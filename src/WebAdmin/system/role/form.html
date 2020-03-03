@@ -43,8 +43,9 @@
         //没必要等下拉加载完再赋值，因为easyui会在加载完后自动处理已存在的值，其它控件也一样
         if(id)
         {
-            taskInitModel= abp.services.app.role.get({id:id}).done(function (d) {
-                psAry = d.result.grantedPermissions;
+            taskInitModel = abp.services.app.role.get({ id: id }).done(function (d) {
+              
+                psAry = d.grantedPermissions;
                 isStatic = d.isStatic;
                 $frm.form('load',d);
                 if (d.isStatic) {
@@ -63,7 +64,7 @@
 
         var inited = false;//若不加此判断，修改时首次自动勾选权限将失败
         $permissionsTree.tree({
-            url:abp.appPath+'api/services/app/Role/GetAllPermissions',
+            url:abp.appPath+'api/services/app/permission/GetAllPermissions',
             checkbox:true,
             onLoadSuccess: function (node, data) {
                 taskInitTree.resolve();
@@ -91,9 +92,9 @@
             //ajax错误是abp会自动调用提示
             var postData = $frm.serializeJSON();
             var nodes = $permissionsTree.tree('getChecked', ['checked','indeterminate']);
-            postData.Permissions = new Array();
+            postData.grantedPermissions = new Array();
             nodes.forEach(function(value,index){
-               postData.Permissions.push(value.id);
+               postData.grantedPermissions.push(value.id);
             });
             var defer;
             if(id){

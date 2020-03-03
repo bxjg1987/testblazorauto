@@ -24,7 +24,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ZLJ.Users
 {
-    //[AbpAuthorize(PermissionNames.Pages_Users)]
     public class UserAppService : AsyncCrudAppService<User, UserDto, long, PagedUserResultRequestDto, CreateUserDto, UserDto>, IUserAppService
     {
         private readonly UserManager _userManager;
@@ -50,14 +49,20 @@ namespace ZLJ.Users
             _passwordHasher = passwordHasher;
             _abpSession = abpSession;
             _logInManager = logInManager;
+
+            CreatePermissionName = Authorization.PermissionNames.AdministratorSystemUserAdd;
+            UpdatePermissionName = Authorization.PermissionNames.AdministratorSystemUserUpdate;
+            DeletePermissionName = Authorization.PermissionNames.AdministratorSystemUserDelete;
+            GetAllPermissionName = Authorization.PermissionNames.AdministratorSystemUser;
+            GetPermissionName = Authorization.PermissionNames.AdministratorSystemUser;
         }
 
         public override async Task<UserDto> CreateAsync(CreateUserDto input)
         {
             CheckCreatePermission();
-
+            
             var user = ObjectMapper.Map<User>(input);
-
+            user.Surname = user.Name;
             user.TenantId = AbpSession.TenantId;
             user.IsEmailConfirmed = true;
 
@@ -80,9 +85,9 @@ namespace ZLJ.Users
             CheckUpdatePermission();
 
             var user = await _userManager.GetUserByIdAsync(input.Id);
-
+            
             MapToEntity(input, user);
-
+            user.Surname = user.Name;
             CheckErrors(await _userManager.UpdateAsync(user));
 
             if (input.RoleNames != null)
@@ -98,7 +103,25 @@ namespace ZLJ.Users
             var user = await _userManager.GetUserByIdAsync(input.Id);
             await _userManager.DeleteAsync(user);
         }
+        public async Task<IEnumerable<long>> DeleteBatchAsync(IList<long> input)
+        {
+            CheckDeletePermission();
 
+            if (AbpSession.UserId.HasValue && input.Contains(AbpSession.UserId.Value))
+                input.Remove(AbpSession.UserId.Value);
+
+            input.Remove(1);
+
+            var list = new List<long>();
+            foreach (var item in input)
+            {
+                var user = await _userManager.GetUserByIdAsync(item);
+                var r = await _userManager.DeleteAsync(user);
+                if (r.Succeeded)
+                    list.Add(item);
+            }
+            return list;
+        }
         public async Task<ListResultDto<RoleDto>> GetRoles()
         {
             var roles = await _roleRepository.GetAllListAsync();

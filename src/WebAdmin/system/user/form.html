@@ -79,7 +79,7 @@
                 $userName.textbox('readonly');//由于html标签已经说明是easyui控件，正在渲染，若没渲染完就调用此方法会报错，因此放在load后面感觉保险点
                 taskInitRoles.done(function () {
                     roles.forEach(function (currentValue, index, ary) {
-                        currentValue.checkbox({ 'checked': $.inArray(currentValue.val(), d.roleNames) != -1 });
+                        currentValue.checkbox({ 'checked': $.inArray(currentValue.val().toUpperCase( ), d.roleNames) != -1 });
                     });
                 });
             });

@@ -115,7 +115,7 @@
         var $roleCombobox = $('<input />').appendTo($toolbarRight);
         $roleCombobox.combobox({
             editable: false,
-            url:abp.appPath+ "/api/services/app/Role/GetForSelect",
+            url:abp.appPath+ "api/services/app/Role/GetForSelect",
             queryParams: { forType: 0, allText1: '==角色==' },
             prompt:'==角色==',
             onChange: search
@@ -124,7 +124,7 @@
             var data = {};
             var keywords = $keywordTextbox.textbox('getValue');
             if (keywords)
-                data.keywords = keywords;
+                data.keyword = keywords;
             var roleId = $roleCombobox.combobox('getValue');
             if (roleId)
                 data.roleId = roleId;

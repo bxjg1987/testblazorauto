@@ -92,6 +92,15 @@
         $.fn.combobox.defaults.panelHeight = 'auto';
         $.fn.combobox.defaults.panelMaxHeight = '280';
         $.fn.combobox.defaults.onLoadError = abp.ajax.myErrorHandler;
+        $.fn.combobox.defaults.method = 'get';
+        $.fn.combobox.defaults.loadFilter = function (data, parent) {
+            if (data && data.__abp) {
+                if (data.result.items)
+                    return data.result.items;
+                return data.result;
+            }
+            return data;
+        };
         //$.fn.combobox.defaults.textField = 'displayText';
     }
     if ($.fn.combogrid) {
@@ -103,6 +112,7 @@
     }
     if ($.fn.combotree) {
         $.fn.combotree.defaults.width = inputWidth;
+        $.fn.datagrid.defaults.method = 'get';
         //$.fn.combotree.defaults.validateOnCreate = false;
         //$.fn.combotree.defaults.validateOnBlur = false;
         $.fn.combotree.defaults.prompt = '==请选择==';
@@ -120,7 +130,9 @@
         $.fn.tree.defaults.method = 'get';
         $.fn.tree.defaults.loadFilter = function (data, parent) {
             if (data && data.__abp) {
-                return  data.result.items;
+                if (data.result.items)
+                    return data.result.items;
+                return  data.result;
             }
             return data;
         };

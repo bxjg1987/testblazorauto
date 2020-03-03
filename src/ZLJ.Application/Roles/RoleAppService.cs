@@ -14,6 +14,9 @@ using ZLJ.Authorization.Users;
 using ZLJ.Roles.Dto;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Abp.Zero.Configuration;
+using System;
+using BXJG.GeneralTree;
 
 namespace ZLJ.Roles
 {
@@ -22,12 +25,23 @@ namespace ZLJ.Roles
     {
         private readonly RoleManager _roleManager;
         private readonly UserManager _userManager;
+        readonly IRoleManagementConfig roleManagementConfig;
 
-        public RoleAppService(IRepository<Role> repository, RoleManager roleManager, UserManager userManager)
+        public RoleAppService(IRepository<Role> repository, RoleManager roleManager, UserManager userManager,
+            IRoleManagementConfig roleManagementConfig)
             : base(repository)
         {
             _roleManager = roleManager;
             _userManager = userManager;
+            this.roleManagementConfig=roleManagementConfig;
+
+            LocalizationSourceName = ZLJConsts.LocalizationSourceName;
+
+            base.CreatePermissionName = Authorization.PermissionNames.AdministratorSystemRoleAdd;
+            base.UpdatePermissionName = Authorization.PermissionNames.AdministratorSystemRoleUpdate;
+            base.DeletePermissionName = Authorization.PermissionNames.AdministratorSystemRoleDelete;
+            base.GetPermissionName = Authorization.PermissionNames.AdministratorSystemRole;
+            base.GetAllPermissionName = Authorization.PermissionNames.AdministratorSystemRole;
         }
 
         public override async Task<RoleDto> CreateAsync(CreateRoleDto input)
@@ -64,22 +78,64 @@ namespace ZLJ.Roles
 
         public override async Task<RoleDto> UpdateAsync(RoleDto input)
         {
-            CheckUpdatePermission();
+            #region 默认代码
+            //CheckUpdatePermission();
 
+            //var role = await _roleManager.GetRoleByIdAsync(input.Id);
+
+            //ObjectMapper.Map(input, role);
+
+            //CheckErrors(await _roleManager.UpdateAsync(role));
+
+            //var grantedPermissions = PermissionManager
+            //    .GetAllPermissions()
+            //    .Where(p => input.GrantedPermissions.Contains(p.Name))
+            //    .ToList();
+
+            //await _roleManager.SetGrantedPermissionsAsync(role, grantedPermissions);
+
+            //return MapToEntityDto(role);
+            #endregion
+            CheckUpdatePermission();
             var role = await _roleManager.GetRoleByIdAsync(input.Id);
 
-            ObjectMapper.Map(input, role);
+            if (roleManagementConfig.StaticRoles.Any(c => c.RoleName.Equals(input.Name, StringComparison.Ordinal)))
+                role.IsStatic = true;
 
-            CheckErrors(await _roleManager.UpdateAsync(role));
+            //var oldRoleNames = role.Permissions.Select(c => c.Name).ToList();
 
-            var grantedPermissions = PermissionManager
-                .GetAllPermissions()
-                .Where(p => input.GrantedPermissions.Contains(p.Name))
-                .ToList();
+            if (role.IsStatic)
+            {
+                //不判断，前端直接禁用控件
+                //  if (input.Permissions.SequenceEqual(oldRoleNames))
+                //if (input.Permissions.Count != oldRoleNames.Count||!input.Permissions.All(oldRoleNames.Contains))
+                //       throw new UserFriendlyException("不允许修改静态角色的权限");
 
-            await _roleManager.SetGrantedPermissionsAsync(role, grantedPermissions);
+                //if (input.Name != role.Name)
+                //    throw new UserFriendlyException("静态角色的标识名不允许修改");
+                //role.Id = input.Id;
+                role.Description = input.Description;
+                role.DisplayName = input.DisplayName;
+                //CheckErrors(await roleManager.UpdateAsync(role));
+            }
+            else
+            {
+                ObjectMapper.Map(input, role);
+                //CheckErrors(await roleManager.UpdateAsync(role));
+                if (input.GrantedPermissions == null)
+                    input.GrantedPermissions = new List<string>();
+                var grantedPermissions = PermissionManager
+                    .GetAllPermissions()
+                    .Where(p => input.GrantedPermissions.Contains(p.Name))
+                    .ToList();
 
-            return MapToEntityDto(role);
+                await _roleManager.SetGrantedPermissionsAsync(role, grantedPermissions);
+            }
+            role.SetNormalizedName();//如果不加 NormalizedName属性不会自动设置 会引起莫名其妙的异常
+            await UnitOfWorkManager.Current.SaveChangesAsync();
+            var dto = ObjectMapper.Map<RoleDto>(role);
+            dto.GrantedPermissions = (await _roleManager.GetGrantedPermissionsAsync(role)).Select(c => c.Name).ToList();
+            return dto;
         }
 
         public override async Task DeleteAsync(EntityDto<int> input)
@@ -143,6 +199,43 @@ namespace ZLJ.Roles
                 GrantedPermissionNames = grantedPermissions.Select(p => p.Name).ToList()
             };
         }
+
+        [AbpAuthorize(Authorization.PermissionNames.AdministratorSystemRoleDelete)]
+        public async Task<IEnumerable<int>> DeleteBatchAsync(params int[] input)
+        {
+            var list = new List<int>();
+            foreach (var item in input)
+            {
+                var role = await _roleManager.GetRoleByIdAsync(item);
+                if (role.IsStatic)
+                {
+                    continue;
+                    //throw new UserFriendlyException("CannotDeleteAStaticRole");
+                }
+                var rt = await _roleManager.DeleteAsync(role);
+                if (rt.Succeeded)
+                    list.Add(role.Id);
+            }
+            return list;
+        }
+
+        public async Task<IReadOnlyList<RoleSelectDto>> GetForSelectAsync(GeneralTreeGetForSelectInput<int?> a)
+        {
+                var list = await _roleManager.Roles.OrderBy(c => c.DisplayName).Select(c => new RoleSelectDto
+                {
+                    Value = c.Id,
+                    Text = c.DisplayName,
+                    Name = c.Name
+                }).ToListAsync();
+                if (a.ForType == 0)
+                    list.Insert(0, new RoleSelectDto(null, string.IsNullOrWhiteSpace(a.ParentText) ? L("Please select role") : a.ParentText));
+                else if (a.ForType == 1)
+                    list.Insert(0, new RoleSelectDto(null, string.IsNullOrWhiteSpace(a.ParentText) ? L("Please select") : a.ParentText));
+                return list;
+          
+           
+        }
+
     }
 }
 

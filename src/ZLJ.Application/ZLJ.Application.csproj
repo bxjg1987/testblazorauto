@@ -11,16 +11,32 @@
     <RootNamespace>ZLJ</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="Permission\**" />
-    <EmbeddedResource Remove="Permission\**" />
-    <None Remove="Permission\**" />
+    <Compile Remove="Auditing\Exporting\**" />
+    <Compile Remove="Authorization\Permissions\Dto\**" />
+    <EmbeddedResource Remove="Auditing\Exporting\**" />
+    <EmbeddedResource Remove="Authorization\Permissions\Dto\**" />
+    <None Remove="Auditing\Exporting\**" />
+    <None Remove="Authorization\Permissions\Dto\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Dto\ComboboxDto.cs" />
+    <Compile Remove="Dto\GetForSelectInput.cs" />
+    <Compile Remove="Dto\GetPageDataInput.cs" />
+    <Compile Remove="Dto\GetTreeInput.cs" />
+    <Compile Remove="Dto\PageDataDto.cs" />
+    <Compile Remove="Dto\TreeNodeBaseDto.cs" />
+    <Compile Remove="Dto\TreeNodeDto.cs" />
+    <Compile Remove="Dto\TreeNodeEditBaseDto.cs" />
+    <Compile Remove="Dto\TreeNodeMoveInput.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BXJG.Attachment\BXJG.Attachment.csproj" />
     <ProjectReference Include="..\BXJG.File\BXJG.File.csproj" />
+    <ProjectReference Include="..\BXJG.GeneralTree\BXJG.GeneralTree.csproj" />
     <ProjectReference Include="..\ZLJ.Core\ZLJ.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Dto\" />
     <Folder Include="Localization\" />
   </ItemGroup>
 </Project>

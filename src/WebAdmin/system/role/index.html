@@ -69,6 +69,7 @@
             $btnDelete.linkbutton($.extend($btnDeleteOptions, {
                 plain: true,
                 onClick: function () {
+                    console.log(m.toLowerCase());
                     var rows = getSelected($(this).text());
                     if (!rows)
                         return;
