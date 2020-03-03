@@ -1,0 +1,129 @@
+﻿<form id="frmUser" class="frm-container">
+    <input type="hidden" name="id" value="0" />
+    <table class="frm-box">
+        <tr>
+            <th><i>*</i>姓名</th>
+            <td><input id="nameUser" name="name" class="easyui-textbox" data-options="required:true,validType:'length[0,50]'" /></td>
+        </tr>
+        <tr>
+            <th><i>*</i>登录名</th>
+            <td><input id="userNameUser" name="userName" class="easyui-textbox" data-options="required:true,validType:'length[0,50]'" /></td>
+        </tr>
+        <tr>
+            <th><i>*</i>手机号</th>
+            <td><input name="phoneNumber" class="easyui-textbox" data-options="iconCls:'icon-phone',required:true,validType:'phone'" /></td>
+        </tr>
+        <tr>
+            <th><i>*</i>邮箱</th>
+            <td><input name="emailAddress" class="easyui-textbox" data-options="iconCls:'icon-email',required:true,validType:'email'" /></td>
+        </tr>
+        <tr id="pwdUser">
+            <th><i>*</i>密码</th>
+            <td><input name="password" type="password" class="easyui-textbox" data-options="iconCls:'icon-lock',required:true, promptq: '新增必填,修改可选'" /></td>
+        </tr>
+        <tr id="pwdCfmUser">
+            <th><i>*</i>密码确认</th>
+            <td><input name="passwordConfirm" type="password" class="easyui-textbox" data-options="iconCls:'icon-lock',required:true" validType="passwordEquals['#pwdUser input[name=\'password\']']" /></td>
+        </tr>
+        <tr id="pwd1User">
+            <th>密码</th>
+            <td><input name="password" type="password" class="easyui-textbox" data-options="iconCls:'icon-lock', promptq: '新增必填,修改可选'" /></td>
+        </tr>
+        <tr id="pwdCfm1User">
+            <th>密码确认</th>
+            <td><input name="passwordConfirm" type="password" class="easyui-textbox" data-options="iconCls:'icon-lock'" validType="passwordEquals['#pwd1User input[name=\'password\']']" /></td>
+        </tr>
+        <tr>
+            <th>激活</th>
+            <td><input type="checkbox" name="isActive" class="easyui-switchbutton" value="true" data-unchecked-value="false" checked data-options="" /></td>
+        </tr>
+        <tr>
+            <th>开启登陆锁定</th>
+            <td><input type="checkbox" name="isLockoutEnabled" class="easyui-switchbutton" value="true" data-unchecked-value="false" checked data-options="" /></td>
+        </tr>
+        <tr>
+            <th class="top" >角色</th>
+            <td id="roleBoxUser"></td>
+        </tr>
+    </table>
+    
+</form>
+
+<script>
+    (function () {
+        var m = 'User';                     //防止智能提示无效
+        var $dlg = $('#dlg' + m);           //弹窗对象
+        var $frm = $dlg.find('form');       //$('#frm' + m);           //表单对象
+        var id = $dlg.data('id');           //修改时的id
+        var $roleBox = $frm.find('#roleBox' + m);
+        var $name = $frm.find('#name' + m);
+        var $userName = $frm.find('#userName' + m);
+        var $trPwd = $frm.find('#pwd' + m);
+        var $trPwdCfm = $frm.find('#pwdCfm' + m);
+        var $trPwd1 = $frm.find('#pwd1' + m);
+        var $trPwdCfm1 = $frm.find('#pwdCfm1' + m);
+        var roles = new Array();            //放角色的checkbox对应的jq对象
+
+        var taskInitRoles = abp.services.app.role.getForSelect({ forType: 2 }).done(function (d) {
+            d.forEach(function (value, index) {
+                var tempBox = $('<span class="checkbox-item" />').appendTo($roleBox);
+                roles.push($('<input class="easyui-checkbox" name="roleNames[]" value="' + value.name + '" label="' + value.text + '">').appendTo(tempBox));
+                $.parser.parse($roleBox);   //动态创建的需要重新渲染
+            });
+        });
+        if (id) {
+            $trPwd.remove();
+            $trPwdCfm.remove();
+            var taskInitForm= abp.services.app.user.get({ id: id }).done(function (d) {
+                $frm.form('load', d);
+                $userName.textbox('readonly');//由于html标签已经说明是easyui控件，正在渲染，若没渲染完就调用此方法会报错，因此放在load后面感觉保险点
+                taskInitRoles.done(function () {
+                    roles.forEach(function (currentValue, index, ary) {
+                        currentValue.checkbox({ 'checked': $.inArray(currentValue.val(), d.roleNames) != -1 });
+                    });
+                });
+            });
+        } else {
+            $trPwd1.remove();
+            $trPwdCfm1.remove();
+        }
+
+        if (taskInitForm)
+            abp.ui.setBusy($dlg, taskInitForm);
+        else
+            abp.ui.setBusy($dlg, taskInitRoles);
+
+        //上面的方法若禁用验证事件可能不会执行，下面的办法假定200毫秒textbox控件可以初始化完成
+        setTimeout(function () {
+            $name.next('span').find('input').focus();
+        }, 0);
+        abp.easyui.serializejsonSwitchbutton($frm);
+
+        $dlg.data('clickSave', function () {
+            if (!$frm.form('validate'))
+                return;
+            
+            var defer;
+            var postData = $frm.serializeJSON();
+            if (id) {
+                defer = abp.services.app.user.update(postData).then(function (d) {
+                    abp.notify.success(abp.localization.zlj('Update') + abp.localization.zlj('Success') + '!');
+                    onSaved('onUpdated');
+                });
+            }
+            else {
+                defer = abp.services.app.user.create(postData).then(function (d) {
+                    abp.notify.success(abp.localization.zlj('Add') + abp.localization.zlj('Success') + '!');
+                    onSaved('onAdded');
+                });
+            }
+            abp.ui.setBusy($dlg, defer);
+        });
+
+        function onSaved(funcName) {
+	        var f = $dlg.data(funcName);
+	        if (f)
+		        f();
+        }
+    })();
+</script>

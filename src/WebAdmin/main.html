@@ -1,0 +1,249 @@
+﻿<style type="text/css">
+    .main-card {
+        border-radius: 3px;
+        border1: 1px solid #eee;
+        background: #fff;
+        padding: 0 10px;
+        display: flex;
+        display: -webkit-flex;
+        flex-flow: column nowrap;
+        justify-content: space-between;
+    }
+
+    .main-card-head {
+        height: 40px;
+        line-height: 40px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .main-card-body {
+        /*height: 100%;*/
+        flex: auto;
+        border1: 1px solid #03b2be;
+    }
+
+    .main-card-footer {
+        height: 35px;
+        line-height: 35px;
+        border1: 1px solid blue;
+    }
+
+    .main-tj1 {
+        display: flex;
+        display: -webkit-flex; /* Safari */
+        /*flex-flow: row;
+        flex-wrap: wrap;*/
+        flex-flow: row wrap; /*上面2行简写*/
+        justify-content: space-between;
+        /*height: 130px;*/
+        margin-right: -15px;
+        margin-bottom: -15px;
+    }
+
+        .main-tj1 .main-card {
+            flex: 1 0 auto;
+            /*width: 280px;*/
+            margin-right: 15px;
+            margin-bottom: 15px;
+            height: 120px;
+            color: #fff;
+            padding: 0;
+            min-width: 230px;
+        }
+
+            .main-tj1 .main-card:nth-of-type(1) {
+                background: url("img/gouwu.png") no-repeat 170px 20px #00c0ef !important;
+            }
+
+            .main-tj1 .main-card:nth-of-type(2) {
+                background: url("img/yonghu.png") no-repeat 170px 20px #00a65a !important;
+            }
+
+            .main-tj1 .main-card:nth-of-type(3) {
+                background: url("img/tubiao.png") no-repeat 170px 20px #f39c12 !important;
+            }
+
+            .main-tj1 .main-card:nth-of-type(4) {
+                background: url("img/shijian.png") no-repeat 170px 20px #dd4b39 !important;
+            }
+
+        .main-tj1 .main-card-head {
+            border-bottom: 0;
+            padding: 0 15px;
+        }
+
+        .main-tj1 .main-card-body {
+            font-weight: bold;
+            font-size: 2rem;
+            padding: 0 15px;
+        }
+
+        .main-tj1 .main-card-footer {
+            height: 25px;
+            background-color: rgba(9, 0, 0, 0.15);
+        }
+
+    .main-tj2 {
+        margin-top: 20px;
+        height: 400px;
+    }
+
+        .main-tj2 .main-card-body {
+            display: flex;
+            display: -webkit-flex; /* Safari */
+            /*flex-flow: row ;*/
+            justify-content: space-between;
+            padding-bottom: 15px;
+            /*margin-right: -15px;
+        margin-bottom: -15px;*/
+        }
+
+    #main_chart1 {
+        flex-grow: 4;
+    }
+
+    #main_chart1_right {
+        flex-grow: 1;
+    }
+</style>
+<div style="padding1:20px;">
+    <div class="main-tj1">
+        <div class="main-card main-card-top">
+            <div class="main-card-head ">
+                访问量
+            </div>
+            <div class="main-card-body">
+                1,391
+            </div>
+            <div class="main-card-footer">
+            </div>
+        </div>
+        <div class="main-card main-card-top">
+            <div class="main-card-head ">
+                新增用户
+            </div>
+            <div class="main-card-body">
+                1,391
+            </div>
+            <div class="main-card-footer">
+            </div>
+        </div>
+        <div class="main-card main-card-top">
+            <div class="main-card-head ">
+                活跃用户
+            </div>
+            <div class="main-card-body">
+                1,391
+            </div>
+            <div class="main-card-footer">
+            </div>
+        </div>
+        <div class="main-card main-card-top">
+            <div class="main-card-head ">
+                占比
+            </div>
+            <div class="main-card-body">
+                12.82%
+            </div>
+            <div class="main-card-footer">
+            </div>
+        </div>
+    </div>
+    <div class="main-card main-tj2">
+        <div class="main-card-head ">
+            访问量走势
+        </div>
+        <div class="main-card-body">
+            <div id="main_chart1"></div>
+            <div id="main_chart1_right">
+                宋德福宋德福
+            </div>
+        </div>
+        <!--<div class="main-card-footer">
+             </div>-->
+    </div>
+    <!--<form enctype="multipart/form-data" action="http://localhost:21021/api/file/upload1" method="post">
+        <input type="file" />
+        <input type="file" />
+        <input type="submit" />
+    </form>-->
+
+
+</div>
+<script type="text/javascript">
+    (function () {
+        //创建图表实例
+        var main_chart1 = echarts.init(document.getElementById('main_chart1'));
+        //指定图表的配置项和数据
+        var option = {
+            //title: {
+            //    text: '某地区蒸发量和降水量',
+            //    subtext: '纯属虚构'
+            //},
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['蒸发量', '降水量']
+            },
+            toolbox: {
+                show: true,
+                feature: {
+                    dataView: { show: true, readOnly: false },
+                    magicType: { show: true, type: ['line', 'bar'] },
+                    restore: { show: true },
+                    saveAsImage: { show: true }
+                }
+            },
+            calculable: true,
+            xAxis: [
+                {
+                    type: 'category',
+                    data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: '蒸发量',
+                    type: 'bar',
+                    data: [2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3],
+                    markPoint: {
+                        data: [
+                            { type: 'max', name: '最大值' },
+                            { type: 'min', name: '最小值' }
+                        ]
+                    },
+                    markLine: {
+                        data: [
+                            { type: 'average', name: '平均值' }
+                        ]
+                    }
+                },
+                {
+                    name: '降水量',
+                    type: 'bar',
+                    data: [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3],
+                    markPoint: {
+                        data: [
+                            { name: '年最高', value: 182.2, xAxis: 7, yAxis: 183 },
+                            { name: '年最低', value: 2.3, xAxis: 11, yAxis: 3 }
+                        ]
+                    },
+                    markLine: {
+                        data: [
+                            { type: 'average', name: '平均值' }
+                        ]
+                    }
+                }
+            ]
+        };
+        //使用刚指定的配置项和数据显示图表。
+        main_chart1.setOption(option);
+
+    }());
+</script>

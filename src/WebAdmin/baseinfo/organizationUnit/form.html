@@ -1,0 +1,90 @@
+﻿<form id="frmOrganizationUnit" class="frm-container">
+    <input type="hidden" name="id" value="0" />
+    <table class="frm-box">
+        <tr>
+            <th><i>*</i>上级单位</th>
+            <td><input name="parentId" value="1" /></td><!--默认值1默认选择为顶级节点-->
+        </tr>
+        <tr>
+            <th><i>*</i>单位名称</th>
+            <td><input name="displayName" class="easyui-textbox" tabindex="0" data-options="required:true,validType:'length[0,50]'" /></td>
+        </tr>
+        <tr>
+            <th><i>*</i>单位类型</th>
+            <td>
+                <select class="easyui-combobox" name="ouType" editable="false">
+                    <!--<option value="0">总部</option>-->
+                    <option value="1">分公司/办事处</option>
+                    <option value="2">部门</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th>排序索引</th>
+            <td><input name="orderIndex" class="easyui-numberspinner" value="0" /></td>
+        </tr>
+    </table>
+</form>
+<script>
+    (function(){
+        var m = 'OrganizationUnit';
+
+        var $dlg = $('#dlg' + m);
+        var $frm = $dlg.find('form');
+        var $cbParent = $frm.find("[name='parentId']");
+        var id = $dlg.data('id');
+        var parent = $dlg.data('parent');
+
+        var initParentTask = $.Deferred();
+        var initFormTask = $.Deferred();
+
+        $cbParent.combotree({
+            url: abp.appPath + '/api/services/app/' + m + '/GetTreeForSelect',
+            queryParams: { forType: 0},
+            onLoadSuccess: function (node, data) {
+                initParentTask.resolve();
+            }
+        });
+
+        if(id)
+        {
+            initFormTask= abp.services.app.organizationUnit.get({id:id}).done(function (d) {
+                $frm.form('load', d);
+            });
+        } else {
+            $cbParent.combotree('setValues', [parent]);
+            initFormTask.resolve();
+        }
+          
+
+        abp.ui.setBusy($dlg, $.when(initFormTask, initParentTask));
+
+        $dlg.data('clickSave',function(){
+            if (!$frm.form('validate'))
+                return;
+            //$.messager.progress();
+            var postData = $frm.serializeJSON();
+           
+            
+            if(id){
+                defer = abp.services.app.organizationUnit.update(postData).done(function (d) {
+                    abp.notify.success(abp.localization.zlj('Update') + abp.localization.zlj('Success') + '!');
+                    onSaved();
+                });
+            } else {
+                postData.Id = 0;
+                defer = abp.services.app.organizationUnit.create(postData).done(function (d) {
+                    abp.notify.success(abp.localization.zlj('Add') + abp.localization.zlj('Success') + '!');
+                    onSaved();
+                });
+            }
+            abp.ui.setBusy($dlg, defer);
+        });
+
+        function onSaved() {
+            var f = $dlg.data('onSaved');
+            if (f)
+                f();
+        }
+    })();
+</script>

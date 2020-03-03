@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<localizationDictionary culture="en">
+  <texts>
+    <text name="验证已通过！请上传。" value="Verification passed! Please upload." />
+  </texts>
+</localizationDictionary>

@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <VersionPrefix>1.0.0.0</VersionPrefix>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
+    <AssemblyName>ZLJ.Application</AssemblyName>
+    <PackageId>ZLJ.Application</PackageId>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <RootNamespace>ZLJ</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Permission\**" />
+    <EmbeddedResource Remove="Permission\**" />
+    <None Remove="Permission\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BXJG.Attachment\BXJG.Attachment.csproj" />
+    <ProjectReference Include="..\BXJG.File\BXJG.File.csproj" />
+    <ProjectReference Include="..\ZLJ.Core\ZLJ.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Localization\" />
+  </ItemGroup>
+</Project>

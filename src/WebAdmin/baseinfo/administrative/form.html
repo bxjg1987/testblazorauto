@@ -1,0 +1,97 @@
+﻿<form id="frmAdministrative" class="frm-container">
+    <input type="hidden" name="id" value="0" />
+    <table class="frm-box">
+        <tr class="row">
+            <th><i>*</i>上级区域</th>
+            <td><input name="parentId" value="0" /></td>
+        </tr>
+        <tr>
+            <th><i>*</i>区域名称</th>
+            <td><input name="displayName" class="easyui-textbox" tabindex="0" data-options="required:true,validType:'length[0,50]'" /></td>
+        </tr>
+        <tr class="row">
+            <th><i>*</i>行政级别</th>
+            <td><input name="level" data-options="required:true" /></td>
+        </tr>
+        <!--<tr>
+            <th>排序索引</th>
+            <td><input name="orderIndex" class="easyui-numberspinner" value="0" /></td>
+        </tr>-->
+    </table>
+</form>
+<script>
+    (function(){
+        var m = 'Administrative';
+        var $dlg = $('#dlg' + m);
+        var $frm = $dlg.find('form');
+        var $cbParent = $frm.find("[name='parentId']");
+        var $cbLevel = $frm.find("[name='level']");
+        var id = $dlg.data('id');
+        var parent = $dlg.data('parent');
+
+        var initParentTask = $.Deferred();
+        var initLevelTask = $.Deferred();
+        var initFormTask = $.Deferred();
+
+        $cbParent.combotree({
+            url: abp.appPath + '/api/services/app/' + m + '/GetTreeForSelect',
+            queryParams: { forType: 4, parentText: '全国' },
+            prompt: abp.localization.zlj('全国'),
+            onLoadSuccess: function (node, data) {
+                initParentTask.resolve();
+            },
+            loadFilter: function (data, parent) {
+                if (data && data[0])
+                    data[0].id = 0;//奇怪这里用'0' 与输入口默认值对应不起来
+                return data;
+            },
+        });
+
+        $cbLevel.combobox({
+            url: abp.appPath + '/api/services/app/utils/GetAdministrativeLevel',
+            editable: false,
+            readonly1:true,
+            queryParams: { a:3},//随便发个什么
+            onLoadSuccess: function (node, data) {
+                initLevelTask.resolve();
+            }
+        });
+        if (id) {
+            initFormTask = abp.services.app.administrative.get({ id: id }).done(function (d) {
+                $frm.form('load', d);
+            });
+        } else {
+            $cbParent.combotree('setValue', parent);
+            initFormTask.resolve();
+        }
+
+        abp.ui.setBusy($dlg, $.when(initFormTask, initParentTask, initLevelTask));
+
+        $dlg.data('clickSave', function () {
+            if (!$frm.form('validate'))
+                return;
+            var postData = $frm.serializeJSON();
+            var defer;
+            if(id){
+                defer = abp.services.app.administrative.update(postData).done(function (d) {
+                    abp.notify.success(abp.localization.zlj('Update') + abp.localization.zlj('Success')+'!');
+                });
+            } else {
+                postData.Id = 0;
+                defer = abp.services.app.administrative.create(postData).done(function (d) {
+                    abp.notify.success(abp.localization.zlj('Add') + abp.localization.zlj('Success') + '!');
+                });
+            }
+            defer.done(function () {
+                onSaved();
+            });
+            abp.ui.setBusy($dlg, defer);
+        });
+
+        function onSaved() {
+            var f = $dlg.data('onSaved');
+            if (f)
+                f();
+        }
+    })();
+</script>

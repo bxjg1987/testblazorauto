@@ -1,0 +1,195 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>变形精怪快速开发框架</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="lib/toastr/toastr.min.css" rel="stylesheet" />
+    <!--<link href="css/login.css" rel="stylesheet" />-->
+    <style type="text/css">
+        #language a{
+            margin:0 5px;
+        }
+    </style>
+</head>
+<body>
+    <form>
+        <label for="userNameOrEmailAddress" id="lb_userNameOrEmailAddress">User name</label>
+        <input id="userNameOrEmailAddress" name="userNameOrEmailAddress" /><br />
+        <label for="password" id="lb_password">Password</label>
+        <input id="password" name="password" type="password" /><br />
+        <input type="submit" id="btnSubmit" value="Login" />
+    </form>
+
+    <div id="language"></div>
+
+    <!--引入jquery-->
+    <script src="lib/jquery/jquery.min.js"></script>
+
+    <!--一下二个做弹出用的-->
+    <script src="lib/sweetalert/sweetalert.min.js"></script>
+
+    <!--浏览器通知-->
+    <script src="lib/push.js/push.min.js"></script>
+
+    <!--toastr-->
+    <script src="lib/toastr/toastr.min.js"></script>
+
+    <!--loading-->
+    <script src="lib/spin/spin.min.js"></script>
+    <script src="lib/spin/jquery.spin.js"></script>
+
+    <!--正在加载、正在提交..-->
+    <script src="lib/block-ui/jquery.blockUI.min.js"></script>
+
+    <!--什么用？-->
+    <script src="lib/moment/moment-with-locales.min.js"></script>
+
+
+
+    <!--abp相关-->
+    <script src="lib/abp-web-resources/Abp/Framework/scripts/abp.min.js"></script>
+    <script src="lib/abp-web-resources/Abp/Framework/scripts/libs/abp.jquery.min.js"></script>
+    <script src="lib/abp-web-resources/Abp/Framework/scripts/libs/abp.toastr.min.js"></script>
+    <script src="lib/abp-web-resources/Abp/Framework/scripts/libs/abp.blockUI.min.js"></script>
+    <script src="lib/abp-web-resources/Abp/Framework/scripts/libs/abp.spin.min.js"></script>
+    <script src="lib/abp-web-resources/Abp/Framework/scripts/libs/abp.sweet-alert.min.js"></script>
+    <!-- Dynamic scripts of ABP system (They are created on runtime and can not be bundled)
+    <script src="http://localhost:21021/AbpServiceProxies/getall"></script>
+    <script src="http://localhost:21021/AbpScripts/GetScripts"></script>-->
+
+    <!--signalr 暂时不要启用，研究透signalR后再说
+    <script src="lib/signalr/dist/browser/signalr.js"></script>
+    <script src="lib/abp-web-resources/Abp/Framework/scripts/libs/abp.signalr-client.js"></script>-->
+    <!--表单序列化生成json-->
+    <script src="lib/jquery-serializejson-2.9.0/jquery.serializejson.min.js"></script>
+
+
+    <!--自定义的启动js-->
+    <script src="js/startup.js"></script>
+
+    <script>
+
+        let $lb_userNameOrEmailAddress = $('#lb_userNameOrEmailAddress'); //账号label
+        let $lb_password = $('#lb_password');//密码label
+        let $login_box_submit = $('#btnSubmit');//提交按钮
+
+
+        //当前语言处理+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        //未登录时无法获取用户自己的当前语言，只能看以本地上次的当前语言为准
+
+        let $language = $('#language');//语言列表框
+        let languageChanged = false;//是否切换过语言了
+
+        initLanguage();
+
+        function initLanguage() {
+            let lan = abp.getCurrentLanguage();
+            let task;
+            if (!lan) {
+                task = loadGetScripts();
+                abp.setCurrentLanguage(abp.localization.currentCulture.name);
+            } else {
+                task = loadGetScripts(lan);
+            }
+            return task.done(function () {
+                initElementLan();
+                renderLanguageList();
+            });
+        }
+
+        //给页面上的元素设置本地化文本
+        function initElementLan() {
+            $lb_userNameOrEmailAddress.text(abp.localization.localize('UserName'));
+            $lb_password.text(abp.localization.localize('Password'));
+            $login_box_submit.val(abp.localization.localize('LogIn'));
+        }
+
+        //加载abp动态js文件，里面包含多语言信息,可以继续done.. then...
+        //加载完后，abp.localization.currentCulture就变了
+        function loadGetScripts(language) {
+            let url = abp.appPath + 'AbpScripts/GetScripts';
+            if (language)
+                url += '?culture=' + language + '&ui-culture=' + language;
+            return $.getScript(url);
+        }
+
+        //更改当前语言
+        function changeCurrentLanguage(language) {
+            if (abp.getCurrentLanguage() == language)
+                return;
+
+            languageChanged = true;
+            return loadGetScripts(language).done(function () {
+                abp.setCurrentLanguage(abp.localization.currentCulture.name);
+                initElementLan();
+            });
+        }
+
+        //渲染多语言切换列表框
+        function renderLanguageList() {
+            $language.empty();
+            abp.localization.languages.forEach(function (currentValue, index, arr) {
+                var $temp = $('<a href="javascript:void(0)">' + currentValue.displayName + '</a>').appendTo($language);
+                $temp.click(function (e) {
+                    e.preventDefault();
+                    changeCurrentLanguage(currentValue.name);
+                });
+            });
+        }
+        //当前语言处理---------------------------------------------------------------
+
+
+
+        //判断token是否过期
+        //if (abp.auth.accessToken) {
+        //    abp.services.app.session.getCurrentLoginInformations({ async: false })
+        //    .done(function (result) {
+        //        //abp.notify.success('凭证有效，无需登陆。正在跳转到后台首页...');
+        //        //gotoIndex();
+        //        if (result.user)
+        //            location = 'index.html';
+        //    }).fail(function () {
+        //        //  location = 'index.html';
+        //    });
+        //}
+
+        var $login_form = $('form');
+        $login_box_submit.click(function (e) {
+            e.preventDefault();
+
+            //经过测试.net core版本必须json提交，设置contentType，data对应的格式也必须是json
+            //但是正常来说无论表单还是json应该都可以登录 只要提交的数据格式和contentType匹配
+            abp.ui.setBusy(null,
+                $.ajax({
+                    type: "POST",
+                    url: abp.appPath + 'api/TokenAuth/Authenticate',
+                    contentType: "application/json",
+                    data: JSON.stringify($login_form.serializeJSON()),// $login_form.serializeJSON(),
+                    dataType1: "json",
+                    success: function (d) {
+                        abp.setCurrentJWTToken(d.result.accessToken);
+
+                        if (languageChanged) {
+
+                            //处理语言切换。也可以考虑动态代理api，user接口有提供
+                            abp.ajax({
+                                type: 'get',
+                                url: abp.appPath + 'AbpLocalization/ChangeCulture?cultureName=' + abp.getCurrentLanguage(),
+                                success: function (d) {
+                                    location = 'index.html';
+                                }
+                            });
+                        } else
+                            location = 'index.html';
+                    },
+                    error: function (message) {
+                        alert("提交失败" + JSON.stringify(message));
+                    }
+                })
+            );
+        });
+
+    </script>
+</body>
+</html>

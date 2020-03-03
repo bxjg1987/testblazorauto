@@ -1,0 +1,360 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="lib/jquery-easyui-1.9.4/themes/material/easyui.css" rel="stylesheet" />
+    <link href="lib/jquery-easyui-1.9.4/themes/icon.css?h=6" rel="stylesheet" />
+    <link href="lib/jquery-easyui-1.9.4/themes/color.css" rel="stylesheet" />
+
+    <link href="lib/toastr/toastr.min.css" rel="stylesheet" />
+    <link href="lib/webuploader-0.1.5/webuploader.css" rel="stylesheet" />
+    <!--<link href="lib/zlj-jquery-easyui-webuploader-0.1/zlj-jquery-easyui-webuploader-0.1.css" rel="stylesheet" />-->
+    <!--因为移植到.net core报错，暂时注释掉-->
+    <!--<link href="http://localhost:21021/jqWebUploader/bxjgJqWebUploader.css" rel="stylesheet" />-->
+    <link href="css/app.css" rel="stylesheet" />
+
+</head>
+<body class="easyui-layout" data-options="fit:true,border:false">
+
+    <!--顶部-->
+    <div data-options="region:'north',border:false" style="height: 54px; background-color: #3c8dbc;">
+        <div id="top_logo">
+            asp.net mvc5.x ABPv4.11
+        </div>
+        <div id="top_right">
+            <!--<a id="global_patient_btn" href="javascript:void(0);" title="小龙女/女/23岁/13855835855" class="easyui-menubutton c-trans1"
+               data-options="iconCls:'icon-patientPatientInfo',plain:true">当前患者：小龙女/女/23岁</a> <span style="color:#ccc;">|</span>-->
+            <a id="curr_user" href="#" class="easyui-menubutton c-trans1" data-options="menu:'#mm1',iconCls:'icon-user',plain:true"></a>
+        </div>
+    </div>
+
+    <!--菜单-->
+    <div id="main_menu_container" data-options="region:'west',border:false" style="width:150px; background-color: #012941;">
+        <div id="main_menu"></div>
+    </div>
+
+    <!--主体-->
+    <div id="main_tabs_container" data-options="region:'center',border:false">
+        <div class="easyui-layout" data-options="fit:true,border:false">
+            <div data-options="region:'center'">
+                <div id="main_tabs" class="easyui-tabs" data-options="fit:true,border:false">
+                </div>
+            </div>
+            <div data-options="region:'south'" style="height:30px;">
+                <div style=" height:24px; font-size:12px; line-height:22px; text-align:center; color:#777; background-color: #e3e3e3;">
+                    Copyright©2019 <a href="#" target="_blank" style="color:#777;">变形精怪</a> 版权所有
+                    | <a id="apiurl" href="swagger/index.html" target="_blank" style="color:#777;">API</a> | Powered by ASP.NET Core 3.1
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--菜单折叠按钮-->
+    <a id="main_menu_togle" href="javascript:;"></a>
+
+    <!--快速选择患者开始-->
+    <div style="display:none;">
+        <div id="dgToolbarGlobalPatient" class="datagrid-toolbar1 ">
+            <div class="toolbar_right">
+                <input class="easyui-textbox" data-options="width:260, prompt:'关键字...'" />
+                <!--<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-search" data-options="">@L("Search")</a>-->
+            </div>
+        </div>
+        <div id="global_patient_panel">
+            <div id="global_patient_detail" style="width:100%; height:200px; background:#aaa;">
+                更多当前患者信息...
+            </div>
+            <table id="global_patient_dg" style="width:100%; min-height:100px; max-height:400px; "></table>
+        </div>
+        <div id="mm1">
+            <div data-options="iconCls:'icon-edit'">修改资料</div>
+            <div data-options="iconCls:'icon-back'">注销</div>
+        </div>
+    </div>
+
+    <!--引入jquery-->
+    <script src="lib/jquery/jquery.min.js"></script>
+
+    <!--easyui-->
+    <script src="lib/jquery-easyui-1.9.4/jquery.easyui.min.js"></script>
+    <script src="lib/jquery-easyui-1.9.4/locale/easyui-lang-zh_CN.js"></script>
+    <script src="lib/jquery-easyui-1.9.4/plugins/treegrid-dnd.js"></script>
+    <script src="https://cdn.bootcss.com/jquery.form/3.51/jquery.form.min.js"></script>
+
+    <script src="lib/webuploader-0.1.5/webuploader.min.js"></script>
+
+
+    <!--一下二个做弹出用的-->
+    <script src="lib/sweetalert/sweetalert.min.js"></script>
+
+    <!--浏览器通知-->
+    <script src="lib/push.js/push.min.js"></script>
+
+    <!--toastr-->
+    <script src="lib/toastr/toastr.min.js"></script>
+
+    <!--loading-->
+    <script src="lib/spin/spin.min.js"></script>
+    <script src="lib/spin/jquery.spin.js"></script>
+
+    <!--正在加载、正在提交..-->
+    <script src="lib/block-ui/jquery.blockUI.min.js"></script>
+
+    <!--什么用？-->
+    <script src="lib/moment/moment-with-locales.min.js"></script>
+
+    <!--abp相关-->
+    <script src="lib/abp-web-resources/Abp/Framework/scripts/abp.min.js"></script>
+    <script src="lib/abp-web-resources/Abp/Framework/scripts/libs/abp.jquery.min.js"></script>
+    <script src="lib/abp-web-resources/Abp/Framework/scripts/libs/abp.toastr.min.js"></script>
+    <script src="lib/abp-web-resources/Abp/Framework/scripts/libs/abp.blockUI.min.js"></script>
+    <script src="lib/abp-web-resources/Abp/Framework/scripts/libs/abp.spin.min.js"></script>
+    <script src="lib/abp-web-resources/Abp/Framework/scripts/libs/abp.sweet-alert.min.js"></script>
+    <!-- Dynamic scripts of ABP system (They are created on runtime and can not be bundled) -->
+    <script src="http://localhost:21021/AbpServiceProxies/getall"></script>
+    <!--<script src="http://localhost:21021/AbpScripts/GetScripts?sdf=3"></script>-->
+ 
+    <!--<script src="https://cdn.bootcss.com/echarts/4.1.0-release/echarts.min.js"></script>-->
+    <script src="lib/echarts-4.1.0/echarts.min.js"></script>
+
+
+    <!--<script src="js/webuploader-ext.js"></script>-->
+    <!--自己开发的基于webuploader的jq插件，必须放在jq easyui webuploader下方加载-->
+    <!--<script src="lib/zlj-jquery-easyui-webuploader-0.1/zlj-jquery-easyui-webuploader-0.1.js"></script>-->
+    <!--因为移植到.net core报错，暂时注释掉-->
+    <!--<script src="http://localhost:21021/jqWebUploader/bxjgJqWebUploader.js"></script>-->
+    <!--<script src="https://cdn.bootcss.com/jquery.serializeJSON/2.9.0/jquery.serializejson.min.js"></script>-->
+    <script src="lib/jquery-serializejson-2.9.0/jquery.serializejson.min.js"></script>
+
+
+    <script src="js/startup.js"></script>
+    <script src="js/app.js"></script>
+
+    <script type="text/javascript">
+        var $mm = $('#mm1');//右侧顶部 当前用户下拉菜单
+        var $txtCurrUser = $('#curr_user');//右侧顶部 当前用户
+        var $mainTabs = $('#main_tabs');//中间 右侧 最主要的区域 tab
+        var menuBoxWidth = 150;//左侧菜单宽度
+        var $mainMenu = $('#main_menu');//左侧主菜单
+        var $menuTogleBtn = $('#main_menu_togle');//折叠菜单用的
+        var $logo = $('#top_logo');//左侧顶部logo
+        //var $global_patient_btn = $('#global_patient_btn');
+        var $global_patient_panel = $('#global_patient_panel');
+        var $global_patient_dg = $('#global_patient_dg');
+        var $mainLayout = $('body');
+        var $apiurl = $('#apiurl');//底部api地址
+
+        $apiurl.attr('href', abp.appPath + $apiurl.attr('href'));
+
+        $mainTabs.tabs({
+            onLoadError: function () {
+                alert('加载失败！');
+            }
+        });
+
+        $mm.menu({
+            onClick: function (item) {
+                if (item.text == '修改资料') {
+                    alert('开发中');
+                    return;
+                }
+                if (item.text == '注销') {
+                    abp.utils.setCookieValue(abp.auth.accessTokenCookieName, '');
+                    location.href = '/login.html';
+                }
+            }
+        });
+
+        $menuTogleBtn.click(function () {
+
+            //菜单处理
+            var opts = $mainMenu.sidemenu('options');
+            var zkcs = 'collapse';
+            var kd = 50;
+            var thispt = "-170px";
+            if (opts.collapsed) {
+                zkcs = 'expand';
+                kd = menuBoxWidth;
+                thispt = "-158px";
+            }
+            $mainMenu.sidemenu(zkcs);
+            $mainMenu.sidemenu('resize', {
+                width: kd
+            });
+
+            //toggle按钮处理
+            $(this).offset({ left: kd + 10 });
+            $(this).css('background-positionX', thispt);
+
+            //重新布局
+            $mainLayout.layout('panel', 'west').panel('resize', { width: kd });
+            $mainLayout.layout('resize');
+        });
+
+
+        /*
+        $global_patient_btn.tooltip({
+            content: $global_patient_panel,
+            onUpdate: function (content) {
+                //首次显示时触发一次
+                var t = $(this);
+
+                t.tooltip('tip').unbind().bind('mouseenter', function () {
+                    t.tooltip('show');
+                }).bind('mouseleave', function () {
+                    t.tooltip('hide');
+                }).css({
+                    boxShadow: '0px 3px 5px #aaa'
+                });
+
+                $global_patient_dg.datagrid({
+                    toolbar: '#dgToolbarGlobalPatient',
+                    pagination: true,
+                    singleSelect: true,
+                    url: abp.appPath + 'api/services/app/PatientInfo/GetAll',
+                    frozenColumns: [[
+                        { field: 'name', title: '姓名', width: 100, sortable: true }
+                    ]],
+                    columns: [[
+                        { field: 'sexDisplayName', title: '性别', width: 50, sortable: false },
+                        { field: 'birthday', title: '出生年月', width: 100, sortable: true },
+                        { field: 'weight', title: '体重(kg)', width: 70, sortable: true },
+                        //{  field: 'pinyin', title: '拼音', width: 80, sortable:true },
+                        { field: 'dialysisNo', title: '透析号', width: 120, sortable: true },
+                        { field: 'patientNo', title: '病历号', width: 120, sortable: true },
+                        { field: 'idCard', title: '证件号', width: 120, sortable: true },
+                        { field: 'height', title: '身高(cm)', width: 70, sortable: true },
+                        { field: 'cellphone', title: '手机号', width: 120, sortable: true },
+                        { field: 'hospitalizationNo', title: '住院号', width: 120, sortable: true },
+                        { field: 'hospitalizationBedNo', title: '床位', width: 80, sortable: true },
+                        { field: 'address', title: '住址', width: 250, sortable: false },
+                        { field: 'zipCode', title: '邮编', width: 100, sortable: true },
+                        { field: 'remark', title: '备注', width: 300, sortable: false },
+                        { field: 'familyMember1', title: '家属1', width: 80, sortable: false },
+                        { field: 'familyMember1Cellphone', title: '家属1手机号', width: 120, sortable: false },
+                        { field: 'familyMember2', title: '家属2', width: 80, sortable: false },
+                        { field: 'familyMember2Cellphone', title: '家属2手机号', width: 120, sortable: false },
+                        { field: 'insuranceNo', title: '保险号', width: 120, sortable: false },
+                        { field: 'firstDialysisDay', title: '首次透析日', width: 120, sortable: true },
+                        { field: 'revertToReminderDays', title: '转归提醒天数', width: 50, sortable: false },
+                        { field: 'barcode', title: '条码', width: 150, sortable: true },
+                        { field: 'idCardTypeDisplayName', title: '证件类型', width: 80, sortable: false },
+                        { field: 'professionalDisplayName', title: '职业', width: 150, sortable: false },
+                        { field: 'bloodTypeDisplayName', title: '血型', width: 50, sortable: false },
+                        { field: 'rhDisplayName', title: 'RH', width: 40, sortable: false },
+                        { field: 'outpatientTypeDisplayName', title: '门诊类型', width: 60, sortable: false },
+                        { field: 'inpatientAreaDisplayName', title: '住院病区', width: 100, sortable: false },
+                        { field: 'levelOfEducationDisplayName', title: '文化程度', width: 100, sortable: true },
+                        { field: 'wayOfLivingDisplayName', title: '居住方式', width: 100, sortable: false },
+                        { field: 'insuranceTypeDisplayName', title: '保险类型', width: 150, sortable: false },
+                        { field: 'illnessStateDisplayName', title: '病情状态', width: 80, sortable: false }
+                    ]],
+                    onDblClickRow: function (index, row) {
+                        abp.services.app.patientInfo.get({ id: row.id }).done(function (d) {
+                            globalPatient = d;
+                            $global_patient_btn.menubutton({ 'text': '当前患者：' + globalPatient.name + '/' + globalPatient.sexDisplayName + '/' + globalPatient.age + '岁' });
+                        })
+                        t.tooltip('tip').trigger('mouseleave');
+                    },
+                    onLoadSuccess: function (data) {
+                        //$global_patient_dg.datagrid("resize");
+                        $global_patient_dg.datagrid("autoSizeColumn", 'sexDisplayName');
+                    },
+                    onSelect: function (index, row) {
+                        try {
+
+                        } catch (err) {
+                            console.log(err);
+                        }
+                    }
+                });
+            },
+            onShow: function () {
+                //var t = $(this);
+            }
+        });
+        */
+        function fillMenu2(children) {
+            var ary = [];
+            children.forEach(function (curr, index) {
+                if (!curr.isVisible)
+                    return;
+                var child = {
+                    text: curr.displayName,
+                    iconCls: 'icon-' + curr.icon,
+                    url: curr.url + '?_t=' + abp.pageLoadTime.getTime()
+                };
+                if (curr.items && curr.items.length > 0) {
+                    child.children = fillMenu2(curr.items);
+                    //fillMenu(child, curr.items);
+                }
+                ary.push(child);
+            });
+            return ary;
+        }
+
+
+        //$.getScript(url).done(function () { });//这个貌似不是ajax请求，无法在请求头添加token
+        //abp扩展
+        $.ajax({
+            url: abp.appPath + "AbpScripts/GetScripts",
+            dataType: "text",
+            success: function (t) {
+                eval(t);
+                $mainTabs.tabs('add', {
+                    title: null,
+                    iconCls: 'icon-home',
+                    //cache: false,//如果没有缓存，选择tab时也会刷新
+                    selected: true,
+                    closable: false,
+                    href: 'main.html'//内部可能需要访问getscripts的js中的东东
+                });
+                $mainMenu.sidemenu({
+                    multiple: false,
+                    border: false,
+                    width: menuBoxWidth,
+                    floatMenuWidth: 130,
+                    data: fillMenu2(abp.nav.menus.MainMenu.items), //getMenus(),
+                    onSelect: function (item) {
+                        var thisTxt = item.text;
+                        var curr = $mainTabs.tabs('getTab', thisTxt);
+                        if (curr)
+                            $mainTabs.tabs('select', thisTxt);
+                        else {
+                            $mainTabs.tabs('add', {
+                                title: thisTxt,
+                                //cache: false,//如果没有缓存，选择tab时也会刷新
+                                selected: true,
+                                closable: true,
+                                href: item.url
+                            });
+                        }
+                    }
+                });
+                abp.services.app.session.getCurrentLoginInformations()
+                    .done(function (result) {
+                        if (!result.user) {
+                            console.log(abp.ajax.defaultError401);
+                            abp.ajax.showError(abp.ajax.defaultError401)
+                                .done(function () {
+                                    location = 'login.html';
+                                });
+                            return;
+                        }
+
+                        //$txtCurrUser.menubutton({text:result.user.name});
+
+                        $txtCurrUser.menubutton('options').text = result.user.name;
+                        $.parser.parse('#top_right');
+                    });
+            },
+            error: function () {
+
+            }
+        });
+    </script>
+</body>
+</html>

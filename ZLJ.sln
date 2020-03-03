@@ -1,0 +1,104 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29806.167
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZLJ.Core", "src\ZLJ.Core\ZLJ.Core.csproj", "{0FA75A5B-AB83-4FD0-B545-279774C01E87}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZLJ.Application", "src\ZLJ.Application\ZLJ.Application.csproj", "{3870C648-4AEA-4B85-BA3F-F2F63B96136A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZLJ.Migrator", "src\ZLJ.Migrator\ZLJ.Migrator.csproj", "{880B3591-E057-46FE-B525-10BD83828B93}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZLJ.Web.Host", "src\ZLJ.Web.Host\ZLJ.Web.Host.csproj", "{38E184BD-E874-4633-A947-AED4FDB73F40}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZLJ.Web.Core", "src\ZLJ.Web.Core\ZLJ.Web.Core.csproj", "{22CFE0D2-8DCA-42D7-AD7D-784C3862493F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZLJ.Web.Mvc", "src\ZLJ.Web.Mvc\ZLJ.Web.Mvc.csproj", "{A2213374-BB48-48FD-BBD4-81E6A961D866}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZLJ.EntityFrameworkCore", "src\ZLJ.EntityFrameworkCore\ZLJ.EntityFrameworkCore.csproj", "{E0580562-F8F2-4EBB-B07A-ABFC6F2C314F}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "WebAdmin", "src\WebAdmin\", "{39917A80-8D5A-4ACE-9F1B-11522564A507}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv2.0"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_49236"
+		Debug.AspNetCompiler.PhysicalPath = "src\WebAdmin\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_49236\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_49236"
+		Release.AspNetCompiler.PhysicalPath = "src\WebAdmin\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_49236\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "49236"
+		SlnRelativePath = "src\WebAdmin\"
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{D42FF479-F331-48F6-AAA2-45B9FD451892}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.File", "src\BXJG.File\BXJG.File.csproj", "{0773DDFD-ABAC-4B01-89DD-3ACC90C78A22}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Attachment", "src\BXJG.Attachment\BXJG.Attachment.csproj", "{71060AA1-EA2A-4E0D-8CE5-990DE9E57EF2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0FA75A5B-AB83-4FD0-B545-279774C01E87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FA75A5B-AB83-4FD0-B545-279774C01E87}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FA75A5B-AB83-4FD0-B545-279774C01E87}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FA75A5B-AB83-4FD0-B545-279774C01E87}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3870C648-4AEA-4B85-BA3F-F2F63B96136A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3870C648-4AEA-4B85-BA3F-F2F63B96136A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3870C648-4AEA-4B85-BA3F-F2F63B96136A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3870C648-4AEA-4B85-BA3F-F2F63B96136A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{880B3591-E057-46FE-B525-10BD83828B93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{880B3591-E057-46FE-B525-10BD83828B93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{880B3591-E057-46FE-B525-10BD83828B93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{880B3591-E057-46FE-B525-10BD83828B93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38E184BD-E874-4633-A947-AED4FDB73F40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38E184BD-E874-4633-A947-AED4FDB73F40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38E184BD-E874-4633-A947-AED4FDB73F40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38E184BD-E874-4633-A947-AED4FDB73F40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22CFE0D2-8DCA-42D7-AD7D-784C3862493F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22CFE0D2-8DCA-42D7-AD7D-784C3862493F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22CFE0D2-8DCA-42D7-AD7D-784C3862493F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22CFE0D2-8DCA-42D7-AD7D-784C3862493F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2213374-BB48-48FD-BBD4-81E6A961D866}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2213374-BB48-48FD-BBD4-81E6A961D866}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2213374-BB48-48FD-BBD4-81E6A961D866}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2213374-BB48-48FD-BBD4-81E6A961D866}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0580562-F8F2-4EBB-B07A-ABFC6F2C314F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0580562-F8F2-4EBB-B07A-ABFC6F2C314F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0580562-F8F2-4EBB-B07A-ABFC6F2C314F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0580562-F8F2-4EBB-B07A-ABFC6F2C314F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39917A80-8D5A-4ACE-9F1B-11522564A507}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39917A80-8D5A-4ACE-9F1B-11522564A507}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39917A80-8D5A-4ACE-9F1B-11522564A507}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{39917A80-8D5A-4ACE-9F1B-11522564A507}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{0773DDFD-ABAC-4B01-89DD-3ACC90C78A22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0773DDFD-ABAC-4B01-89DD-3ACC90C78A22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0773DDFD-ABAC-4B01-89DD-3ACC90C78A22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0773DDFD-ABAC-4B01-89DD-3ACC90C78A22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71060AA1-EA2A-4E0D-8CE5-990DE9E57EF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71060AA1-EA2A-4E0D-8CE5-990DE9E57EF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71060AA1-EA2A-4E0D-8CE5-990DE9E57EF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71060AA1-EA2A-4E0D-8CE5-990DE9E57EF2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0773DDFD-ABAC-4B01-89DD-3ACC90C78A22} = {D42FF479-F331-48F6-AAA2-45B9FD451892}
+		{71060AA1-EA2A-4E0D-8CE5-990DE9E57EF2} = {D42FF479-F331-48F6-AAA2-45B9FD451892}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F45DD46C-6040-4FCC-87E0-648786C36933}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,120 @@
+﻿<form id="frmRole" class="frm-container">
+    <input type="hidden" name="id" value="0" />
+    <table class="frm-box">
+        <tr>
+            <th><i>*</i>角色标识</th>
+            <td><input id="nameRole" name="name" class="easyui-textbox" data-options="required:true,validType:'length[0,20]'" /><span class="tishi" style="display:none;">静态角色不允许修改标识和权限</span></td>
+        </tr>
+        <tr>
+            <th><i>*</i>角色名称</th>
+            <td><input name="displayName" class="easyui-textbox" data-options="required:true,validType:'length[0,30]'" /></td>
+        </tr>
+        <tr>
+            <th valign="top" style="padding-top:5px;">备注</th>
+            <td style="padding-top:5px;"><input name="description" class="easyui-textbox" data-options="multiline:true,validType:'length[0,200]'" style="width:280px; height:100px;" /></td>
+        </tr>
+        <tr>
+            <th class="top">权限</th>
+            <td style="padding-top:5px;"><ul id="treeRole" style="width:300px;"></ul></td>
+        </tr>
+    </table>
+
+</form>
+
+<script>
+    (function () {
+        //关于权限有两种办法
+        //1 修改加载角色时直接加载所有权限，拥有的权限直接被选中
+        //2 分别加载所有权限 和角色和拥有的权限 目前采用此方式
+
+        var m = 'Role';
+        var $dlg = $('#dlg' + m);
+        var $frm = $dlg.find('#frm' + m);
+        var $permissionsTree = $dlg.find('#tree' + m);
+        var id = $dlg.data('id');
+        var $name = $dlg.find('#name' + m);
+
+        var psAry = new Array();            //用来保存已选择的权限集合
+        var isStatic = false;               //当前角色是否是静态角色
+
+        var taskInitTree = $.Deferred();    //权限树形控件初始化任务
+        var taskInitModel = $.Deferred();   //加载实体异步任务
+
+        //没必要等下拉加载完再赋值，因为easyui会在加载完后自动处理已存在的值，其它控件也一样
+        if(id)
+        {
+            taskInitModel= abp.services.app.role.get({id:id}).done(function (d) {
+                psAry = d.result.grantedPermissions;
+                isStatic = d.isStatic;
+                $frm.form('load',d);
+                if (d.isStatic) {
+                    $name.textbox('readonly');
+                    $frm.find('.tishi').show();
+                }
+            });
+        }else{
+            taskInitModel.resolve();
+        }
+
+        //上面的方法若禁用验证事件可能不会执行，下面的办法假定200毫秒textbox控件可以初始化完成
+        setTimeout(function(){
+            $name.next('span').find('input').focus();
+        },0);
+
+        var inited = false;//若不加此判断，修改时首次自动勾选权限将失败
+        $permissionsTree.tree({
+            url:abp.appPath+'api/services/app/Role/GetAllPermissions',
+            checkbox:true,
+            onLoadSuccess: function (node, data) {
+                taskInitTree.resolve();
+            },
+            onBeforeCheck: function (node, checked) {
+                if (inited && isStatic)
+                    return false;
+            }
+        });
+        var defInit = $.when(taskInitModel, taskInitTree).done(function () {
+            psAry.forEach(function (value, index) {
+                var node = $permissionsTree.tree('find', value);
+                if (node && (!node.children || node.children.length == 0))
+                    $permissionsTree.tree('check', node.target)
+            });
+            inited = true;
+            $name.next('span').find('input').focus();
+        });
+        abp.ui.setBusy($dlg, defInit);
+
+        $dlg.data('clickSave', function (d) {
+            if (!$frm.form('validate'))
+                return;
+
+            //ajax错误是abp会自动调用提示
+            var postData = $frm.serializeJSON();
+            var nodes = $permissionsTree.tree('getChecked', ['checked','indeterminate']);
+            postData.Permissions = new Array();
+            nodes.forEach(function(value,index){
+               postData.Permissions.push(value.id);
+            });
+            var defer;
+            if(id){
+                defer =abp.services.app.role.update(postData).done(function (d) {
+                    abp.notify.success(abp.localization.zlj('Update') + abp.localization.zlj('Success')+'!');
+                    onSaved('onSaved');
+                });
+            } else {
+                postData.Id = 0;
+                defer = abp.services.app.role.create(postData).done(function (d) {
+                    abp.notify.success(abp.localization.zlj('Add') + abp.localization.zlj('Success') + '!');
+                    onSaved('onSaved');
+                });
+            }
+            abp.ui.setBusy($dlg,defer);
+        });
+
+        function onSaved(funcName) {
+            var f = $dlg.data(funcName);
+            if (f)
+                f();
+        }
+    })();
+</script>
