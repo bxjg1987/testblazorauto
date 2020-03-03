@@ -3,13 +3,15 @@ using Abp.Zero.EntityFrameworkCore;
 using ZLJ.Authorization.Roles;
 using ZLJ.Authorization.Users;
 using ZLJ.MultiTenancy;
+using ZLJ.BaseInfo;
 
 namespace ZLJ.EntityFrameworkCore
 {
     public class ZLJDbContext : AbpZeroDbContext<Tenant, Role, User, ZLJDbContext>
     {
         /* Define a DbSet for each entity of the application */
-        
+
+        public virtual DbSet<OrganizationUnitEntity> OrganizationUnitEntities { get; set; }
         public ZLJDbContext(DbContextOptions<ZLJDbContext> options)
             : base(options)
         {

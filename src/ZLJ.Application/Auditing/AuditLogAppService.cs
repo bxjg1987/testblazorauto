@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Dynamic;
+using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
 using Abp.Auditing;
@@ -65,12 +65,11 @@ namespace ZLJ.Auditing
             var query = CreateAuditLogAndUsersQuery(input);
            
             var resultCount = await AsyncQueryableExecuter.CountAsync(query);
-          query =  query
-                .OrderBy(c=>c.AuditLog.ExecutionTime)
-                .PageBy( input.SkipCount,input.MaxResultCount);
-            var results =await AsyncQueryableExecuter.ToListAsync(query);
+            var results = await AsyncQueryableExecuter.ToListAsync( query
+                .OrderBy(input.Sorting)
+                .PageBy( input.SkipCount,input.MaxResultCount));
 
-           var auditLogListDtos = ConvertToAuditLogListDtos(results);
+            var auditLogListDtos = ConvertToAuditLogListDtos(results);
 
             return new PagedResultDto<AuditLogListDto>  (resultCount, auditLogListDtos);
         }

@@ -19,8 +19,8 @@ namespace ZLJ.Users.Dto
         public string Name { get; set; }
 
         //[Required]
-        //[StringLength(AbpUserBase.MaxSurnameLength)]
-        //public string Surname { get; set; }
+       [StringLength(AbpUserBase.MaxSurnameLength)]
+        public string Surname { get; set; }
 
         [Required]
         [EmailAddress]

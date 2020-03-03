@@ -112,7 +112,15 @@
     }
     if ($.fn.combotree) {
         $.fn.combotree.defaults.width = inputWidth;
-        $.fn.datagrid.defaults.method = 'get';
+        $.fn.combotree.defaults.method = 'get';
+        $.fn.combotree.defaults.loadFilter = function (data, parent) {
+            if (data && data.__abp) {
+                if (data.result.items)
+                    return data.result.items;
+                return data.result;
+            }
+            return data;
+        };
         //$.fn.combotree.defaults.validateOnCreate = false;
         //$.fn.combotree.defaults.validateOnBlur = false;
         $.fn.combotree.defaults.prompt = '==请选择==';
@@ -132,7 +140,7 @@
             if (data && data.__abp) {
                 if (data.result.items)
                     return data.result.items;
-                return  data.result;
+                return data.result;
             }
             return data;
         };
@@ -219,11 +227,16 @@
             }
         };
         $.fn.treegrid.defaults.loadFilter = function (data) {
-            if (data && data.totalCount)
-                return { rows: data.items, total: data.totalCount };
+            if (data && data.__abp) {
+                if (data.result.items)
+                    return data.result.items;
+                return data.result;
+            }
             return data;
         };
         $.fn.treegrid.defaults.onLoadError = abp.ajax.myErrorHandler;
+        $.fn.treegrid.defaults.method = 'get';
+
         //$.fn.datagrid.defaults.ctrlSelect = true;
         //$.fn.datagrid.defaults.fit = true;
         //$.fn.datagrid.defaults.checkOnSelect = true;
@@ -253,7 +266,7 @@
     abp.file = abp.file || {};
 
     //生成上传附件的选项
-    abp.file.buildJQUOA = function (module, permission,downPermission) {
+    abp.file.buildJQUOA = function (module, permission, downPermission) {
         return {
             server: abp.appPath + '/api/attachment/upload',
             onCheckUpload: function (ct) {
@@ -278,10 +291,10 @@
                 onClick: function (ct) {
                     abp.ajax({
                         url: abp.appPath + 'api/attachment/downloadstart',
-                        type:'post',
+                        type: 'post',
                         data: JSON.stringify({ id: ct.attachmentId, permission: downPermission }),
                         success: function (data) {
-                            window.open(abp.appPath + 'api/attachment/downloadend?token='+data);
+                            window.open(abp.appPath + 'api/attachment/downloadend?token=' + data);
                         }
                     });
                 }
