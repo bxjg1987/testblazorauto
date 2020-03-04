@@ -46,11 +46,11 @@ namespace BXJG.Utils.Localization
         {
             return localizationSource.GetEnum(typeof(T));
         }
-        public static IDictionary<int?, string> GetNullableEnum(this ILocalizationSource localizationSource, Type enumType)
+        public static IList<KeyValuePair<int?, string>> GetNullableEnum(this ILocalizationSource localizationSource, Type enumType)
         {
             return localizationSource.GetUnknown<int>(localizationSource.GetEnum(enumType));
         }
-        public static IDictionary<int?, string> GetNullableEnum<T>(this ILocalizationSource localizationSource) where T : Enum
+        public static IList<KeyValuePair<int?, string>> GetNullableEnum<T>(this ILocalizationSource localizationSource) where T : Enum
         {
             return localizationSource.GetUnknown<int>(localizationSource.GetEnum<T>());
         }
@@ -63,11 +63,11 @@ namespace BXJG.Utils.Localization
         {
             return localizationManager.GetSource(sourceName).GetEnum<T>();
         }
-        public static IDictionary<int?, string> GetNullableEnum(this ILocalizationManager localizationManager, string sourceName, Type enumType)
+        public static IList<KeyValuePair<int?, string>> GetNullableEnum(this ILocalizationManager localizationManager, string sourceName, Type enumType)
         {
             return localizationManager.GetSource(sourceName).GetNullableEnum(enumType);
         }
-        public static IDictionary<int?, string> GetNullableEnum<T>(this ILocalizationManager localizationManager, string sourceName) where T : Enum
+        public static IList<KeyValuePair<int?, string>> GetNullableEnum<T>(this ILocalizationManager localizationManager, string sourceName) where T : Enum
         {
             return localizationManager.GetSource(sourceName).GetNullableEnum<T>();
         }
@@ -124,7 +124,7 @@ namespace BXJG.Utils.Localization
             dic.Add(true, localizationSource.GetBool(true));
             return dic;
         }
-        public static IDictionary<bool?, string> GetNullableBool(this ILocalizationSource localizationSource)
+        public static IList<KeyValuePair<bool?, string>> GetNullableBool(this ILocalizationSource localizationSource)
         {
             return localizationSource.GetUnknown<bool>(localizationSource.GetBool());
         }
@@ -140,15 +140,15 @@ namespace BXJG.Utils.Localization
         {
             return new KeyValuePair<T?, string>(default(T?), localizationSource.GetUnknown());
         }
-        public static IDictionary<T?, string> GetUnknown<T>(this ILocalizationSource localizationSource, IDictionary<T, string> dic) where T : struct
+        public static IList <KeyValuePair <T?, string>>  GetUnknown<T>(this ILocalizationSource localizationSource, IDictionary<T, string> dic) where T : struct
         {
-            var dic1 = new Dictionary<T?, string>();
+            var dic1 = new List<KeyValuePair<T?, string>>();
             foreach (var item in dic)
             {
-                dic1.Add(item.Key, item.Value);
+                dic1.Add(new KeyValuePair<T?, string>(item.Key,item.Value));
             }
             var unknown = new KeyValuePair<T?, string>(default(T?), localizationSource.GetUnknown());
-            dic1.Add(unknown.Key, unknown.Value);
+            dic1.Add(new KeyValuePair<T?, string>(unknown.Key, unknown.Value));
             return dic1;
         }
     }

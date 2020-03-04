@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZLJ.Utils.Application
+namespace BXJG.Utils.Application
 {
     public class GetPYInput
     {

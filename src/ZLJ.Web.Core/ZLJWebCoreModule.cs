@@ -14,6 +14,7 @@ using ZLJ.Configuration;
 using ZLJ.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using ZLJ.Navigation;
+using BXJG.Utils;
 
 namespace ZLJ
 {
@@ -49,6 +50,8 @@ namespace ZLJ
                  .CreateControllersForAppServices(
                      typeof(ZLJApplicationModule).GetAssembly()
                  );
+
+            Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(BXJGUtilsModule).Assembly, moduleName: "utils", useConventionalHttpVerbs: true);
 
             ConfigureTokenAuth();
         }

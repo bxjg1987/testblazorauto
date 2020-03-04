@@ -11,33 +11,42 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Enums\GetForCombboxType.cs" />
     <Compile Remove="Extensions\StreamExtension.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Localization\SourceFiles\ZLJ-es.xml" />
-    <None Remove="Localization\SourceFiles\ZLJ-fr.xml" />
-    <None Remove="Localization\SourceFiles\ZLJ-it.xml" />
-    <None Remove="Localization\SourceFiles\ZLJ-ja.xml" />
-    <None Remove="Localization\SourceFiles\ZLJ-lt.xml" />
-    <None Remove="Localization\SourceFiles\ZLJ-nl.xml" />
-    <None Remove="Localization\SourceFiles\ZLJ-pt-BR.xml" />
-    <None Remove="Localization\SourceFiles\ZLJ-tr.xml" />
-    <None Remove="Localization\SourceFiles\ZLJ-zh-Hans.xml" />
-    <None Remove="Localization\SourceFiles\ZLJ.xml" />
+    <None Remove="Localization\SourceFiles\BXJGUtils-es.xml" />
+    <None Remove="Localization\SourceFiles\BXJGUtils-fr.xml" />
+    <None Remove="Localization\SourceFiles\BXJGUtils-it.xml" />
+    <None Remove="Localization\SourceFiles\BXJGUtils-ja.xml" />
+    <None Remove="Localization\SourceFiles\BXJGUtils-lt.xml" />
+    <None Remove="Localization\SourceFiles\BXJGUtils-nl.xml" />
+    <None Remove="Localization\SourceFiles\BXJGUtils-pt-BR.xml" />
+    <None Remove="Localization\SourceFiles\BXJGUtils-tr.xml" />
+    <None Remove="Localization\SourceFiles\BXJGUtils-zh-Hans.xml" />
+    <None Remove="Localization\SourceFiles\BXJGUtils.xml" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Localization\SourceFiles\ZLJ-es.xml" />
-    <EmbeddedResource Include="Localization\SourceFiles\ZLJ-fr.xml" />
-    <EmbeddedResource Include="Localization\SourceFiles\ZLJ-it.xml" />
-    <EmbeddedResource Include="Localization\SourceFiles\ZLJ-ja.xml" />
-    <EmbeddedResource Include="Localization\SourceFiles\ZLJ-lt.xml" />
-    <EmbeddedResource Include="Localization\SourceFiles\ZLJ-nl.xml" />
-    <EmbeddedResource Include="Localization\SourceFiles\ZLJ-pt-BR.xml" />
-    <EmbeddedResource Include="Localization\SourceFiles\ZLJ-tr.xml" />
-    <EmbeddedResource Include="Localization\SourceFiles\ZLJ-zh-Hans.xml" />
-    <EmbeddedResource Include="Localization\SourceFiles\ZLJ.xml" />
+    <Compile Include="Application\Dto\GetPYInput.cs" />
+    <Compile Include="Application\Dto\GetEnumForCombboxInput.cs" />
+    <Compile Include="Application\IBXJGUtilsAppService.cs" />
+    <Compile Include="Application\BXJGUtilsAppService.cs" />
+    <Compile Include="Application\BXJGUtilsAppServiceBase.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Localization\SourceFiles\BXJGUtils-es.xml" />
+    <EmbeddedResource Include="Localization\SourceFiles\BXJGUtils-fr.xml" />
+    <EmbeddedResource Include="Localization\SourceFiles\BXJGUtils-it.xml" />
+    <EmbeddedResource Include="Localization\SourceFiles\BXJGUtils-ja.xml" />
+    <EmbeddedResource Include="Localization\SourceFiles\BXJGUtils-lt.xml" />
+    <EmbeddedResource Include="Localization\SourceFiles\BXJGUtils-nl.xml" />
+    <EmbeddedResource Include="Localization\SourceFiles\BXJGUtils-pt-BR.xml" />
+    <EmbeddedResource Include="Localization\SourceFiles\BXJGUtils-tr.xml" />
+    <EmbeddedResource Include="Localization\SourceFiles\BXJGUtils-zh-Hans.xml" />
+    <EmbeddedResource Include="Localization\SourceFiles\BXJGUtils.xml" />
   </ItemGroup>
 
   <ItemGroup>
