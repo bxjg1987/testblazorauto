@@ -1,6 +1,28 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <localizationDictionary culture="en">
   <texts>
+    <!--菜单-->
+    <text name="Asset management" value="Asset" />
+    <text name="BaseInfo" value="Base info" />
+    <text name="Equipment info" value="Equipment" />
+    <text name="OrganizationUnit" value="Organization" />
+    <text name="Employee" value="Employee" />
+    <text name="Administrative" value="Administrative" />
+    <text name="DataDictionary" value="Data dictionary" />
+    <text name="System" value="System" />
+    <text name="Role" value="Role" />
+    <text name="User" value="User" />
+    <text name="Log" value="Audit log" />
+    <text name="WeChatIndex" value="WeChatIndex" />
+    <text name="Btype" value="Btype" />
+    <text name="Demo" value="Demo" />
+    <text name="WeChat" value="WeChat" />
+    <text name="Upload" value="Upload" />
+    <text name="Settings" value="Settings" />
+    
+
+
+
     <text name="HomePage" value="Home page" />
     <text name="About" value="About" />
     <text name="WelcomeMessage" value="Welcome to ZLJ!" />
@@ -44,8 +66,10 @@
     <text name="Logout" value="Logout" />
     <text name="RegisterFormUserNameInvalidMessage">Please don't enter an email address for username.</text>
     <text name="DatabaseConnectionString" value="Database connection string" />
-    <text name="Users" value="Users" />
+    <text name="EquipmentInfo" value="Equipment" />
     <text name="IsActive" value="Is active" />
+    <text name="Add" value="Add" />
+    <text name="Update" value="Edit" />
     <text name="FullName" value="Full name" />
     <text name="CreateNewUser" value="Create new user" />
     <text name="Yes" value="Yes" />
@@ -94,7 +118,6 @@
     <text name="SuccessfullyDeleted">Successfully deleted</text>
     <text name="StartTyping">Start Typing</text>
     <text name="Skins">Skins</text>
-    <text name="Settings">Settings</text>
     <text name="Filter">Filter</text>
     <text name="CurrentPassword">Current Password</text>
     <text name="NewPassword">New Password</text>

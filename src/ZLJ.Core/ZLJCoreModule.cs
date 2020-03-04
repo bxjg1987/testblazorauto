@@ -5,6 +5,8 @@ using Abp.Zero;
 using Abp.Zero.Configuration;
 using BXJG.Attachment;
 using BXJG.File;
+using BXJG.GeneralTree;
+using BXJG.Utils;
 using ZLJ.Authorization.Roles;
 using ZLJ.Authorization.Users;
 using ZLJ.Configuration;
@@ -15,7 +17,9 @@ using ZLJ.Timing;
 namespace ZLJ
 {
     [DependsOn(
-        typeof(AbpZeroCoreModule), 
+        typeof(AbpZeroCoreModule),
+        typeof(BXJGUtilsModule),
+        typeof(GeneralTreeModule),
         typeof(BXJGFileModule), 
         typeof(BXJGAttachmentModule))]
     public class ZLJCoreModule : AbpModule

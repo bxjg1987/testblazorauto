@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Application\**" />
+    <EmbeddedResource Remove="Application\**" />
+    <None Remove="Application\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Extensions\StreamExtension.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Localization\SourceFiles\ZLJ-es.xml" />
+    <None Remove="Localization\SourceFiles\ZLJ-fr.xml" />
+    <None Remove="Localization\SourceFiles\ZLJ-it.xml" />
+    <None Remove="Localization\SourceFiles\ZLJ-ja.xml" />
+    <None Remove="Localization\SourceFiles\ZLJ-lt.xml" />
+    <None Remove="Localization\SourceFiles\ZLJ-nl.xml" />
+    <None Remove="Localization\SourceFiles\ZLJ-pt-BR.xml" />
+    <None Remove="Localization\SourceFiles\ZLJ-tr.xml" />
+    <None Remove="Localization\SourceFiles\ZLJ-zh-Hans.xml" />
+    <None Remove="Localization\SourceFiles\ZLJ.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Localization\SourceFiles\ZLJ-es.xml" />
+    <EmbeddedResource Include="Localization\SourceFiles\ZLJ-fr.xml" />
+    <EmbeddedResource Include="Localization\SourceFiles\ZLJ-it.xml" />
+    <EmbeddedResource Include="Localization\SourceFiles\ZLJ-ja.xml" />
+    <EmbeddedResource Include="Localization\SourceFiles\ZLJ-lt.xml" />
+    <EmbeddedResource Include="Localization\SourceFiles\ZLJ-nl.xml" />
+    <EmbeddedResource Include="Localization\SourceFiles\ZLJ-pt-BR.xml" />
+    <EmbeddedResource Include="Localization\SourceFiles\ZLJ-tr.xml" />
+    <EmbeddedResource Include="Localization\SourceFiles\ZLJ-zh-Hans.xml" />
+    <EmbeddedResource Include="Localization\SourceFiles\ZLJ.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Abp" Version="5.2.0" />
+  </ItemGroup>
+
+</Project>
