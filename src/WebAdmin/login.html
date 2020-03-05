@@ -88,11 +88,11 @@
             let task;
             if (!lan) {
                 task = loadGetScripts();
-                abp.setCurrentLanguage(abp.localization.currentCulture.name);
             } else {
                 task = loadGetScripts(lan);
             }
             return task.done(function () {
+                abp.setCurrentLanguage(abp.localization.currentCulture.name);
                 initElementLan();
                 renderLanguageList();
             });

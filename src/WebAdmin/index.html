@@ -18,7 +18,7 @@
 
 </head>
 <body class="easyui-layout" data-options="fit:true,border:false">
-
+    <div id="loading" style="position:absolute; z-index:9999; width:100%; height:100%; background-color:#01273b; color:#e3f0fe; text-align:center; padding-top:200px;">Loading...</div>
     <!--顶部-->
     <div data-options="region:'north',border:false" style="height: 54px; background-color: #3c8dbc;">
         <div id="top_logo">
@@ -46,10 +46,10 @@
             <div data-options="region:'south'" style="height:30px;">
                 <div style=" height:24px; font-size:12px; line-height:22px; text-align:center; color:#777; background-color: #e3e3e3;">
                     Copyright©2019 <a href="#" target="_blank" style="color:#777;">变形精怪</a> 版权所有
-                    | <a id="apiurl" href="swagger/index.html" target="_blank" style="color:#777;">API</a> 
+                    | <a id="apiurl" href="swagger/index.html" target="_blank" style="color:#777;">API</a>
                     | <a target="_blank" style="color:#777;" href="https://aspnetboilerplate.com/">Powered by ABP.5.2.0 </a>
                     & <a target="_blank" style="color:#777;" href="https://docs.microsoft.com/zh-cn/aspnet/core/getting-started/?view=aspnetcore-3.1&tabs=windows">ASP.NET Core 3.1</a>
-</div>
+                </div>
             </div>
         </div>
     </div>
@@ -118,7 +118,6 @@
     <!-- Dynamic scripts of ABP system (They are created on runtime and can not be bundled) -->
     <script src="http://localhost:21021/AbpServiceProxies/getall"></script>
     <!--<script src="http://localhost:21021/AbpScripts/GetScripts?sdf=3"></script>-->
- 
     <!--<script src="https://cdn.bootcss.com/echarts/4.1.0-release/echarts.min.js"></script>-->
     <script src="lib/echarts-4.1.0/echarts.min.js"></script>
 
@@ -133,6 +132,12 @@
 
 
     <script src="js/startup.js"></script>
+
+    <script>
+        if (!abp.getCurrentJWTToken())
+            location = 'login.html';
+    </script>
+
     <script src="js/app.js"></script>
 
     <script type="text/javascript">
@@ -149,6 +154,8 @@
         var $mainLayout = $('body');
         var $apiurl = $('#apiurl');//底部api地址
 
+        let $loading = $("#loading");
+
         $apiurl.attr('href', abp.appPath + $apiurl.attr('href'));
 
         $mainTabs.tabs({
@@ -164,7 +171,7 @@
                     return;
                 }
                 if (item.text == '注销') {
-                    abp.utils.setCookieValue(abp.auth.accessTokenCookieName, '');
+                    abp.setCurrentJWTToken('');
                     location.href = '/login.html';
                 }
             }
@@ -338,19 +345,30 @@
                 });
                 abp.services.app.session.getCurrentLoginInformations()
                     .done(function (result) {
-                        if (!result.user) {
-                            console.log(abp.ajax.defaultError401);
-                            abp.ajax.showError(abp.ajax.defaultError401)
-                                .done(function () {
-                                    location = 'login.html';
-                                });
-                            return;
-                        }
+                        //if (!result.user) {
+                        //若不考虑本地化提示，可以将代码放到外面
+                        //console.log(abp.ajax.defaultError401);
+                        //abp.ajax.showError(abp.ajax.defaultError401)
+                        //    .done(function () {
+                        //        location = 'login.html';
+                        //    });
+
+                        //首次加载，未登录时不需要提示用户，直接跳转，最好的方式是在页面顶部去判断
+                        //但是发现放顶部不好处理，因为判断当前用户是否登录需要读cookie 依赖abp库
+                        //最好的方式是为首页增加loading...
+                        //最终决定在最早切断去判断 增加loading..
+                        //     location = 'login.html';
+                        //     return;
+                        //}
 
                         //$txtCurrUser.menubutton({text:result.user.name});
 
                         $txtCurrUser.menubutton('options').text = result.user.name;
                         $.parser.parse('#top_right');
+
+                        setTimeout(function () {
+                            $loading.fadeOut(300);
+                        }, 1000);
                     });
             },
             error: function () {
