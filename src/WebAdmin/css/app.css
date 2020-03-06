@@ -8,6 +8,18 @@ html, body {
     background-color: #aaa;
 }
 
+#loading {
+    position: absolute;
+    z-index: 9999;
+    width: 100%;
+    height: 100%;
+    color: #e3f0fe;
+    text-align: center;
+    padding-top: 200px;
+    background: #181e25 url(../img/loading.gif) no-repeat;
+    background-position: center center;
+}
+
 #top_right {
     position: absolute;
     right: 10px;
