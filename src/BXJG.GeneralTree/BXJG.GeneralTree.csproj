@@ -35,7 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Abp.AutoMapper" Version="5.2.0" />
+    <PackageReference Include="Abp.AutoMapper" Version="5.3.0" />
   </ItemGroup>
 
 </Project>

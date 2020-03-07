@@ -3,6 +3,7 @@ using Abp.Reflection.Extensions;
 using Abp.Timing;
 using Abp;
 using BXJG.Utils.Localization;
+using BXJG.Utils.Enums;
 
 namespace BXJG.Utils
 {
@@ -14,6 +15,9 @@ namespace BXJG.Utils
     {
         public override void PreInitialize()
         {
+            IocManager.Register<BXJGUtilsModuleConfig>();
+            Configuration.Modules.BXJGUtils().AddEnum("gender", typeof(Gender), BXJGUtilsConsts.LocalizationSourceName);
+
             BXJGUtilsLocalizationConfigurer.Configure(Configuration.Localization);
         }
 

@@ -29,14 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Application\Dto\GetPYInput.cs" />
-    <Compile Include="Application\Dto\GetEnumForCombboxInput.cs" />
-    <Compile Include="Application\IBXJGUtilsAppService.cs" />
-    <Compile Include="Application\BXJGUtilsAppService.cs" />
-    <Compile Include="Application\BXJGUtilsAppServiceBase.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Include="Localization\SourceFiles\BXJGUtils-es.xml" />
     <EmbeddedResource Include="Localization\SourceFiles\BXJGUtils-fr.xml" />
     <EmbeddedResource Include="Localization\SourceFiles\BXJGUtils-it.xml" />
@@ -50,7 +42,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Abp" Version="5.2.0" />
+    <PackageReference Include="Abp" Version="5.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Application\" />
   </ItemGroup>
 
 </Project>

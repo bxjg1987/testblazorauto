@@ -73,7 +73,14 @@ namespace BXJG.Utils.Localization
         }
 
 
-
+        #region 获取指定枚举值对应的本地化文本
+        /// <summary>
+        /// 获取指定枚举值对应的本地化文本
+        /// 如：Gender.Man  则获取 “男”
+        /// </summary>
+        /// <param name="localizationSource"></param>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public static string GetEnum(this ILocalizationSource localizationSource, Enum obj)
         {
             if (obj == null)
@@ -89,20 +96,97 @@ namespace BXJG.Utils.Localization
 
             return localizationSource.GetString(localizationKey);
         }
+        /// <summary>
+        /// 获取指定枚举值对应的本地化文本
+        /// 如：Gender.Man  则获取 “男”
+        /// </summary>
+        /// <typeparam name="T">枚举类型</typeparam>
+        /// <param name="localizationSource"></param>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public static string GetEnum<T>(this ILocalizationSource localizationSource, T obj) where T : Enum
         {
             return localizationSource.GetEnum(obj as Enum);
         }
-
+        /// <summary>
+        /// 获取指定枚举值对应的本地化文本
+        /// 如：Gender.Man  则获取 “男”
+        /// </summary>
+        /// <param name="localizationManager"></param>
+        /// <param name="sourceName"></param>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public static string GetEnum(this ILocalizationManager localizationManager, string sourceName, Enum obj)
         {
             return localizationManager.GetSource(sourceName).GetEnum(obj);
         }
+        /// <summary>
+        /// 获取指定枚举值对应的本地化文本
+        /// 如：Gender.Man  则获取 “男”
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="localizationManager"></param>
+        /// <param name="sourceName">本地化资源名</param>
+        /// <param name="obj">枚举值</param>
+        /// <returns></returns>
         public static string GetEnum<T>(this ILocalizationManager localizationManager, string sourceName, T obj) where T : Enum
         {
             return localizationManager.GetSource(sourceName).GetEnum<T>(obj);
         }
+        #endregion
 
+        #region 为指定类型本身获取本地化字符串
+        /// <summary>
+        /// 为指定类型本身获取本地化字符串
+        /// 如：.GetForType(typeof(Gender))  返回"性别"
+        /// </summary>
+        /// <param name="localizationSource"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static string GetForType(this ILocalizationSource localizationSource, Type type)
+        {
+            var localizationKey = type.FullName;
+            var attr = type.GetCustomAttribute(typeof(DescriptionAttribute), false) as DescriptionAttribute;
+            if (attr != null)
+                localizationKey = attr.Description;
+            return localizationSource.GetString(localizationKey);
+        }
+        /// <summary>
+        /// 为指定类型本身获取本地化字符串
+        /// 如：.GetForType(typeof(Gender))  返回"性别"
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="localizationSource"></param>
+        /// <returns></returns>
+        public static string GetForType<T>(this ILocalizationSource localizationSource)
+        {
+            return localizationSource.GetForType(typeof(T));
+        }
+        /// <summary>
+        /// 为指定类型本身获取本地化字符串
+        /// 如：.GetForType(typeof(Gender))  返回"性别"
+        /// </summary>
+        /// <param name="localizationManager"></param>
+        /// <param name="sourceName"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static string GetForType(this ILocalizationManager localizationManager, string sourceName, Type type)
+        {
+            return localizationManager.GetSource(sourceName).GetForType(type);
+        }
+        /// <summary>
+        /// 为指定类型本身获取本地化字符串
+        /// 如：.GetForType(typeof(Gender))  返回"性别"
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="localizationManager"></param>
+        /// <param name="sourceName"></param>
+        /// <returns></returns>
+        public static string GetForType<T>(this ILocalizationManager localizationManager, string sourceName)
+        {
+            return localizationManager.GetSource(sourceName).GetForType(typeof(T));
+        }
+        #endregion
 
 
         public static string GetTrue(this ILocalizationSource localizationSource)
@@ -140,12 +224,12 @@ namespace BXJG.Utils.Localization
         {
             return new KeyValuePair<T?, string>(default(T?), localizationSource.GetUnknown());
         }
-        public static IList <KeyValuePair <T?, string>>  GetUnknown<T>(this ILocalizationSource localizationSource, IDictionary<T, string> dic) where T : struct
+        public static IList<KeyValuePair<T?, string>> GetUnknown<T>(this ILocalizationSource localizationSource, IDictionary<T, string> dic) where T : struct
         {
             var dic1 = new List<KeyValuePair<T?, string>>();
             foreach (var item in dic)
             {
-                dic1.Add(new KeyValuePair<T?, string>(item.Key,item.Value));
+                dic1.Add(new KeyValuePair<T?, string>(item.Key, item.Value));
             }
             var unknown = new KeyValuePair<T?, string>(default(T?), localizationSource.GetUnknown());
             dic1.Add(new KeyValuePair<T?, string>(unknown.Key, unknown.Value));
