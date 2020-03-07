@@ -15,14 +15,19 @@
     <text name="PleaseEnterLoginInformation" value="Please enter login information" />
     <text name="TenancyName" value="Tenancy name" />
     <text name="UserNameOrEmail" value="User name or email" />
-    <text name="Password" value="Password" />
+    <text name="密码" value="Password" />
     <text name="ResetPassword" value="Reset Password" />
     <text name="UpdatePassword" value="Update Password" />
-    <text name="RememberMe" value="Remember me" />
-    <text name="LogIn" value="Log in" />
+
+
+    <text name="记住我" value="Remember me" />
+    <text name="忘记密码？" value="Forget the password?" />
+    
+    <text name="登录" value="Log in" />
     <text name="LoginFailed" value="Login failed!" />
     <text name="NameSurname" value="Name surname" />
-    <text name="UserName" value="User name" />
+    <text name="用户名" value="User name" />
+    <text name="用户登录" value="User login" />
     <text name="Name" value="Name" />
     <text name="Surname" value="Surname" />
     <text name="EmailAddress" value="Email address" />

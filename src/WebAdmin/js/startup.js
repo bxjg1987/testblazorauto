@@ -15,6 +15,7 @@
     */
     abp.localization.defaultSourceName = 'ZLJ';    //abp模板中没有提供这个值，设置默认本地化资源
     abp.localization.zlj = abp.localization.getSource(abp.localization.defaultSourceName);//后来发现没啥必要，可以这样：abp.localization.localize('NewTask');
+    abp.localization.bxjgUtils = abp.localization.getSource('BXJGUtils');
 
     //除了abp的ajax请求，其它所有ajax请求异常时的处理，比如：easyui列表页请求异常
     abp.ajax.myErrorHandler = function (jqXHR, status, error) {

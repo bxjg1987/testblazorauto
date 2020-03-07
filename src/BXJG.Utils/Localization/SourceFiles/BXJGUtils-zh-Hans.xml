@@ -39,11 +39,12 @@
     <text name="PleaseEnterLoginInformation" value="请输入登录信息" />
     <text name="TenancyName" value="租户名称" />
     <text name="UserNameOrEmail" value="用户名或邮箱地址" />
-    <text name="Password" value="密码" />
+    <text name="密码" value="密码" />
     <text name="RememberMe" value="记住我" />
     <text name="YouCanNotDeleteOwnAccount" value="不许自杀！" />
     <text name="YouCanNotDeleteAdmin" value="不许杀大Boss！" />
-    <text name="LogIn" value="登录" />
+    <text name="登录" value="登录" />
+    <text name="用户登录" value="用户登录" />
     <text name="LoginFailed" value="登录失败!" />
     <text name="GetUsersKeywordsInputPrompt" value="姓名/登录名/邮箱/手机号 等..." />
     <text name="Add" value="新增" />
@@ -73,7 +74,9 @@
     <text name="UnAuthenticated" value="身份验证失败！" />
     <text name="UnAuthenticatedDetail" value="登陆已过期！稍重新登陆。" />
     <text name="NameSurname" value="名 姓" />
-    <text name="UserName" value="用户名" />
+    <text name="用户名" value="用户名" />
+    <text name="记住我" value="记住用户名和密码" />
+    <text name="忘记密码？" value="忘记密码？" />
     <text name="Name" value="名称" />
     <text name="Surname" value="姓" />
     <text name="EmailAddress" value="邮箱地址" />

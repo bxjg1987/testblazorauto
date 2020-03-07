@@ -1,66 +1,231 @@
 ﻿<!doctype html>
 <html lang="en">
 <head>
+    <title>Login</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <!-- Bootstrap CSS -->
     <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">-->
-    <link href="https://cdn.bootcss.com/twitter-bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" />
     <!-- Loding font -->
     <!--<link href="https://fonts.googleapis.com/css?family=Montserrat:300,700" rel="stylesheet">-->
     <!-- Custom Styles -->
-    <link rel="stylesheet" type="text/css" href="css/login.css">
-
-    <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="css/login.css" />
 </head>
 <body>
-
     <!-- Backgrounds -->
-
     <div id="login-bg" class="container-fluid">
-
         <div class="bg-img"></div>
         <div class="bg-color"></div>
     </div>
-
     <!-- End Backgrounds -->
-
     <div class="container" id="login">
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 <div class="login">
 
-                    <h1>用户登录</h1>
+                    <h1 id="userLogin">用户登录</h1>
 
                     <!-- Loging form -->
                     <form>
                         <div class="form-group">
-                            <input type1="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="登录名/邮箱地址">
+                            <input name="userNameOrEmailAddress" type1="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="登录名/邮箱地址">
                         </div>
                         <div class="form-group">
-                            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="密码">
+                            <input type="password" name="password"  class="form-control" id="exampleInputPassword1" placeholder="密码">
                         </div>
 
                         <div class="form-check">
-
-                            <label class="switch">
-                                <input type="checkbox">
+                            <label class="switch" style="display:none;">
+                                <input type="checkbox" name="RememberMe" >
                                 <span class="slider round"></span>
                             </label>
-                            <label class="form-check-label" for="exampleCheck1">记住账号密码</label>
+                            <label style="display:none;" class="form-check-label" for="exampleCheck1" id="jzmm">记住账号密码</label>
 
-                            <label class="forgot-password"><a href="#">忘记密码?<a></label>
+                            <label class="forgot-password"><a id="wjmm" href="#">忘记密码?</a></label>
 
                         </div>
 
-                        <br>
-                        <button type="submit" class="btn btn-lg btn-block btn-primary">登录</button>
+
+                        <button id="btnSubmit" type="submit" class="btn btn-lg btn-block btn-primary">登录</button>
                     </form>
+                    <div id="language" style="font-size:12px;"></div>
                 </div>
             </div>
         </div>
     </div>
+    
+    <!--引入jquery-->
+    <script src="lib/jquery/jquery.min.js"></script>
+
+    <!--一下二个做弹出用的-->
+    <script src="lib/sweetalert/sweetalert.min.js"></script>
+
+    <!--浏览器通知-->
+    <script src="lib/push.js/push.min.js"></script>
+
+    <!--toastr-->
+    <script src="lib/toastr/toastr.min.js"></script>
+
+    <!--loading-->
+    <script src="lib/spin/spin.min.js"></script>
+    <script src="lib/spin/jquery.spin.js"></script>
+
+    <!--正在加载、正在提交..-->
+    <script src="lib/block-ui/jquery.blockUI.min.js"></script>
+
+    <!--什么用？-->
+    <script src="lib/moment/moment-with-locales.min.js"></script>
+
+    <!--abp相关-->
+    <script src="lib/abp-web-resources/Abp/Framework/scripts/abp.min.js"></script>
+    <script src="lib/abp-web-resources/Abp/Framework/scripts/libs/abp.jquery.min.js"></script>
+    <script src="lib/abp-web-resources/Abp/Framework/scripts/libs/abp.toastr.min.js"></script>
+    <script src="lib/abp-web-resources/Abp/Framework/scripts/libs/abp.blockUI.min.js"></script>
+    <script src="lib/abp-web-resources/Abp/Framework/scripts/libs/abp.spin.min.js"></script>
+    <script src="lib/abp-web-resources/Abp/Framework/scripts/libs/abp.sweet-alert.min.js"></script>
+    <!-- Dynamic scripts of ABP system (They are created on runtime and can not be bundled)
+    <script src="http://localhost:21021/AbpServiceProxies/getall"></script>
+    <script src="http://localhost:21021/AbpScripts/GetScripts"></script>-->
+    <!--signalr 暂时不要启用，研究透signalR后再说
+    <script src="lib/signalr/dist/browser/signalr.js"></script>
+    <script src="lib/abp-web-resources/Abp/Framework/scripts/libs/abp.signalr-client.js"></script>-->
+    <!--表单序列化生成json-->
+    <script src="lib/jquery-serializejson-2.9.0/jquery.serializejson.min.js"></script>
+
+    <!--自定义的启动js-->
+    <script src="js/startup.js"></script>
+
+    <script>
+
+        let $lb_userNameOrEmailAddress = $('#exampleInputEmail1'); //账号label
+        let $lb_password = $('#exampleInputPassword1');//密码label
+        let $login_box_submit = $('#btnSubmit');//提交按钮
+        let $userLogin = $('#userLogin');
+        let $jzmm = $('#jzmm');
+        let $wjmm = $('#wjmm');
+
+        //当前语言处理+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        //未登录时无法获取用户自己的当前语言，只能看以本地上次的当前语言为准
+
+        let $language = $('#language');//语言列表框
+        let languageChanged = false;//是否切换过语言了
+
+        initLanguage();
+
+        function initLanguage() {
+            let lan = abp.getCurrentLanguage();
+            let task;
+            if (!lan) {
+                task = loadGetScripts();
+            } else {
+                task = loadGetScripts(lan);
+            }
+            return task.done(function () {
+                abp.setCurrentLanguage(abp.localization.currentCulture.name);
+                initElementLan();
+                renderLanguageList();
+            });
+        }
+
+        //给页面上的元素设置本地化文本
+        function initElementLan() {
+            $lb_userNameOrEmailAddress.attr('placeholder',abp.localization.bxjgUtils('用户名'));
+            $lb_password.attr('placeholder',abp.localization.localize('密码'));
+            $login_box_submit.text(abp.localization.bxjgUtils('登录'));
+            $userLogin.text(abp.localization.bxjgUtils('用户登录'));
+            $jzmm.text(abp.localization.bxjgUtils('记住我'));
+            $wjmm.text(abp.localization.bxjgUtils('忘记密码？'));
+        }
+
+        //加载abp动态js文件，里面包含多语言信息,可以继续done.. then...
+        //加载完后，abp.localization.currentCulture就变了
+        function loadGetScripts(language) {
+            let url = abp.appPath + 'AbpScripts/GetScripts';
+            if (language)
+                url += '?culture=' + language + '&ui-culture=' + language;
+            return $.getScript(url);
+        }
+
+        //更改当前语言
+        function changeCurrentLanguage(language) {
+            if (abp.getCurrentLanguage() == language)
+                return;
+
+            languageChanged = true;
+            return loadGetScripts(language).done(function () {
+                abp.setCurrentLanguage(abp.localization.currentCulture.name);
+                initElementLan();
+            });
+        }
+
+        //渲染多语言切换列表框
+        function renderLanguageList() {
+            $language.empty();
+            abp.localization.languages.forEach(function (currentValue, index, arr) {
+                var $temp = $('<a href="javascript:void(0)">' + currentValue.displayName + '</a> | ').appendTo($language);
+                $temp.click(function (e) {
+                    e.preventDefault();
+                    changeCurrentLanguage(currentValue.name);
+                });
+            });
+        }
+        //当前语言处理---------------------------------------------------------------
+
+
+
+        //判断token是否过期
+        //if (abp.auth.accessToken) {
+        //    abp.services.app.session.getCurrentLoginInformations({ async: false })
+        //    .done(function (result) {
+        //        //abp.notify.success('凭证有效，无需登陆。正在跳转到后台首页...');
+        //        //gotoIndex();
+        //        if (result.user)
+        //            location = 'index.html';
+        //    }).fail(function () {
+        //        //  location = 'index.html';
+        //    });
+        //}
+
+        let $login_form = $('form');
+        $login_box_submit.click(function (e) {
+            e.preventDefault();
+            //console.log($login_form.serializeJSON());
+        
+            //经过测试.net core版本必须json提交，设置contentType，data对应的格式也必须是json
+            //但是正常来说无论表单还是json应该都可以登录 只要提交的数据格式和contentType匹配
+            let language = abp.getCurrentLanguage();
+            abp.ui.setBusy('.login',
+                $.ajax({
+                    type: "POST",
+                    url: abp.appPath + 'api/TokenAuth/Authenticate?culture=' + language + '&ui-culture=' + language,
+                    contentType: "application/json",
+                    data: JSON.stringify($login_form.serializeJSON()),// $login_form.serializeJSON(),
+                    dataType1: "json",
+                    success: function (d) {
+                        abp.setCurrentJWTToken(d.result.accessToken);
+
+                        if (languageChanged) {
+
+                            //处理语言切换。也可以考虑动态代理api，user接口有提供
+                            abp.ajax({
+                                type: 'get',
+                                url: abp.appPath + 'AbpLocalization/ChangeCulture?cultureName=' + abp.getCurrentLanguage(),
+                                success: function (d) {
+                                    location = 'index.html';
+                                }
+                            });
+                        } else
+                            location = 'index.html';
+                    },
+                    error: function (message) {
+                        abp.ajax.showError(message.responseJSON.error);
+                    }
+                })
+            );
+        });
+
+    </script>
 </body>
 </html>
