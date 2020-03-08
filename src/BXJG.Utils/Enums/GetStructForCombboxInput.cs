@@ -11,7 +11,7 @@ namespace BXJG.Utils.Enums
     /// <summary>
     /// 获取枚举作为下拉框数据时的输入模型
     /// </summary>
-    public class GetEnumForCombboxInput : GetForSelectInput
+    public class GetStructForCombboxInput : GetForSelectInput
     {
         ///// <summary>
         ///// 是否加载“未知”
@@ -20,7 +20,6 @@ namespace BXJG.Utils.Enums
         /// <summary>
         /// 枚举类型名
         /// </summary>
-        [Required]
-        public string EnumTypeName { get; set; }
+        public string LocationSourceName { get; set; }
     }
 }

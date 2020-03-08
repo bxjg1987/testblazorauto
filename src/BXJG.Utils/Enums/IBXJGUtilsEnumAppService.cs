@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
+using BXJG.Utils.Dto;
+
 namespace BXJG.Utils.Enums
 {
     /// <summary>
@@ -21,9 +23,9 @@ namespace BXJG.Utils.Enums
 
         ////由于abp可以为应用服务生成js代理，客服端调用更方便
 
-       
+
         //string GetPY(GetPYInput input);
 
-        //IList<ComboboxDto<int>> GetBool(NullableInput input);
+        IList<ComboboxItemDto> GetBool(GetStructForCombboxInput input);
     }
 }

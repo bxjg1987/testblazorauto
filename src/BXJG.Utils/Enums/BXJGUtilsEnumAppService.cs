@@ -9,6 +9,7 @@ using System.Reflection;
 using BXJG.Utils.Localization;
 using Abp.Application.Services.Dto;
 using Abp.Extensions;
+using BXJG.Utils.Dto;
 
 namespace BXJG.Utils.Enums
 {
@@ -32,26 +33,15 @@ namespace BXJG.Utils.Enums
         public IList<ComboboxItemDto> GetByName(GetEnumForCombboxInput input)
         {
             var cfgItem = cfg.Enums.Single(c => c.Name.Equals(input.EnumTypeName, StringComparison.OrdinalIgnoreCase));
-            var t = cfgItem.Type;
 
-            IEnumerable<ComboboxItemDto> a;
-            if (input.Nullable)
-            {
-                var list = base.LocalizationSource.GetNullableEnum(t);
-                a = list.Select(c => new ComboboxItemDto { Value = c.Key.ToString(), DisplayText = c.Value });
-            }
-            else
-            {
-                var list = base.LocalizationSource.GetEnum(t);
-                a = list.Select(c => new ComboboxItemDto { Value = c.Key.ToString(), DisplayText = c.Value });
-            }
-            var b = a.ToList();
+            var list = base.LocalizationManager.GetEnum( cfgItem.LocationSourceName, cfgItem.Type);
+            var b = list.Select(c => new ComboboxItemDto { Value = c.Key.ToString(), DisplayText = c.Value }).ToList();
 
             if (input.ForType == 0)
                 return b;
 
             var temp = new ComboboxItemDto { Value = null };
-
+            //列表页 不限 类型名    表单页  请选择  
             if (input.ForType > 0 && !input.ParentText.IsNullOrWhiteSpace())
             {
                 temp.DisplayText = base.LocalizationManager.GetSource(cfgItem.LocationSourceName).GetStringOrNull(input.ParentText);
@@ -60,17 +50,34 @@ namespace BXJG.Utils.Enums
             }
             else if (input.ForType == 1)
             {
-                b.Insert(0, new ComboboxItemDto(null, base.LocalizationManager.GetForType(cfgItem.LocationSourceName, t)));
-                return b;
+                temp.DisplayText = base.LocalizationManager.GetForType(cfgItem.LocationSourceName, cfgItem.Type);
             }
-            if (input.ForType == 3)
+            else if (input.ForType == 2)
             {
-                b.Insert(0, new ComboboxItemDto(null, L("==请选择==")));
-                return b;
+                temp.DisplayText = L("==不限==");
             }
-
+            else
+            {
+                temp.DisplayText = L("==请选择==");
+            }
             b.Insert(0, temp);
             return b;
+        }
+
+        public IList<ComboboxItemDto> GetBool(GetStructForCombboxInput input)
+        {
+            var list = base.LocalizationSource.GetBool().Select(c => new ComboboxItemDto(c.Key.ToString(), c.Value)).ToList();
+          
+            var temp = new ComboboxItemDto { Value = null };
+            if (input.ForType > 0 && !input.ParentText.IsNullOrWhiteSpace())
+            {
+                if (input.LocationSourceName.IsNullOrWhiteSpace())
+                    temp.DisplayText = L(input.ParentText);
+                else
+                    temp.DisplayText = base.LocalizationManager.GetSource(input.LocationSourceName).GetString(input.ParentText);
+                list.Insert(0, temp);
+            }
+            return list;
         }
 
         //public IList<ComboboxDto<int>> GetGender(NullableInput b)
@@ -133,11 +140,7 @@ namespace BXJG.Utils.Enums
         //}
 
 
-        //public IList<ComboboxDto<int>> GetBool(NullableInput nullable)
-        //{
-        //    var list = base.LocalizationSource.GetBool().Select(c => new ComboboxDto<int>(c.Key, c.Value)).ToList();
-        //    return sdf(list, nullable.Nullable);
-        //}
+
 
         //IList<ComboboxDto<int>> sdf(IList<ComboboxDto<int>> k,bool b)
         //{

@@ -12,6 +12,8 @@ namespace BXJG.Utils.Localization
 {
     public static class BXJGUtilsLocalizationExt
     {
+        #region 获取枚举的本地化列表
+
         public static IDictionary<int, string> GetEnum(this ILocalizationSource localizationSource, Type enumType)
         {
             if (!enumType.IsEnum)
@@ -33,7 +35,7 @@ namespace BXJG.Utils.Localization
             {
                 var field = fields[i];
                 var fieldName = field.Name;
-                var localizationKey = fieldName;
+                var localizationKey = enumType.FullName + "." + fieldName;
                 var attr = field.GetCustomAttribute(typeof(DescriptionAttribute), false) as DescriptionAttribute;
                 if (attr != null)
                     localizationKey = attr.Description;
@@ -46,14 +48,14 @@ namespace BXJG.Utils.Localization
         {
             return localizationSource.GetEnum(typeof(T));
         }
-        public static IList<KeyValuePair<int?, string>> GetNullableEnum(this ILocalizationSource localizationSource, Type enumType)
-        {
-            return localizationSource.GetUnknown<int>(localizationSource.GetEnum(enumType));
-        }
-        public static IList<KeyValuePair<int?, string>> GetNullableEnum<T>(this ILocalizationSource localizationSource) where T : Enum
-        {
-            return localizationSource.GetUnknown<int>(localizationSource.GetEnum<T>());
-        }
+        //public static IList<KeyValuePair<int?, string>> GetNullableEnum(this ILocalizationSource localizationSource, Type enumType)
+        //{
+        //    return localizationSource.GetUnknown<int>(localizationSource.GetEnum(enumType));
+        //}
+        //public static IList<KeyValuePair<int?, string>> GetNullableEnum<T>(this ILocalizationSource localizationSource) where T : Enum
+        //{
+        //    return localizationSource.GetUnknown<int>(localizationSource.GetEnum<T>());
+        //}
 
         public static IDictionary<int, string> GetEnum(this ILocalizationManager localizationManager, string sourceName, Type enumType)
         {
@@ -63,15 +65,16 @@ namespace BXJG.Utils.Localization
         {
             return localizationManager.GetSource(sourceName).GetEnum<T>();
         }
-        public static IList<KeyValuePair<int?, string>> GetNullableEnum(this ILocalizationManager localizationManager, string sourceName, Type enumType)
-        {
-            return localizationManager.GetSource(sourceName).GetNullableEnum(enumType);
-        }
-        public static IList<KeyValuePair<int?, string>> GetNullableEnum<T>(this ILocalizationManager localizationManager, string sourceName) where T : Enum
-        {
-            return localizationManager.GetSource(sourceName).GetNullableEnum<T>();
-        }
+        //public static IList<KeyValuePair<int?, string>> GetNullableEnum(this ILocalizationManager localizationManager, string sourceName, Type enumType)
+        //{
+        //    return localizationManager.GetSource(sourceName).GetNullableEnum(enumType);
+        //}
+        //public static IList<KeyValuePair<int?, string>> GetNullableEnum<T>(this ILocalizationManager localizationManager, string sourceName) where T : Enum
+        //{
+        //    return localizationManager.GetSource(sourceName).GetNullableEnum<T>();
+        //}
 
+        #endregion
 
         #region 获取指定枚举值对应的本地化文本
         /// <summary>
@@ -86,10 +89,14 @@ namespace BXJG.Utils.Localization
             if (obj == null)
                 return null;
 
-            string objName = obj.ToString();
-            var localizationKey = objName;
+
             Type t = obj.GetType();
+            string objName = obj.ToString();
+
             FieldInfo fi = t.GetField(objName);
+
+            var localizationKey = t.FullName + "." + objName;
+
             var attr = fi.GetCustomAttribute(typeof(DescriptionAttribute), false) as DescriptionAttribute;
             if (attr != null)
                 localizationKey = attr.Description;
@@ -136,6 +143,15 @@ namespace BXJG.Utils.Localization
         #endregion
 
         #region 为指定类型本身获取本地化字符串
+        private static string GetLocalizationKeyForType(Type type)
+        {
+            var localizationKey = type.FullName;
+            var attr = type.GetCustomAttribute(typeof(DescriptionAttribute), false) as DescriptionAttribute;
+            if (attr != null)
+                localizationKey = attr.Description;
+            return localizationKey;
+        }
+        #region MyRegion
         /// <summary>
         /// 为指定类型本身获取本地化字符串
         /// 如：.GetForType(typeof(Gender))  返回"性别"
@@ -145,11 +161,11 @@ namespace BXJG.Utils.Localization
         /// <returns></returns>
         public static string GetForType(this ILocalizationSource localizationSource, Type type)
         {
-            var localizationKey = type.FullName;
-            var attr = type.GetCustomAttribute(typeof(DescriptionAttribute), false) as DescriptionAttribute;
-            if (attr != null)
-                localizationKey = attr.Description;
-            return localizationSource.GetString(localizationKey);
+            //var localizationKey = type.FullName;
+            //var attr = type.GetCustomAttribute(typeof(DescriptionAttribute), false) as DescriptionAttribute;
+            //if (attr != null)
+            //    localizationKey = attr.Description;
+            return localizationSource.GetString(GetLocalizationKeyForType(type));
         }
         /// <summary>
         /// 为指定类型本身获取本地化字符串
@@ -187,8 +203,58 @@ namespace BXJG.Utils.Localization
             return localizationManager.GetSource(sourceName).GetForType(typeof(T));
         }
         #endregion
+        #region MyRegion
+        /// <summary>
+        /// 为指定类型本身获取本地化字符串
+        /// 如：.GetForType(typeof(Gender))  返回"性别"
+        /// </summary>
+        /// <param name="localizationSource"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static string GetForTypeOrNull(this ILocalizationSource localizationSource, Type type)
+        {
+            return localizationSource.GetStringOrNull(GetLocalizationKeyForType(type));
+        }
+        /// <summary>
+        /// 为指定类型本身获取本地化字符串
+        /// 如：.GetForType(typeof(Gender))  返回"性别"
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="localizationSource"></param>
+        /// <returns></returns>
+        public static string GetForTypeOrNull<T>(this ILocalizationSource localizationSource)
+        {
+            return localizationSource.GetForTypeOrNull(typeof(T));
+        }
+        /// <summary>
+        /// 为指定类型本身获取本地化字符串
+        /// 如：.GetForType(typeof(Gender))  返回"性别"
+        /// </summary>
+        /// <param name="localizationManager"></param>
+        /// <param name="sourceName"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static string GetForTypeOrNull(this ILocalizationManager localizationManager, string sourceName, Type type)
+        {
+            return localizationManager.GetSource(sourceName).GetForTypeOrNull(type);
+        }
+        /// <summary>
+        /// 为指定类型本身获取本地化字符串
+        /// 如：.GetForType(typeof(Gender))  返回"性别"
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="localizationManager"></param>
+        /// <param name="sourceName"></param>
+        /// <returns></returns>
+        public static string GetForTypeOrNull<T>(this ILocalizationManager localizationManager, string sourceName)
+        {
+            return localizationManager.GetSource(sourceName).GetForTypeOrNull(typeof(T));
+        }
 
+        #endregion
+        #endregion
 
+        #region 获取boo值的本地化数据
         public static string GetTrue(this ILocalizationSource localizationSource)
         {
             return localizationSource.GetString(true.ToString());
@@ -208,14 +274,13 @@ namespace BXJG.Utils.Localization
             dic.Add(true, localizationSource.GetBool(true));
             return dic;
         }
-        public static IList<KeyValuePair<bool?, string>> GetNullableBool(this ILocalizationSource localizationSource)
-        {
-            return localizationSource.GetUnknown<bool>(localizationSource.GetBool());
-        }
+        //public static IList<KeyValuePair<bool?, string>> GetNullableBool(this ILocalizationSource localizationSource)
+        //{
+        //    return localizationSource.GetUnknown<bool>(localizationSource.GetBool());
+        //}
+        #endregion
 
-
-
-
+        #region MyRegion
         public static string GetUnknown(this ILocalizationSource localizationSource)
         {
             return localizationSource.GetString("Unknown");
@@ -235,5 +300,7 @@ namespace BXJG.Utils.Localization
             dic1.Add(new KeyValuePair<T?, string>(unknown.Key, unknown.Value));
             return dic1;
         }
+
+        #endregion 
     }
 }
