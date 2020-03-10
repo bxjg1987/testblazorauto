@@ -207,31 +207,31 @@ namespace ZLJ.Organizations
 
             return dtoList;
         }
-        public virtual async Task<IList<GeneralTreeComboboxDto<long?>>> GetNodesForSelectAsync(GeneralTreeGetForSelectInput<long?> input)
+        public virtual async Task<IList<ComboboxItemDto>> GetNodesForSelectAsync(GeneralTreeGetForSelectInput<long?> input)
         {
 
             var query = ownRepository.GetAll()
                  .Where(c => c.ParentId == input.Id || c.Id == input.Id)
                  .OrderBy(c => c.Code);
 
-            var dtoList = await AsyncQueryableExecuter.ToListAsync(query.Select(c => new GeneralTreeComboboxDto<long?> { Text = c.DisplayName, Value = c.Id }));
-            var parenOrganizationUnitDto = input.Id.HasValue ? dtoList.SingleOrDefault(c => c.Value == input.Id) : null;
+            var dtoList = await AsyncQueryableExecuter.ToListAsync(query.Select(c => new ComboboxItemDto { DisplayText = c.DisplayName, Value = c.Id.ToString() }));
+            var parenOrganizationUnitDto = input.Id.HasValue ? dtoList.SingleOrDefault(c => c.Value == input.Id.ToString()) : null;
             if (parenOrganizationUnitDto != null)
             {
                 dtoList.Remove(parenOrganizationUnitDto);
                 parenOrganizationUnitDto.Value = null;
-                parenOrganizationUnitDto.Text = "==" + parenOrganizationUnitDto.Text + "==";
+                parenOrganizationUnitDto.DisplayText = "==" + parenOrganizationUnitDto.DisplayText + "==";
             }
             //dtoList = dtoList.Where(c => c.Value != input.Id).ToList();
 
             if (input.ForType > 0 && input.ForType < 5 && !string.IsNullOrWhiteSpace(input.ParentText))
-                dtoList.Insert(0, new GeneralTreeComboboxDto<long?> { Value = null, Text = L(input.ParentText) });
+                dtoList.Insert(0, new ComboboxItemDto { Value = null, DisplayText = L(input.ParentText) });
             else if ((input.ForType == 1 || input.ForType == 3) && input.Id.HasValue)
                 dtoList.Insert(0, parenOrganizationUnitDto);
             else if (input.ForType == 1 || input.ForType == 2)
-                dtoList.Insert(0, new GeneralTreeComboboxDto<long?> { Value = null, Text = L(allTextForSearch) });
+                dtoList.Insert(0, new ComboboxItemDto { Value = null, DisplayText = L(allTextForSearch) });
             else if (input.ForType == 3 || input.ForType == 4)
-                dtoList.Insert(0, new GeneralTreeComboboxDto<long?> { Value = null, Text = L(allTextForForm) });
+                dtoList.Insert(0, new ComboboxItemDto { Value = null, DisplayText = L(allTextForForm) });
 
             return dtoList;
         }

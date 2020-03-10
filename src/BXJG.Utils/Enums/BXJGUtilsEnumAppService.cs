@@ -34,7 +34,7 @@ namespace BXJG.Utils.Enums
         {
             var cfgItem = cfg.Enums.Single(c => c.Name.Equals(input.EnumTypeName, StringComparison.OrdinalIgnoreCase));
 
-            var list = base.LocalizationManager.GetEnum( cfgItem.LocationSourceName, cfgItem.Type);
+            var list = base.LocalizationManager.GetEnum(cfgItem.LocationSourceName, cfgItem.Type);
             var b = list.Select(c => new ComboboxItemDto { Value = c.Key.ToString(), DisplayText = c.Value }).ToList();
 
             if (input.ForType == 0)
@@ -63,11 +63,11 @@ namespace BXJG.Utils.Enums
             b.Insert(0, temp);
             return b;
         }
-
+      
         public IList<ComboboxItemDto> GetBool(GetStructForCombboxInput input)
         {
             var list = base.LocalizationSource.GetBool().Select(c => new ComboboxItemDto(c.Key.ToString(), c.Value)).ToList();
-          
+
             var temp = new ComboboxItemDto { Value = null };
             if (input.ForType > 0 && !input.ParentText.IsNullOrWhiteSpace())
             {
@@ -76,6 +76,14 @@ namespace BXJG.Utils.Enums
                 else
                     temp.DisplayText = base.LocalizationManager.GetSource(input.LocationSourceName).GetString(input.ParentText);
                 list.Insert(0, temp);
+            }
+            else if (input.ForType <= 2)
+            {
+                temp.DisplayText = L("==不限==");
+            }
+            else
+            {
+                temp.DisplayText = L("==请选择==");
             }
             return list;
         }

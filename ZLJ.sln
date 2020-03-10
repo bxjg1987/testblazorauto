@@ -21,21 +21,21 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "WebAdmin", "WebAdmin\", "{3
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv2.0"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_49236"
-		Debug.AspNetCompiler.PhysicalPath = "src\WebAdmin\"
+		Debug.AspNetCompiler.PhysicalPath = "WebAdmin\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_49236\"
 		Debug.AspNetCompiler.Updateable = "true"
 		Debug.AspNetCompiler.ForceOverwrite = "true"
 		Debug.AspNetCompiler.FixedNames = "false"
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.VirtualPath = "/localhost_49236"
-		Release.AspNetCompiler.PhysicalPath = "src\WebAdmin\"
+		Release.AspNetCompiler.PhysicalPath = "WebAdmin\"
 		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_49236\"
 		Release.AspNetCompiler.Updateable = "true"
 		Release.AspNetCompiler.ForceOverwrite = "true"
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
 		VWDPort = "49236"
-		SlnRelativePath = "src\WebAdmin\"
+		SlnRelativePath = "WebAdmin\"
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{D42FF479-F331-48F6-AAA2-45B9FD451892}"
@@ -46,7 +46,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Attachment", "src\BXJG
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.GeneralTree", "src\BXJG.GeneralTree\BXJG.GeneralTree.csproj", "{528C048F-66A5-40A4-9598-F676537BD481}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BXJG.Utils", "src\BXJG.Utils\BXJG.Utils.csproj", "{AF224A98-5C8A-4EDA-8341-B704B46D4B3E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Utils", "src\BXJG.Utils\BXJG.Utils.csproj", "{AF224A98-5C8A-4EDA-8341-B704B46D4B3E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{04E5EC1B-C5AD-473B-A833-DC9C2CB4627E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -107,6 +109,14 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{0FA75A5B-AB83-4FD0-B545-279774C01E87} = {04E5EC1B-C5AD-473B-A833-DC9C2CB4627E}
+		{3870C648-4AEA-4B85-BA3F-F2F63B96136A} = {04E5EC1B-C5AD-473B-A833-DC9C2CB4627E}
+		{880B3591-E057-46FE-B525-10BD83828B93} = {04E5EC1B-C5AD-473B-A833-DC9C2CB4627E}
+		{38E184BD-E874-4633-A947-AED4FDB73F40} = {04E5EC1B-C5AD-473B-A833-DC9C2CB4627E}
+		{22CFE0D2-8DCA-42D7-AD7D-784C3862493F} = {04E5EC1B-C5AD-473B-A833-DC9C2CB4627E}
+		{A2213374-BB48-48FD-BBD4-81E6A961D866} = {04E5EC1B-C5AD-473B-A833-DC9C2CB4627E}
+		{E0580562-F8F2-4EBB-B07A-ABFC6F2C314F} = {04E5EC1B-C5AD-473B-A833-DC9C2CB4627E}
+		{D42FF479-F331-48F6-AAA2-45B9FD451892} = {04E5EC1B-C5AD-473B-A833-DC9C2CB4627E}
 		{0773DDFD-ABAC-4B01-89DD-3ACC90C78A22} = {D42FF479-F331-48F6-AAA2-45B9FD451892}
 		{71060AA1-EA2A-4E0D-8CE5-990DE9E57EF2} = {D42FF479-F331-48F6-AAA2-45B9FD451892}
 		{528C048F-66A5-40A4-9598-F676537BD481} = {D42FF479-F331-48F6-AAA2-45B9FD451892}

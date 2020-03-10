@@ -200,7 +200,7 @@ namespace BXJG.Utils.Localization
         /// <returns></returns>
         public static string GetForType<T>(this ILocalizationManager localizationManager, string sourceName)
         {
-            return localizationManager.GetSource(sourceName).GetForType(typeof(T));
+            return localizationManager.GetSource(sourceName).GetForType<T>();
         }
         #endregion
         #region MyRegion
@@ -248,9 +248,8 @@ namespace BXJG.Utils.Localization
         /// <returns></returns>
         public static string GetForTypeOrNull<T>(this ILocalizationManager localizationManager, string sourceName)
         {
-            return localizationManager.GetSource(sourceName).GetForTypeOrNull(typeof(T));
+            return localizationManager.GetSource(sourceName).GetForTypeOrNull<T>();
         }
-
         #endregion
         #endregion
 
@@ -274,33 +273,45 @@ namespace BXJG.Utils.Localization
             dic.Add(true, localizationSource.GetBool(true));
             return dic;
         }
-        //public static IList<KeyValuePair<bool?, string>> GetNullableBool(this ILocalizationSource localizationSource)
-        //{
-        //    return localizationSource.GetUnknown<bool>(localizationSource.GetBool());
-        //}
+        
+        public static string GetTrue(this ILocalizationManager localizationManager, string sourceName)
+        {
+            return localizationManager.GetSource(sourceName).GetTrue();
+        }
+        public static string GetFalse(this ILocalizationManager localizationManager, string sourceName)
+        {
+            return localizationManager.GetSource(sourceName).GetFalse();
+        }
+        public static string GetBool(this ILocalizationManager localizationManager, string sourceName, bool value)
+        {
+            return localizationManager.GetSource(sourceName).GetBool(value);
+        }
+        public static IDictionary<bool, string> GetBool(this ILocalizationManager localizationManager, string sourceName)
+        {
+            return localizationManager.GetSource(sourceName).GetBool();
+        }
         #endregion
 
         #region MyRegion
-        public static string GetUnknown(this ILocalizationSource localizationSource)
-        {
-            return localizationSource.GetString("Unknown");
-        }
-        public static KeyValuePair<T?, string> GetUnknown<T>(this ILocalizationSource localizationSource) where T : struct
-        {
-            return new KeyValuePair<T?, string>(default(T?), localizationSource.GetUnknown());
-        }
-        public static IList<KeyValuePair<T?, string>> GetUnknown<T>(this ILocalizationSource localizationSource, IDictionary<T, string> dic) where T : struct
-        {
-            var dic1 = new List<KeyValuePair<T?, string>>();
-            foreach (var item in dic)
-            {
-                dic1.Add(new KeyValuePair<T?, string>(item.Key, item.Value));
-            }
-            var unknown = new KeyValuePair<T?, string>(default(T?), localizationSource.GetUnknown());
-            dic1.Add(new KeyValuePair<T?, string>(unknown.Key, unknown.Value));
-            return dic1;
-        }
-
+        //public static string GetUnknown(this ILocalizationSource localizationSource)
+        //{
+        //    return localizationSource.GetString("Unknown");
+        //}
+        //public static KeyValuePair<T?, string> GetUnknown<T>(this ILocalizationSource localizationSource) where T : struct
+        //{
+        //    return new KeyValuePair<T?, string>(default(T?), localizationSource.GetUnknown());
+        //}
+        //public static IList<KeyValuePair<T?, string>> GetUnknown<T>(this ILocalizationSource localizationSource, IDictionary<T, string> dic) where T : struct
+        //{
+        //    var dic1 = new List<KeyValuePair<T?, string>>();
+        //    foreach (var item in dic)
+        //    {
+        //        dic1.Add(new KeyValuePair<T?, string>(item.Key, item.Value));
+        //    }
+        //    var unknown = new KeyValuePair<T?, string>(default(T?), localizationSource.GetUnknown());
+        //    dic1.Add(new KeyValuePair<T?, string>(unknown.Key, unknown.Value));
+        //    return dic1;
+        //}
         #endregion 
     }
 }

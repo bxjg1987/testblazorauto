@@ -17,7 +17,7 @@ namespace BXJG.GeneralTree
     //abp默认提供的CombboxItemDto只是一个辅助类，我们可以定义一个更符合我们要求的辅助类
     //其实用他的也可以，只是不是很方便
 
-
+       
 
     /// <summary>
     /// Easyui的Combobox下拉框控件对应数据的模型，它是一个通用模型

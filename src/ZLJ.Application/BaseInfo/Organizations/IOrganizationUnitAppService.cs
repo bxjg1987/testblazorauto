@@ -45,7 +45,7 @@ namespace ZLJ.Organizations
         /// </summary>
         /// <returns></returns>
         [AbpAuthorize(PermissionNames.AdministratorBaseInfoOrganizationUnit)]
-        Task<IList<GeneralTreeComboboxDto<long?>>> GetNodesForSelectAsync(GeneralTreeGetForSelectInput<long?> input);
+        Task<IList<ComboboxItemDto>> GetNodesForSelectAsync(GeneralTreeGetForSelectInput<long?> input);
         /// <summary>
         /// 移动节点，服务端将自动重新生成所有兄弟节点的code
         /// </summary>

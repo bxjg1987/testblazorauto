@@ -223,8 +223,8 @@ namespace ZLJ.Roles
         {
                 var list = await _roleManager.Roles.OrderBy(c => c.DisplayName).Select(c => new RoleSelectDto
                 {
-                    Value = c.Id,
-                    Text = c.DisplayName,
+                    Value = c.Id.ToString(),
+                    DisplayText = c.DisplayName,
                     Name = c.Name
                 }).ToListAsync();
                 if (a.ForType == 0)
