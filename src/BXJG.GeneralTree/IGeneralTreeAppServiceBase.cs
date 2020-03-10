@@ -13,7 +13,16 @@ namespace BXJG.GeneralTree
     /// </summary>
     /// <typeparam name="TDto"></typeparam>
     /// <typeparam name="TEditDto"></typeparam>
-    public interface IGeneralTreeAppServiceBase<TDto, TEditDto> : IApplicationService
+
+    public interface IGeneralTreeAppServiceBase<
+        TDto,
+        TEditDto,
+        TGetAllInput,
+        TGetTreeForSelectInput, 
+        TGetTreeForSelectOutput,
+        TGetNodesForSelectInput,
+        TGetNodesForSelectOutput,
+        TMoveInput> : IApplicationService
     {
         /*
          * 返回列表都是IList abp官网的一般是IReadOnlyList，为了方便调用方进一步做处理 我们这里返回IList
@@ -30,24 +39,24 @@ namespace BXJG.GeneralTree
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task<IList<TDto>> GetAllListAsync(GeneralTreeGetTreeInput<long?> input);
+        Task<IList<TDto>> GetAllListAsync(TGetAllInput input);
         /// <summary>
         /// 获取简洁的树形数据，通常引用此数据的页面调用
         /// </summary>
         /// <param name="input">指定父节点，是否显示全部</param>
         /// <returns></returns>
-        Task<IList<GeneralTreeNodeDto>> GetTreeForSelectAsync(GeneralTreeGetForSelectInput<long?> input);
+        Task<IList<TGetTreeForSelectOutput>> GetTreeForSelectAsync(TGetTreeForSelectInput input);
         /// <summary>
         /// 获取指定父节点的子节点，以扁平结构返回
         /// </summary>
         /// <returns></returns>
-        Task<IList<GeneralTreeComboboxDto<long?>>> GetNodesForSelectAsync(GeneralTreeGetForSelectInput<long?> input);
+        Task<IList<TGetNodesForSelectOutput>> GetNodesForSelectAsync(TGetNodesForSelectInput input);
         /// <summary>
         /// 移动节点，服务端将自动重新生成所有兄弟节点的code
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task<TDto> MoveAsync(GeneralTreeNodeMoveInput input);
+        Task<TDto> MoveAsync(TMoveInput input);
         /// <summary>
         /// 删除指定节点
         /// </summary>

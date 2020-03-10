@@ -13,7 +13,15 @@ namespace BXJG.GeneralTree
     /// <summary>
     /// 数据字典管理
     /// </summary>
-    public interface IGeneralTreeAppService : IGeneralTreeAppServiceBase<GeneralTreeDto, GeneralTreeEditDto>
+    public interface IGeneralTreeAppService : IGeneralTreeAppServiceBase<
+        GeneralTreeDto,
+        GeneralTreeEditDto,
+        GeneralTreeGetTreeInput,
+        GeneralTreeGetForSelectInput,
+        GeneralTreeNodeDto,
+        GeneralTreeGetForSelectInput,
+        ComboboxItemDto,
+        GeneralTreeNodeMoveInput>
     {
        
     }

@@ -9,8 +9,7 @@ namespace BXJG.GeneralTree
     /// <summary>
     /// 树形数据的管理页面查询时的请求模型
     /// </summary>
-    /// <typeparam name="TId"></typeparam>
-    public class GeneralTreeGetTreeInput<TId> // 与ForSelectInput不同，后者只针对选择，且有Search和Form模式
+    public class GeneralTreeGetTreeInput // 与ForSelectInput不同，后者只针对选择，且有Search和Form模式
     {
         //不要使用Nullable<TId>类型，因为某些情况此参数可能不允许为null
         //若数据很多 可以需要么次加载一个节点的数据，所以ParentId字段是必要的
@@ -18,7 +17,7 @@ namespace BXJG.GeneralTree
         /// <summary>
         /// 父级节点id，非必填
         /// </summary>
-        public TId ParentId { get; set; } 
+        public long? ParentId { get; set; } 
         /// <summary>
         /// 是否加载父节点
         /// </summary>

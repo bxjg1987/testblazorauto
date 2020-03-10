@@ -23,9 +23,53 @@ namespace BXJG.GeneralTree
      * 
      * 新增时用管理类操作可以自动处理Code
      */
+
+    /*
+     *         TDto,
+    TEditDto,
+    TGetAllInput,
+    TGetTreeForSelectInput,
+    TGetTreeForSelectOutput,
+    TGetNodesForSelectInput,
+    TGetNodesForSelectOutput,
+    TMoveInput,
+    TEntity,
+    TManager> : ApplicationService, IGeneralTreeAppServiceBase<
+        TDto,
+        TEditDto,
+        TGetAllInput,
+        TGetTreeForSelectInput,
+        TGetTreeForSelectOutput,
+        TGetNodesForSelectInput,
+        TGetNodesForSelectOutput,
+        TMoveInput>
+    where TEntity : GeneralTreeEntity<TEntity>
+    where TDto : GeneralTreeGetTreeNodeBaseDto<TDto>, new()
+    where TEditDto : GeneralTreeNodeEditBaseDto//父类可以对输入做一定的处理
+    where TManager : GeneralTreeManager<TEntity>
+    where TGetAllInput : GeneralTreeGetTreeInput
+    where TGetTreeForSelectInput : GeneralTreeGetForSelectInput
+    where TGetTreeForSelectOutput : GeneralTreeNodeDto
+    where TGetNodesForSelectInput : GeneralTreeGetForSelectInput
+    where TGetNodesForSelectOutput : ComboboxItemDto
+    where TMoveInput : GeneralTreeNodeMoveInput
+     */
+
+
+
     //[AbpAuthorize(PermissionNames.AdministratorSystemAdministrative)]
     public class GeneralTreeAppService
-        : GeneralTreeAppServiceBase< GeneralTreeEntity, GeneralTreeDto, GeneralTreeEditDto, GeneralTreeManager>,
+        : GeneralTreeAppServiceBase< 
+            GeneralTreeDto,
+            GeneralTreeEditDto,
+            GeneralTreeGetTreeInput,
+            GeneralTreeGetForSelectInput,
+            GeneralTreeNodeDto,
+            GeneralTreeGetForSelectInput,
+            ComboboxItemDto,
+            GeneralTreeNodeMoveInput,
+            GeneralTreeEntity,
+            GeneralTreeManager>,
         IGeneralTreeAppService
     {
         public GeneralTreeAppService(

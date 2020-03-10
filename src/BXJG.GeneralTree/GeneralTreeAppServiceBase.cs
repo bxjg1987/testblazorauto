@@ -33,12 +33,35 @@ namespace BXJG.GeneralTree
     /// <typeparam name="long"></typeparam>
     /// <typeparam name="TDto"></typeparam>
     /// <typeparam name="TEditDto"></typeparam>
-    public  class GeneralTreeAppServiceBase< TEntity,  TDto, TEditDto,TManager> : ApplicationService,
-        IGeneralTreeAppServiceBase<TDto, TEditDto>
+    public class GeneralTreeAppServiceBase<
+        TDto,
+        TEditDto,
+        TGetAllInput,
+        TGetTreeForSelectInput,
+        TGetTreeForSelectOutput,
+        TGetNodesForSelectInput,
+        TGetNodesForSelectOutput,
+        TMoveInput,
+        TEntity,
+        TManager> : ApplicationService, IGeneralTreeAppServiceBase<
+            TDto,
+            TEditDto,
+            TGetAllInput,
+            TGetTreeForSelectInput,
+            TGetTreeForSelectOutput,
+            TGetNodesForSelectInput,
+            TGetNodesForSelectOutput,
+            TMoveInput>
         where TEntity : GeneralTreeEntity<TEntity>
         where TDto : GeneralTreeGetTreeNodeBaseDto<TDto>, new()
         where TEditDto : GeneralTreeNodeEditBaseDto//父类可以对输入做一定的处理
-        where TManager: GeneralTreeManager<TEntity>
+        where TManager : GeneralTreeManager<TEntity>
+        where TGetAllInput : GeneralTreeGetTreeInput
+        where TGetTreeForSelectInput : GeneralTreeGetForSelectInput
+        where TGetTreeForSelectOutput : GeneralTreeNodeDto
+        where TGetNodesForSelectInput : GeneralTreeGetForSelectInput
+        where TGetNodesForSelectOutput : ComboboxItemDto
+        where TMoveInput : GeneralTreeNodeMoveInput
     {
         /* 
          * 数据显示地方有：管理页列表、作为一个搜索条件框、作为表单里一个下拉框
@@ -101,12 +124,12 @@ namespace BXJG.GeneralTree
             await generalTreeManager.CreateAsync(m);
             return ObjectMapper.Map<TDto>(m);
         }
-        public virtual async Task<TDto> MoveAsync(GeneralTreeNodeMoveInput input)
+        public virtual async Task<TDto> MoveAsync(TMoveInput input)
         {
             //移动关于追加 之后 之前 的处理逻辑本应该定义在领域服务中
             await CheckUpdatePermissionAsync();
 
-            var m =await generalTreeManager.MoveAsync(input.Id, input.TargetId, input.MoveType);
+            var m = await generalTreeManager.MoveAsync(input.Id, input.TargetId, input.MoveType);
             return ObjectMapper.Map<TDto>(m);// m.MapTo<TDto>();
         }
         public virtual async Task<TDto> UpdateAsync(TEditDto input)
@@ -149,7 +172,7 @@ namespace BXJG.GeneralTree
         }
 
         //如果没有上级节点包装 列表默认被选择了 点击新增时 上级几点无法定位到null，因此需要做个包装
-        public virtual async Task<IList<TDto>> GetAllListAsync(GeneralTreeGetTreeInput<long?> input)
+        public virtual async Task<IList<TDto>> GetAllListAsync(TGetAllInput input)
         {
             //权限判断
             await CheckGetPermissionAsync();
@@ -206,7 +229,7 @@ namespace BXJG.GeneralTree
             }
             return list1;
         }
-        public virtual async Task<IList<GeneralTreeNodeDto>> GetTreeForSelectAsync(GeneralTreeGetForSelectInput<long?> input)
+        public virtual async Task<IList<TGetTreeForSelectOutput>> GetTreeForSelectAsync(TGetTreeForSelectInput input)
         {
             //权限判断
             await CheckGetPermissionAsync();
@@ -282,7 +305,7 @@ namespace BXJG.GeneralTree
 
             return dtoList;
         }
-        public virtual async Task<IList<GeneralTreeComboboxDto<long?>>> GetNodesForSelectAsync(GeneralTreeGetForSelectInput<long?> input)
+        public virtual async Task<IList<TGetNodesForSelectOutput>> GetNodesForSelectAsync(TGetNodesForSelectInput input)
         {
             await CheckGetPermissionAsync();
 
@@ -290,7 +313,7 @@ namespace BXJG.GeneralTree
                  .Where(c => c.ParentId == input.Id || c.Id == input.Id)
                  .OrderBy(c => c.Code);
 
-            var dtoList = await AsyncQueryableExecuter.ToListAsync( query.Select(c => new GeneralTreeComboboxDto<long?> { Text = c.DisplayName, Value = c.Id, ExtDataString = c.ExtensionData }));
+            var dtoList = await AsyncQueryableExecuter.ToListAsync(query.Select(c => new GeneralTreeComboboxDto<long?> { Text = c.DisplayName, Value = c.Id, ExtDataString = c.ExtensionData }));
             var parentDto = input.Id.HasValue ? dtoList.SingleOrDefault(c => c.Value == input.Id) : null;
             if (parentDto != null)
             {
@@ -359,6 +382,7 @@ namespace BXJG.GeneralTree
         {
             return q.OrderBy(c => c.Code);
         }
+
 
         //protected virtual Task BeforeCreate(TEntity m)
         //{
