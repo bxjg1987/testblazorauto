@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZLJ.Web.Mvc", "src\ZLJ.Web.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZLJ.EntityFrameworkCore", "src\ZLJ.EntityFrameworkCore\ZLJ.EntityFrameworkCore.csproj", "{E0580562-F8F2-4EBB-B07A-ABFC6F2C314F}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "WebAdmin", "src\WebAdmin\", "{39917A80-8D5A-4ACE-9F1B-11522564A507}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "WebAdmin", "WebAdmin\", "{39917A80-8D5A-4ACE-9F1B-11522564A507}"
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv2.0"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_49236"
