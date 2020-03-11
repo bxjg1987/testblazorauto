@@ -11,9 +11,14 @@ namespace BXJG.GeneralTree
     /// <summary>
     /// 通用树形结构服务接口，其它树形接口应该继承此接口以获得树形结构数据的通用功能
     /// </summary>
-    /// <typeparam name="TDto"></typeparam>
-    /// <typeparam name="TEditDto"></typeparam>
-
+    /// <typeparam name="TDto">管理页面显示的Dto类型</typeparam>
+    /// <typeparam name="TEditDto">编辑模型</typeparam>
+    /// <typeparam name="TGetAllInput">管理页面获取所有树形数据时的输入模型</typeparam>
+    /// <typeparam name="TGetTreeForSelectInput">获取树形下拉框数据时的输入模型</typeparam>
+    /// <typeparam name="TGetTreeForSelectOutput">获取树形下拉框数据时的输出模型</typeparam>
+    /// <typeparam name="TGetNodesForSelectInput">获取扁平下拉框数据时的输入模型</typeparam>
+    /// <typeparam name="TGetNodesForSelectOutput">获取扁平下拉框数据时的输出模型</typeparam>
+    /// <typeparam name="TMoveInput">移动节点时的输入模型</typeparam>
     public interface IGeneralTreeAppServiceBase<
         TDto,
         TEditDto,

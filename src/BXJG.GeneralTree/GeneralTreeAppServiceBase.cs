@@ -26,13 +26,16 @@ namespace BXJG.GeneralTree
     /// <summary>
     /// 树形结构应用逻辑基类
     /// </summary>
-    /// <typeparam name="TTenant"></typeparam>
-    /// <typeparam name="TUser"></typeparam>
-    /// <typeparam name="TRole"></typeparam>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <typeparam name="long"></typeparam>
     /// <typeparam name="TDto"></typeparam>
     /// <typeparam name="TEditDto"></typeparam>
+    /// <typeparam name="TGetAllInput"></typeparam>
+    /// <typeparam name="TGetTreeForSelectInput"></typeparam>
+    /// <typeparam name="TGetTreeForSelectOutput"></typeparam>
+    /// <typeparam name="TGetNodesForSelectInput"></typeparam>
+    /// <typeparam name="TGetNodesForSelectOutput"></typeparam>
+    /// <typeparam name="TMoveInput"></typeparam>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <typeparam name="TManager"></typeparam>
     public class GeneralTreeAppServiceBase<
         TDto,
         TEditDto,
@@ -58,9 +61,9 @@ namespace BXJG.GeneralTree
         where TManager : GeneralTreeManager<TEntity>
         where TGetAllInput : GeneralTreeGetTreeInput
         where TGetTreeForSelectInput : GeneralTreeGetForSelectInput
-        where TGetTreeForSelectOutput : GeneralTreeNodeDto
+        where TGetTreeForSelectOutput : GeneralTreeNodeDto<TGetTreeForSelectOutput>, new()
         where TGetNodesForSelectInput : GeneralTreeGetForSelectInput
-        where TGetNodesForSelectOutput : ComboboxItemDto
+        where TGetNodesForSelectOutput : GeneralTreeComboboxDto, new()
         where TMoveInput : GeneralTreeNodeMoveInput
     {
         /* 
@@ -105,7 +108,7 @@ namespace BXJG.GeneralTree
         {
             await CheckCreatePermissionAsync();
 
-            if (input.ParentId == 0)
+            if (input.ParentId <= 0)
                 input.ParentId = null;
 
             var m = ObjectMapper.Map<TEntity>(input);
@@ -237,9 +240,9 @@ namespace BXJG.GeneralTree
 
             //得到实体扁平集合
             string parentCode = "";
-            if (input.Id.HasValue && input.Id.Value > 0)
+            if (input.ParentId.HasValue && input.ParentId.Value > 0)
             {
-                var top = await ownRepository.GetAsync(input.Id.Value);
+                var top = await ownRepository.GetAsync(input.ParentId.Value);
                 parentCode = top.Code;
             }
             var query = ownRepository.GetAll()
@@ -256,10 +259,10 @@ namespace BXJG.GeneralTree
 
             //转换为Dtop
             //上面没有直接用投影是为了给子类一个机会来参与遍历过程
-            var dtoList = new List<GeneralTreeNodeDto>();
+            var dtoList = new List<TGetTreeForSelectOutput>();
             foreach (var c in list)
             {
-                var temp = new GeneralTreeNodeDto
+                var temp = new TGetTreeForSelectOutput
                 {
                     id = c.Id.ToString(),
                     parentId = c.ParentId.ToString(),
@@ -284,24 +287,24 @@ namespace BXJG.GeneralTree
                 OnGetForSelectItem(entity, c);
             });
 
-            var parentDto = input.Id.HasValue ? dtoList.SingleOrDefault(c => c.id == input.Id.ToString()) : null;
+            var parentDto = input.ParentId.HasValue ? dtoList.SingleOrDefault(c => c.id == input.ParentId.ToString()) : null;
 
-            if (input.Id.HasValue)
-                dtoList = dtoList.Where(c => c.parentId == input.Id.ToString()).ToList();
+            if (input.ParentId.HasValue)
+                dtoList = dtoList.Where(c => c.parentId == input.ParentId.ToString()).ToList();
             else
                 dtoList = dtoList.Where(c => string.IsNullOrWhiteSpace(c.parentId)).ToList();
 
             if (input.ForType > 0 && input.ForType < 5 && !string.IsNullOrWhiteSpace(input.ParentText))
-                return new List<GeneralTreeNodeDto> { new GeneralTreeNodeDto { id = null, text = L(input.ParentText), children = dtoList } };
+                return new List<TGetTreeForSelectOutput> { new TGetTreeForSelectOutput { id = null, text = L(input.ParentText), children = dtoList } };
 
-            if ((input.ForType == 1 || input.ForType == 3) && input.Id.HasValue)
-                return new List<GeneralTreeNodeDto> { parentDto };
+            if ((input.ForType == 1 || input.ForType == 3) && input.ParentId.HasValue)
+                return new List<TGetTreeForSelectOutput> { parentDto };
 
             if (input.ForType == 1 || input.ForType == 2)
-                return new List<GeneralTreeNodeDto> { new GeneralTreeNodeDto { id = null, text = L(this.allTextForSearch), children = dtoList } };
+                return new List<TGetTreeForSelectOutput> { new TGetTreeForSelectOutput { id = null, text = L(this.allTextForSearch), children = dtoList } };
 
             if (input.ForType == 3 || input.ForType == 4)
-                return new List<GeneralTreeNodeDto> { new GeneralTreeNodeDto { id = null, text = L(this.allTextForForm), children = dtoList } };
+                return new List<TGetTreeForSelectOutput> { new TGetTreeForSelectOutput { id = null, text = L(this.allTextForForm), children = dtoList } };
 
             return dtoList;
         }
@@ -310,27 +313,27 @@ namespace BXJG.GeneralTree
             await CheckGetPermissionAsync();
 
             var query = ownRepository.GetAll()
-                 .Where(c => c.ParentId == input.Id || c.Id == input.Id)
+                 .Where(c => c.ParentId == input.ParentId || c.Id == input.ParentId)
                  .OrderBy(c => c.Code);
 
-            var dtoList = await AsyncQueryableExecuter.ToListAsync(query.Select(c => new GeneralTreeComboboxDto<long?> { Text = c.DisplayName, Value = c.Id, ExtDataString = c.ExtensionData }));
-            var parentDto = input.Id.HasValue ? dtoList.SingleOrDefault(c => c.Value == input.Id) : null;
+            var dtoList = await AsyncQueryableExecuter.ToListAsync(query.Select(c => new TGetNodesForSelectOutput { ExtDataString = c.ExtensionData, DisplayText = c.DisplayName, Value = c.Id.ToString() }));
+            var parentDto = input.ParentId.HasValue ? dtoList.SingleOrDefault(c => c.Value == input.ParentId.ToString()) : null;
             if (parentDto != null)
             {
                 dtoList.Remove(parentDto);
                 parentDto.Value = null;
-                parentDto.Text = "==" + parentDto.Text + "==";
+                parentDto.DisplayText = "==" + parentDto.DisplayText + "==";
             }
             //dtoList = dtoList.Where(c => c.Value != input.Id).ToList();
 
             if (input.ForType > 0 && input.ForType < 5 && !string.IsNullOrWhiteSpace(input.ParentText))
-                dtoList.Insert(0, new GeneralTreeComboboxDto<long?> { Value = null, Text = L(input.ParentText) });
-            else if ((input.ForType == 1 || input.ForType == 3) && input.Id.HasValue)
+                dtoList.Insert(0, new TGetNodesForSelectOutput { Value = null, DisplayText = L(input.ParentText) });
+            else if ((input.ForType == 1 || input.ForType == 3) && input.ParentId.HasValue)
                 dtoList.Insert(0, parentDto);
             else if (input.ForType == 1 || input.ForType == 2)
-                dtoList.Insert(0, new GeneralTreeComboboxDto<long?> { Value = null, Text = L(allTextForSearch) });
+                dtoList.Insert(0, new TGetNodesForSelectOutput { Value = null, DisplayText = L(allTextForSearch) });
             else if (input.ForType == 3 || input.ForType == 4)
-                dtoList.Insert(0, new GeneralTreeComboboxDto<long?> { Value = null, Text = L(allTextForForm) });
+                dtoList.Insert(0, new TGetNodesForSelectOutput { Value = null, DisplayText = L(allTextForForm) });
 
             return dtoList;
         }
@@ -362,10 +365,10 @@ namespace BXJG.GeneralTree
             //    throw new UserFriendlyException(L("UnAuthorized"));
 
             //使用父类的权限检查可以得到一个正常的未授权响应
-            if (!string.IsNullOrEmpty(permissionName))
-            {
-                PermissionChecker.Authorize(permissionName);
-            }
+            //if (!string.IsNullOrEmpty(permissionName))
+            //{
+                await PermissionChecker.AuthorizeAsync(permissionName);
+            //}
         }
         #endregion
 
@@ -374,7 +377,7 @@ namespace BXJG.GeneralTree
         {
 
         }
-        protected virtual void OnGetForSelectItem(TEntity entity, GeneralTreeNodeDto node)
+        protected virtual void OnGetForSelectItem(TEntity entity, TGetTreeForSelectOutput node)
         {
 
         }

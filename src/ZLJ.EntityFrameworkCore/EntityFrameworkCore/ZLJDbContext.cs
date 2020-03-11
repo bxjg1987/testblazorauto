@@ -4,6 +4,7 @@ using ZLJ.Authorization.Roles;
 using ZLJ.Authorization.Users;
 using ZLJ.MultiTenancy;
 using ZLJ.BaseInfo;
+using BXJG.GeneralTree;
 
 namespace ZLJ.EntityFrameworkCore
 {
@@ -12,6 +13,9 @@ namespace ZLJ.EntityFrameworkCore
         /* Define a DbSet for each entity of the application */
 
         public virtual DbSet<OrganizationUnitEntity> OrganizationUnitEntities { get; set; }
+
+        public virtual DbSet<GeneralTreeEntity> GeneralTreeEntities { get; set; }
+
         public ZLJDbContext(DbContextOptions<ZLJDbContext> options)
             : base(options)
         {

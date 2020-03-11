@@ -32,20 +32,20 @@ namespace ZLJ.Organizations
         /// <param name="input"></param>
         /// <returns></returns>
         [AbpAuthorize(PermissionNames.AdministratorBaseInfoOrganizationUnit)]
-        Task<IList<OrganizationUnitDto>> GetAllListAsync(GeneralTreeGetTreeInput<long?> input);
+        Task<IList<OrganizationUnitDto>> GetAllListAsync(GeneralTreeGetTreeInput input);
         /// <summary>
         /// 获取简洁的树形数据，通常引用此数据的页面调用
         /// </summary>
         /// <param name="input">指定父节点，是否显示全部</param>
         /// <returns></returns>
         [AbpAuthorize(PermissionNames.AdministratorBaseInfoOrganizationUnit)]
-        Task<IList<GeneralTreeNodeDto>> GetTreeForSelectAsync(GeneralTreeGetForSelectInput<long?> input);
+        Task<IList<GeneralTreeNodeDto>> GetTreeForSelectAsync(GeneralTreeGetForSelectInput input);
         /// <summary>
         /// 获取指定父节点的子节点，以扁平结构返回
         /// </summary>
         /// <returns></returns>
         [AbpAuthorize(PermissionNames.AdministratorBaseInfoOrganizationUnit)]
-        Task<IList<ComboboxItemDto>> GetNodesForSelectAsync(GeneralTreeGetForSelectInput<long?> input);
+        Task<IList<ComboboxItemDto>> GetNodesForSelectAsync(GeneralTreeGetForSelectInput input);
         /// <summary>
         /// 移动节点，服务端将自动重新生成所有兄弟节点的code
         /// </summary>

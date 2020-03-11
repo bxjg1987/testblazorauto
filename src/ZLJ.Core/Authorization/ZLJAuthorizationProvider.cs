@@ -1,12 +1,17 @@
 ﻿using Abp.Authorization;
 using Abp.Localization;
 using Abp.MultiTenancy;
+using BXJG.GeneralTree;
 
 namespace ZLJ.Authorization
 {
     public class ZLJAuthorizationProvider : AuthorizationProvider
     {
-       
+        GeneralTreeModuleConfig cfg;
+        public ZLJAuthorizationProvider(GeneralTreeModuleConfig cfg)
+        {
+            this.cfg = cfg;
+        }
         public override void SetPermissions(IPermissionDefinitionContext context)
         {
             var admin = context.CreatePermission(PermissionNames.Administrator, L("Administrator"));
@@ -48,11 +53,11 @@ namespace ZLJ.Authorization
             xz.CreateChildPermission(PermissionNames.AdministratorBaseInfoAdministrativeUpdate, L("Update"), multiTenancySides: MultiTenancySides.Tenant);
             xz.CreateChildPermission(PermissionNames.AdministratorBaseInfoAdministrativeDelete, L("Delete"), multiTenancySides: MultiTenancySides.Tenant);
 
-            //cfg.InitPermission(baseInfo);
-            var zd = baseInfo.CreateChildPermission(PermissionNames.AdministratorBaseInfoDataDictionary, L("DataDictionary"), multiTenancySides: MultiTenancySides.Tenant);
-            zd.CreateChildPermission(PermissionNames.AdministratorBaseInfoDataDictionaryCreate, L("Add"), multiTenancySides: MultiTenancySides.Tenant);
-            zd.CreateChildPermission(PermissionNames.AdministratorBaseInfoDataDictionaryUpdate, L("Update"), multiTenancySides: MultiTenancySides.Tenant);
-            zd.CreateChildPermission(PermissionNames.AdministratorBaseInfoDataDictionaryDelete, L("Delete"), multiTenancySides: MultiTenancySides.Tenant);
+            cfg.InitPermission( baseInfo);
+            //var zd = baseInfo.CreateChildPermission(PermissionNames.AdministratorBaseInfoDataDictionary, L("DataDictionary"), multiTenancySides: MultiTenancySides.Tenant);
+            //zd.CreateChildPermission(PermissionNames.AdministratorBaseInfoDataDictionaryCreate, L("Add"), multiTenancySides: MultiTenancySides.Tenant);
+            //zd.CreateChildPermission(PermissionNames.AdministratorBaseInfoDataDictionaryUpdate, L("Update"), multiTenancySides: MultiTenancySides.Tenant);
+            //zd.CreateChildPermission(PermissionNames.AdministratorBaseInfoDataDictionaryDelete, L("Delete"), multiTenancySides: MultiTenancySides.Tenant);
 
 
             #endregion

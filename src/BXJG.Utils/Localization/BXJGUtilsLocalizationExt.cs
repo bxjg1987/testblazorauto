@@ -312,6 +312,18 @@ namespace BXJG.Utils.Localization
         //    dic1.Add(new KeyValuePair<T?, string>(unknown.Key, unknown.Value));
         //    return dic1;
         //}
-        #endregion 
+        #endregion
+
+        #region MyRegion
+        public static string UtilsL(this string key)
+        {
+            return Abp.Localization.LocalizationHelper.GetString(BXJGUtilsConsts.LocalizationSourceName, key);
+        }
+
+        public static ILocalizableString UtilsLI(this string key)
+        {
+            return new LocalizableString(key, BXJGUtilsConsts.LocalizationSourceName);
+        }
+        #endregion
     }
 }

@@ -17,6 +17,7 @@ using Microsoft.EntityFrameworkCore;
 using Abp.Zero.Configuration;
 using System;
 using BXJG.GeneralTree;
+using BXJG.Utils.Dto;
 
 namespace ZLJ.Roles
 {
@@ -219,7 +220,7 @@ namespace ZLJ.Roles
             return list;
         }
 
-        public async Task<IReadOnlyList<RoleSelectDto>> GetForSelectAsync(GeneralTreeGetForSelectInput<int?> a)
+        public async Task<IReadOnlyList<RoleSelectDto>> GetForSelectAsync(GetForSelectInput a)
         {
                 var list = await _roleManager.Roles.OrderBy(c => c.DisplayName).Select(c => new RoleSelectDto
                 {

@@ -48,7 +48,7 @@ namespace ZLJ.EntityFrameworkCore.Seed.Tenants
                 .ToList();
 
             var permissions = PermissionFinder
-                .GetAllPermissions(new ZLJAuthorizationProvider())
+                .GetAllPermissions(new ZLJAuthorizationProvider(new BXJG.GeneralTree.GeneralTreeModuleConfig()))
                 .Where(p => p.MultiTenancySides.HasFlag(MultiTenancySides.Tenant) &&
                             !grantedPermissions.Contains(p.Name))
                 .ToList();

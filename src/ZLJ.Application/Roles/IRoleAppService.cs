@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using BXJG.GeneralTree;
+using BXJG.Utils.Dto;
 using ZLJ.Roles.Dto;
 
 namespace ZLJ.Roles
@@ -14,7 +15,7 @@ namespace ZLJ.Roles
         Task<GetRoleForEditOutput> GetRoleForEdit(EntityDto input);
 
         Task<ListResultDto<RoleListDto>> GetRolesAsync(GetRolesInput input);
-        Task<IReadOnlyList<RoleSelectDto>> GetForSelectAsync(GeneralTreeGetForSelectInput<int?> a );
+        Task<IReadOnlyList<RoleSelectDto>> GetForSelectAsync(GetForSelectInput a );
         Task<IEnumerable<int>> DeleteBatchAsync(params int[] input);
     }
 }

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace BXJG.GeneralTree
 {
     /// <summary>
-    /// 数据字典管理
+    /// 数据字典应用服务接口
     /// </summary>
     public interface IGeneralTreeAppService : IGeneralTreeAppServiceBase<
         GeneralTreeDto,
@@ -20,9 +20,7 @@ namespace BXJG.GeneralTree
         GeneralTreeGetForSelectInput,
         GeneralTreeNodeDto,
         GeneralTreeGetForSelectInput,
-        ComboboxItemDto,
+        GeneralTreeComboboxDto,
         GeneralTreeNodeMoveInput>
-    {
-       
-    }
+    {}
 }

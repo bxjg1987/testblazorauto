@@ -30,6 +30,6 @@ namespace BXJG.GeneralTree
         /// </summary>
        // public string ParentText { get; set; }
 
-       public long? Id { get; set; }
+       public long? ParentId { get; set; }
     }
 }

@@ -88,7 +88,7 @@ namespace ZLJ.Organizations
         }
 
         //如果没有上级节点包装 列表默认被选择了 点击新增时 上级几点无法定位到null，因此需要做个包装
-        public virtual async Task<IList<OrganizationUnitDto>> GetAllListAsync(GeneralTreeGetTreeInput<long?> input)
+        public virtual async Task<IList<OrganizationUnitDto>> GetAllListAsync(GeneralTreeGetTreeInput input)
         {
             //获取父节点的code 方便后续查询所有子集
             string parentCode = "";
@@ -138,13 +138,13 @@ namespace ZLJ.Organizations
             }
             return list1;
         }
-        public virtual async Task<IList<GeneralTreeNodeDto>> GetTreeForSelectAsync(GeneralTreeGetForSelectInput<long?> input)
+        public virtual async Task<IList<GeneralTreeNodeDto>> GetTreeForSelectAsync(GeneralTreeGetForSelectInput input)
         {
             //得到实体扁平集合
             string parentCode = "";
-            if (input.Id.HasValue && input.Id.Value > 0)
+            if (input.ParentId.HasValue && input.ParentId.Value > 0)
             {
-                var top = await ownRepository.GetAsync(input.Id.Value);
+                var top = await ownRepository.GetAsync(input.ParentId.Value);
                 parentCode = top.Code;
             }
             var query = ownRepository.GetAll()
@@ -186,17 +186,17 @@ namespace ZLJ.Organizations
 
             });
 
-            var parenOrganizationUnitDto = input.Id.HasValue ? dtoList.SingleOrDefault(c => c.id == input.Id.ToString()) : null;
+            var parenOrganizationUnitDto = input.ParentId.HasValue ? dtoList.SingleOrDefault(c => c.id == input.ParentId.ToString()) : null;
 
-            if (input.Id.HasValue)
-                dtoList = dtoList.Where(c => c.parentId == input.Id.ToString()).ToList();
+            if (input.ParentId.HasValue)
+                dtoList = dtoList.Where(c => c.parentId == input.ParentId.ToString()).ToList();
             else
                 dtoList = dtoList.Where(c => string.IsNullOrWhiteSpace(c.parentId)).ToList();
 
             if (input.ForType > 0 && input.ForType < 5 && !string.IsNullOrWhiteSpace(input.ParentText))
                 return new List<GeneralTreeNodeDto> { new GeneralTreeNodeDto { id = null, text = L(input.ParentText), children = dtoList } };
 
-            if ((input.ForType == 1 || input.ForType == 3) && input.Id.HasValue)
+            if ((input.ForType == 1 || input.ForType == 3) && input.ParentId.HasValue)
                 return new List<GeneralTreeNodeDto> { parenOrganizationUnitDto };
 
             if (input.ForType == 1 || input.ForType == 2)
@@ -207,15 +207,15 @@ namespace ZLJ.Organizations
 
             return dtoList;
         }
-        public virtual async Task<IList<ComboboxItemDto>> GetNodesForSelectAsync(GeneralTreeGetForSelectInput<long?> input)
+        public virtual async Task<IList<ComboboxItemDto>> GetNodesForSelectAsync(GeneralTreeGetForSelectInput input)
         {
 
             var query = ownRepository.GetAll()
-                 .Where(c => c.ParentId == input.Id || c.Id == input.Id)
+                 .Where(c => c.ParentId == input.ParentId || c.Id == input.ParentId)
                  .OrderBy(c => c.Code);
 
             var dtoList = await AsyncQueryableExecuter.ToListAsync(query.Select(c => new ComboboxItemDto { DisplayText = c.DisplayName, Value = c.Id.ToString() }));
-            var parenOrganizationUnitDto = input.Id.HasValue ? dtoList.SingleOrDefault(c => c.Value == input.Id.ToString()) : null;
+            var parenOrganizationUnitDto = input.ParentId.HasValue ? dtoList.SingleOrDefault(c => c.Value == input.ParentId.ToString()) : null;
             if (parenOrganizationUnitDto != null)
             {
                 dtoList.Remove(parenOrganizationUnitDto);
@@ -226,7 +226,7 @@ namespace ZLJ.Organizations
 
             if (input.ForType > 0 && input.ForType < 5 && !string.IsNullOrWhiteSpace(input.ParentText))
                 dtoList.Insert(0, new ComboboxItemDto { Value = null, DisplayText = L(input.ParentText) });
-            else if ((input.ForType == 1 || input.ForType == 3) && input.Id.HasValue)
+            else if ((input.ForType == 1 || input.ForType == 3) && input.ParentId.HasValue)
                 dtoList.Insert(0, parenOrganizationUnitDto);
             else if (input.ForType == 1 || input.ForType == 2)
                 dtoList.Insert(0, new ComboboxItemDto { Value = null, DisplayText = L(allTextForSearch) });

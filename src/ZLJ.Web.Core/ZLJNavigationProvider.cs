@@ -1,6 +1,7 @@
 ﻿using Abp.Application.Navigation;
 using Abp.Authorization;
 using Abp.Localization;
+using BXJG.GeneralTree;
 using ZLJ.Authorization;
 
 namespace ZLJ.Navigation
@@ -10,6 +11,11 @@ namespace ZLJ.Navigation
     /// </summary>
     public class ZLJNavigationProvider : NavigationProvider
     {
+        GeneralTreeModuleConfig cfg;
+        public ZLJNavigationProvider(GeneralTreeModuleConfig cfg)
+        {
+            this.cfg = cfg;
+        }
         public override void SetNavigation(INavigationProviderContext context)
         {
 
@@ -51,14 +57,14 @@ namespace ZLJ.Navigation
                                                 icon: "qizi",
                                                 url: "/baseinfo/Administrative/index.html",
                                                 permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorBaseInfoAdministrative)));
-            jczl.AddItem(new MenuItemDefinition("DataDictionary",
-                                                L("DataDictionary"),
-                                                icon: "shuju",
-                                                url: "/baseinfo/DataDictionary/index.html",
-                                                permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorBaseInfoDataDictionary)));
-            //var sjzd = cfg.InitNav(jczl);
-            //sjzd.Icon = "shuju";
-            //sjzd.Url = "/baseinfo/generalTree/index.html";
+            //jczl.AddItem(new MenuItemDefinition("DataDictionary",
+            //                                    L("DataDictionary"),
+            //                                    icon: "shuju",
+            //                                    url: "/baseinfo/DataDictionary/index.html",
+            //                                    permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorBaseInfoDataDictionary)));
+            var sjzd = cfg.InitNav(jczl);
+            sjzd.Icon = "shuju";
+            sjzd.Url = "/baseinfo/generalTree/index.html";
 
 
             jczl.AddItem(new MenuItemDefinition("Btype",
