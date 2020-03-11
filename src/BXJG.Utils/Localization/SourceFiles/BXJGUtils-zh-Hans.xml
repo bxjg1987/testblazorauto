@@ -4,10 +4,10 @@
     <text name="This node does not allow modification" value="此节点不允许修改！" />
     <text name="true" value="是" />
     <text name="false" value="否" />
-    <text name="no limit" value="==不限==" />
+    <text name="不限" value="==不限==" />
     <text name="Please select role" value="==角色==" />
-    <text name="Please select" value="==请选择==" />
-    <text name="All" value="全部" />
+    <text name="请选择" value="==请选择==" />
+    <text name="全部" value="全部" />
     <text name="Nationwide" value="全国" />
     <text name="HomePage" value="主页" />
     <text name="About" value="关于我们" />

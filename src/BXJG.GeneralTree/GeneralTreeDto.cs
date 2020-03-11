@@ -18,9 +18,9 @@ namespace BXJG.GeneralTree
     public class GeneralTreeDto : GeneralTreeGetTreeNodeBaseDto<GeneralTreeDto>
     {
         public bool IsTree { get; set; }
-        public string IsTreeText => IsTree ?  "是".UtilsL() : "否".UtilsL();
+        public string IsTreeText => IsTree.ToString().UtilsL() ;
         public bool IsSysDefine { get; set; }
-        public string IsSysDefineText => IsSysDefine ? "是".UtilsL() : "否".UtilsL();
+        public string IsSysDefineText => IsSysDefine.ToString().UtilsL();
     }
 
     //[AutoMapFrom(typeof(DataDictionaryEntity))]

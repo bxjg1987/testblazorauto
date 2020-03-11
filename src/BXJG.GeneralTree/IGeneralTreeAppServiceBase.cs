@@ -44,7 +44,7 @@ namespace BXJG.GeneralTree
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task<IList<TDto>> GetAllListAsync(TGetAllInput input);
+        Task<IList<TDto>> GetAllAsync(TGetAllInput input);
         /// <summary>
         /// 获取简洁的树形数据，通常引用此数据的页面调用
         /// </summary>

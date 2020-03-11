@@ -13,6 +13,7 @@ using Abp.Domain.Repositories;
 using Abp.Linq;
 using Abp.MultiTenancy;
 using Abp.UI;
+using BXJG.Utils.Localization;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -94,9 +95,9 @@ namespace BXJG.GeneralTree
             this.ownRepository = ownRepository;
             this.AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
             //L内部调用的LocationSource是使用的属性注入，所以在构造函数中无法使用L()
-            this.allTextForManager = allTextForManager;
-            this.allTextForSearch = allTextForSearch;
-            this.allTextForForm = allTextForForm;
+            this.allTextForManager = allTextForManager.UtilsL();
+            this.allTextForSearch = allTextForSearch.UtilsL();
+            this.allTextForForm = allTextForForm.UtilsL();
 
             this.createPermissionName = createPermissionName;
             this.updatePermissionName = updatePermissionName;
@@ -175,7 +176,7 @@ namespace BXJG.GeneralTree
         }
 
         //如果没有上级节点包装 列表默认被选择了 点击新增时 上级几点无法定位到null，因此需要做个包装
-        public virtual async Task<IList<TDto>> GetAllListAsync(TGetAllInput input)
+        public virtual async Task<IList<TDto>> GetAllAsync(TGetAllInput input)
         {
             //权限判断
             await CheckGetPermissionAsync();
@@ -189,8 +190,8 @@ namespace BXJG.GeneralTree
             }
 
             //查询
-            var query = ownRepository.GetAll().Where(c => c.Code.StartsWith(parentCode));
-            query = AllQuery(query); //方便子类排序
+            var query = CreateFilteredQuery(input).Where(c => c.Code.StartsWith(parentCode));
+            query = ApplySorting(query, input); //方便子类排序
             var list = await AsyncQueryableExecuter.ToListAsync(query);//.ToListAsync();
 
             //建立dto以及处理父子关系
@@ -228,7 +229,7 @@ namespace BXJG.GeneralTree
                 if (input.ParentId.HasValue)
                     return new List<TDto> { parentDto };
 
-                return new List<TDto> { new TDto { DisplayName = L(allTextForManager), Children = list1 } };
+                return new List<TDto> { new TDto { DisplayName = allTextForManager, Children = list1 } };
             }
             return list1;
         }
@@ -301,10 +302,10 @@ namespace BXJG.GeneralTree
                 return new List<TGetTreeForSelectOutput> { parentDto };
 
             if (input.ForType == 1 || input.ForType == 2)
-                return new List<TGetTreeForSelectOutput> { new TGetTreeForSelectOutput { id = null, text = L(this.allTextForSearch), children = dtoList } };
+                return new List<TGetTreeForSelectOutput> { new TGetTreeForSelectOutput { id = null, text = this.allTextForSearch, children = dtoList } };
 
             if (input.ForType == 3 || input.ForType == 4)
-                return new List<TGetTreeForSelectOutput> { new TGetTreeForSelectOutput { id = null, text = L(this.allTextForForm), children = dtoList } };
+                return new List<TGetTreeForSelectOutput> { new TGetTreeForSelectOutput { id = null, text = this.allTextForForm, children = dtoList } };
 
             return dtoList;
         }
@@ -331,9 +332,9 @@ namespace BXJG.GeneralTree
             else if ((input.ForType == 1 || input.ForType == 3) && input.ParentId.HasValue)
                 dtoList.Insert(0, parentDto);
             else if (input.ForType == 1 || input.ForType == 2)
-                dtoList.Insert(0, new TGetNodesForSelectOutput { Value = null, DisplayText = L(allTextForSearch) });
+                dtoList.Insert(0, new TGetNodesForSelectOutput { Value = null, DisplayText = allTextForSearch });
             else if (input.ForType == 3 || input.ForType == 4)
-                dtoList.Insert(0, new TGetNodesForSelectOutput { Value = null, DisplayText = L(allTextForForm) });
+                dtoList.Insert(0, new TGetNodesForSelectOutput { Value = null, DisplayText = allTextForForm });
 
             return dtoList;
         }
@@ -367,7 +368,7 @@ namespace BXJG.GeneralTree
             //使用父类的权限检查可以得到一个正常的未授权响应
             //if (!string.IsNullOrEmpty(permissionName))
             //{
-                await PermissionChecker.AuthorizeAsync(permissionName);
+            await PermissionChecker.AuthorizeAsync(permissionName);
             //}
         }
         #endregion
@@ -381,12 +382,14 @@ namespace BXJG.GeneralTree
         {
 
         }
-        protected virtual IQueryable<TEntity> AllQuery(IQueryable<TEntity> q)
+        protected virtual IQueryable<TEntity> CreateFilteredQuery(TGetAllInput q)
         {
-            return q.OrderBy(c => c.Code);
+            return ownRepository.GetAll();
         }
-
-
+        protected virtual IQueryable<TEntity> ApplySorting(IQueryable<TEntity> query, TGetAllInput input)
+        {
+            return query.OrderBy(c => c.Code);
+        }
         //protected virtual Task BeforeCreate(TEntity m)
         //{
         //    return Task.FromResult<object>(null);

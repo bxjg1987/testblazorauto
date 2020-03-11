@@ -28,7 +28,8 @@ namespace BXJG.GeneralTree
 
         //虽然子类可以继承这个进行自定义数据扩展，但是那是编译时/设计时扩展，前端无法随时扩展自定义数据，因此这里ExtData功能是有必要的
         public dynamic ExtData { get; private set; }
-
+        
+        //实体转为dto时 由于ef，无法将字符串转换为dynamic
         [JsonIgnore]
         public string ExtDataString
         {

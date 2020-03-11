@@ -1,4 +1,5 @@
-﻿using Abp.Localization.Dictionaries;
+﻿using Abp.AutoMapper;
+using Abp.Localization.Dictionaries;
 using Abp.Localization.Dictionaries.Xml;
 using Abp.Modules;
 using System;
@@ -36,8 +37,13 @@ namespace BXJG.GeneralTree
             //    Configuration.Navigation.Providers.Insert(0,typeof(GeneralTreeNavigationProvider));
             //   // Configuration.Navigation.Providers.Add<GeneralTreeNavigationProvider>();
             //}
-              
-            IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
+            var thisAssembly = Assembly.GetExecutingAssembly();
+            IocManager.RegisterAssemblyByConvention(thisAssembly);
+          
+            Configuration.Modules.AbpAutoMapper().Configurators.Add(
+               // Scan the assembly for classes which inherit from AutoMapper.Profile
+               cfg => cfg.AddMaps(thisAssembly)
+           );
         }
     }
 }

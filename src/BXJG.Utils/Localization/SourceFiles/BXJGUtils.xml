@@ -18,6 +18,9 @@
     <text name="密码" value="Password" />
     <text name="ResetPassword" value="Reset Password" />
     <text name="UpdatePassword" value="Update Password" />
+    <text name="全部" value="All" />
+    <text name="请选择" value="Please select" />
+    <text name="不限" value="Unlimited" />
 
 
     <text name="记住我" value="Remember me" />

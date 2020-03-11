@@ -273,7 +273,7 @@ namespace BXJG.Utils.Localization
             dic.Add(true, localizationSource.GetBool(true));
             return dic;
         }
-        
+
         public static string GetTrue(this ILocalizationManager localizationManager, string sourceName)
         {
             return localizationManager.GetSource(sourceName).GetTrue();
@@ -315,11 +315,20 @@ namespace BXJG.Utils.Localization
         #endregion
 
         #region MyRegion
+        /// <summary>
+        /// 获取Utils模块中的指定键的本地化字符串
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public static string UtilsL(this string key)
         {
             return Abp.Localization.LocalizationHelper.GetString(BXJGUtilsConsts.LocalizationSourceName, key);
         }
-
+        /// <summary>
+        /// 获取Utils模块中的指定键的本地化ILocalizableString
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public static ILocalizableString UtilsLI(this string key)
         {
             return new LocalizableString(key, BXJGUtilsConsts.LocalizationSourceName);
