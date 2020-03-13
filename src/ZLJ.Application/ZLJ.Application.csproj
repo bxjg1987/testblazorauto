@@ -13,10 +13,13 @@
   <ItemGroup>
     <Compile Remove="Auditing\Exporting\**" />
     <Compile Remove="Authorization\Permissions\Dto\**" />
+    <Compile Remove="Localization\**" />
     <EmbeddedResource Remove="Auditing\Exporting\**" />
     <EmbeddedResource Remove="Authorization\Permissions\Dto\**" />
+    <EmbeddedResource Remove="Localization\**" />
     <None Remove="Auditing\Exporting\**" />
     <None Remove="Authorization\Permissions\Dto\**" />
+    <None Remove="Localization\**" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Dto\ComboboxDto.cs" />
@@ -38,7 +41,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Dto\" />
-    <Folder Include="Localization\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.0.21" />

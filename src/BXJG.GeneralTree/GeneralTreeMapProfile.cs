@@ -11,11 +11,13 @@ namespace BXJG.GeneralTree
         public GeneralTreeMapProfile()
         {
             CreateMap<GeneralTreeEntity, GeneralTreeDto>()
-                .ForMember(c => c.ExtData, opt => opt.MapFrom(c => JsonConvert.DeserializeObject<dynamic>(c.ExtensionData)));
-                //.ForMember(c => c.IsTreeText, opt => opt.MapFrom(c => c.IsTree.ToString().UtilsL()))
-                //.ForMember(c => c.IsSysDefineText, opt => opt.MapFrom(c => c.IsSysDefine.ToString().UtilsL()))
+                .ForMember(c => c.ExtData, opt => opt.MapFrom(c => JsonConvert.DeserializeObject<dynamic>(c.ExtensionData)))
+                .ForMember(c => c.Children, opt => opt.Ignore());
+            //.ForMember(c => c.IsTreeText, opt => opt.MapFrom(c => c.IsTree.ToString().UtilsL()))
+            //.ForMember(c => c.IsSysDefineText, opt => opt.MapFrom(c => c.IsSysDefine.ToString().UtilsL()))
 
-
+            //CreateMap<GeneralTreeEditDto, GeneralTreeEntity>()
+            //  .
 
             //// Role and permission
             //CreateMap<Permission, string>().ConvertUsing(r => r.Name);

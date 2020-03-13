@@ -21,6 +21,10 @@
     <text name="全部" value="All" />
     <text name="请选择" value="Please select" />
     <text name="不限" value="Unlimited" />
+    <text name="新增" value="Add" />
+    <text name="修改" value="Edit" />
+    <text name="删除" value="Delete" />
+    <text name="查询" value="Search" />
 
 
     <text name="记住我" value="Remember me" />

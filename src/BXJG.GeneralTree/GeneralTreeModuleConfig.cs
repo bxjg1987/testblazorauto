@@ -29,12 +29,12 @@ namespace BXJG.GeneralTree
         }
         public Permission InitPermission(IPermissionDefinitionContext context)
         {
-            Permission admin = context.CreatePermission(GeneralTreeConsts.GeneralTreeGetPermissionName, "数据字典".UtilsLI());
+            Permission admin = context.CreatePermission(GeneralTreeConsts.GeneralTreeGetPermissionName, "数据字典".GeneralTreeLI());
             return InitPermission1(admin);
         }
         public Permission InitPermission(Permission parent)
         {
-            var admin = parent.CreateChildPermission(GeneralTreeConsts.GeneralTreeGetPermissionName, "数据字典".UtilsLI());
+            var admin = parent.CreateChildPermission(GeneralTreeConsts.GeneralTreeGetPermissionName, "数据字典".GeneralTreeLI());
             return InitPermission1(admin);
         }
 
@@ -42,7 +42,7 @@ namespace BXJG.GeneralTree
         public MenuItemDefinition InitNav(MenuItemDefinition menuItemDefinition)
         {
             var zcgl = new MenuItemDefinition(GeneralTreeConsts.GeneralTreeMenuName,
-                                                  "数据字典".UtilsLI(),
+                                                  "数据字典".GeneralTreeLI(),
                                                   icon: "generalTree",
                                                   permissionDependency: new SimplePermissionDependency(GeneralTreeConsts.GeneralTreeGetPermissionName));
             menuItemDefinition.AddItem(zcgl);

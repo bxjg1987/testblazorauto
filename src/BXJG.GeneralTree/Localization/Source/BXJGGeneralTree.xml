@@ -3,5 +3,6 @@
   <texts>
     <text name="数据字典" value="General dictionary" />
     <text name="此节点不允许修改！" value="This node is not allowed to be modified!" />
+    <text name="系统预设数据不允许删除！" value="System preset data cannot be deleted!" />
   </texts>
 </localizationDictionary>

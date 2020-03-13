@@ -94,7 +94,7 @@ namespace BXJG.GeneralTree
             this.generalTreeManager = organizationUnitManager;
             this.ownRepository = ownRepository;
             this.AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
-            //L内部调用的LocationSource是使用的属性注入，所以在构造函数中无法使用L()
+            //L内部调用的LocationSource是使用的属性注入，所以在构造函数中无法使用L()  此规则.net framework版本是这个规则，.net core版本未测试过
             this.allTextForManager = allTextForManager.UtilsL();
             this.allTextForSearch = allTextForSearch.UtilsL();
             this.allTextForForm = allTextForForm.UtilsL();
@@ -170,8 +170,8 @@ namespace BXJG.GeneralTree
             var entity = await ownRepository.GetAsync(input.Id);
 
             var n = ObjectMapper.Map<TDto>(entity);
-            if (!string.IsNullOrWhiteSpace(entity.ExtensionData))
-                n.ExtData = JsonConvert.DeserializeObject<dynamic>(entity.ExtensionData);
+            //if (!string.IsNullOrWhiteSpace(entity.ExtensionData))
+            //    n.ExtData = JsonConvert.DeserializeObject<dynamic>(entity.ExtensionData);
             return n;
         }
 
@@ -209,10 +209,11 @@ namespace BXJG.GeneralTree
                 if (c.Children != null && c.Children.Count > 0)
                     c.State = "closed";//默认值为 open
 
-                if (!string.IsNullOrWhiteSpace(entity.ExtensionData))
-                    c.ExtData = JsonConvert.DeserializeObject<dynamic>(entity.ExtensionData);
+                //映射配置中定义了
+                //if (!string.IsNullOrWhiteSpace(entity.ExtensionData))
+                //    c.ExtData = JsonConvert.DeserializeObject<dynamic>(entity.ExtensionData);
 
-                OnGetAllListItem(entity, c);
+                OnGetAllItem(entity, c);
             }
 
 
@@ -288,18 +289,29 @@ namespace BXJG.GeneralTree
                 OnGetForSelectItem(entity, c);
             });
 
-            var parentDto = input.ParentId.HasValue ? dtoList.SingleOrDefault(c => c.id == input.ParentId.ToString()) : null;
-
+            TGetTreeForSelectOutput parentDto;
             if (input.ParentId.HasValue)
+            {
+                parentDto = dtoList.SingleOrDefault(c => c.id == input.ParentId.ToString());
                 dtoList = dtoList.Where(c => c.parentId == input.ParentId.ToString()).ToList();
-            else
+            }
+            else {
+                parentDto = null;
                 dtoList = dtoList.Where(c => string.IsNullOrWhiteSpace(c.parentId)).ToList();
+            }
+            
 
+            //通用树是通过继承来实现扩展的，所以这里L引用的本地化源可能被子类重写，因此这里用L是可以的
             if (input.ForType > 0 && input.ForType < 5 && !string.IsNullOrWhiteSpace(input.ParentText))
                 return new List<TGetTreeForSelectOutput> { new TGetTreeForSelectOutput { id = null, text = L(input.ParentText), children = dtoList } };
 
             if ((input.ForType == 1 || input.ForType == 3) && input.ParentId.HasValue)
+            {
+                parentDto.text = "==" + parentDto.text + "==";
+                parentDto.id = null;
                 return new List<TGetTreeForSelectOutput> { parentDto };
+            }
+               
 
             if (input.ForType == 1 || input.ForType == 2)
                 return new List<TGetTreeForSelectOutput> { new TGetTreeForSelectOutput { id = null, text = this.allTextForSearch, children = dtoList } };
@@ -366,15 +378,20 @@ namespace BXJG.GeneralTree
             //    throw new UserFriendlyException(L("UnAuthorized"));
 
             //使用父类的权限检查可以得到一个正常的未授权响应
-            //if (!string.IsNullOrEmpty(permissionName))
-            //{
+            if (!string.IsNullOrEmpty(permissionName))
+            {
             await PermissionChecker.AuthorizeAsync(permissionName);
-            //}
+            }
         }
         #endregion
 
         #region 预留给子类重写
-        protected virtual void OnGetAllListItem(TEntity entity, TDto dto)
+        /// <summary>
+        /// 管理页获取列表时 每个Entity转换为Dto时回调此方法，给子类一个机会修改dto的值
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="dto"></param>
+        protected virtual void OnGetAllItem(TEntity entity, TDto dto)
         {
 
         }

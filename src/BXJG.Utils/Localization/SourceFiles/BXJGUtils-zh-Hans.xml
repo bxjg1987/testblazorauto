@@ -2,12 +2,16 @@
 <localizationDictionary culture="zh-Hans">
   <texts>
     <text name="This node does not allow modification" value="此节点不允许修改！" />
-    <text name="true" value="是" />
-    <text name="false" value="否" />
+    <text name="True" value="是" />
+    <text name="False" value="否" />
     <text name="不限" value="==不限==" />
     <text name="Please select role" value="==角色==" />
     <text name="请选择" value="==请选择==" />
     <text name="全部" value="全部" />
+    <text name="新增" value="新增" />
+    <text name="修改" value="修改" />
+    <text name="删除" value="删除" />
+    <text name="查询" value="查询" />
     <text name="Nationwide" value="全国" />
     <text name="HomePage" value="主页" />
     <text name="About" value="关于我们" />
