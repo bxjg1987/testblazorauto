@@ -1,7 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <localizationDictionary culture="zh-Hans">
   <texts>
-    <text name="This node does not allow modification" value="此节点不允许修改！" />
+    <text name="操作成功！" value="操作成功！" />
+    <text name="操作失败！" value="操作失败！" />
+    <text name="新增成功！" value="新增成功！" />
+    <text name="新增失败！" value="新增失败！" />
+    <text name="修改成功！" value="修改成功！" />
+    <text name="修改失败！" value="修改失败！" />
+    <text name="删除成功！" value="删除成功！" />
+    <text name="删除失败！" value="删除失败！" />
+
+    <text name="此节点不允许修改！" value="此节点不允许修改！" />
     <text name="True" value="是" />
     <text name="False" value="否" />
     <text name="不限" value="==不限==" />
@@ -28,7 +37,7 @@
     <text name="Department1">部门</text>
     <text name="FormIsNotValidMessage" value="部分输入信息不符合要求,请检查并改正." />
     <text name="TenantNameCanNotBeEmpty" value="租户名不能为空" />
-    <text name="Refresh" value="刷新" />
+    <text name="刷新" value="刷新" />
     <text name="CurrentTenant">当前租户</text>
     <text name="Change">修改</text>
     <text name="ChangeTenant">请输入租户名(如:default)</text>
@@ -73,7 +82,7 @@
     <text name="Prompt" value="提示" />
     <text name="LoadFailed" value="加载失败！请稍候重试。" />
     <text name="OperationTip" value="操作提示" />
-    <text name="PleaseSeleteLines" value="请选择要{0}的行" />
+    <text name="请选择要{0}的行" value="请选择要{0}的行" />
     <text name="UnAuthorized" value="未授权" />
     <text name="UnAuthenticated" value="身份验证失败！" />
     <text name="UnAuthenticatedDetail" value="登陆已过期！稍重新登陆。" />

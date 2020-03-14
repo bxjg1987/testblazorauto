@@ -1,6 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <localizationDictionary culture="en">
   <texts>
+
+    <text name="操作成功！" value="操作成功！" />
+    <text name="操作失败！" value="操作失败！" />
+    <text name="新增成功！" value="新增成功！" />
+    <text name="新增失败！" value="新增失败！" />
+    <text name="修改成功！" value="修改成功！" />
+    <text name="修改失败！" value="修改失败！" />
+    <text name="删除成功！" value="删除成功！" />
+    <text name="删除失败！" value="删除失败！" />
+    <text name="此节点不允许修改！" value="This node does not allow modification!" />
+    
     <text name="HomePage" value="Home page" />
     <text name="About" value="About" />
     <text name="WelcomeMessage" value="Welcome to ZLJ!" />
@@ -94,7 +105,8 @@
     <text name="LabelOptions">Label options</text>
     <text name="Permissions">Permissions</text>
     <text name="RoleDescription">Role description</text>
-    <text name="Refresh">Refresh</text>
+    <text name="刷新" value="Refresh" />
+    <text name="请选择要{0}的行" value="Please select the row to {0}" />
     <text name="Create">Create</text>
     <text name="UserDetails">User details</text>
     <text name="UserRoles">User roles</text>

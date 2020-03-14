@@ -1,12 +1,12 @@
-﻿<div id="dgToolbarDataDictionary" class="datagrid-toolbar1">
+﻿<div id="dgToolbarGeneralTree" class="datagrid-toolbar1">
     <div class="toolbar_right">
     </div>
 </div>
-<table id="dgDataDictionary"></table>
+<table id="dgGeneralTree"></table>
 <script>
     (function () {
         //若在js函数内部直接使用 razor变量，将失去vs2017提供的js代码折叠效果，因此这里搞个变量
-        var m = 'DataDictionary';
+        var m = 'GeneralTree';
 
         var canAdd = abp.auth.isGranted('GeneralTreeCreatePermission');
         var canUpdate = abp.auth.isGranted('GeneralTreeUpdatePermission');
@@ -23,7 +23,7 @@
             var $btnAdd = $('<a />').insertBefore($toolbarRight);
             var $btnAddOptions = {
                 iconCls: 'icon-add',
-                text: abp.localization.zlj('Add')
+                text: abp.localization.bxjgUtils('新增')
             };
             $btnAdd.linkbutton($.extend($btnAddOptions, {
                 plain: true,
@@ -43,7 +43,7 @@
             var $btnUpdate = $('<a />').insertBefore($toolbarRight);
             var $btnUpdateOptions = {
                 iconCls: 'icon-edit',
-                text: abp.localization.zlj('Update')
+                text: abp.localization.bxjgUtils('修改')
             };
             $btnUpdate.linkbutton($.extend($btnUpdateOptions, {
                 plain: true,
@@ -53,7 +53,7 @@
                         return false;
 
                     if (!rows[0].id) {
-                        abp.message.warn(abp.localization.zlj('This node does not allow modification'));
+                        abp.message.warn(abp.localization.bxjgUtils('此节点不允许修改！'));
                         return;
                     }
 
@@ -71,7 +71,7 @@
             var $btnDelete = $('<a />').insertBefore($toolbarRight);
             var $btnDeleteOptions = {
                 iconCls: 'icon-remove',
-                text: abp.localization.zlj('Delete')
+                text: abp.localization.bxjgUtils('删除')
             };
             $btnDelete.linkbutton($.extend($btnDeleteOptions, {
                 plain: true,
@@ -80,15 +80,15 @@
                     if (!rows)
                         return;
                     abp.message.confirm(
-                        abp.localization.zlj('DeleteConfirm'),
-                        abp.localization.zlj('DeleteConfirmPropt'),
+                        abp.localization.bxjgUtils('DeleteConfirm'),
+                        abp.localization.bxjgUtils('DeleteConfirmPropt'),
                         function (isConfirmed) {
                             if (isConfirmed) {
                                 //这里有个诡异的问题，若用两个parent会导致刷新异常
-                                abp.ui.setBusy($dg.parent().parent().parent(), abp.services.app.dataDictionary.delete({ id: rows[0].id }).done(function (d) {
-                                    abp.notify.success(abp.localization.zlj('Delete') + abp.localization.zlj('Success') + '!');
+                                abp.ui.setBusy($dg.parent().parent().parent(), abp.services.app[abp.utils.toCamelCase(m)].delete({ id: rows[0].id }).done(function (d) {
+                                    abp.notify.success(abp.localization.bxjgUtils('删除') + abp.localization.bxjgUtils('成功') + '!');
                                     $dg.treegrid('unselectAll');
-                                    tnRefresh.trigger('click');
+                                    $btnRefresh.trigger('click');
                                 }));
                             }
                         }
@@ -105,7 +105,7 @@
         var $btnRefresh = $('<a />').insertBefore($toolbarRight);
         $btnRefresh.linkbutton({
             iconCls: 'icon-reload',
-            text: abp.localization.zlj('Refresh'),
+            text: abp.localization.bxjgUtils('刷新'),
             plain: true,
             onClick: function () {
                 $dg.treegrid('reload');
@@ -115,7 +115,7 @@
         function getSelected(str) {
             var rows = $dg.treegrid('getSelections');
             if (rows.length == 0) {//若没有选择，返回的是一个空数组，而非undifined/null
-                abp.message.warn(abp.localization.zlj('PleaseSeleteLines', $.trim(str)));
+                abp.message.warn(abp.localization.bxjgUtils('请选择要{0}的行', $.trim(str)));
                 return false;
             }
             return rows;
@@ -137,7 +137,7 @@
 
             $dlg.dialog({
                 iconCls: id ? $btnUpdateOptions.iconCls : $btnAddOptions.iconCls,
-                title: (id ? $btnUpdateOptions.text : $btnAddOptions.text) + abp.localization.zlj(m),
+                title: (id ? $btnUpdateOptions.text : $btnAddOptions.text) + abp.localization.bxjgUtils(m),
                 width: 500,
                 height: 400,
                 border: false,
@@ -145,7 +145,7 @@
                 href: '/baseinfo/' + m + '/form.html?_t=' + abp.pageLoadTime.getTime(),
                 buttons: [{
                     iconCls: 'icon-ok',
-                    text: abp.localization.zlj('Save'),
+                    text: abp.localization.bxjgUtils('保存'),
                     handler: function () {
                         var callback = $dlg.data('clickSave');
                         if (callback)
@@ -153,7 +153,7 @@
                     }
                 }, {
                     iconCls: 'icon-undo',
-                    text: abp.localization.zlj('Back'),
+                    text: abp.localization.bxjgUtils('返回'),
                     handler: function () {
                         $dlg.dialog('close');
                     }
@@ -174,7 +174,7 @@
             rownumbers: true,
             queryParams: { loadParent: true },
             toolbar: '#dgToolbar' + m,
-            url: abp.appPath + 'api/services/app/generalTree/GetAll',
+            url: abp.appPath + 'api/services/app/'+m+'/GetAll',
             columns: [[
                 { field: 'displayName', title: '名称', width: 300 },
                 { field: 'isTreeText', title: '树形结构', checked: true, width: 80, align: 'center' },
@@ -199,8 +199,8 @@
                         point = 2;
                         break;
                 }
-                abp.ui.setBusy($dg.parent().parent().parent(), abp.services.app.dataDictionary.move({ targetId: target.id, id: source.id, moveType: point }).done(function (d) {
-                    abp.notify.success(abp.localization.zlj('Update') + abp.localization.zlj('Success') + '!');
+                abp.ui.setBusy($dg.parent().parent().parent(), abp.services.app[abp.utils.toCamelCase( m)].move({ targetId: target.id, id: source.id, moveType: point }).done(function (d) {
+                    abp.notify.success(abp.localization.bxjgUtils('修改') + abp.localization.bxjgUtils('成功') + '!');
                     $btnRefresh.trigger('click');
                 }));
             },

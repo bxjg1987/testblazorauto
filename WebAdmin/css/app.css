@@ -352,6 +352,10 @@ a.c-trans1:hover .m-btn-downarrow, a.c-trans1:hover .s-btn-downarrow {
     padding: 8px;
     overflow: hidden;
 }
+    /*.datagrid-toolbar1 > a.l-btn {
+        margin-right:5px;
+    }*/
+
 
 .toolbar_right {
     float: right;

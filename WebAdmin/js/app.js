@@ -112,6 +112,8 @@
     }
     if ($.fn.combotree) {
         $.fn.combotree.defaults.width = inputWidth;
+        $.fn.combotree.defaults.valueField = 'id';
+        $.fn.combotree.defaults.textField = 'text';
         $.fn.combotree.defaults.method = 'get';
         $.fn.combotree.defaults.loadFilter = function (data, parent) {
             if (data && data.__abp) {

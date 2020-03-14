@@ -1,4 +1,4 @@
-﻿﻿<form id="frmDataDictionary" class="frm-container">
+﻿﻿<form id="frmGeneralTree" class="frm-container">
     <input type="hidden" name="id" value="0" />
     <table class="frm-box">
         <tr>
@@ -21,7 +21,7 @@
 </form>
 <script>
     (function(){
-        var m = 'DataDictionary';
+        var m = 'GeneralTree';
         var $dlg = $('#dlg' + m);
         var $frm = $('form');
         var $cbParent = $frm.find("[name='parentId']");
@@ -33,23 +33,24 @@
 
         //初始化父节点下拉框
         $cbParent.combotree({
-            url: abp.appPath + '/api/services/app/' + m + '/GetTreeForSelect',
+            url: abp.appPath + 'api/services/app/' + m + '/GetTreeForSelect',
             queryParams: { forType: 4, parentText: '全部'},
-            prompt: abp.localization.zlj('全部'),
+            prompt: abp.localization.bxjgUtils('全部'),
             onLoadSuccess: function (node, data) {
                 initParentTask.resolve();
             },
             loadFilter: function (data, parent) {
+                data = $.fn.combotree.defaults.loadFilter(data,parent);
                 if (data && data[0])
                     data[0].id = 0;//奇怪这里用'0' 与输入口默认值对应不起来
                 return data;
-            },
+            }
         });
 
         //没必要等下拉加载完再赋值，因为easyui会在加载完后自动处理已存在的值，其它控件也一样
         if(id)
         {
-            initFormTask = abp.services.app.dataDictionary.get({ id: id }).done(function (d) {
+            initFormTask = abp.services.app[abp.utils.toCamelCase(m)].get({ id: id }).done(function (d) {
                 $frm.form('load', d);
             });
         } else {
@@ -66,13 +67,13 @@
             var postData = $frm.serializeJSON(/*{ checkboxUncheckedValue: "false" }*/);
             var defer;
             if(id){
-                defer = abp.services.app.dataDictionary.update(postData).done(function (d) {
-                    abp.notify.success(abp.localization.zlj('Update') + abp.localization.zlj('Success')+'!');
+                defer = abp.services.app.generalTree.update(postData).done(function (d) {
+                    abp.notify.success(abp.localization.bxjgUtils('修改') + abp.localization.bxjgUtils('成功')+'!');
                 });
             } else {
                 postData.id = 0;
-                defer = abp.services.app.dataDictionary.create(postData).done(function (d) {
-                    abp.notify.success(abp.localization.zlj('Add') + abp.localization.zlj('Success') + '!');
+                defer = abp.services.app.generalTree.create(postData).done(function (d) {
+                    abp.notify.success(abp.localization.bxjgUtils('新增') + abp.localization.bxjgUtils('成功') + '!');
                 });
             }
             defer.done(function () {

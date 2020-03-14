@@ -11,7 +11,7 @@ namespace BXJG.GeneralTree
     /// </summary>
     public class GeneralTreeNodeDto<T> where T: GeneralTreeNodeDto<T>
     {
-        public string id { get; set; }
+        public string id { get; set; }//用id是为了适配easyui的tree  combotree共用此模型
         public string text { get; set; }
         public string iconCls { get; set; }
         public bool @checked { get; set; }
