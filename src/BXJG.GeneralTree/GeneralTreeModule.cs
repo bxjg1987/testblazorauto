@@ -39,11 +39,18 @@ namespace BXJG.GeneralTree
             //}
             var thisAssembly = Assembly.GetExecutingAssembly();
             IocManager.RegisterAssemblyByConvention(thisAssembly);
-          
-            Configuration.Modules.AbpAutoMapper().Configurators.Add(
-               // Scan the assembly for classes which inherit from AutoMapper.Profile
-               cfg => cfg.AddMaps(thisAssembly)
-           );
+
+            //用ZLJ.Migration项目迁移时总报错
+            try
+            {
+                Configuration.Modules.AbpAutoMapper().Configurators.Add(
+                    // Scan the assembly for classes which inherit from AutoMapper.Profile
+                    cfg => cfg.AddMaps(thisAssembly)
+                );
+            }
+            catch (Exception)
+            {
+            }
         }
     }
 }

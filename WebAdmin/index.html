@@ -345,7 +345,7 @@
                 });
                 abp.services.app.session.getCurrentLoginInformations()
                     .done(function (result) {
-                        //if (!result.user) {
+                        if (!result.user) {
                         //若不考虑本地化提示，可以将代码放到外面
                         //console.log(abp.ajax.defaultError401);
                         //abp.ajax.showError(abp.ajax.defaultError401)
@@ -357,9 +357,9 @@
                         //但是发现放顶部不好处理，因为判断当前用户是否登录需要读cookie 依赖abp库
                         //最好的方式是为首页增加loading...
                         //最终决定在最早切断去判断 增加loading..
-                        //     location = 'login.html';
+                            location = 'login.html';
                         //     return;
-                        //}
+                        }
 
                         //$txtCurrUser.menubutton({text:result.user.name});
 

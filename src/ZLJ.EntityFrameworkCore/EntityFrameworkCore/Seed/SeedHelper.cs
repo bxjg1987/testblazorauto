@@ -29,6 +29,7 @@ namespace ZLJ.EntityFrameworkCore.Seed
             new TenantRoleAndUserBuilder(context, 1).Create();
 
             new DefaultOrganizationUnit(context, 1).Create();
+            new DefaultDataDictionaryBuilder(context, 1).Create();
         }
 
         private static void WithDbContext<TDbContext>(IIocResolver iocResolver, Action<TDbContext> contextAction)

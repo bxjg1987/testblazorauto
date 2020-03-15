@@ -5,6 +5,7 @@ using ZLJ.Authorization.Users;
 using ZLJ.MultiTenancy;
 using ZLJ.BaseInfo;
 using BXJG.GeneralTree;
+using ZLJ.Asset;
 
 namespace ZLJ.EntityFrameworkCore
 {
@@ -15,7 +16,7 @@ namespace ZLJ.EntityFrameworkCore
         public virtual DbSet<OrganizationUnitEntity> OrganizationUnitEntities { get; set; }
 
         public virtual DbSet<GeneralTreeEntity> GeneralTreeEntities { get; set; }
-
+        public virtual DbSet<EquipmentInfoEntity> EquipmentInfos { get; set; }
         public ZLJDbContext(DbContextOptions<ZLJDbContext> options)
             : base(options)
         {
