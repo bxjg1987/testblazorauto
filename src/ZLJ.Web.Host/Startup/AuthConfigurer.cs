@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Abp.Runtime.Security;
-
+using BXJG.Wechart.MiniProgram;
 namespace ZLJ.Web.Host.Startup
 {
     public static class AuthConfigurer
@@ -16,10 +16,12 @@ namespace ZLJ.Web.Host.Startup
         {
             if (bool.Parse(configuration["Authentication:JwtBearer:IsEnabled"]))
             {
-                services.AddAuthentication(options => {
+                services.AddAuthentication(options =>
+                {
                     options.DefaultAuthenticateScheme = "JwtBearer";
                     options.DefaultChallengeScheme = "JwtBearer";
-                }).AddJwtBearer("JwtBearer", options =>
+                })
+                .AddJwtBearer("JwtBearer", options =>
                 {
                     options.Audience = configuration["Authentication:JwtBearer:Audience"];
 
@@ -48,6 +50,11 @@ namespace ZLJ.Web.Host.Startup
                     {
                         OnMessageReceived = QueryStringTokenResolver
                     };
+                })
+                .AddWeChartMiniProgram(opt =>
+                {
+                    opt.AppId = "aaa";
+                    opt.Secret = "ccc";
                 });
             }
         }

@@ -91,7 +91,7 @@ namespace ZLJ.Auditing
             return results.Select(
                 result =>
                 {
-                    var auditLogListDto = result.AuditLog.MapTo<AuditLogListDto>();
+                    var auditLogListDto = base.ObjectMapper.Map<AuditLogListDto>(result.AuditLog);// result.AuditLog.MapTo<AuditLogListDto>();
                     auditLogListDto.UserName = result.User == null ? null : result.User.UserName;
                     auditLogListDto.ServiceName = _namespaceStripper.StripNameSpace(auditLogListDto.ServiceName);
                     return auditLogListDto;

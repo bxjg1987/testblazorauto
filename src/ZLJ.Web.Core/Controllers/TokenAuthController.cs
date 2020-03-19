@@ -17,6 +17,9 @@ using ZLJ.Authorization;
 using ZLJ.Authorization.Users;
 using ZLJ.Models.TokenAuth;
 using ZLJ.MultiTenancy;
+using Microsoft.AspNetCore.Authentication;
+using BXJG.Wechart.MiniProgram;
+using System.Security.Cryptography;
 
 namespace ZLJ.Controllers
 {
@@ -47,6 +50,80 @@ namespace ZLJ.Controllers
             _externalAuthConfiguration = externalAuthConfiguration;
             _externalAuthManager = externalAuthManager;
             _userRegistrationManager = userRegistrationManager;
+        }
+
+        [HttpPost]
+        public async Task<ExternalAuthenticateResultModel> WeChartMiniProgramLoginAsync()
+        {
+            //SignInManager<object> sdf=null;
+            //UserManager<object> uuu = null;
+
+
+            //从第三方登录拿到当前用户（包含openId、sessionKey）
+            var t = await base.HttpContext.AuthenticateAsync("miniprogram");
+            //拿到openId
+            var openid = t.Principal.Claims.Single(c => c.Type == "openid").Value;
+            //尝试做第三发登录（内部通过openid找到本地账号做登录），注意目前不考虑多租户，所以租户用"default"
+            var loginResult = await _logInManager.LoginAsync(new UserLoginInfo(MiniProgramConsts.AuthenticationScheme, openid, MiniProgramConsts.AuthenticationSchemeDisplayName), "default");
+            //根据登录结果，若成功则直接返回jwtToken 或者自动注册后返回
+            switch (loginResult.Result)
+            {
+                case AbpLoginResultType.Success:
+                {
+                    //若成功则直接返回jwtToken
+                    var accessToken = CreateAccessToken(CreateJwtClaims(loginResult.Identity));
+                    return new ExternalAuthenticateResultModel
+                    {
+                        AccessToken = accessToken,
+                        EncryptedAccessToken = GetEncryptedAccessToken(accessToken),
+                        ExpireInSeconds = (int)_configuration.Expiration.TotalSeconds
+                    };
+                }
+                case AbpLoginResultType.UnknownExternalLogin:
+                {
+                    //若未找到关联的本地账号则自动注册，再返回jwtToken
+                    var newUser = await RegisterExternalUserAsync(new ExternalAuthUserInfo
+                    {
+                        Provider = MiniProgramConsts.AuthenticationScheme,
+                        ProviderKey = openid,
+                        Name = Guid.NewGuid().ToString("N"),
+                        EmailAddress = Guid.NewGuid().ToString("N") + "@mp.com",
+                        Surname = "a"
+                    });
+                    if (!newUser.IsActive)
+                    {
+                        return new ExternalAuthenticateResultModel
+                        {
+                            WaitingForActivation = true
+                        };
+                    }
+
+                    // Try to login again with newly registered user!
+                    loginResult = await _logInManager.LoginAsync(new UserLoginInfo(MiniProgramConsts.AuthenticationScheme,openid, MiniProgramConsts.AuthenticationSchemeDisplayName),"default");
+                    if (loginResult.Result != AbpLoginResultType.Success)
+                    {
+                        throw _abpLoginResultTypeHelper.CreateExceptionForFailedLoginAttempt(
+                            loginResult.Result,
+                            openid,
+                            "default"
+                        );
+                    }
+
+                    return new ExternalAuthenticateResultModel
+                    {
+                        AccessToken = CreateAccessToken(CreateJwtClaims(loginResult.Identity)),
+                        ExpireInSeconds = (int)_configuration.Expiration.TotalSeconds
+                    };
+                }
+                default:
+                {
+                    throw _abpLoginResultTypeHelper.CreateExceptionForFailedLoginAttempt(
+                        loginResult.Result,
+                        openid,
+                       "default"
+                    );
+                }
+            }
         }
 
         [HttpPost]

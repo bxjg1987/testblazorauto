@@ -10,11 +10,14 @@ using Abp.Zero.Configuration;
 using ZLJ.Authorization.Roles;
 using ZLJ.Authorization.Users;
 using ZLJ.MultiTenancy;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace ZLJ.Authorization
 {
     public class LogInManager : AbpLogInManager<Tenant, Role, User>
     {
+        //private readonly IHttpContextAccessor _httpContext;
         public LogInManager(
             UserManager userManager, 
             IMultiTenancyConfig multiTenancyConfig,
@@ -26,7 +29,7 @@ namespace ZLJ.Authorization
             IIocResolver iocResolver,
             IPasswordHasher<User> passwordHasher, 
             RoleManager roleManager,
-            UserClaimsPrincipalFactory claimsPrincipalFactory) 
+            UserClaimsPrincipalFactory claimsPrincipalFactory/*, IHttpContextAccessor httpContextAccessor*/) 
             : base(
                   userManager, 
                   multiTenancyConfig,
@@ -40,6 +43,11 @@ namespace ZLJ.Authorization
                   roleManager, 
                   claimsPrincipalFactory)
         {
+            //this._httpContext = httpContextAccessor;
         }
+
+        //public Task<AbpLoginResult<Tenant, User>> WechartMiniProgramLoginAsync() {
+        //    this._httpContext.AuthenticateAsync
+        //}
     }
 }

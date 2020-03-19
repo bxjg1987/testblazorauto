@@ -18,6 +18,7 @@
     <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\BXJG.Wechart\BXJG.Wechart.csproj" />
     <ProjectReference Include="..\BXJG.Attachment\BXJG.Attachment.csproj" />
     <ProjectReference Include="..\BXJG.File\BXJG.File.csproj" />
     <ProjectReference Include="..\BXJG.Utils\BXJG.Utils.csproj" />
@@ -27,8 +28,8 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0-rc4" />
-    <PackageReference Include="Abp.AspNetCore" Version="5.3.0" />
-    <PackageReference Include="Abp.ZeroCore" Version="5.3.0" />
-    <PackageReference Include="Abp.AspNetCore.SignalR" Version="5.3.0" />
+    <PackageReference Include="Abp.AspNetCore" Version="5.4.0" />
+    <PackageReference Include="Abp.ZeroCore" Version="5.4.0" />
+    <PackageReference Include="Abp.AspNetCore.SignalR" Version="5.4.0" />
   </ItemGroup>
 </Project>
