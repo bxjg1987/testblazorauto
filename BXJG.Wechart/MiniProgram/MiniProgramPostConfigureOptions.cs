@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 
-namespace BXJG.Wechart.MiniProgram
+namespace BXJG.WeChart.MiniProgram
 {
     /*
      * 参考OAuthPostConfigureOptions<TOptions, THandler>
@@ -51,12 +51,12 @@ namespace BXJG.Wechart.MiniProgram
             //        dataProtector);
             //}
 
-            if (options.StateDataFormat == null)
-            {
-                var dataProtector = options.DataProtectionProvider.CreateProtector(
-                    typeof(MiniProgramAuthenticationHandler).FullName, name, "v1");
-                options.StateDataFormat = new PropertiesDataFormat(dataProtector);
-            }
+            //if (options.StateDataFormat == null)
+            //{
+            //    var dataProtector = options.DataProtectionProvider.CreateProtector(
+            //        typeof(MiniProgramAuthenticationHandler).FullName, name, "v1");
+            //    options.StateDataFormat = new PropertiesDataFormat(dataProtector);
+            //}
 
             if (options.Backchannel == null)
             {

@@ -7,7 +7,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Abp.Runtime.Security;
-using BXJG.Wechart.MiniProgram;
+using BXJG.WeChart.MiniProgram;
+using Microsoft.AspNetCore.Authentication;
+
 namespace ZLJ.Web.Host.Startup
 {
     public static class AuthConfigurer
@@ -55,6 +57,14 @@ namespace ZLJ.Web.Host.Startup
                 {
                     opt.AppId = "aaa";
                     opt.Secret = "ccc";
+
+                    opt.ClaimActions.MapJsonKey("nickName", "nickName");
+                    opt.ClaimActions.MapJsonKey("avatarUrl", "avatarUrl");
+                    opt.ClaimActions.MapJsonKey("gender", "gender");
+                    opt.ClaimActions.MapJsonKey("country", "country");
+                    opt.ClaimActions.MapJsonKey("province", "province");
+                    opt.ClaimActions.MapJsonKey("city", "city");
+                    opt.ClaimActions.MapJsonKey("language", "language");
                 });
             }
         }

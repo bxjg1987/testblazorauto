@@ -18,7 +18,7 @@ using ZLJ.Authorization.Users;
 using ZLJ.Models.TokenAuth;
 using ZLJ.MultiTenancy;
 using Microsoft.AspNetCore.Authentication;
-using BXJG.Wechart.MiniProgram;
+using BXJG.WeChart.MiniProgram;
 using System.Security.Cryptography;
 
 namespace ZLJ.Controllers
@@ -26,6 +26,7 @@ namespace ZLJ.Controllers
     [Route("api/[controller]/[action]")]
     public class TokenAuthController : ZLJControllerBase
     {
+        private readonly UserManager userManager;
         private readonly LogInManager _logInManager;
         private readonly ITenantCache _tenantCache;
         private readonly AbpLoginResultTypeHelper _abpLoginResultTypeHelper;
@@ -41,7 +42,9 @@ namespace ZLJ.Controllers
             TokenAuthConfiguration configuration,
             IExternalAuthConfiguration externalAuthConfiguration,
             IExternalAuthManager externalAuthManager,
-            UserRegistrationManager userRegistrationManager)
+            UserRegistrationManager userRegistrationManager,
+            UserManager userManager
+            )
         {
             _logInManager = logInManager;
             _tenantCache = tenantCache;
@@ -50,79 +53,87 @@ namespace ZLJ.Controllers
             _externalAuthConfiguration = externalAuthConfiguration;
             _externalAuthManager = externalAuthManager;
             _userRegistrationManager = userRegistrationManager;
+            this.userManager = userManager;
         }
+
 
         [HttpPost]
         public async Task<ExternalAuthenticateResultModel> WeChartMiniProgramLoginAsync()
         {
-            //SignInManager<object> sdf=null;
-            //UserManager<object> uuu = null;
-
 
             //从第三方登录拿到当前用户（包含openId、sessionKey）
-            var t = await base.HttpContext.AuthenticateAsync("miniprogram");
+            var t = await base.HttpContext.AuthenticateAsync(MiniProgramConsts.AuthenticationScheme);//间接使用第三方身份验证方案获取信息
             //拿到openId
-            var openid = t.Principal.Claims.Single(c => c.Type == "openid").Value;
-            //尝试做第三发登录（内部通过openid找到本地账号做登录），注意目前不考虑多租户，所以租户用"default"
-            var loginResult = await _logInManager.LoginAsync(new UserLoginInfo(MiniProgramConsts.AuthenticationScheme, openid, MiniProgramConsts.AuthenticationSchemeDisplayName), "default");
+            var openid = t.Principal.Claims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value;
+            var tenancyName = GetTenancyNameOrNull();
+            //尝试做第三发登录（内部通过openid找到本地账号做登录），
+            var loginResult = await _logInManager.LoginAsync(new UserLoginInfo(MiniProgramConsts.AuthenticationScheme, openid, MiniProgramConsts.AuthenticationSchemeDisplayName), tenancyName);
             //根据登录结果，若成功则直接返回jwtToken 或者自动注册后返回
             switch (loginResult.Result)
             {
                 case AbpLoginResultType.Success:
-                {
-                    //若成功则直接返回jwtToken
-                    var accessToken = CreateAccessToken(CreateJwtClaims(loginResult.Identity));
-                    return new ExternalAuthenticateResultModel
                     {
-                        AccessToken = accessToken,
-                        EncryptedAccessToken = GetEncryptedAccessToken(accessToken),
-                        ExpireInSeconds = (int)_configuration.Expiration.TotalSeconds
-                    };
-                }
-                case AbpLoginResultType.UnknownExternalLogin:
-                {
-                    //若未找到关联的本地账号则自动注册，再返回jwtToken
-                    var newUser = await RegisterExternalUserAsync(new ExternalAuthUserInfo
-                    {
-                        Provider = MiniProgramConsts.AuthenticationScheme,
-                        ProviderKey = openid,
-                        Name = Guid.NewGuid().ToString("N"),
-                        EmailAddress = Guid.NewGuid().ToString("N") + "@mp.com",
-                        Surname = "a"
-                    });
-                    if (!newUser.IsActive)
-                    {
+                        //更新微信用户信息
+                        foreach (var item in t.Principal.Claims)
+                        {
+                            await userManager.ReplaceClaimAsync(loginResult.User, new Claim(item.Type, ""), item);
+                        }
+
+                        //返回jwtToken
+                        var accessToken = CreateAccessToken(CreateJwtClaims(loginResult.Identity));
                         return new ExternalAuthenticateResultModel
                         {
-                            WaitingForActivation = true
+                            AccessToken = accessToken,
+                            EncryptedAccessToken = GetEncryptedAccessToken(accessToken),
+                            ExpireInSeconds = (int)_configuration.Expiration.TotalSeconds
                         };
                     }
+                case AbpLoginResultType.UnknownExternalLogin:
+                    {
+                        //若未找到关联的本地账号则自动注册，再返回jwtToken
+                        var newUser = await RegisterExternalUserAsync(new ExternalAuthUserInfo
+                        {
+                            Provider = MiniProgramConsts.AuthenticationScheme,
+                            ProviderKey = openid,
+                            Name = t.Principal.Claims.SingleOrDefault(c => c.Type == "nickName")?.Value,
+                            EmailAddress = Guid.NewGuid().ToString("N") + "@mp.com",
+                            Surname = "a"
+                        });
+                        if (!newUser.IsActive)
+                        {
+                            return new ExternalAuthenticateResultModel
+                            {
+                                WaitingForActivation = true
+                            };
+                        }
 
-                    // Try to login again with newly registered user!
-                    loginResult = await _logInManager.LoginAsync(new UserLoginInfo(MiniProgramConsts.AuthenticationScheme,openid, MiniProgramConsts.AuthenticationSchemeDisplayName),"default");
-                    if (loginResult.Result != AbpLoginResultType.Success)
+                        // Try to login again with newly registered user!
+                        loginResult = await _logInManager.LoginAsync(new UserLoginInfo(MiniProgramConsts.AuthenticationScheme, openid, MiniProgramConsts.AuthenticationSchemeDisplayName), tenancyName);
+                        if (loginResult.Result != AbpLoginResultType.Success)
+                        {
+                            throw _abpLoginResultTypeHelper.CreateExceptionForFailedLoginAttempt(
+                                loginResult.Result,
+                                openid,
+                                tenancyName
+                            );
+                        }
+                        //保存微信用户信息（排出openid，因为它存储在userlogins里）
+                        await userManager.AddClaimsAsync(loginResult.User, t.Principal.Claims.Where(c=>c.Type!= ClaimTypes.NameIdentifier));
+
+                        return new ExternalAuthenticateResultModel
+                        {
+                            AccessToken = CreateAccessToken(CreateJwtClaims(loginResult.Identity)),
+                            ExpireInSeconds = (int)_configuration.Expiration.TotalSeconds
+                        };
+                    }
+                default:
                     {
                         throw _abpLoginResultTypeHelper.CreateExceptionForFailedLoginAttempt(
                             loginResult.Result,
                             openid,
-                            "default"
+                            tenancyName
                         );
                     }
-
-                    return new ExternalAuthenticateResultModel
-                    {
-                        AccessToken = CreateAccessToken(CreateJwtClaims(loginResult.Identity)),
-                        ExpireInSeconds = (int)_configuration.Expiration.TotalSeconds
-                    };
-                }
-                default:
-                {
-                    throw _abpLoginResultTypeHelper.CreateExceptionForFailedLoginAttempt(
-                        loginResult.Result,
-                        openid,
-                       "default"
-                    );
-                }
             }
         }
 
