@@ -12,7 +12,7 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace BXJG.Wechart.MiniProgram
+namespace BXJG.WeChart.MiniProgram
 {
     //可以参考TwitterHandler和OAuthHandler的设计
 

@@ -18,7 +18,7 @@ using ZLJ.Authorization.Users;
 using ZLJ.Models.TokenAuth;
 using ZLJ.MultiTenancy;
 using Microsoft.AspNetCore.Authentication;
-using BXJG.Wechart.MiniProgram;
+using BXJG.WeChart.MiniProgram;
 using System.Security.Cryptography;
 
 namespace ZLJ.Controllers

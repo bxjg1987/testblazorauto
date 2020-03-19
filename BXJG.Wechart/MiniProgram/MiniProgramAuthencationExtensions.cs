@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BXJG.Wechart.MiniProgram
+namespace BXJG.WeChart.MiniProgram
 {
     /*
      * 参考TwitterExtensions

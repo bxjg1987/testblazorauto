@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Text;
 
-namespace BXJG.Wechart.MiniProgram
+namespace BXJG.WeChart.MiniProgram
 {
     public class MiniProgramAuthenticationOptions: RemoteAuthenticationOptions
     {

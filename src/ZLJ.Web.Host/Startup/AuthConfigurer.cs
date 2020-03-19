@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Abp.Runtime.Security;
-using BXJG.Wechart.MiniProgram;
+using BXJG.WeChart.MiniProgram;
 namespace ZLJ.Web.Host.Startup
 {
     public static class AuthConfigurer
