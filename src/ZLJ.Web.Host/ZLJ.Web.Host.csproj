@@ -28,7 +28,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\BXJG.Wechart\BXJG.WeChart.csproj" />
+    <ProjectReference Include="..\BXJG.Wechart\BXJG.WeChart.csproj" />
     <ProjectReference Include="..\ZLJ.Web.Core\ZLJ.Web.Core.csproj" />
   </ItemGroup>
   <ItemGroup>

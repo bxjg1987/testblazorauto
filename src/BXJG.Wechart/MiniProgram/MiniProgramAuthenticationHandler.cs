@@ -45,17 +45,17 @@ namespace BXJG.WeChart.MiniProgram
                 throw new HttpRequestException($"An error occurred when retrieving wechar mini program user information ({response.StatusCode}). Please check if the authentication information is correct and the corresponding Microsoft Account API is enabled.");
 
             //正式处理
-            //var rt = JsonSerializer.Deserialize<MiniProgramToken>(await response.Content.ReadAsStringAsync());
+            var rt = JsonSerializer.Deserialize<MiniProgramToken>(await response.Content.ReadAsStringAsync());
             
             //调试
-            var rt = new MiniProgramToken
-            {
-                errcode = 0,
-                errmsg = "",
-                openid = "1111111",
-                session_key = "222",
-                unionid = ""
-            };
+            //var rt = new MiniProgramToken
+            //{
+            //    errcode = 0,
+            //    errmsg = "",
+            //    openid = "1111111",
+            //    session_key = "222",
+            //    unionid = ""
+            //};
 
             if (rt.errcode != 0)
                 throw new HttpRequestException($"errcode:{rt.errcode}, errmsg:{rt.errmsg}");
