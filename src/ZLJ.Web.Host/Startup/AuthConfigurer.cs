@@ -16,14 +16,15 @@ namespace ZLJ.Web.Host.Startup
     {
         public static void Configure(IServiceCollection services, IConfiguration configuration)
         {
+            var authBuilder = services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = "JwtBearer";
+                options.DefaultChallengeScheme = "JwtBearer";
+            });
+
             if (bool.Parse(configuration["Authentication:JwtBearer:IsEnabled"]))
             {
-                services.AddAuthentication(options =>
-                {
-                    options.DefaultAuthenticateScheme = "JwtBearer";
-                    options.DefaultChallengeScheme = "JwtBearer";
-                })
-                .AddJwtBearer("JwtBearer", options =>
+                authBuilder.AddJwtBearer("JwtBearer", options =>
                 {
                     options.Audience = configuration["Authentication:JwtBearer:Audience"];
 
@@ -52,11 +53,15 @@ namespace ZLJ.Web.Host.Startup
                     {
                         OnMessageReceived = QueryStringTokenResolver
                     };
-                })
-                .AddWeChartMiniProgram(opt =>
+                });
+            }
+
+            if (bool.Parse(configuration["Authentication:WeChartMiniProgram:IsEnabled"]))
+            {
+                authBuilder.AddWeChartMiniProgram(opt =>
                 {
-                    opt.AppId = "aaa";
-                    opt.Secret = "ccc";
+                    opt.AppId = configuration["Authentication:WeChartMiniProgram:AppId"];
+                    opt.Secret = configuration["Authentication:WeChartMiniProgram:Secret"];
 
                     opt.ClaimActions.MapJsonKey("nickName", "nickName");
                     opt.ClaimActions.MapJsonKey("avatarUrl", "avatarUrl");
