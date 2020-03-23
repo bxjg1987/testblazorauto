@@ -13286,3 +13286,218 @@ DEBUG 2020-03-23 11:22:35,066 [2    ] , Culture=neutral, PublicKeyToken=null]] -
 DEBUG 2020-03-23 11:22:35,070 [2    ] Abp.BackgroundJobs.BackgroundJobManager  - WaitToStop background worker: Castle.Proxies.BackgroundJobManagerProxy
 DEBUG 2020-03-23 11:22:35,070 [2    ] , Culture=neutral, PublicKeyToken=null]] - WaitToStop background worker: Abp.Authorization.Users.UserTokenExpirationWorker`2[[ZLJ.MultiTenancy.Tenant, ZLJ.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[ZLJ.Authorization.Users.User, ZLJ.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]
 DEBUG 2020-03-23 11:22:35,071 [2    ] Abp.Modules.AbpModuleManager             - Shutting down completed.
+DEBUG 2020-03-23 15:45:09,568 [1    ] Abp.Modules.AbpModuleManager             - Loading Abp modules...
+DEBUG 2020-03-23 15:45:09,642 [1    ] Abp.Modules.AbpModuleManager             - Found 19 ABP modules in total.
+DEBUG 2020-03-23 15:45:09,713 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ZLJ.Web.Host.Startup.ZLJWebHostModule, ZLJ.Web.Host, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2020-03-23 15:45:09,723 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ZLJ.ZLJWebCoreModule, ZLJ.Web.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2020-03-23 15:45:09,724 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ZLJ.ZLJApplicationModule, ZLJ.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2020-03-23 15:45:09,725 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ZLJ.ZLJCoreModule, ZLJ.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2020-03-23 15:45:09,727 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Zero.AbpZeroCoreModule, Abp.ZeroCore, Version=5.4.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2020-03-23 15:45:09,728 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Zero.AbpZeroCommonModule, Abp.Zero.Common, Version=5.4.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2020-03-23 15:45:09,730 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.AbpKernelModule, Abp, Version=5.4.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2020-03-23 15:45:09,731 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: BXJG.Utils.BXJGUtilsModule, BXJG.Utils, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2020-03-23 15:45:09,732 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: BXJG.GeneralTree.GeneralTreeModule, BXJG.GeneralTree, Version=1.0.2.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2020-03-23 15:45:09,734 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: BXJG.File.BXJGFileModule, BXJG.File, Version=0.0.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2020-03-23 15:45:09,735 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: BXJG.Attachment.BXJGAttachmentModule, BXJG.Attachment, Version=0.0.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2020-03-23 15:45:09,736 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.AutoMapper.AbpAutoMapperModule, Abp.AutoMapper, Version=5.4.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2020-03-23 15:45:09,737 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ZLJ.EntityFrameworkCore.ZLJEntityFrameworkModule, ZLJ.EntityFrameworkCore, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2020-03-23 15:45:09,738 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Zero.EntityFrameworkCore.AbpZeroCoreEntityFrameworkCoreModule, Abp.ZeroCore.EntityFrameworkCore, Version=5.4.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2020-03-23 15:45:09,739 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.EntityFrameworkCore.AbpEntityFrameworkCoreModule, Abp.EntityFrameworkCore, Version=5.4.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2020-03-23 15:45:09,739 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.EntityFramework.AbpEntityFrameworkCommonModule, Abp.EntityFramework.Common, Version=5.4.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2020-03-23 15:45:09,740 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.AspNetCore.AbpAspNetCoreModule, Abp.AspNetCore, Version=5.4.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2020-03-23 15:45:09,741 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.AbpWebCommonModule, Abp.Web.Common, Version=5.4.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2020-03-23 15:45:09,742 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.AspNetCore.SignalR.AbpAspNetCoreSignalRModule, Abp.AspNetCore.SignalR, Version=5.4.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2020-03-23 15:45:09,751 [1    ] Abp.Modules.AbpModuleManager             - 19 modules loaded.
+DEBUG 2020-03-23 15:45:09,953 [1    ] o.Configuration.LanguageManagementConfig - Converted Abp (Abp.Localization.Dictionaries.DictionaryBasedLocalizationSource) to MultiTenantLocalizationSource
+DEBUG 2020-03-23 15:45:09,953 [1    ] o.Configuration.LanguageManagementConfig - Converted AbpZero (Abp.Localization.Dictionaries.DictionaryBasedLocalizationSource) to MultiTenantLocalizationSource
+DEBUG 2020-03-23 15:45:09,953 [1    ] o.Configuration.LanguageManagementConfig - Converted BXJGUtils (Abp.Localization.Dictionaries.DictionaryBasedLocalizationSource) to MultiTenantLocalizationSource
+DEBUG 2020-03-23 15:45:09,953 [1    ] o.Configuration.LanguageManagementConfig - Converted BXJGGeneralTree (Abp.Localization.Dictionaries.DictionaryBasedLocalizationSource) to MultiTenantLocalizationSource
+DEBUG 2020-03-23 15:45:09,953 [1    ] o.Configuration.LanguageManagementConfig - Converted BXJGFile (Abp.Localization.Dictionaries.DictionaryBasedLocalizationSource) to MultiTenantLocalizationSource
+DEBUG 2020-03-23 15:45:09,953 [1    ] o.Configuration.LanguageManagementConfig - Converted BXJGAttachment (Abp.Localization.Dictionaries.DictionaryBasedLocalizationSource) to MultiTenantLocalizationSource
+DEBUG 2020-03-23 15:45:09,954 [1    ] o.Configuration.LanguageManagementConfig - Converted ZLJ (Abp.Localization.Dictionaries.DictionaryBasedLocalizationSource) to MultiTenantLocalizationSource
+DEBUG 2020-03-23 15:45:09,954 [1    ] o.Configuration.LanguageManagementConfig - Converted AbpWeb (Abp.Localization.Dictionaries.DictionaryBasedLocalizationSource) to MultiTenantLocalizationSource
+DEBUG 2020-03-23 15:45:11,374 [1    ] ameworkCore.AbpEntityFrameworkCoreModule - Registering DbContext: ZLJ.EntityFrameworkCore.ZLJDbContext, ZLJ.EntityFrameworkCore, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2020-03-23 15:45:13,178 [1    ] Abp.Localization.LocalizationManager     - Initializing 8 localization sources.
+DEBUG 2020-03-23 15:45:13,269 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: Abp
+DEBUG 2020-03-23 15:45:13,313 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: AbpZero
+DEBUG 2020-03-23 15:45:13,343 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: BXJGUtils
+DEBUG 2020-03-23 15:45:13,346 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: BXJGGeneralTree
+DEBUG 2020-03-23 15:45:13,360 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: BXJGFile
+DEBUG 2020-03-23 15:45:13,362 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: BXJGAttachment
+DEBUG 2020-03-23 15:45:13,390 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: ZLJ
+DEBUG 2020-03-23 15:45:13,414 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: AbpWeb
+DEBUG 2020-03-23 15:45:13,673 [1    ] Abp.BackgroundJobs.BackgroundJobManager  - Start background worker: Castle.Proxies.BackgroundJobManagerProxy
+DEBUG 2020-03-23 15:45:13,849 [1    ] , Culture=neutral, PublicKeyToken=null]] - Start background worker: Abp.Authorization.Users.UserTokenExpirationWorker`2[[ZLJ.MultiTenancy.Tenant, ZLJ.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[ZLJ.Authorization.Users.User, ZLJ.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]
+DEBUG 2020-03-23 15:45:14,073 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - Found 15 classes define auto mapping attributes
+DEBUG 2020-03-23 15:45:14,073 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ZLJ.Models.TokenAuth.ExternalLoginProviderInfoModel
+DEBUG 2020-03-23 15:45:14,097 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ZLJ.Sessions.Dto.TenantLoginInfoDto
+DEBUG 2020-03-23 15:45:14,099 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ZLJ.Sessions.Dto.UserLoginInfoDto
+DEBUG 2020-03-23 15:45:14,101 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ZLJ.Roles.Dto.PermissionDto
+DEBUG 2020-03-23 15:45:14,101 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ZLJ.MultiTenancy.Dto.CreateTenantDto
+DEBUG 2020-03-23 15:45:14,103 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ZLJ.MultiTenancy.Dto.TenantDto
+DEBUG 2020-03-23 15:45:14,103 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ZLJ.Users.Dto.CreateUserDto
+DEBUG 2020-03-23 15:45:14,104 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ZLJ.Users.Dto.UserDto
+DEBUG 2020-03-23 15:45:14,104 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ZLJ.Auditing.Dto.AuditLogListDto
+DEBUG 2020-03-23 15:45:14,104 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ZLJ.Asset.EquipmentInfoDto
+DEBUG 2020-03-23 15:45:14,105 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ZLJ.Asset.EquipmentInfoEditDto
+DEBUG 2020-03-23 15:45:14,105 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - BXJG.GeneralTree.GeneralTreeEditDto
+DEBUG 2020-03-23 15:45:14,105 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - BXJG.File.BXJGFileDto
+DEBUG 2020-03-23 15:45:14,106 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - BXJG.Attachment.BXJGAttachmentDto
+DEBUG 2020-03-23 15:45:14,106 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - BXJG.Attachment.BXJGDownloadOutput
+INFO  2020-03-23 15:45:33,215 [1    ] tCore.Builder.RequestLocalizationOptions - Supported Request Localization Cultures: en,zh-Hans
+INFO  2020-03-23 15:45:33,936 [1    ] taProtection.KeyManagement.XmlKeyManager - User profile is available. Using 'C:\Users\Administrator\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+INFO  2020-03-23 15:45:53,573 [12   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 GET http://localhost:21021/AbpServiceProxies/getall  
+INFO  2020-03-23 15:45:54,267 [12   ] ft.AspNetCore.Routing.EndpointMiddleware - Executing endpoint 'Abp.AspNetCore.Mvc.Proxying.AbpServiceProxiesController.GetAll (Abp.AspNetCore)'
+INFO  2020-03-23 15:46:01,154 [12   ] c.Infrastructure.ControllerActionInvoker - Route matched with {action = "GetAll", controller = "AbpServiceProxies", area = ""}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ContentResult GetAll(Abp.AspNetCore.Mvc.Proxying.ApiProxyGenerationModel) on controller Abp.AspNetCore.Mvc.Proxying.AbpServiceProxiesController (Abp.AspNetCore).
+INFO  2020-03-23 15:46:02,313 [12   ] Mvc.Infrastructure.ContentResultExecutor - Executing ContentResult with HTTP Response ContentType of application/x-javascript
+INFO  2020-03-23 15:46:02,355 [12   ] c.Infrastructure.ControllerActionInvoker - Executed action Abp.AspNetCore.Mvc.Proxying.AbpServiceProxiesController.GetAll (Abp.AspNetCore) in 1181.2366ms
+INFO  2020-03-23 15:46:02,356 [12   ] ft.AspNetCore.Routing.EndpointMiddleware - Executed endpoint 'Abp.AspNetCore.Mvc.Proxying.AbpServiceProxiesController.GetAll (Abp.AspNetCore)'
+INFO  2020-03-23 15:46:02,365 [12   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished in 8796.301ms 200 application/x-javascript
+INFO  2020-03-23 15:46:02,766 [11   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 OPTIONS http://localhost:21021/AbpScripts/GetScripts  
+INFO  2020-03-23 15:46:02,795 [11   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2020-03-23 15:46:02,800 [11   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished in 33.652ms 204 
+INFO  2020-03-23 15:46:03,241 [11   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 GET http://localhost:21021/AbpScripts/GetScripts  
+INFO  2020-03-23 15:46:03,245 [11   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2020-03-23 15:46:03,708 [11   ] uthentication.JwtBearer.JwtBearerHandler - Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo: '[PII is hidden. For more details, see https://aka.ms/IdentityModel/PII.]', Current time: '[PII is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'.
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, JwtSecurityToken jwtToken, TokenValidationParameters validationParameters)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateTokenPayload(JwtSecurityToken jwtToken, TokenValidationParameters validationParameters)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateToken(String token, TokenValidationParameters validationParameters, SecurityToken& validatedToken)
+   at Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler.HandleAuthenticateAsync()
+INFO  2020-03-23 15:46:03,719 [11   ] uthentication.JwtBearer.JwtBearerHandler - JwtBearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo: '[PII is hidden. For more details, see https://aka.ms/IdentityModel/PII.]', Current time: '[PII is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'.
+INFO  2020-03-23 15:46:03,722 [11   ] ft.AspNetCore.Routing.EndpointMiddleware - Executing endpoint 'Abp.AspNetCore.Mvc.Controllers.AbpScriptsController.GetScripts (Abp.AspNetCore)'
+INFO  2020-03-23 15:46:03,786 [11   ] c.Infrastructure.ControllerActionInvoker - Route matched with {action = "GetScripts", controller = "AbpScripts", area = ""}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult] GetScripts(System.String, Boolean) on controller Abp.AspNetCore.Mvc.Controllers.AbpScriptsController (Abp.AspNetCore).
+INFO  2020-03-23 15:46:05,335 [11   ] Mvc.Infrastructure.ContentResultExecutor - Executing ContentResult with HTTP Response ContentType of application/x-javascript; charset=utf-8
+INFO  2020-03-23 15:46:05,362 [11   ] c.Infrastructure.ControllerActionInvoker - Executed action Abp.AspNetCore.Mvc.Controllers.AbpScriptsController.GetScripts (Abp.AspNetCore) in 1575.4347ms
+INFO  2020-03-23 15:46:05,364 [11   ] ft.AspNetCore.Routing.EndpointMiddleware - Executed endpoint 'Abp.AspNetCore.Mvc.Controllers.AbpScriptsController.GetScripts (Abp.AspNetCore)'
+INFO  2020-03-23 15:46:05,371 [11   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished in 2130.515ms 200 application/x-javascript; charset=utf-8
+INFO  2020-03-23 15:46:05,790 [8    ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/Session/GetCurrentLoginInformations  
+INFO  2020-03-23 15:46:05,791 [8    ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2020-03-23 15:46:05,795 [8    ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished in 3.1255ms 204 
+INFO  2020-03-23 15:46:05,870 [8    ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 GET http://localhost:21021/api/services/app/Session/GetCurrentLoginInformations application/json 
+INFO  2020-03-23 15:46:05,872 [8    ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2020-03-23 15:46:05,878 [8    ] uthentication.JwtBearer.JwtBearerHandler - Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo: '[PII is hidden. For more details, see https://aka.ms/IdentityModel/PII.]', Current time: '[PII is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'.
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, JwtSecurityToken jwtToken, TokenValidationParameters validationParameters)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateTokenPayload(JwtSecurityToken jwtToken, TokenValidationParameters validationParameters)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateToken(String token, TokenValidationParameters validationParameters, SecurityToken& validatedToken)
+   at Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler.HandleAuthenticateAsync()
+INFO  2020-03-23 15:46:05,879 [8    ] uthentication.JwtBearer.JwtBearerHandler - JwtBearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo: '[PII is hidden. For more details, see https://aka.ms/IdentityModel/PII.]', Current time: '[PII is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'.
+INFO  2020-03-23 15:46:05,883 [8    ] ft.AspNetCore.Routing.EndpointMiddleware - Executing endpoint 'ZLJ.Sessions.SessionAppService.GetCurrentLoginInformations (ZLJ.Application)'
+INFO  2020-03-23 15:46:05,932 [8    ] c.Infrastructure.ControllerActionInvoker - Route matched with {area = "app", action = "GetCurrentLoginInformations", controller = "Session"}. Executing controller action with signature System.Threading.Tasks.Task`1[ZLJ.Sessions.Dto.GetCurrentLoginInformationsOutput] GetCurrentLoginInformations() on controller ZLJ.Sessions.SessionAppService (ZLJ.Application).
+INFO  2020-03-23 15:46:07,455 [11   ] .Mvc.Infrastructure.ObjectResultExecutor - Executing ObjectResult, writing value of type 'Abp.Web.Models.AjaxResponse'.
+INFO  2020-03-23 15:46:07,650 [11   ] c.Infrastructure.ControllerActionInvoker - Executed action ZLJ.Sessions.SessionAppService.GetCurrentLoginInformations (ZLJ.Application) in 1716.827ms
+INFO  2020-03-23 15:46:07,650 [11   ] ft.AspNetCore.Routing.EndpointMiddleware - Executed endpoint 'ZLJ.Sessions.SessionAppService.GetCurrentLoginInformations (ZLJ.Application)'
+INFO  2020-03-23 15:46:07,652 [11   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished in 1781.7182ms 200 application/json; charset=utf-8
+INFO  2020-03-23 15:46:08,581 [12   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 GET http://localhost:21021/AbpScripts/GetScripts?culture=zh-Hans&ui-culture=zh-Hans&_=1584949568193  
+INFO  2020-03-23 15:46:08,591 [12   ] ft.AspNetCore.Routing.EndpointMiddleware - Executing endpoint 'Abp.AspNetCore.Mvc.Controllers.AbpScriptsController.GetScripts (Abp.AspNetCore)'
+INFO  2020-03-23 15:46:08,658 [12   ] c.Infrastructure.ControllerActionInvoker - Route matched with {action = "GetScripts", controller = "AbpScripts", area = ""}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult] GetScripts(System.String, Boolean) on controller Abp.AspNetCore.Mvc.Controllers.AbpScriptsController (Abp.AspNetCore).
+INFO  2020-03-23 15:46:08,827 [12   ] Mvc.Infrastructure.ContentResultExecutor - Executing ContentResult with HTTP Response ContentType of application/x-javascript; charset=utf-8
+INFO  2020-03-23 15:46:08,829 [12   ] c.Infrastructure.ControllerActionInvoker - Executed action Abp.AspNetCore.Mvc.Controllers.AbpScriptsController.GetScripts (Abp.AspNetCore) in 171.0645ms
+INFO  2020-03-23 15:46:08,830 [12   ] ft.AspNetCore.Routing.EndpointMiddleware - Executed endpoint 'Abp.AspNetCore.Mvc.Controllers.AbpScriptsController.GetScripts (Abp.AspNetCore)'
+INFO  2020-03-23 15:46:08,831 [12   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished in 250.5002ms 200 application/x-javascript; charset=utf-8
+INFO  2020-03-23 15:46:10,439 [14   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 OPTIONS http://localhost:21021/api/TokenAuth/Authenticate?culture=zh-Hans&ui-culture=zh-Hans  
+INFO  2020-03-23 15:46:10,443 [14   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2020-03-23 15:46:10,445 [14   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished in 5.8106ms 204 
+INFO  2020-03-23 15:46:10,510 [14   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 POST http://localhost:21021/api/TokenAuth/Authenticate?culture=zh-Hans&ui-culture=zh-Hans application/json 54
+INFO  2020-03-23 15:46:10,511 [14   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2020-03-23 15:46:10,539 [14   ] uthentication.JwtBearer.JwtBearerHandler - Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo: '[PII is hidden. For more details, see https://aka.ms/IdentityModel/PII.]', Current time: '[PII is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'.
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, JwtSecurityToken jwtToken, TokenValidationParameters validationParameters)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateTokenPayload(JwtSecurityToken jwtToken, TokenValidationParameters validationParameters)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateToken(String token, TokenValidationParameters validationParameters, SecurityToken& validatedToken)
+   at Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler.HandleAuthenticateAsync()
+INFO  2020-03-23 15:46:10,540 [14   ] uthentication.JwtBearer.JwtBearerHandler - JwtBearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo: '[PII is hidden. For more details, see https://aka.ms/IdentityModel/PII.]', Current time: '[PII is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'.
+INFO  2020-03-23 15:46:10,542 [14   ] ft.AspNetCore.Routing.EndpointMiddleware - Executing endpoint 'ZLJ.Controllers.TokenAuthController.Authenticate (ZLJ.Web.Core)'
+INFO  2020-03-23 15:46:10,624 [14   ] c.Infrastructure.ControllerActionInvoker - Route matched with {action = "Authenticate", controller = "TokenAuth", area = ""}. Executing controller action with signature System.Threading.Tasks.Task`1[ZLJ.Models.TokenAuth.AuthenticateResultModel] Authenticate(ZLJ.Models.TokenAuth.AuthenticateModel) on controller ZLJ.Controllers.TokenAuthController (ZLJ.Web.Core).
+INFO  2020-03-23 15:46:14,233 [12   ] .Mvc.Infrastructure.ObjectResultExecutor - Executing ObjectResult, writing value of type 'Abp.Web.Models.AjaxResponse'.
+INFO  2020-03-23 15:46:14,247 [12   ] c.Infrastructure.ControllerActionInvoker - Executed action ZLJ.Controllers.TokenAuthController.Authenticate (ZLJ.Web.Core) in 3621.5008ms
+INFO  2020-03-23 15:46:14,248 [12   ] ft.AspNetCore.Routing.EndpointMiddleware - Executed endpoint 'ZLJ.Controllers.TokenAuthController.Authenticate (ZLJ.Web.Core)'
+INFO  2020-03-23 15:46:14,249 [12   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished in 3739.1963ms 200 application/json; charset=utf-8
+INFO  2020-03-23 15:46:14,518 [12   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 GET http://localhost:21021/AbpServiceProxies/getall  
+INFO  2020-03-23 15:46:14,530 [12   ] ft.AspNetCore.Routing.EndpointMiddleware - Executing endpoint 'Abp.AspNetCore.Mvc.Proxying.AbpServiceProxiesController.GetAll (Abp.AspNetCore)'
+INFO  2020-03-23 15:46:14,701 [12   ] c.Infrastructure.ControllerActionInvoker - Route matched with {action = "GetAll", controller = "AbpServiceProxies", area = ""}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ContentResult GetAll(Abp.AspNetCore.Mvc.Proxying.ApiProxyGenerationModel) on controller Abp.AspNetCore.Mvc.Proxying.AbpServiceProxiesController (Abp.AspNetCore).
+INFO  2020-03-23 15:46:14,714 [12   ] Mvc.Infrastructure.ContentResultExecutor - Executing ContentResult with HTTP Response ContentType of application/x-javascript
+INFO  2020-03-23 15:46:14,718 [12   ] c.Infrastructure.ControllerActionInvoker - Executed action Abp.AspNetCore.Mvc.Proxying.AbpServiceProxiesController.GetAll (Abp.AspNetCore) in 16.0949ms
+INFO  2020-03-23 15:46:14,718 [12   ] ft.AspNetCore.Routing.EndpointMiddleware - Executed endpoint 'Abp.AspNetCore.Mvc.Proxying.AbpServiceProxiesController.GetAll (Abp.AspNetCore)'
+INFO  2020-03-23 15:46:14,719 [12   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished in 201.998ms 200 application/x-javascript
+INFO  2020-03-23 15:46:15,326 [11   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 OPTIONS http://localhost:21021/AbpScripts/GetScripts  
+INFO  2020-03-23 15:46:15,328 [11   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2020-03-23 15:46:15,329 [11   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished in 3.3916ms 204 
+INFO  2020-03-23 15:46:15,715 [8    ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 GET http://localhost:21021/AbpScripts/GetScripts  
+INFO  2020-03-23 15:46:15,717 [8    ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2020-03-23 15:46:15,814 [8    ] uthentication.JwtBearer.JwtBearerHandler - Successfully validated the token.
+INFO  2020-03-23 15:46:16,053 [8    ] ft.AspNetCore.Routing.EndpointMiddleware - Executing endpoint 'Abp.AspNetCore.Mvc.Controllers.AbpScriptsController.GetScripts (Abp.AspNetCore)'
+INFO  2020-03-23 15:46:16,076 [8    ] c.Infrastructure.ControllerActionInvoker - Route matched with {action = "GetScripts", controller = "AbpScripts", area = ""}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult] GetScripts(System.String, Boolean) on controller Abp.AspNetCore.Mvc.Controllers.AbpScriptsController (Abp.AspNetCore).
+INFO  2020-03-23 15:46:17,142 [12   ] Mvc.Infrastructure.ContentResultExecutor - Executing ContentResult with HTTP Response ContentType of application/x-javascript; charset=utf-8
+INFO  2020-03-23 15:46:17,144 [12   ] c.Infrastructure.ControllerActionInvoker - Executed action Abp.AspNetCore.Mvc.Controllers.AbpScriptsController.GetScripts (Abp.AspNetCore) in 1067.1858ms
+INFO  2020-03-23 15:46:17,145 [12   ] ft.AspNetCore.Routing.EndpointMiddleware - Executed endpoint 'Abp.AspNetCore.Mvc.Controllers.AbpScriptsController.GetScripts (Abp.AspNetCore)'
+INFO  2020-03-23 15:46:17,146 [12   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished in 1429.7179ms 200 application/x-javascript; charset=utf-8
+INFO  2020-03-23 15:46:17,551 [14   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/Session/GetCurrentLoginInformations  
+INFO  2020-03-23 15:46:17,552 [14   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2020-03-23 15:46:17,554 [14   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished in 2.6078ms 204 
+INFO  2020-03-23 15:46:17,875 [12   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 GET http://localhost:21021/api/services/app/Session/GetCurrentLoginInformations application/json 
+INFO  2020-03-23 15:46:17,877 [12   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2020-03-23 15:46:17,902 [12   ] uthentication.JwtBearer.JwtBearerHandler - Successfully validated the token.
+INFO  2020-03-23 15:46:17,907 [12   ] ft.AspNetCore.Routing.EndpointMiddleware - Executing endpoint 'ZLJ.Sessions.SessionAppService.GetCurrentLoginInformations (ZLJ.Application)'
+INFO  2020-03-23 15:46:17,928 [12   ] c.Infrastructure.ControllerActionInvoker - Route matched with {area = "app", action = "GetCurrentLoginInformations", controller = "Session"}. Executing controller action with signature System.Threading.Tasks.Task`1[ZLJ.Sessions.Dto.GetCurrentLoginInformationsOutput] GetCurrentLoginInformations() on controller ZLJ.Sessions.SessionAppService (ZLJ.Application).
+INFO  2020-03-23 15:46:18,104 [4    ] .Mvc.Infrastructure.ObjectResultExecutor - Executing ObjectResult, writing value of type 'Abp.Web.Models.AjaxResponse'.
+INFO  2020-03-23 15:46:18,128 [4    ] c.Infrastructure.ControllerActionInvoker - Executed action ZLJ.Sessions.SessionAppService.GetCurrentLoginInformations (ZLJ.Application) in 197.3685ms
+INFO  2020-03-23 15:46:18,128 [4    ] ft.AspNetCore.Routing.EndpointMiddleware - Executed endpoint 'ZLJ.Sessions.SessionAppService.GetCurrentLoginInformations (ZLJ.Application)'
+INFO  2020-03-23 15:46:18,131 [4    ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished in 255.3589ms 200 application/json; charset=utf-8
+INFO  2020-03-23 15:46:24,415 [12   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/GeneralTree/GetAll?loadParent=true  
+INFO  2020-03-23 15:46:24,417 [12   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2020-03-23 15:46:24,418 [12   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished in 2.3137ms 204 
+INFO  2020-03-23 15:46:24,477 [14   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 GET http://localhost:21021/api/services/app/GeneralTree/GetAll?loadParent=true  
+INFO  2020-03-23 15:46:24,478 [14   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2020-03-23 15:46:24,491 [14   ] uthentication.JwtBearer.JwtBearerHandler - Successfully validated the token.
+INFO  2020-03-23 15:46:24,496 [14   ] ft.AspNetCore.Routing.EndpointMiddleware - Executing endpoint 'BXJG.GeneralTree.GeneralTreeAppService.GetAllAsync (BXJG.GeneralTree)'
+INFO  2020-03-23 15:46:24,582 [14   ] c.Infrastructure.ControllerActionInvoker - Route matched with {area = "app", action = "GetAll", controller = "GeneralTree"}. Executing controller action with signature System.Threading.Tasks.Task`1[System.Collections.Generic.IList`1[BXJG.GeneralTree.GeneralTreeDto]] GetAllAsync(BXJG.GeneralTree.GeneralTreeGetTreeInput) on controller BXJG.GeneralTree.GeneralTreeAppService (BXJG.GeneralTree).
+INFO  2020-03-23 15:46:25,620 [17   ] .Mvc.Infrastructure.ObjectResultExecutor - Executing ObjectResult, writing value of type 'Abp.Web.Models.AjaxResponse'.
+INFO  2020-03-23 15:46:25,715 [17   ] c.Infrastructure.ControllerActionInvoker - Executed action BXJG.GeneralTree.GeneralTreeAppService.GetAllAsync (BXJG.GeneralTree) in 1132.5928ms
+INFO  2020-03-23 15:46:25,715 [17   ] ft.AspNetCore.Routing.EndpointMiddleware - Executed endpoint 'BXJG.GeneralTree.GeneralTreeAppService.GetAllAsync (BXJG.GeneralTree)'
+INFO  2020-03-23 15:46:25,716 [17   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished in 1239.1621ms 200 application/json; charset=utf-8
+INFO  2020-03-23 15:47:28,583 [7    ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/GeneralTree/Move  
+INFO  2020-03-23 15:47:28,584 [7    ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2020-03-23 15:47:28,588 [7    ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished in 4.4927ms 204 
+INFO  2020-03-23 15:47:28,677 [13   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 POST http://localhost:21021/api/services/app/GeneralTree/Move application/json 36
+INFO  2020-03-23 15:47:28,678 [13   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2020-03-23 15:47:28,694 [13   ] uthentication.JwtBearer.JwtBearerHandler - Successfully validated the token.
+INFO  2020-03-23 15:47:28,698 [13   ] ft.AspNetCore.Routing.EndpointMiddleware - Executing endpoint 'BXJG.GeneralTree.GeneralTreeAppService.MoveAsync (BXJG.GeneralTree)'
+INFO  2020-03-23 15:47:28,782 [13   ] c.Infrastructure.ControllerActionInvoker - Route matched with {area = "app", action = "Move", controller = "GeneralTree"}. Executing controller action with signature System.Threading.Tasks.Task`1[BXJG.GeneralTree.GeneralTreeDto] MoveAsync(BXJG.GeneralTree.GeneralTreeNodeMoveInput) on controller BXJG.GeneralTree.GeneralTreeAppService (BXJG.GeneralTree).
+INFO  2020-03-23 15:47:29,785 [8    ] .Mvc.Infrastructure.ObjectResultExecutor - Executing ObjectResult, writing value of type 'Abp.Web.Models.AjaxResponse'.
+INFO  2020-03-23 15:47:29,790 [8    ] c.Infrastructure.ControllerActionInvoker - Executed action BXJG.GeneralTree.GeneralTreeAppService.MoveAsync (BXJG.GeneralTree) in 1006.7962ms
+INFO  2020-03-23 15:47:29,791 [8    ] ft.AspNetCore.Routing.EndpointMiddleware - Executed endpoint 'BXJG.GeneralTree.GeneralTreeAppService.MoveAsync (BXJG.GeneralTree)'
+INFO  2020-03-23 15:47:29,792 [8    ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished in 1115.6607ms 200 application/json; charset=utf-8
+INFO  2020-03-23 15:47:29,827 [7    ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/GeneralTree/GetAll?loadParent=true  
+INFO  2020-03-23 15:47:29,827 [7    ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2020-03-23 15:47:29,828 [7    ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished in 1.3863ms 204 
+INFO  2020-03-23 15:47:29,889 [13   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 GET http://localhost:21021/api/services/app/GeneralTree/GetAll?loadParent=true  
+INFO  2020-03-23 15:47:29,890 [13   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2020-03-23 15:47:29,896 [13   ] uthentication.JwtBearer.JwtBearerHandler - Successfully validated the token.
+INFO  2020-03-23 15:47:29,902 [13   ] ft.AspNetCore.Routing.EndpointMiddleware - Executing endpoint 'BXJG.GeneralTree.GeneralTreeAppService.GetAllAsync (BXJG.GeneralTree)'
+INFO  2020-03-23 15:47:29,937 [13   ] c.Infrastructure.ControllerActionInvoker - Route matched with {area = "app", action = "GetAll", controller = "GeneralTree"}. Executing controller action with signature System.Threading.Tasks.Task`1[System.Collections.Generic.IList`1[BXJG.GeneralTree.GeneralTreeDto]] GetAllAsync(BXJG.GeneralTree.GeneralTreeGetTreeInput) on controller BXJG.GeneralTree.GeneralTreeAppService (BXJG.GeneralTree).
+INFO  2020-03-23 15:47:30,151 [8    ] .Mvc.Infrastructure.ObjectResultExecutor - Executing ObjectResult, writing value of type 'Abp.Web.Models.AjaxResponse'.
+INFO  2020-03-23 15:47:30,212 [8    ] c.Infrastructure.ControllerActionInvoker - Executed action BXJG.GeneralTree.GeneralTreeAppService.GetAllAsync (BXJG.GeneralTree) in 274.7203ms
+INFO  2020-03-23 15:47:30,213 [8    ] ft.AspNetCore.Routing.EndpointMiddleware - Executed endpoint 'BXJG.GeneralTree.GeneralTreeAppService.GetAllAsync (BXJG.GeneralTree)'
+INFO  2020-03-23 15:47:30,213 [8    ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished in 324.5124ms 200 application/json; charset=utf-8
+INFO  2020-03-23 16:06:35,549 [55   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 GET http://localhost:21021/swagger/index.html  
+INFO  2020-03-23 16:06:35,832 [55   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished in 283.4376ms 200 text/html;charset=utf-8
+INFO  2020-03-23 16:06:36,295 [54   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 GET http://localhost:21021/AntiForgery/SetCookie  
+INFO  2020-03-23 16:06:36,300 [54   ] ft.AspNetCore.Routing.EndpointMiddleware - Executing endpoint 'ZLJ.Web.Host.Controllers.AntiForgeryController.SetCookie (ZLJ.Web.Host)'
+INFO  2020-03-23 16:06:36,341 [54   ] c.Infrastructure.ControllerActionInvoker - Route matched with {action = "SetCookie", controller = "AntiForgery", area = ""}. Executing controller action with signature Void SetCookie() on controller ZLJ.Web.Host.Controllers.AntiForgeryController (ZLJ.Web.Host).
+INFO  2020-03-23 16:06:36,401 [54   ] .Mvc.Infrastructure.ObjectResultExecutor - Executing ObjectResult, writing value of type 'Abp.Web.Models.AjaxResponse'.
+INFO  2020-03-23 16:06:36,403 [54   ] c.Infrastructure.ControllerActionInvoker - Executed action ZLJ.Web.Host.Controllers.AntiForgeryController.SetCookie (ZLJ.Web.Host) in 61.5195ms
+INFO  2020-03-23 16:06:36,403 [54   ] ft.AspNetCore.Routing.EndpointMiddleware - Executed endpoint 'ZLJ.Web.Host.Controllers.AntiForgeryController.SetCookie (ZLJ.Web.Host)'
+INFO  2020-03-23 16:06:36,404 [54   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished in 108.6374ms 200 application/json; charset=utf-8
+INFO  2020-03-23 16:06:36,564 [55   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 GET http://localhost:21021/swagger/v1/swagger.json  
+INFO  2020-03-23 16:06:37,530 [55   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished in 965.7022ms 200 application/json;charset=utf-8
+DEBUG 2020-03-23 16:48:37,936 [2    ] Abp.Modules.AbpModuleManager             - Shutting down has been started
+DEBUG 2020-03-23 16:48:37,948 [2    ] Abp.BackgroundJobs.BackgroundJobManager  - Stop background worker: Castle.Proxies.BackgroundJobManagerProxy
+DEBUG 2020-03-23 16:48:37,948 [2    ] , Culture=neutral, PublicKeyToken=null]] - Stop background worker: Abp.Authorization.Users.UserTokenExpirationWorker`2[[ZLJ.MultiTenancy.Tenant, ZLJ.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[ZLJ.Authorization.Users.User, ZLJ.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]
+DEBUG 2020-03-23 16:48:37,952 [2    ] Abp.BackgroundJobs.BackgroundJobManager  - WaitToStop background worker: Castle.Proxies.BackgroundJobManagerProxy
+DEBUG 2020-03-23 16:48:37,953 [2    ] , Culture=neutral, PublicKeyToken=null]] - WaitToStop background worker: Abp.Authorization.Users.UserTokenExpirationWorker`2[[ZLJ.MultiTenancy.Tenant, ZLJ.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[ZLJ.Authorization.Users.User, ZLJ.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]
+DEBUG 2020-03-23 16:48:37,953 [2    ] Abp.Modules.AbpModuleManager             - Shutting down completed.

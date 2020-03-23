@@ -43,6 +43,7 @@ namespace BXJG.GeneralTree
 
         public override async Task DeleteAsync(EntityDto<long> input)
         {
+           await base.CheckDeletePermissionAsync();
             var sd = await base.ownRepository.GetAsync(input.Id);
             if (sd.IsSysDefine)
                 throw new UserFriendlyException(L("系统预设数据不允许删除！"));
