@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 
-namespace BXJG.WeChart.MiniProgram
+namespace BXJG.WeChat.MiniProgram
 {
     /*
      * 参考OAuthPostConfigureOptions<TOptions, THandler>

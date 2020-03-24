@@ -18,7 +18,7 @@ using Abp.Dependency;
 using Abp.Json;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
-
+using BXJG.WeChat.Payment;
 namespace ZLJ.Web.Host.Startup
 {
     public class Startup
@@ -112,7 +112,9 @@ namespace ZLJ.Web.Host.Startup
 
             app.UseAbpRequestLocalization();
 
-          
+            app.UseWeChatPayment();
+
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHub<AbpCommonHub>("/signalr");

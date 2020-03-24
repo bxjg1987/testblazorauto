@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Abp.Runtime.Security;
-using BXJG.WeChart.MiniProgram;
+using BXJG.WeChat.MiniProgram;
 using Microsoft.AspNetCore.Authentication;
 
 namespace ZLJ.Web.Host.Startup
