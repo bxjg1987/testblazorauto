@@ -29,13 +29,13 @@ namespace BXJG.WeChat.MiniProgram
             //Utf8JsonReader sdf = new Utf8JsonReader();
 
             var input = await new StreamReader(Request.Body).ReadToEndAsync();
-            var jd = JsonDocument.Parse(input);
+            var jd = JsonDocument.Parse(input).RootElement;
 
             var requestUrl = QueryHelpers.AddQueryString(Options.UserInformationEndpoint, new Dictionary<string, string>
             {
                 { "appid", Options.AppId },
                 { "secret", Options.Secret },
-                { "js_code",jd.RootElement.GetString("code") },
+                { "js_code",jd.GetString("code") },
                 { "grant_type", "authorization_code" },
             });
 
@@ -75,7 +75,7 @@ namespace BXJG.WeChat.MiniProgram
                 IssuedUtc = Clock.UtcNow
             };
 
-            var ticket = await CreateTicketAsync(identity, authenticationProperties, rt, jd.RootElement);
+            var ticket = await CreateTicketAsync(identity, authenticationProperties, rt, jd);
 
             return HandleRequestResult.Success(ticket);
         }

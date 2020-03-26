@@ -4,8 +4,7 @@ using System.Text;
 
 namespace BXJG.WeChat.Payment
 {
-    public class WeChatPaymentOptions
+   public  class WeChatPamentNoticeHandleResult
     {
-        public string CallbackPath { get; set; }
     }
 }

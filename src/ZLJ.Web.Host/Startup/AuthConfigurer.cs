@@ -63,13 +63,15 @@ namespace ZLJ.Web.Host.Startup
                     opt.AppId = configuration["Authentication:WeChartMiniProgram:AppId"];
                     opt.Secret = configuration["Authentication:WeChartMiniProgram:Secret"];
 
-                    opt.ClaimActions.MapJsonKey("nickName", "nickName");
-                    opt.ClaimActions.MapJsonKey("avatarUrl", "avatarUrl");
-                    opt.ClaimActions.MapJsonKey("gender", "gender");
-                    opt.ClaimActions.MapJsonKey("country", "country");
-                    opt.ClaimActions.MapJsonKey("province", "province");
-                    opt.ClaimActions.MapJsonKey("city", "city");
-                    opt.ClaimActions.MapJsonKey("language", "language");
+                    //登录时不考虑前端传，而是在controller中单独提供一个api 来更新用户信息，包括手机号的处理
+
+                    //opt.ClaimActions.MapJsonKey("nickName", "nickName");
+                    //opt.ClaimActions.MapJsonKey("avatarUrl", "avatarUrl");
+                    //opt.ClaimActions.MapJsonKey("gender", "gender");
+                    //opt.ClaimActions.MapJsonKey("country", "country");
+                    //opt.ClaimActions.MapJsonKey("province", "province");
+                    //opt.ClaimActions.MapJsonKey("city", "city");
+                    //opt.ClaimActions.MapJsonKey("language", "language");
                 });
             }
         }

@@ -137,6 +137,8 @@ namespace ZLJ.Controllers
             }
         }
 
+        //需要提供方法来更新小程序用户信息 头像 昵称 手机号之类的
+
         [HttpPost]
         public async Task<AuthenticateResultModel> Authenticate([FromBody] AuthenticateModel model)
         {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace BXJG.WeChat.Payment
 {
@@ -8,7 +9,8 @@ namespace BXJG.WeChat.Payment
     /// 前端支付完成后，微信回调我方接口时传递过来的数据结构
     /// 参考微信支付文档：https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=9_7
     /// </summary>
-    public class PaymentResult
+    [XmlRoot("xml")]
+    public class WeChatPaymentNoticeResult
     {
         /// <summary>
         /// SUCCESS/FAIL
@@ -117,19 +119,31 @@ namespace BXJG.WeChat.Payment
         /// 注意：只有下单时订单使用了优惠，回调通知才会返回券信息。
         /// 下列情况可能导致订单不可以享受优惠： https://pay.weixin.qq.com/wiki/doc/api/danpin.php?chapter=9_202&index=7#menu4
         /// </summary>
-        public string @coupon_type_n { get; set; }
+        public string @coupon_type_0 { get; set; }
+        public string @coupon_type_1 { get; set; }
+        public string @coupon_type_2 { get; set; }
+        public string @coupon_type_3 { get; set; }
+        public string @coupon_type_4 { get; set; }
         /// <summary>
         /// 代金券ID
         /// 代金券ID,$n为下标，从0开始编号
         /// 注意：只有下单时订单使用了优惠，回调通知才会返回券信息。
         /// 下列情况可能导致订单不可以享受优惠 https://pay.weixin.qq.com/wiki/doc/api/danpin.php?chapter=9_202&index=7#menu4
         /// </summary>
-        public string coupon_id_n { get; set; }
+        public string coupon_id_0 { get; set; }
+        public string coupon_id_1 { get; set; }
+        public string coupon_id_2 { get; set; }
+        public string coupon_id_3 { get; set; }
+        public string coupon_id_4 { get; set; }
         /// <summary>
         /// 单个代金券支付金额
         /// 单个代金券支付金额,$n为下标，从0开始编号
         /// </summary>
-        public int coupon_fee_n { get; set; }
+        public int coupon_fee_0 { get; set; }
+        public int coupon_fee_1 { get; set; }
+        public int coupon_fee_2 { get; set; }
+        public int coupon_fee_3 { get; set; }
+        public int coupon_fee_4 { get; set; }
         /// <summary>
         /// 微信支付订单号
         /// </summary>
