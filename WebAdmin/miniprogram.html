@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="lib/jquery/jquery.min.js"></script>
+</head>
+<body>
+    <script >
+        
+        $.ajax({
+            url: 'http://localhost:21021/wechart-miniProgram-signin',
+            type: 'POST',
+            data: JSON.stringify({ code: "dfsdf" }),
+            contentType: "application/json;charset=utf-8",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("withCredentials",true);
+            },
+            success: function (result) {
+                console.log(result);
+            }
+        });
+        
+    </script>
+</body>
+</html>

@@ -25,7 +25,7 @@ namespace BXJG.WeChat.MiniProgram
         public static AuthenticationBuilder AddWeChartMiniProgram(this AuthenticationBuilder builder, string authenticationScheme, string displayName, Action<MiniProgramAuthenticationOptions> configureOptions)
         {
             builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<IPostConfigureOptions<MiniProgramAuthenticationOptions>, MiniProgramPostConfigureOptions>());
-            return builder.AddRemoteScheme<MiniProgramAuthenticationOptions, MiniProgramAuthenticationHandler>(authenticationScheme, displayName, configureOptions);
+            return builder.AddScheme<MiniProgramAuthenticationOptions, MiniProgramAuthenticationHandler>(authenticationScheme, displayName, configureOptions);
         }
     }
 }

@@ -21,7 +21,6 @@
     <ProjectReference Include="..\BXJG.Attachment\BXJG.Attachment.csproj" />
     <ProjectReference Include="..\BXJG.File\BXJG.File.csproj" />
     <ProjectReference Include="..\BXJG.Utils\BXJG.Utils.csproj" />
-    <ProjectReference Include="..\BXJG.Wechart\BXJG.WeChat.csproj" />
     <ProjectReference Include="..\BXJG.Wechat\BXJG.WeChat.csproj" />
     <ProjectReference Include="..\ZLJ.Application\ZLJ.Application.csproj" />
     <ProjectReference Include="..\ZLJ.EntityFrameworkCore\ZLJ.EntityFrameworkCore.csproj" />
