@@ -13,9 +13,7 @@
             type: 'POST',
             data: JSON.stringify({ code: "dfsdf" }),
             contentType: "application/json;charset=utf-8",
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader("withCredentials",true);
-            },
+            
             success: function (result) {
                 console.log(JSON.parse(result));
             }

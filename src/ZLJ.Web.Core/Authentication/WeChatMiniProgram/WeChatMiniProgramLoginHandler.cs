@@ -36,7 +36,7 @@ namespace ZLJ.Authentication.WeChatMiniProgram
 
         private HttpContext httpContext;
         private HttpResponse httpResponse;
-        string tenancyName=null;
+        string tenancyName = null;
         public WeChatMiniProgramLoginHandler(IAbpSession abpSession,
             LogInManager logInManager,
             ITenantCache tenantCache,
@@ -55,7 +55,7 @@ namespace ZLJ.Authentication.WeChatMiniProgram
         [UnitOfWork]
         public async Task<bool> ExcuteAsync(WeChatMiniProgramLoginContext ct)
         {
-            
+
             this.httpContext = ct.HttpContext;
             this.httpResponse = httpContext.Response;
             if (AbpSession.TenantId.HasValue)
@@ -75,10 +75,19 @@ namespace ZLJ.Authentication.WeChatMiniProgram
                         //    await userManager.ReplaceClaimAsync(loginResult.User, new Claim(item., ""), item);
                         //}
 
+                        
+                        var cs = await userManager.GetClaimsAsync(loginResult.User);//it is work
+                        var sessionKey = cs.Single(c => c.Type == "session_key");//ClaimType="session_key" Value="2222"
+                        //ct.WeChatMiniProgramUser.session_key= "777",but here does not work
+                        var claimRT = await userManager.ReplaceClaimAsync(loginResult.User, sessionKey, new Claim("session_key", ct.WeChatMiniProgramUser.session_key));
+
+                        //await userManager.RemoveClaimAsync(loginResult.User, new Claim("session_key", ""));
+                        //await userManager.AddClaimAsync(loginResult.User, new Claim("session_key", ct.WeChatMiniProgramUser.session_key));
+
                         //返回jwtToken
                         var accessToken = CreateAccessToken(CreateJwtClaims(loginResult.Identity));
 
-                      
+
                         await WriteJsonAsync(new
                         {
                             AccessToken = accessToken,
@@ -107,7 +116,7 @@ namespace ZLJ.Authentication.WeChatMiniProgram
                         //}
 
                         // Try to login again with newly registered user!
-                        loginResult = await _logInManager.LoginAsync(new UserLoginInfo(MiniProgramConsts.AuthenticationScheme, ct.WeChatMiniProgramUser. openid, MiniProgramConsts.AuthenticationSchemeDisplayName), tenancyName);
+                        loginResult = await _logInManager.LoginAsync(new UserLoginInfo(MiniProgramConsts.AuthenticationScheme, ct.WeChatMiniProgramUser.openid, MiniProgramConsts.AuthenticationSchemeDisplayName), tenancyName);
                         if (loginResult.Result != AbpLoginResultType.Success)
                         {
                             //throw _abpLoginResultTypeHelper.CreateExceptionForFailedLoginAttempt(
@@ -123,6 +132,7 @@ namespace ZLJ.Authentication.WeChatMiniProgram
 
                         else
                         {
+                            await userManager.AddClaimAsync(loginResult.User, new Claim("session_key", ct.WeChatMiniProgramUser.session_key));
                             await WriteJsonAsync(new
                             {
                                 AccessToken = CreateAccessToken(CreateJwtClaims(loginResult.Identity)),
