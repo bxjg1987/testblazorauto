@@ -16,6 +16,9 @@ using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using ZLJ.Navigation;
 using BXJG.Utils;
 using BXJG.GeneralTree;
+using Abp.Dependency;
+using ZLJ.Authentication.WeChatMiniProgram;
+using BXJG.WeChat.MiniProgram;
 
 namespace ZLJ
 {
@@ -23,7 +26,7 @@ namespace ZLJ
          typeof(ZLJApplicationModule),
          typeof(ZLJEntityFrameworkModule),
          typeof(AbpAspNetCoreModule)
-        ,typeof(AbpAspNetCoreSignalRModule)
+        , typeof(AbpAspNetCoreSignalRModule)
      )]
     public class ZLJWebCoreModule : AbpModule
     {
@@ -61,6 +64,7 @@ namespace ZLJ
         private void ConfigureTokenAuth()
         {
             IocManager.Register<TokenAuthConfiguration>();
+            //IocManager.Register<IWeChatMiniProgramLoginHandler, WeChatMiniProgramLoginHandler>(DependencyLifeStyle.Transient);
             var tokenAuthConfig = IocManager.Resolve<TokenAuthConfiguration>();
 
             tokenAuthConfig.SecurityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_appConfiguration["Authentication:JwtBearer:SecurityKey"]));

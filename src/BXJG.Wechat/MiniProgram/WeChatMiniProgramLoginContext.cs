@@ -14,8 +14,8 @@ namespace BXJG.WeChat.MiniProgram
         public HttpContext HttpContext { get; }
         //实现类本身可以通过选项模式访问到这个对象，不过这里提供会让实现方更方便
         public MiniProgramAuthenticationOptions Options { get; }
-        public WeChatMiniProgramUser WeChatMiniProgramUser { get; }
-        public WeChatMiniProgramLoginContext(HttpContext httpContext, MiniProgramAuthenticationOptions options, WeChatMiniProgramUser weChatMiniProgramUser)
+        public WeChatUser WeChatMiniProgramUser { get; }
+        public WeChatMiniProgramLoginContext(HttpContext httpContext, MiniProgramAuthenticationOptions options, WeChatUser weChatMiniProgramUser)
         {
             HttpContext = httpContext;
             Options = options;

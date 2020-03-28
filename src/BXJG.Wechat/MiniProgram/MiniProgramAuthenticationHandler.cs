@@ -35,7 +35,7 @@ namespace BXJG.WeChat.MiniProgram
             var handler = Context.RequestServices.GetService<IWeChatMiniProgramLoginHandler>();
             //既然已经注册了这个身份验证方案，就必须提实现
             if (handler == null)
-                throw new Exception($"请实现{nameof(IWeChatMiniProgramLoginHandler)}，否则不要注册微笑小程序登录的身份验证方案");
+                throw new Exception($"请实现{nameof(IWeChatMiniProgramLoginHandler)}，否则不要注册微信小程序登录的身份验证方案");
 
             //在身份验证的多个步骤触发相应的事件，允许调用方控制身份验证过程，可以参考asp.net core默认实现，如：TwitterHandler
             //Options.Events.CreatingTicket(ct);
@@ -49,7 +49,7 @@ namespace BXJG.WeChat.MiniProgram
         /// 根据上传信息中的code向微信服务器发起请求，获取openid、session_key....
         /// </summary>
         /// <returns></returns>
-        private async Task<WeChatMiniProgramUser> HandleRemoteAuthenticateAsync()
+        private async Task<WeChatUser> HandleRemoteAuthenticateAsync()
         {
             var input = await new StreamReader(Request.Body).ReadToEndAsync();
             var jd = JsonDocument.Parse(input).RootElement;
@@ -74,7 +74,7 @@ namespace BXJG.WeChat.MiniProgram
             {
                 errcode = 0,
                 errmsg = "",
-                openid = "1111111",
+                openid = "33333",
                 session_key = "222",
                 unionid = ""
             };
@@ -82,7 +82,7 @@ namespace BXJG.WeChat.MiniProgram
             if (rt.errcode != 0)
                 throw new HttpRequestException($"errcode:{rt.errcode}, errmsg:{rt.errmsg}");
 
-            return new WeChatMiniProgramUser
+            return new WeChatUser
             {
                 Input = jd,
                 openid = rt.openid,

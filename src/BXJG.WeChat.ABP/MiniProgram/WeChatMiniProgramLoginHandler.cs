@@ -1,4 +1,5 @@
 ﻿using Abp.Authorization;
+using Abp.Authorization.Roles;
 using Abp.Authorization.Users;
 using Abp.Dependency;
 using Abp.Domain.Uow;
@@ -24,12 +25,15 @@ using ZLJ.Models.TokenAuth;
 
 namespace ZLJ.Authentication.WeChatMiniProgram
 {
-    public class Class1 : IWeChatMiniProgramLoginHandler, ITransientDependency
+    public class WeChatMiniProgramLoginHandler<TTenant, TRole, TUser> : IWeChatMiniProgramLoginHandler
+         where TTenant : AbpTenant<TUser>
+        where TRole : AbpRole<TUser>, new()
+        where TUser : AbpUser<TUser>
     {
         private readonly IAbpSession AbpSession;
         private readonly ITenantCache _tenantCache;
-        private readonly LogInManager _logInManager;
-        private readonly UserManager userManager;
+        private readonly AbpLogInManager<TTenant, TRole, TUser> _logInManager;
+        private readonly AbpUserManager<TRole, TUser> userManager;
         private readonly TokenAuthConfiguration _configuration;
         private readonly UserRegistrationManager _userRegistrationManager;
         public IUnitOfWorkManager UnitOfWorkManager { get; set; }
@@ -37,7 +41,7 @@ namespace ZLJ.Authentication.WeChatMiniProgram
         private HttpContext httpContext;
         private HttpResponse httpResponse;
 
-        public Class1(IAbpSession abpSession,
+        public WeChatMiniProgramLoginHandler(IAbpSession abpSession,
             LogInManager logInManager,
             ITenantCache tenantCache,
             UserRegistrationManager userRegistrationManager,

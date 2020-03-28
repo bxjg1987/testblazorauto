@@ -57,85 +57,85 @@ namespace ZLJ.Controllers
         }
 
 
-        [HttpPost]
-        public async Task<ExternalAuthenticateResultModel> WeChartMiniProgramLoginAsync()
-        {
+        //[HttpPost]
+        //public async Task<ExternalAuthenticateResultModel> WeChartMiniProgramLoginAsync()
+        //{
 
-            //从第三方登录拿到当前用户（包含openId、sessionKey）
-            var t = await base.HttpContext.AuthenticateAsync(MiniProgramConsts.AuthenticationScheme);//间接使用第三方身份验证方案获取信息
-            //拿到openId
-            var openid = t.Principal.Claims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value;
-            var tenancyName = GetTenancyNameOrNull();
-            //尝试做第三发登录（内部通过openid找到本地账号做登录），
-            var loginResult = await _logInManager.LoginAsync(new UserLoginInfo(MiniProgramConsts.AuthenticationScheme, openid, MiniProgramConsts.AuthenticationSchemeDisplayName), tenancyName);
-            //根据登录结果，若成功则直接返回jwtToken 或者自动注册后返回
-            switch (loginResult.Result)
-            {
-                case AbpLoginResultType.Success:
-                    {
-                        //更新微信用户信息
-                        foreach (var item in t.Principal.Claims)
-                        {
-                            await userManager.ReplaceClaimAsync(loginResult.User, new Claim(item.Type, ""), item);
-                        }
+        //    //从第三方登录拿到当前用户（包含openId、sessionKey）
+        //    var t = await base.HttpContext.AuthenticateAsync(MiniProgramConsts.AuthenticationScheme);//间接使用第三方身份验证方案获取信息
+        //    //拿到openId
+        //    var openid = t.Principal.Claims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value;
+        //    var tenancyName = GetTenancyNameOrNull();
+        //    //尝试做第三发登录（内部通过openid找到本地账号做登录），
+        //    var loginResult = await _logInManager.LoginAsync(new UserLoginInfo(MiniProgramConsts.AuthenticationScheme, openid, MiniProgramConsts.AuthenticationSchemeDisplayName), tenancyName);
+        //    //根据登录结果，若成功则直接返回jwtToken 或者自动注册后返回
+        //    switch (loginResult.Result)
+        //    {
+        //        case AbpLoginResultType.Success:
+        //            {
+        //                //更新微信用户信息
+        //                foreach (var item in t.Principal.Claims)
+        //                {
+        //                    await userManager.ReplaceClaimAsync(loginResult.User, new Claim(item.Type, ""), item);
+        //                }
 
-                        //返回jwtToken
-                        var accessToken = CreateAccessToken(CreateJwtClaims(loginResult.Identity));
-                        return new ExternalAuthenticateResultModel
-                        {
-                            AccessToken = accessToken,
-                            EncryptedAccessToken = GetEncryptedAccessToken(accessToken),
-                            ExpireInSeconds = (int)_configuration.Expiration.TotalSeconds
-                        };
-                    }
-                case AbpLoginResultType.UnknownExternalLogin:
-                    {
-                        //若未找到关联的本地账号则自动注册，再返回jwtToken
-                        var newUser = await RegisterExternalUserAsync(new ExternalAuthUserInfo
-                        {
-                            Provider = MiniProgramConsts.AuthenticationScheme,
-                            ProviderKey = openid,
-                            Name = t.Principal.Claims.SingleOrDefault(c => c.Type == "nickName")?.Value,
-                            EmailAddress = Guid.NewGuid().ToString("N") + "@mp.com",
-                            Surname = "a"
-                        });
-                        if (!newUser.IsActive)
-                        {
-                            return new ExternalAuthenticateResultModel
-                            {
-                                WaitingForActivation = true
-                            };
-                        }
+        //                //返回jwtToken
+        //                var accessToken = CreateAccessToken(CreateJwtClaims(loginResult.Identity));
+        //                return new ExternalAuthenticateResultModel
+        //                {
+        //                    AccessToken = accessToken,
+        //                    EncryptedAccessToken = GetEncryptedAccessToken(accessToken),
+        //                    ExpireInSeconds = (int)_configuration.Expiration.TotalSeconds
+        //                };
+        //            }
+        //        case AbpLoginResultType.UnknownExternalLogin:
+        //            {
+        //                //若未找到关联的本地账号则自动注册，再返回jwtToken
+        //                var newUser = await RegisterExternalUserAsync(new ExternalAuthUserInfo
+        //                {
+        //                    Provider = MiniProgramConsts.AuthenticationScheme,
+        //                    ProviderKey = openid,
+        //                    Name = t.Principal.Claims.SingleOrDefault(c => c.Type == "nickName")?.Value,
+        //                    EmailAddress = Guid.NewGuid().ToString("N") + "@mp.com",
+        //                    Surname = "a"
+        //                });
+        //                if (!newUser.IsActive)
+        //                {
+        //                    return new ExternalAuthenticateResultModel
+        //                    {
+        //                        WaitingForActivation = true
+        //                    };
+        //                }
 
-                        // Try to login again with newly registered user!
-                        loginResult = await _logInManager.LoginAsync(new UserLoginInfo(MiniProgramConsts.AuthenticationScheme, openid, MiniProgramConsts.AuthenticationSchemeDisplayName), tenancyName);
-                        if (loginResult.Result != AbpLoginResultType.Success)
-                        {
-                            throw _abpLoginResultTypeHelper.CreateExceptionForFailedLoginAttempt(
-                                loginResult.Result,
-                                openid,
-                                tenancyName
-                            );
-                        }
-                        //保存微信用户信息（排出openid，因为它存储在userlogins里）
-                        await userManager.AddClaimsAsync(loginResult.User, t.Principal.Claims.Where(c=>c.Type!= ClaimTypes.NameIdentifier));
+        //                // Try to login again with newly registered user!
+        //                loginResult = await _logInManager.LoginAsync(new UserLoginInfo(MiniProgramConsts.AuthenticationScheme, openid, MiniProgramConsts.AuthenticationSchemeDisplayName), tenancyName);
+        //                if (loginResult.Result != AbpLoginResultType.Success)
+        //                {
+        //                    throw _abpLoginResultTypeHelper.CreateExceptionForFailedLoginAttempt(
+        //                        loginResult.Result,
+        //                        openid,
+        //                        tenancyName
+        //                    );
+        //                }
+        //                //保存微信用户信息（排出openid，因为它存储在userlogins里）
+        //                await userManager.AddClaimsAsync(loginResult.User, t.Principal.Claims.Where(c=>c.Type!= ClaimTypes.NameIdentifier));
 
-                        return new ExternalAuthenticateResultModel
-                        {
-                            AccessToken = CreateAccessToken(CreateJwtClaims(loginResult.Identity)),
-                            ExpireInSeconds = (int)_configuration.Expiration.TotalSeconds
-                        };
-                    }
-                default:
-                    {
-                        throw _abpLoginResultTypeHelper.CreateExceptionForFailedLoginAttempt(
-                            loginResult.Result,
-                            openid,
-                            tenancyName
-                        );
-                    }
-            }
-        }
+        //                return new ExternalAuthenticateResultModel
+        //                {
+        //                    AccessToken = CreateAccessToken(CreateJwtClaims(loginResult.Identity)),
+        //                    ExpireInSeconds = (int)_configuration.Expiration.TotalSeconds
+        //                };
+        //            }
+        //        default:
+        //            {
+        //                throw _abpLoginResultTypeHelper.CreateExceptionForFailedLoginAttempt(
+        //                    loginResult.Result,
+        //                    openid,
+        //                    tenancyName
+        //                );
+        //            }
+        //    }
+        //}
 
         //需要提供方法来更新小程序用户信息 头像 昵称 手机号之类的
 

@@ -13,17 +13,22 @@ namespace BXJG.WeChat.MiniProgram
      */
     public static class MiniProgramAuthencationExtensions
     {
-        public static AuthenticationBuilder AddWeChartMiniProgram(this AuthenticationBuilder builder)
-            => builder.AddWeChartMiniProgram(MiniProgramConsts.AuthenticationScheme, _ => { });
+        public static AuthenticationBuilder AddWeChartMiniProgram<TLoginHandler>(this AuthenticationBuilder builder) 
+            where TLoginHandler: class, IWeChatMiniProgramLoginHandler
+            => builder.AddWeChartMiniProgram<TLoginHandler>(MiniProgramConsts.AuthenticationScheme, _ => { });
 
-        public static AuthenticationBuilder AddWeChartMiniProgram(this AuthenticationBuilder builder, Action<MiniProgramAuthenticationOptions> configureOptions)
-            => builder.AddWeChartMiniProgram(MiniProgramConsts.AuthenticationScheme, configureOptions);
+        public static AuthenticationBuilder AddWeChartMiniProgram<TLoginHandler>(this AuthenticationBuilder builder, Action<MiniProgramAuthenticationOptions> configureOptions) 
+            where TLoginHandler : class, IWeChatMiniProgramLoginHandler
+            => builder.AddWeChartMiniProgram<TLoginHandler>(MiniProgramConsts.AuthenticationScheme, configureOptions);
 
-        public static AuthenticationBuilder AddWeChartMiniProgram(this AuthenticationBuilder builder, string authenticationScheme, Action<MiniProgramAuthenticationOptions> configureOptions)
-            => builder.AddWeChartMiniProgram(authenticationScheme, MiniProgramConsts.AuthenticationSchemeDisplayName, configureOptions);
+        public static AuthenticationBuilder AddWeChartMiniProgram<TLoginHandler>(this AuthenticationBuilder builder, string authenticationScheme, Action<MiniProgramAuthenticationOptions> configureOptions) 
+            where TLoginHandler : class, IWeChatMiniProgramLoginHandler
+            => builder.AddWeChartMiniProgram<TLoginHandler>(authenticationScheme, MiniProgramConsts.AuthenticationSchemeDisplayName, configureOptions);
 
-        public static AuthenticationBuilder AddWeChartMiniProgram(this AuthenticationBuilder builder, string authenticationScheme, string displayName, Action<MiniProgramAuthenticationOptions> configureOptions)
+        public static AuthenticationBuilder AddWeChartMiniProgram<TLoginHandler>(this AuthenticationBuilder builder, string authenticationScheme, string displayName, Action<MiniProgramAuthenticationOptions> configureOptions) 
+            where TLoginHandler :class, IWeChatMiniProgramLoginHandler
         {
+            builder.Services.AddScoped<IWeChatMiniProgramLoginHandler, TLoginHandler>();
             builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<IPostConfigureOptions<MiniProgramAuthenticationOptions>, MiniProgramPostConfigureOptions>());
             return builder.AddScheme<MiniProgramAuthenticationOptions, MiniProgramAuthenticationHandler>(authenticationScheme, displayName, configureOptions);
         }

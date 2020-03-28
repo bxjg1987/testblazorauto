@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using Abp.Runtime.Security;
 using BXJG.WeChat.MiniProgram;
 using Microsoft.AspNetCore.Authentication;
+using ZLJ.Authentication.WeChatMiniProgram;
 
 namespace ZLJ.Web.Host.Startup
 {
@@ -58,7 +59,7 @@ namespace ZLJ.Web.Host.Startup
 
             if (bool.Parse(configuration["Authentication:WeChartMiniProgram:IsEnabled"]))
             {
-                authBuilder.AddWeChartMiniProgram(opt =>
+                authBuilder.AddWeChartMiniProgram<WeChatMiniProgramLoginHandler>(opt =>
                 {
                     opt.AppId = configuration["Authentication:WeChartMiniProgram:AppId"];
                     opt.Secret = configuration["Authentication:WeChartMiniProgram:Secret"];
