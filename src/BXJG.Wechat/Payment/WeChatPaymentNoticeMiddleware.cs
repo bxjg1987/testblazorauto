@@ -8,8 +8,6 @@ using Microsoft.Extensions.Options;
 using System.Xml.Linq;
 using System.IO;
 using Microsoft.Extensions.Logging;
-using BXJG.Utils.XML;
-
 
 namespace BXJG.WeChat.Payment
 {
@@ -58,7 +56,7 @@ namespace BXJG.WeChat.Payment
 
             //拿到微信传来的数据
             //没必要先判断return_code再决定是否序列化，因为大部分时候都是成功的，先判断还得linq to xml 的多创建一个XDocument，没必要
-            var wpnr = await request.Body.XmlDeserializeAsync<WeChatPaymentNoticeResult>();
+            WeChatPaymentNoticeResult wpnr = null;// await request.Body.XmlDeserializeAsync<WeChatPaymentNoticeResult>();
 
             //如果微信传来的状态就是错误的就直接返回
             //这里也可以让调用方去执行一些业务
