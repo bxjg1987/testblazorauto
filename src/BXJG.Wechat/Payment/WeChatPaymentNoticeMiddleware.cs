@@ -32,7 +32,7 @@ namespace BXJG.WeChat.Payment
             //若考虑配置文件更新时自动更新选项，则使用IOptionsMonitor<>.CurrentValue，否则用IOptions<>.Value
             //由于考虑用户代码的某些组件也需要访问此选项对象，因此使用asp.net core选项模型，使用依赖注入的方式
             //而不是使用注册中间件是直接提供Options的方式，这样调用方可以随时依赖注入此选项对象
-            var options = context.RequestServices.GetRequiredService<IOptionsMonitor<WeChatPaymentNoticeOptions>>().CurrentValue;
+            var options = context.RequestServices.GetRequiredService<IOptionsMonitor<WeChatPaymentOptions>>().CurrentValue;
 
             //若当前请求不是支付结果回调请求，则跳过处理，直接执行后续中间件
             if (!options.CallbackPath.Equals(request.Path, StringComparison.OrdinalIgnoreCase))

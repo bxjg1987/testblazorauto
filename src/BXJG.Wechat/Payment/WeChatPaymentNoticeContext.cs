@@ -8,10 +8,10 @@ namespace BXJG.WeChat.Payment
     public class WeChatPaymentNoticeContext
     {
         public HttpContext HttpContext { get; }
-        public WeChatPaymentNoticeOptions Options { get; }
+        public WeChatPaymentOptions Options { get; }
         public WeChatPaymentNoticeResult PaymentNoticeResult { get; }
 
-        public WeChatPaymentNoticeContext(HttpContext httpContext, WeChatPaymentNoticeOptions options, WeChatPaymentNoticeResult paymentNoticeResult)
+        public WeChatPaymentNoticeContext(HttpContext httpContext, WeChatPaymentOptions options, WeChatPaymentNoticeResult paymentNoticeResult)
         {
             HttpContext = httpContext;
             Options = options;

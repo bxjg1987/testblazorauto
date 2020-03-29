@@ -23,9 +23,9 @@ namespace BXJG.WeChat.Payment
         public string detail { get; private set; }
         public string attach { get; set; }
         public string out_trade_no { get; set; }
-        public string fee_type { get; set; }
+        public string fee_type { get; set; } = "CNY";//目前写死
         public int total_fee { get; set; }
-        public string spbill_create_ip { get; set; }
+        public string spbill_create_ip { get; private set; }
         public string time_start { get; set; } = DateTime.Now.ToString("yyyyMMddHHmmss");
         public string time_expire { get; set; } = DateTime.Now.AddMinutes(2).ToString("yyyyMMddHHmmss");
         public string goods_tag { get; set; }
@@ -46,18 +46,23 @@ namespace BXJG.WeChat.Payment
             MiniProgramAuthenticationOptions options1, 
             WeChatPaymentSecuret securet, 
             string openid,
-            string body)
+            string body,
+            string out_trade_no,
+            int total_fee)
         {
             paymentOptions = options;
             authOptions = options1;
             this.securet = securet; 
             
-            appid = authOptions.AppId;
-            mch_id = paymentOptions.mch_id;
+            this.mch_id = paymentOptions.mch_id;
             ResetNonce();
-            notify_url = paymentOptions.notify_url;
             this.openid = openid;
             this.body = body;
+            this.out_trade_no = out_trade_no;
+            this.total_fee = total_fee;
+            this.spbill_create_ip = options.ip;//先这么来，以后可能想个法获取服务器的外网ip
+            this.notify_url = paymentOptions.notify_url;
+            this.appid = authOptions.AppId;
         }
 
         /// <summary>
@@ -73,13 +78,14 @@ namespace BXJG.WeChat.Payment
         /// </summary>
         /// <returns></returns>
         public string ComputationalSignature() {
-            return securet.sign(this);
+            sign= securet.sign(this);
+            return sign;
         }
         /// <summary>
         /// 设置单品优惠
         /// </summary>
-        public void SetDetail() { 
-        
+        public void SetDetail() {
+            throw new NotImplementedException();
         }
     }
 }
