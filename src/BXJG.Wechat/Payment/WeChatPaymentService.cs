@@ -13,18 +13,22 @@ namespace BXJG.WeChat.Payment
         private readonly MiniProgramAuthenticationOptions authOptions;
         private readonly WeChatPaymentOptions paymentOptions;
         //private readonly WeChatPaymentSecuret securet;
+        private readonly IHttpClientFactory clientFactory;
 
         public WeChatPaymentService(
               IOptionsMonitor<WeChatPaymentOptions> paymentOptions,
-              IOptionsMonitor<MiniProgramAuthenticationOptions> authOptions)
+              IOptionsMonitor<MiniProgramAuthenticationOptions> authOptions,
+              IHttpClientFactory clientFactory)
         {
             this.paymentOptions = paymentOptions.CurrentValue;
             this.authOptions = authOptions.CurrentValue;
+            this.clientFactory = clientFactory;
         }
 
-        //public Task<WeChatPaymentUnifyOrderResult> PayAsync(WeChatPaymentUnifyOrderInput data) 
+        //public Task<WeChatPaymentUnifyOrderResult> PayAsync(WeChatPaymentUnifyOrderInput data)
         //{
-
+        //    var client = clientFactory.CreateClient(WeChatPaymentConsts.HttpClientName);
+        //    var str = data.ToXml();
         //}
     }
 }

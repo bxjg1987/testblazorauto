@@ -34,12 +34,19 @@ namespace BXJG.WeChat.Payment
         /// <param name="total_fee">订单总金额，单位为分 https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=4_2 </param>
         /// <returns></returns>
         public WeChatPaymentUnifyOrderInput Create(
-            string openid,
             string body,
             string out_trade_no,
-            int total_fee)
+            decimal total_fee)
         {
-            return new WeChatPaymentUnifyOrderInput(paymentOptions, authOptions, securet, openid, body, out_trade_no, total_fee);
+            return new WeChatPaymentUnifyOrderInput(
+                securet,
+                authOptions.AppId, 
+                paymentOptions.mch_id, 
+                paymentOptions.notify_url, 
+                paymentOptions.ip, 
+                body,
+                out_trade_no, 
+                total_fee);
         }
     }
 }
