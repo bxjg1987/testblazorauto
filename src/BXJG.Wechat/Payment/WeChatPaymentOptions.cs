@@ -33,6 +33,10 @@ namespace BXJG.WeChat.Payment
         /// 发起支付请求时要用(提交给微信)
         /// </summary>
         public string ip { get; set; }
+        /// <summary>
+        /// 获取或设置 微信小程序支付 统一下单接口地址
+        /// </summary>
+        public string UnifyOrderUrl { get; set; } = WeChatPaymentConsts.UnifyOrderUrl;
 
         //暂时不搞配置
         //public HttpClient Backchannel { get; set; }

@@ -11,7 +11,7 @@ namespace BXJG.WeChat.Payment
     /// 统一下单，要提交给微信的数据模型；数据结构与类型完全与官方保持一致，不做任何转换
     /// https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=9_1&index=1
     /// </summary>
-    public class WeChatPaymentUnifyOrderInput//:  IPostToWeChat
+    public class WeChatPaymentUnifyOrderInput: IWeChatMiniProgramPaymentNeedSign// IPostToWeChat
     {
         /// <summary>
         /// 获取appid
@@ -104,7 +104,7 @@ namespace BXJG.WeChat.Payment
         /// <summary>
         /// 交易类型
         /// </summary>
-        public string trade_type { get; private set; } = "JSAPI";//反正固定的 就不搞枚举了
+        public trade_type trade_type { get; private set; } = trade_type.JSAPI;//反正固定的 就不搞枚举了
         /// <summary>
         /// 商品ID 可选
         /// trade_type=NATIVE时，此参数必传。此参数为二维码中包含的商品ID，商户自行定义。
@@ -181,7 +181,8 @@ namespace BXJG.WeChat.Payment
             throw new NotImplementedException();
         }
         /// <summary>
-        /// 这种转换因为有微信规定的规则，所以就放实例里吧
+        /// 将消息转换为微信要求的xml格式
+        /// 这种转换因为有微信规定的规则，所以此功能定义在实例里
         /// </summary>
         /// <returns></returns>
         public string ToXml()

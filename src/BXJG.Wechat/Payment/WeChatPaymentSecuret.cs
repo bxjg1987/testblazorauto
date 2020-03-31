@@ -29,12 +29,12 @@ namespace BXJG.WeChat.Payment
         //    return o;
         //}
 
-        public bool CheckSign(INeedSign o)
+        public bool CheckSign(IWeChatMiniProgramPaymentNeedSign o)
         {
             return GetSign(o) == o.sign;
         }
 
-        public string GetSign(object o)
+        public string GetSign(IWeChatMiniProgramPaymentNeedSign o)
         {
             StringBuilder sb = new StringBuilder();
 
@@ -42,6 +42,9 @@ namespace BXJG.WeChat.Payment
             var ps = type.GetProperties().OrderBy(c => c.Name);
             foreach (var item in ps)
             {
+                if (item.Name == nameof(o.sign))
+                    continue;
+
                 var val = item.GetValue(o);
                 if (val != null)
                     sb.Append($"{item.Name}={val}&");

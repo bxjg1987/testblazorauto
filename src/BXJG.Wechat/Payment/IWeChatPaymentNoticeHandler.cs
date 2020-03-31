@@ -12,6 +12,9 @@ namespace BXJG.WeChat.Payment
     /// </summary>
     public interface IWeChatPaymentNoticeHandler
     {
+        //目前微信规定的只返回成功或失败，简单的办法是返回Task，当无异常时认为成功，否则通过异常捕获失败原因
+        //理想的方式 考虑微信将来接口的变动，我们应该始终定义一个返回值，即便将来微信接口要求更多的返回字段，我们接口的定义至少不用动 只需要修改返回的模型的定义
+        //但是微信接口变动的情况可能性不大，暂时就现在这种方式吧
         Task PaymentNoticeAsync(WeChatPaymentNoticeContext context);
     }
 }

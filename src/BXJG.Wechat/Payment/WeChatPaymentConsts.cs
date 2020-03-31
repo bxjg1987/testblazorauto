@@ -13,5 +13,9 @@ namespace BXJG.WeChat.Payment
         /// 参考 命名客户端：https://docs.microsoft.com/zh-cn/aspnet/core/fundamentals/http-requests?view=aspnetcore-3.1
         /// </summary>
         public const string HttpClientName = "WeChatMiniProgramPayment";
+        /// <summary>
+        /// 微信小程序支付 统一下单接口地址
+        /// </summary>
+        public const string UnifyOrderUrl = "https://api.mch.weixin.qq.com/pay/unifiedorder";
     }
 }
