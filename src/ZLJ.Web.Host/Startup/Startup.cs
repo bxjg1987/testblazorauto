@@ -34,6 +34,7 @@ namespace ZLJ.Web.Host.Startup
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            services.AddLetsEncrypt();
             //MVC
             services.AddControllersWithViews(
                 options =>

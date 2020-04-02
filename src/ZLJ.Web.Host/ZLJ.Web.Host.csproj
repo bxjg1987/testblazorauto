@@ -32,7 +32,8 @@
     <ProjectReference Include="..\ZLJ.Web.Core\ZLJ.Web.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Abp.Castle.Log4Net" Version="5.4.0" />
+    <PackageReference Include="Abp.Castle.Log4Net" Version="5.5.0" />
+    <PackageReference Include="McMaster.AspNetCore.LetsEncrypt" Version="0.3.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

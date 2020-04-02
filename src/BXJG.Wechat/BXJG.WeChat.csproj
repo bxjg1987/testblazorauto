@@ -16,6 +16,8 @@
 
   <ItemGroup>
     <Compile Remove="MiniProgram\MiniProgramCreatingTicketContext.cs" />
+    <Compile Remove="Payment\WeChatPamentNoticeHandleResult.cs" />
+    <Compile Remove="Payment\WeChatPaymentDefaults.cs" />
     <Compile Remove="Payment\WeChatPaymentNoticeOptions.cs" />
   </ItemGroup>
 

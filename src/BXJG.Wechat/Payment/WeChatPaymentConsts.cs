@@ -17,5 +17,9 @@ namespace BXJG.WeChat.Payment
         /// 微信小程序支付 统一下单接口地址
         /// </summary>
         public const string UnifyOrderUrl = "https://api.mch.weixin.qq.com/pay/unifiedorder";
+        /// <summary>
+        /// 微信支付成功 会请求我们的服务器以通知用户支付结果
+        /// </summary>
+        public const string PaymentNoticeCallbackPath = "/wechat-payment-notice";
     }
 }

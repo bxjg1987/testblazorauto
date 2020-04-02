@@ -4,6 +4,10 @@ using System.Text;
 
 namespace BXJG.WeChat.Payment
 {
+    /*
+     * 尽量不要用通用枚举，因为每一种类型都对应一个具体业务中的某种类型，将来可能会变化
+     */
+
     /// <summary>
     /// 微信小程序支付-统一下单-交易类型
     /// https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=9_1&index=1
