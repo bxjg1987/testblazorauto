@@ -11,7 +11,8 @@ namespace BXJG.WeChat.Payment
     {
         #region 注册服务和中间件
         /// <summary>
-        /// 向中间件管道注册微信支付结果通知中间件
+        /// 向中间件管道注册微信小程序支付结果通知中间件
+        /// 此中间件拦截微信小程序支付的结果通知，并从请求中获取相关数据进行封装，然后调用的的处理器(同时传入你需要的参数)
         /// </summary>
         /// <param name="builder"></param>
         /// <returns></returns>
@@ -20,7 +21,27 @@ namespace BXJG.WeChat.Payment
             return builder.UseMiddleware<WeChatPaymentNoticeMiddleware>();
         }
         /// <summary>
-        /// 向依赖注入容器添加支付功能需要的相关服务
+        /// 向依赖注入容器添加微信小程序支付需要的相关服务
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddWeChatPayment(this IServiceCollection services)
+        {
+            return services.AddWeChatPayment(opt => { });
+        }
+        /// <summary>
+        /// 向依赖注入容器添加微信小程序支付需要的相关服务，并以单例形式注册THandler
+        /// </summary>
+        /// <typeparam name="THandler"></typeparam>
+        /// <param name="services"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddWeChatPayment<THandler>(this IServiceCollection services)
+            where THandler : class, IWeChatPaymentNoticeHandler
+        {
+            return services.AddWeChatPayment<THandler>(opt => { });
+        }
+        /// <summary>
+        /// 向依赖注入容器添加微信小程序支付需要的相关服务，并允许你通过act委托提供配置
         /// </summary>
         /// <param name="services"></param>
         /// <param name="act"></param>
@@ -29,10 +50,43 @@ namespace BXJG.WeChat.Payment
         {
             return services.AddWeChatPaymentCore().Configure(act);
         }
+        /// <summary>
+        /// 向依赖注入容器添加微信小程序支付需要的相关服务，并允许你通过act委托提供配置，并以单例形式注册THandler
+        /// </summary>
+        /// <typeparam name="THandler"></typeparam>
+        /// <param name="services"></param>
+        /// <param name="act"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddWeChatPayment<THandler>(this IServiceCollection services, Action<WeChatPaymentOptions> act)
+             where THandler : class, IWeChatPaymentNoticeHandler
+        {
+            return services.AddWeChatPayment(act).AddSingleton<IWeChatPaymentNoticeHandler, THandler>();
+        }
+        /// <summary>
+        /// 向依赖注入容器添加微信小程序支付需要的相关服务，并允许你通过configuration提供配置，通常你可以将此配置关联到配置文件(appsettings.json)
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="configuration"></param>
+        /// <returns></returns>
         public static IServiceCollection AddWeChatPayment(this IServiceCollection services, IConfiguration configuration)
         {
             return services.AddWeChatPaymentCore().Configure<WeChatPaymentOptions>(configuration);
         }
+        /// <summary>
+        /// 向依赖注入容器添加微信小程序支付需要的相关服务，并允许你通过configuration提供配置，通常你可以将此配置关联到配置文件(appsettings.json)，并以单例形式注册THandler
+        /// </summary>
+        /// <typeparam name="THandler"></typeparam>
+        /// <param name="services"></param>
+        /// <param name="configuration"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddWeChatPayment<THandler>(this IServiceCollection services, IConfiguration configuration)
+             where THandler : class, IWeChatPaymentNoticeHandler
+        {
+            return services.AddWeChatPayment(configuration).AddSingleton<IWeChatPaymentNoticeHandler, THandler>();
+        }
+
+        //其实还可以提供一个默认配置节，对应到appsetting.json的指定节点
+
         /// <summary>
         /// 注册微信小程序支付的核心服务
         /// </summary>
@@ -40,14 +94,16 @@ namespace BXJG.WeChat.Payment
         /// <returns></returns>
         private static IServiceCollection AddWeChatPaymentCore(this IServiceCollection services)
         {
-            services.AddHttpClient(WeChatPaymentConsts.HttpClientName, client => {
+            services.AddHttpClient(WeChatPaymentConsts.HttpClientName, client =>
+            {
                 //微信小程序支付内部通过此httpClient来发起请求，这里可以统一对client进行配置
             });
             return services
                     .AddSingleton<WeChatPaymentService>()
                     .AddSingleton<WeChatPaymentUnifyOrderInputFactory>()
                     .AddSingleton<WeChatPaymentSecuret>()
-                    .AddSingleton<WeChatPaymentUnifyOrderResult.WeChatPaymentUnifyOrderResultFactory>();
+                    .AddSingleton<WeChatPaymentUnifyOrderResult.WeChatPaymentUnifyOrderResultFactory>()
+                    .AddSingleton<WeChatPaymentNoticeResult.WeChatPaymentNoticeResultFactory>();
         }
         #endregion
 
@@ -79,11 +135,11 @@ namespace BXJG.WeChat.Payment
         }
         public static Task ResponseWeChatSuccessAsync(this HttpResponse response)
         {
-            return response.ResponseWeChatAsync(WeChatPaymentConsts.SUCCESS);
+            return response.ResponseWeChatAsync(WeChatPaymentConsts.SUCCESS, "OK");
         }
         public static Task ResponseWeChatFailAsync(this HttpResponse response, string msg)
         {
-            return response.ResponseWeChatAsync(WeChatPaymentConsts.FAIL);
+            return response.ResponseWeChatAsync(WeChatPaymentConsts.FAIL, msg);
         }
     }
 }

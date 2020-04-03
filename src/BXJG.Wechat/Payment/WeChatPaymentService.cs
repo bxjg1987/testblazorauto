@@ -25,7 +25,7 @@ namespace BXJG.WeChat.Payment
         public WeChatPaymentService(
               IOptionsMonitor<WeChatPaymentOptions> paymentOptions,
               IOptionsMonitor<MiniProgramAuthenticationOptions> authOptions,
-               WeChatPaymentUnifyOrderResultFactory weChatPaymentUnifyOrderResultFactory,
+              WeChatPaymentUnifyOrderResultFactory weChatPaymentUnifyOrderResultFactory,
               IHttpClientFactory clientFactory)
         {
             this.paymentOptions = paymentOptions.CurrentValue;
@@ -47,5 +47,10 @@ namespace BXJG.WeChat.Payment
             var response = await client.PostAsync(paymentOptions.UnifyOrderUrl, ct, cancellationToken);
             return await weChatPaymentUnifyOrderResultFactory.LoadAsync(await response.Content.ReadAsStreamAsync(), cancellationToken);
         }
+
+        /*
+         * 主动查询订单、关闭订单、申请退款.....等接口将陆续添加
+         * https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=9_2
+         */
     }
 }

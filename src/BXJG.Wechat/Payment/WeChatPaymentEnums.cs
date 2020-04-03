@@ -4,15 +4,17 @@ using System.Text;
 
 namespace BXJG.WeChat.Payment
 {
-    /*
-     * 尽量不要用通用枚举，因为每一种类型都对应一个具体业务中的某种类型，将来可能会变化
-     */
+    public enum coupon_type {
+        CASH,
+        NO_CASH
+    }
 
     /// <summary>
     /// 微信小程序支付-统一下单-交易类型
     /// https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=9_1&index=1
     /// </summary>
-    public enum trade_type {
+    public enum trade_type
+    {
         JSAPI
     }
     /// <summary>
@@ -35,7 +37,8 @@ namespace BXJG.WeChat.Payment
     /// 微信小程序支付-统一下单-返回码
     /// https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=9_1&index=1
     /// </summary>
-    public enum return_code {
+    public enum return_code
+    {
         SUCCESS,
         FAIL
     }
@@ -43,7 +46,8 @@ namespace BXJG.WeChat.Payment
     /// 微信小程序支付-统一下单-返回码(业务结果)
     /// https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=9_1&index=1
     /// </summary>
-    public enum result_code {
+    public enum result_code
+    {
         SUCCESS,
         FAIL
     }
@@ -51,7 +55,8 @@ namespace BXJG.WeChat.Payment
     /// 微信小程序支付-统一下单-返回码(错误代码)
     /// https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=9_1&index=1
     /// </summary>
-    public enum err_code {
+    public enum err_code
+    {
         /// <summary>
         /// 参数错误	参数格式有误或者未按规则上传	订单重入时，要求参数值与原请求一致，请确认参数问题
         /// </summary>
