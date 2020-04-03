@@ -100,7 +100,7 @@ namespace BXJG.WeChat.Payment
             });
             return services
                     .AddSingleton<WeChatPaymentService>()
-                    .AddSingleton<WeChatPaymentUnifyOrderInputFactory>()
+                    //.AddSingleton<WeChatPaymentUnifyOrderInputFactory>()
                     .AddSingleton<WeChatPaymentSecuret>()
                     .AddSingleton<WeChatPaymentUnifyOrderResult.WeChatPaymentUnifyOrderResultFactory>()
                     .AddSingleton<WeChatPaymentNoticeResult.WeChatPaymentNoticeResultFactory>();

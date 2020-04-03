@@ -19,6 +19,7 @@
     <Compile Remove="Payment\WeChatPamentNoticeHandleResult.cs" />
     <Compile Remove="Payment\WeChatPaymentDefaults.cs" />
     <Compile Remove="Payment\WeChatPaymentNoticeOptions.cs" />
+    <Compile Remove="Payment\WeChatPaymentUnifyOrderInputFactory.cs" />
   </ItemGroup>
 
   <ItemGroup>

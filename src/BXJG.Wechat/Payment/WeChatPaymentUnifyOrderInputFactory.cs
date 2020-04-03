@@ -6,6 +6,10 @@ using System.Text;
 
 namespace BXJG.WeChat.Payment
 {
+    //用户统一下单总是需要注入WeChatPaymentService，创建统一下单提交数据时又得注入WeChatPaymentUnifyOrderInputFactory
+    //为了调用方方便 直接将这个类的功能搬到WeChatPaymentService中了
+    //按职责分离 这样其实不太合理，但是为了调用方输入 就这么搞吧
+
     /// <summary>
     /// 统一下单时要准备提交的数据，此工作用来简化这个数据的创建过程
     /// 推荐使用依赖注入

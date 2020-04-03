@@ -10,12 +10,10 @@ namespace ZLJ.Web.Host.Controllers
     public class WeChatMiniProgramPaymentController: ControllerBase
     {
         private readonly WeChatPaymentService weChatPaymentService;
-        private readonly WeChatPaymentUnifyOrderInputFactory weChatPaymentUnifyOrderInputFactory;
 
-        public WeChatMiniProgramPaymentController(WeChatPaymentService weChatPaymentService, WeChatPaymentUnifyOrderInputFactory weChatPaymentUnifyOrderInputFactory)
+        public WeChatMiniProgramPaymentController(WeChatPaymentService weChatPaymentService)
         {
             this.weChatPaymentService = weChatPaymentService;
-            this.weChatPaymentUnifyOrderInputFactory = weChatPaymentUnifyOrderInputFactory;
         }
         /// <summary>
         /// 统一下单
@@ -27,7 +25,7 @@ namespace ZLJ.Web.Host.Controllers
             //业务处理...各种判断、处理优惠策略、创建本地系统订单等等...
 
             //创建要向微信提交的订单
-            var weChatOrder = this.weChatPaymentUnifyOrderInputFactory.Create("商品描述", "本地系统订单号", 3.5m);
+            var weChatOrder = this.weChatPaymentService.Create("商品描述", "本地系统订单号", 3.5m);
 
             //其它可选属性设置
             //weChatOrder.attach = "附件数据";
