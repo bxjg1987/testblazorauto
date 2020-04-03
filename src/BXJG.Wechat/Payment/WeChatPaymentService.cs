@@ -4,11 +4,15 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using static BXJG.WeChat.Payment.WeChatPaymentUnifyOrderResult;
 
 namespace BXJG.WeChat.Payment
 {
+    /// <summary>
+    /// 微信小程序支付服务类
+    /// </summary>
     public class WeChatPaymentService
     {
         private readonly MiniProgramAuthenticationOptions authOptions;
@@ -29,8 +33,13 @@ namespace BXJG.WeChat.Payment
             this.weChatPaymentUnifyOrderResultFactory = weChatPaymentUnifyOrderResultFactory;
             this.clientFactory = clientFactory;
         }
-
-        public async Task<WeChatPaymentUnifyOrderResult> PayAsync(WeChatPaymentUnifyOrderInput data, System.Threading.CancellationToken cancellationToken = default)
+        /// <summary>
+        /// 推荐WeChatPaymentUnifyOrderInputFactory来创建WeChatPaymentUnifyOrderInput。然后发起统一支付
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task<WeChatPaymentUnifyOrderResult> PayAsync(WeChatPaymentUnifyOrderInput data, CancellationToken cancellationToken = default)
         {
             var client = clientFactory.CreateClient(WeChatPaymentConsts.HttpClientName);
             var str = data.ToXml();

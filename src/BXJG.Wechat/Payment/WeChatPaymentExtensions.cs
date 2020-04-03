@@ -33,11 +33,21 @@ namespace BXJG.WeChat.Payment
         {
             return services.AddWeChatPaymentCore().Configure<WeChatPaymentOptions>(configuration);
         }
+        /// <summary>
+        /// 注册微信小程序支付的核心服务
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
         private static IServiceCollection AddWeChatPaymentCore(this IServiceCollection services)
         {
+            services.AddHttpClient(WeChatPaymentConsts.HttpClientName, client => {
+                //微信小程序支付内部通过此httpClient来发起请求，这里可以统一对client进行配置
+            });
             return services
-                    .AddScoped<WeChatPaymentSecuret>()
-                    .AddScoped<WeChatPaymentUnifyOrderResult.WeChatPaymentUnifyOrderResultFactory>();
+                    .AddSingleton<WeChatPaymentService>()
+                    .AddSingleton<WeChatPaymentUnifyOrderInputFactory>()
+                    .AddSingleton<WeChatPaymentSecuret>()
+                    .AddSingleton<WeChatPaymentUnifyOrderResult.WeChatPaymentUnifyOrderResultFactory>();
         }
         #endregion
 
