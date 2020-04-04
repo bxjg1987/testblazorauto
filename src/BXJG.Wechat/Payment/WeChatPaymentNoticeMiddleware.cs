@@ -61,6 +61,7 @@ namespace BXJG.WeChat.Payment
             {
                 //中间件无法参与业务处理，因此业务处理需要考虑并发情况
                 await handler.PaymentNoticeAsync(paymentNoticeContext);
+                await response.ResponseWeChatSuccessAsync();
             }
             //catch (UserFriendlyException ex) {
             //  可以定义一个类似UserFriendlyException，让调用方的Handler返回业务异常是使用这个类。
