@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>BXJG.Shop</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Localization\SourceFiles\BXJGShop-zh-Hans.xml" />
+    <None Remove="Localization\SourceFiles\BXJGShop.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Localization\SourceFiles\BXJGShop-zh-Hans.xml" />
+    <EmbeddedResource Include="Localization\SourceFiles\BXJGShop.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Abp" Version="5.5.0" />
+    <PackageReference Include="Abp.Zero.Common" Version="5.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\BXJG.Utils\BXJG.Utils.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -10,9 +10,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Abp" Version="5.4.0" />
-    <PackageReference Include="Abp.Zero" Version="5.4.0" />
-    <PackageReference Include="Abp.Zero.Common" Version="5.4.0" />
+    <PackageReference Include="Abp" Version="5.5.0" />
+    <PackageReference Include="Abp.Zero" Version="5.5.0" />
+    <PackageReference Include="Abp.Zero.Common" Version="5.5.0" />
   </ItemGroup>
 
 </Project>
