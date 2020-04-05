@@ -7,18 +7,18 @@ using BXJG.GeneralTree;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace BXJG.Shop.Catalogue
+namespace BXJG.Shop.Common
 {
     /// <summary>
-    /// 商品动态字段字典类
+    /// 商城模块自己的通用字典
     /// </summary>
-    [Table("BXJGShopItemDynamicFields")]
-    public class ItemDynamicFieldEntity : GeneralTreeEntity<ItemDynamicFieldEntity>
+    [Table("BXJGShopDictionaries")]
+    public class BXJGShopDictionaryEntity : GeneralTreeEntity<BXJGShopDictionaryEntity>
     {
         public const int IconMaxLength = 500;
 
-        [Column(TypeName="varchar")]
-        [StringLength(IconMaxLength)]
+        [Column(TypeName= "varchar(500)")]
+        [MaxLength(IconMaxLength)]
         public string Icon { get; set; }
     }
 }

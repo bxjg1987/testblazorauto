@@ -250,7 +250,7 @@ namespace BXJG.GeneralTree
             var query = ownRepository.GetAll()
                 .Where(c => c.Code.StartsWith(parentCode))
                 .OrderBy(c => c.Code);
-            //可以调用虚方法简介给子类一个机会做过滤，暂未实现
+            //可以调用虚方法间接给子类一个机会做过滤，暂未实现
             var list = await AsyncQueryableExecuter.ToListAsync(query);
 
 
@@ -259,7 +259,7 @@ namespace BXJG.GeneralTree
             //if (parent != null)
             //    list.Remove(parent);
 
-            //转换为Dtop
+            //转换为Dto
             //上面没有直接用投影是为了给子类一个机会来参与遍历过程
             var dtoList = new List<TGetTreeForSelectOutput>();
             foreach (var c in list)
@@ -286,7 +286,7 @@ namespace BXJG.GeneralTree
                 if (!string.IsNullOrWhiteSpace(entity.ExtensionData))
                     c.attributes.extData = JsonConvert.DeserializeObject<dynamic>(entity.ExtensionData);
 
-                OnGetForSelectItem(entity, c);
+                OnGetTreeForSelectItem(entity, c);
             });
 
             TGetTreeForSelectOutput parentDto;
@@ -295,11 +295,12 @@ namespace BXJG.GeneralTree
                 parentDto = dtoList.SingleOrDefault(c => c.id == input.ParentId.ToString());
                 dtoList = dtoList.Where(c => c.parentId == input.ParentId.ToString()).ToList();
             }
-            else {
+            else
+            {
                 parentDto = null;
                 dtoList = dtoList.Where(c => string.IsNullOrWhiteSpace(c.parentId)).ToList();
             }
-            
+
 
             //通用树是通过继承来实现扩展的，所以这里L引用的本地化源可能被子类重写，因此这里用L是可以的
             if (input.ForType > 0 && input.ForType < 5 && !string.IsNullOrWhiteSpace(input.ParentText))
@@ -311,7 +312,7 @@ namespace BXJG.GeneralTree
                 parentDto.id = null;
                 return new List<TGetTreeForSelectOutput> { parentDto };
             }
-               
+
 
             if (input.ForType == 1 || input.ForType == 2)
                 return new List<TGetTreeForSelectOutput> { new TGetTreeForSelectOutput { id = null, text = this.allTextForSearch, children = dtoList } };
@@ -326,10 +327,14 @@ namespace BXJG.GeneralTree
             await CheckGetPermissionAsync();
 
             var query = ownRepository.GetAll()
-                 .Where(c => c.ParentId == input.ParentId || c.Id == input.ParentId)
-                 .OrderBy(c => c.Code);
+                 .Where(c => c.ParentId == input.ParentId || c.Id == input.ParentId);
 
-            var dtoList = await AsyncQueryableExecuter.ToListAsync(query.Select(c => new TGetNodesForSelectOutput { ExtDataString = c.ExtensionData, DisplayText = c.DisplayName, Value = c.Id.ToString() }));
+            query = GetNodesForSelectSort(query);
+            //GetNodesForSelectProjection允许子类直接投影，这种情况可能不太灵活，因为子类可能不方便做ef投影，所以将来可能考虑完全获取实体，在内存中来做这个转换
+
+            
+
+            var dtoList =await GetNodesForSelectProjectionAsync(query);
             var parentDto = input.ParentId.HasValue ? dtoList.SingleOrDefault(c => c.Value == input.ParentId.ToString()) : null;
             if (parentDto != null)
             {
@@ -380,7 +385,7 @@ namespace BXJG.GeneralTree
             //使用父类的权限检查可以得到一个正常的未授权响应
             if (!string.IsNullOrEmpty(permissionName))
             {
-            await PermissionChecker.AuthorizeAsync(permissionName);
+                await PermissionChecker.AuthorizeAsync(permissionName);
             }
         }
         #endregion
@@ -395,7 +400,13 @@ namespace BXJG.GeneralTree
         {
 
         }
-        protected virtual void OnGetForSelectItem(TEntity entity, TGetTreeForSelectOutput node)
+        /// <summary>
+        /// 获取树形下拉框时，将实体转换为dto时回调
+        /// 允许子类在转换过程中处理自己的字段
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="node"></param>
+        protected virtual void OnGetTreeForSelectItem(TEntity entity, TGetTreeForSelectOutput node)
         {
 
         }
@@ -407,6 +418,27 @@ namespace BXJG.GeneralTree
         {
             return query.OrderBy(c => c.Code);
         }
+        /// <summary>
+        /// 获取扁平化的下拉框数据时转换
+        /// 子类可以用投影转换，若有复杂情况也可以在内存中转换
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        protected virtual async Task<IList<TGetNodesForSelectOutput>> GetNodesForSelectProjectionAsync(IQueryable<TEntity> query)
+        {
+            var q = query.Select(c => new TGetNodesForSelectOutput { ExtDataString = c.ExtensionData, DisplayText = c.DisplayName, Value = c.Id.ToString() });
+            return await AsyncQueryableExecuter.ToListAsync(q);
+        }
+        /// <summary>
+        /// 获取扁平化的下拉框数据时的排序
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        protected virtual IQueryable<TEntity> GetNodesForSelectSort(IQueryable<TEntity> query)
+        {
+            return query.OrderBy(c => c.Code);
+        }
+
         //protected virtual Task BeforeCreate(TEntity m)
         //{
         //    return Task.FromResult<object>(null);

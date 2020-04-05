@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BXJG.Shop.Catalogue.Dto
+namespace BXJG.Shop.Common.Dto
 {
-    public class ItemDynamicFieldTreeNodeDto : GeneralTreeNodeDto<ItemDynamicFieldTreeNodeDto>
+    public class DictionaryTreeNodeDto : GeneralTreeNodeDto<DictionaryTreeNodeDto>
     {
         public string Icon { get; set; }
     }

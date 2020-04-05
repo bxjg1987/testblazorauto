@@ -9,9 +9,9 @@ namespace BXJG.Shop.Authorization
     {
         public const string BXJGShop = "BXJGShop";
 
-        public const string BXJGShopCatalogueItemDynamicField = "BXJGShopCatalogueItemDynamicField";
-        public const string BXJGShopCatalogueItemDynamicFieldCreate = "BXJGShopCatalogueItemDynamicFieldCreate";
-        public const string BXJGShopCatalogueItemDynamicFieldUpdate = "BXJGShopCatalogueItemDynamicFieldUpdate";
-        public const string BXJGShopCatalogueItemDynamicFieldDelete = "BXJGShopCatalogueItemDynamicFieldDelete";
+        public const string BXJGShopDictionary = "BXJGShopDictionary";
+        public const string BXJGShopDictionaryCreate = "BXJGShopDictionaryCreate";
+        public const string BXJGShopDictionaryUpdate = "BXJGShopDictionaryUpdate";
+        public const string BXJGShopDictionaryDelete = "BXJGShopDictionaryDelete";
     }
 }

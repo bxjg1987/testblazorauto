@@ -17,11 +17,11 @@ namespace BXJG.Shop.Authorization
         {
             //商城管理
             var shop = context.CreatePermission(BXJGShopPermissions.BXJGShop, BXJGShopPermissions.BXJGShop.L());
-            //商品动态字段数
-            var spdtzdTree = shop.CreateChildPermission(BXJGShopPermissions.BXJGShopCatalogueItemDynamicField, BXJGShopPermissions.BXJGShopCatalogueItemDynamicField.L(), multiTenancySides: MultiTenancySides.Tenant);
-            spdtzdTree.CreateChildPermission(BXJGShopPermissions.BXJGShopCatalogueItemDynamicFieldCreate, BXJGShopPermissions.BXJGShopCatalogueItemDynamicFieldCreate.L(), multiTenancySides: MultiTenancySides.Tenant);
-            spdtzdTree.CreateChildPermission(BXJGShopPermissions.BXJGShopCatalogueItemDynamicFieldUpdate, BXJGShopPermissions.BXJGShopCatalogueItemDynamicFieldUpdate.L(), multiTenancySides: MultiTenancySides.Tenant);
-            spdtzdTree.CreateChildPermission(BXJGShopPermissions.BXJGShopCatalogueItemDynamicFieldDelete, BXJGShopPermissions.BXJGShopCatalogueItemDynamicFieldDelete.L(), multiTenancySides: MultiTenancySides.Tenant);
+            //商城模块自己的数据字典
+            var spdtzdTree = shop.CreateChildPermission(BXJGShopPermissions.BXJGShopDictionary, BXJGShopPermissions.BXJGShopDictionary.L(), multiTenancySides: MultiTenancySides.Tenant);
+            spdtzdTree.CreateChildPermission(BXJGShopPermissions.BXJGShopDictionaryCreate, BXJGShopPermissions.BXJGShopDictionaryCreate.L(), multiTenancySides: MultiTenancySides.Tenant);
+            spdtzdTree.CreateChildPermission(BXJGShopPermissions.BXJGShopDictionaryUpdate, BXJGShopPermissions.BXJGShopDictionaryUpdate.L(), multiTenancySides: MultiTenancySides.Tenant);
+            spdtzdTree.CreateChildPermission(BXJGShopPermissions.BXJGShopDictionaryDelete, BXJGShopPermissions.BXJGShopDictionaryDelete.L(), multiTenancySides: MultiTenancySides.Tenant);
         }
     }
 }

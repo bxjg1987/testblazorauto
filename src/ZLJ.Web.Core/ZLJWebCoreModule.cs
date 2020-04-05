@@ -16,18 +16,16 @@ using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using ZLJ.Navigation;
 using BXJG.Utils;
 using BXJG.GeneralTree;
-using Abp.Dependency;
-using ZLJ.Authentication.WeChatMiniProgram;
-using BXJG.WeChat.MiniProgram;
+using BXJG.Shop;
 
 namespace ZLJ
 {
     [DependsOn(
-         typeof(ZLJApplicationModule),
-         typeof(ZLJEntityFrameworkModule),
-         typeof(AbpAspNetCoreModule)
-        , typeof(AbpAspNetCoreSignalRModule)
-     )]
+        typeof(ZLJApplicationModule),
+        typeof(ZLJEntityFrameworkModule),
+        typeof(AbpAspNetCoreModule),
+        typeof(AbpAspNetCoreSignalRModule),
+        typeof(BXJGShopApplicationModule))]
     public class ZLJWebCoreModule : AbpModule
     {
         private readonly IWebHostEnvironment _env;
@@ -57,6 +55,7 @@ namespace ZLJ
 
             Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(BXJGUtilsModule).Assembly/*, moduleName: "utils", useConventionalHttpVerbs: true*/);
             Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(GeneralTreeModule).Assembly);
+            Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(BXJGShopApplicationModule).Assembly);
 
             ConfigureTokenAuth();
         }

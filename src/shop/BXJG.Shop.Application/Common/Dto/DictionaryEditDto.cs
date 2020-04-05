@@ -9,13 +9,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Shop.Catalogue.Dto
+namespace BXJG.Shop.Common.Dto
 {
     /// <summary>
     /// 通用树形数据更新模型
     /// </summary>
-    [AutoMapTo(typeof(ItemDynamicFieldEntity))]
-    public class ItemDynamicFieldEditDto : GeneralTreeNodeEditBaseDto
+    [AutoMapTo(typeof(BXJGShopDictionaryEntity))]
+    public class DictionaryEditDto : GeneralTreeNodeEditBaseDto
     {
         public string Icon { get; set; }
     }

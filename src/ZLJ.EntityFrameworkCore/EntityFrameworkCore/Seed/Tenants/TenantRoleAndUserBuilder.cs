@@ -9,6 +9,7 @@ using Abp.MultiTenancy;
 using ZLJ.Authorization;
 using ZLJ.Authorization.Roles;
 using ZLJ.Authorization.Users;
+using BXJG.Shop.Authorization;
 
 namespace ZLJ.EntityFrameworkCore.Seed.Tenants
 {
@@ -48,7 +49,10 @@ namespace ZLJ.EntityFrameworkCore.Seed.Tenants
                 .ToList();
 
             var permissions = PermissionFinder
-                .GetAllPermissions(new ZLJAuthorizationProvider(new BXJG.GeneralTree.GeneralTreeModuleConfig()))
+                .GetAllPermissions(
+                new ZLJAuthorizationProvider(new BXJG.GeneralTree.GeneralTreeModuleConfig()),
+                    new BXJGShopAuthorizationProvider()
+                )
                 .Where(p => p.MultiTenancySides.HasFlag(MultiTenancySides.Tenant) &&
                             !grantedPermissions.Contains(p.Name))
                 .ToList();
