@@ -14,7 +14,7 @@ namespace BXJG.Shop
         public override void PreInitialize()
         {
             //Adding authorization providers
-            Configuration.Authorization.Providers.Add<BXJGShopAuthorizationProvider>();
+            //Configuration.Authorization.Providers.Add<BXJGShopAuthorizationProvider>();
 
             //Adding custom AutoMapper configuration
             Configuration.Modules.AbpAutoMapper().Configurators.Add(

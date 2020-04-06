@@ -2,6 +2,7 @@
 using Abp.Localization;
 using Abp.MultiTenancy;
 using BXJG.GeneralTree;
+using BXJG.Shop.Authorization;
 
 namespace ZLJ.Authorization
 {
@@ -16,6 +17,9 @@ namespace ZLJ.Authorization
         {
             var admin = context.CreatePermission(PermissionNames.Administrator, L("Administrator"));
             //{codegenerator}
+            #region 商城
+            BXJGShopAuthorizationProvider.SetPermissions(admin);
+            #endregion
             #region 资产管理
             var asset = admin.CreateChildPermission(PermissionNames.AdministratorAsset, L("Asset management"), multiTenancySides: MultiTenancySides.Tenant);
 

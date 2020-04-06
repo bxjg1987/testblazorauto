@@ -7,6 +7,7 @@ using ZLJ.BaseInfo;
 using BXJG.GeneralTree;
 using ZLJ.Asset;
 using BXJG.Shop.Common;
+using BXJG.Shop.Catalogue;
 
 namespace ZLJ.EntityFrameworkCore
 {
@@ -20,6 +21,8 @@ namespace ZLJ.EntityFrameworkCore
         public virtual DbSet<EquipmentInfoEntity> EquipmentInfos { get; set; }
 
         public virtual DbSet<BXJGShopDictionaryEntity> BXJGShopDictionaries { get; set; }
+
+        public virtual DbSet<ItemEntity> BXJGShopItems { get; set; }
         public ZLJDbContext(DbContextOptions<ZLJDbContext> options)
             : base(options)
         {

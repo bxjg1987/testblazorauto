@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Abp.Application.Services;
 using Abp.Authorization.Roles;
 using Abp.Authorization.Users;
+using Abp.Domain.Repositories;
 using Abp.IdentityFramework;
 using Abp.MultiTenancy;
 using Abp.Runtime.Session;
@@ -18,7 +19,6 @@ namespace BXJG.Shop
         where TTenant : AbpTenant<TUser>
         where TTenantManager: AbpTenantManager<TTenant, TUser>
         where TUserManager: AbpUserManager<TRole, TUser>
-
     {
         public TTenantManager TenantManager { get; set; }
 

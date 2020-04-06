@@ -18,8 +18,4 @@
     <ProjectReference Include="..\BXJG.Shop.Core\BXJG.Shop.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Catalogue\" />
-  </ItemGroup>
-
 </Project>

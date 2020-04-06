@@ -2,6 +2,7 @@
 using Abp.Authorization;
 using Abp.Localization;
 using BXJG.GeneralTree;
+using BXJG.Shop;
 using ZLJ.Authorization;
 
 namespace ZLJ.Navigation
@@ -20,17 +21,18 @@ namespace ZLJ.Navigation
         {
 
             //{codegenerator}
-            var zcgl = new MenuItemDefinition("Asset",
-                                                 L("Asset management"),
-                                                 icon: "zican",
-                                                 permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorAsset));
-            context.Manager.MainMenu.AddItem(zcgl);
+            //var zcgl = new MenuItemDefinition("Asset",
+            //                                     L("Asset management"),
+            //                                     icon: "zican",
+            //                                     permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorAsset));
+            //context.Manager.MainMenu.AddItem(zcgl);
 
-            zcgl.AddItem(new MenuItemDefinition("EquipmentInfo",
-                                                L("Equipment info"),
-                                                icon: "shebei",
-                                                url: "/asset/equipmentInfo/index.html",
-                                                permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorAssetEquipmentInfo)));
+            //zcgl.AddItem(new MenuItemDefinition("EquipmentInfo",
+            //                                    L("Equipment info"),
+            //                                    icon: "shebei",
+            //                                    url: "/asset/equipmentInfo/index.html",
+            //                                    permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorAssetEquipmentInfo)));
+            BXJGShopNavigationProvider.Init(context.Manager.MainMenu);
 
             var jczl = new MenuItemDefinition("BaseInfo",
                                                 L("BaseInfo"),
@@ -104,26 +106,26 @@ namespace ZLJ.Navigation
                                                 icon: "config",
                                                 url: "/system/settings.html",
                                                 permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorSystemConfig)));
-            var demo = new MenuItemDefinition("Demo",
-                                                L("Demo"),
-                                                icon: "caidanbai",
-                                                permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorDemo));
-            context.Manager.MainMenu.AddItem(demo);
-            demo.AddItem(new MenuItemDefinition("DemoUpload",
-                                                L("Upload"),
-                                                icon: "wenjian",
-                                                url: "/demo/upload.html",
-                                                permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorDemoUpload)));
-            var weChat = new MenuItemDefinition("WeChat",
-                                                L("WeChat"),
-                                                icon: "caidanbai",
-                                                permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorWeChat));
-            context.Manager.MainMenu.AddItem(weChat);
-            weChat.AddItem(new MenuItemDefinition("WeChatIndex",
-                                                L("WeChatIndex"),
-                                                icon: "wenjian",
-                                                url: "/wechat/index.html",
-                                                permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorWeChatIndex)));
+            //var demo = new MenuItemDefinition("Demo",
+            //                                    L("Demo"),
+            //                                    icon: "caidanbai",
+            //                                    permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorDemo));
+            //context.Manager.MainMenu.AddItem(demo);
+            //demo.AddItem(new MenuItemDefinition("DemoUpload",
+            //                                    L("Upload"),
+            //                                    icon: "wenjian",
+            //                                    url: "/demo/upload.html",
+            //                                    permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorDemoUpload)));
+            //var weChat = new MenuItemDefinition("WeChat",
+            //                                    L("WeChat"),
+            //                                    icon: "caidanbai",
+            //                                    permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorWeChat));
+            //context.Manager.MainMenu.AddItem(weChat);
+            //weChat.AddItem(new MenuItemDefinition("WeChatIndex",
+            //                                    L("WeChatIndex"),
+            //                                    icon: "wenjian",
+            //                                    url: "/wechat/index.html",
+            //                                    permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorWeChatIndex)));
 
         }
 
