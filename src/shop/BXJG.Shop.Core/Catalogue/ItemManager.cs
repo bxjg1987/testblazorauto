@@ -13,5 +13,6 @@ namespace BXJG.Shop.Catalogue
     /// </summary>
     public class ItemManager : DomainService 
     {
+
     }
 }

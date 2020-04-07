@@ -9,7 +9,7 @@ namespace BXJG.Shop.Catalogue.Dto
     /// <summary>
     /// 创建上架模型时前端提供的数据模型
     /// </summary>
-    [AutoMapTo(typeof(ItemEntity))]
+    //[AutoMapTo(typeof(ItemEntity))]
     public class ItemCreateDto
     {
         #region 基本信息

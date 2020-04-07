@@ -53,6 +53,17 @@ namespace BXJG.Shop.Catalogue
      * 不要只用系统自增id，因为将来别的系统可能有自己的id，对接不方便。
      * 
      * 所以现在我们只有一个“上架信息”的概念，里面包含所有信息，部分信息允许随时修改，价格等关键信息一旦产生订单则不允许修改（可以提供复制功能创建新的上架信息）
+     * -------------------------------------------------------------------------------------------------
+     * 2020-4-7更新
+     * 仔细考虑订单直接关联上架信息很麻烦，比如有个用户购买了商品，后台又修改了商品品牌，所以哪些可以修改 哪些不能修改很难定下来
+     * 订单关联上架信息还有个问题，订单确定后不关心 是否热卖、是否首页显示这样的，但是因为外键关联了 也关联了
+     * 另外上架信息中的产品信息 跟订单中的商品信息虽然很多字段重复，但这确实是两个不同的概念，关心的字段也不同
+     * 总的来说 上架信息 跟 订单中的商品信息 分开是比较保险的方式
+     * 
+     * 另外需要注意上架信息的并发问题，一个多个后台操作人员修改同一个上架信息 最好做下并发处理。比如：经理将某个商品下架 另一个用户在修改商品价格，最终可能导致商品没有下架
+     * 不过这个问题可以以后来处理
+     * 
+     * 为将来方便统计 商品上架信息 和 订单中的产品  都会引用一个id 这个作为产品id，注意此时 商品上架信息的id并非商品id
      */
 
     /// <summary>
@@ -61,7 +72,7 @@ namespace BXJG.Shop.Catalogue
     /// 设计时考虑不提供继承的方式扩展，因为那样太复杂
     /// 你可以使用关联和事件的方式参与到这个模块中来
     /// </summary>
-   [Table("BXJGShopItems")]
+    [Table("BXJGShopItems")]
     public class ItemEntity : FullAuditedEntity<long>, IMustHaveTenant
     {
         #region 基本信息
@@ -140,14 +151,17 @@ namespace BXJG.Shop.Catalogue
         public bool Focus { get; set; }
         /// <summary>
         /// 是否已发布
+        /// 已发布且当前时间处于上/下架范围内时才会显示在前端
         /// </summary>
         public bool Published { get; set; }
         /// <summary>
         /// 上架时间
+        /// 已发布且当前时间处于上/下架范围内时才会显示在前端
         /// </summary>
         public DateTimeOffset? AvailableStart { get; set; }
         /// <summary>
         /// 下架时间
+        /// 已发布且当前时间处于上/下架范围内时才会显示在前端
         /// </summary>
         public DateTimeOffset? AvailableEnd { get; set; }
         #endregion
@@ -162,14 +176,14 @@ namespace BXJG.Shop.Catalogue
         {
             Published = true;
             AvailableStart = yxq;
-            AvailableEnd = js ?? yxq.AddYears(100);
+            AvailableEnd = js ?? yxq.AddYears(10);
         }
         /// <summary>
         /// 发布此商品
         /// </summary>
         /// <param name="yxq">开始发布时间，默认当前时间</param>
         /// <param name="js">有效期，单位秒</param>
-        public void Publish(DateTimeOffset yxq = default, long js = 0)
+        public void Publish(DateTimeOffset yxq = default, long js = 60 * 60 * 24 * 365 * 10)
         {
             Publish(yxq, yxq.AddSeconds(js));
         }

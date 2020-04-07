@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using Abp.Application.Services.Dto;
+using Abp.AutoMapper;
+
 namespace BXJG.Shop.Catalogue.Dto
 {
     /// <summary>
     /// 更新上架模型时前端提供的数据模型
     /// </summary>
+   // [AutoMapTo(typeof(ItemEntity))]
     public class ItemUpdateDto:EntityDto<long>
     {
         #region 基本信息

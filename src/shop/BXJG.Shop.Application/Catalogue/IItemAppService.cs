@@ -14,14 +14,43 @@ using BXJG.Shop.Authorization;
 namespace BXJG.Shop.Catalogue
 {
     /// <summary>
-    /// 上架信息应用服务
+    /// 商品上架信息应用服务
     /// </summary>
     /// <typeparam name="TTree"></typeparam>
     public interface IItemAppService : IApplicationService
     {
+        /// <summary>
+        /// 新增商品上架信息
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         [AbpAuthorize(BXJGShopPermissions.BXJGShopItemCreate)]
         Task<ItemDto> CreateAsync(ItemCreateDto input);
+        /// <summary>
+        /// 修改商品上架信息
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+
         [AbpAuthorize(BXJGShopPermissions.BXJGShopItemUpdate)]
         Task<ItemDto> UpdateAsync(ItemUpdateDto input);
+        /// <summary>
+        /// 查询商品上架信息的分页数据
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [AbpAuthorize(BXJGShopPermissions.BXJGShopItem)]
+        Task<IList<ItemDto>> GetListAsync(GetAllItemsInput input);
+
+        //简单起见，目前不用返回值，将来可能包含删除失败的id集合和相应的原因
+        //目前不返回，将来添加返回值 对所有调用方也都不影响
+
+        /// <summary>
+        /// 批量删除商品上架信息
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        [AbpAuthorize(BXJGShopPermissions.BXJGShopItemDelete)]
+        Task DeleteAsync(params long[] ids);
     }
 }
