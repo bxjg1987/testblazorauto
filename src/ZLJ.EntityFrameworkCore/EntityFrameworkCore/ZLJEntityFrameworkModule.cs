@@ -43,7 +43,7 @@ namespace ZLJ.EntityFrameworkCore
         {
             if (!SkipDbSeed)
             {
-                SeedHelper.SeedHostDb(IocManager);
+                //SeedHelper.SeedHostDb(IocManager);
             }
         }
     }
