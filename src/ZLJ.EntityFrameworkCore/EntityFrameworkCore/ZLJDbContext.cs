@@ -8,6 +8,7 @@ using BXJG.GeneralTree;
 using ZLJ.Asset;
 using BXJG.Shop.Common;
 using BXJG.Shop.Catalogue;
+using BXJG.Shop.Customer;
 
 namespace ZLJ.EntityFrameworkCore
 {
@@ -23,6 +24,9 @@ namespace ZLJ.EntityFrameworkCore
         public virtual DbSet<BXJGShopDictionaryEntity> BXJGShopDictionaries { get; set; }
 
         public virtual DbSet<ItemEntity> BXJGShopItems { get; set; }
+
+
+        public virtual DbSet<CustomerEntity<User>> BXJGShopCustomers { get; set; }
         public ZLJDbContext(DbContextOptions<ZLJDbContext> options)
             : base(options)
         {

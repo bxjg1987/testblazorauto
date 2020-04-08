@@ -11,7 +11,7 @@ namespace BXJG.Shop.Catalogue
     /// 上架信息领域服务
     /// 内部会触发相应领域事件
     /// </summary>
-    public class ItemManager : DomainService 
+    public class ItemManager : BXJGShopDomainServiceBase
     {
 
     }
