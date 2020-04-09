@@ -6,6 +6,7 @@ using Abp.Application.Services.Dto;
 using Abp.Auditing;
 using Abp.Authorization.Users;
 using Abp.AutoMapper;
+using BXJG.Utils.Enums;
 
 namespace BXJG.Shop.Customer.Dto
 {
@@ -53,5 +54,13 @@ namespace BXJG.Shop.Customer.Dto
         /// 总消费金额
         /// </summary>
         public decimal Amount { get; set; }
+        /// <summary>
+        /// 性别
+        /// </summary>
+        public Gender Gender { get; set; }
+        /// <summary>
+        /// 出生日期
+        /// </summary>
+        public DateTimeOffset Birthday { get; set; }
     }
 }

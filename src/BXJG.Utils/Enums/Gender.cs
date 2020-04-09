@@ -9,7 +9,8 @@ namespace BXJG.Utils.Enums
     /// </summary>
     public enum Gender
     {
-        Man,
-        Woman
+        Woman,
+        Man
+        
     }
 }

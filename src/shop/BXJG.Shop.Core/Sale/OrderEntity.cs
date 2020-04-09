@@ -79,7 +79,6 @@ namespace BXJG.Shop.Sale
      *      说明时间 发生了什么事 附件（图片） 是否允许用户端看到
      * 
      */
-
     public class OrderEntity : Entity<long>
     {
         #region 订单信息

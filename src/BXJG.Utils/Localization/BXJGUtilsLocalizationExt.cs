@@ -140,6 +140,11 @@ namespace BXJG.Utils.Localization
         {
             return localizationManager.GetSource(sourceName).GetEnum<T>(obj);
         }
+
+        public static string ToLocalizationString(this Enum e, string sourceName = BXJGUtilsConsts.LocalizationSourceName)
+        {
+            return LocalizationHelper.GetSource(sourceName).GetEnum(e);
+        }
         #endregion
 
         #region 为指定类型本身获取本地化字符串

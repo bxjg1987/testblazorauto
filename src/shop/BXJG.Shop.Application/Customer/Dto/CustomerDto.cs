@@ -1,5 +1,7 @@
 ﻿using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
+using BXJG.Utils.Enums;
+using BXJG.Utils.Localization;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -40,5 +42,23 @@ namespace BXJG.Shop.Customer.Dto
         /// 总消费金额
         /// </summary>
         public decimal Amount { get; set; }
+        /// <summary>
+        /// 性别
+        /// </summary>
+        public Gender Gender { get; set; }
+        /// <summary>
+        /// 获取性别的本地化文本
+        /// </summary>
+        public string GenderText
+        {
+            get
+            {
+                return Gender.ToLocalizationString();
+            }
+        }
+        /// <summary>
+        /// 出生日期
+        /// </summary>
+        public DateTimeOffset Birthday { get; set; }
     }
 }

@@ -12,5 +12,7 @@ namespace BXJG.Shop.Customer
         Task<IList<CustomerDto>> GetListAsync(GetAllCustomersInput input);
 
         Task<CustomerDto> UpdateAsync(CustomerUpdateDto input); 
+
+        
     }
 }
