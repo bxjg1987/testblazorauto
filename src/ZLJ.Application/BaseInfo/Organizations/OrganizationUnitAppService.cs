@@ -29,7 +29,6 @@ namespace ZLJ.Organizations
 
         protected readonly OrganizationUnitManager organizationUnitManager;
         protected readonly IRepository<OrganizationUnit, long> ownRepository;
-        public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }//属性注入
 
         public OrganizationUnitAppService(
             IRepository<OrganizationUnit, long> repository,
@@ -37,7 +36,6 @@ namespace ZLJ.Organizations
         {
             this.organizationUnitManager = organizationUnitManager;
             this.ownRepository = repository;
-            this.AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
         }
 
         public virtual async Task<OrganizationUnitDto> CreateAsync(EditOrganizationUnitDto input)

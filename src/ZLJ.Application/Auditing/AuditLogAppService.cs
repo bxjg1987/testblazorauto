@@ -25,7 +25,6 @@ namespace ZLJ.Auditing
         private readonly IRepository<User, long> _userRepository;
         //private readonly IAuditLogListExcelExporter _auditLogListExcelExporter;
         private readonly INamespaceStripper _namespaceStripper;
-        public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }//属性注入
 
         public AuditLogAppService(
             IRepository<AuditLog, long> auditLogRepository, 
@@ -38,7 +37,6 @@ namespace ZLJ.Auditing
             //_auditLogListExcelExporter = auditLogListExcelExporter;
             _namespaceStripper = namespaceStripper;
 
-            this.AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
         }
         
         public async Task<PagedResultDto<AuditLogListDto>> GetAuditLogs(GetAuditLogsInput input)

@@ -73,8 +73,8 @@
     <text name="Delete" value="删除" />
     <text name="InternalServerError" value="服务器内部错误！" />
     <text name="Unknown" value="未知" />
-    <text name="Woman" value="女" />
-    <text name="Man" value="男" />
+    <text name="BXJG.Utils.Enums.Gender.Woman" value="女" />
+    <text name="BXJG.Utils.Enums.Gender.Man" value="男" />
     <text name="Keywords" value="关键字" />
     <text name="Search" value="搜索" />
     <text name="AreYouSure" value="确定此操作吗？" />

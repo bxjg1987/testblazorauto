@@ -29,7 +29,7 @@ namespace BXJG.Shop
         protected BXJGShopAppServiceBase()
         {
             LocalizationSourceName = BXJGShopConsts.LocalizationSourceName;
-            this.AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
+            AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
         }
 
         protected virtual async Task<TUser> GetCurrentUserAsync()

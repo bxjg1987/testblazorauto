@@ -13,17 +13,19 @@ namespace BXJG.Shop.Customer.Dto
     /// <summary>
     /// 更新上架模型时前端提供的数据模型
     /// </summary>
-   // [AutoMapTo(typeof(ItemEntity))]
+   //[AutoMapTo(typeof(CustomerEntity<>))]
     public class CustomerUpdateDto : EntityDto<long>
     {
         #region abp用户信息
+        //public long UserId { get; set; }
+
         [Required]
         [StringLength(AbpUserBase.MaxUserNameLength)]
-        public string UserUserName { get; set; }
+        public string UserName { get; set; }
 
         [Required]
         [StringLength(AbpUserBase.MaxNameLength)]
-        public string UserName { get; set; }
+        public string Name { get; set; }
 
         //[Required]
         //[StringLength(AbpUserBase.MaxSurnameLength)]
@@ -32,17 +34,19 @@ namespace BXJG.Shop.Customer.Dto
         [Required]
         [EmailAddress]
         [StringLength(AbpUserBase.MaxEmailAddressLength)]
-        public string UserEmailAddress { get; set; }
+        public string EmailAddress { get; set; }
 
-        public bool UserIsActive { get; set; }
+        public bool IsActive { get; set; }
 
         //public string[] RoleNames { get; set; }
 
         [Required]
         [StringLength(AbpUserBase.MaxPlainPasswordLength)]
         [DisableAuditing]
-        public string UserPassword { get; set; }
+        public string Password { get; set; }
 
+
+        public string PhoneNumber { get; set; }
         #endregion
 
 

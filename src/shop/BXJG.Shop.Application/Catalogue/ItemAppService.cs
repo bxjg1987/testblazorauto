@@ -42,12 +42,10 @@ namespace BXJG.Shop.Catalogue
     {
         private readonly IRepository<ItemEntity, long> repository;
 
-        public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }//属性注入
 
         public ItemAppService(IRepository<ItemEntity, long> repository)
         {
             this.repository = repository;
-            this.AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
         }
 
         public async Task<ItemDto> CreateAsync(ItemCreateDto input)

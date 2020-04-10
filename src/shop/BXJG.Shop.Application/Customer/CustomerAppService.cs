@@ -16,6 +16,8 @@ using System.Linq.Dynamic.Core;
 using System.Linq.Dynamic;
 using Abp.Extensions;
 using BXJG.Shop.Customer.Dto;
+using Abp.Application.Services.Dto;
+using Microsoft.EntityFrameworkCore;
 
 namespace BXJG.Shop.Customer
 {
@@ -23,6 +25,15 @@ namespace BXJG.Shop.Customer
      * 设计此功能时还没有引用Microsoft.EntityFrameworkCore，它包含很多好用的扩展方法，使用的AsyncQueryableExecuter + system.linq.dynamic 的方式
      * 而abp zero是直接引用的它
      * 可以考虑直接引用Microsoft.EntityFrameworkCore
+     * 
+     * 最后决定直接在应用层引入Microsoft.EntityFrameworkCore 因为这能提供及大的遍历，且像AsNoChangeTracking无法用AsyncQueryableExecuter实现
+     * 
+     * await UserManager.InitializeOptionsAsync(AbpSession.TenantId);
+     * 源码地址 https://github.com/aspnetboilerplate/aspnetboilerplate/blob/c0604b9b1347a3b9581bf97b4cae22db5b6bab1b/src/Abp.ZeroCore/Authorization/Users/AbpUserManager.cs
+     * 默认项目模板中 用户新增和注册 都会调用此方法
+     * 很费解，看源码 主要是从 abp Settings中获取值 然后赋值给 IdentityOptions选项对象
+     * 但是这个选项对象要么是单例 要么是 一个请求一个实例，每次赋值是几个意思？
+     * 暂时不纠结了
      */
 
     /// <summary>
@@ -35,54 +46,142 @@ namespace BXJG.Shop.Customer
     /// <typeparam name="TUserManager"></typeparam>
     public class CustomerAppService<TTenant, TUser, TRole, TTenantManager, TUserManager>
         : BXJGShopAppServiceBase<TTenant, TUser, TRole, TTenantManager, TUserManager>, ICustomerAppService
-        where TUser : AbpUser<TUser>
+        where TUser : AbpUser<TUser>, new()
         where TRole : AbpRole<TUser>, new()
         where TTenant : AbpTenant<TUser>
         where TTenantManager : AbpTenantManager<TTenant, TUser>
         where TUserManager : AbpUserManager<TRole, TUser>
     {
         private readonly IRepository<CustomerEntity<TUser>, long> repository;
-
-        public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }//属性注入
-
         public CustomerAppService(IRepository<CustomerEntity<TUser>, long> repository)
         {
             this.repository = repository;
-            this.AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
         }
+        public async Task<CustomerDto> CreateAsync(CustomerUpdateDto input)
+        {
+            #region 创建主程序的用户
+            //这个是从abp默认项目模板的用户管理应用服务中抄过来的
+            var user = new TUser();
+            user.EmailAddress = input.EmailAddress;
+            user.Name = input.Name;
+            user.Surname = user.Name;
+            user.PhoneNumber = input.PhoneNumber;
+            user.TenantId = AbpSession.TenantId;
+            user.IsEmailConfirmed = true;
+            user.UserName = input.UserName;
 
-        //public async Task<ItemDto> CreateAsync(ItemCreateDto input)
-        //{
-        //    var entity = base.ObjectMapper.Map<CustomerEntity<TUser>>(input);
-        //    entity = await repository.InsertAsync(entity);
-        //    await repository.EnsurePropertyLoadedAsync(entity, c => c.Category);
-        //    return ObjectMapper.Map<ItemDto>(entity);
-        //}
+            //看顶部注释
+            await UserManager.InitializeOptionsAsync(AbpSession.TenantId);
+
+            CheckErrors(await UserManager.CreateAsync(user, input.Password));
+
+            //目前不考虑多角色商城会员
+            //if (input.RoleNames != null)
+            //{
+            //    CheckErrors(await _userManager.SetRolesAsync(user, input.RoleNames));
+            //}
+
+            CurrentUnitOfWork.SaveChanges();//保存后才能拿到新的UserId
+
+            //return MapToEntityDto(user);
+            #endregion
+
+            //映射不太好处理，手动来吧
+            var entity = new CustomerEntity<TUser>
+            {
+                Amount = input.Amount,
+                Birthday = input.Birthday,
+                Gender = input.Gender,
+                Integral = input.Integral,
+                User = user,
+                UserId = user.Id,
+                TenantId = AbpSession.TenantId.Value
+            };
+            await repository.InsertAsync(entity);
+            CurrentUnitOfWork.SaveChanges();//保存后才能拿到新的会员信息自增Id
+            return ObjectMapper.Map<CustomerDto>(entity);
+        }
 
         public async Task<CustomerDto> UpdateAsync(CustomerUpdateDto input)
         {
-            //var entity = await AsyncQueryableExecuter.FirstOrDefaultAsync(repository.GetAllIncluding(c => c.Category));
-            //ObjectMapper.Map<ItemUpdateDto, CustomerEntity<TUser>>(input, entity);
-            //return ObjectMapper.Map<ItemDto>(entity);
-            return null;
+            var entity = await repository.GetAsync(input.Id);
+
+
+            #region 更新主程序的用户信息
+            var user = await UserManager.GetUserByIdAsync(entity.UserId);
+            user.EmailAddress = input.EmailAddress;
+            user.Name = input.Name;
+            user.Surname = user.Name;
+            user.PhoneNumber = input.PhoneNumber;
+            //user.TenantId = AbpSession.TenantId;
+            //user.IsEmailConfirmed = true;
+            user.UserName = input.UserName;
+            CheckErrors(await UserManager.UpdateAsync(user));
+            //目前不考虑多角色商城会员
+            //if (input.RoleNames != null)
+            //{
+            //    CheckErrors(await _userManager.SetRolesAsync(user, input.RoleNames));
+            //}
+
+            // return await GetAsync(input);
+
+            #endregion
+
+
+
+            entity. Amount = input.Amount;
+            entity.Birthday = input.Birthday;
+            entity.Gender = input.Gender;
+            entity.Integral = input.Integral;
+            entity.TenantId = AbpSession.TenantId.Value;
+
+
+            await repository.UpdateAsync(entity);
+            CurrentUnitOfWork.SaveChanges();
+            return ObjectMapper.Map<CustomerDto>(entity);
         }
 
-        public async Task<IList<CustomerDto>> GetListAsync(GetAllCustomersInput input)
+        public async Task<PagedResultDto<CustomerDto>> GetListAsync(GetAllCustomersInput input)
         {
-            var query = repository.GetAllIncluding(c => c.User)
-                .WhereIf(!input.Keywords.IsNullOrEmpty(), c => c.User.Name.Contains(input.Keywords) || c.User.PhoneNumber.Contains(input.Keywords))
-                .OrderBy(input.Sorting)
-                .PageBy(input);
+            var query = repository.GetAllIncluding(c => c.User).AsNoTracking()
+                .WhereIf(!input.Keywords.IsNullOrEmpty(), c => c.User.Name.Contains(input.Keywords) || c.User.PhoneNumber.Contains(input.Keywords));
 
-            var list = await AsyncQueryableExecuter.ToListAsync(query);
-            return ObjectMapper.Map<IList<CustomerDto>>(list);
+            var totalCount = await query.CountAsync();
 
+            if (!input.Sorting.IsNullOrWhiteSpace())
+                query = query.OrderBy(input.Sorting);
+            query = query.PageBy(input);
+
+            var entities = await query.ToListAsync();
+
+            return new PagedResultDto<CustomerDto>(
+                totalCount,
+                ObjectMapper.Map<IReadOnlyList<CustomerDto>>(entities)
+            );
         }
 
+        public async Task<long[]> DeleteAsync(params long[] ids)
+        {
+            var successIds = new List<long>();
+            foreach (var item in ids)
+            {
+                try
+                {
+                    await repository.DeleteAsync(item);
+                    successIds.Add(item);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Warn("删除商城会员失败！", ex);
+                }
+            }
+            return successIds.ToArray();
+        }
 
-        //public Task DeleteAsync(params long[] ids)
-        //{
-        //  return  repository.DeleteAsync(c => ids.Contains(c.Id));
-        //}
+        public async Task<CustomerDto> GetAsync(EntityDto<long> input)
+        {
+            var entity = await repository.GetAllIncluding(c => c.User).AsNoTracking().SingleAsync(c => c.Id == input.Id);
+            return ObjectMapper.Map<CustomerDto>(entity);
+        }
     }
 }

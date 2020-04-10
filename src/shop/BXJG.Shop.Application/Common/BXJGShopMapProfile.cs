@@ -6,6 +6,8 @@ using BXJG.Utils.Localization;
 using BXJG.Shop.Common.Dto;
 using BXJG.Shop.Catalogue;
 using BXJG.Shop.Catalogue.Dto;
+using BXJG.Shop.Customer.Dto;
+using BXJG.Shop.Customer;
 
 namespace BXJG.Shop.Common
 {
@@ -35,6 +37,10 @@ namespace BXJG.Shop.Common
                .ForMember(c => c.Images, opt => opt.MapFrom(c => string.Join(',', c.Images)));
             #endregion
 
+            #region ª·‘±
+            //CreateMap<CustomerUpdateDto, CustomerEntity<>>()
+            //    .ForMember(c => c.User, opt => opt.Ignore());
+            #endregion
 
             //.ForMember(c => c.IsTreeText, opt => opt.MapFrom(c => c.IsTree.ToString().UtilsL()))
             //.ForMember(c => c.IsSysDefineText, opt => opt.MapFrom(c => c.IsSysDefine.ToString().UtilsL()))
