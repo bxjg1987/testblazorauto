@@ -5,6 +5,7 @@ using Abp.Authorization.Roles;
 using Abp.Authorization.Users;
 using Abp.Domain.Repositories;
 using Abp.IdentityFramework;
+using Abp.Linq;
 using Abp.MultiTenancy;
 using Abp.Runtime.Session;
 using Microsoft.AspNetCore.Identity;
@@ -20,6 +21,7 @@ namespace BXJG.Shop
         where TTenantManager: AbpTenantManager<TTenant, TUser>
         where TUserManager: AbpUserManager<TRole, TUser>
     {
+        public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }//属性注入
         public TTenantManager TenantManager { get; set; }
 
         public TUserManager UserManager { get; set; }
@@ -27,6 +29,7 @@ namespace BXJG.Shop
         protected BXJGShopAppServiceBase()
         {
             LocalizationSourceName = BXJGShopConsts.LocalizationSourceName;
+            this.AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
         }
 
         protected virtual async Task<TUser> GetCurrentUserAsync()
