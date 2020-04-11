@@ -66,15 +66,20 @@ namespace BXJG.Shop.Customer
             user.Name = input.Name;
             user.Surname = user.Name;
             user.PhoneNumber = input.PhoneNumber;
-            user.TenantId = AbpSession.TenantId;
+            user.IsActive = input.IsActive;
+            //user.TenantId = AbpSession.TenantId;//好像UserManager会自己处理
+
+
             user.IsEmailConfirmed = true;
+            user.IsPhoneNumberConfirmed = true;
             user.UserName = input.UserName;
 
-            //看顶部注释
-            await UserManager.InitializeOptionsAsync(AbpSession.TenantId);
+
+            await UserManager.InitializeOptionsAsync(AbpSession.TenantId);//看顶部注释
+            //user.SetNormalizedNames();//这个貌似没必要调了，UserManager内部会处理
+
 
             CheckErrors(await UserManager.CreateAsync(user, input.Password));
-
             //目前不考虑多角色商城会员
             //if (input.RoleNames != null)
             //{
@@ -93,9 +98,8 @@ namespace BXJG.Shop.Customer
                 Birthday = input.Birthday,
                 Gender = input.Gender,
                 Integral = input.Integral,
-                User = user,
-                UserId = user.Id,
-                TenantId = AbpSession.TenantId.Value
+                //User = user,//下面设置了userId就行了
+                UserId = user.Id
             };
             await repository.InsertAsync(entity);
             CurrentUnitOfWork.SaveChanges();//保存后才能拿到新的会员信息自增Id
@@ -106,7 +110,6 @@ namespace BXJG.Shop.Customer
         {
             var entity = await repository.GetAsync(input.Id);
 
-
             #region 更新主程序的用户信息
             var user = await UserManager.GetUserByIdAsync(entity.UserId);
             user.EmailAddress = input.EmailAddress;
@@ -114,8 +117,10 @@ namespace BXJG.Shop.Customer
             user.Surname = user.Name;
             user.PhoneNumber = input.PhoneNumber;
             //user.TenantId = AbpSession.TenantId;
-            //user.IsEmailConfirmed = true;
+            user.IsEmailConfirmed = true;
+            user.IsPhoneNumberConfirmed = true;
             user.UserName = input.UserName;
+            user.IsActive = input.IsActive;
             CheckErrors(await UserManager.UpdateAsync(user));
             //目前不考虑多角色商城会员
             //if (input.RoleNames != null)
@@ -129,11 +134,11 @@ namespace BXJG.Shop.Customer
 
 
 
-            entity. Amount = input.Amount;
+            entity.Amount = input.Amount;
             entity.Birthday = input.Birthday;
             entity.Gender = input.Gender;
             entity.Integral = input.Integral;
-            entity.TenantId = AbpSession.TenantId.Value;
+            //entity.TenantId = AbpSession.TenantId.Value;
 
 
             await repository.UpdateAsync(entity);

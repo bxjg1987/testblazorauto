@@ -38,6 +38,8 @@ namespace BXJG.Shop.Common
             #endregion
 
             #region 会员
+            //https://automapper.readthedocs.io/en/latest/Open-Generics.html
+            //文档说了不能使用泛型方法来创建开放泛型映射，但即使是一个typeof()方式 也不行 所以只能手动来
             //CreateMap<CustomerUpdateDto, CustomerEntity<>>()
             //    .ForMember(c => c.User, opt => opt.Ignore());
             #endregion
