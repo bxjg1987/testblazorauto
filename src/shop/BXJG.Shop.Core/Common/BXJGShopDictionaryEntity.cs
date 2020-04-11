@@ -12,7 +12,6 @@ namespace BXJG.Shop.Common
     /// <summary>
     /// 商城模块自己的通用字典
     /// </summary>
-    [Table("BXJGShopDictionaries")]
     public class BXJGShopDictionaryEntity : GeneralTreeEntity<BXJGShopDictionaryEntity>
     {
         public const int IconMaxLength = 500;

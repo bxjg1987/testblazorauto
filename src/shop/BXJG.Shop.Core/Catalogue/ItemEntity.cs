@@ -72,7 +72,6 @@ namespace BXJG.Shop.Catalogue
     /// 设计时考虑不提供继承的方式扩展，因为那样太复杂
     /// 你可以使用关联和事件的方式参与到这个模块中来
     /// </summary>
-    [Table("BXJGShopItems")]
     public class ItemEntity : FullAuditedEntity<long>, IMustHaveTenant
     {
         #region 基本信息

@@ -1,6 +1,10 @@
-﻿using Abp.Domain.Entities;
+﻿using Abp.Authorization.Users;
+using Abp.Domain.Entities;
+using BXJG.Shop.Common;
+using BXJG.Shop.Customer;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace BXJG.Shop.Sale
@@ -27,6 +31,10 @@ namespace BXJG.Shop.Sale
      *      用户备注：用户下单是写的备注
      *      
      * 支付
+     *      费用计算的主要思路是 
+     *          各种费用相加 = 订单金额  
+     *          订单金额减去各种优惠 = 付款金额
+     *          
      *      商品小计
      *      运费
      *      是否开具发票
@@ -34,6 +42,7 @@ namespace BXJG.Shop.Sale
      *      订单金额
      *      积分
      *      支付方式：微信 支付宝 现金 网银
+     *      付款金额
      *      支付状态：
      *          参考nopcommerce https://admin-demo.nopcommerce.com/Admin/Order/Edit/4
      *          Authorized状态对应：用户申请退款
@@ -46,6 +55,7 @@ namespace BXJG.Shop.Sale
      *          部分退款：
      *              部分退款的金额记录放在订单跟踪里，因为可能多次部分退款(nopm的方式)，部分退款时也可以再次变为已付款，多次部分退款总额不得操作订单总额
      *      
+     *          
      * 配送
      *      收货人
      *      电话
@@ -73,16 +83,129 @@ namespace BXJG.Shop.Sale
      *      金额
      *      积分
      * 
-     * 订单变更记录
-     *      nopcommerec订单详情页有个Order notes 用来记录订单各种变化情况，什么时候下单 上面时候 付款 什么时候发货 什么时候申请退款等等...
-     *      我们也使用这样的设计
-     *      说明时间 发生了什么事 附件（图片） 是否允许用户端看到
-     * 
      */
-    public class OrderEntity : Entity<long>
+    public class OrderEntity<TUser> : Entity<long>, IMustHaveTenant
+        where TUser : AbpUserBase
     {
+        //ef映射配置放到了BXJG.EFCore中
+
+        public const int OrderNoMaxLength = 36;//guid长度 32+4个分隔符，将来可能使用其它格式的订单号
+        public const int CustomerRemarkMaxLength =500;
+        public const int ConsigneeMaxLength = 20;
+        public const int ConsigneePhoneNumberMaxLength = 50;
+        public const int ReceivingAddressMaxLength = 200;
+        public const int ZipCodeMaxLength = 50;
+        public const int LogisticsNumberMaxLength = 50;
+
+        public int TenantId { get; set; }
+
         #region 订单信息
-        public long UserId { get; set; }
+        /// <summary>
+        /// 关联的顾客的Id
+        /// </summary>
+        public long CustomerId { get; set; }
+        /// <summary>
+        /// 关联的顾客的实体
+        /// </summary>
+        public virtual CustomerEntity<TUser> Customer { get; set; }
+        /// <summary>
+        /// 订单号
+        /// </summary>
+        //[MaxLength(OrderNoMaxLength)] api中定义了
+        public string OrderNo { get; set; }
+        //public DateTimeOffset CreateTime { get; set; }//直接用继承来的CreateDate
+        /// <summary>
+        /// 订单状态
+        /// </summary>
+        public OrderStatus Status { get; set; }
+        /// <summary>
+        /// 顾客下单时填写的备注
+        /// </summary>
+        [MaxLength(CustomerRemarkMaxLength)]
+        public string CustomerRemark { get; set; }
         #endregion
+
+        #region 支付信息
+        /// <summary>
+        /// 商品小计
+        /// </summary>
+        public decimal MerchandiseSubtotal { get; set; }
+        /// <summary>
+        /// 配送费
+        /// </summary>
+        public decimal DistributionFee { get; set; }
+        /// <summary>
+        /// 是否需要开票
+        /// </summary>
+        public bool InvoiceRequired { get; set; }
+        /// <summary>
+        /// 发票税金
+        /// </summary>
+        public decimal InvoiceTax { get; set; }
+        /// <summary>
+        /// 可得积分
+        /// </summary>
+        public long Integral { get; set; }
+        /// <summary>
+        /// 支付方式
+        /// </summary>
+        public BXJGShopDictionaryEntity PaymentMethod { get; set; }
+        /// <summary>
+        /// 支付方式Id
+        /// 未支付时 就不存在支付方式，因此可空
+        /// </summary>
+        public long? PaymentMethodId { get; set; }
+        /// <summary>
+        /// 付款金额
+        /// 顾客最终支付金额
+        /// </summary>
+        public decimal PaymentAmount { get; set; }
+        /// <summary>
+        /// 支付状态
+        /// </summary>
+        public PaymentStatus PaymentStatus { get; set; }
+        #endregion
+
+        #region 物流配送
+        /// <summary>
+        /// 收货人
+        /// 不一定就是下单人
+        /// </summary>
+        public string Consignee { get; set; }
+        /// <summary>
+        /// 收货人电话
+        /// </summary>
+        public string ConsigneePhoneNumber { get; set; }
+        //省市区县 暂时忽略，后期补充
+
+        /// <summary>
+        /// 收货地址
+        /// </summary>
+        public string ReceivingAddress { get; set; }
+        /// <summary>
+        /// 邮编
+        /// </summary>
+        public string ZipCode { get; set; }
+        /// <summary>
+        /// 支付方式
+        /// </summary>
+        public BXJGShopDictionaryEntity DistributionMethod { get; set; }
+        /// <summary>
+        /// 配送方式
+        /// 刚创建订单时配送方式尚未确定
+        /// </summary>
+        public long? DistributionMethodId { get; set; }
+        /// <summary>
+        /// 物流单号
+        /// </summary>
+        public string LogisticsNumber { get; set; }
+        /// <summary>
+        /// 物流状态
+        /// 刚创建订单时没有物流状态，因此加个?
+        /// </summary>
+        public LogisticsStatus? LogisticsStatus { get; set; }
+        #endregion
+
+        //产品信息和变更信息 与订单都是一对多关系，因此另外有实体定义
     }
 }

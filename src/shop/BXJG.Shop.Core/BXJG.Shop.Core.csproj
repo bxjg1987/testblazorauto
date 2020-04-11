@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Sale\PaymentMethod.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Localization\SourceFiles\BXJGShop-zh-Hans.xml" />
     <None Remove="Localization\SourceFiles\BXJGShop.xml" />
   </ItemGroup>
