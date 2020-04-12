@@ -10,8 +10,8 @@ using ZLJ.EntityFrameworkCore;
 namespace ZLJ.Migrations
 {
     [DbContext(typeof(ZLJDbContext))]
-    [Migration("20200410143404_updateShopCust")]
-    partial class updateShopCust
+    [Migration("20200412141107_addShop")]
+    partial class addShop
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -1583,6 +1583,161 @@ namespace ZLJ.Migrations
                     b.ToTable("BXJGShopCustomers");
                 });
 
+            modelBuilder.Entity("BXJG.Shop.Sale.OrderEntity<ZLJ.Authorization.Users.User>", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Consignee")
+                        .HasColumnType("nvarchar(20)")
+                        .HasMaxLength(20);
+
+                    b.Property<string>("ConsigneePhoneNumber")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("CustomerId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("CustomerRemark")
+                        .HasColumnType("nvarchar(500)")
+                        .HasMaxLength(500);
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("DistributionFee")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<long?>("DistributionMethodId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("Integral")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("InvoiceRequired")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("InvoiceTax")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("LogisticsNumber")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<int?>("LogisticsStatus")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("MerchandiseSubtotal")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("OrderNo")
+                        .HasColumnType("varchar(36)");
+
+                    b.Property<decimal>("PaymentAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<long?>("PaymentMethodId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("PaymentStatus")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ReceivingAddress")
+                        .HasColumnType("nvarchar(200)")
+                        .HasMaxLength(200);
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ZipCode")
+                        .HasColumnType("varchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("DistributionMethodId");
+
+                    b.HasIndex("PaymentMethodId");
+
+                    b.ToTable("BXJGShopOrders");
+                });
+
+            modelBuilder.Entity("BXJG.Shop.Sale.OrderItemEntity<ZLJ.Authorization.Users.User>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Integral")
+                        .HasColumnType("int");
+
+                    b.Property<long>("ItemId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("OrderId")
+                        .HasColumnType("bigint");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Quantity")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TotalIntegral")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ItemId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("BXJGShopOrderItems");
+                });
+
             modelBuilder.Entity("ZLJ.Asset.EquipmentInfoEntity", b =>
                 {
                     b.Property<long>("Id")
@@ -2109,6 +2264,38 @@ namespace ZLJ.Migrations
                     b.HasOne("ZLJ.Authorization.Users.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("BXJG.Shop.Sale.OrderEntity<ZLJ.Authorization.Users.User>", b =>
+                {
+                    b.HasOne("BXJG.Shop.Customer.CustomerEntity<ZLJ.Authorization.Users.User>", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BXJG.Shop.Common.BXJGShopDictionaryEntity", "DistributionMethod")
+                        .WithMany()
+                        .HasForeignKey("DistributionMethodId");
+
+                    b.HasOne("BXJG.Shop.Common.BXJGShopDictionaryEntity", "PaymentMethod")
+                        .WithMany()
+                        .HasForeignKey("PaymentMethodId");
+                });
+
+            modelBuilder.Entity("BXJG.Shop.Sale.OrderItemEntity<ZLJ.Authorization.Users.User>", b =>
+                {
+                    b.HasOne("BXJG.Shop.Catalogue.ItemEntity", "Item")
+                        .WithMany()
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BXJG.Shop.Sale.OrderEntity<ZLJ.Authorization.Users.User>", "Order")
+                        .WithMany("Items")
+                        .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

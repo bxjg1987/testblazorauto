@@ -1595,12 +1595,24 @@ namespace ZLJ.Migrations
                     b.Property<string>("ConsigneePhoneNumber")
                         .HasColumnType("varchar(50)");
 
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
                     b.Property<long>("CustomerId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("CustomerRemark")
                         .HasColumnType("nvarchar(500)")
                         .HasMaxLength(500);
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<decimal>("DistributionFee")
                         .HasColumnType("decimal(18,2)");
@@ -1616,6 +1628,15 @@ namespace ZLJ.Migrations
 
                     b.Property<decimal>("InvoiceTax")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("LogisticsNumber")
                         .HasColumnType("varchar(50)");
@@ -1642,6 +1663,11 @@ namespace ZLJ.Migrations
                         .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -1660,6 +1686,54 @@ namespace ZLJ.Migrations
                     b.HasIndex("PaymentMethodId");
 
                     b.ToTable("BXJGShopOrders");
+                });
+
+            modelBuilder.Entity("BXJG.Shop.Sale.OrderItemEntity<ZLJ.Authorization.Users.User>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Integral")
+                        .HasColumnType("int");
+
+                    b.Property<long>("ItemId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("OrderId")
+                        .HasColumnType("bigint");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Quantity")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TotalIntegral")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ItemId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("BXJGShopOrderItems");
                 });
 
             modelBuilder.Entity("ZLJ.Asset.EquipmentInfoEntity", b =>
@@ -2207,6 +2281,21 @@ namespace ZLJ.Migrations
                     b.HasOne("BXJG.Shop.Common.BXJGShopDictionaryEntity", "PaymentMethod")
                         .WithMany()
                         .HasForeignKey("PaymentMethodId");
+                });
+
+            modelBuilder.Entity("BXJG.Shop.Sale.OrderItemEntity<ZLJ.Authorization.Users.User>", b =>
+                {
+                    b.HasOne("BXJG.Shop.Catalogue.ItemEntity", "Item")
+                        .WithMany()
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BXJG.Shop.Sale.OrderEntity<ZLJ.Authorization.Users.User>", "Order")
+                        .WithMany("Items")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ZLJ.Asset.EquipmentInfoEntity", b =>

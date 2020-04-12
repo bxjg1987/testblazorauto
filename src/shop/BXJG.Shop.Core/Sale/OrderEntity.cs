@@ -1,5 +1,6 @@
 ﻿using Abp.Authorization.Users;
 using Abp.Domain.Entities;
+using Abp.Domain.Entities.Auditing;
 using BXJG.Shop.Common;
 using BXJG.Shop.Customer;
 using System;
@@ -83,14 +84,19 @@ namespace BXJG.Shop.Sale
      *      金额
      *      积分
      * 
+     * 如只用CustomerId关联顾客，则可以省去TUser这个泛型参数，外键配置可以在Shop.EFCoe中通过API方式配置映射， 将来查询时使用join
+     * 因为商城系统中的订单是一个非常核心的概念，一旦引入泛型 则与此关联的很多概念都必须也是泛型，所以会很麻烦
+     * 而订单中关联的顾客又特别重要，所以使用泛型的方式确实会提供很多便利
+     * 综合来考虑 使用泛型虽然会让设计变得麻烦，但是大量的业务逻辑处理中会变得简单
+     * 
+     * 从订单的设计开始，后续所以模型的ef映射都移动到BXJG.EFCore中
+     * 
      */
-    public class OrderEntity<TUser> : Entity<long>, IMustHaveTenant
+    public class OrderEntity<TUser> : FullAuditedEntity<long>, IMustHaveTenant
         where TUser : AbpUserBase
     {
-        //ef映射配置放到了BXJG.EFCore中
-
         public const int OrderNoMaxLength = 36;//guid长度 32+4个分隔符，将来可能使用其它格式的订单号
-        public const int CustomerRemarkMaxLength =500;
+        public const int CustomerRemarkMaxLength = 500;
         public const int ConsigneeMaxLength = 20;
         public const int ConsigneePhoneNumberMaxLength = 50;
         public const int ReceivingAddressMaxLength = 200;
@@ -106,6 +112,7 @@ namespace BXJG.Shop.Sale
         public long CustomerId { get; set; }
         /// <summary>
         /// 关联的顾客的实体
+        /// 注意顾客与User是一对一关联的
         /// </summary>
         public virtual CustomerEntity<TUser> Customer { get; set; }
         /// <summary>
@@ -206,6 +213,21 @@ namespace BXJG.Shop.Sale
         public LogisticsStatus? LogisticsStatus { get; set; }
         #endregion
 
-        //产品信息和变更信息 与订单都是一对多关系，因此另外有实体定义
+        /// <summary>
+        /// 订单商品明细
+        /// </summary>
+        public virtual IList<OrderItemEntity<TUser>> Items { get; set; }
+
+
+        //订单跟踪
+
+        /// <summary>
+        /// 乐观并发
+        /// </summary>
+        public byte[] RowVersion { get; set; }
+
+        #region 方法
+
+        #endregion
     }
 }
