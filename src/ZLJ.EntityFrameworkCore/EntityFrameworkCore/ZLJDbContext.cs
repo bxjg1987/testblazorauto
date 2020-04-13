@@ -22,11 +22,12 @@ namespace ZLJ.EntityFrameworkCore
         public virtual DbSet<GeneralTreeEntity> GeneralTreeEntities { get; set; }
         public virtual DbSet<EquipmentInfoEntity> EquipmentInfos { get; set; }
 
+        #region 注册商城模块中的实体
         public virtual DbSet<BXJGShopDictionaryEntity> BXJGShopDictionaries { get; set; }
         public virtual DbSet<ItemEntity> BXJGShopItems { get; set; }
         public virtual DbSet<CustomerEntity<User>> BXJGShopCustomers { get; set; }
         public virtual DbSet<OrderEntity<User>> BXJGShopOrders { get; set; }
-
+        #endregion
 
         public ZLJDbContext(DbContextOptions<ZLJDbContext> options)
             : base(options)

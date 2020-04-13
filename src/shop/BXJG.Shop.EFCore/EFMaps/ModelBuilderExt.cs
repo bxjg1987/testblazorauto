@@ -18,7 +18,7 @@ namespace BXJG.Shop.EFMaps
             where TUser : AbpUserBase
         {
             return modelBuilder
-                .ApplyConfigurationsFromAssembly(typeof(BXJGShopEFCoreModule).Assembly)
+                .ApplyConfigurationsFromAssembly(BXJGShopEFCoreModule.GetAssembly())
                 .ApplyConfiguration(new OrderItemMap<TUser>())
                 .ApplyConfiguration(new OrderMap<TUser>());//上面扫描程序集的方式无法注册带泛型的，所以下面单独加
 

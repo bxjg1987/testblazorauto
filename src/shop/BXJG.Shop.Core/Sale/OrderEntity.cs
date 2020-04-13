@@ -218,7 +218,6 @@ namespace BXJG.Shop.Sale
         /// </summary>
         public virtual IList<OrderItemEntity<TUser>> Items { get; set; }
 
-
         //订单跟踪
 
         /// <summary>
@@ -227,7 +226,15 @@ namespace BXJG.Shop.Sale
         public byte[] RowVersion { get; set; }
 
         #region 方法
-
+        //public OrderEntity<TUser> AddItems(params OrderItemInput[] items) {
+        //    if (Items == null)
+        //        Items = new List<OrderItemEntity<TUser>>();
+        //    foreach (var item in items)
+        //    {
+        //        var itemEntity = new OrderItemEntity<TUser> { 
+        //        };
+        //    }
+        //}
         #endregion
     }
 }

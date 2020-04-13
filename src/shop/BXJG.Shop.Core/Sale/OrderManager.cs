@@ -1,6 +1,7 @@
 ﻿using Abp.Authorization.Users;
 using Abp.Domain.Repositories;
 using Abp.Domain.Services;
+using Abp.Runtime.Session;
 using BXJG.Shop.Catalogue;
 using BXJG.Shop.Customer;
 using System;
@@ -18,18 +19,34 @@ namespace BXJG.Shop.Sale
         where TUser : AbpUserBase
     {
         protected readonly IRepository<OrderEntity<TUser>, long> repository;
+        protected readonly IAbpSession session;
 
-        public OrderManager(IRepository<OrderEntity<TUser>, long> repository)
+        public OrderManager(IRepository<OrderEntity<TUser>, long> repository,IAbpSession session)
         {
             this.repository = repository;
+            this.session = session;
         }
-       //好好考虑下 是否为订单定义一个Builder对象
+
+        //好好考虑下 是否为订单定义一个Builder对象
+        /// <summary>
+        /// 创建订单
+        /// </summary>
+        /// <param name="customer"></param>
+        /// <param name="orderTime"></param>
+        /// <param name="orderNo"></param>
+        /// <param name="customerRemark"></param>
+        /// <param name="invoiceRequired"></param>
+        /// <param name="consignee"></param>
+        /// <param name="items"></param>
+        /// <returns></returns>
         public async Task<OrderEntity<TUser>> CreateAsync(
-            CustomerEntity<TUser> customer, 
-            (ItemEntity item, decimal count)[] items, 
-            DateTimeOffset? orderTime=null,
-            bool invoiceRequired=false, 
-            string customerRemark=null)
+            CustomerEntity<TUser> customer = null,
+            DateTimeOffset? orderTime = null,
+            string orderNo = "",
+            string customerRemark = null,
+            bool invoiceRequired = false,
+            string consignee = "",
+            params OrderItemInput[] items)
         {
             var order = new OrderEntity<TUser>();
 
