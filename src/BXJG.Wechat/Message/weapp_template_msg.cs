@@ -19,12 +19,10 @@ namespace BXJG.WeChat.Message
         /// <summary>
         /// 小程序模板消息formid
         /// </summary>
-
         public string form_id { get; set; }
 
         /// <summary>
         /// 小程序模板数据
-
         /// </summary>
         public object data { get; set; }
 
