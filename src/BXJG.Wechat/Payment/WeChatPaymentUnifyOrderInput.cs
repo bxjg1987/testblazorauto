@@ -182,7 +182,7 @@ namespace BXJG.WeChat.Payment
         }
         /// <summary>
         /// 将消息转换为微信要求的xml格式
-        /// 这种转换因为有微信规定的规则，所以此功能定义在实例里
+        /// 这功能感觉最好搞个扩展方法
         /// </summary>
         /// <returns></returns>
         public string ToXml()
