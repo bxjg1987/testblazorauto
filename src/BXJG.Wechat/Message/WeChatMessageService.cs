@@ -12,11 +12,11 @@ using System.Threading.Tasks;
 
 namespace BXJG.WeChat.Message
 {
-    public class WeChatMessage
+    public class WeChatMessageService
     {
         private readonly MiniProgramAuthenticationOptions _authOptions;
         private readonly IHttpClientFactory _clientFactory;
-        public WeChatMessage(
+        public WeChatMessageService(
             IOptionsMonitor<MiniProgramAuthenticationOptions> authOptions,
             IHttpClientFactory clientFactory)
         {
@@ -57,9 +57,9 @@ namespace BXJG.WeChat.Message
             if (!response.IsSuccessStatusCode)
                 throw new HttpRequestException($"调用微信统一发送消息接口异常 ({response.StatusCode}).请检查.");
             ///序列化微信接口返回值
-            var result = JsonConvert.DeserializeObject<WechatResult>(await response.Content.ReadAsStringAsync());
+            return JsonConvert.DeserializeObject<WechatResult>(await response.Content.ReadAsStringAsync());
 
-            return new WechatResult() { errcode = result.errcode, errmsg = result.errmsg };
+            //return new WechatResult() { errcode = result.errcode, errmsg = result.errmsg };
 
         }
 
