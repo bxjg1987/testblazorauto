@@ -91,6 +91,10 @@ namespace BXJG.Shop.Sale
      * 
      * 从订单的设计开始，后续所以模型的ef映射都移动到BXJG.EFCore中
      * 
+     * ---------------------------------------------------------------------------------------
+     * 2020-4-16 变形精怪
+     * 不要设置默认值，因为从数据库查询时会自动赋值，所以默认值因为会造成多一次赋值
+     * 谨慎属性赋值时做更多处理，比如添加明细 自动更新 金额。因为从数据库查询时 可能并不加载明细，而金额是直接从数据库取值
      */
     public class OrderEntity<TUser> : FullAuditedEntity<long>, IMustHaveTenant
         where TUser : AbpUserBase
@@ -170,7 +174,7 @@ namespace BXJG.Shop.Sale
         /// <summary>
         /// 支付状态
         /// </summary>
-        public PaymentStatus PaymentStatus { get; set; }
+        public PaymentStatus PaymentStatus { get; set; } 
         #endregion
 
         #region 物流配送
@@ -190,7 +194,7 @@ namespace BXJG.Shop.Sale
         /// </summary>
         public string ReceivingAddress { get; set; }
         /// <summary>
-        /// 邮编
+        /// 已弃用，京东没有这个字段
         /// </summary>
         public string ZipCode { get; set; }
         /// <summary>

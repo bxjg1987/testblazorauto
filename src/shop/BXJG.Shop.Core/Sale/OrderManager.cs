@@ -2,6 +2,7 @@
 using Abp.Domain.Repositories;
 using Abp.Domain.Services;
 using Abp.Runtime.Session;
+using Abp.UI;
 using BXJG.Shop.Catalogue;
 using BXJG.Shop.Customer;
 using System;
@@ -34,8 +35,7 @@ namespace BXJG.Shop.Sale
      *      后台管理员可以直接新增订单吗？
      *      从其它地方导入订单？
      *      
-     * 原本考虑定义一个OrderBuilder对象单独负责订单的创建，其实是有必要的。但是目前的场景 先直接定义到订单领域服务中
-     * 将来有需求时再重构，避免过度设计
+     * 
      */
 
     /// <summary>
@@ -46,38 +46,59 @@ namespace BXJG.Shop.Sale
         where TUser : AbpUserBase
     {
         protected readonly IRepository<OrderEntity<TUser>, long> repository;
+        protected readonly IRepository<CustomerEntity<TUser>, long> customerRepository;
+        protected readonly CustomerManager<TUser> customerManager;
         protected readonly IAbpSession session;
 
-        public OrderManager(IRepository<OrderEntity<TUser>, long> repository,IAbpSession session)
+        public OrderManager(
+            IRepository<OrderEntity<TUser>, long> repository,
+            IRepository<CustomerEntity<TUser>, long> customerRepository,
+            CustomerManager<TUser> customerManager,
+            IAbpSession session
+            )
         {
             this.repository = repository;
+            this.customerRepository = customerRepository;
+            this.customerManager = customerManager;
             this.session = session;
         }
 
-        //好好考虑下 是否为订单定义一个Builder对象
-        /// <summary>
-        /// 创建订单
-        /// </summary>
-        /// <param name="customer"></param>
-        /// <param name="orderTime"></param>
-        /// <param name="orderNo"></param>
-        /// <param name="customerRemark"></param>
-        /// <param name="invoiceRequired"></param>
-        /// <param name="consignee"></param>
-        /// <param name="items"></param>
-        /// <returns></returns>
         public async Task<OrderEntity<TUser>> CreateAsync(
             CustomerEntity<TUser> customer = null,
             DateTimeOffset? orderTime = null,
-            string orderNo = "",
             string customerRemark = null,
             bool invoiceRequired = false,
             string consignee = "",
             params OrderItemInput[] items)
         {
-            var order = new OrderEntity<TUser>();
+            if (customer == null)
+            {
+                //if (!session.UserId.HasValue)
+                //    throw new ApplicationException("创建订单时无法确定购买客户");
+                //else
+                //   await customerRepository.SingleByUserIdWithoutUserAsync(session.UserId.Value);
+
+                //session.GetUserId()会报异常的
+                await customerManager.GetCurrentWithoutUserAsync();
+            }
+            //顾客的各种业务逻辑判断，比如是否是黑名单顾客
 
 
+            var order = new OrderEntity<TUser>
+            {
+                Customer = customer,
+                CustomerId = customer.Id,
+                OrderNo = Guid.NewGuid().ToString("N"),//将来再考虑用个专门的组件生产简单、不重复的订单号
+                Status = OrderStatus.Created,
+                CustomerRemark = customerRemark,
+                InvoiceRequired = invoiceRequired,
+            };
+            //MerchandiseSubtotal 商品小计
+            //DistributionFee 配送费 简单的情况 可以让 后台管理员确认订单时录入配送费；合理的情况是根据购买的商品自动计算
+            //InvoiceTax 发票税金
+
+            await repository.InsertAsync(order);
+            await CurrentUnitOfWork.SaveChangesAsync();//保存，以获得新的自增id
             return order;
         }
     }

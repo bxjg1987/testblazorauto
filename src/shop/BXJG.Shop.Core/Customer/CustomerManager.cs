@@ -24,19 +24,38 @@ namespace BXJG.Shop.Customer
             this.repository = repository;
             this.session = session;
         }
-
+        /// <summary>
+        /// 根据用户id获取关联的顾客实体，同时加载用户实体
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public Task<CustomerEntity<TUser>> SingleByUserIdWithUserAsync(long userId)
         {
             return repository.SingleByUserIdWithUserAsync<TUser>(userId);
         }
+        /// <summary>
+        /// 根据用户id获取关联的顾客实体，不加载用户实体
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public Task<CustomerEntity<TUser>> SingleByUserIdWithoutUserAsync(long userId)
         {
             return repository.SingleByUserIdWithoutUserAsync<TUser>(userId);
         }
+        /// <summary>
+        /// 获取当前登录用户关联的顾客实体,不加载用户实体
+        /// 若是匿名用户则报异常
+        /// </summary>
+        /// <returns></returns>
         public Task<CustomerEntity<TUser>> GetCurrentWithoutUserAsync()
         {
             return SingleByUserIdWithoutUserAsync(session.GetUserId());
         }
+        /// <summary>
+        /// 获取当前登录用户关联的顾客实体,同时加载用户实体
+        /// 若是匿名用户则报异常
+        /// </summary>
+        /// <returns></returns>
         public Task<CustomerEntity<TUser>> GetCurrentWithUserAsync()
         {
             return SingleByUserIdWithUserAsync(session.GetUserId());
