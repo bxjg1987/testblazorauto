@@ -12,15 +12,19 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+
 namespace BXJG.WeChat.MiniProgram
 {
     //可以参考TwitterHandler和OAuthHandler的设计
 
     public class MiniProgramAuthenticationHandler : AuthenticationHandler<MiniProgramAuthenticationOptions>, IAuthenticationRequestHandler
     {
+        private IHostEnvironment _env;
         private HttpClient Backchannel => Options.Backchannel;
-        public MiniProgramAuthenticationHandler(IOptionsMonitor<MiniProgramAuthenticationOptions> options, ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock) : base(options, logger, encoder, clock)
+        public MiniProgramAuthenticationHandler(IOptionsMonitor<MiniProgramAuthenticationOptions> options, ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock, IHostEnvironment env) : base(options, logger, encoder, clock)
         {
+            _env = env;
         }
 
         /// <summary>
@@ -66,18 +70,24 @@ namespace BXJG.WeChat.MiniProgram
             if (!response.IsSuccessStatusCode)
                 throw new HttpRequestException($"An error occurred when retrieving wechar mini program user information ({response.StatusCode}). Please check if the authentication information is correct and the corresponding Microsoft Account API is enabled.");
 
-            //正式处理
-            //var rt = JsonSerializer.Deserialize<MiniProgramToken>(await response.Content.ReadAsStringAsync());
-
-            //调试
-            var rt = new MiniProgramToken
+            MiniProgramToken rt = null;
+            if (_env.IsProduction())
             {
-                errcode = 0,
-                errmsg = "",
-                openid = "rexcfdwe",
-                session_key = "777777",
-                unionid = ""
-            };
+                //正式处理
+                rt = JsonSerializer.Deserialize<MiniProgramToken>(await response.Content.ReadAsStringAsync());
+            }
+            else if (_env.IsDevelopment())
+            {
+                //调试
+                rt = new MiniProgramToken
+                {
+                    errcode = 0,
+                    errmsg = "",
+                    openid = "rexcfdwe",
+                    session_key = "777777",
+                    unionid = ""
+                };
+            }
 
             if (rt.errcode != 0)
                 throw new HttpRequestException($"errcode:{rt.errcode}, errmsg:{rt.errmsg}");

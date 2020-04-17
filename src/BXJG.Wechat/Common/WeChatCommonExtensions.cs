@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using BXJG.WeChat.Message;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -11,12 +13,24 @@ namespace BXJG.WeChat.Common
     /// </summary>
     public static class WeChatCommonExtensions
     {
-        public static IServiceCollection AddWeChartMiniProgram(this IServiceCollection services)
+        public static IServiceCollection AddWeChartMiniProgram(this IServiceCollection services, Action<WechatTemplateOptions> act)
+        {
+            return services.AddWeChartMiniProgramCore().Configure(act);
+        }
+
+
+        public static IServiceCollection AddWeChartMiniProgram(this IServiceCollection services, IConfiguration cfg)
+        {
+            return services.AddWeChartMiniProgramCore().Configure<WechatTemplateOptions>(cfg);
+        }
+
+        public static IServiceCollection AddWeChartMiniProgramCore(this IServiceCollection services)
         {
             services.AddHttpClient(Consts.WeChatMiniProgramHttpClientName, client =>
             {
                 //微信小程序支付内部通过此httpClient来发起请求，这里可以统一对client进行配置
             });
+
             return services.AddSingleton<AccessTokenProvider>();
         }
     }
