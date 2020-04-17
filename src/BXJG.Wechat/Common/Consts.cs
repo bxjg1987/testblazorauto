@@ -9,5 +9,7 @@ namespace BXJG.WeChat.Common
         public const string WeChatMiniProgramHttpClientName = "WeChatMiniProgramHttpClientName";
 
         public const string AccessTokenUrl = "https://api.weixin.qq.com/cgi-bin/token";
+
+        public const string TemplateMessageClaimType = "TemplateIdList";
     }
 }
