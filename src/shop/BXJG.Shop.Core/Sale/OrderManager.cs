@@ -92,6 +92,7 @@ namespace BXJG.Shop.Sale
                 Status = OrderStatus.Created,
                 CustomerRemark = customerRemark,
                 InvoiceRequired = invoiceRequired,
+                PaymentStatus = PaymentStatus.WaitingForPayment
             };
             //MerchandiseSubtotal 商品小计
             //DistributionFee 配送费 简单的情况 可以让 后台管理员确认订单时录入配送费；合理的情况是根据购买的商品自动计算
