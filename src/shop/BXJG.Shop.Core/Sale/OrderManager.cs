@@ -1,14 +1,19 @@
 ﻿using Abp.Authorization.Users;
 using Abp.Domain.Repositories;
 using Abp.Domain.Services;
+using Abp.Extensions;
 using Abp.Runtime.Session;
 using Abp.UI;
 using BXJG.Shop.Catalogue;
 using BXJG.Shop.Customer;
+using BXJG.Utils.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using BXJG.Utils.Extensions;
+using System.Threading;
+using Abp.Threading;
 
 namespace BXJG.Shop.Sale
 {
@@ -48,52 +53,79 @@ namespace BXJG.Shop.Sale
         protected readonly IRepository<OrderEntity<TUser>, long> repository;
         protected readonly IRepository<CustomerEntity<TUser>, long> customerRepository;
         protected readonly CustomerManager<TUser> customerManager;
-        protected readonly IAbpSession session;
+        //领域层不应该访问session  protected readonly IAbpSession session;
 
         public OrderManager(
             IRepository<OrderEntity<TUser>, long> repository,
             IRepository<CustomerEntity<TUser>, long> customerRepository,
-            CustomerManager<TUser> customerManager,
-            IAbpSession session
-            )
+            CustomerManager<TUser> customerManager)
         {
             this.repository = repository;
             this.customerRepository = customerRepository;
             this.customerManager = customerManager;
-            this.session = session;
         }
 
         public async Task<OrderEntity<TUser>> CreateAsync(
-            CustomerEntity<TUser> customer = null,
+            CustomerEntity<TUser> customer,
+            string consignee,
+            string consigneePhoneNumber,
+            string receivingAddress,
             DateTimeOffset? orderTime = null,
             string customerRemark = null,
             bool invoiceRequired = false,
-            string consignee = "",
             params OrderItemInput[] items)
         {
-            if (customer == null)
-            {
-                //if (!session.UserId.HasValue)
-                //    throw new ApplicationException("创建订单时无法确定购买客户");
-                //else
-                //   await customerRepository.SingleByUserIdWithoutUserAsync(session.UserId.Value);
+            #region 各参数基本验证
+            //前端、Controller都验证过了，反反复复验证没必要，依赖数据库的非空就够了
+            //consignee.RequiredValidate(nameof(consignee));
+            //consigneePhoneNumber.RequiredValidate(nameof(consigneePhoneNumber));
+            //receivingAddress.RequiredValidate(nameof(receivingAddress));
+            if (items == null || items.Length == 0)
+                throw new ArgumentNullException(nameof(items));
+            #endregion
 
-                //session.GetUserId()会报异常的
-                await customerManager.GetCurrentWithoutUserAsync();
-            }
+            #region 顾客处理
+            //领域层不应付访问session
+            //if (customer == null)
+            //    await customerManager.GetCurrentWithoutUserAsync(); //session.GetUserId()会报异常的
             //顾客的各种业务逻辑判断，比如是否是黑名单顾客
+            #endregion
 
+            #region 订单时间
+            //所在服务器的当前时间未必准确
+            //abp官方文档 提供了时间处理方案 https://aspnetboilerplate.com/Pages/Documents/Timing
+            //.net后来提供的DateTimeOffset也许已经处理了这个问题
+            if (!orderTime.HasValue)
+                orderTime = DateTimeOffset.Now;
+            #endregion
 
+            //所有业务判断都成功时才创建订单对象
             var order = new OrderEntity<TUser>
             {
                 Customer = customer,
                 CustomerId = customer.Id,
                 OrderNo = Guid.NewGuid().ToString("N"),//将来再考虑用个专门的组件生产简单、不重复的订单号
+                OrderTime = orderTime.Value,
                 Status = OrderStatus.Created,
                 CustomerRemark = customerRemark,
+
                 InvoiceRequired = invoiceRequired,
-                PaymentStatus = PaymentStatus.WaitingForPayment
+                PaymentStatus = PaymentStatus.WaitingForPayment,
+
+                Consignee = consignee,
+                ConsigneePhoneNumber = consigneePhoneNumber,
+                ReceivingAddress = receivingAddress,
             };
+
+            #region 订单明细
+           
+            foreach (var item in items)
+            {
+
+
+            }
+            #endregion
+
             //MerchandiseSubtotal 商品小计
             //DistributionFee 配送费 简单的情况 可以让 后台管理员确认订单时录入配送费；合理的情况是根据购买的商品自动计算
             //InvoiceTax 发票税金

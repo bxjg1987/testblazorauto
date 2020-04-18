@@ -17,12 +17,13 @@ namespace BXJG.Shop.Customer
         where TUser : AbpUserBase
     {
         protected readonly IRepository<CustomerEntity<TUser>, long> repository;
-        protected readonly IAbpSession session;
+        //领域层 不应该访问Session
+        //protected readonly IAbpSession session;
 
         public CustomerManager(IRepository<CustomerEntity<TUser>, long> repository, IAbpSession session)
         {
             this.repository = repository;
-            this.session = session;
+
         }
         /// <summary>
         /// 根据用户id获取关联的顾客实体，同时加载用户实体
@@ -42,23 +43,23 @@ namespace BXJG.Shop.Customer
         {
             return repository.SingleByUserIdWithoutUserAsync<TUser>(userId);
         }
-        /// <summary>
-        /// 获取当前登录用户关联的顾客实体,不加载用户实体
-        /// 若是匿名用户则报异常
-        /// </summary>
-        /// <returns></returns>
-        public Task<CustomerEntity<TUser>> GetCurrentWithoutUserAsync()
-        {
-            return SingleByUserIdWithoutUserAsync(session.GetUserId());
-        }
-        /// <summary>
-        /// 获取当前登录用户关联的顾客实体,同时加载用户实体
-        /// 若是匿名用户则报异常
-        /// </summary>
-        /// <returns></returns>
-        public Task<CustomerEntity<TUser>> GetCurrentWithUserAsync()
-        {
-            return SingleByUserIdWithUserAsync(session.GetUserId());
-        }
+        ///// <summary>
+        ///// 获取当前登录用户关联的顾客实体,不加载用户实体
+        ///// 若是匿名用户则报异常
+        ///// </summary>
+        ///// <returns></returns>
+        //public Task<CustomerEntity<TUser>> GetCurrentWithoutUserAsync()
+        //{
+        //    return SingleByUserIdWithoutUserAsync(session.GetUserId());
+        //}
+        ///// <summary>
+        ///// 获取当前登录用户关联的顾客实体,同时加载用户实体
+        ///// 若是匿名用户则报异常
+        ///// </summary>
+        ///// <returns></returns>
+        //public Task<CustomerEntity<TUser>> GetCurrentWithUserAsync()
+        //{
+        //    return SingleByUserIdWithUserAsync(session.GetUserId());
+        //}
     }
 }

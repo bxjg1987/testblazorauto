@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZLJ.Utils.Extensions
+namespace BXJG.Utils.Extensions
 {
    public static  class StringExtension
     {

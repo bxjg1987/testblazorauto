@@ -8,6 +8,7 @@ using Abp.IdentityFramework;
 using Abp.Linq;
 using Abp.MultiTenancy;
 using Abp.Runtime.Session;
+using Abp.Threading;
 using Microsoft.AspNetCore.Identity;
 namespace BXJG.Shop
 {
@@ -25,7 +26,8 @@ namespace BXJG.Shop
         public TTenantManager TenantManager { get; set; }
 
         public TUserManager UserManager { get; set; }
-
+        //参考BXJGShopDomainServiceBase中的注释
+        //public ICancellationTokenProvider CancellationToken { get; set; } = NullCancellationTokenProvider.Instance;
         protected BXJGShopAppServiceBase()
         {
             LocalizationSourceName = BXJGShopConsts.LocalizationSourceName;

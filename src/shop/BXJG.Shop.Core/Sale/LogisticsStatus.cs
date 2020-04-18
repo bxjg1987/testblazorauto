@@ -10,9 +10,9 @@ namespace BXJG.Shop.Sale
     public enum LogisticsStatus
     {
         /// <summary>
-        /// 不需要运送
+        /// 待发货
         /// </summary>
-        Unwanted,
+        WaitShip,
         /// <summary>
         /// 已发货
         /// </summary>
@@ -24,6 +24,10 @@ namespace BXJG.Shop.Sale
         /// <summary>
         /// 已拒收
         /// </summary>
-        Rejected
+        Rejected,
+        /// <summary>
+        /// 不需要运送
+        /// </summary>
+        Unwanted
     }
 }

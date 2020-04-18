@@ -6,6 +6,7 @@ using BXJG.Shop.Customer;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text;
 
 namespace BXJG.Shop.Sale
@@ -124,7 +125,12 @@ namespace BXJG.Shop.Sale
         /// </summary>
         //[MaxLength(OrderNoMaxLength)] api中定义了
         public string OrderNo { get; set; }
-        //public DateTimeOffset CreateTime { get; set; }//直接用继承来的CreateDate
+        /// <summary>
+        /// 下单时间
+        /// 虽然父类已经有了CreateDate，但是类型为DateTime。况且CreateDate是表示这条信息的创建时间，OrderTime是下单业务发生的时间
+        /// </summary>
+        public DateTimeOffset OrderTime { get; set; }
+
         /// <summary>
         /// 订单状态
         /// </summary>
@@ -139,6 +145,8 @@ namespace BXJG.Shop.Sale
         #region 支付信息
         /// <summary>
         /// 商品小计
+        /// 一个订单的中的多个商品价格相加的价格，但是商品列表可能随时在变动，所以这个属性只代表数据库中的商品小计字段的值
+        /// 可以通过对应的方法来根据商品列表计算得到商品小计
         /// </summary>
         public decimal MerchandiseSubtotal { get; set; }
         /// <summary>
@@ -173,8 +181,10 @@ namespace BXJG.Shop.Sale
         public decimal PaymentAmount { get; set; }
         /// <summary>
         /// 支付状态
+        /// 某些场景下，并不是顾客下单就可以付款，而是需要后台审核后才能付款
+        /// 因此使用? 表示此时订单处于不可付款状态，也就是没有付款状态
         /// </summary>
-        public PaymentStatus PaymentStatus { get; set; } 
+        public PaymentStatus? PaymentStatus { get; set; }
         #endregion
 
         #region 物流配送
@@ -193,12 +203,12 @@ namespace BXJG.Shop.Sale
         /// 收货地址
         /// </summary>
         public string ReceivingAddress { get; set; }
+        ///// <summary>
+        ///// 已弃用，京东没有这个字段
+        ///// </summary>
+        //public string ZipCode { get; set; }
         /// <summary>
-        /// 已弃用，京东没有这个字段
-        /// </summary>
-        public string ZipCode { get; set; }
-        /// <summary>
-        /// 支付方式
+        /// 配送方式
         /// </summary>
         public BXJGShopDictionaryEntity DistributionMethod { get; set; }
         /// <summary>
@@ -239,6 +249,16 @@ namespace BXJG.Shop.Sale
         //        };
         //    }
         //}
+
+        /// <summary>
+        /// 计算商品小计
+        /// 商品列表中的单价之和
+        /// </summary>
+        /// <returns></returns>
+        public decimal CalculationMerchandiseSubtotal()
+        {
+            return Items.Sum(c => c.Price);
+        }
         #endregion
     }
 }
