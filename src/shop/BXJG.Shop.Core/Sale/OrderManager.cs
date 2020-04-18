@@ -77,15 +77,17 @@ namespace BXJG.Shop.Sale
         {
             #region 各参数基本验证
             //前端、Controller都验证过了，反反复复验证没必要，依赖数据库的非空就够了
+            //假如调用多个方法 都会传入同一个参数，那么在上层验证更合适
+            //直接使用，不加判断，大不了使用时异常
             //consignee.RequiredValidate(nameof(consignee));
             //consigneePhoneNumber.RequiredValidate(nameof(consigneePhoneNumber));
             //receivingAddress.RequiredValidate(nameof(receivingAddress));
-            if (items == null || items.Length == 0)
-                throw new ArgumentNullException(nameof(items));
+            //if (items == null || items.Length == 0)
+            //    throw new ArgumentNullException(nameof(items));
             #endregion
 
             #region 顾客处理
-            //领域层不应付访问session
+            //领域层不应访问session
             //if (customer == null)
             //    await customerManager.GetCurrentWithoutUserAsync(); //session.GetUserId()会报异常的
             //顾客的各种业务逻辑判断，比如是否是黑名单顾客
@@ -118,17 +120,29 @@ namespace BXJG.Shop.Sale
             };
 
             #region 订单明细
-           
+            order.Items = new List<OrderItemEntity<TUser>>();
             foreach (var item in items)
             {
-
-
+                var product = new OrderItemEntity<TUser>
+                {
+                    Amount = item.Quantity * item.Item.Price,
+                    Image = item.Item.GetImages()[0],
+                    Integral = item.Item.Integral,
+                    Item = item.Item,
+                    ItemId = item.Item.Id,
+                    Order = order,
+                    Price = item.Item.Price,
+                    Quantity = item.Quantity,
+                    Title = item.Item.Title,
+                    TotalIntegral = Convert.ToInt32(item.Item.Integral * item.Quantity)
+                };
+                order.Items.Add(product);
             }
             #endregion
-
-            //MerchandiseSubtotal 商品小计
+            order.CalculationMerchandiseSubtotal(true);//计算并设置商品小计
+            
             //DistributionFee 配送费 简单的情况 可以让 后台管理员确认订单时录入配送费；合理的情况是根据购买的商品自动计算
-            //InvoiceTax 发票税金
+            //InvoiceTax 发票税金 https://gitee.com/bxjg1987/abp/wikis/%E9%85%8D%E7%BD%AE%E5%8A%9F%E8%83%BD?sort_id=2127088
 
             await repository.InsertAsync(order);
             await CurrentUnitOfWork.SaveChangesAsync();//保存，以获得新的自增id

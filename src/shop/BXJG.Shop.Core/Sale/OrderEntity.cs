@@ -254,10 +254,14 @@ namespace BXJG.Shop.Sale
         /// 计算商品小计
         /// 商品列表中的单价之和
         /// </summary>
+        /// <param name="d">是否更新MerchandiseSubtotal属性</param>
         /// <returns></returns>
-        public decimal CalculationMerchandiseSubtotal()
+        public decimal CalculationMerchandiseSubtotal(bool d = false)
         {
-            return Items.Sum(c => c.Price);
+            var val = Items.Sum(c => c.Price);
+            if (d)
+                this.MerchandiseSubtotal = val;
+            return val;
         }
         #endregion
     }

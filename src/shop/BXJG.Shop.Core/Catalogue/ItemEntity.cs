@@ -156,11 +156,13 @@ namespace BXJG.Shop.Catalogue
         /// <summary>
         /// 上架时间
         /// 已发布且当前时间处于上/下架范围内时才会显示在前端
+        /// 若不设置，则不限制上架开始时间
         /// </summary>
         public DateTimeOffset? AvailableStart { get; set; }
         /// <summary>
         /// 下架时间
         /// 已发布且当前时间处于上/下架范围内时才会显示在前端
+        /// 若不设置则不限制上架结束时间
         /// </summary>
         public DateTimeOffset? AvailableEnd { get; set; }
         #endregion
@@ -185,6 +187,10 @@ namespace BXJG.Shop.Catalogue
         public void Publish(DateTimeOffset yxq = default, long js = 60 * 60 * 24 * 365 * 10)
         {
             Publish(yxq, yxq.AddSeconds(js));
+        }
+
+        public string[] GetImages() {
+            return Images.Split(',');
         }
         #endregion
     }

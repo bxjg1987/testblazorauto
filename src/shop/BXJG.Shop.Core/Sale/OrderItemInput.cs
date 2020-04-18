@@ -27,7 +27,7 @@ namespace BXJG.Shop.Sale
         /// <summary>
         /// 数量
         /// </summary>
-        public decimal Count { get; set; }
+        public decimal Quantity { get; set; }
 
         //不要定义无参的构造函数，不包含的购买的产品或数量 此对象都不是一个有意义的对象
         //public OrderItemInput(){}
@@ -36,11 +36,11 @@ namespace BXJG.Shop.Sale
         /// 实例化订单明细创建项
         /// </summary>
         /// <param name="itemEntity">商品上架信息</param>
-        /// <param name="count">要购买的数量</param>
-        public OrderItemInput(ItemEntity itemEntity, decimal count)
+        /// <param name="quantity">要购买的数量</param>
+        public OrderItemInput(ItemEntity itemEntity, decimal quantity)
         {
             this.Item = itemEntity;
-            this.Count = count;
+            this.Quantity = quantity;
 
             //此次倒是可以对ItemEntity进行数据校验
             //判断库存是否够，需要使用到其它组件的功能，因此不要放这里面
