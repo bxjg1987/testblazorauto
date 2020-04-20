@@ -16,11 +16,11 @@ namespace BXJG.Shop.EFMaps
     {
         public void Configure(EntityTypeBuilder<OrderEntity<TUser>> builder)
         {
-            builder.Property(c => c.OrderNo).HasColumnType($"varchar({OrderEntity<TUser>.OrderNoMaxLength})");
+            builder.Property(c => c.OrderNo).IsRequired(true).HasColumnType($"varchar({OrderEntity<TUser>.OrderNoMaxLength})");
             builder.Property(c => c.CustomerRemark).HasMaxLength(OrderEntity<TUser>.CustomerRemarkMaxLength);
-            builder.Property(c => c.Consignee).HasMaxLength(OrderEntity<TUser>.ConsigneeMaxLength);
-            builder.Property(c => c.ConsigneePhoneNumber).HasColumnType($"varchar({OrderEntity<TUser>.ConsigneePhoneNumberMaxLength})");
-            builder.Property(c => c.ReceivingAddress).HasMaxLength(OrderEntity<TUser>.ReceivingAddressMaxLength);
+            builder.Property(c => c.Consignee).IsRequired(true).HasMaxLength(OrderEntity<TUser>.ConsigneeMaxLength);
+            builder.Property(c => c.ConsigneePhoneNumber).IsRequired(true).HasColumnType($"varchar({OrderEntity<TUser>.ConsigneePhoneNumberMaxLength})");
+            builder.Property(c => c.ReceivingAddress).IsRequired(true).HasMaxLength(OrderEntity<TUser>.ReceivingAddressMaxLength);
             builder.Property(c => c.LogisticsNumber).HasColumnType($"varchar({OrderEntity<TUser>.LogisticsNumberMaxLength})");
             builder.Property(c => c.RowVersion).IsRowVersion();
         }

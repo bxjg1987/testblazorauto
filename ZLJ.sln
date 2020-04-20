@@ -56,11 +56,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BXJG.WeChat.ABP", "src\BXJG
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shop", "Shop", "{5CB7E57D-5618-4434-B500-15DDCCDDCCF1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BXJG.Shop.Core", "src\shop\BXJG.Shop.Core\BXJG.Shop.Core.csproj", "{61ED052E-E29E-433E-999C-A4BEED9F46E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Shop.Core", "src\shop\BXJG.Shop.Core\BXJG.Shop.Core.csproj", "{61ED052E-E29E-433E-999C-A4BEED9F46E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BXJG.Shop.Application", "src\shop\BXJG.Shop.Application\BXJG.Shop.Application.csproj", "{0482C67A-5001-4602-B93B-8D2F52221163}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Shop.Application", "src\shop\BXJG.Shop.Application\BXJG.Shop.Application.csproj", "{0482C67A-5001-4602-B93B-8D2F52221163}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BXJG.Shop.EFCore", "src\shop\BXJG.Shop.EFCore\BXJG.Shop.EFCore.csproj", "{AD66AD3C-950E-42AE-BCA6-B6D1DEF4A956}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Shop.EFCore", "src\shop\BXJG.Shop.EFCore\BXJG.Shop.EFCore.csproj", "{AD66AD3C-950E-42AE-BCA6-B6D1DEF4A956}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{48232CB6-562B-44BB-912B-3ED71CCE455E}"
+	ProjectSection(SolutionItems) = preProject
+		docs\规范.txt = docs\规范.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

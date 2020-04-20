@@ -16,6 +16,10 @@ namespace BXJG.Shop.Customer
      * 
      * 经过测试发现不用泛型行不通
      */
+    /// <summary>
+    /// 商城系统中的顾客
+    /// </summary>
+    /// <typeparam name="TUser"></typeparam>
     public class CustomerEntity<TUser> : FullAuditedEntity<long>, IMustHaveTenant
         where TUser : AbpUserBase //因为内部可能包含领域逻辑，因此加约束更方便
     {
@@ -47,5 +51,10 @@ namespace BXJG.Shop.Customer
         /// 出生日期
         /// </summary>
         public DateTimeOffset Birthday { get; set; }
+        /// <summary>
+        /// 积分、余额等处理时可能存在并发处理
+        /// 最好的办法是在要处理的字段上加并发控制，以减小并发冲突的几率，但是目前一切从简先用行并发控制
+        /// </summary>
+        public byte[] RowVersion { get; set; }
     }
 }

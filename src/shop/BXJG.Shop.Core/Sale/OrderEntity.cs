@@ -127,7 +127,7 @@ namespace BXJG.Shop.Sale
         public string OrderNo { get; set; }
         /// <summary>
         /// 下单时间
-        /// 虽然父类已经有了CreateDate，但是类型为DateTime。况且CreateDate是表示这条信息的创建时间，OrderTime是下单业务发生的时间
+        /// 虽然父类已经有了CreateDate，但是类型为DateTime。况且CreateDate是表示这条信息的创建时间，OrderTime是下单业务发生的时间，这是两个不一样的概念
         /// </summary>
         public DateTimeOffset OrderTime { get; set; }
 
@@ -138,7 +138,6 @@ namespace BXJG.Shop.Sale
         /// <summary>
         /// 顾客下单时填写的备注
         /// </summary>
-        [MaxLength(CustomerRemarkMaxLength)]
         public string CustomerRemark { get; set; }
         #endregion
 
@@ -149,18 +148,28 @@ namespace BXJG.Shop.Sale
         /// 可以通过对应的方法来根据商品列表计算得到商品小计
         /// </summary>
         public decimal MerchandiseSubtotal { get; set; }
-        /// <summary>
-        /// 配送费
-        /// </summary>
-        public decimal DistributionFee { get; set; }
-        /// <summary>
-        /// 是否需要开票
-        /// </summary>
-        public bool InvoiceRequired { get; set; }
-        /// <summary>
-        /// 发票税金
-        /// </summary>
-        public decimal InvoiceTax { get; set; }
+        ///// <summary>
+        ///// 配送费
+        ///// </summary>
+        //public decimal DistributionFee { get; set; }
+
+        ///// <summary>
+        ///// 是否需要开票
+        ///// </summary>
+        //public InvoiceType InvoiceType { get; set; }
+        ///// <summary>
+        ///// 发票抬头
+        ///// </summary>
+        //public string InvoiceTitle { get; set; }
+        ///// <summary>
+        ///// 税号
+        ///// </summary>
+        //public string TaxId { get; set; }
+        ///// <summary>
+        ///// 发票税金
+        ///// </summary>
+        //public decimal InvoiceTax { get; set; }
+
         /// <summary>
         /// 可得积分
         /// </summary>
@@ -229,8 +238,9 @@ namespace BXJG.Shop.Sale
 
         /// <summary>
         /// 订单商品明细
+        /// 由于无商品明细的订单是没有意义的，因此初始化时直接实例化了，直接用不用担心null问题
         /// </summary>
-        public virtual IList<OrderItemEntity<TUser>> Items { get; set; }
+        public virtual IList<OrderItemEntity<TUser>> Items { get; set; } = new List<OrderItemEntity<TUser>>();
 
         //订单跟踪
 
@@ -250,13 +260,16 @@ namespace BXJG.Shop.Sale
         //    }
         //}
 
+
         /// <summary>
         /// 计算商品小计
         /// 商品列表中的单价之和
+        /// 当查询时MerchandiseSubtotal表示数据库存储的值，被这里的结算结果覆盖是正常的
+        /// 即便不覆盖 我们的代码任意位置也可以对MerchandiseSubtotal赋值
         /// </summary>
         /// <param name="d">是否更新MerchandiseSubtotal属性</param>
         /// <returns></returns>
-        public decimal CalculationMerchandiseSubtotal(bool d = false)
+        public decimal CalculationMerchandiseSubtotal(bool d = true)
         {
             var val = Items.Sum(c => c.Price);
             if (d)

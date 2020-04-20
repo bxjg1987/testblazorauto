@@ -1,4 +1,5 @@
 ﻿using Abp.Domain.Services;
+using Abp.Events.Bus;
 using Abp.Threading;
 using System;
 using System.Collections.Generic;
@@ -17,9 +18,12 @@ namespace BXJG.Shop
         //由于大部异步操作都是基于本地数据库的，因此只有特殊场景才需要这个，所以抽象类中不要定义这个
         //public ICancellationTokenProvider CancellationToken { get; set; } = NullCancellationTokenProvider.Instance;
 
+        public IEventBus EventBus { get; set; }//属性注入 必须public
+
         public BXJGShopDomainServiceBase()
         {
             base.LocalizationSourceName = BXJGShopConsts.LocalizationSourceName;
+            EventBus = NullEventBus.Instance;//空模式
         }
     }
 }

@@ -45,5 +45,31 @@ namespace BXJG.Shop.Sale
             //此次倒是可以对ItemEntity进行数据校验
             //判断库存是否够，需要使用到其它组件的功能，因此不要放这里面
         }
+        /// <summary>
+        /// 计算售价金额
+        /// 定义成方法而不是属性，这样调用方明确知道此逻辑是每次计算的
+        /// </summary>
+        /// <returns></returns>
+        public decimal CalculationAmount()
+        {
+            return Item.Price * Quantity;
+        }
+        /// <summary>
+        /// 计算原价金额
+        /// 定义成方法而不是属性，这样调用方明确知道此逻辑是每次计算的
+        /// </summary>
+        /// <returns></returns>
+        public decimal CalculationOldAmount()
+        {
+            return Item.OldPrice * Quantity;
+        }
+        /// <summary>
+        /// 计算积分
+        /// </summary>
+        /// <returns></returns>
+        public int CalculationIntegral()
+        {
+            return Convert.ToInt32(Item.Integral * Quantity);
+        }
     }
 }
