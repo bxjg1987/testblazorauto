@@ -3,6 +3,8 @@ using Abp.Domain.Entities;
 using BXJG.Shop.Catalogue;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Policy;
 using System.Text;
 
 namespace BXJG.Shop.Sale
@@ -14,68 +16,128 @@ namespace BXJG.Shop.Sale
      * 但是将来可能不遵循ddd，而直接操作订单明细，因此在订单明细上也加个并发控制字段
      * 原本应该只给关键字段，如数量、金额之类的的字段加并发控制，但是比较麻烦，现在就直接使用rowVersion来做吧
      * 
-     * 恶心的泛型
+     * 订单中的商品 数量 价格信息一旦购买后就说明成交了，不允许任意调整
+     * 非要调整 应该定义单独的方法，调整需要有操作日志之类的，且这种日志必须使用数据库日志，与业务记录保持在同一个事务
      */
 
     /// <summary>
-    /// 订单中的产品信息
+    /// 订单中的产品和数量信息，将来可能包含更多信息
+    /// 目前所有属性私有化，将来根据业务需要 提供相应的业务方法
     /// </summary>
     public class OrderItemEntity<TUser> : Entity
-        where TUser:AbpUserBase
+        where TUser : AbpUserBase
     {
+        private OrderItemEntity() { }//ef专用
+        /// <summary>
+        /// 创建一个顾客购买的产品信息
+        /// 它是一张订单中的产品条码，包含商品信息 和 数量
+        /// </summary>
+        /// <param name="order">所属订单</param>
+        /// <param name="item">关联的商品/上架信息</param>
+        /// <param name="quantity">数量</param>
+        /// <param name="title">商品标题，若不填则取商品信息的同名属性</param>
+        /// <param name="image">商品封面图，若不填则取商品信息的第一张图片</param>
+        /// <param name="price">商品单价，若不填则取商品信息的同名属性</param>
+        /// <param name="integral">商品积分，若不填则取商品信息的同名属性</param>
+        /// <param name="amount">商品金额，若不填则取商品信息单价*数量</param>
+        /// <param name="totalIntegral">商品积分，若不填则取商品信息积分*数量</param>
+        public OrderItemEntity(
+            OrderEntity<TUser> order,
+            ItemEntity item,
+            decimal quantity,
+            string title = "",
+            string image = "",
+            decimal? price = default,
+            int? integral = default,
+            decimal? amount = default,
+            int? totalIntegral = default)
+        {
+            Order = order;
+            Item = item;
+            Quantity = quantity;
+            //OrderId = order.Id; //新增时没有
+            ItemId = item.Id;
+            Title = title ?? item.Title;
+            Image = image ?? item.GetImages().FirstOrDefault();
+            Price = price ?? item.Price;
+            Integral = integral ?? item.Integral;
+            Amount = amount ?? CalculationAmount();
+            TotalIntegral = totalIntegral ?? CalculationTotalIntegral();
+        }
+
         /// <summary>
         /// 关联的订单Id
         /// </summary>
-        public long OrderId { get; set; }
+        public long OrderId { get; private set; }
         /// <summary>
         /// 关联的订单实体
         /// </summary>
-        public virtual OrderEntity<TUser> Order { get; set; }
+        public virtual OrderEntity<TUser> Order { get; private set; }
         /// <summary>
         /// 关联的商品上架信息Id
         /// </summary>
-        public long ItemId { get; set; }
+        public long ItemId { get; private set; }
         /// <summary>
         /// 关联的商品上架信息
         /// </summary>
-        public virtual ItemEntity Item { get; set; }
+        public virtual ItemEntity Item { get; private set; }
         /// <summary>
         /// 产品标题
         /// </summary>
-        public string Title { get; set; }
+        public string Title { get; private set; }
         /// <summary>
         /// 产品图片
         /// 与商品上架信息不同，这里只需要单张图片
         /// </summary>
-        public string Image { get; set; }
+        public string Image { get; private set; }
         /// <summary>
         /// 单价
         /// </summary>
-        public decimal Price { get; set; }
+        public decimal Price { get; private set; }
         /// <summary>
         /// 数量
         /// </summary>
-        public decimal Quantity { get; set; }
+        public decimal Quantity { get; private set; }
         /// <summary>
         /// 积分
         /// </summary>
-        public int Integral { get; set; }
+        public int Integral { get; private set; }
 
         //以下汇总信息是方便将来统计查询
 
         /// <summary>
         /// 金额
         /// </summary>
-        public decimal Amount { get; set; }
+        public decimal Amount { get; private set; }
         /// <summary>
         /// 总积分
         /// </summary>
-        public int TotalIntegral { get; set; }
-
+        public int TotalIntegral { get; private set; }
         /// <summary>
         /// 乐观并发控制标记
         /// https://docs.microsoft.com/zh-cn/ef/core/modeling/concurrency?tabs=data-annotations
         /// </summary>
-        public byte[] RowVersion { get; set; }
+        public byte[] RowVersion { get; private set; }
+
+        #region 方法
+        /// <summary>
+        /// 计算总金额
+        /// 单价 * 数量
+        /// </summary>
+        /// <returns></returns>
+        public decimal CalculationAmount()
+        {
+            return Price * Quantity;
+        }
+        /// <summary>
+        /// 计算总积分
+        /// 积分 * 数量
+        /// </summary>
+        /// <returns></returns>
+        public int CalculationTotalIntegral()
+        {
+            return Convert.ToInt32(Integral * Quantity);
+        }
+        #endregion
     }
 }

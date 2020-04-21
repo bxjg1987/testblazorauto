@@ -1,6 +1,8 @@
 ﻿using Abp.Authorization.Users;
 using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
+using Abp.Events.Bus;
+using BXJG.Shop.Catalogue;
 using BXJG.Shop.Common;
 using BXJG.Shop.Customer;
 using System;
@@ -8,6 +10,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BXJG.Shop.Sale
 {
@@ -108,33 +111,33 @@ namespace BXJG.Shop.Sale
         public const int ZipCodeMaxLength = 50;
         public const int LogisticsNumberMaxLength = 50;
 
-        public int TenantId { get; set; }
+        public int TenantId { get; set; }//应该私有化，但受IMustHaveTenant限制，只能public
 
         #region 订单信息
         /// <summary>
         /// 关联的顾客的Id
         /// </summary>
-        public long CustomerId { get; set; }
+        public long CustomerId { get; private set; }
         /// <summary>
         /// 关联的顾客的实体
         /// 注意顾客与User是一对一关联的
         /// </summary>
-        public virtual CustomerEntity<TUser> Customer { get; set; }
+        public virtual CustomerEntity<TUser> Customer { get; private set; }
         /// <summary>
         /// 订单号
         /// </summary>
         //[MaxLength(OrderNoMaxLength)] api中定义了
-        public string OrderNo { get; set; }
+        public string OrderNo { get; private set; }
         /// <summary>
         /// 下单时间
         /// 虽然父类已经有了CreateDate，但是类型为DateTime。况且CreateDate是表示这条信息的创建时间，OrderTime是下单业务发生的时间，这是两个不一样的概念
         /// </summary>
-        public DateTimeOffset OrderTime { get; set; }
+        public DateTimeOffset OrderTime { get; private set; }
 
         /// <summary>
         /// 订单状态
         /// </summary>
-        public OrderStatus Status { get; set; }
+        public OrderStatus Status { get; private set; }
         /// <summary>
         /// 顾客下单时填写的备注
         /// </summary>
@@ -147,7 +150,7 @@ namespace BXJG.Shop.Sale
         /// 一个订单的中的多个商品价格相加的价格，但是商品列表可能随时在变动，所以这个属性只代表数据库中的商品小计字段的值
         /// 可以通过对应的方法来根据商品列表计算得到商品小计
         /// </summary>
-        public decimal MerchandiseSubtotal { get; set; }
+        public decimal MerchandiseSubtotal { get; private set; }
         ///// <summary>
         ///// 配送费
         ///// </summary>
@@ -173,27 +176,27 @@ namespace BXJG.Shop.Sale
         /// <summary>
         /// 可得积分
         /// </summary>
-        public long Integral { get; set; }
+        public long Integral { get; private set; }
         /// <summary>
         /// 支付方式
         /// </summary>
-        public BXJGShopDictionaryEntity PaymentMethod { get; set; }
+        public BXJGShopDictionaryEntity PaymentMethod { get; private set; }
         /// <summary>
         /// 支付方式Id
         /// 未支付时 就不存在支付方式，因此可空
         /// </summary>
-        public long? PaymentMethodId { get; set; }
+        public long? PaymentMethodId { get; private set; }
         /// <summary>
         /// 付款金额
         /// 顾客最终支付金额
         /// </summary>
-        public decimal PaymentAmount { get; set; }
+        public decimal PaymentAmount { get; private set; }
         /// <summary>
         /// 支付状态
         /// 某些场景下，并不是顾客下单就可以付款，而是需要后台审核后才能付款
         /// 因此使用? 表示此时订单处于不可付款状态，也就是没有付款状态
         /// </summary>
-        public PaymentStatus? PaymentStatus { get; set; }
+        public PaymentStatus? PaymentStatus { get; private set; }
         #endregion
 
         #region 物流配送
@@ -236,31 +239,104 @@ namespace BXJG.Shop.Sale
         public LogisticsStatus? LogisticsStatus { get; set; }
         #endregion
 
+        #region 商品列表
+
+        //订单明细应该自定义一个实现ICollection的集合
+
+        private List<OrderItemEntity<TUser>> items;
         /// <summary>
         /// 订单商品明细
         /// 由于无商品明细的订单是没有意义的，因此初始化时直接实例化了，直接用不用担心null问题
         /// </summary>
-        public virtual IList<OrderItemEntity<TUser>> Items { get; set; } = new List<OrderItemEntity<TUser>>();
+        public virtual IReadOnlyList<OrderItemEntity<TUser>> Items
+        {
+            get
+            {
+                return items.AsReadOnly();
+            }
+            private set { items = value.ToList(); }//给ef用的
+        }
+
+        #endregion
 
         //订单跟踪
 
         /// <summary>
         /// 乐观并发
         /// </summary>
-        public byte[] RowVersion { get; set; }
+        public byte[] RowVersion { get; private set; }
+
+        private IEventBus eventBus;
+
+        private OrderEntity() { }//给ef用的
+
+        public OrderEntity(
+            CustomerEntity<TUser> customer,
+            IEventBus eventBus = null,
+            string orderNo = "",
+            DateTimeOffset? orderTime = default,
+            string customerRemark = "",
+            params (ItemEntity item, decimal quantity)[] items)
+        {
+            if (eventBus == null)
+                this.eventBus = NullEventBus.Instance;
+
+            this.Customer = customer;
+            this.CustomerId = customer.Id;
+            this.OrderNo = string.IsNullOrWhiteSpace(orderNo) ? Guid.NewGuid().ToString() : orderNo;
+            this.OrderTime = orderTime ?? DateTimeOffset.Now;
+            this.Status = OrderStatus.Created;
+            this.CustomerRemark = customerRemark;
+            this.items = new List<OrderItemEntity<TUser>>();
+            foreach (var item in items)
+            {
+                this.items.Add(BuildItem(item.item, item.quantity));
+            }
+        }
 
         #region 方法
-        //public OrderEntity<TUser> AddItems(params OrderItemInput[] items) {
-        //    if (Items == null)
-        //        Items = new List<OrderItemEntity<TUser>>();
-        //    foreach (var item in items)
-        //    {
-        //        var itemEntity = new OrderItemEntity<TUser> { 
-        //        };
-        //    }
-        //}
 
-
+        private OrderItemEntity<TUser> BuildItem(ItemEntity item, decimal quantity)
+        {
+            var orderItem = new OrderItemEntity<TUser>();
+            orderItem.Order = this;
+            orderItem.Amount = item.Price * quantity;
+            orderItem.Image = item.GetImages().First();
+            orderItem.Integral = Convert.ToInt32(item.Integral * quantity);
+            return orderItem;
+        }
+        /// <summary>
+        /// 添加商品明细
+        /// </summary>
+        /// <param name="items">商品/上架和数量信息（c#元组）</param>
+        /// <returns></returns>
+        public async Task<IEnumerable<OrderItemEntity<TUser>>> AddItemAsync(params (ItemEntity item, decimal quantity)[] items)
+        {
+            var list = new List<OrderItemEntity<TUser>>();
+            foreach (var item in items)
+            {
+                list.Add(await AddItemAsync(item.item, item.quantity));
+            }
+            return list;
+        }
+        /// <summary>
+        /// 添加订单明细
+        /// </summary>
+        /// <param name="item">商品/上架信息</param>
+        /// <param name="quantity">数量</param>
+        /// <returns></returns>
+        public Task<OrderItemEntity<TUser>> AddItemAsync(ItemEntity item, decimal quantity)
+        {
+            var orderItem = new OrderItemEntity<TUser>();
+            orderItem.Order = this;
+            orderItem.Amount = item.Price * quantity;
+            orderItem.Image = item.GetImages().First();
+            orderItem.Integral = Convert.ToInt32(item.Integral * quantity);
+            //触发订单明细添加前事件
+            this.items.Add(orderItem);
+            //触发订单明细添加后事件
+            return Task.FromResult(orderItem);
+        }
         /// <summary>
         /// 计算商品小计
         /// 商品列表中的单价之和

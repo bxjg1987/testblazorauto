@@ -14,7 +14,7 @@ namespace BXJG.Shop.Sale
      */
 
     /// <summary>
-    /// 订单明细创建项
+    /// 订单明细创建项 就是一个普通的传输对象
     /// 创建订单时 用来向订单添加购买的产品明细时需要的输入模型
     /// 将根据此模型创建OrderItemEntity，它内部的很多属性的值都来自商品上架信息（ItemEntity）
     /// </summary>
@@ -41,9 +41,6 @@ namespace BXJG.Shop.Sale
         {
             this.Item = itemEntity;
             this.Quantity = quantity;
-
-            //此次倒是可以对ItemEntity进行数据校验
-            //判断库存是否够，需要使用到其它组件的功能，因此不要放这里面
         }
         /// <summary>
         /// 计算售价金额
