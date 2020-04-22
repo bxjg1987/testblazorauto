@@ -222,12 +222,12 @@ namespace BXJG.Shop.Sale
         /// <summary>
         /// 配送方式
         /// </summary>
-        public BXJGShopDictionaryEntity DistributionMethod { get; set; }
+        public BXJGShopDictionaryEntity DistributionMethod { get; private set; }
         /// <summary>
         /// 配送方式
         /// 刚创建订单时配送方式尚未确定
         /// </summary>
-        public long? DistributionMethodId { get; set; }
+        public long? DistributionMethodId { get; private set; }
         /// <summary>
         /// 物流单号
         /// </summary>
@@ -236,7 +236,7 @@ namespace BXJG.Shop.Sale
         /// 物流状态
         /// 刚创建订单时没有物流状态，因此加个?
         /// </summary>
-        public LogisticsStatus? LogisticsStatus { get; set; }
+        public LogisticsStatus? LogisticsStatus { get; private set; }
         #endregion
 
         #region 商品列表
@@ -266,7 +266,9 @@ namespace BXJG.Shop.Sale
         /// </summary>
         public byte[] RowVersion { get; private set; }
 
-        private IEventBus eventBus;
+        //实体不应该放入容器中，所以事件总线无法使用属性注入
+        //由于查询实体时是仓储来创建实体的，默认ef创建实体时无法在构造函数中提供事件总线，因此这里使用静态属性
+        public IEventBus EventBus { get; set; } = Abp.Events.Bus.EventBus.Default;
 
         private OrderEntity() { }//给ef用的
 
@@ -279,7 +281,7 @@ namespace BXJG.Shop.Sale
             params (ItemEntity item, decimal quantity)[] items)
         {
             if (eventBus == null)
-                this.eventBus = NullEventBus.Instance;
+                this.EventBus = NullEventBus.Instance;
 
             this.Customer = customer;
             this.CustomerId = customer.Id;
@@ -298,12 +300,7 @@ namespace BXJG.Shop.Sale
 
         private OrderItemEntity<TUser> BuildItem(ItemEntity item, decimal quantity)
         {
-            var orderItem = new OrderItemEntity<TUser>();
-            orderItem.Order = this;
-            orderItem.Amount = item.Price * quantity;
-            orderItem.Image = item.GetImages().First();
-            orderItem.Integral = Convert.ToInt32(item.Integral * quantity);
-            return orderItem;
+            return new OrderItemEntity<TUser>(this, item, quantity);
         }
         /// <summary>
         /// 添加商品明细
@@ -327,11 +324,7 @@ namespace BXJG.Shop.Sale
         /// <returns></returns>
         public Task<OrderItemEntity<TUser>> AddItemAsync(ItemEntity item, decimal quantity)
         {
-            var orderItem = new OrderItemEntity<TUser>();
-            orderItem.Order = this;
-            orderItem.Amount = item.Price * quantity;
-            orderItem.Image = item.GetImages().First();
-            orderItem.Integral = Convert.ToInt32(item.Integral * quantity);
+            var orderItem = BuildItem(item, quantity);
             //触发订单明细添加前事件
             this.items.Add(orderItem);
             //触发订单明细添加后事件
@@ -339,18 +332,11 @@ namespace BXJG.Shop.Sale
         }
         /// <summary>
         /// 计算商品小计
-        /// 商品列表中的单价之和
-        /// 当查询时MerchandiseSubtotal表示数据库存储的值，被这里的结算结果覆盖是正常的
-        /// 即便不覆盖 我们的代码任意位置也可以对MerchandiseSubtotal赋值
         /// </summary>
-        /// <param name="d">是否更新MerchandiseSubtotal属性</param>
         /// <returns></returns>
-        public decimal CalculationMerchandiseSubtotal(bool d = true)
+        public decimal CalculationMerchandiseSubtotal()
         {
-            var val = Items.Sum(c => c.Price);
-            if (d)
-                this.MerchandiseSubtotal = val;
-            return val;
+            return Items.Sum(c => c.CalculationAmount());
         }
         #endregion
     }

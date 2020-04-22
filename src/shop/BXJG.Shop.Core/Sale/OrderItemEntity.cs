@@ -1,5 +1,6 @@
 ﻿using Abp.Authorization.Users;
 using Abp.Domain.Entities;
+using Abp.Events.Bus;
 using BXJG.Shop.Catalogue;
 using System;
 using System.Collections.Generic;
@@ -27,6 +28,14 @@ namespace BXJG.Shop.Sale
     public class OrderItemEntity<TUser> : Entity
         where TUser : AbpUserBase
     {
+        public IEventBus EventBus
+        {
+            get
+            {
+                return Order.EventBus;
+            }
+        }
+
         private OrderItemEntity() { }//ef专用
         /// <summary>
         /// 创建一个顾客购买的产品信息
@@ -103,7 +112,7 @@ namespace BXJG.Shop.Sale
         /// </summary>
         public int Integral { get; private set; }
 
-        //以下汇总信息是方便将来统计查询
+        //以下冗余字段 而非每次计算，方便统计
 
         /// <summary>
         /// 金额
@@ -121,8 +130,7 @@ namespace BXJG.Shop.Sale
 
         #region 方法
         /// <summary>
-        /// 计算总金额
-        /// 单价 * 数量
+        /// 计算总金额 单价 * 数量
         /// </summary>
         /// <returns></returns>
         public decimal CalculationAmount()
@@ -130,8 +138,7 @@ namespace BXJG.Shop.Sale
             return Price * Quantity;
         }
         /// <summary>
-        /// 计算总积分
-        /// 积分 * 数量
+        /// 计算总积分 积分 * 数量
         /// </summary>
         /// <returns></returns>
         public int CalculationTotalIntegral()
