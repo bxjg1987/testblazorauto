@@ -387,6 +387,7 @@ namespace BXJG.Shop.Sale
         {
             this.Status = OrderStatus.Processing;
             this.PaymentStatus = Sale.PaymentStatus.Paid;
+            this.LogisticsStatus = Sale.LogisticsStatus.WaitShip;
             //这里可以触发付款成功的事件
             //不应该在这里做与订单无关的业务，那些事情交给领域服务或领域事件去处理
             return Task.CompletedTask;
