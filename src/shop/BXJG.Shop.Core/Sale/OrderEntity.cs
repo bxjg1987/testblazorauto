@@ -210,7 +210,6 @@ namespace BXJG.Shop.Sale
         /// </summary>
         public string ConsigneePhoneNumber { get; set; }
         //省市区县 暂时忽略，后期补充
-
         /// <summary>
         /// 收货地址
         /// </summary>
@@ -240,10 +239,7 @@ namespace BXJG.Shop.Sale
         #endregion
 
         #region 商品列表
-
-        //订单明细应该自定义一个实现ICollection的集合
-
-        private List<OrderItemEntity<TUser>> items;
+        private List<OrderItemEntity<TUser>> items = new List<OrderItemEntity<TUser>>();
         /// <summary>
         /// 订单商品明细
         /// 由于无商品明细的订单是没有意义的，因此初始化时直接实例化了，直接用不用担心null问题
@@ -256,7 +252,6 @@ namespace BXJG.Shop.Sale
             }
             private set { items = value.ToList(); }//给ef用的
         }
-
         #endregion
 
         //订单跟踪
@@ -271,17 +266,41 @@ namespace BXJG.Shop.Sale
         public IEventBus EventBus { get; set; } = Abp.Events.Bus.EventBus.Default;
 
         private OrderEntity() { }//给ef用的
-
+        /// <summary>
+        /// 创建一张服务业务规则的订单
+        /// </summary>
+        /// <param name="customer">关联的顾客，谁下的单？</param>
+        /// <param name="consignee">收货人</param>
+        /// <param name="consigneePhoneNumber">收货人电话</param>
+        /// <param name="receivingAddress">收货地址</param>
+        /// <param name="orderNo">订单号，默认guid</param>
+        /// <param name="orderTime">下单时间，默认now</param>
+        /// <param name="customerRemark">顾客下单时填写的备注</param>
+        /// <param name="items">商品明细，不允许为空</param>
         public OrderEntity(
             CustomerEntity<TUser> customer,
-            IEventBus eventBus = null,
+            string consignee ,
+            string consigneePhoneNumber,
+            string receivingAddress,
+            //IEventBus eventBus = null,
             string orderNo = "",
             DateTimeOffset? orderTime = default,
             string customerRemark = "",
             params (ItemEntity item, decimal quantity)[] items)
         {
-            if (eventBus == null)
-                this.EventBus = NullEventBus.Instance;
+            //折中的办法，参考EventBus属性的备注
+            //if (eventBus == null)
+            //    this.EventBus = NullEventBus.Instance;
+
+            //如果发生顾客为空、收货人等为空，则表明应用层或前端验证不到位，需要修改代码
+            //所以正常情况下以下判断均能通过，因此这里的检验只是保证业务正确性，若不正确直接抛异常，
+            //不需要抛UserFriendly异常
+
+            if (customer == null)
+                throw new ArgumentNullException();
+
+            if (string.IsNullOrWhiteSpace(consignee) || string.IsNullOrWhiteSpace(consigneePhoneNumber) || string.IsNullOrWhiteSpace(receivingAddress))
+                throw new ArgumentNullException();
 
             this.Customer = customer;
             this.CustomerId = customer.Id;
@@ -289,15 +308,25 @@ namespace BXJG.Shop.Sale
             this.OrderTime = orderTime ?? DateTimeOffset.Now;
             this.Status = OrderStatus.Created;
             this.CustomerRemark = customerRemark;
-            this.items = new List<OrderItemEntity<TUser>>();
+            this.Consignee = consignee;
+            this.ConsigneePhoneNumber = consigneePhoneNumber;
+            this.ReceivingAddress = receivingAddress;
+            //this.items = new List<OrderItemEntity<TUser>>();
             foreach (var item in items)
             {
                 this.items.Add(BuildItem(item.item, item.quantity));
             }
+            this.MerchandiseSubtotal = CalculationMerchandiseSubtotal();
+            this.Integral = CalculationIntegral();
         }
 
         #region 方法
-
+        /// <summary>
+        /// 根据商品/上架信息和数量创建订单明细
+        /// </summary>
+        /// <param name="item">商品/上架信息</param>
+        /// <param name="quantity">数量</param>
+        /// <returns></returns>
         private OrderItemEntity<TUser> BuildItem(ItemEntity item, decimal quantity)
         {
             return new OrderItemEntity<TUser>(this, item, quantity);
@@ -325,18 +354,30 @@ namespace BXJG.Shop.Sale
         public Task<OrderItemEntity<TUser>> AddItemAsync(ItemEntity item, decimal quantity)
         {
             var orderItem = BuildItem(item, quantity);
-            //触发订单明细添加前事件
+
+            //暂未实现。触发订单明细添加前事件，事件处理程序中可以进一步调整订单明细 或 组织当前明细添加到订单明细中
+
             this.items.Add(orderItem);
-            //触发订单明细添加后事件
+
+            //暂未实现。触发订单明细添加后事件
+
             return Task.FromResult(orderItem);
         }
         /// <summary>
-        /// 计算商品小计
+        /// 计算商品小计 商品明细的金额合计
         /// </summary>
         /// <returns></returns>
         public decimal CalculationMerchandiseSubtotal()
         {
-            return Items.Sum(c => c.CalculationAmount());
+            return items.Sum(c => c.CalculationAmount());
+        }
+        /// <summary>
+        /// 计算积分总额 商品明细的积分合计
+        /// </summary>
+        /// <returns></returns>
+        public int CalculationIntegral()
+        {
+            return items.Sum(c => c.CalculationTotalIntegral());
         }
         #endregion
     }

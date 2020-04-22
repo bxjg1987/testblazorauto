@@ -39,7 +39,7 @@ namespace BXJG.Shop.Sale
         private OrderItemEntity() { }//ef专用
         /// <summary>
         /// 创建一个顾客购买的产品信息
-        /// 它是一张订单中的产品条码，包含商品信息 和 数量
+        /// 它是一张订单中的产品条目，包含商品信息 和 数量
         /// </summary>
         /// <param name="order">所属订单</param>
         /// <param name="item">关联的商品/上架信息</param>
