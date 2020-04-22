@@ -61,6 +61,12 @@ namespace BXJG.Shop.Sale
             decimal? amount = default,
             int? totalIntegral = default)
         {
+            if (order == null || item == null)
+                throw new ArgumentNullException();
+
+            if (quantity <= 0)
+                throw new ArgumentException();
+
             Order = order;
             Item = item;
             Quantity = quantity;
