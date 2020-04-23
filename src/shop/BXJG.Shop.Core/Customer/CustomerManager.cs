@@ -17,7 +17,7 @@ namespace BXJG.Shop.Customer
      * 虽然ICustomerRepositoryExtensions提供了扩展方法，但是需要提供泛型TUser，并且也无法（也不合理）提供session的访问
      * 因此在领域服务提供一个封装
      */
-    public class CustomerManager<TUser> : BXJGShopDomainServiceBase, IAsyncEventHandler<EntityCreatedEventData<OrderEntity<TUser>>>
+    public class CustomerManager<TUser> : BXJGShopDomainServiceBase//, IAsyncEventHandler<EntityCreatedEventData<OrderEntity<TUser>>>
         where TUser : AbpUserBase
     {
 
@@ -85,19 +85,19 @@ namespace BXJG.Shop.Customer
             //单独弄了个事件 而不是使用abp提供的EntityChanged事件，这样保证只有在积分变动时才触发这个事件
             await EventBus.TriggerAsync(new CustomerIntegralChangedEventData<TUser>(entity));
         }
-        /// <summary>
-        /// 订单创建成功的事件处理
-        /// 增减积分
-        /// </summary>
-        /// <param name="eventData"></param>
-        /// <returns></returns>
-        public Task HandleEventAsync(EntityCreatedEventData<OrderEntity<TUser>> eventData)
-        {
-            //var order = eventData.Entity;
-            //return ChangeIntegral(order.Customer, order.Integral);
+        ///// <summary>
+        ///// 订单创建成功的事件处理
+        ///// 增减积分
+        ///// </summary>
+        ///// <param name="eventData"></param>
+        ///// <returns></returns>
+        //public Task HandleEventAsync(EntityCreatedEventData<OrderEntity<TUser>> eventData)
+        //{
+        //    //var order = eventData.Entity;
+        //    //return ChangeIntegral(order.Customer, order.Integral);
 
-            //订单完成才能加积分 而不是订单创建时
-            return Task.CompletedTask;
-        }
+        //    //订单完成才能加积分 而不是订单创建时
+        //    return Task.CompletedTask;
+        //}
     }
 }

@@ -18,7 +18,6 @@ namespace BXJG.Shop.EFMaps
         {
             builder.ToTable("BXJGShopOrderItems");
             builder.Property(c => c.RowVersion).IsRowVersion();
-            builder.Ignore(c => c.EventBus);
         }
     }
 }

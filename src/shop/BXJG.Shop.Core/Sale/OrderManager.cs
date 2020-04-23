@@ -41,8 +41,6 @@ namespace BXJG.Shop.Sale
      *      前台顾客购买
      *      后台管理员可以直接新增订单吗？
      *      从其它地方导入订单？
-     *      
-     * 
      */
 
     /// <summary>
@@ -75,11 +73,8 @@ namespace BXJG.Shop.Sale
             string consignee,
             string consigneePhoneNumber,
             string receivingAddress,
-            DateTimeOffset? orderTime = null,
+            string orderNo = "",
             string customerRemark = null,
-            //InvoiceType invoiceType = default,
-            //string invoiceTitle = "",
-            //string taxId = "",
             params OrderItemInput[] items)
         {
             #region 各参数基本验证
@@ -95,42 +90,20 @@ namespace BXJG.Shop.Sale
             receivingAddress.RequiredValidate(nameof(receivingAddress));
             #endregion
 
-            #region 针对顾客的各种业务判断和处理
-            //比如判断是否是黑名单客户
-            #endregion
-
-            #region 开票业务
-            //暂时忽略开票
-            //if (invoiceType != InvoiceType.None && invoiceTitle.IsNullOrWhiteSpace())
-            //    throw new UserFriendlyException(L("需要开票时，请提供发票抬头！"));
-            //if (invoiceType == InvoiceType.Business && taxId.IsNullOrWhiteSpace())
-            //    throw new UserFriendlyException(L("需要开企业发票时，请提供税号！"));
-            #endregion
-
-            #region 订单时间
-            //所在服务器的当前时间未必准确
-            //abp官方文档 提供了时间处理方案 https://aspnetboilerplate.com/Pages/Documents/Timing
-            //.net后来提供的DateTimeOffset也许已经处理了这个问题
-            if (!orderTime.HasValue)
-                orderTime = DateTimeOffset.Now;
-            #endregion
-
             //所有业务判断都成功时才创建订单对象
             var order = new OrderEntity<TUser>
             {
                 Customer = customer,
                 CustomerId = customer.Id,
-                OrderNo = Guid.NewGuid().ToString("N"),//将来再考虑用个专门的组件生产简单、不重复的订单号
-                OrderTime = orderTime.Value,
+                OrderNo = orderNo ?? Guid.NewGuid().ToString("N"),//将来再考虑用个专门的组件生产简单、不重复的订单号
+                OrderTime = DateTimeOffset.Now,
                 Status = OrderStatus.Created,
                 CustomerRemark = customerRemark,
                 //暂时忽略开票
                 //InvoiceType = invoiceType,
                 //InvoiceTitle = invoiceTitle,
                 //TaxId = taxId,
-
                 PaymentStatus = PaymentStatus.WaitingForPayment,
-
                 Consignee = consignee,
                 ConsigneePhoneNumber = consigneePhoneNumber,
                 ReceivingAddress = receivingAddress,
@@ -141,7 +114,7 @@ namespace BXJG.Shop.Sale
             {
                 var product = new OrderItemEntity<TUser>
                 {
-                    Amount = item.CalculationAmount(),
+                    Amount = item.Item.Price * item.Quantity,
                     Image = item.Item.GetImages()[0],
                     Integral = item.Item.Integral,
                     Item = item.Item,
@@ -150,18 +123,15 @@ namespace BXJG.Shop.Sale
                     Price = item.Item.Price,
                     Quantity = item.Quantity,
                     Title = item.Item.Title,
-                    TotalIntegral = Convert.ToInt32(item.Item.Integral * item.Quantity)
+                    TotalIntegral = Convert.ToInt32(item.Item.Integral * item.Quantity),
                 };
                 order.Items.Add(product);
+                order.MerchandiseSubtotal += product.Amount;
+                order.Integral += product.TotalIntegral;
             }
             #endregion
-            order.CalculationMerchandiseSubtotal();//计算并设置商品小计
-
-            //暂时忽略配送费
-            //DistributionFee 配送费 简单的情况 可以让 后台管理员确认订单时录入配送费；合理的情况是根据购买的商品自动计算
-
-            //InvoiceTax 发票税金 https://gitee.com/bxjg1987/abp/wikis/%E9%85%8D%E7%BD%AE%E5%8A%9F%E8%83%BD?sort_id=2127088
-
+            order.PaymentAmount = order.MerchandiseSubtotal;//+各种费用-各种优惠
+            //插入之前触发一个事件，允许事件处理程序修改或阻止订单创建
             await repository.InsertAsync(order);
             //即使调用了，后续事件处理异常了一样会回滚，参考 https://aspnetboilerplate.com/Pages/Documents/Unit-Of-Work#savechanges
             //文档是这么说的，没有试验过
@@ -171,6 +141,40 @@ namespace BXJG.Shop.Sale
             //好像这个abp自动触发了 https://aspnetboilerplate.com/Pages/Documents/EventBus-Domain-Events#entity-changes
             //await EventBus.TriggerAsync(new EntityCreatedEventData<OrderEntity<TUser>>(order));//
             return order;
+        }
+
+        public async Task<OrderEntity<TUser>> PayAsync(OrderEntity<TUser> entity,long payMethod)
+        {
+            //支付前触发一个事件，允许事件处理程序阻止支付
+            entity.Status = OrderStatus.Processing;
+            entity.PaymentStatus = PaymentStatus.Paid;
+            entity.PaymentMethodId = payMethod;
+            //要不要加个支付时间？
+            entity.LogisticsStatus = LogisticsStatus.WaitShip;
+            //触发已订单支付完成
+            return entity;
+        }
+
+        public async Task<OrderEntity<TUser>> ShipmentAsync(OrderEntity<TUser> entity, long shipmentMethod)
+        {
+            //发货前触发一个事件，允许事件处理程序阻止发货
+            entity.DistributionMethodId = shipmentMethod;
+            //要不要加个发货时间？
+            entity.LogisticsStatus = LogisticsStatus.Shipped;
+            //触发已订单支付完成
+            return entity;
+        }
+        /// <summary>
+        /// 签收
+        /// </summary>
+        /// <param name="entity">订单</param>
+        /// <returns></returns>
+        public async Task<OrderEntity<TUser>> SignAsync(OrderEntity<TUser> entity)
+        {
+            //要不要加个发货时间？
+            entity.LogisticsStatus = LogisticsStatus.Signed;
+            //触发已订单支付完成
+            return entity;
         }
     }
 }

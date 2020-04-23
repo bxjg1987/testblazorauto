@@ -23,7 +23,6 @@ namespace BXJG.Shop.EFMaps
             builder.Property(c => c.ReceivingAddress).IsRequired(true).HasMaxLength(OrderEntity<TUser>.ReceivingAddressMaxLength);
             builder.Property(c => c.LogisticsNumber).HasColumnType($"varchar({OrderEntity<TUser>.LogisticsNumberMaxLength})");
             builder.Property(c => c.RowVersion).IsRowVersion();
-            builder.Ignore(c => c.EventBus);
         }
     }
 }
