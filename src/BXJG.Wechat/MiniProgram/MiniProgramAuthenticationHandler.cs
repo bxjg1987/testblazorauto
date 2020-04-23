@@ -83,7 +83,7 @@ namespace BXJG.WeChat.MiniProgram
                 {
                     errcode = 0,
                     errmsg = "",
-                    openid = "rexcfdwe",
+                    openid = jd.GetString("code"),
                     session_key = "777777",
                     unionid = ""
                 };
