@@ -17,27 +17,24 @@ using System.Security.Claims;
 
 namespace BXJG.WeChat.Message
 {
-    public class WeChatMessageService<TUser,TKey>
-        where TUser : class
+    public class WeChatMessageService
     {
         private readonly MiniProgramAuthenticationOptions _authOptions;
         private readonly IHttpClientFactory _clientFactory;
         private readonly AccessTokenProvider _accessTokenProvider;
-        private readonly UserManager<TUser> _userManager;
+
         //  private readonly WechatTemplateOptions _options;
 
         public WeChatMessageService(
             IOptionsMonitor<MiniProgramAuthenticationOptions> authOptions,
             IHttpClientFactory clientFactory,
-            AccessTokenProvider accessTokenProvider,
-            UserManager<TUser> userManager
+            AccessTokenProvider accessTokenProvider
             //IOptionsMonitor< WechatTemplateOptions> options
             )
         {
             _authOptions = authOptions.CurrentValue;
             _clientFactory = clientFactory;
             _accessTokenProvider = accessTokenProvider;
-            _userManager = userManager;
             //_options = options.CurrentValue;
 
         }
@@ -56,12 +53,12 @@ namespace BXJG.WeChat.Message
         {
             //if (!_options.TemplateList.Contains(template_id, StringComparer.Ordinal))
             //    throw new ArgumentException("发送订阅消息失败！");
-          
-            var user = await _userManager.FindByLoginAsync(MiniProgramConsts.AuthenticationScheme, touser);
-            var claimns = await _userManager.GetClaimsAsync(user);
-            var templateAry = System.Text.Json.JsonSerializer.Deserialize<string[]>(claimns.Single(c => c.Type == Common.Consts.TemplateMessageClaimType).Value);
-            if(!templateAry.Contains(template_id, StringComparer.OrdinalIgnoreCase))
-                throw new ArgumentException($"发送订阅消息失败！当前模板id{template_id}用户未同意，请核对！");
+
+            //var user = await _userManager.FindByLoginAsync(MiniProgramConsts.AuthenticationScheme, touser);
+            //var claimns = await _userManager.GetClaimsAsync(user);
+            //var templateAry = System.Text.Json.JsonSerializer.Deserialize<string[]>(claimns.Single(c => c.Type == Common.Consts.TemplateMessageClaimType).Value);
+            //if (!templateAry.Contains(template_id, StringComparer.OrdinalIgnoreCase))
+            //    throw new ArgumentException($"发送订阅消息失败！当前模板id{template_id}用户未同意，请核对！");
 
             var access_token = this._accessTokenProvider.accessToken;
 
