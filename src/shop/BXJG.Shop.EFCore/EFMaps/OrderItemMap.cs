@@ -1,4 +1,6 @@
 ﻿using Abp.Authorization.Users;
+using BXJG.GeneralTree;
+using BXJG.Shop.Common;
 using BXJG.Shop.Sale;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -11,10 +13,11 @@ namespace BXJG.Shop.EFMaps
     /// 订单产品明细ef映射
     /// </summary>
     /// <typeparam name="TUser"></typeparam>
-    public class OrderItemMap<TUser> : IEntityTypeConfiguration<OrderItemEntity<TUser>>
+    public class OrderItemMap<TUser, TArea> : IEntityTypeConfiguration<OrderItemEntity<TUser,TArea>>
         where TUser : AbpUserBase
+          where TArea : GeneralTreeEntity<TArea>, IShopAdministrative
     {
-        public void Configure(EntityTypeBuilder<OrderItemEntity<TUser>> builder)
+        public void Configure(EntityTypeBuilder<OrderItemEntity<TUser,TArea>> builder)
         {
             builder.ToTable("BXJGShopOrderItems");
             builder.Property(c => c.RowVersion).IsRowVersion();

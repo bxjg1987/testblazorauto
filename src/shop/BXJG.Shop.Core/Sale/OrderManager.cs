@@ -16,6 +16,8 @@ using Abp.Threading;
 using Abp.Configuration;
 using BXJG.Shop.Localization;
 using Abp.Events.Bus.Entities;
+using BXJG.GeneralTree;
+using BXJG.Shop.Common;
 
 namespace BXJG.Shop.Sale
 {
@@ -47,20 +49,22 @@ namespace BXJG.Shop.Sale
     /// 订单管理领域逻辑
     /// </summary>
     /// <typeparam name="TUser"></typeparam>
-    public class OrderManager<TUser> : BXJGShopDomainServiceBase
+    /// <typeparam name="TArea">送货地址区域类型 参考实体类的泛型说明</typeparam>
+    public class OrderManager<TUser, TArea> : BXJGShopDomainServiceBase
         where TUser : AbpUserBase
+        where TArea : GeneralTreeEntity<TArea>, IShopAdministrative
     {
-        protected readonly IRepository<OrderEntity<TUser>, long> repository;
-        protected readonly IRepository<CustomerEntity<TUser>, long> customerRepository;
-        protected readonly CustomerManager<TUser> customerManager;
+        protected readonly IRepository<OrderEntity<TUser, TArea>, long> repository;
+        protected readonly IRepository<CustomerEntity<TUser, TArea>, long> customerRepository;
+        protected readonly CustomerManager<TUser, TArea> customerManager;
         protected readonly ISettingManager settingManager;
         //领域层不应该访问session  protected readonly IAbpSession session;
 
         public OrderManager(
-            IRepository<OrderEntity<TUser>, long> repository,
-            IRepository<CustomerEntity<TUser>, long> customerRepository,
+            IRepository<OrderEntity<TUser, TArea>, long> repository,
+            IRepository<CustomerEntity<TUser, TArea>, long> customerRepository,
             ISettingManager settingManager,
-            CustomerManager<TUser> customerManager)
+            CustomerManager<TUser, TArea> customerManager)
         {
             this.settingManager = settingManager;
             this.repository = repository;
@@ -68,12 +72,11 @@ namespace BXJG.Shop.Sale
             this.customerManager = customerManager;
         }
 
-        public async Task<OrderEntity<TUser>> CreateAsync(
-            CustomerEntity<TUser> customer,
+        public async Task<OrderEntity<TUser, TArea>> CreateAsync(
+            CustomerEntity<TUser, TArea> customer,
             string consignee,
             string consigneePhoneNumber,
             string receivingAddress,
-            string orderNo = "",
             string customerRemark = null,
             params OrderItemInput[] items)
         {
@@ -83,6 +86,7 @@ namespace BXJG.Shop.Sale
             //在应用层或UI的Action可能会调用多个api时传入相同参数，那么此时参数验证一次就够了
             //一旦采用多层次都验证，那么整个项目会有大量这种情况存在，会导致性能下降，高并发时可能更严重些。
             //还是做正确的事吧，领域层本就是独立的层，保证业务数据的约束也算是业务逻辑的一部分
+            //将来使用充血模型后 很多验证可能移植到实体类上
             customer.RequiredValidate(nameof(customer));//领域层不应访问session，所以不要在customer为空时自动获取当前登录用户所关联的顾客
             items.RequiredValidate(nameof(items));
             consignee.RequiredValidate(nameof(consignee));
@@ -91,11 +95,11 @@ namespace BXJG.Shop.Sale
             #endregion
 
             //所有业务判断都成功时才创建订单对象
-            var order = new OrderEntity<TUser>
+            var order = new OrderEntity<TUser, TArea>
             {
                 Customer = customer,
                 CustomerId = customer.Id,
-                OrderNo = orderNo ?? Guid.NewGuid().ToString("N"),//将来再考虑用个专门的组件生产简单、不重复的订单号
+                OrderNo = Guid.NewGuid().ToString("N"),//将来再考虑用个专门的组件生产简单、不重复的订单号
                 OrderTime = DateTimeOffset.Now,
                 Status = OrderStatus.Created,
                 CustomerRemark = customerRemark,
@@ -112,7 +116,7 @@ namespace BXJG.Shop.Sale
             #region 订单明细
             foreach (var item in items)
             {
-                var product = new OrderItemEntity<TUser>
+                var product = new OrderItemEntity<TUser, TArea>
                 {
                     Amount = item.Item.Price * item.Quantity,
                     Image = item.Item.GetImages()[0],
@@ -143,7 +147,7 @@ namespace BXJG.Shop.Sale
             return order;
         }
 
-        public async Task<OrderEntity<TUser>> PayAsync(OrderEntity<TUser> entity,long payMethod)
+        public async Task<OrderEntity<TUser, TArea>> PayAsync(OrderEntity<TUser, TArea> entity, long payMethod)
         {
             //支付前触发一个事件，允许事件处理程序阻止支付
             entity.Status = OrderStatus.Processing;
@@ -155,7 +159,7 @@ namespace BXJG.Shop.Sale
             return entity;
         }
 
-        public async Task<OrderEntity<TUser>> ShipmentAsync(OrderEntity<TUser> entity, long shipmentMethod)
+        public async Task<OrderEntity<TUser, TArea>> ShipmentAsync(OrderEntity<TUser, TArea> entity, long shipmentMethod)
         {
             //发货前触发一个事件，允许事件处理程序阻止发货
             entity.DistributionMethodId = shipmentMethod;
@@ -169,7 +173,7 @@ namespace BXJG.Shop.Sale
         /// </summary>
         /// <param name="entity">订单</param>
         /// <returns></returns>
-        public async Task<OrderEntity<TUser>> SignAsync(OrderEntity<TUser> entity)
+        public async Task<OrderEntity<TUser, TArea>> SignAsync(OrderEntity<TUser, TArea> entity)
         {
             //要不要加个发货时间？
             entity.LogisticsStatus = LogisticsStatus.Signed;

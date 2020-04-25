@@ -2,6 +2,7 @@
 using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
 using Abp.Events.Bus;
+using BXJG.GeneralTree;
 using BXJG.Shop.Catalogue;
 using BXJG.Shop.Common;
 using BXJG.Shop.Customer;
@@ -100,8 +101,14 @@ namespace BXJG.Shop.Sale
      * 不要设置默认值，因为从数据库查询时会自动赋值，所以默认值因为会造成多一次赋值
      * 谨慎属性赋值时做更多处理，比如添加明细 自动更新 金额。因为从数据库查询时 可能并不加载明细，而金额是直接从数据库取值
      */
-    public class OrderEntity<TUser> : FullAuditedEntity<long>, IMustHaveTenant
+    /// <summary>
+    /// 订单实体类
+    /// </summary>
+    /// <typeparam name="TUser">系统用户类型</typeparam>
+    /// <typeparam name="TArea">送货地址区域类型</typeparam>
+    public class OrderEntity<TUser, TArea> : FullAuditedEntity<long>, IMustHaveTenant
         where TUser : AbpUserBase
+        where TArea : GeneralTreeEntity<TArea>, IShopAdministrative
     {
         public const int OrderNoMaxLength = 36;//guid长度 32+4个分隔符，将来可能使用其它格式的订单号
         public const int CustomerRemarkMaxLength = 500;
@@ -117,26 +124,26 @@ namespace BXJG.Shop.Sale
         /// <summary>
         /// 关联的顾客的Id
         /// </summary>
-        public long CustomerId { get;  set; }
+        public long CustomerId { get; set; }
         /// <summary>
         /// 关联的顾客的实体
         /// 注意顾客与User是一对一关联的
         /// </summary>
-        public virtual CustomerEntity<TUser> Customer { get;  set; }
+        public virtual CustomerEntity<TUser,TArea> Customer { get; set; }
         /// <summary>
         /// 订单号
         /// </summary>
-        public string OrderNo { get;  set; }
+        public string OrderNo { get; set; }
         /// <summary>
         /// 下单时间
         /// 虽然父类已经有了CreateDate，但是类型为DateTime。况且CreateDate是表示这条信息的创建时间，OrderTime是下单业务发生的时间，这是两个不一样的概念
         /// </summary>
-        public DateTimeOffset OrderTime { get;  set; }
+        public DateTimeOffset OrderTime { get; set; }
 
         /// <summary>
         /// 订单状态
         /// </summary>
-        public OrderStatus Status { get;  set; }
+        public OrderStatus Status { get; set; }
         /// <summary>
         /// 顾客下单时填写的备注
         /// </summary>
@@ -149,7 +156,7 @@ namespace BXJG.Shop.Sale
         /// 一个订单的中的多个商品价格相加的价格，但是商品列表可能随时在变动，所以这个属性只代表数据库中的商品小计字段的值
         /// 可以通过对应的方法来根据商品列表计算得到商品小计
         /// </summary>
-        public decimal MerchandiseSubtotal { get;  set; }
+        public decimal MerchandiseSubtotal { get; set; }
         ///// <summary>
         ///// 配送费
         ///// </summary>
@@ -175,30 +182,38 @@ namespace BXJG.Shop.Sale
         /// <summary>
         /// 可得积分
         /// </summary>
-        public long Integral { get;  set; }
+        public long Integral { get; set; }
         /// <summary>
         /// 支付方式
         /// </summary>
-        public BXJGShopDictionaryEntity PaymentMethod { get;  set; }
+        public BXJGShopDictionaryEntity PaymentMethod { get; set; }
         /// <summary>
         /// 支付方式Id
         /// 未支付时 就不存在支付方式，因此可空
         /// </summary>
-        public long? PaymentMethodId { get;  set; }
+        public long? PaymentMethodId { get; set; }
         /// <summary>
         /// 付款金额
         /// 顾客最终支付金额
         /// </summary>
-        public decimal PaymentAmount { get;  set; }
+        public decimal PaymentAmount { get; set; }
         /// <summary>
         /// 支付状态
         /// 某些场景下，并不是顾客下单就可以付款，而是需要后台审核后才能付款
         /// 因此使用? 表示此时订单处于不可付款状态，也就是没有付款状态
         /// </summary>
-        public PaymentStatus? PaymentStatus { get;  set; }
+        public PaymentStatus? PaymentStatus { get; set; }
         #endregion
 
         #region 物流配送
+        /// <summary>
+        /// 送货地址所属区域
+        /// </summary>
+        public virtual TArea Area { get; set; }
+        /// <summary>
+        /// 送货地址所属区域Id
+        /// </summary>
+        public long AreaId { get; set; }
         /// <summary>
         /// 收货人
         /// 不一定就是下单人
@@ -220,12 +235,12 @@ namespace BXJG.Shop.Sale
         /// <summary>
         /// 配送方式
         /// </summary>
-        public BXJGShopDictionaryEntity DistributionMethod { get;  set; }
+        public BXJGShopDictionaryEntity DistributionMethod { get; set; }
         /// <summary>
         /// 配送方式
         /// 刚创建订单时配送方式尚未确定
         /// </summary>
-        public long? DistributionMethodId { get;  set; }
+        public long? DistributionMethodId { get; set; }
         /// <summary>
         /// 物流单号
         /// </summary>
@@ -234,14 +249,14 @@ namespace BXJG.Shop.Sale
         /// 物流状态
         /// 刚创建订单时没有物流状态，因此加个?
         /// </summary>
-        public LogisticsStatus? LogisticsStatus { get;  set; }
+        public LogisticsStatus? LogisticsStatus { get; set; }
         #endregion
 
         #region 商品列表
         /// <summary>
         /// 订单商品明细
         /// </summary>
-        public virtual IList<OrderItemEntity<TUser>> Items { get; set; }
+        public virtual IList<OrderItemEntity<TUser, TArea>> Items { get; set; }
         #endregion
 
         //订单跟踪

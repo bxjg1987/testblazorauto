@@ -5,13 +5,14 @@ using System.Collections.Generic;
 using System.Text;
 using ZLJ.Authorization.Roles;
 using ZLJ.Authorization.Users;
+using ZLJ.BaseInfo;
 using ZLJ.MultiTenancy;
 
 namespace ZLJ.Shop
 {
-    public class CustomerAppService : CustomerAppService<Tenant, User, Role, TenantManager, UserManager>
+    public class CustomerAppService : CustomerAppService<Tenant, User, Role, TenantManager, UserManager, AdministrativeEntity>
     {
-        public CustomerAppService(IRepository<CustomerEntity<User>, long> repository) : base(repository)
+        public CustomerAppService(IRepository<CustomerEntity<User, AdministrativeEntity>, long> repository) : base(repository)
         {
         }
     }

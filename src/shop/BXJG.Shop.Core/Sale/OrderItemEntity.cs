@@ -1,7 +1,9 @@
 ﻿using Abp.Authorization.Users;
 using Abp.Domain.Entities;
 using Abp.Events.Bus;
+using BXJG.GeneralTree;
 using BXJG.Shop.Catalogue;
+using BXJG.Shop.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,8 +27,9 @@ namespace BXJG.Shop.Sale
     /// 订单中的产品和数量信息，将来可能包含更多信息
     /// 目前所有属性私有化，将来根据业务需要 提供相应的业务方法
     /// </summary>
-    public class OrderItemEntity<TUser> : Entity
+    public class OrderItemEntity<TUser,TArea> : Entity
         where TUser : AbpUserBase
+        where TArea : GeneralTreeEntity<TArea>, IShopAdministrative
     {
         /// <summary>
         /// 关联的订单Id
@@ -35,7 +38,7 @@ namespace BXJG.Shop.Sale
         /// <summary>
         /// 关联的订单实体
         /// </summary>
-        public virtual OrderEntity<TUser> Order { get;  set; }
+        public virtual OrderEntity<TUser, TArea> Order { get;  set; }
         /// <summary>
         /// 关联的商品上架信息Id
         /// </summary>

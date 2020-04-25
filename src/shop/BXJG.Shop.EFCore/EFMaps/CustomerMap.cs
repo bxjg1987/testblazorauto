@@ -1,4 +1,6 @@
 ﻿using Abp.Authorization.Users;
+using BXJG.GeneralTree;
+using BXJG.Shop.Common;
 using BXJG.Shop.Customer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -8,10 +10,11 @@ using System.Text;
 
 namespace BXJG.Shop.EFMaps
 {
-    public class CustomerMap<TUser> : IEntityTypeConfiguration<CustomerEntity<TUser>>
+    public class CustomerMap<TUser, TArea> : IEntityTypeConfiguration<CustomerEntity<TUser, TArea>>
         where TUser : AbpUserBase
+         where TArea : GeneralTreeEntity<TArea>, IShopAdministrative
     {
-        public void Configure(EntityTypeBuilder<CustomerEntity<TUser>> builder)
+        public void Configure(EntityTypeBuilder<CustomerEntity<TUser, TArea>> builder)
         {
             builder.Property(c => c.RowVersion).IsRowVersion();
         }
