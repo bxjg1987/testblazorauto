@@ -42,31 +42,31 @@ namespace BXJG.Shop.Sale
             this.Item = itemEntity;
             this.Quantity = quantity;
         }
-        /// <summary>
-        /// 计算售价金额
-        /// 定义成方法而不是属性，这样调用方明确知道此逻辑是每次计算的
-        /// </summary>
-        /// <returns></returns>
-        public decimal CalculationAmount()
-        {
-            return Item.Price * Quantity;
-        }
-        /// <summary>
-        /// 计算原价金额
-        /// 定义成方法而不是属性，这样调用方明确知道此逻辑是每次计算的
-        /// </summary>
-        /// <returns></returns>
-        public decimal CalculationOldAmount()
-        {
-            return Item.OldPrice * Quantity;
-        }
-        /// <summary>
-        /// 计算积分
-        /// </summary>
-        /// <returns></returns>
-        public int CalculationIntegral()
-        {
-            return Convert.ToInt32(Item.Integral * Quantity);
-        }
+        ///// <summary>
+        ///// 计算售价金额
+        ///// 定义成方法而不是属性，这样调用方明确知道此逻辑是每次计算的
+        ///// </summary>
+        ///// <returns></returns>
+        //public decimal CalculationAmount()
+        //{
+        //    return Item.Price * Quantity;
+        //}
+        ///// <summary>
+        ///// 计算原价金额
+        ///// 定义成方法而不是属性，这样调用方明确知道此逻辑是每次计算的
+        ///// </summary>
+        ///// <returns></returns>
+        //public decimal CalculationOldAmount()
+        //{
+        //    return Item.OldPrice * Quantity;
+        //}
+        ///// <summary>
+        ///// 计算积分
+        ///// </summary>
+        ///// <returns></returns>
+        //public int CalculationIntegral()
+        //{
+        //    return Convert.ToInt32(Item.Integral * Quantity);
+        //}
     }
 }

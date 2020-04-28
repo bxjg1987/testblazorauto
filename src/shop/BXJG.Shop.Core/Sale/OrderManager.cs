@@ -16,6 +16,8 @@ using Abp.Threading;
 using Abp.Configuration;
 using BXJG.Shop.Localization;
 using Abp.Events.Bus.Entities;
+using BXJG.GeneralTree;
+using BXJG.Shop.Common;
 
 namespace BXJG.Shop.Sale
 {
@@ -41,28 +43,28 @@ namespace BXJG.Shop.Sale
      *      前台顾客购买
      *      后台管理员可以直接新增订单吗？
      *      从其它地方导入订单？
-     *      
-     * 
      */
 
     /// <summary>
     /// 订单管理领域逻辑
     /// </summary>
     /// <typeparam name="TUser"></typeparam>
-    public class OrderManager<TUser> : BXJGShopDomainServiceBase
+    /// <typeparam name="TArea">送货地址区域类型 参考实体类的泛型说明</typeparam>
+    public class OrderManager<TUser, TArea> : BXJGShopDomainServiceBase
         where TUser : AbpUserBase
+        where TArea : GeneralTreeEntity<TArea>, IShopAdministrative
     {
-        protected readonly IRepository<OrderEntity<TUser>, long> repository;
-        protected readonly IRepository<CustomerEntity<TUser>, long> customerRepository;
-        protected readonly CustomerManager<TUser> customerManager;
+        protected readonly IRepository<OrderEntity<TUser, TArea>, long> repository;
+        protected readonly IRepository<CustomerEntity<TUser, TArea>, long> customerRepository;
+        protected readonly CustomerManager<TUser, TArea> customerManager;
         protected readonly ISettingManager settingManager;
         //领域层不应该访问session  protected readonly IAbpSession session;
 
         public OrderManager(
-            IRepository<OrderEntity<TUser>, long> repository,
-            IRepository<CustomerEntity<TUser>, long> customerRepository,
+            IRepository<OrderEntity<TUser, TArea>, long> repository,
+            IRepository<CustomerEntity<TUser, TArea>, long> customerRepository,
             ISettingManager settingManager,
-            CustomerManager<TUser> customerManager)
+            CustomerManager<TUser, TArea> customerManager)
         {
             this.settingManager = settingManager;
             this.repository = repository;
@@ -70,16 +72,12 @@ namespace BXJG.Shop.Sale
             this.customerManager = customerManager;
         }
 
-        public async Task<OrderEntity<TUser>> CreateAsync(
-            CustomerEntity<TUser> customer,
+        public async Task<OrderEntity<TUser, TArea>> CreateAsync(
+            CustomerEntity<TUser, TArea> customer,
             string consignee,
             string consigneePhoneNumber,
             string receivingAddress,
-            DateTimeOffset? orderTime = null,
             string customerRemark = null,
-            //InvoiceType invoiceType = default,
-            //string invoiceTitle = "",
-            //string taxId = "",
             params OrderItemInput[] items)
         {
             #region 各参数基本验证
@@ -88,6 +86,7 @@ namespace BXJG.Shop.Sale
             //在应用层或UI的Action可能会调用多个api时传入相同参数，那么此时参数验证一次就够了
             //一旦采用多层次都验证，那么整个项目会有大量这种情况存在，会导致性能下降，高并发时可能更严重些。
             //还是做正确的事吧，领域层本就是独立的层，保证业务数据的约束也算是业务逻辑的一部分
+            //将来使用充血模型后 很多验证可能移植到实体类上
             customer.RequiredValidate(nameof(customer));//领域层不应访问session，所以不要在customer为空时自动获取当前登录用户所关联的顾客
             items.RequiredValidate(nameof(items));
             consignee.RequiredValidate(nameof(consignee));
@@ -95,42 +94,20 @@ namespace BXJG.Shop.Sale
             receivingAddress.RequiredValidate(nameof(receivingAddress));
             #endregion
 
-            #region 针对顾客的各种业务判断和处理
-            //比如判断是否是黑名单客户
-            #endregion
-
-            #region 开票业务
-            //暂时忽略开票
-            //if (invoiceType != InvoiceType.None && invoiceTitle.IsNullOrWhiteSpace())
-            //    throw new UserFriendlyException(L("需要开票时，请提供发票抬头！"));
-            //if (invoiceType == InvoiceType.Business && taxId.IsNullOrWhiteSpace())
-            //    throw new UserFriendlyException(L("需要开企业发票时，请提供税号！"));
-            #endregion
-
-            #region 订单时间
-            //所在服务器的当前时间未必准确
-            //abp官方文档 提供了时间处理方案 https://aspnetboilerplate.com/Pages/Documents/Timing
-            //.net后来提供的DateTimeOffset也许已经处理了这个问题
-            if (!orderTime.HasValue)
-                orderTime = DateTimeOffset.Now;
-            #endregion
-
             //所有业务判断都成功时才创建订单对象
-            var order = new OrderEntity<TUser>
+            var order = new OrderEntity<TUser, TArea>
             {
                 Customer = customer,
                 CustomerId = customer.Id,
                 OrderNo = Guid.NewGuid().ToString("N"),//将来再考虑用个专门的组件生产简单、不重复的订单号
-                OrderTime = orderTime.Value,
+                OrderTime = DateTimeOffset.Now,
                 Status = OrderStatus.Created,
                 CustomerRemark = customerRemark,
                 //暂时忽略开票
                 //InvoiceType = invoiceType,
                 //InvoiceTitle = invoiceTitle,
                 //TaxId = taxId,
-
                 PaymentStatus = PaymentStatus.WaitingForPayment,
-
                 Consignee = consignee,
                 ConsigneePhoneNumber = consigneePhoneNumber,
                 ReceivingAddress = receivingAddress,
@@ -139,9 +116,9 @@ namespace BXJG.Shop.Sale
             #region 订单明细
             foreach (var item in items)
             {
-                var product = new OrderItemEntity<TUser>
+                var product = new OrderItemEntity<TUser, TArea>
                 {
-                    Amount = item.CalculationAmount(),
+                    Amount = item.Item.Price * item.Quantity,
                     Image = item.Item.GetImages()[0],
                     Integral = item.Item.Integral,
                     Item = item.Item,
@@ -150,18 +127,15 @@ namespace BXJG.Shop.Sale
                     Price = item.Item.Price,
                     Quantity = item.Quantity,
                     Title = item.Item.Title,
-                    TotalIntegral = Convert.ToInt32(item.Item.Integral * item.Quantity)
+                    TotalIntegral = Convert.ToInt32(item.Item.Integral * item.Quantity),
                 };
                 order.Items.Add(product);
+                order.MerchandiseSubtotal += product.Amount;
+                order.Integral += product.TotalIntegral;
             }
             #endregion
-            order.CalculationMerchandiseSubtotal();//计算并设置商品小计
-
-            //暂时忽略配送费
-            //DistributionFee 配送费 简单的情况 可以让 后台管理员确认订单时录入配送费；合理的情况是根据购买的商品自动计算
-
-            //InvoiceTax 发票税金 https://gitee.com/bxjg1987/abp/wikis/%E9%85%8D%E7%BD%AE%E5%8A%9F%E8%83%BD?sort_id=2127088
-
+            order.PaymentAmount = order.MerchandiseSubtotal;//+各种费用-各种优惠
+            //插入之前触发一个事件，允许事件处理程序修改或阻止订单创建
             await repository.InsertAsync(order);
             //即使调用了，后续事件处理异常了一样会回滚，参考 https://aspnetboilerplate.com/Pages/Documents/Unit-Of-Work#savechanges
             //文档是这么说的，没有试验过
@@ -171,6 +145,40 @@ namespace BXJG.Shop.Sale
             //好像这个abp自动触发了 https://aspnetboilerplate.com/Pages/Documents/EventBus-Domain-Events#entity-changes
             //await EventBus.TriggerAsync(new EntityCreatedEventData<OrderEntity<TUser>>(order));//
             return order;
+        }
+
+        public async Task<OrderEntity<TUser, TArea>> PayAsync(OrderEntity<TUser, TArea> entity, long payMethod)
+        {
+            //支付前触发一个事件，允许事件处理程序阻止支付
+            entity.Status = OrderStatus.Processing;
+            entity.PaymentStatus = PaymentStatus.Paid;
+            entity.PaymentMethodId = payMethod;
+            //要不要加个支付时间？
+            entity.LogisticsStatus = LogisticsStatus.WaitShip;
+            //触发已订单支付完成
+            return entity;
+        }
+
+        public async Task<OrderEntity<TUser, TArea>> ShipmentAsync(OrderEntity<TUser, TArea> entity, long shipmentMethod)
+        {
+            //发货前触发一个事件，允许事件处理程序阻止发货
+            entity.DistributionMethodId = shipmentMethod;
+            //要不要加个发货时间？
+            entity.LogisticsStatus = LogisticsStatus.Shipped;
+            //触发已订单支付完成
+            return entity;
+        }
+        /// <summary>
+        /// 签收
+        /// </summary>
+        /// <param name="entity">订单</param>
+        /// <returns></returns>
+        public async Task<OrderEntity<TUser, TArea>> SignAsync(OrderEntity<TUser, TArea> entity)
+        {
+            //要不要加个发货时间？
+            entity.LogisticsStatus = LogisticsStatus.Signed;
+            //触发已订单支付完成
+            return entity;
         }
     }
 }

@@ -18,6 +18,7 @@ using Abp.Extensions;
 using BXJG.Shop.Customer.Dto;
 using Abp.Application.Services.Dto;
 using Microsoft.EntityFrameworkCore;
+using BXJG.Shop.Common;
 
 namespace BXJG.Shop.Customer
 {
@@ -44,16 +45,17 @@ namespace BXJG.Shop.Customer
     /// <typeparam name="TRole"></typeparam>
     /// <typeparam name="TTenantManager"></typeparam>
     /// <typeparam name="TUserManager"></typeparam>
-    public class CustomerAppService<TTenant, TUser, TRole, TTenantManager, TUserManager>
+    public class CustomerAppService<TTenant, TUser, TRole, TTenantManager, TUserManager,TArea>
         : BXJGShopAppServiceBase<TTenant, TUser, TRole, TTenantManager, TUserManager>, ICustomerAppService
         where TUser : AbpUser<TUser>, new()
         where TRole : AbpRole<TUser>, new()
         where TTenant : AbpTenant<TUser>
         where TTenantManager : AbpTenantManager<TTenant, TUser>
         where TUserManager : AbpUserManager<TRole, TUser>
+        where TArea : GeneralTreeEntity<TArea>, IShopAdministrative
     {
-        private readonly IRepository<CustomerEntity<TUser>, long> repository;
-        public CustomerAppService(IRepository<CustomerEntity<TUser>, long> repository)
+        private readonly IRepository<CustomerEntity<TUser,TArea>, long> repository;
+        public CustomerAppService(IRepository<CustomerEntity<TUser,TArea> ,long> repository)
         {
             this.repository = repository;
         }
@@ -92,7 +94,7 @@ namespace BXJG.Shop.Customer
             #endregion
 
             //映射不太好处理，手动来吧
-            var entity = new CustomerEntity<TUser>
+            var entity = new CustomerEntity<TUser,TArea>
             {
                 Amount = input.Amount,
                 Birthday = input.Birthday,

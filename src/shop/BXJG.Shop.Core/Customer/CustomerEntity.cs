@@ -1,6 +1,9 @@
 ﻿using Abp.Authorization.Users;
 using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
+using BXJG.GeneralTree;
+using BXJG.Shop.Common;
+using BXJG.Shop.Sale;
 using BXJG.Utils.Enums;
 using System;
 using System.Collections.Generic;
@@ -20,8 +23,9 @@ namespace BXJG.Shop.Customer
     /// 商城系统中的顾客
     /// </summary>
     /// <typeparam name="TUser"></typeparam>
-    public class CustomerEntity<TUser> : FullAuditedEntity<long>, IMustHaveTenant
+    public class CustomerEntity<TUser,TArea> : FullAuditedEntity<long>, IMustHaveTenant
         where TUser : AbpUserBase //因为内部可能包含领域逻辑，因此加约束更方便
+        where TArea : GeneralTreeEntity<TArea>, IShopAdministrative
     {
         /// <summary>
         /// 租户id
@@ -34,7 +38,7 @@ namespace BXJG.Shop.Customer
         /// <summary>
         /// 关联到abp用户
         /// </summary>
-        public TUser User { get; set; }
+        public virtual TUser User { get; set; }
         /// <summary>
         /// 顾客的积分
         /// </summary>
@@ -51,6 +55,10 @@ namespace BXJG.Shop.Customer
         /// 出生日期
         /// </summary>
         public DateTimeOffset Birthday { get; set; }
+        /// <summary>
+        /// 顾客的订单列表
+        /// </summary>
+        public virtual List<OrderEntity<TUser, TArea>> Orders { get; set; }
         /// <summary>
         /// 积分、余额等处理时可能存在并发处理
         /// 最好的办法是在要处理的字段上加并发控制，以减小并发冲突的几率，但是目前一切从简先用行并发控制

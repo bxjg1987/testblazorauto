@@ -1,4 +1,6 @@
 ﻿using Abp.Authorization.Users;
+using BXJG.GeneralTree;
+using BXJG.Shop.Common;
 using BXJG.Shop.Sale;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -11,19 +13,19 @@ namespace BXJG.Shop.EFMaps
     /// 订单的ef映射类，请在主程序的DBContext.OnModelCreating注册
     /// </summary>
     /// <typeparam name="TUser"></typeparam>
-    public class OrderMap<TUser> : IEntityTypeConfiguration<OrderEntity<TUser>>
+    public class OrderMap<TUser,TArea> : IEntityTypeConfiguration<OrderEntity<TUser,TArea>>
         where TUser : AbpUserBase
+          where TArea : GeneralTreeEntity<TArea>, IShopAdministrative
     {
-        public void Configure(EntityTypeBuilder<OrderEntity<TUser>> builder)
+        public void Configure(EntityTypeBuilder<OrderEntity<TUser, TArea>> builder)
         {
-            builder.Property(c => c.OrderNo).IsRequired(true).HasColumnType($"varchar({OrderEntity<TUser>.OrderNoMaxLength})");
-            builder.Property(c => c.CustomerRemark).HasMaxLength(OrderEntity<TUser>.CustomerRemarkMaxLength);
-            builder.Property(c => c.Consignee).IsRequired(true).HasMaxLength(OrderEntity<TUser>.ConsigneeMaxLength);
-            builder.Property(c => c.ConsigneePhoneNumber).IsRequired(true).HasColumnType($"varchar({OrderEntity<TUser>.ConsigneePhoneNumberMaxLength})");
-            builder.Property(c => c.ReceivingAddress).IsRequired(true).HasMaxLength(OrderEntity<TUser>.ReceivingAddressMaxLength);
-            builder.Property(c => c.LogisticsNumber).HasColumnType($"varchar({OrderEntity<TUser>.LogisticsNumberMaxLength})");
+            builder.Property(c => c.OrderNo).IsRequired(true).HasColumnType($"varchar({OrderEntity<TUser, TArea>.OrderNoMaxLength})");
+            builder.Property(c => c.CustomerRemark).HasMaxLength(OrderEntity<TUser, TArea>.CustomerRemarkMaxLength);
+            builder.Property(c => c.Consignee).IsRequired(true).HasMaxLength(OrderEntity<TUser, TArea>.ConsigneeMaxLength);
+            builder.Property(c => c.ConsigneePhoneNumber).IsRequired(true).HasColumnType($"varchar({OrderEntity<TUser, TArea>.ConsigneePhoneNumberMaxLength})");
+            builder.Property(c => c.ReceivingAddress).IsRequired(true).HasMaxLength(OrderEntity<TUser, TArea>.ReceivingAddressMaxLength);
+            builder.Property(c => c.LogisticsNumber).HasColumnType($"varchar({OrderEntity<TUser, TArea>.LogisticsNumberMaxLength})");
             builder.Property(c => c.RowVersion).IsRowVersion();
-            builder.Ignore(c => c.EventBus);
         }
     }
 }
