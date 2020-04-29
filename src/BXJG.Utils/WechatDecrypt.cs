@@ -1,14 +1,16 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
 
 namespace BXJG.Utils
 {
     public class WechatDecrypt
     {
-        public static string DecodeEncryptedData(string sessionKey, string encryptedData, string iv)
+        public static DecodedPhoneNumber DecodeEncryptedData(string sessionKey, string encryptedData, string iv)
         {
             var aesCipher = Convert.FromBase64String(encryptedData);
             var aesKey = Convert.FromBase64String(sessionKey);
@@ -16,7 +18,7 @@ namespace BXJG.Utils
 
             var result = AES_Decrypt(encryptedData, aesIV, aesKey);
             var resultStr = Encoding.UTF8.GetString(result);
-            return resultStr;
+            return JsonSerializer.Deserialize<DecodedPhoneNumber>(resultStr);
         }
 
         private static byte[] AES_Decrypt(String Input, byte[] Iv, byte[] Key)
@@ -62,40 +64,39 @@ namespace BXJG.Utils
             Array.Copy(decrypted, 0, res, 0, decrypted.Length - pad);
             return res;
         }
-        //public static string DecryptPhoneNumber(string sessionkey, string encryptedData, string iv)
-        //{
 
-
-        //    try
-        //    {
-        //        return AESDecrypt(encryptedData, sessionkey, iv);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return ex.Message;
-        //    }
-        //}
-
-        //public static string AESDecrypt(string encryptedDatatxt, string AesKey, string AesIV)
-        //{
-        //    try
-        //    {
-        //        byte[] encryptedData = Convert.FromBase64String(encryptedDatatxt);
-        //        RijndaelManaged rijndaelCipher = new RijndaelManaged();
-        //        rijndaelCipher.Key = Convert.FromBase64String(AesKey);
-        //        rijndaelCipher.IV = Convert.FromBase64String(AesIV);
-        //        rijndaelCipher.Mode = CipherMode.CBC;
-        //        rijndaelCipher.Padding = PaddingMode.PKCS7;
-        //        ICryptoTransform transform = rijndaelCipher.CreateDecryptor();
-        //        byte[] plainText = transform.TransformFinalBlock(encryptedData, 0, encryptedData.Length);
-        //        string result = Encoding.Default.GetString(plainText);
-        //        return result;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-
-        //    }
-        //}
     }
+
+    public class DecodedPhoneNumber
+    {
+
+        //
+        // 摘要:
+        //     用户绑定的手机号（国外手机号会有区号）
+        public string phoneNumber { get; set; }
+        //
+        // 摘要:
+        //     没有区号的手机号
+        public string purePhoneNumber { get; set; }
+        //
+        // 摘要:
+        //     区号（Senparc注：国别号）
+        public string countryCode { get; set; }
+
+
+        public Watermark watermark { get; set; }
+
+    }
+
+    public class Watermark
+    {
+
+        public string appid { get; set; }
+        public long timestamp { get; set; }
+        public DateTimeOffset DateTimeStamp { get; }
+    }
+
 }
+//
+// 摘要:
+//     用户绑定手机号解密类
