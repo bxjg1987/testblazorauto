@@ -1,8 +1,17 @@
 ﻿
+.icon-BXJGShop {
+	background: url('icons/BXJGShop.png') no-repeat center center;
+}
+.icon-BXJGShopDictionary {
+	background: url('icons/shuju.png') no-repeat center center;
+}
+.icon-BXJGShopItem {
+	background: url('icons/BXJGShopItem.png') no-repeat center center;
+}
+
 .icon-kaishi {
 	background: url('icons/kaishi.png') no-repeat center center;
 }
-
 .icon-download {
 	background: url('icons/download.png') no-repeat center center;
 }

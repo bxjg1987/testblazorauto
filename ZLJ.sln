@@ -64,7 +64,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Shop.EFCore", "src\sho
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{48232CB6-562B-44BB-912B-3ED71CCE455E}"
 	ProjectSection(SolutionItems) = preProject
-		docs\规范.txt = docs\规范.txt
+		docs\开发日记.txt = docs\开发日记.txt
 	EndProjectSection
 EndProject
 Global

@@ -23,4 +23,8 @@
     <ProjectReference Include="..\BXJG.Shop.Core\BXJG.Shop.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Front\" />
+  </ItemGroup>
+
 </Project>
