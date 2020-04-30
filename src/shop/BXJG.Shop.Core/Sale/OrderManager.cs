@@ -71,9 +71,20 @@ namespace BXJG.Shop.Sale
             this.customerRepository = customerRepository;
             this.customerManager = customerManager;
         }
-
+        /// <summary>
+        /// 创建订单
+        /// </summary>
+        /// <param name="customer">顾客</param>
+        /// <param name="area">收货人所属地区</param>
+        /// <param name="consignee">收货人</param>
+        /// <param name="consigneePhoneNumber">收货人电话</param>
+        /// <param name="receivingAddress">收货地址</param>
+        /// <param name="customerRemark"></param>
+        /// <param name="items"></param>
+        /// <returns></returns>
         public async Task<OrderEntity<TUser, TArea>> CreateAsync(
             CustomerEntity<TUser, TArea> customer,
+            TArea area,
             string consignee,
             string consigneePhoneNumber,
             string receivingAddress,
@@ -108,6 +119,7 @@ namespace BXJG.Shop.Sale
                 //InvoiceTitle = invoiceTitle,
                 //TaxId = taxId,
                 PaymentStatus = PaymentStatus.WaitingForPayment,
+                Area = area,
                 Consignee = consignee,
                 ConsigneePhoneNumber = consigneePhoneNumber,
                 ReceivingAddress = receivingAddress,
@@ -146,26 +158,32 @@ namespace BXJG.Shop.Sale
             //await EventBus.TriggerAsync(new EntityCreatedEventData<OrderEntity<TUser>>(order));//
             return order;
         }
-
+        /// <summary>
+        /// 支付
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="payMethod"></param>
+        /// <returns></returns>
         public async Task<OrderEntity<TUser, TArea>> PayAsync(OrderEntity<TUser, TArea> entity, long payMethod)
         {
-            //支付前触发一个事件，允许事件处理程序阻止支付
             entity.Status = OrderStatus.Processing;
             entity.PaymentStatus = PaymentStatus.Paid;
             entity.PaymentMethodId = payMethod;
-            //要不要加个支付时间？
             entity.LogisticsStatus = LogisticsStatus.WaitShip;
-            //触发已订单支付完成
+            await EventBus.TriggerAsync(new OrderPaidEventData<TUser, TArea>(entity));
             return entity;
         }
-
-        public async Task<OrderEntity<TUser, TArea>> ShipmentAsync(OrderEntity<TUser, TArea> entity, long shipmentMethod)
+        /// <summary>
+        /// 发货
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="shipmentMethod"></param>
+        /// <returns></returns>
+        public async Task<OrderEntity<TUser, TArea>> ShipmentAsync(OrderEntity<TUser, TArea> entity, BXJGShopDictionaryEntity shipmentMethod)
         {
-            //发货前触发一个事件，允许事件处理程序阻止发货
-            entity.DistributionMethodId = shipmentMethod;
-            //要不要加个发货时间？
+            entity.DistributionMethod = shipmentMethod;
             entity.LogisticsStatus = LogisticsStatus.Shipped;
-            //触发已订单支付完成
+            await EventBus.TriggerAsync(new OrderShipedEventData<TUser, TArea>(entity));
             return entity;
         }
         /// <summary>
@@ -175,9 +193,8 @@ namespace BXJG.Shop.Sale
         /// <returns></returns>
         public async Task<OrderEntity<TUser, TArea>> SignAsync(OrderEntity<TUser, TArea> entity)
         {
-            //要不要加个发货时间？
             entity.LogisticsStatus = LogisticsStatus.Signed;
-            //触发已订单支付完成
+            await EventBus.TriggerAsync(new OrderSignedEventData<TUser, TArea>(entity));
             return entity;
         }
     }

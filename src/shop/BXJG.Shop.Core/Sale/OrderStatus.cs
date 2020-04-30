@@ -27,4 +27,56 @@ namespace BXJG.Shop.Sale
         /// </summary>
         Completed
     }
+    /// <summary>
+    /// 支付状态
+    /// </summary>
+    public enum PaymentStatus
+    {
+        /// <summary>
+        /// 待支付
+        /// </summary>
+        WaitingForPayment,
+        /// <summary>
+        /// 已支付
+        /// </summary>
+        Paid,
+        /// <summary>
+        /// 申请退款
+        /// </summary>
+        ApplyForRefund,
+        /// <summary>
+        /// 已全额退款
+        /// </summary>
+        Refunded,
+        /// <summary>
+        /// 已部分退款
+        /// </summary>
+        RefundedInPart
+    }
+    /// <summary>
+    /// 物流状态
+    /// </summary>
+    public enum LogisticsStatus
+    {
+        /// <summary>
+        /// 待发货
+        /// </summary>
+        WaitShip,
+        /// <summary>
+        /// 已发货
+        /// </summary>
+        Shipped,
+        /// <summary>
+        /// 已签收
+        /// </summary>
+        Signed,
+        /// <summary>
+        /// 已拒收
+        /// </summary>
+        Rejected,
+        /// <summary>
+        /// 不需要运送
+        /// </summary>
+        Unwanted
+    }
 }

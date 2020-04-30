@@ -223,7 +223,6 @@ namespace BXJG.Shop.Sale
         /// 收货人电话
         /// </summary>
         public string ConsigneePhoneNumber { get; set; }
-        //省市区县 暂时忽略，后期补充
         /// <summary>
         /// 收货地址
         /// </summary>
