@@ -10,9 +10,9 @@ using ZLJ.MultiTenancy;
 
 namespace ZLJ.Shop
 {
-    public class CustomerAppService : CustomerAppService<Tenant, User, Role, TenantManager, UserManager, AdministrativeEntity>
+    public class BXJGShopCustomerAppService : BXJGShopCustomerAppService<Tenant, User, Role, TenantManager, UserManager, AdministrativeEntity>
     {
-        public CustomerAppService(IRepository<CustomerEntity<User, AdministrativeEntity>, long> repository) : base(repository)
+        public BXJGShopCustomerAppService(IRepository<CustomerEntity<User, AdministrativeEntity>, long> repository) : base(repository)
         {
         }
     }

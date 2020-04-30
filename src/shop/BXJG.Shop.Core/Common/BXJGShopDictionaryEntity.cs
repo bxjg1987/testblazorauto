@@ -16,8 +16,6 @@ namespace BXJG.Shop.Common
     {
         public const int IconMaxLength = 500;
 
-        [Column(TypeName= "varchar(500)")]
-        [MaxLength(IconMaxLength)]
         public string Icon { get; set; }
     }
 }

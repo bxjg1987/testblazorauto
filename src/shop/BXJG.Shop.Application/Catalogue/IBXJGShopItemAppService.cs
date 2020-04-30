@@ -18,7 +18,7 @@ namespace BXJG.Shop.Catalogue
     /// 商品上架信息应用服务
     /// </summary>
     /// <typeparam name="TTree"></typeparam>
-    public interface IItemAppService : IApplicationService
+    public interface IBXJGShopItemAppService : IApplicationService
     {
         /// <summary>
         /// 新增商品上架信息

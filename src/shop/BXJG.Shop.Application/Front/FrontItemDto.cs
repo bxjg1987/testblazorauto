@@ -1,26 +1,25 @@
 ﻿using Abp.Application.Services.Dto;
-using Abp.AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace BXJG.Shop.Catalogue.Dto
+namespace BXJG.Shop.Front
 {
     /// <summary>
-    /// 后台管理页使用的DTO
+    /// 显示给顾客的商品信息
     /// </summary>
-    public class ItemDto : FullAuditedEntityDto<long>
+    public class FrontItemDto : EntityDto<long>
     {
         #region 基本信息
         /// <summary>
         /// 标题
         /// </summary>
         public string Title { get; set; }
-        /// <summary>
-        /// sku
-        /// </summary>
-        public string Sku { get; set; }
+        ///// <summary>
+        ///// sku
+        ///// </summary>
+        //public string Sku { get; set; }
         /// <summary>
         /// 简短描述
         /// </summary>
@@ -79,18 +78,19 @@ namespace BXJG.Shop.Catalogue.Dto
         /// 是否显示在轮播图片中
         /// </summary>
         public bool Focus { get; set; }
-        /// <summary>
-        /// 是否已发布
-        /// </summary>
-        public bool Published { get; set; }
-        /// <summary>
-        /// 上架时间
-        /// </summary>
-        public DateTimeOffset? AvailableStart { get; set; }
-        /// <summary>
-        /// 下架时间
-        /// </summary>
-        public DateTimeOffset? AvailableEnd { get; set; }
+        ///// <summary>
+        ///// 是否已发布
+        ///// </summary>
+        //public bool Published { get; set; }
+        ///// <summary>
+        ///// 上架时间
+        ///// </summary>
+        //public DateTimeOffset? AvailableStart { get; set; }
+        ///// <summary>
+        ///// 下架时间
+        ///// </summary>
+        //public DateTimeOffset? AvailableEnd { get; set; }
         #endregion
+
     }
 }

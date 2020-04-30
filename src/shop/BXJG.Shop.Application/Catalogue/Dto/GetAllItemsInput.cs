@@ -39,7 +39,7 @@ namespace BXJG.Shop.Catalogue.Dto
         public void Normalize()
         {
             if (this.Sorting.IsNullOrEmpty())
-                this.Sorting = "creation desc";
+                this.Sorting = "creationtime desc";
         }
     }
 }

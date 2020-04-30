@@ -45,8 +45,8 @@ namespace BXJG.Shop.Customer
     /// <typeparam name="TRole"></typeparam>
     /// <typeparam name="TTenantManager"></typeparam>
     /// <typeparam name="TUserManager"></typeparam>
-    public class CustomerAppService<TTenant, TUser, TRole, TTenantManager, TUserManager,TArea>
-        : BXJGShopAppServiceBase<TTenant, TUser, TRole, TTenantManager, TUserManager>, ICustomerAppService
+    public class BXJGShopCustomerAppService<TTenant, TUser, TRole, TTenantManager, TUserManager,TArea>
+        : BXJGShopAppServiceBase<TTenant, TUser, TRole, TTenantManager, TUserManager>, IBXJGShopCustomerAppService
         where TUser : AbpUser<TUser>, new()
         where TRole : AbpRole<TUser>, new()
         where TTenant : AbpTenant<TUser>
@@ -55,7 +55,7 @@ namespace BXJG.Shop.Customer
         where TArea : GeneralTreeEntity<TArea>, IShopAdministrative
     {
         private readonly IRepository<CustomerEntity<TUser,TArea>, long> repository;
-        public CustomerAppService(IRepository<CustomerEntity<TUser,TArea> ,long> repository)
+        public BXJGShopCustomerAppService(IRepository<CustomerEntity<TUser,TArea> ,long> repository)
         {
             this.repository = repository;
         }

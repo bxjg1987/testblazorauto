@@ -1,0 +1,21 @@
+﻿using Abp.Application.Services;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BXJG.Shop.Front
+{
+    /// <summary>
+    /// 面向前端顾客关于商品信息的接口
+    /// </summary>
+    public interface IFrontItemAppService:IApplicationService
+    {
+        /// <summary>
+        /// 搜索商品信息
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        Task<List<FrontItemDto>> GetAllAsync(GetAllFrontItemInput input);
+    }
+}

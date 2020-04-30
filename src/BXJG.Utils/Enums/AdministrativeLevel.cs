@@ -9,8 +9,17 @@ namespace BXJG.Utils.Enums
     /// </summary>
     public enum AdministrativeLevel
     {
+        /// <summary>
+        /// 省、直辖市
+        /// </summary>
         Pprovince,
+        /// <summary>
+        /// 市
+        /// </summary>
         City,
+        /// <summary>
+        /// 区县
+        /// </summary>
         County
     }
 }

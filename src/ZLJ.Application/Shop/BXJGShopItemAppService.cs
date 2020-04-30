@@ -9,9 +9,9 @@ using Abp.Domain.Repositories;
 
 namespace ZLJ.Shop
 {
-    public class ItemAppService : ItemAppService<Tenant, User, Role, TenantManager, UserManager>
+    public class BXJGShopItemAppService : BXJGShopItemAppService<Tenant, User, Role, TenantManager, UserManager>
     {
-        public ItemAppService(IRepository<ItemEntity, long> repository) : base(repository)
+        public BXJGShopItemAppService(IRepository<ItemEntity, long> repository) : base(repository)
         {
         }
     }

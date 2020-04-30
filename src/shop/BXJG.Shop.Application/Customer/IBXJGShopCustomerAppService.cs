@@ -18,7 +18,7 @@ namespace BXJG.Shop.Customer
     /// <summary>
     /// 后台管理员对商城会员进行管理的应用服务
     /// </summary>
-    public interface ICustomerAppService : IApplicationService
+    public interface IBXJGShopCustomerAppService : IApplicationService
     {
         Task<PagedResultDto<CustomerDto>> GetListAsync(GetAllCustomersInput input);
         Task<CustomerDto> GetAsync(EntityDto<long> input);
