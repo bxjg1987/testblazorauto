@@ -9,7 +9,7 @@ namespace BXJG.Shop.Sale.Dto
     /// 顾客端和小程序端目前都使用此对象作为订单列表的显示模式
     /// 将来可能按后台管理员和前端顾客分开定义不同对象（比如顾客id、顾客名称，后台管理时需要，但前端顾客的订单列表不需要返回这些字段）
     /// </summary>
-    public class OrderListDto
+    public class OrderDto
     {
         #region 订单信息
         /// <summary>

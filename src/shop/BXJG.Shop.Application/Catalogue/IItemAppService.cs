@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Abp.Authorization;
 using BXJG.Shop.Authorization;
+using Abp.Application.Services.Dto;
 
 namespace BXJG.Shop.Catalogue
 {
@@ -40,7 +41,14 @@ namespace BXJG.Shop.Catalogue
         /// <param name="input"></param>
         /// <returns></returns>
         [AbpAuthorize(BXJGShopPermissions.BXJGShopItem)]
-        Task<IList<ItemDto>> GetListAsync(GetAllItemsInput input);
+        Task<IList<ItemDto>> GetAllAsync(GetAllItemsInput input);
+        /// <summary>
+        /// 根据Id获取商品上架信息
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [AbpAuthorize(BXJGShopPermissions.BXJGShopItem)]
+        Task<ItemDto> GetAsync(EntityDto<long> input);
 
         //简单起见，目前不用返回值，将来可能包含删除失败的id集合和相应的原因
         //目前不返回，将来添加返回值 对所有调用方也都不影响
@@ -51,6 +59,6 @@ namespace BXJG.Shop.Catalogue
         /// <param name="ids"></param>
         /// <returns></returns>
         [AbpAuthorize(BXJGShopPermissions.BXJGShopItemDelete)]
-        Task DeleteAsync(params long[] ids);
+        Task DeleteAsync(DeleteInput input);
     }
 }

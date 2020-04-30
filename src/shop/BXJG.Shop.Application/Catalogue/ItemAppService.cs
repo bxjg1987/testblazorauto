@@ -15,6 +15,7 @@ using Abp.Linq.Extensions;
 using System.Linq.Dynamic.Core;
 using System.Linq.Dynamic;
 using Abp.Extensions;
+using Abp.Application.Services.Dto;
 
 namespace BXJG.Shop.Catalogue
 {
@@ -63,7 +64,7 @@ namespace BXJG.Shop.Catalogue
             return ObjectMapper.Map<ItemDto>(entity);
         }
 
-        public async Task<IList<ItemDto>> GetListAsync(GetAllItemsInput input)
+        public async Task<IList<ItemDto>> GetAllAsync(GetAllItemsInput input)
         {
             var query = repository.GetAllIncluding(c => c.Category)
                 .WhereIf(input.CategoryId.HasValue, c => c.CategoryId == input.CategoryId.Value)
@@ -78,9 +79,15 @@ namespace BXJG.Shop.Catalogue
             return ObjectMapper.Map<IList<ItemDto>>(list);
         }
 
-        public Task DeleteAsync(params long[] ids)
+        public Task DeleteAsync(DeleteInput input)
         {
-          return  repository.DeleteAsync(c => ids.Contains(c.Id));
+            return repository.DeleteAsync(c => input.Ids.Contains(c.Id));
+        }
+
+        public async Task<ItemDto> GetAsync(EntityDto<long> input)
+        {
+            var entity = await repository.GetAsync(input.Id);
+            return ObjectMapper.Map<ItemDto>(entity);
         }
     }
 }
