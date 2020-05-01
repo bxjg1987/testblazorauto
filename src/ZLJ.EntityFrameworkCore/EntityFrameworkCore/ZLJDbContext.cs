@@ -12,6 +12,8 @@ using BXJG.Shop.Customer;
 using BXJG.Shop;
 using BXJG.Shop.Sale;
 using BXJG.Shop.EFMaps;
+using ZLJ.Administrative;
+
 namespace ZLJ.EntityFrameworkCore
 {
     public class ZLJDbContext : AbpZeroDbContext<Tenant, Role, User, ZLJDbContext>
@@ -21,6 +23,7 @@ namespace ZLJ.EntityFrameworkCore
         public virtual DbSet<OrganizationUnitEntity> OrganizationUnitEntities { get; set; }
         public virtual DbSet<GeneralTreeEntity> GeneralTreeEntities { get; set; }
         public virtual DbSet<EquipmentInfoEntity> EquipmentInfos { get; set; }
+        public virtual DbSet<AdministrativeEntity> Administratives { get; set; }
 
         #region 注册商城模块中的实体
         public virtual DbSet<BXJGShopDictionaryEntity> BXJGShopDictionaries { get; set; }
@@ -38,7 +41,9 @@ namespace ZLJ.EntityFrameworkCore
             base.OnModelCreating(modelBuilder);
             
             //扫描并应用商城模块中的ef映射
-            modelBuilder.ApplyConfigurationBXJGShop<User, AdministrativeEntity>();
+            modelBuilder
+                .ApplyConfigurationsFromAssembly(typeof(ZLJEntityFrameworkModule).Assembly)
+                .ApplyConfigurationBXJGShop<User, AdministrativeEntity>();
         }
     }
 }

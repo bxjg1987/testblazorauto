@@ -3,6 +3,7 @@ using BXJG.Shop.Customer;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using ZLJ.Administrative;
 using ZLJ.Authorization.Roles;
 using ZLJ.Authorization.Users;
 using ZLJ.BaseInfo;

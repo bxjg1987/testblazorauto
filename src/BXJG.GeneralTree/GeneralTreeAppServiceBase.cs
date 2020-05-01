@@ -237,7 +237,7 @@ namespace BXJG.GeneralTree
         public virtual async Task<IList<TGetTreeForSelectOutput>> GetTreeForSelectAsync(TGetTreeForSelectInput input)
         {
             //权限判断
-            await CheckGetPermissionAsync();
+            //await CheckGetPermissionAsync();
 
 
             //得到实体扁平集合
@@ -324,7 +324,7 @@ namespace BXJG.GeneralTree
         }
         public virtual async Task<IList<TGetNodesForSelectOutput>> GetNodesForSelectAsync(TGetNodesForSelectInput input)
         {
-            await CheckGetPermissionAsync();
+            //await CheckGetPermissionAsync();
 
             var query = ownRepository.GetAll()
                  .Where(c => c.ParentId == input.ParentId || c.Id == input.ParentId);

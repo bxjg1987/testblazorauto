@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ZLJ.BaseInfo
+namespace ZLJ.Administrative
 {
     /// <summary>
     /// 行政区域实体类
@@ -16,6 +16,5 @@ namespace ZLJ.BaseInfo
         /// 主程序的行政级别
         /// </summary>
         public AdministrativeLevel Level { get; set; }
-      
     }
 }
