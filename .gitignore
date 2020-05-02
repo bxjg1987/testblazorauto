@@ -341,3 +341,4 @@ ASALocalRun/
 healthchecksdb
 
 App_Data/Logs/
+/src/ZLJ.Web.Host/App_Data/Logs/Logs.txt
