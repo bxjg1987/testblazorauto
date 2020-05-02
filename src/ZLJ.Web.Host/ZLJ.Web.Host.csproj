@@ -60,7 +60,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
+    <Folder Include="App_Data\Logs\" />
     <Folder Include="wwwroot\upload\" />
   </ItemGroup>
 </Project>
