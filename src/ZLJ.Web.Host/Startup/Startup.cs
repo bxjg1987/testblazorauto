@@ -20,6 +20,8 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
 using BXJG.WeChat.Payment;
 using ZLJ.Web.Host.Controllers;
+using System.IO;
+using BXJG.Shop;
 
 namespace ZLJ.Web.Host.Startup
 {
@@ -84,7 +86,19 @@ namespace ZLJ.Web.Host.Startup
             services.AddSwaggerGen(options =>
             {
                 options.SwaggerDoc("v1", new OpenApiInfo() { Title = "ZLJ API", Version = "v1" });
+
+                //添加中文注释
+                var basePath = Path.GetDirectoryName(typeof(Program).Assembly.Location);
+                var commentsFileName = typeof(ZLJApplicationModule).Assembly.GetName().Name + ".XML";
+                var commentsFileName1 = typeof(BXJGShopApplicationModule).Assembly.GetName().Name + ".XML";
+
+                var xmlPath = Path.Combine(basePath, commentsFileName);
+                var xmlPath1 = Path.Combine(basePath, commentsFileName1);
+                options.IncludeXmlComments(xmlPath);
+                options.IncludeXmlComments(xmlPath1);
+
                 options.DocInclusionPredicate((docName, description) => true);
+
 
                 // Define the BearerAuth scheme that's in use
                 options.AddSecurityDefinition("bearerAuth", new OpenApiSecurityScheme()
