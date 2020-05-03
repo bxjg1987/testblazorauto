@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace BXJG.Shop.Catalogue.Dto
+namespace BXJG.Shop.Catalogue
 {
     /// <summary>
     /// 后台管理页使用的DTO

@@ -12,10 +12,9 @@ using System.Threading.Tasks;
 using Abp.Linq.Extensions;
 using Abp.ObjectMapping;
 using Microsoft.EntityFrameworkCore;
-using BXJG.Shop.Catalogue.Dto;
 using Abp;
 
-namespace BXJG.Shop.Front
+namespace BXJG.Shop.Catalogue
 {
     public class FrontItemAppService : AbpServiceBase, IFrontItemAppService
     {

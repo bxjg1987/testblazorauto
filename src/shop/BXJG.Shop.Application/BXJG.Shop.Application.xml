@@ -19,300 +19,426 @@
             <typeparam name="TTenantManager"></typeparam>
             <typeparam name="TUserManager"></typeparam>
         </member>
-        <member name="T:BXJG.Shop.Catalogue.Dto.GetAllItemsInput">
+        <member name="T:BXJG.Shop.Catalogue.FrontItemDto">
             <summary>
-            上架/商品信息后台管理页面查询列表时使用的输入模型
+            显示给顾客的商品信息
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.GetAllItemsInput.CategoryId">
+        <member name="P:BXJG.Shop.Catalogue.FrontItemDto.Title">
+            <summary>
+            标题
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Catalogue.FrontItemDto.DescriptionShort">
+            <summary>
+            简短描述
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Catalogue.FrontItemDto.DescriptionFull">
+            <summary>
+            详细描述
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Catalogue.FrontItemDto.Images">
+            <summary>
+            轮播图片集合，多个用英文逗号,分割
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Catalogue.FrontItemDto.Image">
+            <summary>
+            封面图片
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Catalogue.FrontItemDto.CategoryId">
+            <summary>
+            所属类别id
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Catalogue.FrontItemDto.CategoryDisplayName">
+            <summary>
+            分类名称
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Catalogue.FrontItemDto.OldPrice">
+            <summary>
+            原价
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Catalogue.FrontItemDto.Price">
+            <summary>
+            现价(销售价)
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Catalogue.FrontItemDto.Integral">
+            <summary>
+            积分
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Catalogue.FrontItemDto.Hot">
+            <summary>
+            是否热卖
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Catalogue.FrontItemDto.New">
+            <summary>
+            是否新品
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Catalogue.FrontItemDto.Home">
+            <summary>
+            是否显示在首页
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Catalogue.FrontItemDto.Focus">
+            <summary>
+            是否显示在轮播图片中
+            </summary>
+        </member>
+        <member name="T:BXJG.Shop.Catalogue.GetAllFrontItemInput">
+            <summary>
+            面向顾客的商品查询时的输入模型
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Catalogue.GetAllFrontItemInput.CategoryId">
             <summary>
             所属商品类别id
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.GetAllItemsInput.Published">
-            <summary>
-            是否已发布
-            </summary>
-        </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.GetAllItemsInput.Keywords">
+        <member name="P:BXJG.Shop.Catalogue.GetAllFrontItemInput.Keywords">
             <summary>
             关键字
             Title/DescriptionShort/SKU等..模糊查询
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.GetAllItemsInput.AvailableStart">
+        <member name="P:BXJG.Shop.Catalogue.GetAllFrontItemInput.PriceMin">
+            <summary>
+            价格范围下限
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Catalogue.GetAllFrontItemInput.PriceMax">
+            <summary>
+            价格范围上限
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Catalogue.GetAllFrontItemInput.Hot">
+            <summary>
+            是否热卖
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Catalogue.GetAllFrontItemInput.New">
+            <summary>
+            是否新品
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Catalogue.GetAllFrontItemInput.Home">
+            <summary>
+            是否显示在首页
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Catalogue.GetAllFrontItemInput.Focus">
+            <summary>
+            是否显示在轮播图片中
+            </summary>
+        </member>
+        <member name="M:BXJG.Shop.Catalogue.GetAllFrontItemInput.Normalize">
+            <summary>
+            模型绑定后，abp会调用此方法来进一步初始化
+            </summary>
+        </member>
+        <member name="T:BXJG.Shop.Catalogue.GetAllItemsInput">
+            <summary>
+            上架/商品信息后台管理页面查询列表时使用的输入模型
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Catalogue.GetAllItemsInput.CategoryId">
+            <summary>
+            所属商品类别id
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Catalogue.GetAllItemsInput.Published">
+            <summary>
+            是否已发布
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Catalogue.GetAllItemsInput.Keywords">
+            <summary>
+            关键字
+            Title/DescriptionShort/SKU等..模糊查询
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Catalogue.GetAllItemsInput.AvailableStart">
             <summary>
             上架时间范围-开始
             注意与实体类中的同名字段意义不同
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.GetAllItemsInput.AvailableEnd">
+        <member name="P:BXJG.Shop.Catalogue.GetAllItemsInput.AvailableEnd">
             <summary>
             上架时间范围-结束
             注意与实体类中的同名字段意义不同
             </summary>
         </member>
-        <member name="T:BXJG.Shop.Catalogue.Dto.ItemCreateDto">
+        <member name="T:BXJG.Shop.Catalogue.ItemCreateDto">
             <summary>
             创建上架模型时前端提供的数据模型
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemCreateDto.Title">
+        <member name="P:BXJG.Shop.Catalogue.ItemCreateDto.Title">
             <summary>
             标题
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemCreateDto.Sku">
+        <member name="P:BXJG.Shop.Catalogue.ItemCreateDto.Sku">
             <summary>
             sku
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemCreateDto.DescriptionShort">
+        <member name="P:BXJG.Shop.Catalogue.ItemCreateDto.DescriptionShort">
             <summary>
             简短描述
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemCreateDto.DescriptionFull">
+        <member name="P:BXJG.Shop.Catalogue.ItemCreateDto.DescriptionFull">
             <summary>
             详细描述
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemCreateDto.Images">
+        <member name="P:BXJG.Shop.Catalogue.ItemCreateDto.Images">
             <summary>
             图片集合
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemCreateDto.CategoryId">
+        <member name="P:BXJG.Shop.Catalogue.ItemCreateDto.CategoryId">
             <summary>
             所属类别id
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemCreateDto.OldPrice">
+        <member name="P:BXJG.Shop.Catalogue.ItemCreateDto.OldPrice">
             <summary>
             原价
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemCreateDto.Price">
+        <member name="P:BXJG.Shop.Catalogue.ItemCreateDto.Price">
             <summary>
             现价(销售价)
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemCreateDto.Integral">
+        <member name="P:BXJG.Shop.Catalogue.ItemCreateDto.Integral">
             <summary>
             积分
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemCreateDto.Hot">
+        <member name="P:BXJG.Shop.Catalogue.ItemCreateDto.Hot">
             <summary>
             是否热卖
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemCreateDto.New">
+        <member name="P:BXJG.Shop.Catalogue.ItemCreateDto.New">
             <summary>
             是否新品
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemCreateDto.Home">
+        <member name="P:BXJG.Shop.Catalogue.ItemCreateDto.Home">
             <summary>
             是否显示在首页
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemCreateDto.Focus">
+        <member name="P:BXJG.Shop.Catalogue.ItemCreateDto.Focus">
             <summary>
             是否显示在轮播图片中
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemCreateDto.Published">
+        <member name="P:BXJG.Shop.Catalogue.ItemCreateDto.Published">
             <summary>
             是否已发布
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemCreateDto.AvailableStart">
+        <member name="P:BXJG.Shop.Catalogue.ItemCreateDto.AvailableStart">
             <summary>
             上架时间
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemCreateDto.AvailableEnd">
+        <member name="P:BXJG.Shop.Catalogue.ItemCreateDto.AvailableEnd">
             <summary>
             下架时间
             </summary>
         </member>
-        <member name="T:BXJG.Shop.Catalogue.Dto.ItemDto">
+        <member name="T:BXJG.Shop.Catalogue.ItemDto">
             <summary>
             后台管理页使用的DTO
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemDto.Title">
+        <member name="P:BXJG.Shop.Catalogue.ItemDto.Title">
             <summary>
             标题
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemDto.Sku">
+        <member name="P:BXJG.Shop.Catalogue.ItemDto.Sku">
             <summary>
             sku
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemDto.DescriptionShort">
+        <member name="P:BXJG.Shop.Catalogue.ItemDto.DescriptionShort">
             <summary>
             简短描述
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemDto.DescriptionFull">
+        <member name="P:BXJG.Shop.Catalogue.ItemDto.DescriptionFull">
             <summary>
             详细描述
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemDto.Images">
+        <member name="P:BXJG.Shop.Catalogue.ItemDto.Images">
             <summary>
             轮播图片集合，多个用英文逗号,分割
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemDto.Image">
+        <member name="P:BXJG.Shop.Catalogue.ItemDto.Image">
             <summary>
             封面图片
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemDto.CategoryId">
+        <member name="P:BXJG.Shop.Catalogue.ItemDto.CategoryId">
             <summary>
             所属类别id
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemDto.CategoryDisplayName">
+        <member name="P:BXJG.Shop.Catalogue.ItemDto.CategoryDisplayName">
             <summary>
             分类名称
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemDto.OldPrice">
+        <member name="P:BXJG.Shop.Catalogue.ItemDto.OldPrice">
             <summary>
             原价
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemDto.Price">
+        <member name="P:BXJG.Shop.Catalogue.ItemDto.Price">
             <summary>
             现价(销售价)
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemDto.Integral">
+        <member name="P:BXJG.Shop.Catalogue.ItemDto.Integral">
             <summary>
             积分
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemDto.Hot">
+        <member name="P:BXJG.Shop.Catalogue.ItemDto.Hot">
             <summary>
             是否热卖
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemDto.New">
+        <member name="P:BXJG.Shop.Catalogue.ItemDto.New">
             <summary>
             是否新品
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemDto.Home">
+        <member name="P:BXJG.Shop.Catalogue.ItemDto.Home">
             <summary>
             是否显示在首页
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemDto.Focus">
+        <member name="P:BXJG.Shop.Catalogue.ItemDto.Focus">
             <summary>
             是否显示在轮播图片中
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemDto.Published">
+        <member name="P:BXJG.Shop.Catalogue.ItemDto.Published">
             <summary>
             是否已发布
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemDto.AvailableStart">
+        <member name="P:BXJG.Shop.Catalogue.ItemDto.AvailableStart">
             <summary>
             上架时间
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemDto.AvailableEnd">
+        <member name="P:BXJG.Shop.Catalogue.ItemDto.AvailableEnd">
             <summary>
             下架时间
             </summary>
         </member>
-        <member name="T:BXJG.Shop.Catalogue.Dto.ItemUpdateDto">
+        <member name="T:BXJG.Shop.Catalogue.ItemUpdateDto">
             <summary>
             更新上架模型时前端提供的数据模型
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemUpdateDto.Title">
+        <member name="P:BXJG.Shop.Catalogue.ItemUpdateDto.Title">
             <summary>
             标题
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemUpdateDto.Sku">
+        <member name="P:BXJG.Shop.Catalogue.ItemUpdateDto.Sku">
             <summary>
             sku
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemUpdateDto.DescriptionShort">
+        <member name="P:BXJG.Shop.Catalogue.ItemUpdateDto.DescriptionShort">
             <summary>
             简短描述
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemUpdateDto.DescriptionFull">
+        <member name="P:BXJG.Shop.Catalogue.ItemUpdateDto.DescriptionFull">
             <summary>
             详细描述
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemUpdateDto.Images">
+        <member name="P:BXJG.Shop.Catalogue.ItemUpdateDto.Images">
             <summary>
             轮播图片集合，多个用英文逗号,分割
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemUpdateDto.CategoryId">
+        <member name="P:BXJG.Shop.Catalogue.ItemUpdateDto.CategoryId">
             <summary>
             所属类别id
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemUpdateDto.OldPrice">
+        <member name="P:BXJG.Shop.Catalogue.ItemUpdateDto.OldPrice">
             <summary>
             原价
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemUpdateDto.Price">
+        <member name="P:BXJG.Shop.Catalogue.ItemUpdateDto.Price">
             <summary>
             现价(销售价)
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemUpdateDto.Integral">
+        <member name="P:BXJG.Shop.Catalogue.ItemUpdateDto.Integral">
             <summary>
             积分
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemUpdateDto.Hot">
+        <member name="P:BXJG.Shop.Catalogue.ItemUpdateDto.Hot">
             <summary>
             是否热卖
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemUpdateDto.New">
+        <member name="P:BXJG.Shop.Catalogue.ItemUpdateDto.New">
             <summary>
             是否新品
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemUpdateDto.Home">
+        <member name="P:BXJG.Shop.Catalogue.ItemUpdateDto.Home">
             <summary>
             是否显示在首页
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemUpdateDto.Focus">
+        <member name="P:BXJG.Shop.Catalogue.ItemUpdateDto.Focus">
             <summary>
             是否显示在轮播图片中
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemUpdateDto.Published">
+        <member name="P:BXJG.Shop.Catalogue.ItemUpdateDto.Published">
             <summary>
             是否已发布
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemUpdateDto.AvailableStart">
+        <member name="P:BXJG.Shop.Catalogue.ItemUpdateDto.AvailableStart">
             <summary>
             上架时间
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.Dto.ItemUpdateDto.AvailableEnd">
+        <member name="P:BXJG.Shop.Catalogue.ItemUpdateDto.AvailableEnd">
             <summary>
             下架时间
             </summary>
@@ -323,21 +449,21 @@
             </summary>
             <typeparam name="TTree"></typeparam>
         </member>
-        <member name="M:BXJG.Shop.Catalogue.IBXJGShopItemAppService.CreateAsync(BXJG.Shop.Catalogue.Dto.ItemCreateDto)">
+        <member name="M:BXJG.Shop.Catalogue.IBXJGShopItemAppService.CreateAsync(BXJG.Shop.Catalogue.ItemCreateDto)">
             <summary>
             新增商品上架信息
             </summary>
             <param name="input"></param>
             <returns></returns>
         </member>
-        <member name="M:BXJG.Shop.Catalogue.IBXJGShopItemAppService.UpdateAsync(BXJG.Shop.Catalogue.Dto.ItemUpdateDto)">
+        <member name="M:BXJG.Shop.Catalogue.IBXJGShopItemAppService.UpdateAsync(BXJG.Shop.Catalogue.ItemUpdateDto)">
             <summary>
             修改商品上架信息
             </summary>
             <param name="input"></param>
             <returns></returns>
         </member>
-        <member name="M:BXJG.Shop.Catalogue.IBXJGShopItemAppService.GetAllAsync(BXJG.Shop.Catalogue.Dto.GetAllItemsInput)">
+        <member name="M:BXJG.Shop.Catalogue.IBXJGShopItemAppService.GetAllAsync(BXJG.Shop.Catalogue.GetAllItemsInput)">
             <summary>
             查询商品上架信息的分页数据
             </summary>
@@ -351,11 +477,23 @@
             <param name="input"></param>
             <returns></returns>
         </member>
-        <member name="M:BXJG.Shop.Catalogue.IBXJGShopItemAppService.DeleteAsync(BXJG.Shop.Catalogue.Dto.DeleteInput)">
+        <member name="M:BXJG.Shop.Catalogue.IBXJGShopItemAppService.DeleteAsync(BXJG.Shop.Catalogue.DeleteInput)">
             <summary>
             批量删除商品上架信息
             </summary>
             <param name="ids"></param>
+            <returns></returns>
+        </member>
+        <member name="T:BXJG.Shop.Catalogue.IFrontItemAppService">
+            <summary>
+            面向前端顾客关于商品信息的接口
+            </summary>
+        </member>
+        <member name="M:BXJG.Shop.Catalogue.IFrontItemAppService.GetAllAsync(BXJG.Shop.Catalogue.GetAllFrontItemInput)">
+            <summary>
+            搜索商品信息
+            </summary>
+            <param name="input"></param>
             <returns></returns>
         </member>
         <member name="T:BXJG.Shop.Common.Dto.DictionaryEditDto">
@@ -453,325 +591,187 @@
             后台管理员对商城会员进行管理的应用服务
             </summary>
         </member>
-        <member name="T:BXJG.Shop.Front.FrontItemDto">
-            <summary>
-            显示给顾客的商品信息
-            </summary>
-        </member>
-        <member name="P:BXJG.Shop.Front.FrontItemDto.Title">
-            <summary>
-            标题
-            </summary>
-        </member>
-        <member name="P:BXJG.Shop.Front.FrontItemDto.DescriptionShort">
-            <summary>
-            简短描述
-            </summary>
-        </member>
-        <member name="P:BXJG.Shop.Front.FrontItemDto.DescriptionFull">
-            <summary>
-            详细描述
-            </summary>
-        </member>
-        <member name="P:BXJG.Shop.Front.FrontItemDto.Images">
-            <summary>
-            轮播图片集合，多个用英文逗号,分割
-            </summary>
-        </member>
-        <member name="P:BXJG.Shop.Front.FrontItemDto.Image">
-            <summary>
-            封面图片
-            </summary>
-        </member>
-        <member name="P:BXJG.Shop.Front.FrontItemDto.CategoryId">
-            <summary>
-            所属类别id
-            </summary>
-        </member>
-        <member name="P:BXJG.Shop.Front.FrontItemDto.CategoryDisplayName">
-            <summary>
-            分类名称
-            </summary>
-        </member>
-        <member name="P:BXJG.Shop.Front.FrontItemDto.OldPrice">
-            <summary>
-            原价
-            </summary>
-        </member>
-        <member name="P:BXJG.Shop.Front.FrontItemDto.Price">
-            <summary>
-            现价(销售价)
-            </summary>
-        </member>
-        <member name="P:BXJG.Shop.Front.FrontItemDto.Integral">
-            <summary>
-            积分
-            </summary>
-        </member>
-        <member name="P:BXJG.Shop.Front.FrontItemDto.Hot">
-            <summary>
-            是否热卖
-            </summary>
-        </member>
-        <member name="P:BXJG.Shop.Front.FrontItemDto.New">
-            <summary>
-            是否新品
-            </summary>
-        </member>
-        <member name="P:BXJG.Shop.Front.FrontItemDto.Home">
-            <summary>
-            是否显示在首页
-            </summary>
-        </member>
-        <member name="P:BXJG.Shop.Front.FrontItemDto.Focus">
-            <summary>
-            是否显示在轮播图片中
-            </summary>
-        </member>
-        <member name="T:BXJG.Shop.Front.GetAllFrontItemInput">
-            <summary>
-            面向顾客的商品查询时的输入模型
-            </summary>
-        </member>
-        <member name="P:BXJG.Shop.Front.GetAllFrontItemInput.CategoryId">
-            <summary>
-            所属商品类别id
-            </summary>
-        </member>
-        <member name="P:BXJG.Shop.Front.GetAllFrontItemInput.Keywords">
-            <summary>
-            关键字
-            Title/DescriptionShort/SKU等..模糊查询
-            </summary>
-        </member>
-        <member name="P:BXJG.Shop.Front.GetAllFrontItemInput.PriceMin">
-            <summary>
-            价格范围下限
-            </summary>
-        </member>
-        <member name="P:BXJG.Shop.Front.GetAllFrontItemInput.PriceMax">
-            <summary>
-            价格范围上限
-            </summary>
-        </member>
-        <member name="P:BXJG.Shop.Front.GetAllFrontItemInput.Hot">
-            <summary>
-            是否热卖
-            </summary>
-        </member>
-        <member name="P:BXJG.Shop.Front.GetAllFrontItemInput.New">
-            <summary>
-            是否新品
-            </summary>
-        </member>
-        <member name="P:BXJG.Shop.Front.GetAllFrontItemInput.Home">
-            <summary>
-            是否显示在首页
-            </summary>
-        </member>
-        <member name="P:BXJG.Shop.Front.GetAllFrontItemInput.Focus">
-            <summary>
-            是否显示在轮播图片中
-            </summary>
-        </member>
-        <member name="M:BXJG.Shop.Front.GetAllFrontItemInput.Normalize">
-            <summary>
-            模型绑定后，abp会调用此方法来进一步初始化
-            </summary>
-        </member>
-        <member name="T:BXJG.Shop.Front.IFrontItemAppService">
-            <summary>
-            面向前端顾客关于商品信息的接口
-            </summary>
-        </member>
-        <member name="M:BXJG.Shop.Front.IFrontItemAppService.GetAllAsync(BXJG.Shop.Front.GetAllFrontItemInput)">
-            <summary>
-            搜索商品信息
-            </summary>
-            <param name="input"></param>
-            <returns></returns>
-        </member>
-        <member name="T:BXJG.Shop.Sale.Dto.OrderDto">
+        <member name="T:BXJG.Shop.Sale.OrderDto">
             <summary>
             顾客端和小程序端目前都使用此对象作为订单列表的显示模式
             将来可能按后台管理员和前端顾客分开定义不同对象（比如顾客id、顾客名称，后台管理时需要，但前端顾客的订单列表不需要返回这些字段）
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Sale.Dto.OrderDto.OrderNo">
+        <member name="P:BXJG.Shop.Sale.OrderDto.OrderNo">
             <summary>
             订单号
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Sale.Dto.OrderDto.CustomerId">
+        <member name="P:BXJG.Shop.Sale.OrderDto.CustomerId">
             <summary>
             顾客Id
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Sale.Dto.OrderDto.CustomerName">
+        <member name="P:BXJG.Shop.Sale.OrderDto.CustomerName">
             <summary>
             顾客名称
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Sale.Dto.OrderDto.OrderTime">
+        <member name="P:BXJG.Shop.Sale.OrderDto.OrderTime">
             <summary>
             下单时间
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Sale.Dto.OrderDto.Status">
+        <member name="P:BXJG.Shop.Sale.OrderDto.Status">
             <summary>
             订单状态
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Sale.Dto.OrderDto.StatusText">
+        <member name="P:BXJG.Shop.Sale.OrderDto.StatusText">
             <summary>
             获取订单状态的本地化文本
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Sale.Dto.OrderDto.CustomerRemark">
+        <member name="P:BXJG.Shop.Sale.OrderDto.CustomerRemark">
             <summary>
             顾客下单时填写的备注
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Sale.Dto.OrderDto.MerchandiseSubtotal">
+        <member name="P:BXJG.Shop.Sale.OrderDto.MerchandiseSubtotal">
             <summary>
             商品小计
             一个订单的中的多个商品价格相加的价格，但是商品列表可能随时在变动，所以这个属性只代表数据库中的商品小计字段的值
             可以通过对应的方法来根据商品列表计算得到商品小计
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Sale.Dto.OrderDto.Integral">
+        <member name="P:BXJG.Shop.Sale.OrderDto.Integral">
             <summary>
             可得积分
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Sale.Dto.OrderDto.PaymentMethodDisplayName">
+        <member name="P:BXJG.Shop.Sale.OrderDto.PaymentMethodDisplayName">
             <summary>
             支付方式
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Sale.Dto.OrderDto.PaymentMethodId">
+        <member name="P:BXJG.Shop.Sale.OrderDto.PaymentMethodId">
             <summary>
             支付方式Id
             未支付时 就不存在支付方式，因此可空
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Sale.Dto.OrderDto.PaymentAmount">
+        <member name="P:BXJG.Shop.Sale.OrderDto.PaymentAmount">
             <summary>
             付款金额
             顾客最终支付金额
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Sale.Dto.OrderDto.PaymentStatus">
+        <member name="P:BXJG.Shop.Sale.OrderDto.PaymentStatus">
             <summary>
             支付状态
             某些场景下，并不是顾客下单就可以付款，而是需要后台审核后才能付款
             因此使用? 表示此时订单处于不可付款状态，也就是没有付款状态
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Sale.Dto.OrderDto.PaymentStatusText">
+        <member name="P:BXJG.Shop.Sale.OrderDto.PaymentStatusText">
             <summary>
             支付状态本地化文本
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Sale.Dto.OrderDto.AreaId">
+        <member name="P:BXJG.Shop.Sale.OrderDto.AreaId">
             <summary>
             送货地址所属区域Id
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Sale.Dto.OrderDto.AreaDisplayName">
+        <member name="P:BXJG.Shop.Sale.OrderDto.AreaDisplayName">
             <summary>
             送货地址所属区域的显示名
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Sale.Dto.OrderDto.Consignee">
+        <member name="P:BXJG.Shop.Sale.OrderDto.Consignee">
             <summary>
             收货人 不一定就是下单人
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Sale.Dto.OrderDto.ConsigneePhoneNumber">
+        <member name="P:BXJG.Shop.Sale.OrderDto.ConsigneePhoneNumber">
             <summary>
             收货人电话
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Sale.Dto.OrderDto.ReceivingAddress">
+        <member name="P:BXJG.Shop.Sale.OrderDto.ReceivingAddress">
             <summary>
             收货地址
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Sale.Dto.OrderDto.DistributionMethodDisplayName">
+        <member name="P:BXJG.Shop.Sale.OrderDto.DistributionMethodDisplayName">
             <summary>
             配送方式名称
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Sale.Dto.OrderDto.DistributionMethodId">
+        <member name="P:BXJG.Shop.Sale.OrderDto.DistributionMethodId">
             <summary>
             配送方式Id 刚创建订单时配送方式尚未确定，将为空
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Sale.Dto.OrderDto.LogisticsNumber">
+        <member name="P:BXJG.Shop.Sale.OrderDto.LogisticsNumber">
             <summary>
             物流单号
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Sale.Dto.OrderDto.LogisticsStatus">
+        <member name="P:BXJG.Shop.Sale.OrderDto.LogisticsStatus">
             <summary>
             物流状态
             刚创建订单时没有物流状态，因此加个?
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Sale.Dto.OrderDto.LogisticsStatusText">
+        <member name="P:BXJG.Shop.Sale.OrderDto.LogisticsStatusText">
             <summary>
             物流状态
             刚创建订单时没有物流状态，因此加个?
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Sale.Dto.OrderDto.Items">
+        <member name="P:BXJG.Shop.Sale.OrderDto.Items">
             <summary>
             订单明细
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Sale.Dto.OrderItemDto.OrderId">
+        <member name="P:BXJG.Shop.Sale.OrderItemDto.OrderId">
             <summary>
             关联的订单Id
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Sale.Dto.OrderItemDto.ItemId">
+        <member name="P:BXJG.Shop.Sale.OrderItemDto.ItemId">
             <summary>
             关联的商品上架信息Id
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Sale.Dto.OrderItemDto.Title">
+        <member name="P:BXJG.Shop.Sale.OrderItemDto.Title">
             <summary>
             产品标题
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Sale.Dto.OrderItemDto.Image">
+        <member name="P:BXJG.Shop.Sale.OrderItemDto.Image">
             <summary>
             产品图片
             与商品上架信息不同，这里只需要单张图片
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Sale.Dto.OrderItemDto.Price">
+        <member name="P:BXJG.Shop.Sale.OrderItemDto.Price">
             <summary>
             单价
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Sale.Dto.OrderItemDto.Quantity">
+        <member name="P:BXJG.Shop.Sale.OrderItemDto.Quantity">
             <summary>
             数量
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Sale.Dto.OrderItemDto.Integral">
+        <member name="P:BXJG.Shop.Sale.OrderItemDto.Integral">
             <summary>
             积分
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Sale.Dto.OrderItemDto.Amount">
+        <member name="P:BXJG.Shop.Sale.OrderItemDto.Amount">
             <summary>
             金额
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Sale.Dto.OrderItemDto.TotalIntegral">
+        <member name="P:BXJG.Shop.Sale.OrderItemDto.TotalIntegral">
             <summary>
             总积分
             </summary>

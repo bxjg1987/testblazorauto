@@ -5,7 +5,7 @@ using System.Text;
 using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
 
-namespace BXJG.Shop.Catalogue.Dto
+namespace BXJG.Shop.Catalogue
 {
     /// <summary>
     /// 更新上架模型时前端提供的数据模型

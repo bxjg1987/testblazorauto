@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BXJG.Shop.Catalogue.Dto
+namespace BXJG.Shop.Catalogue
 {
     /// <summary>
     /// 上架/商品信息后台管理页面查询列表时使用的输入模型

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BXJG.Shop.Sale.Dto
+namespace BXJG.Shop.Sale
 {
 
     public class OrderItemDto

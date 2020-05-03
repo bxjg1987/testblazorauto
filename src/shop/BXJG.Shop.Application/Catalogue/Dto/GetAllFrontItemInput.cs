@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BXJG.Shop.Front
+namespace BXJG.Shop.Catalogue
 {
     /// <summary>
     /// 面向顾客的商品查询时的输入模型

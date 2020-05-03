@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BXJG.Shop.Sale.Dto
+namespace BXJG.Shop.Sale
 {
     /// <summary>
     /// 顾客端和小程序端目前都使用此对象作为订单列表的显示模式

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Shop.Front
+namespace BXJG.Shop.Catalogue
 {
     /// <summary>
     /// 面向前端顾客关于商品信息的接口

@@ -3,7 +3,6 @@ using Abp.Authorization.Roles;
 using Abp.Authorization.Users;
 using Abp.MultiTenancy;
 using BXJG.GeneralTree;
-using BXJG.Shop.Catalogue.Dto;
 using System;
 using System.Collections.Generic;
 using System.Text;

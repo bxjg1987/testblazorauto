@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace BXJG.Shop.Front
+namespace BXJG.Shop.Catalogue
 {
     /// <summary>
     /// 显示给顾客的商品信息
