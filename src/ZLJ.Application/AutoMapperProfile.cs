@@ -5,10 +5,8 @@ using Newtonsoft.Json;
 using BXJG.Utils.Localization;
 using BXJG.Shop.Common.Dto;
 using BXJG.Shop.Catalogue;
-using BXJG.Shop.Catalogue.Dto;
 using BXJG.Shop.Customer.Dto;
 using BXJG.Shop.Customer;
-using BXJG.Shop.Front;
 
 namespace ZLJ
 {
@@ -19,8 +17,14 @@ namespace ZLJ
      * 通常非关键性字段、且很多地方的赋值规则一样时才使用自动映射
      * 某些时候可能需要将dto传入领域层，请不要直接传递dto，领域服务应该定义单独的模型来接受这些参数，或者干脆定义具体的参数列表。最好是使用前者，因为这样可以使用自动映射
      */
+    /// <summary>
+    /// 
+    /// </summary>
     public class AutoMapperProfile : Profile
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public AutoMapperProfile()
         {
             //CreateMap<BXJGShopDictionaryEntity, DictionaryDto>()

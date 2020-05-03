@@ -138,6 +138,16 @@
             Throws <see cref="T:Abp.Runtime.Validation.AbpValidationException"/> if can not find any of the permission names.
             </summary>
         </member>
+        <member name="T:ZLJ.AutoMapperProfile">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:ZLJ.AutoMapperProfile.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="T:ZLJ.Organizations.Dto.EditOrganizationUnitDto">
             <summary>
             更新模型
@@ -520,6 +530,11 @@
         </member>
         <member name="F:ZLJ.Net.MimeTypes.MimeTypeNames.ApplicationZip">
             <summary>ZIP archive files; Registered[7]</summary>
+        </member>
+        <member name="T:ZLJ.Shop.BXJGCustomerOrderAppService">
+            <summary>
+            
+            </summary>
         </member>
         <member name="T:ZLJ.ZLJAppServiceBase">
             <summary>

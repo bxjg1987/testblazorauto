@@ -510,6 +510,7 @@
             <typeparam name="TRole"></typeparam>
             <typeparam name="TTenantManager"></typeparam>
             <typeparam name="TUserManager"></typeparam>
+            <typeparam name="TArea"></typeparam>
         </member>
         <member name="T:BXJG.Shop.Customer.Dto.CustomerDto">
             <summary>
@@ -589,6 +590,250 @@
         <member name="T:BXJG.Shop.Customer.IBXJGShopCustomerAppService">
             <summary>
             后台管理员对商城会员进行管理的应用服务
+            </summary>
+        </member>
+        <member name="T:BXJG.Shop.Sale.CustomerOrderAppService`6">
+            <summary>
+            前台顾客对订单的操作接口
+            你需要在主程序中提供一个子类以指定泛型参数
+            </summary>
+            <typeparam name="TTenant"></typeparam>
+            <typeparam name="TUser"></typeparam>
+            <typeparam name="TRole"></typeparam>
+            <typeparam name="TTenantManager"></typeparam>
+            <typeparam name="TUserManager"></typeparam>
+            <typeparam name="TArea"></typeparam>
+        </member>
+        <member name="M:BXJG.Shop.Sale.CustomerOrderAppService`6.#ctor(Abp.Domain.Repositories.IRepository{BXJG.Shop.Sale.OrderEntity{`1,`5},System.Int64},BXJG.Shop.Sale.OrderManager{`1,`5},BXJG.Shop.Customer.CustomerManager{`1,`5},Abp.Domain.Repositories.IRepository{`5,System.Int64},Abp.Domain.Repositories.IRepository{BXJG.Shop.Catalogue.ItemEntity,System.Int64})">
+            <summary>
+            
+            </summary>
+            <param name="repository"></param>
+            <param name="orderManager"></param>
+            <param name="customerManager"></param>
+            <param name="generalTreeManager"></param>
+            <param name="itemRepository"></param>
+        </member>
+        <member name="M:BXJG.Shop.Sale.CustomerOrderAppService`6.CreateAsync(BXJG.Shop.Sale.CustomerOrderCreateDto)">
+            <summary>
+            
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="T:BXJG.Shop.Sale.CustomerOrderCreateDto">
+            <summary>
+            前端顾客下单时提交的数据
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.CustomerOrderCreateDto.CustomerRemark">
+            <summary>
+            顾客填写的备注
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.CustomerOrderCreateDto.AreaId">
+            <summary>
+            收货人所属区域Id
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.CustomerOrderCreateDto.Consignee">
+            <summary>
+            收货人
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.CustomerOrderCreateDto.ConsigneePhoneNumber">
+            <summary>
+            收货人电话
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.CustomerOrderCreateDto.ReceivingAddress">
+            <summary>
+            收货地址
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.CustomerOrderCreateDto.Items">
+            <summary>
+            订单明细
+            </summary>
+        </member>
+        <member name="T:BXJG.Shop.Sale.CustomerOrderDto">
+            <summary>
+            前端顾客查询自己订单时使用的模型
+            与后台管理员管理订单的模型不同，这是两种不同的场景，虽然现在看字段几乎一样，但是将来可能不同
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.CustomerOrderDto.OrderNo">
+            <summary>
+            订单号
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.CustomerOrderDto.OrderTime">
+            <summary>
+            下单时间
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.CustomerOrderDto.Status">
+            <summary>
+            订单状态
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.CustomerOrderDto.StatusText">
+            <summary>
+            获取订单状态的本地化文本
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.CustomerOrderDto.CustomerRemark">
+            <summary>
+            顾客下单时填写的备注
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.CustomerOrderDto.MerchandiseSubtotal">
+            <summary>
+            商品小计
+            一个订单的中的多个商品价格相加的价格，但是商品列表可能随时在变动，所以这个属性只代表数据库中的商品小计字段的值
+            可以通过对应的方法来根据商品列表计算得到商品小计
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.CustomerOrderDto.Integral">
+            <summary>
+            可得积分
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.CustomerOrderDto.PaymentMethodDisplayName">
+            <summary>
+            支付方式
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.CustomerOrderDto.PaymentMethodId">
+            <summary>
+            支付方式Id
+            未支付时 就不存在支付方式，因此可空
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.CustomerOrderDto.PaymentAmount">
+            <summary>
+            付款金额
+            顾客最终支付金额
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.CustomerOrderDto.PaymentStatus">
+            <summary>
+            支付状态
+            某些场景下，并不是顾客下单就可以付款，而是需要后台审核后才能付款
+            因此使用? 表示此时订单处于不可付款状态，也就是没有付款状态
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.CustomerOrderDto.PaymentStatusText">
+            <summary>
+            支付状态本地化文本
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.CustomerOrderDto.AreaId">
+            <summary>
+            送货地址所属区域Id
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.CustomerOrderDto.AreaDisplayName">
+            <summary>
+            送货地址所属区域的显示名
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.CustomerOrderDto.Consignee">
+            <summary>
+            收货人 不一定就是下单人
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.CustomerOrderDto.ConsigneePhoneNumber">
+            <summary>
+            收货人电话
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.CustomerOrderDto.ReceivingAddress">
+            <summary>
+            收货地址
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.CustomerOrderDto.DistributionMethodDisplayName">
+            <summary>
+            配送方式名称
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.CustomerOrderDto.DistributionMethodId">
+            <summary>
+            配送方式Id 刚创建订单时配送方式尚未确定，将为空
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.CustomerOrderDto.LogisticsNumber">
+            <summary>
+            物流单号
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.CustomerOrderDto.LogisticsStatus">
+            <summary>
+            物流状态
+            刚创建订单时没有物流状态，因此加个?
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.CustomerOrderDto.LogisticsStatusText">
+            <summary>
+            物流状态
+            刚创建订单时没有物流状态，因此加个?
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.CustomerOrderDto.Items">
+            <summary>
+            订单明细
+            </summary>
+        </member>
+        <member name="T:BXJG.Shop.Sale.CustomerOrderItemDto">
+            <summary>
+            顾客查询订单时包含的订单明细
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.CustomerOrderItemDto.OrderId">
+            <summary>
+            关联的订单Id
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.CustomerOrderItemDto.ItemId">
+            <summary>
+            关联的商品上架信息Id
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.CustomerOrderItemDto.Title">
+            <summary>
+            产品标题
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.CustomerOrderItemDto.Image">
+            <summary>
+            产品图片
+            与商品上架信息不同，这里只需要单张图片
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.CustomerOrderItemDto.Price">
+            <summary>
+            单价
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.CustomerOrderItemDto.Quantity">
+            <summary>
+            数量
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.CustomerOrderItemDto.Integral">
+            <summary>
+            积分
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.CustomerOrderItemDto.Amount">
+            <summary>
+            金额
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.CustomerOrderItemDto.TotalIntegral">
+            <summary>
+            总积分
             </summary>
         </member>
         <member name="T:BXJG.Shop.Sale.OrderDto">
@@ -730,6 +975,21 @@
             订单明细
             </summary>
         </member>
+        <member name="T:BXJG.Shop.Sale.OrderItemCreateDto">
+            <summary>
+            前端顾客创建订单的商品明细
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.OrderItemCreateDto.ItemId">
+            <summary>
+            关联的商品上架信息Id
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.OrderItemCreateDto.Quantity">
+            <summary>
+            数量
+            </summary>
+        </member>
         <member name="P:BXJG.Shop.Sale.OrderItemDto.OrderId">
             <summary>
             关联的订单Id
@@ -775,6 +1035,18 @@
             <summary>
             总积分
             </summary>
+        </member>
+        <member name="T:BXJG.Shop.Sale.ICustomerOrderAppService">
+            <summary>
+            前端顾客对订单的操作接口
+            </summary>
+        </member>
+        <member name="M:BXJG.Shop.Sale.ICustomerOrderAppService.CreateAsync(BXJG.Shop.Sale.CustomerOrderCreateDto)">
+            <summary>
+            前端顾客下订单
+            </summary>
+            <param name="input">前端顾客下单时需要提供的数据</param>
+            <returns>创建好的订单</returns>
         </member>
     </members>
 </doc>

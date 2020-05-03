@@ -44,6 +44,7 @@ namespace BXJG.Shop.Customer
     /// <typeparam name="TRole"></typeparam>
     /// <typeparam name="TTenantManager"></typeparam>
     /// <typeparam name="TUserManager"></typeparam>
+    /// <typeparam name="TArea"></typeparam>
     public class BXJGShopCustomerAppService<TTenant, TUser, TRole, TTenantManager, TUserManager,TArea>
         : BXJGShopAppServiceBase<TTenant, TUser, TRole, TTenantManager, TUserManager>, IBXJGShopCustomerAppService
         where TUser : AbpUser<TUser>, new()

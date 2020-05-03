@@ -7,24 +7,27 @@ using System.Text;
 namespace BXJG.Shop.Sale
 {
     /// <summary>
-    /// 顾客端和小程序端目前都使用此对象作为订单列表的显示模式
-    /// 将来可能按后台管理员和前端顾客分开定义不同对象（比如顾客id、顾客名称，后台管理时需要，但前端顾客的订单列表不需要返回这些字段）
+    /// 前端顾客查询自己订单时使用的模型
+    /// 与后台管理员管理订单的模型不同，这是两种不同的场景，虽然现在看字段几乎一样，但是将来可能不同
     /// </summary>
-    public class OrderDto : EntityDto<long>
+    public class CustomerOrderDto : EntityDto<long>
     {
         #region 订单信息
         /// <summary>
         /// 订单号
         /// </summary>
         public string OrderNo { get; set; }
-        /// <summary>
-        /// 顾客Id
-        /// </summary>
-        public long CustomerId { get; set; }
-        /// <summary>
-        /// 顾客名称
-        /// </summary>
-        public string CustomerName { get; set; }
+        
+        //暂时取消吧
+        ///// <summary>
+        ///// 顾客Id
+        ///// </summary>
+        //public long CustomerId { get; set; }
+        ///// <summary>
+        ///// 顾客名称
+        ///// </summary>
+        //public string CustomerName { get; set; }
+
         /// <summary>
         /// 下单时间
         /// </summary>
@@ -148,7 +151,7 @@ namespace BXJG.Shop.Sale
         /// <summary>
         /// 订单明细
         /// </summary>
-        public List<OrderItemDto> Items { get; set; } = new List<OrderItemDto>();
+        public List<CustomerOrderItemDto> Items { get; set; } = new List<CustomerOrderItemDto>();
         #endregion
     }
 
