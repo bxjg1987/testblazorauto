@@ -12,6 +12,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
 using BXJG.Shop.Catalogue;
+using BXJG.WeChat.Payment;
+using Abp.Threading;
 
 namespace BXJG.Shop.Sale
 {
@@ -25,7 +27,9 @@ namespace BXJG.Shop.Sale
     /// <typeparam name="TTenantManager"></typeparam>
     /// <typeparam name="TUserManager"></typeparam>
     /// <typeparam name="TArea"></typeparam>
-    public class CustomerOrderAppService<TTenant, TUser, TRole, TTenantManager, TUserManager, TArea, TOrderManager,TCustomerManager>
+    /// <typeparam name="TOrderManager"></typeparam>
+    /// <typeparam name="TCustomerManager"></typeparam>
+    public class CustomerOrderAppService<TTenant, TUser, TRole, TTenantManager, TUserManager, TArea, TOrderManager, TCustomerManager>
         : BXJGShopAppServiceBase<TTenant, TUser, TRole, TTenantManager, TUserManager>, ICustomerOrderAppService
         where TUser : AbpUser<TUser>, new()
         where TRole : AbpRole<TUser>, new()
@@ -33,14 +37,21 @@ namespace BXJG.Shop.Sale
         where TTenantManager : AbpTenantManager<TTenant, TUser>
         where TUserManager : AbpUserManager<TRole, TUser>
         where TArea : GeneralTreeEntity<TArea>, IShopAdministrative
-        where TOrderManager: OrderManager<TUser, TArea>
+        where TOrderManager : OrderManager<TUser, TArea>
         where TCustomerManager : CustomerManager<TUser>
     {
         private readonly IRepository<OrderEntity<TUser, TArea>, long> repository;
-        private readonly OrderManager<TUser, TArea> orderManager;
-        private readonly CustomerManager<TUser> customerManager;
+        private readonly TOrderManager orderManager;
+        private readonly TCustomerManager customerManager;
         private readonly IRepository<TArea, long> generalTreeManager;
         private readonly IRepository<ItemEntity, long> itemRepository;
+        private readonly WeChatPaymentService weChatPaymentService;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public ICancellationTokenProvider CancellationToken { get; set; } = NullCancellationTokenProvider.Instance;
+
 
         /// <summary>
         /// 
@@ -50,21 +61,24 @@ namespace BXJG.Shop.Sale
         /// <param name="customerManager"></param>
         /// <param name="generalTreeManager"></param>
         /// <param name="itemRepository"></param>
+        /// <param name="weChatPaymentService"></param>
         public CustomerOrderAppService(
             IRepository<OrderEntity<TUser, TArea>, long> repository,
             TOrderManager orderManager,
             TCustomerManager customerManager,
             IRepository<TArea, long> generalTreeManager,
-            IRepository<ItemEntity, long> itemRepository)
+            IRepository<ItemEntity, long> itemRepository,
+            WeChatPaymentService weChatPaymentService)
         {
             this.repository = repository;
             this.orderManager = orderManager;
             this.customerManager = customerManager;
             this.generalTreeManager = generalTreeManager;
             this.itemRepository = itemRepository;
+            this.weChatPaymentService = weChatPaymentService;
         }
         /// <summary>
-        /// 
+        /// 创建订单
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
@@ -89,6 +103,17 @@ namespace BXJG.Shop.Sale
                 input.CustomerRemark,
                 itemEntities.ToArray());
             return ObjectMapper.Map<CustomerOrderDto>(order);
+        }
+        /// <summary>
+        /// 前台顾客发起订单支付
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task<CustomerPaymentResult> PaymentAsync(CustomerPaymentInput input)
+        {
+            var p = weChatPaymentService.Create("", "", 3);
+            WeChatPaymentUnifyOrderResult wpor = await weChatPaymentService.PayAsync(p, CancellationToken.Token);
+            return new CustomerPaymentResult(wpor);
         }
     }
 }

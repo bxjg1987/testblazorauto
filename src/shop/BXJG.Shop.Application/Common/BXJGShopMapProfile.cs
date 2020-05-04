@@ -7,6 +7,7 @@ using BXJG.Shop.Common.Dto;
 using BXJG.Shop.Catalogue;
 using BXJG.Shop.Customer.Dto;
 using BXJG.Shop.Customer;
+using BXJG.Shop.Sale;
 
 namespace BXJG.Shop.Common
 {
@@ -41,6 +42,10 @@ namespace BXJG.Shop.Common
                .ForMember(c => c.Images, opt => opt.MapFrom(d => d.Images.Split(',', System.StringSplitOptions.None)));
             #endregion
 
+            #region 前端顾客和订单相关东东
+            CreateMap(typeof(OrderItemEntity<,>), typeof(CustomerOrderItemDto));
+            CreateMap(typeof(OrderEntity<,>), typeof(CustomerOrderDto));
+            #endregion
 
             #region 会员
             //https://automapper.readthedocs.io/en/latest/Open-Generics.html

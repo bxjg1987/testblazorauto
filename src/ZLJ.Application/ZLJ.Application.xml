@@ -536,16 +536,6 @@
             
             </summary>
         </member>
-        <member name="M:ZLJ.Shop.BXJGCustomerOrderAppService.#ctor(Abp.Domain.Repositories.IRepository{BXJG.Shop.Sale.OrderEntity{ZLJ.Authorization.Users.User,ZLJ.Administrative.AdministrativeEntity},System.Int64},BXJG.Shop.Sale.OrderManager{ZLJ.Authorization.Users.User,ZLJ.Administrative.AdministrativeEntity},BXJG.Shop.Customer.CustomerManager{ZLJ.Authorization.Users.User},Abp.Domain.Repositories.IRepository{ZLJ.Administrative.AdministrativeEntity,System.Int64},Abp.Domain.Repositories.IRepository{BXJG.Shop.Catalogue.ItemEntity,System.Int64})">
-            <summary>
-            
-            </summary>
-            <param name="repository"></param>
-            <param name="orderManager"></param>
-            <param name="customerManager"></param>
-            <param name="generalTreeManager"></param>
-            <param name="itemRepository"></param>
-        </member>
         <member name="T:ZLJ.ZLJAppServiceBase">
             <summary>
             Derive your application services from this class.

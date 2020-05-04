@@ -603,8 +603,15 @@
             <typeparam name="TTenantManager"></typeparam>
             <typeparam name="TUserManager"></typeparam>
             <typeparam name="TArea"></typeparam>
+            <typeparam name="TOrderManager"></typeparam>
+            <typeparam name="TCustomerManager"></typeparam>
         </member>
-        <member name="M:BXJG.Shop.Sale.CustomerOrderAppService`8.#ctor(Abp.Domain.Repositories.IRepository{BXJG.Shop.Sale.OrderEntity{`1,`5},System.Int64},`6,`7,Abp.Domain.Repositories.IRepository{`5,System.Int64},Abp.Domain.Repositories.IRepository{BXJG.Shop.Catalogue.ItemEntity,System.Int64})">
+        <member name="P:BXJG.Shop.Sale.CustomerOrderAppService`8.CancellationToken">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:BXJG.Shop.Sale.CustomerOrderAppService`8.#ctor(Abp.Domain.Repositories.IRepository{BXJG.Shop.Sale.OrderEntity{`1,`5},System.Int64},`6,`7,Abp.Domain.Repositories.IRepository{`5,System.Int64},Abp.Domain.Repositories.IRepository{BXJG.Shop.Catalogue.ItemEntity,System.Int64},BXJG.WeChat.Payment.WeChatPaymentService)">
             <summary>
             
             </summary>
@@ -613,10 +620,18 @@
             <param name="customerManager"></param>
             <param name="generalTreeManager"></param>
             <param name="itemRepository"></param>
+            <param name="weChatPaymentService"></param>
         </member>
         <member name="M:BXJG.Shop.Sale.CustomerOrderAppService`8.CreateAsync(BXJG.Shop.Sale.CustomerOrderCreateDto)">
             <summary>
-            
+            创建订单
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Shop.Sale.CustomerOrderAppService`8.PaymentAsync(BXJG.Shop.Sale.CustomerPaymentInput)">
+            <summary>
+            前台顾客发起订单支付
             </summary>
             <param name="input"></param>
             <returns></returns>
@@ -836,6 +851,27 @@
             总积分
             </summary>
         </member>
+        <member name="T:BXJG.Shop.Sale.CustomerPaymentInput">
+            <summary>
+            前台顾客发起订单支付时提供的数据
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.CustomerPaymentInput.OrderId">
+            <summary>
+            订单id
+            </summary>
+        </member>
+        <member name="T:BXJG.Shop.Sale.CustomerPaymentResult">
+            <summary>
+            前端顾客发起支付订单预支付的返回数据
+            </summary>
+        </member>
+        <member name="M:BXJG.Shop.Sale.CustomerPaymentResult.#ctor(BXJG.WeChat.Payment.WeChatPaymentUnifyOrderResult)">
+            <summary>
+            
+            </summary>
+            <param name="weChatPaymentUnifyOrderResult"></param>
+        </member>
         <member name="T:BXJG.Shop.Sale.OrderDto">
             <summary>
             顾客端和小程序端目前都使用此对象作为订单列表的显示模式
@@ -1047,6 +1083,13 @@
             </summary>
             <param name="input">前端顾客下单时需要提供的数据</param>
             <returns>创建好的订单</returns>
+        </member>
+        <member name="M:BXJG.Shop.Sale.ICustomerOrderAppService.PaymentAsync(BXJG.Shop.Sale.CustomerPaymentInput)">
+            <summary>
+            前台顾客发起订单支付
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
         </member>
     </members>
 </doc>
