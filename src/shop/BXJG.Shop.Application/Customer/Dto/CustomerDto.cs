@@ -11,7 +11,7 @@ namespace BXJG.Shop.Customer.Dto
     /// <summary>
     /// 后台管理页使用的DTO
     /// </summary>
-    [AutoMapFrom(typeof(CustomerEntity<,>))]
+    [AutoMapFrom(typeof(CustomerEntity<>))]
     public class CustomerDto : FullAuditedEntityDto<long>
     {
         #region abp用户信息

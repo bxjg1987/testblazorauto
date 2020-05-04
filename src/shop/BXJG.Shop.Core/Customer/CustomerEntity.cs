@@ -18,14 +18,18 @@ namespace BXJG.Shop.Customer
      * 或许可以尝试不用泛型，而直接连到AbpUserBase，这样比较冒险。再着将来主程序需要引用CustomerEntity时也很难关联查询到泛型实体的额外属性
      * 
      * 经过测试发现不用泛型行不通
+     * 
+     * 去掉OrderEntity的直接关联，因为顾客是个独立的概念，它不一定会有订单；按同样的思路，今后出现的更多与顾客有关的概念时 顾客实体会变得更加复杂
+     * 再则订单是一个复杂的概念，将来可能有更多泛型，顾客实体会变得越来越复杂
+     * 
      */
     /// <summary>
     /// 商城系统中的顾客
     /// </summary>
     /// <typeparam name="TUser"></typeparam>
-    public class CustomerEntity<TUser,TArea> : FullAuditedEntity<long>, IMustHaveTenant
+    public class CustomerEntity<TUser> : FullAuditedEntity<long>, IMustHaveTenant
         where TUser : AbpUserBase //因为内部可能包含领域逻辑，因此加约束更方便
-        where TArea : GeneralTreeEntity<TArea>, IShopAdministrative
+        //where TArea : GeneralTreeEntity<TArea>, IShopAdministrative
     {
         /// <summary>
         /// 租户id
@@ -55,10 +59,11 @@ namespace BXJG.Shop.Customer
         /// 出生日期
         /// </summary>
         public DateTimeOffset Birthday { get; set; }
-        /// <summary>
-        /// 顾客的订单列表
-        /// </summary>
-        public virtual List<OrderEntity<TUser, TArea>> Orders { get; set; }
+        ///// <summary>
+        ///// 顾客的订单列表
+        ///// 不要加这个属性，会导致顾客变得复杂。如果加了这个 那将来有更多概念需要与顾客关联时，顾客实体会变得越来越复杂
+        ///// </summary>
+        //public virtual List<OrderEntity<TUser, TArea>> Orders { get; set; }
         /// <summary>
         /// 积分、余额等处理时可能存在并发处理
         /// 最好的办法是在要处理的字段上加并发控制，以减小并发冲突的几率，但是目前一切从简先用行并发控制

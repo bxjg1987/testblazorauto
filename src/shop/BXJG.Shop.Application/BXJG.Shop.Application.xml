@@ -592,7 +592,7 @@
             后台管理员对商城会员进行管理的应用服务
             </summary>
         </member>
-        <member name="T:BXJG.Shop.Sale.CustomerOrderAppService`6">
+        <member name="T:BXJG.Shop.Sale.CustomerOrderAppService`8">
             <summary>
             前台顾客对订单的操作接口
             你需要在主程序中提供一个子类以指定泛型参数
@@ -604,7 +604,7 @@
             <typeparam name="TUserManager"></typeparam>
             <typeparam name="TArea"></typeparam>
         </member>
-        <member name="M:BXJG.Shop.Sale.CustomerOrderAppService`6.#ctor(Abp.Domain.Repositories.IRepository{BXJG.Shop.Sale.OrderEntity{`1,`5},System.Int64},BXJG.Shop.Sale.OrderManager{`1,`5},BXJG.Shop.Customer.CustomerManager{`1,`5},Abp.Domain.Repositories.IRepository{`5,System.Int64},Abp.Domain.Repositories.IRepository{BXJG.Shop.Catalogue.ItemEntity,System.Int64})">
+        <member name="M:BXJG.Shop.Sale.CustomerOrderAppService`8.#ctor(Abp.Domain.Repositories.IRepository{BXJG.Shop.Sale.OrderEntity{`1,`5},System.Int64},`6,`7,Abp.Domain.Repositories.IRepository{`5,System.Int64},Abp.Domain.Repositories.IRepository{BXJG.Shop.Catalogue.ItemEntity,System.Int64})">
             <summary>
             
             </summary>
@@ -614,7 +614,7 @@
             <param name="generalTreeManager"></param>
             <param name="itemRepository"></param>
         </member>
-        <member name="M:BXJG.Shop.Sale.CustomerOrderAppService`6.CreateAsync(BXJG.Shop.Sale.CustomerOrderCreateDto)">
+        <member name="M:BXJG.Shop.Sale.CustomerOrderAppService`8.CreateAsync(BXJG.Shop.Sale.CustomerOrderCreateDto)">
             <summary>
             
             </summary>

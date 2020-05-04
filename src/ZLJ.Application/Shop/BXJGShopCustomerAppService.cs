@@ -13,7 +13,7 @@ namespace ZLJ.Shop
 {
     public class BXJGShopCustomerAppService : BXJGShopCustomerAppService<Tenant, User, Role, TenantManager, UserManager, AdministrativeEntity>
     {
-        public BXJGShopCustomerAppService(IRepository<CustomerEntity<User, AdministrativeEntity>, long> repository) : base(repository)
+        public BXJGShopCustomerAppService(IRepository<CustomerEntity<User>, long> repository) : base(repository)
         {
         }
     }

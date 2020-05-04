@@ -54,8 +54,8 @@ namespace BXJG.Shop.Customer
         where TUserManager : AbpUserManager<TRole, TUser>
         where TArea : GeneralTreeEntity<TArea>, IShopAdministrative
     {
-        private readonly IRepository<CustomerEntity<TUser,TArea>, long> repository;
-        public BXJGShopCustomerAppService(IRepository<CustomerEntity<TUser,TArea> ,long> repository)
+        private readonly IRepository<CustomerEntity<TUser>, long> repository;
+        public BXJGShopCustomerAppService(IRepository<CustomerEntity<TUser> ,long> repository)
         {
             this.repository = repository;
         }
@@ -94,7 +94,7 @@ namespace BXJG.Shop.Customer
             #endregion
 
             //映射不太好处理，手动来吧
-            var entity = new CustomerEntity<TUser,TArea>
+            var entity = new CustomerEntity<TUser>
             {
                 Amount = input.Amount,
                 Birthday = input.Birthday,

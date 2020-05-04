@@ -129,7 +129,7 @@ namespace BXJG.Shop.Sale
         /// 关联的顾客的实体
         /// 注意顾客与User是一对一关联的
         /// </summary>
-        public virtual CustomerEntity<TUser,TArea> Customer { get; set; }
+        public virtual CustomerEntity<TUser> Customer { get; set; }
         /// <summary>
         /// 订单号
         /// </summary>

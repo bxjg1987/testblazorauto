@@ -25,7 +25,7 @@ namespace BXJG.Shop.Sale
     /// <typeparam name="TTenantManager"></typeparam>
     /// <typeparam name="TUserManager"></typeparam>
     /// <typeparam name="TArea"></typeparam>
-    public class CustomerOrderAppService<TTenant, TUser, TRole, TTenantManager, TUserManager, TArea>
+    public class CustomerOrderAppService<TTenant, TUser, TRole, TTenantManager, TUserManager, TArea, TOrderManager,TCustomerManager>
         : BXJGShopAppServiceBase<TTenant, TUser, TRole, TTenantManager, TUserManager>, ICustomerOrderAppService
         where TUser : AbpUser<TUser>, new()
         where TRole : AbpRole<TUser>, new()
@@ -33,10 +33,12 @@ namespace BXJG.Shop.Sale
         where TTenantManager : AbpTenantManager<TTenant, TUser>
         where TUserManager : AbpUserManager<TRole, TUser>
         where TArea : GeneralTreeEntity<TArea>, IShopAdministrative
+        where TOrderManager: OrderManager<TUser, TArea>
+        where TCustomerManager : CustomerManager<TUser>
     {
         private readonly IRepository<OrderEntity<TUser, TArea>, long> repository;
         private readonly OrderManager<TUser, TArea> orderManager;
-        private readonly CustomerManager<TUser, TArea> customerManager;
+        private readonly CustomerManager<TUser> customerManager;
         private readonly IRepository<TArea, long> generalTreeManager;
         private readonly IRepository<ItemEntity, long> itemRepository;
 
@@ -50,8 +52,8 @@ namespace BXJG.Shop.Sale
         /// <param name="itemRepository"></param>
         public CustomerOrderAppService(
             IRepository<OrderEntity<TUser, TArea>, long> repository,
-            OrderManager<TUser, TArea> orderManager,
-            CustomerManager<TUser, TArea> customerManager,
+            TOrderManager orderManager,
+            TCustomerManager customerManager,
             IRepository<TArea, long> generalTreeManager,
             IRepository<ItemEntity, long> itemRepository)
         {
