@@ -111,7 +111,13 @@ namespace BXJG.Shop.Sale
         /// <returns></returns>
         public async Task<CustomerPaymentResult> PaymentAsync(CustomerPaymentInput input)
         {
-            var p = weChatPaymentService.Create("", "", 3);
+            var customer = await customerManager.SingleByUserIdWithoutUserAsync(AbpSession.UserId.Value);
+            var order = await repository.GetAsync(input.OrderId);
+            if (customer.Id != order.CustomerId)
+                throw new ApplicationException();
+
+            var p = weChatPaymentService.Create("ABP-商城", order.OrderNo, order.PaymentAmount);
+            //p.attach
             WeChatPaymentUnifyOrderResult wpor = await weChatPaymentService.PayAsync(p, CancellationToken.Token);
             return new CustomerPaymentResult(wpor);
         }

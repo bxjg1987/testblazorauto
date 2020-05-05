@@ -866,6 +866,11 @@
             前端顾客发起支付订单预支付的返回数据
             </summary>
         </member>
+        <member name="P:BXJG.Shop.Sale.CustomerPaymentResult.WeChatPaymentUnifyOrderResult">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="M:BXJG.Shop.Sale.CustomerPaymentResult.#ctor(BXJG.WeChat.Payment.WeChatPaymentUnifyOrderResult)">
             <summary>
             

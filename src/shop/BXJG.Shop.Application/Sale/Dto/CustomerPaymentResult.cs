@@ -10,14 +10,17 @@ namespace BXJG.Shop.Sale
     /// </summary>
     public class CustomerPaymentResult
     {
-        private WeChatPaymentUnifyOrderResult weChatPaymentUnifyOrderResult;
+        /// <summary>
+        /// 
+        /// </summary>
+        public WeChatPaymentUnifyOrderResult WeChatPaymentUnifyOrderResult { get;  }
         /// <summary>
         /// 
         /// </summary>
         /// <param name="weChatPaymentUnifyOrderResult"></param>
         public CustomerPaymentResult(WeChatPaymentUnifyOrderResult weChatPaymentUnifyOrderResult)
         {
-            this.weChatPaymentUnifyOrderResult = weChatPaymentUnifyOrderResult;
+            this.WeChatPaymentUnifyOrderResult = weChatPaymentUnifyOrderResult;
         }
     }
 }
