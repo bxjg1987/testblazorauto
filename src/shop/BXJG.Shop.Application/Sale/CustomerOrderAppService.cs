@@ -30,7 +30,7 @@ namespace BXJG.Shop.Sale
     /// <typeparam name="TOrderManager"></typeparam>
     /// <typeparam name="TCustomerManager"></typeparam>
     public class CustomerOrderAppService<TTenant, TUser, TRole, TTenantManager, TUserManager, TArea, TOrderManager, TCustomerManager>
-        : BXJGShopAppServiceBase<TTenant, TUser, TRole, TTenantManager, TUserManager>, ICustomerOrderAppService
+        : BXJGShopCustomerAppServiceBase<TTenant, TUser, TRole, TTenantManager, TUserManager, TCustomerManager>, ICustomerOrderAppService
         where TUser : AbpUser<TUser>, new()
         where TRole : AbpRole<TUser>, new()
         where TTenant : AbpTenant<TUser>
@@ -42,41 +42,30 @@ namespace BXJG.Shop.Sale
     {
         private readonly IRepository<OrderEntity<TUser, TArea>, long> repository;
         private readonly TOrderManager orderManager;
-        private readonly TCustomerManager customerManager;
         private readonly IRepository<TArea, long> generalTreeManager;
         private readonly IRepository<ItemEntity, long> itemRepository;
         private readonly WeChatPaymentService weChatPaymentService;
 
-        /// <summary>
-        /// 
-        /// </summary>
         public ICancellationTokenProvider CancellationToken { get; set; } = NullCancellationTokenProvider.Instance;
 
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="repository"></param>
-        /// <param name="orderManager"></param>
-        /// <param name="customerManager"></param>
-        /// <param name="generalTreeManager"></param>
-        /// <param name="itemRepository"></param>
-        /// <param name="weChatPaymentService"></param>
         public CustomerOrderAppService(
-            IRepository<OrderEntity<TUser, TArea>, long> repository,
-            TOrderManager orderManager,
+            IRepository<CustomerEntity<TUser>, long> customerRepository,
             TCustomerManager customerManager,
+            BXJGShopCustomerSession<TUser> customerSession,
+            IRepository<OrderEntity<TUser, TArea>, long> repository,
+            TOrderManager orderManager, 
             IRepository<TArea, long> generalTreeManager,
             IRepository<ItemEntity, long> itemRepository,
             WeChatPaymentService weChatPaymentService)
+            : base(customerRepository, customerManager, customerSession)
         {
             this.repository = repository;
             this.orderManager = orderManager;
-            this.customerManager = customerManager;
             this.generalTreeManager = generalTreeManager;
             this.itemRepository = itemRepository;
             this.weChatPaymentService = weChatPaymentService;
         }
+
         /// <summary>
         /// 创建订单
         /// </summary>
@@ -84,7 +73,7 @@ namespace BXJG.Shop.Sale
         /// <returns></returns>
         public async Task<CustomerOrderDto> CreateAsync(CustomerOrderCreateDto input)
         {
-            var customer = await customerManager.SingleByUserIdWithoutUserAsync(AbpSession.UserId.Value);
+            var customer = await base.GetCurrentCustomerAsync();
             var area = await generalTreeManager.GetAsync(input.AreaId);
             var itemIds = input.Items.Select(c => c.ItemId);
             var items = await itemRepository.GetAllListAsync(c => itemIds.Contains(c.Id));
@@ -111,13 +100,13 @@ namespace BXJG.Shop.Sale
         /// <returns></returns>
         public async Task<CustomerPaymentResult> PaymentAsync(CustomerPaymentInput input)
         {
-            var customer = await customerManager.SingleByUserIdWithoutUserAsync(AbpSession.UserId.Value);
+            var customerId = await base.GetCurrentCustomerIdAsync();
             var order = await repository.GetAsync(input.OrderId);
-            if (customer.Id != order.CustomerId)
+            if (customerId != order.CustomerId)
                 throw new ApplicationException();
 
             var p = weChatPaymentService.Create("ABP-商城", order.OrderNo, order.PaymentAmount);
-            //p.attach
+            //p.attach   //微信支付需要的其它可选参数可以继续配置
             WeChatPaymentUnifyOrderResult wpor = await weChatPaymentService.PayAsync(p, CancellationToken.Token);
             return new CustomerPaymentResult(wpor);
         }

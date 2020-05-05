@@ -512,6 +512,38 @@
             <typeparam name="TUserManager"></typeparam>
             <typeparam name="TArea"></typeparam>
         </member>
+        <member name="T:BXJG.Shop.Customer.BXJGShopCustomerAppServiceBase`6">
+            <summary>
+            登录的顾客的应用服务基类
+            比如顾客下订单 支付订单 或其它顾客操作可能会定义不同的应用服务，这些服务都可以继承此类来简化代码
+            </summary>
+            <typeparam name="TTenant"></typeparam>
+            <typeparam name="TUser"></typeparam>
+            <typeparam name="TRole"></typeparam>
+            <typeparam name="TTenantManager"></typeparam>
+            <typeparam name="TUserManager"></typeparam>
+            <typeparam name="TCustomerManager"></typeparam>
+        </member>
+        <member name="M:BXJG.Shop.Customer.BXJGShopCustomerAppServiceBase`6.#ctor(Abp.Domain.Repositories.IRepository{BXJG.Shop.Customer.CustomerEntity{`1},System.Int64},`5,BXJG.Shop.Customer.BXJGShopCustomerSession{`1})">
+            <summary>
+            
+            </summary>
+            <param name="customerRepository"></param>
+            <param name="customerManager"></param>
+            <param name="customerSession"></param>
+        </member>
+        <member name="M:BXJG.Shop.Customer.BXJGShopCustomerAppServiceBase`6.GetCurrentCustomerAsync">
+            <summary>
+            获取当前登录用户关联的顾客信息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Shop.Customer.BXJGShopCustomerAppServiceBase`6.GetCurrentCustomerIdAsync">
+            <summary>
+            获取当前登录用户关联的顾客id
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:BXJG.Shop.Customer.Dto.CustomerDto">
             <summary>
             后台管理页使用的DTO
@@ -605,22 +637,6 @@
             <typeparam name="TArea"></typeparam>
             <typeparam name="TOrderManager"></typeparam>
             <typeparam name="TCustomerManager"></typeparam>
-        </member>
-        <member name="P:BXJG.Shop.Sale.CustomerOrderAppService`8.CancellationToken">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:BXJG.Shop.Sale.CustomerOrderAppService`8.#ctor(Abp.Domain.Repositories.IRepository{BXJG.Shop.Sale.OrderEntity{`1,`5},System.Int64},`6,`7,Abp.Domain.Repositories.IRepository{`5,System.Int64},Abp.Domain.Repositories.IRepository{BXJG.Shop.Catalogue.ItemEntity,System.Int64},BXJG.WeChat.Payment.WeChatPaymentService)">
-            <summary>
-            
-            </summary>
-            <param name="repository"></param>
-            <param name="orderManager"></param>
-            <param name="customerManager"></param>
-            <param name="generalTreeManager"></param>
-            <param name="itemRepository"></param>
-            <param name="weChatPaymentService"></param>
         </member>
         <member name="M:BXJG.Shop.Sale.CustomerOrderAppService`8.CreateAsync(BXJG.Shop.Sale.CustomerOrderCreateDto)">
             <summary>
