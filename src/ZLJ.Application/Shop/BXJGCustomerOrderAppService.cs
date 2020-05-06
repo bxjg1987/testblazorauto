@@ -36,6 +36,7 @@ namespace ZLJ.Shop
             IRepository<ItemEntity, long> itemRepository, WeChatPaymentService weChatPaymentService)
             : base(customerRepository, customerManager, customerSession, repository, orderManager, generalTreeManager, itemRepository, weChatPaymentService)
         {
+            //sd
         }
     }
 }
