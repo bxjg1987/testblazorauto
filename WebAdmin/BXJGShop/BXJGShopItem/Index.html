@@ -122,9 +122,14 @@
         var $brandCombobox = $('<input />').appendTo($toolbarRight);
         $brandCombobox.combobox({
             editable: false,
-            url: abp.appPath + "/api/services/app/datadictionary/getnodesForSelect",
-            queryParams: { forType: 1,id:7 },
-            prompt: '==' + abp.localization.zlj('Brand')+'==',
+            //url: abp.appPath + "/api/services/app/datadictionary/getnodesForSelect",
+            //queryParams: { forType: 1,id:7 },
+            //prompt: '==' + abp.localization.zlj('Brand') + '==', 
+            url: abp.appPath + 'api/services/app/BXJGShopDictionary/GetNodesForSelect',
+            queryParams: { forType: 4, parentText: '全部',ParentId:1 },
+            prompt: abp.localization.bxjgUtils('全部'),
+            valueField: 'value',
+            textField: 'displayText',
             onChange: search
         });
         function search() {
@@ -140,10 +145,10 @@
 
 
         $cls.tree({
-            url: abp.appPath + 'api/services/app/GeneralTree/GetTreeForSelect',
+            url: abp.appPath + 'api/services/app/BXJGShopDictionary/GetTreeForSelect',
             queryParams: {
                 "forType": 1,
-                "ParentId": 21,
+                "ParentId": 1,
                 "ParentText":"全部分类"
             },//?ParentId=21&ForType=1&ParentText=全部分类
             onSelect: function (node) {
@@ -221,17 +226,22 @@
             rownumbers: true,
             pagination: true,
             toolbar: '#dgToolbar' + m,
-            url: abp.appPath + 'api/services/app/equipmentinfo/GetAll',
+            ///api/services/app/BXJGShopItem/GetAll
+            url: abp.appPath + 'api/services/app/BXJGShopItem/GetAll',
+            queryParams: {
+                "CategoryId": 2,
+                "Published": true
+            },
             frozenColumns: [[
                 { field: 'ck', checkbox: true },
-                { field: 'name', title: '名称', width: 200, sortable: true }
+                { field: 'title', title: '名称', width: 200, sortable: true }
             ]],
             columns: [[
                 { field: 'categoryDisplayName', title: '类别', width: 100, sortable: true },
-                { field: 'mnemonicCode', title: '助记码', width: 100, sortable: true },
-                { field: 'unitDisplayName', title: '单位', width: 80, sortable: true },
-                { field: 'brandDisplayName', title: '品牌', width: 120, sortable: true },
-                { field: 'size', title: '规格型号', width: 200, sortable: true },
+                //{ field: 'mnemonicCode', title: '助记码', width: 100, sortable: true },
+                //{ field: 'unitDisplayName', title: '单位', width: 80, sortable: true },
+                //{ field: 'brandDisplayName', title: '品牌', width: 120, sortable: true },
+                //{ field: 'size', title: '规格型号', width: 200, sortable: true },
                 //{ field: 'supplierName', title: '供应商', width: 250, sortable: true },
                 //{ field: 'purchasePrice', title: '进价', width: 80, align: 'right', sortable: true },
                 //{ field: 'sellPrice', title: '售价', width: 80, align: 'right', sortable: true }
