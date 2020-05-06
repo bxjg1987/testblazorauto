@@ -1,4 +1,4 @@
-﻿﻿<form id="frmGeneralTree" class="frm-container">
+﻿﻿<form id="frmBXJGShopDictionary" class="frm-container">
     <input type="hidden" name="id" value="0" />
     <table class="frm-box">
         <tr>
@@ -21,7 +21,7 @@
 </form>
 <script>
     (function () {
-        var m = 'GeneralTree';
+        var m = 'BXJGShopDictionary';
         var $dlg = $('#dlg' + m);
         var $frm = $('form');
         var $cbParent = $frm.find("[name='parentId']");
@@ -34,8 +34,8 @@
         //初始化父节点下拉框
         $cbParent.combotree({
             url: abp.appPath + 'api/services/app/' + m + '/GetTreeForSelect',
-            queryParams: { forType: 1, parentText: '全部分类',parentid:21},
-            prompt: abp.localization.bxjgUtils('全部分类'),
+            queryParams: { forType: 4, parentText: '全部' },
+            prompt: abp.localization.bxjgUtils('全部'),
             onLoadSuccess: function (node, data) {
                 initParentTask.resolve();
             },
@@ -66,12 +66,12 @@
             var postData = $frm.serializeJSON(/*{ checkboxUncheckedValue: "false" }*/);
             var defer;
             if (id) {
-                defer = abp.services.app.generalTree.update(postData).done(function (d) {
+                defer = abp.services.app.bXJGShopDictionary.update(postData).done(function (d) {
                     abp.notify.success(abp.localization.bxjgUtils('修改') + abp.localization.bxjgUtils('成功') + '!');
                 });
             } else {
                 postData.id = 0;
-                defer = abp.services.app.generalTree.create(postData).done(function (d) {
+                defer = abp.services.app.bXJGShopDictionary.create(postData).done(function (d) {
                     abp.notify.success(abp.localization.bxjgUtils('新增') + abp.localization.bxjgUtils('成功') + '!');
                 });
             }

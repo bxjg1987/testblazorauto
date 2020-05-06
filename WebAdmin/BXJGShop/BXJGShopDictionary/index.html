@@ -1,12 +1,12 @@
-﻿<div id="dgToolbarGeneralTree" class="datagrid-toolbar1">
+﻿<div id="dgToolbarBXJGShopDictionary" class="datagrid-toolbar1">
     <div class="toolbar_right">
     </div>
 </div>
-<table id="dgGeneralTree"></table>
+<table id="dgBXJGShopDictionary"></table>
 <script>
     (function () {
         //若在js函数内部直接使用 razor变量，将失去vs2017提供的js代码折叠效果，因此这里搞个变量
-        var m = 'GeneralTree';
+        var m = 'BXJGShopDictionary';
 
         var canAdd = abp.auth.isGranted('GeneralTreeCreatePermission');
         var canUpdate = abp.auth.isGranted('GeneralTreeUpdatePermission');
@@ -174,7 +174,8 @@
             rownumbers: true,
             queryParams: { loadParent: true },
             toolbar: '#dgToolbar' + m,
-            url: abp.appPath + 'api/services/app/' + m +'/GetTreeForSelect?ParentId=21&ForType=1&ParentText=全部分类',
+            url: abp.appPath + 'api/services/app/' + 'BXJGShopDictionary' +'/GetAll',
+            //url: abp.apppath + 'api/services/app/BXJGShopDictionary/GetAll',
             columns: [[
                 { field: 'text', title: '名称', width: 300 },
                 { field: 'isTreeText', title: '树形结构', checked: true, width: 80, align: 'center' },
