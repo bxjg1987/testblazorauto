@@ -1,24 +1,24 @@
 ﻿<div class="listpage-left" style="width:180px;">
     <div class="listpage-left-head ">分类</div>
     <div class="listpage-left-content">
-        <ul id="clsEquipmentInfo" />
+        <ul id="clsBXJGShopItem" />
     </div>
 </div>
 <div class="listpage-right">
-    <div id="dgToolbarEquipmentInfo" class="datagrid-toolbar1">
+    <div id="dgToolbarBXJGShopItem" class="datagrid-toolbar1">
         <div class="toolbar_right">
             <!--<input class="easyui-textbox" data-options="width:260, prompt:'名称/助记码/品牌/规格型号/供应商 等...'" />-->
         </div>
     </div>
-    <table id="dgEquipmentInfo"></table>
+    <table id="dgBXJGShopItem"></table>
 </div>
 <script>
     (function () {
         //在razor变量两边加单引号会被当成字符串，vs智能提示不会消失
-        var m = 'EquipmentInfo';
-        var canAdd = abp.auth.isGranted('Administrator.Asset.' + m + '.Create');
-        var canUpdate = abp.auth.isGranted('Administrator.Asset.' + m + '.Update');
-        var canDelete = abp.auth.isGranted('Administrator.Asset.' + m + '.Delete');
+        var m = 'BXJGShopItem';
+        var canAdd = abp.auth.isGranted( m + 'Create');
+        var canUpdate = abp.auth.isGranted( m + 'Update');
+        var canDelete = abp.auth.isGranted(m + 'Delete');
         var $toolbar = $('#dgToolbar' + m);
         var $toolbarRight = $toolbar.find('.toolbar_right');
         var $dg = $('#dg'+m);
@@ -115,7 +115,7 @@
         var $keywordTextbox = $('<input />').appendTo($toolbarRight);
         $keywordTextbox.textbox({
             width: 200,
-            prompt: abp.localization.zlj('GetEquipmentInfoKeywordsInputPrompt'),
+            prompt: abp.localization.zlj('GetBXJGShopItemKeywordsInputPrompt'),
             onChange: search
         });
 
@@ -152,7 +152,8 @@
                 "ParentText":"全部分类"
             },//?ParentId=21&ForType=1&ParentText=全部分类
             onSelect: function (node) {
-                $dg.datagrid('load', { categorycode: node.attributes ? node.attributes.code : '' });
+                //$dg.datagrid('load', { CategoryId: node.id ? node.attributes.id : 2 });
+                  $dg.datagrid('load', { CategoryId:2 });
             }
         });
 
@@ -192,7 +193,7 @@
                 height: 520,
                 border: false,
                 modal: true,
-                href: '/asset/' + m + '/form.html?_t=' + abp.pageLoadTime.getTime(),
+                href: '/BXJGShop/' + m + '/form.html?_t=' + abp.pageLoadTime.getTime(),
                 buttons: [{
                     iconCls: 'icon-ok',
                     text: abp.localization.zlj('Save'),

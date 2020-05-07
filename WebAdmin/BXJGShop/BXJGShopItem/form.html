@@ -1,83 +1,92 @@
-﻿<form id="frmEquipmentInfo">
+﻿<form id="frmBXJGShopItem">
     <input type="hidden" name="id" value="0" />
     <table class="frm-box column2">
         <tr>
             <th>名称</th>
-            <td colspan="3"><input name="name" class="easyui-textbox" data-options=" required:true, validType:'length[1,100]'" style="width:468px" /></td>
+            <td colspan="3"><input name="title" class="easyui-textbox" data-options=" required:true, validType:'length[1,100]'" style="width:468px" /></td>
         </tr>
         <tr>
             <th>类别</th>
             <td>
-                <input name="categoryId" class="easyui-combotree"
+                <input name="categoryId" class="easyui-combobox"
+                       valueField='value'
+                       textField='displayText'
                        data-options="
-                       editable:false,
-                       required:true,
-                       url:abp.appPath+'/api/services/app/dataDictionary/GettreeForSelect',
-                       queryParams: { forType: 4,id:5}" />
+                       url:abp.appPath+'api/services/app/BXJGShopDictionary/GetNodesForSelect',
+                       queryParams: { forType: 4,ParentId:1,ParentText:'请选择类别' }" />
             </td>
             <th>助记码</th>
             <td><input name="mnemonicCode" class="easyui-textbox" data-options="validType:'length[0,100]'" /></td>
         </tr>
         <tr>
-            <th>单位</th>
-            <td>
-                <input name="unitId" class="easyui-combobox"
-                       data-options="
-                       url:abp.appPath+'/api/services/app/dataDictionary/GetNodesForSelect',
-                       queryParams: { forType: 4,id:6}" />
-            </td>
-            <th>规格型号</th>
-            <td><input name="size" class="easyui-textbox" data-options="validType:'length[0,100]'" /></td>
+            <th>原价</th>
+            <td><input name="oldPrice" class="easyui-numberspinner" data-options="prefix:'￥',precision:2,value:0" /></td>
+            <th>现价</th>
+            <td><input name="price" class="easyui-numberspinner" data-options="prefix:'￥',precision:2,value:0" /></td>
         </tr>
         <tr>
-            <th>品牌</th>
+            <th>计价单位</th>
             <td>
-                <input name="brandId" class="easyui-combobox "
+                <input name="sku" class="easyui-combobox"
+                       valueField='value'
+                       textField='displayText'
                        data-options="
-                       url:abp.appPath+'/api/services/app/dataDictionary/GetNodesForSelect',
-                       queryParams: { forType: 4,id:7}" />
+                       url:abp.appPath+'api/services/app/BXJGShopDictionary/GetNodesForSelect',
+                       queryParams: { forType: 4,ParentId:12,ParentText:'请选择单位'}" />
             </td>
+            <!--<th>是否热卖</th>
+        <td>
+            <select class="easyui-combobox" id="new" name="new">
+                <option value="true">是</option>
+                <option value="false">否</option>
+            </select>
+        </td>-->
+            <!--<th>品牌</th>
+        <td>
+            <input name="brandId" class="easyui-combobox "
+                   valueField= 'value'
+                   textField= 'displayText'
+                   data-options="
+                   url:abp.appPath+'api/services/app/BXJGShopDictionary/GetNodesForSelect',
+                   queryParams: { forType: 4,ParentId:5}" />
+        </td>-->
             <!--<th>供应商</th>
-            <td>
-                <select class="easyui-combogrid" name="supplierId"
-                        data-options="
-                                panelWidth:700,
-                                idField:'id',
-                                textField:'name',
-                                prompt:'请选择(支持按名称/联系人/手机号/地址等模糊查询)',
-                                url:'/api/services/app/btype/GetForSelect',
-                                queryParams1: { forType: 2,id:71},
-                                delay: 500,
-                                mode: 'remote',
-                                pagination:true,
-                                columns:[[
-                                    {field:'name',title:'名称',width:200},
-                                    {field:'contact',title:'联系人',width:100},
-                                    {field:'cellphone',title:'联系电话',width:100},
-                                    {field:'areaText',title:'区域',width:100},
-                                    {field:'industryText',title:'行业',width:100},
-                                    {field:'address',title:'地址',width:100},
-                                    {field:'remark',title:'备注',width:100}
-                                ]]
-                            "></select>
-            </td>-->
+        <td>
+            <select class="easyui-combogrid" name="supplierId"
+                    data-options="
+                            panelWidth:700,
+                            idField:'id',
+                            textField:'name',
+                            prompt:'请选择(支持按名称/联系人/手机号/地址等模糊查询)',
+                            url:'/api/services/app/btype/GetForSelect',
+                            queryParams1: { forType: 2,id:71},
+                            delay: 500,
+                            mode: 'remote',
+                            pagination:true,
+                            columns:[[
+                                {field:'name',title:'名称',width:200},
+                                {field:'contact',title:'联系人',width:100},
+                                {field:'cellphone',title:'联系电话',width:100},
+                                {field:'areaText',title:'区域',width:100},
+                                {field:'industryText',title:'行业',width:100},
+                                {field:'address',title:'地址',width:100},
+                                {field:'remark',title:'备注',width:100}
+                            ]]
+                        "></select>
+        </td>-->
             <td></td>
+
+        <tr>
         </tr>
         <!--<tr>
-            <th>进价</th>
-            <td><input name="purchasePrice" class="easyui-numberspinner" data-options="prefix:'￥',precision:2,value:0" /></td>
-            <th>售价</th>
-            <td><input name="sellPrice" class="easyui-numberspinner" data-options="prefix:'￥',precision:2,value:0" /></td>
-        </tr>-->
-        <tr>
             <th class="top">附件</th>
             <td colspan="3" class="attachment" style="height:260px;"></td>
-        </tr>
+        </tr>-->
     </table>
 </form>
 <script>
     (function () {
-        let m = 'EquipmentInfo';
+        let m = 'BXJGShopItem';
         let $dlg = $('#dlg' + m);
         let $frm = $dlg.find('form');
         let id = $dlg.data('id');
@@ -86,10 +95,10 @@
         let $cls = $frm.find('[name="categoryId"]');
         let $brand = $frm.find('[name="brand"]');
         let $unit = $frm.find('[name="unit"]');
-        let attachment = $frm.find('.attachment');
+        //let attachment = $frm.find('.attachment');
 
-        attachment.jqEasyuiWebuploader(abp.file.buildJQUOA('EquipmentInfo', 'Administrator.Asset.EquipmentInfo.Create', 'Administrator.Asset.EquipmentInfo'));
-        let up = attachment.jqEasyuiWebuploader('webUploader');
+        //attachment.jqEasyuiWebuploader(abp.file.buildJQUOA('BXJGShopItem', 'Administrator.Asset.BXJGShopItem.Create', 'Administrator.Asset.BXJGShopItem'));
+        //let up = attachment.jqEasyuiWebuploader('webUploader');
         //let uploaderInitTask = attachment.jqEasyuiWebuploader('initTask');
         setTimeout(function () {
             $name.next('span').find('input').focus();
@@ -109,12 +118,12 @@
         function save(postData) {
             var defer;
             if (id) {
-                defer = abp.services.app.equipmentInfo.update(postData).done(function (d) {
+                defer = abp.services.app.bXJGShopItem.update(postData).done(function (d) {
                     abp.notify.success(abp.localization.zlj('Update') + abp.localization.zlj('Success') + '!');
                     onSaved('onUpdated');
                 });
             } else {
-                defer = abp.services.app.equipmentInfo.create(postData).done(function (d) {
+                defer = abp.services.app.bXJGShopItem.create(postData).done(function (d) {
                     abp.notify.success(abp.localization.zlj('Add') + abp.localization.zlj('Success') + '!');
                     onSaved('onAdded');
                 });
@@ -127,36 +136,36 @@
                 return;
 
             var postData = $frm.serializeJSON();
-
+            console.log(postData);
             //处理附件
-            var jjjc = attachment.jqEasyuiWebuploader('checkSaveOrGetFileIds');
-            postData.attachments = jjjc.data;
+            //var jjjc = attachment.jqEasyuiWebuploader('checkSaveOrGetFileIds');
+            //postData.attachments = jjjc.data;
 
-            if (!jjjc.success) {
+            //if (!jjjc.success) {
 
-                abp.message.confirm(
-                    abp.localization.zlj('附件未上传完成，将只保存已上传的附件，是否继续保存？'),
-                    abp.localization.zlj('附件检查'),
-                    function (isConfirmed) {
-                        if (isConfirmed) {
-                            save(postData);
-                        }
-                    }
-                );
+            //    abp.message.confirm(
+            //        abp.localization.zlj('附件未上传完成，将只保存已上传的附件，是否继续保存？'),
+            //        abp.localization.zlj('附件检查'),
+            //        function (isConfirmed) {
+            //            if (isConfirmed) {
+            //                save(postData);
+            //            }
+            //        }
+            //    );
 
-            } else {
-                save(postData);
-            }
-
+            //} else {
+            //    save(postData);
+            //}
+            save(postData);
         });
 
         if (id) {
-            abp.ui.setBusy($dlg, abp.services.app.equipmentInfo.get({ id: id }).done(function (d) {
+            abp.ui.setBusy($dlg, abp.services.app.BXJGShopItem.get({ id: id }).done(function (d) {
                 $frm.form('load', d);
                 if (d.attachments) {
                     //插件有点问题，初始化有部分东西是异步的，因此这里等一段时间
                     //保险的方式是插件提供初始化完成的回调函数
-                     setTimeout(function () {
+                    setTimeout(function () {
                         d.attachments.forEach(function (item, index) {
                             var obj = {
                                 id: item.id,//这个好像也没什么卵用
@@ -171,7 +180,7 @@
                             file.setStatus('complete');
                             up.addFiles(file);
                         });
-                    },500);
+                    }, 500);
                 }
             }));
         } else
