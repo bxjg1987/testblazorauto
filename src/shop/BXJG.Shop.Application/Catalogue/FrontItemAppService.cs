@@ -16,11 +16,11 @@ using Abp;
 
 namespace BXJG.Shop.Catalogue
 {
-    public class FrontItemAppService : AbpServiceBase, IFrontItemAppService
+    public class BXJGShopFrontItemAppService : AbpServiceBase, IBXJGShopFrontItemAppService
     {
         private readonly IRepository<ItemEntity, long> repository;
 
-        public FrontItemAppService(IRepository<ItemEntity, long> repository)
+        public BXJGShopFrontItemAppService(IRepository<ItemEntity, long> repository)
         {
             this.repository = repository;
         }
