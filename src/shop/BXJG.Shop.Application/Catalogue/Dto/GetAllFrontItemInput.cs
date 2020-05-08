@@ -17,6 +17,10 @@ namespace BXJG.Shop.Catalogue
         /// </summary>
         public long? CategoryId { get; set; }
         /// <summary>
+        /// 品牌Id
+        /// </summary>
+        public long? BrandId { get; set; }
+        /// <summary>
         /// 关键字
         /// Title/DescriptionShort/SKU等..模糊查询
         /// </summary>

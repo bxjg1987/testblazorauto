@@ -28,6 +28,7 @@ namespace BXJG.Shop.Catalogue
         {
             var now = DateTimeOffset.Now;
             var query = repository.GetAllIncluding(c => c.Category)
+                   .WhereIf(input.BrandId.HasValue, c => c.BrandId == input.BrandId.Value)
                    .WhereIf(input.CategoryId.HasValue, c => c.CategoryId == input.CategoryId.Value)
                    .Where(c => c.Published && (!c.AvailableStart.HasValue || c.AvailableStart.Value <= now) && (!c.AvailableEnd.HasValue || c.AvailableEnd.Value > now))
                    .WhereIf(input.PriceMin.HasValue, c => c.Price >= input.PriceMin.Value)

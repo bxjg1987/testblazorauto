@@ -66,6 +66,7 @@ namespace BXJG.Shop.Catalogue
         public async Task<IList<ItemDto>> GetAllAsync(GetAllItemsInput input)
         {
             var query = repository.GetAllIncluding(c => c.Category)
+                .WhereIf(input.BrandId.HasValue, c => c.BrandId == input.BrandId.Value)
                 .WhereIf(input.CategoryId.HasValue, c => c.CategoryId == input.CategoryId.Value)
                 .WhereIf(input.Published.HasValue, c => c.Published == input.Published.Value)
                 .WhereIf(input.AvailableStart.HasValue, c => c.AvailableStart >= input.AvailableStart.Value)

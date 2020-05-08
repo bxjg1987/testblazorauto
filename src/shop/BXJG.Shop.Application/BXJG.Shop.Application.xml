@@ -59,6 +59,16 @@
             分类名称
             </summary>
         </member>
+        <member name="P:BXJG.Shop.Catalogue.FrontItemDto.BrandDisplayName">
+            <summary>
+            品牌名
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Catalogue.FrontItemDto.BrandId">
+            <summary>
+            品牌Id
+            </summary>
+        </member>
         <member name="P:BXJG.Shop.Catalogue.FrontItemDto.OldPrice">
             <summary>
             原价
@@ -102,6 +112,11 @@
         <member name="P:BXJG.Shop.Catalogue.GetAllFrontItemInput.CategoryId">
             <summary>
             所属商品类别id
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Catalogue.GetAllFrontItemInput.BrandId">
+            <summary>
+            品牌Id
             </summary>
         </member>
         <member name="P:BXJG.Shop.Catalogue.GetAllFrontItemInput.Keywords">
@@ -153,6 +168,11 @@
         <member name="P:BXJG.Shop.Catalogue.GetAllItemsInput.CategoryId">
             <summary>
             所属商品类别id
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Catalogue.GetAllItemsInput.BrandId">
+            <summary>
+            品牌Id
             </summary>
         </member>
         <member name="P:BXJG.Shop.Catalogue.GetAllItemsInput.Published">
@@ -213,9 +233,14 @@
             所属类别id
             </summary>
         </member>
+        <member name="P:BXJG.Shop.Catalogue.ItemCreateDto.BrandId">
+            <summary>
+            品牌Id
+            </summary>
+        </member>
         <member name="P:BXJG.Shop.Catalogue.ItemCreateDto.OldPrice">
             <summary>
-            原价
+            原价 
             </summary>
         </member>
         <member name="P:BXJG.Shop.Catalogue.ItemCreateDto.Price">
@@ -308,6 +333,16 @@
             分类名称
             </summary>
         </member>
+        <member name="P:BXJG.Shop.Catalogue.ItemDto.BrandDisplayName">
+            <summary>
+            品牌名
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Catalogue.ItemDto.BrandId">
+            <summary>
+            品牌Id
+            </summary>
+        </member>
         <member name="P:BXJG.Shop.Catalogue.ItemDto.OldPrice">
             <summary>
             原价
@@ -391,6 +426,11 @@
         <member name="P:BXJG.Shop.Catalogue.ItemUpdateDto.CategoryId">
             <summary>
             所属类别id
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Catalogue.ItemUpdateDto.BrandId">
+            <summary>
+            品牌Id
             </summary>
         </member>
         <member name="P:BXJG.Shop.Catalogue.ItemUpdateDto.OldPrice">

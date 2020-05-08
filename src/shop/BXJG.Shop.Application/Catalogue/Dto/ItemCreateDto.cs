@@ -43,6 +43,10 @@ namespace BXJG.Shop.Catalogue
         /// </summary>
         [Required]
         public long CategoryId { get; set; }
+        /// <summary>
+        /// 品牌Id
+        /// </summary>
+        public long? BrandId { get; set; }
         #endregion
 
         #region 价格信息

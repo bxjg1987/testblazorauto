@@ -45,6 +45,14 @@ namespace BXJG.Shop.Catalogue
         /// 分类名称
         /// </summary>
         public string CategoryDisplayName { get; set; }
+        /// <summary>
+        /// 品牌名
+        /// </summary>
+        public string BrandDisplayName { get; set; }
+        /// <summary>
+        /// 品牌Id
+        /// </summary>
+        public long? BrandId { get; set; }
         #endregion
 
         #region 价格信息

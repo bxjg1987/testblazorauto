@@ -17,6 +17,10 @@ namespace BXJG.Shop.Catalogue
         /// </summary>
         public long? CategoryId { get; set; }
         /// <summary>
+        /// 品牌Id
+        /// </summary>
+        public long? BrandId { get; set; }
+        /// <summary>
         /// 是否已发布
         /// </summary>
         public bool? Published { get; set; }
