@@ -126,7 +126,7 @@
             //queryParams: { forType: 1,id:7 },
             //prompt: '==' + abp.localization.zlj('Brand') + '==', 
             url: abp.appPath + 'api/services/app/BXJGShopDictionary/GetNodesForSelect',
-            queryParams: { forType: 4, parentText: '全部',ParentId:1 },
+            queryParams: { forType: 4, parentText: '全部', ParentId: 1 },
             prompt: abp.localization.bxjgUtils('全部'),
             valueField: 'value',
             textField: 'displayText',
@@ -230,7 +230,7 @@
             ///api/services/app/BXJGShopItem/GetAll
             url: abp.appPath + 'api/services/app/BXJGShopItem/GetAll',
             queryParams: {
-                "CategoryId": 2,
+                //"CategoryId": 1,
                 "Published": true
             },
             frozenColumns: [[
@@ -238,7 +238,7 @@
                 { field: 'title', title: '名称', width: 200, sortable: true }
             ]],
             columns: [[
-                { field: 'categoryDisplayName', title: '类别', width: 100, sortable: true },
+                { field: 'categoryDisplayName', title: '类别', width: 100, sortable: true }
                 //{ field: 'mnemonicCode', title: '助记码', width: 100, sortable: true },
                 //{ field: 'unitDisplayName', title: '单位', width: 80, sortable: true },
                 //{ field: 'brandDisplayName', title: '品牌', width: 120, sortable: true },
