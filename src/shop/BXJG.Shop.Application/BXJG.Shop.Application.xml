@@ -114,6 +114,11 @@
             所属商品类别id
             </summary>
         </member>
+        <member name="P:BXJG.Shop.Catalogue.GetAllFrontItemInput.CategoryCode">
+            <summary>
+            分类Code
+            </summary>
+        </member>
         <member name="P:BXJG.Shop.Catalogue.GetAllFrontItemInput.BrandId">
             <summary>
             品牌Id
@@ -168,6 +173,11 @@
         <member name="P:BXJG.Shop.Catalogue.GetAllItemsInput.CategoryId">
             <summary>
             所属商品类别id
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Catalogue.GetAllItemsInput.CategoryCode">
+            <summary>
+            分类Code
             </summary>
         </member>
         <member name="P:BXJG.Shop.Catalogue.GetAllItemsInput.BrandId">
@@ -524,12 +534,12 @@
             <param name="ids"></param>
             <returns></returns>
         </member>
-        <member name="T:BXJG.Shop.Catalogue.IFrontItemAppService">
+        <member name="T:BXJG.Shop.Catalogue.IBXJGShopFrontItemAppService">
             <summary>
             面向前端顾客关于商品信息的接口
             </summary>
         </member>
-        <member name="M:BXJG.Shop.Catalogue.IFrontItemAppService.GetAllAsync(BXJG.Shop.Catalogue.GetAllFrontItemInput)">
+        <member name="M:BXJG.Shop.Catalogue.IBXJGShopFrontItemAppService.GetAllAsync(BXJG.Shop.Catalogue.GetAllFrontItemInput)">
             <summary>
             搜索商品信息
             </summary>

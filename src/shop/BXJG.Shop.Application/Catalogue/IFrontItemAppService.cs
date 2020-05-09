@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Services;
+using Abp.Application.Services.Dto;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,6 +17,6 @@ namespace BXJG.Shop.Catalogue
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task<List<FrontItemDto>> GetAllAsync(GetAllFrontItemInput input);
+        Task<PagedResultDto<FrontItemDto>> GetAllAsync(GetAllFrontItemInput input);
     }
 }

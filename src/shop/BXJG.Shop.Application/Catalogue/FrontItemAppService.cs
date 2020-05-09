@@ -13,23 +13,31 @@ using Abp.Linq.Extensions;
 using Abp.ObjectMapping;
 using Microsoft.EntityFrameworkCore;
 using Abp;
+using Abp.Application.Services.Dto;
+using BXJG.Shop.Common;
 
 namespace BXJG.Shop.Catalogue
 {
     public class BXJGShopFrontItemAppService : AbpServiceBase, IBXJGShopFrontItemAppService
     {
         private readonly IRepository<ItemEntity, long> repository;
+        private readonly BXJGShopDictionaryManager dictionaryManager;
 
-        public BXJGShopFrontItemAppService(IRepository<ItemEntity, long> repository)
+        public BXJGShopFrontItemAppService(IRepository<ItemEntity, long> repository, BXJGShopDictionaryManager dictionaryManager)
         {
             this.repository = repository;
+            this.dictionaryManager = dictionaryManager;
         }
-        public async Task<List<FrontItemDto>> GetAllAsync(GetAllFrontItemInput input)
+        public async Task<PagedResultDto<FrontItemDto>> GetAllAsync(GetAllFrontItemInput input)
         {
+            string clsCode = input.CategoryCode;
+            if (clsCode.IsNullOrWhiteSpace() && input.CategoryId.HasValue)
+                clsCode = await dictionaryManager.GetCodeAsync(input.CategoryId.Value);
+
             var now = DateTimeOffset.Now;
             var query = repository.GetAllIncluding(c => c.Category)
                    .WhereIf(input.BrandId.HasValue, c => c.BrandId == input.BrandId.Value)
-                   .WhereIf(input.CategoryId.HasValue, c => c.CategoryId == input.CategoryId.Value)
+                   .WhereIf(!clsCode.IsNullOrWhiteSpace(), c => c.Category.Code.StartsWith(clsCode))
                    .Where(c => c.Published && (!c.AvailableStart.HasValue || c.AvailableStart.Value <= now) && (!c.AvailableEnd.HasValue || c.AvailableEnd.Value > now))
                    .WhereIf(input.PriceMin.HasValue, c => c.Price >= input.PriceMin.Value)
                    .WhereIf(input.PriceMax.HasValue, c => c.Price < input.PriceMax.Value)
@@ -37,12 +45,12 @@ namespace BXJG.Shop.Catalogue
                    .WhereIf(input.New.HasValue, c => c.New == input.New)
                    .WhereIf(input.Home.HasValue, c => c.Home == input.Home)
                    .WhereIf(input.Focus.HasValue, c => c.Focus == input.Focus)
-                   .WhereIf(!input.Keywords.IsNullOrEmpty(), c => c.Title.Contains(input.Keywords) || c.Sku.Contains(input.Keywords))
-                   .OrderBy(input.Sorting)
-                   .PageBy(input);
+                   .WhereIf(!input.Keywords.IsNullOrEmpty(), c => c.Title.Contains(input.Keywords) || c.Sku.Contains(input.Keywords));
+            var count = await query.CountAsync();
 
-            var list = await query.ToListAsync();
-            return ObjectMapper.Map<List<FrontItemDto>>(list);
+            var list = await query.OrderBy(input.Sorting).PageBy(input).ToListAsync();
+
+            return new PagedResultDto<FrontItemDto>(count, ObjectMapper.Map<IReadOnlyList<FrontItemDto>>(list));
         }
     }
 }

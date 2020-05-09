@@ -31,7 +31,6 @@ namespace BXJG.Shop.Catalogue
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-
         [AbpAuthorize(BXJGShopPermissions.BXJGShopItemUpdate)]
         Task<ItemDto> UpdateAsync(ItemUpdateDto input);
         /// <summary>
@@ -40,7 +39,7 @@ namespace BXJG.Shop.Catalogue
         /// <param name="input"></param>
         /// <returns></returns>
         [AbpAuthorize(BXJGShopPermissions.BXJGShopItem)]
-        Task<IList<ItemDto>> GetAllAsync(GetAllItemsInput input);
+        Task<PagedResultDto<ItemDto>> GetAllAsync(GetAllItemsInput input);
         /// <summary>
         /// 根据Id获取商品上架信息
         /// </summary>

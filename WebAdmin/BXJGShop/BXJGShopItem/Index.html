@@ -115,19 +115,16 @@
         var $keywordTextbox = $('<input />').appendTo($toolbarRight);
         $keywordTextbox.textbox({
             width: 200,
-            prompt: abp.localization.zlj('GetBXJGShopItemKeywordsInputPrompt'),
+            prompt: abp.localization.bxjgShop('GetBXJGShopItemKeywordsInputPrompt'),
             onChange: search
         });
 
         var $brandCombobox = $('<input />').appendTo($toolbarRight);
         $brandCombobox.combobox({
             editable: false,
-            //url: abp.appPath + "/api/services/app/datadictionary/getnodesForSelect",
-            //queryParams: { forType: 1,id:7 },
-            //prompt: '==' + abp.localization.zlj('Brand') + '==', 
             url: abp.appPath + 'api/services/app/BXJGShopDictionary/GetNodesForSelect',
-            queryParams: { forType: 4, parentText: '全部', ParentId: 1 },
-            prompt: abp.localization.bxjgUtils('全部'),
+            queryParams: { ParentId: 2,forType:1 },
+            prompt: '==品牌==',
             valueField: 'value',
             textField: 'displayText',
             onChange: search
@@ -152,8 +149,10 @@
                 "ParentText":"全部分类"
             },//?ParentId=21&ForType=1&ParentText=全部分类
             onSelect: function (node) {
-                //$dg.datagrid('load', { CategoryId: node.id ? node.attributes.id : 2 });
-                  $dg.datagrid('load', { CategoryId:2 });
+                let loadAllParameter = {};
+                if (node.id)
+                    loadAllParameter.categoryCode = node.attributes.code;
+                $dg.datagrid('load', loadAllParameter);
             }
         });
 
@@ -188,7 +187,7 @@
 
             $dlg.dialog({
                 iconCls: id ? $btnUpdateOptions.iconCls : $btnAddOptions.iconCls,
-                title: (id ? $btnUpdateOptions.text : $btnAddOptions.text) + abp.localization.zlj(m),
+                title: (id ? $btnUpdateOptions.text : $btnAddOptions.text) + '商品',//abp.localization.bxjgShop(m),
                 width:650,
                 height: 520,
                 border: false,

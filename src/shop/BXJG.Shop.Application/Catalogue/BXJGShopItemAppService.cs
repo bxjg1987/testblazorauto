@@ -15,6 +15,8 @@ using System.Linq.Dynamic.Core;
 using System.Linq.Dynamic;
 using Abp.Extensions;
 using Abp.Application.Services.Dto;
+using Microsoft.EntityFrameworkCore;
+using BXJG.Shop.Common;
 
 namespace BXJG.Shop.Catalogue
 {
@@ -41,11 +43,15 @@ namespace BXJG.Shop.Catalogue
         where TUserManager : AbpUserManager<TRole, TUser>
     {
         private readonly IRepository<ItemEntity, long> repository;
+        private readonly BXJGShopDictionaryManager dictionaryManager;
 
+        private readonly IRepository<BXJGShopDictionaryEntity, long> respDic;
 
-        public BXJGShopItemAppService(IRepository<ItemEntity, long> repository)
+        public BXJGShopItemAppService(IRepository<ItemEntity, long> repository, BXJGShopDictionaryManager dictionaryManager, IRepository<BXJGShopDictionaryEntity, long> respDic)
         {
             this.repository = repository;
+            this.dictionaryManager = dictionaryManager;
+            this.respDic = respDic;
         }
 
         public async Task<ItemDto> CreateAsync(ItemCreateDto input)
@@ -63,20 +69,23 @@ namespace BXJG.Shop.Catalogue
             return ObjectMapper.Map<ItemDto>(entity);
         }
 
-        public async Task<IList<ItemDto>> GetAllAsync(GetAllItemsInput input)
+        public async Task<PagedResultDto<ItemDto>> GetAllAsync(GetAllItemsInput input)
         {
+            string clsCode = input.CategoryCode;
+            if (clsCode.IsNullOrWhiteSpace() && input.CategoryId.HasValue)
+                clsCode = await dictionaryManager.GetCodeAsync(input.CategoryId.Value);
+
             var query = repository.GetAllIncluding(c => c.Category)
                 .WhereIf(input.BrandId.HasValue, c => c.BrandId == input.BrandId.Value)
-                .WhereIf(input.CategoryId.HasValue, c => c.CategoryId == input.CategoryId.Value)
+                .WhereIf(!clsCode.IsNullOrWhiteSpace(), c => c.Category.Code.StartsWith(clsCode))
                 .WhereIf(input.Published.HasValue, c => c.Published == input.Published.Value)
                 .WhereIf(input.AvailableStart.HasValue, c => c.AvailableStart >= input.AvailableStart.Value)
                 .WhereIf(input.AvailableEnd.HasValue, c => c.AvailableEnd < input.AvailableEnd.Value)
-                .WhereIf(!input.Keywords.IsNullOrEmpty(), c => c.Title.Contains(input.Keywords) || c.Sku.Contains(input.Keywords))
-                .OrderBy(input.Sorting)
-                .PageBy(input);
+                .WhereIf(!input.Keywords.IsNullOrEmpty(), c => c.Title.Contains(input.Keywords) || c.Sku.Contains(input.Keywords));
 
-            var list = await AsyncQueryableExecuter.ToListAsync(query);
-            return ObjectMapper.Map<IList<ItemDto>>(list);
+            var count = await query.CountAsync();
+            var list = await query.OrderBy(input.Sorting).PageBy(input).ToListAsync();
+            return new PagedResultDto<ItemDto>(count, ObjectMapper.Map<IReadOnlyList<ItemDto>>(list));
         }
 
         public Task DeleteAsync(DeleteInput input)
