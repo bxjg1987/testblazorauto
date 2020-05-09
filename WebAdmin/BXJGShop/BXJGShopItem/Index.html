@@ -215,7 +215,6 @@
                 //可以通过onload事件初始化控件，如：下拉框
             });
         }
-
         $dg.datagrid({
             ctrlSelect: true,
             fit: true,
@@ -229,43 +228,62 @@
             toolbar: '#dgToolbar' + m,
             ///api/services/app/BXJGShopItem/GetAll
             url: abp.appPath + 'api/services/app/BXJGShopItem/GetAll',
-            queryParams: {
-                "CategoryId": 2,
-                "Published": true
-            },
-            frozenColumns: [[
-                { field: 'ck', checkbox: true },
-                { field: 'title', title: '名称', width: 200, sortable: true }
-            ]],
             columns: [[
-                { field: 'categoryDisplayName', title: '类别', width: 100, sortable: true },
-                //{ field: 'mnemonicCode', title: '助记码', width: 100, sortable: true },
-                //{ field: 'unitDisplayName', title: '单位', width: 80, sortable: true },
-                //{ field: 'brandDisplayName', title: '品牌', width: 120, sortable: true },
-                //{ field: 'size', title: '规格型号', width: 200, sortable: true },
-                //{ field: 'supplierName', title: '供应商', width: 250, sortable: true },
-                //{ field: 'purchasePrice', title: '进价', width: 80, align: 'right', sortable: true },
-                //{ field: 'sellPrice', title: '售价', width: 80, align: 'right', sortable: true }
-            ]],
-            onRowContextMenu: function (e, index, row) {
-                if (!row)
-                    return;
-                e.preventDefault();//禁止浏览器默认右键菜单
-                //可以在这里临时创建右键菜单，则可以通过闭包访问row
-                var rows = $dg.datagrid('getSelections');
-                if (rows.length == 1)
-                    $dg.datagrid('clearSelections')
-                $dg.datagrid('selectRow', index);
-                $cmenu.menu('show', {
-                    left: e.pageX,
-                    top: e.pageY
-                });
-            },
-            onDblClickRow: function (index, row) {
-                if ($btnUpdate)
-                    $btnUpdate.trigger('click');
-            }
+                { field: 'title', title: '名称', width: 100, sortable: true  },
+                { field: 'categoryDisplayName', title: '类别', width: 100 }
+                //{ field: 'price', title: 'Price', width: 100, align: 'right' }
+            ]]
         });
+        //$dg.datagrid({
+        //    ctrlSelect: true,
+        //    fit: true,
+        //    checkOnSelect: true,
+        //    selectOnCheck: true,
+        //    singleSelect: false,
+        //    border: false,
+        //    showFooter1: true,
+        //    rownumbers: true,
+        //    pagination: true,
+        //    toolbar: '#dgToolbar' + m,
+        //    ///api/services/app/BXJGShopItem/GetAll
+        //    url: abp.appPath + 'api/services/app/BXJGShopItem/GetAll',
+        //    queryParams: {
+        //        "CategoryId": 2,
+        //        "Published": true
+        //    },
+        //    frozenColumns: [[
+        //        { field: 'ck', checkbox: true },
+        //        { field: 'title', title: '名称', width: 200, sortable: true }
+        //    ]],
+        //    columns: [[
+        //        { field: 'categoryDisplayName', title: '类别', width: 100, sortable: true },
+        //        //{ field: 'mnemonicCode', title: '助记码', width: 100, sortable: true },
+        //        //{ field: 'unitDisplayName', title: '单位', width: 80, sortable: true },
+        //        //{ field: 'brandDisplayName', title: '品牌', width: 120, sortable: true },
+        //        //{ field: 'size', title: '规格型号', width: 200, sortable: true },
+        //        //{ field: 'supplierName', title: '供应商', width: 250, sortable: true },
+        //        //{ field: 'purchasePrice', title: '进价', width: 80, align: 'right', sortable: true },
+        //        //{ field: 'sellPrice', title: '售价', width: 80, align: 'right', sortable: true }
+        //    ]],
+        //    onRowContextMenu: function (e, index, row) {
+        //        if (!row)
+        //            return;
+        //        e.preventDefault();//禁止浏览器默认右键菜单
+        //        //可以在这里临时创建右键菜单，则可以通过闭包访问row
+        //        var rows = $dg.datagrid('getSelections');
+        //        if (rows.length == 1)
+        //            $dg.datagrid('clearSelections')
+        //        $dg.datagrid('selectRow', index);
+        //        $cmenu.menu('show', {
+        //            left: e.pageX,
+        //            top: e.pageY
+        //        });
+        //    },
+        //    onDblClickRow: function (index, row) {
+        //        if ($btnUpdate)
+        //            $btnUpdate.trigger('click');
+        //    }
+        //});
         
      }());
 </script>
