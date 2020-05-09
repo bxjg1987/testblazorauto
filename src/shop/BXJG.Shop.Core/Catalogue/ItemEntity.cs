@@ -114,14 +114,6 @@ namespace BXJG.Shop.Catalogue
         /// 所属类别id
         /// </summary>
         public long CategoryId { get; set; }
-        /// <summary>
-        /// 品牌
-        /// </summary>
-        public virtual BXJGShopDictionaryEntity Brand { get; set; }
-        /// <summary>
-        /// 品牌Id
-        /// </summary>
-        public long? BrandId { get; set; }
         #endregion
 
         #region 价格信息

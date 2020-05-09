@@ -10,7 +10,7 @@ namespace BXJG.Shop.Catalogue
     /// <summary>
     /// 面向前端顾客关于商品信息的接口
     /// </summary>
-    public interface IBXJGShopFrontItemAppService:IApplicationService
+    public interface IFrontItemAppService:IApplicationService
     {
         /// <summary>
         /// 搜索商品信息
