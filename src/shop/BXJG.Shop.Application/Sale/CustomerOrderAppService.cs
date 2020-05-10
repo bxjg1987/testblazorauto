@@ -105,9 +105,7 @@ namespace BXJG.Shop.Sale
             if (customerId != order.CustomerId)
                 throw new ApplicationException();
 
-            var p = weChatPaymentService.Create("ABP-商城", order.OrderNo, order.PaymentAmount);
-            //p.attach   //微信支付需要的其它可选参数可以继续配置
-            WeChatPaymentUnifyOrderResult wpor = await weChatPaymentService.PayAsync(p, CancellationToken.Token);
+            WeChatPaymentUnifyOrderResult wpor = await weChatPaymentService.PayAsync("ABP-商城", order.OrderNo, order.PaymentAmount);
             return new CustomerPaymentResult(wpor);
         }
     }
