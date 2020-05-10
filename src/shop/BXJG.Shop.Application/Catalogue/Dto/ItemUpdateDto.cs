@@ -58,6 +58,7 @@ namespace BXJG.Shop.Catalogue
         /// <summary>
         /// 现价(销售价)
         /// </summary>
+       [Required]
         public decimal Price { get; set; }
         /// <summary>
         /// 积分
