@@ -110,17 +110,17 @@ namespace BXJG.WeChat.Payment
                 out_trade_no,
                 total_fee);
         }
-        
+
         //没有将方法的参数封装为对象，因为这样调用方用起来更简单
+
         /// <summary>
         /// 向微信的小程序支付服务发起预支付
-        /// 参考：https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=9_1&index=1
         /// </summary>
-        /// <param name="body">商品简单描述，该字段请按照规范传递，具体请见参数规定 参考 https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=4_2</param>
+        /// <param name="body">商品简单描述，该字段请按照规范传递，具体请见参数规定</param>
         /// <param name="out_trade_no">商户订单号</param>
         /// <param name="total_fee">金额</param>
         /// <param name="device_info">设备号 自定义参数，可以为终端设备号(门店号或收银设备ID)，PC网页或公众号内支付可以传"WEB"</param>
-        /// <param name="detail">商品详细描述，对于使用单品优惠的商户，该字段必须按照规范上传， https://pay.weixin.qq.com/wiki/doc/api/danpin.php?chapter=9_102&index=2</param>
+        /// <param name="detail">商品详细描述，对于使用单品优惠的商户，该字段必须按照规范上传 </param>
         /// <param name="attach">自定义的附加信息，将来微信推送支付结果通知时会原样返回给我们</param>
         /// <param name="time_start">交易开始时间，默认为当前时间</param>
         /// <param name="time_expire">交易结束时间，默认为交易开始时间的5分钟后</param>
