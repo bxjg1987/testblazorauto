@@ -36,11 +36,17 @@ namespace BXJG.Shop.Catalogue
         /// <summary>
         /// 图片集合
         /// </summary>
+        [Required]
         public string[] Images { get; set; }
         /// <summary>
         /// 所属类别id
         /// </summary>
+        [Required]
         public long CategoryId { get; set; }
+        /// <summary>
+        /// 品牌Id
+        /// </summary>
+        public long? BrandId { get; set; }
         #endregion
 
         #region 价格信息
@@ -51,6 +57,7 @@ namespace BXJG.Shop.Catalogue
         /// <summary>
         /// 现价(销售价)
         /// </summary>
+        [Required]
         public decimal Price { get; set; }
         /// <summary>
         /// 积分

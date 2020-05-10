@@ -59,14 +59,14 @@
             分类名称
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.FrontItemDto.BrandDisplayName">
-            <summary>
-            品牌名
-            </summary>
-        </member>
         <member name="P:BXJG.Shop.Catalogue.FrontItemDto.BrandId">
             <summary>
-            品牌Id
+            品牌id
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Catalogue.FrontItemDto.BrandDisplayName">
+            <summary>
+            品牌名称
             </summary>
         </member>
         <member name="P:BXJG.Shop.Catalogue.FrontItemDto.OldPrice">
@@ -250,7 +250,7 @@
         </member>
         <member name="P:BXJG.Shop.Catalogue.ItemCreateDto.OldPrice">
             <summary>
-            原价 
+            原价
             </summary>
         </member>
         <member name="P:BXJG.Shop.Catalogue.ItemCreateDto.Price">
@@ -343,14 +343,14 @@
             分类名称
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Catalogue.ItemDto.BrandDisplayName">
-            <summary>
-            品牌名
-            </summary>
-        </member>
         <member name="P:BXJG.Shop.Catalogue.ItemDto.BrandId">
             <summary>
-            品牌Id
+            品牌id
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Catalogue.ItemDto.BrandDisplayName">
+            <summary>
+            品牌名称
             </summary>
         </member>
         <member name="P:BXJG.Shop.Catalogue.ItemDto.OldPrice">
@@ -493,6 +493,18 @@
             下架时间
             </summary>
         </member>
+        <member name="T:BXJG.Shop.Catalogue.IBXJGShopFrontItemAppService">
+            <summary>
+            面向前端顾客关于商品信息的接口
+            </summary>
+        </member>
+        <member name="M:BXJG.Shop.Catalogue.IBXJGShopFrontItemAppService.GetAllAsync(BXJG.Shop.Catalogue.GetAllFrontItemInput)">
+            <summary>
+            搜索商品信息
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
         <member name="T:BXJG.Shop.Catalogue.IBXJGShopItemAppService">
             <summary>
             商品上架信息应用服务
@@ -532,18 +544,6 @@
             批量删除商品上架信息
             </summary>
             <param name="ids"></param>
-            <returns></returns>
-        </member>
-        <member name="T:BXJG.Shop.Catalogue.IBXJGShopFrontItemAppService">
-            <summary>
-            面向前端顾客关于商品信息的接口
-            </summary>
-        </member>
-        <member name="M:BXJG.Shop.Catalogue.IBXJGShopFrontItemAppService.GetAllAsync(BXJG.Shop.Catalogue.GetAllFrontItemInput)">
-            <summary>
-            搜索商品信息
-            </summary>
-            <param name="input"></param>
             <returns></returns>
         </member>
         <member name="T:BXJG.Shop.Common.Dto.DictionaryEditDto">
