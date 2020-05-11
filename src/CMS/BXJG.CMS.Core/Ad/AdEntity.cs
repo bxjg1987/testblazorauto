@@ -1,0 +1,53 @@
+﻿using Abp.Domain.Entities;
+using Abp.Domain.Entities.Auditing;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace BXJG.CMS.Ad
+{
+    /// <summary>
+    /// 广告实体类
+    /// </summary>
+    public class AdEntity : FullAuditedEntity<long>, IMustHaveTenant
+    {
+        public int TenantId { get; set; }
+        /// <summary>
+        /// 标题
+        /// </summary>
+        public string Title { get; set; }
+        /// <summary>
+        /// 广告类型，图片、文本、Html、等
+        /// </summary>
+        public AdType AdType { get; set; }
+        /// <summary>
+        /// 广告内容，不同类型的广告 广告内容的含义不同
+        /// 图片：图片地址
+        /// 文本：广告文本
+        /// Html：Html代码
+        /// </summary>
+        public string Content { get; set; }
+        /// <summary>
+        /// 点击广告的连接地址
+        /// </summary>
+        public string Url { get; set; }
+        /// <summary>
+        /// 是否已发布
+        /// </summary>
+        public bool Published { get; set; }
+        /// <summary>
+        /// 发布开始时间，若为空则不限
+        /// Published为true时才有效
+        /// </summary>
+        public DateTimeOffset? PublishStartTime { get; set; }
+        /// <summary>
+        /// 发布结束时间，若为空则不限
+        /// Published为true时才有效
+        /// </summary>
+        public DateTimeOffset? PublishEndTime { get; set; }
+        /// <summary>
+        /// 排序索引
+        /// </summary>
+        public int SortIndex { get; set; }
+    }
+}
