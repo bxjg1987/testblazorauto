@@ -3,17 +3,17 @@ using Abp.Localization.Dictionaries;
 using Abp.Localization.Dictionaries.Xml;
 using Abp.Reflection.Extensions;
 
-namespace BXJG.Shop.Localization
+namespace BXJG.CMS.Localization
 {
-    public static class BXJGShopLocalizationConfigurer
+    public static class BXJGCMSLocalizationConfigurer
     {
         public static void Configure(ILocalizationConfiguration localizationConfiguration)
         {
             localizationConfiguration.Sources.Add(
-                new DictionaryBasedLocalizationSource(BXJGShopConsts.LocalizationSourceName,
+                new DictionaryBasedLocalizationSource(BXJGCMSConsts.LocalizationSourceName,
                     new XmlEmbeddedFileLocalizationDictionaryProvider(
-                        typeof(BXJGShopLocalizationConfigurer).GetAssembly(),
-                        "BXJG.Shop.Localization.SourceFiles"
+                        typeof(BXJGCMSLocalizationConfigurer).GetAssembly(),
+                        "BXJG.CMS.Localization.SourceFiles"
                     )
                 )
             );

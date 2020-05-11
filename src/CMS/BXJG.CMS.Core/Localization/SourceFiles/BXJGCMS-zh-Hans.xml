@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<localizationDictionary culture="zh-Hans">
+  <texts>
+    <text name="BXJGCMS" value="商城管理" />
+    <text name="BXJGCMSItem" value="商品管理" />
+    <text name="BXJGCMSDictionary" value="商城字典" />
+    <text name="GetBXJGCMSItemKeywordsInputPrompt" value="品名/描述..." />
+  </texts>
+</localizationDictionary>

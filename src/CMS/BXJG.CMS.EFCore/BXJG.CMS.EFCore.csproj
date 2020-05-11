@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Abp" Version="5.6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BXJG.CMS.Core\BXJG.CMS.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="EFMaps\" />
+  </ItemGroup>
+
+</Project>
