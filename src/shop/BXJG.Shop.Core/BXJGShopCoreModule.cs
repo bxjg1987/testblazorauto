@@ -2,6 +2,7 @@
 using Abp.Reflection.Extensions;
 using BXJG.Shop.Authorization;
 using BXJG.Shop.Configuration;
+using BXJG.Shop.Localization;
 using System;
 
 namespace BXJG.Shop
