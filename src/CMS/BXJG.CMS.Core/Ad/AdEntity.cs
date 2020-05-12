@@ -25,6 +25,8 @@ namespace BXJG.CMS.Ad
         /// 图片：图片地址
         /// 文本：广告文本
         /// Html：Html代码
+        /// Javascript：js代码
+        /// JavsScriptLink：要引用的js文件地址
         /// </summary>
         public string Content { get; set; }
         /// <summary>

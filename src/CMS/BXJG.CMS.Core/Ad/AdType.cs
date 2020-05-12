@@ -1,6 +1,11 @@
-﻿public enum AdType
+﻿/// <summary>
+/// 广告类型
+/// </summary>
+public enum AdType
 {
     Image,
     Text,
-    Html
+    Html,
+    JavsScript,
+    JavsScriptLink
 }
