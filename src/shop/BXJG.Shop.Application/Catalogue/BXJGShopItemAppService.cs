@@ -75,13 +75,18 @@ namespace BXJG.Shop.Catalogue
             if (clsCode.IsNullOrWhiteSpace() && input.CategoryId.HasValue)
                 clsCode = await dictionaryManager.GetCodeAsync(input.CategoryId.Value);
 
-            var query = repository.GetAllIncluding(c => c.Category)
+            var query = repository.GetAllIncluding(c => c.Category, c => c.Brand)
                 .WhereIf(input.BrandId.HasValue, c => c.BrandId == input.BrandId.Value)
                 .WhereIf(!clsCode.IsNullOrWhiteSpace(), c => c.Category.Code.StartsWith(clsCode))
                 .WhereIf(input.Published.HasValue, c => c.Published == input.Published.Value)
                 .WhereIf(input.AvailableStart.HasValue, c => c.AvailableStart >= input.AvailableStart.Value)
                 .WhereIf(input.AvailableEnd.HasValue, c => c.AvailableEnd < input.AvailableEnd.Value)
-                .WhereIf(!input.Keywords.IsNullOrEmpty(), c => c.Title.Contains(input.Keywords) || c.Sku.Contains(input.Keywords));
+                .WhereIf(!input.Keywords.IsNullOrEmpty(), c =>
+                    c.Title.Contains(input.Keywords)
+                    || c.DescriptionShort.Contains(input.Keywords)
+                    || c.Brand.DisplayName.Contains(input.Keywords)
+                    || c.Category.DisplayName.Contains(input.Keywords)
+                    || c.Sku.Contains(input.Keywords));
 
             var count = await query.CountAsync();
             var list = await query.OrderBy(input.Sorting).PageBy(input).ToListAsync();

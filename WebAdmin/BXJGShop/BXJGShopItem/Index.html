@@ -16,12 +16,12 @@
     (function () {
         //在razor变量两边加单引号会被当成字符串，vs智能提示不会消失
         var m = 'BXJGShopItem';
-        var canAdd = abp.auth.isGranted( m + 'Create');
-        var canUpdate = abp.auth.isGranted( m + 'Update');
+        var canAdd = abp.auth.isGranted(m + 'Create');
+        var canUpdate = abp.auth.isGranted(m + 'Update');
         var canDelete = abp.auth.isGranted(m + 'Delete');
         var $toolbar = $('#dgToolbar' + m);
         var $toolbarRight = $toolbar.find('.toolbar_right');
-        var $dg = $('#dg'+m);
+        var $dg = $('#dg' + m);
         var $cmenu = $('<div />');
         var $cls = $('#cls' + m);
 
@@ -45,7 +45,7 @@
             }));
         }
         if (canUpdate) {
-            var $btnUpdate = $('<a />').insertBefore($toolbarRight);  
+            var $btnUpdate = $('<a />').insertBefore($toolbarRight);
             var $btnUpdateOptions = {
                 iconCls: 'icon-edit',
                 text: abp.localization.zlj('Update')
@@ -123,7 +123,7 @@
         $brandCombobox.combobox({
             editable: false,
             url: abp.appPath + 'api/services/app/BXJGShopDictionary/GetNodesForSelect',
-            queryParams: { ParentId: 2,forType:1 },
+            queryParams: { ParentId: 2, forType: 1 },
             prompt: '==品牌==',
             valueField: 'value',
             textField: 'displayText',
@@ -146,7 +146,7 @@
             queryParams: {
                 "forType": 1,
                 "ParentId": 1,
-                "ParentText":"全部分类"
+                "ParentText": "全部"
             },//?ParentId=21&ForType=1&ParentText=全部分类
             onSelect: function (node) {
                 let loadAllParameter = {};
@@ -188,7 +188,7 @@
             $dlg.dialog({
                 iconCls: id ? $btnUpdateOptions.iconCls : $btnAddOptions.iconCls,
                 title: (id ? $btnUpdateOptions.text : $btnAddOptions.text) + '商品',//abp.localization.bxjgShop(m),
-                width:650,
+                width: 650,
                 height: 520,
                 border: false,
                 modal: true,
@@ -226,6 +226,7 @@
             rownumbers: true,
             pagination: true,
             toolbar: '#dgToolbar' + m,
+            striped:true,
             ///api/services/app/BXJGShopItem/GetAll
             url: abp.appPath + 'api/services/app/BXJGShopItem/GetAll',
             queryParams: {
@@ -234,17 +235,22 @@
             },
             frozenColumns: [[
                 { field: 'ck', checkbox: true },
-                { field: 'title', title: '名称', width: 200, sortable: true }
+                { field: 'title', title: '名称', width: 300, sortable: true }
             ]],
             columns: [[
-                { field: 'categoryDisplayName', title: '类别', width: 100, sortable: true }
-                //{ field: 'mnemonicCode', title: '助记码', width: 100, sortable: true },
-                //{ field: 'unitDisplayName', title: '单位', width: 80, sortable: true },
-                //{ field: 'brandDisplayName', title: '品牌', width: 120, sortable: true },
-                //{ field: 'size', title: '规格型号', width: 200, sortable: true },
-                //{ field: 'supplierName', title: '供应商', width: 250, sortable: true },
-                //{ field: 'purchasePrice', title: '进价', width: 80, align: 'right', sortable: true },
-                //{ field: 'sellPrice', title: '售价', width: 80, align: 'right', sortable: true }
+                {
+                    field: 'image', title: '封面图', width: 150, align:'center', formatter: function (value, row, index) {
+                        return '<img style="height:80px;" src="' +abp.appPath+'\\'+ value + '" />';
+                    }
+                },
+                { field: 'categoryDisplayName', title: '类别', width: 100, sortable: true },
+                { field: 'brandDisplayName', title: '品牌', width: 100, sortable: true },
+                { field: 'sku', title: 'SKU', width: 100 },
+                { field: 'oldPrice', title: '原价格', width: 80, sortable: true, align: 'right' },
+                { field: 'price', title: '现价格', width: 80, sortable: true, align: 'right' },
+                { field: 'integral', title: '积分', width: 60, sortable: true, align: 'right' },
+                { field: 'hot', title: '热卖', width: 60, align: 'center' },
+                { field: 'new', title: '新品', width: 60, align: 'center' }
             ]],
             onRowContextMenu: function (e, index, row) {
                 if (!row)
@@ -265,6 +271,6 @@
                     $btnUpdate.trigger('click');
             }
         });
-        
-     }());
+
+    }());
 </script>

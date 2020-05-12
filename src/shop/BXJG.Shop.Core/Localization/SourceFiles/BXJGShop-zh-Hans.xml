@@ -4,6 +4,6 @@
     <text name="BXJGShop" value="商城管理" />
     <text name="BXJGShopItem" value="商品管理" />
     <text name="BXJGShopDictionary" value="商城字典" />
-    <text name="GetBXJGShopItemKeywordsInputPrompt" value="品名/描述..." />
+    <text name="GetBXJGShopItemKeywordsInputPrompt" value="标题/描述/品牌/SKU..." />
   </texts>
 </localizationDictionary>
