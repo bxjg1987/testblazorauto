@@ -5,5 +5,9 @@
     <text name="BXJGShopItem" value="商品管理" />
     <text name="BXJGShopDictionary" value="商城字典" />
     <text name="GetBXJGShopItemKeywordsInputPrompt" value="标题/描述/品牌/SKU..." />
+    <text name="BXJGShopOrder" value="订单管理" />
+    <text name="发货" value="发货" />
+    <text name="退款" value="退款" />
+    <text name="取消" value="取消" />
   </texts>
 </localizationDictionary>

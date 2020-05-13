@@ -4,6 +4,10 @@
     <text name="BXJGShop" value="Mall" />
     <text name="BXJGShopItem" value="Product" />
     <text name="BXJGShopDictionary" value="Dictionary" />
-    
+    <text name="GetBXJGShopItemKeywordsInputPrompt" value="title/description/brand/sku..." />
+    <text name="BXJGShopOrder" value="Order manager" />
+    <text name="发货" value="Shipment" />
+    <text name="退款" value="Refund" />
+    <text name="取消" value="Cancel" />
   </texts>
 </localizationDictionary>

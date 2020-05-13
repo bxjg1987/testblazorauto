@@ -8,7 +8,9 @@
 .icon-BXJGShopItem {
 	background: url('icons/BXJGShopItem.png') no-repeat center center;
 }
-
+.icon-BXJGShopOrder {
+	background: url('icons/BXJGShopOrder.png') no-repeat center center;
+}
 .icon-kaishi {
 	background: url('icons/kaishi.png') no-repeat center center;
 }

@@ -1,36 +1,27 @@
-﻿<div class="listpage-left" style="width:180px;">
-    <div class="listpage-left-head ">分类</div>
-    <div class="listpage-left-content">
-        <ul id="clsBXJGShopItem" />
+﻿<div id="dgToolbarBXJGShopOrder" class="datagrid-toolbar1">
+    <div class="toolbar_right">
+        <!--<input class="easyui-textbox" data-options="width:260, prompt:'名称/助记码/品牌/规格型号/供应商 等...'" />-->
     </div>
 </div>
-<div class="listpage-right">
-    <div id="dgToolbarBXJGShopItem" class="datagrid-toolbar1">
-        <div class="toolbar_right">
-            <!--<input class="easyui-textbox" data-options="width:260, prompt:'名称/助记码/品牌/规格型号/供应商 等...'" />-->
-        </div>
-    </div>
-    <table id="dgBXJGShopItem"></table>
-</div>
+<table id="dgBXJGShopOrder"></table>
 <script>
     (function () {
         //在razor变量两边加单引号会被当成字符串，vs智能提示不会消失
-        var m = 'BXJGShopItem';
-        var canAdd = abp.auth.isGranted(m + 'Create');
-        var canUpdate = abp.auth.isGranted(m + 'Update');
-        var canDelete = abp.auth.isGranted(m + 'Delete');
+        var m = 'BXJGShopOrder';
+        var canAdd = abp.auth.isGranted(m + 'Shipment');
+        var canUpdate = abp.auth.isGranted(m + 'Refund');
+        var canDelete = abp.auth.isGranted(m + 'Cancel');
         var $toolbar = $('#dgToolbar' + m);
         var $toolbarRight = $toolbar.find('.toolbar_right');
         var $dg = $('#dg' + m);
         var $cmenu = $('<div />');
-        var $cls = $('#cls' + m);
 
         $cmenu.menu();
         if (canAdd) {
             var $btnAdd = $('<a />').insertBefore($toolbarRight);
             var $btnAddOptions = {
                 iconCls: 'icon-add',
-                text: abp.localization.zlj('Add')
+                text: abp.localization.bxjgShop('发货')
             };
             $btnAdd.linkbutton($.extend($btnAddOptions, {
                 plain: true,
@@ -48,7 +39,7 @@
             var $btnUpdate = $('<a />').insertBefore($toolbarRight);
             var $btnUpdateOptions = {
                 iconCls: 'icon-edit',
-                text: abp.localization.zlj('Update')
+                text: abp.localization.bxjgShop('退款')
             };
             $btnUpdate.linkbutton($.extend($btnUpdateOptions, {
                 plain: true,
@@ -69,7 +60,7 @@
             var $btnDelete = $('<a />').insertBefore($toolbarRight);
             var $btnDeleteOptions = {
                 iconCls: 'icon-remove',
-                text: abp.localization.zlj('Delete')
+                text: abp.localization.bxjgShop('取消')
             };
             $btnDelete.linkbutton($.extend($btnDeleteOptions, {
                 plain: true,
@@ -115,7 +106,7 @@
         var $keywordTextbox = $('<input />').appendTo($toolbarRight);
         $keywordTextbox.textbox({
             width: 200,
-            prompt: abp.localization.bxjgShop('GetBXJGShopItemKeywordsInputPrompt'),
+            prompt: abp.localization.bxjgShop('GetBXJGShopOrderKeywordsInputPrompt'),
             onChange: search
         });
 
@@ -124,7 +115,7 @@
             editable: false,
             url: abp.appPath + 'api/services/app/BXJGShopDictionary/GetNodesForSelect',
             queryParams: { ParentId: 2, forType: 1 },
-            prompt: '==品牌==',
+            prompt: '==订单状态==',
             valueField: 'value',
             textField: 'displayText',
             onChange: search
@@ -139,22 +130,6 @@
                 data.brandId = brandId;
             $dg.datagrid('load', data);
         }
-
-
-        $cls.tree({
-            url: abp.appPath + 'api/services/app/BXJGShopDictionary/GetTreeForSelect',
-            queryParams: {
-                "forType": 1,
-                "ParentId": 1,
-                "ParentText": "全部"
-            },//?ParentId=21&ForType=1&ParentText=全部分类
-            onSelect: function (node) {
-                let loadAllParameter = {};
-                if (node.id)
-                    loadAllParameter.categoryCode = node.attributes.code;
-                $dg.datagrid('load', loadAllParameter);
-            }
-        });
 
         //str:删除 审核，注意本地化
         function getSelected(str) {
@@ -226,9 +201,9 @@
             rownumbers: true,
             pagination: true,
             toolbar: '#dgToolbar' + m,
-            striped:true,
-            ///api/services/app/BXJGShopItem/GetAll
-            url: abp.appPath + 'api/services/app/BXJGShopItem/GetAll',
+            striped: true,
+            ///api/services/app/BXJGShopOrder/GetAll
+            url: abp.appPath + 'api/services/app/BXJGShopOrder/GetAll',
             queryParams: {
                 //"CategoryId": 1,
                 //"Published": true
@@ -236,26 +211,26 @@
             frozenColumns: [[
                 { field: 'ck', checkbox: true },
                 {
-                    field: 'image', title: '封面图', align:'center', width:100, formatter: function (value, row, index) {
-                        return '<img style="height:80px;" src="' +abp.appPath+'\\'+ value + '" />';
+                    field: 'image', title: '封面图', align: 'center', width: 100, formatter: function (value, row, index) {
+                        return '<img style="height:80px;" src="' + abp.appPath + '\\' + value + '" />';
                     }
                 },
-                { field: 'title', title: '名称', width:300, sortable: true }
+                { field: 'title', title: '名称', width: 300, sortable: true }
             ]],
             columns: [[
-                { field: 'categoryDisplayName', title: '类别',  sortable: true },
-                { field: 'brandDisplayName', title: '品牌',  sortable: true },
+                { field: 'categoryDisplayName', title: '类别', sortable: true },
+                { field: 'brandDisplayName', title: '品牌', sortable: true },
                 { field: 'sku', title: 'SKU' },
-                { field: 'oldPrice', title: '原价格',  sortable: true, align: 'right' },
-                { field: 'price', title: '现价格',  sortable: true, align: 'right' },
-                { field: 'integral', title: '积分',  sortable: true, align: 'right' },
-                { field: 'published', title: '是否发布', align: 'center',formatter:abp.easyui.datagridBool  },
+                { field: 'oldPrice', title: '原价格', sortable: true, align: 'right' },
+                { field: 'price', title: '现价格', sortable: true, align: 'right' },
+                { field: 'integral', title: '积分', sortable: true, align: 'right' },
+                { field: 'published', title: '是否发布', align: 'center', formatter: abp.easyui.datagridBool },
                 { field: 'availableStart', title: '发布开始时间' },
                 { field: 'availableEnd', title: '发布结束时间' },
-                { field: 'hot', title: '热卖',  align: 'center',formatter:abp.easyui.datagridBool },
-                { field: 'new', title: '新品', align: 'center',formatter:abp.easyui.datagridBool  },
-                { field: 'home', title: '首页显示',align: 'center',formatter:abp.easyui.datagridBool  },
-                { field: 'focus', title: '首页轮播',  align: 'center',formatter:abp.easyui.datagridBool  }
+                { field: 'hot', title: '热卖', align: 'center', formatter: abp.easyui.datagridBool },
+                { field: 'new', title: '新品', align: 'center', formatter: abp.easyui.datagridBool },
+                { field: 'home', title: '首页显示', align: 'center', formatter: abp.easyui.datagridBool },
+                { field: 'focus', title: '首页轮播', align: 'center', formatter: abp.easyui.datagridBool }
             ]],
             onRowContextMenu: function (e, index, row) {
                 if (!row)

@@ -18,5 +18,10 @@ namespace BXJG.Shop.Authorization
         public const string BXJGShopItemCreate = "BXJGShopItemCreate";
         public const string BXJGShopItemUpdate = "BXJGShopItemUpdate";
         public const string BXJGShopItemDelete = "BXJGShopItemDelete";
+        //订单管理
+        public const string BXJGShopOrder = "BXJGShopOrder";
+        public const string BXJGShopOrderShip = "BXJGShopOrderShipment";
+        public const string BXJGShopOrderRefund = "BXJGShopOrderRefund";
+        public const string BXJGShopOrderCancel = "BXJGShopOrderCancel";
     }
 }

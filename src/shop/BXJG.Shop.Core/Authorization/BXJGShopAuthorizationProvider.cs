@@ -29,7 +29,11 @@ namespace BXJG.Shop.Authorization
             item.CreateChildPermission(BXJGShopPermissions.BXJGShopItemCreate, "新增".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
             item.CreateChildPermission(BXJGShopPermissions.BXJGShopItemUpdate, "修改".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
             item.CreateChildPermission(BXJGShopPermissions.BXJGShopItemDelete, "删除".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
-
+            //订单
+            var order = shop.CreateChildPermission(BXJGShopPermissions.BXJGShopOrder, BXJGShopPermissions.BXJGShopOrder.BXJGShopL(), multiTenancySides: MultiTenancySides.Tenant);
+            order.CreateChildPermission(BXJGShopPermissions.BXJGShopOrderShip, "发货".BXJGShopL(), multiTenancySides: MultiTenancySides.Tenant);
+            order.CreateChildPermission(BXJGShopPermissions.BXJGShopOrderRefund, "退款".BXJGShopL(), multiTenancySides: MultiTenancySides.Tenant);
+            order.CreateChildPermission(BXJGShopPermissions.BXJGShopOrderCancel, "取消".BXJGShopL(), multiTenancySides: MultiTenancySides.Tenant);
 
             return context;
         }
