@@ -67,6 +67,13 @@
             });
         }, 0);
     };
+    abp.easyui.datagridBool = function (value, row, index) {
+
+        if (value)
+            return '<img style="" src="img/' + value + '.png" />';
+        return '';
+    };
+
 
     var inputWidth = 170;
     if ($.fn.textbox) {

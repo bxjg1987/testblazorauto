@@ -235,22 +235,27 @@
             },
             frozenColumns: [[
                 { field: 'ck', checkbox: true },
-                { field: 'title', title: '名称', width: 300, sortable: true }
-            ]],
-            columns: [[
                 {
-                    field: 'image', title: '封面图', width: 150, align:'center', formatter: function (value, row, index) {
+                    field: 'image', title: '封面图',  align:'center', formatter: function (value, row, index) {
                         return '<img style="height:80px;" src="' +abp.appPath+'\\'+ value + '" />';
                     }
                 },
-                { field: 'categoryDisplayName', title: '类别', width: 100, sortable: true },
-                { field: 'brandDisplayName', title: '品牌', width: 100, sortable: true },
-                { field: 'sku', title: 'SKU', width: 100 },
-                { field: 'oldPrice', title: '原价格', width: 80, sortable: true, align: 'right' },
-                { field: 'price', title: '现价格', width: 80, sortable: true, align: 'right' },
-                { field: 'integral', title: '积分', width: 60, sortable: true, align: 'right' },
-                { field: 'hot', title: '热卖', width: 60, align: 'center' },
-                { field: 'new', title: '新品', width: 60, align: 'center' }
+                { field: 'title', title: '名称', width:300, sortable: true }
+            ]],
+            columns: [[
+                { field: 'categoryDisplayName', title: '类别',  sortable: true },
+                { field: 'brandDisplayName', title: '品牌',  sortable: true },
+                { field: 'sku', title: 'SKU' },
+                { field: 'oldPrice', title: '原价格',  sortable: true, align: 'right' },
+                { field: 'price', title: '现价格',  sortable: true, align: 'right' },
+                { field: 'integral', title: '积分',  sortable: true, align: 'right' },
+                { field: 'published', title: '是否发布', align: 'center',formatter:abp.easyui.datagridBool  },
+                { field: 'availableStart', title: '发布开始时间' },
+                { field: 'availableEnd', title: '发布结束时间' },
+                { field: 'hot', title: '热卖',  align: 'center',formatter:abp.easyui.datagridBool },
+                { field: 'new', title: '新品', align: 'center',formatter:abp.easyui.datagridBool  },
+                { field: 'home', title: '首页显示',align: 'center',formatter:abp.easyui.datagridBool  },
+                { field: 'focus', title: '首页轮播',  align: 'center',formatter:abp.easyui.datagridBool  }
             ]],
             onRowContextMenu: function (e, index, row) {
                 if (!row)
