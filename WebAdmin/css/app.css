@@ -427,4 +427,9 @@ span.checkbox-item {
 
 }
 
+/*重写easyui样式*/
+.datagrid-row-selected {
+    background-color: #ddd;
+    color:#000;
+}
 
