@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BXJG.Shop.Sale
 {
-    public interface IOrderAppService : IApplicationService
+    public interface IBXJGShopOrderAppService : IApplicationService
     {
         //Task<OrderDto> CreateAsync
         //Task<List<OrderDto>> GetAllAsync();

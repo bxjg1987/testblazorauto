@@ -8,16 +8,16 @@
     (function () {
         //在razor变量两边加单引号会被当成字符串，vs智能提示不会消失
         var m = 'BXJGShopOrder';
-        var canAdd = abp.auth.isGranted(m + 'Shipment');
-        var canUpdate = abp.auth.isGranted(m + 'Refund');
-        var canDelete = abp.auth.isGranted(m + 'Cancel');
+        var canShipment = abp.auth.isGranted(m + 'Shipment');
+        var canRefund = abp.auth.isGranted(m + 'Refund');
+        var canCancel = abp.auth.isGranted(m + 'Cancel');
         var $toolbar = $('#dgToolbar' + m);
         var $toolbarRight = $toolbar.find('.toolbar_right');
         var $dg = $('#dg' + m);
         var $cmenu = $('<div />');
 
         $cmenu.menu();
-        if (canAdd) {
+        if (canShipment) {
             var $btnAdd = $('<a />').insertBefore($toolbarRight);
             var $btnAddOptions = {
                 iconCls: 'icon-add',
@@ -35,7 +35,7 @@
                 }
             }));
         }
-        if (canUpdate) {
+        if (canRefund) {
             var $btnUpdate = $('<a />').insertBefore($toolbarRight);
             var $btnUpdateOptions = {
                 iconCls: 'icon-edit',
@@ -56,7 +56,7 @@
                 }
             }));
         }
-        if (canDelete) {
+        if (canCancel) {
             var $btnDelete = $('<a />').insertBefore($toolbarRight);
             var $btnDeleteOptions = {
                 iconCls: 'icon-remove',
@@ -110,8 +110,8 @@
             onChange: search
         });
 
-        var $brandCombobox = $('<input />').appendTo($toolbarRight);
-        $brandCombobox.combobox({
+        var $orderStatus = $('<input />').appendTo($toolbarRight);
+        $orderStatus.combobox({
             editable: false,
             url: abp.appPath + 'api/services/app/BXJGShopDictionary/GetNodesForSelect',
             queryParams: { ParentId: 2, forType: 1 },
@@ -125,7 +125,7 @@
             var keywords = $keywordTextbox.textbox('getValue');
             if (keywords)
                 data.keywords = keywords;
-            var brandId = $brandCombobox.combobox('getValue');
+            var brandId = $orderStatus.combobox('getValue');
             if (brandId)
                 data.brandId = brandId;
             $dg.datagrid('load', data);

@@ -9,5 +9,10 @@
     <text name="发货" value="Shipment" />
     <text name="退款" value="Refund" />
     <text name="取消" value="Cancel" />
+    <text name="BXJG.Shop.Sale.LogisticsStatus.WaitShip" value="WaitShip" />
+    <text name="BXJG.Shop.Sale.LogisticsStatus.Shipped" value="Shipped" />
+    <text name="BXJG.Shop.Sale.LogisticsStatus.Signed" value="Signed" />
+    <text name="BXJG.Shop.Sale.LogisticsStatus.Rejected" value="Rejected" />
+    <text name="BXJG.Shop.Sale.LogisticsStatus.Unwanted" value="Unwanted" />
   </texts>
 </localizationDictionary>

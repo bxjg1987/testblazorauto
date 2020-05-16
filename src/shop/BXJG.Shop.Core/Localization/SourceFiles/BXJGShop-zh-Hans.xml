@@ -9,5 +9,25 @@
     <text name="发货" value="发货" />
     <text name="退款" value="退款" />
     <text name="取消" value="取消" />
+    
+    <text name="BXJG.Shop.Sale.OrderStatus" value="==订单状态==" />
+    <text name="BXJG.Shop.Sale.OrderStatus.Created" value="已创建" />
+    <text name="BXJG.Shop.Sale.OrderStatus.Processing" value="执行中" />
+    <text name="BXJG.Shop.Sale.OrderStatus.Cancelled" value="已取消" />
+    <text name="BXJG.Shop.Sale.OrderStatus.Completed" value="已完成" />
+
+    <text name="BXJG.Shop.Sale.LogisticsStatus" value="==物流状态==" />
+    <text name="BXJG.Shop.Sale.LogisticsStatus.WaitShip" value="待发货" />
+    <text name="BXJG.Shop.Sale.LogisticsStatus.Shipped" value="已发货" />
+    <text name="BXJG.Shop.Sale.LogisticsStatus.Signed" value="已签收" />
+    <text name="BXJG.Shop.Sale.LogisticsStatus.Rejected" value="已拒收" />
+    <text name="BXJG.Shop.Sale.LogisticsStatus.Unwanted" value="无需配送" />
+
+    <text name="BXJG.Shop.Sale.PaymentStatus" value="==支付状态==" />
+    <text name="BXJG.Shop.Sale.PaymentStatus.WaitingForPayment" value="待支付" />
+    <text name="BXJG.Shop.Sale.PaymentStatus.Paid" value="已支付" />
+    <text name="BXJG.Shop.Sale.PaymentStatus.ApplyForRefund" value="申请退款" />
+    <text name="BXJG.Shop.Sale.PaymentStatus.Refunded" value="已全额退款" />
+    <text name="BXJG.Shop.Sale.PaymentStatus.RefundedInPart" value="已部分退款" />
   </texts>
 </localizationDictionary>

@@ -674,6 +674,32 @@
             后台管理员对商城会员进行管理的应用服务
             </summary>
         </member>
+        <member name="T:BXJG.Shop.Sale.BXJGCommonOrderAppService">
+            <summary>
+            提供与订单相关的，前后端都需要用到的接口
+            </summary>
+        </member>
+        <member name="M:BXJG.Shop.Sale.BXJGCommonOrderAppService.GetAllOrderStatus(BXJG.Utils.Dto.GetForSelectInput)">
+            <summary>
+            获取订单状态列表
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Shop.Sale.BXJGCommonOrderAppService.GetAllPaymentStatus(BXJG.Utils.Dto.GetForSelectInput)">
+            <summary>
+            获取支付状态列表
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Shop.Sale.BXJGCommonOrderAppService.GetAllLogisticsStatus(BXJG.Utils.Dto.GetForSelectInput)">
+            <summary>
+            获取物流状态列表
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
         <member name="T:BXJG.Shop.Sale.CustomerOrderAppService`8">
             <summary>
             前台顾客对订单的操作接口
@@ -1142,6 +1168,32 @@
             <summary>
             总积分
             </summary>
+        </member>
+        <member name="T:BXJG.Shop.Sale.IBXJGCommonOrderAppService">
+            <summary>
+            提供与订单相关的，前后端都需要用到的接口
+            </summary>
+        </member>
+        <member name="M:BXJG.Shop.Sale.IBXJGCommonOrderAppService.GetAllOrderStatus(BXJG.Utils.Dto.GetForSelectInput)">
+            <summary>
+            获取订单状态列表
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Shop.Sale.IBXJGCommonOrderAppService.GetAllPaymentStatus(BXJG.Utils.Dto.GetForSelectInput)">
+            <summary>
+            获取支付状态列表
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Shop.Sale.IBXJGCommonOrderAppService.GetAllLogisticsStatus(BXJG.Utils.Dto.GetForSelectInput)">
+            <summary>
+            获取物流状态列表
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
         </member>
         <member name="T:BXJG.Shop.Sale.ICustomerOrderAppService">
             <summary>

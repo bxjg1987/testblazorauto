@@ -3,6 +3,8 @@ using Abp.Reflection.Extensions;
 using BXJG.Shop.Authorization;
 using BXJG.Shop.Configuration;
 using BXJG.Shop.Localization;
+using BXJG.Shop.Sale;
+using BXJG.Utils;
 using System;
 
 namespace BXJG.Shop
@@ -13,6 +15,7 @@ namespace BXJG.Shop
         {
             BXJGShopLocalizationConfigurer.Configure(Configuration.Localization);
             Configuration.Settings.Providers.Add<BXJGShopAppSettingProvider>();
+            //Configuration.Modules.BXJGUtils().AddEnum("bxjgShopOrderStatus", typeof(OrderStatus), BXJGUtilsConsts.LocalizationSourceName);
         }
         public override void Initialize()
         {

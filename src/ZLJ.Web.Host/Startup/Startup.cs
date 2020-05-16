@@ -22,6 +22,8 @@ using BXJG.WeChat.Payment;
 using ZLJ.Web.Host.Controllers;
 using System.IO;
 using BXJG.Shop;
+using BXJG.Utils;
+using BXJG.GeneralTree;
 
 namespace ZLJ.Web.Host.Startup
 {
@@ -91,11 +93,18 @@ namespace ZLJ.Web.Host.Startup
                 var basePath = Path.GetDirectoryName(typeof(Program).Assembly.Location);
                 var commentsFileName = typeof(ZLJApplicationModule).Assembly.GetName().Name + ".XML";
                 var commentsFileName1 = typeof(BXJGShopApplicationModule).Assembly.GetName().Name + ".XML";
+                var commentsFileName2 = typeof(GeneralTreeModule).Assembly.GetName().Name + ".XML";
+                var commentsFileName3= typeof(BXJGUtilsModule).Assembly.GetName().Name + ".XML";
 
                 var xmlPath = Path.Combine(basePath, commentsFileName);
                 var xmlPath1 = Path.Combine(basePath, commentsFileName1);
+                var xmlPath2 = Path.Combine(basePath, commentsFileName2);
+                var xmlPath3 = Path.Combine(basePath, commentsFileName3);
+
                 options.IncludeXmlComments(xmlPath);
                 options.IncludeXmlComments(xmlPath1);
+                options.IncludeXmlComments(xmlPath2);
+                options.IncludeXmlComments(xmlPath3);
 
                 options.DocInclusionPredicate((docName, description) => true);
 

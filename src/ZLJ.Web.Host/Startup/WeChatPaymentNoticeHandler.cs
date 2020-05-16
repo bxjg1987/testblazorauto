@@ -16,12 +16,12 @@ namespace ZLJ.Web.Host.Startup
         /// <summary>
         /// 用来处理微信结果通知的应用服务
         /// </summary>
-        private readonly IOrderAppService orderAppService;
+        private readonly IBXJGShopOrderAppService orderAppService;
         /// <summary>
         /// 
         /// </summary>
         /// <param name="orderAppService">用来处理微信结果通知的应用服务</param>
-        public WeChatPaymentNoticeHandler(IOrderAppService orderAppService)
+        public WeChatPaymentNoticeHandler(IBXJGShopOrderAppService orderAppService)
         {
             this.orderAppService = orderAppService;
         }
