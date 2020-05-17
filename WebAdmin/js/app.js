@@ -111,6 +111,9 @@
     if ($.fn.combogrid) {
         $.fn.combogrid.defaults.width = inputWidth;
         $.fn.combogrid.defaults.onLoadError = abp.ajax.myErrorHandler;
+
+        $.fn.combogrid.defaults.nowrap = false;
+        $.fn.combogrid.defaults.striped = true;
     }
     if ($.fn.numberspinner) {
         $.fn.numberspinner.defaults.width = inputWidth;
@@ -207,6 +210,9 @@
         };
         $.fn.datagrid.defaults.onLoadError = abp.ajax.myErrorHandler;
         $.fn.datagrid.defaults.method = 'get';
+        $.fn.datagrid.defaults.nowrap = false;
+        $.fn.datagrid.defaults.striped = true;
+
         //$.fn.datagrid.defaults.ctrlSelect = true;
         //$.fn.datagrid.defaults.fit = true;
         //$.fn.datagrid.defaults.checkOnSelect = true;

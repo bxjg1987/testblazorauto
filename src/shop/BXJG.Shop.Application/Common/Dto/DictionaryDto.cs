@@ -9,5 +9,7 @@ namespace BXJG.Shop.Common.Dto
     public class DictionaryDto : GeneralTreeGetTreeNodeBaseDto<DictionaryDto>
     {
         public string Icon { get; set; }
+        public bool IsSysDefine { get; set; }
+        public bool IsTree { get; set; }
     }
 }

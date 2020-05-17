@@ -17,5 +17,8 @@ namespace BXJG.Shop.Common
         public const int IconMaxLength = 500;
 
         public string Icon { get; set; }
+
+        public bool IsSysDefine { get; set; }
+        public bool IsTree { get; set; }
     }
 }

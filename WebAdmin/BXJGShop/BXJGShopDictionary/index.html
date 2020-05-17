@@ -178,8 +178,8 @@
             //url: abp.apppath + 'api/services/app/BXJGShopDictionary/GetAll',
             columns: [[
                 { field: 'text', title: '名称', width: 300 },
-                { field: 'isTreeText', title: '树形结构', checked: true, width: 80, align: 'center' },
-                { field: 'isSysDefineText', title: '系统预设', checked: true, width: 80, align: 'center' },
+                { field: 'isTree', title: '树形结构', checked: true, width: 80, align: 'center', formatter: abp.easyui.datagridBool },
+                { field: 'isSysDefine', title: '系统预设', checked: true, width: 80, align: 'center', formatter: abp.easyui.datagridBool },
                 { field: 'code', title: '编号', width: 200 }
             ]],
             onLoadSuccess: function (node, data) {

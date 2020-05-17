@@ -30,11 +30,13 @@ namespace ZLJ
     {
         private readonly IWebHostEnvironment _env;
         private readonly IConfigurationRoot _appConfiguration;
+        ZLJEntityFrameworkModule abpProjectNameEntityFrameworkModule;
 
-        public ZLJWebCoreModule(IWebHostEnvironment env)
+        public ZLJWebCoreModule(IWebHostEnvironment env, ZLJEntityFrameworkModule abpProjectNameEntityFrameworkModule)
         {
             _env = env;
             _appConfiguration = env.GetAppConfiguration();
+            this.abpProjectNameEntityFrameworkModule = abpProjectNameEntityFrameworkModule;
         }
 
         public override void PreInitialize()
@@ -58,6 +60,9 @@ namespace ZLJ
             Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(BXJGShopApplicationModule).Assembly/*,"bxjgshop"*/);//试过 这里用前者没啥鸟用，abp是已实现类所在程序的前缀，默认还是app
 
             ConfigureTokenAuth();
+
+            //默认每次启动都会尝试数据库迁移，这里禁用它提高系统启动速度
+            abpProjectNameEntityFrameworkModule.SkipDbSeed = true;
         }
 
         private void ConfigureTokenAuth()
