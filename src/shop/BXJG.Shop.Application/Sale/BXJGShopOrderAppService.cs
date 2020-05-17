@@ -24,7 +24,7 @@ using BXJG.WeChat.Payment;
 
 namespace BXJG.Shop.Sale
 {
-    public class BXJGShopOrderAppService<TTenant, TUser, TRole, TTenantManager, TUserManager, TArea, TOrderManager, TCustomerManager>
+    public abstract class BXJGShopOrderAppService<TTenant, TUser, TRole, TTenantManager, TUserManager, TArea, TOrderManager, TCustomerManager>
         : BXJGShopAppServiceBase<TTenant, TUser, TRole, TTenantManager, TUserManager>, IBXJGShopOrderAppService
         where TUser : AbpUser<TUser>
         where TRole : AbpRole<TUser>, new()
@@ -65,7 +65,7 @@ namespace BXJG.Shop.Sale
         /// <returns></returns>
         public async Task<PagedResultDto<OrderDto>> GetAllAsync(GetAllOrderInput input)
         {
-            var query = repository.GetAllIncluding(c => c.Customer, c => c.Area,c=>c.DistributionMethod, c => c.PaymentMethod)
+            var query = repository.GetAllIncluding(c => c.Customer.User, c => c.Area,c=>c.DistributionMethod, c => c.PaymentMethod)
                 .WhereIf(input.OrderStartTime.HasValue,c=>c.OrderTime>=input.OrderStartTime.Value)
                 .WhereIf(input.OrderEndTime.HasValue, c => c.OrderTime < input.OrderEndTime.Value)
                 .WhereIf(input.OrderStatus.HasValue, c => c.Status==input.OrderStatus.Value)

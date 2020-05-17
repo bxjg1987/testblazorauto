@@ -35,6 +35,8 @@ namespace ZLJ.EntityFrameworkCore.Seed
 
             new DefaultOrganizationUnit(context, 1).Create();
             new DefaultDataDictionaryBuilder(context, 1).Create();
+            new DefaultAdministrativeBuilder(context, 1).Create();
+            
 
             //默认商城数据迁移
             new DefaultBXJGShopBuilder<Tenant, Role, User, ZLJDbContext, AdministrativeEntity>(context, 1).Create();

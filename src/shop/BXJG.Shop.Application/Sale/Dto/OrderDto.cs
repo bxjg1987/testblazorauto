@@ -24,7 +24,7 @@ namespace BXJG.Shop.Sale
         /// <summary>
         /// 顾客名称
         /// </summary>
-        public string CustomerName { get; set; }
+        public string CustomerUserName { get; set; }
         /// <summary>
         /// 下单时间
         /// </summary>

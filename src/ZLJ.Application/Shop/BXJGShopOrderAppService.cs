@@ -24,14 +24,14 @@ namespace ZLJ.Shop
             TenantManager,
             UserManager,
             AdministrativeEntity,
-            OrderManager<User, AdministrativeEntity>,
-            CustomerManager<User>>
+            OrderManager,
+            CustomerManager>
     {
         public BXJGShopOrderAppService(
             IRepository<CustomerEntity<User>, long> customerRepository,
-            CustomerManager<User> customerManager,
+            CustomerManager customerManager,
             IRepository<OrderEntity<User, AdministrativeEntity>, long> repository,
-            OrderManager<User, AdministrativeEntity> orderManager,
+            OrderManager orderManager,
             IRepository<AdministrativeEntity, long> generalTreeManager,
             IRepository<ItemEntity, long> itemRepository, WeChatPaymentService weChatPaymentService)
             : base(customerRepository, customerManager, repository, orderManager, generalTreeManager, itemRepository, weChatPaymentService)

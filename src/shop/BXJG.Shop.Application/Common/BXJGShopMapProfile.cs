@@ -54,6 +54,10 @@ namespace BXJG.Shop.Common
             //    .ForMember(c => c.User, opt => opt.Ignore());
             #endregion
 
+            #region 后台管理员+订单
+            CreateMap(typeof(OrderEntity<,>), typeof(OrderDto));
+            #endregion
+
             //.ForMember(c => c.IsTreeText, opt => opt.MapFrom(c => c.IsTree.ToString().UtilsL()))
             //.ForMember(c => c.IsSysDefineText, opt => opt.MapFrom(c => c.IsSysDefine.ToString().UtilsL()))
 

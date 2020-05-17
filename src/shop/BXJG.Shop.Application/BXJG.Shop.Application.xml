@@ -1042,7 +1042,7 @@
             顾客Id
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Sale.OrderDto.CustomerName">
+        <member name="P:BXJG.Shop.Sale.OrderDto.CustomerUserName">
             <summary>
             顾客名称
             </summary>

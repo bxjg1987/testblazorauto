@@ -34,7 +34,7 @@ namespace BXJG.Shop.Catalogue
     /// <typeparam name="TRole"></typeparam>
     /// <typeparam name="TTenantManager"></typeparam>
     /// <typeparam name="TUserManager"></typeparam>
-    public class BXJGShopItemAppService<TTenant, TUser, TRole, TTenantManager, TUserManager>
+    public abstract class BXJGShopItemAppService<TTenant, TUser, TRole, TTenantManager, TUserManager>
         : BXJGShopAppServiceBase<TTenant, TUser, TRole, TTenantManager, TUserManager>, IBXJGShopItemAppService
         where TUser : AbpUser<TUser>
         where TRole : AbpRole<TUser>, new()

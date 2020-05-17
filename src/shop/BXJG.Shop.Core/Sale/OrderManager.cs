@@ -18,6 +18,7 @@ using BXJG.Shop.Localization;
 using Abp.Events.Bus.Entities;
 using BXJG.GeneralTree;
 using BXJG.Shop.Common;
+using Abp.Dependency;
 
 namespace BXJG.Shop.Sale
 {
@@ -50,26 +51,26 @@ namespace BXJG.Shop.Sale
     /// </summary>
     /// <typeparam name="TUser"></typeparam>
     /// <typeparam name="TArea">送货地址区域类型 参考实体类的泛型说明</typeparam>
-    public class OrderManager<TUser, TArea> : BXJGShopDomainServiceBase
+    public class OrderManager<TUser, TArea> : BXJGShopDomainServiceBase//, ITransientDependency
         where TUser : AbpUserBase
         where TArea : GeneralTreeEntity<TArea>, IShopAdministrative
     {
         protected readonly IRepository<OrderEntity<TUser, TArea>, long> repository;
         protected readonly IRepository<CustomerEntity<TUser>, long> customerRepository;
-        protected readonly CustomerManager<TUser> customerManager;
+        //protected readonly CustomerManager<TUser> customerManager;
         protected readonly ISettingManager settingManager;
         //领域层不应该访问session  protected readonly IAbpSession session;
 
         public OrderManager(
             IRepository<OrderEntity<TUser, TArea>, long> repository,
             IRepository<CustomerEntity<TUser>, long> customerRepository,
-            ISettingManager settingManager,
-            CustomerManager<TUser> customerManager)
+            ISettingManager settingManager
+            /*,CustomerManager<TUser> customerManager*/)
         {
             this.settingManager = settingManager;
             this.repository = repository;
             this.customerRepository = customerRepository;
-            this.customerManager = customerManager;
+            //this.customerManager = customerManager;
         }
         /// <summary>
         /// 创建订单

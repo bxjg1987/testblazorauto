@@ -207,7 +207,7 @@
 
             $dlg.dialog({
                 iconCls: id ? $btnUpdateOptions.iconCls : $btnAddOptions.iconCls,
-                title: (id ? $btnUpdateOptions.text : $btnAddOptions.text) + '商品',//abp.localization.bxjgShop(m),
+                title: (id ? $btnUpdateOptions.text : $btnAddOptions.text) + '订单',//abp.localization.bxjgShop(m),
                 width: 650,
                 height: 520,
                 border: false,
@@ -246,7 +246,7 @@
             rownumbers: true,
             pagination: true,
             toolbar: '#dgToolbar' + m,
-            striped: true,
+            //striped: true,
             ///api/services/app/BXJGShopOrder/GetAll
             url: abp.appPath + 'api/services/app/BXJGShopOrder/GetAll',
             queryParams: {
@@ -255,27 +255,28 @@
             },
             frozenColumns: [[
                 { field: 'ck', checkbox: true },
-                {
-                    field: 'image', title: '封面图', align: 'center', width: 100, formatter: function (value, row, index) {
-                        return '<img style="height:80px;" src="' + abp.appPath + '\\' + value + '" />';
-                    }
-                },
-                { field: 'title', title: '名称', width: 300, sortable: true }
+                //{
+                //    field: 'image', title: '封面图', align: 'center', width: 100, formatter: function (value, row, index) {
+                //        return '<img style="height:80px;" src="' + abp.appPath + '\\' + value + '" />';
+                //    }
+                //},
+                { field: 'orderNo', title: '单号', width: 270, sortable: false }
             ]],
             columns: [[
-                { field: 'categoryDisplayName', title: '类别', sortable: true },
-                { field: 'brandDisplayName', title: '品牌', sortable: true },
-                { field: 'sku', title: 'SKU' },
-                { field: 'oldPrice', title: '原价格', sortable: true, align: 'right' },
-                { field: 'price', title: '现价格', sortable: true, align: 'right' },
-                { field: 'integral', title: '积分', sortable: true, align: 'right' },
-                { field: 'published', title: '是否发布', align: 'center', formatter: abp.easyui.datagridBool },
-                { field: 'availableStart', title: '发布开始时间' },
-                { field: 'availableEnd', title: '发布结束时间' },
-                { field: 'hot', title: '热卖', align: 'center', formatter: abp.easyui.datagridBool },
-                { field: 'new', title: '新品', align: 'center', formatter: abp.easyui.datagridBool },
-                { field: 'home', title: '首页显示', align: 'center', formatter: abp.easyui.datagridBool },
-                { field: 'focus', title: '首页轮播', align: 'center', formatter: abp.easyui.datagridBool }
+                { field: 'customerUserName', title: '顾客', width:100, sortable: true },
+                { field: 'orderTime', title: '下单时间', width:200, sortable: true },
+                { field: 'statusText', title: '订单状态' },
+                { field: 'merchandiseSubtotal', title: '商品小计', sortable: true, align: 'right' },
+                { field: 'paymentAmount', title: '订单金额', sortable: true, align: 'right' },
+                { field: 'integral', title: '积分小计', sortable: true, align: 'right' },
+                { field: 'paymentMethodDisplayName', title: '支付方式', sortable: true, align: 'right' }//,
+                //{ field: 'published', title: '是否发布', align: 'center', formatter: abp.easyui.datagridBool },
+                //{ field: 'availableStart', title: '发布开始时间' },
+                //{ field: 'availableEnd', title: '发布结束时间' },
+                //{ field: 'hot', title: '热卖', align: 'center', formatter: abp.easyui.datagridBool },
+                //{ field: 'new', title: '新品', align: 'center', formatter: abp.easyui.datagridBool },
+                //{ field: 'home', title: '首页显示', align: 'center', formatter: abp.easyui.datagridBool },
+                //{ field: 'focus', title: '首页轮播', align: 'center', formatter: abp.easyui.datagridBool }
             ]],
             onRowContextMenu: function (e, index, row) {
                 if (!row)

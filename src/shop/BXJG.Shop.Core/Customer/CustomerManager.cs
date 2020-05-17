@@ -1,4 +1,5 @@
 ﻿using Abp.Authorization.Users;
+using Abp.Dependency;
 using Abp.Domain.Repositories;
 using Abp.Domain.Services;
 using Abp.Domain.Uow;
@@ -20,7 +21,7 @@ namespace BXJG.Shop.Customer
      * 虽然ICustomerRepositoryExtensions提供了扩展方法，但是需要提供泛型TUser，并且也无法（也不合理）提供session的访问
      * 因此在领域服务提供一个封装
      */
-    public class CustomerManager<TUser> : BXJGShopDomainServiceBase
+    public class CustomerManager<TUser> : BXJGShopDomainServiceBase//, ITransientDependency
         where TUser : AbpUserBase
     {
         protected readonly IRepository<CustomerEntity<TUser>, long> repository;
