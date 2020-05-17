@@ -105,17 +105,62 @@
 
         var $keywordTextbox = $('<input />').appendTo($toolbarRight);
         $keywordTextbox.textbox({
-            width: 200,
-            prompt: abp.localization.bxjgShop('GetBXJGShopOrderKeywordsInputPrompt'),
+            width: 250,
+            prompt: abp.localization.bxjgShop('BXJGShopOrderKeywordsInputPrompt'),
             onChange: search
         });
 
         var $orderStatus = $('<input />').appendTo($toolbarRight);
         $orderStatus.combobox({
             editable: false,
+            width:130,
+            url: abp.appPath + 'api/services/app/BXJGShopCommonOrder/GetAllOrderStatus',
+            queryParams: { forType: 1 },
+            prompt:abp.localization.bxjgShop('BXJG.Shop.Sale.OrderStatus'),
+            valueField: 'value',
+            textField: 'displayText',
+            onChange: search
+        });
+        var $paymentStatus = $('<input />').appendTo($toolbarRight);
+        $paymentStatus.combobox({
+            editable: false,
+            width:130,
+            url: abp.appPath + 'api/services/app/BXJGShopCommonOrder/GetAllPaymentStatus',
+            queryParams: { forType: 1 },
+            prompt:abp.localization.bxjgShop('BXJG.Shop.Sale.PaymentStatus'),
+            valueField: 'value',
+            textField: 'displayText',
+            onChange: search
+        });
+        var $logisticsStatusStatus = $('<input />').appendTo($toolbarRight);
+        $logisticsStatusStatus.combobox({
+            editable: false,
+            width:130,
+            url: abp.appPath + 'api/services/app/BXJGShopCommonOrder/GetAllLogisticsStatus',
+            queryParams: { forType: 1 },
+            prompt:abp.localization.bxjgShop('BXJG.Shop.Sale.LogisticsStatus'),
+            valueField: 'value',
+            textField: 'displayText',
+            onChange: search
+        });
+        var $paymentMethodCombobox = $('<input />').appendTo($toolbarRight);
+        $paymentMethodCombobox.combobox({
+            editable: false,
+            width:130,
             url: abp.appPath + 'api/services/app/BXJGShopDictionary/GetNodesForSelect',
-            queryParams: { ParentId: 2, forType: 1 },
-            prompt: '==订单状态==',
+            queryParams: { ParentId: 3, forType: 1 },
+            prompt: abp.localization.bxjgShop('BXJGShopPaymentMethod'),
+            valueField: 'value',
+            textField: 'displayText',
+            onChange: search
+        });
+        var $distributionMethodCombobox = $('<input />').appendTo($toolbarRight);
+        $distributionMethodCombobox.combobox({
+            editable: false,
+            width:130,
+            url: abp.appPath + 'api/services/app/BXJGShopDictionary/GetNodesForSelect',
+            queryParams: { ParentId: 4, forType: 1 },
+            prompt: abp.localization.bxjgShop('BXJGShopDistributionMethod'),
             valueField: 'value',
             textField: 'displayText',
             onChange: search

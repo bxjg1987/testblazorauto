@@ -674,33 +674,33 @@
             后台管理员对商城会员进行管理的应用服务
             </summary>
         </member>
-        <member name="T:BXJG.Shop.Sale.BXJGCommonOrderAppService">
+        <member name="T:BXJG.Shop.Sale.BXJGShopCommonOrderAppService">
             <summary>
             提供与订单相关的，前后端都需要用到的接口
             </summary>
         </member>
-        <member name="M:BXJG.Shop.Sale.BXJGCommonOrderAppService.GetAllOrderStatus(BXJG.Utils.Dto.GetForSelectInput)">
+        <member name="M:BXJG.Shop.Sale.BXJGShopCommonOrderAppService.GetAllOrderStatus(BXJG.Utils.Dto.GetForSelectInput)">
             <summary>
             获取订单状态列表
             </summary>
             <param name="input"></param>
             <returns></returns>
         </member>
-        <member name="M:BXJG.Shop.Sale.BXJGCommonOrderAppService.GetAllPaymentStatus(BXJG.Utils.Dto.GetForSelectInput)">
+        <member name="M:BXJG.Shop.Sale.BXJGShopCommonOrderAppService.GetAllPaymentStatus(BXJG.Utils.Dto.GetForSelectInput)">
             <summary>
             获取支付状态列表
             </summary>
             <param name="input"></param>
             <returns></returns>
         </member>
-        <member name="M:BXJG.Shop.Sale.BXJGCommonOrderAppService.GetAllLogisticsStatus(BXJG.Utils.Dto.GetForSelectInput)">
+        <member name="M:BXJG.Shop.Sale.BXJGShopCommonOrderAppService.GetAllLogisticsStatus(BXJG.Utils.Dto.GetForSelectInput)">
             <summary>
             获取物流状态列表
             </summary>
             <param name="input"></param>
             <returns></returns>
         </member>
-        <member name="T:BXJG.Shop.Sale.CustomerOrderAppService`8">
+        <member name="T:BXJG.Shop.Sale.BXJGShopCustomerOrderAppService`8">
             <summary>
             前台顾客对订单的操作接口
             你需要在主程序中提供一个子类以指定泛型参数
@@ -714,16 +714,23 @@
             <typeparam name="TOrderManager"></typeparam>
             <typeparam name="TCustomerManager"></typeparam>
         </member>
-        <member name="M:BXJG.Shop.Sale.CustomerOrderAppService`8.CreateAsync(BXJG.Shop.Sale.CustomerOrderCreateDto)">
+        <member name="M:BXJG.Shop.Sale.BXJGShopCustomerOrderAppService`8.CreateAsync(BXJG.Shop.Sale.CustomerOrderCreateDto)">
             <summary>
             创建订单
             </summary>
             <param name="input"></param>
             <returns></returns>
         </member>
-        <member name="M:BXJG.Shop.Sale.CustomerOrderAppService`8.PaymentAsync(BXJG.Shop.Sale.CustomerPaymentInput)">
+        <member name="M:BXJG.Shop.Sale.BXJGShopCustomerOrderAppService`8.PaymentAsync(BXJG.Shop.Sale.CustomerPaymentInput)">
             <summary>
             前台顾客发起订单支付
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Shop.Sale.BXJGShopOrderAppService`8.GetAllAsync(BXJG.Shop.Sale.GetAllOrderInput)">
+            <summary>
+            根据条件查询订单列表
             </summary>
             <param name="input"></param>
             <returns></returns>
@@ -969,6 +976,56 @@
             </summary>
             <param name="weChatPaymentUnifyOrderResult"></param>
         </member>
+        <member name="T:BXJG.Shop.Sale.GetAllOrderInput">
+            <summary>
+            后台管理获取订单列表时提供的输入参数
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.GetAllOrderInput.OrderStartTime">
+            <summary>
+            订单开始时间
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.GetAllOrderInput.OrderEndTime">
+            <summary>
+            订单结束时间
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.GetAllOrderInput.OrderStatus">
+            <summary>
+            订单状态
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.GetAllOrderInput.PaymentStatus">
+            <summary>
+            支付状态
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.GetAllOrderInput.LogisticsStatusStatus">
+            <summary>
+            物流状态
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.GetAllOrderInput.AreaId">
+            <summary>
+            收货地址所属区域Id
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.GetAllOrderInput.DistributionMethodId">
+            <summary>
+            配送方式Id
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.GetAllOrderInput.PaymentMethodId">
+            <summary>
+            支付方式Id
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Sale.GetAllOrderInput.Keywords">
+            <summary>
+            关键字 订单号
+            </summary>
+        </member>
         <member name="T:BXJG.Shop.Sale.OrderDto">
             <summary>
             顾客端和小程序端目前都使用此对象作为订单列表的显示模式
@@ -1169,50 +1226,55 @@
             总积分
             </summary>
         </member>
-        <member name="T:BXJG.Shop.Sale.IBXJGCommonOrderAppService">
+        <member name="T:BXJG.Shop.Sale.IBXJGShopCommonOrderAppService">
             <summary>
             提供与订单相关的，前后端都需要用到的接口
             </summary>
         </member>
-        <member name="M:BXJG.Shop.Sale.IBXJGCommonOrderAppService.GetAllOrderStatus(BXJG.Utils.Dto.GetForSelectInput)">
+        <member name="M:BXJG.Shop.Sale.IBXJGShopCommonOrderAppService.GetAllOrderStatus(BXJG.Utils.Dto.GetForSelectInput)">
             <summary>
             获取订单状态列表
             </summary>
             <param name="input"></param>
             <returns></returns>
         </member>
-        <member name="M:BXJG.Shop.Sale.IBXJGCommonOrderAppService.GetAllPaymentStatus(BXJG.Utils.Dto.GetForSelectInput)">
+        <member name="M:BXJG.Shop.Sale.IBXJGShopCommonOrderAppService.GetAllPaymentStatus(BXJG.Utils.Dto.GetForSelectInput)">
             <summary>
             获取支付状态列表
             </summary>
             <param name="input"></param>
             <returns></returns>
         </member>
-        <member name="M:BXJG.Shop.Sale.IBXJGCommonOrderAppService.GetAllLogisticsStatus(BXJG.Utils.Dto.GetForSelectInput)">
+        <member name="M:BXJG.Shop.Sale.IBXJGShopCommonOrderAppService.GetAllLogisticsStatus(BXJG.Utils.Dto.GetForSelectInput)">
             <summary>
             获取物流状态列表
             </summary>
             <param name="input"></param>
             <returns></returns>
         </member>
-        <member name="T:BXJG.Shop.Sale.ICustomerOrderAppService">
+        <member name="T:BXJG.Shop.Sale.IBXJGShopCustomerOrderAppService">
             <summary>
             前端顾客对订单的操作接口
             </summary>
         </member>
-        <member name="M:BXJG.Shop.Sale.ICustomerOrderAppService.CreateAsync(BXJG.Shop.Sale.CustomerOrderCreateDto)">
+        <member name="M:BXJG.Shop.Sale.IBXJGShopCustomerOrderAppService.CreateAsync(BXJG.Shop.Sale.CustomerOrderCreateDto)">
             <summary>
             前端顾客下订单
             </summary>
             <param name="input">前端顾客下单时需要提供的数据</param>
             <returns>创建好的订单</returns>
         </member>
-        <member name="M:BXJG.Shop.Sale.ICustomerOrderAppService.PaymentAsync(BXJG.Shop.Sale.CustomerPaymentInput)">
+        <member name="M:BXJG.Shop.Sale.IBXJGShopCustomerOrderAppService.PaymentAsync(BXJG.Shop.Sale.CustomerPaymentInput)">
             <summary>
             前台顾客发起订单支付
             </summary>
             <param name="input"></param>
             <returns></returns>
+        </member>
+        <member name="T:BXJG.Shop.Sale.IBXJGShopOrderAppService">
+            <summary>
+            后台管理订单的应用服务接口
+            </summary>
         </member>
     </members>
 </doc>

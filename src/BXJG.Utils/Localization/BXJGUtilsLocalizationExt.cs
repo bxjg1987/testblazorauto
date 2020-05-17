@@ -34,6 +34,8 @@ namespace BXJG.Utils.Localization
             for (int i = 1; i < fields.Length; i++)
             {
                 var field = fields[i];
+                if (field.Name == "value__")
+                    continue;
                 var fieldName = field.Name;
                 var localizationKey = enumType.FullName + "." + fieldName;
                 var attr = field.GetCustomAttribute(typeof(DescriptionAttribute), false) as DescriptionAttribute;

@@ -9,6 +9,10 @@
     <text name="发货" value="发货" />
     <text name="退款" value="退款" />
     <text name="取消" value="取消" />
+
+    <text name="BXJGShopOrderKeywordsInputPrompt" value="单号/收货人/电话/收货地址..." />
+    <text name="BXJGShopPaymentMethod" value="==支付方式==" />
+    <text name="BXJGShopDistributionMethod" value="==配送方式==" />
     
     <text name="BXJG.Shop.Sale.OrderStatus" value="==订单状态==" />
     <text name="BXJG.Shop.Sale.OrderStatus.Created" value="已创建" />

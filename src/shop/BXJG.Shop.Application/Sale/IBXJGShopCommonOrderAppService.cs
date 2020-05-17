@@ -11,7 +11,7 @@ namespace BXJG.Shop.Sale
     /// <summary>
     /// 提供与订单相关的，前后端都需要用到的接口
     /// </summary>
-    public interface IBXJGCommonOrderAppService : IApplicationService
+    public interface IBXJGShopCommonOrderAppService : IApplicationService
     {
         /// <summary>
         /// 获取订单状态列表

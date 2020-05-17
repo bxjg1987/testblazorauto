@@ -531,9 +531,14 @@
         <member name="F:ZLJ.Net.MimeTypes.MimeTypeNames.ApplicationZip">
             <summary>ZIP archive files; Registered[7]</summary>
         </member>
-        <member name="T:ZLJ.Shop.BXJGCustomerOrderAppService">
+        <member name="T:ZLJ.Shop.BXJGShopCustomerOrderAppService">
             <summary>
             
+            </summary>
+        </member>
+        <member name="T:ZLJ.Shop.BXJGShopOrderAppService">
+            <summary>
+            后台管理员对订单操作的相关功能
             </summary>
         </member>
         <member name="T:ZLJ.ZLJAppServiceBase">

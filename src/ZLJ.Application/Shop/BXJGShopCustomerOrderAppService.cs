@@ -16,7 +16,7 @@ namespace ZLJ.Shop
     /// <summary>
     /// 
     /// </summary>
-    public class BXJGCustomerOrderAppService : CustomerOrderAppService<
+    public class BXJGShopCustomerOrderAppService : BXJGShopCustomerOrderAppService<
             Tenant,
             User,
             Role,
@@ -26,7 +26,7 @@ namespace ZLJ.Shop
             OrderManager<User, AdministrativeEntity>,
             CustomerManager<User>>
     {
-        public BXJGCustomerOrderAppService(
+        public BXJGShopCustomerOrderAppService(
             IRepository<CustomerEntity<User>, long> customerRepository,
             CustomerManager<User> customerManager,
             BXJGShopCustomerSession<User> customerSession,

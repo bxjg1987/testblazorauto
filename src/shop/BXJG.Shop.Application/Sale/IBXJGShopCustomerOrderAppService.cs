@@ -9,7 +9,7 @@ namespace BXJG.Shop.Sale
     /// <summary>
     /// 前端顾客对订单的操作接口
     /// </summary>
-    public interface ICustomerOrderAppService : IApplicationService
+    public interface IBXJGShopCustomerOrderAppService : IApplicationService
     {
         /// <summary>
         /// 前端顾客下订单
