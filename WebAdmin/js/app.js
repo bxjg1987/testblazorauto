@@ -250,6 +250,8 @@
         $.fn.treegrid.defaults.onLoadError = abp.ajax.myErrorHandler;
         $.fn.treegrid.defaults.method = 'get';
 
+        $.fn.treegrid.defaults.nowrap = false;
+        $.fn.treegrid.defaults.striped = true;
         //$.fn.datagrid.defaults.ctrlSelect = true;
         //$.fn.datagrid.defaults.fit = true;
         //$.fn.datagrid.defaults.checkOnSelect = true;
