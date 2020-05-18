@@ -75,24 +75,25 @@
 
     var inputWidth = 170;
     if ($.fn.textbox) {
-        $.fn.textbox.defaults.width = inputWidth;
+        $.fn.textbox.defaults.width = '100%';
+
         //$.fn.textbox.defaults.validateOnCreate = false;
         //$.fn.textbox.defaults.validateOnBlur = true;
     }
     if ($.fn.datebox) {
-        $.fn.datebox.defaults.width = inputWidth;
+        $.fn.datebox.defaults.width = '100%';
         //$.fn.datebox.defaults.validateOnCreate = false;
         //$.fn.datebox.defaults.validateOnBlur = true;
     }
     if ($.fn.datetimebox) {
-        $.fn.datetimebox.defaults.width = inputWidth;
+        $.fn.datetimebox.defaults.width = '100%';
         //$.fn.datetimebox.defaults.validateOnCreate = false;
         //$.fn.datetimebox.defaults.validateOnBlur = true;
     }
     if ($.fn.combobox) {
         //$.fn.combobox.defaults.validateOnCreate = false;
         //$.fn.combobox.defaults.validateOnBlur = true;
-        $.fn.combobox.defaults.width = inputWidth;
+        $.fn.combobox.defaults.width = '100%';
         $.fn.combobox.defaults.prompt = '==请选择==';
         $.fn.combobox.defaults.panelHeight = 'auto';
         $.fn.combobox.defaults.panelMaxHeight = '280';
@@ -109,17 +110,17 @@
         //$.fn.combobox.defaults.textField = 'displayText';
     }
     if ($.fn.combogrid) {
-        $.fn.combogrid.defaults.width = inputWidth;
+        $.fn.combogrid.defaults.width = '100%';
         $.fn.combogrid.defaults.onLoadError = abp.ajax.myErrorHandler;
 
         $.fn.combogrid.defaults.nowrap = false;
         $.fn.combogrid.defaults.striped = true;
     }
     if ($.fn.numberspinner) {
-        $.fn.numberspinner.defaults.width = inputWidth;
+        $.fn.numberspinner.defaults.width = '100%';
     }
     if ($.fn.combotree) {
-        $.fn.combotree.defaults.width = inputWidth;
+        $.fn.combotree.defaults.width = '100%';
         $.fn.combotree.defaults.valueField = 'id';
         $.fn.combotree.defaults.textField = 'text';
         $.fn.combotree.defaults.method = 'get';
@@ -156,7 +157,7 @@
         };
     }
     if ($.fn.validatebox) {
-        $.fn.validatebox.defaults.width = inputWidth;
+        $.fn.validatebox.defaults.width = '100%';
 
         //easyui验证器扩展
         $.extend($.fn.validatebox.defaults.rules, {

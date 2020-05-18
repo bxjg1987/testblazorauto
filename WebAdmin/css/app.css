@@ -365,17 +365,16 @@ a.c-trans1:hover .m-btn-downarrow, a.c-trans1:hover .s-btn-downarrow {
 
 /*基于table的表单样式开始------------------*/
 form.frm-container {
-    width: 100%;
-    height1: 100%;
+   display:block;
 }
 
-.frm-box {
-    width: 92%;
-    margin: 20px auto 0 auto;
+table.frm-box {
+    width1:94%;
+    margin:20px auto;
     border-collapse: collapse;
 }
 
-fieldset {
+    /*fieldset {
     width: 94%;
     margin: 0 auto;
     margin-top: 10px;
@@ -386,13 +385,12 @@ fieldset .frm-box {
     width: 100%;
     margin: 0px auto;
 }
-
+*/
 .frm-box > tbody > tr > th {
-    width: 110px;
     height: 40px;
     font-weight: normal;
     text-align: right;
-    padding-right: 5px;
+    padding:0 10px 0 15px;
     position: relative;
 }
 

@@ -122,6 +122,7 @@
         var $brandCombobox = $('<input />').appendTo($toolbarRight);
         $brandCombobox.combobox({
             editable: false,
+            width:170,
             url: abp.appPath + 'api/services/app/BXJGShopDictionary/GetNodesForSelect',
             queryParams: { ParentId: 2, forType: 1 },
             prompt: '==品牌==',
@@ -188,8 +189,8 @@
             $dlg.dialog({
                 iconCls: id ? $btnUpdateOptions.iconCls : $btnAddOptions.iconCls,
                 title: (id ? $btnUpdateOptions.text : $btnAddOptions.text) + '商品',//abp.localization.bxjgShop(m),
-                width: 650,
-                height: 520,
+                width: 880,
+                height: 600,
                 border: false,
                 modal: true,
                 href: '/BXJGShop/' + m + '/form.html?_t=' + abp.pageLoadTime.getTime(),

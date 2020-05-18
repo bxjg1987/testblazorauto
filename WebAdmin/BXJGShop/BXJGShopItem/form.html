@@ -1,9 +1,9 @@
-﻿<form id="frmBXJGShopItem">
+﻿<form id="frmBXJGShopItem" class="frm-container">
     <input type="hidden" name="id" value="0" />
-    <table class="frm-box column2">
+    <table class="frm-box column3">
         <tr>
             <th>名称</th>
-            <td colspan="3"><input name="title" class="easyui-textbox" data-options=" required:true, validType:'length[1,100]'" style="width:468px" /></td>
+            <td colspan="5"><input name="title" class="easyui-textbox" data-options="width:750, required:true, validType:'length[1,100]'" /></td>
         </tr>
         <tr>
             <th>类别</th>
@@ -12,17 +12,29 @@
                        valueField='value'
                        textField='displayText'
                        data-options="
+                       width:'100%',
                        url:abp.appPath+'api/services/app/BXJGShopDictionary/GetNodesForSelect',
-                       queryParams: { forType: 4,ParentId:1,ParentText:'请选择类别' }" />
+                       queryParams: { forType: 4,ParentId:1,ParentText1:'请选择类别' }" />
             </td>
             <th>助记码</th>
             <td><input name="mnemonicCode" class="easyui-textbox" data-options="validType:'length[0,100]'" /></td>
+            <th>SKU</th>
+            <td><input name="sku" class="easyui-textbox" data-options="validType:'length[0,100]'" /></td>
         </tr>
         <tr>
+            <th>类别</th>
+            <td>
+                <input name="brandId" class="easyui-combobox"
+                       valueField='value'
+                       textField='displayText'
+                       data-options="
+                       url:abp.appPath+'api/services/app/BXJGShopDictionary/GetNodesForSelect',
+                       queryParams: { forType: 4,ParentId:2,ParentText1:'请选择类别' }" />
+            </td>
             <th>原价</th>
-            <td><input name="oldPrice" class="easyui-numberspinner" data-options="prefix:'￥',precision:2,value:0" /></td>
+            <td><input name="oldPrice" class="easyui-numberspinner" data-options="prefix:'￥',precision:1,value:0" /></td>
             <th>现价</th>
-            <td><input name="price" class="easyui-numberspinner" data-options="prefix:'￥',precision:2,value:0" /></td>
+            <td><input name="price" class="easyui-numberspinner" data-options="prefix:'￥',precision:1,value:0" /></td>
         </tr>
         <tr>
             <th>计价单位</th>
@@ -34,55 +46,57 @@
                        url:abp.appPath+'api/services/app/BXJGShopDictionary/GetNodesForSelect',
                        queryParams: { forType: 4,ParentId:12,ParentText:'请选择单位'}" />
             </td>
-            <!--<th>是否热卖</th>
-        <td>
-            <select class="easyui-combobox" id="new" name="new">
-                <option value="true">是</option>
-                <option value="false">否</option>
-            </select>
-        </td>-->
-            <!--<th>品牌</th>
-        <td>
-            <input name="brandId" class="easyui-combobox "
-                   valueField= 'value'
-                   textField= 'displayText'
-                   data-options="
-                   url:abp.appPath+'api/services/app/BXJGShopDictionary/GetNodesForSelect',
-                   queryParams: { forType: 4,ParentId:5}" />
-        </td>-->
-            <!--<th>供应商</th>
-        <td>
-            <select class="easyui-combogrid" name="supplierId"
-                    data-options="
-                            panelWidth:700,
-                            idField:'id',
-                            textField:'name',
-                            prompt:'请选择(支持按名称/联系人/手机号/地址等模糊查询)',
-                            url:'/api/services/app/btype/GetForSelect',
-                            queryParams1: { forType: 2,id:71},
-                            delay: 500,
-                            mode: 'remote',
-                            pagination:true,
-                            columns:[[
-                                {field:'name',title:'名称',width:200},
-                                {field:'contact',title:'联系人',width:100},
-                                {field:'cellphone',title:'联系电话',width:100},
-                                {field:'areaText',title:'区域',width:100},
-                                {field:'industryText',title:'行业',width:100},
-                                {field:'address',title:'地址',width:100},
-                                {field:'remark',title:'备注',width:100}
-                            ]]
-                        "></select>
-        </td>-->
+            <th>计价单位</th>
             <td></td>
 
-        <tr>
-        </tr>
-        <!--<tr>
-            <th class="top">附件</th>
-            <td colspan="3" class="attachment" style="height:260px;"></td>
-        </tr>-->
-    </table>
+
+            <!--<th>是否热卖</th>
+    <td>
+        <select class="easyui-combobox" id="new" name="new">
+            <option value="true">是</option>
+            <option value="false">否</option>
+        </select>
+    </td>-->
+            <!--<th>品牌</th>
+    <td>
+        <input name="brandId" class="easyui-combobox "
+               valueField= 'value'
+               textField= 'displayText'
+               data-options="
+               url:abp.appPath+'api/services/app/BXJGShopDictionary/GetNodesForSelect',
+               queryParams: { forType: 4,ParentId:5}" />
+    </td>-->
+            <!--<th>供应商</th>
+    <td>
+        <select class="easyui-combogrid" name="supplierId"
+                data-options="
+                        panelWidth:700,
+                        idField:'id',
+                        textField:'name',
+                        prompt:'请选择(支持按名称/联系人/手机号/地址等模糊查询)',
+                        url:'/api/services/app/btype/GetForSelect',
+                        queryParams1: { forType: 2,id:71},
+                        delay: 500,
+                        mode: 'remote',
+                        pagination:true,
+                        columns:[[
+                            {field:'name',title:'名称',width:200},
+                            {field:'contact',title:'联系人',width:100},
+                            {field:'cellphone',title:'联系电话',width:100},
+                            {field:'areaText',title:'区域',width:100},
+                            {field:'industryText',title:'行业',width:100},
+                            {field:'address',title:'地址',width:100},
+                            {field:'remark',title:'备注',width:100}
+                        ]]
+                    "></select>
+    </td>-->
+            <th>计价单位</th> <td></td>
+            </tr>
+            <!--<tr>
+        <th class="top">附件</th>
+        <td colspan="3" class="attachment" style="height:260px;"></td>
+    </tr>-->
+</table>
 </form>
 <script>
     (function () {
