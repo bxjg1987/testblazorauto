@@ -27,9 +27,9 @@ namespace BXJG.Shop.Customer
     /// 商城系统中的顾客
     /// </summary>
     /// <typeparam name="TUser"></typeparam>
-    public class CustomerEntity<TUser> : FullAuditedEntity<long>, IMustHaveTenant
+    public class CustomerEntity<TUser, TArea> : FullAuditedEntity<long>, IMustHaveTenant
         where TUser : AbpUserBase //因为内部可能包含领域逻辑，因此加约束更方便
-        //where TArea : GeneralTreeEntity<TArea>, IShopAdministrative
+        where TArea : GeneralTreeEntity<TArea>, IShopAdministrative
     {
         /// <summary>
         /// 租户id
@@ -54,11 +54,19 @@ namespace BXJG.Shop.Customer
         /// <summary>
         /// 性别
         /// </summary>
-        public Gender Gender { get; set; }
+        public Gender? Gender { get; set; }
         /// <summary>
         /// 出生日期
         /// </summary>
-        public DateTimeOffset Birthday { get; set; }
+        public DateTimeOffset? Birthday { get; set; }
+        /// <summary>
+        /// 所属区域Id
+        /// </summary>
+        public long? AreaId { get; set; }
+        /// <summary>
+        /// 所属区域
+        /// </summary>
+        public virtual TArea Area { get; set; }
         ///// <summary>
         ///// 顾客的订单列表
         ///// 不要加这个属性，会导致顾客变得复杂。如果加了这个 那将来有更多概念需要与顾客关联时，顾客实体会变得越来越复杂

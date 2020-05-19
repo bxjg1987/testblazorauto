@@ -5,7 +5,6 @@ using Newtonsoft.Json;
 using BXJG.Utils.Localization;
 using BXJG.Shop.Common.Dto;
 using BXJG.Shop.Catalogue;
-using BXJG.Shop.Customer.Dto;
 using BXJG.Shop.Customer;
 
 namespace ZLJ

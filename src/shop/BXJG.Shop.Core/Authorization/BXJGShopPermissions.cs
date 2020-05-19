@@ -23,5 +23,10 @@ namespace BXJG.Shop.Authorization
         public const string BXJGShopOrderShip = "BXJGShopOrderShipment";
         public const string BXJGShopOrderRefund = "BXJGShopOrderRefund";
         public const string BXJGShopOrderCancel = "BXJGShopOrderCancel";
+        //顾客管理
+        public const string BXJGShopCustomer = "BXJGShopCustomer";
+        public const string BXJGShopCustomerCreate = "BXJGShopCustomerCreate";
+        public const string BXJGShopCustomerUpdate = "BXJGShopCustomerUpdate";
+        public const string BXJGShopCustomerDelete = "BXJGShopCustomerDelete";
     }
 }

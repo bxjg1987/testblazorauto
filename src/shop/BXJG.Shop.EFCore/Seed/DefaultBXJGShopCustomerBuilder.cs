@@ -2,6 +2,8 @@
 using Abp.Authorization.Users;
 using Abp.MultiTenancy;
 using Abp.Zero.EntityFrameworkCore;
+using BXJG.GeneralTree;
+using BXJG.Shop.Common;
 using BXJG.Shop.Customer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -13,21 +15,22 @@ using System.Text;
 
 namespace BXJG.Shop.Seed
 {
-    public class DefaultBXJGShopCustomerBuilder<TTenant, TRole, TUser, TSelf>
+    public class DefaultBXJGShopCustomerBuilder<TTenant, TRole, TUser, TSelf,TArea>
         where TTenant : AbpTenant<TUser>
         where TRole : AbpRole<TUser>
         where TUser : AbpUser<TUser>, new()
         where TSelf : AbpZeroDbContext<TTenant, TRole, TUser, TSelf>
+            where TArea : GeneralTreeEntity<TArea>, IShopAdministrative
     {
         private readonly TSelf _context;
         private readonly int _tenantId;
-        DbSet<CustomerEntity<TUser>> items;
+        DbSet<CustomerEntity<TUser,TArea>> items;
 
         public DefaultBXJGShopCustomerBuilder(TSelf context, int tenantId)
         {
             _context = context;
             _tenantId = tenantId;
-            items = context.Set<CustomerEntity<TUser>>();
+            items = context.Set<CustomerEntity<TUser,TArea>>();
         }
 
         public void Create(bool insertTestData = true)
@@ -57,7 +60,7 @@ namespace BXJG.Shop.Seed
             _context.Users.Add(adminUser);
             _context.SaveChanges();
 
-            var cust1 = new CustomerEntity<TUser>
+            var cust1 = new CustomerEntity<TUser,TArea>
             {
                 Birthday = DateTime.Now.AddYears(-30),
                 Gender = Utils.Enums.Gender.Man,
@@ -86,7 +89,7 @@ namespace BXJG.Shop.Seed
             _context.Users.Add(adminUser1);
             _context.SaveChanges();
 
-            var cust2 = new CustomerEntity<TUser>
+            var cust2 = new CustomerEntity<TUser,TArea>
             {
                 Birthday = DateTime.Now.AddYears(-22).AddDays(116),
                 Gender = Utils.Enums.Gender.Woman,

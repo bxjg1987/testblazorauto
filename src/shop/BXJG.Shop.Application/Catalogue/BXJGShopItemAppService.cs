@@ -75,7 +75,7 @@ namespace BXJG.Shop.Catalogue
             if (clsCode.IsNullOrWhiteSpace() && input.CategoryId.HasValue)
                 clsCode = await dictionaryManager.GetCodeAsync(input.CategoryId.Value);
 
-            var query = repository.GetAllIncluding(c => c.Category, c => c.Brand)
+            var query = repository.GetAllIncluding(c => c.Category, c => c.Brand).AsNoTracking()
                 .WhereIf(input.BrandId.HasValue, c => c.BrandId == input.BrandId.Value)
                 .WhereIf(!clsCode.IsNullOrWhiteSpace(), c => c.Category.Code.StartsWith(clsCode))
                 .WhereIf(input.Published.HasValue, c => c.Published == input.Published.Value)

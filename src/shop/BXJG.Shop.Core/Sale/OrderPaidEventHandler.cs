@@ -21,10 +21,10 @@ namespace BXJG.Shop.Sale
         where TUser : AbpUserBase
         where TArea : GeneralTreeEntity<TArea>, IShopAdministrative
     {
-        protected readonly IRepository<CustomerEntity<TUser>, long> repository;
+        protected readonly IRepository<CustomerEntity<TUser,TArea>, long> repository;
 
 
-        public OrderPaidEventHandler(IRepository<CustomerEntity<TUser>, long> repository)
+        public OrderPaidEventHandler(IRepository<CustomerEntity<TUser,TArea>, long> repository)
         {
             this.repository = repository;
 
@@ -39,7 +39,7 @@ namespace BXJG.Shop.Sale
         /// <param name="entity"></param>
         /// <param name="integral">负数则为减积分</param>
         /// <returns></returns>
-        public async Task ChangeIntegralAsync(CustomerEntity<TUser> entity, long integral)
+        public async Task ChangeIntegralAsync(CustomerEntity<TUser,TArea> entity, long integral)
         {
             entity.Integral += integral;
             //即使调用了，后续事件处理异常了一样会回滚，参考 https://aspnetboilerplate.com/Pages/Documents/Unit-Of-Work#savechanges
@@ -47,7 +47,7 @@ namespace BXJG.Shop.Sale
             //await CurrentUnitOfWork.SaveChangesAsync(); 
 
             //单独弄了个事件 而不是使用abp提供的EntityChanged事件，这样保证只有在积分变动时才触发这个事件
-            await EventBus.TriggerAsync(new CustomerIntegralChangedEventData<TUser>(entity));
+            await EventBus.TriggerAsync(new CustomerIntegralChangedEventData<TUser,TArea>(entity));
         }
         /// <summary>
         /// 订单付款成功的事件处理

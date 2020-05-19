@@ -1,0 +1,196 @@
+﻿<form id="frmEmployee">
+    <input type="hidden" name="id" value="0" />
+    <input type="hidden" name="userId" value="0" />
+    <table class="frm-box">
+        <tr>
+            <th>姓名</th>
+            <td><input name="name" class="easyui-textbox" data-options="required:true, validType:'length[2,20]'" /></td>
+            <th>性别</th>
+            <td><input name="gender" class="easyui-switchbutton" data-value-type="number" value="1" data-unchecked-value="0" data-options="onText:'男',offText:'女'" /></td>
+            <th>身份证号</th>
+            <td>
+                <input name="idCard" class="easyui-textbox" data-options="required:true,validType:'idcard'" />
+            </td>
+            <!-- 无法使用远程远程，因为修改时要排除当前员工本身的身份证，不好处理
+                <td><input name="idCard" class="easyui-textbox" data-options="required:true,invalidMessage:'该身份证已经',validType:{
+                    idcard:true,
+                    remote:[abp.appPath+'api/services/app/employee/notExistsByIdCard','id']
+               }" /></td>-->
+            <!--easyui validType支持字符串、多个验证类型的数据 和对象(属性为验证类型，值为参数)-->
+        </tr>
+        <tr>
+            <th>出生日期</th>
+            <td><input name="birthday" class="easyui-datebox" /></td>
+            <th>民族</th>
+            <td><input name="nationId" class="easyui-combobox" data-options="editable:false, url:abp.appPath+ '/api/services/app/dataDictionary/GetNodesForSelect',queryParams: {id: 3,forType: 4},method:'post'" /></td>
+            <th>学历</th>
+            <td><input name="educationId" class="easyui-combobox" data-options="editable:false, url:abp.appPath+'/api/services/app/dataDictionary/GetNodesForSelect',queryParams: {id: 2,forType: 4},method:'post'" /></td>
+        </tr>
+        <tr>
+            <th>手机号</th>
+            <td><input name="phoneNumber" class="easyui-textbox" data-options="required:true,validType:'phone'" /></td>
+            <th>地址</th>
+            <td colspan="3"><input name="address" class="easyui-textbox" style="width:453px;" data-options="validType:'length[2,200]'" /></td>
+        </tr>
+        <tr>
+            <th id="emailAddressTH">邮箱</th>
+            <td><input name="emailAddress" class="easyui-textbox" data-options="validType:'email',required:true" /></td>
+            <th>部门</th>
+            <td><input name="ouId" class="easyui-combotree" data-options="editable:false, url:abp.appPath+'/api/services/app/organizationUnit/GettreeForSelect',queryParams: { id:1, forType: 4},method:'post',required:true" /></td>
+            <th>岗位</th>
+            <td><input name="jobId" class="easyui-combobox" data-options="editable:false, url:abp.appPath+'/api/services/app/dataDictionary/GetNodesForSelect',queryParams: {id: 4,forType: 4},method:'post'" /></td>
+        </tr>
+        <tr>
+            <th>入职日期</th>
+            <td><input name="dateOfEntry" class="easyui-datebox" /></td>
+            <th>离职日期</th>
+            <td><input name="dateOfLeave" class="easyui-datebox" /></td>
+            <th>关联账号</th>
+            <td><input name="showUser" /></td>
+        </tr>
+        <tr class="trEmployeeUser">
+            <th>登录名</th>
+            <td><input name="userName" class="easyui-textbox" data-options="required:true,validType:'length[0,50]'" /></td>
+            <th>密码</th>
+            <td><input name="password" type="password" class="easyui-textbox" data-options="iconCls:'icon-lock',required:true, prompt1: '新增必填,修改可选'" /></td>
+            <th>密码确认</th>
+            <td><input name="passwordConfirm" type="password" class="easyui-textbox" data-options="iconCls:'icon-lock',required:true" validType="passwordEquals['#frmEmployee input[name=\'password\']']" /></td>
+        </tr>
+        <tr class="trEmployeeUser">
+            <th>激活</th>
+            <td><input type="checkbox" name="isActive" class="easyui-switchbutton" value="true" checked data-unchecked-value="false" data-options="" /></td>
+            <th>登陆锁定</th>
+            <td colspan="3"><input type="checkbox" name="isLockoutEnabled" class="easyui-switchbutton" value="true" checked data-unchecked-value="false" data-options="" /></td>
+        </tr>
+        <tr class="trEmployeeUser">
+            <th>所属角色</th>
+            <td colspan="5" id="roleBoxEmployee"></td>
+        </tr>
+    </table>
+</form>
+
+<script>
+    (function () {
+        var m = 'Employee';
+        var $dlg = $('#dlg' + m);
+        var $frm = $dlg.find('form');
+        var id = $dlg.data('id');
+        var $name = $frm.find('[name="name"]');
+        var $userId = $frm.find('[name="userId"]');
+        var $emailAddress = $frm.find('[name="emailAddress"]');
+        var $showUser = $frm.find('[name="showUser"]');
+        var $trEmployeeUser = $frm.find('.trEmployeeUser');
+        var $userName = $frm.find('[name="userName"]');
+        var $password = $frm.find('[name="password"]');
+        var $passwordConfirm = $frm.find('[name="passwordConfirm"]');
+        var $roleBox = $frm.find('#roleBox' + m);
+
+        //事件绑定
+        $showUser.switchbutton({
+            onChange: function (checked) {
+                if (checked) {
+                    $trEmployeeUser.show('slow');
+                    $emailAddress.textbox('enableValidation');
+                    $userName.textbox('enableValidation');
+                    if (parseInt($userId.val())) {//字符串"0"=true
+                        $password.textbox('disableValidation');
+                        $passwordConfirm.textbox('disableValidation');
+                        $userName.textbox('readonly');
+                    }
+                    else {
+                        $password.textbox('enableValidation');
+                        $passwordConfirm.textbox('enableValidation');
+                    }
+                }
+                else {
+                    $trEmployeeUser.hide('slow');
+                    $emailAddress.textbox('disableValidation');
+                    $userName.textbox('disableValidation');
+                    $password.textbox('disableValidation');
+                    $passwordConfirm.textbox('disableValidation');
+                }
+            }
+        });
+        $dlg.data('clickSave', function () {
+            //表单验证
+            if (!$frm.form('validate'))
+                return;
+
+            //表单序列化为json，准备提交
+            var postData = $frm.serializeJSON();
+            //null不关联 0新增关联的用户 1修改关联的用户
+            if ($showUser.switchbutton('options').checked) {
+                if (!postData.userId)
+                    postData.userId = 0;
+            } else
+                postData.userId = null;
+            if (!postData.roleNames)
+                postData.roleNames = [];
+            var defer;
+            if (id) {
+                defer = abp.services.app.employee.update(postData).done(function (d) {
+                    abp.notify.success(abp.localization.zlj('Update') + abp.localization.zlj('Success') + '!');
+                    onSaved('onUpdated');
+                });
+            } else {
+                defer = abp.services.app.employee.create(postData).done(function (d) {
+                    abp.notify.success(abp.localization.zlj('Add') + abp.localization.zlj('Success') + '!');
+                    onSaved('onUpdated');
+                });
+            }
+            abp.ui.setBusy($dlg, defer);
+        });
+
+        var roles = new Array();            //放角色的checkbox对应的原始jq对象
+        var taskInitRoles = abp.services.app.role.getForSelect({ forType: 2 }).done(function (d) {
+            d.forEach(function (value, index) {
+                var tempBox = $('<span class="checkbox-item" />').appendTo($roleBox);
+                roles.push($('<input class="easyui-checkbox" name="roleNames[]" value="' + value.name + '" label="' + value.text + '">').appendTo(tempBox));
+                $.parser.parse($roleBox);   //动态创建的需要重新渲染
+            });
+        });
+
+        
+
+        abp.easyui.serializejsonSwitchbutton($frm);
+
+        if (id) {
+            var taskInitForm = abp.services.app.employee.get({ id: id }).done(function (d) {
+                $frm.form('load', d);
+                //由于html标签已经说明是easyui控件，正在渲染，若没渲染完就调用此方法会报错，因此放在load后面感觉保险点
+                taskInitRoles.done(function () {
+                    roles.forEach(function (currentValue, index, ary) {
+                        if ($.inArray(currentValue.val(), d.roleNames) != -1)
+                            currentValue.checkbox('check');
+                        //currentValue.checkbox({ 'checked': $.inArray(currentValue.val(), d.roleNames) != -1 });
+                    });
+                });
+               
+                setTimeout(function () {
+                    $showUser.switchbutton('check');
+                    if (!d.userId)
+                        $showUser.switchbutton('uncheck');
+                }, 0);
+            });
+        } else {
+            setTimeout(function () {
+                //由于是否关联用户的切换会导致验证，验证会导致聚焦未验证过的输入框，
+                //加载成功时会自动切换一次关联用户，因此修改时聚焦没意义
+                $name.next('span').find('input').focus();
+                $showUser.switchbutton('check');
+                $showUser.switchbutton('uncheck');
+            }, 0);
+        }
+
+        if (taskInitForm)
+            abp.ui.setBusy($dlg, taskInitForm);
+        else
+            abp.ui.setBusy($dlg, taskInitRoles);
+
+        function onSaved(funcName) {
+            var f = $dlg.data(funcName);
+            if (f)
+                f();
+        }
+    })();
+</script>

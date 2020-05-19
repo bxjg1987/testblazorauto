@@ -29,7 +29,7 @@ namespace BXJG.Shop.Seed
         {
             new DefaultBXJGShopDataDictionaryBuilder<TTenant, TRole, TUser, TSelf>(_context, _tenantId).Create(insertTestData);
             new DefaultBXJGShopItemBuilder<TTenant, TRole, TUser, TSelf>(_context, _tenantId).Create(insertTestData);
-            new DefaultBXJGShopCustomerBuilder<TTenant, TRole, TUser, TSelf>(_context, _tenantId).Create(insertTestData);
+            new DefaultBXJGShopCustomerBuilder<TTenant, TRole, TUser, TSelf,TArea>(_context, _tenantId).Create(insertTestData);
             new DefaultBXJGShopOrderBuilder<TTenant, TRole, TUser, TSelf,TArea>(_context, _tenantId).Create(insertTestData);
             _context.SaveChanges();
         }

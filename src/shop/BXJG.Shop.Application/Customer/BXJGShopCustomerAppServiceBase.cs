@@ -3,6 +3,8 @@ using Abp.Authorization.Roles;
 using Abp.Authorization.Users;
 using Abp.Domain.Repositories;
 using Abp.MultiTenancy;
+using BXJG.GeneralTree;
+using BXJG.Shop.Common;
 using BXJG.Shop.Customer;
 using System;
 using System.Collections.Generic;
@@ -21,18 +23,19 @@ namespace BXJG.Shop.Customer
     /// <typeparam name="TTenantManager"></typeparam>
     /// <typeparam name="TUserManager"></typeparam>
     /// <typeparam name="TCustomerManager"></typeparam>
-    public abstract class BXJGShopCustomerAppServiceBase<TTenant, TUser, TRole, TTenantManager, TUserManager, TCustomerManager>
+    public abstract class BXJGShopCustomerAppServiceBase<TTenant, TUser, TRole, TTenantManager, TUserManager, TCustomerManager,TArea>
         : BXJGShopAppServiceBase<TTenant, TUser, TRole, TTenantManager, TUserManager>, IApplicationService
         where TUser : AbpUser<TUser>, new()
         where TRole : AbpRole<TUser>, new()
         where TTenant : AbpTenant<TUser>
         where TTenantManager : AbpTenantManager<TTenant, TUser>
         where TUserManager : AbpUserManager<TRole, TUser>
-        where TCustomerManager : CustomerManager<TUser>
+        where TArea : GeneralTreeEntity<TArea>, IShopAdministrative
+        where TCustomerManager : CustomerManager<TUser,TArea>
     {
-        protected readonly IRepository<CustomerEntity<TUser>, long> customerRepository;
+        protected readonly IRepository<CustomerEntity<TUser,TArea>, long> customerRepository;
         protected readonly TCustomerManager customerManager;
-        protected readonly BXJGShopCustomerSession<TUser> customerSession;
+        protected readonly BXJGShopCustomerSession<TUser,TArea> customerSession;
 
         /// <summary>
         /// 
@@ -40,7 +43,7 @@ namespace BXJG.Shop.Customer
         /// <param name="customerRepository"></param>
         /// <param name="customerManager"></param>
         /// <param name="customerSession"></param>
-        public BXJGShopCustomerAppServiceBase(IRepository<CustomerEntity<TUser>, long> customerRepository, TCustomerManager customerManager, BXJGShopCustomerSession<TUser> customerSession)
+        public BXJGShopCustomerAppServiceBase(IRepository<CustomerEntity<TUser,TArea>, long> customerRepository, TCustomerManager customerManager, BXJGShopCustomerSession<TUser,TArea> customerSession)
         {
             this.customerRepository = customerRepository;
             this.customerManager = customerManager;
@@ -50,7 +53,7 @@ namespace BXJG.Shop.Customer
         /// 获取当前登录用户关联的顾客信息
         /// </summary>
         /// <returns></returns>
-        protected virtual Task<CustomerEntity<TUser>> GetCurrentCustomerAsync()
+        protected virtual Task<CustomerEntity<TUser,TArea>> GetCurrentCustomerAsync()
         {
             return customerRepository.SingleByUserIdWithoutUserAsync(base.AbpSession.UserId.Value);
         }

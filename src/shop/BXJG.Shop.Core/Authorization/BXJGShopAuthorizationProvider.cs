@@ -35,6 +35,11 @@ namespace BXJG.Shop.Authorization
             order.CreateChildPermission(BXJGShopPermissions.BXJGShopOrderRefund, "退款".BXJGShopL(), multiTenancySides: MultiTenancySides.Tenant);
             order.CreateChildPermission(BXJGShopPermissions.BXJGShopOrderCancel, "取消".BXJGShopL(), multiTenancySides: MultiTenancySides.Tenant);
 
+            //顾客
+            var Customer = shop.CreateChildPermission(BXJGShopPermissions.BXJGShopCustomer, BXJGShopPermissions.BXJGShopCustomer.BXJGShopL(), multiTenancySides: MultiTenancySides.Tenant);
+            Customer.CreateChildPermission(BXJGShopPermissions.BXJGShopCustomerCreate, "新增".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
+            Customer.CreateChildPermission(BXJGShopPermissions.BXJGShopCustomerUpdate, "修改".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
+            Customer.CreateChildPermission(BXJGShopPermissions.BXJGShopCustomerDelete, "删除".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
             return context;
         }
     }

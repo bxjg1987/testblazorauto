@@ -56,16 +56,16 @@ namespace BXJG.Shop.Sale
         where TArea : GeneralTreeEntity<TArea>, IShopAdministrative
     {
         protected readonly IRepository<OrderEntity<TUser, TArea>, long> repository;
-        protected readonly IRepository<CustomerEntity<TUser>, long> customerRepository;
-        //protected readonly CustomerManager<TUser> customerManager;
+        protected readonly IRepository<CustomerEntity<TUser,TArea>, long> customerRepository;
+        //protected readonly CustomerManager<TUser,TArea> customerManager;
         protected readonly ISettingManager settingManager;
         //领域层不应该访问session  protected readonly IAbpSession session;
 
         public OrderManager(
             IRepository<OrderEntity<TUser, TArea>, long> repository,
-            IRepository<CustomerEntity<TUser>, long> customerRepository,
+            IRepository<CustomerEntity<TUser,TArea>, long> customerRepository,
             ISettingManager settingManager
-            /*,CustomerManager<TUser> customerManager*/)
+            /*,CustomerManager<TUser,TArea> customerManager*/)
         {
             this.settingManager = settingManager;
             this.repository = repository;
@@ -84,7 +84,7 @@ namespace BXJG.Shop.Sale
         /// <param name="items"></param>
         /// <returns></returns>
         public async Task<OrderEntity<TUser, TArea>> CreateAsync(
-            CustomerEntity<TUser> customer,
+            CustomerEntity<TUser,TArea> customer,
             TArea area,
             string consignee,
             string consigneePhoneNumber,

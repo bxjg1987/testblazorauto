@@ -8,6 +8,8 @@ using System.Text;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using BXJG.GeneralTree;
+using BXJG.Shop.Common;
 
 namespace BXJG.Shop.Customer
 {
@@ -17,18 +19,19 @@ namespace BXJG.Shop.Customer
     /// 包装IAbpSession以提供当前顾客Id的获取
     /// 一次请求一个实例
     /// </summary>
-    public class BXJGShopCustomerSession<TUser> : IPerWebRequestDependency
+    public class BXJGShopCustomerSession<TUser,TArea> : IPerWebRequestDependency
         where TUser : AbpUserBase
+        where TArea : GeneralTreeEntity<TArea>, IShopAdministrative
     {
         private readonly IAbpSession abpSession;
-        private readonly IRepository<CustomerEntity<TUser>, long> repository;
+        private readonly IRepository<CustomerEntity<TUser,TArea>, long> repository;
         ///// <summary>
         ///// 获取顾客id，
         ///// </summary>
         //public readonly Lazy<long> CustomerId;
         private long customerId;
 
-        public BXJGShopCustomerSession(IAbpSession abpSession, IRepository<CustomerEntity<TUser>, long> repository)
+        public BXJGShopCustomerSession(IAbpSession abpSession, IRepository<CustomerEntity<TUser, TArea>, long> repository)
         {
             this.abpSession = abpSession;
             this.repository = repository;

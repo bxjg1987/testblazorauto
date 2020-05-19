@@ -30,7 +30,12 @@ namespace BXJG.Shop
                                                 BXJGShopPermissions.BXJGShopOrder.BXJGShopL(),
                                                 icon: BXJGShopPermissions.BXJGShopOrder,
                                                 url: $"/{BXJGShopPermissions.BXJGShop}/{BXJGShopPermissions.BXJGShopOrder}/index.html",
-                                                permissionDependency: new SimplePermissionDependency(BXJGShopPermissions.BXJGShopOrder))); ;
+                                                permissionDependency: new SimplePermissionDependency(BXJGShopPermissions.BXJGShopOrder)))
+                .AddItem(new MenuItemDefinition(BXJGShopPermissions.BXJGShopCustomer,
+                                                BXJGShopPermissions.BXJGShopCustomer.BXJGShopL(),
+                                                icon: BXJGShopPermissions.BXJGShopCustomer,
+                                                url: $"/{BXJGShopPermissions.BXJGShop}/{BXJGShopPermissions.BXJGShopCustomer}/index.html",
+                                                permissionDependency: new SimplePermissionDependency(BXJGShopPermissions.BXJGShopCustomer))); 
 
             menu.AddItem(jczl);
             return menu;

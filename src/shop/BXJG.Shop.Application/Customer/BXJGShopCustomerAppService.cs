@@ -14,7 +14,6 @@ using Abp.Linq.Extensions;
 using System.Linq.Dynamic.Core;
 using System.Linq.Dynamic;
 using Abp.Extensions;
-using BXJG.Shop.Customer.Dto;
 using Abp.Application.Services.Dto;
 using Microsoft.EntityFrameworkCore;
 using BXJG.Shop.Common;
@@ -54,8 +53,8 @@ namespace BXJG.Shop.Customer
         where TUserManager : AbpUserManager<TRole, TUser>
         where TArea : GeneralTreeEntity<TArea>, IShopAdministrative
     {
-        private readonly IRepository<CustomerEntity<TUser>, long> repository;
-        public BXJGShopCustomerAppService(IRepository<CustomerEntity<TUser> ,long> repository)
+        private readonly IRepository<CustomerEntity<TUser,TArea>, long> repository;
+        public BXJGShopCustomerAppService(IRepository<CustomerEntity<TUser,TArea> ,long> repository)
         {
             this.repository = repository;
         }
@@ -94,7 +93,7 @@ namespace BXJG.Shop.Customer
             #endregion
 
             //映射不太好处理，手动来吧
-            var entity = new CustomerEntity<TUser>
+            var entity = new CustomerEntity<TUser,TArea>
             {
                 Amount = input.Amount,
                 Birthday = input.Birthday,
@@ -150,7 +149,8 @@ namespace BXJG.Shop.Customer
 
         public async Task<PagedResultDto<CustomerDto>> GetListAsync(GetAllCustomersInput input)
         {
-            var query = repository.GetAllIncluding(c => c.User).AsNoTracking()
+            var query = repository.GetAllIncluding(c => c.User,c=>c.Area).AsNoTracking()
+                .WhereIf(!input.AreaCode.IsNullOrWhiteSpace(),c=>c.Area.Code.StartsWith(input.AreaCode))
                 .WhereIf(!input.Keywords.IsNullOrEmpty(), c => c.User.Name.Contains(input.Keywords) || c.User.PhoneNumber.Contains(input.Keywords));
 
             var totalCount = await query.CountAsync();

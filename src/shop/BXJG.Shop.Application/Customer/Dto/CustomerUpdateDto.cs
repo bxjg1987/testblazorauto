@@ -8,7 +8,7 @@ using Abp.Authorization.Users;
 using Abp.AutoMapper;
 using BXJG.Utils.Enums;
 
-namespace BXJG.Shop.Customer.Dto
+namespace BXJG.Shop.Customer
 {
     /// <summary>
     /// 更新上架模型时前端提供的数据模型
@@ -48,8 +48,10 @@ namespace BXJG.Shop.Customer.Dto
 
         public string PhoneNumber { get; set; }
         #endregion
-
-
+        /// <summary>
+        /// 所属地区Id
+        /// </summary>
+        public long? AreaId { get; set; }
         /// <summary>
         /// 顾客的积分
         /// </summary>
@@ -65,6 +67,6 @@ namespace BXJG.Shop.Customer.Dto
         /// <summary>
         /// 出生日期
         /// </summary>
-        public DateTimeOffset Birthday { get; set; }
+        public DateTimeOffset? Birthday { get; set; }
     }
 }

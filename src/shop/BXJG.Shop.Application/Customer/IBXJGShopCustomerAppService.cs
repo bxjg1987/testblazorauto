@@ -1,6 +1,5 @@
 ﻿using Abp.Application.Services;
 using Abp.Application.Services.Dto;
-using BXJG.Shop.Customer.Dto;
 using System;
 using System.Collections.Generic;
 using System.Text;

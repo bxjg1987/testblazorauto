@@ -562,7 +562,7 @@
             <typeparam name="TUserManager"></typeparam>
             <typeparam name="TArea"></typeparam>
         </member>
-        <member name="T:BXJG.Shop.Customer.BXJGShopCustomerAppServiceBase`6">
+        <member name="T:BXJG.Shop.Customer.BXJGShopCustomerAppServiceBase`7">
             <summary>
             登录的顾客的应用服务基类
             比如顾客下订单 支付订单 或其它顾客操作可能会定义不同的应用服务，这些服务都可以继承此类来简化代码
@@ -574,7 +574,7 @@
             <typeparam name="TUserManager"></typeparam>
             <typeparam name="TCustomerManager"></typeparam>
         </member>
-        <member name="M:BXJG.Shop.Customer.BXJGShopCustomerAppServiceBase`6.#ctor(Abp.Domain.Repositories.IRepository{BXJG.Shop.Customer.CustomerEntity{`1},System.Int64},`5,BXJG.Shop.Customer.BXJGShopCustomerSession{`1})">
+        <member name="M:BXJG.Shop.Customer.BXJGShopCustomerAppServiceBase`7.#ctor(Abp.Domain.Repositories.IRepository{BXJG.Shop.Customer.CustomerEntity{`1,`6},System.Int64},`5,BXJG.Shop.Customer.BXJGShopCustomerSession{`1,`6})">
             <summary>
             
             </summary>
@@ -582,91 +582,121 @@
             <param name="customerManager"></param>
             <param name="customerSession"></param>
         </member>
-        <member name="M:BXJG.Shop.Customer.BXJGShopCustomerAppServiceBase`6.GetCurrentCustomerAsync">
+        <member name="M:BXJG.Shop.Customer.BXJGShopCustomerAppServiceBase`7.GetCurrentCustomerAsync">
             <summary>
             获取当前登录用户关联的顾客信息
             </summary>
             <returns></returns>
         </member>
-        <member name="M:BXJG.Shop.Customer.BXJGShopCustomerAppServiceBase`6.GetCurrentCustomerIdAsync">
+        <member name="M:BXJG.Shop.Customer.BXJGShopCustomerAppServiceBase`7.GetCurrentCustomerIdAsync">
             <summary>
             获取当前登录用户关联的顾客id
             </summary>
             <returns></returns>
         </member>
-        <member name="T:BXJG.Shop.Customer.Dto.CustomerDto">
+        <member name="T:BXJG.Shop.Customer.CustomerDto">
             <summary>
             后台管理页使用的DTO
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Customer.Dto.CustomerDto.UserId">
+        <member name="P:BXJG.Shop.Customer.CustomerDto.UserId">
             <summary>
             关联到abp用户的id
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Customer.Dto.CustomerDto.UserFullName">
+        <member name="P:BXJG.Shop.Customer.CustomerDto.UserFullName">
             <summary>
             关联到abp用户
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Customer.Dto.CustomerDto.UserUserName">
+        <member name="P:BXJG.Shop.Customer.CustomerDto.UserUserName">
             <summary>
             应该是登录名
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Customer.Dto.CustomerDto.Integral">
+        <member name="P:BXJG.Shop.Customer.CustomerDto.AreaId">
+            <summary>
+            所属地区id
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Customer.CustomerDto.AreaDisplayName">
+            <summary>
+            所属地区
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Customer.CustomerDto.Integral">
             <summary>
             顾客的积分
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Customer.Dto.CustomerDto.Amount">
+        <member name="P:BXJG.Shop.Customer.CustomerDto.Amount">
             <summary>
             总消费金额
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Customer.Dto.CustomerDto.Gender">
+        <member name="P:BXJG.Shop.Customer.CustomerDto.Gender">
             <summary>
             性别
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Customer.Dto.CustomerDto.GenderText">
+        <member name="P:BXJG.Shop.Customer.CustomerDto.GenderText">
             <summary>
             获取性别的本地化文本
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Customer.Dto.CustomerDto.Birthday">
+        <member name="P:BXJG.Shop.Customer.CustomerDto.Birthday">
             <summary>
             出生日期
             </summary>
         </member>
-        <member name="T:BXJG.Shop.Customer.Dto.CustomerUpdateDto">
+        <member name="T:BXJG.Shop.Customer.CustomerUpdateDto">
             <summary>
             更新上架模型时前端提供的数据模型
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Customer.Dto.CustomerUpdateDto.Integral">
+        <member name="P:BXJG.Shop.Customer.CustomerUpdateDto.AreaId">
+            <summary>
+            所属地区Id
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Customer.CustomerUpdateDto.Integral">
             <summary>
             顾客的积分
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Customer.Dto.CustomerUpdateDto.Amount">
+        <member name="P:BXJG.Shop.Customer.CustomerUpdateDto.Amount">
             <summary>
             总消费金额
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Customer.Dto.CustomerUpdateDto.Gender">
+        <member name="P:BXJG.Shop.Customer.CustomerUpdateDto.Gender">
             <summary>
             性别
             </summary>
         </member>
-        <member name="P:BXJG.Shop.Customer.Dto.CustomerUpdateDto.Birthday">
+        <member name="P:BXJG.Shop.Customer.CustomerUpdateDto.Birthday">
             <summary>
             出生日期
             </summary>
         </member>
-        <member name="T:BXJG.Shop.Customer.Dto.GetAllCustomersInput">
+        <member name="T:BXJG.Shop.Customer.GetAllCustomersInput">
             <summary>
             上架/商品信息后台管理页面查询列表时使用的输入模型
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Customer.GetAllCustomersInput.AreaCode">
+            <summary>
+            所属区域code，模糊查询
+            </summary>
+        </member>
+        <member name="P:BXJG.Shop.Customer.GetAllCustomersInput.Keywords">
+            <summary>
+            姓名、邮箱、手机号等模糊查询
+            </summary>
+        </member>
+        <member name="M:BXJG.Shop.Customer.GetAllCustomersInput.Normalize">
+            <summary>
+            模型绑定后，abp会调用此方法来进一步初始化
             </summary>
         </member>
         <member name="T:BXJG.Shop.Customer.IBXJGShopCustomerAppService">

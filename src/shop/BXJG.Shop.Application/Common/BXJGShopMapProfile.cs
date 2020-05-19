@@ -5,7 +5,6 @@ using Newtonsoft.Json;
 using BXJG.Utils.Localization;
 using BXJG.Shop.Common.Dto;
 using BXJG.Shop.Catalogue;
-using BXJG.Shop.Customer.Dto;
 using BXJG.Shop.Customer;
 using BXJG.Shop.Sale;
 
@@ -56,6 +55,10 @@ namespace BXJG.Shop.Common
 
             #region 后台管理员+订单
             CreateMap(typeof(OrderEntity<,>), typeof(OrderDto));
+            #endregion
+
+            #region 后台管理对顾客信息的管理时使用的dto映射
+            CreateMap(typeof(CustomerEntity<,>), typeof(CustomerDto));
             #endregion
 
             //.ForMember(c => c.IsTreeText, opt => opt.MapFrom(c => c.IsTree.ToString().UtilsL()))

@@ -33,7 +33,7 @@ namespace BXJG.Shop.Sale
         where TUserManager : AbpUserManager<TRole, TUser>
         where TArea : GeneralTreeEntity<TArea>, IShopAdministrative
         where TOrderManager : OrderManager<TUser, TArea>
-        where TCustomerManager : CustomerManager<TUser>
+        where TCustomerManager : CustomerManager<TUser,TArea>
     {
         private readonly IRepository<OrderEntity<TUser, TArea>, long> repository;
         private readonly TOrderManager orderManager;
@@ -44,7 +44,7 @@ namespace BXJG.Shop.Sale
         public ICancellationTokenProvider CancellationToken { get; set; } = NullCancellationTokenProvider.Instance;
 
         public BXJGShopOrderAppService(
-            IRepository<CustomerEntity<TUser>, long> customerRepository,
+            IRepository<CustomerEntity<TUser,TArea>, long> customerRepository,
             TCustomerManager customerManager,
             IRepository<OrderEntity<TUser, TArea>, long> repository,
             TOrderManager orderManager,

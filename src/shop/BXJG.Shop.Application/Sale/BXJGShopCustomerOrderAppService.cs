@@ -30,7 +30,7 @@ namespace BXJG.Shop.Sale
     /// <typeparam name="TOrderManager"></typeparam>
     /// <typeparam name="TCustomerManager"></typeparam>
     public abstract class BXJGShopCustomerOrderAppService<TTenant, TUser, TRole, TTenantManager, TUserManager, TArea, TOrderManager, TCustomerManager>
-        : BXJGShopCustomerAppServiceBase<TTenant, TUser, TRole, TTenantManager, TUserManager, TCustomerManager>, IBXJGShopCustomerOrderAppService
+        : BXJGShopCustomerAppServiceBase<TTenant, TUser, TRole, TTenantManager, TUserManager, TCustomerManager,TArea>, IBXJGShopCustomerOrderAppService
         where TUser : AbpUser<TUser>, new()
         where TRole : AbpRole<TUser>, new()
         where TTenant : AbpTenant<TUser>
@@ -38,7 +38,7 @@ namespace BXJG.Shop.Sale
         where TUserManager : AbpUserManager<TRole, TUser>
         where TArea : GeneralTreeEntity<TArea>, IShopAdministrative
         where TOrderManager : OrderManager<TUser, TArea>
-        where TCustomerManager : CustomerManager<TUser>
+        where TCustomerManager : CustomerManager<TUser,TArea>
     {
         private readonly IRepository<OrderEntity<TUser, TArea>, long> repository;
         private readonly TOrderManager orderManager;
@@ -49,9 +49,9 @@ namespace BXJG.Shop.Sale
         public ICancellationTokenProvider CancellationToken { get; set; } = NullCancellationTokenProvider.Instance;
 
         public BXJGShopCustomerOrderAppService(
-            IRepository<CustomerEntity<TUser>, long> customerRepository,
+            IRepository<CustomerEntity<TUser,TArea>, long> customerRepository,
             TCustomerManager customerManager,
-            BXJGShopCustomerSession<TUser> customerSession,
+            BXJGShopCustomerSession<TUser,TArea> customerSession,
             IRepository<OrderEntity<TUser, TArea>, long> repository,
             TOrderManager orderManager, 
             IRepository<TArea, long> generalTreeManager,

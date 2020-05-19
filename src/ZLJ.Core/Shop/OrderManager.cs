@@ -12,7 +12,7 @@ namespace ZLJ.Shop
 {
     public class OrderManager : OrderManager<User, AdministrativeEntity>
     {
-        public OrderManager(IRepository<OrderEntity<User, AdministrativeEntity>, long> repository, IRepository<CustomerEntity<User>, long> customerRepository, ISettingManager settingManager) : base(repository, customerRepository, settingManager)
+        public OrderManager(IRepository<OrderEntity<User, AdministrativeEntity>, long> repository, IRepository<CustomerEntity<User, AdministrativeEntity>, long> customerRepository, ISettingManager settingManager) : base(repository, customerRepository, settingManager)
         {
         }
     }

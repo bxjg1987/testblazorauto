@@ -6,12 +6,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BXJG.Shop.Customer.Dto
+namespace BXJG.Shop.Customer
 {
     /// <summary>
     /// 后台管理页使用的DTO
     /// </summary>
-    [AutoMapFrom(typeof(CustomerEntity<>))]
     public class CustomerDto : FullAuditedEntityDto<long>
     {
         #region abp用户信息
@@ -27,13 +26,20 @@ namespace BXJG.Shop.Customer.Dto
         /// 应该是登录名
         /// </summary>
         public string UserUserName { get; set; }
-
+        //public DateTime UserLastLoginTime { get; set; }
         public string UserSurname { get; set; }
         public string UserEmailAddress { get; set; }
         public bool UserIsActive { get; set; }
         public string UserPhoneNumber { get; set; }
         #endregion
-
+        /// <summary>
+        /// 所属地区id
+        /// </summary>
+        public long? AreaId { get; set; }
+        /// <summary>
+        /// 所属地区
+        /// </summary>
+        public string AreaDisplayName{ get; set; }
         /// <summary>
         /// 顾客的积分
         /// </summary>
@@ -59,6 +65,6 @@ namespace BXJG.Shop.Customer.Dto
         /// <summary>
         /// 出生日期
         /// </summary>
-        public DateTimeOffset Birthday { get; set; }
+        public DateTimeOffset? Birthday { get; set; }
     }
 }
