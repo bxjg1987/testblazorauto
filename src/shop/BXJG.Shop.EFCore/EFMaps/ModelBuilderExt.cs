@@ -1,6 +1,8 @@
 ﻿using Abp.Authorization.Users;
 using BXJG.GeneralTree;
 using BXJG.Shop.Common;
+using BXJG.Shop.Customer;
+using BXJG.Shop.Sale;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -13,19 +15,27 @@ namespace BXJG.Shop.EFMaps
         /// <summary>
         /// 注册商城系统中的ef映射
         /// </summary>
-        /// <typeparam name="TUser"></typeparam>
-        /// <typeparam name="TArea"></typeparam>
         /// <param name="modelBuilder"></param>
         /// <returns></returns>
-        public static ModelBuilder ApplyConfigurationBXJGShop<TUser, TArea>(this ModelBuilder modelBuilder)
-            where TUser : AbpUserBase
-            where TArea : GeneralTreeEntity<TArea>, IShopAdministrative
+        public static ModelBuilder ApplyConfigurationBXJGShop(this ModelBuilder modelBuilder)
         {
-            return modelBuilder
-                .ApplyConfigurationsFromAssembly(BXJGShopEFCoreModule.GetAssembly())
-                .ApplyConfiguration(new OrderItemMap<TUser, TArea>())
-                .ApplyConfiguration(new OrderMap<TUser, TArea>());//上面扫描程序集的方式无法注册带泛型的，所以下面单独加
-
+            return modelBuilder.ApplyConfigurationsFromAssembly(BXJGShopEFCoreModule.GetAssembly());
         }
+
+        //public static ModelBuilder ApplyConfigurationBXJGShop<TEntity, TMap>(this ModelBuilder modelBuilder)
+        //    where TEntity : class
+        //    where TMap : IEntityTypeConfiguration<TEntity>, new()
+        //{
+        //    return modelBuilder.ApplyConfiguration(new TMap());
+        //}
+
+        //public static ModelBuilder ApplyConfigurationBXJGShop<TUser, TArea, TEntity, TMap>(this ModelBuilder modelBuilder)
+        //    where TUser : AbpUserBase
+        //    where TArea : GeneralTreeEntity<TArea>, IAdministrative
+        //    where TEntity : class
+        //    where TMap : IEntityTypeConfiguration<TEntity>, new()
+        //{
+        //    return modelBuilder.ApplyConfigurationBXJGShop<TEntity, TMap>();
+        //}
     }
 }

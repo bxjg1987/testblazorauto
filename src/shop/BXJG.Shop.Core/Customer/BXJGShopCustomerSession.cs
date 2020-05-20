@@ -21,7 +21,7 @@ namespace BXJG.Shop.Customer
     /// </summary>
     public class BXJGShopCustomerSession<TUser,TArea> : IPerWebRequestDependency
         where TUser : AbpUserBase
-        where TArea : GeneralTreeEntity<TArea>, IShopAdministrative
+        where TArea : GeneralTreeEntity<TArea>, IAdministrative
     {
         private readonly IAbpSession abpSession;
         private readonly IRepository<CustomerEntity<TUser,TArea>, long> repository;

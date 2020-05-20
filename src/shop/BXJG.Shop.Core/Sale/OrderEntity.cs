@@ -108,7 +108,7 @@ namespace BXJG.Shop.Sale
     /// <typeparam name="TArea">送货地址区域类型</typeparam>
     public class OrderEntity<TUser, TArea> : FullAuditedEntity<long>, IMustHaveTenant
         where TUser : AbpUserBase
-        where TArea : GeneralTreeEntity<TArea>, IShopAdministrative
+        where TArea : GeneralTreeEntity<TArea>, IAdministrative
     {
         public const int OrderNoMaxLength = 36;//guid长度 32+4个分隔符，将来可能使用其它格式的订单号
         public const int CustomerRemarkMaxLength = 500;

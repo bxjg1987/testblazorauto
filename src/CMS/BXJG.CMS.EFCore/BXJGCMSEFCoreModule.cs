@@ -3,7 +3,7 @@ using Abp.Reflection.Extensions;
 using System;
 using System.Reflection;
 
-namespace BXJG.CMS
+namespace BXJG.CMS.EFCore
 {
     [DependsOn(
      typeof(BXJGCMSCoreModule))]

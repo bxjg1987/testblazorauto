@@ -19,7 +19,7 @@ namespace BXJG.Shop.Sale
     /// <typeparam name="TArea"></typeparam>
     public class OrderPaidEventHandler<TUser, TArea> : BXJGShopDomainServiceBase, IAsyncEventHandler<OrderPaidEventData<TUser, TArea>>
         where TUser : AbpUserBase
-        where TArea : GeneralTreeEntity<TArea>, IShopAdministrative
+        where TArea : GeneralTreeEntity<TArea>, IAdministrative
     {
         protected readonly IRepository<CustomerEntity<TUser,TArea>, long> repository;
 

@@ -23,7 +23,7 @@ namespace BXJG.Shop.Customer
      */
     public class CustomerManager<TUser,TArea> : BXJGShopDomainServiceBase//, ITransientDependency
         where TUser : AbpUserBase
-        where TArea : GeneralTreeEntity<TArea>, IShopAdministrative
+        where TArea : GeneralTreeEntity<TArea>, IAdministrative
     {
         protected readonly IRepository<CustomerEntity<TUser,TArea>, long> repository;
         //领域层 不应该访问Session

@@ -10,11 +10,12 @@ using System.Text;
 
 namespace BXJG.Shop.EFMaps
 {
-    public class CustomerMap<TUser, TArea> : IEntityTypeConfiguration<CustomerEntity<TUser, TArea>>
+    public class CustomerMap<TUser, TArea, TEntity> : IEntityTypeConfiguration<TEntity>
         where TUser : AbpUserBase
-        where TArea : GeneralTreeEntity<TArea>, IShopAdministrative
+        where TArea : GeneralTreeEntity<TArea>, IAdministrative
+        where TEntity : CustomerEntity<TUser, TArea>
     {
-        public void Configure(EntityTypeBuilder<CustomerEntity<TUser, TArea>> builder)
+        public virtual void Configure(EntityTypeBuilder<TEntity> builder)
         {
             builder.Property(c => c.RowVersion).IsRowVersion();
             ///builder.Property(c => c.Birthday).IsRequired(false);

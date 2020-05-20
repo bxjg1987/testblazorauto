@@ -30,7 +30,7 @@ namespace BXJG.Shop.Customer
         where TTenant : AbpTenant<TUser>
         where TTenantManager : AbpTenantManager<TTenant, TUser>
         where TUserManager : AbpUserManager<TRole, TUser>
-        where TArea : GeneralTreeEntity<TArea>, IShopAdministrative
+        where TArea : GeneralTreeEntity<TArea>, IAdministrative
         where TCustomerManager : CustomerManager<TUser,TArea>
     {
         protected readonly IRepository<CustomerEntity<TUser,TArea>, long> customerRepository;

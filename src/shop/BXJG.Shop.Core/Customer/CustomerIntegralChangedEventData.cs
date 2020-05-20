@@ -15,7 +15,7 @@ namespace BXJG.Shop.Customer
     /// <typeparam name="TUser"></typeparam>
     public class CustomerIntegralChangedEventData<TUser,TArea> : EntityEventData<CustomerEntity<TUser,TArea>>
         where TUser : AbpUserBase
-        where TArea : GeneralTreeEntity<TArea>, IShopAdministrative
+        where TArea : GeneralTreeEntity<TArea>, IAdministrative
     {
         public CustomerIntegralChangedEventData(CustomerEntity<TUser,TArea> customer):base(customer)
         {

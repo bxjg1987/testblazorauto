@@ -29,7 +29,7 @@ namespace BXJG.Shop.Sale
     /// </summary>
     public class OrderItemEntity<TUser,TArea> : Entity
         where TUser : AbpUserBase
-        where TArea : GeneralTreeEntity<TArea>, IShopAdministrative
+        where TArea : GeneralTreeEntity<TArea>, IAdministrative
     {
         /// <summary>
         /// 关联的订单Id

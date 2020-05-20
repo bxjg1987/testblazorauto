@@ -20,7 +20,7 @@ namespace BXJG.Shop.Seed
         where TRole : AbpRole<TUser>
         where TUser : AbpUser<TUser>, new()
         where TSelf : AbpZeroDbContext<TTenant, TRole, TUser, TSelf>
-            where TArea : GeneralTreeEntity<TArea>, IShopAdministrative
+            where TArea : GeneralTreeEntity<TArea>, IAdministrative
     {
         private readonly TSelf _context;
         private readonly int _tenantId;

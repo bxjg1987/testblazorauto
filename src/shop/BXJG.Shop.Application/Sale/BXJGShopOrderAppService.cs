@@ -31,7 +31,7 @@ namespace BXJG.Shop.Sale
         where TTenant : AbpTenant<TUser>
         where TTenantManager : AbpTenantManager<TTenant, TUser>
         where TUserManager : AbpUserManager<TRole, TUser>
-        where TArea : GeneralTreeEntity<TArea>, IShopAdministrative
+        where TArea : GeneralTreeEntity<TArea>, IAdministrative
         where TOrderManager : OrderManager<TUser, TArea>
         where TCustomerManager : CustomerManager<TUser,TArea>
     {

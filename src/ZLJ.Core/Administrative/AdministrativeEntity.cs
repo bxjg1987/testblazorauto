@@ -10,7 +10,7 @@ namespace ZLJ.Administrative
     /// <summary>
     /// 行政区域实体类
     /// </summary>
-    public class AdministrativeEntity : GeneralTreeEntity<AdministrativeEntity>, IShopAdministrative
+    public class AdministrativeEntity : GeneralTreeEntity<AdministrativeEntity>, IAdministrative
     {
         /// <summary>
         /// 主程序的行政级别

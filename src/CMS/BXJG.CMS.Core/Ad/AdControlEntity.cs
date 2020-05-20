@@ -11,7 +11,7 @@ namespace BXJG.CMS.Ad
     /// 广告控件
     /// 
     /// </summary>
-    public class AdControl : FullAuditedEntity, IMayHaveTenant, IExtendableObject
+    public class AdControlEntity : FullAuditedEntity, IMayHaveTenant, IExtendableObject
     {
         public int? TenantId { get; set; }
         /// <summary>

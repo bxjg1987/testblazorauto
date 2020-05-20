@@ -53,7 +53,7 @@ namespace BXJG.Shop.Sale
     /// <typeparam name="TArea">送货地址区域类型 参考实体类的泛型说明</typeparam>
     public class OrderManager<TUser, TArea> : BXJGShopDomainServiceBase//, ITransientDependency
         where TUser : AbpUserBase
-        where TArea : GeneralTreeEntity<TArea>, IShopAdministrative
+        where TArea : GeneralTreeEntity<TArea>, IAdministrative
     {
         protected readonly IRepository<OrderEntity<TUser, TArea>, long> repository;
         protected readonly IRepository<CustomerEntity<TUser,TArea>, long> customerRepository;

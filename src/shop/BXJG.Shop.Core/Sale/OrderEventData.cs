@@ -15,7 +15,7 @@ namespace BXJG.Shop.Sale
     /// <typeparam name="TArea"></typeparam>
     public class OrderPaidEventData<TUser, TArea> : EntityEventData<OrderEntity<TUser, TArea>>
         where TUser : AbpUserBase
-        where TArea : GeneralTreeEntity<TArea>, IShopAdministrative
+        where TArea : GeneralTreeEntity<TArea>, IAdministrative
     {
         public OrderPaidEventData(OrderEntity<TUser, TArea> order) : base(order)
         { }
@@ -27,7 +27,7 @@ namespace BXJG.Shop.Sale
     /// <typeparam name="TArea"></typeparam>
     public class OrderShipedEventData<TUser, TArea> : EntityEventData<OrderEntity<TUser, TArea>>
         where TUser : AbpUserBase
-        where TArea : GeneralTreeEntity<TArea>, IShopAdministrative
+        where TArea : GeneralTreeEntity<TArea>, IAdministrative
     {
         public OrderShipedEventData(OrderEntity<TUser, TArea> order) : base(order)
         { }
@@ -39,7 +39,7 @@ namespace BXJG.Shop.Sale
     /// <typeparam name="TArea"></typeparam>
     public class OrderSignedEventData<TUser, TArea> : EntityEventData<OrderEntity<TUser, TArea>>
         where TUser : AbpUserBase
-        where TArea : GeneralTreeEntity<TArea>, IShopAdministrative
+        where TArea : GeneralTreeEntity<TArea>, IAdministrative
     {
         public OrderSignedEventData(OrderEntity<TUser, TArea> order) : base(order)
         { }

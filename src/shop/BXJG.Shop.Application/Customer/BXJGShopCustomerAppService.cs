@@ -51,7 +51,7 @@ namespace BXJG.Shop.Customer
         where TTenant : AbpTenant<TUser>
         where TTenantManager : AbpTenantManager<TTenant, TUser>
         where TUserManager : AbpUserManager<TRole, TUser>
-        where TArea : GeneralTreeEntity<TArea>, IShopAdministrative
+        where TArea : GeneralTreeEntity<TArea>, IAdministrative
     {
         private readonly IRepository<CustomerEntity<TUser,TArea>, long> repository;
         public BXJGShopCustomerAppService(IRepository<CustomerEntity<TUser,TArea> ,long> repository)
