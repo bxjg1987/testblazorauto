@@ -32,7 +32,7 @@ namespace BXJG.CMS
                                                 url: $"/{BXJGCMSPermissions.BXJGCMS}/{BXJGCMSPermissions.BXJGCMSAdControl}/index.html",
                                                 permissionDependency: new SimplePermissionDependency(BXJGCMSPermissions.BXJGCMSAdControl)));
 
-            //menu.AddItem(jczl);
+            menu.AddItem(jczl);
             return menu;
         }
     }

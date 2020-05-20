@@ -1,9 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <localizationDictionary culture="en">
   <texts>
-    <text name="BXJGCMS" value="Mall" />
-    <text name="BXJGCMSItem" value="Product" />
-    <text name="BXJGCMSDictionary" value="Dictionary" />
-    
+    <text name="BXJGCMS" value="Content" />
+
+    <text name="BXJGCMSAd" value="Ad" />
+    <text name="BXJGCMSAdPosition" value="Ad position" />
+    <text name="BXJGCMSAdControl" value="Ad control" />
   </texts>
 </localizationDictionary>

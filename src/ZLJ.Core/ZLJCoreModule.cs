@@ -4,6 +4,7 @@ using Abp.Timing;
 using Abp.Zero;
 using Abp.Zero.Configuration;
 using BXJG.Attachment;
+using BXJG.CMS;
 using BXJG.File;
 using BXJG.GeneralTree;
 using BXJG.Utils;

@@ -17,6 +17,7 @@ using ZLJ.Navigation;
 using BXJG.Utils;
 using BXJG.GeneralTree;
 using BXJG.Shop;
+using BXJG.CMS;
 
 namespace ZLJ
 {
@@ -25,7 +26,8 @@ namespace ZLJ
         typeof(ZLJEntityFrameworkModule),
         typeof(AbpAspNetCoreModule),
         typeof(AbpAspNetCoreSignalRModule),
-        typeof(BXJGShopApplicationModule))]
+        typeof(BXJGShopApplicationModule),
+        typeof(BXJGCMSApplicationModule))]
     public class ZLJWebCoreModule : AbpModule
     {
         private readonly IWebHostEnvironment _env;

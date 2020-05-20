@@ -12,12 +12,11 @@ namespace BXJG.CMS
     /// </summary>
     public class BXJGCMSDomainServiceBase : DomainService
     {
-        public IEventBus EventBus { get; set; }//属性注入 必须public
+        public  IEventBus EventBus { get;}= NullEventBus.Instance;//空模式
 
         public BXJGCMSDomainServiceBase()
         {
             base.LocalizationSourceName = BXJGCMSConsts.LocalizationSourceName;
-            EventBus = NullEventBus.Instance;//空模式
         }
     }
 }
