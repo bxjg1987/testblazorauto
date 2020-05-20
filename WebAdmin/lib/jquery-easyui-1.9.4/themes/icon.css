@@ -1,4 +1,16 @@
 ﻿
+.icon-BXJGCMSAdControl {
+	background: url('icons/control.png') no-repeat center center;
+}
+.icon-BXJGCMSAdPosition {
+	background: url('icons/layout.png') no-repeat center center;
+}
+.icon-BXJGCMSAd {
+	background: url('icons/ad.png') no-repeat center center;
+}
+.icon-BXJGCMS {
+	background: url('icons/diqiu.png') no-repeat center center;
+}
 .icon-BXJGShop {
 	background: url('icons/BXJGShop.png') no-repeat center center;
 }

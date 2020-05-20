@@ -12,18 +12,26 @@ namespace BXJG.CMS.Authorization
     {
         public static Permission SetPermissions( Permission context)
         {
-            //商城管理
-            var shop = context.CreateChildPermission(BXJGCMSPermissions.BXJGCMS, BXJGCMSPermissions.BXJGCMS.BXJGCMSL());
-            ////商城模块自己的数据字典
-            //var spdtzdTree = shop.CreateChildPermission(BXJGCMSPermissions.BXJGCMSDictionary, BXJGCMSPermissions.BXJGCMSDictionary.BXJGCMSL(), multiTenancySides: MultiTenancySides.Tenant);
-            //spdtzdTree.CreateChildPermission(BXJGCMSPermissions.BXJGCMSDictionaryCreate, "新增".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
-            //spdtzdTree.CreateChildPermission(BXJGCMSPermissions.BXJGCMSDictionaryUpdate, "修改".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
-            //spdtzdTree.CreateChildPermission(BXJGCMSPermissions.BXJGCMSDictionaryDelete, "删除".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
-            ////商品
-            //var item = shop.CreateChildPermission(BXJGCMSPermissions.BXJGCMSItem, BXJGCMSPermissions.BXJGCMSItem.BXJGCMSL(), multiTenancySides: MultiTenancySides.Tenant);
-            //item.CreateChildPermission(BXJGCMSPermissions.BXJGCMSItemCreate, "新增".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
-            //item.CreateChildPermission(BXJGCMSPermissions.BXJGCMSItemUpdate, "修改".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
-            //item.CreateChildPermission(BXJGCMSPermissions.BXJGCMSItemDelete, "删除".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
+            //cms
+            var cms = context.CreateChildPermission(BXJGCMSPermissions.BXJGCMS, BXJGCMSPermissions.BXJGCMS.BXJGCMSL());
+
+            #region 广告
+            //广告
+            var ad = cms.CreateChildPermission(BXJGCMSPermissions.BXJGCMSAd, BXJGCMSPermissions.BXJGCMSAd.BXJGCMSL(), multiTenancySides: MultiTenancySides.Tenant);
+            ad.CreateChildPermission(BXJGCMSPermissions.BXJGCMSAdCreate, "新增".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
+            ad.CreateChildPermission(BXJGCMSPermissions.BXJGCMSAdUpdate, "修改".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
+            ad.CreateChildPermission(BXJGCMSPermissions.BXJGCMSAdDelete, "删除".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
+            //广告位
+            var adPosition = cms.CreateChildPermission(BXJGCMSPermissions.BXJGCMSAdPosition, BXJGCMSPermissions.BXJGCMSAdPosition.BXJGCMSL(), multiTenancySides: MultiTenancySides.Tenant);
+            adPosition.CreateChildPermission(BXJGCMSPermissions.BXJGCMSAdPositionCreate, "新增".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
+            adPosition.CreateChildPermission(BXJGCMSPermissions.BXJGCMSAdPositionUpdate, "修改".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
+            adPosition.CreateChildPermission(BXJGCMSPermissions.BXJGCMSAdPositionDelete, "删除".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
+            //广告控件
+            var adControl = cms.CreateChildPermission(BXJGCMSPermissions.BXJGCMSAdControl, BXJGCMSPermissions.BXJGCMSAdControl.BXJGCMSL(), multiTenancySides: MultiTenancySides.Tenant);
+            adControl.CreateChildPermission(BXJGCMSPermissions.BXJGCMSAdControlCreate, "新增".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
+            adControl.CreateChildPermission(BXJGCMSPermissions.BXJGCMSAdControlUpdate, "修改".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
+            adControl.CreateChildPermission(BXJGCMSPermissions.BXJGCMSAdControlDelete, "删除".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
+            #endregion
 
 
             return context;

@@ -12,20 +12,25 @@ namespace BXJG.CMS
     {
         public static MenuDefinition Init(MenuDefinition menu)
         {
-            //var jczl = new MenuItemDefinition(BXJGCMSPermissions.BXJGCMS,
-            //                         BXJGCMSPermissions.BXJGCMS.BXJGCMSL(),
-            //                         icon: BXJGCMSPermissions.BXJGCMS,
-            //                         permissionDependency: new SimplePermissionDependency(BXJGCMSPermissions.BXJGCMS))
-            //    .AddItem(new MenuItemDefinition(BXJGCMSPermissions.BXJGCMSDictionary,
-            //                                    BXJGCMSPermissions.BXJGCMSDictionary.BXJGCMSL(),
-            //                                    icon: BXJGCMSPermissions.BXJGCMSDictionary,
-            //                                    url: $"/{BXJGCMSPermissions.BXJGCMS}/{BXJGCMSPermissions.BXJGCMSDictionary}/index.html",
-            //                                    permissionDependency: new SimplePermissionDependency(BXJGCMSPermissions.BXJGCMSDictionary)))
-            //    .AddItem(new MenuItemDefinition(BXJGCMSPermissions.BXJGCMSItem,
-            //                                    BXJGCMSPermissions.BXJGCMSItem.BXJGCMSL(),
-            //                                    icon: BXJGCMSPermissions.BXJGCMSItem,
-            //                                    url: $"/{BXJGCMSPermissions.BXJGCMS}/{BXJGCMSPermissions.BXJGCMSItem}/index.html",
-            //                                    permissionDependency: new SimplePermissionDependency(BXJGCMSPermissions.BXJGCMSItem)));
+            var jczl = new MenuItemDefinition(BXJGCMSPermissions.BXJGCMS,
+                                     BXJGCMSPermissions.BXJGCMS.BXJGCMSL(),
+                                     icon: BXJGCMSPermissions.BXJGCMS,
+                                     permissionDependency: new SimplePermissionDependency(BXJGCMSPermissions.BXJGCMS))
+                .AddItem(new MenuItemDefinition(BXJGCMSPermissions.BXJGCMSAd,
+                                                BXJGCMSPermissions.BXJGCMSAd.BXJGCMSL(),
+                                                icon: BXJGCMSPermissions.BXJGCMSAd,
+                                                url: $"/{BXJGCMSPermissions.BXJGCMS}/{BXJGCMSPermissions.BXJGCMSAd}/index.html",
+                                                permissionDependency: new SimplePermissionDependency(BXJGCMSPermissions.BXJGCMSAd)))
+                .AddItem(new MenuItemDefinition(BXJGCMSPermissions.BXJGCMSAdPosition,
+                                                BXJGCMSPermissions.BXJGCMSAdPosition.BXJGCMSL(),
+                                                icon: BXJGCMSPermissions.BXJGCMSAdPosition,
+                                                url: $"/{BXJGCMSPermissions.BXJGCMS}/{BXJGCMSPermissions.BXJGCMSAdPosition}/index.html",
+                                                permissionDependency: new SimplePermissionDependency(BXJGCMSPermissions.BXJGCMSAdPosition)))
+                .AddItem(new MenuItemDefinition(BXJGCMSPermissions.BXJGCMSAdControl,
+                                                BXJGCMSPermissions.BXJGCMSAdControl.BXJGCMSL(),
+                                                icon: BXJGCMSPermissions.BXJGCMSAdControl,
+                                                url: $"/{BXJGCMSPermissions.BXJGCMS}/{BXJGCMSPermissions.BXJGCMSAdControl}/index.html",
+                                                permissionDependency: new SimplePermissionDependency(BXJGCMSPermissions.BXJGCMSAdControl)));
 
             //menu.AddItem(jczl);
             return menu;

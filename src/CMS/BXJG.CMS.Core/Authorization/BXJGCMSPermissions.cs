@@ -8,15 +8,22 @@ namespace BXJG.CMS.Authorization
     public class BXJGCMSPermissions
     {
         public const string BXJGCMS = "BXJGCMS";
-        ////商城专用字典
-        //public const string BXJGCMSDictionary = "BXJGCMSDictionary";
-        //public const string BXJGCMSDictionaryCreate = "BXJGCMSDictionaryCreate";
-        //public const string BXJGCMSDictionaryUpdate = "BXJGCMSDictionaryUpdate";
-        //public const string BXJGCMSDictionaryDelete = "BXJGCMSDictionaryDelete";
-        ////产品信息/上架信息
-        //public const string BXJGCMSItem = "BXJGCMSItem";
-        //public const string BXJGCMSItemCreate = "BXJGCMSItemCreate";
-        //public const string BXJGCMSItemUpdate = "BXJGCMSItemUpdate";
-        //public const string BXJGCMSItemDelete = "BXJGCMSItemDelete";
+        #region 广告
+        //广告
+        public const string BXJGCMSAd = "BXJGCMSAd";
+        public const string BXJGCMSAdCreate = "BXJGCMSAdCreate";
+        public const string BXJGCMSAdUpdate = "BXJGCMSAdUpdate";
+        public const string BXJGCMSAdDelete = "BXJGCMSAdDelete";
+        //广告控件
+        public const string BXJGCMSAdControl = "BXJGCMSAdControl";
+        public const string BXJGCMSAdControlCreate = "BXJGCMSAdControlCreate";
+        public const string BXJGCMSAdControlUpdate = "BXJGCMSAdControlUpdate";
+        public const string BXJGCMSAdControlDelete = "BXJGCMSAdControlDelete";
+        //广告位
+        public const string BXJGCMSAdPosition = "BXJGCMSAdPosition";
+        public const string BXJGCMSAdPositionCreate = "BXJGCMSAdPositionCreate";
+        public const string BXJGCMSAdPositionUpdate = "BXJGCMSAdPositionUpdate";
+        public const string BXJGCMSAdPositionDelete = "BXJGCMSAdPositionDelete";
+        #endregion
     }
 }

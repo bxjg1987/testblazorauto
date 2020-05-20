@@ -27,6 +27,7 @@
     <ProjectReference Include="..\BXJG.File\BXJG.File.csproj" />
     <ProjectReference Include="..\BXJG.GeneralTree\BXJG.GeneralTree.csproj" />
     <ProjectReference Include="..\BXJG.Utils\BXJG.Utils.csproj" />
+    <ProjectReference Include="..\cms\BXJG.CMS.Core\BXJG.CMS.Core.csproj" />
     <ProjectReference Include="..\shop\BXJG.Shop.Core\BXJG.Shop.Core.csproj" />
   </ItemGroup>
 </Project>

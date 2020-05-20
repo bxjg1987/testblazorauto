@@ -1,6 +1,7 @@
 ﻿using Abp.Application.Navigation;
 using Abp.Authorization;
 using Abp.Localization;
+using BXJG.CMS;
 using BXJG.GeneralTree;
 using BXJG.Shop;
 using ZLJ.Authorization;
@@ -33,7 +34,7 @@ namespace ZLJ.Navigation
             //                                    url: "/asset/equipmentInfo/index.html",
             //                                    permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorAssetEquipmentInfo)));
             BXJGShopNavigationProvider.Init(context.Manager.MainMenu);
-
+            BXJGCMSNavigationProvider.Init(context.Manager.MainMenu);
             var jczl = new MenuItemDefinition("BaseInfo",
                                                 L("BaseInfo"),
                                                 icon: "dangan",
