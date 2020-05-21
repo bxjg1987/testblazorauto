@@ -19,6 +19,7 @@ using Abp.Events.Bus.Entities;
 using BXJG.GeneralTree;
 using BXJG.Shop.Common;
 using Abp.Dependency;
+using BXJG.Common;
 
 namespace BXJG.Shop.Sale
 {

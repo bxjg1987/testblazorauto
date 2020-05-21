@@ -2,6 +2,7 @@
 using Abp.Authorization.Users;
 using Abp.MultiTenancy;
 using Abp.Zero.EntityFrameworkCore;
+using BXJG.Common;
 using BXJG.GeneralTree;
 using BXJG.Shop.Common;
 using System;

@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using BXJG.GeneralTree;
 using BXJG.Shop.Common;
+using BXJG.Common;
 
 namespace BXJG.Shop.Customer
 {

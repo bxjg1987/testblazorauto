@@ -3,6 +3,7 @@ using Abp.Authorization.Roles;
 using Abp.Authorization.Users;
 using Abp.Domain.Repositories;
 using Abp.MultiTenancy;
+using BXJG.Common;
 using BXJG.GeneralTree;
 using BXJG.Shop.Common;
 using BXJG.Shop.Customer;

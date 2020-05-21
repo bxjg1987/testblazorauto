@@ -1,6 +1,7 @@
 ﻿using Abp.Authorization.Users;
 using Abp.Domain.Repositories;
 using Abp.Events.Bus.Handlers;
+using BXJG.Common;
 using BXJG.GeneralTree;
 using BXJG.Shop.Common;
 using BXJG.Shop.Customer;

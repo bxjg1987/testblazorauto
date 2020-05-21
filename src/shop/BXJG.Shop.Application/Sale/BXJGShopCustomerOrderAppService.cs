@@ -14,6 +14,7 @@ using System.Linq;
 using BXJG.Shop.Catalogue;
 using BXJG.WeChat.Payment;
 using Abp.Threading;
+using BXJG.Common;
 
 namespace BXJG.Shop.Sale
 {

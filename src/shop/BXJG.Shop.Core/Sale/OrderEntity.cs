@@ -2,6 +2,7 @@
 using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
 using Abp.Events.Bus;
+using BXJG.Common;
 using BXJG.GeneralTree;
 using BXJG.Shop.Catalogue;
 using BXJG.Shop.Common;

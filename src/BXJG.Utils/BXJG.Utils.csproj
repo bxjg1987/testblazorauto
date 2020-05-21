@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Enums\AdministrativeLevel.cs" />
     <Compile Remove="Enums\GetForCombboxType.cs" />
     <Compile Remove="Extensions\StreamExtension.cs" />
   </ItemGroup>

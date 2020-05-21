@@ -29,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\BXJG.Common\BXJG.Common.csproj" />
     <ProjectReference Include="..\..\BXJG.GeneralTree\BXJG.GeneralTree.csproj" />
     <ProjectReference Include="..\..\BXJG.Utils\BXJG.Utils.csproj" />
   </ItemGroup>

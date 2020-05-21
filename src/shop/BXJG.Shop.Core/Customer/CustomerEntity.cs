@@ -1,6 +1,7 @@
 ﻿using Abp.Authorization.Users;
 using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
+using BXJG.Common;
 using BXJG.GeneralTree;
 using BXJG.Shop.Common;
 using BXJG.Shop.Sale;

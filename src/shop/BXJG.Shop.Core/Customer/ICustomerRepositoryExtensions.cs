@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using BXJG.GeneralTree;
 using BXJG.Shop.Common;
+using BXJG.Common;
+
 namespace BXJG.Shop.Customer
 {
     /*

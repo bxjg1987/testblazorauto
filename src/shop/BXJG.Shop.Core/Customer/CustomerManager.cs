@@ -7,6 +7,7 @@ using Abp.Events.Bus;
 using Abp.Events.Bus.Entities;
 using Abp.Events.Bus.Handlers;
 using Abp.Runtime.Session;
+using BXJG.Common;
 using BXJG.GeneralTree;
 using BXJG.Shop.Common;
 using BXJG.Shop.Sale;

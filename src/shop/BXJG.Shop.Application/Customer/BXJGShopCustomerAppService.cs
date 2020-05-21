@@ -17,6 +17,7 @@ using Abp.Extensions;
 using Abp.Application.Services.Dto;
 using Microsoft.EntityFrameworkCore;
 using BXJG.Shop.Common;
+using BXJG.Common;
 
 namespace BXJG.Shop.Customer
 {

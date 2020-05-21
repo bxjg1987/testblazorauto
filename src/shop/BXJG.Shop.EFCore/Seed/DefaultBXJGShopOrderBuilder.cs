@@ -14,6 +14,7 @@ using BXJG.Shop.Sale;
 using BXJG.GeneralTree;
 using BXJG.Shop.Common;
 using BXJG.Shop.Catalogue;
+using BXJG.Common;
 
 namespace BXJG.Shop.Seed
 {

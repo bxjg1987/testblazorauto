@@ -1,4 +1,5 @@
-﻿using BXJG.GeneralTree;
+﻿using BXJG.Common;
+using BXJG.GeneralTree;
 using BXJG.Shop.Common;
 using BXJG.Utils.Enums;
 using System;

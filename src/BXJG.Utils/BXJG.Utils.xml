@@ -32,26 +32,6 @@
             给前端一个机会来设置自己想要的值，注意是否需要本地化调用方来决定
             </summary>
         </member>
-        <member name="T:BXJG.Utils.Enums.AdministrativeLevel">
-            <summary>
-            行政级别
-            </summary>
-        </member>
-        <member name="F:BXJG.Utils.Enums.AdministrativeLevel.Pprovince">
-            <summary>
-            省、直辖市
-            </summary>
-        </member>
-        <member name="F:BXJG.Utils.Enums.AdministrativeLevel.City">
-            <summary>
-            市
-            </summary>
-        </member>
-        <member name="F:BXJG.Utils.Enums.AdministrativeLevel.County">
-            <summary>
-            区县
-            </summary>
-        </member>
         <member name="T:BXJG.Utils.Enums.EnumConfigItem">
             <summary>
             枚举作为下拉框时

@@ -21,6 +21,7 @@ using BXJG.Shop.Customer;
 using Abp.Threading;
 using BXJG.Shop.Catalogue;
 using BXJG.WeChat.Payment;
+using BXJG.Common;
 
 namespace BXJG.Shop.Sale
 {

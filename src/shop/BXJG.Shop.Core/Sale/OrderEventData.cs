@@ -1,5 +1,6 @@
 ﻿using Abp.Authorization.Users;
 using Abp.Events.Bus.Entities;
+using BXJG.Common;
 using BXJG.GeneralTree;
 using BXJG.Shop.Common;
 using System;

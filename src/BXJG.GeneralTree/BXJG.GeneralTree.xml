@@ -276,16 +276,6 @@
             移动到目标节点的相对位置
             </summary>
         </member>
-        <member name="T:BXJG.GeneralTree.IAdministrative">
-            <summary>
-            区域
-            </summary>
-        </member>
-        <member name="P:BXJG.GeneralTree.IAdministrative.Level">
-            <summary>
-            省？市、区、县
-            </summary>
-        </member>
         <member name="T:BXJG.GeneralTree.IGeneralTreeAppService">
             <summary>
             数据字典应用服务接口
