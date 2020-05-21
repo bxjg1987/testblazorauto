@@ -56,7 +56,7 @@ namespace ZLJ.EntityFrameworkCore
                 .ApplyConfiguration(new OrderMap<User, AdministrativeEntity, OrderEntity<User, AdministrativeEntity>>())
                 .ApplyConfiguration(new OrderItemMap<User, AdministrativeEntity, OrderItemEntity<User, AdministrativeEntity>>())
                 .ApplyConfiguration(new ItemMap< ItemEntity>())
-                .ApplyConfigurationBXJGCMS<User>();
+                .ApplyConfigurationBXJGCMS();
         }
     }
 }

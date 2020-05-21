@@ -1,5 +1,4 @@
-﻿using Abp.Domain.Entities;
-using Abp.Domain.Entities.Auditing;
+﻿using Abp.Application.Services.Dto;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,11 +6,15 @@ using System.Text;
 namespace BXJG.CMS.Ad
 {
     /// <summary>
-    /// 广告实体类
+    /// 前端展示广告时使用的模型
+    /// 通常广告接口返回FrontAdRecordDto，它包含广告位、控件和多个FrontAdDto
     /// </summary>
-    public class AdEntity : FullAuditedEntity<long>, IMustHaveTenant
+    public class FrontAdDto : EntityDto<long>
     {
-        public int TenantId { get; set; }
+        /// <summary>
+        /// 广告记录Id
+        /// </summary>
+        public long RecordId { get; set; }
         /// <summary>
         /// 标题
         /// </summary>
@@ -33,5 +36,9 @@ namespace BXJG.CMS.Ad
         /// 点击广告的连接地址
         /// </summary>
         public string Url { get; set; }
+        /// <summary>
+        /// 排序索引
+        /// </summary>
+        public int SortIndex { get; set; }
     }
 }

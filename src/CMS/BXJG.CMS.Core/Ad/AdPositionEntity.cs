@@ -9,7 +9,7 @@ namespace BXJG.CMS.Ad
     /// <summary>
     /// 广告位实体类
     /// </summary>
-    public class AdPositionEntity : FullAuditedEntity, IMustHaveTenant
+    public class AdPositionEntity : FullAuditedEntity<long>, IMustHaveTenant
     {
         public int TenantId { get; set; }
         /// <summary>
