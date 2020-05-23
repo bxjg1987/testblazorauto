@@ -60,6 +60,7 @@ namespace ZLJ
             Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(BXJGUtilsModule).Assembly/*, moduleName: "utils", useConventionalHttpVerbs: true*/);
             Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(GeneralTreeModule).Assembly);
             Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(BXJGShopApplicationModule).Assembly/*,"bxjgshop"*/);//试过 这里用前者没啥鸟用，abp是已实现类所在程序的前缀，默认还是app
+            Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(BXJGCMSApplicationModule).Assembly);
 
             ConfigureTokenAuth();
 

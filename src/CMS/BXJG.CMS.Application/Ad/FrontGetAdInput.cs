@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace BXJG.CMS.Ad
@@ -9,6 +10,10 @@ namespace BXJG.CMS.Ad
     /// </summary>
     public class FrontGetAdInput
     {
-
+        /// <summary>
+        /// 广告位
+        /// </summary>
+        [Required]
+        public long PositionId { get; set; }
     }
 }

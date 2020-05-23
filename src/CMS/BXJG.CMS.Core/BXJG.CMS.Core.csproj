@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Ad\AdControlEqualityComparer.cs" />
     <Compile Remove="Configuration\BXJGCMSAppSettingProvider.cs" />
   </ItemGroup>
 

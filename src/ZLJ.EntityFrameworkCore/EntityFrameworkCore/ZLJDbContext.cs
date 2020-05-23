@@ -27,6 +27,8 @@ namespace ZLJ.EntityFrameworkCore
         public virtual DbSet<EquipmentInfoEntity> EquipmentInfos { get; set; }
         public virtual DbSet<AdministrativeEntity> Administratives { get; set; }
 
+        //后期考虑实现动态DbSet简化实体注册
+
         #region 注册商城模块中的实体
         public virtual DbSet<BXJGShopDictionaryEntity> BXJGShopDictionaries { get; set; }
         public virtual DbSet<ItemEntity> BXJGShopItems { get; set; }
@@ -36,8 +38,9 @@ namespace ZLJ.EntityFrameworkCore
 
         #region CMS
         public virtual DbSet<AdEntity> BXJGCMSAds { get; set; }
-        public virtual DbSet<AdControlEntity> BXJGCMSControls { get; set; }
-        public virtual DbSet<AdPositionEntity> BXJGCMSPositions { get; set; }
+        public virtual DbSet<AdControlEntity> BXJGCMSAdControls { get; set; }
+        public virtual DbSet<AdPositionEntity> BXJGCMSAdPositions { get; set; }
+        public virtual DbSet<AdRecordEntity> BXJGCMSAdRecords { get; set; }
         #endregion
 
         public ZLJDbContext(DbContextOptions<ZLJDbContext> options)
