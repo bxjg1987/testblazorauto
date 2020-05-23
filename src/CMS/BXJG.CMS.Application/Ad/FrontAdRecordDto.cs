@@ -5,42 +5,40 @@ using System.Text;
 
 namespace BXJG.CMS.Ad
 {
-    public class FrontAdPositionDto
+    public class FrontAdPositionDto:EntityDto<long>
     {
-        public long     AdPositionId { get; set; }
-    
-        public int      AdPositionWidth { get; set; }
-      
-        public int      AdPositionHeight { get; set; }
-     
+        public int Width { get; set; }
+
+        public int Height { get; set; }
+
         public List<FrontAdControlDto> Controls { get; set; }
     }
 
-    public class FrontAdControlDto 
+    public class FrontAdControlDto : EntityDto<long>
     {
-        public long AdControlId { get; set; }
-   
+        //public long AdControlId { get; set; }
+
         public AdControlType AdControlType { get; set; }
-    
+
         public dynamic ExtensionData { get; set; }
-        
-        public List<FrontAdDto> Ads { get; set; }
+
+        public List<FrontAdRecordDto> Ads { get; set; }
     }
-    
-    public class FrontAdDto 
+
+    public class FrontAdRecordDto
     {
-        public long RecordId { get; set; }
-        
+        public long Id { get; set; }
+
         public long AdId { get; set; }
 
-        public string Title { get; set; }
-        
-        public AdType AdType { get; set; }
-        
-        public string Content { get; set; }
-        
-        public string Url { get; set; }
-        
-        public int SortIndex { get; set; }
+        public string AdTitle { get; set; }
+
+        public AdType AdAdType { get; set; }
+
+        public string AdContent { get; set; }
+
+        public string AdUrl { get; set; }
+
+        public int AdSortIndex { get; set; }
     }
 }

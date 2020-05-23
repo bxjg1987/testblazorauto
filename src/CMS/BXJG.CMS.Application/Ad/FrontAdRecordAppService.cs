@@ -29,10 +29,10 @@ namespace BXJG.CMS.Ad
                 .ToListAsync();
 
             var position = ObjectMapper.Map<FrontAdPositionDto>(ads.First().AdPosition);
-            position.Controls = ObjectMapper.Map<List<FrontAdControlDto>>(ads.Select(c => c.AdControl).Distinct());
+            position.Controls = ObjectMapper.Map<List<FrontAdControlDto>>(ads.Select(c => c.AdControl).Distinct().ToList());
             foreach (var item in position.Controls)
             {
-                item.Ads = ObjectMapper.Map<List<FrontAdDto>>(ads.Select(c => c.AdControlId == item.AdControlId));
+                item.Ads = ObjectMapper.Map<List<FrontAdRecordDto>>(ads.Where(c => c.AdControlId == item.Id));
             }
             return position;
         }
