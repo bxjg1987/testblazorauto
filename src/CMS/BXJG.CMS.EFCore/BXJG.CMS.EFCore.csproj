@@ -6,9 +6,12 @@
 
   <ItemGroup>
     <PackageReference Include="Abp" Version="5.7.0" />
+    <PackageReference Include="Abp.ZeroCore" Version="5.7.0" />
+    <PackageReference Include="Abp.ZeroCore.EntityFrameworkCore" Version="5.7.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\BXJG.Common\BXJG.Common.csproj" />
     <ProjectReference Include="..\..\BXJG.GeneralTree\BXJG.GeneralTree.csproj" />
     <ProjectReference Include="..\BXJG.CMS.Core\BXJG.CMS.Core.csproj" />
   </ItemGroup>

@@ -12,6 +12,7 @@ using ZLJ.MultiTenancy;
 using ZLJ.Authorization.Roles;
 using ZLJ.Authorization.Users;
 using ZLJ.Administrative;
+using BXJG.CMS.EFCore.Seed;
 
 namespace ZLJ.EntityFrameworkCore.Seed
 {
@@ -36,10 +37,11 @@ namespace ZLJ.EntityFrameworkCore.Seed
             new DefaultOrganizationUnit(context, 1).Create();
             new DefaultDataDictionaryBuilder(context, 1).Create();
             new DefaultAdministrativeBuilder(context, 1).Create();
-            
 
             //默认商城数据迁移
             new DefaultBXJGShopBuilder<Tenant, Role, User, ZLJDbContext, AdministrativeEntity>(context, 1).Create();
+            //cms演示数据
+            new DefaultBXJGCMSBuilder<Tenant, Role, User, ZLJDbContext>(context, 1).Create();
         }
 
         private static void WithDbContext<TDbContext>(IIocResolver iocResolver, Action<TDbContext> contextAction)

@@ -1,0 +1,126 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>BXJG.CMS.Application</name>
+    </assembly>
+    <members>
+        <member name="T:BXJG.CMS.Ad.AdPositionDto">
+            <summary>
+            后台对广告位进行管理时使用的广告位Dto
+            </summary>
+        </member>
+        <member name="T:BXJG.CMS.Ad.BXJGCMSFrontAdRecordAppService">
+            <summary>
+            前台暂时广告时通过此接口来查询广告列表
+            </summary>
+        </member>
+        <member name="M:BXJG.CMS.Ad.BXJGCMSFrontAdRecordAppService.GetAllAsync(BXJG.CMS.Ad.FrontGetAdInput)">
+            <summary>
+            获取指定广告位中，已发布且在发布时间范围内的广告
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="T:BXJG.CMS.Ad.FrontAdPositionControlEntityDto">
+            <summary>
+            前端查询广告时使用的模型
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Ad.FrontAdPositionControlEntityDto.AdPositionId">
+            <summary>
+            广告位Id
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Ad.FrontAdPositionControlEntityDto.AdPositionWidth">
+            <summary>
+            广告位宽度
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Ad.FrontAdPositionControlEntityDto.AdPositionHeight">
+            <summary>
+            广告位高度
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Ad.FrontAdPositionControlEntityDto.AdControlId">
+            <summary>
+            控件Id
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Ad.FrontAdPositionControlEntityDto.AdControlAdControlType">
+            <summary>
+            控件类型
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Ad.FrontAdPositionControlEntityDto.AdControlExtensionData">
+            <summary>
+            控件参数
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Ad.FrontAdPositionControlEntityDto.Ads">
+            <summary>
+            包含的广告列表
+            </summary>
+        </member>
+        <member name="T:BXJG.CMS.Ad.FrontAdRecordDto">
+            <summary>
+            前端查询广告时的广告明细
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Ad.FrontAdRecordDto.Id">
+            <summary>
+            广告发布记录的Id
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Ad.FrontAdRecordDto.AdId">
+            <summary>
+            广告Id
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Ad.FrontAdRecordDto.AdTitle">
+            <summary>
+            广告标题
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Ad.FrontAdRecordDto.AdAdType">
+            <summary>
+            广告类型
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Ad.FrontAdRecordDto.AdContent">
+            <summary>
+            广告内容，不同类型的广告、内容表现不同
+            比如图片类型的广告，则内容为图片地址；html类型的广告内容为Html代码
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Ad.FrontAdRecordDto.AdUrl">
+            <summary>
+            点击广告后的连接地址
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Ad.FrontAdRecordDto.AdSortIndex">
+            <summary>
+            多个广告的排序索引
+            </summary>
+        </member>
+        <member name="T:BXJG.CMS.Ad.FrontGetAdInput">
+            <summary>
+            前端查询广告时提供的参数
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Ad.FrontGetAdInput.PositionId">
+            <summary>
+            广告位
+            </summary>
+        </member>
+        <member name="T:BXJG.CMS.Ad.IBXJGCMSFrontAdRecordAppService">
+            <summary>
+            前台暂时广告时通过此接口来查询广告列表
+            </summary>
+        </member>
+        <member name="T:BXJG.CMS.BXJGCMSAppServiceBase`5">
+            <summary>
+            Derive your application services from this class.
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -40,12 +40,12 @@ namespace BXJG.CMS.Ad
                 .ToListAsync();
 
             //应该在广告发布时去限制同一广告位不能同时发布多种广告控件的广告，注意处理并发问题（无法使用数据库乐观并发，考虑lock或分布式锁）
-            if (ads.Select(c => c.AdControl).Count() > 1)
-                throw new ApplicationException(L("同一广告位不能同时显示多种控件的广告！"));
+            //if (ads.Select(c => c.AdControl).Distinct().Count() > 1)
+            //    throw new ApplicationException(L("同一广告位不能同时显示多种控件的广告！"));
 
             var position = ObjectMapper.Map<FrontAdPositionControlEntityDto>(ads.First());
 
-            position.Ads = ObjectMapper.Map<List<FrontAdRecordDto>>(ads.Where(c => c.AdPositionId == input.PositionId));
+            position.Ads = ObjectMapper.Map<List<FrontAdRecordDto>>(ads);
 
             return position;
         }

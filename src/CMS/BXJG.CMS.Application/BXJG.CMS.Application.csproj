@@ -5,6 +5,10 @@
     <RootNamespace>BXJG.CMS</RootNamespace>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>e:\abp\src\cms\BXJG.CMS.Application\BXJG.CMS.Application.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Abp.AutoMapper" Version="5.7.0" />
     <PackageReference Include="Abp.ZeroCore" Version="5.7.0" />
