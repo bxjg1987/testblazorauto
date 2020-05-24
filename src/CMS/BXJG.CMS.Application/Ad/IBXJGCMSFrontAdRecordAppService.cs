@@ -9,8 +9,8 @@ namespace BXJG.CMS.Ad
     /// <summary>
     /// 前台暂时广告时通过此接口来查询广告列表
     /// </summary>
-    public interface IFrontAdRecordAppService : IApplicationService
+    public interface IBXJGCMSFrontAdRecordAppService : IApplicationService
     {
-        Task<FrontAdPositionDto> GetAllAsync(FrontGetAdInput input);
+        Task<FrontAdPositionControlEntityDto> GetAllAsync(FrontGetAdInput input);
     }
 }

@@ -9,7 +9,7 @@ namespace BXJG.CMS.Ad
     /// <summary>
     /// 已经或即将发布的广告，建立广告、控件、广告位之间的多对多关系
     /// </summary>
-    public class AdRecordEntity : FullAuditedEntity<long>, IMustHaveTenant
+    public class AdRecordEntity : FullAuditedEntity<long>, IMustHaveTenant 
     {
         public int TenantId { get; set; }
         /// <summary>
