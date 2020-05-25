@@ -64,7 +64,7 @@ namespace BXJG.Shop.Catalogue
             //await repository.EnsurePropertyLoadedAsync(entity, c => c.Category);
             //await repository.EnsurePropertyLoadedAsync(entity, c => c.Brand);
 
-             entity = await repository.GetAllIncluding(c => c.Category, c => c.Brand).SingleAsync(c=>c.Id==entity.Id);
+            entity = await repository.GetAllIncluding(c => c.Category, c => c.Brand).SingleAsync(c => c.Id == entity.Id);
             return ObjectMapper.Map<ItemDto>(entity);
         }
 
@@ -110,6 +110,6 @@ namespace BXJG.Shop.Catalogue
             return ObjectMapper.Map<ItemDto>(entity);
         }
 
-       
+
     }
 }

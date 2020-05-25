@@ -107,7 +107,8 @@
             }
             return data;
         };
-        //$.fn.combobox.defaults.textField = 'displayText';
+        $.fn.combobox.defaults.valueField = 'value';
+        $.fn.combobox.defaults.textField = 'displayText';
     }
     if ($.fn.combogrid) {
         $.fn.combogrid.defaults.width = '100%';

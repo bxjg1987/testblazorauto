@@ -509,7 +509,6 @@
             <summary>
             商品上架信息应用服务
             </summary>
-            <typeparam name="TTree"></typeparam>
         </member>
         <member name="M:BXJG.Shop.Catalogue.IBXJGShopItemAppService.CreateAsync(BXJG.Shop.Catalogue.ItemCreateDto)">
             <summary>

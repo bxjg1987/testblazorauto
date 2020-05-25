@@ -1,102 +1,131 @@
 ﻿<form id="frmBXJGShopItem" class="frm-container">
     <input type="hidden" name="id" value="0" />
-    <table class="frm-box column3">
+    <table class="frm-box">
         <tr>
             <th>名称</th>
-            <td colspan="5"><input name="title" class="easyui-textbox" data-options="width:750, required:true, validType:'length[1,100]'" /></td>
+            <td colspan="5">
+                <input name="title" class="easyui-textbox" data-options="width:820, required:true, validType:'length[1,100]',prompt:'简短、准确的商品标题...'" />
+            </td>
         </tr>
         <tr>
             <th>类别</th>
             <td>
-                <input name="categoryId" class="easyui-combobox"
-                       valueField='value'
-                       textField='displayText'
+                <input name="categoryId" class="easyui-combotree"
                        data-options="
-                       width:'100%',
-                       url:abp.appPath+'api/services/app/BXJGShopDictionary/GetNodesForSelect',
-                       queryParams: { forType: 4,ParentId:1,ParentText1:'请选择类别' }" />
+                       url:abp.appPath+'api/services/app/BXJGShopDictionary/GettreeForSelect',
+                       queryParams: { forType: 4,ParentId:1 }" />
             </td>
             <th>助记码</th>
-            <td><input name="mnemonicCode" class="easyui-textbox" data-options="validType:'length[0,100]'" /></td>
+            <td><input name="mnemonicCode" class="easyui-textbox" data-options="validType:'length[0,100]',prompt:'通常为拼音简码...'" /></td>
             <th>SKU</th>
-            <td><input name="sku" class="easyui-textbox" data-options="validType:'length[0,100]'" /></td>
+            <td><input name="sku" class="easyui-textbox easyui-tooltip" data-options="validType:'length[0,100]'" /></td>
         </tr>
         <tr>
-            <th>类别</th>
+            <th>品牌</th>
             <td>
                 <input name="brandId" class="easyui-combobox"
-                       valueField='value'
-                       textField='displayText'
                        data-options="
                        url:abp.appPath+'api/services/app/BXJGShopDictionary/GetNodesForSelect',
-                       queryParams: { forType: 4,ParentId:2,ParentText1:'请选择类别' }" />
+                       queryParams: { forType: 4,ParentId:2 }" />
             </td>
             <th>原价</th>
             <td><input name="oldPrice" class="easyui-numberspinner" data-options="prefix:'￥',precision:1,value:0" /></td>
             <th>现价</th>
-            <td><input name="price" class="easyui-numberspinner" data-options="prefix:'￥',precision:1,value:0" /></td>
+            <td><input name="price" class="easyui-numberspinner" data-options="required:true,prefix:'￥',precision:1,value:0" /></td>
         </tr>
         <tr>
-            <th>计价单位</th>
+            <th>单位</th>
             <td>
-                <input name="sku" class="easyui-combobox"
-                       valueField='value'
-                       textField='displayText'
+                <input name="unitId" class="easyui-combobox"
                        data-options="
                        url:abp.appPath+'api/services/app/BXJGShopDictionary/GetNodesForSelect',
-                       queryParams: { forType: 4,ParentId:12,ParentText:'请选择单位'}" />
+                       queryParams: { forType: 4,ParentId:5}" />
             </td>
-            <th>计价单位</th>
-            <td></td>
+            <th>积分</th>
+            <td><input name="integral" class="easyui-numberspinner" data-options="value:0" /></td>
+
 
 
             <!--<th>是否热卖</th>
-    <td>
-        <select class="easyui-combobox" id="new" name="new">
-            <option value="true">是</option>
-            <option value="false">否</option>
-        </select>
-    </td>-->
-            <!--<th>品牌</th>
-    <td>
-        <input name="brandId" class="easyui-combobox "
-               valueField= 'value'
-               textField= 'displayText'
-               data-options="
-               url:abp.appPath+'api/services/app/BXJGShopDictionary/GetNodesForSelect',
-               queryParams: { forType: 4,ParentId:5}" />
-    </td>-->
-            <!--<th>供应商</th>
-    <td>
-        <select class="easyui-combogrid" name="supplierId"
-                data-options="
-                        panelWidth:700,
-                        idField:'id',
-                        textField:'name',
-                        prompt:'请选择(支持按名称/联系人/手机号/地址等模糊查询)',
-                        url:'/api/services/app/btype/GetForSelect',
-                        queryParams1: { forType: 2,id:71},
-                        delay: 500,
-                        mode: 'remote',
-                        pagination:true,
-                        columns:[[
-                            {field:'name',title:'名称',width:200},
-                            {field:'contact',title:'联系人',width:100},
-                            {field:'cellphone',title:'联系电话',width:100},
-                            {field:'areaText',title:'区域',width:100},
-                            {field:'industryText',title:'行业',width:100},
-                            {field:'address',title:'地址',width:100},
-                            {field:'remark',title:'备注',width:100}
-                        ]]
-                    "></select>
-    </td>-->
-            <th>计价单位</th> <td></td>
-            </tr>
-            <!--<tr>
-        <th class="top">附件</th>
-        <td colspan="3" class="attachment" style="height:260px;"></td>
-    </tr>-->
-</table>
+        <td>
+            <select class="easyui-combobox" id="new" name="new">
+                <option value="true">是</option>
+                <option value="false">否</option>
+            </select>
+        </td>
+               <th>品牌</th>
+        <td>
+            <input name="brandId" class="easyui-combobox "
+                   valueField= 'value'
+                   textField= 'displayText'
+                   data-options="
+                   url:abp.appPath+'api/services/app/BXJGShopDictionary/GetNodesForSelect',
+                   queryParams: { forType: 4,ParentId:5}" />
+        </td>
+               <th>供应商</th>
+        <td>
+            <select class="easyui-combogrid" name="supplierId"
+                    data-options="
+                            panelWidth:700,
+                            idField:'id',
+                            textField:'name',
+                            prompt:'请选择(支持按名称/联系人/手机号/地址等模糊查询)',
+                            url:'/api/services/app/btype/GetForSelect',
+                            queryParams1: { forType: 2,id:71},
+                            delay: 500,
+                            mode: 'remote',
+                            pagination:true,
+                            columns:[[
+                                {field:'name',title:'名称',width:200},
+                                {field:'contact',title:'联系人',width:100},
+                                {field:'cellphone',title:'联系电话',width:100},
+                                {field:'areaText',title:'区域',width:100},
+                                {field:'industryText',title:'行业',width:100},
+                                {field:'address',title:'地址',width:100},
+                                {field:'remark',title:'备注',width:100}
+                            ]]
+                        "></select>
+        </td>-->
+            <th>xx</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>热卖</th>
+            <td><input class="easyui-switchbutton" data-options="onText:'Yes',offText:'No'"></td>
+            <th>新品</th>
+            <td><input class="easyui-switchbutton" data-options="onText:'Yes',offText:'No'"></td>
+            <th>首页显示</th>
+            <td><input class="easyui-switchbutton" data-options="onText:'Yes',offText:'No'"></td>
+        </tr>
+        <tr>
+            <th>发布</th>
+            <td><input class="easyui-switchbutton" data-options="onText:'Yes',offText:'No'"></td>
+            <th>发布开始时间</th>
+            <td><input class="easyui-datetimebox" name="availableStart" data-options="showSeconds1:false"></td>
+            <th>发布结束时间</th>
+            <td><input class="easyui-datetimebox" name="availableEnd" data-options="showSeconds1:true"></td>
+        </tr>
+
+        <tr>
+            <th class="top">封面图片</th>
+            <td colspan="5" id="frmBXJGShopItemUploader" style="height:200px; padding:7px 0;">
+                <div id="frmBXJGShopItemUploaderPicker">选择图片</div>
+                <div id="frmBXJGShopItemUploaderImgs" style="height:170px; background-color:#f5f5f5; text-align:center; line-height:170px; color:#aaa;">
+                    图片预览区...
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th>简短描述</th>
+            <td colspan="5"><input name="descriptionShort" class="easyui-textbox" data-options="width:820, validType:'length[1,100]',prompt:'显示在标题下方的商品简短描述信息...'" /></td>
+        </tr>
+        <tr>
+            <th class="top">详细描述</th>
+            <td colspan="5" style="padding-top:7px;">
+                <input name="descriptionFull" class="easyui-textbox" data-options="multiline:true, height:600, width:820, validType:'length[1,100]'" />
+            </td>
+        </tr>
+    </table>
 </form>
 <script>
     (function () {
@@ -205,5 +234,28 @@
             if (f)
                 f();
         }
+
+        let uploader = WebUploader.create({
+
+            // 选完文件后，是否自动上传。
+            auto: true,
+
+            // swf文件路径
+            swf: '/lib/webuploader-0.1.5/Uploader.swf',
+
+            // 文件接收服务端。
+            server: abp.appPath+ 'api/file/upload',
+
+            // 选择文件的按钮。可选。
+            // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+            pick: '#frmBXJGShopItemUploaderPicker',
+
+            // 只允许选择图片文件。
+            accept: {
+                title: 'Images',
+                extensions: 'gif,jpg,jpeg,bmp,png',
+                mimeTypes: 'image/*'
+            }
+        });
     })();
 </script>
