@@ -80,7 +80,9 @@ a.c-trans1:hover .m-btn-downarrow, a.c-trans1:hover .s-btn-downarrow {
 
 #main_menu_container {
 }
-
+.sidemenu .accordion {
+background-color:none;
+}
 .sidemenu .accordion .panel-title {
     color: #b8c7ce;
     margin-left: 5px;
