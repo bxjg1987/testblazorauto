@@ -1,0 +1,13 @@
+﻿.jqImageUploader-container {
+    height:200px;
+}
+.jqImageUploader-picker {
+
+}
+.jqImageUploader-images {
+    height: 170px;
+    background-color: #f5f5f5;
+    text-align: center;
+    line-height: 170px;
+    color: #aaa;
+}

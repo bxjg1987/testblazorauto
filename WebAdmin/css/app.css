@@ -80,40 +80,42 @@ a.c-trans1:hover .m-btn-downarrow, a.c-trans1:hover .s-btn-downarrow {
 
 #main_menu_container {
 }
+
 .sidemenu .accordion {
-background:none;
-}
-.sidemenu .accordion .panel-title {
-    color: #b8c7ce;
-    margin-left: 5px;
-    font-weight: normal;
+    background: none;
 }
 
-.sidemenu .accordion .accordion-header {
-    background: #012941;
-    color: #b8c7ce;
-}
+    .sidemenu .accordion .panel-title {
+        color: #b8c7ce;
+        margin-left: 5px;
+        font-weight: normal;
+    }
 
-.sidemenu .accordion .accordion-body {
-    background: #001321;
-    color: #8aa4af;
-}
+    .sidemenu .accordion .accordion-header {
+        background: #012941;
+        color: #b8c7ce;
+    }
 
-.sidemenu .accordion .accordion-header-selected {
-    background: #164456;
-}
+    .sidemenu .accordion .accordion-body {
+        background: #001321;
+        color: #8aa4af;
+    }
 
-.sidemenu .accordion .accordion-header .panel-title:hover {
-    color: #e3e3e3;
-}
+    .sidemenu .accordion .accordion-header-selected {
+        background: #164456;
+    }
 
-.sidemenu .accordion .accordion-header-selected .panel-title {
-    color: #dedede;
-}
+    .sidemenu .accordion .accordion-header .panel-title:hover {
+        color: #e3e3e3;
+    }
 
-.sidemenu .accordion .accordion-collapse {
-    background: transparent;
-}
+    .sidemenu .accordion .accordion-header-selected .panel-title {
+        color: #dedede;
+    }
+
+    .sidemenu .accordion .accordion-collapse {
+        background: transparent;
+    }
 
 .sidemenu .tree-title {
     margin-left: 5px;
@@ -196,15 +198,15 @@ background:none;
 #main_tabs > .tabs-header {
     background-color: #fff;
 }
-/*主tab中的单个按钮样式*/
-#main_tabs > .tabs-header a.tabs-inner {
-    border-bottom: 1px solid #e3e3e3;
-    background-color: #fff;
-}
-/*当前选择的tab按钮样式*/
-#main_tabs > .tabs-header li.tabs-selected a.tabs-inner {
-    background-color: #e3e3e3;
-}
+    /*主tab中的单个按钮样式*/
+    #main_tabs > .tabs-header a.tabs-inner {
+        border-bottom: 1px solid #e3e3e3;
+        background-color: #fff;
+    }
+    /*当前选择的tab按钮样式*/
+    #main_tabs > .tabs-header li.tabs-selected a.tabs-inner {
+        background-color: #e3e3e3;
+    }
 
 #main_tabs > .tabs-panels > .panel > .panel-body {
     background-color: #e3e3e3;
@@ -216,9 +218,9 @@ background:none;
     margin-left: 30px;
 }
 
-#main_tabs > .tabs-header .tabs-first:first-of-type .tabs-with-icon {
-    padding-left: 13px;
-}
+    #main_tabs > .tabs-header .tabs-first:first-of-type .tabs-with-icon {
+        padding-left: 13px;
+    }
 
 #main_tabs > .tabs-header .tabs-scroller-left {
     left: 30px;
@@ -262,55 +264,55 @@ background:none;
     margin: 0;
 }
 
-.form-container .row {
-    min-height: 35px;
-    min-width: 315px;
-    margin: 4px 0;
-    float: left; /*考虑用流布局*/
-}
+    .form-container .row {
+        min-height: 35px;
+        min-width: 315px;
+        margin: 4px 0;
+        float: left; /*考虑用流布局*/
+    }
 
-.form-container .row:first-child {
-    padding-top1: 0;
-}
+        .form-container .row:first-child {
+            padding-top1: 0;
+        }
 
-.form-container .row > div:first-child, .form-container .row > label:first-child {
-    display: inline-block;
-    width: 8rem;
-    text-align: right;
-    margin-right: 8px;
-}
+        .form-container .row > div:first-child, .form-container .row > label:first-child {
+            display: inline-block;
+            width: 8rem;
+            text-align: right;
+            margin-right: 8px;
+        }
 
-.form-container .row > div:first-child {
-}
+        .form-container .row > div:first-child {
+        }
 
-.form-container .row > div:first-child i {
-    position: relative;
-    top: 3px;
-    right: 5px;
-    color: red;
-}
+            .form-container .row > div:first-child i {
+                position: relative;
+                top: 3px;
+                right: 5px;
+                color: red;
+            }
 
-.form-container .row > div:first-child label {
-    width: auto;
-    margin-right: 0;
-}
+            .form-container .row > div:first-child label {
+                width: auto;
+                margin-right: 0;
+            }
 
-.form-container .row label {
-    line-height: 35px;
-    display: inline-block;
-    border1: 1px solid red;
-}
+        .form-container .row label {
+            line-height: 35px;
+            display: inline-block;
+            border1: 1px solid red;
+        }
 
-.form-container .row > label:first-child {
-}
+        .form-container .row > label:first-child {
+        }
 
-.form-container .input1 {
-    width: 170px;
-}
+    .form-container .input1 {
+        width: 170px;
+    }
 
-.form-container .ck {
-    margin-top: 0.5rem;
-}
+    .form-container .ck {
+        margin-top: 0.5rem;
+    }
 
 .easyui-searchbox {
     width: 18rem;
@@ -354,7 +356,7 @@ background:none;
     padding: 8px;
     overflow: hidden;
 }
-    /*.datagrid-toolbar1 > a.l-btn {
+/*.datagrid-toolbar1 > a.l-btn {
         margin-right:5px;
     }*/
 
@@ -367,16 +369,16 @@ background:none;
 
 /*基于table的表单样式开始------------------*/
 form.frm-container {
-   display:block;
+    display: block;
 }
 
 table.frm-box {
-    width1:94%;
-    margin:20px auto;
+    width1: 94%;
+    margin: 20px auto;
     border-collapse: collapse;
 }
 
-    /*fieldset {
+/*fieldset {
     width: 94%;
     margin: 0 auto;
     margin-top: 10px;
@@ -392,16 +394,16 @@ fieldset .frm-box {
     height: 40px;
     font-weight: normal;
     text-align: right;
-    padding:0 10px 0 15px;
+    padding: 0 10px 0 15px;
     position: relative;
 }
 
-.frm-box > tbody > tr > th i {
-    position: relative;
-    right: 5px;
-    top: 3px;
-    color: red;
-}
+    .frm-box > tbody > tr > th i {
+        position: relative;
+        right: 5px;
+        top: 3px;
+        color: red;
+    }
 
 
 .frm-box > tbody > tr > td {
@@ -424,12 +426,46 @@ span.checkbox-item {
 
 /*附件*/
 .attachment {
-
 }
 
 /*重写easyui样式*/
 .datagrid-row-selected {
     background-color: #ddd;
-    color:#000;
+    color: #000;
 }
 
+/*图片上传*/
+.imgUploader-container {
+    height: 230px;
+}
+
+.imgUploader-images {
+    height: 200px;
+    background-color: #f5f5f5;
+    text-align: center;
+    color: #aaa;
+    padding:10px;
+}
+
+.imgUploader-img-container {
+    height: 180px;
+    width: 150px;
+    float: left;
+    margin-right: 10px;
+    position: relative;
+    border:solid 1px #ccc;
+}
+    .imgUploader-img-container a {
+        position: absolute;
+        right: -5px;
+        top: -5px;
+        background-color: red;
+        border-radius: 50%;
+        color: #fff;
+        display:block;
+        padding: 1px 5px;
+    }
+    .imgUploader-img-container img {
+        width: 100%;
+        height: 100%;
+    }
