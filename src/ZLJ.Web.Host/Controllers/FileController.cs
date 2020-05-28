@@ -40,10 +40,10 @@ namespace ZLJ.Controllers
 
         [HttpPost]
         [AbpAuthorize]
-        public async Task<List< FileUploadResult> > UploadAsync(IFormFileCollection files)
+        public async Task<List< FileUploadResult> > UploadAsync(IFormFileCollection file)
         {
             var rts = new List<FileUploadResult>();
-            foreach (var item in files)
+            foreach (var item in file)
             {
                 //此处需要对文件做各种检查  依赖abp的特征或设置系统
                 

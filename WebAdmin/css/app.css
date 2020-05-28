@@ -436,15 +436,16 @@ span.checkbox-item {
 
 /*图片上传*/
 .imgUploader-container {
-    height: 230px;
+   min-height: 230px;
 }
 
 .imgUploader-images {
-    height: 200px;
+    height1: 200px;
     background-color: #f5f5f5;
     text-align: center;
     color: #aaa;
-    padding:10px;
+    overflow: hidden;
+    padding: 10px;
 }
 
 .imgUploader-img-container {
@@ -454,6 +455,7 @@ span.checkbox-item {
     margin-right: 10px;
     position: relative;
     border:solid 1px #ccc;
+    margin:0,10px 10px 0;
 }
     .imgUploader-img-container a {
         position: absolute;
@@ -464,6 +466,7 @@ span.checkbox-item {
         color: #fff;
         display:block;
         padding: 1px 5px;
+        cursor:pointer;
     }
     .imgUploader-img-container img {
         width: 100%;

@@ -91,15 +91,15 @@
         </tr>
         <tr>
             <th>热卖</th>
-            <td><input class="easyui-switchbutton" data-options="onText:'Yes',offText:'No'"></td>
+            <td> <input class="easyui-checkbox" name="hot" value="true"></td>
             <th>新品</th>
-            <td><input class="easyui-switchbutton" data-options="onText:'Yes',offText:'No'"></td>
+            <td><input class="easyui-checkbox" name="new" ></td>
             <th>首页显示</th>
-            <td><input class="easyui-switchbutton" data-options="onText:'Yes',offText:'No'"></td>
+            <td><input class="easyui-checkbox" name="home" ></td>
         </tr>
         <tr>
             <th>发布</th>
-            <td><input class="easyui-switchbutton" data-options="onText:'Yes',offText:'No'"></td>
+            <td><input class="easyui-checkbox" name="published"></td>
             <th>发布开始时间</th>
             <td><input class="easyui-datetimebox" name="availableStart" data-options="showSeconds1:false"></td>
             <th>发布结束时间</th>
@@ -113,15 +113,15 @@
                 <div class="imgUploader-images">
                     <!--图片预览区，支持拖拽、截图粘贴...-->
                     <div class="imgUploader-img-container">
-                        <a>×</a>
+                        <a href="javascript:void(0);">×</a>
                         <img src="http://demo.dtcms.net/upload/201504/20/thumb_201504200119256512.jpg" />
                     </div>
                     <div class="imgUploader-img-container">
-                        <a>×</a>
+                        <a href="javascript:void(0);">×</a>
                         <img src="http://demo.dtcms.net/upload/201504/20/thumb_201504200314272543.jpg" />
                     </div>
                     <div class="imgUploader-img-container">
-                        <a>×</a>
+                        <a href="javascript:void(0);">×</a>
                         <img src="http://demo.dtcms.net/upload/201504/20/thumb_201504200119256512.jpg" />
                     </div>
                 </div>
@@ -152,6 +152,8 @@
         let $cls = $frm.find('[name="categoryId"]');
         let $brand = $frm.find('[name="brand"]');
         let $unit = $frm.find('[name="unit"]');
+        let $uploader = $('#frmBXJGShopItemUploader');
+        let $uploaderImages = $uploader.find('.imgUploader-images');
         //let attachment = $frm.find('.attachment');
 
         //attachment.jqEasyuiWebuploader(abp.file.buildJQUOA('BXJGShopItem', 'Administrator.Asset.BXJGShopItem.Create', 'Administrator.Asset.BXJGShopItem'));
@@ -249,6 +251,8 @@
                 f();
         }
 
+
+        //图片上传开始-------------------------------------
         let uploader = WebUploader.create({
 
             // 选完文件后，是否自动上传。
@@ -271,6 +275,34 @@
                 mimeTypes: 'image/*'
             }
         });
+        uploader.on('uploadSuccess', function (file,response) {
+            file.filePath = response.result[0];
+        });
+        uploader.on('fileQueued', function (file) {
+
+
+            let $box = $('<div class="imgUploader-img-container">').appendTo($uploaderImages);
+            let $a = $('<a>×</a>').appendTo($box);
+            let $img = $('<img />').appendTo($box);
+
+            $a.on('click', function () {
+                $box.remove();
+            });
+
+            uploader.makeThumb( file, function( error, src ) {
+                if ( error ) {
+                    $img.replaceWith('<span>不能预览</span>');
+                    return;
+                }
+
+                $img.attr( 'src', src );
+            } );
+        });
+        uploader.on('uploadBeforeSend', function (obj, data, headers) {
+           headers.Authorization = "Bearer " + abp.getCurrentJWTToken();
+        });
+        //图片上传结束-------------------------------------
+
 
         var E = window.wangEditor
         var editor = new E('#bxjgShopItemEditor')
