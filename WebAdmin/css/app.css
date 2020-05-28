@@ -472,3 +472,20 @@ span.checkbox-item {
         width: 100%;
         height: 100%;
     }
+    .imgUploader-img-container i {
+        position: absolute;
+        bottom: 0;
+        display: block;
+        text-align: center;
+        width:100%;
+        height:1.5rem;
+        line-height:1.5rem;
+        background-color: rgba(255, 255, 255, 0.9);
+    }
+
+.imgUploader-img-complete {
+    color: #03b804;
+}
+.imgUploader-img-error {
+    color:#e60303;
+}

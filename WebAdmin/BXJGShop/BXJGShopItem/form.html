@@ -115,14 +115,17 @@
                     <div class="imgUploader-img-container">
                         <a href="javascript:void(0);">×</a>
                         <img src="http://demo.dtcms.net/upload/201504/20/thumb_201504200119256512.jpg" />
+                        <i class="imgUploader-img-success">上传完成</i>
                     </div>
                     <div class="imgUploader-img-container">
                         <a href="javascript:void(0);">×</a>
                         <img src="http://demo.dtcms.net/upload/201504/20/thumb_201504200314272543.jpg" />
+                        <i class="imgUploader-img-error">上传失败</i>
                     </div>
                     <div class="imgUploader-img-container">
                         <a href="javascript:void(0);">×</a>
                         <img src="http://demo.dtcms.net/upload/201504/20/thumb_201504200119256512.jpg" />
+                        <i class="imgUploader-img-success">上传完成</i>
                     </div>
                 </div>
             </td>
@@ -279,11 +282,10 @@
             file.filePath = response.result[0];
         });
         uploader.on('fileQueued', function (file) {
-
-
             let $box = $('<div class="imgUploader-img-container">').appendTo($uploaderImages);
             let $a = $('<a>×</a>').appendTo($box);
             let $img = $('<img />').appendTo($box);
+            let $i = $('<i />').appendTo($box);
 
             $a.on('click', function () {
                 $box.remove();
@@ -296,7 +298,24 @@
                 }
 
                 $img.attr( 'src', src );
-            } );
+            });
+
+            file.on('statuschange', function (n,o) {
+                $i.removeClass('imgUploader-img-' + o);
+                $i.addClass('imgUploader-img-' + n);
+                let statusText = '';
+                switch (n) {
+                    case 'complete':
+                        statusText = '已完成';
+                        break;
+                    case 'error':
+                        statusText = '失败';
+                        break;
+                    default:
+                        statusText = file.statusText;
+                }
+                $i.text(statusText);
+            });
         });
         uploader.on('uploadBeforeSend', function (obj, data, headers) {
            headers.Authorization = "Bearer " + abp.getCurrentJWTToken();
