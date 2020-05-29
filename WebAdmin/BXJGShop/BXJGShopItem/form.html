@@ -46,23 +46,7 @@
 
 
 
-            <!--<th>是否热卖</th>
-            <td>
-                <select class="easyui-combobox" id="new" name="new">
-                    <option value="true">是</option>
-                    <option value="false">否</option>
-                </select>
-            </td>
-                   <th>品牌</th>
-            <td>
-                <input name="brandId" class="easyui-combobox "
-                       valueField= 'value'
-                       textField= 'displayText'
-                       data-options="
-                       url:abp.appPath+'api/services/app/BXJGShopDictionary/GetNodesForSelect',
-                       queryParams: { forType: 4,ParentId:5}" />
-            </td>
-                   <th>供应商</th>
+            <!--<th>供应商</th>
             <td>
                 <select class="easyui-combogrid" name="supplierId"
                         data-options="
@@ -86,16 +70,16 @@
                                 ]]
                             "></select>
             </td>-->
-            <th>xx</th>
-            <td></td>
+            <th>焦点</th>
+            <td><input class="easyui-checkbox" name="focused" value="true"></td>
         </tr>
         <tr>
             <th>热卖</th>
             <td> <input class="easyui-checkbox" name="hot" value="true"></td>
             <th>新品</th>
-            <td><input class="easyui-checkbox" name="new" ></td>
+            <td><input class="easyui-checkbox" name="new"></td>
             <th>首页显示</th>
-            <td><input class="easyui-checkbox" name="home" ></td>
+            <td><input class="easyui-checkbox" name="home"></td>
         </tr>
         <tr>
             <th>发布</th>
@@ -110,23 +94,13 @@
             <th class="top">封面图片</th>
             <td colspan="5" id="frmBXJGShopItemUploader" class="imgUploader-container" style=" padding:7px 0;">
                 <div id="frmBXJGShopItemUploaderPicker" class="imgUploader-picker">选择图片</div>
-                <div class="imgUploader-images">
-                    <!--图片预览区，支持拖拽、截图粘贴...-->
+                <div class="imgUploader-images" style="max-width:830px;">
+                    <!--图片预览区，支持拖拽、截图粘贴...
                     <div class="imgUploader-img-container">
                         <a href="javascript:void(0);">×</a>
                         <img src="http://demo.dtcms.net/upload/201504/20/thumb_201504200119256512.jpg" />
                         <i class="imgUploader-img-success">上传完成</i>
-                    </div>
-                    <div class="imgUploader-img-container">
-                        <a href="javascript:void(0);">×</a>
-                        <img src="http://demo.dtcms.net/upload/201504/20/thumb_201504200314272543.jpg" />
-                        <i class="imgUploader-img-error">上传失败</i>
-                    </div>
-                    <div class="imgUploader-img-container">
-                        <a href="javascript:void(0);">×</a>
-                        <img src="http://demo.dtcms.net/upload/201504/20/thumb_201504200119256512.jpg" />
-                        <i class="imgUploader-img-success">上传完成</i>
-                    </div>
+                    </div>-->
                 </div>
             </td>
         </tr>
@@ -136,10 +110,9 @@
         </tr>
         <tr>
             <th class="top">详细描述</th>
-            <td colspan="5" style="padding-top:7px;">
-                <div id="bxjgShopItemEditor">
-                    <p>欢迎使用 <b>wangEditor</b> 富文本编辑器</p>
-                </div>
+            <td colspan="5" style="padding-top:7px; ">
+                <div id="bxjgShopItemEditor0" style="border: 1px solid #ddd;"></div>
+                <div id="bxjgShopItemEditor" style="width:820px; height:600px;border: 1px solid #ddd;"></div>
             </td>
         </tr>
     </table>
@@ -278,29 +251,11 @@
                 mimeTypes: 'image/*'
             }
         });
-        uploader.on('uploadSuccess', function (file,response) {
+        uploader.on('uploadSuccess', function (file, response) {
             file.filePath = response.result[0];
         });
         uploader.on('fileQueued', function (file) {
-            let $box = $('<div class="imgUploader-img-container">').appendTo($uploaderImages);
-            let $a = $('<a>×</a>').appendTo($box);
-            let $img = $('<img />').appendTo($box);
-            let $i = $('<i />').appendTo($box);
-
-            $a.on('click', function () {
-                $box.remove();
-            });
-
-            uploader.makeThumb( file, function( error, src ) {
-                if ( error ) {
-                    $img.replaceWith('<span>不能预览</span>');
-                    return;
-                }
-
-                $img.attr( 'src', src );
-            });
-
-            file.on('statuschange', function (n,o) {
+            file.on('statuschange', function (n, o) {
                 $i.removeClass('imgUploader-img-' + o);
                 $i.addClass('imgUploader-img-' + n);
                 let statusText = '';
@@ -311,21 +266,63 @@
                     case 'error':
                         statusText = '失败';
                         break;
+                    case 'progress':
+                        statusText = '上传中...';
+                        break;
                     default:
                         statusText = file.statusText;
                 }
                 $i.text(statusText);
             });
+
+
+            let $box = $('<div class="imgUploader-img-container">').appendTo($uploaderImages);
+            let $a = $('<a>×</a>').appendTo($box);
+            let $img = $('<img />').appendTo($box);
+            let $i = $('<i />').appendTo($box);
+
+
+            $a.on('click', function () {
+                uploader.removeFile(file, true);
+                $box.remove();
+            });
+            if (file.serverPath) {
+                $img.attr('src', file.serverPath);
+                file.setStatus('complete');
+            } else {
+                uploader.makeThumb(file, function (error, src) {
+                    if (error) {
+                        $img.replaceWith('<span>不能预览</span>');
+                        return;
+                    }
+                    $img.attr('src', src);
+                });
+            }
         });
         uploader.on('uploadBeforeSend', function (obj, data, headers) {
-           headers.Authorization = "Bearer " + abp.getCurrentJWTToken();
+            headers.Authorization = "Bearer " + abp.getCurrentJWTToken();
         });
+
+        for (var i = 0; i < 3; i++) {
+            let file1 = new WebUploader.File({
+                size: 1,//经测试大于0的文件才会被加入队列
+                name: 'http://demo.dtcms.net/upload/201504/20/thumb_201504200119256512.jpg'
+            });
+            file1.serverPath = 'http://demo.dtcms.net/upload/201504/20/thumb_201504200119256512.jpg';
+            uploader.addFiles(file1);
+        }
+
+        
+
         //图片上传结束-------------------------------------
 
-
+        //富文本编辑器开始---------------------------------
         var E = window.wangEditor
-        var editor = new E('#bxjgShopItemEditor')
+        var editor = new E('#bxjgShopItemEditor0','#bxjgShopItemEditor')
         // 或者 var editor = new E( document.getElementById('editor') )
+        
+        editor.customConfig.uploadImgShowBase64 = true;
         editor.create();
+        //富文本编辑器结束---------------------------------
     })();
 </script>
