@@ -12,6 +12,7 @@
             <td>
                 <input name="categoryId" class="easyui-combotree"
                        data-options="
+                       required:true,
                        url:abp.appPath+'api/services/app/BXJGShopDictionary/GettreeForSelect',
                        queryParams: { forType: 4,ParentId:1 }" />
             </td>
@@ -23,7 +24,7 @@
                        queryParams: { forType: 4,ParentId:2 }" />
             </td>
             <th>SKU</th>
-            <td><input name="sku" class="easyui-textbox easyui-tooltip" data-options="validType:'length[0,100]'" /></td>
+            <td><input name="sku" class="easyui-textbox" data-options="validType:'length[0,100]'" /></td>
         </tr>
         <tr>
             <th>助记码</th>
@@ -71,19 +72,19 @@
                             "></select>
             </td>-->
             <th>焦点</th>
-            <td><input class="easyui-checkbox" name="focused" value="true"></td>
+            <td><input class="easyui-checkbox" name="focus" value="true"></td>
         </tr>
         <tr>
             <th>热卖</th>
-            <td> <input class="easyui-checkbox" name="hot" value="true"></td>
+            <td><input class="easyui-checkbox" name="hot" value="true"></td>
             <th>新品</th>
-            <td><input class="easyui-checkbox" name="new"></td>
+            <td><input class="easyui-checkbox" name="new" value="true"></td>
             <th>首页显示</th>
-            <td><input class="easyui-checkbox" name="home"></td>
+            <td><input class="easyui-checkbox" name="home" value="true"></td>
         </tr>
         <tr>
             <th>发布</th>
-            <td><input class="easyui-checkbox" name="published"></td>
+            <td><input class="easyui-checkbox" name="published" data-options="value:true"></td>
             <th>发布开始时间</th>
             <td><input class="easyui-datetimebox" name="availableStart" data-options="showSeconds1:false"></td>
             <th>发布结束时间</th>
@@ -150,48 +151,36 @@
             });
         }, 0);
 
-        function save(postData) {
+        $dlg.data('clickSave', function () {
+            if (!$frm.form('validate'))
+                return;
+            var files = uploader.getFiles('complete');
+            if (!files || files.length == 0) {
+                abp.message.error('请至少上传一张封面图');
+                return;
+            }
+
+            var postData = $frm.serializeJSON();
+            postData.images = new Array();
+            files.forEach(function (currentValue, index, arr) {
+                postData.images.push(currentValue.serverPath);
+            });
+            postData.descriptionFull = editor.txt.html();
+            console.log('提交的数据如下：');
+            console.log(postData);
             var defer;
             if (id) {
                 defer = abp.services.app.bXJGShopItem.update(postData).done(function (d) {
-                    abp.notify.success(abp.localization.zlj('Update') + abp.localization.zlj('Success') + '!');
+                    abp.notify.success(abp.localization.bxjgUtils('修改') + abp.localization.bxjgUtils('成功') + '!');
                     onSaved('onUpdated');
                 });
             } else {
                 defer = abp.services.app.bXJGShopItem.create(postData).done(function (d) {
-                    abp.notify.success(abp.localization.zlj('Add') + abp.localization.zlj('Success') + '!');
+                    abp.notify.success(abp.localization.bxjgUtils('新增') + abp.localization.bxjgUtils('修改') + '!');
                     onSaved('onAdded');
                 });
             }
             abp.ui.setBusy($dlg, defer);
-        }
-        $dlg.data('clickSave', function () {
-
-            if (!$frm.form('validate'))
-                return;
-
-            var postData = $frm.serializeJSON();
-            console.log(postData);
-            //处理附件
-            //var jjjc = attachment.jqEasyuiWebuploader('checkSaveOrGetFileIds');
-            //postData.attachments = jjjc.data;
-
-            //if (!jjjc.success) {
-
-            //    abp.message.confirm(
-            //        abp.localization.zlj('附件未上传完成，将只保存已上传的附件，是否继续保存？'),
-            //        abp.localization.zlj('附件检查'),
-            //        function (isConfirmed) {
-            //            if (isConfirmed) {
-            //                save(postData);
-            //            }
-            //        }
-            //    );
-
-            //} else {
-            //    save(postData);
-            //}
-            save(postData);
         });
 
         if (id) {
@@ -252,7 +241,7 @@
             }
         });
         uploader.on('uploadSuccess', function (file, response) {
-            file.filePath = response.result[0];
+            file.serverPath = response.result[0].relativePath;
         });
         uploader.on('fileQueued', function (file) {
             file.on('statuschange', function (n, o) {
@@ -303,24 +292,22 @@
             headers.Authorization = "Bearer " + abp.getCurrentJWTToken();
         });
 
-        for (var i = 0; i < 3; i++) {
-            let file1 = new WebUploader.File({
-                size: 1,//经测试大于0的文件才会被加入队列
-                name: 'http://demo.dtcms.net/upload/201504/20/thumb_201504200119256512.jpg'
-            });
-            file1.serverPath = 'http://demo.dtcms.net/upload/201504/20/thumb_201504200119256512.jpg';
-            uploader.addFiles(file1);
-        }
-
-        
+        //for (var i = 0; i < 3; i++) {
+        //    let file1 = new WebUploader.File({
+        //        size: 1,//经测试大于0的文件才会被加入队列
+        //        name: 'http://demo.dtcms.net/upload/201504/20/thumb_201504200119256512.jpg'
+        //    });
+        //    file1.serverPath = 'http://demo.dtcms.net/upload/201504/20/thumb_201504200119256512.jpg';
+        //    uploader.addFiles(file1);
+        //}
 
         //图片上传结束-------------------------------------
 
         //富文本编辑器开始---------------------------------
         var E = window.wangEditor
-        var editor = new E('#bxjgShopItemEditor0','#bxjgShopItemEditor')
+        var editor = new E('#bxjgShopItemEditor0', '#bxjgShopItemEditor')
         // 或者 var editor = new E( document.getElementById('editor') )
-        
+
         editor.customConfig.uploadImgShowBase64 = true;
         editor.create();
         //富文本编辑器结束---------------------------------
