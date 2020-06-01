@@ -16,6 +16,16 @@ namespace BXJG.CMS
                                      BXJGCMSPermissions.BXJGCMS.BXJGCMSL(),
                                      icon: BXJGCMSPermissions.BXJGCMS,
                                      permissionDependency: new SimplePermissionDependency(BXJGCMSPermissions.BXJGCMS))
+                .AddItem(new MenuItemDefinition(BXJGCMSPermissions.Article,
+                                                BXJGCMSPermissions.Article.BXJGCMSL(),
+                                                icon: BXJGCMSPermissions.Article,
+                                                url: $"/{BXJGCMSPermissions.BXJGCMS}/{BXJGCMSPermissions.Article}/index.html",
+                                                permissionDependency: new SimplePermissionDependency(BXJGCMSPermissions.Article)))
+                .AddItem(new MenuItemDefinition(BXJGCMSPermissions.Column,
+                                                BXJGCMSPermissions.Column.BXJGCMSL(),
+                                                icon: BXJGCMSPermissions.Column,
+                                                url: $"/{BXJGCMSPermissions.BXJGCMS}/{BXJGCMSPermissions.Column}/index.html",
+                                                permissionDependency: new SimplePermissionDependency(BXJGCMSPermissions.Column)))
                 .AddItem(new MenuItemDefinition(BXJGCMSPermissions.BXJGCMSAd,
                                                 BXJGCMSPermissions.BXJGCMSAd.BXJGCMSL(),
                                                 icon: BXJGCMSPermissions.BXJGCMSAd,

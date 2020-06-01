@@ -8,6 +8,21 @@ namespace BXJG.CMS.Authorization
     public class BXJGCMSPermissions
     {
         public const string BXJGCMS = "BXJGCMS";
+
+        #region 文章
+        public const string Article = "BXJGCMSArticle";
+        public const string ArticleCreate = "BXJGCMSArticleCreate";
+        public const string ArticleUpdate = "BXJGCMSArticleUpdate";
+        public const string ArticleDelete = "BXJGCMSArticleDelete";
+        #endregion
+
+        #region 栏目
+        public const string Column = "BXJGCMSColumn";
+        public const string ColumnCreate = "BXJGCMSColumnCreate";
+        public const string ColumnUpdate = "BXJGCMSColumnUpdate";
+        public const string ColumnDelete = "BXJGCMSColumnDelete";
+        #endregion
+
         #region 广告
         //广告
         public const string BXJGCMSAd = "BXJGCMSAd";

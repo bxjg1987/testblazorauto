@@ -3,6 +3,7 @@ using Abp.Authorization.Users;
 using Abp.MultiTenancy;
 using Abp.Zero.EntityFrameworkCore;
 using BXJG.CMS.Ad;
+using BXJG.CMS.Article;
 using BXJG.Common;
 using BXJG.GeneralTree;
 using System;
@@ -28,6 +29,18 @@ namespace BXJG.CMS.EFCore.Seed
 
         public void Create(bool insertTestData = true)
         {
+            #region 系统预定义文章
+            var articleSet = _context.Set<ArticleEntity>();
+            articleSet.Add(new ArticleEntity
+            {
+                Content = "硬核科技是一家........",
+                CreationTime = new DateTime(2017, 3, 1),
+                SystemDefine = true,
+                TenantId = this._tenantId,
+                Title = "公司简介"
+            });
+            #endregion
+
             if (!insertTestData)
                 return;
 
@@ -170,7 +183,7 @@ namespace BXJG.CMS.EFCore.Seed
                     AdPositionId = 2,
                     CreationTime = new DateTime(2020, 5, 20),
                     Published = true,
-                    PublishStartTime=new DateTime(2020,3,11),
+                    PublishStartTime = new DateTime(2020, 3, 11),
                     TenantId = this._tenantId,
                     SortIndex = 0
                 });

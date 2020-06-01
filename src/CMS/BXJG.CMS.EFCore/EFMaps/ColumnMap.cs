@@ -11,6 +11,7 @@ namespace BXJG.CMS.EFCore.EFMaps
     {
         public void Configure(EntityTypeBuilder<ColumnEntity> builder)
         {
+            builder.Property(c => c.Title).HasMaxLength(ColumnEntity.SeoTitleMaxLength);
             builder.Property(c => c.Icon).HasColumnType($"varchar({ColumnEntity.IconMaxLength})");
             builder.Property(c => c.SeoTitle).HasMaxLength(ColumnEntity.SeoTitleMaxLength);
             builder.Property(c => c.SeoDescription).HasMaxLength(ColumnEntity.SeoDescriptionMaxLength);

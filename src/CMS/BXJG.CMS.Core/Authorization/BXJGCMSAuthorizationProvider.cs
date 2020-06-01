@@ -15,6 +15,20 @@ namespace BXJG.CMS.Authorization
             //cms
             var cms = context.CreateChildPermission(BXJGCMSPermissions.BXJGCMS, BXJGCMSPermissions.BXJGCMS.BXJGCMSL());
 
+            #region 文章管理
+            var article = cms.CreateChildPermission(BXJGCMSPermissions.Article, BXJGCMSPermissions.Article.BXJGCMSL(), multiTenancySides: MultiTenancySides.Tenant);
+            article.CreateChildPermission(BXJGCMSPermissions.ArticleCreate, "新增".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
+            article.CreateChildPermission(BXJGCMSPermissions.ArticleUpdate, "修改".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
+            article.CreateChildPermission(BXJGCMSPermissions.ArticleDelete, "删除".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
+            #endregion
+
+            #region 栏目
+            var column = cms.CreateChildPermission(BXJGCMSPermissions.Column, BXJGCMSPermissions.Column.BXJGCMSL(), multiTenancySides: MultiTenancySides.Tenant);
+            column.CreateChildPermission(BXJGCMSPermissions.ColumnCreate, "新增".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
+            column.CreateChildPermission(BXJGCMSPermissions.ColumnUpdate, "修改".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
+            column.CreateChildPermission(BXJGCMSPermissions.ColumnDelete, "删除".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
+            #endregion
+
             #region 广告
             //广告
             var ad = cms.CreateChildPermission(BXJGCMSPermissions.BXJGCMSAd, BXJGCMSPermissions.BXJGCMSAd.BXJGCMSL(), multiTenancySides: MultiTenancySides.Tenant);

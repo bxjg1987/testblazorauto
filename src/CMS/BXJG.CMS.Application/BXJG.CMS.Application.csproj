@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Abp" Version="5.8.0" />
     <PackageReference Include="Abp.AutoMapper" Version="5.8.0" />
     <PackageReference Include="Abp.ZeroCore" Version="5.8.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.4" />
@@ -19,6 +20,10 @@
   <ItemGroup>
     <ProjectReference Include="..\..\BXJG.Utils\BXJG.Utils.csproj" />
     <ProjectReference Include="..\BXJG.CMS.Core\BXJG.CMS.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Column\" />
   </ItemGroup>
 
 </Project>

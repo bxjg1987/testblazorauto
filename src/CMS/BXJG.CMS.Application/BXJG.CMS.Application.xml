@@ -117,6 +117,64 @@
             前台暂时广告时通过此接口来查询广告列表
             </summary>
         </member>
+        <member name="T:BXJG.CMS.Article.ArticleDto">
+            <summary>
+            后台对文章进行管理时的列表页面用的模型
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Article.ArticleDto.Title">
+            <summary>
+            标题
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Article.ArticleDto.Content">
+            <summary>
+            内容
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Article.ArticleDto.SystemDefine">
+            <summary>
+            系统预设文章 不允许删除
+            </summary>
+        </member>
+        <member name="T:BXJG.CMS.Article.ArticleEditDto">
+            <summary>
+            后台新增或修改文章时前端提交的数据模型
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Article.ArticleEditDto.Title">
+            <summary>
+            标题
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Article.ArticleEditDto.Content">
+            <summary>
+            内容
+            </summary>
+        </member>
+        <member name="T:BXJG.CMS.Article.GetAllArticleInput">
+            <summary>
+            后台管理文章时 列表页面获取文章列表时提供的参数模型
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Article.GetAllArticleInput.Keywords">
+            <summary>
+            关键字
+            Title/DescriptionShort/SKU等..模糊查询
+            </summary>
+        </member>
+        <member name="T:BXJG.CMS.Article.IArticleAppService">
+            <summary>
+            后台管理员对文章进行管理的应用服务接口
+            </summary>
+        </member>
+        <member name="M:BXJG.CMS.Article.IArticleAppService.BulkDelete(BXJG.CMS.Article.DeleteInput)">
+            <summary>
+            批量删除
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
         <member name="T:BXJG.CMS.BXJGCMSAppServiceBase`5">
             <summary>
             Derive your application services from this class.
