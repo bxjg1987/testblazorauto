@@ -152,6 +152,18 @@
             内容
             </summary>
         </member>
+        <member name="T:BXJG.CMS.Article.BXJGCMSArticleAppService">
+            <summary>
+            后台管理文章的应用服务
+            </summary>
+        </member>
+        <member name="M:BXJG.CMS.Article.BXJGCMSArticleAppService.BulkDeleteAsync(BXJG.CMS.Article.DeleteInput)">
+            <summary>
+            批量删除
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
         <member name="T:BXJG.CMS.Article.GetAllArticleInput">
             <summary>
             后台管理文章时 列表页面获取文章列表时提供的参数模型
@@ -163,12 +175,12 @@
             Title/DescriptionShort/SKU等..模糊查询
             </summary>
         </member>
-        <member name="T:BXJG.CMS.Article.IArticleAppService">
+        <member name="T:BXJG.CMS.Article.IBXJGCMSArticleAppService">
             <summary>
             后台管理员对文章进行管理的应用服务接口
             </summary>
         </member>
-        <member name="M:BXJG.CMS.Article.IArticleAppService.BulkDelete(BXJG.CMS.Article.DeleteInput)">
+        <member name="M:BXJG.CMS.Article.IBXJGCMSArticleAppService.BulkDeleteAsync(BXJG.CMS.Article.DeleteInput)">
             <summary>
             批量删除
             </summary>

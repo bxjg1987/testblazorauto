@@ -15,6 +15,8 @@ using BXJG.Shop.EFMaps;
 using ZLJ.Administrative;
 using BXJG.CMS.EFCore.EFMaps;
 using BXJG.CMS.Ad;
+using BXJG.CMS.Article;
+using BXJG.CMS.Column;
 
 namespace ZLJ.EntityFrameworkCore
 {
@@ -41,6 +43,8 @@ namespace ZLJ.EntityFrameworkCore
         public virtual DbSet<AdControlEntity> BXJGCMSAdControls { get; set; }
         public virtual DbSet<AdPositionEntity> BXJGCMSAdPositions { get; set; }
         public virtual DbSet<AdRecordEntity> BXJGCMSAdRecords { get; set; }
+        public virtual DbSet<ArticleEntity> BXJGCMSArticles { get; set; }
+        public virtual DbSet<ColumnEntity> BXJGCMSColumns { get; set; }
         #endregion
 
         public ZLJDbContext(DbContextOptions<ZLJDbContext> options)

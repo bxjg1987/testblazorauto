@@ -20,7 +20,4 @@
     <ProjectReference Include="..\shop\BXJG.Shop.EFCore\BXJG.Shop.EFCore.csproj" />
     <ProjectReference Include="..\ZLJ.Core\ZLJ.Core.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Migrations\" />
-  </ItemGroup>
 </Project>
