@@ -16,6 +16,8 @@ namespace BXJG.CMS.EFCore.EFMaps
             builder.Property(c => c.SeoTitle).HasMaxLength(ColumnEntity.SeoTitleMaxLength);
             builder.Property(c => c.SeoDescription).HasMaxLength(ColumnEntity.SeoDescriptionMaxLength);
             builder.Property(c => c.SeoKeyword).HasMaxLength(ColumnEntity.SeoKeywordMaxLength);
+            //builder.Property(c => c.ColumnType).HasMaxLength(ColumnEntity.SeoKeywordMaxLength);
+            //builder.Property(c => c.SeoKeyword).HasMaxLength(ColumnEntity.SeoKeywordMaxLength);
         }
     }
 }

@@ -4,6 +4,7 @@ using Abp.MultiTenancy;
 using Abp.Zero.EntityFrameworkCore;
 using BXJG.CMS.Ad;
 using BXJG.CMS.Article;
+using BXJG.CMS.Column;
 using BXJG.Common;
 using BXJG.GeneralTree;
 using System;
@@ -38,6 +39,24 @@ namespace BXJG.CMS.EFCore.Seed
                 SystemDefine = true,
                 TenantId = this._tenantId,
                 Title = "公司简介"
+            });
+            #endregion
+
+            #region 栏目
+            var columnSet = _context.Set<ColumnEntity>();
+            columnSet.Add(new ColumnEntity
+            {
+                Code = "00001",
+                CreationTime = new DateTime(2017, 3, 1),
+                SystemDefine = true,
+                TenantId = this._tenantId,
+                ColumnType = ColumnType.SinglePage,
+                ContentType = ContentType.Article,
+                Description = "关于公司情况的介绍",
+                SeoTitle = "SeoTitle",
+                SeoKeyword = "SeoKeyword",
+                SeoDescription = "SeoDescription",
+                DisplayName = "关于我们"
             });
             #endregion
 
