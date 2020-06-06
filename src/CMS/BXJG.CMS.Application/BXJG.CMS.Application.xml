@@ -192,5 +192,166 @@
             Derive your application services from this class.
             </summary>
         </member>
+        <member name="T:BXJG.CMS.Column.BXJGCMSColumnAppService`1">
+            <summary>
+            CMS栏目管理服务
+            </summary>
+            <typeparam name="TDataDictionary"></typeparam>
+        </member>
+        <member name="T:BXJG.CMS.Column.ColumnCombboxDto">
+            <summary>
+            扁平化的栏目下拉框数据模型
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Column.ColumnCombboxDto.Icon">
+            <summary>
+            图标
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Column.ColumnCombboxDto.ColumnType">
+            <summary>
+            栏目类型
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Column.ColumnCombboxDto.ContentTypeId">
+            <summary>
+            内容类型Id
+            </summary>
+        </member>
+        <member name="T:BXJG.CMS.Column.ColumnDto">
+            <summary>
+            后台管理的列表页查询模型
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Column.ColumnDto.Icon">
+            <summary>
+            图标
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Column.ColumnDto.ColumnType">
+            <summary>
+            栏目类型
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Column.ColumnDto.ContentTypeId">
+            <summary>
+            内容类型Id
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Column.ColumnDto.ContentTypeDisplayName">
+            <summary>
+            内容类型
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Column.ColumnDto.SystemDefine">
+            <summary>
+            是否是系统预定的栏目，这些栏目不允许被删除
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Column.ColumnDto.SeoTitle">
+            <summary>
+            SEO标题
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Column.ColumnDto.SeoDescription">
+            <summary>
+            SEO描述信息
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Column.ColumnDto.SeoKeyword">
+            <summary>
+            seo关键字
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Column.ColumnDto.Description">
+            <summary>
+            栏目描述
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Column.ColumnDto.ListTemplate">
+            <summary>
+            列表页模板
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Column.ColumnDto.DetailTemplate">
+            <summary>
+            详情页模板
+            </summary>
+        </member>
+        <member name="T:BXJG.CMS.Column.ColumnEditDto">
+            <summary>
+            后台管理CMS栏目的编辑模型
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Column.ColumnEditDto.Icon">
+            <summary>
+            图标
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Column.ColumnEditDto.ColumnType">
+            <summary>
+            栏目类型
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Column.ColumnEditDto.ContentTypeId">
+            <summary>
+            内容类型Id
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Column.ColumnEditDto.SystemDefine">
+            <summary>
+            是否是系统预定的栏目，这些栏目不允许被删除
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Column.ColumnEditDto.SeoTitle">
+            <summary>
+            SEO标题
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Column.ColumnEditDto.SeoDescription">
+            <summary>
+            SEO描述信息
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Column.ColumnEditDto.SeoKeyword">
+            <summary>
+            seo关键字
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Column.ColumnEditDto.Description">
+            <summary>
+            栏目描述
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Column.ColumnEditDto.ListTemplate">
+            <summary>
+            列表页模板
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Column.ColumnEditDto.DetailTemplate">
+            <summary>
+            详情页模板
+            </summary>
+        </member>
+        <member name="T:BXJG.CMS.Column.ColumnTreeNodeDto">
+            <summary>
+            获取栏目树形下拉框的数据模型
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Column.ColumnTreeNodeDto.Icon">
+            <summary>
+            图标
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Column.ColumnTreeNodeDto.ColumnType">
+            <summary>
+            栏目类型
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Column.ColumnTreeNodeDto.ContentTypeId">
+            <summary>
+            内容类型Id
+            </summary>
+        </member>
     </members>
 </doc>

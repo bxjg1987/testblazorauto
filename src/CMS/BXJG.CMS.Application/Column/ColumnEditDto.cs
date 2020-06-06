@@ -1,14 +1,19 @@
-﻿using BXJG.GeneralTree;
+﻿using Abp.Application.Services.Dto;
+using Abp.AutoMapper;
+using BXJG.GeneralTree;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BXJG.CMS.Column
 {
     /// <summary>
-    /// 栏目实体类
+    /// 后台管理CMS栏目的编辑模型
     /// </summary>
-    public class ColumnEntity<TDataDictionary> : GeneralTreeEntity<ColumnEntity<TDataDictionary>>
+    public class ColumnEditDto : GeneralTreeNodeEditBaseDto
     {
         /// <summary>
         /// 图标
@@ -18,17 +23,10 @@ namespace BXJG.CMS.Column
         /// 栏目类型
         /// </summary>
         public ColumnType ColumnType { get; set; }
-
-        //将来可能需要做一个dll实现新的内容类型，然后注册到主模块中，因此内容类型如果用枚举就不太方便了
-
         /// <summary>
         /// 内容类型Id
         /// </summary>
         public long ContentTypeId { get; set; }
-        /// <summary>
-        /// 内容类型
-        /// </summary>
-        public virtual TDataDictionary ContentType { get; set; }
         /// <summary>
         /// 是否是系统预定的栏目，这些栏目不允许被删除
         /// </summary>
@@ -58,4 +56,5 @@ namespace BXJG.CMS.Column
         /// </summary>
         public string DetailTemplate { get; set; }
     }
+
 }

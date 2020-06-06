@@ -44,7 +44,7 @@ namespace ZLJ.EntityFrameworkCore
         public virtual DbSet<AdPositionEntity> BXJGCMSAdPositions { get; set; }
         public virtual DbSet<AdRecordEntity> BXJGCMSAdRecords { get; set; }
         public virtual DbSet<ArticleEntity> BXJGCMSArticles { get; set; }
-        public virtual DbSet<ColumnEntity> BXJGCMSColumns { get; set; }
+        public virtual DbSet<ColumnEntity<GeneralTreeEntity>> BXJGCMSColumns { get; set; }
         #endregion
 
         public ZLJDbContext(DbContextOptions<ZLJDbContext> options)
@@ -63,7 +63,8 @@ namespace ZLJ.EntityFrameworkCore
                 .ApplyConfiguration(new OrderMap<User, AdministrativeEntity, OrderEntity<User, AdministrativeEntity>>())
                 .ApplyConfiguration(new OrderItemMap<User, AdministrativeEntity, OrderItemEntity<User, AdministrativeEntity>>())
                 .ApplyConfiguration(new ItemMap< ItemEntity>())
-                .ApplyConfigurationBXJGCMS();
+                .ApplyConfigurationBXJGCMS()
+                .ApplyConfiguration(new ColumnMap<GeneralTreeEntity>());
         }
     }
 }

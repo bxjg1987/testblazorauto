@@ -14,7 +14,7 @@ using System.Text;
 
 namespace BXJG.CMS.EFCore.Seed
 {
-    public class DefaultBXJGCMSBuilder<TTenant, TRole, TUser, TSelf>
+    public class DefaultBXJGCMSBuilder<TTenant, TRole, TUser, TSelf, TDataDictionary>
         where TTenant : AbpTenant<TUser>
         where TRole : AbpRole<TUser>
         where TUser : AbpUser<TUser>, new()
@@ -43,15 +43,15 @@ namespace BXJG.CMS.EFCore.Seed
             #endregion
 
             #region 栏目
-            var columnSet = _context.Set<ColumnEntity>();
-            columnSet.Add(new ColumnEntity
+            var columnSet = _context.Set<ColumnEntity<TDataDictionary>>();
+            columnSet.Add(new ColumnEntity<TDataDictionary>
             {
                 Code = "00001",
                 CreationTime = new DateTime(2017, 3, 1),
                 SystemDefine = true,
                 TenantId = this._tenantId,
                 ColumnType = ColumnType.SinglePage,
-                ContentType = ContentType.Article,
+                ContentTypeId = 30,//这里应该由调用方指定，而不是设定死
                 Description = "关于公司情况的介绍",
                 SeoTitle = "SeoTitle",
                 SeoKeyword = "SeoKeyword",

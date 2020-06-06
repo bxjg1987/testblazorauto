@@ -233,6 +233,11 @@
             <param name="input"></param>
             <returns></returns>
         </member>
+        <member name="T:ZLJ.CMS.BXJGCMSColumnAppService">
+            <summary>
+            后台管理CMS栏目应用服务
+            </summary>
+        </member>
         <member name="T:ZLJ.Net.MimeTypes.MimeTypeNames">
             <summary>
             Common mime types. 

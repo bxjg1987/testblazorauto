@@ -7,17 +7,16 @@ using System.Text;
 
 namespace BXJG.CMS.EFCore.EFMaps
 {
-    public class ColumnMap : IEntityTypeConfiguration<ColumnEntity>
+    public class ColumnMap<TDataDictionary> : IEntityTypeConfiguration<ColumnEntity<TDataDictionary>>
     {
-        public void Configure(EntityTypeBuilder<ColumnEntity> builder)
+        public void Configure(EntityTypeBuilder<ColumnEntity<TDataDictionary>> builder)
         {
-            builder.Property(c => c.Title).HasMaxLength(ColumnEntity.SeoTitleMaxLength);
-            builder.Property(c => c.Icon).HasColumnType($"varchar({ColumnEntity.IconMaxLength})");
-            builder.Property(c => c.SeoTitle).HasMaxLength(ColumnEntity.SeoTitleMaxLength);
-            builder.Property(c => c.SeoDescription).HasMaxLength(ColumnEntity.SeoDescriptionMaxLength);
-            builder.Property(c => c.SeoKeyword).HasMaxLength(ColumnEntity.SeoKeywordMaxLength);
-            //builder.Property(c => c.ColumnType).HasMaxLength(ColumnEntity.SeoKeywordMaxLength);
-            //builder.Property(c => c.SeoKeyword).HasMaxLength(ColumnEntity.SeoKeywordMaxLength);
+            builder.Property(c => c.Icon).HasColumnType($"varchar({BXJGCMSConsts.IconMaxLength})");
+            builder.Property(c => c.SeoTitle).HasMaxLength(BXJGCMSConsts.SeoTitleMaxLength);
+            builder.Property(c => c.SeoDescription).HasMaxLength(BXJGCMSConsts.SeoDescriptionMaxLength);
+            builder.Property(c => c.SeoKeyword).HasMaxLength(BXJGCMSConsts.SeoKeywordMaxLength);
+            builder.Property(c => c.ListTemplate).HasColumnType($"varchar({BXJGCMSConsts.ListTemplateMaxLength})");
+            builder.Property(c => c.DetailTemplate).HasColumnType($"varchar({BXJGCMSConsts.DetailTemplateMaxLength})");
         }
     }
 }

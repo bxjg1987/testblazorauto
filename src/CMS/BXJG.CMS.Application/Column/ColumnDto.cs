@@ -1,4 +1,5 @@
-﻿using BXJG.GeneralTree;
+﻿using Abp.AutoMapper;
+using BXJG.GeneralTree;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -6,9 +7,9 @@ using System.Text;
 namespace BXJG.CMS.Column
 {
     /// <summary>
-    /// 栏目实体类
+    /// 后台管理的列表页查询模型
     /// </summary>
-    public class ColumnEntity<TDataDictionary> : GeneralTreeEntity<ColumnEntity<TDataDictionary>>
+    public class ColumnDto : GeneralTreeGetTreeNodeBaseDto<ColumnDto>
     {
         /// <summary>
         /// 图标
@@ -18,9 +19,6 @@ namespace BXJG.CMS.Column
         /// 栏目类型
         /// </summary>
         public ColumnType ColumnType { get; set; }
-
-        //将来可能需要做一个dll实现新的内容类型，然后注册到主模块中，因此内容类型如果用枚举就不太方便了
-
         /// <summary>
         /// 内容类型Id
         /// </summary>
@@ -28,7 +26,7 @@ namespace BXJG.CMS.Column
         /// <summary>
         /// 内容类型
         /// </summary>
-        public virtual TDataDictionary ContentType { get; set; }
+        public string ContentTypeDisplayName { get; set; }
         /// <summary>
         /// 是否是系统预定的栏目，这些栏目不允许被删除
         /// </summary>

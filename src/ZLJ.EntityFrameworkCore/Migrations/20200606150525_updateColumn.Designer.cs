@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ZLJ.EntityFrameworkCore;
 
 namespace ZLJ.Migrations
 {
     [DbContext(typeof(ZLJDbContext))]
-    partial class ZLJDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200606150525_updateColumn")]
+    partial class updateColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1598,7 +1600,7 @@ namespace ZLJ.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DetailTemplate")
-                        .HasColumnType("varchar(200)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
@@ -1609,7 +1611,7 @@ namespace ZLJ.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Icon")
-                        .HasColumnType("varchar(200)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -1621,22 +1623,19 @@ namespace ZLJ.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("ListTemplate")
-                        .HasColumnType("varchar(200)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<long?>("ParentId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("SeoDescription")
-                        .HasColumnType("nvarchar(max)")
-                        .HasMaxLength(5000);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SeoKeyword")
-                        .HasColumnType("nvarchar(1000)")
-                        .HasMaxLength(1000);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SeoTitle")
-                        .HasColumnType("nvarchar(2000)")
-                        .HasMaxLength(2000);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("SystemDefine")
                         .HasColumnType("bit");

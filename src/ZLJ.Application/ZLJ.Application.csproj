@@ -41,6 +41,7 @@
     <ProjectReference Include="..\BXJG.GeneralTree\BXJG.GeneralTree.csproj" />
     <ProjectReference Include="..\BXJG.Utils\BXJG.Utils.csproj" />
     <ProjectReference Include="..\BXJG.Wechat\BXJG.WeChat.csproj" />
+    <ProjectReference Include="..\cms\BXJG.CMS.Application\BXJG.CMS.Application.csproj" />
     <ProjectReference Include="..\shop\BXJG.Shop.Application\BXJG.Shop.Application.csproj" />
     <ProjectReference Include="..\ZLJ.Core\ZLJ.Core.csproj" />
   </ItemGroup>
