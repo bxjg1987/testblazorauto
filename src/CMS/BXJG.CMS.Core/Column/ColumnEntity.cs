@@ -32,7 +32,7 @@ namespace BXJG.CMS.Column
         /// <summary>
         /// 是否是系统预定的栏目，这些栏目不允许被删除
         /// </summary>
-        public bool SystemDefine { get; set; }
+        public bool IsSysDefine { get; set; }
         /// <summary>
         /// SEO标题
         /// </summary>

@@ -21,7 +21,7 @@ namespace BXJG.CMS.Column
         /// <summary>
         /// 时候是系统预定义的栏目
         /// </summary>
-        public bool? SystemDefine { get; set; }
+        public bool? IsSysDefine { get; set; }
         /// <summary>
         /// 关键字 标题、seo信息，模板名等...
         /// </summary>

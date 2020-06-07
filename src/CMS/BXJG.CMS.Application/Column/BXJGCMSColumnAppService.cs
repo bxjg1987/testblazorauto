@@ -1,6 +1,7 @@
 ﻿using Abp.Domain.Repositories;
 using BXJG.CMS.Authorization;
 using BXJG.GeneralTree;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,39 +24,18 @@ namespace BXJG.CMS.Column
                                                                                       ColumnManager<TDataDictionary>>, IBXJGCMSColumnAppService
         where TDataDictionary : GeneralTreeEntity<TDataDictionary>
     {
-        public BXJGCMSColumnAppService(IRepository<ColumnEntity<TDataDictionary>, long> repository, ColumnManager<TDataDictionary> organizationUnitManager)
+        public BXJGCMSColumnAppService(IRepository<ColumnEntity<TDataDictionary>, long> repository, ColumnManager<TDataDictionary> manager)
             : base(repository,
-                   organizationUnitManager,
+                   manager,
                    BXJGCMSPermissions.ColumnCreate,
                    BXJGCMSPermissions.ColumnUpdate,
                    BXJGCMSPermissions.ColumnDelete,
                    BXJGCMSPermissions.Column)
+        { }
+
+        protected override IQueryable<ColumnEntity<TDataDictionary>> GetAllFiltered(GetAllInput q, string parentCode)
         {
-            //base.createPermissionName = BXJGCMSPermissions.ColumnCreate;
-            //base.updatePermissionName = BXJGCMSPermissions.ColumnUpdate;
-            //base.deletePermissionName = BXJGCMSPermissions.ColumnDelete;
-            //base.getPermissionName = BXJGCMSPermissions.Column;
+            return base.GetAllFiltered(q, parentCode).Include(c=>c.ContentType);
         }
-
-        //protected override async Task<IList<ColumnCombboxDto>> ComboboxProjectionAsync(IQueryable<ColumnEntity<TDataDictionary>> query)
-        //{
-        //    var q = query.Select(c => new ColumnCombboxDto
-        //    {
-        //        ExtDataString = c.ExtensionData,
-        //        DisplayText = c.DisplayName,
-        //        Value = c.Id.ToString(),
-        //        Icon = c.Icon,
-        //        ColumnType = c.ColumnType,
-        //        ContentTypeId = c.ContentTypeId
-        //    });
-        //    return await AsyncQueryableExecuter.ToListAsync(q);
-        //}
-
-        //protected override void ComboTreeMap(ColumnEntity<TDataDictionary> entity, ColumnTreeNodeDto node)
-        //{
-        //    node.Icon = entity.Icon;
-        //    //node.IsSysDefine = entity.IsSysDefine;
-        //    //node.IsTree = entity.IsTree;
-        //}
     }
 }

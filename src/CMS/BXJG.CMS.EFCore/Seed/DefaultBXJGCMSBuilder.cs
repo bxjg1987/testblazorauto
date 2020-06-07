@@ -48,7 +48,7 @@ namespace BXJG.CMS.EFCore.Seed
             {
                 Code = "00001",
                 CreationTime = new DateTime(2017, 3, 1),
-                SystemDefine = true,
+                IsSysDefine = true,
                 TenantId = this._tenantId,
                 ColumnType = ColumnType.SinglePage,
                 ContentTypeId = 30,//这里应该由调用方指定，而不是设定死

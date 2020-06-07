@@ -1,4 +1,11 @@
 ﻿
+
+.icon-BXJGCMSColumn {
+	background: url('icons/Column.png') no-repeat center center;
+}
+.icon-BXJGCMSArticle {
+	background: url('icons/Article.png') no-repeat center center;
+}
 .icon-BXJGCMSAdControl {
 	background: url('icons/control.png') no-repeat center center;
 }

@@ -10,52 +10,70 @@ namespace BXJG.GeneralTree
     /// </summary>
     public static class GeneralTreeMapProfileExt
     {
-        public static void EntityToDto<TSource, TDestination>(this IMappingExpression<TSource, TDestination> config)
+        public static IMappingExpression DtoToEntity(this IMappingExpression config)
+        {
+            return config.ForMember("Code", opt => opt.Ignore())
+                    .ForMember("Parent", opt => opt.Ignore())
+                    .ForMember("TenantId", opt => opt.Ignore())
+                    .ForMember("Children", opt => opt.Ignore())
+                    .ForMember("ExtensionData", opt => opt.Ignore())
+                    .ForMember("IsDeleted", opt => opt.Ignore())
+                    .ForMember("DeleterUserId", opt => opt.Ignore())
+                    .ForMember("DeletionTime", opt => opt.Ignore())
+                    .ForMember("LastModificationTime", opt => opt.Ignore())
+                    .ForMember("LastModifierUserId", opt => opt.Ignore())
+                    .ForMember("CreationTime", opt => opt.Ignore())
+                    .ForMember("CreatorUserId", opt => opt.Ignore());
+        }
+
+
+
+        public static IMappingExpression<TSource, TDestination> EntityToDto<TSource, TDestination>(this IMappingExpression<TSource, TDestination> config)
            where TSource : GeneralTreeEntity<TSource>
            where TDestination : GeneralTreeGetTreeNodeBaseDto<TDestination>
         {
-            config.ForMember(c => c.ExtData, opt => opt.Ignore());
+            return config.ForMember(c => c.ExtData, opt => opt.Ignore());
         }
 
-        public static void EntityToDto(this IMappingExpression config)
+        public static IMappingExpression EntityToDto(this IMappingExpression config)
         {
-            config.ForMember("ExtData", opt => opt.Ignore());
+            return config.ForMember("ExtData", opt => opt.Ignore());
         }
 
-        public static void EntityToComboTree<TSource, TDestination>(this IMappingExpression<TSource, TDestination> config)
+        public static IMappingExpression<TSource, TDestination> EntityToComboTree<TSource, TDestination>(this IMappingExpression<TSource, TDestination> config)
             where TSource : GeneralTreeEntity<TSource>
             where TDestination : GeneralTreeNodeDto<TDestination>
         {
-            config.ForMember(c => c.Text, opt => opt.MapFrom(c => c.DisplayName))
-                  .ForMember(c => c.IconCls, opt => opt.Ignore())
-                  .ForMember(c => c.Checked, opt => opt.Ignore());
+            return config.ForMember(c => c.Text, opt => opt.MapFrom(c => c.DisplayName))
+                    .ForMember(c => c.IconCls, opt => opt.Ignore())
+                    .ForMember(c => c.Checked, opt => opt.Ignore());
             //.ForMember(c => c.State, opt => opt.Ignore())
             //.ForMember(c => c.ExtData, opt => opt.Ignore())
         }
 
-        public static void EntityToComboTree(this IMappingExpression config)
+        public static IMappingExpression EntityToComboTree(this IMappingExpression config)
         {
-            config.ForMember("Text", opt => opt.MapFrom("DisplayName"))
-                  .ForMember("IconCls", opt => opt.Ignore())
-                  .ForMember("Checked", opt => opt.Ignore());
+            return config.ForMember("Text", opt => opt.MapFrom("DisplayName"))
+                    .ForMember("IconCls", opt => opt.Ignore())
+                    .ForMember("Checked", opt => opt.Ignore());
             //.ForMember(c => c.State, opt => opt.Ignore())
             //.ForMember(c => c.ExtData, opt => opt.Ignore())
         }
 
 
 
-        public static void EntityToCombobox<TSource, TDestination>(this IMappingExpression<TSource, TDestination> config)
+        public static IMappingExpression<TSource, TDestination> EntityToCombobox<TSource, TDestination>(this IMappingExpression<TSource, TDestination> config)
             where TSource : GeneralTreeEntity<TSource>
             where TDestination : GeneralTreeComboboxDto
         {
-            config.ForMember(c => c.DisplayText, opt => opt.MapFrom(c => c.DisplayName))
-                  .ForMember(c => c.Value, opt => opt.MapFrom(c => c.Id.ToString()));
+            return config.ForMember(c => c.DisplayText, opt => opt.MapFrom(c => c.DisplayName))
+                    .ForMember(c => c.Value, opt => opt.MapFrom(c => c.Id.ToString()));
         }
 
-        public static void EntityToCombobox(this IMappingExpression config)
+        public static IMappingExpression EntityToCombobox(this IMappingExpression config)
         {
-            config.ForMember("DisplayText", opt => opt.MapFrom("DisplayName"))
-                  .ForMember("Value", opt => opt.MapFrom("Id"));
+            return config.ForMember("DisplayText", opt => opt.MapFrom("DisplayName"))
+                      .ForMember("Value", opt => opt.MapFrom("Id"));
             //.ForMember(c => c.State, opt => opt.Ignore())
             //.ForMember(c => c.ExtData, opt => opt.Ignore())
         }

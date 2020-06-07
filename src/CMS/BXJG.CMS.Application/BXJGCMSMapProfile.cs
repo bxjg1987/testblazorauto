@@ -16,9 +16,8 @@ namespace BXJG.CMS
             CreateMap<AdRecordEntity, FrontAdRecordDto>();
             #endregion
 
-            //可能是因为泛型原因，必须调用EntityToDto
-            CreateMap(typeof(ColumnEntity<>), typeof(ColumnDto)).EntityToDto();
-
+            CreateMap(typeof(ColumnEditDto), typeof(ColumnEntity<>)).DtoToEntity().ForMember("ContentType",opt=> opt.Ignore());
+            CreateMap(typeof(ColumnEntity<>), typeof(ColumnDto)).EntityToDto();//可能是因为泛型原因，必须调用EntityToDto
             CreateMap(typeof(ColumnEntity<>), typeof(ColumnTreeNodeDto)).EntityToComboTree();
             CreateMap(typeof(ColumnEntity<>), typeof(ColumnCombboxDto)).EntityToCombobox();
         }
