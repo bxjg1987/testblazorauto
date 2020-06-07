@@ -1,5 +1,6 @@
 ﻿using Abp.Modules;
 using Abp.Reflection.Extensions;
+using BXJG.GeneralTree;
 using BXJG.Shop.Authorization;
 using BXJG.Shop.Configuration;
 using BXJG.Shop.Localization;
@@ -9,6 +10,7 @@ using System;
 
 namespace BXJG.Shop
 {
+    [DependsOn(typeof(GeneralTreeModule))]
     public class BXJGShopCoreModule : AbpModule
     {
         public override void PreInitialize()

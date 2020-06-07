@@ -7,6 +7,7 @@ using BXJG.Shop.Common.Dto;
 using BXJG.Shop.Catalogue;
 using BXJG.Shop.Customer;
 using BXJG.Shop.Sale;
+using BXJG.GeneralTree;
 
 namespace BXJG.Shop.Common
 {
@@ -21,9 +22,7 @@ namespace BXJG.Shop.Common
     {
         public BXJGShopMapProfile()
         {
-            CreateMap<BXJGShopDictionaryEntity, DictionaryDto>()
-                .ForMember(c => c.ExtData, opt => opt.MapFrom(c => JsonConvert.DeserializeObject<dynamic>(c.ExtensionData)))
-                .ForMember(c => c.Children, opt => opt.Ignore());
+            CreateMap<BXJGShopDictionaryEntity, DictionaryDto>();
 
             #region 上架信息/商品信息
             CreateMap<ItemEntity, ItemDto>()

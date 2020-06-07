@@ -1,10 +1,12 @@
 ﻿using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
-
+using AutoMapper.Configuration.Annotations;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace BXJG.GeneralTree
@@ -14,7 +16,7 @@ namespace BXJG.GeneralTree
     /// </summary>
     /// <typeparam name="TChild"></typeparam>
     public class GeneralTreeGetTreeNodeBaseDto<TChild> : AuditedEntityDto<long>
-        where TChild: GeneralTreeGetTreeNodeBaseDto<TChild>
+        where TChild : GeneralTreeGetTreeNodeBaseDto<TChild>
     {
         /// <summary>
         /// 父级组织单位id
@@ -35,6 +37,7 @@ namespace BXJG.GeneralTree
         /// <summary>
         /// 配合easyui，state：节点状态，'open' 或 'closed'，默认：'open'。如果为'closed'的时候，将不自动展开该节点。
         /// </summary>
+       // [Ignore]
         public string State { get; set; } = "open";
         //{
         //    get
@@ -51,6 +54,33 @@ namespace BXJG.GeneralTree
         ///// </summary>
         //public int OrderIndex { get; set; }
 
-        public dynamic ExtData { get; set; }
+        private string extensionData;
+
+        //对ExtData的赋值本来可以直接在AutoMapper映射中来做
+        //但是模块中使用了泛型，加上实现子类可能有更多泛型，AutoMapper好像支持不太好
+        //因此AutoMapper映射原始的ExtensionData，在属性内部设置ExtData
+        //ExtensionData本身就不需要序列化到前端了
+
+        [Newtonsoft.Json.JsonIgnore]
+        public string ExtensionData
+        {
+            get
+            {
+                return extensionData;
+            }
+            set
+            {
+                extensionData = value;
+                if (string.IsNullOrWhiteSpace(value))
+                    ExtData = null;
+                else
+                    ExtData = JsonConvert.DeserializeObject<dynamic>(value);
+            }
+        }
+        /// <summary>
+        /// 扩展属性
+        /// </summary>
+       // [Ignore]
+        public dynamic ExtData { get; private set; }
     }
 }

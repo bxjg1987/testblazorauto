@@ -10,9 +10,15 @@ namespace BXJG.GeneralTree
     {
         public GeneralTreeMapProfile()
         {
-            CreateMap<GeneralTreeEntity, GeneralTreeDto>()
-                .ForMember(c => c.ExtData, opt => opt.MapFrom(c => JsonConvert.DeserializeObject<dynamic>(c.ExtensionData)))
-                .ForMember(c => c.Children, opt => opt.Ignore());
+            CreateMap(typeof(GeneralTreeEntity<>), typeof(GeneralTreeGetTreeNodeBaseDto<>))
+                .IncludeAllDerived()
+                .ForMember("State",opt=>opt.Ignore())
+                .ForMember("ExtData", opt => opt.Ignore())
+                .ForMember("Children", opt => opt.Ignore()); 
+
+            CreateMap<GeneralTreeEntity, GeneralTreeDto>();
+                //.ForMember(c => c.ExtData, opt => opt.MapFrom(c => JsonConvert.DeserializeObject<dynamic>(c.ExtensionData)))  在DTO的属性中做了处理
+               // .ForMember(c => c.Children, opt => opt.Ignore())
             //.ForMember(c => c.IsTreeText, opt => opt.MapFrom(c => c.IsTree.ToString().UtilsL()))
             //.ForMember(c => c.IsSysDefineText, opt => opt.MapFrom(c => c.IsSysDefine.ToString().UtilsL()))
 

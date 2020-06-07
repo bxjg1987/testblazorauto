@@ -17,14 +17,16 @@ namespace BXJG.Shop
             //Configuration.Authorization.Providers.Add<BXJGShopAuthorizationProvider>();
 
             //Adding custom AutoMapper configuration
-            Configuration.Modules.AbpAutoMapper().Configurators.Add(
-                // Scan the assembly for classes which inherit from AutoMapper.Profile
-                cfg => cfg.AddMaps(typeof(BXJGShopApplicationModule).GetAssembly())
-            );
+         
         }
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(typeof(BXJGShopApplicationModule).GetAssembly());
+
+            Configuration.Modules.AbpAutoMapper().Configurators.Add(
+             // Scan the assembly for classes which inherit from AutoMapper.Profile
+             cfg => cfg.AddMaps(typeof(BXJGShopApplicationModule).GetAssembly())
+         );
         }
     }
 }

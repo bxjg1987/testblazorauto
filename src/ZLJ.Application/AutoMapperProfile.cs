@@ -6,6 +6,7 @@ using BXJG.Utils.Localization;
 using BXJG.Shop.Common.Dto;
 using BXJG.Shop.Catalogue;
 using BXJG.Shop.Customer;
+using ZLJ.Administrative;
 
 namespace ZLJ
 {
@@ -26,6 +27,8 @@ namespace ZLJ
         /// </summary>
         public AutoMapperProfile()
         {
+            CreateMap<AdministrativeEntity, AdministrativeDto>();
+
             //CreateMap<BXJGShopDictionaryEntity, DictionaryDto>()
             //    .ForMember(c => c.ExtData, opt => opt.MapFrom(c => JsonConvert.DeserializeObject<dynamic>(c.ExtensionData)))
             //    .ForMember(c => c.Children, opt => opt.Ignore());

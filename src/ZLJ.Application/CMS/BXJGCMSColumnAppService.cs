@@ -12,7 +12,7 @@ namespace ZLJ.CMS
     /// </summary>
     public class BXJGCMSColumnAppService : BXJGCMSColumnAppService<GeneralTreeEntity>
     {
-        public BXJGCMSColumnAppService(IRepository<ColumnEntity<GeneralTreeEntity>, long> repository, ColumnManager<GeneralTreeEntity> organizationUnitManager) : base(repository, organizationUnitManager)
+        public BXJGCMSColumnAppService(IRepository<ColumnEntity<GeneralTreeEntity>, long> repository, ColumnManager organizationUnitManager) : base(repository, organizationUnitManager)
         {
         }
     }

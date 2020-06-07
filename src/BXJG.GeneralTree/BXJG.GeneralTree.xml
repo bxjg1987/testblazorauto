@@ -137,6 +137,11 @@
             什么鬼
             </summary>
         </member>
+        <member name="P:BXJG.GeneralTree.GeneralTreeGetTreeNodeBaseDto`1.ExtData">
+            <summary>
+            扩展属性
+            </summary>
+        </member>
         <member name="T:BXJG.GeneralTree.GeneralTreeManager`1">
             <summary>
             通用树形领域服务
