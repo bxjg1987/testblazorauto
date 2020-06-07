@@ -31,17 +31,17 @@ namespace BXJG.Shop.Common
             base.getPermissionName = BXJGShopPermissions.BXJGShopDictionary;
         }
 
-        protected override async Task<IList<DictionaryCombboxDto>> GetNodesForSelectProjectionAsync(IQueryable<BXJGShopDictionaryEntity> query)
-        {
-            var q = query.Select(c => new DictionaryCombboxDto { ExtDataString = c.ExtensionData, DisplayText = c.DisplayName, Value = c.Id.ToString(), Icon = c.Icon, IsTree = c.IsTree, IsSysDefine = c.IsSysDefine });
-            return await AsyncQueryableExecuter.ToListAsync(q);
-        }
+        //protected override async Task<IList<DictionaryCombboxDto>> ComboboxProjectionAsync(IQueryable<BXJGShopDictionaryEntity> query)
+        //{
+        //    var q = query.Select(c => new DictionaryCombboxDto { ExtDataString = c.ExtensionData, DisplayText = c.DisplayName, Value = c.Id.ToString(), Icon = c.Icon, IsTree = c.IsTree, IsSysDefine = c.IsSysDefine });
+        //    return await AsyncQueryableExecuter.ToListAsync(q);
+        //}
 
-        protected override void OnGetTreeForSelectItem(BXJGShopDictionaryEntity entity, DictionaryTreeNodeDto node)
-        {
-            node.Icon = entity.Icon;
-            node.IsSysDefine = entity.IsSysDefine;
-            node.IsTree = entity.IsTree;
-        }
+        //protected override void ComboTreeMap(BXJGShopDictionaryEntity entity, DictionaryTreeNodeDto node)
+        //{
+        //    node.Icon = entity.Icon;
+        //    node.IsSysDefine = entity.IsSysDefine;
+        //    node.IsTree = entity.IsTree;
+        //}
     }
 }

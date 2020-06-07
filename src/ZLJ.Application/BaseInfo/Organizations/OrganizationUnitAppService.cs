@@ -112,8 +112,8 @@ namespace ZLJ.Organizations
                 c.Children = list1.Where(d => d.ParentId == c.Id).ToList();
                 var entity = list.Single(d => d.Id == c.Id);
 
-                if (c.Children != null && c.Children.Count > 0)
-                    c.State = "closed";//默认值为 open
+                //if (c.Children != null && c.Children.Count > 0)
+                //    c.State = "closed";//默认值为 open
 
 
             }
@@ -164,9 +164,9 @@ namespace ZLJ.Organizations
             {
                 var temp = new GeneralTreeNodeDto
                 {
-                    id = c.Id.ToString(),
-                    parentId = c.ParentId.ToString(),
-                    text = c.DisplayName
+                    Id = c.Id.ToString(),
+                    ParentId = c.ParentId.ToString(),
+                    Text = c.DisplayName
                 };
                 temp.attributes = new ExpandoObject();
                 temp.attributes.code = c.Code;//这里可以搞个虚方法，允许子类填充自己的字段
@@ -174,34 +174,34 @@ namespace ZLJ.Organizations
             }
             dtoList.ForEach(c =>
             {
-                c.children = dtoList.Where(d => d.parentId == c.id).ToList();
+                c.Children = dtoList.Where(d => d.ParentId == c.Id).ToList();
 
-                var entity = list.Single(d => d.Id.ToString() == c.id);
+                var entity = list.Single(d => d.Id.ToString() == c.Id);
 
-                if (c.children != null && c.children.Count > 0)
+                if (c.Children != null && c.Children.Count > 0)
                     c.state = "closed";//默认值为 open
 
 
             });
 
-            var parenOrganizationUnitDto = input.ParentId.HasValue ? dtoList.SingleOrDefault(c => c.id == input.ParentId.ToString()) : null;
+            var parenOrganizationUnitDto = input.ParentId.HasValue ? dtoList.SingleOrDefault(c => c.Id == input.ParentId.ToString()) : null;
 
             if (input.ParentId.HasValue)
-                dtoList = dtoList.Where(c => c.parentId == input.ParentId.ToString()).ToList();
+                dtoList = dtoList.Where(c => c.ParentId == input.ParentId.ToString()).ToList();
             else
-                dtoList = dtoList.Where(c => string.IsNullOrWhiteSpace(c.parentId)).ToList();
+                dtoList = dtoList.Where(c => string.IsNullOrWhiteSpace(c.ParentId)).ToList();
 
             if (input.ForType > 0 && input.ForType < 5 && !string.IsNullOrWhiteSpace(input.ParentText))
-                return new List<GeneralTreeNodeDto> { new GeneralTreeNodeDto { id = null, text = L(input.ParentText), children = dtoList } };
+                return new List<GeneralTreeNodeDto> { new GeneralTreeNodeDto { Id = null, Text = L(input.ParentText), Children = dtoList } };
 
             if ((input.ForType == 1 || input.ForType == 3) && input.ParentId.HasValue)
                 return new List<GeneralTreeNodeDto> { parenOrganizationUnitDto };
 
             if (input.ForType == 1 || input.ForType == 2)
-                return new List<GeneralTreeNodeDto> { new GeneralTreeNodeDto { id = null, text = L(this.allTextForSearch), children = dtoList } };
+                return new List<GeneralTreeNodeDto> { new GeneralTreeNodeDto { Id = null, Text = L(this.allTextForSearch), Children = dtoList } };
 
             if (input.ForType == 3 || input.ForType == 4)
-                return new List<GeneralTreeNodeDto> { new GeneralTreeNodeDto { id = null, text = L(this.allTextForForm), children = dtoList } };
+                return new List<GeneralTreeNodeDto> { new GeneralTreeNodeDto { Id = null, Text = L(this.allTextForForm), Children = dtoList } };
 
             return dtoList;
         }

@@ -33,24 +33,24 @@ namespace ZLJ.Administrative
             base.deletePermissionName = PermissionNames.AdministratorBaseInfoAdministrativeDelete;
             base.getPermissionName = PermissionNames.AdministratorBaseInfoAdministrative;
         }
-        protected override void OnGetAllItem(AdministrativeEntity entity, AdministrativeDto dto)
-        {
-            dto.Level = entity.Level;
-        }
-        protected override async Task<IList<AdministrativeCombboxDto>> GetNodesForSelectProjectionAsync(IQueryable<AdministrativeEntity> query)
-        {
-           return await query
-                .Select(c => new AdministrativeCombboxDto { 
-                    ExtDataString = c.ExtensionData,
-                    DisplayText = c.DisplayName, 
-                    Value = c.Id.ToString(),
-                    Level = c.Level })
-                .ToListAsync();
-        }
+        //protected override void GetAllMap(AdministrativeEntity entity, AdministrativeDto dto)
+        //{
+        //    dto.Level = entity.Level;
+        //}
+        //protected override async Task<IList<AdministrativeCombboxDto>> ComboboxProjectionAsync(IQueryable<AdministrativeEntity> query)
+        //{
+        //   return await query
+        //        .Select(c => new AdministrativeCombboxDto { 
+        //            ExtDataString = c.ExtensionData,
+        //            DisplayText = c.DisplayName, 
+        //            Value = c.Id.ToString(),
+        //            Level = c.Level })
+        //        .ToListAsync();
+        //}
 
-        protected override void OnGetTreeForSelectItem(AdministrativeEntity entity, AdministrativeTreeNodeDto node)
-        {
-            node.Level = entity.Level;
-        }
+        //protected override void ComboTreeMap(AdministrativeEntity entity, AdministrativeTreeNodeDto node)
+        //{
+        //    node.Level = entity.Level;
+        //}
     }
 }

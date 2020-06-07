@@ -190,8 +190,8 @@ namespace BXJG.GeneralTree
             }
 
             //查询
-            var query = CreateFilteredQuery(input).Where(c => c.Code.StartsWith(parentCode));
-            query = ApplySorting(query, input); //方便子类排序
+            var query = GetAllFiltered(input, parentCode);//.Where(c => c.Code.StartsWith(parentCode));
+            query = GetAllSorting(query, input); //方便子类排序
             var list = await AsyncQueryableExecuter.ToListAsync(query);//.ToListAsync();
 
             //建立dto以及处理父子关系
@@ -199,23 +199,27 @@ namespace BXJG.GeneralTree
             //if (parent != null)
             //    list.Remove(parent);
 
-            var list1 = ObjectMapper.Map<IList<TDto>>(list);//映射排除children
+            var list1 = ObjectMapper.Map<IList<TDto>>(list);//使用映射的好处是子类扩展多个属性时都可以使用映射，避免大量属性赋值的代码
 
-            foreach (var c in list1)
+
+            //这里应该加个开关，因为子类可能并不需要遍历
+            if (GetAllMap != null)
             {
-                c.Children = list1.Where(d => d.ParentId == c.Id).ToList();
-                var entity = list.Single(d => d.Id == c.Id);
+                foreach (var c in list1)
+                {
+                    //c.Children = list1.Where(d => d.ParentId == c.Id).ToList();
+                    var entity = list.Single(d => d.Id == c.Id);
 
-                if (c.Children != null && c.Children.Count > 0)
-                    c.State = "closed";//默认值为 open
+                    //if (c.Children != null && c.Children.Count > 0)
+                    //    c.State = "closed";//默认值为 open
 
-                //映射配置中定义了
-                //if (!string.IsNullOrWhiteSpace(entity.ExtensionData))
-                //    c.ExtData = JsonConvert.DeserializeObject<dynamic>(entity.ExtensionData);
+                    //dto属性中处理了
+                    //if (!string.IsNullOrWhiteSpace(entity.ExtensionData))
+                    //    c.ExtData = JsonConvert.DeserializeObject<dynamic>(entity.ExtensionData);
 
-                OnGetAllItem(entity, c);
+                    GetAllMap(entity, c);
+                }
             }
-
 
             var parentDto = input.ParentId.HasValue ? list1.SingleOrDefault(c => c.Id == input.ParentId) : null;
             //得到顶级节点集合
@@ -247,94 +251,97 @@ namespace BXJG.GeneralTree
                 var top = await ownRepository.GetAsync(input.ParentId.Value);
                 parentCode = top.Code;
             }
-            var query = ownRepository.GetAll()
-                .Where(c => c.Code.StartsWith(parentCode))
-                .OrderBy(c => c.Code);
-            //可以调用虚方法间接给子类一个机会做过滤，暂未实现
+            var query = this.ComboTreeFilter(input, parentCode);
+            query = this.ComboTreeSort(query, input);
+
+
             var list = await AsyncQueryableExecuter.ToListAsync(query);
 
+            var dtoList = ObjectMapper.Map<List<TGetTreeForSelectOutput>>(list);
 
-            //先踢出父节点
-            //TEntity parent = list.SingleOrDefault(c => c.Id == input.Id);
-            //if (parent != null)
-            //    list.Remove(parent);
-
-            //转换为Dto
-            //上面没有直接用投影是为了给子类一个机会来参与遍历过程
-            var dtoList = new List<TGetTreeForSelectOutput>();
-            foreach (var c in list)
+            if (ComboTreeMap != null)
             {
-                var temp = new TGetTreeForSelectOutput
+                dtoList.ForEach(c =>
                 {
-                    id = c.Id.ToString(),
-                    parentId = c.ParentId.ToString(),
-                    text = c.DisplayName
-                };
-                temp.attributes = new ExpandoObject();
-                temp.attributes.code = c.Code;//这里可以搞个虚方法，允许子类填充自己的字段
-                dtoList.Add(temp);
+                    var entity = list.Single(d => d.Id.ToString() == c.Id);
+
+                    //这俩属性通过属性的方式处理了
+                    //c.state = "closed";//默认值为 open
+                    //c.attributes.extData = JsonConvert.DeserializeObject<dynamic>(entity.ExtensionData);
+
+                    ComboTreeMap(entity, c);
+                });
+
             }
-            dtoList.ForEach(c =>
-            {
-                c.children = dtoList.Where(d => d.parentId == c.id).ToList();
-
-                var entity = list.Single(d => d.Id.ToString() == c.id);
-
-                if (c.children != null && c.children.Count > 0)
-                    c.state = "closed";//默认值为 open
-
-                if (!string.IsNullOrWhiteSpace(entity.ExtensionData))
-                    c.attributes.extData = JsonConvert.DeserializeObject<dynamic>(entity.ExtensionData);
-
-                OnGetTreeForSelectItem(entity, c);
-            });
-
             TGetTreeForSelectOutput parentDto;
             if (input.ParentId.HasValue)
             {
-                parentDto = dtoList.SingleOrDefault(c => c.id == input.ParentId.ToString());
-                dtoList = dtoList.Where(c => c.parentId == input.ParentId.ToString()).ToList();
+                parentDto = dtoList.SingleOrDefault(c => c.Id == input.ParentId.ToString());
+                dtoList = dtoList.Where(c => c.ParentId == input.ParentId.ToString()).ToList();
             }
             else
             {
                 parentDto = null;
-                dtoList = dtoList.Where(c => string.IsNullOrWhiteSpace(c.parentId)).ToList();
+                dtoList = dtoList.Where(c => string.IsNullOrWhiteSpace(c.ParentId)).ToList();
             }
 
 
             //通用树是通过继承来实现扩展的，所以这里L引用的本地化源可能被子类重写，因此这里用L是可以的
             if (input.ForType > 0 && input.ForType < 5 && !string.IsNullOrWhiteSpace(input.ParentText))
-                return new List<TGetTreeForSelectOutput> { new TGetTreeForSelectOutput { id = null, text = L(input.ParentText), children = dtoList } };
+                return new List<TGetTreeForSelectOutput> { new TGetTreeForSelectOutput { Id = null, Text = L(input.ParentText), Children = dtoList } };
 
             if ((input.ForType == 1 || input.ForType == 3) && input.ParentId.HasValue)
             {
-                parentDto.text = "==" + parentDto.text + "==";
-                parentDto.id = null;
+                parentDto.Text = "==" + parentDto.Text + "==";
+                parentDto.Id = null;
                 return new List<TGetTreeForSelectOutput> { parentDto };
             }
 
 
             if (input.ForType == 1 || input.ForType == 2)
-                return new List<TGetTreeForSelectOutput> { new TGetTreeForSelectOutput { id = null, text = this.allTextForSearch, children = dtoList } };
+                return new List<TGetTreeForSelectOutput> { new TGetTreeForSelectOutput { Id = null, Text = this.allTextForSearch, Children = dtoList } };
 
             if (input.ForType == 3 || input.ForType == 4)
-                return new List<TGetTreeForSelectOutput> { new TGetTreeForSelectOutput { id = null, text = this.allTextForForm, children = dtoList } };
+                return new List<TGetTreeForSelectOutput> { new TGetTreeForSelectOutput { Id = null, Text = this.allTextForForm, Children = dtoList } };
 
             return dtoList;
         }
         public virtual async Task<IList<TGetNodesForSelectOutput>> GetNodesForSelectAsync(TGetNodesForSelectInput input)
         {
             //await CheckGetPermissionAsync();
+            //得到实体扁平集合
+            string parentCode = "";
+            if (input.ParentId.HasValue && input.ParentId.Value > 0)
+            {
+                var top = await ownRepository.GetAsync(input.ParentId.Value);
+                parentCode = top.Code;
+            }
 
-            var query = ownRepository.GetAll()
-                 .Where(c => c.ParentId == input.ParentId || c.Id == input.ParentId);
+            var query = ComboboxFilter(input, parentCode);
 
-            query = GetNodesForSelectSort(query);
+            query = ComboboxSort(query, input);
             //GetNodesForSelectProjection允许子类直接投影，这种情况可能不太灵活，因为子类可能不方便做ef投影，所以将来可能考虑完全获取实体，在内存中来做这个转换
 
-            
+            var list = await AsyncQueryableExecuter.ToListAsync(query);
 
-            var dtoList =await GetNodesForSelectProjectionAsync(query);
+            var dtoList = ObjectMapper.Map<List<TGetNodesForSelectOutput>>(list);
+
+            if (ComboboxMap != null)
+            {
+                dtoList.ForEach(c =>
+                {
+                    var entity = list.Single(d => d.Id.ToString() == c.Value);
+
+                    //这俩属性通过属性的方式处理了
+                    //c.state = "closed";//默认值为 open
+                    //c.attributes.extData = JsonConvert.DeserializeObject<dynamic>(entity.ExtensionData);
+
+                    ComboboxMap(entity, c);
+                });
+
+            }
+
+            //var dtoList = await ComboboxProjectionAsync(query);
             var parentDto = input.ParentId.HasValue ? dtoList.SingleOrDefault(c => c.Value == input.ParentId.ToString()) : null;
             if (parentDto != null)
             {
@@ -390,59 +397,67 @@ namespace BXJG.GeneralTree
         }
         #endregion
 
-        #region 预留给子类重写
-        /// <summary>
-        /// 管理页获取列表时 每个Entity转换为Dto时回调此方法，给子类一个机会修改dto的值
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="dto"></param>
-        protected virtual void OnGetAllItem(TEntity entity, TDto dto)
+        #region 后台管理获取列表时可重写的方法
+        protected virtual IQueryable<TEntity> GetAllFiltered(TGetAllInput q, string parentCode)
         {
-
+            return ownRepository.GetAll().Where(c => c.Code.StartsWith(parentCode));
         }
-        /// <summary>
-        /// 获取树形下拉框时，将实体转换为dto时回调
-        /// 允许子类在转换过程中处理自己的字段
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="node"></param>
-        protected virtual void OnGetTreeForSelectItem(TEntity entity, TGetTreeForSelectOutput node)
-        {
-
-        }
-        protected virtual IQueryable<TEntity> CreateFilteredQuery(TGetAllInput q)
-        {
-            return ownRepository.GetAll();
-        }
-        protected virtual IQueryable<TEntity> ApplySorting(IQueryable<TEntity> query, TGetAllInput input)
+        protected virtual IQueryable<TEntity> GetAllSorting(IQueryable<TEntity> query, TGetAllInput input)
         {
             return query.OrderBy(c => c.Code);
         }
-        /// <summary>
-        /// 获取扁平化的下拉框数据时转换
-        /// 子类可以用投影转换，若有复杂情况也可以在内存中转换
-        /// </summary>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        protected virtual async Task<IList<TGetNodesForSelectOutput>> GetNodesForSelectProjectionAsync(IQueryable<TEntity> query)
+        protected Action<TEntity, TDto> GetAllMap = null;
+
+        #endregion
+        #region 获取树形下拉框数据时子类可以重写的方法
+        protected virtual IQueryable<TEntity> ComboTreeFilter(TGetTreeForSelectInput input, string parentCode)
         {
-            var q = query.Select(c => new TGetNodesForSelectOutput { ExtDataString = c.ExtensionData, DisplayText = c.DisplayName, Value = c.Id.ToString() });
-            return await AsyncQueryableExecuter.ToListAsync(q);
+            return ownRepository.GetAll().Where(c => c.Code.StartsWith(parentCode));
         }
-        /// <summary>
-        /// 获取扁平化的下拉框数据时的排序
-        /// </summary>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        protected virtual IQueryable<TEntity> GetNodesForSelectSort(IQueryable<TEntity> query)
+        protected virtual IQueryable<TEntity> ComboTreeSort(IQueryable<TEntity> query, TGetTreeForSelectInput input)
         {
             return query.OrderBy(c => c.Code);
         }
 
-        //protected virtual Task BeforeCreate(TEntity m)
+        protected Action<TEntity, TGetTreeForSelectOutput> ComboTreeMap = null;
+        //protected virtual void ComboTreeMap(TEntity entity, TGetTreeForSelectOutput node)
         //{
-        //    return Task.FromResult<object>(null);
+        //    //base.ObjectMapper.Map<TGetTreeForSelectOutput>(entity);
         //}
+        #endregion
+        #region 获取扁平化下拉框数据时子类可重写的方法
+        protected virtual IQueryable<TEntity> ComboboxFilter(TGetNodesForSelectInput input, string parentCode)
+        {
+            return ownRepository.GetAll().Where(c => c.Code.StartsWith(parentCode));
+            //return ownRepository.GetAll().Where(c => c.ParentId == input.ParentId || c.Id == input.ParentId);
+        }
+        protected virtual IQueryable<TEntity> ComboboxSort(IQueryable<TEntity> query, TGetNodesForSelectInput input)
+        {
+            return query.OrderBy(c => c.Code);
+        }
+        //protected virtual async Task<IList<TGetNodesForSelectOutput>> ComboboxProjectionAsync(IQueryable<TEntity> query)
+        //{
+        //    //var q = query.Select(c => new TGetNodesForSelectOutput { ExtDataString = c.ExtensionData, DisplayText = c.DisplayName, Value = c.Id.ToString() });
+        //    //return await AsyncQueryableExecuter.ToListAsync(q);
+
+        //    var list = await AsyncQueryableExecuter.ToListAsync(query);
+        //    var dtos = new List<TGetNodesForSelectOutput>();
+        //    foreach (var item in list)
+        //    {
+        //        var dto = new TGetNodesForSelectOutput()
+        //        {
+        //            Code = item.Code,
+        //            DisplayText = item.DisplayName,
+        //            ExtDataString = item.ExtensionData,
+        //            Value = item.Id.ToString()
+        //        };
+        //        ComboboxMap(item, dto);
+        //        dtos.Add(dto);
+        //    }
+        //    return dtos;
+        //}
+        protected Action<TEntity, TGetNodesForSelectOutput> ComboboxMap = null;
+       
         #endregion
     }
 }

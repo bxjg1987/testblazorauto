@@ -194,7 +194,7 @@
         </member>
         <member name="T:BXJG.CMS.Column.BXJGCMSColumnAppService`1">
             <summary>
-            CMS栏目管理服务
+            后台管理管理CMS栏目的服务
             </summary>
             <typeparam name="TDataDictionary"></typeparam>
         </member>
@@ -349,6 +349,46 @@
             </summary>
         </member>
         <member name="P:BXJG.CMS.Column.ColumnTreeNodeDto.ContentTypeId">
+            <summary>
+            内容类型Id
+            </summary>
+        </member>
+        <member name="T:BXJG.CMS.Column.GetAllInput">
+            <summary>
+            后台管理栏目时，获取列表页面数据时的输入模型
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Column.GetAllInput.ColumnType">
+            <summary>
+            栏目类型
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Column.GetAllInput.ContentTypeId">
+            <summary>
+            内容类型Id
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Column.GetAllInput.SystemDefine">
+            <summary>
+            时候是系统预定义的栏目
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Column.GetAllInput.Keywords">
+            <summary>
+            关键字 标题、seo信息，模板名等...
+            </summary>
+        </member>
+        <member name="T:BXJG.CMS.Column.GetForSelectInput">
+            <summary>
+            获取下拉框（无论是树形的还是扁平化的）栏目时的输入模型
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Column.GetForSelectInput.ColumnType">
+            <summary>
+            栏目类型
+            </summary>
+        </member>
+        <member name="P:BXJG.CMS.Column.GetForSelectInput.ContentTypeId">
             <summary>
             内容类型Id
             </summary>

@@ -23,6 +23,8 @@ namespace BXJG.Shop.Common
         public BXJGShopMapProfile()
         {
             CreateMap<BXJGShopDictionaryEntity, DictionaryDto>();
+            CreateMap<BXJGShopDictionaryEntity, DictionaryTreeNodeDto>().EntityToComboTree(); 
+            CreateMap<BXJGShopDictionaryEntity, DictionaryCombboxDto>().EntityToCombobox();
 
             #region 上架信息/商品信息
             CreateMap<ItemEntity, ItemDto>()

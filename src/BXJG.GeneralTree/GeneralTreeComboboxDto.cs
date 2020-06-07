@@ -25,28 +25,36 @@ namespace BXJG.GeneralTree
     /// <typeparam name="TId"></typeparam>
     public class GeneralTreeComboboxDto: ComboboxItemDto
     {
+        public string Code { get; set; }
 
-        //虽然子类可以继承这个进行自定义数据扩展，但是那是编译时/设计时扩展，前端无法随时扩展自定义数据，因此这里ExtData功能是有必要的
-        public dynamic ExtData { get; private set; }
-        
-        //实体转为dto时 由于ef，无法将字符串转换为dynamic
-        [JsonIgnore]
-        public string ExtDataString
+        private string extensionData;
+
+        //对ExtData的赋值本来可以直接在AutoMapper映射中来做
+        //但是模块中使用了泛型，加上实现子类可能有更多泛型，AutoMapper好像支持不太好
+        //因此AutoMapper映射原始的ExtensionData，在属性内部设置ExtData
+        //ExtensionData本身就不需要序列化到前端了
+
+        [JsonIgnore]//目前默认使用的并非.net 3.x的json序列化
+        public string ExtensionData
         {
             get
             {
-                if (ExtData == null)
-                    return null;
-                return JsonConvert.SerializeObject(ExtData);
+                return extensionData;
             }
             set
             {
-                if (!string.IsNullOrWhiteSpace(value))
-                    ExtData = JsonConvert.DeserializeObject<dynamic>(value);
-                else
+                extensionData = value;
+                if (string.IsNullOrWhiteSpace(value))
                     ExtData = null;
+                else
+                    ExtData = JsonConvert.DeserializeObject<dynamic>(value);
             }
         }
+        /// <summary>
+        /// 扩展属性
+        /// </summary>
+       // [Ignore]
+        public dynamic ExtData { get; private set; }
 
         public GeneralTreeComboboxDto()
         {
@@ -55,7 +63,7 @@ namespace BXJG.GeneralTree
         public GeneralTreeComboboxDto(long? id, string text, string extData = "")
             :base(id.HasValue?id.ToString():null,text)
         {
-            ExtDataString = extData;
+            ExtensionData = extData;
         }
     }
 }

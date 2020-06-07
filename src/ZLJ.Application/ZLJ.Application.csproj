@@ -25,6 +25,8 @@
     <None Remove="Localization\**" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="BaseInfo\Organizations\IOrganizationUnitAppService.cs" />
+    <Compile Remove="BaseInfo\Organizations\OrganizationUnitAppService.cs" />
     <Compile Remove="Dto\ComboboxDto.cs" />
     <Compile Remove="Dto\GetForSelectInput.cs" />
     <Compile Remove="Dto\GetPageDataInput.cs" />

@@ -38,7 +38,7 @@ namespace BXJG.GeneralTree
         /// 配合easyui，state：节点状态，'open' 或 'closed'，默认：'open'。如果为'closed'的时候，将不自动展开该节点。
         /// </summary>
        // [Ignore]
-        public string State { get; set; } = "open";
+        public string State => this.Children != null && this.Children.Count > 0&& !string.IsNullOrWhiteSpace(this.Code) ? "closed" : "open";
         //{
         //    get
         //    {
@@ -61,7 +61,7 @@ namespace BXJG.GeneralTree
         //因此AutoMapper映射原始的ExtensionData，在属性内部设置ExtData
         //ExtensionData本身就不需要序列化到前端了
 
-        [Newtonsoft.Json.JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]//目前默认使用的并非.net 3.x的json序列化
         public string ExtensionData
         {
             get

@@ -56,7 +56,11 @@ namespace BXJG.CMS.EFCore.Seed
                 SeoTitle = "SeoTitle",
                 SeoKeyword = "SeoKeyword",
                 SeoDescription = "SeoDescription",
-                DisplayName = "关于我们"
+                DisplayName = "关于我们",
+                ExtensionData = "{\"sss\":33}",
+                Icon = "ssssicon",
+                ListTemplate = "newslist",
+                DetailTemplate = "newsdetail"
             });
             #endregion
 

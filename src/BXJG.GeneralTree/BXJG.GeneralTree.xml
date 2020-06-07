@@ -24,41 +24,16 @@
             <typeparam name="TEntity"></typeparam>
             <typeparam name="TManager"></typeparam>
         </member>
-        <member name="M:BXJG.GeneralTree.GeneralTreeAppServiceBase`10.OnGetAllItem(`8,`0)">
-            <summary>
-            管理页获取列表时 每个Entity转换为Dto时回调此方法，给子类一个机会修改dto的值
-            </summary>
-            <param name="entity"></param>
-            <param name="dto"></param>
-        </member>
-        <member name="M:BXJG.GeneralTree.GeneralTreeAppServiceBase`10.OnGetTreeForSelectItem(`8,`4)">
-            <summary>
-            获取树形下拉框时，将实体转换为dto时回调
-            允许子类在转换过程中处理自己的字段
-            </summary>
-            <param name="entity"></param>
-            <param name="node"></param>
-        </member>
-        <member name="M:BXJG.GeneralTree.GeneralTreeAppServiceBase`10.GetNodesForSelectProjectionAsync(System.Linq.IQueryable{`8})">
-            <summary>
-            获取扁平化的下拉框数据时转换
-            子类可以用投影转换，若有复杂情况也可以在内存中转换
-            </summary>
-            <param name="query"></param>
-            <returns></returns>
-        </member>
-        <member name="M:BXJG.GeneralTree.GeneralTreeAppServiceBase`10.GetNodesForSelectSort(System.Linq.IQueryable{`8})">
-            <summary>
-            获取扁平化的下拉框数据时的排序
-            </summary>
-            <param name="query"></param>
-            <returns></returns>
-        </member>
         <member name="T:BXJG.GeneralTree.GeneralTreeComboboxDto">
             <summary>
             Easyui的Combobox下拉框控件对应数据的模型，它是一个通用模型
             </summary>
             <typeparam name="TId"></typeparam>
+        </member>
+        <member name="P:BXJG.GeneralTree.GeneralTreeComboboxDto.ExtData">
+            <summary>
+            扩展属性
+            </summary>
         </member>
         <member name="T:BXJG.GeneralTree.GeneralTreeDto">
             <summary>
@@ -211,6 +186,11 @@
             通用字典领域服务
             </summary>
         </member>
+        <member name="T:BXJG.GeneralTree.GeneralTreeMapProfileExt">
+            <summary>
+            经过测试,在有泛型的场景中AutoMapper使用继承并不能达到预期效果
+            </summary>
+        </member>
         <member name="T:BXJG.GeneralTree.GeneralTreeModuleConfig">
             <summary>
             公共模块配置对象
@@ -239,6 +219,11 @@
         <member name="T:BXJG.GeneralTree.GeneralTreeNodeDto`1">
             <summary>
             获取树形下拉框数据的模型
+            </summary>
+        </member>
+        <member name="P:BXJG.GeneralTree.GeneralTreeNodeDto`1.ExtData">
+            <summary>
+            扩展属性
             </summary>
         </member>
         <member name="T:BXJG.GeneralTree.GeneralTreeNodeEditBaseDto">

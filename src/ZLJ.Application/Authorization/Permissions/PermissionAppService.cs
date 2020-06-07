@@ -66,13 +66,13 @@ namespace ZLJ.Authorization.Permissions
                 var permissions = PermissionManager.GetAllPermissions();
                 var list = permissions.Select(c => new GeneralTreeNodeDto
                 {
-                    id = c.Name,
-                    text = c.DisplayName.Localize(new LocalizationContext(base.LocalizationManager)),
-                    state = c.Children != null && c.Children.Count > 0 ? "closed" : "open",
-                    parentId = c.Parent != null ? c.Parent.Name : null
+                    Id = c.Name,
+                    Text = c.DisplayName.Localize(new LocalizationContext(base.LocalizationManager)),
+                    //State = c.Children != null && c.Children.Count > 0 ? "closed" : "open",
+                    ParentId = c.Parent != null ? c.Parent.Name : null
                 }).ToList();
-                list.ForEach(c => c.children = list.Where(d => d.parentId == c.id).ToList());
-                return list.Where(c => c.parentId == PermissionNames.Administrator).ToList();
+                list.ForEach(c => c.Children = list.Where(d => d.ParentId == c.Id).ToList());
+                return list.Where(c => c.ParentId == PermissionNames.Administrator).ToList();
            
         }
         [AbpAuthorize]

@@ -173,66 +173,6 @@
             0总公司 1分公司 2部门
             </summary>
         </member>
-        <member name="T:ZLJ.Organizations.IOrganizationUnitAppService">
-            <summary>
-            组织单位管理
-            </summary>
-        </member>
-        <member name="M:ZLJ.Organizations.IOrganizationUnitAppService.CreateAsync(ZLJ.Organizations.Dto.EditOrganizationUnitDto)">
-            <summary>
-            创建树形结构数据的节点
-            </summary>
-            <param name="input"></param>
-            <returns></returns>
-        </member>
-        <member name="M:ZLJ.Organizations.IOrganizationUnitAppService.GetAllListAsync(BXJG.GeneralTree.GeneralTreeGetTreeInput)">
-            <summary>
-            获取所有数据，通常由展示的列表页面调用
-            </summary>
-            <param name="input"></param>
-            <returns></returns>
-        </member>
-        <member name="M:ZLJ.Organizations.IOrganizationUnitAppService.GetTreeForSelectAsync(BXJG.GeneralTree.GeneralTreeGetForSelectInput)">
-            <summary>
-            获取简洁的树形数据，通常引用此数据的页面调用
-            </summary>
-            <param name="input">指定父节点，是否显示全部</param>
-            <returns></returns>
-        </member>
-        <member name="M:ZLJ.Organizations.IOrganizationUnitAppService.GetNodesForSelectAsync(BXJG.GeneralTree.GeneralTreeGetForSelectInput)">
-            <summary>
-            获取指定父节点的子节点，以扁平结构返回
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:ZLJ.Organizations.IOrganizationUnitAppService.MoveAsync(ZLJ.Organizations.Dto.MoveInput)">
-            <summary>
-            移动节点，服务端将自动重新生成所有兄弟节点的code
-            </summary>
-            <param name="input"></param>
-            <returns></returns>
-        </member>
-        <member name="M:ZLJ.Organizations.IOrganizationUnitAppService.DeleteAsync(Abp.Application.Services.Dto.EntityDto{System.Int64})">
-            <summary>
-            删除指定节点
-            </summary>
-            <param name="input"></param>
-            <returns></returns>
-        </member>
-        <member name="M:ZLJ.Organizations.IOrganizationUnitAppService.UpdateAsync(ZLJ.Organizations.Dto.EditOrganizationUnitDto)">
-            <summary>
-            更新指定节点
-            </summary>
-            <param name="input"></param>
-            <returns></returns>
-        </member>
-        <member name="M:ZLJ.Organizations.IOrganizationUnitAppService.GetAsync(Abp.Application.Services.Dto.EntityDto{System.Int64})">
-            <summary>
-            获取指定节点
-            </summary>
-            <param name="input"></param>
-            <returns></returns>
-        </member>
         <member name="T:ZLJ.CMS.BXJGCMSColumnAppService">
             <summary>
             后台管理CMS栏目应用服务

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,57 +10,43 @@ namespace BXJG.GeneralTree
     /// <summary>
     /// 获取树形下拉框数据的模型
     /// </summary>
-    public class GeneralTreeNodeDto<T> where T: GeneralTreeNodeDto<T>
+    public class GeneralTreeNodeDto<T> where T : GeneralTreeNodeDto<T>
     {
-        public string id { get; set; }//用id是为了适配easyui的tree  combotree共用此模型
-        public string text { get; set; }
-        public string iconCls { get; set; }
-        public bool @checked { get; set; }
-        public string state { get; set; } = "open";
-        public dynamic attributes { get; set; }
-        public IList<T> children { get; set; }
+        public string Id { get; set; }//用id是为了适配easyui的tree  combotree共用此模型
+        public string Text { get; set; }
+        public string IconCls { get; set; }
+        public bool Checked { get; set; }
+        public string State => this.Children != null && this.Children.Count > 0 && !string.IsNullOrWhiteSpace(this.Code) ? "closed" : "open";
+        //public dynamic attributes { get; set; }
+        public IList<T> Children { get; set; }
 
-        public string parentId { get; set; }
+        public string ParentId { get; set; }
 
-        ////因为不确定前端是否支持这样自定义的字段，因此保险起见数据都保存到attributes，这里只提供读取
-        public string code
+        //因为不确定前端是否支持这样自定义的字段，因此保险起见数据都保存到attributes，这里只提供读取
+        public string Code { get; set; }
+
+        private string extensionData;
+        [JsonIgnore]//目前默认使用的并非.net 3.x的json序列化
+        public string ExtensionData
         {
             get
             {
-                if (attributes == null)
-                    return null;
-
-                var dic = this.attributes as IDictionary<string, object>;
-                if (dic == null)
-                    return null;
-
-                if (dic.ContainsKey("code"))
-                    return attributes.code;
-
-                return null;
+                return extensionData;
             }
-        }
-        public dynamic extData
-        {
-            get
+            set
             {
-                if (attributes == null)
-                    return null;
-
-                var dic = this.attributes as IDictionary<string, object>;
-                if (dic == null)
-                    return null;
-
-                if (dic.ContainsKey("extData"))
-                    return attributes.extData;
-
-                return null;
-
-
-                //return attributes!=null? attributes.extData:null;
-
+                extensionData = value;
+                if (string.IsNullOrWhiteSpace(value))
+                    ExtData = null;
+                else
+                    ExtData = JsonConvert.DeserializeObject<dynamic>(value);
             }
         }
+        /// <summary>
+        /// 扩展属性
+        /// </summary>
+       // [Ignore]
+        public dynamic ExtData { get; private set; }
     }
 
     public class GeneralTreeNodeDto : GeneralTreeNodeDto<GeneralTreeNodeDto> { }

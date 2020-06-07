@@ -5,10 +5,10 @@ namespace BXJG.CMS.Column
     public interface IBXJGCMSColumnAppService : IGeneralTreeAppServiceBase<
          ColumnDto,
          ColumnEditDto,
-         GeneralTreeGetTreeInput,
-         GeneralTreeGetForSelectInput,
+         GetAllInput,
+         GetForSelectInput,
          ColumnTreeNodeDto,
-         GeneralTreeGetForSelectInput,
+         GetForSelectInput,
          ColumnCombboxDto,
          GeneralTreeNodeMoveInput>
     { }
