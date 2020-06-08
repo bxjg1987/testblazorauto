@@ -11,7 +11,7 @@
     <RootNamespace>ZLJ</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>e:\abp\src\ZLJ.Application\ZLJ.Application.xml</DocumentationFile>
+    <DocumentationFile>..\ZLJ.Web.Host\APIXML\ZLJ.Application.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Auditing\Exporting\**" />

@@ -16,7 +16,7 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <OutputPath></OutputPath>
-    <DocumentationFile>e:\abp\src\BXJG.GeneralTree\BXJG.GeneralTree.xml</DocumentationFile>
+    <DocumentationFile>..\ZLJ.Web.Host\APIXML\BXJG.GeneralTree.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

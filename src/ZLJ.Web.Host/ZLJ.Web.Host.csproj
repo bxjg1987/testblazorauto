@@ -21,7 +21,28 @@
     <Content Remove="wwwroot\swagger\ui\index.html" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="BXJG.CMS.Application.xml" />
+    <None Remove="BXJG.GeneralTree.xml" />
+    <None Remove="BXJG.Shop.Application.xml" />
+    <None Remove="BXJG.Utils.xml" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="app.config" />
+    <None Update="APIXML\BXJG.CMS.Application.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="APIXML\BXJG.GeneralTree.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="APIXML\BXJG.Shop.Application.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="APIXML\BXJG.Utils.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="APIXML\ZLJ.Application.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Dockerfile">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

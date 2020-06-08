@@ -1,6 +1,7 @@
 ﻿using Abp.AutoMapper;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
+using System.Reflection;
 using ZLJ.Authorization;
 
 namespace ZLJ
@@ -13,7 +14,7 @@ namespace ZLJ
         public override void PreInitialize()
         {
             Configuration.Authorization.Providers.Add<ZLJAuthorizationProvider>();
-           
+            Configuration.Modules.AbpAutoMapper().Configurators.Add(cfg => cfg.AddMaps(Assembly.GetExecutingAssembly()));
         }
 
         public override void Initialize()
@@ -21,10 +22,7 @@ namespace ZLJ
 
             IocManager.RegisterAssemblyByConvention(typeof(ZLJApplicationModule).GetAssembly());
 
-            Configuration.Modules.AbpAutoMapper().Configurators.Add(
-                // Scan the assembly for classes which inherit from AutoMapper.Profile
-                cfg => cfg.AddMaps(typeof(ZLJApplicationModule).GetAssembly())
-            );
+            
         }
     }
 }

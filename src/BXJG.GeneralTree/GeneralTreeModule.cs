@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace BXJG.GeneralTree
 {
+    [DependsOn(typeof(AbpAutoMapperModule))]
     public class GeneralTreeModule : AbpModule
     {
         public override void PreInitialize()
@@ -27,6 +28,8 @@ namespace BXJG.GeneralTree
                             )
                         )
                     );
+
+            Configuration.Modules.AbpAutoMapper().Configurators.Add(cfg => cfg.AddMaps(Assembly.GetExecutingAssembly()));
         }
         public override void Initialize()
         {
@@ -37,13 +40,9 @@ namespace BXJG.GeneralTree
             //    Configuration.Navigation.Providers.Insert(0,typeof(GeneralTreeNavigationProvider));
             //   // Configuration.Navigation.Providers.Add<GeneralTreeNavigationProvider>();
             //}
-            var thisAssembly = Assembly.GetExecutingAssembly();
-            IocManager.RegisterAssemblyByConvention(thisAssembly);
+           // var thisAssembly = Assembly.GetExecutingAssembly();
+            IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
 
-            Configuration.Modules.AbpAutoMapper().Configurators.Add(
-                // Scan the assembly for classes which inherit from AutoMapper.Profile
-                cfg => cfg.AddMaps(thisAssembly)
-            );
         }
     }
 }

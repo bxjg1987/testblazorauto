@@ -6,7 +6,8 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>e:\abp\src\cms\BXJG.CMS.Application\BXJG.CMS.Application.xml</DocumentationFile>
+    <DocumentationFile>..\..\ZLJ.Web.Host\APIXML\BXJG.CMS.Application.xml</DocumentationFile>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
   </PropertyGroup>
 
   <ItemGroup>
