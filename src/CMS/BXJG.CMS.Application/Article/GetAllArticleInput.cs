@@ -17,8 +17,14 @@ namespace BXJG.CMS.Article
         /// Title/DescriptionShort/SKU等..模糊查询
         /// </summary>
         public string Keywords { get; set; }
-
-
+        /// <summary>
+        /// 所属栏目Id。栏目id和code二选一，推荐提供code
+        /// </summary>
+        public long? ColumnId { get; set; }
+        /// <summary>
+        /// 所属栏目的code。栏目id和code二选一，推荐提供code
+        /// </summary>
+        public string ColumnCode { get; set; }
         public void Normalize()
         {
             if (this.Sorting.IsNullOrEmpty())

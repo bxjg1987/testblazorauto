@@ -17,6 +17,7 @@
     abp.localization.zlj = abp.localization.getSource(abp.localization.defaultSourceName);//后来发现没啥必要，可以这样：abp.localization.localize('NewTask');
     abp.localization.bxjgUtils = abp.localization.getSource('BXJGUtils');
     abp.localization.bxjgShop = abp.localization.getSource('BXJGShop');
+    abp.localization.bxjgCMS = abp.localization.getSource('BXJGCMS');
     //除了abp的ajax请求，其它所有ajax请求异常时的处理，比如：easyui列表页请求异常
     abp.ajax.myErrorHandler = function (jqXHR, status, error) {
         //|| (jqXHR.status === 500 && jqXHR.data.error)

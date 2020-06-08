@@ -55,9 +55,9 @@ namespace BXJG.GeneralTree
         {
             return config.ForMember("Text", opt => opt.MapFrom("DisplayName"))
                     .ForMember("IconCls", opt => opt.Ignore())
-                    .ForMember("Checked", opt => opt.Ignore());
+                    .ForMember("Checked", opt => opt.Ignore())
             //.ForMember(c => c.State, opt => opt.Ignore())
-            //.ForMember(c => c.ExtData, opt => opt.Ignore())
+            .ForMember("ExtData", opt => opt.Ignore());
         }
 
 

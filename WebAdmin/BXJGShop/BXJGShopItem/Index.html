@@ -152,7 +152,7 @@
             onSelect: function (node) {
                 let loadAllParameter = {};
                 if (node.id)
-                    loadAllParameter.categoryCode = node.attributes.code;
+                    loadAllParameter.categoryCode = node.code;
                 $dg.datagrid('load', loadAllParameter);
             }
         });

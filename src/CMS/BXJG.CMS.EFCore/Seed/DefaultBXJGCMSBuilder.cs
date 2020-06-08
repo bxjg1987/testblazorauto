@@ -30,18 +30,6 @@ namespace BXJG.CMS.EFCore.Seed
 
         public void Create(bool insertTestData = true)
         {
-            #region 系统预定义文章
-            var articleSet = _context.Set<ArticleEntity>();
-            articleSet.Add(new ArticleEntity
-            {
-                Content = "硬核科技是一家........",
-                CreationTime = new DateTime(2017, 3, 1),
-                SystemDefine = true,
-                TenantId = this._tenantId,
-                Title = "公司简介"
-            });
-            #endregion
-
             #region 栏目
             var columnSet = _context.Set<ColumnEntity<TDataDictionary>>();
             columnSet.Add(new ColumnEntity<TDataDictionary>
@@ -62,7 +50,24 @@ namespace BXJG.CMS.EFCore.Seed
                 ListTemplate = "newslist",
                 DetailTemplate = "newsdetail"
             });
+            _context.SaveChanges();
             #endregion
+
+            #region 系统预定义文章
+            var articleSet = _context.Set<ArticleEntity<TDataDictionary>>();
+            articleSet.Add(new ArticleEntity<TDataDictionary>
+            {
+                Content = "硬核科技是一家........",
+                CreationTime = new DateTime(2017, 3, 1),
+                IsSysDefine = true,
+                TenantId = this._tenantId,
+                Title = "公司简介",
+                ColumnId=1
+            });
+            _context.SaveChanges();
+            #endregion
+
+
 
             if (!insertTestData)
                 return;

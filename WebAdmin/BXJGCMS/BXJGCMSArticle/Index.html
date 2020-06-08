@@ -1,21 +1,21 @@
 ﻿<div class="listpage-left" style="width:180px;">
     <div class="listpage-left-head ">栏目</div>
     <div class="listpage-left-content">
-        <ul id="clsBXJGArticle" />
+        <ul id="clsBXJGCMSArticle" />
     </div>
 </div>
 <div class="listpage-right">
-    <div id="dgToolbarBXJGArticle" class="datagrid-toolbar1">
+    <div id="dgToolbarBXJGCMSArticle" class="datagrid-toolbar1">
         <div class="toolbar_right">
             <!--<input class="easyui-textbox" data-options="width:260, prompt:'名称/助记码/品牌/规格型号/供应商 等...'" />-->
         </div>
     </div>
-    <table id="dgBXJGArticle"></table>
+    <table id="dgBXJGCMSArticle"></table>
 </div>
 <script>
     (function () {
         //在razor变量两边加单引号会被当成字符串，vs智能提示不会消失
-        var m = 'BXJGArticle';
+        var m = 'BXJGCMSArticle';
         var canAdd = abp.auth.isGranted(m + 'Create');
         var canUpdate = abp.auth.isGranted(m + 'Update');
         var canDelete = abp.auth.isGranted(m + 'Delete');
@@ -30,7 +30,7 @@
             var $btnAdd = $('<a />').insertBefore($toolbarRight);
             var $btnAddOptions = {
                 iconCls: 'icon-add',
-                text: abp.localization.zlj('Add')
+                text: abp.localization.bxjgUtils('新增')
             };
             $btnAdd.linkbutton($.extend($btnAddOptions, {
                 plain: true,
@@ -48,7 +48,7 @@
             var $btnUpdate = $('<a />').insertBefore($toolbarRight);
             var $btnUpdateOptions = {
                 iconCls: 'icon-edit',
-                text: abp.localization.zlj('Update')
+                text: abp.localization.bxjgUtils('修改')
             };
             $btnUpdate.linkbutton($.extend($btnUpdateOptions, {
                 plain: true,
@@ -69,7 +69,7 @@
             var $btnDelete = $('<a />').insertBefore($toolbarRight);
             var $btnDeleteOptions = {
                 iconCls: 'icon-remove',
-                text: abp.localization.zlj('Delete')
+                text: abp.localization.bxjgUtils('删除')
             };
             $btnDelete.linkbutton($.extend($btnDeleteOptions, {
                 plain: true,
@@ -78,8 +78,8 @@
                     if (!rows)
                         return;
                     abp.message.confirm(
-                        abp.localization.zlj('DeleteConfirm'),
-                        abp.localization.zlj('DeleteConfirmPropt'),
+                        abp.localization.bxjgUtils('DeleteConfirm'),
+                        abp.localization.bxjgUtils('DeleteConfirmPropt'),
                         function (isConfirmed) {
                             if (isConfirmed) {
                                 var ary = new Array();
@@ -87,7 +87,7 @@
                                     ary.push(this.id);
                                 });
                                 abp.ui.setBusy(null, abp.services.app[abp.utils.toCamelCase(m)].deleteBatch(ary).done(function (d) {
-                                    abp.notify.success(abp.localization.zlj('Delete') + abp.localization.zlj('Success') + '!');
+                                    abp.notify.success(abp.localization.bxjgUtils('Delete') + abp.localization.bxjgUtils('Success') + '!');
                                     $btnRefresh.trigger('click');
                                 }));
                             }
@@ -105,7 +105,7 @@
         var $btnRefresh = $('<a />').insertBefore($toolbarRight);
         $btnRefresh.linkbutton({
             iconCls: 'icon-reload',
-            text: abp.localization.zlj('Refresh'),
+            text: abp.localization.bxjgUtils('刷新'),
             plain: true,
             onClick: function () {
                 $dg.datagrid('reload');
@@ -115,44 +115,31 @@
         var $keywordTextbox = $('<input />').appendTo($toolbarRight);
         $keywordTextbox.textbox({
             width: 200,
-            prompt: abp.localization.bxjgShop('GetBXJGArticleKeywordsInputPrompt'),
+            prompt: abp.localization.bxjgCMS('GetBXJGCMSArticleKeywordsInputPrompt'),
             onChange: search
         });
 
-        var $brandCombobox = $('<input />').appendTo($toolbarRight);
-        $brandCombobox.combobox({
-            editable: false,
-            width:170,
-            url: abp.appPath + 'api/services/app/BXJGShopDictionary/GetNodesForSelect',
-            queryParams: { ParentId: 2, forType: 1 },
-            prompt: '==品牌==',
-            valueField: 'value',
-            textField: 'displayText',
-            onChange: search
-        });
+        
         function search() {
             var data = {};
             var keywords = $keywordTextbox.textbox('getValue');
             if (keywords)
                 data.keywords = keywords;
-            var brandId = $brandCombobox.combobox('getValue');
-            if (brandId)
-                data.brandId = brandId;
             $dg.datagrid('load', data);
         }
 
 
         $cls.tree({
-            url: abp.appPath + 'api/services/app/BXJGShopDictionary/GetTreeForSelect',
+            url: abp.appPath + 'api/services/app/BXJGCMSColumn/GetTreeForSelect',
             queryParams: {
-                "forType": 1,
-                "ParentId": 1,
-                "ParentText": "全部"
+                forType: 1,
+                //ParentId: 1,
+                ParentText: "全部"
             },//?ParentId=21&ForType=1&ParentText=全部分类
             onSelect: function (node) {
                 let loadAllParameter = {};
                 if (node.id)
-                    loadAllParameter.categoryCode = node.attributes.code;
+                    loadAllParameter.columnCode = node.code;
                 $dg.datagrid('load', loadAllParameter);
             }
         });
@@ -161,7 +148,7 @@
         function getSelected(str) {
             var rows = $dg.datagrid('getSelections');
             if (rows.length == 0) {//若没有选择，返回的是一个空数组，而非undifined/null
-                abp.message.warn(abp.localization.zlj('PleaseSeleteLines', $.trim(str)));
+                abp.message.warn(abp.localization.bxjgUtils('PleaseSeleteLines', $.trim(str)));
                 return false;
             }
             return rows;
@@ -188,12 +175,12 @@
 
             $dlg.dialog({
                 iconCls: id ? $btnUpdateOptions.iconCls : $btnAddOptions.iconCls,
-                title: (id ? $btnUpdateOptions.text : $btnAddOptions.text) + '商品',//abp.localization.bxjgShop(m),
+                title: (id ? $btnUpdateOptions.text : $btnAddOptions.text) + '商品',//abp.localization.BXJGCMSShop(m),
                 width: 950,
                 height: 700,
                 border: false,
                 modal: true,
-                href: '/BXJGShop/' + m + '/form.html?_t=' + abp.pageLoadTime.getTime(),
+                href: '/BXJGCMS/' + m + '/form.html?_t=' + abp.pageLoadTime.getTime(),
                 buttons: [{
                     iconCls: 'icon-ok',
                     text: abp.localization.zlj('Save'),
@@ -229,35 +216,18 @@
             //nowrap: false,           
             toolbar: '#dgToolbar' + m,
             //striped:true,
-            ///api/services/app/BXJGArticle/GetAll
-            url: abp.appPath + 'api/services/app/BXJGArticle/GetAll',
+            ///api/services/app/BXJGCMSArticle/GetAll
+            url: abp.appPath + 'api/services/app/BXJGCMSArticle/GetAll',
             queryParams: {
                 //"CategoryId": 1,
                 //"Published": true
             },
             frozenColumns: [[
                 { field: 'ck', checkbox: true },
-                {
-                    field: 'image', title: '封面图', align:'center', width:100, formatter: function (value, row, index) {
-                        return '<img style="height:80px;" src="' +abp.appPath+ value + '" />';
-                    }
-                },
-                { field: 'title', title: '名称', width:300, sortable: true }
+                { field: 'title', title: '标题', width:300, sortable: true }
             ]],
             columns: [[
-                { field: 'categoryDisplayName', title: '类别',  sortable: true },
-                { field: 'brandDisplayName', title: '品牌',  sortable: true },
-                { field: 'sku', title: 'SKU' },
-                { field: 'oldPrice', title: '原价格',  sortable: true, align: 'right' },
-                { field: 'price', title: '现价格',  sortable: true, align: 'right' },
-                { field: 'integral', title: '积分',  sortable: true, align: 'right' },
-                { field: 'published', title: '是否发布', align: 'center',formatter:abp.easyui.datagridBool  },
-                { field: 'availableStart', title: '发布开始时间' },
-                { field: 'availableEnd', title: '发布结束时间' },
-                { field: 'hot', title: '热卖',  align: 'center',formatter:abp.easyui.datagridBool },
-                { field: 'new', title: '新品', align: 'center',formatter:abp.easyui.datagridBool  },
-                { field: 'home', title: '首页显示',align: 'center',formatter:abp.easyui.datagridBool  },
-                { field: 'focus', title: '首页轮播',  align: 'center',formatter:abp.easyui.datagridBool  }
+                { field: 'columnDisplayName', title: '所属栏目',width:100 }
             ]],
             onRowContextMenu: function (e, index, row) {
                 if (!row)

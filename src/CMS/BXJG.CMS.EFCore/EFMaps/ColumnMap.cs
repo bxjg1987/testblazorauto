@@ -11,12 +11,12 @@ namespace BXJG.CMS.EFCore.EFMaps
     {
         public void Configure(EntityTypeBuilder<ColumnEntity<TDataDictionary>> builder)
         {
-            builder.Property(c => c.Icon).HasColumnType($"varchar({BXJGCMSConsts.IconMaxLength})");
-            builder.Property(c => c.SeoTitle).HasMaxLength(BXJGCMSConsts.SeoTitleMaxLength);
-            builder.Property(c => c.SeoDescription).HasMaxLength(BXJGCMSConsts.SeoDescriptionMaxLength);
-            builder.Property(c => c.SeoKeyword).HasMaxLength(BXJGCMSConsts.SeoKeywordMaxLength);
-            builder.Property(c => c.ListTemplate).HasColumnType($"varchar({BXJGCMSConsts.ListTemplateMaxLength})");
-            builder.Property(c => c.DetailTemplate).HasColumnType($"varchar({BXJGCMSConsts.DetailTemplateMaxLength})");
+            builder.Property(c => c.Icon).HasColumnType($"varchar({BXJGCMSConsts.ColumnIconMaxLength})");
+            builder.Property(c => c.SeoTitle).HasMaxLength(BXJGCMSConsts.ColumnSeoTitleMaxLength);
+            builder.Property(c => c.SeoDescription).HasMaxLength(BXJGCMSConsts.ColumnSeoDescriptionMaxLength);
+            builder.Property(c => c.SeoKeyword).HasMaxLength(BXJGCMSConsts.ColumnSeoKeywordMaxLength);
+            builder.Property(c => c.ListTemplate).HasColumnType($"varchar({BXJGCMSConsts.ColumnListTemplateMaxLength})");
+            builder.Property(c => c.DetailTemplate).HasColumnType($"varchar({BXJGCMSConsts.ColumnDetailTemplateMaxLength})");
         }
     }
 }

@@ -15,12 +15,21 @@ namespace BXJG.CMS.Article
         /// 标题
         /// </summary>
         [Required]
-        [StringLength(ArticleEntity.TitleMaxLength)]
+        [StringLength(BXJGCMSConsts.ArticleTitleMaxLength)]
         public string Title { get; set; }
         /// <summary>
         /// 内容
         /// </summary>
         [Required]
         public string Content { get; set; }
+        /// <summary>
+        /// 所属栏目的Id
+        /// </summary>
+        [Required]
+        public long ColumnId { get; set; }
+        ///// <summary>
+        ///// 系统预设文章 不允许删除
+        ///// </summary>
+        //public bool IsSysDefine { get; set; }
     }
 }

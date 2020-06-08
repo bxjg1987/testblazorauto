@@ -6,13 +6,17 @@
 
         #region MyRegion
         //由于ColumnEntity是泛型，将验证定义在这里
-        public const int TitleMaxLength = 50;
-        public const int IconMaxLength = 200;
-        public const int SeoTitleMaxLength = 2000;
-        public const int SeoDescriptionMaxLength = 5000;
-        public const int SeoKeywordMaxLength = 1000;
-        public const int ListTemplateMaxLength = 200;
-        public const int DetailTemplateMaxLength = 200;
+        public const int ColumnTitleMaxLength = 50;
+        public const int ColumnIconMaxLength = 200;
+        public const int ColumnSeoTitleMaxLength = 2000;
+        public const int ColumnSeoDescriptionMaxLength = 5000;
+        public const int ColumnSeoKeywordMaxLength = 1000;
+        public const int ColumnListTemplateMaxLength = 200;
+        public const int ColumnDetailTemplateMaxLength = 200;
+        #endregion
+
+        #region Article
+        public const int ArticleTitleMaxLength = 500;
         #endregion
 
         #region settings

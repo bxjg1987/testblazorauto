@@ -1,5 +1,6 @@
 ﻿using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
+using BXJG.CMS.Column;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,10 +10,8 @@ namespace BXJG.CMS.Article
     /// <summary>
     /// 文章实体类
     /// </summary>
-    public class ArticleEntity : FullAuditedEntity<long>, IMustHaveTenant
+    public class ArticleEntity<TDataDictionary> : FullAuditedEntity<long>, IMustHaveTenant
     {
-        public const int TitleMaxLength = 500;
-
         public int TenantId { get; set; }
         /// <summary>
         /// 标题
@@ -25,6 +24,14 @@ namespace BXJG.CMS.Article
         /// <summary>
         /// 系统预设文章 不允许删除
         /// </summary>
-        public bool SystemDefine { get; set; }
+        public bool IsSysDefine { get; set; }
+        /// <summary>
+        /// 所属栏目的Id
+        /// </summary>
+        public long ColumnId { get; set; }
+        /// <summary>
+        /// 所属栏目的导航属性
+        /// </summary>
+        public virtual ColumnEntity<TDataDictionary> Column { get; set; }
     }
 }

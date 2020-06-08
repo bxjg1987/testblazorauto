@@ -5,7 +5,10 @@ using System.Text;
 
 namespace BXJG.CMS.Article
 {
-    public class DeleteInput: BulkDelete
+    /// <summary>
+    /// 批量删除时的输入模型
+    /// </summary>
+    public class DeleteInput: BulkOperationInput
     {
     }
 }

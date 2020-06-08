@@ -22,6 +22,14 @@ namespace BXJG.CMS.Article
         /// <summary>
         /// 系统预设文章 不允许删除
         /// </summary>
-        public bool SystemDefine { get; set; }
+        public bool IsSysDefine { get; set; }
+        /// <summary>
+        /// 所属栏目的Id
+        /// </summary>
+        public long ColumnId { get; set; }
+        /// <summary>
+        /// 所属栏目的名称
+        /// </summary>
+        public string ColumnDisplayName { get; set; }
     }
 }

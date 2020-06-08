@@ -7,13 +7,11 @@ using System.Text;
 
 namespace BXJG.CMS.EFCore.EFMaps
 {
-    public class ArticleMap : IEntityTypeConfiguration<ArticleEntity>
+    public class ArticleMap<TDataDictionary> : IEntityTypeConfiguration<ArticleEntity<TDataDictionary>>
     {
-        public void Configure(EntityTypeBuilder<ArticleEntity> builder)
+        public void Configure(EntityTypeBuilder<ArticleEntity<TDataDictionary>> builder)
         {
-            //builder.Property(c => c.Title).HasArticleType($"varchar({ArticleEntity.IconMaxLength})");
-            builder.Property(c => c.Title).HasMaxLength(ArticleEntity.TitleMaxLength).IsRequired(true);
-            builder.Property(c => c.Title).IsRequired(true);
+            builder.Property(c => c.Title).HasMaxLength(BXJGCMSConsts.ArticleTitleMaxLength).IsRequired(true);
         }
     }
 }
