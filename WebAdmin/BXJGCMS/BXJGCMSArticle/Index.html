@@ -118,13 +118,43 @@
             prompt: abp.localization.bxjgCMS('GetBXJGCMSArticleKeywordsInputPrompt'),
             onChange: search
         });
-
-        
+        var $publishedCombobox = $('<input />').appendTo($toolbarRight);
+        $publishedCombobox.combobox({
+            editable: false,
+            width: 130,
+            prompt: '==发布状态==',
+            data: [
+                { displayText: '==发布状态==', value: null },
+                { displayText: '已发布', value: 'true' },
+                { displayText: '未发布', value: 'false' }],
+            onChange: search
+        });
+        var $startDate = $('<input />').appendTo($toolbarRight);
+        $startDate.datebox({
+            prompt: '发布开始日期',
+            width:120,
+            onChange: search
+        });
+        var $endDate = $('<input />').appendTo($toolbarRight);
+        $endDate.datebox({
+            prompt: '发布结束日期',
+            width: 120,
+            onChange: search
+        });
         function search() {
             var data = {};
             var keywords = $keywordTextbox.textbox('getValue');
             if (keywords)
                 data.keywords = keywords;
+            var published = $publishedCombobox.combobox('getValue');
+            if (published )
+                data.published = published;
+            var startDate = $startDate.datebox('getValue');
+            if (startDate)
+                data.publishStartTime = startDate;
+            var endDate = $endDate.datebox('getValue');
+            if (endDate)
+                data.publishEndTime = endDate;
             $dg.datagrid('load', data);
         }
 
@@ -175,9 +205,9 @@
 
             $dlg.dialog({
                 iconCls: id ? $btnUpdateOptions.iconCls : $btnAddOptions.iconCls,
-                title: (id ? $btnUpdateOptions.text : $btnAddOptions.text) + '商品',//abp.localization.BXJGCMSShop(m),
-                width: 950,
-                height: 700,
+                title: (id ? $btnUpdateOptions.text : $btnAddOptions.text) + '文章',//abp.localization.BXJGCMSShop(m),
+                width: 850,
+                height: 650,
                 border: false,
                 modal: true,
                 href: '/BXJGCMS/' + m + '/form.html?_t=' + abp.pageLoadTime.getTime(),

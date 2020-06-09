@@ -25,6 +25,21 @@ namespace BXJG.CMS.Article
         /// 所属栏目的code。栏目id和code二选一，推荐提供code
         /// </summary>
         public string ColumnCode { get; set; }
+        /// <summary>
+        /// 是否已发布
+        /// </summary>
+        public bool? Published { get; set; }
+        /// <summary>
+        /// 发布开始时间，若为空则不限
+        /// Published为true时才有效
+        /// </summary>
+        public DateTimeOffset? PublishStartTime { get; set; }
+        /// <summary>
+        /// 发布结束时间，若为空则不限
+        /// Published为true时才有效
+        /// </summary>
+        public DateTimeOffset? PublishEndTime { get; set; }
+
         public void Normalize()
         {
             if (this.Sorting.IsNullOrEmpty())

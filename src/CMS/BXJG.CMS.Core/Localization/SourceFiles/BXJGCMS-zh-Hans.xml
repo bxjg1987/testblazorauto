@@ -4,8 +4,11 @@
     <text name="BXJGCMS" value="内容管理" />
 
     <text name="BXJGCMSArticle" value="文章管理" />
+    <text name="GetBXJGCMSArticleKeywordsInputPrompt" value="标题/seo关键字/描述..." />
+    
     <text name="BXJGCMSColumn" value="栏目管理" />
     
+
     <text name="BXJGCMSAd" value="广告管理" />
     <text name="BXJGCMSAdPosition" value="广告位" />
     <text name="BXJGCMSAdControl" value="广告控件" />

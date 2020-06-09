@@ -62,7 +62,12 @@ namespace BXJG.CMS.EFCore.Seed
                 IsSysDefine = true,
                 TenantId = this._tenantId,
                 Title = "公司简介",
-                ColumnId=1
+                ColumnId = 1,
+                SeoDescription = "SeoDescription",
+                SeoKeyword = "SeoKeyword",
+                SeoTitle = "SeoTitle",
+                Summary = "Summary",
+                Published = true
             });
             _context.SaveChanges();
             #endregion

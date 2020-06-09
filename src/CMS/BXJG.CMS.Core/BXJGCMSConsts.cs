@@ -17,6 +17,10 @@
 
         #region Article
         public const int ArticleTitleMaxLength = 500;
+        public const int ArticleSeoTitleMaxLength = 2000;
+        public const int ArticleSeoDescriptionMaxLength = 5000;
+        public const int ArticleSeoKeywordMaxLength = 1000;
+        public const int ArticleSummaryMaxLength = 5000;
         #endregion
 
         #region settings

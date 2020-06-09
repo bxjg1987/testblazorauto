@@ -1,126 +1,67 @@
-﻿<form id="frmBXJGShopItem" class="frm-container">
+﻿<form id="frmBXJGCMSArticle" class="frm-container">
     <input type="hidden" name="id" value="0" />
     <table class="frm-box">
         <tr>
-            <th>名称</th>
-            <td colspan="5">
-                <input name="title" class="easyui-textbox" data-options="width:815, required:true, validType:'length[1,100]',prompt:'简短、准确的商品标题...'" />
-            </td>
-        </tr>
-        <tr>
-            <th>类别</th>
-            <td>
-                <input name="categoryId" class="easyui-combotree"
+            <th>所属栏目</th>
+            <td colspan="5" >
+                <input name="columnId" class="easyui-combotree"
                        data-options="
+                       width:200,
                        required:true,
-                       url:abp.appPath+'api/services/app/BXJGShopDictionary/GettreeForSelect',
-                       queryParams: { forType: 4,ParentId:1 }" />
+                       url:abp.appPath+'api/services/app/BXJGCMSColumn/GettreeForSelect',
+                       queryParams: { forType: 4 }" />
             </td>
-            <th>品牌</th>
-            <td>
-                <input name="brandId" class="easyui-combobox"
-                       data-options="
-                       url:abp.appPath+'api/services/app/BXJGShopDictionary/GetNodesForSelect',
-                       queryParams: { forType: 4,ParentId:2 }" />
-            </td>
-            <th>SKU</th>
-            <td><input name="sku" class="easyui-textbox" data-options="validType:'length[0,100]'" /></td>
         </tr>
         <tr>
-            <th>助记码</th>
-            <td><input name="mnemonicCode" class="easyui-textbox" data-options="validType:'length[0,100]',prompt:'通常为拼音简码...'" /></td>
-            <th>原价</th>
-            <td><input name="oldPrice" class="easyui-numberspinner" data-options="prefix:'￥',precision:1,value:0" /></td>
-            <th>现价</th>
-            <td><input name="price" class="easyui-numberspinner" data-options="required:true,prefix:'￥',precision:1,value:0" /></td>
-        </tr>
-        <tr>
-            <th>单位</th>
-            <td>
-                <input name="unitId" class="easyui-combobox"
-                       data-options="
-                       url:abp.appPath+'api/services/app/BXJGShopDictionary/GetNodesForSelect',
-                       queryParams: { forType: 4,ParentId:5}" />
+            <th>标题</th>
+            <td colspan="5" >
+                <input name="title" class="easyui-textbox" data-options=" required:true, validType:'length[1,200]',prompt:'文章标题'" />
             </td>
-            <th>积分</th>
-            <td><input name="integral" class="easyui-numberspinner" data-options="value:0" /></td>
-
-
-
-            <!--<th>供应商</th>
-            <td>
-                <select class="easyui-combogrid" name="supplierId"
-                        data-options="
-                                panelWidth:700,
-                                idField:'id',
-                                textField:'name',
-                                prompt:'请选择(支持按名称/联系人/手机号/地址等模糊查询)',
-                                url:'/api/services/app/btype/GetForSelect',
-                                queryParams1: { forType: 2,id:71},
-                                delay: 500,
-                                mode: 'remote',
-                                pagination:true,
-                                columns:[[
-                                    {field:'name',title:'名称',width:200},
-                                    {field:'contact',title:'联系人',width:100},
-                                    {field:'cellphone',title:'联系电话',width:100},
-                                    {field:'areaText',title:'区域',width:100},
-                                    {field:'industryText',title:'行业',width:100},
-                                    {field:'address',title:'地址',width:100},
-                                    {field:'remark',title:'备注',width:100}
-                                ]]
-                            "></select>
-            </td>-->
-            <th>焦点</th>
-            <td><input class="easyui-checkbox" name="focus" value="true"></td>
         </tr>
         <tr>
-            <th>热卖</th>
-            <td><input class="easyui-checkbox" name="hot" value="true"></td>
-            <th>新品</th>
-            <td><input class="easyui-checkbox" name="new" value="true"></td>
-            <th>首页显示</th>
-            <td><input class="easyui-checkbox" name="home" value="true"></td>
+            <th>SEO标题</th>
+            <td colspan="5" >
+                <input name="seoTitle" class="easyui-textbox" data-options="  validType:'length[1,2000]',prompt:'seo标题'" />
+            </td>
+        </tr>
+        <tr>
+            <th>SEO关键字</th>
+            <td colspan="5" >
+                <input name="seoKeyword" class="easyui-textbox" data-options=" validType:'length[1,2000]',prompt:'seo关键字'" />
+            </td>
+        </tr>
+        <tr>
+            <th>SEO描述</th>
+            <td colspan="5" >
+                <input name="seoDescription" class="easyui-textbox" data-options=" validType:'length[1,2000]',prompt:'seo描述信息'" />
+            </td>
+        </tr>
+        <tr>
+            <th>摘要</th>
+            <td colspan="5" >
+                <input name="summary" class="easyui-textbox" data-options=" validType:'length[1,2000]',prompt:'摘要信息'" />
+            </td>
         </tr>
         <tr>
             <th>发布</th>
             <td><input class="easyui-checkbox" name="published" data-options="value:true"></td>
             <th>发布开始时间</th>
-            <td><input class="easyui-datetimebox" name="availableStart" data-options="showSeconds1:false"></td>
+            <td><input class="easyui-datetimebox" name="publishStart" data-options="showSeconds1:false,prompt:'发布开始时间，可不设置'"></td>
             <th>发布结束时间</th>
-            <td><input class="easyui-datetimebox" name="availableEnd" data-options="showSeconds1:true"></td>
-        </tr>
-
-        <tr>
-            <th class="top">封面图片</th>
-            <td colspan="5" id="frmBXJGShopItemUploader" class="imgUploader-container" style=" padding:7px 0;">
-                <div id="frmBXJGShopItemUploaderPicker" class="imgUploader-picker">选择图片</div>
-                <div class="imgUploader-images" style="max-width:830px;">
-                    <!--图片预览区，支持拖拽、截图粘贴...
-                    <div class="imgUploader-img-container">
-                        <a href="javascript:void(0);">×</a>
-                        <img src="http://demo.dtcms.net/upload/201504/20/thumb_201504200119256512.jpg" />
-                        <i class="imgUploader-img-success">上传完成</i>
-                    </div>-->
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <th>简短描述</th>
-            <td colspan="5"><input name="descriptionShort" class="easyui-textbox" data-options="width:820, validType:'length[1,100]',prompt:'显示在标题下方的商品简短描述信息...'" /></td>
+            <td><input class="easyui-datetimebox" name="publishEndTime" data-options="showSeconds1:true,prompt:'发布结束时间，可不设置'"></td>
         </tr>
         <tr>
             <th class="top">详细描述</th>
             <td colspan="5" style="padding-top:7px; ">
-                <div id="bxjgShopItemEditor0" style="border: 1px solid #ddd;"></div>
-                <div id="bxjgShopItemEditor" style="width:820px; height:600px;border: 1px solid #ddd;"></div>
+                <div id="BXJGCMSArticleEditor0" style="border: 1px solid #ddd;"></div>
+                <div id="BXJGCMSArticleEditor" style="width:700px; height:600px;border: 1px solid #ddd;"></div>
             </td>
         </tr>
     </table>
 </form>
 <script>
     (function () {
-        let m = 'BXJGShopItem';
+        let m = 'BXJGCMSArticle';
         let $dlg = $('#dlg' + m);
         let $frm = $dlg.find('form');
         let id = $dlg.data('id');
@@ -129,11 +70,11 @@
         let $cls = $frm.find('[name="categoryId"]');
         let $brand = $frm.find('[name="brand"]');
         let $unit = $frm.find('[name="unit"]');
-        let $uploader = $('#frmBXJGShopItemUploader');
+        let $uploader = $('#frmBXJGCMSArticleUploader');
         let $uploaderImages = $uploader.find('.imgUploader-images');
         //let attachment = $frm.find('.attachment');
 
-        //attachment.jqEasyuiWebuploader(abp.file.buildJQUOA('BXJGShopItem', 'Administrator.Asset.BXJGShopItem.Create', 'Administrator.Asset.BXJGShopItem'));
+        //attachment.jqEasyuiWebuploader(abp.file.buildJQUOA('BXJGCMSArticle', 'Administrator.Asset.BXJGCMSArticle.Create', 'Administrator.Asset.BXJGCMSArticle'));
         //let up = attachment.jqEasyuiWebuploader('webUploader');
         //let uploaderInitTask = attachment.jqEasyuiWebuploader('initTask');
         setTimeout(function () {
@@ -170,12 +111,12 @@
             console.log(postData);
             var defer;
             if (id) {
-                defer = abp.services.app.bXJGShopItem.update(postData).done(function (d) {
+                defer = abp.services.app.BXJGCMSArticle.update(postData).done(function (d) {
                     abp.notify.success(abp.localization.bxjgUtils('修改') + abp.localization.bxjgUtils('成功') + '!');
                     onSaved('onUpdated');
                 });
             } else {
-                defer = abp.services.app.bXJGShopItem.create(postData).done(function (d) {
+                defer = abp.services.app.BXJGCMSArticle.create(postData).done(function (d) {
                     abp.notify.success(abp.localization.bxjgUtils('新增') + abp.localization.bxjgUtils('修改') + '!');
                     onSaved('onAdded');
                 });
@@ -184,7 +125,7 @@
         });
 
         if (id) {
-            abp.ui.setBusy($dlg, abp.services.app.BXJGShopItem.get({ id: id }).done(function (d) {
+            abp.ui.setBusy($dlg, abp.services.app.BXJGCMSArticle.get({ id: id }).done(function (d) {
                 $frm.form('load', d);
                 if (d.attachments) {
                     //插件有点问题，初始化有部分东西是异步的，因此这里等一段时间
@@ -231,7 +172,7 @@
 
             // 选择文件的按钮。可选。
             // 内部根据当前运行是创建，可能是input元素，也可能是flash.
-            pick: '#frmBXJGShopItemUploaderPicker',
+            pick: '#frmBXJGCMSArticleUploaderPicker',
 
             // 只允许选择图片文件。
             accept: {
@@ -305,7 +246,7 @@
 
         //富文本编辑器开始---------------------------------
         var E = window.wangEditor
-        var editor = new E('#bxjgShopItemEditor0', '#bxjgShopItemEditor')
+        var editor = new E('#BXJGCMSArticleEditor0', '#BXJGCMSArticleEditor')
         // 或者 var editor = new E( document.getElementById('editor') )
 
         editor.customConfig.uploadImgShowBase64 = true;

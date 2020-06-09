@@ -8,16 +8,19 @@ using BXJG.CMS.Authorization;
 using BXJG.GeneralTree;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Abp.Collections.Extensions;
+using Abp.Linq.Extensions;
+using Abp.Extensions;
 
 namespace BXJG.CMS.Article
 {
     /// <summary>
     /// 后台管理文章的应用服务
     /// </summary>
-    public class BXJGCMSArticleAppService<TDataDictionary> : AsyncCrudAppService<ArticleEntity<TDataDictionary>, 
-                                                                                 ArticleDto, 
+    public class BXJGCMSArticleAppService<TDataDictionary> : AsyncCrudAppService<ArticleEntity<TDataDictionary>,
+                                                                                 ArticleDto,
                                                                                  long,
-                                                                                 GetAllArticleInput, 
+                                                                                 GetAllArticleInput,
                                                                                  ArticleEditDto>, IBXJGCMSArticleAppService
         where TDataDictionary : GeneralTreeEntity<TDataDictionary>
     {
@@ -42,7 +45,18 @@ namespace BXJG.CMS.Article
 
         protected override IQueryable<ArticleEntity<TDataDictionary>> CreateFilteredQuery(GetAllArticleInput input)
         {
-            return base.CreateFilteredQuery(input).Include(c=>c.Column);
+            return base.CreateFilteredQuery(input)
+                       .Include(c => c.Column)
+                       .WhereIf(input.Published.HasValue, c => c.Published == input.Published.Value)
+                       .WhereIf(input.PublishStartTime.HasValue, c =>  c.PublishStartTime >= input.PublishStartTime.Value)
+                       .WhereIf(input.PublishEndTime.HasValue, c =>  c.PublishEndTime < input.PublishEndTime.Value)
+                       .WhereIf(!input.Keywords.IsNullOrWhiteSpace(), c => c.Title.Contains(input.Keywords)
+                                                                           || c.SeoTitle.Contains(input.Keywords)
+                                                                           || c.SeoDescription.Contains(input.Keywords)
+                                                                           || c.SeoKeyword.Contains(input.Keywords)
+                                                                           || c.Summary.Contains(input.Keywords));
         }
+
+
     }
 }
