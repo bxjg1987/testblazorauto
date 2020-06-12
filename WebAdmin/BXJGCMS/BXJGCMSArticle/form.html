@@ -37,16 +37,16 @@
             </td>
         </tr>
         <tr>
-            <th>摘要</th>
+            <th class="top">摘要</th>
             <td colspan="5" >
-                <input name="summary" class="easyui-textbox" data-options=" validType:'length[1,2000]',prompt:'摘要信息'" />
+                <input name="summary" class="easyui-textbox" data-options="multiline:true, height:100, validType:'length[1,2000]',prompt:'摘要信息'" style="padding-top:5px;" />
             </td>
         </tr>
         <tr>
             <th>发布</th>
             <td><input class="easyui-checkbox" name="published" data-options="value:true"></td>
             <th>发布开始时间</th>
-            <td><input class="easyui-datetimebox" name="publishStart" data-options="showSeconds1:false,prompt:'发布开始时间，可不设置'"></td>
+            <td><input class="easyui-datetimebox" name="publishStartTime" data-options="showSeconds1:false,prompt:'发布开始时间，可不设置'"></td>
             <th>发布结束时间</th>
             <td><input class="easyui-datetimebox" name="publishEndTime" data-options="showSeconds1:true,prompt:'发布结束时间，可不设置'"></td>
         </tr>
@@ -66,57 +66,27 @@
         let $frm = $dlg.find('form');
         let id = $dlg.data('id');
         let $name = $frm.find('[name="name"]');
-        let $mnemonicCode = $frm.find('[name="mnemonicCode"]');
-        let $cls = $frm.find('[name="categoryId"]');
-        let $brand = $frm.find('[name="brand"]');
-        let $unit = $frm.find('[name="unit"]');
-        let $uploader = $('#frmBXJGCMSArticleUploader');
-        let $uploaderImages = $uploader.find('.imgUploader-images');
-        //let attachment = $frm.find('.attachment');
+        let $cls = $frm.find('[name="columnId"]');
 
-        //attachment.jqEasyuiWebuploader(abp.file.buildJQUOA('BXJGCMSArticle', 'Administrator.Asset.BXJGCMSArticle.Create', 'Administrator.Asset.BXJGCMSArticle'));
-        //let up = attachment.jqEasyuiWebuploader('webUploader');
-        //let uploaderInitTask = attachment.jqEasyuiWebuploader('initTask');
         setTimeout(function () {
             $name.next('span').find('input').focus();
-            var $realName = $frm.find('[name="name"]').prev();  //这里必须直接通过jquery做选择
-            $realName.focus().blur(function () {
-                var input = $name.val();
-                if (!input)
-                    return;
-                if ($mnemonicCode.val())
-                    return;
-                abp.services.app.utils.getPY({ chinese: input }).done(function (d) {
-                    $mnemonicCode.textbox('setValue', d);
-                });
-            });
         }, 0);
 
         $dlg.data('clickSave', function () {
             if (!$frm.form('validate'))
                 return;
-            var files = uploader.getFiles('complete');
-            if (!files || files.length == 0) {
-                abp.message.error('请至少上传一张封面图');
-                return;
-            }
 
             var postData = $frm.serializeJSON();
-            postData.images = new Array();
-            files.forEach(function (currentValue, index, arr) {
-                postData.images.push(currentValue.serverPath);
-            });
-            postData.descriptionFull = editor.txt.html();
-            console.log('提交的数据如下：');
-            console.log(postData);
+            
+            postData.content = editor.txt.html();
             var defer;
             if (id) {
-                defer = abp.services.app.BXJGCMSArticle.update(postData).done(function (d) {
+                defer = abp.services.app.bXJGCMSArticle.update(postData).done(function (d) {
                     abp.notify.success(abp.localization.bxjgUtils('修改') + abp.localization.bxjgUtils('成功') + '!');
                     onSaved('onUpdated');
                 });
             } else {
-                defer = abp.services.app.BXJGCMSArticle.create(postData).done(function (d) {
+                defer = abp.services.app.bXJGCMSArticle.create(postData).done(function (d) {
                     abp.notify.success(abp.localization.bxjgUtils('新增') + abp.localization.bxjgUtils('修改') + '!');
                     onSaved('onAdded');
                 });
@@ -125,28 +95,9 @@
         });
 
         if (id) {
-            abp.ui.setBusy($dlg, abp.services.app.BXJGCMSArticle.get({ id: id }).done(function (d) {
+            abp.ui.setBusy($dlg, abp.services.app.bXJGCMSArticle.get({ id: id }).done(function (d) {
                 $frm.form('load', d);
-                if (d.attachments) {
-                    //插件有点问题，初始化有部分东西是异步的，因此这里等一段时间
-                    //保险的方式是插件提供初始化完成的回调函数
-                    setTimeout(function () {
-                        d.attachments.forEach(function (item, index) {
-                            var obj = {
-                                id: item.id,//这个好像也没什么卵用
-                                name: item.name,
-                                ext: item.extension.substring(1),//这行貌似没什么卵用，webuploader取文件名后缀
-                                size: item.size
-                            };
-                            var file = new WebUploader.File(obj);
-                            file.myData = file.myData || {};
-                            file.myData.serverFileId = item.id;
-                            file.myData.attachmentId = item.attachmentId;
-                            file.setStatus('complete');
-                            up.addFiles(file);
-                        });
-                    }, 500);
-                }
+                editor.txt.html(d.content);
             }));
         } else
             $cls.val($dlg.data('clsId'));//直接用val赋值，easyui初始化后会直接使用这个值初始化对应的控件
@@ -156,93 +107,6 @@
             if (f)
                 f();
         }
-
-
-        //图片上传开始-------------------------------------
-        let uploader = WebUploader.create({
-
-            // 选完文件后，是否自动上传。
-            auto: true,
-
-            // swf文件路径
-            swf: '/lib/webuploader-0.1.5/Uploader.swf',
-
-            // 文件接收服务端。
-            server: abp.appPath + 'api/file/upload',
-
-            // 选择文件的按钮。可选。
-            // 内部根据当前运行是创建，可能是input元素，也可能是flash.
-            pick: '#frmBXJGCMSArticleUploaderPicker',
-
-            // 只允许选择图片文件。
-            accept: {
-                title: 'Images',
-                extensions: 'gif,jpg,jpeg,bmp,png',
-                mimeTypes: 'image/*'
-            }
-        });
-        uploader.on('uploadSuccess', function (file, response) {
-            file.serverPath = response.result[0].relativePath;
-        });
-        uploader.on('fileQueued', function (file) {
-            file.on('statuschange', function (n, o) {
-                $i.removeClass('imgUploader-img-' + o);
-                $i.addClass('imgUploader-img-' + n);
-                let statusText = '';
-                switch (n) {
-                    case 'complete':
-                        statusText = '已完成';
-                        break;
-                    case 'error':
-                        statusText = '失败';
-                        break;
-                    case 'progress':
-                        statusText = '上传中...';
-                        break;
-                    default:
-                        statusText = file.statusText;
-                }
-                $i.text(statusText);
-            });
-
-
-            let $box = $('<div class="imgUploader-img-container">').appendTo($uploaderImages);
-            let $a = $('<a>×</a>').appendTo($box);
-            let $img = $('<img />').appendTo($box);
-            let $i = $('<i />').appendTo($box);
-
-
-            $a.on('click', function () {
-                uploader.removeFile(file, true);
-                $box.remove();
-            });
-            if (file.serverPath) {
-                $img.attr('src', file.serverPath);
-                file.setStatus('complete');
-            } else {
-                uploader.makeThumb(file, function (error, src) {
-                    if (error) {
-                        $img.replaceWith('<span>不能预览</span>');
-                        return;
-                    }
-                    $img.attr('src', src);
-                });
-            }
-        });
-        uploader.on('uploadBeforeSend', function (obj, data, headers) {
-            headers.Authorization = "Bearer " + abp.getCurrentJWTToken();
-        });
-
-        //for (var i = 0; i < 3; i++) {
-        //    let file1 = new WebUploader.File({
-        //        size: 1,//经测试大于0的文件才会被加入队列
-        //        name: 'http://demo.dtcms.net/upload/201504/20/thumb_201504200119256512.jpg'
-        //    });
-        //    file1.serverPath = 'http://demo.dtcms.net/upload/201504/20/thumb_201504200119256512.jpg';
-        //    uploader.addFiles(file1);
-        //}
-
-        //图片上传结束-------------------------------------
 
         //富文本编辑器开始---------------------------------
         var E = window.wangEditor

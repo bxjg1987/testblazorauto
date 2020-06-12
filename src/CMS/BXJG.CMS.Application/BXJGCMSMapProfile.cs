@@ -25,7 +25,17 @@ namespace BXJG.CMS
             #endregion
 
             #region ндуб
-            CreateMap(typeof(ArticleEditDto), typeof(ArticleEntity<>)).ForMember("Column", opt => opt.Ignore());
+            CreateMap(typeof(ArticleEditDto), typeof(ArticleEntity<>))
+                .IncludeAllDerived()
+                .ForMember("TenantId", opt => opt.Ignore())
+                .ForMember("IsDeleted", opt => opt.Ignore())
+                .ForMember("DeleterUserId", opt => opt.Ignore())
+                .ForMember("DeletionTime", opt => opt.Ignore())
+                .ForMember("LastModificationTime", opt => opt.Ignore())
+                .ForMember("LastModifierUserId", opt => opt.Ignore())
+                .ForMember("CreationTime", opt => opt.Ignore())
+                .ForMember("CreatorUserId", opt => opt.Ignore())
+                .ForMember("Column", opt => opt.Ignore());
             CreateMap(typeof(ArticleEntity<>), typeof(ArticleDto));
             #endregion
         }

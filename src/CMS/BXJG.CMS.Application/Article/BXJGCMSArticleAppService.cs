@@ -47,6 +47,7 @@ namespace BXJG.CMS.Article
         {
             return base.CreateFilteredQuery(input)
                        .Include(c => c.Column)
+                       .AsNoTracking()
                        .WhereIf(input.Published.HasValue, c => c.Published == input.Published.Value)
                        .WhereIf(input.PublishStartTime.HasValue, c =>  c.PublishStartTime >= input.PublishStartTime.Value)
                        .WhereIf(input.PublishEndTime.HasValue, c =>  c.PublishEndTime < input.PublishEndTime.Value)
