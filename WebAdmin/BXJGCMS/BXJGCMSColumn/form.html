@@ -80,6 +80,7 @@
         });
         //初始化栏目类型
         $cbColumnType.combobox({
+            editable:false,
             required: true,
             url: abp.appPath+'api/services/app/bxjgcmscommon/getcolumntypes',
             queryParams: { forType: 4 },
@@ -89,9 +90,10 @@
         });
         //初始化内容类型
         $cbContentType.combobox({
+            editable:false,
             required: true,
             url:abp.appPath+'api/services/app/GeneralTree/GetNodesForSelect',
-            queryParams: { forType: 4,parentId:49 },
+            queryParams: { forType: 4,parentId:21 },
             onLoadSuccess: function (node, data) {
                 initContentTypeTask.resolve();
             }

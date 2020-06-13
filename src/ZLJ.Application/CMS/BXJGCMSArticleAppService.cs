@@ -13,8 +13,7 @@ namespace ZLJ.CMS
     /// </summary>
     public class BXJGCMSArticleAppService : BXJGCMSArticleAppService<GeneralTreeEntity>
     {
-        public BXJGCMSArticleAppService(IRepository<ArticleEntity<GeneralTreeEntity>, long> repository) 
-            : base(repository)
+        public BXJGCMSArticleAppService(IRepository<ArticleEntity<GeneralTreeEntity>, long> repository, IRepository<ColumnEntity<GeneralTreeEntity>, long> columnRepository) : base(repository, columnRepository)
         {
         }
     }
