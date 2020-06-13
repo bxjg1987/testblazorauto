@@ -29,8 +29,8 @@ namespace ZLJ
         public AutoMapperProfile()
         {
             CreateMap<AdministrativeEntity, AdministrativeDto>();
-            CreateMap<AdministrativeEntity, DictionaryTreeNodeDto>().EntityToComboTree();
-            CreateMap<AdministrativeEntity, DictionaryCombboxDto>().EntityToCombobox();
+            CreateMap<AdministrativeEntity, AdministrativeTreeNodeDto>().EntityToComboTree();
+            CreateMap<AdministrativeEntity, AdministrativeCombboxDto>().EntityToCombobox();
 
             //CreateMap<BXJGShopDictionaryEntity, DictionaryDto>()
             //    .ForMember(c => c.ExtData, opt => opt.MapFrom(c => JsonConvert.DeserializeObject<dynamic>(c.ExtensionData)))

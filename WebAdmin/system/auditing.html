@@ -25,10 +25,12 @@
 
         var $startDate = $('<input />').appendTo($toolbarRight);
         $startDate.datebox({
+  		width:130,prompt:'开始日期',
             onChange: search
         });
         var $endDate = $('<input />').appendTo($toolbarRight);
         $endDate.datebox({
+  		width:130,prompt:'结束日期',
             onChange: search
         });
         function search() {
@@ -42,7 +44,7 @@
             $dg.datagrid('load', data);
         }
 
-        
+
         $dg.datagrid({
             ctrlSelect: true,
             fit: true,
