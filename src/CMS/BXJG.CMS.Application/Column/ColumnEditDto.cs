@@ -18,6 +18,7 @@ namespace BXJG.CMS.Column
         /// <summary>
         /// 图标
         /// </summary>
+        [StringLength(BXJGCMSConsts.ColumnIconMaxLength)]
         public string Icon { get; set; }
         /// <summary>
         /// 栏目类型
@@ -34,14 +35,17 @@ namespace BXJG.CMS.Column
         /// <summary>
         /// SEO标题
         /// </summary>
+        [StringLength(BXJGCMSConsts.ColumnSeoTitleMaxLength)]
         public string SeoTitle { get; set; }
         /// <summary>
         /// SEO描述信息
         /// </summary>
+        [StringLength(BXJGCMSConsts.ColumnSeoDescriptionMaxLength)]
         public string SeoDescription { get; set; }
         /// <summary>
         /// seo关键字
         /// </summary>
+        [StringLength(BXJGCMSConsts.ColumnSeoKeywordMaxLength)]
         public string SeoKeyword { get; set; }
         /// <summary>
         /// 栏目描述
@@ -50,10 +54,12 @@ namespace BXJG.CMS.Column
         /// <summary>
         /// 列表页模板
         /// </summary>
+        [StringLength(BXJGCMSConsts.ColumnListTemplateMaxLength)]
         public string ListTemplate { get; set; }
         /// <summary>
         /// 详情页模板
         /// </summary>
+        [StringLength(BXJGCMSConsts.ColumnDetailTemplateMaxLength)]
         public string DetailTemplate { get; set; }
     }
 

@@ -31,7 +31,7 @@ namespace BXJG.Utils.Localization
             //}
 
             var dic = new Dictionary<int, string>();
-            for (int i = 1; i < fields.Length; i++)
+            for (int i = 0; i < fields.Length; i++)
             {
                 var field = fields[i];
                 if (field.Name == "value__")

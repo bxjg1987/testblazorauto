@@ -2,21 +2,53 @@
     <input type="hidden" name="id" value="0" />
     <table class="frm-box">
         <tr>
-            <th><i>*</i>上级</th>
+            <th>上级栏目</th>
             <td><input name="parentId" value="0" /></td>
+            <th>系统预定义</th>
+            <td><input name="isSysDefine" class="easyui-switchbutton" type="checkbox" data-value-type="boolean" /></td>
         </tr>
         <tr>
-            <th><i>*</i>名称</th>
-            <td><input name="displayName" class="easyui-textbox" tabindex="0" data-options="required:true,validType:'length[0,50]'" /></td>
+            <th>栏目名称</th>
+            <td colspan="3"><input name="displayName" class="easyui-textbox" data-options="required:true,validType:'length[0,500]',width:'115%'" /></td>
         </tr>
         <tr>
-            <th><i>*</i>树形结构</th>
-            <td><input class="easyui-switchbutton" type="checkbox" name="isTree" value="true" data-value-type="boolean" /></td>
+            <th>栏目类型</th>
+            <td>
+                <input name="columnType" class="easyui-combobox" data-options="required:true,
+                                                                               url:abp.appPath+'api/services/app/bxjgcmscommon/getcolumntypes',
+                                                                               queryParams:{forType:4}" />
+            </td>
+            <th>内容类型</th>
+            <td>
+                <input name="contentTypeId" class="easyui-combobox"
+                       data-options="required:true,
+                                     url:abp.appPath+'api/services/app/GeneralTree/GetNodesForSelect',
+                                     queryParams: { forType: 4,ParentId:12 }" />
+            </td>
         </tr>
-        <!--<tr>
-            <th>排序索引</th>
-            <td><input name="orderIndex" class="easyui-numberspinner" value="0" /></td>
-        </tr>-->
+        <tr>
+            <th>列表页模板</th>
+            <td><input name="listTemplate" class="easyui-textbox" data-options="validType:'length[0,50]'" /></td>
+
+            <th>内容页模板</th>
+            <td><input name="detailTemplate" class="easyui-textbox" data-options="validType:'length[0,50]'" /></td>
+        </tr>
+        <tr>
+            <th>SEO标题</th>
+            <td colspan="3"><input name="seoTitle" class="easyui-textbox" data-options="validType:'length[0,50]'" /></td>
+        </tr>
+        <tr>
+            <th>SEO关键字</th>
+            <td colspan="3"><input name="seoKeyword" class="easyui-textbox" data-options="validType:'length[0,50]'" /></td>
+        </tr>
+        <tr>
+            <th>SEO描述</th>
+            <td colspan="3"><input name="seoDescription" class="easyui-textbox" data-options="validType:'length[0,50]'" /></td>
+        </tr>
+        <tr>
+            <th>描述</th>
+            <td colspan="3"><input name="description" class="easyui-textbox" data-options="validType:'length[0,50]'" /></td>
+        </tr>
     </table>
 </form>
 <script>
