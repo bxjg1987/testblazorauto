@@ -15,58 +15,63 @@ namespace BXJG.WeChat.Payment
     {
         #region MyRegion
         /// <summary>
-        /// 返回状态码
+        /// 返回状态码 必填
         /// SUCCESS/FAIL 此字段是通信标识，非交易标识，交易是否成功需要查看result_code来判断
         /// </summary>
         public return_code return_code { get; private set; }
         /// <summary>
-        /// 返回信息
+        /// 返回信息 可选
         /// 返回信息，如非空，为错误原因    签名失败 参数格式校验错误
         /// </summary>
         public string return_msg { get; private set; }
         /// <summary>
-        /// 调用接口提交的小程序ID
+        /// 调用接口提交的小程序ID 必填
         /// </summary>
         public string appid { get; private set; }
         /// <summary>
-        /// 调用接口提交的商户号
+        /// 调用接口提交的商户号 必填
         /// </summary>
         public string mch_id { get; private set; }
         /// <summary>
-        /// 自定义参数，可以为请求支付的终端设备号等
+        /// 自定义参数，可选
+        /// 可以为请求支付的终端设备号等
         /// </summary>
         public string device_info { get; private set; }
         /// <summary>
-        /// 微信返回的随机字符串
+        /// 微信返回的随机字符串 必填
         /// </summary>
         public string nonce_str { get; private set; }
         /// <summary>
-        /// 微信返回的签名值
+        /// 微信返回的签名值 必填
         /// https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=4_3
         /// </summary>
         public string sign { get; private set; }
         /// <summary>
-        /// 业务结果 SUCCESS/FAIL
+        /// 业务结果 必填
+        /// SUCCESS/FAIL
         /// </summary>
         public result_code result_code { get; private set; }
         /// <summary>
-        /// 错误代码
+        /// 错误代码 可选
         /// </summary>
         public err_code err_code { get; private set; }
         /// <summary>
-        /// 错误代码描述
+        /// 错误代码描述 可选
         /// </summary>
         public string err_code_des { get; private set; }
         /// <summary>
-        /// 交易类型，取值为：JSAPI，NATIVE，APP等
+        /// 交易类型，必填，
+        /// 取值为：JSAPI，NATIVE，APP等 小程序是JSAPI  
         /// https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=4_2
         /// </summary>
         public trade_type trade_type { get; private set; }
         /// <summary>
-        /// 微信生成的预支付会话标识，用于后续接口调用中使用，该值有效期为2小时
+        /// 微信生成的预支付会话标识，必填
+        /// 用于后续接口调用中使用，该值有效期为2小时
         /// </summary>
         public string prepay_id { get; private set; }
         /// <summary>
+        /// 二维码链接 可选
         /// rade_type=NATIVE时有返回，此url用于生成支付二维码，然后提供给用户进行扫码支付。
         /// 注意：code_url的值并非固定，使用时按照URL格式转成二维码即可
         /// </summary>
