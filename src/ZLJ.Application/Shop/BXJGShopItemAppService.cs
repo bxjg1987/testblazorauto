@@ -10,9 +10,12 @@ using BXJG.Shop.Common;
 
 namespace ZLJ.Shop
 {
+    /// <summary>
+    /// 后台管理对商品的接口
+    /// </summary>
     public class BXJGShopItemAppService : BXJGShopItemAppService<Tenant, User, Role, TenantManager, UserManager>
     {
-        public BXJGShopItemAppService(IRepository<ItemEntity, long> repository, BXJGShopDictionaryManager dictionaryManager, IRepository<BXJGShopDictionaryEntity, long> respDic) : base(repository, dictionaryManager, respDic)
+        public BXJGShopItemAppService(IRepository<ItemEntity, long> repository, BXJGShopDictionaryManager dictionaryManager, IRepository<BXJGShopDictionaryEntity, long> respDic, ItemManager itemManager) : base(repository, dictionaryManager, respDic, itemManager)
         {
         }
     }
