@@ -55,7 +55,11 @@ namespace BXJG.Shop.Catalogue
             this.respDic = respDic;
             this.itemManager = itemManager;
         }
-
+        /// <summary>
+        /// 创建并发布商品信息
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public async Task<ItemDto> CreateAsync(ItemCreateDto input)
         {
             var entity = base.ObjectMapper.Map<ItemEntity>(input);
@@ -71,14 +75,22 @@ namespace BXJG.Shop.Catalogue
             await itemManager.PublishAsync(entity, input.AvailableStart, input.AvailableEnd);
             return ObjectMapper.Map<ItemDto>(entity);
         }
-
+        /// <summary>
+        /// 更新商品信息
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public async Task<ItemDto> UpdateAsync(ItemUpdateDto input)
         {
             var entity = await AsyncQueryableExecuter.FirstOrDefaultAsync(repository.GetAllIncluding(c => c.Category));
             ObjectMapper.Map<ItemUpdateDto, ItemEntity>(input, entity);
             return ObjectMapper.Map<ItemDto>(entity);
         }
-
+        /// <summary>
+        /// 管理页面用来获取所有商品信息
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public async Task<PagedResultDto<ItemDto>> GetAllAsync(GetAllItemsInput input)
         {
             string clsCode = input.CategoryCode;
@@ -102,12 +114,20 @@ namespace BXJG.Shop.Catalogue
             var list = await query.OrderBy(input.Sorting).PageBy(input).ToListAsync();
             return new PagedResultDto<ItemDto>(count, ObjectMapper.Map<IReadOnlyList<ItemDto>>(list));
         }
-
+        /// <summary>
+        /// 批量删除
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public Task DeleteAsync(DeleteInput input)
         {
             return repository.DeleteAsync(c => input.Ids.Contains(c.Id));
         }
-
+        /// <summary>
+        /// 根据id获取商品信息
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public async Task<ItemDto> GetAsync(EntityDto<long> input)
         {
             var entity = await repository.GetAsync(input.Id);
@@ -120,7 +140,7 @@ namespace BXJG.Shop.Catalogue
         /// <returns></returns>
         public async Task PublishAsync(BatchPublishInput input)
         {
-            var entities = await repository.GetAllListAsync();
+            var entities = await repository.GetAllListAsync(d=>input.Ids.Contains(d.Id));
             //如果有问题，就每个明细await吧
             var ts = new HashSet<Task>();
             foreach (var item in entities)
