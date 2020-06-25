@@ -44,14 +44,16 @@ namespace BXJG.Shop.Catalogue
     {
         private readonly IRepository<ItemEntity, long> repository;
         private readonly BXJGShopDictionaryManager dictionaryManager;
+        private readonly ItemManager itemManager;
 
         private readonly IRepository<BXJGShopDictionaryEntity, long> respDic;
 
-        public BXJGShopItemAppService(IRepository<ItemEntity, long> repository, BXJGShopDictionaryManager dictionaryManager, IRepository<BXJGShopDictionaryEntity, long> respDic)
+        public BXJGShopItemAppService(IRepository<ItemEntity, long> repository, BXJGShopDictionaryManager dictionaryManager, IRepository<BXJGShopDictionaryEntity, long> respDic, ItemManager itemManager)
         {
             this.repository = repository;
             this.dictionaryManager = dictionaryManager;
             this.respDic = respDic;
+            this.itemManager = itemManager;
         }
 
         public async Task<ItemDto> CreateAsync(ItemCreateDto input)
@@ -65,6 +67,8 @@ namespace BXJG.Shop.Catalogue
             //await repository.EnsurePropertyLoadedAsync(entity, c => c.Brand);
 
             entity = await repository.GetAllIncluding(c => c.Category, c => c.Brand).SingleAsync(c => c.Id == entity.Id);
+
+            await itemManager.PublishAsync(entity, input.AvailableStart, input.AvailableEnd);
             return ObjectMapper.Map<ItemDto>(entity);
         }
 
@@ -109,7 +113,26 @@ namespace BXJG.Shop.Catalogue
             var entity = await repository.GetAsync(input.Id);
             return ObjectMapper.Map<ItemDto>(entity);
         }
-
-
+        /// <summary>
+        /// 批量发布商品
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task PublishAsync(BatchPublishInput input)
+        {
+            var entities = await repository.GetAllListAsync();
+            //如果有问题，就每个明细await吧
+            var ts = new HashSet<Task>();
+            foreach (var item in entities)
+            {
+                Task t;
+                if (input.AvailableEndSeconds != default)
+                    t = itemManager.PublishDurationAsync(item, input.AvailableStart, input.AvailableEndSeconds.Value);
+                else
+                    t = itemManager.PublishAsync(item, input.AvailableStart, input.AvailableEnd);
+                ts.Add(t);
+            }
+            await Task.WhenAll(ts.ToArray());
+        }
     }
 }

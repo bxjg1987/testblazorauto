@@ -1,11 +1,15 @@
 ﻿using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
+using Abp.Events.Bus;
+using Abp.Events.Bus.Entities;
 using BXJG.GeneralTree;
 using BXJG.Shop.Common;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Threading.Tasks;
 
 namespace BXJG.Shop.Catalogue
 {
@@ -74,6 +78,16 @@ namespace BXJG.Shop.Catalogue
     /// </summary>
     public class ItemEntity : FullAuditedEntity<long>, IMustHaveTenant
     {
+        //public IEventBus EventBus = NullEventBus.Instance;//空模式
+
+        //public ItemEntity()
+        //{
+        //}
+        //public ItemEntity(IEventBus bs)
+        //{
+        //    EventBus = bs;
+        //}
+
         #region 基本信息
         public const int TitleMaxLength = 100;
         public const int SkuMaxLength = 50;
@@ -181,23 +195,26 @@ namespace BXJG.Shop.Catalogue
         /// </summary>
         /// <param name="yxq">开始发布时间，默认当前时间</param>
         /// <param name="js">结束时间</param>
-        public void Publish(DateTimeOffset yxq = default, DateTimeOffset? js = null)
+        internal void Publish(DateTimeOffset? yxq = default, DateTimeOffset? js = default)
         {
             Published = true;
-            AvailableStart = yxq;
-            AvailableEnd = js ?? yxq.AddYears(10);
+            AvailableStart = yxq ?? DateTimeOffset.Now;
+            AvailableEnd = js ?? AvailableStart.Value.AddYears(10);
+            //return EventBus.TriggerAsync(new EntityEventData<ItemEntity>(this));
         }
         /// <summary>
         /// 发布此商品
         /// </summary>
         /// <param name="yxq">开始发布时间，默认当前时间</param>
         /// <param name="js">有效期，单位秒</param>
-        public void Publish(DateTimeOffset yxq = default, long js = 60 * 60 * 24 * 365 * 10)
+        internal void PublishDuration(DateTimeOffset? yxq = default, long js = 60 * 60 * 24 * 365 * 10)
         {
-            Publish(yxq, yxq.AddSeconds(js));
+            yxq = yxq ?? DateTimeOffset.Now;
+            Publish(yxq, yxq.Value.AddSeconds(js));
         }
 
-        public string[] GetImages() {
+        public string[] GetImages()
+        {
             return Images.Split(',');
         }
         #endregion

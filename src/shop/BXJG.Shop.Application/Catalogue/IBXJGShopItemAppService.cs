@@ -57,5 +57,12 @@ namespace BXJG.Shop.Catalogue
         /// <returns></returns>
         [AbpAuthorize(BXJGShopPermissions.BXJGShopItemDelete)]
         Task DeleteAsync(DeleteInput input);
+        /// <summary>
+        /// 批量发布商品
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [AbpAuthorize(BXJGShopPermissions.BXJGShopItemUpdate)]//暂时用修改权限，后期补
+        Task PublishAsync(BatchPublishInput input);
     }
 }
