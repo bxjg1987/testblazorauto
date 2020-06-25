@@ -23,7 +23,7 @@ namespace BXJG.Shop.Catalogue
         public Task PublishAsync(ItemEntity item, DateTimeOffset? yxq = default, DateTimeOffset? js = default)
         {
             item.Publish(yxq, js);
-            return EventBus.TriggerAsync(new EntityEventData<ItemEntity>(item));
+            return EventBus.TriggerAsync(new ItemPublishChangedEventData(item));
         }
         /// <summary>
         /// 发布此商品
@@ -34,6 +34,16 @@ namespace BXJG.Shop.Catalogue
         {
             yxq = yxq ?? DateTimeOffset.Now;
             return PublishAsync(item, yxq, yxq.Value.AddSeconds(js));
+        }
+        /// <summary>
+        /// 取消发布指定商品
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public Task UnPublishAsync(ItemEntity item) {
+            item.Published = false;
+            return EventBus.TriggerAsync(new ItemPublishChangedEventData(item));
+            //item.AvailableStart = null;
         }
     }
 }

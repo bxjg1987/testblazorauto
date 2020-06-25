@@ -154,5 +154,22 @@ namespace BXJG.Shop.Catalogue
             }
             await Task.WhenAll(ts.ToArray());
         }
+        /// <summary>
+        /// 批量取消商品的发布
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task UnPublishAsync(BatchUnPublishInput input)
+        {
+            var entities = await repository.GetAllListAsync(d => input.Ids.Contains(d.Id));
+            //如果有问题，就每个明细await吧
+            var ts = new HashSet<Task>();
+            foreach (var item in entities)
+            {
+                Task t = itemManager.UnPublishAsync(item);
+                ts.Add(t);
+            }
+            await Task.WhenAll(ts.ToArray());
+        }
     }
 }

@@ -64,5 +64,12 @@ namespace BXJG.Shop.Catalogue
         /// <returns></returns>
         [AbpAuthorize(BXJGShopPermissions.BXJGShopItemUpdate)]//暂时用修改权限，后期补
         Task PublishAsync(BatchPublishInput input);
+        /// <summary>
+        /// 批量取消发布商品
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [AbpAuthorize(BXJGShopPermissions.BXJGShopItemUpdate)]//暂时用修改权限，后期补
+        Task UnPublishAsync(BatchUnPublishInput input);
     }
 }
