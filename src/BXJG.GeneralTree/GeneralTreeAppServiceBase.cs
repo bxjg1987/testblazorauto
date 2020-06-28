@@ -14,6 +14,7 @@ using Abp.Linq;
 using Abp.MultiTenancy;
 using Abp.UI;
 using BXJG.Utils.Localization;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -21,223 +22,59 @@ using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Abp.Extensions;
+using Abp.Linq.Extensions;
 namespace BXJG.GeneralTree
 {
     /// <summary>
     /// 树形结构应用逻辑基类
     /// </summary>
-    /// <typeparam name="TDto"></typeparam>
-    /// <typeparam name="TEditDto"></typeparam>
-    /// <typeparam name="TGetAllInput"></typeparam>
     /// <typeparam name="TGetTreeForSelectInput"></typeparam>
     /// <typeparam name="TGetTreeForSelectOutput"></typeparam>
     /// <typeparam name="TGetNodesForSelectInput"></typeparam>
     /// <typeparam name="TGetNodesForSelectOutput"></typeparam>
-    /// <typeparam name="TMoveInput"></typeparam>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TManager"></typeparam>
-    public class GeneralTreeAppServiceBase<
-        TDto,
-        TEditDto,
-        TGetAllInput,
-        TGetTreeForSelectInput,
-        TGetTreeForSelectOutput,
-        TGetNodesForSelectInput,
-        TGetNodesForSelectOutput,
-        TMoveInput,
-        TEntity,
-        TManager> : ApplicationService, IGeneralTreeAppServiceBase<
-            TDto,
-            TEditDto,
-            TGetAllInput,
-            TGetTreeForSelectInput,
-            TGetTreeForSelectOutput,
-            TGetNodesForSelectInput,
-            TGetNodesForSelectOutput,
-            TMoveInput>
+    public class UnAuthGeneralTreeAppServiceBase<TGetTreeForSelectInput,
+                                           TGetTreeForSelectOutput,
+                                           TGetNodesForSelectInput,
+                                           TGetNodesForSelectOutput,
+                                           TEntity,
+                                           TManager> : ApplicationService, IUnAuthGeneralTreeAppServiceBase<TGetTreeForSelectInput,
+                                                                                                      TGetTreeForSelectOutput,
+                                                                                                      TGetNodesForSelectInput,
+                                                                                                      TGetNodesForSelectOutput>
         where TEntity : GeneralTreeEntity<TEntity>
-        where TDto : GeneralTreeGetTreeNodeBaseDto<TDto>, new()
-        where TEditDto : GeneralTreeNodeEditBaseDto//父类可以对输入做一定的处理
         where TManager : GeneralTreeManager<TEntity>
-        where TGetAllInput : GeneralTreeGetTreeInput
         where TGetTreeForSelectInput : GeneralTreeGetForSelectInput
         where TGetTreeForSelectOutput : GeneralTreeNodeDto<TGetTreeForSelectOutput>, new()
         where TGetNodesForSelectInput : GeneralTreeGetForSelectInput
         where TGetNodesForSelectOutput : GeneralTreeComboboxDto, new()
-        where TMoveInput : GeneralTreeNodeMoveInput
     {
         /* 
          * 数据显示地方有：管理页列表、作为一个搜索条件框、作为表单里一个下拉框
          * 顶级文本可能是 前端传过来的、上级节点文本、默认文本；除非根本不现实
          */
 
-        protected string allTextForManager, allTextForSearch, allTextForForm;//注意这里代表的是本地化文本的key
+        protected string allTextForSearch, allTextForForm;//注意这里代表的是本地化文本的key
         public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }//属性注入
         protected readonly TManager generalTreeManager;
         protected readonly IRepository<TEntity, long> ownRepository;
 
-        protected string createPermissionName, updatePermissionName, deletePermissionName, getPermissionName;
-
-        public GeneralTreeAppServiceBase(
-            IRepository<TEntity, long> ownRepository,
-            TManager organizationUnitManager,
-            string createPermissionName = null,
-            string updatePermissionName = null,
-            string deletePermissionName = null,
-            string getPermissionName = null,
-            string allTextForManager = "全部",
-            string allTextForSearch = "不限",
-            string allTextForForm = "请选择")//这里的字符串后期可以使用常量
+        public UnAuthGeneralTreeAppServiceBase(IRepository<TEntity, long> ownRepository,
+                                         TManager organizationUnitManager,
+                                         string allTextForSearch = "不限",
+                                         string allTextForForm = "请选择")//这里的字符串后期可以使用常量
         {
             base.LocalizationSourceName = GeneralTreeConsts.LocalizationSourceName;
             this.generalTreeManager = organizationUnitManager;
             this.ownRepository = ownRepository;
             this.AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
             //L内部调用的LocationSource是使用的属性注入，所以在构造函数中无法使用L()  此规则.net framework版本是这个规则，.net core版本未测试过
-            this.allTextForManager = allTextForManager.UtilsL();
             this.allTextForSearch = allTextForSearch.UtilsL();
             this.allTextForForm = allTextForForm.UtilsL();
-
-            this.createPermissionName = createPermissionName;
-            this.updatePermissionName = updatePermissionName;
-            this.deletePermissionName = deletePermissionName;
-            this.getPermissionName = getPermissionName;
         }
 
-        public virtual async Task<TDto> CreateAsync(TEditDto input)
-        {
-            await CheckCreatePermissionAsync();
-
-            if (input.ParentId <= 0)
-                input.ParentId = null;
-
-            var m = ObjectMapper.Map<TEntity>(input);
-
-            //扩展属性的处理后期放到Manager中去处理
-            if (input.ExtData != null)
-            {
-                foreach (var item in input.ExtData)
-                {
-                    m.RemoveData(item.Key);
-                    m.SetData(item.Key, item.Value);
-                }
-            }
-
-            //await BeforeCreate(m);
-            await generalTreeManager.CreateAsync(m);
-            return ObjectMapper.Map<TDto>(m);
-        }
-        public virtual async Task<TDto> MoveAsync(TMoveInput input)
-        {
-            //移动关于追加 之后 之前 的处理逻辑本应该定义在领域服务中
-            await CheckUpdatePermissionAsync();
-
-            var m = await generalTreeManager.MoveAsync(input.Id, input.TargetId, input.MoveType);
-            return ObjectMapper.Map<TDto>(m);// m.MapTo<TDto>();
-        }
-        public virtual async Task<TDto> UpdateAsync(TEditDto input)
-        {
-            //var sdf = input.Pci.inputText;
-
-            await CheckUpdatePermissionAsync();
-
-            if (input.ParentId == 0)
-                input.ParentId = null;
-
-            var m = await ownRepository.GetAsync(input.Id);
-            ObjectMapper.Map(input, m);
-            //扩展属性的处理后期放到Manager中去处理
-            if (input.ExtData != null)
-            {
-                foreach (var item in input.ExtData)
-                {
-                    m.RemoveData(item.Key);
-                    m.SetData(item.Key, item.Value);
-                }
-            }
-            await generalTreeManager.UpdateAsync(m);
-            return ObjectMapper.Map<TDto>(m);
-        }
-        public virtual async Task DeleteAsync(EntityDto<long> input)
-        {
-            await CheckDeletePermissionAsync();
-            await this.generalTreeManager.DeleteAsync(input.Id);
-        }
-        public virtual async Task<TDto> GetAsync(EntityDto<long> input)
-        {
-            await CheckGetPermissionAsync();
-            var entity = await ownRepository.GetAsync(input.Id);
-
-            var n = ObjectMapper.Map<TDto>(entity);
-            //if (!string.IsNullOrWhiteSpace(entity.ExtensionData))
-            //    n.ExtData = JsonConvert.DeserializeObject<dynamic>(entity.ExtensionData);
-            return n;
-        }
-
-        //如果没有上级节点包装 列表默认被选择了 点击新增时 上级几点无法定位到null，因此需要做个包装
-        public virtual async Task<IList<TDto>> GetAllAsync(TGetAllInput input)
-        {
-            //权限判断
-            await CheckGetPermissionAsync();
-
-            //获取父节点的code 方便后续查询所有子集
-            string parentCode = "";
-            if (input.ParentId.HasValue && input.ParentId.Value > 0)
-            {
-                var top = await ownRepository.SingleAsync(c => c.Id == input.ParentId.Value);
-                parentCode = top.Code;
-            }
-
-            //查询
-            var query = GetAllFiltered(input, parentCode);//.Where(c => c.Code.StartsWith(parentCode));
-            query = GetAllSorting(query, input); //方便子类排序
-            var list = await AsyncQueryableExecuter.ToListAsync(query);//.ToListAsync();
-
-            //建立dto以及处理父子关系
-            //TEntity parent = list.SingleOrDefault(c => c.Id == input.ParentId);
-            //if (parent != null)
-            //    list.Remove(parent);
-
-            var list1 = ObjectMapper.Map<IList<TDto>>(list);//使用映射的好处是子类扩展多个属性时都可以使用映射，避免大量属性赋值的代码
-
-
-            //这里应该加个开关，因为子类可能并不需要遍历
-            if (GetAllMap != null)
-            {
-                foreach (var c in list1)
-                {
-                    //c.Children = list1.Where(d => d.ParentId == c.Id).ToList();
-                    var entity = list.Single(d => d.Id == c.Id);
-
-                    //if (c.Children != null && c.Children.Count > 0)
-                    //    c.State = "closed";//默认值为 open
-
-                    //dto属性中处理了
-                    //if (!string.IsNullOrWhiteSpace(entity.ExtensionData))
-                    //    c.ExtData = JsonConvert.DeserializeObject<dynamic>(entity.ExtensionData);
-
-                    GetAllMap(entity, c);
-                }
-            }
-
-            var parentDto = input.ParentId.HasValue ? list1.SingleOrDefault(c => c.Id == input.ParentId) : null;
-            //得到顶级节点集合
-            list1 = list1.Where(c => c.ParentId == input.ParentId).ToList();
-
-            //处理顶级文本
-            if (input.LoadParent)
-            {
-                if (!string.IsNullOrWhiteSpace(input.ParentText))
-                    return new List<TDto> { new TDto { DisplayName = L(input.ParentText), Children = list1 } };
-
-                if (input.ParentId.HasValue)
-                    return new List<TDto> { parentDto };
-
-                return new List<TDto> { new TDto { DisplayName = allTextForManager, Children = list1 } };
-            }
-            return list1;
-        }
         public virtual async Task<IList<TGetTreeForSelectOutput>> GetTreeForSelectAsync(TGetTreeForSelectInput input)
         {
             //权限判断
@@ -363,52 +200,6 @@ namespace BXJG.GeneralTree
             return dtoList;
         }
 
-        #region 权限判断
-        protected virtual Task CheckCreatePermissionAsync()
-        {
-            return CheckPermissionAsync(deletePermissionName);
-        }
-        protected virtual Task CheckUpdatePermissionAsync()
-        {
-            return CheckPermissionAsync(updatePermissionName);
-        }
-        protected virtual Task CheckDeletePermissionAsync()
-        {
-            return CheckPermissionAsync(deletePermissionName);
-        }
-        protected virtual Task CheckGetPermissionAsync()
-        {
-            return CheckPermissionAsync(getPermissionName);
-        }
-        protected virtual async Task CheckPermissionAsync(string permissionName)
-        {
-
-            //if (string.IsNullOrWhiteSpace(permissionName))
-            //    return;
-
-            //if (!await IsGrantedAsync(permissionName))
-            //    throw new UserFriendlyException(L("UnAuthorized"));
-
-            //使用父类的权限检查可以得到一个正常的未授权响应
-            if (!string.IsNullOrEmpty(permissionName))
-            {
-                await PermissionChecker.AuthorizeAsync(permissionName);
-            }
-        }
-        #endregion
-
-        #region 后台管理获取列表时可重写的方法
-        protected virtual IQueryable<TEntity> GetAllFiltered(TGetAllInput q, string parentCode)
-        {
-            return ownRepository.GetAll().Where(c => c.Code.StartsWith(parentCode));
-        }
-        protected virtual IQueryable<TEntity> GetAllSorting(IQueryable<TEntity> query, TGetAllInput input)
-        {
-            return query.OrderBy(c => c.Code);
-        }
-        protected Action<TEntity, TDto> GetAllMap = null;
-
-        #endregion
         #region 获取树形下拉框数据时子类可以重写的方法
         protected virtual IQueryable<TEntity> ComboTreeFilter(TGetTreeForSelectInput input, string parentCode)
         {
@@ -457,7 +248,276 @@ namespace BXJG.GeneralTree
         //    return dtos;
         //}
         protected Action<TEntity, TGetNodesForSelectOutput> ComboboxMap = null;
-       
+        #endregion
+    }
+
+    /// <summary>
+    /// 树形结构应用逻辑基类
+    /// </summary>
+    /// <typeparam name="TDto"></typeparam>
+    /// <typeparam name="TEditDto"></typeparam>
+    /// <typeparam name="TGetAllInput"></typeparam>
+    /// <typeparam name="TGetTreeForSelectInput"></typeparam>
+    /// <typeparam name="TGetTreeForSelectOutput"></typeparam>
+    /// <typeparam name="TGetNodesForSelectInput"></typeparam>
+    /// <typeparam name="TGetNodesForSelectOutput"></typeparam>
+    /// <typeparam name="TMoveInput"></typeparam>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <typeparam name="TManager"></typeparam>
+    public class GeneralTreeAppServiceBase<TDto,
+                                           TEditDto,
+                                           TGetAllInput,
+                                           TGetTreeForSelectInput,
+                                           TGetTreeForSelectOutput,
+                                           TGetNodesForSelectInput,
+                                           TGetNodesForSelectOutput,
+                                           TMoveInput,
+                                           TEntity,
+                                           TManager> : UnAuthGeneralTreeAppServiceBase<TGetTreeForSelectInput,
+                                                                                 TGetTreeForSelectOutput,
+                                                                                 TGetNodesForSelectInput,
+                                                                                 TGetNodesForSelectOutput,
+                                                                                 TEntity,
+                                                                                 TManager>, IGeneralTreeAppServiceBase<TDto,
+                                                                                                                       TEditDto,
+                                                                                                                       TGetAllInput,
+                                                                                                                       TGetTreeForSelectInput,
+                                                                                                                       TGetTreeForSelectOutput,
+                                                                                                                       TGetNodesForSelectInput,
+                                                                                                                       TGetNodesForSelectOutput,
+                                                                                                                       TMoveInput>
+        where TEntity : GeneralTreeEntity<TEntity>
+        where TDto : GeneralTreeGetTreeNodeBaseDto<TDto>, new()
+        where TEditDto : GeneralTreeNodeEditBaseDto//父类可以对输入做一定的处理
+        where TManager : GeneralTreeManager<TEntity>
+        where TGetAllInput : GeneralTreeGetTreeInput
+        where TGetTreeForSelectInput : GeneralTreeGetForSelectInput
+        where TGetTreeForSelectOutput : GeneralTreeNodeDto<TGetTreeForSelectOutput>, new()
+        where TGetNodesForSelectInput : GeneralTreeGetForSelectInput
+        where TGetNodesForSelectOutput : GeneralTreeComboboxDto, new()
+        where TMoveInput : GeneralTreeNodeMoveInput
+    {
+        /* 
+         * 数据显示地方有：管理页列表、作为一个搜索条件框、作为表单里一个下拉框
+         * 顶级文本可能是 前端传过来的、上级节点文本、默认文本；除非根本不现实
+         */
+
+        protected string allTextForManager;//注意这里代表的是本地化文本的key
+
+        protected string createPermissionName, updatePermissionName, deletePermissionName, getPermissionName;
+
+        public GeneralTreeAppServiceBase(IRepository<TEntity, long> ownRepository,
+                                         TManager organizationUnitManager,
+                                         string createPermissionName = null,
+                                         string updatePermissionName = null,
+                                         string deletePermissionName = null,
+                                         string getPermissionName = null,
+                                         string allTextForManager = "全部",
+                                         string allTextForSearch = "不限",
+                                         string allTextForForm = "请选择") : base(ownRepository,
+                                                                                  organizationUnitManager,
+                                                                                  allTextForSearch,
+                                                                                  allTextForForm)
+        {
+            //L内部调用的LocationSource是使用的属性注入，所以在构造函数中无法使用L()  此规则.net framework版本是这个规则，.net core版本未测试过
+            this.allTextForManager = allTextForManager.UtilsL();
+
+
+            this.createPermissionName = createPermissionName;
+            this.updatePermissionName = updatePermissionName;
+            this.deletePermissionName = deletePermissionName;
+            this.getPermissionName = getPermissionName;
+        }
+
+        public virtual async Task<TDto> CreateAsync(TEditDto input)
+        {
+            await CheckCreatePermissionAsync();
+
+            if (input.ParentId <= 0)
+                input.ParentId = null;
+
+            var m = ObjectMapper.Map<TEntity>(input);
+
+            //扩展属性的处理后期放到Manager中去处理
+            if (input.ExtData != null)
+            {
+                foreach (var item in input.ExtData)
+                {
+                    m.RemoveData(item.Key);
+                    m.SetData(item.Key, item.Value);
+                }
+            }
+
+            //await BeforeCreate(m);
+            await generalTreeManager.CreateAsync(m);
+            return ObjectMapper.Map<TDto>(m);
+        }
+        public virtual async Task<TDto> MoveAsync(TMoveInput input)
+        {
+            //移动关于追加 之后 之前 的处理逻辑本应该定义在领域服务中
+            await CheckUpdatePermissionAsync();
+
+            var m = await generalTreeManager.MoveAsync(input.Id, input.TargetId, input.MoveType);
+            return ObjectMapper.Map<TDto>(m);// m.MapTo<TDto>();
+        }
+        public virtual async Task<TDto> UpdateAsync(TEditDto input)
+        {
+            //var sdf = input.Pci.inputText;
+
+            await CheckUpdatePermissionAsync();
+
+            if (input.ParentId == 0)
+                input.ParentId = null;
+
+            var m = await ownRepository.GetAsync(input.Id);
+            ObjectMapper.Map(input, m);
+            //扩展属性的处理后期放到Manager中去处理
+            if (input.ExtData != null)
+            {
+                foreach (var item in input.ExtData)
+                {
+                    m.RemoveData(item.Key);
+                    m.SetData(item.Key, item.Value);
+                }
+            }
+            await generalTreeManager.UpdateAsync(m);
+            return ObjectMapper.Map<TDto>(m);
+        }
+        public virtual async Task DeleteAsync(EntityDto<long> input)
+        {
+            await CheckDeletePermissionAsync();
+            await this.generalTreeManager.DeleteAsync(input.Id);
+        }
+        public virtual async Task<TDto> GetAsync(EntityDto<long> input)
+        {
+            await CheckGetPermissionAsync();
+            var entity = await ownRepository.GetAsync(input.Id);
+
+            var n = ObjectMapper.Map<TDto>(entity);
+            //if (!string.IsNullOrWhiteSpace(entity.ExtensionData))
+            //    n.ExtData = JsonConvert.DeserializeObject<dynamic>(entity.ExtensionData);
+            return n;
+        }
+
+        //如果没有上级节点包装 列表默认被选择了 点击新增时 上级几点无法定位到null，因此需要做个包装
+        public virtual async Task<IList<TDto>> GetAllAsync(TGetAllInput input)
+        {
+            //权限判断
+            await CheckGetPermissionAsync();
+
+            //获取父节点的code 方便后续查询所有子集
+            string parentCode = "";
+            if (input.ParentId.HasValue && input.ParentId.Value > 0)
+            {
+                var top = await ownRepository.SingleAsync(c => c.Id == input.ParentId.Value);
+                parentCode = top.Code;
+            }
+
+            //查询
+            var query = GetAllFiltered(input, parentCode);//.Where(c => c.Code.StartsWith(parentCode));
+            query = GetAllSorting(query, input); //方便子类排序
+            //var list = await AsyncQueryableExecuter.ToListAsync(query);//.ToListAsync();
+            var list = await query.ToListAsync();
+            //建立dto以及处理父子关系
+            //TEntity parent = list.SingleOrDefault(c => c.Id == input.ParentId);
+            //if (parent != null)
+            //    list.Remove(parent);
+
+            var list1 = ObjectMapper.Map<IList<TDto>>(list);//使用映射的好处是子类扩展多个属性时都可以使用映射，避免大量属性赋值的代码
+
+
+            //这里应该加个开关，因为子类可能并不需要遍历
+            if (GetAllMap != null)
+            {
+                foreach (var c in list1)
+                {
+                    //c.Children = list1.Where(d => d.ParentId == c.Id).ToList();
+                    var entity = list.Single(d => d.Id == c.Id);
+
+                    //if (c.Children != null && c.Children.Count > 0)
+                    //    c.State = "closed";//默认值为 open
+
+                    //dto属性中处理了
+                    //if (!string.IsNullOrWhiteSpace(entity.ExtensionData))
+                    //    c.ExtData = JsonConvert.DeserializeObject<dynamic>(entity.ExtensionData);
+
+                    GetAllMap(entity, c);
+                }
+            }
+
+            var parentDto = input.ParentId.HasValue ? list1.SingleOrDefault(c => c.Id == input.ParentId) : null;
+            //得到顶级节点集合
+            list1 = list1.Where(c => c.ParentId == input.ParentId).ToList();
+
+            //处理顶级文本
+            if (input.LoadParent)
+            {
+                if (!string.IsNullOrWhiteSpace(input.ParentText))
+                    return new List<TDto> { new TDto { DisplayName = L(input.ParentText), Children = list1 } };
+
+                if (input.ParentId.HasValue)
+                    return new List<TDto> { parentDto };
+
+                return new List<TDto> { new TDto { DisplayName = allTextForManager, Children = list1 } };
+            }
+            return list1;
+        }
+        public override async Task<IList<TGetTreeForSelectOutput>> GetTreeForSelectAsync(TGetTreeForSelectInput input)
+        {
+            //权限判断
+            await CheckGetPermissionAsync();
+            return await base.GetTreeForSelectAsync(input);
+        }
+        public override async Task<IList<TGetNodesForSelectOutput>> GetNodesForSelectAsync(TGetNodesForSelectInput input)
+        {
+            await CheckGetPermissionAsync();
+            return await base.GetNodesForSelectAsync(input);
+        }
+
+        #region 权限判断
+        protected virtual Task CheckCreatePermissionAsync()
+        {
+            return CheckPermissionAsync(deletePermissionName);
+        }
+        protected virtual Task CheckUpdatePermissionAsync()
+        {
+            return CheckPermissionAsync(updatePermissionName);
+        }
+        protected virtual Task CheckDeletePermissionAsync()
+        {
+            return CheckPermissionAsync(deletePermissionName);
+        }
+        protected virtual Task CheckGetPermissionAsync()
+        {
+            return CheckPermissionAsync(getPermissionName);
+        }
+        protected virtual async Task CheckPermissionAsync(string permissionName)
+        {
+
+            //if (string.IsNullOrWhiteSpace(permissionName))
+            //    return;
+
+            //if (!await IsGrantedAsync(permissionName))
+            //    throw new UserFriendlyException(L("UnAuthorized"));
+
+            //使用父类的权限检查可以得到一个正常的未授权响应
+            if (!string.IsNullOrEmpty(permissionName))
+            {
+                await PermissionChecker.AuthorizeAsync(permissionName);
+            }
+        }
+        #endregion
+
+        #region 后台管理获取列表时可重写的方法
+        protected virtual IQueryable<TEntity> GetAllFiltered(TGetAllInput q, string parentCode)
+        {
+            return ownRepository.GetAll().Where(c => c.Code.StartsWith(parentCode));
+        }
+        protected virtual IQueryable<TEntity> GetAllSorting(IQueryable<TEntity> query, TGetAllInput input)
+        {
+            return query.OrderBy(c => c.Code);
+        }
+        protected Action<TEntity, TDto> GetAllMap = null;
         #endregion
     }
 }

@@ -21,6 +21,11 @@ namespace BXJG.Shop
                                                 icon: BXJGShopPermissions.BXJGShopDictionary,
                                                 url: $"/{BXJGShopPermissions.BXJGShop}/{BXJGShopPermissions.BXJGShopDictionary}/index.html",
                                                 permissionDependency: new SimplePermissionDependency(BXJGShopPermissions.BXJGShopDictionary)))
+                .AddItem(new MenuItemDefinition(BXJGShopPermissions.BXJGShopItemCategory,
+                                                BXJGShopPermissions.BXJGShopItemCategory.BXJGShopL(),
+                                                icon: BXJGShopPermissions.BXJGShopItemCategory,
+                                                url: $"/{BXJGShopPermissions.BXJGShop}/{BXJGShopPermissions.BXJGShopItemCategory}/index.html",
+                                                permissionDependency: new SimplePermissionDependency(BXJGShopPermissions.BXJGShopItemCategory)))
                 .AddItem(new MenuItemDefinition(BXJGShopPermissions.BXJGShopItem,
                                                 BXJGShopPermissions.BXJGShopItem.BXJGShopL(),
                                                 icon: BXJGShopPermissions.BXJGShopItem,

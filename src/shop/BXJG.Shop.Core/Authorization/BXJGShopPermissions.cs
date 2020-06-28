@@ -13,6 +13,13 @@ namespace BXJG.Shop.Authorization
         public const string BXJGShopDictionaryCreate = "BXJGShopDictionaryCreate";
         public const string BXJGShopDictionaryUpdate = "BXJGShopDictionaryUpdate";
         public const string BXJGShopDictionaryDelete = "BXJGShopDictionaryDelete";
+
+        //商品分类
+        public const string BXJGShopItemCategory = "BXJGShopItemCategory";
+        public const string BXJGShopItemCategoryCreate = "BXJGShopItemCategoryCreate";
+        public const string BXJGShopItemCategoryUpdate = "BXJGShopItemCategoryUpdate";
+        public const string BXJGShopItemCategoryDelete = "BXJGShopItemCategoryDelete";
+
         //产品信息/上架信息
         public const string BXJGShopItem = "BXJGShopItem";
         public const string BXJGShopItemCreate = "BXJGShopItemCreate";

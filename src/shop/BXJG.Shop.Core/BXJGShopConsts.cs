@@ -1,9 +1,16 @@
-﻿namespace BXJG.Shop
+﻿using System.ComponentModel;
+
+namespace BXJG.Shop
 {
     public class BXJGShopConsts
     {
         public const string LocalizationSourceName = "BXJGShop";
 
+        #region 商品分类
+        public const int ItemCategoryIconMaxLength = 200;
+        public const int ItemCategoryImage1MaxLength = 200;
+        public const int ItemCategoryImage2MaxLength = 200;
+        #endregion
 
         #region settings
         /// <summary>

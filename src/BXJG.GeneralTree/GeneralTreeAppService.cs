@@ -12,13 +12,32 @@ using System.Threading.Tasks;
 using Abp.UI;
 using Abp.Domain.Entities;
 using Abp.MultiTenancy;
+using Microsoft.EntityFrameworkCore;
 
 namespace BXJG.GeneralTree
 {
     /// <summary>
     /// 数据字典应用服务类
     /// </summary>
-    public class GeneralTreeAppService : GeneralTreeAppServiceBase< 
+    public class UnAuthGeneralTreeAppService : UnAuthGeneralTreeAppServiceBase<
+            GeneralTreeGetForSelectInput,
+            GeneralTreeNodeDto,
+            GeneralTreeGetForSelectInput,
+            GeneralTreeComboboxDto,
+            GeneralTreeEntity,
+            GeneralTreeManager>, IUnAuthGeneralTreeAppService
+    {
+        public UnAuthGeneralTreeAppService(
+            IRepository<GeneralTreeEntity, long> repository,
+            GeneralTreeManager organizationUnitManager)
+            : base(repository, organizationUnitManager)
+        { }
+    }
+
+    /// <summary>
+    /// 数据字典应用服务类
+    /// </summary>
+    public class GeneralTreeAppService : GeneralTreeAppServiceBase<
             GeneralTreeDto,
             GeneralTreeEditDto,
             GeneralTreeGetTreeInput,
@@ -28,7 +47,7 @@ namespace BXJG.GeneralTree
             GeneralTreeComboboxDto,
             GeneralTreeNodeMoveInput,
             GeneralTreeEntity,
-            GeneralTreeManager>,IGeneralTreeAppService
+            GeneralTreeManager>, IGeneralTreeAppService
     {
         public GeneralTreeAppService(
             IRepository<GeneralTreeEntity, long> repository,
@@ -43,9 +62,11 @@ namespace BXJG.GeneralTree
 
         public override async Task DeleteAsync(EntityDto<long> input)
         {
-           await base.CheckDeletePermissionAsync();
-            var sd = await base.ownRepository.GetAsync(input.Id);
-            if (sd.IsSysDefine)
+            await base.CheckDeletePermissionAsync();
+
+            var p = await ownRepository.GetAll().AnyAsync(c => c.Id == input.Id && c.IsSysDefine);
+            // var sd = await base.AsyncQueryableExecuter.AnyAsync( base.ownRepository.GetAsync(input.Id);
+            if (p)
                 throw new UserFriendlyException(L("系统预设数据不允许删除！"));
 
             await base.DeleteAsync(input);

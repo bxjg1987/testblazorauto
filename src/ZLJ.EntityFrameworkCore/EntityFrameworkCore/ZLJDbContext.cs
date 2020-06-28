@@ -33,6 +33,7 @@ namespace ZLJ.EntityFrameworkCore
 
         #region 注册商城模块中的实体
         public virtual DbSet<BXJGShopDictionaryEntity> BXJGShopDictionaries { get; set; }
+        public virtual DbSet<ItemCategoryEntity> BXJGShopItemCategories { get; set; }
         public virtual DbSet<ItemEntity> BXJGShopItems { get; set; }
         public virtual DbSet<CustomerEntity<User, AdministrativeEntity>> BXJGShopCustomers { get; set; }
         public virtual DbSet<OrderEntity<User, AdministrativeEntity>> BXJGShopOrders { get; set; }

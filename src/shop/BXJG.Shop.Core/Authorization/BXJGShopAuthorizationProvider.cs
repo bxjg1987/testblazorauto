@@ -24,11 +24,19 @@ namespace BXJG.Shop.Authorization
             spdtzdTree.CreateChildPermission(BXJGShopPermissions.BXJGShopDictionaryCreate, "新增".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
             spdtzdTree.CreateChildPermission(BXJGShopPermissions.BXJGShopDictionaryUpdate, "修改".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
             spdtzdTree.CreateChildPermission(BXJGShopPermissions.BXJGShopDictionaryDelete, "删除".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
+
+            //商品分类
+            var itemCategory = shop.CreateChildPermission(BXJGShopPermissions.BXJGShopItemCategory, BXJGShopPermissions.BXJGShopItemCategory.BXJGShopL(), multiTenancySides: MultiTenancySides.Tenant);
+            itemCategory.CreateChildPermission(BXJGShopPermissions.BXJGShopItemCategoryCreate, "新增".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
+            itemCategory.CreateChildPermission(BXJGShopPermissions.BXJGShopItemCategoryUpdate, "修改".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
+            itemCategory.CreateChildPermission(BXJGShopPermissions.BXJGShopItemCategoryDelete, "删除".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
+
             //商品
             var item = shop.CreateChildPermission(BXJGShopPermissions.BXJGShopItem, BXJGShopPermissions.BXJGShopItem.BXJGShopL(), multiTenancySides: MultiTenancySides.Tenant);
             item.CreateChildPermission(BXJGShopPermissions.BXJGShopItemCreate, "新增".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
             item.CreateChildPermission(BXJGShopPermissions.BXJGShopItemUpdate, "修改".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
             item.CreateChildPermission(BXJGShopPermissions.BXJGShopItemDelete, "删除".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
+
             //订单
             var order = shop.CreateChildPermission(BXJGShopPermissions.BXJGShopOrder, BXJGShopPermissions.BXJGShopOrder.BXJGShopL(), multiTenancySides: MultiTenancySides.Tenant);
             order.CreateChildPermission(BXJGShopPermissions.BXJGShopOrderShip, "发货".BXJGShopL(), multiTenancySides: MultiTenancySides.Tenant);

@@ -3,6 +3,7 @@
   <texts>
     <text name="BXJGShop" value="商城管理" />
     <text name="BXJGShopItem" value="商品管理" />
+    <text name="BXJGShopItemCategory" value="商品分类" />
     <text name="BXJGShopDictionary" value="商城字典" />
     <text name="GetBXJGShopItemKeywordsInputPrompt" value="标题/描述/品牌/SKU..." />
     <text name="BXJGShopOrder" value="订单管理" />
