@@ -11,6 +11,7 @@ using BXJG.Shop.Sale;
 using ZLJ.Administrative;
 using BXJG.Shop.Customer;
 using BXJG.WeChat.Payment;
+using BXJG.GeneralTree;
 
 namespace ZLJ.Shop
 {
@@ -25,15 +26,15 @@ namespace ZLJ.Shop
             UserManager,
             AdministrativeEntity,
             OrderManager,
-            CustomerManager>
+            CustomerManager, GeneralTreeEntity>
     {
         public BXJGShopOrderAppService(
             IRepository<CustomerEntity<User, AdministrativeEntity>, long> customerRepository,
             CustomerManager customerManager,
-            IRepository<OrderEntity<User, AdministrativeEntity>, long> repository,
+            IRepository<OrderEntity<User, AdministrativeEntity, GeneralTreeEntity>, long> repository,
             OrderManager orderManager,
             IRepository<AdministrativeEntity, long> generalTreeManager,
-            IRepository<ItemEntity, long> itemRepository, WeChatPaymentService weChatPaymentService)
+            IRepository<ItemEntity<GeneralTreeEntity>, long> itemRepository, WeChatPaymentService weChatPaymentService)
             : base(customerRepository, customerManager, repository, orderManager, generalTreeManager, itemRepository, weChatPaymentService)
         {
             //sd

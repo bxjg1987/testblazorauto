@@ -11,14 +11,14 @@ namespace BXJG.Shop.Catalogue
     /// 前台用户获取商品分类信息的接口
     /// 不检查登录和授权的
     /// </summary>
-    public class BXJGShopItemCategoryFrontAppService : UnAuthGeneralTreeAppServiceBase<ItemCategoryGetForSelectInput,
+    public class BXJGShopFrontItemCategoryAppService : UnAuthGeneralTreeAppServiceBase<ItemCategoryGetForSelectInput,
                                                                                        ItemCategoryTreeNodeDto,
                                                                                        ItemCategoryGetForSelectInput,
                                                                                        ItemCategoryCombboxDto,
                                                                                        ItemCategoryEntity,
-                                                                                       ItemCategoryManager>, IBXJGShopItemCategoryFrontAppService
+                                                                                       ItemCategoryManager>, IBXJGShopFrontItemCategoryAppService
     {
-        public BXJGShopItemCategoryFrontAppService(IRepository<ItemCategoryEntity, long> ownRepository,
+        public BXJGShopFrontItemCategoryAppService(IRepository<ItemCategoryEntity, long> ownRepository,
                                                    ItemCategoryManager organizationUnitManager,
                                                    string allTextForSearch = "不限", 
                                                    string allTextForForm = "请选择") : base(ownRepository,

@@ -29,8 +29,8 @@ namespace BXJG.Shop.Customer
     /// </summary>
     /// <typeparam name="TUser"></typeparam>
     public class CustomerEntity<TUser, TArea> : FullAuditedEntity<long>, IMustHaveTenant
-        where TUser : AbpUserBase //因为内部可能包含领域逻辑，因此加约束更方便
-        where TArea : GeneralTreeEntity<TArea>, IAdministrative
+        //where TUser : AbpUserBase //因为内部可能包含领域逻辑，因此加约束更方便
+        //where TArea : GeneralTreeEntity<TArea>, IAdministrative
     {
         /// <summary>
         /// 租户id

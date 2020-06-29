@@ -25,7 +25,7 @@ using BXJG.Common;
 
 namespace BXJG.Shop.Sale
 {
-    public abstract class BXJGShopOrderAppService<TTenant, TUser, TRole, TTenantManager, TUserManager, TArea, TOrderManager, TCustomerManager>
+    public abstract class BXJGShopOrderAppService<TTenant, TUser, TRole, TTenantManager, TUserManager, TArea, TOrderManager, TCustomerManager, TDataDictionary>
         : BXJGShopAppServiceBase<TTenant, TUser, TRole, TTenantManager, TUserManager>, IBXJGShopOrderAppService
         where TUser : AbpUser<TUser>
         where TRole : AbpRole<TUser>, new()
@@ -33,13 +33,14 @@ namespace BXJG.Shop.Sale
         where TTenantManager : AbpTenantManager<TTenant, TUser>
         where TUserManager : AbpUserManager<TRole, TUser>
         where TArea : GeneralTreeEntity<TArea>, IAdministrative
-        where TOrderManager : OrderManager<TUser, TArea>
+        where TOrderManager : OrderManager<TUser, TArea, TDataDictionary>
         where TCustomerManager : CustomerManager<TUser,TArea>
+        where TDataDictionary : GeneralTreeEntity<TDataDictionary>
     {
-        private readonly IRepository<OrderEntity<TUser, TArea>, long> repository;
+        private readonly IRepository<OrderEntity<TUser, TArea, TDataDictionary>, long> repository;
         private readonly TOrderManager orderManager;
         private readonly IRepository<TArea, long> generalTreeManager;
-        private readonly IRepository<ItemEntity, long> itemRepository;
+        private readonly IRepository<ItemEntity<TDataDictionary>, long> itemRepository;
         private readonly WeChatPaymentService weChatPaymentService;
 
         public ICancellationTokenProvider CancellationToken { get; set; } = NullCancellationTokenProvider.Instance;
@@ -47,10 +48,10 @@ namespace BXJG.Shop.Sale
         public BXJGShopOrderAppService(
             IRepository<CustomerEntity<TUser,TArea>, long> customerRepository,
             TCustomerManager customerManager,
-            IRepository<OrderEntity<TUser, TArea>, long> repository,
+            IRepository<OrderEntity<TUser, TArea, TDataDictionary>, long> repository,
             TOrderManager orderManager,
             IRepository<TArea, long> generalTreeManager,
-            IRepository<ItemEntity, long> itemRepository,
+            IRepository<ItemEntity<TDataDictionary>, long> itemRepository,
             WeChatPaymentService weChatPaymentService)
         {
             this.repository = repository;

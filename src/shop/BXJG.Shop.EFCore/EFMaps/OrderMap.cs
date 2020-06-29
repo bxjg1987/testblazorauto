@@ -14,19 +14,19 @@ namespace BXJG.Shop.EFMaps
     /// 订单的ef映射类，请在主程序的DBContext.OnModelCreating注册
     /// </summary>
     /// <typeparam name="TUser"></typeparam>
-    public class OrderMap<TUser, TArea,TEntity> : IEntityTypeConfiguration<TEntity>
-        where TUser : AbpUserBase
-        where TArea : GeneralTreeEntity<TArea>, IAdministrative
-        where TEntity: OrderEntity<TUser, TArea>
+    public class OrderMap<TUser, TArea,TEntity, TDataDictionary> : IEntityTypeConfiguration<TEntity>
+        //where TUser : AbpUserBase
+        //where TArea : GeneralTreeEntity<TArea>, IAdministrative
+        where TEntity: OrderEntity<TUser, TArea, TDataDictionary>
     {
         public virtual void Configure(EntityTypeBuilder<TEntity> builder)
         {
-            builder.Property(c => c.OrderNo).IsRequired(true).HasColumnType($"varchar({OrderEntity<TUser, TArea>.OrderNoMaxLength})");
-            builder.Property(c => c.CustomerRemark).HasMaxLength(OrderEntity<TUser, TArea>.CustomerRemarkMaxLength);
-            builder.Property(c => c.Consignee).IsRequired(true).HasMaxLength(OrderEntity<TUser, TArea>.ConsigneeMaxLength);
-            builder.Property(c => c.ConsigneePhoneNumber).IsRequired(true).HasColumnType($"varchar({OrderEntity<TUser, TArea>.ConsigneePhoneNumberMaxLength})");
-            builder.Property(c => c.ReceivingAddress).IsRequired(true).HasMaxLength(OrderEntity<TUser, TArea>.ReceivingAddressMaxLength);
-            builder.Property(c => c.LogisticsNumber).HasColumnType($"varchar({OrderEntity<TUser, TArea>.LogisticsNumberMaxLength})");
+            builder.Property(c => c.OrderNo).IsRequired(true).HasColumnType($"varchar({BXJGShopConsts.OrderNoMaxLength})");
+            builder.Property(c => c.CustomerRemark).HasMaxLength(BXJGShopConsts.CustomerRemarkMaxLength);
+            builder.Property(c => c.Consignee).IsRequired(true).HasMaxLength(BXJGShopConsts.ConsigneeMaxLength);
+            builder.Property(c => c.ConsigneePhoneNumber).IsRequired(true).HasColumnType($"varchar({BXJGShopConsts.ConsigneePhoneNumberMaxLength})");
+            builder.Property(c => c.ReceivingAddress).IsRequired(true).HasMaxLength(BXJGShopConsts.ReceivingAddressMaxLength);
+            builder.Property(c => c.LogisticsNumber).HasColumnType($"varchar({BXJGShopConsts.LogisticsNumberMaxLength})");
             builder.Property(c => c.RowVersion).IsRowVersion();
             builder.HasIndex(g => g.OrderNo).IsUnique();
         }

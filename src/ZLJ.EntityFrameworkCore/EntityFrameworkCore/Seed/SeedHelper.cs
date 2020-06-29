@@ -40,7 +40,7 @@ namespace ZLJ.EntityFrameworkCore.Seed
             new DefaultAdministrativeBuilder(context, 1).Create();
 
             //默认商城数据迁移
-            new DefaultBXJGShopBuilder<Tenant, Role, User, ZLJDbContext, AdministrativeEntity>(context, 1).Create();
+            new DefaultBXJGShopBuilder<Tenant, Role, User, ZLJDbContext, AdministrativeEntity, GeneralTreeEntity>(context, 1).Create();
             //cms演示数据
             new DefaultBXJGCMSBuilder<Tenant, Role, User, ZLJDbContext,GeneralTreeEntity>(context, 1).Create();
         }

@@ -11,7 +11,7 @@ using System.Text;
 
 namespace BXJG.Shop.Seed
 {
-    public class DefaultBXJGShopItemBuilder<TTenant, TRole, TUser, TSelf>
+    public class DefaultBXJGShopItemBuilder<TTenant, TRole, TUser, TSelf, TDataDictionary>
         where TTenant : AbpTenant<TUser>
         where TRole : AbpRole<TUser>
         where TUser : AbpUser<TUser>
@@ -19,7 +19,7 @@ namespace BXJG.Shop.Seed
     {
         private readonly TSelf _context;
         private readonly int _tenantId;
-        DbSet<ItemEntity> items;
+        DbSet<ItemEntity<TDataDictionary>> items;
 
         DbSet<ItemCategoryEntity> cls;
 
@@ -27,7 +27,7 @@ namespace BXJG.Shop.Seed
         {
             _context = context;
             _tenantId = tenantId;
-            items = context.Set<ItemEntity>();
+            items = context.Set<ItemEntity<TDataDictionary>>();
             this.cls = context.Set<ItemCategoryEntity>();
         }
 
@@ -115,12 +115,12 @@ namespace BXJG.Shop.Seed
             });
             this._context.SaveChanges();
            
-            items.Add(new ItemEntity
+            items.Add(new ItemEntity<TDataDictionary>
             {
                 AvailableEnd = DateTime.Now.AddHours(325),
                 AvailableStart = DateTime.Now.AddHours(-17),
                 CategoryId = 1,
-                BrandId = 103,
+                BrandId = 20,
                 DescriptionShort = "简短描述",
                 Title = "吉普JEEP短袖t恤男2020夏季商务休闲男装T恤男士条纹翻领体恤POLO衫打底衫上衣 蓝色条纹 L",
                 TenantId = this._tenantId,
@@ -136,12 +136,12 @@ namespace BXJG.Shop.Seed
                 Images = "upload/442ee74ddb0186fb.jpg",
             });
             this._context.SaveChanges();
-            items.Add(new ItemEntity
+            items.Add(new ItemEntity<TDataDictionary>
             {
                 AvailableEnd = DateTime.Now.AddHours(145),
                 AvailableStart = DateTime.Now.AddHours(-237),
                 CategoryId = 2,
-                BrandId = 104,
+                BrandId = 21,
                 DescriptionShort = "简短描述",
                 Title = "云妆蝶梦 t恤女短袖2020夏季新品韩版大码圆领印花纯棉体恤女装打底衫休闲百搭棉上衣 M806 小花蓝色",
                 TenantId = this._tenantId,
@@ -158,7 +158,7 @@ namespace BXJG.Shop.Seed
 
             });
             this._context.SaveChanges();
-            items.Add(new ItemEntity
+            items.Add(new ItemEntity<TDataDictionary>
             {
                 AvailableEnd = DateTime.Now.AddHours(145),
                 AvailableStart = DateTime.Now.AddHours(-237),
@@ -180,12 +180,12 @@ namespace BXJG.Shop.Seed
 
             });
             this._context.SaveChanges();
-            items.Add(new ItemEntity
+            items.Add(new ItemEntity<TDataDictionary>
             {
                 //AvailableEnd = DateTime.Now.AddHours(145),
                 //AvailableStart = DateTime.Now.AddHours(-237),
                 CategoryId = 4,
-                BrandId = 104,
+                BrandId = 22,
                 DescriptionShort = "简短描述",
                 Title = "【2020春夏新款】外交官Diplomat行李箱拉杆箱登机箱万向轮男女旅行箱密码箱TC-623系列 镜面蓝色 19英寸 / 登机箱 / 无侧边手提&脚垫",
                 TenantId = this._tenantId,
@@ -201,12 +201,12 @@ namespace BXJG.Shop.Seed
                 Images = "upload/8f71080a3e183310.jpg",
             });
             this._context.SaveChanges();
-            items.Add(new ItemEntity
+            items.Add(new ItemEntity<TDataDictionary>
             {
                 AvailableEnd = DateTime.Now.AddHours(421),
                 AvailableStart = DateTime.Now.AddHours(-57),
                 CategoryId = 4,
-                BrandId = 103,
+                BrandId = 23,
                 DescriptionShort = "简短描述",
                 Title = "苹果联想戴尔小米电脑包双肩包15.6寸14寸17.3寸男女笔记本背包 红色(带USB接口) 14寸",
                 TenantId = this._tenantId,
@@ -222,12 +222,12 @@ namespace BXJG.Shop.Seed
                 Images = "upload/b.jpg",
             });
             this._context.SaveChanges();
-            items.Add(new ItemEntity
+            items.Add(new ItemEntity<TDataDictionary>
             {
                 AvailableEnd = DateTime.Now.AddHours(11),
                 AvailableStart = DateTime.Now.AddHours(-257),
                 CategoryId = 3,
-                BrandId = 104,
+                BrandId = 22,
                 DescriptionShort = "简短描述",
                 Title = "李宁短袖T恤男子半袖运动服篮球系列男装ATSN159",
                 TenantId = this._tenantId,

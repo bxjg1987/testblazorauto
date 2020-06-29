@@ -1,5 +1,6 @@
 ﻿using Abp.Authorization.Users;
 using BXJG.GeneralTree;
+using BXJG.Shop.Catalogue;
 using BXJG.Shop.Common;
 using BXJG.Shop.Customer;
 using BXJG.Shop.Sale;
@@ -17,9 +18,15 @@ namespace BXJG.Shop.EFMaps
         /// </summary>
         /// <param name="modelBuilder"></param>
         /// <returns></returns>
-        public static ModelBuilder ApplyConfigurationBXJGShop(this ModelBuilder modelBuilder)
+        public static ModelBuilder ApplyConfigurationBXJGShop<TUser,TArea,TDataDictionary>(this ModelBuilder modelBuilder)
         {
-            return modelBuilder.ApplyConfigurationsFromAssembly(BXJGShopEFCoreModule.GetAssembly());
+            return modelBuilder
+                .ApplyConfigurationsFromAssembly(BXJGShopEFCoreModule.GetAssembly())
+                .ApplyConfiguration(new CustomerMap<TUser, TArea, CustomerEntity<TUser, TArea>>())
+                .ApplyConfiguration(new OrderMap<TUser, TArea, OrderEntity<TUser, TArea, TDataDictionary>, TDataDictionary>())
+                .ApplyConfiguration(new OrderItemMap<TUser, TArea, OrderItemEntity<TUser, TArea, TDataDictionary>, TDataDictionary>())
+                .ApplyConfiguration(new ItemMap<ItemEntity<TDataDictionary>, TDataDictionary>());
+
         }
 
         //public static ModelBuilder ApplyConfigurationBXJGShop<TEntity, TMap>(this ModelBuilder modelBuilder)

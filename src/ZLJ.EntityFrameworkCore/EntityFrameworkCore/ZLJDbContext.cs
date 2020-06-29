@@ -17,6 +17,7 @@ using BXJG.CMS.EFCore.EFMaps;
 using BXJG.CMS.Ad;
 using BXJG.CMS.Article;
 using BXJG.CMS.Column;
+using System;
 
 namespace ZLJ.EntityFrameworkCore
 {
@@ -34,9 +35,9 @@ namespace ZLJ.EntityFrameworkCore
         #region 注册商城模块中的实体
         public virtual DbSet<BXJGShopDictionaryEntity> BXJGShopDictionaries { get; set; }
         public virtual DbSet<ItemCategoryEntity> BXJGShopItemCategories { get; set; }
-        public virtual DbSet<ItemEntity> BXJGShopItems { get; set; }
+        public virtual DbSet<ItemEntity<GeneralTreeEntity>> BXJGShopItems { get; set; }
         public virtual DbSet<CustomerEntity<User, AdministrativeEntity>> BXJGShopCustomers { get; set; }
-        public virtual DbSet<OrderEntity<User, AdministrativeEntity>> BXJGShopOrders { get; set; }
+        public virtual DbSet<OrderEntity<User, AdministrativeEntity, GeneralTreeEntity>> BXJGShopOrders { get; set; }
         #endregion
 
         #region CMS
@@ -55,18 +56,12 @@ namespace ZLJ.EntityFrameworkCore
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
+   
             //扫描并应用商城模块中的ef映射
             modelBuilder
                 .ApplyConfigurationsFromAssembly(typeof(ZLJEntityFrameworkModule).Assembly)
-                .ApplyConfigurationBXJGShop()
-                .ApplyConfiguration(new CustomerMap<User, AdministrativeEntity, CustomerEntity<User, AdministrativeEntity>> ())
-                .ApplyConfiguration(new OrderMap<User, AdministrativeEntity, OrderEntity<User, AdministrativeEntity>>())
-                .ApplyConfiguration(new OrderItemMap<User, AdministrativeEntity, OrderItemEntity<User, AdministrativeEntity>>())
-                .ApplyConfiguration(new ItemMap< ItemEntity>())
-                .ApplyConfigurationBXJGCMS()
-                .ApplyConfiguration(new ColumnMap<GeneralTreeEntity>())
-                .ApplyConfiguration(new ArticleMap<GeneralTreeEntity>());
+                .ApplyConfigurationBXJGShop<User, AdministrativeEntity, GeneralTreeEntity>()
+                .ApplyConfigurationBXJGCMS<GeneralTreeEntity>();
         }
     }
 }

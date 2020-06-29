@@ -18,17 +18,17 @@ namespace BXJG.Shop.Catalogue
         /// 标题
         /// </summary>
         [Required]
-        [StringLength(ItemEntity.TitleMaxLength)]
+        [StringLength(BXJGShopConsts.ItemTitleMaxLength)]
         public string Title { get; set; }
         /// <summary>
         /// sku
         /// </summary>
-        [StringLength(ItemEntity.SkuMaxLength)]
+        [StringLength(BXJGShopConsts.ItemSkuMaxLength)]
         public string Sku { get; set; }
         /// <summary>
         /// 简短描述
         /// </summary>
-        [StringLength(ItemEntity.DescriptionShortMaxLength)]
+        [StringLength(BXJGShopConsts.ItemDescriptionShortMaxLength)]
         public string DescriptionShort { get; set; }
         /// <summary>
         /// 详细描述
@@ -38,6 +38,7 @@ namespace BXJG.Shop.Catalogue
         /// 轮播图片集合，多个用英文逗号,分割
         /// </summary>
         [Required]
+        [StringLength(BXJGShopConsts.ItemImagesMaxLength)]
         public string[] Images { get; set; }
         /// <summary>
         /// 所属类别id

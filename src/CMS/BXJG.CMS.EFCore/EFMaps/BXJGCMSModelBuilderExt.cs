@@ -9,12 +9,13 @@ namespace BXJG.CMS.EFCore.EFMaps
 {
     public static class BXJGCMSModelBuilderExt
     {
-        public static ModelBuilder ApplyConfigurationBXJGCMS(this ModelBuilder modelBuilder)
+        public static ModelBuilder ApplyConfigurationBXJGCMS<TDataDictionary>(this ModelBuilder modelBuilder)
             //where TUser : AbpUserBase
         {
             return modelBuilder
-                .ApplyConfigurationsFromAssembly(BXJGCMSEFCoreModule.GetAssembly());
-            //    .ApplyConfiguration(new OrderMap<TUser, TArea>());//上面扫描程序集的方式无法注册带泛型的，所以下面单独加
+                .ApplyConfigurationsFromAssembly(BXJGCMSEFCoreModule.GetAssembly())
+                .ApplyConfiguration(new ColumnMap<TDataDictionary>())
+                .ApplyConfiguration(new ArticleMap<TDataDictionary>());
 
         }
     }

@@ -107,17 +107,11 @@ namespace BXJG.Shop.Sale
     /// </summary>
     /// <typeparam name="TUser">系统用户类型</typeparam>
     /// <typeparam name="TArea">送货地址区域类型</typeparam>
-    public class OrderEntity<TUser, TArea> : FullAuditedEntity<long>, IMustHaveTenant
-        where TUser : AbpUserBase
-        where TArea : GeneralTreeEntity<TArea>, IAdministrative
+    public class OrderEntity<TUser, TArea,TDataDictionary> : FullAuditedEntity<long>, IMustHaveTenant
+        //where TUser : AbpUserBase
+        //where TArea : GeneralTreeEntity<TArea>, IAdministrative
     {
-        public const int OrderNoMaxLength = 36;//guid长度 32+4个分隔符，将来可能使用其它格式的订单号
-        public const int CustomerRemarkMaxLength = 500;
-        public const int ConsigneeMaxLength = 20;
-        public const int ConsigneePhoneNumberMaxLength = 50;
-        public const int ReceivingAddressMaxLength = 200;
-        public const int ZipCodeMaxLength = 50;
-        public const int LogisticsNumberMaxLength = 50;
+      
 
         public int TenantId { get; set; }//应该私有化，但受IMustHaveTenant限制，只能public
 
@@ -187,7 +181,7 @@ namespace BXJG.Shop.Sale
         /// <summary>
         /// 支付方式
         /// </summary>
-        public BXJGShopDictionaryEntity PaymentMethod { get; set; }
+        public virtual TDataDictionary PaymentMethod { get; set; }
         /// <summary>
         /// 支付方式Id
         /// 未支付时 就不存在支付方式，因此可空
@@ -235,7 +229,7 @@ namespace BXJG.Shop.Sale
         /// <summary>
         /// 配送方式
         /// </summary>
-        public BXJGShopDictionaryEntity DistributionMethod { get; set; }
+        public virtual TDataDictionary DistributionMethod { get; set; }
         /// <summary>
         /// 配送方式
         /// 刚创建订单时配送方式尚未确定
@@ -256,7 +250,7 @@ namespace BXJG.Shop.Sale
         /// <summary>
         /// 订单商品明细
         /// </summary>
-        public virtual IList<OrderItemEntity<TUser, TArea>> Items { get; set; }
+        public virtual IList<OrderItemEntity<TUser, TArea, TDataDictionary>> Items { get; set; }
         #endregion
 
         //订单跟踪

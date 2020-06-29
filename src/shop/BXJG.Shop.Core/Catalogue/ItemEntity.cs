@@ -76,40 +76,26 @@ namespace BXJG.Shop.Catalogue
     /// 设计时考虑不提供继承的方式扩展，因为那样太复杂
     /// 你可以使用关联和事件的方式参与到这个模块中来
     /// </summary>
-    public class ItemEntity : FullAuditedEntity<long>, IMustHaveTenant
+    public class ItemEntity<TDataDictionary> : FullAuditedEntity<long>, IMustHaveTenant
+        //where TDataDictionary: GeneralTreeEntity<TDataDictionary>
     {
-        //public IEventBus EventBus = NullEventBus.Instance;//空模式
-
-        //public ItemEntity()
-        //{
-        //}
-        //public ItemEntity(IEventBus bs)
-        //{
-        //    EventBus = bs;
-        //}
-
         #region 基本信息
-        public const int TitleMaxLength = 100;
-        public const int SkuMaxLength = 50;
-        public const int DescriptionShortMaxLength = 10000;
-        public const int ImagesMaxLength = 5000;
+      
 
         public int TenantId { get; set; }
         /// <summary>
         /// 标题
         /// </summary>
-        [Required]
-        [StringLength(TitleMaxLength)]
+       
         public string Title { get; set; }
         /// <summary>
         /// sku
         /// </summary>
-        [StringLength(SkuMaxLength)]
+      
         public string Sku { get; set; }
         /// <summary>
         /// 简短描述
         /// </summary>
-        [StringLength(DescriptionShortMaxLength)]
         public string DescriptionShort { get; set; }
         /// <summary>
         /// 详细描述
@@ -118,12 +104,11 @@ namespace BXJG.Shop.Catalogue
         /// <summary>
         /// 轮播图片集合，多个用英文逗号,分割
         /// </summary>
-        [StringLength(ImagesMaxLength)]
         public string Images { get; set; }
         /// <summary>
         /// 所属类别
         /// </summary>
-        public virtual BXJGShopDictionaryEntity Category { get; set; }
+        public virtual ItemCategoryEntity Category { get; set; }
         /// <summary>
         /// 所属类别id
         /// </summary>
@@ -131,7 +116,7 @@ namespace BXJG.Shop.Catalogue
         /// <summary>
         /// 品牌
         /// </summary>
-        public virtual BXJGShopDictionaryEntity Brand { get; set; }
+        public virtual TDataDictionary Brand { get; set; }
         /// <summary>
         /// 品牌id
         /// </summary>

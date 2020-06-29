@@ -34,21 +34,27 @@ namespace BXJG.Shop.Catalogue
     /// <typeparam name="TRole"></typeparam>
     /// <typeparam name="TTenantManager"></typeparam>
     /// <typeparam name="TUserManager"></typeparam>
-    public abstract class BXJGShopItemAppService<TTenant, TUser, TRole, TTenantManager, TUserManager>
+    /// <typeparam name="TDataDictionary"></typeparam>
+    /// <typeparam name="TItemManager"></typeparam>
+    public abstract class BXJGShopItemAppService<TTenant, TUser, TRole, TTenantManager, TUserManager,TDataDictionary>
         : BXJGShopAppServiceBase<TTenant, TUser, TRole, TTenantManager, TUserManager>, IBXJGShopItemAppService
         where TUser : AbpUser<TUser>
         where TRole : AbpRole<TUser>, new()
         where TTenant : AbpTenant<TUser>
         where TTenantManager : AbpTenantManager<TTenant, TUser>
         where TUserManager : AbpUserManager<TRole, TUser>
+        where TDataDictionary : GeneralTreeEntity<TDataDictionary>
     {
-        private readonly IRepository<ItemEntity, long> repository;
-        private readonly BXJGShopDictionaryManager dictionaryManager;
-        private readonly ItemManager itemManager;
+        private readonly IRepository<ItemEntity<TDataDictionary>, long> repository;
+        private readonly ItemCategoryManager dictionaryManager;
+        private readonly ItemManager<TDataDictionary> itemManager;
 
         private readonly IRepository<BXJGShopDictionaryEntity, long> respDic;
 
-        public BXJGShopItemAppService(IRepository<ItemEntity, long> repository, BXJGShopDictionaryManager dictionaryManager, IRepository<BXJGShopDictionaryEntity, long> respDic, ItemManager itemManager)
+        public BXJGShopItemAppService(IRepository<ItemEntity<TDataDictionary>, long> repository, 
+                                      ItemCategoryManager dictionaryManager, 
+                                      IRepository<BXJGShopDictionaryEntity, long> respDic,
+                                      ItemManager<TDataDictionary> itemManager)
         {
             this.repository = repository;
             this.dictionaryManager = dictionaryManager;
@@ -62,7 +68,7 @@ namespace BXJG.Shop.Catalogue
         /// <returns></returns>
         public async Task<ItemDto> CreateAsync(ItemCreateDto input)
         {
-            var entity = base.ObjectMapper.Map<ItemEntity>(input);
+            var entity = base.ObjectMapper.Map<ItemEntity<TDataDictionary>>(input);
             entity = await repository.InsertAsync(entity);
             await CurrentUnitOfWork.SaveChangesAsync();
 
@@ -83,7 +89,7 @@ namespace BXJG.Shop.Catalogue
         public async Task<ItemDto> UpdateAsync(ItemUpdateDto input)
         {
             var entity = await AsyncQueryableExecuter.FirstOrDefaultAsync(repository.GetAllIncluding(c => c.Category));
-            ObjectMapper.Map<ItemUpdateDto, ItemEntity>(input, entity);
+            ObjectMapper.Map<ItemUpdateDto, ItemEntity<TDataDictionary>>(input, entity);
             return ObjectMapper.Map<ItemDto>(entity);
         }
         /// <summary>

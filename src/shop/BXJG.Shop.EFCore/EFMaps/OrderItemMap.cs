@@ -14,10 +14,10 @@ namespace BXJG.Shop.EFMaps
     /// 订单产品明细ef映射
     /// </summary>
     /// <typeparam name="TUser"></typeparam>
-    public class OrderItemMap<TUser, TArea,TEntity> : IEntityTypeConfiguration<TEntity>
-        where TUser : AbpUserBase
-        where TArea : GeneralTreeEntity<TArea>, IAdministrative
-        where TEntity: OrderItemEntity<TUser, TArea>
+    public class OrderItemMap<TUser, TArea,TEntity, TDataDictionary> : IEntityTypeConfiguration<TEntity>
+        //where TUser : AbpUserBase
+        //where TArea : GeneralTreeEntity<TArea>, IAdministrative
+        where TEntity: OrderItemEntity<TUser, TArea, TDataDictionary>
     {
         public virtual void Configure(EntityTypeBuilder<TEntity> builder)
         {

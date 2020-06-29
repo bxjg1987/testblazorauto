@@ -18,7 +18,7 @@ namespace BXJG.Shop.Sale
     /// </summary>
     /// <typeparam name="TUser"></typeparam>
     /// <typeparam name="TArea"></typeparam>
-    public class OrderPaidEventHandler<TUser, TArea> : BXJGShopDomainServiceBase, IAsyncEventHandler<OrderPaidEventData<TUser, TArea>>
+    public class OrderPaidEventHandler<TUser, TArea, TDataDictionary> : BXJGShopDomainServiceBase, IAsyncEventHandler<OrderPaidEventData<TUser, TArea, TDataDictionary>>
         where TUser : AbpUserBase
         where TArea : GeneralTreeEntity<TArea>, IAdministrative
     {
@@ -57,7 +57,7 @@ namespace BXJG.Shop.Sale
         /// <param name="eventData"></param>
         /// <returns></returns>
         //[UnitOfWork] 不确定是否必须加
-        public Task HandleEventAsync(OrderPaidEventData<TUser, TArea> eventData)
+        public Task HandleEventAsync(OrderPaidEventData<TUser, TArea, TDataDictionary> eventData)
         {
             return ChangeIntegralAsync(eventData.Entity.Customer, eventData.Entity.Integral);
         }

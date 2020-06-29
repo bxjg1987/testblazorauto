@@ -11,7 +11,7 @@ using System.Text;
 
 namespace BXJG.Shop.Seed
 {
-    public class DefaultBXJGShopBuilder< TTenant, TRole, TUser, TSelf, TArea>
+    public class DefaultBXJGShopBuilder< TTenant, TRole, TUser, TSelf, TArea, TDataDictionary>
         where TTenant : AbpTenant<TUser>
         where TRole : AbpRole<TUser>
         where TUser : AbpUser<TUser>, new()
@@ -29,9 +29,9 @@ namespace BXJG.Shop.Seed
         public void Create(bool insertTestData = true)
         {
             new DefaultBXJGShopDataDictionaryBuilder<TTenant, TRole, TUser, TSelf>(_context, _tenantId).Create(insertTestData);
-            new DefaultBXJGShopItemBuilder<TTenant, TRole, TUser, TSelf>(_context, _tenantId).Create(insertTestData);
+            new DefaultBXJGShopItemBuilder<TTenant, TRole, TUser, TSelf, TDataDictionary>(_context, _tenantId).Create(insertTestData);
             new DefaultBXJGShopCustomerBuilder<TTenant, TRole, TUser, TSelf,TArea>(_context, _tenantId).Create(insertTestData);
-            new DefaultBXJGShopOrderBuilder<TTenant, TRole, TUser, TSelf,TArea>(_context, _tenantId).Create(insertTestData);
+            new DefaultBXJGShopOrderBuilder<TTenant, TRole, TUser, TSelf,TArea, TDataDictionary>(_context, _tenantId).Create(insertTestData);
             _context.SaveChanges();
         }
     }

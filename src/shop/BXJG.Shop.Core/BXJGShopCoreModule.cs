@@ -2,11 +2,13 @@
 using Abp.Reflection.Extensions;
 using BXJG.GeneralTree;
 using BXJG.Shop.Authorization;
+using BXJG.Shop.Catalogue;
 using BXJG.Shop.Configuration;
 using BXJG.Shop.Localization;
 using BXJG.Shop.Sale;
 using BXJG.Utils;
 using System;
+using Abp.Dependency;
 
 namespace BXJG.Shop
 {
@@ -22,6 +24,10 @@ namespace BXJG.Shop
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(typeof(BXJGShopCoreModule).GetAssembly());
+
+            IocManager.Register(typeof(ItemManager<>), DependencyLifeStyle.Transient);
+            
+            
         }
     }
 }

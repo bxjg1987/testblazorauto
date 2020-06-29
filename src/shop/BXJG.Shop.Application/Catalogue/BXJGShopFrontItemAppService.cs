@@ -15,15 +15,17 @@ using Microsoft.EntityFrameworkCore;
 using Abp;
 using Abp.Application.Services.Dto;
 using BXJG.Shop.Common;
+using BXJG.GeneralTree;
 
 namespace BXJG.Shop.Catalogue
 {
-    public class BXJGShopFrontItemAppService : AbpServiceBase, IBXJGShopFrontItemAppService
+    public class BXJGShopFrontItemAppService<TDataDictionary> : AbpServiceBase, IBXJGShopFrontItemAppService
+        where TDataDictionary : GeneralTreeEntity<TDataDictionary>
     {
-        private readonly IRepository<ItemEntity, long> repository;
-        private readonly BXJGShopDictionaryManager dictionaryManager;
+        private readonly IRepository<ItemEntity<TDataDictionary>, long> repository;
+        private readonly ItemCategoryManager dictionaryManager;
 
-        public BXJGShopFrontItemAppService(IRepository<ItemEntity, long> repository, BXJGShopDictionaryManager dictionaryManager)
+        public BXJGShopFrontItemAppService(IRepository<ItemEntity<TDataDictionary>, long> repository, ItemCategoryManager dictionaryManager)
         {
             this.repository = repository;
             this.dictionaryManager = dictionaryManager;

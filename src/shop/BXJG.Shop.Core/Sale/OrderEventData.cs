@@ -14,11 +14,11 @@ namespace BXJG.Shop.Sale
     /// </summary>
     /// <typeparam name="TUser"></typeparam>
     /// <typeparam name="TArea"></typeparam>
-    public class OrderPaidEventData<TUser, TArea> : EntityEventData<OrderEntity<TUser, TArea>>
+    public class OrderPaidEventData<TUser, TArea, TDataDictionary> : EntityEventData<OrderEntity<TUser, TArea, TDataDictionary>>
         where TUser : AbpUserBase
         where TArea : GeneralTreeEntity<TArea>, IAdministrative
     {
-        public OrderPaidEventData(OrderEntity<TUser, TArea> order) : base(order)
+        public OrderPaidEventData(OrderEntity<TUser, TArea, TDataDictionary> order) : base(order)
         { }
     }
     /// <summary>
@@ -26,11 +26,11 @@ namespace BXJG.Shop.Sale
     /// </summary>
     /// <typeparam name="TUser"></typeparam>
     /// <typeparam name="TArea"></typeparam>
-    public class OrderShipedEventData<TUser, TArea> : EntityEventData<OrderEntity<TUser, TArea>>
+    public class OrderShipedEventData<TUser, TArea, TDataDictionary> : EntityEventData<OrderEntity<TUser, TArea, TDataDictionary>>
         where TUser : AbpUserBase
         where TArea : GeneralTreeEntity<TArea>, IAdministrative
     {
-        public OrderShipedEventData(OrderEntity<TUser, TArea> order) : base(order)
+        public OrderShipedEventData(OrderEntity<TUser, TArea, TDataDictionary> order) : base(order)
         { }
     }
     /// <summary>
@@ -38,11 +38,11 @@ namespace BXJG.Shop.Sale
     /// </summary>
     /// <typeparam name="TUser"></typeparam>
     /// <typeparam name="TArea"></typeparam>
-    public class OrderSignedEventData<TUser, TArea> : EntityEventData<OrderEntity<TUser, TArea>>
+    public class OrderSignedEventData<TUser, TArea, TDataDictionary> : EntityEventData<OrderEntity<TUser, TArea, TDataDictionary>>
         where TUser : AbpUserBase
         where TArea : GeneralTreeEntity<TArea>, IAdministrative
     {
-        public OrderSignedEventData(OrderEntity<TUser, TArea> order) : base(order)
+        public OrderSignedEventData(OrderEntity<TUser, TArea, TDataDictionary> order) : base(order)
         { }
     }
 }
