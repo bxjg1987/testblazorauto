@@ -7,7 +7,7 @@ using System.Text;
 
 namespace ZLJ.Shop
 {
-    class BXJGShopFrontItemAppService : BXJG.Shop.Catalogue.BXJGShopFrontItemAppService<GeneralTreeEntity>
+    public class BXJGShopFrontItemAppService : BXJGShopFrontItemAppService<GeneralTreeEntity>
     {
         public BXJGShopFrontItemAppService(IRepository<ItemEntity<GeneralTreeEntity>, long> repository, ItemCategoryManager dictionaryManager) : base(repository, dictionaryManager)
         {
