@@ -10,6 +10,8 @@ namespace BXJG.Shop.Configuration
     {
         public override IEnumerable<SettingDefinition> GetSettingDefinitions(SettingDefinitionProviderContext context)
         {
+            var sys = new SettingDefinitionGroup(BXJGShopConsts.DataDictionayMigrationValueSettingGroupKey, "数据字典下来值".BXJGShopL());
+
             var orderGroup = new SettingDefinitionGroup(BXJGShopConsts.OrderSettingGroupKey, "订单设置".BXJGShopL());
             return new[]
             {
@@ -21,6 +23,29 @@ namespace BXJG.Shop.Configuration
                     scopes: SettingScopes.Application | SettingScopes.Tenant,
                     isVisibleToClients:true),
 
+                 new SettingDefinition(
+                    BXJGShopConsts.DataDictionayMigrationValuepinpai,
+                    "0",
+                    "品牌数据字典Id".BXJGShopL(),
+                    sys,
+                    scopes: SettingScopes.Application | SettingScopes.Tenant,
+                    isVisibleToClients:true),
+
+                 new SettingDefinition(
+                    BXJGShopConsts.DataDictionayMigrationValuezhifufangshi,
+                    "0",
+                    "支付方式数据字典Id".BXJGShopL(),
+                    sys,
+                    scopes: SettingScopes.Application | SettingScopes.Tenant,
+                    isVisibleToClients:true),
+
+                 new SettingDefinition(
+                    BXJGShopConsts.DataDictionayMigrationValuepeisongfangshi,
+                    "0",
+                    "配送方式数据字典Id".BXJGShopL(),
+                    sys,
+                    scopes: SettingScopes.Application | SettingScopes.Tenant,
+                    isVisibleToClients:true),
                 new SettingDefinition("bxjgtestshp", "red", scopes: SettingScopes.Application | SettingScopes.Tenant | SettingScopes.User, isVisibleToClients: true)
             };
         }

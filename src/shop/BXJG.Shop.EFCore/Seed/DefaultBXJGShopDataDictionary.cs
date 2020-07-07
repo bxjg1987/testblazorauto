@@ -10,6 +10,7 @@ using Abp.Zero.EntityFrameworkCore;
 using Abp.Authorization.Roles;
 using Abp.Authorization.Users;
 using Abp.MultiTenancy;
+using Abp.Configuration;
 
 namespace BXJG.Shop.Seed
 {
@@ -71,7 +72,8 @@ namespace BXJG.Shop.Seed
                      };
                 }
                 set.Add(p);
-                //_context.Settings.Add(new Abp.Configuration.Setting(this._tenantId, default, "", ""));
+                _context.SaveChanges();
+                _context.Settings.Add(new Setting(this._tenantId, null, BXJGShopConsts.DataDictionayMigrationValuepinpai, p.Id.ToString()));
                 _context.SaveChanges();
             }
 
@@ -116,6 +118,9 @@ namespace BXJG.Shop.Seed
                 }
                 set.Add(p);
                 _context.SaveChanges();
+
+                _context.Settings.Add(new Setting(this._tenantId, null, BXJGShopConsts.DataDictionayMigrationValuezhifufangshi, p.Id.ToString()));
+                _context.SaveChanges();
             }
 
             var psfs = set.Any(c => c.ParentId == parentId && c.DisplayName == "配送方式");
@@ -158,6 +163,8 @@ namespace BXJG.Shop.Seed
                      };
                 }
                 set.Add(p);
+                _context.SaveChanges();
+                _context.Settings.Add(new Setting(this._tenantId, null, BXJGShopConsts.DataDictionayMigrationValuepeisongfangshi, p.Id.ToString()));
                 _context.SaveChanges();
             }
 

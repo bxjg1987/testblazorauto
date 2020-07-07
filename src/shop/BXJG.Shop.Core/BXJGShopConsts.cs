@@ -28,6 +28,16 @@ namespace BXJG.Shop
         #endregion
         #region settings
         /// <summary>
+        /// 商城中使用的数据字典是由外部提供，数据迁移后生成的id可能不同，迁移时会将值存储到settings中
+        /// 因为abp提供了js库，可以在前端访问settings，这样数据迁移时生成的字典的id就能给到前端访问，
+        /// 这里定义一个组，专门存放数据字典迁移后生成的id 的对应的设置项
+        /// </summary>
+        public const string DataDictionayMigrationValueSettingGroupKey = "DataDictionayMigrationValueSettingGroupKey";
+        public const string DataDictionayMigrationValuepinpai= "DataDictionayMigrationValuepinpai";
+        public const string DataDictionayMigrationValuezhifufangshi = "DataDictionayMigrationValuezhifufangshi";
+        public const string DataDictionayMigrationValuepeisongfangshi = "DataDictionayMigrationValuepeisongfangshi";
+
+        /// <summary>
         /// 订单设置组名
         /// </summary>
         public const string OrderSettingGroupKey = "BXJGOrder";
