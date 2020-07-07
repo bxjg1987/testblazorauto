@@ -10,7 +10,7 @@ using System.Text;
 
 namespace BXJG.Shop.Seed
 {
-    public class DefaultBXJGShopDataDictionaryBuilder<TTenant, TRole, TUser, TSelf>
+    public class DefaultBXJGShopItemCagtegoryBuilder<TTenant, TRole, TUser, TSelf>
         where TTenant : AbpTenant<TUser>
         where TRole : AbpRole<TUser>
         where TUser : AbpUser<TUser>
@@ -20,7 +20,7 @@ namespace BXJG.Shop.Seed
         private readonly int _tenantId;
         DbSet<BXJGShopDictionaryEntity> set;
 
-        public DefaultBXJGShopDataDictionaryBuilder(TSelf context, int tenantId)
+        public DefaultBXJGShopItemCagtegoryBuilder(TSelf context, int tenantId)
         {
             _context = context;
             _tenantId = tenantId;

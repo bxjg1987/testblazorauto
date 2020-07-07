@@ -35,12 +35,15 @@ namespace ZLJ.EntityFrameworkCore.Seed
             new DefaultTenantBuilder(context).Create();
             new TenantRoleAndUserBuilder(context, 1).Create();
 
+            //以下内容应该放进DefaultTenantBuilder中
             new DefaultOrganizationUnit(context, 1).Create();
             new DefaultDataDictionaryBuilder(context, 1).Create();
             new DefaultAdministrativeBuilder(context, 1).Create();
 
             //默认商城数据迁移
-            new DefaultBXJGShopBuilder<Tenant, Role, User, ZLJDbContext, AdministrativeEntity, GeneralTreeEntity>(context, 1).Create();
+            var sc = new DefaultBXJGShopBuilder<Tenant, Role, User, ZLJDbContext, AdministrativeEntity, GeneralTreeEntity>(context, 1);
+            sc.Create();
+            sc.CreateDataDictionary();
             //cms演示数据
             new DefaultBXJGCMSBuilder<Tenant, Role, User, ZLJDbContext,GeneralTreeEntity>(context, 1).Create();
         }
