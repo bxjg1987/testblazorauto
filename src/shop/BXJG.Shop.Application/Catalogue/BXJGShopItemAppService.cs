@@ -97,6 +97,8 @@ namespace BXJG.Shop.Catalogue
                 entity.Publish(input.AvailableStart, input.AvailableEnd);
             else
                 entity.UnPublish();
+            await CurrentUnitOfWork.SaveChangesAsync();
+            entity = await repository.GetAllIncluding(c => c.Category, c => c.Brand, c => c.Unit).SingleAsync(c => c.Id == entity.Id);
             return ObjectMapper.Map<ItemDto>(entity);
         }
         /// <summary>
@@ -110,7 +112,7 @@ namespace BXJG.Shop.Catalogue
             if (clsCode.IsNullOrWhiteSpace() && input.CategoryId.HasValue)
                 clsCode = await dictionaryManager.GetCodeAsync(input.CategoryId.Value);
 
-            var query = repository.GetAllIncluding(c => c.Category, c => c.Brand).AsNoTracking()
+            var query = repository.GetAllIncluding(c => c.Category, c => c.Brand, c => c.Unit).AsNoTracking()
                 .WhereIf(input.BrandId.HasValue, c => c.BrandId == input.BrandId.Value)
                 .WhereIf(!clsCode.IsNullOrWhiteSpace(), c => c.Category.Code.StartsWith(clsCode))
                 .WhereIf(input.Published.HasValue, c => c.Published == input.Published.Value)
