@@ -2,6 +2,7 @@
 using Abp.Authorization.Users;
 using Abp.MultiTenancy;
 using Abp.Zero.EntityFrameworkCore;
+using BXJG.GeneralTree;
 using BXJG.Shop.Catalogue;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -16,11 +17,12 @@ namespace BXJG.Shop.Seed
         where TRole : AbpRole<TUser>
         where TUser : AbpUser<TUser>
         where TSelf : AbpZeroDbContext<TTenant, TRole, TUser, TSelf>
+        where TDataDictionary: GeneralTreeEntity<TDataDictionary>
     {
         private readonly TSelf _context;
         private readonly int _tenantId;
         DbSet<ItemEntity<TDataDictionary>> items;
-
+        DbSet<TDataDictionary> dics;
         DbSet<ItemCategoryEntity> cls;
 
         public DefaultBXJGShopItemBuilder(TSelf context, int tenantId)
@@ -29,6 +31,7 @@ namespace BXJG.Shop.Seed
             _tenantId = tenantId;
             items = context.Set<ItemEntity<TDataDictionary>>();
             this.cls = context.Set<ItemCategoryEntity>();
+            dics = context.Set<TDataDictionary>();
         }
 
         public void Create(bool insertTestData = true)
@@ -114,13 +117,14 @@ namespace BXJG.Shop.Seed
                 ShowInHome = true,
             });
             this._context.SaveChanges();
-           
+            var pp = dics.Include(c=>c.Children).Where(c=>c.DisplayName== "商品品牌"&& c.TenantId==this._tenantId).Single();
+
             items.Add(new ItemEntity<TDataDictionary>
             {
                 AvailableEnd = DateTime.Now.AddHours(325),
                 AvailableStart = DateTime.Now.AddHours(-17),
                 CategoryId = 1,
-                BrandId = 20,
+                BrandId = pp.Children[  new Random().Next(0,pp.Children.Count)].Id ,
                 DescriptionShort = "简短描述",
                 Title = "吉普JEEP短袖t恤男2020夏季商务休闲男装T恤男士条纹翻领体恤POLO衫打底衫上衣 蓝色条纹 L",
                 TenantId = this._tenantId,
@@ -141,7 +145,7 @@ namespace BXJG.Shop.Seed
                 AvailableEnd = DateTime.Now.AddHours(145),
                 AvailableStart = DateTime.Now.AddHours(-237),
                 CategoryId = 2,
-                BrandId = 21,
+                BrandId = pp.Children[new Random().Next(0, pp.Children.Count)].Id,
                 DescriptionShort = "简短描述",
                 Title = "云妆蝶梦 t恤女短袖2020夏季新品韩版大码圆领印花纯棉体恤女装打底衫休闲百搭棉上衣 M806 小花蓝色",
                 TenantId = this._tenantId,
@@ -163,7 +167,7 @@ namespace BXJG.Shop.Seed
                 AvailableEnd = DateTime.Now.AddHours(145),
                 AvailableStart = DateTime.Now.AddHours(-237),
                 CategoryId = 3,
-                //BrandId = 103,
+                BrandId = pp.Children[new Random().Next(0, pp.Children.Count)].Id,
                 DescriptionShort = "简短描述",
                 Title = "力开力朗 双肩包 442 户外大容量登山包休闲旅行背包50L 带防雨罩 桔色",
                 TenantId = this._tenantId,
@@ -185,7 +189,7 @@ namespace BXJG.Shop.Seed
                 //AvailableEnd = DateTime.Now.AddHours(145),
                 //AvailableStart = DateTime.Now.AddHours(-237),
                 CategoryId = 4,
-                BrandId = 22,
+                BrandId = pp.Children[new Random().Next(0, pp.Children.Count)].Id,
                 DescriptionShort = "简短描述",
                 Title = "【2020春夏新款】外交官Diplomat行李箱拉杆箱登机箱万向轮男女旅行箱密码箱TC-623系列 镜面蓝色 19英寸 / 登机箱 / 无侧边手提&脚垫",
                 TenantId = this._tenantId,
@@ -206,7 +210,7 @@ namespace BXJG.Shop.Seed
                 AvailableEnd = DateTime.Now.AddHours(421),
                 AvailableStart = DateTime.Now.AddHours(-57),
                 CategoryId = 4,
-                BrandId = 23,
+                BrandId = pp.Children[new Random().Next(0, pp.Children.Count)].Id,
                 DescriptionShort = "简短描述",
                 Title = "苹果联想戴尔小米电脑包双肩包15.6寸14寸17.3寸男女笔记本背包 红色(带USB接口) 14寸",
                 TenantId = this._tenantId,
@@ -227,7 +231,7 @@ namespace BXJG.Shop.Seed
                 AvailableEnd = DateTime.Now.AddHours(11),
                 AvailableStart = DateTime.Now.AddHours(-257),
                 CategoryId = 3,
-                BrandId = 22,
+                BrandId = pp.Children[new Random().Next(0, pp.Children.Count)].Id,
                 DescriptionShort = "简短描述",
                 Title = "李宁短袖T恤男子半袖运动服篮球系列男装ATSN159",
                 TenantId = this._tenantId,

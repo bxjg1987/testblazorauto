@@ -63,5 +63,6 @@ namespace ZLJ.EntityFrameworkCore
                 .ApplyConfigurationBXJGShop<User, AdministrativeEntity, GeneralTreeEntity>()
                 .ApplyConfigurationBXJGCMS<GeneralTreeEntity>();
         }
+
     }
 }

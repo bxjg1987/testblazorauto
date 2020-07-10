@@ -16,11 +16,12 @@ namespace BXJG.Shop
                                      BXJGShopPermissions.BXJGShop.BXJGShopL(),
                                      icon: BXJGShopPermissions.BXJGShop,
                                      permissionDependency: new SimplePermissionDependency(BXJGShopPermissions.BXJGShop))
-                .AddItem(new MenuItemDefinition(BXJGShopPermissions.BXJGShopDictionary,
-                                                BXJGShopPermissions.BXJGShopDictionary.BXJGShopL(),
-                                                icon: BXJGShopPermissions.BXJGShopDictionary,
-                                                url: $"/{BXJGShopPermissions.BXJGShop}/{BXJGShopPermissions.BXJGShopDictionary}/index.html",
-                                                permissionDependency: new SimplePermissionDependency(BXJGShopPermissions.BXJGShopDictionary)))
+                //商城不提供独立的字典，而时由模块调用方提供
+                //.AddItem(new MenuItemDefinition(BXJGShopPermissions.BXJGShopDictionary,
+                //                                BXJGShopPermissions.BXJGShopDictionary.BXJGShopL(),
+                //                                icon: BXJGShopPermissions.BXJGShopDictionary,
+                //                                url: $"/{BXJGShopPermissions.BXJGShop}/{BXJGShopPermissions.BXJGShopDictionary}/index.html",
+                //                                permissionDependency: new SimplePermissionDependency(BXJGShopPermissions.BXJGShopDictionary)))
                 .AddItem(new MenuItemDefinition(BXJGShopPermissions.BXJGShopItemCategory,
                                                 BXJGShopPermissions.BXJGShopItemCategory.BXJGShopL(),
                                                 icon: BXJGShopPermissions.BXJGShopItemCategory,

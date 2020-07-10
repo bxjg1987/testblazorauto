@@ -42,8 +42,8 @@ namespace ZLJ.EntityFrameworkCore.Seed
 
             //默认商城数据迁移
             var sc = new DefaultBXJGShopBuilder<Tenant, Role, User, ZLJDbContext, AdministrativeEntity, GeneralTreeEntity>(context, 1);
+            sc.CreateDataDictionary();//这个一定要放上面，因为后续演示数据的建立是需要字典的
             sc.Create();
-            sc.CreateDataDictionary();
             //cms演示数据
             new DefaultBXJGCMSBuilder<Tenant, Role, User, ZLJDbContext,GeneralTreeEntity>(context, 1).Create();
         }
