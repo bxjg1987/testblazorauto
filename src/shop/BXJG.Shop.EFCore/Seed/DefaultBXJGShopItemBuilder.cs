@@ -17,7 +17,7 @@ namespace BXJG.Shop.Seed
         where TRole : AbpRole<TUser>
         where TUser : AbpUser<TUser>
         where TSelf : AbpZeroDbContext<TTenant, TRole, TUser, TSelf>
-        where TDataDictionary: GeneralTreeEntity<TDataDictionary>
+        where TDataDictionary : GeneralTreeEntity<TDataDictionary>
     {
         private readonly TSelf _context;
         private readonly int _tenantId;
@@ -42,8 +42,8 @@ namespace BXJG.Shop.Seed
             if (items.Any())
                 return;
 
-         
-           
+
+
             cls.Add(new ItemCategoryEntity
             {
                 Code = "00001",
@@ -53,7 +53,7 @@ namespace BXJG.Shop.Seed
                 Image2 = "a2.jpg",
                 TenantId = this._tenantId,
                 ShowInHome = true,
-                CreationTime= DateTime.Now,
+                CreationTime = DateTime.Now,
                 Children = new List<ItemCategoryEntity>
                 {
                     new ItemCategoryEntity
@@ -106,7 +106,8 @@ namespace BXJG.Shop.Seed
             });
             this._context.SaveChanges();
 
-            cls.Add(new ItemCategoryEntity {
+            cls.Add(new ItemCategoryEntity
+            {
                 Code = "00002",
                 Icon = "sdfsa.jpg",
                 DisplayName = "家电",
@@ -117,19 +118,21 @@ namespace BXJG.Shop.Seed
                 ShowInHome = true,
             });
             this._context.SaveChanges();
-            var pp = dics.Include(c=>c.Children).Where(c=>c.DisplayName== "商品品牌"&& c.TenantId==this._tenantId).Single();
-
+            var pp = dics.Include(c => c.Children).Where(c => c.DisplayName == "商品品牌" && c.TenantId == this._tenantId).Single();
+            var dw = dics.Include(c => c.Children).Where(c => c.DisplayName == "商品单位" && c.TenantId == this._tenantId).Single();
             items.Add(new ItemEntity<TDataDictionary>
             {
-                AvailableEnd = DateTime.Now.AddHours(325),
-                AvailableStart = DateTime.Now.AddHours(-17),
+                Specification = "规格型号1",
+                UnitId = dw.Children[new Random().Next(0, dw.Children.Count)].Id,
+                //AvailableEnd = DateTime.Now.AddHours(325),
+                //AvailableStart = DateTime.Now.AddHours(-17),
                 CategoryId = 1,
-                BrandId = pp.Children[  new Random().Next(0,pp.Children.Count)].Id ,
+                BrandId = pp.Children[new Random().Next(0, pp.Children.Count)].Id,
                 DescriptionShort = "简短描述",
                 Title = "吉普JEEP短袖t恤男2020夏季商务休闲男装T恤男士条纹翻领体恤POLO衫打底衫上衣 蓝色条纹 L",
                 TenantId = this._tenantId,
                 Sku = "PT001",
-                Published = true,
+                //Published = true,
                 Focus = false,
                 Home = true,
                 New = true,
@@ -142,15 +145,17 @@ namespace BXJG.Shop.Seed
             this._context.SaveChanges();
             items.Add(new ItemEntity<TDataDictionary>
             {
-                AvailableEnd = DateTime.Now.AddHours(145),
-                AvailableStart = DateTime.Now.AddHours(-237),
+                Specification = "规格型号2",
+                UnitId = dw.Children[new Random().Next(0, dw.Children.Count)].Id,
+                //AvailableEnd = DateTime.Now.AddHours(145),
+                //AvailableStart = DateTime.Now.AddHours(-237),
                 CategoryId = 2,
                 BrandId = pp.Children[new Random().Next(0, pp.Children.Count)].Id,
                 DescriptionShort = "简短描述",
                 Title = "云妆蝶梦 t恤女短袖2020夏季新品韩版大码圆领印花纯棉体恤女装打底衫休闲百搭棉上衣 M806 小花蓝色",
                 TenantId = this._tenantId,
                 Sku = "XTW02",
-                Published = false,
+                //Published = false,
                 Focus = true,
                 Home = true,
                 New = false,
@@ -164,15 +169,17 @@ namespace BXJG.Shop.Seed
             this._context.SaveChanges();
             items.Add(new ItemEntity<TDataDictionary>
             {
-                AvailableEnd = DateTime.Now.AddHours(145),
-                AvailableStart = DateTime.Now.AddHours(-237),
+                Specification = "规格型号3",
+                UnitId = dw.Children[new Random().Next(0, dw.Children.Count)].Id,
+                //AvailableEnd = DateTime.Now.AddHours(145),
+                //AvailableStart = DateTime.Now.AddHours(-237),
                 CategoryId = 3,
                 BrandId = pp.Children[new Random().Next(0, pp.Children.Count)].Id,
                 DescriptionShort = "简短描述",
                 Title = "力开力朗 双肩包 442 户外大容量登山包休闲旅行背包50L 带防雨罩 桔色",
                 TenantId = this._tenantId,
                 //Sku = "XTW02",
-                Published = true,
+                //Published = true,
                 Focus = true,
                 Home = true,
                 New = false,
@@ -186,6 +193,8 @@ namespace BXJG.Shop.Seed
             this._context.SaveChanges();
             items.Add(new ItemEntity<TDataDictionary>
             {
+                Specification = "规格型号4",
+                UnitId = dw.Children[new Random().Next(0, dw.Children.Count)].Id,
                 //AvailableEnd = DateTime.Now.AddHours(145),
                 //AvailableStart = DateTime.Now.AddHours(-237),
                 CategoryId = 4,
@@ -194,7 +203,7 @@ namespace BXJG.Shop.Seed
                 Title = "【2020春夏新款】外交官Diplomat行李箱拉杆箱登机箱万向轮男女旅行箱密码箱TC-623系列 镜面蓝色 19英寸 / 登机箱 / 无侧边手提&脚垫",
                 TenantId = this._tenantId,
                 Sku = "KY0x-192",
-                Published = true,
+                //Published = true,
                 Focus = false,
                 Home = true,
                 New = false,
@@ -207,15 +216,17 @@ namespace BXJG.Shop.Seed
             this._context.SaveChanges();
             items.Add(new ItemEntity<TDataDictionary>
             {
-                AvailableEnd = DateTime.Now.AddHours(421),
-                AvailableStart = DateTime.Now.AddHours(-57),
+                Specification = "规格型号1",
+                UnitId = dw.Children[new Random().Next(0, dw.Children.Count)].Id,
+                //AvailableEnd = DateTime.Now.AddHours(421),
+                //AvailableStart = DateTime.Now.AddHours(-57),
                 CategoryId = 4,
                 BrandId = pp.Children[new Random().Next(0, pp.Children.Count)].Id,
                 DescriptionShort = "简短描述",
                 Title = "苹果联想戴尔小米电脑包双肩包15.6寸14寸17.3寸男女笔记本背包 红色(带USB接口) 14寸",
                 TenantId = this._tenantId,
                 //Sku = "KY0x-192",
-                Published = false,
+                //Published = false,
                 Focus = true,
                 Home = false,
                 New = false,
@@ -228,15 +239,17 @@ namespace BXJG.Shop.Seed
             this._context.SaveChanges();
             items.Add(new ItemEntity<TDataDictionary>
             {
-                AvailableEnd = DateTime.Now.AddHours(11),
-                AvailableStart = DateTime.Now.AddHours(-257),
+                Specification = "规格型号5",
+                UnitId = dw.Children[new Random().Next(0, dw.Children.Count)].Id,
+                //AvailableEnd = DateTime.Now.AddHours(11),
+                //AvailableStart = DateTime.Now.AddHours(-257),
                 CategoryId = 3,
                 BrandId = pp.Children[new Random().Next(0, pp.Children.Count)].Id,
                 DescriptionShort = "简短描述",
                 Title = "李宁短袖T恤男子半袖运动服篮球系列男装ATSN159",
                 TenantId = this._tenantId,
                 Sku = "Wk9913",
-                Published = true,
+                //Published = true,
                 Focus = false,
                 Home = true,
                 New = false,

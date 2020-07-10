@@ -37,7 +37,7 @@ namespace BXJG.Shop.Catalogue
         /// 图片集合
         /// </summary>
         [Required]
-        [StringLength(BXJGShopConsts.ItemImagesMaxLength)]
+       // [StringLength(BXJGShopConsts.ItemImagesMaxLength)]
         public string[] Images { get; set; }
         /// <summary>
         /// 所属类别id
@@ -48,6 +48,15 @@ namespace BXJG.Shop.Catalogue
         /// 品牌Id
         /// </summary>
         public long? BrandId { get; set; }
+        /// <summary>
+        /// 单位
+        /// </summary>
+        public long? UnitId { get; set; }
+        /// <summary>
+        /// 规格型号
+        /// </summary>
+        [StringLength(BXJGShopConsts.ItemSpecificationMaxLength)]
+        public string Specification { get; set; }
         #endregion
 
         #region 价格信息

@@ -17,6 +17,7 @@ using Abp.Extensions;
 using Abp.Application.Services.Dto;
 using Microsoft.EntityFrameworkCore;
 using BXJG.Shop.Common;
+using Abp.Linq.Extensions;
 
 namespace BXJG.Shop.Catalogue
 {
@@ -36,7 +37,7 @@ namespace BXJG.Shop.Catalogue
     /// <typeparam name="TUserManager"></typeparam>
     /// <typeparam name="TDataDictionary"></typeparam>
     /// <typeparam name="TItemManager"></typeparam>
-    public  class BXJGShopItemAppService<TTenant, TUser, TRole, TTenantManager, TUserManager,TDataDictionary>
+    public class BXJGShopItemAppService<TTenant, TUser, TRole, TTenantManager, TUserManager, TDataDictionary>
         : BXJGShopAppServiceBase<TTenant, TUser, TRole, TTenantManager, TUserManager>, IBXJGShopItemAppService
         where TUser : AbpUser<TUser>
         where TRole : AbpRole<TUser>, new()
@@ -51,8 +52,8 @@ namespace BXJG.Shop.Catalogue
 
         private readonly IRepository<BXJGShopDictionaryEntity, long> respDic;
 
-        public BXJGShopItemAppService(IRepository<ItemEntity<TDataDictionary>, long> repository, 
-                                      ItemCategoryManager dictionaryManager, 
+        public BXJGShopItemAppService(IRepository<ItemEntity<TDataDictionary>, long> repository,
+                                      ItemCategoryManager dictionaryManager,
                                       IRepository<BXJGShopDictionaryEntity, long> respDic,
                                       ItemManager<TDataDictionary> itemManager)
         {
@@ -76,9 +77,11 @@ namespace BXJG.Shop.Catalogue
             //await repository.EnsurePropertyLoadedAsync(entity, c => c.Category);
             //await repository.EnsurePropertyLoadedAsync(entity, c => c.Brand);
 
-            entity = await repository.GetAllIncluding(c => c.Category, c => c.Brand).SingleAsync(c => c.Id == entity.Id);
+            entity = await repository.GetAllIncluding(c => c.Category, c => c.Brand, c => c.Unit).SingleAsync(c => c.Id == entity.Id);
+            if (input.Published)
+                entity.Publish(input.AvailableStart, input.AvailableEnd);
+            //await itemManager.PublishAsync(entity, input.AvailableStart, input.AvailableEnd);
 
-            await itemManager.PublishAsync(entity, input.AvailableStart, input.AvailableEnd);
             return ObjectMapper.Map<ItemDto>(entity);
         }
         /// <summary>
@@ -88,8 +91,12 @@ namespace BXJG.Shop.Catalogue
         /// <returns></returns>
         public async Task<ItemDto> UpdateAsync(ItemUpdateDto input)
         {
-            var entity = await AsyncQueryableExecuter.FirstOrDefaultAsync(repository.GetAllIncluding(c => c.Category));
+            var entity = await this.repository.GetAsync(input.Id);
             ObjectMapper.Map<ItemUpdateDto, ItemEntity<TDataDictionary>>(input, entity);
+            if (input.Published)
+                entity.Publish(input.AvailableStart, input.AvailableEnd);
+            else
+                entity.UnPublish();
             return ObjectMapper.Map<ItemDto>(entity);
         }
         /// <summary>
@@ -109,12 +116,12 @@ namespace BXJG.Shop.Catalogue
                 .WhereIf(input.Published.HasValue, c => c.Published == input.Published.Value)
                 .WhereIf(input.AvailableStart.HasValue, c => c.AvailableStart >= input.AvailableStart.Value)
                 .WhereIf(input.AvailableEnd.HasValue, c => c.AvailableEnd < input.AvailableEnd.Value)
-                .WhereIf(!input.Keywords.IsNullOrEmpty(), c =>
-                    c.Title.Contains(input.Keywords)
-                    || c.DescriptionShort.Contains(input.Keywords)
-                    || c.Brand.DisplayName.Contains(input.Keywords)
-                    || c.Category.DisplayName.Contains(input.Keywords)
-                    || c.Sku.Contains(input.Keywords));
+                .WhereIf(!input.Keywords.IsNullOrEmpty(), c => c.Title.Contains(input.Keywords)
+                                                            || c.DescriptionShort.Contains(input.Keywords)
+                                                            || c.Brand.DisplayName.Contains(input.Keywords)
+                                                            || c.Category.DisplayName.Contains(input.Keywords)
+                                                            || c.Specification.Contains(input.Keywords)
+                                                            || c.Sku.Contains(input.Keywords));
 
             var count = await query.CountAsync();
             var list = await query.OrderBy(input.Sorting).PageBy(input).ToListAsync();
@@ -146,19 +153,15 @@ namespace BXJG.Shop.Catalogue
         /// <returns></returns>
         public async Task PublishAsync(BatchPublishInput input)
         {
-            var entities = await repository.GetAllListAsync(d=>input.Ids.Contains(d.Id));
-            //如果有问题，就每个明细await吧
-            var ts = new HashSet<Task>();
+            var entities = await repository.GetAllListAsync(d => input.Ids.Contains(d.Id));
             foreach (var item in entities)
             {
                 Task t;
                 if (input.AvailableEndSeconds != default)
-                    t = itemManager.PublishDurationAsync(item, input.AvailableStart, input.AvailableEndSeconds.Value);
+                    item.PublishDuration(input.AvailableStart, input.AvailableEndSeconds.Value);
                 else
-                    t = itemManager.PublishAsync(item, input.AvailableStart, input.AvailableEnd);
-                ts.Add(t);
+                    item.Publish(input.AvailableStart, input.AvailableEnd);
             }
-            await Task.WhenAll(ts.ToArray());
         }
         /// <summary>
         /// 批量取消商品的发布
@@ -169,13 +172,10 @@ namespace BXJG.Shop.Catalogue
         {
             var entities = await repository.GetAllListAsync(d => input.Ids.Contains(d.Id));
             //如果有问题，就每个明细await吧
-            var ts = new HashSet<Task>();
             foreach (var item in entities)
             {
-                Task t = itemManager.UnPublishAsync(item);
-                ts.Add(t);
+               item.UnPublish();
             }
-            await Task.WhenAll(ts.ToArray());
         }
     }
 }

@@ -16,6 +16,7 @@ namespace BXJG.Shop
         public const int ItemSkuMaxLength = 50;
         public const int ItemDescriptionShortMaxLength = 10000;
         public const int ItemImagesMaxLength = 5000;
+        public const int ItemSpecificationMaxLength = 500;
         #endregion
         #region 订单
         public const int OrderNoMaxLength = 36;//guid长度 32+4个分隔符，将来可能使用其它格式的订单号
@@ -36,6 +37,7 @@ namespace BXJG.Shop
         public const string DataDictionayMigrationValuepinpai= "DataDictionayMigrationValuepinpai";
         public const string DataDictionayMigrationValuezhifufangshi = "DataDictionayMigrationValuezhifufangshi";
         public const string DataDictionayMigrationValuepeisongfangshi = "DataDictionayMigrationValuepeisongfangshi";
+        public const string DataDictionayMigrationValuedanwei = "DataDictionayMigrationValuedanwei";
 
         /// <summary>
         /// 订单设置组名

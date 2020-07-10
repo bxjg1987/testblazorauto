@@ -1,3 +1,51 @@
+abp事件问题
+----------------------------------------------------------------------------------------------------------
+不支持的方式
+public class ItemPublishChangedEventData<T> : EntityEventData<XXXX<T>>
+{
+    public ItemPublishChangedEventData(XXXX<T> entity) : base(entity)
+    {
+    }
+}
+
+支持的方式
+public class ItemPublishChangedEventData<TEntity> : EntityEventData<TEntity>
+{
+    public ItemPublishChangedEventData(TEntity entity) : base(entity)
+    {
+    }
+}
+
+否则报错，类似：
+Constructor on type 'BXJG.Shop.Catalogue.ItemPublishChangedEventData`1
+[[BXJG.GeneralTree.GeneralTreeEntity`1[[BXJG.GeneralTree.GeneralTreeEntity, BXJG.GeneralTree, Version=1.0.2.0, Culture=neutral, PublicKeyToken=null]],
+BXJG.GeneralTree, Version=1.0.2.0, Culture=neutral, PublicKeyToken=null]]' 
+not found.
+
+
+事件处理器的注意点
+失败的方式 此方式事件处理器不会接收到事件
+ //public  class Class2<TEntity> : DomainService, IAsyncEventHandler<ItemPublishChangedEventData<TEntity>>
+    //{
+    //    public Task HandleEventAsync(ItemPublishChangedEventData<TEntity> eventData) 
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+    //}
+成功的方式
+    //public class Class2 : DomainService, IAsyncEventHandler<ItemPublishChangedEventData<GeneralTreeEntity>>
+    //{
+    //    public Task HandleEventAsync(ItemPublishChangedEventData<GeneralTreeEntity> eventData)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+    //}
+容易理解，因为应用启动时回去注册所有事件处理器，此时泛型类型不确定，无法注册处理器
+
+所以最终决定，事件的定义按正确的方式
+
+
+
 商城模块使用外部字典功能时的数据迁移问题
 ----------------------------------------------------------------------------------------------------------
 商城模块要使用的字典的项肯定得由商城模块提供，因此定义DefaultBXJGShopBuilder类来做商城字典初始化数据的添加

@@ -9,9 +9,9 @@ namespace BXJG.Shop.Catalogue
     /// 商品发布成功或失败时触发的事件
     /// 事件处理程序中可以通过商品的 Published属性来判断是发布还是取消发布
     /// </summary>
-    public class ItemPublishChangedEventData<TDataDictionary> : EntityEventData<ItemEntity<TDataDictionary>>
+    public class ItemPublishChangedEventData<TEntity> : EntityEventData<TEntity>
     {
-        public ItemPublishChangedEventData(ItemEntity<TDataDictionary> entity) : base(entity)
+        public ItemPublishChangedEventData(TEntity entity) : base(entity)
         {
         }
     }

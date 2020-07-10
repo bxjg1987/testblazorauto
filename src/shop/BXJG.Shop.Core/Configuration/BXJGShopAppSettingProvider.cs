@@ -28,7 +28,15 @@ namespace BXJG.Shop.Configuration
                     "0",
                     "品牌数据字典Id".BXJGShopL(),
                     sys,
-                    scopes: SettingScopes.Application | SettingScopes.Tenant,
+                    scopes:  SettingScopes.Tenant,
+                    isVisibleToClients:true),
+
+                 new SettingDefinition(
+                    BXJGShopConsts.DataDictionayMigrationValuedanwei,
+                    "0",
+                    "单位数据字典Id".BXJGShopL(),
+                    sys,
+                    scopes:  SettingScopes.Tenant,
                     isVisibleToClients:true),
 
                  new SettingDefinition(
@@ -36,7 +44,7 @@ namespace BXJG.Shop.Configuration
                     "0",
                     "支付方式数据字典Id".BXJGShopL(),
                     sys,
-                    scopes: SettingScopes.Application | SettingScopes.Tenant,
+                    scopes: SettingScopes.Tenant,
                     isVisibleToClients:true),
 
                  new SettingDefinition(

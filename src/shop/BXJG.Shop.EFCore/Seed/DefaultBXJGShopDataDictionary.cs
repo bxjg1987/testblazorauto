@@ -15,7 +15,7 @@ using Abp.Configuration;
 namespace BXJG.Shop.Seed
 {
     public class DefaultBXJGShopDataDictionary<TTenant, TRole, TUser, TSelf, TDataDictionary>
-         where TTenant : AbpTenant<TUser>
+        where TTenant : AbpTenant<TUser>
         where TDataDictionary : GeneralTreeEntity<TDataDictionary>, new()
         where TSelf : AbpZeroDbContext<TTenant, TRole, TUser, TSelf>
         where TRole : AbpRole<TUser>
@@ -74,6 +74,45 @@ namespace BXJG.Shop.Seed
                 set.Add(p);
                 _context.SaveChanges();
                 _context.Settings.Add(new Setting(this._tenantId, null, BXJGShopConsts.DataDictionayMigrationValuepinpai, p.Id.ToString()));
+                _context.SaveChanges();
+            }
+
+            var dw = set.Any(c => c.ParentId == parentId && c.DisplayName == "商品单位");
+            if (!dw)
+            {
+                var last = set.Where(c => c.ParentId == parentId).OrderBy(c => c.Code).LastOrDefault();
+                var lastIndex = 0;
+                if (last != null)
+                {
+                    lastIndex = Convert.ToInt32(last.Code.Split('.').Last());
+                }
+                var p = new TDataDictionary
+                {
+                    Code = last == null ? "00001" : (lastIndex + 1).ToString().PadLeft(5, '0'),
+                    CreationTime = DateTime.Now,
+                    DisplayName = "商品单位",
+                    TenantId = _tenantId
+                };
+                if (insertTestData)
+                {
+                    p.Children = new List<TDataDictionary> {
+                         new TDataDictionary{
+                            Code = last==null?"00001.00001":  (lastIndex+1).ToString().PadLeft(5,'0')+".00001",
+                            CreationTime = DateTime.Now,
+                            DisplayName = "个",
+                            TenantId = _tenantId,
+                         },
+                         new TDataDictionary{
+                            Code = last==null?"00001.00002":  (lastIndex+1).ToString().PadLeft(5,'0')+".00002",
+                            CreationTime = DateTime.Now,
+                            DisplayName = "把",
+                            TenantId = _tenantId,
+                         }
+                     };
+                }
+                set.Add(p);
+                _context.SaveChanges();
+                _context.Settings.Add(new Setting(this._tenantId, null, BXJGShopConsts.DataDictionayMigrationValuedanwei, p.Id.ToString()));
                 _context.SaveChanges();
             }
 

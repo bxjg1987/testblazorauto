@@ -7,6 +7,7 @@ using BXJG.Shop.Common;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Threading.Tasks;
@@ -76,22 +77,19 @@ namespace BXJG.Shop.Catalogue
     /// 设计时考虑不提供继承的方式扩展，因为那样太复杂
     /// 你可以使用关联和事件的方式参与到这个模块中来
     /// </summary>
-    public class ItemEntity<TDataDictionary> : FullAuditedEntity<long>, IMustHaveTenant
-        //where TDataDictionary: GeneralTreeEntity<TDataDictionary>
+    public class ItemEntity<TDataDictionary> : FullAuditedEntity<long>, IMustHaveTenant, IAggregateRoot<long>
+    //where TDataDictionary: GeneralTreeEntity<TDataDictionary>
     {
-        #region 基本信息
-      
-
         public int TenantId { get; set; }
+     
+        #region 基本信息
         /// <summary>
         /// 标题
         /// </summary>
-       
         public string Title { get; set; }
         /// <summary>
         /// sku
         /// </summary>
-      
         public string Sku { get; set; }
         /// <summary>
         /// 简短描述
@@ -121,6 +119,22 @@ namespace BXJG.Shop.Catalogue
         /// 品牌id
         /// </summary>
         public long? BrandId { get; set; }
+
+        //目前来说单位可以直接存具体的值，所以可以使用string类型
+        //但是将来单位可能拆包 组包，为了将来考虑 这里就用数据字典吧
+
+        /// <summary>
+        /// 单位外键实体
+        /// </summary>
+        public virtual TDataDictionary Unit { get; set; }
+        /// <summary>
+        /// 单位
+        /// </summary>
+        public long? UnitId { get; set; }
+        /// <summary>
+        /// 规格型号
+        /// </summary>
+        public string Specification { get; set; }
         #endregion
 
         #region 价格信息
@@ -159,19 +173,22 @@ namespace BXJG.Shop.Catalogue
         /// 是否已发布
         /// 已发布且当前时间处于上/下架范围内时才会显示在前端
         /// </summary>
-        public bool Published { get; set; }
+        public bool Published { get; protected set; }
         /// <summary>
         /// 上架时间
         /// 已发布且当前时间处于上/下架范围内时才会显示在前端
         /// 若不设置，则不限制上架开始时间
         /// </summary>
-        public DateTimeOffset? AvailableStart { get; set; }
+        public DateTimeOffset? AvailableStart { get; protected set; }
         /// <summary>
         /// 下架时间
         /// 已发布且当前时间处于上/下架范围内时才会显示在前端
         /// 若不设置则不限制上架结束时间
         /// </summary>
-        public DateTimeOffset? AvailableEnd { get; set; }
+        public DateTimeOffset? AvailableEnd { get; protected set; }
+
+        //[NotMapped] 通过api去配置了
+        public virtual ICollection<IEventData> DomainEvents { get; } = new Collection<IEventData>();
         #endregion
 
         #region 方法
@@ -180,11 +197,12 @@ namespace BXJG.Shop.Catalogue
         /// </summary>
         /// <param name="yxq">开始发布时间，默认当前时间</param>
         /// <param name="js">结束时间</param>
-        internal void Publish(DateTimeOffset? yxq = default, DateTimeOffset? js = default)
+        public void Publish(DateTimeOffset? yxq = default, DateTimeOffset? js = default)
         {
             Published = true;
             AvailableStart = yxq ?? DateTimeOffset.Now;
             AvailableEnd = js ?? AvailableStart.Value.AddYears(10);
+            DomainEvents.Add(new ItemPublishChangedEventData<ItemEntity< TDataDictionary>>(this));
             //return EventBus.TriggerAsync(new EntityEventData<ItemEntity>(this));
         }
         /// <summary>
@@ -192,12 +210,27 @@ namespace BXJG.Shop.Catalogue
         /// </summary>
         /// <param name="yxq">开始发布时间，默认当前时间</param>
         /// <param name="js">有效期，单位秒</param>
-        internal void PublishDuration(DateTimeOffset? yxq = default, long js = 60 * 60 * 24 * 365 * 10)
+        public void PublishDuration(DateTimeOffset? yxq = default, long js = 60 * 60 * 24 * 365 * 10)
         {
             yxq = yxq ?? DateTimeOffset.Now;
             Publish(yxq, yxq.Value.AddSeconds(js));
         }
-
+        /// <summary>
+        /// 取消发布指定商品
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public void UnPublish()
+        {
+            Published = false;
+            DomainEvents.Add(new ItemPublishChangedEventData<ItemEntity<TDataDictionary>>(this));
+            // return EventBus.TriggerAsync(new ItemPublishChangedEventData<ItemEntity<TDataDictionary>>(item));
+            //item.AvailableStart = null;
+        }
+        /// <summary>
+        /// 图片集合
+        /// </summary>
+        /// <returns></returns>
         public string[] GetImages()
         {
             return Images.Split(',');
