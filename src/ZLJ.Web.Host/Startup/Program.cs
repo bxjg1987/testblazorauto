@@ -21,7 +21,7 @@ namespace ZLJ.Web.Host.Startup
 
             return WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-                .UseConfiguration(cfgHosting)
+                //.UseConfiguration(cfgHosting)
                 .Build();
         }
     }
