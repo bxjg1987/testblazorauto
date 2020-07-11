@@ -51,7 +51,7 @@ namespace ZLJ.Controllers
                 var hz = Path.GetExtension(item.FileName);//.txt
                 var rdmName = Guid.NewGuid().ToString("N");//sdfsdfsdfsf3r2xsdf
                 var fName = rdmName+hz;//sdfsdfsdfsf3r2xsdf.txt
-                var fileName = Path.Combine(hostingEnvironment.WebRootPath, "upload", fName);//e:\app\wwwroot\upload\sdfsdfsdfsf3r2xsdf.txt
+                var fileName = Path.Combine(hostingEnvironment.WebRootPath, "upload/temp", fName);//e:\app\wwwroot\upload\sdfsdfsdfsf3r2xsdf.txt
                 var xnlj = Path.Combine( "upload", fName);//upload\sdfsdfsdfsf3r2xsdf.txt
                 using (var fs = System.IO.File.Create(fileName))
                 {

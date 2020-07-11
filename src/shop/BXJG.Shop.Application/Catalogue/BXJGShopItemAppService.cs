@@ -49,7 +49,6 @@ namespace BXJG.Shop.Catalogue
         private readonly IRepository<ItemEntity<TDataDictionary>, long> repository;
         private readonly ItemCategoryManager dictionaryManager;
         private readonly ItemManager<TDataDictionary> itemManager;
-
         private readonly IRepository<BXJGShopDictionaryEntity, long> respDic;
 
         public BXJGShopItemAppService(IRepository<ItemEntity<TDataDictionary>, long> repository,
