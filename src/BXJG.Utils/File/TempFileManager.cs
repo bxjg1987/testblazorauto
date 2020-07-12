@@ -4,11 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Hosting;
 using Microsoft.VisualBasic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading;
+using BXJG.Common;
 
 namespace BXJG.Utils.File
 {
@@ -26,7 +26,7 @@ namespace BXJG.Utils.File
             root = env.Root;
         }
 
-        public async Task<IEnumerable<Output>> UploadAsync(CancellationToken cancellationToken, params Input[] inputs)
+        public async Task<IEnumerable<Output>> UploadAsync(CancellationToken cancellationToken = default, params Input[] inputs)
         {
             var outputs = new Collection<Output>();
             foreach (var item in inputs)
@@ -44,6 +44,16 @@ namespace BXJG.Utils.File
                 outputs.Add(new Output(Path.Combine("upload", "temp", wjm)));
             }
             return outputs;
+        }
+
+        public void MoveAsync(CancellationToken cancellationToken = default, params string[] inputs)
+        {
+            foreach (var item in inputs)
+            {
+                var f = Path.Combine(root, item);
+
+                System.IO.File.Move(f, Path.Combine(root, "upload", Path.GetFileName(item)));
+            }
         }
     }
 }

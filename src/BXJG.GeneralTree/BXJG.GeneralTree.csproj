@@ -6,7 +6,7 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/bxjg1987/abpGeneralModules/tree/master/src/BXJG.GeneralTree</RepositoryUrl>
     <RepositoryType>github</RepositoryType>
-    <Version>1.0.2</Version>
+    <Version>1.0.3</Version>
     <Description>abp通用树模块,类似abp的组织单位
 内部定义了抽象的Tree和一个默认实现; 抽象的TreeManager和一个默认实现; 抽象的AppService和一个默认实现;
 所以你可以使用默认实现来完成一个类似"通用字典"的功能; 也可以通过子类完全实现自己的通用树,比如类似"区域"(省、市、区县)</Description>
@@ -38,11 +38,8 @@
 
   <ItemGroup>
     <PackageReference Include="Abp.AutoMapper" Version="5.9.0" />
+    <PackageReference Include="BXJG.Utils" Version="1.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.4" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\BXJG.Utils\BXJG.Utils.csproj" />
   </ItemGroup>
 
 </Project>
