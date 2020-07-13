@@ -13,6 +13,7 @@ using Abp.Configuration;
 using Abp.Threading.Extensions;
 using System.Linq;
 using Abp.UI;
+using HeyRed.Mime;
 
 namespace BXJG.Utils.File
 {
@@ -38,8 +39,9 @@ namespace BXJG.Utils.File
 
             foreach (var item in inputs)
             {
+                var hzm = MimeTypesMap.GetExtension(item.ContentType);
                 //这里的类型后期按mime做个对应
-                if (!aryts.Contains(item.ContentType, StringComparer.OrdinalIgnoreCase))
+                if (!aryts.Contains(hzm, StringComparer.OrdinalIgnoreCase))
                     throw new UserFriendlyException($"不允许上传此类型的文件，仅允许{ts}");
 
                 if (item.Length > sz * 1024)

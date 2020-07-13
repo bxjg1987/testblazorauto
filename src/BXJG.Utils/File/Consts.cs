@@ -13,6 +13,6 @@ namespace BXJG.Utils.File
         public const string SettingKeyUploadSize = "BXJGUtilsFileUploadSize";
         public const int DefaultUploadMaxSize = 1024 * 5;
         public const string SettingKeyUploadType = "BXJGUtilsFileUploadType";
-        public const string DefaultUploadTypes = ".jpg,.gif,.png";
+        public const string DefaultUploadTypes = "jpg,jpeg,gif,png";
     }
 }

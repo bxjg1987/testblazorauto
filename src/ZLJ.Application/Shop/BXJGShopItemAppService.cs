@@ -8,6 +8,7 @@ using BXJG.Shop.Catalogue;
 using Abp.Domain.Repositories;
 using BXJG.Shop.Common;
 using BXJG.GeneralTree;
+using BXJG.Utils.File;
 
 namespace ZLJ.Shop
 {
@@ -19,7 +20,8 @@ namespace ZLJ.Shop
         public BXJGShopItemAppService(IRepository<ItemEntity<GeneralTreeEntity>, long> repository, 
                                       ItemCategoryManager dictionaryManager, 
                                       IRepository<BXJGShopDictionaryEntity, long> respDic, 
-                                      ItemManager<GeneralTreeEntity> itemManager) : base(repository, dictionaryManager, respDic, itemManager)
+                                      ItemManager<GeneralTreeEntity> itemManager,
+                                      TempFileManager tempFileManager) : base(repository, dictionaryManager, respDic, itemManager, tempFileManager)
         {
         }
     }
