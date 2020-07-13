@@ -18,6 +18,8 @@ using BXJG.Utils;
 using BXJG.GeneralTree;
 using BXJG.Shop;
 using BXJG.CMS;
+using BXJG.Common;
+using Abp.Dependency;
 
 namespace ZLJ
 {
@@ -84,6 +86,7 @@ namespace ZLJ
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(typeof(ZLJWebCoreModule).GetAssembly());
+            IocManager.Register<IEnv, NetCoreEnv>(DependencyLifeStyle.Singleton);
         }
 
         public override void PostInitialize()

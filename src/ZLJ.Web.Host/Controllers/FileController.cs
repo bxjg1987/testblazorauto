@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Abp.Authorization;
+using BXJG.Utils.File;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -31,35 +32,39 @@ namespace ZLJ.Controllers
     {
         private readonly IConfiguration config;
         private readonly IWebHostEnvironment hostingEnvironment;
+        private readonly TempFileManager tempFileManager;
 
-        public FileController(IConfiguration config, IWebHostEnvironment hostingEnvironment)
+        public FileController(IConfiguration config, IWebHostEnvironment hostingEnvironment, TempFileManager tempFileManager)
         {
             this.hostingEnvironment = hostingEnvironment;
             this.config = config;
+            this.tempFileManager = tempFileManager;
         }
 
         [HttpPost]
         [AbpAuthorize]
-        public async Task<List< FileUploadResult> > UploadAsync(IFormFileCollection file)
+        public async Task<IList<Output>> UploadAsync(IFormFileCollection file)
         {
             var rts = new List<FileUploadResult>();
-            foreach (var item in file)
-            {
-                //此处需要对文件做各种检查  依赖abp的特征或设置系统
-                
-                //aaa.txt
-                var hz = Path.GetExtension(item.FileName);//.txt
-                var rdmName = Guid.NewGuid().ToString("N");//sdfsdfsdfsf3r2xsdf
-                var fName = rdmName+hz;//sdfsdfsdfsf3r2xsdf.txt
-                var fileName = Path.Combine(hostingEnvironment.WebRootPath, "upload/temp", fName);//e:\app\wwwroot\upload\sdfsdfsdfsf3r2xsdf.txt
-                var xnlj = Path.Combine( "upload", fName);//upload\sdfsdfsdfsf3r2xsdf.txt
-                using (var fs = System.IO.File.Create(fileName))
-                {
-                    await item.CopyToAsync(fs, HttpContext.RequestAborted);
-                }
-                rts.Add(new FileUploadResult { RelativePath= xnlj });
-            }
-            return rts;
+            var fs = file.Select(c => new Input(c.FileName, c.OpenReadStream(), c.ContentType, c.Length));
+            return await tempFileManager.UploadAsync(HttpContext.RequestAborted, fs.ToArray());
+            //foreach (var item in file)
+            //{
+            //    //此处需要对文件做各种检查  依赖abp的特征或设置系统
+
+            //    //aaa.txt
+            //    var hz = Path.GetExtension(item.FileName);//.txt
+            //    var rdmName = Guid.NewGuid().ToString("N");//sdfsdfsdfsf3r2xsdf
+            //    var fName = rdmName+hz;//sdfsdfsdfsf3r2xsdf.txt
+            //    var fileName = Path.Combine(hostingEnvironment.WebRootPath, "upload/temp", fName);//e:\app\wwwroot\upload\sdfsdfsdfsf3r2xsdf.txt
+            //    var xnlj = Path.Combine( "upload", fName);//upload\sdfsdfsdfsf3r2xsdf.txt
+            //    using (var fs = System.IO.File.Create(fileName))
+            //    {
+            //        await item.CopyToAsync(fs, HttpContext.RequestAborted);
+            //    }
+            //    rts.Add(new FileUploadResult { RelativePath= xnlj });
+            //}
+            //return rts;
         }
     }
 }

@@ -18,6 +18,7 @@ using Abp.Application.Services.Dto;
 using Microsoft.EntityFrameworkCore;
 using BXJG.Shop.Common;
 using Abp.Linq.Extensions;
+using BXJG.Utils.File;
 
 namespace BXJG.Shop.Catalogue
 {
@@ -50,16 +51,19 @@ namespace BXJG.Shop.Catalogue
         private readonly ItemCategoryManager dictionaryManager;
         private readonly ItemManager<TDataDictionary> itemManager;
         private readonly IRepository<BXJGShopDictionaryEntity, long> respDic;
+        private readonly TempFileManager tempFileManager;
 
         public BXJGShopItemAppService(IRepository<ItemEntity<TDataDictionary>, long> repository,
                                       ItemCategoryManager dictionaryManager,
                                       IRepository<BXJGShopDictionaryEntity, long> respDic,
-                                      ItemManager<TDataDictionary> itemManager)
+                                      ItemManager<TDataDictionary> itemManager, 
+                                      TempFileManager tempFileManager)
         {
             this.repository = repository;
             this.dictionaryManager = dictionaryManager;
             this.respDic = respDic;
             this.itemManager = itemManager;
+            this.tempFileManager = tempFileManager;
         }
         /// <summary>
         /// 创建并发布商品信息
@@ -70,6 +74,7 @@ namespace BXJG.Shop.Catalogue
         {
             var entity = base.ObjectMapper.Map<ItemEntity<TDataDictionary>>(input);
             entity = await repository.InsertAsync(entity);
+            this.tempFileManager.Move(input.Images);
             await CurrentUnitOfWork.SaveChangesAsync();
 
             //这里查两次，有点坑
@@ -96,6 +101,7 @@ namespace BXJG.Shop.Catalogue
                 entity.Publish(input.AvailableStart, input.AvailableEnd);
             else
                 entity.UnPublish();
+            this.tempFileManager.Move(input.Images);
             await CurrentUnitOfWork.SaveChangesAsync();
             entity = await repository.GetAllIncluding(c => c.Category, c => c.Brand, c => c.Unit).SingleAsync(c => c.Id == entity.Id);
             return ObjectMapper.Map<ItemDto>(entity);

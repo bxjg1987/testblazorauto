@@ -4,6 +4,8 @@ using Abp.Timing;
 using Abp;
 using BXJG.Utils.Localization;
 using BXJG.Utils.Enums;
+using Abp.Threading.BackgroundWorkers;
+using BXJG.Utils.File;
 
 namespace BXJG.Utils
 {
@@ -19,6 +21,7 @@ namespace BXJG.Utils
             Configuration.Modules.BXJGUtils().AddEnum("gender", typeof(Gender), BXJGUtilsConsts.LocalizationSourceName);
 
             BXJGUtilsLocalizationConfigurer.Configure(Configuration.Localization);
+            Configuration.Settings.Providers.Add<BXJGUtilsFileSettingProvider>();
         }
 
         public override void Initialize()
@@ -28,6 +31,8 @@ namespace BXJG.Utils
 
         public override void PostInitialize()
         {
+            var workManager = IocManager.Resolve<IBackgroundWorkerManager>();
+            workManager.Add(IocManager.Resolve<RemoveUploadFileWorker>());
         }
     }
 }
