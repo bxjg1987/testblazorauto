@@ -72,9 +72,8 @@ namespace BXJG.Utils.File
             {
                 var fileName = Path.GetFileName(item);
                 var f = Path.Combine(this.tempDir, fileName);
-                var mb = Path.Combine(this.dir, fileName);
-                System.IO.File.Move(f, mb);
-                list.Add(item);
+                System.IO.File.Move(f, Path.Combine(this.dir, fileName));
+                list.Add(Path.Combine(Consts.UploadDir, fileName));
             }
             return list;
         }
