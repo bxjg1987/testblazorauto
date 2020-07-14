@@ -14,4 +14,9 @@ namespace BXJG.Common
     {
         public string Root { get; }
     }
+
+    public class DefaultEnv : IEnv
+    {
+        public string Root => AppContext.BaseDirectory;
+    }
 }

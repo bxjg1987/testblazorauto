@@ -86,7 +86,7 @@ namespace ZLJ
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(typeof(ZLJWebCoreModule).GetAssembly());
-            IocManager.Register<IEnv, NetCoreEnv>(DependencyLifeStyle.Singleton);
+            //IocManager.Register<IEnv, NetCoreEnv>(DependencyLifeStyle.Singleton);//utils已经注册了个 这里可以替换
         }
 
         public override void PostInitialize()

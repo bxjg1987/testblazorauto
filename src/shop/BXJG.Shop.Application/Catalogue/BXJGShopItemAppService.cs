@@ -72,9 +72,10 @@ namespace BXJG.Shop.Catalogue
         /// <returns></returns>
         public async Task<ItemDto> CreateAsync(ItemCreateDto input)
         {
+            input.Images = this.tempFileManager.Move(input.Images).ToArray();
             var entity = base.ObjectMapper.Map<ItemEntity<TDataDictionary>>(input);
             entity = await repository.InsertAsync(entity);
-            this.tempFileManager.Move(input.Images);
+        
             await CurrentUnitOfWork.SaveChangesAsync();
 
             //这里查两次，有点坑
@@ -95,13 +96,14 @@ namespace BXJG.Shop.Catalogue
         /// <returns></returns>
         public async Task<ItemDto> UpdateAsync(ItemUpdateDto input)
         {
+            input.Images = this.tempFileManager.Move(input.Images).ToArray();
             var entity = await this.repository.GetAsync(input.Id);
             ObjectMapper.Map<ItemUpdateDto, ItemEntity<TDataDictionary>>(input, entity);
             if (input.Published)
                 entity.Publish(input.AvailableStart, input.AvailableEnd);
             else
                 entity.UnPublish();
-            this.tempFileManager.Move(input.Images);
+           
             await CurrentUnitOfWork.SaveChangesAsync();
             entity = await repository.GetAllIncluding(c => c.Category, c => c.Brand, c => c.Unit).SingleAsync(c => c.Id == entity.Id);
             return ObjectMapper.Map<ItemDto>(entity);

@@ -25,8 +25,13 @@ namespace BXJG.Utils.File
         public TempFileManager(IEnv env, ISettingManager settingManager)
         {
             this.dir = Path.Combine(env.Root, Consts.UploadDir);
-            this.tempDir = Path.Combine(env.Root, Consts.UploadTemp);
+            if (!Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
             this.settingManager = settingManager;
+            this.tempDir = Path.Combine(env.Root, Consts.UploadTemp);
+
+            if (!Directory.Exists(tempDir))
+                Directory.CreateDirectory(tempDir);
         }
 
         public async Task<IList<Output>> UploadAsync(CancellationToken cancellationToken = default, params Input[] inputs)
@@ -60,14 +65,18 @@ namespace BXJG.Utils.File
             return outputs;
         }
 
-        public void Move( params string[] inputs)
+        public IList<string> Move( params string[] inputs)
         {
+            var list = new List<string>();
             foreach (var item in inputs)
             {
                 var fileName = Path.GetFileName(item);
                 var f = Path.Combine(this.tempDir, fileName);
-                System.IO.File.Move(f, Path.Combine(this.dir, fileName));
+                var mb = Path.Combine(this.dir, fileName);
+                System.IO.File.Move(f, mb);
+                list.Add(item);
             }
+            return list;
         }
     }
 }

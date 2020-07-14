@@ -6,6 +6,7 @@ using BXJG.Utils.Localization;
 using BXJG.Utils.Enums;
 using Abp.Threading.BackgroundWorkers;
 using BXJG.Utils.File;
+using BXJG.Common;
 
 namespace BXJG.Utils
 {
@@ -27,6 +28,7 @@ namespace BXJG.Utils
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(typeof(BXJGUtilsModule).GetAssembly());
+            IocManager.Register<IEnv,Utils.File. DefaultEnv>(Abp.Dependency.DependencyLifeStyle.Singleton);
         }
 
         public override void PostInitialize()
