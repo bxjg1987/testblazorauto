@@ -16,7 +16,7 @@ namespace BXJG.Utils.File
         public RemoveUploadFileWorker(AbpTimer timer, IEnv env) : base(timer)
         {
             dir = Path.Combine(env.Root,Consts.UploadTemp);
-            Timer.Period = 1000 * 60 * 60 * 24;
+            Timer.Period = 1000 * 60;//时间别太长，默认情况下应用长时间不被访问，应用会终止
         }
         //[UnitOfWork]
         protected override void DoWork()

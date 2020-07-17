@@ -65,14 +65,15 @@ namespace BXJG.Utils.File
             return outputs;
         }
 
-        public IList<string> Move( params string[] inputs)
+        public IList<string> Move(params string[] inputs)
         {
             var list = new List<string>();
             foreach (var item in inputs)
             {
                 var fileName = Path.GetFileName(item);
-                var f = Path.Combine(this.tempDir, fileName);
-                System.IO.File.Move(f, Path.Combine(this.dir, fileName));
+                var mb = Path.Combine(this.dir, fileName);
+                if (!System.IO.File.Exists(mb))
+                    System.IO.File.Move(Path.Combine(this.tempDir, fileName), mb);
                 list.Add(Path.Combine(Consts.UploadDir, fileName));
             }
             return list;
