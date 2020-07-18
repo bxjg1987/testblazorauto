@@ -5,4 +5,17 @@
     <RootNamespace>BXJG.Equipment</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Abp" Version="5.9.0" />
+    <PackageReference Include="Abp.AutoMapper" Version="5.9.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.4" />
+    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\BXJG.Common\BXJG.Common.csproj" />
+    <ProjectReference Include="..\..\BXJG.Utils\BXJG.Utils.csproj" />
+    <ProjectReference Include="..\BXJG.Equipment.Core\BXJG.Equipment.Core.csproj" />
+  </ItemGroup>
+
 </Project>

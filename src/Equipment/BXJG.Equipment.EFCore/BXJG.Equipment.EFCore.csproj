@@ -5,4 +5,25 @@
     <RootNamespace>BXJG.Equipment</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Seed\DefaultBXJGShopBuilder.cs" />
+    <Compile Remove="Seed\DefaultBXJGShopCustomerBuilder.cs" />
+    <Compile Remove="Seed\DefaultBXJGShopDataDictionary.cs" />
+    <Compile Remove="Seed\DefaultBXJGShopItemBuilder.cs" />
+    <Compile Remove="Seed\DefaultBXJGShopItemCagtegoryBuilder.cs" />
+    <Compile Remove="Seed\DefaultBXJGShopOrderBuilder.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Abp.EntityFrameworkCore" Version="5.9.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BXJG.Equipment.Core\BXJG.Equipment.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Seed\" />
+  </ItemGroup>
+
 </Project>

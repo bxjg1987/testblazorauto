@@ -28,11 +28,10 @@ namespace ZLJ
 
         public override void Initialize()
         {
-
             //经过测试，这样abp还是无法生成动态webapi，手动提供实现类吧
             //IocManager.Register(typeof(IBXJGShopItemAppService), typeof(BXJGShopItemAppService<Tenant, User, Role, TenantManager, UserManager, GeneralTreeEntity>), DependencyLifeStyle.Transient);
             //IocManager.Register(typeof(IBXJGShopFrontItemAppService), typeof(BXJGShopFrontItemAppService<GeneralTreeEntity>), DependencyLifeStyle.Transient);
-            IocManager.RegisterAssemblyByConvention(typeof(ZLJApplicationModule).GetAssembly());
+            IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
 
            
         }

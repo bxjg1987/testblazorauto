@@ -13,6 +13,7 @@ namespace BXJG.Equipment
         {
             BXJGEquipmentLocalizationConfigurer.Configure(Configuration.Localization);
             Configuration.Settings.Providers.Add<BXJGEquipmentAppSettingProvider>();
+    
             //使用Utils模块提供的通用枚举转下拉框数据
             //但是它不好控制权限
             //Configuration.Modules.BXJGUtils().AddEnum("BXJGEquipmentOrderStatus", typeof(OrderStatus), BXJGUtilsConsts.LocalizationSourceName);
