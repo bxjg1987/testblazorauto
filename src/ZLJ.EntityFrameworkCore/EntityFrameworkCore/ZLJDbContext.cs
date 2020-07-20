@@ -25,10 +25,11 @@ namespace ZLJ.EntityFrameworkCore
     {
         /* Define a DbSet for each entity of the application */
 
+        #region 主模块
         public virtual DbSet<OrganizationUnitEntity> OrganizationUnitEntities { get; set; }
         public virtual DbSet<GeneralTreeEntity> GeneralTreeEntities { get; set; }
-        public virtual DbSet<EquipmentInfoEntity> EquipmentInfos { get; set; }
         public virtual DbSet<AdministrativeEntity> Administratives { get; set; }
+        #endregion
 
         //后期考虑实现动态DbSet简化实体注册
 
@@ -47,6 +48,10 @@ namespace ZLJ.EntityFrameworkCore
         public virtual DbSet<AdRecordEntity> BXJGCMSAdRecords { get; set; }
         public virtual DbSet<ArticleEntity<GeneralTreeEntity>> BXJGCMSArticles { get; set; }
         public virtual DbSet<ColumnEntity<GeneralTreeEntity>> BXJGCMSColumns { get; set; }
+        #endregion
+
+        #region 设备管理
+        public virtual DbSet<BXJG.Equipment.EquipmentInfo.EquipmentInfoEntity> BXJGEquipmentInfo { get; set; }
         #endregion
 
         public ZLJDbContext(DbContextOptions<ZLJDbContext> options)

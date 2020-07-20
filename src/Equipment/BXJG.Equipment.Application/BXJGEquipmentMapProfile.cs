@@ -1,15 +1,23 @@
 ﻿using AutoMapper;
+using BXJG.Equipment.EquipmentInfo;
 using BXJG.GeneralTree;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BXJG.Shop
+namespace BXJG.Equipment
 {
     public class BXJGEquipmentMapProfile<TUser, TArea, TDataDictionary> : Profile
     {
         public BXJGEquipmentMapProfile()
         {
+            #region 设备定义
+            CreateMap<EquipmentInfoEntity<TDataDictionary>, EquipmentInfoDto>();
+            CreateMap<EquipmentInfoDto, EquipmentInfoEntity<TDataDictionary>>();
+
+            CreateMap<EquipmentInfoEntity, EquipmentInfoDto>();
+            CreateMap<EquipmentInfoDto, EquipmentInfoEntity>();
+            #endregion
             //#region 商品分类
             //CreateMap<ItemCategoryEditDto, ItemCategoryEntity>();
             //CreateMap<ItemCategoryEntity, ItemCategoryDto>();

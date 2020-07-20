@@ -4,9 +4,8 @@ using BXJG.Equipment;
 using System;
 using System.Reflection;
 
-namespace BXJG.Shop
+namespace BXJG.Equipment
 {
-    [DependsOn(typeof(BXJEquipmentCoreModule))]
     public class BXJGEquipmentEFCoreModule : AbpModule
     {
         public override void Initialize()

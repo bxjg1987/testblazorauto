@@ -20,6 +20,7 @@ using BXJG.Shop;
 using BXJG.CMS;
 using BXJG.Common;
 using Abp.Dependency;
+using BXJG.Equipment;
 
 namespace ZLJ
 {
@@ -29,7 +30,8 @@ namespace ZLJ
         typeof(AbpAspNetCoreModule),
         typeof(AbpAspNetCoreSignalRModule),
         typeof(BXJGShopApplicationModule),
-        typeof(BXJGCMSApplicationModule))]
+        typeof(BXJGCMSApplicationModule),
+        typeof(BXJGEquipmentEFCoreModule))]
     public class ZLJWebCoreModule : AbpModule
     {
         private readonly IWebHostEnvironment _env;

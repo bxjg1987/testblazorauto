@@ -42,6 +42,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{48232CB6-562B-44BB-912B-3ED71CCE455E}"
 	ProjectSection(SolutionItems) = preProject
 		docs\开发日记.txt = docs\开发日记.txt
+		docs\模块化开发.txt = docs\模块化开发.txt
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CMS", "CMS", "{EFA1D7C1-F006-4BEE-AFFD-53260672EE58}"
@@ -77,11 +78,11 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "WebAdmin(1)", "..\abpfront\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Equipment", "Equipment", "{214A4B25-4EEC-4729-B68C-74FE69CC7B45}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BXJG.Equipment.Core", "src\Equipment\BXJG.Equipment.Core\BXJG.Equipment.Core.csproj", "{59A72F48-0884-47AE-AABC-5B8B6577B923}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Equipment.Core", "src\Equipment\BXJG.Equipment.Core\BXJG.Equipment.Core.csproj", "{59A72F48-0884-47AE-AABC-5B8B6577B923}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BXJG.Equipment.Application", "src\Equipment\BXJG.Equipment.Application\BXJG.Equipment.Application.csproj", "{9C687A9B-85F8-4B98-8AFF-46DE7562E4A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Equipment.Application", "src\Equipment\BXJG.Equipment.Application\BXJG.Equipment.Application.csproj", "{9C687A9B-85F8-4B98-8AFF-46DE7562E4A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BXJG.Equipment.EFCore", "src\Equipment\BXJG.Equipment.EFCore\BXJG.Equipment.EFCore.csproj", "{CE743573-183A-46E0-8908-4B743F66F108}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Equipment.EFCore", "src\Equipment\BXJG.Equipment.EFCore\BXJG.Equipment.EFCore.csproj", "{CE743573-183A-46E0-8908-4B743F66F108}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

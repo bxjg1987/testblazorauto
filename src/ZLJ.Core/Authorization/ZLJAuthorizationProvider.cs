@@ -2,6 +2,7 @@
 using Abp.Localization;
 using Abp.MultiTenancy;
 using BXJG.CMS.Authorization;
+using BXJG.Equipment.Authorization;
 using BXJG.GeneralTree;
 using BXJG.Shop.Authorization;
 
@@ -18,6 +19,10 @@ namespace ZLJ.Authorization
         {
             var admin = context.CreatePermission(PermissionNames.Administrator, L("Administrator"));
             //{codegenerator}
+
+            //添加设备管理模块的权限
+            admin.AddEquipmentPermission();
+          
             #region 商城
             BXJGShopAuthorizationProvider.SetPermissions(admin);
             #endregion
@@ -61,7 +66,7 @@ namespace ZLJ.Authorization
             xz.CreateChildPermission(PermissionNames.AdministratorBaseInfoAdministrativeUpdate, L("Update"), multiTenancySides: MultiTenancySides.Tenant);
             xz.CreateChildPermission(PermissionNames.AdministratorBaseInfoAdministrativeDelete, L("Delete"), multiTenancySides: MultiTenancySides.Tenant);
 
-            cfg.InitPermission( baseInfo);
+            cfg.InitPermission(baseInfo);
             //var zd = baseInfo.CreateChildPermission(PermissionNames.AdministratorBaseInfoDataDictionary, L("DataDictionary"), multiTenancySides: MultiTenancySides.Tenant);
             //zd.CreateChildPermission(PermissionNames.AdministratorBaseInfoDataDictionaryCreate, L("Add"), multiTenancySides: MultiTenancySides.Tenant);
             //zd.CreateChildPermission(PermissionNames.AdministratorBaseInfoDataDictionaryUpdate, L("Update"), multiTenancySides: MultiTenancySides.Tenant);
@@ -96,7 +101,7 @@ namespace ZLJ.Authorization
             #endregion 
         }
 
-            private static ILocalizableString L(string name)
+        private static ILocalizableString L(string name)
         {
             return new LocalizableString(name, ZLJConsts.LocalizationSourceName);
         }

@@ -2,6 +2,7 @@
 using Abp.Dependency;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
+using BXJG.Equipment;
 using BXJG.GeneralTree;
 using BXJG.Shop;
 using BXJG.Shop.Catalogue;
@@ -16,14 +17,17 @@ namespace ZLJ
 {
     [DependsOn(
         typeof(ZLJCoreModule), 
-        typeof(AbpAutoMapperModule))]
+        typeof(AbpAutoMapperModule),
+        typeof(BXJGEquipmentApplicationModule))]
     public class ZLJApplicationModule : AbpModule
     {
         public override void PreInitialize()
         {
             Configuration.Authorization.Providers.Add<ZLJAuthorizationProvider>();
+
             Configuration.Modules.AbpAutoMapper().Configurators.Add(cfg => cfg.AddMaps(Assembly.GetExecutingAssembly()));
             Configuration.Modules.AbpAutoMapper().Configurators.Add(cfg => cfg.AddProfile<BXJGShopMapProfile<User, AdministrativeEntity, GeneralTreeEntity>>());
+            Configuration.Modules.AbpAutoMapper().Configurators.Add(cfg => cfg.AddProfile<BXJGEquipmentMapProfile<User, AdministrativeEntity, GeneralTreeEntity>>());
         }
 
         public override void Initialize()

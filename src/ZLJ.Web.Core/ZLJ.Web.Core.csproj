@@ -27,6 +27,8 @@
     <ProjectReference Include="..\BXJG.Wechat\BXJG.WeChat.csproj" />
     <ProjectReference Include="..\cms\BXJG.CMS.Application\BXJG.CMS.Application.csproj" />
     <ProjectReference Include="..\cms\BXJG.CMS.Core\BXJG.CMS.Core.csproj" />
+    <ProjectReference Include="..\Equipment\BXJG.Equipment.Application\BXJG.Equipment.Application.csproj" />
+    <ProjectReference Include="..\Equipment\BXJG.Equipment.EFCore\BXJG.Equipment.EFCore.csproj" />
     <ProjectReference Include="..\shop\BXJG.Shop.Application\BXJG.Shop.Application.csproj" />
     <ProjectReference Include="..\ZLJ.Application\ZLJ.Application.csproj" />
     <ProjectReference Include="..\ZLJ.EntityFrameworkCore\ZLJ.EntityFrameworkCore.csproj" />

@@ -5,20 +5,35 @@ using BXJG.Equipment.Authorization;
 using BXJG.Equipment.Localization;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace BXJG.Equipment
 {
-    public class BXJGEquipmentNavigationProvider : NavigationProvider
+    public static class BXJGEquipmentNavigationExt
     {
-        public override void SetNavigation(INavigationProviderContext context)
+        static MenuItemDefinition Create()
         {
-            //{codegenerator}
             var jczl = new MenuItemDefinition("BXJGEquipment",
                                               "BXJGEquipment".BXJGEquipmentL(),
                                                icon: "shebei",
                                                permissionDependency: new SimplePermissionDependency(BXJGEquipmentPermissionNames.BXJGEquipment));
-            context.Manager.MainMenu.AddItem(jczl);
+
+            //初始化更多菜单或子菜单
+            //{codegenerator}
+
+            return jczl;
+        }
+
+        public static MenuDefinition AddBXJGEquipmentNavigation(this MenuDefinition parent)
+        {
+            parent.AddItem(Create());
+            return parent;
+        }
+        public static MenuItemDefinition AddBXJGEquipmentNavigation(this MenuItemDefinition parent)
+        {
+            parent.AddItem(Create());
+            return parent;
             //jczl.AddItem(new MenuItemDefinition("OrganizationUnit",
             //                                    L("OrganizationUnit"),
             //                                    icon: "shebei",

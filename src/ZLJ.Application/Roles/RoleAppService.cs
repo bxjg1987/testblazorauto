@@ -105,7 +105,8 @@ namespace ZLJ.Roles
 
             //var oldRoleNames = role.Permissions.Select(c => c.Name).ToList();
 
-            if (role.IsStatic)
+            //暂时去掉不允许修改超级管理员权限问题
+            if (false)
             {
                 //不判断，前端直接禁用控件
                 //  if (input.Permissions.SequenceEqual(oldRoleNames))

@@ -5,6 +5,7 @@ using BXJG.CMS;
 using BXJG.GeneralTree;
 using BXJG.Shop;
 using ZLJ.Authorization;
+using BXJG.Equipment;
 
 namespace ZLJ.Navigation
 {
@@ -33,6 +34,9 @@ namespace ZLJ.Navigation
             //                                    icon: "shebei",
             //                                    url: "/asset/equipmentInfo/index.html",
             //                                    permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorAssetEquipmentInfo)));
+           
+            context.Manager.MainMenu.AddBXJGEquipmentNavigation();
+
             BXJGShopNavigationProvider.Init(context.Manager.MainMenu);
             BXJGCMSNavigationProvider.Init(context.Manager.MainMenu);
             var jczl = new MenuItemDefinition("BaseInfo",

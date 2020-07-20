@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Authorization\BXJGEquipmentAuthorizationProvider.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Localization\SourceFiles\BXJGEquipment-zh-Hans.xml" />
     <None Remove="Localization\SourceFiles\BXJGEquipment.xml" />
   </ItemGroup>
@@ -20,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\BXJG.GeneralTree\BXJG.GeneralTree.csproj" />
     <ProjectReference Include="..\..\BXJG.Utils\BXJG.Utils.csproj" />
   </ItemGroup>
 

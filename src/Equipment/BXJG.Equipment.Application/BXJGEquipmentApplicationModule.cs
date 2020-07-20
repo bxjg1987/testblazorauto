@@ -12,12 +12,13 @@ namespace BXJG.Equipment
     {
         public override void PreInitialize()
         {
+            //权限和菜单以Permission的扩展方法提供了
             //权限
-            Configuration.Authorization.Providers.Add<BXJGEquipmentAuthorizationProvider>();
+            //Configuration.Authorization.Providers.Add<BXJGEquipmentAuthorizationProvider>();
             //菜单
-            Configuration.Navigation.Providers.Add<BXJGEquipmentNavigationProvider>();
+            //Configuration.Navigation.Providers.Add<BXJGEquipmentNavigationProvider>();
             //需要模块调用方提供必要的泛型参数，所以映射的配置由调用方主动来执行，参考BXJGShopMapProfile
-            Configuration.Modules.AbpAutoMapper().Configurators.Add(cfg => cfg.AddMaps(Assembly.GetExecutingAssembly()));
+            //Configuration.Modules.AbpAutoMapper().Configurators.Add(cfg => cfg.AddMaps(Assembly.GetExecutingAssembly()));
         }
         public override void Initialize()
         {
