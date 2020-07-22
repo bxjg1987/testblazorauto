@@ -5,7 +5,6 @@ using ZLJ.Authorization.Users;
 using ZLJ.MultiTenancy;
 using ZLJ.BaseInfo;
 using BXJG.GeneralTree;
-using ZLJ.Asset;
 using BXJG.Shop.Common;
 using BXJG.Shop.Catalogue;
 using BXJG.Shop.Customer;
@@ -18,6 +17,7 @@ using BXJG.CMS.Ad;
 using BXJG.CMS.Article;
 using BXJG.CMS.Column;
 using System;
+using BXJG.Equipment;
 
 namespace ZLJ.EntityFrameworkCore
 {
@@ -66,7 +66,8 @@ namespace ZLJ.EntityFrameworkCore
             modelBuilder
                 .ApplyConfigurationsFromAssembly(typeof(ZLJEntityFrameworkModule).Assembly)
                 .ApplyConfigurationBXJGShop<User, AdministrativeEntity, GeneralTreeEntity>()
-                .ApplyConfigurationBXJGCMS<GeneralTreeEntity>();
+                .ApplyConfigurationBXJGCMS<GeneralTreeEntity>()
+                .ApplyConfigurationBXJGEquipment();//若这里使用泛型版本，DbSet中又使用EquipmentInfoEntity类型，则报错
         }
 
     }

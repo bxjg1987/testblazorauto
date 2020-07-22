@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ZLJ.Migrations
 {
-    public partial class init57 : Migration
+    public partial class init59 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -545,6 +545,29 @@ namespace ZLJ.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "BXJGEquipmentInfo",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CreationTime = table.Column<DateTime>(nullable: false),
+                    CreatorUserId = table.Column<long>(nullable: true),
+                    LastModificationTime = table.Column<DateTime>(nullable: true),
+                    LastModifierUserId = table.Column<long>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    DeleterUserId = table.Column<long>(nullable: true),
+                    DeletionTime = table.Column<DateTime>(nullable: true),
+                    TenantId = table.Column<int>(nullable: false),
+                    Name = table.Column<string>(maxLength: 200, nullable: false),
+                    Longitude = table.Column<decimal>(nullable: false),
+                    Latitude = table.Column<decimal>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BXJGEquipmentInfo", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "BXJGGeneralTrees",
                 columns: table => new
                 {
@@ -605,6 +628,40 @@ namespace ZLJ.Migrations
                         name: "FK_BXJGShopDictionaries_BXJGShopDictionaries_ParentId",
                         column: x => x.ParentId,
                         principalTable: "BXJGShopDictionaries",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BXJGShopItemCategories",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CreationTime = table.Column<DateTime>(nullable: false),
+                    CreatorUserId = table.Column<long>(nullable: true),
+                    LastModificationTime = table.Column<DateTime>(nullable: true),
+                    LastModifierUserId = table.Column<long>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    DeleterUserId = table.Column<long>(nullable: true),
+                    DeletionTime = table.Column<DateTime>(nullable: true),
+                    Code = table.Column<string>(maxLength: 95, nullable: false),
+                    ParentId = table.Column<long>(nullable: true),
+                    TenantId = table.Column<int>(nullable: true),
+                    DisplayName = table.Column<string>(maxLength: 128, nullable: false),
+                    ExtensionData = table.Column<string>(nullable: true),
+                    Icon = table.Column<string>(type: "varchar(200)", nullable: true),
+                    Image1 = table.Column<string>(type: "varchar(200)", nullable: true),
+                    Image2 = table.Column<string>(type: "varchar(200)", nullable: true),
+                    ShowInHome = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BXJGShopItemCategories", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BXJGShopItemCategories_BXJGShopItemCategories_ParentId",
+                        column: x => x.ParentId,
+                        principalTable: "BXJGShopItemCategories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -1021,7 +1078,7 @@ namespace ZLJ.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ZLJEquipmentInfos",
+                name: "BXJGCMSColumns",
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
@@ -1033,22 +1090,37 @@ namespace ZLJ.Migrations
                     IsDeleted = table.Column<bool>(nullable: false),
                     DeleterUserId = table.Column<long>(nullable: true),
                     DeletionTime = table.Column<DateTime>(nullable: true),
-                    TenantId = table.Column<int>(nullable: false),
-                    Code = table.Column<string>(maxLength: 32, nullable: false),
-                    AreaId = table.Column<long>(nullable: false),
-                    Size = table.Column<string>(maxLength: 200, nullable: true),
-                    Longitude = table.Column<double>(nullable: false),
-                    Latitude = table.Column<double>(nullable: false)
+                    Code = table.Column<string>(maxLength: 95, nullable: false),
+                    ParentId = table.Column<long>(nullable: true),
+                    TenantId = table.Column<int>(nullable: true),
+                    DisplayName = table.Column<string>(maxLength: 128, nullable: false),
+                    ExtensionData = table.Column<string>(nullable: true),
+                    Icon = table.Column<string>(type: "varchar(200)", nullable: true),
+                    ColumnType = table.Column<int>(nullable: false),
+                    ContentTypeId = table.Column<long>(nullable: false),
+                    IsSysDefine = table.Column<bool>(nullable: false),
+                    SeoTitle = table.Column<string>(maxLength: 2000, nullable: true),
+                    SeoDescription = table.Column<string>(maxLength: 5000, nullable: true),
+                    SeoKeyword = table.Column<string>(maxLength: 1000, nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    ListTemplate = table.Column<string>(type: "varchar(200)", nullable: true),
+                    DetailTemplate = table.Column<string>(type: "varchar(200)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ZLJEquipmentInfos", x => x.Id);
+                    table.PrimaryKey("PK_BXJGCMSColumns", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ZLJEquipmentInfos_BXJGGeneralTrees_AreaId",
-                        column: x => x.AreaId,
+                        name: "FK_BXJGCMSColumns_BXJGGeneralTrees_ContentTypeId",
+                        column: x => x.ContentTypeId,
                         principalTable: "BXJGGeneralTrees",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BXJGCMSColumns_BXJGCMSColumns_ParentId",
+                        column: x => x.ParentId,
+                        principalTable: "BXJGCMSColumns",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -1069,9 +1141,11 @@ namespace ZLJ.Migrations
                     Sku = table.Column<string>(maxLength: 50, nullable: true),
                     DescriptionShort = table.Column<string>(maxLength: 10000, nullable: true),
                     DescriptionFull = table.Column<string>(nullable: true),
-                    Images = table.Column<string>(maxLength: 5000, nullable: true),
+                    Images = table.Column<string>(type: "varchar(5000)", nullable: true),
                     CategoryId = table.Column<long>(nullable: false),
                     BrandId = table.Column<long>(nullable: true),
+                    UnitId = table.Column<long>(nullable: true),
+                    Specification = table.Column<string>(maxLength: 500, nullable: true),
                     OldPrice = table.Column<decimal>(nullable: false),
                     Price = table.Column<decimal>(nullable: false),
                     Integral = table.Column<int>(nullable: false),
@@ -1087,17 +1161,23 @@ namespace ZLJ.Migrations
                 {
                     table.PrimaryKey("PK_BXJGShopItems", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BXJGShopItems_BXJGShopDictionaries_BrandId",
+                        name: "FK_BXJGShopItems_BXJGGeneralTrees_BrandId",
                         column: x => x.BrandId,
-                        principalTable: "BXJGShopDictionaries",
+                        principalTable: "BXJGGeneralTrees",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_BXJGShopItems_BXJGShopDictionaries_CategoryId",
+                        name: "FK_BXJGShopItems_BXJGShopItemCategories_CategoryId",
                         column: x => x.CategoryId,
-                        principalTable: "BXJGShopDictionaries",
+                        principalTable: "BXJGShopItemCategories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BXJGShopItems_BXJGGeneralTrees_UnitId",
+                        column: x => x.UnitId,
+                        principalTable: "BXJGGeneralTrees",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -1251,17 +1331,54 @@ namespace ZLJ.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_BXJGShopOrders_BXJGShopDictionaries_DistributionMethodId",
+                        name: "FK_BXJGShopOrders_BXJGGeneralTrees_DistributionMethodId",
                         column: x => x.DistributionMethodId,
-                        principalTable: "BXJGShopDictionaries",
+                        principalTable: "BXJGGeneralTrees",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_BXJGShopOrders_BXJGShopDictionaries_PaymentMethodId",
+                        name: "FK_BXJGShopOrders_BXJGGeneralTrees_PaymentMethodId",
                         column: x => x.PaymentMethodId,
-                        principalTable: "BXJGShopDictionaries",
+                        principalTable: "BXJGGeneralTrees",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BXJGCMSArticles",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CreationTime = table.Column<DateTime>(nullable: false),
+                    CreatorUserId = table.Column<long>(nullable: true),
+                    LastModificationTime = table.Column<DateTime>(nullable: true),
+                    LastModifierUserId = table.Column<long>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    DeleterUserId = table.Column<long>(nullable: true),
+                    DeletionTime = table.Column<DateTime>(nullable: true),
+                    TenantId = table.Column<int>(nullable: false),
+                    ColumnId = table.Column<long>(nullable: false),
+                    Title = table.Column<string>(maxLength: 500, nullable: false),
+                    IsSysDefine = table.Column<bool>(nullable: false),
+                    Content = table.Column<string>(nullable: true),
+                    SeoTitle = table.Column<string>(maxLength: 2000, nullable: true),
+                    SeoDescription = table.Column<string>(maxLength: 5000, nullable: true),
+                    SeoKeyword = table.Column<string>(maxLength: 1000, nullable: true),
+                    Summary = table.Column<string>(maxLength: 5000, nullable: true),
+                    Published = table.Column<bool>(nullable: false),
+                    PublishStartTime = table.Column<DateTimeOffset>(nullable: true),
+                    PublishEndTime = table.Column<DateTimeOffset>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BXJGCMSArticles", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BXJGCMSArticles_BXJGCMSColumns_ColumnId",
+                        column: x => x.ColumnId,
+                        principalTable: "BXJGCMSColumns",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -1664,6 +1781,21 @@ namespace ZLJ.Migrations
                 column: "AdPositionId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_BXJGCMSArticles_ColumnId",
+                table: "BXJGCMSArticles",
+                column: "ColumnId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BXJGCMSColumns_ContentTypeId",
+                table: "BXJGCMSColumns",
+                column: "ContentTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BXJGCMSColumns_ParentId",
+                table: "BXJGCMSColumns",
+                column: "ParentId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_BXJGGeneralTrees_ParentId",
                 table: "BXJGGeneralTrees",
                 column: "ParentId");
@@ -1684,6 +1816,11 @@ namespace ZLJ.Migrations
                 column: "ParentId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_BXJGShopItemCategories_ParentId",
+                table: "BXJGShopItemCategories",
+                column: "ParentId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_BXJGShopItems_BrandId",
                 table: "BXJGShopItems",
                 column: "BrandId");
@@ -1692,6 +1829,11 @@ namespace ZLJ.Migrations
                 name: "IX_BXJGShopItems_CategoryId",
                 table: "BXJGShopItems",
                 column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BXJGShopItems_UnitId",
+                table: "BXJGShopItems",
+                column: "UnitId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BXJGShopOrderItems_ItemId",
@@ -1728,11 +1870,6 @@ namespace ZLJ.Migrations
                 name: "IX_BXJGShopOrders_PaymentMethodId",
                 table: "BXJGShopOrders",
                 column: "PaymentMethodId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ZLJEquipmentInfos_AreaId",
-                table: "ZLJEquipmentInfos",
-                column: "AreaId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -1822,10 +1959,16 @@ namespace ZLJ.Migrations
                 name: "BXJGCMSAdRecords");
 
             migrationBuilder.DropTable(
-                name: "BXJGShopOrderItems");
+                name: "BXJGCMSArticles");
 
             migrationBuilder.DropTable(
-                name: "ZLJEquipmentInfos");
+                name: "BXJGEquipmentInfo");
+
+            migrationBuilder.DropTable(
+                name: "BXJGShopDictionaries");
+
+            migrationBuilder.DropTable(
+                name: "BXJGShopOrderItems");
 
             migrationBuilder.DropTable(
                 name: "AbpEntityDynamicParameters");
@@ -1852,13 +1995,13 @@ namespace ZLJ.Migrations
                 name: "BXJGCMSAdPositions");
 
             migrationBuilder.DropTable(
+                name: "BXJGCMSColumns");
+
+            migrationBuilder.DropTable(
                 name: "BXJGShopItems");
 
             migrationBuilder.DropTable(
                 name: "BXJGShopOrders");
-
-            migrationBuilder.DropTable(
-                name: "BXJGGeneralTrees");
 
             migrationBuilder.DropTable(
                 name: "AbpDynamicParameters");
@@ -1867,10 +2010,13 @@ namespace ZLJ.Migrations
                 name: "AbpEntityChangeSets");
 
             migrationBuilder.DropTable(
+                name: "BXJGShopItemCategories");
+
+            migrationBuilder.DropTable(
                 name: "BXJGShopCustomers");
 
             migrationBuilder.DropTable(
-                name: "BXJGShopDictionaries");
+                name: "BXJGGeneralTrees");
 
             migrationBuilder.DropTable(
                 name: "Administratives");

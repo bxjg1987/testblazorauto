@@ -9,10 +9,10 @@ using System.Text;
 
 namespace BXJG.Equipment.EquipmentInfo
 {
-    public abstract class EquipmentInfoAppService<TEntity> : AsyncCrudAppService<TEntity, EquipmentInfoDto, long, EquipmentInfoGetAllInput, EquipmentInfoEditDto>, IEquipmentInfoAppService
+    public abstract class BXJGEquipmentInfoAppService<TEntity> : AsyncCrudAppService<TEntity, EquipmentInfoDto, long, EquipmentInfoGetAllInput, EquipmentInfoEditDto>, IBXJGEquipmentInfoAppService
         where TEntity : Entity<long>
     {
-        public EquipmentInfoAppService(IRepository<TEntity, long> repository) : base(repository)
+        public BXJGEquipmentInfoAppService(IRepository<TEntity, long> repository) : base(repository)
         {
         }
 
@@ -31,9 +31,9 @@ namespace BXJG.Equipment.EquipmentInfo
     /// 关联的设备信息定义的实体类型为EquipmentInfoEntity，它继承EquipmentInfoEntity<GeneralTreeEntity>。若模块调用方要使用自己的数据字典类型
     /// 则需要自定义实体和应用服务，且都有相关的父类
     /// </summary>
-    public class EquipmentInfoAppService : EquipmentInfoAppService<EquipmentInfoEntity>
+    public class BXJGEquipmentInfoAppService : BXJGEquipmentInfoAppService<EquipmentInfoEntity>
     {
-        public EquipmentInfoAppService(IRepository<EquipmentInfoEntity, long> repository) : base(repository)
+        public BXJGEquipmentInfoAppService(IRepository<EquipmentInfoEntity, long> repository) : base(repository)
         {
         }
     }

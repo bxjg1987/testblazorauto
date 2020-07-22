@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BXJG.Equipment.EquipmentInfo
 {
-    public interface IEquipmentInfoAppService : IAsyncCrudAppService<EquipmentInfoDto, long, EquipmentInfoGetAllInput, EquipmentInfoEditDto>
+    public interface IBXJGEquipmentInfoAppService : IAsyncCrudAppService<EquipmentInfoDto, long, EquipmentInfoGetAllInput, EquipmentInfoEditDto>
     {
     }
 }

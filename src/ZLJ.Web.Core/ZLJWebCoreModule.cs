@@ -31,7 +31,8 @@ namespace ZLJ
         typeof(AbpAspNetCoreSignalRModule),
         typeof(BXJGShopApplicationModule),
         typeof(BXJGCMSApplicationModule),
-        typeof(BXJGEquipmentEFCoreModule))]
+        typeof(BXJGEquipmentEFCoreModule),
+        typeof(BXJGEquipmentApplicationModule))]
     public class ZLJWebCoreModule : AbpModule
     {
         private readonly IWebHostEnvironment _env;
@@ -65,7 +66,8 @@ namespace ZLJ
             Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(GeneralTreeModule).Assembly);
             Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(BXJGShopApplicationModule).Assembly/*,"bxjgshop"*/);//试过 这里用前者没啥鸟用，abp是已实现类所在程序的前缀，默认还是app
             Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(BXJGCMSApplicationModule).Assembly);
-
+            Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(BXJGEquipmentApplicationModule).Assembly);
+            
             ConfigureTokenAuth();
 
             //默认每次启动都会尝试数据库迁移，这里禁用它提高系统启动速度

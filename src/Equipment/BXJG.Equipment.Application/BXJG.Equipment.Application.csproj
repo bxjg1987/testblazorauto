@@ -5,6 +5,11 @@
     <RootNamespace>BXJG.Equipment</RootNamespace>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath></OutputPath>
+    <DocumentationFile>..\..\ZLJ.Web.Host\APIXML\BXJG.Equipment.Application.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Abp" Version="5.9.0" />
     <PackageReference Include="Abp.AutoMapper" Version="5.9.0" />

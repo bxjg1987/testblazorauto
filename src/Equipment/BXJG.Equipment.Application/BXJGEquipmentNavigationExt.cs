@@ -22,6 +22,13 @@ namespace BXJG.Equipment
             //初始化更多菜单或子菜单
             //{codegenerator}
 
+            //添加设备信息的菜单定义
+            jczl.AddItem(new MenuItemDefinition(name: BXJGEquipmentPermissionNames.BXJGEquipmentEquipmentInfo,
+                                                displayName: BXJGEquipmentPermissionNames.BXJGEquipmentEquipmentInfo.BXJGEquipmentL(),
+                                                icon: "dangan",
+                                                url: $"/{BXJGEquipmentPermissionNames.BXJGEquipment}/{BXJGEquipmentPermissionNames.BXJGEquipmentEquipmentInfo}/index.html",
+                                                requiresAuthentication: true,
+                                                permissionDependency: new SimplePermissionDependency()));
             return jczl;
         }
 

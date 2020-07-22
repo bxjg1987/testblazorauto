@@ -17,6 +17,9 @@ namespace BXJG.Equipment
 
             CreateMap<EquipmentInfoEntity, EquipmentInfoDto>();
             CreateMap<EquipmentInfoDto, EquipmentInfoEntity>();
+
+            CreateMap<EquipmentInfoEditDto, EquipmentInfoEntity<TDataDictionary>>();
+            CreateMap<EquipmentInfoEditDto, EquipmentInfoEntity>();
             #endregion
             //#region 商品分类
             //CreateMap<ItemCategoryEditDto, ItemCategoryEntity>();

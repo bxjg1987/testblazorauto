@@ -83,5 +83,6 @@ namespace BXJG.Equipment.EquipmentInfo
     /// 设备信息定义的实体，
     /// 关联的数据字典类型为GeneralTreeEntity，若需要关联到模块调用方自定义的字典时请自定义类并继承此类的泛型版本
     /// </summary>
-    public class EquipmentInfoEntity : EquipmentInfoEntity<GeneralTreeEntity> { }
+    public class EquipmentInfoEntity : EquipmentInfoEntity<GeneralTreeEntity>
+    { }
 }

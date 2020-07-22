@@ -1,5 +1,6 @@
 ﻿using Abp.Authorization;
 using BXJG.Equipment.Localization;
+using BXJG.Utils.Localization;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -18,11 +19,21 @@ namespace BXJG.Equipment.Authorization
         {
             var root = parent.CreateChildPermission(BXJGEquipmentPermissionNames.BXJGEquipment,
                                                     BXJGEquipmentPermissionNames.BXJGEquipment.BXJGEquipmentL(),
-                                                    "设备管理菜单描述信息".BXJGEquipmentL(),
-                                                    Abp.MultiTenancy.MultiTenancySides.Tenant);
+                                                    multiTenancySides: Abp.MultiTenancy.MultiTenancySides.Tenant);
 
             //添加当前模块的更多子权限
-
+            var sbxx = root.CreateChildPermission(BXJGEquipmentPermissionNames.BXJGEquipmentEquipmentInfo,
+                                                  BXJGEquipmentPermissionNames.BXJGEquipmentEquipmentInfo.BXJGEquipmentL(),
+                                                  multiTenancySides: Abp.MultiTenancy.MultiTenancySides.Tenant);
+            sbxx.CreateChildPermission(BXJGEquipmentPermissionNames.BXJGEquipmentEquipmentInfoCreate,
+                                       "新增".UtilsLI(),
+                                       multiTenancySides: Abp.MultiTenancy.MultiTenancySides.Tenant);
+            sbxx.CreateChildPermission(BXJGEquipmentPermissionNames.BXJGEquipmentEquipmentInfoUpdate,
+                                       "修改".UtilsLI(),
+                                       multiTenancySides: Abp.MultiTenancy.MultiTenancySides.Tenant);
+            sbxx.CreateChildPermission(BXJGEquipmentPermissionNames.BXJGEquipmentEquipmentInfoDelete,
+                                       "删除".UtilsLI(),
+                                       multiTenancySides: Abp.MultiTenancy.MultiTenancySides.Tenant);
             return parent;
         }
     }

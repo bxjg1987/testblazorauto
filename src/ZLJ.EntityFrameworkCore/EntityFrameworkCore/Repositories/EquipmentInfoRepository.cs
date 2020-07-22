@@ -7,7 +7,6 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ZLJ.Asset;
 
 namespace ZLJ.EntityFrameworkCore.Repositories
 {

@@ -25,6 +25,7 @@ using BXJG.Shop;
 using BXJG.Utils;
 using BXJG.GeneralTree;
 using BXJG.CMS;
+using BXJG.Equipment;
 
 namespace ZLJ.Web.Host.Startup
 {
@@ -98,18 +99,21 @@ namespace ZLJ.Web.Host.Startup
                 var commentsFileName2 = typeof(GeneralTreeModule).Assembly.GetName().Name + ".XML";
                 var commentsFileName3 = typeof(BXJGUtilsModule).Assembly.GetName().Name + ".XML";
                 var commentsFileName4 = typeof(BXJGCMSApplicationModule).Assembly.GetName().Name + ".XML";
+                var commentsFileName5 = typeof(BXJGEquipmentApplicationModule).Assembly.GetName().Name + ".XML";
 
                 var xmlPath = Path.Combine(basePath, commentsFileName);
                 var xmlPath1 = Path.Combine(basePath, commentsFileName1);
                 var xmlPath2 = Path.Combine(basePath, commentsFileName2);
                 var xmlPath3 = Path.Combine(basePath, commentsFileName3);
                 var xmlPath4 = Path.Combine(basePath, commentsFileName4);
+                var xmlPath5 = Path.Combine(basePath, commentsFileName5);
 
                 options.IncludeXmlComments(xmlPath);
                 options.IncludeXmlComments(xmlPath1);
                 options.IncludeXmlComments(xmlPath2);
                 options.IncludeXmlComments(xmlPath3);
                 options.IncludeXmlComments(xmlPath4);
+                options.IncludeXmlComments(xmlPath5);
 
                 options.DocInclusionPredicate((docName, description) => true);
 
