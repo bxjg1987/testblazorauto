@@ -11,11 +11,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Abp" Version="5.9.0" />
-    <PackageReference Include="Abp.AutoMapper" Version="5.9.0" />
-    <PackageReference Include="Abp.ZeroCore" Version="5.9.0" />
+    <PackageReference Include="Abp.ZeroCore" Version="5.10.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.4" />
-    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.1.2" />
   </ItemGroup>
 
   <ItemGroup>
