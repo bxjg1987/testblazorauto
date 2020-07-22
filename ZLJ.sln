@@ -55,9 +55,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.CMS.Application", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Common", "src\BXJG.Common\BXJG.Common.csproj", "{79F31531-CFFC-4D6C-B409-5DD4EB830283}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "WebAdmin(1)", "..\abpfront\src\WebAdmin\", "{55972824-9A8E-43C3-8CB8-6F438FE2E815}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Equipment", "Equipment", "{214A4B25-4EEC-4729-B68C-74FE69CC7B45}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Equipment.Core", "src\Equipment\BXJG.Equipment.Core\BXJG.Equipment.Core.csproj", "{59A72F48-0884-47AE-AABC-5B8B6577B923}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Equipment.Application", "src\Equipment\BXJG.Equipment.Application\BXJG.Equipment.Application.csproj", "{9C687A9B-85F8-4B98-8AFF-46DE7562E4A7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Equipment.EFCore", "src\Equipment\BXJG.Equipment.EFCore\BXJG.Equipment.EFCore.csproj", "{CE743573-183A-46E0-8908-4B743F66F108}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "WebAdmin", "..\abpfront\src\WebAdmin\", "{55972824-9A8E-43C3-8CB8-6F438FE2E815}"
 	ProjectSection(WebsiteProperties) = preProject
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv2.0"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_52139"
 		Debug.AspNetCompiler.PhysicalPath = "..\abpfront\src\WebAdmin\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_52139\"
@@ -75,14 +83,6 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "WebAdmin(1)", "..\abpfront\
 		VWDPort = "52139"
 		SlnRelativePath = "..\abpfront\src\WebAdmin\"
 	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Equipment", "Equipment", "{214A4B25-4EEC-4729-B68C-74FE69CC7B45}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Equipment.Core", "src\Equipment\BXJG.Equipment.Core\BXJG.Equipment.Core.csproj", "{59A72F48-0884-47AE-AABC-5B8B6577B923}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Equipment.Application", "src\Equipment\BXJG.Equipment.Application\BXJG.Equipment.Application.csproj", "{9C687A9B-85F8-4B98-8AFF-46DE7562E4A7}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Equipment.EFCore", "src\Equipment\BXJG.Equipment.EFCore\BXJG.Equipment.EFCore.csproj", "{CE743573-183A-46E0-8908-4B743F66F108}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -166,10 +166,6 @@ Global
 		{79F31531-CFFC-4D6C-B409-5DD4EB830283}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{79F31531-CFFC-4D6C-B409-5DD4EB830283}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{79F31531-CFFC-4D6C-B409-5DD4EB830283}.Release|Any CPU.Build.0 = Release|Any CPU
-		{55972824-9A8E-43C3-8CB8-6F438FE2E815}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{55972824-9A8E-43C3-8CB8-6F438FE2E815}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{55972824-9A8E-43C3-8CB8-6F438FE2E815}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{55972824-9A8E-43C3-8CB8-6F438FE2E815}.Release|Any CPU.Build.0 = Debug|Any CPU
 		{59A72F48-0884-47AE-AABC-5B8B6577B923}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{59A72F48-0884-47AE-AABC-5B8B6577B923}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59A72F48-0884-47AE-AABC-5B8B6577B923}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -182,6 +178,10 @@ Global
 		{CE743573-183A-46E0-8908-4B743F66F108}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CE743573-183A-46E0-8908-4B743F66F108}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CE743573-183A-46E0-8908-4B743F66F108}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55972824-9A8E-43C3-8CB8-6F438FE2E815}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55972824-9A8E-43C3-8CB8-6F438FE2E815}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55972824-9A8E-43C3-8CB8-6F438FE2E815}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{55972824-9A8E-43C3-8CB8-6F438FE2E815}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
