@@ -60,4 +60,33 @@ namespace BXJG.GeneralTree
         public bool IsSysDefine { get; set; }
         public bool IsTree { get; set; }
     }
+    /// <summary>
+    /// 行政区实体
+    /// </summary>
+    [Table("BXJGDistricts")]
+    public class DistrictEntity : GeneralTreeEntity<DistrictEntity>
+    {
+        /// <summary>
+        /// 主程序的行政级别
+        /// </summary>
+        public DistrictLevel Level { get; set; }
+    }
+    /// <summary>
+    /// 行政区级别
+    /// </summary>
+    public enum DistrictLevel
+    {
+        /// <summary>
+        /// 省、直辖市
+        /// </summary>
+        Province,
+        /// <summary>
+        /// 市
+        /// </summary>
+        City,
+        /// <summary>
+        /// 区县
+        /// </summary>
+        County
+    }
 }
