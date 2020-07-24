@@ -11,12 +11,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Application\**" />
-    <EmbeddedResource Remove="Application\**" />
-    <None Remove="Application\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Remove="Class1.cs" />
     <Compile Remove="Enums\AdministrativeLevel.cs" />
     <Compile Remove="Enums\GetForCombboxType.cs" />
@@ -55,11 +49,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Application\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\BXJG.Common\BXJG.Common.csproj" />
+    <ProjectReference Include="..\..\libs\BXJG.Common\BXJG.Common.csproj" />
   </ItemGroup>
 
 </Project>

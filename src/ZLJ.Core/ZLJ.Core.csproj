@@ -11,6 +11,9 @@
     <UserSecretsId>AbpCompanyName-ZLJ-56C2EF2F-ABD6-4EFC-AAF2-2E81C34E8FB1</UserSecretsId>
     <RootNamespace>ZLJ</RootNamespace>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="Localization\SourceFiles\*.xml" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
   </ItemGroup>
@@ -23,12 +26,10 @@
     <PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="3.3.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BXJG.Attachment\BXJG.Attachment.csproj" />
-    <ProjectReference Include="..\BXJG.File\BXJG.File.csproj" />
-    <ProjectReference Include="..\BXJG.GeneralTree\BXJG.GeneralTree.csproj" />
-    <ProjectReference Include="..\BXJG.Utils\BXJG.Utils.csproj" />
     <ProjectReference Include="..\cms\BXJG.CMS.Core\BXJG.CMS.Core.csproj" />
     <ProjectReference Include="..\Equipment\BXJG.Equipment.Core\BXJG.Equipment.Core.csproj" />
+    <ProjectReference Include="..\Modules\BXJG.Attachment\BXJG.Attachment.csproj" />
+    <ProjectReference Include="..\Modules\BXJG.File\BXJG.File.csproj" />
     <ProjectReference Include="..\shop\BXJG.Shop.Core\BXJG.Shop.Core.csproj" />
   </ItemGroup>
 </Project>

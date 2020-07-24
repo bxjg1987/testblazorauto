@@ -58,7 +58,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BXJG.Wechat\BXJG.WeChat.csproj" />
     <ProjectReference Include="..\ZLJ.Web.Core\ZLJ.Web.Core.csproj" />
   </ItemGroup>
   <ItemGroup>

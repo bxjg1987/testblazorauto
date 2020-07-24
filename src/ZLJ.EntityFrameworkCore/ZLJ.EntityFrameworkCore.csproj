@@ -18,9 +18,6 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BXJG.Attachment\BXJG.Attachment.csproj" />
-    <ProjectReference Include="..\BXJG.File\BXJG.File.csproj" />
-    <ProjectReference Include="..\BXJG.GeneralTree\BXJG.GeneralTree.csproj" />
     <ProjectReference Include="..\cms\BXJG.CMS.Core\BXJG.CMS.Core.csproj" />
     <ProjectReference Include="..\cms\BXJG.CMS.EFCore\BXJG.CMS.EFCore.csproj" />
     <ProjectReference Include="..\Equipment\BXJG.Equipment.EFCore\BXJG.Equipment.EFCore.csproj" />

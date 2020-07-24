@@ -1,0 +1,376 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>BXJG.Utils</name>
+    </assembly>
+    <members>
+        <member name="T:BXJG.Utils.BXJGUtilsAppServiceBase">
+            <summary>
+            Derive your application services from this class.
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.Dto.BulkOperationInput`1">
+            <summary>
+            批量操作时的输入模型
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Dto.BulkOperationInput`1.Ids">
+            <summary>
+            要操作的对象的Id集合
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.Dto.BulkOperationInput">
+            <summary>
+            批量操作时的输入模型
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.Dto.GetForSelectInput">
+            <summary>
+            列表页搜索框、表单页下拉框查询使用的输入模型
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Dto.GetForSelectInput.ForType">
+            <summary>
+            0直接返回查找到的后代节点，
+            
+            大于0的都会尝试增加父节点的返回
+            若ParentText不为空，则取ParentText的本地化文本后创建一个虚拟节点作为父节点，子节点为查询到的列表
+            1若ParentText为空，则尝试加载Id对应的父节点，若未找到则通过Search创建虚拟节点
+            2若未找到则通过Search创建虚拟节点
+              
+            3若ParentText为空，则尝试加载Id对应的父节点，若未找到则通过Form创建虚拟节点
+            4若未找到则通过Form创建虚拟节点
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Dto.GetForSelectInput.ParentText">
+            <summary>
+            给前端一个机会来设置自己想要的值，注意是否需要本地化调用方来决定
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.Enums.EnumConfigItem">
+            <summary>
+            枚举作为下拉框时
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.Enums.EnumManager">
+            <summary>
+            各个模块内都有自己的枚举，各个模块应该提供自己的应用服务向前端提供枚举下拉框的值
+            这些应用服务可以使用此类来简化列表的生成
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.Enums.Gender">
+            <summary>
+            性别
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.Enums.GetEnumForCombboxInput">
+            <summary>
+            获取枚举作为下拉框数据时的输入模型
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Enums.GetEnumForCombboxInput.EnumTypeName">
+            <summary>
+            枚举类型名
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.Enums.IBXJGUtilsEnumAppService">
+            <summary>
+            系统枚举
+            </summary>
+        </member>
+        <member name="M:BXJG.Utils.Extensions.CommonExtensions.RequiredValidate``1(System.Nullable{``0},System.String)">
+            <summary>
+            若为空，则报ArgumentNullException异常
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="val"></param>
+            <param name="parameterName"></param>
+        </member>
+        <member name="M:BXJG.Utils.Extensions.CommonExtensions.RequiredValidate(System.Object,System.String)">
+            <summary>
+            若为空，则报ArgumentNullException异常
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="val"></param>
+            <param name="parameterName"></param>
+        </member>
+        <member name="M:BXJG.Utils.Extensions.CommonExtensions.RequiredValidate(System.String,System.String)">
+            <summary>
+            若为空，则报ArgumentNullException异常
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="val"></param>
+            <param name="parameterName"></param>
+        </member>
+        <member name="M:BXJG.Utils.Extensions.CommonExtensions.RequiredValidate(System.Nullable{System.Int32},System.String)">
+            <summary>
+            若为空，则报ArgumentNullException异常
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="val"></param>
+            <param name="parameterName"></param>
+        </member>
+        <member name="M:BXJG.Utils.Extensions.CommonExtensions.RequiredValidate(System.Nullable{System.DateTime},System.String)">
+            <summary>
+            若为空，则报ArgumentNullException异常
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="val"></param>
+            <param name="parameterName"></param>
+        </member>
+        <member name="M:BXJG.Utils.Extensions.CommonExtensions.RequiredValidate(System.Nullable{System.DateTimeOffset},System.String)">
+            <summary>
+            若为空，则报ArgumentNullException异常
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="val"></param>
+            <param name="parameterName"></param>
+        </member>
+        <member name="M:BXJG.Utils.Extensions.CommonExtensions.RequiredValidate(System.Nullable{System.Decimal},System.String)">
+            <summary>
+            若为空，则报ArgumentNullException异常
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="val"></param>
+            <param name="parameterName"></param>
+        </member>
+        <member name="M:BXJG.Utils.Extensions.CommonExtensions.RequiredValidate(System.Nullable{System.Int64},System.String)">
+            <summary>
+            若为空，则报ArgumentNullException异常
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="val"></param>
+            <param name="parameterName"></param>
+        </member>
+        <member name="M:BXJG.Utils.Extensions.CommonExtensions.RequiredValidate(System.Nullable{System.Boolean},System.String)">
+            <summary>
+            若为空，则报ArgumentNullException异常
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="val"></param>
+            <param name="parameterName"></param>
+        </member>
+        <member name="M:BXJG.Utils.Extensions.CommonExtensions.RequiredValidate(System.Array,System.String)">
+            <summary>
+            若为空，则报ArgumentNullException异常
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="val"></param>
+            <param name="parameterName"></param>
+        </member>
+        <member name="M:BXJG.Utils.Extensions.DateTimeExt.GetAgeString(System.DateTime)">
+            <summary>
+            获得年龄字符串：某个日期点到今天的年龄
+            默认返回：xx岁xx月xx天
+            </summary>
+            <param name="p_FirstDateTime">第1个日期参数</param>
+        </member>
+        <member name="M:BXJG.Utils.Extensions.DateTimeExt.GetAgeString(System.DateTime,System.String)">
+            <summary>
+            获得年龄字符串：某个日期点到今天的年龄
+            默认返回：xx岁xx月xx天
+            </summary>
+            <param name="p_FirstDateTime">第1个日期参数</param>
+            <param name="p_Format">返回字符串的格式，默认为：{0}岁{1}月{2}天</param>
+        </member>
+        <member name="M:BXJG.Utils.Extensions.DateTimeExt.GetAgeString(System.DateTime,System.DateTime)">
+            <summary>
+            获得年龄字符串：两个日期点之间的年龄
+            默认返回：xx岁xx月xx天
+            </summary>
+            <param name="p_FirstDateTime">第1个日期参数</param>
+            <param name="p_SecondDateTime">第2个日期参数</param>
+        </member>
+        <member name="M:BXJG.Utils.Extensions.DateTimeExt.GetAgeString(System.DateTime,System.DateTime,System.String)">
+            <summary>
+            获得年龄字符串：两个日期点之间的年龄
+            默认返回：xx岁xx月xx天
+            </summary>
+            <param name="p_FirstDateTime">第1个日期参数</param>
+            <param name="p_SecondDateTime">第2个日期参数</param>
+            <param name="p_Format">返回字符串的格式，默认为：{0}岁{1}月{2}天</param>
+        </member>
+        <member name="M:BXJG.Utils.Extensions.DateTimeExt.CalculateAgeString(System.DateTime,System.DateTime,System.String)">
+            <summary>
+            计算年龄字符串
+            默认返回：xx岁xx月xx天
+            </summary>
+            <param name="p_FirstDateTime">第1个日期参数</param>
+            <param name="p_SecondDateTime">第2个日期参数</param>
+            <param name="p_Format">返回字符串的格式，默认为：{0}岁{1}月{2}天</param>
+        </member>
+        <member name="M:BXJG.Utils.Extensions.HashHelper.GetMD532(System.String,System.Text.Encoding)">
+            <summary>
+            计算指定字符串的32位md5值
+            微信小程序支付签名算法使用的此方式，编码为utf8
+            已转换为大写
+            </summary>
+            <param name="str"></param>
+            <param name="encoding"></param>
+            <returns></returns>
+        </member>
+        <member name="P:BXJG.Utils.File.Output.RelativePath">
+            <summary>
+            相对路径
+            </summary>
+        </member>
+        <member name="M:BXJG.Utils.Localization.BXJGUtilsLocalizationExt.GetEnum(Abp.Localization.Sources.ILocalizationSource,System.Enum)">
+            <summary>
+            获取指定枚举值对应的本地化文本
+            如：Gender.Man  则获取 “男”
+            </summary>
+            <param name="localizationSource"></param>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Localization.BXJGUtilsLocalizationExt.GetEnum``1(Abp.Localization.Sources.ILocalizationSource,``0)">
+            <summary>
+            获取指定枚举值对应的本地化文本
+            如：Gender.Man  则获取 “男”
+            </summary>
+            <typeparam name="T">枚举类型</typeparam>
+            <param name="localizationSource"></param>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Localization.BXJGUtilsLocalizationExt.GetEnum(Abp.Localization.ILocalizationManager,System.String,System.Enum)">
+            <summary>
+            获取指定枚举值对应的本地化文本
+            如：Gender.Man  则获取 “男”
+            </summary>
+            <param name="localizationManager"></param>
+            <param name="sourceName"></param>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Localization.BXJGUtilsLocalizationExt.GetEnum``1(Abp.Localization.ILocalizationManager,System.String,``0)">
+            <summary>
+            获取指定枚举值对应的本地化文本
+            如：Gender.Man  则获取 “男”
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="localizationManager"></param>
+            <param name="sourceName">本地化资源名</param>
+            <param name="obj">枚举值</param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Localization.BXJGUtilsLocalizationExt.GetForType(Abp.Localization.Sources.ILocalizationSource,System.Type)">
+            <summary>
+            为指定类型本身获取本地化字符串
+            如：.GetForType(typeof(Gender))  返回"性别"
+            </summary>
+            <param name="localizationSource"></param>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Localization.BXJGUtilsLocalizationExt.GetForType``1(Abp.Localization.Sources.ILocalizationSource)">
+            <summary>
+            为指定类型本身获取本地化字符串
+            如：.GetForType(typeof(Gender))  返回"性别"
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="localizationSource"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Localization.BXJGUtilsLocalizationExt.GetForType(Abp.Localization.ILocalizationManager,System.String,System.Type)">
+            <summary>
+            为指定类型本身获取本地化字符串
+            如：.GetForType(typeof(Gender))  返回"性别"
+            </summary>
+            <param name="localizationManager"></param>
+            <param name="sourceName"></param>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Localization.BXJGUtilsLocalizationExt.GetForType``1(Abp.Localization.ILocalizationManager,System.String)">
+            <summary>
+            为指定类型本身获取本地化字符串
+            如：.GetForType(typeof(Gender))  返回"性别"
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="localizationManager"></param>
+            <param name="sourceName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Localization.BXJGUtilsLocalizationExt.GetForTypeOrNull(Abp.Localization.Sources.ILocalizationSource,System.Type)">
+            <summary>
+            为指定类型本身获取本地化字符串
+            如：.GetForType(typeof(Gender))  返回"性别"
+            </summary>
+            <param name="localizationSource"></param>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Localization.BXJGUtilsLocalizationExt.GetForTypeOrNull``1(Abp.Localization.Sources.ILocalizationSource)">
+            <summary>
+            为指定类型本身获取本地化字符串
+            如：.GetForType(typeof(Gender))  返回"性别"
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="localizationSource"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Localization.BXJGUtilsLocalizationExt.GetForTypeOrNull(Abp.Localization.ILocalizationManager,System.String,System.Type)">
+            <summary>
+            为指定类型本身获取本地化字符串
+            如：.GetForType(typeof(Gender))  返回"性别"
+            </summary>
+            <param name="localizationManager"></param>
+            <param name="sourceName"></param>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Localization.BXJGUtilsLocalizationExt.GetForTypeOrNull``1(Abp.Localization.ILocalizationManager,System.String)">
+            <summary>
+            为指定类型本身获取本地化字符串
+            如：.GetForType(typeof(Gender))  返回"性别"
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="localizationManager"></param>
+            <param name="sourceName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Localization.BXJGUtilsLocalizationExt.UtilsL(System.String)">
+            <summary>
+            获取Utils模块中的指定键的本地化字符串
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Localization.BXJGUtilsLocalizationExt.UtilsLI(System.String)">
+            <summary>
+            获取Utils模块中的指定键的本地化ILocalizableString
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="T:BXJG.Utils.RandomHelper">
+            <summary>
+            生成随机数
+            </summary>
+        </member>
+        <member name="M:BXJG.Utils.RandomHelper.RandomBase64(System.Int32)">
+            <summary>
+            a-z A-Z 0-9 生成的随机值 性能略高于Random255
+            </summary>
+            <param name="length"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.RandomHelper.Random255(System.String,System.Byte)">
+            <summary>
+            从指定字符串中生成随机值，做想生成a-z A-Z 0-9的随机值 RandomBase64方法性能略高
+            </summary>
+            <param name="str"></param>
+            <param name="length"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.RandomHelper.RandomNumber(System.Byte)">
+            <summary>
+            随机纯数字的字符串
+            比如生成手机验证码
+            </summary>
+            <param name="length"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

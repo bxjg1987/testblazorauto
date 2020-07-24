@@ -26,12 +26,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\BXJG.GeneralTree\BXJG.GeneralTree.csproj" />
-    <ProjectReference Include="..\..\BXJG.Utils\BXJG.Utils.csproj" />
+    <Folder Include="Configuration\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Configuration\" />
+    <ProjectReference Include="..\..\Modules\BXJG.GeneralTree\BXJG.GeneralTree.csproj" />
   </ItemGroup>
 
 </Project>

@@ -21,10 +21,6 @@
     <Compile Remove="Controllers\FileController.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BXJG.Attachment\BXJG.Attachment.csproj" />
-    <ProjectReference Include="..\BXJG.File\BXJG.File.csproj" />
-    <ProjectReference Include="..\BXJG.Utils\BXJG.Utils.csproj" />
-    <ProjectReference Include="..\BXJG.Wechat\BXJG.WeChat.csproj" />
     <ProjectReference Include="..\cms\BXJG.CMS.Application\BXJG.CMS.Application.csproj" />
     <ProjectReference Include="..\cms\BXJG.CMS.Core\BXJG.CMS.Core.csproj" />
     <ProjectReference Include="..\Equipment\BXJG.Equipment.Application\BXJG.Equipment.Application.csproj" />

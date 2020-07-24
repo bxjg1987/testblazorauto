@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BXJG.Utils\BXJG.Utils.csproj" />
+    <ProjectReference Include="..\..\modules\BXJG.Utils\BXJG.Utils.csproj" />
   </ItemGroup>
 
 </Project>

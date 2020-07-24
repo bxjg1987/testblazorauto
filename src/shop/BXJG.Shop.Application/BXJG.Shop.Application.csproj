@@ -18,8 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\BXJG.Utils\BXJG.Utils.csproj" />
-    <ProjectReference Include="..\..\BXJG.Wechat\BXJG.WeChat.csproj" />
+    <ProjectReference Include="..\..\libs\BXJG.Wechat\BXJG.WeChat.csproj" />
     <ProjectReference Include="..\BXJG.Shop.Core\BXJG.Shop.Core.csproj" />
   </ItemGroup>
 

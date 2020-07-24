@@ -38,11 +38,6 @@
     <Compile Remove="Dto\TreeNodeMoveInput.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BXJG.Attachment\BXJG.Attachment.csproj" />
-    <ProjectReference Include="..\BXJG.File\BXJG.File.csproj" />
-    <ProjectReference Include="..\BXJG.GeneralTree\BXJG.GeneralTree.csproj" />
-    <ProjectReference Include="..\BXJG.Utils\BXJG.Utils.csproj" />
-    <ProjectReference Include="..\BXJG.Wechat\BXJG.WeChat.csproj" />
     <ProjectReference Include="..\cms\BXJG.CMS.Application\BXJG.CMS.Application.csproj" />
     <ProjectReference Include="..\Equipment\BXJG.Equipment.Application\BXJG.Equipment.Application.csproj" />
     <ProjectReference Include="..\shop\BXJG.Shop.Application\BXJG.Shop.Application.csproj" />
