@@ -41,38 +41,6 @@ namespace ZLJ.Authorization
             #region 基础信息
              admin.AddBaseInfoPermission();
             #endregion
-            #region 基础资料
-            var baseInfo = admin.CreateChildPermission(PermissionNames.AdministratorBaseInfo, L("BaseInfo"), multiTenancySides: MultiTenancySides.Tenant);
-
-            var btype = baseInfo.CreateChildPermission(PermissionNames.AdministratorBaseInfoBtype, L("Btype"), multiTenancySides: MultiTenancySides.Tenant);
-            btype.CreateChildPermission(PermissionNames.AdministratorBaseInfoBtypeCreate, L("Add"), multiTenancySides: MultiTenancySides.Tenant);
-            btype.CreateChildPermission(PermissionNames.AdministratorBaseInfoBtypeUpdate, L("Update"), multiTenancySides: MultiTenancySides.Tenant);
-            btype.CreateChildPermission(PermissionNames.AdministratorBaseInfoBtypeDelete, L("Delete"), multiTenancySides: MultiTenancySides.Tenant);
-
-            var uo = baseInfo.CreateChildPermission(PermissionNames.AdministratorBaseInfoOrganizationUnit, L("OrganizationUnit"), multiTenancySides: MultiTenancySides.Tenant);
-            uo.CreateChildPermission(PermissionNames.AdministratorBaseInfoOrganizationUnitAdd, L("Add"), multiTenancySides: MultiTenancySides.Tenant);
-            uo.CreateChildPermission(PermissionNames.AdministratorBaseInfoOrganizationUnitUpdate, L("Update"), multiTenancySides: MultiTenancySides.Tenant);
-            uo.CreateChildPermission(PermissionNames.AdministratorBaseInfoOrganizationUnitDelete, L("Delete"), multiTenancySides: MultiTenancySides.Tenant);
-
-            var job = baseInfo.CreateChildPermission(PermissionNames.AdministratorBaseInfoJob, L("Job"), multiTenancySides: MultiTenancySides.Tenant);
-            job.CreateChildPermission(PermissionNames.AdministratorBaseInfoJobCreate, L("Add"), multiTenancySides: MultiTenancySides.Tenant);
-            job.CreateChildPermission(PermissionNames.AdministratorBaseInfoJobUpdate, L("Update"), multiTenancySides: MultiTenancySides.Tenant);
-            job.CreateChildPermission(PermissionNames.AdministratorBaseInfoJobDelete, L("Delete"), multiTenancySides: MultiTenancySides.Tenant);
-
-            var emp = baseInfo.CreateChildPermission(PermissionNames.AdministratorBaseInfoEmployee, L("Employee"), multiTenancySides: MultiTenancySides.Tenant);
-            emp.CreateChildPermission(PermissionNames.AdministratorBaseInfoEmployeeCreate, L("Add"), multiTenancySides: MultiTenancySides.Tenant);
-            emp.CreateChildPermission(PermissionNames.AdministratorBaseInfoEmployeeUpdate, L("Update"), multiTenancySides: MultiTenancySides.Tenant);
-            emp.CreateChildPermission(PermissionNames.AdministratorBaseInfoEmployeeDelete, L("Delete"), multiTenancySides: MultiTenancySides.Tenant);
-
-         
-            //cfg.InitPermission(baseInfo);
-            //var zd = baseInfo.CreateChildPermission(PermissionNames.AdministratorBaseInfoDataDictionary, L("DataDictionary"), multiTenancySides: MultiTenancySides.Tenant);
-            //zd.CreateChildPermission(PermissionNames.AdministratorBaseInfoDataDictionaryCreate, L("Add"), multiTenancySides: MultiTenancySides.Tenant);
-            //zd.CreateChildPermission(PermissionNames.AdministratorBaseInfoDataDictionaryUpdate, L("Update"), multiTenancySides: MultiTenancySides.Tenant);
-            //zd.CreateChildPermission(PermissionNames.AdministratorBaseInfoDataDictionaryDelete, L("Delete"), multiTenancySides: MultiTenancySides.Tenant);
-
-
-            #endregion
             #region 系统管理
             var sys = admin.CreateChildPermission(PermissionNames.AdministratorSystem, L("System"));
             sys.CreateChildPermission(PermissionNames.AdministratorSystemTenant, L("Tenant"), multiTenancySides: MultiTenancySides.Host);
@@ -90,14 +58,6 @@ namespace ZLJ.Authorization
             sys.CreateChildPermission(PermissionNames.AdministratorSystemLog, L("Log"));
             sys.CreateChildPermission(PermissionNames.AdministratorSystemConfig, L("Settings"));
             #endregion
-            #region Demo
-            var demo = admin.CreateChildPermission(PermissionNames.AdministratorDemo, L("Demo"), multiTenancySides: MultiTenancySides.Tenant);
-            demo.CreateChildPermission(PermissionNames.AdministratorDemoUpload, L("Upload"), multiTenancySides: MultiTenancySides.Tenant);
-            #endregion
-            #region 微信
-            var weChat = admin.CreateChildPermission(PermissionNames.AdministratorWeChat, L("WeChat"), multiTenancySides: MultiTenancySides.Tenant);
-            weChat.CreateChildPermission(PermissionNames.AdministratorWeChatIndex, L("WeChatIndex"), multiTenancySides: MultiTenancySides.Tenant);
-            #endregion 
         }
 
         private static ILocalizableString L(string name)

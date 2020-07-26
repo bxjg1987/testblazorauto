@@ -14,65 +14,19 @@ namespace ZLJ.Navigation
     /// </summary>
     public class ZLJNavigationProvider : NavigationProvider
     {
-        GeneralTreeModuleConfig cfg;
-        public ZLJNavigationProvider(GeneralTreeModuleConfig cfg)
-        {
-            this.cfg = cfg;
-        }
         public override void SetNavigation(INavigationProviderContext context)
         {
-
             //{codegenerator}
-            //var zcgl = new MenuItemDefinition("Asset",
-            //                                     L("Asset management"),
-            //                                     icon: "zican",
-            //                                     permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorAsset));
-            //context.Manager.MainMenu.AddItem(zcgl);
-
-            //zcgl.AddItem(new MenuItemDefinition("EquipmentInfo",
-            //                                    L("Equipment info"),
-            //                                    icon: "shebei",
-            //                                    url: "/asset/equipmentInfo/index.html",
-            //                                    permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorAssetEquipmentInfo)));
+        
             //注册设备管理模块的菜单
             context.Manager.MainMenu.AddBXJGEquipmentNavigation();
 
             BXJGShopNavigationProvider.Init(context.Manager.MainMenu);
             BXJGCMSNavigationProvider.Init(context.Manager.MainMenu);
+
             //注册基础信息模块的菜单
             context.Manager.MainMenu.AddBXJGBaseInfoNavigation();
-            var jczl = new MenuItemDefinition("BaseInfo",
-                                                L("BaseInfo"),
-                                                icon: "dangan",
-                                                permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorBaseInfo));
-            context.Manager.MainMenu.AddItem(jczl);
-            jczl.AddItem(new MenuItemDefinition("OrganizationUnit",
-                                                L("OrganizationUnit"),
-                                                icon: "zuzhi",
-                                                url: "/baseinfo/OrganizationUnit/index.html",
-                                                permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorBaseInfoOrganizationUnit)));
-            //jczl.AddItem(new MenuItemDefinition("Job",
-            //                                    L("Job"),
-            //                                    icon: "zheng",
-            //                                    url: "/baseinfo/job/index.html",
-            //                                    permissionDependency: PermissionNames.AdministratorBaseInfoJob));
-            jczl.AddItem(new MenuItemDefinition("Employee",
-                                                L("Employee"),
-                                                icon: "user",
-                                                url: "/baseinfo/Employee/index.html",
-                                                permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorBaseInfoEmployee)));
-          
-            //var sjzd = cfg.InitNav(jczl);
-            //sjzd.Icon = "shuju";
-            //sjzd.Url = "/baseinfo/generalTree/index.html";
-
-
-            jczl.AddItem(new MenuItemDefinition("Btype",
-                                                L("Btype"),
-                                                url: "/views/baseinfo/btype/index.html",
-                                                icon: "groupbai",
-                                                permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorBaseInfoBtype)));
-
+           
             var xtsz = new MenuItemDefinition("System",
                                                 L("System"),
                                                 icon: "config",
@@ -104,27 +58,6 @@ namespace ZLJ.Navigation
                                                 icon: "config",
                                                 url: "/system/settings.html",
                                                 permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorSystemConfig)));
-            //var demo = new MenuItemDefinition("Demo",
-            //                                    L("Demo"),
-            //                                    icon: "caidanbai",
-            //                                    permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorDemo));
-            //context.Manager.MainMenu.AddItem(demo);
-            //demo.AddItem(new MenuItemDefinition("DemoUpload",
-            //                                    L("Upload"),
-            //                                    icon: "wenjian",
-            //                                    url: "/demo/upload.html",
-            //                                    permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorDemoUpload)));
-            //var weChat = new MenuItemDefinition("WeChat",
-            //                                    L("WeChat"),
-            //                                    icon: "caidanbai",
-            //                                    permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorWeChat));
-            //context.Manager.MainMenu.AddItem(weChat);
-            //weChat.AddItem(new MenuItemDefinition("WeChatIndex",
-            //                                    L("WeChatIndex"),
-            //                                    icon: "wenjian",
-            //                                    url: "/wechat/index.html",
-            //                                    permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorWeChatIndex)));
-
         }
 
         private static ILocalizableString L(string name)
