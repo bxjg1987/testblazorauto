@@ -18,14 +18,13 @@ namespace BXJG.Shop.EFMaps
         /// </summary>
         /// <param name="modelBuilder"></param>
         /// <returns></returns>
-        public static ModelBuilder ApplyConfigurationBXJGShop<TUser,TArea,TDataDictionary>(this ModelBuilder modelBuilder)
+        public static ModelBuilder ApplyConfigurationBXJGShop<TUser>(this ModelBuilder modelBuilder)
         {
             return modelBuilder
                 .ApplyConfigurationsFromAssembly(BXJGShopEFCoreModule.GetAssembly())
-                .ApplyConfiguration(new CustomerMap<TUser, TArea, CustomerEntity<TUser, TArea>>())
-                .ApplyConfiguration(new OrderMap<TUser, TArea, OrderEntity<TUser, TArea, TDataDictionary>, TDataDictionary>())
-                .ApplyConfiguration(new OrderItemMap<TUser, TArea, OrderItemEntity<TUser, TArea, TDataDictionary>, TDataDictionary>())
-                .ApplyConfiguration(new ItemMap<ItemEntity<TDataDictionary>, TDataDictionary>());
+                .ApplyConfiguration(new CustomerMap<TUser, CustomerEntity<TUser>>())
+                .ApplyConfiguration(new OrderMap<TUser, OrderEntity<TUser>>())
+                .ApplyConfiguration(new OrderItemMap<TUser, OrderItemEntity<TUser>>());
 
         }
 
@@ -36,9 +35,9 @@ namespace BXJG.Shop.EFMaps
         //    return modelBuilder.ApplyConfiguration(new TMap());
         //}
 
-        //public static ModelBuilder ApplyConfigurationBXJGShop<TUser, TArea, TEntity, TMap>(this ModelBuilder modelBuilder)
+        //public static ModelBuilder ApplyConfigurationBXJGShop<TUser, TEntity, TMap>(this ModelBuilder modelBuilder)
         //    where TUser : AbpUserBase
-        //    where TArea : GeneralTreeEntity<TArea>, IAdministrative
+        //    
         //    where TEntity : class
         //    where TMap : IEntityTypeConfiguration<TEntity>, new()
         //{

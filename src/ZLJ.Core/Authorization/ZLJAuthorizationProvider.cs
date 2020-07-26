@@ -5,7 +5,7 @@ using BXJG.CMS.Authorization;
 using BXJG.Equipment.Authorization;
 using BXJG.GeneralTree;
 using BXJG.Shop.Authorization;
-
+using BXJG.BaseInfo.Authorization;
 namespace ZLJ.Authorization
 {
     public class ZLJAuthorizationProvider : AuthorizationProvider
@@ -38,6 +38,9 @@ namespace ZLJ.Authorization
             asset.CreateChildPermission(PermissionNames.AdministratorAssetEquipmentInfoDelete, L("Delete"), multiTenancySides: MultiTenancySides.Tenant);
 
             #endregion
+            #region 基础信息
+            admin.AddBaseInfoPermission();
+            #endregion
             #region 基础资料
             var baseInfo = admin.CreateChildPermission(PermissionNames.AdministratorBaseInfo, L("BaseInfo"), multiTenancySides: MultiTenancySides.Tenant);
 
@@ -61,11 +64,7 @@ namespace ZLJ.Authorization
             emp.CreateChildPermission(PermissionNames.AdministratorBaseInfoEmployeeUpdate, L("Update"), multiTenancySides: MultiTenancySides.Tenant);
             emp.CreateChildPermission(PermissionNames.AdministratorBaseInfoEmployeeDelete, L("Delete"), multiTenancySides: MultiTenancySides.Tenant);
 
-            var xz = baseInfo.CreateChildPermission(PermissionNames.AdministratorBaseInfoAdministrative, L("Administrative"), multiTenancySides: MultiTenancySides.Tenant);
-            xz.CreateChildPermission(PermissionNames.AdministratorBaseInfoAdministrativeAdd, L("Add"), multiTenancySides: MultiTenancySides.Tenant);
-            xz.CreateChildPermission(PermissionNames.AdministratorBaseInfoAdministrativeUpdate, L("Update"), multiTenancySides: MultiTenancySides.Tenant);
-            xz.CreateChildPermission(PermissionNames.AdministratorBaseInfoAdministrativeDelete, L("Delete"), multiTenancySides: MultiTenancySides.Tenant);
-
+         
             cfg.InitPermission(baseInfo);
             //var zd = baseInfo.CreateChildPermission(PermissionNames.AdministratorBaseInfoDataDictionary, L("DataDictionary"), multiTenancySides: MultiTenancySides.Tenant);
             //zd.CreateChildPermission(PermissionNames.AdministratorBaseInfoDataDictionaryCreate, L("Add"), multiTenancySides: MultiTenancySides.Tenant);

@@ -7,9 +7,9 @@ using System.Text;
 
 namespace BXJG.CMS.EFCore.EFMaps
 {
-    public class ArticleMap<TDataDictionary> : IEntityTypeConfiguration<ArticleEntity<TDataDictionary>>
+    public class ArticleMap : IEntityTypeConfiguration<ArticleEntity>
     {
-        public void Configure(EntityTypeBuilder<ArticleEntity<TDataDictionary>> builder)
+        public void Configure(EntityTypeBuilder<ArticleEntity> builder)
         {
             builder.Property(c => c.Title).HasMaxLength(BXJGCMSConsts.ArticleTitleMaxLength).IsRequired(true);
             builder.Property(c => c.SeoTitle).HasMaxLength(BXJGCMSConsts.ArticleSeoTitleMaxLength);

@@ -8,10 +8,11 @@ using BXJG.Shop.Catalogue;
 using Abp.Domain.Repositories;
 using BXJG.Shop.Common;
 using BXJG.Shop.Sale;
-using ZLJ.Administrative;
+
 using BXJG.Shop.Customer;
 using BXJG.WeChat.Payment;
 using BXJG.GeneralTree;
+using ZLJ.BaseInfo.Administrative;
 
 namespace ZLJ.Shop
 {
@@ -24,17 +25,16 @@ namespace ZLJ.Shop
             Role,
             TenantManager,
             UserManager,
-            AdministrativeEntity,
             OrderManager,
-            CustomerManager, GeneralTreeEntity>
+            CustomerManager>
     {
         public BXJGShopOrderAppService(
-            IRepository<CustomerEntity<User, AdministrativeEntity>, long> customerRepository,
+            IRepository<CustomerEntity<User>, long> customerRepository,
             CustomerManager customerManager,
-            IRepository<OrderEntity<User, AdministrativeEntity, GeneralTreeEntity>, long> repository,
+            IRepository<OrderEntity<User>, long> repository,
             OrderManager orderManager,
             IRepository<AdministrativeEntity, long> generalTreeManager,
-            IRepository<ItemEntity<GeneralTreeEntity>, long> itemRepository, WeChatPaymentService weChatPaymentService)
+            IRepository<ItemEntity, long> itemRepository, WeChatPaymentService weChatPaymentService)
             : base(customerRepository, customerManager, repository, orderManager, generalTreeManager, itemRepository, weChatPaymentService)
         {
             //sd

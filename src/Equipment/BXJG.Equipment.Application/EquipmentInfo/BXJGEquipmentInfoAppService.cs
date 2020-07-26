@@ -21,7 +21,7 @@ namespace BXJG.Equipment.EquipmentInfo
         //    return base.Repository.DeleteAsync(c => ids.Contains(c.Id));
         //}
 
-        //protected override IQueryable<EquipmentInfoEntity<TDataDictionary>> CreateFilteredQuery(EquipmentInfoGetAllInput input)
+        //protected override IQueryable<EquipmentInfoEntity> CreateFilteredQuery(EquipmentInfoGetAllInput input)
         //{
         //    return base.CreateFilteredQuery(input).Include(c => c.ZZMM);
         //}

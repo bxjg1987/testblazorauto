@@ -7,9 +7,9 @@ using System.Text;
 
 namespace BXJG.CMS.EFCore.EFMaps
 {
-    public class ColumnMap<TDataDictionary> : IEntityTypeConfiguration<ColumnEntity<TDataDictionary>>
+    public class ColumnMap : IEntityTypeConfiguration<ColumnEntity>
     {
-        public void Configure(EntityTypeBuilder<ColumnEntity<TDataDictionary>> builder)
+        public void Configure(EntityTypeBuilder<ColumnEntity> builder)
         {
             builder.Property(c => c.Icon).HasColumnType($"varchar({BXJGCMSConsts.ColumnIconMaxLength})");
             builder.Property(c => c.SeoTitle).HasMaxLength(BXJGCMSConsts.ColumnSeoTitleMaxLength);

@@ -26,6 +26,7 @@
     <PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="3.3.1" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BaseInfo\BXJG.BaseInfo.Core\BXJG.BaseInfo.Core.csproj" />
     <ProjectReference Include="..\cms\BXJG.CMS.Core\BXJG.CMS.Core.csproj" />
     <ProjectReference Include="..\Equipment\BXJG.Equipment.Core\BXJG.Equipment.Core.csproj" />
     <ProjectReference Include="..\Modules\BXJG.Attachment\BXJG.Attachment.csproj" />

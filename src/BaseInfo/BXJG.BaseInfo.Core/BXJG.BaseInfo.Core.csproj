@@ -5,4 +5,19 @@
     <RootNamespace>BXJG.BaseInfo</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Localization\SourceFiles\BXJGBaseInfo-zh-Hans.xml" />
+    <None Remove="Localization\SourceFiles\BXJGBaseInfo.xml" />
+    <None Remove="ve-EA3.tmp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Localization\SourceFiles\BXJGBaseInfo-zh-Hans.xml" />
+    <EmbeddedResource Include="Localization\SourceFiles\BXJGBaseInfo.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Modules\BXJG.GeneralTree\BXJG.GeneralTree.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -9,7 +9,6 @@ using System.Reflection;
 using BXJG.Utils.Localization;
 using Abp.Application.Services.Dto;
 using Abp.Extensions;
-using BXJG.Utils.Dto;
 
 namespace BXJG.Utils.Enums
 {

@@ -17,7 +17,7 @@ using Microsoft.EntityFrameworkCore;
 using Abp.Zero.Configuration;
 using System;
 using BXJG.GeneralTree;
-using BXJG.Utils.Dto;
+using BXJG.Common.Dto;
 
 namespace ZLJ.Roles
 {

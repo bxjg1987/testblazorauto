@@ -3,7 +3,7 @@ using Abp.Application.Services.Dto;
 using Abp.Extensions;
 using Abp.Localization;
 using Abp.Localization.Sources;
-using BXJG.Utils.Dto;
+using BXJG.Common.Dto;
 using BXJG.Utils.Localization;
 using System;
 using System.Collections.Generic;

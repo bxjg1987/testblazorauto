@@ -11,7 +11,7 @@ using System.Text;
 
 namespace BXJG.Shop
 {
-    public class BXJGShopMapProfile<TUser, TArea, TDataDictionary> : Profile
+    public class BXJGShopMapProfile<TUser> : Profile
     {
         public BXJGShopMapProfile()
         {
@@ -33,24 +33,24 @@ namespace BXJG.Shop
             #endregion
 
             #region 上架信息/商品信息
-            CreateMap<ItemEntity<TDataDictionary>, ItemDto>()
+            CreateMap<ItemEntity, ItemDto>()
                .ForMember(c => c.Images, opt => opt.MapFrom(d => d.Images.Split(',', System.StringSplitOptions.None)));
 
-            CreateMap<ItemCreateDto, ItemEntity<TDataDictionary>>()
+            CreateMap<ItemCreateDto, ItemEntity>()
                .ForMember(c => c.Images, opt => opt.MapFrom(c => string.Join(',', c.Images)));
 
-            CreateMap<ItemUpdateDto, ItemEntity<TDataDictionary>>()
+            CreateMap<ItemUpdateDto, ItemEntity>()
                .ForMember(c => c.Images, opt => opt.MapFrom(c => string.Join(',', c.Images)));
             #endregion
 
             #region 显示给顾客的商品信息
-            CreateMap<ItemEntity<TDataDictionary>, FrontItemDto>()
+            CreateMap<ItemEntity, FrontItemDto>()
                .ForMember(c => c.Images, opt => opt.MapFrom(d => d.Images.Split(',', System.StringSplitOptions.None)));
             #endregion
 
             #region 前端顾客和订单相关东东
-            CreateMap<OrderItemEntity<TUser, TArea, TDataDictionary>, CustomerOrderItemDto>();
-            CreateMap<OrderEntity<TUser, TArea, TDataDictionary>, CustomerOrderDto>();
+            CreateMap<OrderItemEntity<TUser>, CustomerOrderItemDto>();
+            CreateMap<OrderEntity<TUser>, CustomerOrderDto>();
             #endregion
 
             #region 会员
@@ -61,11 +61,11 @@ namespace BXJG.Shop
             #endregion
 
             #region 后台管理员+订单
-            CreateMap<OrderEntity<TUser, TArea, TDataDictionary>, OrderDto>();
+            CreateMap<OrderEntity<TUser>, OrderDto>();
             #endregion
 
             #region 后台管理对顾客信息的管理时使用的dto映射
-            CreateMap<CustomerEntity<TUser,TArea>, CustomerDto>();// (typeof(CustomerEntity<,>), typeof(CustomerDto));
+            CreateMap<CustomerEntity<TUser>, CustomerDto>();// (typeof(CustomerEntity<,>), typeof(CustomerDto));
             #endregion
 
             //.ForMember(c => c.IsTreeText, opt => opt.MapFrom(c => c.IsTree.ToString().UtilsL()))

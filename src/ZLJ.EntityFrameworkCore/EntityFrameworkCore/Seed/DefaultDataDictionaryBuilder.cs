@@ -21,9 +21,9 @@ namespace ZLJ.EntityFrameworkCore.Seed
             //未考虑多租户情况
 
             GeneralTreeEntity shebeiquyu = null;
-            if (!_context.GeneralTreeEntities.IgnoreQueryFilters().Any(c => c.TenantId==_tenantId&& c.Code=="00001"))
+            if (!_context.BXJGGeneralTreeEntities.IgnoreQueryFilters().Any(c => c.TenantId==_tenantId&& c.Code=="00001"))
             {
-                shebeiquyu = _context.GeneralTreeEntities.Add(new GeneralTreeEntity
+                shebeiquyu = _context.BXJGGeneralTreeEntities.Add(new GeneralTreeEntity
                 {
                     Code = "00001",
                     DisplayName = "设备分布区域",
@@ -32,9 +32,9 @@ namespace ZLJ.EntityFrameworkCore.Seed
             }
 
             GeneralTreeEntity xueli = null;
-            if (!_context.GeneralTreeEntities.IgnoreQueryFilters().Any(c => c.TenantId == _tenantId && c.Code == "00002"))
+            if (!_context.BXJGGeneralTreeEntities.IgnoreQueryFilters().Any(c => c.TenantId == _tenantId && c.Code == "00002"))
             {
-                xueli = _context.GeneralTreeEntities.Add(new GeneralTreeEntity
+                xueli = _context.BXJGGeneralTreeEntities.Add(new GeneralTreeEntity
                 {
                     Code = "00002",
                     DisplayName = "学历",
@@ -44,9 +44,9 @@ namespace ZLJ.EntityFrameworkCore.Seed
             }
 
             GeneralTreeEntity minzu = null;
-            if (!_context.GeneralTreeEntities.IgnoreQueryFilters().Any(c => c.TenantId == _tenantId && c.Code == "00003"))
+            if (!_context.BXJGGeneralTreeEntities.IgnoreQueryFilters().Any(c => c.TenantId == _tenantId && c.Code == "00003"))
             {
-                minzu = _context.GeneralTreeEntities.Add(new GeneralTreeEntity
+                minzu = _context.BXJGGeneralTreeEntities.Add(new GeneralTreeEntity
                 {
                     Code = "00003",
                     DisplayName = "民族",
@@ -60,9 +60,9 @@ namespace ZLJ.EntityFrameworkCore.Seed
             {
                 var ccc = "000" + i.ToString().PadLeft(2, '0'); ;
 
-                if (!_context.GeneralTreeEntities.IgnoreQueryFilters().Any(c => c.TenantId == _tenantId && c.Code == ccc))
+                if (!_context.BXJGGeneralTreeEntities.IgnoreQueryFilters().Any(c => c.TenantId == _tenantId && c.Code == ccc))
                 {
-                    _context.GeneralTreeEntities.Add(new GeneralTreeEntity
+                    _context.BXJGGeneralTreeEntities.Add(new GeneralTreeEntity
                     {
                         Code = ccc,
                         DisplayName = "预留" + i,
@@ -77,7 +77,7 @@ namespace ZLJ.EntityFrameworkCore.Seed
 
             if (shebeiquyu != null)
             {
-                _context.GeneralTreeEntities.Add(new GeneralTreeEntity
+                _context.BXJGGeneralTreeEntities.Add(new GeneralTreeEntity
                 {
                     Code = "00001.0001",
                     DisplayName = "渝北",
@@ -85,7 +85,7 @@ namespace ZLJ.EntityFrameworkCore.Seed
                     TenantId = _tenantId,
                     ParentId = shebeiquyu.Id
                 });
-                _context.GeneralTreeEntities.Add(new GeneralTreeEntity
+                _context.BXJGGeneralTreeEntities.Add(new GeneralTreeEntity
                 {
                     Code = "00001.0002",
                     DisplayName = "九龙坡",
@@ -97,7 +97,7 @@ namespace ZLJ.EntityFrameworkCore.Seed
 
             if (xueli != null)
             {
-                _context.GeneralTreeEntities.Add(new GeneralTreeEntity
+                _context.BXJGGeneralTreeEntities.Add(new GeneralTreeEntity
                 {
                     Code = "00002.0001",
                     DisplayName = "博士及以上",
@@ -105,7 +105,7 @@ namespace ZLJ.EntityFrameworkCore.Seed
                     TenantId = _tenantId,
                     ParentId = xueli.Id
                 });
-                _context.GeneralTreeEntities.Add(new GeneralTreeEntity
+                _context.BXJGGeneralTreeEntities.Add(new GeneralTreeEntity
                 {
                     Code = "00002.0002",
                     DisplayName = "硕士",
@@ -117,7 +117,7 @@ namespace ZLJ.EntityFrameworkCore.Seed
 
             if (minzu != null)
             {
-                _context.GeneralTreeEntities.Add(new GeneralTreeEntity
+                _context.BXJGGeneralTreeEntities.Add(new GeneralTreeEntity
                 {
                     Code = "00003.0001",
                     DisplayName = "汉族",
@@ -125,7 +125,7 @@ namespace ZLJ.EntityFrameworkCore.Seed
                     TenantId = _tenantId,
                     ParentId = minzu.Id
                 });
-                _context.GeneralTreeEntities.Add(new GeneralTreeEntity
+                _context.BXJGGeneralTreeEntities.Add(new GeneralTreeEntity
                 {
                     Code = "00003.0002",
                     DisplayName = "维吾尔族",
@@ -141,9 +141,9 @@ namespace ZLJ.EntityFrameworkCore.Seed
 
             ////岗位
             //GeneralTreeEntity gangwei = null;
-            //if (!_context.GeneralTreeEntities.Any(c => c.Id == 4))
+            //if (!_context.BXJGGeneralTreeEntities.Any(c => c.Id == 4))
             //{
-            //    gangwei= _context.GeneralTreeEntities.Add(new GeneralTreeEntity
+            //    gangwei= _context.BXJGGeneralTreeEntities.Add(new GeneralTreeEntity
             //    {
             //        Code = "00004",
             //        DisplayName = "岗位",
@@ -152,9 +152,9 @@ namespace ZLJ.EntityFrameworkCore.Seed
             //    }).Entity;
             //}
             ////设备分类
-            //if (!_context.GeneralTreeEntities.Any(c => c.Id == 5))
+            //if (!_context.BXJGGeneralTreeEntities.Any(c => c.Id == 5))
             //{
-            //    _context.GeneralTreeEntities.Add(new GeneralTreeEntity
+            //    _context.BXJGGeneralTreeEntities.Add(new GeneralTreeEntity
             //    {
             //        Code = "00005",
             //        DisplayName = "设备分类",
@@ -164,9 +164,9 @@ namespace ZLJ.EntityFrameworkCore.Seed
             //    });
             //}
             ////单位
-            //if (!_context.GeneralTreeEntities.Any(c => c.Id == 6))
+            //if (!_context.BXJGGeneralTreeEntities.Any(c => c.Id == 6))
             //{
-            //    _context.GeneralTreeEntities.Add(new GeneralTreeEntity
+            //    _context.BXJGGeneralTreeEntities.Add(new GeneralTreeEntity
             //    {
             //        Code = "00006",
             //        DisplayName = "单位",
@@ -175,9 +175,9 @@ namespace ZLJ.EntityFrameworkCore.Seed
             //    });
             //}
             ////品牌
-            //if (!_context.GeneralTreeEntities.Any(c => c.Id == 6))
+            //if (!_context.BXJGGeneralTreeEntities.Any(c => c.Id == 6))
             //{
-            //    _context.GeneralTreeEntities.Add(new GeneralTreeEntity
+            //    _context.BXJGGeneralTreeEntities.Add(new GeneralTreeEntity
             //    {
             //        Code = "00007",
             //        DisplayName = "品牌",

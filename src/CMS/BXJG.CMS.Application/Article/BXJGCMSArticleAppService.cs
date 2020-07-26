@@ -12,22 +12,23 @@ using Abp.Collections.Extensions;
 using Abp.Linq.Extensions;
 using Abp.Extensions;
 using BXJG.CMS.Column;
+using BXJG.Common.Dto;
 
 namespace BXJG.CMS.Article
 {
     /// <summary>
     /// 后台管理文章的应用服务
     /// </summary>
-    public class BXJGCMSArticleAppService<TDataDictionary> : AsyncCrudAppService<ArticleEntity<TDataDictionary>,
+    public class BXJGCMSArticleAppService : AsyncCrudAppService<ArticleEntity,
                                                                                  ArticleDto,
                                                                                  long,
                                                                                  GetAllArticleInput,
                                                                                  ArticleEditDto>, IBXJGCMSArticleAppService
-        where TDataDictionary : GeneralTreeEntity<TDataDictionary>
+        
     {
-       private readonly  IRepository<ColumnEntity<TDataDictionary>, long> columnRepository;
+       private readonly  IRepository<ColumnEntity, long> columnRepository;
 
-        public BXJGCMSArticleAppService(IRepository<ArticleEntity<TDataDictionary>, long> repository, IRepository<ColumnEntity<TDataDictionary>, long> columnRepository) : base(repository)
+        public BXJGCMSArticleAppService(IRepository<ArticleEntity, long> repository, IRepository<ColumnEntity, long> columnRepository) : base(repository)
         {
             LocalizationSourceName = BXJGCMSConsts.LocalizationSourceName;
 
@@ -43,12 +44,12 @@ namespace BXJG.CMS.Article
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public Task BulkDeleteAsync(DeleteInput input)
+        public Task BulkDeleteAsync(BatchOperationInputLong input)
         {
             return Repository.DeleteAsync(c => input.Ids.Contains(c.Id));
         }
 
-        protected override IQueryable<ArticleEntity<TDataDictionary>> CreateFilteredQuery(GetAllArticleInput input)
+        protected override IQueryable<ArticleEntity> CreateFilteredQuery(GetAllArticleInput input)
         {
             //这种做法不好，查两次，且为了查code 还使用了同步。最好是不要这个直接一条语句查询
             //当然最最好的办法是强制要求调用方传递code，提供columnId的唯一目的是考虑调用方有时候确实不太方便传递code

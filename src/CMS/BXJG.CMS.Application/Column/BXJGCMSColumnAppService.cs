@@ -12,7 +12,7 @@ namespace BXJG.CMS.Column
     /// 后台管理管理CMS栏目的服务
     /// </summary>
     /// <typeparam name="TDataDictionary"></typeparam>
-    public class BXJGCMSColumnAppService<TDataDictionary> : GeneralTreeAppServiceBase<ColumnDto,
+    public class BXJGCMSColumnAppService : GeneralTreeAppServiceBase<ColumnDto,
                                                                                       ColumnEditDto,
                                                                                       GetAllInput,
                                                                                       GetForSelectInput,
@@ -20,11 +20,11 @@ namespace BXJG.CMS.Column
                                                                                       GetForSelectInput,
                                                                                       ColumnCombboxDto,
                                                                                       GeneralTreeNodeMoveInput,
-                                                                                      ColumnEntity<TDataDictionary>,
-                                                                                      ColumnManager<TDataDictionary>>, IBXJGCMSColumnAppService
-        where TDataDictionary : GeneralTreeEntity<TDataDictionary>
+                                                                                      ColumnEntity,
+                                                                                      ColumnManager>, IBXJGCMSColumnAppService
+        
     {
-        public BXJGCMSColumnAppService(IRepository<ColumnEntity<TDataDictionary>, long> repository, ColumnManager<TDataDictionary> manager)
+        public BXJGCMSColumnAppService(IRepository<ColumnEntity, long> repository, ColumnManager manager)
             : base(repository,
                    manager,
                    BXJGCMSPermissions.ColumnCreate,
@@ -33,7 +33,7 @@ namespace BXJG.CMS.Column
                    BXJGCMSPermissions.Column)
         { }
 
-        protected override IQueryable<ColumnEntity<TDataDictionary>> GetAllFiltered(GetAllInput q, string parentCode)
+        protected override IQueryable<ColumnEntity> GetAllFiltered(GetAllInput q, string parentCode)
         {
             return base.GetAllFiltered(q, parentCode).Include(c=>c.ContentType);
         }

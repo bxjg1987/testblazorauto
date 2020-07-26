@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Services.Dto;
+using BXJG.Common.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace BXJG.GeneralTree
     /// 列表页搜索框、表单页下拉框查询使用的输入模型
     /// </summary>
     /// <typeparam name="TId"></typeparam>
-    public class GeneralTreeGetForSelectInput : BXJG.Utils.Dto.GetForSelectInput
+    public class GeneralTreeGetForSelectInput : GetForSelectInput
     {
         /// <summary>
         /// 0直接返回查找到的后代节点，

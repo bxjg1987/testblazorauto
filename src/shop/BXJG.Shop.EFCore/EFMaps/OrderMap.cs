@@ -14,10 +14,10 @@ namespace BXJG.Shop.EFMaps
     /// 订单的ef映射类，请在主程序的DBContext.OnModelCreating注册
     /// </summary>
     /// <typeparam name="TUser"></typeparam>
-    public class OrderMap<TUser, TArea,TEntity, TDataDictionary> : IEntityTypeConfiguration<TEntity>
+    public class OrderMap<TUser,TEntity> : IEntityTypeConfiguration<TEntity>
         //where TUser : AbpUserBase
-        //where TArea : GeneralTreeEntity<TArea>, IAdministrative
-        where TEntity: OrderEntity<TUser, TArea, TDataDictionary>
+        //
+        where TEntity: OrderEntity<TUser>
     {
         public virtual void Configure(EntityTypeBuilder<TEntity> builder)
         {

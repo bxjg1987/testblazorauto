@@ -11,9 +11,10 @@ using BXJG.Shop.Seed;
 using ZLJ.MultiTenancy;
 using ZLJ.Authorization.Roles;
 using ZLJ.Authorization.Users;
-using ZLJ.Administrative;
+
 using BXJG.CMS.EFCore.Seed;
 using BXJG.GeneralTree;
+using BXJG.BaseInfo.EFCore.Seed;
 
 namespace ZLJ.EntityFrameworkCore.Seed
 {
@@ -38,10 +39,13 @@ namespace ZLJ.EntityFrameworkCore.Seed
             //以下内容应该放进DefaultTenantBuilder中
             new DefaultOrganizationUnit(context, 1).Create();
             new DefaultDataDictionaryBuilder(context, 1).Create();
-            new DefaultAdministrativeBuilder(context, 1).Create();
+            // new DefaultAdministrativeBuilder(context, 1).Create();
+
+            //初始化基础信息模块中的数据
+            new DefaultBXJGBaseInfoBuilder<Tenant, Role, User, ZLJDbContext>(context, 1).Create();
 
             //默认商城数据迁移
-            var sc = new DefaultBXJGShopBuilder<Tenant, Role, User, ZLJDbContext, AdministrativeEntity, GeneralTreeEntity>(context, 1);
+            var sc = new DefaultBXJGShopBuilder<Tenant, Role, User, ZLJDbContext>(context, 1);
             sc.CreateDataDictionary();//这个一定要放上面，因为后续演示数据的建立是需要字典的
             sc.Create();
             //cms演示数据

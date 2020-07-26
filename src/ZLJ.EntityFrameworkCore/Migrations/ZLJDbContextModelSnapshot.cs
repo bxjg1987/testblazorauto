@@ -15,7 +15,7 @@ namespace ZLJ.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.4")
+                .HasAnnotation("ProductVersion", "3.1.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -1517,7 +1517,7 @@ namespace ZLJ.Migrations
                     b.ToTable("BXJGCMSAdRecords");
                 });
 
-            modelBuilder.Entity("BXJG.CMS.Article.ArticleEntity<BXJG.GeneralTree.GeneralTreeEntity>", b =>
+            modelBuilder.Entity("BXJG.CMS.Article.ArticleEntity", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -1594,7 +1594,7 @@ namespace ZLJ.Migrations
                     b.ToTable("BXJGCMSArticles");
                 });
 
-            modelBuilder.Entity("BXJG.CMS.Column.ColumnEntity<BXJG.GeneralTree.GeneralTreeEntity>", b =>
+            modelBuilder.Entity("BXJG.CMS.Column.ColumnEntity", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -1718,9 +1718,7 @@ namespace ZLJ.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(200)")
-                        .HasMaxLength(200);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("TenantId")
                         .HasColumnType("int");
@@ -1856,7 +1854,7 @@ namespace ZLJ.Migrations
                     b.ToTable("BXJGShopItemCategories");
                 });
 
-            modelBuilder.Entity("BXJG.Shop.Catalogue.ItemEntity<BXJG.GeneralTree.GeneralTreeEntity>", b =>
+            modelBuilder.Entity("BXJG.Shop.Catalogue.ItemEntity", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -2023,7 +2021,7 @@ namespace ZLJ.Migrations
                     b.ToTable("BXJGShopDictionaries");
                 });
 
-            modelBuilder.Entity("BXJG.Shop.Customer.CustomerEntity<ZLJ.Authorization.Users.User, ZLJ.Administrative.AdministrativeEntity>", b =>
+            modelBuilder.Entity("BXJG.Shop.Customer.CustomerEntity<ZLJ.Authorization.Users.User>", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -2086,7 +2084,7 @@ namespace ZLJ.Migrations
                     b.ToTable("BXJGShopCustomers");
                 });
 
-            modelBuilder.Entity("BXJG.Shop.Sale.OrderEntity<ZLJ.Authorization.Users.User, ZLJ.Administrative.AdministrativeEntity, BXJG.GeneralTree.GeneralTreeEntity>", b =>
+            modelBuilder.Entity("BXJG.Shop.Sale.OrderEntity<ZLJ.Authorization.Users.User>", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -2196,7 +2194,7 @@ namespace ZLJ.Migrations
                     b.ToTable("BXJGShopOrders");
                 });
 
-            modelBuilder.Entity("BXJG.Shop.Sale.OrderItemEntity<ZLJ.Authorization.Users.User, ZLJ.Administrative.AdministrativeEntity, BXJG.GeneralTree.GeneralTreeEntity>", b =>
+            modelBuilder.Entity("BXJG.Shop.Sale.OrderItemEntity<ZLJ.Authorization.Users.User>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -2242,63 +2240,6 @@ namespace ZLJ.Migrations
                     b.HasIndex("OrderId");
 
                     b.ToTable("BXJGShopOrderItems");
-                });
-
-            modelBuilder.Entity("ZLJ.Administrative.AdministrativeEntity", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(95)")
-                        .HasMaxLength(95);
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("CreatorUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("DeleterUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DisplayName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
-
-                    b.Property<string>("ExtensionData")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("LastModifierUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("Level")
-                        .HasColumnType("int");
-
-                    b.Property<long?>("ParentId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int?>("TenantId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ParentId");
-
-                    b.ToTable("Administratives");
                 });
 
             modelBuilder.Entity("ZLJ.Authorization.Roles.Role", b =>
@@ -2500,6 +2441,63 @@ namespace ZLJ.Migrations
                     b.HasIndex("TenantId", "NormalizedUserName");
 
                     b.ToTable("AbpUsers");
+                });
+
+            modelBuilder.Entity("ZLJ.BaseInfo.Administrative.AdministrativeEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(95)")
+                        .HasMaxLength(95);
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(128)")
+                        .HasMaxLength(128);
+
+                    b.Property<string>("ExtensionData")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("Level")
+                        .HasColumnType("int");
+
+                    b.Property<long?>("ParentId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("BXJGBaseInfoAdministratives");
                 });
 
             modelBuilder.Entity("ZLJ.MultiTenancy.Tenant", b =>
@@ -2764,16 +2762,16 @@ namespace ZLJ.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("BXJG.CMS.Article.ArticleEntity<BXJG.GeneralTree.GeneralTreeEntity>", b =>
+            modelBuilder.Entity("BXJG.CMS.Article.ArticleEntity", b =>
                 {
-                    b.HasOne("BXJG.CMS.Column.ColumnEntity<BXJG.GeneralTree.GeneralTreeEntity>", "Column")
+                    b.HasOne("BXJG.CMS.Column.ColumnEntity", "Column")
                         .WithMany()
                         .HasForeignKey("ColumnId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("BXJG.CMS.Column.ColumnEntity<BXJG.GeneralTree.GeneralTreeEntity>", b =>
+            modelBuilder.Entity("BXJG.CMS.Column.ColumnEntity", b =>
                 {
                     b.HasOne("BXJG.GeneralTree.GeneralTreeEntity", "ContentType")
                         .WithMany()
@@ -2781,7 +2779,7 @@ namespace ZLJ.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BXJG.CMS.Column.ColumnEntity<BXJG.GeneralTree.GeneralTreeEntity>", "Parent")
+                    b.HasOne("BXJG.CMS.Column.ColumnEntity", "Parent")
                         .WithMany("Children")
                         .HasForeignKey("ParentId");
                 });
@@ -2800,7 +2798,7 @@ namespace ZLJ.Migrations
                         .HasForeignKey("ParentId");
                 });
 
-            modelBuilder.Entity("BXJG.Shop.Catalogue.ItemEntity<BXJG.GeneralTree.GeneralTreeEntity>", b =>
+            modelBuilder.Entity("BXJG.Shop.Catalogue.ItemEntity", b =>
                 {
                     b.HasOne("BXJG.GeneralTree.GeneralTreeEntity", "Brand")
                         .WithMany()
@@ -2824,9 +2822,9 @@ namespace ZLJ.Migrations
                         .HasForeignKey("ParentId");
                 });
 
-            modelBuilder.Entity("BXJG.Shop.Customer.CustomerEntity<ZLJ.Authorization.Users.User, ZLJ.Administrative.AdministrativeEntity>", b =>
+            modelBuilder.Entity("BXJG.Shop.Customer.CustomerEntity<ZLJ.Authorization.Users.User>", b =>
                 {
-                    b.HasOne("ZLJ.Administrative.AdministrativeEntity", "Area")
+                    b.HasOne("ZLJ.BaseInfo.Administrative.AdministrativeEntity", "Area")
                         .WithMany()
                         .HasForeignKey("AreaId");
 
@@ -2837,15 +2835,15 @@ namespace ZLJ.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("BXJG.Shop.Sale.OrderEntity<ZLJ.Authorization.Users.User, ZLJ.Administrative.AdministrativeEntity, BXJG.GeneralTree.GeneralTreeEntity>", b =>
+            modelBuilder.Entity("BXJG.Shop.Sale.OrderEntity<ZLJ.Authorization.Users.User>", b =>
                 {
-                    b.HasOne("ZLJ.Administrative.AdministrativeEntity", "Area")
+                    b.HasOne("ZLJ.BaseInfo.Administrative.AdministrativeEntity", "Area")
                         .WithMany()
                         .HasForeignKey("AreaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BXJG.Shop.Customer.CustomerEntity<ZLJ.Authorization.Users.User, ZLJ.Administrative.AdministrativeEntity>", "Customer")
+                    b.HasOne("BXJG.Shop.Customer.CustomerEntity<ZLJ.Authorization.Users.User>", "Customer")
                         .WithMany()
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2860,26 +2858,19 @@ namespace ZLJ.Migrations
                         .HasForeignKey("PaymentMethodId");
                 });
 
-            modelBuilder.Entity("BXJG.Shop.Sale.OrderItemEntity<ZLJ.Authorization.Users.User, ZLJ.Administrative.AdministrativeEntity, BXJG.GeneralTree.GeneralTreeEntity>", b =>
+            modelBuilder.Entity("BXJG.Shop.Sale.OrderItemEntity<ZLJ.Authorization.Users.User>", b =>
                 {
-                    b.HasOne("BXJG.Shop.Catalogue.ItemEntity<BXJG.GeneralTree.GeneralTreeEntity>", "Item")
+                    b.HasOne("BXJG.Shop.Catalogue.ItemEntity", "Item")
                         .WithMany()
                         .HasForeignKey("ItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BXJG.Shop.Sale.OrderEntity<ZLJ.Authorization.Users.User, ZLJ.Administrative.AdministrativeEntity, BXJG.GeneralTree.GeneralTreeEntity>", "Order")
+                    b.HasOne("BXJG.Shop.Sale.OrderEntity<ZLJ.Authorization.Users.User>", "Order")
                         .WithMany("Items")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("ZLJ.Administrative.AdministrativeEntity", b =>
-                {
-                    b.HasOne("ZLJ.Administrative.AdministrativeEntity", "Parent")
-                        .WithMany("Children")
-                        .HasForeignKey("ParentId");
                 });
 
             modelBuilder.Entity("ZLJ.Authorization.Roles.Role", b =>
@@ -2910,6 +2901,13 @@ namespace ZLJ.Migrations
                     b.HasOne("ZLJ.Authorization.Users.User", "LastModifierUser")
                         .WithMany()
                         .HasForeignKey("LastModifierUserId");
+                });
+
+            modelBuilder.Entity("ZLJ.BaseInfo.Administrative.AdministrativeEntity", b =>
+                {
+                    b.HasOne("ZLJ.BaseInfo.Administrative.AdministrativeEntity", "Parent")
+                        .WithMany("Children")
+                        .HasForeignKey("ParentId");
                 });
 
             modelBuilder.Entity("ZLJ.MultiTenancy.Tenant", b =>

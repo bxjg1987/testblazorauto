@@ -5,7 +5,7 @@ using Abp.Zero.EntityFrameworkCore;
 using BXJG.CMS.EFCore.Seed;
 using BXJG.GeneralTree;
 using BXJG.Shop.Seed;
-using ZLJ.Administrative;
+
 using ZLJ.Authorization.Roles;
 using ZLJ.Authorization.Users;
 using ZLJ.EntityFrameworkCore.Seed;

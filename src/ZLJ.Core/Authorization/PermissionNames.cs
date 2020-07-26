@@ -38,11 +38,6 @@
         public const string AdministratorBaseInfoEmployeeUpdate = "Administrator.BaseInfo.Employee.Update";
         public const string AdministratorBaseInfoEmployeeDelete = "Administrator.BaseInfo.Employee.Delete";
 
-        public const string AdministratorBaseInfoAdministrative = "Administrator.BaseInfo.Administrative";
-        public const string AdministratorBaseInfoAdministrativeAdd = "Administrator.BaseInfo.Administrative.Add";
-        public const string AdministratorBaseInfoAdministrativeUpdate = "Administrator.BaseInfo.Administrative.Update";
-        public const string AdministratorBaseInfoAdministrativeDelete = "Administrator.BaseInfo.Administrative.Delete";
-
         public const string AdministratorBaseInfoDataDictionary = "Administrator.BaseInfo.DataDictionary";
         public const string AdministratorBaseInfoDataDictionaryCreate = "Administrator.BaseInfo.DataDictionary.Create";
         public const string AdministratorBaseInfoDataDictionaryUpdate = "Administrator.BaseInfo.DataDictionary.Update";

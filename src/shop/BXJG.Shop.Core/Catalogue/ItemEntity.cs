@@ -77,8 +77,8 @@ namespace BXJG.Shop.Catalogue
     /// 设计时考虑不提供继承的方式扩展，因为那样太复杂
     /// 你可以使用关联和事件的方式参与到这个模块中来
     /// </summary>
-    public class ItemEntity<TDataDictionary> : FullAuditedEntity<long>, IMustHaveTenant, IAggregateRoot<long>
-    //where TDataDictionary: GeneralTreeEntity<TDataDictionary>
+    public class ItemEntity : FullAuditedEntity<long>, IMustHaveTenant, IAggregateRoot<long>
+    //where TDataDictionary: GeneralTreeEntity
     {
         public int TenantId { get; set; }
      
@@ -114,7 +114,7 @@ namespace BXJG.Shop.Catalogue
         /// <summary>
         /// 品牌
         /// </summary>
-        public virtual TDataDictionary Brand { get; set; }
+        public virtual GeneralTreeEntity Brand { get; set; }
         /// <summary>
         /// 品牌id
         /// </summary>
@@ -126,7 +126,7 @@ namespace BXJG.Shop.Catalogue
         /// <summary>
         /// 单位外键实体
         /// </summary>
-        public virtual TDataDictionary Unit { get; set; }
+        public virtual GeneralTreeEntity Unit { get; set; }
         /// <summary>
         /// 单位
         /// </summary>
@@ -202,7 +202,7 @@ namespace BXJG.Shop.Catalogue
             Published = true;
             AvailableStart = yxq ?? DateTimeOffset.Now;
             AvailableEnd = js ?? AvailableStart.Value.AddYears(10);
-            DomainEvents.Add(new ItemPublishChangedEventData<ItemEntity< TDataDictionary>>(this));
+            DomainEvents.Add(new ItemPublishChangedEventData<ItemEntity>(this));
             //return EventBus.TriggerAsync(new EntityEventData<ItemEntity>(this));
         }
         /// <summary>
@@ -223,8 +223,8 @@ namespace BXJG.Shop.Catalogue
         public void UnPublish()
         {
             Published = false;
-            DomainEvents.Add(new ItemPublishChangedEventData<ItemEntity<TDataDictionary>>(this));
-            // return EventBus.TriggerAsync(new ItemPublishChangedEventData<ItemEntity<TDataDictionary>>(item));
+            DomainEvents.Add(new ItemPublishChangedEventData<ItemEntity>(this));
+            // return EventBus.TriggerAsync(new ItemPublishChangedEventData<ItemEntity>(item));
             //item.AvailableStart = null;
         }
         /// <summary>

@@ -25,7 +25,7 @@ namespace BXJG.Shop
         {
             IocManager.RegisterAssemblyByConvention(typeof(BXJGShopCoreModule).GetAssembly());
 
-            IocManager.Register(typeof(ItemManager<>), DependencyLifeStyle.Transient);
+            //IocManager.Register(typeof(ItemManager<>), DependencyLifeStyle.Transient);
             
             
         }

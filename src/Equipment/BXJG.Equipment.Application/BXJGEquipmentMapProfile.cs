@@ -7,18 +7,12 @@ using System.Text;
 
 namespace BXJG.Equipment
 {
-    public class BXJGEquipmentMapProfile<TUser, TArea, TDataDictionary> : Profile
+    public class BXJGEquipmentMapProfile<TUser> : Profile
     {
         public BXJGEquipmentMapProfile()
         {
             #region 设备定义
-            CreateMap<EquipmentInfoEntity<TDataDictionary>, EquipmentInfoDto>();
-            CreateMap<EquipmentInfoDto, EquipmentInfoEntity<TDataDictionary>>();
-
             CreateMap<EquipmentInfoEntity, EquipmentInfoDto>();
-            CreateMap<EquipmentInfoDto, EquipmentInfoEntity>();
-
-            CreateMap<EquipmentInfoEditDto, EquipmentInfoEntity<TDataDictionary>>();
             CreateMap<EquipmentInfoEditDto, EquipmentInfoEntity>();
             #endregion
             //#region 商品分类
@@ -39,24 +33,24 @@ namespace BXJG.Equipment
             //#endregion
 
             //#region 上架信息/商品信息
-            //CreateMap<ItemEntity<TDataDictionary>, ItemDto>()
+            //CreateMap<ItemEntity, ItemDto>()
             //   .ForMember(c => c.Images, opt => opt.MapFrom(d => d.Images.Split(',', System.StringSplitOptions.None)));
 
-            //CreateMap<ItemCreateDto, ItemEntity<TDataDictionary>>()
+            //CreateMap<ItemCreateDto, ItemEntity>()
             //   .ForMember(c => c.Images, opt => opt.MapFrom(c => string.Join(',', c.Images)));
 
-            //CreateMap<ItemUpdateDto, ItemEntity<TDataDictionary>>()
+            //CreateMap<ItemUpdateDto, ItemEntity>()
             //   .ForMember(c => c.Images, opt => opt.MapFrom(c => string.Join(',', c.Images)));
             //#endregion
 
             //#region 显示给顾客的商品信息
-            //CreateMap<ItemEntity<TDataDictionary>, FrontItemDto>()
+            //CreateMap<ItemEntity, FrontItemDto>()
             //   .ForMember(c => c.Images, opt => opt.MapFrom(d => d.Images.Split(',', System.StringSplitOptions.None)));
             //#endregion
 
             //#region 前端顾客和订单相关东东
-            //CreateMap<OrderItemEntity<TUser, TArea, TDataDictionary>, CustomerOrderItemDto>();
-            //CreateMap<OrderEntity<TUser, TArea, TDataDictionary>, CustomerOrderDto>();
+            //CreateMap<OrderItemEntity<TUser>, CustomerOrderItemDto>();
+            //CreateMap<OrderEntity<TUser>, CustomerOrderDto>();
             //#endregion
 
             //#region 会员
@@ -67,7 +61,7 @@ namespace BXJG.Equipment
             //#endregion
 
             //#region 后台管理员+订单
-            //CreateMap<OrderEntity<TUser, TArea, TDataDictionary>, OrderDto>();
+            //CreateMap<OrderEntity<TUser>, OrderDto>();
             //#endregion
 
             //#region 后台管理对顾客信息的管理时使用的dto映射

@@ -3,7 +3,7 @@ using Abp.Application.Services.Dto;
 using Abp.Extensions;
 using Abp.Localization;
 using BXJG.Shop.Common;
-using BXJG.Utils.Dto;
+using BXJG.Common.Dto;
 using BXJG.Utils.Enums;
 using BXJG.Utils.Localization;
 using System;

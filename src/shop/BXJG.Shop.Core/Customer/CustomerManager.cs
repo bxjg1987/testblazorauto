@@ -22,15 +22,14 @@ namespace BXJG.Shop.Customer
      * 虽然ICustomerRepositoryExtensions提供了扩展方法，但是需要提供泛型TUser，并且也无法（也不合理）提供session的访问
      * 因此在领域服务提供一个封装
      */
-    public class CustomerManager<TUser,TArea> : BXJGShopDomainServiceBase//, ITransientDependency
+    public class CustomerManager<TUser> : BXJGShopDomainServiceBase//, ITransientDependency
         where TUser : AbpUserBase
-        where TArea : GeneralTreeEntity<TArea>, IAdministrative
     {
-        protected readonly IRepository<CustomerEntity<TUser,TArea>, long> repository;
+        protected readonly IRepository<CustomerEntity<TUser>, long> repository;
         //领域层 不应该访问Session
         //protected readonly IAbpSession session;
 
-        public CustomerManager(IRepository<CustomerEntity<TUser,TArea>, long> repository)
+        public CustomerManager(IRepository<CustomerEntity<TUser>, long> repository)
         {
             this.repository = repository;
         }
@@ -39,18 +38,18 @@ namespace BXJG.Shop.Customer
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public Task<CustomerEntity<TUser,TArea>> SingleByUserIdWithUserAsync(long userId)
+        public Task<CustomerEntity<TUser>> SingleByUserIdWithUserAsync(long userId)
         {
-            return repository.SingleByUserIdWithUserAsync<TUser,TArea>(userId);
+            return repository.SingleByUserIdWithUserAsync<TUser>(userId);
         }
         /// <summary>
         /// 根据用户id获取关联的顾客实体，不加载用户实体
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public Task<CustomerEntity<TUser,TArea>> SingleByUserIdWithoutUserAsync(long userId)
+        public Task<CustomerEntity<TUser>> SingleByUserIdWithoutUserAsync(long userId)
         {
-            return repository.SingleByUserIdWithoutUserAsync<TUser,TArea>(userId);
+            return repository.SingleByUserIdWithoutUserAsync<TUser>(userId);
         }
     }
 

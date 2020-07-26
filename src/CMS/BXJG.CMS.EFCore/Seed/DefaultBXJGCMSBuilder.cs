@@ -31,8 +31,8 @@ namespace BXJG.CMS.EFCore.Seed
         public void Create(bool insertTestData = true)
         {
             #region 栏目
-            var columnSet = _context.Set<ColumnEntity<TDataDictionary>>();
-            columnSet.Add(new ColumnEntity<TDataDictionary>
+            var columnSet = _context.Set<ColumnEntity>();
+            columnSet.Add(new ColumnEntity
             {
                 Code = "00001",
                 CreationTime = new DateTime(2017, 3, 1),
@@ -54,8 +54,8 @@ namespace BXJG.CMS.EFCore.Seed
             #endregion
 
             #region 系统预定义文章
-            var articleSet = _context.Set<ArticleEntity<TDataDictionary>>();
-            articleSet.Add(new ArticleEntity<TDataDictionary>
+            var articleSet = _context.Set<ArticleEntity>();
+            articleSet.Add(new ArticleEntity
             {
                 Content = "硬核科技是一家........",
                 CreationTime = new DateTime(2017, 3, 1),

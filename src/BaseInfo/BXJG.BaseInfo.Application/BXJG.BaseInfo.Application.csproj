@@ -2,6 +2,27 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>BXJG.BaseInfo</RootNamespace>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>..\..\ZLJ.Web.Host\APIXML\BXJG.BaseInfo.Application.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="BXJGBaseInfoMapProfile.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Administrative\ve-57B1.tmp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BXJG.BaseInfo.Core\BXJG.BaseInfo.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Abp.ZeroCore" Version="5.10.1" />
+  </ItemGroup>
 
 </Project>

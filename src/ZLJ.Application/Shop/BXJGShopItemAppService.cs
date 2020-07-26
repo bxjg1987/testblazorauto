@@ -15,12 +15,12 @@ namespace ZLJ.Shop
     /// <summary>
     /// 后台管理对商品的接口
     /// </summary>
-    public class BXJGShopItemAppService : BXJGShopItemAppService<Tenant, User, Role, TenantManager, UserManager, GeneralTreeEntity>
+    public class BXJGShopItemAppService : BXJGShopItemAppService<Tenant, User, Role, TenantManager, UserManager>
     {
-        public BXJGShopItemAppService(IRepository<ItemEntity<GeneralTreeEntity>, long> repository, 
+        public BXJGShopItemAppService(IRepository<ItemEntity, long> repository, 
                                       ItemCategoryManager dictionaryManager, 
                                       IRepository<BXJGShopDictionaryEntity, long> respDic, 
-                                      ItemManager<GeneralTreeEntity> itemManager,
+                                      ItemManager itemManager,
                                       TempFileManager tempFileManager) : base(repository, dictionaryManager, respDic, itemManager, tempFileManager)
         {
         }

@@ -18,6 +18,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\baseinfo\BXJG.BaseInfo.EFCore\BXJG.BaseInfo.EFCore.csproj" />
     <ProjectReference Include="..\cms\BXJG.CMS.Core\BXJG.CMS.Core.csproj" />
     <ProjectReference Include="..\cms\BXJG.CMS.EFCore\BXJG.CMS.EFCore.csproj" />
     <ProjectReference Include="..\Equipment\BXJG.Equipment.EFCore\BXJG.Equipment.EFCore.csproj" />

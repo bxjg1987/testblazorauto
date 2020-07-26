@@ -1,5 +1,6 @@
 ﻿using Abp.Application.Services;
 using Abp.Application.Services.Dto;
+using BXJG.Common.Dto;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,6 +18,6 @@ namespace BXJG.CMS.Article
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task BulkDeleteAsync(DeleteInput input);
+        Task BulkDeleteAsync(BatchOperationInputLong input);
     }
 }

@@ -4,6 +4,7 @@ using Abp.Timing;
 using Abp.Zero;
 using Abp.Zero.Configuration;
 using BXJG.Attachment;
+using BXJG.BaseInfo;
 using BXJG.CMS;
 using BXJG.Equipment;
 using BXJG.File;
@@ -24,7 +25,8 @@ namespace ZLJ
         typeof(GeneralTreeModule),
         typeof(BXJGFileModule), 
         typeof(BXJGAttachmentModule),
-        typeof(BXJEquipmentCoreModule))]
+        typeof(BXJEquipmentCoreModule),
+        typeof(BXJGBaseInfoCoreModule))]
     public class ZLJCoreModule : AbpModule
     {
         public override void PreInitialize()

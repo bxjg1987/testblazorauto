@@ -19,13 +19,13 @@ using BXJG.GeneralTree;
 
 namespace BXJG.Shop.Catalogue
 {
-    public class BXJGShopFrontItemAppService<TDataDictionary> : AbpServiceBase, IBXJGShopFrontItemAppService
-        where TDataDictionary : GeneralTreeEntity<TDataDictionary>
+    public class BXJGShopFrontItemAppService : AbpServiceBase, IBXJGShopFrontItemAppService
+        
     {
-        private readonly IRepository<ItemEntity<TDataDictionary>, long> repository;
+        private readonly IRepository<ItemEntity, long> repository;
         private readonly ItemCategoryManager dictionaryManager;
 
-        public BXJGShopFrontItemAppService(IRepository<ItemEntity<TDataDictionary>, long> repository, ItemCategoryManager dictionaryManager)
+        public BXJGShopFrontItemAppService(IRepository<ItemEntity, long> repository, ItemCategoryManager dictionaryManager)
         {
             this.repository = repository;
             this.dictionaryManager = dictionaryManager;

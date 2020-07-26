@@ -14,11 +14,11 @@ namespace BXJG.Shop.Sale
     /// </summary>
     /// <typeparam name="TUser"></typeparam>
     /// <typeparam name="TArea"></typeparam>
-    public class OrderPaidEventData<TUser, TArea, TDataDictionary> : EntityEventData<OrderEntity<TUser, TArea, TDataDictionary>>
+    public class OrderPaidEventData<TUser> : EntityEventData<OrderEntity<TUser>>
         where TUser : AbpUserBase
-        where TArea : GeneralTreeEntity<TArea>, IAdministrative
+        
     {
-        public OrderPaidEventData(OrderEntity<TUser, TArea, TDataDictionary> order) : base(order)
+        public OrderPaidEventData(OrderEntity<TUser> order) : base(order)
         { }
     }
     /// <summary>
@@ -26,11 +26,11 @@ namespace BXJG.Shop.Sale
     /// </summary>
     /// <typeparam name="TUser"></typeparam>
     /// <typeparam name="TArea"></typeparam>
-    public class OrderShipedEventData<TUser, TArea, TDataDictionary> : EntityEventData<OrderEntity<TUser, TArea, TDataDictionary>>
+    public class OrderShipedEventData<TUser> : EntityEventData<OrderEntity<TUser>>
         where TUser : AbpUserBase
-        where TArea : GeneralTreeEntity<TArea>, IAdministrative
+        
     {
-        public OrderShipedEventData(OrderEntity<TUser, TArea, TDataDictionary> order) : base(order)
+        public OrderShipedEventData(OrderEntity<TUser> order) : base(order)
         { }
     }
     /// <summary>
@@ -38,11 +38,11 @@ namespace BXJG.Shop.Sale
     /// </summary>
     /// <typeparam name="TUser"></typeparam>
     /// <typeparam name="TArea"></typeparam>
-    public class OrderSignedEventData<TUser, TArea, TDataDictionary> : EntityEventData<OrderEntity<TUser, TArea, TDataDictionary>>
+    public class OrderSignedEventData<TUser> : EntityEventData<OrderEntity<TUser>>
         where TUser : AbpUserBase
-        where TArea : GeneralTreeEntity<TArea>, IAdministrative
+        
     {
-        public OrderSignedEventData(OrderEntity<TUser, TArea, TDataDictionary> order) : base(order)
+        public OrderSignedEventData(OrderEntity<TUser> order) : base(order)
         { }
     }
 }

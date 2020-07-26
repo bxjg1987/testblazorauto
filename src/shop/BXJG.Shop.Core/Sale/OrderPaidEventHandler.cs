@@ -18,14 +18,14 @@ namespace BXJG.Shop.Sale
     /// </summary>
     /// <typeparam name="TUser"></typeparam>
     /// <typeparam name="TArea"></typeparam>
-    public class OrderPaidEventHandler<TUser, TArea, TDataDictionary> : BXJGShopDomainServiceBase, IAsyncEventHandler<OrderPaidEventData<TUser, TArea, TDataDictionary>>
+    public class OrderPaidEventHandler<TUser> : BXJGShopDomainServiceBase, IAsyncEventHandler<OrderPaidEventData<TUser>>
         where TUser : AbpUserBase
-        where TArea : GeneralTreeEntity<TArea>, IAdministrative
+        
     {
-        protected readonly IRepository<CustomerEntity<TUser,TArea>, long> repository;
+        protected readonly IRepository<CustomerEntity<TUser>, long> repository;
 
 
-        public OrderPaidEventHandler(IRepository<CustomerEntity<TUser,TArea>, long> repository)
+        public OrderPaidEventHandler(IRepository<CustomerEntity<TUser>, long> repository)
         {
             this.repository = repository;
 
@@ -40,7 +40,7 @@ namespace BXJG.Shop.Sale
         /// <param name="entity"></param>
         /// <param name="integral">负数则为减积分</param>
         /// <returns></returns>
-        public async Task ChangeIntegralAsync(CustomerEntity<TUser,TArea> entity, long integral)
+        public async Task ChangeIntegralAsync(CustomerEntity<TUser> entity, long integral)
         {
             entity.Integral += integral;
             //即使调用了，后续事件处理异常了一样会回滚，参考 https://aspnetboilerplate.com/Pages/Documents/Unit-Of-Work#savechanges
@@ -48,7 +48,7 @@ namespace BXJG.Shop.Sale
             //await CurrentUnitOfWork.SaveChangesAsync(); 
 
             //单独弄了个事件 而不是使用abp提供的EntityChanged事件，这样保证只有在积分变动时才触发这个事件
-            await EventBus.TriggerAsync(new CustomerIntegralChangedEventData<TUser,TArea>(entity));
+            await EventBus.TriggerAsync(new CustomerIntegralChangedEventData<TUser>(entity));
         }
         /// <summary>
         /// 订单付款成功的事件处理
@@ -57,7 +57,7 @@ namespace BXJG.Shop.Sale
         /// <param name="eventData"></param>
         /// <returns></returns>
         //[UnitOfWork] 不确定是否必须加
-        public Task HandleEventAsync(OrderPaidEventData<TUser, TArea, TDataDictionary> eventData)
+        public Task HandleEventAsync(OrderPaidEventData<TUser> eventData)
         {
             return ChangeIntegralAsync(eventData.Entity.Customer, eventData.Entity.Integral);
         }

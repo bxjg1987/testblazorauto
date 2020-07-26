@@ -6,6 +6,7 @@ using Abp.Application.Services.Dto;
 using Abp.Auditing;
 using Abp.Authorization.Users;
 using Abp.AutoMapper;
+using BXJG.Common;
 using BXJG.Utils.Enums;
 
 namespace BXJG.Shop.Customer

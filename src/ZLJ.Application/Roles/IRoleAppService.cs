@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using BXJG.GeneralTree;
-using BXJG.Utils.Dto;
+using BXJG.Common.Dto;
 using ZLJ.Roles.Dto;
 
 namespace ZLJ.Roles

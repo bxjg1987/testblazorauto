@@ -16,18 +16,18 @@ namespace BXJG.Shop
     //        throw new NotImplementedException();
     //    }
     //}
-    public class Class2 : DomainService, IAsyncEventHandler<ItemPublishChangedEventData<ItemEntity< GeneralTreeEntity>>>
+    public class Class2 : DomainService, IAsyncEventHandler<ItemPublishChangedEventData<ItemEntity>>
     {
-        public Task HandleEventAsync(ItemPublishChangedEventData<ItemEntity<GeneralTreeEntity>> eventData)
+        public Task HandleEventAsync(ItemPublishChangedEventData<ItemEntity> eventData)
         {
            return Task.CompletedTask;
             //经过测试 事件触发方和事件处理程序在同一个事务中
            // throw new NotImplementedException("gggggggggggggggggggggggggggggggggggggggggggggggg");
         }
     }
-    //public class Class2 : Class2<GeneralTreeEntity>
+    //public class Class2 : Class2
     //{
-    //    public override Task HandleEventAsync(ItemPublishChangedEventData<GeneralTreeEntity> eventData)
+    //    public override Task HandleEventAsync(ItemPublishChangedEventData eventData)
     //    {
     //        throw new NotImplementedException();
     //    }

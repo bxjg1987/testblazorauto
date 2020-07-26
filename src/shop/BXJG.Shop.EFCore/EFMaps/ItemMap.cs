@@ -7,10 +7,9 @@ using System.Text;
 
 namespace BXJG.Shop.EFMaps
 {
-    public class ItemMap<TEntity, TDataDictionary> : IEntityTypeConfiguration<TEntity>
-        where TEntity: ItemEntity<TDataDictionary>
+    public class ItemMap : IEntityTypeConfiguration<ItemEntity>
     {
-        public void Configure(EntityTypeBuilder<TEntity> builder)
+        public void Configure(EntityTypeBuilder<ItemEntity> builder)
         {
             //builder.Property(c => c.Title).HasColumnType($"varchar({BXJGShopDictionaryEntity.IconMaxLength})");
             builder.Property(c => c.Title).HasMaxLength(BXJGShopConsts.ItemTitleMaxLength).IsRequired();

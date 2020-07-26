@@ -10,14 +10,14 @@ namespace BXJG.Equipment
 {
     public static class BXJGEquipmentModelBuilderExt
     {
+        /// <summary>
+        /// 注册设备管理模块的ef映射配置
+        /// </summary>
+        /// <param name="modelBuilder"></param>
+        /// <returns></returns>
         public static ModelBuilder ApplyConfigurationBXJGEquipment(this ModelBuilder modelBuilder)
         {
             return modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-        }
-        public static ModelBuilder ApplyConfigurationBXJGEquipment<TDataDictionary>(this ModelBuilder modelBuilder)
-        {
-            return modelBuilder.ApplyConfiguration(new EquipmentInfoMap<EquipmentInfoEntity<TDataDictionary>, TDataDictionary>())
-                               .ApplyConfiguration(new EquipmentInfoMap<TDataDictionary>());
         }
     }
 }

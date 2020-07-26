@@ -9,6 +9,7 @@ using BXJG.Utils.Enums;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using ZLJ.BaseInfo.Administrative;
 
 namespace BXJG.Shop.Customer
 {
@@ -28,9 +29,9 @@ namespace BXJG.Shop.Customer
     /// 商城系统中的顾客
     /// </summary>
     /// <typeparam name="TUser"></typeparam>
-    public class CustomerEntity<TUser, TArea> : FullAuditedEntity<long>, IMustHaveTenant
+    public class CustomerEntity<TUser> : FullAuditedEntity<long>, IMustHaveTenant
         //where TUser : AbpUserBase //因为内部可能包含领域逻辑，因此加约束更方便
-        //where TArea : GeneralTreeEntity<TArea>, IAdministrative
+        //
     {
         /// <summary>
         /// 租户id
@@ -67,12 +68,12 @@ namespace BXJG.Shop.Customer
         /// <summary>
         /// 所属区域
         /// </summary>
-        public virtual TArea Area { get; set; }
+        public virtual AdministrativeEntity Area { get; set; }
         ///// <summary>
         ///// 顾客的订单列表
         ///// 不要加这个属性，会导致顾客变得复杂。如果加了这个 那将来有更多概念需要与顾客关联时，顾客实体会变得越来越复杂
         ///// </summary>
-        //public virtual List<OrderEntity<TUser, TArea>> Orders { get; set; }
+        //public virtual List<OrderEntity<TUser>> Orders { get; set; }
         /// <summary>
         /// 积分、余额等处理时可能存在并发处理
         /// 最好的办法是在要处理的字段上加并发控制，以减小并发冲突的几率，但是目前一切从简先用行并发控制

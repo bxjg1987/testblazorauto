@@ -6,10 +6,9 @@ using System.Text;
 
 namespace BXJG.CMS.Column
 {
-    public class ColumnManager<TDataDictionary> : GeneralTreeManager<ColumnEntity<TDataDictionary>>
-        where TDataDictionary: GeneralTreeEntity<TDataDictionary>
+    public class ColumnManager : GeneralTreeManager<ColumnEntity>
     {
-        public ColumnManager(IRepository<ColumnEntity<TDataDictionary>, long> repository) : base(repository)
+        public ColumnManager(IRepository<ColumnEntity, long> repository) : base(repository)
         {
         }
     }

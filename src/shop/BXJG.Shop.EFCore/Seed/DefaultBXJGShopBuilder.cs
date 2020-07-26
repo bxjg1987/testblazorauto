@@ -11,13 +11,13 @@ using System.Text;
 
 namespace BXJG.Shop.Seed
 {
-    public class DefaultBXJGShopBuilder< TTenant, TRole, TUser, TSelf, TArea, TDataDictionary>
+    public class DefaultBXJGShopBuilder< TTenant, TRole, TUser, TSelf>
         where TTenant : AbpTenant<TUser>
         where TRole : AbpRole<TUser>
         where TUser : AbpUser<TUser>, new()
         where TSelf : AbpZeroDbContext<TTenant, TRole, TUser, TSelf>
-        where TArea : GeneralTreeEntity<TArea>, IAdministrative
-        where TDataDictionary: GeneralTreeEntity<TDataDictionary>,new()
+        
+       
     {
         private readonly TSelf _context;
         private readonly int _tenantId;
@@ -30,14 +30,14 @@ namespace BXJG.Shop.Seed
         public void Create(bool insertTestData = true)
         {
             new DefaultBXJGShopItemCagtegoryBuilder<TTenant, TRole, TUser, TSelf>(_context, _tenantId).Create(insertTestData);
-            new DefaultBXJGShopItemBuilder<TTenant, TRole, TUser, TSelf, TDataDictionary>(_context, _tenantId).Create(insertTestData);
-            new DefaultBXJGShopCustomerBuilder<TTenant, TRole, TUser, TSelf,TArea>(_context, _tenantId).Create(insertTestData);
-            new DefaultBXJGShopOrderBuilder<TTenant, TRole, TUser, TSelf,TArea, TDataDictionary>(_context, _tenantId).Create(insertTestData);
+            new DefaultBXJGShopItemBuilder<TTenant, TRole, TUser, TSelf>(_context, _tenantId).Create(insertTestData);
+            new DefaultBXJGShopCustomerBuilder<TTenant, TRole, TUser, TSelf>(_context, _tenantId).Create(insertTestData);
+            new DefaultBXJGShopOrderBuilder<TTenant, TRole, TUser, TSelf>(_context, _tenantId).Create(insertTestData);
             _context.SaveChanges();
         }
         public void CreateDataDictionary(bool insertTestData = true, long? parentId=default)
         {
-            new DefaultBXJGShopDataDictionary<TTenant, TRole, TUser, TSelf, TDataDictionary>(_context, _tenantId, parentId, insertTestData).Create();
+            new DefaultBXJGShopDataDictionary<TTenant, TRole, TUser, TSelf>(_context, _tenantId, parentId, insertTestData).Create();
             _context.SaveChanges();
         }
     }

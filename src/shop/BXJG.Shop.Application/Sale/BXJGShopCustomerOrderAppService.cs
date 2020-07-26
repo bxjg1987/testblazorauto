@@ -15,6 +15,7 @@ using BXJG.Shop.Catalogue;
 using BXJG.WeChat.Payment;
 using Abp.Threading;
 using BXJG.Common;
+using ZLJ.BaseInfo.Administrative;
 
 namespace BXJG.Shop.Sale
 {
@@ -27,38 +28,37 @@ namespace BXJG.Shop.Sale
     /// <typeparam name="TRole"></typeparam>
     /// <typeparam name="TTenantManager"></typeparam>
     /// <typeparam name="TUserManager"></typeparam>
-    /// <typeparam name="TArea"></typeparam>
     /// <typeparam name="TOrderManager"></typeparam>
     /// <typeparam name="TCustomerManager"></typeparam>
     /// <typeparam name="TDataDictionary"></typeparam>
-    public abstract class BXJGShopCustomerOrderAppService<TTenant, TUser, TRole, TTenantManager, TUserManager, TArea, TOrderManager, TCustomerManager,TDataDictionary>
-        : BXJGShopCustomerAppServiceBase<TTenant, TUser, TRole, TTenantManager, TUserManager, TCustomerManager,TArea>, IBXJGShopCustomerOrderAppService
+    public abstract class BXJGShopCustomerOrderAppService<TTenant, TUser, TRole, TTenantManager, TUserManager, TOrderManager, TCustomerManager>
+        : BXJGShopCustomerAppServiceBase<TTenant, TUser, TRole, TTenantManager, TUserManager, TCustomerManager>, IBXJGShopCustomerOrderAppService
         where TUser : AbpUser<TUser>, new()
         where TRole : AbpRole<TUser>, new()
         where TTenant : AbpTenant<TUser>
         where TTenantManager : AbpTenantManager<TTenant, TUser>
         where TUserManager : AbpUserManager<TRole, TUser>
-        where TArea : GeneralTreeEntity<TArea>, IAdministrative
-        where TOrderManager : OrderManager<TUser, TArea, TDataDictionary>
-        where TCustomerManager : CustomerManager<TUser,TArea>
-        where TDataDictionary : GeneralTreeEntity<TDataDictionary>
+        
+        where TOrderManager : OrderManager<TUser>
+        where TCustomerManager : CustomerManager<TUser>
+        
     {
-        private readonly IRepository<OrderEntity<TUser, TArea, TDataDictionary>, long> repository;
+        private readonly IRepository<OrderEntity<TUser>, long> repository;
         private readonly TOrderManager orderManager;
-        private readonly IRepository<TArea, long> generalTreeManager;
-        private readonly IRepository<ItemEntity<TDataDictionary>, long> itemRepository;
+        private readonly IRepository<AdministrativeEntity, long> generalTreeManager;
+        private readonly IRepository<ItemEntity, long> itemRepository;
         private readonly WeChatPaymentService weChatPaymentService;
 
         public ICancellationTokenProvider CancellationToken { get; set; } = NullCancellationTokenProvider.Instance;
 
         public BXJGShopCustomerOrderAppService(
-            IRepository<CustomerEntity<TUser,TArea>, long> customerRepository,
+            IRepository<CustomerEntity<TUser>, long> customerRepository,
             TCustomerManager customerManager,
-            BXJGShopCustomerSession<TUser,TArea> customerSession,
-            IRepository<OrderEntity<TUser, TArea, TDataDictionary>, long> repository,
+            BXJGShopCustomerSession<TUser> customerSession,
+            IRepository<OrderEntity<TUser>, long> repository,
             TOrderManager orderManager, 
-            IRepository<TArea, long> generalTreeManager,
-            IRepository<ItemEntity<TDataDictionary>, long> itemRepository,
+            IRepository<AdministrativeEntity, long> generalTreeManager,
+            IRepository<ItemEntity, long> itemRepository,
             WeChatPaymentService weChatPaymentService)
             : base(customerRepository, customerManager, customerSession)
         {
@@ -80,11 +80,11 @@ namespace BXJG.Shop.Sale
             var area = await generalTreeManager.GetAsync(input.AreaId);
             var itemIds = input.Items.Select(c => c.ItemId);
             var items = await itemRepository.GetAllListAsync(c => itemIds.Contains(c.Id));
-            var itemEntities = new List<OrderItemInput<TDataDictionary>>();
+            var itemEntities = new List<OrderItemInput>();
             foreach (var item in input.Items)
             {
                 var k = items.Single(c => c.Id == item.ItemId);
-                itemEntities.Add(new OrderItemInput<TDataDictionary>(k, item.Quantity));
+                itemEntities.Add(new OrderItemInput(k, item.Quantity));
             }
             var order = await orderManager.CreateAsync(
                 customer,

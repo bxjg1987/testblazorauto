@@ -6,14 +6,13 @@ using BXJG.Shop.Sale;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using ZLJ.Administrative;
 using ZLJ.Authorization.Users;
 
 namespace ZLJ.Shop
 {
-    public class OrderManager : OrderManager<User, AdministrativeEntity, GeneralTreeEntity>
+    public class OrderManager : OrderManager<User>
     {
-        public OrderManager(IRepository<OrderEntity<User, AdministrativeEntity, GeneralTreeEntity>, long> repository, IRepository<CustomerEntity<User, AdministrativeEntity>, long> customerRepository, ISettingManager settingManager) : base(repository, customerRepository, settingManager)
+        public OrderManager(IRepository<OrderEntity<User>, long> repository, IRepository<CustomerEntity<User>, long> customerRepository, ISettingManager settingManager) : base(repository, customerRepository, settingManager)
         {
         }
     }

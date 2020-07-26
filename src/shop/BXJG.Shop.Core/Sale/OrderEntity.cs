@@ -13,6 +13,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZLJ.BaseInfo.Administrative;
 
 namespace BXJG.Shop.Sale
 {
@@ -107,9 +108,9 @@ namespace BXJG.Shop.Sale
     /// </summary>
     /// <typeparam name="TUser">系统用户类型</typeparam>
     /// <typeparam name="TArea">送货地址区域类型</typeparam>
-    public class OrderEntity<TUser, TArea,TDataDictionary> : FullAuditedEntity<long>, IMustHaveTenant
+    public class OrderEntity<TUser> : FullAuditedEntity<long>, IMustHaveTenant
         //where TUser : AbpUserBase
-        //where TArea : GeneralTreeEntity<TArea>, IAdministrative
+        //
     {
       
 
@@ -124,7 +125,7 @@ namespace BXJG.Shop.Sale
         /// 关联的顾客的实体
         /// 注意顾客与User是一对一关联的
         /// </summary>
-        public virtual CustomerEntity<TUser,TArea> Customer { get; set; }
+        public virtual CustomerEntity<TUser> Customer { get; set; }
         /// <summary>
         /// 订单号
         /// </summary>
@@ -181,7 +182,7 @@ namespace BXJG.Shop.Sale
         /// <summary>
         /// 支付方式
         /// </summary>
-        public virtual TDataDictionary PaymentMethod { get; set; }
+        public virtual GeneralTreeEntity PaymentMethod { get; set; }
         /// <summary>
         /// 支付方式Id
         /// 未支付时 就不存在支付方式，因此可空
@@ -204,7 +205,7 @@ namespace BXJG.Shop.Sale
         /// <summary>
         /// 送货地址所属区域
         /// </summary>
-        public virtual TArea Area { get; set; }
+        public virtual AdministrativeEntity Area { get; set; }
         /// <summary>
         /// 送货地址所属区域Id
         /// </summary>
@@ -229,7 +230,7 @@ namespace BXJG.Shop.Sale
         /// <summary>
         /// 配送方式
         /// </summary>
-        public virtual TDataDictionary DistributionMethod { get; set; }
+        public virtual GeneralTreeEntity DistributionMethod { get; set; }
         /// <summary>
         /// 配送方式
         /// 刚创建订单时配送方式尚未确定
@@ -250,7 +251,7 @@ namespace BXJG.Shop.Sale
         /// <summary>
         /// 订单商品明细
         /// </summary>
-        public virtual IList<OrderItemEntity<TUser, TArea, TDataDictionary>> Items { get; set; }
+        public virtual IList<OrderItemEntity<TUser>> Items { get; set; }
         #endregion
 
         //订单跟踪

@@ -16,22 +16,22 @@ using System.Text;
 
 namespace BXJG.Shop.Seed
 {
-    public class DefaultBXJGShopCustomerBuilder<TTenant, TRole, TUser, TSelf,TArea>
+    public class DefaultBXJGShopCustomerBuilder<TTenant, TRole, TUser, TSelf>
         where TTenant : AbpTenant<TUser>
         where TRole : AbpRole<TUser>
         where TUser : AbpUser<TUser>, new()
         where TSelf : AbpZeroDbContext<TTenant, TRole, TUser, TSelf>
-            where TArea : GeneralTreeEntity<TArea>, IAdministrative
+            
     {
         private readonly TSelf _context;
         private readonly int _tenantId;
-        DbSet<CustomerEntity<TUser,TArea>> items;
+        DbSet<CustomerEntity<TUser>> items;
 
         public DefaultBXJGShopCustomerBuilder(TSelf context, int tenantId)
         {
             _context = context;
             _tenantId = tenantId;
-            items = context.Set<CustomerEntity<TUser,TArea>>();
+            items = context.Set<CustomerEntity<TUser>>();
         }
 
         public void Create(bool insertTestData = true)
@@ -61,10 +61,10 @@ namespace BXJG.Shop.Seed
             _context.Users.Add(adminUser);
             _context.SaveChanges();
 
-            var cust1 = new CustomerEntity<TUser,TArea>
+            var cust1 = new CustomerEntity<TUser>
             {
                 Birthday = DateTime.Now.AddYears(-30),
-                Gender = Utils.Enums.Gender.Man,
+                Gender = Gender.Man,
                 TenantId = this._tenantId,
                 User = adminUser
             };
@@ -90,10 +90,10 @@ namespace BXJG.Shop.Seed
             _context.Users.Add(adminUser1);
             _context.SaveChanges();
 
-            var cust2 = new CustomerEntity<TUser,TArea>
+            var cust2 = new CustomerEntity<TUser>
             {
                 Birthday = DateTime.Now.AddYears(-22).AddDays(116),
-                Gender = Utils.Enums.Gender.Woman,
+                Gender = Gender.Woman,
                 TenantId = this._tenantId,
                 User = adminUser1
             };

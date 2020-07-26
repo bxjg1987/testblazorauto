@@ -8,7 +8,7 @@ namespace BXJG.CMS.Column
     /// <summary>
     /// 栏目实体类
     /// </summary>
-    public class ColumnEntity<TDataDictionary> : GeneralTreeEntity<ColumnEntity<TDataDictionary>>
+    public class ColumnEntity : GeneralTreeEntity<ColumnEntity>
     {
         /// <summary>
         /// 图标
@@ -28,7 +28,7 @@ namespace BXJG.CMS.Column
         /// <summary>
         /// 内容类型
         /// </summary>
-        public virtual TDataDictionary ContentType { get; set; }
+        public virtual GeneralTreeEntity ContentType { get; set; }
         /// <summary>
         /// 是否是系统预定的栏目，这些栏目不允许被删除
         /// </summary>

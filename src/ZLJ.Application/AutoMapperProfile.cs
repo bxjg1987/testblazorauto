@@ -6,7 +6,7 @@ using BXJG.Utils.Localization;
 using BXJG.Shop.Common.Dto;
 using BXJG.Shop.Catalogue;
 using BXJG.Shop.Customer;
-using ZLJ.Administrative;
+
 using BXJG.GeneralTree;
 
 namespace ZLJ
@@ -28,9 +28,7 @@ namespace ZLJ
         /// </summary>
         public AutoMapperProfile()
         {
-            CreateMap<AdministrativeEntity, AdministrativeDto>();
-            CreateMap<AdministrativeEntity, AdministrativeTreeNodeDto>().EntityToComboTree();
-            CreateMap<AdministrativeEntity, AdministrativeCombboxDto>().EntityToCombobox();
+            
 
             //CreateMap<BXJGShopDictionaryEntity, DictionaryDto>()
             //    .ForMember(c => c.ExtData, opt => opt.MapFrom(c => JsonConvert.DeserializeObject<dynamic>(c.ExtensionData)))

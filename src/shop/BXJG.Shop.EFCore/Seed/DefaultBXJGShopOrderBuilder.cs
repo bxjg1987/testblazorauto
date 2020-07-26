@@ -18,23 +18,23 @@ using BXJG.Common;
 
 namespace BXJG.Shop.Seed
 {
-    public class DefaultBXJGShopOrderBuilder<TTenant, TRole, TUser, TSelf, TArea, TDataDictionary>
+    public class DefaultBXJGShopOrderBuilder<TTenant, TRole, TUser, TSelf>
         where TTenant : AbpTenant<TUser>
         where TRole : AbpRole<TUser>
         where TUser : AbpUser<TUser>, new()
         where TSelf : AbpZeroDbContext<TTenant, TRole, TUser, TSelf>
-        where TArea : GeneralTreeEntity<TArea>, IAdministrative
+        
     {
         private readonly TSelf _context;
         private readonly int _tenantId;
-        DbSet<OrderEntity<TUser, TArea, TDataDictionary>> items;
-        DbSet<ItemEntity<TDataDictionary>> orderItems;
+        DbSet<OrderEntity<TUser>> items;
+        DbSet<ItemEntity> orderItems;
         public DefaultBXJGShopOrderBuilder(TSelf context, int tenantId)
         {
             _context = context;
             _tenantId = tenantId;
-            items = context.Set<OrderEntity<TUser, TArea, TDataDictionary>>();
-            orderItems = context.Set<ItemEntity<TDataDictionary> >();
+            items = context.Set<OrderEntity<TUser>>();
+            orderItems = context.Set<ItemEntity >();
         }
 
         public void Create(bool insertTestData = true)
@@ -47,7 +47,7 @@ namespace BXJG.Shop.Seed
 
             var ois = orderItems.ToList();
 
-            var order = new OrderEntity<TUser, TArea, TDataDictionary>
+            var order = new OrderEntity<TUser>
             {
                 AreaId = 4,
                 Consignee = "张三",
@@ -65,7 +65,7 @@ namespace BXJG.Shop.Seed
                 OrderNo = Guid.NewGuid().ToString("N"),
                 Integral = 324,
                 MerchandiseSubtotal = 318,
-                Items = ois.Take(2).Select(c => new OrderItemEntity<TUser, TArea, TDataDictionary>
+                Items = ois.Take(2).Select(c => new OrderItemEntity<TUser>
                 {
                     Amount = c.Price * 3,
                     Quantity = 3,
@@ -89,7 +89,7 @@ namespace BXJG.Shop.Seed
             _context.SaveChanges();
 
 
-            var order1 = new OrderEntity<TUser, TArea, TDataDictionary>
+            var order1 = new OrderEntity<TUser>
             {
                 AreaId = 6,
                 Consignee = "李四",
@@ -107,7 +107,7 @@ namespace BXJG.Shop.Seed
                 OrderNo = Guid.NewGuid().ToString("N"),
                 Integral = ois.Skip(2).Sum(c => c.Integral),
                 MerchandiseSubtotal = ois.Skip(2).Sum(c => c.Price)-5,
-                Items = ois.Skip(2).Select(c => new OrderItemEntity<TUser, TArea, TDataDictionary>
+                Items = ois.Skip(2).Select(c => new OrderItemEntity<TUser>
                 {
                     Amount = c.Price * 1,
                     Quantity = 1,

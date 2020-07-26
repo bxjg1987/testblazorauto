@@ -18,14 +18,14 @@ namespace BXJG.CMS
             #endregion
 
             #region 栏目
-            CreateMap(typeof(ColumnEditDto), typeof(ColumnEntity<>)).DtoToEntity().ForMember("ContentType", opt => opt.Ignore());
-            CreateMap(typeof(ColumnEntity<>), typeof(ColumnDto)).EntityToDto();//可能是因为泛型原因，必须调用EntityToDto
-            CreateMap(typeof(ColumnEntity<>), typeof(ColumnTreeNodeDto)).EntityToComboTree();
-            CreateMap(typeof(ColumnEntity<>), typeof(ColumnCombboxDto)).EntityToCombobox();
+            CreateMap(typeof(ColumnEditDto), typeof(ColumnEntity)).DtoToEntity().ForMember("ContentType", opt => opt.Ignore());
+            CreateMap(typeof(ColumnEntity), typeof(ColumnDto)).EntityToDto();//可能是因为泛型原因，必须调用EntityToDto
+            CreateMap(typeof(ColumnEntity), typeof(ColumnTreeNodeDto)).EntityToComboTree();
+            CreateMap(typeof(ColumnEntity), typeof(ColumnCombboxDto)).EntityToCombobox();
             #endregion
 
             #region 文章
-            CreateMap(typeof(ArticleEditDto), typeof(ArticleEntity<>))
+            CreateMap(typeof(ArticleEditDto), typeof(ArticleEntity))
                 .IncludeAllDerived()
                 .ForMember("TenantId", opt => opt.Ignore())
                 .ForMember("IsDeleted", opt => opt.Ignore())
@@ -36,7 +36,7 @@ namespace BXJG.CMS
                 .ForMember("CreationTime", opt => opt.Ignore())
                 .ForMember("CreatorUserId", opt => opt.Ignore())
                 .ForMember("Column", opt => opt.Ignore());
-            CreateMap(typeof(ArticleEntity<>), typeof(ArticleDto));
+            CreateMap(typeof(ArticleEntity), typeof(ArticleDto));
             #endregion
         }
     }

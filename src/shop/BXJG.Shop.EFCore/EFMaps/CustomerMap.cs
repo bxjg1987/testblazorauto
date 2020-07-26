@@ -11,10 +11,10 @@ using System.Text;
 
 namespace BXJG.Shop.EFMaps
 {
-    public class CustomerMap<TUser, TArea, TEntity> : IEntityTypeConfiguration<TEntity>
+    public class CustomerMap<TUser, TEntity> : IEntityTypeConfiguration<TEntity>
         //where TUser : AbpUserBase
-        //where TArea : GeneralTreeEntity<TArea>, IAdministrative
-        where TEntity : CustomerEntity<TUser, TArea>
+        //
+        where TEntity : CustomerEntity<TUser>
     {
         public virtual void Configure(EntityTypeBuilder<TEntity> builder)
         {

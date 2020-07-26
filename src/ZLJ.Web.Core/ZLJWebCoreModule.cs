@@ -21,6 +21,7 @@ using BXJG.CMS;
 using BXJG.Common;
 using Abp.Dependency;
 using BXJG.Equipment;
+using BXJG.BaseInfo;
 
 namespace ZLJ
 {
@@ -67,7 +68,8 @@ namespace ZLJ
             Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(BXJGShopApplicationModule).Assembly/*,"bxjgshop"*/);//试过 这里用前者没啥鸟用，abp是已实现类所在程序的前缀，默认还是app
             Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(BXJGCMSApplicationModule).Assembly);
             Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(BXJGEquipmentApplicationModule).Assembly);
-            
+            Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(BXJGBaseInfoApplicationModule).Assembly);
+
             ConfigureTokenAuth();
 
             //默认每次启动都会尝试数据库迁移，这里禁用它提高系统启动速度

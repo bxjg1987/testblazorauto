@@ -12,26 +12,26 @@ using System.Text;
 
 namespace BXJG.Shop.Seed
 {
-    public class DefaultBXJGShopItemBuilder<TTenant, TRole, TUser, TSelf, TDataDictionary>
+    public class DefaultBXJGShopItemBuilder<TTenant, TRole, TUser, TSelf>
         where TTenant : AbpTenant<TUser>
         where TRole : AbpRole<TUser>
         where TUser : AbpUser<TUser>
         where TSelf : AbpZeroDbContext<TTenant, TRole, TUser, TSelf>
-        where TDataDictionary : GeneralTreeEntity<TDataDictionary>
+       
     {
         private readonly TSelf _context;
         private readonly int _tenantId;
-        DbSet<ItemEntity<TDataDictionary>> items;
-        DbSet<TDataDictionary> dics;
+        DbSet<ItemEntity> items;
+        DbSet<GeneralTreeEntity> dics;
         DbSet<ItemCategoryEntity> cls;
 
         public DefaultBXJGShopItemBuilder(TSelf context, int tenantId)
         {
             _context = context;
             _tenantId = tenantId;
-            items = context.Set<ItemEntity<TDataDictionary>>();
+            items = context.Set<ItemEntity>();
             this.cls = context.Set<ItemCategoryEntity>();
-            dics = context.Set<TDataDictionary>();
+            dics = context.Set<GeneralTreeEntity>();
         }
 
         public void Create(bool insertTestData = true)
@@ -120,7 +120,7 @@ namespace BXJG.Shop.Seed
             this._context.SaveChanges();
             var pp = dics.Include(c => c.Children).Where(c => c.DisplayName == "商品品牌" && c.TenantId == this._tenantId).Single();
             var dw = dics.Include(c => c.Children).Where(c => c.DisplayName == "商品单位" && c.TenantId == this._tenantId).Single();
-            items.Add(new ItemEntity<TDataDictionary>
+            items.Add(new ItemEntity
             {
                 Specification = "规格型号1",
                 UnitId = dw.Children[new Random().Next(0, dw.Children.Count)].Id,
@@ -143,7 +143,7 @@ namespace BXJG.Shop.Seed
                 Images = "upload/442ee74ddb0186fb.jpg",
             });
             this._context.SaveChanges();
-            items.Add(new ItemEntity<TDataDictionary>
+            items.Add(new ItemEntity
             {
                 Specification = "规格型号2",
                 UnitId = dw.Children[new Random().Next(0, dw.Children.Count)].Id,
@@ -167,7 +167,7 @@ namespace BXJG.Shop.Seed
 
             });
             this._context.SaveChanges();
-            items.Add(new ItemEntity<TDataDictionary>
+            items.Add(new ItemEntity
             {
                 Specification = "规格型号3",
                 UnitId = dw.Children[new Random().Next(0, dw.Children.Count)].Id,
@@ -191,7 +191,7 @@ namespace BXJG.Shop.Seed
 
             });
             this._context.SaveChanges();
-            items.Add(new ItemEntity<TDataDictionary>
+            items.Add(new ItemEntity
             {
                 Specification = "规格型号4",
                 UnitId = dw.Children[new Random().Next(0, dw.Children.Count)].Id,
@@ -214,7 +214,7 @@ namespace BXJG.Shop.Seed
                 Images = "upload/8f71080a3e183310.jpg",
             });
             this._context.SaveChanges();
-            items.Add(new ItemEntity<TDataDictionary>
+            items.Add(new ItemEntity
             {
                 Specification = "规格型号1",
                 UnitId = dw.Children[new Random().Next(0, dw.Children.Count)].Id,
@@ -237,7 +237,7 @@ namespace BXJG.Shop.Seed
                 Images = "upload/b.jpg",
             });
             this._context.SaveChanges();
-            items.Add(new ItemEntity<TDataDictionary>
+            items.Add(new ItemEntity
             {
                 Specification = "规格型号5",
                 UnitId = dw.Children[new Random().Next(0, dw.Children.Count)].Id,

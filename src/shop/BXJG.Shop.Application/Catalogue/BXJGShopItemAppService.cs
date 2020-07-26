@@ -38,25 +38,25 @@ namespace BXJG.Shop.Catalogue
     /// <typeparam name="TUserManager"></typeparam>
     /// <typeparam name="TDataDictionary"></typeparam>
     /// <typeparam name="TItemManager"></typeparam>
-    public class BXJGShopItemAppService<TTenant, TUser, TRole, TTenantManager, TUserManager, TDataDictionary>
+    public class BXJGShopItemAppService<TTenant, TUser, TRole, TTenantManager, TUserManager>
         : BXJGShopAppServiceBase<TTenant, TUser, TRole, TTenantManager, TUserManager>, IBXJGShopItemAppService
         where TUser : AbpUser<TUser>
         where TRole : AbpRole<TUser>, new()
         where TTenant : AbpTenant<TUser>
         where TTenantManager : AbpTenantManager<TTenant, TUser>
         where TUserManager : AbpUserManager<TRole, TUser>
-        where TDataDictionary : GeneralTreeEntity<TDataDictionary>
+        
     {
-        private readonly IRepository<ItemEntity<TDataDictionary>, long> repository;
+        private readonly IRepository<ItemEntity, long> repository;
         private readonly ItemCategoryManager dictionaryManager;
-        private readonly ItemManager<TDataDictionary> itemManager;
+        private readonly ItemManager itemManager;
         private readonly IRepository<BXJGShopDictionaryEntity, long> respDic;
         private readonly TempFileManager tempFileManager;
 
-        public BXJGShopItemAppService(IRepository<ItemEntity<TDataDictionary>, long> repository,
+        public BXJGShopItemAppService(IRepository<ItemEntity, long> repository,
                                       ItemCategoryManager dictionaryManager,
                                       IRepository<BXJGShopDictionaryEntity, long> respDic,
-                                      ItemManager<TDataDictionary> itemManager, 
+                                      ItemManager itemManager, 
                                       TempFileManager tempFileManager)
         {
             this.repository = repository;
@@ -73,7 +73,7 @@ namespace BXJG.Shop.Catalogue
         public async Task<ItemDto> CreateAsync(ItemCreateDto input)
         {
             input.Images = this.tempFileManager.Move(input.Images).ToArray();
-            var entity = base.ObjectMapper.Map<ItemEntity<TDataDictionary>>(input);
+            var entity = base.ObjectMapper.Map<ItemEntity>(input);
             entity = await repository.InsertAsync(entity);
         
             await CurrentUnitOfWork.SaveChangesAsync();
@@ -98,7 +98,7 @@ namespace BXJG.Shop.Catalogue
         {
             input.Images = this.tempFileManager.Move(input.Images).ToArray();
             var entity = await this.repository.GetAsync(input.Id);
-            ObjectMapper.Map<ItemUpdateDto, ItemEntity<TDataDictionary>>(input, entity);
+            ObjectMapper.Map<ItemUpdateDto, ItemEntity>(input, entity);
             if (input.Published)
                 entity.Publish(input.AvailableStart, input.AvailableEnd);
             else

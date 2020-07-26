@@ -20,6 +20,7 @@ using BXJG.GeneralTree;
 using BXJG.Shop.Common;
 using Abp.Dependency;
 using BXJG.Common;
+using ZLJ.BaseInfo.Administrative;
 
 namespace BXJG.Shop.Sale
 {
@@ -52,21 +53,21 @@ namespace BXJG.Shop.Sale
     /// </summary>
     /// <typeparam name="TUser"></typeparam>
     /// <typeparam name="TArea">送货地址区域类型 参考实体类的泛型说明</typeparam>
-    public class OrderManager<TUser, TArea, TDataDictionary> : BXJGShopDomainServiceBase//, ITransientDependency
+    public class OrderManager<TUser> : BXJGShopDomainServiceBase//, ITransientDependency
         where TUser : AbpUserBase
-        where TArea : GeneralTreeEntity<TArea>, IAdministrative
+        
     {
-        protected readonly IRepository<OrderEntity<TUser, TArea, TDataDictionary>, long> repository;
-        protected readonly IRepository<CustomerEntity<TUser,TArea>, long> customerRepository;
-        //protected readonly CustomerManager<TUser,TArea> customerManager;
+        protected readonly IRepository<OrderEntity<TUser>, long> repository;
+        protected readonly IRepository<CustomerEntity<TUser>, long> customerRepository;
+        //protected readonly CustomerManager<TUser> customerManager;
         protected readonly ISettingManager settingManager;
         //领域层不应该访问session  protected readonly IAbpSession session;
 
         public OrderManager(
-            IRepository<OrderEntity<TUser, TArea, TDataDictionary>, long> repository,
-            IRepository<CustomerEntity<TUser,TArea>, long> customerRepository,
+            IRepository<OrderEntity<TUser>, long> repository,
+            IRepository<CustomerEntity<TUser>, long> customerRepository,
             ISettingManager settingManager
-            /*,CustomerManager<TUser,TArea> customerManager*/)
+            /*,CustomerManager<TUser> customerManager*/)
         {
             this.settingManager = settingManager;
             this.repository = repository;
@@ -84,14 +85,14 @@ namespace BXJG.Shop.Sale
         /// <param name="customerRemark"></param>
         /// <param name="items"></param>
         /// <returns></returns>
-        public async Task<OrderEntity<TUser, TArea, TDataDictionary>> CreateAsync(
-            CustomerEntity<TUser,TArea> customer,
-            TArea area,
+        public async Task<OrderEntity<TUser>> CreateAsync(
+            CustomerEntity<TUser> customer,
+            AdministrativeEntity area,
             string consignee,
             string consigneePhoneNumber,
             string receivingAddress,
             string customerRemark = null,
-            params OrderItemInput<TDataDictionary>[] items)
+            params OrderItemInput[] items)
         {
             #region 各参数基本验证
             //领域服务的方法有必要验证入参来保证业务正确性，它不能祈求调用方或底层的数据库一定会做完整性约束。
@@ -108,7 +109,7 @@ namespace BXJG.Shop.Sale
             #endregion
 
             //所有业务判断都成功时才创建订单对象
-            var order = new OrderEntity<TUser, TArea, TDataDictionary>
+            var order = new OrderEntity<TUser>
             {
                 Customer = customer,
                 CustomerId = customer.Id,
@@ -130,7 +131,7 @@ namespace BXJG.Shop.Sale
             #region 订单明细
             foreach (var item in items)
             {
-                var product = new OrderItemEntity<TUser, TArea, TDataDictionary>
+                var product = new OrderItemEntity<TUser>
                 {
                     Amount = item.Item.Price * item.Quantity,
                     Image = item.Item.GetImages()[0],
@@ -166,13 +167,13 @@ namespace BXJG.Shop.Sale
         /// <param name="entity"></param>
         /// <param name="payMethod"></param>
         /// <returns></returns>
-        public async Task<OrderEntity<TUser, TArea, TDataDictionary>> PayAsync(OrderEntity<TUser, TArea, TDataDictionary> entity, long payMethod)
+        public async Task<OrderEntity<TUser>> PayAsync(OrderEntity<TUser> entity, long payMethod)
         {
             entity.Status = OrderStatus.Processing;
             entity.PaymentStatus = PaymentStatus.Paid;
             entity.PaymentMethodId = payMethod;
             entity.LogisticsStatus = LogisticsStatus.WaitShip;
-            await EventBus.TriggerAsync(new OrderPaidEventData<TUser, TArea, TDataDictionary>(entity));
+            await EventBus.TriggerAsync(new OrderPaidEventData<TUser>(entity));
             return entity;
         }
         /// <summary>
@@ -181,11 +182,11 @@ namespace BXJG.Shop.Sale
         /// <param name="entity"></param>
         /// <param name="shipmentMethod"></param>
         /// <returns></returns>
-        public async Task<OrderEntity<TUser, TArea, TDataDictionary>> ShipmentAsync(OrderEntity<TUser, TArea, TDataDictionary> entity, TDataDictionary shipmentMethod)
+        public async Task<OrderEntity<TUser>> ShipmentAsync(OrderEntity<TUser> entity, GeneralTreeEntity shipmentMethod)
         {
             entity.DistributionMethod = shipmentMethod;
             entity.LogisticsStatus = LogisticsStatus.Shipped;
-            await EventBus.TriggerAsync(new OrderShipedEventData<TUser, TArea, TDataDictionary>(entity));
+            await EventBus.TriggerAsync(new OrderShipedEventData<TUser>(entity));
             return entity;
         }
         /// <summary>
@@ -193,10 +194,10 @@ namespace BXJG.Shop.Sale
         /// </summary>
         /// <param name="entity">订单</param>
         /// <returns></returns>
-        public async Task<OrderEntity<TUser, TArea, TDataDictionary>> SignAsync(OrderEntity<TUser, TArea, TDataDictionary> entity)
+        public async Task<OrderEntity<TUser>> SignAsync(OrderEntity<TUser> entity)
         {
             entity.LogisticsStatus = LogisticsStatus.Signed;
-            await EventBus.TriggerAsync(new OrderSignedEventData<TUser, TArea, TDataDictionary>(entity));
+            await EventBus.TriggerAsync(new OrderSignedEventData<TUser>(entity));
             return entity;
         }
     }

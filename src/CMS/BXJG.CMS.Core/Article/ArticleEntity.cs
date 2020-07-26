@@ -10,7 +10,7 @@ namespace BXJG.CMS.Article
     /// <summary>
     /// 文章实体类
     /// </summary>
-    public class ArticleEntity<TDataDictionary> : FullAuditedEntity<long>, IMustHaveTenant
+    public class ArticleEntity : FullAuditedEntity<long>, IMustHaveTenant
     {
         public int TenantId { get; set; }
         /// <summary>
@@ -20,7 +20,7 @@ namespace BXJG.CMS.Article
         /// <summary>
         /// 所属栏目的导航属性
         /// </summary>
-        public virtual ColumnEntity<TDataDictionary> Column { get; set; }
+        public virtual ColumnEntity Column { get; set; }
         /// <summary>
         /// 标题
         /// </summary>

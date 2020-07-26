@@ -6,7 +6,7 @@ using BXJG.GeneralTree;
 using BXJG.Shop;
 using ZLJ.Authorization;
 using BXJG.Equipment;
-
+using BXJG.BaseInfo;
 namespace ZLJ.Navigation
 {
     /// <summary>
@@ -34,11 +34,13 @@ namespace ZLJ.Navigation
             //                                    icon: "shebei",
             //                                    url: "/asset/equipmentInfo/index.html",
             //                                    permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorAssetEquipmentInfo)));
-           
+            //注册设备管理模块的菜单
             context.Manager.MainMenu.AddBXJGEquipmentNavigation();
 
             BXJGShopNavigationProvider.Init(context.Manager.MainMenu);
             BXJGCMSNavigationProvider.Init(context.Manager.MainMenu);
+            //注册基础信息模块的菜单
+            context.Manager.MainMenu.AddBXJGBaseInfoNavigation();
             var jczl = new MenuItemDefinition("BaseInfo",
                                                 L("BaseInfo"),
                                                 icon: "dangan",
@@ -59,16 +61,7 @@ namespace ZLJ.Navigation
                                                 icon: "user",
                                                 url: "/baseinfo/Employee/index.html",
                                                 permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorBaseInfoEmployee)));
-            jczl.AddItem(new MenuItemDefinition("Administrative",
-                                                L("Administrative"),
-                                                icon: "qizi",
-                                                url: "/baseinfo/Administrative/index.html",
-                                                permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorBaseInfoAdministrative)));
-            //jczl.AddItem(new MenuItemDefinition("DataDictionary",
-            //                                    L("DataDictionary"),
-            //                                    icon: "shuju",
-            //                                    url: "/baseinfo/DataDictionary/index.html",
-            //                                    permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorBaseInfoDataDictionary)));
+          
             var sjzd = cfg.InitNav(jczl);
             sjzd.Icon = "shuju";
             sjzd.Url = "/baseinfo/generalTree/index.html";

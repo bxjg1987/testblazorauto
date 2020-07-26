@@ -14,16 +14,16 @@ using Abp.Configuration;
 
 namespace BXJG.Shop.Seed
 {
-    public class DefaultBXJGShopDataDictionary<TTenant, TRole, TUser, TSelf, TDataDictionary>
+    public class DefaultBXJGShopDataDictionary<TTenant, TRole, TUser, TSelf>
         where TTenant : AbpTenant<TUser>
-        where TDataDictionary : GeneralTreeEntity<TDataDictionary>, new()
+        
         where TSelf : AbpZeroDbContext<TTenant, TRole, TUser, TSelf>
         where TRole : AbpRole<TUser>
         where TUser : AbpUser<TUser>
     {
         private readonly TSelf _context;
         private readonly int _tenantId;
-        DbSet<TDataDictionary> set;
+        DbSet<GeneralTreeEntity> set;
         long? parentId;
         bool insertTestData;
 
@@ -32,7 +32,7 @@ namespace BXJG.Shop.Seed
             _context = context;
             _tenantId = tenantId;
             this.parentId = parentId;
-            set = context.Set<TDataDictionary>();
+            set = context.Set<GeneralTreeEntity>();
             this.insertTestData = insertTestData;
         }
 
@@ -47,7 +47,7 @@ namespace BXJG.Shop.Seed
                 {
                     lastIndex = Convert.ToInt32(last.Code.Split('.').Last());
                 }
-                var p = new TDataDictionary
+                var p = new GeneralTreeEntity
                 {
                     Code = last == null ? "00001" : (lastIndex + 1).ToString().PadLeft(5, '0'),
                     CreationTime = DateTime.Now,
@@ -56,14 +56,14 @@ namespace BXJG.Shop.Seed
                 };
                 if (insertTestData)
                 {
-                    p.Children = new List<TDataDictionary> {
-                         new TDataDictionary{
+                    p.Children = new List<GeneralTreeEntity>{
+                         new GeneralTreeEntity{
                             Code = last==null?"00001.00001":  (lastIndex+1).ToString().PadLeft(5,'0')+".00001",
                             CreationTime = DateTime.Now,
                             DisplayName = "阿迪达斯1",
                             TenantId = _tenantId,
                          },
-                         new TDataDictionary{
+                         new GeneralTreeEntity{
                             Code = last==null?"00001.00002":  (lastIndex+1).ToString().PadLeft(5,'0')+".00002",
                             CreationTime = DateTime.Now,
                             DisplayName = "耐克1",
@@ -86,7 +86,7 @@ namespace BXJG.Shop.Seed
                 {
                     lastIndex = Convert.ToInt32(last.Code.Split('.').Last());
                 }
-                var p = new TDataDictionary
+                var p = new GeneralTreeEntity
                 {
                     Code = last == null ? "00001" : (lastIndex + 1).ToString().PadLeft(5, '0'),
                     CreationTime = DateTime.Now,
@@ -95,14 +95,14 @@ namespace BXJG.Shop.Seed
                 };
                 if (insertTestData)
                 {
-                    p.Children = new List<TDataDictionary> {
-                         new TDataDictionary{
+                    p.Children = new List<GeneralTreeEntity> {
+                         new GeneralTreeEntity{
                             Code = last==null?"00001.00001":  (lastIndex+1).ToString().PadLeft(5,'0')+".00001",
                             CreationTime = DateTime.Now,
                             DisplayName = "个",
                             TenantId = _tenantId,
                          },
-                         new TDataDictionary{
+                         new GeneralTreeEntity{
                             Code = last==null?"00001.00002":  (lastIndex+1).ToString().PadLeft(5,'0')+".00002",
                             CreationTime = DateTime.Now,
                             DisplayName = "把",
@@ -125,7 +125,7 @@ namespace BXJG.Shop.Seed
                 {
                     lastIndex = Convert.ToInt32(last.Code.Split('.').Last());
                 }
-                var p = new TDataDictionary
+                var p = new GeneralTreeEntity
                 {
                     Code = last == null ? "00001" : (lastIndex + 1).ToString().PadLeft(5, '0'),
                     CreationTime = DateTime.Now,
@@ -134,20 +134,20 @@ namespace BXJG.Shop.Seed
                 };
                 if (insertTestData)
                 {
-                    p.Children = new List<TDataDictionary> {
-                         new TDataDictionary{
+                    p.Children = new List<GeneralTreeEntity> {
+                         new GeneralTreeEntity{
                             Code = last==null?"00001.00001":  (lastIndex+1).ToString().PadLeft(5,'0')+".00001",
                             CreationTime = DateTime.Now,
                             DisplayName = "微信",
                             TenantId = _tenantId,
                          },
-                         new TDataDictionary{
+                         new GeneralTreeEntity{
                             Code = last==null?"00001.00002":  (lastIndex+1).ToString().PadLeft(5,'0')+".00002",
                             CreationTime = DateTime.Now,
                             DisplayName = "支付宝",
                             TenantId = _tenantId,
                          },
-                         new TDataDictionary{
+                         new GeneralTreeEntity{
                             Code = last==null?"00001.00003":  (lastIndex+1).ToString().PadLeft(5,'0')+".00003",
                             CreationTime = DateTime.Now,
                             DisplayName = "货到付款",
@@ -171,7 +171,7 @@ namespace BXJG.Shop.Seed
                 {
                     lastIndex = Convert.ToInt32(last.Code.Split('.').Last());
                 }
-                var p = new TDataDictionary
+                var p = new GeneralTreeEntity
                 {
                     Code = last == null ? "00001" : (lastIndex + 1).ToString().PadLeft(5, '0'),
                     CreationTime = DateTime.Now,
@@ -180,20 +180,20 @@ namespace BXJG.Shop.Seed
                 };
                 if (insertTestData)
                 {
-                    p.Children = new List<TDataDictionary> {
-                         new TDataDictionary{
+                    p.Children = new List<GeneralTreeEntity> {
+                         new GeneralTreeEntity{
                             Code = last==null?"00001.00001":  (lastIndex+1).ToString().PadLeft(5,'0')+".00001",
                             CreationTime = DateTime.Now,
                             DisplayName = "顺丰",
                             TenantId = _tenantId,
                          },
-                         new TDataDictionary{
+                         new GeneralTreeEntity{
                             Code = last==null?"00001.00002":  (lastIndex+1).ToString().PadLeft(5,'0')+".00002",
                             CreationTime = DateTime.Now,
                             DisplayName = "中通",
                             TenantId = _tenantId,
                          },
-                         new TDataDictionary{
+                         new GeneralTreeEntity{
                             Code = last==null?"00001.00003":  (lastIndex+1).ToString().PadLeft(5,'0')+".00003",
                             CreationTime = DateTime.Now,
                             DisplayName = "圆通",

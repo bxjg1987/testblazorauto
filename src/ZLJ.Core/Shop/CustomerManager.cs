@@ -3,14 +3,14 @@ using BXJG.Shop.Customer;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using ZLJ.Administrative;
 using ZLJ.Authorization.Users;
+using ZLJ.BaseInfo.Administrative;
 
 namespace ZLJ.Shop
 {
-    public class CustomerManager : CustomerManager<User, AdministrativeEntity>
+    public class CustomerManager : CustomerManager<User>
     {
-        public CustomerManager(IRepository<CustomerEntity<User, AdministrativeEntity>, long> repository) : base(repository)
+        public CustomerManager(IRepository<CustomerEntity<User>, long> repository) : base(repository)
         {
         }
     }

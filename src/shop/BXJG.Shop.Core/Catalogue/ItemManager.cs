@@ -15,25 +15,25 @@ namespace BXJG.Shop.Catalogue
     /// 内部会触发相应领域事件
     /// </summary>
     /// <typeparam name="TDataDictionary"></typeparam>
-    public class ItemManager<TDataDictionary> : BXJGShopDomainServiceBase
-    //where TDataDictionary: GeneralTreeEntity<TDataDictionary>
+    public class ItemManager : BXJGShopDomainServiceBase
+    //where TDataDictionary: GeneralTreeEntity
     {
         ///// <summary>
         ///// 发布此商品
         ///// </summary>
         ///// <param name="yxq">开始发布时间，默认当前时间</param>
         ///// <param name="js">结束时间</param>
-        //public Task PublishAsync(ItemEntity<TDataDictionary> item, DateTimeOffset? yxq = default, DateTimeOffset? js = default)
+        //public Task PublishAsync(ItemEntity item, DateTimeOffset? yxq = default, DateTimeOffset? js = default)
         //{
         //    item.Publish(yxq, js);
-        //    return EventBus.TriggerAsync(new ItemPublishChangedEventData<ItemEntity<TDataDictionary>>(item));
+        //    return EventBus.TriggerAsync(new ItemPublishChangedEventData<ItemEntity>(item));
         //}
         ///// <summary>
         ///// 发布此商品
         ///// </summary>
         ///// <param name="yxq">开始发布时间，默认当前时间</param>
         ///// <param name="js">有效期，单位秒</param>
-        //public Task PublishDurationAsync(ItemEntity<TDataDictionary> item, DateTimeOffset? yxq = default, long js = 60 * 60 * 24 * 365 * 10)
+        //public Task PublishDurationAsync(ItemEntity item, DateTimeOffset? yxq = default, long js = 60 * 60 * 24 * 365 * 10)
         //{
         //    yxq = yxq ?? DateTimeOffset.Now;
         //    return PublishAsync(item, yxq, yxq.Value.AddSeconds(js));
@@ -43,9 +43,9 @@ namespace BXJG.Shop.Catalogue
         ///// </summary>
         ///// <param name="item"></param>
         ///// <returns></returns>
-        //public Task UnPublishAsync(ItemEntity<TDataDictionary> item) {
+        //public Task UnPublishAsync(ItemEntity item) {
         //    item.UnPublish();
-        //    return EventBus.TriggerAsync(new ItemPublishChangedEventData<ItemEntity<TDataDictionary>>(item));
+        //    return EventBus.TriggerAsync(new ItemPublishChangedEventData<ItemEntity>(item));
         //    //item.AvailableStart = null;
         //}
     }

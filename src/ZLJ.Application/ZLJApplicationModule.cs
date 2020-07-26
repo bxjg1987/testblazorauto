@@ -2,12 +2,13 @@
 using Abp.Dependency;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
+using BXJG.BaseInfo;
 using BXJG.Equipment;
 using BXJG.GeneralTree;
 using BXJG.Shop;
 using BXJG.Shop.Catalogue;
 using System.Reflection;
-using ZLJ.Administrative;
+
 using ZLJ.Authorization;
 using ZLJ.Authorization.Roles;
 using ZLJ.Authorization.Users;
@@ -18,16 +19,14 @@ namespace ZLJ
     [DependsOn(
         typeof(ZLJCoreModule), 
         typeof(AbpAutoMapperModule),
-        typeof(BXJGEquipmentApplicationModule))]
+        typeof(BXJGEquipmentApplicationModule),
+        typeof(BXJGBaseInfoApplicationModule))]
     public class ZLJApplicationModule : AbpModule
     {
         public override void PreInitialize()
         {
             Configuration.Authorization.Providers.Add<ZLJAuthorizationProvider>();
 
-            Configuration.Modules.AbpAutoMapper().Configurators.Add(cfg => cfg.AddMaps(Assembly.GetExecutingAssembly()));
-            Configuration.Modules.AbpAutoMapper().Configurators.Add(cfg => cfg.AddProfile<BXJGShopMapProfile<User, AdministrativeEntity, GeneralTreeEntity>>());
-            Configuration.Modules.AbpAutoMapper().Configurators.Add(cfg => cfg.AddProfile<BXJGEquipmentMapProfile<User, AdministrativeEntity, GeneralTreeEntity>>());
         }
 
         public override void Initialize()
@@ -37,7 +36,10 @@ namespace ZLJ
             //IocManager.Register(typeof(IBXJGShopFrontItemAppService), typeof(BXJGShopFrontItemAppService<GeneralTreeEntity>), DependencyLifeStyle.Transient);
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
 
-           
+            //注册automapper映射
+            Configuration.Modules.AbpAutoMapper().Configurators.Add(cfg => cfg.AddMaps(Assembly.GetExecutingAssembly()));
+            Configuration.Modules.AbpAutoMapper().Configurators.Add(cfg => cfg.AddProfile<BXJGShopMapProfile<User>>());
+            Configuration.Modules.AbpAutoMapper().Configurators.Add(cfg => cfg.AddProfile<BXJGEquipmentMapProfile<User>>());
         }
     }
 }

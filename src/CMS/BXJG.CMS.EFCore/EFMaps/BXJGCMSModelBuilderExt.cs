@@ -9,13 +9,13 @@ namespace BXJG.CMS.EFCore.EFMaps
 {
     public static class BXJGCMSModelBuilderExt
     {
-        public static ModelBuilder ApplyConfigurationBXJGCMS<TDataDictionary>(this ModelBuilder modelBuilder)
+        public static ModelBuilder ApplyConfigurationBXJGCMS(this ModelBuilder modelBuilder)
             //where TUser : AbpUserBase
         {
             return modelBuilder
                 .ApplyConfigurationsFromAssembly(BXJGCMSEFCoreModule.GetAssembly())
-                .ApplyConfiguration(new ColumnMap<TDataDictionary>())
-                .ApplyConfiguration(new ArticleMap<TDataDictionary>());
+                .ApplyConfiguration(new ColumnMap())
+                .ApplyConfiguration(new ArticleMap());
 
         }
     }

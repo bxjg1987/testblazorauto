@@ -4,4 +4,20 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Seed\DefaultBXJGShopCustomerBuilder.cs" />
+    <Compile Remove="Seed\DefaultBXJGShopDataDictionary.cs" />
+    <Compile Remove="Seed\DefaultBXJGShopItemBuilder.cs" />
+    <Compile Remove="Seed\DefaultBXJGShopItemCagtegoryBuilder.cs" />
+    <Compile Remove="Seed\DefaultBXJGShopOrderBuilder.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Abp.ZeroCore.EntityFrameworkCore" Version="5.10.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BXJG.BaseInfo.Core\BXJG.BaseInfo.Core.csproj" />
+  </ItemGroup>
+
 </Project>

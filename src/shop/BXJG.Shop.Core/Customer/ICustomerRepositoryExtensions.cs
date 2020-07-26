@@ -22,27 +22,23 @@ namespace BXJG.Shop.Customer
     /// </summary>
     public static class ICustomerRepositoryExtensions
     {
-        public static Task<CustomerEntity<TUser,TArea>> SingleByUserIdWithUserAsync<TUser,TArea >(this IRepository<CustomerEntity<TUser,TArea >, long> repository, long userId)
+        public static Task<CustomerEntity<TUser>> SingleByUserIdWithUserAsync<TUser >(this IRepository<CustomerEntity<TUser >, long> repository, long userId)
             where TUser : AbpUserBase
-            where TArea : GeneralTreeEntity<TArea>, IAdministrative
         {
             return repository.GetAllIncluding(c => c.User).SingleAsync(c => c.UserId == userId);
         }
-        public static Task<CustomerEntity<TUser,TArea >> SingleByUserIdWithoutUserAsync<TUser,TArea >(this IRepository<CustomerEntity<TUser,TArea >, long> repository, long userId)
+        public static Task<CustomerEntity<TUser >> SingleByUserIdWithoutUserAsync<TUser >(this IRepository<CustomerEntity<TUser >, long> repository, long userId)
             where TUser : AbpUserBase
-            where TArea : GeneralTreeEntity<TArea>, IAdministrative
         {
             return repository.SingleAsync(c => c.UserId == userId);
         }
-        public static Task<CustomerEntity<TUser ,TArea>> SingleOrDefaultByUserIdWithUserAsync<TUser ,TArea>(this IRepository<CustomerEntity<TUser ,TArea>, long> repository, long userId)
+        public static Task<CustomerEntity<TUser >> SingleOrDefaultByUserIdWithUserAsync<TUser >(this IRepository<CustomerEntity<TUser >, long> repository, long userId)
             where TUser : AbpUserBase
-            where TArea : GeneralTreeEntity<TArea>, IAdministrative
         {
             return repository.GetAllIncluding(c => c.User).SingleOrDefaultAsync(c => c.UserId == userId);
         }
-        public static Task<CustomerEntity<TUser,TArea >> SingleOrDefaultByUserIdWithoutUserAsync<TUser,TArea >(this IRepository<CustomerEntity<TUser,TArea >, long> repository, long userId)
+        public static Task<CustomerEntity<TUser >> SingleOrDefaultByUserIdWithoutUserAsync<TUser >(this IRepository<CustomerEntity<TUser >, long> repository, long userId)
             where TUser : AbpUserBase
-            where TArea : GeneralTreeEntity<TArea>, IAdministrative
         {
             return repository.GetAll().SingleOrDefaultAsync(c => c.UserId == userId);
         }

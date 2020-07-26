@@ -1,5 +1,6 @@
 ﻿using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
+using BXJG.Common;
 using BXJG.Utils.Enums;
 using BXJG.Utils.Localization;
 using System;
