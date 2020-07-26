@@ -12,6 +12,8 @@ namespace BXJG.GeneralTree
     {
         public static IMappingExpression DtoToEntity(this IMappingExpression config)
         {
+            return config;
+
             return config.ForMember("Code", opt => opt.Ignore())
                     .ForMember("Parent", opt => opt.Ignore())
                     .ForMember("TenantId", opt => opt.Ignore())
@@ -32,11 +34,15 @@ namespace BXJG.GeneralTree
            where TSource : GeneralTreeEntity<TSource>
            where TDestination : GeneralTreeGetTreeNodeBaseDto<TDestination>
         {
+            return config;
+
             return config.ForMember(c => c.ExtData, opt => opt.Ignore());
         }
 
         public static IMappingExpression EntityToDto(this IMappingExpression config)
         {
+            return config;
+
             return config.ForMember("ExtData", opt => opt.Ignore());
         }
 
@@ -44,6 +50,8 @@ namespace BXJG.GeneralTree
             where TSource : GeneralTreeEntity<TSource>
             where TDestination : GeneralTreeNodeDto<TDestination>
         {
+            return config.ForMember(c => c.Text, opt => opt.MapFrom(c => c.DisplayName));
+
             return config.ForMember(c => c.Text, opt => opt.MapFrom(c => c.DisplayName))
                     .ForMember(c => c.IconCls, opt => opt.Ignore())
                     .ForMember(c => c.Checked, opt => opt.Ignore());
@@ -53,14 +61,14 @@ namespace BXJG.GeneralTree
 
         public static IMappingExpression EntityToComboTree(this IMappingExpression config)
         {
+            return config.ForMember("Text", opt => opt.MapFrom("DisplayName"));
+
             return config.ForMember("Text", opt => opt.MapFrom("DisplayName"))
                     .ForMember("IconCls", opt => opt.Ignore())
                     .ForMember("Checked", opt => opt.Ignore())
             //.ForMember(c => c.State, opt => opt.Ignore())
             .ForMember("ExtData", opt => opt.Ignore());
         }
-
-
 
         public static IMappingExpression<TSource, TDestination> EntityToCombobox<TSource, TDestination>(this IMappingExpression<TSource, TDestination> config)
             where TSource : GeneralTreeEntity<TSource>
@@ -69,7 +77,7 @@ namespace BXJG.GeneralTree
             return config.ForMember(c => c.DisplayText, opt => opt.MapFrom(c => c.DisplayName))
                     .ForMember(c => c.Value, opt => opt.MapFrom(c => c.Id.ToString()));
         }
-
+     
         public static IMappingExpression EntityToCombobox(this IMappingExpression config)
         {
             return config.ForMember("DisplayText", opt => opt.MapFrom("DisplayName"))

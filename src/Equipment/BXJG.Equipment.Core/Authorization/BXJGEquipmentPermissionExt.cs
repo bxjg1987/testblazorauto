@@ -34,7 +34,7 @@ namespace BXJG.Equipment.Authorization
             sbxx.CreateChildPermission(BXJGEquipmentPermissionNames.BXJGEquipmentEquipmentInfoDelete,
                                        "删除".UtilsLI(),
                                        multiTenancySides: Abp.MultiTenancy.MultiTenancySides.Tenant);
-            return parent;
+            return root;
         }
     }
 }

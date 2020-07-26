@@ -1,9 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <localizationDictionary culture="zh-Hans">
-  <texts>
-    <text name="数据字典" value="数据字典" />
-    <text name="此节点不允许修改！" value="此节点不允许修改！" />
-    <text name="系统预设数据不允许删除！" value="系统预设数据不允许删除！" />
-    <text name="全部" value="全部" />
-  </texts>
+	<texts>
+		<text name="数据字典" value="数据字典" />
+		<text name="此节点不允许修改！" value="此节点不允许修改！" />
+		<text name="系统预设数据不允许删除！" value="系统预设数据不允许删除！" />
+		<text name="全部" value="全部" />
+		<text name="GeneralTreeMenu" value="数据字典" />
+	</texts>
 </localizationDictionary>

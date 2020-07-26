@@ -62,9 +62,9 @@ namespace ZLJ.Navigation
                                                 url: "/baseinfo/Employee/index.html",
                                                 permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorBaseInfoEmployee)));
           
-            var sjzd = cfg.InitNav(jczl);
-            sjzd.Icon = "shuju";
-            sjzd.Url = "/baseinfo/generalTree/index.html";
+            //var sjzd = cfg.InitNav(jczl);
+            //sjzd.Icon = "shuju";
+            //sjzd.Url = "/baseinfo/generalTree/index.html";
 
 
             jczl.AddItem(new MenuItemDefinition("Btype",

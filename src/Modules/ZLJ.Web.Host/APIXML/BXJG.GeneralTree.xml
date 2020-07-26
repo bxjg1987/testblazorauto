@@ -232,6 +232,11 @@
             追加到目标节点的子节点中
             </summary>
         </member>
+        <member name="T:BXJG.GeneralTree.GeneralTreeNavigationExt">
+            <summary>
+            为了模块的使用方更容易的将此模块中的菜单插入到主菜单的任意节点，这里定义此模块中的菜单相关的扩展方法
+            </summary>
+        </member>
         <member name="T:BXJG.GeneralTree.GeneralTreeNodeDto`1">
             <summary>
             获取树形下拉框数据的模型
@@ -281,6 +286,13 @@
             <summary>
             移动到目标节点的相对位置
             </summary>
+        </member>
+        <member name="M:BXJG.GeneralTree.GeneralTreePermissionExt.AddGeneralTreePermission(Abp.Authorization.Permission)">
+            <summary>
+            将基础信息模块中 权限树 的顶级节点 添加到 此节点的子节点中。返回此节点以便实现链式编程
+            </summary>
+            <param name="parent"></param>
+            <returns></returns>
         </member>
         <member name="T:BXJG.GeneralTree.IUnAuthGeneralTreeAppService">
             <summary>

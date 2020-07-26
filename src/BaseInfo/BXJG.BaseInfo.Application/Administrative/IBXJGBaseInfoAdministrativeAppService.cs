@@ -3,7 +3,7 @@ using ZLJ.BaseInfo;
 
 namespace ZLJ.BaseInfo.Administrative
 {
-    public interface IAdministrativeAppService : IGeneralTreeAppServiceBase<
+    public interface IBXJGBaseInfoAdministrativeAppService : IGeneralTreeAppServiceBase<
         AdministrativeDto,
         AdministrativeEditDto,
         GeneralTreeGetTreeInput,

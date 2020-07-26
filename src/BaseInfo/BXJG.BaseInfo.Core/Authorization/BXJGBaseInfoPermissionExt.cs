@@ -1,5 +1,6 @@
 ﻿using Abp.Authorization;
 using BXJG.BaseInfo.Localization;
+using BXJG.GeneralTree;
 using BXJG.Utils.Localization;
 using System;
 using System.Collections.Generic;
@@ -35,7 +36,10 @@ namespace BXJG.BaseInfo.Authorization
             sbxx.CreateChildPermission(BXJGBaseInfoPermissionNames.BXJGBaseInfoAdministrativeDelete,
                                        "删除".UtilsLI(),
                                        multiTenancySides: Abp.MultiTenancy.MultiTenancySides.Tenant);
-            return parent;
+
+            root.AddGeneralTreePermission();
+
+            return root;
         }
     }
 }

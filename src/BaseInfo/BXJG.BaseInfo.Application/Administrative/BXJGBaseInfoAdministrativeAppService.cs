@@ -9,7 +9,7 @@ using ZLJ.BaseInfo;
 
 namespace ZLJ.BaseInfo.Administrative
 {
-    public class AdministrativeAppService : GeneralTreeAppServiceBase<
+    public class BXJGBaseInfoAdministrativeAppService : GeneralTreeAppServiceBase<
              AdministrativeDto,
              AdministrativeEditDto,
              GeneralTreeGetTreeInput,
@@ -19,9 +19,9 @@ namespace ZLJ.BaseInfo.Administrative
              AdministrativeCombboxDto,
              GeneralTreeNodeMoveInput,
              AdministrativeEntity,
-             AdministrativeManager>, IAdministrativeAppService
+             AdministrativeManager>, IBXJGBaseInfoAdministrativeAppService
     {
-        public AdministrativeAppService(
+        public BXJGBaseInfoAdministrativeAppService(
             IRepository<AdministrativeEntity, long> repository,
             AdministrativeManager organizationUnitManager)
             : base(repository, organizationUnitManager)

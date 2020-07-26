@@ -3,6 +3,7 @@ using Abp.Authorization;
 using Abp.Localization;
 using BXJG.BaseInfo.Authorization;
 using BXJG.BaseInfo.Localization;
+using BXJG.GeneralTree;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,20 +30,28 @@ namespace BXJG.BaseInfo
             jczl.AddItem(new MenuItemDefinition(name: BXJGBaseInfoPermissionNames.BXJGBaseInfoAdministrative,
                                                 displayName: BXJGBaseInfoPermissionNames.BXJGBaseInfoAdministrative.BXJGBaseInfoL(),
                                                 icon: "qizi",
-                                                url: $"/{BXJGBaseInfoPermissionNames.BXJGBaseInfo}/{BXJGBaseInfoPermissionNames.BXJGBaseInfoAdministrative}/index.html",
+                                                url: $"/{BXJGBaseInfoPermissionNames.BXJGBaseInfo}/Administrative/index.html",
                                                 requiresAuthentication: true,
                                                 permissionDependency: new SimplePermissionDependency(BXJGBaseInfoPermissionNames.BXJGBaseInfoAdministrative)));
+
+            var sjzd = jczl.AddGeneralTreeNavigation();
+            sjzd.Icon = "shuju";
+            sjzd.Url = "/bxjgbaseinfo/generalTree/index.html";
+
             return jczl;
         }
 
-        public static MenuDefinition AddBXJGBaseInfoNavigation(this MenuDefinition parent)
+        public static MenuItemDefinition AddBXJGBaseInfoNavigation(this MenuDefinition parent)
         {
-            parent.AddItem(Create());
-            return parent;
+            var p = Create();
+            parent.AddItem(p);
+            return p;
         }
         public static MenuItemDefinition AddBXJGBaseInfoNavigation(this MenuItemDefinition parent)
         {
-            parent.AddItem(Create());
-            return parent;  }
+            var p = Create();
+            parent.AddItem(p);
+            return p;
+        }
     }
 }

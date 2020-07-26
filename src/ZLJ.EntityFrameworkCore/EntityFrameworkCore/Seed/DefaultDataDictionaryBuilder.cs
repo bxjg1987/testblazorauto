@@ -79,7 +79,7 @@ namespace ZLJ.EntityFrameworkCore.Seed
             {
                 _context.BXJGGeneralTreeEntities.Add(new GeneralTreeEntity
                 {
-                    Code = "00001.0001",
+                    Code = "00001.00001",
                     DisplayName = "渝北",
                     IsSysDefine = true,
                     TenantId = _tenantId,
@@ -87,7 +87,7 @@ namespace ZLJ.EntityFrameworkCore.Seed
                 });
                 _context.BXJGGeneralTreeEntities.Add(new GeneralTreeEntity
                 {
-                    Code = "00001.0002",
+                    Code = "00001.00002",
                     DisplayName = "九龙坡",
                     IsSysDefine = true,
                     TenantId = _tenantId,
@@ -99,7 +99,7 @@ namespace ZLJ.EntityFrameworkCore.Seed
             {
                 _context.BXJGGeneralTreeEntities.Add(new GeneralTreeEntity
                 {
-                    Code = "00002.0001",
+                    Code = "00002.00001",
                     DisplayName = "博士及以上",
                     IsSysDefine = true,
                     TenantId = _tenantId,
@@ -107,7 +107,7 @@ namespace ZLJ.EntityFrameworkCore.Seed
                 });
                 _context.BXJGGeneralTreeEntities.Add(new GeneralTreeEntity
                 {
-                    Code = "00002.0002",
+                    Code = "00002.00002",
                     DisplayName = "硕士",
                     IsSysDefine = true,
                     TenantId = _tenantId,
@@ -119,7 +119,7 @@ namespace ZLJ.EntityFrameworkCore.Seed
             {
                 _context.BXJGGeneralTreeEntities.Add(new GeneralTreeEntity
                 {
-                    Code = "00003.0001",
+                    Code = "00003.00001",
                     DisplayName = "汉族",
                     IsSysDefine = true,
                     TenantId = _tenantId,
@@ -127,7 +127,7 @@ namespace ZLJ.EntityFrameworkCore.Seed
                 });
                 _context.BXJGGeneralTreeEntities.Add(new GeneralTreeEntity
                 {
-                    Code = "00003.0002",
+                    Code = "00003.00002",
                     DisplayName = "维吾尔族",
                     IsSysDefine = true,
                     TenantId = _tenantId,

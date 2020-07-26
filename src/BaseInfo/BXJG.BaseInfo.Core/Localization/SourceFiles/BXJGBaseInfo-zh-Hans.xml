@@ -3,6 +3,10 @@
   <texts>
     <text name="BXJGBaseInfo" value="基础信息" />
 	<text name="BXJGBaseInfoAdministrative" value="行政区域" />
+
+	  <text name="ZLJ.BaseInfo.Administrative.AdministrativeLevel.Province" value="省、直辖市" />
+	  <text name="ZLJ.BaseInfo.Administrative.AdministrativeLevel.City" value="市" />
+	  <text name="ZLJ.BaseInfo.Administrative.AdministrativeLevel.County" value="区县" />
 	  
   </texts>
 </localizationDictionary>

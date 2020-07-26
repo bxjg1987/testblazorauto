@@ -39,7 +39,7 @@ namespace ZLJ.Authorization
 
             #endregion
             #region 基础信息
-            admin.AddBaseInfoPermission();
+             admin.AddBaseInfoPermission();
             #endregion
             #region 基础资料
             var baseInfo = admin.CreateChildPermission(PermissionNames.AdministratorBaseInfo, L("BaseInfo"), multiTenancySides: MultiTenancySides.Tenant);
@@ -65,7 +65,7 @@ namespace ZLJ.Authorization
             emp.CreateChildPermission(PermissionNames.AdministratorBaseInfoEmployeeDelete, L("Delete"), multiTenancySides: MultiTenancySides.Tenant);
 
          
-            cfg.InitPermission(baseInfo);
+            //cfg.InitPermission(baseInfo);
             //var zd = baseInfo.CreateChildPermission(PermissionNames.AdministratorBaseInfoDataDictionary, L("DataDictionary"), multiTenancySides: MultiTenancySides.Tenant);
             //zd.CreateChildPermission(PermissionNames.AdministratorBaseInfoDataDictionaryCreate, L("Add"), multiTenancySides: MultiTenancySides.Tenant);
             //zd.CreateChildPermission(PermissionNames.AdministratorBaseInfoDataDictionaryUpdate, L("Update"), multiTenancySides: MultiTenancySides.Tenant);
