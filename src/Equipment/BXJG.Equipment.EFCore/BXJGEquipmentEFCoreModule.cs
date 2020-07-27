@@ -4,7 +4,7 @@ using BXJG.Equipment;
 using System;
 using System.Reflection;
 
-namespace BXJG.Equipment
+namespace BXJG.Equipment.EFCore
 {
     public class BXJGEquipmentEFCoreModule : AbpModule
     {

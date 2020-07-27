@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BXJG.Equipment
+namespace BXJG.Equipment.EFCore.EFMaps
 {
     public class EquipmentInfoMap<TEntity> : IEntityTypeConfiguration<EquipmentInfoEntity>
     {
@@ -15,7 +15,6 @@ namespace BXJG.Equipment
         {
             builder.Property(c => c.HardwareCode).HasColumnType($"varchar({BXJGEquipmentConst.EquipmentInfoHardwareCodeMaxLength})");
             builder.Property(c => c.Name).HasMaxLength(BXJGEquipmentConst.EquipmentInfoNameMaxLength).IsRequired();
-
             builder.Property(c => c.Longitude).IsRequired();
             builder.Property(c => c.Latitude).IsRequired();
         }

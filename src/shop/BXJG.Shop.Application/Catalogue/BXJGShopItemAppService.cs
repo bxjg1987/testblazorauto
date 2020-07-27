@@ -19,6 +19,7 @@ using Microsoft.EntityFrameworkCore;
 using BXJG.Shop.Common;
 using Abp.Linq.Extensions;
 using BXJG.Utils.File;
+using BXJG.Common.Dto;
 
 namespace BXJG.Shop.Catalogue
 {
@@ -141,9 +142,22 @@ namespace BXJG.Shop.Catalogue
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public Task DeleteAsync(DeleteInput input)
+        public async Task<BatchOperationResultLong> DeleteAsync(BatchOperationInputLong input)
         {
-            return repository.DeleteAsync(c => input.Ids.Contains(c.Id));
+            var result = new BatchOperationResultLong();
+            foreach (var item in input.Ids)
+            {
+                try
+                {
+                    await repository.DeleteAsync(item);
+                    result.Ids.Add(item);
+                }
+                catch (Exception ex)
+                {
+                    base.Logger.Warn($"删除商品档案失败，设备Id：{item}", ex);
+                }
+            }
+            return result;
         }
         /// <summary>
         /// 根据id获取商品信息

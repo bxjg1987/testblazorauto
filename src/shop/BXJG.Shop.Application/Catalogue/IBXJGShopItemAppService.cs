@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Abp.Authorization;
 using BXJG.Shop.Authorization;
 using Abp.Application.Services.Dto;
+using BXJG.Common.Dto;
 
 namespace BXJG.Shop.Catalogue
 {
@@ -56,7 +57,7 @@ namespace BXJG.Shop.Catalogue
         /// <param name="ids"></param>
         /// <returns></returns>
         [AbpAuthorize(BXJGShopPermissions.BXJGShopItemDelete)]
-        Task DeleteAsync(DeleteInput input);
+        Task<BatchOperationResultLong> DeleteAsync(BatchOperationInputLong input);
         /// <summary>
         /// 批量发布商品
         /// </summary>

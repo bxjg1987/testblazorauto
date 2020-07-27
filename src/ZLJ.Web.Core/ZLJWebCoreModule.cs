@@ -22,6 +22,7 @@ using BXJG.Common;
 using Abp.Dependency;
 using BXJG.Equipment;
 using BXJG.BaseInfo;
+using BXJG.Equipment.EFCore;
 
 namespace ZLJ
 {

@@ -2,6 +2,7 @@
 using Abp.Localization.Dictionaries;
 using Abp.Localization.Dictionaries.Xml;
 using Abp.Modules;
+using BXJG.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,8 @@ using System.Threading.Tasks;
 
 namespace BXJG.GeneralTree
 {
-    [DependsOn(typeof(AbpAutoMapperModule))]
+    [DependsOn(typeof(AbpAutoMapperModule),
+               typeof(BXJGUtilsModule))]
     public class GeneralTreeModule : AbpModule
     {
         public override void PreInitialize()

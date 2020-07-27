@@ -6,51 +6,38 @@ using System.Text;
 
 namespace BXJG.Equipment.Localization
 {
+    /// <summary>
+    /// 设备管理模块针对模块内的本地化的扩展
+    /// 内部方法均使用本模块的本地化资源文件
+    /// </summary>
     public static class BXJGEuipmentLocalizationExtision
     {
-        public static string LSN => BXJGEquipmentConst.LocalizationSourceName;
+        static string LSN => BXJGEquipmentConst.LocalizationSourceName;
+        /// <summary>
+        /// 获取本模块中指定键的ILocalizableString
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public static ILocalizableString BXJGEquipmentL(this string key)
         {
             return new LocalizableString(key, LSN);
         }
+        /// <summary>
+        /// 获取设备管理模块中指定键的本地化字符串
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public static string BXJGEquipmentLS(this string key)
         {
             return LocalizationHelper.Manager.GetString(LSN, key);
         }
         public static string BXJGEquipmentLS<TEnum>(this TEnum val) where TEnum : Enum
         {
-            return LocalizationHelper.Manager.GetEnum<TEnum>(LSN, val);
+            return LocalizationHelper.Manager.GetEnum(LSN, val);
         }
         public static IDictionary<int, string> BXJGEquipmentLDic<TEnum>(this TEnum val) where TEnum : Enum
         {
             return LocalizationHelper.Manager.GetEnum<TEnum>(LSN);
         }
-        ///// <summary>
-        ///// 获取订单状态的本地化文本
-        ///// </summary>
-        ///// <param name="key"></param>
-        ///// <returns></returns>
-        //public static string BXJGEquipmentOrderStatus(this OrderStatus status)
-        //{
-        //    return status.BXJGEquipmentEnum<OrderStatus>();
-        //}
-        ///// <summary>
-        ///// 获取订单的物流状态的本地化文本
-        ///// </summary>
-        ///// <param name="key"></param>
-        ///// <returns></returns>
-        //public static string BXJGEquipmentLogisticsStatus(this LogisticsStatus status)
-        //{
-        //    return status.BXJGEquipmentEnum<LogisticsStatus>();
-        //}
-        ///// <summary>
-        ///// 获取订单支付状态本地化文本
-        ///// </summary>
-        ///// <param name="status"></param>
-        ///// <returns></returns>
-        //public static string BXJGEquipmentPaymentStatus(this PaymentStatus status)
-        //{
-        //    return status.BXJGEquipmentEnum<PaymentStatus>();
-        //}
     }
 }

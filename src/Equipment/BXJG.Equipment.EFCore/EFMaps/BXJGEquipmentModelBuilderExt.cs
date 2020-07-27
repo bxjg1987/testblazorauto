@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 
-namespace BXJG.Equipment
+namespace BXJG.Equipment.EFCore.EFMaps
 {
     public static class BXJGEquipmentModelBuilderExt
     {

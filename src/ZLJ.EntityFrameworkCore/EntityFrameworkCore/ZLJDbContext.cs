@@ -20,6 +20,7 @@ using BXJG.Equipment;
 using BXJG.BaseInfo.EFCore.EFMaps;
 using ZLJ.BaseInfo.Administrative;
 using BXJG.Equipment.EquipmentInfo;
+using BXJG.Equipment.EFCore.EFMaps;
 
 namespace ZLJ.EntityFrameworkCore
 {

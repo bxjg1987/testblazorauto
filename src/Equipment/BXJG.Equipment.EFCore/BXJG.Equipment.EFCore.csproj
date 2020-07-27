@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <RootNamespace>BXJG.Equipment</RootNamespace>
+    <RootNamespace>BXJG.Equipment.EFCore</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

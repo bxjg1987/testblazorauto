@@ -14,15 +14,15 @@ namespace BXJG.Equipment
     {
         static MenuItemDefinition Create()
         {
-            var jczl = new MenuItemDefinition("BXJGEquipment",
-                                              "BXJGEquipment".BXJGEquipmentL(),
-                                               icon: "shebei",
-                                               permissionDependency: new SimplePermissionDependency(BXJGEquipmentPermissionNames.BXJGEquipment));
+            var jczl = new MenuItemDefinition(BXJGEquipmentPermissionNames.BXJGEquipment,
+                                              BXJGEquipmentPermissionNames.BXJGEquipment.BXJGEquipmentL(),
+                                              icon: "shebei",
+                                              permissionDependency: new SimplePermissionDependency(BXJGEquipmentPermissionNames.BXJGEquipment));
 
-            //初始化更多菜单或子菜单
+            //代码生成器的占位符，它将在这里插入更多菜单
             //{codegenerator}
 
-            //添加设备信息的菜单定义
+            //设备档案
             jczl.AddItem(new MenuItemDefinition(name: BXJGEquipmentPermissionNames.BXJGEquipmentEquipmentInfo,
                                                 displayName: BXJGEquipmentPermissionNames.BXJGEquipmentEquipmentInfo.BXJGEquipmentL(),
                                                 icon: "dangan",

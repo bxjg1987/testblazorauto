@@ -8,6 +8,9 @@ using ZLJ.BaseInfo.Administrative;
 
 namespace BXJG.Equipment.EquipmentInfo
 {
+    /// <summary>
+    /// 设备档案实体类
+    /// </summary>
     public class EquipmentInfoEntity : FullAuditedEntity<long>, IMustHaveTenant
     {
         /// <summary>

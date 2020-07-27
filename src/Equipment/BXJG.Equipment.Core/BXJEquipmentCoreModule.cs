@@ -1,12 +1,13 @@
 ﻿using Abp.Modules;
 using BXJG.Equipment.Configuration;
 using BXJG.Equipment.Localization;
+using BXJG.GeneralTree;
 using BXJG.Utils;
 using System;
 
 namespace BXJG.Equipment
 {
-    [DependsOn(typeof(BXJGUtilsModule))]
+    [DependsOn(typeof(GeneralTreeModule))]
     public class BXJEquipmentCoreModule : AbpModule
     {
         public override void PreInitialize()
