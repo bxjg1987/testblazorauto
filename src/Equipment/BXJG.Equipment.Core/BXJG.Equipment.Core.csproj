@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\BaseInfo\BXJG.BaseInfo.Core\BXJG.BaseInfo.Core.csproj" />
     <ProjectReference Include="..\..\Modules\BXJG.GeneralTree\BXJG.GeneralTree.csproj" />
   </ItemGroup>
 

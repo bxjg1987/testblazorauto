@@ -4,6 +4,7 @@ using BXJG.GeneralTree;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using ZLJ.BaseInfo.Administrative;
 
 namespace BXJG.Equipment.EquipmentInfo
 {
@@ -25,6 +26,18 @@ namespace BXJG.Equipment.EquipmentInfo
         /// 纬度
         /// </summary>
         public decimal Latitude { get; set; }
+        /// <summary>
+        /// 硬件码
+        /// </summary>
+        public string HardwareCode { get; set; }
+        /// <summary>
+        /// 所属区域Id
+        /// </summary>
+        public long? AreaId { get; set; }
+        /// <summary>
+        /// 所属区域实体
+        /// </summary>
+        public virtual AdministrativeEntity Area { get; set; }
         ///// <summary>
         ///// 助记码
         ///// </summary>

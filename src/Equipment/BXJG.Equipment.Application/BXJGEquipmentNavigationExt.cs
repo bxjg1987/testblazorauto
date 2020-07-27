@@ -26,7 +26,7 @@ namespace BXJG.Equipment
             jczl.AddItem(new MenuItemDefinition(name: BXJGEquipmentPermissionNames.BXJGEquipmentEquipmentInfo,
                                                 displayName: BXJGEquipmentPermissionNames.BXJGEquipmentEquipmentInfo.BXJGEquipmentL(),
                                                 icon: "dangan",
-                                                url: $"/{BXJGEquipmentPermissionNames.BXJGEquipment}/{BXJGEquipmentPermissionNames.BXJGEquipmentEquipmentInfo}/index.html",
+                                                url: $"/{BXJGEquipmentPermissionNames.BXJGEquipment}/equipmentinfo/index.html",
                                                 requiresAuthentication: true,
                                                 permissionDependency: new SimplePermissionDependency()));
             return jczl;

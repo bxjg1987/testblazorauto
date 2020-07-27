@@ -13,8 +13,9 @@ namespace BXJG.Equipment
     {
         public void Configure(EntityTypeBuilder<EquipmentInfoEntity> builder)
         {
-            //builder.Property(c => c.Title).HasColumnType($"varchar({BXJGShopDictionaryEntity.IconMaxLength})");
+            builder.Property(c => c.HardwareCode).HasColumnType($"varchar({BXJGEquipmentConst.EquipmentInfoHardwareCodeMaxLength})");
             builder.Property(c => c.Name).HasMaxLength(BXJGEquipmentConst.EquipmentInfoNameMaxLength).IsRequired();
+
             builder.Property(c => c.Longitude).IsRequired();
             builder.Property(c => c.Latitude).IsRequired();
         }

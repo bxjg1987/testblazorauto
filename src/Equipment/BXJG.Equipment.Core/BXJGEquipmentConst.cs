@@ -10,6 +10,7 @@ namespace BXJG.Equipment
 
         #region 设备信息
         public const int EquipmentInfoNameMaxLength = 200;
+        public const int EquipmentInfoHardwareCodeMaxLength = 50;
         //public const int EquipmentInfoMnemonicCodeMaxLength = 200;
         //public const int EquipmentInfoSizeMaxLength = 200;
         #endregion

@@ -9,6 +9,8 @@ namespace BXJG.Equipment.EquipmentInfo
 {
     public class EquipmentInfoGetAllInput : PagedAndSortedResultRequestDto, IShouldNormalize
     {
+        public string AreaCode { get; set; }
+        public string Keywords { get; set; }
         public void Normalize()
         {
             if (this.Sorting.IsNullOrEmpty())

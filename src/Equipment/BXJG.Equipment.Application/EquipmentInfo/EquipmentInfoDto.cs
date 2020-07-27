@@ -19,5 +19,17 @@ namespace BXJG.Equipment.EquipmentInfo
         /// 纬度
         /// </summary>
         public decimal Latitude { get; set; }
+        /// <summary>
+        /// 硬件码
+        /// </summary>
+        public string HardwareCode { get; set; }
+        /// <summary>
+        /// 所属区域Id
+        /// </summary>
+        public long? AreaId { get; set; }
+        /// <summary>
+        /// 所属区域名
+        /// </summary>
+        public string AreaDisplayName { get; set; }
     }
 }
