@@ -10,7 +10,7 @@ using ZLJ.EntityFrameworkCore;
 namespace ZLJ.Migrations
 {
     [DbContext(typeof(ZLJDbContext))]
-    [Migration("20200726105203_init5.10.1")]
+    [Migration("20200729162912_init5.10.1")]
     partial class init5101
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1692,6 +1692,9 @@ namespace ZLJ.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<long?>("AreaId")
+                        .HasColumnType("bigint");
+
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2");
 
@@ -1703,6 +1706,9 @@ namespace ZLJ.Migrations
 
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("HardwareCode")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -1726,6 +1732,8 @@ namespace ZLJ.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AreaId");
 
                     b.ToTable("BXJGEquipmentInfo");
                 });
@@ -2784,6 +2792,13 @@ namespace ZLJ.Migrations
                     b.HasOne("BXJG.CMS.Column.ColumnEntity", "Parent")
                         .WithMany("Children")
                         .HasForeignKey("ParentId");
+                });
+
+            modelBuilder.Entity("BXJG.Equipment.EquipmentInfo.EquipmentInfoEntity", b =>
+                {
+                    b.HasOne("ZLJ.BaseInfo.Administrative.AdministrativeEntity", "Area")
+                        .WithMany()
+                        .HasForeignKey("AreaId");
                 });
 
             modelBuilder.Entity("BXJG.GeneralTree.GeneralTreeEntity", b =>

@@ -3,6 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>BXJG.BaseInfo</RootNamespace>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Version>1.0.5</Version>
   </PropertyGroup>
 
   <ItemGroup>
