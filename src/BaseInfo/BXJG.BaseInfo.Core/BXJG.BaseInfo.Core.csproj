@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Modules\BXJG.GeneralTree\BXJG.GeneralTree.csproj" />
+    <PackageReference Include="BXJG.GeneralTree" Version="1.0.5" />
   </ItemGroup>
 
 </Project>
