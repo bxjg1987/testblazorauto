@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace OxygenChamber.Server
+namespace OxygenChamber.Server.Protocol
 {
     /// <summary>
     /// 设备发送过来的消息
@@ -14,13 +14,15 @@ namespace OxygenChamber.Server
     {
         /// <summary>
         /// 对应协议中的命令
-        /// 1开关门
-        /// 2断电
-        /// 3气阀
-        /// 4仓压
+        /// 1开关门的返回
+        /// 2断电的返回
+        /// 3气阀的返回
+        /// 4仓压的返回
         /// 5设备上报状态
         /// 
-        /// 否则表示要下发给设备的命令，原样发送
+        /// 101(0x65)控制开关门
+        /// ...
+        /// 104(0x68)控制仓压
         /// </summary>
         public byte Key { get; set; }
         /// <summary>
@@ -43,10 +45,10 @@ namespace OxygenChamber.Server
         /// 仓压
         /// </summary>
         public short Pressure { get; set; }
-        ///// <summary>
-        ///// 压力控制 true增加 false减少
-        ///// </summary>
-        //public bool PressureControl { get; set; }
+        /// <summary>
+        /// 压力控制 true增加 false减少
+        /// </summary>
+        public bool PressureControl { get; set; }
         /// <summary>
         /// 控制仓压的返回状态
         /// </summary>
@@ -59,9 +61,9 @@ namespace OxygenChamber.Server
         /// 备用8字节
         /// </summary>
         public byte[] Spare { get; set; }
-        /// <summary>
-        /// 控制方发来的原始命令，直接下发给设备用的
-        /// </summary>
-        public byte[] OriginalCMD { get; set; }
+        ///// <summary>
+        ///// 控制方发来的原始命令，直接下发给设备用的
+        ///// </summary>
+        //public byte[] OriginalCMD { get; set; }
     }
 }
