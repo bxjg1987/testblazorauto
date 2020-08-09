@@ -12,6 +12,11 @@ namespace OxygenChamber.Server.Protocol
     /// </summary>
     public class OxygenChamberPackage : IKeyedPackageInfo<byte>
     {
+        public Guid Identity { get; } = Guid.NewGuid();
+        /// <summary>
+        /// 产生消息的时间
+        /// </summary>
+        public DateTimeOffset CreateTime { get; } = DateTimeOffset.Now;
         /// <summary>
         /// 对应协议中的命令
         /// 1开关门的返回

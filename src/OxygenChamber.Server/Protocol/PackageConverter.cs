@@ -69,19 +69,19 @@ namespace OxygenChamber.Server.Protocol
             byte[] data = null;
             switch (pack.Key)
             {
-                case 101:
-                case 102:
-                case 103:
+                case 1:
+                case 2:
+                case 3:
                     data = new byte[10];
                     data[2] = 0x07;
-                    if (pack.Key == 101)
+                    if (pack.Key == 1)
                         data[7] = pack.DoorState.ToByte();
-                    else if (pack.Key == 102)
+                    else if (pack.Key == 2)
                         data[7] = pack.ElectricState.ToByte();
-                    else if (pack.Key == 102)
+                    else if (pack.Key == 3)
                         data[7] = pack.ValveState.ToByte();
                     break;
-                case 104:
+                case 4:
                     data = new byte[12];
                     data[2] = 0x09;
                     data[7] = pack.PressureControl.ToByte();
@@ -93,7 +93,6 @@ namespace OxygenChamber.Server.Protocol
                     throw new Exception("无法识别要发送的指令");
             }
             data[0] = 0xbb;
-
             data[1] = pack.Key;
             //data[2] = 0x07;
             var equipmentId = BitConverter.GetBytes(pack.Id);
@@ -101,7 +100,8 @@ namespace OxygenChamber.Server.Protocol
             data[4] = equipmentId[2];
             data[5] = equipmentId[1];
             data[6] = equipmentId[0];
-
+            //data[7] =状态
+            data[8] = new ReadOnlySpan<byte>(data,1,8).CalculateAdd();
             data[data.Length - 1] = 0xed;
 
             writer.Write(data);

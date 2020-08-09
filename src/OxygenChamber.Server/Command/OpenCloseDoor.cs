@@ -17,14 +17,24 @@ namespace OxygenChamber.Server.Command
     {
         public async ValueTask ExecuteAsync(IAppSession session, OxygenChamberPackage package)
         {
-            //记得在配置SuperSocket时使用UseInProcSessionContainer，否则session容器为空
-            var container = (session.Server as IServer).GetAsyncSessionContainer();
-            var sessions = await container.GetSessionsAsync();
-            //找到目标设备
-            var targetSession = sessions.SingleOrDefault(c => c.AsOxygenChamberSession().EquipmentId == package.Id);
-            if (targetSession == null)
-                throw new Exception($"目标设备未与服务端建立连接，设备Id：{package.Id}");
-          // await targetSession.SendAsync();
+            var targetSession = await session.Server.GetSessionByEquipment(package.Id);
+            package.Key -= 100;
+            await (targetSession as IAppSession).SendAsync(new PackageConverter(), package);
+            var dt = DateTimeOffset.Now;
+            while ((DateTimeOffset.Now - dt).TotalSeconds < 20)
+            {
+                await Task.Delay(1);
+                var lastInfo = targetSession["cmdResult" + 1] as OxygenChamberPackage;
+                if (lastInfo == null || (DateTimeOffset.Now - lastInfo.CreateTime).TotalSeconds > 5)
+                    continue;
+                await session.SendAsync(new byte[] { 1 });
+                await session.Channel.CloseAsync();
+                return;
+            }
+            //设备返回超时
+            //throw new Exception("");
+            //await session.SendAsync(new byte[] { 0 });
+            throw new Exception("超时");
         }
     }
 }

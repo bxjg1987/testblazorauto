@@ -17,7 +17,7 @@ namespace OxygenChamber.Server.Protocol
         public static void CheckCalculateAdd(this ReadOnlySpan< byte> buffer)
         {
             //经过测试用Slice(-1)取尾部会报错 buffer[-1]也不行
-            if (buffer.CalculateAdd().Equals(buffer[buffer.Length-1]))
+            if (!buffer.CalculateAdd().Equals(buffer[buffer.Length-1]))
                 throw new Exception($"校验失败！数据：{buffer.To16String()}");
         }
         /// <summary>

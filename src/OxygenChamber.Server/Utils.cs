@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace OxygenChamber.Server
 {
@@ -36,6 +37,19 @@ namespace OxygenChamber.Server
         public static byte ToByte(this bool b)
         {
             return (byte)(b ? 1 : 0);
+        }
+
+        public static async Task<OxygenChamberSession> GetSessionByEquipment(this IServerInfo server, int equipmentId)
+        {
+            var container = (server as IServer).GetAsyncSessionContainer();
+            var sessions = await container.GetSessionsAsync();
+            foreach (var item in sessions)
+            {
+                var p = item as OxygenChamberSession;
+                if (p.EquipmentId == equipmentId)
+                    return p;
+            }
+            throw new Exception($"目标设备未与服务端建立连接，设备Id：{equipmentId}");
         }
     }
 }
