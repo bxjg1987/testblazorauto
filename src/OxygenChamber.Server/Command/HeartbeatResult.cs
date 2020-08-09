@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using OxygenChamber.Server.Protocol;
 using SuperSocket;
 using SuperSocket.Command;
@@ -14,8 +15,16 @@ namespace OxygenChamber.Server.Command
     [Command(Key = (byte)0)]
     public class HeartbeatResult : IAsyncCommand<OxygenChamberPackage>
     {
+        readonly ILogger<HeartbeatResult> logger;
+
+        public HeartbeatResult(ILogger<HeartbeatResult> logger)
+        {
+            this.logger = logger;
+        }
+
         public async ValueTask ExecuteAsync(IAppSession session, OxygenChamberPackage package)
         {
+            logger.LogInformation($"心跳上报。设备ID：{package.Id}");
             var mySession = session.AsOxygenChamberSession();
             if (mySession.EquipmentId == default)
                 session.AsOxygenChamberSession().EquipmentId = package.Id;

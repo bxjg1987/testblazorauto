@@ -53,6 +53,9 @@ namespace OxygenChamber.Server
                 .UsePackageDecoder<PackageConverter>()
                 .UseSession<OxygenChamberSession>()
                 .UseInProcSessionContainer()//必须使用这个，否则通信过程中获取session容器为空
+                .ConfigureServices(services => {
+                    services.AddSingleton<IPackageEncoder<OxygenChamberPackage>, PackageConverter>();
+                })
                 .Build();
           
             await host.RunAsync();

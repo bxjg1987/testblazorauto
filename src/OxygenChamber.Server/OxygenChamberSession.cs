@@ -4,6 +4,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace OxygenChamber.Server
 {
@@ -34,6 +35,9 @@ namespace OxygenChamber.Server
         /// 获取设备id
         /// </summary>
         public int EquipmentId { get; set; }
-
+        //protected override ValueTask OnSessionConnectedAsync()
+        //{
+        //    return base.OnSessionConnectedAsync();
+        //}
     }
 }
