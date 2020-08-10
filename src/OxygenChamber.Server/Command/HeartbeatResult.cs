@@ -24,12 +24,12 @@ namespace OxygenChamber.Server.Command
 
         public async ValueTask ExecuteAsync(IAppSession session, OxygenChamberPackage package)
         {
-            logger.LogInformation($"心跳上报。设备ID：{package.Id}");
+            logger.LogInformation($"心跳上报。设备ID：{package.EquipmentId}");
             var mySession = session.AsOxygenChamberSession();
             if (mySession.EquipmentId == default)
-                session.AsOxygenChamberSession().EquipmentId = package.Id;
-            else if (mySession.EquipmentId != package.Id)
-                throw new Exception($"异常的心跳请求！设备id不匹配，session.EquipmentId：{mySession.EquipmentId}；package.Id：{package.Id}");
+                session.AsOxygenChamberSession().EquipmentId = package.EquipmentId;
+            else if (mySession.EquipmentId != package.EquipmentId)
+                throw new Exception($"异常的心跳请求！设备id不匹配，session.EquipmentId：{mySession.EquipmentId}；package.Id：{package.EquipmentId}");
         }
     }
 }

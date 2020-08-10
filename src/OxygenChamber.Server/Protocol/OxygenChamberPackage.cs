@@ -33,7 +33,7 @@ namespace OxygenChamber.Server.Protocol
         /// <summary>
         /// 设备Id
         /// </summary>
-        public int Id { get; set; }
+        public int EquipmentId { get; set; }
         /// <summary>
         /// 门的开关状态
         /// </summary>
