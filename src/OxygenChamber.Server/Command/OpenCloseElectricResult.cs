@@ -13,8 +13,8 @@ namespace OxygenChamber.Server.Command
     /// <summary>
     /// 服务器发送开关门的指令时，将由此命令处理
     /// </summary>
-    [Command(Key = (byte)1)]
-    public class OpenCloseDoorResult : OpenCloseStateResult
+    [Command(Key = (byte)2)]
+    public class OpenCloseElectricResult : OpenCloseStateResult
     {
         //public async ValueTask ExecuteAsync(IAppSession session, OxygenChamberPackage package)
         //{
