@@ -12,6 +12,9 @@ namespace OxygenChamber.Server.Protocol
     /// </summary>
     public class OxygenChamberPackage : IKeyedPackageInfo<byte>
     {
+        /// <summary>
+        /// 每条消息的唯一id
+        /// </summary>
         public Guid Identity { get; } = Guid.NewGuid();
         /// <summary>
         /// 产生消息的时间

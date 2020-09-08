@@ -35,9 +35,9 @@ namespace OxygenChamber.Server.Command
             {
                 using (var cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"insert into BXJGEquipmentState(CreateTime,EquipmentId,DoorState,ElectricState,ValveState,Pressure,OxygenConcentration) 
-                                        values(@CreateTime,@EquipmentId,@DoorState,@ElectricState,@ValveState,@Pressure,@OxygenConcentration)";
-                    cmd.Parameters.AddWithValue("CreateTime", DateTime.Now);
+                    cmd.CommandText = @"insert into BXJGEquipmentState(CreationTime,EquipmentId,DoorState,ElectricState,ValveState,Pressure,OxygenConcentration) 
+                                        values(@CreationTime,@EquipmentId,@DoorState,@ElectricState,@ValveState,@Pressure,@OxygenConcentration)";
+                    cmd.Parameters.AddWithValue("CreationTime", DateTime.Now);
                     cmd.Parameters.AddWithValue("EquipmentId", package.EquipmentId);
                     cmd.Parameters.AddWithValue("DoorState", package.DoorState);
                     cmd.Parameters.AddWithValue("ElectricState", package.ElectricState);
