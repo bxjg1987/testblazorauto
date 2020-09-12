@@ -12,13 +12,13 @@ using SuperSocket.ProtoBase;
 namespace OxygenChamber.Server.Command
 {
     /// <summary>
-    /// 服务器发送开关门的指令时，将由此命令处理
+    /// 管理端向设备发送开关门
     /// </summary>
     [Command(Key = (byte)101)]
-    public class OpenCloseDoor : OpenCloseState<OpenCloseDoor>//, IAsyncCommand<OxygenChamberPackage>
+    public class OpenCloseDoor : OpenCloseState//, IAsyncCommand<OxygenChamberPackage>
     {
         public OpenCloseDoor(ILogger<OpenCloseDoor> logger) 
-            : base(logger, 1, "舱门", c=>c.DoorState)
+            : base( 1, "舱门", c=>c.DoorState,logger)
         {
         }
 

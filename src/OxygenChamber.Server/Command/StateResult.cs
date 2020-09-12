@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+using OxygenChamber.Server.Db;
 using OxygenChamber.Server.Protocol;
 using SuperSocket;
 using SuperSocket.Command;
@@ -18,37 +20,44 @@ namespace OxygenChamber.Server.Command
     [Command(Key = (byte)5)]
     public class StateResult : IAsyncCommand<OxygenChamberPackage>
     {
-        readonly ILogger<StateResult> logger;
-        readonly IConfiguration configuration;
-        public StateResult(ILogger<StateResult> logger, IConfiguration configuration)
+        public ILogger Logger { get; set; }
+        private readonly ConnectionProvider connectionProvider;
+
+        public StateResult(ConnectionProvider connectionProvider, ILogger<StateResult> logger = default)
         {
-            this.logger = logger;
-            this.configuration = configuration;
+            this.Logger = logger ?? NullLogger<StateResult>.Instance;
+            this.connectionProvider = connectionProvider;
         }
 
         public async ValueTask ExecuteAsync(IAppSession session, OxygenChamberPackage package)
         {
-            logger.LogInformation($"状态上报。设备ID：{package.EquipmentId}");
-            var strConn = configuration.GetConnectionString("Default");
-            //这里的场景可以考虑全局连接
-            using (var conn = new SqlConnection(strConn))
+            Logger.LogInformation($"状态上报。设备ID：{package.EquipmentId}");
+            int cc = 2;
+            for (int i = 0; i < cc; i++)
             {
-                using (var cmd = conn.CreateCommand())
+                try
                 {
-                    cmd.CommandText = @"insert into BXJGEquipmentState(CreationTime,EquipmentId,DoorState,ElectricState,ValveState,Pressure,OxygenConcentration) 
-                                        values(@CreationTime,@EquipmentId,@DoorState,@ElectricState,@ValveState,@Pressure,@OxygenConcentration)";
-                    cmd.Parameters.AddWithValue("CreationTime", DateTime.Now);
-                    cmd.Parameters.AddWithValue("EquipmentId", package.EquipmentId);
-                    cmd.Parameters.AddWithValue("DoorState", package.DoorState);
-                    cmd.Parameters.AddWithValue("ElectricState", package.ElectricState);
-                    cmd.Parameters.AddWithValue("ValveState", package.ValveState);
-                    cmd.Parameters.AddWithValue("Pressure", package.Pressure);
-                    cmd.Parameters.AddWithValue("OxygenConcentration", package.OxygenConcentration);
-                    await conn.OpenAsync();
-                    await cmd.ExecuteNonQueryAsync();
+                    var conn = connectionProvider.GetConnection();
+                    using (var cmd = conn.CreateCommand())
+                    {
+                        //这里没啥必要用参数化
+                        cmd.CommandText = $@"insert into BXJGEquipmentState(CreationTime,EquipmentId,DoorState,ElectricState,ValveState,Pressure,OxygenConcentration) 
+                                        values({DateTime.Now},{package.EquipmentId},{package.DoorState},{ package.ElectricState},{package.ValveState},{package.Pressure},{ package.OxygenConcentration})";
+                        await cmd.ExecuteNonQueryAsync();
+                        break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (i < cc)
+                        continue;
+                    throw;
+                }
+                finally
+                {
+                    await session.SendEquipmentStateAsync(package.EquipmentId, 5, true);//回复设备
                 }
             }
-            await session.SendEquipmentStateAsync(package.EquipmentId, 5, true);
         }
     }
 }

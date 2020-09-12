@@ -8,20 +8,21 @@ using System.Linq;
 using OxygenChamber.Server.Protocol;
 using Microsoft.Extensions.Logging;
 using SuperSocket.ProtoBase;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace OxygenChamber.Server.Command
 {
     /// <summary>
-    /// 调整气压
+    /// 管理端向设备端发送仓压控制的指令
     /// </summary>
     [Command(Key = (byte)104)]
     public class ChangePressure : IAsyncCommand<OxygenChamberPackage>
     {
-        private readonly ILogger<ChangePressure> logger;
+        public ILogger Logger { get; set; }
 
-        public ChangePressure(ILogger<ChangePressure> logger)
+        public ChangePressure(ILogger<ChangePressure> logger = default)
         {
-            this.logger = logger;
+            Logger = logger ?? NullLogger<ChangePressure>.Instance;
         }
 
         public async ValueTask ExecuteAsync(IAppSession session, OxygenChamberPackage package)
@@ -50,22 +51,23 @@ namespace OxygenChamber.Server.Command
             var targetSession = await session.Server.GetSessionByEquipment(package.EquipmentId);
             await (targetSession as IAppSession).SendAsync(rcmd);
 
-            logger.LogInformation($"下发调整气压指令！设备ID：{package.EquipmentId}，状态：{package.PressureControl},值：{package.Pressure}");
-            var dt = DateTimeOffset.Now;
-            while ((DateTimeOffset.Now - dt).TotalSeconds < 10)
-            {
-                await Task.Delay(1);
-                var lastInfo = targetSession["cmdResult" + 4] as OxygenChamberPackage;
-                if (lastInfo == null || (DateTimeOffset.Now - lastInfo.CreateTime).TotalSeconds > 5)
-                    continue;
-                await session.SendEquipmentStateAsync(package.EquipmentId,104, lastInfo.PressureState);
-                await session.Channel.CloseAsync();//为毛session没有关闭方法？
-                logger.LogInformation($"调整气压成功！设备ID：{package.EquipmentId}，状态：{package.PressureControl},值：{package.Pressure}");
-                return;
-            }
-            //经过测试，异常时将自动断开连接
-            //await session.SendAsync(new byte[] { 0 });
-            throw new TimeoutException($"调整气压返回结果时超时！设备Id：{package.EquipmentId}，状态：{package.PressureControl},值：{package.Pressure}");
+            Logger.LogInformation($"下发调整气压指令！设备ID：{package.EquipmentId}，状态：{package.PressureControl},值：{package.Pressure}");
+
+            //var dt = DateTimeOffset.Now;
+            //while ((DateTimeOffset.Now - dt).TotalSeconds < 10)
+            //{
+            //    await Task.Delay(1);
+            //    var lastInfo = targetSession["cmdResult" + 4] as OxygenChamberPackage;
+            //    if (lastInfo == null || (DateTimeOffset.Now - lastInfo.CreateTime).TotalSeconds > 5)
+            //        continue;
+            //    await session.SendEquipmentStateAsync(package.EquipmentId,104, lastInfo.PressureState);
+            //    await session.Channel.CloseAsync();//为毛session没有关闭方法？
+            //    logger.LogInformation($"调整气压成功！设备ID：{package.EquipmentId}，状态：{package.PressureControl},值：{package.Pressure}");
+            //    return;
+            //}
+            ////经过测试，异常时将自动断开连接
+            ////await session.SendAsync(new byte[] { 0 });
+            //throw new TimeoutException($"调整气压返回结果时超时！设备Id：{package.EquipmentId}，状态：{package.PressureControl},值：{package.Pressure}");
         }
     }
 }

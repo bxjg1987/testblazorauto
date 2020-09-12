@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using SuperSocket.Command;
 using OxygenChamber.Server.Protocol;
+using OxygenChamber.Server.Db;
 
 namespace OxygenChamber.Server
 {
@@ -21,6 +22,7 @@ namespace OxygenChamber.Server
             //尽可能将配置放到配置文件中
             IHost host = null;
             host = SuperSocketHostBuilder
+               
                 .Create<OxygenChamberPackage, OxygenChamberPackagePipelineFilter>()
                 //.UseSessionHandler(session =>
                 //{
@@ -53,9 +55,13 @@ namespace OxygenChamber.Server
                 .UsePackageDecoder<PackageConverter>()
                 .UseSession<OxygenChamberSession>()
                 .UseInProcSessionContainer()//必须使用这个，否则通信过程中获取session容器为空
-                //.ConfigureServices(services => {
-                    //services.AddSingleton<IPackageEncoder<OxygenChamberPackage>, PackageConverter>();
-                //})
+                                            //.ConfigureServices(services => {
+                                            //services.AddSingleton<IPackageEncoder<OxygenChamberPackage>, PackageConverter>();
+                                            //})
+
+                .ConfigureServices(cfg => {
+                    cfg.AddSingleton<ConnectionProvider>();
+                })
                 .Build();
           
             await host.RunAsync();

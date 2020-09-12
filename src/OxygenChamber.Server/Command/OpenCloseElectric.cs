@@ -12,13 +12,13 @@ using SuperSocket.ProtoBase;
 namespace OxygenChamber.Server.Command
 {
     /// <summary>
-    /// 服务器发送开关电的指令时，将由此命令处理
+    /// 开关电
     /// </summary>
     [Command(Key = (byte)102)]
-    public class OpenCloseElectric : OpenCloseState<OpenCloseElectric>//, IAsyncCommand<OxygenChamberPackage>
+    public class OpenCloseElectric : OpenCloseState//, IAsyncCommand<OxygenChamberPackage>
     {
         public OpenCloseElectric(ILogger<OpenCloseElectric> logger)
-            : base(logger, 2, "电源", c => c.ElectricState)
+            : base( 2, "电源", c => c.ElectricState, logger)
         {
         }
     }
