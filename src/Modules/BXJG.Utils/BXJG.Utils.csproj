@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>..\ZLJ.Web.Host\APIXML\BXJG.Utils.xml</DocumentationFile>
+    <DocumentationFile>..\..\ZLJ.Web.Host\APIXML\BXJG.Utils.xml</DocumentationFile>
   </PropertyGroup>
 
 

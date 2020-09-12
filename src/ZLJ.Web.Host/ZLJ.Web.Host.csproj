@@ -28,6 +28,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Update="APIXML\BXJG.BaseInfo.Application.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="APIXML\BXJG.CMS.Application.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
