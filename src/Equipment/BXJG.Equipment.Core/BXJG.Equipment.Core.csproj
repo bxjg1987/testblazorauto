@@ -7,6 +7,8 @@
 
   <ItemGroup>
     <Compile Remove="Authorization\BXJGEquipmentAuthorizationProvider.cs" />
+    <Compile Remove="EquipmentInfo\ChangePressureEventData.cs" />
+    <Compile Remove="EquipmentInfo\ChangeStateEventData.cs" />
   </ItemGroup>
 
   <ItemGroup>

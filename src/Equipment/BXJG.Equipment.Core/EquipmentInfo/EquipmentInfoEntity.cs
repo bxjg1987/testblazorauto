@@ -4,6 +4,7 @@ using BXJG.GeneralTree;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using ZLJ.BaseInfo.Administrative;
 
 namespace BXJG.Equipment.EquipmentInfo
@@ -11,7 +12,7 @@ namespace BXJG.Equipment.EquipmentInfo
     /// <summary>
     /// 设备档案实体类
     /// </summary>
-    public class EquipmentInfoEntity : FullAuditedEntity<long>, IMustHaveTenant
+    public class EquipmentInfoEntity : CreationAuditedEntity<long>, IMustHaveTenant
     {
         /// <summary>
         /// 租户id
@@ -41,6 +42,15 @@ namespace BXJG.Equipment.EquipmentInfo
         /// 所属区域实体
         /// </summary>
         public virtual AdministrativeEntity Area { get; set; }
+        ///// <summary>
+        ///// 开关舱门
+        ///// </summary>
+        ///// <param name="open"></param>
+        ///// <returns></returns>
+        //public void OpenOrCloseDoorAsync(bool open)
+        //{
+        //    base.DomainEvents.Add(new ChangeStateEventData(HardwareCode, open));
+        //}
         ///// <summary>
         ///// 助记码
         ///// </summary>

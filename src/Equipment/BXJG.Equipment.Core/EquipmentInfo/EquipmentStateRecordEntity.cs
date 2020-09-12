@@ -11,7 +11,7 @@ namespace BXJG.Equipment
     /// <summary>
     /// 设备运行过程中采集的状态记录
     /// </summary>
-    public class EquipmentStateRecordEntity : FullAuditedEntity<long>, IMustHaveTenant
+    public class EquipmentStateRecordEntity : CreationAuditedEntity<long>, IMustHaveTenant
     {
         /// <summary>
         /// 租户id
