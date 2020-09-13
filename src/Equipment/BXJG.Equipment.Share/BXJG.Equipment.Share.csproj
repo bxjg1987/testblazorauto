@@ -6,7 +6,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="CommandBuilder.cs" />
     <Compile Remove="IChangeStateCommandBuilder.cs" />
+    <Compile Remove="IChangeValueCommandBuilder.cs" />
+    <Compile Remove="ICommandCalibrator.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SuperSocket.ProtoBase" Version="2.0.0-beta6" />
   </ItemGroup>
 
 </Project>
