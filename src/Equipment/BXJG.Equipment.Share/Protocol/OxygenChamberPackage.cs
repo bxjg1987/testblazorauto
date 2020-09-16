@@ -6,9 +6,8 @@ using System.Text;
 namespace BXJG.Equipment.Protocol
 {
     /// <summary>
-    /// 设备发送过来的消息
-    /// 可能是服务器发送控制命令后的返回信息
-    /// 也可能是设备主动发送过来的数据
+    /// 所有类型的数据包的抽象类
+    /// 按协议规定，它同时也可以作为心跳包
     /// </summary>
     public class OxygenChamberPackage : IKeyedPackageInfo<byte>
     {
