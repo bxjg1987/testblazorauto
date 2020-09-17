@@ -16,7 +16,6 @@ using BXJG.CMS.Ad;
 using BXJG.CMS.Article;
 using BXJG.CMS.Column;
 using System;
-using BXJG.Equipment;
 using BXJG.BaseInfo.EFCore.EFMaps;
 using ZLJ.BaseInfo.Administrative;
 using BXJG.Equipment.EquipmentInfo;

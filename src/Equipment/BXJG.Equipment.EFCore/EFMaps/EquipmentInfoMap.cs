@@ -1,5 +1,4 @@
-﻿using BXJG.Equipment;
-using BXJG.Equipment.EquipmentInfo;
+﻿using BXJG.Equipment.EquipmentInfo;
 using BXJG.GeneralTree;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

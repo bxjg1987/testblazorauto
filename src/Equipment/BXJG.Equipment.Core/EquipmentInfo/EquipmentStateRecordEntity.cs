@@ -1,12 +1,11 @@
 ﻿using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
-using BXJG.Equipment.EquipmentInfo;
 using Castle.MicroKernel.Registration.Interceptor;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BXJG.Equipment
+namespace BXJG.Equipment.EquipmentInfo
 {
     /// <summary>
     /// 设备运行过程中采集的状态记录

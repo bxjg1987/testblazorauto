@@ -50,7 +50,7 @@ namespace BXJG.Equipment.Protocol
     public class cykz : OxygenChamberPackage
     {
         public bool Add { get; set; }
-        public byte Value { get; set; }
+        public short Value { get; set; }
     }
     /// <summary>
     /// 状态上报
