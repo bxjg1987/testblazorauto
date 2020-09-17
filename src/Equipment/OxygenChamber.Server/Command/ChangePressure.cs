@@ -5,10 +5,11 @@ using System.Threading.Tasks;
 using SuperSocket;
 using SuperSocket.Command;
 using System.Linq;
-using OxygenChamber.Server.Protocol;
 using Microsoft.Extensions.Logging;
 using SuperSocket.ProtoBase;
 using Microsoft.Extensions.Logging.Abstractions;
+using BXJG.Equipment;
+using BXJG.Equipment.Protocol;
 
 namespace OxygenChamber.Server.Command
 {
@@ -19,39 +20,21 @@ namespace OxygenChamber.Server.Command
     public class ChangePressure : IAsyncCommand<OxygenChamberPackage>
     {
         public ILogger Logger { get; set; }
+        private readonly fscy fscy;
 
-        public ChangePressure(ILogger<ChangePressure> logger = default)
+        public ChangePressure(fscy fscy,ILogger<ChangePressure> logger = default)
         {
+            this.fscy = fscy;
             Logger = logger ?? NullLogger<ChangePressure>.Instance;
         }
 
         public async ValueTask ExecuteAsync(IAppSession session, OxygenChamberPackage package)
         {
-            var rcmd = new byte[12];
-            var j = 0;
-            rcmd[j++] = 0xbb;
-            rcmd[j++] = 4;
-            rcmd[j++] = 0x09;
-
-            var eid = BitConverter.GetBytes(package.EquipmentId);
-            rcmd[j++] = eid[3];
-            rcmd[j++] = eid[2];
-            rcmd[j++] = eid[1];
-            rcmd[j++] = eid[0];
-
-            rcmd[j++] = package.PressureControl.ToByte();//状态
-
-            var cy = BitConverter.GetBytes(package.Pressure);
-            rcmd[j++] = cy[1];
-            rcmd[j++] = cy[0];
-
-            rcmd[j++] = new ReadOnlySpan<byte>(rcmd, 1, 10).CalculateAdd();
-            rcmd[j++] = 0xed;
-
+            var cykz = package as cykz;
             var targetSession = await session.Server.GetSessionByEquipment(package.EquipmentId);
-            await (targetSession as IAppSession).SendAsync(rcmd);
+            await (targetSession as IAppSession).SendAsync(fscy, cykz);
 
-            Logger.LogInformation($"下发调整气压指令！设备ID：{package.EquipmentId}，状态：{package.PressureControl},值：{package.Pressure}");
+            Logger.LogInformation($"下发调整舱压指令！设备ID：{package.EquipmentId}，状态：{cykz.Add},值：{cykz.Value}");
 
             //var dt = DateTimeOffset.Now;
             //while ((DateTimeOffset.Now - dt).TotalSeconds < 10)

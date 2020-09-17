@@ -69,57 +69,60 @@ namespace BXJG.Equipment.Protocol
     }
 
     /// <summary>
-    /// 根据协议，将强类型的数据包序列号为byte[]的指令
+    /// 将发送的状态变更的包对象序列化为命令的类
     /// </summary>
-    public class sf : IPackageEncoder<OxygenChamberPackage>
+    public class fszt : IPackageEncoder<OxygenChamberStatePackage>
     {
-        public int Encode(IBufferWriter<byte> writer, OxygenChamberPackage pack)
+        const int len = 10;
+        public int Encode(IBufferWriter<byte> writer, OxygenChamberStatePackage pack)
         {
-            throw new NotImplementedException();
-            //byte[] data = null;
-            //switch (pack.Key)
-            //{
-            //    case 101:
-            //    case 1:
-            //    case 102:
-            //    case 2:
-            //    case 103:
-            //    case 3:
-            //        data = new byte[10];
-            //        data[2] = 0x07;
-            //        if (pack.Key == 1 || pack.Key == 101)
-            //            data[7] = pack.DoorState.ToByte();
-            //        else if (pack.Key == 2 || pack.Key == 102)
-            //            data[7] = pack.ElectricState.ToByte();
-            //        else if (pack.Key == 3 || pack.Key == 103)
-            //            data[7] = pack.ValveState.ToByte();
-            //        break;
-            //    case 104:
-            //    case 4:
-            //        data = new byte[12];
-            //        data[2] = 0x09;
-            //        data[7] = pack.PressureControl.ToByte();
-            //        var pressure = BitConverter.GetBytes(pack.Pressure);
-            //        data[8] = pressure[1];
-            //        data[9] = pressure[0];
-            //        break;
-            //    default:
-            //        throw new Exception($"无法识别要发送的指令！设备：{pack.EquipmentId}，指令：{pack.Key}");
-            //}
-            //data[0] = 0xbb;
-            //data[1] = pack.Key;
-            ////data[2] = 0x07;
-            //var equipmentId = BitConverter.GetBytes(pack.EquipmentId);
-            //data[3] = equipmentId[3];
-            //data[4] = equipmentId[2];
-            //data[5] = equipmentId[1];
-            //data[6] = equipmentId[0];
-            ////data[7] =状态
-            //data[data.Length - 2] = new ReadOnlySpan<byte>(data, 1, data.Length - 2).CalculateAdd();
-            //data[data.Length - 1] = 0xed;
+            var j = 0;
+            byte[] data = new byte[len];
+            data[j++] = 0xbb;
+            data[j++] = pack.Key;
+            data[j++] = len - 3;//按协议 去掉首位和校验
+            //System.Buffers.Binary.BinaryPrimitives.big
+            var equipmentId = BitConverter.GetBytes(pack.EquipmentId);
+            data[j++] = equipmentId[3];
+            data[j++] = equipmentId[2];
+            data[j++] = equipmentId[1];
+            data[j++] = equipmentId[0];
+            data[j++] = pack.State.ToByte();
+            data[j++] = new ReadOnlyMemory<byte>(data, 1, data.Length - 2).CheckSumValue();
+            data[j++] = 0xed;
+            writer.Write(data);
+            return len;
+        }
+    }
 
-            //writer.Write(data);
-            //return data.Length;
+
+    /// <summary>
+    /// 将舱压包对象序列化为命令的类
+    /// </summary>
+    public class fscy : IPackageEncoder<cykz>
+    {
+        const int len = 12;
+        public int Encode(IBufferWriter<byte> writer, cykz pack)
+        {
+            var j = 0;
+            byte[] data = new byte[len];
+            data[j++] = 0xbb;
+            data[j++] = pack.Key;
+            data[j++] = len - 3;//按协议 去掉首位和校验
+            //System.Buffers.Binary.BinaryPrimitives.big
+            var equipmentId = BitConverter.GetBytes(pack.EquipmentId);
+            data[j++] = equipmentId[3];
+            data[j++] = equipmentId[2];
+            data[j++] = equipmentId[1];
+            data[j++] = equipmentId[0];
+            data[j++] = pack.Add.ToByte();
+            var cy = BitConverter.GetBytes(pack.Value);
+            data[j++] = cy[1];
+            data[j++] = cy[0];
+            data[j++] = new ReadOnlyMemory<byte>(data, 1, data.Length - 2).CheckSumValue();
+            data[j++] = 0xed;
+            writer.Write(data);
+            return len;
         }
     }
 }

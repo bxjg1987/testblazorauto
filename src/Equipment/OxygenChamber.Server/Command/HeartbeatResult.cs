@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using BXJG.Equipment.Protocol;
 using Microsoft.Extensions.Logging;
-using OxygenChamber.Server.Protocol;
+using Microsoft.Extensions.Logging.Abstractions;
 using SuperSocket;
 using SuperSocket.Command;
 namespace OxygenChamber.Server.Command
@@ -15,19 +16,19 @@ namespace OxygenChamber.Server.Command
     [Command(Key = (byte)0)]
     public class HeartbeatResult : IAsyncCommand<OxygenChamberPackage>
     {
-        readonly ILogger<HeartbeatResult> logger;
+        public ILogger Logger { get; set; }
 
         public HeartbeatResult(ILogger<HeartbeatResult> logger)
         {
-            this.logger = logger;
+            Logger = logger ?? NullLogger<HeartbeatResult>.Instance;
         }
 
         public async ValueTask ExecuteAsync(IAppSession session, OxygenChamberPackage package)
         {
-            logger.LogInformation($"心跳上报。设备ID：{package.EquipmentId}");
+            Logger.LogInformation($"心跳上报。设备ID：{package.EquipmentId}");
             var mySession = session.AsOxygenChamberSession();
             if (mySession.EquipmentId == default)
-                session.AsOxygenChamberSession().EquipmentId = package.EquipmentId;
+                mySession.EquipmentId = package.EquipmentId;
             else if (mySession.EquipmentId != package.EquipmentId)
                 throw new Exception($"异常的心跳请求！设备id不匹配，session.EquipmentId：{mySession.EquipmentId}；package.Id：{package.EquipmentId}");
         }

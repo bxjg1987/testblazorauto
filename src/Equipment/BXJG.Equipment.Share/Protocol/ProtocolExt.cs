@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BXJG.Equipment;
 
 namespace BXJG.Equipment.Protocol
 {
@@ -20,21 +21,37 @@ namespace BXJG.Equipment.Protocol
         /// <param name="buffer"></param>
         public static void CheckSum(this ReadOnlySequence<byte> buffer)
         {
-            throw new NotImplementedException();
-            //经过测试用Slice(-1)取尾部会报错 buffer[-1]也不行
-            //if (!buffer.CheckSumValue().Equals(buffer[buffer.Length - 1]))
-            //    throw new Exception($"校验失败！数据：{buffer.To16String()}");
+            //命令：0xbb;0x01;0x07;0x00;0x01;0x00;0x01;0x00;sum;0xed
+            //buffer = 0x01;0x07;0x00;0x01;0x00;0x01;0x00;sum;
+            var jyz = buffer.CheckSumValue();
+            var jyz2 = buffer.Slice(buffer.Length - 1, 1).FirstSpan[0];
+
+            if (jyz != jyz2)
+                throw new Exception($"校验失败！数据：{buffer.ToArray().ToHexStr()}");
         }
-        
-        public static byte CheckSumValue(this ReadOnlySpan<byte> buffer)
+        public static byte CheckSumValue(this byte[] buffer)
         {
+            return new ReadOnlySequence<byte>(buffer).CheckSumValue();
+        }
+        public static byte CheckSumValue(this ReadOnlyMemory<byte> buffer)
+        {
+            return new ReadOnlySequence<byte>(buffer).CheckSumValue();
+        }
+        public static byte CheckSumValue(this ReadOnlySequence<byte> buffer)
+        {
+            //命令：0xbb;0x01;0x07;0x00;0x01;0x00;0x01;0x00;sum;0xed
+            //buffer = 0x01;0x07;0x00;0x01;0x00;0x01;0x00;sum;
             //和校验位 = （头+命令+长度+协议内容）&  0xff
-            int cks = 0xbb;//使用supersocket的头尾协议模板定义的协议会掐头去尾，但是我们的协议要求头部字节参与和校验计算
-            for (int i = 0; i < buffer.Length - 1; i++)
+
+            var rd = new SequenceReader<byte>(buffer.Slice(0, buffer.Length - 1));
+            var cks = 0xbb;//使用supersocket的头尾协议模板定义的协议会掐头去尾，但是我们的协议要求头部字节参与和校验计算
+            byte p;
+
+            while (rd.TryRead(out p))
             {
-                cks += buffer[i];
+                cks += p;
             }
-            var q = cks & 0xff;
+            var q = cks & 0xFF;
             return (byte)q;
         }
 

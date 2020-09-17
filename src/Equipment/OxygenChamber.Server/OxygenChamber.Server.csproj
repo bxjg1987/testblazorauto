@@ -10,8 +10,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Protocol\**" />
+    <EmbeddedResource Remove="Protocol\**" />
+    <None Remove="Protocol\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Class3.cs" />
     <Compile Remove="Class4.cs" />
+    <Compile Remove="Command\ChangePressureResult.cs" />
+    <Compile Remove="Command\OpenCloseDoorResult.cs" />
+    <Compile Remove="Command\OpenCloseElectricResult.cs" />
+    <Compile Remove="Command\OpenCloseStateResult.cs" />
+    <Compile Remove="Command\OpenCloseValveResult.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,6 +46,10 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.SqlClient" Version="2.0.0" />
     <PackageReference Include="SuperSocket" Version="2.0.0-beta6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BXJG.Equipment.Share\BXJG.Equipment.Share.csproj" />
   </ItemGroup>
 
 </Project>

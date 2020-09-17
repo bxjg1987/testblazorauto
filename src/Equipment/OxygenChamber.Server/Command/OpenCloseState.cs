@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using SuperSocket;
 using SuperSocket.Command;
 using System.Linq;
-using OxygenChamber.Server.Protocol;
 using Microsoft.Extensions.Logging;
 using SuperSocket.ProtoBase;
 using Microsoft.Extensions.Logging.Abstractions;
+using BXJG.Equipment.Protocol;
 
 namespace OxygenChamber.Server.Command
 {
@@ -16,26 +16,28 @@ namespace OxygenChamber.Server.Command
     /// 打开或关闭某个状态的命令抽象类
     /// </summary>
     //[Command(Key = (byte)102)]
-    public abstract class OpenCloseState: IAsyncCommand<OxygenChamberPackage>
+    public abstract class OpenCloseState : IAsyncCommand<OxygenChamberPackage>
     {
         byte cmdKey;
         string cmdName;
         public ILogger Logger { get; set; }
-        Func<OxygenChamberPackage, bool> stateAccessor;
-
-        public OpenCloseState(byte cmdKey, string cmdName, Func<OxygenChamberPackage, bool> stateAccessor, ILogger logger = default)
+     
+        readonly fszt fszt;
+        public OpenCloseState(byte cmdKey, string cmdName, fszt fszt, ILogger logger = default)
         {
+            this.fszt = fszt;
             this.Logger = logger ?? NullLogger.Instance;
             this.cmdKey = cmdKey;
             this.cmdName = cmdName;
-            this.stateAccessor = stateAccessor;
         }
 
         public async ValueTask ExecuteAsync(IAppSession session, OxygenChamberPackage package)
         {
+            var zt = package as OxygenChamberStatePackage;
+            zt.Key = cmdKey;
             var targetSession = await session.Server.GetSessionByEquipment(package.EquipmentId);
-            await (targetSession as IAppSession).SendEquipmentStateAsync(package.EquipmentId, cmdKey, stateAccessor(package));
-            Logger.LogInformation($"下发开关{cmdName}指令！设备ID：{package.EquipmentId}，状态：{stateAccessor(package)}");
+            await (targetSession as IAppSession).SendAsync(  fszt,zt);
+            Logger.LogInformation($"下发开关{cmdName}指令！设备ID：{package.EquipmentId}，状态：{zt.State}");
             //var dt = DateTimeOffset.Now;
             //while ((DateTimeOffset.Now - dt).TotalSeconds < 10)
             //{

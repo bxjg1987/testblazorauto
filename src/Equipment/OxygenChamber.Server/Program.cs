@@ -10,8 +10,8 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Reflection;
 using SuperSocket.Command;
-using OxygenChamber.Server.Protocol;
 using OxygenChamber.Server.Db;
+using BXJG.Equipment.Protocol;
 
 namespace OxygenChamber.Server
 {
@@ -22,7 +22,7 @@ namespace OxygenChamber.Server
             //尽可能将配置放到配置文件中
             IHost host = null;
             host = SuperSocketHostBuilder
-               
+
                 .Create<OxygenChamberPackage, OxygenChamberPackagePipelineFilter>()
                 //.UseSessionHandler(session =>
                 //{
@@ -59,11 +59,15 @@ namespace OxygenChamber.Server
                                             //services.AddSingleton<IPackageEncoder<OxygenChamberPackage>, PackageConverter>();
                                             //})
 
-                .ConfigureServices(cfg => {
+                .ConfigureServices(cfg =>
+                {
                     cfg.AddSingleton<ConnectionProvider>();
+                    cfg.AddSingleton<fszt>();
+                    cfg.AddSingleton<fscy>();
+                    cfg.AddSingleton<Cleaner>();
                 })
                 .Build();
-          
+            host.Services.GetService<Cleaner>().Start();//定时任务删除历史的设备状态数据
             await host.RunAsync();
 
             //下面是多服务器配置

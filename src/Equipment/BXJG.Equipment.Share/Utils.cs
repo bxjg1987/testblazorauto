@@ -41,15 +41,43 @@ namespace BXJG.Equipment
         {
             return (byte)(b ? 1 : 0);
         }
+        public static bool ToBoolean(this byte b) => b == 1;
         /// <summary>
         /// 转换为16进制的字符串格式
         /// </summary>
         /// <param name="bytes"></param>
         /// <returns></returns>
-        public static string To16String(this ReadOnlySpan<byte> bytes)
+        public static string ToHexStr(this ReadOnlySpan<byte> bytes)
         {
             //bytes.ToArray()低效
-            return BitConverter.ToString(bytes.ToArray(), 0).Replace("-", string.Empty);//.ToLower()
+            return bytes.ToArray().ToHexStr();
         }
+        /// <summary>
+        /// 转换为16进制的字符串格式
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <returns></returns>
+        public static string ToHexStr(this byte[] bytes)
+        {
+            //bytes.ToArray()低效
+            return BitConverter.ToString(bytes).Replace("-", string.Empty);//.ToLower()
+        }
+        ///// <summary>
+        ///// 字节数组转16进制字符串
+        ///// </summary>
+        ///// <param name="bytes"></param>
+        ///// <returns></returns>
+        //public static string byteToHexStr(byte[] bytes)
+        //{
+        //    string returnStr = "";
+        //    if (bytes != null)
+        //    {
+        //        for (int i = 0; i < bytes.Length; i++)
+        //        {
+        //            returnStr += bytes[i].ToString("X2");
+        //        }
+        //    }
+        //    return returnStr;
+        //}
     }
 }

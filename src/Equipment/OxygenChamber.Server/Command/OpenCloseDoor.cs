@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using SuperSocket;
 using SuperSocket.Command;
 using System.Linq;
-using OxygenChamber.Server.Protocol;
 using Microsoft.Extensions.Logging;
 using SuperSocket.ProtoBase;
+using BXJG.Equipment.Protocol;
 
 namespace OxygenChamber.Server.Command
 {
@@ -17,8 +17,8 @@ namespace OxygenChamber.Server.Command
     [Command(Key = (byte)101)]
     public class OpenCloseDoor : OpenCloseState//, IAsyncCommand<OxygenChamberPackage>
     {
-        public OpenCloseDoor(ILogger<OpenCloseDoor> logger) 
-            : base( 1, "舱门", c=>c.DoorState,logger)
+        public OpenCloseDoor(fszt fszt, ILogger<OpenCloseDoor> logger = default)
+            : base(1, "舱门", fszt, logger)
         {
         }
 
