@@ -39,6 +39,8 @@ namespace BXJG.Equipment.Protocol
                     r = cykzs;
                     sr.TryRead(out var cykzValue);
                     cykzs.Add = cykzValue == 1;
+                    sr.TryReadBigEndian(out short zykzz);
+                    cykzs.Value = zykzz;
                     break;
                 case 5:                                 //状态上报
                     var ztsbb = new ztsb();
