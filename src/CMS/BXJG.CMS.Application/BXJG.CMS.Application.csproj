@@ -11,7 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Abp.ZeroCore" Version="5.10.1" />
+    <PackageReference Include="Abp.ZeroCore" Version="5.13.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.4" />
   </ItemGroup>
 

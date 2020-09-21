@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Abp.ZeroCore" Version="5.10.1" />
+    <PackageReference Include="Abp.ZeroCore" Version="5.13.0" />
   </ItemGroup>
 
   <ItemGroup>
