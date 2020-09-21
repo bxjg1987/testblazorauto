@@ -15,6 +15,8 @@
 
 <h1>各模块基本介绍</h1>
 目前没有整理文档，都是配套设计思路的视频<br />
+<h3>结合supersocket的设备控制功能</h3>
+https://www.bilibili.com/video/BV1M5411j7Lo/<br />
 <h3>微信小程序登录模块：</h3>
 https://www.bilibili.com/video/BV1Uk4y1d7Be/<br />
 <h3>微信小程序支付模块：</h3>
