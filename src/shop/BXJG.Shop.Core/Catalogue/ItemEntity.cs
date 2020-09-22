@@ -78,7 +78,6 @@ namespace BXJG.Shop.Catalogue
     /// 你可以使用关联和事件的方式参与到这个模块中来
     /// </summary>
     public class ItemEntity : FullAuditedEntity<long>, IMustHaveTenant, IAggregateRoot<long>
-    //where TDataDictionary: GeneralTreeEntity
     {
         public int TenantId { get; set; }
      

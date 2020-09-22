@@ -28,9 +28,7 @@ namespace BXJG.Shop.Sale
     /// 订单中的产品和数量信息，将来可能包含更多信息
     /// 目前所有属性私有化，将来根据业务需要 提供相应的业务方法
     /// </summary>
-    public class OrderItemEntity<TUser> : Entity
-        //where TUser : AbpUserBase
-        //
+    public class OrderItemEntity : Entity
     {
         /// <summary>
         /// 关联的订单Id
@@ -39,7 +37,7 @@ namespace BXJG.Shop.Sale
         /// <summary>
         /// 关联的订单实体
         /// </summary>
-        public virtual OrderEntity<TUser> Order { get;  set; }
+        public virtual OrderEntity Order { get;  set; }
         /// <summary>
         /// 关联的商品上架信息Id
         /// </summary>

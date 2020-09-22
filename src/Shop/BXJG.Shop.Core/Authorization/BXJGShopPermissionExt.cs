@@ -8,14 +8,13 @@ using BXJG.Utils.Localization;
 
 namespace BXJG.Shop.Authorization
 {
-    //由于模块中的权限应该加入到主程序中，因此此逻辑移植到静态方法中
-    public static class BXJGShopAuthorizationProvider// : AuthorizationProvider
+    public static class BXJGShopPermissionExt
     {
         /// <summary>
         /// 商城相关功能权限定义
         /// </summary>
         /// <param name="context"></param>
-        public static Permission SetPermissions( Permission context)
+        public static Permission AddBXJGShopPermission(this Permission context)
         {
             //商城管理
             var shop = context.CreateChildPermission(BXJGShopPermissions.BXJGShop, BXJGShopPermissions.BXJGShop.BXJGShopL());

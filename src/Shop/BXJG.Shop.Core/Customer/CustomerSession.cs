@@ -20,18 +20,17 @@ namespace BXJG.Shop.Customer
     /// 包装IAbpSession以提供当前顾客Id的获取
     /// 一次请求一个实例
     /// </summary>
-    public class BXJGShopCustomerSession<TUser> : IPerWebRequestDependency
-        where TUser : AbpUserBase
+    public class CustomerSession : IPerWebRequestDependency
     {
         private readonly IAbpSession abpSession;
-        private readonly IRepository<CustomerEntity<TUser>, long> repository;
+        private readonly IRepository<CustomerEntity, long> repository;
         ///// <summary>
         ///// 获取顾客id，
         ///// </summary>
         //public readonly Lazy<long> CustomerId;
         private long customerId;
 
-        public BXJGShopCustomerSession(IAbpSession abpSession, IRepository<CustomerEntity<TUser>, long> repository)
+        public CustomerSession(IAbpSession abpSession, IRepository<CustomerEntity, long> repository)
         {
             this.abpSession = abpSession;
             this.repository = repository;
@@ -48,12 +47,12 @@ namespace BXJG.Shop.Customer
         /// 获取当前登录的顾客的Id
         /// </summary>
         /// <returns></returns>
-        public async Task<long> GetCurrentCustomerIdAsync()
+        public async ValueTask<long> GetCurrentCustomerIdAsync()
         {
             //反正当前类是一个请求一个实例，所以不用考虑线程同步
             //将来考虑使用缓存来减小数据的查询次数
 
-            if (customerId == 0)
+            if (customerId == default)
                 customerId = await repository.GetAll().Where(c => c.UserId == abpSession.UserId).Select(c => c.Id).SingleAsync();
 
             return customerId;

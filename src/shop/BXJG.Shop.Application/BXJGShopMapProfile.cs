@@ -11,7 +11,7 @@ using System.Text;
 
 namespace BXJG.Shop
 {
-    public class BXJGShopMapProfile<TUser> : Profile
+    public class BXJGShopMapProfile : Profile
     {
         public BXJGShopMapProfile()
         {
@@ -49,8 +49,8 @@ namespace BXJG.Shop
             #endregion
 
             #region 前端顾客和订单相关东东
-            CreateMap<OrderItemEntity<TUser>, CustomerOrderItemDto>();
-            CreateMap<OrderEntity<TUser>, CustomerOrderDto>();
+            CreateMap<OrderItemEntity, CustomerOrderItemDto>();
+            CreateMap<OrderEntity, CustomerOrderDto>();
             #endregion
 
             #region 会员
@@ -61,11 +61,11 @@ namespace BXJG.Shop
             #endregion
 
             #region 后台管理员+订单
-            CreateMap<OrderEntity<TUser>, OrderDto>();
+            CreateMap<OrderEntity, OrderDto>();
             #endregion
 
             #region 后台管理对顾客信息的管理时使用的dto映射
-            CreateMap<CustomerEntity<TUser>, CustomerDto>();// (typeof(CustomerEntity<,>), typeof(CustomerDto));
+            CreateMap<CustomerEntity, CustomerDto>();// (typeof(CustomerEntity<,>), typeof(CustomerDto));
             #endregion
 
             //.ForMember(c => c.IsTreeText, opt => opt.MapFrom(c => c.IsTree.ToString().UtilsL()))

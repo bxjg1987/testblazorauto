@@ -36,7 +36,7 @@ namespace BXJG.Shop.Customer
     {
         protected readonly IRepository<CustomerEntity<TUser>, long> customerRepository;
         protected readonly TCustomerManager customerManager;
-        protected readonly BXJGShopCustomerSession<TUser> customerSession;
+        protected readonly CustomerSession<TUser> customerSession;
 
         /// <summary>
         /// 
@@ -44,7 +44,7 @@ namespace BXJG.Shop.Customer
         /// <param name="customerRepository"></param>
         /// <param name="customerManager"></param>
         /// <param name="customerSession"></param>
-        public BXJGShopCustomerAppServiceBase(IRepository<CustomerEntity<TUser>, long> customerRepository, TCustomerManager customerManager, BXJGShopCustomerSession<TUser> customerSession)
+        public BXJGShopCustomerAppServiceBase(IRepository<CustomerEntity<TUser>, long> customerRepository, TCustomerManager customerManager, CustomerSession<TUser> customerSession)
         {
             this.customerRepository = customerRepository;
             this.customerManager = customerManager;
@@ -62,7 +62,7 @@ namespace BXJG.Shop.Customer
         /// 获取当前登录用户关联的顾客id
         /// </summary>
         /// <returns></returns>
-        protected virtual Task<long> GetCurrentCustomerIdAsync()
+        protected virtual ValueTask<long> GetCurrentCustomerIdAsync()
         {
             return customerSession.GetCurrentCustomerIdAsync();
         }

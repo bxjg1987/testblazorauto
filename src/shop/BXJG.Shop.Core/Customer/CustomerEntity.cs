@@ -28,10 +28,7 @@ namespace BXJG.Shop.Customer
     /// <summary>
     /// 商城系统中的顾客
     /// </summary>
-    /// <typeparam name="TUser"></typeparam>
-    public class CustomerEntity<TUser> : FullAuditedEntity<long>, IMustHaveTenant
-        //where TUser : AbpUserBase //因为内部可能包含领域逻辑，因此加约束更方便
-        //
+    public class CustomerEntity : FullAuditedEntity<long>, IMustHaveTenant
     {
         /// <summary>
         /// 租户id
@@ -41,10 +38,6 @@ namespace BXJG.Shop.Customer
         /// 关联到abp用户的id
         /// </summary>
         public long UserId { get; set; }
-        /// <summary>
-        /// 关联到abp用户
-        /// </summary>
-        public virtual TUser User { get; set; }
         /// <summary>
         /// 顾客的积分
         /// </summary>

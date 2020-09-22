@@ -53,21 +53,19 @@ namespace BXJG.Shop.Sale
     /// </summary>
     /// <typeparam name="TUser"></typeparam>
     /// <typeparam name="TArea">送货地址区域类型 参考实体类的泛型说明</typeparam>
-    public class OrderManager<TUser> : BXJGShopDomainServiceBase//, ITransientDependency
-        where TUser : AbpUserBase
-        
+    public class OrderManager : BXJGShopDomainServiceBase//, ITransientDependency
     {
-        protected readonly IRepository<OrderEntity<TUser>, long> repository;
-        protected readonly IRepository<CustomerEntity<TUser>, long> customerRepository;
-        //protected readonly CustomerManager<TUser> customerManager;
+        protected readonly IRepository<OrderEntity, long> repository;
+        protected readonly IRepository<CustomerEntity, long> customerRepository;
+        //protected readonly CustomerManager customerManager;
         protected readonly ISettingManager settingManager;
         //领域层不应该访问session  protected readonly IAbpSession session;
 
         public OrderManager(
-            IRepository<OrderEntity<TUser>, long> repository,
-            IRepository<CustomerEntity<TUser>, long> customerRepository,
+            IRepository<OrderEntity, long> repository,
+            IRepository<CustomerEntity, long> customerRepository,
             ISettingManager settingManager
-            /*,CustomerManager<TUser> customerManager*/)
+            /*,CustomerManager customerManager*/)
         {
             this.settingManager = settingManager;
             this.repository = repository;
@@ -85,8 +83,8 @@ namespace BXJG.Shop.Sale
         /// <param name="customerRemark"></param>
         /// <param name="items"></param>
         /// <returns></returns>
-        public async Task<OrderEntity<TUser>> CreateAsync(
-            CustomerEntity<TUser> customer,
+        public async Task<OrderEntity> CreateAsync(
+            CustomerEntity customer,
             AdministrativeEntity area,
             string consignee,
             string consigneePhoneNumber,
@@ -109,7 +107,7 @@ namespace BXJG.Shop.Sale
             #endregion
 
             //所有业务判断都成功时才创建订单对象
-            var order = new OrderEntity<TUser>
+            var order = new OrderEntity
             {
                 Customer = customer,
                 CustomerId = customer.Id,
@@ -131,7 +129,7 @@ namespace BXJG.Shop.Sale
             #region 订单明细
             foreach (var item in items)
             {
-                var product = new OrderItemEntity<TUser>
+                var product = new OrderItemEntity
                 {
                     Amount = item.Item.Price * item.Quantity,
                     Image = item.Item.GetImages()[0],
@@ -158,7 +156,7 @@ namespace BXJG.Shop.Sale
             await CurrentUnitOfWork.SaveChangesAsync();
             //使用事件总线 减小业务之间的相互依赖 参考CustomerManager中对订单创建事件的处理
             //好像这个abp自动触发了 https://aspnetboilerplate.com/Pages/Documents/EventBus-Domain-Events#entity-changes
-            //await EventBus.TriggerAsync(new EntityCreatedEventData<OrderEntity<TUser>>(order));//
+            //await EventBus.TriggerAsync(new EntityCreatedEventData<OrderEntity>(order));//
             return order;
         }
         /// <summary>
@@ -167,13 +165,13 @@ namespace BXJG.Shop.Sale
         /// <param name="entity"></param>
         /// <param name="payMethod"></param>
         /// <returns></returns>
-        public async Task<OrderEntity<TUser>> PayAsync(OrderEntity<TUser> entity, long payMethod)
+        public async Task<OrderEntity> PayAsync(OrderEntity entity, long payMethod)
         {
             entity.Status = OrderStatus.Processing;
             entity.PaymentStatus = PaymentStatus.Paid;
             entity.PaymentMethodId = payMethod;
             entity.LogisticsStatus = LogisticsStatus.WaitShip;
-            await EventBus.TriggerAsync(new OrderPaidEventData<TUser>(entity));
+            await EventBus.TriggerAsync(new OrderPaidEventData(entity));
             return entity;
         }
         /// <summary>
@@ -182,11 +180,11 @@ namespace BXJG.Shop.Sale
         /// <param name="entity"></param>
         /// <param name="shipmentMethod"></param>
         /// <returns></returns>
-        public async Task<OrderEntity<TUser>> ShipmentAsync(OrderEntity<TUser> entity, GeneralTreeEntity shipmentMethod)
+        public async Task<OrderEntity> ShipmentAsync(OrderEntity entity, GeneralTreeEntity shipmentMethod)
         {
             entity.DistributionMethod = shipmentMethod;
             entity.LogisticsStatus = LogisticsStatus.Shipped;
-            await EventBus.TriggerAsync(new OrderShipedEventData<TUser>(entity));
+            await EventBus.TriggerAsync(new OrderShipedEventData(entity));
             return entity;
         }
         /// <summary>
@@ -194,10 +192,10 @@ namespace BXJG.Shop.Sale
         /// </summary>
         /// <param name="entity">订单</param>
         /// <returns></returns>
-        public async Task<OrderEntity<TUser>> SignAsync(OrderEntity<TUser> entity)
+        public async Task<OrderEntity> SignAsync(OrderEntity entity)
         {
             entity.LogisticsStatus = LogisticsStatus.Signed;
-            await EventBus.TriggerAsync(new OrderSignedEventData<TUser>(entity));
+            await EventBus.TriggerAsync(new OrderSignedEventData(entity));
             return entity;
         }
     }

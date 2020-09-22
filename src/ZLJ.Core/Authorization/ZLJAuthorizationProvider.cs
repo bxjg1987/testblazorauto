@@ -22,9 +22,9 @@ namespace ZLJ.Authorization
 
             //添加设备管理模块的权限
             admin.AddEquipmentPermission();
-          
+
             #region 商城
-            BXJGShopAuthorizationProvider.SetPermissions(admin);
+            admin.AddBXJGShopPermission();
             #endregion
             #region CMS
             BXJGCMSAuthorizationProvider.SetPermissions(admin);

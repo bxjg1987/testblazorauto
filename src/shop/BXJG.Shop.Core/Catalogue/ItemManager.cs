@@ -16,7 +16,6 @@ namespace BXJG.Shop.Catalogue
     /// </summary>
     /// <typeparam name="TDataDictionary"></typeparam>
     public class ItemManager : BXJGShopDomainServiceBase
-    //where TDataDictionary: GeneralTreeEntity
     {
         ///// <summary>
         ///// 发布此商品

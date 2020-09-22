@@ -1,21 +1,22 @@
-﻿using BXJG.Shop.Common.Dto;
+﻿using BXJG.Common.Dto;
+using BXJG.Shop.Common.Dto;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace BXJG.Shop.Catalogue
 {
-    /// <summary>
-    /// 批量取消发布商品时的输入模型
-    /// </summary>
-    public class BatchUnPublishInput: Class1<long>
-    {
+    ///// <summary>
+    ///// 批量取消发布商品时的输入模型
+    ///// </summary>
+    //public class BatchUnPublishInput: Class1<long>
+    //{
 
-    }
+    //}
     /// <summary>
     /// 批量发布商品时的输入模型
     /// </summary>
-    public class BatchPublishInput : BatchUnPublishInput
+    public class BatchPublishInput : BatchOperationInputLong
     {
         /// <summary>
         /// 发布开始时间

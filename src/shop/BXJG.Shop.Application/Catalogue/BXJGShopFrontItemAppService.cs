@@ -20,7 +20,6 @@ using BXJG.GeneralTree;
 namespace BXJG.Shop.Catalogue
 {
     public class BXJGShopFrontItemAppService : AbpServiceBase, IBXJGShopFrontItemAppService
-        
     {
         private readonly IRepository<ItemEntity, long> repository;
         private readonly ItemCategoryManager dictionaryManager;

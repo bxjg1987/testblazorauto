@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Catalogue\DeleteInput.cs" />
     <Compile Remove="Customer\Dto\CustomerCreateDto.cs" />
   </ItemGroup>
 

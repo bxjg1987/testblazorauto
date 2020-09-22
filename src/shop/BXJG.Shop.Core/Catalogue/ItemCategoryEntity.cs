@@ -5,6 +5,9 @@ using System.Text;
 
 namespace BXJG.Shop.Catalogue
 {
+    /// <summary>
+    /// 商品分类实体（树形）
+    /// </summary>
     public class ItemCategoryEntity : GeneralTreeEntity<ItemCategoryEntity>
     {
         /// <summary>

@@ -14,11 +14,9 @@ namespace BXJG.Shop.Sale
     /// </summary>
     /// <typeparam name="TUser"></typeparam>
     /// <typeparam name="TArea"></typeparam>
-    public class OrderPaidEventData<TUser> : EntityEventData<OrderEntity<TUser>>
-        where TUser : AbpUserBase
-        
+    public class OrderPaidEventData : EntityEventData<OrderEntity>
     {
-        public OrderPaidEventData(OrderEntity<TUser> order) : base(order)
+        public OrderPaidEventData(OrderEntity order) : base(order)
         { }
     }
     /// <summary>
@@ -26,11 +24,9 @@ namespace BXJG.Shop.Sale
     /// </summary>
     /// <typeparam name="TUser"></typeparam>
     /// <typeparam name="TArea"></typeparam>
-    public class OrderShipedEventData<TUser> : EntityEventData<OrderEntity<TUser>>
-        where TUser : AbpUserBase
-        
+    public class OrderShipedEventData : EntityEventData<OrderEntity>
     {
-        public OrderShipedEventData(OrderEntity<TUser> order) : base(order)
+        public OrderShipedEventData(OrderEntity order) : base(order)
         { }
     }
     /// <summary>
@@ -38,11 +34,9 @@ namespace BXJG.Shop.Sale
     /// </summary>
     /// <typeparam name="TUser"></typeparam>
     /// <typeparam name="TArea"></typeparam>
-    public class OrderSignedEventData<TUser> : EntityEventData<OrderEntity<TUser>>
-        where TUser : AbpUserBase
-        
+    public class OrderSignedEventData : EntityEventData<OrderEntity>
     {
-        public OrderSignedEventData(OrderEntity<TUser> order) : base(order)
+        public OrderSignedEventData(OrderEntity order) : base(order)
         { }
     }
 }

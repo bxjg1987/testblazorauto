@@ -106,14 +106,8 @@ namespace BXJG.Shop.Sale
     /// <summary>
     /// 订单实体类
     /// </summary>
-    /// <typeparam name="TUser">系统用户类型</typeparam>
-    /// <typeparam name="TArea">送货地址区域类型</typeparam>
-    public class OrderEntity<TUser> : FullAuditedEntity<long>, IMustHaveTenant
-        //where TUser : AbpUserBase
-        //
+    public class OrderEntity : FullAuditedEntity<long>, IMustHaveTenant
     {
-      
-
         public int TenantId { get; set; }//应该私有化，但受IMustHaveTenant限制，只能public
 
         #region 订单信息
@@ -125,7 +119,7 @@ namespace BXJG.Shop.Sale
         /// 关联的顾客的实体
         /// 注意顾客与User是一对一关联的
         /// </summary>
-        public virtual CustomerEntity<TUser> Customer { get; set; }
+        public virtual CustomerEntity Customer { get; set; }
         /// <summary>
         /// 订单号
         /// </summary>
@@ -251,7 +245,7 @@ namespace BXJG.Shop.Sale
         /// <summary>
         /// 订单商品明细
         /// </summary>
-        public virtual IList<OrderItemEntity<TUser>> Items { get; set; }
+        public virtual IList<OrderItemEntity> Items { get; set; }
         #endregion
 
         //订单跟踪

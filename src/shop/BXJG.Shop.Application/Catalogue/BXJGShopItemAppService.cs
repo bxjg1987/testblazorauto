@@ -20,6 +20,7 @@ using BXJG.Shop.Common;
 using Abp.Linq.Extensions;
 using BXJG.Utils.File;
 using BXJG.Common.Dto;
+using Abp;
 
 namespace BXJG.Shop.Catalogue
 {
@@ -32,21 +33,7 @@ namespace BXJG.Shop.Catalogue
     /// <summary>
     /// 商品上架信息应用服务
     /// </summary>
-    /// <typeparam name="TTenant"></typeparam>
-    /// <typeparam name="TUser"></typeparam>
-    /// <typeparam name="TRole"></typeparam>
-    /// <typeparam name="TTenantManager"></typeparam>
-    /// <typeparam name="TUserManager"></typeparam>
-    /// <typeparam name="TDataDictionary"></typeparam>
-    /// <typeparam name="TItemManager"></typeparam>
-    public class BXJGShopItemAppService<TTenant, TUser, TRole, TTenantManager, TUserManager>
-        : BXJGShopAppServiceBase<TTenant, TUser, TRole, TTenantManager, TUserManager>, IBXJGShopItemAppService
-        where TUser : AbpUser<TUser>
-        where TRole : AbpRole<TUser>, new()
-        where TTenant : AbpTenant<TUser>
-        where TTenantManager : AbpTenantManager<TTenant, TUser>
-        where TUserManager : AbpUserManager<TRole, TUser>
-        
+    public class BXJGShopItemAppService: AbpServiceBase
     {
         private readonly IRepository<ItemEntity, long> repository;
         private readonly ItemCategoryManager dictionaryManager;

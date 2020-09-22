@@ -45,17 +45,23 @@ namespace BXJG.Shop.Customer
     /// <typeparam name="TTenantManager"></typeparam>
     /// <typeparam name="TUserManager"></typeparam>
     /// <typeparam name="AdministrativeEntity"></typeparam>
-    public abstract class BXJGShopCustomerAppService<TTenant, TUser, TRole, TTenantManager, TUserManager>
-        : BXJGShopAppServiceBase<TTenant, TUser, TRole, TTenantManager, TUserManager>, IBXJGShopCustomerAppService
+    public abstract class BXJGShopCustomerAppService<TTenant, 
+                                                     TUser, 
+                                                     TRole,
+                                                     TTenantManager, 
+                                                     TUserManager> : BXJGShopAppServiceBase<TTenant,
+                                                                                            TUser,
+                                                                                            TRole,
+                                                                                            TTenantManager,
+                                                                                            TUserManager>, IBXJGShopCustomerAppService
         where TUser : AbpUser<TUser>, new()
         where TRole : AbpRole<TUser>, new()
         where TTenant : AbpTenant<TUser>
         where TTenantManager : AbpTenantManager<TTenant, TUser>
         where TUserManager : AbpUserManager<TRole, TUser>
-        
     {
-        private readonly IRepository<CustomerEntity<TUser>, long> repository;
-        public BXJGShopCustomerAppService(IRepository<CustomerEntity<TUser> ,long> repository)
+        private readonly IRepository<CustomerEntity, long> repository;
+        public BXJGShopCustomerAppService(IRepository<CustomerEntity ,long> repository)
         {
             this.repository = repository;
         }
@@ -94,7 +100,7 @@ namespace BXJG.Shop.Customer
             #endregion
 
             //映射不太好处理，手动来吧
-            var entity = new CustomerEntity<TUser>
+            var entity = new CustomerEntity
             {
                 Amount = input.Amount,
                 Birthday = input.Birthday,

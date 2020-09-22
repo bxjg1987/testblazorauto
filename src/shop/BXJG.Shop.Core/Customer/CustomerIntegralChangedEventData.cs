@@ -13,12 +13,9 @@ namespace BXJG.Shop.Customer
     /// <summary>
     /// 顾客Customer积分变更(增加/减少)事件
     /// </summary>
-    /// <typeparam name="TUser"></typeparam>
-    public class CustomerIntegralChangedEventData<TUser> : EntityEventData<CustomerEntity<TUser>>
-        where TUser : AbpUserBase
-        
+    public class CustomerIntegralChangedEventData : EntityEventData<CustomerEntity>
     {
-        public CustomerIntegralChangedEventData(CustomerEntity<TUser> customer):base(customer)
+        public CustomerIntegralChangedEventData(CustomerEntity customer):base(customer)
         {
             
         }

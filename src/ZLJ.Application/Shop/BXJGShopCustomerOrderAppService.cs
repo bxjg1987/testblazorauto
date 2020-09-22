@@ -30,7 +30,7 @@ namespace ZLJ.Shop
         public BXJGShopCustomerOrderAppService(
             IRepository<CustomerEntity<User>, long> customerRepository,
             CustomerManager customerManager,
-            BXJGShopCustomerSession<User> customerSession,
+            CustomerSession<User> customerSession,
             IRepository<OrderEntity<User>, long> repository,
             OrderManager orderManager,
             IRepository<AdministrativeEntity, long> generalTreeManager, 

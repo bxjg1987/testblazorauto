@@ -21,7 +21,7 @@ namespace ZLJ.Navigation
             //注册设备管理模块的菜单
             context.Manager.MainMenu.AddBXJGEquipmentNavigation();
 
-            BXJGShopNavigationProvider.Init(context.Manager.MainMenu);
+            context.Manager.MainMenu.AddBXJGShopNavigation();
             BXJGCMSNavigationProvider.Init(context.Manager.MainMenu);
 
             //注册基础信息模块的菜单

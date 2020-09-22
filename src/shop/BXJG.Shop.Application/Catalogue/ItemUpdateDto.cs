@@ -11,7 +11,7 @@ namespace BXJG.Shop.Catalogue
     /// 更新上架模型时前端提供的数据模型
     /// </summary>
    // [AutoMapTo(typeof(ItemEntity))]
-    public class ItemUpdateDto:EntityDto<long>
+    public class ItemUpdateDto : EntityDto<long>
     {
         #region 基本信息
         /// <summary>
@@ -38,7 +38,7 @@ namespace BXJG.Shop.Catalogue
         /// 轮播图片集合，多个用英文逗号,分割
         /// </summary>
         [Required]
-       // [StringLength(BXJGShopConsts.ItemImagesMaxLength)]
+        // [StringLength(BXJGShopConsts.ItemImagesMaxLength)]
         public string[] Images { get; set; }
         /// <summary>
         /// 所属类别id
@@ -68,7 +68,7 @@ namespace BXJG.Shop.Catalogue
         /// <summary>
         /// 现价(销售价)
         /// </summary>
-       [Required]
+        [Required]
         public decimal Price { get; set; }
         /// <summary>
         /// 积分

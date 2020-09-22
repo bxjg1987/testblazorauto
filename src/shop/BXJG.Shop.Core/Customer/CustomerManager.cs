@@ -22,35 +22,34 @@ namespace BXJG.Shop.Customer
      * 虽然ICustomerRepositoryExtensions提供了扩展方法，但是需要提供泛型TUser，并且也无法（也不合理）提供session的访问
      * 因此在领域服务提供一个封装
      */
-    public class CustomerManager<TUser> : BXJGShopDomainServiceBase//, ITransientDependency
-        where TUser : AbpUserBase
+    public class CustomerManager : BXJGShopDomainServiceBase//, ITransientDependency
     {
-        protected readonly IRepository<CustomerEntity<TUser>, long> repository;
+        protected readonly IRepository<CustomerEntity, long> repository;
         //领域层 不应该访问Session
         //protected readonly IAbpSession session;
 
-        public CustomerManager(IRepository<CustomerEntity<TUser>, long> repository)
+        public CustomerManager(IRepository<CustomerEntity, long> repository)
         {
             this.repository = repository;
         }
-        /// <summary>
-        /// 根据用户id获取关联的顾客实体，同时加载用户实体
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        public Task<CustomerEntity<TUser>> SingleByUserIdWithUserAsync(long userId)
-        {
-            return repository.SingleByUserIdWithUserAsync<TUser>(userId);
-        }
-        /// <summary>
-        /// 根据用户id获取关联的顾客实体，不加载用户实体
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        public Task<CustomerEntity<TUser>> SingleByUserIdWithoutUserAsync(long userId)
-        {
-            return repository.SingleByUserIdWithoutUserAsync<TUser>(userId);
-        }
+        ///// <summary>
+        ///// 根据用户id获取关联的顾客实体，同时加载用户实体
+        ///// </summary>
+        ///// <param name="userId"></param>
+        ///// <returns></returns>
+        //public Task<CustomerEntity<TUser>> SingleByUserIdWithUserAsync(long userId)
+        //{
+        //    return repository.SingleByUserIdWithUserAsync(userId);
+        //}
+        ///// <summary>
+        ///// 根据用户id获取关联的顾客实体，不加载用户实体
+        ///// </summary>
+        ///// <param name="userId"></param>
+        ///// <returns></returns>
+        //public Task<CustomerEntity<TUser>> SingleByUserIdWithoutUserAsync(long userId)
+        //{
+        //    return repository.SingleByUserIdWithoutUserAsync(userId);
+        //}
     }
 
 }
