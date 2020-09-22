@@ -13,13 +13,11 @@ using Microsoft.AspNetCore.Identity;
 namespace BXJG.Shop
 {
     /// <summary>
-    /// Derive your application services from this class.
+    /// 商城模块应用服务基类
     /// </summary>
-    public abstract class BXJGShopAppServiceBase: ApplicationService
+    public abstract class BXJGShopAppServiceBase : ApplicationService
     {
         public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }
-        //参考BXJGShopDomainServiceBase中的注释
-        //public ICancellationTokenProvider CancellationToken { get; set; } = NullCancellationTokenProvider.Instance;
         protected BXJGShopAppServiceBase()
         {
             LocalizationSourceName = BXJGShopConsts.LocalizationSourceName;

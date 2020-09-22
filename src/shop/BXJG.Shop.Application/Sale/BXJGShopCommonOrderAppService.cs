@@ -17,12 +17,11 @@ namespace BXJG.Shop.Sale
     /// <summary>
     /// 提供与订单相关的，前后端都需要用到的接口
     /// </summary>
-    public class BXJGShopCommonOrderAppService : AbpServiceBase, IBXJGShopCommonOrderAppService
+    public class BXJGShopCommonOrderAppService : BXJGShopAppServiceBase, IBXJGShopCommonOrderAppService
     {
         private readonly EnumManagerFactory enumManagerFactory;
         public BXJGShopCommonOrderAppService(EnumManagerFactory enumManagerFactory)
         {
-            base.LocalizationSourceName = BXJGShopConsts.LocalizationSourceName;
             this.enumManagerFactory = enumManagerFactory;
         }
         /// <summary>

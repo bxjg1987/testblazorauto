@@ -32,7 +32,7 @@ namespace BXJG.Shop.Sale
     /// <typeparam name="TCustomerManager"></typeparam>
     /// <typeparam name="TDataDictionary"></typeparam>
     public abstract class BXJGShopCustomerOrderAppService<TTenant, TUser, TRole, TTenantManager, TUserManager, TOrderManager, TCustomerManager>
-        : BXJGShopCustomerAppServiceBase<TTenant, TUser, TRole, TTenantManager, TUserManager, TCustomerManager>, IBXJGShopCustomerOrderAppService
+        : CustomerAppServiceBase<TTenant, TUser, TRole, TTenantManager, TUserManager, TCustomerManager>, IBXJGShopCustomerOrderAppService
         where TUser : AbpUser<TUser>, new()
         where TRole : AbpRole<TUser>, new()
         where TTenant : AbpTenant<TUser>
