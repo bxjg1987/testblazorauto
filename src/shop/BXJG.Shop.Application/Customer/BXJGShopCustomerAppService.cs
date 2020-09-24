@@ -18,6 +18,10 @@ using Abp.Application.Services.Dto;
 using Microsoft.EntityFrameworkCore;
 using BXJG.Shop.Common;
 using BXJG.Common;
+using BXJG.Common.Dto;
+using Microsoft.AspNetCore.Identity;
+using Abp.IdentityFramework;
+using AutoMapper.QueryableExtensions;
 
 namespace BXJG.Shop.Customer
 {
@@ -26,7 +30,7 @@ namespace BXJG.Shop.Customer
      * 而abp zero是直接引用的它
      * 可以考虑直接引用Microsoft.EntityFrameworkCore
      * 
-     * 最后决定直接在应用层引入Microsoft.EntityFrameworkCore 因为这能提供及大的遍历，且像AsNoChangeTracking无法用AsyncQueryableExecuter实现
+     * 最后决定直接在应用层引入Microsoft.EntityFrameworkCore 因为这能提供及大的便利，且像AsNoChangeTracking无法用AsyncQueryableExecuter实现
      * 
      * await UserManager.InitializeOptionsAsync(AbpSession.TenantId);
      * 源码地址 https://github.com/aspnetboilerplate/aspnetboilerplate/blob/c0604b9b1347a3b9581bf97b4cae22db5b6bab1b/src/Abp.ZeroCore/Authorization/Users/AbpUserManager.cs
@@ -37,33 +41,41 @@ namespace BXJG.Shop.Customer
      */
 
     /// <summary>
-    /// 商城会员（顾客）信息
+    /// 后台管理员对商城顾客进行管理的抽象服务类
+    /// 模块使用方应提供一个子类并指名各泛型的类型
     /// </summary>
-    /// <typeparam name="TTenant"></typeparam>
-    /// <typeparam name="TUser"></typeparam>
-    /// <typeparam name="TRole"></typeparam>
-    /// <typeparam name="TTenantManager"></typeparam>
-    /// <typeparam name="TUserManager"></typeparam>
-    /// <typeparam name="AdministrativeEntity"></typeparam>
-    public abstract class BXJGShopCustomerAppService<TTenant, 
-                                                     TUser, 
+    /// <typeparam name="TTenant">租户类型</typeparam>
+    /// <typeparam name="TUser">用户类型</typeparam>
+    /// <typeparam name="TRole">角色类型</typeparam>
+    /// <typeparam name="TTenantManager">租户管理器类型</typeparam>
+    /// <typeparam name="TRoleManager">角色管理器类型</typeparam>
+    /// <typeparam name="TUserManager">用户管理器类型</typeparam>
+    public abstract class BXJGShopCustomerAppService<TTenant,
+                                                     TUser,
                                                      TRole,
-                                                     TTenantManager, 
-                                                     TUserManager> : BXJGShopAppServiceBase<TTenant,
-                                                                                            TUser,
-                                                                                            TRole,
-                                                                                            TTenantManager,
-                                                                                            TUserManager>, IBXJGShopCustomerAppService
+                                                     TTenantManager,
+                                                     TRoleManager,
+                                                     TUserManager> : BXJGShopAppServiceBase, IBXJGShopCustomerAppService
         where TUser : AbpUser<TUser>, new()
         where TRole : AbpRole<TUser>, new()
         where TTenant : AbpTenant<TUser>
         where TTenantManager : AbpTenantManager<TTenant, TUser>
+        where TRoleManager : AbpRoleManager<TRole, TUser>
         where TUserManager : AbpUserManager<TRole, TUser>
     {
+        private readonly TTenantManager TenantManager;
+        private readonly TRoleManager RoleManager;
+        private readonly TUserManager UserManager;
         private readonly IRepository<CustomerEntity, long> repository;
-        public BXJGShopCustomerAppService(IRepository<CustomerEntity ,long> repository)
+        private readonly IRepository<TUser, long> userRepository;
+
+        public BXJGShopCustomerAppService(IRepository<CustomerEntity, long> repository, TTenantManager tenantManager, TRoleManager roleManager, TUserManager userManager, IRepository<TUser, long> userRepository)
         {
             this.repository = repository;
+            TenantManager = tenantManager;
+            RoleManager = roleManager;
+            UserManager = userManager;
+            this.userRepository = userRepository;
         }
         public async Task<CustomerDto> CreateAsync(CustomerUpdateDto input)
         {
@@ -111,7 +123,8 @@ namespace BXJG.Shop.Customer
             };
             await repository.InsertAsync(entity);
             CurrentUnitOfWork.SaveChanges();//保存后才能拿到新的会员信息自增Id
-            return ObjectMapper.Map<CustomerDto>(entity);
+            var m = await GetOneAsync(entity.Id);
+            return MapToDto(m.customer, m.user);
         }
 
         public async Task<CustomerDto> UpdateAsync(CustomerUpdateDto input)
@@ -151,14 +164,20 @@ namespace BXJG.Shop.Customer
 
             await repository.UpdateAsync(entity);
             CurrentUnitOfWork.SaveChanges();
-            return ObjectMapper.Map<CustomerDto>(entity);
+            var m = await GetOneAsync(input.Id);
+            return MapToDto(m.customer, m.user);
         }
 
-        public async Task<PagedResultDto<CustomerDto>> GetListAsync(GetAllCustomersInput input)
+        public async Task<PagedResultDto<CustomerDto>> GetAllAsync(GetAllCustomersInput input)
         {
-            var query = repository.GetAllIncluding(c => c.User,c=>c.Area).AsNoTracking()
-                .WhereIf(!input.AreaCode.IsNullOrWhiteSpace(),c=>c.Area.Code.StartsWith(input.AreaCode))
-                .WhereIf(!input.Keywords.IsNullOrEmpty(), c => c.User.Name.Contains(input.Keywords) || c.User.PhoneNumber.Contains(input.Keywords));
+            var query = from c in repository.GetAllIncluding(c => c.Area)
+                        join u in userRepository.GetAllIncluding(c => c.Roles) on c.UserId equals u.Id
+                        select new { c, u };
+
+            //var qq = repository.GetAllIncluding(c => c.Area).Join<TUser>(userRepository.GetAllIncluding(c => c.Roles), c => c.UserId, d =>d.Id, (c,u)=>  );
+
+            query.WhereIf(!input.AreaCode.IsNullOrWhiteSpace(), c => c.c.Area.Code.StartsWith(input.AreaCode))
+                 .WhereIf(!input.Keywords.IsNullOrEmpty(), c => c.u.Name.Contains(input.Keywords) || c.u.PhoneNumber.Contains(input.Keywords));
 
             var totalCount = await query.CountAsync();
 
@@ -167,35 +186,75 @@ namespace BXJG.Shop.Customer
             query = query.PageBy(input);
 
             var entities = await query.ToListAsync();
+            var dtos = entities.Select(c => MapToDto(c.c, c.u)).ToList();
 
             return new PagedResultDto<CustomerDto>(
                 totalCount,
-                ObjectMapper.Map<IReadOnlyList<CustomerDto>>(entities)
+                dtos
             );
-        }
-
-        public async Task<long[]> DeleteAsync(params long[] ids)
-        {
-            var successIds = new List<long>();
-            foreach (var item in ids)
-            {
-                try
-                {
-                    await repository.DeleteAsync(item);
-                    successIds.Add(item);
-                }
-                catch (Exception ex)
-                {
-                    Logger.Warn("删除商城会员失败！", ex);
-                }
-            }
-            return successIds.ToArray();
         }
 
         public async Task<CustomerDto> GetAsync(EntityDto<long> input)
         {
-            var entity = await repository.GetAllIncluding(c => c.User).AsNoTracking().SingleAsync(c => c.Id == input.Id);
-            return ObjectMapper.Map<CustomerDto>(entity);
+            var m = await GetOneAsync(input.Id);
+            return MapToDto(m.customer, m.user);
+        }
+
+        public async Task<BatchOperationResultLong> DeleteBatchAsync(BatchOperationInputLong input)
+        {
+            var result = new BatchOperationResultLong();
+            foreach (var item in input.Ids)
+            {
+                try
+                {
+                    await repository.DeleteAsync(item);
+                    result.Ids.Add(item);
+                }
+                catch (Exception ex)
+                {
+                    base.Logger.Warn($"删除顾客失败，Id：{item}", ex);
+                }
+            }
+            return result;
+        }
+        /// <summary>
+        /// 辅助方法
+        /// </summary>
+        /// <param name="identityResult"></param>
+        protected virtual void CheckErrors(IdentityResult identityResult)
+        {
+            identityResult.CheckErrors(LocalizationManager);
+        }
+        /// <summary>
+        /// 根据顾客id获取顾客实体和关联的用户实体
+        /// </summary>
+        /// <param name="id">顾客id</param>
+        /// <returns></returns>
+        protected async virtual Task<(CustomerEntity customer, TUser user)> GetOneAsync(long id)
+        {
+            var query = from c in repository.GetAllIncluding(c => c.Area)
+                        join u in userRepository.GetAllIncluding(c => c.Roles) on c.UserId equals u.Id
+                        select new { c, u };
+            var r = await query.SingleAsync();
+            return (r.c, r.u);
+        }
+        /// <summary>
+        /// 将一对一的顾客实体和用户实体转换为顾客的查询模型
+        /// </summary>
+        /// <param name="c">顾客实体</param>
+        /// <param name="u">用户实体</param>
+        /// <returns></returns>
+        protected virtual CustomerDto MapToDto(CustomerEntity c, TUser u)
+        {
+            var dto = ObjectMapper.Map<CustomerDto>(c);
+            ObjectMapper.Map(u, dto);
+            //dto.UserEmailAddress = u.EmailAddress;
+            //dto.UserFullName = u.FullName;
+            //dto.UserIsActive = u.IsActive;
+            //dto.UserPhoneNumber = u.PhoneNumber;
+            //dto.UserSurname = u.Surname;
+            //dto.UserUserName = u.UserName;
+            return dto;
         }
     }
 }

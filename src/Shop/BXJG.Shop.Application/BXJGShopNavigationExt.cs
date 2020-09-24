@@ -8,7 +8,7 @@ using System.Text;
 
 namespace BXJG.Shop
 {
-    public static class BXJGShopNavigationProvider
+    public static class BXJGShopNavigationExt
     {
         //public static MenuDefinition Init(MenuDefinition menu)
         //{

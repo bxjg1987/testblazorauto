@@ -22,16 +22,16 @@ namespace BXJG.Shop.Customer
         /// <summary>
         /// 关联到abp用户
         /// </summary>
-        public string UserFullName { get; set; }
+        public string FullName { get; set; }
         /// <summary>
         /// 应该是登录名
         /// </summary>
-        public string UserUserName { get; set; }
+        public string UserName { get; set; }
         //public DateTime UserLastLoginTime { get; set; }
-        public string UserSurname { get; set; }
-        public string UserEmailAddress { get; set; }
-        public bool UserIsActive { get; set; }
-        public string UserPhoneNumber { get; set; }
+        public string Surname { get; set; }
+        public string EmailAddress { get; set; }
+        public bool IsActive { get; set; }
+        public string PhoneNumber { get; set; }
         #endregion
         /// <summary>
         /// 所属地区id

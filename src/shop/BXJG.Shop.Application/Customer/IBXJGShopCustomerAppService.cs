@@ -1,5 +1,8 @@
 ﻿using Abp.Application.Services;
 using Abp.Application.Services.Dto;
+using Abp.Authorization;
+using BXJG.Common.Dto;
+using BXJG.Shop.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -19,10 +22,19 @@ namespace BXJG.Shop.Customer
     /// </summary>
     public interface IBXJGShopCustomerAppService : IApplicationService
     {
-        Task<PagedResultDto<CustomerDto>> GetListAsync(GetAllCustomersInput input);
+        [AbpAuthorize(BXJGShopPermissions.BXJGShopCustomer)]
+        Task<PagedResultDto<CustomerDto>> GetAllAsync(GetAllCustomersInput input);
+
+        [AbpAuthorize(BXJGShopPermissions.BXJGShopCustomer)]
         Task<CustomerDto> GetAsync(EntityDto<long> input);
+        
+        [AbpAuthorize(BXJGShopPermissions.BXJGShopCustomerCreate)]
         Task<CustomerDto> CreateAsync(CustomerUpdateDto input);
+        
+        [AbpAuthorize(BXJGShopPermissions.BXJGShopCustomerUpdate)]
         Task<CustomerDto> UpdateAsync(CustomerUpdateDto input);
-        Task<long[]> DeleteAsync(params long[] ids);
+       
+        [AbpAuthorize(BXJGShopPermissions.BXJGShopCustomerDelete)]
+        Task<BatchOperationResultLong> DeleteBatchAsync(BatchOperationInputLong input);
     }
 }
