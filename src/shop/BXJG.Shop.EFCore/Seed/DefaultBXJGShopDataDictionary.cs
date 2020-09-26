@@ -14,9 +14,15 @@ using Abp.Configuration;
 
 namespace BXJG.Shop.Seed
 {
+    /// <summary>
+    /// 为商城模块插入字典数据
+    /// </summary>
+    /// <typeparam name="TTenant"></typeparam>
+    /// <typeparam name="TRole"></typeparam>
+    /// <typeparam name="TUser"></typeparam>
+    /// <typeparam name="TSelf"></typeparam>
     public class DefaultBXJGShopDataDictionary<TTenant, TRole, TUser, TSelf>
         where TTenant : AbpTenant<TUser>
-        
         where TSelf : AbpZeroDbContext<TTenant, TRole, TUser, TSelf>
         where TRole : AbpRole<TUser>
         where TUser : AbpUser<TUser>
@@ -25,18 +31,17 @@ namespace BXJG.Shop.Seed
         private readonly int _tenantId;
         DbSet<GeneralTreeEntity> set;
         long? parentId;
-        bool insertTestData;
 
-        public DefaultBXJGShopDataDictionary(TSelf context, int tenantId, long? parentId = default, bool insertTestData = true)
+        public DefaultBXJGShopDataDictionary(TSelf context, int tenantId, long? parentId = default)
         {
             _context = context;
             _tenantId = tenantId;
             this.parentId = parentId;
             set = context.Set<GeneralTreeEntity>();
-            this.insertTestData = insertTestData;
+          //  this.insertTestData = insertTestData;
         }
 
-        public void Create()
+        public void Create(bool insertTestData = true)
         {
             var pp = set.Any(c => c.ParentId == parentId && c.DisplayName == "商品品牌");
             if (!pp)

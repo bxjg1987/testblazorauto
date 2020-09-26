@@ -8,6 +8,7 @@ using BXJG.Shop.Catalogue;
 using BXJG.Shop.Customer;
 
 using BXJG.GeneralTree;
+using ZLJ.Authorization.Users;
 
 namespace ZLJ
 {
@@ -28,7 +29,7 @@ namespace ZLJ
         /// </summary>
         public AutoMapperProfile()
         {
-            
+            CreateMap<User, CustomerDto>();
 
             //CreateMap<BXJGShopDictionaryEntity, DictionaryDto>()
             //    .ForMember(c => c.ExtData, opt => opt.MapFrom(c => JsonConvert.DeserializeObject<dynamic>(c.ExtensionData)))

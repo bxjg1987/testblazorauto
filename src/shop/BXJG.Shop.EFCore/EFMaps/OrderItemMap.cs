@@ -13,13 +13,9 @@ namespace BXJG.Shop.EFMaps
     /// <summary>
     /// 订单产品明细ef映射
     /// </summary>
-    /// <typeparam name="TUser"></typeparam>
-    public class OrderItemMap<TUser,TEntity> : IEntityTypeConfiguration<TEntity>
-        //where TUser : AbpUserBase
-        //
-        where TEntity: OrderItemEntity<TUser>
+    public class OrderItemMap : IEntityTypeConfiguration<OrderItemEntity>
     {
-        public virtual void Configure(EntityTypeBuilder<TEntity> builder)
+        public virtual void Configure(EntityTypeBuilder<OrderItemEntity> builder)
         {
             builder.ToTable("BXJGShopOrderItems");
             builder.Property(c => c.RowVersion).IsRowVersion();

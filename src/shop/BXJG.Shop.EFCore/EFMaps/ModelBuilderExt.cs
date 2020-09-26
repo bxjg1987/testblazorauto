@@ -7,6 +7,7 @@ using BXJG.Shop.Sale;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 
 namespace BXJG.Shop.EFMaps
@@ -18,13 +19,9 @@ namespace BXJG.Shop.EFMaps
         /// </summary>
         /// <param name="modelBuilder"></param>
         /// <returns></returns>
-        public static ModelBuilder ApplyConfigurationBXJGShop<TUser>(this ModelBuilder modelBuilder)
+        public static ModelBuilder ApplyConfigurationBXJGShop(this ModelBuilder modelBuilder)
         {
-            return modelBuilder
-                .ApplyConfigurationsFromAssembly(BXJGShopEFCoreModule.GetAssembly())
-                .ApplyConfiguration(new CustomerMap<TUser, CustomerEntity<TUser>>())
-                .ApplyConfiguration(new OrderMap<TUser, OrderEntity<TUser>>())
-                .ApplyConfiguration(new OrderItemMap<TUser, OrderItemEntity<TUser>>());
+            return modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
         }
 

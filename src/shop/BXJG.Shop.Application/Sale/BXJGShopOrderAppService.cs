@@ -26,40 +26,32 @@ using ZLJ.BaseInfo.Administrative;
 
 namespace BXJG.Shop.Sale
 {
-    public abstract class BXJGShopOrderAppService<TTenant, TUser, TRole, TTenantManager, TUserManager, TOrderManager, TCustomerManager>
-        : BXJGShopAppServiceBase<TTenant, TUser, TRole, TTenantManager, TUserManager>, IBXJGShopOrderAppService
-        where TUser : AbpUser<TUser>
-        where TRole : AbpRole<TUser>, new()
-        where TTenant : AbpTenant<TUser>
-        where TTenantManager : AbpTenantManager<TTenant, TUser>
-        where TUserManager : AbpUserManager<TRole, TUser>
-        
-        where TOrderManager : OrderManager<TUser>
-        where TCustomerManager : CustomerManager<TUser>
-        
+    /// <summary>
+    /// 后台管理员管理订单的应用服务
+    /// </summary>
+    public class BXJGShopOrderAppService : BXJGShopAppServiceBase, IBXJGShopOrderAppService
     {
-        private readonly IRepository<OrderEntity<TUser>, long> repository;
-        private readonly TOrderManager orderManager;
-        private readonly IRepository<AdministrativeEntity, long> generalTreeManager;
+        private readonly IRepository<OrderEntity, long> repository;
+        private readonly OrderManager orderManager;
+        private readonly IRepository<AdministrativeEntity, long> administrativeRepository;
         private readonly IRepository<ItemEntity, long> itemRepository;
-        private readonly WeChatPaymentService weChatPaymentService;
+        private readonly WeChatPaymentService wechatPaymentService;
 
         public ICancellationTokenProvider CancellationToken { get; set; } = NullCancellationTokenProvider.Instance;
 
-        public BXJGShopOrderAppService(
-            IRepository<CustomerEntity<TUser>, long> customerRepository,
-            TCustomerManager customerManager,
-            IRepository<OrderEntity<TUser>, long> repository,
-            TOrderManager orderManager,
-            IRepository<AdministrativeEntity, long> generalTreeManager,
-            IRepository<ItemEntity, long> itemRepository,
-            WeChatPaymentService weChatPaymentService)
+        public BXJGShopOrderAppService(IRepository<CustomerEntity, long> customerRepository,
+                                       CustomerManager customerManager,
+                                       IRepository<OrderEntity, long> repository,
+                                       OrderManager orderManager,
+                                       IRepository<AdministrativeEntity, long> administrativeRepository,
+                                       IRepository<ItemEntity, long> itemRepository,
+                                       WeChatPaymentService wechatPaymentService)
         {
             this.repository = repository;
             this.orderManager = orderManager;
-            this.generalTreeManager = generalTreeManager;
+            this.administrativeRepository = administrativeRepository;
             this.itemRepository = itemRepository;
-            this.weChatPaymentService = weChatPaymentService;
+            this.wechatPaymentService = wechatPaymentService;
         }
         /// <summary>
         /// 根据条件查询订单列表
@@ -68,21 +60,20 @@ namespace BXJG.Shop.Sale
         /// <returns></returns>
         public async Task<PagedResultDto<OrderDto>> GetAllAsync(GetAllOrderInput input)
         {
-            var query = repository.GetAllIncluding(c => c.Customer.User, c => c.Area,c=>c.DistributionMethod, c => c.PaymentMethod)
-                .WhereIf(input.OrderStartTime.HasValue,c=>c.OrderTime>=input.OrderStartTime.Value)
-                .WhereIf(input.OrderEndTime.HasValue, c => c.OrderTime < input.OrderEndTime.Value)
-                .WhereIf(input.OrderStatus.HasValue, c => c.Status==input.OrderStatus.Value)
-                .WhereIf(input.PaymentStatus.HasValue, c => c.PaymentStatus == input.PaymentStatus.Value)
-                .WhereIf(input.LogisticsStatusStatus.HasValue, c => c.LogisticsStatus == input.LogisticsStatusStatus.Value)
-                .WhereIf(input.AreaId.HasValue, c => c.AreaId==input.AreaId.Value)
-                .WhereIf(input.PaymentMethodId.HasValue, c => c.PaymentMethodId == input.PaymentMethodId.Value)
-                .WhereIf(input.DistributionMethodId.HasValue, c => c.DistributionMethodId == input.DistributionMethodId.Value)
-                .WhereIf(!input.Keywords.IsNullOrEmpty(), c =>
-                    c.OrderNo.Contains(input.Keywords)
-                    || c.Consignee.Contains(input.Keywords)
-                    || c.ConsigneePhoneNumber.Contains(input.Keywords)
-                    || c.ReceivingAddress.Contains(input.Keywords)
-                    || c.LogisticsNumber.Contains(input.Keywords));
+            var query = repository.GetAllIncluding(c => c.Area, c => c.DistributionMethod, c => c.PaymentMethod)
+                                  .WhereIf(input.OrderStartTime.HasValue, c => c.OrderTime >= input.OrderStartTime.Value)
+                                  .WhereIf(input.OrderEndTime.HasValue, c => c.OrderTime < input.OrderEndTime.Value)
+                                  .WhereIf(input.OrderStatus.HasValue, c => c.Status == input.OrderStatus.Value)
+                                  .WhereIf(input.PaymentStatus.HasValue, c => c.PaymentStatus == input.PaymentStatus.Value)
+                                  .WhereIf(input.LogisticsStatusStatus.HasValue, c => c.LogisticsStatus == input.LogisticsStatusStatus.Value)
+                                  .WhereIf(input.AreaId.HasValue, c => c.AreaId == input.AreaId.Value)
+                                  .WhereIf(input.PaymentMethodId.HasValue, c => c.PaymentMethodId == input.PaymentMethodId.Value)
+                                  .WhereIf(input.DistributionMethodId.HasValue, c => c.DistributionMethodId == input.DistributionMethodId.Value)
+                                  .WhereIf(!input.Keywords.IsNullOrEmpty(), c => c.OrderNo.Contains(input.Keywords) ||
+                                                                                 c.Consignee.Contains(input.Keywords) || 
+                                                                                 c.ConsigneePhoneNumber.Contains(input.Keywords) ||
+                                                                                 c.ReceivingAddress.Contains(input.Keywords) ||
+                                                                                 c.LogisticsNumber.Contains(input.Keywords));
 
             var count = await query.CountAsync();
             var list = await query.OrderBy(input.Sorting).PageBy(input).ToListAsync();

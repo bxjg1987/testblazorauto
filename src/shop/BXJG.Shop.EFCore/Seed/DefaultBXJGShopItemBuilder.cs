@@ -12,12 +12,18 @@ using System.Text;
 
 namespace BXJG.Shop.Seed
 {
+    /// <summary>
+    /// 为商城模块录入商品信息演示数据
+    /// </summary>
+    /// <typeparam name="TTenant"></typeparam>
+    /// <typeparam name="TRole"></typeparam>
+    /// <typeparam name="TUser"></typeparam>
+    /// <typeparam name="TSelf"></typeparam>
     public class DefaultBXJGShopItemBuilder<TTenant, TRole, TUser, TSelf>
         where TTenant : AbpTenant<TUser>
         where TRole : AbpRole<TUser>
         where TUser : AbpUser<TUser>
         where TSelf : AbpZeroDbContext<TTenant, TRole, TUser, TSelf>
-       
     {
         private readonly TSelf _context;
         private readonly int _tenantId;
@@ -41,8 +47,6 @@ namespace BXJG.Shop.Seed
 
             if (items.Any())
                 return;
-
-
 
             cls.Add(new ItemCategoryEntity
             {

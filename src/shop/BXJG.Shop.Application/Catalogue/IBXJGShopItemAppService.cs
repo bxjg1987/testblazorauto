@@ -71,6 +71,6 @@ namespace BXJG.Shop.Catalogue
         /// <param name="input"></param>
         /// <returns></returns>
         [AbpAuthorize(BXJGShopPermissions.BXJGShopItemUpdate)]//暂时用修改权限，后期补
-        Task UnPublishAsync(BatchUnPublishInput input);
+        Task UnPublishAsync(BatchOperationInputLong input);
     }
 }

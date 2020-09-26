@@ -39,8 +39,8 @@ namespace ZLJ.EntityFrameworkCore
         public virtual DbSet<BXJGShopDictionaryEntity> BXJGShopDictionaries { get; set; }
         public virtual DbSet<ItemCategoryEntity> BXJGShopItemCategories { get; set; }
         public virtual DbSet<ItemEntity> BXJGShopItems { get; set; }
-        public virtual DbSet<CustomerEntity<User>> BXJGShopCustomers { get; set; }
-        public virtual DbSet<OrderEntity<User>> BXJGShopOrders { get; set; }
+        public virtual DbSet<CustomerEntity> BXJGShopCustomers { get; set; }
+        public virtual DbSet<OrderEntity> BXJGShopOrders { get; set; }
         #endregion
 
         #region CMS
@@ -67,7 +67,7 @@ namespace ZLJ.EntityFrameworkCore
             //注册各模块中的ef映射
             modelBuilder
                 .ApplyConfigurationsFromAssembly(typeof(ZLJEntityFrameworkModule).Assembly)
-                .ApplyConfigurationBXJGShop<User>()
+                .ApplyConfigurationBXJGShop()
                 .ApplyConfigurationBXJGCMS()
                 .ApplyConfigurationBXJGEquipment()
                 .ApplyConfigurationBXJGBaseInfo();

@@ -33,7 +33,7 @@ namespace BXJG.Shop.Catalogue
     /// <summary>
     /// 商品上架信息应用服务
     /// </summary>
-    public class BXJGShopItemAppService: AbpServiceBase
+    public class BXJGShopItemAppService : AbpServiceBase, IBXJGShopItemAppService
     {
         private readonly IRepository<ItemEntity, long> repository;
         private readonly ItemCategoryManager dictionaryManager;
@@ -44,7 +44,7 @@ namespace BXJG.Shop.Catalogue
         public BXJGShopItemAppService(IRepository<ItemEntity, long> repository,
                                       ItemCategoryManager dictionaryManager,
                                       IRepository<BXJGShopDictionaryEntity, long> respDic,
-                                      ItemManager itemManager, 
+                                      ItemManager itemManager,
                                       TempFileManager tempFileManager)
         {
             this.repository = repository;
@@ -63,7 +63,7 @@ namespace BXJG.Shop.Catalogue
             input.Images = this.tempFileManager.Move(input.Images).ToArray();
             var entity = base.ObjectMapper.Map<ItemEntity>(input);
             entity = await repository.InsertAsync(entity);
-        
+
             await CurrentUnitOfWork.SaveChangesAsync();
 
             //这里查两次，有点坑
@@ -91,7 +91,7 @@ namespace BXJG.Shop.Catalogue
                 entity.Publish(input.AvailableStart, input.AvailableEnd);
             else
                 entity.UnPublish();
-           
+
             await CurrentUnitOfWork.SaveChangesAsync();
             entity = await repository.GetAllIncluding(c => c.Category, c => c.Brand, c => c.Unit).SingleAsync(c => c.Id == entity.Id);
             return ObjectMapper.Map<ItemDto>(entity);
@@ -178,13 +178,13 @@ namespace BXJG.Shop.Catalogue
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task UnPublishAsync(BatchUnPublishInput input)
+        public async Task UnPublishAsync(BatchOperationInputLong input)
         {
             var entities = await repository.GetAllListAsync(d => input.Ids.Contains(d.Id));
             //如果有问题，就每个明细await吧
             foreach (var item in entities)
             {
-               item.UnPublish();
+                item.UnPublish();
             }
         }
     }

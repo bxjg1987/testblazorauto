@@ -6,6 +6,12 @@ namespace BXJG.Shop
     {
         public const string LocalizationSourceName = "BXJGShop";
 
+        /// <summary>
+        /// 目前考虑所有商城用户属于静态角色，静态角色在BXJGShopCoreModule中配置
+        /// ef初始化或顾客注册时设置此角色
+        /// </summary>
+        public const string CustomerRoleName = "Customer";
+
         #region 商品分类
         public const int ItemCategoryIconMaxLength = 200;
         public const int ItemCategoryImage1MaxLength = 200;

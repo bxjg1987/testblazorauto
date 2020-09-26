@@ -19,6 +19,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Localization\LocalizationExt.cs" />
+    <Compile Remove="Shop\CustomerManager.cs" />
+    <Compile Remove="Shop\OrderManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Abp.AutoMapper" Version="5.13.0" />
@@ -32,5 +34,8 @@
     <ProjectReference Include="..\Modules\BXJG.Attachment\BXJG.Attachment.csproj" />
     <ProjectReference Include="..\Modules\BXJG.File\BXJG.File.csproj" />
     <ProjectReference Include="..\shop\BXJG.Shop.Core\BXJG.Shop.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Shop\" />
   </ItemGroup>
 </Project>

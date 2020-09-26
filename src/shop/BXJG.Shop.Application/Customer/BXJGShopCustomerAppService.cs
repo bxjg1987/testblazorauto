@@ -22,6 +22,7 @@ using BXJG.Common.Dto;
 using Microsoft.AspNetCore.Identity;
 using Abp.IdentityFramework;
 using AutoMapper.QueryableExtensions;
+using Abp.AutoMapper;
 
 namespace BXJG.Shop.Customer
 {
@@ -50,33 +51,28 @@ namespace BXJG.Shop.Customer
     /// <typeparam name="TTenantManager">租户管理器类型</typeparam>
     /// <typeparam name="TRoleManager">角色管理器类型</typeparam>
     /// <typeparam name="TUserManager">用户管理器类型</typeparam>
-    public abstract class BXJGShopCustomerAppService<TTenant,
-                                                     TUser,
-                                                     TRole,
-                                                     TTenantManager,
-                                                     TRoleManager,
-                                                     TUserManager> : BXJGShopAppServiceBase, IBXJGShopCustomerAppService
+    public class BXJGShopCustomerAppService<TUser,
+                                            TRole,
+                                            TRoleManager,
+                                            TUserManager> : BXJGShopAppServiceBase, IBXJGShopCustomerAppService
         where TUser : AbpUser<TUser>, new()
         where TRole : AbpRole<TUser>, new()
-        where TTenant : AbpTenant<TUser>
-        where TTenantManager : AbpTenantManager<TTenant, TUser>
         where TRoleManager : AbpRoleManager<TRole, TUser>
         where TUserManager : AbpUserManager<TRole, TUser>
     {
-        private readonly TTenantManager TenantManager;
         private readonly TRoleManager RoleManager;
         private readonly TUserManager UserManager;
         private readonly IRepository<CustomerEntity, long> repository;
         private readonly IRepository<TUser, long> userRepository;
 
-        public BXJGShopCustomerAppService(IRepository<CustomerEntity, long> repository, TTenantManager tenantManager, TRoleManager roleManager, TUserManager userManager, IRepository<TUser, long> userRepository)
+        public BXJGShopCustomerAppService(IRepository<CustomerEntity, long> repository, TRoleManager roleManager, TUserManager userManager, IRepository<TUser, long> userRepository)
         {
             this.repository = repository;
-            TenantManager = tenantManager;
             RoleManager = roleManager;
             UserManager = userManager;
             this.userRepository = userRepository;
         }
+
         public async Task<CustomerDto> CreateAsync(CustomerUpdateDto input)
         {
             #region 创建主程序的用户
@@ -88,25 +84,20 @@ namespace BXJG.Shop.Customer
             user.PhoneNumber = input.PhoneNumber;
             user.IsActive = input.IsActive;
             //user.TenantId = AbpSession.TenantId;//好像UserManager会自己处理
-
-
             user.IsEmailConfirmed = true;
             user.IsPhoneNumberConfirmed = true;
             user.UserName = input.UserName;
-
-
             await UserManager.InitializeOptionsAsync(AbpSession.TenantId);//看顶部注释
             //user.SetNormalizedNames();//这个貌似没必要调了，UserManager内部会处理
-
-
             CheckErrors(await UserManager.CreateAsync(user, input.Password));
             //目前不考虑多角色商城会员
             //if (input.RoleNames != null)
             //{
             //    CheckErrors(await _userManager.SetRolesAsync(user, input.RoleNames));
             //}
-
             CurrentUnitOfWork.SaveChanges();//保存后才能拿到新的UserId
+
+            CheckErrors(await UserManager.AddToRoleAsync(user, BXJGShopConsts.CustomerRoleName));
 
             //return MapToEntityDto(user);
             #endregion
@@ -114,17 +105,16 @@ namespace BXJG.Shop.Customer
             //映射不太好处理，手动来吧
             var entity = new CustomerEntity
             {
-                Amount = input.Amount,
+                //Amount = input.Amount,
                 Birthday = input.Birthday,
                 Gender = input.Gender,
-                Integral = input.Integral,
+                //Integral = input.Integral,
                 //User = user,//下面设置了userId就行了
                 UserId = user.Id
             };
             await repository.InsertAsync(entity);
             CurrentUnitOfWork.SaveChanges();//保存后才能拿到新的会员信息自增Id
-            var m = await GetOneAsync(entity.Id);
-            return MapToDto(m.customer, m.user);
+            return await GetDtoAsync(entity.Id);
         }
 
         public async Task<CustomerDto> UpdateAsync(CustomerUpdateDto input)
@@ -155,17 +145,16 @@ namespace BXJG.Shop.Customer
 
 
 
-            entity.Amount = input.Amount;
+            //entity.Amount = input.Amount;
             entity.Birthday = input.Birthday;
             entity.Gender = input.Gender;
-            entity.Integral = input.Integral;
+            //entity.Integral = input.Integral;
             //entity.TenantId = AbpSession.TenantId.Value;
 
 
             await repository.UpdateAsync(entity);
             CurrentUnitOfWork.SaveChanges();
-            var m = await GetOneAsync(input.Id);
-            return MapToDto(m.customer, m.user);
+            return await GetDtoAsync(input.Id);
         }
 
         public async Task<PagedResultDto<CustomerDto>> GetAllAsync(GetAllCustomersInput input)
@@ -176,13 +165,20 @@ namespace BXJG.Shop.Customer
 
             //var qq = repository.GetAllIncluding(c => c.Area).Join<TUser>(userRepository.GetAllIncluding(c => c.Roles), c => c.UserId, d =>d.Id, (c,u)=>  );
 
-            query.WhereIf(!input.AreaCode.IsNullOrWhiteSpace(), c => c.c.Area.Code.StartsWith(input.AreaCode))
-                 .WhereIf(!input.Keywords.IsNullOrEmpty(), c => c.u.Name.Contains(input.Keywords) || c.u.PhoneNumber.Contains(input.Keywords));
+            query = query.WhereIf(!input.AreaCode.IsNullOrWhiteSpace(), c => c.c.Area.Code.StartsWith(input.AreaCode))
+                   .WhereIf(!input.Keywords.IsNullOrEmpty(), c => c.u.Name.Contains(input.Keywords) || c.u.PhoneNumber.Contains(input.Keywords));
 
             var totalCount = await query.CountAsync();
 
             if (!input.Sorting.IsNullOrWhiteSpace())
+            {
+                if (input.Sorting.Contains("FullName "))
+                    input.Sorting = "u." + input.Sorting;
+                else
+                    input.Sorting = "c." + input.Sorting;
                 query = query.OrderBy(input.Sorting);
+            }
+
             query = query.PageBy(input);
 
             var entities = await query.ToListAsync();
@@ -196,8 +192,7 @@ namespace BXJG.Shop.Customer
 
         public async Task<CustomerDto> GetAsync(EntityDto<long> input)
         {
-            var m = await GetOneAsync(input.Id);
-            return MapToDto(m.customer, m.user);
+            return await GetDtoAsync(input.Id);
         }
 
         public async Task<BatchOperationResultLong> DeleteBatchAsync(BatchOperationInputLong input)
@@ -248,13 +243,12 @@ namespace BXJG.Shop.Customer
         {
             var dto = ObjectMapper.Map<CustomerDto>(c);
             ObjectMapper.Map(u, dto);
-            //dto.UserEmailAddress = u.EmailAddress;
-            //dto.UserFullName = u.FullName;
-            //dto.UserIsActive = u.IsActive;
-            //dto.UserPhoneNumber = u.PhoneNumber;
-            //dto.UserSurname = u.Surname;
-            //dto.UserUserName = u.UserName;
             return dto;
+        }
+        protected virtual async Task<CustomerDto> GetDtoAsync(long id)
+        {
+            var p = await GetOneAsync(id);
+            return MapToDto(p.customer, p.user);
         }
     }
 }

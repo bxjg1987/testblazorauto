@@ -74,6 +74,8 @@
     <text name="Unknown" value="未知" />
     <text name="BXJG.Utils.Enums.Gender.Woman" value="女" />
     <text name="BXJG.Utils.Enums.Gender.Man" value="男" />
+    <text name="BXJG.Common.Gender.Woman" value="女" />
+    <text name="BXJG.Common.Gender.Man" value="男" />
     <text name="Keywords" value="关键字" />
     <text name="Search" value="搜索" />
     <text name="AreYouSure" value="确定此操作吗？" />

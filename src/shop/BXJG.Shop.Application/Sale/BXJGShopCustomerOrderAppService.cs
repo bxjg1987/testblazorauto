@@ -21,30 +21,11 @@ namespace BXJG.Shop.Sale
 {
     /// <summary>
     /// 前台顾客对订单的操作接口
-    /// 你需要在主程序中提供一个子类以指定泛型参数
     /// </summary>
-    /// <typeparam name="TTenant"></typeparam>
-    /// <typeparam name="TUser"></typeparam>
-    /// <typeparam name="TRole"></typeparam>
-    /// <typeparam name="TTenantManager"></typeparam>
-    /// <typeparam name="TUserManager"></typeparam>
-    /// <typeparam name="TOrderManager"></typeparam>
-    /// <typeparam name="TCustomerManager"></typeparam>
-    /// <typeparam name="TDataDictionary"></typeparam>
-    public abstract class BXJGShopCustomerOrderAppService<TTenant, TUser, TRole, TTenantManager, TUserManager, TOrderManager, TCustomerManager>
-        : CustomerAppServiceBase<TTenant, TUser, TRole, TTenantManager, TUserManager, TCustomerManager>, IBXJGShopCustomerOrderAppService
-        where TUser : AbpUser<TUser>, new()
-        where TRole : AbpRole<TUser>, new()
-        where TTenant : AbpTenant<TUser>
-        where TTenantManager : AbpTenantManager<TTenant, TUser>
-        where TUserManager : AbpUserManager<TRole, TUser>
-        
-        where TOrderManager : OrderManager<TUser>
-        where TCustomerManager : CustomerManager<TUser>
-        
+    public class BXJGShopCustomerOrderAppService : CustomerAppServiceBase, IBXJGShopCustomerOrderAppService
     {
-        private readonly IRepository<OrderEntity<TUser>, long> repository;
-        private readonly TOrderManager orderManager;
+        private readonly IRepository<OrderEntity, long> repository;
+        private readonly OrderManager orderManager;
         private readonly IRepository<AdministrativeEntity, long> generalTreeManager;
         private readonly IRepository<ItemEntity, long> itemRepository;
         private readonly WeChatPaymentService weChatPaymentService;
@@ -52,11 +33,11 @@ namespace BXJG.Shop.Sale
         public ICancellationTokenProvider CancellationToken { get; set; } = NullCancellationTokenProvider.Instance;
 
         public BXJGShopCustomerOrderAppService(
-            IRepository<CustomerEntity<TUser>, long> customerRepository,
-            TCustomerManager customerManager,
-            CustomerSession<TUser> customerSession,
-            IRepository<OrderEntity<TUser>, long> repository,
-            TOrderManager orderManager, 
+            IRepository<CustomerEntity, long> customerRepository,
+            CustomerManager customerManager,
+            CustomerSession customerSession,
+            IRepository<OrderEntity, long> repository,
+            OrderManager orderManager, 
             IRepository<AdministrativeEntity, long> generalTreeManager,
             IRepository<ItemEntity, long> itemRepository,
             WeChatPaymentService weChatPaymentService)

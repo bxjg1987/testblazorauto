@@ -9,6 +9,8 @@ using BXJG.Shop.Sale;
 using BXJG.Utils;
 using System;
 using Abp.Dependency;
+using Abp.Zero.Configuration;
+using Abp.MultiTenancy;
 
 namespace BXJG.Shop
 {
@@ -19,6 +21,7 @@ namespace BXJG.Shop
         {
             BXJGShopLocalizationConfigurer.Configure(Configuration.Localization);
             Configuration.Settings.Providers.Add<BXJGShopAppSettingProvider>();
+            Configuration.Modules.Zero().RoleManagement.StaticRoles.Add(new StaticRoleDefinition(BXJGShopConsts.CustomerRoleName, MultiTenancySides.Tenant));
             //Configuration.Modules.BXJGUtils().AddEnum("bxjgShopOrderStatus", typeof(OrderStatus), BXJGUtilsConsts.LocalizationSourceName);
         }
         public override void Initialize()

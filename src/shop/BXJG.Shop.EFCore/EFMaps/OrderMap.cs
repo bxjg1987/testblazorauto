@@ -14,12 +14,9 @@ namespace BXJG.Shop.EFMaps
     /// 订单的ef映射类，请在主程序的DBContext.OnModelCreating注册
     /// </summary>
     /// <typeparam name="TUser"></typeparam>
-    public class OrderMap<TUser,TEntity> : IEntityTypeConfiguration<TEntity>
-        //where TUser : AbpUserBase
-        //
-        where TEntity: OrderEntity<TUser>
+    public class OrderMap : IEntityTypeConfiguration<OrderEntity>
     {
-        public virtual void Configure(EntityTypeBuilder<TEntity> builder)
+        public virtual void Configure(EntityTypeBuilder<OrderEntity> builder)
         {
             builder.Property(c => c.OrderNo).IsRequired(true).HasColumnType($"varchar({BXJGShopConsts.OrderNoMaxLength})");
             builder.Property(c => c.CustomerRemark).HasMaxLength(BXJGShopConsts.CustomerRemarkMaxLength);

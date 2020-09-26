@@ -16,32 +16,54 @@ using System.Text;
 
 namespace BXJG.Shop.Seed
 {
+    /// <summary>
+    /// 为商城模块插入顾客演示数据
+    /// </summary>
+    /// <typeparam name="TTenant"></typeparam>
+    /// <typeparam name="TRole"></typeparam>
+    /// <typeparam name="TUser"></typeparam>
+    /// <typeparam name="TSelf"></typeparam>
     public class DefaultBXJGShopCustomerBuilder<TTenant, TRole, TUser, TSelf>
         where TTenant : AbpTenant<TUser>
-        where TRole : AbpRole<TUser>
+        where TRole : AbpRole<TUser>, new()
         where TUser : AbpUser<TUser>, new()
         where TSelf : AbpZeroDbContext<TTenant, TRole, TUser, TSelf>
-            
     {
         private readonly TSelf _context;
         private readonly int _tenantId;
-        DbSet<CustomerEntity<TUser>> items;
-
+        DbSet<CustomerEntity> items;
+        DbSet<TRole> roles;
         public DefaultBXJGShopCustomerBuilder(TSelf context, int tenantId)
         {
             _context = context;
             _tenantId = tenantId;
-            items = context.Set<CustomerEntity<TUser>>();
+            items = context.Set<CustomerEntity>();
+            roles = context.Set<TRole>();
         }
 
         public void Create(bool insertTestData = true)
         {
+            //初始化顾客的默认角色
+            var role = _context.Roles.IgnoreQueryFilters().FirstOrDefault(r => r.TenantId == _tenantId && r.Name == BXJGShopConsts.CustomerRoleName);
+            if (role == null)
+            {
+                var sdf = new TRole();
+                sdf.TenantId = _tenantId;
+                sdf.Name = BXJGShopConsts.CustomerRoleName;
+                sdf.DisplayName = BXJGShopConsts.CustomerRoleName;
+                sdf.SetNormalizedName();
+                sdf.IsStatic = true;
+                role = _context.Roles.Add(sdf).Entity;
+                _context.SaveChanges();
+            }
+
             if (!insertTestData)
                 return;
 
-            if (items.Any())
+            if (items.IgnoreQueryFilters().Where(c=>c.TenantId == _tenantId).Any())
                 return;
 
+           // var role = roles.Single(c => c.Name == BXJGShopConsts.CustomerRoleName);
             var adminUser = new TUser
             {
                 TenantId = _tenantId,
@@ -60,13 +82,15 @@ namespace BXJG.Shop.Seed
 
             _context.Users.Add(adminUser);
             _context.SaveChanges();
+            _context.UserRoles.Add(new UserRole(_tenantId, adminUser.Id, role.Id));
+            _context.SaveChanges();
 
-            var cust1 = new CustomerEntity<TUser>
+            var cust1 = new CustomerEntity
             {
                 Birthday = DateTime.Now.AddYears(-30),
                 Gender = Gender.Man,
                 TenantId = this._tenantId,
-                User = adminUser
+                UserId = adminUser.Id
             };
             items.Add(cust1);
 
@@ -90,21 +114,21 @@ namespace BXJG.Shop.Seed
             _context.Users.Add(adminUser1);
             _context.SaveChanges();
 
-            var cust2 = new CustomerEntity<TUser>
+            var cust2 = new CustomerEntity
             {
                 Birthday = DateTime.Now.AddYears(-22).AddDays(116),
                 Gender = Gender.Woman,
                 TenantId = this._tenantId,
-                User = adminUser1
+                UserId = adminUser1.Id
             };
             items.Add(cust2);
 
             // Assign Admin role to admin user
-            //_context.UserRoles.Add(new UserRole(_tenantId, adminUser.Id, adminRole.Id));
-            //_context.SaveChanges();
 
 
             this._context.SaveChanges();
+            _context.UserRoles.Add(new UserRole(_tenantId, adminUser1.Id, role.Id));
+            _context.SaveChanges();
         }
     }
 }
