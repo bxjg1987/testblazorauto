@@ -13,20 +13,8 @@ using ZLJ.BaseInfo.Administrative;
 
 namespace BXJG.Shop.Customer
 {
-    /*
-     * 商城用户（顾客）有很多额外字段，比如积分啥的 也可能包含多个收货地址
-     * 因此建立顾客与abp用户的一对一关系
-     * 其它实体在引用 顾客实体时 可以保护abp用户和顾客两个实体的引用，关联查询会更方便，但是导致那个实体更复杂，商城业务中更多情况只关注顾客属性
-     * 或许可以尝试不用泛型，而直接连到AbpUserBase，这样比较冒险。再着将来主程序需要引用CustomerEntity时也很难关联查询到泛型实体的额外属性
-     * 
-     * 经过测试发现不用泛型行不通
-     * 
-     * 去掉OrderEntity的直接关联，因为顾客是个独立的概念，它不一定会有订单；按同样的思路，今后出现的更多与顾客有关的概念时 顾客实体会变得更加复杂
-     * 再则订单是一个复杂的概念，将来可能有更多泛型，顾客实体会变得越来越复杂
-     * 
-     */
     /// <summary>
-    /// 商城系统中的顾客
+    /// 商城系统中的顾客，与用户一对一关联
     /// </summary>
     public class CustomerEntity : FullAuditedEntity<long>, IMustHaveTenant
     {

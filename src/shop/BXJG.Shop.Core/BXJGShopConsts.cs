@@ -11,6 +11,11 @@ namespace BXJG.Shop
         /// ef初始化或顾客注册时设置此角色
         /// </summary>
         public const string CustomerRoleName = "Customer";
+        /// <summary>
+        /// 顾客登陆时会将顾客id存储到claim中，此值就是claim类型
+        /// </summary>
+        public const string CustomerIdClaim = "CustomerId";
+
 
         #region 商品分类
         public const int ItemCategoryIconMaxLength = 200;

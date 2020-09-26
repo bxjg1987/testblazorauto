@@ -6,50 +6,57 @@ using Abp.Domain.Uow;
 using Abp.Events.Bus;
 using Abp.Events.Bus.Entities;
 using Abp.Events.Bus.Handlers;
+using Abp.MultiTenancy;
 using Abp.Runtime.Session;
 using BXJG.Common;
 using BXJG.GeneralTree;
 using BXJG.Shop.Common;
 using BXJG.Shop.Sale;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace BXJG.Shop.Customer
 {
-    /*
-     * 虽然ICustomerRepositoryExtensions提供了扩展方法，但是需要提供泛型TUser，并且也无法（也不合理）提供session的访问
-     * 因此在领域服务提供一个封装
-     */
-    public class CustomerManager : BXJGShopDomainServiceBase//, ITransientDependency
+    /// <summary>
+    /// 顾客领域服务
+    /// </summary>
+    public class CustomerManager : BXJGShopDomainServiceBase
     {
         protected readonly IRepository<CustomerEntity, long> repository;
-        //领域层 不应该访问Session
-        //protected readonly IAbpSession session;
+
+        //protected readonly IAbpSession session;//领域层 不应该访问Session
 
         public CustomerManager(IRepository<CustomerEntity, long> repository)
         {
             this.repository = repository;
         }
+
+
+    
+
+        //直接在仓储中提供了扩展方法
         ///// <summary>
-        ///// 根据用户id获取关联的顾客实体，同时加载用户实体
+        ///// 根据用户Id获取关联的顾客实体
         ///// </summary>
         ///// <param name="userId"></param>
         ///// <returns></returns>
-        //public Task<CustomerEntity<TUser>> SingleByUserIdWithUserAsync(long userId)
+        //public Task<CustomerEntity> GetByUserIdAsync(long userId)
         //{
-        //    return repository.SingleByUserIdWithUserAsync(userId);
+        //    return repository.SingleByUserIdAsync(userId);
         //}
         ///// <summary>
-        ///// 根据用户id获取关联的顾客实体，不加载用户实体
+        ///// 根据用户Id获取关联的顾客Id
         ///// </summary>
         ///// <param name="userId"></param>
         ///// <returns></returns>
-        //public Task<CustomerEntity<TUser>> SingleByUserIdWithoutUserAsync(long userId)
+        //public async ValueTask<long> GetCustomerIdByUserIdAsync(long userId)
         //{
-        //    return repository.SingleByUserIdWithoutUserAsync(userId);
+        //    return await repository.GetAll().Where(c => c.UserId == userId).Select(c => c.Id).SingleAsync();
         //}
     }
-
 }

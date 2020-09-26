@@ -35,7 +35,7 @@ namespace BXJG.Shop.Sale
         public BXJGShopCustomerOrderAppService(
             IRepository<CustomerEntity, long> customerRepository,
             CustomerManager customerManager,
-            CustomerSession customerSession,
+            ICustomerSession customerSession,
             IRepository<OrderEntity, long> repository,
             OrderManager orderManager, 
             IRepository<AdministrativeEntity, long> generalTreeManager,

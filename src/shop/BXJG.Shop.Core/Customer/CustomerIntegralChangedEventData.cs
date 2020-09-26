@@ -15,10 +15,9 @@ namespace BXJG.Shop.Customer
     /// </summary>
     public class CustomerIntegralChangedEventData : EntityEventData<CustomerEntity>
     {
-        public CustomerIntegralChangedEventData(CustomerEntity customer):base(customer)
+        public CustomerIntegralChangedEventData(CustomerEntity customer) : base(customer)
         {
-            
+
         }
-      
     }
 }

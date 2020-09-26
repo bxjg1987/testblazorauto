@@ -14,13 +14,11 @@ using BXJG.Common;
 
 namespace BXJG.Shop.Customer
 {
-    //简单起见先直接用具体类，不提炼接口。获取当前用户关联的顾客id场景单一，变化的可能性不大，所以可能也没必要定义接口
-
     /// <summary>
     /// 包装IAbpSession以提供当前顾客Id的获取
-    /// 一次请求一个实例
+    /// 一次请求一个实例，请查看BXJGShopCoreModule中的注册逻辑
     /// </summary>
-    public class CustomerSession : IPerWebRequestDependency
+    public class CustomerSession : ICustomerSession//, IPerWebRequestDependency
     {
         private readonly IAbpSession abpSession;
         private readonly IRepository<CustomerEntity, long> repository;

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BXJG.GeneralTree;
 using BXJG.Shop.Common;
 using BXJG.Common;
+using System.Linq;
 
 namespace BXJG.Shop.Customer
 {
@@ -17,13 +18,35 @@ namespace BXJG.Shop.Customer
     /// </summary>
     public static class ICustomerRepositoryExtensions
     {
+        /// <summary>
+        /// 根据用户id获取顾客实体
+        /// </summary>
+        /// <param name="repository"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public static Task<CustomerEntity> SingleByUserIdAsync(this IRepository<CustomerEntity, long> repository, long userId)
         {
-            return repository.SingleAsync(c => c.UserId == userId);
+            return repository.GetAllIncluding(c=>c.Area).SingleAsync(c => c.UserId == userId);
         }
-        public static Task<CustomerEntity> SingleOrDefaultByUserIdWithoutUserAsync<TUser>(this IRepository<CustomerEntity, long> repository, long userId)
+        /// <summary>
+        /// 根据用户id获取顾客实体
+        /// </summary>
+        /// <typeparam name="TUser"></typeparam>
+        /// <param name="repository"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public static Task<CustomerEntity> SingleOrDefaultByUserIdAsync<TUser>(this IRepository<CustomerEntity, long> repository, long userId)
         {
-            return repository.GetAll().SingleOrDefaultAsync(c => c.UserId == userId);
+            return repository.GetAllIncluding(c => c.Area).SingleOrDefaultAsync(c => c.UserId == userId);
+        }
+        /// <summary>
+        /// 根据用户Id获取关联的顾客Id
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public static async ValueTask<long> GetCustomerIdByUserIdAsync(this IRepository<CustomerEntity, long> repository, long userId)
+        {
+            return await repository.GetAll().Where(c => c.UserId == userId).Select(c => c.Id).SingleAsync();
         }
     }
 }

@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Class2.cs" />
     <Compile Remove="Common\IShopAdministrative.cs" />
     <Compile Remove="Sale\OrderBuilder.cs" />
     <Compile Remove="Sale\PaymentMethod.cs" />
@@ -25,6 +26,8 @@
     <PackageReference Include="Abp" Version="5.13.0" />
     <PackageReference Include="Abp.Web.Common" Version="5.13.0" />
     <PackageReference Include="Abp.Zero.Common" Version="5.13.0" />
+    <PackageReference Include="Abp.ZeroCore" Version="5.13.0" />
+    <PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="3.3.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.4" />
   </ItemGroup>
 

@@ -31,7 +31,7 @@ namespace BXJG.Shop.Customer
         /// <summary>
         /// 顾客session
         /// </summary>
-        protected readonly CustomerSession customerSession;
+        protected readonly ICustomerSession customerSession;
 
         /// <summary>
         /// 实例化登录的顾客的应用服务基类
@@ -39,7 +39,7 @@ namespace BXJG.Shop.Customer
         /// <param name="customerRepository">顾客实体仓储</param>
         /// <param name="customerManager">顾客领域服务</param>
         /// <param name="customerSession">顾客session</param>
-        public CustomerAppServiceBase(IRepository<CustomerEntity, long> customerRepository, CustomerManager customerManager, CustomerSession customerSession)
+        public CustomerAppServiceBase(IRepository<CustomerEntity, long> customerRepository, CustomerManager customerManager, ICustomerSession customerSession)
         {
             this.customerRepository = customerRepository;
             this.customerManager = customerManager;
