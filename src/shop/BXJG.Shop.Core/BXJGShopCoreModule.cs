@@ -40,7 +40,7 @@ namespace BXJG.Shop
             IocManager.IocContainer.Register(
                 Component
                     .For<ICustomerSession>()
-                    .ImplementedBy<CustomerSession>()
+                    .ImplementedBy<CustomerClaimSession>()
                     .LifestyleCustom<MsScopedLifestyleManager>()
             );
 

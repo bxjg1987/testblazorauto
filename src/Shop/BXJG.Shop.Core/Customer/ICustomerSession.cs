@@ -10,6 +10,11 @@ namespace BXJG.Shop.Customer
     /// </summary>
     public interface ICustomerSession
     {
-        ValueTask<long> GetCurrentCustomerIdAsync();
+        /// <summary>
+        /// 获取当前登陆用户关联的顾客信息
+        /// 若当前登陆用户不属于Customer角色则返回null
+        /// </summary>
+        /// <returns></returns>
+        ValueTask<long?> GetCurrentCustomerIdAsync();
     }
 }

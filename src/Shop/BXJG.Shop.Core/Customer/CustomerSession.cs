@@ -26,7 +26,7 @@ namespace BXJG.Shop.Customer
         ///// 获取顾客id，
         ///// </summary>
         //public readonly Lazy<long> CustomerId;
-        private long customerId;
+        private long? customerId = -1;
 
         public CustomerSession(IAbpSession abpSession, IRepository<CustomerEntity, long> repository)
         {
@@ -45,14 +45,17 @@ namespace BXJG.Shop.Customer
         /// 获取当前登录的顾客的Id
         /// </summary>
         /// <returns></returns>
-        public async ValueTask<long> GetCurrentCustomerIdAsync()
+        public async ValueTask<long?> GetCurrentCustomerIdAsync()
         {
             //反正当前类是一个请求一个实例，所以不用考虑线程同步
             //将来考虑使用缓存来减小数据的查询次数
 
-            if (customerId == default)
-                customerId = await repository.GetAll().Where(c => c.UserId == abpSession.UserId).Select(c => c.Id).SingleAsync();
-
+            if (customerId == -1)
+            {
+                customerId = await repository.GetAll().Where(c => c.UserId == abpSession.UserId).Select(c => c.Id).SingleOrDefaultAsync();
+                if (customerId == default)
+                    customerId = null;
+            }
             return customerId;
         }
     }

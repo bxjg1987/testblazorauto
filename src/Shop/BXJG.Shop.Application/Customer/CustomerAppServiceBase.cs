@@ -57,7 +57,7 @@ namespace BXJG.Shop.Customer
         /// 获取当前登录用户关联的顾客id
         /// </summary>
         /// <returns></returns>
-        protected virtual ValueTask<long> GetCurrentCustomerIdAsync()
+        protected virtual ValueTask<long?> GetCurrentCustomerIdAsync()
         {
             return customerSession.GetCurrentCustomerIdAsync();
         }

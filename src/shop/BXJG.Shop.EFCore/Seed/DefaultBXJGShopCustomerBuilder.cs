@@ -60,16 +60,18 @@ namespace BXJG.Shop.Seed
             if (!insertTestData)
                 return;
 
-            if (items.IgnoreQueryFilters().Where(c=>c.TenantId == _tenantId).Any())
+            if (items.IgnoreQueryFilters().Where(c => c.TenantId == _tenantId).Any())
                 return;
 
-           // var role = roles.Single(c => c.Name == BXJGShopConsts.CustomerRoleName);
+            // var role = roles.Single(c => c.Name == BXJGShopConsts.CustomerRoleName);
             var adminUser = new TUser
             {
                 TenantId = _tenantId,
                 UserName = "cust1",
                 Name = "测试顾客",
                 Surname = "测试顾客",
+                PhoneNumber = "17723896676",
+                IsPhoneNumberConfirmed = true,
                 EmailAddress = "ssssss@sdfs.com",
                 Roles = new List<UserRole>()
             };
