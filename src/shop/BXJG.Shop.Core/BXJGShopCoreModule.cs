@@ -27,6 +27,8 @@ namespace BXJG.Shop
             Configuration.Settings.Providers.Add<BXJGShopAppSettingProvider>();
             Configuration.Modules.Zero().RoleManagement.StaticRoles.Add(new StaticRoleDefinition(BXJGShopConsts.CustomerRoleName, MultiTenancySides.Tenant));
             //Configuration.Modules.BXJGUtils().AddEnum("bxjgShopOrderStatus", typeof(OrderStatus), BXJGUtilsConsts.LocalizationSourceName);
+
+            Configuration.DynamicEntityProperties.Providers.Add<ProductDynamicEntityPropertyDefinition>();
         }
         public override void Initialize()
         {
