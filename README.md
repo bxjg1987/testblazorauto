@@ -15,18 +15,12 @@
 
 <h1>各模块基本介绍</h1>
 目前没有整理文档，都是配套设计思路的视频<br />
-<h3>结合supersocket的设备控制功能</h3>
-https://www.bilibili.com/video/BV1M5411j7Lo/<br />
-<h3>微信小程序登录模块：</h3>
-https://www.bilibili.com/video/BV1Uk4y1d7Be/<br />
-<h3>微信小程序支付模块：</h3>
-https://www.bilibili.com/video/BV1Ac411h7Jo/<br />
-<h3>大文件分片上传/附件模块：</h3>
-https://www.bilibili.com/video/BV1m7411m7Es/<br />
-<h3>通用树形结构模块：</h3>
-https://www.bilibili.com/video/BV1m7411m7Es?p=7<br />
-<h3>简单商城模块</h3>
-shop文件夹中是目前正在做商城模块，大致思路是尽量保持独立模块，主程序能尽量简单的引入和去除商城功能。主要是参考nopCommerce..<br />
+[商城模块->顾客](https://www.bilibili.com/video/BV1zy4y1k7uR/)  
+[结合supersocket的设备控制功能](https://www.bilibili.com/video/BV1M5411j7Lo/)   
+[微信小程序登录模块](https://www.bilibili.com/video/BV1Uk4y1d7Be/)  
+[微信小程序支付模块](https://www.bilibili.com/video/BV1Ac411h7Jo/)  
+[大文件分片上传/附件模块](https://www.bilibili.com/video/BV1m7411m7Es/)  
+[通用树形结构模块](https://www.bilibili.com/video/BV1m7411m7Es?p=7)  
 
 <h1>期待你的加入</h1>
 abp是一个程序的框架，按它的模块化方式我们可以设计出适合常规业务的通用代码。如果你也在用abp，或在学习，那么我们可以一起来 **累积和分享 这些模块**，模块的设计我们可以一起探讨。
