@@ -21,6 +21,7 @@
 [微信小程序支付模块](https://www.bilibili.com/video/BV1Ac411h7Jo/)  
 [大文件分片上传/附件模块](https://www.bilibili.com/video/BV1m7411m7Es/)  
 [https://www.bilibili.com/video/BV1m7411m7Es?p=7](通用树形结构模块)  
+[是个的风格](http://www.baidu.com)
 
 <h1>期待你的加入</h1>
 abp是一个程序的框架，按它的模块化方式我们可以设计出适合常规业务的通用代码。如果你也在用abp，或在学习，那么我们可以一起来 **累积和分享 这些模块**，模块的设计我们可以一起探讨。
