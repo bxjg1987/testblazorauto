@@ -21,13 +21,9 @@
 [结合supersocket的设备控制功能](https://www.bilibili.com/video/BV1M5411j7Lo/)   
 
 [微信小程序登录模块](https://www.bilibili.com/video/BV1Uk4y1d7Be/)  
-
 [微信小程序支付模块](https://www.bilibili.com/video/BV1Ac411h7Jo/)  
-
 [大文件分片上传/附件模块](https://www.bilibili.com/video/BV1m7411m7Es/)  
-
 [通用树形结构模块](https://www.bilibili.com/video/BV1m7411m7Es?p=7)  
-
 [sdddddd](http://www.baidu.com)
 
 <h1>期待你的加入</h1>
