@@ -21,7 +21,7 @@
 [微信小程序支付模块](https://www.bilibili.com/video/BV1Ac411h7Jo/)  
 [大文件分片上传/附件模块](https://www.bilibili.com/video/BV1m7411m7Es/)  
 
-[https://www.bilibili.com/video/BV1m7411m7Es?p=7](通用树形结构模块)  
+[通用树形结构模块](https://www.bilibili.com/video/BV1m7411m7Es?p=7)  
 
 [sdddddd](http://www.baidu.com)
 
