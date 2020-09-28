@@ -16,7 +16,7 @@ namespace BXJG.Shop.EFMaps
         public virtual void Configure(EntityTypeBuilder<CustomerEntity> builder)
         {
             builder.Property(c => c.RowVersion).IsRowVersion();
-            ///builder.Property(c => c.Birthday).IsRequired(false);
+            builder.Property(c => c.ExtensionData).HasMaxLength(int.MaxValue);
         }
     }
 }

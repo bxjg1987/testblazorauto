@@ -16,7 +16,7 @@ namespace BXJG.Shop.Customer
     /// <summary>
     /// 商城系统中的顾客，与用户一对一关联
     /// </summary>
-    public class CustomerEntity : FullAuditedEntity<long>, IMustHaveTenant
+    public class CustomerEntity : FullAuditedEntity<long>, IMustHaveTenant, IExtendableObject
     {
         /// <summary>
         /// 租户id
@@ -60,5 +60,6 @@ namespace BXJG.Shop.Customer
         /// 最好的办法是在要处理的字段上加并发控制，以减小并发冲突的几率，但是目前一切从简先用行并发控制
         /// </summary>
         public byte[] RowVersion { get; set; }
+        public string ExtensionData { get; set; }
     }
 }

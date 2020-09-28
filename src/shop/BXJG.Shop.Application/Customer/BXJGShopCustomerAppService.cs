@@ -73,7 +73,7 @@ namespace BXJG.Shop.Customer
             this.userRepository = userRepository;
         }
 
-        public async Task<CustomerDto> CreateAsync(CustomerUpdateDto input)
+        public virtual async Task<CustomerDto> CreateAsync(CustomerUpdateDto input)
         {
             #region 创建主程序的用户
             //这个是从abp默认项目模板的用户管理应用服务中抄过来的
@@ -117,7 +117,7 @@ namespace BXJG.Shop.Customer
             return await GetDtoAsync(entity.Id);
         }
 
-        public async Task<CustomerDto> UpdateAsync(CustomerUpdateDto input)
+        public virtual async Task<CustomerDto> UpdateAsync(CustomerUpdateDto input)
         {
             var entity = await repository.GetAsync(input.Id);
 
@@ -157,7 +157,7 @@ namespace BXJG.Shop.Customer
             return await GetDtoAsync(input.Id);
         }
 
-        public async Task<PagedResultDto<CustomerDto>> GetAllAsync(GetAllCustomersInput input)
+        public virtual async Task<PagedResultDto<CustomerDto>> GetAllAsync(GetAllCustomersInput input)
         {
             var query = from c in repository.GetAllIncluding(c => c.Area)
                         join u in userRepository.GetAllIncluding(c => c.Roles) on c.UserId equals u.Id
@@ -190,12 +190,12 @@ namespace BXJG.Shop.Customer
             );
         }
 
-        public async Task<CustomerDto> GetAsync(EntityDto<long> input)
+        public virtual async Task<CustomerDto> GetAsync(EntityDto<long> input)
         {
             return await GetDtoAsync(input.Id);
         }
 
-        public async Task<BatchOperationResultLong> DeleteBatchAsync(BatchOperationInputLong input)
+        public virtual async Task<BatchOperationResultLong> DeleteBatchAsync(BatchOperationInputLong input)
         {
             var result = new BatchOperationResultLong();
             foreach (var item in input.Ids)
@@ -225,7 +225,7 @@ namespace BXJG.Shop.Customer
         /// </summary>
         /// <param name="id">顾客id</param>
         /// <returns></returns>
-        protected async virtual Task<(CustomerEntity customer, TUser user)> GetOneAsync(long id)
+        protected virtual async Task<(CustomerEntity customer, TUser user)> GetOneAsync(long id)
         {
             var query = from c in repository.GetAllIncluding(c => c.Area)
                         join u in userRepository.GetAllIncluding(c => c.Roles) on c.UserId equals u.Id
