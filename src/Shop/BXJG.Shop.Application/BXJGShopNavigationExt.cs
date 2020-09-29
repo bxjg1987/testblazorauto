@@ -58,11 +58,11 @@ namespace BXJG.Shop
             //{codegenerator}
 
             //设备档案
-            jczl.AddItem(new MenuItemDefinition(BXJGShopPermissions.BXJGShopItemCategory,
-                                                BXJGShopPermissions.BXJGShopItemCategory.BXJGShopL(),
-                                                icon: BXJGShopPermissions.BXJGShopItemCategory,
-                                                url: $"/{BXJGShopPermissions.BXJGShop}/{BXJGShopPermissions.BXJGShopItemCategory}/index.html",
-                                                permissionDependency: new SimplePermissionDependency(BXJGShopPermissions.BXJGShopItemCategory)))
+            jczl.AddItem(new MenuItemDefinition(BXJGShopPermissions.BXJGShopProductCategory,
+                                                BXJGShopPermissions.BXJGShopProductCategory.BXJGShopL(),
+                                                icon: BXJGShopPermissions.BXJGShopProductCategory,
+                                                url: $"/{BXJGShopPermissions.BXJGShop}/{BXJGShopPermissions.BXJGShopProductCategory}/index.html",
+                                                permissionDependency: new SimplePermissionDependency(BXJGShopPermissions.BXJGShopProductCategory)))
             .AddItem(new MenuItemDefinition(BXJGShopPermissions.BXJGShopItem,
                                             BXJGShopPermissions.BXJGShopItem.BXJGShopL(),
                                             icon: BXJGShopPermissions.BXJGShopItem,

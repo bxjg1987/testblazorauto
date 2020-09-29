@@ -19,7 +19,7 @@ namespace BXJG.Shop.Seed
     /// <typeparam name="TRole"></typeparam>
     /// <typeparam name="TUser"></typeparam>
     /// <typeparam name="TSelf"></typeparam>
-    public class DefaultBXJGShopItemCagtegoryBuilder<TTenant, TRole, TUser, TSelf>
+    public class DefaultBXJGShopProductCagtegoryBuilder<TTenant, TRole, TUser, TSelf>
         where TTenant : AbpTenant<TUser>
         where TRole : AbpRole<TUser>
         where TUser : AbpUser<TUser>
@@ -27,13 +27,13 @@ namespace BXJG.Shop.Seed
     {
         private readonly TSelf _context;
         private readonly int _tenantId;
-        DbSet<ItemCategoryEntity> set;
+        DbSet<ProductCategoryEntity> set;
 
-        public DefaultBXJGShopItemCagtegoryBuilder(TSelf context, int tenantId)
+        public DefaultBXJGShopProductCagtegoryBuilder(TSelf context, int tenantId)
         {
             _context = context;
             _tenantId = tenantId;
-            set = context.Set<ItemCategoryEntity>();
+            set = context.Set<ProductCategoryEntity>();
         }
 
         public void Create(bool insertTestData = true)
@@ -44,15 +44,17 @@ namespace BXJG.Shop.Seed
             if (set.Any())
                 return;
 
-            set.Add(new ItemCategoryEntity
+            set.Add(new ProductCategoryEntity
             {
                 Code = "00001",
                 CreationTime = DateTime.Now,
                 DisplayName = "分类1",
-                TenantId = _tenantId
+                TenantId = _tenantId, 
+                ShowInHome=true
             });
-            _context.SaveChanges();//必须保持下才能保证生产id
-            set.Add(new ItemCategoryEntity
+            _context.SaveChanges();//必须保存下才能保证生产id
+
+            set.Add(new ProductCategoryEntity
             {
                 Code = "00001.00001",
                 CreationTime = DateTime.Now,
@@ -61,7 +63,7 @@ namespace BXJG.Shop.Seed
                 ParentId = 1
             });
             _context.SaveChanges();//必须保持下才能保证生产id
-            set.Add(new ItemCategoryEntity
+            set.Add(new ProductCategoryEntity
             {
                 Code = "00001.00002",
                 CreationTime = DateTime.Now,
@@ -70,17 +72,17 @@ namespace BXJG.Shop.Seed
                 ParentId = 1
             });
             _context.SaveChanges();//必须保持下才能保证生产id
-            set.Add(new ItemCategoryEntity
+            set.Add(new ProductCategoryEntity
             {
                 Code = "00001.00002.00001",
                 CreationTime = DateTime.Now,
                 DisplayName = "子类B-1",
                 TenantId = _tenantId,
-                ParentId = 4
+                ParentId = 3
             });
             _context.SaveChanges();//必须保持下才能保证生产id
 
-            set.Add(new ItemCategoryEntity
+            set.Add(new ProductCategoryEntity
             {
                 Code = "00002",
                 CreationTime = DateTime.Now,

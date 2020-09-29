@@ -10,11 +10,15 @@ namespace BXJG.Shop.Catalogue
     {
         public override void SetDynamicEntityProperties(IDynamicEntityPropertyDefinitionContext context)
         {
-            context.Manager.AddAllowedInputType<SingleLineStringInputType>();
-            context.Manager.AddAllowedInputType<CheckboxInputType>();
-            context.Manager.AddAllowedInputType<ComboboxInputType>();
+            try
+            {
+                context.Manager.AddAllowedInputType<SingleLineStringInputType>();
+                context.Manager.AddAllowedInputType<CheckboxInputType>();
+                context.Manager.AddAllowedInputType<ComboboxInputType>();
+            }
+            catch { }
 
-            context.Manager.AddEntity<ItemEntity,long>();
+            context.Manager.AddEntity<ItemEntity, long>();
         }
     }
 }

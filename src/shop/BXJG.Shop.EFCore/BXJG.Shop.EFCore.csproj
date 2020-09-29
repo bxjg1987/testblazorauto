@@ -7,7 +7,6 @@
 
   <ItemGroup>
     <Compile Remove="BXJGShopRepository.cs" />
-    <Compile Remove="Seed\DefaultBXJGShopItemCagtegoryBuilder.cs" />
   </ItemGroup>
 
   <ItemGroup>

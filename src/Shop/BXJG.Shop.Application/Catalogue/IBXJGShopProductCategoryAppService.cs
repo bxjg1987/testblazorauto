@@ -8,7 +8,7 @@ namespace BXJG.Shop.Catalogue
     /// <summary>
     /// 后端管理对商品分类的操作
     /// </summary>
-    public interface IBXJGShopItemCategoryAppService : IGeneralTreeAppServiceBase<ItemCategoryDto,
+    public interface IBXJGShopProductCategoryAppService : IGeneralTreeAppServiceBase<ItemCategoryDto,
                                                                                   ItemCategoryEditDto,
                                                                                   ItemCategoryGetAllInput,
                                                                                   ItemCategoryGetForSelectInput,

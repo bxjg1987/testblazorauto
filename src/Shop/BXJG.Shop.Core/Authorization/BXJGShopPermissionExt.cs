@@ -25,10 +25,10 @@ namespace BXJG.Shop.Authorization
             spdtzdTree.CreateChildPermission(BXJGShopPermissions.BXJGShopDictionaryDelete, "删除".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
 
             //商品分类
-            var itemCategory = shop.CreateChildPermission(BXJGShopPermissions.BXJGShopItemCategory, BXJGShopPermissions.BXJGShopItemCategory.BXJGShopL(), multiTenancySides: MultiTenancySides.Tenant);
-            itemCategory.CreateChildPermission(BXJGShopPermissions.BXJGShopItemCategoryCreate, "新增".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
-            itemCategory.CreateChildPermission(BXJGShopPermissions.BXJGShopItemCategoryUpdate, "修改".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
-            itemCategory.CreateChildPermission(BXJGShopPermissions.BXJGShopItemCategoryDelete, "删除".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
+            var itemCategory = shop.CreateChildPermission(BXJGShopPermissions.BXJGShopProductCategory, BXJGShopPermissions.BXJGShopProductCategory.BXJGShopL(), multiTenancySides: MultiTenancySides.Tenant);
+            itemCategory.CreateChildPermission(BXJGShopPermissions.BXJGShopProductCategoryCreate, "新增".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
+            itemCategory.CreateChildPermission(BXJGShopPermissions.BXJGShopProductCategoryUpdate, "修改".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
+            itemCategory.CreateChildPermission(BXJGShopPermissions.BXJGShopProductCategoryDelete, "删除".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
 
             //商品
             var item = shop.CreateChildPermission(BXJGShopPermissions.BXJGShopItem, BXJGShopPermissions.BXJGShopItem.BXJGShopL(), multiTenancySides: MultiTenancySides.Tenant);

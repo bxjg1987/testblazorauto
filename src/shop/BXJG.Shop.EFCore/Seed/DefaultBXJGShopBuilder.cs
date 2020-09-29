@@ -30,8 +30,10 @@ namespace BXJG.Shop.Seed
         public void Create(bool insertTestData = true)
         {
             new DefaultBXJGShopDataDictionary<TTenant, TRole, TUser, TSelf>(_context, _tenantId, parentId).Create(insertTestData);
-            //new DefaultBXJGShopItemCagtegoryBuilder<TTenant, TRole, TUser, TSelf>(_context, _tenantId).Create(insertTestData);
+            new DefaultBXJGShopProductCagtegoryBuilder<TTenant, TRole, TUser, TSelf>(_context, _tenantId).Create(insertTestData);
+            new DefaultBxjgShopProductDynamicPropertyBuilder<TTenant, TRole, TUser, TSelf>(_context, _tenantId).Create(insertTestData);
             new DefaultBXJGShopItemBuilder<TTenant, TRole, TUser, TSelf>(_context, _tenantId).Create(insertTestData);
+            new DefaultBXJGShopProductBuilder<TTenant, TRole, TUser, TSelf>(_context, _tenantId).Create(insertTestData);
             new DefaultBXJGShopCustomerBuilder<TTenant, TRole, TUser, TSelf>(_context, _tenantId).Create(insertTestData);
             new DefaultBXJGShopOrderBuilder<TTenant, TRole, TUser, TSelf>(_context, _tenantId).Create(insertTestData);
             //_context.SaveChanges();

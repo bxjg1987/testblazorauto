@@ -9,9 +9,9 @@ namespace BXJG.Shop.Catalogue
     /// <summary>
     /// 商品分类领域服务
     /// </summary>
-    public class ItemCategoryManager : GeneralTreeManager<ItemCategoryEntity>
+    public class ProductCategoryManager : GeneralTreeManager<ProductCategoryEntity>
     {
-        public ItemCategoryManager(IRepository<ItemCategoryEntity, long> repository) : base(repository)
+        public ProductCategoryManager(IRepository<ProductCategoryEntity, long> repository) : base(repository)
         {
         }
     }

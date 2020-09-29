@@ -105,7 +105,7 @@ namespace BXJG.Shop.Catalogue
         /// <summary>
         /// 所属类别
         /// </summary>
-        public virtual ItemCategoryEntity Category { get; set; }
+        public virtual ProductCategoryEntity Category { get; set; }
         /// <summary>
         /// 所属类别id
         /// </summary>

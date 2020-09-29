@@ -21,7 +21,7 @@ namespace BXJG.Shop.Seed
     /// <typeparam name="TRole"></typeparam>
     /// <typeparam name="TUser"></typeparam>
     /// <typeparam name="TSelf"></typeparam>
-    public class ProductDynamicPropertyBuilder<TTenant, TRole, TUser, TSelf>
+    public class DefaultBxjgShopProductDynamicPropertyBuilder<TTenant, TRole, TUser, TSelf>
         where TTenant : AbpTenant<TUser>
         where TRole : AbpRole<TUser>
         where TUser : AbpUser<TUser>
@@ -30,7 +30,7 @@ namespace BXJG.Shop.Seed
         private readonly TSelf _context;
         private readonly int _tenantId;
 
-        public ProductDynamicPropertyBuilder(TSelf context, int tenantId)
+        public DefaultBxjgShopProductDynamicPropertyBuilder(TSelf context, int tenantId)
         {
             _context = context;
             _tenantId = tenantId;
@@ -41,13 +41,13 @@ namespace BXJG.Shop.Seed
             if (!insertTestData)
                 return;
 
-            var p = _context.DynamicProperties.IgnoreQueryFilters().Where(c => c.TenantId == _tenantId).Any();
+            var p = _context.DynamicProperties.IgnoreQueryFilters().Where(c => c.TenantId == _tenantId&& c.PropertyName=="规格").Any();
             if (p)
                 return;
 
             _context.DynamicProperties.Add(new DynamicProperty
             {
-                InputType = InputTypeBase.GetName<SingleLineStringInputType>(),
+                InputType = InputTypeBase.GetName<ComboboxInputType>(),
                 PropertyName = "规格",
                 TenantId = _tenantId
             });
@@ -80,7 +80,7 @@ namespace BXJG.Shop.Seed
             _context.DynamicEntityProperties.Add(new DynamicEntityProperty
             {
                 DynamicPropertyId = 1,
-                EntityFullName = typeof(ItemEntity).FullName,
+                EntityFullName = typeof(SkuEntity).FullName,
                 TenantId = _tenantId
             });
             _context.SaveChanges();

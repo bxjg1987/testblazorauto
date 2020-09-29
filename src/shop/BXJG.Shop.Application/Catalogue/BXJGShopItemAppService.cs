@@ -36,13 +36,13 @@ namespace BXJG.Shop.Catalogue
     public class BXJGShopItemAppService : AbpServiceBase, IBXJGShopItemAppService
     {
         private readonly IRepository<ItemEntity, long> repository;
-        private readonly ItemCategoryManager dictionaryManager;
+        private readonly ProductCategoryManager dictionaryManager;
         private readonly ItemManager itemManager;
         private readonly IRepository<BXJGShopDictionaryEntity, long> respDic;
         private readonly TempFileManager tempFileManager;
 
         public BXJGShopItemAppService(IRepository<ItemEntity, long> repository,
-                                      ItemCategoryManager dictionaryManager,
+                                      ProductCategoryManager dictionaryManager,
                                       IRepository<BXJGShopDictionaryEntity, long> respDic,
                                       ItemManager itemManager,
                                       TempFileManager tempFileManager)

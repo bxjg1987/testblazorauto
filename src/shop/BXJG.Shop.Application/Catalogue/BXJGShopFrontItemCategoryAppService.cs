@@ -15,11 +15,11 @@ namespace BXJG.Shop.Catalogue
                                                                                        ItemCategoryTreeNodeDto,
                                                                                        ItemCategoryGetForSelectInput,
                                                                                        ItemCategoryCombboxDto,
-                                                                                       ItemCategoryEntity,
-                                                                                       ItemCategoryManager>, IBXJGShopFrontItemCategoryAppService
+                                                                                       ProductCategoryEntity,
+                                                                                       ProductCategoryManager>, IBXJGShopFrontItemCategoryAppService
     {
-        public BXJGShopFrontItemCategoryAppService(IRepository<ItemCategoryEntity, long> ownRepository,
-                                                   ItemCategoryManager organizationUnitManager,
+        public BXJGShopFrontItemCategoryAppService(IRepository<ProductCategoryEntity, long> ownRepository,
+                                                   ProductCategoryManager organizationUnitManager,
                                                    string allTextForSearch = "不限", 
                                                    string allTextForForm = "请选择") : base(ownRepository,
                                                                                             organizationUnitManager,

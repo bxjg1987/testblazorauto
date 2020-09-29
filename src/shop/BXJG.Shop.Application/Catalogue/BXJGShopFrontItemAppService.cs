@@ -22,9 +22,9 @@ namespace BXJG.Shop.Catalogue
     public class BXJGShopFrontItemAppService : AbpServiceBase, IBXJGShopFrontItemAppService
     {
         private readonly IRepository<ItemEntity, long> repository;
-        private readonly ItemCategoryManager dictionaryManager;
+        private readonly ProductCategoryManager dictionaryManager;
 
-        public BXJGShopFrontItemAppService(IRepository<ItemEntity, long> repository, ItemCategoryManager dictionaryManager)
+        public BXJGShopFrontItemAppService(IRepository<ItemEntity, long> repository, ProductCategoryManager dictionaryManager)
         {
             this.repository = repository;
             this.dictionaryManager = dictionaryManager;

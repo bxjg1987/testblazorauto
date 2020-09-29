@@ -7,9 +7,9 @@ using System.Text;
 
 namespace BXJG.Shop.EFMaps
 {
-    public class ItemCategoryMap : IEntityTypeConfiguration<ItemCategoryEntity>
+    public class ProductCategoryMap : IEntityTypeConfiguration<ProductCategoryEntity>
     {
-        public void Configure(EntityTypeBuilder<ItemCategoryEntity> builder)
+        public void Configure(EntityTypeBuilder<ProductCategoryEntity> builder)
         {
             builder.Property(c => c.Icon).HasColumnType($"varchar({BXJGShopConsts.ItemCategoryIconMaxLength})");
             builder.Property(c => c.Image1).HasColumnType($"varchar({BXJGShopConsts.ItemCategoryImage1MaxLength})");

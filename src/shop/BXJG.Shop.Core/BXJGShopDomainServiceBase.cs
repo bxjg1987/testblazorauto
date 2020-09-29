@@ -1,5 +1,6 @@
 ﻿using Abp.Domain.Services;
 using Abp.Events.Bus;
+using Abp.Linq;
 using Abp.Threading;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ namespace BXJG.Shop
         //public ICancellationTokenProvider CancellationToken { get; set; } = NullCancellationTokenProvider.Instance;
 
         public IEventBus EventBus { get; set; }//属性注入 必须public
-
+        public IAsyncQueryableExecuter asyncQueryableExecuter { get; set; } = NullAsyncQueryableExecuter.Instance;
         public BXJGShopDomainServiceBase()
         {
             base.LocalizationSourceName = BXJGShopConsts.LocalizationSourceName;
