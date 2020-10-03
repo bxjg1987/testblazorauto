@@ -39,11 +39,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Shop.Application", "sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Shop.EFCore", "src\shop\BXJG.Shop.EFCore\BXJG.Shop.EFCore.csproj", "{AD66AD3C-950E-42AE-BCA6-B6D1DEF4A956}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{48232CB6-562B-44BB-912B-3ED71CCE455E}"
-	ProjectSection(SolutionItems) = preProject
-		docs\开发日记.txt = docs\开发日记.txt
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CMS", "CMS", "{EFA1D7C1-F006-4BEE-AFFD-53260672EE58}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.CMS.Core", "src\cms\BXJG.CMS.Core\BXJG.CMS.Core.csproj", "{BC540F69-135B-4360-B3A9-BC07AB6E133B}"

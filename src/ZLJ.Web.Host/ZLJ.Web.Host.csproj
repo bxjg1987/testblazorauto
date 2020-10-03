@@ -18,6 +18,9 @@
     <None Remove="App_Data\Logs\**" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="Controllers\FileController.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Remove="wwwroot\swagger\ui\index.html" />
   </ItemGroup>
   <ItemGroup>

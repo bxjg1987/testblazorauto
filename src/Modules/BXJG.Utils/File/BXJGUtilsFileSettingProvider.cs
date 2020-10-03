@@ -6,6 +6,9 @@ using System.Text;
 
 namespace BXJG.Utils.File
 {
+    /// <summary>
+    /// 这里只是通用设置，各模块可以有自己的设置
+    /// </summary>
     public class BXJGUtilsFileSettingProvider : SettingProvider
     {
         public override IEnumerable<SettingDefinition> GetSettingDefinitions(SettingDefinitionProviderContext context)

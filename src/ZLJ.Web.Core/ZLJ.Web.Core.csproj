@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <VersionPrefix>1.0.0.0</VersionPrefix>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -17,9 +17,6 @@
     <RootNamespace>ZLJ</RootNamespace>
     <LangVersion>7.2</LangVersion>
   </PropertyGroup>
-  <ItemGroup>
-    <Compile Remove="Controllers\FileController.cs" />
-  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\cms\BXJG.CMS.Application\BXJG.CMS.Application.csproj" />
     <ProjectReference Include="..\cms\BXJG.CMS.Core\BXJG.CMS.Core.csproj" />

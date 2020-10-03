@@ -60,7 +60,7 @@ namespace BXJG.Shop.Catalogue
         /// <returns></returns>
         public async Task<ItemDto> CreateAsync(ItemCreateDto input)
         {
-            input.Images = this.tempFileManager.Move(input.Images).ToArray();
+            input.Images =(await this.tempFileManager.MoveAsync(input.Images)).Select(c=>c.FileRelativePath).ToArray();
             var entity = base.ObjectMapper.Map<ItemEntity>(input);
             entity = await repository.InsertAsync(entity);
 
@@ -84,7 +84,7 @@ namespace BXJG.Shop.Catalogue
         /// <returns></returns>
         public async Task<ItemDto> UpdateAsync(ItemUpdateDto input)
         {
-            input.Images = this.tempFileManager.Move(input.Images).ToArray();
+            input.Images = (await this.tempFileManager.MoveAsync(input.Images)).Select(c => c.FileRelativePath).ToArray();
             var entity = await this.repository.GetAsync(input.Id);
             ObjectMapper.Map<ItemUpdateDto, ItemEntity>(input, entity);
             if (input.Published)

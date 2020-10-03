@@ -43,11 +43,11 @@ namespace ZLJ.Controllers
 
         [HttpPost]
         [AbpAuthorize]
-        public async Task<IList<Output>> UploadAsync(IFormFileCollection file)
+        public async Task<IList<BXJG.Utils.File.FileResult>> UploadAsync(IFormFileCollection file, bool createThum = false)
         {
             var rts = new List<FileUploadResult>();
-            var fs = file.Select(c => new Input(c.FileName, c.OpenReadStream(), c.ContentType, c.Length));
-            return await tempFileManager.UploadAsync(HttpContext.RequestAborted, fs.ToArray());
+            var fs = file.Select(c => new Input(c.FileName, c.OpenReadStream(), c.ContentType));
+            return await tempFileManager.UploadAsync(createThum, fs.ToArray());
             //foreach (var item in file)
             //{
             //    //此处需要对文件做各种检查  依赖abp的特征或设置系统
