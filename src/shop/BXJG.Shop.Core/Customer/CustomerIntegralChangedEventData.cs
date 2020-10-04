@@ -3,7 +3,6 @@ using Abp.Events.Bus;
 using Abp.Events.Bus.Entities;
 using BXJG.Common;
 using BXJG.GeneralTree;
-using BXJG.Shop.Common;
 using System;
 using System.Collections.Generic;
 using System.Text;

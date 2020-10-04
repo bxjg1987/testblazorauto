@@ -5,7 +5,6 @@ using ZLJ.Authorization.Users;
 using ZLJ.MultiTenancy;
 using ZLJ.BaseInfo;
 using BXJG.GeneralTree;
-using BXJG.Shop.Common;
 using BXJG.Shop.Catalogue;
 using BXJG.Shop.Customer;
 using BXJG.Shop;
@@ -36,10 +35,8 @@ namespace ZLJ.EntityFrameworkCore
         //后期考虑实现动态DbSet简化实体注册
 
         #region 注册商城模块中的实体
-        public virtual DbSet<BXJGShopDictionaryEntity> BXJGShopDictionaries { get; set; }
         public virtual DbSet<ProductCategoryEntity> BXJGShopProductCategories { get; set; }
-        public virtual DbSet<ItemEntity> BXJGShopItems { get; set; }
-        public virtual DbSet<ProductEntity> BXJGShopProducts { get; set; }
+        public virtual DbSet<ProductEntity> BXJGShopItems { get; set; }
         public virtual DbSet<CustomerEntity> BXJGShopCustomers { get; set; }
         public virtual DbSet<OrderEntity> BXJGShopOrders { get; set; }
         #endregion

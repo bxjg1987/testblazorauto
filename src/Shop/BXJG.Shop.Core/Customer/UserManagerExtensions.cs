@@ -19,7 +19,7 @@ namespace BXJG.Shop.Customer
         /// <returns></returns>
         public static async ValueTask<bool> IsCustomerAsync<TUser>(this UserManager<TUser> userManager, TUser user) where TUser : class
         {
-            return await userManager.IsInRoleAsync(user, BXJGShopConsts.CustomerRoleName);
+            return await userManager.IsInRoleAsync(user, CoreConsts.CustomerRoleName);
         }
     }
 }

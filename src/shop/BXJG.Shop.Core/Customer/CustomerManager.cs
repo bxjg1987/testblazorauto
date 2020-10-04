@@ -10,7 +10,6 @@ using Abp.MultiTenancy;
 using Abp.Runtime.Session;
 using BXJG.Common;
 using BXJG.GeneralTree;
-using BXJG.Shop.Common;
 using BXJG.Shop.Sale;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -25,7 +24,7 @@ namespace BXJG.Shop.Customer
     /// <summary>
     /// 顾客领域服务
     /// </summary>
-    public class CustomerManager : BXJGShopDomainServiceBase
+    public class CustomerManager : DomainServiceBase
     {
         protected readonly IRepository<CustomerEntity, long> repository;
 

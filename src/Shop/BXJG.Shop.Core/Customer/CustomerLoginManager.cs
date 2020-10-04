@@ -42,7 +42,7 @@ namespace BXJG.Shop.Customer
             if (!isCustomer)
                 return;
             var custId = await repository.GetCustomerIdByUserIdAsync(r.User.Id);
-            r.Identity.AddClaim(new System.Security.Claims.Claim(BXJGShopConsts.CustomerIdClaim, custId.ToString()));
+            r.Identity.AddClaim(new System.Security.Claims.Claim(CoreConsts.CustomerIdClaim, custId.ToString()));
         }
     }
 }

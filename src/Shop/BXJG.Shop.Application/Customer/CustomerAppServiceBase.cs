@@ -5,7 +5,6 @@ using Abp.Domain.Repositories;
 using Abp.MultiTenancy;
 using BXJG.Common;
 using BXJG.GeneralTree;
-using BXJG.Shop.Common;
 using BXJG.Shop.Customer;
 using System;
 using System.Collections.Generic;
@@ -18,7 +17,7 @@ namespace BXJG.Shop.Customer
     /// 登录的顾客的应用服务基类
     /// 比如顾客下订单 支付订单 或其它顾客操作可能会定义不同的应用服务，这些服务都可以继承此类来简化代码
     /// </summary>
-    public abstract class CustomerAppServiceBase : BXJGShopAppServiceBase, IApplicationService
+    public abstract class CustomerAppServiceBase : AppServiceBase, IApplicationService
     {
         /// <summary>
         /// 顾客实体仓储

@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Services.Dto;
+using Abp.AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,10 +7,8 @@ using System.Text;
 
 namespace BXJG.Shop.Catalogue
 {
-
-
     /// <summary>
-    /// 后台管理商品列表页模型
+    /// 后台管理页使用的DTO
     /// </summary>
     public class ProductDto : FullAuditedEntityDto<long>
     {
@@ -58,6 +57,25 @@ namespace BXJG.Shop.Catalogue
         /// 单位
         /// </summary>
         public long? UnitId { get; set; }
+        /// <summary>
+        /// 规格型号
+        /// </summary>
+        public string Specification { get; set; }
+        #endregion
+
+        #region 价格信息
+        /// <summary>
+        /// 原价
+        /// </summary>
+        public decimal OldPrice { get; set; }
+        /// <summary>
+        /// 现价(销售价)
+        /// </summary>
+        public decimal Price { get; set; }
+        /// <summary>
+        /// 积分
+        /// </summary>
+        public int Integral { get; set; }
         #endregion
 
         #region 上架信息

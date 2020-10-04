@@ -11,9 +11,9 @@ namespace BXJG.Shop.EFMaps
     {
         public void Configure(EntityTypeBuilder<ProductCategoryEntity> builder)
         {
-            builder.Property(c => c.Icon).HasColumnType($"varchar({BXJGShopConsts.ItemCategoryIconMaxLength})");
-            builder.Property(c => c.Image1).HasColumnType($"varchar({BXJGShopConsts.ItemCategoryImage1MaxLength})");
-            builder.Property(c => c.Image2).HasColumnType($"varchar({BXJGShopConsts.ItemCategoryImage2MaxLength})");
+            builder.Property(c => c.Icon).HasColumnType($"varchar({CoreConsts.ItemCategoryIconMaxLength})");
+            builder.Property(c => c.Image1).HasColumnType($"varchar({CoreConsts.ItemCategoryImage1MaxLength})");
+            builder.Property(c => c.Image2).HasColumnType($"varchar({CoreConsts.ItemCategoryImage2MaxLength})");
         }
     }
 }

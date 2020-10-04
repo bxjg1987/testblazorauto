@@ -4,7 +4,6 @@ using Abp.Events.Bus;
 using BXJG.Common;
 using BXJG.GeneralTree;
 using BXJG.Shop.Catalogue;
-using BXJG.Shop.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,7 +44,7 @@ namespace BXJG.Shop.Sale
         /// <summary>
         /// 关联的商品上架信息
         /// </summary>
-        public virtual ItemEntity Item { get;  set; }
+        public virtual ProductEntity Item { get;  set; }
         /// <summary>
         /// 产品标题
         /// </summary>

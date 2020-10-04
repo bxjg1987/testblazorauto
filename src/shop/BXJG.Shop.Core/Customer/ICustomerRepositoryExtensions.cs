@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using BXJG.GeneralTree;
-using BXJG.Shop.Common;
 using BXJG.Common;
 using System.Linq;
 

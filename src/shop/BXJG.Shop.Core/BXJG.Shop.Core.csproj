@@ -6,6 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Catalogue\ProductPublishRecordEntity.cs" />
+    <Compile Remove="Catalogue\SkuRecordEntity.cs" />
     <Compile Remove="Class2.cs" />
     <Compile Remove="Common\IShopAdministrative.cs" />
     <Compile Remove="Customer\CustomerSession.cs" />
@@ -35,6 +37,10 @@
   <ItemGroup>
     <ProjectReference Include="..\..\BaseInfo\BXJG.BaseInfo.Core\BXJG.BaseInfo.Core.csproj" />
     <ProjectReference Include="..\..\Modules\BXJG.GeneralTree\BXJG.GeneralTree.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Common\" />
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,6 @@
 ﻿using Abp.Authorization.Users;
 using BXJG.Common;
 using BXJG.GeneralTree;
-using BXJG.Shop.Common;
 using BXJG.Shop.Sale;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

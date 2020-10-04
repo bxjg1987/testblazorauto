@@ -1781,110 +1781,6 @@ namespace ZLJ.Migrations
                     b.ToTable("BXJGGeneralTrees");
                 });
 
-            modelBuilder.Entity("BXJG.Shop.Catalogue.ItemEntity", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTimeOffset?>("AvailableEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<DateTimeOffset?>("AvailableStart")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<long?>("BrandId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("CategoryId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("CreatorUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("DeleterUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DescriptionFull")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DescriptionShort")
-                        .HasColumnType("nvarchar(max)")
-                        .HasMaxLength(10000);
-
-                    b.Property<bool>("Focus")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Home")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Hot")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Images")
-                        .HasColumnType("varchar(5000)");
-
-                    b.Property<int>("Integral")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("LastModifierUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<bool>("New")
-                        .HasColumnType("bit");
-
-                    b.Property<decimal>("OldPrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<bool>("Published")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Sku")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("Specification")
-                        .HasColumnType("nvarchar(500)")
-                        .HasMaxLength(500);
-
-                    b.Property<int>("TenantId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.Property<long?>("UnitId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BrandId");
-
-                    b.HasIndex("CategoryId");
-
-                    b.HasIndex("UnitId");
-
-                    b.ToTable("BXJGShopItems");
-                });
-
             modelBuilder.Entity("BXJG.Shop.Catalogue.ProductCategoryEntity", b =>
                 {
                     b.Property<long>("Id")
@@ -2001,6 +1897,9 @@ namespace ZLJ.Migrations
                     b.Property<string>("Images")
                         .HasColumnType("varchar(5000)");
 
+                    b.Property<int>("Integral")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -2013,8 +1912,18 @@ namespace ZLJ.Migrations
                     b.Property<bool>("New")
                         .HasColumnType("bit");
 
+                    b.Property<decimal>("OldPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<bool>("Published")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Specification")
+                        .HasColumnType("nvarchar(500)")
+                        .HasMaxLength(500);
 
                     b.Property<int>("TenantId")
                         .HasColumnType("int");
@@ -2035,7 +1944,7 @@ namespace ZLJ.Migrations
 
                     b.HasIndex("UnitId");
 
-                    b.ToTable("BXJGShopProducts");
+                    b.ToTable("BXJGShopItems");
                 });
 
             modelBuilder.Entity("BXJG.Shop.Catalogue.SkuEntity", b =>
@@ -2061,70 +1970,7 @@ namespace ZLJ.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("SkuEntity");
-                });
-
-            modelBuilder.Entity("BXJG.Shop.Common.BXJGShopDictionaryEntity", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(95)")
-                        .HasMaxLength(95);
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("CreatorUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("DeleterUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DisplayName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
-
-                    b.Property<string>("ExtensionData")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Icon")
-                        .HasColumnType("varchar(500)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsSysDefine")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsTree")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("LastModifierUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("ParentId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int?>("TenantId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ParentId");
-
-                    b.ToTable("BXJGShopDictionaries");
+                    b.ToTable("BXJGShopSku");
                 });
 
             modelBuilder.Entity("BXJG.Shop.Customer.CustomerEntity", b =>
@@ -2906,23 +2752,6 @@ namespace ZLJ.Migrations
                         .HasForeignKey("ParentId");
                 });
 
-            modelBuilder.Entity("BXJG.Shop.Catalogue.ItemEntity", b =>
-                {
-                    b.HasOne("BXJG.GeneralTree.GeneralTreeEntity", "Brand")
-                        .WithMany()
-                        .HasForeignKey("BrandId");
-
-                    b.HasOne("BXJG.Shop.Catalogue.ProductCategoryEntity", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BXJG.GeneralTree.GeneralTreeEntity", "Unit")
-                        .WithMany()
-                        .HasForeignKey("UnitId");
-                });
-
             modelBuilder.Entity("BXJG.Shop.Catalogue.ProductCategoryEntity", b =>
                 {
                     b.HasOne("BXJG.Shop.Catalogue.ProductCategoryEntity", "Parent")
@@ -2954,13 +2783,6 @@ namespace ZLJ.Migrations
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("BXJG.Shop.Common.BXJGShopDictionaryEntity", b =>
-                {
-                    b.HasOne("BXJG.Shop.Common.BXJGShopDictionaryEntity", "Parent")
-                        .WithMany("Children")
-                        .HasForeignKey("ParentId");
                 });
 
             modelBuilder.Entity("BXJG.Shop.Customer.CustomerEntity", b =>
@@ -2995,7 +2817,7 @@ namespace ZLJ.Migrations
 
             modelBuilder.Entity("BXJG.Shop.Sale.OrderItemEntity", b =>
                 {
-                    b.HasOne("BXJG.Shop.Catalogue.ItemEntity", "Item")
+                    b.HasOne("BXJG.Shop.Catalogue.ProductEntity", "Item")
                         .WithMany()
                         .HasForeignKey("ItemId")
                         .OnDelete(DeleteBehavior.Cascade)

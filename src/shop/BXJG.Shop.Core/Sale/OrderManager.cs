@@ -17,7 +17,6 @@ using Abp.Configuration;
 using BXJG.Shop.Localization;
 using Abp.Events.Bus.Entities;
 using BXJG.GeneralTree;
-using BXJG.Shop.Common;
 using Abp.Dependency;
 using BXJG.Common;
 using ZLJ.BaseInfo.Administrative;
@@ -53,7 +52,7 @@ namespace BXJG.Shop.Sale
     /// </summary>
     /// <typeparam name="TUser"></typeparam>
     /// <typeparam name="TArea">送货地址区域类型 参考实体类的泛型说明</typeparam>
-    public class OrderManager : BXJGShopDomainServiceBase//, ITransientDependency
+    public class OrderManager : DomainServiceBase//, ITransientDependency
     {
         protected readonly IRepository<OrderEntity, long> repository;
         protected readonly IRepository<CustomerEntity, long> customerRepository;

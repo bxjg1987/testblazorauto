@@ -23,7 +23,7 @@ namespace BXJG.Shop.Sale
         /// <summary>
         /// 商品上架信息
         /// </summary>
-        public ItemEntity Item { get; set; }
+        public ProductEntity Item { get; set; }
         /// <summary>
         /// 数量
         /// </summary>
@@ -37,7 +37,7 @@ namespace BXJG.Shop.Sale
         /// </summary>
         /// <param name="itemEntity">商品上架信息</param>
         /// <param name="quantity">要购买的数量</param>
-        public OrderItemInput(ItemEntity itemEntity, decimal quantity)
+        public OrderItemInput(ProductEntity itemEntity, decimal quantity)
         {
             this.Item = itemEntity;
             this.Quantity = quantity;

@@ -1,7 +1,6 @@
 ﻿using Abp.Authorization.Users;
 using BXJG.GeneralTree;
 using BXJG.Shop.Catalogue;
-using BXJG.Shop.Common;
 using BXJG.Shop.Customer;
 using BXJG.Shop.Sale;
 using Microsoft.EntityFrameworkCore;

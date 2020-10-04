@@ -29,7 +29,7 @@ namespace BXJG.Shop.Customer
         }
         public async ValueTask<long?> GetCurrentCustomerIdAsync()
         {
-            var userEmailClaim = PrincipalAccessor.Principal?.Claims.FirstOrDefault(c => c.Type == BXJGShopConsts.CustomerIdClaim);
+            var userEmailClaim = PrincipalAccessor.Principal?.Claims.FirstOrDefault(c => c.Type == CoreConsts.CustomerIdClaim);
             if (string.IsNullOrEmpty(userEmailClaim?.Value))
                 return null;
             return long.Parse(userEmailClaim.Value);

@@ -6,11 +6,12 @@ using System.Text;
 namespace BXJG.Shop.Catalogue
 {
     /// <summary>
-    /// 产品发布状态改变时触发
+    /// 商品发布成功或失败时触发的事件
+    /// 事件处理程序中可以通过商品的 Published属性来判断是发布还是取消发布
     /// </summary>
-    public class ProductPublishEventData : EntityEventData<ProductEntity>
+    public class ProductPublishEventData<TEntity> : EntityEventData<TEntity>
     {
-        public ProductPublishEventData(ProductEntity entity) : base(entity)
+        public ProductPublishEventData(TEntity entity) : base(entity)
         {
         }
     }

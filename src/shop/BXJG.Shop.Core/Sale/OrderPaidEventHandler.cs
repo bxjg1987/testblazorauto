@@ -3,7 +3,6 @@ using Abp.Domain.Repositories;
 using Abp.Events.Bus.Handlers;
 using BXJG.Common;
 using BXJG.GeneralTree;
-using BXJG.Shop.Common;
 using BXJG.Shop.Customer;
 using System;
 using System.Collections.Generic;
@@ -18,7 +17,7 @@ namespace BXJG.Shop.Sale
     /// </summary>
     /// <typeparam name="TUser"></typeparam>
     /// <typeparam name="TArea"></typeparam>
-    public class OrderPaidEventHandler : BXJGShopDomainServiceBase, IAsyncEventHandler<OrderPaidEventData>
+    public class OrderPaidEventHandler : DomainServiceBase, IAsyncEventHandler<OrderPaidEventData>
         
     {
         protected readonly IRepository<CustomerEntity, long> repository;

@@ -5,7 +5,6 @@ using Abp.Events.Bus;
 using BXJG.Common;
 using BXJG.GeneralTree;
 using BXJG.Shop.Catalogue;
-using BXJG.Shop.Common;
 using BXJG.Shop.Customer;
 using System;
 using System.Collections.Generic;
@@ -106,7 +105,7 @@ namespace BXJG.Shop.Sale
     /// <summary>
     /// 订单实体类
     /// </summary>
-    public class OrderEntity : FullAuditedEntity<long>, IMustHaveTenant
+    public class OrderEntity : FullAuditedAggregateRoot<long>, IMustHaveTenant
     {
         public int TenantId { get; set; }//应该私有化，但受IMustHaveTenant限制，只能public
 
@@ -245,7 +244,7 @@ namespace BXJG.Shop.Sale
         /// <summary>
         /// 订单商品明细
         /// </summary>
-        public virtual IList<OrderItemEntity> Items { get; set; }
+        public virtual List<OrderItemEntity> Items { get; set; }
         #endregion
 
         //订单跟踪

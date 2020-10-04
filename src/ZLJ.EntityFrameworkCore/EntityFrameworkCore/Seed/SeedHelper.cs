@@ -43,12 +43,10 @@ namespace ZLJ.EntityFrameworkCore.Seed
 
             //初始化基础信息模块中的数据
             new DefaultBXJGBaseInfoBuilder<Tenant, Role, User, ZLJDbContext>(context, 1).Create();
-
             //默认商城数据迁移
-            var sc = new DefaultBXJGShopBuilder<Tenant, Role, User, ZLJDbContext>(context, 1);
-            sc.Create();
+            new DefaultBuilder<Tenant, Role, User, ZLJDbContext>(context, 1).Create();
             //cms演示数据
-            new DefaultBXJGCMSBuilder<Tenant, Role, User, ZLJDbContext,GeneralTreeEntity>(context, 1).Create();
+            new DefaultBXJGCMSBuilder<Tenant, Role, User, ZLJDbContext, GeneralTreeEntity>(context, 1).Create();
         }
 
         private static void WithDbContext<TDbContext>(IIocResolver iocResolver, Action<TDbContext> contextAction)

@@ -3,7 +3,6 @@ using AutoMapper;
 using Abp.Authorization;
 using Newtonsoft.Json;
 using BXJG.Utils.Localization;
-using BXJG.Shop.Common.Dto;
 using BXJG.Shop.Catalogue;
 using BXJG.Shop.Customer;
 

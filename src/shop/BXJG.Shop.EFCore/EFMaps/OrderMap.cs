@@ -1,7 +1,6 @@
 ﻿using Abp.Authorization.Users;
 using BXJG.Common;
 using BXJG.GeneralTree;
-using BXJG.Shop.Common;
 using BXJG.Shop.Sale;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -18,12 +17,12 @@ namespace BXJG.Shop.EFMaps
     {
         public virtual void Configure(EntityTypeBuilder<OrderEntity> builder)
         {
-            builder.Property(c => c.OrderNo).IsRequired(true).HasColumnType($"varchar({BXJGShopConsts.OrderNoMaxLength})");
-            builder.Property(c => c.CustomerRemark).HasMaxLength(BXJGShopConsts.CustomerRemarkMaxLength);
-            builder.Property(c => c.Consignee).IsRequired(true).HasMaxLength(BXJGShopConsts.ConsigneeMaxLength);
-            builder.Property(c => c.ConsigneePhoneNumber).IsRequired(true).HasColumnType($"varchar({BXJGShopConsts.ConsigneePhoneNumberMaxLength})");
-            builder.Property(c => c.ReceivingAddress).IsRequired(true).HasMaxLength(BXJGShopConsts.ReceivingAddressMaxLength);
-            builder.Property(c => c.LogisticsNumber).HasColumnType($"varchar({BXJGShopConsts.LogisticsNumberMaxLength})");
+            builder.Property(c => c.OrderNo).IsRequired(true).HasColumnType($"varchar({CoreConsts.OrderNoMaxLength})");
+            builder.Property(c => c.CustomerRemark).HasMaxLength(CoreConsts.CustomerRemarkMaxLength);
+            builder.Property(c => c.Consignee).IsRequired(true).HasMaxLength(CoreConsts.ConsigneeMaxLength);
+            builder.Property(c => c.ConsigneePhoneNumber).IsRequired(true).HasColumnType($"varchar({CoreConsts.ConsigneePhoneNumberMaxLength})");
+            builder.Property(c => c.ReceivingAddress).IsRequired(true).HasMaxLength(CoreConsts.ReceivingAddressMaxLength);
+            builder.Property(c => c.LogisticsNumber).HasColumnType($"varchar({CoreConsts.LogisticsNumberMaxLength})");
             builder.Property(c => c.RowVersion).IsRowVersion();
             builder.HasIndex(g => g.OrderNo).IsUnique();
         }

@@ -96,7 +96,7 @@ namespace ZLJ.Web.Host.Startup
                 //添加中文注释
                 var basePath = Path.GetDirectoryName(typeof(Program).Assembly.Location)+@"\apixml\";
                 var commentsFileName = typeof(ZLJApplicationModule).Assembly.GetName().Name + ".XML";
-                var commentsFileName1 = typeof(BXJGShopApplicationModule).Assembly.GetName().Name + ".XML";
+                var commentsFileName1 = typeof(ApplicationModule).Assembly.GetName().Name + ".XML";
                 var commentsFileName2 = typeof(GeneralTreeModule).Assembly.GetName().Name + ".XML";
                 var commentsFileName3 = typeof(BXJGUtilsModule).Assembly.GetName().Name + ".XML";
                 var commentsFileName4 = typeof(BXJGCMSApplicationModule).Assembly.GetName().Name + ".XML";

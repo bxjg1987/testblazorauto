@@ -17,8 +17,7 @@ namespace BXJG.Shop.Catalogue
                 context.Manager.AddAllowedInputType<ComboboxInputType>();
             }
             catch { }
-
-            context.Manager.AddEntity<ItemEntity, long>();
+            context.Manager.AddEntity<SkuEntity, long>();
         }
     }
 }

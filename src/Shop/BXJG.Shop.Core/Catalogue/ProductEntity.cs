@@ -1,26 +1,94 @@
 ﻿using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
+using Abp.Events.Bus;
+using Abp.Events.Bus.Entities;
 using BXJG.GeneralTree;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Threading.Tasks;
 
 namespace BXJG.Shop.Catalogue
 {
+    /*
+     * 【【【以下注释记录思考过程，请从上往下看到底。】】】】
+     * -----------------------------------------------------------------
+     * 
+     * 基本信息：
+     * 标题、品牌、单位、规格、描述、图片、所属分类等 只跟商品相关的信息      
+     * 这个概念是有必要的，将来可能对接上游的供应链 下游连接销售、上架。将来来可能统计某个商品的销售情况
+     * 可以修改 因为只包含商品属性
+     * 
+     * 成本价格：
+     * 商品成本+其它费用的成本合计     
+     * 成本价格是可能会变动的，每次采购 每次销售的成本价都不同，所以成本价的变动需要有记录，且记录是不允许修改，因为可能被别的地方引用了
+     * 目前只考虑销售(上架)，因此成本价只关联到上架信息
+     * 
+     * 销售价格：
+     * 原价、现价（销售价）、折扣价......      
+     * 也是需要记录的，不允许修改，与一次上架关联
+     * 
+     * 物流信息：
+     * 默认快递公司、运费、等
+     * 
+     * 上架信息：
+     * 是否显示在首页、是否是新品、是否是热卖...上架开始/结束时间等等，各种优惠   包含上面的 基本信息、成本价、销售价、物流等   
+     * 每次上架都有记录，但允许修改
+     * 可以考虑上架结束的 不允许修改。
+     * 
+     * 可以发现上面的除基本信息外，其它各项都会有记录，且都不允许修改（除了在销售期间的上架信息）
+     * 但它们在业务中确实是不同的概念，因此分开是有好处的，因为将来某些功能可能只关心其中的某些概念
+     * 所以将后续四个概念合并不太好
+     * 
+     * 最最最简单的情况 可以先不考虑成本和物流
+     * 
+     * 销售订单又是另外一个概念，它引用上面的不变的概念，比如销售价格信息等。也可能包含一些冗余字段，比如上架信息可能有自己的标题，而不是取商品的标题，那么最终订单
+     * 也可能保存这个冗余字段
+     * -----------------------------------------------------------------------
+     * 简单起见 只考虑销售价和上架 且合并。再没有产生订单时允许修改，否则只能修改部分字段（比如是否热卖、开始/结束时间等）。【注意考虑并发问题】
+     * -----------------------------------------------------------------------
+     * 如果考虑上架信息包含足够多的商品冗余字段，那么商品信息中最终只剩一个 商品唯一Id，此时就等同于与上架信息合并了。只是上架信息包含一个商品Id 也许可以直接用sku
+     * 将来与上游的采购（供应链）通过sku来对接
+     * 将来统计也根据此商品唯一id来统计
+     * 
+     * 不要只用系统自增id，因为将来别的系统可能有自己的id，对接不方便。
+     * 
+     * 所以现在我们只有一个“上架信息”的概念，里面包含所有信息，部分信息允许随时修改，价格等关键信息一旦产生订单则不允许修改（可以提供复制功能创建新的上架信息）
+     * -------------------------------------------------------------------------------------------------
+     * 2020-4-7更新
+     * 仔细考虑订单直接关联上架信息很麻烦，比如有个用户购买了商品，后台又修改了商品品牌，所以哪些可以修改 哪些不能修改很难定下来
+     * 订单关联上架信息还有个问题，订单确定后不关心 是否热卖、是否首页显示这样的，但是因为外键关联了 也关联了
+     * 另外上架信息中的产品信息 跟订单中的商品信息虽然很多字段重复，但这确实是两个不同的概念，关心的字段也不同
+     * 总的来说 上架信息 跟 订单中的商品信息 分开是比较保险的方式
+     * 
+     * 另外需要注意上架信息的并发问题，一个多个后台操作人员修改同一个上架信息 最好做下并发处理。比如：经理将某个商品下架 另一个用户在修改商品价格，最终可能导致商品没有下架
+     * 不过这个问题可以以后来处理
+     * 
+     * 为将来方便统计 商品上架信息 和 订单中的产品  都会引用一个id 这个作为产品id，注意此时 商品上架信息的id并非商品id
+     */
+
     /// <summary>
-    /// 产品实体(spu)
+    /// 上架信息实体类
+    /// 里面可能包含部分业务逻辑方法
+    /// 设计时考虑不提供继承的方式扩展，因为那样太复杂
+    /// 你可以使用关联和事件的方式参与到这个模块中来
     /// </summary>
     public class ProductEntity : FullAuditedAggregateRoot<long>, IMustHaveTenant
     {
-        #region 基础信息
-        /// <summary>
-        /// 所属租户id
-        /// </summary>
         public int TenantId { get; set; }
+
+        #region 基本信息
         /// <summary>
         /// 标题
         /// </summary>
         public string Title { get; set; }
+        ///// <summary>
+        ///// sku
+        ///// </summary>
+        //public string Sku { get; set; }
         /// <summary>
         /// 简短描述
         /// </summary>
@@ -29,26 +97,10 @@ namespace BXJG.Shop.Catalogue
         /// 详细描述
         /// </summary>
         public string DescriptionFull { get; set; }
-
-        /* 
-         * 将来考虑设计一个图片模块
-         * 文件模块（文件的上传下载、与实体的关联） -> 图片模块在文件模块基础上增加缩略图等功能
-         * 
-         * 每个sku也应该有自己的图片列表，暂未实现
-         */
         /// <summary>
         /// 轮播图片集合，多个用英文逗号,分割
         /// </summary>
         public string Images { get; set; }
-        //使用方法而不是属性，让调用方明确知道此调用会经过计算而不是直接获取变量的值
-        /// <summary>
-        /// 获取图片集合
-        /// </summary>
-        /// <returns></returns>
-        public string[] GetImages()
-        {
-            return Images.Split(',');
-        }
         /// <summary>
         /// 所属类别
         /// </summary>
@@ -68,6 +120,7 @@ namespace BXJG.Shop.Catalogue
 
         //目前来说单位可以直接存具体的值，所以可以使用string类型
         //但是将来单位可能拆包 组包，为了将来考虑 这里就用数据字典吧
+
         /// <summary>
         /// 单位外键实体
         /// </summary>
@@ -77,17 +130,28 @@ namespace BXJG.Shop.Catalogue
         /// </summary>
         public long? UnitId { get; set; }
         /// <summary>
-        /// sku列表
+        /// 规格型号
+        /// </summary>
+        public string Specification { get; set; }
+        /// <summary>
+        /// sku集合
         /// </summary>
         public virtual List<SkuEntity> Skus { get; set; }
+        #endregion
 
-        /* 
-         * 可以但不建议在这里定义可选的动态属性DynamicProperty，因为动态属性属于通用功能
-         * 可选的动态属性等待abp5.14来实现，参考 https://github.com/aspnetboilerplate/aspnetboilerplate/issues/5813
-         * 在管理sku时可显示的动态属性由这里决定
-         * 
-         * 此限定目前考虑是放在产品实体而不是产品分类实体上
-         */
+        #region 价格信息
+        /// <summary>
+        /// 原价
+        /// </summary>
+        public decimal OldPrice { get; set; }
+        /// <summary>
+        /// 现价(销售价)
+        /// </summary>
+        public decimal Price { get; set; }
+        /// <summary>
+        /// 积分
+        /// </summary>
+        public int Integral { get; set; }
         #endregion
 
         #region 上架信息
@@ -137,7 +201,8 @@ namespace BXJG.Shop.Catalogue
             Published = true;
             AvailableStart = yxq ?? DateTimeOffset.Now;
             AvailableEnd = js ?? AvailableStart.Value.AddYears(10);
-            DomainEvents.Add(new ProductPublishEventData(this));
+            DomainEvents.Add(new ProductPublishEventData<ProductEntity>(this));
+            //return EventBus.TriggerAsync(new EntityEventData<ItemEntity>(this));
         }
         /// <summary>
         /// 发布此商品
@@ -152,11 +217,22 @@ namespace BXJG.Shop.Catalogue
         /// <summary>
         /// 取消发布指定商品
         /// </summary>
+        /// <param name="item"></param>
         /// <returns></returns>
         public void UnPublish()
         {
             Published = false;
-            DomainEvents.Add(new ProductPublishEventData(this));
+            DomainEvents.Add(new ProductPublishEventData<ProductEntity>(this));
+            // return EventBus.TriggerAsync(new ItemPublishChangedEventData<ItemEntity>(item));
+            //item.AvailableStart = null;
+        }
+        /// <summary>
+        /// 图片集合
+        /// </summary>
+        /// <returns></returns>
+        public string[] GetImages()
+        {
+            return Images.Split(',');
         }
         #endregion
     }

@@ -15,7 +15,7 @@ namespace ZLJ.Shop
     /// <summary>
     /// 后台管理员对顾客信息进行管理的应用服务
     /// </summary>
-    public class BXJGShopCustomerAppService : BXJGShopCustomerAppService<User, Role, RoleManager, UserManager>
+    public class BXJGShopCustomerAppService : CustomerAppService<User, Role, RoleManager, UserManager>
     {
         public BXJGShopCustomerAppService(IRepository<CustomerEntity, long> repository, RoleManager roleManager, UserManager userManager, IRepository<User, long> userRepository) : base(repository, roleManager, userManager, userRepository)
         {
