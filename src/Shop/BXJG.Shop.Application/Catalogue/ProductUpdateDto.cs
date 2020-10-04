@@ -33,7 +33,7 @@ namespace BXJG.Shop.Catalogue
         /// 轮播图片集合，多个用英文逗号,分割
         /// </summary>
         [Required]
-        // [StringLength(BXJGShopConsts.ItemImagesMaxLength)]
+        //[StringLength(CoreConsts.ItemImagesMaxLength)]
         public string[] Images { get; set; }
         /// <summary>
         /// 所属类别id
@@ -48,11 +48,6 @@ namespace BXJG.Shop.Catalogue
         /// 单位
         /// </summary>
         public long? UnitId { get; set; }
-        /// <summary>
-        /// 规格型号
-        /// </summary>
-        [StringLength(CoreConsts.ItemSpecificationMaxLength)]
-        public string Specification { get; set; }
         #endregion
 
         #region 价格信息

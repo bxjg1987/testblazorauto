@@ -67,7 +67,7 @@ namespace BXJG.Shop.Seed
                 Home = true,
                 New = true,
                 Hot = false,
-                Images = "upload/20201004/442ee74ddb0186fb.jpg",
+                Images = "/upload/20201004/442ee74ddb0186fb.jpg",
                 Skus = new List<SkuEntity> {
                     new SkuEntity{ Integral=3, OldPrice=8, Price=3 },
                     new SkuEntity{ Integral=7, OldPrice=12, Price=7 },
@@ -90,7 +90,7 @@ namespace BXJG.Shop.Seed
                 Home = true,
                 New = false,
                 Hot = false,
-                Images = "upload/20201004/d4047d7267bcf1fc.jpg",
+                Images = "/upload/20201004/d4047d7267bcf1fc.jpg",
                 Skus = new List<SkuEntity> {
                     new SkuEntity{ Integral=3, OldPrice=5, Price=3 },
                     new SkuEntity{ Integral=5, OldPrice=8, Price=5 },
@@ -114,7 +114,7 @@ namespace BXJG.Shop.Seed
                 Home = true,
                 New = false,
                 Hot = true,
-                Images = "upload/20201004/57feec7cN5f2eac85.jpg",
+                Images = "/upload/20201004/57feec7cN5f2eac85.jpg",
                 Skus = new List<SkuEntity> {
                     new SkuEntity{ Integral=8, OldPrice=12, Price=8 },
                     new SkuEntity{ Integral=51, OldPrice=110, Price=51 },
@@ -137,7 +137,7 @@ namespace BXJG.Shop.Seed
                 Home = true,
                 New = false,
                 Hot = false,
-                Images = "upload/20201004/8f71080a3e183310.jpg",
+                Images = "/upload/20201004/8f71080a3e183310.jpg",
             });
             this._context.SaveChanges();
             products.Add(new ProductEntity
@@ -156,7 +156,7 @@ namespace BXJG.Shop.Seed
                 Home = false,
                 New = false,
                 Hot = true,
-                Images = "upload/20201004/b.jpg",
+                Images = "/upload/20201004/b.jpg",
                 Skus = new List<SkuEntity> {
                     new SkuEntity{ Integral=56, OldPrice=98, Price=56 },
                     new SkuEntity{ Integral=134, OldPrice=180, Price=134 },
@@ -179,7 +179,7 @@ namespace BXJG.Shop.Seed
                 Home = true,
                 New = false,
                 Hot = false,
-                Images = "upload/20201004/a.jpg",
+                Images = "/upload/20201004/a.jpg",
             });
             this._context.SaveChanges();
             #endregion

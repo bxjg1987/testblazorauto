@@ -47,7 +47,6 @@ namespace BXJG.Shop.Catalogue
                    .WhereIf(input.Focus.HasValue, c => c.Focus == input.Focus)
                    .WhereIf(!input.Keywords.IsNullOrEmpty(), c => c.Title.Contains(input.Keywords)
                                                                || c.DescriptionShort.Contains(input.Keywords)
-                                                               || c.Specification.Contains(input.Keywords)
                                                                || c.Brand.DisplayName.Contains(input.Keywords)
                                                                || c.Category.DisplayName.Contains(input.Keywords));
             var count = await query.CountAsync();

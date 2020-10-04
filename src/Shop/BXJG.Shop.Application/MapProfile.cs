@@ -1,10 +1,12 @@
-﻿using AutoMapper;
+﻿using Abp.Application.Services.Dto;
+using AutoMapper;
 using BXJG.GeneralTree;
 using BXJG.Shop.Catalogue;
 using BXJG.Shop.Customer;
 using BXJG.Shop.Sale;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace BXJG.Shop
@@ -28,7 +30,7 @@ namespace BXJG.Shop
 
             #region 上架信息/商品信息
             CreateMap<ProductEntity, ProductDto>()
-               .ForMember(c => c.Images, opt => opt.MapFrom(d => d.Images.Split(',', System.StringSplitOptions.None)));
+               .ForMember(c => c.Images, opt => opt.MapFrom(d => d.GetImages().Select(e => new NameValueDto(e.Key, e.Value))));
 
             CreateMap<ProductCreateDto, ProductEntity>()
                .ForMember(c => c.Images, opt => opt.MapFrom(c => string.Join(',', c.Images)));
@@ -39,7 +41,7 @@ namespace BXJG.Shop
 
             #region 显示给顾客的商品信息
             CreateMap<ProductEntity, FrontProductDto>()
-               .ForMember(c => c.Images, opt => opt.MapFrom(d => d.Images.Split(',', System.StringSplitOptions.None)));
+               .ForMember(c => c.Images, opt => opt.MapFrom(d => d.GetImages().Select(e=> new NameValueDto(e.Key,e.Value))));
             #endregion
 
             #region 前端顾客和订单相关东东

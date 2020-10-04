@@ -23,10 +23,12 @@ using Abp.Dependency;
 using BXJG.Equipment;
 using BXJG.BaseInfo;
 using BXJG.Equipment.EFCore;
+using Abp.Configuration.Startup;
 
 namespace ZLJ
 {
     [DependsOn(
+        typeof(BXJGUtilsModule),
         typeof(ZLJApplicationModule),
         typeof(ZLJEntityFrameworkModule),
         typeof(AbpAspNetCoreModule),
@@ -93,13 +95,15 @@ namespace ZLJ
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(typeof(ZLJWebCoreModule).GetAssembly());
-            //IocManager.Register<IEnv, NetCoreEnv>(DependencyLifeStyle.Singleton);//utils已经注册了个 这里可以替换
+            IocManager.Register<IEnv, NetCoreEnv>(DependencyLifeStyle.Singleton);//utils已经注册了个 这里可以替换
+            //Configuration.ReplaceService<IEnv, NetCoreEnv>(DependencyLifeStyle.Singleton);//经过测试没什么卵用
         }
 
         public override void PostInitialize()
         {
             IocManager.Resolve<ApplicationPartManager>()
                 .AddApplicationPartsIfNotAddedBefore(typeof(ZLJWebCoreModule).Assembly);
+           // Configuration.ReplaceService<IEnv, NetCoreEnv>(DependencyLifeStyle.Singleton);//经过测试没什么卵用
         }
     }
 }

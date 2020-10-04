@@ -91,7 +91,7 @@ namespace BXJG.Utils.File
         /// <param name="createThum"></param>
         /// <param name="inputs"></param>
         /// <returns></returns>
-        public async Task<List<FileResult>> UploadAsync(bool createThum = false, params Input[] inputs)
+        public async Task<List<FileResult>> UploadAsync(bool createThum = false, params FileInput[] inputs)
         {
             var outputs = new List<FileResult>();   //准备返回值
 
@@ -134,7 +134,7 @@ namespace BXJG.Utils.File
 
                     //参考：https://docs.sixlabors.com/articles/imagesharp/resize.html
                     //经过测试这里load item.Stream会报错
-                    using (SixLabors.ImageSharp.Image img =await SixLabors.ImageSharp.Image.LoadAsync(output.FileAbsolutePath, cancellationTokenProvider.Token))
+                    using (SixLabors.ImageSharp.Image img = await SixLabors.ImageSharp.Image.LoadAsync(output.FileAbsolutePath, cancellationTokenProvider.Token))
                     {
                         img.Mutate(x => x.Resize(500, 0));  //按给定的宽度缩放
                         img.Save(output.ThumAbsolutePath);
@@ -158,15 +158,32 @@ namespace BXJG.Utils.File
             var list = new List<FileResult>();
             foreach (var item in inputs)
             {
+                if (!item.Contains(Consts.UploadTemp, StringComparison.OrdinalIgnoreCase))
+                {
+                    var rr = new FileResult();
+                    rr.FileAbsolutePath = Relative2AbsolutePath(item);
+                    rr.FileRelativePath = item;
+                    rr.ThumAbsolutePath = ConvertToThumPath(rr.FileAbsolutePath);
+                    if (System.IO.File.Exists(rr.ThumAbsolutePath))
+                    {
+                        rr.ThumRelativePath = Absolute2RelativePath(rr.ThumAbsolutePath);
+                    }
+                    else
+                        rr.ThumAbsolutePath = default;
+                    list.Add(rr);
+                    continue;
+                }
+
                 var moveResult = new FileResult();
 
                 //移动文件
                 var sourceAbsolutePath = Relative2AbsolutePath(item);                                   //temp绝对路径
                 moveResult.FileRelativePath = TempToOkPath(item);                                       //正式目录相对路径
                 moveResult.FileAbsolutePath = Relative2AbsolutePath(moveResult.FileRelativePath);       //正式目录绝对路径
-                if (!System.IO.File.Exists(moveResult.FileAbsolutePath))
+                if (!System.IO.File.Exists(moveResult.FileAbsolutePath)) {
+                    Directory.CreateDirectory( Path.GetDirectoryName(  moveResult.FileAbsolutePath)   );
                     System.IO.File.Move(sourceAbsolutePath, moveResult.FileAbsolutePath);
-
+                }
                 //移动缩略图
                 var thumItem = ConvertToThumPath(item);                                                 //temp缩略图相对路径
                 var sourceThumAbsolutePath = Relative2AbsolutePath(thumItem);                           //temp缩略图绝对路径

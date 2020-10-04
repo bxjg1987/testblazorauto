@@ -7,8 +7,10 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BXJG.Shop.Catalogue
@@ -85,10 +87,6 @@ namespace BXJG.Shop.Catalogue
         /// 标题
         /// </summary>
         public string Title { get; set; }
-        ///// <summary>
-        ///// sku
-        ///// </summary>
-        //public string Sku { get; set; }
         /// <summary>
         /// 简短描述
         /// </summary>
@@ -98,7 +96,7 @@ namespace BXJG.Shop.Catalogue
         /// </summary>
         public string DescriptionFull { get; set; }
         /// <summary>
-        /// 轮播图片集合，多个用英文逗号,分割
+        /// 多个用英文逗号,分割
         /// </summary>
         public string Images { get; set; }
         /// <summary>
@@ -129,10 +127,10 @@ namespace BXJG.Shop.Catalogue
         /// 单位
         /// </summary>
         public long? UnitId { get; set; }
-        /// <summary>
-        /// 规格型号
-        /// </summary>
-        public string Specification { get; set; }
+        ///// <summary>
+        ///// 规格型号
+        ///// </summary>
+        //public string Specification { get; set; }
         /// <summary>
         /// sku集合
         /// </summary>
@@ -226,13 +224,39 @@ namespace BXJG.Shop.Catalogue
             // return EventBus.TriggerAsync(new ItemPublishChangedEventData<ItemEntity>(item));
             //item.AvailableStart = null;
         }
+        ///// <summary>
+        ///// 图片集合
+        ///// </summary>
+        ///// <returns></returns>
+        //public string[] GetImages()
+        //{
+        //    return Images.Split(',');
+        //}
+        ///// <summary>
+        ///// 获取缩略图列表
+        ///// </summary>
+        ///// <returns></returns>
+        //public string[] GetThumImages()
+        //{
+        //    return GetImages().Select(c => c.Insert(c.LastIndexOf("."), "thum")).ToArray();
+        //}
+
+
+        //定义方法而不是属性，让调用方明确知道此调用会引起计算而不是直接从变量中获取值
         /// <summary>
-        /// 图片集合
+        /// 获取产品图像
+        /// key：缩略图 value：原始图像
         /// </summary>
         /// <returns></returns>
-        public string[] GetImages()
+        public Dictionary<string, string> GetImages()
         {
-            return Images.Split(',');
+            var ary = Images.Split(',');
+            var r = new Dictionary<string, string>();
+            foreach (var item in ary)
+            {
+                r.Add(item.Insert(item.LastIndexOf("."), "thum"), item);
+            }
+            return r;
         }
         #endregion
     }

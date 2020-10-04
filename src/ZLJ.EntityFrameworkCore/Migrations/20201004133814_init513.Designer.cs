@@ -10,8 +10,8 @@ using ZLJ.EntityFrameworkCore;
 namespace ZLJ.Migrations
 {
     [DbContext(typeof(ZLJDbContext))]
-    [Migration("20201004101743_updateitemtoproduct1")]
-    partial class updateitemtoproduct1
+    [Migration("20201004133814_init513")]
+    partial class init513
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -1923,10 +1923,6 @@ namespace ZLJ.Migrations
                     b.Property<bool>("Published")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Specification")
-                        .HasColumnType("nvarchar(500)")
-                        .HasMaxLength(500);
-
                     b.Property<int>("TenantId")
                         .HasColumnType("int");
 
@@ -1972,7 +1968,7 @@ namespace ZLJ.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("SkuEntity");
+                    b.ToTable("BXJGShopSku");
                 });
 
             modelBuilder.Entity("BXJG.Shop.Customer.CustomerEntity", b =>

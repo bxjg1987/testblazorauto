@@ -15,7 +15,7 @@ namespace BXJG.Shop.EFMaps
             builder.Property(c => c.Title).HasMaxLength(CoreConsts.ItemTitleMaxLength).IsRequired();
             //builder.Property(c => c.Sku).HasMaxLength(BXJGShopConsts.ItemSkuMaxLength);
             builder.Property(c => c.DescriptionShort).HasMaxLength(CoreConsts.ItemDescriptionShortMaxLength);
-            builder.Property(c => c.Specification).HasMaxLength(CoreConsts.ItemSpecificationMaxLength);
+            //builder.Property(c => c.Specification).HasMaxLength(CoreConsts.ItemSpecificationMaxLength);
             builder.Property(c => c.Images).HasColumnType($"varchar({CoreConsts.ItemImagesMaxLength})");
             builder.Ignore(c => c.DomainEvents);
             //builder.Property(c => c.DescriptionShort).HasMaxLength(BXJGShopConsts.ItemDescriptionShortMaxLength);

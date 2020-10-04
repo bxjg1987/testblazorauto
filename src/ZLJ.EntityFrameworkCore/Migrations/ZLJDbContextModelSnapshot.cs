@@ -1844,7 +1844,7 @@ namespace ZLJ.Migrations
 
                     b.HasIndex("ParentId");
 
-                    b.ToTable("BXJGShopProductCategories");
+                    b.ToTable("BXJGShopProductCategory");
                 });
 
             modelBuilder.Entity("BXJG.Shop.Catalogue.ProductEntity", b =>
@@ -1921,10 +1921,6 @@ namespace ZLJ.Migrations
                     b.Property<bool>("Published")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Specification")
-                        .HasColumnType("nvarchar(500)")
-                        .HasMaxLength(500);
-
                     b.Property<int>("TenantId")
                         .HasColumnType("int");
 
@@ -1944,7 +1940,7 @@ namespace ZLJ.Migrations
 
                     b.HasIndex("UnitId");
 
-                    b.ToTable("BXJGShopItems");
+                    b.ToTable("BXJGShopProduct");
                 });
 
             modelBuilder.Entity("BXJG.Shop.Catalogue.SkuEntity", b =>
@@ -2035,7 +2031,7 @@ namespace ZLJ.Migrations
 
                     b.HasIndex("AreaId");
 
-                    b.ToTable("BXJGShopCustomers");
+                    b.ToTable("BXJGShopCustomer");
                 });
 
             modelBuilder.Entity("BXJG.Shop.Sale.OrderEntity", b =>
@@ -2145,7 +2141,7 @@ namespace ZLJ.Migrations
 
                     b.HasIndex("PaymentMethodId");
 
-                    b.ToTable("BXJGShopOrders");
+                    b.ToTable("BXJGShopOrder");
                 });
 
             modelBuilder.Entity("BXJG.Shop.Sale.OrderItemEntity", b =>

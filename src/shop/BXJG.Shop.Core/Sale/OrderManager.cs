@@ -20,6 +20,7 @@ using BXJG.GeneralTree;
 using Abp.Dependency;
 using BXJG.Common;
 using ZLJ.BaseInfo.Administrative;
+using System.Linq;
 
 namespace BXJG.Shop.Sale
 {
@@ -131,7 +132,7 @@ namespace BXJG.Shop.Sale
                 var product = new OrderItemEntity
                 {
                     Amount = item.Item.Price * item.Quantity,
-                    Image = item.Item.GetImages()[0],
+                    Image = item.Item.GetImages()?.First().Key,
                     Integral = item.Item.Integral,
                     Item = item.Item,
                     ItemId = item.Item.Id,

@@ -16,10 +16,6 @@ namespace BXJG.Shop.Catalogue
         /// 标题
         /// </summary>
         public string Title { get; set; }
-        ///// <summary>
-        ///// sku
-        ///// </summary>
-        //public string Sku { get; set; }
         /// <summary>
         /// 简短描述
         /// </summary>
@@ -31,11 +27,15 @@ namespace BXJG.Shop.Catalogue
         /// <summary>
         /// 轮播图片集合，多个用英文逗号,分割
         /// </summary>
-        public string[] Images { get; set; }
+        public List<NameValueDto> Images { get; set; }
         /// <summary>
-        /// 封面图片
+        /// 封面原始图片
         /// </summary>
-        public string Image { get { return Images?.First(); } }
+        public string Image { get { return Images?.First().Value; } }
+        /// <summary>
+        /// 封面缩略图图片
+        /// </summary>
+        public string ImageThum { get { return Images?.First().Name; } }
         /// <summary>
         /// 所属类别id
         /// </summary>
@@ -60,10 +60,6 @@ namespace BXJG.Shop.Catalogue
         /// 单位
         /// </summary>
         public long? UnitId { get; set; }
-        /// <summary>
-        /// 规格型号
-        /// </summary>
-        public string Specification { get; set; }
         #endregion
 
         #region 价格信息

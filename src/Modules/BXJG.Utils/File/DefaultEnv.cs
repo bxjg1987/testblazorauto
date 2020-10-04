@@ -8,6 +8,12 @@ namespace BXJG.Utils.File
 {
     public class DefaultEnv : IEnv
     {
-        public string Root => Path.Combine(AppContext.BaseDirectory,"wwwroot");
+        public string Root
+        {
+            get
+            {
+                return Path.Combine(AppContext.BaseDirectory, "wwwroot");
+            }
+        }
     }
 }

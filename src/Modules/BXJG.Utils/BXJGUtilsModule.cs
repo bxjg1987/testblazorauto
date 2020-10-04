@@ -7,6 +7,7 @@ using BXJG.Utils.Enums;
 using Abp.Threading.BackgroundWorkers;
 using BXJG.Utils.File;
 using BXJG.Common;
+using Abp.Dependency;
 
 namespace BXJG.Utils
 {
@@ -28,7 +29,11 @@ namespace BXJG.Utils
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(typeof(BXJGUtilsModule).GetAssembly());
-            IocManager.Register<IEnv,Utils.File. DefaultEnv>(Abp.Dependency.DependencyLifeStyle.Singleton);
+            //调试模式时默认实现获取的路径是 ..\bin\debug\wwwroot
+            //而asp.net core默认读取是在ZLJ.Web.Host\wwwroot 导致上传的文件看不到效果
+            //发布到服务器后不存在这个问题
+            //可气的是abp提供的Configuration.ReplaceService<IEnv, NetCoreEnv>(DependencyLifeStyle.Singleton);没什么暖用
+            //IocManager.RegisterIfNot<IEnv, Utils.File.DefaultEnv>(Abp.Dependency.DependencyLifeStyle.Transient);
         }
 
         public override void PostInitialize()

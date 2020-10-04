@@ -35,10 +35,10 @@ namespace ZLJ.EntityFrameworkCore
         //后期考虑实现动态DbSet简化实体注册
 
         #region 注册商城模块中的实体
-        public virtual DbSet<ProductCategoryEntity> BXJGShopProductCategories { get; set; }
-        public virtual DbSet<ProductEntity> BXJGShopItems { get; set; }
-        public virtual DbSet<CustomerEntity> BXJGShopCustomers { get; set; }
-        public virtual DbSet<OrderEntity> BXJGShopOrders { get; set; }
+        public virtual DbSet<ProductCategoryEntity> BXJGShopProductCategory { get; set; }
+        public virtual DbSet<ProductEntity> BXJGShopProduct { get; set; }
+        public virtual DbSet<CustomerEntity> BXJGShopCustomer { get; set; }
+        public virtual DbSet<OrderEntity> BXJGShopOrder { get; set; }
         #endregion
 
         #region CMS

@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Abp.Application.Services.Dto;
 using Abp.Authorization;
 using BXJG.Utils.File;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using ZLJ.Controllers;
 using ZLJ.Models;
 
@@ -39,12 +42,12 @@ namespace ZLJ.Controllers
 
         [HttpPost]
         [AbpAuthorize]
-        public async Task<List<(string FileRelativePath, string ThumRelativePath)>> UploadAsync(IFormFileCollection file, [FromHeader]bool createThum = false)
+        public async Task<List<FileDto>> UploadAsync(IFormFileCollection file, [FromHeader] bool createThum = false)
         {
             var rts = new List<FileUploadResult>();
-            var fs = file.Select(c => new Input(c.FileName, c.OpenReadStream(), c.ContentType));
+            var fs = file.Select(c => new FileInput(c.FileName, c.OpenReadStream(), c.ContentType));
             var r = await tempFileManager.UploadAsync(createThum, fs.ToArray());
-            return r.Select(c => (c.FileRelativePath, c.ThumRelativePath)).ToList();
+            return r.Select(c => new FileDto { FilePath = c.FileRelativePath, ThumPath = c.ThumRelativePath }).ToList();
         }
     }
 }

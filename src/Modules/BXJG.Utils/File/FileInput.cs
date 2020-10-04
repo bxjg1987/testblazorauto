@@ -5,9 +5,9 @@ using System.Text;
 
 namespace BXJG.Utils.File
 {
-    public class Input
+    public class FileInput
     {
-        public Input(string fileName, Stream stream, string contentType)
+        public FileInput(string fileName, Stream stream, string contentType)
         {
             FileName = fileName;
             Stream = stream;
