@@ -4,6 +4,7 @@ using BXJG.GeneralTree;
 using BXJG.Shop.Catalogue;
 using BXJG.Shop.Customer;
 using BXJG.Shop.Sale;
+using BXJG.Utils.File;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,11 +27,11 @@ namespace BXJG.Shop
             //CreateMap(typeof(ColumnEntity<>), typeof(ColumnCombboxDto)).EntityToCombobox();
             #endregion
 
-           
+
 
             #region 上架信息/商品信息
             CreateMap<ProductEntity, ProductDto>()
-               .ForMember(c => c.Images, opt => opt.MapFrom(d => d.GetImages().Select(e => new NameValueDto(e.Key, e.Value))));
+               .ForMember(c => c.Images, opt => opt.MapFrom(d => d.GetImages().Select(e => new FileDto { FilePath = e.Value, ThumPath = e.Key })));
 
             CreateMap<ProductCreateDto, ProductEntity>()
                .ForMember(c => c.Images, opt => opt.MapFrom(c => string.Join(',', c.Images)));
@@ -41,7 +42,7 @@ namespace BXJG.Shop
 
             #region 显示给顾客的商品信息
             CreateMap<ProductEntity, FrontProductDto>()
-               .ForMember(c => c.Images, opt => opt.MapFrom(d => d.GetImages().Select(e=> new NameValueDto(e.Key,e.Value))));
+                .ForMember(c => c.Images, opt => opt.MapFrom(d => d.GetImages().Select(e => new FileDto { FilePath = e.Value, ThumPath = e.Key })));
             #endregion
 
             #region 前端顾客和订单相关东东

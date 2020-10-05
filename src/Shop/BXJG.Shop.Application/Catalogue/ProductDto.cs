@@ -1,5 +1,6 @@
 ﻿using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
+using BXJG.Utils.File;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,15 +29,15 @@ namespace BXJG.Shop.Catalogue
         /// <summary>
         /// 轮播图片集合，多个用英文逗号,分割
         /// </summary>
-        public List<NameValueDto> Images { get; set; }
+        public List<FileDto> Images { get; set; }
         /// <summary>
         /// 封面原始图片
         /// </summary>
-        public string Image { get { return Images?.First().Value; } }
+        public string Image { get { return Images?.First().FilePath; } }
         /// <summary>
         /// 封面缩略图图片
         /// </summary>
-        public string ImageThum { get { return Images?.First().Name; } }
+        public string ImageThum { get { return Images?.First().ThumPath; } }
         /// <summary>
         /// 所属类别id
         /// </summary>

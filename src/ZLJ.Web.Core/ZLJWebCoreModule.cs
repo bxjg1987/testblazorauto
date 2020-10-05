@@ -77,6 +77,8 @@ namespace ZLJ
 
             //默认每次启动都会尝试数据库迁移，这里禁用它提高系统启动速度
             abpProjectNameEntityFrameworkModule.SkipDbSeed = true;
+
+            Configuration.ReplaceService<IEnv, NetCoreEnv>(DependencyLifeStyle.Singleton);//经过测试没什么卵用
         }
 
         private void ConfigureTokenAuth()
@@ -95,8 +97,8 @@ namespace ZLJ
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(typeof(ZLJWebCoreModule).GetAssembly());
-            IocManager.Register<IEnv, NetCoreEnv>(DependencyLifeStyle.Singleton);//utils已经注册了个 这里可以替换
-            //Configuration.ReplaceService<IEnv, NetCoreEnv>(DependencyLifeStyle.Singleton);//经过测试没什么卵用
+            //IocManager.Register<IEnv, NetCoreEnv>(DependencyLifeStyle.Singleton);//utils已经注册了个 这里可以替换
+            //Configuration.ReplaceService<IEnv, NetCoreEnv>(DependencyLifeStyle.Singleton);//经过测试必须在PreInitialize
         }
 
         public override void PostInitialize()

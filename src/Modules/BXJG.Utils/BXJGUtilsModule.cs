@@ -31,9 +31,8 @@ namespace BXJG.Utils
             IocManager.RegisterAssemblyByConvention(typeof(BXJGUtilsModule).GetAssembly());
             //调试模式时默认实现获取的路径是 ..\bin\debug\wwwroot
             //而asp.net core默认读取是在ZLJ.Web.Host\wwwroot 导致上传的文件看不到效果
-            //发布到服务器后不存在这个问题
-            //可气的是abp提供的Configuration.ReplaceService<IEnv, NetCoreEnv>(DependencyLifeStyle.Singleton);没什么暖用
-            //IocManager.RegisterIfNot<IEnv, Utils.File.DefaultEnv>(Abp.Dependency.DependencyLifeStyle.Transient);
+            //发布到服务器后不存在这个问题，调试时需要在web.core模块PreInitialize中替换服务，注意经过测试一定要在PreInitialize中替换
+            IocManager.Register<IEnv, Utils.File.DefaultEnv>(Abp.Dependency.DependencyLifeStyle.Singleton);
         }
 
         public override void PostInitialize()
