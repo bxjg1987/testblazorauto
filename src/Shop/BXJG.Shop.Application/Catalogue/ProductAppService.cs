@@ -20,6 +20,9 @@ using Abp.Linq.Extensions;
 using BXJG.Utils.File;
 using BXJG.Common.Dto;
 using Abp;
+using Abp.DynamicEntityProperties;
+using Abp.DynamicEntityProperties.Extensions;
+using Abp.Runtime.Session;
 
 namespace BXJG.Shop.Catalogue
 {
@@ -39,33 +42,60 @@ namespace BXJG.Shop.Catalogue
         private readonly ProductManager itemManager;
         private readonly TempFileManager tempFileManager;
 
+        //private readonly IDynamicPropertyManager dynamicPropertyManager;
+        //private readonly IDynamicPropertyValueManager dynamicPropertyValueManager;
+        private readonly IDynamicEntityPropertyManager dynamicEntityPropertyManager;
+        private readonly IDynamicEntityPropertyValueManager dynamicEntityPropertyValueManager;
+
+        private readonly IAbpSession abpSession;
+
         public ProductAppService(IRepository<ProductEntity, long> repository,
-                                      ProductCategoryManager dictionaryManager,
-                                      ProductManager itemManager,
-                                      TempFileManager tempFileManager)
+                                 ProductCategoryManager dictionaryManager,
+                                 ProductManager itemManager,
+                                 TempFileManager tempFileManager,
+                                 IDynamicEntityPropertyManager dynamicEntityPropertyManager,
+                                 IDynamicEntityPropertyValueManager dynamicEntityPropertyValueManager, IAbpSession abpSession)
         {
             this.repository = repository;
             this.dictionaryManager = dictionaryManager;
             this.itemManager = itemManager;
             this.tempFileManager = tempFileManager;
+            this.dynamicEntityPropertyManager = dynamicEntityPropertyManager;
+            this.dynamicEntityPropertyValueManager = dynamicEntityPropertyValueManager;
+            this.abpSession = abpSession;
         }
         /// <summary>
         /// 创建并发布商品信息
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<ProductDto> CreateAsync(ProductCreateDto input)
+        public async Task<ProductDto> CreateAsync(ProductUpdateDto input)
         {
-            input.Images =(await this.tempFileManager.MoveAsync(input.Images)).Select(c=>c.FileRelativePath).ToArray();
+            input.Images = (await this.tempFileManager.MoveAsync(input.Images)).Select(c => c.FileRelativePath).ToArray();
             var entity = base.ObjectMapper.Map<ProductEntity>(input);
-            entity = await repository.InsertAsync(entity);
 
+            //保存
+            entity = await repository.InsertAsync(entity);
             await CurrentUnitOfWork.SaveChangesAsync();
 
             //这里查两次，有点坑
             //await repository.EnsurePropertyLoadedAsync(entity, c => c.Category);
             //await repository.EnsurePropertyLoadedAsync(entity, c => c.Brand);
 
+            //处理sku。这里使用顺序不是很严谨
+            var dep = await dynamicEntityPropertyManager.GetAllAsync<SkuEntity, long>();        //获取与SkuEntity关联的动实体态属性集合
+            for (int i = 0; i < entity.Skus.Count; i++)
+            {
+                var skuInput = input.Skus[i];    //用户提交的 动态实体属性id和值
+                var sku = entity.Skus[i];
+                foreach (var dynamicEntityPropertyValue in skuInput.DynamicEntityPropertyValues)
+                {
+                    var dynamicEntityProperty = dep.Single(c => c.Id == dynamicEntityPropertyValue.Key);
+                    await dynamicEntityPropertyValueManager.AddAsync(new DynamicEntityPropertyValue(dynamicEntityProperty, sku.Id.ToString(), dynamicEntityPropertyValue.Value, abpSession.TenantId));
+                }
+            }
+
+            //发布
             entity = await repository.GetAllIncluding(c => c.Category, c => c.Brand, c => c.Unit).SingleAsync(c => c.Id == entity.Id);
             if (input.Published)
                 entity.Publish(input.AvailableStart, input.AvailableEnd);

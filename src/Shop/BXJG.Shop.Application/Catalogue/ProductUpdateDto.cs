@@ -11,7 +11,7 @@ namespace BXJG.Shop.Catalogue
     /// 更新上架模型时前端提供的数据模型
     /// </summary>
    // [AutoMapTo(typeof(ItemEntity))]
-    public class ProductUpdateDto : EntityDto<long>
+    public class ProductUpdateDto :  EntityDto<long>
     {
         #region 基本信息
         /// <summary>
@@ -49,7 +49,6 @@ namespace BXJG.Shop.Catalogue
         /// </summary>
         public long? UnitId { get; set; }
         #endregion
-
         #region 价格信息
         /// <summary>
         /// 原价
@@ -66,6 +65,13 @@ namespace BXJG.Shop.Catalogue
         public int Integral { get; set; }
         #endregion
 
+        #region Sku
+        /// <summary>
+        /// Sku信息
+        /// 不同属性组合形成的价格
+        /// </summary>
+        public List<SkuEditDto> Skus { get; set; }
+        #endregion
         #region 上架信息
         /// <summary>
         /// 是否热卖

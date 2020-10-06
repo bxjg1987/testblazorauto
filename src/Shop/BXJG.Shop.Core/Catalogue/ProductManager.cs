@@ -7,7 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-
+using Abp.DynamicEntityProperties;
+using Abp.DynamicEntityProperties.Extensions;
 namespace BXJG.Shop.Catalogue
 {
     /// <summary>
@@ -17,6 +18,26 @@ namespace BXJG.Shop.Catalogue
     /// <typeparam name="TDataDictionary"></typeparam>
     public class ProductManager : DomainServiceBase
     {
+        //private readonly IDynamicPropertyManager dynamicPropertyManager;
+        //private readonly IDynamicPropertyValueManager dynamicPropertyValueManager;
+        //private readonly IDynamicEntityPropertyManager dynamicEntityPropertyManager;
+        //private readonly IDynamicEntityPropertyValueManager dynamicEntityPropertyValueManager;
+
+        //public ProductManager(IDynamicPropertyManager dynamicPropertyManager,
+        //                      IDynamicPropertyValueManager dynamicPropertyValueManager,
+        //                      IDynamicEntityPropertyManager dynamicEntityPropertyManager,
+        //                      IDynamicEntityPropertyValueManager dynamicEntityPropertyValueManager)
+        //{
+        //    this.dynamicPropertyManager = dynamicPropertyManager;
+        //    this.dynamicPropertyValueManager = dynamicPropertyValueManager;
+        //    this.dynamicEntityPropertyManager = dynamicEntityPropertyManager;
+        //    this.dynamicEntityPropertyValueManager = dynamicEntityPropertyValueManager;
+        //}
+
+        //public Task<ProductEntity> CreateAsync(ProductEntity productEntity,   ) { 
+        
+        //}
+
         ///// <summary>
         ///// 发布此商品
         ///// </summary>

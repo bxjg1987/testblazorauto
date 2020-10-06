@@ -199,7 +199,7 @@ namespace BXJG.Shop.Catalogue
             Published = true;
             AvailableStart = yxq ?? DateTimeOffset.Now;
             AvailableEnd = js ?? AvailableStart.Value.AddYears(10);
-            DomainEvents.Add(new ProductPublishEventData<ProductEntity>(this));
+            DomainEvents.Add(new ProductPublishEventData(this));
             //return EventBus.TriggerAsync(new EntityEventData<ItemEntity>(this));
         }
         /// <summary>
@@ -220,7 +220,7 @@ namespace BXJG.Shop.Catalogue
         public void UnPublish()
         {
             Published = false;
-            DomainEvents.Add(new ProductPublishEventData<ProductEntity>(this));
+            DomainEvents.Add(new ProductPublishEventData(this));
             // return EventBus.TriggerAsync(new ItemPublishChangedEventData<ItemEntity>(item));
             //item.AvailableStart = null;
         }

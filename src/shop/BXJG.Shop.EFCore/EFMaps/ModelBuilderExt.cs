@@ -21,7 +21,6 @@ namespace BXJG.Shop.EFMaps
         public static ModelBuilder ApplyConfigurationBXJGShop(this ModelBuilder modelBuilder)
         {
             return modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
         }
 
         //public static ModelBuilder ApplyConfigurationBXJGShop<TEntity, TMap>(this ModelBuilder modelBuilder)

@@ -1,14 +1,22 @@
-﻿using Abp.Domain.Entities;
+﻿using Abp.Application.Services.Dto;
+using Abp.Domain.Entities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace BXJG.Shop.Catalogue
 {
-    public class SkuEntity : Entity<long>
+    /// <summary>
+    /// 新增需改商品时相关的sku信息
+    /// </summary>
+    public class SkuEditDto : EntityDto<long>
     {
-        //sku属性由abp动态属性提供
-
+        /// <summary>
+        /// 动态属性
+        /// key：动态实体属性id；value：值
+        /// </summary>
+        public Dictionary<int, string> DynamicEntityPropertyValues { get; set; }
         /// <summary>
         /// 原价
         /// </summary>
@@ -21,13 +29,5 @@ namespace BXJG.Shop.Catalogue
         /// 积分
         /// </summary>
         public int Integral { get; set; }
-        /// <summary>
-        /// 所属产品(spu)的Id
-        /// </summary>
-        public long ProductId { get; set; }
-        /// <summary>
-        /// 所属产品(spu)
-        /// </summary>
-        public virtual ProductEntity Product { get; set; }
     }
 }

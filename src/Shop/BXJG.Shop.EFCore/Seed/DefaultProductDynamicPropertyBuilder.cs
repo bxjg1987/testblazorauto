@@ -47,7 +47,7 @@ namespace BXJG.Shop.Seed
             _context.DynamicProperties.Add(new DynamicProperty
             {
                 InputType = InputTypeBase.GetName<ComboboxInputType>(),
-                PropertyName = "规格",
+                PropertyName = "specification",
                 TenantId = _tenantId
             });
             _context.SaveChanges();

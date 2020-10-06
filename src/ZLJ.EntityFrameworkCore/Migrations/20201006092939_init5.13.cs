@@ -577,7 +577,7 @@ namespace ZLJ.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BXJGShopProductCategories",
+                name: "BXJGShopProductCategory",
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
@@ -601,11 +601,11 @@ namespace ZLJ.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BXJGShopProductCategories", x => x.Id);
+                    table.PrimaryKey("PK_BXJGShopProductCategory", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BXJGShopProductCategories_BXJGShopProductCategories_ParentId",
+                        name: "FK_BXJGShopProductCategory_BXJGShopProductCategory_ParentId",
                         column: x => x.ParentId,
-                        principalTable: "BXJGShopProductCategories",
+                        principalTable: "BXJGShopProductCategory",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -964,7 +964,7 @@ namespace ZLJ.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BXJGShopCustomers",
+                name: "BXJGShopCustomer",
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
@@ -988,9 +988,9 @@ namespace ZLJ.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BXJGShopCustomers", x => x.Id);
+                    table.PrimaryKey("PK_BXJGShopCustomer", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BXJGShopCustomers_BXJGBaseInfoAdministratives_AreaId",
+                        name: "FK_BXJGShopCustomer_BXJGBaseInfoAdministratives_AreaId",
                         column: x => x.AreaId,
                         principalTable: "BXJGBaseInfoAdministratives",
                         principalColumn: "Id",
@@ -1089,7 +1089,7 @@ namespace ZLJ.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BXJGShopItems",
+                name: "BXJGShopProduct",
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
@@ -1122,21 +1122,21 @@ namespace ZLJ.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BXJGShopItems", x => x.Id);
+                    table.PrimaryKey("PK_BXJGShopProduct", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BXJGShopItems_BXJGGeneralTrees_BrandId",
+                        name: "FK_BXJGShopProduct_BXJGGeneralTrees_BrandId",
                         column: x => x.BrandId,
                         principalTable: "BXJGGeneralTrees",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_BXJGShopItems_BXJGShopProductCategories_CategoryId",
+                        name: "FK_BXJGShopProduct_BXJGShopProductCategory_CategoryId",
                         column: x => x.CategoryId,
-                        principalTable: "BXJGShopProductCategories",
+                        principalTable: "BXJGShopProductCategory",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_BXJGShopItems_BXJGGeneralTrees_UnitId",
+                        name: "FK_BXJGShopProduct_BXJGGeneralTrees_UnitId",
                         column: x => x.UnitId,
                         principalTable: "BXJGGeneralTrees",
                         principalColumn: "Id",
@@ -1246,7 +1246,7 @@ namespace ZLJ.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BXJGShopOrders",
+                name: "BXJGShopOrder",
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
@@ -1280,27 +1280,27 @@ namespace ZLJ.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BXJGShopOrders", x => x.Id);
+                    table.PrimaryKey("PK_BXJGShopOrder", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BXJGShopOrders_BXJGBaseInfoAdministratives_AreaId",
+                        name: "FK_BXJGShopOrder_BXJGBaseInfoAdministratives_AreaId",
                         column: x => x.AreaId,
                         principalTable: "BXJGBaseInfoAdministratives",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_BXJGShopOrders_BXJGShopCustomers_CustomerId",
+                        name: "FK_BXJGShopOrder_BXJGShopCustomer_CustomerId",
                         column: x => x.CustomerId,
-                        principalTable: "BXJGShopCustomers",
+                        principalTable: "BXJGShopCustomer",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_BXJGShopOrders_BXJGGeneralTrees_DistributionMethodId",
+                        name: "FK_BXJGShopOrder_BXJGGeneralTrees_DistributionMethodId",
                         column: x => x.DistributionMethodId,
                         principalTable: "BXJGGeneralTrees",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_BXJGShopOrders_BXJGGeneralTrees_PaymentMethodId",
+                        name: "FK_BXJGShopOrder_BXJGGeneralTrees_PaymentMethodId",
                         column: x => x.PaymentMethodId,
                         principalTable: "BXJGGeneralTrees",
                         principalColumn: "Id",
@@ -1359,15 +1359,15 @@ namespace ZLJ.Migrations
                 {
                     table.PrimaryKey("PK_BXJGShopSku", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BXJGShopSku_BXJGShopItems_ProductId",
+                        name: "FK_BXJGShopSku_BXJGShopProduct_ProductId",
                         column: x => x.ProductId,
-                        principalTable: "BXJGShopItems",
+                        principalTable: "BXJGShopProduct",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "BXJGShopOrderItems",
+                name: "BXJGShopOrderItem",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -1385,17 +1385,17 @@ namespace ZLJ.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BXJGShopOrderItems", x => x.Id);
+                    table.PrimaryKey("PK_BXJGShopOrderItem", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BXJGShopOrderItems_BXJGShopItems_ItemId",
+                        name: "FK_BXJGShopOrderItem_BXJGShopProduct_ItemId",
                         column: x => x.ItemId,
-                        principalTable: "BXJGShopItems",
+                        principalTable: "BXJGShopProduct",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_BXJGShopOrderItems_BXJGShopOrders_OrderId",
+                        name: "FK_BXJGShopOrderItem_BXJGShopOrder_OrderId",
                         column: x => x.OrderId,
-                        principalTable: "BXJGShopOrders",
+                        principalTable: "BXJGShopOrder",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -1791,64 +1791,64 @@ namespace ZLJ.Migrations
                 column: "ParentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BXJGShopCustomers_AreaId",
-                table: "BXJGShopCustomers",
+                name: "IX_BXJGShopCustomer_AreaId",
+                table: "BXJGShopCustomer",
                 column: "AreaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BXJGShopItems_BrandId",
-                table: "BXJGShopItems",
-                column: "BrandId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BXJGShopItems_CategoryId",
-                table: "BXJGShopItems",
-                column: "CategoryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BXJGShopItems_UnitId",
-                table: "BXJGShopItems",
-                column: "UnitId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BXJGShopOrderItems_ItemId",
-                table: "BXJGShopOrderItems",
-                column: "ItemId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BXJGShopOrderItems_OrderId",
-                table: "BXJGShopOrderItems",
-                column: "OrderId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BXJGShopOrders_AreaId",
-                table: "BXJGShopOrders",
+                name: "IX_BXJGShopOrder_AreaId",
+                table: "BXJGShopOrder",
                 column: "AreaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BXJGShopOrders_CustomerId",
-                table: "BXJGShopOrders",
+                name: "IX_BXJGShopOrder_CustomerId",
+                table: "BXJGShopOrder",
                 column: "CustomerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BXJGShopOrders_DistributionMethodId",
-                table: "BXJGShopOrders",
+                name: "IX_BXJGShopOrder_DistributionMethodId",
+                table: "BXJGShopOrder",
                 column: "DistributionMethodId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BXJGShopOrders_OrderNo",
-                table: "BXJGShopOrders",
+                name: "IX_BXJGShopOrder_OrderNo",
+                table: "BXJGShopOrder",
                 column: "OrderNo",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_BXJGShopOrders_PaymentMethodId",
-                table: "BXJGShopOrders",
+                name: "IX_BXJGShopOrder_PaymentMethodId",
+                table: "BXJGShopOrder",
                 column: "PaymentMethodId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BXJGShopProductCategories_ParentId",
-                table: "BXJGShopProductCategories",
+                name: "IX_BXJGShopOrderItem_ItemId",
+                table: "BXJGShopOrderItem",
+                column: "ItemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BXJGShopOrderItem_OrderId",
+                table: "BXJGShopOrderItem",
+                column: "OrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BXJGShopProduct_BrandId",
+                table: "BXJGShopProduct",
+                column: "BrandId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BXJGShopProduct_CategoryId",
+                table: "BXJGShopProduct",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BXJGShopProduct_UnitId",
+                table: "BXJGShopProduct",
+                column: "UnitId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BXJGShopProductCategory_ParentId",
+                table: "BXJGShopProductCategory",
                 column: "ParentId");
 
             migrationBuilder.CreateIndex(
@@ -1950,7 +1950,7 @@ namespace ZLJ.Migrations
                 name: "BXJGEquipmentInfo");
 
             migrationBuilder.DropTable(
-                name: "BXJGShopOrderItems");
+                name: "BXJGShopOrderItem");
 
             migrationBuilder.DropTable(
                 name: "BXJGShopSku");
@@ -1983,10 +1983,10 @@ namespace ZLJ.Migrations
                 name: "BXJGCMSColumns");
 
             migrationBuilder.DropTable(
-                name: "BXJGShopOrders");
+                name: "BXJGShopOrder");
 
             migrationBuilder.DropTable(
-                name: "BXJGShopItems");
+                name: "BXJGShopProduct");
 
             migrationBuilder.DropTable(
                 name: "AbpDynamicProperties");
@@ -1998,13 +1998,13 @@ namespace ZLJ.Migrations
                 name: "AbpUsers");
 
             migrationBuilder.DropTable(
-                name: "BXJGShopCustomers");
+                name: "BXJGShopCustomer");
 
             migrationBuilder.DropTable(
                 name: "BXJGGeneralTrees");
 
             migrationBuilder.DropTable(
-                name: "BXJGShopProductCategories");
+                name: "BXJGShopProductCategory");
 
             migrationBuilder.DropTable(
                 name: "BXJGBaseInfoAdministratives");

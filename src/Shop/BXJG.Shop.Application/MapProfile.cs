@@ -38,6 +38,11 @@ namespace BXJG.Shop
 
             CreateMap<ProductUpdateDto, ProductEntity>()
                .ForMember(c => c.Images, opt => opt.MapFrom(c => string.Join(',', c.Images)));
+
+            //sku
+            //CreateMap<SkuEntity, SkuEditDto>().ForMember(c=>c.DynamicEntityPropertyValues,c=>c.Ignore());
+            CreateMap<SkuEntity, SkuEditDto>();
+            CreateMap<SkuEditDto, SkuEntity>();
             #endregion
 
             #region 显示给顾客的商品信息

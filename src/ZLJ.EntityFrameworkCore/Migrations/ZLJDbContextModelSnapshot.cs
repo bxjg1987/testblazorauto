@@ -2189,7 +2189,7 @@ namespace ZLJ.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("BXJGShopOrderItems");
+                    b.ToTable("BXJGShopOrderItem");
                 });
 
             modelBuilder.Entity("ZLJ.Authorization.Roles.Role", b =>

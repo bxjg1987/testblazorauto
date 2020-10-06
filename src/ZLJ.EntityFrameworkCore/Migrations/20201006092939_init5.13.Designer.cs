@@ -10,7 +10,7 @@ using ZLJ.EntityFrameworkCore;
 namespace ZLJ.Migrations
 {
     [DbContext(typeof(ZLJDbContext))]
-    [Migration("20201004133814_init513")]
+    [Migration("20201006092939_init5.13")]
     partial class init513
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1846,7 +1846,7 @@ namespace ZLJ.Migrations
 
                     b.HasIndex("ParentId");
 
-                    b.ToTable("BXJGShopProductCategories");
+                    b.ToTable("BXJGShopProductCategory");
                 });
 
             modelBuilder.Entity("BXJG.Shop.Catalogue.ProductEntity", b =>
@@ -1942,7 +1942,7 @@ namespace ZLJ.Migrations
 
                     b.HasIndex("UnitId");
 
-                    b.ToTable("BXJGShopItems");
+                    b.ToTable("BXJGShopProduct");
                 });
 
             modelBuilder.Entity("BXJG.Shop.Catalogue.SkuEntity", b =>
@@ -2033,7 +2033,7 @@ namespace ZLJ.Migrations
 
                     b.HasIndex("AreaId");
 
-                    b.ToTable("BXJGShopCustomers");
+                    b.ToTable("BXJGShopCustomer");
                 });
 
             modelBuilder.Entity("BXJG.Shop.Sale.OrderEntity", b =>
@@ -2143,7 +2143,7 @@ namespace ZLJ.Migrations
 
                     b.HasIndex("PaymentMethodId");
 
-                    b.ToTable("BXJGShopOrders");
+                    b.ToTable("BXJGShopOrder");
                 });
 
             modelBuilder.Entity("BXJG.Shop.Sale.OrderItemEntity", b =>
@@ -2191,7 +2191,7 @@ namespace ZLJ.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("BXJGShopOrderItems");
+                    b.ToTable("BXJGShopOrderItem");
                 });
 
             modelBuilder.Entity("ZLJ.Authorization.Roles.Role", b =>

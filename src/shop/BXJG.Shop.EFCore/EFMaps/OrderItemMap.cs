@@ -16,7 +16,7 @@ namespace BXJG.Shop.EFMaps
     {
         public virtual void Configure(EntityTypeBuilder<OrderItemEntity> builder)
         {
-            builder.ToTable("BXJGShopOrderItems");
+            builder.ToTable("BXJGShopOrderItem");
             builder.Property(c => c.RowVersion).IsRowVersion();
         }
     }

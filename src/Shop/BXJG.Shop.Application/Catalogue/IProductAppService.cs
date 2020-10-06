@@ -25,7 +25,7 @@ namespace BXJG.Shop.Catalogue
         /// <param name="input"></param>
         /// <returns></returns>
         [AbpAuthorize(PermissionNames.ProductCreate)]
-        Task<ProductDto> CreateAsync(ProductCreateDto input);
+        Task<ProductDto> CreateAsync(ProductUpdateDto input);
         /// <summary>
         /// 修改商品上架信息
         /// </summary>

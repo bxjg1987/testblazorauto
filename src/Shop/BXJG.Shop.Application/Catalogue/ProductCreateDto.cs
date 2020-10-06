@@ -66,6 +66,10 @@ namespace BXJG.Shop.Catalogue
         public int Integral { get; set; }
         #endregion
 
+        #region Sku
+        public List<SkuEditDto> Skus { get; set; }
+        #endregion
+
         #region 上架信息
         /// <summary>
         /// 是否热卖
