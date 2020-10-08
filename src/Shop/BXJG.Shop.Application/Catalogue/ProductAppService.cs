@@ -195,16 +195,30 @@ namespace BXJG.Shop.Catalogue
         public async Task<BatchOperationResultLong> DeleteAsync(BatchOperationInputLong input)
         {
             var result = new BatchOperationResultLong();
-            foreach (var item in input.Ids)
+            foreach (var id in input.Ids)
             {
                 try
                 {
-                    await repository.DeleteAsync(item);
-                    result.Ids.Add(item);
+                    var entity = await this.repository.GetAllIncluding(c => c.Skus).SingleAsync(c => c.Id == id);
+
+                    //删除原来的sku
+                    foreach (var item in entity.Skus)
+                    {
+                        //单个sku动态属性值
+                        var val = await dynamicEntityPropertyValueManager.GetValuesAsync<SkuEntity, long>(item.Id.ToString());
+                        foreach (var item1 in val)
+                        {
+                            //await dynamicEntityPropertyValueManager.CleanValues(3, "");
+                            await dynamicEntityPropertyValueManager.DeleteAsync(item1.Id);
+                        }
+                    }
+                    //entity.Skus.Clear();//这里应该是有级联删除的
+                    await repository.DeleteAsync(entity);
+                    result.Ids.Add(id);
                 }
                 catch (Exception ex)
                 {
-                    base.Logger.Warn($"删除商品档案失败，设备Id：{item}", ex);
+                    base.Logger.Warn($"删除商品档案失败，设备Id：{id}", ex);
                 }
             }
             return result;
