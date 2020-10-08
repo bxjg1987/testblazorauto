@@ -54,7 +54,8 @@ namespace BXJG.Shop.Catalogue
                                  ProductManager itemManager,
                                  TempFileManager tempFileManager,
                                  IDynamicEntityPropertyManager dynamicEntityPropertyManager,
-                                 IDynamicEntityPropertyValueManager dynamicEntityPropertyValueManager, IAbpSession abpSession)
+                                 IDynamicEntityPropertyValueManager dynamicEntityPropertyValueManager,
+                                 IAbpSession abpSession)
         {
             this.repository = repository;
             this.dictionaryManager = dictionaryManager;
@@ -71,6 +72,7 @@ namespace BXJG.Shop.Catalogue
         /// <returns></returns>
         public async Task<ProductDto> CreateAsync(ProductUpdateDto input)
         {
+            //将图片从临时目录移动到正式目录
             input.Images = (await this.tempFileManager.MoveAsync(input.Images)).Select(c => c.FileRelativePath).ToArray();
             var entity = base.ObjectMapper.Map<ProductEntity>(input);
 
@@ -96,12 +98,13 @@ namespace BXJG.Shop.Catalogue
             }
 
             //发布
-            entity = await repository.GetAllIncluding(c => c.Category, c => c.Brand, c => c.Unit).SingleAsync(c => c.Id == entity.Id);
+            entity = await repository.GetAllIncluding(c => c.Category, c => c.Brand, c => c.Unit, c => c.Skus).SingleAsync(c => c.Id == entity.Id);
             if (input.Published)
                 entity.Publish(input.AvailableStart, input.AvailableEnd);
             //await itemManager.PublishAsync(entity, input.AvailableStart, input.AvailableEnd);
 
-            return ObjectMapper.Map<ProductDto>(entity);
+            //return ObjectMapper.Map<ProductDto>(entity);
+            return await GetOneAsync(entity.Id);//这里又去查，性能不太好
         }
         /// <summary>
         /// 更新商品信息
@@ -110,17 +113,53 @@ namespace BXJG.Shop.Catalogue
         /// <returns></returns>
         public async Task<ProductDto> UpdateAsync(ProductUpdateDto input)
         {
+            //获取原来的实体
+            var entity = await this.repository.GetAllIncluding(c => c.Skus).SingleAsync(c => c.Id == input.Id);
+
+            //删除原来的sku
+            foreach (var item in entity.Skus)
+            {
+                //单个sku动态属性值
+                var val = await dynamicEntityPropertyValueManager.GetValuesAsync<SkuEntity, long>(item.Id.ToString());
+                foreach (var item1 in val)
+                {
+                    //await dynamicEntityPropertyValueManager.CleanValues(3, "");
+                    await dynamicEntityPropertyValueManager.DeleteAsync(item1.Id);
+                }
+            }
+            entity.Skus.Clear();
+            //await CurrentUnitOfWork.SaveChangesAsync();
+
+            //将图片从临时目录移动到正式目录
             input.Images = (await this.tempFileManager.MoveAsync(input.Images)).Select(c => c.FileRelativePath).ToArray();
-            var entity = await this.repository.GetAsync(input.Id);
-            ObjectMapper.Map<ProductUpdateDto, ProductEntity>(input, entity);
+            //更新现有属性
+            ObjectMapper.Map(input, entity);
+
+            //发布处理
             if (input.Published)
                 entity.Publish(input.AvailableStart, input.AvailableEnd);
             else
                 entity.UnPublish();
 
+            //保存下以生成sku的自增id
             await CurrentUnitOfWork.SaveChangesAsync();
-            entity = await repository.GetAllIncluding(c => c.Category, c => c.Brand, c => c.Unit).SingleAsync(c => c.Id == entity.Id);
-            return ObjectMapper.Map<ProductDto>(entity);
+
+            //添加新的sku
+            var dep = await dynamicEntityPropertyManager.GetAllAsync<SkuEntity, long>();        //获取与SkuEntity关联的动实体态属性集合
+            for (int i = 0; i < entity.Skus.Count; i++)
+            {
+                var skuInput = input.Skus[i];    //用户提交的 动态实体属性id和值
+                var sku = entity.Skus[i];
+                foreach (var dynamicEntityPropertyValue in skuInput.DynamicEntityPropertyValues)
+                {
+                    var dynamicEntityProperty = dep.Single(c => c.Id == dynamicEntityPropertyValue.Key);
+                    await dynamicEntityPropertyValueManager.AddAsync(new DynamicEntityPropertyValue(dynamicEntityProperty, sku.Id.ToString(), dynamicEntityPropertyValue.Value, abpSession.TenantId));
+                }
+            }
+
+            //entity = await repository.GetAllIncluding(c => c.Category, c => c.Brand, c => c.Unit, c => c.Skus).SingleAsync(c => c.Id == entity.Id);
+            //return ObjectMapper.Map<ProductDto>(entity);
+            return await GetOneAsync(entity.Id);//这里又去查，性能不太好
         }
         /// <summary>
         /// 管理页面用来获取所有商品信息
@@ -177,8 +216,7 @@ namespace BXJG.Shop.Catalogue
         /// <returns></returns>
         public async Task<ProductDto> GetAsync(EntityDto<long> input)
         {
-            var entity = await repository.GetAsync(input.Id);
-            return ObjectMapper.Map<ProductDto>(entity);
+            return await GetOneAsync(input.Id);
         }
         /// <summary>
         /// 批量发布商品
@@ -210,6 +248,33 @@ namespace BXJG.Shop.Catalogue
             {
                 item.UnPublish();
             }
+        }
+        /// <summary>
+        /// 获取单个商品，包括相关外键属性，及其sku和每个sku关联的动态属性
+        /// </summary>
+        /// <param name="id">商品id</param>
+        /// <returns></returns>
+        private async Task<ProductDto> GetOneAsync(long id)
+        {
+            var entity = await repository.GetAllIncluding(c => c.Category, c => c.Brand, c => c.Unit, c => c.Skus).SingleAsync(c => c.Id == id);
+            var dto = ObjectMapper.Map<ProductDto>(entity);
+
+            //这里暂时用土办法，最好的办法是一次性查询多个sku的动态属性值
+            foreach (var item in entity.Skus)
+            {
+                //单个sku动态属性值
+                var val = await dynamicEntityPropertyValueManager.GetValuesAsync<SkuEntity, long>(item.Id.ToString());
+
+                //单个sku
+                var sku = dto.Skus.Single(c => c.Id == item.Id);
+                sku.DynamicEntityPropertyValues = new Dictionary<int, string>();
+                foreach (var item2 in val)
+                {
+                    sku.DynamicEntityPropertyValues.Add(item2.DynamicEntityPropertyId, item2.Value);
+                }
+            }
+
+            return dto;
         }
     }
 }

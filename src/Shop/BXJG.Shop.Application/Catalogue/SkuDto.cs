@@ -10,7 +10,7 @@ namespace BXJG.Shop.Catalogue
     /// <summary>
     /// 新增需改商品时相关的sku信息
     /// </summary>
-    public class SkuEditDto : EntityDto<long>
+    public class SkuDto : EntityDto<long>
     {
         /// <summary>
         /// 动态属性

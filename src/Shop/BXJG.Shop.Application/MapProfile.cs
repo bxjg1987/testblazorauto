@@ -41,8 +41,8 @@ namespace BXJG.Shop
 
             //sku
             //CreateMap<SkuEntity, SkuEditDto>().ForMember(c=>c.DynamicEntityPropertyValues,c=>c.Ignore());
-            CreateMap<SkuEntity, SkuEditDto>();
-            CreateMap<SkuEditDto, SkuEntity>();
+            CreateMap<SkuEntity, SkuDto>();
+            CreateMap<SkuDto, SkuEntity>();
             #endregion
 
             #region 显示给顾客的商品信息

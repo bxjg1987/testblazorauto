@@ -67,7 +67,7 @@ namespace BXJG.Shop.Catalogue
         #endregion
 
         #region Sku
-        public List<SkuEditDto> Skus { get; set; }
+        public List<SkuDto> Skus { get; set; }
         #endregion
 
         #region 上架信息
