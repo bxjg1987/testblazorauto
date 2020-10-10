@@ -39,7 +39,7 @@ namespace BXJG.Shop.Catalogue
     {
         private readonly IRepository<ProductEntity, long> repository;
         private readonly ProductCategoryManager dictionaryManager;
-        private readonly ProductManager itemManager;
+        private readonly ProductManager productManager;
         private readonly TempFileManager tempFileManager;
 
         //private readonly IDynamicPropertyManager dynamicPropertyManager;
@@ -59,7 +59,7 @@ namespace BXJG.Shop.Catalogue
         {
             this.repository = repository;
             this.dictionaryManager = dictionaryManager;
-            this.itemManager = itemManager;
+            this.productManager = itemManager;
             this.tempFileManager = tempFileManager;
             this.dynamicEntityPropertyManager = dynamicEntityPropertyManager;
             this.dynamicEntityPropertyValueManager = dynamicEntityPropertyValueManager;
@@ -242,7 +242,6 @@ namespace BXJG.Shop.Catalogue
             var entities = await repository.GetAllListAsync(d => input.Ids.Contains(d.Id));
             foreach (var item in entities)
             {
-                Task t;
                 if (input.AvailableEndSeconds != default)
                     item.PublishDuration(input.AvailableStart, input.AvailableEndSeconds.Value);
                 else
@@ -257,7 +256,6 @@ namespace BXJG.Shop.Catalogue
         public async Task UnPublishAsync(BatchOperationInputLong input)
         {
             var entities = await repository.GetAllListAsync(d => input.Ids.Contains(d.Id));
-            //如果有问题，就每个明细await吧
             foreach (var item in entities)
             {
                 item.UnPublish();
