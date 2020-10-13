@@ -5,11 +5,9 @@ using System.Text;
 
 namespace BXJG.Shop.Catalogue
 {
-    /*
-     * 有销售记录关联的通过外键约束保证无法删除
-     * 可以用IsActive来禁用它
-     */
-
+    /// <summary>
+    /// 商品的sku信息，= 动态属性组合 + 价格...
+    /// </summary>
     public class SkuEntity : Entity<long>//, IPassivable
     {
         //sku属性由abp动态属性提供

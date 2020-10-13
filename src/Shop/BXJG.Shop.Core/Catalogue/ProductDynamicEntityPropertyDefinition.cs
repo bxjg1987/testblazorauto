@@ -10,6 +10,7 @@ namespace BXJG.Shop.Catalogue
     {
         public override void SetDynamicEntityProperties(IDynamicEntityPropertyDefinitionContext context)
         {
+            //其它模块可能已注册了，所以这里加try
             try
             {
                 context.Manager.AddAllowedInputType<SingleLineStringInputType>();

@@ -70,6 +70,12 @@ namespace BXJG.Shop.Seed
                 Images = "/upload/20201004/442ee74ddb0186fb.jpg",
                 Skus = new List<SkuEntity> {
                     new SkuEntity{ Integral=3, OldPrice=8, Price=3 },
+                    new SkuEntity{ Integral=68, OldPrice=398, Price=2.54m },
+                    new SkuEntity{ Integral=4, OldPrice=398, Price=8 },
+                    new SkuEntity{ Integral=6, OldPrice=398, Price=52.4m },
+                    new SkuEntity{ Integral=7, OldPrice=398, Price=88 },
+                    new SkuEntity{ Integral=8, OldPrice=398, Price=57 },
+                    new SkuEntity{ Integral=34, OldPrice=398, Price=95 },
                     new SkuEntity{ Integral=7, OldPrice=12, Price=7 },
                     new SkuEntity{ Integral=9, OldPrice=15, Price=9 }
                 }
@@ -94,7 +100,13 @@ namespace BXJG.Shop.Seed
                 Skus = new List<SkuEntity> {
                     new SkuEntity{ Integral=3, OldPrice=5, Price=3 },
                     new SkuEntity{ Integral=5, OldPrice=8, Price=5 },
-                    new SkuEntity{ Integral=11, OldPrice=16, Price=11 }
+                    new SkuEntity{ Integral=11, OldPrice=16, Price=11 },
+                    new SkuEntity{ Integral=68, OldPrice=398, Price=2.54m },
+                    new SkuEntity{ Integral=4, OldPrice=398, Price=8 },
+                    new SkuEntity{ Integral=6, OldPrice=398, Price=52.4m },
+                    new SkuEntity{ Integral=7, OldPrice=398, Price=88 },
+                    new SkuEntity{ Integral=8, OldPrice=398, Price=57 },
+                    new SkuEntity{ Integral=34, OldPrice=398, Price=95 }
                 }
             });
             this._context.SaveChanges();
@@ -118,7 +130,13 @@ namespace BXJG.Shop.Seed
                 Skus = new List<SkuEntity> {
                     new SkuEntity{ Integral=8, OldPrice=12, Price=8 },
                     new SkuEntity{ Integral=51, OldPrice=110, Price=51 },
-                    new SkuEntity{ Integral=121, OldPrice=290, Price=121 }
+                    new SkuEntity{ Integral=6, OldPrice=398, Price=52.4m },
+                    new SkuEntity{ Integral=7, OldPrice=398, Price=88 },
+                    new SkuEntity{ Integral=8, OldPrice=398, Price=57 },
+                    new SkuEntity{ Integral=34, OldPrice=398, Price=95 },
+                    new SkuEntity{ Integral=121, OldPrice=290, Price=121 },
+                    new SkuEntity{ Integral=68, OldPrice=398, Price=2.54m },
+                    new SkuEntity{ Integral=4, OldPrice=398, Price=8 }
                 }
             });
             this._context.SaveChanges();
@@ -138,6 +156,17 @@ namespace BXJG.Shop.Seed
                 New = false,
                 Hot = false,
                 Images = "/upload/20201004/8f71080a3e183310.jpg",
+                Skus = new List<SkuEntity> {
+                    new SkuEntity{ Integral=56, OldPrice=98, Price=56 },
+                    new SkuEntity{ Integral=24, OldPrice=75.3m, Price=1.34m },
+                    new SkuEntity{ Integral=36, OldPrice=398, Price=36 },
+                    new SkuEntity{ Integral=68, OldPrice=398, Price=2.54m },
+                    new SkuEntity{ Integral=4, OldPrice=398, Price=8 },
+                    new SkuEntity{ Integral=6, OldPrice=398, Price=52.4m },
+                    new SkuEntity{ Integral=7, OldPrice=398, Price=88 },
+                    new SkuEntity{ Integral=8, OldPrice=398, Price=57 },
+                    new SkuEntity{ Integral=34, OldPrice=398, Price=95 }
+                }
             });
             this._context.SaveChanges();
             products.Add(new ProductEntity
@@ -159,8 +188,14 @@ namespace BXJG.Shop.Seed
                 Images = "/upload/20201004/b.jpg",
                 Skus = new List<SkuEntity> {
                     new SkuEntity{ Integral=56, OldPrice=98, Price=56 },
-                    new SkuEntity{ Integral=134, OldPrice=180, Price=134 },
-                    new SkuEntity{ Integral=254, OldPrice=398, Price=254 }
+                    new SkuEntity{ Integral=24, OldPrice=75.3m, Price=1.34m },
+                    new SkuEntity{ Integral=36, OldPrice=398, Price=36 },
+                    new SkuEntity{ Integral=68, OldPrice=398, Price=2.54m },
+                    new SkuEntity{ Integral=4, OldPrice=398, Price=8 },
+                    new SkuEntity{ Integral=6, OldPrice=398, Price=52.4m },
+                    new SkuEntity{ Integral=7, OldPrice=398, Price=88 },
+                    new SkuEntity{ Integral=8, OldPrice=398, Price=57 },
+                    new SkuEntity{ Integral=34, OldPrice=398, Price=95 }
                 }
             });
             this._context.SaveChanges();
@@ -179,20 +214,26 @@ namespace BXJG.Shop.Seed
                 Home = true,
                 New = false,
                 Hot = false,
-                Images = "/upload/20201004/a.jpg",
+                Images = "/upload/20201004/a.jpg"
             });
             this._context.SaveChanges();
             #endregion
 
             #region 插入abp实体动态属性值 以实现sku
             //动态属性初始化参考 ProductDynamicPropertyBuilder
-            var dep = _context.DynamicEntityProperties.IgnoreQueryFilters().Where(c => c.TenantId == _tenantId && c.Id == 1).Single();
-            for (int i = 0; i < 4; i++)
+            var dep = _context.DynamicEntityProperties.IgnoreQueryFilters().Where(c => c.TenantId == _tenantId).ToList();
+            var p = 0;
+            for (int i = 0; i < 5; i++)
             {
                 for (int k = 0; k < 3; k++)
                 {
-                    _context.DynamicEntityPropertyValues.Add(new DynamicEntityPropertyValue(dep, (i * 3 + k + 1).ToString(), (k + 1).ToString(), _tenantId));
-                    _context.SaveChanges();
+                    for (int j = 0; j < 3; j++)
+                    {
+                        p++;
+                        _context.DynamicEntityPropertyValues.Add(new DynamicEntityPropertyValue(dep[0], p.ToString(), (k + 1).ToString(), _tenantId));
+                        _context.DynamicEntityPropertyValues.Add(new DynamicEntityPropertyValue(dep[1], p.ToString(), (j + 1).ToString(), _tenantId));
+                        _context.SaveChanges();
+                    }
                 }
             }
             #endregion

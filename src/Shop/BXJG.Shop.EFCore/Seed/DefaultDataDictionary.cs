@@ -45,7 +45,7 @@ namespace BXJG.Shop.Seed
             var pp = set.IgnoreQueryFilters().Any(c => c.TenantId == _tenantId && c.ParentId == parentId && c.DisplayName == "商品品牌");
             if (!pp)
             {
-                var last = set.Where(c => c.ParentId == parentId).OrderBy(c => c.Code).LastOrDefault();
+                var last = set.IgnoreQueryFilters().Where(c => c.TenantId == _tenantId && c.ParentId == parentId).OrderBy(c => c.Code).LastOrDefault();
                 var lastIndex = 0;
                 if (last != null)
                 {
@@ -84,7 +84,7 @@ namespace BXJG.Shop.Seed
             var dw = set.IgnoreQueryFilters().Any(c => c.TenantId == _tenantId && c.ParentId == parentId && c.DisplayName == "商品单位");
             if (!dw)
             {
-                var last = set.Where(c => c.ParentId == parentId).OrderBy(c => c.Code).LastOrDefault();
+                var last = set.IgnoreQueryFilters().Where(c => c.TenantId == _tenantId && c.ParentId == parentId).OrderBy(c => c.Code).LastOrDefault();
                 var lastIndex = 0;
                 if (last != null)
                 {
@@ -123,7 +123,7 @@ namespace BXJG.Shop.Seed
             var zf = set.IgnoreQueryFilters().Any(c => c.TenantId == _tenantId && c.ParentId == parentId && c.DisplayName == "支付方式");
             if (!zf)
             {
-                var last = set.Where(c => c.ParentId == parentId).OrderBy(c => c.Code).LastOrDefault();
+                var last = set.IgnoreQueryFilters().Where(c => c.TenantId == _tenantId && c.ParentId == parentId).OrderBy(c => c.Code).LastOrDefault();
                 var lastIndex = 0;
                 if (last != null)
                 {
@@ -169,7 +169,7 @@ namespace BXJG.Shop.Seed
             var psfs = set.IgnoreQueryFilters().Any(c => c.TenantId == _tenantId && c.ParentId == parentId && c.DisplayName == "配送方式");
             if (!psfs)
             {
-                var last = set.Where(c => c.ParentId == parentId).OrderBy(c => c.Code).LastOrDefault();
+                var last = set.IgnoreQueryFilters().Where(c => c.TenantId == _tenantId && c.ParentId == parentId).OrderBy(c => c.Code).LastOrDefault();
                 var lastIndex = 0;
                 if (last != null)
                 {

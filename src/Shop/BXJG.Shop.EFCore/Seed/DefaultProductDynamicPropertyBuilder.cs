@@ -38,51 +38,98 @@ namespace BXJG.Shop.Seed
 
         public void Create(bool insertTestData = true)
         {
-            if (!insertTestData)
-                return;
+            //if (!insertTestData)
+            //    return;
 
-            if (_context.DynamicProperties.IgnoreQueryFilters().Any(c => c.TenantId == _tenantId && c.PropertyName == "规格"))
-                return;
-
-            _context.DynamicProperties.Add(new DynamicProperty
+            //规格
+            if (!_context.DynamicProperties.IgnoreQueryFilters().Any(c => c.TenantId == _tenantId && c.PropertyName == "规格"))
             {
-                InputType = InputTypeBase.GetName<ComboboxInputType>(),
-                PropertyName = "specification",
-                TenantId = _tenantId
-            });
-            _context.SaveChanges();
+                var gg = new DynamicProperty
+                {
+                    InputType = InputTypeBase.GetName<ComboboxInputType>(),
+                    PropertyName = "规格",
+                    TenantId = _tenantId
+                };
+                _context.DynamicProperties.Add(gg);
+                _context.SaveChanges();
 
-            _context.DynamicPropertyValues.Add(new DynamicPropertyValue
-            {
-                DynamicPropertyId = 1,
-                TenantId = _tenantId,
-                Value = "大"
-            });
-            _context.SaveChanges();
+                _context.DynamicPropertyValues.Add(new DynamicPropertyValue
+                {
+                    DynamicPropertyId = gg.Id,
+                    TenantId = _tenantId,
+                    Value = "大"
+                });
+                _context.SaveChanges();
 
-            _context.DynamicPropertyValues.Add(new DynamicPropertyValue
-            {
-                DynamicPropertyId = 1,
-                TenantId = _tenantId,
-                Value = "中"
-            });
-            _context.SaveChanges();
+                _context.DynamicPropertyValues.Add(new DynamicPropertyValue
+                {
+                    DynamicPropertyId = gg.Id,
+                    TenantId = _tenantId,
+                    Value = "中"
+                });
+                _context.SaveChanges();
 
-            _context.DynamicPropertyValues.Add(new DynamicPropertyValue
-            {
-                DynamicPropertyId = 1,
-                TenantId = _tenantId,
-                Value = "小"
-            });
-            _context.SaveChanges();
+                _context.DynamicPropertyValues.Add(new DynamicPropertyValue
+                {
+                    DynamicPropertyId = gg.Id,
+                    TenantId = _tenantId,
+                    Value = "小"
+                });
+                _context.SaveChanges();
 
-            _context.DynamicEntityProperties.Add(new DynamicEntityProperty
+                _context.DynamicEntityProperties.Add(new DynamicEntityProperty
+                {
+                    DynamicPropertyId = gg.Id,
+                    EntityFullName = typeof(SkuEntity).FullName,
+                    TenantId = _tenantId
+                });
+                _context.SaveChanges();
+            }
+
+            //口味
+            if (!_context.DynamicProperties.IgnoreQueryFilters().Any(c => c.TenantId == _tenantId && c.PropertyName == "口味"))
             {
-                DynamicPropertyId = 1,
-                EntityFullName = typeof(SkuEntity).FullName,
-                TenantId = _tenantId
-            });
-            _context.SaveChanges();
+                var gg = new DynamicProperty
+                {
+                    InputType = InputTypeBase.GetName<ComboboxInputType>(),
+                    PropertyName = "口味",
+                    TenantId = _tenantId
+                };
+                _context.DynamicProperties.Add(gg);
+                _context.SaveChanges();
+
+                _context.DynamicPropertyValues.Add(new DynamicPropertyValue
+                {
+                    DynamicPropertyId = gg.Id,
+                    TenantId = _tenantId,
+                    Value = "草莓"
+                });
+                _context.SaveChanges();
+
+                _context.DynamicPropertyValues.Add(new DynamicPropertyValue
+                {
+                    DynamicPropertyId = gg.Id,
+                    TenantId = _tenantId,
+                    Value = "蓝莓"
+                });
+                _context.SaveChanges();
+
+                _context.DynamicPropertyValues.Add(new DynamicPropertyValue
+                {
+                    DynamicPropertyId = gg.Id,
+                    TenantId = _tenantId,
+                    Value = "葡萄"
+                });
+                _context.SaveChanges();
+
+                _context.DynamicEntityProperties.Add(new DynamicEntityProperty
+                {
+                    DynamicPropertyId = gg.Id,
+                    EntityFullName = typeof(SkuEntity).FullName,
+                    TenantId = _tenantId
+                });
+                _context.SaveChanges();
+            }
         }
     }
 }

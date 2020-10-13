@@ -96,7 +96,9 @@ namespace BXJG.Shop.Catalogue
         /// </summary>
         public string DescriptionFull { get; set; }
         /// <summary>
-        /// 多个用英文逗号,分割
+        /// 商品图片
+        /// 分原始图像和缩略图，此字段存储的原始图像地址，多个用英文逗号,分割
+        /// 此字段主要是用来存储数据的，要读取图片信息建议调用GetImages方法，它将返回原始和缩略图地址
         /// </summary>
         public string Images { get; set; }
         /// <summary>
@@ -224,6 +226,7 @@ namespace BXJG.Shop.Catalogue
             // return EventBus.TriggerAsync(new ItemPublishChangedEventData<ItemEntity>(item));
             //item.AvailableStart = null;
         }
+        
         ///// <summary>
         ///// 图片集合
         ///// </summary>
@@ -244,7 +247,7 @@ namespace BXJG.Shop.Catalogue
 
         //定义方法而不是属性，让调用方明确知道此调用会引起计算而不是直接从变量中获取值
         /// <summary>
-        /// 获取产品图像
+        /// 获取产品缩略图和原始图地址列表
         /// key：缩略图 value：原始图像
         /// </summary>
         /// <returns></returns>
