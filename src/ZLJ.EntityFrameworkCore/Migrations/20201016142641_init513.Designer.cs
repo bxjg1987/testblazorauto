@@ -10,7 +10,7 @@ using ZLJ.EntityFrameworkCore;
 namespace ZLJ.Migrations
 {
     [DbContext(typeof(ZLJDbContext))]
-    [Migration("20201006092939_init5.13")]
+    [Migration("20201016142641_init513")]
     partial class init513
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1952,6 +1952,36 @@ namespace ZLJ.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("DynamicEntityProperty1Id")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DynamicEntityProperty2Id")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DynamicEntityProperty3Id")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DynamicEntityProperty4Id")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DynamicEntityProperty5Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DynamicEntityPropertyValue1")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DynamicEntityPropertyValue2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DynamicEntityPropertyValue3")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DynamicEntityPropertyValue4")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DynamicEntityPropertyValue5")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Integral")
                         .HasColumnType("int");
 
@@ -1965,6 +1995,16 @@ namespace ZLJ.Migrations
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DynamicEntityProperty1Id");
+
+                    b.HasIndex("DynamicEntityProperty2Id");
+
+                    b.HasIndex("DynamicEntityProperty3Id");
+
+                    b.HasIndex("DynamicEntityProperty4Id");
+
+                    b.HasIndex("DynamicEntityProperty5Id");
 
                     b.HasIndex("ProductId");
 
@@ -2776,6 +2816,28 @@ namespace ZLJ.Migrations
 
             modelBuilder.Entity("BXJG.Shop.Catalogue.SkuEntity", b =>
                 {
+                    b.HasOne("Abp.DynamicEntityProperties.DynamicEntityProperty", "DynamicEntityProperty1")
+                        .WithMany()
+                        .HasForeignKey("DynamicEntityProperty1Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Abp.DynamicEntityProperties.DynamicEntityProperty", "DynamicEntityProperty2")
+                        .WithMany()
+                        .HasForeignKey("DynamicEntityProperty2Id");
+
+                    b.HasOne("Abp.DynamicEntityProperties.DynamicEntityProperty", "DynamicEntityProperty3")
+                        .WithMany()
+                        .HasForeignKey("DynamicEntityProperty3Id");
+
+                    b.HasOne("Abp.DynamicEntityProperties.DynamicEntityProperty", "DynamicEntityProperty4")
+                        .WithMany()
+                        .HasForeignKey("DynamicEntityProperty4Id");
+
+                    b.HasOne("Abp.DynamicEntityProperties.DynamicEntityProperty", "DynamicEntityProperty5")
+                        .WithMany()
+                        .HasForeignKey("DynamicEntityProperty5Id");
+
                     b.HasOne("BXJG.Shop.Catalogue.ProductEntity", "Product")
                         .WithMany("Skus")
                         .HasForeignKey("ProductId")

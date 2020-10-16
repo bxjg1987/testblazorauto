@@ -70,7 +70,7 @@ namespace BXJG.Shop.Catalogue
         /// Sku信息
         /// 不同属性组合形成的价格
         /// </summary>
-        public List<SkuDto> Skus { get; set; }
+        public List<SkuEditDto> Skus { get; set; }
         #endregion
         #region 上架信息
         /// <summary>

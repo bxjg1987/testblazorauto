@@ -1,4 +1,5 @@
 ﻿using Abp.Domain.Entities;
+using Abp.DynamicEntityProperties;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -36,5 +37,68 @@ namespace BXJG.Shop.Catalogue
         ///// 是否启用
         ///// </summary>
         //public bool IsActive { get; set; }
+        #region sku动态属性组合
+        /// <summary>
+        /// 第1个动态属性id
+        /// </summary>
+        public int DynamicEntityProperty1Id { get; set; }
+        /// <summary>
+        /// 第1个动态属性
+        /// </summary>
+        public virtual DynamicEntityProperty DynamicEntityProperty1 { get; set; }
+        /// <summary>
+        /// 第一个动态属性值
+        /// </summary>
+        public string DynamicEntityPropertyValue1 { get; set; }
+        /// <summary>
+        /// 第2个动态属性id
+        /// </summary>
+        public int? DynamicEntityProperty2Id { get; set; }
+        /// <summary>
+        /// 第2个动态属性
+        /// </summary>
+        public virtual DynamicEntityProperty DynamicEntityProperty2 { get; set; }
+        /// <summary>
+        /// 第2个动态属性值
+        /// </summary>
+        public string DynamicEntityPropertyValue2 { get; set; }
+        /// <summary>
+        /// 第3个动态属性id
+        /// </summary>
+        public int? DynamicEntityProperty3Id { get; set; }
+        /// <summary>
+        /// 第3个动态属性
+        /// </summary>
+        public virtual DynamicEntityProperty DynamicEntityProperty3 { get; set; }
+        /// <summary>
+        /// 第3个动态属性值
+        /// </summary>
+        public string DynamicEntityPropertyValue3 { get; set; }
+        /// <summary>
+        /// 第4个动态属性id
+        /// </summary>
+        public int? DynamicEntityProperty4Id { get; set; }
+        /// <summary>
+        /// 第4个动态属性
+        /// </summary>
+        public virtual DynamicEntityProperty DynamicEntityProperty4 { get; set; }
+        /// <summary>
+        /// 第4个动态属性值
+        /// </summary>
+        public string DynamicEntityPropertyValue4 { get; set; }
+        /// <summary>
+        /// 第5个动态属性Id
+        /// </summary>
+        public int? DynamicEntityProperty5Id { get; set; }
+        /// <summary>
+        /// 第5个动态属性
+        /// </summary>
+        public virtual DynamicEntityProperty DynamicEntityProperty5 { get; set; }
+        /// <summary>
+        /// 第5个动态属性值
+        /// </summary>
+        public string DynamicEntityPropertyValue5 { get; set; }
+        #endregion
+
     }
 }

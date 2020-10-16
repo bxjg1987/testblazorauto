@@ -69,15 +69,15 @@ namespace BXJG.Shop.Seed
                 Hot = false,
                 Images = "/upload/20201004/442ee74ddb0186fb.jpg",
                 Skus = new List<SkuEntity> {
-                    new SkuEntity{ Integral=3, OldPrice=8, Price=3 },
-                    new SkuEntity{ Integral=68, OldPrice=398, Price=2.54m },
-                    new SkuEntity{ Integral=4, OldPrice=398, Price=8 },
-                    new SkuEntity{ Integral=6, OldPrice=398, Price=52.4m },
-                    new SkuEntity{ Integral=7, OldPrice=398, Price=88 },
-                    new SkuEntity{ Integral=8, OldPrice=398, Price=57 },
-                    new SkuEntity{ Integral=34, OldPrice=398, Price=95 },
-                    new SkuEntity{ Integral=7, OldPrice=12, Price=7 },
-                    new SkuEntity{ Integral=9, OldPrice=15, Price=9 }
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="1", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="1", Integral=3, OldPrice=8, Price=3},
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="1", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="2", Integral=68, OldPrice=398, Price=2.54m },
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="1", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="3", Integral=4, OldPrice=398, Price=8 },
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="2", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="1", Integral=6, OldPrice=398, Price=52.4m },
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="2", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="2", Integral=7, OldPrice=398, Price=88 },
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="2", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="3", Integral=8, OldPrice=398, Price=57 },
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="3", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="1", Integral=34, OldPrice=398, Price=95 },
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="3", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="2", Integral=7, OldPrice=12, Price=7 },
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="3", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="3", Integral=9, OldPrice=15, Price=9 }
                 }
             });
             this._context.SaveChanges();
@@ -98,15 +98,15 @@ namespace BXJG.Shop.Seed
                 Hot = false,
                 Images = "/upload/20201004/d4047d7267bcf1fc.jpg",
                 Skus = new List<SkuEntity> {
-                    new SkuEntity{ Integral=3, OldPrice=5, Price=3 },
-                    new SkuEntity{ Integral=5, OldPrice=8, Price=5 },
-                    new SkuEntity{ Integral=11, OldPrice=16, Price=11 },
-                    new SkuEntity{ Integral=68, OldPrice=398, Price=2.54m },
-                    new SkuEntity{ Integral=4, OldPrice=398, Price=8 },
-                    new SkuEntity{ Integral=6, OldPrice=398, Price=52.4m },
-                    new SkuEntity{ Integral=7, OldPrice=398, Price=88 },
-                    new SkuEntity{ Integral=8, OldPrice=398, Price=57 },
-                    new SkuEntity{ Integral=34, OldPrice=398, Price=95 }
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="1", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="1", Integral=35, OldPrice=8, Price=3},
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="1", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="2", Integral=35, OldPrice=398, Price=2.54m },
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="1", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="3", Integral=66, OldPrice=398, Price=8 },
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="2", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="1", Integral=74, OldPrice=398, Price=52.4m },
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="2", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="2", Integral=32, OldPrice=398, Price=88 },
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="2", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="3", Integral=64, OldPrice=398, Price=57 },
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="3", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="1", Integral=36, OldPrice=398, Price=95 },
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="3", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="2", Integral=7, OldPrice=12, Price=7 },
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="3", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="3", Integral=74, OldPrice=15, Price=9 }
                 }
             });
             this._context.SaveChanges();
@@ -128,15 +128,15 @@ namespace BXJG.Shop.Seed
                 Hot = true,
                 Images = "/upload/20201004/57feec7cN5f2eac85.jpg",
                 Skus = new List<SkuEntity> {
-                    new SkuEntity{ Integral=8, OldPrice=12, Price=8 },
-                    new SkuEntity{ Integral=51, OldPrice=110, Price=51 },
-                    new SkuEntity{ Integral=6, OldPrice=398, Price=52.4m },
-                    new SkuEntity{ Integral=7, OldPrice=398, Price=88 },
-                    new SkuEntity{ Integral=8, OldPrice=398, Price=57 },
-                    new SkuEntity{ Integral=34, OldPrice=398, Price=95 },
-                    new SkuEntity{ Integral=121, OldPrice=290, Price=121 },
-                    new SkuEntity{ Integral=68, OldPrice=398, Price=2.54m },
-                    new SkuEntity{ Integral=4, OldPrice=398, Price=8 }
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="1", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="1", Integral=53, OldPrice=64, Price=72},
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="1", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="2", Integral=43, OldPrice=63, Price=636m },
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="1", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="3", Integral=67, OldPrice=53, Price=42 },
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="2", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="1", Integral=23, OldPrice=3, Price=52.4m },
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="2", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="2", Integral=53, OldPrice=8, Price=35 },
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="2", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="3", Integral=71, OldPrice=83, Price=73 },
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="3", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="1", Integral=17, OldPrice=37, Price=33 },
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="3", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="2", Integral=72, OldPrice=37, Price=38 },
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="3", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="3", Integral=42, OldPrice=85, Price=83 }
                 }
             });
             this._context.SaveChanges();
@@ -157,15 +157,15 @@ namespace BXJG.Shop.Seed
                 Hot = false,
                 Images = "/upload/20201004/8f71080a3e183310.jpg",
                 Skus = new List<SkuEntity> {
-                    new SkuEntity{ Integral=56, OldPrice=98, Price=56 },
-                    new SkuEntity{ Integral=24, OldPrice=75.3m, Price=1.34m },
-                    new SkuEntity{ Integral=36, OldPrice=398, Price=36 },
-                    new SkuEntity{ Integral=68, OldPrice=398, Price=2.54m },
-                    new SkuEntity{ Integral=4, OldPrice=398, Price=8 },
-                    new SkuEntity{ Integral=6, OldPrice=398, Price=52.4m },
-                    new SkuEntity{ Integral=7, OldPrice=398, Price=88 },
-                    new SkuEntity{ Integral=8, OldPrice=398, Price=57 },
-                    new SkuEntity{ Integral=34, OldPrice=398, Price=95 }
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="1", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="1", Integral=8, OldPrice=8, Price=3},
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="1", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="2", Integral=69, OldPrice=31, Price=3.4m },
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="1", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="3", Integral=95, OldPrice=7, Price=38.4m },
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="2", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="1", Integral=9, OldPrice=7, Price=11.7m },
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="2", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="2", Integral=53, OldPrice=26, Price=8.8m },
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="2", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="3", Integral=26, OldPrice=22, Price=63 },
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="3", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="1", Integral=27, OldPrice=31, Price=7 },
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="3", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="2", Integral=7, OldPrice=72, Price=83 },
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="3", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="3", Integral=88, OldPrice=27, Price=29 }
                 }
             });
             this._context.SaveChanges();
@@ -187,15 +187,15 @@ namespace BXJG.Shop.Seed
                 Hot = true,
                 Images = "/upload/20201004/b.jpg",
                 Skus = new List<SkuEntity> {
-                    new SkuEntity{ Integral=56, OldPrice=98, Price=56 },
-                    new SkuEntity{ Integral=24, OldPrice=75.3m, Price=1.34m },
-                    new SkuEntity{ Integral=36, OldPrice=398, Price=36 },
-                    new SkuEntity{ Integral=68, OldPrice=398, Price=2.54m },
-                    new SkuEntity{ Integral=4, OldPrice=398, Price=8 },
-                    new SkuEntity{ Integral=6, OldPrice=398, Price=52.4m },
-                    new SkuEntity{ Integral=7, OldPrice=398, Price=88 },
-                    new SkuEntity{ Integral=8, OldPrice=398, Price=57 },
-                    new SkuEntity{ Integral=34, OldPrice=398, Price=95 }
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="1", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="1", Integral=74, OldPrice=8, Price=353},
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="1", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="2", Integral=68, OldPrice=398, Price=62.54m },
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="1", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="3", Integral=4, OldPrice=2, Price=84 },
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="2", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="1", Integral=6, OldPrice=4, Price=52.4m },
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="2", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="2", Integral=47, OldPrice=7, Price=4 },
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="2", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="3", Integral=8, OldPrice=85, Price=57 },
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="3", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="1", Integral=34, OldPrice=22, Price=19.5m },
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="3", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="2", Integral=7, OldPrice=36, Price=27 },
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityPropertyValue1="3", DynamicEntityProperty2Id=2, DynamicEntityPropertyValue2="3", Integral=52, OldPrice=15, Price=39 }
                 }
             });
             this._context.SaveChanges();
@@ -221,21 +221,21 @@ namespace BXJG.Shop.Seed
 
             #region 插入abp实体动态属性值 以实现sku
             //动态属性初始化参考 ProductDynamicPropertyBuilder
-            var dep = _context.DynamicEntityProperties.IgnoreQueryFilters().Where(c => c.TenantId == _tenantId).ToList();
-            var p = 0;
-            for (int i = 0; i < 5; i++)
-            {
-                for (int k = 0; k < 3; k++)
-                {
-                    for (int j = 0; j < 3; j++)
-                    {
-                        p++;
-                        _context.DynamicEntityPropertyValues.Add(new DynamicEntityPropertyValue(dep[0], p.ToString(), (k + 1).ToString(), _tenantId));
-                        _context.DynamicEntityPropertyValues.Add(new DynamicEntityPropertyValue(dep[1], p.ToString(), (j + 1).ToString(), _tenantId));
-                        _context.SaveChanges();
-                    }
-                }
-            }
+            //var dep = _context.DynamicEntityProperties.IgnoreQueryFilters().Where(c => c.TenantId == _tenantId).ToList();
+            //var p = 0;
+            //for (int i = 0; i < 5; i++)
+            //{
+            //    for (int k = 0; k < 3; k++)
+            //    {
+            //        for (int j = 0; j < 3; j++)
+            //        {
+            //            p++;
+            //            _context.DynamicEntityPropertyValues.Add(new DynamicEntityPropertyValue(dep[0], p.ToString(), (k + 1).ToString(), _tenantId));
+            //            _context.DynamicEntityPropertyValues.Add(new DynamicEntityPropertyValue(dep[1], p.ToString(), (j + 1).ToString(), _tenantId));
+            //            _context.SaveChanges();
+            //        }
+            //    }
+            //}
             #endregion
         }
     }

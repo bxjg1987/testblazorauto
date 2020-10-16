@@ -41,51 +41,6 @@ namespace BXJG.Shop.Seed
             //if (!insertTestData)
             //    return;
 
-            //规格
-            if (!_context.DynamicProperties.IgnoreQueryFilters().Any(c => c.TenantId == _tenantId && c.PropertyName == "规格"))
-            {
-                var gg = new DynamicProperty
-                {
-                    InputType = InputTypeBase.GetName<ComboboxInputType>(),
-                    PropertyName = "规格",
-                    TenantId = _tenantId
-                };
-                _context.DynamicProperties.Add(gg);
-                _context.SaveChanges();
-
-                _context.DynamicPropertyValues.Add(new DynamicPropertyValue
-                {
-                    DynamicPropertyId = gg.Id,
-                    TenantId = _tenantId,
-                    Value = "大"
-                });
-                _context.SaveChanges();
-
-                _context.DynamicPropertyValues.Add(new DynamicPropertyValue
-                {
-                    DynamicPropertyId = gg.Id,
-                    TenantId = _tenantId,
-                    Value = "中"
-                });
-                _context.SaveChanges();
-
-                _context.DynamicPropertyValues.Add(new DynamicPropertyValue
-                {
-                    DynamicPropertyId = gg.Id,
-                    TenantId = _tenantId,
-                    Value = "小"
-                });
-                _context.SaveChanges();
-
-                _context.DynamicEntityProperties.Add(new DynamicEntityProperty
-                {
-                    DynamicPropertyId = gg.Id,
-                    EntityFullName = typeof(SkuEntity).FullName,
-                    TenantId = _tenantId
-                });
-                _context.SaveChanges();
-            }
-
             //口味
             if (!_context.DynamicProperties.IgnoreQueryFilters().Any(c => c.TenantId == _tenantId && c.PropertyName == "口味"))
             {
@@ -119,6 +74,51 @@ namespace BXJG.Shop.Seed
                     DynamicPropertyId = gg.Id,
                     TenantId = _tenantId,
                     Value = "葡萄"
+                });
+                _context.SaveChanges();
+
+                _context.DynamicEntityProperties.Add(new DynamicEntityProperty
+                {
+                    DynamicPropertyId = gg.Id,
+                    EntityFullName = typeof(SkuEntity).FullName,
+                    TenantId = _tenantId
+                });
+                _context.SaveChanges();
+            }
+            
+            //规格
+            if (!_context.DynamicProperties.IgnoreQueryFilters().Any(c => c.TenantId == _tenantId && c.PropertyName == "规格"))
+            {
+                var gg = new DynamicProperty
+                {
+                    InputType = InputTypeBase.GetName<ComboboxInputType>(),
+                    PropertyName = "规格",
+                    TenantId = _tenantId
+                };
+                _context.DynamicProperties.Add(gg);
+                _context.SaveChanges();
+
+                _context.DynamicPropertyValues.Add(new DynamicPropertyValue
+                {
+                    DynamicPropertyId = gg.Id,
+                    TenantId = _tenantId,
+                    Value = "大"
+                });
+                _context.SaveChanges();
+
+                _context.DynamicPropertyValues.Add(new DynamicPropertyValue
+                {
+                    DynamicPropertyId = gg.Id,
+                    TenantId = _tenantId,
+                    Value = "中"
+                });
+                _context.SaveChanges();
+
+                _context.DynamicPropertyValues.Add(new DynamicPropertyValue
+                {
+                    DynamicPropertyId = gg.Id,
+                    TenantId = _tenantId,
+                    Value = "小"
                 });
                 _context.SaveChanges();
 

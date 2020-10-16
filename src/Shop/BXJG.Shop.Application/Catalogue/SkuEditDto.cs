@@ -1,34 +1,11 @@
 ﻿using Abp.Application.Services.Dto;
-using Abp.Domain.Entities;
-using BXJG.Common.Dto;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace BXJG.Shop.Catalogue
 {
-    //public class SkuDto : EntityDto<long>
-    //{
-    //    /// <summary>
-    //    /// 动态实体属性值
-    //    /// </summary>
-    //    public List<DynamicEntityPropertyValueDto> DynamicEntityPropertyValues { get; set; }
-    //    /// <summary>
-    //    /// 原价
-    //    /// </summary>
-    //    public decimal OldPrice { get; set; }
-    //    /// <summary>
-    //    /// 现价(销售价)
-    //    /// </summary>
-    //    public decimal Price { get; set; }
-    //    /// <summary>
-    //    /// 积分
-    //    /// </summary>
-    //    public int Integral { get; set; }
-    //}
-
-    public class SkuDto : EntityDto<long>
+    public class SkuEditDto : EntityDto<long>
     {
         ///// <summary>
         ///// 动态实体属性值
@@ -53,10 +30,6 @@ namespace BXJG.Shop.Catalogue
         /// </summary>
         public int DynamicEntityProperty1Id { get; set; }
         /// <summary>
-        /// 第1个动态属性名称
-        /// </summary>
-        public string DynamicEntityProperty1DynamicPropertyPropertyName { get; set; }
-        /// <summary>
         /// 第一个动态属性值
         /// </summary>
         public string DynamicEntityPropertyValue1 { get; set; }
@@ -64,10 +37,6 @@ namespace BXJG.Shop.Catalogue
         /// 第2个动态属性id
         /// </summary>
         public int? DynamicEntityProperty2Id { get; set; }
-        /// <summary>
-        /// 第2个动态属性名称
-        /// </summary>
-        public string DynamicEntityProperty21DynamicPropertyPropertyName { get; set; }
         /// <summary>
         /// 第2个动态属性值
         /// </summary>
@@ -77,10 +46,6 @@ namespace BXJG.Shop.Catalogue
         /// </summary>
         public int? DynamicEntityProperty3Id { get; set; }
         /// <summary>
-        /// 第3个动态属性名称
-        /// </summary>
-        public string DynamicEntityProperty3DynamicPropertyPropertyName { get; set; }
-        /// <summary>
         /// 第3个动态属性值
         /// </summary>
         public string DynamicEntityPropertyValue3 { get; set; }
@@ -88,10 +53,6 @@ namespace BXJG.Shop.Catalogue
         /// 第4个动态属性id
         /// </summary>
         public int? DynamicEntityProperty4Id { get; set; }
-        /// <summary>
-        /// 第4个动态属性名称
-        /// </summary>
-        public string DynamicEntityProperty4DynamicPropertyPropertyName { get; set; }
         /// <summary>
         /// 第4个动态属性值
         /// </summary>
@@ -101,14 +62,9 @@ namespace BXJG.Shop.Catalogue
         /// </summary>
         public int? DynamicEntityProperty5Id { get; set; }
         /// <summary>
-        /// 第5个动态属性名称
-        /// </summary>
-        public string DynamicEntityProperty5DynamicPropertyPropertyName { get; set; }
-        /// <summary>
         /// 第5个动态属性值
         /// </summary>
         public string DynamicEntityPropertyValue5 { get; set; }
         #endregion
     }
-
 }

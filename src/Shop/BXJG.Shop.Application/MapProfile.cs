@@ -33,8 +33,8 @@ namespace BXJG.Shop
             CreateMap<ProductEntity, ProductDto>()
                .ForMember(c => c.Images, opt => opt.MapFrom(d => d.GetImages().Select(e => new FileDto { FilePath = e.Value, ThumPath = e.Key })));
 
-            CreateMap<ProductCreateDto, ProductEntity>()
-               .ForMember(c => c.Images, opt => opt.MapFrom(c => string.Join(',', c.Images)));
+            //CreateMap<ProductCreateDto, ProductEntity>()
+            //   .ForMember(c => c.Images, opt => opt.MapFrom(c => string.Join(',', c.Images)));
 
             CreateMap<ProductUpdateDto, ProductEntity>()
                .ForMember(c => c.Images, opt => opt.MapFrom(c => string.Join(',', c.Images)));
@@ -42,7 +42,7 @@ namespace BXJG.Shop
             //sku
             //CreateMap<SkuEntity, SkuEditDto>().ForMember(c=>c.DynamicEntityPropertyValues,c=>c.Ignore());
             CreateMap<SkuEntity, SkuDto>();
-            CreateMap<SkuDto, SkuEntity>();
+            CreateMap<SkuEditDto, SkuEntity>();
             #endregion
 
             #region 显示给顾客的商品信息

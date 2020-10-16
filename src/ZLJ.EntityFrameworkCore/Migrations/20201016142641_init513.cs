@@ -1353,11 +1353,51 @@ namespace ZLJ.Migrations
                     OldPrice = table.Column<decimal>(nullable: false),
                     Price = table.Column<decimal>(nullable: false),
                     Integral = table.Column<int>(nullable: false),
-                    ProductId = table.Column<long>(nullable: false)
+                    ProductId = table.Column<long>(nullable: false),
+                    DynamicEntityProperty1Id = table.Column<int>(nullable: false),
+                    DynamicEntityPropertyValue1 = table.Column<string>(nullable: true),
+                    DynamicEntityProperty2Id = table.Column<int>(nullable: true),
+                    DynamicEntityPropertyValue2 = table.Column<string>(nullable: true),
+                    DynamicEntityProperty3Id = table.Column<int>(nullable: true),
+                    DynamicEntityPropertyValue3 = table.Column<string>(nullable: true),
+                    DynamicEntityProperty4Id = table.Column<int>(nullable: true),
+                    DynamicEntityPropertyValue4 = table.Column<string>(nullable: true),
+                    DynamicEntityProperty5Id = table.Column<int>(nullable: true),
+                    DynamicEntityPropertyValue5 = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_BXJGShopSku", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BXJGShopSku_AbpDynamicEntityProperties_DynamicEntityProperty1Id",
+                        column: x => x.DynamicEntityProperty1Id,
+                        principalTable: "AbpDynamicEntityProperties",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BXJGShopSku_AbpDynamicEntityProperties_DynamicEntityProperty2Id",
+                        column: x => x.DynamicEntityProperty2Id,
+                        principalTable: "AbpDynamicEntityProperties",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_BXJGShopSku_AbpDynamicEntityProperties_DynamicEntityProperty3Id",
+                        column: x => x.DynamicEntityProperty3Id,
+                        principalTable: "AbpDynamicEntityProperties",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_BXJGShopSku_AbpDynamicEntityProperties_DynamicEntityProperty4Id",
+                        column: x => x.DynamicEntityProperty4Id,
+                        principalTable: "AbpDynamicEntityProperties",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_BXJGShopSku_AbpDynamicEntityProperties_DynamicEntityProperty5Id",
+                        column: x => x.DynamicEntityProperty5Id,
+                        principalTable: "AbpDynamicEntityProperties",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_BXJGShopSku_BXJGShopProduct_ProductId",
                         column: x => x.ProductId,
@@ -1852,6 +1892,31 @@ namespace ZLJ.Migrations
                 column: "ParentId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_BXJGShopSku_DynamicEntityProperty1Id",
+                table: "BXJGShopSku",
+                column: "DynamicEntityProperty1Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BXJGShopSku_DynamicEntityProperty2Id",
+                table: "BXJGShopSku",
+                column: "DynamicEntityProperty2Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BXJGShopSku_DynamicEntityProperty3Id",
+                table: "BXJGShopSku",
+                column: "DynamicEntityProperty3Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BXJGShopSku_DynamicEntityProperty4Id",
+                table: "BXJGShopSku",
+                column: "DynamicEntityProperty4Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BXJGShopSku_DynamicEntityProperty5Id",
+                table: "BXJGShopSku",
+                column: "DynamicEntityProperty5Id");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_BXJGShopSku_ProductId",
                 table: "BXJGShopSku",
                 column: "ProductId");
@@ -1956,9 +2021,6 @@ namespace ZLJ.Migrations
                 name: "BXJGShopSku");
 
             migrationBuilder.DropTable(
-                name: "AbpDynamicEntityProperties");
-
-            migrationBuilder.DropTable(
                 name: "AbpEntityChanges");
 
             migrationBuilder.DropTable(
@@ -1986,10 +2048,10 @@ namespace ZLJ.Migrations
                 name: "BXJGShopOrder");
 
             migrationBuilder.DropTable(
-                name: "BXJGShopProduct");
+                name: "AbpDynamicEntityProperties");
 
             migrationBuilder.DropTable(
-                name: "AbpDynamicProperties");
+                name: "BXJGShopProduct");
 
             migrationBuilder.DropTable(
                 name: "AbpEntityChangeSets");
@@ -1999,6 +2061,9 @@ namespace ZLJ.Migrations
 
             migrationBuilder.DropTable(
                 name: "BXJGShopCustomer");
+
+            migrationBuilder.DropTable(
+                name: "AbpDynamicProperties");
 
             migrationBuilder.DropTable(
                 name: "BXJGGeneralTrees");
