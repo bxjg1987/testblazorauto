@@ -218,7 +218,7 @@ namespace BXJG.Shop.Catalogue
                 }
                 catch (Exception ex)
                 {
-                    base.Logger.Warn($"删除商品档案失败，设备Id：{id}", ex);
+                    base.Logger.Warn($"删除商品档案失败，Id：{id}", ex);
                 }
             }
             return result;
