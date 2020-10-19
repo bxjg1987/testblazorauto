@@ -102,7 +102,7 @@ namespace BXJG.Shop.Seed
                 {
                     DynamicPropertyId = gg.Id,
                     TenantId = _tenantId,
-                    Value = "大"
+                    Value = "大杯"
                 });
                 _context.SaveChanges();
 
@@ -110,7 +110,7 @@ namespace BXJG.Shop.Seed
                 {
                     DynamicPropertyId = gg.Id,
                     TenantId = _tenantId,
-                    Value = "中"
+                    Value = "中杯"
                 });
                 _context.SaveChanges();
 
@@ -118,7 +118,7 @@ namespace BXJG.Shop.Seed
                 {
                     DynamicPropertyId = gg.Id,
                     TenantId = _tenantId,
-                    Value = "小"
+                    Value = "小杯"
                 });
                 _context.SaveChanges();
 

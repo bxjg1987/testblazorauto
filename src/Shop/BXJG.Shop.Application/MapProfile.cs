@@ -41,7 +41,27 @@ namespace BXJG.Shop
 
             //sku
             //CreateMap<SkuEntity, SkuEditDto>().ForMember(c=>c.DynamicEntityPropertyValues,c=>c.Ignore());
-            CreateMap<SkuEntity, SkuDto>();
+            CreateMap<SkuEntity, SkuDto>()
+                .ForMember(c => c.DynamicEntityProperty1Text,
+                           opt => opt.MapFrom(c =>
+                               c.DynamicEntityProperty1.DynamicProperty.DynamicPropertyValues.Count > 0 ? c.DynamicEntityProperty1.DynamicProperty.DynamicPropertyValues.Single(d => d.Id.ToString() == c.DynamicEntityProperty1Value).Value : ""
+                            ))
+                .ForMember(c => c.DynamicEntityProperty2Text,
+                           opt => opt.MapFrom(c =>
+                               c.DynamicEntityProperty2.DynamicProperty.DynamicPropertyValues.Count > 0 ? c.DynamicEntityProperty2.DynamicProperty.DynamicPropertyValues.Single(d => d.Id.ToString() == c.DynamicEntityProperty2Value).Value : ""
+                            ))
+                .ForMember(c => c.DynamicEntityProperty3Text,
+                           opt => opt.MapFrom(c =>
+                               c.DynamicEntityProperty3.DynamicProperty.DynamicPropertyValues.Count > 0 ? c.DynamicEntityProperty3.DynamicProperty.DynamicPropertyValues.Single(d => d.Id.ToString() == c.DynamicEntityProperty3Value).Value : ""
+                            ))
+                .ForMember(c => c.DynamicEntityProperty4Text,
+                           opt => opt.MapFrom(c =>
+                               c.DynamicEntityProperty4.DynamicProperty.DynamicPropertyValues.Count > 0 ? c.DynamicEntityProperty4.DynamicProperty.DynamicPropertyValues.Single(d => d.Id.ToString() == c.DynamicEntityProperty4Value).Value : ""
+                            ))
+                .ForMember(c => c.DynamicEntityProperty5Text,
+                           opt => opt.MapFrom(c =>
+                               c.DynamicEntityProperty5.DynamicProperty.DynamicPropertyValues.Count > 0 ? c.DynamicEntityProperty5.DynamicProperty.DynamicPropertyValues.Single(d => d.Id.ToString() == c.DynamicEntityProperty5Value).Value : ""
+                            ));
             CreateMap<SkuEditDto, SkuEntity>();
             #endregion
 

@@ -49,7 +49,7 @@ namespace BXJG.Shop.Catalogue
         /// <summary>
         /// 第一个动态属性值
         /// </summary>
-        public string DynamicEntityPropertyValue1 { get; set; }
+        public string DynamicEntityProperty1Value { get; set; }
         /// <summary>
         /// 第2个动态属性id
         /// </summary>
@@ -61,7 +61,7 @@ namespace BXJG.Shop.Catalogue
         /// <summary>
         /// 第2个动态属性值
         /// </summary>
-        public string DynamicEntityPropertyValue2 { get; set; }
+        public string DynamicEntityProperty2Value { get; set; }
         /// <summary>
         /// 第3个动态属性id
         /// </summary>
@@ -73,7 +73,7 @@ namespace BXJG.Shop.Catalogue
         /// <summary>
         /// 第3个动态属性值
         /// </summary>
-        public string DynamicEntityPropertyValue3 { get; set; }
+        public string DynamicEntityProperty3Value { get; set; }
         /// <summary>
         /// 第4个动态属性id
         /// </summary>
@@ -85,7 +85,7 @@ namespace BXJG.Shop.Catalogue
         /// <summary>
         /// 第4个动态属性值
         /// </summary>
-        public string DynamicEntityPropertyValue4 { get; set; }
+        public string DynamicEntityProperty4Value { get; set; }
         /// <summary>
         /// 第5个动态属性Id
         /// </summary>
@@ -97,7 +97,7 @@ namespace BXJG.Shop.Catalogue
         /// <summary>
         /// 第5个动态属性值
         /// </summary>
-        public string DynamicEntityPropertyValue5 { get; set; }
+        public string DynamicEntityProperty5Value { get; set; }
         #endregion
 
     }
