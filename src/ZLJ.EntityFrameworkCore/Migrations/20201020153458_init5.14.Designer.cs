@@ -10,8 +10,8 @@ using ZLJ.EntityFrameworkCore;
 namespace ZLJ.Migrations
 {
     [DbContext(typeof(ZLJDbContext))]
-    [Migration("20201019130823_updatesku")]
-    partial class updatesku
+    [Migration("20201020153458_init5.14")]
+    partial class init514
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

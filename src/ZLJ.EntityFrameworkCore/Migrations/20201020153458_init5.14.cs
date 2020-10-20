@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ZLJ.Migrations
 {
-    public partial class init513 : Migration
+    public partial class init514 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -1355,15 +1355,15 @@ namespace ZLJ.Migrations
                     Integral = table.Column<int>(nullable: false),
                     ProductId = table.Column<long>(nullable: false),
                     DynamicEntityProperty1Id = table.Column<int>(nullable: false),
-                    DynamicEntityPropertyValue1 = table.Column<string>(nullable: true),
+                    DynamicEntityProperty1Value = table.Column<string>(nullable: true),
                     DynamicEntityProperty2Id = table.Column<int>(nullable: true),
-                    DynamicEntityPropertyValue2 = table.Column<string>(nullable: true),
+                    DynamicEntityProperty2Value = table.Column<string>(nullable: true),
                     DynamicEntityProperty3Id = table.Column<int>(nullable: true),
-                    DynamicEntityPropertyValue3 = table.Column<string>(nullable: true),
+                    DynamicEntityProperty3Value = table.Column<string>(nullable: true),
                     DynamicEntityProperty4Id = table.Column<int>(nullable: true),
-                    DynamicEntityPropertyValue4 = table.Column<string>(nullable: true),
+                    DynamicEntityProperty4Value = table.Column<string>(nullable: true),
                     DynamicEntityProperty5Id = table.Column<int>(nullable: true),
-                    DynamicEntityPropertyValue5 = table.Column<string>(nullable: true)
+                    DynamicEntityProperty5Value = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

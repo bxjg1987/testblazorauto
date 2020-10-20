@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Abp.ZeroCore" Version="5.13.0" />
+    <PackageReference Include="Abp.ZeroCore" Version="5.14.0" />
   </ItemGroup>
 
   <ItemGroup>

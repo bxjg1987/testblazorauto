@@ -98,11 +98,10 @@ namespace BXJG.Shop.Catalogue
             //}
 
             //发布
-            entity = await repository.GetAllIncluding(c => c.Category, c => c.Brand, c => c.Unit, c => c.Skus).SingleAsync(c => c.Id == entity.Id);
             if (input.Published)
                 entity.Publish(input.AvailableStart, input.AvailableEnd);
-            //await itemManager.PublishAsync(entity, input.AvailableStart, input.AvailableEnd);
 
+            //entity = await repository.GetAllIncluding(c => c.Category, c => c.Brand, c => c.Unit, c => c.Skus).SingleAsync(c => c.Id == entity.Id);
             //return ObjectMapper.Map<ProductDto>(entity);
             return await GetOneAsync(entity.Id);//这里又去查，性能不太好
         }
