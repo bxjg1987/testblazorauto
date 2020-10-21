@@ -283,7 +283,13 @@ namespace BXJG.Shop.Catalogue
                 .SingleAsync();
            
             var dto = ObjectMapper.Map<ProductDto>(entity);
-          
+            dto.Skus= dto.Skus
+                .OrderBy(c => c.DynamicEntityProperty1Value)
+                .ThenBy(c => c.DynamicEntityProperty2Value)
+                .ThenBy(c => c.DynamicEntityProperty3Value)
+                .ThenBy(c => c.DynamicEntityProperty4Value)
+                .ThenBy(c => c.DynamicEntityProperty5Value)
+                .ToList();
             //这里暂时用土办法，最好的办法是一次性查询多个sku的动态属性值
             //foreach (var item in entity.Skus)
             //{
