@@ -2200,14 +2200,14 @@ namespace ZLJ.Migrations
                     b.Property<int>("Integral")
                         .HasColumnType("int");
 
-                    b.Property<long>("ItemId")
-                        .HasColumnType("bigint");
-
                     b.Property<long>("OrderId")
                         .HasColumnType("bigint");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<long>("ProductId")
+                        .HasColumnType("bigint");
 
                     b.Property<decimal>("Quantity")
                         .HasColumnType("decimal(18,2)");
@@ -2217,6 +2217,9 @@ namespace ZLJ.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 
+                    b.Property<long?>("SkuId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
@@ -2225,9 +2228,11 @@ namespace ZLJ.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ItemId");
-
                     b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("SkuId");
 
                     b.ToTable("BXJGShopOrderItem");
                 });
@@ -2875,17 +2880,22 @@ namespace ZLJ.Migrations
 
             modelBuilder.Entity("BXJG.Shop.Sale.OrderItemEntity", b =>
                 {
-                    b.HasOne("BXJG.Shop.Catalogue.ProductEntity", "Item")
-                        .WithMany()
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("BXJG.Shop.Sale.OrderEntity", "Order")
                         .WithMany("Items")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("BXJG.Shop.Catalogue.ProductEntity", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("BXJG.Shop.Catalogue.SkuEntity", "Sku")
+                        .WithMany()
+                        .HasForeignKey("SkuId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("ZLJ.Authorization.Roles.Role", b =>

@@ -18,5 +18,11 @@ namespace BXJG.Shop.Catalogue
         /// <param name="input"></param>
         /// <returns></returns>
         Task<PagedResultDto<FrontProductDto>> GetAllAsync(GetAllFrontProductInput input);
+        /// <summary>
+        /// 获取指定id的商品和sku信息
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        Task<FrontProductDto> GetAsync(EntityDto<long> input);
     }
 }

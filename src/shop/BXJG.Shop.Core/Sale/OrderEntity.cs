@@ -107,7 +107,7 @@ namespace BXJG.Shop.Sale
     /// </summary>
     public class OrderEntity : FullAuditedAggregateRoot<long>, IMustHaveTenant
     {
-        public int TenantId { get; set; }//应该私有化，但受IMustHaveTenant限制，只能public
+        public int TenantId { get; set; }
 
         #region 订单信息
         /// <summary>

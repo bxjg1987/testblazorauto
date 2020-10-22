@@ -1413,7 +1413,8 @@ namespace ZLJ.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     OrderId = table.Column<long>(nullable: false),
-                    ItemId = table.Column<long>(nullable: false),
+                    ProductId = table.Column<long>(nullable: false),
+                    SkuId = table.Column<long>(nullable: true),
                     Title = table.Column<string>(nullable: true),
                     Image = table.Column<string>(nullable: true),
                     Price = table.Column<decimal>(nullable: false),
@@ -1427,17 +1428,23 @@ namespace ZLJ.Migrations
                 {
                     table.PrimaryKey("PK_BXJGShopOrderItem", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BXJGShopOrderItem_BXJGShopProduct_ItemId",
-                        column: x => x.ItemId,
-                        principalTable: "BXJGShopProduct",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_BXJGShopOrderItem_BXJGShopOrder_OrderId",
                         column: x => x.OrderId,
                         principalTable: "BXJGShopOrder",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BXJGShopOrderItem_BXJGShopProduct_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "BXJGShopProduct",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_BXJGShopOrderItem_BXJGShopSku_SkuId",
+                        column: x => x.SkuId,
+                        principalTable: "BXJGShopSku",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -1862,14 +1869,19 @@ namespace ZLJ.Migrations
                 column: "PaymentMethodId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BXJGShopOrderItem_ItemId",
-                table: "BXJGShopOrderItem",
-                column: "ItemId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_BXJGShopOrderItem_OrderId",
                 table: "BXJGShopOrderItem",
                 column: "OrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BXJGShopOrderItem_ProductId",
+                table: "BXJGShopOrderItem",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BXJGShopOrderItem_SkuId",
+                table: "BXJGShopOrderItem",
+                column: "SkuId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BXJGShopProduct_BrandId",
@@ -2018,9 +2030,6 @@ namespace ZLJ.Migrations
                 name: "BXJGShopOrderItem");
 
             migrationBuilder.DropTable(
-                name: "BXJGShopSku");
-
-            migrationBuilder.DropTable(
                 name: "AbpEntityChanges");
 
             migrationBuilder.DropTable(
@@ -2048,10 +2057,7 @@ namespace ZLJ.Migrations
                 name: "BXJGShopOrder");
 
             migrationBuilder.DropTable(
-                name: "AbpDynamicEntityProperties");
-
-            migrationBuilder.DropTable(
-                name: "BXJGShopProduct");
+                name: "BXJGShopSku");
 
             migrationBuilder.DropTable(
                 name: "AbpEntityChangeSets");
@@ -2063,6 +2069,15 @@ namespace ZLJ.Migrations
                 name: "BXJGShopCustomer");
 
             migrationBuilder.DropTable(
+                name: "AbpDynamicEntityProperties");
+
+            migrationBuilder.DropTable(
+                name: "BXJGShopProduct");
+
+            migrationBuilder.DropTable(
+                name: "BXJGBaseInfoAdministratives");
+
+            migrationBuilder.DropTable(
                 name: "AbpDynamicProperties");
 
             migrationBuilder.DropTable(
@@ -2070,9 +2085,6 @@ namespace ZLJ.Migrations
 
             migrationBuilder.DropTable(
                 name: "BXJGShopProductCategory");
-
-            migrationBuilder.DropTable(
-                name: "BXJGBaseInfoAdministratives");
         }
     }
 }

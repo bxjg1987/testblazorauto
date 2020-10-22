@@ -62,6 +62,10 @@ namespace BXJG.Shop.Catalogue
         /// 单位
         /// </summary>
         public long? UnitId { get; set; }
+        /// <summary>
+        /// sku集合
+        /// </summary>
+        public virtual List<SkuDto> Skus { get; set; }
         #endregion
 
         #region 价格信息

@@ -40,11 +40,19 @@ namespace BXJG.Shop.Sale
         /// <summary>
         /// 关联的商品上架信息Id
         /// </summary>
-        public long ItemId { get;  set; }
+        public long ProductId { get;  set; }
         /// <summary>
         /// 关联的商品上架信息
         /// </summary>
-        public virtual ProductEntity Item { get;  set; }
+        public virtual ProductEntity Product { get;  set; }
+        /// <summary>
+        /// 关联的skuId，可选
+        /// </summary>
+        public long? SkuId { get; set; }
+        /// <summary>
+        /// 关联的sku
+        /// </summary>
+        public virtual SkuEntity Sku { get; set; }
         /// <summary>
         /// 产品标题
         /// </summary>

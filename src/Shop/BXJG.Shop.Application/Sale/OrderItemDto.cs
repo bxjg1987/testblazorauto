@@ -4,7 +4,6 @@ using System.Text;
 
 namespace BXJG.Shop.Sale
 {
-
     public class OrderItemDto
     {
         /// <summary>
@@ -14,7 +13,7 @@ namespace BXJG.Shop.Sale
         /// <summary>
         /// 关联的商品上架信息Id
         /// </summary>
-        public long ItemId { get; set; }
+        public long ProductId { get; set; }
         /// <summary>
         /// 产品标题
         /// </summary>

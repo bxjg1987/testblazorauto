@@ -55,5 +55,52 @@ namespace BXJG.Shop.Catalogue
 
             return new PagedResultDto<FrontProductDto>(count, ObjectMapper.Map<IReadOnlyList<FrontProductDto>>(list));
         }
+        /// <summary>
+        /// 获取单个商品，包括相关外键属性，及其sku和每个sku关联的动态属性
+        /// </summary>
+        /// <param name="input">商品id</param>
+        /// <returns></returns>
+        public async Task<FrontProductDto> GetAsync(EntityDto<long> input)
+        {
+            var entity = await repository.GetAllIncluding(c => c.Category, c => c.Brand, c => c.Unit)
+                .Where(c => c.Id == input.Id)
+                .Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty1.DynamicProperty.DynamicPropertyValues)
+                .Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty2.DynamicProperty.DynamicPropertyValues)
+                .Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty3.DynamicProperty.DynamicPropertyValues)
+                .Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty4.DynamicProperty.DynamicPropertyValues)
+                .Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty5.DynamicProperty.DynamicPropertyValues)
+                //上面的加载DynamicPropertyValues性能不好，但是efcore5才开始支持以下写法；包括AsSignleQuery
+                //.Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty1.DynamicProperty.DynamicPropertyValues.SingleOrDefault(d => d.Id.ToString() == c.DynamicEntityProperty1Value))
+                //.Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty2.DynamicProperty.DynamicPropertyValues.SingleOrDefault(d => d.Id.ToString() == c.DynamicEntityProperty2Value))
+                //.Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty3.DynamicProperty.DynamicPropertyValues.SingleOrDefault(d => d.Id.ToString() == c.DynamicEntityProperty3Value))
+                //.Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty4.DynamicProperty.DynamicPropertyValues.SingleOrDefault(d => d.Id.ToString() == c.DynamicEntityProperty4Value))
+                //.Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty5.DynamicProperty.DynamicPropertyValues.SingleOrDefault(d => d.Id.ToString() == c.DynamicEntityProperty5Value))
+                .SingleAsync();
+
+            var dto = ObjectMapper.Map<FrontProductDto>(entity);
+            dto.Skus = dto.Skus
+                .OrderBy(c => c.DynamicEntityProperty1Value)
+                .ThenBy(c => c.DynamicEntityProperty2Value)
+                .ThenBy(c => c.DynamicEntityProperty3Value)
+                .ThenBy(c => c.DynamicEntityProperty4Value)
+                .ThenBy(c => c.DynamicEntityProperty5Value)
+                .ToList();
+            //这里暂时用土办法，最好的办法是一次性查询多个sku的动态属性值
+            //foreach (var item in entity.Skus)
+            //{
+            //    //单个sku动态属性值
+            //    var val = await dynamicEntityPropertyValueManager.GetValuesAsync<SkuEntity, long>(item.Id.ToString());
+
+            //    //单个sku
+            //    var sku = dto.Skus.Single(c => c.Id == item.Id);
+            //    sku.DynamicEntityPropertyValues = new Dictionary<int, string>();
+            //    foreach (var item2 in val)
+            //    {
+            //        sku.DynamicEntityPropertyValues.Add(item2.DynamicEntityPropertyId, item2.Value);
+            //    }
+            //}
+
+            return dto;
+        }
     }
 }
