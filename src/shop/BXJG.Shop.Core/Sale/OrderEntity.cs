@@ -121,6 +121,7 @@ namespace BXJG.Shop.Sale
         public virtual CustomerEntity Customer { get; set; }
         /// <summary>
         /// 订单号
+        /// 系统里面的关联、处理尽量通过Id属性来，这里的订单号是业务上的概念
         /// </summary>
         public string OrderNo { get; set; }
         /// <summary>
@@ -128,7 +129,6 @@ namespace BXJG.Shop.Sale
         /// 虽然父类已经有了CreateDate，但是类型为DateTime。况且CreateDate是表示这条信息的创建时间，OrderTime是下单业务发生的时间，这是两个不一样的概念
         /// </summary>
         public DateTimeOffset OrderTime { get; set; }
-
         /// <summary>
         /// 订单状态
         /// </summary>

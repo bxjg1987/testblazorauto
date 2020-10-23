@@ -14,9 +14,18 @@ namespace BXJG.Shop.Customer
     /// </summary>
     public class CustomerIntegralChangedEventData : EntityEventData<CustomerEntity>
     {
-        public CustomerIntegralChangedEventData(CustomerEntity customer) : base(customer)
+        /// <summary>
+        /// 获取原始积分值
+        /// </summary>
+        public long OriginalValue { get; private set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="customer">顾客实体</param>
+        /// <param name="originalValue">原始值</param>
+        public CustomerIntegralChangedEventData(CustomerEntity customer,long originalValue) : base(customer)
         {
-
+            this.OriginalValue = originalValue;
         }
     }
 }

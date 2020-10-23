@@ -8,6 +8,7 @@ using BXJG.Utils.Enums;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using ZLJ.BaseInfo.Administrative;
 
 namespace BXJG.Shop.Customer
@@ -15,7 +16,7 @@ namespace BXJG.Shop.Customer
     /// <summary>
     /// 商城系统中的顾客，与用户一对一关联
     /// </summary>
-    public class CustomerEntity : FullAuditedEntity<long>, IMustHaveTenant, IExtendableObject
+    public class CustomerEntity : FullAuditedAggregateRoot<long>, IMustHaveTenant, IExtendableObject
     {
         /// <summary>
         /// 租户id
@@ -25,10 +26,11 @@ namespace BXJG.Shop.Customer
         /// 关联到abp用户的id
         /// </summary>
         public long UserId { get; set; }
+
         /// <summary>
         /// 顾客的积分
         /// </summary>
-        public long Integral { get; set; }
+        public long Integral { get; private set; } //注意不要把事件触发放属性里面，ef赋值时会触发事件，注意私有写入ef一样可以完成
         /// <summary>
         /// 总消费金额
         /// </summary>
@@ -60,5 +62,35 @@ namespace BXJG.Shop.Customer
         /// </summary>
         public byte[] RowVersion { get; set; }
         public string ExtensionData { get; set; }
+
+        #region 积分处理
+
+        /// <summary>
+        /// 调整积分
+        /// </summary>
+        /// <param name="value">增加或减少的积分数量</param>
+        /// <param name="increase">true增加，false减少</param>
+        /// <returns></returns>
+        public void ChangeIntegral(long value, bool increase = true)
+        {
+            if (increase)
+                SetIntegral(Integral + value);
+            else
+                SetIntegral(Integral - value);
+        }
+        /// <summary>
+        /// 设置积分，若值有变化将触发事件
+        /// </summary>
+        /// <param name="value"></param>
+        public void SetIntegral(long value)
+        {
+            if (Integral != value)
+            {
+                var t = Integral;
+                Integral = value;
+                DomainEvents.Add(new CustomerIntegralChangedEventData(this, t));
+            }
+        }
+        #endregion
     }
 }
