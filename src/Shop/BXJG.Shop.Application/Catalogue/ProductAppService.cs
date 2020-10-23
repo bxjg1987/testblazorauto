@@ -23,6 +23,7 @@ using Abp;
 using Abp.DynamicEntityProperties;
 using Abp.DynamicEntityProperties.Extensions;
 using Abp.Runtime.Session;
+using Microsoft.VisualBasic;
 
 namespace BXJG.Shop.Catalogue
 {
@@ -46,6 +47,7 @@ namespace BXJG.Shop.Catalogue
         //private readonly IDynamicPropertyValueManager dynamicPropertyValueManager;
         private readonly IDynamicEntityPropertyManager dynamicEntityPropertyManager;
         private readonly IDynamicEntityPropertyValueManager dynamicEntityPropertyValueManager;
+        private readonly IRepository<DynamicPropertyValue> repository1;
 
         private readonly IAbpSession abpSession;
 
@@ -55,7 +57,7 @@ namespace BXJG.Shop.Catalogue
                                  TempFileManager tempFileManager,
                                  IDynamicEntityPropertyManager dynamicEntityPropertyManager,
                                  IDynamicEntityPropertyValueManager dynamicEntityPropertyValueManager,
-                                 IAbpSession abpSession)
+                                 IAbpSession abpSession, IRepository<DynamicPropertyValue> repository1)
         {
             this.repository = repository;
             this.dictionaryManager = dictionaryManager;
@@ -64,6 +66,7 @@ namespace BXJG.Shop.Catalogue
             this.dynamicEntityPropertyManager = dynamicEntityPropertyManager;
             this.dynamicEntityPropertyValueManager = dynamicEntityPropertyValueManager;
             this.abpSession = abpSession;
+            this.repository1 = repository1;
         }
         /// <summary>
         /// 创建并发布商品信息
@@ -268,12 +271,14 @@ namespace BXJG.Shop.Catalogue
         private async Task<ProductDto> GetOneAsync(long id)
         {
             var entity = await repository.GetAllIncluding(c => c.Category, c => c.Brand, c => c.Unit)
+                //.AsNoTracking()
                 .Where(c => c.Id == id)
-                .Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty1.DynamicProperty.DynamicPropertyValues)
-                .Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty2.DynamicProperty.DynamicPropertyValues)
-                .Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty3.DynamicProperty.DynamicPropertyValues)
-                .Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty4.DynamicProperty.DynamicPropertyValues)
-                .Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty5.DynamicProperty.DynamicPropertyValues)
+                .Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty1)
+                .Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty2)
+                .Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty3)
+                .Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty4)
+                .Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty5)
+
                 //上面的加载DynamicPropertyValues性能不好，但是efcore5才开始支持以下写法；包括AsSignleQuery
                 //.Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty1.DynamicProperty.DynamicPropertyValues.SingleOrDefault(d => d.Id.ToString() == c.DynamicEntityProperty1Value))
                 //.Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty2.DynamicProperty.DynamicPropertyValues.SingleOrDefault(d => d.Id.ToString() == c.DynamicEntityProperty2Value))
@@ -281,9 +286,25 @@ namespace BXJG.Shop.Catalogue
                 //.Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty4.DynamicProperty.DynamicPropertyValues.SingleOrDefault(d => d.Id.ToString() == c.DynamicEntityProperty4Value))
                 //.Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty5.DynamicProperty.DynamicPropertyValues.SingleOrDefault(d => d.Id.ToString() == c.DynamicEntityProperty5Value))
                 .SingleAsync();
-           
+
+            var sdfff = entity.Skus.SelectMany(c => new HashSet<int?> {
+                c.DynamicEntityProperty1?.DynamicPropertyId,
+                c.DynamicEntityProperty2?.DynamicPropertyId ,
+                c.DynamicEntityProperty3?.DynamicPropertyId,
+                c.DynamicEntityProperty4?.DynamicPropertyId,
+                c.DynamicEntityProperty5?.DynamicPropertyId})
+                .Where(c=>c.HasValue)
+                .Distinct()
+                .ToArray();
+
+            var aaa = await repository1
+                .GetAllIncluding(c=>c.DynamicProperty)
+                //.AsNoTracking()
+                .Where(c => sdfff.Contains(c.DynamicPropertyId))
+                .ToListAsync();
+
             var dto = ObjectMapper.Map<ProductDto>(entity);
-            dto.Skus= dto.Skus
+            dto.Skus = dto.Skus
                 .OrderBy(c => c.DynamicEntityProperty1Value)
                 .ThenBy(c => c.DynamicEntityProperty2Value)
                 .ThenBy(c => c.DynamicEntityProperty3Value)
