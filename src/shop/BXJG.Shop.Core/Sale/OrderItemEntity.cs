@@ -13,7 +13,7 @@ using System.Text;
 namespace BXJG.Shop.Sale
 {
     /*
-     * 商品上架信息ItemEntity中的信息可能发生变化，比如销售价，OrderItem会在顾客购买时记录下来购买时的售价 类似的字段有很多
+     * 商品上架信息ProductEntity中的信息可能发生变化，比如销售价，OrderItem会在顾客购买时记录下来购买时的售价 类似的字段有很多
      * 总额 总积分等 本可以查询时计算，但为将来查询更方便直接在保存信息时计算
      * 由于涉及到钱，最后做下并发控制，虽然订单明细不属于聚合根，订单才是聚合根，所以并发控制应该放订单上
      * 但是将来可能不遵循ddd，而直接操作订单明细，因此在订单明细上也加个并发控制字段
@@ -27,7 +27,7 @@ namespace BXJG.Shop.Sale
     /// 订单中的产品和数量信息，将来可能包含更多信息
     /// 目前所有属性私有化，将来根据业务需要 提供相应的业务方法
     /// </summary>
-    public class OrderItemEntity : Entity
+    public class OrderItemEntity : Entity<long>
     {
         /// <summary>
         /// 关联的订单Id

@@ -71,7 +71,7 @@ namespace BXJG.Shop
             #endregion
 
             #region 前端顾客和订单相关东东
-            CreateMap<OrderItemEntity, CustomerOrderItemDto>();
+            //CreateMap<OrderItemEntity, CustomerOrderItemDto>();
             CreateMap<OrderEntity, CustomerOrderDto>();
             #endregion
 

@@ -58,13 +58,13 @@ namespace BXJG.Shop.Sale
         {
             var customer = await base.GetCurrentCustomerAsync();
             var area = await generalTreeManager.GetAsync(input.AreaId);
-            var itemIds = input.Items.Select(c => c.ItemId);
+            var itemIds = input.Items.Select(c => c.ProductId);
             var items = await itemRepository.GetAllListAsync(c => itemIds.Contains(c.Id));
             var itemEntities = new List<OrderItemInput>();
             foreach (var item in input.Items)
             {
-                var k = items.Single(c => c.Id == item.ItemId);
-                itemEntities.Add(new OrderItemInput(k, item.Quantity));
+                var k = items.Single(c => c.Id == item.ProductId);
+                itemEntities.Add(new OrderItemInput(k,null, item.Quantity));
             }
             var order = await orderManager.CreateAsync(
                 customer,

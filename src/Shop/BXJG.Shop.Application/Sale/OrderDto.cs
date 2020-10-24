@@ -7,8 +7,7 @@ using System.Text;
 namespace BXJG.Shop.Sale
 {
     /// <summary>
-    /// 顾客端和小程序端目前都使用此对象作为订单列表的显示模式
-    /// 将来可能按后台管理员和前端顾客分开定义不同对象（比如顾客id、顾客名称，后台管理时需要，但前端顾客的订单列表不需要返回这些字段）
+    /// 后台管理订单时的查询模型
     /// </summary>
     public class OrderDto : EntityDto<long>
     {
@@ -70,7 +69,7 @@ namespace BXJG.Shop.Sale
         public long? PaymentMethodId { get; set; }
         /// <summary>
         /// 付款金额
-        /// 顾客最终支付金额
+        /// 顾客最终支付金额 = 商品小计MerchandiseSubtotal + 其它费用
         /// </summary>
         public decimal PaymentAmount { get; set; }
         /// <summary>

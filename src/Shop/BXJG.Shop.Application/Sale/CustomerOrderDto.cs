@@ -17,17 +17,6 @@ namespace BXJG.Shop.Sale
         /// 订单号
         /// </summary>
         public string OrderNo { get; set; }
-        
-        //暂时取消吧
-        ///// <summary>
-        ///// 顾客Id
-        ///// </summary>
-        //public long CustomerId { get; set; }
-        ///// <summary>
-        ///// 顾客名称
-        ///// </summary>
-        //public string CustomerName { get; set; }
-
         /// <summary>
         /// 下单时间
         /// </summary>
@@ -151,7 +140,7 @@ namespace BXJG.Shop.Sale
         /// <summary>
         /// 订单明细
         /// </summary>
-        public List<CustomerOrderItemDto> Items { get; set; } = new List<CustomerOrderItemDto>();
+        public List<OrderItemDto> Items { get; set; } = new List<OrderItemDto>();
         #endregion
     }
 

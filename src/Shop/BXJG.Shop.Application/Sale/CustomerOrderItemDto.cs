@@ -13,7 +13,7 @@ namespace BXJG.Shop.Sale
     /// <summary>
     /// 顾客查询订单时包含的订单明细
     /// </summary>
-    public class CustomerOrderItemDto : EntityDto
+    public class CustomerOrderItemDto : EntityDto<long>
     {
         /// <summary>
         /// 关联的订单Id
@@ -22,7 +22,7 @@ namespace BXJG.Shop.Sale
         /// <summary>
         /// 关联的商品上架信息Id
         /// </summary>
-        public long ItemId { get; set; }
+        public long ProductId { get; set; }
         /// <summary>
         /// 产品标题
         /// </summary>

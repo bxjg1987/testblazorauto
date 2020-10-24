@@ -38,13 +38,11 @@ namespace BXJG.Shop.Sale
 
         public ICancellationTokenProvider CancellationToken { get; set; } = NullCancellationTokenProvider.Instance;
 
-        public OrderAppService(IRepository<CustomerEntity, long> customerRepository,
-                                       CustomerManager customerManager,
-                                       IRepository<OrderEntity, long> repository,
-                                       OrderManager orderManager,
-                                       IRepository<AdministrativeEntity, long> administrativeRepository,
-                                       IRepository<ProductEntity, long> itemRepository,
-                                       WeChatPaymentService wechatPaymentService)
+        public OrderAppService(IRepository<OrderEntity, long> repository,
+                               OrderManager orderManager,
+                               IRepository<AdministrativeEntity, long> administrativeRepository,
+                               IRepository<ProductEntity, long> itemRepository,
+                               WeChatPaymentService wechatPaymentService)
         {
             this.repository = repository;
             this.orderManager = orderManager;
@@ -69,7 +67,7 @@ namespace BXJG.Shop.Sale
                                   .WhereIf(input.PaymentMethodId.HasValue, c => c.PaymentMethodId == input.PaymentMethodId.Value)
                                   .WhereIf(input.DistributionMethodId.HasValue, c => c.DistributionMethodId == input.DistributionMethodId.Value)
                                   .WhereIf(!input.Keywords.IsNullOrEmpty(), c => c.OrderNo.Contains(input.Keywords) ||
-                                                                                 c.Consignee.Contains(input.Keywords) || 
+                                                                                 c.Consignee.Contains(input.Keywords) ||
                                                                                  c.ConsigneePhoneNumber.Contains(input.Keywords) ||
                                                                                  c.ReceivingAddress.Contains(input.Keywords) ||
                                                                                  c.LogisticsNumber.Contains(input.Keywords));

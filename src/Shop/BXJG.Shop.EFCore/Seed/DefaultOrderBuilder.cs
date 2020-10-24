@@ -55,10 +55,10 @@ namespace BXJG.Shop.Seed
                 CustomerRemark = "顾客备注信息",
                 DistributionMethodId = 30,
                 //TenantId = this._tenantId,
-                Status = OrderStatus.Created,
+                //Status = OrderStatus.Created,
                 ReceivingAddress = "收货地址",
                 //PaymentStatus = PaymentStatus.Paid,
-                PaymentMethodId = 31,
+                //PaymentMethodId = 31,
                 PaymentAmount = ois.Take(2).Sum(c => c.Price),
                 OrderTime = new DateTimeOffset(2020, 5, 15, 21, 2, 3, TimeSpan.Zero),
                 OrderNo = Guid.NewGuid().ToString("N"),
@@ -97,10 +97,10 @@ namespace BXJG.Shop.Seed
                 CustomerRemark = "顾客备注信息，test",
                 DistributionMethodId = 34,
                 TenantId = this._tenantId,
-                Status = OrderStatus.Processing,
+                //Status = OrderStatus.Processing,
                 ReceivingAddress = "收货地址,test",
-                PaymentStatus = PaymentStatus.Paid,
-                PaymentMethodId = 33,
+                //PaymentStatus = PaymentStatus.Paid,
+                //PaymentMethodId = 33,
                 PaymentAmount = ois.Skip(2).Sum(c => c.Price),
                 OrderTime = new DateTimeOffset(2020, 3, 11, 15, 7, 25, TimeSpan.Zero),
                 OrderNo = Guid.NewGuid().ToString("N"),
@@ -119,7 +119,7 @@ namespace BXJG.Shop.Seed
                     TotalIntegral = c.Integral * 1
                 }).ToList()
             };
-
+            order1.Pay(33);
             items.Add(order1);
 
             _context.SaveChanges();

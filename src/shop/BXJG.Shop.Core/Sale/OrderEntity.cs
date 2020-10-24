@@ -132,7 +132,7 @@ namespace BXJG.Shop.Sale
         /// <summary>
         /// 订单状态
         /// </summary>
-        public OrderStatus Status { get; set; }
+        public OrderStatus Status { get; private set; }
         /// <summary>
         /// 顾客下单时填写的备注
         /// </summary>
@@ -180,7 +180,7 @@ namespace BXJG.Shop.Sale
         /// 支付方式Id
         /// 未支付时 就不存在支付方式，因此可空
         /// </summary>
-        public long? PaymentMethodId { get; set; }
+        public long? PaymentMethodId { get; private set; }
         /// <summary>
         /// 付款金额
         /// 顾客最终支付金额
@@ -191,7 +191,7 @@ namespace BXJG.Shop.Sale
         /// 某些场景下，并不是顾客下单就可以付款，而是需要后台审核后才能付款
         /// 因此使用? 表示此时订单处于不可付款状态，也就是没有付款状态
         /// </summary>
-        public PaymentStatus? PaymentStatus { get; set; }
+        public PaymentStatus? PaymentStatus { get; private set; }
         #endregion
 
         #region 物流配送
@@ -237,7 +237,7 @@ namespace BXJG.Shop.Sale
         /// 物流状态
         /// 刚创建订单时没有物流状态，因此加个?
         /// </summary>
-        public LogisticsStatus? LogisticsStatus { get; set; }
+        public LogisticsStatus? LogisticsStatus { get; private set; }
         #endregion
 
         #region 商品列表
@@ -253,5 +253,49 @@ namespace BXJG.Shop.Sale
         /// 乐观并发
         /// </summary>
         public byte[] RowVersion { get; private set; }
+
+        public OrderEntity()
+        {
+            Status = OrderStatus.Created;
+            PaymentStatus = Sale.PaymentStatus.WaitingForPayment;
+        }
+
+        #region 方法
+        /// <summary>
+        /// 支付
+        /// 目前只考虑全额支付
+        /// </summary>
+        /// <param name="payMethod">支付方式Id</param>
+        /// <returns></returns>
+        public void Pay(long payMethod)
+        {
+            PaymentStatus = Sale.PaymentStatus.Paid;
+            PaymentMethodId = payMethod;
+            Status = OrderStatus.Processing;
+            LogisticsStatus = Sale.LogisticsStatus.WaitShip;
+            DomainEvents.Add(new OrderPaidEventData(this));
+        }
+        /// <summary>
+        /// 发货
+        /// </summary>
+        /// <param name="shipmentMethod">发货方式|物流公司</param>
+        /// <returns></returns>
+        public void ShipmentAsync(long shipmentMethod)
+        {
+            DistributionMethodId = shipmentMethod;
+            LogisticsStatus = Sale.LogisticsStatus.Shipped;
+            DomainEvents.Add(new OrderShipedEventData(this));
+        }
+        /// <summary>
+        /// 签收
+        /// </summary>
+        /// <returns></returns>
+        public void SignAsync()
+        {
+            LogisticsStatus = Sale.LogisticsStatus.Signed;
+            DomainEvents.Add(new OrderSignedEventData(this));
+        }
+        #endregion
+
     }
 }

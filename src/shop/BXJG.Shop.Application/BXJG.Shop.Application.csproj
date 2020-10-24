@@ -18,6 +18,7 @@
   <ItemGroup>
     <Compile Remove="Catalogue\DeleteInput.cs" />
     <Compile Remove="Catalogue\ProductCreateDto.cs" />
+    <Compile Remove="Sale\CustomerOrderItemDto.cs" />
   </ItemGroup>
 
   <ItemGroup>

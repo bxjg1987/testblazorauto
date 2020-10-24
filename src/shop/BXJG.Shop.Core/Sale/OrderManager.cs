@@ -50,10 +50,9 @@ namespace BXJG.Shop.Sale
 
     /// <summary>
     /// 订单管理领域逻辑
+    /// 没提供的功能可能在订单实体上
     /// </summary>
-    /// <typeparam name="TUser"></typeparam>
-    /// <typeparam name="TArea">送货地址区域类型 参考实体类的泛型说明</typeparam>
-    public class OrderManager : DomainServiceBase//, ITransientDependency
+    public class OrderManager : DomainServiceBase
     {
         protected readonly IRepository<OrderEntity, long> repository;
         protected readonly IRepository<CustomerEntity, long> customerRepository;
@@ -80,7 +79,7 @@ namespace BXJG.Shop.Sale
         /// <param name="consignee">收货人</param>
         /// <param name="consigneePhoneNumber">收货人电话</param>
         /// <param name="receivingAddress">收货地址</param>
-        /// <param name="customerRemark"></param>
+        /// <param name="customerRemark">顾客提交订单时填写的备注信息</param>
         /// <param name="items"></param>
         /// <returns></returns>
         public async Task<OrderEntity> CreateAsync(
@@ -97,50 +96,59 @@ namespace BXJG.Shop.Sale
             //但是，通常有前端验证、Action模型绑定验证、Application验证、数据库约束等验证。
             //在应用层或UI的Action可能会调用多个api时传入相同参数，那么此时参数验证一次就够了
             //一旦采用多层次都验证，那么整个项目会有大量这种情况存在，会导致性能下降，高并发时可能更严重些。
-            //还是做正确的事吧，领域层本就是独立的层，保证业务数据的约束也算是业务逻辑的一部分
-            //将来使用充血模型后 很多验证可能移植到实体类上
-            customer.RequiredValidate(nameof(customer));//领域层不应访问session，所以不要在customer为空时自动获取当前登录用户所关联的顾客
-            items.RequiredValidate(nameof(items));
-            consignee.RequiredValidate(nameof(consignee));
-            consigneePhoneNumber.RequiredValidate(nameof(consigneePhoneNumber));
-            receivingAddress.RequiredValidate(nameof(receivingAddress));
+            //customer.RequiredValidate(nameof(customer));//领域层不应访问session，所以不要在customer为空时自动获取当前登录用户所关联的顾客
+            //items.RequiredValidate(nameof(items));
+            //consignee.RequiredValidate(nameof(consignee));
+            //consigneePhoneNumber.RequiredValidate(nameof(consigneePhoneNumber));
+            //receivingAddress.RequiredValidate(nameof(receivingAddress));
             #endregion
 
-            //所有业务判断都成功时才创建订单对象
+            //业务判断...略...
+            //用户是否在黑名单中
+            //被购买的商品的状态是否正常
+            //等等业务判断
+
             var order = new OrderEntity
             {
                 Customer = customer,
                 CustomerId = customer.Id,
                 OrderNo = Guid.NewGuid().ToString("N"),//将来再考虑用个专门的组件生产简单、不重复的订单号
                 OrderTime = DateTimeOffset.Now,
-                Status = OrderStatus.Created,
+                //Status = OrderStatus.Created,
                 CustomerRemark = customerRemark,
                 //暂时忽略开票
                 //InvoiceType = invoiceType,
                 //InvoiceTitle = invoiceTitle,
                 //TaxId = taxId,
-                PaymentStatus = PaymentStatus.WaitingForPayment,
+                //PaymentStatus = PaymentStatus.WaitingForPayment,
                 Area = area,
+                AreaId = area.Id,
                 Consignee = consignee,
                 ConsigneePhoneNumber = consigneePhoneNumber,
-                ReceivingAddress = receivingAddress,
+                ReceivingAddress = receivingAddress
             };
-
+           // order.Init();
             #region 订单明细
             foreach (var item in items)
             {
                 var product = new OrderItemEntity
                 {
-                    Amount = item.Item.Price * item.Quantity,
-                    Image = item.Item.GetImages()?.First().Key,
-                    Integral = item.Item.Integral,
-                    Product = item.Item,
-                    ProductId = item.Item.Id,
                     Order = order,
-                    Price = item.Item.Price,
+
+                    Product = item.Product,
+                    ProductId = item.Product.Id,
+
+                    Sku = item.Sku,
+                    SkuId = item.Sku.Id,
+
+                    Title = item.Product.Title,
+                    Image = item.Product.GetImages()?.First().Key,
+
+                    Integral = item.Sku != null ? item.Sku.Integral : item.Product.Integral,
+                    Price = item.Sku != null ? item.Sku.Price : item.Product.Price,
                     Quantity = item.Quantity,
-                    Title = item.Item.Title,
-                    TotalIntegral = Convert.ToInt32(item.Item.Integral * item.Quantity),
+                    Amount = item.CalculationAmount(),// item.Product.Price * item.Quantity,
+                    TotalIntegral = item.CalculationIntegral()// Convert.ToInt32(item.Product.Integral * item.Quantity),
                 };
                 order.Items.Add(product);
                 order.MerchandiseSubtotal += product.Amount;
@@ -158,45 +166,6 @@ namespace BXJG.Shop.Sale
             //好像这个abp自动触发了 https://aspnetboilerplate.com/Pages/Documents/EventBus-Domain-Events#entity-changes
             //await EventBus.TriggerAsync(new EntityCreatedEventData<OrderEntity>(order));//
             return order;
-        }
-        /// <summary>
-        /// 支付
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="payMethod"></param>
-        /// <returns></returns>
-        public async Task<OrderEntity> PayAsync(OrderEntity entity, long payMethod)
-        {
-            entity.Status = OrderStatus.Processing;
-            entity.PaymentStatus = PaymentStatus.Paid;
-            entity.PaymentMethodId = payMethod;
-            entity.LogisticsStatus = LogisticsStatus.WaitShip;
-            await EventBus.TriggerAsync(new OrderPaidEventData(entity));
-            return entity;
-        }
-        /// <summary>
-        /// 发货
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="shipmentMethod"></param>
-        /// <returns></returns>
-        public async Task<OrderEntity> ShipmentAsync(OrderEntity entity, GeneralTreeEntity shipmentMethod)
-        {
-            entity.DistributionMethod = shipmentMethod;
-            entity.LogisticsStatus = LogisticsStatus.Shipped;
-            await EventBus.TriggerAsync(new OrderShipedEventData(entity));
-            return entity;
-        }
-        /// <summary>
-        /// 签收
-        /// </summary>
-        /// <param name="entity">订单</param>
-        /// <returns></returns>
-        public async Task<OrderEntity> SignAsync(OrderEntity entity)
-        {
-            entity.LogisticsStatus = LogisticsStatus.Signed;
-            await EventBus.TriggerAsync(new OrderSignedEventData(entity));
-            return entity;
         }
     }
 }

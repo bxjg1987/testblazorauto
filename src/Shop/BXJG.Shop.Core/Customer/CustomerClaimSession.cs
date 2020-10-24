@@ -18,7 +18,7 @@ namespace BXJG.Shop.Customer
     /// https://aspnetboilerplate.com/Pages/Documents/Articles%5CHow-To%5Cadd-custom-session-field-aspnet-core
     /// 如果需要使用它请在在BXJGShopCoreModule中注册，建议用单例
     /// 推荐配合CustomerLoginManager<TTenant, TRole, TUser, TUserManager>，在LoginManager中将当前登陆的顾客id存储到claim中
-    /// 参考ZZLJ.Authorization.LoginManager.CreateLoginResultAsync
+    /// 参考ZLJ.Authorization.LoginManager.CreateLoginResultAsync
     /// </summary>
     public class CustomerClaimSession : ICustomerSession
     {
