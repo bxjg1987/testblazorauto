@@ -15,6 +15,7 @@ using BXJG.WeChat.Payment;
 using Abp.Threading;
 using BXJG.Common;
 using ZLJ.BaseInfo.Administrative;
+using Microsoft.EntityFrameworkCore;
 
 namespace BXJG.Shop.Sale
 {
@@ -36,7 +37,7 @@ namespace BXJG.Shop.Sale
             CustomerManager customerManager,
             ICustomerSession customerSession,
             IRepository<OrderEntity, long> repository,
-            OrderManager orderManager, 
+            OrderManager orderManager,
             IRepository<AdministrativeEntity, long> generalTreeManager,
             IRepository<ProductEntity, long> itemRepository,
             WeChatPaymentService weChatPaymentService)
@@ -58,13 +59,16 @@ namespace BXJG.Shop.Sale
         {
             var customer = await base.GetCurrentCustomerAsync();
             var area = await generalTreeManager.GetAsync(input.AreaId);
-            var itemIds = input.Items.Select(c => c.ProductId);
-            var items = await itemRepository.GetAllListAsync(c => itemIds.Contains(c.Id));
+            var itemIds = input.Items.Select(c => c.ProductId).ToArray();
+            var items = await itemRepository.GetAllIncluding(c => c.Skus).Where(c => itemIds.Contains(c.Id)).ToListAsync();
             var itemEntities = new List<OrderItemInput>();
             foreach (var item in input.Items)
             {
                 var k = items.Single(c => c.Id == item.ProductId);
-                itemEntities.Add(new OrderItemInput(k,null, item.Quantity));
+                SkuEntity sku = null;
+                if (item.SkuId.HasValue)
+                    sku = k.Skus.Single(c => c.Id == item.SkuId);
+                itemEntities.Add(new OrderItemInput(k, sku, item.Quantity));
             }
             var order = await orderManager.CreateAsync(
                 customer,
