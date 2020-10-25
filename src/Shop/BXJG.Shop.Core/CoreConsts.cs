@@ -28,6 +28,10 @@ namespace BXJG.Shop
         public const int ItemDescriptionShortMaxLength = 10000;
         public const int ItemImagesMaxLength = 5000;
         //public const int ItemSpecificationMaxLength = 500;
+
+        public const int SkuDynamicPropertyNameMaxLength = 50;
+        public const int DynamicEntityPropertyValueMaxLength = 100;
+        public const int DynamicEntityPropertyTextMaxLength = 50;
         #endregion
         #region 订单
         public const int OrderNoMaxLength = 36;//guid长度 32+4个分隔符，将来可能使用其它格式的订单号

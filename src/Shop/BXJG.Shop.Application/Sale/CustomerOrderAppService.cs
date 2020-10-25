@@ -32,16 +32,14 @@ namespace BXJG.Shop.Sale
 
         public ICancellationTokenProvider CancellationToken { get; set; } = NullCancellationTokenProvider.Instance;
 
-        public CustomerOrderAppService(
-            IRepository<CustomerEntity, long> customerRepository,
-            CustomerManager customerManager,
-            ICustomerSession customerSession,
-            IRepository<OrderEntity, long> repository,
-            OrderManager orderManager,
-            IRepository<AdministrativeEntity, long> generalTreeManager,
-            IRepository<ProductEntity, long> itemRepository,
-            WeChatPaymentService weChatPaymentService)
-            : base(customerRepository, customerManager, customerSession)
+        public CustomerOrderAppService(IRepository<CustomerEntity, long> customerRepository,
+                                       CustomerManager customerManager,
+                                       ICustomerSession customerSession,
+                                       IRepository<OrderEntity, long> repository,
+                                       OrderManager orderManager,
+                                       IRepository<AdministrativeEntity, long> generalTreeManager,
+                                       IRepository<ProductEntity, long> itemRepository,
+                                       WeChatPaymentService weChatPaymentService) : base(customerRepository, customerManager, customerSession)
         {
             this.repository = repository;
             this.orderManager = orderManager;
@@ -64,11 +62,11 @@ namespace BXJG.Shop.Sale
             var itemEntities = new List<OrderItemInput>();
             foreach (var item in input.Items)
             {
-                var k = items.Single(c => c.Id == item.ProductId);
+                var product = items.Single(c => c.Id == item.ProductId);
                 SkuEntity sku = null;
                 if (item.SkuId.HasValue)
-                    sku = k.Skus.Single(c => c.Id == item.SkuId);
-                itemEntities.Add(new OrderItemInput(k, sku, item.Quantity));
+                    sku = product.Skus.Single(c => c.Id == item.SkuId);
+                itemEntities.Add(new OrderItemInput(product, sku, item.Quantity));
             }
             var order = await orderManager.CreateAsync(
                 customer,
@@ -92,7 +90,7 @@ namespace BXJG.Shop.Sale
             if (customerId != order.CustomerId)
                 throw new ApplicationException();
 
-            WeChatPaymentUnifyOrderResult wpor = await weChatPaymentService.PayAsync("ABP-商城", order.OrderNo, order.PaymentAmount);
+            WeChatPaymentUnifyOrderResult wpor = await weChatPaymentService.PayAsync("ABP-商城", order.OrderNo, order.PaymentAmount,cancellationToken:this.CancellationToken.Token);
             return new CustomerPaymentResult(wpor);
         }
     }
