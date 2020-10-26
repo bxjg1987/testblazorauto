@@ -10,8 +10,8 @@ using ZLJ.EntityFrameworkCore;
 namespace ZLJ.Migrations
 {
     [DbContext(typeof(ZLJDbContext))]
-    [Migration("20201022143338_init5.14")]
-    partial class init514
+    [Migration("20201026093429_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -1955,32 +1955,77 @@ namespace ZLJ.Migrations
                     b.Property<int>("DynamicEntityProperty1Id")
                         .HasColumnType("int");
 
+                    b.Property<string>("DynamicEntityProperty1Text")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
                     b.Property<string>("DynamicEntityProperty1Value")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<int?>("DynamicEntityProperty2Id")
                         .HasColumnType("int");
 
+                    b.Property<string>("DynamicEntityProperty2Text")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
                     b.Property<string>("DynamicEntityProperty2Value")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<int?>("DynamicEntityProperty3Id")
                         .HasColumnType("int");
 
+                    b.Property<string>("DynamicEntityProperty3Text")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
                     b.Property<string>("DynamicEntityProperty3Value")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<int?>("DynamicEntityProperty4Id")
                         .HasColumnType("int");
 
+                    b.Property<string>("DynamicEntityProperty4Text")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
                     b.Property<string>("DynamicEntityProperty4Value")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<int?>("DynamicEntityProperty5Id")
                         .HasColumnType("int");
 
+                    b.Property<string>("DynamicEntityProperty5Text")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
                     b.Property<string>("DynamicEntityProperty5Value")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("DynamicProperty1Name")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("DynamicProperty2Name")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("DynamicProperty3Name")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("DynamicProperty4Name")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("DynamicProperty5Name")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.Property<int>("Integral")
                         .HasColumnType("int");
@@ -2188,9 +2233,9 @@ namespace ZLJ.Migrations
 
             modelBuilder.Entity("BXJG.Shop.Sale.OrderItemEntity", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<decimal>("Amount")

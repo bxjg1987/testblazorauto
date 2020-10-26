@@ -69,9 +69,9 @@ namespace BXJG.Shop.Seed
                 Hot = false,
                 Images = "/upload/20201004/442ee74ddb0186fb.jpg",
                 Skus = new List<SkuEntity> {
-                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityProperty1Value="1", Integral=3, OldPrice=8, Price=3},
-                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityProperty1Value="2", Integral=68, OldPrice=398, Price=2.54m },
-                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityProperty1Value="3", Integral=4, OldPrice=398, Price=8 }
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicProperty1Name="规格", DynamicEntityProperty1Text="大杯", DynamicEntityProperty1Value="1", Integral=3, OldPrice=8, Price=3},
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicProperty1Name="规格" ,DynamicEntityProperty1Text="中杯", DynamicEntityProperty1Value="2", Integral=68, OldPrice=398, Price=2.54m },
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicProperty1Name="规格", DynamicEntityProperty1Text="大杯", DynamicEntityProperty1Value="3", Integral=4, OldPrice=398, Price=8 }
                 }
             });
             this._context.SaveChanges();
@@ -92,9 +92,9 @@ namespace BXJG.Shop.Seed
                 Hot = false,
                 Images = "/upload/20201004/d4047d7267bcf1fc.jpg",
                 Skus = new List<SkuEntity> {
-                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityProperty1Value="1", Integral=35, OldPrice=8, Price=3},
-                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityProperty1Value="2", Integral=35, OldPrice=398, Price=2.54m },
-                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityProperty1Value="3", Integral=66, OldPrice=398, Price=8 }
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicProperty1Name="规格" ,DynamicEntityProperty1Text="大杯", DynamicEntityProperty1Value="1", Integral=35, OldPrice=8, Price=3},
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicProperty1Name="规格" ,DynamicEntityProperty1Text="中杯", DynamicEntityProperty1Value="2", Integral=35, OldPrice=398, Price=2.54m },
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicProperty1Name="规格" ,DynamicEntityProperty1Text="小杯", DynamicEntityProperty1Value="3", Integral=66, OldPrice=398, Price=8 }
                 }
             });
             this._context.SaveChanges();
@@ -116,9 +116,9 @@ namespace BXJG.Shop.Seed
                 Hot = true,
                 Images = "/upload/20201004/57feec7cN5f2eac85.jpg",
                 Skus = new List<SkuEntity> {
-                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityProperty1Value="1", Integral=53, OldPrice=64, Price=72},
-                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityProperty1Value="2", Integral=43, OldPrice=63, Price=636m },
-                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityProperty1Value="3", Integral=67, OldPrice=53, Price=42 }
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicProperty1Name="规格" ,DynamicEntityProperty1Text="大杯", DynamicEntityProperty1Value="1", Integral=53, OldPrice=64, Price=72},
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicProperty1Name="规格" ,DynamicEntityProperty1Text="中杯", DynamicEntityProperty1Value="2", Integral=43, OldPrice=63, Price=636m },
+                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicProperty1Name="规格" ,DynamicEntityProperty1Text="小杯", DynamicEntityProperty1Value="3", Integral=67, OldPrice=53, Price=42 }
                 }
             });
             this._context.SaveChanges();
@@ -139,9 +139,9 @@ namespace BXJG.Shop.Seed
                 Hot = false,
                 Images = "/upload/20201004/8f71080a3e183310.jpg",
                 Skus = new List<SkuEntity> {
-                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityProperty1Value="1", Integral=8, OldPrice=8, Price=3},
-                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityProperty1Value="2", Integral=69, OldPrice=31, Price=3.4m },
-                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityProperty1Value="3", Integral=95, OldPrice=7, Price=38.4m }
+                    new SkuEntity{  DynamicEntityProperty1Id=1,  DynamicProperty1Name="规格" ,DynamicEntityProperty1Text="大杯",DynamicEntityProperty1Value="1", Integral=8, OldPrice=8, Price=3},
+                    new SkuEntity{  DynamicEntityProperty1Id=1,  DynamicProperty1Name="规格" ,DynamicEntityProperty1Text="中杯",DynamicEntityProperty1Value="2", Integral=69, OldPrice=31, Price=3.4m },
+                    new SkuEntity{  DynamicEntityProperty1Id=1,  DynamicProperty1Name="规格" ,DynamicEntityProperty1Text="小杯",DynamicEntityProperty1Value="3", Integral=95, OldPrice=7, Price=38.4m }
                 }
             });
             this._context.SaveChanges();
@@ -163,9 +163,9 @@ namespace BXJG.Shop.Seed
                 Hot = true,
                 Images = "/upload/20201004/b.jpg",
                 Skus = new List<SkuEntity> {
-                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityProperty1Value="1", Integral=74, OldPrice=8, Price=353},
-                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityProperty1Value="2", Integral=68, OldPrice=398, Price=62.54m },
-                    new SkuEntity{  DynamicEntityProperty1Id=1, DynamicEntityProperty1Value="3", Integral=4, OldPrice=2, Price=84 }
+                    new SkuEntity{  DynamicEntityProperty1Id=1,  DynamicProperty1Name="规格" ,DynamicEntityProperty1Text="大杯",DynamicEntityProperty1Value="1", Integral=74, OldPrice=8, Price=353},
+                    new SkuEntity{  DynamicEntityProperty1Id=1,  DynamicProperty1Name="规格" ,DynamicEntityProperty1Text="中杯",DynamicEntityProperty1Value="2", Integral=68, OldPrice=398, Price=62.54m },
+                    new SkuEntity{  DynamicEntityProperty1Id=1,  DynamicProperty1Name="规格" ,DynamicEntityProperty1Text="小杯",DynamicEntityProperty1Value="3", Integral=4, OldPrice=2, Price=84 }
                 }
             });
             this._context.SaveChanges();

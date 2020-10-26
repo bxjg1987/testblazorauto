@@ -69,8 +69,6 @@ namespace BXJG.Utils.File
         /// </summary>
         /// <param name="env">获取当前应用的相对路径</param>
         /// <param name="settingManager">abp提供的settings系统</param>
-        #endregion
-        #region 公共方法
         public TempFileManager(IEnv env, ISettingManager settingManager)
         {
             this.settingManager = settingManager;
@@ -85,6 +83,8 @@ namespace BXJG.Utils.File
             if (!Directory.Exists(tempDir))
                 Directory.CreateDirectory(tempDir);
         }
+        #endregion
+        #region 公共方法
         /// <summary>
         /// 验证并将文件存储到temp目录
         /// </summary>
@@ -199,7 +199,7 @@ namespace BXJG.Utils.File
             return list;
         }
         #endregion
-        #region 赋值方法
+        #region 辅助方法
         /// <summary>
         /// 转换为缩略图路径
         /// ...xx.jpg -> ...xxthum.jpg
@@ -238,7 +238,7 @@ namespace BXJG.Utils.File
         /// <returns></returns>
         string TempToOkPath(string path)
         {
-            return path.Replace(Consts.UploadTemp, Consts.UploadDir + "\\");
+            return path.Replace(Consts.UploadTemp, Consts.UploadDir + @"\");
         }
         #endregion
     }

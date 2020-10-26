@@ -1,5 +1,6 @@
 ﻿using Abp.Application.Services.Dto;
 using AutoMapper;
+using AutoMapper.Configuration;
 using BXJG.GeneralTree;
 using BXJG.Shop.Catalogue;
 using BXJG.Shop.Customer;
@@ -8,14 +9,17 @@ using BXJG.Utils.File;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 
 namespace BXJG.Shop
 {
     public class MapProfile : Profile
     {
-        public MapProfile()
+        public MapProfile(Microsoft.Extensions.Configuration.IConfiguration configuration)
         {
+            var serverUrl = configuration["App:ServerRootAddress"];
+
             #region 商品分类
             CreateMap<ProductCategoryEditDto, ProductCategoryEntity>();
             CreateMap<ProductCategoryEntity, ProductCategoryDto>();
@@ -67,7 +71,7 @@ namespace BXJG.Shop
 
             #region 显示给顾客的商品信息
             CreateMap<ProductEntity, FrontProductDto>()
-                .ForMember(c => c.Images, opt => opt.MapFrom(d => d.GetImages().Select(e => new FileDto { FilePath = e.Value, ThumPath = e.Key })));
+                .ForMember(c => c.Images, opt => opt.MapFrom(d => d.GetImages().Select(e => new FileDto { FilePath = serverUrl + e.Value, ThumPath = serverUrl + e.Key })));
             #endregion
 
             #region 前端顾客和订单相关东东

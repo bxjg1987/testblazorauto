@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ZLJ.Migrations
 {
-    public partial class init514 : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -1355,15 +1355,25 @@ namespace ZLJ.Migrations
                     Integral = table.Column<int>(nullable: false),
                     ProductId = table.Column<long>(nullable: false),
                     DynamicEntityProperty1Id = table.Column<int>(nullable: false),
-                    DynamicEntityProperty1Value = table.Column<string>(nullable: true),
+                    DynamicProperty1Name = table.Column<string>(maxLength: 50, nullable: true),
+                    DynamicEntityProperty1Value = table.Column<string>(maxLength: 100, nullable: true),
+                    DynamicEntityProperty1Text = table.Column<string>(maxLength: 50, nullable: true),
                     DynamicEntityProperty2Id = table.Column<int>(nullable: true),
-                    DynamicEntityProperty2Value = table.Column<string>(nullable: true),
+                    DynamicProperty2Name = table.Column<string>(maxLength: 50, nullable: true),
+                    DynamicEntityProperty2Value = table.Column<string>(maxLength: 100, nullable: true),
+                    DynamicEntityProperty2Text = table.Column<string>(maxLength: 50, nullable: true),
                     DynamicEntityProperty3Id = table.Column<int>(nullable: true),
-                    DynamicEntityProperty3Value = table.Column<string>(nullable: true),
+                    DynamicProperty3Name = table.Column<string>(maxLength: 50, nullable: true),
+                    DynamicEntityProperty3Value = table.Column<string>(maxLength: 100, nullable: true),
+                    DynamicEntityProperty3Text = table.Column<string>(maxLength: 50, nullable: true),
                     DynamicEntityProperty4Id = table.Column<int>(nullable: true),
-                    DynamicEntityProperty4Value = table.Column<string>(nullable: true),
+                    DynamicProperty4Name = table.Column<string>(maxLength: 50, nullable: true),
+                    DynamicEntityProperty4Value = table.Column<string>(maxLength: 100, nullable: true),
+                    DynamicEntityProperty4Text = table.Column<string>(maxLength: 50, nullable: true),
                     DynamicEntityProperty5Id = table.Column<int>(nullable: true),
-                    DynamicEntityProperty5Value = table.Column<string>(nullable: true)
+                    DynamicProperty5Name = table.Column<string>(maxLength: 50, nullable: true),
+                    DynamicEntityProperty5Value = table.Column<string>(maxLength: 100, nullable: true),
+                    DynamicEntityProperty5Text = table.Column<string>(maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1410,7 +1420,7 @@ namespace ZLJ.Migrations
                 name: "BXJGShopOrderItem",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     OrderId = table.Column<long>(nullable: false),
                     ProductId = table.Column<long>(nullable: false),
