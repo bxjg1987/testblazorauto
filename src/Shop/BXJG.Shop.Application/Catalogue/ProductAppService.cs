@@ -48,6 +48,7 @@ namespace BXJG.Shop.Catalogue
         private readonly IDynamicEntityPropertyManager dynamicEntityPropertyManager;
         private readonly IDynamicEntityPropertyValueManager dynamicEntityPropertyValueManager;
         private readonly IRepository<DynamicPropertyValue> repository1;
+        private readonly IRepository<DynamicEntityProperty> repository2;
 
         private readonly IAbpSession abpSession;
 
@@ -57,7 +58,8 @@ namespace BXJG.Shop.Catalogue
                                  TempFileManager tempFileManager,
                                  IDynamicEntityPropertyManager dynamicEntityPropertyManager,
                                  IDynamicEntityPropertyValueManager dynamicEntityPropertyValueManager,
-                                 IAbpSession abpSession, IRepository<DynamicPropertyValue> repository1)
+                                 IAbpSession abpSession, IRepository<DynamicPropertyValue> repository1,
+                                 IRepository<DynamicEntityProperty> repository2)
         {
             this.repository = repository;
             this.dictionaryManager = dictionaryManager;
@@ -67,6 +69,7 @@ namespace BXJG.Shop.Catalogue
             this.dynamicEntityPropertyValueManager = dynamicEntityPropertyValueManager;
             this.abpSession = abpSession;
             this.repository1 = repository1;
+            this.repository2 = repository2;
         }
         /// <summary>
         /// 创建并发布商品信息
@@ -75,30 +78,21 @@ namespace BXJG.Shop.Catalogue
         /// <returns></returns>
         public async Task<ProductDto> CreateAsync(ProductUpdateDto input)
         {
+            //后期可以考虑进一步封装逻辑到商品领域服务中
+
             //将图片从临时目录移动到正式目录
             input.Images = (await this.tempFileManager.MoveAsync(input.Images)).Select(c => c.FileRelativePath).ToArray();
+
+            //输入模型映射给实体模型赋值
             var entity = base.ObjectMapper.Map<ProductEntity>(input);
+
+            #region 处理sku
+            await NewMethod(entity);
+            #endregion
 
             //保存
             entity = await repository.InsertAsync(entity);
             await CurrentUnitOfWork.SaveChangesAsync();
-
-            //这里查两次，有点坑
-            //await repository.EnsurePropertyLoadedAsync(entity, c => c.Category);
-            //await repository.EnsurePropertyLoadedAsync(entity, c => c.Brand);
-
-            //处理sku。这里使用顺序不是很严谨
-            //var dep = await dynamicEntityPropertyManager.GetAllAsync<SkuEntity, long>();        //获取与SkuEntity关联的动实体态属性集合
-            //for (int i = 0; i < entity.Skus.Count; i++)
-            //{
-            //    var skuInput = input.Skus[i];    //用户提交的 动态实体属性id和值
-            //    var sku = entity.Skus[i];
-            //    foreach (var dynamicEntityPropertyValue in skuInput.DynamicEntityPropertyValues)
-            //    {
-            //        var dynamicEntityProperty = dep.Single(c => c.Id == dynamicEntityPropertyValue.Key);
-            //        await dynamicEntityPropertyValueManager.AddAsync(new DynamicEntityPropertyValue(dynamicEntityProperty, sku.Id.ToString(), dynamicEntityPropertyValue.Value, abpSession.TenantId));
-            //    }
-            //}
 
             //发布
             if (input.Published)
@@ -108,6 +102,52 @@ namespace BXJG.Shop.Catalogue
             //return ObjectMapper.Map<ProductDto>(entity);
             return await GetOneAsync(entity.Id);//这里又去查，性能不太好
         }
+
+        private async ValueTask NewMethod(ProductEntity entity)
+        {
+            if (entity.Skus.Count == 0)
+                return;
+
+            var dynamicEntityProperties = await repository2
+                            .GetAllIncluding(c => c.DynamicProperty.DynamicPropertyValues)
+                            .Where(c => c.EntityFullName == typeof(SkuEntity).FullName)
+                            .ToListAsync();
+
+            foreach (var item in entity.Skus)
+            {
+                var dp1 = dynamicEntityProperties.SingleOrDefault(c => c.Id == item.DynamicEntityProperty1Id)?.DynamicProperty;
+                if (dp1 != null)
+                {
+                    item.DynamicProperty1Name = dp1.PropertyName;
+                    item.DynamicEntityProperty1Text = dp1.DynamicPropertyValues?.SingleOrDefault(c => c.Id.ToString() == item.DynamicEntityProperty1Value)?.Value;
+                }
+                var dp2 = dynamicEntityProperties.SingleOrDefault(c => c.Id == item.DynamicEntityProperty2Id)?.DynamicProperty;
+                if (dp2 != null)
+                {
+                    item.DynamicProperty2Name = dp2.PropertyName;
+                    item.DynamicEntityProperty2Text = dp2.DynamicPropertyValues?.SingleOrDefault(c => c.Id.ToString() == item.DynamicEntityProperty2Value)?.Value;
+                }
+                var dp3 = dynamicEntityProperties.SingleOrDefault(c => c.Id == item.DynamicEntityProperty3Id)?.DynamicProperty;
+                if (dp3 != null)
+                {
+                    item.DynamicProperty3Name = dp3.PropertyName;
+                    item.DynamicEntityProperty3Text = dp3.DynamicPropertyValues?.SingleOrDefault(c => c.Id.ToString() == item.DynamicEntityProperty3Value)?.Value;
+                }
+                var dp4 = dynamicEntityProperties.SingleOrDefault(c => c.Id == item.DynamicEntityProperty4Id)?.DynamicProperty;
+                if (dp4 != null)
+                {
+                    item.DynamicProperty4Name = dp4.PropertyName;
+                    item.DynamicEntityProperty4Text = dp4.DynamicPropertyValues?.SingleOrDefault(c => c.Id.ToString() == item.DynamicEntityProperty4Value)?.Value;
+                }
+                var dp5 = dynamicEntityProperties.SingleOrDefault(c => c.Id == item.DynamicEntityProperty5Id)?.DynamicProperty;
+                if (dp5 != null)
+                {
+                    item.DynamicProperty5Name = dp5.PropertyName;
+                    item.DynamicEntityProperty5Text = dp5.DynamicPropertyValues?.SingleOrDefault(c => c.Id.ToString() == item.DynamicEntityProperty5Value)?.Value;
+                }
+            }
+        }
+
         /// <summary>
         /// 更新商品信息
         /// </summary>
@@ -136,7 +176,7 @@ namespace BXJG.Shop.Catalogue
             input.Images = (await this.tempFileManager.MoveAsync(input.Images)).Select(c => c.FileRelativePath).ToArray();
             //更新现有属性
             ObjectMapper.Map(input, entity);
-
+            await NewMethod(entity);
             //发布处理
             if (input.Published)
                 entity.Publish(input.AvailableStart, input.AvailableEnd);
@@ -201,7 +241,7 @@ namespace BXJG.Shop.Catalogue
             {
                 try
                 {
-                    //var entity = await this.repository.GetAllIncluding(c => c.Skus).SingleAsync(c => c.Id == id);
+                    var entity = await this.repository.GetAllIncluding(c => c.Skus).SingleAsync(c => c.Id == id);
 
                     //删除原来的sku
                     //foreach (var item in entity.Skus)
@@ -215,7 +255,8 @@ namespace BXJG.Shop.Catalogue
                     //    }
                     //}
                     //entity.Skus.Clear();//这里应该是有级联删除的
-                    await repository.DeleteAsync(id);
+                    await repository.DeleteAsync(entity);
+                    await tempFileManager.RemoveAsync(entity.GetImages().Select(c => c.Value).ToArray());
                     result.Ids.Add(id);
                 }
                 catch (Exception ex)
@@ -270,14 +311,14 @@ namespace BXJG.Shop.Catalogue
         /// <returns></returns>
         private async Task<ProductDto> GetOneAsync(long id)
         {
-            var entity = await repository.GetAllIncluding(c => c.Category, c => c.Brand, c => c.Unit)
+            var entity = await repository.GetAllIncluding(c => c.Category, c => c.Brand, c => c.Unit, c=>c.Skus)
                 //.AsNoTracking()
                 .Where(c => c.Id == id)
-                .Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty1)
-                .Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty2)
-                .Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty3)
-                .Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty4)
-                .Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty5)
+                //.Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty1)
+                //.Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty2)
+                //.Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty3)
+                //.Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty4)
+                //.Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty5)
 
                 //上面的加载DynamicPropertyValues性能不好，但是efcore5才开始支持以下写法；包括AsSignleQuery
                 //.Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty1.DynamicProperty.DynamicPropertyValues.SingleOrDefault(d => d.Id.ToString() == c.DynamicEntityProperty1Value))
@@ -287,21 +328,21 @@ namespace BXJG.Shop.Catalogue
                 //.Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty5.DynamicProperty.DynamicPropertyValues.SingleOrDefault(d => d.Id.ToString() == c.DynamicEntityProperty5Value))
                 .SingleAsync();
 
-            var sdfff = entity.Skus.SelectMany(c => new HashSet<int?> {
-                c.DynamicEntityProperty1?.DynamicPropertyId,
-                c.DynamicEntityProperty2?.DynamicPropertyId ,
-                c.DynamicEntityProperty3?.DynamicPropertyId,
-                c.DynamicEntityProperty4?.DynamicPropertyId,
-                c.DynamicEntityProperty5?.DynamicPropertyId})
-                .Where(c=>c.HasValue)
-                .Distinct()
-                .ToArray();
+            //var sdfff = entity.Skus.SelectMany(c => new HashSet<int?> {
+            //    c.DynamicEntityProperty1?.DynamicPropertyId,
+            //    c.DynamicEntityProperty2?.DynamicPropertyId ,
+            //    c.DynamicEntityProperty3?.DynamicPropertyId,
+            //    c.DynamicEntityProperty4?.DynamicPropertyId,
+            //    c.DynamicEntityProperty5?.DynamicPropertyId})
+            //    .Where(c => c.HasValue)
+            //    .Distinct()
+            //    .ToArray();
 
-            var aaa = await repository1
-                .GetAllIncluding(c=>c.DynamicProperty)
-                //.AsNoTracking()
-                .Where(c => sdfff.Contains(c.DynamicPropertyId))
-                .ToListAsync();
+            //var aaa = await repository1
+            //    .GetAllIncluding(c => c.DynamicProperty)
+            //    //.AsNoTracking()
+            //    .Where(c => sdfff.Contains(c.DynamicPropertyId))
+            //    .ToListAsync();
 
             var dto = ObjectMapper.Map<ProductDto>(entity);
             dto.Skus = dto.Skus

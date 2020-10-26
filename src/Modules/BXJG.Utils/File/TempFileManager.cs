@@ -180,8 +180,9 @@ namespace BXJG.Utils.File
                 var sourceAbsolutePath = Relative2AbsolutePath(item);                                   //temp绝对路径
                 moveResult.FileRelativePath = TempToOkPath(item);                                       //正式目录相对路径
                 moveResult.FileAbsolutePath = Relative2AbsolutePath(moveResult.FileRelativePath);       //正式目录绝对路径
-                if (!System.IO.File.Exists(moveResult.FileAbsolutePath)) {
-                    Directory.CreateDirectory( Path.GetDirectoryName(  moveResult.FileAbsolutePath)   );
+                if (!System.IO.File.Exists(moveResult.FileAbsolutePath))
+                {
+                    Directory.CreateDirectory(Path.GetDirectoryName(moveResult.FileAbsolutePath));
                     System.IO.File.Move(sourceAbsolutePath, moveResult.FileAbsolutePath);
                 }
                 //移动缩略图
@@ -197,6 +198,22 @@ namespace BXJG.Utils.File
                 list.Add(moveResult);
             }
             return list;
+        }
+        /// <summary>
+        /// 删除图像
+        /// </summary>
+        /// <param name="inputs"></param>
+        /// <returns></returns>
+        public ValueTask RemoveAsync(params string[] inputs)
+        {
+            foreach (var item in inputs)
+            {
+                var f = this.Relative2AbsolutePath(item);
+                var d = ConvertToThumPath(f);
+                System.IO.File.Delete(f);
+                System.IO.File.Delete(d);
+            }
+            return new ValueTask();
         }
         #endregion
         #region 辅助方法

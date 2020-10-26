@@ -12,16 +12,16 @@ namespace BXJG.Shop.Catalogue
     /// 不检查登录和授权的
     /// </summary>
     public class FrontProductCategoryAppService : UnAuthGeneralTreeAppServiceBase<ProductCategoryGetForSelectInput,
-                                                                                       ProductCategoryTreeNodeDto,
-                                                                                       ProductCategoryGetForSelectInput,
-                                                                                       ProductCategoryCombboxDto,
-                                                                                       ProductCategoryEntity,
-                                                                                       ProductCategoryManager>, IFrontProductCategoryAppService
+                                                                                  ProductCategoryTreeNodeDto,
+                                                                                  ProductCategoryGetForSelectInput,
+                                                                                  ProductCategoryCombboxDto,
+                                                                                  ProductCategoryEntity,
+                                                                                  ProductCategoryManager>, IFrontProductCategoryAppService
     {
         public FrontProductCategoryAppService(IRepository<ProductCategoryEntity, long> ownRepository,
-                                                   ProductCategoryManager organizationUnitManager,
-                                                   string allTextForSearch = "不限", 
-                                                   string allTextForForm = "请选择") : base(ownRepository,
+                                              ProductCategoryManager organizationUnitManager,
+                                              string allTextForSearch = "不限", 
+                                              string allTextForForm = "请选择") : base(ownRepository,
                                                                                             organizationUnitManager,
                                                                                             allTextForSearch,
                                                                                             allTextForForm)

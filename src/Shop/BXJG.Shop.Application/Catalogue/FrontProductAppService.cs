@@ -64,14 +64,14 @@ namespace BXJG.Shop.Catalogue
         /// <returns></returns>
         public async Task<FrontProductDto> GetAsync(EntityDto<long> input)
         {
-            var entity = await repository.GetAllIncluding(c => c.Category, c => c.Brand, c => c.Unit)
+            var entity = await repository.GetAllIncluding(c => c.Category, c => c.Brand, c => c.Unit, c => c.Skus)
               //.AsNoTracking()
               .Where(c => c.Id == input.Id)
-                .Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty1)
-                .Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty2)
-                .Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty3)
-                .Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty4)
-                .Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty5)
+                //.Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty1)
+                //.Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty2)
+                //.Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty3)
+                //.Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty4)
+                //.Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty5)
 
               //上面的加载DynamicPropertyValues性能不好，但是efcore5才开始支持以下写法；包括AsSignleQuery
               //.Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty1.DynamicProperty.DynamicPropertyValues.SingleOrDefault(d => d.Id.ToString() == c.DynamicEntityProperty1Value))
@@ -81,21 +81,21 @@ namespace BXJG.Shop.Catalogue
               //.Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty5.DynamicProperty.DynamicPropertyValues.SingleOrDefault(d => d.Id.ToString() == c.DynamicEntityProperty5Value))
               .SingleAsync();
 
-            var sdfff = entity.Skus.SelectMany(c => new HashSet<int?> {
-                c.DynamicEntityProperty1?.DynamicPropertyId,
-                c.DynamicEntityProperty2?.DynamicPropertyId ,
-                c.DynamicEntityProperty3?.DynamicPropertyId,
-                c.DynamicEntityProperty4?.DynamicPropertyId,
-                c.DynamicEntityProperty5?.DynamicPropertyId})
-                .Where(c => c.HasValue)
-                .Distinct()
-                .ToArray();
+            //var sdfff = entity.Skus.SelectMany(c => new HashSet<int?> {
+            //    c.DynamicEntityProperty1?.DynamicPropertyId,
+            //    c.DynamicEntityProperty2?.DynamicPropertyId ,
+            //    c.DynamicEntityProperty3?.DynamicPropertyId,
+            //    c.DynamicEntityProperty4?.DynamicPropertyId,
+            //    c.DynamicEntityProperty5?.DynamicPropertyId})
+            //    .Where(c => c.HasValue)
+            //    .Distinct()
+            //    .ToArray();
 
-            var aaa = await repository1
-                .GetAllIncluding(c => c.DynamicProperty)
-                //.AsNoTracking()
-                .Where(c => sdfff.Contains(c.DynamicPropertyId))
-                .ToListAsync();
+            //var aaa = await repository1
+            //    .GetAllIncluding(c => c.DynamicProperty)
+            //    //.AsNoTracking()
+            //    .Where(c => sdfff.Contains(c.DynamicPropertyId))
+            //    .ToListAsync();
 
             var dto = ObjectMapper.Map<FrontProductDto>(entity);
             dto.Skus = dto.Skus

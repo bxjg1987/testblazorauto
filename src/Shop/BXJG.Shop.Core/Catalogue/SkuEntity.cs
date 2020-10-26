@@ -12,7 +12,6 @@ namespace BXJG.Shop.Catalogue
     public class SkuEntity : Entity<long>//, IPassivable
     {
         //sku属性由abp动态属性提供
-
         /// <summary>
         /// 原价
         /// </summary>
@@ -38,7 +37,6 @@ namespace BXJG.Shop.Catalogue
         ///// </summary>
         //public bool IsActive { get; set; }
         #region sku动态属性组合
-
         /// <summary>
         /// 第1个动态属性id
         /// </summary>
@@ -145,6 +143,5 @@ namespace BXJG.Shop.Catalogue
         /// </summary>
         public string DynamicEntityProperty5Text { get; set; }
         #endregion
-
     }
 }
