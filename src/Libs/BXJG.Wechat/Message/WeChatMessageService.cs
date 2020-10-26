@@ -3,7 +3,6 @@ using BXJG.WeChat.MiniProgram;
 using BXJG.WeChat.Payment;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;

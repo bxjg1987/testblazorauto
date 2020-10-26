@@ -1,4 +1,4 @@
-﻿using BXJG.Utils;
+﻿using BXJG.Common;
 using BXJG.WeChat.MiniProgram;
 using Microsoft.Extensions.Options;
 using System;

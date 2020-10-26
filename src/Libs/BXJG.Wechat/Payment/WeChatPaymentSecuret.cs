@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using System.Security.Cryptography;
-using BXJG.Utils.Extensions;
 using Microsoft.Extensions.Options;
+using BXJG.Common;
 
 namespace BXJG.WeChat.Payment
 {

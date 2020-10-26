@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BXJG.Common;
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -209,7 +210,7 @@ namespace BXJG.WeChat.Payment
         /// <summary>
         /// 获取随机字符串
         /// </summary>
-        public string nonceStr { get; private set; } = BXJG.Utils.RandomHelper.RandomBase64(12);
+        public string nonceStr { get; private set; } = RandomHelper.RandomBase64(12);
         /// <summary>
         /// 获取微信小程序支付 统一下单接口返回的订单号
         /// "prepay_id=xxxxxxx"
