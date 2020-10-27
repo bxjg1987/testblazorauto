@@ -69,7 +69,7 @@ namespace BXJG.Shop
 
             #region 显示给顾客的商品信息
             CreateMap<ProductEntity, FrontProductDto>()
-                .ForMember(c => c.Images, opt => opt.MapFrom(d => d.GetImages().Select(e => new FileDto { FilePath = serverUrl + e.Value, ThumPath = serverUrl + e.Key })));
+                .ForMember(c => c.Images, opt => opt.MapFrom(d => d.GetImages().Select(e => new FileDto { FilePath = serverUrl + e.Value.Replace(@"\",@"/").Replace(@"//", @"/").Replace(@"//", @"/"), ThumPath = serverUrl + e.Key.Replace(@"\", @"/").Replace(@"//", @"/").Replace(@"//", @"/") })));
             #endregion
 
             #region 前端顾客和订单相关东东
