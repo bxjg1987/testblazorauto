@@ -29,6 +29,27 @@ namespace ZLJ.Authorization
             #region CMS
             BXJGCMSAuthorizationProvider.SetPermissions(admin);
             #endregion
+
+            #region 加盟商
+            var franchisee = admin.CreateChildPermission(PermissionNames.Franchisee, L("Franchisee"));
+            franchisee.CreateChildPermission(PermissionNames.FranchiseeInfo, L("FranchiseeInfo"));
+            franchisee.CreateChildPermission(PermissionNames.FranchiseeEquipment, L("FranchiseeEquipment"));
+
+
+
+            var franchiseeBack = admin.CreateChildPermission(PermissionNames.FranchiseeBack, L("FranchiseeBack"));
+
+            var franchiseeBackStatistical = franchiseeBack.CreateChildPermission(PermissionNames.FranchiseeBackStatistical, L("FranchiseeBackStatistical"));
+            franchiseeBackStatistical.CreateChildPermission(PermissionNames.FranchiseeBackStatisticalIncome, L("FranchiseeBackStatisticalIncome"));
+            franchiseeBackStatistical.CreateChildPermission(PermissionNames.FranchiseeBackStatisticalUser, L("FranchiseeBackStatisticalUser"));
+            franchiseeBackStatistical.CreateChildPermission(PermissionNames.FranchiseeBackStatisticalOrder, L("FranchiseeBackStatisticalOrder"));
+            franchiseeBackStatistical.CreateChildPermission(PermissionNames.FranchiseeBackStatisticalSale, L("FranchiseeBackStatisticalSale"));
+
+            var franchiseeBackEquipment = franchiseeBack.CreateChildPermission(PermissionNames.FranchiseeBackEquipment, L("FranchiseeBackEquipment"));
+            franchiseeBackEquipment.CreateChildPermission(PermissionNames.FranchiseeBackEquipmentOrderStatus, L("FranchiseeBackEquipmentOrderStatus"));
+            franchiseeBackEquipment.CreateChildPermission(PermissionNames.FranchiseeBackEquipmentStatus, L("FranchiseeBackEquipmentStatus"));
+            #endregion
+
             #region 资产管理
             var asset = admin.CreateChildPermission(PermissionNames.AdministratorAsset, L("Asset management"), multiTenancySides: MultiTenancySides.Tenant);
 

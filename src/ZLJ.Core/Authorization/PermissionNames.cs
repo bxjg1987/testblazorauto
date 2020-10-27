@@ -71,5 +71,28 @@
         public const string AdministratorWeChat = "Administrator.WeChat";
         public const string AdministratorWeChatIndex = "Administrator.WeChat.Index";
         #endregion
+
+        #region 加盟商
+        //管理员对加盟商进行管理的权限
+        public const string Franchisee = "Franchisee";
+        public const string FranchiseeInfo = "FranchiseeInfo";
+        public const string FranchiseeEquipment = "FranchiseeEquipment";
+
+
+        //加盟商自己的后台权限
+        public const string FranchiseeBack = "FranchiseeBack";
+
+        //统计
+        public const string FranchiseeBackStatistical = "FranchiseeBackStatistical";
+        public const string FranchiseeBackStatisticalIncome = "FranchiseeBackStatisticalIncome";
+        public const string FranchiseeBackStatisticalUser = "FranchiseeBackStatisticalUser";
+        public const string FranchiseeBackStatisticalOrder = "FranchiseeBackStatisticalOrder";
+        public const string FranchiseeBackStatisticalSale = "FranchiseeBackStatisticalSale";
+
+        //设备管理
+        public const string FranchiseeBackEquipment = "FranchiseeBackEquipment";
+        public const string FranchiseeBackEquipmentOrderStatus = "FranchiseeBackEquipmentOrderStatus";
+        public const string FranchiseeBackEquipmentStatus = "FranchiseeBackEquipmentStatus";
+        #endregion
     }
 }

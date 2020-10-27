@@ -5,6 +5,28 @@
       上下级行政区级别冲突，正确级别：全国 > 省/自治区/直辖市 > 市/自治州/县/自治县 > 乡镇/街道
     </text>
 
+
+    <text name="Franchisee" value="加盟商管理" />
+    <text name="FranchiseeInfo" value="加盟商信息" />
+    <text name="FranchiseeEquipment" value="加盟商设备" />
+    
+    <text name="FranchiseeBack" value="加盟商后台" />
+    
+    <text name="FranchiseeBackStatistical" value="交易统计" />
+    <text name="FranchiseeBackStatisticalIncome" value="收益统计" />
+    <text name="FranchiseeBackStatisticalUser" value="用户数" />
+    <text name="FranchiseeBackStatisticalOrder" value="订单量" />
+    <text name="FranchiseeBackStatisticalSale" value="销售额统计" />
+    
+    <text name="FranchiseeBackEquipment" value="设备管理" />
+    <text name="FranchiseeBackEquipmentOrderStatus" value="订单状态" />
+    <text name="FranchiseeBackEquipmentStatus" value="设备状态" />
+    
+    
+    
+    
+    
+    
     <text name="GetEquipmentInfoKeywordsInputPrompt" value="名称/  助记码 / 规格型号..." />
     <text name="This node does not allow modification" value="此节点不允许修改！" />
     <text name="Asset management" value="资产管理" />

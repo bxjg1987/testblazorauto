@@ -17,16 +17,88 @@ namespace ZLJ.Navigation
         public override void SetNavigation(INavigationProviderContext context)
         {
             //{codegenerator}
-        
+
             //注册设备管理模块的菜单
             context.Manager.MainMenu.AddBXJGEquipmentNavigation();
 
             context.Manager.MainMenu.AddBXJGShopNavigation();
             BXJGCMSNavigationProvider.Init(context.Manager.MainMenu);
+            #region 加盟商
+            var Franchisee = new MenuItemDefinition("Franchisee",
+                                               L("Franchisee"),
+                                               icon: "groupbai",
+                                               permissionDependency: new SimplePermissionDependency(PermissionNames.Franchisee));
+            context.Manager.MainMenu.AddItem(Franchisee);
+            Franchisee.AddItem(new MenuItemDefinition("FranchiseeInfo",
+                                                L("FranchiseeInfo"),
+                                                icon: "wenjian",
+                                                url: "/Franchisee/FranchiseeInfo/index.html",
+                                                permissionDependency: new SimplePermissionDependency(PermissionNames.FranchiseeInfo)));
+            Franchisee.AddItem(new MenuItemDefinition("FranchiseeEquipment",
+                                               L("FranchiseeEquipment"),
+                                               icon: "wenjian",
+                                               url: "/Franchisee/FranchiseeEquipment/index.html",
+                                               permissionDependency: new SimplePermissionDependency(PermissionNames.FranchiseeEquipment)));
 
+
+
+            //var FranchiseeBack = new MenuItemDefinition("FranchiseeBack",
+            //                                   L("FranchiseeBack"),
+            //                                   icon: "FranchiseeBack",
+            //                                   permissionDependency: new SimplePermissionDependency(PermissionNames.FranchiseeBack));
+            //context.Manager.MainMenu.AddItem(FranchiseeBack);
+
+            var m1 = new MenuItemDefinition("FranchiseeBackStatistical",
+                                               L("FranchiseeBackStatistical"),
+                                               icon: "wenjian",
+                                               permissionDependency: new SimplePermissionDependency(PermissionNames.FranchiseeBackStatistical));
+
+            context.Manager.MainMenu.AddItem(m1);
+            m1.AddItem(new MenuItemDefinition("FranchiseeBackStatisticalIncome",
+                                                  L("FranchiseeBackStatisticalIncome"),
+                                                  icon: "wenjian",
+                                                  url: "/Franchisee/FranchiseeBackStatisticalIncome/index.html",
+                                                  permissionDependency: new SimplePermissionDependency(PermissionNames.FranchiseeBackStatisticalIncome)));
+
+
+            m1.AddItem(new MenuItemDefinition("FranchiseeBackStatisticalUser",
+                                                            L("FranchiseeBackStatisticalUser"),
+                                                            icon: "wenjian",
+                                                            url: "/Franchisee/FranchiseeBackStatisticalUser/index.html",
+                                                            permissionDependency: new SimplePermissionDependency(PermissionNames.FranchiseeBackStatisticalUser)));
+            m1.AddItem(new MenuItemDefinition("FranchiseeBackStatisticalOrder",
+                                                  L("FranchiseeBackStatisticalOrder"),
+                                                  icon: "wenjian",
+                                                  url: "/Franchisee/FranchiseeBackStatisticalOrder/index.html",
+                                                  permissionDependency: new SimplePermissionDependency(PermissionNames.FranchiseeBackStatisticalOrder)));
+            m1.AddItem(new MenuItemDefinition("FranchiseeBackStatisticalSale",
+                                                  L("FranchiseeBackStatisticalSale"),
+                                                  icon: "wenjian",
+                                                  url: "/Franchisee/FranchiseeBackStatisticalSale/index.html",
+                                                  permissionDependency: new SimplePermissionDependency(PermissionNames.FranchiseeBackStatisticalSale)));
+
+
+            var m2 = new MenuItemDefinition("FranchiseeBackEquipment",
+                                              L("FranchiseeBackEquipment"),
+                                              icon: "wenjian",
+                                              permissionDependency: new SimplePermissionDependency(PermissionNames.FranchiseeBackEquipment));
+
+            context.Manager.MainMenu.AddItem(m2);
+            m2.AddItem(new MenuItemDefinition("FranchiseeBackEquipmentOrderStatus",
+                                                  L("FranchiseeBackEquipmentOrderStatus"),
+                                                  icon: "wenjian",
+                                                  url: "/Franchisee/FranchiseeBackEquipmentOrderStatus/index.html",
+                                                  permissionDependency: new SimplePermissionDependency(PermissionNames.FranchiseeBackEquipmentOrderStatus)));
+            m2.AddItem(new MenuItemDefinition("FranchiseeBackEquipmentStatus",
+                                      L("FranchiseeBackEquipmentStatus"),
+                                      icon: "wenjian",
+                                      url: "/Franchisee/FranchiseeBackEquipmentStatus/index.html",
+                                      permissionDependency: new SimplePermissionDependency(PermissionNames.FranchiseeBackEquipmentStatus)));
+
+            #endregion
             //注册基础信息模块的菜单
             context.Manager.MainMenu.AddBXJGBaseInfoNavigation();
-           
+
             var xtsz = new MenuItemDefinition("System",
                                                 L("System"),
                                                 icon: "config",
