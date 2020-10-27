@@ -36,5 +36,6 @@
     <text name="BXJG.Shop.Sale.PaymentStatus.RefundedInPart" value="已部分退款" />
 
     <text name="BXJGShopCustomer" value="顾客管理" />
+    <text name="jiamengshang" value="加盟商管理" />
   </texts>
 </localizationDictionary>

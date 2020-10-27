@@ -76,5 +76,14 @@ namespace BXJG.Shop.Sale
             var list = await query.OrderBy(input.Sorting).PageBy(input).ToListAsync();
             return new PagedResultDto<OrderDto>(count, ObjectMapper.Map<IReadOnlyList<OrderDto>>(list));
         }
+
+        public async Task<OrderDto> GetAsync(EntityDto<long> input)
+        {
+            var entity = await repository.GetAllIncluding(c => c.Area, c => c.DistributionMethod, c => c.PaymentMethod)
+                .Include(c => c.Items).ThenInclude(c => c.Sku)
+                .Where(c => c.Id == input.Id)
+                .SingleAsync();
+            return base.ObjectMapper.Map<OrderDto>(entity);
+        }
     }
 }

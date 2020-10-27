@@ -26,83 +26,83 @@ namespace BXJG.Shop.Sale
         /// <summary>
         /// 第1个动态属性id
         /// </summary>
-        public int DynamicEntityProperty1Id { get; set; }
+        public int SkuDynamicEntityProperty1Id { get; set; }
         /// <summary>
         /// 第1个动态属性名称
         /// </summary>
-        public string DynamicEntityProperty1DynamicPropertyPropertyName { get; set; }
+        public string SkuDynamicProperty1Name { get; set; }
         /// <summary>
         /// 第一个动态属性值
         /// </summary>
-        public string DynamicEntityProperty1Value { get; set; }
+        public string SkuDynamicEntityProperty1Value { get; set; }
         /// <summary>
         /// 第一个动态属性值
         /// </summary>
-        public string DynamicEntityProperty1Text { get; set; }
+        public string SkuDynamicEntityProperty1Text { get; set; }
         /// <summary>
         /// 第2个动态属性id
         /// </summary>
-        public int? DynamicEntityProperty2Id { get; set; }
+        public int? SkuDynamicEntityProperty2Id { get; set; }
         /// <summary>
         /// 第2个动态属性名称
         /// </summary>
-        public string DynamicEntityProperty2DynamicPropertyPropertyName { get; set; }
+        public string SkuDynamicProperty2Name { get; set; }
         /// <summary>
         /// 第2个动态属性值
         /// </summary>
-        public string DynamicEntityProperty2Value { get; set; }
+        public string SkuDynamicEntityProperty2Value { get; set; }
         /// <summary>
         /// 第一个动态属性值
         /// </summary>
-        public string DynamicEntityProperty2Text { get; set; }
+        public string SkuDynamicEntityProperty2Text { get; set; }
         /// <summary>
         /// 第3个动态属性id
         /// </summary>
-        public int? DynamicEntityProperty3Id { get; set; }
+        public int? SkuDynamicEntityProperty3Id { get; set; }
         /// <summary>
         /// 第3个动态属性名称
         /// </summary>
-        public string DynamicEntityProperty3DynamicPropertyPropertyName { get; set; }
+        public string SkuDynamicProperty3Name { get; set; }
         /// <summary>
         /// 第3个动态属性值
         /// </summary>
-        public string DynamicEntityProperty3Value { get; set; }
+        public string SkuDynamicEntityProperty3Value { get; set; }
         /// <summary>
         /// 第一个动态属性值
         /// </summary>
-        public string DynamicEntityProperty3Text { get; set; }
+        public string SkuDynamicEntityProperty3Text { get; set; }
         /// <summary>
         /// 第4个动态属性id
         /// </summary>
-        public int? DynamicEntityProperty4Id { get; set; }
+        public int? SkuDynamicEntityProperty4Id { get; set; }
         /// <summary>
         /// 第4个动态属性名称
         /// </summary>
-        public string DynamicEntityProperty4DynamicPropertyPropertyName { get; set; }
+        public string SkuDynamicProperty4Name { get; set; }
         /// <summary>
         /// 第4个动态属性值
         /// </summary>
-        public string DynamicEntityProperty4Value { get; set; }
+        public string SkuDynamicEntityProperty4Value { get; set; }
         /// <summary>
         /// 第一个动态属性值
         /// </summary>
-        public string DynamicEntityProperty4Text { get; set; }
+        public string SkuDynamicEntityProperty4Text { get; set; }
         /// <summary>
         /// 第5个动态属性Id
         /// </summary>
-        public int? DynamicEntityProperty5Id { get; set; }
+        public int? SkuDynamicEntityProperty5Id { get; set; }
         /// <summary>
         /// 第5个动态属性名称
         /// </summary>
-        public string DynamicEntityProperty5DynamicPropertyPropertyName { get; set; }
+        public string SkuDynamicProperty5Name { get; set; }
         /// <summary>
         /// 第5个动态属性值
         /// </summary>
-        public string DynamicEntityProperty5Value { get; set; }
+        public string SkuDynamicEntityProperty5Value { get; set; }
         /// <summary>
         /// 第一个动态属性值
         /// </summary>
-        public string DynamicEntityProperty5Text { get; set; }
+        public string SkuDynamicEntityProperty5Text { get; set; }
         #endregion
         /// <summary>
         /// 产品标题

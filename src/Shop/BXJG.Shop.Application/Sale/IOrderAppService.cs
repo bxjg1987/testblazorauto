@@ -13,5 +13,6 @@ namespace BXJG.Shop.Sale
     public interface IOrderAppService : IApplicationService
     {
         Task<PagedResultDto<OrderDto>> GetAllAsync(GetAllOrderInput input);
+        Task<OrderDto> GetAsync(EntityDto<long> input);
     }
 }

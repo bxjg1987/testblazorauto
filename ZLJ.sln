@@ -92,6 +92,8 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "WebAdmin", "..\abpfront\src
 		SlnRelativePath = "..\abpfront\src\WebAdmin\"
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Franchisee", "Franchisee", "{749E9506-C66F-4916-94BD-733C981E2BFF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -248,6 +250,7 @@ Global
 		{40F12CA4-F153-4F4E-AB26-E044EF0D0F7E} = {04E5EC1B-C5AD-473B-A833-DC9C2CB4627E}
 		{68CAC733-359C-440F-B660-35733810156C} = {214A4B25-4EEC-4729-B68C-74FE69CC7B45}
 		{139AEC88-19D0-4B44-8900-AB6F3140E070} = {214A4B25-4EEC-4729-B68C-74FE69CC7B45}
+		{749E9506-C66F-4916-94BD-733C981E2BFF} = {04E5EC1B-C5AD-473B-A833-DC9C2CB4627E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F45DD46C-6040-4FCC-87E0-648786C36933}
