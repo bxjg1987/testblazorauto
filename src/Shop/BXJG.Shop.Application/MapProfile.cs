@@ -22,9 +22,18 @@ namespace BXJG.Shop
 
             #region 商品分类
             CreateMap<ProductCategoryEditDto, ProductCategoryEntity>();
-            CreateMap<ProductCategoryEntity, ProductCategoryDto>();
-            CreateMap<ProductCategoryEntity, ProductCategoryTreeNodeDto>().EntityToComboTree();
-            CreateMap<ProductCategoryEntity, ProductCategoryCombboxDto>().EntityToCombobox();
+            CreateMap<ProductCategoryEntity, ProductCategoryDto>()
+                .ForMember(c => c.Icon, opt => opt.MapFrom(d => d.Icon.Replace(@"\", @"/").Replace(@"//", @"/").Replace(@"//", @"/")))
+                .ForMember(c => c.Image1, opt => opt.MapFrom(d => d.Image1.Replace(@"\", @"/").Replace(@"//", @"/").Replace(@"//", @"/")))
+                .ForMember(c => c.Image2, opt => opt.MapFrom(d => d.Image2.Replace(@"\", @"/").Replace(@"//", @"/").Replace(@"//", @"/")));
+            CreateMap<ProductCategoryEntity, ProductCategoryTreeNodeDto>().EntityToComboTree()
+                .ForMember(c => c.Icon, opt => opt.MapFrom(d => d.Icon.Replace(@"\", @"/").Replace(@"//", @"/").Replace(@"//", @"/")))
+                .ForMember(c => c.Image1, opt => opt.MapFrom(d => d.Image1.Replace(@"\", @"/").Replace(@"//", @"/").Replace(@"//", @"/")))
+                .ForMember(c => c.Image2, opt => opt.MapFrom(d => d.Image2.Replace(@"\", @"/").Replace(@"//", @"/").Replace(@"//", @"/")));
+            CreateMap<ProductCategoryEntity, ProductCategoryCombboxDto>().EntityToCombobox()
+                .ForMember(c => c.Icon, opt => opt.MapFrom(d => d.Icon.Replace(@"\", @"/").Replace(@"//", @"/").Replace(@"//", @"/")))
+                .ForMember(c => c.Image1, opt => opt.MapFrom(d => d.Image1.Replace(@"\", @"/").Replace(@"//", @"/").Replace(@"//", @"/")))
+                .ForMember(c => c.Image2, opt => opt.MapFrom(d => d.Image2.Replace(@"\", @"/").Replace(@"//", @"/").Replace(@"//", @"/")));
             //CreateMap(typeof(ItemCategoryEditDto), typeof(ItemCategoryEntity<>)).DtoToEntity().ForMember("ContentType", opt => opt.Ignore());
             //CreateMap(typeof(ColumnEntity<>), typeof(ColumnDto)).EntityToDto();//可能是因为泛型原因，必须调用EntityToDto
             //CreateMap(typeof(ColumnEntity<>), typeof(ColumnTreeNodeDto)).EntityToComboTree();
@@ -44,32 +53,32 @@ namespace BXJG.Shop
             //sku
             //CreateMap<SkuEntity, SkuEditDto>().ForMember(c=>c.DynamicEntityPropertyValues,c=>c.Ignore());
             CreateMap<SkuEntity, SkuDto>();
-                //.ForMember(c => c.DynamicEntityProperty1Text,
-                //           opt => opt.MapFrom(c =>
-                //               c.DynamicEntityProperty1.DynamicProperty.DynamicPropertyValues.Count > 0 ? c.DynamicEntityProperty1.DynamicProperty.DynamicPropertyValues.Single(d => d.Id.ToString() == c.DynamicEntityProperty1Value).Value : ""
-                //            ))
-                //.ForMember(c => c.DynamicEntityProperty2Text,
-                //           opt => opt.MapFrom(c =>
-                //               c.DynamicEntityProperty2.DynamicProperty.DynamicPropertyValues.Count > 0 ? c.DynamicEntityProperty2.DynamicProperty.DynamicPropertyValues.Single(d => d.Id.ToString() == c.DynamicEntityProperty2Value).Value : ""
-                //            ))
-                //.ForMember(c => c.DynamicEntityProperty3Text,
-                //           opt => opt.MapFrom(c =>
-                //               c.DynamicEntityProperty3.DynamicProperty.DynamicPropertyValues.Count > 0 ? c.DynamicEntityProperty3.DynamicProperty.DynamicPropertyValues.Single(d => d.Id.ToString() == c.DynamicEntityProperty3Value).Value : ""
-                //            ))
-                //.ForMember(c => c.DynamicEntityProperty4Text,
-                //           opt => opt.MapFrom(c =>
-                //               c.DynamicEntityProperty4.DynamicProperty.DynamicPropertyValues.Count > 0 ? c.DynamicEntityProperty4.DynamicProperty.DynamicPropertyValues.Single(d => d.Id.ToString() == c.DynamicEntityProperty4Value).Value : ""
-                //            ))
-                //.ForMember(c => c.DynamicEntityProperty5Text,
-                //           opt => opt.MapFrom(c =>
-                //               c.DynamicEntityProperty5.DynamicProperty.DynamicPropertyValues.Count > 0 ? c.DynamicEntityProperty5.DynamicProperty.DynamicPropertyValues.Single(d => d.Id.ToString() == c.DynamicEntityProperty5Value).Value : ""
-                //            ));
+            //.ForMember(c => c.DynamicEntityProperty1Text,
+            //           opt => opt.MapFrom(c =>
+            //               c.DynamicEntityProperty1.DynamicProperty.DynamicPropertyValues.Count > 0 ? c.DynamicEntityProperty1.DynamicProperty.DynamicPropertyValues.Single(d => d.Id.ToString() == c.DynamicEntityProperty1Value).Value : ""
+            //            ))
+            //.ForMember(c => c.DynamicEntityProperty2Text,
+            //           opt => opt.MapFrom(c =>
+            //               c.DynamicEntityProperty2.DynamicProperty.DynamicPropertyValues.Count > 0 ? c.DynamicEntityProperty2.DynamicProperty.DynamicPropertyValues.Single(d => d.Id.ToString() == c.DynamicEntityProperty2Value).Value : ""
+            //            ))
+            //.ForMember(c => c.DynamicEntityProperty3Text,
+            //           opt => opt.MapFrom(c =>
+            //               c.DynamicEntityProperty3.DynamicProperty.DynamicPropertyValues.Count > 0 ? c.DynamicEntityProperty3.DynamicProperty.DynamicPropertyValues.Single(d => d.Id.ToString() == c.DynamicEntityProperty3Value).Value : ""
+            //            ))
+            //.ForMember(c => c.DynamicEntityProperty4Text,
+            //           opt => opt.MapFrom(c =>
+            //               c.DynamicEntityProperty4.DynamicProperty.DynamicPropertyValues.Count > 0 ? c.DynamicEntityProperty4.DynamicProperty.DynamicPropertyValues.Single(d => d.Id.ToString() == c.DynamicEntityProperty4Value).Value : ""
+            //            ))
+            //.ForMember(c => c.DynamicEntityProperty5Text,
+            //           opt => opt.MapFrom(c =>
+            //               c.DynamicEntityProperty5.DynamicProperty.DynamicPropertyValues.Count > 0 ? c.DynamicEntityProperty5.DynamicProperty.DynamicPropertyValues.Single(d => d.Id.ToString() == c.DynamicEntityProperty5Value).Value : ""
+            //            ));
             CreateMap<SkuEditDto, SkuEntity>();
             #endregion
 
             #region 显示给顾客的商品信息
             CreateMap<ProductEntity, FrontProductDto>()
-                .ForMember(c => c.Images, opt => opt.MapFrom(d => d.GetImages().Select(e => new FileDto { FilePath = serverUrl + e.Value.Replace(@"\",@"/").Replace(@"//", @"/").Replace(@"//", @"/"), ThumPath = serverUrl + e.Key.Replace(@"\", @"/").Replace(@"//", @"/").Replace(@"//", @"/") })));
+                .ForMember(c => c.Images, opt => opt.MapFrom(d => d.GetImages().Select(e => new FileDto { FilePath = serverUrl + e.Value.Replace(@"\", @"/").Replace(@"//", @"/").Replace(@"//", @"/"), ThumPath = serverUrl + e.Key.Replace(@"\", @"/").Replace(@"//", @"/").Replace(@"//", @"/") })));
             #endregion
 
             #region 前端顾客和订单相关东东
