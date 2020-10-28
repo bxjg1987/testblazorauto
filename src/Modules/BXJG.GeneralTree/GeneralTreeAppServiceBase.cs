@@ -462,17 +462,17 @@ namespace BXJG.GeneralTree
             }
             return list1;
         }
-        public override async Task<IList<TGetTreeForSelectOutput>> GetTreeForSelectAsync(TGetTreeForSelectInput input)
-        {
-            //权限判断
-            await CheckGetPermissionAsync();
-            return await base.GetTreeForSelectAsync(input);
-        }
-        public override async Task<IList<TGetNodesForSelectOutput>> GetNodesForSelectAsync(TGetNodesForSelectInput input)
-        {
-            await CheckGetPermissionAsync();
-            return await base.GetNodesForSelectAsync(input);
-        }
+        //public override async Task<IList<TGetTreeForSelectOutput>> GetTreeForSelectAsync(TGetTreeForSelectInput input)
+        //{
+        //    //权限判断
+        //    await CheckGetPermissionAsync();
+        //    return await base.GetTreeForSelectAsync(input);
+        //}
+        //public override async Task<IList<TGetNodesForSelectOutput>> GetNodesForSelectAsync(TGetNodesForSelectInput input)
+        //{
+        //    await CheckGetPermissionAsync();
+        //    return await base.GetNodesForSelectAsync(input);
+        //}
 
         #region 权限判断
         protected virtual Task CheckCreatePermissionAsync()

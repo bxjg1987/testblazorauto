@@ -18,6 +18,9 @@ using Abp.Threading;
 using System.Drawing;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
+using Microsoft.Extensions.Configuration;
+using Abp.Extensions;
+
 namespace BXJG.Utils.File
 {
     /*
@@ -41,6 +44,7 @@ namespace BXJG.Utils.File
     public class TempFileManager : DomainService//, ITransientDependency
     {
         #region 字段和属性
+        string server;
         readonly ISettingManager settingManager;
         /// <summary>
         /// d:\app\wwwroot
@@ -69,8 +73,9 @@ namespace BXJG.Utils.File
         /// </summary>
         /// <param name="env">获取当前应用的相对路径</param>
         /// <param name="settingManager">abp提供的settings系统</param>
-        public TempFileManager(IEnv env, ISettingManager settingManager)
+        public TempFileManager(IEnv env, ISettingManager settingManager, IConfiguration configuration)
         {
+            server = configuration["App:ServerRootAddress"];
             this.settingManager = settingManager;
 
             rootDir = env.Root;                                         // d:\app\wwwroot
@@ -85,6 +90,21 @@ namespace BXJG.Utils.File
         }
         #endregion
         #region 公共方法
+        public string AddServerPath(string p)
+        {
+            if (p.IsNullOrWhiteSpace())
+                return p;
+            p = p.Replace("\\", "/");
+            p = server + p;
+            return p;
+        }
+
+        public string RemoveServerPath(string p)
+        {
+            if (p.IsNullOrWhiteSpace())
+                return p;
+            return p.Replace(server, "");
+        }
         /// <summary>
         /// 验证并将文件存储到temp目录
         /// </summary>

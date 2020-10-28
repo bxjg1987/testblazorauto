@@ -8,5 +8,8 @@ namespace BXJG.Utils.File
     {
         public string FilePath { get; set; }
         public string ThumPath { get; set; }
+
+        public string FileUrl { get; set; }
+        public string ThumUrl { get; set; }
     }
 }
