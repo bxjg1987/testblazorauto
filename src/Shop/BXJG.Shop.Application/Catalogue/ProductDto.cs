@@ -27,6 +27,10 @@ namespace BXJG.Shop.Catalogue
         /// </summary>
         public string DescriptionFull { get; set; }
         /// <summary>
+        /// 详细描述中的图片相对路径集合
+        /// </summary>
+        public string[] DescriptionFullImages { get; set; }
+        /// <summary>
         /// 轮播图片集合，多个用英文逗号,分割
         /// </summary>
         public List<FileDto> Images { get; set; }

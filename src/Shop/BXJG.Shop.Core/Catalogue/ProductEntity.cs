@@ -96,6 +96,12 @@ namespace BXJG.Shop.Catalogue
         /// </summary>
         public string DescriptionFull { get; set; }
         /// <summary>
+        /// 详细描述中的图片相对路径列表，多个用英文,分割
+        /// 方便移动、删除物理文件
+        /// </summary>
+        public string DescriptionFullImages { get; set; }
+
+        /// <summary>
         /// 商品图片
         /// 分原始图像和缩略图，此字段存储的原始图像地址，多个用英文逗号,分割
         /// 此字段主要是用来存储数据的，要读取图片信息建议调用GetImages方法，它将返回原始和缩略图地址
@@ -226,7 +232,7 @@ namespace BXJG.Shop.Catalogue
             // return EventBus.TriggerAsync(new ItemPublishChangedEventData<ItemEntity>(item));
             //item.AvailableStart = null;
         }
-        
+
         ///// <summary>
         ///// 图片集合
         ///// </summary>
@@ -260,6 +266,14 @@ namespace BXJG.Shop.Catalogue
                 r.Add(item.Insert(item.LastIndexOf("."), "thum"), item);
             }
             return r;
+        }
+        /// <summary>
+        /// 获取商品详细描述中的图片相对路径列表
+        /// </summary>
+        /// <returns></returns>
+        public string[] GetDescriptionFullImages()
+        {
+            return DescriptionFullImages.Split(',');
         }
         #endregion
     }

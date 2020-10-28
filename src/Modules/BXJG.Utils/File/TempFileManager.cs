@@ -90,20 +90,35 @@ namespace BXJG.Utils.File
         }
         #endregion
         #region 公共方法
+        /// <summary>
+        /// 将不带host的文件相对路径转换为完整路径
+        /// /upload/20201101/a.jpg -> http://www.xx.com/upload/20201101/a.jpg
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
         public string AddServerPath(string p)
         {
             if (p.IsNullOrWhiteSpace())
                 return p;
             p = p.Replace("\\", "/");
+            p = p.TrimStart('/');
             p = server + p;
             return p;
         }
-
+        /// <summary>
+        /// 将带host的完整文件路径转换为相对路径
+        /// http://www.xx.com/upload/20201101/a.jpg -> /upload/20201101/a.jpg
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
         public string RemoveServerPath(string p)
         {
             if (p.IsNullOrWhiteSpace())
                 return p;
-            return p.Replace(server, "");
+            p = p.Replace(server, "");
+            if (!p.StartsWith('/'))
+                p = "/" + p;
+            return p;
         }
         /// <summary>
         /// 验证并将文件存储到temp目录
@@ -228,10 +243,17 @@ namespace BXJG.Utils.File
         {
             foreach (var item in inputs)
             {
-                var f = this.Relative2AbsolutePath(item);
-                var d = ConvertToThumPath(f);
-                System.IO.File.Delete(f);
-                System.IO.File.Delete(d);
+                try
+                {
+                    var f = this.Relative2AbsolutePath(item);
+                    var d = ConvertToThumPath(f);
+                    System.IO.File.Delete(f);
+                    System.IO.File.Delete(d);
+                }
+                catch (Exception ex)
+                {
+                    base.Logger.Warn("图片删除失败", ex);
+                }
             }
             return new ValueTask();
         }
