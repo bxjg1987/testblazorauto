@@ -78,12 +78,15 @@ namespace BXJG.Shop.Catalogue
         /// <returns></returns>
         public async Task<ProductDto> CreateAsync(ProductUpdateDto input)
         {
-            //后期可以考虑进一步封装逻辑到商品领域服务中
+            //***********将来考虑将部分逻辑封装到领域服务中************
 
             //将图片从临时目录移动到正式目录
             input.Images = (await this.tempFileManager.MoveAsync(input.Images)).Select(c => c.FileRelativePath).ToArray();
-            input.DescriptionFullImages = (await this.tempFileManager.MoveAsync(input.DescriptionFullImages)).Select(c => c.FileRelativePath).ToArray();
-            
+
+            //处理详细描述中的图片，未考虑异常情况，先用着吧
+            input.DescriptionFull = tempFileManager.ReplaceImagePath(input.DescriptionFull);
+            await tempFileManager.MoveAsync(tempFileManager.GetMatchedImagePath(input.DescriptionFull).ToArray());
+
             //输入模型映射给实体模型赋值
             var entity = base.ObjectMapper.Map<ProductEntity>(input);
 
@@ -94,6 +97,9 @@ namespace BXJG.Shop.Catalogue
             //保存
             entity = await repository.InsertAsync(entity);
             await CurrentUnitOfWork.SaveChangesAsync();
+
+
+
 
             //发布
             if (input.Published)
@@ -156,18 +162,33 @@ namespace BXJG.Shop.Catalogue
         /// <returns></returns>
         public async Task<ProductDto> UpdateAsync(ProductUpdateDto input)
         {
-            //将来考虑将部分逻辑封装到领域服务中
+            //***********将来考虑将部分逻辑封装到领域服务中************
 
             //目前下面的处理存在隐患。若移动或删除图片成功后，提交数据库更新失败，则图片文件将丢失。
 
             //获取原来的实体
             var entity = await this.repository.GetAllIncluding(c => c.Skus).SingleAsync(c => c.Id == input.Id);
 
-            var oldImags = entity.GetImages().Select(c=>c.Value);
-            var needremove =  oldImags.Except(input.Images);
+            var oldImags = entity.GetImages().Select(c => c.Value);
+            var needremove = oldImags.Except(input.Images);
             await tempFileManager.RemoveAsync(needremove.ToArray());
             //将图片从临时目录移动到正式目录
             input.Images = (await this.tempFileManager.MoveAsync(input.Images)).Select(c => c.FileRelativePath).ToArray();
+
+
+            //处理详细描述中的图片，未考虑异常情况，先用着吧
+            var tempDesFull = tempFileManager.GetMatchedImagePath(input.DescriptionFull);
+            input.DescriptionFull = tempFileManager.ReplaceImagePath(input.DescriptionFull);
+            await tempFileManager.MoveAsync(tempDesFull);
+
+            var desnewFullImages = tempFileManager.GetMatchedImagePath(input.DescriptionFull);
+            if (!entity.DescriptionFull.IsNullOrWhiteSpace())
+            {
+                var desFullImags = tempFileManager.GetMatchedImagePath(entity.DescriptionFull);
+                var needremovedesFullImags = desFullImags.Except(desnewFullImages);
+                await tempFileManager.RemoveAsync(needremovedesFullImags.ToArray());
+            }
+
 
             //更新现有属性
             ObjectMapper.Map(input, entity);
@@ -291,7 +312,7 @@ namespace BXJG.Shop.Catalogue
         /// <returns></returns>
         private async Task<ProductDto> GetOneAsync(long id)
         {
-            var entity = await repository.GetAllIncluding(c => c.Category, c => c.Brand, c => c.Unit, c=>c.Skus)
+            var entity = await repository.GetAllIncluding(c => c.Category, c => c.Brand, c => c.Unit, c => c.Skus)
                 //.AsNoTracking()
                 .Where(c => c.Id == id)
                 //.Include(c => c.Skus).ThenInclude(c => c.DynamicEntityProperty1)

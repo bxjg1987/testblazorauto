@@ -95,11 +95,6 @@ namespace BXJG.Shop.Catalogue
         /// 详细描述
         /// </summary>
         public string DescriptionFull { get; set; }
-        /// <summary>
-        /// 详细描述中的图片相对路径列表，多个用英文,分割
-        /// 方便移动、删除物理文件
-        /// </summary>
-        public string DescriptionFullImages { get; set; }
 
         /// <summary>
         /// 商品图片
@@ -266,14 +261,6 @@ namespace BXJG.Shop.Catalogue
                 r.Add(item.Insert(item.LastIndexOf("."), "thum"), item);
             }
             return r;
-        }
-        /// <summary>
-        /// 获取商品详细描述中的图片相对路径列表
-        /// </summary>
-        /// <returns></returns>
-        public string[] GetDescriptionFullImages()
-        {
-            return DescriptionFullImages.Split(',');
         }
         #endregion
     }

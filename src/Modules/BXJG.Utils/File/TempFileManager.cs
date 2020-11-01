@@ -20,6 +20,7 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 using Microsoft.Extensions.Configuration;
 using Abp.Extensions;
+using System.Text.RegularExpressions;
 
 namespace BXJG.Utils.File
 {
@@ -44,7 +45,14 @@ namespace BXJG.Utils.File
     public class TempFileManager : DomainService//, ITransientDependency
     {
         #region 字段和属性
-        string server;
+        /// <summary>
+        /// appsettings中的app下的ServerRootAddress
+        /// http://xxx.xxx.xx:21021/
+        /// </summary>
+        string serverRootAddress;
+        /// <summary>
+        /// abp提供的设置管理器
+        /// </summary>
         readonly ISettingManager settingManager;
         /// <summary>
         /// d:\app\wwwroot
@@ -64,6 +72,11 @@ namespace BXJG.Utils.File
         /// abp提供的异步取消
         /// </summary>
         public ICancellationTokenProvider cancellationTokenProvider { get; set; } = NullCancellationTokenProvider.Instance; //空模式
+        /// <summary>
+        /// 用来匹配字符串文本中包含的图片地址列表
+        /// 在构造函数中被初始化
+        /// </summary>
+        Regex regex;
         #endregion
         #region 构造函数
         /// <summary>
@@ -75,7 +88,8 @@ namespace BXJG.Utils.File
         /// <param name="settingManager">abp提供的settings系统</param>
         public TempFileManager(IEnv env, ISettingManager settingManager, IConfiguration configuration)
         {
-            server = configuration["App:ServerRootAddress"];
+            serverRootAddress = configuration["App:ServerRootAddress"];
+            regex = new Regex($@"<img.+?src=['""]{serverRootAddress}(\S+)['""]", RegexOptions.Multiline | RegexOptions.IgnoreCase);
             this.settingManager = settingManager;
 
             rootDir = env.Root;                                         // d:\app\wwwroot
@@ -102,7 +116,7 @@ namespace BXJG.Utils.File
                 return p;
             p = p.Replace("\\", "/");
             p = p.TrimStart('/');
-            p = server + p;
+            p = serverRootAddress + p;
             return p;
         }
         /// <summary>
@@ -115,7 +129,7 @@ namespace BXJG.Utils.File
         {
             if (p.IsNullOrWhiteSpace())
                 return p;
-            p = p.Replace(server, "");
+            p = p.Replace(serverRootAddress, "");
             if (!p.StartsWith('/'))
                 p = "/" + p;
             return p;
@@ -191,8 +205,10 @@ namespace BXJG.Utils.File
         public async ValueTask<List<FileResult>> MoveAsync(params string[] inputs)
         {
             var list = new List<FileResult>();
-            foreach (var item in inputs)
+            for (var jk = 0; jk < inputs.Length; jk++)
             {
+                var item = inputs[jk].Replace("/", "\\");
+
                 if (!item.Contains(Consts.UploadTemp, StringComparison.OrdinalIgnoreCase))
                 {
                     var rr = new FileResult();
@@ -246,17 +262,51 @@ namespace BXJG.Utils.File
                 try
                 {
                     var f = this.Relative2AbsolutePath(item);
-                    var d = ConvertToThumPath(f);
                     System.IO.File.Delete(f);
+                }
+                catch (Exception ex)
+                {
+                    base.Logger.Warn("文件删除失败", ex);
+                }
+                try
+                {
+                    var f = this.Relative2AbsolutePath(item);
+                    var d = ConvertToThumPath(f);
                     System.IO.File.Delete(d);
                 }
                 catch (Exception ex)
                 {
-                    base.Logger.Warn("图片删除失败", ex);
+                    base.Logger.Warn("缩略图删除失败", ex);
                 }
             }
             return new ValueTask();
         }
+
+        #region 文章中的图片处理
+        //public ValueTask<(string, string[])> HandConentAsync(string str)
+        //{
+
+        //}
+
+        string pattern;
+        /// <summary>
+        /// 获取指定内容中所包含的图片的相对路径
+        /// /aaa/bbb/cc.jpg
+        /// </summary>
+        /// <param name="content"></param>
+        /// <returns></returns>
+        public string[] GetMatchedImagePath(string content)
+        {
+            //Regex rg = new Regex($@"<img.+src=('|""){server}/(\S+)('|"")", RegexOptions.Multiline);
+            return regex.Matches(content).Select(c => c.Groups[1].Value).ToArray();
+        }
+
+        public string ReplaceImagePath(string content)
+        {
+            return regex.Replace(content, c => c.Value.Replace("temp/", ""));
+        }
+        #endregion
+
         #endregion
         #region 辅助方法
         /// <summary>
@@ -287,7 +337,7 @@ namespace BXJG.Utils.File
         /// <returns></returns>
         string Relative2AbsolutePath(string path)
         {
-            return rootDir + path;
+            return Path.Combine(rootDir, path);
         }
         /// <summary>
         /// 临时目录转换为正式目录

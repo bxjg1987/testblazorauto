@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ZLJ.Migrations
 {
-    public partial class init : Migration
+    public partial class init514 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

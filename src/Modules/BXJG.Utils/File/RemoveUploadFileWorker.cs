@@ -15,11 +15,16 @@ namespace BXJG.Utils.File
         string dir;
         public RemoveUploadFileWorker(AbpTimer timer, IEnv env) : base(timer)
         {
-            dir = Path.Combine(env.Root,Consts.UploadTemp);
+            dir = Path.Combine(env.Root, Consts.UploadTemp);
             Timer.Period = 1000 * 60;//时间别太长，默认情况下应用长时间不被访问，应用会终止
         }
         //[UnitOfWork]
         protected override void DoWork()
+        {
+            DoWork(dir);
+        }
+
+        protected void DoWork(string dir)
         {
             var files = Directory.GetFiles(dir);
             foreach (var item in files)
@@ -27,6 +32,14 @@ namespace BXJG.Utils.File
                 var file = new FileInfo(item);
                 if ((DateTime.Now - file.CreationTime).TotalMinutes > 30)
                     System.IO.File.Delete(item);
+            }
+            var dirs = Directory.GetDirectories(dir);
+            if (dirs.Length > 0)
+            {
+                foreach (var item in dirs)
+                {
+                    DoWork(item);
+                }
             }
         }
     }
