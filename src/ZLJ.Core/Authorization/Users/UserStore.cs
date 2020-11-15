@@ -18,7 +18,7 @@ namespace ZLJ.Authorization.Users
             IUnitOfWorkManager unitOfWorkManager,
             IRepository<User, long> userRepository,
             IRepository<Role> roleRepository,
-            IAsyncQueryableExecuter asyncQueryableExecuter,
+            
             IRepository<UserRole, long> userRoleRepository,
             IRepository<UserLogin, long> userLoginRepository,
             IRepository<UserClaim, long> userClaimRepository,
@@ -29,7 +29,7 @@ namespace ZLJ.Authorization.Users
                 unitOfWorkManager,
                 userRepository,
                 roleRepository,
-                asyncQueryableExecuter,
+                
                 userRoleRepository,
                 userLoginRepository,
                 userClaimRepository,

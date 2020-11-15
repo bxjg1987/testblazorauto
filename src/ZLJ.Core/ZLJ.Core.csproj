@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <VersionPrefix>1.0.0.0</VersionPrefix>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <AssemblyName>ZLJ.Core</AssemblyName>
     <PackageId>ZLJ.Core</PackageId>
@@ -23,9 +23,9 @@
     <Compile Remove="Shop\OrderManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Abp.AutoMapper" Version="5.14.0" />
-    <PackageReference Include="Abp.ZeroCore" Version="5.14.0" />
-    <PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="3.3.1" />
+    <PackageReference Include="Abp.AutoMapper" Version="6.0.0" />
+    <PackageReference Include="Abp.ZeroCore" Version="6.0.0" />
+    <PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="3.4.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BaseInfo\BXJG.BaseInfo.Core\BXJG.BaseInfo.Core.csproj" />
