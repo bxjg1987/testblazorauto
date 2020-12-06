@@ -18,7 +18,6 @@ using Abp.Dependency;
 using Abp.Json;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
-using BXJG.WeChat.Payment;
 using ZLJ.Web.Host.Controllers;
 using System.IO;
 using BXJG.Common;
@@ -44,7 +43,7 @@ namespace ZLJ.Web.Host.Startup
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddBXJGCommon();
+            //services.AddBXJGCommon();
            // services.AddLettuceEncrypt();
             //MVC
             services.AddControllersWithViews(
@@ -65,10 +64,10 @@ namespace ZLJ.Web.Host.Startup
             IdentityRegistrar.Register(services);
             AuthConfigurer.Configure(services, _appConfiguration);
  
-            services.AddWeChatPayment<WeChatPaymentNoticeHandler>(opt=> {
-                opt.mch_id = "商户id";
-                opt.key = "商户平台秘钥";
-            });
+            //services.AddWeChatPayment<WeChatPaymentNoticeHandler>(opt=> {
+            //    opt.mch_id = "商户id";
+            //    opt.key = "商户平台秘钥";
+            //});
 
             services.AddSignalR();
 
@@ -157,7 +156,7 @@ namespace ZLJ.Web.Host.Startup
 
             app.UseAbpRequestLocalization();
 
-            app.UseWeChatPayment();
+           // app.UseWeChatPayment();
 
 
             app.UseEndpoints(endpoints =>

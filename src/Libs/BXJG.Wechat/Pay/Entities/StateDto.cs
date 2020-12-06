@@ -19,7 +19,7 @@ namespace BXJG.WeChat.Pay.Entities
 
         static StateDto()
         {
-            SuccessJsonString = JsonConvert.SerializeObject(Success);
+            SuccessJsonString = System.Text.Json.JsonSerializer.Serialize(Success);
         }
 
         public StateDto()

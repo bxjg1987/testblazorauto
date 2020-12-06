@@ -7,11 +7,16 @@ using System.Threading.Tasks;
 namespace BXJG.WeChat.Pay.Entities
 {
     /// <summary>
-    /// jsapi/小程序下单接口的返回值
+    /// jsapi/小程序下单接口的返回值<br />
     /// <seealso cref="PayServiceV3.ReadyToPayAsync(ReadyToPayForJSAPIOrMiniProgramInput)" href="https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/pay/transactions/chapter3_2.shtml" />
     /// </summary>
     public class ReadyToPayForJSAPIOrMiniProgramResult
     {
+        public ReadyToPayForJSAPIOrMiniProgramResult()
+        {
+          
+        }
+
         public ReadyToPayForJSAPIOrMiniProgramResult(string prepay_id)
         {
             this.prepay_id = prepay_id;
