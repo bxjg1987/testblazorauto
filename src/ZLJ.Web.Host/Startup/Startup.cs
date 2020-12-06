@@ -21,6 +21,7 @@ using Newtonsoft.Json.Serialization;
 using BXJG.WeChat.Payment;
 using ZLJ.Web.Host.Controllers;
 using System.IO;
+using BXJG.Common;
 using BXJG.Shop;
 using BXJG.Utils;
 using BXJG.GeneralTree;
@@ -43,6 +44,7 @@ namespace ZLJ.Web.Host.Startup
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            services.AddBXJGCommon();
            // services.AddLettuceEncrypt();
             //MVC
             services.AddControllersWithViews(

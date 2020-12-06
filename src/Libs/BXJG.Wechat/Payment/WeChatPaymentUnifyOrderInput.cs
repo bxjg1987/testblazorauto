@@ -160,7 +160,7 @@ namespace BXJG.WeChat.Payment
         /// </summary>
         public string ResetNonce(int k = 12)
         {
-            nonce_str = RandomHelper.RandomBase64(k);
+            nonce_str = SecurityHelper.RandomBase64(k);
             return nonce_str;
         }
         ///// <summary>

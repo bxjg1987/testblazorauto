@@ -1,6 +1,5 @@
 ﻿using BXJG.WeChat.Common;
 using BXJG.WeChat.MiniProgram;
-using BXJG.WeChat.Payment;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
 using System;

@@ -19,7 +19,6 @@ using Microsoft.EntityFrameworkCore;
 using BXJG.Shop.Customer;
 using Abp.Threading;
 using BXJG.Shop.Catalogue;
-using BXJG.WeChat.Payment;
 using BXJG.Common;
 using ZLJ.BaseInfo.Administrative;
 
@@ -34,21 +33,19 @@ namespace BXJG.Shop.Sale
         private readonly OrderManager orderManager;
         private readonly IRepository<AdministrativeEntity, long> administrativeRepository;
         private readonly IRepository<ProductEntity, long> itemRepository;
-        private readonly WeChatPaymentService wechatPaymentService;
+      //  private readonly WeChatPaymentService wechatPaymentService;
 
         public ICancellationTokenProvider CancellationToken { get; set; } = NullCancellationTokenProvider.Instance;
 
         public OrderAppService(IRepository<OrderEntity, long> repository,
                                OrderManager orderManager,
                                IRepository<AdministrativeEntity, long> administrativeRepository,
-                               IRepository<ProductEntity, long> itemRepository,
-                               WeChatPaymentService wechatPaymentService)
+                               IRepository<ProductEntity, long> itemRepository)
         {
             this.repository = repository;
             this.orderManager = orderManager;
             this.administrativeRepository = administrativeRepository;
             this.itemRepository = itemRepository;
-            this.wechatPaymentService = wechatPaymentService;
         }
         /// <summary>
         /// 根据条件查询订单列表

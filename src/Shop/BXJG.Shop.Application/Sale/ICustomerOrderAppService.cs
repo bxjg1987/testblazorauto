@@ -17,11 +17,11 @@ namespace BXJG.Shop.Sale
         /// <param name="input">前端顾客下单时需要提供的数据</param>
         /// <returns>创建好的订单</returns>
         Task<CustomerOrderDto> CreateAsync(CustomerOrderCreateDto input);
-        /// <summary>
-        /// 前台顾客发起订单支付
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        Task<CustomerPaymentResult> PaymentAsync(CustomerPaymentInput input);
+        ///// <summary>
+        ///// 前台顾客发起订单支付
+        ///// </summary>
+        ///// <param name="input"></param>
+        ///// <returns></returns>
+        //Task<CustomerPaymentResult> PaymentAsync(CustomerPaymentInput input);
     }
 }

@@ -11,7 +11,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
 using BXJG.Shop.Catalogue;
-using BXJG.WeChat.Payment;
 using Abp.Threading;
 using BXJG.Common;
 using ZLJ.BaseInfo.Administrative;
@@ -28,7 +27,6 @@ namespace BXJG.Shop.Sale
         private readonly OrderManager orderManager;
         private readonly IRepository<AdministrativeEntity, long> generalTreeManager;
         private readonly IRepository<ProductEntity, long> itemRepository;
-        private readonly WeChatPaymentService weChatPaymentService;
 
         public ICancellationTokenProvider CancellationToken { get; set; } = NullCancellationTokenProvider.Instance;
 
@@ -38,14 +36,12 @@ namespace BXJG.Shop.Sale
                                        IRepository<OrderEntity, long> repository,
                                        OrderManager orderManager,
                                        IRepository<AdministrativeEntity, long> generalTreeManager,
-                                       IRepository<ProductEntity, long> itemRepository,
-                                       WeChatPaymentService weChatPaymentService) : base(customerRepository, customerManager, customerSession)
+                                       IRepository<ProductEntity, long> itemRepository) : base(customerRepository, customerManager, customerSession)
         {
             this.repository = repository;
             this.orderManager = orderManager;
             this.generalTreeManager = generalTreeManager;
             this.itemRepository = itemRepository;
-            this.weChatPaymentService = weChatPaymentService;
         }
 
         /// <summary>
@@ -78,20 +74,20 @@ namespace BXJG.Shop.Sale
                 itemEntities.ToArray());
             return ObjectMapper.Map<CustomerOrderDto>(order);
         }
-        /// <summary>
-        /// 前台顾客发起订单支付
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        public async Task<CustomerPaymentResult> PaymentAsync(CustomerPaymentInput input)
-        {
-            var customerId = await base.GetCurrentCustomerIdAsync();
-            var order = await repository.GetAsync(input.OrderId);
-            if (customerId != order.CustomerId)
-                throw new ApplicationException();
+        ///// <summary>
+        ///// 前台顾客发起订单支付
+        ///// </summary>
+        ///// <param name="input"></param>
+        ///// <returns></returns>
+        //public async Task<CustomerPaymentResult> PaymentAsync(CustomerPaymentInput input)
+        //{
+        //    var customerId = await base.GetCurrentCustomerIdAsync();
+        //    var order = await repository.GetAsync(input.OrderId);
+        //    if (customerId != order.CustomerId)
+        //        throw new ApplicationException();
 
-            WeChatPaymentUnifyOrderResult wpor = await weChatPaymentService.PayAsync("ABP-商城", order.OrderNo, order.PaymentAmount,cancellationToken:this.CancellationToken.Token);
-            return new CustomerPaymentResult(wpor);
-        }
+        //  //  WeChatPaymentUnifyOrderResult wpor = await weChatPaymentService.PayAsync("ABP-商城", order.OrderNo, order.PaymentAmount,cancellationToken:this.CancellationToken.Token);
+        //    return new CustomerPaymentResult(null);
+        //}
     }
 }
