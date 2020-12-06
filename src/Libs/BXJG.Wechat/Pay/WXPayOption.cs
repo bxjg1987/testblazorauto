@@ -14,7 +14,6 @@ namespace BXJG.WeChat.Pay
     /// </summary>
     public class WXPayOption
     {
-        string mchid;
         /// <summary>
         /// 商户id
         /// </summary>

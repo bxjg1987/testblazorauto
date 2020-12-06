@@ -26,6 +26,7 @@
     <Compile Remove="MiniProgram\MiniProgramCreatingTicketContext.cs" />
     <Compile Remove="Pay\ApiV3.cs" />
     <Compile Remove="Pay\GlobalComponentInitializerExtensions.cs" />
+    <Compile Remove="Pay\HttpClientFactoryExtensions.cs" />
     <Compile Remove="Pay\WXSignValidator.cs" />
   </ItemGroup>
 

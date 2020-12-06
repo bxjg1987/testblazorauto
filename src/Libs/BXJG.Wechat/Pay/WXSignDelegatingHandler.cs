@@ -11,8 +11,6 @@ using System.Threading.Tasks;
 
 namespace BXJG.WeChat.Pay
 {
-    //2020-11-30  核查
-
     /// <summary>
     /// 微信支付通讯过程使用全局的<see cref="WXPayComponents.PayClient"/>通讯，这个自定义的DelegatingHandler处理微信接口通讯中的签名和验签<br/>
     /// 我方向微信支付服务端发起请求时，使用我方私钥进行签名<br/>
@@ -33,10 +31,9 @@ namespace BXJG.WeChat.Pay
          */
 
         SecretHelper secretHelper;
-        public WXSignDelegatingHandler( SecretHelper secretHelper)
+        public WXSignDelegatingHandler(SecretHelper secretHelper)
         {
             InnerHandler = new HttpClientHandler();
-
             this.secretHelper = secretHelper;
         }
 
@@ -56,7 +53,7 @@ namespace BXJG.WeChat.Pay
 
             //使用微信支付平台证书中的公钥解密
             if (!(await secretHelper.VerifyAsync(response)))
-                 throw new ApplicationException("微信支付响应时，验证签名失败！");
+                throw new ApplicationException("微信支付响应时，验证签名失败！");
             return response;
         }
     }
