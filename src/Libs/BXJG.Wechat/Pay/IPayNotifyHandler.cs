@@ -29,11 +29,11 @@ namespace BXJG.WeChat.Pay
         Task PrecessAsync(PayNotifySuccessResult input, CancellationToken cancellationToken = default);
     }
 
-    /// <summary>
-    /// 支付结果通知处理器工厂
-    /// </summary>
-    public interface IPayNotifyHandlerFactory
-    {
-        IPayNotifyHandler Create(WXPayOption option);
-    }
+    ///// <summary>
+    ///// 支付结果通知处理器工厂
+    ///// </summary>
+    //public interface IPayNotifyHandlerFactory
+    //{
+    //    IPayNotifyHandler Create(WXPayOption option);
+    //}
 }

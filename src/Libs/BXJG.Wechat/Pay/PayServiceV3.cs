@@ -7,14 +7,12 @@ using System.Threading.Tasks;
 using BXJG.Common;
 using BXJG.WeChat.Pay.Entities;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 
 namespace BXJG.WeChat.Pay
 {
-    //2020-12-1  核查
-
     /// <summary>
-    /// 微信支付V3接口
-    /// <para>在没有ioc环境中可以调用<see cref="PayServiceV3.Create"/>创建实例</para>
+    /// 微信支付V3接口<br/>
     /// <seealso href="https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/pages/Overview.shtml" />
     /// </summary>
     public class PayServiceV3
@@ -36,9 +34,9 @@ namespace BXJG.WeChat.Pay
         /// web环境相关信息
         /// </summary>
         IWebEnvironment webEnvironment;
-        public PayServiceV3(WXPayOption wxPaymentOption, IHttpClientFactory wxClientFactory, IClock clock, IWebEnvironment webEnvironment)
+        public PayServiceV3(IOptionsMonitor<WXPayOption> wxPaymentOption, IHttpClientFactory wxClientFactory, IClock clock, IWebEnvironment webEnvironment)
         {
-            this.option = wxPaymentOption;
+            this.option = wxPaymentOption.CurrentValue;
             this.wxClientFactory = wxClientFactory;
             this.clock = clock;
             this.webEnvironment = webEnvironment;
@@ -59,9 +57,8 @@ namespace BXJG.WeChat.Pay
              */
 
             //微信支付模块内部赋值
-            //input.appid = option.AppId;
             input.mchid = option.Mchid;
-            if (input.time_expire == default(DateTime))
+            if (input.time_expire == default)
                 input.time_expire = (await clock.GetNowAsync()).AddMinutes(5);//默认过期时间，可以考虑做成配置
             input.notify_url = webEnvironment.CurrUrl + WXPayConst.PayNotifyUrl;
 

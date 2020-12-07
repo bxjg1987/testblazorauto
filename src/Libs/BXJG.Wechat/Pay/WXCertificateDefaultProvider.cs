@@ -109,7 +109,7 @@ namespace BXJG.WeChat.Pay
         /// <param name="wechatPaySerial">证书的序号</param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<string> GetAsync(string wechatPaySerial, CancellationToken cancellationToken = default)
+        public async ValueTask<string> GetAsync(string wechatPaySerial, CancellationToken cancellationToken = default)
         {
             //var token = cancellationToken == null ? CancellationToken.None : cancellationToken.Value;
             var now = await clock.GetNowAsync();

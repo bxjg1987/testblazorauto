@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace BXJG.Common
 {
-    public static class ServiceCollectionExtensions
+    public static class BXJGCommonExtensions
     {
         public static IServiceCollection AddBXJGCommon(this IServiceCollection services)
         {
             return services.AddSingleton<IClock, LocalClock>()
-                   .AddSingleton<IEnv, DefaultEnv>();
+                           .AddSingleton<IEnv, DefaultWebEnv>();
         }
     }
 }

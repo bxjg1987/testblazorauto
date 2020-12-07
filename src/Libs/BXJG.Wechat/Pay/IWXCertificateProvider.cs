@@ -19,6 +19,6 @@ namespace BXJG.WeChat.Pay
         /// </summary>
         /// <param name="wechatpaySerial">证书序号</param>
         /// <returns></returns>
-        Task<string> GetAsync(string wechatpaySerial, CancellationToken cancellationToken = default);
+        ValueTask<string> GetAsync(string wechatpaySerial, CancellationToken cancellationToken = default);
     }
 }

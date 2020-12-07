@@ -92,13 +92,13 @@ namespace BXJG.Utils.File
             regex = new Regex($@"<img.+?src=['""]{serverRootAddress}(\S+)['""]", RegexOptions.Multiline | RegexOptions.IgnoreCase);
             this.settingManager = settingManager;
 
-            rootDir = env.Root;                                         // d:\app\wwwroot
+            rootDir = env.WebRoot;                                         // d:\app\wwwroot
 
-            this.uploadDir = Path.Combine(env.Root, Consts.UploadDir);  // d:\app\wwwroot\upload 
+            this.uploadDir = Path.Combine(env.WebRoot, Consts.UploadDir);  // d:\app\wwwroot\upload 
             if (!Directory.Exists(uploadDir))
                 Directory.CreateDirectory(uploadDir);
 
-            this.tempDir = Path.Combine(env.Root, Consts.UploadTemp);   // d:\app\wwwroot\upload\temp
+            this.tempDir = Path.Combine(env.WebRoot, Consts.UploadTemp);   // d:\app\wwwroot\upload\temp
             if (!Directory.Exists(tempDir))
                 Directory.CreateDirectory(tempDir);
         }

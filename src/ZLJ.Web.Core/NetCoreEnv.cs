@@ -14,6 +14,6 @@ namespace ZLJ
             this.webHostEnvironment = webHostEnvironment;
         }
 
-        public string Root => webHostEnvironment.WebRootPath;
+        public string WebRoot => webHostEnvironment.WebRootPath;
     }
 }

@@ -8,7 +8,7 @@ namespace BXJG.Utils.File
 {
     public class DefaultEnv : IEnv
     {
-        public string Root
+        public string WebRoot
         {
             get
             {
