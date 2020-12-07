@@ -30,7 +30,7 @@ namespace BXJG.Utils
         {
             //注册非abp依赖的公共库Common中的服务
             base.IocManager.RegisterIfNot<IClock, LocalClock>(DependencyLifeStyle.Singleton);
-            base.IocManager.RegisterIfNot<IEnv,BXJG.Common.DefaultWebEnv>(DependencyLifeStyle.Singleton);
+            //base.IocManager.RegisterIfNot<IEnv,BXJG.Common.DefaultWebEnv>(DependencyLifeStyle.Singleton);
  
 
             IocManager.RegisterAssemblyByConvention(typeof(BXJGUtilsModule).GetAssembly());
@@ -39,7 +39,7 @@ namespace BXJG.Utils
             //调试模式时默认实现获取的路径是 ..\bin\debug\wwwroot
             //而asp.net core默认读取是在ZLJ.Web.Host\wwwroot 导致上传的文件看不到效果
             //发布到服务器后不存在这个问题，调试时需要在web.core模块PreInitialize中替换服务，注意经过测试一定要在PreInitialize中替换
-            IocManager.Register<IEnv, Utils.File.DefaultEnv>(Abp.Dependency.DependencyLifeStyle.Singleton);
+            //IocManager.Register<IEnv, Utils.File.DefaultEnv>(Abp.Dependency.DependencyLifeStyle.Singleton);
         }
 
         public override void PostInitialize()

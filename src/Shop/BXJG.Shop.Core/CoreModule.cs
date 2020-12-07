@@ -15,10 +15,12 @@ using BXJG.Shop.Customer;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor.MsDependencyInjection;
 using System.Collections.Generic;
+using BXJG.WeChat;
 
 namespace BXJG.Shop
 {
-    [DependsOn(typeof(GeneralTreeModule))]
+    [DependsOn(typeof(GeneralTreeModule),
+               typeof(BXJGWeChatModule))]
     public class CoreModule : AbpModule
     {
         public override void PreInitialize()

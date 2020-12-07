@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace BXJG.Common
 {
-    public static class BXJGCommonExtensions
+    public static class BXJGCommonWebExtensions
     {
         public static IServiceCollection AddBXJGCommon(this IServiceCollection services)
         {
-            return services.AddSingleton<IClock, LocalClock>();
+            return services.AddSingleton<IEnv, AspNetEnv>();
         }
     }
 }

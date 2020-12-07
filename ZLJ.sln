@@ -94,7 +94,9 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "WebAdmin", "..\abpfront\src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.WeChat.Abp", "src\Modules\BXJG.WeChat.Abp\BXJG.WeChat.Abp.csproj", "{8F980AC0-C0DA-45E6-88BC-4235AA6AC9C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BXJG.Common.Web", "src\libs\BXJG.Common.Web\BXJG.Common.Web.csproj", "{FAC74AD9-FB47-4429-A697-56CA6513E8B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Common.Web", "src\libs\BXJG.Common.Web\BXJG.Common.Web.csproj", "{FAC74AD9-FB47-4429-A697-56CA6513E8B1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BXJG.Utils.Web", "src\modules\BXJG.Utils.Web\BXJG.Utils.Web.csproj", "{B4D49ADD-F501-4AD6-81F3-EA4AAE6EF131}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -222,6 +224,10 @@ Global
 		{FAC74AD9-FB47-4429-A697-56CA6513E8B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FAC74AD9-FB47-4429-A697-56CA6513E8B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FAC74AD9-FB47-4429-A697-56CA6513E8B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4D49ADD-F501-4AD6-81F3-EA4AAE6EF131}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4D49ADD-F501-4AD6-81F3-EA4AAE6EF131}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4D49ADD-F501-4AD6-81F3-EA4AAE6EF131}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4D49ADD-F501-4AD6-81F3-EA4AAE6EF131}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -262,6 +268,7 @@ Global
 		{139AEC88-19D0-4B44-8900-AB6F3140E070} = {214A4B25-4EEC-4729-B68C-74FE69CC7B45}
 		{8F980AC0-C0DA-45E6-88BC-4235AA6AC9C1} = {D42FF479-F331-48F6-AAA2-45B9FD451892}
 		{FAC74AD9-FB47-4429-A697-56CA6513E8B1} = {40F12CA4-F153-4F4E-AB26-E044EF0D0F7E}
+		{B4D49ADD-F501-4AD6-81F3-EA4AAE6EF131} = {D42FF479-F331-48F6-AAA2-45B9FD451892}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F45DD46C-6040-4FCC-87E0-648786C36933}

@@ -1,5 +1,4 @@
 ﻿using BXJG.Common;
-using Microsoft.Extensions.Hosting;
 using Org.BouncyCastle.Crypto.Engines;
 using Org.BouncyCastle.Crypto.Modes;
 using Org.BouncyCastle.Crypto.Parameters;
@@ -48,11 +47,11 @@ namespace BXJG.WeChat.Pay
         /// <summary>
         /// web环境
         /// </summary>
-        IHostEnvironment webEnvironment;
+        IEnv webEnvironment;
 
         public SecretHelper(WXPayOption option,
                             IWXCertificateProvider wxCertificateProvider,
-                            IHostEnvironment webEnvironment,
+                            IEnv webEnvironment,
                             IClock clock)
         {
             this.wxCertificateProvider = wxCertificateProvider;
@@ -63,7 +62,7 @@ namespace BXJG.WeChat.Pay
 
         public async Task<SecretHelper> InitAsync(CancellationToken cancellationToken = default)
         {
-            var path = Path.Combine(webEnvironment.ContentRootPath,"wx", option.CertPath);
+            var path = Path.Combine(webEnvironment.SecureDirectory,"wx", option.CertPath);
             string str;
             using (var sr = new StreamReader(path))
             {
@@ -77,7 +76,7 @@ namespace BXJG.WeChat.Pay
             }
 
             //rsaCert = (RSACryptoServiceProvider)cert.PublicKey.Key;
-            path = Path.Combine(webEnvironment.ContentRootPath,"wx", option.PrivateKeyPath);
+            path = Path.Combine(webEnvironment.SecureDirectory, "wx", option.PrivateKeyPath);
 
             using (var sr = new StreamReader(path))
             {
@@ -220,6 +219,5 @@ namespace BXJG.WeChat.Pay
             var signature = requestHeader["Wechatpay-Signature"];
             return wxSignValidator.VerifyAsync(timestamp2, nonce, body, wechatpaySerial, signature,cancellationToken);
         }
-
     }
 }

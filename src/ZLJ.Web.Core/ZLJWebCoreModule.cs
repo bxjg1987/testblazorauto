@@ -27,16 +27,15 @@ using Abp.Configuration.Startup;
 
 namespace ZLJ
 {
-    [DependsOn(
-        typeof(BXJGUtilsModule),
-        typeof(ZLJApplicationModule),
-        typeof(ZLJEntityFrameworkModule),
-        typeof(AbpAspNetCoreModule),
-        typeof(AbpAspNetCoreSignalRModule),
-        typeof(ApplicationModule),
-        typeof(BXJGCMSApplicationModule),
-        typeof(BXJGEquipmentEFCoreModule),
-        typeof(BXJGEquipmentApplicationModule))]
+    [DependsOn(typeof(BXJGUtilsWebModule),
+               typeof(ZLJApplicationModule),
+               typeof(ZLJEntityFrameworkModule),
+               typeof(AbpAspNetCoreModule),
+               typeof(AbpAspNetCoreSignalRModule),
+               typeof(ApplicationModule),
+               typeof(BXJGCMSApplicationModule),
+               typeof(BXJGEquipmentEFCoreModule),
+               typeof(BXJGEquipmentApplicationModule))]
     public class ZLJWebCoreModule : AbpModule
     {
         private readonly IWebHostEnvironment _env;
@@ -68,7 +67,7 @@ namespace ZLJ
 
             Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(BXJGUtilsModule).Assembly/*, moduleName: "utils", useConventionalHttpVerbs: true*/);
             Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(GeneralTreeModule).Assembly);
-            Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(ApplicationModule).Assembly,"bxjgshop");
+            Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(ApplicationModule).Assembly, "bxjgshop");
             Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(BXJGCMSApplicationModule).Assembly);
             Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(BXJGEquipmentApplicationModule).Assembly);
             Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(BXJGBaseInfoApplicationModule).Assembly);
@@ -78,7 +77,7 @@ namespace ZLJ
             //默认每次启动都会尝试数据库迁移，这里禁用它提高系统启动速度
             abpProjectNameEntityFrameworkModule.SkipDbSeed = true;
 
-            Configuration.ReplaceService<IEnv, NetCoreEnv>(DependencyLifeStyle.Singleton);//经过测试没什么卵用
+            //Configuration.ReplaceService<IEnv, NetCoreEnv>(DependencyLifeStyle.Singleton);//经过测试没什么卵用
         }
 
         private void ConfigureTokenAuth()
@@ -105,7 +104,7 @@ namespace ZLJ
         {
             IocManager.Resolve<ApplicationPartManager>()
                 .AddApplicationPartsIfNotAddedBefore(typeof(ZLJWebCoreModule).Assembly);
-           // Configuration.ReplaceService<IEnv, NetCoreEnv>(DependencyLifeStyle.Singleton);//经过测试没什么卵用
+            // Configuration.ReplaceService<IEnv, NetCoreEnv>(DependencyLifeStyle.Singleton);//经过测试没什么卵用
         }
     }
 }

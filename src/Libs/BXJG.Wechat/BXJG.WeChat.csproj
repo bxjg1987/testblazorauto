@@ -17,13 +17,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Message\**" />
+    <Compile Remove="MiniProgram\**" />
     <Compile Remove="Payment\**" />
+    <EmbeddedResource Remove="Message\**" />
+    <EmbeddedResource Remove="MiniProgram\**" />
     <EmbeddedResource Remove="Payment\**" />
+    <None Remove="Message\**" />
+    <None Remove="MiniProgram\**" />
     <None Remove="Payment\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="MiniProgram\MiniProgramCreatingTicketContext.cs" />
+    <Compile Remove="Common\AccessTokenProvider.cs" />
+    <Compile Remove="Common\WeChatCommonExtensions.cs" />
+    <Compile Remove="IPostToWeChat.cs" />
     <Compile Remove="Pay\ApiV3.cs" />
     <Compile Remove="Pay\GlobalComponentInitializerExtensions.cs" />
     <Compile Remove="Pay\WXSignValidator.cs" />

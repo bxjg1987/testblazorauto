@@ -8,9 +8,11 @@ using System.Threading;
 using BXJG.WeChat.Pay.Entities;
 using System.IO;
 using BXJG.Common;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+
 namespace BXJG.WeChat.Pay
 {
     /// <summary>
@@ -36,6 +38,7 @@ namespace BXJG.WeChat.Pay
         /// 用于获取准确的当前时间
         /// </summary>
         IClock clock;
+        private readonly ILogger logger;
         IHttpClientFactory httpClientFactory;
         SecretHelper secretHelper;
 
@@ -57,13 +60,15 @@ namespace BXJG.WeChat.Pay
                                             IHttpClientFactory wxClientFactory,
                                             SecretHelper secretHelper,
                                             IClock clock,
-                                            IHostEnvironment secureDirectory)
+                                            IEnv secureDirectory,
+                                            ILogger logger)
         {
             this.wxPaymentOption = wxPaymentOption.CurrentValue;
             this.httpClientFactory = wxClientFactory;
             this.clock = clock;
+            this.logger = logger;
             this.secretHelper = secretHelper;
-            this.wxCertPath = Path.Combine(secureDirectory.ContentRootPath, @"wx\wxpaycert.json");
+            this.wxCertPath = Path.Combine(secureDirectory.SecureDirectory,"wx", "wxpaycert.json");
         }
         //private string sfd() {
         //    return wxPaymentOption.ApiV3SecretKey;
@@ -96,6 +101,7 @@ namespace BXJG.WeChat.Pay
                     }
                     catch (Exception ex)
                     {
+                        logger.LogError(ex,"微信支付证书更新失败！");
                         //记录日志、触发事件等
                     }
                     await Task.Delay(1000 * 60 * 60 * 23);

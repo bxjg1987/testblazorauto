@@ -37,6 +37,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\BaseInfo\BXJG.BaseInfo.Core\BXJG.BaseInfo.Core.csproj" />
     <ProjectReference Include="..\..\Modules\BXJG.GeneralTree\BXJG.GeneralTree.csproj" />
+    <ProjectReference Include="..\..\Modules\BXJG.WeChat.Abp\BXJG.WeChat.Abp.csproj" />
   </ItemGroup>
 
   <ItemGroup>

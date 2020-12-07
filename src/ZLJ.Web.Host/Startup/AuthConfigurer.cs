@@ -7,9 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Abp.Runtime.Security;
-using BXJG.WeChat.MiniProgram;
 using Microsoft.AspNetCore.Authentication;
-using ZLJ.Authentication.WeChatMiniProgram;
 
 namespace ZLJ.Web.Host.Startup
 {
@@ -57,14 +55,14 @@ namespace ZLJ.Web.Host.Startup
                 });
             }
 
-            if (bool.Parse(configuration["Authentication:WeChartMiniProgram:IsEnabled"]))
-            {
-                authBuilder.AddWeChartMiniProgram<WeChatMiniProgramLoginHandler>(opt =>
-                {
-                    opt.AppId = configuration["Authentication:WeChartMiniProgram:AppId"];
-                    opt.Secret = configuration["Authentication:WeChartMiniProgram:Secret"];
-                });
-            }
+            //if (bool.Parse(configuration["Authentication:WeChartMiniProgram:IsEnabled"]))
+            //{
+            //    authBuilder.AddWeChartMiniProgram<WeChatMiniProgramLoginHandler>(opt =>
+            //    {
+            //        opt.AppId = configuration["Authentication:WeChartMiniProgram:AppId"];
+            //        opt.Secret = configuration["Authentication:WeChartMiniProgram:Secret"];
+            //    });
+            //}
         }
 
         /* This method is needed to authorize SignalR javascript client.

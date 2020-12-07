@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using BXJG.Common;
 using BXJG.WeChat.Pay.Entities;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
 namespace BXJG.WeChat.Pay
@@ -33,8 +32,8 @@ namespace BXJG.WeChat.Pay
         /// <summary>
         /// web环境相关信息
         /// </summary>
-        IWebEnvironment webEnvironment;
-        public PayServiceV3(IOptionsMonitor<WXPayOption> wxPaymentOption, IHttpClientFactory wxClientFactory, IClock clock, IWebEnvironment webEnvironment)
+        IEnv webEnvironment;
+        public PayServiceV3(IOptionsMonitor<WXPayOption> wxPaymentOption, IHttpClientFactory wxClientFactory, IClock clock, IEnv webEnvironment)
         {
             this.option = wxPaymentOption.CurrentValue;
             this.wxClientFactory = wxClientFactory;
@@ -60,7 +59,7 @@ namespace BXJG.WeChat.Pay
             input.mchid = option.Mchid;
             if (input.time_expire == default)
                 input.time_expire = (await clock.GetNowAsync()).AddMinutes(5);//默认过期时间，可以考虑做成配置
-            input.notify_url = webEnvironment.CurrUrl + WXPayConst.PayNotifyUrl;
+            input.notify_url = webEnvironment.RootUrl + WXPayConst.PayNotifyUrl;
 
             //调用微信支付平台api并返回结果
             var response = await wxClientFactory.CreateClientForWX().PostAsJsonAsync("pay/transactions/jsapi", input);
