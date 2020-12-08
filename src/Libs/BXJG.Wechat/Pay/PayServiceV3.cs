@@ -62,7 +62,7 @@ namespace BXJG.WeChat.Pay
             input.notify_url = webEnvironment.RootUrl + WXPayConst.PayNotifyUrl;
 
             //调用微信支付平台api并返回结果
-            var response = await wxClientFactory.CreateClientForWX().PostAsJsonAsync("pay/transactions/jsapi", input);
+            var response = await wxClientFactory.CreateClientPay().PostAsJsonAsync("pay/transactions/jsapi", input);
             return await response.Content.ReadAsAsync<ReadyToPayForJSAPIOrMiniProgramResult>();
         }
     }

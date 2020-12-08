@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\libs\BXJG.Wechat\BXJG.WeChat.csproj" />
+    <ProjectReference Include="..\BXJG.Utils\BXJG.Utils.csproj" />
   </ItemGroup>
 
 </Project>

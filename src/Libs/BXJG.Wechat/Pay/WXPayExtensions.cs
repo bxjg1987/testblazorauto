@@ -19,6 +19,7 @@ namespace BXJG.WeChat.Pay
         /// <returns></returns>
         public static IServiceCollection AddWXPay(this IServiceCollection services)
         {
+            services.AddSingleton<SecretHelper>();
             services.AddHttpClient(WXPayConst.HttpClientKey, c => {
                 c.BaseAddress = new Uri("https://api.mch.weixin.qq.com/v3/");
             }).AddHttpMessageHandler<WXSignDelegatingHandler>();
@@ -38,7 +39,7 @@ namespace BXJG.WeChat.Pay
         /// </summary>
         /// <param name="httpClientFactory"></param>
         /// <returns></returns>
-        internal static HttpClient CreateClientForWX(this IHttpClientFactory httpClientFactory)
+        internal static HttpClient CreateClientPay(this IHttpClientFactory httpClientFactory)
         {
             return httpClientFactory.CreateClient(WXPayConst.HttpClientKey);
         }

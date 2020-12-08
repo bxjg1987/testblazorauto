@@ -149,7 +149,7 @@ namespace BXJG.WeChat.Pay
             //api路径基地址在httpClient中设置
             //var apiUrl = "https://api.mch.weixin.qq.com/v3/certificates";
             var apiUrl = "certificates";
-            var response = await httpClientFactory.CreateClientForWX().GetAsync(apiUrl);
+            var response = await httpClientFactory.CreateClientPay().GetAsync(apiUrl);
             return await response.Content.ReadAsAsync<WXCertificateResult>(cancellationToken);
         }
     }
