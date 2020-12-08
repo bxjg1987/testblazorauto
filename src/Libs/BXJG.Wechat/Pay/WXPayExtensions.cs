@@ -13,13 +13,24 @@ namespace BXJG.WeChat.Pay
     {
         /// <summary>
         /// 注册微信支付相关服务<br/>
-        /// 在此之前请确保BXJG.Common中的服务已注册
+        /// 在此之前请确保BXJG.Common中的服务已注册<br/>
+        /// 当集成到abp时建议不用调用此方法，而是通过abp的模块化来注册相关服务，但任然需要调用AddWXPayHttpClient注册微信支付内部使用的HttpClient
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>
         public static IServiceCollection AddWXPay(this IServiceCollection services)
         {
-            services.AddSingleton<SecretHelper>();
+            return services.AddSingleton<SecretHelper>()
+                           .AddSingleton<IWXCertificateProvider, WXCertificateDefaultProvider>()
+                           .AddSingleton<PayServiceV3>();
+        }
+        /// <summary>
+        /// 注册微信支付模块内部使用的HttpClient
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddWXPayHttpClient(this IServiceCollection services)
+        {
             services.AddHttpClient(WXPayConst.HttpClientKey, c => {
                 c.BaseAddress = new Uri("https://api.mch.weixin.qq.com/v3/");
             }).AddHttpMessageHandler<WXSignDelegatingHandler>();
@@ -32,7 +43,7 @@ namespace BXJG.WeChat.Pay
         /// <returns></returns>
         public static IServiceCollection AddWXPayFull(this IServiceCollection services)
         {
-            return services.AddBXJGCommon().AddWXPay();
+            return services.AddBXJGCommon().AddWXPay().AddWXPayHttpClient();
         }
         /// <summary>
         /// 创建微信支付模块使用的httpClient

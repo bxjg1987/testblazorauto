@@ -21,41 +21,43 @@ namespace BXJG.WeChat.Pay
     /// </summary>
     public class WXCertificateDefaultProvider : IWXCertificateProvider
     {
-        ///// <summary>
-        ///// 微信支付平台的证书更新时使用的同步锁
-        ///// </summary>
-        //object locker = new object();
         /// <summary>
         /// 微信平台证书获取接口返回的原始数据
         /// </summary>
-        WXCertificateResult wxCertificateResult;
+        private WXCertificateResult wxCertificateResult;
         /// <summary>
         /// 微信支付模块选项对象
         /// </summary>
-        WXPayOption wxPaymentOption;
+        private readonly WXPayOption wxPaymentOption;
         /// <summary>
-        /// 时钟
-        /// 用于获取准确的当前时间
+        /// 时钟 用于获取准确的当前时间
         /// </summary>
-        IClock clock;
+        private readonly IClock clock;
+        /// <summary>
+        /// 日志记录器
+        /// </summary>
         private readonly ILogger logger;
-        IHttpClientFactory httpClientFactory;
-        SecretHelper secretHelper;
-
+        /// <summary>
+        /// 微信支付模块使用的HttpClientFactory
+        /// </summary>
+        private readonly IHttpClientFactory httpClientFactory;
+        /// <summary>
+        /// 加解密、签名、验签等
+        /// </summary>
+        private readonly SecretHelper secretHelper;
         /// <summary>
         /// 存储微信平台证书的文件
         /// </summary>
-        string wxCertPath;
-
-        //这里不要定义wxClient变量，因为WXCertificateDefaultProvider本身是单例的，它的变量也是单例的，导致wxClient的单例无效
-        //若多个方法都需要使用wxClient，则可以像下面这样定义个属性来简化调用
-        //HttpClient wxClient
-        //{
-        //    get { return wxClientFactory.Get(); }
-        //}
-
-        //没有使用默认参数，这样这个类更干净
-        //私有的，确保只有内部类WXCertificateDefaultProviderBuilder可以创建此对象的实例
+        private readonly string wxCertPath;
+        /// <summary>
+        /// 实例化WXCertificateDefaultProvider
+        /// </summary>
+        /// <param name="wxPaymentOption"></param>
+        /// <param name="wxClientFactory"></param>
+        /// <param name="secretHelper"></param>
+        /// <param name="clock"></param>
+        /// <param name="secureDirectory"></param>
+        /// <param name="logger"></param>
         public WXCertificateDefaultProvider(IOptionsMonitor<WXPayOption> wxPaymentOption,
                                             IHttpClientFactory wxClientFactory,
                                             SecretHelper secretHelper,
@@ -69,29 +71,16 @@ namespace BXJG.WeChat.Pay
             this.logger = logger;
             this.secretHelper = secretHelper;
             this.wxCertPath = Path.Combine(secureDirectory.SecureDirectory,"wx", "wxpaycert.json");
-        }
-        //private string sfd() {
-        //    return wxPaymentOption.ApiV3SecretKey;
-        //}
-        public async Task InitAsync()
-        {
-            var txt = await File.ReadAllTextAsync(wxCertPath);
+       
+            var txt =  File.ReadAllText(wxCertPath);
             wxCertificateResult = JsonSerializer.Deserialize<WXCertificateResult>(txt);
             wxCertificateResult.data.Select(c => c.cert = secretHelper.AesGcmDecrypt(c.encrypt_certificate.associated_data, c.encrypt_certificate.nonce, c.encrypt_certificate.ciphertext));
-            //默认使用全局静态配置，所以这里暂时不配置
-            //foreach (var item in wxCertificateResult.data)
-            //{
-            //    item.apiV3Key = sfd;
-            //}
-            //var mw = wxCertificateResult.data[0].cert.Value;//测试解密证书正常
-
 
             //定时任务检查微信支付平台证书
             var t = new Task(async () =>
             {
                 while (true)
                 {
-
                     try
                     {
                         var xzs = wxCertificateResult.data.OrderBy(c => c.effective_time).First();//获取最新的证书
