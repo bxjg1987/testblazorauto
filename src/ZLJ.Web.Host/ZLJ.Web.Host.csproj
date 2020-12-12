@@ -13,9 +13,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="App_Data\Logs\**" />
+    <Compile Remove="wx\**" />
     <Content Remove="App_Data\Logs\**" />
+    <Content Remove="wx\**" />
     <EmbeddedResource Remove="App_Data\Logs\**" />
+    <EmbeddedResource Remove="wx\**" />
     <None Remove="App_Data\Logs\**" />
+    <None Remove="wx\**" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Controllers\FileController.cs" />
@@ -66,6 +70,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\libs\BXJG.WeChat.Web\BXJG.WeChat.Web.csproj" />
     <ProjectReference Include="..\ZLJ.Web.Core\ZLJ.Web.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
@@ -150,5 +155,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\Logs\" />
+    <Folder Include="wx\" />
   </ItemGroup>
 </Project>

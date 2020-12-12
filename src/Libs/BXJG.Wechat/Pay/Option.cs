@@ -12,7 +12,7 @@ namespace BXJG.WeChat.Pay
     /// <summary>
     /// 微信支付相关配置的对象
     /// </summary>
-    public class WXPayOption
+    public class Option
     {
         /// <summary>
         /// 商户id

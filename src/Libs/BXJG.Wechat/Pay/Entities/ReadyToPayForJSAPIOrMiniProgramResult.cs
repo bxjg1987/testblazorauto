@@ -8,7 +8,7 @@ namespace BXJG.WeChat.Pay.Entities
 {
     /// <summary>
     /// jsapi/小程序下单接口的返回值<br />
-    /// <seealso cref="PayServiceV3.ReadyToPayAsync(ReadyToPayForJSAPIOrMiniProgramInput)" href="https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/pay/transactions/chapter3_2.shtml" />
+    /// <seealso cref="ServiceV3.ReadyToPayAsync(ReadyToPayForJSAPIOrMiniProgramInput)" href="https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/pay/transactions/chapter3_2.shtml" />
     /// </summary>
     public class ReadyToPayForJSAPIOrMiniProgramResult
     {

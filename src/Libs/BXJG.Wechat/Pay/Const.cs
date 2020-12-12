@@ -9,7 +9,7 @@ namespace BXJG.WeChat.Pay
     /// <summary>
     /// 微信支付相关常量
     /// </summary>
-    public class WXPayConst
+    public class Const
     {
         /// <summary>
         /// 支付结果通知相对路径
@@ -39,5 +39,9 @@ namespace BXJG.WeChat.Pay
         /// 命名化httpClient使用的名称
         /// </summary>
         public const string HttpClientKey = "wxPay";
+        /// <summary>
+        /// 微信模块下的支付的配置节点名
+        /// </summary>
+        public const string RootConfigKey = "pay";
     }
 }

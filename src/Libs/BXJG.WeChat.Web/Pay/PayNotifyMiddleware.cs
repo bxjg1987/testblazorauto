@@ -22,12 +22,12 @@ namespace BXJG.WeChat.Pay
     /// </summary>
     public class PayNotifyMiddleware
     {
-        private readonly WXPayOption option;
+        private readonly Option option;
         private readonly SecretHelper secretHelper;
         private readonly RequestDelegate next;
 
         public PayNotifyMiddleware(RequestDelegate next,
-                                   IOptionsMonitor<WXPayOption> option,
+                                   IOptionsMonitor<Option> option,
                                    SecretHelper secretHelper)
         {
 
@@ -41,7 +41,7 @@ namespace BXJG.WeChat.Pay
             var request = context.Request;
 
             //1、若没有匹配上则直接执行下一个中间件
-            if (!request.Path.Value.Equals(WXPayConst.PayNotifyUrl, StringComparison.OrdinalIgnoreCase))
+            if (!request.Path.Value.Equals(Const.PayNotifyUrl, StringComparison.OrdinalIgnoreCase))
             {
                 await next(context);
                 return;

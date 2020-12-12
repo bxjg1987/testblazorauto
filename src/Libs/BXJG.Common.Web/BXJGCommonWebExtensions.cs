@@ -9,7 +9,7 @@ namespace BXJG.Common
 {
     public static class BXJGCommonWebExtensions
     {
-        public static IServiceCollection AddBXJGCommon(this IServiceCollection services)
+        public static IServiceCollection AddBXJGCommonWeb(this IServiceCollection services)
         {
             return services.AddSingleton<IEnv, AspNetEnv>();
         }

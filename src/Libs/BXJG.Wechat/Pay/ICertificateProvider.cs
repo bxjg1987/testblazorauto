@@ -11,7 +11,7 @@ namespace BXJG.WeChat.Pay
     /// 微信支付平台证书提供器<br/>
     /// 参考文档：<see cref="" href="https://wechatpay-api.gitbook.io/wechatpay-api-v3/qian-ming-zhi-nan-1/wei-xin-zhi-fu-ping-tai-zheng-shu-geng-xin-zhi-yin" />
     /// </summary>
-    public interface IWXCertificateProvider
+    public interface ICertificateProvider
     {
         /// <summary>
         /// 获取微信支付平台证书的base64字符串<br/>

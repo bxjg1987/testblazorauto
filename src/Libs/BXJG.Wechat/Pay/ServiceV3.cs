@@ -14,12 +14,12 @@ namespace BXJG.WeChat.Pay
     /// 微信支付V3接口<br/>
     /// <seealso href="https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/pages/Overview.shtml" />
     /// </summary>
-    public class PayServiceV3
+    public class ServiceV3
     {
         /// <summary>
         /// 微信支付模块选项对象
         /// </summary>
-        private readonly WXPayOption option;
+        private readonly Option option;
         /// <summary>
         /// 用来访问的微信支付平台接口的httpClient，它通过消息处理器来实施签名和验签
         /// </summary>
@@ -33,7 +33,7 @@ namespace BXJG.WeChat.Pay
         /// 环境相关信息
         /// </summary>
         private readonly IEnv env;
-        public PayServiceV3(IOptionsMonitor<WXPayOption> wxPaymentOption, IHttpClientFactory wxClientFactory, IClock clock, IEnv environment)
+        public ServiceV3(IOptionsMonitor<Option> wxPaymentOption, IHttpClientFactory wxClientFactory, IClock clock, IEnv environment)
         {
             this.option = wxPaymentOption.CurrentValue;
             this.wxClientFactory = wxClientFactory;
@@ -59,7 +59,7 @@ namespace BXJG.WeChat.Pay
             input.mchid = option.Mchid;
             if (input.time_expire == default)
                 input.time_expire = (await clock.GetNowAsync()).AddMinutes(5);//默认过期时间，可以考虑做成配置
-            input.notify_url = env.RootUrl + WXPayConst.PayNotifyUrl;
+            input.notify_url = env.RootUrl + Const.PayNotifyUrl;
 
             //调用微信支付平台api并返回结果
             var response = await wxClientFactory.CreateClientPay().PostAsJsonAsync("pay/transactions/jsapi", input);

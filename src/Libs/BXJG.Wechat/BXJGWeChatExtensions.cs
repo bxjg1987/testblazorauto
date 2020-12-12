@@ -4,7 +4,7 @@ using System;
 
 namespace BXJG.WeChat
 {
-    public static class BXJGWeChatWebExtensions
+    public static class BXJGWeChatExtensions
     {
         public static IServiceCollection AddBXJGWeChat(this IServiceCollection services)
         {

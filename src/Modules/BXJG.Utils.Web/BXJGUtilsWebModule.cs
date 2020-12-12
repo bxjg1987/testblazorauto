@@ -4,6 +4,8 @@ using BXJG.Common;
 using Abp.Reflection.Extensions;
 using Abp.Dependency;
 using System.Reflection;
+using Microsoft.Extensions.DependencyInjection;
+using Castle.Windsor.MsDependencyInjection;
 
 namespace BXJG.Utils
 {
@@ -12,8 +14,11 @@ namespace BXJG.Utils
     {
         public override void Initialize()
         {
-            base.IocManager.RegisterIfNot<IEnv, AspNetEnv>(DependencyLifeStyle.Singleton);
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
+            IocManager.RegService(services=> services.AddBXJGCommonWeb());
+            //var services = new ServiceCollection();
+            //services.AddBXJGCommonWeb();
+            //IocManager.IocContainer.AddServices(services);
         }
     }
 }

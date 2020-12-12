@@ -19,7 +19,7 @@ namespace BXJG.WeChat.Pay
     /// 默认的微信支付平台证书提供器<br/>
     /// 参考文档：<see cref="" href="https://wechatpay-api.gitbook.io/wechatpay-api-v3/qian-ming-zhi-nan-1/wei-xin-zhi-fu-ping-tai-zheng-shu-geng-xin-zhi-yin" />
     /// </summary>
-    public class WXCertificateDefaultProvider : IWXCertificateProvider
+    public class CertificateDefaultProvider : ICertificateProvider
     {
         /// <summary>
         /// 微信平台证书获取接口返回的原始数据
@@ -28,7 +28,7 @@ namespace BXJG.WeChat.Pay
         /// <summary>
         /// 微信支付模块选项对象
         /// </summary>
-        private readonly WXPayOption wxPaymentOption;
+        private readonly Option wxPaymentOption;
         /// <summary>
         /// 时钟 用于获取准确的当前时间
         /// </summary>
@@ -36,7 +36,7 @@ namespace BXJG.WeChat.Pay
         /// <summary>
         /// 日志记录器
         /// </summary>
-        private readonly ILogger logger;
+        public ILogger logger { get; set; } = NullLogger.Instance;
         /// <summary>
         /// 微信支付模块使用的HttpClientFactory
         /// </summary>
@@ -58,21 +58,20 @@ namespace BXJG.WeChat.Pay
         /// <param name="clock"></param>
         /// <param name="secureDirectory"></param>
         /// <param name="logger"></param>
-        public WXCertificateDefaultProvider(IOptionsMonitor<WXPayOption> wxPaymentOption,
-                                            IHttpClientFactory wxClientFactory,
-                                            SecretHelper secretHelper,
-                                            IClock clock,
-                                            IEnv secureDirectory,
-                                            ILogger logger)
+        public CertificateDefaultProvider(IOptionsMonitor<Option> wxPaymentOption,
+                                          IHttpClientFactory wxClientFactory,
+                                          SecretHelper secretHelper,
+                                          IClock clock,
+                                          IEnv secureDirectory)
         {
             this.wxPaymentOption = wxPaymentOption.CurrentValue;
             this.httpClientFactory = wxClientFactory;
             this.clock = clock;
             this.logger = logger;
             this.secretHelper = secretHelper;
-            this.wxCertPath = Path.Combine(secureDirectory.SecureDirectory,"wx", "wxpaycert.json");
-       
-            var txt =  File.ReadAllText(wxCertPath);
+            this.wxCertPath = Path.Combine(secureDirectory.SecureDirectory, "wx", "wxpaycert.json");
+
+            var txt = File.ReadAllText(wxCertPath);
             wxCertificateResult = JsonSerializer.Deserialize<WXCertificateResult>(txt);
             wxCertificateResult.data.Select(c => c.cert = secretHelper.AesGcmDecrypt(c.encrypt_certificate.associated_data, c.encrypt_certificate.nonce, c.encrypt_certificate.ciphertext));
 
@@ -90,7 +89,7 @@ namespace BXJG.WeChat.Pay
                     }
                     catch (Exception ex)
                     {
-                        logger.LogError(ex,"微信支付证书更新失败！");
+                        logger.LogError(ex, "微信支付证书更新失败！");
                         //记录日志、触发事件等
                     }
                     await Task.Delay(1000 * 60 * 60 * 23);

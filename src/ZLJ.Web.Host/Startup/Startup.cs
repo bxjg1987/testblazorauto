@@ -27,6 +27,7 @@ using BXJG.GeneralTree;
 using BXJG.CMS;
 using BXJG.Equipment;
 using BXJG.BaseInfo;
+using BXJG.WeChat.Pay;
 
 namespace ZLJ.Web.Host.Startup
 {
@@ -146,6 +147,7 @@ namespace ZLJ.Web.Host.Startup
         {
             app.UseAbp(options => { options.UseAbpRequestLocalization = false; }); // Initializes ABP framework.
 
+            app.UseWXPay();//注册微信支付中间件
             app.UseCors(_defaultCorsPolicyName); // Enable CORS!
 
             app.UseStaticFiles();

@@ -13,7 +13,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-
+using Microsoft.Extensions.DependencyInjection;
 namespace BXJG.WeChat.Pay
 {
     /// <summary>
@@ -24,11 +24,17 @@ namespace BXJG.WeChat.Pay
         /// <summary>
         /// 微信支付模块选项对象
         /// </summary>
-        WXPayOption option;
+        Option option;
         /// <summary>
         /// 微信支付平台证书提供器
         /// </summary>
-        IWXCertificateProvider wxCertificateProvider;
+        ICertificateProvider wxCertificateProvider
+        {
+            get
+            {
+                return serviceProvider.GetService<ICertificateProvider>();
+            }
+        }
         /// <summary>
         /// 时钟
         /// </summary>
@@ -49,13 +55,15 @@ namespace BXJG.WeChat.Pay
         /// web环境
         /// </summary>
         IEnv env;
+        IServiceProvider serviceProvider;
 
-        public SecretHelper(IOptionsMonitor<WXPayOption> option,
-                            IWXCertificateProvider wxCertificateProvider,
+        public SecretHelper(IOptionsMonitor<Option> option,
+                            //ICertificateProvider wxCertificateProvider,//这样注册ioc容器会报循环依赖，非单例注册也许不会爆，没测试过
+                            IServiceProvider serviceProvider,
                             IEnv webEnvironment,
                             IClock clock)
         {
-            this.wxCertificateProvider = wxCertificateProvider;
+            this.serviceProvider = serviceProvider;
             this.clock = clock;
             this.env = webEnvironment;
             this.option = option.CurrentValue;
@@ -170,7 +178,7 @@ namespace BXJG.WeChat.Pay
             //    }
             //}
 
-            using (var rsa= RSA.Create())
+            using (var rsa = RSA.Create())
             {
                 rsa.ImportPkcs8PrivateKey(privateKeyRawData, out int k);
                 signature = Convert.ToBase64String(rsa.SignData(data, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1));

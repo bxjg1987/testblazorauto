@@ -12,14 +12,12 @@ using System.Threading.Tasks;
 namespace BXJG.WeChat.Pay
 {
     /// <summary>
-    /// 微信支付通讯过程使用全局的<see cref="WXPayComponents.PayClient"/>通讯，这个自定义的DelegatingHandler处理微信接口通讯中的签名和验签<br/>
+    /// 自定义的DelegatingHandler处理微信接口通讯中的签名和验签<br/>
     /// 我方向微信支付服务端发起请求时，使用我方私钥进行签名<br/>
     /// 微信支付服务端响应时，我方使用微信支付服务端的公钥进行验签<br/>
-    /// 参考：<br/>
-    /// <seealso cref="" href="https://wechatpay-api.gitbook.io/wechatpay-api-v3/qian-ming-zhi-nan-1" /><br/>
-    /// <seealso cref="WXPayExtensions.AddWXPay(Microsoft.Extensions.DependencyInjection.IServiceCollection)"/>
+    /// 参考：<seealso cref="" href="https://wechatpay-api.gitbook.io/wechatpay-api-v3/qian-ming-zhi-nan-1" />
     /// </summary>
-    public class WXSignDelegatingHandler : DelegatingHandler
+    public class SignDelegatingHandler : DelegatingHandler
     {
         /*
          * 微软秘钥服务文档：
@@ -33,7 +31,7 @@ namespace BXJG.WeChat.Pay
          */
 
         SecretHelper secretHelper;
-        public WXSignDelegatingHandler(SecretHelper secretHelper)
+        public SignDelegatingHandler(SecretHelper secretHelper)
         {
             InnerHandler = new HttpClientHandler();
             this.secretHelper = secretHelper;
