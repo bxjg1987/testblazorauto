@@ -13,7 +13,9 @@ namespace BXJG.WeChat
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
-            IocManager.Register<SecretHelper>(DependencyLifeStyle.Singleton);
+            IocManager.Register<SecretHelper>(DependencyLifeStyle.Singleton); 
+            IocManager.Register<IWXCertificateProvider, WXCertificateDefaultProvider>(DependencyLifeStyle.Singleton);
+            IocManager.Register<PayServiceV3>(DependencyLifeStyle.Transient); 
         }
     }
 }

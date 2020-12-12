@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 
-namespace BXJG.WeChat.Web
+namespace BXJG.WeChat
 {
     public static class BXJGWeChatWebExtensions
     {
