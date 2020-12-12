@@ -19,7 +19,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Authentication\WeChatMiniProgram\WeChatMiniProgramLoginHandler.cs" />
-    <Compile Remove="Controllers\TokenAuthController.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\cms\BXJG.CMS.Application\BXJG.CMS.Application.csproj" />
