@@ -18,7 +18,7 @@ namespace BXJG.WeChat.MiniProgram
         {
             services.AddHttpClient(Const.HttpClientName, c =>
             {
-                c.BaseAddress = new Uri("https://api.weixin.qq.com/");
+                c.BaseAddress = new Uri(Const.HttpClientBaseAddress);
             });
             return services;
         }
