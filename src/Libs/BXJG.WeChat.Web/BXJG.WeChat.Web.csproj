@@ -1,9 +1,20 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>BXJG.WeChat</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="MiniProgram\IWeChatMiniProgramLoginHandler.cs" />
+    <Compile Remove="MiniProgram\MiniProgramAuthencationExtensions.cs" />
+    <Compile Remove="MiniProgram\MiniProgramAuthenticationHandler.cs" />
+    <Compile Remove="MiniProgram\MiniProgramAuthenticationOptions.cs" />
+    <Compile Remove="MiniProgram\MiniProgramCreatingTicketContext.cs" />
+    <Compile Remove="MiniProgram\MiniProgramPostConfigureOptions.cs" />
+    <Compile Remove="MiniProgram\MiniProgramToken.cs" />
+    <Compile Remove="MiniProgram\WeChatMiniProgramLoginContext.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />

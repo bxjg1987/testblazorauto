@@ -18,20 +18,31 @@
 
   <ItemGroup>
     <Compile Remove="Message\**" />
-    <Compile Remove="MiniProgram\**" />
     <Compile Remove="Payment\**" />
     <EmbeddedResource Remove="Message\**" />
-    <EmbeddedResource Remove="MiniProgram\**" />
     <EmbeddedResource Remove="Payment\**" />
     <None Remove="Message\**" />
-    <None Remove="MiniProgram\**" />
     <None Remove="Payment\**" />
   </ItemGroup>
 
   <ItemGroup>
     <Compile Remove="Common\AccessTokenProvider.cs" />
+    <Compile Remove="Common\Consts.cs" />
     <Compile Remove="Common\WeChatCommonExtensions.cs" />
     <Compile Remove="IPostToWeChat.cs" />
+    <Compile Remove="MiniProgram\CreatingTicketContext.cs" />
+    <Compile Remove="MiniProgram\ILoginHandler.cs" />
+    <Compile Remove="MiniProgram\IWeChatMiniProgramLoginHandler.cs" />
+    <Compile Remove="MiniProgram\MiniProgramAuthencationExtensions.cs" />
+    <Compile Remove="MiniProgram\MiniProgramAuthenticationEvent.cs" />
+    <Compile Remove="MiniProgram\MiniProgramAuthenticationHandler.cs" />
+    <Compile Remove="MiniProgram\MiniProgramAuthenticationOptions.cs" />
+    <Compile Remove="MiniProgram\MiniProgramConsts.cs" />
+    <Compile Remove="MiniProgram\MiniProgramCreatingTicketContext.cs" />
+    <Compile Remove="MiniProgram\MiniProgramPostConfigureOptions.cs" />
+    <Compile Remove="MiniProgram\MiniProgramToken.cs" />
+    <Compile Remove="MiniProgram\WeChatMiniProgramLoginContext.cs" />
+    <Compile Remove="MiniProgram\WeChatUser.cs" />
     <Compile Remove="Pay\ApiV3.cs" />
     <Compile Remove="Pay\GlobalComponentInitializerExtensions.cs" />
     <Compile Remove="Pay\WXSignValidator.cs" />
