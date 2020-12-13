@@ -28,7 +28,7 @@ using BXJG.CMS;
 using BXJG.Equipment;
 using BXJG.BaseInfo;
 using BXJG.WeChat.Pay;
-
+using BXJG.WeChat.MiniProgram;
 namespace ZLJ.Web.Host.Startup
 {
     public class Startup
@@ -44,8 +44,7 @@ namespace ZLJ.Web.Host.Startup
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            //services.AddBXJGCommon();
-           // services.AddLettuceEncrypt();
+            // services.AddLettuceEncrypt();
             //MVC
             services.AddControllersWithViews(
                 options =>
@@ -64,11 +63,9 @@ namespace ZLJ.Web.Host.Startup
 
             IdentityRegistrar.Register(services);
             AuthConfigurer.Configure(services, _appConfiguration);
- 
-            //services.AddWeChatPayment<WeChatPaymentNoticeHandler>(opt=> {
-            //    opt.mch_id = "商户id";
-            //    opt.key = "商户平台秘钥";
-            //});
+
+            //微信相关服务注册使用abp模块化形式,在ZLJ.Core模块中依赖微信模块，并在PreInit中配置
+            //参考：ZLJCoreModule
 
             services.AddSignalR();
 
@@ -96,7 +93,7 @@ namespace ZLJ.Web.Host.Startup
                 options.SwaggerDoc("v1", new OpenApiInfo() { Title = "ZLJ API", Version = "v1" });
 
                 //添加中文注释
-                var basePath = Path.GetDirectoryName(typeof(Program).Assembly.Location)+@"\apixml\";
+                var basePath = Path.GetDirectoryName(typeof(Program).Assembly.Location) + @"\apixml\";
                 var commentsFileName = typeof(ZLJApplicationModule).Assembly.GetName().Name + ".XML";
                 var commentsFileName1 = typeof(ApplicationModule).Assembly.GetName().Name + ".XML";
                 var commentsFileName2 = typeof(GeneralTreeModule).Assembly.GetName().Name + ".XML";
@@ -143,11 +140,15 @@ namespace ZLJ.Web.Host.Startup
             );
         }
 
-        public void Configure(IApplicationBuilder app,  ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
             app.UseAbp(options => { options.UseAbpRequestLocalization = false; }); // Initializes ABP framework.
 
-            app.UseWXPay();//注册微信支付中间件
+            #region 微信相关
+            app.UseWeChatMiniProgram(); //注册微信小程序登陆中间件
+            app.UseWXPay();             //注册微信支付中间件
+            #endregion
+
             app.UseCors(_defaultCorsPolicyName); // Enable CORS!
 
             app.UseStaticFiles();
@@ -158,7 +159,7 @@ namespace ZLJ.Web.Host.Startup
 
             app.UseAbpRequestLocalization();
 
-           // app.UseWeChatPayment();
+            // app.UseWeChatPayment();
 
 
             app.UseEndpoints(endpoints =>
@@ -167,7 +168,7 @@ namespace ZLJ.Web.Host.Startup
                 endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapControllerRoute("defaultWithArea", "{area}/{controller=Home}/{action=Index}/{id?}");
             });
-          
+
             // Enable middleware to serve generated Swagger as a JSON endpoint
             app.UseSwagger();
             // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)

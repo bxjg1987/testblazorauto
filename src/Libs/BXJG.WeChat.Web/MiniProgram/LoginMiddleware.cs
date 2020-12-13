@@ -17,7 +17,6 @@ using Microsoft.AspNetCore.WebUtilities;
 
 namespace BXJG.WeChat.MiniProgram
 {
-
     public class LoginMiddleware
     {
         private readonly Option option;
@@ -55,9 +54,9 @@ namespace BXJG.WeChat.MiniProgram
                 { "grant_type", "authorization_code" },
             });
             var response = await httpClientFactory.CreateClientMiniProgram().GetStringAsync(requestUrl);
-            var token = System.Text.Json.JsonSerializer.Deserialize<Token>(response);
+            var token = System.Text.Json.JsonSerializer.Deserialize<LoginResult>(response);
             var handler = context.RequestServices.GetService<ILoginHandler>();
-            await handler.LoginAsync(new LoginContext { Context = context, Option = option, Token = token, State = input.State });
+            await handler.LoginAsync(new LoginContext { Context = context, Option = option, Token = token });
         }
     }
 }

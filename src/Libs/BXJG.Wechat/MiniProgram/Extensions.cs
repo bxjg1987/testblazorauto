@@ -14,7 +14,14 @@ namespace BXJG.WeChat.MiniProgram
         {
             return httpClientFactory.CreateClient(Const.HttpClientName);
         }
-
+        public static IServiceCollection AddWXMiniProgramHttpClient(this IServiceCollection services)
+        {
+            services.AddHttpClient(Const.HttpClientName, c =>
+            {
+                c.BaseAddress = new Uri("https://api.weixin.qq.com/");
+            });
+            return services;
+        }
         //目前没有服务需要注册
         //Option对象使用原生方法就可以了
         //public static IServiceCollection AddWeChatMiniProgram(this IServiceCollection services)

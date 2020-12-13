@@ -11,8 +11,7 @@ namespace BXJG.WeChat.MiniProgram
     public class LoginContext 
     {
         public HttpContext Context { get; set; }
-        public Token Token { get; set; }
+        public LoginResult Token { get; set; }
         public Option Option { get; set; }
-        public object State { get; set; }
     }
 }

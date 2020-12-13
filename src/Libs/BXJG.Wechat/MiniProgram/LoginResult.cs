@@ -6,7 +6,7 @@ using System.Text.Json;
 
 namespace BXJG.WeChat.MiniProgram
 {
-    public class Token : WechatResult
+    public class LoginResult : WechatResult
     {
         public string openid { get; set; }
         public string session_key { get; set; }

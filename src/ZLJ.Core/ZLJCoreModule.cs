@@ -10,6 +10,7 @@ using BXJG.Equipment;
 using BXJG.File;
 using BXJG.GeneralTree;
 using BXJG.Utils;
+using BXJG.WeChat;
 using ZLJ.Authorization.Roles;
 using ZLJ.Authorization.Users;
 using ZLJ.Configuration;
@@ -26,9 +27,14 @@ namespace ZLJ
         typeof(BXJGFileModule), 
         typeof(BXJGAttachmentModule),
         typeof(BXJEquipmentCoreModule),
-        typeof(BXJGBaseInfoCoreModule))]
+        typeof(BXJGBaseInfoCoreModule),
+        typeof(BXJGWeChatModule))]
     public class ZLJCoreModule : AbpModule
     {
+        //可以构造函数注入微信模块BXJGWeChatModule
+        //然后在构造函数或PreInitialize中对微信进行配置
+        //默认情况下无需硬编码配置，只要依赖BXJGWeChatModule模块，然后在配置文件中配置就可以了
+
         public override void PreInitialize()
         {
             Configuration.Auditing.IsEnabledForAnonymousUsers = true;

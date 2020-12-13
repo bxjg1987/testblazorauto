@@ -19,8 +19,7 @@ using BXJG.WeChat;
 
 namespace BXJG.Shop
 {
-    [DependsOn(typeof(GeneralTreeModule),
-               typeof(BXJGWeChatModule))]
+    [DependsOn(typeof(GeneralTreeModule))]
     public class CoreModule : AbpModule
     {
         public override void PreInitialize()
