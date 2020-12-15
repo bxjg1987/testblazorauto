@@ -25,7 +25,7 @@ using ZLJ.Models.TokenAuth;
 
 namespace ZLJ.Authentication.WeChatMiniProgram
 {
-    public class WeChatMiniProgramLoginHandler : ILoginHandler,ITransientDependency
+    public class WeChatMiniProgramLoginHandler : IWeChatMiniProgramLoginHandler
     {
         private readonly IAbpSession AbpSession;
         private readonly ITenantCache _tenantCache;
@@ -54,15 +54,15 @@ namespace ZLJ.Authentication.WeChatMiniProgram
         }
 
         [UnitOfWork]
-        public async Task LoginAsync(LoginContext ct)
+        public async Task<bool> ExcuteAsync(WeChatMiniProgramLoginContext ct)
         {
-            this.httpContext = ct.Context;
+            this.httpContext = ct.HttpContext;
             this.httpResponse = httpContext.Response;
             if (AbpSession.TenantId.HasValue)
                 this.tenancyName = _tenantCache.GetOrNull(AbpSession.TenantId.Value)?.TenancyName;
 
             //尝试做第三发登录（内部通过openid找到本地账号做登录），
-            var loginResult = await _logInManager.LoginAsync(new UserLoginInfo("wxMiniProgram", ct.Token.openid, "微信小程序"), tenancyName);
+            var loginResult = await _logInManager.LoginAsync(new UserLoginInfo(MiniProgramConsts.AuthenticationScheme, ct.WeChatUser.openid, MiniProgramConsts.AuthenticationSchemeDisplayName), tenancyName);
             //根据登录结果，若成功则直接返回jwtToken 或者自动注册后返回
             switch (loginResult.Result)
             {
@@ -78,7 +78,7 @@ namespace ZLJ.Authentication.WeChatMiniProgram
                         // var claimRT = await userManager.ReplaceClaimAsync(loginResult.User, sessionKeyClaim, new Claim("session_key", ct.WeChatUser.session_key));
 
                         await userManager.RemoveClaimsAsync(loginResult.User, claims.Where(c => c.Type == "session_key"));
-                        await userManager.AddClaimAsync(loginResult.User, new Claim("session_key", ct.Token.session_key));
+                        await userManager.AddClaimAsync(loginResult.User, new Claim("session_key", ct.WeChatUser.session_key));
 
                         #region 处理前端传递来的除code以外的其它数据
                         //var tttt = ct.WeChatUser.Input.EnumerateArray();//json格式的数组对象才能这样
@@ -103,15 +103,15 @@ namespace ZLJ.Authentication.WeChatMiniProgram
                             EncryptedAccessToken = GetEncryptedAccessToken(accessToken),
                             ExpireInSeconds = (int)_configuration.Expiration.TotalSeconds
                         });
-                        break;
+                        return true;
                     }
                 case AbpLoginResultType.UnknownExternalLogin:
                     {
                         //若未找到关联的本地账号则自动注册，再返回jwtToken
                         var newUser = await RegisterExternalUserAsync(new ExternalAuthUserInfo
                         {
-                            Provider = "wxMiniProgram",
-                            ProviderKey = ct.Token.openid,
+                            Provider = MiniProgramConsts.AuthenticationScheme,
+                            ProviderKey = ct.WeChatUser.openid,
                             Name = Guid.NewGuid().ToString("N"),
                             EmailAddress = Guid.NewGuid().ToString("N") + "@mp.com",
                             Surname = "a"
@@ -125,7 +125,7 @@ namespace ZLJ.Authentication.WeChatMiniProgram
                         //}
 
                         // Try to login again with newly registered user!
-                        loginResult = await _logInManager.LoginAsync(new UserLoginInfo("wxMiniProgram", ct.Token.openid, "微信小程序"), tenancyName);
+                        loginResult = await _logInManager.LoginAsync(new UserLoginInfo(MiniProgramConsts.AuthenticationScheme, ct.WeChatUser.openid, MiniProgramConsts.AuthenticationSchemeDisplayName), tenancyName);
                         if (loginResult.Result != AbpLoginResultType.Success)
                         {
                             //throw _abpLoginResultTypeHelper.CreateExceptionForFailedLoginAttempt(
@@ -141,14 +141,14 @@ namespace ZLJ.Authentication.WeChatMiniProgram
 
                         else
                         {
-                            await userManager.AddClaimAsync(loginResult.User, new Claim("session_key", ct.Token.session_key));
+                            await userManager.AddClaimAsync(loginResult.User, new Claim("session_key", ct.WeChatUser.session_key));
                             await WriteJsonAsync(new
                             {
                                 AccessToken = CreateAccessToken(CreateJwtClaims(loginResult.Identity)),
                                 ExpireInSeconds = (int)_configuration.Expiration.TotalSeconds
                             });
                         }
-                        break;
+                        return true;
                     }
                 default:
                     {
@@ -158,8 +158,9 @@ namespace ZLJ.Authentication.WeChatMiniProgram
                         //    openid,
                         //    tenancyName
                         //);
-                        break;
+
                     }
+                    return true;
             }
         }
 
@@ -227,7 +228,5 @@ namespace ZLJ.Authentication.WeChatMiniProgram
         {
             return this.httpResponse.WriteAsync(JsonExtensions.SerializeToJson(o), this.httpContext.RequestAborted);
         }
-
-       
     }
 }

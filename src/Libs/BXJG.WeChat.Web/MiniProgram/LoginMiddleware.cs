@@ -40,17 +40,19 @@ namespace BXJG.WeChat.MiniProgram
                 await next(context);
                 return;
             }
+            
 
             Input input;
             using (var sr = new StreamReader(request.Body))
             {
-                input = System.Text.Json.JsonSerializer.Deserialize<Input>(await sr.ReadToEndAsync());
+                var str =await sr.ReadToEndAsync();
+                input = System.Text.Json.JsonSerializer.Deserialize<Input>(str);
             }
             var requestUrl = QueryHelpers.AddQueryString(Const.OpenIdEndpoint, new Dictionary<string, string>
             {
                 { "appid", option.AppId },
                 { "secret", option.AppSecret },
-                { "js_code",input.Code },
+                { "js_code",input.code },
                 { "grant_type", "authorization_code" },
             });
             var response = await httpClientFactory.CreateClientMiniProgram().GetStringAsync(requestUrl);

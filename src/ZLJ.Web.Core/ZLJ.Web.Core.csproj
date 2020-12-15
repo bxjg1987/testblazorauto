@@ -18,14 +18,16 @@
     <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="Authentication\WeChatMiniProgram\WeChatMiniProgramLoginHandler.cs" />
+    <Compile Remove="Authentication\WeChatMiniProgram\WeChatMiniProgramLoginHandler - 复制.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\cms\BXJG.CMS.Application\BXJG.CMS.Application.csproj" />
     <ProjectReference Include="..\cms\BXJG.CMS.Core\BXJG.CMS.Core.csproj" />
     <ProjectReference Include="..\Equipment\BXJG.Equipment.Application\BXJG.Equipment.Application.csproj" />
     <ProjectReference Include="..\Equipment\BXJG.Equipment.EFCore\BXJG.Equipment.EFCore.csproj" />
+    <ProjectReference Include="..\libs\BXJG.WeChat.Web\BXJG.WeChat.Web.csproj" />
     <ProjectReference Include="..\modules\BXJG.Utils.Web\BXJG.Utils.Web.csproj" />
+    <ProjectReference Include="..\Modules\BXJG.WeChat.Abp\BXJG.WeChat.Abp.csproj" />
     <ProjectReference Include="..\shop\BXJG.Shop.Application\BXJG.Shop.Application.csproj" />
     <ProjectReference Include="..\ZLJ.Application\ZLJ.Application.csproj" />
     <ProjectReference Include="..\ZLJ.EntityFrameworkCore\ZLJ.EntityFrameworkCore.csproj" />
@@ -35,8 +37,5 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
     <PackageReference Include="Abp.AspNetCore" Version="6.0.0" />
     <PackageReference Include="Abp.AspNetCore.SignalR" Version="6.0.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Authentication\WeChatMiniProgram\" />
   </ItemGroup>
 </Project>
