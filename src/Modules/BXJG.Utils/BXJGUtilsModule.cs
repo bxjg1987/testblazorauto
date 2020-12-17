@@ -45,7 +45,16 @@ namespace BXJG.Utils
         public override void PostInitialize()
         {
             var workManager = IocManager.Resolve<IBackgroundWorkerManager>();
-            workManager.Add(IocManager.Resolve<RemoveUploadFileWorker>());
+            //运行ZLJ.Migrator时会确实依赖服务，所以这里try下
+            try
+            {
+                workManager.Add(IocManager.Resolve<RemoveUploadFileWorker>());
+            }
+            catch 
+            {
+
+            }
+           
         }
     }
 }

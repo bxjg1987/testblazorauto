@@ -23,8 +23,8 @@ namespace BXJG.Shop.Catalogue
     {
         private readonly IRepository<ProductEntity, long> repository;
         private readonly ProductCategoryManager dictionaryManager;
-        private readonly IRepository<DynamicPropertyValue> repository1;
-        public FrontProductAppService(IRepository<ProductEntity, long> repository, ProductCategoryManager dictionaryManager, IRepository<DynamicPropertyValue> repository1)
+        private readonly IRepository<DynamicPropertyValue,long> repository1;
+        public FrontProductAppService(IRepository<ProductEntity, long> repository, ProductCategoryManager dictionaryManager, IRepository<DynamicPropertyValue, long> repository1)
         {
             this.repository = repository;
             this.dictionaryManager = dictionaryManager;

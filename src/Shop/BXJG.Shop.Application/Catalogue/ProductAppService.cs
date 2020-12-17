@@ -47,7 +47,7 @@ namespace BXJG.Shop.Catalogue
         //private readonly IDynamicPropertyValueManager dynamicPropertyValueManager;
         private readonly IDynamicEntityPropertyManager dynamicEntityPropertyManager;
         private readonly IDynamicEntityPropertyValueManager dynamicEntityPropertyValueManager;
-        private readonly IRepository<DynamicPropertyValue> repository1;
+        private readonly IRepository<DynamicPropertyValue,long> repository1;
         private readonly IRepository<DynamicEntityProperty> repository2;
 
         private readonly IAbpSession abpSession;
@@ -58,7 +58,7 @@ namespace BXJG.Shop.Catalogue
                                  TempFileManager tempFileManager,
                                  IDynamicEntityPropertyManager dynamicEntityPropertyManager,
                                  IDynamicEntityPropertyValueManager dynamicEntityPropertyValueManager,
-                                 IAbpSession abpSession, IRepository<DynamicPropertyValue> repository1,
+                                 IAbpSession abpSession, IRepository<DynamicPropertyValue,long> repository1,
                                  IRepository<DynamicEntityProperty> repository2)
         {
             this.repository = repository;

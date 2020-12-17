@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ZLJ.Migrations
 {
-    public partial class init514 : Migration
+    public partial class init611 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,23 +11,23 @@ namespace ZLJ.Migrations
                 name: "AbpAuditLogs",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TenantId = table.Column<int>(nullable: true),
-                    UserId = table.Column<long>(nullable: true),
-                    ServiceName = table.Column<string>(maxLength: 256, nullable: true),
-                    MethodName = table.Column<string>(maxLength: 256, nullable: true),
-                    Parameters = table.Column<string>(maxLength: 1024, nullable: true),
-                    ReturnValue = table.Column<string>(nullable: true),
-                    ExecutionTime = table.Column<DateTime>(nullable: false),
-                    ExecutionDuration = table.Column<int>(nullable: false),
-                    ClientIpAddress = table.Column<string>(maxLength: 64, nullable: true),
-                    ClientName = table.Column<string>(maxLength: 128, nullable: true),
-                    BrowserInfo = table.Column<string>(maxLength: 512, nullable: true),
-                    Exception = table.Column<string>(maxLength: 2000, nullable: true),
-                    ImpersonatorUserId = table.Column<long>(nullable: true),
-                    ImpersonatorTenantId = table.Column<int>(nullable: true),
-                    CustomData = table.Column<string>(maxLength: 2000, nullable: true)
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<long>(type: "bigint", nullable: true),
+                    ServiceName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    MethodName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Parameters = table.Column<string>(type: "nvarchar(1024)", maxLength: 1024, nullable: true),
+                    ReturnValue = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ExecutionTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ExecutionDuration = table.Column<int>(type: "int", nullable: false),
+                    ClientIpAddress = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: true),
+                    ClientName = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
+                    BrowserInfo = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
+                    Exception = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
+                    ImpersonatorUserId = table.Column<long>(type: "bigint", nullable: true),
+                    ImpersonatorTenantId = table.Column<int>(type: "int", nullable: true),
+                    CustomData = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -38,17 +38,17 @@ namespace ZLJ.Migrations
                 name: "AbpBackgroundJobs",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    JobType = table.Column<string>(maxLength: 512, nullable: false),
-                    JobArgs = table.Column<string>(maxLength: 1048576, nullable: false),
-                    TryCount = table.Column<short>(nullable: false),
-                    NextTryTime = table.Column<DateTime>(nullable: false),
-                    LastTryTime = table.Column<DateTime>(nullable: true),
-                    IsAbandoned = table.Column<bool>(nullable: false),
-                    Priority = table.Column<byte>(nullable: false)
+                    JobType = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: false),
+                    JobArgs = table.Column<string>(type: "nvarchar(max)", maxLength: 1048576, nullable: false),
+                    TryCount = table.Column<short>(type: "smallint", nullable: false),
+                    NextTryTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastTryTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsAbandoned = table.Column<bool>(type: "bit", nullable: false),
+                    Priority = table.Column<byte>(type: "tinyint", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -59,12 +59,13 @@ namespace ZLJ.Migrations
                 name: "AbpDynamicProperties",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PropertyName = table.Column<string>(nullable: true),
-                    InputType = table.Column<string>(nullable: true),
-                    Permission = table.Column<string>(nullable: true),
-                    TenantId = table.Column<int>(nullable: true)
+                    PropertyName = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    InputType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Permission = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TenantId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -75,17 +76,17 @@ namespace ZLJ.Migrations
                 name: "AbpEditions",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    LastModificationTime = table.Column<DateTime>(nullable: true),
-                    LastModifierUserId = table.Column<long>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    DeleterUserId = table.Column<long>(nullable: true),
-                    DeletionTime = table.Column<DateTime>(nullable: true),
-                    Name = table.Column<string>(maxLength: 32, nullable: false),
-                    DisplayName = table.Column<string>(maxLength: 64, nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: false),
+                    DisplayName = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -96,18 +97,18 @@ namespace ZLJ.Migrations
                 name: "AbpEntityChangeSets",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    BrowserInfo = table.Column<string>(maxLength: 512, nullable: true),
-                    ClientIpAddress = table.Column<string>(maxLength: 64, nullable: true),
-                    ClientName = table.Column<string>(maxLength: 128, nullable: true),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    ExtensionData = table.Column<string>(nullable: true),
-                    ImpersonatorTenantId = table.Column<int>(nullable: true),
-                    ImpersonatorUserId = table.Column<long>(nullable: true),
-                    Reason = table.Column<string>(maxLength: 256, nullable: true),
-                    TenantId = table.Column<int>(nullable: true),
-                    UserId = table.Column<long>(nullable: true)
+                    BrowserInfo = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
+                    ClientIpAddress = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: true),
+                    ClientName = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ExtensionData = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImpersonatorTenantId = table.Column<int>(type: "int", nullable: true),
+                    ImpersonatorUserId = table.Column<long>(type: "bigint", nullable: true),
+                    Reason = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -118,20 +119,20 @@ namespace ZLJ.Migrations
                 name: "AbpLanguages",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    LastModificationTime = table.Column<DateTime>(nullable: true),
-                    LastModifierUserId = table.Column<long>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    DeleterUserId = table.Column<long>(nullable: true),
-                    DeletionTime = table.Column<DateTime>(nullable: true),
-                    TenantId = table.Column<int>(nullable: true),
-                    Name = table.Column<string>(maxLength: 128, nullable: false),
-                    DisplayName = table.Column<string>(maxLength: 64, nullable: false),
-                    Icon = table.Column<string>(maxLength: 128, nullable: true),
-                    IsDisabled = table.Column<bool>(nullable: false)
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    DisplayName = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    Icon = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
+                    IsDisabled = table.Column<bool>(type: "bit", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -142,17 +143,17 @@ namespace ZLJ.Migrations
                 name: "AbpLanguageTexts",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    LastModificationTime = table.Column<DateTime>(nullable: true),
-                    LastModifierUserId = table.Column<long>(nullable: true),
-                    TenantId = table.Column<int>(nullable: true),
-                    LanguageName = table.Column<string>(maxLength: 128, nullable: false),
-                    Source = table.Column<string>(maxLength: 128, nullable: false),
-                    Key = table.Column<string>(maxLength: 256, nullable: false),
-                    Value = table.Column<string>(maxLength: 67108864, nullable: false)
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    LanguageName = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    Source = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    Key = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", maxLength: 67108864, nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -163,19 +164,19 @@ namespace ZLJ.Migrations
                 name: "AbpNotifications",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    NotificationName = table.Column<string>(maxLength: 96, nullable: false),
-                    Data = table.Column<string>(maxLength: 1048576, nullable: true),
-                    DataTypeName = table.Column<string>(maxLength: 512, nullable: true),
-                    EntityTypeName = table.Column<string>(maxLength: 250, nullable: true),
-                    EntityTypeAssemblyQualifiedName = table.Column<string>(maxLength: 512, nullable: true),
-                    EntityId = table.Column<string>(maxLength: 96, nullable: true),
-                    Severity = table.Column<byte>(nullable: false),
-                    UserIds = table.Column<string>(maxLength: 131072, nullable: true),
-                    ExcludedUserIds = table.Column<string>(maxLength: 131072, nullable: true),
-                    TenantIds = table.Column<string>(maxLength: 131072, nullable: true)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    NotificationName = table.Column<string>(type: "nvarchar(96)", maxLength: 96, nullable: false),
+                    Data = table.Column<string>(type: "nvarchar(max)", maxLength: 1048576, nullable: true),
+                    DataTypeName = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
+                    EntityTypeName = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    EntityTypeAssemblyQualifiedName = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
+                    EntityId = table.Column<string>(type: "nvarchar(96)", maxLength: 96, nullable: true),
+                    Severity = table.Column<byte>(type: "tinyint", nullable: false),
+                    UserIds = table.Column<string>(type: "nvarchar(max)", maxLength: 131072, nullable: true),
+                    ExcludedUserIds = table.Column<string>(type: "nvarchar(max)", maxLength: 131072, nullable: true),
+                    TenantIds = table.Column<string>(type: "nvarchar(max)", maxLength: 131072, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -186,15 +187,15 @@ namespace ZLJ.Migrations
                 name: "AbpNotificationSubscriptions",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    TenantId = table.Column<int>(nullable: true),
-                    UserId = table.Column<long>(nullable: false),
-                    NotificationName = table.Column<string>(maxLength: 96, nullable: true),
-                    EntityTypeName = table.Column<string>(maxLength: 250, nullable: true),
-                    EntityTypeAssemblyQualifiedName = table.Column<string>(maxLength: 512, nullable: true),
-                    EntityId = table.Column<string>(maxLength: 96, nullable: true)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    NotificationName = table.Column<string>(type: "nvarchar(96)", maxLength: 96, nullable: true),
+                    EntityTypeName = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    EntityTypeAssemblyQualifiedName = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
+                    EntityId = table.Column<string>(type: "nvarchar(96)", maxLength: 96, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -205,14 +206,14 @@ namespace ZLJ.Migrations
                 name: "AbpOrganizationUnitRoles",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    TenantId = table.Column<int>(nullable: true),
-                    RoleId = table.Column<int>(nullable: false),
-                    OrganizationUnitId = table.Column<long>(nullable: false),
-                    IsDeleted = table.Column<bool>(nullable: false)
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    RoleId = table.Column<int>(type: "int", nullable: false),
+                    OrganizationUnitId = table.Column<long>(type: "bigint", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -223,21 +224,21 @@ namespace ZLJ.Migrations
                 name: "AbpOrganizationUnits",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    LastModificationTime = table.Column<DateTime>(nullable: true),
-                    LastModifierUserId = table.Column<long>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    DeleterUserId = table.Column<long>(nullable: true),
-                    DeletionTime = table.Column<DateTime>(nullable: true),
-                    TenantId = table.Column<int>(nullable: true),
-                    ParentId = table.Column<long>(nullable: true),
-                    Code = table.Column<string>(maxLength: 95, nullable: false),
-                    DisplayName = table.Column<string>(maxLength: 128, nullable: false),
-                    Discriminator = table.Column<string>(nullable: false),
-                    OUType = table.Column<int>(nullable: true)
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    ParentId = table.Column<long>(type: "bigint", nullable: true),
+                    Code = table.Column<string>(type: "nvarchar(95)", maxLength: 95, nullable: false),
+                    DisplayName = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OUType = table.Column<int>(type: "int", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -254,17 +255,17 @@ namespace ZLJ.Migrations
                 name: "AbpTenantNotifications",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    TenantId = table.Column<int>(nullable: true),
-                    NotificationName = table.Column<string>(maxLength: 96, nullable: false),
-                    Data = table.Column<string>(maxLength: 1048576, nullable: true),
-                    DataTypeName = table.Column<string>(maxLength: 512, nullable: true),
-                    EntityTypeName = table.Column<string>(maxLength: 250, nullable: true),
-                    EntityTypeAssemblyQualifiedName = table.Column<string>(maxLength: 512, nullable: true),
-                    EntityId = table.Column<string>(maxLength: 96, nullable: true),
-                    Severity = table.Column<byte>(nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    NotificationName = table.Column<string>(type: "nvarchar(96)", maxLength: 96, nullable: false),
+                    Data = table.Column<string>(type: "nvarchar(max)", maxLength: 1048576, nullable: true),
+                    DataTypeName = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
+                    EntityTypeName = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    EntityTypeAssemblyQualifiedName = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
+                    EntityId = table.Column<string>(type: "nvarchar(96)", maxLength: 96, nullable: true),
+                    Severity = table.Column<byte>(type: "tinyint", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -275,20 +276,20 @@ namespace ZLJ.Migrations
                 name: "AbpUserAccounts",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    LastModificationTime = table.Column<DateTime>(nullable: true),
-                    LastModifierUserId = table.Column<long>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    DeleterUserId = table.Column<long>(nullable: true),
-                    DeletionTime = table.Column<DateTime>(nullable: true),
-                    TenantId = table.Column<int>(nullable: true),
-                    UserId = table.Column<long>(nullable: false),
-                    UserLinkId = table.Column<long>(nullable: true),
-                    UserName = table.Column<string>(maxLength: 256, nullable: true),
-                    EmailAddress = table.Column<string>(maxLength: 256, nullable: true)
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    UserLinkId = table.Column<long>(type: "bigint", nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EmailAddress = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -299,17 +300,17 @@ namespace ZLJ.Migrations
                 name: "AbpUserLoginAttempts",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TenantId = table.Column<int>(nullable: true),
-                    TenancyName = table.Column<string>(maxLength: 64, nullable: true),
-                    UserId = table.Column<long>(nullable: true),
-                    UserNameOrEmailAddress = table.Column<string>(maxLength: 256, nullable: true),
-                    ClientIpAddress = table.Column<string>(maxLength: 64, nullable: true),
-                    ClientName = table.Column<string>(maxLength: 128, nullable: true),
-                    BrowserInfo = table.Column<string>(maxLength: 512, nullable: true),
-                    Result = table.Column<byte>(nullable: false),
-                    CreationTime = table.Column<DateTime>(nullable: false)
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    TenancyName = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: true),
+                    UserId = table.Column<long>(type: "bigint", nullable: true),
+                    UserNameOrEmailAddress = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    ClientIpAddress = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: true),
+                    ClientName = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
+                    BrowserInfo = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
+                    Result = table.Column<byte>(type: "tinyint", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -320,12 +321,12 @@ namespace ZLJ.Migrations
                 name: "AbpUserNotifications",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    TenantId = table.Column<int>(nullable: true),
-                    UserId = table.Column<long>(nullable: false),
-                    TenantNotificationId = table.Column<Guid>(nullable: false),
-                    State = table.Column<int>(nullable: false),
-                    CreationTime = table.Column<DateTime>(nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    TenantNotificationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    State = table.Column<int>(type: "int", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -336,14 +337,14 @@ namespace ZLJ.Migrations
                 name: "AbpUserOrganizationUnits",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    TenantId = table.Column<int>(nullable: true),
-                    UserId = table.Column<long>(nullable: false),
-                    OrganizationUnitId = table.Column<long>(nullable: false),
-                    IsDeleted = table.Column<bool>(nullable: false)
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    OrganizationUnitId = table.Column<long>(type: "bigint", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -354,36 +355,36 @@ namespace ZLJ.Migrations
                 name: "AbpUsers",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    LastModificationTime = table.Column<DateTime>(nullable: true),
-                    LastModifierUserId = table.Column<long>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    DeleterUserId = table.Column<long>(nullable: true),
-                    DeletionTime = table.Column<DateTime>(nullable: true),
-                    AuthenticationSource = table.Column<string>(maxLength: 64, nullable: true),
-                    UserName = table.Column<string>(maxLength: 256, nullable: false),
-                    TenantId = table.Column<int>(nullable: true),
-                    EmailAddress = table.Column<string>(maxLength: 256, nullable: false),
-                    Name = table.Column<string>(maxLength: 64, nullable: false),
-                    Surname = table.Column<string>(maxLength: 64, nullable: false),
-                    Password = table.Column<string>(maxLength: 128, nullable: false),
-                    EmailConfirmationCode = table.Column<string>(maxLength: 328, nullable: true),
-                    PasswordResetCode = table.Column<string>(maxLength: 328, nullable: true),
-                    LockoutEndDateUtc = table.Column<DateTime>(nullable: true),
-                    AccessFailedCount = table.Column<int>(nullable: false),
-                    IsLockoutEnabled = table.Column<bool>(nullable: false),
-                    PhoneNumber = table.Column<string>(maxLength: 32, nullable: true),
-                    IsPhoneNumberConfirmed = table.Column<bool>(nullable: false),
-                    SecurityStamp = table.Column<string>(maxLength: 128, nullable: true),
-                    IsTwoFactorEnabled = table.Column<bool>(nullable: false),
-                    IsEmailConfirmed = table.Column<bool>(nullable: false),
-                    IsActive = table.Column<bool>(nullable: false),
-                    NormalizedUserName = table.Column<string>(maxLength: 256, nullable: false),
-                    NormalizedEmailAddress = table.Column<string>(maxLength: 256, nullable: false),
-                    ConcurrencyStamp = table.Column<string>(maxLength: 128, nullable: true)
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    AuthenticationSource = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    EmailAddress = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    Surname = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    EmailConfirmationCode = table.Column<string>(type: "nvarchar(328)", maxLength: 328, nullable: true),
+                    PasswordResetCode = table.Column<string>(type: "nvarchar(328)", maxLength: 328, nullable: true),
+                    LockoutEndDateUtc = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false),
+                    IsLockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: true),
+                    IsPhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
+                    IsTwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    IsEmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    NormalizedEmailAddress = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -412,13 +413,13 @@ namespace ZLJ.Migrations
                 name: "AbpWebhookEvents",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    WebhookName = table.Column<string>(nullable: false),
-                    Data = table.Column<string>(nullable: true),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    TenantId = table.Column<int>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    DeletionTime = table.Column<DateTime>(nullable: true)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    WebhookName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Data = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -429,15 +430,15 @@ namespace ZLJ.Migrations
                 name: "AbpWebhookSubscriptions",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    TenantId = table.Column<int>(nullable: true),
-                    WebhookUri = table.Column<string>(nullable: false),
-                    Secret = table.Column<string>(nullable: false),
-                    IsActive = table.Column<bool>(nullable: false),
-                    Webhooks = table.Column<string>(nullable: true),
-                    Headers = table.Column<string>(nullable: true)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    WebhookUri = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Secret = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    Webhooks = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Headers = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -448,21 +449,21 @@ namespace ZLJ.Migrations
                 name: "BXJGBaseInfoAdministratives",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    LastModificationTime = table.Column<DateTime>(nullable: true),
-                    LastModifierUserId = table.Column<long>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    DeleterUserId = table.Column<long>(nullable: true),
-                    DeletionTime = table.Column<DateTime>(nullable: true),
-                    Code = table.Column<string>(maxLength: 95, nullable: false),
-                    ParentId = table.Column<long>(nullable: true),
-                    TenantId = table.Column<int>(nullable: true),
-                    DisplayName = table.Column<string>(maxLength: 128, nullable: false),
-                    ExtensionData = table.Column<string>(nullable: true),
-                    Level = table.Column<int>(nullable: false)
+                    Level = table.Column<int>(type: "int", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Code = table.Column<string>(type: "nvarchar(95)", maxLength: 95, nullable: false),
+                    ParentId = table.Column<long>(type: "bigint", nullable: true),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    DisplayName = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    ExtensionData = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -479,18 +480,18 @@ namespace ZLJ.Migrations
                 name: "BXJGCMSAdControls",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    LastModificationTime = table.Column<DateTime>(nullable: true),
-                    LastModifierUserId = table.Column<long>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    DeleterUserId = table.Column<long>(nullable: true),
-                    DeletionTime = table.Column<DateTime>(nullable: true),
-                    TenantId = table.Column<int>(nullable: true),
-                    AdControlType = table.Column<int>(nullable: false),
-                    ExtensionData = table.Column<string>(nullable: true)
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    AdControlType = table.Column<int>(type: "int", nullable: false),
+                    ExtensionData = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -501,19 +502,19 @@ namespace ZLJ.Migrations
                 name: "BXJGCMSAdPositions",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    LastModificationTime = table.Column<DateTime>(nullable: true),
-                    LastModifierUserId = table.Column<long>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    DeleterUserId = table.Column<long>(nullable: true),
-                    DeletionTime = table.Column<DateTime>(nullable: true),
-                    TenantId = table.Column<int>(nullable: false),
-                    DisplayName = table.Column<string>(nullable: false),
-                    Width = table.Column<int>(nullable: false),
-                    Height = table.Column<int>(nullable: false)
+                    TenantId = table.Column<int>(type: "int", nullable: false),
+                    DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Width = table.Column<int>(type: "int", nullable: false),
+                    Height = table.Column<int>(type: "int", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -524,20 +525,20 @@ namespace ZLJ.Migrations
                 name: "BXJGCMSAds",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    LastModificationTime = table.Column<DateTime>(nullable: true),
-                    LastModifierUserId = table.Column<long>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    DeleterUserId = table.Column<long>(nullable: true),
-                    DeletionTime = table.Column<DateTime>(nullable: true),
-                    TenantId = table.Column<int>(nullable: false),
-                    Title = table.Column<string>(nullable: true),
-                    AdType = table.Column<int>(nullable: false),
-                    Content = table.Column<string>(nullable: false),
-                    Url = table.Column<string>(nullable: true)
+                    TenantId = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AdType = table.Column<int>(type: "int", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Url = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -548,22 +549,22 @@ namespace ZLJ.Migrations
                 name: "BXJGGeneralTrees",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    LastModificationTime = table.Column<DateTime>(nullable: true),
-                    LastModifierUserId = table.Column<long>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    DeleterUserId = table.Column<long>(nullable: true),
-                    DeletionTime = table.Column<DateTime>(nullable: true),
-                    Code = table.Column<string>(maxLength: 95, nullable: false),
-                    ParentId = table.Column<long>(nullable: true),
-                    TenantId = table.Column<int>(nullable: true),
-                    DisplayName = table.Column<string>(maxLength: 128, nullable: false),
-                    ExtensionData = table.Column<string>(nullable: true),
-                    IsSysDefine = table.Column<bool>(nullable: false),
-                    IsTree = table.Column<bool>(nullable: false)
+                    IsSysDefine = table.Column<bool>(type: "bit", nullable: false),
+                    IsTree = table.Column<bool>(type: "bit", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Code = table.Column<string>(type: "nvarchar(95)", maxLength: 95, nullable: false),
+                    ParentId = table.Column<long>(type: "bigint", nullable: true),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    DisplayName = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    ExtensionData = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -580,24 +581,24 @@ namespace ZLJ.Migrations
                 name: "BXJGShopProductCategory",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    LastModificationTime = table.Column<DateTime>(nullable: true),
-                    LastModifierUserId = table.Column<long>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    DeleterUserId = table.Column<long>(nullable: true),
-                    DeletionTime = table.Column<DateTime>(nullable: true),
-                    Code = table.Column<string>(maxLength: 95, nullable: false),
-                    ParentId = table.Column<long>(nullable: true),
-                    TenantId = table.Column<int>(nullable: true),
-                    DisplayName = table.Column<string>(maxLength: 128, nullable: false),
-                    ExtensionData = table.Column<string>(nullable: true),
                     Icon = table.Column<string>(type: "varchar(200)", nullable: true),
                     Image1 = table.Column<string>(type: "varchar(200)", nullable: true),
                     Image2 = table.Column<string>(type: "varchar(200)", nullable: true),
-                    ShowInHome = table.Column<bool>(nullable: false)
+                    ShowInHome = table.Column<bool>(type: "bit", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Code = table.Column<string>(type: "nvarchar(95)", maxLength: 95, nullable: false),
+                    ParentId = table.Column<long>(type: "bigint", nullable: true),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    DisplayName = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    ExtensionData = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -614,11 +615,11 @@ namespace ZLJ.Migrations
                 name: "AbpDynamicEntityProperties",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    EntityFullName = table.Column<string>(nullable: true),
-                    DynamicPropertyId = table.Column<int>(nullable: false),
-                    TenantId = table.Column<int>(nullable: true)
+                    EntityFullName = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    DynamicPropertyId = table.Column<int>(type: "int", nullable: false),
+                    TenantId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -635,11 +636,11 @@ namespace ZLJ.Migrations
                 name: "AbpDynamicPropertyValues",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Value = table.Column<string>(nullable: false),
-                    TenantId = table.Column<int>(nullable: true),
-                    DynamicPropertyId = table.Column<int>(nullable: false)
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    DynamicPropertyId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -656,15 +657,15 @@ namespace ZLJ.Migrations
                 name: "AbpFeatures",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    TenantId = table.Column<int>(nullable: true),
-                    Name = table.Column<string>(maxLength: 128, nullable: false),
-                    Value = table.Column<string>(maxLength: 2000, nullable: false),
-                    Discriminator = table.Column<string>(nullable: false),
-                    EditionId = table.Column<int>(nullable: true)
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false),
+                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EditionId = table.Column<int>(type: "int", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -681,14 +682,14 @@ namespace ZLJ.Migrations
                 name: "AbpEntityChanges",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ChangeTime = table.Column<DateTime>(nullable: false),
-                    ChangeType = table.Column<byte>(nullable: false),
-                    EntityChangeSetId = table.Column<long>(nullable: false),
-                    EntityId = table.Column<string>(maxLength: 48, nullable: true),
-                    EntityTypeFullName = table.Column<string>(maxLength: 192, nullable: true),
-                    TenantId = table.Column<int>(nullable: true)
+                    ChangeTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ChangeType = table.Column<byte>(type: "tinyint", nullable: false),
+                    EntityChangeSetId = table.Column<long>(type: "bigint", nullable: false),
+                    EntityId = table.Column<string>(type: "nvarchar(48)", maxLength: 48, nullable: true),
+                    EntityTypeFullName = table.Column<string>(type: "nvarchar(192)", maxLength: 192, nullable: true),
+                    TenantId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -705,23 +706,23 @@ namespace ZLJ.Migrations
                 name: "AbpRoles",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    LastModificationTime = table.Column<DateTime>(nullable: true),
-                    LastModifierUserId = table.Column<long>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    DeleterUserId = table.Column<long>(nullable: true),
-                    DeletionTime = table.Column<DateTime>(nullable: true),
-                    TenantId = table.Column<int>(nullable: true),
-                    Name = table.Column<string>(maxLength: 32, nullable: false),
-                    DisplayName = table.Column<string>(maxLength: 64, nullable: false),
-                    IsStatic = table.Column<bool>(nullable: false),
-                    IsDefault = table.Column<bool>(nullable: false),
-                    NormalizedName = table.Column<string>(maxLength: 32, nullable: false),
-                    ConcurrencyStamp = table.Column<string>(maxLength: 128, nullable: true),
-                    Description = table.Column<string>(maxLength: 5000, nullable: true)
+                    Description = table.Column<string>(type: "nvarchar(max)", maxLength: 5000, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: false),
+                    DisplayName = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    IsStatic = table.Column<bool>(type: "bit", nullable: false),
+                    IsDefault = table.Column<bool>(type: "bit", nullable: false),
+                    NormalizedName = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -750,16 +751,16 @@ namespace ZLJ.Migrations
                 name: "AbpSettings",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    LastModificationTime = table.Column<DateTime>(nullable: true),
-                    LastModifierUserId = table.Column<long>(nullable: true),
-                    TenantId = table.Column<int>(nullable: true),
-                    UserId = table.Column<long>(nullable: true),
-                    Name = table.Column<string>(maxLength: 256, nullable: false),
-                    Value = table.Column<string>(nullable: true)
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<long>(type: "bigint", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -776,24 +777,30 @@ namespace ZLJ.Migrations
                 name: "AbpTenants",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    LastModificationTime = table.Column<DateTime>(nullable: true),
-                    LastModifierUserId = table.Column<long>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    DeleterUserId = table.Column<long>(nullable: true),
-                    DeletionTime = table.Column<DateTime>(nullable: true),
-                    TenancyName = table.Column<string>(maxLength: 64, nullable: false),
-                    Name = table.Column<string>(maxLength: 128, nullable: false),
-                    ConnectionString = table.Column<string>(maxLength: 1024, nullable: true),
-                    IsActive = table.Column<bool>(nullable: false),
-                    EditionId = table.Column<int>(nullable: true)
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    TenancyName = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    ConnectionString = table.Column<string>(type: "nvarchar(1024)", maxLength: 1024, nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    EditionId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpTenants", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AbpTenants_AbpEditions_EditionId",
+                        column: x => x.EditionId,
+                        principalTable: "AbpEditions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_AbpTenants_AbpUsers_CreatorUserId",
                         column: x => x.CreatorUserId,
@@ -804,12 +811,6 @@ namespace ZLJ.Migrations
                         name: "FK_AbpTenants_AbpUsers_DeleterUserId",
                         column: x => x.DeleterUserId,
                         principalTable: "AbpUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_AbpTenants_AbpEditions_EditionId",
-                        column: x => x.EditionId,
-                        principalTable: "AbpEditions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -824,14 +825,14 @@ namespace ZLJ.Migrations
                 name: "AbpUserClaims",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    TenantId = table.Column<int>(nullable: true),
-                    UserId = table.Column<long>(nullable: false),
-                    ClaimType = table.Column<string>(maxLength: 256, nullable: true),
-                    ClaimValue = table.Column<string>(nullable: true)
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -848,12 +849,12 @@ namespace ZLJ.Migrations
                 name: "AbpUserLogins",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TenantId = table.Column<int>(nullable: true),
-                    UserId = table.Column<long>(nullable: false),
-                    LoginProvider = table.Column<string>(maxLength: 128, nullable: false),
-                    ProviderKey = table.Column<string>(maxLength: 256, nullable: false)
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -870,13 +871,13 @@ namespace ZLJ.Migrations
                 name: "AbpUserRoles",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    TenantId = table.Column<int>(nullable: true),
-                    UserId = table.Column<long>(nullable: false),
-                    RoleId = table.Column<int>(nullable: false)
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    RoleId = table.Column<int>(type: "int", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -893,14 +894,14 @@ namespace ZLJ.Migrations
                 name: "AbpUserTokens",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TenantId = table.Column<int>(nullable: true),
-                    UserId = table.Column<long>(nullable: false),
-                    LoginProvider = table.Column<string>(maxLength: 128, nullable: true),
-                    Name = table.Column<string>(maxLength: 128, nullable: true),
-                    Value = table.Column<string>(maxLength: 512, nullable: true),
-                    ExpireDate = table.Column<DateTime>(nullable: true)
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
+                    Value = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
+                    ExpireDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -917,14 +918,14 @@ namespace ZLJ.Migrations
                 name: "AbpWebhookSendAttempts",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    WebhookEventId = table.Column<Guid>(nullable: false),
-                    WebhookSubscriptionId = table.Column<Guid>(nullable: false),
-                    Response = table.Column<string>(nullable: true),
-                    ResponseStatusCode = table.Column<int>(nullable: true),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    LastModificationTime = table.Column<DateTime>(nullable: true),
-                    TenantId = table.Column<int>(nullable: true)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    WebhookEventId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    WebhookSubscriptionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Response = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ResponseStatusCode = table.Column<int>(type: "int", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    TenantId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -941,16 +942,16 @@ namespace ZLJ.Migrations
                 name: "BXJGEquipmentInfo",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    TenantId = table.Column<int>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
-                    Longitude = table.Column<decimal>(nullable: false),
-                    Latitude = table.Column<decimal>(nullable: false),
-                    HardwareCode = table.Column<string>(nullable: true),
-                    AreaId = table.Column<long>(nullable: true)
+                    TenantId = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Longitude = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Latitude = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    HardwareCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AreaId = table.Column<long>(type: "bigint", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -967,24 +968,24 @@ namespace ZLJ.Migrations
                 name: "BXJGShopCustomer",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    LastModificationTime = table.Column<DateTime>(nullable: true),
-                    LastModifierUserId = table.Column<long>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    DeleterUserId = table.Column<long>(nullable: true),
-                    DeletionTime = table.Column<DateTime>(nullable: true),
-                    TenantId = table.Column<int>(nullable: false),
-                    UserId = table.Column<long>(nullable: false),
-                    Integral = table.Column<long>(nullable: false),
-                    Amount = table.Column<decimal>(nullable: false),
-                    Gender = table.Column<int>(nullable: true),
-                    Birthday = table.Column<DateTimeOffset>(nullable: true),
-                    AreaId = table.Column<long>(nullable: true),
-                    RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true),
-                    ExtensionData = table.Column<string>(maxLength: 2147483647, nullable: true)
+                    TenantId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    Integral = table.Column<long>(type: "bigint", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Gender = table.Column<int>(type: "int", nullable: true),
+                    Birthday = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    AreaId = table.Column<long>(type: "bigint", nullable: true),
+                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
+                    ExtensionData = table.Column<string>(type: "nvarchar(max)", maxLength: 2147483647, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1001,23 +1002,23 @@ namespace ZLJ.Migrations
                 name: "BXJGCMSAdRecords",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    LastModificationTime = table.Column<DateTime>(nullable: true),
-                    LastModifierUserId = table.Column<long>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    DeleterUserId = table.Column<long>(nullable: true),
-                    DeletionTime = table.Column<DateTime>(nullable: true),
-                    TenantId = table.Column<int>(nullable: false),
-                    AdId = table.Column<long>(nullable: false),
-                    AdPositionId = table.Column<long>(nullable: false),
-                    AdControlId = table.Column<long>(nullable: false),
-                    Published = table.Column<bool>(nullable: false),
-                    PublishStartTime = table.Column<DateTimeOffset>(nullable: true),
-                    PublishEndTime = table.Column<DateTimeOffset>(nullable: true),
-                    SortIndex = table.Column<int>(nullable: false)
+                    TenantId = table.Column<int>(type: "int", nullable: false),
+                    AdId = table.Column<long>(type: "bigint", nullable: false),
+                    AdPositionId = table.Column<long>(type: "bigint", nullable: false),
+                    AdControlId = table.Column<long>(type: "bigint", nullable: false),
+                    Published = table.Column<bool>(type: "bit", nullable: false),
+                    PublishStartTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    PublishEndTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    SortIndex = table.Column<int>(type: "int", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1029,15 +1030,15 @@ namespace ZLJ.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_BXJGCMSAdRecords_BXJGCMSAds_AdId",
-                        column: x => x.AdId,
-                        principalTable: "BXJGCMSAds",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_BXJGCMSAdRecords_BXJGCMSAdPositions_AdPositionId",
                         column: x => x.AdPositionId,
                         principalTable: "BXJGCMSAdPositions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BXJGCMSAdRecords_BXJGCMSAds_AdId",
+                        column: x => x.AdId,
+                        principalTable: "BXJGCMSAds",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -1046,79 +1047,79 @@ namespace ZLJ.Migrations
                 name: "BXJGCMSColumns",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    LastModificationTime = table.Column<DateTime>(nullable: true),
-                    LastModifierUserId = table.Column<long>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    DeleterUserId = table.Column<long>(nullable: true),
-                    DeletionTime = table.Column<DateTime>(nullable: true),
-                    Code = table.Column<string>(maxLength: 95, nullable: false),
-                    ParentId = table.Column<long>(nullable: true),
-                    TenantId = table.Column<int>(nullable: true),
-                    DisplayName = table.Column<string>(maxLength: 128, nullable: false),
-                    ExtensionData = table.Column<string>(nullable: true),
                     Icon = table.Column<string>(type: "varchar(200)", nullable: true),
-                    ColumnType = table.Column<int>(nullable: false),
-                    ContentTypeId = table.Column<long>(nullable: false),
-                    IsSysDefine = table.Column<bool>(nullable: false),
-                    SeoTitle = table.Column<string>(maxLength: 2000, nullable: true),
-                    SeoDescription = table.Column<string>(maxLength: 5000, nullable: true),
-                    SeoKeyword = table.Column<string>(maxLength: 1000, nullable: true),
-                    Description = table.Column<string>(nullable: true),
+                    ColumnType = table.Column<int>(type: "int", nullable: false),
+                    ContentTypeId = table.Column<long>(type: "bigint", nullable: false),
+                    IsSysDefine = table.Column<bool>(type: "bit", nullable: false),
+                    SeoTitle = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
+                    SeoDescription = table.Column<string>(type: "nvarchar(max)", maxLength: 5000, nullable: true),
+                    SeoKeyword = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ListTemplate = table.Column<string>(type: "varchar(200)", nullable: true),
-                    DetailTemplate = table.Column<string>(type: "varchar(200)", nullable: true)
+                    DetailTemplate = table.Column<string>(type: "varchar(200)", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Code = table.Column<string>(type: "nvarchar(95)", maxLength: 95, nullable: false),
+                    ParentId = table.Column<long>(type: "bigint", nullable: true),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    DisplayName = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    ExtensionData = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_BXJGCMSColumns", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_BXJGCMSColumns_BXJGGeneralTrees_ContentTypeId",
-                        column: x => x.ContentTypeId,
-                        principalTable: "BXJGGeneralTrees",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_BXJGCMSColumns_BXJGCMSColumns_ParentId",
                         column: x => x.ParentId,
                         principalTable: "BXJGCMSColumns",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_BXJGCMSColumns_BXJGGeneralTrees_ContentTypeId",
+                        column: x => x.ContentTypeId,
+                        principalTable: "BXJGGeneralTrees",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "BXJGShopProduct",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    LastModificationTime = table.Column<DateTime>(nullable: true),
-                    LastModifierUserId = table.Column<long>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    DeleterUserId = table.Column<long>(nullable: true),
-                    DeletionTime = table.Column<DateTime>(nullable: true),
-                    TenantId = table.Column<int>(nullable: false),
-                    Title = table.Column<string>(maxLength: 100, nullable: false),
-                    DescriptionShort = table.Column<string>(maxLength: 10000, nullable: true),
-                    DescriptionFull = table.Column<string>(nullable: true),
+                    TenantId = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    DescriptionShort = table.Column<string>(type: "nvarchar(max)", maxLength: 10000, nullable: true),
+                    DescriptionFull = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Images = table.Column<string>(type: "varchar(5000)", nullable: true),
-                    CategoryId = table.Column<long>(nullable: false),
-                    BrandId = table.Column<long>(nullable: true),
-                    UnitId = table.Column<long>(nullable: true),
-                    OldPrice = table.Column<decimal>(nullable: false),
-                    Price = table.Column<decimal>(nullable: false),
-                    Integral = table.Column<int>(nullable: false),
-                    Hot = table.Column<bool>(nullable: false),
-                    New = table.Column<bool>(nullable: false),
-                    Home = table.Column<bool>(nullable: false),
-                    Focus = table.Column<bool>(nullable: false),
-                    Published = table.Column<bool>(nullable: false),
-                    AvailableStart = table.Column<DateTimeOffset>(nullable: true),
-                    AvailableEnd = table.Column<DateTimeOffset>(nullable: true)
+                    CategoryId = table.Column<long>(type: "bigint", nullable: false),
+                    BrandId = table.Column<long>(type: "bigint", nullable: true),
+                    UnitId = table.Column<long>(type: "bigint", nullable: true),
+                    OldPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Integral = table.Column<int>(type: "int", nullable: false),
+                    Hot = table.Column<bool>(type: "bit", nullable: false),
+                    New = table.Column<bool>(type: "bit", nullable: false),
+                    Home = table.Column<bool>(type: "bit", nullable: false),
+                    Focus = table.Column<bool>(type: "bit", nullable: false),
+                    Published = table.Column<bool>(type: "bit", nullable: false),
+                    AvailableStart = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    AvailableEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1130,29 +1131,29 @@ namespace ZLJ.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_BXJGShopProduct_BXJGShopProductCategory_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "BXJGShopProductCategory",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_BXJGShopProduct_BXJGGeneralTrees_UnitId",
                         column: x => x.UnitId,
                         principalTable: "BXJGGeneralTrees",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_BXJGShopProduct_BXJGShopProductCategory_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "BXJGShopProductCategory",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "AbpDynamicEntityPropertyValues",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Value = table.Column<string>(nullable: false),
-                    EntityId = table.Column<string>(nullable: true),
-                    DynamicEntityPropertyId = table.Column<int>(nullable: false),
-                    TenantId = table.Column<int>(nullable: true)
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EntityId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DynamicEntityPropertyId = table.Column<int>(type: "int", nullable: false),
+                    TenantId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1169,14 +1170,16 @@ namespace ZLJ.Migrations
                 name: "AbpEntityPropertyChanges",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    EntityChangeId = table.Column<long>(nullable: false),
-                    NewValue = table.Column<string>(maxLength: 512, nullable: true),
-                    OriginalValue = table.Column<string>(maxLength: 512, nullable: true),
-                    PropertyName = table.Column<string>(maxLength: 96, nullable: true),
-                    PropertyTypeFullName = table.Column<string>(maxLength: 192, nullable: true),
-                    TenantId = table.Column<int>(nullable: true)
+                    EntityChangeId = table.Column<long>(type: "bigint", nullable: false),
+                    NewValue = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
+                    OriginalValue = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
+                    PropertyName = table.Column<string>(type: "nvarchar(96)", maxLength: 96, nullable: true),
+                    PropertyTypeFullName = table.Column<string>(type: "nvarchar(192)", maxLength: 192, nullable: true),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    NewValueHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OriginalValueHash = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1193,16 +1196,16 @@ namespace ZLJ.Migrations
                 name: "AbpPermissions",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    TenantId = table.Column<int>(nullable: true),
-                    Name = table.Column<string>(maxLength: 128, nullable: false),
-                    IsGranted = table.Column<bool>(nullable: false),
-                    Discriminator = table.Column<string>(nullable: false),
-                    RoleId = table.Column<int>(nullable: true),
-                    UserId = table.Column<long>(nullable: true)
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    IsGranted = table.Column<bool>(type: "bit", nullable: false),
+                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RoleId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<long>(type: "bigint", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1225,14 +1228,14 @@ namespace ZLJ.Migrations
                 name: "AbpRoleClaims",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    TenantId = table.Column<int>(nullable: true),
-                    RoleId = table.Column<int>(nullable: false),
-                    ClaimType = table.Column<string>(maxLength: 256, nullable: true),
-                    ClaimValue = table.Column<string>(nullable: true)
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    RoleId = table.Column<int>(type: "int", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1249,34 +1252,34 @@ namespace ZLJ.Migrations
                 name: "BXJGShopOrder",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    LastModificationTime = table.Column<DateTime>(nullable: true),
-                    LastModifierUserId = table.Column<long>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    DeleterUserId = table.Column<long>(nullable: true),
-                    DeletionTime = table.Column<DateTime>(nullable: true),
-                    TenantId = table.Column<int>(nullable: false),
-                    CustomerId = table.Column<long>(nullable: false),
+                    TenantId = table.Column<int>(type: "int", nullable: false),
+                    CustomerId = table.Column<long>(type: "bigint", nullable: false),
                     OrderNo = table.Column<string>(type: "varchar(36)", nullable: false),
-                    OrderTime = table.Column<DateTimeOffset>(nullable: false),
-                    Status = table.Column<int>(nullable: false),
-                    CustomerRemark = table.Column<string>(maxLength: 500, nullable: true),
-                    MerchandiseSubtotal = table.Column<decimal>(nullable: false),
-                    Integral = table.Column<long>(nullable: false),
-                    PaymentMethodId = table.Column<long>(nullable: true),
-                    PaymentAmount = table.Column<decimal>(nullable: false),
-                    PaymentStatus = table.Column<int>(nullable: true),
-                    AreaId = table.Column<long>(nullable: false),
-                    Consignee = table.Column<string>(maxLength: 20, nullable: false),
+                    OrderTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    CustomerRemark = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    MerchandiseSubtotal = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Integral = table.Column<long>(type: "bigint", nullable: false),
+                    PaymentMethodId = table.Column<long>(type: "bigint", nullable: true),
+                    PaymentAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    PaymentStatus = table.Column<int>(type: "int", nullable: true),
+                    AreaId = table.Column<long>(type: "bigint", nullable: false),
+                    Consignee = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     ConsigneePhoneNumber = table.Column<string>(type: "varchar(50)", nullable: false),
-                    ReceivingAddress = table.Column<string>(maxLength: 200, nullable: false),
-                    DistributionMethodId = table.Column<long>(nullable: true),
+                    ReceivingAddress = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    DistributionMethodId = table.Column<long>(type: "bigint", nullable: true),
                     LogisticsNumber = table.Column<string>(type: "varchar(50)", nullable: true),
-                    LogisticsStatus = table.Column<int>(nullable: true),
-                    RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true)
+                    LogisticsStatus = table.Column<int>(type: "int", nullable: true),
+                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1285,12 +1288,6 @@ namespace ZLJ.Migrations
                         name: "FK_BXJGShopOrder_BXJGBaseInfoAdministratives_AreaId",
                         column: x => x.AreaId,
                         principalTable: "BXJGBaseInfoAdministratives",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_BXJGShopOrder_BXJGShopCustomer_CustomerId",
-                        column: x => x.CustomerId,
-                        principalTable: "BXJGShopCustomer",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -1305,33 +1302,39 @@ namespace ZLJ.Migrations
                         principalTable: "BXJGGeneralTrees",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_BXJGShopOrder_BXJGShopCustomer_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "BXJGShopCustomer",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "BXJGCMSArticles",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    LastModificationTime = table.Column<DateTime>(nullable: true),
-                    LastModifierUserId = table.Column<long>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    DeleterUserId = table.Column<long>(nullable: true),
-                    DeletionTime = table.Column<DateTime>(nullable: true),
-                    TenantId = table.Column<int>(nullable: false),
-                    ColumnId = table.Column<long>(nullable: false),
-                    Title = table.Column<string>(maxLength: 500, nullable: false),
-                    IsSysDefine = table.Column<bool>(nullable: false),
-                    Content = table.Column<string>(nullable: true),
-                    SeoTitle = table.Column<string>(maxLength: 2000, nullable: true),
-                    SeoDescription = table.Column<string>(maxLength: 5000, nullable: true),
-                    SeoKeyword = table.Column<string>(maxLength: 1000, nullable: true),
-                    Summary = table.Column<string>(maxLength: 5000, nullable: true),
-                    Published = table.Column<bool>(nullable: false),
-                    PublishStartTime = table.Column<DateTimeOffset>(nullable: true),
-                    PublishEndTime = table.Column<DateTimeOffset>(nullable: true)
+                    TenantId = table.Column<int>(type: "int", nullable: false),
+                    ColumnId = table.Column<long>(type: "bigint", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    IsSysDefine = table.Column<bool>(type: "bit", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SeoTitle = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
+                    SeoDescription = table.Column<string>(type: "nvarchar(max)", maxLength: 5000, nullable: true),
+                    SeoKeyword = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    Summary = table.Column<string>(type: "nvarchar(max)", maxLength: 5000, nullable: true),
+                    Published = table.Column<bool>(type: "bit", nullable: false),
+                    PublishStartTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    PublishEndTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1348,32 +1351,32 @@ namespace ZLJ.Migrations
                 name: "BXJGShopSku",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    OldPrice = table.Column<decimal>(nullable: false),
-                    Price = table.Column<decimal>(nullable: false),
-                    Integral = table.Column<int>(nullable: false),
-                    ProductId = table.Column<long>(nullable: false),
-                    DynamicEntityProperty1Id = table.Column<int>(nullable: false),
-                    DynamicProperty1Name = table.Column<string>(maxLength: 50, nullable: true),
-                    DynamicEntityProperty1Value = table.Column<string>(maxLength: 100, nullable: true),
-                    DynamicEntityProperty1Text = table.Column<string>(maxLength: 50, nullable: true),
-                    DynamicEntityProperty2Id = table.Column<int>(nullable: true),
-                    DynamicProperty2Name = table.Column<string>(maxLength: 50, nullable: true),
-                    DynamicEntityProperty2Value = table.Column<string>(maxLength: 100, nullable: true),
-                    DynamicEntityProperty2Text = table.Column<string>(maxLength: 50, nullable: true),
-                    DynamicEntityProperty3Id = table.Column<int>(nullable: true),
-                    DynamicProperty3Name = table.Column<string>(maxLength: 50, nullable: true),
-                    DynamicEntityProperty3Value = table.Column<string>(maxLength: 100, nullable: true),
-                    DynamicEntityProperty3Text = table.Column<string>(maxLength: 50, nullable: true),
-                    DynamicEntityProperty4Id = table.Column<int>(nullable: true),
-                    DynamicProperty4Name = table.Column<string>(maxLength: 50, nullable: true),
-                    DynamicEntityProperty4Value = table.Column<string>(maxLength: 100, nullable: true),
-                    DynamicEntityProperty4Text = table.Column<string>(maxLength: 50, nullable: true),
-                    DynamicEntityProperty5Id = table.Column<int>(nullable: true),
-                    DynamicProperty5Name = table.Column<string>(maxLength: 50, nullable: true),
-                    DynamicEntityProperty5Value = table.Column<string>(maxLength: 100, nullable: true),
-                    DynamicEntityProperty5Text = table.Column<string>(maxLength: 50, nullable: true)
+                    OldPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Integral = table.Column<int>(type: "int", nullable: false),
+                    ProductId = table.Column<long>(type: "bigint", nullable: false),
+                    DynamicEntityProperty1Id = table.Column<int>(type: "int", nullable: false),
+                    DynamicProperty1Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    DynamicEntityProperty1Value = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    DynamicEntityProperty1Text = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    DynamicEntityProperty2Id = table.Column<int>(type: "int", nullable: true),
+                    DynamicProperty2Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    DynamicEntityProperty2Value = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    DynamicEntityProperty2Text = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    DynamicEntityProperty3Id = table.Column<int>(type: "int", nullable: true),
+                    DynamicProperty3Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    DynamicEntityProperty3Value = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    DynamicEntityProperty3Text = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    DynamicEntityProperty4Id = table.Column<int>(type: "int", nullable: true),
+                    DynamicProperty4Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    DynamicEntityProperty4Value = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    DynamicEntityProperty4Text = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    DynamicEntityProperty5Id = table.Column<int>(type: "int", nullable: true),
+                    DynamicProperty5Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    DynamicEntityProperty5Value = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    DynamicEntityProperty5Text = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1420,19 +1423,19 @@ namespace ZLJ.Migrations
                 name: "BXJGShopOrderItem",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    OrderId = table.Column<long>(nullable: false),
-                    ProductId = table.Column<long>(nullable: false),
-                    SkuId = table.Column<long>(nullable: true),
-                    Title = table.Column<string>(nullable: true),
-                    Image = table.Column<string>(nullable: true),
-                    Price = table.Column<decimal>(nullable: false),
-                    Quantity = table.Column<decimal>(nullable: false),
-                    Integral = table.Column<int>(nullable: false),
-                    Amount = table.Column<decimal>(nullable: false),
-                    TotalIntegral = table.Column<int>(nullable: false),
-                    RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true)
+                    OrderId = table.Column<long>(type: "bigint", nullable: false),
+                    ProductId = table.Column<long>(type: "bigint", nullable: false),
+                    SkuId = table.Column<long>(type: "bigint", nullable: true),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Quantity = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Integral = table.Column<int>(type: "int", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TotalIntegral = table.Column<int>(type: "int", nullable: false),
+                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1587,14 +1590,14 @@ namespace ZLJ.Migrations
                 columns: new[] { "TenantId", "Code" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AbpPermissions_TenantId_Name",
-                table: "AbpPermissions",
-                columns: new[] { "TenantId", "Name" });
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AbpPermissions_RoleId",
                 table: "AbpPermissions",
                 column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpPermissions_TenantId_Name",
+                table: "AbpPermissions",
+                columns: new[] { "TenantId", "Name" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpPermissions_UserId",
@@ -1632,15 +1635,15 @@ namespace ZLJ.Migrations
                 columns: new[] { "TenantId", "NormalizedName" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AbpSettings_UserId",
-                table: "AbpSettings",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AbpSettings_TenantId_Name_UserId",
                 table: "AbpSettings",
                 columns: new[] { "TenantId", "Name", "UserId" },
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpSettings_UserId",
+                table: "AbpSettings",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpTenantNotifications_TenantId",
@@ -1678,11 +1681,6 @@ namespace ZLJ.Migrations
                 column: "EmailAddress");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AbpUserAccounts_UserName",
-                table: "AbpUserAccounts",
-                column: "UserName");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AbpUserAccounts_TenantId_EmailAddress",
                 table: "AbpUserAccounts",
                 columns: new[] { "TenantId", "EmailAddress" });
@@ -1698,9 +1696,9 @@ namespace ZLJ.Migrations
                 columns: new[] { "TenantId", "UserName" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AbpUserClaims_UserId",
-                table: "AbpUserClaims",
-                column: "UserId");
+                name: "IX_AbpUserAccounts_UserName",
+                table: "AbpUserAccounts",
+                column: "UserName");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpUserClaims_TenantId_ClaimType",
@@ -1708,9 +1706,9 @@ namespace ZLJ.Migrations
                 columns: new[] { "TenantId", "ClaimType" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AbpUserLoginAttempts_UserId_TenantId",
-                table: "AbpUserLoginAttempts",
-                columns: new[] { "UserId", "TenantId" });
+                name: "IX_AbpUserClaims_UserId",
+                table: "AbpUserClaims",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpUserLoginAttempts_TenancyName_UserNameOrEmailAddress_Result",
@@ -1718,9 +1716,14 @@ namespace ZLJ.Migrations
                 columns: new[] { "TenancyName", "UserNameOrEmailAddress", "Result" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AbpUserLogins_UserId",
+                name: "IX_AbpUserLoginAttempts_UserId_TenantId",
+                table: "AbpUserLoginAttempts",
+                columns: new[] { "UserId", "TenantId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpUserLogins_TenantId_LoginProvider_ProviderKey",
                 table: "AbpUserLogins",
-                column: "UserId");
+                columns: new[] { "TenantId", "LoginProvider", "ProviderKey" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpUserLogins_TenantId_UserId",
@@ -1728,9 +1731,9 @@ namespace ZLJ.Migrations
                 columns: new[] { "TenantId", "UserId" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AbpUserLogins_TenantId_LoginProvider_ProviderKey",
+                name: "IX_AbpUserLogins_UserId",
                 table: "AbpUserLogins",
-                columns: new[] { "TenantId", "LoginProvider", "ProviderKey" });
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpUserNotifications_UserId_State_CreationTime",
@@ -1748,11 +1751,6 @@ namespace ZLJ.Migrations
                 columns: new[] { "TenantId", "UserId" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AbpUserRoles_UserId",
-                table: "AbpUserRoles",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AbpUserRoles_TenantId_RoleId",
                 table: "AbpUserRoles",
                 columns: new[] { "TenantId", "RoleId" });
@@ -1761,6 +1759,11 @@ namespace ZLJ.Migrations
                 name: "IX_AbpUserRoles_TenantId_UserId",
                 table: "AbpUserRoles",
                 columns: new[] { "TenantId", "UserId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpUserRoles_UserId",
+                table: "AbpUserRoles",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpUsers_CreatorUserId",
@@ -1788,14 +1791,14 @@ namespace ZLJ.Migrations
                 columns: new[] { "TenantId", "NormalizedUserName" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AbpUserTokens_UserId",
-                table: "AbpUserTokens",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AbpUserTokens_TenantId_UserId",
                 table: "AbpUserTokens",
                 columns: new[] { "TenantId", "UserId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpUserTokens_UserId",
+                table: "AbpUserTokens",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpWebhookSendAttempts_WebhookEventId",
@@ -2055,10 +2058,10 @@ namespace ZLJ.Migrations
                 name: "BXJGCMSAdControls");
 
             migrationBuilder.DropTable(
-                name: "BXJGCMSAds");
+                name: "BXJGCMSAdPositions");
 
             migrationBuilder.DropTable(
-                name: "BXJGCMSAdPositions");
+                name: "BXJGCMSAds");
 
             migrationBuilder.DropTable(
                 name: "BXJGCMSColumns");

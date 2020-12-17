@@ -19,13 +19,14 @@ namespace BXJG.WeChat
         public Func<string, IConfiguration> GetPayConfiguration { get; set; }
         public Action<Pay.Option> ConfigPay { get; set; }
 
-        private readonly IConfiguration configuration;
+        //本来它应该使用构造函数注入，但是abp.Migrator没有注入这个，我们去修改abp框架不太好，因此我们自己代码改变下，毕竟ZLJ.Web.Host执行是我们可以通过属性注入正常得到配置对象
+        public IConfiguration Configuration { get; set; }
 
-        public BXJGWeChatModule(IConfiguration configuration)
+        public BXJGWeChatModule()
         {
-            this.configuration = configuration;
-            GetMiniProgramConfiguration = key => configuration.GetSection(key);
-            GetPayConfiguration = key => configuration.GetSection(key);
+            //this.Configuration = Configuration;
+            GetMiniProgramConfiguration = key => Configuration.GetSection(key);
+            GetPayConfiguration = key => Configuration.GetSection(key);
         }
 
         public override void PreInitialize()
@@ -40,7 +41,11 @@ namespace BXJG.WeChat
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
 
 
-            var wxRoot = configuration.GetSection(BXJGWeChatConst.RootConfigKey);
+            var wxRoot = Configuration?.GetSection(BXJGWeChatConst.RootConfigKey);
+
+            
+            if (wxRoot == null)
+                return;
 
             IocManager.RegService(services =>
             {
