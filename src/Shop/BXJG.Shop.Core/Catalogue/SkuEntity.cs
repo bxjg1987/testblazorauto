@@ -44,12 +44,13 @@ namespace BXJG.Shop.Catalogue
         /// <summary>
         /// 第1个动态属性名
         /// 虽然从导航属性可以关联查询，但是这里存储一份冗余字段查询速度更快。毕竟目前考虑sku的动态属性组合不允许修改
+        /// 再则考虑动态属性的定义可能需要修改，订单明细是引用sku的，所以最好sku复制一份数据
         /// </summary>
         public string DynamicProperty1Name { get; set; }
-        /// <summary>
-        /// 第1个动态属性
-        /// </summary>
-        public virtual DynamicEntityProperty DynamicEntityProperty1 { get; set; }
+        ///// <summary>
+        ///// 第1个动态属性
+        ///// </summary>
+        //public virtual DynamicEntityProperty DynamicEntityProperty1 { get; set; }
         /// <summary>
         /// 第1个动态属性值
         /// </summary>
@@ -67,10 +68,10 @@ namespace BXJG.Shop.Catalogue
         /// 虽然从导航属性可以关联查询，但是这里存储一份冗余字段查询速度更快。毕竟目前考虑sku的动态属性组合不允许修改
         /// </summary>
         public string DynamicProperty2Name { get; set; }
-        /// <summary>
-        /// 第2个动态属性
-        /// </summary>
-        public virtual DynamicEntityProperty DynamicEntityProperty2 { get; set; }
+        ///// <summary>
+        ///// 第2个动态属性
+        ///// </summary>
+        //public virtual DynamicEntityProperty DynamicEntityProperty2 { get; set; }
         /// <summary>
         /// 第2个动态属性值
         /// </summary>
@@ -88,10 +89,10 @@ namespace BXJG.Shop.Catalogue
         /// 虽然从导航属性可以关联查询，但是这里存储一份冗余字段查询速度更快。毕竟目前考虑sku的动态属性组合不允许修改
         /// </summary>
         public string DynamicProperty3Name { get; set; }
-        /// <summary>
-        /// 第3个动态属性
-        /// </summary>
-        public virtual DynamicEntityProperty DynamicEntityProperty3 { get; set; }
+        ///// <summary>
+        ///// 第3个动态属性
+        ///// </summary>
+        //public virtual DynamicEntityProperty DynamicEntityProperty3 { get; set; }
         /// <summary>
         /// 第3个动态属性值
         /// </summary>
@@ -109,10 +110,10 @@ namespace BXJG.Shop.Catalogue
         /// 虽然从导航属性可以关联查询，但是这里存储一份冗余字段查询速度更快。毕竟目前考虑sku的动态属性组合不允许修改
         /// </summary>
         public string DynamicProperty4Name { get; set; }
-        /// <summary>
-        /// 第4个动态属性
-        /// </summary>
-        public virtual DynamicEntityProperty DynamicEntityProperty4 { get; set; }
+        ///// <summary>
+        ///// 第4个动态属性
+        ///// </summary>
+        //public virtual DynamicEntityProperty DynamicEntityProperty4 { get; set; }
         /// <summary>
         /// 第4个动态属性值
         /// </summary>
@@ -130,10 +131,10 @@ namespace BXJG.Shop.Catalogue
         /// 虽然从导航属性可以关联查询，但是这里存储一份冗余字段查询速度更快。毕竟目前考虑sku的动态属性组合不允许修改
         /// </summary>
         public string DynamicProperty5Name { get; set; }
-        /// <summary>
-        /// 第5个动态属性
-        /// </summary>
-        public virtual DynamicEntityProperty DynamicEntityProperty5 { get; set; }
+        ///// <summary>
+        ///// 第5个动态属性
+        ///// </summary>
+        //public virtual DynamicEntityProperty DynamicEntityProperty5 { get; set; }
         /// <summary>
         /// 第5个动态属性值
         /// </summary>
