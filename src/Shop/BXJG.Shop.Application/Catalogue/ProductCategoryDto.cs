@@ -1,5 +1,6 @@
 ﻿using Abp.AutoMapper;
 using BXJG.GeneralTree;
+using BXJG.Utils.DynamicProperty;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -27,5 +28,7 @@ namespace BXJG.Shop.Catalogue
         /// 是否显示在首页
         /// </summary>
         public bool ShowInHome { get; set; }
+
+        public List<DynamicPropertyEditDto> DynamicProperty { get; set; }
     }
 }

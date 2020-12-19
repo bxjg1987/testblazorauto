@@ -13,7 +13,7 @@ namespace BXJG.Shop.Catalogue
         /// <summary>
         /// 图标
         /// </summary>
-        public string Icon{ get; set; }
+        public string Icon { get; set; }
         /// <summary>
         /// 图片1
         /// </summary>
@@ -26,5 +26,10 @@ namespace BXJG.Shop.Catalogue
         /// 是否显示在首页
         /// </summary>
         public bool ShowInHome { get; set; }
+        ///// <summary>
+        ///// 为何注释掉，请看ProductCategoryDynamicPropertyEntity的注释
+        ///// 允许当前商品分类下的商品 有哪些sku的动态属性，如：手机类别下允许有 入网类型、版本(4g*64g)、颜色等属性
+        ///// </summary>
+        //public virtual List<ProductCategoryDynamicPropertyEntity> DynamicProperties { get; set; }
     }
 }
