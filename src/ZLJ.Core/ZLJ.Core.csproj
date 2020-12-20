@@ -18,6 +18,11 @@
     <EmbeddedResource Include="Localization\SourceFiles\*.xml" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="DynamicProperty\**" />
+    <EmbeddedResource Remove="DynamicProperty\**" />
+    <None Remove="DynamicProperty\**" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Remove="Localization\LocalizationExt.cs" />
     <Compile Remove="Shop\CustomerManager.cs" />
     <Compile Remove="Shop\OrderManager.cs" />

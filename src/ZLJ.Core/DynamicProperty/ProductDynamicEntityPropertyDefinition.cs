@@ -4,13 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BXJG.Shop.Catalogue
+namespace ZLJ.DynamicProperty
 {
-    public class ProductDynamicEntityPropertyDefinition : DynamicEntityPropertyDefinitionProvider
+    public class DynamicPropertyDefinition : DynamicEntityPropertyDefinitionProvider
     {
         public override void SetDynamicEntityProperties(IDynamicEntityPropertyDefinitionContext context)
         {
-            
+            //这个是通用的，移动到主程序的ZLJ.Core中去了
             try
             {
                 context.Manager.AddAllowedInputType<SingleLineStringInputType>();

@@ -8,6 +8,7 @@ using Abp.Threading.BackgroundWorkers;
 using BXJG.Utils.File;
 using BXJG.Common;
 using Abp.Dependency;
+using BXJG.Utils.DynamicProperty;
 
 namespace BXJG.Utils
 {
@@ -36,6 +37,7 @@ namespace BXJG.Utils
             IocManager.RegisterAssemblyByConvention(typeof(BXJGUtilsModule).GetAssembly());
             //IocManager.Register<IClock, AbpClock>();
             IocManager.RegService(services=>services.AddBXJGCommon());
+            IocManager.Register(typeof(DynamicPropertyManager<>), DependencyLifeStyle.Singleton);
             //调试模式时默认实现获取的路径是 ..\bin\debug\wwwroot
             //而asp.net core默认读取是在ZLJ.Web.Host\wwwroot 导致上传的文件看不到效果
             //发布到服务器后不存在这个问题，调试时需要在web.core模块PreInitialize中替换服务，注意经过测试一定要在PreInitialize中替换
