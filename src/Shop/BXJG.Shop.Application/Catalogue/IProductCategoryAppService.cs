@@ -1,7 +1,10 @@
-﻿using BXJG.GeneralTree;
+﻿using Abp.Authorization;
+using BXJG.GeneralTree;
+using BXJG.Utils.DynamicProperty;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BXJG.Shop.Catalogue
 {
@@ -16,5 +19,8 @@ namespace BXJG.Shop.Catalogue
                                                                                   ProductCategoryGetForSelectInput,
                                                                                   ProductCategoryCombboxDto,
                                                                                   GeneralTreeNodeMoveInput>
-    { }
+    {
+        [AbpAuthorize]
+        Task<IList<DynamicPropertyDto>> GetDynamicPropertyAsync(long id);
+    }
 }

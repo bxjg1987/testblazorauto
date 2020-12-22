@@ -36,14 +36,14 @@ namespace BXJG.GeneralTree
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TManager"></typeparam>
     public class UnAuthGeneralTreeAppServiceBase<TGetTreeForSelectInput,
-                                           TGetTreeForSelectOutput,
-                                           TGetNodesForSelectInput,
-                                           TGetNodesForSelectOutput,
-                                           TEntity,
-                                           TManager> : ApplicationService, IUnAuthGeneralTreeAppServiceBase<TGetTreeForSelectInput,
-                                                                                                      TGetTreeForSelectOutput,
-                                                                                                      TGetNodesForSelectInput,
-                                                                                                      TGetNodesForSelectOutput>
+                                                 TGetTreeForSelectOutput,
+                                                 TGetNodesForSelectInput,
+                                                 TGetNodesForSelectOutput,
+                                                 TEntity,
+                                                 TManager> : ApplicationService, IUnAuthGeneralTreeAppServiceBase<TGetTreeForSelectInput,
+                                                                                                                  TGetTreeForSelectOutput,
+                                                                                                                  TGetNodesForSelectInput,
+                                                                                                                  TGetNodesForSelectOutput>
         where TEntity : GeneralTreeEntity<TEntity>
         where TManager : GeneralTreeManager<TEntity>
         where TGetTreeForSelectInput : GeneralTreeGetForSelectInput
@@ -274,18 +274,18 @@ namespace BXJG.GeneralTree
                                            TMoveInput,
                                            TEntity,
                                            TManager> : UnAuthGeneralTreeAppServiceBase<TGetTreeForSelectInput,
-                                                                                 TGetTreeForSelectOutput,
-                                                                                 TGetNodesForSelectInput,
-                                                                                 TGetNodesForSelectOutput,
-                                                                                 TEntity,
-                                                                                 TManager>, IGeneralTreeAppServiceBase<TDto,
-                                                                                                                       TEditDto,
-                                                                                                                       TGetAllInput,
-                                                                                                                       TGetTreeForSelectInput,
-                                                                                                                       TGetTreeForSelectOutput,
-                                                                                                                       TGetNodesForSelectInput,
-                                                                                                                       TGetNodesForSelectOutput,
-                                                                                                                       TMoveInput>
+                                                                                       TGetTreeForSelectOutput,
+                                                                                       TGetNodesForSelectInput,
+                                                                                       TGetNodesForSelectOutput,
+                                                                                       TEntity,
+                                                                                       TManager>, IGeneralTreeAppServiceBase<TDto,
+                                                                                                                             TEditDto,
+                                                                                                                             TGetAllInput,
+                                                                                                                             TGetTreeForSelectInput,
+                                                                                                                             TGetTreeForSelectOutput,
+                                                                                                                             TGetNodesForSelectInput,
+                                                                                                                             TGetNodesForSelectOutput,
+                                                                                                                             TMoveInput>
         where TEntity : GeneralTreeEntity<TEntity>
         where TDto : GeneralTreeGetTreeNodeBaseDto<TDto>, new()
         where TEditDto : GeneralTreeNodeEditBaseDto//父类可以对输入做一定的处理
@@ -462,17 +462,19 @@ namespace BXJG.GeneralTree
             }
             return list1;
         }
-        //public override async Task<IList<TGetTreeForSelectOutput>> GetTreeForSelectAsync(TGetTreeForSelectInput input)
-        //{
-        //    //权限判断
-        //    await CheckGetPermissionAsync();
-        //    return await base.GetTreeForSelectAsync(input);
-        //}
-        //public override async Task<IList<TGetNodesForSelectOutput>> GetNodesForSelectAsync(TGetNodesForSelectInput input)
-        //{
-        //    await CheckGetPermissionAsync();
-        //    return await base.GetNodesForSelectAsync(input);
-        //}
+        [AbpAuthorize]
+        public override Task<IList<TGetTreeForSelectOutput>> GetTreeForSelectAsync(TGetTreeForSelectInput input)
+        {
+            //权限判断
+            //await CheckGetPermissionAsync();
+            return base.GetTreeForSelectAsync(input);
+        }
+        [AbpAuthorize]
+        public override Task<IList<TGetNodesForSelectOutput>> GetNodesForSelectAsync(TGetNodesForSelectInput input)
+        {
+            //await CheckGetPermissionAsync();
+            return base.GetNodesForSelectAsync(input);
+        }
 
         #region 权限判断
         protected virtual Task CheckCreatePermissionAsync()

@@ -18,20 +18,20 @@ using Abp.Domain.Uow;
 namespace BXJG.Shop.Catalogue
 {
     public class ProductCategoryAppService : GeneralTreeAppServiceBase<ProductCategoryDto,
-                                                                           ProductCategoryEditDto,
-                                                                           ProductCategoryGetAllInput,
-                                                                           ProductCategoryGetForSelectInput,
-                                                                           ProductCategoryTreeNodeDto,
-                                                                           ProductCategoryGetForSelectInput,
-                                                                           ProductCategoryCombboxDto,
-                                                                           GeneralTreeNodeMoveInput,
-                                                                           ProductCategoryEntity,
-                                                                           ProductCategoryManager>, IProductCategoryAppService
+                                                                       ProductCategoryEditDto,
+                                                                       ProductCategoryGetAllInput,
+                                                                       ProductCategoryGetForSelectInput,
+                                                                       ProductCategoryTreeNodeDto,
+                                                                       ProductCategoryGetForSelectInput,
+                                                                       ProductCategoryCombboxDto,
+                                                                       GeneralTreeNodeMoveInput,
+                                                                       ProductCategoryEntity,
+                                                                       ProductCategoryManager>, IProductCategoryAppService
     {
         private readonly DynamicPropertyManager propertyManager;
         private readonly DynamicPropertyValueManager valueManager;
         private readonly DynamicEntityPropertyStore dynamicEntityPropertyStore;
-        private readonly DynamicPropertyManager<ProductCategoryEntity> dynamicPropertyManager;
+        private readonly DynamicPropertyAppService<ProductCategoryEntity> dynamicPropertyManager;
 
         private readonly TempFileManager tempFileManager;
         public ProductCategoryAppService(IRepository<ProductCategoryEntity, long> ownRepository,
@@ -39,7 +39,7 @@ namespace BXJG.Shop.Catalogue
                                          ProductCategoryManager organizationUnitManager,
                                          DynamicPropertyManager propertyManager,
                                          DynamicEntityPropertyStore dynamicEntityPropertyManager,
-                                         DynamicPropertyManager<ProductCategoryEntity> dynamicPropertyManager,
+                                         DynamicPropertyAppService<ProductCategoryEntity> dynamicPropertyManager,
                                          DynamicPropertyValueManager valueManager) : base(ownRepository,
                                                                                           organizationUnitManager,
                                                                                           PermissionNames.ProductCategoryCreate,
@@ -65,7 +65,7 @@ namespace BXJG.Shop.Catalogue
 
             //先保持，后面的动态属性需要引用实体id
             var m = await base.CreateAsync(input);
-            m.DynamicProperty = (await dynamicPropertyManager.SetDynamicPropertyAsync(input.DynamicProperty, m.Id)).ToDto(m.Id);
+            m.DynamicProperty = (await dynamicPropertyManager.SetDynamicPropertyAsync(input.DynamicProperty, m.Id)).ToDto();
             return m;
         }
 
@@ -79,15 +79,20 @@ namespace BXJG.Shop.Catalogue
                 input.Image2 = (await this.tempFileManager.MoveAsync(input.Image2)).Single().FileRelativePath;
 
             var m = await base.UpdateAsync(input);
-            m.DynamicProperty = (await dynamicPropertyManager.SetDynamicPropertyAsync(input.DynamicProperty, m.Id)).ToDto(input.Id);
+            m.DynamicProperty = (await dynamicPropertyManager.SetDynamicPropertyAsync(input.DynamicProperty, m.Id)).ToDto();
             return m;
         }
 
         public override async Task<ProductCategoryDto> GetAsync(EntityDto<long> input)
         {
             var m = await base.GetAsync(input);
-            m.DynamicProperty = (await dynamicPropertyManager.GetDynamicPropertyAsync(m.Id)).ToDto(input.Id);
+            m.DynamicProperty = (await dynamicPropertyManager.GetDynamicPropertyAsync(m.Id)).ToDto();
             return m;
+        }
+
+        public async Task<IList<DynamicPropertyDto>> GetDynamicPropertyAsync(long id)
+        {
+            return (await dynamicPropertyManager.GetDynamicPropertyAsync(id)).ToDto();
         }
     }
 }

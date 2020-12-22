@@ -7,7 +7,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Linq.Expressions;
+using Abp.Dependency;
 
 namespace BXJG.Utils.DynamicProperty
 {
@@ -16,19 +19,21 @@ namespace BXJG.Utils.DynamicProperty
     /// 在模块<see cref="BXJGUtilsModule.Initialize"/>中注册到ioc
     /// </summary>
     /// <typeparam name="TEntity">只是用来获取字符串</typeparam>
-    public class DynamicPropertyManager<TEntity> : DomainService
+    public class DynamicPropertyAppService<TEntity> : ITransientDependency
     {
         private readonly Abp.DynamicEntityProperties.DynamicPropertyManager propertyManager;
         private readonly DynamicPropertyValueManager valueManager;
         private readonly DynamicEntityPropertyStore dynamicEntityPropertyStore;
         private readonly string entityType;
+        private readonly IUnitOfWorkManager unitOfWorkManager;
 
-        public DynamicPropertyManager(DynamicPropertyManager propertyManager, DynamicPropertyValueManager valueManager, DynamicEntityPropertyStore dynamicEntityPropertyStore)
+        public DynamicPropertyAppService(DynamicPropertyManager propertyManager, DynamicPropertyValueManager valueManager, DynamicEntityPropertyStore dynamicEntityPropertyStore, IUnitOfWorkManager unitOfWorkManager)
         {
             this.propertyManager = propertyManager;
             this.valueManager = valueManager;
             this.dynamicEntityPropertyStore = dynamicEntityPropertyStore;
             entityType = typeof(TEntity).FullName;
+            this.unitOfWorkManager = unitOfWorkManager;
         }
         [UnitOfWork]
         public async Task<List<Abp.DynamicEntityProperties.DynamicEntityProperty>> SetDynamicPropertyAsync(IEnumerable<DynamicPropertyEditDto> input, object id)
@@ -58,7 +63,7 @@ namespace BXJG.Utils.DynamicProperty
                     continue;
                 if (c.InputType.IsNullOrWhiteSpace())
                     continue;
-                if (c.InputType.Equals(inputType, StringComparison.OrdinalIgnoreCase) && c.DynamicPropertyValues.IsNullOrWhiteSpace())
+                if (c.InputType.Equals(inputType, StringComparison.OrdinalIgnoreCase) && c.PropertyValues.IsNullOrWhiteSpace())
                     continue;
 
                 //动态属性
@@ -71,10 +76,10 @@ namespace BXJG.Utils.DynamicProperty
                 };
 
                 await propertyManager.AddAsync(dp);
-                await base.CurrentUnitOfWork.SaveChangesAsync();
+                await unitOfWorkManager.Current.SaveChangesAsync();
                 if (c.InputType.Equals(inputType, StringComparison.OrdinalIgnoreCase))
                 {
-                    var p = c.DynamicPropertyValues.Replace('，', ',').Split(',').Reverse();//反下，否则ef保存是反着的
+                    var p = c.PropertyValues.Replace('，', ',').Split(',').Reverse();//反下，否则ef保存是反着的
                     foreach (var item in p)
                     {
                         await valueManager.AddAsync(new DynamicPropertyValue(dp, item, default));
@@ -89,7 +94,7 @@ namespace BXJG.Utils.DynamicProperty
                     //TenantId = tenantId 不提供 看看abp自己会处理不
                 });
             }
-            await base.CurrentUnitOfWork.SaveChangesAsync();
+            await unitOfWorkManager.Current.SaveChangesAsync();
             return await GetDynamicPropertyAsync(id);
             #endregion
         }
@@ -114,16 +119,18 @@ namespace BXJG.Utils.DynamicProperty
         }
     }
 
+    //由于Util没有分层，所以这个类没有放Application层
     public static class DynamicEntityPropertyExtensions
     {
-        public static List<DynamicPropertyEditDto> ToDto(this List<Abp.DynamicEntityProperties.DynamicEntityProperty> dynamicEntityProperties,object id)
+        public static List<DynamicPropertyDto> ToDto(this List<Abp.DynamicEntityProperties.DynamicEntityProperty> dynamicEntityProperties)
         {
-            return dynamicEntityProperties.Select(c => new DynamicPropertyEditDto
+            return dynamicEntityProperties.Select(c => new DynamicPropertyDto
             {
+                Id = c.Id,
                 DisplayName = c.DynamicProperty.DisplayName,
                 InputType = c.DynamicProperty.InputType,
-                PropertyName = c.DynamicProperty.PropertyName.TrimEnd(id.ToString().ToArray()),
-                DynamicPropertyValues = c.DynamicProperty.DynamicPropertyValues!=null?  string.Join(',', c.DynamicProperty.DynamicPropertyValues.Select(c => c.Value)):""
+                PropertyName = Regex.Replace(c.DynamicProperty.PropertyName, @"\d+", ""), //c.DynamicProperty.PropertyName.TrimEnd(id.ToString().ToArray()),
+                PropertyValues = c.DynamicProperty.DynamicPropertyValues?.ToDictionary(cc => cc.Id, cc => cc.Value)
             }).ToList();
         }
     }

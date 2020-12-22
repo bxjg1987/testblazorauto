@@ -19,13 +19,12 @@ namespace BXJG.GeneralTree
     /// <summary>
     /// 数据字典应用服务类
     /// </summary>
-    public class UnAuthGeneralTreeAppService : UnAuthGeneralTreeAppServiceBase<
-            GeneralTreeGetForSelectInput,
-            GeneralTreeNodeDto,
-            GeneralTreeGetForSelectInput,
-            GeneralTreeComboboxDto,
-            GeneralTreeEntity,
-            GeneralTreeManager>, IUnAuthGeneralTreeAppService
+    public class UnAuthGeneralTreeAppService : UnAuthGeneralTreeAppServiceBase<GeneralTreeGetForSelectInput,
+                                                                               GeneralTreeNodeDto,
+                                                                               GeneralTreeGetForSelectInput,
+                                                                               GeneralTreeComboboxDto,
+                                                                               GeneralTreeEntity,
+                                                                               GeneralTreeManager>, IUnAuthGeneralTreeAppService
     {
         public UnAuthGeneralTreeAppService(
             IRepository<GeneralTreeEntity, long> repository,
