@@ -56,10 +56,10 @@ namespace BXJG.Utils.DynamicProperty
         /// 输入类型，可选值：COMBOBOX、CHECKBOX、SINGLE_LINE_INPUT
         /// </summary>
         public string InputType { get; set; }
-        //public string DynamicPropertyValues { get; set; }
+        public string PropertyValues => DynamicPropertyValues == null ? default : string.Join(",", DynamicPropertyValues.Select(m=>m.Value));
         /// <summary>
         /// 当输入类型为COMBOBOX的可选值列表
         /// </summary>
-        public IDictionary<long,string> PropertyValues { get; set; }
+        public IDictionary<long,string> DynamicPropertyValues { get; set; }
     }
 }

@@ -130,7 +130,7 @@ namespace BXJG.Utils.DynamicProperty
                 DisplayName = c.DynamicProperty.DisplayName,
                 InputType = c.DynamicProperty.InputType,
                 PropertyName = Regex.Replace(c.DynamicProperty.PropertyName, @"\d+", ""), //c.DynamicProperty.PropertyName.TrimEnd(id.ToString().ToArray()),
-                PropertyValues = c.DynamicProperty.DynamicPropertyValues?.ToDictionary(cc => cc.Id, cc => cc.Value)
+                DynamicPropertyValues = c.DynamicProperty.DynamicPropertyValues?.ToDictionary(cc => cc.Id, cc => cc.Value)
             }).ToList();
         }
     }
