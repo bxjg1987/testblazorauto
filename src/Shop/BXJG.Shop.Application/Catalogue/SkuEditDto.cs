@@ -28,43 +28,43 @@ namespace BXJG.Shop.Catalogue
         /// <summary>
         /// 第1个动态属性id
         /// </summary>
-        public int DynamicEntityProperty1Id { get; set; }
+        public int DynamicProperty1Id { get; set; }
         /// <summary>
         /// 第一个动态属性值
         /// </summary>
-        public string DynamicEntityProperty1Value { get; set; }
+        public string DynamicProperty1Value { get; set; }
         /// <summary>
         /// 第2个动态属性id
         /// </summary>
-        public int? DynamicEntityProperty2Id { get; set; }
+        public int? DynamicProperty2Id { get; set; }
         /// <summary>
         /// 第2个动态属性值
         /// </summary>
-        public string DynamicEntityProperty2Value { get; set; }
+        public string DynamicProperty2Value { get; set; }
         /// <summary>
         /// 第3个动态属性id
         /// </summary>
-        public int? DynamicEntityProperty3Id { get; set; }
+        public int? DynamicxProperty3Id { get; set; }
         /// <summary>
         /// 第3个动态属性值
         /// </summary>
-        public string DynamicEntityProperty3Value { get; set; }
+        public string DynamicProperty3Value { get; set; }
         /// <summary>
         /// 第4个动态属性id
         /// </summary>
-        public int? DynamicEntityProperty4Id { get; set; }
+        public int? DynamicProperty4Id { get; set; }
         /// <summary>
         /// 第4个动态属性值
         /// </summary>
-        public string DynamicEntityProperty4Value { get; set; }
+        public string DynamicProperty4Value { get; set; }
         /// <summary>
         /// 第5个动态属性Id
         /// </summary>
-        public int? DynamicEntityProperty5Id { get; set; }
+        public int? DynamicProperty5Id { get; set; }
         /// <summary>
         /// 第5个动态属性值
         /// </summary>
-        public string DynamicEntityProperty5Value { get; set; }
+        public string DynamicProperty5Value { get; set; }
         #endregion
     }
 }

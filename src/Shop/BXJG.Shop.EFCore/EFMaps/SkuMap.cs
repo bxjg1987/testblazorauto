@@ -14,24 +14,24 @@ namespace BXJG.Shop.EFMaps
             builder.ToTable("BXJGShopSku");
 
             builder.Property(c => c.DynamicProperty1Name).HasMaxLength(CoreConsts.SkuDynamicPropertyNameMaxLength);
-            builder.Property(c => c.DynamicEntityProperty1Value).HasMaxLength(CoreConsts.DynamicEntityPropertyValueMaxLength);
-            builder.Property(c => c.DynamicEntityProperty1Text).HasMaxLength(CoreConsts.DynamicEntityPropertyTextMaxLength);
+            builder.Property(c => c.DynamicProperty1Value).HasMaxLength(CoreConsts.DynamicPropertyValueMaxLength);
+            builder.Property(c => c.DynamicProperty1Text).HasMaxLength(CoreConsts.DynamicPropertyTextMaxLength);
 
             builder.Property(c => c.DynamicProperty2Name).HasMaxLength(CoreConsts.SkuDynamicPropertyNameMaxLength);
-            builder.Property(c => c.DynamicEntityProperty2Value).HasMaxLength(CoreConsts.DynamicEntityPropertyValueMaxLength);
-            builder.Property(c => c.DynamicEntityProperty2Text).HasMaxLength(CoreConsts.DynamicEntityPropertyTextMaxLength);
+            builder.Property(c => c.DynamicProperty2Value).HasMaxLength(CoreConsts.DynamicPropertyValueMaxLength);
+            builder.Property(c => c.DynamicProperty2Text).HasMaxLength(CoreConsts.DynamicPropertyTextMaxLength);
 
             builder.Property(c => c.DynamicProperty3Name).HasMaxLength(CoreConsts.SkuDynamicPropertyNameMaxLength);
-            builder.Property(c => c.DynamicEntityProperty3Value).HasMaxLength(CoreConsts.DynamicEntityPropertyValueMaxLength);
-            builder.Property(c => c.DynamicEntityProperty3Text).HasMaxLength(CoreConsts.DynamicEntityPropertyTextMaxLength);
+            builder.Property(c => c.DynamicProperty3Value).HasMaxLength(CoreConsts.DynamicPropertyValueMaxLength);
+            builder.Property(c => c.DynamicProperty3Text).HasMaxLength(CoreConsts.DynamicPropertyTextMaxLength);
 
             builder.Property(c => c.DynamicProperty4Name).HasMaxLength(CoreConsts.SkuDynamicPropertyNameMaxLength);
-            builder.Property(c => c.DynamicEntityProperty4Value).HasMaxLength(CoreConsts.DynamicEntityPropertyValueMaxLength);
-            builder.Property(c => c.DynamicEntityProperty4Text).HasMaxLength(CoreConsts.DynamicEntityPropertyTextMaxLength);
+            builder.Property(c => c.DynamicProperty4Value).HasMaxLength(CoreConsts.DynamicPropertyValueMaxLength);
+            builder.Property(c => c.DynamicProperty4Text).HasMaxLength(CoreConsts.DynamicPropertyTextMaxLength);
 
             builder.Property(c => c.DynamicProperty5Name).HasMaxLength(CoreConsts.SkuDynamicPropertyNameMaxLength);
-            builder.Property(c => c.DynamicEntityProperty5Value).HasMaxLength(CoreConsts.DynamicEntityPropertyValueMaxLength);
-            builder.Property(c => c.DynamicEntityProperty5Text).HasMaxLength(CoreConsts.DynamicEntityPropertyTextMaxLength);
+            builder.Property(c => c.DynamicProperty5Value).HasMaxLength(CoreConsts.DynamicPropertyValueMaxLength);
+            builder.Property(c => c.DynamicProperty5Text).HasMaxLength(CoreConsts.DynamicPropertyTextMaxLength);
 
         }
     }

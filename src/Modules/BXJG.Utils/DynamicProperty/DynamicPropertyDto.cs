@@ -15,19 +15,19 @@ namespace BXJG.Utils.DynamicProperty
         /// <summary>
         /// 动态属性名，如：Color
         /// </summary>
-        [Required]
+        //[Required]
         [StringLength(50)]
         public string PropertyName { get; set; }
         /// <summary>
         /// 动态属性显示名，如：颜色
         /// </summary>
-        [Required]
+        //[Required]
         [StringLength(50)]
         public string DisplayName { get; set; }
         /// <summary>
         /// 输入类型，可选值：COMBOBOX、CHECKBOX、SINGLE_LINE_INPUT
         /// </summary>
-        [Required]
+       // [Required]
         [StringLength(50)]
         public string InputType { get; set; }
         /// <summary>
@@ -41,7 +41,7 @@ namespace BXJG.Utils.DynamicProperty
     public class DynamicPropertyDto
     {
         /// <summary>
-        /// 动态实体属性id，它不说动态属性DynamicProperty.Id，而是DynamicEntityProperty.Id
+        /// 动态属性id
         /// </summary>
         public long Id { get; set; }
         /// <summary>

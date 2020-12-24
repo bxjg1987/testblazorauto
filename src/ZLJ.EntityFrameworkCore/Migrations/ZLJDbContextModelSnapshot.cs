@@ -1959,80 +1959,95 @@ namespace ZLJ.Migrations
                         .HasColumnType("bigint")
                         .UseIdentityColumn();
 
-                    b.Property<int>("DynamicEntityProperty1Id")
+                    b.Property<string>("DynamicProperty1DisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("DynamicProperty1Id")
                         .HasColumnType("int");
-
-                    b.Property<string>("DynamicEntityProperty1Text")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("DynamicEntityProperty1Value")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int?>("DynamicEntityProperty2Id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("DynamicEntityProperty2Text")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("DynamicEntityProperty2Value")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int?>("DynamicEntityProperty3Id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("DynamicEntityProperty3Text")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("DynamicEntityProperty3Value")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int?>("DynamicEntityProperty4Id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("DynamicEntityProperty4Text")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("DynamicEntityProperty4Value")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int?>("DynamicEntityProperty5Id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("DynamicEntityProperty5Text")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("DynamicEntityProperty5Value")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("DynamicProperty1Name")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("DynamicProperty1Text")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("DynamicProperty1Value")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("DynamicProperty2DisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("DynamicProperty2Id")
+                        .HasColumnType("int");
+
                     b.Property<string>("DynamicProperty2Name")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("DynamicProperty2Text")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("DynamicProperty2Value")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("DynamicProperty3DisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("DynamicProperty3Id")
+                        .HasColumnType("int");
 
                     b.Property<string>("DynamicProperty3Name")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("DynamicProperty3Text")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("DynamicProperty3Value")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("DynamicProperty4DisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("DynamicProperty4Id")
+                        .HasColumnType("int");
+
                     b.Property<string>("DynamicProperty4Name")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("DynamicProperty4Text")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("DynamicProperty4Value")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("DynamicProperty5DisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("DynamicProperty5Id")
+                        .HasColumnType("int");
+
                     b.Property<string>("DynamicProperty5Name")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("DynamicProperty5Text")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("DynamicProperty5Value")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("Integral")
                         .HasColumnType("int");
@@ -2047,16 +2062,6 @@ namespace ZLJ.Migrations
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DynamicEntityProperty1Id");
-
-                    b.HasIndex("DynamicEntityProperty2Id");
-
-                    b.HasIndex("DynamicEntityProperty3Id");
-
-                    b.HasIndex("DynamicEntityProperty4Id");
-
-                    b.HasIndex("DynamicEntityProperty5Id");
 
                     b.HasIndex("ProductId");
 
@@ -2907,43 +2912,11 @@ namespace ZLJ.Migrations
 
             modelBuilder.Entity("BXJG.Shop.Catalogue.SkuEntity", b =>
                 {
-                    b.HasOne("Abp.DynamicEntityProperties.DynamicEntityProperty", "DynamicEntityProperty1")
-                        .WithMany()
-                        .HasForeignKey("DynamicEntityProperty1Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Abp.DynamicEntityProperties.DynamicEntityProperty", "DynamicEntityProperty2")
-                        .WithMany()
-                        .HasForeignKey("DynamicEntityProperty2Id");
-
-                    b.HasOne("Abp.DynamicEntityProperties.DynamicEntityProperty", "DynamicEntityProperty3")
-                        .WithMany()
-                        .HasForeignKey("DynamicEntityProperty3Id");
-
-                    b.HasOne("Abp.DynamicEntityProperties.DynamicEntityProperty", "DynamicEntityProperty4")
-                        .WithMany()
-                        .HasForeignKey("DynamicEntityProperty4Id");
-
-                    b.HasOne("Abp.DynamicEntityProperties.DynamicEntityProperty", "DynamicEntityProperty5")
-                        .WithMany()
-                        .HasForeignKey("DynamicEntityProperty5Id");
-
                     b.HasOne("BXJG.Shop.Catalogue.ProductEntity", "Product")
                         .WithMany("Skus")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("DynamicEntityProperty1");
-
-                    b.Navigation("DynamicEntityProperty2");
-
-                    b.Navigation("DynamicEntityProperty3");
-
-                    b.Navigation("DynamicEntityProperty4");
-
-                    b.Navigation("DynamicEntityProperty5");
 
                     b.Navigation("Product");
                 });

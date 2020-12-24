@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ZLJ.Migrations
 {
-    public partial class init611 : Migration
+    public partial class updateskudp : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -1357,60 +1357,35 @@ namespace ZLJ.Migrations
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Integral = table.Column<int>(type: "int", nullable: false),
                     ProductId = table.Column<long>(type: "bigint", nullable: false),
-                    DynamicEntityProperty1Id = table.Column<int>(type: "int", nullable: false),
+                    DynamicProperty1Id = table.Column<int>(type: "int", nullable: false),
                     DynamicProperty1Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    DynamicEntityProperty1Value = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    DynamicEntityProperty1Text = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    DynamicEntityProperty2Id = table.Column<int>(type: "int", nullable: true),
+                    DynamicProperty1DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DynamicProperty1Value = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    DynamicProperty1Text = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    DynamicProperty2Id = table.Column<int>(type: "int", nullable: true),
                     DynamicProperty2Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    DynamicEntityProperty2Value = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    DynamicEntityProperty2Text = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    DynamicEntityProperty3Id = table.Column<int>(type: "int", nullable: true),
+                    DynamicProperty2DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DynamicProperty2Value = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    DynamicProperty2Text = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    DynamicProperty3Id = table.Column<int>(type: "int", nullable: true),
                     DynamicProperty3Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    DynamicEntityProperty3Value = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    DynamicEntityProperty3Text = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    DynamicEntityProperty4Id = table.Column<int>(type: "int", nullable: true),
+                    DynamicProperty3DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DynamicProperty3Value = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    DynamicProperty3Text = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    DynamicProperty4Id = table.Column<int>(type: "int", nullable: true),
                     DynamicProperty4Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    DynamicEntityProperty4Value = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    DynamicEntityProperty4Text = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    DynamicEntityProperty5Id = table.Column<int>(type: "int", nullable: true),
+                    DynamicProperty4DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DynamicProperty4Value = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    DynamicProperty4Text = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    DynamicProperty5Id = table.Column<int>(type: "int", nullable: true),
                     DynamicProperty5Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    DynamicEntityProperty5Value = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    DynamicEntityProperty5Text = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true)
+                    DynamicProperty5DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DynamicProperty5Value = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    DynamicProperty5Text = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_BXJGShopSku", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_BXJGShopSku_AbpDynamicEntityProperties_DynamicEntityProperty1Id",
-                        column: x => x.DynamicEntityProperty1Id,
-                        principalTable: "AbpDynamicEntityProperties",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_BXJGShopSku_AbpDynamicEntityProperties_DynamicEntityProperty2Id",
-                        column: x => x.DynamicEntityProperty2Id,
-                        principalTable: "AbpDynamicEntityProperties",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_BXJGShopSku_AbpDynamicEntityProperties_DynamicEntityProperty3Id",
-                        column: x => x.DynamicEntityProperty3Id,
-                        principalTable: "AbpDynamicEntityProperties",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_BXJGShopSku_AbpDynamicEntityProperties_DynamicEntityProperty4Id",
-                        column: x => x.DynamicEntityProperty4Id,
-                        principalTable: "AbpDynamicEntityProperties",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_BXJGShopSku_AbpDynamicEntityProperties_DynamicEntityProperty5Id",
-                        column: x => x.DynamicEntityProperty5Id,
-                        principalTable: "AbpDynamicEntityProperties",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_BXJGShopSku_BXJGShopProduct_ProductId",
                         column: x => x.ProductId,
@@ -1917,31 +1892,6 @@ namespace ZLJ.Migrations
                 column: "ParentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BXJGShopSku_DynamicEntityProperty1Id",
-                table: "BXJGShopSku",
-                column: "DynamicEntityProperty1Id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BXJGShopSku_DynamicEntityProperty2Id",
-                table: "BXJGShopSku",
-                column: "DynamicEntityProperty2Id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BXJGShopSku_DynamicEntityProperty3Id",
-                table: "BXJGShopSku",
-                column: "DynamicEntityProperty3Id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BXJGShopSku_DynamicEntityProperty4Id",
-                table: "BXJGShopSku",
-                column: "DynamicEntityProperty4Id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BXJGShopSku_DynamicEntityProperty5Id",
-                table: "BXJGShopSku",
-                column: "DynamicEntityProperty5Id");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_BXJGShopSku_ProductId",
                 table: "BXJGShopSku",
                 column: "ProductId");
@@ -2043,6 +1993,9 @@ namespace ZLJ.Migrations
                 name: "BXJGShopOrderItem");
 
             migrationBuilder.DropTable(
+                name: "AbpDynamicEntityProperties");
+
+            migrationBuilder.DropTable(
                 name: "AbpEntityChanges");
 
             migrationBuilder.DropTable(
@@ -2073,6 +2026,9 @@ namespace ZLJ.Migrations
                 name: "BXJGShopSku");
 
             migrationBuilder.DropTable(
+                name: "AbpDynamicProperties");
+
+            migrationBuilder.DropTable(
                 name: "AbpEntityChangeSets");
 
             migrationBuilder.DropTable(
@@ -2082,16 +2038,10 @@ namespace ZLJ.Migrations
                 name: "BXJGShopCustomer");
 
             migrationBuilder.DropTable(
-                name: "AbpDynamicEntityProperties");
-
-            migrationBuilder.DropTable(
                 name: "BXJGShopProduct");
 
             migrationBuilder.DropTable(
                 name: "BXJGBaseInfoAdministratives");
-
-            migrationBuilder.DropTable(
-                name: "AbpDynamicProperties");
 
             migrationBuilder.DropTable(
                 name: "BXJGGeneralTrees");

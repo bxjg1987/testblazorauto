@@ -122,35 +122,35 @@ namespace BXJG.Shop.Catalogue
 
             foreach (var item in entity.Skus)
             {
-                var dp1 = dynamicEntityProperties.SingleOrDefault(c => c.Id == item.DynamicEntityProperty1Id)?.DynamicProperty;
+                var dp1 = dynamicEntityProperties.SingleOrDefault(c => c.Id == item.DynamicProperty1Id)?.DynamicProperty;
                 if (dp1 != null)
                 {
                     item.DynamicProperty1Name = dp1.PropertyName;
-                    item.DynamicEntityProperty1Text = dp1.DynamicPropertyValues?.SingleOrDefault(c => c.Id.ToString() == item.DynamicEntityProperty1Value)?.Value;
+                    item.DynamicProperty1Text = dp1.DynamicPropertyValues?.SingleOrDefault(c => c.Id.ToString() == item.DynamicProperty1Value)?.Value;
                 }
-                var dp2 = dynamicEntityProperties.SingleOrDefault(c => c.Id == item.DynamicEntityProperty2Id)?.DynamicProperty;
+                var dp2 = dynamicEntityProperties.SingleOrDefault(c => c.Id == item.DynamicProperty2Id)?.DynamicProperty;
                 if (dp2 != null)
                 {
                     item.DynamicProperty2Name = dp2.PropertyName;
-                    item.DynamicEntityProperty2Text = dp2.DynamicPropertyValues?.SingleOrDefault(c => c.Id.ToString() == item.DynamicEntityProperty2Value)?.Value;
+                    item.DynamicProperty2Text = dp2.DynamicPropertyValues?.SingleOrDefault(c => c.Id.ToString() == item.DynamicProperty2Value)?.Value;
                 }
-                var dp3 = dynamicEntityProperties.SingleOrDefault(c => c.Id == item.DynamicEntityProperty3Id)?.DynamicProperty;
+                var dp3 = dynamicEntityProperties.SingleOrDefault(c => c.Id == item.DynamicProperty3Id)?.DynamicProperty;
                 if (dp3 != null)
                 {
                     item.DynamicProperty3Name = dp3.PropertyName;
-                    item.DynamicEntityProperty3Text = dp3.DynamicPropertyValues?.SingleOrDefault(c => c.Id.ToString() == item.DynamicEntityProperty3Value)?.Value;
+                    item.DynamicProperty3Text = dp3.DynamicPropertyValues?.SingleOrDefault(c => c.Id.ToString() == item.DynamicProperty3Value)?.Value;
                 }
-                var dp4 = dynamicEntityProperties.SingleOrDefault(c => c.Id == item.DynamicEntityProperty4Id)?.DynamicProperty;
+                var dp4 = dynamicEntityProperties.SingleOrDefault(c => c.Id == item.DynamicProperty4Id)?.DynamicProperty;
                 if (dp4 != null)
                 {
                     item.DynamicProperty4Name = dp4.PropertyName;
-                    item.DynamicEntityProperty4Text = dp4.DynamicPropertyValues?.SingleOrDefault(c => c.Id.ToString() == item.DynamicEntityProperty4Value)?.Value;
+                    item.DynamicProperty4Text = dp4.DynamicPropertyValues?.SingleOrDefault(c => c.Id.ToString() == item.DynamicProperty4Value)?.Value;
                 }
-                var dp5 = dynamicEntityProperties.SingleOrDefault(c => c.Id == item.DynamicEntityProperty5Id)?.DynamicProperty;
+                var dp5 = dynamicEntityProperties.SingleOrDefault(c => c.Id == item.DynamicProperty5Id)?.DynamicProperty;
                 if (dp5 != null)
                 {
                     item.DynamicProperty5Name = dp5.PropertyName;
-                    item.DynamicEntityProperty5Text = dp5.DynamicPropertyValues?.SingleOrDefault(c => c.Id.ToString() == item.DynamicEntityProperty5Value)?.Value;
+                    item.DynamicProperty5Text = dp5.DynamicPropertyValues?.SingleOrDefault(c => c.Id.ToString() == item.DynamicProperty5Value)?.Value;
                 }
             }
         }
@@ -347,11 +347,11 @@ namespace BXJG.Shop.Catalogue
 
             var dto = ObjectMapper.Map<ProductDto>(entity);
             dto.Skus = dto.Skus
-                .OrderBy(c => c.DynamicEntityProperty1Value)
-                .ThenBy(c => c.DynamicEntityProperty2Value)
-                .ThenBy(c => c.DynamicEntityProperty3Value)
-                .ThenBy(c => c.DynamicEntityProperty4Value)
-                .ThenBy(c => c.DynamicEntityProperty5Value)
+                .OrderBy(c => c.DynamicProperty1Value)
+                .ThenBy(c => c.DynamicProperty2Value)
+                .ThenBy(c => c.DynamicProperty3Value)
+                .ThenBy(c => c.DynamicProperty4Value)
+                .ThenBy(c => c.DynamicProperty5Value)
                 .ToList();
             //这里暂时用土办法，最好的办法是一次性查询多个sku的动态属性值
             //foreach (var item in entity.Skus)

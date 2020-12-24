@@ -126,7 +126,7 @@ namespace BXJG.Utils.DynamicProperty
         {
             return dynamicEntityProperties.Select(c => new DynamicPropertyDto
             {
-                Id = c.Id,
+                Id = c.DynamicPropertyId,
                 DisplayName = c.DynamicProperty.DisplayName,
                 InputType = c.DynamicProperty.InputType,
                 PropertyName = Regex.Replace(c.DynamicProperty.PropertyName, @"\d+", ""), //c.DynamicProperty.PropertyName.TrimEnd(id.ToString().ToArray()),
