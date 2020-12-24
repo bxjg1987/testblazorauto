@@ -79,7 +79,7 @@ namespace BXJG.Utils.DynamicProperty
                 await unitOfWorkManager.Current.SaveChangesAsync();
                 if (c.InputType.Equals(inputType, StringComparison.OrdinalIgnoreCase))
                 {
-                    var p = c.PropertyValues.Replace('，', ',').Split(',').Reverse();//反下，否则ef保存是反着的
+                    var p = c.PropertyValues.Replace('，', ',').Split(',');//反下，否则ef保存是反着的
                     foreach (var item in p)
                     {
                         await valueManager.AddAsync(new DynamicPropertyValue(dp, item, default));
