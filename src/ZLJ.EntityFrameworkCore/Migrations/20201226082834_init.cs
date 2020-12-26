@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ZLJ.Migrations
 {
-    public partial class updateskudp : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -1359,27 +1359,27 @@ namespace ZLJ.Migrations
                     ProductId = table.Column<long>(type: "bigint", nullable: false),
                     DynamicProperty1Id = table.Column<int>(type: "int", nullable: false),
                     DynamicProperty1Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    DynamicProperty1DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DynamicProperty1DisplayName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     DynamicProperty1Value = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     DynamicProperty1Text = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     DynamicProperty2Id = table.Column<int>(type: "int", nullable: true),
                     DynamicProperty2Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    DynamicProperty2DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DynamicProperty2DisplayName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     DynamicProperty2Value = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     DynamicProperty2Text = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     DynamicProperty3Id = table.Column<int>(type: "int", nullable: true),
                     DynamicProperty3Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    DynamicProperty3DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DynamicProperty3DisplayName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     DynamicProperty3Value = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     DynamicProperty3Text = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     DynamicProperty4Id = table.Column<int>(type: "int", nullable: true),
                     DynamicProperty4Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    DynamicProperty4DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DynamicProperty4DisplayName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     DynamicProperty4Value = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     DynamicProperty4Text = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     DynamicProperty5Id = table.Column<int>(type: "int", nullable: true),
                     DynamicProperty5Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    DynamicProperty5DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DynamicProperty5DisplayName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     DynamicProperty5Value = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     DynamicProperty5Text = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true)
                 },

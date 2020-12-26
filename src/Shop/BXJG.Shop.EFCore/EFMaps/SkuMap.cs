@@ -14,22 +14,27 @@ namespace BXJG.Shop.EFMaps
             builder.ToTable("BXJGShopSku");
 
             builder.Property(c => c.DynamicProperty1Name).HasMaxLength(CoreConsts.SkuDynamicPropertyNameMaxLength);
+            builder.Property(c => c.DynamicProperty1DisplayName).HasMaxLength(CoreConsts.SkuDynamicPropertyDisplayNameMaxLength);
             builder.Property(c => c.DynamicProperty1Value).HasMaxLength(CoreConsts.DynamicPropertyValueMaxLength);
             builder.Property(c => c.DynamicProperty1Text).HasMaxLength(CoreConsts.DynamicPropertyTextMaxLength);
 
             builder.Property(c => c.DynamicProperty2Name).HasMaxLength(CoreConsts.SkuDynamicPropertyNameMaxLength);
+            builder.Property(c => c.DynamicProperty2DisplayName).HasMaxLength(CoreConsts.SkuDynamicPropertyDisplayNameMaxLength);
             builder.Property(c => c.DynamicProperty2Value).HasMaxLength(CoreConsts.DynamicPropertyValueMaxLength);
             builder.Property(c => c.DynamicProperty2Text).HasMaxLength(CoreConsts.DynamicPropertyTextMaxLength);
 
             builder.Property(c => c.DynamicProperty3Name).HasMaxLength(CoreConsts.SkuDynamicPropertyNameMaxLength);
+            builder.Property(c => c.DynamicProperty3DisplayName).HasMaxLength(CoreConsts.SkuDynamicPropertyDisplayNameMaxLength);
             builder.Property(c => c.DynamicProperty3Value).HasMaxLength(CoreConsts.DynamicPropertyValueMaxLength);
             builder.Property(c => c.DynamicProperty3Text).HasMaxLength(CoreConsts.DynamicPropertyTextMaxLength);
 
             builder.Property(c => c.DynamicProperty4Name).HasMaxLength(CoreConsts.SkuDynamicPropertyNameMaxLength);
+            builder.Property(c => c.DynamicProperty4DisplayName).HasMaxLength(CoreConsts.SkuDynamicPropertyDisplayNameMaxLength);
             builder.Property(c => c.DynamicProperty4Value).HasMaxLength(CoreConsts.DynamicPropertyValueMaxLength);
             builder.Property(c => c.DynamicProperty4Text).HasMaxLength(CoreConsts.DynamicPropertyTextMaxLength);
 
             builder.Property(c => c.DynamicProperty5Name).HasMaxLength(CoreConsts.SkuDynamicPropertyNameMaxLength);
+            builder.Property(c => c.DynamicProperty5DisplayName).HasMaxLength(CoreConsts.SkuDynamicPropertyDisplayNameMaxLength);
             builder.Property(c => c.DynamicProperty5Value).HasMaxLength(CoreConsts.DynamicPropertyValueMaxLength);
             builder.Property(c => c.DynamicProperty5Text).HasMaxLength(CoreConsts.DynamicPropertyTextMaxLength);
 

@@ -1960,7 +1960,8 @@ namespace ZLJ.Migrations
                         .UseIdentityColumn();
 
                     b.Property<string>("DynamicProperty1DisplayName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("DynamicProperty1Id")
                         .HasColumnType("int");
@@ -1978,7 +1979,8 @@ namespace ZLJ.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("DynamicProperty2DisplayName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int?>("DynamicProperty2Id")
                         .HasColumnType("int");
@@ -1996,7 +1998,8 @@ namespace ZLJ.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("DynamicProperty3DisplayName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int?>("DynamicProperty3Id")
                         .HasColumnType("int");
@@ -2014,7 +2017,8 @@ namespace ZLJ.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("DynamicProperty4DisplayName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int?>("DynamicProperty4Id")
                         .HasColumnType("int");
@@ -2032,7 +2036,8 @@ namespace ZLJ.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("DynamicProperty5DisplayName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int?>("DynamicProperty5Id")
                         .HasColumnType("int");

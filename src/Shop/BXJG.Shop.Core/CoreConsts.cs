@@ -30,6 +30,7 @@ namespace BXJG.Shop
         //public const int ItemSpecificationMaxLength = 500;
 
         public const int SkuDynamicPropertyNameMaxLength = 50;
+        public const int SkuDynamicPropertyDisplayNameMaxLength = 50;
         public const int DynamicPropertyValueMaxLength = 100;
         public const int DynamicPropertyTextMaxLength = 50;
         #endregion
