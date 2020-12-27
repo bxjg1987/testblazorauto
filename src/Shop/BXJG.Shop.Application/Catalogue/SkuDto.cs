@@ -51,7 +51,7 @@ namespace BXJG.Shop.Catalogue
         /// <summary>
         /// 第1个动态属性id
         /// </summary>
-        public int DynamicProperty1Id { get; set; }
+        public int? DynamicProperty1Id { get; set; }
         /// <summary>
         /// 第1个动态属性名称
         /// </summary>

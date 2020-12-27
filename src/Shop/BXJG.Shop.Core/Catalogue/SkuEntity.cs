@@ -40,7 +40,7 @@ namespace BXJG.Shop.Catalogue
         /// <summary>
         /// 第1个动态属性id
         /// </summary>
-        public int DynamicProperty1Id { get; set; }
+        public int? DynamicProperty1Id { get; set; }
         /// <summary>
         /// 第1个动态属性名
         /// 虽然从导航属性可以关联查询，但是这里存储一份冗余字段查询速度更快。毕竟目前考虑sku的动态属性组合不允许修改

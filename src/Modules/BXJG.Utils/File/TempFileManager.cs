@@ -337,7 +337,7 @@ namespace BXJG.Utils.File
         /// <returns></returns>
         string Relative2AbsolutePath(string path)
         {
-            return Path.Combine(rootDir, path);
+            return Path.Combine(rootDir, path.TrimStart('\\').TrimStart('/'));
         }
         /// <summary>
         /// 临时目录转换为正式目录

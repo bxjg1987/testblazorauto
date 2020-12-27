@@ -47,7 +47,7 @@ namespace BXJG.Shop.Catalogue
         //private readonly IDynamicPropertyValueManager dynamicPropertyValueManager;
         private readonly IDynamicEntityPropertyManager dynamicEntityPropertyManager;
         private readonly IDynamicEntityPropertyValueManager dynamicEntityPropertyValueManager;
-        private readonly IRepository<DynamicPropertyValue,long> repository1;
+        private readonly IRepository<DynamicPropertyValue, long> repository1;
         private readonly IRepository<DynamicEntityProperty> repository2;
 
         private readonly IAbpSession abpSession;
@@ -58,7 +58,7 @@ namespace BXJG.Shop.Catalogue
                                  TempFileManager tempFileManager,
                                  IDynamicEntityPropertyManager dynamicEntityPropertyManager,
                                  IDynamicEntityPropertyValueManager dynamicEntityPropertyValueManager,
-                                 IAbpSession abpSession, IRepository<DynamicPropertyValue,long> repository1,
+                                 IAbpSession abpSession, IRepository<DynamicPropertyValue, long> repository1,
                                  IRepository<DynamicEntityProperty> repository2)
         {
             this.repository = repository;
@@ -91,7 +91,25 @@ namespace BXJG.Shop.Catalogue
             var entity = base.ObjectMapper.Map<ProductEntity>(input);
 
             #region 处理sku
-            await NewMethod(entity);
+            //暂时忽略了sku的完整性检查
+            entity.Skus = entity.Skus.Where(c => !c.DynamicProperty1Value.IsNullOrWhiteSpace() ||
+                                                 !c.DynamicProperty2Value.IsNullOrWhiteSpace() ||
+                                                 !c.DynamicProperty3Value.IsNullOrWhiteSpace() ||
+                                                 !c.DynamicProperty4Value.IsNullOrWhiteSpace() ||
+                                                 !c.DynamicProperty5Value.IsNullOrWhiteSpace()).ToList();
+            entity.Skus.ForEach(c =>
+            {
+                if (c.DynamicProperty1Text.IsNullOrWhiteSpace())
+                    c.DynamicProperty1Text = c.DynamicProperty1Value;
+                if (c.DynamicProperty2Text.IsNullOrWhiteSpace())
+                    c.DynamicProperty2Text = c.DynamicProperty2Value;
+                if (c.DynamicProperty3Text.IsNullOrWhiteSpace())
+                    c.DynamicProperty3Text = c.DynamicProperty3Value;
+                if (c.DynamicProperty4Text.IsNullOrWhiteSpace())
+                    c.DynamicProperty4Text = c.DynamicProperty4Value;
+                if (c.DynamicProperty5Text.IsNullOrWhiteSpace())
+                    c.DynamicProperty5Text = c.DynamicProperty5Value;
+            });
             #endregion
 
             //保存
