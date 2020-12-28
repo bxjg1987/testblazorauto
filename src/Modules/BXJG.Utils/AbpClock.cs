@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BXJG.Utils
 {
-    class AbpClock : IClock
+    class AbpClock : IClock,Abp.Dependency.ISingletonDependency
     {
         public ValueTask<DateTime> GetNowAsync()
         {

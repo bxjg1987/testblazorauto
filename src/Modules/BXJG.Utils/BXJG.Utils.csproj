@@ -11,6 +11,19 @@
     <DocumentationFile>..\..\ZLJ.Web.Host\APIXML\BXJG.Utils.xml</DocumentationFile>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Extensions\CommonExtensions.cs" />
+    <Compile Remove="Extensions\DateTimeExt.cs" />
+    <Compile Remove="Extensions\HashHelper.cs" />
+    <Compile Remove="Extensions\StringExtension.cs" />
+    <Compile Remove="RandomHelper.cs" />
+    <Compile Remove="WechatDecrypt.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="BXJG.Utils.xml" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <EmbeddedResource Include="Localization\SourceFiles\BXJGUtils-zh-Hans.xml" />
@@ -30,6 +43,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\libs\BXJG.Common\BXJG.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Extensions\" />
   </ItemGroup>
 
 </Project>

@@ -6,7 +6,6 @@ using Abp.Runtime.Session;
 using Abp.UI;
 using BXJG.Shop.Catalogue;
 using BXJG.Shop.Customer;
-using BXJG.Utils.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Text;
