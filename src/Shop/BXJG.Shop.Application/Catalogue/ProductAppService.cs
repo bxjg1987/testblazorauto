@@ -128,50 +128,50 @@ namespace BXJG.Shop.Catalogue
             return await GetOneAsync(entity.Id);//这里又去查，性能不太好
         }
 
-        private async ValueTask NewMethod(ProductEntity entity)
-        {
-            if (entity.Skus.Count == 0)
-                return;
+        //private async ValueTask NewMethod(ProductEntity entity)
+        //{
+        //    if (entity.Skus.Count == 0)
+        //        return;
 
-            var dynamicEntityProperties = await repository2
-                            .GetAllIncluding(c => c.DynamicProperty.DynamicPropertyValues)
-                            .Where(c => c.EntityFullName == typeof(SkuEntity).FullName)
-                            .ToListAsync();
+        //    var dynamicEntityProperties = await repository2
+        //                    .GetAllIncluding(c => c.DynamicProperty.DynamicPropertyValues)
+        //                    .Where(c => c.EntityFullName == typeof(SkuEntity).FullName)
+        //                    .ToListAsync();
 
-            foreach (var item in entity.Skus)
-            {
-                var dp1 = dynamicEntityProperties.SingleOrDefault(c => c.Id == item.DynamicProperty1Id)?.DynamicProperty;
-                if (dp1 != null)
-                {
-                    item.DynamicProperty1Name = dp1.PropertyName;
-                    item.DynamicProperty1Text = dp1.DynamicPropertyValues?.SingleOrDefault(c => c.Id.ToString() == item.DynamicProperty1Value)?.Value;
-                }
-                var dp2 = dynamicEntityProperties.SingleOrDefault(c => c.Id == item.DynamicProperty2Id)?.DynamicProperty;
-                if (dp2 != null)
-                {
-                    item.DynamicProperty2Name = dp2.PropertyName;
-                    item.DynamicProperty2Text = dp2.DynamicPropertyValues?.SingleOrDefault(c => c.Id.ToString() == item.DynamicProperty2Value)?.Value;
-                }
-                var dp3 = dynamicEntityProperties.SingleOrDefault(c => c.Id == item.DynamicProperty3Id)?.DynamicProperty;
-                if (dp3 != null)
-                {
-                    item.DynamicProperty3Name = dp3.PropertyName;
-                    item.DynamicProperty3Text = dp3.DynamicPropertyValues?.SingleOrDefault(c => c.Id.ToString() == item.DynamicProperty3Value)?.Value;
-                }
-                var dp4 = dynamicEntityProperties.SingleOrDefault(c => c.Id == item.DynamicProperty4Id)?.DynamicProperty;
-                if (dp4 != null)
-                {
-                    item.DynamicProperty4Name = dp4.PropertyName;
-                    item.DynamicProperty4Text = dp4.DynamicPropertyValues?.SingleOrDefault(c => c.Id.ToString() == item.DynamicProperty4Value)?.Value;
-                }
-                var dp5 = dynamicEntityProperties.SingleOrDefault(c => c.Id == item.DynamicProperty5Id)?.DynamicProperty;
-                if (dp5 != null)
-                {
-                    item.DynamicProperty5Name = dp5.PropertyName;
-                    item.DynamicProperty5Text = dp5.DynamicPropertyValues?.SingleOrDefault(c => c.Id.ToString() == item.DynamicProperty5Value)?.Value;
-                }
-            }
-        }
+        //    foreach (var item in entity.Skus)
+        //    {
+        //        var dp1 = dynamicEntityProperties.SingleOrDefault(c => c.Id == item.DynamicProperty1Id)?.DynamicProperty;
+        //        if (dp1 != null)
+        //        {
+        //            item.DynamicProperty1Name = dp1.PropertyName;
+        //            item.DynamicProperty1Text = dp1.DynamicPropertyValues?.SingleOrDefault(c => c.Id.ToString() == item.DynamicProperty1Value)?.Value;
+        //        }
+        //        var dp2 = dynamicEntityProperties.SingleOrDefault(c => c.Id == item.DynamicProperty2Id)?.DynamicProperty;
+        //        if (dp2 != null)
+        //        {
+        //            item.DynamicProperty2Name = dp2.PropertyName;
+        //            item.DynamicProperty2Text = dp2.DynamicPropertyValues?.SingleOrDefault(c => c.Id.ToString() == item.DynamicProperty2Value)?.Value;
+        //        }
+        //        var dp3 = dynamicEntityProperties.SingleOrDefault(c => c.Id == item.DynamicProperty3Id)?.DynamicProperty;
+        //        if (dp3 != null)
+        //        {
+        //            item.DynamicProperty3Name = dp3.PropertyName;
+        //            item.DynamicProperty3Text = dp3.DynamicPropertyValues?.SingleOrDefault(c => c.Id.ToString() == item.DynamicProperty3Value)?.Value;
+        //        }
+        //        var dp4 = dynamicEntityProperties.SingleOrDefault(c => c.Id == item.DynamicProperty4Id)?.DynamicProperty;
+        //        if (dp4 != null)
+        //        {
+        //            item.DynamicProperty4Name = dp4.PropertyName;
+        //            item.DynamicProperty4Text = dp4.DynamicPropertyValues?.SingleOrDefault(c => c.Id.ToString() == item.DynamicProperty4Value)?.Value;
+        //        }
+        //        var dp5 = dynamicEntityProperties.SingleOrDefault(c => c.Id == item.DynamicProperty5Id)?.DynamicProperty;
+        //        if (dp5 != null)
+        //        {
+        //            item.DynamicProperty5Name = dp5.PropertyName;
+        //            item.DynamicProperty5Text = dp5.DynamicPropertyValues?.SingleOrDefault(c => c.Id.ToString() == item.DynamicProperty5Value)?.Value;
+        //        }
+        //    }
+        //}
 
         /// <summary>
         /// 更新商品信息
@@ -210,7 +210,7 @@ namespace BXJG.Shop.Catalogue
 
             //更新现有属性
             ObjectMapper.Map(input, entity);
-            await NewMethod(entity);
+            
             //发布处理
             if (input.Published)
                 entity.Publish(input.AvailableStart, input.AvailableEnd);
