@@ -15,7 +15,11 @@ namespace BXJG.Common.Extensions
             var c = chinese.ToCharArray();
             for (int i = 0; i < c.Length; i++)
             {
-                str += Pinyin4Net.GetFirstPinyin(chinese[i])[0];
+                var letter = chinese[i];
+                if (letter >= 0x4e00 && letter <= 0x9fbb)//是汉字
+                    str += Pinyin4Net.GetFirstPinyin(chinese[i])[0];
+                else
+                    str += letter;
             }
 
             if (toUpper)
@@ -23,5 +27,15 @@ namespace BXJG.Common.Extensions
 
             return str;
         }
+
+        //public static bool IsChinese(this string text) {
+        //    char[] c = text.ToCharArray();
+
+        //    for (int i = 0; i < c.Length; i++)
+        //        if (c[i] >= 0x4e00 && c[i] <= 0x9fbb)
+        //            Console.WriteLine("是汉字");
+        //        else
+        //            Console.WriteLine("不是汉字");
+        //}
     }
 }

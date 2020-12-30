@@ -300,7 +300,11 @@ namespace BXJG.Utils.File
             //Regex rg = new Regex($@"<img.+src=('|""){server}/(\S+)('|"")", RegexOptions.Multiline);
             return regex.Matches(content).Select(c => c.Groups[1].Value).ToArray();
         }
-
+        /// <summary>
+        /// 去掉文本中图片地址的temp路径片段
+        /// </summary>
+        /// <param name="content"></param>
+        /// <returns></returns>
         public string ReplaceImagePath(string content)
         {
             return regex.Replace(content, c => c.Value.Replace("temp/", ""));

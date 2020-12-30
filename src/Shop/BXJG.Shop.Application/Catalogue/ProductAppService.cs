@@ -43,33 +43,19 @@ namespace BXJG.Shop.Catalogue
         private readonly ProductManager productManager;
         private readonly TempFileManager tempFileManager;
 
-        //private readonly IDynamicPropertyManager dynamicPropertyManager;
-        //private readonly IDynamicPropertyValueManager dynamicPropertyValueManager;
-        private readonly IDynamicEntityPropertyManager dynamicEntityPropertyManager;
-        private readonly IDynamicEntityPropertyValueManager dynamicEntityPropertyValueManager;
-        private readonly IRepository<DynamicPropertyValue, long> repository1;
-        private readonly IRepository<DynamicEntityProperty> repository2;
-
         private readonly IAbpSession abpSession;
 
         public ProductAppService(IRepository<ProductEntity, long> repository,
                                  ProductCategoryManager dictionaryManager,
                                  ProductManager itemManager,
                                  TempFileManager tempFileManager,
-                                 IDynamicEntityPropertyManager dynamicEntityPropertyManager,
-                                 IDynamicEntityPropertyValueManager dynamicEntityPropertyValueManager,
-                                 IAbpSession abpSession, IRepository<DynamicPropertyValue, long> repository1,
-                                 IRepository<DynamicEntityProperty> repository2)
+                                 IAbpSession abpSession)
         {
             this.repository = repository;
             this.dictionaryManager = dictionaryManager;
             this.productManager = itemManager;
             this.tempFileManager = tempFileManager;
-            this.dynamicEntityPropertyManager = dynamicEntityPropertyManager;
-            this.dynamicEntityPropertyValueManager = dynamicEntityPropertyValueManager;
             this.abpSession = abpSession;
-            this.repository1 = repository1;
-            this.repository2 = repository2;
         }
         /// <summary>
         /// 创建并发布商品信息
@@ -84,8 +70,10 @@ namespace BXJG.Shop.Catalogue
             input.Images = (await this.tempFileManager.MoveAsync(input.Images)).Select(c => c.FileRelativePath).ToArray();
 
             //处理详细描述中的图片，未考虑异常情况，先用着吧
-            input.DescriptionFull = tempFileManager.ReplaceImagePath(input.DescriptionFull);
+            //将商品详细描述中包含的图片从temp临时目录移动到正式目录
             await tempFileManager.MoveAsync(tempFileManager.GetMatchedImagePath(input.DescriptionFull).ToArray());
+            //替换商品详细描述中的图片路径为正式目录的路径
+            input.DescriptionFull = tempFileManager.ReplaceImagePath(input.DescriptionFull);
 
             //输入模型映射给实体模型赋值
             var entity = base.ObjectMapper.Map<ProductEntity>(input);
@@ -183,7 +171,6 @@ namespace BXJG.Shop.Catalogue
             //***********将来考虑将部分逻辑封装到领域服务中************
 
             //目前下面的处理存在隐患。若移动或删除图片成功后，提交数据库更新失败，则图片文件将丢失。
-
             //获取原来的实体
             var entity = await this.repository.GetAllIncluding(c => c.Skus).SingleAsync(c => c.Id == input.Id);
 
@@ -195,22 +182,32 @@ namespace BXJG.Shop.Catalogue
 
 
             //处理详细描述中的图片，未考虑异常情况，先用着吧
-            var tempDesFull = tempFileManager.GetMatchedImagePath(input.DescriptionFull);
-            input.DescriptionFull = tempFileManager.ReplaceImagePath(input.DescriptionFull);
-            await tempFileManager.MoveAsync(tempDesFull);
 
+            //获取商品详细描述中的图片路径，其中可能存在正式目录的图片，也有临时目录路径的图片
+            var tempDesFull = tempFileManager.GetMatchedImagePath(input.DescriptionFull);
+            //替换商品详细描述中的图片路径为正式目录的路径
+            input.DescriptionFull = tempFileManager.ReplaceImagePath(input.DescriptionFull);
+            //移动临时目录路径的图片到正式目录，若本就已在正式目录，则只返回路径
+            await tempFileManager.MoveAsync(tempDesFull);
+            //商品步骤已处理好图片的移动，以及商品详细描述中准确的图片路径，下面删除老的图片
+
+
+            //再次匹配，此时获取的图片路径全是正式目录的
             var desnewFullImages = tempFileManager.GetMatchedImagePath(input.DescriptionFull);
             if (!entity.DescriptionFull.IsNullOrWhiteSpace())
             {
+                //获取之前的商品详细描述中的图片路径，都是正式目录的路径
                 var desFullImags = tempFileManager.GetMatchedImagePath(entity.DescriptionFull);
+                //使用交集得到应删除的图片路径集合
                 var needremovedesFullImags = desFullImags.Except(desnewFullImages);
+                //删除老图片
                 await tempFileManager.RemoveAsync(needremovedesFullImags.ToArray());
             }
 
 
             //更新现有属性
             ObjectMapper.Map(input, entity);
-            
+
             //发布处理
             if (input.Published)
                 entity.Publish(input.AvailableStart, input.AvailableEnd);

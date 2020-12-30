@@ -462,17 +462,24 @@ namespace BXJG.GeneralTree
             }
             return list1;
         }
-        [AbpAuthorize]
+        //[AbpAuthorize]
         public override Task<IList<TGetTreeForSelectOutput>> GetTreeForSelectAsync(TGetTreeForSelectInput input)
         {
             //权限判断
             //await CheckGetPermissionAsync();
+            //不用[AbpAuthorize]，因为不确定子类是否可以覆盖
+            if (!base.AbpSession.UserId.HasValue)
+                throw new AbpAuthorizationException();
+
             return base.GetTreeForSelectAsync(input);
         }
-        [AbpAuthorize]
+       // [AbpAuthorize]
         public override Task<IList<TGetNodesForSelectOutput>> GetNodesForSelectAsync(TGetNodesForSelectInput input)
         {
             //await CheckGetPermissionAsync();
+            //不用[AbpAuthorize]，因为不确定子类是否可以覆盖
+            if (!base.AbpSession.UserId.HasValue)
+                throw new AbpAuthorizationException();
             return base.GetNodesForSelectAsync(input);
         }
 
