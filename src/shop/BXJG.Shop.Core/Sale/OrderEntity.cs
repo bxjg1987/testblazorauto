@@ -279,11 +279,13 @@ namespace BXJG.Shop.Sale
         /// 发货
         /// </summary>
         /// <param name="shipmentMethod">发货方式|物流公司</param>
+        /// <param name="logisticsNumber">物流单号，可能是类似虚拟商品，不需要物理发货，所以可为空</param>
         /// <returns></returns>
-        public void ShipmentAsync(long shipmentMethod)
+        public void ShipmentAsync(long shipmentMethod, string logisticsNumber = default)
         {
             DistributionMethodId = shipmentMethod;
             LogisticsStatus = Sale.LogisticsStatus.Shipped;
+            LogisticsNumber = logisticsNumber;
             DomainEvents.Add(new OrderShipedEventData(this));
         }
         /// <summary>
@@ -293,6 +295,7 @@ namespace BXJG.Shop.Sale
         public void SignAsync()
         {
             LogisticsStatus = Sale.LogisticsStatus.Signed;
+            Status = OrderStatus.Completed;
             DomainEvents.Add(new OrderSignedEventData(this));
         }
         #endregion
