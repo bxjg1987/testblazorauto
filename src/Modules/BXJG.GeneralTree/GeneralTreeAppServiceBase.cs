@@ -147,14 +147,14 @@ namespace BXJG.GeneralTree
         {
             //await CheckGetPermissionAsync();
             //得到实体扁平集合
-            string parentCode = "";
-            if (input.ParentId.HasValue && input.ParentId.Value > 0)
-            {
-                var top = await ownRepository.GetAsync(input.ParentId.Value);
-                parentCode = top.Code;
-            }
+            //string parentCode = "";
+            //if (input.ParentId.HasValue && input.ParentId.Value > 0)
+            //{
+            //    var top = await ownRepository.GetAsync(input.ParentId.Value);
+            //    parentCode = top.Code;
+            //}
 
-            var query = ComboboxFilter(input, parentCode);
+            var query = ComboboxFilter(input, input.ParentId);
 
             query = ComboboxSort(query, input);
             //GetNodesForSelectProjection允许子类直接投影，这种情况可能不太灵活，因为子类可能不方便做ef投影，所以将来可能考虑完全获取实体，在内存中来做这个转换
@@ -217,9 +217,9 @@ namespace BXJG.GeneralTree
         //}
         #endregion
         #region 获取扁平化下拉框数据时子类可重写的方法
-        protected virtual IQueryable<TEntity> ComboboxFilter(TGetNodesForSelectInput input, string parentCode)
+        protected virtual IQueryable<TEntity> ComboboxFilter(TGetNodesForSelectInput input, long? parentId)
         {
-            return ownRepository.GetAll().Where(c => c.Code.StartsWith(parentCode));
+            return ownRepository.GetAll().Where(c => c.ParentId==parentId);
             //return ownRepository.GetAll().Where(c => c.ParentId == input.ParentId || c.Id == input.ParentId);
         }
         protected virtual IQueryable<TEntity> ComboboxSort(IQueryable<TEntity> query, TGetNodesForSelectInput input)
