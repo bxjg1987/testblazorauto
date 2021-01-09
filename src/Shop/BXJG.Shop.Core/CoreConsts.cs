@@ -6,6 +6,7 @@ namespace BXJG.Shop
     {
         public const string LocalizationSourceName = "BXJGShop";
 
+        #region 顾客
         /// <summary>
         /// 目前考虑所有商城用户属于静态角色，静态角色在BXJGShopCoreModule中配置
         /// ef初始化或顾客注册时设置此角色
@@ -15,6 +16,15 @@ namespace BXJG.Shop
         /// 顾客登陆时会将顾客id存储到claim中，此值就是claim类型
         /// </summary>
         public const string CustomerIdClaim = "CustomerId";
+        #region 顾客地址
+        public const int ShippingAddressNameMaxLength = 20;
+        public const int ShippingAddressPhoneMaxLength = 20;
+        public const int ShippingAddressAddressMaxLength = 200;
+        public const int ShippingAddressZipCodeMaxLength = 20;
+
+        #endregion
+        #endregion
+
 
 
         #region 商品分类

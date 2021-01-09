@@ -7,6 +7,7 @@ using BXJG.Shop.Sale;
 using BXJG.Utils.Enums;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ZLJ.BaseInfo.Administrative;
@@ -62,7 +63,7 @@ namespace BXJG.Shop.Customer
         /// </summary>
         public byte[] RowVersion { get; set; }
         public string ExtensionData { get; set; }
-
+        public virtual List<ShippingAddressEntity> ShippingAddresses { get; set; }
         #region 积分处理
 
         /// <summary>
@@ -71,12 +72,9 @@ namespace BXJG.Shop.Customer
         /// <param name="value">增加或减少的积分数量</param>
         /// <param name="increase">true增加，false减少</param>
         /// <returns></returns>
-        public void ChangeIntegral(long value, bool increase = true)
+        public void ChangeIntegral(long value)
         {
-            if (increase)
-                SetIntegral(Integral + value);
-            else
-                SetIntegral(Integral - value);
+            SetIntegral(Integral + value);
         }
         /// <summary>
         /// 设置积分，若值有变化将触发事件
@@ -91,6 +89,18 @@ namespace BXJG.Shop.Customer
                 DomainEvents.Add(new CustomerIntegralChangedEventData(this, t));
             }
         }
+
+        // 使用方法而不是属性，这样调用方明确知晓此调用将进行计算，而不是直接从变量中获取
+        /// <summary>
+        /// 获取默认收货地址
+        /// </summary>
+        /// <returns></returns>
+        public ShippingAddressEntity GetDefaltShippingAddress()
+        {
+            return ShippingAddresses.Single(c => c.IsDefault);
+        }
         #endregion
+
+
     }
 }

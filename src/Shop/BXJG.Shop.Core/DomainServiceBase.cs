@@ -20,7 +20,7 @@ namespace BXJG.Shop
         //public ICancellationTokenProvider CancellationToken { get; set; } = NullCancellationTokenProvider.Instance;
 
         public IEventBus EventBus { get; set; }//属性注入 必须public
-        public IAsyncQueryableExecuter asyncQueryableExecuter { get; set; } = NullAsyncQueryableExecuter.Instance;
+        public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; } = NullAsyncQueryableExecuter.Instance;
         public DomainServiceBase()
         {
             base.LocalizationSourceName = CoreConsts.LocalizationSourceName;

@@ -18,4 +18,16 @@ namespace BXJG.Shop.EFMaps
             builder.Property(c => c.ExtensionData).HasMaxLength(int.MaxValue);
         }
     }
+    public class ShippingAddressMap : IEntityTypeConfiguration<ShippingAddressEntity>
+    {
+        public virtual void Configure(EntityTypeBuilder<ShippingAddressEntity> builder)
+        {
+            builder.ToTable("BXJGShippingAddress");
+            builder.Property(c => c.Name).HasMaxLength(CoreConsts.ShippingAddressNameMaxLength);
+            builder.Property(c => c.Phone).HasMaxLength(CoreConsts.ShippingAddressPhoneMaxLength);
+            builder.Property(c => c.Address).HasMaxLength(CoreConsts.ShippingAddressAddressMaxLength);
+            builder.Property(c => c.ZipCode).HasMaxLength(CoreConsts.ShippingAddressZipCodeMaxLength);
+            builder.Property(c => c.ExtensionData).HasMaxLength(int.MaxValue);
+        }
+    }
 }

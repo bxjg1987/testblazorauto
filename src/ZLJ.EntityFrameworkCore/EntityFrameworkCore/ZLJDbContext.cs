@@ -38,6 +38,7 @@ namespace ZLJ.EntityFrameworkCore
         public virtual DbSet<ProductCategoryEntity> BXJGShopProductCategory { get; set; }
         public virtual DbSet<ProductEntity> BXJGShopProduct { get; set; }
         public virtual DbSet<CustomerEntity> BXJGShopCustomer { get; set; }
+        //public virtual DbSet<ShippingAddressEntity>
         public virtual DbSet<OrderEntity> BXJGShopOrder { get; set; }
         #endregion
 
