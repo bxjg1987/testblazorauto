@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZLJ.BaseInfo.Administrative;
 
 namespace BXJG.Shop.Customer
 {
@@ -13,7 +14,7 @@ namespace BXJG.Shop.Customer
     /// </summary>
     public class ShippingAddressEntity : Entity<long>, IMustHaveTenant, IExtendableObject
     {
-        //虽然不是聚合根的实体没必要添加这个字段，但如果有这个字段将来做数据处理可能更方便
+        //虽然不是聚合根没必要添加这个字段，但如果有这个字段将来做数据处理可能更方便
         /// <summary>
         /// 租户id
         /// </summary>
@@ -34,6 +35,14 @@ namespace BXJG.Shop.Customer
         /// 联系电话
         /// </summary>
         public string Phone { get; set; }
+        /// <summary>
+        /// 所属区域Id
+        /// </summary>
+        public long AreaId { get; set; }
+        /// <summary>
+        /// 所属区域
+        /// </summary>
+        public virtual AdministrativeEntity Area { get; set; }
         /// <summary>
         /// 地址
         /// </summary>

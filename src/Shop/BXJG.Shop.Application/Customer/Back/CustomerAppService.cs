@@ -51,9 +51,9 @@ namespace BXJG.Shop.Customer
     /// <typeparam name="TRoleManager">角色管理器类型</typeparam>
     /// <typeparam name="TUserManager">用户管理器类型</typeparam>
     public class CustomerAppService<TUser,
-                                            TRole,
-                                            TRoleManager,
-                                            TUserManager> : AppServiceBase, ICustomerAppService
+                                    TRole,
+                                    TRoleManager,
+                                    TUserManager> : AppServiceBase, ICustomerAppService
         where TUser : AbpUser<TUser>, new()
         where TRole : AbpRole<TUser>, new()
         where TRoleManager : AbpRoleManager<TRole, TUser>

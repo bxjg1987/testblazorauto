@@ -17,7 +17,7 @@ namespace BXJG.Shop.ShoppingCart
     /// <summary>
     /// 购物车实体
     /// </summary>
-    public class ShoppingCartEntity : FullAuditedAggregateRoot<long>, IMustHaveTenant
+    public class ShoppingCartEntity : FullAuditedAggregateRoot<long>, IMustHaveTenant, IExtendableObject
     {
         /// <summary>
         /// 所属租户id
@@ -35,6 +35,8 @@ namespace BXJG.Shop.ShoppingCart
         /// 购物车中的商品明细
         /// </summary>
         public virtual IList<ShoppingCartItemEntity> Items { get; set; }
+        public string ExtensionData { get; set; }
+
 
         public void AddItem(ShoppingCartItemEntity item)
         {
@@ -55,5 +57,7 @@ namespace BXJG.Shop.ShoppingCart
         {
             Items.Clear();
         }
+       
+       
     }
 }
