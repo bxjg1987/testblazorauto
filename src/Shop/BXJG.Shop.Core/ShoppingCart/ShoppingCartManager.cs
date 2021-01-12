@@ -18,45 +18,58 @@ namespace BXJG.Shop.ShoppingCart
      * 若这样做，每次将商品加入购物车都会做一次判断，比较浪费
      * 所以直接在顾客建立时为他建立购物车，将来将商品加入购物车时就不需要判断了，但这样那些从未使用购物车的顾客将浪费数据库空间，这是一个以空间换时间的问题
      * 
-     * 我们可以在顾客的Create中的代码里来建立购物车，但这样会破坏建立顾客的简单逻辑，所以这里采用事件的方式更合理
+     * 我们可以在顾客的Create中的代码里来建立购物车，但这样会破坏建立顾客的简单逻辑，切购物车也不是购物系统必须的功能，它只是辅助功能，所以这里采用事件的方式更合理
      * 需要测试是否在同一个事务中
      */
 
-    public class ShoppingCartManager : DomainServiceBase, IAsyncEventHandler<EntityCreatedEventData<CustomerEntity>>
+    public class ShoppingCartManager : DomainServiceBase,
+                                       IAsyncEventHandler<EntityCreatedEventData<CustomerEntity>>,
+                                       IAsyncEventHandler<EntityCreatedEventData<OrderEntity>>
     {
-        private readonly IRepository<ShoppingCartEntity, long> repository;
-        ///private readonly OrderManager orderManager;
+        protected readonly IRepository<ShoppingCartEntity, long> repository;
+        protected readonly OrderManager orderManager;
 
-        public ShoppingCartManager(IRepository<ShoppingCartEntity, long> repository/*, OrderManager orderManager*/)
+        public ShoppingCartManager(IRepository<ShoppingCartEntity, long> repository, OrderManager orderManager)
         {
             this.repository = repository;
-            //this.orderManager = orderManager;
+            this.orderManager = orderManager;
         }
         /// <summary>
         /// 通过顾客新增事件建立购物车
         /// </summary>
         /// <param name="eventData"></param>
         /// <returns></returns>
-        public Task HandleEventAsync(EntityCreatedEventData<CustomerEntity> eventData)
+        public virtual Task HandleEventAsync(EntityCreatedEventData<CustomerEntity> eventData)
         {
-            var shoppingCart = new ShoppingCartEntity
-            {
-                CustomerId = eventData.Entity.Id
-            };
+            var shoppingCart = new ShoppingCartEntity(eventData.Entity.Id);
+           
             return repository.InsertAsync(shoppingCart);
         }
-        ///// <summary>
-        ///// 购物车计算，将根据购物车生成新的订单，单这个订单并未存储到数据库中，且购物车也不会清空
-        ///// 而是等到真正产生订单并保存到数据库后才会清空购物车
-        ///// </summary>
-        ///// <param name="shoppingCart"></param>
-        ///// <param name=""></param>
-        ///// <returns></returns>
-        //public Task<OrderEntity> BuildOrder(ShoppingCartEntity shoppingCart)
-        //{
-        //    var order = new OrderEntity { 
-             
-        //    };
-        //}
+        /// <summary>
+        /// 下单成功的事件处理中清空顾客在服务端的购物车数据
+        /// </summary>
+        /// <param name="eventData"></param>
+        /// <returns></returns>
+        public virtual Task HandleEventAsync(EntityCreatedEventData<OrderEntity> eventData)
+        {
+            throw new NotImplementedException();
+        }
+        /// <summary>
+        /// 购物车结算，将根据购物车生成新的订单，但这个订单并未存储到数据库中，且购物车也不会清空
+        /// 而是等到真正产生订单并保存到数据库后才会清空购物车
+        /// </summary>
+        /// <param name="shoppingCart"></param>
+        /// <param name="itemIds">顾客指定的要结算的购物车明细的id集合</param>
+        /// <returns></returns>
+        public virtual async Task<OrderEntity> BuildOrder(ShoppingCartEntity shoppingCart, params long[] itemIds)
+        {
+            var order = new OrderEntity
+            {
+
+            };
+
+            return order;
+        }
+
     }
 }

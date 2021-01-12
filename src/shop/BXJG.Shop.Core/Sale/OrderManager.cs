@@ -166,5 +166,16 @@ namespace BXJG.Shop.Sale
             //await EventBus.TriggerAsync(new EntityCreatedEventData<OrderEntity>(order));//
             return order;
         }
+        /// <summary>
+        /// 立即购买或购物车生成订单时会调用此方法
+        /// 它只是生成订单，并未真正完成下单，这里生成订单返回给前端，由顾客继续补录订单信息后提交完成下单
+        /// </summary>
+        /// <param name="customer">顾客</param>
+        /// <param name="items">所购买的商品列表</param>
+        /// <returns></returns>
+        public virtual async Task<OrderEntity> BuildOrder(CustomerEntity customer, params OrderItemInput[] items)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
