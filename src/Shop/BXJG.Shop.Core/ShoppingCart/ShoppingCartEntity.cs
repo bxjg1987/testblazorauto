@@ -19,19 +19,27 @@ namespace BXJG.Shop.ShoppingCart
     /// </summary>
     public class ShoppingCartEntity : FullAuditedAggregateRoot<long>, IMustHaveTenant, IExtendableObject
     {
+        List<ShoppingCartItemEntity> items;
+
         private ShoppingCartEntity() { }//此构造函数给ef用
         //此构造函数给automapper或开发人员用
         public ShoppingCartEntity(long customerId,
                                   CustomerEntity customer = default,
                                   int tenantId = default,
                                   string extensionData = default,
-                                  IList<ShoppingCartItemEntity> items = default)
+                                  IReadOnlyList<ShoppingCartItemEntity> items = default)
         {
             TenantId = tenantId;
             ExtensionData = extensionData;
             CustomerId = customerId;
             Customer = customer;
-            Items = items;
+            if (items != null)
+            {
+                this.items = items.ToList();
+                RegisterValueChangedEvent();
+            }
+            if (this.items == default)
+                this.items = new List<ShoppingCartItemEntity>();
             Calculate();
         }
 
@@ -54,7 +62,7 @@ namespace BXJG.Shop.ShoppingCart
         /// <summary>
         /// 购物车中的商品明细
         /// </summary>
-        public virtual IList<ShoppingCartItemEntity> Items { get; private set; }
+        public virtual IReadOnlyList<ShoppingCartItemEntity> Items => items.AsReadOnly();
         /// <summary>
         /// 金额小计
         /// </summary>
@@ -69,10 +77,12 @@ namespace BXJG.Shop.ShoppingCart
         /// <param name="item"></param>
         public void AddItem(ShoppingCartItemEntity item)
         {
-            Items.Add(item);
+            items.Add(item);
             item.ValueChanged -= Item_ValueChanged;
             item.ValueChanged += Item_ValueChanged;
             Calculate();
+            //base.DomainEvents.Add( )
+            //触发事件..略..或直接用购物车更新事件，但不推荐
         }
         /// <summary>
         /// 重置购物车明细值变化的事件
@@ -98,8 +108,9 @@ namespace BXJG.Shop.ShoppingCart
         /// <param name="item"></param>
         public void RemoveItem(ShoppingCartItemEntity item)
         {
-            Items.Remove(item);
+            items.Remove(item);
             Calculate();
+            //触发事件..略..或直接用购物车更新事件，但不推荐
         }
         /// <summary>
         /// 移除指定的购物车明细
@@ -107,15 +118,16 @@ namespace BXJG.Shop.ShoppingCart
         /// <param name="itemId">购物车明细id，注意不是商品id</param>
         public void RemoveItem(long itemId)
         {
-            Items.Remove(Items.Single(c => c.Id == itemId));
+            RemoveItem(items.Single(c => c.Id == itemId));
         }
         /// <summary>
         /// 清空购物车
         /// </summary>
         public void ClearItems()
         {
-            Items.Clear();
+            items.Clear();
             Calculate();
+            //触发事件..略..或直接用购物车更新事件，但不推荐
         }
         /// <summary>
         /// 获取指定id的购物车明细

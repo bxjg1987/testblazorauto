@@ -28,13 +28,10 @@ namespace BXJG.Shop.Customer
     {
         protected readonly IRepository<CustomerEntity, long> repository;
 
-        //protected readonly IAbpSession session;//领域层 不应该访问Session
-
         public CustomerManager(IRepository<CustomerEntity, long> repository)
         {
             this.repository = repository;
         }
-
 
     
 

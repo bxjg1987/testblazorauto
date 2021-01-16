@@ -28,4 +28,19 @@ namespace BXJG.Shop.EFMaps
             //builder.Property(c => c.RowVersion).IsRowVersion();
         }
     }
+    public class ShoppingCartItemMap : IEntityTypeConfiguration<ShoppingCartItemEntity>
+    {
+        public virtual void Configure(EntityTypeBuilder<ShoppingCartItemEntity> builder)
+        {
+            builder.ToTable("BXJGShopShoppingCartItem");
+            //builder.Property(c => c.OrderNo).IsRequired().HasColumnType($"varchar({CoreConsts.OrderNoMaxLength})");
+            //builder.HasIndex(g => g.OrderNo).IsUnique();
+            //builder.Property(c => c.CustomerRemark).HasMaxLength(CoreConsts.CustomerRemarkMaxLength);
+            //builder.Property(c => c.Consignee).IsRequired().HasMaxLength(CoreConsts.ConsigneeMaxLength);
+            //builder.Property(c => c.ConsigneePhoneNumber).IsRequired().HasColumnType($"varchar({CoreConsts.ConsigneePhoneNumberMaxLength})");
+            //builder.Property(c => c.ReceivingAddress).IsRequired().HasMaxLength(CoreConsts.ReceivingAddressMaxLength);
+            //builder.Property(c => c.LogisticsNumber).HasColumnType($"varchar({CoreConsts.LogisticsNumberMaxLength})");
+            //builder.Property(c => c.RowVersion).IsRowVersion();
+        }
+    }
 }

@@ -126,7 +126,7 @@ namespace BXJG.Shop.Sale
                 ConsigneePhoneNumber = consigneePhoneNumber,
                 ReceivingAddress = receivingAddress
             };
-           // order.Init();
+            // order.Init();
             #region 订单明细
             foreach (var item in items)
             {
@@ -166,16 +166,65 @@ namespace BXJG.Shop.Sale
             //await EventBus.TriggerAsync(new EntityCreatedEventData<OrderEntity>(order));//
             return order;
         }
-        /// <summary>
-        /// 立即购买或购物车生成订单时会调用此方法
-        /// 它只是生成订单，并未真正完成下单，这里生成订单返回给前端，由顾客继续补录订单信息后提交完成下单
-        /// </summary>
-        /// <param name="customer">顾客</param>
-        /// <param name="items">所购买的商品列表</param>
-        /// <returns></returns>
-        public virtual async Task<OrderEntity> BuildOrder(CustomerEntity customer, params OrderItemInput[] items)
-        {
-            throw new NotImplementedException();
-        }
+        ///// <summary>
+        ///// 立即购买或购物车生成订单时会调用此方法
+        ///// 它只是生成订单，并未真正完成下单，这里生成订单返回给前端，由顾客继续补录订单信息后提交完成下单
+        ///// </summary>
+        ///// <param name="customer">顾客</param>
+        ///// <param name="items">所购买的商品列表</param>
+        ///// <returns></returns>
+        //public virtual async Task<OrderEntity> BuildOrderAsync(CustomerEntity customer, params OrderItemInput[] items)
+        //{
+        //    //var addr = customer.GetDefaltShippingAddress();
+        //    var order = new OrderEntity
+        //    {
+        //        //Customer = customer,
+        //        //CustomerId = customer.Id,
+        //        //OrderNo = Guid.NewGuid().ToString("N"),//将来再考虑用个专门的组件生产简单、不重复的订单号
+        //        //OrderTime = DateTimeOffset.Now,
+        //        //Status = OrderStatus.Created,
+        //        //CustomerRemark = customerRemark,
+        //        //暂时忽略开票
+        //        //InvoiceType = invoiceType,
+        //        //InvoiceTitle = invoiceTitle,
+        //        //TaxId = taxId,
+        //        //PaymentStatus = PaymentStatus.WaitingForPayment,
+        //        //Area = addr.Area,
+        //        //AreaId = addr.Id,
+        //        //Consignee = consignee,
+        //        //ConsigneePhoneNumber = consigneePhoneNumber,
+        //        //ReceivingAddress = receivingAddress
+        //    };
+        //    // order.Init();
+        //    #region 订单明细
+        //    foreach (var item in items)
+        //    {
+        //        var product = new OrderItemEntity
+        //        {
+        //            Order = order,
+
+        //            Product = item.Product,
+        //            ProductId = item.Product.Id,
+
+        //            Sku = item.Sku,
+        //            SkuId = item.Sku.Id,
+
+        //            Title = item.Product.Title,
+        //            Image = item.Product.GetImages()?.First().Key,
+
+        //            Integral = item.Sku != null ? item.Sku.Integral : item.Product.Integral,
+        //            Price = item.Sku != null ? item.Sku.Price : item.Product.Price,
+        //            Quantity = item.Quantity,
+        //            Amount = item.CalculationAmount(),// item.Product.Price * item.Quantity,
+        //            TotalIntegral = item.CalculationIntegral()// Convert.ToInt32(item.Product.Integral * item.Quantity),
+        //        };
+        //        order.Items.Add(product);
+        //        order.MerchandiseSubtotal += product.Amount;
+        //        order.Integral += product.TotalIntegral;
+        //    }
+        //    #endregion
+        //    order.PaymentAmount = order.MerchandiseSubtotal;//+各种费用-各种优惠
+        //    return order;
+        //}
     }
 }

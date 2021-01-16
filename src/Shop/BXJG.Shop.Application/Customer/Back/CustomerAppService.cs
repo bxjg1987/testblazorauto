@@ -22,6 +22,7 @@ using Microsoft.AspNetCore.Identity;
 using Abp.IdentityFramework;
 using AutoMapper.QueryableExtensions;
 using Abp.AutoMapper;
+using Abp.Domain.Uow;
 
 namespace BXJG.Shop.Customer
 {
@@ -71,7 +72,6 @@ namespace BXJG.Shop.Customer
             UserManager = userManager;
             this.userRepository = userRepository;
         }
-
         public virtual async Task<CustomerDto> CreateAsync(CustomerUpdateDto input)
         {
             #region 创建主程序的用户
@@ -226,7 +226,7 @@ namespace BXJG.Shop.Customer
         /// <returns></returns>
         protected virtual async Task<(CustomerEntity customer, TUser user)> GetOneAsync(long id)
         {
-            var query = from c in repository.GetAllIncluding(c => c.Area)
+            var query = from c in repository.GetAllIncluding(c => c.Area).Where(c=>c.Id==id)
                         join u in userRepository.GetAllIncluding(c => c.Roles) on c.UserId equals u.Id
                         select new { c, u };
             var r = await query.SingleAsync();

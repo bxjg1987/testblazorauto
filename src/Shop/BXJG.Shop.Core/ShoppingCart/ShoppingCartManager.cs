@@ -22,54 +22,46 @@ namespace BXJG.Shop.ShoppingCart
      * 需要测试是否在同一个事务中
      */
 
-    public class ShoppingCartManager : DomainServiceBase,
-                                       IAsyncEventHandler<EntityCreatedEventData<CustomerEntity>>,
-                                       IAsyncEventHandler<EntityCreatedEventData<OrderEntity>>
+    public class ShoppingCartManager : DomainServiceBase
     {
         protected readonly IRepository<ShoppingCartEntity, long> repository;
-        protected readonly OrderManager orderManager;
+        protected readonly Lazy<OrderManager> orderManager;
 
-        public ShoppingCartManager(IRepository<ShoppingCartEntity, long> repository, OrderManager orderManager)
+        public ShoppingCartManager(IRepository<ShoppingCartEntity, long> repository, Lazy<OrderManager> orderManager)
         {
             this.repository = repository;
             this.orderManager = orderManager;
         }
-        /// <summary>
-        /// 通过顾客新增事件建立购物车
-        /// </summary>
-        /// <param name="eventData"></param>
-        /// <returns></returns>
-        public virtual Task HandleEventAsync(EntityCreatedEventData<CustomerEntity> eventData)
-        {
-            var shoppingCart = new ShoppingCartEntity(eventData.Entity.Id);
-           
-            return repository.InsertAsync(shoppingCart);
-        }
-        /// <summary>
-        /// 下单成功的事件处理中清空顾客在服务端的购物车数据
-        /// </summary>
-        /// <param name="eventData"></param>
-        /// <returns></returns>
-        public virtual Task HandleEventAsync(EntityCreatedEventData<OrderEntity> eventData)
-        {
-            throw new NotImplementedException();
-        }
-        /// <summary>
-        /// 购物车结算，将根据购物车生成新的订单，但这个订单并未存储到数据库中，且购物车也不会清空
-        /// 而是等到真正产生订单并保存到数据库后才会清空购物车
-        /// </summary>
-        /// <param name="shoppingCart"></param>
-        /// <param name="itemIds">顾客指定的要结算的购物车明细的id集合</param>
-        /// <returns></returns>
-        public virtual async Task<OrderEntity> BuildOrder(ShoppingCartEntity shoppingCart, params long[] itemIds)
-        {
-            var order = new OrderEntity
-            {
 
-            };
+        //若将来要添加逻辑，也可以在事件中去处理
+        ///// <summary>
+        ///// 向购物车添加商品明细
+        ///// 将来可能涉及类似库存判断和其它也处理，因此这里定义领域服务方法
+        ///// </summary>
+        ///// <param name="shoppingCart"></param>
+        ///// <param name="item"></param>
+        ///// <returns></returns>
+        //public Task AddItemAsync(ShoppingCartEntity shoppingCart, ShoppingCartItemEntity item)
+        //{
+        //    shoppingCart.AddItem(item);
+        //    return Task.CompletedTask;
+        //}
 
-            return order;
-        }
+        //下单页面并不只是包含订单信息，还包含其它信息，如：可选收货地址，各种优惠、其它可选信息等
+        //订单实体严格来说应该是一个符合订单要求的严谨的实体，因此箱单页面类似OrderBuilder它可以多次配置，最终生成一个严谨的订单对象
+        ///// <summary>
+        ///// 购物车结算，将根据购物车生成新的订单，但这个订单并未存储到数据库中，且购物车也不会清空
+        ///// 而是等到真正产生订单并保存到数据库后才会清空购物车
+        ///// </summary>
+        ///// <param name="shoppingCart"></param>
+        ///// <param name="itemIds">顾客指定的要结算的购物车明细的id集合</param>
+        ///// <returns></returns>
+        //public virtual async Task<OrderEntity> BuildOrder(ShoppingCartEntity shoppingCart, params long[] itemIds)
+        //{
+        //    var order = await orderManager.Value.BuildOrderAsync(shoppingCart.Customer,
+        //        shoppingCart.Items.Where(c => itemIds.Contains(c.Id)).Select(c => new OrderItemInput(c.Product, c.Sku, c.Quantity)).ToArray());
 
+        //    return order;
+        //}
     }
 }

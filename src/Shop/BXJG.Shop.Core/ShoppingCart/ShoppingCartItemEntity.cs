@@ -23,6 +23,9 @@ namespace BXJG.Shop.ShoppingCart
     /// </summary>
     public class ShoppingCartItemEntity : Entity<long>, IMustHaveTenant, IExtendableObject
     {
+        /// <summary>
+        /// 当金额和积分总额变化时触发
+        /// </summary>
         public event Action ValueChanged;
 
         //SkuEntity sku;
@@ -93,19 +96,21 @@ namespace BXJG.Shop.ShoppingCart
             get { return quantity; }
             set
             {
+                var temp = quantity;
                 quantity = value;
+                if (temp == value)
+                    return;
                 if (Sku == null)
                 {
                     Amount = quantity * Product.Price;
                     IntegralTotal = Convert.ToInt32(quantity * Product.Integral);
-                    ValueChanged?.Invoke();//目前只有数量改变时才会重新计算积分和金额，因此这里调用，后续考虑此逻辑移动到Amount的Setter中
                 }
                 else
                 {
                     Amount = quantity * Sku.Price;
                     IntegralTotal = Convert.ToInt32(quantity * Sku.Integral);
-                    ValueChanged?.Invoke();
                 }
+                ValueChanged?.Invoke();//目前只有数量改变时才会重新计算积分和金额，因此这里调用，后续考虑此逻辑移动到Amount的Setter中
             }
         }
         /// <summary>

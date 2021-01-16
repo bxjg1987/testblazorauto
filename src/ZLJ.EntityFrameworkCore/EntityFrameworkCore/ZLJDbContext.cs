@@ -19,6 +19,7 @@ using BXJG.BaseInfo.EFCore.EFMaps;
 using ZLJ.BaseInfo.Administrative;
 using BXJG.Equipment.EquipmentInfo;
 using BXJG.Equipment.EFCore.EFMaps;
+using BXJG.Shop.ShoppingCart;
 
 namespace ZLJ.EntityFrameworkCore
 {
@@ -40,6 +41,7 @@ namespace ZLJ.EntityFrameworkCore
         public virtual DbSet<CustomerEntity> BXJGShopCustomer { get; set; }
         //public virtual DbSet<ShippingAddressEntity>
         public virtual DbSet<OrderEntity> BXJGShopOrder { get; set; }
+        public virtual DbSet<ShoppingCartEntity> BXJGShopShoppingCart{ get; set; }
         #endregion
 
         #region CMS
