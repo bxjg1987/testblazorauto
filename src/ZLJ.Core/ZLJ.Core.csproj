@@ -28,8 +28,8 @@
     <Compile Remove="Shop\OrderManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Abp.AutoMapper" Version="6.1.1" />
-    <PackageReference Include="Abp.ZeroCore" Version="6.1.1" />
+    <PackageReference Include="Abp.AutoMapper" Version="6.2.0" />
+    <PackageReference Include="Abp.ZeroCore" Version="6.2.0" />
     <PackageReference Include="Castle.Windsor.Extensions.DependencyInjection" Version="5.1.0-beta001" />
   </ItemGroup>
   <ItemGroup>
