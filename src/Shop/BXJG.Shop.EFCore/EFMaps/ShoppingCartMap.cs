@@ -18,6 +18,8 @@ namespace BXJG.Shop.EFMaps
     {
         public virtual void Configure(EntityTypeBuilder<ShoppingCartEntity> builder)
         {
+            builder.Property(c => c.Amount).IsConcurrencyToken();
+            builder.Property(c => c.IntegralTotal).IsConcurrencyToken();
             //builder.Property(c => c.OrderNo).IsRequired().HasColumnType($"varchar({CoreConsts.OrderNoMaxLength})");
             //builder.HasIndex(g => g.OrderNo).IsUnique();
             //builder.Property(c => c.CustomerRemark).HasMaxLength(CoreConsts.CustomerRemarkMaxLength);
@@ -33,6 +35,8 @@ namespace BXJG.Shop.EFMaps
         public virtual void Configure(EntityTypeBuilder<ShoppingCartItemEntity> builder)
         {
             builder.ToTable("BXJGShopShoppingCartItem");
+            builder.Property(c => c.Amount).IsConcurrencyToken();
+            builder.Property(c => c.IntegralTotal).IsConcurrencyToken();
             //builder.Property(c => c.OrderNo).IsRequired().HasColumnType($"varchar({CoreConsts.OrderNoMaxLength})");
             //builder.HasIndex(g => g.OrderNo).IsUnique();
             //builder.Property(c => c.CustomerRemark).HasMaxLength(CoreConsts.CustomerRemarkMaxLength);
