@@ -26,18 +26,15 @@ namespace BXJG.Shop.ShoppingCart
         /// <summary>
         /// 当金额和积分总额变化时触发
         /// </summary>
-        public event Action ValueChanged;
+        public event Action<ShoppingCartItemEntity, ShoppingCartChangeData> ValueChanged;
 
         //SkuEntity sku;
         //ProductEntity product;
         decimal quantity;
         private ShoppingCartItemEntity() { }//此构造函数给ef用
         //此构造函数给automapper或开发人员用
-        public ShoppingCartItemEntity(long shoppingCartId,
-                                      ShoppingCartEntity shoppingCart,
-                                      long productId,
+        public ShoppingCartItemEntity(ShoppingCartEntity shoppingCart,
                                       ProductEntity product,
-                                      long? skuId,
                                       SkuEntity sku,
                                       decimal quantity = default,
                                       int tenantId = default,
@@ -45,11 +42,8 @@ namespace BXJG.Shop.ShoppingCart
         {
             TenantId = tenantId;
             ExtensionData = extensionData;
-            ShoppingCartId = shoppingCartId;
             ShoppingCart = shoppingCart;
-            ProductId = productId;
             Product = product;
-            SkuId = skuId;
             Sku = sku;
             Quantity = quantity;
         }
@@ -65,7 +59,7 @@ namespace BXJG.Shop.ShoppingCart
         /// <summary>
         /// 所属购物车id
         /// </summary>
-        public long ShoppingCartId { get; private set; }
+        public long ShoppingCartId => ShoppingCart.Id;
         /// <summary>
         /// 所属购物车
         /// </summary>
@@ -73,7 +67,7 @@ namespace BXJG.Shop.ShoppingCart
         /// <summary>
         /// 所属产品(spu)的Id
         /// </summary>
-        public long ProductId { get; private set; }
+        public long ProductId => Product.Id;
         /// <summary>
         /// 所属产品(spu)
         /// </summary>
@@ -82,7 +76,7 @@ namespace BXJG.Shop.ShoppingCart
         /// 购物扯中的商品的skuid
         /// 若购买的商品是简单商品，没有sku，则sku属性可为空
         /// </summary>
-        public long? SkuId { get; private set; }
+        public long? SkuId => Sku?.Id;
         /// <summary>
         /// 购物扯中的商品的sku
         /// 若购买的商品是简单商品，没有sku，则sku属性可为空
@@ -96,9 +90,10 @@ namespace BXJG.Shop.ShoppingCart
             get { return quantity; }
             set
             {
-                var temp = quantity;
+                var eventData = new ShoppingCartChangeData(quantity, Amount, IntegralTotal);
+               
                 quantity = value;
-                if (temp == value)
+                if (eventData.OriginalQuantity == value)
                     return;
                 if (Sku == null)
                 {
@@ -110,7 +105,7 @@ namespace BXJG.Shop.ShoppingCart
                     Amount = quantity * Sku.Price;
                     IntegralTotal = Convert.ToInt32(quantity * Sku.Integral);
                 }
-                ValueChanged?.Invoke();//目前只有数量改变时才会重新计算积分和金额，因此这里调用，后续考虑此逻辑移动到Amount的Setter中
+                ValueChanged?.Invoke(this, eventData);//目前只有数量改变时才会重新计算积分和金额，因此这里调用，后续考虑此逻辑移动到Amount的Setter中
             }
         }
         /// <summary>
