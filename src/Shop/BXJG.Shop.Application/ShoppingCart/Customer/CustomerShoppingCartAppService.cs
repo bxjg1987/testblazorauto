@@ -16,13 +16,15 @@ namespace BXJG.Shop.ShoppingCart.Customer
     /// </summary>
     public class CustomerShoppingCartAppService : CustomerAppServiceBase, ICustomerShoppingCartAppService
     {
-        private readonly IRepository<ShoppingCartEntity, long> shoppingCartRepository;
-        private readonly IRepository<ProductEntity, long> productRepository;
+        protected readonly IRepository<ShoppingCartEntity, long> shoppingCartRepository;
+        protected readonly IRepository<ProductEntity, long> productRepository;
+        protected readonly ShoppingCartManager shoppingCartManager;
 
-        public CustomerShoppingCartAppService(ICustomerSession customerSession, IRepository<ShoppingCartEntity, long> shoppingCartRepository, IRepository<ProductEntity, long> productRepository) : base(customerSession)
+        public CustomerShoppingCartAppService(ICustomerSession customerSession, IRepository<ShoppingCartEntity, long> shoppingCartRepository, IRepository<ProductEntity, long> productRepository, ShoppingCartManager shoppingCartManager) : base(customerSession)
         {
             this.shoppingCartRepository = shoppingCartRepository;
             this.productRepository = productRepository;
+            this.shoppingCartManager = shoppingCartManager;
         }
 
         public virtual async Task<AddItemOutput> AddItem(AddItemInput input)
@@ -72,13 +74,18 @@ namespace BXJG.Shop.ShoppingCart.Customer
              */
 
             var customerId = await base.GetCurrentCustomerIdAsync();
-            var entity = await AsyncQueryableExecuter.FirstOrDefaultAsync(shoppingCartRepository.GetAllIncluding(c => c.Items, c => c.Customer).Where(c => c.CustomerId == customerId));
-            var productIds = entity.Items.Select(c => c.ProductId);
-            //var skuIds = entity.Items.Select(c => c.SkuId); //sku不是聚合根，没有仓储
-            /*var productWithSkus = */
-            await AsyncQueryableExecuter.ToListAsync(productRepository.GetAllIncluding(c => c.Skus).Where(c => productIds.Contains(c.Id)));
-            //ef查询后默认会建立关联关系，若换其它仓储实现，可以考虑这里重组关联关系，由于某些属性在领域实体是私有的，应该重新new
-            return entity;
+            return await shoppingCartManager.GetShoppingCartAsync(customerId);
+
+            //var entity = await AsyncQueryableExecuter.FirstOrDefaultAsync(shoppingCartRepository.GetAllIncluding(c => c.Items, c => c.Customer).Where(c => c.CustomerId == customerId));
+            //var productIds = entity.Items.Select(c => c.ProductId);
+            ////var skuIds = entity.Items.Select(c => c.SkuId); //sku不是聚合根，没有仓储
+            ///*var productWithSkus = */
+            //await AsyncQueryableExecuter.ToListAsync(productRepository.GetAllIncluding(c => c.Skus).Where(c => productIds.Contains(c.Id)));
+            ////ef查询后默认会建立关联关系，若换其它仓储实现，可以考虑这里重组关联关系，由于某些属性在领域实体是私有的，应该重新new
+            //return entity;
+
+
+
         }
     }
 }
