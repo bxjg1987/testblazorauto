@@ -98,7 +98,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Common.Web", "src\libs
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Utils.Web", "src\modules\BXJG.Utils.Web\BXJG.Utils.Web.csproj", "{B4D49ADD-F501-4AD6-81F3-EA4AAE6EF131}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BXJG.WeChat.Web", "src\libs\BXJG.WeChat.Web\BXJG.WeChat.Web.csproj", "{C9671324-D11F-40A9-839C-C20AF2E16F31}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.WeChat.Web", "src\libs\BXJG.WeChat.Web\BXJG.WeChat.Web.csproj", "{C9671324-D11F-40A9-839C-C20AF2E16F31}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

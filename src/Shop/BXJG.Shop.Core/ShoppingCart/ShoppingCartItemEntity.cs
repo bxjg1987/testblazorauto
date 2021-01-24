@@ -41,6 +41,9 @@ namespace BXJG.Shop.ShoppingCart
                                       string extensionData = default)
         {
             TenantId = tenantId;
+            ShoppingCartId = shoppingCart.Id;
+            ProductId = product.Id;
+            SkuId = sku?.Id;
             ExtensionData = extensionData;
             ShoppingCart = shoppingCart;
             Product = product;
@@ -59,7 +62,7 @@ namespace BXJG.Shop.ShoppingCart
         /// <summary>
         /// 所属购物车id
         /// </summary>
-        public long ShoppingCartId => ShoppingCart.Id;
+        public long ShoppingCartId { get; private set; }
         /// <summary>
         /// 所属购物车
         /// </summary>
@@ -67,7 +70,7 @@ namespace BXJG.Shop.ShoppingCart
         /// <summary>
         /// 所属产品(spu)的Id
         /// </summary>
-        public long ProductId => Product.Id;
+        public long ProductId { get; private set; }
         /// <summary>
         /// 所属产品(spu)
         /// </summary>
@@ -76,7 +79,7 @@ namespace BXJG.Shop.ShoppingCart
         /// 购物扯中的商品的skuid
         /// 若购买的商品是简单商品，没有sku，则sku属性可为空
         /// </summary>
-        public long? SkuId => Sku?.Id;
+        public long? SkuId { get; private set; }
         /// <summary>
         /// 购物扯中的商品的sku
         /// 若购买的商品是简单商品，没有sku，则sku属性可为空

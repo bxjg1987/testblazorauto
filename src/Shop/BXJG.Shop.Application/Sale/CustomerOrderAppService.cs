@@ -21,7 +21,7 @@ namespace BXJG.Shop.Sale
     /// <summary>
     /// 前台顾客对订单的操作接口
     /// </summary>
-    public class CustomerOrderAppService : CustomerAppServiceBase, ICustomerOrderAppService
+    public class CustomerOrderAppService : CustomerAppServiceWithCustomerBase, ICustomerOrderAppService
     {
         private readonly IRepository<OrderEntity, long> repository;
         private readonly OrderManager orderManager;
@@ -36,7 +36,7 @@ namespace BXJG.Shop.Sale
                                        IRepository<OrderEntity, long> repository,
                                        OrderManager orderManager,
                                        IRepository<AdministrativeEntity, long> generalTreeManager,
-                                       IRepository<ProductEntity, long> itemRepository) : base(customerRepository, customerManager, customerSession)
+                                       IRepository<ProductEntity, long> itemRepository) : base( customerSession, customerRepository)
         {
             this.repository = repository;
             this.orderManager = orderManager;

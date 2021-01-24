@@ -52,6 +52,9 @@
     <Folder Include="Dto\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="hyjiacan.py4n" Version="4.0.0" />
   </ItemGroup>
 </Project>

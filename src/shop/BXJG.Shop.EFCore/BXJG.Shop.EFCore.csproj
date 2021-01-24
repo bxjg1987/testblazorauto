@@ -6,6 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ShoppingCart\**" />
+    <EmbeddedResource Remove="ShoppingCart\**" />
+    <None Remove="ShoppingCart\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="BXJGShopRepository.cs" />
   </ItemGroup>
 

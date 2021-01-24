@@ -20,14 +20,6 @@ namespace BXJG.Shop.Customer
     public abstract class CustomerAppServiceBase : AppServiceBase, IApplicationService
     {
         /// <summary>
-        /// 顾客实体仓储
-        /// </summary>
-        protected readonly IRepository<CustomerEntity, long> customerRepository;
-        /// <summary>
-        /// 顾客领域服务
-        /// </summary>
-        protected readonly CustomerManager customerManager;
-        /// <summary>
         /// 顾客session
         /// </summary>
         protected readonly ICustomerSession customerSession;
@@ -35,30 +27,60 @@ namespace BXJG.Shop.Customer
         /// <summary>
         /// 实例化登录的顾客的应用服务基类
         /// </summary>
-        /// <param name="customerRepository">顾客实体仓储</param>
-        /// <param name="customerManager">顾客领域服务</param>
         /// <param name="customerSession">顾客session</param>
-        public CustomerAppServiceBase(IRepository<CustomerEntity, long> customerRepository, CustomerManager customerManager, ICustomerSession customerSession)
+        public CustomerAppServiceBase(ICustomerSession customerSession)
         {
-            this.customerRepository = customerRepository;
-            this.customerManager = customerManager;
             this.customerSession = customerSession;
         }
+
         /// <summary>
-        /// 获取当前登录用户关联的顾客信息
+        /// 获取当前登录用户关联的顾客id
         /// </summary>
         /// <returns></returns>
-        protected virtual Task<CustomerEntity> GetCurrentCustomerAsync()
+        protected virtual ValueTask<long?> GetCurrentCustomerIdOrNullAsync()
         {
-            return customerRepository.SingleByUserIdAsync(AbpSession.UserId.Value);
+            return customerSession.GetCurrentCustomerIdAsync();
         }
         /// <summary>
         /// 获取当前登录用户关联的顾客id
         /// </summary>
         /// <returns></returns>
-        protected virtual ValueTask<long?> GetCurrentCustomerIdAsync()
+        protected virtual async ValueTask<long> GetCurrentCustomerIdAsync()
         {
-            return customerSession.GetCurrentCustomerIdAsync();
+            return (await GetCurrentCustomerIdOrNullAsync()).Value;
+        }
+    }
+    /// <summary>
+    /// 登录的顾客的应用服务基类，可以获取当前顾客实体
+    /// </summary>
+    public abstract class CustomerAppServiceWithCustomerBase : CustomerAppServiceBase
+    {
+        public readonly IRepository<CustomerEntity, long> repository;
+
+
+        protected CustomerAppServiceWithCustomerBase(ICustomerSession customerSession, IRepository<CustomerEntity, long> repository) : base(customerSession)
+        {
+            this.repository = repository;
+        }
+        /// <summary>
+        /// 获取当前登录用户关联的顾客
+        /// </summary>
+        /// <returns></returns>
+        protected virtual async Task<CustomerEntity> GetCurrentCustomerOrNullAsync()
+        {
+            var id = await base.GetCurrentCustomerIdOrNullAsync();
+            if (id.HasValue)
+                return await repository.SingleAsync(c => c.Id == id.Value);
+            return null;
+        }
+        /// <summary>
+        /// 获取当前登录用户关联的顾客
+        /// </summary>
+        /// <returns></returns>
+        protected virtual async Task<CustomerEntity> GetCurrentCustomerAsync()
+        {
+            var id = await base.GetCurrentCustomerIdAsync();
+            return await repository.SingleAsync(c => c.Id == id);
         }
     }
 }

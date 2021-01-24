@@ -123,9 +123,12 @@ namespace BXJG.Shop.ShoppingCart
         /// 移除指定的购物车明细
         /// </summary>
         /// <param name="itemId">购物车明细id，注意不是商品id</param>
-        public void RemoveItem(long itemId)
+        public void RemoveItem(params long[] itemIds)
         {
-            RemoveItem(items.Single(c => c.Id == itemId));
+            foreach (var item in itemIds)
+            {
+                RemoveItem(items.Single(c => c.Id == item));
+            }
         }
         /// <summary>
         /// 清空购物车
