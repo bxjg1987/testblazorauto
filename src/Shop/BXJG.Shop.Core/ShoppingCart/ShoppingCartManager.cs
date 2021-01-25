@@ -34,26 +34,26 @@ namespace BXJG.Shop.ShoppingCart
             this.productRepository = productRepository;
             //this.orderManager = orderManager;
         }
-        /// <summary>
-        /// 获取当前顾客的购物车
-        /// <br />包含关联的顾客和明细(包含明细关联的商品、sku)
-        /// </summary>
-        /// <returns></returns>
-        public async Task<ShoppingCartEntity> GetShoppingCartAsync(long customerId)
-        {
-            /*
-             * 为了不在应用层依赖ef，这里使用多次查询方式。多次查询性能也并不一定比关联查询差，看系统架构
-             * 也可以考虑将此操作放在自定义的仓储中来实现
-             */
+        ///// <summary>
+        ///// 获取当前顾客的购物车
+        ///// <br />包含关联的顾客和明细(包含明细关联的商品、sku)
+        ///// </summary>
+        ///// <returns></returns>
+        //public async Task<ShoppingCartEntity> GetShoppingCartAsync(long customerId)
+        //{
+        //    /*
+        //     * 为了不在应用层依赖ef，这里使用多次查询方式。多次查询性能也并不一定比关联查询差，看系统架构
+        //     * 也可以考虑将此操作放在自定义的仓储中来实现
+        //     */
 
-            var entity = await AsyncQueryableExecuter.FirstOrDefaultAsync(repository.GetAllIncluding(c => c.Items, c => c.Customer).Where(c => c.CustomerId == customerId));
-            var productIds = entity.Items.Select(c => c.ProductId);
-            //var skuIds = entity.Items.Select(c => c.SkuId); //sku不是聚合根，没有仓储
-            /*var productWithSkus = */
-            await AsyncQueryableExecuter.ToListAsync(productRepository.GetAllIncluding(c => c.Skus).Where(c => productIds.Contains(c.Id)));
-            //ef查询后默认会建立关联关系，若换其它仓储实现，可以考虑这里重组关联关系，由于某些属性在领域实体是私有的，应该重新new
-            return entity;
-        }
+        //    var entity = await AsyncQueryableExecuter.FirstOrDefaultAsync(repository.GetAllIncluding(c => c.Items, c => c.Customer).Where(c => c.CustomerId == customerId));
+        //    var productIds = entity.Items.Select(c => c.ProductId);
+        //    //var skuIds = entity.Items.Select(c => c.SkuId); //sku不是聚合根，没有仓储
+        //    /*var productWithSkus = */
+        //    await AsyncQueryableExecuter.ToListAsync(productRepository.GetAllIncluding(c => c.Skus).Where(c => productIds.Contains(c.Id)));
+        //    //ef查询后默认会建立关联关系，若换其它仓储实现，可以考虑这里重组关联关系，由于某些属性在领域实体是私有的，应该重新new
+        //    return entity;
+        //}
         //若将来要添加逻辑，也可以在事件中去处理
         ///// <summary>
         ///// 向购物车添加商品明细

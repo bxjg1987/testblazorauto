@@ -26,28 +26,43 @@ namespace BXJG.Shop.ShoppingCart
         /// <summary>
         /// 当金额和积分总额变化时触发
         /// </summary>
-        public event Action<ShoppingCartItemEntity, ShoppingCartChangeData> ValueChanged;
+        public event Action<ShoppingCartItemEntity,ShoppingCartItemChangeData> ValueChanged;
 
-        //SkuEntity sku;
-        //ProductEntity product;
         decimal quantity;
+        /// <summary>
+        /// 私有的，防止调用方创建不符合业务要求的购物车实体
+        /// <br />这个是给ef用的，用ef查询时ef可以访问到此私有构造函数
+        /// </summary>
         private ShoppingCartItemEntity() { }//此构造函数给ef用
-        //此构造函数给automapper或开发人员用
+        /// <summary>
+        /// 开发人员可以调用此构造函数创建符合业务要求的购物车明细实体
+        /// <br />AutoMapper也可以使用构造函数映射
+        /// </summary>
+        /// <param name="shoppingCart"></param>
+        /// <param name="produtId"></param>
+        /// <param name="skuId"></param>
+        /// <param name="product"></param>
+        /// <param name="sku"></param>
+        /// <param name="quantity"></param>
+        /// <param name="tenantId"></param>
+        /// <param name="extensionData"></param>
         public ShoppingCartItemEntity(ShoppingCartEntity shoppingCart,
-                                      ProductEntity product,
-                                      SkuEntity sku,
+                                      long produtId,
+                                      long? skuId,
+                                      ProductEntity product = default,
+                                      SkuEntity sku=default,
                                       decimal quantity = default,
                                       int tenantId = default,
                                       string extensionData = default)
         {
             TenantId = tenantId;
             ShoppingCartId = shoppingCart.Id;
-            ProductId = product.Id;
-            SkuId = sku?.Id;
-            ExtensionData = extensionData;
             ShoppingCart = shoppingCart;
             Product = product;
+            ProductId = produtId;
+            SkuId = skuId;
             Sku = sku;
+            ExtensionData = extensionData;
             Quantity = quantity;
         }
 
@@ -93,8 +108,8 @@ namespace BXJG.Shop.ShoppingCart
             get { return quantity; }
             set
             {
-                var eventData = new ShoppingCartChangeData(quantity, Amount, IntegralTotal);
-               
+                var eventData = new ShoppingCartItemChangeData( quantity, Amount, IntegralTotal);
+
                 quantity = value;
                 if (eventData.OriginalQuantity == value)
                     return;
@@ -108,7 +123,7 @@ namespace BXJG.Shop.ShoppingCart
                     Amount = quantity * Sku.Price;
                     IntegralTotal = Convert.ToInt32(quantity * Sku.Integral);
                 }
-                ValueChanged?.Invoke(this, eventData);//目前只有数量改变时才会重新计算积分和金额，因此这里调用，后续考虑此逻辑移动到Amount的Setter中
+                ValueChanged?.Invoke( this,eventData);//目前只有数量改变时才会重新计算积分和金额，因此这里调用，后续考虑此逻辑移动到Amount的Setter中
             }
         }
         /// <summary>

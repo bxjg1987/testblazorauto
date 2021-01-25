@@ -27,7 +27,7 @@ namespace BXJG.Shop.ShoppingCart
         /// <returns></returns>
         public virtual Task HandleEventAsync(EntityCreatingEventData<CustomerEntity> eventData)
         {
-            var shoppingCart = new ShoppingCartEntity(eventData.Entity);
+            var shoppingCart = new ShoppingCartEntity(eventData.Entity.Id);
             return repository.InsertAsync(shoppingCart);
         }
 

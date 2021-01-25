@@ -18,42 +18,64 @@ namespace BXJG.Shop.ShoppingCart.Customer
     {
         protected readonly IRepository<ShoppingCartEntity, long> shoppingCartRepository;
         protected readonly IRepository<ProductEntity, long> productRepository;
-        protected readonly ShoppingCartManager shoppingCartManager;
+        //protected readonly ShoppingCartManager shoppingCartManager;
 
-        public CustomerShoppingCartAppService(ICustomerSession customerSession, IRepository<ShoppingCartEntity, long> shoppingCartRepository, IRepository<ProductEntity, long> productRepository, ShoppingCartManager shoppingCartManager) : base(customerSession)
+        public CustomerShoppingCartAppService(ICustomerSession customerSession, IRepository<ShoppingCartEntity, long> shoppingCartRepository, IRepository<ProductEntity, long> productRepository/*, ShoppingCartManager shoppingCartManager*/) : base(customerSession)
         {
             this.shoppingCartRepository = shoppingCartRepository;
             this.productRepository = productRepository;
-            this.shoppingCartManager = shoppingCartManager;
+            //this.shoppingCartManager = shoppingCartManager;
         }
-
+        /// <summary>
+        /// 顾客将商品添加到购物车
+        /// </summary>
+        /// <param name="input">购物车明细信息（商品和数量）</param>
+        /// <returns></returns>
         public virtual async Task<AddItemOutput> AddItem(AddItemInput input)
         {
             var entity = await GetShoppingCart();
-            var product = await AsyncQueryableExecuter.FirstOrDefaultAsync(productRepository.GetAllIncluding(c => c.Skus).Where(c => c.Id == input.ProductId));
-            entity.AddItem(new ShoppingCartItemEntity(entity, product, product.Skus.SingleOrDefault(c => c.Id == input.SkuId), input.Quantity));
+            //var product = await AsyncQueryableExecuter.FirstOrDefaultAsync(productRepository.GetAllIncluding(c => c.Skus).Where(c => c.Id == input.ProductId));
+            entity.AddItem(new ShoppingCartItemEntity(entity, input.ProductId,input.SkuId, quantity: input.Quantity));
             return new AddItemOutput();
         }
-
+        /// <summary>
+        /// 调整购物车明细数量
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public async Task<ChangeItemQuantityOutput> ChangeItemQuantity(ChangeItemQuantityInput input)
         {
             var entity = await GetShoppingCart();
             entity.Items.Single(c => c.Id == input.Id).Quantity += input.Quantity;
             return new ChangeItemQuantityOutput();
         }
-
-        public async Task<ClearOutput> Clear(ClearInput input)
+        /// <summary>
+        /// 清空购物车
+        /// <br />对应Clear，使用Remove动态生成的api将匹配http方法delete
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task<ClearOutput> RemoveAll(ClearInput input)
         {
             var entity = await GetShoppingCart();
             entity.ClearItems();
             return new ClearOutput();
         }
-
+        /// <summary>
+        /// 顾客获取自己的购物车
+        /// <br />若是刚刚登陆时获取购物车，需要提供本地购物车数据，服务端将尝试将本地购物车和服务端的购物车合并后返回，否则只返回服务端购物车数据
+        /// </summary>
+        /// <param name="input">客户端本地购物车信息</param>
+        /// <returns></returns>
         public Task<PagedResultDto<GetOutput>> Get(GetInput input)
         {
             throw new NotImplementedException();
         }
-
+        /// <summary>
+        /// 从购物车中移除明细
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public async Task<RemoveItemOutput> RemoveItem(RemoveItemInput input)
         {
             var entity = await GetShoppingCart();
@@ -68,13 +90,8 @@ namespace BXJG.Shop.ShoppingCart.Customer
         /// <returns></returns>
         private async Task<ShoppingCartEntity> GetShoppingCart()
         {
-            /*
-             * 为了不在应用层依赖ef，这里使用多次查询方式。多次查询性能也并不一定比关联查询差，看系统架构
-             * 也可以考虑将此操作放在自定义的仓储中来实现
-             */
-
             var customerId = await base.GetCurrentCustomerIdAsync();
-            return await shoppingCartManager.GetShoppingCartAsync(customerId);
+            //return await shoppingCartManager.GetShoppingCartAsync(customerId);
 
             //var entity = await AsyncQueryableExecuter.FirstOrDefaultAsync(shoppingCartRepository.GetAllIncluding(c => c.Items, c => c.Customer).Where(c => c.CustomerId == customerId));
             //var productIds = entity.Items.Select(c => c.ProductId);
@@ -84,8 +101,7 @@ namespace BXJG.Shop.ShoppingCart.Customer
             ////ef查询后默认会建立关联关系，若换其它仓储实现，可以考虑这里重组关联关系，由于某些属性在领域实体是私有的，应该重新new
             //return entity;
 
-
-
+            return await AsyncQueryableExecuter.FirstOrDefaultAsync(shoppingCartRepository.GetAllIncluding(c => c.Items).Where(c => c.CustomerId == customerId));
         }
     }
 }

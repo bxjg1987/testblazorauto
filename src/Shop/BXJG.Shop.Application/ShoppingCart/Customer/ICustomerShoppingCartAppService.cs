@@ -40,9 +40,10 @@ namespace BXJG.Shop.ShoppingCart.Customer
         Task<RemoveItemOutput> RemoveItem(RemoveItemInput input);
         /// <summary>
         /// 清空购物车
+        /// <br />对应Clear，使用Remove动态生成的api将匹配http方法delete
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task<ClearOutput> Clear(ClearInput input);
+        Task<ClearOutput> RemoveAll(ClearInput input);
     }
 }
