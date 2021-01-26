@@ -74,7 +74,7 @@ namespace BXJG.Shop.ShoppingCart
         /// <param name="extensionData"></param>
         /// <param name="items"></param>
         public ShoppingCartEntity(long customerId,
-                                  CustomerEntity customer=default,
+                                  CustomerEntity customer = default,
                                   int tenantId = default,
                                   string extensionData = default,
                                   IList<ShoppingCartItemEntity> items = default)
@@ -87,26 +87,32 @@ namespace BXJG.Shop.ShoppingCart
             {
                 this.items = items.ToList();
                 RegisterValueChangedEvent();
+                Calculate();
             }
             if (this.items == default)
                 this.items = new List<ShoppingCartItemEntity>();
-            Calculate();
         }
 
         #endregion
 
         #region 公共方法
         /// <summary>
-        /// 添加购物车明细
+        /// 添加购物车明细，若明细存在则累加数量
         /// </summary>
         /// <param name="item"></param>
         public void AddItem(ShoppingCartItemEntity item)
         {
-            //CheckNullCustomer();
+            ShoppingCartItemEntity oldItem = items.SingleOrDefault(c => c.ProductId == item.ProductId && c.SkuId == item.SkuId);
+            if (oldItem != null)
+            {
+                oldItem.Quantity += item.Quantity;
+                return;
+            }
+
             RegisterValueChangedEvent(item);
             items.Add(item);
             Calculate();
-            DomainEvents.Add(new AddItemEventData(CustomerId, this, item));
+            DomainEvents.Add(new AddItemEventData(this, item));
         }
         /// <summary>
         /// 移除指定购物车明细
@@ -118,7 +124,7 @@ namespace BXJG.Shop.ShoppingCart
             UnRegisterValueChangedEvent(item);//存在隐患，因为此操作不参与数据库事务
             items.Remove(item);
             Calculate();
-            DomainEvents.Add(new RemoveItemEventData(CustomerId, this, item));
+            DomainEvents.Add(new RemoveItemEventData(this, item));
         }
         /// <summary>
         /// 移除指定的购物车明细
@@ -139,7 +145,7 @@ namespace BXJG.Shop.ShoppingCart
             UnRegisterValueChangedEvent();//存在隐患，因为此操作不参与数据库事务
             items.Clear();
             Calculate();
-            DomainEvents.Add(new ClearEventData(CustomerId, this));
+            DomainEvents.Add(new ClearEventData(this));
         }
         /// <summary>
         /// 获取指定id的购物车明细
@@ -179,7 +185,7 @@ namespace BXJG.Shop.ShoppingCart
         private void Item_ValueChanged(ShoppingCartItemEntity item, ShoppingCartItemChangeData shoppingCartEventData)
         {
             Calculate();
-            DomainEvents.Add(new ChangeItemQuantityEventData(CustomerId, this, item, shoppingCartEventData));
+            DomainEvents.Add(new ChangeItemQuantityEventData(this, item, shoppingCartEventData));
         }
         /// <summary>
         /// 计算金额

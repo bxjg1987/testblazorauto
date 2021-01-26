@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace BXJG.Shop.ShoppingCart
 {
+    //经过测试自带的实体事件要在ing事件中才是事务性的
     public class CustomerCreatingEventHandler : IAsyncEventHandler<EntityCreatingEventData<CustomerEntity>>,ITransientDependency
     {
         protected readonly IRepository<ShoppingCartEntity, long> repository;
@@ -30,6 +31,15 @@ namespace BXJG.Shop.ShoppingCart
             var shoppingCart = new ShoppingCartEntity(eventData.Entity.Id);
             return repository.InsertAsync(shoppingCart);
         }
+    }
 
+    public class AddItemEventHandler : IAsyncEventHandler<ChangeItemQuantityEventData>, ITransientDependency
+    {
+        public Task HandleEventAsync(ChangeItemQuantityEventData eventData)
+        {
+            //throw new NotImplementedException();
+            //经过测试这里确实是在事务中
+            return Task.CompletedTask;
+        }
     }
 }

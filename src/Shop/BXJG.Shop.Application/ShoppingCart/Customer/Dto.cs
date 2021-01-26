@@ -13,25 +13,27 @@ namespace BXJG.Shop.ShoppingCart.Customer
      * 顾客端针对购物车的操作相关dto
      */
 
-    /// <summary>
-    /// 购物车明细Dto基类
-    /// </summary>
-    public class ItemBaseDto
-    {
-        /// <summary>
-        /// 商品Id
-        /// </summary>
-        [Required]
-        public long ProductId { get; set; }
-        /// <summary>
-        /// skuId，如果有的话
-        /// </summary>
-        public long? SkuId { get; set; }
-        /// <summary>
-        /// 数量
-        /// </summary>
-        public decimal Quantity { get; set; }
-    }
+    ///// <summary>
+    ///// 购物车明细Dto基类
+    ///// </summary>
+    //public class ItemBaseDto
+    //{
+    //    /// <summary>
+    //    /// 商品Id
+    //    /// </summary>
+    //    [Required]
+    //    public long ProductId { get; set; }
+    //    /// <summary>
+    //    /// skuId，如果有的话
+    //    /// </summary>
+    //    public long? SkuId { get; set; }
+    //    /// <summary>
+    //    /// 数量
+    //    /// </summary>
+    //    public decimal Quantity { get; set; }
+    //}
+
+    #region 合并并获取购物车信息的相关dto
     /// <summary>
     /// 顾客获取服务端购物车时的输入模型
     /// <rb />需要上传本地购物车，由服务端决定是否合并
@@ -50,9 +52,25 @@ namespace BXJG.Shop.ShoppingCart.Customer
     /// <summary>
     /// 顾客获取服务端购物车时的输入模型的购物车明细
     /// </summary>
-    public class GetItemInput : ItemBaseDto
+    public class GetItemInput
     {
-
+        /// <summary>
+        /// 商品Id
+        /// </summary>
+        [Required]
+        public long ProductId { get; set; }
+        /// <summary>
+        /// skuId，如果有的话
+        /// </summary>
+        public long? SkuId { get; set; }
+        /// <summary>
+        /// 数量
+        /// </summary>
+        public decimal Quantity { get; set; } = 1;
+        /// <summary>
+        /// 扩展数据
+        /// </summary>
+        public Dictionary<string, object> ExtensionData { get; set; }
     }
     /// <summary>
     /// 顾客获取购物车信息的输出模型
@@ -71,12 +89,76 @@ namespace BXJG.Shop.ShoppingCart.Customer
         /// 购物车明细
         /// </summary>
         public List<GetItemOutput> Items { get; set; }
+        /// <summary>
+        /// 扩展数据
+        /// </summary>
+        public object ExtensionData { get; set; }
     }
     /// <summary>
     /// 顾客获取购物车信息的输出模型中的购物车明细
     /// </summary>
-    public class GetItemOutput : ItemBaseDto
+    public class GetItemOutput
     {
+        /// <summary>
+        /// 关联的商品id
+        /// </summary>
+        public long ProductId { get; set; }
+        /// <summary>
+        /// 关联的商品标题
+        /// </summary>
+        public string ProductName { get; set; }
+        /// <summary>
+        /// 关联的商品单位
+        /// </summary>
+        public string ProductDisplayName { get; set; }
+        /// <summary>
+        /// skuId，如果有的话
+        /// </summary>
+        public long? SkuId { get; set; }
+        /// <summary>
+        /// sku动态属性1属性名
+        /// </summary>
+        public string SkuDynamicProperty1DisplayName { get; set; }
+        /// <summary>
+        /// sku动态属性1值
+        /// </summary>
+        public string SkuDynamicProperty1Text { get; set; }
+        /// <summary>
+        /// sku动态属性2属性名
+        /// </summary>
+        public string SkuDynamicProperty2DisplayName { get; set; }
+        /// <summary>
+        /// sku动态属性2
+        /// </summary>
+        public string SkuDynamicProperty2Text { get; set; }
+        /// <summary>
+        /// sku动态属性3属性名
+        /// </summary>
+        public string SkuDynamicProperty3DisplayName { get; set; }
+        /// <summary>
+        /// sku动态属性3
+        /// </summary>
+        public string SkuDynamicProperty3Text { get; set; }
+        /// <summary>
+        /// sku动态属性4属性名
+        /// </summary>
+        public string SkuDynamicProperty4DisplayName { get; set; }
+        /// <summary>
+        /// sku动态属性4
+        /// </summary>
+        public string SkuDynamicProperty4Text { get; set; }
+        /// <summary>
+        /// sku动态属性5属性名
+        /// </summary>
+        public string SkuDynamicProperty5DisplayName { get; set; }
+        /// <summary>
+        /// sku动态属性5
+        /// </summary>
+        public string SkuDynamicProperty5Text { get; set; }
+        /// <summary>
+        /// 数量
+        /// </summary>
+        public decimal Quantity { get; set; } = 1;
         /// <summary>
         /// 金额小计
         /// </summary>
@@ -85,19 +167,32 @@ namespace BXJG.Shop.ShoppingCart.Customer
         /// 购物车中包含的商品明细的可得积分总额
         /// </summary>
         public int IntegralTotal { get; private set; }
+        /// <summary>
+        /// 扩展数据
+        /// </summary>
+        public object ExtensionData { get; set; }
     }
+    #endregion
+
+    #region 向购物车添加商品使用的dto
     /// <summary>
     /// 顾客将商品加入购物车时的出入模型
     /// </summary>
-    public class AddItemInput : ItemBaseDto
+    public class AddItemInput
     {
         /// <summary>
-        /// 顾客将商品加入购物车时的出入模型
+        /// 商品Id
         /// </summary>
-        public AddItemInput()
-        {
-            Quantity = 1;
-        }
+        [Required]
+        public long ProductId { get; set; }
+        /// <summary>
+        /// skuId，如果有的话
+        /// </summary>
+        public long? SkuId { get; set; }
+        /// <summary>
+        /// 数量
+        /// </summary>
+        public decimal Quantity { get; set; } = 1;
         /// <summary>
         /// 扩展数据
         /// </summary>
@@ -110,6 +205,10 @@ namespace BXJG.Shop.ShoppingCart.Customer
     {
         //为啥为空？因为将来可以随意调整返回数据，而不必修改接口定义
     }
+    #endregion
+
+    #region 调整指定明细的数量的输入输出dto
+
     /// <summary>
     /// 调整购物车明细数量的输入模型
     /// </summary>
@@ -127,6 +226,8 @@ namespace BXJG.Shop.ShoppingCart.Customer
     {
 
     }
+    #endregion
+
     #region 从购物车中移除明细时的输入/输出模型
     /// <summary>
     /// 从购物车中移除明细时的输入模型
@@ -143,6 +244,7 @@ namespace BXJG.Shop.ShoppingCart.Customer
         //为啥为空？因为将来可以随意调整返回数据，而不必修改接口定义
     }
     #endregion
+
     #region 清空购物车的输入/输出模型
     /// <summary>
     /// 清空购物车的输入模型

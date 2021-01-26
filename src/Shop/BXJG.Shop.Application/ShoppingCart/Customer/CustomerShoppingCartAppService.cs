@@ -1,5 +1,6 @@
 ﻿using Abp.Application.Services;
 using Abp.Application.Services.Dto;
+using Abp.Domain.Entities;
 using Abp.Domain.Repositories;
 using BXJG.Shop.Catalogue;
 using BXJG.Shop.Customer;
@@ -18,6 +19,7 @@ namespace BXJG.Shop.ShoppingCart.Customer
     {
         protected readonly IRepository<ShoppingCartEntity, long> shoppingCartRepository;
         protected readonly IRepository<ProductEntity, long> productRepository;
+
         //protected readonly ShoppingCartManager shoppingCartManager;
 
         public CustomerShoppingCartAppService(ICustomerSession customerSession, IRepository<ShoppingCartEntity, long> shoppingCartRepository, IRepository<ProductEntity, long> productRepository/*, ShoppingCartManager shoppingCartManager*/) : base(customerSession)
@@ -33,9 +35,31 @@ namespace BXJG.Shop.ShoppingCart.Customer
         /// <returns></returns>
         public virtual async Task<AddItemOutput> AddItem(AddItemInput input)
         {
+            if (input.SkuId == 0)
+                input.SkuId = null;
+            if (input.Quantity == 0)
+                input.Quantity = 1;
+
             var entity = await GetShoppingCart();
-            //var product = await AsyncQueryableExecuter.FirstOrDefaultAsync(productRepository.GetAllIncluding(c => c.Skus).Where(c => c.Id == input.ProductId));
-            entity.AddItem(new ShoppingCartItemEntity(entity, input.ProductId,input.SkuId, quantity: input.Quantity));
+
+            ShoppingCartItemEntity item;
+            if (input.SkuId.HasValue)
+            {
+                var product = await AsyncQueryableExecuter.FirstOrDefaultAsync(productRepository.GetAllIncluding(c => c.Skus).Where(c => c.Id == input.ProductId));
+                item = new ShoppingCartItemEntity(entity, input.ProductId, input.SkuId, product: product, sku: product.Skus.Single(c => c.Id == input.SkuId.Value), quantity: input.Quantity);
+            }
+            else
+            {
+                var product = await productRepository.GetAsync(input.ProductId);
+                item = new ShoppingCartItemEntity(entity, input.ProductId, product: product, quantity: input.Quantity);
+            }
+
+            foreach (var i in input.ExtensionData)
+            {
+                item.SetData(i.Key, i.Value);
+            }
+
+            entity.AddItem(item);
             return new AddItemOutput();
         }
         /// <summary>
@@ -101,7 +125,9 @@ namespace BXJG.Shop.ShoppingCart.Customer
             ////ef查询后默认会建立关联关系，若换其它仓储实现，可以考虑这里重组关联关系，由于某些属性在领域实体是私有的，应该重新new
             //return entity;
 
-            return await AsyncQueryableExecuter.FirstOrDefaultAsync(shoppingCartRepository.GetAllIncluding(c => c.Items).Where(c => c.CustomerId == customerId));
+            var shoppingCart = await AsyncQueryableExecuter.FirstOrDefaultAsync(shoppingCartRepository.GetAllIncluding(c => c.Items).Where(c => c.CustomerId == customerId));
+            shoppingCart.RegisterValueChangedEvent();
+            return shoppingCart;
         }
     }
 }

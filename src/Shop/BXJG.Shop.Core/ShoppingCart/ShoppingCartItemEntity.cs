@@ -24,13 +24,13 @@ namespace BXJG.Shop.ShoppingCart
     public class ShoppingCartItemEntity : Entity<long>, IMustHaveTenant, IExtendableObject
     {
         /// <summary>
-        /// 当金额和积分总额变化时触发
+        /// 当数量改变时，总金额和积分也会变化，最后将触发此事件
         /// </summary>
-        public event Action<ShoppingCartItemEntity,ShoppingCartItemChangeData> ValueChanged;
+        public event Action<ShoppingCartItemEntity, ShoppingCartItemChangeData> ValueChanged;
 
         decimal quantity;
         /// <summary>
-        /// 私有的，防止调用方创建不符合业务要求的购物车实体
+        /// 私有的，防止调用方创建不符合业务要求的购物车明细实体
         /// <br />这个是给ef用的，用ef查询时ef可以访问到此私有构造函数
         /// </summary>
         private ShoppingCartItemEntity() { }//此构造函数给ef用
@@ -48,9 +48,9 @@ namespace BXJG.Shop.ShoppingCart
         /// <param name="extensionData"></param>
         public ShoppingCartItemEntity(ShoppingCartEntity shoppingCart,
                                       long produtId,
-                                      long? skuId,
+                                      long? skuId=default,
                                       ProductEntity product = default,
-                                      SkuEntity sku=default,
+                                      SkuEntity sku = default,
                                       decimal quantity = default,
                                       int tenantId = default,
                                       string extensionData = default)
@@ -108,7 +108,7 @@ namespace BXJG.Shop.ShoppingCart
             get { return quantity; }
             set
             {
-                var eventData = new ShoppingCartItemChangeData( quantity, Amount, IntegralTotal);
+                var eventData = new ShoppingCartItemChangeData(quantity, Amount, IntegralTotal);
 
                 quantity = value;
                 if (eventData.OriginalQuantity == value)
@@ -123,7 +123,7 @@ namespace BXJG.Shop.ShoppingCart
                     Amount = quantity * Sku.Price;
                     IntegralTotal = Convert.ToInt32(quantity * Sku.Integral);
                 }
-                ValueChanged?.Invoke( this,eventData);//目前只有数量改变时才会重新计算积分和金额，因此这里调用，后续考虑此逻辑移动到Amount的Setter中
+                ValueChanged?.Invoke(this, eventData);//目前只有数量改变时才会重新计算积分和金额，因此这里调用，后续考虑此逻辑移动到Amount的Setter中
             }
         }
         /// <summary>

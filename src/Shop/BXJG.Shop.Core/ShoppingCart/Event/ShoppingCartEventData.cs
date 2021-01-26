@@ -26,11 +26,9 @@ namespace BXJG.Shop.ShoppingCart
     /// </summary>
     public class ShoppingCartEventData : EventData
     {
-        public long CustomerId { get; }
         public ShoppingCartEntity ShoppingCart { get; }
-        public ShoppingCartEventData(long customerId, ShoppingCartEntity shoppingCart)
+        public ShoppingCartEventData(ShoppingCartEntity shoppingCart)
         {
-            CustomerId = customerId;
             ShoppingCart = shoppingCart;
         }
     }
@@ -40,7 +38,7 @@ namespace BXJG.Shop.ShoppingCart
     public class ShoppingCartItemEventData : ShoppingCartEventData
     {
         public ShoppingCartItemEntity ShoppingCartItem { get; }
-        public ShoppingCartItemEventData(long customerId, ShoppingCartEntity shoppingCart, ShoppingCartItemEntity shoppingCartItem) : base(customerId, shoppingCart)
+        public ShoppingCartItemEventData(ShoppingCartEntity shoppingCart, ShoppingCartItemEntity shoppingCartItem) : base(shoppingCart)
         {
             ShoppingCartItem = shoppingCartItem;
         }
@@ -56,7 +54,7 @@ namespace BXJG.Shop.ShoppingCart
         /// <param name="customerId"></param>
         /// <param name="shoppingCart"></param>
         /// <param name="shoppingCartItem"></param>
-        public AddItemEventData(long customerId, ShoppingCartEntity shoppingCart, ShoppingCartItemEntity shoppingCartItem) : base(customerId, shoppingCart, shoppingCartItem)
+        public AddItemEventData(ShoppingCartEntity shoppingCart, ShoppingCartItemEntity shoppingCartItem) : base(shoppingCart, shoppingCartItem)
         {
         }
     }
@@ -71,7 +69,7 @@ namespace BXJG.Shop.ShoppingCart
         /// <param name="customerId"></param>
         /// <param name="shoppingCart"></param>
         /// <param name="shoppingCartItem"></param>
-        public RemoveItemEventData(long customerId, ShoppingCartEntity shoppingCart, ShoppingCartItemEntity shoppingCartItem) : base(customerId, shoppingCart, shoppingCartItem)
+        public RemoveItemEventData(ShoppingCartEntity shoppingCart, ShoppingCartItemEntity shoppingCartItem) : base(shoppingCart, shoppingCartItem)
         {
         }
     }
@@ -84,7 +82,7 @@ namespace BXJG.Shop.ShoppingCart
         public decimal OriginalQuantity { get; }
         public decimal OriginalAmount { get; }
         public int OriginalIntegralTotal { get; }
-        public ShoppingCartItemChangeData( decimal originalQuantity, decimal originalAmount, int originalIntegralTotal)
+        public ShoppingCartItemChangeData(decimal originalQuantity, decimal originalAmount, int originalIntegralTotal)
         {
             OriginalQuantity = originalQuantity;
             OriginalAmount = originalAmount;
@@ -100,7 +98,7 @@ namespace BXJG.Shop.ShoppingCart
         public decimal OriginalAmount { get; }
         public int OriginalIntegralTotal { get; }
 
-        public ChangeItemQuantityEventData(long customerId, ShoppingCartEntity shoppingCart, ShoppingCartItemEntity shoppingCartItem, ShoppingCartItemChangeData shoppingCartChangeData) : base(customerId, shoppingCart, shoppingCartItem)
+        public ChangeItemQuantityEventData(ShoppingCartEntity shoppingCart, ShoppingCartItemEntity shoppingCartItem, ShoppingCartItemChangeData shoppingCartChangeData) : base(shoppingCart, shoppingCartItem)
         {
             OriginalQuantity = shoppingCartChangeData.OriginalQuantity;
             OriginalAmount = shoppingCartChangeData.OriginalAmount;
@@ -117,7 +115,7 @@ namespace BXJG.Shop.ShoppingCart
         /// </summary>
         /// <param name="customerId"></param>
         /// <param name="shoppingCart"></param>
-        public ClearEventData(long customerId, ShoppingCartEntity shoppingCart) : base(customerId, shoppingCart)
+        public ClearEventData(ShoppingCartEntity shoppingCart) : base(shoppingCart)
         {
         }
     }

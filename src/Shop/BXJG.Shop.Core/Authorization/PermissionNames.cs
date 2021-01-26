@@ -35,5 +35,9 @@ namespace BXJG.Shop.Authorization
         public const string CustomerCreate = "BXJGShopCustomerCreate";
         public const string CustomerUpdate = "BXJGShopCustomerUpdate";
         public const string CustomerDelete = "BXJGShopCustomerDelete";
+
+        #region 顾客管理自己的购物车
+
+        #endregion
     }
 }
