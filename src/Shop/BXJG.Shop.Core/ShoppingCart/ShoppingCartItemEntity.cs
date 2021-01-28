@@ -47,9 +47,7 @@ namespace BXJG.Shop.ShoppingCart
         /// <param name="tenantId"></param>
         /// <param name="extensionData"></param>
         public ShoppingCartItemEntity(ShoppingCartEntity shoppingCart,
-                                      long produtId,
-                                      long? skuId=default,
-                                      ProductEntity product = default,
+                                      ProductEntity product,
                                       SkuEntity sku = default,
                                       decimal quantity = default,
                                       int tenantId = default,
@@ -59,8 +57,8 @@ namespace BXJG.Shop.ShoppingCart
             ShoppingCartId = shoppingCart.Id;
             ShoppingCart = shoppingCart;
             Product = product;
-            ProductId = produtId;
-            SkuId = skuId;
+            ProductId = product.Id;
+            SkuId = sku?.Id;
             Sku = sku;
             ExtensionData = extensionData;
             Quantity = quantity;

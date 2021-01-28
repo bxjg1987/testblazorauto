@@ -5,6 +5,8 @@ using BXJG.GeneralTree;
 using BXJG.Shop.Catalogue;
 using BXJG.Shop.Customer;
 using BXJG.Shop.Sale;
+using BXJG.Shop.ShoppingCart;
+using BXJG.Shop.ShoppingCart.Customer;
 using BXJG.Utils.File;
 using System;
 using System.Collections.Generic;
@@ -98,6 +100,11 @@ namespace BXJG.Shop
 
             #region 后台管理对顾客信息的管理时使用的dto映射
             CreateMap<CustomerEntity, CustomerDto>();// (typeof(CustomerEntity<,>), typeof(CustomerDto));
+            #endregion
+
+            #region 购物车
+            CreateMap<ShoppingCartItemEntity, GetItemOutput>();
+            CreateMap<ShoppingCartEntity, GetOutput>();
             #endregion
 
             //.ForMember(c => c.IsTreeText, opt => opt.MapFrom(c => c.IsTree.ToString().UtilsL()))

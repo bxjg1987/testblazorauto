@@ -35,6 +35,8 @@ namespace BXJG.Shop.ShoppingCart.Customer
         /// <returns></returns>
         public virtual async Task<AddItemOutput> AddItem(AddItemInput input)
         {
+            //正常情况下，应该考虑更多业务判断，目前没有细想
+
             if (input.SkuId == 0)
                 input.SkuId = null;
             if (input.Quantity == 0)
@@ -46,12 +48,12 @@ namespace BXJG.Shop.ShoppingCart.Customer
             if (input.SkuId.HasValue)
             {
                 var product = await AsyncQueryableExecuter.FirstOrDefaultAsync(productRepository.GetAllIncluding(c => c.Skus).Where(c => c.Id == input.ProductId));
-                item = new ShoppingCartItemEntity(entity, input.ProductId, input.SkuId, product: product, sku: product.Skus.Single(c => c.Id == input.SkuId.Value), quantity: input.Quantity);
+                item = new ShoppingCartItemEntity(entity, product, product.Skus.Single(c => c.Id == input.SkuId.Value), input.Quantity);
             }
             else
             {
                 var product = await productRepository.GetAsync(input.ProductId);
-                item = new ShoppingCartItemEntity(entity, input.ProductId, product: product, quantity: input.Quantity);
+                item = new ShoppingCartItemEntity(entity, product, quantity: input.Quantity);
             }
 
             foreach (var i in input.ExtensionData)
@@ -67,7 +69,7 @@ namespace BXJG.Shop.ShoppingCart.Customer
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<ChangeItemQuantityOutput> ChangeItemQuantity(ChangeItemQuantityInput input)
+        public virtual async Task<ChangeItemQuantityOutput> ChangeItemQuantity(ChangeItemQuantityInput input)
         {
             var entity = await GetShoppingCart();
             entity.Items.Single(c => c.Id == input.Id).Quantity += input.Quantity;
@@ -79,7 +81,7 @@ namespace BXJG.Shop.ShoppingCart.Customer
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<ClearOutput> RemoveAll(ClearInput input)
+        public virtual async Task<ClearOutput> RemoveAll(ClearInput input)
         {
             var entity = await GetShoppingCart();
             entity.ClearItems();
@@ -91,16 +93,55 @@ namespace BXJG.Shop.ShoppingCart.Customer
         /// </summary>
         /// <param name="input">客户端本地购物车信息</param>
         /// <returns></returns>
-        public Task<PagedResultDto<GetOutput>> Get(GetInput input)
+        public virtual async Task<GetOutput> Get(GetInput input)
         {
-            throw new NotImplementedException();
+            //正常情况下，合并购物车应该考虑更多业务判断，目前没有细想
+            //合并操作可以考虑封装到领域服务中
+
+            var entity = await GetShoppingCart();
+
+            foreach (var item in input.Items)
+            {
+                var old = entity.Items.SingleOrDefault(c => c.ProductId == item.ProductId && c.SkuId == item.SkuId);
+                if (old != null)
+                    old.Quantity += item.Quantity;
+                else
+                {
+                    ShoppingCartItemEntity item1;
+                    if (item.SkuId.HasValue)
+                    {
+                        var product = await AsyncQueryableExecuter.FirstOrDefaultAsync(productRepository.GetAllIncluding(c => c.Skus).Where(c => c.Id == item.ProductId));
+                        item1 = new ShoppingCartItemEntity(entity, product, product.Skus.Single(c => c.Id == item.SkuId.Value), item.Quantity);
+                    }
+                    else
+                    {
+                        var product = await productRepository.GetAsync(item.ProductId);
+                        item1 = new ShoppingCartItemEntity(entity, product, quantity: item.Quantity);
+                    }
+
+                    foreach (var i in item.ExtensionData)
+                    {
+                        item1.SetData(i.Key, i.Value);
+                    }
+
+                    entity.AddItem(item1);
+                }
+            }
+
+            foreach (var i in input.ExtensionData)
+            {
+                entity.SetData(i.Key, i.Value);
+            }
+            if (input.Items.Count > 0)
+                await CurrentUnitOfWork.SaveChangesAsync();
+            return base.ObjectMapper.Map<GetOutput>(entity);
         }
         /// <summary>
         /// 从购物车中移除明细
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<RemoveItemOutput> RemoveItem(RemoveItemInput input)
+        public virtual async Task<RemoveItemOutput> RemoveItem(RemoveItemInput input)
         {
             var entity = await GetShoppingCart();
             entity.RemoveItem(input.Ids);
@@ -112,7 +153,7 @@ namespace BXJG.Shop.ShoppingCart.Customer
         /// <br />包含关联的顾客和明细(包含明细关联的商品、sku)
         /// </summary>
         /// <returns></returns>
-        private async Task<ShoppingCartEntity> GetShoppingCart()
+        protected virtual async Task<ShoppingCartEntity> GetShoppingCart()
         {
             var customerId = await base.GetCurrentCustomerIdAsync();
             //return await shoppingCartManager.GetShoppingCartAsync(customerId);

@@ -80,19 +80,19 @@ namespace BXJG.Shop.ShoppingCart.Customer
         /// <summary>
         /// 金额小计
         /// </summary>
-        public decimal Amount { get; private set; }
+        public decimal Amount { get;  set; }
         /// <summary>
         /// 购物车中包含的商品明细的可得积分总额
         /// </summary>
-        public int IntegralTotal { get; private set; }
+        public int IntegralTotal { get;  set; }
         /// <summary>
         /// 购物车明细
         /// </summary>
-        public List<GetItemOutput> Items { get; set; }
+        public IReadOnlyList<GetItemOutput> Items { get;  set; }
         /// <summary>
         /// 扩展数据
         /// </summary>
-        public object ExtensionData { get; set; }
+        public object ExtensionData { get;  set; }
     }
     /// <summary>
     /// 顾客获取购物车信息的输出模型中的购物车明细
@@ -106,11 +106,11 @@ namespace BXJG.Shop.ShoppingCart.Customer
         /// <summary>
         /// 关联的商品标题
         /// </summary>
-        public string ProductName { get; set; }
+        public string ProductTitle { get; set; }
         /// <summary>
         /// 关联的商品单位
         /// </summary>
-        public string ProductDisplayName { get; set; }
+        public string ProductUnitDisplayName { get; set; }
         /// <summary>
         /// skuId，如果有的话
         /// </summary>
@@ -162,11 +162,11 @@ namespace BXJG.Shop.ShoppingCart.Customer
         /// <summary>
         /// 金额小计
         /// </summary>
-        public decimal Amount { get; private set; }
+        public decimal Amount { get;  set; }
         /// <summary>
         /// 购物车中包含的商品明细的可得积分总额
         /// </summary>
-        public int IntegralTotal { get; private set; }
+        public int IntegralTotal { get;  set; }
         /// <summary>
         /// 扩展数据
         /// </summary>

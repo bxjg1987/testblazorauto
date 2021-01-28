@@ -19,7 +19,7 @@ namespace BXJG.Shop.ShoppingCart.Customer
         /// </summary>
         /// <param name="input">客户端本地购物车信息</param>
         /// <returns></returns>
-        Task<PagedResultDto<GetOutput>> Get(GetInput input);
+        Task<GetOutput> Get(GetInput input);
         /// <summary>
         /// 顾客将商品添加到购物车
         /// </summary>
