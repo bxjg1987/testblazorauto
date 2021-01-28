@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using BXJG.Utils.Localization;
-using BXJG.Utils.Enums;
+using BXJG.Utils;
 
 namespace BXJG.CMS.Common
 {
@@ -18,7 +18,7 @@ namespace BXJG.CMS.Common
 
         public List<ComboboxItemDto> GetColumnTypes(GetForSelectInput input)
         {
-            return new EnumManager(base.LocalizationSource).GetAllOrderStatus<Column.ColumnType>(input);
+            return new EnumManager(base.LocalizationSource).ConvertToComboboxData<Column.ColumnType>(input);
         }
     }
 }

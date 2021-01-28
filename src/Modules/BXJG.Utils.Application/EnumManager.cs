@@ -10,13 +10,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace BXJG.Utils.Enums
+namespace BXJG.Utils
 {
     /// <summary>
     /// 各个模块内都有自己的枚举，各个模块应该提供自己的应用服务向前端提供枚举下拉框的值
-    /// 这些应用服务可以使用此类来简化列表的生成
+    /// <br />这些应用服务可以使用此类来简化列表的生成
     /// </summary>
-    [Obsolete("因为dto属于Application层中的概念，因此同名类已经迁移到BXJG.Utils.Application中了")]
     public class EnumManager
     {
         private ILocalizationSource localizationSource;
@@ -31,7 +30,7 @@ namespace BXJG.Utils.Enums
             this.localizationSource = localizationSource;
         }
 
-        public List<ComboboxItemDto> GetAllOrderStatus<T>(GetForSelectInput input) where T:Enum
+        public List<ComboboxItemDto> ConvertToComboboxData<T>(GetForSelectInput input) where T:Enum
         {
             var list = localizationSource.GetEnum<T>();
             var b = list.Select(c => new ComboboxItemDto { Value = c.Key.ToString(), DisplayText = c.Value }).ToList();

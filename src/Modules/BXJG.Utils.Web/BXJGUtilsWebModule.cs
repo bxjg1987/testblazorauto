@@ -9,7 +9,7 @@ using Castle.Windsor.MsDependencyInjection;
 
 namespace BXJG.Utils
 {
-    [DependsOn(typeof(BXJGUtilsModule))]
+    [DependsOn(typeof(BXJGUtilsModule),typeof(BXJGUtilsApplicationModule))]
     public class BXJGUtilsWebModule :AbpModule
     {
         public override void Initialize()

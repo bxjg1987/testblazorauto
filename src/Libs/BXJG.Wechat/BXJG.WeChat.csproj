@@ -9,7 +9,7 @@
     <Description>微信小程序登录、支付。
 视频教程：https://www.bilibili.com/video/BV1Uk4y1d7Be/
 源码：https://gitee.com/bxjg1987/abp</Description>
-    <Version>1.0.4</Version>
+    <Version>1.0.8</Version>
     <PackageProjectUrl>https://gitee.com/bxjg1987/abp</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>

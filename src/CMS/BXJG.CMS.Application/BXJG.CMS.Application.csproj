@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Modules\BXJG.Utils.Application\BXJG.Utils.Application.csproj" />
     <ProjectReference Include="..\BXJG.CMS.Core\BXJG.CMS.Core.csproj" />
   </ItemGroup>
 

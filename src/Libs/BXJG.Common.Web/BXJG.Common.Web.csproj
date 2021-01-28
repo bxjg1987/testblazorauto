@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>BXJG.Common</RootNamespace>
+    <Version>1.0.8</Version>
   </PropertyGroup>
 <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
