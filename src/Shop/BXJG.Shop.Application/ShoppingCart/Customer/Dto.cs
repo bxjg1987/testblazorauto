@@ -47,7 +47,7 @@ namespace BXJG.Shop.ShoppingCart.Customer
         /// <summary>
         /// 扩展数据
         /// </summary>
-        public Dictionary<string, object> ExtensionData { get; set; }
+        public Dictionary<string, string> ExtensionData { get; set; }
     }
     /// <summary>
     /// 顾客获取服务端购物车时的输入模型的购物车明细
@@ -70,7 +70,7 @@ namespace BXJG.Shop.ShoppingCart.Customer
         /// <summary>
         /// 扩展数据
         /// </summary>
-        public Dictionary<string, object> ExtensionData { get; set; }
+        public Dictionary<string, string> ExtensionData { get; set; }
     }
     /// <summary>
     /// 顾客获取购物车信息的输出模型
@@ -111,6 +111,18 @@ namespace BXJG.Shop.ShoppingCart.Customer
         /// 关联的商品单位
         /// </summary>
         public string ProductUnitDisplayName { get; set; }
+        /// <summary>
+        /// 商品单价
+        /// </summary>
+        public decimal ProductPrice { get; set; }
+        /// <summary>
+        /// 商品原价
+        /// </summary>
+        public decimal ProductOldPrice { get; set; }
+        /// <summary>
+        /// 商品积分
+        /// </summary>
+        public decimal ProductIntegral { get; set; }
         /// <summary>
         /// skuId，如果有的话
         /// </summary>
@@ -155,6 +167,18 @@ namespace BXJG.Shop.ShoppingCart.Customer
         /// sku动态属性5
         /// </summary>
         public string SkuDynamicProperty5Text { get; set; }
+        /// <summary>
+        /// Sku单价
+        /// </summary>
+        public decimal SkuPrice { get; set; }
+        /// <summary>
+        /// Sku原价
+        /// </summary>
+        public decimal SkuOldPrice { get; set; }
+        /// <summary>
+        /// Sku积分
+        /// </summary>
+        public decimal SkuIntegral { get; set; }
         /// <summary>
         /// 数量
         /// </summary>

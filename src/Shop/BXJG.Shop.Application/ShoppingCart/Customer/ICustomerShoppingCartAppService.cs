@@ -19,31 +19,31 @@ namespace BXJG.Shop.ShoppingCart.Customer
         /// </summary>
         /// <param name="input">客户端本地购物车信息</param>
         /// <returns></returns>
-        Task<GetOutput> Get(GetInput input);
+        Task<GetOutput> MergeAndGetAsync(GetInput input);
         /// <summary>
         /// 顾客将商品添加到购物车
         /// </summary>
         /// <param name="input">购物车明细信息（商品和数量）</param>
         /// <returns></returns>
-        Task<AddItemOutput> AddItem(AddItemInput input);
+        Task<AddItemOutput> AddItemAsync(AddItemInput input);
         /// <summary>
         /// 调整购物车明细数量
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task<ChangeItemQuantityOutput> ChangeItemQuantity(ChangeItemQuantityInput input);
+        Task<ChangeItemQuantityOutput> ChangeItemQuantityAsync(ChangeItemQuantityInput input);
         /// <summary>
         /// 从购物车中移除明细
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task<RemoveItemOutput> RemoveItem(RemoveItemInput input);
+        Task<RemoveItemOutput> RemoveItemAsync(RemoveItemInput input);
         /// <summary>
         /// 清空购物车
         /// <br />对应Clear，使用Remove动态生成的api将匹配http方法delete
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task<ClearOutput> RemoveAll(ClearInput input);
+        Task<ClearOutput> RemoveAllAsync(ClearInput input);
     }
 }
