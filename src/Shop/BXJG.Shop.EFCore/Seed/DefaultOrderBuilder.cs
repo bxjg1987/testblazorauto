@@ -102,7 +102,7 @@ namespace BXJG.Shop.Seed
                 PaymentAmount = ois.Skip(2).Sum(c => c.Price),
                 OrderTime = new DateTimeOffset(2020, 3, 11, 15, 7, 25, TimeSpan.Zero),
                 Integral = ois.Skip(2).Sum(c => c.Integral),
-                MerchandiseSubtotal = ois.Skip(2).Sum(c => c.Price) - 5,
+                //MerchandiseSubtotal = ois.Skip(2).Sum(c => c.Price) - 5,
                 Items = ois.Skip(2).Select(c => new OrderItemEntity
                 {
                     Amount = c.Price * 1,
