@@ -26,7 +26,7 @@ namespace BXJG.Shop.Customer
         /// <summary>
         /// 关联到abp用户的id
         /// </summary>
-        public long UserId { get; set; }
+        public long UserId { get; private set; }
 
         /// <summary>
         /// 顾客的积分
@@ -35,7 +35,7 @@ namespace BXJG.Shop.Customer
         /// <summary>
         /// 总消费金额
         /// </summary>
-        public decimal Amount { get; set; }
+        public decimal Amount { get; private set; }
         /// <summary>
         /// 性别
         /// </summary>
@@ -64,6 +64,25 @@ namespace BXJG.Shop.Customer
         public byte[] RowVersion { get; set; }
         public string ExtensionData { get; set; }
         public virtual List<ShippingAddressEntity> ShippingAddresses { get; set; }
+        /// <summary>
+        /// 给ef用的，它可以放回私有成员
+        /// </summary>
+        private CustomerEntity() { }
+        /// <summary>
+        /// 实例化顾客，AutoMapper可以使用构造函数映射
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="integral"></param>
+        /// <param name="amount"></param>
+        /// <param name="id"></param>
+        public CustomerEntity(long userId, long integral = default, decimal amount = default, long id = default)
+        {
+            Id = id;
+            UserId = userId;
+            Integral = integral;
+            Amount = amount;
+        }
+
         #region 积分处理
 
         /// <summary>
@@ -90,6 +109,8 @@ namespace BXJG.Shop.Customer
             }
         }
 
+
+        #endregion
         // 使用方法而不是属性，这样调用方明确知晓此调用将进行计算，而不是直接从变量中获取
         /// <summary>
         /// 获取默认收货地址
@@ -99,8 +120,6 @@ namespace BXJG.Shop.Customer
         {
             return ShippingAddresses.Single(c => c.IsDefault);
         }
-        #endregion
-
 
     }
 }

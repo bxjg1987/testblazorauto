@@ -9,9 +9,7 @@ namespace BXJG.Common
 
     public enum Gender
     {
-        [Description("女")]
         Woman = 2,
-        [Description("男")]
         Man = 1
     }
 }

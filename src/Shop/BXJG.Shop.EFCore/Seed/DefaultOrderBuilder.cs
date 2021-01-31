@@ -46,12 +46,12 @@ namespace BXJG.Shop.Seed
 
             var ois = orderItems.IgnoreQueryFilters().Where(c => c.TenantId == _tenantId).ToList();
 
-            var order = new OrderEntity
+            var order = new OrderEntity(new CustomerEntity(0,id:1), Guid.NewGuid().ToString("N"))
             {
                 AreaId = 4,
                 Consignee = "张三",
                 ConsigneePhoneNumber = "17723896676",
-                CustomerId = 1,
+             
                 CustomerRemark = "顾客备注信息",
                 DistributionMethodId = 30,
                 //TenantId = this._tenantId,
@@ -61,9 +61,8 @@ namespace BXJG.Shop.Seed
                 //PaymentMethodId = 31,
                 PaymentAmount = ois.Take(2).Sum(c => c.Price),
                 OrderTime = new DateTimeOffset(2020, 5, 15, 21, 2, 3, TimeSpan.Zero),
-                OrderNo = Guid.NewGuid().ToString("N"),
                 Integral = 324,
-                MerchandiseSubtotal = 318,
+                //MerchandiseSubtotal = 318,
                 Items = ois.Take(2).Select(c => new OrderItemEntity
                 {
                     Amount = c.Price * 3,
@@ -88,12 +87,11 @@ namespace BXJG.Shop.Seed
             _context.SaveChanges();
 
 
-            var order1 = new OrderEntity
+            var order1 = new OrderEntity(new CustomerEntity(0,id:2), Guid.NewGuid().ToString("N"))
             {
                 AreaId = 6,
                 Consignee = "李四",
                 ConsigneePhoneNumber = "18323335646",
-                CustomerId = 2,
                 CustomerRemark = "顾客备注信息，test",
                 DistributionMethodId = 34,
                 TenantId = this._tenantId,
@@ -103,7 +101,6 @@ namespace BXJG.Shop.Seed
                 //PaymentMethodId = 33,
                 PaymentAmount = ois.Skip(2).Sum(c => c.Price),
                 OrderTime = new DateTimeOffset(2020, 3, 11, 15, 7, 25, TimeSpan.Zero),
-                OrderNo = Guid.NewGuid().ToString("N"),
                 Integral = ois.Skip(2).Sum(c => c.Integral),
                 MerchandiseSubtotal = ois.Skip(2).Sum(c => c.Price) - 5,
                 Items = ois.Skip(2).Select(c => new OrderItemEntity

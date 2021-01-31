@@ -86,12 +86,11 @@ namespace BXJG.Shop.Seed
             _context.UserRoles.Add(new UserRole(_tenantId, adminUser.Id, role.Id));
             _context.SaveChanges();
 
-            var cust1 = new CustomerEntity
+            var cust1 = new CustomerEntity(adminUser.Id)
             {
                 Birthday = DateTime.Now.AddYears(-30),
                 Gender = Gender.Man,
-                TenantId = this._tenantId,
-                UserId = adminUser.Id
+                TenantId = this._tenantId
             };
             items.Add(cust1);
 
@@ -115,12 +114,11 @@ namespace BXJG.Shop.Seed
             _context.Users.Add(adminUser1);
             _context.SaveChanges();
 
-            var cust2 = new CustomerEntity
+            var cust2 = new CustomerEntity(adminUser1.Id)
             {
                 Birthday = DateTime.Now.AddYears(-22).AddDays(116),
                 Gender = Gender.Woman,
-                TenantId = this._tenantId,
-                UserId = adminUser1.Id
+                TenantId = this._tenantId
             };
             items.Add(cust2);
 

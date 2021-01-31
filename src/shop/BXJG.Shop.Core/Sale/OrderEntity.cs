@@ -113,17 +113,17 @@ namespace BXJG.Shop.Sale
         /// <summary>
         /// 关联的顾客的Id
         /// </summary>
-        public long CustomerId { get; set; }
+        public long CustomerId { get; private set; }
         /// <summary>
         /// 关联的顾客的实体
         /// 注意顾客与User是一对一关联的
         /// </summary>
-        public virtual CustomerEntity Customer { get; set; }
+        public virtual CustomerEntity Customer { get; private set; }
         /// <summary>
         /// 订单号
         /// 系统里面的关联、处理尽量通过Id属性来，这里的订单号是业务上的概念
         /// </summary>
-        public string OrderNo { get; set; }
+        public string OrderNo { get; private set; }
         /// <summary>
         /// 下单时间
         /// 虽然父类已经有了CreateDate，但是类型为DateTime。况且CreateDate是表示这条信息的创建时间，OrderTime是下单业务发生的时间，这是两个不一样的概念
@@ -145,7 +145,7 @@ namespace BXJG.Shop.Sale
         /// 一个订单的中的多个商品价格相加的价格，但是商品列表可能随时在变动，所以这个属性只代表数据库中的商品小计字段的值
         /// 可以通过对应的方法来根据商品列表计算得到商品小计
         /// </summary>
-        public decimal MerchandiseSubtotal { get; set; }
+        public decimal MerchandiseSubtotal { get; private set; }
         ///// <summary>
         ///// 配送费
         ///// </summary>
@@ -253,11 +253,18 @@ namespace BXJG.Shop.Sale
         /// 乐观并发
         /// </summary>
         public byte[] RowVersion { get; private set; }
-
-        public OrderEntity()
+        private OrderEntity() { }
+        public OrderEntity(CustomerEntity customer, string orderNo)
         {
+            CustomerId = customer.Id;
+            Customer = customer;
+            OrderNo = orderNo;
             Status = OrderStatus.Created;
             PaymentStatus = Sale.PaymentStatus.WaitingForPayment;
+            //初始订单明细
+
+            //计算商品金额合计
+            CalculateMerchandiseSubtotal();
         }
 
         #region 方法
@@ -300,5 +307,12 @@ namespace BXJG.Shop.Sale
         }
         #endregion
 
+        /// <summary>
+        /// 计算商品小计
+        /// </summary>
+        private void CalculateMerchandiseSubtotal()
+        {
+            MerchandiseSubtotal = Items.Sum(c => c.Amount);
+        }
     }
 }

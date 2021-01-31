@@ -107,11 +107,8 @@ namespace BXJG.Shop.Sale
             //被购买的商品的状态是否正常
             //等等业务判断
 
-            var order = new OrderEntity
+            var order = new OrderEntity(customer, Guid.NewGuid().ToString("N"))
             {
-                Customer = customer,
-                CustomerId = customer.Id,
-                OrderNo = Guid.NewGuid().ToString("N"),//将来再考虑用个专门的组件生产简单、不重复的订单号
                 OrderTime = DateTimeOffset.Now,
                 //Status = OrderStatus.Created,
                 CustomerRemark = customerRemark,
@@ -150,7 +147,7 @@ namespace BXJG.Shop.Sale
                     TotalIntegral = item.CalculationIntegral()// Convert.ToInt32(item.Product.Integral * item.Quantity),
                 };
                 order.Items.Add(product);
-                order.MerchandiseSubtotal += product.Amount;
+                //order.MerchandiseSubtotal += product.Amount;
                 order.Integral += product.TotalIntegral;
             }
             #endregion

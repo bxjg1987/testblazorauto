@@ -102,14 +102,14 @@ namespace BXJG.Shop.Customer
             #endregion
 
             //映射不太好处理，手动来吧
-            var entity = new CustomerEntity
+            var entity = new CustomerEntity(user.Id)
             {
                 //Amount = input.Amount,
                 Birthday = input.Birthday,
-                Gender = input.Gender,
+                Gender = input.Gender
                 //Integral = input.Integral,
                 //User = user,//下面设置了userId就行了
-                UserId = user.Id
+              
             };
             await repository.InsertAsync(entity);
             CurrentUnitOfWork.SaveChanges();//保存后才能拿到新的会员信息自增Id
@@ -242,6 +242,7 @@ namespace BXJG.Shop.Customer
         {
             var dto = ObjectMapper.Map<CustomerDto>(c);
             ObjectMapper.Map(u, dto);
+            dto.Id = c.Id;
             return dto;
         }
         protected virtual async Task<CustomerDto> GetDtoAsync(long id)
