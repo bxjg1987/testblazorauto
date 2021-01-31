@@ -29,6 +29,7 @@ namespace BXJG.Shop.Sale
     /// </summary>
     public class OrderItemEntity : Entity<long>
     {
+        public event Action<OrderItemEntity> QuitityChanged;
         /// <summary>
         /// 关联的订单Id
         /// </summary>

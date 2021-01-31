@@ -16,92 +16,6 @@ using ZLJ.BaseInfo.Administrative;
 
 namespace BXJG.Shop.Sale
 {
-    /*
-     * 同商品上架信息一样，这里会详细记录订单的设计思考过程
-     * --------------------------------------------------------------------
-     * 
-     * >>>>>>>>>>>>>>>统一说明：凡涉及到需要记录的，都放到订单跟踪里（下面有说明）比如各种状态的变化
-     * 
-     * 订单基本信息
-     *      下单用户：也就是哪个人下的单
-     *      下单时间：系统当前时间，abp里好像有个Clock类，因为服务器时间未必准确 不过简单起见就先用服务器时间吧
-     *      订单号：简单的话就guid，nopcommerce就是用的guid，未来可能考虑使用订单生产规则
-     *      状态：参考dtcms和nopcommonerce     
-     *              已生成：用户购买了商品时创建的订单 对应nopcommerce中dpending 待定的意思，用户可能随时放弃这个单子
-     *              进行中：已付款、退款申请中、各种处理中的状态...
-     *              已取消：无论因为什么原因导致交易未完成都使用此状态。某些系统会细分 未付款之前取消叫取消。付款后申请退款 退货 使用关闭
-     *              已完成：正常交易完成
-     *      注意 还有物流状态、付款状态，下面会说。有一种思路是用数字表示所有的状态，比如5表示 订单开始 已付款 但是在申请退款 且货品已被拦截 
-     *      等多个状态组合成一个订单状态，这太复杂了，还是分开的好
-     *      
-     *      订单备注：后台管理人员为订单设置的备注
-     *      用户备注：用户下单是写的备注
-     *      
-     * 支付
-     *      费用计算的主要思路是 
-     *          各种费用相加 = 订单金额  
-     *          订单金额减去各种优惠 = 付款金额
-     *          
-     *      商品小计
-     *      运费
-     *      是否开具发票
-     *      发票税金
-     *      订单金额
-     *      积分
-     *      支付方式：微信 支付宝 现金 网银
-     *      付款金额
-     *      支付状态：
-     *          参考nopcommerce https://admin-demo.nopcommerce.com/Admin/Order/Edit/4
-     *          Authorized状态对应：用户申请退款
-     *          Void我方拒绝退款
-     *         
-     *          待支付：用户刚下的单，未付款，此时后台
-     *          已支付：
-     *          申请退款：用户申请退款
-     *          已退款：
-     *          部分退款：
-     *              部分退款的金额记录放在订单跟踪里，因为可能多次部分退款(nopm的方式)，部分退款时也可以再次变为已付款，多次部分退款总额不得操作订单总额
-     *      
-     *          
-     * 配送
-     *      收货人
-     *      电话
-     *      省市区县
-     *      详细地址
-     *      邮编
-     *      配送方式
-     *      物流单号:
-     *      物流状态：
-     *          无需运送
-     *          未发货
-     *          已发货
-     *          已拒收
-     *          已签收
-     *      
-     *      将来可能做分多个物流单发送
-     *      
-     *      
-     * 产品信息
-     *      产品图片
-     *      标题title
-     *      销售价
-     *      优惠价
-     *      数量
-     *      金额
-     *      积分
-     * 
-     * 如只用CustomerId关联顾客，则可以省去TUser这个泛型参数，外键配置可以在Shop.EFCoe中通过API方式配置映射， 将来查询时使用join
-     * 因为商城系统中的订单是一个非常核心的概念，一旦引入泛型 则与此关联的很多概念都必须也是泛型，所以会很麻烦
-     * 而订单中关联的顾客又特别重要，所以使用泛型的方式确实会提供很多便利
-     * 综合来考虑 使用泛型虽然会让设计变得麻烦，但是大量的业务逻辑处理中会变得简单
-     * 
-     * 从订单的设计开始，后续所以模型的ef映射都移动到BXJG.EFCore中
-     * 
-     * ---------------------------------------------------------------------------------------
-     * 2020-4-16 变形精怪
-     * 不要设置默认值，因为从数据库查询时会自动赋值，所以默认值因为会造成多一次赋值
-     * 谨慎属性赋值时做更多处理，比如添加明细 自动更新 金额。因为从数据库查询时 可能并不加载明细，而金额是直接从数据库取值
-     */
     /// <summary>
     /// 订单实体类
     /// </summary>
@@ -116,7 +30,6 @@ namespace BXJG.Shop.Sale
         public long CustomerId { get; private set; }
         /// <summary>
         /// 关联的顾客的实体
-        /// 注意顾客与User是一对一关联的
         /// </summary>
         public virtual CustomerEntity Customer { get; private set; }
         /// <summary>
@@ -127,6 +40,8 @@ namespace BXJG.Shop.Sale
         /// <summary>
         /// 下单时间
         /// 虽然父类已经有了CreateDate，但是类型为DateTime。况且CreateDate是表示这条信息的创建时间，OrderTime是下单业务发生的时间，这是两个不一样的概念
+        /// 只是现在感觉不重要，所以可读写，但后期可能调整
+        /// 最好用abp的Clock
         /// </summary>
         public DateTimeOffset OrderTime { get; set; }
         /// <summary>
@@ -137,9 +52,14 @@ namespace BXJG.Shop.Sale
         /// 顾客下单时填写的备注
         /// </summary>
         public string CustomerRemark { get; set; }
-        #endregion
-
-        #region 支付信息
+        /// <summary>
+        /// 订单商品明细
+        /// </summary>
+        private List<OrderItemEntity> items;
+        /// <summary>
+        /// 订单商品明细
+        /// </summary>
+        public virtual IReadOnlyList<OrderItemEntity> Items => items.AsReadOnly();
         /// <summary>
         /// 商品小计
         /// 一个订单的中的多个商品价格相加的价格，但是商品列表可能随时在变动，所以这个属性只代表数据库中的商品小计字段的值
@@ -171,11 +91,21 @@ namespace BXJG.Shop.Sale
         /// <summary>
         /// 可得积分
         /// </summary>
-        public long Integral { get; set; }
+        public long Integral { get; private set; }
+        /// <summary>
+        /// 乐观并发
+        /// </summary>
+        public byte[] RowVersion { get; private set; }
+        #endregion
+
+        #region 支付信息
+        /*
+         * 订单支付时一并设置支付相关属性，不允许单个修改
+         */
         /// <summary>
         /// 支付方式
         /// </summary>
-        public virtual GeneralTreeEntity PaymentMethod { get; set; }
+        public virtual GeneralTreeEntity PaymentMethod { get; private set; }
         /// <summary>
         /// 支付方式Id
         /// 未支付时 就不存在支付方式，因此可空
@@ -185,7 +115,7 @@ namespace BXJG.Shop.Sale
         /// 付款金额
         /// 顾客最终支付金额
         /// </summary>
-        public decimal PaymentAmount { get; set; }
+        public decimal PaymentAmount { get; private set; }
         /// <summary>
         /// 支付状态
         /// 某些场景下，并不是顾客下单就可以付款，而是需要后台审核后才能付款
@@ -195,27 +125,34 @@ namespace BXJG.Shop.Sale
         #endregion
 
         #region 物流配送
+        /*
+         * 配送信息跟订单当前的各种状态有关，不允许胡乱修改
+         * 比如订单已发货，要修改收货人信息时需要做别的业务处理
+         * 
+         * 单独提供修改收货人信息的方法
+         * 单独提供配送的方法
+         */
         /// <summary>
         /// 送货地址所属区域
         /// </summary>
-        public virtual AdministrativeEntity Area { get; set; }
+        public virtual AdministrativeEntity Area { get; private set; }
         /// <summary>
         /// 送货地址所属区域Id
         /// </summary>
-        public long AreaId { get; set; }
+        public long AreaId { get; private set; }
         /// <summary>
         /// 收货人
         /// 不一定就是下单人
         /// </summary>
-        public string Consignee { get; set; }
+        public string Consignee { get; private set; }
         /// <summary>
         /// 收货人电话
         /// </summary>
-        public string ConsigneePhoneNumber { get; set; }
+        public string ConsigneePhoneNumber { get; private set; }
         /// <summary>
         /// 收货地址
         /// </summary>
-        public string ReceivingAddress { get; set; }
+        public string ReceivingAddress { get; private set; }
         ///// <summary>
         ///// 已弃用，京东没有这个字段
         ///// </summary>
@@ -223,16 +160,16 @@ namespace BXJG.Shop.Sale
         /// <summary>
         /// 配送方式
         /// </summary>
-        public virtual GeneralTreeEntity DistributionMethod { get; set; }
+        public virtual GeneralTreeEntity DistributionMethod { get; private set; }
         /// <summary>
         /// 配送方式
         /// 刚创建订单时配送方式尚未确定
         /// </summary>
-        public long? DistributionMethodId { get; set; }
+        public long? DistributionMethodId { get; private set; }
         /// <summary>
         /// 物流单号
         /// </summary>
-        public string LogisticsNumber { get; set; }
+        public string LogisticsNumber { get; private set; }
         /// <summary>
         /// 物流状态
         /// 刚创建订单时没有物流状态，因此加个?
@@ -240,32 +177,28 @@ namespace BXJG.Shop.Sale
         public LogisticsStatus? LogisticsStatus { get; private set; }
         #endregion
 
-        #region 商品列表
-        /// <summary>
-        /// 订单商品明细
-        /// </summary>
-        public virtual List<OrderItemEntity> Items { get; set; }
-        #endregion
-
-        //订单跟踪
-
-        /// <summary>
-        /// 乐观并发
-        /// </summary>
-        public byte[] RowVersion { get; private set; }
+        #region 构造函数
         private OrderEntity() { }
-        public OrderEntity(CustomerEntity customer, string orderNo)
+        public OrderEntity(CustomerEntity customer, string orderNo, IList<OrderItemEntity> items = default)
         {
             CustomerId = customer.Id;
             Customer = customer;
+
             OrderNo = orderNo;
             Status = OrderStatus.Created;
-            PaymentStatus = Sale.PaymentStatus.WaitingForPayment;
-            //初始订单明细
 
+            //PaymentStatus = Sale.PaymentStatus.WaitingForPayment;
+            //初始订单明细
+            if (items == null)
+                this.items = new List<OrderItemEntity>();
+            else
+                this.items = items.ToList();
+            RegisterItemsEvent();
+            //注册明细事件
             //计算商品金额合计
             CalculateMerchandiseSubtotal();
         }
+        #endregion
 
         #region 方法
         /// <summary>
@@ -305,14 +238,34 @@ namespace BXJG.Shop.Sale
             Status = OrderStatus.Completed;
             DomainEvents.Add(new OrderSignedEventData(this));
         }
-        #endregion
-
         /// <summary>
-        /// 计算商品小计
+        /// 注册订单明细的事件
         /// </summary>
-        private void CalculateMerchandiseSubtotal()
+        public void RegisterItemsEvent()
+        {
+            foreach (var item in items)
+            {
+                RegisterItemEvent(item);
+            }
+        }
+        /// <summary>
+        /// 注册订单明细的事件
+        /// </summary>
+        /// <param name="item"></param>
+        private void RegisterItemEvent(OrderItemEntity item)
+        {
+            item.QuitityChanged -= Item_QuitityChanged;
+            item.QuitityChanged += Item_QuitityChanged;
+        }
+        /// <summary>
+        /// 订单明细数量变化时的事件处理
+        /// </summary>
+        /// <param name="arg1"></param>
+        private void Item_QuitityChanged(OrderItemEntity arg1)
         {
             MerchandiseSubtotal = Items.Sum(c => c.Amount);
+            Integral = Items.Sum(c => c.TotalIntegral);
         }
+        #endregion
     }
 }
