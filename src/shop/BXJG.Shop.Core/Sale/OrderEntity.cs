@@ -28,10 +28,11 @@ namespace BXJG.Shop.Sale
         /// 关联的顾客的Id
         /// </summary>
         public long CustomerId { get; private set; }
-        /// <summary>
-        /// 关联的顾客的实体
-        /// </summary>
-        public virtual CustomerEntity Customer { get; private set; }
+        ///// <summary>
+        ///// 关联的顾客的实体
+        /////// 按abp vNext建议，不要在一个聚合中关联另一个聚合根的东东，只关联外键就好了
+        ///// </summary>
+        //public virtual CustomerEntity Customer { get; private set; }
         /// <summary>
         /// 订单号
         /// 系统里面的关联、处理尽量通过Id属性来，这里的订单号是业务上的概念
@@ -40,10 +41,9 @@ namespace BXJG.Shop.Sale
         /// <summary>
         /// 下单时间
         /// 虽然父类已经有了CreateDate，但是类型为DateTime。况且CreateDate是表示这条信息的创建时间，OrderTime是下单业务发生的时间，这是两个不一样的概念
-        /// 只是现在感觉不重要，所以可读写，但后期可能调整
         /// 最好用abp的Clock
         /// </summary>
-        public DateTimeOffset OrderTime { get; set; }
+        public DateTimeOffset OrderTime { get; private set; }
         /// <summary>
         /// 订单状态
         /// </summary>
@@ -102,10 +102,11 @@ namespace BXJG.Shop.Sale
         /*
          * 订单支付时一并设置支付相关属性，不允许单个修改
          */
-        /// <summary>
-        /// 支付方式
-        /// </summary>
-        public virtual GeneralTreeEntity PaymentMethod { get; private set; }
+        ///// <summary>
+        ///// 支付方式
+        ///// 它是另一个领域根，不用导航属性关联
+        ///// </summary>
+        //public virtual GeneralTreeEntity PaymentMethod { get; private set; }
         /// <summary>
         /// 支付方式Id
         /// 未支付时 就不存在支付方式，因此可空
@@ -179,15 +180,18 @@ namespace BXJG.Shop.Sale
 
         #region 构造函数
         private OrderEntity() { }
-        public OrderEntity(CustomerEntity customer, string orderNo, IList<OrderItemEntity> items = default)
+        public OrderEntity(long customerId,
+                           string orderNo,
+                           DateTimeOffset orderTime,
+                           string customerRemark,
+                           IList<OrderItemEntity> items = default)
         {
-            CustomerId = customer.Id;
-            Customer = customer;
+            CustomerId = customerId;
 
             OrderNo = orderNo;
             Status = OrderStatus.Created;
-
-            //PaymentStatus = Sale.PaymentStatus.WaitingForPayment;
+            OrderTime = orderTime;
+            CustomerRemark = customerRemark;
             //初始订单明细
             if (items == null)
                 this.items = new List<OrderItemEntity>();
@@ -198,6 +202,7 @@ namespace BXJG.Shop.Sale
             //计算商品金额合计
             CalculateMerchandiseSubtotal();
         }
+
         #endregion
 
         #region 方法
@@ -209,8 +214,9 @@ namespace BXJG.Shop.Sale
         /// <returns></returns>
         public void Pay(long payMethod)
         {
-            PaymentStatus = Sale.PaymentStatus.Paid;
             PaymentMethodId = payMethod;
+            PaymentAmount = MerchandiseSubtotal;
+            PaymentStatus = Sale.PaymentStatus.Paid;
             Status = OrderStatus.Processing;
             LogisticsStatus = Sale.LogisticsStatus.WaitShip;
             DomainEvents.Add(new OrderPaidEventData(this));
@@ -262,6 +268,10 @@ namespace BXJG.Shop.Sale
         /// </summary>
         /// <param name="arg1"></param>
         private void Item_QuitityChanged(OrderItemEntity arg1)
+        {
+            CalculateMerchandiseSubtotal();
+        }
+        private void CalculateMerchandiseSubtotal()
         {
             MerchandiseSubtotal = Items.Sum(c => c.Amount);
             Integral = Items.Sum(c => c.TotalIntegral);
