@@ -1,7 +1,10 @@
-﻿using Abp.Authorization.Users;
+﻿using Abp;
+using Abp.Authorization.Users;
 using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
 using Abp.Events.Bus;
+using Abp.Extensions;
+using Abp.UI;
 using BXJG.Common;
 using BXJG.GeneralTree;
 using BXJG.Shop.Catalogue;
@@ -133,10 +136,10 @@ namespace BXJG.Shop.Sale
          * 单独提供修改收货人信息的方法
          * 单独提供配送的方法
          */
-        /// <summary>
-        /// 送货地址所属区域
-        /// </summary>
-        public virtual AdministrativeEntity Area { get; private set; }
+        ///// <summary>
+        ///// 送货地址所属区域，另一个聚合中的类，不要直接使用导航属性
+        ///// </summary>
+        //public virtual AdministrativeEntity Area { get; private set; }
         /// <summary>
         /// 送货地址所属区域Id
         /// </summary>
@@ -158,10 +161,10 @@ namespace BXJG.Shop.Sale
         ///// 已弃用，京东没有这个字段
         ///// </summary>
         //public string ZipCode { get; set; }
-        /// <summary>
-        /// 配送方式
-        /// </summary>
-        public virtual GeneralTreeEntity DistributionMethod { get; private set; }
+        ///// <summary>
+        ///// 配送方式，另一个聚合中的类，不要直接使用导航属性
+        ///// </summary>
+        //public virtual GeneralTreeEntity DistributionMethod { get; private set; }
         /// <summary>
         /// 配送方式
         /// 刚创建订单时配送方式尚未确定
@@ -179,30 +182,42 @@ namespace BXJG.Shop.Sale
         #endregion
 
         #region 构造函数
+        /// <summary>
+        /// 此构造函数给efcore用的
+        /// </summary>
         private OrderEntity() { }
+        /// <summary>
+        /// 实例化订单
+        /// </summary>
+        /// <param name="customerId">顾客id</param>
+        /// <param name="orderNo">单号</param>
+        /// <param name="orderTime">下单时间</param>
+        /// <param name="areaId">收货人所属区域id</param>
+        /// <param name="consignee">收货人姓名</param>
+        /// <param name="consigneePhoneNumber">收货人联系电话</param>
+        /// <param name="receivingAddress">收货地址</param>
+        /// <param name="items">商品明细</param>
+        /// <param name="customerRemark">顾客下单时的备注</param>
         public OrderEntity(long customerId,
                            string orderNo,
                            DateTimeOffset orderTime,
-                           string customerRemark,
-                           IList<OrderItemEntity> items = default)
+                           long areaId,
+                           string consignee,
+                           string consigneePhoneNumber,
+                           string receivingAddress,
+                           IList<OrderItemEntity> items,
+                           string customerRemark = default)
         {
-            CustomerId = customerId;
-
-            OrderNo = orderNo;
-            Status = OrderStatus.Created;
-            OrderTime = orderTime;
-            CustomerRemark = customerRemark;
-            //初始订单明细
-            if (items == null)
-                this.items = new List<OrderItemEntity>();
-            else
-                this.items = items.ToList();
+            CustomerId = customerId <= 0 ? throw new ArgumentOutOfRangeException(nameof(customerId)) : customerId;
+            OrderNo = Check.NotNullOrWhiteSpace(orderNo, nameof(orderNo));
+            OrderTime = orderTime == default ? throw new ArgumentException(nameof(orderTime)) : orderTime;
+            UpdateLogisticsInfo(areaId, consignee, consigneePhoneNumber, receivingAddress);
+            this.items = items == null || items.Count < 1 ? throw new ArgumentNullException(nameof(items)) : items.ToList();
             RegisterItemsEvent();
-            //注册明细事件
-            //计算商品金额合计
             CalculateMerchandiseSubtotal();
+            CustomerRemark = customerRemark;
+            Status = OrderStatus.Created;
         }
-
         #endregion
 
         #region 方法
@@ -210,16 +225,45 @@ namespace BXJG.Shop.Sale
         /// 支付
         /// 目前只考虑全额支付
         /// </summary>
-        /// <param name="payMethod">支付方式Id</param>
+        /// <param name="payMethodId">支付方式Id</param>
         /// <returns></returns>
-        public void Pay(long payMethod)
+        public void Pay(long payMethodId)
         {
-            PaymentMethodId = payMethod;
+            //简单的业务判断，未作深入思考
+            if (Status != OrderStatus.Created)
+            {
+                throw new UserFriendlyException("此状态的订单不允许支付操作");
+            }
+            PaymentMethodId = payMethodId;
             PaymentAmount = MerchandiseSubtotal;
             PaymentStatus = Sale.PaymentStatus.Paid;
             Status = OrderStatus.Processing;
             LogisticsStatus = Sale.LogisticsStatus.WaitShip;
             DomainEvents.Add(new OrderPaidEventData(this));
+        }
+        /// <summary>
+        /// 设置物流信息
+        /// 设置物流信息时使用判断物流状态的，这是业务规则，因此单独提供物流状态修改的方法
+        /// </summary>
+        /// <param name="areaId">收货人所属区域id</param>
+        /// <param name="consignee">收货人姓名</param>
+        /// <param name="consigneePhoneNumber">收货人联系电话</param>
+        /// <param name="receivingAddress">收货地址</param>
+        public void UpdateLogisticsInfo(long areaId, string consignee, string consigneePhoneNumber, string receivingAddress)
+        {
+            //真实业务中肯定有已发货后修改收货人信息的情况，那时应该允许修改并触发相应事件，目前未实现这个规则，将来再重构
+            //按ddd的方式应该抛出对应的异常类，这里偷个懒，业务逻辑异常统一抛出UserFriendlyException
+            if (LogisticsStatus.HasValue && (int)LogisticsStatus.Value > 0)
+            {
+                throw new UserFriendlyException("当前物流状态不允许修改收货人信息");
+            }
+
+            AreaId = areaId <= 0 ? throw new ArgumentOutOfRangeException(nameof(areaId)) : areaId;
+            Consignee = Check.NotNullOrWhiteSpace(consignee, nameof(consignee));
+            ConsigneePhoneNumber = Check.NotNullOrWhiteSpace(consigneePhoneNumber, nameof(consigneePhoneNumber));
+            ReceivingAddress = Check.NotNullOrWhiteSpace(receivingAddress, nameof(receivingAddress));
+
+            //触发收货人信息变更事件
         }
         /// <summary>
         /// 发货
@@ -229,6 +273,12 @@ namespace BXJG.Shop.Sale
         /// <returns></returns>
         public void ShipmentAsync(long shipmentMethod, string logisticsNumber = default)
         {
+            //简单的业务判断，未作深入思考
+            if (Status != OrderStatus.Processing)
+            {
+                throw new UserFriendlyException("未付款，不允许发货！");
+            }
+
             DistributionMethodId = shipmentMethod;
             LogisticsStatus = Sale.LogisticsStatus.Shipped;
             LogisticsNumber = logisticsNumber;
@@ -240,6 +290,11 @@ namespace BXJG.Shop.Sale
         /// <returns></returns>
         public void SignAsync()
         {
+            //简单的业务判断，未作深入思考
+            if (Status != OrderStatus.Processing || LogisticsStatus != Sale.LogisticsStatus.Shipped)
+            {
+                throw new UserFriendlyException("此状态的订单不允许做签收处理！");
+            }
             LogisticsStatus = Sale.LogisticsStatus.Signed;
             Status = OrderStatus.Completed;
             DomainEvents.Add(new OrderSignedEventData(this));
@@ -270,7 +325,11 @@ namespace BXJG.Shop.Sale
         private void Item_QuitityChanged(OrderItemEntity arg1)
         {
             CalculateMerchandiseSubtotal();
+            DomainEvents.Add(new OrderItemQuantityChanged(arg1));
         }
+        /// <summary>
+        /// 计算商品小计、积分总额
+        /// </summary>
         private void CalculateMerchandiseSubtotal()
         {
             MerchandiseSubtotal = Items.Sum(c => c.Amount);

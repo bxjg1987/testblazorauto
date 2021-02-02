@@ -17,11 +17,19 @@ namespace BXJG.Shop.Sale
     /// </summary>
     /// <typeparam name="TUser"></typeparam>
     /// <typeparam name="TArea"></typeparam>
-    public class OrderPaidEventHandler : IEventHandler<OrderPaidEventData>
+    public class OrderPaidEventHandler : IAsyncEventHandler<OrderPaidEventData>
     {
-        public void HandleEvent(OrderPaidEventData eventData)
+        private readonly IRepository<CustomerEntity, long> customerRepository;
+
+        public OrderPaidEventHandler(IRepository<CustomerEntity, long> customerRepository)
         {
-            eventData.Entity.Customer.ChangeIntegral(eventData.Entity.Integral);
+            this.customerRepository = customerRepository;
+        }
+
+        public async Task HandleEventAsync(OrderPaidEventData eventData)
+        {
+            var cust = await customerRepository.GetAsync(eventData.Entity.CustomerId);
+            cust.ChangeIntegral(eventData.Entity.Integral);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Abp.Authorization.Users;
 using Abp.Domain.Entities;
 using Abp.Events.Bus;
+using Abp.UI;
 using BXJG.Common;
 using BXJG.GeneralTree;
 using BXJG.Shop.Catalogue;
@@ -85,6 +86,12 @@ namespace BXJG.Shop.Sale
             get { return quantity; }
             set
             {
+                //简单的业务判断，未作深入思考
+                //业务明细始终可以被外界访问，也可能被领域服务调整，因此事件和业务判断应该写在此属性内部
+                if (Order.Status != OrderStatus.Created)
+                {
+                    throw new UserFriendlyException("此状态的订单不允许调整明细数量");
+                }
                 var temp = quantity;
                 quantity = value;
                 if (temp == value)

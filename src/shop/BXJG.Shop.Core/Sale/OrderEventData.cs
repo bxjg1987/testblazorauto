@@ -38,4 +38,13 @@ namespace BXJG.Shop.Sale
         public OrderSignedEventData(OrderEntity order) : base(order)
         { }
     }
+    /// <summary>
+    /// 订单明细数量变更时的事件
+    /// </summary>
+    public class OrderItemQuantityChanged : EntityEventData<OrderItemEntity>
+    {
+        public OrderItemQuantityChanged(OrderItemEntity entity) : base(entity)
+        {
+        }
+    }
 }
