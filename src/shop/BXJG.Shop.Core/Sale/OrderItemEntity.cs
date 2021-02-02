@@ -1,4 +1,5 @@
-﻿using Abp.Authorization.Users;
+﻿using Abp;
+using Abp.Authorization.Users;
 using Abp.Domain.Entities;
 using Abp.Events.Bus;
 using Abp.UI;
@@ -88,9 +89,9 @@ namespace BXJG.Shop.Sale
             {
                 //简单的业务判断，未作深入思考
                 //业务明细始终可以被外界访问，也可能被领域服务调整，因此事件和业务判断应该写在此属性内部
-                if (Order.Status != OrderStatus.Created)
+                if (Order.PaymentStatus != PaymentStatus.WaitingForPayment)
                 {
-                    throw new UserFriendlyException("此状态的订单不允许调整明细数量");
+                    throw new UserFriendlyException("未付款的订单才允许调整明细数量");
                 }
                 var temp = quantity;
                 quantity = value;
@@ -121,9 +122,22 @@ namespace BXJG.Shop.Sale
         /// https://docs.microsoft.com/zh-cn/ef/core/modeling/concurrency?tabs=data-annotations
         /// </summary>
         public byte[] RowVersion { get; private set; }
-
+        /// <summary>
+        /// 此构造函数给efcore用的
+        /// </summary>
         private OrderItemEntity() { }
-        //如果automapper可以沟通过构造函数映射，这里的order空检测将带来问题，此时建议手动将dto转换为实体。
+        /// <summary>
+        /// 实例化订单明细
+        /// 如果automapper可以沟通过构造函数映射，这里的order空检测将带来问题，此时建议手动将dto转换为实体。
+        /// </summary>
+        /// <param name="order">关联的订单</param>
+        /// <param name="productId">关联的商品Id</param>
+        /// <param name="skuId">关联的skuId，可空</param>
+        /// <param name="title">商品标题，必填</param>
+        /// <param name="image">商品图片，可空</param>
+        /// <param name="price">单价，必须大于等于0</param>
+        /// <param name="integral">可得积分，必须大于等于0</param>
+        /// <param name="quantity">数量，比如大于0</param>
         public OrderItemEntity(OrderEntity order,
                                long productId,
                                long? skuId,
@@ -134,14 +148,14 @@ namespace BXJG.Shop.Sale
                                decimal quantity)
         {
             Order = order ?? throw new ArgumentNullException(nameof(order));
-            Title = title ?? throw new ArgumentNullException(nameof(title));
-            Image = image ?? throw new ArgumentNullException(nameof(image));
+            Title = Check.NotNullOrWhiteSpace(title, nameof(title));
+            Image = image;
             OrderId = order.Id;
-            ProductId = productId;
+            ProductId = productId <= 0 ? throw new ArgumentException(nameof(productId)) : productId;
             SkuId = skuId;
-            Price = price;
-            Integral = integral;
-            Quantity = quantity;//这个一定要单价、积分之后，以便触发计算
+            Price = price < 0 ? throw new ArgumentException(nameof(price)) : price;
+            Integral = integral < 0 ? throw new ArgumentException(nameof(integral)) : integral;
+            Quantity = quantity <= 0 ? throw new ArgumentException(nameof(quantity)) : quantity;//这个一定要单价、积分之后，以便触发计算
         }
     }
 }

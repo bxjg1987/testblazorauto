@@ -47,49 +47,49 @@ namespace BXJG.Shop.Sale
             this.Sku = sku;
             this.Quantity = quantity;
         }
-        /// <summary>
-        /// 计算售价金额
-        /// 定义成方法而不是属性，这样调用方明确知道此逻辑是每次计算的
-        /// </summary>
-        /// <returns></returns>
-        public decimal CalculationAmount()
-        {
-            decimal price;
-            if (Sku != null)
-                price = Sku.Price;
-            else
-                price = Product.Price;
+        ///// <summary>
+        ///// 计算售价金额
+        ///// 定义成方法而不是属性，这样调用方明确知道此逻辑是每次计算的
+        ///// </summary>
+        ///// <returns></returns>
+        //public decimal CalculationAmount()
+        //{
+        //    decimal price;
+        //    if (Sku != null)
+        //        price = Sku.Price;
+        //    else
+        //        price = Product.Price;
 
-            return price * Quantity;
-        }
-        /// <summary>
-        /// 计算原价金额
-        /// 定义成方法而不是属性，这样调用方明确知道此逻辑是每次计算的
-        /// </summary>
-        /// <returns></returns>
-        public decimal CalculationOldAmount()
-        {
-            decimal price;
-            if (Sku != null)
-                price = Sku.OldPrice;
-            else
-                price = Product.OldPrice;
+        //    return price * Quantity;
+        //}
+        ///// <summary>
+        ///// 计算原价金额
+        ///// 定义成方法而不是属性，这样调用方明确知道此逻辑是每次计算的
+        ///// </summary>
+        ///// <returns></returns>
+        //public decimal CalculationOldAmount()
+        //{
+        //    decimal price;
+        //    if (Sku != null)
+        //        price = Sku.OldPrice;
+        //    else
+        //        price = Product.OldPrice;
 
-            return price * Quantity;
-        }
-        /// <summary>
-        /// 计算积分
-        /// </summary>
-        /// <returns></returns>
-        public int CalculationIntegral()
-        {
-            int price;
-            if (Sku != null)
-                price = Sku.Integral;
-            else
-                price = Product.Integral;
+        //    return price * Quantity;
+        //}
+        ///// <summary>
+        ///// 计算积分
+        ///// </summary>
+        ///// <returns></returns>
+        //public int CalculationIntegral()
+        //{
+        //    int price;
+        //    if (Sku != null)
+        //        price = Sku.Integral;
+        //    else
+        //        price = Product.Integral;
 
-            return Convert.ToInt32(price * Quantity);
-        }
+        //    return Convert.ToInt32(price * Quantity);
+        //}
     }
 }
