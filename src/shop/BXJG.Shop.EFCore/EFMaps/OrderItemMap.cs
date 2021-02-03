@@ -18,8 +18,8 @@ namespace BXJG.Shop.EFMaps
         {
             builder.ToTable("BXJGShopOrderItem");
             builder.Property(c => c.RowVersion).IsRowVersion();
-            builder.HasOne(c => c.Product).WithMany().OnDelete(DeleteBehavior.Restrict);//去掉级联删除
-            builder.HasOne(c => c.Sku).WithMany().OnDelete(DeleteBehavior.Restrict);
+            //builder.HasOne(c => c.Product).WithMany().OnDelete(DeleteBehavior.Restrict);//去掉级联删除
+            //builder.HasOne(c => c.Sku).WithMany().OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

@@ -96,6 +96,7 @@ namespace BXJG.Shop
 
             #region 后台管理员+订单
             CreateMap<OrderEntity, OrderDto>();
+            CreateMap<OrderItemEntity, OrderItemDto>();
             #endregion
 
             #region 后台管理对顾客信息的管理时使用的dto映射

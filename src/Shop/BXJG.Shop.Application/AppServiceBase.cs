@@ -17,7 +17,6 @@ namespace BXJG.Shop
     /// </summary>
     public abstract class AppServiceBase : ApplicationService
     {
-        [Obsolete("abp为了使用ef的强大功能，仓储实现得并不纯粹，所以我们决定直接引入ef的包，具体参考：https://gitee.com/bxjg1987/abp/wikis/%E5%85%B3%E4%BA%8E%E6%95%B0%E6%8D%AE%E8%AE%BF%E9%97%AE?sort_id=3479400")]
         public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }
         protected AppServiceBase()
         {

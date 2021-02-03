@@ -20,6 +20,7 @@ using Abp.Dependency;
 using BXJG.Common;
 using ZLJ.BaseInfo.Administrative;
 using System.Linq;
+using Abp.Timing;
 
 namespace BXJG.Shop.Sale
 {
@@ -107,51 +108,34 @@ namespace BXJG.Shop.Sale
             //被购买的商品的状态是否正常
             //等等业务判断
 
-            var order = new OrderEntity(customer, Guid.NewGuid().ToString("N"))
-            {
-                OrderTime = DateTimeOffset.Now,
-                //Status = OrderStatus.Created,
-                CustomerRemark = customerRemark,
-                //暂时忽略开票
-                //InvoiceType = invoiceType,
-                //InvoiceTitle = invoiceTitle,
-                //TaxId = taxId,
-                //PaymentStatus = PaymentStatus.WaitingForPayment,
-                Area = area,
-                AreaId = area.Id,
-                Consignee = consignee,
-                ConsigneePhoneNumber = consigneePhoneNumber,
-                ReceivingAddress = receivingAddress
-            };
+            var order = new OrderEntity(customer.Id, Guid.NewGuid().ToString("N"), Clock.Now, area.Id, consignee, consigneePhoneNumber, receivingAddress, customerRemark);
             // order.Init();
             #region 订单明细
             foreach (var item in items)
             {
-                var product = new OrderItemEntity
+                decimal price;
+                int integral;
+                if (item.Sku != null)
                 {
-                    Order = order,
-
-                    Product = item.Product,
-                    ProductId = item.Product.Id,
-
-                    Sku = item.Sku,
-                    SkuId = item.Sku.Id,
-
-                    Title = item.Product.Title,
-                    Image = item.Product.GetImages()?.First().Key,
-
-                    Integral = item.Sku != null ? item.Sku.Integral : item.Product.Integral,
-                    Price = item.Sku != null ? item.Sku.Price : item.Product.Price,
-                    Quantity = item.Quantity,
-                    Amount = item.CalculationAmount(),// item.Product.Price * item.Quantity,
-                    TotalIntegral = item.CalculationIntegral()// Convert.ToInt32(item.Product.Integral * item.Quantity),
-                };
-                order.Items.Add(product);
-                //order.MerchandiseSubtotal += product.Amount;
-                order.Integral += product.TotalIntegral;
+                    price = item.Sku.Price;
+                    integral = item.Sku.Integral;
+                }
+                else
+                {
+                    price = item.Sku.Price;
+                    integral = item.Sku.Integral;
+                }
+                var product = new OrderItemEntity(order,
+                                                  item.Product.Id,
+                                                  item.Sku.Id,
+                                                  item.Product.Title,
+                                                  item.Product.GetImages().First().Key,
+                                                  price,
+                                                  integral,
+                                                  item.Quantity);
+                order.AddItem(product);
             }
             #endregion
-            order.PaymentAmount = order.MerchandiseSubtotal;//+各种费用-各种优惠
             //插入之前触发一个事件，允许事件处理程序修改或阻止订单创建
             await repository.InsertAsync(order);
             //即使调用了，后续事件处理异常了一样会回滚，参考 https://aspnetboilerplate.com/Pages/Documents/Unit-Of-Work#savechanges
@@ -160,7 +144,8 @@ namespace BXJG.Shop.Sale
             await CurrentUnitOfWork.SaveChangesAsync();
             //使用事件总线 减小业务之间的相互依赖 参考CustomerManager中对订单创建事件的处理
             //好像这个abp自动触发了 https://aspnetboilerplate.com/Pages/Documents/EventBus-Domain-Events#entity-changes
-            //await EventBus.TriggerAsync(new EntityCreatedEventData<OrderEntity>(order));//
+            //await EventBus.TriggerAsync(new EntityCreatedEventData<OrderEntity>(order));
+            //经过测试默认的事件中Creating事件才会在事务中。
             return order;
         }
         ///// <summary>

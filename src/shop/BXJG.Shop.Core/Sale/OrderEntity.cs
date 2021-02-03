@@ -62,7 +62,7 @@ namespace BXJG.Shop.Sale
         /// <summary>
         /// 订单商品明细
         /// </summary>
-        public virtual IReadOnlyList<OrderItemEntity> Items => items.AsReadOnly();
+        public virtual IReadOnlyList<OrderItemEntity> Items => items == default ? new List<OrderItemEntity>() : items.AsReadOnly();
         /// <summary>
         /// 商品小计
         /// 一个订单的中的多个商品价格相加的价格，但是商品列表可能随时在变动，所以这个属性只代表数据库中的商品小计字段的值
@@ -205,14 +205,21 @@ namespace BXJG.Shop.Sale
                            string consignee,
                            string consigneePhoneNumber,
                            string receivingAddress,
-                           IList<OrderItemEntity> items,
-                           string customerRemark = default)
+                           string customerRemark = default,
+                           IList<OrderItemEntity> items = default)
         {
             CustomerId = customerId <= 0 ? throw new ArgumentOutOfRangeException(nameof(customerId)) : customerId;
             OrderNo = Check.NotNullOrWhiteSpace(orderNo, nameof(orderNo));
             OrderTime = orderTime == default ? throw new ArgumentException(nameof(orderTime)) : orderTime;
             UpdateLogisticsInfo(areaId, consignee, consigneePhoneNumber, receivingAddress);
-            this.items = items == null || items.Count < 1 ? throw new ArgumentNullException(nameof(items)) : items.ToList();
+            if (items == default)
+            {
+                this.items = new List<OrderItemEntity>();
+            }
+            else
+            {
+                this.items = items.ToList();
+            }
             RegisterItemsEvent();
             CalculateMerchandiseSubtotal();
             CustomerRemark = customerRemark;
@@ -221,6 +228,20 @@ namespace BXJG.Shop.Sale
         #endregion
 
         #region 方法
+        public void AddItem(OrderItemEntity item)
+        {
+            var oldItem = items.SingleOrDefault(c => c.ProductId == item.ProductId && c.SkuId == item.SkuId);
+            if (oldItem != null)
+            {
+                oldItem.Quantity += item.Quantity;
+                return;
+            }
+
+            RegisterItemEvent(item);
+            items.Add(item);
+            CalculateMerchandiseSubtotal();
+            //DomainEvents.Add(new AddItemEventData(this, item));
+        }
         /// <summary>
         /// 支付
         /// 目前只考虑全额支付

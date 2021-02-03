@@ -46,79 +46,19 @@ namespace BXJG.Shop.Seed
 
             var ois = orderItems.IgnoreQueryFilters().Where(c => c.TenantId == _tenantId).ToList();
 
-            var order = new OrderEntity(new CustomerEntity(0,id:1), Guid.NewGuid().ToString("N"))
-            {
-                AreaId = 4,
-                Consignee = "张三",
-                ConsigneePhoneNumber = "17723896676",
-             
-                CustomerRemark = "顾客备注信息",
-                DistributionMethodId = 30,
-                //TenantId = this._tenantId,
-                //Status = OrderStatus.Created,
-                ReceivingAddress = "收货地址",
-                //PaymentStatus = PaymentStatus.Paid,
-                //PaymentMethodId = 31,
-                PaymentAmount = ois.Take(2).Sum(c => c.Price),
-                OrderTime = new DateTimeOffset(2020, 5, 15, 21, 2, 3, TimeSpan.Zero),
-                Integral = 324,
-                //MerchandiseSubtotal = 318,
-                Items = ois.Take(2).Select(c => new OrderItemEntity
-                {
-                    Amount = c.Price * 3,
-                    Quantity = 3,
-                    Image = c.Images.Split(',').First(),
-                    Integral = c.Integral,
-                    ProductId = c.Id,
-                    OrderId = 1,
-                    Price = c.Price,
-                    Title = c.Title,
-                    TotalIntegral = c.Integral * 3
-                }).ToList()
-            };
-
-
+            var order = new OrderEntity(1, Guid.NewGuid().ToString("N"), DateTimeOffset.Now, 4, "张三", "17723896676", "收货地址", "顾客备注信息");
+            order.TenantId = 1;
+            order.AddItem(new OrderItemEntity(order, 1, 1, "商品标题", "sdf图片地址", 3, 3, 3));
+            order.AddItem(new OrderItemEntity(order, 2, default, "商品标题1", "sdf图片地址1", 4, 4, 4));
             items.Add(order);
-
-
-
-
-
             _context.SaveChanges();
 
 
-            var order1 = new OrderEntity(new CustomerEntity(0,id:2), Guid.NewGuid().ToString("N"))
-            {
-                AreaId = 6,
-                Consignee = "李四",
-                ConsigneePhoneNumber = "18323335646",
-                CustomerRemark = "顾客备注信息，test",
-                DistributionMethodId = 34,
-                TenantId = this._tenantId,
-                //Status = OrderStatus.Processing,
-                ReceivingAddress = "收货地址,test",
-                //PaymentStatus = PaymentStatus.Paid,
-                //PaymentMethodId = 33,
-                PaymentAmount = ois.Skip(2).Sum(c => c.Price),
-                OrderTime = new DateTimeOffset(2020, 3, 11, 15, 7, 25, TimeSpan.Zero),
-                Integral = ois.Skip(2).Sum(c => c.Integral),
-                //MerchandiseSubtotal = ois.Skip(2).Sum(c => c.Price) - 5,
-                Items = ois.Skip(2).Select(c => new OrderItemEntity
-                {
-                    Amount = c.Price * 1,
-                    Quantity = 1,
-                    Image = c.Images.Split(',').First(),
-                    Integral = c.Integral,
-                    ProductId = c.Id,
-                    OrderId = 1,
-                    Price = c.Price,
-                    Title = c.Title,
-                    TotalIntegral = c.Integral * 1
-                }).ToList()
-            };
-            order1.Pay(33);
+            var order1 = new OrderEntity(1, Guid.NewGuid().ToString("N"), DateTimeOffset.Now, 4, "张三", "17723896676", "收货地址", "顾客备注信息");
+            order1.TenantId = 1;
+            order1.AddItem(new OrderItemEntity(order1, 1, default, "商品标题sdf", "sdf图片地sdf址", 34,52, 3));
+            order1.AddItem(new OrderItemEntity(order1, 2, 1, "商品标题1sdfddf", "sdf图片ffff地址1", 63, 34, 6));
             items.Add(order1);
-
             _context.SaveChanges();
 
         }
