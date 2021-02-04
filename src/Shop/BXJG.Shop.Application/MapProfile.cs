@@ -97,6 +97,8 @@ namespace BXJG.Shop
 
             #region 后台管理员+订单
             CreateMap<OrderEntity, OrderDto>();
+            CreateMap<AdministrativeEntity, OrderDto>().ForMember(c => c.AreaDisplayName, c => c.MapFrom(d => d.DisplayName));
+            CreateMap<GeneralTreeEntity, OrderDto>().ForMember(c => c.AreaDisplayName, c => c.MapFrom(d => d.DisplayName));
             CreateMap<OrderItemEntity, OrderItemDto>();
             #endregion
 

@@ -78,7 +78,7 @@ namespace BXJG.Shop.Customer
             this.userRepository = userRepository;
             this.administrativeRepository = administrativeRepository;
         }
-        
+
         public virtual async Task<CustomerDto> CreateAsync(CustomerUpdateDto input)
         {
             #region 创建主程序的用户
@@ -187,7 +187,7 @@ namespace BXJG.Shop.Customer
             query = query.PageBy(input);
 
             var entities = await AsyncQueryableExecuter.ToListAsync(query);
-            var dtos = entities.Select(c => MapToDto(c.c, c.u,c.area)).ToList();
+            var dtos = entities.Select(c => MapToDto(c.c, c.u, c.area)).ToList();
             return new PagedResultDto<CustomerDto>(totalCount, dtos);
         }
 
@@ -248,7 +248,8 @@ namespace BXJG.Shop.Customer
         {
             var dto = ObjectMapper.Map<CustomerDto>(c);
             ObjectMapper.Map(u, dto);
-            ObjectMapper.Map(area, dto);
+            if (area != null)
+                ObjectMapper.Map(area, dto);
             dto.Id = c.Id;
             return dto;
         }

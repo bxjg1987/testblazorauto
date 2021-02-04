@@ -39,7 +39,8 @@ namespace BXJG.Shop.Sale
         public OrderAppService(IRepository<OrderEntity, long> repository,
                                OrderManager orderManager,
                                IRepository<AdministrativeEntity, long> administrativeRepository,
-                               IRepository<ProductEntity, long> itemRepository, IRepository<GeneralTreeEntity, long> generalTreeRepository)
+                               IRepository<ProductEntity, long> itemRepository,
+                               IRepository<GeneralTreeEntity, long> generalTreeRepository)
         {
             this.repository = repository;
             this.orderManager = orderManager;
@@ -52,69 +53,73 @@ namespace BXJG.Shop.Sale
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<PagedResultDto<OrderDto>> GetAllAsync(GetAllOrderInput input)
+        public virtual async Task<PagedResultDto<OrderDto>> GetAllAsync(GetAllOrderInput input)
         {
-            var query = repository.GetAll()
-                                  .WhereIf(input.OrderStartTime.HasValue, c => c.OrderTime >= input.OrderStartTime.Value)
-                                  .WhereIf(input.OrderEndTime.HasValue, c => c.OrderTime < input.OrderEndTime.Value)
-                                  .WhereIf(input.OrderStatus.HasValue, c => c.Status == input.OrderStatus.Value)
-                                  .WhereIf(input.PaymentStatus.HasValue, c => c.PaymentStatus == input.PaymentStatus.Value)
-                                  .WhereIf(input.LogisticsStatusStatus.HasValue, c => c.LogisticsStatus == input.LogisticsStatusStatus.Value)
-                                  .WhereIf(input.AreaId.HasValue, c => c.AreaId == input.AreaId.Value)
-                                  .WhereIf(input.PaymentMethodId.HasValue, c => c.PaymentMethodId == input.PaymentMethodId.Value)
-                                  .WhereIf(input.DistributionMethodId.HasValue, c => c.DistributionMethodId == input.DistributionMethodId.Value)
-                                  .WhereIf(!input.Keywords.IsNullOrEmpty(), c => c.OrderNo.Contains(input.Keywords) ||
-                                                                                 c.Consignee.Contains(input.Keywords) ||
-                                                                                 c.ConsigneePhoneNumber.Contains(input.Keywords) ||
-                                                                                 c.ReceivingAddress.Contains(input.Keywords) ||
-                                                                                 c.LogisticsNumber.Contains(input.Keywords));
+            var query = from c in repository.GetAll()
+                        join qy1 in administrativeRepository.GetAll() on c.AreaId equals qy1.Id into dc2
+                        from ar in dc2.DefaultIfEmpty()
+                        join d in generalTreeRepository.GetAll() on c.DistributionMethodId equals d.Id into dc
+                        from e in dc.DefaultIfEmpty()
+                        join f in generalTreeRepository.GetAll() on c.PaymentMethodId equals f.Id into dc1
+                        from g in dc1.DefaultIfEmpty()
+                        select new { c, ar, e, g };
+
+            query = query.WhereIf(input.OrderStartTime.HasValue, c => c.c.OrderTime >= input.OrderStartTime.Value)
+                         .WhereIf(input.OrderEndTime.HasValue, c => c.c.OrderTime < input.OrderEndTime.Value)
+                         .WhereIf(input.OrderStatus.HasValue, c => c.c.Status == input.OrderStatus.Value)
+                         .WhereIf(input.PaymentStatus.HasValue, c => c.c.PaymentStatus == input.PaymentStatus.Value)
+                         .WhereIf(input.LogisticsStatusStatus.HasValue, c => c.c.LogisticsStatus == input.LogisticsStatusStatus.Value)
+                         .WhereIf(input.AreaId.HasValue, c => c.c.AreaId == input.AreaId.Value)
+                         .WhereIf(input.PaymentMethodId.HasValue, c => c.c.PaymentMethodId == input.PaymentMethodId.Value)
+                         .WhereIf(input.DistributionMethodId.HasValue, c => c.c.DistributionMethodId == input.DistributionMethodId.Value)
+                         .WhereIf(!input.Keywords.IsNullOrEmpty(), c => c.c.OrderNo.Contains(input.Keywords) ||
+                                                                        c.c.Consignee.Contains(input.Keywords) ||
+                                                                        c.c.ConsigneePhoneNumber.Contains(input.Keywords) ||
+                                                                        c.c.ReceivingAddress.Contains(input.Keywords) ||
+                                                                        c.c.LogisticsNumber.Contains(input.Keywords));
 
             var count = await AsyncQueryableExecuter.CountAsync(query);
-            var list = await AsyncQueryableExecuter.ToListAsync(query.OrderBy(input.Sorting).PageBy(input));
-            
-            var ids = list.Select(c => c.AreaId);
-            
-            var ids1 = list.Where(c => c.DistributionMethodId.HasValue).Select(c => c.DistributionMethodId.Value);
-            var ids2 = list.Where(c => c.PaymentMethodId.HasValue).Select(c => c.PaymentMethodId.Value);
-            ids1 = ids1.Concat(ids2);
-
-            var list2 = await AsyncQueryableExecuter.ToListAsync(administrativeRepository.GetAll().Where(c => ids.Contains(c.Id)));
-            var list3 = await AsyncQueryableExecuter.ToListAsync(generalTreeRepository.GetAll().Where(c => ids1.Contains(c.Id)));
-
-            var r = new PagedResultDto<OrderDto>(count, ObjectMapper.Map<IReadOnlyList<OrderDto>>(list));
-            foreach (var item in r.Items)
-            {
-                item.AreaDisplayName = list2.Single(c => c.Id == item.AreaId).DisplayName;
-                item.DistributionMethodDisplayName = list3.SingleOrDefault(c => c.Id == item.DistributionMethodId)?.DisplayName;
-                item.PaymentMethodDisplayName = list3.SingleOrDefault(c => c.Id == item.PaymentMethodId)?.DisplayName;
-            }
-            return r;
+            var list = await AsyncQueryableExecuter.ToListAsync(query.OrderBy("c." + input.Sorting).PageBy(input));
+            var dtos = list.Select(c => MapToDto(c.c, c.ar, c.g, c.e)).ToList();
+            return new PagedResultDto<OrderDto>(count, dtos);
         }
         /// <summary>
         /// 根据内部Id查询订单
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<OrderDto> GetAsync(EntityDto<long> input)
+        public virtual async Task<OrderDto> GetAsync(EntityDto<long> input)
         {
-            var entity = await AsyncQueryableExecuter.FirstOrDefaultAsync(repository.GetAllIncluding(c=>c.Items).Where(c => c.Id == input.Id));
-            var r = base.ObjectMapper.Map<OrderDto>(entity);
+            var query = from c in repository.GetAllIncluding(c => c.Items)
+                        join qy1 in administrativeRepository.GetAll() on c.AreaId equals qy1.Id into dc2
+                        from ar in dc2.DefaultIfEmpty()
+                        join d in generalTreeRepository.GetAll() on c.DistributionMethodId equals d.Id into dc
+                        from e in dc.DefaultIfEmpty()
+                        join f in generalTreeRepository.GetAll() on c.PaymentMethodId equals f.Id into dc1
+                        from g in dc1.DefaultIfEmpty()
+                        where c.Id == input.Id
+                        select new { c, ar, e, g };
 
-            var area = await administrativeRepository.GetAsync(entity.AreaId);
-            r.AreaDisplayName = area.DisplayName;
-
-            var ids = new List<long>();
-            if (entity.DistributionMethodId.HasValue) {
-                ids.Add(entity.DistributionMethodId.Value);          
-            }
-            if (entity.PaymentMethodId.HasValue)
-            {
-                ids.Add(entity.PaymentMethodId.Value);
-            }
-            var list2 = await AsyncQueryableExecuter.ToListAsync(generalTreeRepository.GetAll().Where(c => ids.Contains(c.Id)));
-            r.DistributionMethodDisplayName = list2.SingleOrDefault(c => c.Id == entity.DistributionMethodId)?.DisplayName;
-            r.PaymentMethodDisplayName = list2.SingleOrDefault(c => c.Id == entity.PaymentMethodId)?.DisplayName;
-            return r;
+            var entity = await AsyncQueryableExecuter.FirstOrDefaultAsync(query);
+            return MapToDto(entity.c, entity.ar, entity.g, entity.e);
+        }
+        /// <summary>
+        /// 实体映射到dto
+        /// </summary>
+        /// <param name="c">收货地址中的区域</param>
+        /// <param name="area"></param>
+        /// <param name="g1">支付方式</param>
+        /// <param name="g2">配送方式</param>
+        /// <returns></returns>
+        protected virtual OrderDto MapToDto(OrderEntity c, AdministrativeEntity area, GeneralTreeEntity g1 = default, GeneralTreeEntity g2 = default)
+        {
+            var dto = ObjectMapper.Map<OrderDto>(c);
+            ObjectMapper.Map(area, dto);
+            if (g1 != default)
+                ObjectMapper.Map(g1, dto);
+            if (g2 != default)
+                ObjectMapper.Map(g2, dto);
+            return dto;
         }
     }
 }
