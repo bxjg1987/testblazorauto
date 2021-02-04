@@ -78,6 +78,7 @@ namespace BXJG.Shop.Customer
             this.userRepository = userRepository;
             this.administrativeRepository = administrativeRepository;
         }
+        
         public virtual async Task<CustomerDto> CreateAsync(CustomerUpdateDto input)
         {
             #region 创建主程序的用户
@@ -163,19 +164,14 @@ namespace BXJG.Shop.Customer
         public virtual async Task<PagedResultDto<CustomerDto>> GetAllAsync(GetAllCustomersInput input)
         {
             var query = from c in repository.GetAll()
-                        join u in userRepository.GetAllIncluding(c => c.Roles) on c.UserId equals u.Id
-                        select new { c, u };
+                        join u1 in userRepository.GetAllIncluding(c => c.Roles) on c.UserId equals u1.Id into dc
+                        from u in dc.DefaultIfEmpty()
+                        join qy1 in administrativeRepository.GetAll() on c.AreaId equals qy1.Id into dc1
+                        from area in dc1.DefaultIfEmpty()
+                        select new { c, u, area };
 
-            //var qq = repository.GetAllIncluding(c => c.Area).Join<TUser>(userRepository.GetAllIncluding(c => c.Roles), c => c.UserId, d =>d.Id, (c,u)=>  );
-            query = query.WhereIf(!input.Keywords.IsNullOrEmpty(), c => c.u.Name.Contains(input.Keywords) || c.u.PhoneNumber.Contains(input.Keywords));
-
-            //区域code过滤
-            if (!input.AreaCode.IsNullOrWhiteSpace())
-            {
-                //过滤后的区域id，区域被使用的频率很高，可以考虑redis做缓存
-                var qyIds = await AsyncQueryableExecuter.ToListAsync(administrativeRepository.GetAll().Where(c => c.Code.StartsWith(input.AreaCode)).Select(c => c.Id));
-                query = query.Where(c => c.c.AreaId.HasValue && qyIds.Contains(c.c.AreaId.Value));
-            }
+            query = query.WhereIf(!input.Keywords.IsNullOrWhiteSpace(), c => c.u.Name.Contains(input.Keywords) || c.u.PhoneNumber.Contains(input.Keywords))
+                         .WhereIf(!input.AreaCode.IsNullOrWhiteSpace(), c => c.area.Code.StartsWith(input.AreaCode));
 
             var totalCount = await AsyncQueryableExecuter.CountAsync(query);
 
@@ -191,22 +187,8 @@ namespace BXJG.Shop.Customer
             query = query.PageBy(input);
 
             var entities = await AsyncQueryableExecuter.ToListAsync(query);
-            var dtos = entities.Select(c => MapToDto(c.c, c.u)).ToList();
-            var r = new PagedResultDto<CustomerDto>(
-                totalCount,
-                dtos
-            );
-
-            //连接区域
-            var ids = entities.Select(c => c.c.AreaId).Where(c => c.HasValue);
-            var qys = await AsyncQueryableExecuter.ToListAsync(administrativeRepository.GetAll().Where(c => ids.Contains(c.Id)));
-            foreach (var item in r.Items)
-            {
-                var qy = qys.Single(c => c.Id == item.AreaId);
-                item.AreaDisplayName = qy.DisplayName;
-            }
-
-            return r;
+            var dtos = entities.Select(c => MapToDto(c.c, c.u,c.area)).ToList();
+            return new PagedResultDto<CustomerDto>(totalCount, dtos);
         }
 
         public virtual async Task<CustomerDto> GetAsync(EntityDto<long> input)
@@ -244,39 +226,36 @@ namespace BXJG.Shop.Customer
         /// </summary>
         /// <param name="id">顾客id</param>
         /// <returns></returns>
-        protected virtual async Task<(CustomerEntity customer, TUser user)> GetOneAsync(long id)
+        protected virtual async Task<(CustomerEntity customer, TUser user, AdministrativeEntity area)> GetOneAsync(long id)
         {
             var query = from c in repository.GetAll().Where(c => c.Id == id)
-                        join u in userRepository.GetAllIncluding(c => c.Roles) on c.UserId equals u.Id
-                        select new { c, u };
+                        join uu in userRepository.GetAllIncluding(c => c.Roles) on c.UserId equals uu.Id into dc
+                        from u in dc.DefaultIfEmpty()
+                        join qy1 in administrativeRepository.GetAll() on c.AreaId equals qy1.Id into dc1
+                        from area in dc1.DefaultIfEmpty()
+                        select new { c, u, area };
             var r = await AsyncQueryableExecuter.FirstOrDefaultAsync(query);
-            return (r.c, r.u);
+            return (r.c, r.u, r.area);
         }
         /// <summary>
         /// 将一对一的顾客实体和用户实体转换为顾客的查询模型
         /// </summary>
         /// <param name="c">顾客实体</param>
         /// <param name="u">用户实体</param>
+        /// <param name="area">所属区域</param>
         /// <returns></returns>
-        protected virtual CustomerDto MapToDto(CustomerEntity c, TUser u)
+        protected virtual CustomerDto MapToDto(CustomerEntity c, TUser u, AdministrativeEntity area = default)
         {
             var dto = ObjectMapper.Map<CustomerDto>(c);
             ObjectMapper.Map(u, dto);
+            ObjectMapper.Map(area, dto);
             dto.Id = c.Id;
             return dto;
         }
         protected virtual async Task<CustomerDto> GetDtoAsync(long id)
         {
             var p = await GetOneAsync(id);
-            var r = MapToDto(p.customer, p.user);
-
-            if (r.AreaId.HasValue)
-            {
-                var qy = await administrativeRepository.GetAsync(r.AreaId.Value);
-                r.AreaDisplayName = qy.DisplayName;
-            }
-
-            return r;
+            return MapToDto(p.customer, p.user);
         }
     }
 }
