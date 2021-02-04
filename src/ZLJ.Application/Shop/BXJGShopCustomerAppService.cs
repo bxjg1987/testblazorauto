@@ -8,6 +8,7 @@ using System.Text;
 using ZLJ.Authorization.Roles;
 using ZLJ.Authorization.Users;
 using ZLJ.BaseInfo;
+using ZLJ.BaseInfo.Administrative;
 using ZLJ.MultiTenancy;
 
 namespace ZLJ.Shop
@@ -17,7 +18,7 @@ namespace ZLJ.Shop
     /// </summary>
     public class BXJGShopCustomerAppService : CustomerAppService<User, Role, RoleManager, UserManager>
     {
-        public BXJGShopCustomerAppService(IRepository<CustomerEntity, long> repository, RoleManager roleManager, UserManager userManager, IRepository<User, long> userRepository) : base(repository, roleManager, userManager, userRepository)
+        public BXJGShopCustomerAppService(IRepository<CustomerEntity, long> repository, RoleManager roleManager, UserManager userManager, IRepository<User, long> userRepository, IRepository<AdministrativeEntity, long> administrativeRepository) : base(repository, roleManager, userManager, userRepository, administrativeRepository)
         {
         }
     }

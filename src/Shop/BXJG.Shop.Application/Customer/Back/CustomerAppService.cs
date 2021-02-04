@@ -15,7 +15,6 @@ using System.Linq.Dynamic.Core;
 using System.Linq.Dynamic;
 using Abp.Extensions;
 using Abp.Application.Services.Dto;
-using Microsoft.EntityFrameworkCore;
 using BXJG.Common;
 using BXJG.Common.Dto;
 using Microsoft.AspNetCore.Identity;
@@ -23,6 +22,7 @@ using Abp.IdentityFramework;
 using AutoMapper.QueryableExtensions;
 using Abp.AutoMapper;
 using Abp.Domain.Uow;
+using ZLJ.BaseInfo.Administrative;
 
 namespace BXJG.Shop.Customer
 {
@@ -64,13 +64,19 @@ namespace BXJG.Shop.Customer
         private readonly TUserManager UserManager;
         private readonly IRepository<CustomerEntity, long> repository;
         private readonly IRepository<TUser, long> userRepository;
+        protected readonly IRepository<AdministrativeEntity, long> administrativeRepository;
 
-        public CustomerAppService(IRepository<CustomerEntity, long> repository, TRoleManager roleManager, TUserManager userManager, IRepository<TUser, long> userRepository)
+        public CustomerAppService(IRepository<CustomerEntity, long> repository,
+                                  TRoleManager roleManager,
+                                  TUserManager userManager,
+                                  IRepository<TUser, long> userRepository,
+                                  IRepository<AdministrativeEntity, long> administrativeRepository)
         {
             this.repository = repository;
             RoleManager = roleManager;
             UserManager = userManager;
             this.userRepository = userRepository;
+            this.administrativeRepository = administrativeRepository;
         }
         public virtual async Task<CustomerDto> CreateAsync(CustomerUpdateDto input)
         {
@@ -109,7 +115,7 @@ namespace BXJG.Shop.Customer
                 Gender = input.Gender
                 //Integral = input.Integral,
                 //User = user,//下面设置了userId就行了
-              
+
             };
             await repository.InsertAsync(entity);
             CurrentUnitOfWork.SaveChanges();//保存后才能拿到新的会员信息自增Id
@@ -149,8 +155,6 @@ namespace BXJG.Shop.Customer
             entity.Gender = input.Gender;
             //entity.Integral = input.Integral;
             //entity.TenantId = AbpSession.TenantId.Value;
-
-
             await repository.UpdateAsync(entity);
             CurrentUnitOfWork.SaveChanges();
             return await GetDtoAsync(input.Id);
@@ -158,16 +162,22 @@ namespace BXJG.Shop.Customer
 
         public virtual async Task<PagedResultDto<CustomerDto>> GetAllAsync(GetAllCustomersInput input)
         {
-            var query = from c in repository.GetAllIncluding(c => c.Area)
+            var query = from c in repository.GetAll()
                         join u in userRepository.GetAllIncluding(c => c.Roles) on c.UserId equals u.Id
                         select new { c, u };
 
             //var qq = repository.GetAllIncluding(c => c.Area).Join<TUser>(userRepository.GetAllIncluding(c => c.Roles), c => c.UserId, d =>d.Id, (c,u)=>  );
+            query = query.WhereIf(!input.Keywords.IsNullOrEmpty(), c => c.u.Name.Contains(input.Keywords) || c.u.PhoneNumber.Contains(input.Keywords));
 
-            query = query.WhereIf(!input.AreaCode.IsNullOrWhiteSpace(), c => c.c.Area.Code.StartsWith(input.AreaCode))
-                   .WhereIf(!input.Keywords.IsNullOrEmpty(), c => c.u.Name.Contains(input.Keywords) || c.u.PhoneNumber.Contains(input.Keywords));
+            //区域code过滤
+            if (!input.AreaCode.IsNullOrWhiteSpace())
+            {
+                //过滤后的区域id，区域被使用的频率很高，可以考虑redis做缓存
+                var qyIds = await AsyncQueryableExecuter.ToListAsync(administrativeRepository.GetAll().Where(c => c.Code.StartsWith(input.AreaCode)).Select(c => c.Id));
+                query = query.Where(c => c.c.AreaId.HasValue && qyIds.Contains(c.c.AreaId.Value));
+            }
 
-            var totalCount = await query.CountAsync();
+            var totalCount = await AsyncQueryableExecuter.CountAsync(query);
 
             if (!input.Sorting.IsNullOrWhiteSpace())
             {
@@ -180,13 +190,23 @@ namespace BXJG.Shop.Customer
 
             query = query.PageBy(input);
 
-            var entities = await query.ToListAsync();
+            var entities = await AsyncQueryableExecuter.ToListAsync(query);
             var dtos = entities.Select(c => MapToDto(c.c, c.u)).ToList();
-
-            return new PagedResultDto<CustomerDto>(
+            var r = new PagedResultDto<CustomerDto>(
                 totalCount,
                 dtos
             );
+
+            //连接区域
+            var ids = entities.Select(c => c.c.AreaId).Where(c => c.HasValue);
+            var qys = await AsyncQueryableExecuter.ToListAsync(administrativeRepository.GetAll().Where(c => ids.Contains(c.Id)));
+            foreach (var item in r.Items)
+            {
+                var qy = qys.Single(c => c.Id == item.AreaId);
+                item.AreaDisplayName = qy.DisplayName;
+            }
+
+            return r;
         }
 
         public virtual async Task<CustomerDto> GetAsync(EntityDto<long> input)
@@ -226,10 +246,10 @@ namespace BXJG.Shop.Customer
         /// <returns></returns>
         protected virtual async Task<(CustomerEntity customer, TUser user)> GetOneAsync(long id)
         {
-            var query = from c in repository.GetAllIncluding(c => c.Area).Where(c=>c.Id==id)
+            var query = from c in repository.GetAll().Where(c => c.Id == id)
                         join u in userRepository.GetAllIncluding(c => c.Roles) on c.UserId equals u.Id
                         select new { c, u };
-            var r = await query.SingleAsync();
+            var r = await AsyncQueryableExecuter.FirstOrDefaultAsync(query);
             return (r.c, r.u);
         }
         /// <summary>
@@ -248,7 +268,15 @@ namespace BXJG.Shop.Customer
         protected virtual async Task<CustomerDto> GetDtoAsync(long id)
         {
             var p = await GetOneAsync(id);
-            return MapToDto(p.customer, p.user);
+            var r = MapToDto(p.customer, p.user);
+
+            if (r.AreaId.HasValue)
+            {
+                var qy = await administrativeRepository.GetAsync(r.AreaId.Value);
+                r.AreaDisplayName = qy.DisplayName;
+            }
+
+            return r;
         }
     }
 }

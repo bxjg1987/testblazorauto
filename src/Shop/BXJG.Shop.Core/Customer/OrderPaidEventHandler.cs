@@ -29,7 +29,7 @@ namespace BXJG.Shop.Sale
         public async Task HandleEventAsync(OrderPaidEventData eventData)
         {
             var cust = await customerRepository.GetAsync(eventData.Entity.CustomerId);
-            cust.ChangeIntegral(eventData.Entity.Integral);
+            cust.Integral += eventData.Entity.Integral;
         }
     }
 }

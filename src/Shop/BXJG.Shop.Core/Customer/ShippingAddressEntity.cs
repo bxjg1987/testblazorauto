@@ -39,10 +39,10 @@ namespace BXJG.Shop.Customer
         /// 所属区域Id
         /// </summary>
         public long AreaId { get; set; }
-        /// <summary>
-        /// 所属区域
-        /// </summary>
-        public virtual AdministrativeEntity Area { get; set; }
+        ///// <summary>
+        ///// 所属区域
+        ///// </summary>
+        //public virtual AdministrativeEntity Area { get; set; }
         /// <summary>
         /// 地址
         /// </summary>

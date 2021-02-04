@@ -25,7 +25,7 @@ namespace BXJG.Shop.Customer
         /// <returns></returns>
         public static Task<CustomerEntity> SingleByUserIdAsync(this IRepository<CustomerEntity, long> repository, long userId)
         {
-            return repository.GetAllIncluding(c=>c.Area).SingleAsync(c => c.UserId == userId);
+            return repository.GetAll().SingleAsync(c => c.UserId == userId);
         }
         /// <summary>
         /// 根据用户id获取顾客实体
@@ -36,7 +36,7 @@ namespace BXJG.Shop.Customer
         /// <returns></returns>
         public static Task<CustomerEntity> SingleOrDefaultByUserIdAsync<TUser>(this IRepository<CustomerEntity, long> repository, long userId)
         {
-            return repository.GetAllIncluding(c => c.Area).SingleOrDefaultAsync(c => c.UserId == userId);
+            return repository.GetAll().SingleOrDefaultAsync(c => c.UserId == userId);
         }
         /// <summary>
         /// 根据用户Id获取关联的顾客Id
