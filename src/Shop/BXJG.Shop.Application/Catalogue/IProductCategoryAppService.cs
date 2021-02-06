@@ -21,6 +21,6 @@ namespace BXJG.Shop.Catalogue
                                                                              GeneralTreeNodeMoveInput>
     {
         [AbpAuthorize]
-        Task<IList<DynamicPropertyDto>> GetDynamicPropertyAsync(long id);
+        Task<IList<DynamicPropertyModel>> GetDynamicPropertyAsync(long id);
     }
 }

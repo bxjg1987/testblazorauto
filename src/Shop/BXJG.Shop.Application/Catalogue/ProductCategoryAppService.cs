@@ -31,7 +31,7 @@ namespace BXJG.Shop.Catalogue
         private readonly DynamicPropertyManager propertyManager;
         private readonly DynamicPropertyValueManager valueManager;
         private readonly DynamicEntityPropertyStore dynamicEntityPropertyStore;
-        private readonly DynamicPropertyAppService<ProductCategoryEntity> dynamicPropertyManager;
+        private readonly DynamicPropertyManager<ProductCategoryEntity> dynamicPropertyManager;
 
         private readonly TempFileManager tempFileManager;
         public ProductCategoryAppService(IRepository<ProductCategoryEntity, long> ownRepository,
@@ -39,7 +39,7 @@ namespace BXJG.Shop.Catalogue
                                          ProductCategoryManager organizationUnitManager,
                                          DynamicPropertyManager propertyManager,
                                          DynamicEntityPropertyStore dynamicEntityPropertyManager,
-                                         DynamicPropertyAppService<ProductCategoryEntity> dynamicPropertyManager,
+                                         DynamicPropertyManager<ProductCategoryEntity> dynamicPropertyManager,
                                          DynamicPropertyValueManager valueManager) : base(ownRepository,
                                                                                           organizationUnitManager,
                                                                                           PermissionNames.ProductCategoryCreate,
@@ -90,7 +90,7 @@ namespace BXJG.Shop.Catalogue
             return m;
         }
 
-        public async Task<IList<DynamicPropertyDto>> GetDynamicPropertyAsync(long id)
+        public async Task<IList<DynamicPropertyModel>> GetDynamicPropertyAsync(long id)
         {
             return (await dynamicPropertyManager.GetDynamicPropertyAsync(id)).ToDto();
         }

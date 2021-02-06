@@ -19,7 +19,7 @@ namespace BXJG.Utils.DynamicProperty
     /// 在模块<see cref="BXJGUtilsModule.Initialize"/>中注册到ioc
     /// </summary>
     /// <typeparam name="TEntity">只是用来获取字符串</typeparam>
-    public class DynamicPropertyAppService<TEntity> : ITransientDependency
+    public class DynamicPropertyManager<TEntity> : ITransientDependency
     {
         private readonly DynamicPropertyManager propertyManager;
         private readonly DynamicPropertyValueManager valueManager;
@@ -27,10 +27,10 @@ namespace BXJG.Utils.DynamicProperty
         private readonly string entityType;
         private readonly IUnitOfWorkManager unitOfWorkManager;
 
-        public DynamicPropertyAppService(DynamicPropertyManager propertyManager,
-                                         DynamicPropertyValueManager valueManager,
-                                         DynamicEntityPropertyStore dynamicEntityPropertyStore,
-                                         IUnitOfWorkManager unitOfWorkManager)
+        public DynamicPropertyManager(DynamicPropertyManager propertyManager,
+                                      DynamicPropertyValueManager valueManager,
+                                      DynamicEntityPropertyStore dynamicEntityPropertyStore,
+                                      IUnitOfWorkManager unitOfWorkManager)
         {
             this.propertyManager = propertyManager;
             this.valueManager = valueManager;
@@ -39,7 +39,7 @@ namespace BXJG.Utils.DynamicProperty
             this.unitOfWorkManager = unitOfWorkManager;
         }
         [UnitOfWork]
-        public async Task<List<DynamicEntityProperty>> SetDynamicPropertyAsync(IEnumerable<DynamicPropertyEditDto> input, object id)
+        public async Task<List<DynamicEntityProperty>> SetDynamicPropertyAsync(IEnumerable<DynamicPropertyEditModel> input, object id)
         {
             /*
              * 经过测试，abp提供的动态属性相关领域服务和存储已经自动处理了租户id
@@ -102,7 +102,7 @@ namespace BXJG.Utils.DynamicProperty
             #endregion
         }
 
-        public async Task<List<Abp.DynamicEntityProperties.DynamicEntityProperty>> GetDynamicPropertyAsync(object id)
+        public async Task<List<DynamicEntityProperty>> GetDynamicPropertyAsync(object id)
         {
             var ls = await dynamicEntityPropertyStore.GetAllAsync(entityType + id);
             //var ids = ls.Select(c => c.DynamicPropertyId).Distinct();
@@ -125,9 +125,9 @@ namespace BXJG.Utils.DynamicProperty
     //由于Util没有分层，所以这个类没有放Application层
     public static class DynamicEntityPropertyExtensions
     {
-        public static List<DynamicPropertyDto> ToDto(this List<Abp.DynamicEntityProperties.DynamicEntityProperty> dynamicEntityProperties)
+        public static List<DynamicPropertyModel> ToDto(this List<DynamicEntityProperty> dynamicEntityProperties)
         {
-            return dynamicEntityProperties.Select(c => new DynamicPropertyDto
+            return dynamicEntityProperties.Select(c => new DynamicPropertyModel
             {
                 Id = c.DynamicPropertyId,
                 DisplayName = c.DynamicProperty.DisplayName,

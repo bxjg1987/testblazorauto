@@ -10,7 +10,7 @@ namespace BXJG.Utils.DynamicProperty
     /// <summary>
     /// 动态属性编辑模型
     /// </summary>
-    public class DynamicPropertyEditDto
+    public class DynamicPropertyEditModel
     {
         /// <summary>
         /// 动态属性名，如：Color
@@ -38,7 +38,7 @@ namespace BXJG.Utils.DynamicProperty
     /// <summary>
     /// 动态属性查询模型
     /// </summary>
-    public class DynamicPropertyDto
+    public class DynamicPropertyModel
     {
         /// <summary>
         /// 动态属性id

@@ -29,6 +29,6 @@ namespace BXJG.Shop.Catalogue
         /// </summary>
         public bool ShowInHome { get; set; }
 
-        public List<DynamicPropertyDto> DynamicProperty { get; set; }
+        public List<DynamicPropertyModel> DynamicProperty { get; set; }
     }
 }
