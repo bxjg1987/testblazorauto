@@ -21,13 +21,16 @@ namespace BXJG.Utils.DynamicProperty
     /// <typeparam name="TEntity">只是用来获取字符串</typeparam>
     public class DynamicPropertyAppService<TEntity> : ITransientDependency
     {
-        private readonly Abp.DynamicEntityProperties.DynamicPropertyManager propertyManager;
+        private readonly DynamicPropertyManager propertyManager;
         private readonly DynamicPropertyValueManager valueManager;
         private readonly DynamicEntityPropertyStore dynamicEntityPropertyStore;
         private readonly string entityType;
         private readonly IUnitOfWorkManager unitOfWorkManager;
 
-        public DynamicPropertyAppService(DynamicPropertyManager propertyManager, DynamicPropertyValueManager valueManager, DynamicEntityPropertyStore dynamicEntityPropertyStore, IUnitOfWorkManager unitOfWorkManager)
+        public DynamicPropertyAppService(DynamicPropertyManager propertyManager,
+                                         DynamicPropertyValueManager valueManager,
+                                         DynamicEntityPropertyStore dynamicEntityPropertyStore,
+                                         IUnitOfWorkManager unitOfWorkManager)
         {
             this.propertyManager = propertyManager;
             this.valueManager = valueManager;
@@ -36,7 +39,7 @@ namespace BXJG.Utils.DynamicProperty
             this.unitOfWorkManager = unitOfWorkManager;
         }
         [UnitOfWork]
-        public async Task<List<Abp.DynamicEntityProperties.DynamicEntityProperty>> SetDynamicPropertyAsync(IEnumerable<DynamicPropertyEditDto> input, object id)
+        public async Task<List<DynamicEntityProperty>> SetDynamicPropertyAsync(IEnumerable<DynamicPropertyEditDto> input, object id)
         {
             /*
              * 经过测试，abp提供的动态属性相关领域服务和存储已经自动处理了租户id

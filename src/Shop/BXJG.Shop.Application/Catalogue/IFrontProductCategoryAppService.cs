@@ -8,10 +8,9 @@ namespace BXJG.Shop.Catalogue
     /// <summary>
     /// 前端用户对商品分类的功能
     /// </summary>
-    public interface IFrontProductCategoryAppService : IUnAuthGeneralTreeAppServiceBase<
-        ProductCategoryGetForSelectInput,
-        ProductCategoryTreeNodeDto,
-        ProductCategoryGetForSelectInput,
-        ProductCategoryCombboxDto>
+    public interface IFrontProductCategoryAppService : IUnAuthGeneralTreeAppServiceBase<ProductCategoryGetForSelectInput,
+                                                                                        ProductCategoryTreeNodeDto,
+                                                                                        ProductCategoryGetForSelectInput,
+                                                                                        ProductCategoryCombboxDto>
     { }
 }

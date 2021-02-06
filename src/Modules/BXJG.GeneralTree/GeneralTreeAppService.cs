@@ -26,27 +26,23 @@ namespace BXJG.GeneralTree
                                                                                GeneralTreeEntity,
                                                                                GeneralTreeManager>, IUnAuthGeneralTreeAppService
     {
-        public UnAuthGeneralTreeAppService(
-            IRepository<GeneralTreeEntity, long> repository,
-            GeneralTreeManager organizationUnitManager)
-            : base(repository, organizationUnitManager)
+        public UnAuthGeneralTreeAppService(IRepository<GeneralTreeEntity, long> repository, GeneralTreeManager organizationUnitManager) : base(repository, organizationUnitManager)
         { }
     }
 
     /// <summary>
     /// 数据字典应用服务类
     /// </summary>
-    public class GeneralTreeAppService : GeneralTreeAppServiceBase<
-            GeneralTreeDto,
-            GeneralTreeEditDto,
-            GeneralTreeGetTreeInput,
-            GeneralTreeGetForSelectInput,
-            GeneralTreeNodeDto,
-            GeneralTreeGetForSelectInput,
-            GeneralTreeComboboxDto,
-            GeneralTreeNodeMoveInput,
-            GeneralTreeEntity,
-            GeneralTreeManager>, IGeneralTreeAppService
+    public class GeneralTreeAppService : GeneralTreeAppServiceBase<GeneralTreeDto,
+                                                                   GeneralTreeEditDto,
+                                                                   GeneralTreeGetTreeInput,
+                                                                   GeneralTreeGetForSelectInput,
+                                                                   GeneralTreeNodeDto,
+                                                                   GeneralTreeGetForSelectInput,
+                                                                   GeneralTreeComboboxDto,
+                                                                   GeneralTreeNodeMoveInput,
+                                                                   GeneralTreeEntity,
+                                                                   GeneralTreeManager>, IGeneralTreeAppService
     {
         public GeneralTreeAppService(
             IRepository<GeneralTreeEntity, long> repository,

@@ -4,15 +4,16 @@ using Abp.Modules;
 using Abp.Reflection.Extensions;
 using BXJG.Shop.Authorization;
 using BXJG.Shop.Catalogue;
+using BXJG.Utils;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Reflection;
 
 namespace BXJG.Shop
 {
-    [DependsOn(
-          typeof(CoreModule),
-          typeof(AbpAutoMapperModule))]
+    [DependsOn(typeof(CoreModule),
+               typeof(AbpAutoMapperModule),
+               typeof(BXJGUtilsApplicationModule))]
     public class ApplicationModule : AbpModule
     {
         IConfiguration configuration;

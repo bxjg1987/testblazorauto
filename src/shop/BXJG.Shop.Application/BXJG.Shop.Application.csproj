@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\libs\BXJG.Wechat\BXJG.WeChat.csproj" />
+    <ProjectReference Include="..\..\Modules\BXJG.Utils.Application\BXJG.Utils.Application.csproj" />
     <ProjectReference Include="..\BXJG.Shop.Core\BXJG.Shop.Core.csproj" />
   </ItemGroup>
 

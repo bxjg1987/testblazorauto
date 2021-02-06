@@ -53,6 +53,8 @@ namespace ZLJ
             AppRoleConfig.Configure(Configuration.Modules.Zero().RoleManagement);
 
             Configuration.Settings.Providers.Add<AppSettingProvider>();
+
+            Configuration.DynamicEntityProperties.Providers.Add<ZLJDynamicEntityPropertyDefinition>();
         }
 
         public override void Initialize()

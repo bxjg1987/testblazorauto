@@ -19,6 +19,7 @@ namespace BXJG.Utils
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
+            IocManager.Register(typeof(DynamicPropertyAppService<>), DependencyLifeStyle.Singleton);
         }
     }
 }

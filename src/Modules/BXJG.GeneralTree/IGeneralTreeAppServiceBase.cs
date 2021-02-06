@@ -16,9 +16,9 @@ namespace BXJG.GeneralTree
     /// <typeparam name="TGetNodesForSelectInput">获取扁平下拉框数据时的输入模型</typeparam>
     /// <typeparam name="TGetNodesForSelectOutput">获取扁平下拉框数据时的输出模型</typeparam>
     public interface IUnAuthGeneralTreeAppServiceBase<TGetTreeForSelectInput,
-                                                TGetTreeForSelectOutput,
-                                                TGetNodesForSelectInput,
-                                                TGetNodesForSelectOutput> : IApplicationService
+                                                      TGetTreeForSelectOutput,
+                                                      TGetNodesForSelectInput,
+                                                      TGetNodesForSelectOutput> : IApplicationService
     {
         /// <summary>
         /// 获取简洁的树形数据，通常引用此数据的页面调用
@@ -51,9 +51,9 @@ namespace BXJG.GeneralTree
                                                 TGetNodesForSelectInput,
                                                 TGetNodesForSelectOutput,
                                                 TMoveInput> : IUnAuthGeneralTreeAppServiceBase<TGetTreeForSelectInput,
-                                                                                         TGetTreeForSelectOutput,
-                                                                                         TGetNodesForSelectInput,
-                                                                                         TGetNodesForSelectOutput>
+                                                                                               TGetTreeForSelectOutput,
+                                                                                               TGetNodesForSelectInput,
+                                                                                               TGetNodesForSelectOutput>
     {
         /*
          * 返回列表都是IList abp官网的一般是IReadOnlyList，为了方便调用方进一步做处理 我们这里返回IList

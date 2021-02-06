@@ -22,9 +22,9 @@ namespace BXJG.Shop.Catalogue
                                               ProductCategoryManager organizationUnitManager,
                                               string allTextForSearch = "不限", 
                                               string allTextForForm = "请选择") : base(ownRepository,
-                                                                                            organizationUnitManager,
-                                                                                            allTextForSearch,
-                                                                                            allTextForForm)
+                                                                                       organizationUnitManager,
+                                                                                       allTextForSearch,
+                                                                                       allTextForForm)
         {
         }
     }

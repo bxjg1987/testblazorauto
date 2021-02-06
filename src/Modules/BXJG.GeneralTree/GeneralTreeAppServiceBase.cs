@@ -74,7 +74,11 @@ namespace BXJG.GeneralTree
             this.allTextForSearch = allTextForSearch.UtilsL();
             this.allTextForForm = allTextForForm.UtilsL();
         }
-
+        /// <summary>
+        /// 获取树形的下拉框数据，不需要身份验证
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public virtual async Task<IList<TGetTreeForSelectOutput>> GetTreeForSelectAsync(TGetTreeForSelectInput input)
         {
             //权限判断
@@ -143,6 +147,11 @@ namespace BXJG.GeneralTree
 
             return dtoList;
         }
+        /// <summary>
+        /// 获取扁平化的下拉框数据，不需要身份验证
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public virtual async Task<IList<TGetNodesForSelectOutput>> GetNodesForSelectAsync(TGetNodesForSelectInput input)
         {
             //await CheckGetPermissionAsync();
@@ -219,7 +228,7 @@ namespace BXJG.GeneralTree
         #region 获取扁平化下拉框数据时子类可重写的方法
         protected virtual IQueryable<TEntity> ComboboxFilter(TGetNodesForSelectInput input, long? parentId)
         {
-            return ownRepository.GetAll().Where(c => c.ParentId==parentId);
+            return ownRepository.GetAll().Where(c => c.ParentId == parentId);
             //return ownRepository.GetAll().Where(c => c.ParentId == input.ParentId || c.Id == input.ParentId);
         }
         protected virtual IQueryable<TEntity> ComboboxSort(IQueryable<TEntity> query, TGetNodesForSelectInput input)
@@ -328,7 +337,11 @@ namespace BXJG.GeneralTree
             this.deletePermissionName = deletePermissionName;
             this.getPermissionName = getPermissionName;
         }
-
+        /// <summary>
+        /// 创建树形结构数据
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public virtual async Task<TDto> CreateAsync(TEditDto input)
         {
             await CheckCreatePermissionAsync();
@@ -352,6 +365,11 @@ namespace BXJG.GeneralTree
             await generalTreeManager.CreateAsync(m);
             return ObjectMapper.Map<TDto>(m);
         }
+        /// <summary>
+        /// 移动树形结构数据的节点
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public virtual async Task<TDto> MoveAsync(TMoveInput input)
         {
             //移动关于追加 之后 之前 的处理逻辑本应该定义在领域服务中
@@ -360,6 +378,11 @@ namespace BXJG.GeneralTree
             var m = await generalTreeManager.MoveAsync(input.Id, input.TargetId, input.MoveType);
             return ObjectMapper.Map<TDto>(m);// m.MapTo<TDto>();
         }
+        /// <summary>
+        /// 更新树形结构的数据
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public virtual async Task<TDto> UpdateAsync(TEditDto input)
         {
             //var sdf = input.Pci.inputText;
@@ -383,11 +406,21 @@ namespace BXJG.GeneralTree
             await generalTreeManager.UpdateAsync(m);
             return ObjectMapper.Map<TDto>(m);
         }
+        /// <summary>
+        /// 删除树形结构的数据
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public virtual async Task DeleteAsync(EntityDto<long> input)
         {
             await CheckDeletePermissionAsync();
             await this.generalTreeManager.DeleteAsync(input.Id);
         }
+        /// <summary>
+        /// 获取指定节点的树形结构的数据
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public virtual async Task<TDto> GetAsync(EntityDto<long> input)
         {
             await CheckGetPermissionAsync();
@@ -400,6 +433,11 @@ namespace BXJG.GeneralTree
         }
 
         //如果没有上级节点包装 列表默认被选择了 点击新增时 上级几点无法定位到null，因此需要做个包装
+        /// <summary>
+        /// 获取所有树形结构的数据，以树形层次结构返回
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public virtual async Task<IList<TDto>> GetAllAsync(TGetAllInput input)
         {
             //权限判断
@@ -462,7 +500,11 @@ namespace BXJG.GeneralTree
             }
             return list1;
         }
-        //[AbpAuthorize]
+        /// <summary>
+        /// 获取树形下拉框数据，需要身份验证
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public override Task<IList<TGetTreeForSelectOutput>> GetTreeForSelectAsync(TGetTreeForSelectInput input)
         {
             //权限判断
@@ -473,7 +515,11 @@ namespace BXJG.GeneralTree
 
             return base.GetTreeForSelectAsync(input);
         }
-       // [AbpAuthorize]
+        /// <summary>
+        /// 获取扁平化下拉框数据，需要身份验证
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public override Task<IList<TGetNodesForSelectOutput>> GetNodesForSelectAsync(TGetNodesForSelectInput input)
         {
             //await CheckGetPermissionAsync();
