@@ -60,10 +60,10 @@ namespace BXJG.Shop.Customer
         where TRoleManager : AbpRoleManager<TRole, TUser>
         where TUserManager : AbpUserManager<TRole, TUser>
     {
-        private readonly TRoleManager RoleManager;
-        private readonly TUserManager UserManager;
-        private readonly IRepository<CustomerEntity, long> repository;
-        private readonly IRepository<TUser, long> userRepository;
+        protected readonly TRoleManager roleManager;
+        protected readonly TUserManager userManager;
+        protected readonly IRepository<CustomerEntity, long> repository;
+        protected readonly IRepository<TUser, long> userRepository;
         protected readonly IRepository<AdministrativeEntity, long> administrativeRepository;
 
         public CustomerAppService(IRepository<CustomerEntity, long> repository,
@@ -73,8 +73,8 @@ namespace BXJG.Shop.Customer
                                   IRepository<AdministrativeEntity, long> administrativeRepository)
         {
             this.repository = repository;
-            RoleManager = roleManager;
-            UserManager = userManager;
+            this.roleManager = roleManager;
+            this.userManager = userManager;
             this.userRepository = userRepository;
             this.administrativeRepository = administrativeRepository;
         }
@@ -93,9 +93,9 @@ namespace BXJG.Shop.Customer
             user.IsEmailConfirmed = true;
             user.IsPhoneNumberConfirmed = true;
             user.UserName = input.UserName;
-            await UserManager.InitializeOptionsAsync(AbpSession.TenantId);//看顶部注释
+            await userManager.InitializeOptionsAsync(AbpSession.TenantId);//看顶部注释
             //user.SetNormalizedNames();//这个貌似没必要调了，UserManager内部会处理
-            CheckErrors(await UserManager.CreateAsync(user, input.Password));
+            CheckErrors(await userManager.CreateAsync(user, input.Password));
             //目前不考虑多角色商城会员
             //if (input.RoleNames != null)
             //{
@@ -103,7 +103,7 @@ namespace BXJG.Shop.Customer
             //}
             CurrentUnitOfWork.SaveChanges();//保存后才能拿到新的UserId
 
-            CheckErrors(await UserManager.AddToRoleAsync(user, CoreConsts.CustomerRoleName));
+            CheckErrors(await userManager.AddToRoleAsync(user, CoreConsts.CustomerRoleName));
 
             //return MapToEntityDto(user);
             #endregion
@@ -128,7 +128,7 @@ namespace BXJG.Shop.Customer
             var entity = await repository.GetAsync(input.Id);
 
             #region 更新主程序的用户信息
-            var user = await UserManager.GetUserByIdAsync(entity.UserId);
+            var user = await userManager.GetUserByIdAsync(entity.UserId);
             user.EmailAddress = input.EmailAddress;
             user.Name = input.Name;
             user.Surname = user.Name;
@@ -138,7 +138,7 @@ namespace BXJG.Shop.Customer
             user.IsPhoneNumberConfirmed = true;
             user.UserName = input.UserName;
             user.IsActive = input.IsActive;
-            CheckErrors(await UserManager.UpdateAsync(user));
+            CheckErrors(await userManager.UpdateAsync(user));
             //目前不考虑多角色商城会员
             //if (input.RoleNames != null)
             //{
@@ -179,6 +179,8 @@ namespace BXJG.Shop.Customer
             {
                 if (input.Sorting.Contains("FullName "))
                     input.Sorting = "u." + input.Sorting;
+                else if (input.Sorting.Contains("areaDisplayName"))
+                    input.Sorting = input.Sorting.Replace("area", "area.");
                 else
                     input.Sorting = "c." + input.Sorting;
                 query = query.OrderBy(input.Sorting);

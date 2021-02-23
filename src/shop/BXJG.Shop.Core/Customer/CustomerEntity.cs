@@ -28,7 +28,6 @@ namespace BXJG.Shop.Customer
         /// </summary>
         public long UserId { get; private set; }
         private long integral;
-        private decimal amounct;
         /// <summary>
         /// 顾客的积分
         /// </summary>

@@ -17,7 +17,7 @@ namespace BXJG.Shop.Sale
     /// </summary>
     /// <typeparam name="TUser"></typeparam>
     /// <typeparam name="TArea"></typeparam>
-    public class OrderPaidEventHandler : IAsyncEventHandler<OrderPaidEventData>
+    public class OrderPaidEventHandler : IAsyncEventHandler<OrderPaidEventData>, ITransientDependency
     {
         private readonly IRepository<CustomerEntity, long> customerRepository;
 

@@ -129,7 +129,11 @@ namespace BXJG.GeneralTree
 
             //通用树是通过继承来实现扩展的，所以这里L引用的本地化源可能被子类重写，因此这里用L是可以的
             if (input.ForType > 0 && input.ForType < 5 && !string.IsNullOrWhiteSpace(input.ParentText))
-                return new List<TGetTreeForSelectOutput> { new TGetTreeForSelectOutput { Id = null, Text = L(input.ParentText), Children = dtoList } };
+            {
+                dtoList.Insert(0, new TGetTreeForSelectOutput { Id = null, Text = L(input.ParentText) });
+                return dtoList;
+            }
+            //return new List<TGetTreeForSelectOutput> { new TGetTreeForSelectOutput { Id = null, Text = L(input.ParentText), Children = dtoList } };
 
             if ((input.ForType == 1 || input.ForType == 3) && input.ParentId.HasValue)
             {
@@ -140,10 +144,18 @@ namespace BXJG.GeneralTree
 
 
             if (input.ForType == 1 || input.ForType == 2)
-                return new List<TGetTreeForSelectOutput> { new TGetTreeForSelectOutput { Id = null, Text = this.allTextForSearch, Children = dtoList } };
+            {
+                dtoList.Insert(0, new TGetTreeForSelectOutput { Id = null, Text = allTextForSearch });
+                return dtoList;
+            }
+            //return new List<TGetTreeForSelectOutput> { new TGetTreeForSelectOutput { Id = null, Text = this.allTextForSearch, Children = dtoList } };
 
             if (input.ForType == 3 || input.ForType == 4)
-                return new List<TGetTreeForSelectOutput> { new TGetTreeForSelectOutput { Id = null, Text = this.allTextForForm, Children = dtoList } };
+            {
+                dtoList.Insert(0, new TGetTreeForSelectOutput { Id = null, Text = allTextForForm });
+                return dtoList;
+            }
+            // return new List<TGetTreeForSelectOutput> { new TGetTreeForSelectOutput { Id = null, Text = this.allTextForForm, Children = dtoList } };
 
             return dtoList;
         }
