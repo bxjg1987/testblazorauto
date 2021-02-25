@@ -29,6 +29,8 @@ using BXJG.Equipment;
 using BXJG.BaseInfo;
 using BXJG.WeChat.Pay;
 using BXJG.WeChat.MiniProgram;
+using Microsoft.AspNetCore.Identity;
+
 namespace ZLJ.Web.Host.Startup
 {
     public class Startup
@@ -60,8 +62,19 @@ namespace ZLJ.Web.Host.Startup
                 };
             });
 
-
+            //这里abp引入asp.net identity，
             IdentityRegistrar.Register(services);
+            //参考：https://docs.microsoft.com/zh-cn/aspnet/core/security/authentication/identity-configuration?view=aspnetcore-5.0#no-locidentity-options
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequireDigit = false;//要求密码中的数字介于0-9 之间。默认true
+                options.Password.RequireLowercase = false;//密码中需要小写字符。默认true
+                options.Password.RequireNonAlphanumeric = false;//密码中需要一个非字母数字字符.。默认true
+                options.Password.RequireUppercase = false;//必须包含大写字母，默认true
+                options.Password.RequiredLength = 1; //密码最小长度，默认6
+                options.Password.RequiredUniqueChars = 1;  //仅适用于 ASP.NET Core 2.0 或更高版本。 需要密码中的非重复字符数。默认1
+            });
+
             AuthConfigurer.Configure(services, _appConfiguration);
 
             //微信相关服务注册使用abp模块化形式,在ZLJ.Core模块中依赖微信模块，并在PreInit中配置

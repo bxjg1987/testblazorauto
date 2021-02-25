@@ -95,12 +95,19 @@ namespace BXJG.Shop.Customer
             user.UserName = input.UserName;
             await userManager.InitializeOptionsAsync(AbpSession.TenantId);//看顶部注释
             //user.SetNormalizedNames();//这个貌似没必要调了，UserManager内部会处理
-            CheckErrors(await userManager.CreateAsync(user, input.Password));
+
+            //abp 6.1.3未实施密码复杂性要求，而ChangePasswordAsync有验证，所以这里分开处理
+            //参考：https://github.com/aspnetboilerplate/aspnetboilerplate/issues/6050
+            CheckErrors(await userManager.CreateAsync(user/*, input.Password*/));
+            CheckErrors(await userManager.ChangePasswordAsync(user, input.Password));
+
+
             //目前不考虑多角色商城会员
             //if (input.RoleNames != null)
             //{
             //    CheckErrors(await _userManager.SetRolesAsync(user, input.RoleNames));
             //}
+            //BXJG.Common.SecurityHelper.RandomBase64
             CurrentUnitOfWork.SaveChanges();//保存后才能拿到新的UserId
 
             CheckErrors(await userManager.AddToRoleAsync(user, CoreConsts.CustomerRoleName));
@@ -138,7 +145,10 @@ namespace BXJG.Shop.Customer
             user.IsPhoneNumberConfirmed = true;
             user.UserName = input.UserName;
             user.IsActive = input.IsActive;
+
             CheckErrors(await userManager.UpdateAsync(user));
+            if (!input.Password.IsNullOrWhiteSpace())
+                CheckErrors(await userManager.ChangePasswordAsync(user, input.Password));
             //目前不考虑多角色商城会员
             //if (input.RoleNames != null)
             //{
