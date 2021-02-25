@@ -268,7 +268,7 @@ namespace BXJG.Shop.Customer
         protected virtual async Task<CustomerDto> GetDtoAsync(long id)
         {
             var p = await GetOneAsync(id);
-            return MapToDto(p.customer, p.user);
+            return MapToDto(p.customer, p.user,p.area);
         }
     }
 }
