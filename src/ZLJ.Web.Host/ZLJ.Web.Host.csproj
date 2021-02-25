@@ -36,7 +36,18 @@
     <None Remove="BXJG.Utils.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="wx\wxpaycert.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
     <None Include="app.config" />
+    <None Include="wx\apiclient_cert.pem">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="wx\apiclient_key.pem">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="APIXML\BXJG.BaseInfo.Application.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -158,6 +169,5 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\Logs\" />
-    <Folder Include="wx\" />
   </ItemGroup>
 </Project>
