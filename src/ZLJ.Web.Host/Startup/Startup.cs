@@ -64,16 +64,19 @@ namespace ZLJ.Web.Host.Startup
 
             //这里abp引入asp.net identity，
             IdentityRegistrar.Register(services);
+
+            //asp.net userManager有个Option属性，abp的userManager.InitializeOptionsAsync会使用设置系统覆盖此设置 
+            //参考：https://github.com/aspnetboilerplate/aspnetboilerplate/blob/c0604b9b1347a3b9581bf97b4cae22db5b6bab1b/src/Abp.ZeroCore/Authorization/Users/AbpUserManager.cs
             //参考：https://docs.microsoft.com/zh-cn/aspnet/core/security/authentication/identity-configuration?view=aspnetcore-5.0#no-locidentity-options
-            services.Configure<IdentityOptions>(options =>
-            {
-                options.Password.RequireDigit = false;//要求密码中的数字介于0-9 之间。默认true
-                options.Password.RequireLowercase = false;//密码中需要小写字符。默认true
-                options.Password.RequireNonAlphanumeric = false;//密码中需要一个非字母数字字符.。默认true
-                options.Password.RequireUppercase = false;//必须包含大写字母，默认true
-                options.Password.RequiredLength = 1; //密码最小长度，默认6
-                options.Password.RequiredUniqueChars = 1;  //仅适用于 ASP.NET Core 2.0 或更高版本。 需要密码中的非重复字符数。默认1
-            });
+            //services.Configure<IdentityOptions>(options =>
+            //{
+            //    options.Password.RequireDigit = false;//要求密码中的数字介于0-9 之间。默认true
+            //    options.Password.RequireLowercase = false;//密码中需要小写字符。默认true
+            //    options.Password.RequireNonAlphanumeric = false;//密码中需要一个非字母数字字符.。默认true
+            //    options.Password.RequireUppercase = false;//必须包含大写字母，默认true
+            //    options.Password.RequiredLength = 1; //密码最小长度，默认6
+            //    options.Password.RequiredUniqueChars = 1;  //仅适用于 ASP.NET Core 2.0 或更高版本。 需要密码中的非重复字符数。默认1
+            //});
 
             AuthConfigurer.Configure(services, _appConfiguration);
 

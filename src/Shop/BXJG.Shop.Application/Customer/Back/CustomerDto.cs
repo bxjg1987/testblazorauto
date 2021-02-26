@@ -32,6 +32,7 @@ namespace BXJG.Shop.Customer
         public string EmailAddress { get; set; }
         public bool IsActive { get; set; }
         public string PhoneNumber { get; set; }
+        public string Password { get; set; }
         #endregion
         /// <summary>
         /// 所属地区id

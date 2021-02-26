@@ -23,6 +23,7 @@ using AutoMapper.QueryableExtensions;
 using Abp.AutoMapper;
 using Abp.Domain.Uow;
 using ZLJ.BaseInfo.Administrative;
+using Abp.Timing;
 
 namespace BXJG.Shop.Customer
 {
@@ -33,12 +34,9 @@ namespace BXJG.Shop.Customer
      * 
      * 最后决定直接在应用层引入Microsoft.EntityFrameworkCore 因为这能提供及大的便利，且像AsNoChangeTracking无法用AsyncQueryableExecuter实现
      * 
-     * await UserManager.InitializeOptionsAsync(AbpSession.TenantId);
-     * 源码地址 https://github.com/aspnetboilerplate/aspnetboilerplate/blob/c0604b9b1347a3b9581bf97b4cae22db5b6bab1b/src/Abp.ZeroCore/Authorization/Users/AbpUserManager.cs
-     * 默认项目模板中 用户新增和注册 都会调用此方法
-     * 很费解，看源码 主要是从 abp Settings中获取值 然后赋值给 IdentityOptions选项对象
-     * 但是这个选项对象要么是单例 要么是 一个请求一个实例，每次赋值是几个意思？
-     * 暂时不纠结了
+     * InitializeOptionsAsync
+     * asp.net userManager有个Option属性，abp的userManager会使用设置系统覆盖此设置 
+     * 参考：https://github.com/aspnetboilerplate/aspnetboilerplate/blob/c0604b9b1347a3b9581bf97b4cae22db5b6bab1b/src/Abp.ZeroCore/Authorization/Users/AbpUserManager.cs
      */
 
     /// <summary>
@@ -92,13 +90,17 @@ namespace BXJG.Shop.Customer
             //user.TenantId = AbpSession.TenantId;//好像UserManager会自己处理
             user.IsEmailConfirmed = true;
             user.IsPhoneNumberConfirmed = true;
-            user.UserName = input.UserName;
-            await userManager.InitializeOptionsAsync(AbpSession.TenantId);//看顶部注释
+            user.UserName = input.UserName ?? input.PhoneNumber ?? input.EmailAddress ?? BXJG.Common.SecurityHelper.RandomBase64() + Clock.Now.Ticks;
+
+            //asp.net userManager有个Option属性，abp的userManager会使用设置系统覆盖此设置 参考：https://github.com/aspnetboilerplate/aspnetboilerplate/blob/c0604b9b1347a3b9581bf97b4cae22db5b6bab1b/src/Abp.ZeroCore/Authorization/Users/AbpUserManager.cs
+            await userManager.InitializeOptionsAsync(AbpSession.TenantId);
             //user.SetNormalizedNames();//这个貌似没必要调了，UserManager内部会处理
 
             //abp 6.1.3未实施密码复杂性要求，而ChangePasswordAsync有验证，所以这里分开处理
             //参考：https://github.com/aspnetboilerplate/aspnetboilerplate/issues/6050
             CheckErrors(await userManager.CreateAsync(user/*, input.Password*/));
+            if (input.Password.IsNullOrWhiteSpace())
+                input.Password = BXJG.Common.SecurityHelper.RandomBase64(8);
             CheckErrors(await userManager.ChangePasswordAsync(user, input.Password));
 
 
@@ -127,7 +129,9 @@ namespace BXJG.Shop.Customer
             };
             await repository.InsertAsync(entity);
             CurrentUnitOfWork.SaveChanges();//保存后才能拿到新的会员信息自增Id
-            return await GetDtoAsync(entity.Id);
+            var r = await GetDtoAsync(entity.Id);
+            r.Password = input.Password;
+            return r;
         }
 
         public virtual async Task<CustomerDto> UpdateAsync(CustomerUpdateDto input)
@@ -146,6 +150,8 @@ namespace BXJG.Shop.Customer
             user.UserName = input.UserName;
             user.IsActive = input.IsActive;
 
+            //asp.net userManager有个Option属性，abp的userManager会使用设置系统覆盖此设置 参考：https://github.com/aspnetboilerplate/aspnetboilerplate/blob/c0604b9b1347a3b9581bf97b4cae22db5b6bab1b/src/Abp.ZeroCore/Authorization/Users/AbpUserManager.cs
+            await userManager.InitializeOptionsAsync(AbpSession.TenantId);
             CheckErrors(await userManager.UpdateAsync(user));
             if (!input.Password.IsNullOrWhiteSpace())
                 CheckErrors(await userManager.ChangePasswordAsync(user, input.Password));
@@ -211,11 +217,15 @@ namespace BXJG.Shop.Customer
         public virtual async Task<BatchOperationResultLong> DeleteBatchAsync(BatchOperationInputLong input)
         {
             var result = new BatchOperationResultLong();
+            var userIds = await base.AsyncQueryableExecuter.ToListAsync(repository.GetAll().Where(c => input.Ids.Contains(c.Id)).Select(c => new { c.Id, c.UserId }));
+            var sss = userIds.Select(c => c.UserId);
+            var users = await base.AsyncQueryableExecuter.ToListAsync(userRepository.GetAll().Where(c=> sss.Contains(c.Id)));
             foreach (var item in input.Ids)
             {
                 try
                 {
                     await repository.DeleteAsync(item);
+                    await userManager.DeleteAsync(  users.Single(d=>d.Id==     userIds.Single(c=>c.Id==item).UserId        )        );
                     result.Ids.Add(item);
                 }
                 catch (Exception ex)
@@ -263,12 +273,13 @@ namespace BXJG.Shop.Customer
             if (area != null)
                 ObjectMapper.Map(area, dto);
             dto.Id = c.Id;
+            dto.Password = string.Empty;
             return dto;
         }
         protected virtual async Task<CustomerDto> GetDtoAsync(long id)
         {
             var p = await GetOneAsync(id);
-            return MapToDto(p.customer, p.user,p.area);
+            return MapToDto(p.customer, p.user, p.area);
         }
     }
 }
