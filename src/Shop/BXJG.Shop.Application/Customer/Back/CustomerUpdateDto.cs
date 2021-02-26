@@ -43,7 +43,7 @@ namespace BXJG.Shop.Customer
         /// <summary>
         /// 邮箱地址
         /// </summary>
-        [Required]
+        //[Required]
         [EmailAddress]
         [StringLength(AbpUserBase.MaxEmailAddressLength)]
         public string EmailAddress { get; set; }
@@ -58,14 +58,14 @@ namespace BXJG.Shop.Customer
         /// <summary>
         /// 密码
         /// </summary>
-        [Required]
+        //[Required]
         [StringLength(AbpUserBase.MaxPlainPasswordLength)]
         [DisableAuditing]
         public string Password { get; set; }
         /// <summary>
         /// 手机号
         /// </summary>
-        [Required]
+        //[Required]
         [StringLength(AbpUserBase.MaxPhoneNumberLength)]
         public string PhoneNumber { get; set; }
         #endregion
