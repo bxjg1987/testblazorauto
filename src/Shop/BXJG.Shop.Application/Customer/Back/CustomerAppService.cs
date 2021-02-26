@@ -122,6 +122,7 @@ namespace BXJG.Shop.Customer
             {
                 //Amount = input.Amount,
                 Birthday = input.Birthday,
+                AreaId = input.AreaId,
                 Gender = input.Gender
                 //Integral = input.Integral,
                 //User = user,//下面设置了userId就行了
@@ -170,6 +171,7 @@ namespace BXJG.Shop.Customer
             //entity.Amount = input.Amount;
             entity.Birthday = input.Birthday;
             entity.Gender = input.Gender;
+            entity.AreaId = input.AreaId;
             //entity.Integral = input.Integral;
             //entity.TenantId = AbpSession.TenantId.Value;
             await repository.UpdateAsync(entity);
@@ -219,13 +221,13 @@ namespace BXJG.Shop.Customer
             var result = new BatchOperationResultLong();
             var userIds = await base.AsyncQueryableExecuter.ToListAsync(repository.GetAll().Where(c => input.Ids.Contains(c.Id)).Select(c => new { c.Id, c.UserId }));
             var sss = userIds.Select(c => c.UserId);
-            var users = await base.AsyncQueryableExecuter.ToListAsync(userRepository.GetAll().Where(c=> sss.Contains(c.Id)));
+            var users = await base.AsyncQueryableExecuter.ToListAsync(userRepository.GetAll().Where(c => sss.Contains(c.Id)));
             foreach (var item in input.Ids)
             {
                 try
                 {
                     await repository.DeleteAsync(item);
-                    await userManager.DeleteAsync(  users.Single(d=>d.Id==     userIds.Single(c=>c.Id==item).UserId        )        );
+                    await userManager.DeleteAsync(users.Single(d => d.Id == userIds.Single(c => c.Id == item).UserId));
                     result.Ids.Add(item);
                 }
                 catch (Exception ex)

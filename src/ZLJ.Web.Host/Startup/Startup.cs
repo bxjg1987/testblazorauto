@@ -30,6 +30,7 @@ using BXJG.BaseInfo;
 using BXJG.WeChat.Pay;
 using BXJG.WeChat.MiniProgram;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 
 namespace ZLJ.Web.Host.Startup
 {
@@ -177,6 +178,11 @@ namespace ZLJ.Web.Host.Startup
             app.UseAuthentication();
 
             app.UseAbpRequestLocalization();
+            //app.UseAbpRequestLocalization(opt =>
+            //{
+            //    var t = opt.RequestCultureProviders.SingleOrDefault(c => c.GetType() == typeof(AcceptLanguageHeaderRequestCultureProvider));
+            //    opt.RequestCultureProviders.Remove(t);
+            //});
 
             // app.UseWeChatPayment();
 
