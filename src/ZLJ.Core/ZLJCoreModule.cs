@@ -9,6 +9,7 @@ using BXJG.CMS;
 using BXJG.Equipment;
 using BXJG.File;
 using BXJG.GeneralTree;
+using BXJG.Shop.Customer;
 using BXJG.Utils;
 using BXJG.WeChat;
 using ZLJ.Authorization.Roles;
@@ -60,6 +61,7 @@ namespace ZLJ
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(typeof(ZLJCoreModule).GetAssembly());
+            IocManager.Register<ICustomerLoginManager<User>, CustomerLoginManager<Tenant, Role, User, UserManager>>(Abp.Dependency.DependencyLifeStyle.Transient);
         }
 
         public override void PostInitialize()

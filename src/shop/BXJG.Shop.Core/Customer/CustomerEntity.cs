@@ -4,6 +4,7 @@ using Abp.Domain.Entities.Auditing;
 using BXJG.Common;
 using BXJG.GeneralTree;
 using BXJG.Shop.Sale;
+using BXJG.Utils.BusinessUser;
 using BXJG.Utils.Enums;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace BXJG.Shop.Customer
     /// <summary>
     /// 商城系统中的顾客，与用户一对一关联
     /// </summary>
-    public class CustomerEntity : FullAuditedAggregateRoot<long>, IMustHaveTenant, IExtendableObject
+    public class CustomerEntity : FullAuditedAggregateRoot<long>, IBusinessUserEntity, IMustHaveTenant, IExtendableObject
     {
         /// <summary>
         /// 租户id

@@ -21,14 +21,15 @@ namespace BXJG.Shop.ShoppingCart.Customer
         protected readonly IRepository<ShoppingCartEntity, long> shoppingCartRepository;
         protected readonly IRepository<ProductEntity, long> productRepository;
 
-        //protected readonly ShoppingCartManager shoppingCartManager;
-
-        public CustomerShoppingCartAppService(ICustomerSession customerSession, IRepository<ShoppingCartEntity, long> shoppingCartRepository, IRepository<ProductEntity, long> productRepository/*, ShoppingCartManager shoppingCartManager*/) : base(customerSession)
+        public CustomerShoppingCartAppService(ICustomerSession customerSession, IRepository<CustomerEntity, long> repository, IRepository<ShoppingCartEntity, long> shoppingCartRepository, IRepository<ProductEntity, long> productRepository) : base(customerSession, repository)
         {
             this.shoppingCartRepository = shoppingCartRepository;
             this.productRepository = productRepository;
-            //this.shoppingCartManager = shoppingCartManager;
         }
+
+        //protected readonly ShoppingCartManager shoppingCartManager;
+
+
         /// <summary>
         /// 顾客将商品添加到购物车
         /// </summary>
@@ -150,7 +151,7 @@ namespace BXJG.Shop.ShoppingCart.Customer
         /// <returns></returns>
         protected virtual async Task<ShoppingCartEntity> GetShoppingCart()
         {
-            var customerId = await GetCurrentCustomerIdAsync();
+            var customerId = customerSession.BusinessUserId;
             var shoppingCart = await shoppingCartRepository.GetAll()
                                                            .Include(c => c.Items).ThenInclude(c => c.Product.Brand)
                                                            .Include(c => c.Items).ThenInclude(c => c.Product.Unit)

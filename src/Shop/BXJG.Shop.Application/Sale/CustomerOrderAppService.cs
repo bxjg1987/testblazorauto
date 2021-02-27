@@ -21,7 +21,7 @@ namespace BXJG.Shop.Sale
     /// <summary>
     /// 前台顾客对订单的操作接口
     /// </summary>
-    public class CustomerOrderAppService : CustomerAppServiceWithCustomerBase, ICustomerOrderAppService
+    public class CustomerOrderAppService : CustomerAppServiceBase, ICustomerOrderAppService
     {
         private readonly IRepository<OrderEntity, long> repository;
         private readonly OrderManager orderManager;

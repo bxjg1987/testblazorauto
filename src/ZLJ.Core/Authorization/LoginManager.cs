@@ -24,7 +24,7 @@ namespace ZLJ.Authorization
         //private readonly IHttpContextAccessor _httpContext;
 
 
-        private readonly CustomerLoginManager<Tenant, Role, User, UserManager> customerLoginManager;
+        //private readonly CustomerLoginManager<Tenant, Role, User, UserManager> customerLoginManager;
         public LogInManager(
             UserManager userManager,
             IMultiTenancyConfig multiTenancyConfig,
@@ -36,7 +36,7 @@ namespace ZLJ.Authorization
             IIocResolver iocResolver,
             IPasswordHasher<User> passwordHasher,
             RoleManager roleManager,
-            UserClaimsPrincipalFactory claimsPrincipalFactory/*, IHttpContextAccessor httpContextAccessor*/, CustomerLoginManager<Tenant, Role, User, UserManager> customerLoginManager)
+            UserClaimsPrincipalFactory claimsPrincipalFactory/*, IHttpContextAccessor httpContextAccessor, CustomerLoginManager<Tenant, Role, User, UserManager> customerLoginManager*/)
             : base(
                   userManager,
                   multiTenancyConfig,
@@ -50,7 +50,7 @@ namespace ZLJ.Authorization
                   roleManager,
                   claimsPrincipalFactory)
         {
-            this.customerLoginManager = customerLoginManager;
+          //  this.customerLoginManager = customerLoginManager;
             //this._httpContext = httpContextAccessor;
         }
 
@@ -58,20 +58,20 @@ namespace ZLJ.Authorization
         //    this._httpContext.AuthenticateAsync
         //}
 
-        /// <summary>
-        /// 重写以处理不同类型用户的登陆逻辑
-        /// 若不这样做请考虑为不同的用户类型单独定义登陆器
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="tenant"></param>
-        /// <returns></returns>
-        protected override async Task<AbpLoginResult<Tenant, User>> CreateLoginResultAsync(User user, Tenant tenant = null)
-        {
-            var r = await base.CreateLoginResultAsync(user, tenant);
+        ///// <summary>
+        ///// 重写以处理不同类型用户的登陆逻辑
+        ///// 若不这样做请考虑为不同的用户类型单独定义登陆器
+        ///// </summary>
+        ///// <param name="user"></param>
+        ///// <param name="tenant"></param>
+        ///// <returns></returns>
+        //protected override async Task<AbpLoginResult<Tenant, User>> CreateLoginResultAsync(User user, Tenant tenant = null)
+        //{
+        //    var r = await base.CreateLoginResultAsync(user, tenant);
 
-            await customerLoginManager.TryLoginAsync(r);//尝试以顾客身份登陆，
+        //    await customerLoginManager.TryLoginAsync(r);//尝试以顾客身份登陆，
 
-            return r;
-        }
+        //    return r;
+        //}
     }
 }
