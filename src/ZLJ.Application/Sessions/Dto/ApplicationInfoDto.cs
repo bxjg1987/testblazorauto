@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace ZLJ.Sessions.Dto
 {
@@ -10,5 +11,9 @@ namespace ZLJ.Sessions.Dto
         public DateTime ReleaseDate { get; set; }
 
         public Dictionary<string, bool> Features { get; set; }
+
+        public string RunTimeVersion { get; set; }
+        
+        public string AbpVersion { get; set; }
     }
 }

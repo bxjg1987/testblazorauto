@@ -92,12 +92,13 @@ namespace BXJG.Shop.Customer
         /// <param name="integral"></param>
         /// <param name="amount"></param>
         /// <param name="id"></param>
-        public CustomerEntity(long userId, long integral = default, decimal amount = default, long id = default)
+        public CustomerEntity(long userId, long integral = default, decimal amount = default, long id = default, List<ShippingAddressEntity> addresses=default)
         {
             Id = id;
             UserId = userId;
             Integral = integral;
             Amount = amount;
+            ShippingAddresses = addresses ?? new List<ShippingAddressEntity>();
         }
 
         #region 积分处理

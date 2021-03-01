@@ -126,7 +126,7 @@ namespace BXJG.Shop.Customer
                 Gender = input.Gender
                 //Integral = input.Integral,
                 //User = user,//下面设置了userId就行了
-
+                
             };
             await repository.InsertAsync(entity);
             CurrentUnitOfWork.SaveChanges();//保存后才能拿到新的会员信息自增Id
