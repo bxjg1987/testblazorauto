@@ -24,6 +24,9 @@ using Abp.AutoMapper;
 using Abp.Domain.Uow;
 using ZLJ.BaseInfo.Administrative;
 using Abp.Timing;
+using Abp.Domain.Entities;
+using System.Dynamic;
+using Newtonsoft.Json;
 
 namespace BXJG.Shop.Customer
 {
@@ -126,8 +129,36 @@ namespace BXJG.Shop.Customer
                 Gender = input.Gender
                 //Integral = input.Integral,
                 //User = user,//下面设置了userId就行了
-                
+
             };
+            foreach (var item in input.ShippingAddresses)
+            {
+                var addr = new ShippingAddressEntity
+                {
+                    Address = item.Address,
+                    IsDefault = item.IsDefault,
+                    Name = item.Name,
+                    Phone = item.Phone,
+                    ZipCode = item.ZipCode,
+                    AreaId = item.AreaId,
+
+                };
+                if (item.ExtensionData != null)
+                {
+                    foreach (var item2 in item.ExtensionData)
+                    {
+                        addr.SetData(item2.Key, item2.Value);
+                    }
+                }
+                entity.ShippingAddresses.Add(addr);
+            }
+            if (input.ExtensionData != null)
+            {
+                foreach (var item2 in input.ExtensionData)
+                {
+                    entity.SetData(item2.Key, item2.Value);
+                }
+            }
             await repository.InsertAsync(entity);
             CurrentUnitOfWork.SaveChanges();//保存后才能拿到新的会员信息自增Id
             var r = await GetDtoAsync(entity.Id);
@@ -172,6 +203,35 @@ namespace BXJG.Shop.Customer
             entity.Birthday = input.Birthday;
             entity.Gender = input.Gender;
             entity.AreaId = input.AreaId;
+
+            entity.ShippingAddresses.Clear();
+            foreach (var item in input.ShippingAddresses)
+            {
+                var addr = new ShippingAddressEntity
+                {
+                    Address = item.Address,
+                    IsDefault = item.IsDefault,
+                    Name = item.Name,
+                    Phone = item.Phone,
+                    ZipCode = item.ZipCode,
+                    AreaId = item.AreaId,
+                };
+                if (item.ExtensionData != null)
+                {
+                    foreach (var item2 in item.ExtensionData)
+                    {
+                        addr.SetData(item2.Key, item2.Value);
+                    }
+                }
+                entity.ShippingAddresses.Add(addr);
+            }
+            if (input.ExtensionData != null)
+            {
+                foreach (var item2 in input.ExtensionData)
+                {
+                    entity.SetData(item2.Key, item2.Value);
+                }
+            }
             //entity.Integral = input.Integral;
             //entity.TenantId = AbpSession.TenantId.Value;
             await repository.UpdateAsync(entity);
@@ -181,7 +241,7 @@ namespace BXJG.Shop.Customer
 
         public virtual async Task<PagedResultDto<CustomerDto>> GetAllAsync(GetAllCustomersInput input)
         {
-            var query = from c in repository.GetAll()
+            var query = from c in repository.GetAllIncluding(c => c.ShippingAddresses)
                         join u1 in userRepository.GetAllIncluding(c => c.Roles) on c.UserId equals u1.Id into dc
                         from u in dc.DefaultIfEmpty()
                         join qy1 in administrativeRepository.GetAll() on c.AreaId equals qy1.Id into dc1
@@ -207,7 +267,11 @@ namespace BXJG.Shop.Customer
             query = query.PageBy(input);
 
             var entities = await AsyncQueryableExecuter.ToListAsync(query);
-            var dtos = entities.Select(c => MapToDto(c.c, c.u, c.area)).ToList();
+
+            var ids = entities.SelectMany(c => c.c.ShippingAddresses).Select(c => c.AreaId);
+            var areas = administrativeRepository.GetAll().Where(c => ids.Contains(c.Id));
+
+            var dtos = entities.Select(c => MapToDtoAsync(c.c, c.u, c.area, areas)).ToList();
             return new PagedResultDto<CustomerDto>(totalCount, dtos);
         }
 
@@ -252,7 +316,7 @@ namespace BXJG.Shop.Customer
         /// <returns></returns>
         protected virtual async Task<(CustomerEntity customer, TUser user, AdministrativeEntity area)> GetOneAsync(long id)
         {
-            var query = from c in repository.GetAll().Where(c => c.Id == id)
+            var query = from c in repository.GetAllIncluding(c => c.ShippingAddresses).Where(c => c.Id == id)
                         join uu in userRepository.GetAllIncluding(c => c.Roles) on c.UserId equals uu.Id into dc
                         from u in dc.DefaultIfEmpty()
                         join qy1 in administrativeRepository.GetAll() on c.AreaId equals qy1.Id into dc1
@@ -264,24 +328,45 @@ namespace BXJG.Shop.Customer
         /// <summary>
         /// 将一对一的顾客实体和用户实体转换为顾客的查询模型
         /// </summary>
-        /// <param name="c">顾客实体</param>
-        /// <param name="u">用户实体</param>
+        /// <param name="customer">顾客实体</param>
+        /// <param name="user">用户实体</param>
         /// <param name="area">所属区域</param>
         /// <returns></returns>
-        protected virtual CustomerDto MapToDto(CustomerEntity c, TUser u, AdministrativeEntity area = default)
+        protected virtual CustomerDto MapToDtoAsync(CustomerEntity customer, TUser user, AdministrativeEntity area, IEnumerable<AdministrativeEntity> areas)
         {
-            var dto = ObjectMapper.Map<CustomerDto>(c);
-            ObjectMapper.Map(u, dto);
+            var dto = ObjectMapper.Map<CustomerDto>(customer);
+            ObjectMapper.Map(user, dto);
             if (area != null)
                 ObjectMapper.Map(area, dto);
-            dto.Id = c.Id;
+            dto.Id = customer.Id;
             dto.Password = string.Empty;
+            if (!customer.ExtensionData.IsNullOrWhiteSpace())
+                dto.ExtensionData = JsonConvert.DeserializeObject<dynamic>(customer.ExtensionData);
+            foreach (var item in customer.ShippingAddresses)
+            {
+                var addrDto = new ShippingAddressDto
+                {
+                    Address = item.Address,
+                    AreaDislayName = areas.FirstOrDefault(d => d.Id == item.AreaId)?.DisplayName,
+                    AreaId = item.AreaId,
+                    CustomerId = customer.Id,
+                    ExtensionData = !item.ExtensionData.IsNullOrWhiteSpace() ? JsonConvert.DeserializeObject<dynamic>(item.ExtensionData) : null, //System.Text.Json.JsonSerializer.Deserialize<ExpandoObject>(item.ExtensionData),
+                    IsDefault = item.IsDefault,
+                    Name = item.Name,
+                    Phone = item.Phone,
+                    ZipCode = item.ZipCode
+                };
+                dto.ShippingAddresses.Add(addrDto);
+            }
+            //dto.ShippingAddresses 
             return dto;
         }
         protected virtual async Task<CustomerDto> GetDtoAsync(long id)
         {
             var p = await GetOneAsync(id);
-            return MapToDto(p.customer, p.user, p.area);
+            var ids = p.customer.ShippingAddresses.Select(c => c.Id);
+            var areas = administrativeRepository.GetAll().Where(c => ids.Contains(c.Id));
+            return MapToDtoAsync(p.customer, p.user, p.area, areas);
         }
     }
 }

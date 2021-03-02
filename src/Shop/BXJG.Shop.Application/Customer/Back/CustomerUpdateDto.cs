@@ -89,10 +89,11 @@ namespace BXJG.Shop.Customer
         /// 出生日期
         /// </summary>
         public DateTimeOffset? Birthday { get; set; }
+        public Dictionary<string, object> ExtensionData { get; set; }
         /// <summary>
         /// 收货地址列表
         /// </summary>
-        public List<ShippingAddressUpdateDto> Addresses { get; set; }
+        public List<ShippingAddressUpdateDto> ShippingAddresses { get; set; }
     }
 
 

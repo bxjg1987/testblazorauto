@@ -72,7 +72,8 @@ namespace BXJG.Shop.Customer
         /// <summary>
         /// 收货地址列表
         /// </summary>
-        public List<ShippingAddressDto> Addresses { get; set; }
+        public List<ShippingAddressDto> ShippingAddresses { get; set; } = new List<ShippingAddressDto>();
+        public dynamic ExtensionData { get; set; }
     }
     /// <summary>
     /// 后台管理顾客地址
@@ -117,6 +118,6 @@ namespace BXJG.Shop.Customer
         /// 扩展字段
         /// 目前没有想到它的使用场景，只是考虑其它系统引入商城模块时可以用这种简单的扩展方式扩展
         /// </summary>
-        public object ExtensionData { get; set; }
+        public dynamic ExtensionData { get; set; }
     }
 }

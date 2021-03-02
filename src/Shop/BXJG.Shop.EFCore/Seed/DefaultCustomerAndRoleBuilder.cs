@@ -90,7 +90,33 @@ namespace BXJG.Shop.Seed
             {
                 Birthday = DateTime.Now.AddYears(-30),
                 Gender = Gender.Man,
-                TenantId = this._tenantId
+                AreaId=3,
+                TenantId = this._tenantId,
+                ExtensionData = "{\"sdf\":\"sddddd\",\"aaa\":634}",
+                ShippingAddresses = new List<ShippingAddressEntity> {
+                     new ShippingAddressEntity
+                     {
+                        ExtensionData = "{\"a\":3}",
+                         Address = "重庆市开州区镇东街道330号",
+                          AreaId=3,
+                           IsDefault=true,
+                            Name = "王某春",
+                             Phone="17723896676",
+                              TenantId= _tenantId,
+                               ZipCode = "405400"
+                     },
+                     new ShippingAddressEntity
+                     {
+                        ExtensionData = "{\"b\":\"sdfsss\"}",
+                         Address = "重庆开平桥社区",
+                          AreaId=4,
+                           IsDefault=false,
+                            Name = "李某华",
+                             Phone="13332524563",
+                              TenantId= _tenantId,
+                               ZipCode = "405400"
+                     }
+                 }
             };
             items.Add(cust1);
 
@@ -117,6 +143,7 @@ namespace BXJG.Shop.Seed
             var cust2 = new CustomerEntity(adminUser1.Id)
             {
                 Birthday = DateTime.Now.AddYears(-22).AddDays(116),
+                AreaId = 3,
                 Gender = Gender.Woman,
                 TenantId = this._tenantId
             };

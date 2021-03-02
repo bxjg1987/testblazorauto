@@ -103,7 +103,7 @@ namespace BXJG.Shop
             #endregion
 
             #region 后台管理对顾客信息的管理时使用的dto映射
-            CreateMap<CustomerEntity, CustomerDto>();// (typeof(CustomerEntity<,>), typeof(CustomerDto));
+            CreateMap<CustomerEntity, CustomerDto>().ForMember(c => c.ShippingAddresses, c => c.Ignore());
             CreateMap<AdministrativeEntity, CustomerDto>().ForMember(c=>c.AreaDisplayName,c=>c.MapFrom(d=>d.DisplayName));
             #endregion
 
