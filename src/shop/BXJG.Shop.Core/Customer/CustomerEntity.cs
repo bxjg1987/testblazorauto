@@ -135,7 +135,7 @@ namespace BXJG.Shop.Customer
         /// <returns></returns>
         public ShippingAddressEntity GetDefaltShippingAddress()
         {
-            return ShippingAddresses.Single(c => c.IsDefault);
+            return ShippingAddresses.SingleOrDefault(c => c.IsDefault);
         }
     }
 }

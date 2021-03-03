@@ -99,12 +99,12 @@ namespace BXJG.Shop.Customer
             await userManager.InitializeOptionsAsync(AbpSession.TenantId);
             //user.SetNormalizedNames();//这个貌似没必要调了，UserManager内部会处理
 
-            //abp 6.1.3未实施密码复杂性要求，而ChangePasswordAsync有验证，所以这里分开处理
-            //参考：https://github.com/aspnetboilerplate/aspnetboilerplate/issues/6050
-            CheckErrors(await userManager.CreateAsync(user/*, input.Password*/));
             if (input.Password.IsNullOrWhiteSpace())
                 input.Password = BXJG.Common.SecurityHelper.RandomBase64(8);
-            CheckErrors(await userManager.ChangePasswordAsync(user, input.Password));
+            //abp 6.1.3未实施密码复杂性要求，而ChangePasswordAsync有验证，所以这里分开处理
+            //参考：https://github.com/aspnetboilerplate/aspnetboilerplate/issues/6050
+            CheckErrors(await userManager.CreateAsync(user, input.Password));
+            //CheckErrors(await userManager.ChangePasswordAsync(user, input.Password));
 
 
             //目前不考虑多角色商城会员
@@ -168,7 +168,7 @@ namespace BXJG.Shop.Customer
 
         public virtual async Task<CustomerDto> UpdateAsync(CustomerUpdateDto input)
         {
-            var entity = await repository.GetAsync(input.Id);
+            var entity = await AsyncQueryableExecuter.FirstOrDefaultAsync(repository.GetAllIncluding(c => c.ShippingAddresses).Where(c => c.Id == input.Id));
 
             #region 更新主程序的用户信息
             var user = await userManager.GetUserByIdAsync(entity.UserId);
@@ -203,8 +203,8 @@ namespace BXJG.Shop.Customer
             entity.Birthday = input.Birthday;
             entity.Gender = input.Gender;
             entity.AreaId = input.AreaId;
-
-            entity.ShippingAddresses.Clear();
+            if (entity.ShippingAddresses != null)
+                entity.ShippingAddresses.Clear();
             foreach (var item in input.ShippingAddresses)
             {
                 var addr = new ShippingAddressEntity
