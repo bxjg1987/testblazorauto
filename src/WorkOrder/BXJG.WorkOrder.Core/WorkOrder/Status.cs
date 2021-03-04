@@ -14,11 +14,11 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <summary>
         /// 待确认
         /// </summary>
-        ToBeConfirmed,
+        ToBeConfirm,
         /// <summary>
         /// 待执行
         /// </summary>
-        ToBeProcessed,
+        ToBeProcess,
         /// <summary>
         /// 执行中
         /// </summary>
