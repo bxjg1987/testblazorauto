@@ -10,21 +10,21 @@ namespace BXJG.WorkOrder.WorkOrder
         private OrderEntity() { }
         public OrderEntity(long categoryId,
                            UrgencyDegree urgencyDegree,
-                           DateTimeOffset? expectedExecutionTime,
-                           DateTimeOffset? expectedCompletionTime)
+                           DateTimeOffset? estimatedExecutionTime = default,
+                           DateTimeOffset? estimatedCompletionTime = default)
         {
             CategoryId = categoryId;
-            Status = Status.PendingApproval;
+            Status = Status.ToBeConfirmed;
             UrgencyDegree = urgencyDegree;
-            ExpectedExecutionTime = expectedExecutionTime;
-            ExpectedCompletionTime = expectedCompletionTime;
+            EstimatedExecutionTime = estimatedExecutionTime;
+            EstimatedCompletionTime = estimatedCompletionTime;
         }
 
         public long CategoryId { get; set; }
         public Status Status { get; private set; }
         public UrgencyDegree UrgencyDegree { get; set; }
-        public DateTimeOffset? ExpectedExecutionTime { get; set; }
-        public DateTimeOffset? ExpectedCompletionTime { get; set; }
+        public DateTimeOffset? EstimatedExecutionTime { get; set; }
+        public DateTimeOffset? EstimatedCompletionTime { get; set; }
         public DateTimeOffset? ExecutionTime { get; private set; }
         public DateTimeOffset? CompletionTime { get; private set; }
 
@@ -40,15 +40,22 @@ namespace BXJG.WorkOrder.WorkOrder
         public string ExtendedField4 { get; set; }
         public string ExtendedField5 { get; set; }
 
+        /// <summary>
+        /// 分配
+        /// </summary>
+        /// <param name="employeeId"></param>
+        /// <param name="employeeName"></param>
+        /// <param name="time"></param>
         public void Distribute(string employeeId, string employeeName, DateTimeOffset time)
         {
             //各种判断
-            if (Status != Status.PendingApproval)
-                throw new UserFriendlyException();
+            if ((int)Status.ToBeProcessed > 1)
+                throw new UserFriendlyException("状态异常");
 
             EmployeeId = employeeId;
             EmployeeName = employeeName;
             Status = Status.Processing;
+            ExecutionTime = time;
         }
     }
 }
