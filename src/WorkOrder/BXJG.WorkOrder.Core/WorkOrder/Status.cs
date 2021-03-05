@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace BXJG.WorkOrder.WorkOrder
 {
+    //某些逻辑中将其转换为int后比较大小，因此写明枚举值
     /// <summary>
     /// 工单状态
     /// </summary>
@@ -14,22 +15,26 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <summary>
         /// 待确认
         /// </summary>
-        ToBeConfirm,
+        ToBeConfirmed = 0,
+        /// <summary>
+        /// 待分配
+        /// </summary>
+        ToBeAllocated = 1,
         /// <summary>
         /// 待执行
         /// </summary>
-        ToBeProcess,
+        ToBeProcessed = 2,
         /// <summary>
         /// 执行中
         /// </summary>
-        Processing ,
+        Processing = 3,
         /// <summary>
         /// 已拒绝
         /// </summary>
-        Rejected,
+        Rejected = 4,
         /// <summary>
         /// 已完成
         /// </summary>
-        Completed
+        Completed = 5
     }
 }

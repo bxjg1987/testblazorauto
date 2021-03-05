@@ -20,6 +20,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="categoryId">所属分类Id</param>
         /// <param name="urgencyDegree">紧急程度</param>
         /// <param name="title">标题</param>
+        /// <param name="time">创建此对象的时间</param>
         /// <param name="description">内容描述</param>
         /// <param name="estimatedExecutionTime">希望的开始时间</param>
         /// <param name="estimatedCompletionTime">希望的结束时间</param>
@@ -31,6 +32,7 @@ namespace BXJG.WorkOrder.WorkOrder
         public OrderEntity(long categoryId,
                            UrgencyDegree urgencyDegree,
                            string title,
+                           DateTimeOffset time,
                            string description = default,
                            DateTimeOffset? estimatedExecutionTime = default,
                            DateTimeOffset? estimatedCompletionTime = default,
@@ -42,9 +44,10 @@ namespace BXJG.WorkOrder.WorkOrder
         {
             CategoryId = categoryId;
             //部分赋值不要用属性，以免引起事件触发
-            this.status = Status.ToBeConfirm;
+            Status = Status.ToBeConfirmed;
             this.urgencyDegree = urgencyDegree;
             this.title = title;
+            this.StatusChangedTime = time;
             Description = description;
             ChangeEstimatedTime(estimatedExecutionTime, estimatedCompletionTime);
             ExtendedField1 = extendedField1;
@@ -53,11 +56,11 @@ namespace BXJG.WorkOrder.WorkOrder
             ExtendedField4 = extendedField4;
             ExtendedField5 = extendedField5;
         }
-        long categoryId;
+        protected long categoryId;
         /// <summary>
         /// 所属分类Id
         /// </summary>
-        public long CategoryId
+        public virtual long CategoryId
         {
             get
             {
@@ -70,28 +73,15 @@ namespace BXJG.WorkOrder.WorkOrder
                 categoryId = value;
             }
         }
-        Status status;
         /// <summary>
         /// 状态
         /// </summary>
-        public Status Status
-        {
-            get { return status; }
-            private set
-            {
-                if (value != status)
-                {
-                    var o = status;
-                    status = value;
-                    DomainEvents.Add(new StatusChangedEventData(this, o));
-                }
-            }
-        }
-        UrgencyDegree urgencyDegree;
+        public virtual Status Status { get; protected set; }
+        protected UrgencyDegree urgencyDegree;
         /// <summary>
         /// 紧急程度
         /// </summary>
-        public UrgencyDegree UrgencyDegree
+        public virtual UrgencyDegree UrgencyDegree
         {
             get { return urgencyDegree; }
             set
@@ -108,11 +98,11 @@ namespace BXJG.WorkOrder.WorkOrder
                 }
             }
         }
-        string title;
+        protected string title;
         /// <summary>
         /// 标题
         /// </summary>
-        public string Title
+        public virtual string Title
         {
             get { return title; }
             set
@@ -132,77 +122,67 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <summary>
         /// 内容描述
         /// </summary>
-        public string Description { get; set; }
-        string statusDescription;
+        public virtual string Description { get; set; }
         /// <summary>
         /// 当前状态情况说明
         /// </summary>
-        public string StatusDescription
-        {
-            get
-            {
-                return statusDescription;
-            }
-            set
-            {
-                //if (Status != Status.Completed)
-                //    throw new UserFriendlyException("未完成工单不允许设置完成情况！");
-                statusDescription = value;
-            }
-        }
-
-        //string rejectDescription;
-        ///// <summary>
-        ///// 拒绝说明
-        ///// </summary>
-        //public string RejectDescription
-        //{
-        //    get => rejectDescription;
-        //    set
-        //    {
-        //        if (Status != Status.Rejected)
-        //            throw new UserFriendlyException("已拒绝的工单才能设置【拒绝理由】");
-        //        rejectDescription = value;
-        //    }
-        //}
+        public virtual string StatusChangedDescription { get; protected set; }
+        /// <summary>
+        /// 变成当前状态的时间
+        /// </summary>
+        public virtual DateTimeOffset StatusChangedTime { get; protected set; }
 
         /// <summary>
         /// 希望的开始时间
         /// </summary>
-        public DateTimeOffset? EstimatedExecutionTime { get; private set; }
+        public virtual DateTimeOffset? EstimatedExecutionTime { get; protected set; }
         /// <summary>
         /// 希望的结束时间
         /// </summary>
-        public DateTimeOffset? EstimatedCompletionTime { get; private set; }
+        public virtual DateTimeOffset? EstimatedCompletionTime { get; protected set; }
 
         /// <summary>
         /// 实际的执行时间
         /// </summary>
-        public DateTimeOffset? ExecutionTime { get; private set; }
+        public virtual DateTimeOffset? ExecutionTime { get; protected set; }
         /// <summary>
         /// 实际的结束时间
         /// </summary>
-        public DateTimeOffset? CompletionTime { get; private set; }
+        public virtual DateTimeOffset? CompletionTime { get; protected set; }
 
-        public string EmployeeId { get; private set; }
+        public virtual string EmployeeId { get; protected set; }
         //冗余字段通过事件修改
-        public string EmployeeName { get; set; }
+        public virtual string EmployeeName { get; set; }
 
-        public int TenantId { get; set; }
-        public byte[] RowVersion { get; }
-        public string ExtensionData { get; set; }
-        public string ExtendedField1 { get; set; }
-        public string ExtendedField2 { get; set; }
-        public string ExtendedField3 { get; set; }
-        public string ExtendedField4 { get; set; }
-        public string ExtendedField5 { get; set; }
+        public virtual int TenantId { get; set; }
+        public virtual byte[] RowVersion { get; }
+        public virtual string ExtensionData { get; set; }
+        public virtual string ExtendedField1 { get; set; }
+        public virtual string ExtendedField2 { get; set; }
+        public virtual string ExtendedField3 { get; set; }
+        public virtual string ExtendedField4 { get; set; }
+        public virtual string ExtendedField5 { get; set; }
 
+        /// <summary>
+        /// 调整状态
+        /// </summary>
+        /// <param name="status">目标状态</param>
+        /// <param name="time">时间</param>
+        /// <param name="desc">描述</param>
+        protected virtual void ChangeStatus(Status status, DateTimeOffset time, string desc)
+        {
+            var o = this.Status;
+            Status = status;
+            StatusChangedTime = time;
+            StatusChangedDescription = desc;
+            DomainEvents.Add(new StatusChangedEventData(this, o));
+        }
         /// <summary>
         /// 一并设置希望的开始和结束时间
         /// </summary>
         /// <param name="s">希望的开始时间</param>
         /// <param name="e">希望的结束时间</param>
-        public void ChangeEstimatedTime(DateTimeOffset? s, DateTimeOffset? e)
+        public virtual void ChangeEstimatedTime(DateTimeOffset? s, DateTimeOffset? e)
         {
             if (s.HasValue && e.HasValue && s >= e)
             {
@@ -216,7 +196,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// </summary>
         /// <param name="s"></param>
         /// <param name="e"></param>
-        public void ChangePracticalTime(DateTimeOffset? s, DateTimeOffset? e)
+        public virtual void ChangePracticalTime(DateTimeOffset? s, DateTimeOffset? e)
         {
             if (s.HasValue && e.HasValue && s >= e)
             {
@@ -230,17 +210,21 @@ namespace BXJG.WorkOrder.WorkOrder
         /// </summary>
         /// <param name="employeeId"></param>
         /// <param name="employeeName"></param>
+        /// <param name="time"></param>
         /// <param name="start"></param>
         /// <param name="end"></param>
-        public void Distribute(string employeeId, string employeeName, DateTimeOffset? start = default, DateTimeOffset? end = default)
+        /// <param name="checkStatus"></param>
+        public virtual void Allocate(string employeeId, string employeeName, DateTimeOffset time, DateTimeOffset? start = default, DateTimeOffset? end = default, bool checkStatus = true)
         {
             //各种判断
-            if ((int)Status > (int)Status.ToBeProcess)
+            if (checkStatus && Status != Status.ToBeAllocated)
+            {
                 throw new UserFriendlyException("当前状态不允许分配操作");
+            }
 
             EmployeeId = employeeId;
             EmployeeName = employeeName;
-            Status = Status.ToBeProcess;
+
             DateTimeOffset? s = EstimatedExecutionTime;
             DateTimeOffset? e = EstimatedCompletionTime;
             if (start.HasValue)
@@ -248,23 +232,25 @@ namespace BXJG.WorkOrder.WorkOrder
             if (end.HasValue)
                 e = end;
             ChangeEstimatedTime(s, e);
+
+            ChangeStatus(Status.ToBeProcessed, time, "");
         }
         /// <summary>
         /// 执行工单
         /// </summary>
         /// <param name="time"></param>
-        public void Execute(DateTimeOffset time, bool checkStatus = true)
+        /// <param name="checkStatus"></param>
+        public virtual void Execute(DateTimeOffset time, bool checkStatus = true)
         {
-            if (checkStatus)
+            if (checkStatus && Status != Status.ToBeProcessed)
             {
-                //业务判断
-                if (Status != Status.ToBeProcess)
-                    throw new UserFriendlyException("状态异常！");
+                throw new UserFriendlyException("状态异常！");
             }
 
             //ExecutionTime = time;
             ChangePracticalTime(time, CompletionTime);
-            Status = Status.Processing;
+            ChangePracticalTime(ExecutionTime, time);
+            ChangeStatus(Status.Completed, time, "");
         }
         /// <summary>
         /// 完成工单
@@ -272,44 +258,81 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="time">完成时间</param>
         /// <param name="desc">完成情况说明，也可用直接设置CompletionDescription属性修改说明</param>
         /// <param name="checkStatus">是否检查工单当前状态，若不检查则任何状态的工单都可以立即设置为完成</param>
-        public void Completion(DateTimeOffset time, string desc = default, bool checkStatus = true)
+        public virtual void Completion(DateTimeOffset time, string desc = default, bool checkStatus = true)
         {
             if (checkStatus && Status != Status.Processing)
             {
                 throw new UserFriendlyException("只有处理中的工单才可以执行【完成】操作");
             }
-
             ChangePracticalTime(ExecutionTime, time);
-            Status = Status.Completed;
-            StatusDescription = desc;
+            ChangeStatus(Status.Completed, time, desc);
         }
         /// <summary>
         /// 拒绝<br />
         /// 任何状态下的工单都可以直接拒绝，拒绝说明必须录入
         /// </summary>
-        public void Reject(string desc)
+        /// <param name="time">操作时间</param>
+        /// <param name="desc">拒绝原因</param>
+        public virtual void Reject(DateTimeOffset time, string desc = "拒绝")
         {
-            Status = Status.Rejected;
-            StatusDescription = desc;
+            //无论当前工单是什么状态都可用直接拒绝
+            ChangeStatus(Status.Rejected, time, desc);
         }
+        /// <summary>
+        /// 回退到指定状态
+        /// </summary>
+        /// <param name="status"></param>
+        /// <param time="time"></param>
+        /// <param desc="desc"></param>
+        public virtual void BackOff(Status status, DateTimeOffset time, string desc = "回退")
+        {
+            var i = (int)status;
+            if (i <= (int)Status)
+            {
+                return;
+                //throw new ApplicationException("此状态不允许【回退】操作！");
+            }
 
-        //public virtual OrderEntity Copy()
-        //{
-        //    return new OrderEntity();
-        //}
-
-        //这种情况直接拒绝复制一个就好了
-        ///// <summary>
-        ///// 重置<br />
-        ///// 重新回到初始创建状态
-        ///// </summary>
-        //public void Reset()
-        //{
-        //    completionDescription = default;
-        //    rejectDescription = default;
-        //    ChangeEstimatedTime(default, default);
-        //    ChangePracticalTime(default, default);
-        //    status = Status.ToBeConfirm;
-        //}
+            if (i <= (int)Status.Processing)
+            {
+                ChangePracticalTime(ExecutionTime, default);
+            }
+            if (i <= (int)Status.ToBeProcessed)
+            {
+                ChangePracticalTime(default, default);
+            }
+            if (i <= (int)Status.ToBeAllocated)
+            {
+                EmployeeId = default;
+                EmployeeName = default;
+            }
+            if (status == Status.ToBeConfirmed)
+            {
+                //EmployeeId = default;
+                //EmployeeName = default;
+            }
+            ChangeStatus(status, time, desc);
+        }
+        /// <summary>
+        /// 复制工单时创建工单
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        protected abstract T CopyCreate<T>() where T : OrderEntity;
+        /// <summary>
+        /// <summary>
+        /// 复制工单
+        /// </summary>
+        /// <typeparam name="T">具体的工单类型，OrderEntity的子类</typeparam>
+        /// <param name="time">复制操作的时间</param>
+        /// <param name="status">复制后的工单希望处于什么状态</param>
+        /// <param name="desc">此操作的原因</param>
+        /// <returns></returns>
+        public virtual T Copy<T>(DateTime time, Status status = Status.ToBeConfirmed, string desc = "复制") where T : OrderEntity
+        {
+            var entity = CopyCreate<T>();
+            entity.BackOff(status, time, desc);
+            return entity;
+        }
     }
 }
