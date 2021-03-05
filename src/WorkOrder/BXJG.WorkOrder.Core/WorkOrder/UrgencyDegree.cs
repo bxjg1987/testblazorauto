@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace BXJG.WorkOrder.WorkOrder
 {
+    //怕将来改代码 移动顺序，因此值定义死
     /// <summary>
     /// 紧急程度
     /// </summary>
@@ -14,14 +15,14 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <summary>
         /// 紧急的
         /// </summary>
-        Urgent,
+        Urgent = 0,
         /// <summary>
         /// 普通的
         /// </summary>
-        General,
+        Normalize = 1,
         /// <summary>
         /// 可有可无的
         /// </summary>
-        Dispensable
+        Dispensable = 2
     }
 }

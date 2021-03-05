@@ -8,12 +8,12 @@ namespace BXJG.WorkOrder.WorkOrder
     /// <summary>
     /// 抽象的工单聚合根，不同类型的工单应该定义相应子类
     /// </summary>
-    public abstract class OrderEntity : FullAuditedAggregateRoot<long>, IMustHaveTenant, IExtendableObject
+    public abstract class OrderBaseEntity : FullAuditedAggregateRoot<long>, IMustHaveTenant, IExtendableObject
     {
         /// <summary>
         /// 给ef用的
         /// </summary>
-        private OrderEntity() { }
+        private OrderBaseEntity() { }
         /// <summary>
         /// 实例化工单
         /// </summary>
@@ -29,18 +29,18 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="extendedField3"></param>
         /// <param name="extendedField4"></param>
         /// <param name="extendedField5"></param>
-        public OrderEntity(long categoryId,
-                           UrgencyDegree urgencyDegree,
-                           string title,
-                           DateTimeOffset time,
-                           string description = default,
-                           DateTimeOffset? estimatedExecutionTime = default,
-                           DateTimeOffset? estimatedCompletionTime = default,
-                           string extendedField1 = default,
-                           string extendedField2 = default,
-                           string extendedField3 = default,
-                           string extendedField4 = default,
-                           string extendedField5 = default)
+        public OrderBaseEntity(long categoryId,
+                               UrgencyDegree urgencyDegree,
+                               string title,
+                               DateTimeOffset time,
+                               string description = default,
+                               DateTimeOffset? estimatedExecutionTime = default,
+                               DateTimeOffset? estimatedCompletionTime = default,
+                               string extendedField1 = default,
+                               string extendedField2 = default,
+                               string extendedField3 = default,
+                               string extendedField4 = default,
+                               string extendedField5 = default)
         {
             CategoryId = categoryId;
             //部分赋值不要用属性，以免引起事件触发
@@ -155,6 +155,9 @@ namespace BXJG.WorkOrder.WorkOrder
         public virtual string EmployeeName { get; set; }
 
         public virtual int TenantId { get; set; }
+        /// <summary>
+        /// 状态变更有并发可能，使用乐观并发，偷个懒直接使用行级乐观并发
+        /// </summary>
         public virtual byte[] RowVersion { get; }
         public virtual string ExtensionData { get; set; }
         public virtual string ExtendedField1 { get; set; }
@@ -269,7 +272,7 @@ namespace BXJG.WorkOrder.WorkOrder
         }
         /// <summary>
         /// 拒绝<br />
-        /// 任何状态下的工单都可以直接拒绝，拒绝说明必须录入
+        /// 任何状态下的工单都可以直接拒绝
         /// </summary>
         /// <param name="time">操作时间</param>
         /// <param name="desc">拒绝原因</param>
@@ -318,7 +321,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        protected abstract T CopyCreate<T>() where T : OrderEntity;
+        protected abstract T CopyCreate<T>() where T : OrderBaseEntity;
         /// <summary>
         /// <summary>
         /// 复制工单
@@ -328,7 +331,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="status">复制后的工单希望处于什么状态</param>
         /// <param name="desc">此操作的原因</param>
         /// <returns></returns>
-        public virtual T Copy<T>(DateTime time, Status status = Status.ToBeConfirmed, string desc = "复制") where T : OrderEntity
+        public virtual T Copy<T>(DateTime time, Status status = Status.ToBeConfirmed, string desc = "复制") where T : OrderBaseEntity
         {
             var entity = CopyCreate<T>();
             entity.BackOff(status, time, desc);
