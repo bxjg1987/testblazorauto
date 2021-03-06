@@ -2,6 +2,36 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>BXJG.WorkOrder</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="EFMaps\ModelBuilderExt.cs" />
+    <Compile Remove="EFMaps\OrderItemMap.cs" />
+    <Compile Remove="EFMaps\OrderMap.cs" />
+    <Compile Remove="EFMaps\ProductCategoryMap.cs" />
+    <Compile Remove="EFMaps\ProductMap.cs" />
+    <Compile Remove="EFMaps\ShoppingCartMap.cs" />
+    <Compile Remove="EFMaps\SkuMap.cs" />
+    <Compile Remove="Seed\DefaultBuilder.cs" />
+    <Compile Remove="Seed\DefaultCustomerAndRoleBuilder.cs" />
+    <Compile Remove="Seed\DefaultDataDictionary.cs" />
+    <Compile Remove="Seed\DefaultOrderBuilder.cs" />
+    <Compile Remove="Seed\DefaultProductBuilder.cs" />
+    <Compile Remove="Seed\DefaultProductCagtegoryBuilder.cs" />
+    <Compile Remove="Seed\DefaultProductDynamicPropertyBuilder.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BXJG.WorkOrder.Core\BXJG.WorkOrder.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Seed\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Abp.EntityFrameworkCore" Version="6.2.0" />
+  </ItemGroup>
 
 </Project>

@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 
 namespace BXJG.WorkOrder.Employee
 {
-    public interface IEmployeeEntity
+    public class EmployeeDto
     {
-        string Id { get; }
-        string Name { get; }
+        public string Id { get; set; }
+
+        public string Name { get; set; }
+
+        public string Phone { get; set; }
     }
 }

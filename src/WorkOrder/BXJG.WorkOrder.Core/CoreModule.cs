@@ -9,6 +9,7 @@ using Abp.MultiTenancy;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor.MsDependencyInjection;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace BXJG.WorkOrder
 {
@@ -26,7 +27,7 @@ namespace BXJG.WorkOrder
         }
         public override void Initialize()
         {
-            IocManager.RegisterAssemblyByConvention(typeof(CoreModule).GetAssembly());
+            IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
 
             //注册顾客session，确保一次请求一个顾客session实例
             //参考https://github.com/aspnetboilerplate/aspnetboilerplate/issues/3945

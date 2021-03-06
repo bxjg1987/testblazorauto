@@ -5,4 +5,9 @@
     <RootNamespace>BXJG.WorkOrder</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Modules\BXJG.Utils.Application\BXJG.Utils.Application.csproj" />
+    <ProjectReference Include="..\BXJG.WorkOrder.Core\BXJG.WorkOrder.Core.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -151,8 +151,6 @@ namespace BXJG.WorkOrder.WorkOrder
         public virtual DateTimeOffset? CompletionTime { get; protected set; }
 
         public virtual string EmployeeId { get; protected set; }
-        //冗余字段通过事件修改
-        public virtual string EmployeeName { get; set; }
 
         public virtual int TenantId { get; set; }
         /// <summary>
@@ -226,7 +224,6 @@ namespace BXJG.WorkOrder.WorkOrder
             }
 
             EmployeeId = employeeId;
-            EmployeeName = employeeName;
 
             DateTimeOffset? s = EstimatedExecutionTime;
             DateTimeOffset? e = EstimatedCompletionTime;
@@ -307,7 +304,6 @@ namespace BXJG.WorkOrder.WorkOrder
             if (i <= (int)Status.ToBeAllocated)
             {
                 EmployeeId = default;
-                EmployeeName = default;
             }
             if (status == Status.ToBeConfirmed)
             {
