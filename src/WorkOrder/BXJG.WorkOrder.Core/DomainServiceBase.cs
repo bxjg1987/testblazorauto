@@ -23,7 +23,7 @@ namespace BXJG.WorkOrder
         public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; } = NullAsyncQueryableExecuter.Instance;
         public DomainServiceBase()
         {
-            base.LocalizationSourceName = CoreConst.LocalizationSourceName;
+            base.LocalizationSourceName = CoreConsts.LocalizationSourceName;
         }
     }
 }

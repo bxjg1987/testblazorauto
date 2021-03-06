@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BXJG.WorkOrder
 {
-    public class CoreConst
+    public class CoreConsts
     {
         public const string LocalizationSourceName = "BXJGWorkOrder";
     }

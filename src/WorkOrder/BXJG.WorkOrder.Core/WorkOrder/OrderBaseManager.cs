@@ -71,4 +71,34 @@ namespace BXJG.WorkOrder.WorkOrder
                                           string extendedField4 = default,
                                           string extendedField5 = default);
     }
+
+    public class OrderManager : OrderBaseManager<OrderEntity>
+    {
+        protected override OrderEntity Create(long categoryId,
+                                              UrgencyDegree urgencyDegree,
+                                              string title,
+                                              DateTimeOffset time,
+                                              string description = null,
+                                              DateTimeOffset? estimatedExecutionTime = null,
+                                              DateTimeOffset? estimatedCompletionTime = null,
+                                              string extendedField1 = null,
+                                              string extendedField2 = null,
+                                              string extendedField3 = null,
+                                              string extendedField4 = null,
+                                              string extendedField5 = null)
+        {
+            return new OrderEntity(categoryId,
+                                   urgencyDegree,
+                                   title,
+                                   time,
+                                   description,
+                                   estimatedExecutionTime,
+                                   estimatedCompletionTime,
+                                   extendedField1,
+                                   extendedField2,
+                                   extendedField3,
+                                   extendedField4,
+                                   extendedField5);
+        }
+    }
 }

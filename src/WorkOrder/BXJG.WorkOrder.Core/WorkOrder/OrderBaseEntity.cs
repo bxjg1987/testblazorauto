@@ -321,7 +321,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        protected abstract T CopyCreate<T>() where T : OrderBaseEntity;
+        protected abstract OrderBaseEntity CopyCreate();
         /// <summary>
         /// <summary>
         /// 复制工单
@@ -333,9 +333,57 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <returns></returns>
         public virtual T Copy<T>(DateTime time, Status status = Status.ToBeConfirmed, string desc = "复制") where T : OrderBaseEntity
         {
-            var entity = CopyCreate<T>();
+            var entity = CopyCreate() as T;
             entity.BackOff(status, time, desc);
             return entity;
         }
+    }
+    /// <summary>
+    /// 普通的默认的gd
+    /// </summary>
+    public class OrderEntity : OrderBaseEntity
+    {
+        public OrderEntity(long categoryId,
+                           UrgencyDegree urgencyDegree,
+                           string title,
+                           DateTimeOffset time,
+                           string description = null,
+                           DateTimeOffset? estimatedExecutionTime = null,
+                           DateTimeOffset? estimatedCompletionTime = null,
+                           string extendedField1 = null,
+                           string extendedField2 = null,
+                           string extendedField3 = null,
+                           string extendedField4 = null,
+                           string extendedField5 = null) : base(categoryId,
+                                                                urgencyDegree,
+                                                                title,
+                                                                time,
+                                                                description,
+                                                                estimatedExecutionTime,
+                                                                estimatedCompletionTime,
+                                                                extendedField1,
+                                                                extendedField2,
+                                                                extendedField3,
+                                                                extendedField4,
+                                                                extendedField5)
+        {
+        }
+
+        protected override OrderBaseEntity CopyCreate()
+        {
+            return new OrderEntity(CategoryId,
+                                   UrgencyDegree,
+                                   Title,
+                                   StatusChangedTime,
+                                   Description,
+                                   EstimatedExecutionTime,
+                                   EstimatedCompletionTime,
+                                   ExtendedField1,
+                                   ExtendedField2,
+                                   ExtendedField3,
+                                   ExtendedField4,
+                                   ExtendedField5);
+        }
+
     }
 }
