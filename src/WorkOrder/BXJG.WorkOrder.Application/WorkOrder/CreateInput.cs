@@ -9,9 +9,10 @@ using System.Threading.Tasks;
 namespace BXJG.WorkOrder.WorkOrder
 {
     /// <summary>
-    /// 工单后台管理列表也使用的显示模型
+    /// 工单后台管理编辑模型<br />
+    /// 不同工单类型有相应子类
     /// </summary>
-    public class OrderEditDto : EntityDto<long>
+    public class CreateInput : EntityDto<long>
     {
         /// <summary>
         /// 所属分类id

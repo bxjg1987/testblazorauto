@@ -1,6 +1,7 @@
 ﻿using Abp.Application.Services.Dto;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,51 +9,38 @@ using System.Threading.Tasks;
 namespace BXJG.WorkOrder.WorkOrder
 {
     /// <summary>
-    /// 工单后台管理列表页使用的显示模型<br />
+    /// 工单后台管理编辑模型<br />
     /// 不同工单类型有相应子类
     /// </summary>
-    public class OrderDto : FullAuditedEntityDto<long>
+    public class UpdateInput : EntityDto<long>
     {
         /// <summary>
         /// 所属分类id
         /// </summary>
         public long CategoryId { get; set; }
         /// <summary>
-        /// 所属分类名称
-        /// </summary>
-        public string CategoryDisplayName { get; set; }
-        /// <summary>
         /// 状态
         /// </summary>
         public Status Status { get; set; }
-        /// <summary>
-        /// 状态名称
-        /// </summary>
-        public string StatusText => Status.BXJGWorkOrderEnum();
         /// <summary>
         /// 紧急程度
         /// </summary>
         public UrgencyDegree UrgencyDegree { get; set; }
         /// <summary>
-        /// 紧急程度名称
-        /// </summary>
-        public string UrgencyDegreeText => UrgencyDegree.BXJGWorkOrderEnum();
-        /// <summary>
         /// 标题
         /// </summary>
+        [StringLength(CoreConsts.OrderTitleMaxLength)]
         public string Title { get; set; }
         /// <summary>
         /// 内容描述
         /// </summary>
+        [StringLength(CoreConsts.OrderDescriptionMaxLength)]
         public string Description { get; set; }
         /// <summary>
         /// 当前状态情况说明
         /// </summary>
+        [StringLength(CoreConsts.OrderStatusChangedDescriptionMaxLength)]
         public string StatusChangedDescription { get; set; }
-        /// <summary>
-        /// 变成当前状态的时间
-        /// </summary>
-        public DateTimeOffset StatusChangedTime { get; set; }
         /// <summary>
         /// 希望的开始时间
         /// </summary>
@@ -74,17 +62,9 @@ namespace BXJG.WorkOrder.WorkOrder
         /// </summary>
         public string EmployeeId { get; set; }
         /// <summary>
-        /// 员工姓名
-        /// </summary>
-        public string EmployeeName { get; set; }
-        /// <summary>
-        /// 员工手机号
-        /// </summary>
-        public string EmployeePhone { get; set; }
-        /// <summary>
         /// 扩展字段
         /// </summary>
-        public dynamic ExtensionData { get; set; }
+        public Dictionary<string, object> ExtensionData { get; set; }
         /// <summary>
         /// 预留字段1
         /// </summary>
