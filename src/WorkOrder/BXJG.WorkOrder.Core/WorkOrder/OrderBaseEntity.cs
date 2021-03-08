@@ -195,8 +195,8 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <summary>
         /// 一并设置实际的开始和结束时间
         /// </summary>
-        /// <param name="s"></param>
-        /// <param name="e"></param>
+        /// <param name="s">实际开始时间</param>
+        /// <param name="e">实际结束时间</param>
         public virtual void ChangePracticalTime(DateTimeOffset? s, DateTimeOffset? e)
         {
             if (s.HasValue && e.HasValue && s >= e)
@@ -207,60 +207,58 @@ namespace BXJG.WorkOrder.WorkOrder
             CompletionTime = e;
         }
         /// <summary>
+        /// 确认
+        /// </summary>
+        /// <param name="time"></param>
+        public virtual void Confirme(DateTimeOffset time)
+        {
+            if (Status != Status.ToBeConfirmed)
+                throw new UserFriendlyException("状态异常！");
+
+            ChangeStatus(Status.ToBeProcessed, time);
+        }
+        /// <summary>
         /// 分配
         /// </summary>
-        /// <param name="employeeId"></param>
-        /// <param name="employeeName"></param>
-        /// <param name="time"></param>
-        /// <param name="start"></param>
-        /// <param name="end"></param>
-        /// <param name="checkStatus"></param>
-        public virtual void Allocate(string employeeId, string employeeName, DateTimeOffset time, DateTimeOffset? start = default, DateTimeOffset? end = default, bool checkStatus = true)
+        /// <param name="time">分配时间时间</param>
+        /// <param name="employeeId">员工id</param>
+        /// <param name="start">希望的开始时间</param>
+        /// <param name="end">希望的结束时间</param>
+        public virtual void Allocate(DateTimeOffset time, string employeeId, DateTimeOffset? start = default, DateTimeOffset? end = default)
         {
-            //各种判断
-            if (checkStatus && Status != Status.ToBeAllocated)
+            if (Status != Status.ToBeAllocated)
             {
                 throw new UserFriendlyException("当前状态不允许分配操作");
             }
 
             EmployeeId = employeeId;
-
-            DateTimeOffset? s = EstimatedExecutionTime;
-            DateTimeOffset? e = EstimatedCompletionTime;
-            if (start.HasValue)
-                s = start;
-            if (end.HasValue)
-                e = end;
+            DateTimeOffset? s = start ?? EstimatedExecutionTime;
+            DateTimeOffset? e = end ?? EstimatedCompletionTime;
             ChangeEstimatedTime(s, e);
-
-            ChangeStatus(Status.ToBeProcessed, time, "");
+            ChangeStatus(Status.ToBeProcessed, time);
         }
         /// <summary>
         /// 执行工单
         /// </summary>
         /// <param name="time"></param>
-        /// <param name="checkStatus"></param>
-        public virtual void Execute(DateTimeOffset time, bool checkStatus = true)
+        public virtual void Execute(DateTimeOffset time)
         {
-            if (checkStatus && Status != Status.ToBeProcessed)
+            if (Status != Status.ToBeProcessed)
             {
                 throw new UserFriendlyException("状态异常！");
             }
 
-            //ExecutionTime = time;
             ChangePracticalTime(time, CompletionTime);
-            ChangePracticalTime(ExecutionTime, time);
-            ChangeStatus(Status.Completed, time, "");
+            ChangeStatus(Status.Completed, time);
         }
         /// <summary>
         /// 完成工单
         /// </summary>
         /// <param name="time">完成时间</param>
         /// <param name="desc">完成情况说明，也可用直接设置CompletionDescription属性修改说明</param>
-        /// <param name="checkStatus">是否检查工单当前状态，若不检查则任何状态的工单都可以立即设置为完成</param>
-        public virtual void Completion(DateTimeOffset time, string desc = default, bool checkStatus = true)
+        public virtual void Completion(DateTimeOffset time, string desc)
         {
-            if (checkStatus && Status != Status.Processing)
+            if (Status != Status.Processing)
             {
                 throw new UserFriendlyException("只有处理中的工单才可以执行【完成】操作");
             }
@@ -275,7 +273,6 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="desc">拒绝原因</param>
         public virtual void Reject(DateTimeOffset time, string desc = "拒绝")
         {
-            //无论当前工单是什么状态都可用直接拒绝
             ChangeStatus(Status.Rejected, time, desc);
         }
         /// <summary>
@@ -292,7 +289,6 @@ namespace BXJG.WorkOrder.WorkOrder
                 return;
                 //throw new ApplicationException("此状态不允许【回退】操作！");
             }
-
             if (i <= (int)Status.Processing)
             {
                 ChangePracticalTime(ExecutionTime, default);
