@@ -20,6 +20,7 @@ using ZLJ.BaseInfo.Administrative;
 using BXJG.Equipment.EquipmentInfo;
 using BXJG.Equipment.EFCore.EFMaps;
 using BXJG.Shop.ShoppingCart;
+using BXJG.WorkOrder.EFMaps;
 
 namespace ZLJ.EntityFrameworkCore
 {
@@ -41,7 +42,7 @@ namespace ZLJ.EntityFrameworkCore
         public virtual DbSet<CustomerEntity> BXJGShopCustomer { get; set; }
         //public virtual DbSet<ShippingAddressEntity>
         public virtual DbSet<OrderEntity> BXJGShopOrder { get; set; }
-        public virtual DbSet<ShoppingCartEntity> BXJGShopShoppingCart{ get; set; }
+        public virtual DbSet<ShoppingCartEntity> BXJGShopShoppingCart { get; set; }
         #endregion
 
         #region CMS
@@ -57,6 +58,11 @@ namespace ZLJ.EntityFrameworkCore
         public virtual DbSet<EquipmentInfoEntity> BXJGEquipmentInfo { get; set; }
         #endregion
 
+        #region 工单
+        public virtual DbSet<BXJG.WorkOrder.WorkOrderCategory.CategoryEntity> BXJGWorkOrderCategory { get; set; }
+        public virtual DbSet<BXJG.WorkOrder.WorkOrder.OrderEntity> BXJGWorkOrder { get; set; }
+        #endregion
+
         public ZLJDbContext(DbContextOptions<ZLJDbContext> options)
             : base(options)
         { }
@@ -64,14 +70,15 @@ namespace ZLJ.EntityFrameworkCore
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-   
+
             //注册各模块中的ef映射
             modelBuilder
                 .ApplyConfigurationsFromAssembly(typeof(ZLJEntityFrameworkModule).Assembly)
                 .ApplyConfigurationBXJGShop()
                 .ApplyConfigurationBXJGCMS()
                 .ApplyConfigurationBXJGEquipment()
-                .ApplyConfigurationBXJGBaseInfo();
+                .ApplyConfigurationBXJGBaseInfo()
+                .ApplyConfigurationBXJGWorkOrder();
         }
 
     }

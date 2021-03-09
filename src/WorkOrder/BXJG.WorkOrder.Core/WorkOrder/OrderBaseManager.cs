@@ -80,13 +80,13 @@ namespace BXJG.WorkOrder.WorkOrder
                                           string extendedField4 = default,
                                           string extendedField5 = default);
 
-        public virtual Task DeleteAsync(TEntity entity)
-        {
-            if (entity.Status != Status.ToBeConfirmed)
-                throw new UserFriendlyException("此状态的工单不允许删除！");
+        //public virtual Task DeleteAsync(TEntity entity)
+        //{
+        //if (entity.Status != Status.ToBeConfirmed)
+        //   throw new UserFriendlyException("此状态的工单不允许删除！");
 
-            return repository.DeleteAsync(entity);
-        }
+        //    return repository.DeleteAsync(entity);
+        //}
     }
 
     public class OrderManager : OrderBaseManager<OrderEntity>

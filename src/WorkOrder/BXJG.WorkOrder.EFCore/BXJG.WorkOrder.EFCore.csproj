@@ -6,7 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="EFMaps\ModelBuilderExt.cs" />
     <Compile Remove="EFMaps\OrderItemMap.cs" />
     <Compile Remove="EFMaps\OrderMap.cs" />
     <Compile Remove="EFMaps\ProductCategoryMap.cs" />

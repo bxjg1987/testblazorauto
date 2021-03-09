@@ -17,26 +17,19 @@ namespace BXJG.WorkOrder.WorkOrder
                                           in TBatchDeleteInput,
                                           TBatchDeleteOutput,
                                           in TBatchChangeStatusInput,
-                                          TBatchChangeStatusOutput> : IApplicationService
-        where TEntityDto : OrderDto
-        where TUpdateInput : UpdateInput
-        where TGetInput : GetInput
-        where TGetAllInput : GetAllInput
-        where TBatchDeleteInput : BatchOperationInput
-        where TBatchDeleteOutput : BatchOperationResult
-        where TBatchChangeStatusInput : BatchChangeStatusInput
-        where TBatchChangeStatusOutput : BatchChangeStatusOutput
+                                          TBatchChangeStatusOutput,
+                                          in TBatchAllocateInput,
+                                          TBatchAllocateOutput> : IApplicationService
     {
         Task<TEntityDto> CreateAsync(TCreateInput input);
         Task<TEntityDto> UpdateAsync(TUpdateInput input);
         Task<TBatchDeleteOutput> DeleteAsync(TBatchDeleteInput input);
         Task<TEntityDto> GetAsync(TGetInput input);
         Task<PagedResultDto<TEntityDto>> GetAllAsync(TGetAllInput input);
-        /// <summary>
-        /// 万能状态修改api，内部需要调用真实的业务方法，包括回退的处理
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        Task<TBatchChangeStatusOutput> ChangeStatusAsync(TBatchChangeStatusInput input);
+        Task<TBatchChangeStatusOutput> ConfirmeAsync(TBatchChangeStatusInput input);
+        Task<TBatchAllocateOutput> AllocateAsync(TBatchAllocateInput input);
+        Task<TBatchChangeStatusOutput> ExecuteAsync(TBatchChangeStatusInput input);
+        Task<TBatchChangeStatusOutput> RejectAsync(TBatchChangeStatusInput input);
+        Task<TBatchChangeStatusOutput> CompletionAsync(TBatchChangeStatusInput input);
     }
 }

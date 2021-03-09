@@ -24,6 +24,7 @@
     <ProjectReference Include="..\Equipment\BXJG.Equipment.EFCore\BXJG.Equipment.EFCore.csproj" />
     <ProjectReference Include="..\shop\BXJG.Shop.Core\BXJG.Shop.Core.csproj" />
     <ProjectReference Include="..\shop\BXJG.Shop.EFCore\BXJG.Shop.EFCore.csproj" />
+    <ProjectReference Include="..\WorkOrder\BXJG.WorkOrder.EFCore\BXJG.WorkOrder.EFCore.csproj" />
     <ProjectReference Include="..\ZLJ.Core\ZLJ.Core.csproj" />
   </ItemGroup>
 </Project>

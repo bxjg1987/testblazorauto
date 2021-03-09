@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BXJG.WorkOrder.WorkOrder
 {
-    public class BatchChangeStatusOutput : BatchOperationResult
+    public class BatchChangeStatusOutput : BatchOperationResultLong
     {
     }
 }

@@ -13,7 +13,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <summary>
         /// 给ef用的
         /// </summary>
-        private OrderBaseEntity() { }
+        protected internal OrderBaseEntity() { }
         /// <summary>
         /// 实例化工单
         /// </summary>
@@ -29,18 +29,18 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="extendedField3"></param>
         /// <param name="extendedField4"></param>
         /// <param name="extendedField5"></param>
-        public OrderBaseEntity(long categoryId,
-                               UrgencyDegree urgencyDegree,
-                               string title,
-                               DateTimeOffset time,
-                               string description = default,
-                               DateTimeOffset? estimatedExecutionTime = default,
-                               DateTimeOffset? estimatedCompletionTime = default,
-                               string extendedField1 = default,
-                               string extendedField2 = default,
-                               string extendedField3 = default,
-                               string extendedField4 = default,
-                               string extendedField5 = default)
+        protected internal OrderBaseEntity(long categoryId,
+                                           UrgencyDegree urgencyDegree,
+                                           string title,
+                                           DateTimeOffset time,
+                                           string description = default,
+                                           DateTimeOffset? estimatedExecutionTime = default,
+                                           DateTimeOffset? estimatedCompletionTime = default,
+                                           string extendedField1 = default,
+                                           string extendedField2 = default,
+                                           string extendedField3 = default,
+                                           string extendedField4 = default,
+                                           string extendedField5 = default)
         {
             CategoryId = categoryId;
             //部分赋值不要用属性，以免引起事件触发
@@ -170,7 +170,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="status">目标状态</param>
         /// <param name="time">时间</param>
         /// <param name="desc">描述</param>
-        protected virtual void ChangeStatus(Status status, DateTimeOffset time, string desc)
+        protected virtual void ChangeStatus(Status status, DateTimeOffset time, string desc = default)
         {
             var o = this.Status;
             Status = status;
@@ -278,10 +278,10 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <summary>
         /// 回退到指定状态
         /// </summary>
-        /// <param name="status"></param>
         /// <param time="time"></param>
+        /// <param name="status"></param>
         /// <param desc="desc"></param>
-        public virtual void BackOff(Status status, DateTimeOffset time, string desc = "回退")
+        public virtual void BackOff(DateTimeOffset time, Status status = Status.ToBeConfirmed, string desc = "回退")
         {
             var i = (int)status;
             if (i <= (int)Status)
@@ -326,7 +326,7 @@ namespace BXJG.WorkOrder.WorkOrder
         public virtual T Copy<T>(DateTime time, Status status = Status.ToBeConfirmed, string desc = "复制") where T : OrderBaseEntity
         {
             var entity = CopyCreate() as T;
-            entity.BackOff(status, time, desc);
+            entity.BackOff(time, status, desc);
             return entity;
         }
     }
@@ -335,29 +335,30 @@ namespace BXJG.WorkOrder.WorkOrder
     /// </summary>
     public class OrderEntity : OrderBaseEntity
     {
-        public OrderEntity(long categoryId,
-                           UrgencyDegree urgencyDegree,
-                           string title,
-                           DateTimeOffset time,
-                           string description = null,
-                           DateTimeOffset? estimatedExecutionTime = null,
-                           DateTimeOffset? estimatedCompletionTime = null,
-                           string extendedField1 = null,
-                           string extendedField2 = null,
-                           string extendedField3 = null,
-                           string extendedField4 = null,
-                           string extendedField5 = null) : base(categoryId,
-                                                                urgencyDegree,
-                                                                title,
-                                                                time,
-                                                                description,
-                                                                estimatedExecutionTime,
-                                                                estimatedCompletionTime,
-                                                                extendedField1,
-                                                                extendedField2,
-                                                                extendedField3,
-                                                                extendedField4,
-                                                                extendedField5)
+        protected internal OrderEntity():base() { }
+        protected internal OrderEntity(long categoryId,
+                                       UrgencyDegree urgencyDegree,
+                                       string title,
+                                       DateTimeOffset time,
+                                       string description = null,
+                                       DateTimeOffset? estimatedExecutionTime = null,
+                                       DateTimeOffset? estimatedCompletionTime = null,
+                                       string extendedField1 = null,
+                                       string extendedField2 = null,
+                                       string extendedField3 = null,
+                                       string extendedField4 = null,
+                                       string extendedField5 = null) : base(categoryId,
+                                                                            urgencyDegree,
+                                                                            title,
+                                                                            time,
+                                                                            description,
+                                                                            estimatedExecutionTime,
+                                                                            estimatedCompletionTime,
+                                                                            extendedField1,
+                                                                            extendedField2,
+                                                                            extendedField3,
+                                                                            extendedField4,
+                                                                            extendedField5)
         {
         }
 
