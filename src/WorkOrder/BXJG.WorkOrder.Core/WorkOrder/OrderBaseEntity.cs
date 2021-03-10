@@ -151,6 +151,14 @@ namespace BXJG.WorkOrder.WorkOrder
         public virtual DateTimeOffset? CompletionTime { get; protected set; }
 
         public virtual string EmployeeId { get; protected set; }
+        ///// <summary>
+        ///// 联系人
+        ///// </summary>
+        //public virtual string ContactName { get; set; }
+        ///// <summary>
+        ///// 联系电话
+        ///// </summary>
+        //public virtual string ContactPhone { get; set; }
 
         public virtual int TenantId { get; set; }
         /// <summary>

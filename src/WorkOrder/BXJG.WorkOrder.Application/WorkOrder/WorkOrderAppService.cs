@@ -31,86 +31,63 @@ namespace BXJG.WorkOrder.WorkOrder
     /// <typeparam name="TRepository">实体仓储类型</typeparam>
     /// <typeparam name="TCategoryRepository">分类仓储</typeparam>
     /// <typeparam name="TManager">领域服务类型</typeparam>
-    public class WorkOrderAppService<TEntityDto,
-                                     TGetAllInput,
-                                     TCreateInput,
-                                     TUpdateInput,
-                                     TGetInput,
-                                     TBatchDeleteInput,
-                                     TBatchDeleteOutput,
-                                     TBatchChangeStatusInput,
-                                     TBatchChangeStatusOutput,
-                                     TBatchAllocateInput,
-                                     TBatchAllocateOutput,
-                                     TEntity,
-                                     TRepository,
-                                     TCategoryRepository,
-                                     TManager> : AppServiceBase, IWorkOrderAppService<TEntityDto,
-                                                                                      TGetAllInput,
-                                                                                      TCreateInput,
-                                                                                      TUpdateInput,
-                                                                                      TGetInput,
-                                                                                      TBatchDeleteInput,
-                                                                                      TBatchDeleteOutput,
-                                                                                      TBatchChangeStatusInput,
-                                                                                      TBatchChangeStatusOutput,
-                                                                                      TBatchAllocateInput,
-                                                                                      TBatchAllocateOutput>
-
-        where TEntityDto : OrderDto, new()
+    public abstract class WorkOrderAppService<TCreateInput,
+                                              TUpdateInput,
+                                              TBatchDeleteInput,
+                                              TBatchDeleteOutput,
+                                              TGetInput,
+                                              TGetAllInput,
+                                              TEntityDto,
+                                              TBatchChangeStatusInput,
+                                              TBatchChangeStatusOutput,
+                                              TBatchAllocateInput,
+                                              TBatchAllocateOutput,
+                                              TEntity,
+                                              TRepository,
+                                              TManager,
+                                              TCategoryRepository> : AppServiceBase, IWorkOrderAppService<TCreateInput,
+                                                                                                          TUpdateInput,
+                                                                                                          TBatchDeleteInput,
+                                                                                                          TBatchDeleteOutput,
+                                                                                                          TGetInput,
+                                                                                                          TGetAllInput,
+                                                                                                          TEntityDto,
+                                                                                                          TBatchChangeStatusInput,
+                                                                                                          TBatchChangeStatusOutput,
+                                                                                                          TBatchAllocateInput,
+                                                                                                          TBatchAllocateOutput>
+        #region 泛型约束
         where TCreateInput : CreateInput
         where TUpdateInput : UpdateInput
+        where TBatchDeleteInput : BatchOperationInputLong
+        where TBatchDeleteOutput : BatchOperationResultLong
         where TGetInput : GetInput
         where TGetAllInput : GetAllInput
-        where TBatchDeleteInput : BatchOperationInput
-        where TBatchDeleteOutput : BatchOperationResult
+        where TEntityDto : OrderDto, new()
         where TBatchChangeStatusInput : BatchChangeStatusInput
         where TBatchChangeStatusOutput : BatchChangeStatusOutput, new()
         where TBatchAllocateInput : BatchAllocateInput
         where TBatchAllocateOutput : BatchAllocateOutput, new()
         where TEntity : OrderBaseEntity
         where TRepository : IRepository<TEntity, long>
-        where TCategoryRepository : IRepository<CategoryEntity, long>
         where TManager : OrderBaseManager<TEntity>
+        where TCategoryRepository : IRepository<CategoryEntity, long>
+        #endregion
     {
         protected readonly TRepository repository;
         protected readonly TCategoryRepository categoryRepository;
         protected readonly TManager manager;
         protected readonly IEmployeeAppService employeeAppService;
 
-        public WorkOrderAppService(TRepository repository, TManager manager, TCategoryRepository categoryRepository, IEmployeeAppService employeeAppService)
+        public WorkOrderAppService(TRepository repository,
+                                   TManager manager,
+                                   TCategoryRepository categoryRepository,
+                                   IEmployeeAppService employeeAppService)
         {
             this.repository = repository;
             this.manager = manager;
             this.categoryRepository = categoryRepository;
             this.employeeAppService = employeeAppService;
-        }
-
-        public virtual async Task<TBatchAllocateOutput> AllocateAsync(TBatchAllocateInput input)
-        {
-            var query = repository.GetAll().Where(c => input.Ids.Contains(c.Id));
-            var list = await AsyncQueryableExecuter.ToListAsync(query);
-            list.ForEach(c => c.Allocate(Clock.Now, input.EmployeeId, input.Start, input.End));
-            await CurrentUnitOfWork.SaveChangesAsync();
-            return new TBatchAllocateOutput();
-        }
-
-        public virtual async Task<TBatchChangeStatusOutput> CompletionAsync(TBatchChangeStatusInput input)
-        {
-            var query = repository.GetAll().Where(c => input.Ids.Contains(c.Id));
-            var list = await AsyncQueryableExecuter.ToListAsync(query);
-            list.ForEach(c => c.Completion(Clock.Now, input.Description));
-            await CurrentUnitOfWork.SaveChangesAsync();
-            return new TBatchChangeStatusOutput();
-        }
-
-        public virtual async Task<TBatchChangeStatusOutput> ConfirmeAsync(TBatchChangeStatusInput input)
-        {
-            var query = repository.GetAll().Where(c => input.Ids.Contains(c.Id));
-            var list = await AsyncQueryableExecuter.ToListAsync(query);
-            list.ForEach(c => c.Confirme(Clock.Now));
-            await CurrentUnitOfWork.SaveChangesAsync();
-            return new TBatchChangeStatusOutput();
         }
 
         public virtual async Task<TEntityDto> CreateAsync(TCreateInput input)
@@ -126,40 +103,13 @@ namespace BXJG.WorkOrder.WorkOrder
                                                    input.ExtendedField3,
                                                    input.ExtendedField4,
                                                    input.ExtendedField5);
-            await repository.InsertAsync(entity);
-            await CurrentUnitOfWork.SaveChangesAsync();
-            return null;
-        }
 
-        public virtual async Task<TBatchDeleteOutput> DeleteAsync(TBatchDeleteInput input)
-        {
-            throw new NotImplementedException();
-        }
+            //entity.Confirme(Clock.Now);//后台管理员创建的默认直接确认
 
-        public virtual async Task<TBatchChangeStatusOutput> ExecuteAsync(TBatchChangeStatusInput input)
-        {
-            throw new NotImplementedException();
+            var category = await categoryRepository.GetAsync(input.CategoryId);
+            var emp = await employeeAppService.GetByIdsAsync(input.EmployeeId);
+            return EntityToDto(entity, new CategoryEntity[] { category }, emp);
         }
-
-        public virtual async Task<PagedResultDto<TEntityDto>> GetAllAsync(TGetAllInput input)
-        {
-            throw new NotImplementedException();
-        }
-
-        public virtual async Task<TEntityDto> GetAsync(TGetInput input)
-        {
-            throw new NotImplementedException();
-        }
-
-        public virtual async Task<TBatchChangeStatusOutput> RejectAsync(TBatchChangeStatusInput input)
-        {
-            var query = repository.GetAll().Where(c => input.Ids.Contains(c.Id));
-            var list = await AsyncQueryableExecuter.ToListAsync(query);
-            list.ForEach(c => c.Reject(Clock.Now, input.Description));
-            await CurrentUnitOfWork.SaveChangesAsync();
-            return new TBatchChangeStatusOutput();
-        }
-
         public virtual async Task<TEntityDto> UpdateAsync(TUpdateInput input)
         {
             var entity = await repository.GetAsync(input.Id);
@@ -170,9 +120,59 @@ namespace BXJG.WorkOrder.WorkOrder
             entity.Title = input.Title;
             entity.Description = input.Description;
             entity.UrgencyDegree = input.UrgencyDegree;
+            await CurrentUnitOfWork.SaveChangesAsync();
             var category = await categoryRepository.GetAsync(input.CategoryId);
             var emp = await employeeAppService.GetByIdsAsync(input.EmployeeId);
             return EntityToDto(entity, new CategoryEntity[] { category }, emp);
+        }
+        public virtual async Task<TBatchDeleteOutput> DeleteAsync(TBatchDeleteInput input)
+        {
+            throw new NotImplementedException();
+        }
+        public virtual async Task<TEntityDto> GetAsync(TGetInput input)
+        {
+            throw new NotImplementedException();
+        }
+        public virtual async Task<PagedResultDto<TEntityDto>> GetAllAsync(TGetAllInput input)
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual async Task<TBatchChangeStatusOutput> ConfirmeAsync(TBatchChangeStatusInput input)
+        {
+            var query = repository.GetAll().Where(c => input.Ids.Contains(c.Id));
+            var list = await AsyncQueryableExecuter.ToListAsync(query);
+            list.ForEach(c => c.Confirme(Clock.Now));
+            await CurrentUnitOfWork.SaveChangesAsync();
+            return new TBatchChangeStatusOutput();
+        }
+        public virtual async Task<TBatchAllocateOutput> AllocateAsync(TBatchAllocateInput input)
+        {
+            var query = repository.GetAll().Where(c => input.Ids.Contains(c.Id));
+            var list = await AsyncQueryableExecuter.ToListAsync(query);
+            list.ForEach(c => c.Allocate(Clock.Now, input.EmployeeId, input.Start, input.End));
+            await CurrentUnitOfWork.SaveChangesAsync();
+            return new TBatchAllocateOutput();
+        }
+        public virtual async Task<TBatchChangeStatusOutput> ExecuteAsync(TBatchChangeStatusInput input)
+        {
+            throw new NotImplementedException();
+        }
+        public virtual async Task<TBatchChangeStatusOutput> CompletionAsync(TBatchChangeStatusInput input)
+        {
+            var query = repository.GetAll().Where(c => input.Ids.Contains(c.Id));
+            var list = await AsyncQueryableExecuter.ToListAsync(query);
+            list.ForEach(c => c.Completion(Clock.Now, input.Description));
+            await CurrentUnitOfWork.SaveChangesAsync();
+            return new TBatchChangeStatusOutput();
+        }
+        public virtual async Task<TBatchChangeStatusOutput> RejectAsync(TBatchChangeStatusInput input)
+        {
+            var query = repository.GetAll().Where(c => input.Ids.Contains(c.Id));
+            var list = await AsyncQueryableExecuter.ToListAsync(query);
+            list.ForEach(c => c.Reject(Clock.Now, input.Description));
+            await CurrentUnitOfWork.SaveChangesAsync();
+            return new TBatchChangeStatusOutput();
         }
 
         public virtual TEntityDto EntityToDto(TEntity entity, IEnumerable<CategoryEntity> categories, IEnumerable<Employee.EmployeeDto> employees)

@@ -19,6 +19,8 @@ namespace BXJG.WorkOrder.EFMaps
             builder.Property(c => c.Description).HasMaxLength(CoreConsts.OrderDescriptionMaxLength);
             builder.Property(c => c.StatusChangedDescription).HasMaxLength(CoreConsts.OrderStatusChangedDescriptionMaxLength);
             builder.Property(c => c.EmployeeId).HasColumnType($"varchar({CoreConsts.OrderEmployeeIdMaxLength})");
+            //builder.Property(c => c.ContactName).HasMaxLength(CoreConsts.OrderContactNameMaxLength);
+            //builder.Property(c => c.ContactPhone).HasColumnType($"varchar({CoreConsts.OrderContactPhoneMaxLength})");
         }
     }
 

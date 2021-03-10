@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace BXJG.WorkOrder.WorkOrder
 {
-    public interface IWorkOrderAppService<TEntityDto,
-                                          in TGetAllInput,
-                                          in TCreateInput,
+    public interface IWorkOrderAppService<in TCreateInput,
                                           in TUpdateInput,
-                                          in TGetInput,
                                           in TBatchDeleteInput,
                                           TBatchDeleteOutput,
+                                          in TGetInput,
+                                          in TGetAllInput,
+                                          TEntityDto,
                                           in TBatchChangeStatusInput,
                                           TBatchChangeStatusOutput,
                                           in TBatchAllocateInput,

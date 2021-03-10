@@ -12,17 +12,14 @@ namespace BXJG.WorkOrder.WorkOrder
 {
     public abstract class OrderBaseManager<TEntity> : DomainServiceBase where TEntity : OrderBaseEntity
     {
-        /*
-         * 虽然可以通过构造函数创建工单，但创建核心实体时最好使用领域服务，因为创建过程可能使用到其它服务
-         * 需要经过多步骤配置后生成实体的可以考虑Builder模式
-         */
-
         protected readonly IRepository<TEntity, long> repository;
 
         protected OrderBaseManager(IRepository<TEntity, long> repository)
         {
             this.repository = repository;
         }
+        //分类 紧急程度可以定义参数默认值，进一步获取设置系统的默认值
+        //工单的创建场景有：后台管理员创建、客户提交、某些事件如销售订单产生时自动创建，这些场景通常对应应用层方法或事件处理程序，它们都调用此方法
 
         public async Task<TEntity> CreateAsync(long categoryId,
                                                UrgencyDegree urgencyDegree,
@@ -48,7 +45,8 @@ namespace BXJG.WorkOrder.WorkOrder
                                 extendedField3,
                                 extendedField4,
                                 extendedField5);
-            //其它逻辑，暂时忽略
+            await repository.InsertAsync(entity);
+            await CurrentUnitOfWork.SaveChangesAsync();//保存以更新id为自增id
             return entity;
         }
         /// <summary>
@@ -80,13 +78,13 @@ namespace BXJG.WorkOrder.WorkOrder
                                           string extendedField4 = default,
                                           string extendedField5 = default);
 
-        //public virtual Task DeleteAsync(TEntity entity)
-        //{
-        //if (entity.Status != Status.ToBeConfirmed)
-        //   throw new UserFriendlyException("此状态的工单不允许删除！");
+        public virtual Task DeleteAsync(TEntity entity)
+        {
+            if (entity.Status != Status.ToBeConfirmed)
+                throw new UserFriendlyException("此状态的工单不允许删除！");
 
-        //    return repository.DeleteAsync(entity);
-        //}
+            return repository.DeleteAsync(entity);
+        }
     }
 
     public class OrderManager : OrderBaseManager<OrderEntity>

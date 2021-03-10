@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BXJG.WorkOrder.WorkOrder
 {
-   public  class GetInput:EntityDto<long>
+    public class GetInput : EntityDto<long>
     {
     }
 }
