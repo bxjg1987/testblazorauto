@@ -2,6 +2,9 @@
 using Abp.Domain.Repositories;
 using Abp.Timing;
 using BXJG.Common.Dto;
+using BXJG.GeneralTree;
+using BXJG.WorkOrder.Employee;
+using BXJG.WorkOrder.WorkOrderCategory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +13,24 @@ using System.Threading.Tasks;
 
 namespace BXJG.WorkOrder.WorkOrder
 {
+    /// <summary>
+    /// 工单后台管理应用服务
+    /// </summary>
+    /// <typeparam name="TEntityDto">列表页显示模型</typeparam>
+    /// <typeparam name="TGetAllInput">列表页查询时的输入模型</typeparam>
+    /// <typeparam name="TCreateInput">新增时的输入模型</typeparam>
+    /// <typeparam name="TUpdateInput">修改时的输入模型</typeparam>
+    /// <typeparam name="TGetInput">获取单个信息的输入模型</typeparam>
+    /// <typeparam name="TBatchDeleteInput">批量删除的输入模型</typeparam>
+    /// <typeparam name="TBatchDeleteOutput">批量删除时的输出模型</typeparam>
+    /// <typeparam name="TBatchChangeStatusInput">批量状态修改时的输入模型</typeparam>
+    /// <typeparam name="TBatchChangeStatusOutput">批量状态修改时的输出模型</typeparam>
+    /// <typeparam name="TBatchAllocateInput">批量分配时的输入模型</typeparam>
+    /// <typeparam name="TBatchAllocateOutput">批量分配时的输出模型</typeparam>
+    /// <typeparam name="TEntity">实体类型</typeparam>
+    /// <typeparam name="TRepository">实体仓储类型</typeparam>
+    /// <typeparam name="TCategoryRepository">分类仓储</typeparam>
+    /// <typeparam name="TManager">领域服务类型</typeparam>
     public class WorkOrderAppService<TEntityDto,
                                      TGetAllInput,
                                      TCreateInput,
@@ -23,6 +44,7 @@ namespace BXJG.WorkOrder.WorkOrder
                                      TBatchAllocateOutput,
                                      TEntity,
                                      TRepository,
+                                     TCategoryRepository,
                                      TManager> : AppServiceBase, IWorkOrderAppService<TEntityDto,
                                                                                       TGetAllInput,
                                                                                       TCreateInput,
@@ -48,15 +70,20 @@ namespace BXJG.WorkOrder.WorkOrder
         where TBatchAllocateOutput : BatchAllocateOutput, new()
         where TEntity : OrderBaseEntity
         where TRepository : IRepository<TEntity, long>
+        where TCategoryRepository : IRepository<CategoryEntity, long>
         where TManager : OrderBaseManager<TEntity>
     {
         protected readonly TRepository repository;
+        protected readonly TCategoryRepository categoryRepository;
         protected readonly TManager manager;
+        protected readonly IEmployeeAppService employeeAppService;
 
-        public WorkOrderAppService(TRepository repository, TManager manager)
+        public WorkOrderAppService(TRepository repository, TManager manager, TCategoryRepository categoryRepository, IEmployeeAppService employeeAppService)
         {
             this.repository = repository;
             this.manager = manager;
+            this.categoryRepository = categoryRepository;
+            this.employeeAppService = employeeAppService;
         }
 
         public virtual async Task<TBatchAllocateOutput> AllocateAsync(TBatchAllocateInput input)
@@ -126,15 +153,29 @@ namespace BXJG.WorkOrder.WorkOrder
 
         public virtual async Task<TBatchChangeStatusOutput> RejectAsync(TBatchChangeStatusInput input)
         {
-            throw new NotImplementedException();
+            var query = repository.GetAll().Where(c => input.Ids.Contains(c.Id));
+            var list = await AsyncQueryableExecuter.ToListAsync(query);
+            list.ForEach(c => c.Reject(Clock.Now, input.Description));
+            await CurrentUnitOfWork.SaveChangesAsync();
+            return new TBatchChangeStatusOutput();
         }
 
         public virtual async Task<TEntityDto> UpdateAsync(TUpdateInput input)
         {
-            throw new NotImplementedException();
+            var entity = await repository.GetAsync(input.Id);
+            entity.CategoryId = input.CategoryId;
+            entity.ChangeEstimatedTime(input.EstimatedExecutionTime, input.EstimatedCompletionTime);
+            entity.ChangePracticalTime(input.ExecutionTime, input.CompletionTime);
+            entity.Description = input.Description;
+            entity.Title = input.Title;
+            entity.Description = input.Description;
+            entity.UrgencyDegree = input.UrgencyDegree;
+            var category = await categoryRepository.GetAsync(input.CategoryId);
+            var emp = await employeeAppService.GetByIdsAsync(input.EmployeeId);
+            return EntityToDto(entity, new CategoryEntity[] { category }, emp);
         }
 
-        public virtual TEntityDto EntityToDto(TEntity entity, IEnumerable<WorkOrderCategory.CategoryEntity> categories, IEnumerable<Employee.EmployeeDto> employees)
+        public virtual TEntityDto EntityToDto(TEntity entity, IEnumerable<CategoryEntity> categories, IEnumerable<Employee.EmployeeDto> employees)
         {
             var dto = new TEntityDto();
             dto.CategoryDisplayName = categories.Single(c => c.Id == entity.CategoryId).DisplayName;

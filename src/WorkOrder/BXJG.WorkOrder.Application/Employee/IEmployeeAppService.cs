@@ -9,8 +9,8 @@ namespace BXJG.WorkOrder.Employee
 
     //数据量大时修改冗余字段太恐怖了，还是决定在应用层查询组合
 
-    public interface IEmployeeAppService 
+    public interface IEmployeeAppService
     {
-        Task<EmployeeDto> GetByIdsAsync(params string[] ids);
+        Task<IEnumerable<EmployeeDto>> GetByIdsAsync(params string[] ids);
     }
 }
