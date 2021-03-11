@@ -46,7 +46,7 @@ namespace BXJG.WorkOrder.WorkOrder
                                 extendedField4,
                                 extendedField5);
             await repository.InsertAsync(entity);
-            await CurrentUnitOfWork.SaveChangesAsync();//保存以更新id为自增id
+            //await CurrentUnitOfWork.SaveChangesAsync();//保存以更新id为自增id
             return entity;
         }
         /// <summary>

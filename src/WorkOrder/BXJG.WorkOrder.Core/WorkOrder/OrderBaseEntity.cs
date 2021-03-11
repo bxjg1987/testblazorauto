@@ -257,7 +257,7 @@ namespace BXJG.WorkOrder.WorkOrder
             }
 
             ChangePracticalTime(time, CompletionTime);
-            ChangeStatus(Status.Completed, time);
+            ChangeStatus(Status.Processing, time);
         }
         /// <summary>
         /// 完成工单
@@ -343,7 +343,7 @@ namespace BXJG.WorkOrder.WorkOrder
     /// </summary>
     public class OrderEntity : OrderBaseEntity
     {
-        protected internal OrderEntity():base() { }
+        protected internal OrderEntity() : base() { }
         protected internal OrderEntity(long categoryId,
                                        UrgencyDegree urgencyDegree,
                                        string title,

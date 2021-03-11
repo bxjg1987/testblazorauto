@@ -10,11 +10,32 @@ using System.Threading.Tasks;
 namespace BXJG.WorkOrder.WorkOrder
 {
     /// <summary>
-    /// 后台管理工单获取列表页数据时的输入dto<br />
+    /// 后台管理工单获取列表页数据时的输入模型<br />
     /// 不同类型的工单可以提供相应子类
     /// </summary>
     public class GetAllInput : PagedAndSortedResultRequestDto, IShouldNormalize
     {
+        /// <summary>
+        /// 紧急程度
+        /// </summary>
+        public UrgencyDegree? UrgencyDegree { get; set; }
+        /// <summary>
+        /// 所属分类code
+        /// </summary>
+        public string CategoryCode { get; set; }
+        public DateTimeOffset? EstimatedExecutionTimeStart { get; set; }
+        public DateTimeOffset? EstimatedExecutionTimeEnd { get; set; }
+        public DateTimeOffset? EstimatedCompletionTimeStart { get; set; }
+        public DateTimeOffset? EstimatedCompletionTimeEnd { get; set; }
+        public DateTimeOffset? ExecutionTimeStart { get; set; }
+        public DateTimeOffset? ExecutionTimeEnd { get; set; }
+        public DateTimeOffset? CompletionTimeStart { get; set; }
+        public DateTimeOffset? CompletionTimeEnd { get; set; }
+        //public string EmployeeId { get; set; }
+        /// <summary>
+        /// 关键字
+        /// </summary>
+        public string Keyword { get; set; }
         /// <summary>
         /// 模型绑定后，abp会调用此方法来进一步初始化
         /// </summary>
