@@ -250,9 +250,9 @@ namespace BXJG.Shop.Catalogue
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<BatchOperationResultLong> DeleteAsync(BatchOperationInputLong input)
+        public async Task<BatchOperationOutputLong> DeleteAsync(BatchOperationInputLong input)
         {
-            var result = new BatchOperationResultLong();
+            var result = new BatchOperationOutputLong();
             foreach (var id in input.Ids)
             {
                 try

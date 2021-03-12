@@ -20,9 +20,9 @@ namespace BXJG.Equipment.EquipmentInfo
         {
         }
 
-        public async Task<BatchOperationResultLong> DeleteBatchAsync(BatchOperationInputLong input)
+        public async Task<BatchOperationOutputLong> DeleteBatchAsync(BatchOperationInputLong input)
         {
-            var result = new BatchOperationResultLong();
+            var result = new BatchOperationOutputLong();
             foreach (var item in input.Ids)
             {
                 try

@@ -4,12 +4,12 @@ using System.Text;
 
 namespace BXJG.Common.Dto
 {
-    public class BatchOperationResult<TKey> 
+    public class BatchOperationOutput<TKey> 
     {
         public List<TKey> Ids { get; set; } = new List<TKey>();
     }
 
-    public class BatchOperationResult : BatchOperationResult<int>
+    public class BatchOperationOutput : BatchOperationOutput<int>
     {
     }
 
@@ -17,7 +17,7 @@ namespace BXJG.Common.Dto
     /// 批量操作的返回模型，id类型为long
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
-    public class BatchOperationResultLong : BatchOperationResult<long>
+    public class BatchOperationOutputLong : BatchOperationOutput<long>
     {
     }
 }

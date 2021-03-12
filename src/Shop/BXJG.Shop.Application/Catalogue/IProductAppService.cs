@@ -57,7 +57,7 @@ namespace BXJG.Shop.Catalogue
         /// <param name="ids"></param>
         /// <returns></returns>
         [AbpAuthorize(PermissionNames.ProductDelete)]
-        Task<BatchOperationResultLong> DeleteAsync(BatchOperationInputLong input);
+        Task<BatchOperationOutputLong> DeleteAsync(BatchOperationInputLong input);
         /// <summary>
         /// 批量发布商品
         /// </summary>

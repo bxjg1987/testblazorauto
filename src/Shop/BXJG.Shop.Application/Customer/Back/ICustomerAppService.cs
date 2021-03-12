@@ -35,6 +35,6 @@ namespace BXJG.Shop.Customer
         Task<CustomerDto> UpdateAsync(CustomerUpdateDto input);
        
         [AbpAuthorize(PermissionNames.CustomerDelete)]
-        Task<BatchOperationResultLong> DeleteBatchAsync(BatchOperationInputLong input);
+        Task<BatchOperationOutputLong> DeleteBatchAsync(BatchOperationInputLong input);
     }
 }

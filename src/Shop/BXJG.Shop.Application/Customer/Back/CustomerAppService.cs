@@ -280,9 +280,9 @@ namespace BXJG.Shop.Customer
             return await GetDtoAsync(input.Id);
         }
 
-        public virtual async Task<BatchOperationResultLong> DeleteBatchAsync(BatchOperationInputLong input)
+        public virtual async Task<BatchOperationOutputLong> DeleteBatchAsync(BatchOperationInputLong input)
         {
-            var result = new BatchOperationResultLong();
+            var result = new BatchOperationOutputLong();
             var userIds = await base.AsyncQueryableExecuter.ToListAsync(repository.GetAll().Where(c => input.Ids.Contains(c.Id)).Select(c => new { c.Id, c.UserId }));
             var sss = userIds.Select(c => c.UserId);
             var users = await base.AsyncQueryableExecuter.ToListAsync(userRepository.GetAll().Where(c => sss.Contains(c.Id)));

@@ -9,6 +9,6 @@ namespace BXJG.Equipment.EquipmentInfo
 {
     public interface IBXJGEquipmentEquipmentInfoAppService : IAsyncCrudAppService<EquipmentInfoDto, long, EquipmentInfoGetAllInput, EquipmentInfoEditDto>
     {
-        Task<BatchOperationResultLong> DeleteBatchAsync(BatchOperationInputLong input);
+        Task<BatchOperationOutputLong> DeleteBatchAsync(BatchOperationInputLong input);
     }
 }
