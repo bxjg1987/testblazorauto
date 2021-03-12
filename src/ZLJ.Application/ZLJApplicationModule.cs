@@ -7,12 +7,14 @@ using BXJG.Equipment;
 using BXJG.GeneralTree;
 using BXJG.Shop;
 using BXJG.Shop.Catalogue;
+using BXJG.WorkOrder.Employee;
 using System.Reflection;
 
 using ZLJ.Authorization;
 using ZLJ.Authorization.Roles;
 using ZLJ.Authorization.Users;
 using ZLJ.MultiTenancy;
+using ZLJ.WorkOrder;
 
 namespace ZLJ
 {
@@ -36,6 +38,9 @@ namespace ZLJ
             //IocManager.Register(typeof(IBXJGShopFrontItemAppService), typeof(BXJGShopFrontItemAppService<GeneralTreeEntity>), DependencyLifeStyle.Transient);
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
 
+            IocManager.Register<IEmployeeAppService, EmployeeAppService>(DependencyLifeStyle.Transient);
+
+            
             //注册automapper映射
             Configuration.Modules.AbpAutoMapper().Configurators.Add(cfg => cfg.AddMaps(Assembly.GetExecutingAssembly()));
             //Configuration.Modules.AbpAutoMapper().Configurators.Add(cfg => cfg.AddProfile<BXJGShopMapProfile<User>>());

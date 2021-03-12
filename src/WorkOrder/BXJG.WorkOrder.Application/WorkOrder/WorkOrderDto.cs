@@ -11,7 +11,7 @@ namespace BXJG.WorkOrder.WorkOrder
     /// 工单后台管理列表页使用的显示模型<br />
     /// 不同工单类型有相应子类
     /// </summary>
-    public class OrderDto : FullAuditedEntityDto<long>
+    public class WorkOrderDto : FullAuditedEntityDto<long>
     {
         /// <summary>
         /// 所属分类id

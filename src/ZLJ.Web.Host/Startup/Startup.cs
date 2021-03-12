@@ -119,6 +119,7 @@ namespace ZLJ.Web.Host.Startup
                 var commentsFileName5 = typeof(BXJGEquipmentApplicationModule).Assembly.GetName().Name + ".XML";
                 var commentsFileName6 = typeof(BXJGBaseInfoApplicationModule).Assembly.GetName().Name + ".XML";
                 var commentsFileName7 = typeof(BXJGUtilsApplicationModule).Assembly.GetName().Name + ".XML";
+                var commentsFileName8 = typeof(BXJG.WorkOrder.ApplicationModule).Assembly.GetName().Name + ".XML";
 
                 var xmlPath = Path.Combine(basePath, commentsFileName);
                 var xmlPath1 = Path.Combine(basePath, commentsFileName1);
@@ -128,6 +129,7 @@ namespace ZLJ.Web.Host.Startup
                 var xmlPath5 = Path.Combine(basePath, commentsFileName5);
                 var xmlPath6 = Path.Combine(basePath, commentsFileName6);
                 var xmlPath7 = Path.Combine(basePath, commentsFileName7);
+                var xmlPath8 = Path.Combine(basePath, commentsFileName7);
 
                 options.IncludeXmlComments(xmlPath);
                 options.IncludeXmlComments(xmlPath1);
@@ -137,6 +139,7 @@ namespace ZLJ.Web.Host.Startup
                 options.IncludeXmlComments(xmlPath5);
                 options.IncludeXmlComments(xmlPath6);
                 options.IncludeXmlComments(xmlPath7);
+                options.IncludeXmlComments(xmlPath8);
 
                 options.DocInclusionPredicate((docName, description) => true);
 

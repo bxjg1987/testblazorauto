@@ -67,7 +67,7 @@ namespace BXJG.WorkOrder.WorkOrder
         where TBatchDeleteOutput : BatchOperationOutputLong, new()
         where TGetInput : EntityDto<long>
         where TGetAllInput : GetAllInput
-        where TEntityDto : OrderDto, new()
+        where TEntityDto : WorkOrderDto, new()
         where TBatchChangeStatusInput : BatchChangeStatusInput
         where TBatchChangeStatusOutput : BatchChangeStatusOutput, new()
         where TBatchAllocateInput : BatchAllocateInput
@@ -467,6 +467,38 @@ namespace BXJG.WorkOrder.WorkOrder
                     entity.Completion(Clock.Now, input.Description);
                 }
             }
+        }
+    }
+
+
+    /// <summary>
+    /// 默认工单应用服务接口
+    /// </summary>
+    public class WorkOrderAppService : WorkOrderAppService<CreateInput,
+                                                           UpdateInput,
+                                                           BatchOperationInputLong,
+                                                           BatchOperationOutputLong,
+                                                           EntityDto<long>,
+                                                           GetAllInput,
+                                                           WorkOrderDto,
+                                                           BatchChangeStatusInput,
+                                                           BatchChangeStatusOutput,
+                                                           BatchAllocateInput,
+                                                           BatchAllocateOutput,
+                                                           OrderEntity,
+                                                           IRepository<OrderEntity, long>,
+                                                           OrderManager,
+                                                           IRepository<CategoryEntity, long>>, IWorkOrderAppService
+
+    {
+        public WorkOrderAppService(IRepository<OrderEntity, long> repository,
+                                   OrderManager manager,
+                                   IRepository<CategoryEntity, long> categoryRepository,
+                                   IEmployeeAppService employeeAppService) : base(repository,
+                                                                                  manager,
+                                                                                  categoryRepository,
+                                                                                  employeeAppService)
+        {
         }
     }
 }

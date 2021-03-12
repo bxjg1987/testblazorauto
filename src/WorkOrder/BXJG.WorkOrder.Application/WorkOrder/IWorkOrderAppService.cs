@@ -32,4 +32,19 @@ namespace BXJG.WorkOrder.WorkOrder
         Task<TBatchChangeStatusOutput> RejectAsync(TBatchChangeStatusInput input);
         Task<TBatchChangeStatusOutput> CompletionAsync(TBatchChangeStatusInput input);
     }
+    /// <summary>
+    /// 普通工单
+    /// </summary>
+    public interface IWorkOrderAppService : IWorkOrderAppService<CreateInput,
+                                                                 UpdateInput,
+                                                                 BatchOperationInputLong,
+                                                                 BatchOperationOutputLong,
+                                                                 EntityDto<long>,
+                                                                 GetAllInput,
+                                                                 WorkOrderDto,
+                                                                 BatchChangeStatusInput,
+                                                                 BatchChangeStatusOutput,
+                                                                 BatchAllocateInput,
+                                                                 BatchAllocateOutput>
+    { }
 }

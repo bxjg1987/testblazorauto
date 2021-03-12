@@ -35,7 +35,8 @@ namespace ZLJ
                typeof(ApplicationModule),
                typeof(BXJGCMSApplicationModule),
                typeof(BXJGEquipmentEFCoreModule),
-               typeof(BXJGEquipmentApplicationModule))]
+               typeof(BXJGEquipmentApplicationModule),
+               typeof(BXJG.WorkOrder.ApplicationModule))]
     public class ZLJWebCoreModule : AbpModule
     {
         private readonly IWebHostEnvironment _env;
@@ -71,6 +72,7 @@ namespace ZLJ
             Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(BXJGCMSApplicationModule).Assembly);
             Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(BXJGEquipmentApplicationModule).Assembly);
             Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(BXJGBaseInfoApplicationModule).Assembly);
+            Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(BXJG.WorkOrder.ApplicationModule).Assembly,"bxjgworkorder");
 
             ConfigureTokenAuth();
 

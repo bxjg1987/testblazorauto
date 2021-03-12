@@ -223,7 +223,7 @@ namespace BXJG.WorkOrder.WorkOrder
             if (Status != Status.ToBeConfirmed)
                 throw new UserFriendlyException("状态异常！");
 
-            ChangeStatus(Status.ToBeProcessed, time);
+            ChangeStatus(Status.ToBeAllocated, time);
         }
         /// <summary>
         /// 分配
