@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace BXJG.WorkOrder.WorkOrderCategory
 {
-    public class CategoryEntity : GeneralTreeEntity<GeneralTreeEntity>, IGeneratesDomainEvents, IMustHaveTenant, IExtendableObject
+    public class CategoryEntity : GeneralTreeEntity<CategoryEntity>, IGeneratesDomainEvents, IMustHaveTenant, IExtendableObject
     {
         /// <summary>
         /// 租户id

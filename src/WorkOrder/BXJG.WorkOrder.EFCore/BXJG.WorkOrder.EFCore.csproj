@@ -8,7 +8,6 @@
   <ItemGroup>
     <Compile Remove="EFMaps\OrderItemMap.cs" />
     <Compile Remove="EFMaps\OrderMap.cs" />
-    <Compile Remove="EFMaps\ProductCategoryMap.cs" />
     <Compile Remove="EFMaps\ProductMap.cs" />
     <Compile Remove="EFMaps\ShoppingCartMap.cs" />
     <Compile Remove="EFMaps\SkuMap.cs" />

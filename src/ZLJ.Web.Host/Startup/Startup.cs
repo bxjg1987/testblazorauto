@@ -129,7 +129,7 @@ namespace ZLJ.Web.Host.Startup
                 var xmlPath5 = Path.Combine(basePath, commentsFileName5);
                 var xmlPath6 = Path.Combine(basePath, commentsFileName6);
                 var xmlPath7 = Path.Combine(basePath, commentsFileName7);
-                var xmlPath8 = Path.Combine(basePath, commentsFileName7);
+                var xmlPath8 = Path.Combine(basePath, commentsFileName8);
 
                 options.IncludeXmlComments(xmlPath);
                 options.IncludeXmlComments(xmlPath1);
