@@ -10,7 +10,29 @@ using System.Threading.Tasks;
 
 namespace BXJG.WorkOrder.WorkOrder
 {
-    public abstract class OrderBaseManager<TEntity> : DomainServiceBase where TEntity : OrderBaseEntity
+    public class WorkOrderCreateDtoBase
+    { 
+        public long CategoryId { get; set; }
+        public UrgencyDegree UrgencyDegree { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public DateTimeOffset? Time { get; set; }
+        public DateTimeOffset? EstimatedExecutionTime { get; set; }
+        public DateTimeOffset? EstimatedCompletionTime { get; set; }
+    }
+
+    public class WorkOrderCreateDto : WorkOrderCreateDtoBase {
+        public string EntityType { get; set; }
+        public string EntityId { get; set; }
+        public string ExtendedField1 { get; set; }
+        public string ExtendedField2 { get; set; }
+        public string ExtendedField3 { get; set; }
+        public string ExtendedField4 { get; set; }
+        public string ExtendedField5 { get; set; }
+    }
+    public abstract class OrderBaseManager<TEntity,TDto> : DomainServiceBase 
+        where TEntity : OrderBaseEntity
+        where TDto:WorkOrderCreateDtoBase
     {
         protected readonly IRepository<TEntity, long> repository;
 
@@ -21,30 +43,12 @@ namespace BXJG.WorkOrder.WorkOrder
         //分类 紧急程度可以定义参数默认值，进一步获取设置系统的默认值
         //工单的创建场景有：后台管理员创建、客户提交、某些事件如销售订单产生时自动创建，这些场景通常对应应用层方法或事件处理程序，它们都调用此方法
 
-        public async Task<TEntity> CreateAsync(long categoryId,
-                                               UrgencyDegree urgencyDegree,
-                                               string title,
-                                               string description = default,
-                                               DateTimeOffset? estimatedExecutionTime = default,
-                                               DateTimeOffset? estimatedCompletionTime = default,
-                                               string extendedField1 = default,
-                                               string extendedField2 = default,
-                                               string extendedField3 = default,
-                                               string extendedField4 = default,
-                                               string extendedField5 = default)
+        public async Task<TEntity> CreateAsync(TDto dto)
         {
             //其它逻辑，暂时忽略
-            var entity = Create(categoryId,
-                                urgencyDegree, title,
-                                Clock.Now,
-                                description,
-                                estimatedExecutionTime,
-                                estimatedCompletionTime,
-                                extendedField1,
-                                extendedField2,
-                                extendedField3,
-                                extendedField4,
-                                extendedField5);
+            if (!dto.Time.HasValue)
+                dto.Time = Clock.Now;
+            var entity = Create(dto);
             await repository.InsertAsync(entity);
             //await CurrentUnitOfWork.SaveChangesAsync();//保存以更新id为自增id
             return entity;
@@ -65,18 +69,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="extendedField4"></param>
         /// <param name="extendedField5"></param>
         /// <returns></returns>
-        protected abstract TEntity Create(long categoryId,
-                                          UrgencyDegree urgencyDegree,
-                                          string title,
-                                          DateTimeOffset time,
-                                          string description = default,
-                                          DateTimeOffset? estimatedExecutionTime = default,
-                                          DateTimeOffset? estimatedCompletionTime = default,
-                                          string extendedField1 = default,
-                                          string extendedField2 = default,
-                                          string extendedField3 = default,
-                                          string extendedField4 = default,
-                                          string extendedField5 = default);
+        protected abstract TEntity Create(TDto dto);
 
         public virtual Task DeleteAsync(TEntity entity)
         {
@@ -87,37 +80,28 @@ namespace BXJG.WorkOrder.WorkOrder
         }
     }
 
-    public class OrderManager : OrderBaseManager<OrderEntity>
+    public class OrderManager : OrderBaseManager<OrderEntity,WorkOrderCreateDto>
     {
         public OrderManager(IRepository<OrderEntity, long> repository) : base(repository)
         {
         }
 
-        protected override OrderEntity Create(long categoryId,
-                                              UrgencyDegree urgencyDegree,
-                                              string title,
-                                              DateTimeOffset time,
-                                              string description = null,
-                                              DateTimeOffset? estimatedExecutionTime = null,
-                                              DateTimeOffset? estimatedCompletionTime = null,
-                                              string extendedField1 = null,
-                                              string extendedField2 = null,
-                                              string extendedField3 = null,
-                                              string extendedField4 = null,
-                                              string extendedField5 = null)
+        protected override OrderEntity Create(WorkOrderCreateDto dto)
         {
-            return new OrderEntity(categoryId,
-                                   urgencyDegree,
-                                   title,
-                                   time,
-                                   description,
-                                   estimatedExecutionTime,
-                                   estimatedCompletionTime,
-                                   extendedField1,
-                                   extendedField2,
-                                   extendedField3,
-                                   extendedField4,
-                                   extendedField5);
+            return new OrderEntity(dto.CategoryId,
+                                   dto.UrgencyDegree,
+                                   dto.Title,
+                                   dto.Time.Value,
+                                   dto.Description,
+                                   dto.EstimatedExecutionTime,
+                                   dto.EstimatedCompletionTime,
+                                   dto.EntityType,
+                                   dto.EntityId,
+                                   dto.ExtendedField1,
+                                   dto.ExtendedField2,
+                                   dto.ExtendedField3,
+                                   dto.ExtendedField4,
+                                   dto.ExtendedField5);
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace BXJG.WorkOrder.WorkOrder
 {
-    public class BatchAllocateOutput : BatchOperationOutputLong
+    public class WorkOrderBatchAllocateOutputBase : BatchOperationOutputLong
     {
     }
 }

@@ -1,18 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <localizationDictionary culture="en">
   <texts>
-    <text name="BXJGShop" value="Mall" />
-    <text name="BXJGShopItem" value="Product" />
-    <text name="BXJGShopDictionary" value="Dictionary" />
-    <text name="GetBXJGShopItemKeywordsInputPrompt" value="title/description/brand/sku..." />
-    <text name="BXJGShopOrder" value="Order manager" />
-    <text name="发货" value="Shipment" />
-    <text name="退款" value="Refund" />
-    <text name="取消" value="Cancel" />
-    <text name="BXJG.Shop.Sale.LogisticsStatus.WaitShip" value="WaitShip" />
-    <text name="BXJG.Shop.Sale.LogisticsStatus.Shipped" value="Shipped" />
-    <text name="BXJG.Shop.Sale.LogisticsStatus.Signed" value="Signed" />
-    <text name="BXJG.Shop.Sale.LogisticsStatus.Rejected" value="Rejected" />
-    <text name="BXJG.Shop.Sale.LogisticsStatus.Unwanted" value="Unwanted" />
+    <text name="BXJGWorkOrder" value="Work order" />
+    <text name="BXJG.WorkOrder.WorkOrder.Status.ToBeConfirmed" value="To be confirmed" />
+    <text name="BXJG.WorkOrder.WorkOrder.Status.ToBeAllocated" value="To be allocated" />
+    <text name="BXJG.WorkOrder.WorkOrder.Status.ToBeProcessed" value="To be processed" />
+    <text name="BXJG.WorkOrder.WorkOrder.Status.Processing" value="Processing" />
+    <text name="BXJG.WorkOrder.WorkOrder.Status.Rejected" value="Rejected" />
+    <text name="BXJG.WorkOrder.WorkOrder.Status.Completed" value="Completed" />
+    <text name="BXJG.WorkOrder.WorkOrder.UrgencyDegree.Urgent" value="Urgent" />
+    <text name="BXJG.WorkOrder.WorkOrder.UrgencyDegree.Normalize" value="Normalize" />
+    <text name="BXJG.WorkOrder.WorkOrder.UrgencyDegree.Dispensable" value="Dispensable" />
   </texts>
 </localizationDictionary>

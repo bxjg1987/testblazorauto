@@ -12,7 +12,7 @@ namespace BXJG.WorkOrder.WorkOrder
     /// 工单后台管理编辑模型<br />
     /// 不同工单类型有相应子类
     /// </summary>
-    public class CreateInput : UpdateInput
+    public class WorkOrderCreateInput : WorkOrderUpdateInput
     {
     }
 }

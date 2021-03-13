@@ -14,6 +14,9 @@ namespace BXJG.WorkOrder
         public const int OrderDescriptionMaxLength = 5000;
         public const int OrderStatusChangedDescriptionMaxLength = 500;
         public const int OrderEmployeeIdMaxLength = 64;
+        public const int OrderEntityTypeMaxLength = 100;
+        public const int OrderEntityIdMaxLength = 100;
+
         //public const int OrderContactNameMaxLength = 50;
         //public const int OrderContactPhoneMaxLength = 100;
     }

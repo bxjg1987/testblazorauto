@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<localizationDictionary culture="zh-Hans">
+  <texts>
+    <text name="BXJGWorkOrder" value="工单" />
+    <text name="BXJG.WorkOrder.WorkOrder.Status.ToBeConfirmed" value="待确认" />
+    <text name="BXJG.WorkOrder.WorkOrder.Status.ToBeAllocated" value="待分配" />
+    <text name="BXJG.WorkOrder.WorkOrder.Status.ToBeProcessed" value="待执行" />
+    <text name="BXJG.WorkOrder.WorkOrder.Status.Processing" value="执行中" />
+    <text name="BXJG.WorkOrder.WorkOrder.Status.Rejected" value="已拒绝" />
+    <text name="BXJG.WorkOrder.WorkOrder.Status.Completed" value="已完成" />
+
+    <text name="BXJG.WorkOrder.WorkOrder.UrgencyDegree.Urgent" value="紧急" />
+    <text name="BXJG.WorkOrder.WorkOrder.UrgencyDegree.Normalize" value="一般" />
+    <text name="BXJG.WorkOrder.WorkOrder.UrgencyDegree.Dispensable" value="不急" />
+  </texts>
+</localizationDictionary>

@@ -11,7 +11,7 @@ namespace BXJG.WorkOrder.WorkOrder
     /// 工单后台管理列表页使用的显示模型<br />
     /// 不同工单类型有相应子类
     /// </summary>
-    public class WorkOrderDto : FullAuditedEntityDto<long>
+    public class WorkOrderDtoBase : FullAuditedEntityDto<long>
     {
         /// <summary>
         /// 所属分类id
@@ -81,6 +81,13 @@ namespace BXJG.WorkOrder.WorkOrder
         /// 员工手机号
         /// </summary>
         public string EmployeePhone { get; set; }
+        
+    }
+    /// <summary>
+    /// 后台管理普通工单查询模型
+    /// </summary>
+    public class WorkOrderDto : WorkOrderDtoBase
+    {
         /// <summary>
         /// 扩展字段
         /// </summary>

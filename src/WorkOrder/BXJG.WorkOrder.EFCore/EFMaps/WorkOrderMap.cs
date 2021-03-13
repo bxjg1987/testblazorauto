@@ -14,7 +14,7 @@ namespace BXJG.WorkOrder.EFMaps
         public virtual void Configure(EntityTypeBuilder<T> builder)
         {
             builder.Property(c => c.RowVersion).IsRowVersion();
-            builder.Property(c => c.ExtensionData).HasMaxLength(int.MaxValue);
+            //builder.Property(c => c.ExtensionData).HasMaxLength(int.MaxValue);
             builder.Property(c => c.Title).HasMaxLength(CoreConsts.OrderTitleMaxLength).IsRequired();
             builder.Property(c => c.Description).HasMaxLength(CoreConsts.OrderDescriptionMaxLength);
             builder.Property(c => c.StatusChangedDescription).HasMaxLength(CoreConsts.OrderStatusChangedDescriptionMaxLength);
@@ -28,6 +28,11 @@ namespace BXJG.WorkOrder.EFMaps
 
     public class WorkOrderMap : WorkOrderBaseMap<OrderEntity>, IEntityTypeConfiguration<OrderEntity>
     {
-
+        public override void Configure(EntityTypeBuilder<OrderEntity> builder)
+        {
+            base.Configure(builder);
+            builder.Property(c => c.EntityType).HasColumnType($"varchar({CoreConsts.OrderEntityTypeMaxLength})");
+            builder.Property(c => c.EntityId).HasColumnType($"varchar({CoreConsts.OrderEntityIdMaxLength})");
+        }
     }
 }

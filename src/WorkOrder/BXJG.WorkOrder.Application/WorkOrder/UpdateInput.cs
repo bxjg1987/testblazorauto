@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 namespace BXJG.WorkOrder.WorkOrder
 {
     /// <summary>
-    /// 工单后台管理编辑模型<br />
+    /// 工单后台管理更新模型<br />
     /// 不同工单类型有相应子类
     /// </summary>
-    public class UpdateInput : EntityDto<long>
+    public class WorkOrderUpdateInputBase : EntityDto<long>
     {
         /// <summary>
         /// 所属分类id
@@ -21,11 +21,11 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <summary>
         /// 状态
         /// </summary>
-        public Status Status { get; set; }
+        public Status? Status { get; set; } = WorkOrder.Status.ToBeConfirmed;
         /// <summary>
         /// 紧急程度
         /// </summary>
-        public UrgencyDegree UrgencyDegree { get; set; }
+        public UrgencyDegree? UrgencyDegree { get; set; } = WorkOrder.UrgencyDegree.Normalize;
         /// <summary>
         /// 标题
         /// </summary>
@@ -61,6 +61,16 @@ namespace BXJG.WorkOrder.WorkOrder
         /// 员工id
         /// </summary>
         public string EmployeeId { get; set; }
+    }
+    /// <summary>
+    /// 工单后台管理普通工单更新模型
+    /// </summary>
+    public class WorkOrderUpdateInput : WorkOrderUpdateInputBase
+    {
+        ///// <summary>
+        ///// 实体Id
+        ///// </summary>
+        //public string EntityId { get; set; }
         /// <summary>
         /// 扩展字段
         /// </summary>

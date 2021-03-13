@@ -3,7 +3,7 @@ using System;
 
 namespace BXJG.WorkOrder.WorkOrder
 {
-    public class BatchAllocateInput: BatchOperationInputLong
+    public class WorkOrderBatchAllocateInputBase: BatchOperationInputLong
     {
         public string EmployeeId { get; set; }
         public DateTimeOffset? Start { get; set; }

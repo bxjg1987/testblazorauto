@@ -8,7 +8,7 @@ namespace BXJG.WorkOrder.WorkOrder
     /// <summary>
     /// 抽象的工单聚合根，不同类型的工单应该定义相应子类
     /// </summary>
-    public abstract class OrderBaseEntity : FullAuditedAggregateRoot<long>, IMustHaveTenant, IExtendableObject
+    public abstract class OrderBaseEntity : FullAuditedAggregateRoot<long>, IMustHaveTenant
     {
         /// <summary>
         /// 给ef用的
@@ -35,12 +35,7 @@ namespace BXJG.WorkOrder.WorkOrder
                                            DateTimeOffset time,
                                            string description = default,
                                            DateTimeOffset? estimatedExecutionTime = default,
-                                           DateTimeOffset? estimatedCompletionTime = default,
-                                           string extendedField1 = default,
-                                           string extendedField2 = default,
-                                           string extendedField3 = default,
-                                           string extendedField4 = default,
-                                           string extendedField5 = default)
+                                           DateTimeOffset? estimatedCompletionTime = default)
         {
             CategoryId = categoryId;
             //部分赋值不要用属性，以免引起事件触发
@@ -50,11 +45,6 @@ namespace BXJG.WorkOrder.WorkOrder
             this.StatusChangedTime = time;
             Description = description;
             ChangeEstimatedTime(estimatedExecutionTime, estimatedCompletionTime);
-            ExtendedField1 = extendedField1;
-            ExtendedField2 = extendedField2;
-            ExtendedField3 = extendedField3;
-            ExtendedField4 = extendedField4;
-            ExtendedField5 = extendedField5;
         }
         protected long categoryId;
         /// <summary>
@@ -165,12 +155,6 @@ namespace BXJG.WorkOrder.WorkOrder
         /// 状态变更有并发可能，使用乐观并发，偷个懒直接使用行级乐观并发
         /// </summary>
         public virtual byte[] RowVersion { get; }
-        public virtual string ExtensionData { get; set; }
-        public virtual string ExtendedField1 { get; set; }
-        public virtual string ExtendedField2 { get; set; }
-        public virtual string ExtendedField3 { get; set; }
-        public virtual string ExtendedField4 { get; set; }
-        public virtual string ExtendedField5 { get; set; }
 
         /// <summary>
         /// 调整状态
@@ -234,7 +218,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="end">希望的结束时间</param>
         public virtual void Allocate(DateTimeOffset time, string employeeId, DateTimeOffset? start = default, DateTimeOffset? end = default)
         {
-            if (Status != Status.ToBeAllocated)
+            if (Status != Status.ToBeAllocated && Status != Status.Processing)
             {
                 throw new UserFriendlyException("当前状态不允许分配操作");
             }
@@ -341,33 +325,46 @@ namespace BXJG.WorkOrder.WorkOrder
     /// <summary>
     /// 普通的默认的gd
     /// </summary>
-    public class OrderEntity : OrderBaseEntity
+    public class OrderEntity : OrderBaseEntity, IExtendableObject
     {
+        public virtual string EntityType { get; protected set; }
+        public virtual string EntityId { get; protected set; }
+        public virtual string ExtensionData { get; set; }
+        public virtual string ExtendedField1 { get; set; }
+        public virtual string ExtendedField2 { get; set; }
+        public virtual string ExtendedField3 { get; set; }
+        public virtual string ExtendedField4 { get; set; }
+        public virtual string ExtendedField5 { get; set; }
+
         protected internal OrderEntity() : base() { }
         protected internal OrderEntity(long categoryId,
                                        UrgencyDegree urgencyDegree,
                                        string title,
                                        DateTimeOffset time,
-                                       string description = null,
-                                       DateTimeOffset? estimatedExecutionTime = null,
-                                       DateTimeOffset? estimatedCompletionTime = null,
-                                       string extendedField1 = null,
-                                       string extendedField2 = null,
-                                       string extendedField3 = null,
-                                       string extendedField4 = null,
-                                       string extendedField5 = null) : base(categoryId,
-                                                                            urgencyDegree,
-                                                                            title,
-                                                                            time,
-                                                                            description,
-                                                                            estimatedExecutionTime,
-                                                                            estimatedCompletionTime,
-                                                                            extendedField1,
-                                                                            extendedField2,
-                                                                            extendedField3,
-                                                                            extendedField4,
-                                                                            extendedField5)
+                                       string description = default,
+                                       DateTimeOffset? estimatedExecutionTime = default,
+                                       DateTimeOffset? estimatedCompletionTime = default,
+                                       string entityType = default,
+                                       string entityId = default,
+                                       string extendedField1 = default,
+                                       string extendedField2 = default,
+                                       string extendedField3 = default,
+                                       string extendedField4 = default,
+                                       string extendedField5 = default) : base(categoryId,
+                                                                               urgencyDegree,
+                                                                               title,
+                                                                               time,
+                                                                               description,
+                                                                               estimatedExecutionTime,
+                                                                               estimatedCompletionTime)
         {
+            EntityType = entityType;
+            EntityId = entityId;
+            ExtendedField1 = extendedField1;
+            ExtendedField2 = extendedField2;
+            ExtendedField3 = extendedField3;
+            ExtendedField4 = extendedField4;
+            ExtendedField5 = extendedField5;
         }
 
         protected override OrderBaseEntity CopyCreate()
@@ -379,12 +376,13 @@ namespace BXJG.WorkOrder.WorkOrder
                                    Description,
                                    EstimatedExecutionTime,
                                    EstimatedCompletionTime,
+                                   EntityType,
+                                   EntityId,
                                    ExtendedField1,
                                    ExtendedField2,
                                    ExtendedField3,
                                    ExtendedField4,
                                    ExtendedField5);
         }
-
     }
 }

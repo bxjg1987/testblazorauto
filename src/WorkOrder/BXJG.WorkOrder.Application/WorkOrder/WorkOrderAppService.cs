@@ -18,7 +18,7 @@ using Abp.Domain.Entities;
 namespace BXJG.WorkOrder.WorkOrder
 {
     /// <summary>
-    /// 工单后台管理应用服务
+    /// 工单后台管理应用服务基类
     /// </summary>
     /// <typeparam name="TEntityDto">列表页显示模型</typeparam>
     /// <typeparam name="TGetAllInput">列表页查询时的输入模型</typeparam>
@@ -34,47 +34,40 @@ namespace BXJG.WorkOrder.WorkOrder
     /// <typeparam name="TEntity">实体类型</typeparam>
     /// <typeparam name="TRepository">实体仓储类型</typeparam>
     /// <typeparam name="TCategoryRepository">分类仓储</typeparam>
+    /// <typeparam name="TCreateDto"></typeparam>
     /// <typeparam name="TManager">领域服务类型</typeparam>
-    public abstract class WorkOrderAppService<TCreateInput,
-                                              TUpdateInput,
-                                              TBatchDeleteInput,
-                                              TBatchDeleteOutput,
-                                              TGetInput,
-                                              TGetAllInput,
-                                              TEntityDto,
-                                              TBatchChangeStatusInput,
-                                              TBatchChangeStatusOutput,
-                                              TBatchAllocateInput,
-                                              TBatchAllocateOutput,
-                                              TEntity,
-                                              TRepository,
-                                              TManager,
-                                              TCategoryRepository> : AppServiceBase, IWorkOrderAppService<TCreateInput,
-                                                                                                          TUpdateInput,
-                                                                                                          TBatchDeleteInput,
-                                                                                                          TBatchDeleteOutput,
-                                                                                                          TGetInput,
-                                                                                                          TGetAllInput,
-                                                                                                          TEntityDto,
-                                                                                                          TBatchChangeStatusInput,
-                                                                                                          TBatchChangeStatusOutput,
-                                                                                                          TBatchAllocateInput,
-                                                                                                          TBatchAllocateOutput>
+    public abstract class WorkOrderAppServiceBase<TCreateInput,
+                                                  TUpdateInput,
+                                                  TBatchDeleteInput,
+                                                  TBatchDeleteOutput,
+                                                  TGetInput,
+                                                  TGetAllInput,
+                                                  TEntityDto,
+                                                  TBatchChangeStatusInput,
+                                                  TBatchChangeStatusOutput,
+                                                  TBatchAllocateInput,
+                                                  TBatchAllocateOutput,
+                                                  TEntity,
+                                                  TRepository,
+                                                  TCreateDto,
+                                                  TManager,
+                                                  TCategoryRepository> : AppServiceBase
         #region 泛型约束
-        where TCreateInput : CreateInput
-        where TUpdateInput : UpdateInput
+        where TCreateInput : TUpdateInput
+        where TUpdateInput : WorkOrderUpdateInputBase
         where TBatchDeleteInput : BatchOperationInputLong
         where TBatchDeleteOutput : BatchOperationOutputLong, new()
         where TGetInput : EntityDto<long>
-        where TGetAllInput : GetAllInput
-        where TEntityDto : WorkOrderDto, new()
-        where TBatchChangeStatusInput : BatchChangeStatusInput
-        where TBatchChangeStatusOutput : BatchChangeStatusOutput, new()
-        where TBatchAllocateInput : BatchAllocateInput
-        where TBatchAllocateOutput : BatchAllocateOutput, new()
+        where TGetAllInput : GetAllWorkOrderInputBase
+        where TEntityDto : WorkOrderDtoBase, new()
+        where TBatchChangeStatusInput : WorkOrderBatchChangeStatusInputBase
+        where TBatchChangeStatusOutput : WorkOrderBatchChangeStatusOutputBase, new()
+        where TBatchAllocateInput : WorkOrderBatchAllocateInputBase
+        where TBatchAllocateOutput : WorkOrderBatchAllocateOutputBase, new()
         where TEntity : OrderBaseEntity
         where TRepository : IRepository<TEntity, long>
-        where TManager : OrderBaseManager<TEntity>
+        where TCreateDto : WorkOrderCreateDtoBase, new()
+        where TManager : OrderBaseManager<TEntity, TCreateDto>
         where TCategoryRepository : IRepository<CategoryEntity, long>
         #endregion
     {
@@ -83,10 +76,10 @@ namespace BXJG.WorkOrder.WorkOrder
         protected readonly TManager manager;
         protected readonly IEmployeeAppService employeeAppService;
 
-        public WorkOrderAppService(TRepository repository,
-                                   TManager manager,
-                                   TCategoryRepository categoryRepository,
-                                   IEmployeeAppService employeeAppService)
+        public WorkOrderAppServiceBase(TRepository repository,
+                                       TManager manager,
+                                       TCategoryRepository categoryRepository,
+                                       IEmployeeAppService employeeAppService)
         {
             this.repository = repository;
             this.manager = manager;
@@ -100,26 +93,8 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <returns></returns>
         public virtual async Task<TEntityDto> CreateAsync(TCreateInput input)
         {
-            var entity = await manager.CreateAsync(input.CategoryId,
-                                                   input.UrgencyDegree,
-                                                   input.Title,
-                                                   input.Description,
-                                                   input.EstimatedExecutionTime,
-                                                   input.EstimatedCompletionTime,
-                                                   input.ExtendedField1,
-                                                   input.ExtendedField2,
-                                                   input.ExtendedField3,
-                                                   input.ExtendedField4,
-                                                   input.ExtendedField5);
-
-            if (input.ExtensionData != null)
-            {
-                foreach (var item in input.ExtensionData)
-                {
-                    entity.SetData(item.Key, item.Value);
-                }
-            }
-            Skip(entity, input as TUpdateInput);
+            var entity = await manager.CreateAsync(await CreateInputToCreateDto(input));
+            await BeforeEditAsync(entity, input);
             await CurrentUnitOfWork.SaveChangesAsync();
             var category = await categoryRepository.GetAsync(input.CategoryId);
             IEnumerable<EmployeeDto> emps = null;
@@ -127,7 +102,8 @@ namespace BXJG.WorkOrder.WorkOrder
             {
                 emps = await employeeAppService.GetByIdsAsync(entity.EmployeeId);
             }
-            return EntityToDto(entity, new CategoryEntity[] { category }, emps);
+            var state = await GetStateAsync(entity);
+            return await EntityToDtoAsync(entity, new CategoryEntity[] { category }, emps, state);
         }
         /// <summary>
         /// 修改工单
@@ -143,26 +119,11 @@ namespace BXJG.WorkOrder.WorkOrder
             entity.Description = input.Description;
             entity.Title = input.Title;
             entity.Description = input.Description;
-            entity.UrgencyDegree = input.UrgencyDegree;
-            entity.ExtendedField1 = input.ExtendedField1;
-            entity.ExtendedField2 = input.ExtendedField2;
-            entity.ExtendedField3 = input.ExtendedField3;
-            entity.ExtendedField4 = input.ExtendedField4;
-            entity.ExtendedField5 = input.ExtendedField5;
-            if (input.ExtensionData != null)
+            entity.UrgencyDegree = input.UrgencyDegree.Value;
+            await BeforeEditAsync(entity, input);
+            if (input.Status.Value < entity.Status)
             {
-                foreach (var item in input.ExtensionData)
-                {
-                    entity.SetData(item.Key, item.Value);
-                }
-            }
-            if (input.Status > entity.Status)
-            {
-                Skip(entity, input);
-            }
-            else if (input.Status < entity.Status)
-            {
-                entity.BackOff(Clock.Now, input.Status);
+                entity.BackOff(Clock.Now, input.Status.Value);
             }
             await CurrentUnitOfWork.SaveChangesAsync();
             var category = await categoryRepository.GetAsync(input.CategoryId);
@@ -171,7 +132,8 @@ namespace BXJG.WorkOrder.WorkOrder
             {
                 emps = await employeeAppService.GetByIdsAsync(entity.EmployeeId);
             }
-            return EntityToDto(entity, new CategoryEntity[] { category }, emps);
+            var state = await GetStateAsync(entity);
+            return await EntityToDtoAsync(entity, new CategoryEntity[] { category }, emps, state);
         }
         /// <summary>
         /// 删除工单
@@ -212,7 +174,8 @@ namespace BXJG.WorkOrder.WorkOrder
             {
                 emps = await employeeAppService.GetByIdsAsync(entity.EmployeeId);
             }
-            return EntityToDto(entity, new CategoryEntity[] { category }, emps);
+            var state = await GetStateAsync(entity);
+            return await EntityToDtoAsync(entity, new CategoryEntity[] { category }, emps, state);
         }
         /// <summary>
         /// 获取列表
@@ -263,8 +226,14 @@ namespace BXJG.WorkOrder.WorkOrder
             {
                 emps = await employeeAppService.GetByIdsAsync(empIds.ToArray());
             }
-
-            return new PagedResultDto<TEntityDto>(count, list.Select(c => EntityToDto(c, cls, emps)).ToList());
+            var state = await GetStateAsync(list.ToArray());
+            var items = new List<TEntityDto>();
+            foreach (var item in list)
+            {
+                var ttt = await EntityToDtoAsync(item, cls, emps, state);
+                items.Add(ttt);
+            }
+            return new PagedResultDto<TEntityDto>(count, items);
         }
         /// <summary>
         /// 批量分配工单
@@ -398,7 +367,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="categories"></param>
         /// <param name="employees"></param>
         /// <returns></returns>
-        protected virtual TEntityDto EntityToDto(TEntity entity, IEnumerable<CategoryEntity> categories, IEnumerable<EmployeeDto> employees)
+        protected virtual async ValueTask<TEntityDto> EntityToDtoAsync(TEntity entity, IEnumerable<CategoryEntity> categories, IEnumerable<EmployeeDto> employees, object state = null)
         {
             var dto = new TEntityDto();
             dto.CategoryId = entity.CategoryId;
@@ -422,15 +391,7 @@ namespace BXJG.WorkOrder.WorkOrder
             dto.EstimatedCompletionTime = entity.EstimatedCompletionTime;
             dto.EstimatedExecutionTime = entity.EstimatedExecutionTime;
             dto.ExecutionTime = entity.ExecutionTime;
-            dto.ExtendedField1 = entity.ExtendedField1;
-            dto.ExtendedField2 = entity.ExtendedField2;
-            dto.ExtendedField3 = entity.ExtendedField3;
-            dto.ExtendedField4 = entity.ExtendedField4;
-            dto.ExtendedField5 = entity.ExtendedField5;
-            if (!entity.ExtensionData.IsNullOrWhiteSpace())
-            {
-                dto.ExtensionData = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(entity.ExtensionData);
-            }
+
             dto.Id = entity.Id;
             dto.IsDeleted = entity.IsDeleted;
             dto.LastModificationTime = entity.LastModificationTime;
@@ -468,27 +429,48 @@ namespace BXJG.WorkOrder.WorkOrder
                 }
             }
         }
+        protected virtual async ValueTask<TCreateDto> CreateInputToCreateDto(TCreateInput input)
+        {
+            return new TCreateDto
+            {
+                CategoryId = input.CategoryId,
+                Description = input.Description,
+                EstimatedCompletionTime = input.EstimatedCompletionTime,
+                EstimatedExecutionTime = input.EstimatedExecutionTime,
+                Title = input.Title,
+                UrgencyDegree = input.UrgencyDegree.Value
+            };
+        }
+        protected virtual async ValueTask BeforeEditAsync(TEntity entity, TUpdateInput input)
+        {
+            if (input.Status > Status.ToBeConfirmed)
+                Skip(entity, input);
+        }
+        protected virtual async ValueTask<object> GetStateAsync(params TEntity[] entity)
+        {
+            return null;
+        }
     }
-
 
     /// <summary>
     /// 默认工单应用服务接口
     /// </summary>
-    public class WorkOrderAppService : WorkOrderAppService<CreateInput,
-                                                           UpdateInput,
-                                                           BatchOperationInputLong,
-                                                           BatchOperationOutputLong,
-                                                           EntityDto<long>,
-                                                           GetAllInput,
-                                                           WorkOrderDto,
-                                                           BatchChangeStatusInput,
-                                                           BatchChangeStatusOutput,
-                                                           BatchAllocateInput,
-                                                           BatchAllocateOutput,
-                                                           OrderEntity,
-                                                           IRepository<OrderEntity, long>,
-                                                           OrderManager,
-                                                           IRepository<CategoryEntity, long>>, IWorkOrderAppService
+    public class WorkOrderAppService : WorkOrderAppServiceBase<WorkOrderCreateInput,
+                                                               WorkOrderUpdateInput,
+                                                               BatchOperationInputLong,
+                                                               BatchOperationOutputLong,
+                                                               EntityDto<long>,
+                                                               GetAllWorkOrderInputBase,
+                                                               WorkOrderDto,
+                                                               WorkOrderBatchChangeStatusInputBase,
+                                                               WorkOrderBatchChangeStatusOutputBase,
+                                                               WorkOrderBatchAllocateInputBase,
+                                                               WorkOrderBatchAllocateOutputBase,
+                                                               OrderEntity,
+                                                               IRepository<OrderEntity, long>,
+                                                               WorkOrderCreateDto,
+                                                               OrderManager,
+                                                               IRepository<CategoryEntity, long>>
 
     {
         public WorkOrderAppService(IRepository<OrderEntity, long> repository,
@@ -498,7 +480,40 @@ namespace BXJG.WorkOrder.WorkOrder
                                                                                   manager,
                                                                                   categoryRepository,
                                                                                   employeeAppService)
+        { }
+      
+        protected override async ValueTask BeforeEditAsync(OrderEntity entity, WorkOrderUpdateInput input)
         {
+            await base.BeforeEditAsync(entity, input);
+            entity.ExtendedField1 = input.ExtendedField1;
+            entity.ExtendedField2 = input.ExtendedField2;
+            entity.ExtendedField3 = input.ExtendedField3;
+            entity.ExtendedField4 = input.ExtendedField4;
+            entity.ExtendedField5 = input.ExtendedField5;
+            if (input.ExtensionData != null)
+            {
+                foreach (var item in input.ExtensionData)
+                {
+                    entity.SetData(item.Key, item.Value);
+                }
+            }
+        }
+        protected override async ValueTask<WorkOrderDto> EntityToDtoAsync(OrderEntity entity,
+                                                                          IEnumerable<CategoryEntity> categories,
+                                                                          IEnumerable<EmployeeDto> employees,
+                                                                          object state = default)
+        {
+            var dto = await base.EntityToDtoAsync(entity, categories, employees, state);
+            dto.ExtendedField1 = entity.ExtendedField1;
+            dto.ExtendedField2 = entity.ExtendedField2;
+            dto.ExtendedField3 = entity.ExtendedField3;
+            dto.ExtendedField4 = entity.ExtendedField4;
+            dto.ExtendedField5 = entity.ExtendedField5;
+            if (!entity.ExtensionData.IsNullOrWhiteSpace())
+            {
+                dto.ExtensionData = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(entity.ExtensionData);
+            }
+            return dto;
         }
     }
 }

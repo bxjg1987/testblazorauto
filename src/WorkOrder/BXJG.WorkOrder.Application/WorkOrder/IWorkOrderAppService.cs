@@ -35,16 +35,16 @@ namespace BXJG.WorkOrder.WorkOrder
     /// <summary>
     /// 普通工单
     /// </summary>
-    public interface IWorkOrderAppService : IWorkOrderAppService<CreateInput,
+    public interface IWorkOrderAppService : IWorkOrderAppService<WorkOrderCreateInputBase,
                                                                  UpdateInput,
                                                                  BatchOperationInputLong,
                                                                  BatchOperationOutputLong,
                                                                  EntityDto<long>,
-                                                                 GetAllInput,
-                                                                 WorkOrderDto,
-                                                                 BatchChangeStatusInput,
-                                                                 BatchChangeStatusOutput,
-                                                                 BatchAllocateInput,
-                                                                 BatchAllocateOutput>
+                                                                 GetAllWorkOrderInputBase,
+                                                                 WorkOrderDtoBase,
+                                                                 WorkOrderBatchChangeStatusInputBase,
+                                                                 WorkOrderBatchChangeStatusOutputBase,
+                                                                 WorkOrderBatchAllocateInputBase,
+                                                                 WorkOrderBatchAllocateOutputBase>
     { }
 }
