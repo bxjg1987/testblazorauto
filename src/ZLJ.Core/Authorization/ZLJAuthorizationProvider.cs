@@ -6,6 +6,8 @@ using BXJG.Equipment.Authorization;
 using BXJG.GeneralTree;
 using BXJG.Shop.Authorization;
 using BXJG.BaseInfo.Authorization;
+using BXJG.WorkOrder;
+
 namespace ZLJ.Authorization
 {
     public class ZLJAuthorizationProvider : AuthorizationProvider
@@ -21,15 +23,18 @@ namespace ZLJ.Authorization
             //{codegenerator}
 
             //添加设备管理模块的权限
+            #region 设备
             admin.AddEquipmentPermission();
-
+            #endregion
+            #region 工单
+            admin.AddBXJGWorkOrderPermission();
+            #endregion
             #region 商城
             admin.AddBXJGShopPermission();
             #endregion
             #region CMS
             BXJGCMSAuthorizationProvider.SetPermissions(admin);
             #endregion
-
             #region 加盟商
             //var franchisee = admin.CreateChildPermission(PermissionNames.Franchisee, L("Franchisee"));
             //franchisee.CreateChildPermission(PermissionNames.FranchiseeInfo, L("FranchiseeInfo"));
@@ -49,7 +54,6 @@ namespace ZLJ.Authorization
             //franchiseeBackEquipment.CreateChildPermission(PermissionNames.FranchiseeBackEquipmentOrderStatus, L("FranchiseeBackEquipmentOrderStatus"));
             //franchiseeBackEquipment.CreateChildPermission(PermissionNames.FranchiseeBackEquipmentStatus, L("FranchiseeBackEquipmentStatus"));
             #endregion
-
             #region 资产管理
             var asset = admin.CreateChildPermission(PermissionNames.AdministratorAsset, L("Asset management"), multiTenancySides: MultiTenancySides.Tenant);
 

@@ -7,6 +7,8 @@ using BXJG.Shop;
 using ZLJ.Authorization;
 using BXJG.Equipment;
 using BXJG.BaseInfo;
+using BXJG.WorkOrder;
+
 namespace ZLJ.Navigation
 {
     /// <summary>
@@ -20,7 +22,7 @@ namespace ZLJ.Navigation
 
             //注册设备管理模块的菜单
             context.Manager.MainMenu.AddBXJGEquipmentNavigation();
-
+            context.Manager.MainMenu.AddBXJGWorkOrderNavigation();
             context.Manager.MainMenu.AddBXJGShopNavigation();
             BXJGCMSNavigationProvider.Init(context.Manager.MainMenu);
             #region 加盟商

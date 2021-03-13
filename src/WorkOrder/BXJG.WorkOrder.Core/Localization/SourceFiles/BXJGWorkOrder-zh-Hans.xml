@@ -2,6 +2,10 @@
 <localizationDictionary culture="zh-Hans">
   <texts>
     <text name="BXJGWorkOrder" value="工单" />
+    <text name="BXJGWorkOrderManager" value="工单管理" />
+    <text name="BXJGWorkOrderCategory" value="工单分类" />
+    <text name="BXJGWorkOrderCategoryManager" value="工单分类管理" />
+    
     <text name="BXJG.WorkOrder.WorkOrder.Status.ToBeConfirmed" value="待确认" />
     <text name="BXJG.WorkOrder.WorkOrder.Status.ToBeAllocated" value="待分配" />
     <text name="BXJG.WorkOrder.WorkOrder.Status.ToBeProcessed" value="待执行" />

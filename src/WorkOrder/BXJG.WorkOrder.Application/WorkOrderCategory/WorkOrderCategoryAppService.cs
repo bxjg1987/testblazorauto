@@ -21,22 +21,17 @@ namespace BXJG.WorkOrder.WorkOrderCategory
     {
         public WorkOrderCategoryAppService(IRepository<CategoryEntity, long> ownRepository,
                                            CategoryManager organizationUnitManager,
-                                           string createPermissionName = null,
-                                           string updatePermissionName = null,
-                                           string deletePermissionName = null,
-                                           string getPermissionName = null,
                                            string allTextForManager = "全部",
                                            string allTextForSearch = "不限",
                                            string allTextForForm = "请选择") : base(ownRepository,
                                                                                     organizationUnitManager,
-                                                                                    createPermissionName,
-                                                                                    updatePermissionName,
-                                                                                    deletePermissionName,
-                                                                                    getPermissionName,
+                                                                                    CoreConsts.WorkOrderCategoryCreate,
+                                                                                    CoreConsts.WorkOrderCategoryUpdate,
+                                                                                    CoreConsts.WorkOrderCategoryDelete,
+                                                                                    CoreConsts.WorkOrderCategoryManager,
                                                                                     allTextForManager,
                                                                                     allTextForSearch,
                                                                                     allTextForForm)
-        {
-        }
+        { }
     }
 }

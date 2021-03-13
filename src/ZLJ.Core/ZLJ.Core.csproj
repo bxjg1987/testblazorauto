@@ -39,6 +39,7 @@
     <ProjectReference Include="..\Modules\BXJG.Attachment\BXJG.Attachment.csproj" />
     <ProjectReference Include="..\Modules\BXJG.File\BXJG.File.csproj" />
     <ProjectReference Include="..\shop\BXJG.Shop.Core\BXJG.Shop.Core.csproj" />
+    <ProjectReference Include="..\WorkOrder\BXJG.WorkOrder.Core\BXJG.WorkOrder.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Shop\" />

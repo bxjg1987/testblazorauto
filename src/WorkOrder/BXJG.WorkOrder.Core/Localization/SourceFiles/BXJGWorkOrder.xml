@@ -2,6 +2,9 @@
 <localizationDictionary culture="en">
   <texts>
     <text name="BXJGWorkOrder" value="Work order" />
+    <text name="BXJGWorkOrderManager" value="Work order manager" />
+    <text name="BXJGWorkOrderCategory" value="Work order category" />
+    <text name="BXJGWorkOrderCategoryManager" value="Work order category manager" />
     <text name="BXJG.WorkOrder.WorkOrder.Status.ToBeConfirmed" value="To be confirmed" />
     <text name="BXJG.WorkOrder.WorkOrder.Status.ToBeAllocated" value="To be allocated" />
     <text name="BXJG.WorkOrder.WorkOrder.Status.ToBeProcessed" value="To be processed" />
