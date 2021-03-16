@@ -23,10 +23,9 @@ namespace BXJG.GeneralTree
                                                                                GeneralTreeNodeDto,
                                                                                GeneralTreeGetForSelectInput,
                                                                                GeneralTreeComboboxDto,
-                                                                               GeneralTreeEntity,
-                                                                               GeneralTreeManager>, IUnAuthGeneralTreeAppService
+                                                                               GeneralTreeEntity>, IUnAuthGeneralTreeAppService
     {
-        public UnAuthGeneralTreeAppService(IRepository<GeneralTreeEntity, long> repository, GeneralTreeManager organizationUnitManager) : base(repository, organizationUnitManager)
+        public UnAuthGeneralTreeAppService(IRepository<GeneralTreeEntity, long> repository) : base(repository)
         { }
     }
 

@@ -10,14 +10,8 @@ using System.Threading.Tasks;
 
 namespace BXJG.WorkOrder.WorkOrderCategory
 {
-    public class CategoryEntity : GeneralTreeEntity<CategoryEntity>, IGeneratesDomainEvents, IMustHaveTenant, IExtendableObject
+    public class CategoryEntity : GeneralTreeEntity<CategoryEntity>, IGeneratesDomainEvents
     {
-        /// <summary>
-        /// 租户id
-        /// </summary>
-        public int TenantId { get; set; }
-        //public byte[] RowVersion { get; private set; }
-        public string ExtensionData { get; set; }
         public virtual ICollection<IEventData> DomainEvents { get; } = new List<IEventData>();
     }
 }

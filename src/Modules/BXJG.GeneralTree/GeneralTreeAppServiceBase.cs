@@ -39,13 +39,11 @@ namespace BXJG.GeneralTree
                                                  TGetTreeForSelectOutput,
                                                  TGetNodesForSelectInput,
                                                  TGetNodesForSelectOutput,
-                                                 TEntity,
-                                                 TManager> : ApplicationService, IUnAuthGeneralTreeAppServiceBase<TGetTreeForSelectInput,
-                                                                                                                  TGetTreeForSelectOutput,
-                                                                                                                  TGetNodesForSelectInput,
-                                                                                                                  TGetNodesForSelectOutput>
+                                                 TEntity> : ApplicationService, IUnAuthGeneralTreeAppServiceBase<TGetTreeForSelectInput,
+                                                                                                                 TGetTreeForSelectOutput,
+                                                                                                                 TGetNodesForSelectInput,
+                                                                                                                 TGetNodesForSelectOutput>
         where TEntity : GeneralTreeEntity<TEntity>
-        where TManager : GeneralTreeManager<TEntity>
         where TGetTreeForSelectInput : GeneralTreeGetForSelectInput
         where TGetTreeForSelectOutput : GeneralTreeNodeDto<TGetTreeForSelectOutput>, new()
         where TGetNodesForSelectInput : GeneralTreeGetForSelectInput
@@ -58,16 +56,13 @@ namespace BXJG.GeneralTree
 
         protected string allTextForSearch, allTextForForm;//注意这里代表的是本地化文本的key
         public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }//属性注入
-        protected readonly TManager generalTreeManager;
         protected readonly IRepository<TEntity, long> ownRepository;
 
         public UnAuthGeneralTreeAppServiceBase(IRepository<TEntity, long> ownRepository,
-                                         TManager organizationUnitManager,
-                                         string allTextForSearch = "不限",
-                                         string allTextForForm = "请选择")//这里的字符串后期可以使用常量
+                                               string allTextForSearch = "不限",
+                                               string allTextForForm = "请选择")//这里的字符串后期可以使用常量
         {
             base.LocalizationSourceName = GeneralTreeConsts.LocalizationSourceName;
-            this.generalTreeManager = organizationUnitManager;
             this.ownRepository = ownRepository;
             this.AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
             //L内部调用的LocationSource是使用的属性注入，所以在构造函数中无法使用L()  此规则.net framework版本是这个规则，.net core版本未测试过
@@ -298,15 +293,14 @@ namespace BXJG.GeneralTree
                                                                                        TGetTreeForSelectOutput,
                                                                                        TGetNodesForSelectInput,
                                                                                        TGetNodesForSelectOutput,
-                                                                                       TEntity,
-                                                                                       TManager>, IGeneralTreeAppServiceBase<TDto,
-                                                                                                                             TEditDto,
-                                                                                                                             TGetAllInput,
-                                                                                                                             TGetTreeForSelectInput,
-                                                                                                                             TGetTreeForSelectOutput,
-                                                                                                                             TGetNodesForSelectInput,
-                                                                                                                             TGetNodesForSelectOutput,
-                                                                                                                             TMoveInput>
+                                                                                       TEntity>, IGeneralTreeAppServiceBase<TDto,
+                                                                                                                            TEditDto,
+                                                                                                                            TGetAllInput,
+                                                                                                                            TGetTreeForSelectInput,
+                                                                                                                            TGetTreeForSelectOutput,
+                                                                                                                            TGetNodesForSelectInput,
+                                                                                                                            TGetNodesForSelectOutput,
+                                                                                                                            TMoveInput>
         where TEntity : GeneralTreeEntity<TEntity>
         where TDto : GeneralTreeGetTreeNodeBaseDto<TDto>, new()
         where TEditDto : GeneralTreeNodeEditBaseDto//父类可以对输入做一定的处理
@@ -323,6 +317,7 @@ namespace BXJG.GeneralTree
          * 顶级文本可能是 前端传过来的、上级节点文本、默认文本；除非根本不现实
          */
 
+        protected readonly TManager generalTreeManager;
         protected string allTextForManager;//注意这里代表的是本地化文本的key
 
         protected string createPermissionName, updatePermissionName, deletePermissionName, getPermissionName;
@@ -336,13 +331,13 @@ namespace BXJG.GeneralTree
                                          string allTextForManager = "全部",
                                          string allTextForSearch = "不限",
                                          string allTextForForm = "请选择") : base(ownRepository,
-                                                                                  organizationUnitManager,
                                                                                   allTextForSearch,
                                                                                   allTextForForm)
         {
             //L内部调用的LocationSource是使用的属性注入，所以在构造函数中无法使用L()  此规则.net framework版本是这个规则，.net core版本未测试过
             this.allTextForManager = allTextForManager.UtilsL();
 
+            this.generalTreeManager = organizationUnitManager;
 
             this.createPermissionName = createPermissionName;
             this.updatePermissionName = updatePermissionName;
