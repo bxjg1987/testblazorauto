@@ -8,7 +8,7 @@ using System.Reflection;
 namespace BXJG.WorkOrder
 {
     [DependsOn(typeof(BXJGCommonApplicationModule))]
-    public class ApplicationModule : AbpModule
+    public class BXJGWorkOrderEmployeeApplicationModule : AbpModule
     {
         //IConfiguration configuration;
 
@@ -30,7 +30,7 @@ namespace BXJG.WorkOrder
         }
         public override void Initialize()
         {
-            IocManager.RegisterAssemblyByConvention(typeof(ApplicationModule).GetAssembly());
+            IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
             //因为要生成动态webapi，所以这样注册不行，不过在主程序中去试试应该可以
             //IocManager.Register( typeof(IBXJGShopItemAppService), typeof(BXJGShopItemAppService<,,,,,>), DependencyLifeStyle.Transient);
             //IocManager.Register( typeof(IBXJGShopFrontItemAppService), typeof(BXJGShopFrontItemAppService<>), DependencyLifeStyle.Transient);

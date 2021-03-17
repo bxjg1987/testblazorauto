@@ -14,10 +14,11 @@ namespace BXJG.WorkOrder
             //CreateMap(typeof(ColumnEntity), typeof(ColumnDto)).EntityToDto();//可能是因为泛型原因，必须调用EntityToDto
             //CreateMap(typeof(ColumnEntity), typeof(ColumnTreeNodeDto)).EntityToComboTree();
             //CreateMap(typeof(ColumnEntity), typeof(ColumnCombboxDto)).EntityToCombobox();
-            CreateMap(typeof(WorkOrderCategoryEditInput), typeof(CategoryEntity));
-            CreateMap(typeof(CategoryEntity), typeof(WorkOrderCategroyDto));
-            //CreateMap(typeof(CategoryEntity), typeof(WorkOrderCategoryTreeNodeDto)).EntityToComboTree();
-            //CreateMap(typeof(CategoryEntity), typeof(WorkOrderCategoryComboboxItemDto)).EntityToCombobox();
+
+            //CreateMap(typeof(WorkOrderCategoryEditInput), typeof(CategoryEntity));
+            //CreateMap(typeof(CategoryEntity), typeof(WorkOrderCategroyDto));
+            CreateMap(typeof(CategoryEntity), typeof(WorkOrderCategoryTreeNodeDto)).EntityToComboTree();
+            CreateMap(typeof(CategoryEntity), typeof(WorkOrderCategoryComboboxItemDto)).EntityToCombobox();
             #endregion
         }
     }

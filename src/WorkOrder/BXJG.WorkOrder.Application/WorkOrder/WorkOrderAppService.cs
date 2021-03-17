@@ -437,7 +437,7 @@ namespace BXJG.WorkOrder.WorkOrder
     }
 
     /// <summary>
-    /// 默认工单应用服务接口
+    /// 后台管理默认工单应用服务接口
     /// </summary>
     public class WorkOrderAppService : WorkOrderAppServiceBase<WorkOrderCreateInput,
                                                                WorkOrderUpdateInput,

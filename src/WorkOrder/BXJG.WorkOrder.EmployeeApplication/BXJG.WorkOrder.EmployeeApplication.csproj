@@ -6,13 +6,8 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath></OutputPath>
-    <DocumentationFile>..\..\ZLJ.Web.Host\APIXML\BXJG.WorkOrder.Application.xml</DocumentationFile>
+    <DocumentationFile>..\..\ZLJ.Web.Host\APIXML\BXJG.WorkOrder.EmployeeApplication.xml</DocumentationFile>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="WorkOrder\IWorkOrderAppService.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.8" />
