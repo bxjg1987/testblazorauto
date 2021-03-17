@@ -1,5 +1,6 @@
 ﻿using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
+using Abp.Timing;
 using Abp.UI;
 using System;
 
@@ -30,17 +31,17 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="extendedField4"></param>
         /// <param name="extendedField5"></param>
         protected internal OrderBaseEntity(long categoryId,
-                                           UrgencyDegree urgencyDegree,
                                            string title,
                                            DateTimeOffset time,
                                            string description = default,
+                                           UrgencyDegree? urgencyDegree = default,
                                            DateTimeOffset? estimatedExecutionTime = default,
                                            DateTimeOffset? estimatedCompletionTime = default)
         {
             CategoryId = categoryId;
             //部分赋值不要用属性，以免引起事件触发
             Status = Status.ToBeConfirmed;
-            this.urgencyDegree = urgencyDegree;
+            this.urgencyDegree = urgencyDegree ?? UrgencyDegree.Normalize;
             this.title = title;
             this.StatusChangedTime = time;
             Description = description;
@@ -177,7 +178,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="e">希望的结束时间</param>
         public virtual void ChangeEstimatedTime(DateTimeOffset? s, DateTimeOffset? e)
         {
-            if (s.HasValue && e.HasValue && s >= e)
+            if (s.HasValue && e.HasValue && s > e)
             {
                 throw new UserFriendlyException("希望的开始时间必须小于结束时间");
             }
@@ -191,7 +192,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="e">实际结束时间</param>
         public virtual void ChangePracticalTime(DateTimeOffset? s, DateTimeOffset? e)
         {
-            if (s.HasValue && e.HasValue && s >= e)
+            if (s.HasValue && e.HasValue && s > e)
             {
                 throw new UserFriendlyException("实际的开始时间必须小于结束时间");
             }
@@ -248,7 +249,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// </summary>
         /// <param name="time">完成时间</param>
         /// <param name="desc">完成情况说明，也可用直接设置CompletionDescription属性修改说明</param>
-        public virtual void Completion(DateTimeOffset time, string desc)
+        public virtual void Completion(DateTimeOffset time, string desc = default)
         {
             if (Status != Status.Processing)
             {
@@ -263,7 +264,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// </summary>
         /// <param name="time">操作时间</param>
         /// <param name="desc">拒绝原因</param>
-        public virtual void Reject(DateTimeOffset time, string desc = "拒绝")
+        public virtual void Reject(DateTimeOffset time, string desc = default)
         {
             ChangeStatus(Status.Rejected, time, desc);
         }
@@ -275,29 +276,26 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param desc="desc"></param>
         public virtual void BackOff(DateTimeOffset time, Status status = Status.ToBeConfirmed, string desc = "回退")
         {
-            var i = (int)status;
-            if (i <= (int)Status)
-            {
+            if (status >= Status)
                 return;
-                //throw new ApplicationException("此状态不允许【回退】操作！");
-            }
-            if (i <= (int)Status.Processing)
+
+            if (status <= Status.Processing)
             {
                 ChangePracticalTime(ExecutionTime, default);
             }
-            if (i <= (int)Status.ToBeProcessed)
+            if (status <= Status.ToBeProcessed)
             {
                 ChangePracticalTime(default, default);
             }
-            if (i <= (int)Status.ToBeAllocated)
+            if (status <= Status.ToBeAllocated)
             {
                 EmployeeId = default;
             }
-            if (status == Status.ToBeConfirmed)
-            {
-                //EmployeeId = default;
-                //EmployeeName = default;
-            }
+            //if (status == Status.ToBeConfirmed)
+            //{
+            //    //EmployeeId = default;
+            //    //EmployeeName = default;
+            //}
             ChangeStatus(status, time, desc);
         }
         /// <summary>
@@ -338,10 +336,10 @@ namespace BXJG.WorkOrder.WorkOrder
 
         protected internal OrderEntity() : base() { }
         protected internal OrderEntity(long categoryId,
-                                       UrgencyDegree urgencyDegree,
                                        string title,
                                        DateTimeOffset time,
                                        string description = default,
+                                       UrgencyDegree? urgencyDegree = default,
                                        DateTimeOffset? estimatedExecutionTime = default,
                                        DateTimeOffset? estimatedCompletionTime = default,
                                        string entityType = default,
@@ -351,10 +349,10 @@ namespace BXJG.WorkOrder.WorkOrder
                                        string extendedField3 = default,
                                        string extendedField4 = default,
                                        string extendedField5 = default) : base(categoryId,
-                                                                               urgencyDegree,
                                                                                title,
                                                                                time,
                                                                                description,
+                                                                               urgencyDegree,
                                                                                estimatedExecutionTime,
                                                                                estimatedCompletionTime)
         {
@@ -370,10 +368,10 @@ namespace BXJG.WorkOrder.WorkOrder
         protected override OrderBaseEntity CopyCreate()
         {
             return new OrderEntity(CategoryId,
-                                   UrgencyDegree,
                                    Title,
                                    StatusChangedTime,
                                    Description,
+                                   UrgencyDegree,
                                    EstimatedExecutionTime,
                                    EstimatedCompletionTime,
                                    EntityType,
@@ -383,6 +381,58 @@ namespace BXJG.WorkOrder.WorkOrder
                                    ExtendedField3,
                                    ExtendedField4,
                                    ExtendedField5);
+        }
+    }
+
+    public static class WorkOrderUpdateInputBaseExt
+    {
+        public static void ChangeState(this OrderBaseEntity entity,
+                                       Status? status = default,
+                                       DateTimeOffset? time = default,
+                                       string description = default,
+                                       string empId = default,
+                                       DateTimeOffset? start = default,
+                                       DateTimeOffset? end = default)
+        {
+
+            if (!status.HasValue)
+                return;
+
+            if (!time.HasValue)
+                time = Clock.Now;
+
+            entity.BackOff(time.Value, status.Value, description);
+            entity.Skip(time.Value, status.Value, description, empId, start, end);
+        }
+
+        public static void Skip(this OrderBaseEntity entity,
+                                DateTimeOffset? time = default,
+                                Status status = Status.Completed,
+                                string description = default,
+                                string empId = default,
+                                DateTimeOffset? start = default,
+                                DateTimeOffset? end = default)
+        {
+            if (status <= entity.Status)
+                return;
+
+            if (!time.HasValue)
+                time = Clock.Now;
+
+            if (status > Status.ToBeConfirmed)
+                entity.Confirme(time.Value);
+            if (status > Status.ToBeAllocated)
+                entity.Allocate(time.Value, empId, entity.EstimatedExecutionTime ?? start, entity.EstimatedCompletionTime ?? end);
+            if (status > Status.ToBeProcessed)
+                entity.Execute(entity.ExecutionTime ?? time.Value);
+            if (status == Status.Rejected)
+            {
+                entity.Reject(time.Value, description);
+            }
+            else if(status== Status.Completed)
+            {
+                entity.Completion(entity.CompletionTime ?? time.Value, description);
+            }
         }
     }
 }

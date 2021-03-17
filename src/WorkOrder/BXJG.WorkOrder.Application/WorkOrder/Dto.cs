@@ -28,7 +28,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <summary>
         /// 状态名称
         /// </summary>
-        public string StatusText => Status.BXJGWorkOrderEnum();
+        public string StatusDisplayName => Status.BXJGWorkOrderEnum();
         /// <summary>
         /// 紧急程度
         /// </summary>
@@ -36,7 +36,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <summary>
         /// 紧急程度名称
         /// </summary>
-        public string UrgencyDegreeText => UrgencyDegree.BXJGWorkOrderEnum();
+        public string UrgencyDegreeDisplayName => UrgencyDegree.BXJGWorkOrderEnum();
         /// <summary>
         /// 标题
         /// </summary>

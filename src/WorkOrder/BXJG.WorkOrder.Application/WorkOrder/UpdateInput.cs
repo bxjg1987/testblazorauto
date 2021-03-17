@@ -21,14 +21,15 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <summary>
         /// 状态
         /// </summary>
-        public Status? Status { get; set; } = WorkOrder.Status.ToBeConfirmed;
+        public Status? Status { get; set; }
         /// <summary>
         /// 紧急程度
         /// </summary>
-        public UrgencyDegree? UrgencyDegree { get; set; } = WorkOrder.UrgencyDegree.Normalize;
+        public UrgencyDegree? UrgencyDegree { get; set; }
         /// <summary>
         /// 标题
         /// </summary>
+        [Required]
         [StringLength(CoreConsts.OrderTitleMaxLength)]
         public string Title { get; set; }
         /// <summary>

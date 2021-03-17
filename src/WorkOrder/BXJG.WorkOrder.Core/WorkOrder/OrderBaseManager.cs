@@ -13,7 +13,7 @@ namespace BXJG.WorkOrder.WorkOrder
     public class WorkOrderCreateDtoBase
     { 
         public long CategoryId { get; set; }
-        public UrgencyDegree UrgencyDegree { get; set; }
+        public UrgencyDegree? UrgencyDegree { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public DateTimeOffset? Time { get; set; }
@@ -89,10 +89,10 @@ namespace BXJG.WorkOrder.WorkOrder
         protected override OrderEntity Create(WorkOrderCreateDto dto)
         {
             return new OrderEntity(dto.CategoryId,
-                                   dto.UrgencyDegree,
                                    dto.Title,
                                    dto.Time.Value,
                                    dto.Description,
+                                   dto.UrgencyDegree,
                                    dto.EstimatedExecutionTime,
                                    dto.EstimatedCompletionTime,
                                    dto.EntityType,

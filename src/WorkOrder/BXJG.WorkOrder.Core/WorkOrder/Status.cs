@@ -29,12 +29,12 @@ namespace BXJG.WorkOrder.WorkOrder
         /// </summary>
         Processing = 3,
         /// <summary>
-        /// 已拒绝
-        /// </summary>
-        Rejected = 4,
-        /// <summary>
         /// 已完成
         /// </summary>
-        Completed = 5
+        Completed = 4,
+        /// <summary>
+        /// 已拒绝
+        /// </summary>
+        Rejected = 5
     }
 }

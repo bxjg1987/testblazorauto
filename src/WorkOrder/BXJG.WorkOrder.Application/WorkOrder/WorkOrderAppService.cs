@@ -20,22 +20,22 @@ namespace BXJG.WorkOrder.WorkOrder
     /// <summary>
     /// 工单后台管理应用服务基类
     /// </summary>
-    /// <typeparam name="TEntityDto">列表页显示模型</typeparam>
-    /// <typeparam name="TGetAllInput">列表页查询时的输入模型</typeparam>
     /// <typeparam name="TCreateInput">新增时的输入模型</typeparam>
     /// <typeparam name="TUpdateInput">修改时的输入模型</typeparam>
-    /// <typeparam name="TGetInput">获取单个信息的输入模型</typeparam>
     /// <typeparam name="TBatchDeleteInput">批量删除的输入模型</typeparam>
     /// <typeparam name="TBatchDeleteOutput">批量删除时的输出模型</typeparam>
+    /// <typeparam name="TGetInput">获取单个信息的输入模型</typeparam>
+    /// <typeparam name="TGetAllInput">列表页查询时的输入模型</typeparam>
+    /// <typeparam name="TEntityDto">列表页显示模型</typeparam>
     /// <typeparam name="TBatchChangeStatusInput">批量状态修改时的输入模型</typeparam>
     /// <typeparam name="TBatchChangeStatusOutput">批量状态修改时的输出模型</typeparam>
     /// <typeparam name="TBatchAllocateInput">批量分配时的输入模型</typeparam>
     /// <typeparam name="TBatchAllocateOutput">批量分配时的输出模型</typeparam>
     /// <typeparam name="TEntity">实体类型</typeparam>
     /// <typeparam name="TRepository">实体仓储类型</typeparam>
-    /// <typeparam name="TCategoryRepository">分类仓储</typeparam>
     /// <typeparam name="TCreateDto"></typeparam>
     /// <typeparam name="TManager">领域服务类型</typeparam>
+    /// <typeparam name="TCategoryRepository">分类仓储</typeparam>
     public abstract class WorkOrderAppServiceBase<TCreateInput,
                                                   TUpdateInput,
                                                   TBatchDeleteInput,
@@ -96,14 +96,7 @@ namespace BXJG.WorkOrder.WorkOrder
             var entity = await manager.CreateAsync(await CreateInputToCreateDto(input));
             await BeforeEditAsync(entity, input);
             await CurrentUnitOfWork.SaveChangesAsync();
-            var category = await categoryRepository.GetAsync(input.CategoryId);
-            IEnumerable<EmployeeDto> emps = null;
-            if (!entity.EmployeeId.IsNullOrWhiteSpace())
-            {
-                emps = await employeeAppService.GetByIdsAsync(entity.EmployeeId);
-            }
-            var state = await GetStateAsync(entity);
-            return await EntityToDtoAsync(entity, new CategoryEntity[] { category }, emps, state);
+            return await EntityToDto(entity);
         }
         /// <summary>
         /// 修改工单
@@ -113,27 +106,19 @@ namespace BXJG.WorkOrder.WorkOrder
         public virtual async Task<TEntityDto> UpdateAsync(TUpdateInput input)
         {
             var entity = await repository.GetAsync(input.Id);
+            //需要先执行这里，让工单处于希望的状态，后续赋值才可用正常执行
+            await BeforeEditAsync(entity, input);
+            //上面已经处理这俩时间了
+            //entity.ChangeEstimatedTime(input.EstimatedExecutionTime, input.EstimatedCompletionTime);
+            //entity.ChangePracticalTime(input.ExecutionTime, input.CompletionTime);
+
             entity.CategoryId = input.CategoryId;
-            entity.ChangeEstimatedTime(input.EstimatedExecutionTime, input.EstimatedCompletionTime);
-            entity.ChangePracticalTime(input.ExecutionTime, input.CompletionTime);
             entity.Description = input.Description;
             entity.Title = input.Title;
-            entity.Description = input.Description;
             entity.UrgencyDegree = input.UrgencyDegree.Value;
-            await BeforeEditAsync(entity, input);
-            if (input.Status.Value < entity.Status)
-            {
-                entity.BackOff(Clock.Now, input.Status.Value);
-            }
+            entity.Id = input.Id;
             await CurrentUnitOfWork.SaveChangesAsync();
-            var category = await categoryRepository.GetAsync(input.CategoryId);
-            IEnumerable<EmployeeDto> emps = null;
-            if (!entity.EmployeeId.IsNullOrWhiteSpace())
-            {
-                emps = await employeeAppService.GetByIdsAsync(entity.EmployeeId);
-            }
-            var state = await GetStateAsync(entity);
-            return await EntityToDtoAsync(entity, new CategoryEntity[] { category }, emps, state);
+            return await EntityToDto(entity);
         }
         /// <summary>
         /// 删除工单
@@ -168,14 +153,7 @@ namespace BXJG.WorkOrder.WorkOrder
         public virtual async Task<TEntityDto> GetAsync(TGetInput input)
         {
             var entity = await repository.GetAsync(input.Id);
-            var category = await categoryRepository.GetAsync(entity.CategoryId);
-            IEnumerable<EmployeeDto> emps = null;
-            if (!entity.EmployeeId.IsNullOrWhiteSpace())
-            {
-                emps = await employeeAppService.GetByIdsAsync(entity.EmployeeId);
-            }
-            var state = await GetStateAsync(entity);
-            return await EntityToDtoAsync(entity, new CategoryEntity[] { category }, emps, state);
+            return await EntityToDto(entity);
         }
         /// <summary>
         /// 获取列表
@@ -219,7 +197,7 @@ namespace BXJG.WorkOrder.WorkOrder
             var cQuery = categoryRepository.GetAll().Where(c => cIds.Contains(c.Id));
             var cls = await AsyncQueryableExecuter.ToListAsync(cQuery);
 
-            var empIds = list.Select(c => c.EmployeeId);
+            var empIds = list.Where(c => !c.EmployeeId.IsNullOrWhiteSpace()).Select(c => c.EmployeeId);
 
             IEnumerable<EmployeeDto> emps = null;
             if (empIds != null && empIds.Count() > 0)
@@ -230,13 +208,13 @@ namespace BXJG.WorkOrder.WorkOrder
             var items = new List<TEntityDto>();
             foreach (var item in list)
             {
-                var ttt = await EntityToDtoAsync(item, cls, emps, state);
+                var ttt = EntityToDto(item, cls, emps, state);
                 items.Add(ttt);
             }
             return new PagedResultDto<TEntityDto>(count, items);
         }
         /// <summary>
-        /// 批量分配工单
+        /// 批量确认工单
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
@@ -255,7 +233,7 @@ namespace BXJG.WorkOrder.WorkOrder
                 }
                 catch (Exception ex)
                 {
-                    Logger.Warn("确认工单失败！", ex);
+                    Logger.Warn(L("确认工单失败！"), ex);
                 }
             }
             return r;
@@ -280,7 +258,7 @@ namespace BXJG.WorkOrder.WorkOrder
                 }
                 catch (Exception ex)
                 {
-                    Logger.Warn("分配工单失败！", ex);
+                    Logger.Warn(L("分配工单失败！"), ex);
                 }
             }
             return r;
@@ -305,7 +283,7 @@ namespace BXJG.WorkOrder.WorkOrder
                 }
                 catch (Exception ex)
                 {
-                    Logger.Warn("执行工单失败！", ex);
+                    Logger.Warn(L("执行工单失败！"), ex);
                 }
             }
             return r;
@@ -330,7 +308,7 @@ namespace BXJG.WorkOrder.WorkOrder
                 }
                 catch (Exception ex)
                 {
-                    Logger.Warn("完成工单失败！", ex);
+                    Logger.Warn(L("完成工单失败！"), ex);
                 }
             }
             return r;
@@ -355,7 +333,7 @@ namespace BXJG.WorkOrder.WorkOrder
                 }
                 catch (Exception ex)
                 {
-                    Logger.Warn("拒绝工单失败！", ex);
+                    Logger.Warn(L("拒绝工单失败！"), ex);
                 }
             }
             return r;
@@ -366,12 +344,13 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="entity"></param>
         /// <param name="categories"></param>
         /// <param name="employees"></param>
+        /// <param name="state">子类可能需要聚合更多外键</param>
         /// <returns></returns>
-        protected virtual async ValueTask<TEntityDto> EntityToDtoAsync(TEntity entity, IEnumerable<CategoryEntity> categories, IEnumerable<EmployeeDto> employees, object state = null)
+        protected virtual TEntityDto EntityToDto(TEntity entity, IEnumerable<CategoryEntity> categories, IEnumerable<EmployeeDto> employees, object state = null)
         {
             var dto = new TEntityDto();
             dto.CategoryId = entity.CategoryId;
-            if (employees != null)
+            if (categories != null)
             {
                 dto.CategoryDisplayName = categories.SingleOrDefault(c => c.Id == entity.CategoryId)?.DisplayName;
             }
@@ -386,7 +365,7 @@ namespace BXJG.WorkOrder.WorkOrder
             {
                 var emp = employees.SingleOrDefault(c => c.Id == entity.EmployeeId);
                 dto.EmployeeName = emp?.Name;
-                dto.EmployeePhone = emp.Phone;
+                dto.EmployeePhone = emp?.Phone;
             }
             dto.EstimatedCompletionTime = entity.EstimatedCompletionTime;
             dto.EstimatedExecutionTime = entity.EstimatedExecutionTime;
@@ -404,31 +383,26 @@ namespace BXJG.WorkOrder.WorkOrder
             return dto;
         }
         /// <summary>
-        /// 根据用户提交数据处理订单<br />
-        /// 一次性执行多个工单操作
+        /// 将单个实体映射为dto
         /// </summary>
-        /// <param name="entity">工单</param>
-        /// <param name="input">用户提交的数据</param>
-        protected virtual void Skip(TEntity entity, TUpdateInput input)
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        protected virtual async Task<TEntityDto> EntityToDto(TEntity entity)
         {
-            if (input.Status > Status.ToBeConfirmed)
-                entity.Confirme(Clock.Now);
-            if (input.Status > Status.ToBeAllocated)
-                entity.Allocate(Clock.Now, input.EmployeeId, input.EstimatedExecutionTime, input.EstimatedCompletionTime);
-            if (input.Status > Status.ToBeProcessed)
-                entity.Execute(Clock.Now);
-            if (input.Status > Status.Processing)
+            var category = await categoryRepository.GetAsync(entity.CategoryId);
+            IEnumerable<EmployeeDto> emps = null;
+            if (!entity.EmployeeId.IsNullOrWhiteSpace())
             {
-                if (input.Status == Status.Rejected)
-                {
-                    entity.Reject(Clock.Now, input.Description);
-                }
-                else
-                {
-                    entity.Completion(Clock.Now, input.Description);
-                }
+                emps = await employeeAppService.GetByIdsAsync(entity.EmployeeId);
             }
+            var state = await GetStateAsync(entity);
+            return EntityToDto(entity, new CategoryEntity[] { category }, emps, state);
         }
+        /// <summary>
+        /// 新增时的映射
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         protected virtual async ValueTask<TCreateDto> CreateInputToCreateDto(TCreateInput input)
         {
             return new TCreateDto
@@ -438,14 +412,24 @@ namespace BXJG.WorkOrder.WorkOrder
                 EstimatedCompletionTime = input.EstimatedCompletionTime,
                 EstimatedExecutionTime = input.EstimatedExecutionTime,
                 Title = input.Title,
-                UrgencyDegree = input.UrgencyDegree.Value
+                UrgencyDegree = input.UrgencyDegree
             };
         }
+        /// <summary>
+        /// 新增或更新到数据库前执行此方法，默认尝试跳跃或回退，可用重写做更多操作
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="input"></param>
+        /// <returns></returns>
         protected virtual async ValueTask BeforeEditAsync(TEntity entity, TUpdateInput input)
         {
-            if (input.Status > Status.ToBeConfirmed)
-                Skip(entity, input);
+            entity.ChangeState(input.Status, Clock.Now, input.StatusChangedDescription, input.EmployeeId, input.EstimatedExecutionTime, input.EstimatedCompletionTime);
         }
+        /// <summary>
+        /// 子类可能需要聚合更多外键
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         protected virtual async ValueTask<object> GetStateAsync(params TEntity[] entity)
         {
             return null;
@@ -481,7 +465,7 @@ namespace BXJG.WorkOrder.WorkOrder
                                                                                   categoryRepository,
                                                                                   employeeAppService)
         { }
-      
+
         protected override async ValueTask BeforeEditAsync(OrderEntity entity, WorkOrderUpdateInput input)
         {
             await base.BeforeEditAsync(entity, input);
@@ -498,12 +482,9 @@ namespace BXJG.WorkOrder.WorkOrder
                 }
             }
         }
-        protected override async ValueTask<WorkOrderDto> EntityToDtoAsync(OrderEntity entity,
-                                                                          IEnumerable<CategoryEntity> categories,
-                                                                          IEnumerable<EmployeeDto> employees,
-                                                                          object state = default)
+        protected override WorkOrderDto EntityToDto(OrderEntity entity, IEnumerable<CategoryEntity> categories, IEnumerable<EmployeeDto> employees, object state = default)
         {
-            var dto = await base.EntityToDtoAsync(entity, categories, employees, state);
+            var dto = base.EntityToDto(entity, categories, employees, state);
             dto.ExtendedField1 = entity.ExtendedField1;
             dto.ExtendedField2 = entity.ExtendedField2;
             dto.ExtendedField3 = entity.ExtendedField3;

@@ -508,10 +508,12 @@ namespace BXJG.GeneralTree
             return list1;
         }
         /// <summary>
-        /// 获取树形下拉框数据，需要身份验证
+        /// 获取树形下拉框数据，需要身份验证，不要再调用这个接口，它已被启用，将来会被移除
+        /// 
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
+        [Obsolete]
         public override Task<IList<TGetTreeForSelectOutput>> GetTreeForSelectAsync(TGetTreeForSelectInput input)
         {
             //权限判断
@@ -523,10 +525,11 @@ namespace BXJG.GeneralTree
             return base.GetTreeForSelectAsync(input);
         }
         /// <summary>
-        /// 获取扁平化下拉框数据，需要身份验证
+        /// 获取扁平化下拉框数据，需要身份验证，不要再调用这个接口，它已被启用，将来会被移除
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
+        [Obsolete]
         public override Task<IList<TGetNodesForSelectOutput>> GetNodesForSelectAsync(TGetNodesForSelectInput input)
         {
             //await CheckGetPermissionAsync();

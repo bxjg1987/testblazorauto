@@ -7,8 +7,14 @@ using System.Threading.Tasks;
 
 namespace BXJG.WorkOrder.WorkOrder
 {
+    /// <summary>
+    /// 状态批量调整的输入模型
+    /// </summary>
     public class WorkOrderBatchChangeStatusInputBase: BatchOperationInputLong
     {
+        /// <summary>
+        /// 状态变更的说明
+        /// </summary>
         public string Description { get; set; }
     }
 }
