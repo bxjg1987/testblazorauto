@@ -1,4 +1,6 @@
-﻿using BXJG.WorkOrder.Employee;
+﻿using Abp.Dependency;
+using BXJG.WorkOrder.Employee;
+using BXJG.WorkOrder.Session;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ZLJ.WorkOrder
 {
-    public class EmployeeAppService : IEmployeeAppService
+    public class EmployeeAppService :  IEmployeeAppService
     {
         static List<EmployeeDto> items = new List<EmployeeDto>{
            new EmployeeDto{ Id="1", Name="aa", Phone= "13252658457" },
@@ -22,5 +24,12 @@ namespace ZLJ.WorkOrder
         {
             return items.Where(c => c.Name.Contains(keyword) || c.Phone.Contains(keyword)).Select(c => c.Id);
         }
+
+    }
+    public class EmployeeSession :  IEmployeeSession
+    {
+        
+
+        public string CurrentEmployeeId => "1";
     }
 }

@@ -72,6 +72,12 @@
     <None Update="APIXML\BXJG.WorkOrder.Application.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="APIXML\BXJG.WorkOrder.CommonApplication.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="APIXML\BXJG.WorkOrder.EmployeeApplication.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="APIXML\ZLJ.Application.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

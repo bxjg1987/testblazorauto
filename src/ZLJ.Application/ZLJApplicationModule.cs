@@ -8,6 +8,7 @@ using BXJG.GeneralTree;
 using BXJG.Shop;
 using BXJG.Shop.Catalogue;
 using BXJG.WorkOrder.Employee;
+using BXJG.WorkOrder.Session;
 using System.Reflection;
 
 using ZLJ.Authorization;
@@ -39,8 +40,8 @@ namespace ZLJ
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
 
             IocManager.Register<IEmployeeAppService, EmployeeAppService>(DependencyLifeStyle.Transient);
+            IocManager.Register<IEmployeeSession, EmployeeSession>(DependencyLifeStyle.Transient);
 
-            
             //注册automapper映射
             Configuration.Modules.AbpAutoMapper().Configurators.Add(cfg => cfg.AddMaps(Assembly.GetExecutingAssembly()));
             //Configuration.Modules.AbpAutoMapper().Configurators.Add(cfg => cfg.AddProfile<BXJGShopMapProfile<User>>());
