@@ -5,7 +5,8 @@
     <text name="BXJGWorkOrderManager" value="工单管理" />
     <text name="BXJGWorkOrderCategory" value="工单分类" />
     <text name="BXJGWorkOrderCategoryManager" value="工单分类管理" />
-    
+
+    <text name="BXJG.WorkOrder.WorkOrder.Status" value="工单状态" />
     <text name="BXJG.WorkOrder.WorkOrder.Status.ToBeConfirmed" value="待确认" />
     <text name="BXJG.WorkOrder.WorkOrder.Status.ToBeAllocated" value="待分配" />
     <text name="BXJG.WorkOrder.WorkOrder.Status.ToBeProcessed" value="待执行" />
@@ -13,6 +14,7 @@
     <text name="BXJG.WorkOrder.WorkOrder.Status.Rejected" value="已拒绝" />
     <text name="BXJG.WorkOrder.WorkOrder.Status.Completed" value="已完成" />
 
+    <text name="BXJG.WorkOrder.WorkOrder.UrgencyDegree" value="紧急程度" />
     <text name="BXJG.WorkOrder.WorkOrder.UrgencyDegree.Urgent" value="紧急" />
     <text name="BXJG.WorkOrder.WorkOrder.UrgencyDegree.Normalize" value="一般" />
     <text name="BXJG.WorkOrder.WorkOrder.UrgencyDegree.Dispensable" value="不急" />

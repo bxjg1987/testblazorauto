@@ -88,14 +88,16 @@ namespace BXJG.WorkOrder.WorkOrder
             //分类、员工先查询 再用in，
             //假定员工和分类数量不会太多（太多的话考虑分配in查询），且可以使用缓存
             //in查询有索引时性能有所提升
-            var query = repository.GetAll();
+            var query = from c in repository.GetAll()
+                        join lb in categoryRepository.GetAll() on c.CategoryId equals lb.Id into g
+                        from kk in g.DefaultIfEmpty()
+                        where (input.CategoryCode.IsNullOrWhiteSpace() || kk.Code.StartsWith(input.CategoryCode))
+                        select c;
 
-            //IEnumerable<CategoryEntity> categoryEntities;
-            if (!input.CategoryCode.IsNullOrWhiteSpace())
+            if (!input.Keyword.IsNullOrWhiteSpace())
             {
-                var clsIdsQuery = categoryRepository.GetAll().Where(c => c.Code.StartsWith(input.CategoryCode)).Select(c => c.Id);
-                var clsIds = await AsyncQueryableExecuter.ToListAsync(clsIdsQuery);
-                query = query.Where(c => clsIds.Contains(c.CategoryId));
+                var empIdsQuery = await employeeAppService.GetIdsByKeywordAsync(input.Keyword);
+                query = query.Where(c => empIdsQuery.Contains(c.EmployeeId) || c.Title.Contains(input.Keyword));
             }
             if (!input.Keyword.IsNullOrWhiteSpace())
             {

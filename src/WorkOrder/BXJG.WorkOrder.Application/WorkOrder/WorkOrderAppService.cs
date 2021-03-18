@@ -165,21 +165,25 @@ namespace BXJG.WorkOrder.WorkOrder
             //分类、员工先查询 再用in，
             //假定员工和分类数量不会太多（太多的话考虑分配in查询），且可以使用缓存
             //in查询有索引时性能有所提升
-            var query = repository.GetAll();
+            //按分类名称排序 倒是可用用join映射 select new { 工单实体，join的分类 } 后面再排序
+            //按处理人和手机号比较麻烦，可以尝试join已经查询出来的员工列表试试
+            //不过至少可用按分类id和处理人id排序
+            //如果都无法满足时，可以考虑使用原始sql，毕竟这里只是查询需求，不做业务处理，可以引入dapper或ef的原始sql执行方式
 
-            //IEnumerable<CategoryEntity> categoryEntities;
-            if (!input.CategoryCode.IsNullOrWhiteSpace())
+            var query = from c in repository.GetAll()
+                        join lb in categoryRepository.GetAll() on c.CategoryId equals lb.Id into g
+                        from kk in g.DefaultIfEmpty()
+                        where (input.CategoryCode.IsNullOrWhiteSpace() || kk.Code.StartsWith(input.CategoryCode))
+                        select c;
+
+            if (!input.Keywords.IsNullOrWhiteSpace())
             {
-                var clsIdsQuery = categoryRepository.GetAll().Where(c => c.Code.StartsWith(input.CategoryCode)).Select(c => c.Id);
-                var clsIds = await AsyncQueryableExecuter.ToListAsync(clsIdsQuery);
-                query = query.Where(c => clsIds.Contains(c.CategoryId));
-            }
-            if (!input.Keyword.IsNullOrWhiteSpace())
-            {
-                var empIdsQuery = await employeeAppService.GetIdsByKeywordAsync(input.Keyword);
-                query = query.Where(c => empIdsQuery.Contains(c.EmployeeId) || c.Title.Contains(input.Keyword));
+                var empIdsQuery = await employeeAppService.GetIdsByKeywordAsync(input.Keywords);
+                query = query.Where(c => empIdsQuery.Contains(c.EmployeeId) || c.Title.Contains(input.Keywords));
             }
             query = query.WhereIf(input.UrgencyDegree.HasValue, c => c.UrgencyDegree == input.UrgencyDegree)
+                         .WhereIf(input.Status.HasValue, c => c.Status == input.Status)
+                         //.WhereIf(!input.Keyword.IsNullOrWhiteSpace(), c => c.Title.Contains(input.Keyword)) 上面已经写了
                          .WhereIf(input.EstimatedExecutionTimeStart.HasValue, c => c.EstimatedExecutionTime >= input.EstimatedExecutionTimeStart)
                          .WhereIf(input.EstimatedExecutionTimeEnd.HasValue, c => c.EstimatedExecutionTime < input.EstimatedExecutionTimeEnd)
                          .WhereIf(input.EstimatedCompletionTimeStart.HasValue, c => c.EstimatedCompletionTime >= input.EstimatedCompletionTimeStart)

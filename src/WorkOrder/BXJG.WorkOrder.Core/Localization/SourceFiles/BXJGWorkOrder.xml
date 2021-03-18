@@ -5,14 +5,18 @@
     <text name="BXJGWorkOrderManager" value="Work order manager" />
     <text name="BXJGWorkOrderCategory" value="Work order category" />
     <text name="BXJGWorkOrderCategoryManager" value="Work order category manager" />
+    <text name="BXJG.WorkOrder.WorkOrder.Status" value="Work order status" />
     <text name="BXJG.WorkOrder.WorkOrder.Status.ToBeConfirmed" value="To be confirmed" />
     <text name="BXJG.WorkOrder.WorkOrder.Status.ToBeAllocated" value="To be allocated" />
     <text name="BXJG.WorkOrder.WorkOrder.Status.ToBeProcessed" value="To be processed" />
     <text name="BXJG.WorkOrder.WorkOrder.Status.Processing" value="Processing" />
     <text name="BXJG.WorkOrder.WorkOrder.Status.Rejected" value="Rejected" />
     <text name="BXJG.WorkOrder.WorkOrder.Status.Completed" value="Completed" />
+    <text name="BXJG.WorkOrder.WorkOrder.UrgencyDegree" value="UrgencyDegree" />
     <text name="BXJG.WorkOrder.WorkOrder.UrgencyDegree.Urgent" value="Urgent" />
     <text name="BXJG.WorkOrder.WorkOrder.UrgencyDegree.Normalize" value="Normalize" />
     <text name="BXJG.WorkOrder.WorkOrder.UrgencyDegree.Dispensable" value="Dispensable" />
+
+    <text name="标题/处理人/电话等..." value="title/contact/phone etc..." />
   </texts>
 </localizationDictionary>

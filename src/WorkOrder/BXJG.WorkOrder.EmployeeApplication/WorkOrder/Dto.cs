@@ -26,6 +26,14 @@ namespace BXJG.WorkOrder.WorkOrder
         /// </summary>
         public Status Status { get; set; }
         /// <summary>
+        /// 状态颜色
+        /// </summary>
+        public string StatusColor => Status.GetColor();
+        /// <summary>
+        /// 紧急程度颜色
+        /// </summary>
+        public string UrgencyDegreeColor => UrgencyDegree.GetColor();
+        /// <summary>
         /// 状态名称
         /// </summary>
         public string StatusDisplayName => Status.BXJGWorkOrderEnum();

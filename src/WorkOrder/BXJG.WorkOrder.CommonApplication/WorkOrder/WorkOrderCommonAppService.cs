@@ -30,6 +30,4 @@ namespace BXJG.WorkOrder.WorkOrder
             return new EnumManager(LocalizationSource).ConvertToComboboxData<UrgencyDegree>(input);
         }
     }
-
-
 }

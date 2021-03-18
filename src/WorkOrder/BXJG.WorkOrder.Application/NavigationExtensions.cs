@@ -23,12 +23,13 @@ namespace BXJG.WorkOrder
             root.AddItem(new MenuItemDefinition(CoreConsts.WorkOrderCategoryManager,
                                                 CoreConsts.WorkOrderCategoryManager.BXJGWorkOrderL(),
                                                 icon: "BXJGShopProductCategory",
-                                                url: $"/{CoreConsts.WorkOrder}/{CoreConsts.WorkOrderCategoryManager.RemovePreFix(CoreConsts.WorkOrder)}/index.html",
+                                                //url: $"/{CoreConsts.WorkOrder}/{CoreConsts.WorkOrderCategoryManager.RemovePreFix(CoreConsts.WorkOrder).RemovePostFix("Manager")}/index.html",
+                                                url: $"/{CoreConsts.WorkOrder}/WorkOrderCategory/index.html",
                                                 permissionDependency: new SimplePermissionDependency(CoreConsts.WorkOrderCategoryManager)))
                 .AddItem(new MenuItemDefinition(CoreConsts.WorkOrderManager,
                                                 CoreConsts.WorkOrderManager.BXJGWorkOrderL(),
                                                 icon: "BXJGShopOrder",
-                                                url: $"/{CoreConsts.WorkOrder}/{CoreConsts.WorkOrderManager.RemovePreFix(CoreConsts.WorkOrder)}/index.html",
+                                                url: $"/{CoreConsts.WorkOrder}/WorkOrder/index.html",
                                                 permissionDependency: new SimplePermissionDependency(CoreConsts.WorkOrderManager)));
 
             return root;

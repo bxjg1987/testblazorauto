@@ -26,6 +26,14 @@ namespace BXJG.WorkOrder.WorkOrder
         /// </summary>
         public Status Status { get; set; }
         /// <summary>
+        /// 状态颜色
+        /// </summary>
+        public string StatusColor => Status.GetColor();
+        /// <summary>
+        /// 紧急程度颜色
+        /// </summary>
+        public string UrgencyDegreeColor => UrgencyDegree.GetColor();
+        /// <summary>
         /// 状态名称
         /// </summary>
         public string StatusDisplayName => Status.BXJGWorkOrderEnum();
@@ -33,6 +41,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// 紧急程度
         /// </summary>
         public UrgencyDegree UrgencyDegree { get; set; }
+
         /// <summary>
         /// 紧急程度名称
         /// </summary>
@@ -81,7 +90,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// 员工手机号
         /// </summary>
         public string EmployeePhone { get; set; }
-        
+
     }
     /// <summary>
     /// 后台管理普通工单查询模型

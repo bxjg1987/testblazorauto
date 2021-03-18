@@ -18,6 +18,10 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <summary>
         /// 紧急程度
         /// </summary>
+        public Status? Status { get; set; }
+        /// <summary>
+        /// 紧急程度
+        /// </summary>
         public UrgencyDegree? UrgencyDegree { get; set; }
         /// <summary>
         /// 所属分类code
@@ -35,7 +39,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <summary>
         /// 关键字
         /// </summary>
-        public string Keyword { get; set; }
+        public string Keywords { get; set; }
         /// <summary>
         /// 模型绑定后，abp会调用此方法来进一步初始化
         /// </summary>
