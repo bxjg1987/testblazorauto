@@ -94,6 +94,14 @@ namespace BXJG.WorkOrder.WorkOrder
         public virtual async Task<TEntityDto> CreateAsync(TCreateInput input)
         {
             var entity = await manager.CreateAsync(await CreateInputToCreateDto(input));
+            //entity.Skip(Clock.Now,
+            //            input.Status,
+                               
+            //                   input.StatusChangedDescription,
+            //                   input.EmployeeId,
+            //                   input.EstimatedExecutionTime,
+            //                   input.EstimatedCompletionTime,
+            //                   input.ExecutionTime);
             await BeforeEditAsync(entity, input);
             await CurrentUnitOfWork.SaveChangesAsync();
             return await EntityToDto(entity);
@@ -107,7 +115,6 @@ namespace BXJG.WorkOrder.WorkOrder
         {
             var entity = await repository.GetAsync(input.Id);
             //需要先执行这里，让工单处于希望的状态，后续赋值才可用正常执行
-            await BeforeEditAsync(entity, input);
             //上面已经处理这俩时间了
             //entity.ChangeEstimatedTime(input.EstimatedExecutionTime, input.EstimatedCompletionTime);
             //entity.ChangePracticalTime(input.ExecutionTime, input.CompletionTime);
@@ -115,8 +122,21 @@ namespace BXJG.WorkOrder.WorkOrder
             entity.CategoryId = input.CategoryId;
             entity.Description = input.Description;
             entity.Title = input.Title;
-            entity.UrgencyDegree = input.UrgencyDegree.Value;
             entity.Id = input.Id;
+
+            entity.ChangeState(input.Status,
+                               Clock.Now,
+                               input.StatusChangedDescription,
+                               input.EmployeeId,
+                               input.EstimatedExecutionTime,
+                               input.EstimatedCompletionTime,
+                               input.ExecutionTime,
+                               input.CompletionTime, e =>
+                               {
+                                   e.UrgencyDegree = input.UrgencyDegree.Value;
+                               });
+
+            await BeforeEditAsync(entity, input);
             await CurrentUnitOfWork.SaveChangesAsync();
             return await EntityToDto(entity);
         }
@@ -427,7 +447,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <returns></returns>
         protected virtual async ValueTask BeforeEditAsync(TEntity entity, TUpdateInput input)
         {
-            entity.ChangeState(input.Status, Clock.Now, input.StatusChangedDescription, input.EmployeeId, input.EstimatedExecutionTime, input.EstimatedCompletionTime);
+
         }
         /// <summary>
         /// 子类可能需要聚合更多外键

@@ -16,15 +16,15 @@ namespace BXJG.WorkOrder.WorkOrder
             Original = original;
         }
     }
-    //通知冗余字段引用方修改自己的数据
-    public class TitleChangedEventData : EntityEventData<OrderBaseEntity>
-    {
-        public string Original { get; private set; }
-        public TitleChangedEventData(OrderBaseEntity entity, string original) : base(entity)
-        {
-            Original = original;
-        }
-    }
+    ////通知冗余字段引用方修改自己的数据
+    //public class TitleChangedEventData : EntityEventData<OrderBaseEntity>
+    //{
+    //    public string Original { get; private set; }
+    //    public TitleChangedEventData(OrderBaseEntity entity, string original) : base(entity)
+    //    {
+    //        Original = original;
+    //    }
+    //}
 
     public class UrgencyDegreeChangedEventData : EntityEventData<OrderBaseEntity>
     {
