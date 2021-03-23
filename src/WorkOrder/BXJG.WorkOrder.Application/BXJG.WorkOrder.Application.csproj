@@ -15,10 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.8" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\BXJG.WorkOrder.CommonApplication\BXJG.WorkOrder.CommonApplication.csproj" />
   </ItemGroup>
 
