@@ -41,7 +41,6 @@ namespace BXJG.WorkOrder.WorkOrder
         /// 紧急程度
         /// </summary>
         public UrgencyDegree UrgencyDegree { get; set; }
-
         /// <summary>
         /// 紧急程度名称
         /// </summary>
@@ -90,7 +89,6 @@ namespace BXJG.WorkOrder.WorkOrder
         /// 员工手机号
         /// </summary>
         public string EmployeePhone { get; set; }
-
     }
     /// <summary>
     /// 后台管理普通工单查询模型

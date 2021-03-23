@@ -17,6 +17,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <summary>
         /// 所属分类id
         /// </summary>
+        //[Required]//可以考虑在领域服务独去配置，以便设置为默认分类，方便更快速建立工单
         public long CategoryId { get; set; }
         /// <summary>
         /// 状态
@@ -43,19 +44,19 @@ namespace BXJG.WorkOrder.WorkOrder
         [StringLength(CoreConsts.OrderStatusChangedDescriptionMaxLength)]
         public string StatusChangedDescription { get; set; }
         /// <summary>
-        /// 希望的开始时间
+        /// 预计开始时间
         /// </summary>
         public DateTimeOffset? EstimatedExecutionTime { get; set; }
         /// <summary>
-        /// 希望的结束时间
+        /// 预计结束时间
         /// </summary>
         public DateTimeOffset? EstimatedCompletionTime { get; set; }
         /// <summary>
-        /// 实际的执行时间
+        /// 执行时间
         /// </summary>
         public DateTimeOffset? ExecutionTime { get; set; }
         /// <summary>
-        /// 实际的结束时间
+        /// 完成时间
         /// </summary>
         public DateTimeOffset? CompletionTime { get; set; }
         /// <summary>

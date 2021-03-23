@@ -31,9 +31,8 @@ namespace BXJG.WorkOrder.WorkOrder
         public string ExtendedField4 { get; set; }
         public string ExtendedField5 { get; set; }
     }
-    public abstract class OrderBaseManager<TEntity,TDto> : DomainServiceBase 
+    public abstract class OrderBaseManager<TEntity> : DomainServiceBase 
         where TEntity : OrderBaseEntity
-        where TDto:WorkOrderCreateDtoBase
     {
         protected readonly IRepository<TEntity, long> repository;
 
@@ -44,18 +43,18 @@ namespace BXJG.WorkOrder.WorkOrder
         //分类 紧急程度可以定义参数默认值，进一步获取设置系统的默认值
         //工单的创建场景有：后台管理员创建、客户提交、某些事件如销售订单产生时自动创建，这些场景通常对应应用层方法或事件处理程序，它们都调用此方法
 
-        public async Task<TEntity> CreateAsync(TDto dto)
+        public async Task<TEntity> CreateAsync(WorkOrderCreateDtoBase dto)
         {
             //其它逻辑，暂时忽略
             if (!dto.Time.HasValue)
                 dto.Time = Clock.Now;
             var entity = Create(dto);
             await repository.InsertAsync(entity);
-            //await CurrentUnitOfWork.SaveChangesAsync();//保存以更新id为自增id
+            await CurrentUnitOfWork.SaveChangesAsync();//保存以更新id为自增id
             return entity;
         }
      
-        protected abstract TEntity Create(TDto dto);
+        protected abstract TEntity Create(WorkOrderCreateDtoBase dto);
 
         public virtual Task DeleteAsync(TEntity entity)
         {
@@ -66,14 +65,15 @@ namespace BXJG.WorkOrder.WorkOrder
         }
     }
 
-    public class OrderManager : OrderBaseManager<OrderEntity,WorkOrderCreateDto>
+    public class OrderManager : OrderBaseManager<OrderEntity>
     {
         public OrderManager(IRepository<OrderEntity, long> repository) : base(repository)
         {
         }
 
-        protected override OrderEntity Create(WorkOrderCreateDto dto)
+        protected override OrderEntity Create(WorkOrderCreateDtoBase input)
         {
+            var dto = input as WorkOrderCreateDto;
             return new OrderEntity(dto.CategoryId,
                                    dto.Title,
                                    dto.Time.Value,

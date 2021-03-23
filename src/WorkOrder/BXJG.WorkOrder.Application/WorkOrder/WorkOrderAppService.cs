@@ -67,7 +67,7 @@ namespace BXJG.WorkOrder.WorkOrder
         where TEntity : OrderBaseEntity
         where TRepository : IRepository<TEntity, long>
         where TCreateDto : WorkOrderCreateDtoBase, new()
-        where TManager : OrderBaseManager<TEntity, TCreateDto>
+        where TManager : OrderBaseManager<TEntity>
         where TCategoryRepository : IRepository<CategoryEntity, long>
         #endregion
     {
@@ -96,7 +96,7 @@ namespace BXJG.WorkOrder.WorkOrder
             var entity = await manager.CreateAsync(await CreateInputToCreateDto(input));
             //entity.Skip(Clock.Now,
             //            input.Status,
-                               
+
             //                   input.StatusChangedDescription,
             //                   input.EmployeeId,
             //                   input.EstimatedExecutionTime,
@@ -124,8 +124,8 @@ namespace BXJG.WorkOrder.WorkOrder
             entity.Title = input.Title;
             entity.Id = input.Id;
 
-            entity.ChangeState(input.Status,
-                               Clock.Now,
+            entity.ChangeState(Clock.Now,
+                               input.Status,
                                input.StatusChangedDescription,
                                input.EmployeeId,
                                input.EstimatedExecutionTime,
@@ -429,15 +429,17 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <returns></returns>
         protected virtual async ValueTask<TCreateDto> CreateInputToCreateDto(TCreateInput input)
         {
-            return new TCreateDto
+            var dto = new TCreateDto
             {
                 CategoryId = input.CategoryId,
                 Description = input.Description,
                 EstimatedCompletionTime = input.EstimatedCompletionTime,
                 EstimatedExecutionTime = input.EstimatedExecutionTime,
-                Title = input.Title,
-                //UrgencyDegree = input.UrgencyDegree
+                Title = input.Title
             };
+            if (input.UrgencyDegree.HasValue)
+                dto.UrgencyDegree = input.UrgencyDegree.Value;
+            return dto;
         }
         /// <summary>
         /// 新增或更新到数据库前执行此方法，默认尝试跳跃或回退，可用重写做更多操作
