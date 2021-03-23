@@ -436,7 +436,7 @@ namespace BXJG.WorkOrder.WorkOrder
                 EstimatedCompletionTime = input.EstimatedCompletionTime,
                 EstimatedExecutionTime = input.EstimatedExecutionTime,
                 Title = input.Title,
-                UrgencyDegree = input.UrgencyDegree
+                //UrgencyDegree = input.UrgencyDegree
             };
         }
         /// <summary>

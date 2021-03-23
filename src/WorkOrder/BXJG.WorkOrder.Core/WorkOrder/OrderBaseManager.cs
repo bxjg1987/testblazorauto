@@ -13,9 +13,10 @@ namespace BXJG.WorkOrder.WorkOrder
     public class WorkOrderCreateDtoBase
     { 
         public long CategoryId { get; set; }
-        public UrgencyDegree? UrgencyDegree { get; set; }
+        public UrgencyDegree UrgencyDegree { get; set; } = UrgencyDegree.Normalize;
         public string Title { get; set; }
         public string Description { get; set; }
+        public string EmployeeId { get; set; }
         public DateTimeOffset? Time { get; set; }
         public DateTimeOffset? EstimatedExecutionTime { get; set; }
         public DateTimeOffset? EstimatedCompletionTime { get; set; }
@@ -53,22 +54,7 @@ namespace BXJG.WorkOrder.WorkOrder
             //await CurrentUnitOfWork.SaveChangesAsync();//保存以更新id为自增id
             return entity;
         }
-        /// <summary>
-        /// 子类重写，调用构造函数new一个工单
-        /// </summary>
-        /// <param name="categoryId"></param>
-        /// <param name="urgencyDegree"></param>
-        /// <param name="title"></param>
-        /// <param name="time"></param>
-        /// <param name="description"></param>
-        /// <param name="estimatedExecutionTime"></param>
-        /// <param name="estimatedCompletionTime"></param>
-        /// <param name="extendedField1"></param>
-        /// <param name="extendedField2"></param>
-        /// <param name="extendedField3"></param>
-        /// <param name="extendedField4"></param>
-        /// <param name="extendedField5"></param>
-        /// <returns></returns>
+     
         protected abstract TEntity Create(TDto dto);
 
         public virtual Task DeleteAsync(TEntity entity)
@@ -93,6 +79,7 @@ namespace BXJG.WorkOrder.WorkOrder
                                    dto.Time.Value,
                                    dto.Description,
                                    dto.UrgencyDegree,
+                                   dto.EmployeeId,
                                    dto.EstimatedExecutionTime,
                                    dto.EstimatedCompletionTime,
                                    dto.EntityType,
