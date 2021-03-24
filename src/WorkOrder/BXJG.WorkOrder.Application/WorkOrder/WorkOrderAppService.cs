@@ -54,11 +54,11 @@ namespace BXJG.WorkOrder.WorkOrder
                                                   TCategoryRepository> : AppServiceBase
         #region 泛型约束
         where TCreateInput : TUpdateInput
-        where TUpdateInput : WorkOrderUpdateInputBase
+        where TUpdateInput : WorkOrderUpdateBaseInput
         where TBatchDeleteInput : BatchOperationInputLong
         where TBatchDeleteOutput : BatchOperationOutputLong, new()
         where TGetInput : EntityDto<long>
-        where TGetAllInput : GetAllWorkOrderInputBase
+        where TGetAllInput : GetAllWorkOrderBaseInput
         where TEntityDto : WorkOrderDtoBase, new()
         where TBatchChangeStatusInput : WorkOrderBatchChangeStatusInputBase
         where TBatchChangeStatusOutput : WorkOrderBatchChangeStatusOutputBase, new()
@@ -94,14 +94,15 @@ namespace BXJG.WorkOrder.WorkOrder
         public virtual async Task<TEntityDto> CreateAsync(TCreateInput input)
         {
             var entity = await manager.CreateAsync(await CreateInputToCreateDto(input));
-            //entity.Skip(Clock.Now,
-            //            input.Status,
-
-            //                   input.StatusChangedDescription,
-            //                   input.EmployeeId,
-            //                   input.EstimatedExecutionTime,
-            //                   input.EstimatedCompletionTime,
-            //                   input.ExecutionTime);
+            entity.SkipRetain(Clock.Now,
+                              input.Status,
+                              input.StatusChangedDescription,
+                              //以下三个属性在CreateInputToCreateDto已复制
+                              //input.EmployeeId,
+                              //input.EstimatedExecutionTime,
+                              //input.EstimatedCompletionTime,
+                              excuteTime: input.ExecutionTime,
+                              completeTime: input.CompletionTime);
             await BeforeEditAsync(entity, input);
             await CurrentUnitOfWork.SaveChangesAsync();
             return await EntityToDto(entity);
@@ -115,26 +116,23 @@ namespace BXJG.WorkOrder.WorkOrder
         {
             var entity = await repository.GetAsync(input.Id);
             //需要先执行这里，让工单处于希望的状态，后续赋值才可用正常执行
-            //上面已经处理这俩时间了
-            //entity.ChangeEstimatedTime(input.EstimatedExecutionTime, input.EstimatedCompletionTime);
-            //entity.ChangePracticalTime(input.ExecutionTime, input.CompletionTime);
+            entity.ChangeStateRetain(Clock.Now,
+                                     input.Status,
+                                     input.StatusChangedDescription,
+                                     input.EmployeeId,
+                                     input.EstimatedExecutionTime,
+                                     input.EstimatedCompletionTime,
+                                     input.ExecutionTime,
+                                     input.CompletionTime);
 
             entity.CategoryId = input.CategoryId;
             entity.Description = input.Description;
             entity.Title = input.Title;
-            entity.Id = input.Id;
-
-            entity.ChangeState(Clock.Now,
-                               input.Status,
-                               input.StatusChangedDescription,
-                               input.EmployeeId,
-                               input.EstimatedExecutionTime,
-                               input.EstimatedCompletionTime,
-                               input.ExecutionTime,
-                               input.CompletionTime, e =>
-                               {
-                                   e.UrgencyDegree = input.UrgencyDegree.Value;
-                               });
+            entity.SetUrgencyDegree(input.UrgencyDegree);
+            entity.StatusChangedDescription = input.StatusChangedDescription;
+            //因为上面能赋哪几个值是由状态确定的，我们这里有没判断，所以不知道是哪个状态，所以下面还需要赋值下
+            entity.EmployeeId = input.EmployeeId;
+            entity.ChangeEstimatedTimeRetain(input.EstimatedExecutionTime, input.EstimatedCompletionTime);
 
             await BeforeEditAsync(entity, input);
             await CurrentUnitOfWork.SaveChangesAsync();
@@ -435,14 +433,17 @@ namespace BXJG.WorkOrder.WorkOrder
                 Description = input.Description,
                 EstimatedCompletionTime = input.EstimatedCompletionTime,
                 EstimatedExecutionTime = input.EstimatedExecutionTime,
-                Title = input.Title
+                Title = input.Title,
+                EmployeeId = input.EmployeeId,
+                Time = Clock.Now
             };
             if (input.UrgencyDegree.HasValue)
                 dto.UrgencyDegree = input.UrgencyDegree.Value;
             return dto;
         }
         /// <summary>
-        /// 新增或更新到数据库前执行此方法，默认尝试跳跃或回退，可用重写做更多操作
+        /// 新增或更新到数据库前执行此方法<br />
+        /// 默认不做任何操作
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="input"></param>
@@ -470,7 +471,7 @@ namespace BXJG.WorkOrder.WorkOrder
                                                                BatchOperationInputLong,
                                                                BatchOperationOutputLong,
                                                                EntityDto<long>,
-                                                               GetAllWorkOrderInputBase,
+                                                               GetAllWorkOrderBaseInput,
                                                                WorkOrderDto,
                                                                WorkOrderBatchChangeStatusInputBase,
                                                                WorkOrderBatchChangeStatusOutputBase,

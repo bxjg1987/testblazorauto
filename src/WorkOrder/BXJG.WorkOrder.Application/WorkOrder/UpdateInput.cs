@@ -12,7 +12,7 @@ namespace BXJG.WorkOrder.WorkOrder
     /// 工单后台管理更新模型<br />
     /// 不同工单类型有相应子类
     /// </summary>
-    public class WorkOrderUpdateInputBase : EntityDto<long>
+    public class WorkOrderUpdateBaseInput : EntityDto<long>
     {
         /// <summary>
         /// 所属分类id
@@ -67,7 +67,7 @@ namespace BXJG.WorkOrder.WorkOrder
     /// <summary>
     /// 工单后台管理普通工单更新模型
     /// </summary>
-    public class WorkOrderUpdateInput : WorkOrderUpdateInputBase
+    public class WorkOrderUpdateInput : WorkOrderUpdateBaseInput
     {
         ///// <summary>
         ///// 实体Id

@@ -123,7 +123,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <summary>
         /// 当前状态情况说明
         /// </summary>
-        public virtual string StatusChangedDescription { get; protected set; }
+        public virtual string StatusChangedDescription { get; set; }
         /// <summary>
         /// 变成当前状态的时间
         /// </summary>
@@ -189,11 +189,12 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="desc">描述</param>
         protected virtual void ChangeStatus(Status status, DateTimeOffset time, string desc = default)
         {
+            if (Status == status)
+                return;
+
             StatusChangedTime = time;
             StatusChangedDescription = desc;
 
-            if (Status == status)
-                return;
 
             var o = this.Status;
             Status = status;
@@ -208,6 +209,9 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="e">预计结束时间</param>
         public virtual void ChangeEstimatedTime(DateTimeOffset? s = default, DateTimeOffset? e = default)
         {
+            if (s == EstimatedExecutionTime && e == EstimatedCompletionTime)
+                return;
+
             if (Status >= Status.Processing)
                 throw new UserFriendlyException("此状态的工单不允许修改预计开始和结束时间！");
 
@@ -226,9 +230,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="e">完成时间</param>
         protected virtual void ChangePracticalTime(DateTimeOffset? s = default, DateTimeOffset? e = default)
         {
-            s ??= ExecutionTime;
-            if (s == default)
-                throw new ArgumentNullException(nameof(s));
+            //回退时可能都会设置为空
 
             if (s.HasValue && e.HasValue && s > e)
                 throw new UserFriendlyException("执行开始时间必须小于完成时间！");
@@ -310,10 +312,9 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param desc="desc">回退原因，如：希望重新分配</param>
         public virtual void BackOff(DateTimeOffset time, Status? status = default, string desc = "回退")
         {
-            if (status == default)
+            if (status == default && Status != Status.ToBeConfirmed)
             {
-                if (Status != Status.ToBeConfirmed)
-                    status = Status - 1;
+                status = Status - 1;
             }
 
             if (status >= Status)
@@ -327,10 +328,10 @@ namespace BXJG.WorkOrder.WorkOrder
             {
                 ChangePracticalTime(default, default);
             }
-            if (status <= Status.ToBeAllocated)
-            {
+            //if (status <= Status.ToBeAllocated)
+            //{
                 //EmployeeId = default;
-            }
+            //}
             //if (status == Status.ToBeConfirmed)
             //{
             //    //EmployeeId = default;
@@ -454,7 +455,16 @@ namespace BXJG.WorkOrder.WorkOrder
             var end = e ?? entity.EstimatedCompletionTime;
             entity.ChangeEstimatedTime(start, end);
         }
-
+        /// <summary>
+        /// 设置紧急程度
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="urgencyDegree">若为空，则保持原来的值</param>
+        public static void SetUrgencyDegree(this OrderBaseEntity entity, UrgencyDegree? urgencyDegree = default)
+        {
+            if (urgencyDegree.HasValue)
+                entity.UrgencyDegree = urgencyDegree.Value;
+        }
         /// <summary>
         /// 分配或或领取工单
         /// </summary>
@@ -536,12 +546,10 @@ namespace BXJG.WorkOrder.WorkOrder
                                        DateTimeOffset? start = default,
                                        DateTimeOffset? end = default,
                                        DateTimeOffset? excuteTime = default,
-                                       DateTimeOffset? completeTime = default,
-                                       Action<OrderBaseEntity> act = default)
+                                       DateTimeOffset? completeTime = default)
         {
-            entity.BackOff(time, status.Value, description);
-            act?.Invoke(entity);
-            entity.SkipRetain(time, status.Value, description, empId, start, end, excuteTime, completeTime);
+            entity.BackOff(time, status ?? entity.Status, description ?? entity.StatusChangedDescription);
+            entity.SkipRetain(time, status, description, empId, start, end, excuteTime, completeTime);
         }
         /// <summary>
         /// 回退到指定状态
@@ -576,7 +584,6 @@ namespace BXJG.WorkOrder.WorkOrder
                                 DateTimeOffset? excuteTime = default,
                                 DateTimeOffset? completeTime = default)
         {
-            DateTimeOffset t = time ?? Clock.Now;
 
             if (status == default && entity.Status < Status.Completed)
             {
@@ -586,11 +593,12 @@ namespace BXJG.WorkOrder.WorkOrder
             if (status <= entity.Status)
                 return;
 
-            if (status > Status.ToBeConfirmed)
+            DateTimeOffset t = time ?? Clock.Now;
+            if (status > Status.ToBeConfirmed && entity.Status == Status.ToBeConfirmed)
                 entity.Confirme(t);
-            if (status > Status.ToBeAllocated)
+            if (status > Status.ToBeAllocated && entity.Status == Status.ToBeAllocated)
                 entity.Allocate(t, empId, start, end);
-            if (status > Status.ToBeProcessed)
+            if (status > Status.ToBeProcessed && entity.Status == Status.ToBeProcessed)
                 entity.Execute(excuteTime ?? entity.ExecutionTime ?? t);
             if (status == Status.Rejected)
             {
@@ -623,7 +631,14 @@ namespace BXJG.WorkOrder.WorkOrder
                                       DateTimeOffset? excuteTime = default,
                                       DateTimeOffset? completeTime = default)
         {
-            entity.Skip(time, status, description, empId ?? entity.EmployeeId, start ?? entity.EstimatedExecutionTime, end ?? entity.EstimatedCompletionTime, excuteTime, completeTime);
+            entity.Skip(time,
+                        status ?? entity.Status,
+                        description ?? entity.Description,
+                        empId ?? entity.EmployeeId,
+                        start ?? entity.EstimatedExecutionTime,
+                        end ?? entity.EstimatedCompletionTime,
+                        excuteTime,
+                        completeTime);
         }
     }
 }
