@@ -128,7 +128,7 @@ namespace BXJG.WorkOrder.WorkOrder
             entity.CategoryId = input.CategoryId;
             entity.Description = input.Description;
             entity.Title = input.Title;
-            entity.SetUrgencyDegree(input.UrgencyDegree);
+            entity.SetUrgencyDegreeRetain(input.UrgencyDegree);
             entity.StatusChangedDescription = input.StatusChangedDescription;
             //因为上面能赋哪几个值是由状态确定的，我们这里有没判断，所以不知道是哪个状态，所以下面还需要赋值下
             entity.EmployeeId = input.EmployeeId;

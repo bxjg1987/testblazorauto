@@ -74,9 +74,9 @@ namespace BXJG.WorkOrder.WorkOrder
         protected override OrderEntity Create(WorkOrderCreateDtoBase input)
         {
             var dto = input as WorkOrderCreateDto;
-            return new OrderEntity(dto.CategoryId,
+            return new OrderEntity(dto.Time.Value,
+                                   dto.CategoryId,
                                    dto.Title,
-                                   dto.Time.Value,
                                    dto.Description,
                                    dto.UrgencyDegree,
                                    dto.EmployeeId,

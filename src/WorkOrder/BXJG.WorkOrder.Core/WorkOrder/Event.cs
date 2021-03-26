@@ -17,14 +17,16 @@ namespace BXJG.WorkOrder.WorkOrder
         }
     }
     ////通知冗余字段引用方修改自己的数据
-    //public class TitleChangedEventData : EntityEventData<OrderBaseEntity>
-    //{
-    //    public string Original { get; private set; }
-    //    public TitleChangedEventData(OrderBaseEntity entity, string original) : base(entity)
-    //    {
-    //        Original = original;
-    //    }
-    //}
+    public class EstimatedTimeChangedEventData : EntityEventData<OrderBaseEntity>
+    {
+        public DateTimeOffset? OriginalStart { get; private set; }
+        public DateTimeOffset? OriginalEnd { get; private set; }
+        public EstimatedTimeChangedEventData(OrderBaseEntity entity, DateTimeOffset? s, DateTimeOffset? e) : base(entity)
+        {
+            OriginalStart = s;
+            OriginalEnd = e;
+        }
+    }
 
     public class UrgencyDegreeChangedEventData : EntityEventData<OrderBaseEntity>
     {
@@ -34,5 +36,5 @@ namespace BXJG.WorkOrder.WorkOrder
             Original = original;
         }
     }
-    
+
 }

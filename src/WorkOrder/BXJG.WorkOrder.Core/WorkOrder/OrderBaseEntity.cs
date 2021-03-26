@@ -3,9 +3,15 @@ using Abp.Domain.Entities.Auditing;
 using Abp.Timing;
 using Abp.UI;
 using System;
+using System.Linq;
 
 namespace BXJG.WorkOrder.WorkOrder
 {
+    /*
+     * 在录入信息时肯定有人为录入错误的情况，最直观的想法就是修改对应的属性，那么就需要将所有属性定义为public set，这不合理
+     * 因此，考虑属性时候可写时，不考虑认为录入错误需要直接修改的情况
+     */
+
     /// <summary>
     /// 抽象的工单聚合根，不同类型的工单应该定义相应子类
     /// 参考：https://gitee.com/bxjg1987/abp/wikis/pages?sort_id=3742407&doc_id=627313
@@ -19,29 +25,29 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <summary>
         /// 实例化工单
         /// </summary>
-        /// <param name="categoryId">所属分类Id，若提交没有指定应提供一个默认类别</param>
-        /// <param name="title">标题</param>
         /// <param name="time">创建此对象的时间</param>
+        /// <param name="categoryId">所属分类Id，若提交没有指定应提供一个默认类别</param>
+        /// <param name="title">标题，不允许为空</param>
         /// <param name="description">内容描述</param>
-        /// <param name="employeeId">员工id，未分配前也可以先指定</param>
         /// <param name="urgencyDegree">紧急程度</param>
+        /// <param name="employeeId">员工id，未分配前也可以先指定</param>
         /// <param name="estimatedExecutionTime">预计开始时间</param>
         /// <param name="estimatedCompletionTime">预计结束时间</param>
-        protected internal OrderBaseEntity(long categoryId,
+        protected internal OrderBaseEntity(DateTimeOffset time,
+                                           long categoryId,
                                            string title,
-                                           DateTimeOffset time,
                                            string description = default,
                                            UrgencyDegree urgencyDegree = UrgencyDegree.Normalize,
                                            string employeeId = default,
                                            DateTimeOffset? estimatedExecutionTime = default,
                                            DateTimeOffset? estimatedCompletionTime = default)
         {
-            //注意某些属性会触发事件，此时应给变量赋值
+
             CategoryId = categoryId;
-            status = Status.ToBeConfirmed;
-            this.StatusChangedTime = time;
-            this.urgencyDegree = urgencyDegree;
-            this.Title = title;
+            Status = Status.ToBeConfirmed;
+            StatusChangedTime = time;
+            UrgencyDegree = urgencyDegree;
+            Title = title;
             Description = description;
             EmployeeId = employeeId;
             ChangeEstimatedTime(estimatedExecutionTime, estimatedCompletionTime);
@@ -65,23 +71,11 @@ namespace BXJG.WorkOrder.WorkOrder
                 categoryId = value;
             }
         }
-        protected Status status;
         /// <summary>
         /// 状态<br />
         /// 核心属性，调用相应业务方法可以改变其值
         /// </summary>
-        public virtual Status Status 
-        { 
-            get{ return status; }
-            protected set
-            {
-                if (value == status)
-                    return;
-                var o = status;
-                status = value;
-                DomainEvents.Add(new StatusChangedEventData(this, o));
-            }
-        }
+        public virtual Status Status { get; private set; }
         protected UrgencyDegree urgencyDegree;
         /// <summary>
         /// 紧急程度<br />
@@ -97,11 +91,9 @@ namespace BXJG.WorkOrder.WorkOrder
                 if (value == urgencyDegree)
                     return;
 
-                //if (Status >= Status.Completed) 不要用大于小于判断，将来增加新的状态时可能出现意外情况
-                if(Status == Status.Completed || Status == Status.Rejected )
-                {
+                if (Status >= Status.Completed)
                     throw new UserFriendlyException("此状态的工单不允许修改紧急程度！请考虑回退或移交工单流程。");
-                }
+
                 var o = value;
                 urgencyDegree = value;
                 DomainEvents.Add(new UrgencyDegreeChangedEventData(this, o));
@@ -121,11 +113,6 @@ namespace BXJG.WorkOrder.WorkOrder
                 {
                     throw new ArgumentNullException(nameof(Title));
                 }
-                //对工单业务影响不大
-                //if (Status >= Status.Completed)
-                //{
-                //    throw new UserFriendlyException("此状态的工单不允许修改标题！");
-                //}
                 titie = value;
             }
         }
@@ -171,13 +158,10 @@ namespace BXJG.WorkOrder.WorkOrder
             get { return employeeId; }
             set
             {
-                //增加此判断以便调用方不做任何判断时放心赋值
                 if (value == employeeId)
                     return;
-                if (new Status[]{ Status.ToBeProcessed, Status.Processing, Status.Completed, Status.Rejected }.Contains(Status) )
-                {
+                if (Status >= Status.ToBeProcessed)
                     throw new UserFriendlyException("此状态的工单不允许修改关联的员工！请考虑回退或移交工单流程。");
-                }
                 employeeId = value;
             }
         }
@@ -210,11 +194,11 @@ namespace BXJG.WorkOrder.WorkOrder
             StatusChangedTime = time;
             StatusChangedDescription = desc;
 
-
-            var o = this.Status;
+            var o = status;
             Status = status;
             DomainEvents.Add(new StatusChangedEventData(this, o));
         }
+
         /// <summary>
         /// 一并设置预计开始和结束时间<br />
         /// 预计开始时间必须小于等于结束时间<br />
@@ -227,15 +211,32 @@ namespace BXJG.WorkOrder.WorkOrder
             if (s == EstimatedExecutionTime && e == EstimatedCompletionTime)
                 return;
 
-            if (Status >= Status.Processing)
-                throw new UserFriendlyException("此状态的工单不允许修改预计开始和结束时间！");
-
             if (s.HasValue && e.HasValue && s > e)
                 throw new UserFriendlyException("预计开始时间必须小于预计结束时间！");
 
-            EstimatedExecutionTime = s;
-            EstimatedCompletionTime = e;
+            DateTimeOffset? os = EstimatedExecutionTime, oe = EstimatedCompletionTime;
+
+            bool b = false;
+            if (s.HasValue && s != EstimatedExecutionTime)
+            {
+                if (Status > Status.ToBeProcessed)
+                    throw new UserFriendlyException("此状态的工单不允许修改预计开始时间！");
+
+                b = true;
+                EstimatedExecutionTime = s;
+            }
+            if (e.HasValue && s != EstimatedCompletionTime)
+            {
+                if (Status > Status.Processing)
+                    throw new UserFriendlyException("此状态的工单不允许修改预计结束时间！");
+
+                b = true;
+                EstimatedCompletionTime = e;
+            }
+            if (b)
+                DomainEvents.Add(new EstimatedTimeChangedEventData(this, os, oe));
         }
+
         /// <summary>
         /// 一并设置执行和完成时间<br />
         /// 完成时间必须大于等于结束时间<br />
@@ -259,7 +260,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="time"></param>
         public virtual void Confirme(DateTimeOffset time)
         {
-            if (Status != Status.ToBeConfirmed)
+            if (Status != Status.ToBeConfirmed && Status != Status.ToBeAllocated)
             {
                 throw new UserFriendlyException("此状态的工单不允许执行确认操作！");
             }
@@ -274,7 +275,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="end">预计结束时间</param>
         public virtual void Allocate(DateTimeOffset time, string employeeId = default, DateTimeOffset? start = default, DateTimeOffset? end = default)
         {
-            if (Status != Status.ToBeAllocated)
+            if (Status != Status.ToBeAllocated && Status != Status.ToBeProcessed)
             {
                 throw new UserFriendlyException("此状态的工单不允许执行分配操作！");
             }
@@ -288,7 +289,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="time"></param>
         public virtual void Execute(DateTimeOffset time)
         {
-            if (Status != Status.ToBeProcessed)
+            if (Status != Status.ToBeProcessed && Status != Status.Processing)
             {
                 throw new UserFriendlyException("此状态的工单不允许执行操作！");
             }
@@ -302,7 +303,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="desc">完成情况说明，也可用直接设置CompletionDescription属性修改说明</param>
         public virtual void Completion(DateTimeOffset time, string desc = default)
         {
-            if (Status != Status.Processing)
+            if (Status != Status.Processing && Status != Status.Completed)
             {
                 throw new UserFriendlyException("此状态的工单不允许执行完成操作！");
             }
@@ -316,6 +317,10 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="desc">拒绝原因</param>
         public virtual void Reject(DateTimeOffset time, string desc = default)
         {
+            //if (Status == Status.Rejected)
+            //{
+            //    throw new UserFriendlyException("此状态的工单不允许执行拒绝操作！");
+            //}
             //任何状态下的工单都可以执行拒绝操作
             ChangeStatus(Status.Rejected, time, desc);
         }
@@ -327,9 +332,12 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param desc="desc">回退原因，如：希望重新分配</param>
         public virtual void BackOff(DateTimeOffset time, Status? status = default, string desc = "回退")
         {
-            if (status == default && Status != Status.ToBeConfirmed)
+            if (status == default)
             {
-                status = Status - 1;
+                if (Status > Status.ToBeConfirmed)
+                    status = Status - 1;
+                else
+                    status = Status;
             }
 
             if (status >= Status)
@@ -345,7 +353,7 @@ namespace BXJG.WorkOrder.WorkOrder
             }
             //if (status <= Status.ToBeAllocated)
             //{
-                //EmployeeId = default;
+            //EmployeeId = default;
             //}
             //if (status == Status.ToBeConfirmed)
             //{
@@ -388,9 +396,9 @@ namespace BXJG.WorkOrder.WorkOrder
         public virtual string ExtendedField5 { get; set; }
 
         protected OrderEntity() : base() { }
-        protected internal OrderEntity(long categoryId,
+        protected internal OrderEntity(DateTimeOffset time,
+                                       long categoryId,
                                        string title,
-                                       DateTimeOffset time,
                                        string description = default,
                                        UrgencyDegree urgencyDegree = UrgencyDegree.Normalize,
                                        string employeeId = default,
@@ -402,9 +410,9 @@ namespace BXJG.WorkOrder.WorkOrder
                                        string extendedField2 = default,
                                        string extendedField3 = default,
                                        string extendedField4 = default,
-                                       string extendedField5 = default) : base(categoryId,
+                                       string extendedField5 = default) : base(time,
+                                                                               categoryId,
                                                                                title,
-                                                                               time,
                                                                                description,
                                                                                urgencyDegree,
                                                                                employeeId,
@@ -422,9 +430,9 @@ namespace BXJG.WorkOrder.WorkOrder
 
         protected override OrderBaseEntity CopyCreate()
         {
-            return new OrderEntity(CategoryId,
+            return new OrderEntity(StatusChangedTime,
+                                   CategoryId,
                                    Title,
-                                   StatusChangedTime,
                                    Description,
                                    UrgencyDegree,
                                    EmployeeId,
@@ -454,9 +462,12 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="status">希望复制的工单的初始状态</param>
         /// <param name="desc">原因</param>
         /// <returns></returns>
-        public static T Copy<T>(this T old, DateTime time, Status status = Status.ToBeConfirmed, string desc = "复制") where T : OrderBaseEntity
+        public static T Copy<T>(this T old,
+                                DateTime? time = default,
+                                Status status = Status.ToBeConfirmed,
+                                string desc = "复制") where T : OrderBaseEntity
         {
-            return old.Copy(time, status, desc) as T;
+            return old.Copy(time ?? Clock.Now, status, desc) as T;
         }
         /// <summary>
         /// 一并设置预计开始和结束时间<br />
@@ -464,7 +475,9 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="entity"></param>
         /// <param name="s">预计开始时间，若保留默认值则使用之前的值</param>
         /// <param name="e">希望的结束时间，若保留默认值则使用之前的值</param>
-        public static void ChangeEstimatedTimeRetain(this OrderBaseEntity entity, DateTimeOffset? s = default, DateTimeOffset? e = default)
+        public static void ChangeEstimatedTimeRetain(this OrderBaseEntity entity,
+                                                     DateTimeOffset? s = default,
+                                                     DateTimeOffset? e = default)
         {
             var start = s ?? entity.EstimatedExecutionTime;
             var end = e ?? entity.EstimatedCompletionTime;
@@ -475,7 +488,8 @@ namespace BXJG.WorkOrder.WorkOrder
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="urgencyDegree">若为空，则保持原来的值</param>
-        public static void SetUrgencyDegree(this OrderBaseEntity entity, UrgencyDegree? urgencyDegree = default)
+        public static void SetUrgencyDegreeRetain(this OrderBaseEntity entity,
+                                                  UrgencyDegree? urgencyDegree = default)
         {
             if (urgencyDegree.HasValue)
                 entity.UrgencyDegree = urgencyDegree.Value;
@@ -513,59 +527,20 @@ namespace BXJG.WorkOrder.WorkOrder
             entity.Allocate(time, employeeId ?? entity.EmployeeId, start ?? entity.EstimatedExecutionTime, end ?? entity.EstimatedCompletionTime);
         }
         /// <summary>
-        /// 设置为任意状态
+        /// 回退到指定状态
         /// </summary>
         /// <param name="entity"></param>
-        /// <param name="status">目标状态，若为空则调整到下一个状态</param>
         /// <param time="time">回退时间，为空则使用Clock.Now</param>
-        /// <param name="description">改变状态的说明</param>
-        /// <param name="empId">若目标状态大于等于分配，则需要指明分配操作相关参数</param>
-        /// <param name="start">预计开始时间</param>
-        /// <param name="end">预计结束时间</param>
-        /// <param name="excuteTime">实际开始时间</param>
-        /// <param name="completeTime">实际结束时间</param>
-        /// <param name="act">回退 》act 》Skip</param>
-        public static void ChangeState(this OrderBaseEntity entity,
-                                       DateTimeOffset? time = default,
-                                       Status? status = default,
-                                       string description = default,
-                                       string empId = default,
-                                       DateTimeOffset? start = default,
-                                       DateTimeOffset? end = default,
-                                       DateTimeOffset? excuteTime = default,
-                                       DateTimeOffset? completeTime = default,
-                                       Action<OrderBaseEntity> act = default)
+        /// <param name="status">目标状态，不指定则默认回到上一个状态</param>
+        /// <param desc="desc">回退原因，如：希望重新分配</param>
+        public static void BackOff(this OrderBaseEntity entity,
+                                   DateTimeOffset? time = default,
+                                   Status? status = default,
+                                   string desc = "回退")
         {
-            entity.BackOff(time, status.Value, description);
-            act?.Invoke(entity);
-            entity.Skip(time, status.Value, description, empId, start, end, excuteTime, completeTime);
+            entity.BackOff(time ?? Clock.Now, status, desc);
         }
-        /// <summary>
-        /// 设置为任意状态
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="status">目标状态，若为空则调整到下一个状态</param>
-        /// <param time="time">回退时间，为空则使用Clock.Now</param>
-        /// <param name="description">改变状态的说明</param>
-        /// <param name="empId">若目标状态大于等于分配，则需要指明分配操作相关参数，若为空则保留之前的值</param>
-        /// <param name="start">预计开始时间，若为空则保留之前的值</param>
-        /// <param name="end">预计结束时间，若为空则保留之前的值</param>
-        /// <param name="excuteTime">实际开始时间，若为空则保留之前的值，若还为空则使用time的值，若还未空则使用Clock.Now</param>
-        /// <param name="completeTime">实际结束时间，若为空则保留之前的值，若还为空则使用time的值，若还未空则使用Clock.Now</param>
-        /// <param name="act">回退 》act 》Skip</param>
-        public static void ChangeStateRetain(this OrderBaseEntity entity,
-                                       DateTimeOffset? time = default,
-                                       Status? status = default,
-                                       string description = default,
-                                       string empId = default,
-                                       DateTimeOffset? start = default,
-                                       DateTimeOffset? end = default,
-                                       DateTimeOffset? excuteTime = default,
-                                       DateTimeOffset? completeTime = default)
-        {
-            entity.BackOff(time, status ?? entity.Status, description ?? entity.StatusChangedDescription);
-            entity.SkipRetain(time, status, description, empId, start, end, excuteTime, completeTime);
-        }
+
         /// <summary>
         /// 回退到指定状态
         /// </summary>
@@ -573,9 +548,12 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param time="time">回退时间，为空则使用Clock.Now</param>
         /// <param name="status">目标状态，不指定则默认回到上一个状态</param>
         /// <param desc="desc">回退原因，如：希望重新分配</param>
-        public static void BackOff(this OrderBaseEntity entity, DateTimeOffset? time = default, Status? status = default, string desc = "回退")
+        public static void BackOffRetain(this OrderBaseEntity entity,
+                                         DateTimeOffset? time = default,
+                                         Status? status = default,
+                                         string desc = "回退")
         {
-            entity.BackOff(time ?? Clock.Now, status, desc);
+            entity.BackOff(time, status ?? entity.Status, desc ?? desc);
         }
         /// <summary>
         /// 跳跃到指定状态
@@ -599,21 +577,23 @@ namespace BXJG.WorkOrder.WorkOrder
                                 DateTimeOffset? excuteTime = default,
                                 DateTimeOffset? completeTime = default)
         {
-
-            if (status == default && entity.Status < Status.Completed)
+            if (status == default)
             {
-                status = entity.Status + 1;
+                if (entity.Status < Status.Rejected)
+                    status = entity.Status + 1;
+                else
+                    status = entity.Status;
             }
 
             if (status <= entity.Status)
                 return;
 
             DateTimeOffset t = time ?? Clock.Now;
-            if (status > Status.ToBeConfirmed && entity.Status == Status.ToBeConfirmed)
+            if (status > Status.ToBeConfirmed)
                 entity.Confirme(t);
-            if (status > Status.ToBeAllocated && entity.Status == Status.ToBeAllocated)
+            if (status > Status.ToBeAllocated)
                 entity.Allocate(t, empId, start, end);
-            if (status > Status.ToBeProcessed && entity.Status == Status.ToBeProcessed)
+            if (status > Status.ToBeProcessed)
                 entity.Execute(excuteTime ?? entity.ExecutionTime ?? t);
             if (status == Status.Rejected)
             {
@@ -624,6 +604,7 @@ namespace BXJG.WorkOrder.WorkOrder
                 entity.Completion(completeTime ?? entity.CompletionTime ?? t, description);
             }
         }
+
         /// <summary>
         /// 跳跃到指定状态
         /// </summary>
@@ -654,6 +635,58 @@ namespace BXJG.WorkOrder.WorkOrder
                         end ?? entity.EstimatedCompletionTime,
                         excuteTime,
                         completeTime);
+        }
+        /// <summary>
+        /// 设置为任意状态
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="status">目标状态，若为空则调整到下一个状态</param>
+        /// <param time="time">回退时间，为空则使用Clock.Now</param>
+        /// <param name="description">改变状态的说明</param>
+        /// <param name="empId">若目标状态大于等于分配，则需要指明分配操作相关参数</param>
+        /// <param name="start">预计开始时间</param>
+        /// <param name="end">预计结束时间</param>
+        /// <param name="excuteTime">实际开始时间</param>
+        /// <param name="completeTime">实际结束时间</param>
+        /// <param name="act">回退 》act 》Skip</param>
+        public static void ChangeState(this OrderBaseEntity entity,
+                                       DateTimeOffset? time = default,
+                                       Status? status = default,
+                                       string description = default,
+                                       string empId = default,
+                                       DateTimeOffset? start = default,
+                                       DateTimeOffset? end = default,
+                                       DateTimeOffset? excuteTime = default,
+                                       DateTimeOffset? completeTime = default)
+        {
+            entity.BackOff(time, status, description);
+            entity.Skip(time, status, description, empId, start, end, excuteTime, completeTime);
+        }
+        /// <summary>
+        /// 设置为任意状态
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="status">目标状态，若为空则调整到下一个状态</param>
+        /// <param time="time">回退时间，为空则使用Clock.Now</param>
+        /// <param name="description">改变状态的说明</param>
+        /// <param name="empId">若目标状态大于等于分配，则需要指明分配操作相关参数，若为空则保留之前的值</param>
+        /// <param name="start">预计开始时间，若为空则保留之前的值</param>
+        /// <param name="end">预计结束时间，若为空则保留之前的值</param>
+        /// <param name="excuteTime">实际开始时间，若为空则保留之前的值，若还为空则使用time的值，若还未空则使用Clock.Now</param>
+        /// <param name="completeTime">实际结束时间，若为空则保留之前的值，若还为空则使用time的值，若还未空则使用Clock.Now</param>
+        /// <param name="act">回退 》act 》Skip</param>
+        public static void ChangeStateRetain(this OrderBaseEntity entity,
+                                             DateTimeOffset? time = default,
+                                             Status? status = default,
+                                             string description = default,
+                                             string empId = default,
+                                             DateTimeOffset? start = default,
+                                             DateTimeOffset? end = default,
+                                             DateTimeOffset? excuteTime = default,
+                                             DateTimeOffset? completeTime = default)
+        {
+            entity.BackOffRetain(time, status, description);
+            entity.SkipRetain(time, status, description, empId, start, end, excuteTime, completeTime);
         }
     }
 }
