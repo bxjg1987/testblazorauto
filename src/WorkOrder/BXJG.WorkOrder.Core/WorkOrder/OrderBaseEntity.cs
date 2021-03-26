@@ -1,4 +1,4 @@
-﻿using Abp.Domain.Entities;
+using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
 using Abp.Timing;
 using Abp.UI;
@@ -19,7 +19,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <summary>
         /// 实例化工单
         /// </summary>
-        /// <param name="categoryId">所属分类Id</param>
+        /// <param name="categoryId">所属分类Id，若提交没有指定应提供一个默认类别</param>
         /// <param name="title">标题</param>
         /// <param name="time">创建此对象的时间</param>
         /// <param name="description">内容描述</param>
@@ -38,10 +38,10 @@ namespace BXJG.WorkOrder.WorkOrder
         {
             //注意某些属性会触发事件，此时应给变量赋值
             CategoryId = categoryId;
-            Status = Status.ToBeConfirmed;
+            status = Status.ToBeConfirmed;
+            this.StatusChangedTime = time;
             this.urgencyDegree = urgencyDegree;
             this.Title = title;
-            this.StatusChangedTime = time;
             Description = description;
             EmployeeId = employeeId;
             ChangeEstimatedTime(estimatedExecutionTime, estimatedCompletionTime);
@@ -49,7 +49,8 @@ namespace BXJG.WorkOrder.WorkOrder
         protected long categoryId;
         /// <summary>
         /// 所属分类Id<br />
-        /// 无论工单处于什么状态，此属性都不影响正常的业务，暂时可写
+        /// 无论工单处于什么状态，此属性都不影响正常的业务，暂时可写<br />
+        /// 无法提供时也应该给个默认值
         /// </summary>
         public virtual long CategoryId
         {
@@ -64,28 +65,40 @@ namespace BXJG.WorkOrder.WorkOrder
                 categoryId = value;
             }
         }
+        protected Status status;
         /// <summary>
         /// 状态<br />
         /// 核心属性，调用相应业务方法可以改变其值
         /// </summary>
-        public virtual Status Status { get; protected set; }
+        public virtual Status Status 
+        { 
+            get{ return status; }
+            protected set
+            {
+                if (value == status)
+                    return;
+                var o = status;
+                status = value;
+                DomainEvents.Add(new StatusChangedEventData(this, o));
+            }
+        }
         protected UrgencyDegree urgencyDegree;
         /// <summary>
         /// 紧急程度<br />
-        /// 变更此属性可能涉及到通知后台管理尽快确认、通知未分配的尽快分配、通知未处理的尽快处理等，因此已完成或拒绝的工单不允许调整此属性，以免干扰通知<br />
-        /// 当赋值的属性与原始值一样时，不做任何处理，否则正常赋值并触发<see cref="UrgencyDegreeChangedEventData"/>事件<br />
-        /// 虽然也可以在已拒绝或完成的工单允许直接修改此属性但不触发事件，但是那样无法严格要求走回退或移交工单流程，因此目前没这样做。
+        /// 变更此属性可能涉及到通知后台管理尽快确认、通知未分配的尽快分配、通知未处理的尽快处理等，因此已完成或拒绝的工单不允许调整此属性，以免干扰通知，
+        /// 虽然也可以在已拒绝或完成的工单允许直接修改此属性但不触发事件，但是那样无法严格要求走回退或移交工单流程，因此目前没这样做。真实业务中已完成或拒绝的工单修改紧急程度也没有意义.<br />
+        /// 当赋值的属性与原始值一样时，不做任何处理，否则正常赋值并触发<see cref="UrgencyDegreeChangedEventData"/>事件
         /// </summary>
         public virtual UrgencyDegree UrgencyDegree
         {
             get { return urgencyDegree; }
             set
             {
-                //增加此判断以便调用方不做任何判断时放心赋值
                 if (value == urgencyDegree)
                     return;
 
-                if (Status >= Status.Completed)
+                //if (Status >= Status.Completed) 不要用大于小于判断，将来增加新的状态时可能出现意外情况
+                if(Status == Status.Completed || Status == Status.Rejected )
                 {
                     throw new UserFriendlyException("此状态的工单不允许修改紧急程度！请考虑回退或移交工单流程。");
                 }
@@ -121,7 +134,9 @@ namespace BXJG.WorkOrder.WorkOrder
         /// </summary>
         public virtual string Description { get; set; }
         /// <summary>
-        /// 当前状态情况说明
+        /// 当前状态情况说明<br />
+        /// 更改状态的原因，某些状态改变原因不重要，比如确认、分配等..，但某些状态改变原因很重要，比如拒绝，为何拒绝？完成对应的完成情况说明。
+        /// 某些客户可能没有这么严格的要求，而另一些可能需要严格要求。是否开启严格要求、严格要求哪些状态必须说明原因，应该在领域服务通过配置系统来完成。或在状态改变的事件中去处理这些逻辑
         /// </summary>
         public virtual string StatusChangedDescription { get; set; }
         /// <summary>
@@ -129,19 +144,19 @@ namespace BXJG.WorkOrder.WorkOrder
         /// </summary>
         public virtual DateTimeOffset StatusChangedTime { get; protected set; }
         /// <summary>
-        /// 希望的开始时间
+        /// 预计开始时间
         /// </summary>
         public virtual DateTimeOffset? EstimatedExecutionTime { get; protected set; }
         /// <summary>
-        /// 希望的结束时间
+        /// 预计结束时间
         /// </summary>
         public virtual DateTimeOffset? EstimatedCompletionTime { get; protected set; }
         /// <summary>
-        /// 实际的执行时间
+        /// 执行时间
         /// </summary>
         public virtual DateTimeOffset? ExecutionTime { get; protected set; }
         /// <summary>
-        /// 实际的结束时间
+        /// 完成时间
         /// </summary>
         public virtual DateTimeOffset? CompletionTime { get; protected set; }
         protected string employeeId;
@@ -159,7 +174,7 @@ namespace BXJG.WorkOrder.WorkOrder
                 //增加此判断以便调用方不做任何判断时放心赋值
                 if (value == employeeId)
                     return;
-                if (Status >= Status.ToBeProcessed)
+                if (new Status[]{ Status.ToBeProcessed, Status.Processing, Status.Completed, Status.Rejected }.Contains(Status) )
                 {
                     throw new UserFriendlyException("此状态的工单不允许修改关联的员工！请考虑回退或移交工单流程。");
                 }
