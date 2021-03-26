@@ -38,7 +38,7 @@
     <text name="修改" value="Edit" />
     <text name="删除" value="Delete" />
     <text name="查询" value="Search" />
-
+    <text name="Insufficient data rights">Insufficient data rights！</text>
 
     <text name="记住我" value="Remember me" />
     <text name="忘记密码？" value="Forget the password?" />

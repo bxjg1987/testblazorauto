@@ -15,6 +15,10 @@ using System.Threading.Tasks;
 using System.Linq.Dynamic.Core;
 using Abp.Domain.Entities;
 using BXJG.WorkOrder.Session;
+using Abp.UI;
+using BXJG.Utils;
+using Abp.Localization;
+using BXJG.Utils.Localization;
 
 namespace BXJG.WorkOrder.WorkOrder
 {
@@ -75,8 +79,12 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <returns></returns>
         public virtual async Task<TEntityDto> GetAsync(TGetInput input)
         {
-            var entity = await repository.GetAsync(input.Id);
-            return await EntityToDto(entity);
+            var query = repository.GetAll().Where(c => c.Id == input.Id);
+            query = ApplyGetDataRights(query);
+            var e = await AsyncQueryableExecuter.FirstOrDefaultAsync(query);
+            //除非非法请求，否则e始终有值，所以这里不用判断是否为空
+            return await EntityToDto(e);
+            //throw new UserFriendlyException(LocalizationManager.BXJGUtilsL("Insufficient data rights"));
         }
         /// <summary>
         /// 获取列表
@@ -84,6 +92,51 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="input"></param>
         /// <returns></returns>
         public virtual async Task<PagedResultDto<TEntityDto>> GetAllAsync(TGetAllInput input)
+        {
+            //分类、员工先查询 再用in，
+            //假定员工和分类数量不会太多（太多的话考虑分配in查询），且可以使用缓存
+            //in查询有索引时性能有所提升
+            var query = await GetAllFilterAsync(input);
+            query = ApplyGetDataRights(query);
+            var count = await AsyncQueryableExecuter.CountAsync(query);
+            query = OrderPageBy(query, input);
+            var list = await AsyncQueryableExecuter.ToListAsync(query);
+
+            var cIds = list.Select(c => c.CategoryId);
+            var cQuery = categoryRepository.GetAll().Where(c => cIds.Contains(c.Id));
+            var cls = await AsyncQueryableExecuter.ToListAsync(cQuery);
+
+            var empIds = list.Where(c => !c.EmployeeId.IsNullOrWhiteSpace()).Select(c => c.EmployeeId);
+
+            IEnumerable<EmployeeDto> emps = null;
+            if (empIds != null && empIds.Count() > 0)
+            {
+                emps = await employeeAppService.GetByIdsAsync(empIds.ToArray());
+            }
+            var state = await GetStateAsync(list.ToArray());
+            var items = new List<TEntityDto>();
+            foreach (var item in list)
+            {
+                var ttt = EntityToDto(item, cls, emps, state);
+                items.Add(ttt);
+            }
+            return new PagedResultDto<TEntityDto>(count, items);
+        }
+        /// <summary>
+        /// GetAll的排序和分页
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        protected virtual IQueryable<TEntity> OrderPageBy(IQueryable<TEntity> query, TGetAllInput input)
+        {
+            return query.OrderBy(input.Sorting).PageBy(input);
+        }
+        /// <summary>
+        /// 获取指定所有工单的条件
+        /// </summary>
+        /// <returns></returns>
+        protected virtual async Task<IQueryable<TEntity>> GetAllFilterAsync(TGetAllInput input)
         {
             //分类、员工先查询 再用in，
             //假定员工和分类数量不会太多（太多的话考虑分配in查询），且可以使用缓存
@@ -113,30 +166,17 @@ namespace BXJG.WorkOrder.WorkOrder
                          .WhereIf(input.ExecutionTimeEnd.HasValue, c => c.ExecutionTime < input.ExecutionTimeEnd)
                          .WhereIf(input.CompletionTimeStart.HasValue, c => c.CompletionTime >= input.CompletionTimeStart)
                          .WhereIf(input.CompletionTimeEnd.HasValue, c => c.CompletionTime < input.CompletionTimeEnd);
-
-            var count = await AsyncQueryableExecuter.CountAsync(query);
-            query = query.OrderBy(input.Sorting).PageBy(input);
-            var list = await AsyncQueryableExecuter.ToListAsync(query);
-
-            var cIds = list.Select(c => c.CategoryId);
-            var cQuery = categoryRepository.GetAll().Where(c => cIds.Contains(c.Id));
-            var cls = await AsyncQueryableExecuter.ToListAsync(cQuery);
-
-            var empIds = list.Where(c => !c.EmployeeId.IsNullOrWhiteSpace()).Select(c => c.EmployeeId);
-
-            IEnumerable<EmployeeDto> emps = null;
-            if (empIds != null && empIds.Count() > 0)
-            {
-                emps = await employeeAppService.GetByIdsAsync(empIds.ToArray());
-            }
-            var state = await GetStateAsync(list.ToArray());
-            var items = new List<TEntityDto>();
-            foreach (var item in list)
-            {
-                var ttt = EntityToDto(item, cls, emps, state);
-                items.Add(ttt);
-            }
-            return new PagedResultDto<TEntityDto>(count, items);
+            return query;
+        }
+        /// <summary>
+        /// 查询1个或多个工单时的数据权限条件<br />
+        /// 默认 （大厅的且待分配的）  或  （已分配给自己的且不是待确认的）
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        protected virtual IQueryable<TEntity> ApplyGetDataRights(IQueryable<TEntity> query)
+        {
+            return query.Where(c => (c.EmployeeId == null && c.Status == Status.ToBeAllocated) || (c.EmployeeId == CurrentEmployeeId && c.Status != Status.ToBeConfirmed));
         }
         /// <summary>
         /// 批量领取工单
@@ -145,14 +185,17 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <returns></returns>
         public virtual async Task<TBatchAllocateOutput> AllocateAsync(TBatchAllocateInput input)
         {
-            var query = repository.GetAll().Where(c => input.Ids.Contains(c.Id));
+            var query = repository.GetAll()
+                                  .Where(c => c.Status == Status.ToBeAllocated)
+                                  .Where(c => input.Ids.Contains(c.Id));
+
             var list = await AsyncQueryableExecuter.ToListAsync(query);
             var r = new TBatchAllocateOutput();
             foreach (var item in list)
             {
                 try
                 {
-                    item.Allocate(Clock.Now, employeeSession.CurrentEmployeeId, input.Start, input.End);
+                    item.AllocateRetain(Clock.Now, employeeSession.CurrentEmployeeId, input.EstimatedExecutionTime, input.EstimatedCompletionTime);
                     await CurrentUnitOfWork.SaveChangesAsync();
                     r.Ids.Add(item.Id);
                 }
@@ -170,7 +213,10 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <returns></returns>
         public virtual async Task<TBatchChangeStatusOutput> ExecuteAsync(TBatchChangeStatusInput input)
         {
-            var query = repository.GetAll().Where(c => input.Ids.Contains(c.Id));
+            var query = repository.GetAll()
+                                  .Where(c => c.EmployeeId == CurrentEmployeeId)
+                                  .Where(c => c.Status == Status.ToBeProcessed)
+                                  .Where(c => input.Ids.Contains(c.Id));
             var list = await AsyncQueryableExecuter.ToListAsync(query);
             var r = new TBatchChangeStatusOutput();
             foreach (var item in list)
@@ -195,7 +241,10 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <returns></returns>
         public virtual async Task<TBatchChangeStatusOutput> CompletionAsync(TBatchChangeStatusInput input)
         {
-            var query = repository.GetAll().Where(c => input.Ids.Contains(c.Id));
+            var query = repository.GetAll()
+                                  .Where(c => c.EmployeeId == CurrentEmployeeId)
+                                  .Where(c => c.Status == Status.Processing)
+                                  .Where(c => input.Ids.Contains(c.Id));
             var list = await AsyncQueryableExecuter.ToListAsync(query);
             var r = new TBatchChangeStatusOutput();
             foreach (var item in list)
@@ -280,17 +329,16 @@ namespace BXJG.WorkOrder.WorkOrder
     /// <summary>
     /// 后台管理默认工单应用服务接口
     /// </summary>
-    public class WorkOrderEmployeeAppService : WorkOrderEmployeeAppServiceBase<
-                                                               EntityDto<long>,
-                                                               GetAllWorkOrderEmployeeInputBase,
-                                                               WorkOrderEmployeeDto,
-                                                               WorkOrderEmployeeBatchChangeStatusInputBase,
-                                                               WorkOrderEmployeeBatchChangeStatusOutputBase,
-                                                               WorkOrderEmployeeBatchAllocateInputBase,
-                                                               WorkOrderEmployeeBatchAllocateOutput,
-                                                               OrderEntity,
-                                                               IRepository<OrderEntity, long>,
-                                                               IRepository<CategoryEntity, long>>
+    public class WorkOrderEmployeeAppService : WorkOrderEmployeeAppServiceBase<EntityDto<long>,
+                                                                               GetAllWorkOrderEmployeeInputBase,
+                                                                               WorkOrderEmployeeDto,
+                                                                               WorkOrderEmployeeBatchChangeStatusInputBase,
+                                                                               WorkOrderEmployeeBatchChangeStatusOutputBase,
+                                                                               WorkOrderEmployeeBatchAllocateInputBase,
+                                                                               WorkOrderEmployeeBatchAllocateOutput,
+                                                                               OrderEntity,
+                                                                               IRepository<OrderEntity, long>,
+                                                                               IRepository<CategoryEntity, long>>
 
     {
         public WorkOrderEmployeeAppService(IRepository<OrderEntity, long> repository, IRepository<CategoryEntity, long> categoryRepository, IEmployeeAppService employeeAppService, IEmployeeSession employeeSession) : base(repository, categoryRepository, employeeAppService, employeeSession)

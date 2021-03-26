@@ -170,5 +170,6 @@
     <text name="DoctorAdviceDialysisSolution" value="透析方案" />
     <text name="StoreManagementStorageEntry" value="入库" />
     <text name="Brand" value="品牌" />
+    <text name="Insufficient data rights">数据权限不足！</text>
   </texts>
 </localizationDictionary>

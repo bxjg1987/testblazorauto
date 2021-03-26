@@ -94,15 +94,18 @@ namespace BXJG.WorkOrder.WorkOrder
         public virtual async Task<TEntityDto> CreateAsync(TCreateInput input)
         {
             var entity = await manager.CreateAsync(await CreateInputToCreateDto(input));
-            entity.SkipRetain(Clock.Now,
-                              input.Status,
-                              input.StatusChangedDescription,
-                              //以下三个属性在CreateInputToCreateDto已复制
-                              //input.EmployeeId,
-                              //input.EstimatedExecutionTime,
-                              //input.EstimatedCompletionTime,
-                              excuteTime: input.ExecutionTime,
-                              completeTime: input.CompletionTime);
+            if (input.Status.HasValue && entity.Status < input.Status.Value)
+            {
+                entity.SkipRetain(Clock.Now,
+                                  input.Status,
+                                  input.StatusChangedDescription,
+                                  //以下三个属性在CreateInputToCreateDto已复制
+                                  //input.EmployeeId,
+                                  //input.EstimatedExecutionTime,
+                                  //input.EstimatedCompletionTime,
+                                  excuteTime: input.ExecutionTime,
+                                  completeTime: input.CompletionTime);
+            }
             await BeforeEditAsync(entity, input);
             await CurrentUnitOfWork.SaveChangesAsync();
             return await EntityToDto(entity);
@@ -115,16 +118,18 @@ namespace BXJG.WorkOrder.WorkOrder
         public virtual async Task<TEntityDto> UpdateAsync(TUpdateInput input)
         {
             var entity = await repository.GetAsync(input.Id);
-            //需要先执行这里，让工单处于希望的状态，后续赋值才可用正常执行
-            entity.ChangeStateRetain(Clock.Now,
-                                     input.Status,
-                                     input.StatusChangedDescription,
-                                     input.EmployeeId,
-                                     input.EstimatedExecutionTime,
-                                     input.EstimatedCompletionTime,
-                                     input.ExecutionTime,
-                                     input.CompletionTime);
-
+            //需要先执行这里，让工单处于希望的状态，后续赋值才可正常执行
+            if (input.Status.HasValue && entity.Status < input.Status.Value)
+            {
+                entity.ChangeStateRetain(Clock.Now,
+                                         input.Status,
+                                         input.StatusChangedDescription,
+                                         input.EmployeeId,
+                                         input.EstimatedExecutionTime,
+                                         input.EstimatedCompletionTime,
+                                         input.ExecutionTime,
+                                         input.CompletionTime);
+            }
             entity.CategoryId = input.CategoryId;
             entity.Description = input.Description;
             entity.Title = input.Title;
@@ -274,7 +279,7 @@ namespace BXJG.WorkOrder.WorkOrder
             {
                 try
                 {
-                    item.Allocate(Clock.Now, input.EmployeeId, input.Start, input.End);
+                    item.AllocateRetain(Clock.Now, input.EmployeeId, input.EstimatedExecutionTime, input.EstimatedCompletionTime);
                     await CurrentUnitOfWork.SaveChangesAsync();
                     r.Ids.Add(item.Id);
                 }
@@ -435,7 +440,8 @@ namespace BXJG.WorkOrder.WorkOrder
                 EstimatedExecutionTime = input.EstimatedExecutionTime,
                 Title = input.Title,
                 EmployeeId = input.EmployeeId,
-                Time = Clock.Now
+                UrgencyDegree = input.UrgencyDegree
+                //Time = Clock.Now
             };
             if (input.UrgencyDegree.HasValue)
                 dto.UrgencyDegree = input.UrgencyDegree.Value;

@@ -9,7 +9,7 @@ namespace BXJG.WorkOrder.WorkOrder
     public class WorkOrderBatchAllocateInputBase: BatchOperationInputLong
     {
         public string EmployeeId { get; set; }
-        public DateTimeOffset? Start { get; set; }
-        public DateTimeOffset? End { get; set; }
+        public DateTimeOffset? EstimatedExecutionTime { get; set; }
+        public DateTimeOffset? EstimatedCompletionTime { get; set; }
     }
 }

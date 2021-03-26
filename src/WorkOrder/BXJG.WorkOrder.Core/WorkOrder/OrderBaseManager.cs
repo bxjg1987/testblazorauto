@@ -11,9 +11,9 @@ using System.Threading.Tasks;
 namespace BXJG.WorkOrder.WorkOrder
 {
     public class WorkOrderCreateDtoBase
-    { 
-        public long CategoryId { get; set; }
-        public UrgencyDegree UrgencyDegree { get; set; } = UrgencyDegree.Normalize;
+    {
+        public long? CategoryId { get; set; }
+        public UrgencyDegree? UrgencyDegree { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public string EmployeeId { get; set; }
@@ -22,7 +22,8 @@ namespace BXJG.WorkOrder.WorkOrder
         public DateTimeOffset? EstimatedCompletionTime { get; set; }
     }
 
-    public class WorkOrderCreateDto : WorkOrderCreateDtoBase {
+    public class WorkOrderCreateDto : WorkOrderCreateDtoBase
+    {
         public string EntityType { get; set; }
         public string EntityId { get; set; }
         public string ExtendedField1 { get; set; }
@@ -31,8 +32,7 @@ namespace BXJG.WorkOrder.WorkOrder
         public string ExtendedField4 { get; set; }
         public string ExtendedField5 { get; set; }
     }
-    public abstract class OrderBaseManager<TEntity> : DomainServiceBase 
-        where TEntity : OrderBaseEntity
+    public abstract class OrderBaseManager<TEntity> : DomainServiceBase where TEntity : OrderBaseEntity
     {
         protected readonly IRepository<TEntity, long> repository;
 
@@ -43,17 +43,21 @@ namespace BXJG.WorkOrder.WorkOrder
         //分类 紧急程度可以定义参数默认值，进一步获取设置系统的默认值
         //工单的创建场景有：后台管理员创建、客户提交、某些事件如销售订单产生时自动创建，这些场景通常对应应用层方法或事件处理程序，它们都调用此方法
 
-        public async Task<TEntity> CreateAsync(WorkOrderCreateDtoBase dto)
+        public virtual async Task<TEntity> CreateAsync(WorkOrderCreateDtoBase dto)
         {
             //其它逻辑，暂时忽略
+            if (!dto.CategoryId.HasValue)
+                dto.CategoryId = 1;
             if (!dto.Time.HasValue)
                 dto.Time = Clock.Now;
+            if (!dto.UrgencyDegree.HasValue)
+                dto.UrgencyDegree = UrgencyDegree.Normalize;
             var entity = Create(dto);
             await repository.InsertAsync(entity);
             await CurrentUnitOfWork.SaveChangesAsync();//保存以更新id为自增id
             return entity;
         }
-     
+
         protected abstract TEntity Create(WorkOrderCreateDtoBase dto);
 
         public virtual Task DeleteAsync(TEntity entity)
@@ -75,10 +79,10 @@ namespace BXJG.WorkOrder.WorkOrder
         {
             var dto = input as WorkOrderCreateDto;
             return new OrderEntity(dto.Time.Value,
-                                   dto.CategoryId,
+                                   dto.CategoryId.Value,
                                    dto.Title,
                                    dto.Description,
-                                   dto.UrgencyDegree,
+                                   dto.UrgencyDegree.Value,
                                    dto.EmployeeId,
                                    dto.EstimatedExecutionTime,
                                    dto.EstimatedCompletionTime,

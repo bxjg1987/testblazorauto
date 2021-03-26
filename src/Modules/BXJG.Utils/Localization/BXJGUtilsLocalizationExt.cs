@@ -341,5 +341,16 @@ namespace BXJG.Utils.Localization
             return new LocalizableString(key, BXJGUtilsConsts.LocalizationSourceName);
         }
         #endregion
+        /// <summary>
+        /// 获取通用模块中的本地化字符串
+        /// </summary>
+        /// <param name="localizationManager"></param>
+        /// <param name="name"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        public static string BXJGUtilsL(this ILocalizationManager localizationManager, string name, params object[] args)
+        {
+            return string.Format(localizationManager.GetString(BXJGUtilsConsts.LocalizationSourceName, name), args);
+        }
     }
 }

@@ -16,7 +16,10 @@ namespace BXJG.WorkOrder
     public abstract class EmployeeAppServiceBase : AppServiceBase
     {
         protected readonly IEmployeeSession employeeSession;
-
+        /// <summary>
+        /// 当前登陆的员工id
+        /// </summary>
+        protected string CurrentEmployeeId => employeeSession.CurrentEmployeeId;
         public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }
         protected EmployeeAppServiceBase(IEmployeeSession employeeSession)
         {

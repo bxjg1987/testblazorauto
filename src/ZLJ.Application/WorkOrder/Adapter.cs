@@ -1,35 +1,58 @@
-﻿using Abp.Dependency;
+﻿
+
+using Abp.Domain.Repositories;
+using Abp.Extensions;
+using Abp.Linq;
+using Abp.Linq.Extensions;
+using Abp.Runtime.Session;
 using BXJG.WorkOrder.Employee;
 using BXJG.WorkOrder.Session;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using ZLJ.Authorization.Users;
 
 namespace ZLJ.WorkOrder
 {
-    public class EmployeeAppService :  IEmployeeAppService
+    public class EmployeeAppService : IEmployeeAppService
     {
-        static List<EmployeeDto> items = new List<EmployeeDto>{
-           new EmployeeDto{ Id="1", Name="aa", Phone= "13252658457" },
-           new EmployeeDto{ Id="2", Name="bbbb", Phone= "13585458475" }
-        };
+        private readonly IRepository<User, long> userRepository;
+        public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; } = NullAsyncQueryableExecuter.Instance;
+        public EmployeeAppService(IRepository<User, long> userRepository)
+        {
+            this.userRepository = userRepository;
+        }
+
         public async Task<IEnumerable<EmployeeDto>> GetByIdsAsync(params string[] ids)
         {
-            return items.Where(c => ids.Contains(c.Id));
+            var query = userRepository.GetAll()
+                                      .Where(c => ids.Contains(c.Id.ToString()))
+                                      .Select(c => new EmployeeDto
+                                      {
+                                          Id = c.Id.ToString(),
+                                          Name = c.Name,
+                                          Phone = c.PhoneNumber
+                                      });
+            return await AsyncQueryableExecuter.ToListAsync(query);
         }
 
         public async Task<IEnumerable<string>> GetIdsByKeywordAsync(string keyword)
         {
-            return items.Where(c => c.Name.Contains(keyword) || c.Phone.Contains(keyword)).Select(c => c.Id);
+            var query = userRepository.GetAll()
+                                      .WhereIf(!keyword.IsNullOrEmpty(), c => c.Name.Contains(keyword) || c.PhoneNumber.Contains(keyword))
+                                      .Select(c => c.Id.ToString());
+            return await AsyncQueryableExecuter.ToListAsync(query);
+        }
+    }
+    public class EmployeeSession : IEmployeeSession
+    {
+        private readonly IAbpSession abpSession;
+
+        public EmployeeSession(IAbpSession abpSession)
+        {
+            this.abpSession = abpSession;
         }
 
-    }
-    public class EmployeeSession :  IEmployeeSession
-    {
-        
-
-        public string CurrentEmployeeId => "1";
+        public string CurrentEmployeeId => abpSession.UserId?.ToString();
     }
 }
