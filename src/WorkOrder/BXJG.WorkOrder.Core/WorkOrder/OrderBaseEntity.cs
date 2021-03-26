@@ -10,6 +10,37 @@ namespace BXJG.WorkOrder.WorkOrder
     /*
      * 在录入信息时肯定有人为录入错误的情况，最直观的想法就是修改对应的属性，那么就需要将所有属性定义为public set，这不合理
      * 因此，考虑属性时候可写时，不考虑认为录入错误需要直接修改的情况
+     * 
+     * ************************************************************************************
+     * 
+     * 在调用分配方法时，可能工单已处于已分配状态，此时可以retrun或抛出错误，具体用哪种方式呢？
+     * 如果直接返回，相关参数如 分配给谁的，预计开始和结束时间不会得到更新，而调用方会以为正常赋值了。
+     * 若抛出异常，则更符合逻辑，但调用方也许只是想尝试调用，若已分配则不做任何处理
+     * 这是一种普遍情况，确认、分配、执行、完成都有类似的情况
+     * 这种问题在属性赋值中不存在，因为没有参数
+     * 
+     * 方式1
+     * 在实体中抛出异常，这样更符合真实业务逻辑
+     * 定义扩展方法，先判断状态是否有变化，再决定是否调用
+     * 
+     * 方式2 
+     * 反过来，在实体中直接返回，在扩展方法中判断抛出异常
+     * 
+     * 方式3
+     * 在实体方法中增加可选参数来决定
+     * 
+     * 目前采用更严谨的方式1（如分配ChangeStatus方法），但无争议的还是使用return（如ChangeEstimatedTime方法）
+     * 
+     * ************************************************************************************
+     * 
+     * 实体类中的本地化不好处理，目前使用的是简单的扩展方法形式，简单，但不便于单元测试
+     * 应用程序已经可以暂时不考虑本地化
+     * 
+     * ************************************************************************************
+     * 某个状态的工单不允许执行某个状态，将抛出异常
+     * 当调用方严格按正常的业务调用时永远不会抛出异常，这种情况用Exception还是UserFriendlyException都一样
+     * 当调用方没有严格按正常的业务调用时，抛出UserFriendlyException更合适。
+     * 
      */
 
     /// <summary>
@@ -44,18 +75,20 @@ namespace BXJG.WorkOrder.WorkOrder
         {
 
             CategoryId = categoryId;
-            Status = Status.ToBeConfirmed;
-            StatusChangedTime = time;
             UrgencyDegree = urgencyDegree;
             Title = title;
+
+            Status = Status.ToBeConfirmed;
+            StatusChangedTime = time;
             Description = description;
+
             EmployeeId = employeeId;
             ChangeEstimatedTime(estimatedExecutionTime, estimatedCompletionTime);
         }
         protected long categoryId;
         /// <summary>
         /// 所属分类Id<br />
-        /// 无论工单处于什么状态，此属性都不影响正常的业务，暂时可写<br />
+        /// 无论工单处于什么状态，此属性都不影响正常的业务，暂定可写<br />
         /// 无法提供时也应该给个默认值
         /// </summary>
         public virtual long CategoryId
@@ -67,7 +100,7 @@ namespace BXJG.WorkOrder.WorkOrder
             set
             {
                 if (value <= 0)
-                    throw new ApplicationException("工单分类设置无效！");
+                    throw new ApplicationException("工单分类设置无效！");//应用程序异常目前不考虑本地化
                 categoryId = value;
             }
         }
@@ -92,7 +125,7 @@ namespace BXJG.WorkOrder.WorkOrder
                     return;
 
                 if (Status >= Status.Completed)
-                    throw new UserFriendlyException("此状态的工单不允许修改紧急程度！请考虑回退或移交工单流程。");
+                    throw new UserFriendlyException("workorderSetUrgencyDegreeStatusException".BXJGWorkOrderL());
 
                 var o = value;
                 urgencyDegree = value;
@@ -102,7 +135,7 @@ namespace BXJG.WorkOrder.WorkOrder
         protected string titie;
         /// <summary>
         /// 标题<br />
-        /// 无论工单处于什么状态，修改此属性都不影响正常的业务，暂时可写
+        /// 无论工单处于什么状态，修改此属性都不影响正常的业务，暂定可写
         /// </summary>
         public virtual string Title
         {
@@ -111,7 +144,7 @@ namespace BXJG.WorkOrder.WorkOrder
             {
                 if (string.IsNullOrWhiteSpace(value))
                 {
-                    throw new ArgumentNullException(nameof(Title));
+                    throw new ArgumentNullException(nameof(Title));//应用程序异常目前不考虑本地化
                 }
                 titie = value;
             }
@@ -161,7 +194,7 @@ namespace BXJG.WorkOrder.WorkOrder
                 if (value == employeeId)
                     return;
                 if (Status >= Status.ToBeProcessed)
-                    throw new UserFriendlyException("此状态的工单不允许修改关联的员工！请考虑回退或移交工单流程。");
+                    throw new UserFriendlyException("workorderSetEmployeeStatusException".BXJGWorkOrderL());
                 employeeId = value;
             }
         }
@@ -181,18 +214,21 @@ namespace BXJG.WorkOrder.WorkOrder
         public virtual byte[] RowVersion { get; }
 
         /// <summary>
-        /// 调整状态，若状态变化则触发事件
+        /// 调整状态<br />
+        /// 若状态无变化将抛出ApplicationException
         /// </summary>
         /// <param name="status">目标状态</param>
         /// <param name="time">时间</param>
-        /// <param name="desc">描述</param>
-        protected virtual void ChangeStatus(Status status, DateTimeOffset time, string desc = default)
+        /// <param name="description">描述</param>
+        protected virtual void ChangeStatus(Status status, DateTimeOffset time, string description = default)
         {
             if (Status == status)
-                return;
-
+            {
+                //return;若return，StatusChangedTime、StatusChangedDescription将不会得到更新，但程序不会报错，会误导调用方以为这些属性是赋值成功的。
+                throw new ApplicationException("状态无变化，不应该调用此方法！");//不使用UserFriendlyException，因为这个问题应该由开发人员处理，应用程序异常目前不考虑本地化
+            }
             StatusChangedTime = time;
-            StatusChangedDescription = desc;
+            StatusChangedDescription = description;
 
             var o = status;
             Status = status;
@@ -202,36 +238,36 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <summary>
         /// 一并设置预计开始和结束时间<br />
         /// 预计开始时间必须小于等于结束时间<br />
-        /// 预计开始时间和结束时间关乎员工的工作效率，因此不允许随意修改,只有状态为待确认、待分配的、待执行的工单才允许执行此操作
+        /// 预计开始时间和结束时间关乎员工的工作效率，因此不允许随意修改,执行中之前的状态可以修改预计开始时间，执行中之前的状态可设置预计结束时间
         /// </summary>
-        /// <param name="s">预计开始时间</param>
-        /// <param name="e">预计结束时间</param>
-        public virtual void ChangeEstimatedTime(DateTimeOffset? s = default, DateTimeOffset? e = default)
+        /// <param name="estimatedExecutionTime">预计开始时间</param>
+        /// <param name="estimatedCompletionTime">预计结束时间</param>
+        public virtual void ChangeEstimatedTime(DateTimeOffset? estimatedExecutionTime = default, DateTimeOffset? estimatedCompletionTime = default)
         {
-            if (s == EstimatedExecutionTime && e == EstimatedCompletionTime)
+            if (estimatedExecutionTime == EstimatedExecutionTime && estimatedCompletionTime == EstimatedCompletionTime)
                 return;
 
-            if (s.HasValue && e.HasValue && s > e)
-                throw new UserFriendlyException("预计开始时间必须小于预计结束时间！");
+            if (estimatedExecutionTime.HasValue && estimatedCompletionTime.HasValue && estimatedExecutionTime > estimatedCompletionTime)
+                throw new UserFriendlyException("workorderChangeEstimatedTimeException1".BXJGWorkOrderL());
 
             DateTimeOffset? os = EstimatedExecutionTime, oe = EstimatedCompletionTime;
 
             bool b = false;
-            if (s.HasValue && s != EstimatedExecutionTime)
+            if (estimatedExecutionTime.HasValue && estimatedExecutionTime != EstimatedExecutionTime)
             {
                 if (Status > Status.ToBeProcessed)
-                    throw new UserFriendlyException("此状态的工单不允许修改预计开始时间！");
+                    throw new UserFriendlyException("workorderChangeEstimatedTimeException2".BXJGWorkOrderL());
 
                 b = true;
-                EstimatedExecutionTime = s;
+                EstimatedExecutionTime = estimatedExecutionTime;
             }
-            if (e.HasValue && s != EstimatedCompletionTime)
+            if (estimatedCompletionTime.HasValue && estimatedExecutionTime != EstimatedCompletionTime)
             {
                 if (Status > Status.Processing)
-                    throw new UserFriendlyException("此状态的工单不允许修改预计结束时间！");
+                    throw new UserFriendlyException("workorderChangeEstimatedTimeException3".BXJGWorkOrderL());
 
                 b = true;
-                EstimatedCompletionTime = e;
+                EstimatedCompletionTime = estimatedCompletionTime;
             }
             if (b)
                 DomainEvents.Add(new EstimatedTimeChangedEventData(this, os, oe));
@@ -240,29 +276,31 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <summary>
         /// 一并设置执行和完成时间<br />
         /// 完成时间必须大于等于结束时间<br />
-        /// 任意参数为空时则取<br />
+        /// 在执行或完成时才调用此方法<br />
+        /// 回退时可能都设置为空
         /// </summary>
-        /// <param name="s">执行时间</param>
-        /// <param name="e">完成时间</param>
-        protected virtual void ChangePracticalTime(DateTimeOffset? s = default, DateTimeOffset? e = default)
+        /// <param name="executionTime">执行时间</param>
+        /// <param name="completionTime">完成时间</param>
+        protected virtual void ChangePracticalTime(DateTimeOffset? executionTime = default, DateTimeOffset? completionTime = default)
         {
-            //回退时可能都会设置为空
+            if (executionTime.HasValue && completionTime.HasValue && executionTime > completionTime)
+                throw new UserFriendlyException("workorderChangePracticalTimeException1".BXJGWorkOrderL());
 
-            if (s.HasValue && e.HasValue && s > e)
-                throw new UserFriendlyException("执行开始时间必须小于完成时间！");
+            //在执行或完成时才调用此方法，更多逻辑在那两个方法中
 
-            ExecutionTime = s;
-            CompletionTime = e;
+            ExecutionTime = executionTime;
+            CompletionTime = completionTime;
         }
+
         /// <summary>
         /// 确认，只有待确认的工单才允许执行此操作
         /// </summary>
         /// <param name="time"></param>
         public virtual void Confirme(DateTimeOffset time)
         {
-            if (Status != Status.ToBeConfirmed && Status != Status.ToBeAllocated)
+            if (Status != Status.ToBeConfirmed)
             {
-                throw new UserFriendlyException("此状态的工单不允许执行确认操作！");
+                throw new UserFriendlyException("workorderConfirmeException1".BXJGWorkOrderL());
             }
             ChangeStatus(Status.ToBeAllocated, time);
         }
@@ -271,16 +309,16 @@ namespace BXJG.WorkOrder.WorkOrder
         /// </summary>
         /// <param name="time">分配时间时间</param>
         /// <param name="employeeId">员工id，为空则表示只想记录下问题，不需要明确是谁做的</param>
-        /// <param name="start">预计开始时间</param>
-        /// <param name="end">预计结束时间</param>
-        public virtual void Allocate(DateTimeOffset time, string employeeId = default, DateTimeOffset? start = default, DateTimeOffset? end = default)
+        /// <param name="estimatedExecutionTime">预计开始时间</param>
+        /// <param name="estimatedCompletionTime">预计结束时间</param>
+        public virtual void Allocate(DateTimeOffset time, string employeeId = default, DateTimeOffset? estimatedExecutionTime = default, DateTimeOffset? estimatedCompletionTime = default)
         {
-            if (Status != Status.ToBeAllocated && Status != Status.ToBeProcessed)
+            if (Status != Status.ToBeAllocated )
             {
-                throw new UserFriendlyException("此状态的工单不允许执行分配操作！");
+                throw new UserFriendlyException("workorderAllocateException1".BXJGWorkOrderL());
             }
             EmployeeId = employeeId;
-            ChangeEstimatedTime(start, end);
+            ChangeEstimatedTime(estimatedExecutionTime, estimatedCompletionTime);
             ChangeStatus(Status.ToBeProcessed, time);
         }
         /// <summary>
@@ -289,9 +327,9 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="time"></param>
         public virtual void Execute(DateTimeOffset time)
         {
-            if (Status != Status.ToBeProcessed && Status != Status.Processing)
+            if (Status != Status.ToBeProcessed)
             {
-                throw new UserFriendlyException("此状态的工单不允许执行操作！");
+                throw new UserFriendlyException("workorderExecuteException1".BXJGWorkOrderL());
             }
             ChangePracticalTime(time, CompletionTime);
             ChangeStatus(Status.Processing, time);
@@ -300,37 +338,38 @@ namespace BXJG.WorkOrder.WorkOrder
         /// 完成工单，只有执行中的工单才允许执行此操作
         /// </summary>
         /// <param name="time">完成时间</param>
-        /// <param name="desc">完成情况说明，也可用直接设置CompletionDescription属性修改说明</param>
-        public virtual void Completion(DateTimeOffset time, string desc = default)
+        /// <param name="description">完成情况说明，也可用直接设置CompletionDescription属性修改说明</param>
+        public virtual void Completion(DateTimeOffset time, string description = default)
         {
-            if (Status != Status.Processing && Status != Status.Completed)
+            if (Status != Status.Processing)
             {
-                throw new UserFriendlyException("此状态的工单不允许执行完成操作！");
+                throw new UserFriendlyException("workorderCompletionException1".BXJGWorkOrderL());
             }
             ChangePracticalTime(ExecutionTime, time);
-            ChangeStatus(Status.Completed, time, desc);
+            ChangeStatus(Status.Completed, time, description);
         }
         /// <summary>
-        /// 拒绝，任何状态下的工单都可以直接拒绝
+        /// 拒绝<br />
+        /// 若当前状态是已拒绝，则抛出UserFriendlyException异常，否则正常执行。
         /// </summary>
         /// <param name="time">操作时间</param>
-        /// <param name="desc">拒绝原因</param>
-        public virtual void Reject(DateTimeOffset time, string desc = default)
+        /// <param name="description">拒绝原因，可控</param>
+        public virtual void Reject(DateTimeOffset time, string description = default)
         {
-            //if (Status == Status.Rejected)
-            //{
-            //    throw new UserFriendlyException("此状态的工单不允许执行拒绝操作！");
-            //}
+            if (Status == Status.Rejected)
+            {
+                throw new UserFriendlyException("workorderRejectException1".BXJGWorkOrderL());
+            }
             //任何状态下的工单都可以执行拒绝操作
-            ChangeStatus(Status.Rejected, time, desc);
+            ChangeStatus(Status.Rejected, time, description);
         }
         /// <summary>
         /// 回退到指定状态
         /// </summary>
         /// <param time="time"></param>
-        /// <param name="status">目标状态，不指定则默认回到上一个状态</param>
-        /// <param desc="desc">回退原因，如：希望重新分配</param>
-        public virtual void BackOff(DateTimeOffset time, Status? status = default, string desc = "回退")
+        /// <param name="status">目标状态，不指定则默认回到上一个状态。若最终的目标状态已经到顶了，则抛出UserFriendlyException异常</param>
+        /// <param desc="desc">回退原因，如：希望重新分配，可空</param>
+        public virtual void BackOff(DateTimeOffset time, Status? status = default, string description = "回退")
         {
             if (status == default)
             {
@@ -341,7 +380,7 @@ namespace BXJG.WorkOrder.WorkOrder
             }
 
             if (status >= Status)
-                return;
+                throw new UserFriendlyException("workorderBackOffException1".BXJGWorkOrderL(Status.BXJGWorkOrderEnum()));
 
             if (status <= Status.Processing)
             {
@@ -360,7 +399,7 @@ namespace BXJG.WorkOrder.WorkOrder
             //    //EmployeeId = default;
             //    //EmployeeName = default;
             //}
-            ChangeStatus(status.Value, time, desc);
+            ChangeStatus(status.Value, time, description);
         }
         /// <summary>
         /// 复制工单时创建逻辑
@@ -372,12 +411,12 @@ namespace BXJG.WorkOrder.WorkOrder
         /// </summary>
         /// <param name="time">复制操作的时间</param>
         /// <param name="status">复制后的工单希望处于什么状态，默认为待确认</param>
-        /// <param name="desc">此操作的原因</param>
+        /// <param name="description">此操作的原因</param>
         /// <returns></returns>
-        public virtual OrderBaseEntity Copy(DateTime time, Status status = Status.ToBeConfirmed, string desc = "复制")
+        public virtual OrderBaseEntity Copy(DateTime time, Status status = Status.ToBeConfirmed, string description = "复制")
         {
             var entity = CopyCreate();
-            entity.BackOff(time, status, desc);
+            entity.BackOff(time, status, description);
             return entity;
         }
     }
@@ -457,30 +496,30 @@ namespace BXJG.WorkOrder.WorkOrder
         /// 复制
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="old"></param>
+        /// <param name="entity"></param>
         /// <param name="time">复制时间</param>
         /// <param name="status">希望复制的工单的初始状态</param>
-        /// <param name="desc">原因</param>
+        /// <param name="description">原因</param>
         /// <returns></returns>
-        public static T Copy<T>(this T old,
+        public static T Copy<T>(this T entity,
                                 DateTime? time = default,
                                 Status status = Status.ToBeConfirmed,
-                                string desc = "复制") where T : OrderBaseEntity
+                                string description = "复制") where T : OrderBaseEntity
         {
-            return old.Copy(time ?? Clock.Now, status, desc) as T;
+            return entity.Copy(time ?? Clock.Now, status, description) as T;
         }
         /// <summary>
         /// 一并设置预计开始和结束时间<br />
         /// </summary>
         /// <param name="entity"></param>
-        /// <param name="s">预计开始时间，若保留默认值则使用之前的值</param>
-        /// <param name="e">希望的结束时间，若保留默认值则使用之前的值</param>
+        /// <param name="estimatedExecutionTime">预计开始时间，若保留默认值则使用之前的值</param>
+        /// <param name="estimatedCompletionTime">希望的结束时间，若保留默认值则使用之前的值</param>
         public static void ChangeEstimatedTimeRetain(this OrderBaseEntity entity,
-                                                     DateTimeOffset? s = default,
-                                                     DateTimeOffset? e = default)
+                                                     DateTimeOffset? estimatedExecutionTime = default,
+                                                     DateTimeOffset? estimatedCompletionTime = default)
         {
-            var start = s ?? entity.EstimatedExecutionTime;
-            var end = e ?? entity.EstimatedCompletionTime;
+            var start = estimatedExecutionTime ?? entity.EstimatedExecutionTime;
+            var end = estimatedCompletionTime ?? entity.EstimatedCompletionTime;
             entity.ChangeEstimatedTime(start, end);
         }
         /// <summary>
@@ -500,15 +539,15 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="entity"></param>
         /// <param name="time">分配或领取时间，若为空则调用Clock.Now</param>
         /// <param name="employeeId">员工id，若为空则表示此工单不分配给任何员工，只做状态改变</param>
-        /// <param name="start">预计开始时间</param>
-        /// <param name="end">预计结束时间</param>
+        /// <param name="estimatedExecutionTime">预计开始时间</param>
+        /// <param name="estimatedCompletionTime">预计结束时间</param>
         public static void Allocate(this OrderBaseEntity entity,
                                     DateTimeOffset? time = default,
                                     string employeeId = default,
-                                    DateTimeOffset? start = default,
-                                    DateTimeOffset? end = default)
+                                    DateTimeOffset? estimatedExecutionTime = default,
+                                    DateTimeOffset? estimatedCompletionTime = default)
         {
-            entity.Allocate(time ?? Clock.Now, employeeId, start, end);
+            entity.Allocate(time ?? Clock.Now, employeeId, estimatedExecutionTime, estimatedCompletionTime);
         }
         /// <summary>
         /// 分配或领取工单
@@ -516,15 +555,15 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="entity"></param>
         /// <param name="time">分配或领取时间，若为空则调用Clock.Now</param>
         /// <param name="employeeId">员工id，若为空则保留工单之前设置的值，若也为空则最终为空，表示此工单不分配给任何员工，只做状态改变</param>
-        /// <param name="start">预计开始时间，若为空则保留工单之前设置的值，若也为空则最终为空</param>
-        /// <param name="end">预计结束时间，若为空则保留工单之前设置的值，若也为空则最终为空</param>
+        /// <param name="estimatedExecutionTime">预计开始时间，若为空则保留工单之前设置的值，若也为空则最终为空</param>
+        /// <param name="estimatedCompletionTime">预计结束时间，若为空则保留工单之前设置的值，若也为空则最终为空</param>
         public static void AllocateRetain(this OrderBaseEntity entity,
                                           DateTimeOffset? time = default,
                                           string employeeId = default,
-                                          DateTimeOffset? start = default,
-                                          DateTimeOffset? end = default)
+                                          DateTimeOffset? estimatedExecutionTime = default,
+                                          DateTimeOffset? estimatedCompletionTime = default)
         {
-            entity.Allocate(time, employeeId ?? entity.EmployeeId, start ?? entity.EstimatedExecutionTime, end ?? entity.EstimatedCompletionTime);
+            entity.Allocate(time, employeeId ?? entity.EmployeeId, estimatedExecutionTime ?? entity.EstimatedExecutionTime, estimatedCompletionTime ?? entity.EstimatedCompletionTime);
         }
         /// <summary>
         /// 回退到指定状态
@@ -536,9 +575,9 @@ namespace BXJG.WorkOrder.WorkOrder
         public static void BackOff(this OrderBaseEntity entity,
                                    DateTimeOffset? time = default,
                                    Status? status = default,
-                                   string desc = "回退")
+                                   string description = "回退")
         {
-            entity.BackOff(time ?? Clock.Now, status, desc);
+            entity.BackOff(time ?? Clock.Now, status, description);
         }
 
         /// <summary>
@@ -551,9 +590,9 @@ namespace BXJG.WorkOrder.WorkOrder
         public static void BackOffRetain(this OrderBaseEntity entity,
                                          DateTimeOffset? time = default,
                                          Status? status = default,
-                                         string desc = "回退")
+                                         string description = default)
         {
-            entity.BackOff(time, status ?? entity.Status, desc ?? desc);
+            entity.BackOff(time, status, description ?? entity.StatusChangedDescription);
         }
         /// <summary>
         /// 跳跃到指定状态
@@ -563,8 +602,8 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="status">目标状态，若为空则调整到下一个状态</param>
         /// <param name="description">改变状态的说明</param>
         /// <param name="empId">若目标状态大于等于分配，则需要指明分配操作相关参数</param>
-        /// <param name="start">预计开始时间</param>
-        /// <param name="end">预计结束时间</param>
+        /// <param name="estimatedExecutionTime">预计开始时间</param>
+        /// <param name="estimatedCompletionTime">预计结束时间</param>
         /// <param name="excuteTime">实际开始时间，若为空则保留之前的值，若还为空则使用time的值，若还未空则使用Clock.Now</param>
         /// <param name="completeTime">实际结束时间，若为空则保留之前的值，若还为空则使用time的值，若还未空则使用Clock.Now</param>
         public static void Skip(this OrderBaseEntity entity,
@@ -572,8 +611,8 @@ namespace BXJG.WorkOrder.WorkOrder
                                 Status? status = default,
                                 string description = default,
                                 string empId = default,
-                                DateTimeOffset? start = default,
-                                DateTimeOffset? end = default,
+                                DateTimeOffset? estimatedExecutionTime = default,
+                                DateTimeOffset? estimatedCompletionTime = default,
                                 DateTimeOffset? excuteTime = default,
                                 DateTimeOffset? completeTime = default)
         {
@@ -586,13 +625,13 @@ namespace BXJG.WorkOrder.WorkOrder
             }
 
             if (status <= entity.Status)
-                return;
+                throw new UserFriendlyException("workorderSkipException1".BXJGWorkOrderL(entity.Status.BXJGWorkOrderEnum()));
 
             DateTimeOffset t = time ?? Clock.Now;
             if (status > Status.ToBeConfirmed)
                 entity.Confirme(t);
             if (status > Status.ToBeAllocated)
-                entity.Allocate(t, empId, start, end);
+                entity.Allocate(t, empId, estimatedExecutionTime, estimatedCompletionTime);
             if (status > Status.ToBeProcessed)
                 entity.Execute(excuteTime ?? entity.ExecutionTime ?? t);
             if (status == Status.Rejected)
@@ -613,8 +652,8 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="status">目标状态，若为空则调整到下一个状态</param>
         /// <param name="description">改变状态的说明</param>
         /// <param name="empId">若目标状态大于等于分配，则需要指明分配操作相关参数，若为空则保留之前的值</param>
-        /// <param name="start">预计开始时间，若为空则保留之前的值</param>
-        /// <param name="end">预计结束时间，若为空则保留之前的值</param>
+        /// <param name="estimatedExecutionTime">预计开始时间，若为空则保留之前的值</param>
+        /// <param name="estimatedCompletionTime">预计结束时间，若为空则保留之前的值</param>
         /// <param name="excuteTime">实际开始时间，若为空则保留之前的值，若还为空则使用time的值，若还未空则使用Clock.Now</param>
         /// <param name="completeTime">实际结束时间，若为空则保留之前的值，若还为空则使用time的值，若还未空则使用Clock.Now</param>
         public static void SkipRetain(this OrderBaseEntity entity,
@@ -622,17 +661,17 @@ namespace BXJG.WorkOrder.WorkOrder
                                       Status? status = default,
                                       string description = default,
                                       string empId = default,
-                                      DateTimeOffset? start = default,
-                                      DateTimeOffset? end = default,
+                                      DateTimeOffset? estimatedExecutionTime = default,
+                                      DateTimeOffset? estimatedCompletionTime = default,
                                       DateTimeOffset? excuteTime = default,
                                       DateTimeOffset? completeTime = default)
         {
             entity.Skip(time,
-                        status ?? entity.Status,
+                        status ,
                         description ?? entity.Description,
                         empId ?? entity.EmployeeId,
-                        start ?? entity.EstimatedExecutionTime,
-                        end ?? entity.EstimatedCompletionTime,
+                        estimatedExecutionTime ?? entity.EstimatedExecutionTime,
+                        estimatedCompletionTime ?? entity.EstimatedCompletionTime,
                         excuteTime,
                         completeTime);
         }
@@ -644,8 +683,8 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param time="time">回退时间，为空则使用Clock.Now</param>
         /// <param name="description">改变状态的说明</param>
         /// <param name="empId">若目标状态大于等于分配，则需要指明分配操作相关参数</param>
-        /// <param name="start">预计开始时间</param>
-        /// <param name="end">预计结束时间</param>
+        /// <param name="estimatedExecutionTime">预计开始时间</param>
+        /// <param name="estimatedCompletionTime">预计结束时间</param>
         /// <param name="excuteTime">实际开始时间</param>
         /// <param name="completeTime">实际结束时间</param>
         /// <param name="act">回退 》act 》Skip</param>
@@ -654,13 +693,13 @@ namespace BXJG.WorkOrder.WorkOrder
                                        Status? status = default,
                                        string description = default,
                                        string empId = default,
-                                       DateTimeOffset? start = default,
-                                       DateTimeOffset? end = default,
+                                       DateTimeOffset? estimatedExecutionTime = default,
+                                       DateTimeOffset? estimatedCompletionTime = default,
                                        DateTimeOffset? excuteTime = default,
                                        DateTimeOffset? completeTime = default)
         {
             entity.BackOff(time, status, description);
-            entity.Skip(time, status, description, empId, start, end, excuteTime, completeTime);
+            entity.Skip(time, status, description, empId, estimatedExecutionTime, estimatedCompletionTime, excuteTime, completeTime);
         }
         /// <summary>
         /// 设置为任意状态
@@ -670,8 +709,8 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param time="time">回退时间，为空则使用Clock.Now</param>
         /// <param name="description">改变状态的说明</param>
         /// <param name="empId">若目标状态大于等于分配，则需要指明分配操作相关参数，若为空则保留之前的值</param>
-        /// <param name="start">预计开始时间，若为空则保留之前的值</param>
-        /// <param name="end">预计结束时间，若为空则保留之前的值</param>
+        /// <param name="estimatedExecutionTime">预计开始时间，若为空则保留之前的值</param>
+        /// <param name="estimatedCompletionTime">预计结束时间，若为空则保留之前的值</param>
         /// <param name="excuteTime">实际开始时间，若为空则保留之前的值，若还为空则使用time的值，若还未空则使用Clock.Now</param>
         /// <param name="completeTime">实际结束时间，若为空则保留之前的值，若还为空则使用time的值，若还未空则使用Clock.Now</param>
         /// <param name="act">回退 》act 》Skip</param>
@@ -680,13 +719,13 @@ namespace BXJG.WorkOrder.WorkOrder
                                              Status? status = default,
                                              string description = default,
                                              string empId = default,
-                                             DateTimeOffset? start = default,
-                                             DateTimeOffset? end = default,
+                                             DateTimeOffset? estimatedExecutionTime = default,
+                                             DateTimeOffset? estimatedCompletionTime = default,
                                              DateTimeOffset? excuteTime = default,
                                              DateTimeOffset? completeTime = default)
         {
             entity.BackOffRetain(time, status, description);
-            entity.SkipRetain(time, status, description, empId, start, end, excuteTime, completeTime);
+            entity.SkipRetain(time, status, description, empId, estimatedExecutionTime, estimatedCompletionTime, excuteTime, completeTime);
         }
     }
 }

@@ -13,7 +13,7 @@ namespace BXJG.WorkOrder
         static MenuItemDefinition Create()
         {
             var root = new MenuItemDefinition(CoreConsts.WorkOrder,
-                                              CoreConsts.WorkOrderManager.BXJGWorkOrderL(),
+                                              CoreConsts.WorkOrderManager.BXJGWorkOrderLI(),
                                               icon: "BXJGShopOrder",
                                               permissionDependency: new SimplePermissionDependency(CoreConsts.WorkOrder));
 
@@ -21,13 +21,13 @@ namespace BXJG.WorkOrder
             //{codegenerator}
 
             root.AddItem(new MenuItemDefinition(CoreConsts.WorkOrderCategoryManager,
-                                                CoreConsts.WorkOrderCategoryManager.BXJGWorkOrderL(),
+                                                CoreConsts.WorkOrderCategoryManager.BXJGWorkOrderLI(),
                                                 icon: "BXJGShopProductCategory",
                                                 //url: $"/{CoreConsts.WorkOrder}/{CoreConsts.WorkOrderCategoryManager.RemovePreFix(CoreConsts.WorkOrder).RemovePostFix("Manager")}/index.html",
                                                 url: $"/{CoreConsts.WorkOrder}/WorkOrderCategory/index.html",
                                                 permissionDependency: new SimplePermissionDependency(CoreConsts.WorkOrderCategoryManager)))
                 .AddItem(new MenuItemDefinition(CoreConsts.WorkOrderManager,
-                                                CoreConsts.WorkOrderManager.BXJGWorkOrderL(),
+                                                CoreConsts.WorkOrderManager.BXJGWorkOrderLI(),
                                                 icon: "BXJGShopOrder",
                                                 url: $"/{CoreConsts.WorkOrder}/WorkOrder/index.html",
                                                 permissionDependency: new SimplePermissionDependency(CoreConsts.WorkOrderManager)));

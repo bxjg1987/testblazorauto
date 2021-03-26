@@ -15,14 +15,14 @@ namespace BXJG.WorkOrder
         /// <param name="context"></param>
         public static Permission AddBXJGWorkOrderPermission(this Permission context)
         {
-            var root = context.CreateChildPermission(CoreConsts.WorkOrder, CoreConsts.WorkOrderManager.BXJGWorkOrderL(), multiTenancySides: MultiTenancySides.Tenant);
+            var root = context.CreateChildPermission(CoreConsts.WorkOrder, CoreConsts.WorkOrderManager.BXJGWorkOrderLI(), multiTenancySides: MultiTenancySides.Tenant);
           
-            var category = root.CreateChildPermission(CoreConsts.WorkOrderCategoryManager, CoreConsts.WorkOrderCategoryManager.BXJGWorkOrderL(), multiTenancySides: MultiTenancySides.Tenant);
+            var category = root.CreateChildPermission(CoreConsts.WorkOrderCategoryManager, CoreConsts.WorkOrderCategoryManager.BXJGWorkOrderLI(), multiTenancySides: MultiTenancySides.Tenant);
             category.CreateChildPermission(CoreConsts.WorkOrderCategoryCreate, "新增".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
             category.CreateChildPermission(CoreConsts.WorkOrderCategoryUpdate, "修改".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
             category.CreateChildPermission(CoreConsts.WorkOrderCategoryDelete, "删除".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
 
-            var item = root.CreateChildPermission(CoreConsts.WorkOrderManager, CoreConsts.WorkOrderManager.BXJGWorkOrderL(), multiTenancySides: MultiTenancySides.Tenant);
+            var item = root.CreateChildPermission(CoreConsts.WorkOrderManager, CoreConsts.WorkOrderManager.BXJGWorkOrderLI(), multiTenancySides: MultiTenancySides.Tenant);
             item.CreateChildPermission(CoreConsts.WorkOrderCreate, "新增".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
             item.CreateChildPermission(CoreConsts.WorkOrderUpdate, "修改".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
             item.CreateChildPermission(CoreConsts.WorkOrderDelete, "删除".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);

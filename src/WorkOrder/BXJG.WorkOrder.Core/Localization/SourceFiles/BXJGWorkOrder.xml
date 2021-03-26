@@ -18,5 +18,40 @@
     <text name="BXJG.WorkOrder.WorkOrder.UrgencyDegree.Dispensable" value="Dispensable" />
 
     <text name="标题/处理人/电话等..." value="title/contact/phone etc..." />
+    <text name="workorderSetEmployeeStatusException">
+      The work order in this status cannot modify the associated employee! Please consider rolling back or handing over the work order process.
+    </text>
+    <text name="workorderSetUrgencyDegreeStatusException">
+      It is not allowed to modify the emergency degree of the work order in this status! Please consider rolling back or handing over the work order process.
+    </text>
+    <text name="workorderChangeEstimatedTimeException1">
+      Estimated start time must be less than estimated end time!
+    </text>
+    <text name="workorderChangeEstimatedTimeException2">
+      It is not allowed to modify the estimated start time for a work order in this status!
+    </text>
+    <text name="workorderChangeEstimatedTimeException3">
+      It is not allowed to modify the estimated end time for a work order in this status!
+    </text>
+    <text name="workorderChangePracticalTimeException1">
+      Execution start time must be less than completion time!
+    </text>
+    <text name="workorderConfirmeException1">
+      The work order in this status is not allowed to perform the [confirm] operation!
+    </text>
+    <text name="workorderAllocateException1">
+      The work order in this status is not allowed to perform the [assign] operation!
+    </text>
+    <text name="workorderExecuteException1">
+      Work orders in this status are not allowed to execute [execute]!
+    </text>
+    <text name="workorderCompletionException1">
+      The work order in this status is not allowed to perform the [complete] operation!
+    </text>
+    <text name="workorderRejectException1">
+      The work order in this status is not allowed to perform the [reject] operation!
+    </text>
+    <text name="workorderBackOffException1">Work orders in this status cannot be returned to {0} status!</text>
+    <text name="workorderSkipException1">Work orders in this status cannot be skip to {0} status！</text>
   </texts>
 </localizationDictionary>
