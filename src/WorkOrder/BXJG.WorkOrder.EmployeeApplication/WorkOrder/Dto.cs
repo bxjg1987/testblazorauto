@@ -11,7 +11,7 @@ namespace BXJG.WorkOrder.WorkOrder
     /// 工单后台管理列表页使用的显示模型<br />
     /// 不同工单类型有相应子类
     /// </summary>
-    public class WorkOrderEmployeeDtoBase : EntityDto<long>
+    public class WorkOrderEmployeeBaseDto : EntityDto<long>
     {
         /// <summary>
         /// 所属分类id
@@ -94,7 +94,7 @@ namespace BXJG.WorkOrder.WorkOrder
     /// <summary>
     /// 后台管理普通工单查询模型
     /// </summary>
-    public class WorkOrderEmployeeDto : WorkOrderEmployeeDtoBase
+    public class WorkOrderEmployeeDto : WorkOrderEmployeeBaseDto
     {
         /// <summary>
         /// 扩展字段

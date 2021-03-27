@@ -6,7 +6,7 @@ namespace BXJG.WorkOrder.WorkOrder
     /// <summary>
     /// 批量分配的输入模型
     /// </summary>
-    public class WorkOrderEmployeeBatchAllocateInputBase: BatchOperationInputLong
+    public class WorkOrderEmployeeBatchAllocateBaseInput: BatchOperationInputLong
     {
         //public string EmployeeId { get; set; }
         public DateTimeOffset? EstimatedExecutionTime { get; set; }

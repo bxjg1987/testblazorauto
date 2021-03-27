@@ -21,6 +21,7 @@ namespace BXJG.WorkOrder
 
         #region 权限和菜单
 
+        #region 后台
         public const string WorkOrder = "BXJGWorkOrder";
         public const string WorkOrderManager = "BXJGWorkOrderManager";
 
@@ -36,6 +37,19 @@ namespace BXJG.WorkOrder
         public const string WorkOrderCategoryCreate = "BXJGWorkOrderCategoryCreate";
         public const string WorkOrderCategoryUpdate = "BXJGWorkOrderCategoryUpdate";
         public const string WorkOrderCategoryDelete = "BXJGWorkOrderCategoryDelete";
+        #endregion
+
+        #region 员工端
+        
+        
+        //public const string EmployeeWorkOrder = "BXJGEmployeeWorkOrder";
+
+        public const string EmployeeWorkOrderManager = "BXJGEmployeeWorkOrderManager";
+        //public const string EmployeeWorkOrderAllocate = "BXJGEmployeeWorkOrderCreate";
+        //public const string EmployeeWorkOrderExecute = "BXJGEmployeeWorkOrderUpdate";
+        //public const string EmployeeWorkOrderCompletion = "BXJGEmployeeWorkOrderDelete";
+        #endregion
+
         #endregion
 
     }

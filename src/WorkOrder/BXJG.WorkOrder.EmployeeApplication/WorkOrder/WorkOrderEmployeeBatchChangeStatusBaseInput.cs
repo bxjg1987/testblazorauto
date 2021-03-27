@@ -10,7 +10,7 @@ namespace BXJG.WorkOrder.WorkOrder
     /// <summary>
     /// 状态批量调整的输入模型
     /// </summary>
-    public class WorkOrderEmployeeBatchChangeStatusInputBase: BatchOperationInputLong
+    public class WorkOrderEmployeeBatchChangeStatusBaseInput: BatchOperationInputLong
     {
         /// <summary>
         /// 状态变更的说明

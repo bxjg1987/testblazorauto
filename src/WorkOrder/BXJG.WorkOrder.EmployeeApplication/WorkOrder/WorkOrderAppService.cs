@@ -19,9 +19,17 @@ using Abp.UI;
 using BXJG.Utils;
 using Abp.Localization;
 using BXJG.Utils.Localization;
+using Abp.Authorization;
 
 namespace BXJG.WorkOrder.WorkOrder
 {
+    /*
+     * 很多操作都会限制工单状态，比如只有已确认的工单才可以 领取、 只有执行中的工单才可以执行完成操作
+     * 可以在查询时直接加限制条件，比如执行操作中限制只查询待执行状态的工单
+     * 但不应该这样坐，业务领域层对应的操作已经做了状态限制，正常情况前端传递过来的id（集合）中是不包含意外情况的工单
+     * 比如执行操作参数中有id集合，这些id正常情况都是待执行的。这些业务本就应该下层到领域层，若应用层再加判断就失去了领域层业务的意义
+     */
+
     /// <summary>
     /// 员工管理工单应用服务基类
     /// </summary>
@@ -34,7 +42,6 @@ namespace BXJG.WorkOrder.WorkOrder
     /// <typeparam name="TBatchAllocateOutput">批量分配时的输出模型</typeparam>
     /// <typeparam name="TEntity">实体类型</typeparam>
     /// <typeparam name="TRepository">实体仓储类型</typeparam>
-    /// <typeparam name="TManager">领域服务类型</typeparam>
     /// <typeparam name="TCategoryRepository">分类仓储</typeparam>
     public abstract class WorkOrderEmployeeAppServiceBase<TGetInput,
                                                           TGetAllInput,
@@ -48,11 +55,11 @@ namespace BXJG.WorkOrder.WorkOrder
                                                           TCategoryRepository> : EmployeeAppServiceBase
         #region 泛型约束
         where TGetInput : EntityDto<long>
-        where TGetAllInput : GetAllWorkOrderEmployeeInputBase
-        where TEntityDto : WorkOrderEmployeeDtoBase, new()
-        where TBatchChangeStatusInput : WorkOrderEmployeeBatchChangeStatusInputBase
-        where TBatchChangeStatusOutput : WorkOrderEmployeeBatchChangeStatusOutputBase, new()
-        where TBatchAllocateInput : WorkOrderEmployeeBatchAllocateInputBase
+        where TGetAllInput : GetAllWorkOrderEmployeeBaseInput
+        where TEntityDto : WorkOrderEmployeeBaseDto, new()
+        where TBatchChangeStatusInput : WorkOrderEmployeeBatchChangeStatusBaseInput
+        where TBatchChangeStatusOutput : WorkOrderEmployeeBatchChangeStatusBaseOutput, new()
+        where TBatchAllocateInput : WorkOrderEmployeeBatchAllocateBaseInput
         where TBatchAllocateOutput : WorkOrderEmployeeBatchAllocateOutput, new()
         where TEntity : OrderBaseEntity
         where TRepository : IRepository<TEntity, long>
@@ -63,15 +70,28 @@ namespace BXJG.WorkOrder.WorkOrder
         protected readonly TCategoryRepository categoryRepository;
         protected readonly IEmployeeAppService employeeAppService;
 
+        protected readonly string getPermissionName, allocatePermissionName , executePermissionName, completionPermissionName, rejectPermissionName;
+
         public WorkOrderEmployeeAppServiceBase(TRepository repository,
                                                TCategoryRepository categoryRepository,
                                                IEmployeeAppService employeeAppService,
-                                               IEmployeeSession employeeSession) : base(employeeSession)
+                                               IEmployeeSession employeeSession,
+                                               string getPermissionName= default,
+                                               string allocatePermissionName = default,
+                                               string executePermissionName = default,
+                                               string completionPermissionName = default,
+                                               string rejectPermissionName = default) : base(employeeSession)
         {
             this.repository = repository;
             this.categoryRepository = categoryRepository;
             this.employeeAppService = employeeAppService;
+            this.getPermissionName = getPermissionName;
+            this.allocatePermissionName = allocatePermissionName;
+            this.executePermissionName = executePermissionName;
+            this.completionPermissionName = completionPermissionName;
+            this.rejectPermissionName = rejectPermissionName;
         }
+
         /// <summary>
         /// 获取指定工单
         /// </summary>
@@ -79,6 +99,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <returns></returns>
         public virtual async Task<TEntityDto> GetAsync(TGetInput input)
         {
+            await CheckGetPermissionAsync();
             var query = repository.GetAll().Where(c => c.Id == input.Id);
             query = ApplyGetDataRights(query);
             var e = await AsyncQueryableExecuter.FirstOrDefaultAsync(query);
@@ -93,6 +114,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <returns></returns>
         public virtual async Task<PagedResultDto<TEntityDto>> GetAllAsync(TGetAllInput input)
         {
+            await CheckGetPermissionAsync();
             //分类、员工先查询 再用in，
             //假定员工和分类数量不会太多（太多的话考虑分配in查询），且可以使用缓存
             //in查询有索引时性能有所提升
@@ -185,25 +207,36 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <returns></returns>
         public virtual async Task<TBatchAllocateOutput> AllocateAsync(TBatchAllocateInput input)
         {
+            await CheckAllocatePermissionAsync();
             var query = repository.GetAll()
-                                  .Where(c => c.Status == Status.ToBeAllocated)
+                                  //.Where(c => c.Status == Status.ToBeAllocated)领域层的逻辑不应在应用层来限制。传递来的ids正常来说都是待分配的
                                   .Where(c => input.Ids.Contains(c.Id));
 
             var list = await AsyncQueryableExecuter.ToListAsync(query);
             var r = new TBatchAllocateOutput();
+            //var msg = $"部分或全部失败！{Environment.NewLine}";
             foreach (var item in list)
             {
                 try
                 {
-                    item.AllocateRetain(Clock.Now, employeeSession.CurrentEmployeeId, input.EstimatedExecutionTime, input.EstimatedCompletionTime);
+                    item.AllocateRetain(Clock.Now, CurrentEmployeeId, input.EstimatedExecutionTime, input.EstimatedCompletionTime);
                     await CurrentUnitOfWork.SaveChangesAsync();
                     r.Ids.Add(item.Id);
                 }
+                catch (UserFriendlyException ex)
+                {
+                    r.ErrorMessage.Add(new BatchOperationErrorMessage(item.Id, ex.Message));
+                    //msg += $"编号{item.Id}的处理失败！{ex.Message}{Environment.NewLine}";
+                }
                 catch (Exception ex)
                 {
+                    //msg += $"编号{item.Id}的处理失败！服务端内部异常。{Environment.NewLine}";
+                    r.ErrorMessage.Add(item.Id.Message500());
                     Logger.Warn(L("分配工单失败！"), ex);
                 }
             }
+            //if (!msg.IsNullOrWhiteSpace())
+            //    throw new UserFriendlyException(msg);
             return r;
         }
         /// <summary>
@@ -213,9 +246,10 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <returns></returns>
         public virtual async Task<TBatchChangeStatusOutput> ExecuteAsync(TBatchChangeStatusInput input)
         {
+            await CheckExecutePermissionAsync();
             var query = repository.GetAll()
                                   .Where(c => c.EmployeeId == CurrentEmployeeId)
-                                  .Where(c => c.Status == Status.ToBeProcessed)
+                                  //.Where(c => c.Status == Status.ToBeProcessed)
                                   .Where(c => input.Ids.Contains(c.Id));
             var list = await AsyncQueryableExecuter.ToListAsync(query);
             var r = new TBatchChangeStatusOutput();
@@ -227,8 +261,13 @@ namespace BXJG.WorkOrder.WorkOrder
                     await CurrentUnitOfWork.SaveChangesAsync();
                     r.Ids.Add(item.Id);
                 }
+                catch (UserFriendlyException ex)
+                {
+                    r.ErrorMessage.Add(new BatchOperationErrorMessage(item.Id, ex.Message));
+                }
                 catch (Exception ex)
                 {
+                    r.ErrorMessage.Add(item.Id.Message500());
                     Logger.Warn(L("执行工单失败！"), ex);
                 }
             }
@@ -241,9 +280,10 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <returns></returns>
         public virtual async Task<TBatchChangeStatusOutput> CompletionAsync(TBatchChangeStatusInput input)
         {
+            await CheckCompletionPermissionAsync();
             var query = repository.GetAll()
                                   .Where(c => c.EmployeeId == CurrentEmployeeId)
-                                  .Where(c => c.Status == Status.Processing)
+                                  //.Where(c => c.Status == Status.Processing)
                                   .Where(c => input.Ids.Contains(c.Id));
             var list = await AsyncQueryableExecuter.ToListAsync(query);
             var r = new TBatchChangeStatusOutput();
@@ -255,9 +295,48 @@ namespace BXJG.WorkOrder.WorkOrder
                     await CurrentUnitOfWork.SaveChangesAsync();
                     r.Ids.Add(item.Id);
                 }
+                catch (UserFriendlyException ex)
+                {
+                    r.ErrorMessage.Add(new BatchOperationErrorMessage(item.Id, ex.Message));
+                }
                 catch (Exception ex)
                 {
+                    r.ErrorMessage.Add(item.Id.Message500());
                     Logger.Warn(L("完成工单失败！"), ex);
+                }
+            }
+            return r;
+        }
+        /// <summary>
+        /// 拒绝
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public virtual async Task<TBatchChangeStatusOutput> RejectAsync(TBatchChangeStatusInput input)
+        {
+            await CheckRejectPermissionAsync();
+            var query = repository.GetAll()
+                                  .Where(c => c.EmployeeId == CurrentEmployeeId)
+                                  //.Where(c => c.Status != Status.Rejected) //正常情况前端是不应该提交已拒绝的，领域层已有规则限制，这里不应再判断，否则将来重构领域层可能还得修改应用服务
+                                  .Where(c => input.Ids.Contains(c.Id));
+            var list = await AsyncQueryableExecuter.ToListAsync(query);
+            var r = new TBatchChangeStatusOutput();
+            foreach (var item in list)
+            {
+                try
+                {
+                    item.Reject(Clock.Now, input.Description);
+                    await CurrentUnitOfWork.SaveChangesAsync();
+                    r.Ids.Add(item.Id);
+                }
+                catch (UserFriendlyException ex)
+                {
+                    r.ErrorMessage.Add(new BatchOperationErrorMessage(item.Id, ex.Message));
+                }
+                catch (Exception ex)
+                {
+                    r.ErrorMessage.Add(item.Id.Message500());
+                    Logger.Warn(L("拒绝工单失败！"), ex);
                 }
             }
             return r;
@@ -324,24 +403,59 @@ namespace BXJG.WorkOrder.WorkOrder
         {
             return null;
         }
+
+        #region 权限判断
+        protected virtual Task CheckRejectPermissionAsync()
+        {
+            return CheckPermissionAsync(rejectPermissionName);
+        }
+        protected virtual Task CheckCompletionPermissionAsync()
+        {
+            return CheckPermissionAsync(completionPermissionName);
+        }
+        protected virtual Task CheckExecutePermissionAsync()
+        {
+            return CheckPermissionAsync(executePermissionName);
+        }
+        protected virtual Task CheckAllocatePermissionAsync()
+        {
+            return CheckPermissionAsync(allocatePermissionName);
+        }
+        protected virtual Task CheckGetPermissionAsync()
+        {
+            return CheckPermissionAsync(getPermissionName);
+        }
+        #endregion
+
     }
 
     /// <summary>
     /// 后台管理默认工单应用服务接口
     /// </summary>
     public class WorkOrderEmployeeAppService : WorkOrderEmployeeAppServiceBase<EntityDto<long>,
-                                                                               GetAllWorkOrderEmployeeInputBase,
+                                                                               GetAllWorkOrderEmployeeBaseInput,
                                                                                WorkOrderEmployeeDto,
-                                                                               WorkOrderEmployeeBatchChangeStatusInputBase,
-                                                                               WorkOrderEmployeeBatchChangeStatusOutputBase,
-                                                                               WorkOrderEmployeeBatchAllocateInputBase,
+                                                                               WorkOrderEmployeeBatchChangeStatusBaseInput,
+                                                                               WorkOrderEmployeeBatchChangeStatusBaseOutput,
+                                                                               WorkOrderEmployeeBatchAllocateBaseInput,
                                                                                WorkOrderEmployeeBatchAllocateOutput,
                                                                                OrderEntity,
                                                                                IRepository<OrderEntity, long>,
                                                                                IRepository<CategoryEntity, long>>
 
     {
-        public WorkOrderEmployeeAppService(IRepository<OrderEntity, long> repository, IRepository<CategoryEntity, long> categoryRepository, IEmployeeAppService employeeAppService, IEmployeeSession employeeSession) : base(repository, categoryRepository, employeeAppService, employeeSession)
+        public WorkOrderEmployeeAppService(IRepository<OrderEntity, long> repository,
+                                           IRepository<CategoryEntity, long> categoryRepository, 
+                                           IEmployeeAppService employeeAppService, 
+                                           IEmployeeSession employeeSession) : base(repository, 
+                                                                                    categoryRepository, 
+                                                                                    employeeAppService,
+                                                                                    employeeSession,
+                                                                                    CoreConsts.EmployeeWorkOrderManager,
+                                                                                    CoreConsts.EmployeeWorkOrderManager,
+                                                                                    CoreConsts.EmployeeWorkOrderManager,
+                                                                                    CoreConsts.EmployeeWorkOrderManager,
+                                                                                    CoreConsts.EmployeeWorkOrderManager)
         {
         }
 

@@ -16,7 +16,7 @@
     <text name="BXJG.WorkOrder.WorkOrder.UrgencyDegree.Urgent" value="Urgent" />
     <text name="BXJG.WorkOrder.WorkOrder.UrgencyDegree.Normalize" value="Normalize" />
     <text name="BXJG.WorkOrder.WorkOrder.UrgencyDegree.Dispensable" value="Dispensable" />
-
+    <text name="BXJGEmployeeWorkOrderManager" value="Work order manager - employee side" />
     <text name="标题/处理人/电话等..." value="title/contact/phone etc..." />
     <text name="workorderSetEmployeeStatusException">
       The work order in this status cannot modify the associated employee! Please consider rolling back or handing over the work order process.
@@ -53,7 +53,7 @@
     </text>
     <text name="workorderBackOffException1">Work orders in this status cannot be returned to {0} status!</text>
     <text name="workorderSkipException1">Work orders in this status cannot be skip to {0} status！</text>
-    
-    
+
+
   </texts>
 </localizationDictionary>

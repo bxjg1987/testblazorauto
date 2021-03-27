@@ -19,6 +19,7 @@
     <text name="BXJG.WorkOrder.WorkOrder.UrgencyDegree.Normalize" value="一般" />
     <text name="BXJG.WorkOrder.WorkOrder.UrgencyDegree.Dispensable" value="不急" />
 
+    <text name="BXJGEmployeeWorkOrderManager" value="工单管理-员工端" />
     <text name="workorderSetEmployeeStatusException">此状态的工单不允许修改关联的员工！请考虑回退或移交工单流程。</text>
     <text name="workorderSetUrgencyDegreeStatusException">此状态的工单不允许修改紧急程度！请考虑回退或移交工单流程。</text>
     <text name="workorderChangeEstimatedTimeException1">预计开始时间必须小于预计结束时间！</text>

@@ -10,7 +10,7 @@ namespace BXJG.WorkOrder
     public static class PermissionExtensions
     {
         /// <summary>
-        /// 注册工单模块权限
+        /// 注册工单模块管理端权限
         /// </summary>
         /// <param name="context"></param>
         public static Permission AddBXJGWorkOrderPermission(this Permission context)
@@ -27,6 +27,16 @@ namespace BXJG.WorkOrder
             item.CreateChildPermission(CoreConsts.WorkOrderUpdate, "修改".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
             item.CreateChildPermission(CoreConsts.WorkOrderDelete, "删除".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
 
+            return context;
+        }
+
+        /// <summary>
+        /// 注册工单模块员工端权限
+        /// </summary>
+        /// <param name="context"></param>
+        public static Permission AddBXJGEmployeeWorkOrderPermission(this Permission context)
+        {
+            context.CreateChildPermission(CoreConsts.EmployeeWorkOrderManager, CoreConsts.EmployeeWorkOrderManager.BXJGWorkOrderLI(), multiTenancySides: MultiTenancySides.Tenant);
             return context;
         }
     }

@@ -13,7 +13,7 @@ namespace BXJG.WorkOrder.WorkOrder
     /// 后台管理工单获取列表页数据时的输入模型<br />
     /// 不同类型的工单可以提供相应子类
     /// </summary>
-    public class GetAllWorkOrderEmployeeInputBase : PagedAndSortedResultRequestDto, IShouldNormalize
+    public class GetAllWorkOrderEmployeeBaseInput : PagedAndSortedResultRequestDto, IShouldNormalize
     {
         /// <summary>
         /// 紧急程度

@@ -4,9 +4,48 @@ using System.Text;
 
 namespace BXJG.Common.Dto
 {
-    public class BatchOperationOutput<TKey> 
+    public static class BatchOperationErrorMessageExt {
+        public static BatchOperationErrorMessage Message500(this object id) {
+            return new BatchOperationErrorMessage(id, "服务器内部异常");
+        }
+    }
+
+    /// <summary>
+    /// 批量操作错误消息
+    /// </summary>
+    public class BatchOperationErrorMessage
     {
-        public List<TKey> Ids { get; set; } = new List<TKey>();
+        public BatchOperationErrorMessage(object id, string message = default, string code = default)
+        {
+            Id = id.ToString();
+            Message = message;
+            Code = code;
+        }
+
+        public object Id { get; set; }
+        public string Code { get; set; }
+        public string Message { get; set; }
+
+        //public static BatchOperationErrorMessage Message500(object id)
+        //{
+        //    return new BatchOperationErrorMessage(id, "服务器内部异常");
+        //}
+    }
+    /// <summary>
+    /// 批量操作输出模型
+    /// </summary>
+    /// <typeparam name="TKey"></typeparam>
+    public class BatchOperationOutput<TKey>
+    {
+        /// <summary>
+        /// 操作成功的id集合
+        /// </summary>
+        public IList<TKey> Ids { get; } = new List<TKey>();
+        /// <summary>
+        /// 操作失败的id和原因<br />
+        /// 理想的需要如下形式，但abp中 后端和前端都没有针对此方式做适配，因此也可以在错误时封装为UserFriendlyException
+        /// </summary>
+        public IList<BatchOperationErrorMessage> ErrorMessage { get; } = new List<BatchOperationErrorMessage>();
     }
 
     public class BatchOperationOutput : BatchOperationOutput<int>
@@ -18,6 +57,10 @@ namespace BXJG.Common.Dto
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
     public class BatchOperationOutputLong : BatchOperationOutput<long>
+    {
+    }
+
+    public class BatchOperationOutputObject : BatchOperationOutput<object>
     {
     }
 }
