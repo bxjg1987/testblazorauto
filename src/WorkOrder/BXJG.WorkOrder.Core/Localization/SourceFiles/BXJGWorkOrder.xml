@@ -39,17 +39,32 @@
     <text name="workorderConfirmeException1">
       The work order in this status is not allowed to perform the [confirm] operation!
     </text>
+    <text name="workorderUnConfirmeException1">
+      The work order in this status is not allowed to perform the [unconfirm] operation!
+    </text>
     <text name="workorderAllocateException1">
       The work order in this status is not allowed to perform the [assign] operation!
+    </text>
+    <text name="workorderUnAllocateException1">
+      The work order in this status is not allowed to perform the [unassign] operation!
     </text>
     <text name="workorderExecuteException1">
       Work orders in this status are not allowed to execute [execute]!
     </text>
+    <text name="workorderUnExecuteException1">
+      Work orders in this status are not allowed to execute [unexecute]!
+    </text>
     <text name="workorderCompletionException1">
       The work order in this status is not allowed to perform the [complete] operation!
     </text>
+    <text name="workorderUnCompletionException1">
+      The work order in this status is not allowed to perform the [uncomplete] operation!
+    </text>
     <text name="workorderRejectException1">
       The work order in this status is not allowed to perform the [reject] operation!
+    </text>
+    <text name="workorderUnRejectException1">
+      The work order in this status is not allowed to perform the [unreject] operation!
     </text>
     <text name="workorderBackOffException1">Work orders in this status cannot be returned to {0} status!</text>
     <text name="workorderSkipException1">Work orders in this status cannot be skip to {0} status！</text>

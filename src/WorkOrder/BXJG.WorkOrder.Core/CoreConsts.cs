@@ -29,6 +29,12 @@ namespace BXJG.WorkOrder
         public const string WorkOrderCreate = "BXJGWorkOrderCreate";
         public const string WorkOrderUpdate = "BXJGWorkOrderUpdate";
         public const string WorkOrderDelete = "BXJGWorkOrderDelete";
+        public const string WorkOrderConfirme = "BXJGWorkOrderConfirme";
+        public const string WorkOrderAllocate = "BXJGWorkOrderAllocate";
+        public const string WorkOrderExecute = "BXJGWorkOrderExecute";
+        public const string WorkOrderCompletion = "BXJGWorkOrderCompletion";
+        public const string WorkOrderReject = "BXJGWorkOrderReject";
+
 
         public const string WorkOrderCategory = "BXJGWorkOrderCategory";
         public const string WorkOrderCategoryManager = "BXJGWorkOrderCategoryManager";

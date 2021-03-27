@@ -296,13 +296,25 @@ namespace BXJG.WorkOrder.WorkOrder
         /// 确认，只有待确认的工单才允许执行此操作
         /// </summary>
         /// <param name="time"></param>
-        public virtual void Confirme(DateTimeOffset time)
+        public virtual void Confirme(DateTimeOffset time, string description = "反确认")
         {
             if (Status != Status.ToBeConfirmed)
             {
                 throw new UserFriendlyException("workorderConfirmeException1".BXJGWorkOrderL());
             }
-            ChangeStatus(Status.ToBeAllocated, time);
+            ChangeStatus(Status.ToBeAllocated, time, description);
+        }
+        /// <summary>
+        /// 反确认
+        /// </summary>
+        /// <param name="time"></param>
+        public virtual void UnConfirme(DateTimeOffset time, string description = "反确认")
+        {
+            if (Status != Status.ToBeAllocated)
+            {
+                throw new UserFriendlyException("workorderUnConfirmeException1".BXJGWorkOrderL());
+            }
+            ChangeStatus(Status.ToBeConfirmed, time, description);
         }
         /// <summary>
         /// 分配，只有待分配的工单才允许执行此操作
@@ -311,35 +323,62 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="employeeId">员工id，为空则表示只想记录下问题，不需要明确是谁做的</param>
         /// <param name="estimatedExecutionTime">预计开始时间</param>
         /// <param name="estimatedCompletionTime">预计结束时间</param>
-        public virtual void Allocate(DateTimeOffset time, string employeeId = default, DateTimeOffset? estimatedExecutionTime = default, DateTimeOffset? estimatedCompletionTime = default)
+        public virtual void Allocate(DateTimeOffset time, string employeeId = default, DateTimeOffset? estimatedExecutionTime = default, DateTimeOffset? estimatedCompletionTime = default, string description = "分配")
         {
-            if (Status != Status.ToBeAllocated )
+            if (Status != Status.ToBeAllocated)
             {
                 throw new UserFriendlyException("workorderAllocateException1".BXJGWorkOrderL());
             }
             EmployeeId = employeeId;
             ChangeEstimatedTime(estimatedExecutionTime, estimatedCompletionTime);
-            ChangeStatus(Status.ToBeProcessed, time);
+            ChangeStatus(Status.ToBeProcessed, time, description);
+        }
+        /// <summary>
+        /// 反分配
+        /// </summary>
+        /// <param name="time"></param>
+        public virtual void UnAllocate(DateTimeOffset time, string description = "反分配")
+        {
+            if (Status != Status.ToBeProcessed)
+            {
+                throw new UserFriendlyException("workorderUnAllocateException1".BXJGWorkOrderL());
+            }
+            //EmployeeId = default;
+            //ChangeEstimatedTime(default, default);
+            ChangeStatus(Status.ToBeAllocated, time, description);
         }
         /// <summary>
         /// 执行工单，只有待执行的工单才允许执行此操作
         /// </summary>
         /// <param name="time"></param>
-        public virtual void Execute(DateTimeOffset time)
+        public virtual void Execute(DateTimeOffset time, string description = "执行")
         {
             if (Status != Status.ToBeProcessed)
             {
                 throw new UserFriendlyException("workorderExecuteException1".BXJGWorkOrderL());
             }
             ChangePracticalTime(time, CompletionTime);
-            ChangeStatus(Status.Processing, time);
+            ChangeStatus(Status.Processing, time, description);
+        }
+        /// <summary>
+        /// 反执行
+        /// </summary>
+        /// <param name="time"></param>
+        public virtual void UnExecute(DateTimeOffset time, string description = "反执行")
+        {
+            if (Status != Status.Processing)
+            {
+                throw new UserFriendlyException("workorderUnExecuteException1".BXJGWorkOrderL());
+            }
+            ChangePracticalTime(default, default);
+            ChangeStatus(Status.ToBeProcessed, time, description);
         }
         /// <summary>
         /// 完成工单，只有执行中的工单才允许执行此操作
         /// </summary>
         /// <param name="time">完成时间</param>
         /// <param name="description">完成情况说明，也可用直接设置CompletionDescription属性修改说明</param>
-        public virtual void Completion(DateTimeOffset time, string description = default)
+        public virtual void Completion(DateTimeOffset time, string description = "完成")
         {
             if (Status != Status.Processing)
             {
@@ -349,12 +388,26 @@ namespace BXJG.WorkOrder.WorkOrder
             ChangeStatus(Status.Completed, time, description);
         }
         /// <summary>
+        /// 反完成
+        /// </summary>
+        /// <param name="time"></param>
+        /// <param name="description"></param>
+        public virtual void UnCompletion(DateTimeOffset time, string description = "反完成")
+        {
+            if (Status != Status.Completed)
+            {
+                throw new UserFriendlyException("workorderUnCompletionException1".BXJGWorkOrderL());
+            }
+            ChangePracticalTime(ExecutionTime, default);
+            ChangeStatus(Status.Processing, time, description);
+        }
+        /// <summary>
         /// 拒绝<br />
         /// 若当前状态是已拒绝，则抛出UserFriendlyException异常，否则正常执行。
         /// </summary>
         /// <param name="time">操作时间</param>
         /// <param name="description">拒绝原因，可控</param>
-        public virtual void Reject(DateTimeOffset time, string description = default)
+        public virtual void Reject(DateTimeOffset time, string description = "拒绝")
         {
             if (Status == Status.Rejected)
             {
@@ -362,6 +415,20 @@ namespace BXJG.WorkOrder.WorkOrder
             }
             //任何状态下的工单都可以执行拒绝操作
             ChangeStatus(Status.Rejected, time, description);
+        }
+        /// <summary>
+        /// 反拒绝<br />
+        /// 由于任意状态的工单都可以执行拒绝操作，因此反拒绝无法确认之前的状态，只能回到“待确认”状态
+        /// </summary>
+        /// <param name="time"></param>
+        /// <param name="description"></param>
+        public virtual void UnReject(DateTimeOffset time, string description = "反拒绝")
+        {
+            if (Status != Status.Rejected)
+            {
+                throw new UserFriendlyException("workorderUnRejectException1".BXJGWorkOrderL());
+            }
+            ChangeStatus(Status.ToBeConfirmed, time, description);
         }
         /// <summary>
         /// 回退到指定状态
@@ -373,7 +440,7 @@ namespace BXJG.WorkOrder.WorkOrder
         {
             if (status == default)
             {
-                if (Status > Status.ToBeConfirmed)
+                if (Status > Status.ToBeConfirmed && Status <= Status.Completed)
                     status = Status - 1;
                 else
                     status = Status;
@@ -382,24 +449,26 @@ namespace BXJG.WorkOrder.WorkOrder
             if (status >= Status)
                 throw new UserFriendlyException("workorderBackOffException1".BXJGWorkOrderL(Status.BXJGWorkOrderEnum()));
 
-            if (status <= Status.Processing)
+            if (Status == Status.Rejected)
             {
-                ChangePracticalTime(ExecutionTime, default);
+                //已拒绝的工单只允许回退到待确认状态
+                if (status != Status.ToBeConfirmed)
+                    throw new UserFriendlyException("workorderBackOffException1".BXJGWorkOrderL(Status.BXJGWorkOrderEnum()));
+                else
+                {
+                    UnReject(time, description);
+                    return;
+                }
             }
-            if (status <= Status.ToBeProcessed)
-            {
-                ChangePracticalTime(default, default);
-            }
-            //if (status <= Status.ToBeAllocated)
-            //{
-            //EmployeeId = default;
-            //}
-            //if (status == Status.ToBeConfirmed)
-            //{
-            //    //EmployeeId = default;
-            //    //EmployeeName = default;
-            //}
-            ChangeStatus(status.Value, time, description);
+
+            if (status < Status.Completed && Status == Status.Completed)
+                UnCompletion(time, description);
+            if (status < Status.Processing && Status == Status.Processing)
+                UnExecute(time, description);
+            if (status < Status.ToBeProcessed && Status == Status.ToBeProcessed)
+                UnAllocate(time, description);
+            if (status < Status.ToBeConfirmed && Status == Status.ToBeConfirmed)
+                UnConfirme(time, description);
         }
         /// <summary>
         /// 复制工单时创建逻辑
@@ -618,7 +687,7 @@ namespace BXJG.WorkOrder.WorkOrder
         {
             if (status == default)
             {
-                if (entity.Status < Status.Rejected)
+                if (entity.Status >= Status.ToBeConfirmed && entity.Status < Status.Completed)
                     status = entity.Status + 1;
                 else
                     status = entity.Status;
@@ -628,20 +697,21 @@ namespace BXJG.WorkOrder.WorkOrder
                 throw new UserFriendlyException("workorderSkipException1".BXJGWorkOrderL(entity.Status.BXJGWorkOrderEnum()));
 
             DateTimeOffset t = time ?? Clock.Now;
-            if (status > Status.ToBeConfirmed)
-                entity.Confirme(t);
-            if (status > Status.ToBeAllocated)
-                entity.Allocate(t, empId, estimatedExecutionTime, estimatedCompletionTime);
-            if (status > Status.ToBeProcessed)
-                entity.Execute(excuteTime ?? entity.ExecutionTime ?? t);
-            if (status == Status.Rejected)
+
+            if (status == Status.Rejected && entity.Status != Status.Rejected)
             {
                 entity.Reject(t, description);
+                return;
             }
-            else if (status == Status.Completed)
-            {
-                entity.Completion(completeTime ?? entity.CompletionTime ?? t, description);
-            }
+
+            if (status > Status.ToBeConfirmed && entity.Status == Status.ToBeConfirmed)
+                entity.Confirme(t, description);
+            if (status > Status.ToBeAllocated && entity.Status == Status.ToBeAllocated)
+                entity.Allocate(t, empId, estimatedExecutionTime, estimatedCompletionTime, description);
+            if (status > Status.ToBeProcessed && entity.Status == Status.ToBeProcessed)
+                entity.Execute(excuteTime ?? t, description);
+            if (status > Status.Processing && entity.Status == Status.Processing)
+                entity.Completion(completeTime ?? t, description);
         }
 
         /// <summary>
@@ -667,7 +737,7 @@ namespace BXJG.WorkOrder.WorkOrder
                                       DateTimeOffset? completeTime = default)
         {
             entity.Skip(time,
-                        status ,
+                        status,
                         description ?? entity.Description,
                         empId ?? entity.EmployeeId,
                         estimatedExecutionTime ?? entity.EstimatedExecutionTime,
