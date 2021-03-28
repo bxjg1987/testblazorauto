@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <localizationDictionary culture="en">
   <texts>
+    <text name="员工" value="Employee" />
     <text name="BXJGWorkOrder" value="Work order" />
     <text name="BXJGWorkOrderManager" value="Work order manager" />
     <text name="BXJGWorkOrderCategory" value="Work order category" />

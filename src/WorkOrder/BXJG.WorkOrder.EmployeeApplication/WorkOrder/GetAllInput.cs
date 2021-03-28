@@ -18,6 +18,10 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <summary>
         /// 紧急程度
         /// </summary>
+        public Status? Status { get; set; }
+        /// <summary>
+        /// 紧急程度
+        /// </summary>
         public UrgencyDegree? UrgencyDegree { get; set; }
         /// <summary>
         /// 所属分类code
@@ -42,7 +46,7 @@ namespace BXJG.WorkOrder.WorkOrder
         public virtual void Normalize()
         {
             if (Sorting.IsNullOrEmpty())
-                Sorting = "LastModificationTime desc"; //默认最后更新的用户倒叙，因为它可能发生了业务。或者最后登录用户也行
+                Sorting = "Title desc"; //默认最后更新的用户倒叙，因为它可能发生了业务。或者最后登录用户也行
         }
     }
 }

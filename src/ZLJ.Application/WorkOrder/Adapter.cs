@@ -43,6 +43,19 @@ namespace ZLJ.WorkOrder
                                       .Select(c => c.Id.ToString());
             return await AsyncQueryableExecuter.ToListAsync(query);
         }
+
+        public async Task<IEnumerable<EmployeeDto>> GetAllAsync(string keyword)
+        {
+            var query = userRepository.GetAll()
+                                      .WhereIf(!keyword.IsNullOrEmpty(), c => c.Name.Contains(keyword) || c.PhoneNumber.Contains(keyword))
+                                      .Select(c => new EmployeeDto
+                                      {
+                                          Id = c.Id.ToString(),
+                                          Name = c.Name,
+                                          Phone = c.PhoneNumber
+                                      });
+            return await AsyncQueryableExecuter.ToListAsync(query);
+        }
     }
     public class EmployeeSession : IEmployeeSession
     {

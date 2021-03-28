@@ -39,7 +39,7 @@ namespace ZLJ
             //IocManager.Register(typeof(IBXJGShopFrontItemAppService), typeof(BXJGShopFrontItemAppService<GeneralTreeEntity>), DependencyLifeStyle.Transient);
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
 
-            IocManager.Register<IEmployeeAppService, EmployeeAppService>(DependencyLifeStyle.Transient);
+            IocManager.Register<IEmployeeAppService, WorkOrder.EmployeeAppService>(DependencyLifeStyle.Transient);
             IocManager.Register<IEmployeeSession, EmployeeSession>(DependencyLifeStyle.Transient);
 
             //注册automapper映射

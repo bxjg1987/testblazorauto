@@ -15,6 +15,7 @@ namespace BXJG.WorkOrder.WorkOrder
     /// </summary>
     public class GetAllWorkOrderBaseInput : PagedAndSortedResultRequestDto, IShouldNormalize
     {
+        public string EmployeeId { get; set; }
         /// <summary>
         /// 紧急程度
         /// </summary>
@@ -39,14 +40,14 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <summary>
         /// 关键字
         /// </summary>
-        public string Keywords { get; set; }
+        public string Keyword { get; set; }
         /// <summary>
         /// 模型绑定后，abp会调用此方法来进一步初始化
         /// </summary>
         public virtual void Normalize()
         {
             if (Sorting.IsNullOrEmpty())
-                Sorting = "LastModificationTime desc"; //默认最后更新的用户倒叙，因为它可能发生了业务。或者最后登录用户也行
+                Sorting = "Title desc"; //默认最后更新的用户倒叙，因为它可能发生了业务。或者最后登录用户也行
         }
     }
 }

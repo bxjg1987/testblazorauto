@@ -12,6 +12,7 @@ namespace BXJG.WorkOrder.Employee
     public interface IEmployeeAppService
     {
         Task<IEnumerable<EmployeeDto>> GetByIdsAsync(params string[] ids);
+        Task<IEnumerable<EmployeeDto>> GetAllAsync(string keyword);
         Task<IEnumerable<string>> GetIdsByKeywordAsync(string keyword);
     }
 }

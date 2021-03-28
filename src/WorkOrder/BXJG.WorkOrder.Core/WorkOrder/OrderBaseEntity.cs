@@ -485,7 +485,7 @@ namespace BXJG.WorkOrder.WorkOrder
         public virtual OrderBaseEntity Copy(DateTime time, Status status = Status.ToBeConfirmed, string description = "复制")
         {
             var entity = CopyCreate();
-            entity.ChangeStateRetain(time, status, description);
+            entity.ChangeStatusRetain(time, status, description);
             return entity;
         }
     }
@@ -758,7 +758,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="excuteTime">实际开始时间</param>
         /// <param name="completeTime">实际结束时间</param>
         /// <param name="act">回退 》act 》Skip</param>
-        public static void ChangeState(this OrderBaseEntity entity,
+        public static void ChangeStatus(this OrderBaseEntity entity,
                                        DateTimeOffset? time = default,
                                        Status? status = default,
                                        string description = default,
@@ -784,7 +784,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="excuteTime">实际开始时间，若为空则保留之前的值，若还为空则使用time的值，若还未空则使用Clock.Now</param>
         /// <param name="completeTime">实际结束时间，若为空则保留之前的值，若还为空则使用time的值，若还未空则使用Clock.Now</param>
         /// <param name="act">回退 》act 》Skip</param>
-        public static void ChangeStateRetain(this OrderBaseEntity entity,
+        public static void ChangeStatusRetain(this OrderBaseEntity entity,
                                              DateTimeOffset? time = default,
                                              Status? status = default,
                                              string description = default,

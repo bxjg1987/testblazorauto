@@ -280,14 +280,14 @@ namespace BXJG.WorkOrder.WorkOrder
                         where (input.CategoryCode.IsNullOrWhiteSpace() || kk.Code.StartsWith(input.CategoryCode))
                         select c;
 
-            if (!input.Keywords.IsNullOrWhiteSpace())
+            if (!input.Keyword.IsNullOrWhiteSpace())
             {
-                var empIdsQuery = await employeeAppService.GetIdsByKeywordAsync(input.Keywords);
-                query = query.Where(c => empIdsQuery.Contains(c.EmployeeId) || c.Title.Contains(input.Keywords));
+                var empIdsQuery = await employeeAppService.GetIdsByKeywordAsync(input.Keyword);
+                query = query.Where(c => empIdsQuery.Contains(c.EmployeeId) || c.Title.Contains(input.Keyword));
             }
             query = query.WhereIf(input.UrgencyDegree.HasValue, c => c.UrgencyDegree == input.UrgencyDegree)
                          .WhereIf(input.Status.HasValue, c => c.Status == input.Status)
-                         //.WhereIf(!input.Keyword.IsNullOrWhiteSpace(), c => c.Title.Contains(input.Keyword)) 上面已经写了
+                         .WhereIf(!input.EmployeeId.IsNullOrWhiteSpace(), c => c.EmployeeId==input.EmployeeId)
                          .WhereIf(input.EstimatedExecutionTimeStart.HasValue, c => c.EstimatedExecutionTime >= input.EstimatedExecutionTimeStart)
                          .WhereIf(input.EstimatedExecutionTimeEnd.HasValue, c => c.EstimatedExecutionTime < input.EstimatedExecutionTimeEnd)
                          .WhereIf(input.EstimatedCompletionTimeStart.HasValue, c => c.EstimatedCompletionTime >= input.EstimatedCompletionTimeStart)
