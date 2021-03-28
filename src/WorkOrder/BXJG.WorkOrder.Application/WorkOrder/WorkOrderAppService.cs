@@ -124,9 +124,26 @@ namespace BXJG.WorkOrder.WorkOrder
         {
             await CheckCreatePermissionAsync();
             var entity = await manager.CreateAsync(await CreateInputToCreateDto(input));
-            if (input.Status.HasValue && entity.Status < input.Status.Value)
+            if (input.Status.HasValue)
             {
-                //缺乏精细的权限控制
+                switch (input.Status.Value)
+                {
+                    case Status.ToBeAllocated:
+                        await CheckConfirmePermissionAsync();
+                        break;
+                    case Status.ToBeProcessed:
+                        await CheckAllocatePermissionAsync();
+                        break;
+                    case Status.Processing:
+                        await CheckExecutePermissionAsync();
+                        break;
+                    case Status.Completed:
+                        await CheckCompletionPermissionAsync();
+                        break;
+                    case Status.Rejected:
+                        await CheckRejectPermissionAsync();
+                        break;
+                }
                 entity.SkipRetain(Clock.Now,
                                   input.Status,
                                   input.StatusChangedDescription,
@@ -149,33 +166,61 @@ namespace BXJG.WorkOrder.WorkOrder
         public virtual async Task<TEntityDto> UpdateAsync(TUpdateInput input)
         {
             await CheckUpdatePermissionAsync();
+
             var entity = await repository.GetAsync(input.Id);
-            //需要先执行这里，让工单处于希望的状态，后续赋值才可正常执行
-            if (input.Status.HasValue && entity.Status != input.Status.Value)
-            {
-                //缺乏精细的权限控制
-                entity.ChangeStateRetain(Clock.Now,
-                                         input.Status,
-                                         input.StatusChangedDescription,
-                                         input.EmployeeId,
-                                         input.EstimatedExecutionTime,
-                                         input.EstimatedCompletionTime,
-                                         input.ExecutionTime,
-                                         input.CompletionTime);
-            }
+
             entity.CategoryId = input.CategoryId;
             entity.Description = input.Description;
             entity.Title = input.Title;
-            entity.StatusChangedDescription = input.StatusChangedDescription;
 
-
-            entity.SetUrgencyDegreeRetain(input.UrgencyDegree);//涉及到状态判断的操作，放ChangeStateRetain前后都不合适
-
-
-            //因为上面能赋哪几个值是由状态确定的，我们这里有没判断，所以不知道是哪个状态，所以下面还需要赋值下
-            entity.EmployeeId = input.EmployeeId;//涉及到状态判断的操作，放ChangeStateRetain前后都不合适
-            entity.ChangeEstimatedTimeRetain(input.EstimatedExecutionTime, input.EstimatedCompletionTime);//涉及到状态判断的操作，放ChangeStateRetain前后都不合适
-
+            if (input.Status.HasValue && input.Status != entity.Status)
+            {
+                //权限
+                switch (input.Status.Value)
+                {
+                    case Status.ToBeAllocated:
+                        await CheckConfirmePermissionAsync();
+                        break;
+                    case Status.ToBeProcessed:
+                        await CheckAllocatePermissionAsync();
+                        break;
+                    case Status.Processing:
+                        await CheckExecutePermissionAsync();
+                        break;
+                    case Status.Completed:
+                        await CheckCompletionPermissionAsync();
+                        break;
+                    case Status.Rejected:
+                        await CheckRejectPermissionAsync();
+                        break;
+                }
+                if (input.Status.Value > entity.Status)//skip
+                {
+                    entity.SetUrgencyDegreeRetain(input.UrgencyDegree);
+                    entity.Skip(Clock.Now,
+                                input.Status,
+                                input.StatusChangedDescription,
+                                input.EmployeeId,
+                                input.EstimatedExecutionTime,
+                                input.EstimatedCompletionTime,
+                                excuteTime: input.ExecutionTime,
+                                completeTime: input.CompletionTime);
+                }
+                else //backoff
+                {
+                    entity.BackOff(Clock.Now, input.Status, input.StatusChangedDescription);
+                    entity.SetUrgencyDegreeRetain(input.UrgencyDegree);
+                    entity.EmployeeId = input.EmployeeId;
+                    entity.ChangeEstimatedTimeRetain(input.EstimatedExecutionTime, input.EstimatedCompletionTime);
+                }
+            }
+            else
+            {
+                entity.SetUrgencyDegreeRetain(input.UrgencyDegree);
+                entity.StatusChangedDescription = input.StatusChangedDescription;
+                entity.EmployeeId = input.EmployeeId;
+                entity.ChangeEstimatedTimeRetain(input.EstimatedExecutionTime, input.EstimatedCompletionTime);
+            }
 
             await BeforeEditAsync(entity, input);
             await CurrentUnitOfWork.SaveChangesAsync();
@@ -224,20 +269,11 @@ namespace BXJG.WorkOrder.WorkOrder
             return await EntityToDto(entity);
         }
         /// <summary>
-        /// 获取列表
+        /// 获取指定所有工单的条件
         /// </summary>
-        /// <param name="input"></param>
         /// <returns></returns>
-        public virtual async Task<PagedResultDto<TEntityDto>> GetAllAsync(TGetAllInput input)
+        protected virtual async Task<IQueryable<TEntity>> GetAllFilterAsync(TGetAllInput input)
         {
-            //分类、员工先查询 再用in，
-            //假定员工和分类数量不会太多（太多的话考虑分配in查询），且可以使用缓存
-            //in查询有索引时性能有所提升
-            //按分类名称排序 倒是可用用join映射 select new { 工单实体，join的分类 } 后面再排序
-            //按处理人和手机号比较麻烦，可以尝试join已经查询出来的员工列表试试
-            //不过至少可用按分类id和处理人id排序
-            //如果都无法满足时，可以考虑使用原始sql，毕竟这里只是查询需求，不做业务处理，可以引入dapper或ef的原始sql执行方式
-            await CheckGetPermissionAsync();
             var query = from c in repository.GetAll()
                         join lb in categoryRepository.GetAll() on c.CategoryId equals lb.Id into g
                         from kk in g.DefaultIfEmpty()
@@ -261,8 +297,27 @@ namespace BXJG.WorkOrder.WorkOrder
                          .WhereIf(input.CompletionTimeStart.HasValue, c => c.CompletionTime >= input.CompletionTimeStart)
                          .WhereIf(input.CompletionTimeEnd.HasValue, c => c.CompletionTime < input.CompletionTimeEnd);
 
+            return query;
+        }
+        /// <summary>
+        /// 获取列表
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public virtual async Task<PagedResultDto<TEntityDto>> GetAllAsync(TGetAllInput input)
+        {
+            //分类、员工先查询 再用in，
+            //假定员工和分类数量不会太多（太多的话考虑分配in查询），且可以使用缓存
+            //in查询有索引时性能有所提升
+            //按分类名称排序 倒是可用用join映射 select new { 工单实体，join的分类 } 后面再排序
+            //按处理人和手机号比较麻烦，可以尝试join已经查询出来的员工列表试试
+            //不过至少可用按分类id和处理人id排序
+            //如果都无法满足时，可以考虑使用原始sql，毕竟这里只是查询需求，不做业务处理，可以引入dapper或ef的原始sql执行方式
+            await CheckGetPermissionAsync();
+            var query = await GetAllFilterAsync(input);
             var count = await AsyncQueryableExecuter.CountAsync(query);
-            query = query.OrderBy(input.Sorting).PageBy(input);
+            query = OrderBy(query, input);
+            query = PageBy(query, input);
             var list = await AsyncQueryableExecuter.ToListAsync(query);
 
             var cIds = list.Select(c => c.CategoryId);
@@ -439,6 +494,26 @@ namespace BXJG.WorkOrder.WorkOrder
                 }
             }
             return r;
+        }
+        /// <summary>
+        /// GetAll的分页
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        protected virtual IQueryable<TEntity> PageBy(IQueryable<TEntity> query, TGetAllInput input)
+        {
+            return query.PageBy(input);
+        }
+        /// <summary>
+        /// GetAll的排序
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        protected virtual IQueryable<TEntity> OrderBy(IQueryable<TEntity> query, TGetAllInput input)
+        {
+            return query.OrderBy(input.Sorting);
         }
         /// <summary>
         /// 实体映射到dto

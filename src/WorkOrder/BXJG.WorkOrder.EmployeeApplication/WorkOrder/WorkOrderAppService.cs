@@ -121,7 +121,8 @@ namespace BXJG.WorkOrder.WorkOrder
             var query = await GetAllFilterAsync(input);
             query = ApplyGetDataRights(query);
             var count = await AsyncQueryableExecuter.CountAsync(query);
-            query = OrderPageBy(query, input);
+            query = OrderBy(query, input);
+            query = PageBy(query, input);
             var list = await AsyncQueryableExecuter.ToListAsync(query);
 
             var cIds = list.Select(c => c.CategoryId);
@@ -143,16 +144,6 @@ namespace BXJG.WorkOrder.WorkOrder
                 items.Add(ttt);
             }
             return new PagedResultDto<TEntityDto>(count, items);
-        }
-        /// <summary>
-        /// GetAll的排序和分页
-        /// </summary>
-        /// <param name="query"></param>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        protected virtual IQueryable<TEntity> OrderPageBy(IQueryable<TEntity> query, TGetAllInput input)
-        {
-            return query.OrderBy(input.Sorting).PageBy(input);
         }
         /// <summary>
         /// 获取指定所有工单的条件
@@ -340,6 +331,26 @@ namespace BXJG.WorkOrder.WorkOrder
                 }
             }
             return r;
+        }
+        /// <summary>
+        /// GetAll的分页
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        protected virtual IQueryable<TEntity> PageBy(IQueryable<TEntity> query, TGetAllInput input)
+        {
+            return query.PageBy(input);
+        }
+        /// <summary>
+        /// GetAll的排序
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        protected virtual IQueryable<TEntity> OrderBy(IQueryable<TEntity> query, TGetAllInput input)
+        {
+            return query.OrderBy(input.Sorting);
         }
         /// <summary>
         /// 实体映射到dto

@@ -261,7 +261,7 @@ namespace BXJG.WorkOrder.WorkOrder
                 b = true;
                 EstimatedExecutionTime = estimatedExecutionTime;
             }
-            if (estimatedCompletionTime.HasValue && estimatedExecutionTime != EstimatedCompletionTime)
+            if (estimatedCompletionTime.HasValue && estimatedCompletionTime != EstimatedCompletionTime)
             {
                 if (Status > Status.Processing)
                     throw new UserFriendlyException("workorderChangeEstimatedTimeException3".BXJGWorkOrderL());
@@ -296,7 +296,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// 确认，只有待确认的工单才允许执行此操作
         /// </summary>
         /// <param name="time"></param>
-        public virtual void Confirme(DateTimeOffset time, string description = "反确认")
+        public virtual void Confirme(DateTimeOffset time, string description = "确认")
         {
             if (Status != Status.ToBeConfirmed)
             {
@@ -485,7 +485,7 @@ namespace BXJG.WorkOrder.WorkOrder
         public virtual OrderBaseEntity Copy(DateTime time, Status status = Status.ToBeConfirmed, string description = "复制")
         {
             var entity = CopyCreate();
-            entity.BackOff(time, status, description);
+            entity.ChangeStateRetain(time, status, description);
             return entity;
         }
     }
