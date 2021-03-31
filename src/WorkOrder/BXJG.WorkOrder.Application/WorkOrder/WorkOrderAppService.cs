@@ -84,7 +84,8 @@ namespace BXJG.WorkOrder.WorkOrder
                                   createPermissionName,
                                   updatePermissionName,
                                   deletePermissionName,
-                                  confirmePermissionName;
+                                  confirmePermissionName,
+                                  toBeonfirmedPermissionName;
 
         public WorkOrderAppServiceBase(TRepository repository,
                                        TManager manager,
@@ -94,6 +95,7 @@ namespace BXJG.WorkOrder.WorkOrder
                                        string updatePermissionName = default,
                                        string deletePermissionName = default,
                                        string getPermissionName = default,
+                                       string toBeonfirmedPermissionName = default,
                                        string confirmePermissionName = default,
                                        string allocatePermissionName = default,
                                        string executePermissionName = default,
@@ -114,6 +116,7 @@ namespace BXJG.WorkOrder.WorkOrder
             this.updatePermissionName = updatePermissionName;
             this.deletePermissionName = deletePermissionName;
             this.confirmePermissionName = confirmePermissionName;
+            this.toBeonfirmedPermissionName = toBeonfirmedPermissionName;
         }
         /// <summary>
         /// 新增工单
@@ -126,20 +129,19 @@ namespace BXJG.WorkOrder.WorkOrder
             var entity = await manager.CreateAsync(await CreateInputToCreateDto(input));
             if (input.Status.HasValue && input.Status > entity.Status)
             {
-                await entity.SkipRetain(Clock.Now,
-                                        input.Status,
-                                        input.StatusChangedDescription,
-                                        //以下三个属性在CreateInputToCreateDto已复制
-                                        //input.EmployeeId,
-                                        //input.EstimatedExecutionTime,
-                                        //input.EstimatedCompletionTime,
-                                        excuteTime: input.ExecutionTime,
-                                        completeTime: input.CompletionTime,
-                                        toBeAllocated: d => CheckConfirmePermissionAsync(),
-                                        toBeProcessed: d => CheckAllocatePermissionAsync(),
-                                        processing: d => CheckExecutePermissionAsync(),
-                                        completed: d => CheckCompletionPermissionAsync(),
-                                        rejected: d => CheckRejectPermissionAsync());
+                await entity.Skip(Clock.Now,
+                                  input.Status,
+                                  input.StatusChangedDescription,
+                                  input.EmployeeId,
+                                  input.EstimatedExecutionTime,
+                                  input.EstimatedCompletionTime,
+                                  excuteTime: input.ExecutionTime,
+                                  completeTime: input.CompletionTime,
+                                  toBeAllocated: d => CheckConfirmePermissionAsync(),
+                                  toBeProcessed: d => CheckAllocatePermissionAsync(),
+                                  processing: d => CheckExecutePermissionAsync(),
+                                  completed: d => CheckCompletionPermissionAsync(),
+                                  rejected: d => CheckRejectPermissionAsync());
             }
             await BeforeCreateAsync(entity, input);
             await CurrentUnitOfWork.SaveChangesAsync();
@@ -184,7 +186,7 @@ namespace BXJG.WorkOrder.WorkOrder
                     await entity.BackOff(Clock.Now,
                                          input.Status,
                                          input.StatusChangedDescription,
-                                         default,
+                                         d => CheckToBeonfirmedPermissionAsync(),
                                          d => CheckConfirmePermissionAsync(),
                                          d => CheckAllocatePermissionAsync(),
                                          d => CheckExecutePermissionAsync());
@@ -198,7 +200,7 @@ namespace BXJG.WorkOrder.WorkOrder
                 entity.SetUrgencyDegreeRetain(input.UrgencyDegree);
                 entity.StatusChangedDescription = input.StatusChangedDescription;
                 entity.EmployeeId = input.EmployeeId;
-                entity.ChangeEstimatedTimeRetain(input.EstimatedExecutionTime, input.EstimatedCompletionTime);
+                entity.ChangeEstimatedTime(input.EstimatedExecutionTime, input.EstimatedCompletionTime);
             }
 
             await BeforeEditAsync(entity, input);
@@ -320,13 +322,13 @@ namespace BXJG.WorkOrder.WorkOrder
             return new PagedResultDto<TEntityDto>(count, items);
         }
         /// <summary>
-        /// 批量确认工单
+        /// 批量调整工单状态
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public virtual async Task<TBatchChangeStatusOutput> ConfirmeAsync(TBatchChangeStatusInput input)
+        public virtual async Task<TBatchChangeStatusOutput> ChangeStatusAsync(TBatchChangeStatusInput input)
         {
-            await CheckConfirmePermissionAsync();
+            //await CheckConfirmePermissionAsync();
             var query = repository.GetAll().Where(c => input.Ids.Contains(c.Id));
             var list = await AsyncQueryableExecuter.ToListAsync(query);
             var r = new TBatchChangeStatusOutput();
@@ -334,7 +336,14 @@ namespace BXJG.WorkOrder.WorkOrder
             {
                 try
                 {
-                    item.Confirme(Clock.Now);
+                    await item.ChangeStatusRetain(status: input.Status,
+                                                  description: input.Description,
+                                                  toBeConfirmed: d => CheckToBeonfirmedPermissionAsync(),
+                                                  toBeAllocated: d => CheckConfirmePermissionAsync(),
+                                                  toBeProcessed: d => CheckAllocatePermissionAsync(),
+                                                  processing: d => CheckExecutePermissionAsync(),
+                                                  completed: d => CheckConfirmePermissionAsync(),
+                                                  rejected: d => CheckRejectPermissionAsync());
                     await CurrentUnitOfWork.SaveChangesAsync();
                     r.Ids.Add(item.Id);
                 }
@@ -345,7 +354,7 @@ namespace BXJG.WorkOrder.WorkOrder
                 catch (Exception ex)
                 {
                     r.ErrorMessage.Add(item.Id.Message500());
-                    Logger.Warn(L("确认工单失败！"), ex);
+                    Logger.Warn(L("执行失败！"), ex);
                 }
             }
             return r;
@@ -357,7 +366,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <returns></returns>
         public virtual async Task<TBatchAllocateOutput> AllocateAsync(TBatchAllocateInput input)
         {
-            await CheckAllocatePermissionAsync();
+            //await CheckAllocatePermissionAsync();
             var query = repository.GetAll().Where(c => input.Ids.Contains(c.Id));
             var list = await AsyncQueryableExecuter.ToListAsync(query);
             var r = new TBatchAllocateOutput();
@@ -365,7 +374,22 @@ namespace BXJG.WorkOrder.WorkOrder
             {
                 try
                 {
-                    item.AllocateRetain(Clock.Now, input.EmployeeId, input.EstimatedExecutionTime, input.EstimatedCompletionTime);
+                    if (item.Status >= Status.ToBeProcessed)
+                    {
+                        await item.BackOffRetain(status: Status.ToBeAllocated,
+                                                 //toBeConfirmed:d=>CheckToBeonfirmedPermissionAsync(),
+                                                 toBeAllocated: d => CheckConfirmePermissionAsync(),
+                                                 toBeProcessed: d => CheckAllocatePermissionAsync(),
+                                                 processing: d => CheckExecutePermissionAsync());
+                    }
+                    //item.AllocateRetain(Clock.Now, input.EmployeeId, input.EstimatedExecutionTime, input.EstimatedCompletionTime);
+                    await item.Skip(status: Status.ToBeProcessed,
+                                    empId: input.EmployeeId,
+                                    estimatedExecutionTime: input.EstimatedExecutionTime,
+                                    estimatedCompletionTime: input.EstimatedCompletionTime,
+                                    toBeAllocated: d => CheckConfirmePermissionAsync(),
+                                    toBeProcessed: d => CheckAllocatePermissionAsync());
+
                     await CurrentUnitOfWork.SaveChangesAsync();
                     r.Ids.Add(item.Id);
                 }
@@ -381,99 +405,99 @@ namespace BXJG.WorkOrder.WorkOrder
             }
             return r;
         }
-        /// <summary>
-        /// 批量执行工单
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        public virtual async Task<TBatchChangeStatusOutput> ExecuteAsync(TBatchChangeStatusInput input)
-        {
-            await CheckExecutePermissionAsync();
-            var query = repository.GetAll().Where(c => input.Ids.Contains(c.Id));
-            var list = await AsyncQueryableExecuter.ToListAsync(query);
-            var r = new TBatchChangeStatusOutput();
-            foreach (var item in list)
-            {
-                try
-                {
-                    item.Execute(Clock.Now);
-                    await CurrentUnitOfWork.SaveChangesAsync();
-                    r.Ids.Add(item.Id);
-                }
-                catch (UserFriendlyException ex)
-                {
-                    r.ErrorMessage.Add(new BatchOperationErrorMessage(item.Id, ex.Message));
-                }
-                catch (Exception ex)
-                {
-                    r.ErrorMessage.Add(item.Id.Message500());
-                    Logger.Warn(L("执行工单失败！"), ex);
-                }
-            }
-            return r;
-        }
-        /// <summary>
-        /// 批量完成工单
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        public virtual async Task<TBatchChangeStatusOutput> CompletionAsync(TBatchChangeStatusInput input)
-        {
-            await CheckCompletionPermissionAsync();
-            var query = repository.GetAll().Where(c => input.Ids.Contains(c.Id));
-            var list = await AsyncQueryableExecuter.ToListAsync(query);
-            var r = new TBatchChangeStatusOutput();
-            foreach (var item in list)
-            {
-                try
-                {
-                    item.Completion(Clock.Now, input.Description);
-                    await CurrentUnitOfWork.SaveChangesAsync();
-                    r.Ids.Add(item.Id);
-                }
-                catch (UserFriendlyException ex)
-                {
-                    r.ErrorMessage.Add(new BatchOperationErrorMessage(item.Id, ex.Message));
-                }
-                catch (Exception ex)
-                {
-                    r.ErrorMessage.Add(item.Id.Message500());
-                    Logger.Warn(L("完成工单失败！"), ex);
-                }
-            }
-            return r;
-        }
-        /// <summary>
-        /// 批量拒绝工单
-        /// </summary>
-        /// <param name="input">包含id集合和拒绝原因</param>
-        /// <returns></returns>
-        public virtual async Task<TBatchChangeStatusOutput> RejectAsync(TBatchChangeStatusInput input)
-        {
-            await CheckRejectPermissionAsync();
-            var query = repository.GetAll().Where(c => input.Ids.Contains(c.Id));
-            var list = await AsyncQueryableExecuter.ToListAsync(query);
-            var r = new TBatchChangeStatusOutput();
-            foreach (var item in list)
-            {
-                try
-                {
-                    item.Reject(Clock.Now, input.Description);
-                    await CurrentUnitOfWork.SaveChangesAsync();
-                    r.Ids.Add(item.Id);
-                }
-                catch (UserFriendlyException ex)
-                {
-                    r.ErrorMessage.Add(new BatchOperationErrorMessage(item.Id, ex.Message));
-                }
-                catch (Exception ex)
-                {
-                    r.ErrorMessage.Add(item.Id.Message500());
-                    Logger.Warn(L("拒绝工单失败！"), ex);
-                }
-            }
-            return r;
-        }
+        ///// <summary>
+        ///// 批量执行工单
+        ///// </summary>
+        ///// <param name="input"></param>
+        ///// <returns></returns>
+        //public virtual async Task<TBatchChangeStatusOutput> ExecuteAsync(TBatchChangeStatusInput input)
+        //{
+        //    await CheckExecutePermissionAsync();
+        //    var query = repository.GetAll().Where(c => input.Ids.Contains(c.Id));
+        //    var list = await AsyncQueryableExecuter.ToListAsync(query);
+        //    var r = new TBatchChangeStatusOutput();
+        //    foreach (var item in list)
+        //    {
+        //        try
+        //        {
+        //            item.Execute(Clock.Now);
+        //            await CurrentUnitOfWork.SaveChangesAsync();
+        //            r.Ids.Add(item.Id);
+        //        }
+        //        catch (UserFriendlyException ex)
+        //        {
+        //            r.ErrorMessage.Add(new BatchOperationErrorMessage(item.Id, ex.Message));
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            r.ErrorMessage.Add(item.Id.Message500());
+        //            Logger.Warn(L("执行工单失败！"), ex);
+        //        }
+        //    }
+        //    return r;
+        //}
+        ///// <summary>
+        ///// 批量完成工单
+        ///// </summary>
+        ///// <param name="input"></param>
+        ///// <returns></returns>
+        //public virtual async Task<TBatchChangeStatusOutput> CompletionAsync(TBatchChangeStatusInput input)
+        //{
+        //    await CheckCompletionPermissionAsync();
+        //    var query = repository.GetAll().Where(c => input.Ids.Contains(c.Id));
+        //    var list = await AsyncQueryableExecuter.ToListAsync(query);
+        //    var r = new TBatchChangeStatusOutput();
+        //    foreach (var item in list)
+        //    {
+        //        try
+        //        {
+        //            item.Completion(Clock.Now, input.Description);
+        //            await CurrentUnitOfWork.SaveChangesAsync();
+        //            r.Ids.Add(item.Id);
+        //        }
+        //        catch (UserFriendlyException ex)
+        //        {
+        //            r.ErrorMessage.Add(new BatchOperationErrorMessage(item.Id, ex.Message));
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            r.ErrorMessage.Add(item.Id.Message500());
+        //            Logger.Warn(L("完成工单失败！"), ex);
+        //        }
+        //    }
+        //    return r;
+        //}
+        ///// <summary>
+        ///// 批量拒绝工单
+        ///// </summary>
+        ///// <param name="input">包含id集合和拒绝原因</param>
+        ///// <returns></returns>
+        //public virtual async Task<TBatchChangeStatusOutput> RejectAsync(TBatchChangeStatusInput input)
+        //{
+        //    await CheckRejectPermissionAsync();
+        //    var query = repository.GetAll().Where(c => input.Ids.Contains(c.Id));
+        //    var list = await AsyncQueryableExecuter.ToListAsync(query);
+        //    var r = new TBatchChangeStatusOutput();
+        //    foreach (var item in list)
+        //    {
+        //        try
+        //        {
+        //            item.Reject(Clock.Now, input.Description);
+        //            await CurrentUnitOfWork.SaveChangesAsync();
+        //            r.Ids.Add(item.Id);
+        //        }
+        //        catch (UserFriendlyException ex)
+        //        {
+        //            r.ErrorMessage.Add(new BatchOperationErrorMessage(item.Id, ex.Message));
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            r.ErrorMessage.Add(item.Id.Message500());
+        //            Logger.Warn(L("拒绝工单失败！"), ex);
+        //        }
+        //    }
+        //    return r;
+        //}
         /// <summary>
         /// GetAll的分页
         /// </summary>
@@ -638,6 +662,10 @@ namespace BXJG.WorkOrder.WorkOrder
         protected virtual Task CheckGetPermissionAsync()
         {
             return CheckPermissionAsync(getPermissionName);
+        }
+        protected virtual Task CheckToBeonfirmedPermissionAsync()
+        {
+            return CheckPermissionAsync(toBeonfirmedPermissionName);
         }
         #endregion
     }

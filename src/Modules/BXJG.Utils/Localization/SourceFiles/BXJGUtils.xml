@@ -13,7 +13,8 @@
     <text name="此节点不允许修改！" value="This node does not allow modification!" />
     <text name="BXJG.Utils.Enums.Gender.Woman" value="Woman" />
     <text name="BXJG.Utils.Enums.Gender.Man" value="Man" />
-    
+
+    <text name="操作确认" value="are you sure [{0}] the selectd rows?" />
     <text name="HomePage" value="Home page" />
     <text name="About" value="About" />
     <text name="WelcomeMessage" value="Welcome to ZLJ!" />

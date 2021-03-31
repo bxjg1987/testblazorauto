@@ -26,6 +26,7 @@ namespace BXJG.WorkOrder
             item.CreateChildPermission(CoreConsts.WorkOrderCreate, "新增".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
             item.CreateChildPermission(CoreConsts.WorkOrderUpdate, "修改".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
             item.CreateChildPermission(CoreConsts.WorkOrderDelete, "删除".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
+            item.CreateChildPermission(CoreConsts.WorkOrderToBeConfirmed, "待确认".BXJGWorkOrderLI(), multiTenancySides: MultiTenancySides.Tenant);
             item.CreateChildPermission(CoreConsts.WorkOrderConfirme, "确认".BXJGWorkOrderLI(), multiTenancySides: MultiTenancySides.Tenant);
             item.CreateChildPermission(CoreConsts.WorkOrderAllocate, "分配".BXJGWorkOrderLI(), multiTenancySides: MultiTenancySides.Tenant);
             item.CreateChildPermission(CoreConsts.WorkOrderExecute, "执行".BXJGWorkOrderLI(), multiTenancySides: MultiTenancySides.Tenant);

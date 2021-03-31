@@ -10,6 +10,7 @@
     <text name="删除成功！" value="删除成功！" />
     <text name="删除失败！" value="删除失败！" />
     <text name="此节点不允许修改！" value="此节点不允许修改！" />
+    <text name="操作确认" value="确认[{0}]已选择的行吗?" />
     <text name="True" value="是" />
     <text name="False" value="否" />
     <text name="不限" value="==不限==" />
