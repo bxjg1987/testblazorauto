@@ -222,11 +222,13 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="description">描述</param>
         protected virtual void ChangeStatus(Status status, DateTimeOffset time, string description = default)
         {
-            if (Status == status)
-            {
-                //return;若return，StatusChangedTime、StatusChangedDescription将不会得到更新，但程序不会报错，会误导调用方以为这些属性是赋值成功的。
-                throw new ApplicationException("状态无变化，不应该调用此方法！");//不使用UserFriendlyException，因为这个问题应该由开发人员处理，应用程序异常目前不考虑本地化
-            }
+            //此方法是内部的，服务于各业务操作的辅助方法，各业务方法已做判断，这里不必要再判断
+            //if (Status == status)
+            //{
+            //    //return;若return，StatusChangedTime、StatusChangedDescription将不会得到更新，但程序不会报错，会误导调用方以为这些属性是赋值成功的。
+            //    throw new ApplicationException("状态无变化，不应该调用此方法！");//不使用UserFriendlyException，因为这个问题应该由开发人员处理，应用程序异常目前不考虑本地化
+            //}
+
             StatusChangedTime = time;
             StatusChangedDescription = description;
 
@@ -255,7 +257,7 @@ namespace BXJG.WorkOrder.WorkOrder
             bool b = false;
             if (estimatedExecutionTime.HasValue && estimatedExecutionTime != EstimatedExecutionTime)
             {
-                if (Status > Status.ToBeProcessed)
+                if (Status >= Status.Processing)
                     throw new UserFriendlyException("workorderChangeEstimatedTimeException2".BXJGWorkOrderL());
 
                 b = true;
@@ -263,7 +265,7 @@ namespace BXJG.WorkOrder.WorkOrder
             }
             if (estimatedCompletionTime.HasValue && estimatedCompletionTime != EstimatedCompletionTime)
             {
-                if (Status > Status.Processing)
+                if (Status >= Status.Completion)
                     throw new UserFriendlyException("workorderChangeEstimatedTimeException3".BXJGWorkOrderL());
 
                 b = true;
@@ -357,7 +359,7 @@ namespace BXJG.WorkOrder.WorkOrder
             {
                 throw new UserFriendlyException("workorderExecuteException1".BXJGWorkOrderL());
             }
-            ChangePracticalTime(time, CompletionTime);
+            ChangePracticalTime(time, default);
             ChangeStatus(Status.Processing, time, description);
         }
         /// <summary>
@@ -409,7 +411,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="description">拒绝原因，可控</param>
         public virtual void Reject(DateTimeOffset time, string description = "拒绝")
         {
-            if (Status == Status.Rejected)
+            if (Status >= Status.Completed)
             {
                 throw new UserFriendlyException("workorderRejectException1".BXJGWorkOrderL());
             }
@@ -683,7 +685,12 @@ namespace BXJG.WorkOrder.WorkOrder
                                 DateTimeOffset? estimatedExecutionTime = default,
                                 DateTimeOffset? estimatedCompletionTime = default,
                                 DateTimeOffset? excuteTime = default,
-                                DateTimeOffset? completeTime = default)
+                                DateTimeOffset? completeTime = default, 
+                                Func<OrderBaseEntity, Task> onBeforeConfirme = default, 
+                                Func<OrderBaseEntity, Task> onBeforeAllocate = default, 
+                                Func<OrderBaseEntity, Task> onBeforeExecute = default, 
+                                Func<OrderBaseEntity, Task> onBeforeCompletion = default, 
+                                Func<OrderBaseEntity, Task> onBeforeReject = default)
         {
             if (status == default)
             {
@@ -698,16 +705,22 @@ namespace BXJG.WorkOrder.WorkOrder
 
             DateTimeOffset t = time ?? Clock.Now;
 
-            if (status == Status.Rejected && entity.Status != Status.Rejected)
+            if (status == Status.Rejected)
             {
                 entity.Reject(t, description);
                 return;
             }
 
-            if (status > Status.ToBeConfirmed && entity.Status == Status.ToBeConfirmed)
+            if (status > Status.ToBeConfirmed && entity.Status == Status.ToBeConfirmed){
+                await onBeforeConfirme?.Invoke();
                 entity.Confirme(t, description);
-            if (status > Status.ToBeAllocated && entity.Status == Status.ToBeAllocated)
+            }
+             
+            if (status > Status.ToBeAllocated && entity.Status == Status.ToBeAllocated){
+                onBeforeAllocate?.Invoke();
                 entity.Allocate(t, empId, estimatedExecutionTime, estimatedCompletionTime, description);
+            }
+             
             if (status > Status.ToBeProcessed && entity.Status == Status.ToBeProcessed)
                 entity.Execute(excuteTime ?? t, description);
             if (status > Status.Processing && entity.Status == Status.Processing)
@@ -734,7 +747,12 @@ namespace BXJG.WorkOrder.WorkOrder
                                       DateTimeOffset? estimatedExecutionTime = default,
                                       DateTimeOffset? estimatedCompletionTime = default,
                                       DateTimeOffset? excuteTime = default,
-                                      DateTimeOffset? completeTime = default)
+                                      DateTimeOffset? completeTime = default,
+                                      Action<OrderBaseEntity> onBeforeConfirme = default,
+                                      Action<OrderBaseEntity> onBeforeAllocate = default,
+                                      Action<OrderBaseEntity> onBeforeExecute = default,
+                                      Action<OrderBaseEntity> onBeforeCompletion = default,
+                                      Action<OrderBaseEntity> onBeforeReject = default)
         {
             entity.Skip(time,
                         status,

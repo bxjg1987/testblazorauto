@@ -1,4 +1,4 @@
-﻿using Abp.Application.Services.Dto;
+using Abp.Application.Services.Dto;
 using Abp.Domain.Repositories;
 using Abp.Extensions;
 using Abp.Linq.Extensions;
@@ -124,35 +124,28 @@ namespace BXJG.WorkOrder.WorkOrder
         {
             await CheckCreatePermissionAsync();
             var entity = await manager.CreateAsync(await CreateInputToCreateDto(input));
-            if (input.Status.HasValue)
+            if (input.Status.HasValue && input.Status > entity.Status)
             {
-                switch (input.Status.Value)
-                {
-                    case Status.ToBeAllocated:
-                        await CheckConfirmePermissionAsync();
-                        break;
-                    case Status.ToBeProcessed:
-                        await CheckAllocatePermissionAsync();
-                        break;
-                    case Status.Processing:
-                        await CheckExecutePermissionAsync();
-                        break;
-                    case Status.Completed:
-                        await CheckCompletionPermissionAsync();
-                        break;
-                    case Status.Rejected:
-                        await CheckRejectPermissionAsync();
-                        break;
-                }
-                entity.SkipRetain(Clock.Now,
-                                  input.Status,
-                                  input.StatusChangedDescription,
-                                  //以下三个属性在CreateInputToCreateDto已复制
-                                  //input.EmployeeId,
-                                  //input.EstimatedExecutionTime,
-                                  //input.EstimatedCompletionTime,
-                                  excuteTime: input.ExecutionTime,
-                                  completeTime: input.CompletionTime);
+                if(input.Status > Status.ToBeConfirmed)
+                    await CheckConfirmePermissionAsync();
+                if(input.Status.Value > Status.ToBeAllocated)
+                    await CheckAllocatePermissionAsync();
+                if(input.Status.Value > Status.ToBeProcessed)
+                    await CheckExecutePermissionAsync();
+                if(input.Status.Value > Status.Processing)
+                    await CheckCompletionPermissionAsync();
+                if(input.Status.Value == Status.Rejected)
+                    await CheckRejectPermissionAsync();
+                
+                // entity.SkipRetain(Clock.Now,
+                //                   input.Status,
+                //                   input.StatusChangedDescription,
+                //                   //以下三个属性在CreateInputToCreateDto已复制
+                //                   //input.EmployeeId,
+                //                   //input.EstimatedExecutionTime,
+                //                   //input.EstimatedCompletionTime,
+                //                   excuteTime: input.ExecutionTime,
+                //                   completeTime: input.CompletionTime);
             }
             await BeforeCreateAsync(entity, input);
             await CurrentUnitOfWork.SaveChangesAsync();

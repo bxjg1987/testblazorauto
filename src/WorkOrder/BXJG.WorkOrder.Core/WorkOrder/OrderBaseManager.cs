@@ -1,4 +1,4 @@
-﻿using Abp.Domain.Repositories;
+using Abp.Domain.Repositories;
 using Abp.Domain.Services;
 using Abp.Timing;
 using Abp.UI;

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,11 +17,11 @@ namespace BXJG.WorkOrder.WorkOrder
         /// </summary>
         ToBeConfirmed = 0,
         /// <summary>
-        /// 待分配
+        /// 已确认，待分配
         /// </summary>
         ToBeAllocated = 1,
         /// <summary>
-        /// 待执行
+        /// 已分配，待执行
         /// </summary>
         ToBeProcessed = 2,
         /// <summary>
