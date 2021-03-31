@@ -4,6 +4,7 @@ using Abp.Timing;
 using Abp.UI;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace BXJG.WorkOrder.WorkOrder
 {
@@ -206,13 +207,11 @@ namespace BXJG.WorkOrder.WorkOrder
         ///// 联系电话
         ///// </summary>
         //public virtual string ContactPhone { get; set; }
-
         public virtual int TenantId { get; set; }
         /// <summary>
         /// 状态变更有并发可能，使用乐观并发，偷个懒直接使用行级乐观并发
         /// </summary>
         public virtual byte[] RowVersion { get; }
-
         /// <summary>
         /// 调整状态<br />
         /// 若状态无变化将抛出ApplicationException
@@ -236,7 +235,6 @@ namespace BXJG.WorkOrder.WorkOrder
             Status = status;
             DomainEvents.Add(new StatusChangedEventData(this, o));
         }
-
         /// <summary>
         /// 一并设置预计开始和结束时间<br />
         /// 预计开始时间必须小于等于结束时间<br />
@@ -265,7 +263,7 @@ namespace BXJG.WorkOrder.WorkOrder
             }
             if (estimatedCompletionTime.HasValue && estimatedCompletionTime != EstimatedCompletionTime)
             {
-                if (Status >= Status.Completion)
+                if (Status >= Status.Completed)
                     throw new UserFriendlyException("workorderChangeEstimatedTimeException3".BXJGWorkOrderL());
 
                 b = true;
@@ -274,7 +272,6 @@ namespace BXJG.WorkOrder.WorkOrder
             if (b)
                 DomainEvents.Add(new EstimatedTimeChangedEventData(this, os, oe));
         }
-
         /// <summary>
         /// 一并设置执行和完成时间<br />
         /// 完成时间必须大于等于结束时间<br />
@@ -293,7 +290,6 @@ namespace BXJG.WorkOrder.WorkOrder
             ExecutionTime = executionTime;
             CompletionTime = completionTime;
         }
-
         /// <summary>
         /// 确认，只有待确认的工单才允许执行此操作
         /// </summary>
@@ -438,7 +434,13 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param time="time"></param>
         /// <param name="status">目标状态，不指定则默认回到上一个状态。若最终的目标状态已经到顶了，则抛出UserFriendlyException异常</param>
         /// <param desc="desc">回退原因，如：希望重新分配，可空</param>
-        public virtual void BackOff(DateTimeOffset time, Status? status = default, string description = "回退")
+        public virtual async Task BackOff(DateTimeOffset time,
+                                          Status? status = default,
+                                          string description = "回退",
+                                          Func<OrderBaseEntity, Task> toBeConfirmed = default,
+                                          Func<OrderBaseEntity, Task> toBeAllocated = default,
+                                          Func<OrderBaseEntity, Task> toBeProcessed = default,
+                                          Func<OrderBaseEntity, Task> processing = default)
         {
             if (status == default)
             {
@@ -458,19 +460,35 @@ namespace BXJG.WorkOrder.WorkOrder
                     throw new UserFriendlyException("workorderBackOffException1".BXJGWorkOrderL(Status.BXJGWorkOrderEnum()));
                 else
                 {
+                    await toBeConfirmed?.Invoke(this);
                     UnReject(time, description);
                     return;
                 }
             }
 
             if (status < Status.Completed && Status == Status.Completed)
+            {
+                await processing?.Invoke(this);
                 UnCompletion(time, description);
+            }
+
             if (status < Status.Processing && Status == Status.Processing)
+            {
+                await toBeProcessed?.Invoke(this);
                 UnExecute(time, description);
+            }
+
             if (status < Status.ToBeProcessed && Status == Status.ToBeProcessed)
+            {
+                await toBeAllocated?.Invoke(this);
                 UnAllocate(time, description);
+            }
+
             if (status < Status.ToBeConfirmed && Status == Status.ToBeConfirmed)
+            {
+                await toBeConfirmed?.Invoke(this);
                 UnConfirme(time, description);
+            }
         }
         /// <summary>
         /// 复制工单时创建逻辑
@@ -643,12 +661,22 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param time="time">回退时间，为空则使用Clock.Now</param>
         /// <param name="status">目标状态，不指定则默认回到上一个状态</param>
         /// <param desc="desc">回退原因，如：希望重新分配</param>
-        public static void BackOff(this OrderBaseEntity entity,
-                                   DateTimeOffset? time = default,
-                                   Status? status = default,
-                                   string description = "回退")
+        public static async Task BackOff(this OrderBaseEntity entity,
+                                         DateTimeOffset? time = default,
+                                         Status? status = default,
+                                         string description = "回退",
+                                         Func<OrderBaseEntity, Task> toBeConfirmed = default,
+                                         Func<OrderBaseEntity, Task> toBeAllocated = default,
+                                         Func<OrderBaseEntity, Task> toBeProcessed = default,
+                                         Func<OrderBaseEntity, Task> processing = default)
         {
-            entity.BackOff(time ?? Clock.Now, status, description);
+            await entity.BackOff(time ?? Clock.Now,
+                                 status,
+                                 description,
+                                 toBeConfirmed,
+                                 toBeAllocated,
+                                 toBeProcessed,
+                                 processing);
         }
 
         /// <summary>
@@ -658,12 +686,22 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param time="time">回退时间，为空则使用Clock.Now</param>
         /// <param name="status">目标状态，不指定则默认回到上一个状态</param>
         /// <param desc="desc">回退原因，如：希望重新分配</param>
-        public static void BackOffRetain(this OrderBaseEntity entity,
+        public static Task BackOffRetain(this OrderBaseEntity entity,
                                          DateTimeOffset? time = default,
                                          Status? status = default,
-                                         string description = default)
+                                         string description = default,
+                                         Func<OrderBaseEntity, Task> toBeConfirmed = default,
+                                         Func<OrderBaseEntity, Task> toBeAllocated = default,
+                                         Func<OrderBaseEntity, Task> toBeProcessed = default,
+                                         Func<OrderBaseEntity, Task> processing = default)
         {
-            entity.BackOff(time, status, description ?? entity.StatusChangedDescription);
+            return entity.BackOff(time,
+                                  status,
+                                  description ?? entity.StatusChangedDescription,
+                                  toBeConfirmed,
+                                  toBeAllocated,
+                                  toBeProcessed,
+                                  processing);
         }
         /// <summary>
         /// 跳跃到指定状态
@@ -677,20 +715,20 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="estimatedCompletionTime">预计结束时间</param>
         /// <param name="excuteTime">实际开始时间，若为空则保留之前的值，若还为空则使用time的值，若还未空则使用Clock.Now</param>
         /// <param name="completeTime">实际结束时间，若为空则保留之前的值，若还为空则使用time的值，若还未空则使用Clock.Now</param>
-        public static void Skip(this OrderBaseEntity entity,
-                                DateTimeOffset? time = default,
-                                Status? status = default,
-                                string description = default,
-                                string empId = default,
-                                DateTimeOffset? estimatedExecutionTime = default,
-                                DateTimeOffset? estimatedCompletionTime = default,
-                                DateTimeOffset? excuteTime = default,
-                                DateTimeOffset? completeTime = default, 
-                                Func<OrderBaseEntity, Task> onBeforeConfirme = default, 
-                                Func<OrderBaseEntity, Task> onBeforeAllocate = default, 
-                                Func<OrderBaseEntity, Task> onBeforeExecute = default, 
-                                Func<OrderBaseEntity, Task> onBeforeCompletion = default, 
-                                Func<OrderBaseEntity, Task> onBeforeReject = default)
+        public static async Task Skip(this OrderBaseEntity entity,
+                                      DateTimeOffset? time = default,
+                                      Status? status = default,
+                                      string description = default,
+                                      string empId = default,
+                                      DateTimeOffset? estimatedExecutionTime = default,
+                                      DateTimeOffset? estimatedCompletionTime = default,
+                                      DateTimeOffset? excuteTime = default,
+                                      DateTimeOffset? completeTime = default,
+                                      Func<OrderBaseEntity, Task> toBeAllocated = default,
+                                      Func<OrderBaseEntity, Task> toBeProcessed = default,
+                                      Func<OrderBaseEntity, Task> processing = default,
+                                      Func<OrderBaseEntity, Task> completed = default,
+                                      Func<OrderBaseEntity, Task> rejected = default)
         {
             if (status == default)
             {
@@ -707,24 +745,34 @@ namespace BXJG.WorkOrder.WorkOrder
 
             if (status == Status.Rejected)
             {
+                await rejected?.Invoke(entity);
                 entity.Reject(t, description);
                 return;
             }
 
-            if (status > Status.ToBeConfirmed && entity.Status == Status.ToBeConfirmed){
-                await onBeforeConfirme?.Invoke();
+            if (status > Status.ToBeConfirmed && entity.Status == Status.ToBeConfirmed)
+            {
+                await toBeAllocated?.Invoke(entity);
                 entity.Confirme(t, description);
             }
-             
-            if (status > Status.ToBeAllocated && entity.Status == Status.ToBeAllocated){
-                onBeforeAllocate?.Invoke();
+
+            if (status > Status.ToBeAllocated && entity.Status == Status.ToBeAllocated)
+            {
+                await toBeProcessed?.Invoke(entity);
                 entity.Allocate(t, empId, estimatedExecutionTime, estimatedCompletionTime, description);
             }
-             
+
             if (status > Status.ToBeProcessed && entity.Status == Status.ToBeProcessed)
+            {
+                await processing?.Invoke(entity);
                 entity.Execute(excuteTime ?? t, description);
+            }
+
             if (status > Status.Processing && entity.Status == Status.Processing)
+            {
+                await completed?.Invoke(entity);
                 entity.Completion(completeTime ?? t, description);
+            }
         }
 
         /// <summary>
@@ -739,7 +787,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="estimatedCompletionTime">预计结束时间，若为空则保留之前的值</param>
         /// <param name="excuteTime">实际开始时间，若为空则保留之前的值，若还为空则使用time的值，若还未空则使用Clock.Now</param>
         /// <param name="completeTime">实际结束时间，若为空则保留之前的值，若还为空则使用time的值，若还未空则使用Clock.Now</param>
-        public static void SkipRetain(this OrderBaseEntity entity,
+        public static Task SkipRetain(this OrderBaseEntity entity,
                                       DateTimeOffset? time = default,
                                       Status? status = default,
                                       string description = default,
@@ -748,20 +796,25 @@ namespace BXJG.WorkOrder.WorkOrder
                                       DateTimeOffset? estimatedCompletionTime = default,
                                       DateTimeOffset? excuteTime = default,
                                       DateTimeOffset? completeTime = default,
-                                      Action<OrderBaseEntity> onBeforeConfirme = default,
-                                      Action<OrderBaseEntity> onBeforeAllocate = default,
-                                      Action<OrderBaseEntity> onBeforeExecute = default,
-                                      Action<OrderBaseEntity> onBeforeCompletion = default,
-                                      Action<OrderBaseEntity> onBeforeReject = default)
+                                      Func<OrderBaseEntity, Task> toBeAllocated = default,
+                                      Func<OrderBaseEntity, Task> toBeProcessed = default,
+                                      Func<OrderBaseEntity, Task> processing = default,
+                                      Func<OrderBaseEntity, Task> completed = default,
+                                      Func<OrderBaseEntity, Task> rejected = default)
         {
-            entity.Skip(time,
-                        status,
-                        description ?? entity.Description,
-                        empId ?? entity.EmployeeId,
-                        estimatedExecutionTime ?? entity.EstimatedExecutionTime,
-                        estimatedCompletionTime ?? entity.EstimatedCompletionTime,
-                        excuteTime,
-                        completeTime);
+            return entity.Skip(time,
+                               status,
+                               description ?? entity.Description,
+                               empId ?? entity.EmployeeId,
+                               estimatedExecutionTime ?? entity.EstimatedExecutionTime,
+                               estimatedCompletionTime ?? entity.EstimatedCompletionTime,
+                               excuteTime,
+                               completeTime,
+                               toBeAllocated,
+                               toBeProcessed,
+                               processing,
+                               completed,
+                               rejected);
         }
         /// <summary>
         /// 设置为任意状态
@@ -776,18 +829,42 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="excuteTime">实际开始时间</param>
         /// <param name="completeTime">实际结束时间</param>
         /// <param name="act">回退 》act 》Skip</param>
-        public static void ChangeStatus(this OrderBaseEntity entity,
-                                       DateTimeOffset? time = default,
-                                       Status? status = default,
-                                       string description = default,
-                                       string empId = default,
-                                       DateTimeOffset? estimatedExecutionTime = default,
-                                       DateTimeOffset? estimatedCompletionTime = default,
-                                       DateTimeOffset? excuteTime = default,
-                                       DateTimeOffset? completeTime = default)
+        public static async Task ChangeStatus(this OrderBaseEntity entity,
+                                              DateTimeOffset? time = default,
+                                              Status? status = default,
+                                              string description = default,
+                                              string empId = default,
+                                              DateTimeOffset? estimatedExecutionTime = default,
+                                              DateTimeOffset? estimatedCompletionTime = default,
+                                              DateTimeOffset? excuteTime = default,
+                                              DateTimeOffset? completeTime = default,
+                                              Func<OrderBaseEntity, Task> toBeConfirmed = default,
+                                              Func<OrderBaseEntity, Task> toBeAllocated = default,
+                                              Func<OrderBaseEntity, Task> toBeProcessed = default,
+                                              Func<OrderBaseEntity, Task> processing = default,
+                                              Func<OrderBaseEntity, Task> completed = default,
+                                              Func<OrderBaseEntity, Task> rejected = default)
         {
-            entity.BackOff(time, status, description);
-            entity.Skip(time, status, description, empId, estimatedExecutionTime, estimatedCompletionTime, excuteTime, completeTime);
+            await entity.BackOff(time,
+                                 status,
+                                 description,
+                                 toBeConfirmed,
+                                 toBeAllocated,
+                                 toBeProcessed,
+                                 processing);
+            await entity.Skip(time,
+                              status,
+                              description,
+                              empId,
+                              estimatedExecutionTime,
+                              estimatedCompletionTime,
+                              excuteTime,
+                              completeTime,
+                              toBeAllocated,
+                              toBeProcessed,
+                              processing,
+                              completed,
+                              rejected);
         }
         /// <summary>
         /// 设置为任意状态
@@ -802,18 +879,42 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="excuteTime">实际开始时间，若为空则保留之前的值，若还为空则使用time的值，若还未空则使用Clock.Now</param>
         /// <param name="completeTime">实际结束时间，若为空则保留之前的值，若还为空则使用time的值，若还未空则使用Clock.Now</param>
         /// <param name="act">回退 》act 》Skip</param>
-        public static void ChangeStatusRetain(this OrderBaseEntity entity,
-                                             DateTimeOffset? time = default,
-                                             Status? status = default,
-                                             string description = default,
-                                             string empId = default,
-                                             DateTimeOffset? estimatedExecutionTime = default,
-                                             DateTimeOffset? estimatedCompletionTime = default,
-                                             DateTimeOffset? excuteTime = default,
-                                             DateTimeOffset? completeTime = default)
+        public static async Task ChangeStatusRetain(this OrderBaseEntity entity,
+                                                    DateTimeOffset? time = default,
+                                                    Status? status = default,
+                                                    string description = default,
+                                                    string empId = default,
+                                                    DateTimeOffset? estimatedExecutionTime = default,
+                                                    DateTimeOffset? estimatedCompletionTime = default,
+                                                    DateTimeOffset? excuteTime = default,
+                                                    DateTimeOffset? completeTime = default,
+                                                    Func<OrderBaseEntity, Task> toBeConfirmed = default,
+                                                    Func<OrderBaseEntity, Task> toBeAllocated = default,
+                                                    Func<OrderBaseEntity, Task> toBeProcessed = default,
+                                                    Func<OrderBaseEntity, Task> processing = default,
+                                                    Func<OrderBaseEntity, Task> completed = default,
+                                                    Func<OrderBaseEntity, Task> rejected = default)
         {
-            entity.BackOffRetain(time, status, description);
-            entity.SkipRetain(time, status, description, empId, estimatedExecutionTime, estimatedCompletionTime, excuteTime, completeTime);
+            await entity.BackOffRetain(time,
+                                       status,
+                                       description,
+                                       toBeConfirmed,
+                                       toBeAllocated,
+                                       toBeProcessed,
+                                       processing);
+            await entity.SkipRetain(time,
+                                    status,
+                                    description,
+                                    empId,
+                                    estimatedExecutionTime,
+                                    estimatedCompletionTime,
+                                    excuteTime,
+                                    completeTime,
+                                    toBeAllocated,
+                                    toBeProcessed,
+                                    processing,
+                                    completed,
+                                    rejected);
         }
     }
 }

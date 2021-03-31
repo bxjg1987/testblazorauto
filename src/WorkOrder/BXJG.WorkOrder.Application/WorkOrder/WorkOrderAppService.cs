@@ -126,26 +126,20 @@ namespace BXJG.WorkOrder.WorkOrder
             var entity = await manager.CreateAsync(await CreateInputToCreateDto(input));
             if (input.Status.HasValue && input.Status > entity.Status)
             {
-                if(input.Status > Status.ToBeConfirmed)
-                    await CheckConfirmePermissionAsync();
-                if(input.Status.Value > Status.ToBeAllocated)
-                    await CheckAllocatePermissionAsync();
-                if(input.Status.Value > Status.ToBeProcessed)
-                    await CheckExecutePermissionAsync();
-                if(input.Status.Value > Status.Processing)
-                    await CheckCompletionPermissionAsync();
-                if(input.Status.Value == Status.Rejected)
-                    await CheckRejectPermissionAsync();
-                
-                // entity.SkipRetain(Clock.Now,
-                //                   input.Status,
-                //                   input.StatusChangedDescription,
-                //                   //以下三个属性在CreateInputToCreateDto已复制
-                //                   //input.EmployeeId,
-                //                   //input.EstimatedExecutionTime,
-                //                   //input.EstimatedCompletionTime,
-                //                   excuteTime: input.ExecutionTime,
-                //                   completeTime: input.CompletionTime);
+                await entity.SkipRetain(Clock.Now,
+                                        input.Status,
+                                        input.StatusChangedDescription,
+                                        //以下三个属性在CreateInputToCreateDto已复制
+                                        //input.EmployeeId,
+                                        //input.EstimatedExecutionTime,
+                                        //input.EstimatedCompletionTime,
+                                        excuteTime: input.ExecutionTime,
+                                        completeTime: input.CompletionTime,
+                                        toBeAllocated: d => CheckConfirmePermissionAsync(),
+                                        toBeProcessed: d => CheckAllocatePermissionAsync(),
+                                        processing: d => CheckExecutePermissionAsync(),
+                                        completed: d => CheckCompletionPermissionAsync(),
+                                        rejected: d => CheckRejectPermissionAsync());
             }
             await BeforeCreateAsync(entity, input);
             await CurrentUnitOfWork.SaveChangesAsync();
@@ -168,40 +162,32 @@ namespace BXJG.WorkOrder.WorkOrder
 
             if (input.Status.HasValue && input.Status != entity.Status)
             {
-                //权限
-                switch (input.Status.Value)
-                {
-                    case Status.ToBeAllocated:
-                        await CheckConfirmePermissionAsync();
-                        break;
-                    case Status.ToBeProcessed:
-                        await CheckAllocatePermissionAsync();
-                        break;
-                    case Status.Processing:
-                        await CheckExecutePermissionAsync();
-                        break;
-                    case Status.Completed:
-                        await CheckCompletionPermissionAsync();
-                        break;
-                    case Status.Rejected:
-                        await CheckRejectPermissionAsync();
-                        break;
-                }
                 if (input.Status.Value > entity.Status)//skip
                 {
                     entity.SetUrgencyDegreeRetain(input.UrgencyDegree);
-                    entity.Skip(Clock.Now,
-                                input.Status,
-                                input.StatusChangedDescription,
-                                input.EmployeeId,
-                                input.EstimatedExecutionTime,
-                                input.EstimatedCompletionTime,
-                                excuteTime: input.ExecutionTime,
-                                completeTime: input.CompletionTime);
+                    await entity.Skip(Clock.Now,
+                                      input.Status,
+                                      input.StatusChangedDescription,
+                                      input.EmployeeId,
+                                      input.EstimatedExecutionTime,
+                                      input.EstimatedCompletionTime,
+                                      input.ExecutionTime,
+                                      input.CompletionTime,
+                                      d => CheckConfirmePermissionAsync(),
+                                      d => CheckAllocatePermissionAsync(),
+                                      d => CheckExecutePermissionAsync(),
+                                      d => CheckCompletionPermissionAsync(),
+                                      d => CheckRejectPermissionAsync());
                 }
                 else //backoff
                 {
-                    entity.BackOff(Clock.Now, input.Status, input.StatusChangedDescription);
+                    await entity.BackOff(Clock.Now,
+                                         input.Status,
+                                         input.StatusChangedDescription,
+                                         default,
+                                         d => CheckConfirmePermissionAsync(),
+                                         d => CheckAllocatePermissionAsync(),
+                                         d => CheckExecutePermissionAsync());
                     entity.SetUrgencyDegreeRetain(input.UrgencyDegree);
                     entity.EmployeeId = input.EmployeeId;
                     entity.ChangeEstimatedTimeRetain(input.EstimatedExecutionTime, input.EstimatedCompletionTime);
@@ -280,7 +266,7 @@ namespace BXJG.WorkOrder.WorkOrder
             }
             query = query.WhereIf(input.UrgencyDegree.HasValue, c => c.UrgencyDegree == input.UrgencyDegree)
                          .WhereIf(input.Status.HasValue, c => c.Status == input.Status)
-                         .WhereIf(!input.EmployeeId.IsNullOrWhiteSpace(), c => c.EmployeeId==input.EmployeeId)
+                         .WhereIf(!input.EmployeeId.IsNullOrWhiteSpace(), c => c.EmployeeId == input.EmployeeId)
                          .WhereIf(input.EstimatedExecutionTimeStart.HasValue, c => c.EstimatedExecutionTime >= input.EstimatedExecutionTimeStart)
                          .WhereIf(input.EstimatedExecutionTimeEnd.HasValue, c => c.EstimatedExecutionTime < input.EstimatedExecutionTimeEnd)
                          .WhereIf(input.EstimatedCompletionTimeStart.HasValue, c => c.EstimatedCompletionTime >= input.EstimatedCompletionTimeStart)
