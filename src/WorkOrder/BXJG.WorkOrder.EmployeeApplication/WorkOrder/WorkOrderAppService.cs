@@ -211,7 +211,7 @@ namespace BXJG.WorkOrder.WorkOrder
             {
                 try
                 {
-                    item.AllocateRetain(Clock.Now, CurrentEmployeeId, input.EstimatedExecutionTime, input.EstimatedCompletionTime);
+                    item.Allocate(Clock.Now, CurrentEmployeeId, input.EstimatedExecutionTime, input.EstimatedCompletionTime);
                     await CurrentUnitOfWork.SaveChangesAsync();
                     r.Ids.Add(item.Id);
                 }

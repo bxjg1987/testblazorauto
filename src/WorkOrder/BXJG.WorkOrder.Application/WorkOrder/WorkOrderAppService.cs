@@ -85,7 +85,7 @@ namespace BXJG.WorkOrder.WorkOrder
                                   updatePermissionName,
                                   deletePermissionName,
                                   confirmePermissionName,
-                                  toBeonfirmedPermissionName;
+                                  toBeConfirmedPermissionName;
 
         public WorkOrderAppServiceBase(TRepository repository,
                                        TManager manager,
@@ -95,7 +95,7 @@ namespace BXJG.WorkOrder.WorkOrder
                                        string updatePermissionName = default,
                                        string deletePermissionName = default,
                                        string getPermissionName = default,
-                                       string toBeonfirmedPermissionName = default,
+                                       string toBeConfirmedPermissionName = default,
                                        string confirmePermissionName = default,
                                        string allocatePermissionName = default,
                                        string executePermissionName = default,
@@ -116,7 +116,7 @@ namespace BXJG.WorkOrder.WorkOrder
             this.updatePermissionName = updatePermissionName;
             this.deletePermissionName = deletePermissionName;
             this.confirmePermissionName = confirmePermissionName;
-            this.toBeonfirmedPermissionName = toBeonfirmedPermissionName;
+            this.toBeConfirmedPermissionName = toBeConfirmedPermissionName;
         }
         /// <summary>
         /// 新增工单
@@ -166,7 +166,7 @@ namespace BXJG.WorkOrder.WorkOrder
             {
                 if (input.Status.Value > entity.Status)//skip
                 {
-                    entity.SetUrgencyDegreeRetain(input.UrgencyDegree);
+                    entity.UrgencyDegree = input.UrgencyDegree ?? UrgencyDegree.Normalize;
                     await entity.Skip(Clock.Now,
                                       input.Status,
                                       input.StatusChangedDescription,
@@ -190,14 +190,14 @@ namespace BXJG.WorkOrder.WorkOrder
                                          d => CheckConfirmePermissionAsync(),
                                          d => CheckAllocatePermissionAsync(),
                                          d => CheckExecutePermissionAsync());
-                    entity.SetUrgencyDegreeRetain(input.UrgencyDegree);
+                    entity.UrgencyDegree = input.UrgencyDegree ?? UrgencyDegree.Normalize;
                     entity.EmployeeId = input.EmployeeId;
-                    entity.ChangeEstimatedTimeRetain(input.EstimatedExecutionTime, input.EstimatedCompletionTime);
+                    entity.ChangeEstimatedTime(input.EstimatedExecutionTime, input.EstimatedCompletionTime);
                 }
             }
             else
             {
-                entity.SetUrgencyDegreeRetain(input.UrgencyDegree);
+                entity.UrgencyDegree = input.UrgencyDegree ?? UrgencyDegree.Normalize;
                 entity.StatusChangedDescription = input.StatusChangedDescription;
                 entity.EmployeeId = input.EmployeeId;
                 entity.ChangeEstimatedTime(input.EstimatedExecutionTime, input.EstimatedCompletionTime);
@@ -336,14 +336,20 @@ namespace BXJG.WorkOrder.WorkOrder
             {
                 try
                 {
-                    await item.ChangeStatusRetain(status: input.Status,
-                                                  description: input.Description,
-                                                  toBeConfirmed: d => CheckToBeonfirmedPermissionAsync(),
-                                                  toBeAllocated: d => CheckConfirmePermissionAsync(),
-                                                  toBeProcessed: d => CheckAllocatePermissionAsync(),
-                                                  processing: d => CheckExecutePermissionAsync(),
-                                                  completed: d => CheckConfirmePermissionAsync(),
-                                                  rejected: d => CheckRejectPermissionAsync());
+                    await item.ChangeStatus(input.Status,
+                                            Clock.Now,
+                                            input.Description,
+                                            item.EmployeeId,
+                                            item.EstimatedExecutionTime,
+                                            item.EstimatedCompletionTime,
+                                            item.ExecutionTime,
+                                            item.CompletionTime,
+                                            d => CheckToBeonfirmedPermissionAsync(),
+                                            d => CheckConfirmePermissionAsync(),
+                                            d => CheckAllocatePermissionAsync(),
+                                            d => CheckExecutePermissionAsync(),
+                                            d => CheckConfirmePermissionAsync(),
+                                            d => CheckRejectPermissionAsync());
                     await CurrentUnitOfWork.SaveChangesAsync();
                     r.Ids.Add(item.Id);
                 }
@@ -376,11 +382,11 @@ namespace BXJG.WorkOrder.WorkOrder
                 {
                     if (item.Status >= Status.ToBeProcessed)
                     {
-                        await item.BackOffRetain(status: Status.ToBeAllocated,
-                                                 //toBeConfirmed:d=>CheckToBeonfirmedPermissionAsync(),
-                                                 toBeAllocated: d => CheckConfirmePermissionAsync(),
-                                                 toBeProcessed: d => CheckAllocatePermissionAsync(),
-                                                 processing: d => CheckExecutePermissionAsync());
+                        await item.BackOff(status: Status.ToBeAllocated,
+                                           toBeConfirmed: d => CheckToBeonfirmedPermissionAsync(),
+                                           toBeAllocated: d => CheckConfirmePermissionAsync(),
+                                           toBeProcessed: d => CheckAllocatePermissionAsync(),
+                                           processing: d => CheckExecutePermissionAsync());
                     }
                     //item.AllocateRetain(Clock.Now, input.EmployeeId, input.EstimatedExecutionTime, input.EstimatedCompletionTime);
                     await item.Skip(status: Status.ToBeProcessed,
@@ -665,7 +671,7 @@ namespace BXJG.WorkOrder.WorkOrder
         }
         protected virtual Task CheckToBeonfirmedPermissionAsync()
         {
-            return CheckPermissionAsync(toBeonfirmedPermissionName);
+            return CheckPermissionAsync(toBeConfirmedPermissionName);
         }
         #endregion
     }

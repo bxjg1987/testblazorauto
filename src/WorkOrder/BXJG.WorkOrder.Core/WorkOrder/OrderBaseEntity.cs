@@ -511,7 +511,7 @@ namespace BXJG.WorkOrder.WorkOrder
         public virtual OrderBaseEntity Copy(DateTime time, Status status = Status.ToBeConfirmed, string description = "复制")
         {
             var entity = CopyCreate();
-            entity.ChangeStatusRetain(status, time, description).ConfigureAwait(false).GetAwaiter().GetResult();
+            entity.ChangeStatus(status, time, description, EmployeeId).ConfigureAwait(false).GetAwaiter().GetResult();
             return entity;
         }
     }
@@ -603,31 +603,31 @@ namespace BXJG.WorkOrder.WorkOrder
         {
             return entity.Copy(time ?? Clock.Now, status, description) as T;
         }
-        /// <summary>
-        /// 一并设置预计开始和结束时间<br />
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="estimatedExecutionTime">预计开始时间，若保留默认值则使用之前的值</param>
-        /// <param name="estimatedCompletionTime">希望的结束时间，若保留默认值则使用之前的值</param>
-        public static void ChangeEstimatedTimeRetain(this OrderBaseEntity entity,
-                                                     DateTimeOffset? estimatedExecutionTime = default,
-                                                     DateTimeOffset? estimatedCompletionTime = default)
-        {
-            var start = estimatedExecutionTime ?? entity.EstimatedExecutionTime;
-            var end = estimatedCompletionTime ?? entity.EstimatedCompletionTime;
-            entity.ChangeEstimatedTime(start, end);
-        }
-        /// <summary>
-        /// 设置紧急程度
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="urgencyDegree">若为空，则保持原来的值</param>
-        public static void SetUrgencyDegreeRetain(this OrderBaseEntity entity,
-                                                  UrgencyDegree? urgencyDegree = default)
-        {
-            if (urgencyDegree.HasValue)
-                entity.UrgencyDegree = urgencyDegree.Value;
-        }
+        ///// <summary>
+        ///// 一并设置预计开始和结束时间<br />
+        ///// </summary>
+        ///// <param name="entity"></param>
+        ///// <param name="estimatedExecutionTime">预计开始时间，若保留默认值则使用之前的值</param>
+        ///// <param name="estimatedCompletionTime">希望的结束时间，若保留默认值则使用之前的值</param>
+        //public static void ChangeEstimatedTimeRetain(this OrderBaseEntity entity,
+        //                                             DateTimeOffset? estimatedExecutionTime = default,
+        //                                             DateTimeOffset? estimatedCompletionTime = default)
+        //{
+        //    var start = estimatedExecutionTime ?? entity.EstimatedExecutionTime;
+        //    var end = estimatedCompletionTime ?? entity.EstimatedCompletionTime;
+        //    entity.ChangeEstimatedTime(start, end);
+        //}
+        ///// <summary>
+        ///// 设置紧急程度
+        ///// </summary>
+        ///// <param name="entity"></param>
+        ///// <param name="urgencyDegree">若为空，则保持原来的值</param>
+        //public static void SetUrgencyDegreeRetain(this OrderBaseEntity entity,
+        //                                          UrgencyDegree? urgencyDegree = default)
+        //{
+        //    if (urgencyDegree.HasValue)
+        //        entity.UrgencyDegree = urgencyDegree.Value;
+        //}
         /// <summary>
         /// 分配或或领取工单
         /// </summary>
@@ -644,22 +644,22 @@ namespace BXJG.WorkOrder.WorkOrder
         {
             entity.Allocate(time ?? Clock.Now, employeeId, estimatedExecutionTime, estimatedCompletionTime);
         }
-        /// <summary>
-        /// 分配或领取工单
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="time">分配或领取时间，若为空则调用Clock.Now</param>
-        /// <param name="employeeId">员工id，若为空则保留工单之前设置的值，若也为空则最终为空，表示此工单不分配给任何员工，只做状态改变</param>
-        /// <param name="estimatedExecutionTime">预计开始时间，若为空则保留工单之前设置的值，若也为空则最终为空</param>
-        /// <param name="estimatedCompletionTime">预计结束时间，若为空则保留工单之前设置的值，若也为空则最终为空</param>
-        public static void AllocateRetain(this OrderBaseEntity entity,
-                                          DateTimeOffset? time = default,
-                                          string employeeId = default,
-                                          DateTimeOffset? estimatedExecutionTime = default,
-                                          DateTimeOffset? estimatedCompletionTime = default)
-        {
-            entity.Allocate(time, employeeId ?? entity.EmployeeId, estimatedExecutionTime ?? entity.EstimatedExecutionTime, estimatedCompletionTime ?? entity.EstimatedCompletionTime);
-        }
+        ///// <summary>
+        ///// 分配或领取工单
+        ///// </summary>
+        ///// <param name="entity"></param>
+        ///// <param name="time">分配或领取时间，若为空则调用Clock.Now</param>
+        ///// <param name="employeeId">员工id，若为空则保留工单之前设置的值，若也为空则最终为空，表示此工单不分配给任何员工，只做状态改变</param>
+        ///// <param name="estimatedExecutionTime">预计开始时间，若为空则保留工单之前设置的值，若也为空则最终为空</param>
+        ///// <param name="estimatedCompletionTime">预计结束时间，若为空则保留工单之前设置的值，若也为空则最终为空</param>
+        //public static void AllocateRetain(this OrderBaseEntity entity,
+        //                                  DateTimeOffset? time = default,
+        //                                  string employeeId = default,
+        //                                  DateTimeOffset? estimatedExecutionTime = default,
+        //                                  DateTimeOffset? estimatedCompletionTime = default)
+        //{
+        //    entity.Allocate(time, employeeId ?? entity.EmployeeId, estimatedExecutionTime ?? entity.EstimatedExecutionTime, estimatedCompletionTime ?? entity.EstimatedCompletionTime);
+        //}
         /// <summary>
         /// 回退到指定状态
         /// </summary>
@@ -685,30 +685,30 @@ namespace BXJG.WorkOrder.WorkOrder
                                  processing);
         }
 
-        /// <summary>
-        /// 回退到指定状态
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param time="time">回退时间，为空则使用Clock.Now</param>
-        /// <param name="status">目标状态，不指定则默认回到上一个状态</param>
-        /// <param desc="desc">回退原因，如：希望重新分配</param>
-        public static Task BackOffRetain(this OrderBaseEntity entity,
-                                         DateTimeOffset? time = default,
-                                         Status? status = default,
-                                         string description = default,
-                                         Func<OrderBaseEntity, Task> toBeConfirmed = default,
-                                         Func<OrderBaseEntity, Task> toBeAllocated = default,
-                                         Func<OrderBaseEntity, Task> toBeProcessed = default,
-                                         Func<OrderBaseEntity, Task> processing = default)
-        {
-            return entity.BackOff(time,
-                                  status,
-                                  description ?? entity.StatusChangedDescription,
-                                  toBeConfirmed,
-                                  toBeAllocated,
-                                  toBeProcessed,
-                                  processing);
-        }
+        ///// <summary>
+        ///// 回退到指定状态
+        ///// </summary>
+        ///// <param name="entity"></param>
+        ///// <param time="time">回退时间，为空则使用Clock.Now</param>
+        ///// <param name="status">目标状态，不指定则默认回到上一个状态</param>
+        ///// <param desc="desc">回退原因，如：希望重新分配</param>
+        //public static Task BackOffRetain(this OrderBaseEntity entity,
+        //                                 DateTimeOffset? time = default,
+        //                                 Status? status = default,
+        //                                 string description = default,
+        //                                 Func<OrderBaseEntity, Task> toBeConfirmed = default,
+        //                                 Func<OrderBaseEntity, Task> toBeAllocated = default,
+        //                                 Func<OrderBaseEntity, Task> toBeProcessed = default,
+        //                                 Func<OrderBaseEntity, Task> processing = default)
+        //{
+        //    return entity.BackOff(time,
+        //                          status,
+        //                          description ?? entity.StatusChangedDescription,
+        //                          toBeConfirmed,
+        //                          toBeAllocated,
+        //                          toBeProcessed,
+        //                          processing);
+        //}
         /// <summary>
         /// 跳跃到指定状态
         /// </summary>
@@ -785,48 +785,47 @@ namespace BXJG.WorkOrder.WorkOrder
                 entity.Completion(completeTime ?? t, description);
             }
         }
-
-        /// <summary>
-        /// 跳跃到指定状态
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="time">执行时间，若为空则使用Clock.Now</param>
-        /// <param name="status">目标状态，若为空则调整到下一个状态</param>
-        /// <param name="description">改变状态的说明</param>
-        /// <param name="empId">若目标状态大于等于分配，则需要指明分配操作相关参数，若为空则保留之前的值</param>
-        /// <param name="estimatedExecutionTime">预计开始时间，若为空则保留之前的值</param>
-        /// <param name="estimatedCompletionTime">预计结束时间，若为空则保留之前的值</param>
-        /// <param name="excuteTime">实际开始时间，若为空则保留之前的值，若还为空则使用time的值，若还未空则使用Clock.Now</param>
-        /// <param name="completeTime">实际结束时间，若为空则保留之前的值，若还为空则使用time的值，若还未空则使用Clock.Now</param>
-        public static Task SkipRetain(this OrderBaseEntity entity,
-                                      DateTimeOffset? time = default,
-                                      Status? status = default,
-                                      string description = default,
-                                      string empId = default,
-                                      DateTimeOffset? estimatedExecutionTime = default,
-                                      DateTimeOffset? estimatedCompletionTime = default,
-                                      DateTimeOffset? excuteTime = default,
-                                      DateTimeOffset? completeTime = default,
-                                      Func<OrderBaseEntity, Task> toBeAllocated = default,
-                                      Func<OrderBaseEntity, Task> toBeProcessed = default,
-                                      Func<OrderBaseEntity, Task> processing = default,
-                                      Func<OrderBaseEntity, Task> completed = default,
-                                      Func<OrderBaseEntity, Task> rejected = default)
-        {
-            return entity.Skip(time,
-                               status,
-                               description ?? entity.StatusChangedDescription,
-                               empId ?? entity.EmployeeId,
-                               estimatedExecutionTime ?? entity.EstimatedExecutionTime,
-                               estimatedCompletionTime ?? entity.EstimatedCompletionTime,
-                               excuteTime,
-                               completeTime,
-                               toBeAllocated,
-                               toBeProcessed,
-                               processing,
-                               completed,
-                               rejected);
-        }
+        ///// <summary>
+        ///// 跳跃到指定状态
+        ///// </summary>
+        ///// <param name="entity"></param>
+        ///// <param name="time">执行时间，若为空则使用Clock.Now</param>
+        ///// <param name="status">目标状态，若为空则调整到下一个状态</param>
+        ///// <param name="description">改变状态的说明</param>
+        ///// <param name="empId">若目标状态大于等于分配，则需要指明分配操作相关参数，若为空则保留之前的值</param>
+        ///// <param name="estimatedExecutionTime">预计开始时间，若为空则保留之前的值</param>
+        ///// <param name="estimatedCompletionTime">预计结束时间，若为空则保留之前的值</param>
+        ///// <param name="excuteTime">实际开始时间，若为空则保留之前的值，若还为空则使用time的值，若还未空则使用Clock.Now</param>
+        ///// <param name="completeTime">实际结束时间，若为空则保留之前的值，若还为空则使用time的值，若还未空则使用Clock.Now</param>
+        //public static Task SkipRetain(this OrderBaseEntity entity,
+        //                              DateTimeOffset? time = default,
+        //                              Status? status = default,
+        //                              string description = default,
+        //                              string empId = default,
+        //                              DateTimeOffset? estimatedExecutionTime = default,
+        //                              DateTimeOffset? estimatedCompletionTime = default,
+        //                              DateTimeOffset? excuteTime = default,
+        //                              DateTimeOffset? completeTime = default,
+        //                              Func<OrderBaseEntity, Task> toBeAllocated = default,
+        //                              Func<OrderBaseEntity, Task> toBeProcessed = default,
+        //                              Func<OrderBaseEntity, Task> processing = default,
+        //                              Func<OrderBaseEntity, Task> completed = default,
+        //                              Func<OrderBaseEntity, Task> rejected = default)
+        //{
+        //    return entity.Skip(time,
+        //                       status,
+        //                       description ?? entity.StatusChangedDescription,
+        //                       empId ?? entity.EmployeeId,
+        //                       estimatedExecutionTime ?? entity.EstimatedExecutionTime,
+        //                       estimatedCompletionTime ?? entity.EstimatedCompletionTime,
+        //                       excuteTime,
+        //                       completeTime,
+        //                       toBeAllocated,
+        //                       toBeProcessed,
+        //                       processing,
+        //                       completed,
+        //                       rejected);
+        //}
         /// <summary>
         /// 设置为任意状态
         /// </summary>
@@ -858,12 +857,12 @@ namespace BXJG.WorkOrder.WorkOrder
         {
             if (status < entity.Status)
                 await entity.BackOff(time,
-                                 status,
-                                 description,
-                                 toBeConfirmed,
-                                 toBeAllocated,
-                                 toBeProcessed,
-                                 processing);
+                                     status,
+                                     description,
+                                     toBeConfirmed,
+                                     toBeAllocated,
+                                     toBeProcessed,
+                                     processing);
             else
                 await entity.Skip(time,
                                   status,
@@ -879,57 +878,57 @@ namespace BXJG.WorkOrder.WorkOrder
                                   completed,
                                   rejected);
         }
-        /// <summary>
-        /// 设置为任意状态
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="status">目标状态</param>
-        /// <param time="time">回退时间，为空则使用Clock.Now</param>
-        /// <param name="description">改变状态的说明</param>
-        /// <param name="empId">若目标状态大于等于分配，则需要指明分配操作相关参数，若为空则保留之前的值</param>
-        /// <param name="estimatedExecutionTime">预计开始时间，若为空则保留之前的值</param>
-        /// <param name="estimatedCompletionTime">预计结束时间，若为空则保留之前的值</param>
-        /// <param name="excuteTime">实际开始时间，若为空则保留之前的值，若还为空则使用time的值，若还未空则使用Clock.Now</param>
-        /// <param name="completeTime">实际结束时间，若为空则保留之前的值，若还为空则使用time的值，若还未空则使用Clock.Now</param>
-        /// <param name="act">回退 》act 》Skip</param>
-        public static async Task ChangeStatusRetain(this OrderBaseEntity entity,
-                                                    Status? status,
-                                                    DateTimeOffset? time = default,
-                                                    string description = default,
-                                                    string empId = default,
-                                                    DateTimeOffset? estimatedExecutionTime = default,
-                                                    DateTimeOffset? estimatedCompletionTime = default,
-                                                    DateTimeOffset? excuteTime = default,
-                                                    DateTimeOffset? completeTime = default,
-                                                    Func<OrderBaseEntity, Task> toBeConfirmed = default,
-                                                    Func<OrderBaseEntity, Task> toBeAllocated = default,
-                                                    Func<OrderBaseEntity, Task> toBeProcessed = default,
-                                                    Func<OrderBaseEntity, Task> processing = default,
-                                                    Func<OrderBaseEntity, Task> completed = default,
-                                                    Func<OrderBaseEntity, Task> rejected = default)
-        {
-            if (status < entity.Status)
-                await entity.BackOffRetain(time,
-                                       status,
-                                       description,
-                                       toBeConfirmed,
-                                       toBeAllocated,
-                                       toBeProcessed,
-                                       processing);
-            else
-                await entity.SkipRetain(time,
-                                        status,
-                                        description,
-                                        empId,
-                                        estimatedExecutionTime,
-                                        estimatedCompletionTime,
-                                        excuteTime,
-                                        completeTime,
-                                        toBeAllocated,
-                                        toBeProcessed,
-                                        processing,
-                                        completed,
-                                        rejected);
-        }
+        ///// <summary>
+        ///// 设置为任意状态
+        ///// </summary>
+        ///// <param name="entity"></param>
+        ///// <param name="status">目标状态</param>
+        ///// <param time="time">回退时间，为空则使用Clock.Now</param>
+        ///// <param name="description">改变状态的说明</param>
+        ///// <param name="empId">若目标状态大于等于分配，则需要指明分配操作相关参数，若为空则保留之前的值</param>
+        ///// <param name="estimatedExecutionTime">预计开始时间，若为空则保留之前的值</param>
+        ///// <param name="estimatedCompletionTime">预计结束时间，若为空则保留之前的值</param>
+        ///// <param name="excuteTime">实际开始时间，若为空则保留之前的值，若还为空则使用time的值，若还未空则使用Clock.Now</param>
+        ///// <param name="completeTime">实际结束时间，若为空则保留之前的值，若还为空则使用time的值，若还未空则使用Clock.Now</param>
+        ///// <param name="act">回退 》act 》Skip</param>
+        //public static async Task ChangeStatusRetain(this OrderBaseEntity entity,
+        //                                            Status? status,
+        //                                            DateTimeOffset? time = default,
+        //                                            string description = default,
+        //                                            string empId = default,
+        //                                            DateTimeOffset? estimatedExecutionTime = default,
+        //                                            DateTimeOffset? estimatedCompletionTime = default,
+        //                                            DateTimeOffset? excuteTime = default,
+        //                                            DateTimeOffset? completeTime = default,
+        //                                            Func<OrderBaseEntity, Task> toBeConfirmed = default,
+        //                                            Func<OrderBaseEntity, Task> toBeAllocated = default,
+        //                                            Func<OrderBaseEntity, Task> toBeProcessed = default,
+        //                                            Func<OrderBaseEntity, Task> processing = default,
+        //                                            Func<OrderBaseEntity, Task> completed = default,
+        //                                            Func<OrderBaseEntity, Task> rejected = default)
+        //{
+        //    if (status < entity.Status)
+        //        await entity.BackOff(time,
+        //                             status,
+        //                             description,
+        //                             toBeConfirmed,
+        //                             toBeAllocated,
+        //                             toBeProcessed,
+        //                             processing);
+        //    else
+        //        await entity.SkipRetain(time,
+        //                                status,
+        //                                description,
+        //                                empId,
+        //                                estimatedExecutionTime,
+        //                                estimatedCompletionTime,
+        //                                excuteTime,
+        //                                completeTime,
+        //                                toBeAllocated,
+        //                                toBeProcessed,
+        //                                processing,
+        //                                completed,
+        //                                rejected);
+        //}
     }
 }
