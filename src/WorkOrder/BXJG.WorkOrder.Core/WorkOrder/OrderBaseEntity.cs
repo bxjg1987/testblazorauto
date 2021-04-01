@@ -429,74 +429,6 @@ namespace BXJG.WorkOrder.WorkOrder
             ChangeStatus(Status.ToBeConfirmed, time, description);
         }
         /// <summary>
-        /// 回退到指定状态
-        /// </summary>
-        /// <param time="time"></param>
-        /// <param name="status">目标状态，不指定则默认回到上一个状态。若最终的目标状态已经到顶了，则抛出UserFriendlyException异常</param>
-        /// <param desc="desc">回退原因，如：希望重新分配，可空</param>
-        public virtual async Task BackOff(DateTimeOffset time,
-                                          Status? status = default,
-                                          string description = "回退",
-                                          Func<OrderBaseEntity, Task> toBeConfirmed = default,
-                                          Func<OrderBaseEntity, Task> toBeAllocated = default,
-                                          Func<OrderBaseEntity, Task> toBeProcessed = default,
-                                          Func<OrderBaseEntity, Task> processing = default)
-        {
-            if (status == default)
-            {
-                if (Status > Status.ToBeConfirmed && Status <= Status.Completed)
-                    status = Status - 1;
-                else
-                    status = Status;
-            }
-
-            if (status >= Status)
-                throw new UserFriendlyException("workorderBackOffException1".BXJGWorkOrderL(Status.BXJGWorkOrderEnum()));
-
-            if (Status == Status.Rejected)
-            {
-                //已拒绝的工单只允许回退到待确认状态
-                if (status != Status.ToBeConfirmed)
-                    throw new UserFriendlyException("workorderBackOffException1".BXJGWorkOrderL(status.Value.BXJGWorkOrderEnum()));
-                else
-                {
-                    if (toBeConfirmed != null)
-                        await toBeConfirmed(this);
-                    UnReject(time, description);
-                    //this.SkipRetain(toBeAllocated:toBeAllocated, toBeProcessed:toBeProcessed, processing:processing)
-                    return;
-                }
-            }
-
-            if (status < Status.Completed && Status == Status.Completed)
-            {
-                if (processing != null)
-                    await processing(this);
-                UnCompletion(time, description);
-            }
-
-            if (status < Status.Processing && Status == Status.Processing)
-            {
-                if (toBeProcessed != null)
-                    await toBeProcessed(this);
-                UnExecute(time, description);
-            }
-
-            if (status < Status.ToBeProcessed && Status == Status.ToBeProcessed)
-            {
-                if (toBeAllocated != null)
-                    await toBeAllocated(this);
-                UnAllocate(time, description);
-            }
-
-            if (status < Status.ToBeAllocated && Status == Status.ToBeAllocated)
-            {
-                if (toBeConfirmed != null)
-                    await toBeConfirmed(this);
-                UnConfirme(time, description);
-            }
-        }
-        /// <summary>
         /// 复制工单时创建逻辑
         /// </summary>
         /// <returns></returns>
@@ -660,6 +592,82 @@ namespace BXJG.WorkOrder.WorkOrder
         //{
         //    entity.Allocate(time, employeeId ?? entity.EmployeeId, estimatedExecutionTime ?? entity.EstimatedExecutionTime, estimatedCompletionTime ?? entity.EstimatedCompletionTime);
         //}
+
+        /// <summary>
+        /// 回退到指定状态
+        /// </summary>
+        /// <param time="entity"></param>
+        /// <param time="time"></param>
+        /// <param name="status">目标状态，不指定则默认回到上一个状态。若最终的目标状态已经到顶了，则抛出UserFriendlyException异常</param>
+        /// <param desc="desc">回退原因，如：希望重新分配，可空</param>
+        /// <param name="toBeConfirmed"></param>
+        /// <param name="toBeAllocated"></param>
+        /// <param name="toBeProcessed"></param>
+        /// <param name="processing"></param>
+        /// <returns></returns>
+        public static async Task BackOff(this OrderBaseEntity entity,
+                                         DateTimeOffset time,
+                                         Status? status = default,
+                                         string description = "回退",
+                                         Func<OrderBaseEntity, Task> toBeConfirmed = default,
+                                         Func<OrderBaseEntity, Task> toBeAllocated = default,
+                                         Func<OrderBaseEntity, Task> toBeProcessed = default,
+                                         Func<OrderBaseEntity, Task> processing = default)
+        {
+            if (status == default)
+            {
+                if (entity.Status > Status.ToBeConfirmed && entity.Status <= Status.Completed)
+                    status = entity.Status - 1;
+                else
+                    status = entity.Status;
+            }
+
+            if (status >= entity.Status)
+                throw new UserFriendlyException("workorderBackOffException1".BXJGWorkOrderL(entity.Status.BXJGWorkOrderEnum()));
+
+            if (entity.Status == Status.Rejected)
+            {
+                //已拒绝的工单只允许回退到待确认状态
+                if (status != Status.ToBeConfirmed)
+                    throw new UserFriendlyException("workorderBackOffException1".BXJGWorkOrderL(status.Value.BXJGWorkOrderEnum()));
+                else
+                {
+                    if (toBeConfirmed != null)
+                        await toBeConfirmed(entity);
+                    entity.UnReject(time, description);
+                    //this.SkipRetain(toBeAllocated:toBeAllocated, toBeProcessed:toBeProcessed, processing:processing)
+                    return;
+                }
+            }
+
+            if (status < Status.Completed && entity.Status == Status.Completed)
+            {
+                if (processing != null)
+                    await processing(entity);
+                entity.UnCompletion(time, description);
+            }
+
+            if (status < Status.Processing && entity.Status == Status.Processing)
+            {
+                if (toBeProcessed != null)
+                    await toBeProcessed(entity);
+                entity.UnExecute(time, description);
+            }
+
+            if (status < Status.ToBeProcessed && entity.Status == Status.ToBeProcessed)
+            {
+                if (toBeAllocated != null)
+                    await toBeAllocated(entity);
+                entity.UnAllocate(time, description);
+            }
+
+            if (status < Status.ToBeAllocated && entity.Status == Status.ToBeAllocated)
+            {
+                if (toBeConfirmed != null)
+                    await toBeConfirmed(entity);
+                entity.UnConfirme(time, description);
+            }
+        }
         /// <summary>
         /// 回退到指定状态
         /// </summary>
