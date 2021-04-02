@@ -23,11 +23,11 @@ namespace BXJG.WorkOrder
         /// </summary>
         /// <param name="parent"></param>
         /// <returns></returns>
-        public static MenuItemDefinition AddBXJGEmployeeWorkOrderNavigation(this MenuDefinition parent)
+        public static MenuDefinition AddBXJGEmployeeWorkOrderNavigation(this MenuDefinition parent)
         {
             var p = Create();
             parent.AddItem(p);
-            return p;
+            return parent;
         }
         /// <summary>
         /// 注册工单模块中员工需要的菜单
@@ -38,7 +38,7 @@ namespace BXJG.WorkOrder
         {
             var p = Create();
             parent.AddItem(p);
-            return p;
+            return parent;
         }
     }
 }

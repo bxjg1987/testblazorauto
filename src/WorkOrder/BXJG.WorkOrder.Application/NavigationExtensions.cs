@@ -39,11 +39,11 @@ namespace BXJG.WorkOrder
         /// </summary>
         /// <param name="parent"></param>
         /// <returns></returns>
-        public static MenuItemDefinition AddBXJGWorkOrderNavigation(this MenuDefinition parent)
+        public static MenuDefinition AddBXJGWorkOrderNavigation(this MenuDefinition parent)
         {
             var p = Create();
             parent.AddItem(p);
-            return p;
+            return parent;
         }
         /// <summary>
         /// 注册工单模块种的菜单
@@ -54,7 +54,7 @@ namespace BXJG.WorkOrder
         {
             var p = Create();
             parent.AddItem(p);
-            return p;
+            return parent;
         }
     }
 }

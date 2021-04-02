@@ -19,12 +19,15 @@
     <Compile Remove="Auditing\Exporting\**" />
     <Compile Remove="Authorization\Permissions\Dto\**" />
     <Compile Remove="Localization\**" />
+    <Compile Remove="WorkOrder\**" />
     <EmbeddedResource Remove="Auditing\Exporting\**" />
     <EmbeddedResource Remove="Authorization\Permissions\Dto\**" />
     <EmbeddedResource Remove="Localization\**" />
+    <EmbeddedResource Remove="WorkOrder\**" />
     <None Remove="Auditing\Exporting\**" />
     <None Remove="Authorization\Permissions\Dto\**" />
     <None Remove="Localization\**" />
+    <None Remove="WorkOrder\**" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="BaseInfo\Organizations\IOrganizationUnitAppService.cs" />
@@ -54,9 +57,6 @@
   <ItemGroup>
     <Folder Include="CMS\" />
     <Folder Include="Dto\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="hyjiacan.py4n" Version="4.0.0" />

@@ -110,9 +110,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.WorkOrder.EFCore", "sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.WorkOrder.Application", "src\WorkOrder\BXJG.WorkOrder.Application\BXJG.WorkOrder.Application.csproj", "{32669583-820F-4754-A162-F277DAC7C5C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BXJG.WorkOrder.EmployeeApplication", "src\WorkOrder\BXJG.WorkOrder.EmployeeApplication\BXJG.WorkOrder.EmployeeApplication.csproj", "{DD0EC66D-EED5-4A9A-AF87-7988D5D371FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.WorkOrder.EmployeeApplication", "src\WorkOrder\BXJG.WorkOrder.EmployeeApplication\BXJG.WorkOrder.EmployeeApplication.csproj", "{DD0EC66D-EED5-4A9A-AF87-7988D5D371FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BXJG.WorkOrder.CommonApplication", "src\WorkOrder\BXJG.WorkOrder.CommonApplication\BXJG.WorkOrder.CommonApplication.csproj", "{D35D8C6F-DEF7-47CE-9808-D2758A28AD13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.WorkOrder.CommonApplication", "src\WorkOrder\BXJG.WorkOrder.CommonApplication\BXJG.WorkOrder.CommonApplication.csproj", "{D35D8C6F-DEF7-47CE-9808-D2758A28AD13}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
