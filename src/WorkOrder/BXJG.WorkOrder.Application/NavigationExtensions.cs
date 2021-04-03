@@ -10,51 +10,64 @@ namespace BXJG.WorkOrder
 {
     public static class NavigationExtensions
     {
-        static MenuItemDefinition Create()
+        /// <summary>
+        /// 注册工单模块后台管理端的菜单
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <returns></returns>
+        public static MenuItemDefinition AddBXJGWorkOrderAllNav(this IHasMenuItemDefinitions parent)
         {
-            var root = new MenuItemDefinition(CoreConsts.WorkOrder,
-                                              CoreConsts.WorkOrderManager.BXJGWorkOrderLI(),
-                                              icon: "BXJGShopOrder",
-                                              permissionDependency: new SimplePermissionDependency(CoreConsts.WorkOrder));
+            var root = parent.AddBXJGWorkOrderRootNav();
+            root.AddBXJGWorkOrderCategoryNav();
+            root.AddBXJGWorkOrderDefaultNav();
+            return root;
+        }
+        /// <summary>
+        /// 注册工单模块后台管理端的根菜单
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <returns></returns>
+        public static MenuItemDefinition AddBXJGWorkOrderRootNav(this IHasMenuItemDefinitions parent)
+        {
+            var item = new MenuItemDefinition(CoreConsts.WorkOrder,
+                                          CoreConsts.WorkOrderManager.BXJGWorkOrderLI(),
+                                          icon: "BXJGShopOrder",
+                                          permissionDependency: new SimplePermissionDependency(CoreConsts.WorkOrder));
 
-            //代码生成器的占位符，它将在这里插入更多菜单
-            //{codegenerator}
-
-            root.AddItem(new MenuItemDefinition(CoreConsts.WorkOrderCategoryManager,
+            parent.Items.Add(item);
+            return item;
+        }
+        /// <summary>
+        /// 注册工单模块后台管理端的工单分类菜单
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <returns></returns>
+        public static MenuItemDefinition AddBXJGWorkOrderCategoryNav(this IHasMenuItemDefinitions parent)
+        {
+            var item = new MenuItemDefinition(CoreConsts.WorkOrderCategoryManager,
                                                 CoreConsts.WorkOrderCategoryManager.BXJGWorkOrderLI(),
                                                 icon: "BXJGShopProductCategory",
                                                 //url: $"/{CoreConsts.WorkOrder}/{CoreConsts.WorkOrderCategoryManager.RemovePreFix(CoreConsts.WorkOrder).RemovePostFix("Manager")}/index.html",
                                                 url: $"/{CoreConsts.WorkOrder}/WorkOrderCategory/index.html",
-                                                permissionDependency: new SimplePermissionDependency(CoreConsts.WorkOrderCategoryManager)))
-                .AddItem(new MenuItemDefinition(CoreConsts.WorkOrderManager,
-                                                CoreConsts.WorkOrderManager.BXJGWorkOrderLI(),
-                                                icon: "BXJGShopOrder",
-                                                url: $"/{CoreConsts.WorkOrder}/WorkOrder/index.html",
-                                                permissionDependency: new SimplePermissionDependency(CoreConsts.WorkOrderManager)));
+                                                permissionDependency: new SimplePermissionDependency(CoreConsts.WorkOrderCategoryManager));
+            parent.Items.Add(item);
+            return item;
+        }
+        /// <summary>
+        /// 注册工单模块后台管理端的默认工单管理菜单
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <returns></returns>
+        public static MenuItemDefinition AddBXJGWorkOrderDefaultNav(this IHasMenuItemDefinitions parent)
+        {
+            var item = new MenuItemDefinition(CoreConsts.WorkOrderManager,
+                                          CoreConsts.WorkOrderManager.BXJGWorkOrderLI(),
+                                          icon: "BXJGShopOrder",
+                                          url: $"/{CoreConsts.WorkOrder}/WorkOrder/index.html",
+                                          permissionDependency: new SimplePermissionDependency(CoreConsts.WorkOrderManager));
 
-            return root;
-        }
-        /// <summary>
-        /// 注册工单模块种的菜单
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <returns></returns>
-        public static MenuDefinition AddBXJGWorkOrderNavigation(this MenuDefinition parent)
-        {
-            var p = Create();
-            parent.AddItem(p);
-            return parent;
-        }
-        /// <summary>
-        /// 注册工单模块种的菜单
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <returns></returns>
-        public static MenuItemDefinition AddBXJGWorkOrderNavigation(this MenuItemDefinition parent)
-        {
-            var p = Create();
-            parent.AddItem(p);
-            return parent;
+            parent.Items.Add(item);
+            return item;
         }
     }
 }

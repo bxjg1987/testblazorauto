@@ -17,8 +17,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <summary>
         /// 所属分类id
         /// </summary>
-        //[Required]//可以考虑在领域服务独去配置，以便设置为默认分类，方便更快速建立工单
-        public long CategoryId { get; set; }
+        public long? CategoryId { get; set; }
         /// <summary>
         /// 状态
         /// </summary>

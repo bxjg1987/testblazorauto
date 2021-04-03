@@ -158,7 +158,7 @@ namespace BXJG.WorkOrder.WorkOrder
 
             var entity = await repository.GetAsync(input.Id);
 
-            entity.CategoryId = input.CategoryId;
+            entity.CategoryId = input.CategoryId ?? 1;
             entity.Description = input.Description;
             entity.Title = input.Title;
 
