@@ -3,7 +3,11 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>BXJG.WorkOrder</RootNamespace>
-    <Version>1.0.0-rc1</Version>
+    <Version>1.0.0-rc3</Version>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>d:\abp\src\WorkOrder\BXJG.WorkOrder.EFCore\BXJG.WorkOrder.EFCore.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
