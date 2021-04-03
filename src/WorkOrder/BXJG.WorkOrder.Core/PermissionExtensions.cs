@@ -67,5 +67,26 @@ namespace BXJG.WorkOrder
         {
             return context.CreateChildPermission(CoreConsts.EmployeeWorkOrderManager, CoreConsts.EmployeeWorkOrderManager.BXJGWorkOrderLI(), multiTenancySides: MultiTenancySides.Tenant);
         }
+
+        /// <summary>
+        /// 注册工单模块管理端权限
+        /// </summary>
+        /// <param name="context"></param>
+        public static Permission AddBXJGWorkOrderAllPermission(this IPermissionDefinitionContext context)
+        {
+            var workOrder = context.AddBXJGWorkOrderPermission();
+            workOrder.AddBXJGWorkOrderCategoryPermission();
+            workOrder.AddBXJGDefaultWorkOrderPermission();
+            workOrder.AddBXJGEmployeeWorkOrderPermission();
+            return workOrder;
+        }
+        /// <summary>
+        /// 注册工单模块管理端根权限
+        /// </summary>
+        /// <param name="context"></param>
+        public static Permission AddBXJGWorkOrderPermission(this IPermissionDefinitionContext context)
+        {
+            return context.CreatePermission(CoreConsts.WorkOrder, CoreConsts.WorkOrderManager.BXJGWorkOrderLI(), multiTenancySides: MultiTenancySides.Tenant);
+        }
     }
 }
