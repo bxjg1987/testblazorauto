@@ -109,7 +109,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// 状态<br />
         /// 核心属性，调用相应业务方法可以改变其值
         /// </summary>
-        public virtual Status Status { get; private set; }
+        public virtual Status Status { get; protected set; }
         protected UrgencyDegree urgencyDegree;
         /// <summary>
         /// 紧急程度<br />
@@ -156,10 +156,11 @@ namespace BXJG.WorkOrder.WorkOrder
         public virtual string Description { get; set; }
         /// <summary>
         /// 当前状态情况说明<br />
-        /// 更改状态的原因，某些状态改变原因不重要，比如确认、分配等..，但某些状态改变原因很重要，比如拒绝，为何拒绝？完成对应的完成情况说明。
-        /// 某些客户可能没有这么严格的要求，而另一些可能需要严格要求。是否开启严格要求、严格要求哪些状态必须说明原因，应该在领域服务通过配置系统来完成。或在状态改变的事件中去处理这些逻辑
+        /// 更改状态的原因，某些状态改变原因不重要，比如确认、分配等..，但某些状态改变原因很重要，比如拒绝，为何拒绝？完成对应的完成情况说明。<br />
+        /// 某些客户可能没有这么严格的要求，而另一些可能需要严格要求。是否开启严格要求、严格要求哪些状态必须说明原因，应该在领域服务通过配置系统来完成。或在状态改变的事件中去处理这些逻辑<br />
+        /// 状态变更描述是说明具体操作的，因此不允许修改
         /// </summary>
-        public virtual string StatusChangedDescription { get; set; }
+        public virtual string StatusChangedDescription { get; protected set; }
         /// <summary>
         /// 变成当前状态的时间
         /// </summary>
@@ -443,7 +444,8 @@ namespace BXJG.WorkOrder.WorkOrder
         public virtual OrderBaseEntity Copy(DateTime time, Status status = Status.ToBeConfirmed, string description = "复制")
         {
             var entity = CopyCreate();
-            entity.ChangeStatus(status, time, description, EmployeeId).ConfigureAwait(false).GetAwaiter().GetResult();
+            if (entity.Status != status)
+                entity.ChangeStatus(status, time, description, EmployeeId).ConfigureAwait(false).GetAwaiter().GetResult();
             return entity;
         }
     }
@@ -604,9 +606,13 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="toBeAllocated"></param>
         /// <param name="toBeProcessed"></param>
         /// <param name="processing"></param>
+        /// <param name="toBeConfirmed">进入待确认状态时的回调函数</param>
+        /// <param name="toBeAllocated">进入已确认，待分配状态时的回调函数</param>
+        /// <param name="toBeProcessed">进入已分配，待执行状态时的回调函数</param>
+        /// <param name="processing">进入已执行，待完成状态时的回调函数</param>
         /// <returns></returns>
         public static async Task BackOff(this OrderBaseEntity entity,
-                                         DateTimeOffset time,
+                                         DateTimeOffset? time = default,
                                          Status? status = default,
                                          string description = "回退",
                                          Func<OrderBaseEntity, Task> toBeConfirmed = default,
@@ -625,6 +631,8 @@ namespace BXJG.WorkOrder.WorkOrder
             if (status >= entity.Status)
                 throw new UserFriendlyException("workorderBackOffException1".BXJGWorkOrderL(entity.Status.BXJGWorkOrderEnum()));
 
+            var t = time ?? Clock.Now;
+
             if (entity.Status == Status.Rejected)
             {
                 //已拒绝的工单只允许回退到待确认状态
@@ -634,7 +642,7 @@ namespace BXJG.WorkOrder.WorkOrder
                 {
                     if (toBeConfirmed != null)
                         await toBeConfirmed(entity);
-                    entity.UnReject(time, description);
+                    entity.UnReject(t, description);
                     //this.SkipRetain(toBeAllocated:toBeAllocated, toBeProcessed:toBeProcessed, processing:processing)
                     return;
                 }
@@ -644,53 +652,29 @@ namespace BXJG.WorkOrder.WorkOrder
             {
                 if (processing != null)
                     await processing(entity);
-                entity.UnCompletion(time, description);
+                entity.UnCompletion(t, description);
             }
 
             if (status < Status.Processing && entity.Status == Status.Processing)
             {
                 if (toBeProcessed != null)
                     await toBeProcessed(entity);
-                entity.UnExecute(time, description);
+                entity.UnExecute(t, description);
             }
 
             if (status < Status.ToBeProcessed && entity.Status == Status.ToBeProcessed)
             {
                 if (toBeAllocated != null)
                     await toBeAllocated(entity);
-                entity.UnAllocate(time, description);
+                entity.UnAllocate(t, description);
             }
 
             if (status < Status.ToBeAllocated && entity.Status == Status.ToBeAllocated)
             {
                 if (toBeConfirmed != null)
                     await toBeConfirmed(entity);
-                entity.UnConfirme(time, description);
+                entity.UnConfirme(t, description);
             }
-        }
-        /// <summary>
-        /// 回退到指定状态
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param time="time">回退时间，为空则使用Clock.Now</param>
-        /// <param name="status">目标状态，不指定则默认回到上一个状态</param>
-        /// <param desc="desc">回退原因，如：希望重新分配</param>
-        public static async Task BackOff(this OrderBaseEntity entity,
-                                         DateTimeOffset? time = default,
-                                         Status? status = default,
-                                         string description = "回退",
-                                         Func<OrderBaseEntity, Task> toBeConfirmed = default,
-                                         Func<OrderBaseEntity, Task> toBeAllocated = default,
-                                         Func<OrderBaseEntity, Task> toBeProcessed = default,
-                                         Func<OrderBaseEntity, Task> processing = default)
-        {
-            await entity.BackOff(time ?? Clock.Now,
-                                 status,
-                                 description,
-                                 toBeConfirmed,
-                                 toBeAllocated,
-                                 toBeProcessed,
-                                 processing);
         }
 
         ///// <summary>
@@ -722,13 +706,18 @@ namespace BXJG.WorkOrder.WorkOrder
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="time">执行时间，若为空则使用Clock.Now</param>
-        /// <param name="status">目标状态，若为空则调整到下一个状态</param>
+        /// <param name="status">目标状态，若为空则跳跃到下一个状态</param>
         /// <param name="description">改变状态的说明</param>
         /// <param name="empId">若目标状态大于等于分配，则需要指明分配操作相关参数</param>
         /// <param name="estimatedExecutionTime">预计开始时间</param>
         /// <param name="estimatedCompletionTime">预计结束时间</param>
         /// <param name="excuteTime">实际开始时间，若为空则保留之前的值，若还为空则使用time的值，若还未空则使用Clock.Now</param>
         /// <param name="completeTime">实际结束时间，若为空则保留之前的值，若还为空则使用time的值，若还未空则使用Clock.Now</param>
+        /// <param name="toBeAllocated">进入已确认，待分配状态时的回调函数</param>
+        /// <param name="toBeProcessed">进入已分配，待执行状态时的回调函数</param>
+        /// <param name="processing">进入已执行，待完成状态时的回调函数</param>
+        /// <param name="completed">进入已完成状态时的回调函数</param>
+        /// <param name="rejected">进入拒绝状态时的回调函数</param>
         public static async Task Skip(this OrderBaseEntity entity,
                                       DateTimeOffset? time = default,
                                       Status? status = default,
@@ -835,7 +824,8 @@ namespace BXJG.WorkOrder.WorkOrder
         //                       rejected);
         //}
         /// <summary>
-        /// 设置为任意状态
+        /// 设置为任意状态</br />
+        /// 若状态无变化则报异常
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="status">目标状态，若为空则调整到下一个状态</param>
@@ -846,9 +836,14 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="estimatedCompletionTime">预计结束时间</param>
         /// <param name="excuteTime">实际开始时间</param>
         /// <param name="completeTime">实际结束时间</param>
-        /// <param name="act">回退 》act 》Skip</param>
+        /// <param name="toBeConfirmed">进入待确认状态时的回调函数</param>
+        /// <param name="toBeAllocated">进入已确认，待分配状态时的回调函数</param>
+        /// <param name="toBeProcessed">进入已分配，待执行状态时的回调函数</param>
+        /// <param name="processing">进入已执行，待完成状态时的回调函数</param>
+        /// <param name="completed">进入已完成状态时的回调函数</param>
+        /// <param name="rejected">进入拒绝状态时的回调函数</param>
         public static async Task ChangeStatus(this OrderBaseEntity entity,
-                                              Status? status,
+                                              Status status,
                                               DateTimeOffset? time = default,
                                               string description = default,
                                               string empId = default,
@@ -871,7 +866,7 @@ namespace BXJG.WorkOrder.WorkOrder
                                      toBeAllocated,
                                      toBeProcessed,
                                      processing);
-            else
+            else if (status > entity.Status)
                 await entity.Skip(time,
                                   status,
                                   description,
@@ -885,6 +880,11 @@ namespace BXJG.WorkOrder.WorkOrder
                                   processing,
                                   completed,
                                   rejected);
+            else
+            {
+                //由于此方法有其它参数，若不报异常，调用方会认为其它参数处理成功了
+                throw new UserFriendlyException("workorderChangeStatusException1".BXJGWorkOrderL());
+            }
         }
         ///// <summary>
         ///// 设置为任意状态

@@ -14,7 +14,7 @@
     <text name="BXJG.WorkOrder.WorkOrder.Status.Processing" value="执行中" />
     <text name="BXJG.WorkOrder.WorkOrder.Status.Rejected" value="已拒绝" />
     <text name="BXJG.WorkOrder.WorkOrder.Status.Completed" value="已完成" />
-
+    
     <text name="BXJG.WorkOrder.WorkOrder.UrgencyDegree" value="紧急程度" />
     <text name="BXJG.WorkOrder.WorkOrder.UrgencyDegree.Urgent" value="紧急" />
     <text name="BXJG.WorkOrder.WorkOrder.UrgencyDegree.Normalize" value="一般" />
@@ -39,5 +39,6 @@
     <text name="workorderUnRejectException1">此状态的工单不允许执行[反拒绝]操作！</text>
     <text name="workorderBackOffException1">此状态的工单不能回退到{0}状态！</text>
     <text name="workorderSkipException1">此状态的工单不能跳跃到{0}状态！</text>
+    <text name="workorderChangeStatusException1">状态无变化！</text>
   </texts>
 </localizationDictionary>

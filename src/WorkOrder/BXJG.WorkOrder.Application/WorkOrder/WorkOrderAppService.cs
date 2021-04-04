@@ -167,7 +167,7 @@ namespace BXJG.WorkOrder.WorkOrder
                 if (input.Status.Value > entity.Status)//skip
                 {
                     entity.UrgencyDegree = input.UrgencyDegree ?? UrgencyDegree.Normalize;
-                    await entity.Skip(Clock.Now,
+                    await entity.Skip(input.StatusChangedTime ?? Clock.Now,
                                       input.Status,
                                       input.StatusChangedDescription,
                                       input.EmployeeId,
@@ -183,7 +183,7 @@ namespace BXJG.WorkOrder.WorkOrder
                 }
                 else //backoff
                 {
-                    await entity.BackOff(Clock.Now,
+                    await entity.BackOff(input.StatusChangedTime ?? Clock.Now,
                                          input.Status,
                                          input.StatusChangedDescription,
                                          d => CheckToBeonfirmedPermissionAsync(),
@@ -197,8 +197,15 @@ namespace BXJG.WorkOrder.WorkOrder
             }
             else
             {
+                if (entity.Status == input.Status)
+                {
+                    if (entity.StatusChangedDescription != input.StatusChangedDescription)
+                        throw new UserFriendlyException(L("状态无变化时不允许修改状态说明，请考虑回退后修改。"));
+                    if (entity.StatusChangedTime != input.StatusChangedTime)
+                        throw new UserFriendlyException(L("状态无变化时不允许修改状态时间，请考虑回退后修改。"));
+                }
+
                 entity.UrgencyDegree = input.UrgencyDegree ?? UrgencyDegree.Normalize;
-                entity.StatusChangedDescription = input.StatusChangedDescription;
                 entity.EmployeeId = input.EmployeeId;
                 entity.ChangeEstimatedTime(input.EstimatedExecutionTime, input.EstimatedCompletionTime);
             }
@@ -337,7 +344,7 @@ namespace BXJG.WorkOrder.WorkOrder
                 try
                 {
                     await item.ChangeStatus(input.Status,
-                                            Clock.Now,
+                                            input.StatusChangedTime ?? Clock.Now,
                                             input.Description,
                                             item.EmployeeId,
                                             item.EstimatedExecutionTime,
@@ -382,14 +389,16 @@ namespace BXJG.WorkOrder.WorkOrder
                 {
                     if (item.Status >= Status.ToBeProcessed)
                     {
-                        await item.BackOff(status: Status.ToBeAllocated,
+                        await item.BackOff(input.StatusChangedTime ?? Clock.Now,
+                                           status: Status.ToBeAllocated,
                                            toBeConfirmed: d => CheckToBeonfirmedPermissionAsync(),
                                            toBeAllocated: d => CheckConfirmePermissionAsync(),
                                            toBeProcessed: d => CheckAllocatePermissionAsync(),
                                            processing: d => CheckExecutePermissionAsync());
                     }
                     //item.AllocateRetain(Clock.Now, input.EmployeeId, input.EstimatedExecutionTime, input.EstimatedCompletionTime);
-                    await item.Skip(status: Status.ToBeProcessed,
+                    await item.Skip(input.StatusChangedTime ?? Clock.Now,
+                                    status: Status.ToBeProcessed,
                                     empId: input.EmployeeId,
                                     estimatedExecutionTime: input.EstimatedExecutionTime,
                                     estimatedCompletionTime: input.EstimatedCompletionTime,

@@ -69,6 +69,7 @@
     </text>
     <text name="workorderBackOffException1">Work orders in this status cannot be returned to {0} status!</text>
     <text name="workorderSkipException1">Work orders in this status cannot be skip to {0} status！</text>
+    <text name="workorderChangeStatusException1">The status is not changed!</text>
 
 
   </texts>

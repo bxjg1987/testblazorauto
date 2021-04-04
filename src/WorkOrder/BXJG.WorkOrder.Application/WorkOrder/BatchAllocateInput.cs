@@ -8,6 +8,10 @@ namespace BXJG.WorkOrder.WorkOrder
     /// </summary>
     public class WorkOrderBatchAllocateInputBase: BatchOperationInputLong
     {
+        /// <summary>
+        /// 调整状态的时间
+        /// </summary>
+        public DateTimeOffset? StatusChangedTime { get; set; }
         public string EmployeeId { get; set; }
         public DateTimeOffset? EstimatedExecutionTime { get; set; }
         public DateTimeOffset? EstimatedCompletionTime { get; set; }
