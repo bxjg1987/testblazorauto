@@ -1,13 +1,16 @@
 ﻿using Abp.AutoMapper;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
+using BXJG.DynamicAssociateEntity;
 using BXJG.Utils;
+using BXJG.WorkOrder.WorkOrder;
 using System;
 using System.Reflection;
 
 namespace BXJG.WorkOrder
 {
-    [DependsOn(typeof(BXJGCommonApplicationModule))]
+    [DependsOn(typeof(BXJGCommonApplicationModule),
+        typeof(DynamicAssociateEntityApplicationModule))]
     public class ApplicationModule : AbpModule
     {
         //IConfiguration configuration;
@@ -27,6 +30,8 @@ namespace BXJG.WorkOrder
 
             //此行必加
             Configuration.Modules.AbpAutoMapper().Configurators.Add(cfg => cfg.AddMaps(Assembly.GetExecutingAssembly()));
+
+            Configuration.Modules.DynamicAssociateEntity().Providers.Add<Class1>();
         }
         public override void Initialize()
         {
