@@ -7,15 +7,25 @@ using System.Threading.Tasks;
 
 namespace BXJG.DynamicAssociateEntity
 {
-    public interface IDynamicAssociateEntityDefineProvider : ITransientDependency
+    public interface IDynamicAssociateEntityDefineProvider 
     {
-        Dictionary<string, List<DynamicAssociateEntityDefine>> GetDefines(DynamicAssociateEntityDefineInitContext context);
+        IEnumerable<DynamicAssociateEntityDefine> GetDefines(DynamicAssociateEntityDefineInitContext context);
+    }
+
+    public interface IDynamicAssociateEntityDefineProvider2
+    {
+        Dictionary<string, List<DynamicAssociateEntityDefine>> GetDefines(DynamicAssociateEntityDefineInitContext2 context);
     }
 
     /// <summary>
     /// 目前没啥用，预留的
     /// </summary>
     public class DynamicAssociateEntityDefineInitContext
+    {
+
+    }
+
+    public class DynamicAssociateEntityDefineInitContext2
     {
 
     }

@@ -2,6 +2,7 @@
 using Abp.Localization;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BXJG.DynamicAssociateEntity
 {
@@ -38,6 +39,10 @@ namespace BXJG.DynamicAssociateEntity
         /// 考虑到级联关联，比如关联到订单明细时，是先选择订单，再选择明细
         /// </summary>
         public List<DynamicAssociateEntityDefine> Children { get; set; }
+
+        public DynamicAssociateEntityDefineField KeyField => Fields.Single(c => c.IsKey);
+
+        public IOrderedEnumerable<DynamicAssociateEntityDefineField> DisplayField => Fields.Where(c => c.IsDisplayField).OrderBy(c => c.OrderIndex);
         //简单起见，先不考虑预留字段
         //public string ExtField1 { get; set; }
         //public string ExtField2 { get; set; }
@@ -48,6 +53,8 @@ namespace BXJG.DynamicAssociateEntity
     /// </summary>
     public class DynamicAssociateEntityDefineField
     {
+        public bool IsDisplayField { get; set; }
+        public bool IsKey { get; set; }
         /// <summary>
         /// 字段名
         /// </summary>
@@ -64,5 +71,7 @@ namespace BXJG.DynamicAssociateEntity
         /// 显示宽度
         /// </summary>
         public int DislayWidth { get; set; }
+
+        public int OrderIndex { get; set; }
     }
 }

@@ -19,7 +19,8 @@ namespace BXJG.DynamicAssociateEntity
 
         public IReadOnlyList<DynamicAssociateEntityDefine> Get(string key)
         {
-            return dynamicAssociateEntityConfiguration.DynamicAssociateEntityDefines[key].AsReadOnly();
+            throw new NotImplementedException();
+           // return dynamicAssociateEntityConfiguration.DynamicAssociateEntityDefines[key].AsReadOnly();
         }
     }
 }
