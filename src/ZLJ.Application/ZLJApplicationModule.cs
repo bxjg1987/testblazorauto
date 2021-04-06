@@ -3,6 +3,7 @@ using Abp.Dependency;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
 using BXJG.BaseInfo;
+using BXJG.DynamicAssociateEntity;
 using BXJG.Equipment;
 using BXJG.GeneralTree;
 using BXJG.Shop;
@@ -10,26 +11,30 @@ using BXJG.Shop.Catalogue;
 using BXJG.WorkOrder;
 using BXJG.WorkOrder.Employee;
 using BXJG.WorkOrder.Session;
+using System.Collections.Generic;
 using System.Reflection;
 
 using ZLJ.Authorization;
 using ZLJ.Authorization.Roles;
 using ZLJ.Authorization.Users;
+using ZLJ.DynamicAssociateEntity;
+using ZLJ.Localization;
 using ZLJ.MultiTenancy;
 
 namespace ZLJ
 {
     [DependsOn(
-        typeof(ZLJCoreModule), 
+        typeof(ZLJCoreModule),
         typeof(AbpAutoMapperModule),
         typeof(BXJGEquipmentApplicationModule),
-        typeof(BXJGBaseInfoApplicationModule))]
+        typeof(BXJGBaseInfoApplicationModule),
+        typeof(DynamicAssociateEntityApplicationModule))]
     public class ZLJApplicationModule : AbpModule
     {
         public override void PreInitialize()
         {
             Configuration.Authorization.Providers.Add<ZLJAuthorizationProvider>();
-
+            Configuration.Modules.DynamicAssociateEntity().DynamicAssociateEntityDefineProvider = DynamicAssociateEntityConfig.GetDefines;
         }
 
         public override void Initialize()

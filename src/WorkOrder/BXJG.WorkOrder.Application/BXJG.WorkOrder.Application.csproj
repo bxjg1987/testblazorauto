@@ -17,7 +17,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\modules\BXJG.DynamicAssociateEntity.Application\BXJG.DynamicAssociateEntity.Application.csproj" />
-    <ProjectReference Include="..\..\modules\BXJG.DynamicAssociateEntity.Core\BXJG.DynamicAssociateEntity.Core.csproj" />
     <ProjectReference Include="..\BXJG.WorkOrder.CommonApplication\BXJG.WorkOrder.CommonApplication.csproj" />
   </ItemGroup>
 

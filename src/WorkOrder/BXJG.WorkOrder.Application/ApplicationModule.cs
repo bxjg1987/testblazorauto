@@ -31,7 +31,6 @@ namespace BXJG.WorkOrder
             //此行必加
             Configuration.Modules.AbpAutoMapper().Configurators.Add(cfg => cfg.AddMaps(Assembly.GetExecutingAssembly()));
 
-            Configuration.Modules.DynamicAssociateEntity().Providers.Add<Class1>();
         }
         public override void Initialize()
         {

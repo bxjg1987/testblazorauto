@@ -6,30 +6,29 @@ using System.Reflection;
 
 namespace BXJG.DynamicAssociateEntity
 {
+    [DependsOn(typeof(DynamicAssociateEntityModule))]
     public class DynamicAssociateEntityApplicationModule : AbpModule
     {
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
         }
+
         public override void PostInitialize()
         {
-            var config = IocManager.Resolve<DynamicAssociateEntityConfiguration>();
-            foreach (var item in config.DynamicAssociateEntityDefines)
+            var config = IocManager.Resolve<DynamicAssociateEntityDefineManager>();
+            foreach (var item in config.GroupedDefines)
             {
-                RegisterServiceType(item.Value);
-            }
-        }
-
-        private void RegisterServiceType(IEnumerable<DynamicAssociateEntityDefine> dynamicAssociateEntityDefines)
-        {
-            if (dynamicAssociateEntityDefines != null)
-            {
-                foreach (var item in dynamicAssociateEntityDefines)
+                foreach (var item1 in item.Value)
                 {
-                    IocManager.RegisterIfNot(typeof(IDynamicAssociateEntityService), item.ServiceType, DependencyLifeStyle.Transient);
-                    RegisterServiceType(item.Children);
+                    var temp = item1;
+                    while (temp!=null)
+                    {
+                        IocManager.RegisterIfNot(typeof(IDynamicAssociateEntityService), temp.ServiceType, DependencyLifeStyle.Transient);
+                        temp = item1.Child;
+                    }
                 }
+              
             }
         }
     }

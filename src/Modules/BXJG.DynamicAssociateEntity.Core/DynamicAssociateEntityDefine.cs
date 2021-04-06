@@ -9,7 +9,7 @@ namespace BXJG.DynamicAssociateEntity
     /// <summary>
     /// 动态关联实体定义
     /// </summary>
-    public class DynamicAssociateEntityDefine //: IMayHaveTenant
+    public class DynamicAssociateEntityDefine
     {
         public string ParentName => Parent?.Name;
         //public int? TenantId { get; set; }
@@ -24,7 +24,7 @@ namespace BXJG.DynamicAssociateEntity
         /// <summary>
         /// 目标实体字段描述
         /// </summary>
-        public virtual List<DynamicAssociateEntityDefineField> Fields { get; set; }
+        public virtual DynamicAssociateEntityDefineField[] Fields { get; set; }
         /// <summary>
         /// 获取下拉框数据，应用层查询关联数据组合dto时会使用到
         /// </summary>
@@ -38,15 +38,16 @@ namespace BXJG.DynamicAssociateEntity
         /// 子节点集合<br />
         /// 考虑到级联关联，比如关联到订单明细时，是先选择订单，再选择明细
         /// </summary>
-        public List<DynamicAssociateEntityDefine> Children { get; set; }
+        public DynamicAssociateEntityDefine Child { get; set; }
 
         public DynamicAssociateEntityDefineField KeyField => Fields.Single(c => c.IsKey);
 
-        public IOrderedEnumerable<DynamicAssociateEntityDefineField> DisplayField => Fields.Where(c => c.IsDisplayField).OrderBy(c => c.OrderIndex);
+        public IReadOnlyList<DynamicAssociateEntityDefineField> DisplayField => Fields.Where(c => c.IsDisplayField).ToList();
         //简单起见，先不考虑预留字段
         //public string ExtField1 { get; set; }
         //public string ExtField2 { get; set; }
         //public string ExtField3 { get; set; }
+        //public int OrderIndex { get; set; }
     }
     /// <summary>
     /// 动态关联实体定义中的字段
@@ -72,6 +73,6 @@ namespace BXJG.DynamicAssociateEntity
         /// </summary>
         public int DislayWidth { get; set; }
 
-        public int OrderIndex { get; set; }
+        //public int OrderIndex { get; set; }
     }
 }

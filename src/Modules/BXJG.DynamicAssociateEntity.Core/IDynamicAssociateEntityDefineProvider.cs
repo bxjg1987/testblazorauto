@@ -7,26 +7,31 @@ using System.Threading.Tasks;
 
 namespace BXJG.DynamicAssociateEntity
 {
-    public interface IDynamicAssociateEntityDefineProvider 
+    //public interface IDynamicAssociateEntityDefineProvider
+    //{
+    //    IEnumerable<DynamicAssociateEntityDefine> GetDefines(DynamicAssociateEntityDefineInitContext context);
+    //}
+
+    public interface IDynamicAssociateEntityDefineGroupProvider: ITransientDependency
     {
-        IEnumerable<DynamicAssociateEntityDefine> GetDefines(DynamicAssociateEntityDefineInitContext context);
+        Dictionary<string, List<DynamicAssociateEntityDefine>> GetDefines(DynamicAssociateEntityDefineGroupProviderContext context);
     }
 
-    public interface IDynamicAssociateEntityDefineProvider2
+    ///// <summary>
+    ///// 目前没啥用，预留的
+    ///// </summary>
+    //public class DynamicAssociateEntityDefineInitContext
+    //{
+
+    //}
+
+    public class DynamicAssociateEntityDefineGroupProviderContext
     {
-        Dictionary<string, List<DynamicAssociateEntityDefine>> GetDefines(DynamicAssociateEntityDefineInitContext2 context);
-    }
+        public DynamicAssociateEntityDefineGroupProviderContext(IEnumerable<DynamicAssociateEntityDefine> defines)
+        {
+            Defines = defines;
+        }
 
-    /// <summary>
-    /// 目前没啥用，预留的
-    /// </summary>
-    public class DynamicAssociateEntityDefineInitContext
-    {
-
-    }
-
-    public class DynamicAssociateEntityDefineInitContext2
-    {
-
+        public IEnumerable<DynamicAssociateEntityDefine> Defines { get; }
     }
 }

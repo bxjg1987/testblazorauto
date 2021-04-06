@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\modules\BXJG.DynamicAssociateEntity.Core\BXJG.DynamicAssociateEntity.Core.csproj" />
     <ProjectReference Include="..\..\Modules\BXJG.GeneralTree\BXJG.GeneralTree.csproj" />
   </ItemGroup>
 

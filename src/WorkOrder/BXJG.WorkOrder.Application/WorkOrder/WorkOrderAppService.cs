@@ -15,6 +15,8 @@ using System.Threading.Tasks;
 using System.Linq.Dynamic.Core;
 using Abp.Domain.Entities;
 using Abp.UI;
+using BXJG.DynamicAssociateEntity;
+using Abp.Dependency;
 
 namespace BXJG.WorkOrder.WorkOrder
 {
@@ -72,6 +74,8 @@ namespace BXJG.WorkOrder.WorkOrder
         where TCategoryRepository : IRepository<CategoryEntity, long>
         #endregion
     {
+        protected readonly IIocResolver iocResolver;
+        protected readonly DynamicAssociateEntityDefineManager dynamicAssociateEntityDefineManager;
         protected readonly TRepository repository;
         protected readonly TCategoryRepository categoryRepository;
         protected readonly TManager manager;
@@ -91,6 +95,8 @@ namespace BXJG.WorkOrder.WorkOrder
                                        TManager manager,
                                        TCategoryRepository categoryRepository,
                                        IEmployeeAppService employeeAppService,
+                                       IIocResolver iocResolver,
+                                       DynamicAssociateEntityDefineManager dynamicAssociateEntityDefineManager,
                                        string createPermissionName = default,
                                        string updatePermissionName = default,
                                        string deletePermissionName = default,
@@ -117,6 +123,9 @@ namespace BXJG.WorkOrder.WorkOrder
             this.deletePermissionName = deletePermissionName;
             this.confirmePermissionName = confirmePermissionName;
             this.toBeConfirmedPermissionName = toBeConfirmedPermissionName;
+
+            this.iocResolver = iocResolver;
+            this.dynamicAssociateEntityDefineManager = dynamicAssociateEntityDefineManager;
         }
         /// <summary>
         /// 新增工单
@@ -301,6 +310,11 @@ namespace BXJG.WorkOrder.WorkOrder
             //按处理人和手机号比较麻烦，可以尝试join已经查询出来的员工列表试试
             //不过至少可用按分类id和处理人id排序
             //如果都无法满足时，可以考虑使用原始sql，毕竟这里只是查询需求，不做业务处理，可以引入dapper或ef的原始sql执行方式
+            var ss = dynamicAssociateEntityDefineManager.GroupedDefines;
+            var define = ss.First().Value.First();
+            var service = iocResolver.Resolve(define.ServiceType) as IDynamicAssociateEntityService;
+            var ss2 = await service.GetAllAsync(define, "a", "d");
+
             await CheckGetPermissionAsync();
             var query = await GetAllFilterAsync(input);
             var count = await AsyncQueryableExecuter.CountAsync(query);
@@ -707,12 +721,16 @@ namespace BXJG.WorkOrder.WorkOrder
 
     {
         public WorkOrderAppService(IRepository<OrderEntity, long> repository,
+                                   IIocResolver iocResolver,
+                                   DynamicAssociateEntityDefineManager dynamicAssociateEntityDefineManager,
                                    OrderManager manager,
                                    IRepository<CategoryEntity, long> categoryRepository,
                                    IEmployeeAppService employeeAppService) : base(repository,
                                                                                   manager,
                                                                                   categoryRepository,
                                                                                   employeeAppService,
+                                                                                  iocResolver,
+                                                                                  dynamicAssociateEntityDefineManager,
                                                                                   CoreConsts.WorkOrderCreate,
                                                                                   CoreConsts.WorkOrderUpdate,
                                                                                   CoreConsts.WorkOrderDelete,
