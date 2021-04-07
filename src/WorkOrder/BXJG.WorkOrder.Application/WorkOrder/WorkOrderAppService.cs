@@ -310,10 +310,11 @@ namespace BXJG.WorkOrder.WorkOrder
             //按处理人和手机号比较麻烦，可以尝试join已经查询出来的员工列表试试
             //不过至少可用按分类id和处理人id排序
             //如果都无法满足时，可以考虑使用原始sql，毕竟这里只是查询需求，不做业务处理，可以引入dapper或ef的原始sql执行方式
-            var ss = dynamicAssociateEntityDefineManager.GroupedDefines;
-            var define = ss.First().Value.First();
-            var service = iocResolver.Resolve(define.ServiceType) as IDynamicAssociateEntityService;
-            var ss2 = await service.GetAllAsync(define, "a", "d");
+
+            //var ss = dynamicAssociateEntityDefineManager.GroupedDefines;
+            //var define = ss.First().Value.First();
+            //var service = iocResolver.Resolve(define.ServiceType) as IDynamicAssociateEntityService;
+            //var ss2 = await service.GetAllAsync(define, "a", "d");
 
             await CheckGetPermissionAsync();
             var query = await GetAllFilterAsync(input);

@@ -6,8 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZLJ.WorkOrder
+namespace ZLJ
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class WorkOrderDynamicAssociateEntityDefineGroupProvider : IDynamicAssociateEntityDefineGroupProvider
     {
         public Dictionary<string, List<DynamicAssociateEntityDefine>> GetDefines(DynamicAssociateEntityDefineGroupProviderContext context)

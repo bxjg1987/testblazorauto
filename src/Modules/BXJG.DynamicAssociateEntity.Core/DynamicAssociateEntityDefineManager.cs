@@ -13,9 +13,19 @@ namespace BXJG.DynamicAssociateEntity
 {
     public class DynamicAssociateEntityDefineManager : ISingletonDependency
     {
-        public IEnumerable<DynamicAssociateEntityDefine> Defines { get; protected set; }
+        //Defines、GroupedDefines 可以定义到模块配置中，目前只是参考abp setting的设计，放manager里的
+
+        /// <summary>
+        /// 全局动态关联定义
+        /// key：唯一名称；value：定义
+        /// </summary>
+        public IReadOnlyDictionary<string, DynamicAssociateEntityDefine> Defines { get; protected set; }
         protected readonly IIocManager _iocManager;
-        public IReadOnlyDictionary<string, IReadOnlyList<DynamicAssociateEntityDefine>> GroupedDefines { get; protected set; }
+        /// <summary>
+        /// 分组后的动态关联实体定义
+        /// key:组名，如workOrder；value：key：数据唯一名，如：product，value：定义
+        /// </summary>
+        public IReadOnlyDictionary<string, IReadOnlyDictionary<string, DynamicAssociateEntityDefine>> GroupedDefines { get; protected set; }
         protected readonly DynamicAssociateEntityConfiguration dynamicAssociateEntityConfiguration;
 
         public DynamicAssociateEntityDefineManager(IIocManager iocManager, DynamicAssociateEntityConfiguration dynamicAssociateEntityConfiguration)
@@ -25,34 +35,44 @@ namespace BXJG.DynamicAssociateEntity
             this.dynamicAssociateEntityConfiguration = dynamicAssociateEntityConfiguration;
         }
 
-        public IReadOnlyList<DynamicAssociateEntityDefine> Get(string key)
-        {
-            throw new NotImplementedException();
-            // return dynamicAssociateEntityConfiguration.DynamicAssociateEntityDefines[key].AsReadOnly();
-        }
-
+        //public IReadOnlyList<DynamicAssociateEntityDefine> Get(string key)
+        //{
+        //    throw new NotImplementedException();
+        // return dynamicAssociateEntityConfiguration.DynamicAssociateEntityDefines[key].AsReadOnly();
+        //}
 
         public void Initialize()
         {
-            Defines = dynamicAssociateEntityConfiguration.DynamicAssociateEntityDefineProvider();
-            var context = new DynamicAssociateEntityDefineGroupProviderContext(Defines);
-            IDictionary<string, IReadOnlyList<DynamicAssociateEntityDefine>> dic = new Dictionary<string, IReadOnlyList<DynamicAssociateEntityDefine>>();
-            foreach (var providerType in dynamicAssociateEntityConfiguration.DynamicAssociateEntityDefineGroupProviders)
+            var ctx = new DynamicAssociateEntityDefineProviderContext();
+            var dic = new Dictionary<string, DynamicAssociateEntityDefine>();
+            foreach (var providerType in dynamicAssociateEntityConfiguration.DynamicAssociateEntityDefineProviders)
             {
-                using (var provider = CreateProvider(providerType))
+                IEnumerable<DynamicAssociateEntityDefine> defines;
+                using (var provider = _iocManager.ResolveAsDisposable<IDynamicAssociateEntityDefineProvider>(providerType))
                 {
-                    foreach (var settings in provider.Object.GetDefines(context))
+                    defines = provider.Object.GetDefines(ctx);
+                }
+                foreach (var item in defines)
+                {
+                    var p = item;
+                    if (p != null)
                     {
-                        dic.Add(settings.Key, settings.Value.AsReadOnly());
+                        dic.Add(p.Name, p);
+                        p = p.Parent;
                     }
                 }
             }
-            GroupedDefines = new ReadOnlyDictionary<string, IReadOnlyList<DynamicAssociateEntityDefine>>(dic);
-        }
+            Defines = new ReadOnlyDictionary<string, DynamicAssociateEntityDefine>(dic);
 
-        private IDisposableDependencyObjectWrapper<IDynamicAssociateEntityDefineGroupProvider> CreateProvider(Type providerType)
-        {
-            return _iocManager.ResolveAsDisposable<IDynamicAssociateEntityDefineGroupProvider>(providerType);
+            var groupContext = new DynamicAssociateEntityDefineGroupProviderContext(Defines);
+            var groupTemp = new Dictionary<string, IReadOnlyDictionary<string, DynamicAssociateEntityDefine>>();
+            var maps = dynamicAssociateEntityConfiguration.DynamicAssociateEntityDefineGroupProvider(groupContext);
+            foreach (var item in maps)
+            {
+                var list = Defines.Where(c => item.Value.Contains(c.Key)).ToDictionary(c => c.Key, c => c.Value);
+                groupTemp.Add(item.Key, new ReadOnlyDictionary<string, DynamicAssociateEntityDefine>(list));
+            }
+            GroupedDefines = new ReadOnlyDictionary<string, IReadOnlyDictionary<string, DynamicAssociateEntityDefine>>(groupTemp);
         }
     }
 }

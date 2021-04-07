@@ -11,10 +11,9 @@ namespace BXJG.DynamicAssociateEntity
     /// </summary>
     public class DynamicAssociateEntityDefine
     {
-        public string ParentName => Parent?.Name;
         //public int? TenantId { get; set; }
         /// <summary>
-        /// 要关联到的目标实体名，推荐目标实体完整类名，但不是必须的
+        /// 要关联到的目标实体名,全局唯一，推荐目标实体完整类名，但不是必须的
         /// </summary>
         public string Name { get; set; }
         /// <summary>
@@ -22,7 +21,7 @@ namespace BXJG.DynamicAssociateEntity
         /// </summary>
         public ILocalizableString DisplayName { get; set; }
         /// <summary>
-        /// 目标实体字段描述
+        /// 目标实体字段定义
         /// </summary>
         public virtual DynamicAssociateEntityDefineField[] Fields { get; set; }
         /// <summary>
@@ -30,18 +29,30 @@ namespace BXJG.DynamicAssociateEntity
         /// </summary>
         public Type ServiceType { get; set; }
         /// <summary>
+        /// 获取下拉框数据，应用层查询关联数据组合dto时会使用到
+        /// </summary>
+        public Type ServiceType2 { get; set; }
+        /// <summary>
         /// 父节点<br />
         /// 考虑到级联关联，比如关联到订单明细时，是先选择订单，再选择明细
         /// </summary>
         public DynamicAssociateEntityDefine Parent { get; set; }
         /// <summary>
+        /// 级联父级名称
+        /// </summary>
+        public string ParentName => Parent?.Name;
+        /// <summary>
         /// 子节点集合<br />
         /// 考虑到级联关联，比如关联到订单明细时，是先选择订单，再选择明细
         /// </summary>
         public DynamicAssociateEntityDefine Child { get; set; }
-
+        /// <summary>
+        /// 数据主键字段
+        /// </summary>
         public DynamicAssociateEntityDefineField KeyField => Fields.Single(c => c.IsKey);
-
+        /// <summary>
+        /// 用作显示的列集合
+        /// </summary>
         public IReadOnlyList<DynamicAssociateEntityDefineField> DisplayField => Fields.Where(c => c.IsDisplayField).ToList();
         //简单起见，先不考虑预留字段
         //public string ExtField1 { get; set; }
@@ -69,7 +80,7 @@ namespace BXJG.DynamicAssociateEntity
         /// </summary>
         public string DislayFormatter { get; set; }
         /// <summary>
-        /// 显示宽度
+        /// 显示宽度，不同的前端需要的宽度不同，这里只是个默认值，或者作为百分比
         /// </summary>
         public int DislayWidth { get; set; }
 

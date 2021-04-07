@@ -12,9 +12,9 @@ namespace BXJG.DynamicAssociateEntity
     /// </summary>
     public class DynamicAssociateEntityConfiguration
     {
-        public Func<IEnumerable<DynamicAssociateEntityDefine>> DynamicAssociateEntityDefineProvider { get; set; }
+        public ITypeList<IDynamicAssociateEntityDefineProvider> DynamicAssociateEntityDefineProviders { get; } = new TypeList<IDynamicAssociateEntityDefineProvider>();
 
-        public ITypeList<IDynamicAssociateEntityDefineGroupProvider> DynamicAssociateEntityDefineGroupProviders { get; } = new TypeList<IDynamicAssociateEntityDefineGroupProvider>();
-       
+        public Func<DynamicAssociateEntityDefineGroupProviderContext, IDictionary<string, string[]>> DynamicAssociateEntityDefineGroupProvider { get; set; }
+        //public ITypeList<IDynamicAssociateEntityDefineGroupProvider> DynamicAssociateEntityDefineGroupProviders { get; } = new TypeList<IDynamicAssociateEntityDefineGroupProvider>();
     }
 }

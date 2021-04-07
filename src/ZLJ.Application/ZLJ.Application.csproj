@@ -41,6 +41,8 @@
     <Compile Remove="Dto\TreeNodeDto.cs" />
     <Compile Remove="Dto\TreeNodeEditBaseDto.cs" />
     <Compile Remove="Dto\TreeNodeMoveInput.cs" />
+    <Compile Remove="DynamicAssociateEntity\DynamicAssociateEquipmentService.cs" />
+    <Compile Remove="DynamicAssociateEntity\DynamicAssociateProductService.cs" />
     <Compile Remove="Shop\BXJGShopCustomerOrderAppService.cs" />
     <Compile Remove="Shop\BXJGShopItemAppService.cs" />
     <Compile Remove="Shop\BXJGShopOrderAppService.cs" />
@@ -50,7 +52,6 @@
     <ProjectReference Include="..\cms\BXJG.CMS.Application\BXJG.CMS.Application.csproj" />
     <ProjectReference Include="..\Equipment\BXJG.Equipment.Application\BXJG.Equipment.Application.csproj" />
     <ProjectReference Include="..\modules\BXJG.DynamicAssociateEntity.Application\BXJG.DynamicAssociateEntity.Application.csproj" />
-    <ProjectReference Include="..\modules\BXJG.DynamicAssociateEntity.Core\BXJG.DynamicAssociateEntity.Core.csproj" />
     <ProjectReference Include="..\shop\BXJG.Shop.Application\BXJG.Shop.Application.csproj" />
     <ProjectReference Include="..\WorkOrder\BXJG.WorkOrder.Application\BXJG.WorkOrder.Application.csproj" />
     <ProjectReference Include="..\WorkOrder\BXJG.WorkOrder.EmployeeApplication\BXJG.WorkOrder.EmployeeApplication.csproj" />

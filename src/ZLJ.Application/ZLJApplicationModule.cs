@@ -34,7 +34,8 @@ namespace ZLJ
         public override void PreInitialize()
         {
             Configuration.Authorization.Providers.Add<ZLJAuthorizationProvider>();
-            Configuration.Modules.DynamicAssociateEntity().DynamicAssociateEntityDefineProvider = DynamicAssociateEntityConfig.GetDefines;
+            //Configuration.Modules.DynamicAssociateEntity().DynamicAssociateEntityDefineProviders = DynamicAssociateEntityConfig.GetDefines;
+            Configuration.Modules.DynamicAssociateEntity().DynamicAssociateEntityDefineGroupProvider = DynamicAssociateEntityConfig.DynamicAssociateEntityMap;
         }
 
         public override void Initialize()
