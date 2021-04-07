@@ -86,7 +86,7 @@ namespace ZLJ.DynamicAssociateEntity
         {
             return new Dictionary<string, string[]>
             {
-                { "workOrder", "porduct,equipment".Split(',') }
+                { "workOrder", new string[]{ "equipment" } }
             };
         }
     }

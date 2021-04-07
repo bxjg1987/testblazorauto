@@ -4,10 +4,11 @@
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>BXJG.WorkOrder</RootNamespace>
     <Version>1.0.0-rc3</Version>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>..\..\ZLJ.Web.Host\APIXML\BXJG.WorkOrder.EmployeeApplication.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

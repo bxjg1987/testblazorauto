@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BXJG.DynamicAssociateEntity
 {
-    public interface IDynamicAssociateEntityDefineProvider
+    public interface IDynamicAssociateEntityDefineProvider : ITransientDependency
     {
         IEnumerable<DynamicAssociateEntityDefine> GetDefines(DynamicAssociateEntityDefineProviderContext context);
     }
@@ -27,11 +27,11 @@ namespace BXJG.DynamicAssociateEntity
 
     public class DynamicAssociateEntityDefineGroupProviderContext
     {
-        public DynamicAssociateEntityDefineGroupProviderContext(IReadOnlyDictionary<string, DynamicAssociateEntityDefine> defines)
+        public DynamicAssociateEntityDefineGroupProviderContext(/*IReadOnlyDictionary<string, DynamicAssociateEntityDefine> defines*/)
         {
-            Defines = defines;
+            //Defines = defines;
         }
 
-        public IReadOnlyDictionary<string, DynamicAssociateEntityDefine> Defines { get; }
+        //public IReadOnlyDictionary<string, DynamicAssociateEntityDefine> Defines { get; }
     }
 }

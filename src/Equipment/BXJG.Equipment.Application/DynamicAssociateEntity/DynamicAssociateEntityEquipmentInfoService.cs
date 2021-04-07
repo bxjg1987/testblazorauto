@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Services.Dto;
+using Abp.Dependency;
 using Abp.Domain.Repositories;
 using Abp.Extensions;
 using Abp.Linq;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace BXJG.Equipment.DynamicAssociateEntity
 {
-    public class DynamicAssociateEntityEquipmentInfoService : IDynamicAssociateEntityService, IDynamicAssociateEntityService2
+    public class DynamicAssociateEntityEquipmentInfoService : IDynamicAssociateEntityService
     {
         private readonly IRepository<EquipmentInfoEntity, long> repository;
         protected IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; } = NullAsyncQueryableExecuter.Instance;
@@ -29,21 +30,10 @@ namespace BXJG.Equipment.DynamicAssociateEntity
             var query = repository.GetAllIncluding(c => c.Area)
                                   .WhereIf(!keyword.IsNullOrWhiteSpace(), c => c.Name.Contains(keyword));
             var total = await AsyncQueryableExecuter.CountAsync(query);
-            query = query.OrderBy(sorting).PageBy(skip, maxcount);
+            if (!sorting.IsNullOrWhiteSpace())
+                query = query.OrderBy(sorting);
+            query= query.PageBy(skip, maxcount);
             var listEntity = await AsyncQueryableExecuter.ToListAsync(query);
-
-            //var list = new List<Dictionary<string, object>>();
-
-            //listEntity.ForEach(c =>
-            //{
-            //    var dic = new Dictionary<string, object>();
-            //    foreach (var item in defines.Fields)
-            //    {
-            //        dic[item.Name] = t.GetProperty(item.Name).GetValue(c);
-            //    }
-            //    list.Add(dic);
-            //});
-            //return new PagedResultDto<IDictionary<string, object>>(total, list);
             return new PagedResultDto<object>(total, listEntity);
         }
 
@@ -52,18 +42,6 @@ namespace BXJG.Equipment.DynamicAssociateEntity
             var query = repository.GetAllIncluding(c => c.Area).Where(c => ids.Contains(c.Id.ToString()));
             var listEntity = await AsyncQueryableExecuter.ToListAsync(query);
             return listEntity;
-            //  var list = new List<Dictionary<string, object>>();
-
-            //listEntity.ForEach(c =>
-            //{
-            //    var dic = new Dictionary<string, object>();
-            //    foreach (var item in defines.Fields)
-            //    {
-            //        dic[item.Name] = t.GetProperty(item.Name).GetValue(c);
-            //    }
-            //    list.Add(dic);
-            //});
-            //return list;
         }
 
         public async Task<IEnumerable<string>> GetIdsByKeywordAsync(string parentId, string keyword)

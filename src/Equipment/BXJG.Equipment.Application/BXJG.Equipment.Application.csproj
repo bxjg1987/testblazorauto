@@ -3,11 +3,11 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>BXJG.Equipment</RootNamespace>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath></OutputPath>
-    <DocumentationFile>..\..\ZLJ.Web.Host\APIXML\BXJG.Equipment.Application.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

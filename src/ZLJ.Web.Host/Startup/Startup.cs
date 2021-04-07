@@ -39,9 +39,11 @@ namespace ZLJ.Web.Host.Startup
         private const string _defaultCorsPolicyName = "localhost";
 
         private readonly IConfigurationRoot _appConfiguration;
+        IWebHostEnvironment env;
 
         public Startup(IWebHostEnvironment env)
         {
+            this.env = env;
             _appConfiguration = env.GetAppConfiguration();
         }
 
@@ -109,43 +111,24 @@ namespace ZLJ.Web.Host.Startup
             {
                 options.SwaggerDoc("v1", new OpenApiInfo() { Title = "ZLJ API", Version = "v1" });
 
-                //添加中文注释
-                var basePath = Path.GetDirectoryName(typeof(Program).Assembly.Location) + @"\apixml\";
-                var commentsFileName = typeof(ZLJApplicationModule).Assembly.GetName().Name + ".XML";
-                var commentsFileName1 = typeof(ApplicationModule).Assembly.GetName().Name + ".XML";
-                var commentsFileName2 = typeof(GeneralTreeModule).Assembly.GetName().Name + ".XML";
-                var commentsFileName3 = typeof(BXJGUtilsModule).Assembly.GetName().Name + ".XML";
-                var commentsFileName4 = typeof(BXJGCMSApplicationModule).Assembly.GetName().Name + ".XML";
-                var commentsFileName5 = typeof(BXJGEquipmentApplicationModule).Assembly.GetName().Name + ".XML";
-                var commentsFileName6 = typeof(BXJGBaseInfoApplicationModule).Assembly.GetName().Name + ".XML";
-                var commentsFileName7 = typeof(BXJGUtilsApplicationModule).Assembly.GetName().Name + ".XML";
-                var commentsFileName8 = typeof(BXJG.WorkOrder.ApplicationModule).Assembly.GetName().Name + ".XML";
-                var commentsFileName9 = typeof(BXJG.WorkOrder.BXJGCommonApplicationModule).Assembly.GetName().Name + ".XML";
-                var commentsFileName10 = typeof(BXJG.WorkOrder.BXJGWorkOrderEmployeeApplicationModule).Assembly.GetName().Name + ".XML";
 
-                var xmlPath = Path.Combine(basePath, commentsFileName);
-                var xmlPath1 = Path.Combine(basePath, commentsFileName1);
-                var xmlPath2 = Path.Combine(basePath, commentsFileName2);
-                var xmlPath3 = Path.Combine(basePath, commentsFileName3);
-                var xmlPath4 = Path.Combine(basePath, commentsFileName4);
-                var xmlPath5 = Path.Combine(basePath, commentsFileName5);
-                var xmlPath6 = Path.Combine(basePath, commentsFileName6);
-                var xmlPath7 = Path.Combine(basePath, commentsFileName7);
-                var xmlPath8 = Path.Combine(basePath, commentsFileName8);
-                var xmlPath9 = Path.Combine(basePath, commentsFileName9);
-                var xmlPath10 = Path.Combine(basePath, commentsFileName10);
 
-                options.IncludeXmlComments(xmlPath);
-                options.IncludeXmlComments(xmlPath1);
-                options.IncludeXmlComments(xmlPath2);
-                options.IncludeXmlComments(xmlPath3);
-                options.IncludeXmlComments(xmlPath4);
-                options.IncludeXmlComments(xmlPath5);
-                options.IncludeXmlComments(xmlPath6);
-                options.IncludeXmlComments(xmlPath7);
-                options.IncludeXmlComments(xmlPath8);
-                options.IncludeXmlComments(xmlPath9);
-                options.IncludeXmlComments(xmlPath10);
+                options.IncludeXmlComments(AppContext.BaseDirectory + typeof(ZLJApplicationModule).Assembly.GetName().Name + ".XML");
+                options.IncludeXmlComments(AppContext.BaseDirectory + typeof(ApplicationModule).Assembly.GetName().Name + ".XML");
+                options.IncludeXmlComments(AppContext.BaseDirectory + typeof(GeneralTreeModule).Assembly.GetName().Name + ".XML");
+                options.IncludeXmlComments(AppContext.BaseDirectory + typeof(BXJGUtilsModule).Assembly.GetName().Name + ".XML");
+                options.IncludeXmlComments(AppContext.BaseDirectory + typeof(BXJGUtilsApplicationModule).Assembly.GetName().Name + ".XML");
+                options.IncludeXmlComments(AppContext.BaseDirectory + typeof(BXJGCMSApplicationModule).Assembly.GetName().Name + ".XML");
+                options.IncludeXmlComments(AppContext.BaseDirectory + typeof(BXJGEquipmentApplicationModule).Assembly.GetName().Name + ".XML");
+                options.IncludeXmlComments(AppContext.BaseDirectory + typeof(BXJGBaseInfoApplicationModule).Assembly.GetName().Name + ".XML");
+                options.IncludeXmlComments(AppContext.BaseDirectory + typeof(ApplicationModule).Assembly.GetName().Name + ".XML");
+                options.IncludeXmlComments(AppContext.BaseDirectory + typeof(BXJG.WorkOrder.BXJGCommonApplicationModule).Assembly.GetName().Name + ".XML");
+                options.IncludeXmlComments(AppContext.BaseDirectory + typeof(BXJG.WorkOrder.BXJGCommonApplicationModule).Assembly.GetName().Name + ".XML");
+                options.IncludeXmlComments(AppContext.BaseDirectory + typeof(BXJG.WorkOrder.BXJGWorkOrderEmployeeApplicationModule).Assembly.GetName().Name + ".XML");
+                options.IncludeXmlComments(AppContext.BaseDirectory + typeof(BXJG.DynamicAssociateEntity.DynamicAssociateEntityApplicationModule).Assembly.GetName().Name + ".XML");
+
+
+
 
                 options.DocInclusionPredicate((docName, description) => true);
 

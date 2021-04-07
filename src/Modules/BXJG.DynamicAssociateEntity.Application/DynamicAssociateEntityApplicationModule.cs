@@ -16,12 +16,11 @@ namespace BXJG.DynamicAssociateEntity
 
         public override void PostInitialize()
         {
-            var config = IocManager.Resolve<DynamicAssociateEntityDefineManager>();
-            foreach (var temp in config.Defines)
-            {
-                IocManager.RegisterIfNot(temp.Value.ServiceType, DependencyLifeStyle.Transient);
-                IocManager.RegisterIfNot(temp.Value.ServiceType2, DependencyLifeStyle.Transient);
-            }
+            //var config = IocManager.Resolve<DynamicAssociateEntityDefineManager>();
+            //foreach (var temp in config.Defines)
+            //{
+            //    IocManager.RegisterIfNot(temp.Value.ServiceType, DependencyLifeStyle.Transient);
+            //}
         }
     }
 }

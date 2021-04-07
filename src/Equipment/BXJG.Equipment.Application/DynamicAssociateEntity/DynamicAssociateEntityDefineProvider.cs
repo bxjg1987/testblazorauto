@@ -19,7 +19,6 @@ namespace BXJG.Equipment.DynamicAssociateEntity
                     Name="equipment",
                     DisplayName = "设备".BXJGEquipmentL(),
                     ServiceType= typeof(DynamicAssociateEntityEquipmentInfoService),
-                    ServiceType2= typeof(DynamicAssociateEntityEquipmentInfoService),
                     Fields= new DynamicAssociateEntityDefineField[]
                     {
                         new DynamicAssociateEntityDefineField

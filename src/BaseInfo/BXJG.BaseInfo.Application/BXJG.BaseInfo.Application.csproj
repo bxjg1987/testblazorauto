@@ -4,10 +4,11 @@
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>BXJG.BaseInfo</RootNamespace>
     <Version>1.0.5</Version>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>..\..\ZLJ.Web.Host\APIXML\BXJG.BaseInfo.Application.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

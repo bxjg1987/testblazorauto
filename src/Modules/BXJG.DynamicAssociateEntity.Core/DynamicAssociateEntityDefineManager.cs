@@ -64,7 +64,7 @@ namespace BXJG.DynamicAssociateEntity
             }
             Defines = new ReadOnlyDictionary<string, DynamicAssociateEntityDefine>(dic);
 
-            var groupContext = new DynamicAssociateEntityDefineGroupProviderContext(Defines);
+            var groupContext = new DynamicAssociateEntityDefineGroupProviderContext();
             var groupTemp = new Dictionary<string, IReadOnlyDictionary<string, DynamicAssociateEntityDefine>>();
             var maps = dynamicAssociateEntityConfiguration.DynamicAssociateEntityDefineGroupProvider(groupContext);
             foreach (var item in maps)

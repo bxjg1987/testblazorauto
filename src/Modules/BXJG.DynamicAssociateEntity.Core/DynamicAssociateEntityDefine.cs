@@ -28,10 +28,10 @@ namespace BXJG.DynamicAssociateEntity
         /// 获取下拉框数据，应用层查询关联数据组合dto时会使用到
         /// </summary>
         public Type ServiceType { get; set; }
-        /// <summary>
-        /// 获取下拉框数据，应用层查询关联数据组合dto时会使用到
-        /// </summary>
-        public Type ServiceType2 { get; set; }
+        ///// <summary>
+        ///// 获取下拉框数据，应用层查询关联数据组合dto时会使用到
+        ///// </summary>
+        //public Type ServiceType2 { get; set; }
         /// <summary>
         /// 父节点<br />
         /// 考虑到级联关联，比如关联到订单明细时，是先选择订单，再选择明细

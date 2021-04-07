@@ -12,11 +12,11 @@
 所以你可以使用默认实现来完成一个类似"通用字典"的功能; 也可以通过子类完全实现自己的通用树,比如类似"区域"(省、市、区县)</Description>
     <PackageTags>abp GeneralTree 通用树</PackageTags>
     <PackageReleaseNotes></PackageReleaseNotes>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath></OutputPath>
-    <DocumentationFile>..\..\ZLJ.Web.Host\APIXML\BXJG.GeneralTree.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
