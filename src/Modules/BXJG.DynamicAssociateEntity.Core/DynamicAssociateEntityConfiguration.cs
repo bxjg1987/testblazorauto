@@ -14,7 +14,19 @@ namespace BXJG.DynamicAssociateEntity
     {
         public ITypeList<IDynamicAssociateEntityDefineProvider> DynamicAssociateEntityDefineProviders { get; } = new TypeList<IDynamicAssociateEntityDefineProvider>();
 
-        public Func<DynamicAssociateEntityDefineGroupProviderContext, IDictionary<string, string[]>> DynamicAssociateEntityDefineGroupProvider { get; set; }
+        public Func<DynamicAssociateEntityDefineGroupProviderContext, IDictionary<string, AssociateMapItem[]>> DynamicAssociateEntityDefineGroupProvider { get; set; }
         //public ITypeList<IDynamicAssociateEntityDefineGroupProvider> DynamicAssociateEntityDefineGroupProviders { get; } = new TypeList<IDynamicAssociateEntityDefineGroupProvider>();
+    }
+
+    public class AssociateMapItem
+    {
+        /// <summary>
+        /// 关联的目标数据定义
+        /// </summary>
+        public string Name { get; set; }
+        /// <summary>
+        /// 关联粒度
+        /// </summary>
+        public AssociateGranularity AssociateGranularity { get; set; }
     }
 }

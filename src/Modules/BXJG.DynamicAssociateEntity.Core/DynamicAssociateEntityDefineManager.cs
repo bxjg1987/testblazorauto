@@ -18,14 +18,14 @@ namespace BXJG.DynamicAssociateEntity
         /// <summary>
         /// 全局动态关联定义
         /// key：唯一名称；value：定义
+        /// 这种结构比List访问更快
         /// </summary>
         public IReadOnlyDictionary<string, DynamicAssociateEntityDefine> Defines { get; protected set; }
         protected readonly IIocManager _iocManager;
         /// <summary>
-        /// 分组后的动态关联实体定义
-        /// key:组名，如workOrder；value：key：数据唯一名，如：product，value：定义
+        /// 分组后的动态关联实体定义 key就是value.GroupName,这么做是为了提高性能
         /// </summary>
-        public IReadOnlyDictionary<string, IReadOnlyDictionary<string, DynamicAssociateEntityDefine>> GroupedDefines { get; protected set; }
+        public IReadOnlyDictionary<string, DefineMapGroup> GroupedDefines { get; protected set; }
         protected readonly DynamicAssociateEntityConfiguration dynamicAssociateEntityConfiguration;
 
         public DynamicAssociateEntityDefineManager(IIocManager iocManager, DynamicAssociateEntityConfiguration dynamicAssociateEntityConfiguration)
@@ -64,15 +64,47 @@ namespace BXJG.DynamicAssociateEntity
             }
             Defines = new ReadOnlyDictionary<string, DynamicAssociateEntityDefine>(dic);
 
+
+
+
             var groupContext = new DynamicAssociateEntityDefineGroupProviderContext();
-            var groupTemp = new Dictionary<string, IReadOnlyDictionary<string, DynamicAssociateEntityDefine>>();
+            var groupTemp = new Dictionary<string, DefineMapGroup>();
+            /*
+             {
+                key:'groupName',
+                items:[
+                    { defineName:'product', 关联粒度：row }
+                ]
+             }
+             */
             var maps = dynamicAssociateEntityConfiguration.DynamicAssociateEntityDefineGroupProvider(groupContext);
             foreach (var item in maps)
             {
-                var list = Defines.Where(c => item.Value.Contains(c.Key)).ToDictionary(c => c.Key, c => c.Value);
-                groupTemp.Add(item.Key, new ReadOnlyDictionary<string, DynamicAssociateEntityDefine>(list));
+                var grp = new DefineMapGroup
+                {
+                    GroupName = item.Key,
+                    Items = item.Value.Select(c => new DefineMapItem
+                    {
+                        Define = Defines[c.Name],
+                        AssociateGranularity = c.AssociateGranularity
+                    }).ToList().AsReadOnly()
+                };
+                groupTemp.Add(grp.GroupName, grp);
             }
-            GroupedDefines = new ReadOnlyDictionary<string, IReadOnlyDictionary<string, DynamicAssociateEntityDefine>>(groupTemp);
+            GroupedDefines = new ReadOnlyDictionary<string, DefineMapGroup>(groupTemp);
         }
+    }
+    public class DefineMapGroup
+    {
+        public string GroupName { get; set; }
+
+        public IReadOnlyList<DefineMapItem> Items { get; set; }
+
+        //这里将来可能增加更多属性
+    }
+    public class DefineMapItem
+    {
+        public DynamicAssociateEntityDefine Define { get; set; }
+        public AssociateGranularity AssociateGranularity { get; set; }
     }
 }

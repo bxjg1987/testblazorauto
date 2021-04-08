@@ -47,13 +47,17 @@ namespace BXJG.DynamicAssociateEntity
         /// </summary>
         public DynamicAssociateEntityDefine Child { get; set; }
         /// <summary>
+        /// 级联子节点名称
+        /// </summary>
+        public string ChildName => Child?.Name;
+        /// <summary>
         /// 数据主键字段
         /// </summary>
         public DynamicAssociateEntityDefineField KeyField => Fields.Single(c => c.IsKey);
         /// <summary>
         /// 用作显示的列集合
         /// </summary>
-        public IReadOnlyList<DynamicAssociateEntityDefineField> DisplayField => Fields.Where(c => c.IsDisplayField).ToList();
+        public IReadOnlyList<DynamicAssociateEntityDefineField> DisplayFields => Fields.Where(c => c.IsDisplayField).ToList().AsReadOnly();
         //简单起见，先不考虑预留字段
         //public string ExtField1 { get; set; }
         //public string ExtField2 { get; set; }

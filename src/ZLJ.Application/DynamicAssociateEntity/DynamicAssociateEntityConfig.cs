@@ -81,12 +81,22 @@ namespace ZLJ.DynamicAssociateEntity
         //            }
         //        }
         //    };
-        
-        public static IDictionary<string, string[]> DynamicAssociateEntityMap(DynamicAssociateEntityDefineGroupProviderContext context)
+
+        public static IDictionary<string, AssociateMapItem[]> DynamicAssociateEntityMap(DynamicAssociateEntityDefineGroupProviderContext context)
         {
-            return new Dictionary<string, string[]>
+            return new Dictionary<string, AssociateMapItem[]>
             {
-                { "workOrder", new string[]{ "equipment" } }
+                { 
+                    "workOrder", 
+                    new AssociateMapItem[]
+                    {
+                        new AssociateMapItem
+                        {
+                            Name="equipment", 
+                            AssociateGranularity= AssociateGranularity.Row 
+                        }
+                    }
+                }
             };
         }
     }
