@@ -68,6 +68,10 @@ namespace BXJG.DynamicAssociateEntity
         /// 目前只考虑被选择的数据只提供固定的UI选择形式，将来若需要可以把此属性当做数据的默认UI
         /// </summary>
         public string Control { get; set; } = Controls.ComboGrid;
+        /// <summary>
+        /// 数据是否需要分页
+        /// </summary>
+        public bool NeedPagination { get; set; }
     }
     /// <summary>
     /// 动态关联实体定义中的字段

@@ -51,11 +51,12 @@ namespace BXJG.DynamicAssociateEntity
                         DisplayName = child.DisplayName.Localize(this.localizationManager),
                         Name = child.Name,
                         Control = child.Control,
+                        NeedPagination = child.NeedPagination,
                         Fields = child.Fields.Select(qq => new DynamicAssociateEntityDefineFieldDto
                         {
-                            DislayFormatter = qq.DislayFormatter,
-                            DislayName = qq.DislayName.Localize(this.localizationManager),
-                            DislayWidth = qq.DislayWidth,
+                            DisplayFormatter = qq.DislayFormatter,
+                            DisplayName = qq.DislayName.Localize(this.localizationManager),
+                            DisplayWidth = qq.DislayWidth,
                             IsDisplayField = qq.IsDisplayField,
                             IsKey = qq.IsKey,
                             Name = qq.Name
@@ -153,6 +154,10 @@ namespace BXJG.DynamicAssociateEntity
         /// 必填
         /// </summary>
         public bool Required { get; set; }
+        /// <summary>
+        /// 数据是否需要分页
+        /// </summary>
+        public bool NeedPagination { get; set; }
     }
     /// <summary>
     /// 动态关联数据字段定义
@@ -174,15 +179,15 @@ namespace BXJG.DynamicAssociateEntity
         /// <summary>
         /// 字段显示名
         /// </summary>
-        public string DislayName { get; set; }
+        public string DisplayName { get; set; }
         /// <summary>
         /// 显示格式
         /// </summary>
-        public string DislayFormatter { get; set; }
+        public string DisplayFormatter { get; set; }
         /// <summary>
         /// 显示宽度，不同的前端需要的宽度不同，这里只是个默认值，或者作为百分比
         /// </summary>
-        public int DislayWidth { get; set; }
+        public int DisplayWidth { get; set; }
 
         //public int OrderIndex { get; set; }
     }
