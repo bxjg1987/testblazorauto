@@ -45,10 +45,12 @@ namespace BXJG.DynamicAssociateEntity
                     var n = new DynamicAssociateEntityDefineDto
                     {
                         AssociateGranularity = item.AssociateGranularity,
+                        Required = item.Required,
                         ChildName = child.ChildName,
                         DisplayFields = child.DisplayFields.Select(qq => qq.Name).ToArray(),
                         DisplayName = child.DisplayName.Localize(this.localizationManager),
                         Name = child.Name,
+                        Control = child.Control,
                         Fields = child.Fields.Select(qq => new DynamicAssociateEntityDefineFieldDto
                         {
                             DislayFormatter = qq.DislayFormatter,
@@ -65,6 +67,9 @@ namespace BXJG.DynamicAssociateEntity
                         parent.Child = n;
                     else
                         r.Add(n);
+
+                    if (n.Name == item.Define.Name)
+                        break;
 
                     parent = n;
                     child = child.Child;
@@ -140,6 +145,14 @@ namespace BXJG.DynamicAssociateEntity
         /// 关联粒度，所有行都关联到同一个实体类型 还是每行关联到不同的实体类型
         /// </summary>
         public AssociateGranularity AssociateGranularity { get; set; }
+        /// <summary>
+        /// 控件
+        /// </summary>
+        public string Control { get; set; }
+        /// <summary>
+        /// 必填
+        /// </summary>
+        public bool Required { get; set; }
     }
     /// <summary>
     /// 动态关联数据字段定义

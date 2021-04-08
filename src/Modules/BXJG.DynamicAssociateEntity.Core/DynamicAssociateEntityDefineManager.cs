@@ -98,7 +98,8 @@ namespace BXJG.DynamicAssociateEntity
                     Items = item.Value.Select(c => new DefineMapItem
                     {
                         Define = Defines[c.Name],
-                        AssociateGranularity = c.AssociateGranularity
+                        AssociateGranularity = c.AssociateGranularity,
+                        Required = c.Required
                     }).ToList().AsReadOnly()
                 };
                 groupTemp.Add(grp.GroupName, grp);
@@ -118,5 +119,6 @@ namespace BXJG.DynamicAssociateEntity
     {
         public DynamicAssociateEntityDefine Define { get; set; }
         public AssociateGranularity AssociateGranularity { get; set; }
+        public bool Required { get; set; }
     }
 }

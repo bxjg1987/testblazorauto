@@ -16,7 +16,7 @@ namespace BXJG.DynamicAssociateEntity
         /// </summary>
         Table,
         /// <summary>
-        /// 每行都可能关联到不同类型的实体
+        /// 每行数据都可能关联到不同类型的实体
         /// </summary>
         Row
     }

@@ -63,6 +63,11 @@ namespace BXJG.DynamicAssociateEntity
         //public string ExtField2 { get; set; }
         //public string ExtField3 { get; set; }
         //public int OrderIndex { get; set; }
+        /// <summary>
+        /// 控件，可以配置任意字符串，前端自己去适配。Controls也提供了几个常量<br />
+        /// 目前只考虑被选择的数据只提供固定的UI选择形式，将来若需要可以把此属性当做数据的默认UI
+        /// </summary>
+        public string Control { get; set; } = Controls.ComboGrid;
     }
     /// <summary>
     /// 动态关联实体定义中的字段

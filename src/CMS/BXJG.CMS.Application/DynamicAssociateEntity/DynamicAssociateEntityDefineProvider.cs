@@ -65,6 +65,27 @@ namespace BXJG.CMS.DynamicAssociateEntity
                                 IsDisplayField = true,
                                 Name = "published"
                             }
+                        },
+                        Child=new DynamicAssociateEntityDefine
+                        {
+                            Name="test",
+                            DisplayName = "测试".BXJGCMSL(),
+                            ServiceType= typeof(DynamicAssociateEntityArticleService),
+                            Fields= new DynamicAssociateEntityDefineField[]
+                            {
+                                new DynamicAssociateEntityDefineField
+                                {
+                                    DislayName="id".BXJGCMSL(),
+                                    IsKey=true,
+                                    Name="id"
+                                },
+                                new DynamicAssociateEntityDefineField
+                                {
+                                    DislayName ="标题".BXJGCMSL(),
+                                    IsDisplayField = true,
+                                    Name = "title"
+                                }
+                            }
                         }
                     }
                 }
