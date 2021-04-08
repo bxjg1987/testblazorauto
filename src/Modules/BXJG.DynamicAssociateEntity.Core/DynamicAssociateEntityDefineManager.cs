@@ -55,15 +55,27 @@ namespace BXJG.DynamicAssociateEntity
                 foreach (var item in defines)
                 {
                     var p = item;
-                    if (p != null)
+                    while (true)
                     {
                         dic.Add(p.Name, p);
-                        p = p.Parent;
+                        if (p.Child != null)
+                        {
+                            p.Child.Parent = p;
+                            p = p.Child;
+                        }
+                        else
+                        {
+                            break;
+                        }
                     }
                 }
             }
             Defines = new ReadOnlyDictionary<string, DynamicAssociateEntityDefine>(dic);
-
+            //foreach (var item in Defines)
+            //{
+            //    if (!string.IsNullOrWhiteSpace(item.Value.ParentName))
+            //        item.Value.Parent = Defines.Single(c => c.Value.Name == item.Value.ParentName).Value;
+            //}
 
 
 

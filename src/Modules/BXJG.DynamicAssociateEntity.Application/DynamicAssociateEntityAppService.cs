@@ -32,10 +32,13 @@ namespace BXJG.DynamicAssociateEntity
             var r = new List<DynamicAssociateEntityDefineDto>();
 
             var es = dynamicAssociateEntityDefineManager.GroupedDefines[groupName].Items;
-            //Abp.Localization.LocalizableStringExtensions
             foreach (var item in es)
             {
-                  var child = item.Define;
+                var child = item.Define;
+                while (child.Parent != null)
+                {
+                    child = child.Parent;
+                }
                 DynamicAssociateEntityDefineDto parent = null;
                 while (child != null)
                 {
@@ -49,7 +52,7 @@ namespace BXJG.DynamicAssociateEntity
                         Fields = child.Fields.Select(qq => new DynamicAssociateEntityDefineFieldDto
                         {
                             DislayFormatter = qq.DislayFormatter,
-                            DislayName =  qq.DislayName.Localize(this.localizationManager),
+                            DislayName = qq.DislayName.Localize(this.localizationManager),
                             DislayWidth = qq.DislayWidth,
                             IsDisplayField = qq.IsDisplayField,
                             IsKey = qq.IsKey,

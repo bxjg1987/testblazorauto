@@ -86,14 +86,19 @@ namespace ZLJ.DynamicAssociateEntity
         {
             return new Dictionary<string, AssociateMapItem[]>
             {
-                { 
-                    "workOrder", 
+                {
+                    "workOrder",
                     new AssociateMapItem[]
                     {
                         new AssociateMapItem
                         {
-                            Name="equipment", 
-                            AssociateGranularity= AssociateGranularity.Row 
+                            Name="equipment",
+                            AssociateGranularity= AssociateGranularity.Table
+                        },
+                        new AssociateMapItem
+                        {
+                            Name="article",
+                            AssociateGranularity= AssociateGranularity.Row
                         }
                     }
                 }
