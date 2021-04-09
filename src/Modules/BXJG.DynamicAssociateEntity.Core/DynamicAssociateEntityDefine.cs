@@ -37,6 +37,7 @@ namespace BXJG.DynamicAssociateEntity
         /// 考虑到级联关联，比如关联到订单明细时，是先选择订单，再选择明细
         /// </summary>
         public DynamicAssociateEntityDefine Parent { get; set; }
+        //public string NamePath { get; internal set; }
         /// <summary>
         /// 级联父级名称
         /// </summary>

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
 using Abp.Dependency;
 using Abp.Localization;
+using Abp.Extensions;
 
 namespace BXJG.DynamicAssociateEntity
 {
@@ -29,54 +30,77 @@ namespace BXJG.DynamicAssociateEntity
         /// <returns></returns>
         public IList<DynamicAssociateEntityDefineDto> GetDefines(string groupName)
         {
-            var r = new List<DynamicAssociateEntityDefineDto>();
+            //var r = new List<DynamicAssociateEntityDefineDto>();
+            //var es = dynamicAssociateEntityDefineManager.GroupedDefines[groupName].Items.Where(c=>c.Define.Parent==null);
+            //foreach (var item in es)
+            //{
+            //    var child = item.Define;
 
-            var es = dynamicAssociateEntityDefineManager.GroupedDefines[groupName].Items;
+            //    DynamicAssociateEntityDefineDto parent = null;
+            //    while (child != null)
+            //    {
+            //        var n = new DynamicAssociateEntityDefineDto
+            //        {
+            //            AssociateGranularity = item.AssociateGranularity,
+            //            Required = item.Required,
+            //            ChildName = child.ChildName,
+            //            DisplayFields = child.DisplayFields.Select(qq => qq.Name).ToArray(),
+            //            DisplayName = child.DisplayName.Localize(this.localizationManager),
+            //            Name = child.Name,
+            //            Control = child.Control,
+            //            NeedPagination = child.NeedPagination,
+            //            Fields = child.Fields.Select(qq => new DynamicAssociateEntityDefineFieldDto
+            //            {
+            //                DisplayFormatter = qq.DislayFormatter,
+            //                DisplayName = qq.DislayName.Localize(this.localizationManager),
+            //                DisplayWidth = qq.DislayWidth,
+            //                IsDisplayField = qq.IsDisplayField,
+            //                IsKey = qq.IsKey,
+            //                Name = qq.Name
+            //            }).ToArray(),
+            //            ParentName = child.ParentName,
+            //            KeyField = child.KeyField.Name
+            //        };
+            //        if (parent != null)
+            //            parent.Child = n;
+            //        else
+            //            r.Add(n);
+
+            //        if (n.Name == item.Define.Name)
+            //            break;
+
+            //        parent = n;
+            //        child = child.Child;
+            //    }
+            //}
+            //return r;
+            var es = dynamicAssociateEntityDefineManager.GroupedDefines[groupName].Items.Select(item => new DynamicAssociateEntityDefineDto
+            {
+                AssociateGranularity = item.AssociateGranularity,
+                Required = item.Required,
+                ChildName = item.Define.ChildName,
+                DisplayFields = item.Define.DisplayFields.Select(qq => qq.Name).ToArray(),
+                DisplayName = item.Define.DisplayName.Localize(this.localizationManager),
+                Name = item.Define.Name,
+                Control = item.Define.Control,
+                NeedPagination = item.Define.NeedPagination,
+                Fields = item.Define.Fields.Select(qq => new DynamicAssociateEntityDefineFieldDto
+                {
+                    DisplayFormatter = qq.DislayFormatter,
+                    DisplayName = qq.DislayName.Localize(this.localizationManager),
+                    DisplayWidth = qq.DislayWidth,
+                    IsDisplayField = qq.IsDisplayField,
+                    IsKey = qq.IsKey,
+                    Name = qq.Name
+                }).ToArray(),
+                ParentName = item.Define.ParentName,
+                KeyField = item.Define.KeyField.Name
+            }).ToList();
             foreach (var item in es)
             {
-                var child = item.Define;
-                while (child.Parent != null)
-                {
-                    child = child.Parent;
-                }
-                DynamicAssociateEntityDefineDto parent = null;
-                while (child != null)
-                {
-                    var n = new DynamicAssociateEntityDefineDto
-                    {
-                        AssociateGranularity = item.AssociateGranularity,
-                        Required = item.Required,
-                        ChildName = child.ChildName,
-                        DisplayFields = child.DisplayFields.Select(qq => qq.Name).ToArray(),
-                        DisplayName = child.DisplayName.Localize(this.localizationManager),
-                        Name = child.Name,
-                        Control = child.Control,
-                        NeedPagination = child.NeedPagination,
-                        Fields = child.Fields.Select(qq => new DynamicAssociateEntityDefineFieldDto
-                        {
-                            DisplayFormatter = qq.DislayFormatter,
-                            DisplayName = qq.DislayName.Localize(this.localizationManager),
-                            DisplayWidth = qq.DislayWidth,
-                            IsDisplayField = qq.IsDisplayField,
-                            IsKey = qq.IsKey,
-                            Name = qq.Name
-                        }).ToArray(),
-                        ParentName = child.ParentName,
-                        KeyField = child.KeyField.Name
-                    };
-                    if (parent != null)
-                        parent.Child = n;
-                    else
-                        r.Add(n);
-
-                    if (n.Name == item.Define.Name)
-                        break;
-
-                    parent = n;
-                    child = child.Child;
-                }
+                item.Child = es.SingleOrDefault(c => c.ParentName == item.Name);
             }
-            return r;
+            return es.Where(c=>c.ParentName.IsNullOrWhiteSpace()).ToList();
         }
         /// <summary>
         /// 获取动态关联的实体的列表
