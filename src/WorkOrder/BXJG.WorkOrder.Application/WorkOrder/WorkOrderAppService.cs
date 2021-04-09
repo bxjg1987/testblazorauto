@@ -17,6 +17,7 @@ using Abp.Domain.Entities;
 using Abp.UI;
 using BXJG.DynamicAssociateEntity;
 using Abp.Dependency;
+using BXJG.WorkOrder.DynamicAssociateEntity;
 
 namespace BXJG.WorkOrder.WorkOrder
 {
@@ -75,7 +76,6 @@ namespace BXJG.WorkOrder.WorkOrder
         #endregion
     {
         protected readonly IIocResolver iocResolver;
-        protected readonly DynamicAssociateEntityDefineManager dynamicAssociateEntityDefineManager;
         protected readonly TRepository repository;
         protected readonly TCategoryRepository categoryRepository;
         protected readonly TManager manager;
@@ -96,7 +96,6 @@ namespace BXJG.WorkOrder.WorkOrder
                                        TCategoryRepository categoryRepository,
                                        IEmployeeAppService employeeAppService,
                                        IIocResolver iocResolver,
-                                       DynamicAssociateEntityDefineManager dynamicAssociateEntityDefineManager,
                                        string createPermissionName = default,
                                        string updatePermissionName = default,
                                        string deletePermissionName = default,
@@ -125,7 +124,6 @@ namespace BXJG.WorkOrder.WorkOrder
             this.toBeConfirmedPermissionName = toBeConfirmedPermissionName;
 
             this.iocResolver = iocResolver;
-            this.dynamicAssociateEntityDefineManager = dynamicAssociateEntityDefineManager;
         }
         /// <summary>
         /// 新增工单
@@ -721,17 +719,18 @@ namespace BXJG.WorkOrder.WorkOrder
                                                                IRepository<CategoryEntity, long>>
 
     {
+        private readonly WorkOrderDynamicAssociateEntityHelper workOrderDynamicAssociateEntityHelper;
+
         public WorkOrderAppService(IRepository<OrderEntity, long> repository,
                                    IIocResolver iocResolver,
-                                   DynamicAssociateEntityDefineManager dynamicAssociateEntityDefineManager,
                                    OrderManager manager,
                                    IRepository<CategoryEntity, long> categoryRepository,
+                                   WorkOrderDynamicAssociateEntityHelper workOrderDynamicAssociateEntityHelper,
                                    IEmployeeAppService employeeAppService) : base(repository,
                                                                                   manager,
                                                                                   categoryRepository,
                                                                                   employeeAppService,
                                                                                   iocResolver,
-                                                                                  dynamicAssociateEntityDefineManager,
                                                                                   CoreConsts.WorkOrderCreate,
                                                                                   CoreConsts.WorkOrderUpdate,
                                                                                   CoreConsts.WorkOrderDelete,
@@ -741,24 +740,22 @@ namespace BXJG.WorkOrder.WorkOrder
                                                                                   CoreConsts.WorkOrderExecute,
                                                                                   CoreConsts.WorkOrderCompletion,
                                                                                   CoreConsts.WorkOrderReject)
-        { }
+        {
+            this.workOrderDynamicAssociateEntityHelper = workOrderDynamicAssociateEntityHelper;
+        }
 
         protected override async ValueTask BeforeEditAsync(OrderEntity entity, WorkOrderUpdateInput input)
         {
             await base.BeforeEditAsync(entity, input);
-            entity.ExtendedField1 = input.ExtendedField1;
-            entity.ExtendedField2 = input.ExtendedField2;
-            entity.ExtendedField3 = input.ExtendedField3;
-            entity.ExtendedField4 = input.ExtendedField4;
-            entity.ExtendedField5 = input.ExtendedField5;
-            if (input.ExtensionData != null)
-            {
-                foreach (var item in input.ExtensionData)
-                {
-                    entity.SetData(item.Key, item.Value);
-                }
-            }
+            HandExtensions(entity, input);
         }
+
+        protected override async ValueTask BeforeCreateAsync(OrderEntity entity, WorkOrderCreateInput input)
+        {
+            await base.BeforeCreateAsync(entity, input);
+            HandExtensions(entity, input);
+        }
+
         protected override WorkOrderDto EntityToDto(OrderEntity entity, IEnumerable<CategoryEntity> categories, IEnumerable<EmployeeDto> employees, object state = default)
         {
             var dto = base.EntityToDto(entity, categories, employees, state);
@@ -772,6 +769,23 @@ namespace BXJG.WorkOrder.WorkOrder
                 dto.ExtensionData = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(entity.ExtensionData);
             }
             return dto;
+        }
+
+        private void HandExtensions(OrderEntity entity, WorkOrderUpdateInput input)
+        {
+            entity.ExtendedField1 = input.ExtendedField1;
+            entity.ExtendedField2 = input.ExtendedField2;
+            entity.ExtendedField3 = input.ExtendedField3;
+            entity.ExtendedField4 = input.ExtendedField4;
+            entity.ExtendedField5 = input.ExtendedField5;
+            if (input.ExtensionData != null)
+            {
+                foreach (var item in input.ExtensionData)
+                {
+                    entity.SetData(item.Key, item.Value);
+                }
+            }
+            workOrderDynamicAssociateEntityHelper.DtoMapToEntity(input, entity);
         }
     }
 }

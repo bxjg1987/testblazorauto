@@ -8,9 +8,11 @@ using Abp.Application.Services.Dto;
 using Abp.Dependency;
 using Abp.Localization;
 using Abp.Extensions;
+using Abp.Authorization;
 
 namespace BXJG.DynamicAssociateEntity
 {
+    [AbpAuthorize]
     public class DynamicAssociateEntityAppService : ApplicationService
     {
         protected readonly DynamicAssociateEntityDefineManager dynamicAssociateEntityDefineManager;
@@ -30,50 +32,14 @@ namespace BXJG.DynamicAssociateEntity
         /// <returns></returns>
         public IList<DynamicAssociateEntityDefineDto> GetDefines(string groupName)
         {
-            //var r = new List<DynamicAssociateEntityDefineDto>();
-            //var es = dynamicAssociateEntityDefineManager.GroupedDefines[groupName].Items.Where(c=>c.Define.Parent==null);
-            //foreach (var item in es)
-            //{
-            //    var child = item.Define;
+            //测试代码，可以删除
+            //var obj = Class1.DtoMapToEntity(dynamicAssociateEntityDefineManager.GroupedDefines[groupName].LeafItems, new Dictionary<string, object> {
+            //    { "article",3 } ,
+            //    { "column",1 },
+            //    { "equipment",6 }
+            //});
+            //var str = System.Text.Json.JsonSerializer.Serialize(obj);
 
-            //    DynamicAssociateEntityDefineDto parent = null;
-            //    while (child != null)
-            //    {
-            //        var n = new DynamicAssociateEntityDefineDto
-            //        {
-            //            AssociateGranularity = item.AssociateGranularity,
-            //            Required = item.Required,
-            //            ChildName = child.ChildName,
-            //            DisplayFields = child.DisplayFields.Select(qq => qq.Name).ToArray(),
-            //            DisplayName = child.DisplayName.Localize(this.localizationManager),
-            //            Name = child.Name,
-            //            Control = child.Control,
-            //            NeedPagination = child.NeedPagination,
-            //            Fields = child.Fields.Select(qq => new DynamicAssociateEntityDefineFieldDto
-            //            {
-            //                DisplayFormatter = qq.DislayFormatter,
-            //                DisplayName = qq.DislayName.Localize(this.localizationManager),
-            //                DisplayWidth = qq.DislayWidth,
-            //                IsDisplayField = qq.IsDisplayField,
-            //                IsKey = qq.IsKey,
-            //                Name = qq.Name
-            //            }).ToArray(),
-            //            ParentName = child.ParentName,
-            //            KeyField = child.KeyField.Name
-            //        };
-            //        if (parent != null)
-            //            parent.Child = n;
-            //        else
-            //            r.Add(n);
-
-            //        if (n.Name == item.Define.Name)
-            //            break;
-
-            //        parent = n;
-            //        child = child.Child;
-            //    }
-            //}
-            //return r;
             var es = dynamicAssociateEntityDefineManager.GroupedDefines[groupName].Items.Select(item => new DynamicAssociateEntityDefineDto
             {
                 AssociateGranularity = item.AssociateGranularity,
@@ -100,7 +66,7 @@ namespace BXJG.DynamicAssociateEntity
             {
                 item.Child = es.SingleOrDefault(c => c.ParentName == item.Name);
             }
-            return es.Where(c=>c.ParentName.IsNullOrWhiteSpace()).ToList();
+            return es.Where(c => c.ParentName.IsNullOrWhiteSpace()).ToList();
         }
         /// <summary>
         /// 获取动态关联的实体的列表

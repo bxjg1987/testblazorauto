@@ -146,6 +146,11 @@ namespace BXJG.DynamicAssociateEntity
         /// 映射所有节点中的顶级节点
         /// </summary>
         public IReadOnlyList<DefineMapItem> TopItems => Items.Where(c => c.Define.Parent == null).ToList().AsReadOnly();
+        /// <summary>
+        /// 映射所有节点中的叶节点
+        /// </summary>
+        public IReadOnlyList<DefineMapItem> LeafItems => Items.Where(c => c.Define.Child == null || !Items.Any(d => d.Define.Name == c.Define.Child.Name)).ToList().AsReadOnly();
+
         //这里将来可能增加更多属性
     }
     public class DefineMapItem

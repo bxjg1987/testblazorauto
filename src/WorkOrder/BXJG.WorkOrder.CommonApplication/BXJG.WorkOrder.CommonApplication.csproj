@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\modules\BXJG.DynamicAssociateEntity.Application\BXJG.DynamicAssociateEntity.Application.csproj" />
     <ProjectReference Include="..\..\Modules\BXJG.Utils.Application\BXJG.Utils.Application.csproj" />
     <ProjectReference Include="..\BXJG.WorkOrder.Core\BXJG.WorkOrder.Core.csproj" />
   </ItemGroup>
