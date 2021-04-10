@@ -26,11 +26,11 @@ namespace BXJG.DynamicAssociateEntity
             this.localizationManager = localizationManager;
         }
         /// <summary>
-        /// 获取定义
+        /// 获取定义，返回带层次结构的列表
         /// </summary>
         /// <param name="groupName"></param>
         /// <returns></returns>
-        public IList<DynamicAssociateEntityDefineDto> GetDefines(string groupName)
+        public List<DynamicAssociateEntityDefineDto> GetDefines(string groupName)
         {
             var es = dynamicAssociateEntityDefineManager.GroupedDefines[groupName].Items.Select(item => new DynamicAssociateEntityDefineDto
             {
@@ -59,6 +59,39 @@ namespace BXJG.DynamicAssociateEntity
                 item.Child = es.SingleOrDefault(c => c.ParentName == item.Name);
             }
             return es.Where(c => c.ParentName.IsNullOrWhiteSpace()).ToList();
+        }
+        /// <summary>
+        /// 获取定义，返回扁平化的列表，级联选择时更容易处理，避免前端递归
+        /// </summary>
+        /// <param name="groupName"></param>
+        /// <returns></returns>
+        public List<List<DynamicAssociateEntityDefineDto>> GetFlatDefines(string groupName)
+        {
+            return dynamicAssociateEntityDefineManager.GroupedDefines[groupName].TopFlatItems.Select(c =>
+            {
+                return c.Select(item => new DynamicAssociateEntityDefineDto
+                {
+                    AssociateGranularity = item.AssociateGranularity,
+                    Required = item.Required,
+                    ChildName = item.Define.ChildName,
+                    DisplayFields = item.Define.DisplayFields.Select(qq => qq.Name).ToArray(),
+                    DisplayName = item.Define.DisplayName.Localize(localizationManager),
+                    Name = item.Define.Name,
+                    Control = item.Define.Control,
+                    NeedPagination = item.Define.NeedPagination,
+                    Fields = item.Define.Fields.Select(qq => new DynamicAssociateEntityDefineFieldDto
+                    {
+                        DisplayFormatter = qq.DislayFormatter,
+                        DisplayName = qq.DislayName.Localize(localizationManager),
+                        DisplayWidth = qq.DislayWidth,
+                        IsDisplayField = qq.IsDisplayField,
+                        IsKey = qq.IsKey,
+                        Name = qq.Name
+                    }).ToArray(),
+                    ParentName = item.Define.ParentName,
+                    KeyField = item.Define.KeyField.Name
+                }).ToList();
+            }).ToList();
         }
         /// <summary>
         /// 获取动态关联的实体的列表
