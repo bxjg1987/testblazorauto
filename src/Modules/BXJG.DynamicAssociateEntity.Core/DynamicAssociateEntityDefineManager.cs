@@ -27,7 +27,10 @@ namespace BXJG.DynamicAssociateEntity
         /// </summary>
         public IReadOnlyDictionary<string, DefineMapGroup> GroupedDefines { get; protected set; }
 
-
+        public T GetService<T>(string name) 
+        {
+            return (T)_iocManager.Resolve(Defines[name].ServiceType);
+        }
 
         protected readonly DynamicAssociateEntityConfiguration dynamicAssociateEntityConfiguration;
 

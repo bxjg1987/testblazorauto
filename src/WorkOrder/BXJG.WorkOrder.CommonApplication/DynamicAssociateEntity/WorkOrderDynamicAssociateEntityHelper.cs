@@ -10,7 +10,8 @@ namespace BXJG.WorkOrder.DynamicAssociateEntity
 {
     public class WorkOrderDynamicAssociateEntityHelper : DynamicAssociateEntityHelper, ITransientDependency
     {
-        public WorkOrderDynamicAssociateEntityHelper(DynamicAssociateEntityDefineManager dynamicAssociateEntityDefineManager,  IIocResolver iocResolver) : base(dynamicAssociateEntityDefineManager, Class2.DynamicAssociateEntity, iocResolver)
+        public WorkOrderDynamicAssociateEntityHelper(DynamicAssociateEntityDefineManager dynamicAssociateEntityDefineManager) 
+            : base(dynamicAssociateEntityDefineManager, Class2.DynamicAssociateEntity)
         {
         }
     }

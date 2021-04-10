@@ -27,15 +27,14 @@ namespace BXJG.CMS.DynamicAssociateEntity
 
         public async Task<PagedResultDto<object>> GetAllAsync(string parentId, string keyword, string sorting, int skip, int maxcount)
         {
-            throw new NotImplementedException();
-            //var query = repository.GetAllIncluding(c => c.Area)
-            //                      .WhereIf(!keyword.IsNullOrWhiteSpace(), c => c.Name.Contains(keyword));
-            //var total = await AsyncQueryableExecuter.CountAsync(query);
-            //if (!sorting.IsNullOrWhiteSpace())
-            //    query = query.OrderBy(sorting);
-            //query= query.PageBy(skip, maxcount);
-            //var listEntity = await AsyncQueryableExecuter.ToListAsync(query);
-            //return new PagedResultDto<object>(total, listEntity);
+            var query = repository.GetAll()
+                                  .WhereIf(!keyword.IsNullOrWhiteSpace(), c => c.DisplayName.Contains(keyword));
+            var total = await AsyncQueryableExecuter.CountAsync(query);
+            if (!sorting.IsNullOrWhiteSpace())
+                query = query.OrderBy(sorting);
+            query = query.PageBy(skip, maxcount);
+            var listEntity = await AsyncQueryableExecuter.ToListAsync(query);
+            return new PagedResultDto<object>(total, listEntity);
         }
 
         public async Task<IEnumerable<object>> GetAllByIdsAsync(string parentId, params string[] ids)

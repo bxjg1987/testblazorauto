@@ -19,7 +19,7 @@ namespace BXJG.CMS.DynamicAssociateEntity
     {
         private readonly IRepository<ArticleEntity, long> repository;
         protected IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; } = NullAsyncQueryableExecuter.Instance;
-        
+
         public DynamicAssociateEntityArticleService(IRepository<ArticleEntity, long> repository)
         {
             this.repository = repository;
@@ -27,15 +27,15 @@ namespace BXJG.CMS.DynamicAssociateEntity
 
         public async Task<PagedResultDto<object>> GetAllAsync(string parentId, string keyword, string sorting, int skip, int maxcount)
         {
-            throw new NotImplementedException();
-            //var query = repository.GetAllIncluding(c => c.Area)
-            //                      .WhereIf(!keyword.IsNullOrWhiteSpace(), c => c.Name.Contains(keyword));
-            //var total = await AsyncQueryableExecuter.CountAsync(query);
-            //if (!sorting.IsNullOrWhiteSpace())
-            //    query = query.OrderBy(sorting);
-            //query= query.PageBy(skip, maxcount);
-            //var listEntity = await AsyncQueryableExecuter.ToListAsync(query);
-            //return new PagedResultDto<object>(total, listEntity);
+            var query = repository.GetAll()
+                                  .WhereIf(!parentId.IsNullOrWhiteSpace(), c => c.ColumnId.ToString() == parentId)
+                                  .WhereIf(!keyword.IsNullOrWhiteSpace(), c => c.Title.Contains(keyword));
+            var total = await AsyncQueryableExecuter.CountAsync(query);
+            if (!sorting.IsNullOrWhiteSpace())
+                query = query.OrderBy(sorting);
+            query = query.PageBy(skip, maxcount);
+            var listEntity = await AsyncQueryableExecuter.ToListAsync(query);
+            return new PagedResultDto<object>(total, listEntity);
         }
 
         public async Task<IEnumerable<object>> GetAllByIdsAsync(string parentId, params string[] ids)

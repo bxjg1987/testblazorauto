@@ -19,6 +19,7 @@ namespace BXJG.Equipment.DynamicAssociateEntity
                     Name="equipment",
                     DisplayName = "设备".BXJGEquipmentL(),
                     ServiceType= typeof(DynamicAssociateEntityEquipmentInfoService),
+                    NeedPagination=true,
                     Fields= new DynamicAssociateEntityDefineField[]
                     {
                         new DynamicAssociateEntityDefineField
