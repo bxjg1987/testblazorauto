@@ -32,28 +32,20 @@ namespace BXJG.DynamicAssociateEntity
         /// <returns></returns>
         public IList<DynamicAssociateEntityDefineDto> GetDefines(string groupName)
         {
-            //测试代码，可以删除
-            //var obj = Class1.DtoMapToEntity(dynamicAssociateEntityDefineManager.GroupedDefines[groupName].LeafItems, new Dictionary<string, object> {
-            //    { "article",3 } ,
-            //    { "column",1 },
-            //    { "equipment",6 }
-            //});
-            //var str = System.Text.Json.JsonSerializer.Serialize(obj);
-
             var es = dynamicAssociateEntityDefineManager.GroupedDefines[groupName].Items.Select(item => new DynamicAssociateEntityDefineDto
             {
                 AssociateGranularity = item.AssociateGranularity,
                 Required = item.Required,
                 ChildName = item.Define.ChildName,
                 DisplayFields = item.Define.DisplayFields.Select(qq => qq.Name).ToArray(),
-                DisplayName = item.Define.DisplayName.Localize(this.localizationManager),
+                DisplayName = item.Define.DisplayName.Localize(localizationManager),
                 Name = item.Define.Name,
                 Control = item.Define.Control,
                 NeedPagination = item.Define.NeedPagination,
                 Fields = item.Define.Fields.Select(qq => new DynamicAssociateEntityDefineFieldDto
                 {
                     DisplayFormatter = qq.DislayFormatter,
-                    DisplayName = qq.DislayName.Localize(this.localizationManager),
+                    DisplayName = qq.DislayName.Localize(localizationManager),
                     DisplayWidth = qq.DislayWidth,
                     IsDisplayField = qq.IsDisplayField,
                     IsKey = qq.IsKey,
