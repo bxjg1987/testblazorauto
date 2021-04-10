@@ -5,7 +5,9 @@ using Abp.Extensions;
 using Abp.Linq;
 using Abp.Linq.Extensions;
 using BXJG.CMS.Column;
+using BXJG.CMS.Localization;
 using BXJG.DynamicAssociateEntity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,16 +21,20 @@ namespace BXJG.CMS.DynamicAssociateEntity
     {
         private readonly IRepository<ColumnEntity, long> repository;
         protected IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; } = NullAsyncQueryableExecuter.Instance;
-        
         public DynamicAssociateEntityColumnService(IRepository<ColumnEntity, long> repository)
         {
             this.repository = repository;
         }
-
         public async Task<PagedResultDto<object>> GetAllAsync(string parentId, string keyword, string sorting, int skip, int maxcount)
         {
             var query = repository.GetAll()
-                                  .WhereIf(!keyword.IsNullOrWhiteSpace(), c => c.DisplayName.Contains(keyword));
+                                  .WhereIf(!keyword.IsNullOrWhiteSpace(), c => c.DisplayName.Contains(keyword))
+                                  .Select(c => new
+                                  {
+                                      columnId = c.Id,
+                                      columnName = c.DisplayName,
+                                      columnType = c.ColumnType.BXJGCMSEnum()
+                                  } as object);
             var total = await AsyncQueryableExecuter.CountAsync(query);
             if (!sorting.IsNullOrWhiteSpace())
                 query = query.OrderBy(sorting);
@@ -36,22 +42,33 @@ namespace BXJG.CMS.DynamicAssociateEntity
             var listEntity = await AsyncQueryableExecuter.ToListAsync(query);
             return new PagedResultDto<object>(total, listEntity);
         }
-
-        public async Task<IEnumerable<object>> GetAllByIdsAsync(string parentId, params string[] ids)
+        public async Task<IList<object>> GetAllNoPageAsync(string parentId, string keyword, string sorting)
         {
-            throw new NotImplementedException();
-            //var query = repository.GetAllIncluding(c => c.Area).Where(c => ids.Contains(c.Id.ToString()));
-            //var listEntity = await AsyncQueryableExecuter.ToListAsync(query);
-            //return listEntity;
+            var query = repository.GetAll()
+                                  .WhereIf(!keyword.IsNullOrWhiteSpace(), c => c.DisplayName.Contains(keyword))
+                                  .Select(c => new
+                                  {
+                                      columnId = c.Id,
+                                      columnName = c.DisplayName,
+                                      columnType = c.ColumnType.BXJGCMSEnum()
+                                  } as object);
+            if (!sorting.IsNullOrWhiteSpace())
+                query = query.OrderBy(sorting);
+            return await query.ToListAsync();
         }
-
-        public async Task<IEnumerable<string>> GetIdsByKeywordAsync(string parentId, string keyword)
+        public async Task<IEnumerable<object>> GetAllByIdsAsync(params IEnumerable<object>[] ids)
         {
-            throw new NotImplementedException();
-            //var query = repository.GetAllIncluding(c => c.Area)
-            //               .WhereIf(!keyword.IsNullOrWhiteSpace(), c => c.Name.Contains(keyword))
-            //               .Select(c => c.Id.ToString());
-            //return await AsyncQueryableExecuter.ToListAsync(query);
+            var qry = from p in repository.GetAll()
+                      select new
+                      {
+                          ColumnId = p.Id,
+                          ColumnName = p.DisplayName,
+                          columnType = p.ColumnType.BXJGCMSEnum()
+                      };
+            var columnIds = ids.SingleOrDefault();
+            if (columnIds != null)
+                qry = qry.Where(c => columnIds.Contains(c.ColumnId));
+            return await qry.ToListAsync();
         }
     }
 }

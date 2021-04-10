@@ -19,32 +19,34 @@ namespace BXJG.CMS.DynamicAssociateEntity
                     Name="column",
                     DisplayName = "栏目".BXJGCMSL(),
                     ServiceType= typeof(DynamicAssociateEntityColumnService),
+                    NeedPagination=true,
                     Fields= new DynamicAssociateEntityDefineField[]
                     {
                         new DynamicAssociateEntityDefineField
                         {
-                            DislayName="id".BXJGCMSL(),
+                            DislayName="columnId".BXJGCMSL(),
                             IsKey=true,
-                            Name="id"
+                            Name="columnId"
                         },
                         new DynamicAssociateEntityDefineField
                         {
                             DislayName ="名称".BXJGCMSL(),
                             IsDisplayField = true,
-                            Name = "displayName"
+                            Name = "columnName"
                         },
                         new DynamicAssociateEntityDefineField
                         {
-                            DislayName ="内容类型".BXJGCMSL(),
+                            DislayName ="栏目类型".BXJGCMSL(),
                             IsDisplayField = true,
-                            Name = "contentTypeDisplayName"
+                            Name = "columnType"
                         }
                     },
                     Child = new DynamicAssociateEntityDefine
                     {
                         Name="article",
                         DisplayName = "文章".BXJGCMSL(),
-                        ServiceType= typeof(DynamicAssociateEntityArticleService),
+                        ServiceType= typeof(DynamicAssociateEntityArticleService), 
+                        NeedPagination=true,
                         Fields= new DynamicAssociateEntityDefineField[]
                         {
                             new DynamicAssociateEntityDefineField

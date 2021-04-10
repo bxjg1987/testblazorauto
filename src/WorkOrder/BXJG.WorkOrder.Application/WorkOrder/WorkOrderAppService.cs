@@ -75,7 +75,6 @@ namespace BXJG.WorkOrder.WorkOrder
         where TCategoryRepository : IRepository<CategoryEntity, long>
         #endregion
     {
-        protected readonly IIocResolver iocResolver;
         protected readonly TRepository repository;
         protected readonly TCategoryRepository categoryRepository;
         protected readonly TManager manager;
@@ -95,7 +94,7 @@ namespace BXJG.WorkOrder.WorkOrder
                                        TManager manager,
                                        TCategoryRepository categoryRepository,
                                        IEmployeeAppService employeeAppService,
-                                       IIocResolver iocResolver,
+                                     
                                        string createPermissionName = default,
                                        string updatePermissionName = default,
                                        string deletePermissionName = default,
@@ -123,7 +122,7 @@ namespace BXJG.WorkOrder.WorkOrder
             this.confirmePermissionName = confirmePermissionName;
             this.toBeConfirmedPermissionName = toBeConfirmedPermissionName;
 
-            this.iocResolver = iocResolver;
+            //this.iocResolver = iocResolver;
         }
         /// <summary>
         /// 新增工单
@@ -722,7 +721,6 @@ namespace BXJG.WorkOrder.WorkOrder
         private readonly WorkOrderDynamicAssociateEntityHelper workOrderDynamicAssociateEntityHelper;
 
         public WorkOrderAppService(IRepository<OrderEntity, long> repository,
-                                   IIocResolver iocResolver,
                                    OrderManager manager,
                                    IRepository<CategoryEntity, long> categoryRepository,
                                    WorkOrderDynamicAssociateEntityHelper workOrderDynamicAssociateEntityHelper,
@@ -730,7 +728,6 @@ namespace BXJG.WorkOrder.WorkOrder
                                                                                   manager,
                                                                                   categoryRepository,
                                                                                   employeeAppService,
-                                                                                  iocResolver,
                                                                                   CoreConsts.WorkOrderCreate,
                                                                                   CoreConsts.WorkOrderUpdate,
                                                                                   CoreConsts.WorkOrderDelete,

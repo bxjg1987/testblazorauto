@@ -36,15 +36,9 @@ namespace BXJG.Equipment.DynamicAssociateEntity
                         },
                         new DynamicAssociateEntityDefineField
                         {
-                            DislayName = "单位".BXJGEquipmentL(),
+                            DislayName = "硬件码".BXJGEquipmentL(),
                             IsDisplayField = true,
-                            Name ="unit"
-                        },
-                        new DynamicAssociateEntityDefineField
-                        {
-                            DislayName ="规格".BXJGEquipmentL(),
-                            IsDisplayField =true,
-                            Name = "size"
+                            Name ="hardwareCode"
                         }
                     }
                 }

@@ -11,8 +11,8 @@ namespace BXJG.DynamicAssociateEntity
     public interface IDynamicAssociateEntityService : ITransientDependency
     {
         Task<PagedResultDto<object>> GetAllAsync(string parentId, string keyword, string sorting, int skip, int maxcount);
-        Task<IEnumerable<object>> GetAllByIdsAsync(string parentId, params string[] ids);
-        Task<IEnumerable<string>> GetIdsByKeywordAsync(string parentId, string keyword);
+        Task<IList<object>> GetAllNoPageAsync(string parentId, string keyword, string sorting);
+        Task<IEnumerable<object>> GetAllByIdsAsync(params IEnumerable<object>[] ids);
+        //Task<IEnumerable<string>> GetIdsByKeywordAsync(string parentId, string keyword);
     }
-
 }
