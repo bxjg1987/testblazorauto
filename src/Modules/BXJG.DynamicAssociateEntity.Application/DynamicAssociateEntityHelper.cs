@@ -21,13 +21,13 @@ namespace BXJG.DynamicAssociateEntity
             defines = dynamicAssociateEntityDefineManager.GroupedDefines[groupName];
         }
 
-        public IList<IDictionary<string, object>> DtoMapToEntity(IDictionary<string, object> dto)
+        public List<List<KeyValuePair<string, object>>> DtoMapToEntity(IDictionary<string, object> dto)
         {
-            return dto.MapToEntity(defines.LeafItems);
+            return dto.MapToEntity(defines.TopFlatItems);
         }
         public string DtoMapToEntityJsonString(IDictionary<string, object> dto)
         {
-            return dto.DtoMapToEntityJsonString(defines.LeafItems);
+            return dto.DtoMapToEntityJsonString(defines.TopFlatItems);
         }
         /// <summary>
         /// 将用户提交的动态关联外键的数据转换映射到实体的对应属性上，最终以json格式保存，且保留级联结构

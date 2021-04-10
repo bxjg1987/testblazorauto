@@ -113,9 +113,9 @@ namespace BXJG.DynamicAssociateEntity
                     {
                         if (!items.Any(c => c.Name == p.Name))
                         {
-                            var idx = items.IndexOf(item1);
-
-                            items.Insert(idx, new AssociateMapItem { AssociateGranularity = item1.AssociateGranularity, Name = p.Name, Required = item1.Required });
+                            //var idx = items.IndexOf(item1);
+                            //items.Insert(idx, new AssociateMapItem { AssociateGranularity = item1.AssociateGranularity, Name = p.Name, Required = item1.Required });
+                            items.Add(new AssociateMapItem { AssociateGranularity = item1.AssociateGranularity, Name = p.Name, Required = item1.Required });
                         }
                         p = p.Parent;
                     }
@@ -132,7 +132,7 @@ namespace BXJG.DynamicAssociateEntity
                         Required = c.Required
                     }).ToList().AsReadOnly()
                 };
-                grp.Init();
+                grp.Initialize();
                 groupTemp.Add(grp.GroupName, grp);
             }
 
@@ -142,7 +142,7 @@ namespace BXJG.DynamicAssociateEntity
     }
     public class DefineMapGroup
     {
-        //先调用items进行配置，配置完成后需要调用Init() 
+        //先调用items进行配置，配置完成后需要调用Initialize() 
 
         /// <summary>
         /// 分组名，比如工单需要动态关联到入库单明细、租赁订单明细，则这里的组名为workOrder（工单）
@@ -151,16 +151,16 @@ namespace BXJG.DynamicAssociateEntity
 
         internal IList<DefineMapItem> items;
 
-        internal void Init()
+        internal void Initialize()
         {
             #region 建立父子关系
             var listTemp = items.ToList();
-            listTemp.ForEach(c => {
+            listTemp.ForEach(c =>
+            {
                 c.Parent = items.SingleOrDefault(d => c.ParentName == d.Name);
-                c.Child = items.SingleOrDefault(d => c.Name == d.ChildName);
+                c.Child = items.SingleOrDefault(d => c.ChildName == d.Name);
             });
             #endregion
-
             Items = listTemp.AsReadOnly();
             TopItems = items.Where(c => c.Define.Parent == null).ToList().AsReadOnly();
             LeafItems = items.Where(c => c.Define.Child == null || !Items.Any(d => d.Define.Name == c.Define.Child.Name)).ToList().AsReadOnly();
