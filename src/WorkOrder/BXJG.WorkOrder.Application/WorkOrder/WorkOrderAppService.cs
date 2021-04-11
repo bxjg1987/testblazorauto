@@ -95,7 +95,7 @@ namespace BXJG.WorkOrder.WorkOrder
                                        TManager manager,
                                        TCategoryRepository categoryRepository,
                                        IEmployeeAppService employeeAppService,
-                                     
+
                                        string createPermissionName = default,
                                        string updatePermissionName = default,
                                        string deletePermissionName = default,
@@ -708,7 +708,7 @@ namespace BXJG.WorkOrder.WorkOrder
                                                                BatchOperationInputLong,
                                                                BatchOperationOutputLong,
                                                                EntityDto<long>,
-                                                               GetAllWorkOrderBaseInput,
+                                                               GetAllWorkOrderInput,
                                                                WorkOrderDto,
                                                                WorkOrderBatchChangeStatusInputBase,
                                                                WorkOrderBatchChangeStatusOutputBase,
@@ -786,6 +786,22 @@ namespace BXJG.WorkOrder.WorkOrder
                 }
             }
             workOrderDynamicAssociateEntityHelper.DtoMapToEntity(input, entity);
+        }
+
+        protected async override Task<IQueryable<OrderEntity>> GetAllFilterAsync(GetAllWorkOrderInput input)
+        {
+            var query = await base.GetAllFilterAsync(input);
+
+            //var count = await query.CountAsync();
+            //if (count < 10000)
+            //{
+            //    //小量数据采取做外键关联
+            //    //不固定是title排序
+            //    var idsAndSorts = await query.Select(c => new { c.Id, sort = c.Title, sdf = c.DynamicAssociateData.ToDynamicAssociateData() }).ToListAsync();
+            //}
+            //需要在GetAllFilterAsync 分页、排序、entityToDto之间传递一个上下文对象
+
+            return query;
         }
     }
 }

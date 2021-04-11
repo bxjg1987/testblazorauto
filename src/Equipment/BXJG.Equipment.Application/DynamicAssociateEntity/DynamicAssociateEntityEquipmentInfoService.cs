@@ -53,7 +53,12 @@ namespace BXJG.Equipment.DynamicAssociateEntity
                 query = query.OrderBy(sorting);
             return await query.ToListAsync();
         }
-        public async Task<IEnumerable<object>> GetAllByIdsAsync(params IEnumerable<object>[] ids)
+
+        public async Task<IEnumerable<IdSortDto>> GetIdsAndSortValuesAsync(string sort = default, string keyword = default, params IEnumerable<object>[] ids)
+        {
+            throw new NotImplementedException();
+        }
+        public async Task<IEnumerable<object>> GetAllByIdsAsync( IEnumerable<object> ids)
         {
             var qry = from c in repository.GetAll()
                       select new
@@ -62,9 +67,8 @@ namespace BXJG.Equipment.DynamicAssociateEntity
                           c.Name,
                           c.HardwareCode
                       };
-            var columnIds = ids.SingleOrDefault();
-            if (columnIds != null)
-                qry = qry.Where(c => columnIds.Contains(c.Id));
+            if (ids != null)
+                qry = qry.Where(c => ids.Contains(c.Id));
             return await qry.ToListAsync();
         }
     }

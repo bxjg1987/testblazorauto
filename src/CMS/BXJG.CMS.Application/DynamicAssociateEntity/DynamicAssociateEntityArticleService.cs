@@ -23,12 +23,12 @@ namespace BXJG.CMS.DynamicAssociateEntity
     {
         private readonly IRepository<ArticleEntity, long> repository;
         private readonly IRepository<Column.ColumnEntity, long> columnRepository;
-        protected IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; } = NullAsyncQueryableExecuter.Instance;
         public DynamicAssociateEntityArticleService(IRepository<ArticleEntity, long> repository, IRepository<Column.ColumnEntity, long> columnRepository)
         {
             this.repository = repository;
             this.columnRepository = columnRepository;
         }
+
         public async Task<PagedResultDto<object>> GetAllAsync(string parentId, string keyword, string sorting, int skip, int maxcount)
         {
             var query = repository.GetAll()
@@ -40,11 +40,11 @@ namespace BXJG.CMS.DynamicAssociateEntity
                                       c.Title,
                                       c.Published
                                   });
-            var total = await AsyncQueryableExecuter.CountAsync(query);
+            var total = await query.CountAsync();
             if (!sorting.IsNullOrWhiteSpace())
                 query = query.OrderBy(sorting);
             query = query.PageBy(skip, maxcount);
-            var listEntity = await AsyncQueryableExecuter.ToListAsync(query);
+            var listEntity = await query.ToListAsync();
             return new PagedResultDto<object>(total, listEntity);
         }
         public async Task<IList<object>> GetAllNoPageAsync(string parentId, string keyword, string sorting)
@@ -62,10 +62,39 @@ namespace BXJG.CMS.DynamicAssociateEntity
                 query = query.OrderBy(sorting);
             return await query.ToListAsync();
         }
-        [UnitOfWork(false)]
-        public async Task<IEnumerable<object>> GetAllByIdsAsync(params IEnumerable<object>[] ids)
+
+        public async Task<IEnumerable<IdSortDto>> GetIdsAndSortValuesAsync(string sort = default, string keyword = default, params IEnumerable<object>[] ids)
         {
             var qry = from p in repository.GetAll()
+                      join c in columnRepository.GetAll() on p.ColumnId equals c.Id into g
+                      from pc in g.DefaultIfEmpty()
+                      select new { p, pc };
+
+            qry = qry.WhereIf(!keyword.IsNullOrWhiteSpace(), c => c.p.Title.Contains(keyword) || c.pc.DisplayName.Contains(keyword));
+            if (ids != null)
+            {
+                if (ids.Length >0)
+                {
+                    var xz = ids[0];
+                    qry.Where(c => xz.Contains(c.p.ColumnId));
+                }
+                if (ids.Length >1)
+                {
+                    var xz = ids[1];
+                    qry.Where(c => xz.Contains(c.p.Id));
+                }
+            }
+            return sort switch
+            {
+                "title" => await qry.Select(c => new IdSortDto { Id = c.p.Id, SortValue = c.p.Title }).ToListAsync(),
+                "columnName" => await qry.Select(c => new IdSortDto { Id = c.p.Id, SortValue = c.pc.DisplayName }).ToListAsync(),
+                _ => await qry.Select(c => new IdSortDto { Id = c.p.Id }).ToListAsync(),
+            };
+        }
+        public async Task<IEnumerable<object>> GetAllByIdsAsync(IEnumerable<object> ids)
+        {
+            var qry = from p in repository.GetAll()
+                      where ids.Contains(p.Id)
                       join c in columnRepository.GetAll() on p.ColumnId equals c.Id into g
                       from pc in g.DefaultIfEmpty()
                       select new
@@ -77,21 +106,6 @@ namespace BXJG.CMS.DynamicAssociateEntity
                           p.Published,
                           ColumnType = pc.ColumnType.BXJGCMSEnum()
                       };
-
-            if (ids != null)
-            {
-                if (ids.Length == 1)
-                {
-                    var columnIds = ids[0];
-                    qry = qry.Where(c => columnIds.Contains(c.ColumnId));
-                }
-                else if (ids.Length == 2)
-                {
-                    var columnIds = ids[1];
-                    qry = qry.Where(c => columnIds.Contains(c.Id));
-                }
-            }
-
             return await qry.ToListAsync();
         }
     }

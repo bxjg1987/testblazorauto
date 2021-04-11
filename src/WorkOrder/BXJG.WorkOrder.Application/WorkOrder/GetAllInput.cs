@@ -50,4 +50,15 @@ namespace BXJG.WorkOrder.WorkOrder
                 Sorting = "Title desc"; //默认最后更新的用户倒叙，因为它可能发生了业务。或者最后登录用户也行
         }
     }
+    /// <summary>
+    /// 后台管理普通工单获取列表时的输入模型
+    /// </summary>
+    public class GetAllWorkOrderInput : GetAllWorkOrderBaseInput
+    {
+        /// <summary>
+        /// 动态关联实体的限制条件<br />
+        /// key：动态关联数据类型，比如column对应栏目，value：对应的值。目前只考虑每种数据选一个
+        /// </summary>
+        public IDictionary<string, object> DynamicAssociateData { get; set; }
+    }
 }

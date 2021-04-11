@@ -25,6 +25,7 @@ namespace BXJG.CMS.DynamicAssociateEntity
         {
             this.repository = repository;
         }
+
         public async Task<PagedResultDto<object>> GetAllAsync(string parentId, string keyword, string sorting, int skip, int maxcount)
         {
             var query = repository.GetAll()
@@ -56,18 +57,21 @@ namespace BXJG.CMS.DynamicAssociateEntity
                 query = query.OrderBy(sorting);
             return await query.ToListAsync();
         }
-        public async Task<IEnumerable<object>> GetAllByIdsAsync(params IEnumerable<object>[] ids)
+
+        public async Task<IEnumerable<IdSortDto>> GetIdsAndSortValuesAsync(string sort = default, string keyword = default, params IEnumerable<object>[] ids)
+        {
+            throw new NotImplementedException();
+        }
+        public async Task<IEnumerable<object>> GetAllByIdsAsync(IEnumerable<object> ids)
         {
             var qry = from p in repository.GetAll()
+                      where ids.Contains(p.Id)
                       select new
                       {
                           ColumnId = p.Id,
                           ColumnName = p.DisplayName,
                           columnType = p.ColumnType.BXJGCMSEnum()
                       };
-            var columnIds = ids.SingleOrDefault();
-            if (columnIds != null)
-                qry = qry.Where(c => columnIds.Contains(c.ColumnId));
             return await qry.ToListAsync();
         }
     }

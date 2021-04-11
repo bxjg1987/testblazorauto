@@ -129,6 +129,8 @@ namespace BXJG.DynamicAssociateEntity
         /// <returns></returns>
         public static List<List<KeyValuePair<string, object>>> ToDynamicAssociateData(this string str)
         {
+            if (str.IsNullOrWhiteSpace())
+                return null;
             return JsonSerializer.Deserialize<List<List<KeyValuePair<string, object>>>>(str);
         }
         /// <summary>
