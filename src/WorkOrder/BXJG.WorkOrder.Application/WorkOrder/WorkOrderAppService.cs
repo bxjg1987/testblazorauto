@@ -18,7 +18,8 @@ using Abp.UI;
 using BXJG.DynamicAssociateEntity;
 using Abp.Dependency;
 using BXJG.WorkOrder.DynamicAssociateEntity;
-
+using Abp.Domain.Uow;
+using Microsoft.EntityFrameworkCore;
 namespace BXJG.WorkOrder.WorkOrder
 {
     /// <summary>
@@ -256,6 +257,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
+        [UnitOfWork(false)]
         public virtual async Task<TEntityDto> GetAsync(TGetInput input)
         {
             await CheckGetPermissionAsync();
@@ -268,7 +270,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <returns></returns>
         protected virtual async Task<IQueryable<TEntity>> GetAllFilterAsync(TGetAllInput input)
         {
-            var query = from c in repository.GetAll()
+            var query = from c in repository.GetAll().AsNoTrackingWithIdentityResolution()
                         join lb in categoryRepository.GetAll() on c.CategoryId equals lb.Id into g
                         from kk in g.DefaultIfEmpty()
                         where (input.CategoryCode.IsNullOrWhiteSpace() || kk.Code.StartsWith(input.CategoryCode))
@@ -298,6 +300,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
+        [UnitOfWork(false)]
         public virtual async Task<PagedResultDto<TEntityDto>> GetAllAsync(TGetAllInput input)
         {
             //分类、员工先查询 再用in，

@@ -14,9 +14,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using BXJG.CMS.Localization;
+using Abp.Domain.Uow;
 
 namespace BXJG.CMS.DynamicAssociateEntity
 {
+    [UnitOfWork(false)]
     public class DynamicAssociateEntityArticleService : IDynamicAssociateEntityService
     {
         private readonly IRepository<ArticleEntity, long> repository;
@@ -60,6 +62,7 @@ namespace BXJG.CMS.DynamicAssociateEntity
                 query = query.OrderBy(sorting);
             return await query.ToListAsync();
         }
+        [UnitOfWork(false)]
         public async Task<IEnumerable<object>> GetAllByIdsAsync(params IEnumerable<object>[] ids)
         {
             var qry = from p in repository.GetAll()

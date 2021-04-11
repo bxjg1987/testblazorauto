@@ -20,6 +20,7 @@ using BXJG.Utils;
 using Abp.Localization;
 using BXJG.Utils.Localization;
 using Abp.Authorization;
+using Abp.Domain.Uow;
 
 namespace BXJG.WorkOrder.WorkOrder
 {
@@ -97,6 +98,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
+        [UnitOfWork(false)]
         public virtual async Task<TEntityDto> GetAsync(TGetInput input)
         {
             await CheckGetPermissionAsync();
@@ -112,6 +114,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
+        [UnitOfWork(false)]
         public virtual async Task<PagedResultDto<TEntityDto>> GetAllAsync(TGetAllInput input)
         {
             await CheckGetPermissionAsync();
