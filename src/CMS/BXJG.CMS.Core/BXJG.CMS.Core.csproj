@@ -11,13 +11,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Localization\SourceFiles\BXJGCMS-zh-Hans.xml" />
+    <None Remove="Localization\SourceFiles\BXJGCMS-en.xml" />
     <None Remove="Localization\SourceFiles\BXJGCMS.xml" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Localization\SourceFiles\BXJGCMS-zh-Hans.xml" />
     <EmbeddedResource Include="Localization\SourceFiles\BXJGCMS.xml" />
+    <EmbeddedResource Include="Localization\SourceFiles\BXJGCMS-en.xml" />
   </ItemGroup>
 
   <ItemGroup>
