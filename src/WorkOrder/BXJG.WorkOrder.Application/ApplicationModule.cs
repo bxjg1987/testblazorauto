@@ -2,6 +2,7 @@
 using Abp.Modules;
 using Abp.Reflection.Extensions;
 using BXJG.Utils;
+using BXJG.WorkOrder.WorkOrder;
 using System;
 using System.Reflection;
 
@@ -27,6 +28,7 @@ namespace BXJG.WorkOrder
 
             //此行必加
             Configuration.Modules.AbpAutoMapper().Configurators.Add(cfg => cfg.AddMaps(Assembly.GetExecutingAssembly()));
+
         }
         public override void Initialize()
         {

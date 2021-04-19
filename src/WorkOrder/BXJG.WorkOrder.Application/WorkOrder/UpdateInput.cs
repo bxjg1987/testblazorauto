@@ -43,6 +43,10 @@ namespace BXJG.WorkOrder.WorkOrder
         [StringLength(CoreConsts.OrderStatusChangedDescriptionMaxLength)]
         public string StatusChangedDescription { get; set; }
         /// <summary>
+        /// 调整状态的时间
+        /// </summary>
+        public DateTimeOffset? StatusChangedTime { get; set; }
+        /// <summary>
         /// 预计开始时间
         /// </summary>
         public DateTimeOffset? EstimatedExecutionTime { get; set; }

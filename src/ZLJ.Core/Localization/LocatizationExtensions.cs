@@ -12,5 +12,9 @@ namespace ZLJ.Localization
         {
             return LocalizationHelper.Manager.GetEnum<TEnum>(ZLJConsts.LocalizationSourceName, val);
         }
+
+        public static ILocalizableString ZLJLI(this string str) {
+            return new LocalizableString(str, ZLJConsts.LocalizationSourceName);
+        }
     }
 }

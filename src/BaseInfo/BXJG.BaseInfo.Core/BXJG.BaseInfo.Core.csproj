@@ -8,14 +8,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Localization\SourceFiles\BXJGBaseInfo-zh-Hans.xml" />
+    <None Remove="Localization\SourceFiles\BXJGBaseInfo-en.xml" />
     <None Remove="Localization\SourceFiles\BXJGBaseInfo.xml" />
     <None Remove="ve-EA3.tmp" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Localization\SourceFiles\BXJGBaseInfo-zh-Hans.xml" />
     <EmbeddedResource Include="Localization\SourceFiles\BXJGBaseInfo.xml" />
+    <EmbeddedResource Include="Localization\SourceFiles\BXJGBaseInfo-en.xml" />
   </ItemGroup>
 
   <ItemGroup>

@@ -24,6 +24,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Abp.Extensions;
 using Abp.Linq.Extensions;
+using Abp.Domain.Uow;
+
 namespace BXJG.GeneralTree
 {
     /// <summary>
@@ -74,6 +76,7 @@ namespace BXJG.GeneralTree
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
+        [UnitOfWork(false)]
         public virtual async Task<IList<TGetTreeForSelectOutput>> GetTreeForSelectAsync(TGetTreeForSelectInput input)
         {
             //权限判断
@@ -159,6 +162,7 @@ namespace BXJG.GeneralTree
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
+        [UnitOfWork(false)]
         public virtual async Task<IList<TGetNodesForSelectOutput>> GetNodesForSelectAsync(TGetNodesForSelectInput input)
         {
             //await CheckGetPermissionAsync();
@@ -428,6 +432,7 @@ namespace BXJG.GeneralTree
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
+        [UnitOfWork(false)]
         public virtual async Task<TDto> GetAsync(EntityDto<long> input)
         {
             await CheckGetPermissionAsync();
@@ -445,6 +450,7 @@ namespace BXJG.GeneralTree
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
+        [UnitOfWork(false)]
         public virtual async Task<IList<TDto>> GetAllAsync(TGetAllInput input)
         {
             //权限判断
@@ -514,6 +520,7 @@ namespace BXJG.GeneralTree
         /// <param name="input"></param>
         /// <returns></returns>
         [Obsolete]
+        [UnitOfWork(false)]
         public override Task<IList<TGetTreeForSelectOutput>> GetTreeForSelectAsync(TGetTreeForSelectInput input)
         {
             //权限判断
@@ -530,6 +537,7 @@ namespace BXJG.GeneralTree
         /// <param name="input"></param>
         /// <returns></returns>
         [Obsolete]
+        [UnitOfWork(false)]
         public override Task<IList<TGetNodesForSelectOutput>> GetNodesForSelectAsync(TGetNodesForSelectInput input)
         {
             //await CheckGetPermissionAsync();
@@ -576,7 +584,7 @@ namespace BXJG.GeneralTree
         #region 后台管理获取列表时可重写的方法
         protected virtual IQueryable<TEntity> GetAllFiltered(TGetAllInput q, string parentCode)
         {
-            return ownRepository.GetAll().Where(c => c.Code.StartsWith(parentCode));
+            return ownRepository.GetAll().AsNoTrackingWithIdentityResolution().Where(c => c.Code.StartsWith(parentCode));
         }
         protected virtual IQueryable<TEntity> GetAllSorting(IQueryable<TEntity> query, TGetAllInput input)
         {

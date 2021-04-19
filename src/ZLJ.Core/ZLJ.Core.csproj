@@ -26,6 +26,7 @@
     <Compile Remove="Localization\LocalizationExt.cs" />
     <Compile Remove="Shop\CustomerManager.cs" />
     <Compile Remove="Shop\OrderManager.cs" />
+    <Compile Remove="WorkOrderDynamicAssociateEntityDefineGroupProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Abp.AutoMapper" Version="6.3.0" />
@@ -43,5 +44,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Shop\" />
+    <Folder Include="WorkOrder\" />
   </ItemGroup>
 </Project>

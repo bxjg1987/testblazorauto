@@ -13,6 +13,10 @@ namespace BXJG.WorkOrder.WorkOrder
     /// </summary>
     public class WorkOrderBatchChangeStatusInputBase: BatchOperationInputLong
     {
+        /// <summary>
+        /// 调整状态的时间
+        /// </summary>
+        public DateTimeOffset? StatusChangedTime { get; set; }
         [Required]
         public Status Status { get; set; }
         /// <summary>

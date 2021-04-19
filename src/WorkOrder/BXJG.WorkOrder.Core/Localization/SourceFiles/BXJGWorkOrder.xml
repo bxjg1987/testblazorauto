@@ -1,75 +1,44 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<localizationDictionary culture="en">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<localizationDictionary culture="zh-Hans">
   <texts>
-    <text name="员工" value="Employee" />
-    <text name="BXJGWorkOrder" value="Work order" />
-    <text name="BXJGWorkOrderManager" value="Work order manager" />
-    <text name="BXJGWorkOrderCategory" value="Work order category" />
-    <text name="BXJGWorkOrderCategoryManager" value="Work order category manager" />
-    <text name="BXJG.WorkOrder.WorkOrder.Status" value="Work order status" />
-    <text name="BXJG.WorkOrder.WorkOrder.Status.ToBeConfirmed" value="To be confirmed" />
-    <text name="BXJG.WorkOrder.WorkOrder.Status.ToBeAllocated" value="To be allocated" />
-    <text name="BXJG.WorkOrder.WorkOrder.Status.ToBeProcessed" value="To be processed" />
-    <text name="BXJG.WorkOrder.WorkOrder.Status.Processing" value="Processing" />
-    <text name="BXJG.WorkOrder.WorkOrder.Status.Rejected" value="Rejected" />
-    <text name="BXJG.WorkOrder.WorkOrder.Status.Completed" value="Completed" />
-    <text name="BXJG.WorkOrder.WorkOrder.UrgencyDegree" value="UrgencyDegree" />
-    <text name="BXJG.WorkOrder.WorkOrder.UrgencyDegree.Urgent" value="Urgent" />
-    <text name="BXJG.WorkOrder.WorkOrder.UrgencyDegree.Normalize" value="Normalize" />
-    <text name="BXJG.WorkOrder.WorkOrder.UrgencyDegree.Dispensable" value="Dispensable" />
-    <text name="BXJGEmployeeWorkOrderManager" value="Work order manager - employee side" />
-    <text name="标题/处理人/电话等..." value="title/contact/phone etc..." />
-    <text name="workorderSetEmployeeStatusException">
-      The work order in this status cannot modify the associated employee! Please consider rolling back or handing over the work order process.
-    </text>
-    <text name="workorderSetUrgencyDegreeStatusException">
-      It is not allowed to modify the emergency degree of the work order in this status! Please consider rolling back or handing over the work order process.
-    </text>
-    <text name="workorderChangeEstimatedTimeException1">
-      Estimated start time must be less than estimated end time!
-    </text>
-    <text name="workorderChangeEstimatedTimeException2">
-      It is not allowed to modify the estimated start time for a work order in this status!
-    </text>
-    <text name="workorderChangeEstimatedTimeException3">
-      It is not allowed to modify the estimated end time for a work order in this status!
-    </text>
-    <text name="workorderChangePracticalTimeException1">
-      Execution start time must be less than completion time!
-    </text>
-    <text name="workorderConfirmeException1">
-      The work order in this status is not allowed to perform the [confirm] operation!
-    </text>
-    <text name="workorderUnConfirmeException1">
-      The work order in this status is not allowed to perform the [unconfirm] operation!
-    </text>
-    <text name="workorderAllocateException1">
-      The work order in this status is not allowed to perform the [assign] operation!
-    </text>
-    <text name="workorderUnAllocateException1">
-      The work order in this status is not allowed to perform the [unassign] operation!
-    </text>
-    <text name="workorderExecuteException1">
-      Work orders in this status are not allowed to execute [execute]!
-    </text>
-    <text name="workorderUnExecuteException1">
-      Work orders in this status are not allowed to execute [unexecute]!
-    </text>
-    <text name="workorderCompletionException1">
-      The work order in this status is not allowed to perform the [complete] operation!
-    </text>
-    <text name="workorderUnCompletionException1">
-      The work order in this status is not allowed to perform the [uncomplete] operation!
-    </text>
-    <text name="workorderRejectException1">
-      The work order in this status is not allowed to perform the [reject] operation!
-    </text>
-    <text name="workorderUnRejectException1">
-      The work order in this status is not allowed to perform the [unreject] operation!
-    </text>
-    <text name="workorderBackOffException1">Work orders in this status cannot be returned to {0} status!</text>
-    <text name="workorderSkipException1">Work orders in this status cannot be skip to {0} status！</text>
+    <text name="员工" value="员工" />
+    <text name="BXJGWorkOrder" value="工单" />
+    <text name="BXJGWorkOrderManager" value="工单管理" />
+    <text name="BXJGWorkOrderCategory" value="工单分类" />
+    <text name="BXJGWorkOrderCategoryManager" value="工单分类管理" />
 
+    <text name="BXJG.WorkOrder.WorkOrder.Status" value="工单状态" />
+    <text name="BXJG.WorkOrder.WorkOrder.Status.ToBeConfirmed" value="待确认" />
+    <text name="BXJG.WorkOrder.WorkOrder.Status.ToBeAllocated" value="待分配" />
+    <text name="BXJG.WorkOrder.WorkOrder.Status.ToBeProcessed" value="待执行" />
+    <text name="BXJG.WorkOrder.WorkOrder.Status.Processing" value="执行中" />
+    <text name="BXJG.WorkOrder.WorkOrder.Status.Rejected" value="已拒绝" />
+    <text name="BXJG.WorkOrder.WorkOrder.Status.Completed" value="已完成" />
+    
+    <text name="BXJG.WorkOrder.WorkOrder.UrgencyDegree" value="紧急程度" />
+    <text name="BXJG.WorkOrder.WorkOrder.UrgencyDegree.Urgent" value="紧急" />
+    <text name="BXJG.WorkOrder.WorkOrder.UrgencyDegree.Normalize" value="一般" />
+    <text name="BXJG.WorkOrder.WorkOrder.UrgencyDegree.Dispensable" value="不急" />
 
+    <text name="BXJGEmployeeWorkOrderManager" value="工单管理-员工端" />
+    <text name="workorderSetEmployeeStatusException">此状态的工单不允许修改关联的员工！请考虑回退或移交工单流程。</text>
+    <text name="workorderSetUrgencyDegreeStatusException">此状态的工单不允许修改紧急程度！请考虑回退或移交工单流程。</text>
+    <text name="workorderChangeEstimatedTimeException1">预计开始时间必须小于预计结束时间！</text>
+    <text name="workorderChangeEstimatedTimeException2">此状态的工单不允许修改预计开始时间！</text>
+    <text name="workorderChangeEstimatedTimeException3">此状态的工单不允许修改预计结束时间！</text>
+    <text name="workorderChangePracticalTimeException1">执行开始时间必须小于完成时间！</text>
+    <text name="workorderConfirmeException1">此状态的工单不允许执行[确认]操作！</text>
+    <text name="workorderUnConfirmeException1">此状态的工单不允许执行[反确认]操作！</text>
+    <text name="workorderAllocateException1">此状态的工单不允许执行[分配]操作！</text>
+    <text name="workorderUnAllocateException1">此状态的工单不允许执行[反分配]操作！</text>
+    <text name="workorderExecuteException1">此状态的工单不允许执行[执行]操作！</text>
+    <text name="workorderUnExecuteException1">此状态的工单不允许执行[反执行]操作！</text>
+    <text name="workorderCompletionException1">此状态的工单不允许执行[完成]操作！</text>
+    <text name="workorderUnCompletionException1">此状态的工单不允许执行[反完成]操作！</text>
+    <text name="workorderRejectException1">此状态的工单不允许执行[拒绝]操作！</text>
+    <text name="workorderUnRejectException1">此状态的工单不允许执行[反拒绝]操作！</text>
+    <text name="workorderBackOffException1">此状态的工单不能回退到{0}状态！</text>
+    <text name="workorderSkipException1">此状态的工单不能跳跃到{0}状态！</text>
+    <text name="workorderChangeStatusException1">状态无变化！</text>
   </texts>
 </localizationDictionary>

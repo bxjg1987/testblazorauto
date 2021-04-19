@@ -15,7 +15,9 @@ using System.Threading.Tasks;
 using System.Linq.Dynamic.Core;
 using Abp.Domain.Entities;
 using Abp.UI;
-
+using Abp.Dependency;
+using Abp.Domain.Uow;
+using Microsoft.EntityFrameworkCore;
 namespace BXJG.WorkOrder.WorkOrder
 {
     /// <summary>
@@ -91,6 +93,7 @@ namespace BXJG.WorkOrder.WorkOrder
                                        TManager manager,
                                        TCategoryRepository categoryRepository,
                                        IEmployeeAppService employeeAppService,
+
                                        string createPermissionName = default,
                                        string updatePermissionName = default,
                                        string deletePermissionName = default,
@@ -117,6 +120,8 @@ namespace BXJG.WorkOrder.WorkOrder
             this.deletePermissionName = deletePermissionName;
             this.confirmePermissionName = confirmePermissionName;
             this.toBeConfirmedPermissionName = toBeConfirmedPermissionName;
+
+            //this.iocResolver = iocResolver;
         }
         /// <summary>
         /// 新增工单
@@ -167,7 +172,7 @@ namespace BXJG.WorkOrder.WorkOrder
                 if (input.Status.Value > entity.Status)//skip
                 {
                     entity.UrgencyDegree = input.UrgencyDegree ?? UrgencyDegree.Normalize;
-                    await entity.Skip(Clock.Now,
+                    await entity.Skip(input.StatusChangedTime ?? Clock.Now,
                                       input.Status,
                                       input.StatusChangedDescription,
                                       input.EmployeeId,
@@ -183,7 +188,7 @@ namespace BXJG.WorkOrder.WorkOrder
                 }
                 else //backoff
                 {
-                    await entity.BackOff(Clock.Now,
+                    await entity.BackOff(input.StatusChangedTime ?? Clock.Now,
                                          input.Status,
                                          input.StatusChangedDescription,
                                          d => CheckToBeonfirmedPermissionAsync(),
@@ -197,8 +202,15 @@ namespace BXJG.WorkOrder.WorkOrder
             }
             else
             {
+                if (entity.Status == input.Status)
+                {
+                    if (entity.StatusChangedDescription != input.StatusChangedDescription)
+                        throw new UserFriendlyException(L("状态无变化时不允许修改状态说明，请考虑回退后修改。"));
+                    if (entity.StatusChangedTime != input.StatusChangedTime)
+                        throw new UserFriendlyException(L("状态无变化时不允许修改状态时间，请考虑回退后修改。"));
+                }
+
                 entity.UrgencyDegree = input.UrgencyDegree ?? UrgencyDegree.Normalize;
-                entity.StatusChangedDescription = input.StatusChangedDescription;
                 entity.EmployeeId = input.EmployeeId;
                 entity.ChangeEstimatedTime(input.EstimatedExecutionTime, input.EstimatedCompletionTime);
             }
@@ -243,6 +255,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
+        [UnitOfWork(false)]
         public virtual async Task<TEntityDto> GetAsync(TGetInput input)
         {
             await CheckGetPermissionAsync();
@@ -255,7 +268,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <returns></returns>
         protected virtual async Task<IQueryable<TEntity>> GetAllFilterAsync(TGetAllInput input)
         {
-            var query = from c in repository.GetAll()
+            var query = from c in repository.GetAll().AsNoTrackingWithIdentityResolution()
                         join lb in categoryRepository.GetAll() on c.CategoryId equals lb.Id into g
                         from kk in g.DefaultIfEmpty()
                         where (input.CategoryCode.IsNullOrWhiteSpace() || kk.Code.StartsWith(input.CategoryCode))
@@ -285,6 +298,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
+        [UnitOfWork(false)]
         public virtual async Task<PagedResultDto<TEntityDto>> GetAllAsync(TGetAllInput input)
         {
             //分类、员工先查询 再用in，
@@ -294,6 +308,12 @@ namespace BXJG.WorkOrder.WorkOrder
             //按处理人和手机号比较麻烦，可以尝试join已经查询出来的员工列表试试
             //不过至少可用按分类id和处理人id排序
             //如果都无法满足时，可以考虑使用原始sql，毕竟这里只是查询需求，不做业务处理，可以引入dapper或ef的原始sql执行方式
+
+            //var ss = dynamicAssociateEntityDefineManager.GroupedDefines;
+            //var define = ss.First().Value.First();
+            //var service = iocResolver.Resolve(define.ServiceType) as IDynamicAssociateEntityService;
+            //var ss2 = await service.GetAllAsync(define, "a", "d");
+
             await CheckGetPermissionAsync();
             var query = await GetAllFilterAsync(input);
             var count = await AsyncQueryableExecuter.CountAsync(query);
@@ -337,7 +357,7 @@ namespace BXJG.WorkOrder.WorkOrder
                 try
                 {
                     await item.ChangeStatus(input.Status,
-                                            Clock.Now,
+                                            input.StatusChangedTime ?? Clock.Now,
                                             input.Description,
                                             item.EmployeeId,
                                             item.EstimatedExecutionTime,
@@ -382,14 +402,16 @@ namespace BXJG.WorkOrder.WorkOrder
                 {
                     if (item.Status >= Status.ToBeProcessed)
                     {
-                        await item.BackOff(status: Status.ToBeAllocated,
+                        await item.BackOff(input.StatusChangedTime ?? Clock.Now,
+                                           status: Status.ToBeAllocated,
                                            toBeConfirmed: d => CheckToBeonfirmedPermissionAsync(),
                                            toBeAllocated: d => CheckConfirmePermissionAsync(),
                                            toBeProcessed: d => CheckAllocatePermissionAsync(),
                                            processing: d => CheckExecutePermissionAsync());
                     }
                     //item.AllocateRetain(Clock.Now, input.EmployeeId, input.EstimatedExecutionTime, input.EstimatedCompletionTime);
-                    await item.Skip(status: Status.ToBeProcessed,
+                    await item.Skip(input.StatusChangedTime ?? Clock.Now,
+                                    status: Status.ToBeProcessed,
                                     empId: input.EmployeeId,
                                     estimatedExecutionTime: input.EstimatedExecutionTime,
                                     estimatedCompletionTime: input.EstimatedCompletionTime,
@@ -684,7 +706,7 @@ namespace BXJG.WorkOrder.WorkOrder
                                                                BatchOperationInputLong,
                                                                BatchOperationOutputLong,
                                                                EntityDto<long>,
-                                                               GetAllWorkOrderBaseInput,
+                                                               GetAllWorkOrderInput,
                                                                WorkOrderDto,
                                                                WorkOrderBatchChangeStatusInputBase,
                                                                WorkOrderBatchChangeStatusOutputBase,
@@ -697,6 +719,7 @@ namespace BXJG.WorkOrder.WorkOrder
                                                                IRepository<CategoryEntity, long>>
 
     {
+
         public WorkOrderAppService(IRepository<OrderEntity, long> repository,
                                    OrderManager manager,
                                    IRepository<CategoryEntity, long> categoryRepository,
@@ -713,24 +736,21 @@ namespace BXJG.WorkOrder.WorkOrder
                                                                                   CoreConsts.WorkOrderExecute,
                                                                                   CoreConsts.WorkOrderCompletion,
                                                                                   CoreConsts.WorkOrderReject)
-        { }
+        {
+        }
 
         protected override async ValueTask BeforeEditAsync(OrderEntity entity, WorkOrderUpdateInput input)
         {
             await base.BeforeEditAsync(entity, input);
-            entity.ExtendedField1 = input.ExtendedField1;
-            entity.ExtendedField2 = input.ExtendedField2;
-            entity.ExtendedField3 = input.ExtendedField3;
-            entity.ExtendedField4 = input.ExtendedField4;
-            entity.ExtendedField5 = input.ExtendedField5;
-            if (input.ExtensionData != null)
-            {
-                foreach (var item in input.ExtensionData)
-                {
-                    entity.SetData(item.Key, item.Value);
-                }
-            }
+            HandExtensions(entity, input);
         }
+
+        protected override async ValueTask BeforeCreateAsync(OrderEntity entity, WorkOrderCreateInput input)
+        {
+            await base.BeforeCreateAsync(entity, input);
+            HandExtensions(entity, input);
+        }
+
         protected override WorkOrderDto EntityToDto(OrderEntity entity, IEnumerable<CategoryEntity> categories, IEnumerable<EmployeeDto> employees, object state = default)
         {
             var dto = base.EntityToDto(entity, categories, employees, state);
@@ -744,6 +764,38 @@ namespace BXJG.WorkOrder.WorkOrder
                 dto.ExtensionData = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(entity.ExtensionData);
             }
             return dto;
+        }
+
+        private void HandExtensions(OrderEntity entity, WorkOrderUpdateInput input)
+        {
+            entity.ExtendedField1 = input.ExtendedField1;
+            entity.ExtendedField2 = input.ExtendedField2;
+            entity.ExtendedField3 = input.ExtendedField3;
+            entity.ExtendedField4 = input.ExtendedField4;
+            entity.ExtendedField5 = input.ExtendedField5;
+            if (input.ExtensionData != null)
+            {
+                foreach (var item in input.ExtensionData)
+                {
+                    entity.SetData(item.Key, item.Value);
+                }
+            }
+        }
+
+        protected async override Task<IQueryable<OrderEntity>> GetAllFilterAsync(GetAllWorkOrderInput input)
+        {
+            var query = await base.GetAllFilterAsync(input);
+
+            //var count = await query.CountAsync();
+            //if (count < 10000)
+            //{
+            //    //小量数据采取做外键关联
+            //    //不固定是title排序
+            //    var idsAndSorts = await query.Select(c => new { c.Id, sort = c.Title, sdf = c.DynamicAssociateData.ToDynamicAssociateData() }).ToListAsync();
+            //}
+            //需要在GetAllFilterAsync 分页、排序、entityToDto之间传递一个上下文对象
+
+            return query;
         }
     }
 }

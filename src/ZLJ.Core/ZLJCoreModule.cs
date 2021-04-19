@@ -6,6 +6,7 @@ using Abp.Zero.Configuration;
 using BXJG.Attachment;
 using BXJG.BaseInfo;
 using BXJG.CMS;
+//using BXJG.DynamicAssociateEntity;
 using BXJG.Equipment;
 using BXJG.File;
 using BXJG.GeneralTree;
@@ -18,6 +19,7 @@ using ZLJ.Configuration;
 using ZLJ.Localization;
 using ZLJ.MultiTenancy;
 using ZLJ.Timing;
+//using ZLJ.WorkOrder;
 
 namespace ZLJ
 {
@@ -29,7 +31,8 @@ namespace ZLJ
         typeof(BXJGAttachmentModule),
         typeof(BXJEquipmentCoreModule),
         typeof(BXJGBaseInfoCoreModule),
-        typeof(BXJGWeChatModule))]
+        typeof(BXJGWeChatModule)/*, 
+        typeof(DynamicAssociateEntityModule)*/)]
     public class ZLJCoreModule : AbpModule
     {
         //可以构造函数注入微信模块BXJGWeChatModule
@@ -56,6 +59,7 @@ namespace ZLJ
             Configuration.Settings.Providers.Add<AppSettingProvider>();
 
             Configuration.DynamicEntityProperties.Providers.Add<ZLJDynamicEntityPropertyDefinition>();
+            //Configuration.Modules.DynamicAssociateEntity().DynamicAssociateEntityDefineGroupProvider
         }
 
         public override void Initialize()

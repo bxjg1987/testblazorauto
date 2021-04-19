@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Services.Dto;
+using Abp.Domain.Uow;
 using BXJG.Common.Dto;
 using BXJG.Utils;
 using System;
@@ -16,6 +17,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
+        [UnitOfWork(false)]
         public List<ComboboxItemDto> GetAllStatus(GetForSelectInput input)
         {
             return new EnumManager(LocalizationSource).ConvertToComboboxData<Status>(input);
@@ -25,6 +27,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
+        [UnitOfWork(false)]
         public List<ComboboxItemDto> GetAllUrgencyDegree(GetForSelectInput input)
         {
             return new EnumManager(LocalizationSource).ConvertToComboboxData<UrgencyDegree>(input);

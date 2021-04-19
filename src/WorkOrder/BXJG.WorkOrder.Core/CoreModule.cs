@@ -10,6 +10,7 @@ using Castle.MicroKernel.Registration;
 using Castle.Windsor.MsDependencyInjection;
 using System.Collections.Generic;
 using System.Reflection;
+using BXJG.WorkOrder.WorkOrder;
 
 namespace BXJG.WorkOrder
 {

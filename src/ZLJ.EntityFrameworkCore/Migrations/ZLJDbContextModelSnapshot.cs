@@ -2467,6 +2467,9 @@ namespace ZLJ.Migrations
                         .HasMaxLength(5000)
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("DynamicAssociateData")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("EmployeeId")
                         .HasColumnType("varchar(64)");
 

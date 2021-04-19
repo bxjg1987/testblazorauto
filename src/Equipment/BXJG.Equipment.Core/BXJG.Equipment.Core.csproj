@@ -12,13 +12,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Localization\SourceFiles\BXJGEquipment-zh-Hans.xml" />
+    <None Remove="Localization\SourceFiles\BXJGEquipment-en.xml" />
     <None Remove="Localization\SourceFiles\BXJGEquipment.xml" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Localization\SourceFiles\BXJGEquipment-zh-Hans.xml" />
     <EmbeddedResource Include="Localization\SourceFiles\BXJGEquipment.xml" />
+    <EmbeddedResource Include="Localization\SourceFiles\BXJGEquipment-en.xml" />
   </ItemGroup>
 
   <ItemGroup>

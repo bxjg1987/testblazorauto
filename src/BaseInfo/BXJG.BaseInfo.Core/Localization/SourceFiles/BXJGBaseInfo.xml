@@ -1,6 +1,12 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<localizationDictionary culture="en">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<localizationDictionary culture="zh-Hans">
   <texts>
-    <text name="BXJGBaseInfo" value="BaseInfo" />
+    <text name="BXJGBaseInfo" value="基础信息" />
+	<text name="BXJGBaseInfoAdministrative" value="行政区域" />
+
+	  <text name="ZLJ.BaseInfo.Administrative.AdministrativeLevel.Province" value="省、直辖市" />
+	  <text name="ZLJ.BaseInfo.Administrative.AdministrativeLevel.City" value="市" />
+	  <text name="ZLJ.BaseInfo.Administrative.AdministrativeLevel.County" value="区县" />
+	  
   </texts>
 </localizationDictionary>
