@@ -1,8 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<localizationDictionary culture="zh-Hans">
-  <texts>
-    <text name="BXJGEquipment" value="设备管理" />
-	<text name="BXJGEquipmentEquipmentInfo" value="设备档案" />
-	<text name="GetBXJGEquipmentEquipmentInfoKeywordsInputPrompt" value="设备名称" />
-  </texts>
-</localizationDictionary>

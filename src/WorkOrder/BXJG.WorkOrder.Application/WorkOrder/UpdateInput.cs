@@ -71,7 +71,7 @@ namespace BXJG.WorkOrder.WorkOrder
     /// <summary>
     /// 工单后台管理普通工单更新模型
     /// </summary>
-    public class WorkOrderUpdateInput : WorkOrderUpdateBaseInput, IDynamicAssociateEditDto
+    public class WorkOrderUpdateInput : WorkOrderUpdateBaseInput
     {
         ///// <summary>
         ///// 实体Id
@@ -101,9 +101,5 @@ namespace BXJG.WorkOrder.WorkOrder
         /// 预留字段5
         /// </summary>
         public string ExtendedField5 { get; set; }
-        /// <summary>
-        /// 动态关联外键数据
-        /// </summary>
-        public IDictionary<string, object> DynamicAssociateData { get; set; }
     }
 }

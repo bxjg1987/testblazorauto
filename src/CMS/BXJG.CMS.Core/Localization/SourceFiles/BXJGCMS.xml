@@ -1,10 +1,21 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<localizationDictionary culture="en">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<localizationDictionary culture="zh-Hans">
   <texts>
-    <text name="BXJGCMS" value="Content" />
+    <text name="BXJGCMS" value="内容管理" />
 
-    <text name="BXJGCMSAd" value="Ad" />
-    <text name="BXJGCMSAdPosition" value="Ad position" />
-    <text name="BXJGCMSAdControl" value="Ad control" />
+    <text name="BXJGCMSArticle" value="文章管理" />
+    <text name="GetBXJGCMSArticleKeywordsInputPrompt" value="标题/seo关键字/描述..." />
+    
+    <text name="BXJGCMSColumn" value="栏目管理" />
+    
+
+    <text name="BXJGCMSAd" value="广告管理" />
+    <text name="BXJGCMSAdPosition" value="广告位" />
+    <text name="BXJGCMSAdControl" value="广告控件" />
+
+
+    <text name="BXJG.CMS.Column.ColumnType.SinglePage" value="单页栏目" />
+    <text name="BXJG.CMS.Column.ColumnType.Info" value="普通栏目" />
+    <text name="BXJG.CMS.Column.ColumnType.Structure" value="结构栏目" />
   </texts>
 </localizationDictionary>

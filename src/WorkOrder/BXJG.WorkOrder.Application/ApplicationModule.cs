@@ -9,8 +9,7 @@ using System.Reflection;
 
 namespace BXJG.WorkOrder
 {
-    [DependsOn(typeof(BXJGCommonApplicationModule),
-        typeof(DynamicAssociateEntityApplicationModule))]
+    [DependsOn(typeof(BXJGCommonApplicationModule))]
     public class ApplicationModule : AbpModule
     {
         //IConfiguration configuration;

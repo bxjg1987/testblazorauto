@@ -54,10 +54,10 @@ namespace BXJG.Equipment.DynamicAssociateEntity
             return await query.ToListAsync();
         }
 
-        public async Task<IEnumerable<IdSortDto>> GetIdsAndSortValuesAsync(string sort = default, string keyword = default, params IEnumerable<object>[] ids)
-        {
-            throw new NotImplementedException();
-        }
+        //public async Task<IEnumerable<IdSortDto>> GetIdsAndSortValuesAsync(string sort = default, string keyword = default, params IEnumerable<object>[] ids)
+        //{
+        //    throw new NotImplementedException();
+        //}
         public async Task<IEnumerable<object>> GetAllByIdsAsync( IEnumerable<object> ids)
         {
             var qry = from c in repository.GetAll()

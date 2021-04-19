@@ -63,34 +63,34 @@ namespace BXJG.CMS.DynamicAssociateEntity
             return await query.ToListAsync();
         }
 
-        public async Task<IEnumerable<IdSortDto>> GetIdsAndSortValuesAsync(string sort = default, string keyword = default, params IEnumerable<object>[] ids)
-        {
-            var qry = from p in repository.GetAll()
-                      join c in columnRepository.GetAll() on p.ColumnId equals c.Id into g
-                      from pc in g.DefaultIfEmpty()
-                      select new { p, pc };
+        //public async Task<IEnumerable<IdSortDto>> GetIdsAndSortValuesAsync(string sort = default, string keyword = default, params IEnumerable<object>[] ids)
+        //{
+        //    var qry = from p in repository.GetAll()
+        //              join c in columnRepository.GetAll() on p.ColumnId equals c.Id into g
+        //              from pc in g.DefaultIfEmpty()
+        //              select new { p, pc };
 
-            qry = qry.WhereIf(!keyword.IsNullOrWhiteSpace(), c => c.p.Title.Contains(keyword) || c.pc.DisplayName.Contains(keyword));
-            if (ids != null)
-            {
-                if (ids.Length >0)
-                {
-                    var xz = ids[0];
-                    qry.Where(c => xz.Contains(c.p.ColumnId));
-                }
-                if (ids.Length >1)
-                {
-                    var xz = ids[1];
-                    qry.Where(c => xz.Contains(c.p.Id));
-                }
-            }
-            return sort switch
-            {
-                "title" => await qry.Select(c => new IdSortDto { Id = c.p.Id, SortValue = c.p.Title }).ToListAsync(),
-                "columnName" => await qry.Select(c => new IdSortDto { Id = c.p.Id, SortValue = c.pc.DisplayName }).ToListAsync(),
-                _ => await qry.Select(c => new IdSortDto { Id = c.p.Id }).ToListAsync(),
-            };
-        }
+        //    qry = qry.WhereIf(!keyword.IsNullOrWhiteSpace(), c => c.p.Title.Contains(keyword) || c.pc.DisplayName.Contains(keyword));
+        //    if (ids != null)
+        //    {
+        //        if (ids.Length >0)
+        //        {
+        //            var xz = ids[0];
+        //            qry.Where(c => xz.Contains(c.p.ColumnId));
+        //        }
+        //        if (ids.Length >1)
+        //        {
+        //            var xz = ids[1];
+        //            qry.Where(c => xz.Contains(c.p.Id));
+        //        }
+        //    }
+        //    return sort switch
+        //    {
+        //        "title" => await qry.Select(c => new IdSortDto { Id = c.p.Id, SortValue = c.p.Title }).ToListAsync(),
+        //        "columnName" => await qry.Select(c => new IdSortDto { Id = c.p.Id, SortValue = c.pc.DisplayName }).ToListAsync(),
+        //        _ => await qry.Select(c => new IdSortDto { Id = c.p.Id }).ToListAsync(),
+        //    };
+        //}
         public async Task<IEnumerable<object>> GetAllByIdsAsync(IEnumerable<object> ids)
         {
             var qry = from p in repository.GetAll()

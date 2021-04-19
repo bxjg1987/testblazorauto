@@ -20,19 +20,19 @@ namespace BXJG.DynamicAssociateEntity
         //下面这2个接口，动态关联实体模块并不使用
         //但工单也不能直接私下强关联设备或栏目、文章，所以虽然模块内部不使用，但它是一个规范
 
-        /// <summary>
-        /// 查询返回id、排序值
-        /// </summary>
-        /// <param name="sort"></param>
-        /// <param name="keyword"></param>
-        /// <param name="ids"></param>
-        /// <returns></returns>
-        Task<IEnumerable<IdSortDto>> GetIdsAndSortValuesAsync(string sort = default, string keyword = default, params IEnumerable<object>[] ids);
+        ///// <summary>
+        ///// 查询返回id、排序值
+        ///// </summary>
+        ///// <param name="sort"></param>
+        ///// <param name="keyword"></param>
+        ///// <param name="ids"></param>
+        ///// <returns></returns>
+        //Task<IEnumerable<IdSortDto>> GetIdsAndSortValuesAsync(string sort = default, string keyword = default, params IEnumerable<object>[] ids);
         Task<IEnumerable<object>> GetAllByIdsAsync(IEnumerable<object> ids);
     }
-    public class IdSortDto
-    {
-        public object Id { get; set; }
-        public object SortValue { get; set; }
-    }
+    //public class IdSortDto
+    //{
+    //    public object Id { get; set; }
+    //    public object SortValue { get; set; }
+    //}
 }

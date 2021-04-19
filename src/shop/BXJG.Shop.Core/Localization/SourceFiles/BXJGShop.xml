@@ -1,18 +1,41 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<localizationDictionary culture="en">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<localizationDictionary culture="zh-Hans">
   <texts>
-    <text name="BXJGShop" value="Mall" />
-    <text name="BXJGShopItem" value="Product" />
-    <text name="BXJGShopDictionary" value="Dictionary" />
-    <text name="GetBXJGShopItemKeywordsInputPrompt" value="title/description/brand/sku..." />
-    <text name="BXJGShopOrder" value="Order manager" />
-    <text name="发货" value="Shipment" />
-    <text name="退款" value="Refund" />
-    <text name="取消" value="Cancel" />
-    <text name="BXJG.Shop.Sale.LogisticsStatus.WaitShip" value="WaitShip" />
-    <text name="BXJG.Shop.Sale.LogisticsStatus.Shipped" value="Shipped" />
-    <text name="BXJG.Shop.Sale.LogisticsStatus.Signed" value="Signed" />
-    <text name="BXJG.Shop.Sale.LogisticsStatus.Rejected" value="Rejected" />
-    <text name="BXJG.Shop.Sale.LogisticsStatus.Unwanted" value="Unwanted" />
+    <text name="BXJGShop" value="商城管理" />
+    <text name="BXJGShopProduct" value="商品管理" />
+    <text name="BXJGShopProductCategory" value="商品分类" />
+    <text name="BXJGShopDictionary" value="商城字典" />
+    <text name="GetBXJGShopItemKeywordsInputPrompt" value="标题/描述/品牌/SKU..." />
+    <text name="BXJGShopOrder" value="订单管理" />
+    <text name="发货" value="发货" />
+    <text name="退款" value="退款" />
+    <text name="取消" value="取消" />
+
+    <text name="BXJGShopOrderKeywordsInputPrompt" value="单号/收货人/电话/收货地址..." />
+    <text name="BXJGShopPaymentMethod" value="==支付方式==" />
+    <text name="BXJGShopDistributionMethod" value="==配送方式==" />
+    
+    <text name="BXJG.Shop.Sale.OrderStatus" value="==订单状态==" />
+    <text name="BXJG.Shop.Sale.OrderStatus.Created" value="已创建" />
+    <text name="BXJG.Shop.Sale.OrderStatus.Processing" value="执行中" />
+    <text name="BXJG.Shop.Sale.OrderStatus.Cancelled" value="已取消" />
+    <text name="BXJG.Shop.Sale.OrderStatus.Completed" value="已完成" />
+
+    <text name="BXJG.Shop.Sale.LogisticsStatus" value="==物流状态==" />
+    <text name="BXJG.Shop.Sale.LogisticsStatus.WaitShip" value="待发货" />
+    <text name="BXJG.Shop.Sale.LogisticsStatus.Shipped" value="已发货" />
+    <text name="BXJG.Shop.Sale.LogisticsStatus.Signed" value="已签收" />
+    <text name="BXJG.Shop.Sale.LogisticsStatus.Rejected" value="已拒收" />
+    <text name="BXJG.Shop.Sale.LogisticsStatus.Unwanted" value="无需配送" />
+
+    <text name="BXJG.Shop.Sale.PaymentStatus" value="==支付状态==" />
+    <text name="BXJG.Shop.Sale.PaymentStatus.WaitingForPayment" value="待支付" />
+    <text name="BXJG.Shop.Sale.PaymentStatus.Paid" value="已支付" />
+    <text name="BXJG.Shop.Sale.PaymentStatus.ApplyForRefund" value="申请退款" />
+    <text name="BXJG.Shop.Sale.PaymentStatus.Refunded" value="已全额退款" />
+    <text name="BXJG.Shop.Sale.PaymentStatus.RefundedInPart" value="已部分退款" />
+
+    <text name="BXJGShopCustomer" value="顾客管理" />
+    <text name="jiamengshang" value="加盟商管理" />
   </texts>
 </localizationDictionary>

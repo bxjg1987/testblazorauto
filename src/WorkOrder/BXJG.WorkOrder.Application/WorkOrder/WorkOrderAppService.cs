@@ -17,7 +17,6 @@ using Abp.Domain.Entities;
 using Abp.UI;
 using BXJG.DynamicAssociateEntity;
 using Abp.Dependency;
-using BXJG.WorkOrder.DynamicAssociateEntity;
 using Abp.Domain.Uow;
 using Microsoft.EntityFrameworkCore;
 namespace BXJG.WorkOrder.WorkOrder
@@ -721,12 +720,10 @@ namespace BXJG.WorkOrder.WorkOrder
                                                                IRepository<CategoryEntity, long>>
 
     {
-        private readonly WorkOrderDynamicAssociateEntityHelper workOrderDynamicAssociateEntityHelper;
 
         public WorkOrderAppService(IRepository<OrderEntity, long> repository,
                                    OrderManager manager,
                                    IRepository<CategoryEntity, long> categoryRepository,
-                                   WorkOrderDynamicAssociateEntityHelper workOrderDynamicAssociateEntityHelper,
                                    IEmployeeAppService employeeAppService) : base(repository,
                                                                                   manager,
                                                                                   categoryRepository,
@@ -741,7 +738,6 @@ namespace BXJG.WorkOrder.WorkOrder
                                                                                   CoreConsts.WorkOrderCompletion,
                                                                                   CoreConsts.WorkOrderReject)
         {
-            this.workOrderDynamicAssociateEntityHelper = workOrderDynamicAssociateEntityHelper;
         }
 
         protected override async ValueTask BeforeEditAsync(OrderEntity entity, WorkOrderUpdateInput input)
@@ -785,7 +781,6 @@ namespace BXJG.WorkOrder.WorkOrder
                     entity.SetData(item.Key, item.Value);
                 }
             }
-            workOrderDynamicAssociateEntityHelper.DtoMapToEntity(input, entity);
         }
 
         protected async override Task<IQueryable<OrderEntity>> GetAllFilterAsync(GetAllWorkOrderInput input)

@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>BXJG.CMS</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Ad\AdControlEqualityComparer.cs" />
+    <Compile Remove="Configuration\BXJGCMSAppSettingProvider.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Localization\SourceFiles\BXJGCMS-en.xml" />
+    <None Remove="Localization\SourceFiles\BXJGCMS.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Localization\SourceFiles\BXJGCMS.xml" />
+    <EmbeddedResource Include="Localization\SourceFiles\BXJGCMS-en.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Abp.Zero.Common" Version="6.3.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Configuration\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Modules\BXJG.GeneralTree\BXJG.GeneralTree.csproj" />
+  </ItemGroup>
+
+</Project>
