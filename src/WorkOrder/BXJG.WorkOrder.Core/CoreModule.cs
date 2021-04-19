@@ -10,12 +10,11 @@ using Castle.MicroKernel.Registration;
 using Castle.Windsor.MsDependencyInjection;
 using System.Collections.Generic;
 using System.Reflection;
-using BXJG.DynamicAssociateEntity;
 using BXJG.WorkOrder.WorkOrder;
 
 namespace BXJG.WorkOrder
 {
-    [DependsOn(typeof(GeneralTreeModule),typeof(DynamicAssociateEntityModule))]
+    [DependsOn(typeof(GeneralTreeModule))]
     public class CoreModule : AbpModule
     {
         public override void PreInitialize()

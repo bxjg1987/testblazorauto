@@ -15,7 +15,6 @@ using System.Threading.Tasks;
 using System.Linq.Dynamic.Core;
 using Abp.Domain.Entities;
 using Abp.UI;
-using BXJG.DynamicAssociateEntity;
 using Abp.Dependency;
 using Abp.Domain.Uow;
 using Microsoft.EntityFrameworkCore;

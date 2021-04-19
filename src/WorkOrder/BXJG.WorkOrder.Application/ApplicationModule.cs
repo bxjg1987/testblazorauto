@@ -1,7 +1,6 @@
 ﻿using Abp.AutoMapper;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
-using BXJG.DynamicAssociateEntity;
 using BXJG.Utils;
 using BXJG.WorkOrder.WorkOrder;
 using System;

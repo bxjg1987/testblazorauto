@@ -2,7 +2,6 @@ using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
 using Abp.Timing;
 using Abp.UI;
-using BXJG.DynamicAssociateEntity;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -453,7 +452,7 @@ namespace BXJG.WorkOrder.WorkOrder
     /// <summary>
     /// 普通/默认工单
     /// </summary>
-    public class OrderEntity : OrderBaseEntity, IExtendableObject, IDynamicAssociateEntity
+    public class OrderEntity : OrderBaseEntity, IExtendableObject
     {
         public string EntityType { get; protected set; }
         public string EntityId { get; protected set; }
@@ -463,7 +462,6 @@ namespace BXJG.WorkOrder.WorkOrder
         public string ExtendedField3 { get; set; }
         public string ExtendedField4 { get; set; }
         public string ExtendedField5 { get; set; }
-        public string DynamicAssociateData { get; set; }
 
         protected OrderEntity() : base() { }
         protected internal OrderEntity(DateTimeOffset time,

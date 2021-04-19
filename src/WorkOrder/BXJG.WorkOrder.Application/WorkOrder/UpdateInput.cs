@@ -1,5 +1,4 @@
 ﻿using Abp.Application.Services.Dto;
-using BXJG.DynamicAssociateEntity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

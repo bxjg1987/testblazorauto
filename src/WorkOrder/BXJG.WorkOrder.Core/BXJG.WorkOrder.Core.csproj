@@ -3,17 +3,16 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>BXJG.WorkOrder</RootNamespace>
-    <Version>1.0.0-rc5</Version>
+    <Version>1.0.0-rc7</Version>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile></DocumentationFile>
+ 
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="Localization\SourceFiles\BXJGWorkOrder-en.xml" />
-    <None Remove="Localization\SourceFiles\BXJGWorkOrder.xml" />
-  </ItemGroup>
+
 
   <ItemGroup>
     <EmbeddedResource Include="Localization\SourceFiles\BXJGWorkOrder.xml" />
@@ -25,7 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\modules\BXJG.DynamicAssociateEntity.Core\BXJG.DynamicAssociateEntity.Core.csproj" />
     <ProjectReference Include="..\..\Modules\BXJG.GeneralTree\BXJG.GeneralTree.csproj" />
   </ItemGroup>
 

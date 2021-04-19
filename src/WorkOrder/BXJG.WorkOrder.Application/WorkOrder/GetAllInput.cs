@@ -55,10 +55,10 @@ namespace BXJG.WorkOrder.WorkOrder
     /// </summary>
     public class GetAllWorkOrderInput : GetAllWorkOrderBaseInput
     {
-        /// <summary>
-        /// 动态关联实体的限制条件<br />
-        /// key：动态关联数据类型，比如column对应栏目，value：对应的值。目前只考虑每种数据选一个
-        /// </summary>
-        public IDictionary<string, object> DynamicAssociateData { get; set; }
+        ///// <summary>
+        ///// 动态关联实体的限制条件<br />
+        ///// key：动态关联数据类型，比如column对应栏目，value：对应的值。目前只考虑每种数据选一个
+        ///// </summary>
+        //public IDictionary<string, object> DynamicAssociateData { get; set; }
     }
 }
