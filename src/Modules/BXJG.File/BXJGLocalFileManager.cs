@@ -258,69 +258,12 @@ namespace BXJG.File
         //    var files = await repository.GetAllListAsync(c => ids.Contains(c.Id));
         //    return await HardDeleteAsync(files.ToArray());
         //}
-        ///// <summary>
-        ///// 批量软删除指定的记录
-        ///// </summary>
-        ///// <param name="files"></param>
-        ///// <returns></returns>
-        //public async Task<IList<long>> DeleteAsync(params TEntity[] files)
-        //{
-        //    var list = new List<long>();
-        //    var ts = new List<Task>();
-        //    foreach (var item in files)
-        //    {
-        //        //经过测试.net 2.0 foreach都不存在闭包问题
-        //        //无论文件是否被引用存在外键，软删除都会成功
-        //        var t = repository.HardDeleteAsync(item).ContinueWith(t1 =>
-        //        {
-        //            list.Add(item.Id);//软删除成功时记录对应文件的id，以便返回
-
-        //        }, TaskContinuationOptions.NotOnFaulted).ContinueWith(c =>
-        //        {
-        //            //若失败，则记录错误 并终止异常抛出，以便继续处理下一条
-        //            c.Exception.Handle(d =>
-        //            {
-        //                Logger.ErrorFormat(d, "软删除文件失败{0}", item.Id);
-        //                return true;//true表示已经处理了异常，不要继续抛出了
-        //            });
-        //        }, TaskContinuationOptions.OnlyOnFaulted);
-        //        ts.Add(t);
-        //    }
+        
 
         //    await Task.WhenAll(ts);//这样搞 好像好报错
         //    return list;
         //}
-        ///// <summary>
-        ///// 批量硬删除指定id的记录及其关联的物理文件
-        ///// </summary>
-        ///// <param name="files"></param>
-        ///// <returns></returns>
-        //public async Task<IList<long>> HardDeleteAsync(params TEntity[] files)
-        //{
-        //    var list = new List<long>();
-        //    var ts = new List<Task>();
-        //    foreach (var item in files)
-        //    {
-        //        //经过测试.net 2.0 foreach都不存在闭包问题
-        //        //若文件被引用，外键关系可能导致删除失败
-        //        var t = repository.HardDeleteAsync(item).ContinueWith(t1 =>
-        //        {
-        //            list.Add(item.Id);
-        //            System.IO.File.Delete(item.GetAbsolutePath());
-
-        //        }, TaskContinuationOptions.NotOnFaulted).ContinueWith(c =>
-        //        {
-        //            c.Exception.Handle(d =>
-        //            {
-        //                Logger.ErrorFormat(d, "硬删除文件失败{0}", item.Id);
-        //                return true;//true表示已经处理了异常，不要继续抛出了
-        //            });
-        //        }, TaskContinuationOptions.OnlyOnFaulted);
-        //        ts.Add(t);
-        //    }
-        //    await Task.WhenAll(ts);//这样搞 好像好报错
-        //    return list;
-        //}
+        
         ///// <summary>
         ///// 软删除指定目录下的所有文件
         ///// </summary>
@@ -349,36 +292,7 @@ namespace BXJG.File
         //    await repository.UpdateAsync(entity);
         //    return entity;
         //}
-        ///// <summary>
-        ///// 根据物理文件刷新数据库中的记录，主要是大小、md5值、最后修改时间等
-        ///// </summary>
-        ///// <param name="dir"></param>
-        ///// <returns></returns>
-        //public async Task<IList<TEntity>> RefreshByDirAsync(string dir)
-        //{
-        //    if (!dir.EndsWith("\\"))
-        //        dir = dir + "\\";
-        //    var files = await repository.GetAllListAsync(c => c.Path.StartsWith(dir));
-        //    var ts = new List<Task>();
-        //    foreach (var item in files)
-        //    {
-        //        var q = item;
-        //        item.RefreshAsync();
-
-        //        var t = repository.UpdateAsync(item).ContinueWith(c =>
-        //        {
-        //            c.Exception.Handle(d =>
-        //            {
-        //                Logger.ErrorFormat(d, "刷新文件失败{0}", q.Id);
-        //                return true;
-        //            });
-        //        }, TaskContinuationOptions.OnlyOnFaulted);
-
-        //        ts.Add(t);
-        //    }
-        //    await Task.WhenAll(ts);
-        //    return files;
-        //}
+        
         #endregion
 
         /// <summary>
