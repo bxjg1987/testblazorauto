@@ -23,8 +23,9 @@
 
   <ItemGroup>
     <None Remove="BXJG.Utils.xml" />
+    <None Remove="Localization\SourceFiles\BXJGUtils-zh-Hans.xml" />
+    <None Remove="Localization\SourceFiles\BXJGUtils.xml" />
   </ItemGroup>
-
 
   <ItemGroup>
     <EmbeddedResource Include="Localization\SourceFiles\BXJGUtils-zh-Hans.xml" />

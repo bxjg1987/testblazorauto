@@ -12,11 +12,14 @@
  
   </PropertyGroup>
 
-
+  <ItemGroup>
+    <None Remove="Localization\SourceFiles\BXJGWorkOrder-en.xml" />
+    <None Remove="Localization\SourceFiles\BXJGWorkOrder-zh-Hans.xml" />
+  </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Localization\SourceFiles\BXJGWorkOrder-zh-Hans.xml" />
     <EmbeddedResource Include="Localization\SourceFiles\BXJGWorkOrder-en.xml" />
+    <EmbeddedResource Include="Localization\SourceFiles\BXJGWorkOrder-zh-Hans.xml" />
   </ItemGroup>
 
   <ItemGroup>

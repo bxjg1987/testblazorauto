@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <VersionPrefix>1.0.0.0</VersionPrefix>
     <TargetFramework>net5.0</TargetFramework>
@@ -14,9 +14,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Localization\SourceFiles\*.xml" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
-  </ItemGroup>
+
   <ItemGroup>
     <Compile Remove="DynamicProperty\**" />
     <EmbeddedResource Remove="DynamicProperty\**" />
@@ -27,6 +25,14 @@
     <Compile Remove="Shop\CustomerManager.cs" />
     <Compile Remove="Shop\OrderManager.cs" />
     <Compile Remove="WorkOrderDynamicAssociateEntityDefineGroupProvider.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Localization\SourceFiles\ZLJ-en.xml" />
+    <None Remove="Localization\SourceFiles\ZLJ-zh-Hans.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Localization\SourceFiles\ZLJ-en.xml" />
+    <EmbeddedResource Include="Localization\SourceFiles\ZLJ-zh-Hans.xml" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Abp.AutoMapper" Version="6.3.0" />

@@ -22,8 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Localization\SourceFiles\BXJGShop-zh-Hans.xml" />
     <EmbeddedResource Include="Localization\SourceFiles\BXJGShop-en.xml" />
+    <EmbeddedResource Include="Localization\SourceFiles\BXJGShop-zh-Hans.xml" />
   </ItemGroup>
 
   <ItemGroup>

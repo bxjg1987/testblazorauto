@@ -23,7 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\modules\BXJG.DynamicAssociateEntity.Application\BXJG.DynamicAssociateEntity.Application.csproj" />
     <ProjectReference Include="..\BXJG.Equipment.Core\BXJG.Equipment.Core.csproj" />
   </ItemGroup>
 
