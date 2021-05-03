@@ -10,7 +10,7 @@
 迁移：根据情况决定是否修改xxx.Migrator中的数据库连接字符串，设置xxx.Migrator为启动项目，直接F5运行<br />
 启动：设置xxx.Web.Host为启动项目（注意连接字符串修改），启动它，这就是后端接口<br />
 
-前端源码地址：[https://gitee.com/bxjg1987_admin/front](https://gitee.com/bxjg1987/front)
+前端源码地址：[https://gitee.com/bxjg1987_admin/front](https://gitee.com/bxjg1987_admin/front)
 启动UI：右键WebAdmin在浏览器中运行 admin 123qwe登录<br />
 
 <h1>各模块基本介绍</h1>
