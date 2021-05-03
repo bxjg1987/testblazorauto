@@ -154,6 +154,15 @@ namespace ZLJ.Web.Host.Startup
 
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
+            app.Use((ctx, next) =>
+            {
+                ctx.Request.Headers["Accept-Language"] = ctx.Request.Headers["Accept-Language"].ToString()
+                                                                                               .Replace("zh-CN,", "zh-Hans,")
+                                                                                               .Replace("zh-CN;", "zh-Hans;")
+                                                                                               .Replace("zh,", "zh-Hans,")
+                                                                                               .Replace("zh;", "zh-Hans;");
+                return next();
+            });
             app.UseAbp(options => { options.UseAbpRequestLocalization = false; }); // Initializes ABP framework.
 
             #region 微信相关
