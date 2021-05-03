@@ -16,8 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Localization\SourceFiles\BXJGCMS-zh-Hans.xml" />
     <EmbeddedResource Include="Localization\SourceFiles\BXJGCMS-en.xml" />
+    <EmbeddedResource Include="Localization\SourceFiles\BXJGCMS-zh-Hans.xml" />
   </ItemGroup>
 
   <ItemGroup>
