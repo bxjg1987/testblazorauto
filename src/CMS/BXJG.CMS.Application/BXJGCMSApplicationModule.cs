@@ -5,8 +5,8 @@ using BXJG.CMS.Authorization;
 using BXJG.GeneralTree;
 using System;
 using System.Reflection;
-using BXJG.DynamicAssociateEntity;
-using BXJG.CMS.DynamicAssociateEntity;
+//using BXJG.DynamicAssociateEntity;
+//using BXJG.CMS.DynamicAssociateEntity;
 
 namespace BXJG.CMS
 {
@@ -21,7 +21,7 @@ namespace BXJG.CMS
             //Configuration.Authorization.Providers.Add<BXJGCMSAuthorizationProvider>();
 
             Configuration.Modules.AbpAutoMapper().Configurators.Add(cfg => cfg.AddMaps(Assembly.GetExecutingAssembly()));
-            Configuration.Modules.DynamicAssociateEntity().DynamicAssociateEntityDefineProviders.Add<DynamicAssociateEntityDefineProvider>();
+            //Configuration.Modules.DynamicAssociateEntity().DynamicAssociateEntityDefineProviders.Add<DynamicAssociateEntityDefineProvider>();
         }
         public override void Initialize()
         {

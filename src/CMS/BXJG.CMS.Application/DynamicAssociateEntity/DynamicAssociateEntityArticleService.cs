@@ -5,7 +5,7 @@ using Abp.Extensions;
 using Abp.Linq;
 using Abp.Linq.Extensions;
 using BXJG.CMS.Article;
-using BXJG.DynamicAssociateEntity;
+//using BXJG.DynamicAssociateEntity;
 using System;
 using System.Collections.Generic;
 using System.Linq;

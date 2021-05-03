@@ -11,12 +11,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DynamicAssociateEntity\**" />
+    <EmbeddedResource Remove="DynamicAssociateEntity\**" />
+    <None Remove="DynamicAssociateEntity\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Abp.ZeroCore" Version="6.3.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.4" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\modules\BXJG.DynamicAssociateEntity.Application\BXJG.DynamicAssociateEntity.Application.csproj" />
     <ProjectReference Include="..\..\Modules\BXJG.Utils.Application\BXJG.Utils.Application.csproj" />
     <ProjectReference Include="..\BXJG.CMS.Core\BXJG.CMS.Core.csproj" />
   </ItemGroup>

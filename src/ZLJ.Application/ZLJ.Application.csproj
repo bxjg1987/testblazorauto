@@ -19,14 +19,17 @@
   <ItemGroup>
     <Compile Remove="Auditing\Exporting\**" />
     <Compile Remove="Authorization\Permissions\Dto\**" />
+    <Compile Remove="DynamicAssociateEntity\**" />
     <Compile Remove="Localization\**" />
     <Compile Remove="WorkOrder\**" />
     <EmbeddedResource Remove="Auditing\Exporting\**" />
     <EmbeddedResource Remove="Authorization\Permissions\Dto\**" />
+    <EmbeddedResource Remove="DynamicAssociateEntity\**" />
     <EmbeddedResource Remove="Localization\**" />
     <EmbeddedResource Remove="WorkOrder\**" />
     <None Remove="Auditing\Exporting\**" />
     <None Remove="Authorization\Permissions\Dto\**" />
+    <None Remove="DynamicAssociateEntity\**" />
     <None Remove="Localization\**" />
     <None Remove="WorkOrder\**" />
   </ItemGroup>
@@ -42,8 +45,6 @@
     <Compile Remove="Dto\TreeNodeDto.cs" />
     <Compile Remove="Dto\TreeNodeEditBaseDto.cs" />
     <Compile Remove="Dto\TreeNodeMoveInput.cs" />
-    <Compile Remove="DynamicAssociateEntity\DynamicAssociateEquipmentService.cs" />
-    <Compile Remove="DynamicAssociateEntity\DynamicAssociateProductService.cs" />
     <Compile Remove="Shop\BXJGShopCustomerOrderAppService.cs" />
     <Compile Remove="Shop\BXJGShopItemAppService.cs" />
     <Compile Remove="Shop\BXJGShopOrderAppService.cs" />
