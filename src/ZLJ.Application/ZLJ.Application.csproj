@@ -19,14 +19,17 @@
   <ItemGroup>
     <Compile Remove="Auditing\Exporting\**" />
     <Compile Remove="Authorization\Permissions\Dto\**" />
+    <Compile Remove="DynamicAssociateEntity\**" />
     <Compile Remove="Localization\**" />
     <Compile Remove="WorkOrder\**" />
     <EmbeddedResource Remove="Auditing\Exporting\**" />
     <EmbeddedResource Remove="Authorization\Permissions\Dto\**" />
+    <EmbeddedResource Remove="DynamicAssociateEntity\**" />
     <EmbeddedResource Remove="Localization\**" />
     <EmbeddedResource Remove="WorkOrder\**" />
     <None Remove="Auditing\Exporting\**" />
     <None Remove="Authorization\Permissions\Dto\**" />
+    <None Remove="DynamicAssociateEntity\**" />
     <None Remove="Localization\**" />
     <None Remove="WorkOrder\**" />
   </ItemGroup>

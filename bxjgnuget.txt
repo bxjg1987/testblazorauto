@@ -9,7 +9,7 @@ dotnet nuget push D:\abp\src\Libs\BXJG.Wechat.Web\bin\Release\BXJG.Wechat.Web.1.
 Common abp modules
 -------------------------------
 dotnet nuget push D:\abp\src\Modules\BXJG.GeneralTree\bin\Release\BXJG.GeneralTree.1.0.10.nupkg --api-key oy2hfvewq4mg6xlsyhyadiwuonqaqboevepb4xghmibaim --source https://api.nuget.org/v3/index.json
-dotnet nuget push D:\abp\src\Modules\BXJG.Utils\bin\Release\BXJG.Utils.1.0.10.nupkg --api-key oy2hfvewq4mg6xlsyhyadiwuonqaqboevepb4xghmibaim --source https://api.nuget.org/v3/index.json
+dotnet nuget push D:\abp\src\Modules\BXJG.Utils\bin\Release\BXJG.Utils.1.0.12.nupkg --api-key oy2hfvewq4mg6xlsyhyadiwuonqaqboevepb4xghmibaim --source https://api.nuget.org/v3/index.json
 dotnet nuget push D:\abp\src\Modules\BXJG.Utils.Application\bin\Release\BXJG.Utils.Application.1.0.10.nupkg --api-key oy2hfvewq4mg6xlsyhyadiwuonqaqboevepb4xghmibaim --source https://api.nuget.org/v3/index.json
 dotnet nuget push D:\abp\src\Modules\BXJG.Utils.Web\bin\Release\BXJG.Utils.Web.1.0.10.nupkg --api-key oy2hfvewq4mg6xlsyhyadiwuonqaqboevepb4xghmibaim --source https://api.nuget.org/v3/index.json
 dotnet nuget push D:\abp\src\Modules\BXJG.WeChat.Abp\bin\Release\BXJG.WeChat.Abp.1.0.10.nupkg --api-key oy2hfvewq4mg6xlsyhyadiwuonqaqboevepb4xghmibaim --source https://api.nuget.org/v3/index.json

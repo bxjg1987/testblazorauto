@@ -81,6 +81,9 @@ namespace BXJG.Shop.Customer
         public byte[] RowVersion { get; private set; }
         public string ExtensionData { get; set; }
         public virtual List<ShippingAddressEntity> ShippingAddresses { get; set; }
+
+        long? IBusinessUserEntity.UserId => UserId;
+
         /// <summary>
         /// 给ef用的，它可以放回私有成员
         /// </summary>

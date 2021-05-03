@@ -16,6 +16,6 @@ namespace BXJG.Utils.BusinessUser
     /// </summary>
     public interface IBusinessUserEntity
     {
-        long UserId { get; }
+        long? UserId { get; }
     }
 }

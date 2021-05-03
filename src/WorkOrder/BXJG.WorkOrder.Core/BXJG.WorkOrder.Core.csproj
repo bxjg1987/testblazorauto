@@ -15,7 +15,7 @@
 
 
   <ItemGroup>
-    <EmbeddedResource Include="Localization\SourceFiles\BXJGWorkOrder.xml" />
+    <EmbeddedResource Include="Localization\SourceFiles\BXJGWorkOrder-zh-Hans.xml" />
     <EmbeddedResource Include="Localization\SourceFiles\BXJGWorkOrder-en.xml" />
   </ItemGroup>
 

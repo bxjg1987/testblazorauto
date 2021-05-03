@@ -24,7 +24,7 @@ using BXJG.Equipment;
 using BXJG.BaseInfo;
 using BXJG.Equipment.EFCore;
 using Abp.Configuration.Startup;
-using BXJG.DynamicAssociateEntity;
+//using BXJG.DynamicAssociateEntity;
 
 namespace ZLJ
 {
@@ -77,7 +77,7 @@ namespace ZLJ
             Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(BXJG.WorkOrder.ApplicationModule).Assembly,"bxjgworkorder");
             Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(BXJG.WorkOrder.BXJGCommonApplicationModule).Assembly, "bxjgworkorder");
             Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(BXJG.WorkOrder.BXJGWorkOrderEmployeeApplicationModule).Assembly, "bxjgworkorder");
-            Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(DynamicAssociateEntityApplicationModule).Assembly, "bxjgDynamicAssociateEntity");
+            //Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(DynamicAssociateEntityApplicationModule).Assembly, "bxjgDynamicAssociateEntity");
 
             ConfigureTokenAuth();
 

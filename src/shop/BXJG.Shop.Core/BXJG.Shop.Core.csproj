@@ -18,11 +18,11 @@
 
   <ItemGroup>
     <None Remove="Localization\SourceFiles\BXJGShop-en.xml" />
-    <None Remove="Localization\SourceFiles\BXJGShop.xml" />
+    <None Remove="Localization\SourceFiles\BXJGShop-zh-Hans.xml" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Localization\SourceFiles\BXJGShop.xml" />
+    <EmbeddedResource Include="Localization\SourceFiles\BXJGShop-zh-Hans.xml" />
     <EmbeddedResource Include="Localization\SourceFiles\BXJGShop-en.xml" />
   </ItemGroup>
 

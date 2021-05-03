@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace BXJG.Utils.BusinessUser
 {
-    public interface IBusinessUserLoginManager<TUser>
+    public interface IBusinessUserLoginManager<in TUser>
     {
         Task<Claim> GetBusinessUserClaim(TUser user);
     }
