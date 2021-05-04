@@ -15,9 +15,12 @@ namespace BXJG.WorkOrder.WorkOrder
     /// </summary>
     public class GetAllWorkOrderBaseInput : PagedAndSortedResultRequestDto, IShouldNormalize
     {
+        /// <summary>
+        /// 处理人Id
+        /// </summary>
         public string EmployeeId { get; set; }
         /// <summary>
-        /// 紧急程度
+        /// 状态
         /// </summary>
         public Status? Status { get; set; }
         /// <summary>
@@ -28,17 +31,41 @@ namespace BXJG.WorkOrder.WorkOrder
         /// 所属分类code
         /// </summary>
         public string CategoryCode { get; set; }
+        /// <summary>
+        /// 预计开始时间范围-开始
+        /// </summary>
         public DateTimeOffset? EstimatedExecutionTimeStart { get; set; }
+        /// <summary>
+        /// 预计结束时间范围-结束
+        /// </summary>
         public DateTimeOffset? EstimatedExecutionTimeEnd { get; set; }
+        /// <summary>
+        /// 预计完成时间范围-开始
+        /// </summary>
         public DateTimeOffset? EstimatedCompletionTimeStart { get; set; }
+        /// <summary>
+        /// 预计完成时间范围-结束
+        /// </summary>
         public DateTimeOffset? EstimatedCompletionTimeEnd { get; set; }
+        /// <summary>
+        /// 实际开始时间-开始
+        /// </summary>
         public DateTimeOffset? ExecutionTimeStart { get; set; }
+        /// <summary>
+        /// 实际开始时间-结束
+        /// </summary>
         public DateTimeOffset? ExecutionTimeEnd { get; set; }
+        /// <summary>
+        /// 实际完成时间-开始
+        /// </summary>
         public DateTimeOffset? CompletionTimeStart { get; set; }
+        /// <summary>
+        /// 实际完成实际-结束
+        /// </summary>
         public DateTimeOffset? CompletionTimeEnd { get; set; }
         //public string EmployeeId { get; set; }
         /// <summary>
-        /// 关键字
+        /// 关键字，模糊匹配处理人名称、电话、工单标题等
         /// </summary>
         public string Keyword { get; set; }
         /// <summary>

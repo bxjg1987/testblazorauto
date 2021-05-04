@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ZLJ.EntityFrameworkCore;
 
 namespace ZLJ.Migrations
 {
     [DbContext(typeof(ZLJDbContext))]
-    partial class ZLJDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210504163321_updateWorkorderCls")]
+    partial class updateWorkorderCls
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2596,8 +2598,7 @@ namespace ZLJ.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("WorkOrderType")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

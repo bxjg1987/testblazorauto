@@ -20,9 +20,12 @@ namespace BXJG.WorkOrder
         public override void PreInitialize()
         {
             LocalizationConfigurer.Configure(Configuration.Localization);
+            IocManager.Register<BXJGWorkOrderConfig>();
+            Configuration.BXJGWorkOrder().WorkOrderTypes.Add("default", "普通工单");
             //Configuration.Settings.Providers.Add<AppSettingProvider>();
             //Configuration.Modules.BXJGUtils().AddEnum("bxjgShopOrderStatus", typeof(OrderStatus), BXJGUtilsConsts.LocalizationSourceName);
             //Configuration.DynamicEntityProperties.Providers.Add<ProductDynamicEntityPropertyDefinition>();
+            //Configuration
         }
         public override void Initialize()
         {

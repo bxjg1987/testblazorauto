@@ -74,9 +74,8 @@ namespace BXJG.WorkOrder.WorkOrder
                                            DateTimeOffset? estimatedExecutionTime = default,
                                            DateTimeOffset? estimatedCompletionTime = default)
         {
-
             CategoryId = categoryId;
-            UrgencyDegree = urgencyDegree;
+            this.urgencyDegree = urgencyDegree;
             Title = title;
 
             Status = Status.ToBeConfirmed;
@@ -212,7 +211,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <summary>
         /// 状态变更有并发可能，使用乐观并发，偷个懒直接使用行级乐观并发
         /// </summary>
-        public virtual byte[] RowVersion { get; }
+        public virtual byte[] RowVersion { get; set; }
         /// <summary>
         /// 调整状态<br />
         /// 若状态无变化将抛出ApplicationException
@@ -295,6 +294,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// 确认，只有待确认的工单才允许执行此操作
         /// </summary>
         /// <param name="time"></param>
+        /// <param name="description"></param>
         public virtual void Confirme(DateTimeOffset time, string description = "确认")
         {
             if (Status != Status.ToBeConfirmed)
@@ -307,6 +307,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// 反确认
         /// </summary>
         /// <param name="time"></param>
+        /// <param name="description"></param>
         public virtual void UnConfirme(DateTimeOffset time, string description = "反确认")
         {
             if (Status != Status.ToBeAllocated)
@@ -336,6 +337,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// 反分配
         /// </summary>
         /// <param name="time"></param>
+        /// <param name="description"></param>
         public virtual void UnAllocate(DateTimeOffset time, string description = "反分配")
         {
             if (Status != Status.ToBeProcessed)
@@ -350,6 +352,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// 执行工单，只有待执行的工单才允许执行此操作
         /// </summary>
         /// <param name="time"></param>
+        /// <param name="description"></param>
         public virtual void Execute(DateTimeOffset time, string description = "执行")
         {
             if (Status != Status.ToBeProcessed)
@@ -363,6 +366,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// 反执行
         /// </summary>
         /// <param name="time"></param>
+        /// <param name="description"></param>
         public virtual void UnExecute(DateTimeOffset time, string description = "反执行")
         {
             if (Status != Status.Processing)

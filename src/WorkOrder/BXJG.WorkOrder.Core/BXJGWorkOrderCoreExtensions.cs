@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Text;
 using Abp.MultiTenancy;
 using BXJG.Utils.Localization;
+using Abp.Configuration.Startup;
 
 namespace BXJG.WorkOrder
 {
-    public static class PermissionExtensions
+    public static class BXJGWorkOrderCoreExtensions
     {
         /// <summary>
         /// 注册工单模块管理端权限
@@ -88,5 +89,19 @@ namespace BXJG.WorkOrder
         {
             return context.CreatePermission(CoreConsts.WorkOrder, CoreConsts.WorkOrderManager.BXJGWorkOrderLI(), multiTenancySides: MultiTenancySides.Tenant);
         }
+        /// <summary>
+        /// 获取工单模块配置对象
+        /// </summary>
+        /// <param name="config"></param>
+        /// <returns></returns>
+        public static BXJGWorkOrderConfig BXJGWorkOrder(this IAbpStartupConfiguration config)
+        {
+            return config.IocManager.Resolve<BXJGWorkOrderConfig>();
+        }
+
+        //public static IAbpStartupConfiguration AddBXJGWorkOrderType(this IAbpStartupConfiguration config,) 
+        //{ 
+        
+        //}
     }
 }

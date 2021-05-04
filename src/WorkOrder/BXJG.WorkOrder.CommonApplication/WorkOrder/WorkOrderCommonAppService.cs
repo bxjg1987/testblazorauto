@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Services.Dto;
+using Abp.Authorization;
 using Abp.Domain.Uow;
 using BXJG.Common.Dto;
 using BXJG.Utils;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace BXJG.WorkOrder.WorkOrder
 {
+    [AbpAuthorize]
     public class WorkOrderCommonAppService : AppServiceBase
     {
         /// <summary>

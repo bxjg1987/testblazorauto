@@ -18,6 +18,8 @@ using Abp.UI;
 using Abp.Dependency;
 using Abp.Domain.Uow;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.ObjectModel;
+
 namespace BXJG.WorkOrder.WorkOrder
 {
     /// <summary>
@@ -74,26 +76,79 @@ namespace BXJG.WorkOrder.WorkOrder
         where TCategoryRepository : IRepository<CategoryEntity, long>
         #endregion
     {
+        #region 字段和属性
         protected readonly TRepository repository;
         protected readonly TCategoryRepository categoryRepository;
         protected readonly TManager manager;
         protected readonly IEmployeeAppService employeeAppService;
-        protected readonly string getPermissionName,
-                                  allocatePermissionName,
-                                  executePermissionName,
-                                  completionPermissionName,
-                                  rejectPermissionName,
-                                  createPermissionName,
-                                  updatePermissionName,
-                                  deletePermissionName,
-                                  confirmePermissionName,
-                                  toBeConfirmedPermissionName;
 
+        #region 权限名称
+        /// <summary>
+        /// 工单管理-获取权限名称
+        /// </summary>
+        protected readonly string getPermissionName;
+        /// <summary>
+        /// 工单管理-分配权限名称
+        /// </summary>
+        protected readonly string allocatePermissionName;
+        /// <summary>
+        /// 工单管理-执行权限名称
+        /// </summary>
+        protected readonly string executePermissionName;
+        /// <summary>
+        /// 工单管理-完成权限名称
+        /// </summary>
+        protected readonly string completionPermissionName;
+        /// <summary>
+        /// 工单管理-拒绝权限名称
+        /// </summary>
+        protected readonly string rejectPermissionName;
+        /// <summary>
+        /// 工单管理-新增权限名称
+        /// </summary>
+        protected readonly string createPermissionName;
+        /// <summary>
+        /// 工单管理-修改权限名称
+        /// </summary>
+        protected readonly string updatePermissionName;
+        /// <summary>
+        /// 工单管理-删除权限名称
+        /// </summary>
+        protected readonly string deletePermissionName;
+        /// <summary>
+        /// 工单管理-确认权限名称
+        /// </summary>
+        protected readonly string confirmePermissionName;
+        /// <summary>
+        /// 工单管理-待确认权限名称
+        /// </summary>
+        protected readonly string toBeConfirmedPermissionName;
+        #endregion
+
+        #endregion
+
+        #region 构造函数
+        /// <summary>
+        /// 工单后台管理应用服务基类构造函数
+        /// </summary>
+        /// <param name="repository">工单仓储</param>
+        /// <param name="manager">工单领域服务</param>
+        /// <param name="categoryRepository">工单类别仓储</param>
+        /// <param name="employeeAppService">员工服务</param>
+        /// <param name="createPermissionName">新增权限名称</param>
+        /// <param name="updatePermissionName">修改权限名称</param>
+        /// <param name="deletePermissionName">删除权限名称</param>
+        /// <param name="getPermissionName">获取权限名称</param>
+        /// <param name="toBeConfirmedPermissionName">待确认权限名称</param>
+        /// <param name="confirmePermissionName">确认权限名称</param>
+        /// <param name="allocatePermissionName">分配权限名称</param>
+        /// <param name="executePermissionName">执行权限名称</param>
+        /// <param name="completionPermissionName">完成权限名称</param>
+        /// <param name="rejectPermissionName">拒绝权限名称</param>
         public WorkOrderAppServiceBase(TRepository repository,
                                        TManager manager,
                                        TCategoryRepository categoryRepository,
                                        IEmployeeAppService employeeAppService,
-
                                        string createPermissionName = default,
                                        string updatePermissionName = default,
                                        string deletePermissionName = default,
@@ -123,6 +178,8 @@ namespace BXJG.WorkOrder.WorkOrder
 
             //this.iocResolver = iocResolver;
         }
+        #endregion
+
         /// <summary>
         /// 新增工单
         /// </summary>
@@ -132,6 +189,7 @@ namespace BXJG.WorkOrder.WorkOrder
         {
             await CheckCreatePermissionAsync();
             var entity = await manager.CreateAsync(await CreateInputToCreateDto(input));
+
             if (input.Status.HasValue && input.Status > entity.Status)
             {
                 await entity.Skip(Clock.Now,
@@ -171,7 +229,9 @@ namespace BXJG.WorkOrder.WorkOrder
             {
                 if (input.Status.Value > entity.Status)//skip
                 {
+                    entity.EmployeeId = input.EmployeeId;
                     entity.UrgencyDegree = input.UrgencyDegree ?? UrgencyDegree.Normalize;
+                    entity.ChangeEstimatedTime(input.EstimatedExecutionTime, input.EstimatedCompletionTime);
                     await entity.Skip(input.StatusChangedTime ?? Clock.Now,
                                       input.Status,
                                       input.StatusChangedDescription,
@@ -332,7 +392,7 @@ namespace BXJG.WorkOrder.WorkOrder
             {
                 emps = await employeeAppService.GetByIdsAsync(empIds.ToArray());
             }
-            var state = await GetStateAsync(list.ToArray());
+            var state = await GetStateAsync(list);
             var items = new List<TEntityDto>();
             foreach (var item in list)
             {
@@ -603,7 +663,7 @@ namespace BXJG.WorkOrder.WorkOrder
             {
                 emps = await employeeAppService.GetByIdsAsync(entity.EmployeeId);
             }
-            var state = await GetStateAsync(entity);
+            var state = await GetStateAsync(new TEntity[] { entity });
             return EntityToDto(entity, new CategoryEntity[] { category }, emps, state);
         }
         /// <summary>
@@ -649,7 +709,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        protected virtual async ValueTask<object> GetStateAsync(params TEntity[] entity)
+        protected virtual async ValueTask<object> GetStateAsync(IEnumerable<TEntity> entities)
         {
             return null;
         }
