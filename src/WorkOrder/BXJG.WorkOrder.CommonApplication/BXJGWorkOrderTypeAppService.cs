@@ -8,6 +8,8 @@ using Abp.Extensions;
 using Abp.Localization;
 using Abp.Domain.Uow;
 using Abp.Authorization;
+using BXJG.Common.Dto;
+using BXJG.Utils.Localization;
 namespace BXJG.WorkOrder
 {
     /// <summary>
@@ -26,10 +28,25 @@ namespace BXJG.WorkOrder
         /// 获取所有工单类型
         /// </summary>
         /// <returns></returns>
-        [UnitOfWork(false)]
-        public IEnumerable<ComboboxItemDto> GetAllAsync()
+        [UnitOfWork(IsDisabled = true)]
+        public IEnumerable<ComboboxItemDto> GetAllAsync(GetForSelectInput input)
         {
-            return config.WorkOrderTypes.Select(c => new ComboboxItemDto(c.Key, c.Value));
+            var list = config.WorkOrderTypes.Select(c => new ComboboxItemDto(c.Key, c.Value.Localize(LocalizationManager))).ToList();
+            if (input.ForType > 0) {
+                if (!input.ParentText.IsNullOrWhiteSpace())
+                {
+                    list.Insert(0, new ComboboxItemDto(null, input.ParentText));
+                }
+                else if(input.ForType <= 2)
+                {
+                    list.Insert(0, new ComboboxItemDto(null, "==工单类型==".BXJGWorkOrderL()));
+                }
+                else if (input.ForType <= 4)
+                {
+                    list.Insert(0, new ComboboxItemDto(null, "==请选择==".UtilsL()));
+                }
+            }
+            return list;
         }
     }
 }

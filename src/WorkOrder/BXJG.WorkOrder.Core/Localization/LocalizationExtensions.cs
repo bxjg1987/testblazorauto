@@ -20,6 +20,7 @@ namespace BXJG.WorkOrder
         /// 转换为工单模块本地化文本
         /// </summary>
         /// <param name="key"></param>
+        /// <param name="args"></param>
         /// <returns></returns>
         public static string BXJGWorkOrderL(this string key, params string[] args)
         {

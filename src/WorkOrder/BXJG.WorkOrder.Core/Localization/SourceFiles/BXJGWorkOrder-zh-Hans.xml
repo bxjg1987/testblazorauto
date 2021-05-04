@@ -6,6 +6,7 @@
     <text name="BXJGWorkOrderManager" value="工单管理" />
     <text name="BXJGWorkOrderCategory" value="工单分类" />
     <text name="BXJGWorkOrderCategoryManager" value="工单分类管理" />
+    <text name="普通工单" value="普通工单" />
 
     <text name="BXJG.WorkOrder.WorkOrder.Status" value="工单状态" />
     <text name="BXJG.WorkOrder.WorkOrder.Status.ToBeConfirmed" value="待确认" />

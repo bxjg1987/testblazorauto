@@ -11,6 +11,7 @@ using Castle.Windsor.MsDependencyInjection;
 using System.Collections.Generic;
 using System.Reflection;
 using BXJG.WorkOrder.WorkOrder;
+using Abp.Localization;
 
 namespace BXJG.WorkOrder
 {
@@ -21,7 +22,7 @@ namespace BXJG.WorkOrder
         {
             LocalizationConfigurer.Configure(Configuration.Localization);
             IocManager.Register<BXJGWorkOrderConfig>();
-            Configuration.BXJGWorkOrder().WorkOrderTypes.Add("default", "普通工单");
+            Configuration.BXJGWorkOrder().WorkOrderTypes.Add("default", "普通工单".BXJGWorkOrderLI());
             //Configuration.Settings.Providers.Add<AppSettingProvider>();
             //Configuration.Modules.BXJGUtils().AddEnum("bxjgShopOrderStatus", typeof(OrderStatus), BXJGUtilsConsts.LocalizationSourceName);
             //Configuration.DynamicEntityProperties.Providers.Add<ProductDynamicEntityPropertyDefinition>();

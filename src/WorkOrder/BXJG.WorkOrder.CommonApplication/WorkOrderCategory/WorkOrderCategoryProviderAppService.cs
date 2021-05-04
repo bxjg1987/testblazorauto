@@ -8,8 +8,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Abp.Localization;
+using Abp.Authorization;
 namespace BXJG.WorkOrder.WorkOrderCategory
 {
+    [AbpAuthorize]
     public class WorkOrderCategoryProviderAppService : UnAuthGeneralTreeAppServiceBase<GetWorkOrderCategoryForSelectInput,
                                                                                        WorkOrderCategoryTreeNodeDto,
                                                                                        GetWorkOrderCategoryForSelectInput,
@@ -26,24 +28,20 @@ namespace BXJG.WorkOrder.WorkOrderCategory
         {
             base.ComboboxMap = (entity, dto) =>
             {
-                //dto.IsDefault = entity.IsDefault;
-                //dto.WorkOrderType = entity.WorkOrderType;
-                dto.WorkOrderTypeName = entity.WorkOrderType.IsNullOrWhiteSpace() ? default : bXJGWorkOrderConfig.WorkOrderTypes[entity.WorkOrderType];
+                dto.WorkOrderTypeName = entity.WorkOrderType.IsNullOrWhiteSpace() ? default : bXJGWorkOrderConfig.WorkOrderTypes[entity.WorkOrderType].Localize(LocalizationManager);
             };
             base.ComboTreeMap = (entity, dto) =>
             {
-                //dto.IsDefault = entity.IsDefault;
-                //dto.WorkOrderType = entity.WorkOrderType;
-                dto.WorkOrderTypeName = entity.WorkOrderType.IsNullOrWhiteSpace()? default: bXJGWorkOrderConfig.WorkOrderTypes[entity.WorkOrderType];
+                dto.WorkOrderTypeName = entity.WorkOrderType.IsNullOrWhiteSpace()? default: bXJGWorkOrderConfig.WorkOrderTypes[entity.WorkOrderType].Localize(LocalizationManager);
             };
         }
-        protected override IQueryable<CategoryEntity> ComboboxFilter(GetWorkOrderCategoryForSelectInput input, long? parentId)
+        protected override IQueryable<CategoryEntity> ComboboxFilter(GetWorkOrderCategoryForSelectInput q, long? parentId)
         {
-            return base.ComboboxFilter(input, parentId).WhereIf(!input.WorkOrderType.IsNullOrWhiteSpace(), c => c.WorkOrderType == input.WorkOrderType);
+            return base.ComboboxFilter(q, parentId).WhereIf(!q.WorkOrderType.IsNullOrWhiteSpace(), c => c.WorkOrderType == q.WorkOrderType || (q.ContainsNullWorkOrderType && c.WorkOrderType.IsNullOrWhiteSpace()));
         }
-        protected override IQueryable<CategoryEntity> ComboTreeFilter(GetWorkOrderCategoryForSelectInput input, string parentCode)
+        protected override IQueryable<CategoryEntity> ComboTreeFilter(GetWorkOrderCategoryForSelectInput q, string parentCode)
         {
-            return base.ComboTreeFilter(input, parentCode).WhereIf(!input.WorkOrderType.IsNullOrWhiteSpace(), c => c.WorkOrderType == input.WorkOrderType);
+            return base.ComboTreeFilter(q, parentCode).WhereIf(!q.WorkOrderType.IsNullOrWhiteSpace(), c => c.WorkOrderType == q.WorkOrderType || (q.ContainsNullWorkOrderType && c.WorkOrderType.IsNullOrWhiteSpace()));
         }
     }
 }

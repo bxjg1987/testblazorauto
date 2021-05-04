@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Abp.Localization;
 namespace BXJG.WorkOrder.WorkOrderCategory
 {
     public class WorkOrderCategoryAppService : GeneralTreeAppServiceBase<WorkOrderCategroyDto,
@@ -41,25 +41,25 @@ namespace BXJG.WorkOrder.WorkOrderCategory
             this.bXJGWorkOrderConfig = bXJGWorkOrderConfig;
             base.GetAllMap = (entity, dto) =>
             {
-                dto.WorkOrderTypeName = entity.WorkOrderType.IsNullOrWhiteSpace() ? default : bXJGWorkOrderConfig.WorkOrderTypes[entity.WorkOrderType];
+                dto.WorkOrderTypeName = entity.WorkOrderType.IsNullOrWhiteSpace() ? default : bXJGWorkOrderConfig.WorkOrderTypes[entity.WorkOrderType].Localize(LocalizationManager);
             };
         }
 
         protected override IQueryable<CategoryEntity> GetAllFiltered(GetAllWorkOrderCategoryInput q, string parentCode)
         {
-            return base.GetAllFiltered(q, parentCode).WhereIf(!q.WorkOrderType.IsNullOrWhiteSpace(), c => c.WorkOrderType == q.WorkOrderType);
+            return base.GetAllFiltered(q, parentCode).WhereIf(!q.WorkOrderType.IsNullOrWhiteSpace(), c => c.WorkOrderType == q.WorkOrderType || (q.ContainsNullWorkOrderType && c.WorkOrderType.IsNullOrWhiteSpace()));
         }
 
         public override Task<WorkOrderCategroyDto> CreateAsync(WorkOrderCategoryEditInput input)
         {
-            if (!bXJGWorkOrderConfig.WorkOrderTypes.ContainsKey(input.WorkOrderType))
+            if (!input.WorkOrderType.IsNullOrWhiteSpace() && !bXJGWorkOrderConfig.WorkOrderTypes.ContainsKey(input.WorkOrderType))
                 throw new ApplicationException("不支持的工单类型");
             return base.CreateAsync(input);
         }
 
         public override Task<WorkOrderCategroyDto> UpdateAsync(WorkOrderCategoryEditInput input)
         {
-            if (!bXJGWorkOrderConfig.WorkOrderTypes.ContainsKey(input.WorkOrderType))
+            if (!input.WorkOrderType.IsNullOrWhiteSpace() && !bXJGWorkOrderConfig.WorkOrderTypes.ContainsKey(input.WorkOrderType))
                 throw new ApplicationException("不支持的工单类型");
             return base.UpdateAsync(input);
         }

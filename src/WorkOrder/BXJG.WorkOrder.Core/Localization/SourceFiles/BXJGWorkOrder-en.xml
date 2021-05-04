@@ -2,6 +2,7 @@
 <localizationDictionary culture="en">
   <texts>
     <text name="员工" value="Employee" />
+    <text name="普通工单" value="Ordinary work order" />
     <text name="BXJGWorkOrder" value="Work order" />
     <text name="BXJGWorkOrderManager" value="Work order manager" />
     <text name="BXJGWorkOrderCategory" value="Work order category" />
