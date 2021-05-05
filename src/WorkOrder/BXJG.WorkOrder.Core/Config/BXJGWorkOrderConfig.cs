@@ -12,9 +12,6 @@ namespace BXJG.WorkOrder
     /// </summary>
     public class BXJGWorkOrderConfig
     {
-        /// <summary>
-        /// 所有工单类型
-        /// </summary>
-        public IDictionary<string, ILocalizableString> WorkOrderTypes { get; set; } = new Dictionary<string, ILocalizableString>();
+    
     }
 }

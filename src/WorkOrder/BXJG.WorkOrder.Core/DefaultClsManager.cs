@@ -1,5 +1,6 @@
 ﻿using Abp.Domain.Repositories;
 using BXJG.WorkOrder.WorkOrderCategory;
+using BXJG.WorkOrder.WorkOrderType;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,12 +9,15 @@ using System.Threading.Tasks;
 
 namespace BXJG.WorkOrder
 {
+    /// <summary>
+    /// 根据类型获取默认工单类别
+    /// </summary>
     public class DefaultClsManager : DomainServiceBase
     {
         private readonly IRepository<CategoryEntity, long> clsRepository;
-        private readonly BXJGWorkOrderConfig config;
+        private readonly WorkOrderTypeManager config;
 
-        public DefaultClsManager(IRepository<CategoryEntity, long> clsRepository, BXJGWorkOrderConfig config)
+        public DefaultClsManager(IRepository<CategoryEntity, long> clsRepository, WorkOrderTypeManager config)
         {
             this.clsRepository = clsRepository;
             this.config = config;
@@ -21,8 +25,7 @@ namespace BXJG.WorkOrder
 
         public async Task<CategoryEntity> GetDefaultAsync(string workOrderType)
         {
-            if (!config.WorkOrderTypes.ContainsKey(workOrderType))
-                throw new ApplicationException("无效的工单类型");
+            config.Check(workOrderType);
 
             var query = clsRepository.GetAll()
                                      .Where(c => c.IsDefault)

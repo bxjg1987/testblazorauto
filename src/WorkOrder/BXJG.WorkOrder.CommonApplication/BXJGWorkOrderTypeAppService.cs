@@ -10,6 +10,8 @@ using Abp.Domain.Uow;
 using Abp.Authorization;
 using BXJG.Common.Dto;
 using BXJG.Utils.Localization;
+using BXJG.WorkOrder.WorkOrderType;
+
 namespace BXJG.WorkOrder
 {
     /// <summary>
@@ -18,11 +20,11 @@ namespace BXJG.WorkOrder
     [AbpAuthorize]
     public class BXJGWorkOrderTypeAppService : AppServiceBase
     {
-        BXJGWorkOrderConfig config;
+        WorkOrderTypeManager wotManager;
 
-        public BXJGWorkOrderTypeAppService(BXJGWorkOrderConfig config)
+        public BXJGWorkOrderTypeAppService(WorkOrderTypeManager config)
         {
-            this.config = config;
+            this.wotManager = config;
         }
         /// <summary>
         /// 获取所有工单类型
@@ -31,7 +33,7 @@ namespace BXJG.WorkOrder
         [UnitOfWork(IsDisabled = true)]
         public IEnumerable<ComboboxItemDto> GetAllAsync(GetForSelectInput input)
         {
-            var list = config.WorkOrderTypes.Select(c => new ComboboxItemDto(c.Key, c.Value.Localize(LocalizationManager))).ToList();
+            var list = wotManager.List.Select(c => new ComboboxItemDto(c.Name, c.DisplayName.Localize(LocalizationManager))).ToList();
             if (input.ForType > 0) {
                 if (!input.ParentText.IsNullOrWhiteSpace())
                 {

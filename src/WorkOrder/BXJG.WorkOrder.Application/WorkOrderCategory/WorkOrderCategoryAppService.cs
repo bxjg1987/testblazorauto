@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Abp.Localization;
+using BXJG.WorkOrder.WorkOrderType;
+
 namespace BXJG.WorkOrder.WorkOrderCategory
 {
     public class WorkOrderCategoryAppService : GeneralTreeAppServiceBase<WorkOrderCategroyDto,
@@ -22,10 +24,10 @@ namespace BXJG.WorkOrder.WorkOrderCategory
                                                                          CategoryManager>
     {
 
-        BXJGWorkOrderConfig bXJGWorkOrderConfig;
+        WorkOrderTypeManager bXJGWorkOrderConfig;
         public WorkOrderCategoryAppService(IRepository<CategoryEntity, long> ownRepository,
                                            CategoryManager organizationUnitManager,
-                                           BXJGWorkOrderConfig bXJGWorkOrderConfig,
+                                           WorkOrderTypeManager bXJGWorkOrderConfig,
                                            string allTextForManager = "全部",
                                            string allTextForSearch = "不限",
                                            string allTextForForm = "请选择") : base(ownRepository,
@@ -41,7 +43,7 @@ namespace BXJG.WorkOrder.WorkOrderCategory
             this.bXJGWorkOrderConfig = bXJGWorkOrderConfig;
             base.GetAllMap = (entity, dto) =>
             {
-                dto.WorkOrderTypeName = entity.WorkOrderType.IsNullOrWhiteSpace() ? default : bXJGWorkOrderConfig.WorkOrderTypes[entity.WorkOrderType].Localize(LocalizationManager);
+                dto.WorkOrderTypeName = entity.WorkOrderType.IsNullOrWhiteSpace() ? default : bXJGWorkOrderConfig[entity.WorkOrderType].DisplayName.Localize(LocalizationManager);
             };
         }
 
@@ -52,14 +54,14 @@ namespace BXJG.WorkOrder.WorkOrderCategory
 
         public override Task<WorkOrderCategroyDto> CreateAsync(WorkOrderCategoryEditInput input)
         {
-            if (!input.WorkOrderType.IsNullOrWhiteSpace() && !bXJGWorkOrderConfig.WorkOrderTypes.ContainsKey(input.WorkOrderType))
+            if (!input.WorkOrderType.IsNullOrWhiteSpace() && !bXJGWorkOrderConfig.ContainsKey(input.WorkOrderType))
                 throw new ApplicationException("不支持的工单类型");
             return base.CreateAsync(input);
         }
 
         public override Task<WorkOrderCategroyDto> UpdateAsync(WorkOrderCategoryEditInput input)
         {
-            if (!input.WorkOrderType.IsNullOrWhiteSpace() && !bXJGWorkOrderConfig.WorkOrderTypes.ContainsKey(input.WorkOrderType))
+            if (!input.WorkOrderType.IsNullOrWhiteSpace() && !bXJGWorkOrderConfig.ContainsKey(input.WorkOrderType))
                 throw new ApplicationException("不支持的工单类型");
             return base.UpdateAsync(input);
         }

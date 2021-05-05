@@ -12,7 +12,8 @@ using System.Collections.Generic;
 using System.Reflection;
 using BXJG.WorkOrder.WorkOrder;
 using Abp.Localization;
-
+using BXJG.WorkOrder.WorkOrderType;
+using Microsoft.Extensions.DependencyInjection;
 namespace BXJG.WorkOrder
 {
     [DependsOn(typeof(GeneralTreeModule))]
@@ -22,7 +23,7 @@ namespace BXJG.WorkOrder
         {
             LocalizationConfigurer.Configure(Configuration.Localization);
             IocManager.Register<BXJGWorkOrderConfig>();
-            Configuration.BXJGWorkOrder().WorkOrderTypes.Add("default", "普通工单".BXJGWorkOrderLI());
+          
             //Configuration.Settings.Providers.Add<AppSettingProvider>();
             //Configuration.Modules.BXJGUtils().AddEnum("bxjgShopOrderStatus", typeof(OrderStatus), BXJGUtilsConsts.LocalizationSourceName);
             //Configuration.DynamicEntityProperties.Providers.Add<ProductDynamicEntityPropertyDefinition>();
@@ -31,6 +32,20 @@ namespace BXJG.WorkOrder
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
+        }
+
+        public override void PostInitialize()
+        {
+            var workOrderTypeProviders = IocManager.ResolveAll<IWorkOrderTypeProvider>();
+            var ctx = new WorkOrderTypeProviderContext();
+            foreach (var item in workOrderTypeProviders)
+            {
+                item.Create(ctx);
+            }
+            var manager = new WorkOrderTypeManager(ctx.Defines);
+
+            IocManager.RegService(s => s.AddSingleton(manager));
+         
         }
     }
 }

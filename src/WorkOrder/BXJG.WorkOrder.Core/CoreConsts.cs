@@ -10,6 +10,11 @@ namespace BXJG.WorkOrder
     {
         public const string LocalizationSourceName = "BXJGWorkOrder";
 
+        /// <summary>
+        /// 普通工单类型名称
+        /// </summary>
+        public const string DefaultWorkOrderTypeName = "default";
+
         #region 实体
         public const int OrderTitleMaxLength = 500;
         public const int OrderDescriptionMaxLength = 5000;

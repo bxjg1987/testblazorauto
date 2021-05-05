@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Abp.Localization;
 using Abp.Authorization;
+using BXJG.WorkOrder.WorkOrderType;
+
 namespace BXJG.WorkOrder.WorkOrderCategory
 {
     [AbpAuthorize]
@@ -20,7 +22,7 @@ namespace BXJG.WorkOrder.WorkOrderCategory
     {
 
         public WorkOrderCategoryProviderAppService(IRepository<CategoryEntity, long> ownRepository,
-                                                   BXJGWorkOrderConfig bXJGWorkOrderConfig,
+                                                   WorkOrderTypeManager bXJGWorkOrderConfig,
                                                    string allTextForSearch = "不限",
                                                    string allTextForForm = "请选择") : base(ownRepository,
                                                                                             allTextForSearch,
@@ -28,11 +30,11 @@ namespace BXJG.WorkOrder.WorkOrderCategory
         {
             base.ComboboxMap = (entity, dto) =>
             {
-                dto.WorkOrderTypeName = entity.WorkOrderType.IsNullOrWhiteSpace() ? default : bXJGWorkOrderConfig.WorkOrderTypes[entity.WorkOrderType].Localize(LocalizationManager);
+                dto.WorkOrderTypeName = entity.WorkOrderType.IsNullOrWhiteSpace() ? default : bXJGWorkOrderConfig[entity.WorkOrderType].DisplayName.Localize(LocalizationManager);
             };
             base.ComboTreeMap = (entity, dto) =>
             {
-                dto.WorkOrderTypeName = entity.WorkOrderType.IsNullOrWhiteSpace()? default: bXJGWorkOrderConfig.WorkOrderTypes[entity.WorkOrderType].Localize(LocalizationManager);
+                dto.WorkOrderTypeName = entity.WorkOrderType.IsNullOrWhiteSpace()? default: bXJGWorkOrderConfig[entity.WorkOrderType].DisplayName.Localize(LocalizationManager);
             };
         }
         protected override IQueryable<CategoryEntity> ComboboxFilter(GetWorkOrderCategoryForSelectInput q, long? parentId)

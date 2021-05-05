@@ -81,7 +81,8 @@ namespace BXJG.WorkOrder.WorkOrder
         protected readonly TCategoryRepository categoryRepository;
         protected readonly TManager manager;
         protected readonly IEmployeeAppService employeeAppService;
-
+        protected readonly DefaultClsManager defaultClsManager;
+        protected readonly string workOrderType;
         #region 权限名称
         /// <summary>
         /// 工单管理-新增权限名称
@@ -135,6 +136,8 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="manager">工单领域服务</param>
         /// <param name="categoryRepository">工单类别仓储</param>
         /// <param name="employeeAppService">员工服务</param>
+        /// <param name="defaultClsManager">默认分类提供器</param>
+        /// <param name="workOrderType">工单类型</param>
         /// <param name="createPermissionName">新增权限名称</param>
         /// <param name="updatePermissionName">修改权限名称</param>
         /// <param name="deletePermissionName">删除权限名称</param>
@@ -149,6 +152,8 @@ namespace BXJG.WorkOrder.WorkOrder
                                        TManager manager,
                                        TCategoryRepository categoryRepository,
                                        IEmployeeAppService employeeAppService,
+                                       DefaultClsManager defaultClsManager, 
+                                       string workOrderType,
                                        string createPermissionName = default,
                                        string updatePermissionName = default,
                                        string deletePermissionName = default,
@@ -174,7 +179,8 @@ namespace BXJG.WorkOrder.WorkOrder
             this.deletePermissionName = deletePermissionName;
             this.confirmePermissionName = confirmePermissionName;
             this.toBeConfirmedPermissionName = toBeConfirmedPermissionName;
-
+            this.defaultClsManager = defaultClsManager;
+            this.workOrderType = workOrderType;
             //this.iocResolver = iocResolver;
         }
         #endregion
@@ -221,7 +227,7 @@ namespace BXJG.WorkOrder.WorkOrder
 
             if (!input.CategoryId.HasValue)
             {
-                entity.CategoryId = 1;
+                entity.CategoryId = (await defaultClsManager.GetDefaultAsync(workOrderType)).Id;
             }
             else
                 entity.CategoryId = input.CategoryId.Value;
@@ -694,11 +700,14 @@ namespace BXJG.WorkOrder.WorkOrder
 
         public WorkOrderAppService(IRepository<OrderEntity, long> repository,
                                    OrderManager manager,
+                                   DefaultClsManager defaultClsManager,
                                    IRepository<CategoryEntity, long> categoryRepository,
                                    IEmployeeAppService employeeAppService) : base(repository,
                                                                                   manager,
                                                                                   categoryRepository,
                                                                                   employeeAppService,
+                                                                                  defaultClsManager,
+                                                                                  CoreConsts.DefaultWorkOrderTypeName,
                                                                                   CoreConsts.WorkOrderCreate,
                                                                                   CoreConsts.WorkOrderUpdate,
                                                                                   CoreConsts.WorkOrderDelete,
