@@ -9,14 +9,17 @@ using System.Threading.Tasks;
 namespace BXJG.WorkOrder.WorkOrder
 {
     /// <summary>
-    /// 状态批量调整的输入模型
+    /// 后台管理批量调整工单状态的输入模型基类
     /// </summary>
-    public class WorkOrderBatchChangeStatusInputBase: BatchOperationInputLong
+    public class WorkOrderBatchChangeStatusInputBase : BatchOperationInputLong
     {
         /// <summary>
-        /// 调整状态的时间
+        /// 操作时间
         /// </summary>
         public DateTimeOffset? StatusChangedTime { get; set; }
+        /// <summary>
+        /// 目标状态
+        /// </summary>
         [Required]
         public Status Status { get; set; }
         /// <summary>

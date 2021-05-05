@@ -84,9 +84,29 @@ namespace BXJG.WorkOrder.WorkOrder
 
         #region 权限名称
         /// <summary>
+        /// 工单管理-新增权限名称
+        /// </summary>
+        protected readonly string createPermissionName;
+        /// <summary>
+        /// 工单管理-修改权限名称
+        /// </summary>
+        protected readonly string updatePermissionName;
+        /// <summary>
+        /// 工单管理-删除权限名称
+        /// </summary>
+        protected readonly string deletePermissionName;
+        /// <summary>
         /// 工单管理-获取权限名称
         /// </summary>
         protected readonly string getPermissionName;
+        /// <summary>
+        /// 工单管理-待确认权限名称
+        /// </summary>
+        protected readonly string toBeConfirmedPermissionName;
+        /// <summary>
+        /// 工单管理-确认权限名称
+        /// </summary>
+        protected readonly string confirmePermissionName;
         /// <summary>
         /// 工单管理-分配权限名称
         /// </summary>
@@ -103,26 +123,6 @@ namespace BXJG.WorkOrder.WorkOrder
         /// 工单管理-拒绝权限名称
         /// </summary>
         protected readonly string rejectPermissionName;
-        /// <summary>
-        /// 工单管理-新增权限名称
-        /// </summary>
-        protected readonly string createPermissionName;
-        /// <summary>
-        /// 工单管理-修改权限名称
-        /// </summary>
-        protected readonly string updatePermissionName;
-        /// <summary>
-        /// 工单管理-删除权限名称
-        /// </summary>
-        protected readonly string deletePermissionName;
-        /// <summary>
-        /// 工单管理-确认权限名称
-        /// </summary>
-        protected readonly string confirmePermissionName;
-        /// <summary>
-        /// 工单管理-待确认权限名称
-        /// </summary>
-        protected readonly string toBeConfirmedPermissionName;
         #endregion
 
         #endregion
@@ -164,7 +164,6 @@ namespace BXJG.WorkOrder.WorkOrder
             this.manager = manager;
             this.categoryRepository = categoryRepository;
             this.employeeAppService = employeeAppService;
-
             this.getPermissionName = getPermissionName;
             this.allocatePermissionName = allocatePermissionName;
             this.executePermissionName = executePermissionName;
@@ -189,7 +188,6 @@ namespace BXJG.WorkOrder.WorkOrder
         {
             await CheckCreatePermissionAsync();
             var entity = await manager.CreateAsync(await CreateInputToCreateDto(input));
-
             if (input.Status.HasValue && input.Status > entity.Status)
             {
                 await entity.Skip(Clock.Now,
@@ -221,7 +219,12 @@ namespace BXJG.WorkOrder.WorkOrder
 
             var entity = await repository.GetAsync(input.Id);
 
-            entity.CategoryId = input.CategoryId ?? 1;
+            if (!input.CategoryId.HasValue)
+            {
+                entity.CategoryId = 1;
+            }
+            else
+                entity.CategoryId = input.CategoryId.Value;
             entity.Description = input.Description;
             entity.Title = input.Title;
 
@@ -230,7 +233,7 @@ namespace BXJG.WorkOrder.WorkOrder
                 if (input.Status.Value > entity.Status)//skip
                 {
                     entity.EmployeeId = input.EmployeeId;
-                    entity.UrgencyDegree = input.UrgencyDegree ?? UrgencyDegree.Normalize;
+                    entity.UrgencyDegree = input.UrgencyDegree ?? OrderBaseEntity.DefaultUrgencyDegree;
                     entity.ChangeEstimatedTime(input.EstimatedExecutionTime, input.EstimatedCompletionTime);
                     await entity.Skip(input.StatusChangedTime ?? Clock.Now,
                                       input.Status,
@@ -248,29 +251,26 @@ namespace BXJG.WorkOrder.WorkOrder
                 }
                 else //backoff
                 {
-                    await entity.BackOff(input.StatusChangedTime ?? Clock.Now,
+                    await entity.BackOff(input.StatusChangedTime,
                                          input.Status,
                                          input.StatusChangedDescription,
                                          d => CheckToBeonfirmedPermissionAsync(),
                                          d => CheckConfirmePermissionAsync(),
                                          d => CheckAllocatePermissionAsync(),
                                          d => CheckExecutePermissionAsync());
-                    entity.UrgencyDegree = input.UrgencyDegree ?? UrgencyDegree.Normalize;
+                    entity.UrgencyDegree = input.UrgencyDegree ?? OrderBaseEntity.DefaultUrgencyDegree;
                     entity.EmployeeId = input.EmployeeId;
                     entity.ChangeEstimatedTime(input.EstimatedExecutionTime, input.EstimatedCompletionTime);
                 }
             }
             else
             {
-                if (entity.Status == input.Status)
-                {
-                    if (entity.StatusChangedDescription != input.StatusChangedDescription)
-                        throw new UserFriendlyException(L("状态无变化时不允许修改状态说明，请考虑回退后修改。"));
-                    if (entity.StatusChangedTime != input.StatusChangedTime)
-                        throw new UserFriendlyException(L("状态无变化时不允许修改状态时间，请考虑回退后修改。"));
-                }
+                //if ( entity.StatusChangedDescription != input.StatusChangedDescription)
+                //    throw new UserFriendlyException(L("状态无变化时不允许修改状态说明，请考虑回退后修改。"));
+                //if (entity.StatusChangedTime != input.StatusChangedTime)
+                //    throw new UserFriendlyException(L("状态无变化时不允许修改状态时间，请考虑回退后修改。"));
 
-                entity.UrgencyDegree = input.UrgencyDegree ?? UrgencyDegree.Normalize;
+                entity.UrgencyDegree = input.UrgencyDegree ?? OrderBaseEntity.DefaultUrgencyDegree;
                 entity.EmployeeId = input.EmployeeId;
                 entity.ChangeEstimatedTime(input.EstimatedExecutionTime, input.EstimatedCompletionTime);
             }
@@ -493,99 +493,6 @@ namespace BXJG.WorkOrder.WorkOrder
             }
             return r;
         }
-        ///// <summary>
-        ///// 批量执行工单
-        ///// </summary>
-        ///// <param name="input"></param>
-        ///// <returns></returns>
-        //public virtual async Task<TBatchChangeStatusOutput> ExecuteAsync(TBatchChangeStatusInput input)
-        //{
-        //    await CheckExecutePermissionAsync();
-        //    var query = repository.GetAll().Where(c => input.Ids.Contains(c.Id));
-        //    var list = await AsyncQueryableExecuter.ToListAsync(query);
-        //    var r = new TBatchChangeStatusOutput();
-        //    foreach (var item in list)
-        //    {
-        //        try
-        //        {
-        //            item.Execute(Clock.Now);
-        //            await CurrentUnitOfWork.SaveChangesAsync();
-        //            r.Ids.Add(item.Id);
-        //        }
-        //        catch (UserFriendlyException ex)
-        //        {
-        //            r.ErrorMessage.Add(new BatchOperationErrorMessage(item.Id, ex.Message));
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            r.ErrorMessage.Add(item.Id.Message500());
-        //            Logger.Warn(L("执行工单失败！"), ex);
-        //        }
-        //    }
-        //    return r;
-        //}
-        ///// <summary>
-        ///// 批量完成工单
-        ///// </summary>
-        ///// <param name="input"></param>
-        ///// <returns></returns>
-        //public virtual async Task<TBatchChangeStatusOutput> CompletionAsync(TBatchChangeStatusInput input)
-        //{
-        //    await CheckCompletionPermissionAsync();
-        //    var query = repository.GetAll().Where(c => input.Ids.Contains(c.Id));
-        //    var list = await AsyncQueryableExecuter.ToListAsync(query);
-        //    var r = new TBatchChangeStatusOutput();
-        //    foreach (var item in list)
-        //    {
-        //        try
-        //        {
-        //            item.Completion(Clock.Now, input.Description);
-        //            await CurrentUnitOfWork.SaveChangesAsync();
-        //            r.Ids.Add(item.Id);
-        //        }
-        //        catch (UserFriendlyException ex)
-        //        {
-        //            r.ErrorMessage.Add(new BatchOperationErrorMessage(item.Id, ex.Message));
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            r.ErrorMessage.Add(item.Id.Message500());
-        //            Logger.Warn(L("完成工单失败！"), ex);
-        //        }
-        //    }
-        //    return r;
-        //}
-        ///// <summary>
-        ///// 批量拒绝工单
-        ///// </summary>
-        ///// <param name="input">包含id集合和拒绝原因</param>
-        ///// <returns></returns>
-        //public virtual async Task<TBatchChangeStatusOutput> RejectAsync(TBatchChangeStatusInput input)
-        //{
-        //    await CheckRejectPermissionAsync();
-        //    var query = repository.GetAll().Where(c => input.Ids.Contains(c.Id));
-        //    var list = await AsyncQueryableExecuter.ToListAsync(query);
-        //    var r = new TBatchChangeStatusOutput();
-        //    foreach (var item in list)
-        //    {
-        //        try
-        //        {
-        //            item.Reject(Clock.Now, input.Description);
-        //            await CurrentUnitOfWork.SaveChangesAsync();
-        //            r.Ids.Add(item.Id);
-        //        }
-        //        catch (UserFriendlyException ex)
-        //        {
-        //            r.ErrorMessage.Add(new BatchOperationErrorMessage(item.Id, ex.Message));
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            r.ErrorMessage.Add(item.Id.Message500());
-        //            Logger.Warn(L("拒绝工单失败！"), ex);
-        //        }
-        //    }
-        //    return r;
-        //}
         /// <summary>
         /// GetAll的分页
         /// </summary>
@@ -671,7 +578,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        protected virtual async ValueTask<TCreateDto> CreateInputToCreateDto(TCreateInput input)
+        protected virtual ValueTask<TCreateDto> CreateInputToCreateDto(TCreateInput input)
         {
             var dto = new TCreateDto
             {
@@ -684,14 +591,19 @@ namespace BXJG.WorkOrder.WorkOrder
                 UrgencyDegree = input.UrgencyDegree
                 //Time = Clock.Now
             };
-            //if (input.UrgencyDegree.HasValue)
-            //    dto.UrgencyDegree = input.UrgencyDegree.Value;
-            return dto;
+            if (!input.UrgencyDegree.HasValue)
+                dto.UrgencyDegree = OrderBaseEntity.DefaultUrgencyDegree;
+            return ValueTask.FromResult(dto);
         }
-
-        protected virtual async ValueTask BeforeCreateAsync(TEntity entity, TCreateInput input)
+        /// <summary>
+        /// 新增前回调
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        protected virtual ValueTask BeforeCreateAsync(TEntity entity, TCreateInput input)
         {
-
+            return ValueTask.CompletedTask;
         }
         /// <summary>
         /// 新增或更新到数据库前执行此方法<br />
@@ -700,18 +612,18 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="entity"></param>
         /// <param name="input"></param>
         /// <returns></returns>
-        protected virtual async ValueTask BeforeEditAsync(TEntity entity, TUpdateInput input)
+        protected virtual ValueTask BeforeEditAsync(TEntity entity, TUpdateInput input)
         {
-
+            return ValueTask.CompletedTask;
         }
         /// <summary>
         /// 子类可能需要聚合更多外键
         /// </summary>
-        /// <param name="entity"></param>
+        /// <param name="entities"></param>
         /// <returns></returns>
-        protected virtual async ValueTask<object> GetStateAsync(IEnumerable<TEntity> entities)
+        protected virtual ValueTask<object> GetStateAsync(IEnumerable<TEntity> entities)
         {
-            return null;
+            return ValueTask.FromResult<object>(null);
         }
 
         #region 权限判断
@@ -840,22 +752,6 @@ namespace BXJG.WorkOrder.WorkOrder
                     entity.SetData(item.Key, item.Value);
                 }
             }
-        }
-
-        protected async override Task<IQueryable<OrderEntity>> GetAllFilterAsync(GetAllWorkOrderInput input)
-        {
-            var query = await base.GetAllFilterAsync(input);
-
-            //var count = await query.CountAsync();
-            //if (count < 10000)
-            //{
-            //    //小量数据采取做外键关联
-            //    //不固定是title排序
-            //    var idsAndSorts = await query.Select(c => new { c.Id, sort = c.Title, sdf = c.DynamicAssociateData.ToDynamicAssociateData() }).ToListAsync();
-            //}
-            //需要在GetAllFilterAsync 分页、排序、entityToDto之间传递一个上下文对象
-
-            return query;
         }
     }
 }

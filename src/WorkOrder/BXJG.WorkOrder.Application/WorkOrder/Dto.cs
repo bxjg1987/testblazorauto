@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 namespace BXJG.WorkOrder.WorkOrder
 {
     /// <summary>
-    /// 工单后台管理列表页使用的显示模型<br />
-    /// 不同工单类型有相应子类
+    /// 后台管理工单列表页使用的显示模型基类
     /// </summary>
     public class WorkOrderDtoBase : FullAuditedEntityDto<long>
     {
@@ -25,14 +24,6 @@ namespace BXJG.WorkOrder.WorkOrder
         /// 状态
         /// </summary>
         public Status Status { get; set; }
-        ///// <summary>
-        ///// 状态颜色
-        ///// </summary>
-        //public string StatusColor => Status.GetColor();
-        ///// <summary>
-        ///// 紧急程度颜色
-        ///// </summary>
-        //public string UrgencyDegreeColor => UrgencyDegree.GetColor();
         /// <summary>
         /// 状态名称
         /// </summary>
@@ -98,7 +89,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <summary>
         /// 扩展字段
         /// </summary>
-        public dynamic ExtensionData { get; set; }
+        public IDictionary<string, object> ExtensionData { get; set; }
         /// <summary>
         /// 预留字段1
         /// </summary>

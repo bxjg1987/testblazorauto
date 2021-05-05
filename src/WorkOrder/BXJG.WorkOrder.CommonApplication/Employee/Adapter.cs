@@ -10,6 +10,11 @@ using System.Threading.Tasks;
 
 namespace BXJG.WorkOrder.Employee
 {
+    /// <summary>
+    /// 使用abp默认的用户作为员工的服务。在你的模块中调用<see cref="BXJGWorkOrderCommonExt.RegisterBXJGWorkOrderDefaultAdapter{TUser}(Abp.Dependency.IIocManager)"/>来使用这个默认实现
+    /// 也可以注册自己的实现
+    /// </summary>
+    /// <typeparam name="TUser"></typeparam>
     public class EmployeeAppService<TUser> : IEmployeeAppService where TUser : AbpUser<TUser>
     {
         private readonly IRepository<TUser, long> userRepository;

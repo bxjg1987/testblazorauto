@@ -30,9 +30,9 @@ namespace BXJG.WorkOrder
         public static MenuItemDefinition AddBXJGWorkOrderRootNav(this IHasMenuItemDefinitions parent)
         {
             var item = new MenuItemDefinition(CoreConsts.WorkOrder,
-                                          CoreConsts.WorkOrderManager.BXJGWorkOrderLI(),
-                                          icon: "BXJGShopOrder",
-                                          permissionDependency: new SimplePermissionDependency(CoreConsts.WorkOrder));
+                                              CoreConsts.WorkOrderManager.BXJGWorkOrderLI(),
+                                              icon: "BXJGShopOrder",
+                                              permissionDependency: new SimplePermissionDependency(CoreConsts.WorkOrder));
 
             parent.Items.Add(item);
             return item;
@@ -45,11 +45,10 @@ namespace BXJG.WorkOrder
         public static MenuItemDefinition AddBXJGWorkOrderCategoryNav(this IHasMenuItemDefinitions parent)
         {
             var item = new MenuItemDefinition(CoreConsts.WorkOrderCategoryManager,
-                                                CoreConsts.WorkOrderCategoryManager.BXJGWorkOrderLI(),
-                                                icon: "BXJGShopProductCategory",
-                                                //url: $"/{CoreConsts.WorkOrder}/{CoreConsts.WorkOrderCategoryManager.RemovePreFix(CoreConsts.WorkOrder).RemovePostFix("Manager")}/index.html",
-                                                url: $"/{CoreConsts.WorkOrder}/WorkOrderCategory/index.html",
-                                                permissionDependency: new SimplePermissionDependency(CoreConsts.WorkOrderCategoryManager));
+                                              CoreConsts.WorkOrderCategoryManager.BXJGWorkOrderLI(),
+                                              icon: CoreConsts.WorkOrderCategoryManager,
+                                              url: $"/{CoreConsts.WorkOrder}/WorkOrderCategory/index.html",
+                                              permissionDependency: new SimplePermissionDependency(CoreConsts.WorkOrderCategoryManager));
             parent.Items.Add(item);
             return item;
         }
@@ -61,11 +60,10 @@ namespace BXJG.WorkOrder
         public static MenuItemDefinition AddBXJGWorkOrderDefaultNav(this IHasMenuItemDefinitions parent)
         {
             var item = new MenuItemDefinition(CoreConsts.WorkOrderManager,
-                                          CoreConsts.WorkOrderManager.BXJGWorkOrderLI(),
-                                          icon: "BXJGShopOrder",
-                                          url: $"/{CoreConsts.WorkOrder}/WorkOrder/index.html",
-                                          permissionDependency: new SimplePermissionDependency(CoreConsts.WorkOrderManager));
-
+                                              CoreConsts.WorkOrderManager.BXJGWorkOrderLI(),
+                                              icon: "BXJGShopOrder",
+                                              url: $"/{CoreConsts.WorkOrder}/WorkOrder/index.html",
+                                              permissionDependency: new SimplePermissionDependency(CoreConsts.WorkOrderManager));
             parent.Items.Add(item);
             return item;
         }

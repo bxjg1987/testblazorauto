@@ -2,6 +2,7 @@ using Abp.Domain.Repositories;
 using Abp.Domain.Services;
 using Abp.Timing;
 using Abp.UI;
+using BXJG.WorkOrder.WorkOrderCategory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,17 +25,17 @@ namespace BXJG.WorkOrder.WorkOrder
 
     public class WorkOrderCreateDto : WorkOrderCreateDtoBase
     {
-        public string EntityType { get; set; }
-        public string EntityId { get; set; }
         public string ExtendedField1 { get; set; }
         public string ExtendedField2 { get; set; }
         public string ExtendedField3 { get; set; }
         public string ExtendedField4 { get; set; }
         public string ExtendedField5 { get; set; }
     }
+
     public abstract class OrderBaseManager<TEntity> : DomainServiceBase where TEntity : OrderBaseEntity
     {
         protected readonly IRepository<TEntity, long> repository;
+   
 
         protected OrderBaseManager(IRepository<TEntity, long> repository)
         {
@@ -47,11 +48,15 @@ namespace BXJG.WorkOrder.WorkOrder
         {
             //其它逻辑，暂时忽略
             if (!dto.CategoryId.HasValue)
+            {
                 dto.CategoryId = 1;
+            }
+            else
+                dto.CategoryId = dto.CategoryId;
             if (!dto.Time.HasValue)
                 dto.Time = Clock.Now;
             if (!dto.UrgencyDegree.HasValue)
-                dto.UrgencyDegree = UrgencyDegree.Normalize;
+                dto.UrgencyDegree = OrderBaseEntity.DefaultUrgencyDegree;
             var entity = Create(dto);
             await repository.InsertAsync(entity);
             await CurrentUnitOfWork.SaveChangesAsync();//保存以更新id为自增id
@@ -86,8 +91,6 @@ namespace BXJG.WorkOrder.WorkOrder
                                    dto.EmployeeId,
                                    dto.EstimatedExecutionTime,
                                    dto.EstimatedCompletionTime,
-                                   dto.EntityType,
-                                   dto.EntityId,
                                    dto.ExtendedField1,
                                    dto.ExtendedField2,
                                    dto.ExtendedField3,

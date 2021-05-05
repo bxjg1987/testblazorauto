@@ -79,7 +79,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <summary>
         /// 扩展字段
         /// </summary>
-        public Dictionary<string, object> ExtensionData { get; set; }
+        public IDictionary<string, object> ExtensionData { get; set; }
         /// <summary>
         /// 预留字段1
         /// </summary>

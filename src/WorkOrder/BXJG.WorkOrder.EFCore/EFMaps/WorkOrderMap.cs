@@ -31,8 +31,7 @@ namespace BXJG.WorkOrder.EFMaps
         public override void Configure(EntityTypeBuilder<OrderEntity> builder)
         {
             base.Configure(builder);
-            builder.Property(c => c.EntityType).HasColumnType($"varchar({CoreConsts.OrderEntityTypeMaxLength})");
-            builder.Property(c => c.EntityId).HasColumnType($"varchar({CoreConsts.OrderEntityIdMaxLength})");
+
         }
     }
 }

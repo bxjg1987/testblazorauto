@@ -7,9 +7,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BXJG.Utils;
+using Abp.Domain.Uow;
+using Abp.Authorization;
 
 namespace BXJG.WorkOrder.Employee
 {
+    [AbpAuthorize]
+    [UnitOfWork(false)]
     public class EmployeeAppService : AppServiceBase
     {
         private readonly IEmployeeAppService employeeAppService;
@@ -23,7 +28,7 @@ namespace BXJG.WorkOrder.Employee
         {
             var list = (await employeeAppService.GetAllAsync(input.Keyword)).ToList();
 
-            if (input.ForType == 0)
+            if (input.ForType <= 0)
                 return list;
 
             if (!input.ParentText.IsNullOrWhiteSpace())
@@ -31,18 +36,18 @@ namespace BXJG.WorkOrder.Employee
                 list.Insert(0, new EmployeeDto { Name = L(input.ParentText) });
                 return list;
             }
-
-            if (input.ForType == 1)
+            if (input.ForType >= 2)
             {
                 list.Insert(0, new EmployeeDto { Name = "==" + L("员工") + "== " });
                 return list;
             }
-
-            if (input.ForType == 2)
+           
+            if (input.ForType >= 4)
             {
-                list.Insert(0, new EmployeeDto { Name = "==" + base.LocalizationManager.BXJGUtilsL("请选择") + "== " });
+                list.Insert(0, new EmployeeDto { Name = "==请选择==".UtilsL() });
                 return list;
             }
+
             throw new ApplicationException();
         }
     }

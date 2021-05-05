@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 namespace BXJG.WorkOrder.WorkOrder
 {
     [AbpAuthorize]
+    [UnitOfWork(IsDisabled = true)]
     public class WorkOrderCommonAppService : AppServiceBase
     {
         /// <summary>
@@ -19,7 +20,6 @@ namespace BXJG.WorkOrder.WorkOrder
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        [UnitOfWork(IsDisabled = true)]
         public List<ComboboxItemDto> GetAllStatus(GetForSelectInput input)
         {
             return new EnumManager(LocalizationSource).ConvertToComboboxData<Status>(input);
@@ -29,7 +29,6 @@ namespace BXJG.WorkOrder.WorkOrder
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        [UnitOfWork(IsDisabled = true)]
         public List<ComboboxItemDto> GetAllUrgencyDegree(GetForSelectInput input)
         {
             return new EnumManager(LocalizationSource).ConvertToComboboxData<UrgencyDegree>(input);

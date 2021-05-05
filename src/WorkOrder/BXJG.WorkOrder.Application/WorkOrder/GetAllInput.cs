@@ -63,7 +63,6 @@ namespace BXJG.WorkOrder.WorkOrder
         /// 实际完成实际-结束
         /// </summary>
         public DateTimeOffset? CompletionTimeEnd { get; set; }
-        //public string EmployeeId { get; set; }
         /// <summary>
         /// 关键字，模糊匹配处理人名称、电话、工单标题等
         /// </summary>
