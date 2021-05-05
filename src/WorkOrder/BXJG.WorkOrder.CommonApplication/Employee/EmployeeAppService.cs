@@ -36,13 +36,13 @@ namespace BXJG.WorkOrder.Employee
                 list.Insert(0, new EmployeeDto { Name = L(input.ParentText) });
                 return list;
             }
-            if (input.ForType >= 2)
+            if (input.ForType <= 2)
             {
                 list.Insert(0, new EmployeeDto { Name = "==" + L("员工") + "== " });
                 return list;
             }
            
-            if (input.ForType >= 4)
+            if (input.ForType <= 4)
             {
                 list.Insert(0, new EmployeeDto { Name = "==请选择==".UtilsL() });
                 return list;

@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Abp.Localization;
 using BXJG.WorkOrder.WorkOrderType;
+using Microsoft.EntityFrameworkCore;
 
 namespace BXJG.WorkOrder.WorkOrderCategory
 {
@@ -52,18 +53,35 @@ namespace BXJG.WorkOrder.WorkOrderCategory
             return base.GetAllFiltered(q, parentCode).WhereIf(!q.WorkOrderType.IsNullOrWhiteSpace(), c => c.WorkOrderType == q.WorkOrderType || (q.ContainsNullWorkOrderType && c.WorkOrderType.IsNullOrWhiteSpace()));
         }
 
-        public override Task<WorkOrderCategroyDto> CreateAsync(WorkOrderCategoryEditInput input)
+        public override async Task<WorkOrderCategroyDto> CreateAsync(WorkOrderCategoryEditInput input)
         {
             if (!input.WorkOrderType.IsNullOrWhiteSpace() && !bXJGWorkOrderConfig.ContainsKey(input.WorkOrderType))
                 throw new ApplicationException("不支持的工单类型");
-            return base.CreateAsync(input);
+            await HandDefault(input.WorkOrderType, input.IsDefault);
+            return await base.CreateAsync(input);
         }
 
-        public override Task<WorkOrderCategroyDto> UpdateAsync(WorkOrderCategoryEditInput input)
+        public override async Task<WorkOrderCategroyDto> UpdateAsync(WorkOrderCategoryEditInput input)
         {
             if (!input.WorkOrderType.IsNullOrWhiteSpace() && !bXJGWorkOrderConfig.ContainsKey(input.WorkOrderType))
                 throw new ApplicationException("不支持的工单类型");
-            return base.UpdateAsync(input);
+            await HandDefault(input.WorkOrderType, input.IsDefault);
+            return await base.UpdateAsync(input);
+        }
+        //这里体现出来做默认类别还是用settings科学点，暂时这么招吧
+        async Task HandDefault(string workOrderType, bool isDefault)
+        {
+            if (!isDefault)
+                return;
+
+
+            var list = await ownRepository.GetAll().Where(c => c.WorkOrderType == workOrderType).ToListAsync();
+
+            foreach (var item in list)
+            {
+                item.IsDefault = false;
+            }
+            //var query = this.ownRepository.GetAll().Where(c=>string.IsNullOrWhiteSpace( workOrderType)|| c.WorkOrderType )
         }
     }
 }
