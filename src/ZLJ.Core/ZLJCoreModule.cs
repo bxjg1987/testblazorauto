@@ -19,7 +19,7 @@ using ZLJ.Configuration;
 using ZLJ.Localization;
 using ZLJ.MultiTenancy;
 using ZLJ.Timing;
-//using ZLJ.WorkOrder;
+using BXJG.WorkOrder;
 
 namespace ZLJ
 {
@@ -31,6 +31,7 @@ namespace ZLJ
         typeof(BXJGAttachmentModule),
         typeof(BXJEquipmentCoreModule),
         typeof(BXJGBaseInfoCoreModule),
+        typeof(BXJG.WorkOrder.CoreModule),
         typeof(BXJGWeChatModule)/*, 
         typeof(DynamicAssociateEntityModule)*/)]
     public class ZLJCoreModule : AbpModule
@@ -60,6 +61,8 @@ namespace ZLJ
 
             Configuration.DynamicEntityProperties.Providers.Add<ZLJDynamicEntityPropertyDefinition>();
             //Configuration.Modules.DynamicAssociateEntity().DynamicAssociateEntityDefineGroupProvider
+            //Configuration.Modules.BXJGWorkOrder().EnableDefaultWorkOrder = false;
+           // BXJG.WorkOrder.BXJGWorkOrderCoreExtensions
         }
 
         public override void Initialize()

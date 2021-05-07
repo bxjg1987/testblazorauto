@@ -36,10 +36,15 @@ namespace BXJG.WorkOrder
 
         public override void PostInitialize()
         {
+            var cfg = IocManager.Resolve<BXJGWorkOrderConfig>();
             var workOrderTypeProviders = IocManager.ResolveAll<IWorkOrderTypeProvider>();
             var ctx = new WorkOrderTypeProviderContext();
             foreach (var item in workOrderTypeProviders)
             {
+                //若没有开启普通工单功能
+                if (!cfg.EnableDefaultWorkOrder && item is WorkOrderTypeProvider)
+                    continue;
+
                 item.Create(ctx);
             }
             var manager = new WorkOrderTypeManager(ctx.Defines);

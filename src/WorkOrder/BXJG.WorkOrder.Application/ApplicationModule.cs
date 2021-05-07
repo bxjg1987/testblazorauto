@@ -5,15 +5,21 @@ using BXJG.Utils;
 using BXJG.WorkOrder.WorkOrder;
 using System;
 using System.Reflection;
+using Abp.Configuration.Startup;
+using Abp.Domain.Repositories;
+using BXJG.WorkOrder.WorkOrderCategory;
+using BXJG.WorkOrder.Employee;
+using System.Threading.Tasks;
+using Abp.Application.Services.Dto;
 
 namespace BXJG.WorkOrder
 {
     [DependsOn(typeof(BXJGCommonApplicationModule))]
     public class ApplicationModule : AbpModule
     {
-        //IConfiguration configuration;
+        //BXJGWorkOrderConfig configuration;
 
-        //public ApplicationModule(IConfiguration configuration)
+        //public ApplicationModule(BXJGWorkOrderConfig configuration)
         //{
         //    this.configuration = configuration;
         //}
@@ -30,9 +36,13 @@ namespace BXJG.WorkOrder
             Configuration.Modules.AbpAutoMapper().Configurators.Add(cfg => cfg.AddMaps(Assembly.GetExecutingAssembly()));
 
         }
+      
         public override void Initialize()
         {
+           
             IocManager.RegisterAssemblyByConvention(typeof(ApplicationModule).GetAssembly());
+           
+            //IocManager.IocContainer
             //因为要生成动态webapi，所以这样注册不行，不过在主程序中去试试应该可以
             //IocManager.Register( typeof(IBXJGShopItemAppService), typeof(BXJGShopItemAppService<,,,,,>), DependencyLifeStyle.Transient);
             //IocManager.Register( typeof(IBXJGShopFrontItemAppService), typeof(BXJGShopFrontItemAppService<>), DependencyLifeStyle.Transient);

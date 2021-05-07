@@ -25,16 +25,11 @@ namespace BXJG.WorkOrder
 
         public async Task<CategoryEntity> GetDefaultAsync(string workOrderType)
         {
-            config.Check(workOrderType);
-
             var query = clsRepository.GetAll()
                                      .Where(c => c.IsDefault)
-                                     .Where(c => c.WorkOrderType == workOrderType || string.IsNullOrWhiteSpace(c.WorkOrderType));
-
+                                     .Where(c => c.WorkOrderType == workOrderType);
             var list = await AsyncQueryableExecuter.ToListAsync(query);
-            if (list.Count > 1)
-                return list.Single(c => c.WorkOrderType != null);
-            return list[0];
+            return list.Single();
         }
     }
 }

@@ -12,28 +12,31 @@ namespace BXJG.WorkOrder
     {
         /// <summary>
         /// 注册工单模块管理端权限
+        /// 注意：若<see cref="BXJGWorkOrderConfig.EnableDefaultWorkOrder"/>为false时，不应该调用此方法
         /// </summary>
         /// <param name="context"></param>
         public static Permission AddBXJGWorkOrderAllPermission(this Permission context)
         {
-            var workOrder = context.AddBXJGWorkOrderPermission();
+            var workOrder = context.AddBXJGWorkOrderRootPermission();
             workOrder.AddBXJGWorkOrderCategoryPermission();
             workOrder.AddBXJGDefaultWorkOrderPermission();
             workOrder.AddBXJGEmployeeWorkOrderPermission();
             return workOrder;
         }
+       
         /// <summary>
         /// 注册工单模块管理端根权限
         /// </summary>
         /// <param name="context"></param>
-        public static Permission AddBXJGWorkOrderPermission(this Permission context)
+        public static Permission AddBXJGWorkOrderRootPermission(this Permission context)
         {
             return context.CreateChildPermission(CoreConsts.WorkOrder, CoreConsts.WorkOrderManager.BXJGWorkOrderLI(), multiTenancySides: MultiTenancySides.Tenant);
         }
+        
         /// <summary>
         /// 注册工单模块管理端工单分类权限
         /// </summary>
-        /// <param name="context"></param>
+        /// <param name="root"></param>
         public static Permission AddBXJGWorkOrderCategoryPermission(this Permission root)
         {
             var category = root.CreateChildPermission(CoreConsts.WorkOrderCategoryManager, CoreConsts.WorkOrderCategoryManager.BXJGWorkOrderLI(), multiTenancySides: MultiTenancySides.Tenant);
@@ -42,10 +45,12 @@ namespace BXJG.WorkOrder
             category.CreateChildPermission(CoreConsts.WorkOrderCategoryDelete, "删除".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
             return category;
         }
+        
         /// <summary>
         /// 注册工单模块管理端默认工单权限
+        /// 注意：若<see cref="BXJGWorkOrderConfig.EnableDefaultWorkOrder"/>为false时，不应该调用此方法
         /// </summary>
-        /// <param name="context"></param>
+        /// <param name="root"></param>
         public static Permission AddBXJGDefaultWorkOrderPermission(this Permission root)
         {
             var item = root.CreateChildPermission(CoreConsts.WorkOrderManager, CoreConsts.WorkOrderManager.BXJGWorkOrderLI(), multiTenancySides: MultiTenancySides.Tenant);
@@ -60,8 +65,9 @@ namespace BXJG.WorkOrder
             item.CreateChildPermission(CoreConsts.WorkOrderReject, "拒绝".BXJGWorkOrderLI(), multiTenancySides: MultiTenancySides.Tenant);
             return item;
         }
+        
         /// <summary>
-        /// 注册工单模块员工端默认工单权限
+        /// 注册工单模块员工端普通工单权限
         /// </summary>
         /// <param name="context"></param>
         public static Permission AddBXJGEmployeeWorkOrderPermission(this Permission context)
@@ -70,33 +76,36 @@ namespace BXJG.WorkOrder
         }
 
         /// <summary>
-        /// 注册工单模块管理端权限
+        /// 注册工单模块管理端所有权限，包括工单管理根、工单分类管理、普通工单管理的权限
+        /// 注意：若<see cref="BXJGWorkOrderConfig.EnableDefaultWorkOrder"/>为false时，不应该调用此方法
         /// </summary>
         /// <param name="context"></param>
         public static Permission AddBXJGWorkOrderAllPermission(this IPermissionDefinitionContext context)
         {
-            var workOrder = context.AddBXJGWorkOrderPermission();
+            var workOrder = context.AddBXJGWorkOrderRootPermission();
             workOrder.AddBXJGWorkOrderCategoryPermission();
             workOrder.AddBXJGDefaultWorkOrderPermission();
             workOrder.AddBXJGEmployeeWorkOrderPermission();
             return workOrder;
         }
+
         /// <summary>
         /// 注册工单模块管理端根权限
         /// </summary>
         /// <param name="context"></param>
-        public static Permission AddBXJGWorkOrderPermission(this IPermissionDefinitionContext context)
+        public static Permission AddBXJGWorkOrderRootPermission(this IPermissionDefinitionContext context)
         {
             return context.CreatePermission(CoreConsts.WorkOrder, CoreConsts.WorkOrderManager.BXJGWorkOrderLI(), multiTenancySides: MultiTenancySides.Tenant);
         }
+        
         /// <summary>
         /// 获取工单模块配置对象
         /// </summary>
         /// <param name="config"></param>
         /// <returns></returns>
-        public static BXJGWorkOrderConfig BXJGWorkOrder(this IAbpStartupConfiguration config)
+        public static BXJGWorkOrderConfig BXJGWorkOrder(this IModuleConfigurations config)
         {
-            return config.IocManager.Resolve<BXJGWorkOrderConfig>();
+            return config.AbpConfiguration.IocManager.Resolve<BXJGWorkOrderConfig>();
         }
 
         //public static IAbpStartupConfiguration AddBXJGWorkOrderType(this IAbpStartupConfiguration config,) 

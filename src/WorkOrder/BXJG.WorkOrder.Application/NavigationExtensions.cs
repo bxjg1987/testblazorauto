@@ -12,6 +12,7 @@ namespace BXJG.WorkOrder
     {
         /// <summary>
         /// 注册工单模块后台管理端的菜单
+        /// 注意：若<see cref="BXJGWorkOrderConfig.EnableDefaultWorkOrder"/>为false时，不应该调用此方法
         /// </summary>
         /// <param name="parent"></param>
         /// <returns></returns>
@@ -31,7 +32,7 @@ namespace BXJG.WorkOrder
         {
             var item = new MenuItemDefinition(CoreConsts.WorkOrder,
                                               CoreConsts.WorkOrderManager.BXJGWorkOrderLI(),
-                                              icon: "BXJGShopOrder",
+                                              icon: CoreConsts.WorkOrderManager,
                                               permissionDependency: new SimplePermissionDependency(CoreConsts.WorkOrder));
 
             parent.Items.Add(item);
@@ -53,7 +54,8 @@ namespace BXJG.WorkOrder
             return item;
         }
         /// <summary>
-        /// 注册工单模块后台管理端的默认工单管理菜单
+        /// 注册工单模块后台管理端的普通工单管理菜单
+        /// 注意：若<see cref="BXJGWorkOrderConfig.EnableDefaultWorkOrder"/>为false时，不应该调用此方法
         /// </summary>
         /// <param name="parent"></param>
         /// <returns></returns>
@@ -61,7 +63,7 @@ namespace BXJG.WorkOrder
         {
             var item = new MenuItemDefinition(CoreConsts.WorkOrderManager,
                                               CoreConsts.WorkOrderManager.BXJGWorkOrderLI(),
-                                              icon: "BXJGShopOrder",
+                                              icon: CoreConsts.WorkOrderManager,
                                               url: $"/{CoreConsts.WorkOrder}/WorkOrder/index.html",
                                               permissionDependency: new SimplePermissionDependency(CoreConsts.WorkOrderManager));
             parent.Items.Add(item);

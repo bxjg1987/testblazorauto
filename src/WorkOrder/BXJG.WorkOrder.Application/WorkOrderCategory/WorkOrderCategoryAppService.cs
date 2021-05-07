@@ -24,24 +24,17 @@ namespace BXJG.WorkOrder.WorkOrderCategory
                                                                          CategoryEntity,
                                                                          CategoryManager>
     {
-
-        WorkOrderTypeManager bXJGWorkOrderConfig;
+        private readonly WorkOrderTypeManager workOrderTypeManager;
         public WorkOrderCategoryAppService(IRepository<CategoryEntity, long> ownRepository,
                                            CategoryManager organizationUnitManager,
-                                           WorkOrderTypeManager bXJGWorkOrderConfig,
-                                           string allTextForManager = "全部",
-                                           string allTextForSearch = "不限",
-                                           string allTextForForm = "请选择") : base(ownRepository,
-                                                                                    organizationUnitManager,
-                                                                                    CoreConsts.WorkOrderCategoryCreate,
-                                                                                    CoreConsts.WorkOrderCategoryUpdate,
-                                                                                    CoreConsts.WorkOrderCategoryDelete,
-                                                                                    CoreConsts.WorkOrderCategoryManager,
-                                                                                    allTextForManager,
-                                                                                    allTextForSearch,
-                                                                                    allTextForForm)
+                                           WorkOrderTypeManager bXJGWorkOrderConfig) : base(ownRepository,
+                                                                                            organizationUnitManager,
+                                                                                            CoreConsts.WorkOrderCategoryCreate,
+                                                                                            CoreConsts.WorkOrderCategoryUpdate,
+                                                                                            CoreConsts.WorkOrderCategoryDelete,
+                                                                                            CoreConsts.WorkOrderCategoryManager)
         {
-            this.bXJGWorkOrderConfig = bXJGWorkOrderConfig;
+            this.workOrderTypeManager = bXJGWorkOrderConfig;
             base.GetAllMap = (entity, dto) =>
             {
                 dto.WorkOrderTypeName = entity.WorkOrderType.IsNullOrWhiteSpace() ? default : bXJGWorkOrderConfig[entity.WorkOrderType].DisplayName.Localize(LocalizationManager);
@@ -55,33 +48,35 @@ namespace BXJG.WorkOrder.WorkOrderCategory
 
         public override async Task<WorkOrderCategroyDto> CreateAsync(WorkOrderCategoryEditInput input)
         {
-            if (!input.WorkOrderType.IsNullOrWhiteSpace() && !bXJGWorkOrderConfig.ContainsKey(input.WorkOrderType))
-                throw new ApplicationException("不支持的工单类型");
             await HandDefault(input.WorkOrderType, input.IsDefault);
             return await base.CreateAsync(input);
         }
 
         public override async Task<WorkOrderCategroyDto> UpdateAsync(WorkOrderCategoryEditInput input)
         {
-            if (!input.WorkOrderType.IsNullOrWhiteSpace() && !bXJGWorkOrderConfig.ContainsKey(input.WorkOrderType))
-                throw new ApplicationException("不支持的工单类型");
             await HandDefault(input.WorkOrderType, input.IsDefault);
             return await base.UpdateAsync(input);
         }
-        //这里体现出来做默认类别还是用settings科学点，暂时这么招吧
-        async Task HandDefault(string workOrderType, bool isDefault)
+
+        /// <summary>
+        /// 根据工单类型处理默认分类
+        /// </summary>
+        /// <param name="workOrderType"></param>
+        /// <param name="isDefault"></param>
+        /// <returns></returns>
+        private async ValueTask HandDefault(string workOrderType, bool isDefault)
         {
+            if (!workOrderType.IsNullOrWhiteSpace() && !workOrderTypeManager.ContainsKey(workOrderType))
+                throw new ApplicationException("不支持的工单类型");
+
             if (!isDefault)
                 return;
 
-
             var list = await ownRepository.GetAll().Where(c => c.WorkOrderType == workOrderType).ToListAsync();
-
             foreach (var item in list)
             {
                 item.IsDefault = false;
             }
-            //var query = this.ownRepository.GetAll().Where(c=>string.IsNullOrWhiteSpace( workOrderType)|| c.WorkOrderType )
         }
     }
 }

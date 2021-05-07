@@ -1,5 +1,7 @@
-﻿using Abp.Authorization.Users;
+﻿using Abp.Authorization;
+using Abp.Authorization.Users;
 using Abp.Domain.Repositories;
+using Abp.Domain.Uow;
 using Abp.Extensions;
 using Abp.Linq;
 using Abp.Linq.Extensions;
@@ -15,6 +17,8 @@ namespace BXJG.WorkOrder.Employee
     /// 也可以注册自己的实现
     /// </summary>
     /// <typeparam name="TUser"></typeparam>
+    [AbpAuthorize]
+    [UnitOfWork(false)]
     public class EmployeeAppService<TUser> : IEmployeeAppService where TUser : AbpUser<TUser>
     {
         private readonly IRepository<TUser, long> userRepository;

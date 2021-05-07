@@ -15,7 +15,9 @@ namespace BXJG.WorkOrder.WorkOrderCategory
         /// </summary>
         [StringLength(CoreConsts.WorkOrderClsTypeMaxLength)]
         public string WorkOrderType { get; set; }
-        
+        /// <summary>
+        /// 是否包含关联工单类型为空的类别
+        /// </summary>
         public bool ContainsNullWorkOrderType { get; set; } = true;
     }
 }

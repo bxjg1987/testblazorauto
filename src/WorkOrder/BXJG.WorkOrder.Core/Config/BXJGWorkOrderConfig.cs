@@ -12,6 +12,9 @@ namespace BXJG.WorkOrder
     /// </summary>
     public class BXJGWorkOrderConfig
     {
-    
+        /// <summary>
+        /// 是否开启普通工单功能，默认true
+        /// </summary>
+        public bool EnableDefaultWorkOrder { get; set; } = true;
     }
 }

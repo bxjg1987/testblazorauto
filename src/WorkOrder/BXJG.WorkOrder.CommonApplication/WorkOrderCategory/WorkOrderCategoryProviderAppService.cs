@@ -20,13 +20,8 @@ namespace BXJG.WorkOrder.WorkOrderCategory
                                                                                        WorkOrderCategoryComboboxItemDto,
                                                                                        CategoryEntity>
     {
-
         public WorkOrderCategoryProviderAppService(IRepository<CategoryEntity, long> ownRepository,
-                                                   WorkOrderTypeManager bXJGWorkOrderConfig,
-                                                   string allTextForSearch = "不限",
-                                                   string allTextForForm = "请选择") : base(ownRepository,
-                                                                                            allTextForSearch,
-                                                                                            allTextForForm)
+                                                   WorkOrderTypeManager bXJGWorkOrderConfig) : base(ownRepository)
         {
             base.ComboboxMap = (entity, dto) =>
             {
@@ -34,7 +29,7 @@ namespace BXJG.WorkOrder.WorkOrderCategory
             };
             base.ComboTreeMap = (entity, dto) =>
             {
-                dto.WorkOrderTypeName = entity.WorkOrderType.IsNullOrWhiteSpace()? default: bXJGWorkOrderConfig[entity.WorkOrderType].DisplayName.Localize(LocalizationManager);
+                dto.WorkOrderTypeName = entity.WorkOrderType.IsNullOrWhiteSpace() ? default : bXJGWorkOrderConfig[entity.WorkOrderType].DisplayName.Localize(LocalizationManager);
             };
         }
         protected override IQueryable<CategoryEntity> ComboboxFilter(GetWorkOrderCategoryForSelectInput q, long? parentId)

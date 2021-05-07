@@ -45,10 +45,10 @@ namespace BXJG.WorkOrder.WorkOrderType
          
         }
 
-        public void Check(string typeName) {
-            if (!defines.ContainsKey(typeName))
-                throw new ApplicationException("无效的工单类型");
-        }
+        //public void Check(string typeName) {
+        //    if (!defines.ContainsKey(typeName))
+        //        throw new ApplicationException("无效的工单类型");
+        //}
 
         public bool ContainsKey(string key)
         {

@@ -19,6 +19,7 @@ using Abp.Dependency;
 using Abp.Domain.Uow;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
+using Abp.Application.Services;
 
 namespace BXJG.WorkOrder.WorkOrder
 {
@@ -697,9 +698,9 @@ namespace BXJG.WorkOrder.WorkOrder
                                                                IRepository<CategoryEntity, long>>
 
     {
-
         public WorkOrderAppService(IRepository<OrderEntity, long> repository,
                                    OrderManager manager,
+                                   BXJGWorkOrderConfig cfg,
                                    DefaultClsManager defaultClsManager,
                                    IRepository<CategoryEntity, long> categoryRepository,
                                    IEmployeeAppService employeeAppService) : base(repository,
@@ -718,6 +719,8 @@ namespace BXJG.WorkOrder.WorkOrder
                                                                                   CoreConsts.WorkOrderCompletion,
                                                                                   CoreConsts.WorkOrderReject)
         {
+            if (!cfg.EnableDefaultWorkOrder)
+                throw new ApplicationException("BXJGWorkOrderConfig.EnableDefaultWorkOrder=false");
         }
 
         protected override async ValueTask BeforeEditAsync(OrderEntity entity, WorkOrderUpdateInput input)
