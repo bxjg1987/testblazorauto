@@ -161,7 +161,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <summary>
         /// 当前状态情况说明。相关业务方法的description参数将复制给此属性
         /// </summary>
-        public virtual string StatusChangedDescription { get; protected set; }
+        public virtual string StatusChangedDescription { get; set; }
         /// <summary>
         /// 变成当前状态的时间。相关业务方法的time参数将复制给此属性
         /// </summary>

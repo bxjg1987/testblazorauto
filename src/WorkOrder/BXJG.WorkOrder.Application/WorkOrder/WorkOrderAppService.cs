@@ -59,7 +59,7 @@ namespace BXJG.WorkOrder.WorkOrder
                                                   TManager,
                                                   TCategoryRepository> : AppServiceBase
         #region 泛型约束
-        where TCreateInput : TUpdateInput
+        where TCreateInput : WorkOrderCreateBaseInput
         where TUpdateInput : WorkOrderUpdateBaseInput
         where TBatchDeleteInput : BatchOperationInputLong
         where TBatchDeleteOutput : BatchOperationOutputLong, new()
@@ -153,7 +153,7 @@ namespace BXJG.WorkOrder.WorkOrder
                                        TManager manager,
                                        TCategoryRepository categoryRepository,
                                        IEmployeeAppService employeeAppService,
-                                       DefaultClsManager defaultClsManager, 
+                                       DefaultClsManager defaultClsManager,
                                        string workOrderType,
                                        string createPermissionName = default,
                                        string updatePermissionName = default,
@@ -226,61 +226,14 @@ namespace BXJG.WorkOrder.WorkOrder
 
             var entity = await repository.GetAsync(input.Id);
 
-            if (!input.CategoryId.HasValue)
-            {
-                entity.CategoryId = (await defaultClsManager.GetDefaultAsync(workOrderType)).Id;
-            }
-            else
+            if (input.CategoryId.HasValue)
                 entity.CategoryId = input.CategoryId.Value;
-            entity.Description = input.Description;
             entity.Title = input.Title;
-
-            if (input.Status.HasValue && input.Status != entity.Status)
-            {
-                if (input.Status.Value > entity.Status)//skip
-                {
-                    entity.EmployeeId = input.EmployeeId;
-                    entity.UrgencyDegree = input.UrgencyDegree ?? OrderBaseEntity.DefaultUrgencyDegree;
-                    entity.ChangeEstimatedTime(input.EstimatedExecutionTime, input.EstimatedCompletionTime);
-                    await entity.Skip(input.StatusChangedTime ?? Clock.Now,
-                                      input.Status,
-                                      input.StatusChangedDescription,
-                                      input.EmployeeId,
-                                      input.EstimatedExecutionTime,
-                                      input.EstimatedCompletionTime,
-                                      input.ExecutionTime,
-                                      input.CompletionTime,
-                                      d => CheckConfirmePermissionAsync(),
-                                      d => CheckAllocatePermissionAsync(),
-                                      d => CheckExecutePermissionAsync(),
-                                      d => CheckCompletionPermissionAsync(),
-                                      d => CheckRejectPermissionAsync());
-                }
-                else //backoff
-                {
-                    await entity.BackOff(input.StatusChangedTime,
-                                         input.Status,
-                                         input.StatusChangedDescription,
-                                         d => CheckToBeonfirmedPermissionAsync(),
-                                         d => CheckConfirmePermissionAsync(),
-                                         d => CheckAllocatePermissionAsync(),
-                                         d => CheckExecutePermissionAsync());
-                    entity.UrgencyDegree = input.UrgencyDegree ?? OrderBaseEntity.DefaultUrgencyDegree;
-                    entity.EmployeeId = input.EmployeeId;
-                    entity.ChangeEstimatedTime(input.EstimatedExecutionTime, input.EstimatedCompletionTime);
-                }
-            }
-            else
-            {
-                //if ( entity.StatusChangedDescription != input.StatusChangedDescription)
-                //    throw new UserFriendlyException(L("状态无变化时不允许修改状态说明，请考虑回退后修改。"));
-                //if (entity.StatusChangedTime != input.StatusChangedTime)
-                //    throw new UserFriendlyException(L("状态无变化时不允许修改状态时间，请考虑回退后修改。"));
-
-                entity.UrgencyDegree = input.UrgencyDegree ?? OrderBaseEntity.DefaultUrgencyDegree;
-                entity.EmployeeId = input.EmployeeId;
-                entity.ChangeEstimatedTime(input.EstimatedExecutionTime, input.EstimatedCompletionTime);
-            }
+            entity.Description = input.Description;
+            entity.StatusChangedDescription = input.StatusChangedDescription;
+            entity.UrgencyDegree = input.UrgencyDegree ?? OrderBaseEntity.DefaultUrgencyDegree;
+            entity.EmployeeId = input.EmployeeId;
+            entity.ChangeEstimatedTime(input.EstimatedExecutionTime, input.EstimatedCompletionTime);
 
             await BeforeEditAsync(entity, input);
             await CurrentUnitOfWork.SaveChangesAsync();
@@ -726,13 +679,36 @@ namespace BXJG.WorkOrder.WorkOrder
         protected override async ValueTask BeforeEditAsync(OrderEntity entity, WorkOrderUpdateInput input)
         {
             await base.BeforeEditAsync(entity, input);
-            HandExtensions(entity, input);
+            entity.ExtendedField1 = input.ExtendedField1;
+            entity.ExtendedField2 = input.ExtendedField2;
+            entity.ExtendedField3 = input.ExtendedField3;
+            entity.ExtendedField4 = input.ExtendedField4;
+            entity.ExtendedField5 = input.ExtendedField5;
+            if (input.ExtensionData != null)
+            {
+                foreach (var item in input.ExtensionData)
+                {
+                    entity.SetData(item.Key, item.Value);
+                }
+            }
         }
 
         protected override async ValueTask BeforeCreateAsync(OrderEntity entity, WorkOrderCreateInput input)
         {
             await base.BeforeCreateAsync(entity, input);
-            HandExtensions(entity, input);
+
+            entity.ExtendedField1 = input.ExtendedField1;
+            entity.ExtendedField2 = input.ExtendedField2;
+            entity.ExtendedField3 = input.ExtendedField3;
+            entity.ExtendedField4 = input.ExtendedField4;
+            entity.ExtendedField5 = input.ExtendedField5;
+            if (input.ExtensionData != null)
+            {
+                foreach (var item in input.ExtensionData)
+                {
+                    entity.SetData(item.Key, item.Value);
+                }
+            }
         }
 
         protected override WorkOrderDto EntityToDto(OrderEntity entity, IEnumerable<CategoryEntity> categories, IEnumerable<EmployeeDto> employees, object state = default)
@@ -750,20 +726,5 @@ namespace BXJG.WorkOrder.WorkOrder
             return dto;
         }
 
-        private void HandExtensions(OrderEntity entity, WorkOrderUpdateInput input)
-        {
-            entity.ExtendedField1 = input.ExtendedField1;
-            entity.ExtendedField2 = input.ExtendedField2;
-            entity.ExtendedField3 = input.ExtendedField3;
-            entity.ExtendedField4 = input.ExtendedField4;
-            entity.ExtendedField5 = input.ExtendedField5;
-            if (input.ExtensionData != null)
-            {
-                foreach (var item in input.ExtensionData)
-                {
-                    entity.SetData(item.Key, item.Value);
-                }
-            }
-        }
     }
 }

@@ -12,16 +12,12 @@ namespace BXJG.WorkOrder.WorkOrder
     /// 工单后台管理更新模型<br />
     /// 不同工单类型有相应子类
     /// </summary>
-    public class WorkOrderUpdateBaseInput : EntityDto<long>
+    public abstract class WorkOrderUpdateBaseInput : EntityDto<long>
     {
         /// <summary>
         /// 所属分类id
         /// </summary>
         public long? CategoryId { get; set; }
-        /// <summary>
-        /// 状态
-        /// </summary>
-        public Status? Status { get; set; }
         /// <summary>
         /// 紧急程度
         /// </summary>
@@ -43,10 +39,6 @@ namespace BXJG.WorkOrder.WorkOrder
         [StringLength(CoreConsts.OrderStatusChangedDescriptionMaxLength)]
         public string StatusChangedDescription { get; set; }
         /// <summary>
-        /// 调整状态的时间
-        /// </summary>
-        public DateTimeOffset? StatusChangedTime { get; set; }
-        /// <summary>
         /// 预计开始时间
         /// </summary>
         public DateTimeOffset? EstimatedExecutionTime { get; set; }
@@ -55,18 +47,13 @@ namespace BXJG.WorkOrder.WorkOrder
         /// </summary>
         public DateTimeOffset? EstimatedCompletionTime { get; set; }
         /// <summary>
-        /// 执行时间
-        /// </summary>
-        public DateTimeOffset? ExecutionTime { get; set; }
-        /// <summary>
-        /// 完成时间
-        /// </summary>
-        public DateTimeOffset? CompletionTime { get; set; }
-        /// <summary>
         /// 员工id
         /// </summary>
         public string EmployeeId { get; set; }
     }
+
+  
+
     /// <summary>
     /// 工单后台管理普通工单更新模型
     /// </summary>
@@ -101,4 +88,6 @@ namespace BXJG.WorkOrder.WorkOrder
         /// </summary>
         public string ExtendedField5 { get; set; }
     }
+
+    
 }
