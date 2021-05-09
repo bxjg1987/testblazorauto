@@ -36,6 +36,8 @@ namespace BXJG.WorkOrder
         public const string WorkOrderCreate = "BXJGWorkOrderCreate";
         public const string WorkOrderUpdate = "BXJGWorkOrderUpdate";
         public const string WorkOrderDelete = "BXJGWorkOrderDelete";
+
+
         public const string WorkOrderToBeConfirmed = "BXJGWorkOrderToBeConfirmed";
         public const string WorkOrderConfirme = "BXJGWorkOrderConfirme";
         public const string WorkOrderAllocate = "BXJGWorkOrderAllocate";

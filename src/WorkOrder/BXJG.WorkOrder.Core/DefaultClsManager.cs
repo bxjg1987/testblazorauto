@@ -1,4 +1,6 @@
 ﻿using Abp.Domain.Repositories;
+using Abp.Extensions;
+using Abp.UI;
 using BXJG.WorkOrder.WorkOrderCategory;
 using BXJG.WorkOrder.WorkOrderType;
 using System;
@@ -27,8 +29,10 @@ namespace BXJG.WorkOrder
         {
             var query = clsRepository.GetAll()
                                      .Where(c => c.IsDefault)
-                                     .Where(c => c.WorkOrderType == workOrderType);
+                                     .Where(c => c.WorkOrderType == workOrderType|| string.IsNullOrWhiteSpace( c.WorkOrderType));
             var list = await AsyncQueryableExecuter.ToListAsync(query);
+            if (list.Count == 0)
+                throw new UserFriendlyException(L("请在工单类别中设置默认类别"));
             return list.Single();
         }
     }
