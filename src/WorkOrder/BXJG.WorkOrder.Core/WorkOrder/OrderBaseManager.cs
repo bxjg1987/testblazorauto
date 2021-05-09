@@ -63,7 +63,7 @@ namespace BXJG.WorkOrder.WorkOrder
                 dto.UrgencyDegree = OrderBaseEntity.DefaultUrgencyDegree;
             var entity = Create(dto);
             await repository.InsertAsync(entity);
-            await CurrentUnitOfWork.SaveChangesAsync();//保存以更新id为自增id
+            //await CurrentUnitOfWork.SaveChangesAsync();//保存以更新id为自增id
             return entity;
         }
 
