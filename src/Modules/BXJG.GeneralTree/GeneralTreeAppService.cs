@@ -43,12 +43,14 @@ namespace BXJG.GeneralTree
                                                                    GeneralTreeEntity,
                                                                    GeneralTreeManager>, IGeneralTreeAppService
     {
-        public GeneralTreeAppService(IRepository<GeneralTreeEntity, long> ownRepository, GeneralTreeManager organizationUnitManager, string createPermissionName = null, string updatePermissionName = null, string deletePermissionName = null, string getPermissionName = null, string allTextForManager = "全部") : base(ownRepository, organizationUnitManager, createPermissionName, updatePermissionName, deletePermissionName, getPermissionName, allTextForManager)
+        public GeneralTreeAppService(IRepository<GeneralTreeEntity, long> ownRepository, 
+                                     GeneralTreeManager organizationUnitManager) : base(ownRepository,
+                                                                                        organizationUnitManager,
+                                                                                        GeneralTreeConsts.GeneralTreeCreatePermissionName,
+                                                                                        GeneralTreeConsts.GeneralTreeUpdatePermissionName,
+                                                                                        GeneralTreeConsts.GeneralTreeDeletePermissionName,
+                                                                                        GeneralTreeConsts.GeneralTreeGetPermissionName)
         {
-            base.createPermissionName = GeneralTreeConsts.GeneralTreeCreatePermissionName;
-            base.updatePermissionName = GeneralTreeConsts.GeneralTreeUpdatePermissionName;
-            base.deletePermissionName = GeneralTreeConsts.GeneralTreeDeletePermissionName;
-            base.getPermissionName = GeneralTreeConsts.GeneralTreeGetPermissionName;
         }
 
         protected override ValueTask BeforeDeleteAsync(GeneralTreeEntity entity)
