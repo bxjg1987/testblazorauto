@@ -10,6 +10,10 @@ using System.Threading.Tasks;
 using Abp.Localization;
 using BXJG.WorkOrder.WorkOrderType;
 using Microsoft.EntityFrameworkCore;
+using Abp.Linq.Expressions;
+using System.Linq.Expressions;
+using Abp.Application.Services.Dto;
+using Abp.Domain.Uow;
 
 namespace BXJG.WorkOrder.WorkOrderCategory
 {
@@ -35,15 +39,47 @@ namespace BXJG.WorkOrder.WorkOrderCategory
                                                                                             CoreConsts.WorkOrderCategoryManager)
         {
             this.workOrderTypeManager = bXJGWorkOrderConfig;
+            //虽然性能低，但访问不高
             base.GetAllMap = (entity, dto) =>
             {
-                dto.WorkOrderTypeName = entity.WorkOrderType.IsNullOrWhiteSpace() ? default : bXJGWorkOrderConfig[entity.WorkOrderType].DisplayName.Localize(LocalizationManager);
+                //dto.WorkOrderTypeName = entity.WorkOrderTypes.Count==0 ? default : bXJGWorkOrderConfig[entity.WorkOrderTypes].DisplayName.Localize(LocalizationManager);
+                dto.WorkOrderTypes = entity.WorkOrderTypes.Select(c => new CategoryWorkOrderTypeDto
+                {
+                    //WorkOrderType = c.WorkOrderType,
+                    WorkOrderTypeDisplayName = bXJGWorkOrderConfig[c.WorkOrderType].DisplayName.Localize(LocalizationManager)
+                });
+                //dto.WorkOrderTypeName = string.Join(',', entity.WorkOrderTypes.Select(c => bXJGWorkOrderConfig[c.WorkOrderType].DisplayName.Localize(LocalizationManager)));
             };
         }
+        [UnitOfWork(false)]
+        public override async Task<WorkOrderCategroyDto> GetAsync(EntityDto<long> input)
+        {
+            await CheckGetPermissionAsync();
+            var entity = await ownRepository.GetAsync(input.Id);
 
+            var n = ObjectMapper.Map<TDto>(entity);
+            //if (!string.IsNullOrWhiteSpace(entity.ExtensionData))
+            //    n.ExtData = JsonConvert.DeserializeObject<dynamic>(entity.ExtensionData);
+            return n;
+        }
         protected override IQueryable<CategoryEntity> GetAllFiltered(GetAllWorkOrderCategoryInput q, string parentCode)
         {
-            return base.GetAllFiltered(q, parentCode).WhereIf(!q.WorkOrderType.IsNullOrWhiteSpace(), c => c.WorkOrderType == q.WorkOrderType || (q.ContainsNullWorkOrderType && c.WorkOrderType.IsNullOrWhiteSpace()));
+            var query = base.GetAllFiltered(q, parentCode).Include(c => c.WorkOrderTypes); //虽然性能低，但访问量不大
+            if (q.WorkOrderTypes != null && q.WorkOrderTypes.Any())
+            {
+                Expression<Func<CategoryEntity, bool>> where1 = c => q.WorkOrderTypes.Any(d => c.WorkOrderTypes.Any(e => e.WorkOrderType == d));
+
+                if (q.ContainsNullWorkOrderType)
+                {
+                    where1 = where1.Or(c => c.WorkOrderTypes == null);
+                }
+
+                return query.Where(where1);
+
+            }
+
+            return query;
+            //.WhereIf(!q.WorkOrderTypes.IsNullOrWhiteSpace(), c => c.WorkOrderTypes == q.WorkOrderType || (q.ContainsNullWorkOrderType && c.WorkOrderTypes.IsNullOrWhiteSpace()));
         }
 
         public override async Task<WorkOrderCategroyDto> CreateAsync(WorkOrderCategoryEditInput input)
@@ -72,7 +108,7 @@ namespace BXJG.WorkOrder.WorkOrderCategory
             if (!isDefault)
                 return;
 
-            var list = await ownRepository.GetAll().Where(c => c.WorkOrderType == workOrderType).ToListAsync();
+            var list = await ownRepository.GetAll().Where(c => c.WorkOrderTypes == workOrderType).ToListAsync();
             foreach (var item in list)
             {
                 item.IsDefault = false;

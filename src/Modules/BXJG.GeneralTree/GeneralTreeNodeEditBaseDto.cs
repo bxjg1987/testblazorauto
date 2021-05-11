@@ -47,4 +47,6 @@ namespace BXJG.GeneralTree
 
         //public dynamic ExtData { get; set; }
     }
+
+
 }

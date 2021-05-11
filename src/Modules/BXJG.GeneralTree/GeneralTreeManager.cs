@@ -83,7 +83,7 @@ namespace BXJG.GeneralTree
             return entity;
         }
 
-        public virtual async Task DeleteAsync(params long[] keys)
+        public virtual async Task DeleteAsync(Func<TEntity, ValueTask> act, params long[] keys)
         {
             if (keys != null && keys.Length > 0)
             {
@@ -91,6 +91,8 @@ namespace BXJG.GeneralTree
                 var entities = await repository.GetAllListAsync(c => keys.Contains(c.Id));
                 foreach (var item in entities)
                 {
+                    if (act != null)
+                        await act(item);
                     await repository.DeleteAsync(c => c.Code.StartsWith(item.Code));
                 }
             }

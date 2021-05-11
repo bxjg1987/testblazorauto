@@ -11,7 +11,7 @@ namespace BXJG.WorkOrder.EFMaps
     {
         public void Configure(EntityTypeBuilder<CategoryEntity> builder)
         {
-            builder.Property(c => c.WorkOrderType).HasMaxLength(CoreConsts.WorkOrderClsTypeMaxLength);
+            builder.Property(c => c.WorkOrderTypes).HasMaxLength(CoreConsts.WorkOrderClsTypeMaxLength);
             //builder.Property(c => c.Icon).HasColumnType($"varchar({CoreConsts.ItemCategoryIconMaxLength})");
             //builder.Property(c => c.Image1).HasColumnType($"varchar({CoreConsts.ItemCategoryImage1MaxLength})");
             //builder.Property(c => c.Image2).HasColumnType($"varchar({CoreConsts.ItemCategoryImage2MaxLength})");

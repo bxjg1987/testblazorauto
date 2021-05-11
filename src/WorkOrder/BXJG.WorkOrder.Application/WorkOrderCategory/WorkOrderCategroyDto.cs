@@ -12,11 +12,7 @@ namespace BXJG.WorkOrder.WorkOrderCategory
         /// <summary>
         /// 所属类型，为空则表示所有类型的工单公用
         /// </summary>
-        public string WorkOrderType { get; set; }
-        /// <summary>
-        /// 所属类型名称
-        /// </summary>
-        public string WorkOrderTypeName { get; set; }
+        public IEnumerable<CategoryWorkOrderTypeDto> WorkOrderTypes { get; set; }
         /// <summary>
         /// 是否为默认类别
         /// </summary>

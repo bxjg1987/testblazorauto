@@ -25,20 +25,20 @@ namespace BXJG.WorkOrder.WorkOrderCategory
         {
             base.ComboboxMap = (entity, dto) =>
             {
-                dto.WorkOrderTypeName = entity.WorkOrderType.IsNullOrWhiteSpace() ? default : bXJGWorkOrderConfig[entity.WorkOrderType].DisplayName.Localize(LocalizationManager);
+                dto.WorkOrderTypeName = entity.WorkOrderTypes.IsNullOrWhiteSpace() ? default : bXJGWorkOrderConfig[entity.WorkOrderTypes].DisplayName.Localize(LocalizationManager);
             };
             base.ComboTreeMap = (entity, dto) =>
             {
-                dto.WorkOrderTypeName = entity.WorkOrderType.IsNullOrWhiteSpace() ? default : bXJGWorkOrderConfig[entity.WorkOrderType].DisplayName.Localize(LocalizationManager);
+                dto.WorkOrderTypeName = entity.WorkOrderTypes.IsNullOrWhiteSpace() ? default : bXJGWorkOrderConfig[entity.WorkOrderTypes].DisplayName.Localize(LocalizationManager);
             };
         }
-        protected override IQueryable<CategoryEntity> ComboboxFilter(GetWorkOrderCategoryForSelectInput q, long? parentId)
+        protected override IQueryable<CategoryEntity> ComboboxFilterAsync(GetWorkOrderCategoryForSelectInput q, long? parentId)
         {
-            return base.ComboboxFilter(q, parentId).WhereIf(!q.WorkOrderType.IsNullOrWhiteSpace(), c => c.WorkOrderType == q.WorkOrderType || (q.ContainsNullWorkOrderType && c.WorkOrderType.IsNullOrWhiteSpace()));
+            return base.ComboboxFilterAsync(q, parentId).WhereIf(!q.WorkOrderType.IsNullOrWhiteSpace(), c => c.WorkOrderTypes == q.WorkOrderType || (q.ContainsNullWorkOrderType && c.WorkOrderTypes.IsNullOrWhiteSpace()));
         }
-        protected override IQueryable<CategoryEntity> ComboTreeFilter(GetWorkOrderCategoryForSelectInput q, string parentCode)
+        protected override IQueryable<CategoryEntity> ComboTreeFilterAsync(GetWorkOrderCategoryForSelectInput q, string parentCode)
         {
-            return base.ComboTreeFilter(q, parentCode).WhereIf(!q.WorkOrderType.IsNullOrWhiteSpace(), c => c.WorkOrderType == q.WorkOrderType || (q.ContainsNullWorkOrderType && c.WorkOrderType.IsNullOrWhiteSpace()));
+            return base.ComboTreeFilterAsync(q, parentCode).WhereIf(!q.WorkOrderType.IsNullOrWhiteSpace(), c => c.WorkOrderTypes == q.WorkOrderType || (q.ContainsNullWorkOrderType && c.WorkOrderTypes.IsNullOrWhiteSpace()));
         }
     }
 }
