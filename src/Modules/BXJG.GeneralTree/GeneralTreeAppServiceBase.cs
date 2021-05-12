@@ -364,7 +364,7 @@ namespace BXJG.GeneralTree
         protected string createPermissionName, updatePermissionName, deletePermissionName, getPermissionName;
 
         public GeneralTreeAppServiceBase(IRepository<TEntity, long> ownRepository,
-                                         TManager organizationUnitManager,
+                                         TManager manager,
                                          string createPermissionName = null,
                                          string updatePermissionName = null,
                                          string deletePermissionName = null,
@@ -375,7 +375,7 @@ namespace BXJG.GeneralTree
             this.allTextForManager = allTextForManager.UtilsL();
             this.ownRepository = ownRepository;
 
-            this.generalTreeManager = organizationUnitManager;
+            this.generalTreeManager = manager;
 
             this.createPermissionName = createPermissionName;
             this.updatePermissionName = updatePermissionName;
@@ -410,21 +410,10 @@ namespace BXJG.GeneralTree
 
             await BeforeCreateAsync(input, m, ctx);
             await generalTreeManager.CreateAsync(m);
-            return ObjectMapper.Map<TDto>(m);
+            return await GetEntityToDtoAsync(m);
         }
         /// <summary>
-        /// 新增前回调
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="input"></param>
-        /// <param name="context"><see cref="CreateAsync"/>的多个步骤间共享数据，默认存在input的key</param>
-        /// <returns></returns>
-        protected virtual ValueTask BeforeCreateAsync(TCreateInput input, TEntity entity, IDictionary<string, object> context = default)
-        {
-            return ValueTask.CompletedTask;
-        }
-        /// <summary>
-        /// 新增时的映射
+        /// 新增时的映射，默认使用automapper映射
         /// </summary>
         /// <param name="input"></param>
         /// <param name="context"><see cref="GetAllAsync"/>的多个步骤间共享数据，默认存在input的key</param>
@@ -433,6 +422,17 @@ namespace BXJG.GeneralTree
         {
             var entity = ObjectMapper.Map<TEntity>(input);
             return ValueTask.FromResult(entity);
+        }
+        /// <summary>
+        /// 新增前回调，默认啥也没干
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="input"></param>
+        /// <param name="context"><see cref="CreateAsync"/>的多个步骤间共享数据，默认存在input的key</param>
+        /// <returns></returns>
+        protected virtual ValueTask BeforeCreateAsync(TCreateInput input, TEntity entity, IDictionary<string, object> context = default)
+        {
+            return ValueTask.CompletedTask;
         }
         #endregion
 
@@ -451,7 +451,7 @@ namespace BXJG.GeneralTree
             return ObjectMapper.Map<TDto>(m);// m.MapTo<TDto>();
         }
         /// <summary>
-        /// 移动节点前回调
+        /// 移动节点前回调，默认啥也没干
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
@@ -491,7 +491,7 @@ namespace BXJG.GeneralTree
             }
             await BeforeUpdateAsync(input, m, ctx);
             await generalTreeManager.UpdateAsync(m);
-            return ObjectMapper.Map<TDto>(m);
+            return await GetEntityToDtoAsync(m);
         }
         /// <summary>
         /// 修改时的查询，默认根据id查询
@@ -504,18 +504,7 @@ namespace BXJG.GeneralTree
             return ValueTask.FromResult(ownRepository.GetAll().Where(c => c.Id == input.Id));
         }
         /// <summary>
-        /// 修改前回调
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="input"></param>
-        /// <param name="context"><see cref="UpdateAsync"/>的多个步骤间共享数据，默认存在input的key</param>
-        /// <returns></returns>
-        protected virtual ValueTask BeforeUpdateAsync(TEditDto input, TEntity entity, IDictionary<string, object> context = default)
-        {
-            return ValueTask.CompletedTask;
-        }
-        /// <summary>
-        /// 修改时的映射
+        /// 修改时的映射，默认使用automapper
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="input"></param>
@@ -524,6 +513,17 @@ namespace BXJG.GeneralTree
         protected virtual ValueTask UpdateMapAsync(TEditDto input, TEntity entity, IDictionary<string, object> context = default)
         {
             ObjectMapper.Map(input, entity);
+            return ValueTask.CompletedTask;
+        }
+        /// <summary>
+        /// 修改前回调，默认啥也没干
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="input"></param>
+        /// <param name="context"><see cref="UpdateAsync"/>的多个步骤间共享数据，默认存在input的key</param>
+        /// <returns></returns>
+        protected virtual ValueTask BeforeUpdateAsync(TEditDto input, TEntity entity, IDictionary<string, object> context = default)
+        {
             return ValueTask.CompletedTask;
         }
         #endregion
@@ -540,7 +540,7 @@ namespace BXJG.GeneralTree
             await this.generalTreeManager.DeleteAsync(BeforeDeleteAsync, input.Ids);
         }
         /// <summary>
-        /// 删除前回调
+        /// 删除前回调，默认啥也没干
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
@@ -549,6 +549,18 @@ namespace BXJG.GeneralTree
             return ValueTask.CompletedTask;
         }
         #endregion
+
+        /// <summary>
+        /// 获取列表和获取指定id的信息都将回调此方法，默认啥也没干
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="dto"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        protected virtual ValueTask EntityToDtoAsync(TEntity entity, TDto dto, IDictionary<string, object> context = default)
+        {
+            return ValueTask.CompletedTask;
+        }
 
         #region get
         /// <summary>
@@ -585,10 +597,11 @@ namespace BXJG.GeneralTree
         /// <param name="entity"></param>
         /// <param name="context"><see cref="GetAsync"/>的多个步骤间共享数据，默认存在input的key</param>
         /// <returns></returns>
-        protected virtual ValueTask<TDto> GetEntityToDtoAsync(TEntity entity, IDictionary<string, object> context = default)
+        protected virtual async ValueTask<TDto> GetEntityToDtoAsync(TEntity entity, IDictionary<string, object> context = default)
         {
             var dto = ObjectMapper.Map<TDto>(entity);
-            return ValueTask.FromResult(dto);
+            await EntityToDtoAsync(entity, dto, context);
+            return dto;
         }
         #endregion
 
@@ -689,9 +702,15 @@ namespace BXJG.GeneralTree
         /// <param name="entities">实体列表</param>
         /// <param name="context"><see cref="GetAllAsync"/>的多个步骤间共享数据，默认存在input的key</param>
         /// <returns></returns>
-        protected virtual ValueTask<List<TDto>> GetAllEntityToDtoAsync(IEnumerable<TEntity> entities, IDictionary<string, object> context = default)
+        protected virtual async ValueTask<List<TDto>> GetAllEntityToDtoAsync(IEnumerable<TEntity> entities, IDictionary<string, object> context = default)
         {
-            return ValueTask.FromResult(ObjectMapper.Map<List<TDto>>(entities));
+            var dtos = ObjectMapper.Map<List<TDto>>(entities);
+            foreach (var item in dtos)
+            {
+                var entity = entities.Single(c => c.Id == item.Id);
+                await EntityToDtoAsync(entity, item, context);
+            }
+            return dtos;
         }
         #endregion
 

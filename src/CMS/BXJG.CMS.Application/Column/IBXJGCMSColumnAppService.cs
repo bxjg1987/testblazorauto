@@ -1,15 +1,16 @@
-﻿using BXJG.GeneralTree;
+﻿using Abp.Application.Services.Dto;
+using BXJG.Common.Dto;
+using BXJG.GeneralTree;
 
 namespace BXJG.CMS.Column
 {
     public interface IBXJGCMSColumnAppService : IGeneralTreeAppServiceBase<
          ColumnDto,
          ColumnEditDto,
+         ColumnEditDto,
+         BatchOperationInputLong,
          GetAllInput,
-         GetForSelectInput,
-         ColumnTreeNodeDto,
-         GetForSelectInput,
-         ColumnCombboxDto,
+         EntityDto<long>,
          GeneralTreeNodeMoveInput>
     { }
 }

@@ -1,5 +1,7 @@
-﻿using Abp.Domain.Repositories;
+﻿using Abp.Application.Services.Dto;
+using Abp.Domain.Repositories;
 using BXJG.CMS.Authorization;
+using BXJG.Common.Dto;
 using BXJG.GeneralTree;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -8,21 +10,17 @@ using System.Threading.Tasks;
 
 namespace BXJG.CMS.Column
 {
-    /// <summary>
-    /// 后台管理管理CMS栏目的服务
-    /// </summary>
-    /// <typeparam name="TDataDictionary"></typeparam>
+  
     public class BXJGCMSColumnAppService : GeneralTreeAppServiceBase<ColumnDto,
-                                                                                      ColumnEditDto,
-                                                                                      GetAllInput,
-                                                                                      GetForSelectInput,
-                                                                                      ColumnTreeNodeDto,
-                                                                                      GetForSelectInput,
-                                                                                      ColumnCombboxDto,
-                                                                                      GeneralTreeNodeMoveInput,
-                                                                                      ColumnEntity,
-                                                                                      ColumnManager>, IBXJGCMSColumnAppService
-        
+                                                                     ColumnEditDto,
+                                                                     ColumnEditDto,
+                                                                     BatchOperationInputLong,
+                                                                     GetAllInput,
+                                                                     EntityDto<long>,
+                                                                     GeneralTreeNodeMoveInput,
+                                                                     ColumnEntity,
+                                                                     ColumnManager>, IBXJGCMSColumnAppService
+
     {
         public BXJGCMSColumnAppService(IRepository<ColumnEntity, long> repository, ColumnManager manager)
             : base(repository,
@@ -32,10 +30,10 @@ namespace BXJG.CMS.Column
                    BXJGCMSPermissions.ColumnDelete,
                    BXJGCMSPermissions.Column)
         { }
-
-        protected override IQueryable<ColumnEntity> GetAllFiltered(GetAllInput q, string parentCode)
+        protected override async ValueTask<IQueryable<ColumnEntity>> GetAllFilteredAsync(GetAllInput input, string parentCode, IDictionary<string, object> context = null)
         {
-            return base.GetAllFiltered(q, parentCode).Include(c=>c.ContentType);
+            var q = await base.GetAllFilteredAsync(input, parentCode, context);
+            return q.Include(c => c.ContentType);
         }
     }
 }

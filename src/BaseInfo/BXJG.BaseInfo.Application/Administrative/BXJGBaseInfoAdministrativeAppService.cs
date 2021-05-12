@@ -1,5 +1,7 @@
-﻿using Abp.Domain.Repositories;
+﻿using Abp.Application.Services.Dto;
+using Abp.Domain.Repositories;
 using BXJG.BaseInfo.Authorization;
+using BXJG.Common.Dto;
 using BXJG.GeneralTree;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -12,11 +14,10 @@ namespace ZLJ.BaseInfo.Administrative
     public class BXJGBaseInfoAdministrativeAppService : GeneralTreeAppServiceBase<
              AdministrativeDto,
              AdministrativeEditDto,
+             AdministrativeEditDto,
+             BatchOperationInputLong,
              GeneralTreeGetTreeInput,
-             GeneralTreeGetForSelectInput,
-             AdministrativeTreeNodeDto,
-             GeneralTreeGetForSelectInput,
-             AdministrativeCombboxDto,
+             EntityDto<long>,
              GeneralTreeNodeMoveInput,
              AdministrativeEntity,
              AdministrativeManager>, IBXJGBaseInfoAdministrativeAppService

@@ -27,13 +27,14 @@ namespace BXJG.WorkOrder
 
         public async Task<CategoryEntity> GetDefaultAsync(string workOrderType)
         {
-            var query = clsRepository.GetAll()
-                                     .Where(c => c.IsDefault)
-                                     .Where(c => c.WorkOrderTypes == workOrderType|| string.IsNullOrWhiteSpace( c.WorkOrderTypes));
-            var list = await AsyncQueryableExecuter.ToListAsync(query);
-            if (list.Count == 0)
-                throw new UserFriendlyException(L("请在工单类别中设置默认类别"));
-            return list.Single();
+            throw new NotImplementedException();
+            //var query = clsRepository.GetAll()
+            //                         .Where(c => c.IsDefault)
+            //                         .Where(c => c.WorkOrderTypes == workOrderType|| string.IsNullOrWhiteSpace( c.WorkOrderTypes));
+            //var list = await AsyncQueryableExecuter.ToListAsync(query);
+            //if (list.Count == 0)
+            //    throw new UserFriendlyException(L("请在工单类别中设置默认类别"));
+            //return list.Single();
         }
     }
 }

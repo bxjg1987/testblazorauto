@@ -30,4 +30,8 @@
     <ProjectReference Include="..\..\Modules\BXJG.GeneralTree\BXJG.GeneralTree.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="WorkOrderCategoryLinkType\" />
+  </ItemGroup>
+
 </Project>

@@ -23,7 +23,7 @@ namespace BXJG.WorkOrder
         public const int OrderEntityTypeMaxLength = 100;
         public const int OrderEntityIdMaxLength = 100;
 
-        //public const int WorkOrderClsTypeMaxLength = 50;
+        public const int WorkOrderTypeMaxLength = 200;
         #endregion
 
         #region 权限和菜单

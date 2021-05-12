@@ -4,6 +4,7 @@ using Abp.Events.Bus;
 using BXJG.GeneralTree;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,14 +16,17 @@ namespace BXJG.WorkOrder.WorkOrderCategory
     /// </summary>
     public class CategoryEntity : GeneralTreeEntity<CategoryEntity>, IGeneratesDomainEvents
     {
+        /// <summary>
+        /// 领域事件
+        /// </summary>
         public virtual ICollection<IEventData> DomainEvents { get; } = new List<IEventData>();
         /// <summary>
-        /// 所属类型，为空则表示所有类型的工单公用
+        /// 是否默认
         /// </summary>
-        public virtual ICollection<CategoryWorkOrderTypeEntity> WorkOrderTypes { get; set; }
+        public virtual bool IsDefault { get; set; }
         /// <summary>
-        /// 是否为默认类别
+        /// 哪些类型的工单可以共用这个类别
         /// </summary>
-        public bool IsDefault { get; set; }
+        public virtual ICollection<WorkOrderCategoryTypeEntity> WorkOrderTypes { get; set; } = new Collection<WorkOrderCategoryTypeEntity>();
     }
 }

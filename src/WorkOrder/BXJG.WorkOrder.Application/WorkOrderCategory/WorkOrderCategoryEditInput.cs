@@ -13,9 +13,20 @@ namespace BXJG.WorkOrder.WorkOrderCategory
         /// <summary>
         /// 所属类型，为空则表示所有类型的工单公用
         /// </summary>
-        public IEnumerable<string> WorkOrderTypes { get; set; }
+        public IEnumerable<WorkOrderTypeDto> WorkOrderTypes { get; set; }
+    }
+    /// <summary>
+    /// 新增或修改工单类别时关联工单类型的输入模型
+    /// </summary>
+    public class WorkOrderTypeDto
+    {
         /// <summary>
-        /// 是否为默认类别
+        /// 工单类型
+        /// </summary>
+        [StringLength(CoreConsts.WorkOrderTypeMaxLength)]
+        public string WorkOrderType { get; set; }
+        /// <summary>
+        /// 是否默认
         /// </summary>
         public bool IsDefault { get; set; }
     }
