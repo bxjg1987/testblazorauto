@@ -8,12 +8,19 @@ using System.Threading.Tasks;
 
 namespace BXJG.WorkOrder.WorkOrderCategory
 {
+    /// <summary>
+    /// 新增或修改工单的输入模型
+    /// </summary>
     public class WorkOrderCategoryEditInput : GeneralTreeNodeEditBaseDto
     {
         /// <summary>
         /// 所属类型，为空则表示所有类型的工单公用
         /// </summary>
         public IEnumerable<WorkOrderTypeDto> WorkOrderTypes { get; set; }
+        /// <summary>
+        /// 是否设置为默认
+        /// </summary>
+        public bool IsDefault { get; set; }
     }
     /// <summary>
     /// 新增或修改工单类别时关联工单类型的输入模型

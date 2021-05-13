@@ -43,8 +43,8 @@ namespace BXJG.GeneralTree
                                                                    GeneralTreeEntity,
                                                                    GeneralTreeManager>, IGeneralTreeAppService
     {
-        public GeneralTreeAppService(IRepository<GeneralTreeEntity, long> ownRepository, 
-                                     GeneralTreeManager organizationUnitManager) : base(ownRepository,
+        public GeneralTreeAppService(IRepository<GeneralTreeEntity, long> repository, 
+                                     GeneralTreeManager organizationUnitManager) : base(repository,
                                                                                         organizationUnitManager,
                                                                                         GeneralTreeConsts.GeneralTreeCreatePermissionName,
                                                                                         GeneralTreeConsts.GeneralTreeUpdatePermissionName,

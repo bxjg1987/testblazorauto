@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ZLJ.EntityFrameworkCore;
 
 namespace ZLJ.Migrations
 {
     [DbContext(typeof(ZLJDbContext))]
-    partial class ZLJDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210513123332_updateworkordercls1")]
+    partial class updateworkordercls1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2603,7 +2605,7 @@ namespace ZLJ.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<long?>("CategoryId")
+                    b.Property<long?>("CategoryEntityId")
                         .HasColumnType("bigint");
 
                     b.Property<bool>("IsDefault")
@@ -2613,13 +2615,14 @@ namespace ZLJ.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("WorkOrderType")
-                        .HasColumnType("varchar(200)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("CategoryEntityId");
 
-                    b.ToTable("BXJGWorkOrderCategoryType");
+                    b.ToTable("WorkOrderCategoryTypeEntity");
                 });
 
             modelBuilder.Entity("ZLJ.Authorization.Roles.Role", b =>
@@ -3318,7 +3321,7 @@ namespace ZLJ.Migrations
                 {
                     b.HasOne("BXJG.WorkOrder.WorkOrderCategory.CategoryEntity", null)
                         .WithMany("WorkOrderTypes")
-                        .HasForeignKey("CategoryId");
+                        .HasForeignKey("CategoryEntityId");
                 });
 
             modelBuilder.Entity("ZLJ.Authorization.Roles.Role", b =>

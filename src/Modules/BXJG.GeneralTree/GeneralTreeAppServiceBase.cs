@@ -59,14 +59,14 @@ namespace BXJG.GeneralTree
 
         protected string allTextForSearch, allTextForForm;//注意这里代表的是本地化文本的key
         public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }//属性注入
-        protected readonly IRepository<TEntity, long> ownRepository;
+        protected readonly IRepository<TEntity, long> repository;
 
-        public UnAuthGeneralTreeAppServiceBase(IRepository<TEntity, long> ownRepository,
+        public UnAuthGeneralTreeAppServiceBase(IRepository<TEntity, long> repository,
                                                string allTextForSearch = "不限",
                                                string allTextForForm = "请选择")//这里的字符串后期可以使用常量
         {
             base.LocalizationSourceName = GeneralTreeConsts.LocalizationSourceName;
-            this.ownRepository = ownRepository;
+            this.repository = repository;
             this.AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
             //L内部调用的LocationSource是使用的属性注入，所以在构造函数中无法使用L()  此规则.net framework版本是这个规则，.net core版本未测试过
             this.allTextForSearch = allTextForSearch.UtilsL();
@@ -88,7 +88,7 @@ namespace BXJG.GeneralTree
             string parentCode = "";
             if (input.ParentId.HasValue && input.ParentId.Value > 0)
             {
-                var top = await ownRepository.GetAsync(input.ParentId.Value);
+                var top = await repository.GetAsync(input.ParentId.Value);
                 parentCode = top.Code;
             }
             var ctx = new Dictionary<string, object> { { "input", input } };
@@ -231,7 +231,7 @@ namespace BXJG.GeneralTree
         /// <returns></returns>
         protected virtual ValueTask<IQueryable<TEntity>> ComboTreeFilterAsync(TGetTreeForSelectInput input, string parentCode, IDictionary<string, object> context = default)
         {
-            return ValueTask.FromResult(ownRepository.GetAll().Where(c => c.Code.StartsWith(parentCode)));
+            return ValueTask.FromResult(repository.GetAll().Where(c => c.Code.StartsWith(parentCode)));
         }
         /// <summary>
         /// 获取树形数据的排序，默认按code
@@ -266,7 +266,7 @@ namespace BXJG.GeneralTree
         /// <returns></returns>
         protected virtual ValueTask<IQueryable<TEntity>> ComboboxFilterAsync(TGetNodesForSelectInput input, long? parentId, IDictionary<string, object> context = default)
         {
-            return ValueTask.FromResult(ownRepository.GetAll().Where(c => c.ParentId == parentId));
+            return ValueTask.FromResult(repository.GetAll().Where(c => c.ParentId == parentId));
             //return ownRepository.GetAll().Where(c => c.ParentId == input.ParentId || c.Id == input.ParentId);
         }
         /// <summary>
@@ -357,7 +357,7 @@ namespace BXJG.GeneralTree
          * 顶级文本可能是 前端传过来的、上级节点文本、默认文本；除非根本不现实
          */
         public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; } = NullAsyncQueryableExecuter.Instance;
-        protected readonly IRepository<TEntity, long> ownRepository;
+        protected readonly IRepository<TEntity, long> repository;
         protected readonly TManager generalTreeManager;
         protected string allTextForManager;//注意这里代表的是本地化文本的key
 
@@ -373,7 +373,7 @@ namespace BXJG.GeneralTree
         {
             //L内部调用的LocationSource是使用的属性注入，所以在构造函数中无法使用L()  此规则.net framework版本是这个规则，.net core版本未测试过
             this.allTextForManager = allTextForManager.UtilsL();
-            this.ownRepository = ownRepository;
+            this.repository = ownRepository;
 
             this.generalTreeManager = manager;
 
@@ -501,7 +501,7 @@ namespace BXJG.GeneralTree
         /// <returns></returns>
         protected virtual ValueTask<IQueryable<TEntity>> UpdateGetAsync(TEditDto input, IDictionary<string, object> context = default)
         {
-            return ValueTask.FromResult(ownRepository.GetAll().Where(c => c.Id == input.Id));
+            return ValueTask.FromResult(repository.GetAll().Where(c => c.Id == input.Id));
         }
         /// <summary>
         /// 修改时的映射，默认使用automapper
@@ -588,7 +588,7 @@ namespace BXJG.GeneralTree
         /// <returns></returns>
         protected virtual ValueTask<IQueryable<TEntity>> GetQueryAsync(TGetInput input, IDictionary<string, object> context = default)
         {
-            var query = ownRepository.GetAll().Where(c => c.Id == input.Id);
+            var query = repository.GetAll().Where(c => c.Id == input.Id);
             return ValueTask.FromResult(query);
         }
         /// <summary>
@@ -621,7 +621,7 @@ namespace BXJG.GeneralTree
             string parentCode = "";
             if (input.ParentId.HasValue && input.ParentId.Value > 0)
             {
-                var top = await ownRepository.SingleAsync(c => c.Id == input.ParentId.Value);
+                var top = await repository.SingleAsync(c => c.Id == input.ParentId.Value);
                 parentCode = top.Code;
             }
             var ctx = new Dictionary<string, object> { { "input", input } };
@@ -683,7 +683,7 @@ namespace BXJG.GeneralTree
         /// <returns></returns>
         protected virtual ValueTask<IQueryable<TEntity>> GetAllFilteredAsync(TGetAllInput input, string parentCode, IDictionary<string, object> context = default)
         {
-            return ValueTask.FromResult(ownRepository.GetAll().Where(c => c.Code.StartsWith(parentCode)));
+            return ValueTask.FromResult(repository.GetAll().Where(c => c.Code.StartsWith(parentCode)));
         }
         /// <summary>
         /// 获取所有数据的排序

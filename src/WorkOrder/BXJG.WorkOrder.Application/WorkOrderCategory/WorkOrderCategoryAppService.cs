@@ -44,11 +44,11 @@ namespace BXJG.WorkOrder.WorkOrderCategory
         public WorkOrderCategoryAppService(IRepository<CategoryEntity, long> ownRepository,
                                            CategoryManager clsManager,
                                            WorkOrderTypeManager workOrderTypeManager) : base(ownRepository,
-                                                                                            clsManager,
-                                                                                            CoreConsts.WorkOrderCategoryCreate,
-                                                                                            CoreConsts.WorkOrderCategoryUpdate,
-                                                                                            CoreConsts.WorkOrderCategoryDelete,
-                                                                                            CoreConsts.WorkOrderCategoryManager)
+                                                                                             clsManager,
+                                                                                             CoreConsts.WorkOrderCategoryCreate,
+                                                                                             CoreConsts.WorkOrderCategoryUpdate,
+                                                                                             CoreConsts.WorkOrderCategoryDelete,
+                                                                                             CoreConsts.WorkOrderCategoryManager)
         {
             this.workOrderTypeManager = workOrderTypeManager;
             //虽然性能低，但访问不高
@@ -64,20 +64,20 @@ namespace BXJG.WorkOrder.WorkOrderCategory
             //};
         }
 
-        protected override ValueTask BeforeCreateAsync(WorkOrderCategoryEditInput input, CategoryEntity entity, IDictionary<string, object> context = null)
-        {
-            return generalTreeManager.HandDefaultAsync(entity);
-        }
+        //protected override ValueTask BeforeCreateAsync(WorkOrderCategoryEditInput input, CategoryEntity entity, IDictionary<string, object> context = null)
+        //{
+        //    return generalTreeManager.HandSaveDefaultAsync(entity);
+        //}
 
         protected override async ValueTask<IQueryable<CategoryEntity>> UpdateGetAsync(WorkOrderCategoryEditInput input, IDictionary<string, object> context = null)
         {
             var query = await base.UpdateGetAsync(input, context);
             return query.Include(c => c.WorkOrderTypes);
         }
-        protected override ValueTask BeforeUpdateAsync(WorkOrderCategoryEditInput input, CategoryEntity entity, IDictionary<string, object> context = null)
-        {
-            return generalTreeManager.HandDefaultAsync(entity);
-        }
+        //protected override ValueTask BeforeUpdateAsync(WorkOrderCategoryEditInput input, CategoryEntity entity, IDictionary<string, object> context = null)
+        //{
+        //    return generalTreeManager.HandSaveDefaultAsync(entity);
+        //}
 
         protected override async ValueTask<IQueryable<CategoryEntity>> GetQueryAsync(EntityDto<long> input, IDictionary<string, object> context = null)
         {
@@ -97,7 +97,7 @@ namespace BXJG.WorkOrder.WorkOrderCategory
         {
             var query = await base.GetAllFilteredAsync(input, parentCode, context);
             query = query.Include(c => c.WorkOrderTypes)
-                         .Where(generalTreeManager.GetWhereExpression(input.WorkOrderTypes, input.ContainsNullWorkOrderType));
+                         .WhereWorkOrderType(input.WorkOrderTypes, input.ContainsNullWorkOrderType);
             return query;
         }
     }

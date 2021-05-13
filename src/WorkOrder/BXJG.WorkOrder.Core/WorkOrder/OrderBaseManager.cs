@@ -35,15 +35,17 @@ namespace BXJG.WorkOrder.WorkOrder
     public abstract class OrderBaseManager<TEntity> : DomainServiceBase where TEntity : OrderBaseEntity
     {
         protected readonly IRepository<TEntity, long> repository;
-        protected readonly DefaultClsManager defaultClsManager;
+        //protected readonly DefaultClsManager defaultClsManager;
         protected readonly string workOrderType;
+        protected readonly IRepository<CategoryEntity, long> clsRepository;
+        protected readonly CategoryManager clsManager;
 
-
-        protected OrderBaseManager(IRepository<TEntity, long> repository, DefaultClsManager defaultClsManager, string workOrderType)
+        protected OrderBaseManager(IRepository<TEntity, long> repository, IRepository<CategoryEntity, long> clsRepository, CategoryManager clsManager, string workOrderType)
         {
             this.repository = repository;
-            this.defaultClsManager = defaultClsManager;
             this.workOrderType = workOrderType;
+            this.clsRepository = clsRepository;
+            this.clsManager = clsManager;
         }
         //分类 紧急程度可以定义参数默认值，进一步获取设置系统的默认值
         //工单的创建场景有：后台管理员创建、客户提交、某些事件如销售订单产生时自动创建，这些场景通常对应应用层方法或事件处理程序，它们都调用此方法
@@ -53,7 +55,7 @@ namespace BXJG.WorkOrder.WorkOrder
             //其它逻辑，暂时忽略
             if (!dto.CategoryId.HasValue)
             {
-                dto.CategoryId = (await defaultClsManager.GetDefaultAsync(workOrderType)).Id;
+                dto.CategoryId = (await clsRepository.GetDefaultAsync(workOrderType)).Id;
             }
             else
                 dto.CategoryId = dto.CategoryId;
@@ -63,7 +65,7 @@ namespace BXJG.WorkOrder.WorkOrder
                 dto.UrgencyDegree = OrderBaseEntity.DefaultUrgencyDegree;
             var entity = Create(dto);
             await repository.InsertAsync(entity);
-            //await CurrentUnitOfWork.SaveChangesAsync();//保存以更新id为自增id
+            await CurrentUnitOfWork.SaveChangesAsync();//保存以更新id为自增id
             return entity;
         }
 
@@ -80,7 +82,12 @@ namespace BXJG.WorkOrder.WorkOrder
 
     public class OrderManager : OrderBaseManager<OrderEntity>
     {
-        public OrderManager(IRepository<OrderEntity, long> repository, DefaultClsManager defaultClsManager) : base(repository, defaultClsManager, CoreConsts.DefaultWorkOrderTypeName)
+        public OrderManager(IRepository<OrderEntity, long> repository, 
+                            IRepository<CategoryEntity, long> clsRepository,
+                            CategoryManager clsManager) : base(repository,
+                                                               clsRepository,
+                                                               clsManager, 
+                                                               CoreConsts.DefaultWorkOrderTypeName)
         {
         }
 

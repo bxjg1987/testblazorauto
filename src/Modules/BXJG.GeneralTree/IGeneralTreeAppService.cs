@@ -28,6 +28,7 @@ namespace BXJG.GeneralTree
                                                                          GeneralTreeEditDto,
                                                                          BatchOperationInputLong,
                                                                          GeneralTreeGetTreeInput,
-                                                                         EntityDto<long>, GeneralTreeNodeMoveInput>
+                                                                         EntityDto<long>,
+                                                                         GeneralTreeNodeMoveInput>
     { }
 }

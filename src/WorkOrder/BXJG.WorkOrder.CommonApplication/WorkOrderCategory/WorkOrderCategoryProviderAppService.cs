@@ -10,19 +10,25 @@ using System.Threading.Tasks;
 using Abp.Localization;
 using Abp.Authorization;
 using BXJG.WorkOrder.WorkOrderType;
+using Abp.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace BXJG.WorkOrder.WorkOrderCategory
 {
-    [AbpAuthorize]
+    //[AbpAuthorize]
     public class WorkOrderCategoryProviderAppService : UnAuthGeneralTreeAppServiceBase<GetWorkOrderCategoryForSelectInput,
                                                                                        WorkOrderCategoryTreeNodeDto,
                                                                                        GetWorkOrderCategoryForSelectInput,
                                                                                        WorkOrderCategoryComboboxItemDto,
                                                                                        CategoryEntity>
     {
+        protected readonly CategoryManager categoryManager;
+
         public WorkOrderCategoryProviderAppService(IRepository<CategoryEntity, long> ownRepository,
-                                                   WorkOrderTypeManager bXJGWorkOrderConfig) : base(ownRepository)
+                                                   WorkOrderTypeManager workOrderTypeManager,
+                                                   CategoryManager categoryManager) : base(ownRepository)
         {
+            this.categoryManager = categoryManager;
             //base.ComboboxMap = (entity, dto) =>
             //{
             //    dto.WorkOrderTypeName = entity.WorkOrderTypes.IsNullOrWhiteSpace() ? default : bXJGWorkOrderConfig[entity.WorkOrderTypes].DisplayName.Localize(LocalizationManager);
@@ -32,13 +38,29 @@ namespace BXJG.WorkOrder.WorkOrderCategory
             //    dto.WorkOrderTypeName = entity.WorkOrderTypes.IsNullOrWhiteSpace() ? default : bXJGWorkOrderConfig[entity.WorkOrderTypes].DisplayName.Localize(LocalizationManager);
             //};
         }
-        //protected override IQueryable<CategoryEntity> ComboboxFilterAsync(GetWorkOrderCategoryForSelectInput q, long? parentId)
-        //{
-        //    return base.ComboboxFilterAsync(q, parentId).WhereIf(!q.WorkOrderType.IsNullOrWhiteSpace(), c => c.WorkOrderTypes == q.WorkOrderType || (q.ContainsNullWorkOrderType && c.WorkOrderTypes.IsNullOrWhiteSpace()));
-        //}
-        //protected override IQueryable<CategoryEntity> ComboTreeFilterAsync(GetWorkOrderCategoryForSelectInput q, string parentCode)
-        //{
-        //    return base.ComboTreeFilterAsync(q, parentCode).WhereIf(!q.WorkOrderType.IsNullOrWhiteSpace(), c => c.WorkOrderTypes == q.WorkOrderType || (q.ContainsNullWorkOrderType && c.WorkOrderTypes.IsNullOrWhiteSpace()));
-        //}
+
+        protected override async ValueTask<IQueryable<CategoryEntity>> ComboboxFilterAsync(GetWorkOrderCategoryForSelectInput input, long? parentId, IDictionary<string, object> context = null)
+        {
+            var query = await base.ComboboxFilterAsync(input, parentId, context);
+            return query.Include(c => c.WorkOrderTypes).WhereWorkOrderType(input.WorkOrderType, input.ContainsNullWorkOrderType);
+        }
+
+        protected override ValueTask<List<WorkOrderCategoryComboboxItemDto>> EntityToComboboDtoAsync(IEnumerable<CategoryEntity> entities, IDictionary<string, object> context = null)
+        {
+            entities.HandDefault();
+            return base.EntityToComboboDtoAsync(entities, context);
+        }
+
+        protected override async ValueTask<IQueryable<CategoryEntity>> ComboTreeFilterAsync(GetWorkOrderCategoryForSelectInput input, string parentCode, IDictionary<string, object> context = null)
+        {
+            var query = await base.ComboTreeFilterAsync(input, parentCode, context);
+            return query.Include(c => c.WorkOrderTypes).WhereWorkOrderType(input.WorkOrderType, input.ContainsNullWorkOrderType);
+        }
+        
+        protected override ValueTask<List<WorkOrderCategoryTreeNodeDto>> EntityToTreeDtoAsync(IEnumerable<CategoryEntity> entities, IDictionary<string, object> context = null)
+        {
+            entities.HandDefault();
+            return base.EntityToTreeDtoAsync(entities, context);
+        }
     }
 }

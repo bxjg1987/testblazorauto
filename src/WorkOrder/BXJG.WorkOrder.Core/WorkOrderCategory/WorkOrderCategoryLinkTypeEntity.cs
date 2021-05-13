@@ -21,14 +21,6 @@ namespace BXJG.WorkOrder.WorkOrderCategory
         /// 工单类型名
         /// </summary>
         public string WorkOrderType { get; set; }
-        ///// <summary>
-        ///// 工单类别id
-        ///// </summary>
-        //public long CategoryId { get; set; }
-        ///// <summary>
-        ///// 工单类别导航树形
-        ///// </summary>
-        //public virtual CategoryEntity Category { get; set; }
         /// <summary>
         /// 是否为默认类别
         /// </summary>
