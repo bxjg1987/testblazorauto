@@ -14,12 +14,12 @@ namespace BXJG.WorkOrder.WorkOrderCategory
     /// <summary>
     /// 工单分类实体。业务简单，不使用充血模型
     /// </summary>
-    public class CategoryEntity : GeneralTreeEntity<CategoryEntity>, IGeneratesDomainEvents
+    public class CategoryEntity : GeneralTreeEntity<CategoryEntity>//, IGeneratesDomainEvents
     {
-        /// <summary>
-        /// 领域事件
-        /// </summary>
-        public virtual ICollection<IEventData> DomainEvents { get; } = new List<IEventData>();
+        ///// <summary>
+        ///// 领域事件
+        ///// </summary>
+        //public virtual ICollection<IEventData> DomainEvents { get; } = new List<IEventData>();
         /// <summary>
         /// 是否默认
         /// </summary>

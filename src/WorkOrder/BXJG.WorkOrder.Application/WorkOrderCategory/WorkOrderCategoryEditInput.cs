@@ -27,6 +27,8 @@ namespace BXJG.WorkOrder.WorkOrderCategory
     /// </summary>
     public class WorkOrderTypeDto
     {
+        //public long CategoryId { get; set; }
+        //public CategoryEntity Category { get; set; }
         /// <summary>
         /// 工单类型
         /// </summary>

@@ -20,5 +20,9 @@ namespace BXJG.WorkOrder.WorkOrderCategory
         /// 是否默认
         /// </summary>
         public bool IsDefault { get; set; }
+        /// <summary>
+        /// 关联的工单类型
+        /// </summary>
+        public string WorkOrderTypeDisplayName { get; set; }
     }
 }

@@ -9,6 +9,7 @@
     <text name="修改失败！" value="修改失败！" />
     <text name="删除成功！" value="删除成功！" />
     <text name="删除失败！" value="删除失败！" />
+    <text name="默认" value="默认" />
     <text name="此节点不允许修改！" value="此节点不允许修改！" />
     <text name="操作确认" value="确认[{0}]已选择的行吗?" />
     <text name="True" value="是" />
@@ -16,6 +17,7 @@
     <text name="不限" value="==不限==" />
     <text name="Please select role" value="==角色==" />
     <text name="==请选择==" value="==请选择==" />
+    <text name="请选择" value="==请选择==" />
     <text name="全部" value="全部" />
     <text name="新增" value="新增" />
     <text name="修改" value="修改" />

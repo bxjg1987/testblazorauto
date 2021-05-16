@@ -35,8 +35,8 @@
     <EmbeddedResource Include="Localization\SourceFiles\ZLJ-zh-Hans.xml" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Abp.AutoMapper" Version="6.3.0" />
-    <PackageReference Include="Abp.ZeroCore" Version="6.3.0" />
+    <PackageReference Include="Abp.AutoMapper" Version="6.3.1" />
+    <PackageReference Include="Abp.ZeroCore" Version="6.3.1" />
     <PackageReference Include="Castle.Windsor.Extensions.DependencyInjection" Version="5.1.1" />
   </ItemGroup>
   <ItemGroup>

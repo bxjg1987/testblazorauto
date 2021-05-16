@@ -65,7 +65,7 @@ namespace BXJG.GeneralTree
                                                string allTextForSearch = "不限",
                                                string allTextForForm = "请选择")//这里的字符串后期可以使用常量
         {
-            base.LocalizationSourceName = GeneralTreeConsts.LocalizationSourceName;
+            //base.LocalizationSourceName = GeneralTreeConsts.LocalizationSourceName;
             this.repository = repository;
             this.AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
             //L内部调用的LocationSource是使用的属性注入，所以在构造函数中无法使用L()  此规则.net framework版本是这个规则，.net core版本未测试过
@@ -568,7 +568,6 @@ namespace BXJG.GeneralTree
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        //[UnitOfWork(false)] 接口已经加了
         public virtual async Task<TDto> GetAsync(TGetInput input)
         {
             await CheckGetPermissionAsync();
@@ -611,7 +610,6 @@ namespace BXJG.GeneralTree
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        //[UnitOfWork(false)] 接口已经加了
         public virtual async Task<IList<TDto>> GetAllAsync(TGetAllInput input)
         {
             //权限判断
@@ -619,11 +617,13 @@ namespace BXJG.GeneralTree
 
             //获取父节点的code 方便后续查询所有子集
             string parentCode = "";
+
             if (input.ParentId.HasValue && input.ParentId.Value > 0)
             {
                 var top = await repository.SingleAsync(c => c.Id == input.ParentId.Value);
                 parentCode = top.Code;
             }
+
             var ctx = new Dictionary<string, object> { { "input", input } };
             //查询
             var query = await GetAllFilteredAsync(input, parentCode, ctx);//.Where(c => c.Code.StartsWith(parentCode));
@@ -731,9 +731,8 @@ namespace BXJG.GeneralTree
         {
             return CheckPermissionAsync(getPermissionName);
         }
-        protected virtual Task CheckPermissionAsync(string permissionName)
+        protected virtual async Task CheckPermissionAsync(string permissionName)
         {
-
             //if (string.IsNullOrWhiteSpace(permissionName))
             //    return;
 
@@ -743,9 +742,8 @@ namespace BXJG.GeneralTree
             //使用父类的权限检查可以得到一个正常的未授权响应
             if (!string.IsNullOrEmpty(permissionName))
             {
-                PermissionChecker.AuthorizeAsync(permissionName);
+                await PermissionChecker.AuthorizeAsync(permissionName);
             }
-            return Task.CompletedTask;
         }
         #endregion
     }

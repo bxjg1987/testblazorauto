@@ -13,9 +13,13 @@ namespace BXJG.WorkOrder
             //CreateMap(typeof(WorkOrderCategoryEditInput), typeof(CategoryEntity));
             //CreateMap(typeof(CategoryEntity), typeof(WorkOrderCategroyDto));
             CreateMap<WorkOrderCategoryEditInput, CategoryEntity>();
-            CreateMap<CategoryEntity, WorkOrderCategroyDto>();
+
             CreateMap<WorkOrderTypeDto, WorkOrderCategoryTypeEntity>();
-            CreateMap<WorkOrderCategoryTypeEntity, WorkOrderTypeDto>();
+            //CreateMap<WorkOrderCategoryTypeEntity, WorkOrderTypeDto>();
+
+
+            CreateMap<CategoryEntity, WorkOrderCategroyDto>();
+            CreateMap<WorkOrderCategoryTypeEntity, CategoryWorkOrderTypeDto>();
             #endregion
         }
     }

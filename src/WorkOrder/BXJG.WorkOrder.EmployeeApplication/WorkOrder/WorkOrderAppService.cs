@@ -91,6 +91,7 @@ namespace BXJG.WorkOrder.WorkOrder
             this.executePermissionName = executePermissionName;
             this.completionPermissionName = completionPermissionName;
             this.rejectPermissionName = rejectPermissionName;
+            base.LocalizationSourceName = CoreConsts.LocalizationSourceName;
         }
 
         /// <summary>

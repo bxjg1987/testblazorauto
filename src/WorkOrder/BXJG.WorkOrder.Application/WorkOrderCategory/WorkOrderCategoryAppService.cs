@@ -15,7 +15,7 @@ using System.Linq.Expressions;
 using Abp.Application.Services.Dto;
 using Abp.Domain.Uow;
 using BXJG.Common.Dto;
-
+using BXJG.Utils.Localization;
 namespace BXJG.WorkOrder.WorkOrderCategory
 {
     /// <summary>
@@ -38,67 +38,51 @@ namespace BXJG.WorkOrder.WorkOrderCategory
         /// <summary>
         /// 实例化工单类别应用服务
         /// </summary>
-        /// <param name="ownRepository"></param>
+        /// <param name="repository"></param>
         /// <param name="clsManager"></param>
         /// <param name="workOrderTypeManager"></param>
-        public WorkOrderCategoryAppService(IRepository<CategoryEntity, long> ownRepository,
+        public WorkOrderCategoryAppService(IRepository<CategoryEntity, long> repository,
                                            CategoryManager clsManager,
-                                           WorkOrderTypeManager workOrderTypeManager) : base(ownRepository,
+                                           WorkOrderTypeManager workOrderTypeManager) : base(repository,
                                                                                              clsManager,
                                                                                              CoreConsts.WorkOrderCategoryCreate,
                                                                                              CoreConsts.WorkOrderCategoryUpdate,
                                                                                              CoreConsts.WorkOrderCategoryDelete,
                                                                                              CoreConsts.WorkOrderCategoryManager)
         {
+            base.LocalizationSourceName = CoreConsts.LocalizationSourceName;
             this.workOrderTypeManager = workOrderTypeManager;
-            //虽然性能低，但访问不高
-            //base.GetAllMap = (entity, dto) =>
-            //{
-            //    //dto.WorkOrderTypeName = entity.WorkOrderTypes.Count==0 ? default : bXJGWorkOrderConfig[entity.WorkOrderTypes].DisplayName.Localize(LocalizationManager);
-            //    dto.WorkOrderTypes = entity.WorkOrderTypes.Select(c => new CategoryWorkOrderTypeDto
-            //    {
-            //        //WorkOrderType = c.WorkOrderType,
-            //        WorkOrderTypeDisplayName = bXJGWorkOrderConfig[c.WorkOrderType].DisplayName.Localize(LocalizationManager)
-            //    });
-            //    //dto.WorkOrderTypeName = string.Join(',', entity.WorkOrderTypes.Select(c => bXJGWorkOrderConfig[c.WorkOrderType].DisplayName.Localize(LocalizationManager)));
-            //};
         }
-
-        //protected override ValueTask BeforeCreateAsync(WorkOrderCategoryEditInput input, CategoryEntity entity, IDictionary<string, object> context = null)
-        //{
-        //    return generalTreeManager.HandSaveDefaultAsync(entity);
-        //}
-
-        protected override async ValueTask<IQueryable<CategoryEntity>> UpdateGetAsync(WorkOrderCategoryEditInput input, IDictionary<string, object> context = null)
+        protected override ValueTask BeforeUpdateAsync(WorkOrderCategoryEditInput input, CategoryEntity entity, IDictionary<string, object> context = null)
         {
-            var query = await base.UpdateGetAsync(input, context);
-            return query.Include(c => c.WorkOrderTypes);
+            entity.WorkOrderTypes.Clear();
+            return base.BeforeUpdateAsync(input, entity, context);
         }
-        //protected override ValueTask BeforeUpdateAsync(WorkOrderCategoryEditInput input, CategoryEntity entity, IDictionary<string, object> context = null)
-        //{
-        //    return generalTreeManager.HandSaveDefaultAsync(entity);
-        //}
-
         protected override async ValueTask<IQueryable<CategoryEntity>> GetQueryAsync(EntityDto<long> input, IDictionary<string, object> context = null)
         {
             var query = await base.GetQueryAsync(input, context);
             return query.Include(c => c.WorkOrderTypes);
         }
-        protected override ValueTask EntityToDtoAsync(CategoryEntity entity, WorkOrderCategroyDto dto, IDictionary<string, object> context = null)
-        {
-            foreach (var item in dto.WorkOrderTypes)
-            {
-                item.WorkOrderTypeDisplayName = item.WorkOrderType.GeneralTreeL();
-            }
-            return ValueTask.CompletedTask;
-        }
-
         protected override async ValueTask<IQueryable<CategoryEntity>> GetAllFilteredAsync(GetAllWorkOrderCategoryInput input, string parentCode, IDictionary<string, object> context = null)
         {
             var query = await base.GetAllFilteredAsync(input, parentCode, context);
             query = query.Include(c => c.WorkOrderTypes)
-                         .WhereWorkOrderType(input.WorkOrderTypes, input.ContainsNullWorkOrderType);
+                         .WhereWorkOrderType(input.CategoryTypeQueryType, input.WorkOrderTypes, input.ContainsNullWorkOrderType);
             return query;
+        }
+        protected override ValueTask EntityToDtoAsync(CategoryEntity entity, WorkOrderCategroyDto dto, IDictionary<string, object> context = null)
+        {
+            dto.WorkOrderTypeDisplayName = "";
+            foreach (var item in dto.WorkOrderTypes)
+            {
+
+                item.WorkOrderTypeDisplayName = workOrderTypeManager[item.WorkOrderType].DisplayName.Localize(LocalizationManager);
+                dto.WorkOrderTypeDisplayName += item.WorkOrderTypeDisplayName;
+                if (item.IsDefault)
+                    dto.WorkOrderTypeDisplayName += $"({"默认".UtilsL()})";
+                dto.WorkOrderTypeDisplayName += ",";
+            }
+            return ValueTask.CompletedTask;
         }
     }
 }

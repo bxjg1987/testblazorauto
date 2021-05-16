@@ -13,6 +13,8 @@ namespace BXJG.WorkOrder.WorkOrderCategory
     /// </summary>
     public class WorkOrderCategoryTypeEntity : Entity<long>, IMustHaveTenant
     {
+        public long CategoryId { get; set; }
+        public CategoryEntity Category { get; set; }
         /// <summary>
         /// 为了方便将来做数据处理，加上租户
         /// </summary>

@@ -38,42 +38,28 @@ namespace BXJG.WorkOrder.WorkOrderCategory
             return top;
         }
 
-        /// <summary>
-        /// 获取查询条件，只要该类别所关联的工单类型包含workOrderTypes中的任何一个就认为符合条件
-        /// </summary>
-        /// <param name="query"></param>
-        /// <param name="workOrderTypes"></param>
-        /// <param name="containsNullWorkOrderType"></param>
-        /// <returns></returns>
-        public static IQueryable<CategoryEntity> WhereWorkOrderType(this IQueryable<CategoryEntity> query, IEnumerable<string> workOrderTypes, bool containsNullWorkOrderType)
-        {
-            Expression<Func<CategoryEntity, bool>> where = c => true;
-            if (workOrderTypes != null && workOrderTypes.Any())
-            {
-                where = c => workOrderTypes.Any(d => c.WorkOrderTypes.Any(e => e.WorkOrderType == d));
-                if (containsNullWorkOrderType)
-                {
-                    where = where.Or(c => !c.WorkOrderTypes.Any());
-                }
-            }
-            return query.Where(where);
-        }
+        ///// <summary>
+        ///// 获取查询条件，只要该类别所关联的工单类型包含workOrderTypes中的任何一个就认为符合条件
+        ///// </summary>
+        ///// <param name="query"></param>
+        ///// <param name="workOrderTypes"></param>
+        ///// <param name="containsNullWorkOrderType"></param>
+        ///// <returns></returns>
+        //public static IQueryable<CategoryEntity> WhereWorkOrderType(this IQueryable<CategoryEntity> query, IEnumerable<string> workOrderTypes, bool containsNullWorkOrderType)
+        //{
+        //    Expression<Func<CategoryEntity, bool>> where = c => true;
+        //    if (workOrderTypes != null && workOrderTypes.Any())
+        //    {
+        //        //where = c => workOrderTypes.Any(d => c.WorkOrderTypes.Any(e => e.WorkOrderType == d));
+        //        where = c => c.WorkOrderTypes.Any(d=> workOrderTypes.Any(e=>e==d.WorkOrderType));
+        //        if (containsNullWorkOrderType)
+        //        {
+        //            where = where.Or(c => !c.WorkOrderTypes.Any());
+        //        }
+        //    }
+        //    return query.Where(where);
+        //}
 
-        /// <summary>
-        /// 若关联的工单类型设置了默认，则取消未关联工单类型的分类的默认设置
-        /// </summary>
-        /// <param name="entities"></param>
-        /// <returns></returns>
-        public static void HandDefault(this IEnumerable<CategoryEntity> entities)
-        {
-            if (entities.Any(c => c.WorkOrderTypes.Any(d => d.IsDefault)))
-            {
-                var list = entities.Where(c => !c.WorkOrderTypes.Any());
-                foreach (var item in list)
-                {
-                    item.IsDefault = false;
-                }
-            }
-        }
+      
     }
 }

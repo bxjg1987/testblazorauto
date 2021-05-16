@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ZLJ.EntityFrameworkCore;
 
 namespace ZLJ.Migrations
 {
     [DbContext(typeof(ZLJDbContext))]
-    partial class ZLJDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210516072850_updateworkorder8")]
+    partial class updateworkorder8
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2603,10 +2605,7 @@ namespace ZLJ.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<long>("CategoryId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("CategoryId1")
+                    b.Property<long?>("CategoryId")
                         .HasColumnType("bigint");
 
                     b.Property<bool>("IsDefault")
@@ -2621,8 +2620,6 @@ namespace ZLJ.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
-
-                    b.HasIndex("CategoryId1");
 
                     b.ToTable("BXJGWorkOrderCategoryType");
                 });
@@ -3323,15 +3320,7 @@ namespace ZLJ.Migrations
                 {
                     b.HasOne("BXJG.WorkOrder.WorkOrderCategory.CategoryEntity", null)
                         .WithMany("WorkOrderTypes")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BXJG.WorkOrder.WorkOrderCategory.CategoryEntity", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId1");
-
-                    b.Navigation("Category");
+                        .HasForeignKey("CategoryId");
                 });
 
             modelBuilder.Entity("ZLJ.Authorization.Roles.Role", b =>
