@@ -67,6 +67,8 @@ namespace BXJG.WorkOrder.WorkOrderCategory
 
             if (entity.WorkOrderTypes.Any())
             {
+                entity.IsDefault = false;
+
                 #region 检查是否存在不支持的工单类型
                 var str = string.Empty;
                 foreach (var item in entity.WorkOrderTypes)
@@ -85,6 +87,7 @@ namespace BXJG.WorkOrder.WorkOrderCategory
                 var cls = await AsyncQueryableExecuter.ToListAsync(query);
                 cls.ForEach(item =>
                 {
+                    //item.IsDefault = false;
                     foreach (var workOrderType in item.WorkOrderTypes)
                     {
                         workOrderType.IsDefault = false;
@@ -107,8 +110,6 @@ namespace BXJG.WorkOrder.WorkOrderCategory
 
             //await scop.CompleteAsync();
         }
-
-       
 
         //移动到WorkOrderCategoryRepositoryExtensions中了
         ///// <summary>
@@ -135,16 +136,21 @@ namespace BXJG.WorkOrder.WorkOrderCategory
 
         public override async Task<CategoryEntity> CreateAsync(CategoryEntity entity)
         {
-            entity = await base.CreateAsync(entity);
             await HandSaveDefaultAsync(entity);
-            return entity;
+            return await base.CreateAsync(entity);
         }
 
         public override async Task<CategoryEntity> UpdateAsync(CategoryEntity entity)
         {
-            entity = await base.UpdateAsync(entity);
+            using (var scope = base.UnitOfWorkManager.Begin())
+            {
+                var temp = await AsyncQueryableExecuter.FirstOrDefaultAsync(repository.GetAllIncluding(c => c.WorkOrderTypes));
+                temp.WorkOrderTypes.Clear();
+                await scope.CompleteAsync();
+            }
+
             await HandSaveDefaultAsync(entity);
-            return entity;
+            return await base.UpdateAsync(entity);
         }
     }
 }

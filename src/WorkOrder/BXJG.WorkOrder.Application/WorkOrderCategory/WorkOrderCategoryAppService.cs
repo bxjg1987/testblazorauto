@@ -53,11 +53,9 @@ namespace BXJG.WorkOrder.WorkOrderCategory
             base.LocalizationSourceName = CoreConsts.LocalizationSourceName;
             this.workOrderTypeManager = workOrderTypeManager;
         }
-        protected override ValueTask BeforeUpdateAsync(WorkOrderCategoryEditInput input, CategoryEntity entity, IDictionary<string, object> context = null)
-        {
-            entity.WorkOrderTypes.Clear();
-            return base.BeforeUpdateAsync(input, entity, context);
-        }
+
+        //manager中已有新增或修改的逻辑
+       
         protected override async ValueTask<IQueryable<CategoryEntity>> GetQueryAsync(EntityDto<long> input, IDictionary<string, object> context = null)
         {
             var query = await base.GetQueryAsync(input, context);
@@ -75,13 +73,15 @@ namespace BXJG.WorkOrder.WorkOrderCategory
             dto.WorkOrderTypeDisplayName = "";
             foreach (var item in dto.WorkOrderTypes)
             {
-
                 item.WorkOrderTypeDisplayName = workOrderTypeManager[item.WorkOrderType].DisplayName.Localize(LocalizationManager);
                 dto.WorkOrderTypeDisplayName += item.WorkOrderTypeDisplayName;
                 if (item.IsDefault)
                     dto.WorkOrderTypeDisplayName += $"({"默认".UtilsL()})";
                 dto.WorkOrderTypeDisplayName += ",";
             }
+            dto.WorkOrderTypeDisplayName = dto.WorkOrderTypeDisplayName.TrimEnd(',');
+            if (dto.WorkOrderTypes.Any())
+                dto.IsDefault = false;
             return ValueTask.CompletedTask;
         }
     }

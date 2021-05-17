@@ -675,7 +675,7 @@ namespace BXJG.GeneralTree
             return list1;
         }
         /// <summary>
-        /// 获取所有数据的查询
+        /// 获取所有数据的查询，默认已加入parentCode条件
         /// </summary>
         /// <param name="input">输入参数</param>
         /// <param name="parentCode">父节点code</param>
