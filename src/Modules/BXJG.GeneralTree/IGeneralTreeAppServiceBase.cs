@@ -26,13 +26,11 @@ namespace BXJG.GeneralTree
         /// </summary>
         /// <param name="input">指定父节点，是否显示全部</param>
         /// <returns></returns>
-        [UnitOfWork(false)]
         Task<IList<TGetTreeForSelectOutput>> GetTreeForSelectAsync(TGetTreeForSelectInput input);
         /// <summary>
         /// 获取指定父节点的子节点，以扁平结构返回
         /// </summary>
         /// <returns></returns>
-        [UnitOfWork(false)]
         Task<IList<TGetNodesForSelectOutput>> GetNodesForSelectAsync(TGetNodesForSelectInput input);
     }
 
@@ -91,14 +89,12 @@ namespace BXJG.GeneralTree
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        [UnitOfWork(false)]
         Task<IList<TDto>> GetAllAsync(TGetAllInput input);
         /// <summary>
         /// 获取指定节点
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        [UnitOfWork(false)]
         Task<TDto> GetAsync(TGetInput input);
     }
 

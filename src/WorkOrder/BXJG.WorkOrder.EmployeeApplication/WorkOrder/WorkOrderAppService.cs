@@ -91,7 +91,7 @@ namespace BXJG.WorkOrder.WorkOrder
             this.executePermissionName = executePermissionName;
             this.completionPermissionName = completionPermissionName;
             this.rejectPermissionName = rejectPermissionName;
-            base.LocalizationSourceName = CoreConsts.LocalizationSourceName;
+            //base.LocalizationSourceName = CoreConsts.LocalizationSourceName; 基类不能用
         }
 
         /// <summary>

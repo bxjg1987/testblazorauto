@@ -31,7 +31,7 @@ namespace BXJG.WorkOrder
         /// </summary>
         /// <returns></returns>
         [UnitOfWork(IsDisabled = true)]
-        public IEnumerable<ComboboxItemDto> GetAllAsync(GetForSelectInput input)
+        public IEnumerable<ComboboxItemDto> GetAll(GetForSelectInput input)
         {
             var list = wotManager.List.Select(c => new ComboboxItemDto(c.Name, c.DisplayName.Localize(LocalizationManager))).ToList();
             if (input.ForType > 0) {

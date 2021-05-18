@@ -12,7 +12,7 @@ using Abp.Authorization;
 using BXJG.WorkOrder.WorkOrderType;
 using Abp.Linq;
 using Microsoft.EntityFrameworkCore;
-
+using Abp.Linq.Extensions;
 namespace BXJG.WorkOrder.WorkOrderCategory
 {
     [AbpAuthorize]
@@ -27,7 +27,7 @@ namespace BXJG.WorkOrder.WorkOrderCategory
         public WorkOrderCategoryProviderAppService(IRepository<CategoryEntity, long> ownRepository,
                                                    CategoryManager categoryManager) : base(ownRepository)
         {
-            base.LocalizationSourceName = CoreConsts.LocalizationSourceName;
+            //base.LocalizationSourceName = CoreConsts.LocalizationSourceName;//基类不能用
             this.categoryManager = categoryManager;
         }
 
@@ -37,39 +37,29 @@ namespace BXJG.WorkOrder.WorkOrderCategory
             return query.Include(c => c.WorkOrderTypes).WhereWorkOrderType(input.CategoryTypeQueryType, input.WorkOrderTypes, input.ContainsNullWorkOrderType);
         }
 
-        protected override ValueTask<List<WorkOrderCategoryComboboxItemDto>> EntityToComboboDtoAsync(IEnumerable<CategoryEntity> entities, IDictionary<string, object> context = null)
-        {
-            HandDefault(entities);
-            return base.EntityToComboboDtoAsync(entities, context);
-        }
+        //protected override async ValueTask<List<WorkOrderCategoryComboboxItemDto>> EntityToComboboDtoAsync(IEnumerable<CategoryEntity> entities, IDictionary<string, object> context = null)
+        //{
+        //    //HandDefault(entities);
+        //    return base.EntityToComboboDtoAsync(entities, context);
+        //}
 
         protected override async ValueTask<IQueryable<CategoryEntity>> ComboTreeFilterAsync(GetWorkOrderCategoryForSelectInput input, string parentCode, IDictionary<string, object> context = null)
         {
+            var sdf = base.CurrentUnitOfWork;
             var query = await base.ComboTreeFilterAsync(input, parentCode, context);
             return query.Include(c => c.WorkOrderTypes).WhereWorkOrderType(input.CategoryTypeQueryType, input.WorkOrderTypes, input.ContainsNullWorkOrderType);
         }
-        
-        protected override ValueTask<List<WorkOrderCategoryTreeNodeDto>> EntityToTreeDtoAsync(IEnumerable<CategoryEntity> entities, IDictionary<string, object> context = null)
-        {
-            HandDefault(entities);
-            return base.EntityToTreeDtoAsync(entities, context);
-        }
 
-        /// <summary>
-        /// 若关联的工单类型设置了默认，则取消未关联工单类型的分类的默认设置，调用方不应使用事务
-        /// </summary>
-        /// <param name="entities"></param>
-        /// <returns></returns>
-        static void HandDefault( IEnumerable<CategoryEntity> entities)
+        protected override async ValueTask<List<WorkOrderCategoryTreeNodeDto>> EntityToTreeDtoAsync(IEnumerable<CategoryEntity> entities, IDictionary<string, object> context = null)
         {
-            if (entities.Any(c => c.WorkOrderTypes.Any(d => d.IsDefault)))
+            var dtos = await base.EntityToTreeDtoAsync(entities, context);
+            foreach (var item in entities)
             {
-                var list = entities.Where(c => !c.WorkOrderTypes.Any());
-                foreach (var item in list)
-                {
-                    item.IsDefault = false; //这里修改值，调用方不应使用事务
+                if (item.WorkOrderTypes.Any(c => c.IsDefault)) {
+                    dtos.Single(c => c.Id == item.Id.ToString()).IsDefault = false;
                 }
             }
+            return dtos;
         }
     }
 }

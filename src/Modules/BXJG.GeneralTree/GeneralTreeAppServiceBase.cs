@@ -77,7 +77,7 @@ namespace BXJG.GeneralTree
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        //[UnitOfWork(false)]//接口已经加了
+        [UnitOfWork(false)]
         public virtual async Task<IList<TGetTreeForSelectOutput>> GetTreeForSelectAsync(TGetTreeForSelectInput input)
         {
             //权限判断
@@ -163,7 +163,7 @@ namespace BXJG.GeneralTree
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        //[UnitOfWork(false)]//接口已经加了
+        [UnitOfWork(false)]
         public virtual async Task<IList<TGetNodesForSelectOutput>> GetNodesForSelectAsync(TGetNodesForSelectInput input)
         {
             //await CheckGetPermissionAsync();
@@ -568,6 +568,7 @@ namespace BXJG.GeneralTree
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
+        [UnitOfWork(false)]
         public virtual async Task<TDto> GetAsync(TGetInput input)
         {
             await CheckGetPermissionAsync();
@@ -610,6 +611,7 @@ namespace BXJG.GeneralTree
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
+        [UnitOfWork(false)]
         public virtual async Task<IList<TDto>> GetAllAsync(TGetAllInput input)
         {
             //权限判断

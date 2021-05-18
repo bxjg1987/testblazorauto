@@ -81,34 +81,42 @@ namespace BXJG.WorkOrder.WorkOrderCategory
                 #endregion
 
                 #region 确保一个工单类型只能有一个默认类别
-                var query = repository.GetAllIncluding(c => c.WorkOrderTypes)
-                                      .Where(c => c.WorkOrderTypes.Any(d => entity.WorkOrderTypes.Any(e => e.WorkOrderType == d.WorkOrderType) && d.IsDefault))
-                                      .Where(c => c.Id != entity.Id);
-                var cls = await AsyncQueryableExecuter.ToListAsync(query);
-                cls.ForEach(item =>
+                var ts = entity.WorkOrderTypes.Where(c => c.IsDefault).Select(c => c.WorkOrderType);
+                if (ts.Any())
                 {
-                    //item.IsDefault = false;
-                    foreach (var workOrderType in item.WorkOrderTypes)
+                    var query = repository.GetAllIncluding(c => c.WorkOrderTypes)
+                                          .Where(c => c.WorkOrderTypes.Any(d => ts.Any(e => e == d.WorkOrderType) && d.IsDefault))
+                                          .Where(c => c.Id != entity.Id);
+                    var cls = await AsyncQueryableExecuter.ToListAsync(query);
+                    cls.ForEach(item =>
                     {
-                        workOrderType.IsDefault = false;
-                    }
-                });
+                        //item.IsDefault = false;
+                        foreach (var workOrderType in item.WorkOrderTypes)
+                        {
+                            workOrderType.IsDefault = false;
+                        }
+                    });
+                }
                 #endregion
-                return;
             }
-
-            #region 确保未关联工单类型的分类有且只有一个默认类别
-            if (!entity.IsDefault)
-                return;
-            var query1 = repository.GetAll().Where(c => !c.WorkOrderTypes.Any() && c.Id != entity.Id && c.IsDefault);
-            var cls1 = await AsyncQueryableExecuter.ToListAsync(query1);
-            foreach (var item in cls1)
+            else
             {
-                item.IsDefault = false;
+                #region 确保未关联工单类型的分类有且只有一个默认类别
+                if (entity.IsDefault)
+                {
+                    var query1 = repository.GetAll().Where(c => !c.WorkOrderTypes.Any() && c.Id != entity.Id && c.IsDefault);
+                    var cls1 = await AsyncQueryableExecuter.ToListAsync(query1);
+                    foreach (var item in cls1)
+                    {
+                        item.IsDefault = false;
+                    }
+                }
+                #endregion
             }
-            #endregion
-
-            //await scop.CompleteAsync();
+            await CurrentUnitOfWork.SaveChangesAsync();
+            var qq = repository.GetAll().Where(c => !c.WorkOrderTypes.Any() && c.IsDefault);
+            if ((await AsyncQueryableExecuter.CountAsync(qq)) != 1)
+                throw new UserFriendlyException("共享的类别有有且只能有一个默认类别！".BXJGWorkOrderL());
         }
 
         //移动到WorkOrderCategoryRepositoryExtensions中了
@@ -142,13 +150,10 @@ namespace BXJG.WorkOrder.WorkOrderCategory
 
         public override async Task<CategoryEntity> UpdateAsync(CategoryEntity entity)
         {
-            using (var scope = base.UnitOfWorkManager.Begin())
-            {
-                var temp = await AsyncQueryableExecuter.FirstOrDefaultAsync(repository.GetAllIncluding(c => c.WorkOrderTypes));
-                temp.WorkOrderTypes.Clear();
-                await scope.CompleteAsync();
-            }
-
+            var ts = entity.WorkOrderTypes.ToList();
+            entity = await AsyncQueryableExecuter.FirstOrDefaultAsync(repository.GetAllIncluding(c => c.WorkOrderTypes).Where(c => c.Id == entity.Id));
+            entity.WorkOrderTypes.Clear();
+            entity.WorkOrderTypes = ts;
             await HandSaveDefaultAsync(entity);
             return await base.UpdateAsync(entity);
         }

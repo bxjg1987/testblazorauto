@@ -50,7 +50,7 @@ namespace BXJG.WorkOrder.WorkOrderCategory
                                                                                              CoreConsts.WorkOrderCategoryDelete,
                                                                                              CoreConsts.WorkOrderCategoryManager)
         {
-            base.LocalizationSourceName = CoreConsts.LocalizationSourceName;
+            //base.LocalizationSourceName = CoreConsts.LocalizationSourceName; 基类不能用
             this.workOrderTypeManager = workOrderTypeManager;
         }
 
