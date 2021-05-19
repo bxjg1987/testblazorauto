@@ -69,8 +69,8 @@ namespace BXJG.GeneralTree
             this.repository = repository;
             this.AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
             //L内部调用的LocationSource是使用的属性注入，所以在构造函数中无法使用L()  此规则.net framework版本是这个规则，.net core版本未测试过
-            this.allTextForSearch = allTextForSearch.UtilsL();
-            this.allTextForForm = allTextForForm.UtilsL();
+            this.allTextForSearch = allTextForSearch;
+            this.allTextForForm = allTextForForm;
         }
         /// <summary>
         /// 获取树形的下拉框数据，不需要身份验证
@@ -129,7 +129,7 @@ namespace BXJG.GeneralTree
             //通用树是通过继承来实现扩展的，所以这里L引用的本地化源可能被子类重写，因此这里用L是可以的
             if (input.ForType > 0 && input.ForType < 5 && !string.IsNullOrWhiteSpace(input.ParentText))
             {
-                dtoList.Insert(0, new TGetTreeForSelectOutput { Id = null, Text = L(input.ParentText) });
+                dtoList.Insert(0, new TGetTreeForSelectOutput { Id = null, Text = input.ParentText });
                 return dtoList;
             }
             //return new List<TGetTreeForSelectOutput> { new TGetTreeForSelectOutput { Id = null, Text = L(input.ParentText), Children = dtoList } };
@@ -210,7 +210,7 @@ namespace BXJG.GeneralTree
             //dtoList = dtoList.Where(c => c.Value != input.Id).ToList();
 
             if (input.ForType > 0 && input.ForType < 5 && !string.IsNullOrWhiteSpace(input.ParentText))
-                dtoList.Insert(0, new TGetNodesForSelectOutput { Value = null, DisplayText = L(input.ParentText) });
+                dtoList.Insert(0, new TGetNodesForSelectOutput { Value = null, DisplayText = input.ParentText });
             else if ((input.ForType == 1 || input.ForType == 3) && input.ParentId.HasValue)
                 dtoList.Insert(0, parentDto);
             else if (input.ForType == 1 || input.ForType == 2)
@@ -372,7 +372,7 @@ namespace BXJG.GeneralTree
                                          string allTextForManager = "全部")
         {
             //L内部调用的LocationSource是使用的属性注入，所以在构造函数中无法使用L()  此规则.net framework版本是这个规则，.net core版本未测试过
-            this.allTextForManager = allTextForManager.UtilsL();
+            this.allTextForManager = allTextForManager;
             this.repository = ownRepository;
 
             this.generalTreeManager = manager;
@@ -667,7 +667,7 @@ namespace BXJG.GeneralTree
             if (input.LoadParent)
             {
                 if (!string.IsNullOrWhiteSpace(input.ParentText))
-                    return new List<TDto> { new TDto { DisplayName = L(input.ParentText), Children = list1 } };
+                    return new List<TDto> { new TDto { DisplayName = input.ParentText, Children = list1 } };
 
                 if (input.ParentId.HasValue)
                     return new List<TDto> { parentDto };

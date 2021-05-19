@@ -15,11 +15,11 @@ namespace BXJG.WorkOrder.WorkOrder
     [UnitOfWork(IsDisabled = true)]
     public class WorkOrderCommonAppService : AppServiceBase
     {
-        EnumManager enumManager;
+        Lazy< EnumManager> enumManager;
 
         public WorkOrderCommonAppService()
         {
-            enumManager = new EnumManager(LocalizationSource);
+            enumManager = new Lazy<EnumManager>(()=> new EnumManager(base.LocalizationManager, CoreConsts.LocalizationSourceName));
         }
         /// <summary>
         /// 获取工单状态列表
@@ -28,7 +28,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <returns></returns>
         public List<ComboboxItemDto> GetAllStatus(GetForSelectInput input)
         {
-            return enumManager.ConvertToComboboxData<Status>(input);
+            return enumManager.Value.ConvertToComboboxData<Status>(input);
         }
         /// <summary>
         /// 获取工单紧急程度列表
@@ -37,7 +37,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <returns></returns>
         public List<ComboboxItemDto> GetAllUrgencyDegree(GetForSelectInput input)
         {
-            return enumManager.ConvertToComboboxData<UrgencyDegree>(input);
+            return enumManager.Value.ConvertToComboboxData<UrgencyDegree>(input);
         }
     }
 }
