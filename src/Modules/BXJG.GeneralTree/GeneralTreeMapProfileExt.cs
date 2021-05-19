@@ -10,6 +10,7 @@ namespace BXJG.GeneralTree
     /// </summary>
     public static class GeneralTreeMapProfileExt
     {
+        [Obsolete]
         public static IMappingExpression DtoToEntity(this IMappingExpression config)
         {
             return config;
@@ -28,8 +29,7 @@ namespace BXJG.GeneralTree
                     .ForMember("CreatorUserId", opt => opt.Ignore());
         }
 
-
-
+        [Obsolete]
         public static IMappingExpression<TSource, TDestination> EntityToDto<TSource, TDestination>(this IMappingExpression<TSource, TDestination> config)
            where TSource : GeneralTreeEntity<TSource>
            where TDestination : GeneralTreeGetTreeNodeBaseDto<TDestination>
@@ -39,6 +39,7 @@ namespace BXJG.GeneralTree
             return config.ForMember(c => c.ExtData, opt => opt.Ignore());
         }
 
+        [Obsolete]
         public static IMappingExpression EntityToDto(this IMappingExpression config)
         {
             return config;

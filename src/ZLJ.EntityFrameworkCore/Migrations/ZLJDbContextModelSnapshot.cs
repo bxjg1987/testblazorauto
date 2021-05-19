@@ -2589,15 +2589,42 @@ namespace ZLJ.Migrations
                     b.Property<int?>("TenantId")
                         .HasColumnType("int");
 
-                    b.Property<string>("WorkOrderType")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ParentId");
 
                     b.ToTable("BXJGWorkOrderCategory");
+                });
+
+            modelBuilder.Entity("BXJG.WorkOrder.WorkOrderCategory.WorkOrderCategoryTypeEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<long>("CategoryId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("CategoryId1")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("WorkOrderType")
+                        .HasColumnType("varchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("CategoryId1");
+
+                    b.ToTable("BXJGWorkOrderCategoryType");
                 });
 
             modelBuilder.Entity("ZLJ.Authorization.Roles.Role", b =>
@@ -3292,6 +3319,21 @@ namespace ZLJ.Migrations
                     b.Navigation("Parent");
                 });
 
+            modelBuilder.Entity("BXJG.WorkOrder.WorkOrderCategory.WorkOrderCategoryTypeEntity", b =>
+                {
+                    b.HasOne("BXJG.WorkOrder.WorkOrderCategory.CategoryEntity", null)
+                        .WithMany("WorkOrderTypes")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BXJG.WorkOrder.WorkOrderCategory.CategoryEntity", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId1");
+
+                    b.Navigation("Category");
+                });
+
             modelBuilder.Entity("ZLJ.Authorization.Roles.Role", b =>
                 {
                     b.HasOne("ZLJ.Authorization.Users.User", "CreatorUser")
@@ -3457,6 +3499,8 @@ namespace ZLJ.Migrations
             modelBuilder.Entity("BXJG.WorkOrder.WorkOrderCategory.CategoryEntity", b =>
                 {
                     b.Navigation("Children");
+
+                    b.Navigation("WorkOrderTypes");
                 });
 
             modelBuilder.Entity("ZLJ.Authorization.Roles.Role", b =>

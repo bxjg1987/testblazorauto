@@ -10,10 +10,10 @@
     <text name="修改失败！" value="修改失败！" />
     <text name="删除成功！" value="删除成功！" />
     <text name="删除失败！" value="删除失败！" />
+    <text name="默认" value="default" />
     <text name="此节点不允许修改！" value="This node does not allow modification!" />
     <text name="BXJG.Utils.Enums.Gender.Woman" value="Woman" />
     <text name="BXJG.Utils.Enums.Gender.Man" value="Man" />
-
     <text name="操作确认" value="are you sure [{0}] the selectd rows?" />
     <text name="HomePage" value="Home page" />
     <text name="About" value="About" />

@@ -14,16 +14,16 @@ using Abp.UI.Inputs;
 using Abp.Application.Services.Dto;
 using BXJG.Utils.DynamicProperty;
 using Abp.Domain.Uow;
+using BXJG.Common.Dto;
 
 namespace BXJG.Shop.Catalogue
 {
     public class ProductCategoryAppService : GeneralTreeAppServiceBase<ProductCategoryDto,
                                                                        ProductCategoryEditDto,
+                                                                       ProductCategoryEditDto,
+                                                                       BatchOperationInputLong,
                                                                        ProductCategoryGetAllInput,
-                                                                       ProductCategoryGetForSelectInput,
-                                                                       ProductCategoryTreeNodeDto,
-                                                                       ProductCategoryGetForSelectInput,
-                                                                       ProductCategoryCombboxDto,
+                                                                       EntityDto<long>,
                                                                        GeneralTreeNodeMoveInput,
                                                                        ProductCategoryEntity,
                                                                        ProductCategoryManager>, IProductCategoryAppService
@@ -95,4 +95,15 @@ namespace BXJG.Shop.Catalogue
             return (await dynamicPropertyManager.GetDynamicPropertyAsync(id)).ToDto();
         }
     }
+
+    //public class ProductCategoryCommonAppService : UnAuthGeneralTreeAppServiceBase<ProductCategoryGetForSelectInput,
+    //                                                                               ProductCategoryTreeNodeDto,
+    //                                                                               ProductCategoryGetForSelectInput,
+    //                                                                               ProductCategoryCombboxDto, 
+    //                                                                               ProductCategoryEntity>
+    //{
+    //    public ProductCategoryCommonAppService(IRepository<ProductCategoryEntity, long> ownRepository) : base(ownRepository)
+    //    {
+    //    }
+    //}
 }

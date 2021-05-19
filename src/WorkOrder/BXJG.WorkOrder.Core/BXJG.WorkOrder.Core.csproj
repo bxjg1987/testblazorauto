@@ -13,6 +13,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DefaultClsManager.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Localization\SourceFiles\BXJGWorkOrder-en.xml" />
     <None Remove="Localization\SourceFiles\BXJGWorkOrder-zh-Hans.xml" />
   </ItemGroup>
@@ -23,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Abp" Version="6.3.0" />
+    <PackageReference Include="Abp" Version="6.3.1" />
   </ItemGroup>
 
   <ItemGroup>

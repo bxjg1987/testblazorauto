@@ -1,4 +1,5 @@
-﻿using Abp.Authorization;
+﻿using Abp.Application.Services.Dto;
+using Abp.Authorization;
 using BXJG.GeneralTree;
 using BXJG.Utils.DynamicProperty;
 using System;
@@ -13,11 +14,10 @@ namespace BXJG.Shop.Catalogue
     /// </summary>
     public interface IProductCategoryAppService : IGeneralTreeAppServiceBase<ProductCategoryDto,
                                                                              ProductCategoryEditDto,
+                                                                             ProductCategoryEditDto,
+                                                                             BXJG.Common.Dto.BatchOperationInputLong,
                                                                              ProductCategoryGetAllInput,
-                                                                             ProductCategoryGetForSelectInput,
-                                                                             ProductCategoryTreeNodeDto,
-                                                                             ProductCategoryGetForSelectInput,
-                                                                             ProductCategoryCombboxDto,
+                                                                             EntityDto<long>,
                                                                              GeneralTreeNodeMoveInput>
     {
         [AbpAuthorize]

@@ -10,73 +10,79 @@ using System.Threading.Tasks;
 using Abp.Localization;
 using BXJG.WorkOrder.WorkOrderType;
 using Microsoft.EntityFrameworkCore;
-
+using Abp.Linq.Expressions;
+using System.Linq.Expressions;
+using Abp.Application.Services.Dto;
+using Abp.Domain.Uow;
+using BXJG.Common.Dto;
+using BXJG.Utils.Localization;
 namespace BXJG.WorkOrder.WorkOrderCategory
 {
+    /// <summary>
+    /// 工单分类应用服务
+    /// </summary>
     public class WorkOrderCategoryAppService : GeneralTreeAppServiceBase<WorkOrderCategroyDto,
                                                                          WorkOrderCategoryEditInput,
+                                                                         WorkOrderCategoryEditInput,
+                                                                         BatchOperationInputLong,
                                                                          GetAllWorkOrderCategoryInput,
-                                                                         GetWorkOrderCategoryForSelectInput,
-                                                                         WorkOrderCategoryTreeNodeDto,
-                                                                         GetWorkOrderCategoryForSelectInput,
-                                                                         WorkOrderCategoryComboboxItemDto,
+                                                                         EntityDto<long>,
                                                                          GeneralTreeNodeMoveInput,
                                                                          CategoryEntity,
                                                                          CategoryManager>
     {
-        private readonly WorkOrderTypeManager workOrderTypeManager;
-        public WorkOrderCategoryAppService(IRepository<CategoryEntity, long> ownRepository,
-                                           CategoryManager organizationUnitManager,
-                                           WorkOrderTypeManager bXJGWorkOrderConfig) : base(ownRepository,
-                                                                                            organizationUnitManager,
-                                                                                            CoreConsts.WorkOrderCategoryCreate,
-                                                                                            CoreConsts.WorkOrderCategoryUpdate,
-                                                                                            CoreConsts.WorkOrderCategoryDelete,
-                                                                                            CoreConsts.WorkOrderCategoryManager)
-        {
-            this.workOrderTypeManager = bXJGWorkOrderConfig;
-            base.GetAllMap = (entity, dto) =>
-            {
-                dto.WorkOrderTypeName = entity.WorkOrderType.IsNullOrWhiteSpace() ? default : bXJGWorkOrderConfig[entity.WorkOrderType].DisplayName.Localize(LocalizationManager);
-            };
-        }
-
-        protected override IQueryable<CategoryEntity> GetAllFiltered(GetAllWorkOrderCategoryInput q, string parentCode)
-        {
-            return base.GetAllFiltered(q, parentCode).WhereIf(!q.WorkOrderType.IsNullOrWhiteSpace(), c => c.WorkOrderType == q.WorkOrderType || (q.ContainsNullWorkOrderType && c.WorkOrderType.IsNullOrWhiteSpace()));
-        }
-
-        public override async Task<WorkOrderCategroyDto> CreateAsync(WorkOrderCategoryEditInput input)
-        {
-            await HandDefault(input.WorkOrderType, input.IsDefault);
-            return await base.CreateAsync(input);
-        }
-
-        public override async Task<WorkOrderCategroyDto> UpdateAsync(WorkOrderCategoryEditInput input)
-        {
-            await HandDefault(input.WorkOrderType, input.IsDefault);
-            return await base.UpdateAsync(input);
-        }
-
         /// <summary>
-        /// 根据工单类型处理默认分类
+        /// 工单类型管理器
         /// </summary>
-        /// <param name="workOrderType"></param>
-        /// <param name="isDefault"></param>
-        /// <returns></returns>
-        private async ValueTask HandDefault(string workOrderType, bool isDefault)
+        protected readonly WorkOrderTypeManager workOrderTypeManager;
+        /// <summary>
+        /// 实例化工单类别应用服务
+        /// </summary>
+        /// <param name="repository"></param>
+        /// <param name="clsManager"></param>
+        /// <param name="workOrderTypeManager"></param>
+        public WorkOrderCategoryAppService(IRepository<CategoryEntity, long> repository,
+                                           CategoryManager clsManager,
+                                           WorkOrderTypeManager workOrderTypeManager) : base(repository,
+                                                                                             clsManager,
+                                                                                             CoreConsts.WorkOrderCategoryCreate,
+                                                                                             CoreConsts.WorkOrderCategoryUpdate,
+                                                                                             CoreConsts.WorkOrderCategoryDelete,
+                                                                                             CoreConsts.WorkOrderCategoryManager)
         {
-            if (!workOrderType.IsNullOrWhiteSpace() && !workOrderTypeManager.ContainsKey(workOrderType))
-                throw new ApplicationException("不支持的工单类型");
+            //base.LocalizationSourceName = CoreConsts.LocalizationSourceName; 基类不能用
+            this.workOrderTypeManager = workOrderTypeManager;
+        }
 
-            if (!isDefault)
-                return;
-
-            var list = await ownRepository.GetAll().Where(c => c.WorkOrderType == workOrderType).ToListAsync();
-            foreach (var item in list)
+        //manager中已有新增或修改的逻辑
+       
+        protected override async ValueTask<IQueryable<CategoryEntity>> GetQueryAsync(EntityDto<long> input, IDictionary<string, object> context = null)
+        {
+            var query = await base.GetQueryAsync(input, context);
+            return query.Include(c => c.WorkOrderTypes);
+        }
+        protected override async ValueTask<IQueryable<CategoryEntity>> GetAllFilteredAsync(GetAllWorkOrderCategoryInput input, string parentCode, IDictionary<string, object> context = null)
+        {
+            var query = await base.GetAllFilteredAsync(input, parentCode, context);
+            query = query.Include(c => c.WorkOrderTypes)
+                         .WhereWorkOrderType(input.CategoryTypeQueryType, input.WorkOrderTypes, input.ContainsNullWorkOrderType);
+            return query;
+        }
+        protected override ValueTask EntityToDtoAsync(CategoryEntity entity, WorkOrderCategroyDto dto, IDictionary<string, object> context = null)
+        {
+            dto.WorkOrderTypeDisplayName = "";
+            foreach (var item in dto.WorkOrderTypes)
             {
-                item.IsDefault = false;
+                item.WorkOrderTypeDisplayName = workOrderTypeManager[item.WorkOrderType].DisplayName.Localize(LocalizationManager);
+                dto.WorkOrderTypeDisplayName += item.WorkOrderTypeDisplayName;
+                if (item.IsDefault)
+                    dto.WorkOrderTypeDisplayName += $"({"默认".UtilsL()})";
+                dto.WorkOrderTypeDisplayName += ",";
             }
+            dto.WorkOrderTypeDisplayName = dto.WorkOrderTypeDisplayName.TrimEnd(',');
+            if (dto.WorkOrderTypes.Any())
+                dto.IsDefault = false;
+            return ValueTask.CompletedTask;
         }
     }
 }
