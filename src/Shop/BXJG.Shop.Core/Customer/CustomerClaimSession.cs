@@ -32,7 +32,7 @@ namespace BXJG.Shop.Customer
     /// 如果需要使用它请在在BXJGShopCoreModule中注册，建议用单例
     /// 推荐配合CustomerLoginManager<TTenant, TRole, TUser, TUserManager>，在LoginManager中将当前登陆的顾客id存储到claim中
     /// 参考ZLJ.Authorization.LoginManager.CreateLoginResultAsync
-    /// 我们的文档：https://gitee.com/bxjg1987/abp/wikis/多种用户类型?sort_id=3639713
+    /// 我们的文档：https://gitee.com/bxjg1987_admin/abp/wikis/多种用户类型?sort_id=3639713
     /// </summary>
     public class CustomerClaimSession : BusinessUserClaimSession<long>, ICustomerSession
     {

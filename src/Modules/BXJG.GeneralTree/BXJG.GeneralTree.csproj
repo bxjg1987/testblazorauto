@@ -4,7 +4,7 @@
     <TargetFramework>net5.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <RepositoryUrl>https://gitee.com/bxjg1987/abp/tree/master/src/Modules/BXJG.GeneralTree</RepositoryUrl>
+    <RepositoryUrl>https://gitee.com/bxjg1987_admin/abp/tree/master/src/Modules/BXJG.GeneralTree</RepositoryUrl>
     <RepositoryType>github</RepositoryType>
     <Version>1.0.15</Version>
     <Description>abp通用树模块,类似abp的组织单位

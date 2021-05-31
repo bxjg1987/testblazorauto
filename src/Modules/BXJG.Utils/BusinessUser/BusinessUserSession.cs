@@ -16,7 +16,7 @@ namespace BXJG.Utils.BusinessUser
      * https://aspnetboilerplate.com/Pages/Documents/Articles%5CHow-To%5Cadd-custom-session-field-aspnet-core
      * 相比abp官方文档方式，我们抽象了个接口出来
      * 
-     * 我们的文档：https://gitee.com/bxjg1987/abp/wikis/多种用户类型?sort_id=3639713
+     * 我们的文档：https://gitee.com/bxjg1987_admin/abp/wikis/多种用户类型?sort_id=3639713
      */
 
     public interface IBusinessUserSession<TKey>

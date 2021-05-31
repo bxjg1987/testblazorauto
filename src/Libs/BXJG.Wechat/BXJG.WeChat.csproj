@@ -4,13 +4,13 @@
     <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>BXJG.WeChat</AssemblyName>
     <Authors>变形精怪</Authors>
-    <RepositoryUrl>https://gitee.com/bxjg1987/abp</RepositoryUrl>
+    <RepositoryUrl>https://gitee.com/bxjg1987_admin/abp</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <Description>微信小程序登录、支付。
 视频教程：https://www.bilibili.com/video/BV1Uk4y1d7Be/
-源码：https://gitee.com/bxjg1987/abp</Description>
+源码：https://gitee.com/bxjg1987_admin/abp</Description>
     <Version>1.0.15</Version>
-    <PackageProjectUrl>https://gitee.com/bxjg1987/abp</PackageProjectUrl>
+    <PackageProjectUrl>https://gitee.com/bxjg1987_admin/abp</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageId>BXJG.WeChat</PackageId>
