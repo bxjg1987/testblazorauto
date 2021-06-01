@@ -96,14 +96,17 @@ namespace BXJG.Shop.Catalogue
         }
     }
 
-    //public class ProductCategoryCommonAppService : UnAuthGeneralTreeAppServiceBase<ProductCategoryGetForSelectInput,
-    //                                                                               ProductCategoryTreeNodeDto,
-    //                                                                               ProductCategoryGetForSelectInput,
-    //                                                                               ProductCategoryCombboxDto, 
-    //                                                                               ProductCategoryEntity>
-    //{
-    //    public ProductCategoryCommonAppService(IRepository<ProductCategoryEntity, long> ownRepository) : base(ownRepository)
-    //    {
-    //    }
-    //}
+    /// <summary>
+    /// 前后端都可以调用此接口获取商品分类信息
+    /// </summary>
+    public class ProductCategoryCommonAppService : UnAuthGeneralTreeAppServiceBase<ProductCategoryGetForSelectInput,
+                                                                                   ProductCategoryTreeNodeDto,
+                                                                                   ProductCategoryGetForSelectInput,
+                                                                                   ProductCategoryCombboxDto,
+                                                                                   ProductCategoryEntity>
+    {
+        public ProductCategoryCommonAppService(IRepository<ProductCategoryEntity, long> repository) : base(repository)
+        {
+        }
+    }
 }

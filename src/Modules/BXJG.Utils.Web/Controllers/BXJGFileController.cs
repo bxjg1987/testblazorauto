@@ -42,17 +42,17 @@ namespace BXJG.Utils.Controllers
 
         [HttpPost]
         [AbpAuthorize]
-        public async Task<List<FileDto>> UploadAsync(IFormFileCollection file, [FromHeader] bool createThum = false)
+        public async Task<List<FileDto>> UploadAsync(IFormFileCollection file, [FromHeader] bool createThum = false, [FromHeader] int thumSize = 300)
         {
            // var rts = new List<FileUploadResult>();
             var fs = file.Select(c => new FileInput(c.FileName, c.OpenReadStream(), c.ContentType));
-            var r = await tempFileManager.UploadAsync(createThum, fs.ToArray());
+            var r = await tempFileManager.UploadAsync(createThum, thumSize, fs.ToArray());
             return r.Select(c => new FileDto
             {
                 FilePath = c.FileRelativePath,
                 ThumPath = c.ThumRelativePath,
-                FileUrl = tempFileManager.AddServerPath(c.FileRelativePath),
-                ThumUrl = tempFileManager.AddServerPath(c.ThumRelativePath)
+                FileUrl = c.FileUrl,
+                ThumUrl = c.ThumUrl
             }).ToList();
         }
     }

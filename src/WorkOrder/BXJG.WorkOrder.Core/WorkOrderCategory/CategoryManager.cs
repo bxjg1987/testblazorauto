@@ -115,7 +115,7 @@ namespace BXJG.WorkOrder.WorkOrderCategory
             }
             await CurrentUnitOfWork.SaveChangesAsync();
             var qq = repository.GetAll().Where(c => !c.WorkOrderTypes.Any() && c.IsDefault);
-            if ((await AsyncQueryableExecuter.CountAsync(qq)) != 1)
+            if ((await AsyncQueryableExecuter.CountAsync(qq)) > 1)
                 throw new UserFriendlyException("共享的类别有有且只能有一个默认类别！".BXJGWorkOrderL());
         }
 

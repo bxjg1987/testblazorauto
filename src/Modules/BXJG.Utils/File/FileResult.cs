@@ -29,5 +29,13 @@ namespace BXJG.Utils.File
         /// d:\app\wwwroot\upload\20202115\athum.jpg
         /// </summary>
         public string ThumAbsolutePath { get; set; }
+        /// <summary>
+        /// 可访问的文件url，http://xx.xx/upload/temp/xx.jpg
+        /// </summary>
+        public string FileUrl { get; set; }
+        /// <summary>
+        /// 可访问的缩略图url，http://xx.xx/upload/temp/xxthum.jpg
+        /// </summary>
+        public string ThumUrl { get; set; }
     }
 }

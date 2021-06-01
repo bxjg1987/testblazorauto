@@ -53,18 +53,13 @@ namespace BXJG.Utils.File
         /// 根url地址
         /// http://xxx.xxx.xx:port/
         /// </summary>
-        readonly string _serverRootAddress;
-
-        /// <summary>
-        /// abp提供的设置管理器
-        /// </summary>
-        readonly ISettingManager _settingManager;
+        readonly string _serverRootUrl;
 
         /// <summary>
         /// web根目录
         /// window中为d:\app\wwwroot
         /// </summary>
-        readonly string _rootDir;
+        readonly string _webRootDir;
 
         /// <summary>
         /// 文件上传的根目录
@@ -77,6 +72,11 @@ namespace BXJG.Utils.File
         /// window中d:\app\wwwroot\upload\temp
         /// </summary>
         readonly string _tempDir;
+
+        /// <summary>
+        /// abp提供的设置管理器
+        /// </summary>
+        readonly ISettingManager _settingManager;
 
         /// <summary>
         /// abp提供的异步取消
@@ -103,19 +103,18 @@ namespace BXJG.Utils.File
         /// <param name="configuration">abp提供的settings系统</param>
         public TempFileManager(IEnv env, ISettingManager settingManager, IConfiguration configuration)
         {
-            _serverRootAddress = env.RootUrl;// configuration["App:ServerRootAddress"];
-            _regex = new Regex($@"<img.+?src=['""]{_serverRootAddress}(\S+)['""]",
+            _serverRootUrl = env.RootUrl;// configuration["App:ServerRootAddress"];
+            _regex = new Regex($@"<img.+?src=['""]{_serverRootUrl}(\S+)['""]",
                 RegexOptions.Multiline | RegexOptions.IgnoreCase);
             _settingManager = settingManager;
 
-            _rootDir = env.WebRoot; // d:\app\wwwroot
-
-
+            _webRootDir = env.WebRoot; // d:\app\wwwroot
             //未考虑并发冲突，也基本不需要
             _uploadDir = Path.Combine(env.WebRoot, Consts.UploadDir); // d:\app\wwwroot\upload 
-            if (!Directory.Exists(_uploadDir))
-                Directory.CreateDirectory(_uploadDir);
-            _tempDir = Path.Combine(env.WebRoot, Consts.UploadDir, "temp"); // d:\app\wwwroot\upload\temp
+            //Directory.CreateDirectory是递归的，这里的处理省了
+            //if (!Directory.Exists(_uploadDir))
+            //    Directory.CreateDirectory(_uploadDir);
+            _tempDir = Path.Combine(env.WebRoot, Consts.UploadTemp); // d:\app\wwwroot\upload\temp
             if (!Directory.Exists(_tempDir))
                 Directory.CreateDirectory(_tempDir);
         }
@@ -136,7 +135,7 @@ namespace BXJG.Utils.File
                 return p;
             p = p.Replace(Path.DirectorySeparatorChar.ToString(), "/");
             p = p.TrimStart('/');
-            p = _serverRootAddress + p;
+            p = _serverRootUrl + p;
             return p;
         }
 
@@ -150,7 +149,7 @@ namespace BXJG.Utils.File
         {
             if (p.IsNullOrWhiteSpace())
                 return p;
-            p = p.Replace(_serverRootAddress, "");
+            p = p.Replace(_serverRootUrl, "");
             if (!p.StartsWith('/'))
                 p = "/" + p;
             return p;
@@ -159,15 +158,16 @@ namespace BXJG.Utils.File
         /// <summary>
         /// 验证并将文件存储到temp目录
         /// </summary>
-        /// <param name="createThum"></param>
+        /// <param name="createThum">上传是图片且此值为true时将生成缩略图</param>
+        /// <param name="thumSize">需要创建缩略图时，缩略图的宽度，高度自动等比例缩放</param>
         /// <param name="inputs"></param>
         /// <returns></returns>
-        public async Task<List<FileResult>> UploadAsync(bool createThum = false, params FileInput[] inputs)
+        public async Task<List<FileResult>> UploadAsync(bool createThum = false, int thumSize = 500, params FileInput[] inputs)
         {
             var outputs = new List<FileResult>(); //准备返回值
 
-            var ts = await _settingManager.GetSettingValueAsync(Consts.SettingKeyUploadType); //设置中允许的后缀名 .pdf,.jpg...
-            var aryts = ts.Split(','); //设置中允许的后缀名 [".pdf",".jpg"...]
+            var ts = await _settingManager.GetSettingValueAsync(Consts.SettingKeyUploadType); //设置中允许的后缀名 pdf,jpg...
+            var aryts = ts.Split(','); //设置中允许的后缀名 ["pdf","jpg"...]
             var sz = await _settingManager.GetSettingValueAsync<int>(Consts.SettingKeyUploadSize); //设置中的大小限制
 
             foreach (var item in inputs)
@@ -189,13 +189,12 @@ namespace BXJG.Utils.File
 
                 var hz = Path.GetExtension(item.FileName); //文件后缀.jpg
                 var wjm = Guid.NewGuid().ToString("n") + hz; //xxx.jpg  xxx=guid
-                var dateDir =
-                    Path.Combine(_tempDir, DateTime.Now.ToString("yyyyMMdd")); //d:\app\wwwroot\upload\temp\20201003
-                //if (!Directory.Exists(dateDir))
-                Directory.CreateDirectory(dateDir);
+                var dateDir = Path.Combine(_tempDir, DateTime.Now.ToString("yyyyMMdd")); //d:\app\wwwroot\upload\temp\20201003
+                if (!Directory.Exists(dateDir))
+                    Directory.CreateDirectory(dateDir);
                 output.FileAbsolutePath = Path.Combine(dateDir, wjm); //d:\app\wwwroot\upload\temp\20201003\xxx.jpg
-                output.FileRelativePath =
-                    Absolute2RelativePath(output.FileAbsolutePath); //\upload\temp\20201003\xxx.jpg
+                output.FileRelativePath = Absolute2RelativePath(output.FileAbsolutePath); //\upload\temp\20201003\xxx.jpg
+                output.FileUrl = AddServerPath(output.FileRelativePath);
                 using (var fs = System.IO.File.Create(output.FileAbsolutePath))
                 {
                     await item.Stream.CopyToAsync(fs, cancellationTokenProvider.Token);
@@ -209,11 +208,11 @@ namespace BXJG.Utils.File
                 {
                     output.ThumAbsolutePath = ConvertToThumPath(output.FileAbsolutePath);
                     output.ThumRelativePath = Absolute2RelativePath(output.ThumAbsolutePath);
-
+                    output.ThumUrl = AddServerPath(output.ThumRelativePath);
                     //参考：https://docs.sixlabors.com/articles/imagesharp/resize.html
                     //经过测试这里load item.Stream会报错
-                    using var img = await  Image.LoadAsync(output.FileAbsolutePath, cancellationTokenProvider.Token);
-                    img.Mutate(x => x.Resize(500, 0)); //按给定的宽度缩放
+                    using var img = await Image.LoadAsync(output.FileAbsolutePath, cancellationTokenProvider.Token);
+                    img.Mutate(x => x.Resize(thumSize, 0)); //按给定的宽度缩放
                     await img.SaveAsync(output.ThumAbsolutePath);
                 }
 
@@ -235,19 +234,26 @@ namespace BXJG.Utils.File
             var list = new List<FileResult>();
             foreach (var file in inputs)
             {
-                var item = file.Replace("/", Path.DirectorySeparatorChar.ToString());
+                string item = file;
+                if (item.StartsWith(_serverRootUrl))
+                    item = RemoveServerPath(item);
 
-                if (!item.Contains(Path.Combine(Consts.UploadDir, "temp"), StringComparison.OrdinalIgnoreCase))
+                item = item.Replace("/", Path.DirectorySeparatorChar.ToString());
+
+                //修改时，有部分文件是不需要移动的
+                if (!item.Contains(Consts.UploadTemp, StringComparison.OrdinalIgnoreCase))
                 {
                     var rr = new FileResult
                     {
                         FileAbsolutePath = Relative2AbsolutePath(item),
                         FileRelativePath = item,
+                        FileUrl = AddServerPath(item)
                     };
                     rr.ThumAbsolutePath = ConvertToThumPath(rr.FileAbsolutePath);
-                    if (System.IO. File.Exists(rr.ThumAbsolutePath))
+                    if (System.IO.File.Exists(rr.ThumAbsolutePath))
                     {
                         rr.ThumRelativePath = Absolute2RelativePath(rr.ThumAbsolutePath);
+                        rr.ThumUrl = AddServerPath(rr.ThumRelativePath);
                     }
                     else
                         rr.ThumAbsolutePath = default;
@@ -261,6 +267,7 @@ namespace BXJG.Utils.File
                 //移动文件
                 var sourceAbsolutePath = Relative2AbsolutePath(item); //temp绝对路径
                 moveResult.FileRelativePath = TempToOkPath(item); //正式目录相对路径
+                moveResult.FileUrl = AddServerPath(moveResult.FileRelativePath);
                 moveResult.FileAbsolutePath = Relative2AbsolutePath(moveResult.FileRelativePath); //正式目录绝对路径
                 if (!System.IO.File.Exists(moveResult.FileAbsolutePath))
                 {
@@ -275,13 +282,14 @@ namespace BXJG.Utils.File
                 {
                     moveResult.ThumRelativePath = TempToOkPath(thumItem); //缩略图正式目录相对路径
                     moveResult.ThumAbsolutePath = Relative2AbsolutePath(moveResult.ThumRelativePath); //缩略图正式目录绝对路径
+                    moveResult.ThumUrl = AddServerPath(moveResult.ThumRelativePath);
                     System.IO.File.Move(sourceThumAbsolutePath, moveResult.ThumAbsolutePath);
                 }
 
                 list.Add(moveResult);
             }
 
-            return new ValueTask<List<FileResult>>( list);
+            return new ValueTask<List<FileResult>>(list);
         }
 
         /// <summary>
@@ -291,12 +299,19 @@ namespace BXJG.Utils.File
         /// <returns></returns>
         public ValueTask RemoveAsync(params string[] inputs)
         {
-            foreach (var item in inputs)
+            foreach (var item1 in inputs)
             {
+                string item = item1;
+                if (item.StartsWith(_serverRootUrl))
+                    item = RemoveServerPath(item);
+                item = item.Replace("/", Path.DirectorySeparatorChar.ToString());
+
+
+                item = Relative2AbsolutePath(item);
                 try
                 {
-                    var f = Relative2AbsolutePath(item);
-                    System.IO.File.Delete(f);
+                  //  var f = Relative2AbsolutePath(item);
+                    System.IO.File.Delete(item);
                 }
                 catch (Exception ex)
                 {
@@ -305,8 +320,8 @@ namespace BXJG.Utils.File
 
                 try
                 {
-                    var f = Relative2AbsolutePath(item);
-                    var d = ConvertToThumPath(f);
+                  //  var f = Relative2AbsolutePath(item);
+                    var d = ConvertToThumPath(item);
                     System.IO.File.Delete(d);
                 }
                 catch (Exception ex)
@@ -320,7 +335,7 @@ namespace BXJG.Utils.File
 
         #region 文章中的图片处理
 
-     
+
 
         /// <summary>
         /// 获取指定内容中所包含的图片的相对路径
@@ -342,7 +357,7 @@ namespace BXJG.Utils.File
         /// <returns></returns>
         public string ReplaceImagePath(string content)
         {
-            return _regex.Replace(content, c => c.Value.Replace("temp/", ""));
+            return _regex.Replace(content, c => c.Value.Replace("temp"+Path.DirectorySeparatorChar, ""));
         }
 
         #endregion
@@ -370,7 +385,7 @@ namespace BXJG.Utils.File
         /// <returns></returns>
         public string Absolute2RelativePath(string path)
         {
-            return path.Substring(_rootDir.Length);
+            return path.Substring(_webRootDir.Length);
         }
 
         /// <summary>
@@ -381,7 +396,7 @@ namespace BXJG.Utils.File
         /// <returns></returns>
         public string Relative2AbsolutePath(string path)
         {
-            return Path.Combine(_rootDir, path.TrimStart(Path.DirectorySeparatorChar));
+            return Path.Combine(_webRootDir, path.TrimStart(Path.DirectorySeparatorChar));
         }
 
         /// <summary>
@@ -390,9 +405,9 @@ namespace BXJG.Utils.File
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-       string TempToOkPath(string path)
+        string TempToOkPath(string path)
         {
-            return path.Replace(Path.Combine(Consts.UploadDir, "temp"), Consts.UploadDir);
+            return path.Replace(Consts.UploadTemp, Consts.UploadDir);
         }
 
         #endregion

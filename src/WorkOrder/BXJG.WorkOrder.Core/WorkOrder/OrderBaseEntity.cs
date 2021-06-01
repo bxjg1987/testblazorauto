@@ -158,6 +158,20 @@ namespace BXJG.WorkOrder.WorkOrder
         /// 内容描述
         /// </summary>
         public virtual string Description { get; set; }
+
+        ///// <summary>
+        ///// 关联的原始图片列表，多个用英文逗号分割
+        ///// 缩略图与原始图片是按顺序关联的
+        ///// 存储可访问路径，而不是相对路径
+        ///// </summary>
+        //public virtual string Images { get; set; }
+        ///// <summary>
+        ///// 关联的缩略图列表，多个用英文逗号分割
+        ///// 缩略图与原始图片是按顺序关联的
+        ///// 存储可访问路径，而不是相对路径
+        ///// </summary>
+        //public virtual string ThumImages { get; set; }
+
         /// <summary>
         /// 当前状态情况说明。相关业务方法的description参数将复制给此属性
         /// </summary>

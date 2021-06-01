@@ -12,6 +12,10 @@ namespace BXJG.Utils.File
             UploadTemp = @$"upload{Path.DirectorySeparatorChar}temp";
         }
         public const string UploadDir = "upload";
+      
+       /// <summary>
+       /// upload\temp
+       /// </summary>
         public static readonly string UploadTemp;
 
         public const string SettingKeyUploadGroup = "BXJGUtilsFileUploadGroup";
