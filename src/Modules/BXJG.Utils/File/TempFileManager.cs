@@ -310,7 +310,7 @@ namespace BXJG.Utils.File
                 item = Relative2AbsolutePath(item);
                 try
                 {
-                  //  var f = Relative2AbsolutePath(item);
+                    //  var f = Relative2AbsolutePath(item);
                     System.IO.File.Delete(item);
                 }
                 catch (Exception ex)
@@ -320,7 +320,7 @@ namespace BXJG.Utils.File
 
                 try
                 {
-                  //  var f = Relative2AbsolutePath(item);
+                    //  var f = Relative2AbsolutePath(item);
                     var d = ConvertToThumPath(item);
                     System.IO.File.Delete(d);
                 }
@@ -357,14 +357,11 @@ namespace BXJG.Utils.File
         /// <returns></returns>
         public string ReplaceImagePath(string content)
         {
-            return _regex.Replace(content, c => c.Value.Replace("temp"+Path.DirectorySeparatorChar, ""));
+            return _regex.Replace(content, c => c.Value.Replace("temp" + Path.DirectorySeparatorChar, ""));
         }
 
         #endregion
 
-        #endregion
-
-        #region 辅助方法
 
         /// <summary>
         /// 转换为缩略图路径
@@ -372,7 +369,7 @@ namespace BXJG.Utils.File
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        string ConvertToThumPath(string path)
+        public string ConvertToThumPath(string path)
         {
             return path.Insert(path.LastIndexOf("."), "thum");
         }
@@ -405,11 +402,26 @@ namespace BXJG.Utils.File
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        string TempToOkPath(string path)
+        public string TempToOkPath(string path)
         {
             return path.Replace(Consts.UploadTemp, Consts.UploadDir);
         }
 
+        /// <summary>
+        /// 判断指定文件是否存在缩略图
+        /// </summary>
+        /// <param name="filePath">任何路径</param>
+        /// <returns></returns>
+        public bool HasThumImage(string filePath)
+        {
+            RemoveServerPath(filePath);
+            filePath = filePath.Replace('/', Path.DirectorySeparatorChar);
+            if (!filePath.StartsWith(_webRootDir))
+                filePath = Relative2AbsolutePath(filePath);
+            if (!filePath.Contains("thum."))
+                filePath = ConvertToThumPath(filePath);
+            return System.IO.File.Exists(filePath);
+        }
         #endregion
     }
 }
