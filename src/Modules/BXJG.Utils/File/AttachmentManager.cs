@@ -101,8 +101,17 @@ namespace BXJG.Utils.File
             #region 最后移动新文件，删除旧文件
             //移动所有文件
             await tempFileManager.MoveAsync(files.Select(c => c.Key).ToArray());
-            //删除旧文件
-            await tempFileManager.RemoveAsync(needDelete.ToArray());
+
+            try
+            {
+                //最后删除旧文件，内部不会异常
+                await tempFileManager.RemoveAsync(needDelete.ToArray());
+            }
+            catch (Exception ex)
+            {
+                Logger.Warn("删除附件旧文件失败！", ex);
+            }
+      
             #endregion
 
             return list;
