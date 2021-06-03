@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Services.Dto;
+using BXJG.Utils.File;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -13,6 +14,10 @@ namespace BXJG.WorkOrder.WorkOrder
     /// </summary>
     public abstract class WorkOrderCreateBaseInput : WorkOrderUpdateBaseInput
     {
+        /// <summary>
+        /// 关联的图片
+        /// </summary>
+        public AttachmentEditDto Images { get; set; }
         /// <summary>
         /// 状态
         /// </summary>

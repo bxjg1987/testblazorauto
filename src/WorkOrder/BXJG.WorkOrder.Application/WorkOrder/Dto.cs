@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Services.Dto;
+using BXJG.Utils.File;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,11 @@ namespace BXJG.WorkOrder.WorkOrder
     /// 后台管理工单列表页使用的显示模型基类
     /// </summary>
     public class WorkOrderDtoBase : FullAuditedEntityDto<long>
-    {
+    {        
+        /// <summary>
+        /// 关联的图片
+        /// </summary>
+        public AttachmentDto Images { get; set; }
         /// <summary>
         /// 所属分类id
         /// </summary>

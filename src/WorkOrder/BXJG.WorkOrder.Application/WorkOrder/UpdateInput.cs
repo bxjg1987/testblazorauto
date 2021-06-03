@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Services.Dto;
+using BXJG.Utils.File;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -14,6 +15,10 @@ namespace BXJG.WorkOrder.WorkOrder
     /// </summary>
     public abstract class WorkOrderUpdateBaseInput : EntityDto<long>
     {
+        /// <summary>
+        /// 关联的图片
+        /// </summary>
+        public AttachmentEditDto Images { get; set; }
         /// <summary>
         /// 所属分类id
         /// </summary>
@@ -52,7 +57,7 @@ namespace BXJG.WorkOrder.WorkOrder
         public string EmployeeId { get; set; }
     }
 
-  
+
 
     /// <summary>
     /// 工单后台管理普通工单更新模型
@@ -89,5 +94,5 @@ namespace BXJG.WorkOrder.WorkOrder
         public string ExtendedField5 { get; set; }
     }
 
-    
+
 }
