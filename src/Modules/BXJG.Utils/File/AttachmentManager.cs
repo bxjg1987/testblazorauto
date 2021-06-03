@@ -34,17 +34,18 @@ namespace BXJG.Utils.File
             this.entityType = entityType;
         }
         /// <summary>
-        /// 设置附件，请在你的业务数据操作最后一个步骤调用此方法
+        /// 设置附件，请在你的业务数据操作最后一个步骤调用此方法，或者将你的带事务的操作放在act中
         /// </summary>
         /// <param name="entityId">实体id</param>
         /// <param name="files">key文件相对路径，value扩展属性</param>
+        /// <param name="act">移动新文件和删除旧文件之前回调</param>
         /// <returns></returns>
-        public async Task<List<AttachmentEntity>> SetAttachmentsAsync(object entityId, IDictionary<string, IDictionary<string, object>> files)
+        public async Task<List<AttachmentEntity>> SetAttachmentsAsync(object entityId, IDictionary<string, IDictionary<string, object>> files, Func<List<AttachmentEntity>, ValueTask> act = default)
         {
             //相应的文件处理参考：https://gitee.com/bxjg1987_admin/abp/wikis/pages?sort_id=4086113%26doc_id=627313#%E4%BA%8B%E5%8A%A1
             #region 删除旧文件
             //查询旧文件的相对url
-            var qq = repository.GetAll().Where(c => c.EntityId == entityId.ToString()).Select(c => c.RelativeFileUrl); 
+            var qq = repository.GetAll().Where(c => c.EntityId == entityId.ToString()).Select(c => c.RelativeFileUrl);
             var qqList = await AsyncQueryableExecuter.ToListAsync(qq);
             //旧文件的名称集合
             var oldNames = qqList.Select(c => Path.GetFileName(c));
@@ -60,41 +61,50 @@ namespace BXJG.Utils.File
             //得到需要删除的文件集合，包含路径
             var needDelete = qqList.Where(c => xj.Any(d => c.Contains(d)));
 
-            //不要在这里删，要在数据库操作之后删除文件
-            //await tempFileManager.RemoveAsync(needDelete.ToArray());
-            #endregion
-
             //删除旧文件的数据库记录
             await repository.DeleteAsync(c => c.EntityId == entityId.ToString());
-            await CurrentUnitOfWork.SaveChangesAsync();
 
-            //添加新的
+            //不要在这里删，要在数据库操作之后删除文件
+            //await tempFileManager.RemoveAsync(needDelete.ToArray());
+
+            await CurrentUnitOfWork.SaveChangesAsync();
+            #endregion
+
+            #region 添加新的
             var list = new List<AttachmentEntity>();
-           
-                foreach (var item in files)
+            foreach (var item in files)
+            {
+                var entity = new AttachmentEntity
                 {
-                    var entity = new AttachmentEntity
-                    {
-                        EntityType = entityType,
-                        EntityId = entityId.ToString(),
-                        RelativeFileUrl = tempFileManager.Absolute2RelativeUrl(item.Key),
-                    };
-                    entity.AbsoluteFileUrl = tempFileManager.Relative2AbsoluteUrl(entity.RelativeFileUrl);
-                    entity.RelativeThumUrl = tempFileManager.TryGetThumRelativeUrl(entity.RelativeFileUrl);
-                    if (!entity.RelativeThumUrl.IsNullOrWhiteSpace())
-                        entity.AbsoluteThumUrl = tempFileManager.Relative2AbsoluteUrl(entity.RelativeThumUrl);
-                    foreach (var ext in item.Value)
-                    {
-                        entity.SetData(ext.Key, ext.Value);
-                    }
-                    list.Add(entity);
+                    EntityType = entityType,
+                    EntityId = entityId.ToString(),
+                    RelativeFileUrl = tempFileManager.Absolute2RelativeUrl(item.Key),
+                };
+                entity.AbsoluteFileUrl = tempFileManager.Relative2AbsoluteUrl(entity.RelativeFileUrl);
+                entity.RelativeThumUrl = tempFileManager.TryGetThumRelativeUrl(entity.RelativeFileUrl);
+                if (!entity.RelativeThumUrl.IsNullOrWhiteSpace())
+                    entity.AbsoluteThumUrl = tempFileManager.Relative2AbsoluteUrl(entity.RelativeThumUrl);
+                foreach (var ext in item.Value)
+                {
+                    entity.SetData(ext.Key, ext.Value);
                 }
+                list.Add(entity);
+            }
             await CurrentUnitOfWork.SaveChangesAsync();
+            #endregion
 
+            #region 回调
+            if (act != default)
+                await act(list);
+            #endregion
+
+            #region 最后移动新文件，删除旧文件
             //移动所有文件
             await tempFileManager.MoveAsync(files.Select(c => c.Key).ToArray());
             //删除旧文件
             await tempFileManager.RemoveAsync(needDelete.ToArray());
+            #endregion
+
             return list;
         }
         /// <summary>
