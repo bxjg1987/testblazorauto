@@ -36,7 +36,7 @@ namespace BXJG.Utils.Controllers
 
         public BXJGFileController(TempFileManager tempFileManager)
         {
-            base.LocalizationSourceName = BXJG.Utils.BXJGUtilsConsts.LocalizationSourceName;
+            base.LocalizationSourceName = BXJGUtilsConsts.LocalizationSourceName;
             this.tempFileManager = tempFileManager;
         }
 
@@ -44,16 +44,17 @@ namespace BXJG.Utils.Controllers
         [AbpAuthorize]
         public async Task<List<FileDto>> UploadAsync(IFormFileCollection file, [FromHeader] bool createThum = false, [FromHeader] int thumSize = 300)
         {
-           // var rts = new List<FileUploadResult>();
+            // var rts = new List<FileUploadResult>();
             var fs = file.Select(c => new FileInput(c.FileName, c.OpenReadStream(), c.ContentType));
             var r = await tempFileManager.UploadAsync(createThum, thumSize, fs.ToArray());
-            return r.Select(c => new FileDto
-            {
-                FilePath = c.FileRelativePath,
-                ThumPath = c.ThumRelativePath,
-                FileUrl = c.FileUrl,
-                ThumUrl = c.ThumUrl
-            }).ToList();
+            return ObjectMapper.Map<List<FileDto>>(r);
+            //return r.Select(c => new FileDto
+            //{
+            //    FilePath = c.FileRelativePath,
+            //    ThumPath = c.ThumRelativePath,
+            //    FileUrl = c.FileUrl,
+            //    ThumUrl = c.ThumUrl
+            //}).ToList();
         }
     }
 }

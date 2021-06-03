@@ -10,15 +10,20 @@ using BXJG.Common;
 using Abp.Dependency;
 using BXJG.Utils.DynamicProperty;
 using System.Reflection;
+using Abp.AutoMapper;
 
 namespace BXJG.Utils
 {
-    [DependsOn( typeof(BXJGUtilsModule))]
+    [DependsOn(typeof(BXJGUtilsModule),
+               typeof(AbpAutoMapperModule))]
     public class BXJGUtilsApplicationModule : AbpModule
     {
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
+
+            //注册附件应用服务，它不实现abp的应用服务，所以不会生成动态webApi
+            //IocManager.Register(typeof(AttachmentAppService<>), DependencyLifeStyle.Transient);
         }
     }
 }

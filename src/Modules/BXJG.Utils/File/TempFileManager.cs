@@ -21,7 +21,7 @@ using SixLabors.ImageSharp.Processing;
 using Microsoft.Extensions.Configuration;
 using Abp.Extensions;
 using System.Text.RegularExpressions;
-
+using BXJG.Common.Extensions;
 namespace BXJG.Utils.File
 {
     /*
@@ -43,7 +43,7 @@ namespace BXJG.Utils.File
     /// 这是一个临时性的实现，基于服务器本地文件存储的文件管理领域服务
     /// mvc或web api层的controller接收上传的文件，并通过此类进行文件的验证和保存
     /// 参考文档：<see href="https://gitee.com/bxjg1987_admin/abp/wikis/文件管理?sort_id=2946614"/> 
-    /// 将来迁移到vNext后将启用此功能
+    /// 将来迁移到vNext后将弃用此功能，使用vNext自带的文件管理模块
     /// </summary>
     public class TempFileManager : DomainService //, ITransientDependency
     {
@@ -91,8 +91,6 @@ namespace BXJG.Utils.File
 
         #endregion
 
-        #region 构造函数
-
         /// <summary>
         /// 一个简单的文件管理领域服务
         /// mvc或web api层的controller接收上传的文件，并通过此类进行文件的验证和保存
@@ -117,42 +115,6 @@ namespace BXJG.Utils.File
             _tempDir = Path.Combine(env.WebRoot, Consts.UploadTemp); // d:\app\wwwroot\upload\temp
             if (!Directory.Exists(_tempDir))
                 Directory.CreateDirectory(_tempDir);
-        }
-
-        #endregion
-
-        #region 公共方法
-
-        /// <summary>
-        /// 将不带host的文件相对路径转换为完整路径
-        /// /upload/20201101/a.jpg -> http://www.xx.com/upload/20201101/a.jpg
-        /// </summary>
-        /// <param name="p"></param>
-        /// <returns></returns>
-        public string AddServerPath(string p)
-        {
-            if (p.IsNullOrWhiteSpace())
-                return p;
-            p = p.Replace(Path.DirectorySeparatorChar.ToString(), "/");
-            p = p.TrimStart('/');
-            p = _serverRootUrl + p;
-            return p;
-        }
-
-        /// <summary>
-        /// 将带host的完整文件路径转换为相对路径
-        /// http://www.xx.com/upload/20201101/a.jpg -> /upload/20201101/a.jpg
-        /// </summary>
-        /// <param name="p"></param>
-        /// <returns></returns>
-        public string RemoveServerPath(string p)
-        {
-            if (p.IsNullOrWhiteSpace())
-                return p;
-            p = p.Replace(_serverRootUrl, "");
-            if (!p.StartsWith('/'))
-                p = "/" + p;
-            return p;
         }
 
         /// <summary>
@@ -194,7 +156,7 @@ namespace BXJG.Utils.File
                     Directory.CreateDirectory(dateDir);
                 output.FileAbsolutePath = Path.Combine(dateDir, wjm); //d:\app\wwwroot\upload\temp\20201003\xxx.jpg
                 output.FileRelativePath = Absolute2RelativePath(output.FileAbsolutePath); //\upload\temp\20201003\xxx.jpg
-                output.FileUrl = AddServerPath(output.FileRelativePath);
+                output.FileUrl = Relative2AbsoluteUrl(output.FileRelativePath);
                 using (var fs = System.IO.File.Create(output.FileAbsolutePath))
                 {
                     await item.Stream.CopyToAsync(fs, cancellationTokenProvider.Token);
@@ -208,7 +170,7 @@ namespace BXJG.Utils.File
                 {
                     output.ThumAbsolutePath = ConvertToThumPath(output.FileAbsolutePath);
                     output.ThumRelativePath = Absolute2RelativePath(output.ThumAbsolutePath);
-                    output.ThumUrl = AddServerPath(output.ThumRelativePath);
+                    output.ThumUrl = Relative2AbsoluteUrl(output.ThumRelativePath);
                     //参考：https://docs.sixlabors.com/articles/imagesharp/resize.html
                     //经过测试这里load item.Stream会报错
                     using var img = await Image.LoadAsync(output.FileAbsolutePath, cancellationTokenProvider.Token);
@@ -223,22 +185,38 @@ namespace BXJG.Utils.File
 
             return outputs;
         }
+     
+        //public string GetDownloadUrl(string relativeUrl)
+        //{
+        //    relativeUrl = relativeUrl.UrlSeparatorChar2DirectorySeparatorChar();
+        //    relativeUrl = Relative2AbsolutePath(relativeUrl);
+        //    using (var fs = System.IO.File.OpenRead(relativeUrl))
+        //    {
+        //        act(fs);
+        //    }
+        //}
 
         /// <summary>
-        /// 将temp目录中的文件和缩略图(如果有)移动到正式目录
+        /// 将temp目录中的文件和缩略图(如果有)移动到正式目录，
+        /// 若是非temp目录的文件则不移动，但依然会处理返回值。
+        /// 注意它不是事务性的
         /// </summary>
-        /// <param name="inputs">文件在temp目录相对路径集合</param>
+        /// <param name="urls">相对或绝对url</param>
         /// <returns></returns>
-        public ValueTask<List<FileResult>> MoveAsync(params string[] inputs)
+        public ValueTask<List<FileResult>> MoveAsync(params string[] urls)
         {
+            //using (var tran = UnitOfWorkManager.Begin(System.Transactions.TransactionScopeOption.Suppress))
+            //{
+                
+            //}
             var list = new List<FileResult>();
-            foreach (var file in inputs)
+            foreach (var file in urls)
             {
                 string item = file;
-                if (item.StartsWith(_serverRootUrl))
-                    item = RemoveServerPath(item);
 
-                item = item.Replace("/", Path.DirectorySeparatorChar.ToString());
+                item = Absolute2RelativeUrl(item);
+
+                item = item.UrlSeparatorChar2DirectorySeparatorChar();
 
                 //修改时，有部分文件是不需要移动的
                 if (!item.Contains(Consts.UploadTemp, StringComparison.OrdinalIgnoreCase))
@@ -247,13 +225,13 @@ namespace BXJG.Utils.File
                     {
                         FileAbsolutePath = Relative2AbsolutePath(item),
                         FileRelativePath = item,
-                        FileUrl = AddServerPath(item)
+                        FileUrl = Relative2AbsoluteUrl(item)
                     };
                     rr.ThumAbsolutePath = ConvertToThumPath(rr.FileAbsolutePath);
                     if (System.IO.File.Exists(rr.ThumAbsolutePath))
                     {
                         rr.ThumRelativePath = Absolute2RelativePath(rr.ThumAbsolutePath);
-                        rr.ThumUrl = AddServerPath(rr.ThumRelativePath);
+                        rr.ThumUrl = Relative2AbsoluteUrl(rr.ThumRelativePath);
                     }
                     else
                         rr.ThumAbsolutePath = default;
@@ -267,7 +245,7 @@ namespace BXJG.Utils.File
                 //移动文件
                 var sourceAbsolutePath = Relative2AbsolutePath(item); //temp绝对路径
                 moveResult.FileRelativePath = TempToOkPath(item); //正式目录相对路径
-                moveResult.FileUrl = AddServerPath(moveResult.FileRelativePath);
+                moveResult.FileUrl = Relative2AbsoluteUrl(moveResult.FileRelativePath);
                 moveResult.FileAbsolutePath = Relative2AbsolutePath(moveResult.FileRelativePath); //正式目录绝对路径
                 if (!System.IO.File.Exists(moveResult.FileAbsolutePath))
                 {
@@ -282,7 +260,7 @@ namespace BXJG.Utils.File
                 {
                     moveResult.ThumRelativePath = TempToOkPath(thumItem); //缩略图正式目录相对路径
                     moveResult.ThumAbsolutePath = Relative2AbsolutePath(moveResult.ThumRelativePath); //缩略图正式目录绝对路径
-                    moveResult.ThumUrl = AddServerPath(moveResult.ThumRelativePath);
+                    moveResult.ThumUrl = Relative2AbsoluteUrl(moveResult.ThumRelativePath);
                     System.IO.File.Move(sourceThumAbsolutePath, moveResult.ThumAbsolutePath);
                 }
 
@@ -302,11 +280,9 @@ namespace BXJG.Utils.File
             foreach (var item1 in inputs)
             {
                 string item = item1;
-                if (item.StartsWith(_serverRootUrl))
-                    item = RemoveServerPath(item);
-                item = item.Replace("/", Path.DirectorySeparatorChar.ToString());
-
-
+                //if (item.StartsWith(_serverRootUrl))
+                item = Absolute2RelativeUrl(item);
+                item = item.UrlSeparatorChar2DirectorySeparatorChar();
                 item = Relative2AbsolutePath(item);
                 try
                 {
@@ -335,8 +311,6 @@ namespace BXJG.Utils.File
 
         #region 文章中的图片处理
 
-
-
         /// <summary>
         /// 获取指定内容中所包含的图片的相对路径
         /// /aaa/bbb/cc.jpg
@@ -362,6 +336,31 @@ namespace BXJG.Utils.File
 
         #endregion
 
+        /// <summary>
+        /// 将不带host的文件相对路径转换为完整路径
+        /// /upload/20201101/a.jpg -> http://www.xx.com/upload/20201101/a.jpg
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
+        public string Relative2AbsoluteUrl(string p)
+        {
+            if (!p.StartsWith(_serverRootUrl))
+                return _serverRootUrl + p.TrimStart('/');
+            return p;
+        }
+
+        /// <summary>
+        /// 将带host的完整文件路径转换为相对路径
+        /// http://www.xx.com/upload/20201101/a.jpg -> /upload/20201101/a.jpg
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
+        public string Absolute2RelativeUrl(string p)
+        {
+            if (p.StartsWith(_serverRootUrl))
+                return p.Substring(_serverRootUrl.Length);
+            return p;
+        }
 
         /// <summary>
         /// 转换为缩略图路径
@@ -371,7 +370,9 @@ namespace BXJG.Utils.File
         /// <returns></returns>
         public string ConvertToThumPath(string path)
         {
-            return path.Insert(path.LastIndexOf("."), "thum");
+            if (!path.Contains("thum."))
+                return path.Insert(path.LastIndexOf("."), "thum");
+            return path;
         }
 
         /// <summary>
@@ -382,7 +383,9 @@ namespace BXJG.Utils.File
         /// <returns></returns>
         public string Absolute2RelativePath(string path)
         {
-            return path.Substring(_webRootDir.Length);
+            if (path.StartsWith(_webRootDir))
+                return path.Substring(_webRootDir.Length);
+            return path;
         }
 
         /// <summary>
@@ -393,7 +396,9 @@ namespace BXJG.Utils.File
         /// <returns></returns>
         public string Relative2AbsolutePath(string path)
         {
-            return Path.Combine(_webRootDir, path.TrimStart(Path.DirectorySeparatorChar));
+            if (!path.StartsWith(_webRootDir))
+                return Path.Combine(_webRootDir, path.TrimStart(Path.DirectorySeparatorChar));
+            return path;
         }
 
         /// <summary>
@@ -408,20 +413,19 @@ namespace BXJG.Utils.File
         }
 
         /// <summary>
-        /// 判断指定文件是否存在缩略图
+        /// 尝试获取缩略图的相对url
         /// </summary>
-        /// <param name="filePath">任何路径</param>
+        /// <param name="absoluteUrl">绝对url</param>
         /// <returns></returns>
-        public bool HasThumImage(string filePath)
+        public string TryGetThumRelativeUrl(string absoluteUrl)
         {
-            RemoveServerPath(filePath);
-            filePath = filePath.Replace('/', Path.DirectorySeparatorChar);
-            if (!filePath.StartsWith(_webRootDir))
-                filePath = Relative2AbsolutePath(filePath);
-            if (!filePath.Contains("thum."))
-                filePath = ConvertToThumPath(filePath);
-            return System.IO.File.Exists(filePath);
+            absoluteUrl = Absolute2RelativeUrl(absoluteUrl);
+            var url = absoluteUrl = ConvertToThumPath(absoluteUrl);
+            absoluteUrl = absoluteUrl.UrlSeparatorChar2DirectorySeparatorChar();
+            absoluteUrl = Relative2AbsolutePath(absoluteUrl);
+            if (System.IO.File.Exists(absoluteUrl))
+                return url;
+            return default;
         }
-        #endregion
     }
 }

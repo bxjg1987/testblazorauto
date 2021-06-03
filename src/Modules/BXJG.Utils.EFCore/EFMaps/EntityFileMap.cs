@@ -7,15 +7,16 @@ using System.Text;
 
 namespace BXJG.Utils.EFCore.EFMaps
 {
-    public class EntityFileMap : IEntityTypeConfiguration<EntityFileEntity>
+    public class EntityFileMap : IEntityTypeConfiguration<AttachmentEntity>
     {
-        public void Configure(EntityTypeBuilder<EntityFileEntity> builder)
+        public void Configure(EntityTypeBuilder<AttachmentEntity> builder)
         {
             builder.Property(c => c.EntityType).HasColumnType($"varchar({FileConsts.EntityFileEntityTypeMaxLength})");
             builder.Property(c => c.EntityId).HasColumnType($"varchar({FileConsts.EntityFileEntityIdMaxLength})");
-            builder.Property(c => c.FileUrl).HasColumnType($"varchar({FileConsts.EntityFileFileUrlMaxLength})");
-            builder.Property(c => c.ThumUrl).HasColumnType($"varchar({FileConsts.EntityFileThumUrlMaxLength})");
-
+            builder.Property(c => c.RelativeFileUrl).HasColumnType($"varchar({FileConsts.EntityFileFileUrlMaxLength})");
+            builder.Ignore(c => c.RelativeThumUrl);
+            builder.Ignore(c => c.AbsoluteFileUrl);
+            builder.Ignore(c => c.AbsoluteThumUrl);
             //builder.HasMany(c => c.WorkOrderTypes).WithOne().HasForeignKey("CategoryId");
             //builder.Property(c => c.WorkOrderTypes).HasMaxLength(CoreConsts.WorkOrderClsTypeMaxLength);
             //builder.Property(c => c.Icon).HasColumnType($"varchar({CoreConsts.ItemCategoryIconMaxLength})");

@@ -47,13 +47,7 @@ namespace ZLJ.Controllers
             var rts = new List<FileUploadResult>();
             var fs = file.Select(c => new FileInput(c.FileName, c.OpenReadStream(), c.ContentType));
             var r = await tempFileManager.UploadAsync(createThum, thumSize, fs.ToArray());
-            return r.Select(c => new FileDto
-            {
-                FilePath = c.FileRelativePath,
-                ThumPath = c.ThumRelativePath,
-                FileUrl = c.FileUrl,
-                ThumUrl = c.ThumUrl
-            }).ToList();
+            return ObjectMapper.Map<List<FileDto>>(r);
         }
     }
 }

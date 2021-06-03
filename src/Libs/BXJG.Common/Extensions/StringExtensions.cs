@@ -1,6 +1,7 @@
 ﻿using hyjiacan.py4n;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -63,5 +64,24 @@ namespace BXJG.Common.Extensions
         //        else
         //            Console.WriteLine("不是汉字");
         //}
+
+        /// <summary>
+        /// 将路径中的反斜杠转换为url中的正斜杠，已适配多操作系统
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string DirectorySeparatorChar2UrlSeparatorChar(this string str)
+        {
+            return str.Replace(Path.DirectorySeparatorChar, '/');
+        }
+        /// <summary>
+        /// 将url中的正斜杠转换为路径中的反斜杠，已适配多操作系统
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string UrlSeparatorChar2DirectorySeparatorChar(this string str)
+        {
+            return str.Replace('/', Path.DirectorySeparatorChar);
+        }
     }
 }
