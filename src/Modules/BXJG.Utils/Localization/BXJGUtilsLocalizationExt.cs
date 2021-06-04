@@ -346,7 +346,7 @@ namespace BXJG.Utils.Localization
         /// </summary>
         /// <param name="localizationManager"></param>
         /// <param name="name"></param>
-        /// <param name="args"></param>
+        /// <param name="args">注意不要传递数组</param>
         /// <returns></returns>
         public static string BXJGUtilsL(this ILocalizationManager localizationManager, string name, params object[] args)
         {

@@ -45,6 +45,7 @@ namespace BXJG.Utils.File
         /// 扩展数据
         /// </summary>
         public string ExtensionData { get; set; }
+
         /// <summary>
         /// 租户id
         /// </summary>

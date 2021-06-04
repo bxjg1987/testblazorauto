@@ -15,10 +15,6 @@ namespace BXJG.WorkOrder.WorkOrder
     public abstract class WorkOrderCreateBaseInput : WorkOrderUpdateBaseInput
     {
         /// <summary>
-        /// 关联的图片
-        /// </summary>
-        public AttachmentEditDto Images { get; set; }
-        /// <summary>
         /// 状态
         /// </summary>
         public Status? Status { get; set; }

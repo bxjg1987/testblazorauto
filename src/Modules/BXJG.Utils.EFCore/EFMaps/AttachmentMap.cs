@@ -7,7 +7,7 @@ using System.Text;
 
 namespace BXJG.Utils.EFCore.EFMaps
 {
-    public class EntityFileMap : IEntityTypeConfiguration<AttachmentEntity>
+    public class AttachmentMap : IEntityTypeConfiguration<AttachmentEntity>
     {
         public void Configure(EntityTypeBuilder<AttachmentEntity> builder)
         {

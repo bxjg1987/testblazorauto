@@ -12,6 +12,7 @@ using Abp.Extensions;
 
 namespace BXJG.Utils.Enums
 {
+    [Obsolete]
     public class BXJGUtilsEnumAppService : BXJGUtilsAppServiceBase, IBXJGUtilsEnumAppService
     {
         //IList<ComboboxDto<int>> GetByType(Type t)

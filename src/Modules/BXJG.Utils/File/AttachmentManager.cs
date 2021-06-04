@@ -20,7 +20,7 @@ namespace BXJG.Utils.File
     /// 它与实体建立弱引用(EntityType,EntityId)关系，将所有实体的附件统一存储到一张表中
     /// <see href="https://gitee.com/bxjg1987_admin/abp/wikis/pages?sort_id=4086113%26doc_id=627313" />
     /// </summary>
-    public class AttachmentManager : BXJGUtilsAppServiceBase
+    public class AttachmentManager : DomainService
     {
         private readonly TempFileManager tempFileManager;
         private readonly IRepository<AttachmentEntity, Guid> repository;
@@ -29,6 +29,7 @@ namespace BXJG.Utils.File
 
         public AttachmentManager(TempFileManager tempFileManager, IRepository<AttachmentEntity, Guid> repository, string entityType)
         {
+            base.LocalizationSourceName = BXJGUtilsConsts.LocalizationSourceName;
             this.tempFileManager = tempFileManager;
             this.repository = repository;
             this.entityType = entityType;
@@ -40,7 +41,7 @@ namespace BXJG.Utils.File
         /// <param name="files">key文件相对路径，value扩展属性</param>
         /// <param name="act">移动新文件和删除旧文件之前回调</param>
         /// <returns></returns>
-        public async Task<List<AttachmentEntity>> SetAttachmentsAsync(object entityId, IDictionary<string, IDictionary<string, object>> files, Func<List<AttachmentEntity>, ValueTask> act = default)
+        public async Task<List<AttachmentEntity>> SetAttachmentsAsync(object entityId, IList<AttachmentEditDto> files, Func<List<AttachmentEntity>, ValueTask> act = default)
         {
             //相应的文件处理参考：https://gitee.com/bxjg1987_admin/abp/wikis/pages?sort_id=4086113%26doc_id=627313#%E4%BA%8B%E5%8A%A1
             #region 删除旧文件
@@ -52,8 +53,8 @@ namespace BXJG.Utils.File
 
             //新文件的名称集合
             if (files == null)
-                files = new Dictionary<string, IDictionary<string, object>>();
-            var newNames = files.Keys.Select(c => Path.GetFileName(c));
+                files = new List<AttachmentEditDto>();
+            var newNames = files.Select(c => Path.GetFileName(c.AbsoluteFileUrl));
 
             //找到需要删除的文件名，不含路径，注意文件名是guid，所以可用这样做
             var xj = oldNames.Except(newNames);
@@ -72,19 +73,23 @@ namespace BXJG.Utils.File
 
             #region 添加新的
             var list = new List<AttachmentEntity>();
-            foreach (var item in files)
+
+            for (var i = 0; i < files.Count; i++)
             {
+                var item = files[i];
+
                 var entity = new AttachmentEntity
                 {
                     EntityType = entityType,
                     EntityId = entityId.ToString(),
-                    RelativeFileUrl = tempFileManager.Absolute2RelativeUrl(item.Key),
+                    RelativeFileUrl = tempFileManager.Absolute2RelativeUrl(item.AbsoluteFileUrl),
+                    OrderIndex = item.OrderIndex == default ? i : item.OrderIndex
                 };
-                entity.AbsoluteFileUrl = tempFileManager.Relative2AbsoluteUrl(entity.RelativeFileUrl);
                 entity.RelativeThumUrl = tempFileManager.TryGetThumRelativeUrl(entity.RelativeFileUrl);
+                entity.AbsoluteFileUrl = tempFileManager.Relative2AbsoluteUrl(entity.RelativeFileUrl);
                 if (!entity.RelativeThumUrl.IsNullOrWhiteSpace())
                     entity.AbsoluteThumUrl = tempFileManager.Relative2AbsoluteUrl(entity.RelativeThumUrl);
-                foreach (var ext in item.Value)
+                foreach (var ext in item.ExtensionData)
                 {
                     entity.SetData(ext.Key, ext.Value);
                 }
@@ -100,7 +105,7 @@ namespace BXJG.Utils.File
 
             #region 最后移动新文件，删除旧文件
             //移动所有文件
-            await tempFileManager.MoveAsync(files.Select(c => c.Key).ToArray());
+            await tempFileManager.MoveAsync(files.Select(c => c.AbsoluteFileUrl).ToArray());
 
             try
             {
@@ -111,7 +116,7 @@ namespace BXJG.Utils.File
             {
                 Logger.Warn("删除附件旧文件失败！", ex);
             }
-      
+
             #endregion
 
             return list;
@@ -121,10 +126,9 @@ namespace BXJG.Utils.File
         /// </summary>
         /// <param name="entityIds"></param>
         /// <returns>key为实体id，value为附件列表</returns>
-        public async Task<Dictionary<object, List<AttachmentEntity>>> GetAttachmentsAsync(params object[] entityIds)
+        public async Task<Dictionary<string, List<AttachmentEntity>>> GetAttachmentsAsync(params string[] entityIds)
         {
-            var ids = entityIds.Select(c => c.ToString());
-            var q = repository.GetAll().Where(c => ids.Contains(c.EntityId)).OrderBy(c => c.OrderIndex);
+            var q = repository.GetAll().Where(c => c.EntityType == entityType && entityIds.Contains(c.EntityId)).OrderBy(c => c.OrderIndex);
             var list = await AsyncQueryableExecuter.ToListAsync(q);
             list.ForEach(entity =>
             {
@@ -133,14 +137,34 @@ namespace BXJG.Utils.File
                 if (!entity.RelativeThumUrl.IsNullOrWhiteSpace())
                     entity.AbsoluteThumUrl = tempFileManager.Relative2AbsoluteUrl(entity.RelativeThumUrl);
             });
-            var dic = new Dictionary<object, List<AttachmentEntity>>();
+            var dic = new Dictionary<string, List<AttachmentEntity>>();
             foreach (var item in entityIds)
             {
-                dic.Add(item, list.Where(c => c.EntityId == item.ToString()).ToList());
+                var sss = list.Where(c => c.EntityId == item).ToList();
+                if (sss.Count > 0)
+                    dic.Add(item, sss);
             }
             return dic;
         }
 
+        /// <summary>
+        /// 获取附件
+        /// </summary>
+        /// <param name="entityIds"></param>
+        /// <returns>key为实体id，value第一个附件</returns>
+        public async Task<Dictionary<string, AttachmentEntity>> GetFirstAttachmentsAsync(params string[] entityIds)
+        {
+            //先用low的方式实现功能吧
+            var items = await GetAttachmentsAsync(entityIds);
+            foreach (var item in items)
+            {
+                while (item.Value.Count > 1)
+                {
+                    item.Value.RemoveAt(item.Value.Count - 1);
+                }
+            }
+            return items.ToDictionary(c => c.Key, c => c.Value.FirstOrDefault());
+        }
     }
     /// <summary>
     /// 一个简单的附件管理器

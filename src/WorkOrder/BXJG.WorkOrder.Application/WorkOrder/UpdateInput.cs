@@ -16,10 +16,6 @@ namespace BXJG.WorkOrder.WorkOrder
     public abstract class WorkOrderUpdateBaseInput : EntityDto<long>
     {
         /// <summary>
-        /// 关联的图片
-        /// </summary>
-        public AttachmentEditDto Images { get; set; }
-        /// <summary>
         /// 所属分类id
         /// </summary>
         public long? CategoryId { get; set; }
@@ -33,6 +29,10 @@ namespace BXJG.WorkOrder.WorkOrder
         [Required]
         [StringLength(CoreConsts.OrderTitleMaxLength)]
         public string Title { get; set; }
+        /// <summary>
+        /// 关联的图片，第一张图片将作为封面
+        /// </summary>
+        public List<AttachmentEditDto> Images { get; set; }
         /// <summary>
         /// 内容描述
         /// </summary>

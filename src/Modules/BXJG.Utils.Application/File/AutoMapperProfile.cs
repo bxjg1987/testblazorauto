@@ -1,4 +1,6 @@
 using AutoMapper;
+using BXJG.Utils.AutoMapper;
+using System.Collections.Generic;
 using System.Text.Json;
 namespace BXJG.Utils.File
 {
@@ -11,8 +13,12 @@ namespace BXJG.Utils.File
             #endregion
 
             #region 附件Attachment
-            CreateMap<AttachmentEntity, AttachmentDto>();
-            //CreateMap<AttachmentEditDto, AttachmentEntity>().ForMember(c => c.ExtensionData, opt => opt.Ignore());
+            //CreateMap<AttachmentEntity, AttachmentDto>().ForMember(c => c.ExtensionData, c => c.MapFrom(en => Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string,object>>( en.ExtensionData)));
+            //CreateMap<AttachmentEntity, AttachmentDto>().MapExtensionData();
+            CreateMap<AttachmentEntity, AttachmentDto>();//扩展属性已在BXJG.Utils模块中统一配置了映射
+
+            //CreateMap(typeof(AttachmentEntity), typeof(AttachmentDto)).ForMember("", e => e.ConvertUsing);
+            //CreateMap<AttachmentEditDto, AttachmentEntity>().ForMember(c => c.ExtensionData, opt => opt.Ignore.());
             #endregion
         }
     }

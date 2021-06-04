@@ -22,6 +22,7 @@
     <ProjectReference Include="..\cms\BXJG.CMS.Core\BXJG.CMS.Core.csproj" />
     <ProjectReference Include="..\cms\BXJG.CMS.EFCore\BXJG.CMS.EFCore.csproj" />
     <ProjectReference Include="..\Equipment\BXJG.Equipment.EFCore\BXJG.Equipment.EFCore.csproj" />
+    <ProjectReference Include="..\modules\BXJG.Utils.EFCore\BXJG.Utils.EFCore.csproj" />
     <ProjectReference Include="..\shop\BXJG.Shop.Core\BXJG.Shop.Core.csproj" />
     <ProjectReference Include="..\shop\BXJG.Shop.EFCore\BXJG.Shop.EFCore.csproj" />
     <ProjectReference Include="..\WorkOrder\BXJG.WorkOrder.EFCore\BXJG.WorkOrder.EFCore.csproj" />

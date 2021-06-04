@@ -1,5 +1,7 @@
 ﻿using Abp.Application.Services.Dto;
 using Abp.Domain.Entities;
+using BXJG.Common.Dto;
+using BXJG.Utils.AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +13,7 @@ namespace BXJG.Utils.File
     /// <summary>
     /// 通用显示模型
     /// </summary>
-    public class AttachmentDto : EntityDto<Guid>
+    public class AttachmentDto : EntityDto<Guid>,IExtendableDto
     {
         /// <summary>
         /// 关联实体id
@@ -21,12 +23,12 @@ namespace BXJG.Utils.File
         /// 文件url，可访问路径
         /// 例：http://xxx.xxx/upload/xxx.xx
         /// </summary>
-        public string FileUrl { get; set; }
+        public string AbsoluteFileUrl { get; set; }
         /// <summary>
         /// 缩略图url，可访问路径
         /// 例：http://xxx.xxx/upload/xxxthum.xx
         /// </summary>
-        public string ThumUrl { get; set; }
+        public string AbsoluteThumUrl { get; set; }
         /// <summary>
         /// 排序索引
         /// </summary>

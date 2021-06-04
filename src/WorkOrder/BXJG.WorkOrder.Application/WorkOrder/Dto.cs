@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Services.Dto;
+using BXJG.Common.Dto;
 using BXJG.Utils.File;
 using System;
 using System.Collections.Generic;
@@ -12,11 +13,16 @@ namespace BXJG.WorkOrder.WorkOrder
     /// 后台管理工单列表页使用的显示模型基类
     /// </summary>
     public class WorkOrderDtoBase : FullAuditedEntityDto<long>
-    {        
+    {
         /// <summary>
         /// 关联的图片
         /// </summary>
-        public AttachmentDto Images { get; set; }
+        public List<AttachmentDto> Images { get; set; }
+        /// <summary>
+        /// 封面图片
+        /// </summary>
+        //[Newtonsoft.Json.JsonIgnore]
+        public AttachmentDto ImageCover => Images?.FirstOrDefault();
         /// <summary>
         /// 所属分类id
         /// </summary>
@@ -89,12 +95,12 @@ namespace BXJG.WorkOrder.WorkOrder
     /// <summary>
     /// 后台管理普通工单查询模型
     /// </summary>
-    public class WorkOrderDto : WorkOrderDtoBase
+    public class WorkOrderDto : WorkOrderDtoBase, IExtendableDto
     {
         /// <summary>
         /// 扩展字段
         /// </summary>
-        public IDictionary<string, object> ExtensionData { get; set; }
+        public Dictionary<string, object> ExtensionData { get; set; }
         /// <summary>
         /// 预留字段1
         /// </summary>

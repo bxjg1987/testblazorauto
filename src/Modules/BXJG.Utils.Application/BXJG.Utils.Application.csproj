@@ -12,6 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="File\AttachmentEditDto.cs" />
     <Compile Remove="File\AttachmentService.cs" />
     <Compile Remove="File\FileInput.cs" />
   </ItemGroup>

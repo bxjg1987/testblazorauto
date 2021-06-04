@@ -18,6 +18,18 @@ namespace BXJG.Utils
                typeof(AbpAutoMapperModule))]
     public class BXJGUtilsApplicationModule : AbpModule
     {
+        public override void PreInitialize()
+        {
+            //Adding authorization providers
+            //Configuration.Authorization.Providers.Add<BXJGShopAuthorizationProvider>();
+
+            //需要模块调用方提供必要的泛型参数，所以映射的配置由调用方主动来执行，参考BXJGShopMapProfile
+            //Configuration.Modules.AbpAutoMapper().Configurators.Add(cfg => cfg.AddProfile(new MapProfile(configuration)));
+
+            //此行必加
+            Configuration.Modules.AbpAutoMapper().Configurators.Add(cfg => cfg.AddMaps(Assembly.GetExecutingAssembly()));
+
+        }
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());

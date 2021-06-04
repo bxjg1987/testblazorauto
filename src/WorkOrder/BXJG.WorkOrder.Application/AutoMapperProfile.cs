@@ -9,6 +9,10 @@ namespace BXJG.WorkOrder
     {
         public AutoMapperProfile()
         {
+            #region 基础工单
+            CreateMap<OrderEntity, WorkOrderDto>();
+            #endregion
+
             #region 工单分类
             //CreateMap(typeof(WorkOrderCategoryEditInput), typeof(CategoryEntity));
             //CreateMap(typeof(CategoryEntity), typeof(WorkOrderCategroyDto));

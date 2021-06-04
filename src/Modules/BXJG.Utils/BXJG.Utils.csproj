@@ -13,8 +13,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="AutoMapper\ExtensionDataSS.cs" />
+    <Compile Remove="AutoMapper\IExtendableDto.cs" />
     <Compile Remove="Extensions\CommonExtensions.cs" />
     <Compile Remove="Extensions\DateTimeExt.cs" />
+    <Compile Remove="Extensions\dfdfg.cs" />
     <Compile Remove="Extensions\HashHelper.cs" />
     <Compile Remove="Extensions\StringExtension.cs" />
     <Compile Remove="File\FileDto.cs" />
@@ -35,6 +38,7 @@
 
   <ItemGroup>
     <PackageReference Include="Abp" Version="6.3.1" />
+    <PackageReference Include="Abp.AutoMapper" Version="6.3.1" />
     <PackageReference Include="Abp.Zero.Common" Version="6.3.1" />
     <PackageReference Include="Abp.ZeroCore" Version="6.3.1" />
     <PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="3.4.0" />

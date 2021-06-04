@@ -21,7 +21,8 @@ using BXJG.Equipment.EquipmentInfo;
 using BXJG.Equipment.EFCore.EFMaps;
 using BXJG.Shop.ShoppingCart;
 using BXJG.WorkOrder.EFMaps;
-
+using BXJG.Utils.File;
+using BXJG.Utils.EFCore.EFMaps;
 namespace ZLJ.EntityFrameworkCore
 {
     public class ZLJDbContext : AbpZeroDbContext<Tenant, Role, User, ZLJDbContext>
@@ -63,6 +64,10 @@ namespace ZLJ.EntityFrameworkCore
         public virtual DbSet<BXJG.WorkOrder.WorkOrder.OrderEntity> BXJGWorkOrder { get; set; }
         #endregion
 
+        #region 通用附件
+        public virtual DbSet<AttachmentEntity> BXJGAttachments { get; set; }
+        #endregion
+
         public ZLJDbContext(DbContextOptions<ZLJDbContext> options)
             : base(options)
         { }
@@ -78,7 +83,8 @@ namespace ZLJ.EntityFrameworkCore
                 .ApplyConfigurationBXJGCMS()
                 .ApplyConfigurationBXJGEquipment()
                 .ApplyConfigurationBXJGBaseInfo()
-                .ApplyConfigurationBXJGWorkOrder();
+                .ApplyConfigurationBXJGWorkOrder()
+                .ApplyConfigurationBXJGUtils();
         }
 
     }

@@ -20,6 +20,7 @@ using Abp.Domain.Uow;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
 using Abp.Application.Services;
+using BXJG.Utils.File;
 
 namespace BXJG.WorkOrder.WorkOrder
 {
@@ -85,6 +86,7 @@ namespace BXJG.WorkOrder.WorkOrder
         protected readonly IRepository<CategoryEntity, long> clsRepository;
         protected readonly CategoryManager clsManager;
         protected readonly string workOrderType;
+        protected readonly AttachmentManager<TEntity> attachmentManager;
         #region 权限名称
         /// <summary>
         /// 工单管理-新增权限名称
@@ -141,6 +143,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="clsRepository">工单类别仓储</param>
         /// <param name="clsManager">工单类领域服务</param>
         /// <param name="workOrderType">工单类型</param>
+        /// <param name="attachmentManager">附件管理器</param>
         /// <param name="createPermissionName">新增权限名称</param>
         /// <param name="updatePermissionName">修改权限名称</param>
         /// <param name="deletePermissionName">删除权限名称</param>
@@ -154,6 +157,7 @@ namespace BXJG.WorkOrder.WorkOrder
         public WorkOrderAppServiceBase(TRepository repository,
                                        TManager manager,
                                        TCategoryRepository categoryRepository,
+                                       AttachmentManager<TEntity> attachmentManager,
                                        IEmployeeAppService employeeAppService,
                                        IRepository<CategoryEntity, long> clsRepository,
                                        CategoryManager clsManager,
@@ -186,6 +190,7 @@ namespace BXJG.WorkOrder.WorkOrder
             this.clsRepository = clsRepository;
             this.clsManager = clsManager;
             this.workOrderType = workOrderType;
+            this.attachmentManager = attachmentManager;
             //this.iocResolver = iocResolver;
         }
         #endregion
@@ -199,25 +204,11 @@ namespace BXJG.WorkOrder.WorkOrder
         {
             await CheckCreatePermissionAsync();
             var entity = await manager.CreateAsync(await CreateInputToCreateDto(input));
-            if (input.Status.HasValue && input.Status > entity.Status)
-            {
-                await entity.Skip(Clock.Now,
-                                  input.Status,
-                                  input.StatusChangedDescription,
-                                  input.EmployeeId,
-                                  input.EstimatedExecutionTime,
-                                  input.EstimatedCompletionTime,
-                                  excuteTime: input.ExecutionTime,
-                                  completeTime: input.CompletionTime,
-                                  toBeAllocated: d => CheckConfirmePermissionAsync(),
-                                  toBeProcessed: d => CheckAllocatePermissionAsync(),
-                                  processing: d => CheckExecutePermissionAsync(),
-                                  completed: d => CheckCompletionPermissionAsync(),
-                                  rejected: d => CheckRejectPermissionAsync());
-            }
             await BeforeCreateAsync(entity, input);
             await CurrentUnitOfWork.SaveChangesAsync();
-            return await EntityToDto(entity);
+            TEntityDto r = default;
+            await attachmentManager.SetAttachmentsAsync(entity.Id, input.Images, async c => r = await EntityToDto(entity));
+            return r;
         }
         /// <summary>
         /// 修改工单
@@ -227,27 +218,19 @@ namespace BXJG.WorkOrder.WorkOrder
         public virtual async Task<TEntityDto> UpdateAsync(TUpdateInput input)
         {
             await CheckUpdatePermissionAsync();
-
             var entity = await repository.GetAsync(input.Id);
-
-            if (input.CategoryId.HasValue)
-                entity.CategoryId = input.CategoryId.Value;
-            entity.Title = input.Title;
-            entity.Description = input.Description;
-            entity.StatusChangedDescription = input.StatusChangedDescription;
-            entity.UrgencyDegree = input.UrgencyDegree ?? OrderBaseEntity.DefaultUrgencyDegree;
-            entity.EmployeeId = input.EmployeeId;
-            entity.ChangeEstimatedTime(input.EstimatedExecutionTime, input.EstimatedCompletionTime);
-
             await BeforeEditAsync(entity, input);
             await CurrentUnitOfWork.SaveChangesAsync();
-            return await EntityToDto(entity);
+            TEntityDto r = default;
+            await attachmentManager.SetAttachmentsAsync(entity.Id, input.Images, async c => r = await EntityToDto(entity));
+            return r;
         }
         /// <summary>
         /// 删除工单
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
+        //[UnitOfWork(false)]
         public virtual async Task<TBatchDeleteOutput> DeleteAsync(TBatchDeleteInput input)
         {
             await CheckDeletePermissionAsync();
@@ -260,6 +243,7 @@ namespace BXJG.WorkOrder.WorkOrder
                 {
                     await manager.DeleteAsync(item);
                     await CurrentUnitOfWork.SaveChangesAsync();
+                    await attachmentManager.SetAttachmentsAsync(item.Id, null);
                     r.Ids.Add(item.Id);
                 }
                 catch (UserFriendlyException ex)
@@ -356,11 +340,15 @@ namespace BXJG.WorkOrder.WorkOrder
             {
                 emps = await employeeAppService.GetByIdsAsync(empIds.ToArray());
             }
+
+            var images = await attachmentManager.GetFirstAttachmentsAsync(list.Select(c => c.Id.ToString()).ToArray());
+            var images2 = images.ToDictionary(c => c.Key, c => new List<AttachmentEntity> { c.Value });
+            
             var state = await GetStateAsync(list);
             var items = new List<TEntityDto>();
             foreach (var item in list)
             {
-                var ttt = EntityToDto(item, cls, emps, state);
+                var ttt = EntityToDto(item, cls, emps, images2, state);
                 items.Add(ttt);
             }
             return new PagedResultDto<TEntityDto>(count, items);
@@ -483,42 +471,45 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="entity"></param>
         /// <param name="categories"></param>
         /// <param name="employees"></param>
+        /// <param name="images"></param>
         /// <param name="state">子类可能需要聚合更多外键</param>
         /// <returns></returns>
-        protected virtual TEntityDto EntityToDto(TEntity entity, IEnumerable<CategoryEntity> categories, IEnumerable<EmployeeDto> employees, object state = null)
+        protected virtual TEntityDto EntityToDto(TEntity entity, IEnumerable<CategoryEntity> categories, IEnumerable<EmployeeDto> employees, IDictionary<string, List<AttachmentEntity>> images, object state = null)
         {
-            var dto = new TEntityDto();
-            dto.CategoryId = entity.CategoryId;
+            var dto = base.ObjectMapper.Map<TEntityDto>(entity);
+            //dto.CategoryId = entity.CategoryId;
             if (categories != null)
             {
                 dto.CategoryDisplayName = categories.SingleOrDefault(c => c.Id == entity.CategoryId)?.DisplayName;
             }
-            dto.CompletionTime = entity.CompletionTime;
-            dto.CreationTime = entity.CreationTime;
-            dto.CreatorUserId = entity.CreatorUserId;
-            dto.DeleterUserId = entity.DeleterUserId;
-            dto.DeletionTime = entity.DeletionTime;
-            dto.Description = entity.Description;
-            dto.EmployeeId = entity.EmployeeId;
+            //dto.CompletionTime = entity.CompletionTime;
+            //dto.CreationTime = entity.CreationTime;
+            //dto.CreatorUserId = entity.CreatorUserId;
+            //dto.DeleterUserId = entity.DeleterUserId;
+            //dto.DeletionTime = entity.DeletionTime;
+            //dto.Description = entity.Description;
+            //dto.EmployeeId = entity.EmployeeId;
             if (employees != null)
             {
                 var emp = employees.SingleOrDefault(c => c.Id == entity.EmployeeId);
                 dto.EmployeeName = emp?.Name;
                 dto.EmployeePhone = emp?.Phone;
             }
-            dto.EstimatedCompletionTime = entity.EstimatedCompletionTime;
-            dto.EstimatedExecutionTime = entity.EstimatedExecutionTime;
-            dto.ExecutionTime = entity.ExecutionTime;
+            //dto.EstimatedCompletionTime = entity.EstimatedCompletionTime;
+            //dto.EstimatedExecutionTime = entity.EstimatedExecutionTime;
+            //dto.ExecutionTime = entity.ExecutionTime;
 
-            dto.Id = entity.Id;
-            dto.IsDeleted = entity.IsDeleted;
-            dto.LastModificationTime = entity.LastModificationTime;
-            dto.LastModifierUserId = entity.LastModifierUserId;
-            dto.Status = entity.Status;
-            dto.StatusChangedDescription = entity.StatusChangedDescription;
-            dto.StatusChangedTime = entity.StatusChangedTime;
-            dto.Title = entity.Title;
-            dto.UrgencyDegree = entity.UrgencyDegree;
+            //dto.Id = entity.Id;
+            //dto.IsDeleted = entity.IsDeleted;
+            //dto.LastModificationTime = entity.LastModificationTime;
+            //dto.LastModifierUserId = entity.LastModifierUserId;
+            //dto.Status = entity.Status;
+            //dto.StatusChangedDescription = entity.StatusChangedDescription;
+            //dto.StatusChangedTime = entity.StatusChangedTime;
+            //dto.Title = entity.Title;
+            //dto.UrgencyDegree = entity.UrgencyDegree;
+            if (images.ContainsKey(entity.Id.ToString()))
+                dto.Images = ObjectMapper.Map<List<AttachmentDto>>(images[entity.Id.ToString()]);
             return dto;
         }
         /// <summary>
@@ -535,7 +526,9 @@ namespace BXJG.WorkOrder.WorkOrder
                 emps = await employeeAppService.GetByIdsAsync(entity.EmployeeId);
             }
             var state = await GetStateAsync(new TEntity[] { entity });
-            return EntityToDto(entity, new CategoryEntity[] { category }, emps, state);
+            var images = await attachmentManager.GetAttachmentsAsync(entity.Id.ToString());
+        
+            return EntityToDto(entity, new CategoryEntity[] { category }, emps, images, state);
         }
         /// <summary>
         /// 新增时的映射
@@ -565,9 +558,24 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="entity"></param>
         /// <param name="input"></param>
         /// <returns></returns>
-        protected virtual ValueTask BeforeCreateAsync(TEntity entity, TCreateInput input)
+        protected virtual async ValueTask BeforeCreateAsync(TEntity entity, TCreateInput input)
         {
-            return ValueTask.CompletedTask;
+            if (input.Status.HasValue && input.Status > entity.Status)
+            {
+                await entity.Skip(Clock.Now,
+                                  input.Status,
+                                  input.StatusChangedDescription,
+                                  input.EmployeeId,
+                                  input.EstimatedExecutionTime,
+                                  input.EstimatedCompletionTime,
+                                  excuteTime: input.ExecutionTime,
+                                  completeTime: input.CompletionTime,
+                                  toBeAllocated: d => CheckConfirmePermissionAsync(),
+                                  toBeProcessed: d => CheckAllocatePermissionAsync(),
+                                  processing: d => CheckExecutePermissionAsync(),
+                                  completed: d => CheckCompletionPermissionAsync(),
+                                  rejected: d => CheckRejectPermissionAsync());
+            }
         }
         /// <summary>
         /// 新增或更新到数据库前执行此方法<br />
@@ -578,6 +586,14 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <returns></returns>
         protected virtual ValueTask BeforeEditAsync(TEntity entity, TUpdateInput input)
         {
+            if (input.CategoryId.HasValue)
+                entity.CategoryId = input.CategoryId.Value;
+            entity.Title = input.Title;
+            entity.Description = input.Description;
+            entity.StatusChangedDescription = input.StatusChangedDescription;
+            entity.UrgencyDegree = input.UrgencyDegree ?? OrderBaseEntity.DefaultUrgencyDegree;
+            entity.EmployeeId = input.EmployeeId;
+            entity.ChangeEstimatedTime(input.EstimatedExecutionTime, input.EstimatedCompletionTime);
             return ValueTask.CompletedTask;
         }
         /// <summary>
@@ -589,7 +605,6 @@ namespace BXJG.WorkOrder.WorkOrder
         {
             return ValueTask.FromResult<object>(null);
         }
-
         #region 权限判断
         protected virtual Task CheckCreatePermissionAsync()
         {
@@ -661,9 +676,11 @@ namespace BXJG.WorkOrder.WorkOrder
                                    IRepository<CategoryEntity, long> clsRepository,
                                    CategoryManager clsManager,
                                    IRepository<CategoryEntity, long> categoryRepository,
+                                   AttachmentManager<OrderEntity> attachmentManager,
                                    IEmployeeAppService employeeAppService) : base(repository,
                                                                                   manager,
                                                                                   categoryRepository,
+                                                                                  attachmentManager,
                                                                                   employeeAppService,
                                                                                   clsRepository,
                                                                                   clsManager,
@@ -682,22 +699,6 @@ namespace BXJG.WorkOrder.WorkOrder
                 throw new ApplicationException("BXJGWorkOrderConfig.EnableDefaultWorkOrder=false");
         }
 
-        protected override async ValueTask BeforeEditAsync(OrderEntity entity, WorkOrderUpdateInput input)
-        {
-            await base.BeforeEditAsync(entity, input);
-            entity.ExtendedField1 = input.ExtendedField1;
-            entity.ExtendedField2 = input.ExtendedField2;
-            entity.ExtendedField3 = input.ExtendedField3;
-            entity.ExtendedField4 = input.ExtendedField4;
-            entity.ExtendedField5 = input.ExtendedField5;
-            if (input.ExtensionData != null)
-            {
-                foreach (var item in input.ExtensionData)
-                {
-                    entity.SetData(item.Key, item.Value);
-                }
-            }
-        }
 
         protected override async ValueTask BeforeCreateAsync(OrderEntity entity, WorkOrderCreateInput input)
         {
@@ -717,19 +718,37 @@ namespace BXJG.WorkOrder.WorkOrder
             }
         }
 
-        protected override WorkOrderDto EntityToDto(OrderEntity entity, IEnumerable<CategoryEntity> categories, IEnumerable<EmployeeDto> employees, object state = default)
+        protected override async ValueTask BeforeEditAsync(OrderEntity entity, WorkOrderUpdateInput input)
         {
-            var dto = base.EntityToDto(entity, categories, employees, state);
-            dto.ExtendedField1 = entity.ExtendedField1;
-            dto.ExtendedField2 = entity.ExtendedField2;
-            dto.ExtendedField3 = entity.ExtendedField3;
-            dto.ExtendedField4 = entity.ExtendedField4;
-            dto.ExtendedField5 = entity.ExtendedField5;
-            if (!entity.ExtensionData.IsNullOrWhiteSpace())
+            await base.BeforeEditAsync(entity, input);
+            entity.ExtendedField1 = input.ExtendedField1;
+            entity.ExtendedField2 = input.ExtendedField2;
+            entity.ExtendedField3 = input.ExtendedField3;
+            entity.ExtendedField4 = input.ExtendedField4;
+            entity.ExtendedField5 = input.ExtendedField5;
+            if (input.ExtensionData != null)
             {
-                dto.ExtensionData = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(entity.ExtensionData);
+                foreach (var item in input.ExtensionData)
+                {
+                    entity.SetData(item.Key, item.Value);
+                }
             }
-            return dto;
         }
+
+        //使用了映射，省了
+        //protected override WorkOrderDto EntityToDto(OrderEntity entity, IEnumerable<CategoryEntity> categories, IEnumerable<EmployeeDto> employees, IDictionary<object, List<AttachmentEntity>> images, object state = default)
+        //{
+        //    var dto = base.EntityToDto(entity, categories, employees,images, state);
+        //    dto.ExtendedField1 = entity.ExtendedField1;
+        //    dto.ExtendedField2 = entity.ExtendedField2;
+        //    dto.ExtendedField3 = entity.ExtendedField3;
+        //    dto.ExtendedField4 = entity.ExtendedField4;
+        //    dto.ExtendedField5 = entity.ExtendedField5;
+        //    if (!entity.ExtensionData.IsNullOrWhiteSpace())
+        //    {
+        //        dto.ExtensionData = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(entity.ExtensionData);
+        //    }
+        //    return dto;
+        //}
     }
 }
