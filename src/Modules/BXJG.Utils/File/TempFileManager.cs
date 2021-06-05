@@ -98,8 +98,7 @@ namespace BXJG.Utils.File
         /// </summary>
         /// <param name="env">获取当前应用的相对路径</param>
         /// <param name="settingManager">abp提供的settings系统</param>
-        /// <param name="configuration">abp提供的settings系统</param>
-        public TempFileManager(IEnv env, ISettingManager settingManager, IConfiguration configuration)
+        public TempFileManager(IEnv env, ISettingManager settingManager)
         {
             _serverRootUrl = env.RootUrl;// configuration["App:ServerRootAddress"];
             _regex = new Regex($@"<img.+?src=['""]{_serverRootUrl}(\S+)['""]",
@@ -113,7 +112,7 @@ namespace BXJG.Utils.File
             //if (!Directory.Exists(_uploadDir))
             //    Directory.CreateDirectory(_uploadDir);
             _tempDir = Path.Combine(env.WebRoot, Consts.UploadTemp); // d:\app\wwwroot\upload\temp
-            if (!Directory.Exists(_tempDir))
+            //if (!Directory.Exists(_tempDir))
                 Directory.CreateDirectory(_tempDir);
         }
 
@@ -152,11 +151,11 @@ namespace BXJG.Utils.File
                 var hz = Path.GetExtension(item.FileName); //文件后缀.jpg
                 var wjm = Guid.NewGuid().ToString("n") + hz; //xxx.jpg  xxx=guid
                 var dateDir = Path.Combine(_tempDir, DateTime.Now.ToString("yyyyMMdd")); //d:\app\wwwroot\upload\temp\20201003
-                if (!Directory.Exists(dateDir))
+                //if (!Directory.Exists(dateDir))
                     Directory.CreateDirectory(dateDir);
                 output.FileAbsolutePath = Path.Combine(dateDir, wjm); //d:\app\wwwroot\upload\temp\20201003\xxx.jpg
                 output.FileRelativePath = Absolute2RelativePath(output.FileAbsolutePath); //\upload\temp\20201003\xxx.jpg
-                output.FileUrl = Relative2AbsoluteUrl(output.FileRelativePath);
+                output.FileUrl = Relative2AbsoluteUrl(output.FileRelativePath.DirectorySeparatorChar2UrlSeparatorChar());
                 using (var fs = System.IO.File.Create(output.FileAbsolutePath))
                 {
                     await item.Stream.CopyToAsync(fs, cancellationTokenProvider.Token);
@@ -170,7 +169,7 @@ namespace BXJG.Utils.File
                 {
                     output.ThumAbsolutePath = ConvertToThumPath(output.FileAbsolutePath);
                     output.ThumRelativePath = Absolute2RelativePath(output.ThumAbsolutePath);
-                    output.ThumUrl = Relative2AbsoluteUrl(output.ThumRelativePath);
+                    output.ThumUrl = ConvertToThumPath(output.FileUrl);
                     //参考：https://docs.sixlabors.com/articles/imagesharp/resize.html
                     //经过测试这里load item.Stream会报错
                     using var img = await Image.LoadAsync(output.FileAbsolutePath, cancellationTokenProvider.Token);
@@ -205,10 +204,6 @@ namespace BXJG.Utils.File
         /// <returns></returns>
         public ValueTask<List<FileResult>> MoveAsync(params string[] urls)
         {
-            //using (var tran = UnitOfWorkManager.Begin(System.Transactions.TransactionScopeOption.Suppress))
-            //{
-                
-            //}
             var list = new List<FileResult>();
             foreach (var file in urls)
             {
@@ -225,13 +220,13 @@ namespace BXJG.Utils.File
                     {
                         FileAbsolutePath = Relative2AbsolutePath(item),
                         FileRelativePath = item,
-                        FileUrl = Relative2AbsoluteUrl(item)
+                        FileUrl = Relative2AbsoluteUrl(item.DirectorySeparatorChar2UrlSeparatorChar())
                     };
                     rr.ThumAbsolutePath = ConvertToThumPath(rr.FileAbsolutePath);
                     if (System.IO.File.Exists(rr.ThumAbsolutePath))
                     {
                         rr.ThumRelativePath = Absolute2RelativePath(rr.ThumAbsolutePath);
-                        rr.ThumUrl = Relative2AbsoluteUrl(rr.ThumRelativePath);
+                        rr.ThumUrl = ConvertToThumPath(rr.FileUrl);
                     }
                     else
                         rr.ThumAbsolutePath = default;
@@ -245,7 +240,7 @@ namespace BXJG.Utils.File
                 //移动文件
                 var sourceAbsolutePath = Relative2AbsolutePath(item); //temp绝对路径
                 moveResult.FileRelativePath = TempToOkPath(item); //正式目录相对路径
-                moveResult.FileUrl = Relative2AbsoluteUrl(moveResult.FileRelativePath);
+                moveResult.FileUrl = Relative2AbsoluteUrl(moveResult.FileRelativePath.DirectorySeparatorChar2UrlSeparatorChar());
                 moveResult.FileAbsolutePath = Relative2AbsolutePath(moveResult.FileRelativePath); //正式目录绝对路径
                 if (!System.IO.File.Exists(moveResult.FileAbsolutePath))
                 {
@@ -260,7 +255,7 @@ namespace BXJG.Utils.File
                 {
                     moveResult.ThumRelativePath = TempToOkPath(thumItem); //缩略图正式目录相对路径
                     moveResult.ThumAbsolutePath = Relative2AbsolutePath(moveResult.ThumRelativePath); //缩略图正式目录绝对路径
-                    moveResult.ThumUrl = Relative2AbsoluteUrl(moveResult.ThumRelativePath);
+                    moveResult.ThumUrl = ConvertToThumPath(moveResult.FileUrl);
                     System.IO.File.Move(sourceThumAbsolutePath, moveResult.ThumAbsolutePath);
                 }
 
