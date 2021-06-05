@@ -404,7 +404,7 @@ namespace BXJG.Utils.File
         /// <returns></returns>
         public string TempToOkPath(string path)
         {
-            return path.Replace(Consts.UploadTemp, Consts.UploadDir);
+            return path.Replace(Consts.UploadTemp, Consts.UploadDir).Replace(Consts.UploadTempUrl, Consts.UploadDir);
         }
 
         /// <summary>

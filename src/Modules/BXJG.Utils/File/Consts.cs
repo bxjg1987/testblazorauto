@@ -10,6 +10,7 @@ namespace BXJG.Utils.File
         static Consts()
         {
             UploadTemp = @$"upload{Path.DirectorySeparatorChar}temp";
+            UploadTempUrl = @$"upload/temp";
         }
         public const string UploadDir = "upload";
       
@@ -17,6 +18,7 @@ namespace BXJG.Utils.File
        /// upload\temp
        /// </summary>
         public static readonly string UploadTemp;
+        public static readonly string UploadTempUrl;
 
         public const string SettingKeyUploadGroup = "BXJGUtilsFileUploadGroup";
         public const string SettingKeyUploadSize = "BXJGUtilsFileUploadSize";

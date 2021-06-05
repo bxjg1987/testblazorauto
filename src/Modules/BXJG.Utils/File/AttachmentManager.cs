@@ -46,29 +46,31 @@ namespace BXJG.Utils.File
             //相应的文件处理参考：https://gitee.com/bxjg1987_admin/abp/wikis/pages?sort_id=4086113%26doc_id=627313#%E4%BA%8B%E5%8A%A1
             #region 删除旧文件
             //查询旧文件的相对url
-            var qq = repository.GetAll().Where(c => c.EntityId == entityId.ToString()).Select(c => c.RelativeFileUrl);
+            var qq = repository.GetAll().Where(c => c.EntityType == entityType && c.EntityId == entityId.ToString()).Select(c => c.RelativeFileUrl);
             var qqList = await AsyncQueryableExecuter.ToListAsync(qq);
-            //旧文件的名称集合
-            var oldNames = qqList.Select(c => Path.GetFileName(c));
+            string[] needDelete = new string[0];
+            if (qqList.Count > 0)
+            {
+                //旧文件的名称集合
+                var oldNames = qqList.Select(c => Path.GetFileName(c));
 
-            //新文件的名称集合
-            if (files == null)
-                files = new List<AttachmentEditDto>();
-            var newNames = files.Select(c => Path.GetFileName(c.AbsoluteFileUrl));
+                //新文件的名称集合
+                if (files == null)
+                    files = new List<AttachmentEditDto>();
+                var newNames = files.Select(c => Path.GetFileName(c.AbsoluteFileUrl));
 
-            //找到需要删除的文件名，不含路径，注意文件名是guid，所以可用这样做
-            var xj = oldNames.Except(newNames);
+                //找到需要删除的文件名，不含路径，注意文件名是guid，所以可用这样做
+                var xj = oldNames.Except(newNames);
 
-            //得到需要删除的文件集合，包含路径
-            var needDelete = qqList.Where(c => xj.Any(d => c.Contains(d)));
+                //得到需要删除的文件集合，包含路径
+                needDelete = qqList.Where(c => xj.Any(d => c.Contains(d))).ToArray();
 
-            //删除旧文件的数据库记录
-            await repository.DeleteAsync(c => c.EntityId == entityId.ToString());
-
+                //删除旧文件的数据库记录
+                await repository.DeleteAsync(c => c.EntityType==entityType&& c.EntityId == entityId.ToString());
+                await CurrentUnitOfWork.SaveChangesAsync();
+            }
             //不要在这里删，要在数据库操作之后删除文件
-            //await tempFileManager.RemoveAsync(needDelete.ToArray());
-
-            await CurrentUnitOfWork.SaveChangesAsync();
+            //await tempFileManager.RemoveAsync(needDelete);
             #endregion
 
             #region 添加新的
@@ -82,19 +84,25 @@ namespace BXJG.Utils.File
                 {
                     EntityType = entityType,
                     EntityId = entityId.ToString(),
-                    RelativeFileUrl = tempFileManager.Absolute2RelativeUrl(item.AbsoluteFileUrl),
+                    RelativeFileUrl = tempFileManager.Absolute2RelativeUrl(tempFileManager.TempToOkPath(item.AbsoluteFileUrl)),
                     OrderIndex = item.OrderIndex == default ? i : item.OrderIndex
                 };
-                entity.RelativeThumUrl = tempFileManager.TryGetThumRelativeUrl(entity.RelativeFileUrl);
+                entity.RelativeThumUrl = tempFileManager.ConvertToThumPath(entity.RelativeFileUrl);
                 entity.AbsoluteFileUrl = tempFileManager.Relative2AbsoluteUrl(entity.RelativeFileUrl);
                 if (!entity.RelativeThumUrl.IsNullOrWhiteSpace())
                     entity.AbsoluteThumUrl = tempFileManager.Relative2AbsoluteUrl(entity.RelativeThumUrl);
-                foreach (var ext in item.ExtensionData)
+                if (item.ExtensionData != null)
                 {
-                    entity.SetData(ext.Key, ext.Value);
+                    foreach (var ext in item.ExtensionData)
+                    {
+                        entity.SetData(ext.Key, ext.Value);
+                    }
                 }
+
+                await repository.InsertAsync(entity);
                 list.Add(entity);
             }
+
             await CurrentUnitOfWork.SaveChangesAsync();
             #endregion
 
@@ -104,13 +112,14 @@ namespace BXJG.Utils.File
             #endregion
 
             #region 最后移动新文件，删除旧文件
+
             //移动所有文件
             await tempFileManager.MoveAsync(files.Select(c => c.AbsoluteFileUrl).ToArray());
 
             try
             {
                 //最后删除旧文件，内部不会异常
-                await tempFileManager.RemoveAsync(needDelete.ToArray());
+                await tempFileManager.RemoveAsync(needDelete);
             }
             catch (Exception ex)
             {
@@ -133,7 +142,7 @@ namespace BXJG.Utils.File
             list.ForEach(entity =>
             {
                 entity.AbsoluteFileUrl = tempFileManager.Relative2AbsoluteUrl(entity.RelativeFileUrl);
-                entity.RelativeThumUrl = tempFileManager.TryGetThumRelativeUrl(entity.RelativeFileUrl);
+                entity.RelativeThumUrl = tempFileManager.TryGetThumRelativeUrl(entity.AbsoluteFileUrl);
                 if (!entity.RelativeThumUrl.IsNullOrWhiteSpace())
                     entity.AbsoluteThumUrl = tempFileManager.Relative2AbsoluteUrl(entity.RelativeThumUrl);
             });

@@ -267,8 +267,20 @@ namespace BXJG.WorkOrder.WorkOrder
         public virtual async Task<TEntityDto> GetAsync(TGetInput input)
         {
             await CheckGetPermissionAsync();
-            var entity = await repository.GetAsync(input.Id);
+            var q = await GetFilterAsync(input);
+            var entity = await AsyncQueryableExecuter.FirstOrDefaultAsync(q);
             return await EntityToDto(entity);
+        }
+        protected virtual async ValueTask<IQueryable<TEntity>> GetFilterAsync(TGetInput input)
+        {
+            var q = repository.GetAll();
+            q = await GetAndAllFilterAsync(q);
+            q = q.Where(c => c.Id == input.Id);
+            return q;
+        }
+        protected virtual ValueTask<IQueryable<TEntity>> GetAndAllFilterAsync(IQueryable<TEntity> q)
+        {
+            return ValueTask.FromResult(q);
         }
         /// <summary>
         /// 获取指定所有工单的条件
@@ -298,6 +310,8 @@ namespace BXJG.WorkOrder.WorkOrder
                          .WhereIf(input.ExecutionTimeEnd.HasValue, c => c.ExecutionTime < input.ExecutionTimeEnd)
                          .WhereIf(input.CompletionTimeStart.HasValue, c => c.CompletionTime >= input.CompletionTimeStart)
                          .WhereIf(input.CompletionTimeEnd.HasValue, c => c.CompletionTime < input.CompletionTimeEnd);
+
+            query = await GetAndAllFilterAsync(query);
 
             return query;
         }
@@ -343,7 +357,7 @@ namespace BXJG.WorkOrder.WorkOrder
 
             var images = await attachmentManager.GetFirstAttachmentsAsync(list.Select(c => c.Id.ToString()).ToArray());
             var images2 = images.ToDictionary(c => c.Key, c => new List<AttachmentEntity> { c.Value });
-            
+
             var state = await GetStateAsync(list);
             var items = new List<TEntityDto>();
             foreach (var item in list)
@@ -527,7 +541,7 @@ namespace BXJG.WorkOrder.WorkOrder
             }
             var state = await GetStateAsync(new TEntity[] { entity });
             var images = await attachmentManager.GetAttachmentsAsync(entity.Id.ToString());
-        
+
             return EntityToDto(entity, new CategoryEntity[] { category }, emps, images, state);
         }
         /// <summary>
