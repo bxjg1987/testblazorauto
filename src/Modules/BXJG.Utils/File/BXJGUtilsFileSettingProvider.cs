@@ -22,16 +22,16 @@ namespace BXJG.Utils.File
                     Consts.DefaultUploadTypes,
                     "允许的文件类型".UtilsLI(),
                     sys,
-                    scopes: SettingScopes.Application ,
-                    isVisibleToClients:false),
+                    scopes: SettingScopes.Application | SettingScopes.Tenant ,
+                    isVisibleToClients:true),
 
                  new SettingDefinition(
                     Consts.SettingKeyUploadSize,
                     Consts.DefaultUploadMaxSize.ToString(),
                     "允许的大小(Kb)".UtilsLI(),
                     sys,
-                    scopes: SettingScopes.Application ,
-                    isVisibleToClients:false)
+                    scopes: SettingScopes.Application | SettingScopes.Tenant,
+                    isVisibleToClients:true)
             };
         }
     }
