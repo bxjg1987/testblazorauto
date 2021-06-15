@@ -137,6 +137,7 @@ namespace BXJG.Utils.File
         /// <returns>key为实体id，value为附件列表</returns>
         public async Task<Dictionary<string, List<AttachmentEntity>>> GetAttachmentsAsync(params string[] entityIds)
         {
+            entityIds = entityIds.Distinct().ToArray();
             var q = repository.GetAll().Where(c => c.EntityType == entityType && entityIds.Contains(c.EntityId)).OrderBy(c => c.OrderIndex);
             var list = await AsyncQueryableExecuter.ToListAsync(q);
             list.ForEach(entity =>
@@ -147,6 +148,7 @@ namespace BXJG.Utils.File
                     entity.AbsoluteThumUrl = tempFileManager.Relative2AbsoluteUrl(entity.RelativeThumUrl);
             });
             var dic = new Dictionary<string, List<AttachmentEntity>>();
+
             foreach (var item in entityIds)
             {
                 var sss = list.Where(c => c.EntityId == item).ToList();
