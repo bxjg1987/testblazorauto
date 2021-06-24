@@ -6,9 +6,9 @@ using Abp.Linq;
 using Abp.MultiTenancy;
 using Abp.Runtime.Session;
 using Abp.Threading;
-using BXJG.WorkOrder.Session;
+using BXJG.WorkOrder.EmployeeApplication.Session;
 
-namespace BXJG.WorkOrder
+namespace BXJG.WorkOrder.EmployeeApplication
 {
     /// <summary>
     /// 员工对工单处理的应用服务抽象类
@@ -19,8 +19,8 @@ namespace BXJG.WorkOrder
         /// <summary>
         /// 当前登陆的员工id
         /// </summary>
-        protected string CurrentEmployeeId => employeeSession.CurrentEmployeeId;
-        public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }
+        protected string CurrentEmployeeId => employeeSession.BusinessUserId;
+      
         protected EmployeeAppServiceBase(IEmployeeSession employeeSession)
         {
             LocalizationSourceName = CoreConsts.LocalizationSourceName;

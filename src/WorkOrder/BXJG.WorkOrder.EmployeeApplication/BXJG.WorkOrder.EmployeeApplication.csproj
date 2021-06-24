@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace>BXJG.WorkOrder</RootNamespace>
+    <RootNamespace>BXJG.WorkOrder.EmployeeApplication</RootNamespace>
     <Version>1.1.0</Version>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
@@ -10,6 +10,12 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="EmployeeWorkOrderNavigationExtensions.cs" />
+    <Compile Remove="WorkOrder\CreateDto.cs" />
+    <Compile Remove="WorkOrder\UpdateDto.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\BXJG.WorkOrder.CommonApplication\BXJG.WorkOrder.CommonApplication.csproj" />

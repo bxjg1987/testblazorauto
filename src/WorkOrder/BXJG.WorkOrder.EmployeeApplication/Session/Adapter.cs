@@ -9,9 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Abp.Runtime.Session;
-using BXJG.WorkOrder.Session;
 
-namespace BXJG.WorkOrder.Session
+namespace BXJG.WorkOrder.EmployeeApplication.Session
 {
     public class EmployeeSession : IEmployeeSession
     {
@@ -22,7 +21,8 @@ namespace BXJG.WorkOrder.Session
             this.abpSession = abpSession;
         }
 
-        public string CurrentEmployeeId => abpSession.UserId?.ToString();
+        public string BusinessUserId => abpSession.UserId?.ToString();
+
     }
 }
 

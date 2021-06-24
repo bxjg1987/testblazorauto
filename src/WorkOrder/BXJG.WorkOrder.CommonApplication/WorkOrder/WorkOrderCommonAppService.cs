@@ -12,20 +12,20 @@ using System.Threading.Tasks;
 namespace BXJG.WorkOrder.WorkOrder
 {
     [AbpAuthorize]
-    [UnitOfWork(IsDisabled = true)]
     public class WorkOrderCommonAppService : AppServiceBase
     {
-        Lazy< EnumManager> enumManager;
+        Lazy<EnumManager> enumManager;
 
         public WorkOrderCommonAppService()
         {
-            enumManager = new Lazy<EnumManager>(()=> new EnumManager(base.LocalizationManager, CoreConsts.LocalizationSourceName));
+            enumManager = new Lazy<EnumManager>(() => new EnumManager(base.LocalizationManager, CoreConsts.LocalizationSourceName));
         }
         /// <summary>
         /// 获取工单状态列表
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
+        [UnitOfWork(IsDisabled = true)]
         public List<ComboboxItemDto> GetAllStatus(GetForSelectInput input)
         {
             return enumManager.Value.ConvertToComboboxData<Status>(input);
@@ -35,6 +35,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
+        [UnitOfWork(IsDisabled = true)]
         public List<ComboboxItemDto> GetAllUrgencyDegree(GetForSelectInput input)
         {
             return enumManager.Value.ConvertToComboboxData<UrgencyDegree>(input);

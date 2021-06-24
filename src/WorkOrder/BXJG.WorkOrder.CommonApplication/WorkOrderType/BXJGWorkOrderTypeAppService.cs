@@ -12,7 +12,7 @@ using BXJG.Common.Dto;
 using BXJG.Utils.Localization;
 using BXJG.WorkOrder.WorkOrderType;
 
-namespace BXJG.WorkOrder
+namespace BXJG.WorkOrder.WorkOrderType
 {
     /// <summary>
     /// 工单类型应用服务

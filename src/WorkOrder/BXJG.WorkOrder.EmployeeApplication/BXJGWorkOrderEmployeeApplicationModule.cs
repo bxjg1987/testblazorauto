@@ -2,11 +2,11 @@
 using Abp.Modules;
 using Abp.Reflection.Extensions;
 using BXJG.Utils;
-using BXJG.WorkOrder.Session;
+using BXJG.WorkOrder.EmployeeApplication.Session;
 using System;
 using System.Reflection;
 
-namespace BXJG.WorkOrder
+namespace BXJG.WorkOrder.EmployeeApplication
 {
     [DependsOn(typeof(BXJGCommonApplicationModule))]
     public class BXJGWorkOrderEmployeeApplicationModule : AbpModule

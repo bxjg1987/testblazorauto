@@ -3,7 +3,7 @@ using BXJG.GeneralTree;
 using BXJG.WorkOrder.WorkOrder;
 using BXJG.WorkOrder.WorkOrderCategory;
 using System.Text.Json;
-namespace BXJG.WorkOrder
+namespace BXJG.WorkOrder.EmployeeApplication
 {
     public class AutoMapperProfile : Profile
     {

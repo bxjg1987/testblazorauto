@@ -1,18 +1,29 @@
 ﻿using Abp.Application.Services.Dto;
+using BXJG.Common.Dto;
+using BXJG.Utils.File;
+using BXJG.WorkOrder.WorkOrder;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.WorkOrder.WorkOrder
+namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
 {
     /// <summary>
-    /// 工单后台管理列表页使用的显示模型<br />
-    /// 不同工单类型有相应子类
+    /// 后台管理工单列表页使用的显示模型基类
     /// </summary>
-    public class WorkOrderEmployeeBaseDto : EntityDto<long>
+    public class WorkOrderDtoBase : FullAuditedEntityDto<long>
     {
+        /// <summary>
+        /// 关联的图片
+        /// </summary>
+        public List<AttachmentDto> Images { get; set; }
+        /// <summary>
+        /// 封面图片
+        /// </summary>
+        //[Newtonsoft.Json.JsonIgnore]
+        public AttachmentDto ImageCover => Images?.FirstOrDefault();
         /// <summary>
         /// 所属分类id
         /// </summary>
@@ -25,14 +36,6 @@ namespace BXJG.WorkOrder.WorkOrder
         /// 状态
         /// </summary>
         public Status Status { get; set; }
-        ///// <summary>
-        ///// 状态颜色
-        ///// </summary>
-        //public string StatusColor => Status.GetColor();
-        ///// <summary>
-        ///// 紧急程度颜色
-        ///// </summary>
-        //public string UrgencyDegreeColor => UrgencyDegree.GetColor();
         /// <summary>
         /// 状态名称
         /// </summary>
@@ -89,17 +92,16 @@ namespace BXJG.WorkOrder.WorkOrder
         /// 员工手机号
         /// </summary>
         public string EmployeePhone { get; set; }
-        
     }
     /// <summary>
     /// 后台管理普通工单查询模型
     /// </summary>
-    public class WorkOrderEmployeeDto : WorkOrderEmployeeBaseDto
+    public class WorkOrderDto : WorkOrderDtoBase, IExtendableDto
     {
         /// <summary>
         /// 扩展字段
         /// </summary>
-        public dynamic ExtensionData { get; set; }
+        public Dictionary<string, object> ExtensionData { get; set; }
         /// <summary>
         /// 预留字段1
         /// </summary>
