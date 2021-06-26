@@ -24,5 +24,9 @@ namespace BXJG.WorkOrder.WorkOrderType
         /// 是否是默认，目前没啥用
         /// </summary>
         public bool IsDefault { get; set; }
+        ///// <summary>
+        ///// 关联的管理端应用服务类型，考虑直接用name关联
+        ///// </summary>
+        //public Type ManagerAppServiceType { get; set; }
     }
 }

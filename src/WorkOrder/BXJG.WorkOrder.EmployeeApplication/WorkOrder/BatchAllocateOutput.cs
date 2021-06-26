@@ -5,7 +5,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
     /// <summary>
     /// 员工批量领取工单的输出模型
     /// </summary>
-    public class WorkOrderBatchAllocateOutputBase : BatchOperationOutputLong
+    public class WorkOrderBatchAllocateOutput1Base : BatchOperationOutputLong
     {
     }
 }

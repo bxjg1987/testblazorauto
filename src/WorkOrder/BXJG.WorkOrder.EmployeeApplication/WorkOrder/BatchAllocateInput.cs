@@ -6,7 +6,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
     /// <summary>
     /// 维修人员批量领取工单的输入模型
     /// </summary>
-    public class WorkOrderBatchAllocateInputBase: BatchOperationInputLong
+    public class WorkOrderBatchAllocateInput1Base: BatchOperationInputLong
     {
         ///// <summary>
         ///// 分配时间

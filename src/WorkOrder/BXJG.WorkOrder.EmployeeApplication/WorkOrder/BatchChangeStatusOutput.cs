@@ -10,7 +10,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
     /// <summary>
     /// 员工批量改变工单状态的输出模型
     /// </summary>
-    public class WorkOrderBatchChangeStatusOutputBase : BatchOperationOutputLong
+    public class WorkOrderBatchChangeStatusOutput1Base : BatchOperationOutputLong
     {
     }
 }

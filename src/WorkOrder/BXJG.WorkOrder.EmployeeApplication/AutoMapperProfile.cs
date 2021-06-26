@@ -1,5 +1,6 @@
 using AutoMapper;
 using BXJG.GeneralTree;
+using BXJG.WorkOrder.EmployeeApplication.WorkOrder;
 using BXJG.WorkOrder.WorkOrder;
 using BXJG.WorkOrder.WorkOrderCategory;
 using System.Text.Json;
@@ -10,6 +11,8 @@ namespace BXJG.WorkOrder.EmployeeApplication
         public AutoMapperProfile()
         {
             #region 工单分类
+            CreateMap<OrderEntity, WorkOrder1Dto>();
+
             //CreateMap(typeof(WorkOrderUpdateInput), typeof(OrderEntity)).DtoToEntity().ForMember("ContentType", opt => opt.Ignore());
             //CreateMap(typeof(ColumnEntity), typeof(ColumnDto)).EntityToDto();//可能是因为泛型原因，必须调用EntityToDto
             //CreateMap(typeof(ColumnEntity), typeof(ColumnTreeNodeDto)).EntityToComboTree();

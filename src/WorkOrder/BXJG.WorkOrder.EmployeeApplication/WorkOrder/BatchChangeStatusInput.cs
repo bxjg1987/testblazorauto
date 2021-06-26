@@ -12,7 +12,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
     /// <summary>
     /// 员工批量改变工单状态的输入模型
     /// </summary>
-    public class WorkOrderBatchChangeStatusInputBase : BatchOperationInputLong
+    public class WorkOrderBatchChangeStatusInput1Base : BatchOperationInputLong
     {
         ///// <summary>
         ///// 操作时间

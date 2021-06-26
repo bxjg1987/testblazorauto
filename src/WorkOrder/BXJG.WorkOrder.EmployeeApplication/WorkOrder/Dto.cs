@@ -13,7 +13,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
     /// <summary>
     /// 后台管理工单列表页使用的显示模型基类
     /// </summary>
-    public class WorkOrderDtoBase : FullAuditedEntityDto<long>
+    public class WorkOrderDto1Base : FullAuditedEntityDto<long>
     {
         /// <summary>
         /// 关联的图片
@@ -22,7 +22,6 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         /// <summary>
         /// 封面图片
         /// </summary>
-        //[Newtonsoft.Json.JsonIgnore]
         public AttachmentDto ImageCover => Images?.FirstOrDefault();
         /// <summary>
         /// 所属分类id
@@ -96,7 +95,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
     /// <summary>
     /// 后台管理普通工单查询模型
     /// </summary>
-    public class WorkOrderDto : WorkOrderDtoBase, IExtendableDto
+    public class WorkOrder1Dto : WorkOrderDto1Base, IExtendableDto
     {
         /// <summary>
         /// 扩展字段

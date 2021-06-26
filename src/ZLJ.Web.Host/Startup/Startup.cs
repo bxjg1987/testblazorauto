@@ -124,7 +124,7 @@ namespace ZLJ.Web.Host.Startup
                 options.IncludeXmlComments(AppContext.BaseDirectory + typeof(ApplicationModule).Assembly.GetName().Name + ".XML");
                 options.IncludeXmlComments(AppContext.BaseDirectory + typeof(BXJG.WorkOrder.BXJGCommonApplicationModule).Assembly.GetName().Name + ".XML");
                 options.IncludeXmlComments(AppContext.BaseDirectory + typeof(BXJG.WorkOrder.BXJGCommonApplicationModule).Assembly.GetName().Name + ".XML");
-                options.IncludeXmlComments(AppContext.BaseDirectory + typeof(BXJG.WorkOrder.BXJGWorkOrderEmployeeApplicationModule).Assembly.GetName().Name + ".XML");
+                options.IncludeXmlComments(AppContext.BaseDirectory + typeof(BXJG.WorkOrder.EmployeeApplication.BXJGWorkOrderEmployeeApplicationModule).Assembly.GetName().Name + ".XML");
                 //options.IncludeXmlComments(AppContext.BaseDirectory + typeof(BXJG.DynamicAssociateEntity.DynamicAssociateEntityApplicationModule).Assembly.GetName().Name + ".XML");
 
 
