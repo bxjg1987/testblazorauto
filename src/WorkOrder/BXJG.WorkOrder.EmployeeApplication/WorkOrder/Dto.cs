@@ -11,9 +11,9 @@ using System.Threading.Tasks;
 namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
 {
     /// <summary>
-    /// 后台管理工单列表页使用的显示模型基类
+    /// 工单处理人员获取工单的显示模型基类
     /// </summary>
-    public class WorkOrderDto1Base : FullAuditedEntityDto<long>
+    public class EmployeeWorkOrderDtoBase : FullAuditedEntityDto<long>
     {
         /// <summary>
         /// 关联的图片
@@ -93,9 +93,9 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         public string EmployeePhone { get; set; }
     }
     /// <summary>
-    /// 后台管理普通工单查询模型
+    /// 工单处理人员获取普通工单的显示模型基类
     /// </summary>
-    public class WorkOrder1Dto : WorkOrderDto1Base, IExtendableDto
+    public class EmployeeWorkOrderDto : EmployeeWorkOrderDtoBase, IExtendableDto
     {
         /// <summary>
         /// 扩展字段

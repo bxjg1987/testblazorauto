@@ -11,7 +11,7 @@ namespace BXJG.WorkOrder.EmployeeApplication
         public AutoMapperProfile()
         {
             #region 工单分类
-            CreateMap<OrderEntity, WorkOrder1Dto>();
+            CreateMap<OrderEntity, EmployeeWorkOrderDto>();
 
             //CreateMap(typeof(WorkOrderUpdateInput), typeof(OrderEntity)).DtoToEntity().ForMember("ContentType", opt => opt.Ignore());
             //CreateMap(typeof(ColumnEntity), typeof(ColumnDto)).EntityToDto();//可能是因为泛型原因，必须调用EntityToDto

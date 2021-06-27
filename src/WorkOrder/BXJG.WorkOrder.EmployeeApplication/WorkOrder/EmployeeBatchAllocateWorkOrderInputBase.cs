@@ -1,12 +1,13 @@
 ﻿using BXJG.Common.Dto;
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
 {
     /// <summary>
-    /// 维修人员批量领取工单的输入模型
+    /// 工单处理人批量领取工单的输入模型
     /// </summary>
-    public class WorkOrderBatchAllocateInput1Base: BatchOperationInputLong
+    public class EmployeeBatchAllocateWorkOrderInputBase : BatchOperationInputLong
     {
         ///// <summary>
         ///// 分配时间
@@ -24,5 +25,10 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         /// 预计结束时间
         /// </summary>
         public DateTimeOffset? EstimatedCompletionTime { get; set; }
+        /// <summary>
+        /// 状态改变说明或备注信息
+        /// </summary>
+        [StringLength(CoreConsts.OrderStatusChangedDescriptionMaxLength)]
+        public  string StatusChangedDescription { get; set; }
     }
 }

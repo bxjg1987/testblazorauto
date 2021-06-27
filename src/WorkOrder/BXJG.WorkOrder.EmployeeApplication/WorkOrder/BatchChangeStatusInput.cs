@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
 {
     /// <summary>
-    /// 员工批量改变工单状态的输入模型
+    /// 工单处理人批量改变工单状态的输入模型
     /// </summary>
     public class WorkOrderBatchChangeStatusInput1Base : BatchOperationInputLong
     {

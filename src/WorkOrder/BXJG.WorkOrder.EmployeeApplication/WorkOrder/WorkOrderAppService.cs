@@ -66,15 +66,15 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         where TGetInput : EntityDto<long>
         where TGetAllInput : GetAllWorkOrderBase1Input
         where TGetTotalInput : GetTotalInput
-        where TEntityDto : WorkOrderDto1Base, new()
-        where TBatchAllocateInput : WorkOrderBatchAllocateInput1Base
-        where TBatchAllocateOutput : WorkOrderBatchAllocateOutput1Base, new()
-        where TBatchExcuteInput : WorkOrderBatchChangeStatusInput1Base
-        where TBatchExcuteOutput : WorkOrderBatchChangeStatusOutput1Base, new()
-        where TBatchCompletionInput : WorkOrderBatchChangeStatusInput1Base
-        where TBatchCompletionOutput : WorkOrderBatchChangeStatusOutput1Base, new()
-        where TBatchRejectInput : WorkOrderBatchChangeStatusInput1Base
-        where TBatchRejectOutput : WorkOrderBatchChangeStatusOutput1Base, new()
+        where TEntityDto : EmployeeWorkOrderDtoBase, new()
+        where TBatchAllocateInput : EmployeeBatchAllocateWorkOrderInputBase
+        where TBatchAllocateOutput : EmployeeBatchAllocateWorkOrderOutputBase, new()
+        where TBatchExcuteInput : EmployeeBatchExecuteWorkOrderInputBase
+        where TBatchExcuteOutput : EmployeeBatchExecuteWorkOrderOutputBase, new()
+        where TBatchCompletionInput : EmployeeBatchCompletionWorkOrderInputBase
+        where TBatchCompletionOutput : EmployeeBatchCompletionWorkOrderOutputBase, new()
+        where TBatchRejectInput : EmployeeBatchRejectWorkOrderInputBase
+        where TBatchRejectOutput : EmployeeBatchRejectWorkOrderOutputBase, new()
         where TEntity : OrderBaseEntity
         where TRepository : IRepository<TEntity, long>
         where TManager : OrderBaseManager<TEntity>
@@ -464,15 +464,15 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
     public class WorkOrderAppService : WorkOrderAppServiceBase<EntityDto<long>,
                                                                GetAllWorkOrderInput,
                                                                GetWorkOrderTotalInput,
-                                                               WorkOrder1Dto,
-                                                               WorkOrderBatchAllocateInput1Base,
-                                                               WorkOrderBatchAllocateOutput1Base,
-                                                               WorkOrderBatchChangeStatusInput1Base,
-                                                               WorkOrderBatchChangeStatusOutput1Base,
-                                                               WorkOrderBatchChangeStatusInput1Base,
-                                                               WorkOrderBatchChangeStatusOutput1Base,
-                                                               WorkOrderBatchChangeStatusInput1Base,
-                                                               WorkOrderBatchChangeStatusOutput1Base,
+                                                               EmployeeWorkOrderDto,
+                                                               EmployeeBatchAllocateWorkOrderInputBase,    
+                                                               EmployeeBatchAllocateWorkOrderOutputBase, 
+                                                               EmployeeBatchExecuteWorkOrderInputBase,
+                                                               EmployeeBatchExecuteWorkOrderOutputBase,
+                                                               EmployeeBatchCompletionWorkOrderInputBase,   
+                                                               EmployeeBatchCompletionWorkOrderOutputBase,
+                                                               EmployeeBatchRejectWorkOrderInputBase,
+                                                               EmployeeBatchRejectWorkOrderOutputBase,
                                                                OrderEntity,
                                                                IRepository<OrderEntity, long>,
                                                                OrderManager>
@@ -497,6 +497,5 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
             if (!cfg.EnableDefaultWorkOrder)
                 throw new ApplicationException("BXJGWorkOrderConfig.EnableDefaultWorkOrder=false");
         }
-
     }
 }
