@@ -79,6 +79,9 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         /// 实际的结束时间
         /// </summary>
         public DateTimeOffset? CompletionTime { get; set; }
+
+        //不管那么多，员工信息也返回吧，用不用是模块调用方的事
+
         /// <summary>
         /// 员工id
         /// </summary>

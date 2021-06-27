@@ -29,6 +29,6 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         /// 状态改变说明或备注信息
         /// </summary>
         [StringLength(CoreConsts.OrderStatusChangedDescriptionMaxLength)]
-        public  string StatusChangedDescription { get; set; }
+        public string StatusChangedDescription { get; set; }
     }
 }

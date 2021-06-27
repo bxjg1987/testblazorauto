@@ -7,9 +7,6 @@ using System.Threading.Tasks;
 
 namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
 {
-
-    
-
     /// <summary>
     /// 获取工单数量时的输入模型
     /// </summary>
@@ -22,7 +19,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         /// <summary>
         /// 处理人Id集合，参考<see cref="GetTotalInput.EmployeeIds"/>
         /// </summary>
-        public IEnumerable<string> EmployeeIds { get; set; }
+        public string[] EmployeeIds { get; set; }
         /// <summary>
         /// 只包含在这几种状态内的工单
         /// </summary>

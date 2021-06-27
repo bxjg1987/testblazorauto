@@ -26,6 +26,7 @@ using BXJG.WorkOrder.EmployeeApplication.Session;
 using System.Linq.Dynamic;
 using Abp.Linq.Expressions;
 using System.Linq.Expressions;
+using BXJG.WorkOrder.WorkOrderType;
 
 namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
 {
@@ -35,7 +36,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
     /// <typeparam name="TGetInput">获取单个工单的输入模型</typeparam>
     /// <typeparam name="TGetAllInput">获取工单分页列表时的输入模型</typeparam>
     /// <typeparam name="TGetTotalInput">获取工单数量时的输入模型</typeparam>
-    /// <typeparam name="TEntityDto">工单模型</typeparam>
+    /// <typeparam name="TDto">工单显示模型</typeparam>
     /// <typeparam name="TBatchAllocateInput">批量领取时的输入模型</typeparam>
     /// <typeparam name="TBatchAllocateOutput">批量领取时的输出模型</typeparam>
     /// <typeparam name="TBatchExcuteInput">批量执行时的输入模型</typeparam>
@@ -50,7 +51,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
     public abstract class WorkOrderAppServiceBase<TGetInput,
                                                   TGetAllInput,
                                                   TGetTotalInput,
-                                                  TEntityDto,
+                                                  TDto,
                                                   TBatchAllocateInput,
                                                   TBatchAllocateOutput,
                                                   TBatchExcuteInput,
@@ -66,7 +67,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         where TGetInput : EntityDto<long>
         where TGetAllInput : GetAllWorkOrderBase1Input
         where TGetTotalInput : GetTotalInput
-        where TEntityDto : EmployeeWorkOrderDtoBase, new()
+        where TDto : EmployeeWorkOrderDtoBase, new()
         where TBatchAllocateInput : EmployeeBatchAllocateWorkOrderInputBase
         where TBatchAllocateOutput : EmployeeBatchAllocateWorkOrderOutputBase, new()
         where TBatchExcuteInput : EmployeeBatchExecuteWorkOrderInputBase
@@ -86,8 +87,8 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         protected readonly TManager manager;
         protected readonly IEmployeeAppService employeeAppService;
         protected readonly CategoryManager clsManager;
-        protected readonly string workOrderType;
         protected readonly AttachmentManager<TEntity> attachmentManager;
+        protected readonly WorkOrderTypeDefine workOrderTypeDefine;
         #endregion
 
         #region 构造函数
@@ -102,6 +103,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         /// <param name="clsManager">工单类领域服务</param>
         /// <param name="workOrderType">工单类型</param>
         /// <param name="attachmentManager">附件管理器</param>
+        /// <param name="workOrderTypeManager">工单类型定义</param>
         public WorkOrderAppServiceBase(TRepository repository,
                                        IEmployeeSession empSession,
                                        TManager manager,
@@ -109,6 +111,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
                                        AttachmentManager<TEntity> attachmentManager,
                                        IEmployeeAppService employeeAppService,
                                        CategoryManager clsManager,
+                                       WorkOrderTypeManager workOrderTypeManager,
                                        string workOrderType) : base(empSession)
         {
             this.repository = repository;
@@ -116,9 +119,8 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
             this.categoryRepository = categoryRepository;
             this.employeeAppService = employeeAppService;
             this.clsManager = clsManager;
-            this.workOrderType = workOrderType;
             this.attachmentManager = attachmentManager;
-            //this.iocResolver = iocResolver;
+            this.workOrderTypeDefine = workOrderTypeManager[workOrderType];
         }
         #endregion
 
@@ -140,7 +142,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         /// <param name="input"></param>
         /// <returns></returns>
         [UnitOfWork(false)]
-        public virtual async Task<TEntityDto> Get1Async(TGetInput input)
+        public virtual async Task<TDto> GetAsync(TGetInput input)
         {
             await CheckPermissionAsync();
             var q = await GetFilterAsync(input);
@@ -162,7 +164,6 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         /// 获取指定所有工单的条件
         /// </summary>
         /// <returns></returns>
-
 
         private class sdf
         {
@@ -212,14 +213,13 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
             return query;
         }
 
-
         /// <summary>
         /// 获取列表
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
         [UnitOfWork(false)]
-        public virtual async Task<PagedResultDto<TEntityDto>> GetAll1Async(TGetAllInput input)
+        public virtual async Task<PagedResultDto<TDto>> GetAll1Async(TGetAllInput input)
         {
             //分类、员工先查询 再用in，
             //假定员工和分类数量不会太多（太多的话考虑分配in查询），且可以使用缓存
@@ -235,7 +235,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
             //var ss2 = await service.GetAllAsync(define, "a", "d");
 
             await CheckPermissionAsync();
-            var query = await GetAllFilterAsync( input as TGetTotalInput);
+            var query = await GetAllFilterAsync(input as TGetTotalInput);
             var count = await AsyncQueryableExecuter.CountAsync(query);
             query = OrderBy(query, input);
             query = PageBy(query, input);
@@ -257,13 +257,13 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
             var images2 = images.ToDictionary(c => c.Key, c => new List<AttachmentEntity> { c.Value });
 
             var state = await GetStateAsync(list);
-            var items = new List<TEntityDto>();
+            var items = new List<TDto>();
             foreach (var item in list)
             {
                 var ttt = EntityToDto(item, cls, emps, images2, state);
                 items.Add(ttt);
             }
-            return new PagedResultDto<TEntityDto>(count, items);
+            return new PagedResultDto<TDto>(count, items);
         }
         ///// <summary>
         ///// 批量调整工单状态
@@ -386,9 +386,9 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         /// <param name="images"></param>
         /// <param name="state">子类可能需要聚合更多外键</param>
         /// <returns></returns>
-        protected virtual TEntityDto EntityToDto(TEntity entity, IEnumerable<CategoryEntity> categories, IEnumerable<EmployeeDto> employees, IDictionary<string, List<AttachmentEntity>> images, object state = null)
+        protected virtual TDto EntityToDto(TEntity entity, IEnumerable<CategoryEntity> categories, IEnumerable<EmployeeDto> employees, IDictionary<string, List<AttachmentEntity>> images, object state = null)
         {
-            var dto = base.ObjectMapper.Map<TEntityDto>(entity);
+            var dto = base.ObjectMapper.Map<TDto>(entity);
             //dto.CategoryId = entity.CategoryId;
             if (categories != null)
             {
@@ -429,7 +429,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        protected virtual async Task<TEntityDto> EntityToDto(TEntity entity)
+        protected virtual async Task<TDto> EntityToDto(TEntity entity)
         {
             var category = await categoryRepository.GetAsync(entity.CategoryId);
             IEnumerable<EmployeeDto> emps = null;
@@ -461,30 +461,31 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
     /// <summary>
     /// 后台管理默认工单应用服务接口
     /// </summary>
-    public class WorkOrderAppService : WorkOrderAppServiceBase<EntityDto<long>,
-                                                               GetAllWorkOrderInput,
-                                                               GetWorkOrderTotalInput,
-                                                               EmployeeWorkOrderDto,
-                                                               EmployeeBatchAllocateWorkOrderInputBase,    
-                                                               EmployeeBatchAllocateWorkOrderOutputBase, 
-                                                               EmployeeBatchExecuteWorkOrderInputBase,
-                                                               EmployeeBatchExecuteWorkOrderOutputBase,
-                                                               EmployeeBatchCompletionWorkOrderInputBase,   
-                                                               EmployeeBatchCompletionWorkOrderOutputBase,
-                                                               EmployeeBatchRejectWorkOrderInputBase,
-                                                               EmployeeBatchRejectWorkOrderOutputBase,
-                                                               OrderEntity,
-                                                               IRepository<OrderEntity, long>,
-                                                               OrderManager>
+    public class EmployeeWorkOrderAppService : WorkOrderAppServiceBase<EntityDto<long>,
+                                                                       GetAllWorkOrderInput,
+                                                                       GetWorkOrderTotalInput,
+                                                                       EmployeeWorkOrderDto,
+                                                                       EmployeeBatchAllocateWorkOrderInputBase,
+                                                                       EmployeeBatchAllocateWorkOrderOutputBase,
+                                                                       EmployeeBatchExecuteWorkOrderInputBase,
+                                                                       EmployeeBatchExecuteWorkOrderOutputBase,
+                                                                       EmployeeBatchCompletionWorkOrderInputBase,
+                                                                       EmployeeBatchCompletionWorkOrderOutputBase,
+                                                                       EmployeeBatchRejectWorkOrderInputBase,
+                                                                       EmployeeBatchRejectWorkOrderOutputBase,
+                                                                       OrderEntity,
+                                                                       IRepository<OrderEntity, long>,
+                                                                       OrderManager>
 
     {
-        public WorkOrderAppService(IRepository<OrderEntity, long> repository,
+        public EmployeeWorkOrderAppService(IRepository<OrderEntity, long> repository,
                                    BXJGWorkOrderConfig cfg,
                                    IEmployeeSession empSession,
                                    OrderManager manager,
                                    IRepository<CategoryEntity, long> categoryRepository,
                                    AttachmentManager<OrderEntity> attachmentManager,
                                    IEmployeeAppService employeeAppService,
+                                   WorkOrderTypeManager workOrderTypeManager,
                                    CategoryManager clsManager) : base(repository,
                                                                       empSession,
                                                                       manager,
@@ -492,6 +493,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
                                                                       attachmentManager,
                                                                       employeeAppService,
                                                                       clsManager,
+                                                                      workOrderTypeManager,
                                                                       CoreConsts.DefaultWorkOrderTypeName)
         {
             if (!cfg.EnableDefaultWorkOrder)

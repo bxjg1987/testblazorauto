@@ -77,7 +77,7 @@ namespace ZLJ
             Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(BXJGBaseInfoApplicationModule).Assembly);
             Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(BXJG.WorkOrder.ApplicationModule).Assembly,"bxjgworkorder");
             Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(BXJG.WorkOrder.BXJGCommonApplicationModule).Assembly, "bxjgworkorder");
-            Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(BXJGWorkOrderEmployeeApplicationModule).Assembly, "bxjgworkorderemployee");
+            Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(BXJGWorkOrderEmployeeApplicationModule).Assembly, "bxjgemployeeworkorder");
             //Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(DynamicAssociateEntityApplicationModule).Assembly, "bxjgDynamicAssociateEntity");
 
             ConfigureTokenAuth();
