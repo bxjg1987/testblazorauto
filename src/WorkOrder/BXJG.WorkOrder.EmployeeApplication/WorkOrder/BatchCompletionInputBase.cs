@@ -5,9 +5,9 @@ using System.ComponentModel.DataAnnotations;
 namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
 {
     /// <summary>
-    /// 工单处理人批量拒绝工单的输入模型
+    /// 工单处理人批量完成工单的输入模型
     /// </summary>
-    public class EmployeeBatchRejectWorkOrderInputBase : BatchOperationInputLong
+    public class BatchCompletionInputBase : BatchOperationInputLong
     {
         /// <summary>
         /// 状态改变说明或备注信息

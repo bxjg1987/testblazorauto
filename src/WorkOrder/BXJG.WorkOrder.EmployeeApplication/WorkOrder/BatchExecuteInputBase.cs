@@ -7,7 +7,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
     /// <summary>
     /// 工单处理人批量执行工单的输入模型
     /// </summary>
-    public class EmployeeBatchExecuteWorkOrderInputBase : BatchOperationInputLong
+    public class BatchExecuteInputBase : BatchOperationInputLong
     {
         /// <summary>
         /// 状态改变说明或备注信息

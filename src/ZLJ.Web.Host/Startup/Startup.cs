@@ -110,8 +110,9 @@ namespace ZLJ.Web.Host.Startup
             services.AddSwaggerGen(options =>
             {
                 options.SwaggerDoc("v1", new OpenApiInfo() { Title = "ZLJ API", Version = "v1" });
-
-
+                
+                //解决swagger不同命名空间中，同名模型导致冲突的问题
+                options.CustomSchemaIds(type => type.ToString());
 
                 options.IncludeXmlComments(AppContext.BaseDirectory + typeof(ZLJApplicationModule).Assembly.GetName().Name + ".XML");
                 options.IncludeXmlComments(AppContext.BaseDirectory + typeof(ApplicationModule).Assembly.GetName().Name + ".XML");

@@ -14,7 +14,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
     /// 维修人员工单获取列表页数据时的输入模型<br />
     /// 不同类型的工单可以提供相应子类，以便增加更多搜索条件
     /// </summary>
-    public class GetAllWorkOrderBase1Input : GetTotalInput, IPagedAndSortedResultRequest, /*PagedAndSortedResultRequestDto,*/ IShouldNormalize
+    public class GetAllInputBase : GetTotalInputBase, IPagedAndSortedResultRequest, /*PagedAndSortedResultRequestDto,*/ IShouldNormalize
     {
         ///// <summary>
         ///// 获取数量时，控制查询处理人范围的方式
@@ -88,7 +88,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
     /// <summary>
     /// 后台管理普通工单获取列表时的输入模型
     /// </summary>
-    public class GetAllWorkOrderInput : GetAllWorkOrderBase1Input
+    public class GetAllEmployeeWorkOrderInput : GetAllInputBase
     {
         ///// <summary>
         ///// 动态关联实体的限制条件<br />

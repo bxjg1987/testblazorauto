@@ -10,14 +10,14 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
     /// <summary>
     /// 获取工单数量时的输入模型
     /// </summary>
-    public class GetTotalInput//: IGetTotalInput
+    public class GetTotalInputBase//: IGetTotalInput
     {
         /// <summary>
         /// 获取数量时，控制查询处理人范围的方式
         /// </summary>
         public EmpType EmployeeType { get; set; }
         /// <summary>
-        /// 处理人Id集合，参考<see cref="GetTotalInput.EmployeeIds"/>
+        /// 处理人Id集合，参考<see cref="GetTotalInputBase.EmployeeIds"/>
         /// </summary>
         public string[] EmployeeIds { get; set; }
         /// <summary>
@@ -93,5 +93,5 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         None
     }
 
-    public class GetWorkOrderTotalInput : GetTotalInput { }
+    public class GetEmployeeWorkOrderTotalInput : GetTotalInputBase { }
 }

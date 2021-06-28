@@ -13,7 +13,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
     /// <summary>
     /// 工单处理人员获取工单的显示模型基类
     /// </summary>
-    public class EmployeeWorkOrderDtoBase : FullAuditedEntityDto<long>
+    public class WorkOrderDtoBase : FullAuditedEntityDto<long>
     {
         /// <summary>
         /// 关联的图片
@@ -64,11 +64,11 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         /// </summary>
         public DateTimeOffset StatusChangedTime { get; set; }
         /// <summary>
-        /// 希望的开始时间
+        /// 预计开始时间
         /// </summary>
         public DateTimeOffset? EstimatedExecutionTime { get; set; }
         /// <summary>
-        /// 希望的结束时间
+        /// 预计结束时间
         /// </summary>
         public DateTimeOffset? EstimatedCompletionTime { get; set; }
         /// <summary>
@@ -98,7 +98,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
     /// <summary>
     /// 工单处理人员获取普通工单的显示模型基类
     /// </summary>
-    public class EmployeeWorkOrderDto : EmployeeWorkOrderDtoBase, IExtendableDto
+    public class WorkOrderDto : WorkOrderDtoBase, IExtendableDto
     {
         /// <summary>
         /// 扩展字段
