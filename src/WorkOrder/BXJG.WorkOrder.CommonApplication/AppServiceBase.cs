@@ -5,6 +5,7 @@ using Abp.Authorization;
 using Abp.Domain.Repositories;
 using Abp.Linq;
 using Abp.Localization;
+using Abp.Localization.Sources;
 using Abp.MultiTenancy;
 using Abp.Runtime.Session;
 using Abp.Threading;
@@ -15,9 +16,15 @@ namespace BXJG.WorkOrder
     /// </summary>
     public abstract class AppServiceBase : ApplicationService
     {
+        /// <summary>
+        /// 工单处理人端本地化源
+        /// </summary>
+        protected readonly ILocalizationSource BXJGWorkOrderLocalizationSource;
         protected IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; } = NullAsyncQueryableExecuter.Instance;
         protected AppServiceBase()
         {
+            BXJGWorkOrderLocalizationSource = LocalizationManager.GetSource(CoreConsts.LocalizationSourceName);
+
             LocalizationSourceName = CoreConsts.LocalizationSourceName;
         }
 

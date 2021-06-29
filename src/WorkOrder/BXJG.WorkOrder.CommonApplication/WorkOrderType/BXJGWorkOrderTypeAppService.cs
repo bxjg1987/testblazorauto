@@ -14,6 +14,15 @@ using BXJG.WorkOrder.WorkOrderType;
 
 namespace BXJG.WorkOrder.WorkOrderType
 {
+
+    public class WorkOrderTypeDefineDto : ComboboxItemDto
+    {
+        public WorkOrderTypeDefineDto(string value, string displayText) : base(value, displayText)
+        {
+        }
+
+        public bool IsDefault { get; set; }
+    }
     /// <summary>
     /// 工单类型应用服务
     /// </summary>
@@ -31,21 +40,22 @@ namespace BXJG.WorkOrder.WorkOrderType
         /// </summary>
         /// <returns></returns>
         [UnitOfWork(IsDisabled = true)]
-        public IEnumerable<ComboboxItemDto> GetAll(GetForSelectInput input)
+        public IEnumerable<WorkOrderTypeDefineDto> GetAll(GetForSelectInput input)
         {
-            var list = wotManager.List.Select(c => new ComboboxItemDto(c.Name, c.DisplayName.Localize(LocalizationManager))).ToList();
-            if (input.ForType > 0) {
+            var list = wotManager.List.Select(c => new WorkOrderTypeDefineDto(c.Name, c.DisplayName.Localize(LocalizationManager)) { IsDefault = c.IsDefault }).ToList();
+            if (input.ForType > 0)
+            {
                 if (!input.ParentText.IsNullOrWhiteSpace())
                 {
-                    list.Insert(0, new ComboboxItemDto(null, input.ParentText));
+                    list.Insert(0, new WorkOrderTypeDefineDto(null, input.ParentText));
                 }
-                else if(input.ForType <= 2)
+                else if (input.ForType <= 2)
                 {
-                    list.Insert(0, new ComboboxItemDto(null, "==工单类型==".BXJGWorkOrderL()));
+                    list.Insert(0, new WorkOrderTypeDefineDto(null, "==工单类型==".BXJGWorkOrderL()));
                 }
                 else if (input.ForType <= 4)
                 {
-                    list.Insert(0, new ComboboxItemDto(null, "==请选择==".UtilsL()));
+                    list.Insert(0, new WorkOrderTypeDefineDto(null, "==请选择==".UtilsL()));
                 }
             }
             return list;
