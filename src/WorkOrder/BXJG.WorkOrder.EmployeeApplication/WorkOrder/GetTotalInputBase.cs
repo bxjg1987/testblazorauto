@@ -80,11 +80,11 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         /// </summary>
         OnlyMe,
         /// <summary>
-        /// 工单处理人只包含在参数<see cref="GetTotalInput.EmployeeIds"/>中的
+        /// 工单处理人只包含在参数<see cref="GetTotalInputBase.EmployeeIds"/>中的
         /// </summary>
         Contains,
         /// <summary>
-        /// 工单处理人除了在参数<see cref="GetTotalInput.EmployeeIds"/>中的
+        /// 工单处理人除了在参数<see cref="GetTotalInputBase.EmployeeIds"/>中的
         /// </summary>
         Exclude,
         /// <summary>
@@ -93,5 +93,5 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         None
     }
 
-    public class GetEmployeeWorkOrderTotalInput : GetTotalInputBase { }
+    //public class GetTotalInput : GetTotalInputBase { }
 }

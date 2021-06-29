@@ -7,7 +7,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
     /// <summary>
     /// 工单处理人批量领取工单的输入模型
     /// </summary>
-    public class BatchAllocateInputBase : BatchOperationInputLong
+    public class BatchAllocateInputBase : BatchChangeStatusInputBase
     {
         ///// <summary>
         ///// 分配时间
@@ -25,10 +25,10 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         /// 预计结束时间
         /// </summary>
         public DateTimeOffset? EstimatedCompletionTime { get; set; }
-        /// <summary>
-        /// 状态改变说明或备注信息
-        /// </summary>
-        [StringLength(CoreConsts.OrderStatusChangedDescriptionMaxLength)]
-        public string StatusChangedDescription { get; set; }
+        ///// <summary>
+        ///// 状态改变说明或备注信息
+        ///// </summary>
+        //[StringLength(CoreConsts.OrderStatusChangedDescriptionMaxLength)]
+        //public string StatusChangedDescription { get; set; }
     }
 }

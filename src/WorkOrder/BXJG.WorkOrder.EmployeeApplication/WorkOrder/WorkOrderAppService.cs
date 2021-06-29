@@ -69,13 +69,13 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         where TGetTotalInput : GetTotalInputBase
         where TDto : WorkOrderDtoBase, new()
         where TBatchAllocateInput : BatchAllocateInputBase
-        where TBatchAllocateOutput : BatchAllocateOutputBase, new()
-        where TBatchExcuteInput : BatchExecuteInputBase
-        where TBatchExcuteOutput : BatchExecuteOutputBase, new()
-        where TBatchCompletionInput : BatchCompletionInputBase
-        where TBatchCompletionOutput : BatchCompletionOutputBase, new()
-        where TBatchRejectInput : BatchRejectInputBase
-        where TBatchRejectOutput : BatchRejectOutputBase, new()
+        where TBatchAllocateOutput : BatchOperationOutputLong, new()
+        where TBatchExcuteInput : BatchChangeStatusInputBase
+        where TBatchExcuteOutput : BatchOperationOutputLong, new()
+        where TBatchCompletionInput : BatchChangeStatusInputBase
+        where TBatchCompletionOutput : BatchOperationOutputLong, new()
+        where TBatchRejectInput : BatchChangeStatusInputBase
+        where TBatchRejectOutput : BatchOperationOutputLong, new()
         where TEntity : OrderBaseEntity
         where TRepository : IRepository<TEntity, long>
         where TManager : OrderBaseManager<TEntity>
@@ -134,6 +134,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         {
             await CheckPermissionAsync();
             var query = await GetAllFilterAsync(input);
+            var str = query.ToQueryString();
             return await AsyncQueryableExecuter.CountAsync(query);
         }
         /// <summary>
@@ -145,14 +146,16 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         public virtual async Task<TDto> GetAsync(TGetInput input)
         {
             await CheckPermissionAsync();
-            var q = await GetFilterAsync(input);
-            var entity = await AsyncQueryableExecuter.FirstOrDefaultAsync(q);
+            var query = await GetFilterAsync(input);
+            var str = query.ToQueryString();
+            var entity = await AsyncQueryableExecuter.FirstOrDefaultAsync(query);
             return await EntityToDto(entity);
         }
         protected virtual async ValueTask<IQueryable<TEntity>> GetFilterAsync(TGetInput input)
         {
             var q = repository.GetAll();
             q = await GetAndAllFilterAsync(q);
+            var str = q.ToQueryString();
             q = q.Where(c => c.Id == input.Id);
             return q;
         }
@@ -209,7 +212,6 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
                          .WhereIf(!input.Keyword.IsNullOrWhiteSpace(), c => c.Title.Contains(input.Keyword) || c.Description.Contains(input.Keyword));
 
             query = await GetAndAllFilterAsync(query);
-
             return query;
         }
 
@@ -239,6 +241,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
             var count = await AsyncQueryableExecuter.CountAsync(query);
             query = OrderBy(query, input);
             query = PageBy(query, input);
+            var str = query.ToQueryString();
             var list = await AsyncQueryableExecuter.ToListAsync(query);
 
             var cIds = list.Select(c => c.CategoryId);
@@ -452,6 +455,10 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
             return ValueTask.FromResult<object>(null);
         }
 
+        /// <summary>
+        /// 工单处理人端权限判断
+        /// </summary>
+        /// <returns></returns>
         protected virtual Task CheckPermissionAsync()
         {
             return base.CheckPermissionAsync(CoreConsts.EmployeeWorkOrderManager);
@@ -461,24 +468,24 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
     /// <summary>
     /// 后台管理默认工单应用服务接口
     /// </summary>
-    public class EmployeeWorkOrderAppService : EmployeeWorkOrderAppServiceBase<EntityDto<long>,
-                                                                               GetAllEmployeeWorkOrderInput,
-                                                                               GetEmployeeWorkOrderTotalInput,
-                                                                               WorkOrderDto,
-                                                                               BatchAllocateInputBase,
-                                                                               BatchAllocateOutputBase,
-                                                                               BatchExecuteInputBase,
-                                                                               BatchExecuteOutputBase,
-                                                                               BatchCompletionInputBase,
-                                                                               BatchCompletionOutputBase,
-                                                                               BatchRejectInputBase,
-                                                                               BatchRejectOutputBase,
-                                                                               OrderEntity,
-                                                                               IRepository<OrderEntity, long>,
-                                                                               OrderManager>
+    public class WorkOrderAppService : EmployeeWorkOrderAppServiceBase<EntityDto<long>,
+                                                                       GetAllInputBase,
+                                                                       GetTotalInputBase,
+                                                                       WorkOrderDto,
+                                                                       BatchAllocateInputBase,
+                                                                       BatchOperationOutputLong,
+                                                                       BatchChangeStatusInputBase,
+                                                                       BatchOperationOutputLong,
+                                                                       BatchChangeStatusInputBase,
+                                                                       BatchOperationOutputLong,
+                                                                       BatchChangeStatusInputBase,
+                                                                       BatchOperationOutputLong,
+                                                                       OrderEntity,
+                                                                       IRepository<OrderEntity, long>,
+                                                                       OrderManager>
 
     {
-        public EmployeeWorkOrderAppService(IRepository<OrderEntity, long> repository,
+        public WorkOrderAppService(IRepository<OrderEntity, long> repository,
                                    BXJGWorkOrderConfig cfg,
                                    IEmployeeSession empSession,
                                    OrderManager manager,

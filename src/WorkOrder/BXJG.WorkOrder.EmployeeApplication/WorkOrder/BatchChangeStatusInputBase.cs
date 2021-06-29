@@ -1,13 +1,13 @@
-﻿using BXJG.Common.Dto;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
 {
-    /// <summary>
-    /// 工单处理人批量拒绝工单的输入模型
-    /// </summary>
-    public class BatchRejectInputBase : BatchOperationInputLong
+    public class BatchChangeStatusInputBase
     {
         /// <summary>
         /// 状态改变说明或备注信息
