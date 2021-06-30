@@ -36,7 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Abp.AutoMapper" Version="6.3.1" />
+    <PackageReference Include="Abp.AutoMapper" Version="6.4.0-rc1" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
     <PackageReference Include="MimeMapping" Version="1.0.1.37" />
   </ItemGroup>

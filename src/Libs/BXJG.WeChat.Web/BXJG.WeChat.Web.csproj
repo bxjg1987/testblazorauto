@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>BXJG.WeChat</RootNamespace>
-    <Version>1.0.15</Version>
+    <Version>1.2.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
