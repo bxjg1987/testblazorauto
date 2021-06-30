@@ -6,6 +6,7 @@ using ZLJ.Authorization.Roles;
 using ZLJ.Authorization.Users;
 using ZLJ.MultiTenancy;
 using Microsoft.Extensions.Logging;
+using Abp.Domain.Uow;
 
 namespace ZLJ.Identity
 {
@@ -15,8 +16,8 @@ namespace ZLJ.Identity
             IOptions<SecurityStampValidatorOptions> options,
             SignInManager signInManager,
             ISystemClock systemClock,
-            ILoggerFactory loggerFactory) 
-            : base(options, signInManager, systemClock, loggerFactory)
+            ILoggerFactory loggerFactory,IUnitOfWorkManager unitOfWorkManager) 
+            : base(options, signInManager, systemClock, loggerFactory,unitOfWorkManager)
         {
         }
     }

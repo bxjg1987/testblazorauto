@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Security.Claims;
 using System.Linq;
 using ZLJ.MultiTenancy;
+using Abp.Domain.Uow;
 
 namespace ZLJ.Authorization.Users
 {
@@ -18,11 +19,11 @@ namespace ZLJ.Authorization.Users
         public UserClaimsPrincipalFactory(
             UserManager userManager,
             RoleManager roleManager,
-            IOptions<IdentityOptions> optionsAccessor, ICustomerLoginManager<User> customerLoginManager)
+            IOptions<IdentityOptions> optionsAccessor, ICustomerLoginManager<User> customerLoginManager,IUnitOfWorkManager unitOfWorkManager)
             : base(
                   userManager,
                   roleManager,
-                  optionsAccessor)
+                  optionsAccessor,unitOfWorkManager)
         {
             this.customerLoginManager = customerLoginManager;
         }

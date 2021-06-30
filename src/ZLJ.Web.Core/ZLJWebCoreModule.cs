@@ -25,6 +25,7 @@ using BXJG.BaseInfo;
 using BXJG.Equipment.EFCore;
 using Abp.Configuration.Startup;
 using BXJG.WorkOrder.EmployeeApplication;
+using Castle.MicroKernel.Resolvers;
 //using BXJG.DynamicAssociateEntity;
 
 namespace ZLJ
@@ -104,6 +105,10 @@ namespace ZLJ
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(typeof(ZLJWebCoreModule).GetAssembly());
+            //Lazy<TService>注入
+            IocManager.IocContainer.Register(
+               Castle.MicroKernel.Registration.Component.For<ILazyComponentLoader>().ImplementedBy<LazyOfTComponentLoader>()
+            );
             //IocManager.Register<IEnv, NetCoreEnv>(DependencyLifeStyle.Singleton);//utils已经注册了个 这里可以替换
             //Configuration.ReplaceService<IEnv, NetCoreEnv>(DependencyLifeStyle.Singleton);//经过测试必须在PreInitialize
         }
