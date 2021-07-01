@@ -18,24 +18,13 @@ namespace BXJG.Shop.Customer
     /// <summary>
     /// 提供与顾客登陆相关功能
     /// </summary>
-    public class CustomerLoginManager<TTenant,
-                                      TRole,
-                                      TUser,
-                                      TUserManager> : BusinessUserLoginManager<CustomerEntity,
+    public class CustomerLoginManager<TUser> : BusinessUserLoginManager<CustomerEntity,
                                                                                long,
-                                                                               TTenant,
-                                                                               TRole,
-                                                                               TUser,
-                                                                               TUserManager>, ICustomerLoginManager<TUser>
-        where TTenant : AbpTenant<TUser>
-        where TRole : AbpRole<TUser>, new()
+                                                                               TUser>, ICustomerLoginManager<TUser>
+        
         where TUser : AbpUser<TUser>
-        where TUserManager : AbpUserManager<TRole, TUser>
     {
-        public CustomerLoginManager(IRepository<CustomerEntity, long> repository,
-                                    TUserManager userManager) : base(repository,
-                                                                     userManager,
-                                                                     CoreConsts.CustomerRoleName,
+        public CustomerLoginManager(IRepository<CustomerEntity, long> repository) : base(repository,
                                                                      CoreConsts.CustomerIdClaim)
         {
 

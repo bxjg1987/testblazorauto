@@ -15,37 +15,28 @@ namespace BXJG.Utils.BusinessUser
 {
     public interface IBusinessUserLoginManager<in TUser>
     {
+        public string claimKey { get; }
         Task<Claim> GetBusinessUserClaim(TUser user);
     }
-    
-    public class BusinessUserLoginManager<TEntity, TKey, TTenant, TRole, TUser, TUserManager> : IBusinessUserLoginManager<TUser>
+
+    public class BusinessUserLoginManager<TEntity, TKey, TUser> : IBusinessUserLoginManager<TUser>
         where TEntity : class, IEntity<TKey>, IBusinessUserEntity
-        where TTenant : AbpTenant<TUser>
-        where TRole : AbpRole<TUser>, new()
-        where TUser : AbpUser<TUser>
-        where TUserManager : AbpUserManager<TRole, TUser>
+        where TUser : AbpUserBase
     {
         protected readonly IRepository<TEntity, TKey> repository;
-        protected readonly TUserManager userManager;
-        protected readonly string roleName;
-        protected readonly string claimKey;
+        public string claimKey { get; private set; }
         public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; } = NullAsyncQueryableExecuter.Instance;
-        public BusinessUserLoginManager(IRepository<TEntity, TKey> repository,
-                                        TUserManager userManager,
-                                        string roleName,
-                                        string claimKey)
+        public BusinessUserLoginManager(IRepository<TEntity, TKey> repository, string claimKey)
         {
             this.repository = repository;
-            this.userManager = userManager;
-            this.roleName = roleName;
             this.claimKey = claimKey;
         }
 
         public async Task<Claim> GetBusinessUserClaim(TUser user)
         {
-            var isCustomer = await userManager.IsInRoleAsync(user, roleName);
-            if (!isCustomer)
-                return null;
+            //var isCustomer = await userManager.IsInRoleAsync(user, roleName);
+            //if (!isCustomer)
+            //    return null;
             var custId = await AsyncQueryableExecuter.FirstOrDefaultAsync(repository.GetAll().Where(c => c.UserId == user.Id).Select(c => c.Id));
             return new Claim(claimKey, custId.ToString());
         }

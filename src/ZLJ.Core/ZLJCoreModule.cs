@@ -68,7 +68,7 @@ namespace ZLJ
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(typeof(ZLJCoreModule).GetAssembly());
-            IocManager.Register<ICustomerLoginManager<User>, CustomerLoginManager<Tenant, Role, User, UserManager>>(Abp.Dependency.DependencyLifeStyle.Transient);
+            IocManager.Register<ICustomerLoginManager<User>, CustomerLoginManager< User>>(Abp.Dependency.DependencyLifeStyle.Transient);
         }
 
         public override void PostInitialize()

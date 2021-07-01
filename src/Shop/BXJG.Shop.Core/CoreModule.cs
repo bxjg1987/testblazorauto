@@ -48,7 +48,7 @@ namespace BXJG.Shop
                                                       .Named("sdf234sdf"));
 
             //注册顾客登陆器
-            IocManager.Register(typeof(CustomerLoginManager<,,,>), DependencyLifeStyle.Transient);
+            IocManager.Register(typeof(CustomerLoginManager<>), DependencyLifeStyle.Transient);
 
             //这样不行，因为使用时ICustomerLoginManager<User>，而具体实现有4个泛型，所以需要在主程序是注册ios 或者直接使用上面的
             //IocManager.Register(typeof(ICustomerLoginManager<>), typeof(CustomerLoginManager<,,,>), DependencyLifeStyle.Transient);

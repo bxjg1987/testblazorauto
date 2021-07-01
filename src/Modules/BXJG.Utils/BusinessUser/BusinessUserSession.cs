@@ -18,7 +18,7 @@ namespace BXJG.Utils.BusinessUser
      * 
      * 我们的文档：https://gitee.com/bxjg1987_admin/abp/wikis/多种用户类型?sort_id=3639713
      */
-
+   
     public interface IBusinessUserSession<TKey>
     {
         //没必要用task，因为业务用户id必须快速获取
@@ -41,7 +41,7 @@ namespace BXJG.Utils.BusinessUser
             this.businessUserClaimType = businessUserClaimType;
         }
 
-        public TKey BusinessUserId
+        public virtual TKey BusinessUserId
         {
             get
             {
