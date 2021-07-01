@@ -34,10 +34,9 @@ namespace BXJG.Utils.BusinessUser
 
         public async Task<Claim> GetBusinessUserClaim(TUser user)
         {
-            //var isCustomer = await userManager.IsInRoleAsync(user, roleName);
-            //if (!isCustomer)
-            //    return null;
             var custId = await AsyncQueryableExecuter.FirstOrDefaultAsync(repository.GetAll().Where(c => c.UserId == user.Id).Select(c => c.Id));
+            if (custId.Equals(default(TKey)))
+                throw new ApplicationException("根据系统用户id获取业务用户id失败！");
             return new Claim(claimKey, custId.ToString());
         }
     }
