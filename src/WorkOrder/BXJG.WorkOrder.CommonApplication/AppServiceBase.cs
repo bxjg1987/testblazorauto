@@ -43,5 +43,11 @@ namespace BXJG.WorkOrder
                 await PermissionChecker.AuthorizeAsync(permissionName);
             }
         }
+
+        protected string BXJGWorkOrderL(string name)
+        {
+            return BXJGWorkOrderLocalizationSource.GetString(name);
+        }
+
     }
 }

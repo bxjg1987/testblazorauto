@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
 {
     public class GetAllInputBase<TGetTotal> : PagedAndSortedResultRequestDto, IShouldNormalize
-    where TGetTotal : GetTotalInputBase
+        where TGetTotal : GetTotalInputBase
     {
         public TGetTotal GetTotalInput { get; set; }
 

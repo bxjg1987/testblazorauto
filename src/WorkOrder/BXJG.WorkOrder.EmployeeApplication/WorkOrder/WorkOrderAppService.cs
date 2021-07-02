@@ -31,7 +31,8 @@ using BXJG.WorkOrder.WorkOrderType;
 namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
 {
     /// <summary>
-    /// 工单处理人针对工单的相关操作接口，不同类型的工单应提供不同的子类实现
+    /// 工单处理人针对工单的相关操作接口，
+    /// 不同类型的工单应提供不同的子类实现
     /// </summary>
     /// <typeparam name="TGetInput">获取单个工单的输入模型</typeparam>
     /// <typeparam name="TGetAllInput">获取工单分页列表时的输入模型</typeparam>
@@ -48,6 +49,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
     /// <typeparam name="TEntity">实体类型</typeparam>
     /// <typeparam name="TRepository">实体仓储类型</typeparam>
     /// <typeparam name="TManager">领域服务类型</typeparam>
+    /// <typeparam name="TQueryTemp"></typeparam>
     public abstract class WorkOrderAppServiceBase<TGetInput,
                                                   TGetAllInput,
                                                   TGetTotalInput,
@@ -62,10 +64,11 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
                                                   TBatchRejectOutput,
                                                   TEntity,
                                                   TRepository,
-                                                  TManager> : AppServiceBase
-        #region 泛型约束
+                                                  TManager,
+                                                  TQueryTemp> : AppServiceBase
+        #region MyRegion
         where TGetInput : EntityDto<long>
-        where TGetAllInput : GetAllInputBase
+        where TGetAllInput : GetAllInputBase<TGetTotalInput>
         where TGetTotalInput : GetTotalInputBase
         where TDto : WorkOrderDtoBase, new()
         where TBatchAllocateInput : BatchAllocateInputBase
@@ -79,9 +82,10 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         where TEntity : OrderBaseEntity
         where TRepository : IRepository<TEntity, long>
         where TManager : OrderBaseManager<TEntity>
+        where TQueryTemp : QueryTemp<TEntity>, new()
         #endregion
     {
-        #region 字段和属性
+        #region MyRegion
         protected readonly TRepository repository;
         protected readonly IRepository<CategoryEntity, long> categoryRepository;
         protected readonly TManager manager;
@@ -89,6 +93,11 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         protected readonly CategoryManager clsManager;
         protected readonly AttachmentManager<TEntity> attachmentManager;
         protected readonly WorkOrderTypeDefine workOrderTypeDefine;
+        protected readonly string getPermissionName;
+        protected readonly string allocatePermissionName;
+        protected readonly string executePermissionName;
+        protected readonly string completionPermissionName;
+        protected readonly string rejectPermissionName;
         #endregion
 
         #region 构造函数
@@ -104,6 +113,11 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         /// <param name="workOrderType">工单类型</param>
         /// <param name="attachmentManager">附件管理器</param>
         /// <param name="workOrderTypeManager">工单类型定义</param>
+        /// <param name="getPermissionName">获取工单的权限名</param>
+        /// <param name="allocatePermissionName">领取工单的权限名</param>
+        /// <param name="executePermissionName">执行工单的权限名</param>
+        /// <param name="completionPermissionName">完成工单的权限名</param>
+        /// <param name="rejectPermissionName">拒绝工单的权限名</param>
         public WorkOrderAppServiceBase(TRepository repository,
                                        IEmployeeSession empSession,
                                        TManager manager,
@@ -112,7 +126,12 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
                                        IEmployeeAppService employeeAppService,
                                        CategoryManager clsManager,
                                        WorkOrderTypeManager workOrderTypeManager,
-                                       string workOrderType) : base(empSession)
+                                       string workOrderType,
+                                       string getPermissionName = default,
+                                       string allocatePermissionName = default,
+                                       string executePermissionName = default,
+                                       string completionPermissionName = default,
+                                       string rejectPermissionName = default) : base(empSession)
         {
             this.repository = repository;
             this.manager = manager;
@@ -121,6 +140,12 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
             this.clsManager = clsManager;
             this.attachmentManager = attachmentManager;
             this.workOrderTypeDefine = workOrderTypeManager[workOrderType];
+
+            this.getPermissionName = getPermissionName;
+            this.allocatePermissionName = allocatePermissionName;
+            this.executePermissionName = executePermissionName;
+            this.completionPermissionName = completionPermissionName;
+            this.rejectPermissionName = rejectPermissionName;
         }
         #endregion
 
@@ -132,7 +157,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         [UnitOfWork(false)]
         public virtual async Task<long> GetTotalAsync(TGetTotalInput input)
         {
-            await CheckPermissionAsync();
+            await CheckGetPermissionAsync();
             var query = await GetAllFilterAsync(input);
             //var str = query.ToQueryString();
             return await AsyncQueryableExecuter.CountAsync(query);
@@ -145,76 +170,12 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         [UnitOfWork(false)]
         public virtual async Task<TDto> GetAsync(TGetInput input)
         {
-            await CheckPermissionAsync();
+            await CheckGetPermissionAsync();
             var query = await GetFilterAsync(input);
             //var str = query.ToQueryString();
             var entity = await AsyncQueryableExecuter.FirstOrDefaultAsync(query);
             return await EntityToDto(entity);
         }
-        protected virtual async ValueTask<IQueryable<TEntity>> GetFilterAsync(TGetInput input)
-        {
-            var q = repository.GetAll();
-            q = await GetAndAllFilterAsync(q);
-            //var str = q.ToQueryString();
-            q = q.Where(c => c.Id == input.Id);
-            return q;
-        }
-        protected virtual ValueTask<IQueryable<TEntity>> GetAndAllFilterAsync(IQueryable<TEntity> q)
-        {
-            return ValueTask.FromResult(q);
-        }
-        /// <summary>
-        /// 获取指定所有工单的条件
-        /// </summary>
-        /// <returns></returns>
-
-        private class sdf
-        {
-            public TEntity Order { get; set; }
-            public CategoryEntity Cls { get; set; }
-        }
-        protected virtual async Task<IQueryable<TEntity>> GetAllFilterAsync(TGetTotalInput input)
-        {
-            var query1 = from c in repository.GetAll().AsNoTrackingWithIdentityResolution()
-                         join lb in categoryRepository.GetAll() on c.CategoryId equals lb.Id into g
-                         from kk in g.DefaultIfEmpty()
-                         select new sdf { Order = c, Cls = kk };
-
-            if (input.CategoryCodes != null)
-            {
-                Expression<Func<sdf, bool>> where = c => false;
-                foreach (var item in input.CategoryCodes)
-                {
-                    where = where.Or(c => c.Cls.Code.StartsWith(item));
-                }
-                query1 = query1.Where(where);
-            }
-            var query = query1.Select(c => c.Order);
-
-            if (!input.Keyword.IsNullOrWhiteSpace())
-            {
-                var empIdsQuery = await employeeAppService.GetIdsByKeywordAsync(input.Keyword);
-                query = query.Where(c => empIdsQuery.Contains(c.EmployeeId));
-            }
-            query = query.WhereIf(input.UrgencyDegrees != null, c => input.UrgencyDegrees.Contains(c.UrgencyDegree))
-                         .WhereIf(input.Statuses != null, c => input.Statuses.Contains(c.Status))
-                         .WhereIf(input.EmployeeIds != null && input.EmployeeType == EmpType.Contains, c => input.EmployeeIds.Contains(c.EmployeeId))
-                         .WhereIf(input.EmployeeIds != null && input.EmployeeType == EmpType.Exclude, c => !input.EmployeeIds.Contains(c.EmployeeId))
-                         .WhereIf(input.EmployeeType == EmpType.OnlyMe, c => c.EmployeeId == CurrentEmployeeId)
-                         .WhereIf(input.EstimatedExecutionTimeStart.HasValue, c => c.EstimatedExecutionTime >= input.EstimatedExecutionTimeStart)
-                         .WhereIf(input.EstimatedExecutionTimeEnd.HasValue, c => c.EstimatedExecutionTime < input.EstimatedExecutionTimeEnd)
-                         .WhereIf(input.EstimatedCompletionTimeStart.HasValue, c => c.EstimatedCompletionTime >= input.EstimatedCompletionTimeStart)
-                         .WhereIf(input.EstimatedCompletionTimeEnd.HasValue, c => c.EstimatedCompletionTime < input.EstimatedCompletionTimeEnd)
-                         .WhereIf(input.ExecutionTimeStart.HasValue, c => c.ExecutionTime >= input.ExecutionTimeStart)
-                         .WhereIf(input.ExecutionTimeEnd.HasValue, c => c.ExecutionTime < input.ExecutionTimeEnd)
-                         .WhereIf(input.CompletionTimeStart.HasValue, c => c.CompletionTime >= input.CompletionTimeStart)
-                         .WhereIf(input.CompletionTimeEnd.HasValue, c => c.CompletionTime < input.CompletionTimeEnd)
-                         .WhereIf(!input.Keyword.IsNullOrWhiteSpace(), c => c.Title.Contains(input.Keyword) || c.Description.Contains(input.Keyword));
-
-            query = await GetAndAllFilterAsync(query);
-            return query;
-        }
-
         /// <summary>
         /// 获取列表
         /// </summary>
@@ -236,19 +197,19 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
             //var service = iocResolver.Resolve(define.ServiceType) as IDynamicAssociateEntityService;
             //var ss2 = await service.GetAllAsync(define, "a", "d");
 
-            await CheckPermissionAsync();
-            var query = await GetAllFilterAsync(input as TGetTotalInput);
+            await CheckGetPermissionAsync();
+            var query = await GetAllFilterAsync(input.GetTotalInput);
             var count = await AsyncQueryableExecuter.CountAsync(query);
             query = OrderBy(query, input);
             query = PageBy(query, input);
             //var str = query.ToQueryString();
             var list = await AsyncQueryableExecuter.ToListAsync(query);
 
-            var cIds = list.Select(c => c.CategoryId);
-            var cQuery = categoryRepository.GetAll().Where(c => cIds.Contains(c.Id));
-            var cls = await AsyncQueryableExecuter.ToListAsync(cQuery);
+            //var cIds = list.Select(c => c.CategoryId);
+            //var cQuery = categoryRepository.GetAll().Where(c => cIds.Contains(c.Id));
+            //var cls = await AsyncQueryableExecuter.ToListAsync(cQuery);
 
-            var empIds = list.Where(c => !c.EmployeeId.IsNullOrWhiteSpace()).Select(c => c.EmployeeId);
+            var empIds = list.Where(c => !c.Order.EmployeeId.IsNullOrWhiteSpace()).Select(c => c.Order.EmployeeId);
 
             IEnumerable<EmployeeDto> emps = null;
             if (empIds != null && empIds.Count() > 0)
@@ -256,147 +217,219 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
                 emps = await employeeAppService.GetByIdsAsync(empIds.ToArray());
             }
 
-            var images = await attachmentManager.GetFirstAttachmentsAsync(list.Select(c => c.Id.ToString()).ToArray());
-            var images2 = images.ToDictionary(c => c.Key, c => new List<AttachmentEntity> { c.Value });
+            var images = await attachmentManager.GetAttachmentsAsync(list.Select(c => c.Order.Id.ToString()).ToArray());
+            // var images2 = images.ToDictionary(c => c.Key, c =>c.Value);
 
             var state = await GetStateAsync(list);
             var items = new List<TDto>();
             foreach (var item in list)
             {
-                var ttt = EntityToDto(item, cls, emps, images2, state);
+                var ttt = EntityToDto(item, emps, images, state);
                 items.Add(ttt);
             }
             return new PagedResultDto<TDto>(count, items);
         }
-        ///// <summary>
-        ///// 批量调整工单状态
-        ///// </summary>
-        ///// <param name="input"></param>
-        ///// <returns></returns>
-        //public virtual async Task<TBatchExcuteOutput> ChangeStatusAsync(TBatchExcuteInput input)
-        //{
-        //    //await CheckConfirmePermissionAsync();
-        //    var query = repository.GetAll().Where(c => input.Ids.Contains(c.Id));
-        //    var list = await AsyncQueryableExecuter.ToListAsync(query);
-        //    var r = new TBatchExcuteOutput();
-        //    foreach (var item in list)
-        //    {
-        //        try
-        //        {
-        //            await item.ChangeStatus(input.Status,
-        //                                    input.StatusChangedTime ?? Clock.Now,
-        //                                    input.Description,
-        //                                    item.EmployeeId,
-        //                                    item.EstimatedExecutionTime,
-        //                                    item.EstimatedCompletionTime,
-        //                                    item.ExecutionTime,
-        //                                    item.CompletionTime,
-        //                                    d => CheckToBeonfirmedPermissionAsync(),
-        //                                    d => CheckConfirmePermissionAsync(),
-        //                                    d => CheckAllocatePermissionAsync(),
-        //                                    d => CheckExecutePermissionAsync(),
-        //                                    d => CheckConfirmePermissionAsync(),
-        //                                    d => CheckRejectPermissionAsync());
-        //            await CurrentUnitOfWork.SaveChangesAsync();
-        //            r.Ids.Add(item.Id);
-        //        }
-        //        catch (UserFriendlyException ex)
-        //        {
-        //            r.ErrorMessage.Add(new BatchOperationErrorMessage(item.Id, ex.Message));
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            r.ErrorMessage.Add(item.Id.Message500());
-        //            Logger.Warn(L("执行失败！"), ex);
-        //        }
-        //    }
-        //    return r;
-        //}
-        ///// <summary>
-        ///// 批量分配工单
-        ///// </summary>
-        ///// <param name="input"></param>
-        ///// <returns></returns>
-        //public virtual async Task<TBatchAllocateOutput> AllocateAsync(TBatchAllocateInput input)
-        //{
-        //    //await CheckAllocatePermissionAsync();
-        //    var query = repository.GetAll().Where(c => input.Ids.Contains(c.Id));
-        //    var list = await AsyncQueryableExecuter.ToListAsync(query);
-        //    var r = new TBatchAllocateOutput();
-        //    foreach (var item in list)
-        //    {
-        //        try
-        //        {
-        //            if (item.Status >= Status.ToBeProcessed)
-        //            {
-        //                await item.BackOff(input.StatusChangedTime ?? Clock.Now,
-        //                                   status: Status.ToBeAllocated,
-        //                                   toBeConfirmed: d => CheckToBeonfirmedPermissionAsync(),
-        //                                   toBeAllocated: d => CheckConfirmePermissionAsync(),
-        //                                   toBeProcessed: d => CheckAllocatePermissionAsync(),
-        //                                   processing: d => CheckExecutePermissionAsync());
-        //            }
-        //            //item.AllocateRetain(Clock.Now, input.EmployeeId, input.EstimatedExecutionTime, input.EstimatedCompletionTime);
-        //            await item.Skip(input.StatusChangedTime ?? Clock.Now,
-        //                            status: Status.ToBeProcessed,
-        //                            empId: input.EmployeeId,
-        //                            estimatedExecutionTime: input.EstimatedExecutionTime,
-        //                            estimatedCompletionTime: input.EstimatedCompletionTime,
-        //                            toBeAllocated: d => CheckConfirmePermissionAsync(),
-        //                            toBeProcessed: d => CheckAllocatePermissionAsync());
-
-        //            await CurrentUnitOfWork.SaveChangesAsync();
-        //            r.Ids.Add(item.Id);
-        //        }
-        //        catch (UserFriendlyException ex)
-        //        {
-        //            r.ErrorMessage.Add(new BatchOperationErrorMessage(item.Id, ex.Message));
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            r.ErrorMessage.Add(item.Id.Message500());
-        //            Logger.Warn(L("分配工单失败！"), ex);
-        //        }
-        //    }
-        //    return r;
-        //}
         /// <summary>
-        /// GetAll的分页
+        /// 批量领取工单
         /// </summary>
-        /// <param name="query"></param>
         /// <param name="input"></param>
         /// <returns></returns>
-        protected virtual IQueryable<TEntity> PageBy(IQueryable<TEntity> query, TGetAllInput input)
+        public virtual async Task<TBatchAllocateOutput> AllocateAsync(TBatchAllocateInput input)
+        {
+            await CheckAllocatePermissionAsync();
+            var query = repository.GetAll().Where(c => input.Ids.Contains(c.Id));
+            var list = await AsyncQueryableExecuter.ToListAsync(query);
+            var r = new TBatchAllocateOutput();
+            foreach (var item in list)
+            {
+                try
+                {
+                    item.Allocate(Clock.Now, CurrentEmployeeId, input.EstimatedExecutionTime, input.EstimatedCompletionTime, input.StatusChangedDescription);
+                    await CurrentUnitOfWork.SaveChangesAsync();
+                    r.Ids.Add(item.Id);
+                }
+                catch (UserFriendlyException ex)
+                {
+                    r.ErrorMessage.Add(new BatchOperationErrorMessage(item.Id, ex.Message));
+                }
+                catch (Exception ex)
+                {
+                    r.ErrorMessage.Add(item.Id.Message500());
+                    Logger.Warn(BXJGWorkOrderL("领取工单失败！"), ex);
+                }
+            }
+            return r;
+        }
+        /// <summary>
+        /// 批量执行
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public virtual async Task<TBatchExcuteOutput> ExcuteAsync(TBatchExcuteInput input)
+        {
+            await CheckExecutePermissionAsync();
+            var query = repository.GetAll().Where(c => input.Ids.Contains(c.Id));
+            var list = await AsyncQueryableExecuter.ToListAsync(query);
+            var r = new TBatchExcuteOutput();
+            foreach (var item in list)
+            {
+                try
+                {
+                    item.Execute(Clock.Now, input.StatusChangedDescription);
+                    await CurrentUnitOfWork.SaveChangesAsync();
+                    r.Ids.Add(item.Id);
+                }
+                catch (UserFriendlyException ex)
+                {
+                    r.ErrorMessage.Add(new BatchOperationErrorMessage(item.Id, ex.Message));
+                }
+                catch (Exception ex)
+                {
+                    r.ErrorMessage.Add(item.Id.Message500());
+                    Logger.Warn(L("执行失败！"), ex);
+                }
+            }
+            return r;
+        }
+        /// <summary>
+        /// 批量完成
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public virtual async Task<TBatchCompletionOutput> CompletionAsync(TBatchCompletionInput input)
+        {
+            await CheckCompletionPermissionAsync();
+            var query = repository.GetAll().Where(c => input.Ids.Contains(c.Id));
+            var list = await AsyncQueryableExecuter.ToListAsync(query);
+            var r = new TBatchCompletionOutput();
+            foreach (var item in list)
+            {
+                try
+                {
+                    item.Completion(Clock.Now, input.StatusChangedDescription);
+                    await CurrentUnitOfWork.SaveChangesAsync();
+                    r.Ids.Add(item.Id);
+                }
+                catch (UserFriendlyException ex)
+                {
+                    r.ErrorMessage.Add(new BatchOperationErrorMessage(item.Id, ex.Message));
+                }
+                catch (Exception ex)
+                {
+                    r.ErrorMessage.Add(item.Id.Message500());
+                    Logger.Warn(BXJGWorkOrderL("完成失败！"), ex);
+                }
+            }
+            return r;
+        }
+        /// <summary>
+        /// 批量拒绝
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public virtual async Task<TBatchRejectOutput> RejectAsync(TBatchRejectInput input)
+        {
+            await CheckRejectPermissionAsync();
+            var query = repository.GetAll().Where(c => input.Ids.Contains(c.Id));
+            var list = await AsyncQueryableExecuter.ToListAsync(query);
+            var r = new TBatchRejectOutput();
+            foreach (var item in list)
+            {
+                try
+                {
+                    item.Reject(Clock.Now, input.StatusChangedDescription);
+                    await CurrentUnitOfWork.SaveChangesAsync();
+                    r.Ids.Add(item.Id);
+                }
+                catch (UserFriendlyException ex)
+                {
+                    r.ErrorMessage.Add(new BatchOperationErrorMessage(item.Id, ex.Message));
+                }
+                catch (Exception ex)
+                {
+                    r.ErrorMessage.Add(item.Id.Message500());
+                    Logger.Warn(BXJGWorkOrderL("拒绝失败！"), ex);
+                }
+            }
+            return r;
+        }
+
+
+        protected virtual async ValueTask<IQueryable<TQueryTemp>> GetFilterAsync(TGetInput input)
+        {
+            var q = from c in repository.GetAll().AsNoTrackingWithIdentityResolution()
+                    join lb in categoryRepository.GetAll() on c.CategoryId equals lb.Id into g
+                    from kk in g.DefaultIfEmpty()
+                    where c.Id == input.Id
+                    select new TQueryTemp { Order = c, Category = kk };
+
+            //q = q.Where(c => c.Order.Id == input.Id);
+            q = await GetAndAllFilterAsync(q);
+            //var str = q.ToQueryString();
+            return q;
+        }
+        protected virtual ValueTask<IQueryable<TQueryTemp>> GetAndAllFilterAsync(IQueryable<TQueryTemp> q)
+        {
+            return ValueTask.FromResult(q);
+        }
+        protected virtual async Task<IQueryable<TQueryTemp>> GetAllFilterAsync(TGetTotalInput input)
+        {
+            var query = from c in repository.GetAll().AsNoTrackingWithIdentityResolution()
+                        join lb in categoryRepository.GetAll() on c.CategoryId equals lb.Id into g
+                        from kk in g.DefaultIfEmpty()
+                        select new TQueryTemp { Order = c, Category = kk };
+
+            if (input.CategoryCodes != null)
+            {
+                Expression<Func<TQueryTemp, bool>> where = c => false;
+                foreach (var item in input.CategoryCodes)
+                {
+                    where = where.Or(c => c.Category.Code.StartsWith(item));
+                }
+                query = query.Where(where);
+            }
+            //var query = query1.Select(c => c.Order);
+
+            if (!input.Keyword.IsNullOrWhiteSpace())
+            {
+                var empIdsQuery = await employeeAppService.GetIdsByKeywordAsync(input.Keyword);
+                query = query.Where(c => empIdsQuery.Contains(c.Order.EmployeeId));
+            }
+            query = query.WhereIf(input.UrgencyDegrees != null, c => input.UrgencyDegrees.Contains(c.Order.UrgencyDegree))
+                         .WhereIf(input.Statuses != null, c => input.Statuses.Contains(c.Order.Status))
+                         .WhereIf(input.EmployeeIds != null && input.EmployeeType == EmpType.Contains, c => input.EmployeeIds.Contains(c.Order.EmployeeId))
+                         .WhereIf(input.EmployeeIds != null && input.EmployeeType == EmpType.Exclude, c => !input.EmployeeIds.Contains(c.Order.EmployeeId))
+                         .WhereIf(input.EmployeeType == EmpType.OnlyMe, c => c.Order.EmployeeId == CurrentEmployeeId)
+                         .WhereIf(input.EstimatedExecutionTimeStart.HasValue, c => c.Order.EstimatedExecutionTime >= input.EstimatedExecutionTimeStart)
+                         .WhereIf(input.EstimatedExecutionTimeEnd.HasValue, c => c.Order.EstimatedExecutionTime < input.EstimatedExecutionTimeEnd)
+                         .WhereIf(input.EstimatedCompletionTimeStart.HasValue, c => c.Order.EstimatedCompletionTime >= input.EstimatedCompletionTimeStart)
+                         .WhereIf(input.EstimatedCompletionTimeEnd.HasValue, c => c.Order.EstimatedCompletionTime < input.EstimatedCompletionTimeEnd)
+                         .WhereIf(input.ExecutionTimeStart.HasValue, c => c.Order.ExecutionTime >= input.ExecutionTimeStart)
+                         .WhereIf(input.ExecutionTimeEnd.HasValue, c => c.Order.ExecutionTime < input.ExecutionTimeEnd)
+                         .WhereIf(input.CompletionTimeStart.HasValue, c => c.Order.CompletionTime >= input.CompletionTimeStart)
+                         .WhereIf(input.CompletionTimeEnd.HasValue, c => c.Order.CompletionTime < input.CompletionTimeEnd)
+                         .WhereIf(!input.Keyword.IsNullOrWhiteSpace(), c => c.Order.Title.Contains(input.Keyword) || c.Order.Description.Contains(input.Keyword));
+
+            query = await GetAndAllFilterAsync(query);
+            return query;
+        }
+        protected virtual IQueryable<TQueryTemp> PageBy(IQueryable<TQueryTemp> query, TGetAllInput input)
         {
             return query.PageBy(input);
         }
-        /// <summary>
-        /// GetAll的排序
-        /// </summary>
-        /// <param name="query"></param>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        protected virtual IQueryable<TEntity> OrderBy(IQueryable<TEntity> query, TGetAllInput input)
+        protected virtual IQueryable<TQueryTemp> OrderBy(IQueryable<TQueryTemp> query, TGetAllInput input)
         {
             return query.OrderBy(input.Sorting);
         }
-        /// <summary>
-        /// 实体映射到dto
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="categories"></param>
-        /// <param name="employees"></param>
-        /// <param name="images"></param>
-        /// <param name="state">子类可能需要聚合更多外键</param>
-        /// <returns></returns>
-        protected virtual TDto EntityToDto(TEntity entity, IEnumerable<CategoryEntity> categories, IEnumerable<EmployeeDto> employees, IDictionary<string, List<AttachmentEntity>> images, object state = null)
+        protected virtual TDto EntityToDto(TQueryTemp temp, IEnumerable<EmployeeDto> employees, IDictionary<string, List<AttachmentEntity>> images, object state = null)
         {
-            var dto = base.ObjectMapper.Map<TDto>(entity);
+            var dto = base.ObjectMapper.Map<TDto>(temp.Order);
             //dto.CategoryId = entity.CategoryId;
-            if (categories != null)
-            {
-                dto.CategoryDisplayName = categories.SingleOrDefault(c => c.Id == entity.CategoryId)?.DisplayName;
-            }
+            //if (categories != null)
+            //{
+            //    dto.CategoryDisplayName = categories.SingleOrDefault(c => c.Id == entity.CategoryId)?.DisplayName;
+            //}
+            dto.CategoryDisplayName = temp.Category?.DisplayName;
             //dto.CompletionTime = entity.CompletionTime;
             //dto.CreationTime = entity.CreationTime;
             //dto.CreatorUserId = entity.CreatorUserId;
@@ -406,7 +439,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
             //dto.EmployeeId = entity.EmployeeId;
             if (employees != null)
             {
-                var emp = employees.SingleOrDefault(c => c.Id == entity.EmployeeId);
+                var emp = employees.SingleOrDefault(c => c.Id == temp.Order.EmployeeId);
                 dto.EmployeeName = emp?.Name;
                 dto.EmployeePhone = emp?.Phone;
             }
@@ -423,53 +456,56 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
             //dto.StatusChangedTime = entity.StatusChangedTime;
             //dto.Title = entity.Title;
             //dto.UrgencyDegree = entity.UrgencyDegree;
-            if (images.ContainsKey(entity.Id.ToString()))
-                dto.Images = ObjectMapper.Map<List<AttachmentDto>>(images[entity.Id.ToString()]);
+            if (images.ContainsKey(temp.Order.Id.ToString()))
+                dto.Images = ObjectMapper.Map<List<AttachmentDto>>(images[temp.Order.Id.ToString()]);
             return dto;
         }
-        /// <summary>
-        /// 将单个实体映射为dto
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
-        protected virtual async Task<TDto> EntityToDto(TEntity entity)
+        protected virtual async Task<TDto> EntityToDto(TQueryTemp temp)
         {
-            var category = await categoryRepository.GetAsync(entity.CategoryId);
+            //var category = await categoryRepository.GetAsync(entity.CategoryId);
             IEnumerable<EmployeeDto> emps = null;
-            if (!entity.EmployeeId.IsNullOrWhiteSpace())
+            if (!temp.Order.EmployeeId.IsNullOrWhiteSpace())
             {
-                emps = await employeeAppService.GetByIdsAsync(entity.EmployeeId);
+                emps = await employeeAppService.GetByIdsAsync(temp.Order.EmployeeId);
             }
-            var state = await GetStateAsync(new TEntity[] { entity });
-            var images = await attachmentManager.GetAttachmentsAsync(entity.Id.ToString());
+            var state = await GetStateAsync(new TQueryTemp[] { temp });
+            var images = await attachmentManager.GetAttachmentsAsync(temp.Order.Id.ToString());
 
-            return EntityToDto(entity, new CategoryEntity[] { category }, emps, images, state);
+            return EntityToDto(temp, emps, images, state);
         }
-        /// <summary>
-        /// 子类可能需要聚合更多外键
-        /// </summary>
-        /// <param name="entities"></param>
-        /// <returns></returns>
-        protected virtual ValueTask<object> GetStateAsync(IEnumerable<TEntity> entities)
+        protected virtual ValueTask<object> GetStateAsync(IEnumerable<TQueryTemp> entities)
         {
             return ValueTask.FromResult<object>(null);
         }
-
-        /// <summary>
-        /// 工单处理人端权限判断
-        /// </summary>
-        /// <returns></returns>
-        protected virtual Task CheckPermissionAsync()
+        #region 权限判断
+        protected virtual Task CheckRejectPermissionAsync()
         {
-            return base.CheckPermissionAsync(CoreConsts.EmployeeWorkOrderManager);
+            return CheckPermissionAsync(rejectPermissionName);
         }
+        protected virtual Task CheckCompletionPermissionAsync()
+        {
+            return CheckPermissionAsync(completionPermissionName);
+        }
+        protected virtual Task CheckExecutePermissionAsync()
+        {
+            return CheckPermissionAsync(executePermissionName);
+        }
+        protected virtual Task CheckAllocatePermissionAsync()
+        {
+            return CheckPermissionAsync(allocatePermissionName);
+        }
+        protected virtual Task CheckGetPermissionAsync()
+        {
+            return CheckPermissionAsync(getPermissionName);
+        }
+        #endregion
     }
 
     /// <summary>
     /// 后台管理默认工单应用服务接口
     /// </summary>
     public class WorkOrderAppService : WorkOrderAppServiceBase<EntityDto<long>,
-                                                               GetAllInputBase,
+                                                               GetAllInputBase<GetTotalInputBase>,
                                                                GetTotalInputBase,
                                                                WorkOrderDto,
                                                                BatchAllocateInputBase,
@@ -482,7 +518,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
                                                                BatchOperationOutputLong,
                                                                OrderEntity,
                                                                IRepository<OrderEntity, long>,
-                                                               OrderManager>
+                                                               OrderManager, QueryTemp<OrderEntity>>
 
     {
         public WorkOrderAppService(IRepository<OrderEntity, long> repository,
@@ -506,5 +542,12 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
             if (!cfg.EnableDefaultWorkOrder)
                 throw new ApplicationException("BXJGWorkOrderConfig.EnableDefaultWorkOrder=false");
         }
+    }
+
+    //用元祖的话目前不支持动态排序
+    public class QueryTemp<TEntity>
+    {
+        public TEntity Order { get; set; }
+        public CategoryEntity Category { get; set; }
     }
 }

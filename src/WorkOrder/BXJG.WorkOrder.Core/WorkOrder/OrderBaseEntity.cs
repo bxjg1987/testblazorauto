@@ -554,7 +554,7 @@ namespace BXJG.WorkOrder.WorkOrder
         }
 
         /// <summary>
-        /// 分配或或领取工单
+        /// 分配或领取工单
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="time">分配或领取时间，若为空则调用Clock.Now</param>

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
 {
-    public class BatchChangeStatusInputBase
+    public class BatchChangeStatusInputBase : BXJG.Common.Dto.BatchOperationInputLong
     {
         /// <summary>
         /// 状态改变说明或备注信息
