@@ -12,14 +12,14 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
     /// </summary>
     public class GetTotalInputBase//: IGetTotalInput
     {
-        /// <summary>
-        /// 获取数量时，控制查询处理人范围的方式
-        /// </summary>
-        public EmpType EmployeeType { get; set; }
-        /// <summary>
-        /// 处理人Id集合，参考<see cref="GetTotalInputBase.EmployeeIds"/>
-        /// </summary>
-        public string[] EmployeeIds { get; set; }
+        ///// <summary>
+        ///// 获取数量时，控制查询处理人范围的方式
+        ///// </summary>
+        //public EmpType EmployeeType { get; set; }
+        ///// <summary>
+        ///// 处理人Id集合，参考<see cref="GetTotalInputBase.EmployeeIds"/>
+        ///// </summary>
+        //public string[] EmployeeIds { get; set; }
         /// <summary>
         /// 只包含在这几种状态内的工单
         /// </summary>
@@ -70,28 +70,28 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         public string Keyword { get; set; }
     }
 
-    /// <summary>
-    /// 获取数量时，控制查询处理人范围的方式
-    /// </summary>
-    public enum EmpType
-    {
-        /// <summary>
-        /// 只查询当前登陆用户的工单
-        /// </summary>
-        OnlyMe,
-        /// <summary>
-        /// 工单处理人只包含在参数<see cref="GetTotalInputBase.EmployeeIds"/>中的
-        /// </summary>
-        Contains,
-        /// <summary>
-        /// 工单处理人除了在参数<see cref="GetTotalInputBase.EmployeeIds"/>中的
-        /// </summary>
-        Exclude,
-        /// <summary>
-        /// 不限制
-        /// </summary>
-        None
-    }
+    ///// <summary>
+    ///// 获取数量时，控制查询处理人范围的方式
+    ///// </summary>
+    //public enum EmpType
+    //{
+    //    /// <summary>
+    //    /// 只查询当前登陆用户的工单
+    //    /// </summary>
+    //    OnlyMe,
+    //    /// <summary>
+    //    /// 工单处理人只包含在参数<see cref="GetTotalInputBase.EmployeeIds"/>中的
+    //    /// </summary>
+    //    Contains,
+    //    /// <summary>
+    //    /// 工单处理人除了在参数<see cref="GetTotalInputBase.EmployeeIds"/>中的
+    //    /// </summary>
+    //    Exclude,
+    //    /// <summary>
+    //    /// 不限制
+    //    /// </summary>
+    //    None
+    //}
 
     //public class GetTotalInput : GetTotalInputBase { }
 }

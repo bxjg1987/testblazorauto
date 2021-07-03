@@ -275,6 +275,9 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
             {
                 try
                 {
+                    if (item.EmployeeId != employeeSession.BusinessUserId)
+                        throw new UserFriendlyException( $"无权执行此操作！工单{item.Id+item.Title}不属于当前用户。");
+
                     item.Execute(Clock.Now, input.StatusChangedDescription);
                     await CurrentUnitOfWork.SaveChangesAsync();
                     r.Ids.Add(item.Id);
@@ -286,7 +289,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
                 catch (Exception ex)
                 {
                     r.ErrorMessage.Add(item.Id.Message500());
-                    Logger.Warn(L("执行失败！"), ex);
+                    Logger.Warn(BXJGWorkOrderL("执行失败！"), ex);
                 }
             }
             return r;
@@ -306,6 +309,8 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
             {
                 try
                 {
+                    if (item.EmployeeId != employeeSession.BusinessUserId)
+                        throw new UserFriendlyException($"无权执行此操作！工单{item.Id + item.Title}不属于当前用户。");
                     item.Completion(Clock.Now, input.StatusChangedDescription);
                     await CurrentUnitOfWork.SaveChangesAsync();
                     r.Ids.Add(item.Id);
@@ -337,6 +342,8 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
             {
                 try
                 {
+                    if (item.EmployeeId != employeeSession.BusinessUserId)
+                        throw new UserFriendlyException($"无权执行此操作！工单{item.Id + item.Title}不属于当前用户。");
                     item.Reject(Clock.Now, input.StatusChangedDescription);
                     await CurrentUnitOfWork.SaveChangesAsync();
                     r.Ids.Add(item.Id);
@@ -354,7 +361,6 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
             return r;
         }
 
-
         protected virtual async ValueTask<IQueryable<TQueryTemp>> GetFilterAsync(TGetInput input)
         {
             var q = from c in repository.GetAll().AsNoTrackingWithIdentityResolution()
@@ -368,8 +374,24 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
             //var str = q.ToQueryString();
             return q;
         }
-        protected virtual ValueTask<IQueryable<TQueryTemp>> GetAndAllFilterAsync(IQueryable<TQueryTemp> q)
+        protected virtual ValueTask<IQueryable<TQueryTemp>> GetAndAllFilterAsync(IQueryable<TQueryTemp> q, params Status[] statuses)
         {
+            Expression<Func<TQueryTemp, bool>> where = m => true;
+            if (statuses != null && statuses.Length > 0)
+            {
+                if (statuses.Contains(Status.ToBeAllocated))
+                {
+                    where = m => m.Order.Status == Status.ToBeAllocated;
+                }
+                var temp = statuses.Where(c => c != Status.ToBeAllocated);
+                where = where.Or(c => c.Order.EmployeeId == employeeSession.BusinessUserId && statuses.Contains(c.Order.Status));
+            }
+            else
+            {
+                where = m => m.Order.Status == Status.ToBeAllocated;
+                where = where.Or(c => c.Order.EmployeeId == employeeSession.BusinessUserId);
+            }
+            q = q.Where(where);
             return ValueTask.FromResult(q);
         }
         protected virtual async Task<IQueryable<TQueryTemp>> GetAllFilterAsync(TGetTotalInput input)
@@ -396,10 +418,10 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
                 query = query.Where(c => empIdsQuery.Contains(c.Order.EmployeeId));
             }
             query = query.WhereIf(input.UrgencyDegrees != null, c => input.UrgencyDegrees.Contains(c.Order.UrgencyDegree))
-                         .WhereIf(input.Statuses != null, c => input.Statuses.Contains(c.Order.Status))
-                         .WhereIf(input.EmployeeIds != null && input.EmployeeType == EmpType.Contains, c => input.EmployeeIds.Contains(c.Order.EmployeeId))
-                         .WhereIf(input.EmployeeIds != null && input.EmployeeType == EmpType.Exclude, c => !input.EmployeeIds.Contains(c.Order.EmployeeId))
-                         .WhereIf(input.EmployeeType == EmpType.OnlyMe, c => c.Order.EmployeeId == CurrentEmployeeId)
+                         //.WhereIf(input.Statuses != null, c => input.Statuses.Contains(c.Order.Status))
+                         //.WhereIf(input.EmployeeIds != null && input.EmployeeType == EmpType.Contains, c => input.EmployeeIds.Contains(c.Order.EmployeeId))
+                         //.WhereIf(input.EmployeeIds != null && input.EmployeeType == EmpType.Exclude, c => !input.EmployeeIds.Contains(c.Order.EmployeeId))
+                         //.WhereIf(input.EmployeeType == EmpType.OnlyMe, c => c.Order.EmployeeId == CurrentEmployeeId)
                          .WhereIf(input.EstimatedExecutionTimeStart.HasValue, c => c.Order.EstimatedExecutionTime >= input.EstimatedExecutionTimeStart)
                          .WhereIf(input.EstimatedExecutionTimeEnd.HasValue, c => c.Order.EstimatedExecutionTime < input.EstimatedExecutionTimeEnd)
                          .WhereIf(input.EstimatedCompletionTimeStart.HasValue, c => c.Order.EstimatedCompletionTime >= input.EstimatedCompletionTimeStart)
@@ -410,7 +432,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
                          .WhereIf(input.CompletionTimeEnd.HasValue, c => c.Order.CompletionTime < input.CompletionTimeEnd)
                          .WhereIf(!input.Keyword.IsNullOrWhiteSpace(), c => c.Order.Title.Contains(input.Keyword) || c.Order.Description.Contains(input.Keyword));
 
-            query = await GetAndAllFilterAsync(query);
+            query = await GetAndAllFilterAsync(query, input.Statuses);
             return query;
         }
         protected virtual IQueryable<TQueryTemp> PageBy(IQueryable<TQueryTemp> query, TGetAllInput input)
