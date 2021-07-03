@@ -3,14 +3,13 @@ using Abp.Domain.Repositories;
 using Abp.Extensions;
 using Abp.Linq;
 using Abp.Linq.Extensions;
-using BXJG.WorkOrder.Employee;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Abp.Runtime.Session;
 
-namespace BXJG.WorkOrder.EmployeeApplication.Session
+namespace BXJG.WorkOrder.Session
 {
     public class EmployeeSession : IEmployeeSession
     {

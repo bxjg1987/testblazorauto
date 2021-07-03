@@ -14,6 +14,8 @@ using BXJG.WorkOrder.WorkOrder;
 using Abp.Localization;
 using BXJG.WorkOrder.WorkOrderType;
 using Microsoft.Extensions.DependencyInjection;
+using BXJG.WorkOrder.Session;
+
 namespace BXJG.WorkOrder
 {
     [DependsOn(typeof(GeneralTreeModule))]
@@ -32,6 +34,8 @@ namespace BXJG.WorkOrder
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
+            //模块调用方可以替换此服务
+            IocManager.Register<IEmployeeSession, EmployeeSession>(Abp.Dependency.DependencyLifeStyle.Singleton);
         }
 
         public override void PostInitialize()

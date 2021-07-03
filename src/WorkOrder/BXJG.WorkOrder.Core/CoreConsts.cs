@@ -60,7 +60,7 @@ namespace BXJG.WorkOrder
         
         //public const string EmployeeWorkOrder = "BXJGEmployeeWorkOrder";
 
-        public const string EmployeeWorkOrderManager = "BXJGEmployeeWorkOrderManager";
+        //public const string EmployeeWorkOrderManager = "BXJGEmployeeWorkOrderManager";
         //public const string EmployeeWorkOrderAllocate = "BXJGEmployeeWorkOrderCreate";
         //public const string EmployeeWorkOrderExecute = "BXJGEmployeeWorkOrderUpdate";
         //public const string EmployeeWorkOrderCompletion = "BXJGEmployeeWorkOrderDelete";

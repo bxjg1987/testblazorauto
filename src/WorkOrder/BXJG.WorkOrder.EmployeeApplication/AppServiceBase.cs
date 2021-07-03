@@ -7,7 +7,7 @@ using Abp.Localization.Sources;
 using Abp.MultiTenancy;
 using Abp.Runtime.Session;
 using Abp.Threading;
-using BXJG.WorkOrder.EmployeeApplication.Session;
+using BXJG.WorkOrder.Session;
 
 namespace BXJG.WorkOrder.EmployeeApplication
 {

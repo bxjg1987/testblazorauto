@@ -20,7 +20,7 @@ namespace BXJG.WorkOrder
             var workOrder = context.AddBXJGWorkOrderRootPermission();
             workOrder.AddBXJGWorkOrderCategoryPermission();
             workOrder.AddBXJGDefaultWorkOrderPermission();
-            workOrder.AddBXJGEmployeeWorkOrderPermission();
+            //workOrder.AddBXJGEmployeeWorkOrderPermission();
             return workOrder;
         }
        
@@ -66,14 +66,14 @@ namespace BXJG.WorkOrder
             return item;
         }
         
-        /// <summary>
-        /// 注册工单模块员工端普通工单权限
-        /// </summary>
-        /// <param name="context"></param>
-        public static Permission AddBXJGEmployeeWorkOrderPermission(this Permission context)
-        {
-            return context.CreateChildPermission(CoreConsts.EmployeeWorkOrderManager, CoreConsts.EmployeeWorkOrderManager.BXJGWorkOrderLI(), multiTenancySides: MultiTenancySides.Tenant);
-        }
+        ///// <summary>
+        ///// 注册工单模块员工端普通工单权限
+        ///// </summary>
+        ///// <param name="context"></param>
+        //public static Permission AddBXJGEmployeeWorkOrderPermission(this Permission context)
+        //{
+        //    return context.CreateChildPermission(CoreConsts.EmployeeWorkOrderManager, CoreConsts.EmployeeWorkOrderManager.BXJGWorkOrderLI(), multiTenancySides: MultiTenancySides.Tenant);
+        //}
 
         /// <summary>
         /// 注册工单模块管理端所有权限，包括工单管理根、工单分类管理、普通工单管理的权限
@@ -85,7 +85,7 @@ namespace BXJG.WorkOrder
             var workOrder = context.AddBXJGWorkOrderRootPermission();
             workOrder.AddBXJGWorkOrderCategoryPermission();
             workOrder.AddBXJGDefaultWorkOrderPermission();
-            workOrder.AddBXJGEmployeeWorkOrderPermission();
+            //workOrder.AddBXJGEmployeeWorkOrderPermission();
             return workOrder;
         }
 

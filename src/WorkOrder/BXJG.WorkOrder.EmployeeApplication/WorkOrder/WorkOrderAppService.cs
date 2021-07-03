@@ -17,16 +17,17 @@ using Abp.Domain.Entities;
 using Abp.UI;
 using Abp.Dependency;
 using Abp.Domain.Uow;
-using Microsoft.EntityFrameworkCore;
+//using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
 using Abp.Application.Services;
 using BXJG.Utils.File;
 using BXJG.WorkOrder.WorkOrder;
-using BXJG.WorkOrder.EmployeeApplication.Session;
 using System.Linq.Dynamic;
 using Abp.Linq.Expressions;
 using System.Linq.Expressions;
 using BXJG.WorkOrder.WorkOrderType;
+using Microsoft.EntityFrameworkCore;
+using BXJG.WorkOrder.Session;
 
 namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
 {
@@ -159,7 +160,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         {
             await CheckGetPermissionAsync();
             var query = await GetAllFilterAsync(input);
-            //var str = query.ToQueryString();
+            var sql = query.ToQueryString();
             return await AsyncQueryableExecuter.CountAsync(query);
         }
         /// <summary>
@@ -182,7 +183,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         /// <param name="input"></param>
         /// <returns></returns>
         [UnitOfWork(false)]
-        public virtual async Task<PagedResultDto<TDto>> GetAll1Async(TGetAllInput input)
+        public virtual async Task<PagedResultDto<TDto>> GetAllAsync(TGetAllInput input)
         {
             //分类、员工先查询 再用in，
             //假定员工和分类数量不会太多（太多的话考虑分配in查询），且可以使用缓存
@@ -276,7 +277,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
                 try
                 {
                     if (item.EmployeeId != employeeSession.BusinessUserId)
-                        throw new UserFriendlyException( $"无权执行此操作！工单{item.Id+item.Title}不属于当前用户。");
+                        throw new UserFriendlyException($"无权执行此操作！工单{item.Id + item.Title}不属于当前用户。");
 
                     item.Execute(Clock.Now, input.StatusChangedDescription);
                     await CurrentUnitOfWork.SaveChangesAsync();
@@ -363,20 +364,15 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
 
         protected virtual async ValueTask<IQueryable<TQueryTemp>> GetFilterAsync(TGetInput input)
         {
-            var q = from c in repository.GetAll().AsNoTrackingWithIdentityResolution()
-                    join lb in categoryRepository.GetAll() on c.CategoryId equals lb.Id into g
-                    from kk in g.DefaultIfEmpty()
-                    where c.Id == input.Id
-                    select new TQueryTemp { Order = c, Category = kk };
-
-            //q = q.Where(c => c.Order.Id == input.Id);
+            var q = GetQuery();
+            q = q.Where(c => c.Order.Id == input.Id);
             q = await GetAndAllFilterAsync(q);
             //var str = q.ToQueryString();
             return q;
         }
         protected virtual ValueTask<IQueryable<TQueryTemp>> GetAndAllFilterAsync(IQueryable<TQueryTemp> q, params Status[] statuses)
         {
-            Expression<Func<TQueryTemp, bool>> where = m => true;
+            Expression<Func<TQueryTemp, bool>> where = m => false;
             if (statuses != null && statuses.Length > 0)
             {
                 if (statuses.Contains(Status.ToBeAllocated))
@@ -394,44 +390,88 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
             q = q.Where(where);
             return ValueTask.FromResult(q);
         }
-        protected virtual async Task<IQueryable<TQueryTemp>> GetAllFilterAsync(TGetTotalInput input)
+
+
+        protected virtual ValueTask<Expression<Func<TQueryTemp, bool>>> ApplyCls(params string[] cls)
         {
-            var query = from c in repository.GetAll().AsNoTrackingWithIdentityResolution()
-                        join lb in categoryRepository.GetAll() on c.CategoryId equals lb.Id into g
+            Expression<Func<TQueryTemp, bool>> where = c => false;
+            foreach (var item in cls)
+            {
+                where = where.Or(c => c.Category.Code.StartsWith(item));
+            }
+            return ValueTask.FromResult(where);
+        }
+        protected virtual ValueTask<Expression<Func<TQueryTemp, bool>>> ApplyKeyword(string keyword)
+        {
+            Expression<Func<TQueryTemp, bool>> where = c => c.Order.Title.Contains(keyword) || c.Order.Description.Contains(keyword);
+            return ValueTask.FromResult(where);
+        }
+        protected virtual ValueTask<IQueryable<TQueryTemp>> ApplyOther(IQueryable<TQueryTemp> query, TGetTotalInput input)
+        {
+            query = query.WhereIf(input.UrgencyDegrees != null, c => input.UrgencyDegrees.Contains(c.Order.UrgencyDegree))
+                        //.WhereIf(input.Statuses != null, c => input.Statuses.Contains(c.Order.Status))
+                        //.WhereIf(input.EmployeeIds != null && input.EmployeeType == EmpType.Contains, c => input.EmployeeIds.Contains(c.Order.EmployeeId))
+                        //.WhereIf(input.EmployeeIds != null && input.EmployeeType == EmpType.Exclude, c => !input.EmployeeIds.Contains(c.Order.EmployeeId))
+                        //.WhereIf(input.EmployeeType == EmpType.OnlyMe, c => c.Order.EmployeeId == CurrentEmployeeId)
+                        .WhereIf(input.EstimatedExecutionTimeStart.HasValue, c => c.Order.EstimatedExecutionTime >= input.EstimatedExecutionTimeStart)
+                        .WhereIf(input.EstimatedExecutionTimeEnd.HasValue, c => c.Order.EstimatedExecutionTime < input.EstimatedExecutionTimeEnd)
+                        .WhereIf(input.EstimatedCompletionTimeStart.HasValue, c => c.Order.EstimatedCompletionTime >= input.EstimatedCompletionTimeStart)
+                        .WhereIf(input.EstimatedCompletionTimeEnd.HasValue, c => c.Order.EstimatedCompletionTime < input.EstimatedCompletionTimeEnd)
+                        .WhereIf(input.ExecutionTimeStart.HasValue, c => c.Order.ExecutionTime >= input.ExecutionTimeStart)
+                        .WhereIf(input.ExecutionTimeEnd.HasValue, c => c.Order.ExecutionTime < input.ExecutionTimeEnd)
+                        .WhereIf(input.CompletionTimeStart.HasValue, c => c.Order.CompletionTime >= input.CompletionTimeStart)
+                        .WhereIf(input.CompletionTimeEnd.HasValue, c => c.Order.CompletionTime < input.CompletionTimeEnd);
+            return ValueTask.FromResult(query);
+        }
+        //protected virtual Task<IEnumerable<string>> GetEmployeeIdsAsync(TGetTotalInput input)
+        //{
+        //    //if (!input.Keyword.IsNullOrWhiteSpace())
+        //    //{
+        //    //    return employeeAppService.GetIdsByKeywordAsync(input.Keyword);
+        //    //}
+        //    //return employeeAppService.GetIdsByKeywordAsync(input.Keyword);
+        //    return null;
+        //}
+
+        protected virtual IQueryable<TEntity> GetOrderQuery() {
+            return repository.GetAll();
+        }
+        protected virtual IQueryable<CategoryEntity> GetClsQuery()
+        {
+            return categoryRepository.GetAll();
+        }
+        protected virtual IQueryable<TQueryTemp> GetQuery()
+        {
+            var query = from c in GetOrderQuery().AsNoTrackingWithIdentityResolution()
+                        join lb in GetClsQuery().AsNoTrackingWithIdentityResolution() on c.CategoryId equals lb.Id into g
                         from kk in g.DefaultIfEmpty()
                         select new TQueryTemp { Order = c, Category = kk };
+            return query;
+        }
 
+        protected virtual async Task<IQueryable<TQueryTemp>> GetAllFilterAsync(TGetTotalInput input)
+        {
+            var query = GetQuery();
             if (input.CategoryCodes != null)
             {
-                Expression<Func<TQueryTemp, bool>> where = c => false;
-                foreach (var item in input.CategoryCodes)
-                {
-                    where = where.Or(c => c.Category.Code.StartsWith(item));
-                }
-                query = query.Where(where);
+                //Expression<Func<TQueryTemp, bool>> where = c => false;
+                //foreach (var item in input.CategoryCodes)
+                //{
+                //    where = where.Or(c => c.Category.Code.StartsWith(item));
+                //}
+                query = query.Where(await ApplyCls(input.CategoryCodes));
             }
             //var query = query1.Select(c => c.Order);
 
-            if (!input.Keyword.IsNullOrWhiteSpace())
-            {
-                var empIdsQuery = await employeeAppService.GetIdsByKeywordAsync(input.Keyword);
-                query = query.Where(c => empIdsQuery.Contains(c.Order.EmployeeId));
-            }
-            query = query.WhereIf(input.UrgencyDegrees != null, c => input.UrgencyDegrees.Contains(c.Order.UrgencyDegree))
-                         //.WhereIf(input.Statuses != null, c => input.Statuses.Contains(c.Order.Status))
-                         //.WhereIf(input.EmployeeIds != null && input.EmployeeType == EmpType.Contains, c => input.EmployeeIds.Contains(c.Order.EmployeeId))
-                         //.WhereIf(input.EmployeeIds != null && input.EmployeeType == EmpType.Exclude, c => !input.EmployeeIds.Contains(c.Order.EmployeeId))
-                         //.WhereIf(input.EmployeeType == EmpType.OnlyMe, c => c.Order.EmployeeId == CurrentEmployeeId)
-                         .WhereIf(input.EstimatedExecutionTimeStart.HasValue, c => c.Order.EstimatedExecutionTime >= input.EstimatedExecutionTimeStart)
-                         .WhereIf(input.EstimatedExecutionTimeEnd.HasValue, c => c.Order.EstimatedExecutionTime < input.EstimatedExecutionTimeEnd)
-                         .WhereIf(input.EstimatedCompletionTimeStart.HasValue, c => c.Order.EstimatedCompletionTime >= input.EstimatedCompletionTimeStart)
-                         .WhereIf(input.EstimatedCompletionTimeEnd.HasValue, c => c.Order.EstimatedCompletionTime < input.EstimatedCompletionTimeEnd)
-                         .WhereIf(input.ExecutionTimeStart.HasValue, c => c.Order.ExecutionTime >= input.ExecutionTimeStart)
-                         .WhereIf(input.ExecutionTimeEnd.HasValue, c => c.Order.ExecutionTime < input.ExecutionTimeEnd)
-                         .WhereIf(input.CompletionTimeStart.HasValue, c => c.Order.CompletionTime >= input.CompletionTimeStart)
-                         .WhereIf(input.CompletionTimeEnd.HasValue, c => c.Order.CompletionTime < input.CompletionTimeEnd)
-                         .WhereIf(!input.Keyword.IsNullOrWhiteSpace(), c => c.Order.Title.Contains(input.Keyword) || c.Order.Description.Contains(input.Keyword));
 
+            //var empIdsQuery = await GetEmployeeIdsAsync(input);
+            //if (empIdsQuery != null && empIdsQuery.Count() > 0)
+            //    query = query.Where(c => empIdsQuery.Contains(c.Order.EmployeeId));
+
+
+            query = await ApplyOther(query, input);
+
+            query = query.WhereIf(!input.Keyword.IsNullOrWhiteSpace(),await ApplyKeyword(input.Keyword));
             query = await GetAndAllFilterAsync(query, input.Statuses);
             return query;
         }

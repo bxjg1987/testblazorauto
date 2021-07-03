@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.WorkOrder.EmployeeApplication.Session
+namespace BXJG.WorkOrder.Session
 {
     public interface IEmployeeSession: IBusinessUserSession<string>
     {

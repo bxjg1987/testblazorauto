@@ -50,8 +50,23 @@ namespace BXJG.Utils.BusinessUser
                     return default;
 
                 //return userEmailClaim.Value.ToNullable<TKey>();
-                return (TKey)Convert.ChangeType(userEmailClaim.Value, typeof(TKey));
+                // return (TKey)Convert.ChangeType(userEmailClaim.Value, typeof(TKey));
+                var t = typeof(TKey);
+
+                if (t.IsGenericType && t.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
+                {
+                    if (userEmailClaim.Value == null)
+                    {
+                        return default(TKey);
+                    }
+
+                    t = Nullable.GetUnderlyingType(t);
+                }
+
+                return (TKey)Convert.ChangeType(userEmailClaim.Value, t);
             }
         }
+
+       
     }
 }

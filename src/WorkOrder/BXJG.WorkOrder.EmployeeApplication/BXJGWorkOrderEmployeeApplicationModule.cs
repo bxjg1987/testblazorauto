@@ -2,7 +2,6 @@
 using Abp.Modules;
 using Abp.Reflection.Extensions;
 using BXJG.Utils;
-using BXJG.WorkOrder.EmployeeApplication.Session;
 using System;
 using System.Reflection;
 
@@ -33,8 +32,7 @@ namespace BXJG.WorkOrder.EmployeeApplication
         {
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
 
-            //模块调用方可以替换此服务
-            IocManager.Register<IEmployeeSession, EmployeeSession>(Abp.Dependency.DependencyLifeStyle.Singleton);
+            
             //因为要生成动态webapi，所以这样注册不行，不过在主程序中去试试应该可以
             //IocManager.Register( typeof(IBXJGShopItemAppService), typeof(BXJGShopItemAppService<,,,,,>), DependencyLifeStyle.Transient);
             //IocManager.Register( typeof(IBXJGShopFrontItemAppService), typeof(BXJGShopFrontItemAppService<>), DependencyLifeStyle.Transient);
