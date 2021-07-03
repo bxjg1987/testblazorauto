@@ -70,7 +70,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         #region MyRegion
         where TGetInput : EntityDto<long>
         where TGetAllInput : GetAllInputBase<TGetTotalInput>
-        where TGetTotalInput : GetTotalInputBase
+        where TGetTotalInput : GetTotalInputBase, new()
         where TDto : WorkOrderDtoBase, new()
         where TBatchAllocateInput : BatchAllocateInputBase
         where TBatchAllocateOutput : BatchOperationOutputLong, new()
@@ -88,11 +88,10 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
     {
         #region MyRegion
         protected readonly TRepository repository;
-        protected readonly IRepository<CategoryEntity, long> categoryRepository;
-        protected readonly TManager manager;
-        protected readonly IEmployeeAppService employeeAppService;
-        protected readonly CategoryManager clsManager;
-        protected readonly AttachmentManager<TEntity> attachmentManager;
+        protected readonly Lazy<IRepository<CategoryEntity, long>> categoryRepository;
+        protected readonly Lazy<TManager> manager;
+        protected readonly Lazy<CategoryManager> clsManager;
+        protected readonly Lazy<AttachmentManager<TEntity>> attachmentManager;
         protected readonly WorkOrderTypeDefine workOrderTypeDefine;
         protected readonly string getPermissionName;
         protected readonly string allocatePermissionName;
@@ -121,11 +120,10 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         /// <param name="rejectPermissionName">拒绝工单的权限名</param>
         public WorkOrderAppServiceBase(TRepository repository,
                                        IEmployeeSession empSession,
-                                       TManager manager,
-                                       IRepository<CategoryEntity, long> categoryRepository,
-                                       AttachmentManager<TEntity> attachmentManager,
-                                       IEmployeeAppService employeeAppService,
-                                       CategoryManager clsManager,
+                                       Lazy<TManager> manager,
+                                       Lazy<IRepository<CategoryEntity, long>> categoryRepository,
+                                       Lazy<AttachmentManager<TEntity>> attachmentManager,
+                                       Lazy<CategoryManager> clsManager,
                                        WorkOrderTypeManager workOrderTypeManager,
                                        string workOrderType,
                                        string getPermissionName = default,
@@ -137,7 +135,6 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
             this.repository = repository;
             this.manager = manager;
             this.categoryRepository = categoryRepository;
-            this.employeeAppService = employeeAppService;
             this.clsManager = clsManager;
             this.attachmentManager = attachmentManager;
             this.workOrderTypeDefine = workOrderTypeManager[workOrderType];
@@ -212,20 +209,20 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
 
             var empIds = list.Where(c => !c.Order.EmployeeId.IsNullOrWhiteSpace()).Select(c => c.Order.EmployeeId);
 
-            IEnumerable<EmployeeDto> emps = null;
-            if (empIds != null && empIds.Count() > 0)
-            {
-                emps = await employeeAppService.GetByIdsAsync(empIds.ToArray());
-            }
+            //IEnumerable<EmployeeDto> emps = null;
+            //if (empIds != null && empIds.Count() > 0)
+            //{
+            //    emps = await employeeAppService.GetByIdsAsync(empIds.ToArray());
+            //}
 
-            var images = await attachmentManager.GetAttachmentsAsync(list.Select(c => c.Order.Id.ToString()).ToArray());
+            var images = await attachmentManager.Value.GetAttachmentsAsync(list.Select(c => c.Order.Id.ToString()).ToArray());
             // var images2 = images.ToDictionary(c => c.Key, c =>c.Value);
 
             var state = await GetStateAsync(list);
             var items = new List<TDto>();
             foreach (var item in list)
             {
-                var ttt = EntityToDto(item, emps, images, state);
+                var ttt = EntityToDto(item, images, state);
                 items.Add(ttt);
             }
             return new PagedResultDto<TDto>(count, items);
@@ -377,14 +374,14 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
             {
                 if (statuses.Contains(Status.ToBeAllocated))
                 {
-                    where = m => m.Order.Status == Status.ToBeAllocated;
+                    where = m => m.Order.Status == Status.ToBeAllocated && (m.Order.EmployeeId ==""|| m.Order.EmployeeId ==null);
                 }
                 var temp = statuses.Where(c => c != Status.ToBeAllocated);
                 where = where.Or(c => c.Order.EmployeeId == employeeSession.BusinessUserId && statuses.Contains(c.Order.Status));
             }
             else
             {
-                where = m => m.Order.Status == Status.ToBeAllocated;
+                where = m => m.Order.Status == Status.ToBeAllocated && (m.Order.EmployeeId == "" || m.Order.EmployeeId == null);
                 where = where.Or(c => c.Order.EmployeeId == employeeSession.BusinessUserId);
             }
             q = q.Where(where);
@@ -433,12 +430,13 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         //    return null;
         //}
 
-        protected virtual IQueryable<TEntity> GetOrderQuery() {
+        protected virtual IQueryable<TEntity> GetOrderQuery()
+        {
             return repository.GetAll();
         }
         protected virtual IQueryable<CategoryEntity> GetClsQuery()
         {
-            return categoryRepository.GetAll();
+            return categoryRepository.Value.GetAll();
         }
         protected virtual IQueryable<TQueryTemp> GetQuery()
         {
@@ -471,7 +469,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
 
             query = await ApplyOther(query, input);
 
-            query = query.WhereIf(!input.Keyword.IsNullOrWhiteSpace(),await ApplyKeyword(input.Keyword));
+            query = query.WhereIf(!input.Keyword.IsNullOrWhiteSpace(), await ApplyKeyword(input.Keyword));
             query = await GetAndAllFilterAsync(query, input.Statuses);
             return query;
         }
@@ -483,7 +481,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         {
             return query.OrderBy(input.Sorting);
         }
-        protected virtual TDto EntityToDto(TQueryTemp temp, IEnumerable<EmployeeDto> employees, IDictionary<string, List<AttachmentEntity>> images, object state = null)
+        protected virtual TDto EntityToDto(TQueryTemp temp, IDictionary<string, List<AttachmentEntity>> images, object state = null)
         {
             var dto = base.ObjectMapper.Map<TDto>(temp.Order);
             //dto.CategoryId = entity.CategoryId;
@@ -499,12 +497,12 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
             //dto.DeletionTime = entity.DeletionTime;
             //dto.Description = entity.Description;
             //dto.EmployeeId = entity.EmployeeId;
-            if (employees != null)
-            {
-                var emp = employees.SingleOrDefault(c => c.Id == temp.Order.EmployeeId);
-                dto.EmployeeName = emp?.Name;
-                dto.EmployeePhone = emp?.Phone;
-            }
+            //if (employees != null)
+            //{
+            //    var emp = employees.SingleOrDefault(c => c.Id == temp.Order.EmployeeId);
+            //    dto.EmployeeName = emp?.Name;
+            //    dto.EmployeePhone = emp?.Phone;
+            //}
             //dto.EstimatedCompletionTime = entity.EstimatedCompletionTime;
             //dto.EstimatedExecutionTime = entity.EstimatedExecutionTime;
             //dto.ExecutionTime = entity.ExecutionTime;
@@ -525,15 +523,15 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         protected virtual async Task<TDto> EntityToDto(TQueryTemp temp)
         {
             //var category = await categoryRepository.GetAsync(entity.CategoryId);
-            IEnumerable<EmployeeDto> emps = null;
-            if (!temp.Order.EmployeeId.IsNullOrWhiteSpace())
-            {
-                emps = await employeeAppService.GetByIdsAsync(temp.Order.EmployeeId);
-            }
+            //IEnumerable<EmployeeDto> emps = null;
+            //if (!temp.Order.EmployeeId.IsNullOrWhiteSpace())
+            //{
+            //    emps = await employeeAppService.GetByIdsAsync(temp.Order.EmployeeId);
+            //}
             var state = await GetStateAsync(new TQueryTemp[] { temp });
-            var images = await attachmentManager.GetAttachmentsAsync(temp.Order.Id.ToString());
+            var images = await attachmentManager.Value.GetAttachmentsAsync(temp.Order.Id.ToString());
 
-            return EntityToDto(temp, emps, images, state);
+            return EntityToDto(temp, images, state);
         }
         protected virtual ValueTask<object> GetStateAsync(IEnumerable<TQueryTemp> entities)
         {
@@ -586,17 +584,15 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         public WorkOrderAppService(IRepository<OrderEntity, long> repository,
                                    BXJGWorkOrderConfig cfg,
                                    IEmployeeSession empSession,
-                                   OrderManager manager,
-                                   IRepository<CategoryEntity, long> categoryRepository,
-                                   AttachmentManager<OrderEntity> attachmentManager,
-                                   IEmployeeAppService employeeAppService,
+                                   Lazy<OrderManager> manager,
+                                   Lazy<IRepository<CategoryEntity, long>> categoryRepository,
+                                   Lazy<AttachmentManager<OrderEntity>> attachmentManager,
                                    WorkOrderTypeManager workOrderTypeManager,
-                                   CategoryManager clsManager) : base(repository,
+                                   Lazy<CategoryManager> clsManager) : base(repository,
                                                                       empSession,
                                                                       manager,
                                                                       categoryRepository,
                                                                       attachmentManager,
-                                                                      employeeAppService,
                                                                       clsManager,
                                                                       workOrderTypeManager,
                                                                       CoreConsts.DefaultWorkOrderTypeName)

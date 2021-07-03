@@ -86,14 +86,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         /// 员工id
         /// </summary>
         public string EmployeeId { get; set; }
-        /// <summary>
-        /// 员工姓名
-        /// </summary>
-        public string EmployeeName { get; set; }
-        /// <summary>
-        /// 员工手机号
-        /// </summary>
-        public string EmployeePhone { get; set; }
+
     }
     /// <summary>
     /// 工单处理人员获取普通工单的显示模型基类
