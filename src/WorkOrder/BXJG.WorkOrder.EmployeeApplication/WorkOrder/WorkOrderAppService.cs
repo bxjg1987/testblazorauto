@@ -5,7 +5,6 @@ using Abp.Linq.Extensions;
 using Abp.Timing;
 using BXJG.Common.Dto;
 using BXJG.GeneralTree;
-using BXJG.WorkOrder.Employee;
 using BXJG.WorkOrder.WorkOrderCategory;
 using System;
 using System.Collections.Generic;
@@ -93,11 +92,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         protected readonly Lazy<CategoryManager> clsManager;
         protected readonly Lazy<AttachmentManager<TEntity>> attachmentManager;
         protected readonly WorkOrderTypeDefine workOrderTypeDefine;
-        protected readonly string getPermissionName;
-        protected readonly string allocatePermissionName;
-        protected readonly string executePermissionName;
-        protected readonly string completionPermissionName;
-        protected readonly string rejectPermissionName;
+        protected readonly string getPermissionName,allocatePermissionName,executePermissionName,completionPermissionName,rejectPermissionName;
         #endregion
 
         #region 构造函数
@@ -207,7 +202,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
             //var cQuery = categoryRepository.GetAll().Where(c => cIds.Contains(c.Id));
             //var cls = await AsyncQueryableExecuter.ToListAsync(cQuery);
 
-            var empIds = list.Where(c => !c.Order.EmployeeId.IsNullOrWhiteSpace()).Select(c => c.Order.EmployeeId);
+            //var empIds = list.Where(c => !c.Order.EmployeeId.IsNullOrWhiteSpace()).Select(c => c.Order.EmployeeId);
 
             //IEnumerable<EmployeeDto> emps = null;
             //if (empIds != null && empIds.Count() > 0)
@@ -389,15 +384,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         }
 
 
-        protected virtual ValueTask<Expression<Func<TQueryTemp, bool>>> ApplyCls(params string[] cls)
-        {
-            Expression<Func<TQueryTemp, bool>> where = c => false;
-            foreach (var item in cls)
-            {
-                where = where.Or(c => c.Category.Code.StartsWith(item));
-            }
-            return ValueTask.FromResult(where);
-        }
+     
         protected virtual ValueTask<Expression<Func<TQueryTemp, bool>>> ApplyKeyword(string keyword)
         {
             Expression<Func<TQueryTemp, bool>> where = c => c.Order.Title.Contains(keyword) || c.Order.Description.Contains(keyword);
@@ -405,6 +392,16 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         }
         protected virtual ValueTask<IQueryable<TQueryTemp>> ApplyOther(IQueryable<TQueryTemp> query, TGetTotalInput input)
         {
+            if (input.CategoryCodes != null)
+            {
+                Expression<Func<TQueryTemp, bool>> where = c => false;
+                foreach (var item in input.CategoryCodes)
+                {
+                    where = where.Or(c => c.Category.Code.StartsWith(item));
+                }
+                query = query.Where(where);
+            }
+
             query = query.WhereIf(input.UrgencyDegrees != null, c => input.UrgencyDegrees.Contains(c.Order.UrgencyDegree))
                         //.WhereIf(input.Statuses != null, c => input.Statuses.Contains(c.Order.Status))
                         //.WhereIf(input.EmployeeIds != null && input.EmployeeType == EmpType.Contains, c => input.EmployeeIds.Contains(c.Order.EmployeeId))
@@ -450,15 +447,15 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         protected virtual async Task<IQueryable<TQueryTemp>> GetAllFilterAsync(TGetTotalInput input)
         {
             var query = GetQuery();
-            if (input.CategoryCodes != null)
-            {
-                //Expression<Func<TQueryTemp, bool>> where = c => false;
-                //foreach (var item in input.CategoryCodes)
-                //{
-                //    where = where.Or(c => c.Category.Code.StartsWith(item));
-                //}
-                query = query.Where(await ApplyCls(input.CategoryCodes));
-            }
+            //if (input.CategoryCodes != null)
+            //{
+            //    //Expression<Func<TQueryTemp, bool>> where = c => false;
+            //    //foreach (var item in input.CategoryCodes)
+            //    //{
+            //    //    where = where.Or(c => c.Category.Code.StartsWith(item));
+            //    //}
+            //    query = query.Where(await ApplyCls(input.CategoryCodes));
+            //}
             //var query = query1.Select(c => c.Order);
 
 
@@ -602,10 +599,5 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         }
     }
 
-    //用元祖的话目前不支持动态排序
-    public class QueryTemp<TEntity>
-    {
-        public TEntity Order { get; set; }
-        public CategoryEntity Category { get; set; }
-    }
+
 }

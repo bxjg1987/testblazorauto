@@ -5,7 +5,6 @@ using Abp.Linq.Extensions;
 using Abp.Timing;
 using BXJG.Common.Dto;
 using BXJG.GeneralTree;
-using BXJG.WorkOrder.Employee;
 using BXJG.WorkOrder.WorkOrderCategory;
 using System;
 using System.Collections.Generic;
@@ -21,6 +20,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
 using Abp.Application.Services;
 using BXJG.Utils.File;
+using System.Linq.Expressions;
+using Abp.Linq.Expressions;
 
 namespace BXJG.WorkOrder.WorkOrder
 {
@@ -33,6 +34,7 @@ namespace BXJG.WorkOrder.WorkOrder
     /// <typeparam name="TBatchDeleteOutput">批量删除时的输出模型</typeparam>
     /// <typeparam name="TGetInput">获取单个信息的输入模型</typeparam>
     /// <typeparam name="TGetAllInput">列表页查询时的输入模型</typeparam>
+    /// <typeparam name="TGetTotalInput"></typeparam>
     /// <typeparam name="TEntityDto">列表页显示模型</typeparam>
     /// <typeparam name="TBatchChangeStatusInput">批量状态修改时的输入模型</typeparam>
     /// <typeparam name="TBatchChangeStatusOutput">批量状态修改时的输出模型</typeparam>
@@ -43,11 +45,13 @@ namespace BXJG.WorkOrder.WorkOrder
     /// <typeparam name="TCreateDto"></typeparam>
     /// <typeparam name="TManager">领域服务类型</typeparam>
     /// <typeparam name="TCategoryRepository">分类仓储</typeparam>
+    /// <typeparam name="TQueryTemp">分类仓储</typeparam>
     public abstract class WorkOrderAppServiceBase<TCreateInput,
                                                   TUpdateInput,
                                                   TBatchDeleteInput,
                                                   TBatchDeleteOutput,
                                                   TGetInput,
+                                                  TGetTotalInput,
                                                   TGetAllInput,
                                                   TEntityDto,
                                                   TBatchChangeStatusInput,
@@ -58,88 +62,47 @@ namespace BXJG.WorkOrder.WorkOrder
                                                   TRepository,
                                                   TCreateDto,
                                                   TManager,
-                                                  TCategoryRepository> : AppServiceBase
-        #region 泛型约束
-        where TCreateInput : WorkOrderCreateBaseInput
-        where TUpdateInput : WorkOrderUpdateBaseInput
+                                                  TCategoryRepository,
+                                                  TQueryTemp> : AppServiceBase
+        #region MyRegion
+        where TCreateInput : CreateInputBase
+        where TUpdateInput : UpdateInputBase
         where TBatchDeleteInput : BatchOperationInputLong
         where TBatchDeleteOutput : BatchOperationOutputLong, new()
         where TGetInput : EntityDto<long>
-        where TGetAllInput : GetAllWorkOrderBaseInput
-        where TEntityDto : WorkOrderDtoBase, new()
-        where TBatchChangeStatusInput : WorkOrderBatchChangeStatusInputBase
-        where TBatchChangeStatusOutput : WorkOrderBatchChangeStatusOutputBase, new()
-        where TBatchAllocateInput : WorkOrderBatchAllocateInputBase
-        where TBatchAllocateOutput : WorkOrderBatchAllocateOutputBase, new()
+        where TGetTotalInput : GetTotalInputBase, new()
+        where TGetAllInput : GetAllInputBase<TGetTotalInput>
+        where TEntityDto : DtoBase, new()
+        where TBatchChangeStatusInput : BatchChangeStatusInputBase
+        where TBatchChangeStatusOutput : BatchOperationOutputLong, new()
+        where TBatchAllocateInput : BatchAllocateInputBase
+        where TBatchAllocateOutput : BatchOperationOutputLong, new()
         where TEntity : OrderBaseEntity
         where TRepository : IRepository<TEntity, long>
         where TCreateDto : WorkOrderCreateDtoBase, new()
         where TManager : OrderBaseManager<TEntity>
         where TCategoryRepository : IRepository<CategoryEntity, long>
+        where TQueryTemp : QueryTemp<TEntity>, new()
         #endregion
     {
-        #region 字段和属性
+        #region MyRegion
         protected readonly TRepository repository;
-        protected readonly TCategoryRepository categoryRepository;
-        protected readonly TManager manager;
-        protected readonly IEmployeeAppService employeeAppService;
-        protected readonly IRepository<CategoryEntity, long> clsRepository;
-        protected readonly CategoryManager clsManager;
+        protected readonly Lazy<TCategoryRepository> categoryRepository;
+        protected readonly Lazy<TManager> manager;
+        protected readonly Lazy<IRepository<CategoryEntity, long>> clsRepository;
+        protected readonly Lazy<CategoryManager> clsManager;
         protected readonly string workOrderType;
-        protected readonly AttachmentManager<TEntity> attachmentManager;
-        #region 权限名称
-        /// <summary>
-        /// 工单管理-新增权限名称
-        /// </summary>
-        protected readonly string createPermissionName;
-        /// <summary>
-        /// 工单管理-修改权限名称
-        /// </summary>
-        protected readonly string updatePermissionName;
-        /// <summary>
-        /// 工单管理-删除权限名称
-        /// </summary>
-        protected readonly string deletePermissionName;
-        /// <summary>
-        /// 工单管理-获取权限名称
-        /// </summary>
-        protected readonly string getPermissionName;
-        /// <summary>
-        /// 工单管理-待确认权限名称
-        /// </summary>
-        protected readonly string toBeConfirmedPermissionName;
-        /// <summary>
-        /// 工单管理-确认权限名称
-        /// </summary>
-        protected readonly string confirmePermissionName;
-        /// <summary>
-        /// 工单管理-分配权限名称
-        /// </summary>
-        protected readonly string allocatePermissionName;
-        /// <summary>
-        /// 工单管理-执行权限名称
-        /// </summary>
-        protected readonly string executePermissionName;
-        /// <summary>
-        /// 工单管理-完成权限名称
-        /// </summary>
-        protected readonly string completionPermissionName;
-        /// <summary>
-        /// 工单管理-拒绝权限名称
-        /// </summary>
-        protected readonly string rejectPermissionName;
+        protected readonly Lazy<AttachmentManager<TEntity>> attachmentManager;
+        protected readonly string createPermissionName, updatePermissionName, deletePermissionName, getPermissionName, toBeConfirmedPermissionName, confirmePermissionName, allocatePermissionName, executePermissionName, completionPermissionName, rejectPermissionName;
         #endregion
 
-        #endregion
-
-        #region 构造函数
+        #region MyRegion
         /// <summary>
         /// 工单后台管理应用服务基类构造函数
         /// </summary>
         /// <param name="repository">工单仓储</param>
         /// <param name="manager">工单领域服务</param>
         /// <param name="categoryRepository">工单类别仓储</param>
-        /// <param name="employeeAppService">员工服务</param>
         /// <param name="clsRepository">工单类别仓储</param>
         /// <param name="clsManager">工单类领域服务</param>
         /// <param name="workOrderType">工单类型</param>
@@ -155,12 +118,11 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <param name="completionPermissionName">完成权限名称</param>
         /// <param name="rejectPermissionName">拒绝权限名称</param>
         public WorkOrderAppServiceBase(TRepository repository,
-                                       TManager manager,
-                                       TCategoryRepository categoryRepository,
-                                       AttachmentManager<TEntity> attachmentManager,
-                                       IEmployeeAppService employeeAppService,
-                                       IRepository<CategoryEntity, long> clsRepository,
-                                       CategoryManager clsManager,
+                                       Lazy<TManager> manager,
+                                       Lazy<TCategoryRepository> categoryRepository,
+                                       Lazy<AttachmentManager<TEntity>> attachmentManager,
+                                       Lazy<IRepository<CategoryEntity, long>> clsRepository,
+                                       Lazy<CategoryManager> clsManager,
                                        string workOrderType,
                                        string createPermissionName = default,
                                        string updatePermissionName = default,
@@ -176,7 +138,6 @@ namespace BXJG.WorkOrder.WorkOrder
             this.repository = repository;
             this.manager = manager;
             this.categoryRepository = categoryRepository;
-            this.employeeAppService = employeeAppService;
             this.getPermissionName = getPermissionName;
             this.allocatePermissionName = allocatePermissionName;
             this.executePermissionName = executePermissionName;
@@ -191,27 +152,28 @@ namespace BXJG.WorkOrder.WorkOrder
             this.clsManager = clsManager;
             this.workOrderType = workOrderType;
             this.attachmentManager = attachmentManager;
-            //this.iocResolver = iocResolver;
         }
         #endregion
 
+        #region MyRegion
         /// <summary>
-        /// 新增工单
+        /// 新增
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
         public virtual async Task<TEntityDto> CreateAsync(TCreateInput input)
         {
             await CheckCreatePermissionAsync();
-            var entity = await manager.CreateAsync(await CreateInputToCreateDto(input));
+            var entity = await manager.Value.CreateAsync(await CreateInputToCreateDto(input));
             await BeforeCreateAsync(entity, input);
             await CurrentUnitOfWork.SaveChangesAsync();
+            var cls = await clsRepository.Value.GetAsync(entity.CategoryId);
             TEntityDto r = default;
-            await attachmentManager.SetAttachmentsAsync(entity.Id, input.Images, async c => r = await EntityToDto(entity));
+            await attachmentManager.Value.SetAttachmentsAsync(entity.Id, input.Images, async c => r = await EntityToDto(new TQueryTemp { Order = entity, Category = cls }));
             return r;
         }
         /// <summary>
-        /// 修改工单
+        /// 修改
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
@@ -221,16 +183,16 @@ namespace BXJG.WorkOrder.WorkOrder
             var entity = await repository.GetAsync(input.Id);
             await BeforeEditAsync(entity, input);
             await CurrentUnitOfWork.SaveChangesAsync();
+            var cls = await clsRepository.Value.GetAsync(entity.CategoryId);
             TEntityDto r = default;
-            await attachmentManager.SetAttachmentsAsync(entity.Id, input.Images, async c => r = await EntityToDto(entity));
+            await attachmentManager.Value.SetAttachmentsAsync(entity.Id, input.Images, async c => r = await EntityToDto(new TQueryTemp { Order = entity, Category = cls }));
             return r;
         }
         /// <summary>
-        /// 删除工单
+        /// 删除
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        //[UnitOfWork(false)]
         public virtual async Task<TBatchDeleteOutput> DeleteAsync(TBatchDeleteInput input)
         {
             await CheckDeletePermissionAsync();
@@ -241,9 +203,9 @@ namespace BXJG.WorkOrder.WorkOrder
             {
                 try
                 {
-                    await manager.DeleteAsync(item);
+                    await manager.Value.DeleteAsync(item);
                     await CurrentUnitOfWork.SaveChangesAsync();
-                    await attachmentManager.SetAttachmentsAsync(item.Id, null);
+                    await attachmentManager.Value.SetAttachmentsAsync(item.Id, null);
                     r.Ids.Add(item.Id);
                 }
                 catch (UserFriendlyException ex)
@@ -253,7 +215,7 @@ namespace BXJG.WorkOrder.WorkOrder
                 catch (Exception ex)
                 {
                     r.ErrorMessage.Add(item.Id.Message500());
-                    Logger.Warn(L("删除工单失败！"), ex);
+                    Logger.Warn("删除工单失败！".BXJGWorkOrderL(), ex);
                 }
             }
             return r;
@@ -271,52 +233,8 @@ namespace BXJG.WorkOrder.WorkOrder
             var entity = await AsyncQueryableExecuter.FirstOrDefaultAsync(q);
             return await EntityToDto(entity);
         }
-        protected virtual async ValueTask<IQueryable<TEntity>> GetFilterAsync(TGetInput input)
-        {
-            var q = repository.GetAll();
-            q = await GetAndAllFilterAsync(q);
-            q = q.Where(c => c.Id == input.Id);
-            return q;
-        }
-        protected virtual ValueTask<IQueryable<TEntity>> GetAndAllFilterAsync(IQueryable<TEntity> q)
-        {
-            return ValueTask.FromResult(q);
-        }
         /// <summary>
-        /// 获取指定所有工单的条件
-        /// </summary>
-        /// <returns></returns>
-        protected virtual async Task<IQueryable<TEntity>> GetAllFilterAsync(TGetAllInput input)
-        {
-            var query = from c in repository.GetAll().AsNoTrackingWithIdentityResolution()
-                        join lb in categoryRepository.GetAll() on c.CategoryId equals lb.Id into g
-                        from kk in g.DefaultIfEmpty()
-                        where (input.CategoryCode.IsNullOrWhiteSpace() || kk.Code.StartsWith(input.CategoryCode))
-                        select c;
-
-            if (!input.Keyword.IsNullOrWhiteSpace())
-            {
-                var empIdsQuery = await employeeAppService.GetIdsByKeywordAsync(input.Keyword);
-                query = query.Where(c => empIdsQuery.Contains(c.EmployeeId) || c.Title.Contains(input.Keyword));
-            }
-            query = query.WhereIf(input.UrgencyDegree.HasValue, c => c.UrgencyDegree == input.UrgencyDegree)
-                         .WhereIf(input.Status.HasValue, c => c.Status == input.Status)
-                         .WhereIf(!input.EmployeeId.IsNullOrWhiteSpace(), c => c.EmployeeId == input.EmployeeId)
-                         .WhereIf(input.EstimatedExecutionTimeStart.HasValue, c => c.EstimatedExecutionTime >= input.EstimatedExecutionTimeStart)
-                         .WhereIf(input.EstimatedExecutionTimeEnd.HasValue, c => c.EstimatedExecutionTime < input.EstimatedExecutionTimeEnd)
-                         .WhereIf(input.EstimatedCompletionTimeStart.HasValue, c => c.EstimatedCompletionTime >= input.EstimatedCompletionTimeStart)
-                         .WhereIf(input.EstimatedCompletionTimeEnd.HasValue, c => c.EstimatedCompletionTime < input.EstimatedCompletionTimeEnd)
-                         .WhereIf(input.ExecutionTimeStart.HasValue, c => c.ExecutionTime >= input.ExecutionTimeStart)
-                         .WhereIf(input.ExecutionTimeEnd.HasValue, c => c.ExecutionTime < input.ExecutionTimeEnd)
-                         .WhereIf(input.CompletionTimeStart.HasValue, c => c.CompletionTime >= input.CompletionTimeStart)
-                         .WhereIf(input.CompletionTimeEnd.HasValue, c => c.CompletionTime < input.CompletionTimeEnd);
-
-            query = await GetAndAllFilterAsync(query);
-
-            return query;
-        }
-        /// <summary>
-        /// 获取列表
+        /// 获取工单列表
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
@@ -337,32 +255,21 @@ namespace BXJG.WorkOrder.WorkOrder
             //var ss2 = await service.GetAllAsync(define, "a", "d");
 
             await CheckGetPermissionAsync();
-            var query = await GetAllFilterAsync(input);
+            var query = await GetAllFilterAsync(input.GetTotalInput);
             var count = await AsyncQueryableExecuter.CountAsync(query);
             query = OrderBy(query, input);
             query = PageBy(query, input);
             var list = await AsyncQueryableExecuter.ToListAsync(query);
 
-            var cIds = list.Select(c => c.CategoryId);
-            var cQuery = categoryRepository.GetAll().Where(c => cIds.Contains(c.Id));
-            var cls = await AsyncQueryableExecuter.ToListAsync(cQuery);
+          
 
-            var empIds = list.Where(c => !c.EmployeeId.IsNullOrWhiteSpace()).Select(c => c.EmployeeId);
-
-            IEnumerable<EmployeeDto> emps = null;
-            if (empIds != null && empIds.Count() > 0)
-            {
-                emps = await employeeAppService.GetByIdsAsync(empIds.ToArray());
-            }
-
-            var images = await attachmentManager.GetFirstAttachmentsAsync(list.Select(c => c.Id.ToString()).ToArray());
-            var images2 = images.ToDictionary(c => c.Key, c => new List<AttachmentEntity> { c.Value });
+            var images = await attachmentManager.Value.GetAttachmentsAsync(list.Select(c => c.Order.Id.ToString()).ToArray());
 
             var state = await GetStateAsync(list);
             var items = new List<TEntityDto>();
             foreach (var item in list)
             {
-                var ttt = EntityToDto(item, cls, emps, images2, state);
+                var ttt = EntityToDto(item, images, state);
                 items.Add(ttt);
             }
             return new PagedResultDto<TEntityDto>(count, items);
@@ -406,7 +313,7 @@ namespace BXJG.WorkOrder.WorkOrder
                 catch (Exception ex)
                 {
                     r.ErrorMessage.Add(item.Id.Message500());
-                    Logger.Warn(L("执行失败！"), ex);
+                    Logger.Warn("执行失败！".BXJGWorkOrderL(), ex);
                 }
             }
             return r;
@@ -454,48 +361,110 @@ namespace BXJG.WorkOrder.WorkOrder
                 catch (Exception ex)
                 {
                     r.ErrorMessage.Add(item.Id.Message500());
-                    Logger.Warn(L("分配工单失败！"), ex);
+                    Logger.Warn("分配工单失败！".BXJGWorkOrderL(), ex);
                 }
             }
             return r;
         }
-        /// <summary>
-        /// GetAll的分页
-        /// </summary>
-        /// <param name="query"></param>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        protected virtual IQueryable<TEntity> PageBy(IQueryable<TEntity> query, TGetAllInput input)
+        #endregion
+
+        #region MyRegion
+        protected virtual async ValueTask<IQueryable<TQueryTemp>> GetFilterAsync(TGetInput input)
+        {
+            var q = GetQuery();
+            q = q.Where(c => c.Order.Id == input.Id);
+            q = await GetAndAllFilterAsync(q);
+            //var str = q.ToQueryString();
+            return q;
+        }
+        protected virtual ValueTask<IQueryable<TQueryTemp>> GetAndAllFilterAsync(IQueryable<TQueryTemp> q)
+        {
+            return ValueTask.FromResult(q);
+        }
+        protected virtual ValueTask<Expression<Func<TQueryTemp, bool>>> ApplyKeyword(string keyword)
+        {
+            Expression<Func<TQueryTemp, bool>> where = c => c.Order.Title.Contains(keyword) || c.Order.Description.Contains(keyword);
+            return ValueTask.FromResult(where);
+        }
+        protected virtual ValueTask<IQueryable<TQueryTemp>> ApplyOther(IQueryable<TQueryTemp> query, TGetTotalInput input)
+        {
+            if (input.CategoryCodes != null)
+            {
+                Expression<Func<TQueryTemp, bool>> where = c => false;
+                foreach (var item in input.CategoryCodes)
+                {
+                    where = where.Or(c => c.Category.Code.StartsWith(item));
+                }
+                query = query.Where(where);
+            }
+            query = query.WhereIf(input.UrgencyDegrees != null, c => input.UrgencyDegrees.Contains(c.Order.UrgencyDegree))
+                         .WhereIf(input.Statuses != null, c => input.Statuses.Contains(c.Order.Status))
+                         .WhereIf(!input.EmployeeId.IsNullOrWhiteSpace(), c => c.Order.EmployeeId == input.EmployeeId)
+                         .WhereIf(input.EstimatedExecutionTimeStart.HasValue, c => c.Order.EstimatedExecutionTime >= input.EstimatedExecutionTimeStart)
+                         .WhereIf(input.EstimatedExecutionTimeEnd.HasValue, c => c.Order.EstimatedExecutionTime < input.EstimatedExecutionTimeEnd)
+                         .WhereIf(input.EstimatedCompletionTimeStart.HasValue, c => c.Order.EstimatedCompletionTime >= input.EstimatedCompletionTimeStart)
+                         .WhereIf(input.EstimatedCompletionTimeEnd.HasValue, c => c.Order.EstimatedCompletionTime < input.EstimatedCompletionTimeEnd)
+                         .WhereIf(input.ExecutionTimeStart.HasValue, c => c.Order.ExecutionTime >= input.ExecutionTimeStart)
+                         .WhereIf(input.ExecutionTimeEnd.HasValue, c => c.Order.ExecutionTime < input.ExecutionTimeEnd)
+                         .WhereIf(input.CompletionTimeStart.HasValue, c => c.Order.CompletionTime >= input.CompletionTimeStart)
+                         .WhereIf(input.CompletionTimeEnd.HasValue, c => c.Order.CompletionTime < input.CompletionTimeEnd);
+            return ValueTask.FromResult(query);
+        }
+        protected virtual IQueryable<TEntity> GetOrderQuery()
+        {
+            return repository.GetAll();
+        }
+        protected virtual IQueryable<CategoryEntity> GetClsQuery()
+        {
+            return categoryRepository.Value.GetAll();
+        }
+        protected virtual IQueryable<TQueryTemp> GetQuery()
+        {
+            var query = from c in GetOrderQuery().AsNoTrackingWithIdentityResolution()
+                        join lb in GetClsQuery().AsNoTrackingWithIdentityResolution() on c.CategoryId equals lb.Id into g
+                        from kk in g.DefaultIfEmpty()
+                        select new TQueryTemp { Order = c, Category = kk };
+            return query;
+        }
+        protected virtual async Task<IQueryable<TQueryTemp>> GetAllFilterAsync(TGetTotalInput input)
+        {
+            var query = GetQuery();
+            //if (input.CategoryCodes != null)
+            //{
+            //    //Expression<Func<TQueryTemp, bool>> where = c => false;
+            //    //foreach (var item in input.CategoryCodes)
+            //    //{
+            //    //    where = where.Or(c => c.Category.Code.StartsWith(item));
+            //    //}
+            //    query = query.Where(await ApplyCls(input.CategoryCodes));
+            //}
+            //var query = query1.Select(c => c.Order);
+
+
+            //var empIdsQuery = await GetEmployeeIdsAsync(input);
+            //if (empIdsQuery != null && empIdsQuery.Count() > 0)
+            //    query = query.Where(c => empIdsQuery.Contains(c.Order.EmployeeId));
+
+
+            query = await ApplyOther(query, input);
+
+            query = query.WhereIf(!input.Keyword.IsNullOrWhiteSpace(), await ApplyKeyword(input.Keyword));
+            query = await GetAndAllFilterAsync(query);
+            return query;
+        }
+        protected virtual IQueryable<TQueryTemp> PageBy(IQueryable<TQueryTemp> query, TGetAllInput input)
         {
             return query.PageBy(input);
         }
-        /// <summary>
-        /// GetAll的排序
-        /// </summary>
-        /// <param name="query"></param>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        protected virtual IQueryable<TEntity> OrderBy(IQueryable<TEntity> query, TGetAllInput input)
+        protected virtual IQueryable<TQueryTemp> OrderBy(IQueryable<TQueryTemp> query, TGetAllInput input)
         {
             return query.OrderBy(input.Sorting);
         }
-        /// <summary>
-        /// 实体映射到dto
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="categories"></param>
-        /// <param name="employees"></param>
-        /// <param name="images"></param>
-        /// <param name="state">子类可能需要聚合更多外键</param>
-        /// <returns></returns>
-        protected virtual TEntityDto EntityToDto(TEntity entity, IEnumerable<CategoryEntity> categories, IEnumerable<EmployeeDto> employees, IDictionary<string, List<AttachmentEntity>> images, object state = null)
+        protected virtual TEntityDto EntityToDto(TQueryTemp entity, IDictionary<string, List<AttachmentEntity>> images, object state = null)
         {
-            var dto = base.ObjectMapper.Map<TEntityDto>(entity);
+            var dto = base.ObjectMapper.Map<TEntityDto>(entity.Order);
             //dto.CategoryId = entity.CategoryId;
-            if (categories != null)
-            {
-                dto.CategoryDisplayName = categories.SingleOrDefault(c => c.Id == entity.CategoryId)?.DisplayName;
-            }
+            dto.CategoryDisplayName = entity.Category?.DisplayName;
             //dto.CompletionTime = entity.CompletionTime;
             //dto.CreationTime = entity.CreationTime;
             //dto.CreatorUserId = entity.CreatorUserId;
@@ -503,12 +472,12 @@ namespace BXJG.WorkOrder.WorkOrder
             //dto.DeletionTime = entity.DeletionTime;
             //dto.Description = entity.Description;
             //dto.EmployeeId = entity.EmployeeId;
-            if (employees != null)
-            {
-                var emp = employees.SingleOrDefault(c => c.Id == entity.EmployeeId);
-                dto.EmployeeName = emp?.Name;
-                dto.EmployeePhone = emp?.Phone;
-            }
+            //if (employees != null)
+            //{
+            //    var emp = employees.SingleOrDefault(c => c.Id == entity.EmployeeId);
+            //    dto.EmployeeName = emp?.Name;
+            //    dto.EmployeePhone = emp?.Phone;
+            //}
             //dto.EstimatedCompletionTime = entity.EstimatedCompletionTime;
             //dto.EstimatedExecutionTime = entity.EstimatedExecutionTime;
             //dto.ExecutionTime = entity.ExecutionTime;
@@ -522,33 +491,23 @@ namespace BXJG.WorkOrder.WorkOrder
             //dto.StatusChangedTime = entity.StatusChangedTime;
             //dto.Title = entity.Title;
             //dto.UrgencyDegree = entity.UrgencyDegree;
-            if (images.ContainsKey(entity.Id.ToString()))
-                dto.Images = ObjectMapper.Map<List<AttachmentDto>>(images[entity.Id.ToString()]);
+            if (images.ContainsKey(entity.Order.Id.ToString()))
+                dto.Images = ObjectMapper.Map<List<AttachmentDto>>(images[entity.Order.Id.ToString()]);
             return dto;
         }
-        /// <summary>
-        /// 将单个实体映射为dto
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
-        protected virtual async Task<TEntityDto> EntityToDto(TEntity entity)
+        protected virtual async Task<TEntityDto> EntityToDto(TQueryTemp entity)
         {
-            var category = await categoryRepository.GetAsync(entity.CategoryId);
-            IEnumerable<EmployeeDto> emps = null;
-            if (!entity.EmployeeId.IsNullOrWhiteSpace())
-            {
-                emps = await employeeAppService.GetByIdsAsync(entity.EmployeeId);
-            }
-            var state = await GetStateAsync(new TEntity[] { entity });
-            var images = await attachmentManager.GetAttachmentsAsync(entity.Id.ToString());
+            //var category = await categoryRepository.GetAsync(entity.CategoryId);
+            //IEnumerable<EmployeeDto> emps = null;
+            //if (!entity.EmployeeId.IsNullOrWhiteSpace())
+            //{
+            //    emps = await employeeAppService.GetByIdsAsync(entity.EmployeeId);
+            //}
+            var state = await GetStateAsync(new TQueryTemp[] { entity });
+            var images = await attachmentManager.Value.GetAttachmentsAsync(entity.Order.Id.ToString());
 
-            return EntityToDto(entity, new CategoryEntity[] { category }, emps, images, state);
+            return EntityToDto(entity, images, state);
         }
-        /// <summary>
-        /// 新增时的映射
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
         protected virtual ValueTask<TCreateDto> CreateInputToCreateDto(TCreateInput input)
         {
             var dto = new TCreateDto
@@ -566,12 +525,6 @@ namespace BXJG.WorkOrder.WorkOrder
                 dto.UrgencyDegree = OrderBaseEntity.DefaultUrgencyDegree;
             return ValueTask.FromResult(dto);
         }
-        /// <summary>
-        /// 新增前回调
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="input"></param>
-        /// <returns></returns>
         protected virtual async ValueTask BeforeCreateAsync(TEntity entity, TCreateInput input)
         {
             if (input.Status.HasValue && input.Status > entity.Status)
@@ -591,13 +544,6 @@ namespace BXJG.WorkOrder.WorkOrder
                                   rejected: d => CheckRejectPermissionAsync());
             }
         }
-        /// <summary>
-        /// 新增或更新到数据库前执行此方法<br />
-        /// 默认不做任何操作
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="input"></param>
-        /// <returns></returns>
         protected virtual ValueTask BeforeEditAsync(TEntity entity, TUpdateInput input)
         {
             if (input.CategoryId.HasValue)
@@ -610,16 +556,13 @@ namespace BXJG.WorkOrder.WorkOrder
             entity.ChangeEstimatedTime(input.EstimatedExecutionTime, input.EstimatedCompletionTime);
             return ValueTask.CompletedTask;
         }
-        /// <summary>
-        /// 子类可能需要聚合更多外键
-        /// </summary>
-        /// <param name="entities"></param>
-        /// <returns></returns>
-        protected virtual ValueTask<object> GetStateAsync(IEnumerable<TEntity> entities)
+        protected virtual ValueTask<object> GetStateAsync(IEnumerable<TQueryTemp> entities)
         {
             return ValueTask.FromResult<object>(null);
         }
-        #region 权限判断
+        #endregion
+
+        #region MyRegion
         protected virtual Task CheckCreatePermissionAsync()
         {
             return CheckPermissionAsync(createPermissionName);
@@ -663,106 +606,106 @@ namespace BXJG.WorkOrder.WorkOrder
         #endregion
     }
 
-    /// <summary>
-    /// 后台管理默认工单应用服务接口
-    /// </summary>
-    public class WorkOrderAppService : WorkOrderAppServiceBase<WorkOrderCreateInput,
-                                                               WorkOrderUpdateInput,
-                                                               BatchOperationInputLong,
-                                                               BatchOperationOutputLong,
-                                                               EntityDto<long>,
-                                                               GetAllWorkOrderInput,
-                                                               WorkOrderDto,
-                                                               WorkOrderBatchChangeStatusInputBase,
-                                                               WorkOrderBatchChangeStatusOutputBase,
-                                                               WorkOrderBatchAllocateInputBase,
-                                                               WorkOrderBatchAllocateOutputBase,
-                                                               OrderEntity,
-                                                               IRepository<OrderEntity, long>,
-                                                               WorkOrderCreateDto,
-                                                               OrderManager,
-                                                               IRepository<CategoryEntity, long>>
+    ///// <summary>
+    ///// 后台管理默认工单应用服务接口
+    ///// </summary>
+    //public class WorkOrderAppService : WorkOrderAppServiceBase<WorkOrderCreateInput,
+    //                                                           WorkOrderUpdateInput,
+    //                                                           BatchOperationInputLong,
+    //                                                           BatchOperationOutputLong,
+    //                                                           EntityDto<long>,
+    //                                                           GetAllWorkOrderInput,
+    //                                                           WorkOrderDto,
+    //                                                           BatchChangeStatusInputBase,
+    //                                                           WorkOrderBatchChangeStatusOutputBase,
+    //                                                           BatchAllocateInputBase,
+    //                                                           WorkOrderBatchAllocateOutputBase,
+    //                                                           OrderEntity,
+    //                                                           IRepository<OrderEntity, long>,
+    //                                                           WorkOrderCreateDto,
+    //                                                           OrderManager,
+    //                                                           IRepository<CategoryEntity, long>>
 
-    {
-        public WorkOrderAppService(IRepository<OrderEntity, long> repository,
-                                   OrderManager manager,
-                                   BXJGWorkOrderConfig cfg,
-                                   IRepository<CategoryEntity, long> clsRepository,
-                                   CategoryManager clsManager,
-                                   IRepository<CategoryEntity, long> categoryRepository,
-                                   AttachmentManager<OrderEntity> attachmentManager,
-                                   IEmployeeAppService employeeAppService) : base(repository,
-                                                                                  manager,
-                                                                                  categoryRepository,
-                                                                                  attachmentManager,
-                                                                                  employeeAppService,
-                                                                                  clsRepository,
-                                                                                  clsManager,
-                                                                                  CoreConsts.DefaultWorkOrderTypeName,
-                                                                                  CoreConsts.WorkOrderCreate,
-                                                                                  CoreConsts.WorkOrderUpdate,
-                                                                                  CoreConsts.WorkOrderDelete,
-                                                                                  CoreConsts.WorkOrderManager,
-                                                                                  CoreConsts.WorkOrderConfirme,
-                                                                                  CoreConsts.WorkOrderAllocate,
-                                                                                  CoreConsts.WorkOrderExecute,
-                                                                                  CoreConsts.WorkOrderCompletion,
-                                                                                  CoreConsts.WorkOrderReject)
-        {
-            if (!cfg.EnableDefaultWorkOrder)
-                throw new ApplicationException("BXJGWorkOrderConfig.EnableDefaultWorkOrder=false");
-        }
+    //{
+    //    public WorkOrderAppService(IRepository<OrderEntity, long> repository,
+    //                               OrderManager manager,
+    //                               BXJGWorkOrderConfig cfg,
+    //                               IRepository<CategoryEntity, long> clsRepository,
+    //                               CategoryManager clsManager,
+    //                               IRepository<CategoryEntity, long> categoryRepository,
+    //                               AttachmentManager<OrderEntity> attachmentManager,
+    //                               IEmployeeAppService employeeAppService) : base(repository,
+    //                                                                              manager,
+    //                                                                              categoryRepository,
+    //                                                                              attachmentManager,
+    //                                                                              employeeAppService,
+    //                                                                              clsRepository,
+    //                                                                              clsManager,
+    //                                                                              CoreConsts.DefaultWorkOrderTypeName,
+    //                                                                              CoreConsts.WorkOrderCreate,
+    //                                                                              CoreConsts.WorkOrderUpdate,
+    //                                                                              CoreConsts.WorkOrderDelete,
+    //                                                                              CoreConsts.WorkOrderManager,
+    //                                                                              CoreConsts.WorkOrderConfirme,
+    //                                                                              CoreConsts.WorkOrderAllocate,
+    //                                                                              CoreConsts.WorkOrderExecute,
+    //                                                                              CoreConsts.WorkOrderCompletion,
+    //                                                                              CoreConsts.WorkOrderReject)
+    //    {
+    //        if (!cfg.EnableDefaultWorkOrder)
+    //            throw new ApplicationException("BXJGWorkOrderConfig.EnableDefaultWorkOrder=false");
+    //    }
 
 
-        protected override async ValueTask BeforeCreateAsync(OrderEntity entity, WorkOrderCreateInput input)
-        {
-            await base.BeforeCreateAsync(entity, input);
+    //    protected override async ValueTask BeforeCreateAsync(OrderEntity entity, WorkOrderCreateInput input)
+    //    {
+    //        await base.BeforeCreateAsync(entity, input);
 
-            entity.ExtendedField1 = input.ExtendedField1;
-            entity.ExtendedField2 = input.ExtendedField2;
-            entity.ExtendedField3 = input.ExtendedField3;
-            entity.ExtendedField4 = input.ExtendedField4;
-            entity.ExtendedField5 = input.ExtendedField5;
-            if (input.ExtensionData != null)
-            {
-                foreach (var item in input.ExtensionData)
-                {
-                    entity.SetData(item.Key, item.Value);
-                }
-            }
-        }
+    //        entity.ExtendedField1 = input.ExtendedField1;
+    //        entity.ExtendedField2 = input.ExtendedField2;
+    //        entity.ExtendedField3 = input.ExtendedField3;
+    //        entity.ExtendedField4 = input.ExtendedField4;
+    //        entity.ExtendedField5 = input.ExtendedField5;
+    //        if (input.ExtensionData != null)
+    //        {
+    //            foreach (var item in input.ExtensionData)
+    //            {
+    //                entity.SetData(item.Key, item.Value);
+    //            }
+    //        }
+    //    }
 
-        protected override async ValueTask BeforeEditAsync(OrderEntity entity, WorkOrderUpdateInput input)
-        {
-            await base.BeforeEditAsync(entity, input);
-            entity.ExtendedField1 = input.ExtendedField1;
-            entity.ExtendedField2 = input.ExtendedField2;
-            entity.ExtendedField3 = input.ExtendedField3;
-            entity.ExtendedField4 = input.ExtendedField4;
-            entity.ExtendedField5 = input.ExtendedField5;
-            if (input.ExtensionData != null)
-            {
-                foreach (var item in input.ExtensionData)
-                {
-                    entity.SetData(item.Key, item.Value);
-                }
-            }
-        }
+    //    protected override async ValueTask BeforeEditAsync(OrderEntity entity, WorkOrderUpdateInput input)
+    //    {
+    //        await base.BeforeEditAsync(entity, input);
+    //        entity.ExtendedField1 = input.ExtendedField1;
+    //        entity.ExtendedField2 = input.ExtendedField2;
+    //        entity.ExtendedField3 = input.ExtendedField3;
+    //        entity.ExtendedField4 = input.ExtendedField4;
+    //        entity.ExtendedField5 = input.ExtendedField5;
+    //        if (input.ExtensionData != null)
+    //        {
+    //            foreach (var item in input.ExtensionData)
+    //            {
+    //                entity.SetData(item.Key, item.Value);
+    //            }
+    //        }
+    //    }
 
-        //使用了映射，省了
-        //protected override WorkOrderDto EntityToDto(OrderEntity entity, IEnumerable<CategoryEntity> categories, IEnumerable<EmployeeDto> employees, IDictionary<object, List<AttachmentEntity>> images, object state = default)
-        //{
-        //    var dto = base.EntityToDto(entity, categories, employees,images, state);
-        //    dto.ExtendedField1 = entity.ExtendedField1;
-        //    dto.ExtendedField2 = entity.ExtendedField2;
-        //    dto.ExtendedField3 = entity.ExtendedField3;
-        //    dto.ExtendedField4 = entity.ExtendedField4;
-        //    dto.ExtendedField5 = entity.ExtendedField5;
-        //    if (!entity.ExtensionData.IsNullOrWhiteSpace())
-        //    {
-        //        dto.ExtensionData = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(entity.ExtensionData);
-        //    }
-        //    return dto;
-        //}
-    }
+    //    //使用了映射，省了
+    //    //protected override WorkOrderDto EntityToDto(OrderEntity entity, IEnumerable<CategoryEntity> categories, IEnumerable<EmployeeDto> employees, IDictionary<object, List<AttachmentEntity>> images, object state = default)
+    //    //{
+    //    //    var dto = base.EntityToDto(entity, categories, employees,images, state);
+    //    //    dto.ExtendedField1 = entity.ExtendedField1;
+    //    //    dto.ExtendedField2 = entity.ExtendedField2;
+    //    //    dto.ExtendedField3 = entity.ExtendedField3;
+    //    //    dto.ExtendedField4 = entity.ExtendedField4;
+    //    //    dto.ExtendedField5 = entity.ExtendedField5;
+    //    //    if (!entity.ExtensionData.IsNullOrWhiteSpace())
+    //    //    {
+    //    //        dto.ExtensionData = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(entity.ExtensionData);
+    //    //    }
+    //    //    return dto;
+    //    //}
+    //}
 }

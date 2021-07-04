@@ -12,6 +12,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Employee\**" />
+    <EmbeddedResource Remove="Employee\**" />
+    <None Remove="Employee\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="WorkOrder\EnumExt.cs" />
   </ItemGroup>
 

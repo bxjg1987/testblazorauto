@@ -8,7 +8,6 @@ using System.Reflection;
 using Abp.Configuration.Startup;
 using Abp.Domain.Repositories;
 using BXJG.WorkOrder.WorkOrderCategory;
-using BXJG.WorkOrder.Employee;
 using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
 

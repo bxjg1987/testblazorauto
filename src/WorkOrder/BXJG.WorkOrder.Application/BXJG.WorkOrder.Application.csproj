@@ -12,6 +12,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="WorkOrder\BatchAllocateOutput.cs" />
+    <Compile Remove="WorkOrder\BatchChangeStatusOutput.cs" />
     <Compile Remove="WorkOrder\IWorkOrderAppService.cs" />
   </ItemGroup>
 

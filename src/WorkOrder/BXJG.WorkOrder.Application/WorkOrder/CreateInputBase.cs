@@ -12,7 +12,7 @@ namespace BXJG.WorkOrder.WorkOrder
     /// <summary>
     /// 后台管理工单新增模型基类
     /// </summary>
-    public abstract class WorkOrderCreateBaseInput : WorkOrderUpdateBaseInput
+    public class CreateInputBase : UpdateInputBase
     {
         /// <summary>
         /// 状态
@@ -34,7 +34,7 @@ namespace BXJG.WorkOrder.WorkOrder
     /// <summary>
     /// 工单后台管理编辑模型基类
     /// </summary>
-    public class WorkOrderCreateInput : WorkOrderCreateBaseInput
+    public class WorkOrderCreateInput : CreateInputBase
     {
         /// <summary>
         /// 扩展字段

@@ -1,8 +1,8 @@
 ﻿using Abp.Application.Services.Dto;
+using BXJG.Common.Dto;
 using BXJG.Utils.File;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,68 +10,90 @@ using System.Threading.Tasks;
 namespace BXJG.WorkOrder.WorkOrder
 {
     /// <summary>
-    /// 工单后台管理更新模型<br />
-    /// 不同工单类型有相应子类
+    /// 后台管理工单列表页使用的显示模型基类
     /// </summary>
-    public abstract class WorkOrderUpdateBaseInput : EntityDto<long>
+    public class DtoBase : FullAuditedEntityDto<long>
     {
+        /// <summary>
+        /// 关联的图片
+        /// </summary>
+        public List<AttachmentDto> Images { get; set; }
+        /// <summary>
+        /// 封面图片
+        /// </summary>
+        //[Newtonsoft.Json.JsonIgnore]
+        public AttachmentDto ImageCover => Images?.FirstOrDefault();
         /// <summary>
         /// 所属分类id
         /// </summary>
-        public long? CategoryId { get; set; }
+        public long CategoryId { get; set; }
+        /// <summary>
+        /// 所属分类名称
+        /// </summary>
+        public string CategoryDisplayName { get; set; }
+        /// <summary>
+        /// 状态
+        /// </summary>
+        public Status Status { get; set; }
+        /// <summary>
+        /// 状态名称
+        /// </summary>
+        public string StatusDisplayName => Status.BXJGWorkOrderEnum();
         /// <summary>
         /// 紧急程度
         /// </summary>
-        public UrgencyDegree? UrgencyDegree { get; set; }
+        public UrgencyDegree UrgencyDegree { get; set; }
+        /// <summary>
+        /// 紧急程度名称
+        /// </summary>
+        public string UrgencyDegreeDisplayName => UrgencyDegree.BXJGWorkOrderEnum();
         /// <summary>
         /// 标题
         /// </summary>
-        [Required]
-        [StringLength(CoreConsts.OrderTitleMaxLength)]
         public string Title { get; set; }
-        /// <summary>
-        /// 关联的图片，第一张图片将作为封面
-        /// </summary>
-        public List<AttachmentEditDto> Images { get; set; }
         /// <summary>
         /// 内容描述
         /// </summary>
-        [StringLength(CoreConsts.OrderDescriptionMaxLength)]
         public string Description { get; set; }
         /// <summary>
         /// 当前状态情况说明
         /// </summary>
-        [StringLength(CoreConsts.OrderStatusChangedDescriptionMaxLength)]
         public string StatusChangedDescription { get; set; }
         /// <summary>
-        /// 预计开始时间
+        /// 变成当前状态的时间
+        /// </summary>
+        public DateTimeOffset StatusChangedTime { get; set; }
+        /// <summary>
+        /// 希望的开始时间
         /// </summary>
         public DateTimeOffset? EstimatedExecutionTime { get; set; }
         /// <summary>
-        /// 预计结束时间
+        /// 希望的结束时间
         /// </summary>
         public DateTimeOffset? EstimatedCompletionTime { get; set; }
+        /// <summary>
+        /// 实际的执行时间
+        /// </summary>
+        public DateTimeOffset? ExecutionTime { get; set; }
+        /// <summary>
+        /// 实际的结束时间
+        /// </summary>
+        public DateTimeOffset? CompletionTime { get; set; }
         /// <summary>
         /// 员工id
         /// </summary>
         public string EmployeeId { get; set; }
+      
     }
-
-
-
     /// <summary>
-    /// 工单后台管理普通工单更新模型
+    /// 后台管理普通工单查询模型
     /// </summary>
-    public class WorkOrderUpdateInput : WorkOrderUpdateBaseInput
+    public class WorkOrderDto : DtoBase, IExtendableDto
     {
-        ///// <summary>
-        ///// 实体Id
-        ///// </summary>
-        //public string EntityId { get; set; }
         /// <summary>
         /// 扩展字段
         /// </summary>
-        public IDictionary<string, object> ExtensionData { get; set; }
+        public Dictionary<string, object> ExtensionData { get; set; }
         /// <summary>
         /// 预留字段1
         /// </summary>
@@ -93,6 +115,4 @@ namespace BXJG.WorkOrder.WorkOrder
         /// </summary>
         public string ExtendedField5 { get; set; }
     }
-
-
 }

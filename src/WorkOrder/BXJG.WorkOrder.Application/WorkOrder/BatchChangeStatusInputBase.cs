@@ -11,7 +11,7 @@ namespace BXJG.WorkOrder.WorkOrder
     /// <summary>
     /// 后台管理批量调整工单状态的输入模型基类
     /// </summary>
-    public class WorkOrderBatchChangeStatusInputBase : BatchOperationInputLong
+    public class BatchChangeStatusInputBase : BatchOperationInputLong
     {
         /// <summary>
         /// 操作时间
