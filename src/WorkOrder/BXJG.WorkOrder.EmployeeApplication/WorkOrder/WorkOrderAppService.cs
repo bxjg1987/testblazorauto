@@ -103,7 +103,6 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         /// <param name="empSession">处理人员session</param>
         /// <param name="manager">工单领域服务</param>
         /// <param name="categoryRepository">工单类别仓储</param>
-        /// <param name="employeeAppService">处理人员服务</param>
         /// <param name="clsManager">工单类领域服务</param>
         /// <param name="workOrderType">工单类型</param>
         /// <param name="attachmentManager">附件管理器</param>
