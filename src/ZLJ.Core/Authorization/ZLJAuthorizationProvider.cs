@@ -27,7 +27,7 @@ namespace ZLJ.Authorization
             admin.AddEquipmentPermission();
             #endregion
             #region 工单
-            admin.AddBXJGWorkOrderAllPermission();
+            //admin.AddBXJGWorkOrderAllPermission();
             #endregion
             #region 商城
             admin.AddBXJGShopPermission();

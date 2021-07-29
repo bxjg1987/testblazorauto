@@ -9,7 +9,6 @@ using BXJG.GeneralTree;
 using BXJG.Shop;
 using BXJG.Shop.Catalogue;
 using BXJG.WorkOrder;
-using BXJG.WorkOrder.Employee;
 using System.Collections.Generic;
 using System.Reflection;
 
@@ -43,7 +42,7 @@ namespace ZLJ
             //IocManager.Register(typeof(IBXJGShopFrontItemAppService), typeof(BXJGShopFrontItemAppService<GeneralTreeEntity>), DependencyLifeStyle.Transient);
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
 
-            IocManager.RegisterBXJGWorkOrderDefaultAdapter<User>();
+            //IocManager.RegisterBXJGWorkOrderDefaultAdapter<User>();
             //IocManager.Register<IEmployeeAppService, WorkOrder.EmployeeAppService>(DependencyLifeStyle.Transient);
             //IocManager.Register<IEmployeeSession, EmployeeSession>(DependencyLifeStyle.Transient);
 
