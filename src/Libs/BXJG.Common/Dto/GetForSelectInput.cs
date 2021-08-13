@@ -25,6 +25,7 @@ namespace BXJG.Common.Dto
 
     /// <summary>
     /// 列表页搜索框、表单页下拉框查询使用的输入模型
+    /// 分页版本参考utils中的GetPageForSelectInput
     /// </summary>
     public class GetForSelectInput
     {
@@ -33,11 +34,10 @@ namespace BXJG.Common.Dto
         /// 
         /// 大于0的都会尝试增加父节点的返回
         /// 若ParentText不为空，则取ParentText的本地化文本后创建一个虚拟节点作为父节点，子节点为查询到的列表
-        /// 1若ParentText为空，则尝试加载Id对应的父节点，若未找到则通过Search创建虚拟节点
-        /// 2若未找到则通过Search创建虚拟节点
-        ///   
-        /// 3若ParentText为空，则尝试加载Id对应的父节点，若未找到则通过Form创建虚拟节点
-        /// 4若未找到则通过Form创建虚拟节点
+        /// 
+        /// 1 搜索框
+        /// 2 表单框
+        /// 
         /// </summary>
         public int ForType { get; set; }
         /// <summary>
