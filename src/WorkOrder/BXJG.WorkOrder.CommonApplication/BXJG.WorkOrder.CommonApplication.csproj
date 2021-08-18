@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <Compile Remove="WorkOrder\EnumExt.cs" />
+    <Compile Remove="WorkOrder\OperationLogDto.cs" />
   </ItemGroup>
 
   <ItemGroup>
