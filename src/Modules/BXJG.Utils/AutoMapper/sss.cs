@@ -9,13 +9,20 @@ using System.Threading.Tasks;
 
 namespace BXJG.Utils.AutoMapper
 {
-    public class sss : IMemberValueResolver<IExtendableObject, IExtendableDto, string, Dictionary<string, object>>
+    public class sss : IMemberValueResolver<IExtendableObject, IExtendableDto, string, object>
     {
-        public Dictionary<string, object> Resolve(IExtendableObject source, IExtendableDto destination, string sourceMember, Dictionary<string, object> destMember, ResolutionContext context)
+        //public Dictionary<string, object> Resolve(IExtendableObject source, IExtendableDto destination, string sourceMember, Dictionary<string, object> destMember, ResolutionContext context)
+        //{
+        //    if (!string.IsNullOrWhiteSpace(source.ExtensionData))
+        //        return Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, object>>(source.ExtensionData);
+        //    return new Dictionary<string, object>();
+        //}
+
+        public dynamic Resolve(IExtendableObject source, IExtendableDto destination, string sourceMember, dynamic destMember, ResolutionContext context)
         {
             if (!string.IsNullOrWhiteSpace(source.ExtensionData))
-                return Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, object>>(source.ExtensionData);
-            return new Dictionary<string, object>();
+                return Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(source.ExtensionData);
+            return new object();
         }
     }
 }

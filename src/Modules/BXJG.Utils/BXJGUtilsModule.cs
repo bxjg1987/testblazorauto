@@ -39,7 +39,7 @@ namespace BXJG.Utils
             {
                 cfg.ForAllMaps((a, b) =>
                 {
-                    if (a.SourceType.GetInterface(typeof(IExtendableObject).FullName) != default && a.DestinationType.GetInterface(typeof(IExtendableDto).FullName) != default)
+                    if (a.SourceType.GetInterface(typeof(IExtendableObject)?.FullName) != default && a.DestinationType.GetInterface(typeof(IExtendableDto)?.FullName) != default)
                     {
                         b.ForMember("ExtensionData", c => c.MapFrom(new sss(), "ExtensionData"));
                     }

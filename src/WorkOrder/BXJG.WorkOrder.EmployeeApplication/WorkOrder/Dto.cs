@@ -96,7 +96,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         /// <summary>
         /// 扩展字段
         /// </summary>
-        public Dictionary<string, object> ExtensionData { get; set; }
+        public dynamic ExtensionData { get; set; }
         /// <summary>
         /// 预留字段1
         /// </summary>

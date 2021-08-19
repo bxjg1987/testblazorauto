@@ -12,80 +12,77 @@ using Abp.Application.Services.Dto;
 using Abp.Linq;
 using Abp.Authorization;
 using System.ComponentModel.DataAnnotations;
+using Abp.Linq.Extensions;
+using AutoMapper;
+using BXJG.Common.Dto;
+using Abp.Authorization.Users;
 
 namespace BXJG.Utils.OperationLog
 {
     /// <summary>
     /// 操作日志dto
     /// </summary>
-    public class Dto
+    public class Dto : IExtendableDto
     {
         /// <summary>
         /// 操作时的浏览器信息
         /// </summary>
-        public virtual string BrowserInfo { get; set; }
+        public virtual string SetBrowserInfo { get; set; }
         /// <summary>
         /// 客户端id
         /// </summary>
-        public virtual string ClientIpAddress { get; set; }
+        public virtual string SetClientIpAddress { get; set; }
         /// <summary>
         /// 客户端名称
         /// </summary>
-        public virtual string ClientName { get; set; }
+        public virtual string SetClientName { get; set; }
         /// <summary>
         /// 操作员id
         /// </summary>
-        public virtual long? UserId { get; set; }
+        public virtual long? SetUserId { get; set; }
         /// <summary>
         /// 操作员姓名
         /// </summary>
         public virtual string UserName { get; set; }
         /// <summary>
-        /// 被操作的实体类型
-        /// </summary>
-        public virtual string EntityTypeFullName { get; set; }
-        /// <summary>
-        /// 被操作的实体的id
-        /// </summary>
-        public virtual string EntityId { get; set; }
-        ///// <summary>
-        ///// 工单处理人
-        ///// </summary>
-        //public string EmployeeId { get; set; }
-        ///// <summary>
-        ///// 处理人姓名
-        ///// </summary>
-        //public string EmployeeName { get; set; }
-        /// <summary>
-        /// 操作时间
-        /// </summary>
-        public virtual DateTimeOffset OperationTime { get; set; }
-        /// <summary>
         /// 原因
         /// </summary>
-        public virtual string Reason { get; set; }
+        public virtual string SetReason { get; set; }
         /// <summary>
         /// 扩展数据
         /// </summary>
         public virtual dynamic ExtensionData { get; set; }
         /// <summary>
+        /// 被操作的实体类型
+        /// </summary>
+        public virtual string EntityEntityTypeFullName { get; set; }
+        /// <summary>
+        /// 被操作的实体的id
+        /// </summary>
+        public virtual string EntityEntityId { get; set; }
+        /// <summary>
+        /// 操作时间
+        /// </summary>
+        public virtual DateTimeOffset EntityChangeTime { get; set; }
+        /// <summary>
         /// 被改过的字段
         /// </summary>
-        public virtual List<FieldDto> Fields { get; set; }
+        public virtual List<PropertyDto> PropertyChanges { get; set; }
     }
+
     /// <summary>
     /// 操作日志字段dto
     /// </summary>
-    public class FieldDto
+    public class PropertyDto
     {
         /// <summary>
         /// 字段名
         /// </summary>
-        public virtual string FileldName { get; set; }
+        public virtual string PropertyName { get; set; }
         /// <summary>
         /// 字段显示名
         /// </summary>
-        public virtual string FieldDisplayName { get; set; }
+        public virtual string PropertyNameDisplayName { get; set; }
         /// <summary>
         /// 修改前的值
         /// </summary>
@@ -95,27 +92,84 @@ namespace BXJG.Utils.OperationLog
         /// </summary>
         public virtual string OriginalValue { get; set; }
     }
+
     public class GetAllInput
     {
+        //[Required]
+        //public string EntityTypeFullName { get; set; }
         [Required]
         public string EntityId { get; set; }
-        public DateTimeOffset StartTime { get; set; }
-        public DateTimeOffset EndTime { get; set; }
+        public DateTimeOffset? StartTime { get; set; }
+        public DateTimeOffset? EndTime { get; set; }
         public string Sorting { get; set; }
     }
 
+    /// <summary>
+    /// 查询时临时用的
+    /// </summary>
+    public class EntitySet
+    {
+        public EntityChange Entity { get; set; }
+        public EntityChangeSet Set { get; set; }
+    }
+
+    public class AutoMapperProfile : Profile
+    {
+        public AutoMapperProfile()
+        {
+            CreateMap<EntitySet, Dto>();
+            CreateMap<EntityPropertyChange, PropertyDto>();
+        }
+    }
+    //public static class AutoMapperExtensions
+    //{
+    //    public static IMappingExpression<TSource, TDestination> ApplyDefault<TSource, TDestination>(this IMappingExpression<TSource, TDestination> config)
+    //        where TSource : EntitySet
+    //        where TDestination : Dto
+    //    {
+    //        //已全局处理扩展属性，参考：BXJGUtilsModule
+    //        //config = config.ForMember(c => c.ExtensionData, opt =>opt.ConvertUsing(c => System.Text.Json.JsonSerializer.Deserialize<dynamic>(c.Set.ExtensionData)));
+
+
+    //        //return config.ForMember(c => c.Text, opt => opt.MapFrom(c => c.DisplayName));
+
+    //        //return config.ForMember(c => c.Text, opt => opt.MapFrom(c => c.DisplayName))
+    //        //        .ForMember(c => c.IconCls, opt => opt.Ignore())
+    //        //        .ForMember(c => c.Checked, opt => opt.Ignore());
+    //        //.ForMember(c => c.State, opt => opt.Ignore())
+    //        //.ForMember(c => c.ExtData, opt => opt.Ignore())
+
+    //        return config;
+    //    }
+    //}
+
     //目前只是站在实体的角度
     //可以类似的设计站在操作员的角度
-    public class OperationLogAppService : ApplicationService
+
+    public class OperationLogAppService<TDto, TFieldDto, TGetAllInput, TUser, TEntitySet> : ApplicationService
+        where TDto : Dto
+        where TFieldDto : PropertyDto
+        where TGetAllInput : GetAllInput
+        where TUser : AbpUserBase
+        where TEntitySet : EntitySet
     {
+        protected readonly IRepository<EntityChange, long> entityRepository;
+        protected readonly IRepository<EntityChangeSet, long> setRepository;
+        protected readonly IRepository<TUser, long> userRepository;
+
         protected IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; } = NullAsyncQueryableExecuter.Instance;
-        protected readonly IRepository<EntityChange, long> repository;
 
         protected string permissionName;
 
-        public OperationLogAppService(IRepository<EntityChange, long> repository, string permissionName = default)
+        public OperationLogAppService(IRepository<EntityChange, long> repository,
+                                      IRepository<EntityChangeSet, long> setRepository,
+                                      IRepository<TUser, long> userRepository,
+                                      string permissionName = default)
         {
-            this.repository = repository;
+            this.entityRepository = repository;
+            this.setRepository = setRepository;
+            this.userRepository = userRepository;
+            this.permissionName = permissionName;
         }
 
         /// <summary>
@@ -123,27 +177,27 @@ namespace BXJG.Utils.OperationLog
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<long> GetTotalAsync(GetAllInput input)
+        public async Task<long> GetTotalAsync(TGetAllInput input)
         {
             await CheckPermissionAsync();
             var query = await CreateFilterAsync(input);
             return await AsyncQueryableExecuter.CountAsync(query);
         }
 
-        public async Task<PagedResultDto<Dto>> GetAllAsync(GetAllInput input)
+        public async Task<PagedResultDto<TDto>> GetAllAsync(TGetAllInput input)
         {
             await CheckPermissionAsync();
-
             var query = await CreateFilterAsync(input);
             var totle = await AsyncQueryableExecuter.CountAsync(query);
             query = this.Sort(query, input);
             var list = await AsyncQueryableExecuter.ToListAsync(query);
-            var dots = new List<Dto>();
+            await BeforeMapAsync(list);
+            var dots = new List<TDto>();
             foreach (var item in list)
             {
                 dots.Add(await Map2DtoAsync(item));
             }
-            return new PagedResultDto<Dto>(totle, dots);
+            return new PagedResultDto<TDto>(totle, dots);
         }
 
         protected virtual async ValueTask CheckPermissionAsync()
@@ -152,29 +206,69 @@ namespace BXJG.Utils.OperationLog
                 await PermissionChecker.AuthorizeAsync(permissionName);
         }
 
-        protected virtual ValueTask<IQueryable<EntityChange>> CreateFilterAsync(GetAllInput input)
+        protected virtual ValueTask<IQueryable<EntitySet>> CreateFilterAsync(TGetAllInput input)
         {
-            return ValueTask.FromResult(repository.GetAll());
+            var query = from c in entityRepository.GetAllIncluding(c => c.PropertyChanges)
+                        join d in setRepository.GetAll() on c.EntityChangeSetId equals d.Id into temp
+                        from e in temp.DefaultIfEmpty()
+                        select new EntitySet
+                        {
+                            Entity = c,
+                            Set = e
+                        };
+
+            query = query.Where(c => c.Entity.EntityId == input.EntityId)
+                         .WhereIf(input.StartTime.HasValue, c => c.Entity.ChangeTime > input.StartTime)
+                         .WhereIf(input.EndTime.HasValue, c => c.Entity.ChangeTime <= input.EndTime);
+
+            return ValueTask.FromResult(query);
         }
 
-        protected virtual IOrderedQueryable<EntityChange> Sort(IQueryable<EntityChange> query, GetAllInput input)
+        protected virtual IOrderedQueryable<EntitySet> Sort(IQueryable<EntitySet> query, TGetAllInput input)
         {
-            IOrderedQueryable<EntityChange> q;
+            IOrderedQueryable<EntitySet> q;
             if (!input.Sorting.IsNullOrWhiteSpace())
                 q = query.OrderBy(input.Sorting);
             else
-                q = query.OrderByDescending(c => c.ChangeTime);
+                q = query.OrderByDescending(c => c.Entity.ChangeTime);
             return q;
         }
 
-        protected virtual ValueTask MapBeforeAsync(IList<EntityChange> entityChanges)
+        protected virtual async Task BeforeMapAsync(IList<EntitySet> entityChanges)
         {
-            return ValueTask.CompletedTask;
+            var userIds = entityChanges.Select(c => c.Set.UserId);
+
+            var users = await AsyncQueryableExecuter.ToListAsync(userRepository.GetAll()
+                                                                               .Where(c => userIds.Contains(c.Id))
+                                                                               .Select(c => new NameValueDto { Name = c.Id.ToString(), Value = c.Name }));
+
+            base.CurrentUnitOfWork.Items["users"] = users;
         }
 
-        protected virtual ValueTask<Dto> Map2DtoAsync(EntityChange entityChange)
+        protected virtual ValueTask<TDto> Map2DtoAsync(EntitySet entityChange)
         {
-            return ValueTask.FromResult(base.ObjectMapper.Map<Dto>(entityChange));
+            var r = base.ObjectMapper.Map<TDto>(entityChange);
+            var users = CurrentUnitOfWork.Items["users"] as List<NameValueDto>;
+            r.UserName = users.SingleOrDefault(c => c.Name == r.SetUserId.ToString())?.Value;
+            return ValueTask.FromResult(r);
+        }
+    }
+
+    public class OperationLogAppService<TUser> : OperationLogAppService<Dto,
+                                                                        PropertyDto,
+                                                                        GetAllInput,
+                                                                        TUser,
+                                                                        EntitySet>
+        where TUser : AbpUserBase
+    {
+        public OperationLogAppService(IRepository<EntityChange, long> repository,
+                                      IRepository<EntityChangeSet, long> setRepository,
+                                      IRepository<TUser, long> userRepository,
+                                      string permissionName = null) : base(repository,
+                                                                           setRepository,
+                                                                           userRepository,
+                                                                           permissionName)
+        {
         }
     }
 }

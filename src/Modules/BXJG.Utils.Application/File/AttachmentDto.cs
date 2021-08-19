@@ -36,6 +36,6 @@ namespace BXJG.Utils.File
         /// <summary>
         /// 扩展属性
         /// </summary>
-        public Dictionary<string,object> ExtensionData { get; set; }
+        public dynamic ExtensionData { get; set; }
     }
 }

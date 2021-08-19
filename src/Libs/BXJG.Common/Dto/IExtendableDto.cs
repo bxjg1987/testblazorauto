@@ -8,6 +8,6 @@ namespace BXJG.Common.Dto
 {
     public interface IExtendableDto
     {
-        public Dictionary<string,object> ExtensionData { get; set; }
+        public dynamic ExtensionData { get; set; }
     }
 }
