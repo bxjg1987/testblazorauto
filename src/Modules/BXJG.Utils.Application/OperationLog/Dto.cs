@@ -22,7 +22,7 @@ namespace BXJG.Utils.OperationLog
     /// <summary>
     /// 操作日志dto
     /// </summary>
-    public class Dto : IExtendableDto
+    public class Dto<TPropertyDto> : IExtendableDto
     {
         /// <summary>
         /// 操作时的浏览器信息
@@ -67,7 +67,7 @@ namespace BXJG.Utils.OperationLog
         /// <summary>
         /// 被改过的字段
         /// </summary>
-        public virtual List<PropertyDto> PropertyChanges { get; set; }
+        public virtual List<TPropertyDto> EntityPropertyChanges { get; set; }
     }
 
     /// <summary>
@@ -82,7 +82,11 @@ namespace BXJG.Utils.OperationLog
         /// <summary>
         /// 字段显示名
         /// </summary>
-        public virtual string PropertyNameDisplayName { get; set; }
+        public virtual string PropertyDisplayName { get; set; }
+        /// <summary>
+        /// 字段类型名
+        /// </summary>
+        public virtual string PropertyTypeFullName { get; set; }
         /// <summary>
         /// 修改前的值
         /// </summary>
@@ -100,6 +104,7 @@ namespace BXJG.Utils.OperationLog
         /// </summary>
         public virtual string OriginalValueDisplayName { get; set; }
     }
+
     /// <summary>
     /// 获取操作日志时的输入模型
     /// </summary>
@@ -139,10 +144,11 @@ namespace BXJG.Utils.OperationLog
     {
         public AutoMapperProfile()
         {
-            CreateMap<EntitySet, Dto>();
+            CreateMap(typeof(EntitySet), typeof(Dto<>));
             CreateMap<EntityPropertyChange, PropertyDto>();
         }
     }
+
     //public static class AutoMapperExtensions
     //{
     //    public static IMappingExpression<TSource, TDestination> ApplyDefault<TSource, TDestination>(this IMappingExpression<TSource, TDestination> config)
@@ -168,9 +174,12 @@ namespace BXJG.Utils.OperationLog
     //目前只是站在实体的角度
     //可以类似的设计站在操作员的角度
 
-    public class OperationLogAppService<TDto, TFieldDto, TGetAllInput, TUser, TEntitySet> : ApplicationService
-        where TDto : Dto
-        where TFieldDto : PropertyDto
+    //为什么用TDto, TPropertyDto, TGetAllInput， TEntitySet这些泛型，而不是写死？
+    //希望实现方有机会定义自己的子类dto，它们可能在应用层组合更多属性
+
+    public class OperationLogAppService<TDto, TPropertyDto, TGetAllInput, TUser, TEntitySet> : ApplicationService
+        where TDto : Dto<TPropertyDto>
+        where TPropertyDto : PropertyDto
         where TGetAllInput : GetAllInput
         where TUser : AbpUserBase
         where TEntitySet : EntitySet
@@ -273,17 +282,33 @@ namespace BXJG.Utils.OperationLog
             var users = CurrentUnitOfWork.Items["users"] as List<NameValueDto>;
             r.UserName = users.SingleOrDefault(c => c.Name == r.SetUserId.ToString())?.Value;
             //数量少，使用Parallel.For反而性能更低
-            foreach (var item in r.PropertyChanges)
+            foreach (var item in r.EntityPropertyChanges)
             {
-                await ForEachPropertiesAsync(item);
+                await ForEachPropertiesAsync(r, item);
             }
             return r;
         }
 
-        protected virtual ValueTask ForEachPropertiesAsync(PropertyDto property)
+        protected virtual ValueTask ForEachPropertiesAsync(TDto dto, TPropertyDto property)
         {
-            property.PropertyNameDisplayName = base.L(property.PropertyName);
+            property.PropertyDisplayName = base.L(dto.EntityEntityTypeFullName + "." + property.PropertyName);
             return ValueTask.CompletedTask;
+        }
+    }
+
+    public class OperationLogAppService<TUser> : OperationLogAppService<Dto<PropertyDto>,
+                                                                        PropertyDto,
+                                                                        GetAllInput,
+                                                                        TUser,
+                                                                        EntitySet> where TUser : AbpUserBase
+    {
+        public OperationLogAppService(IRepository<EntityChange, long> repository,
+                                      IRepository<EntityChangeSet, long> setRepository,
+                                      IRepository<TUser, long> userRepository, string permissionName = null) : base(repository,
+                                                                                                                    setRepository,
+                                                                                                                    userRepository,
+                                                                                                                    permissionName)
+        {
         }
     }
 
