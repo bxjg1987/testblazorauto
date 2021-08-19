@@ -88,19 +88,41 @@ namespace BXJG.Utils.OperationLog
         /// </summary>
         public virtual string NewValue { get; set; }
         /// <summary>
+        /// 修改前的值
+        /// </summary>
+        public virtual string NewValueDisplayName { get; set; }
+        /// <summary>
         /// 修改后的值
         /// </summary>
         public virtual string OriginalValue { get; set; }
+        /// <summary>
+        /// 修改后的值
+        /// </summary>
+        public virtual string OriginalValueDisplayName { get; set; }
     }
-
+    /// <summary>
+    /// 获取操作日志时的输入模型
+    /// </summary>
     public class GetAllInput
     {
+        /// <summary>
+        /// 实体id
+        /// </summary>
         //[Required]
         //public string EntityTypeFullName { get; set; }
         [Required]
         public string EntityId { get; set; }
+        /// <summary>
+        /// 开始时间
+        /// </summary>
         public DateTimeOffset? StartTime { get; set; }
+        /// <summary>
+        /// 结束时间
+        /// </summary>
         public DateTimeOffset? EndTime { get; set; }
+        /// <summary>
+        /// 排序方式
+        /// </summary>
         public string Sorting { get; set; }
     }
 
@@ -245,30 +267,64 @@ namespace BXJG.Utils.OperationLog
             base.CurrentUnitOfWork.Items["users"] = users;
         }
 
-        protected virtual ValueTask<TDto> Map2DtoAsync(EntitySet entityChange)
+        protected virtual async ValueTask<TDto> Map2DtoAsync(EntitySet entityChange)
         {
             var r = base.ObjectMapper.Map<TDto>(entityChange);
             var users = CurrentUnitOfWork.Items["users"] as List<NameValueDto>;
             r.UserName = users.SingleOrDefault(c => c.Name == r.SetUserId.ToString())?.Value;
-            return ValueTask.FromResult(r);
+            //数量少，使用Parallel.For反而性能更低
+            foreach (var item in r.PropertyChanges)
+            {
+                await ForEachPropertiesAsync(item);
+            }
+            return r;
+        }
+
+        protected virtual ValueTask ForEachPropertiesAsync(PropertyDto property)
+        {
+            property.PropertyNameDisplayName = base.L(property.PropertyName);
+            return ValueTask.CompletedTask;
         }
     }
 
-    public class OperationLogAppService<TUser> : OperationLogAppService<Dto,
-                                                                        PropertyDto,
-                                                                        GetAllInput,
-                                                                        TUser,
-                                                                        EntitySet>
-        where TUser : AbpUserBase
-    {
-        public OperationLogAppService(IRepository<EntityChange, long> repository,
-                                      IRepository<EntityChangeSet, long> setRepository,
-                                      IRepository<TUser, long> userRepository,
-                                      string permissionName = null) : base(repository,
-                                                                           setRepository,
-                                                                           userRepository,
-                                                                           permissionName)
-        {
-        }
-    }
+    #region 通用实现
+    //public class OptLogDefine
+    //{
+    //    public string TypeName { get; set; }
+
+    //    public string EntityFullName { get; set; }
+
+    //    public string PermissionName { get; set; }
+
+    //    public Type HandlerType { get; set; }
+
+    //    public IReadOnlyDictionary<string,string> 
+    //}
+    //public class OptLogDefineManager
+    //{ 
+
+    //}
+    //public class GetAllInput1 : GetAllInput
+    //{
+    //    public string TypeName { get; set; }
+    //}
+
+    //public class OperationLogAppService<TUser> : OperationLogAppService<Dto,
+    //                                                                    PropertyDto,
+    //                                                                    GetAllInput1,
+    //                                                                    TUser,
+    //                                                                    EntitySet>
+    //    where TUser : AbpUserBase
+    //{
+    //    public OperationLogAppService(IRepository<EntityChange, long> repository,
+    //                                  IRepository<EntityChangeSet, long> setRepository,
+    //                                  IRepository<TUser, long> userRepository,
+    //                                  string permissionName = null) : base(repository,
+    //                                                                       setRepository,
+    //                                                                       userRepository,
+    //                                                                       permissionName)
+    //    {
+    //    }
+    //}
+    #endregion
 }
