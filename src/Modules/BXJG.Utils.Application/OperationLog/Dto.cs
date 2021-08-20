@@ -16,6 +16,7 @@ using Abp.Linq.Extensions;
 using AutoMapper;
 using BXJG.Common.Dto;
 using Abp.Authorization.Users;
+using Abp.Domain.Uow;
 
 namespace BXJG.Utils.OperationLog
 {
@@ -177,7 +178,7 @@ namespace BXJG.Utils.OperationLog
     //为什么用TDto, TPropertyDto, TGetAllInput， TEntitySet这些泛型，而不是写死？
     //希望实现方有机会定义自己的子类dto，它们可能在应用层组合更多属性
 
-    public class OperationLogAppService<TDto, TPropertyDto, TGetAllInput, TUser, TEntitySet> : ApplicationService
+    public abstract class OperationLogAppService<TDto, TPropertyDto, TGetAllInput, TUser, TEntitySet> : ApplicationService
         where TDto : Dto<TPropertyDto>
         where TPropertyDto : PropertyDto
         where TGetAllInput : GetAllInput
@@ -208,13 +209,14 @@ namespace BXJG.Utils.OperationLog
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
+        [UnitOfWork(IsDisabled = true)]
         public async Task<long> GetTotalAsync(TGetAllInput input)
         {
             await CheckPermissionAsync();
             var query = await CreateFilterAsync(input);
             return await AsyncQueryableExecuter.CountAsync(query);
         }
-
+        [UnitOfWork(IsDisabled = true)]
         public async Task<PagedResultDto<TDto>> GetAllAsync(TGetAllInput input)
         {
             await CheckPermissionAsync();
