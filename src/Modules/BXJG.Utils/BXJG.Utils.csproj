@@ -13,8 +13,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="AutoMapper\ExtensionDataSS.cs" />
-    <Compile Remove="AutoMapper\IExtendableDto.cs" />
+    <Compile Remove="AutoMapper\**" />
+    <EmbeddedResource Remove="AutoMapper\**" />
+    <None Remove="AutoMapper\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Extensions\CommonExtensions.cs" />
     <Compile Remove="Extensions\DateTimeExt.cs" />
     <Compile Remove="Extensions\dfdfg.cs" />

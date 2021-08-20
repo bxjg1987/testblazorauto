@@ -15,7 +15,6 @@ using Abp.Domain.Entities;
 using System.Collections.Generic;
 using AutoMapper;
 using BXJG.Common.Dto;
-using BXJG.Utils.AutoMapper;
 
 namespace BXJG.Utils
 {
@@ -33,18 +32,6 @@ namespace BXJG.Utils
 
             BXJGUtilsLocalizationConfigurer.Configure(Configuration.Localization);
             Configuration.Settings.Providers.Add<BXJGUtilsFileSettingProvider>();
-            Configuration.Modules.AbpAutoMapper().Configurators.Add(cfg => cfg.AddMaps(Assembly.GetExecutingAssembly()));
-            //统一配置abp扩展属性映射
-            Configuration.Modules.AbpAutoMapper().Configurators.Add(cfg =>
-            {
-                cfg.ForAllMaps((a, b) =>
-                {
-                    if (a.SourceType.GetInterface(typeof(IExtendableObject)?.FullName) != default && a.DestinationType.GetInterface(typeof(IExtendableDto)?.FullName) != default)
-                    {
-                        b.ForMember("ExtensionData", c => c.MapFrom(new sss(), "ExtensionData"));
-                    }
-                });
-            });
         }
 
         public override void Initialize()

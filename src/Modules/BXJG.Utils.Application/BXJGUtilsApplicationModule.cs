@@ -11,6 +11,9 @@ using Abp.Dependency;
 using BXJG.Utils.DynamicProperty;
 using System.Reflection;
 using Abp.AutoMapper;
+using Abp.Domain.Entities;
+using BXJG.Utils.AutoMapper;
+using BXJG.Common.Dto;
 
 namespace BXJG.Utils
 {
@@ -28,6 +31,19 @@ namespace BXJG.Utils
 
             //此行必加
             Configuration.Modules.AbpAutoMapper().Configurators.Add(cfg => cfg.AddMaps(Assembly.GetExecutingAssembly()));
+
+            //Configuration.Modules.AbpAutoMapper().Configurators.Add(cfg => cfg.AddMaps(Assembly.GetExecutingAssembly()));
+            //统一配置abp扩展属性映射
+            //Configuration.Modules.AbpAutoMapper().Configurators.Add(cfg =>
+            //{
+            //    cfg.ForAllMaps((a, b) =>
+            //    {
+            //        if (a.SourceType.GetInterface(typeof(IExtendableObject)?.FullName) != default && a.DestinationType.GetInterface(typeof(IExtendableDto)?.FullName) != default)
+            //        {
+            //            b.ForMember("ExtensionData", c => c.MapFrom(new sss(), "ExtensionData"));
+            //        }
+            //    });
+            //});
 
         }
         public override void Initialize()

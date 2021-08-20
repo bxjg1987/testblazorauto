@@ -1,3 +1,4 @@
+using Abp.Auditing;
 using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
 using Abp.Timing;
@@ -48,6 +49,7 @@ namespace BXJG.WorkOrder.WorkOrder
     /// 抽象的工单实体，它是聚合根，不同类型的工单应该定义相应子类
     /// 参考：https://gitee.com/bxjg1987_admin/abp/wikis/pages?sort_id=3712351&doc_id=627313
     /// </summary>
+    [Audited]
     public abstract class OrderBaseEntity : FullAuditedAggregateRoot<long>, IMustHaveTenant
     {
         public static readonly UrgencyDegree DefaultUrgencyDegree = UrgencyDegree.Normalize;
@@ -142,6 +144,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <summary>
         /// 标题。
         /// </summary>
+        [DisableAuditing]
         public virtual string Title
         {
             get { return titie; }
@@ -157,6 +160,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <summary>
         /// 内容描述
         /// </summary>
+        [DisableAuditing]
         public virtual string Description { get; set; }
 
         ///// <summary>
@@ -183,10 +187,12 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <summary>
         /// 预计开始时间。参考：<see cref="ChangeEstimatedTime"/>
         /// </summary>
+  
         public virtual DateTimeOffset? EstimatedExecutionTime { get; protected set; }
         /// <summary>
         /// 预计结束时间。参考：<see cref="ChangeEstimatedTime"/>
         /// </summary>
+       
         public virtual DateTimeOffset? EstimatedCompletionTime { get; protected set; }
         /// <summary>
         /// 执行时间。参考：<see cref="ChangePracticalTime"/>
@@ -230,6 +236,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <summary>
         /// 状态变更有并发可能，使用乐观并发，偷个懒直接使用行级乐观并发
         /// </summary>
+        [DisableAuditing]
         public byte[] RowVersion { get; set; }
         /// <summary>
         /// 调整状态。将引发<see cref="StatusChangedEventData"/>事件

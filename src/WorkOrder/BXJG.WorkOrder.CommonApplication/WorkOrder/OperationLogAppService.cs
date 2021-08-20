@@ -12,6 +12,8 @@ using System.Text;
 using System.Threading.Tasks;
 using BXJG.Utils.Localization;
 using BXJG.WorkOrder.WorkOrderCategory;
+using Abp.Domain.Uow;
+using Abp.Extensions;
 
 namespace BXJG.WorkOrder.WorkOrder
 {
@@ -52,8 +54,12 @@ namespace BXJG.WorkOrder.WorkOrder
 
         protected override async Task BeforeMapAsync(IList<EntitySet> entityChanges)
         {
-            await base.BeforeMapAsync(entityChanges);
+            var t1 = base.BeforeMapAsync(entityChanges);
 
+            //var t2 = Task.Run(async () =>
+            //{
+            //   using (var scope = base.UnitOfWorkManager.Begin(new UnitOfWorkOptions { IsTransactional = false }))
+            //   {
             var clsIds = new List<string>();
             foreach (var item in entityChanges)
             {
@@ -66,12 +72,38 @@ namespace BXJG.WorkOrder.WorkOrder
                         clsIds.Add(item2.OriginalValue);
                 }
             }
+            Task<List<NameValueDto>> t2 = Task.FromResult(new List<NameValueDto>());
             if (clsIds.Count > 0)
             {
                 var query = clsRepository.GetAll().Where(c => clsIds.Contains(c.Id.ToString())).Select(c => new NameValueDto { Name = c.Id.ToString(), Value = c.DisplayName });
-                var cls = await AsyncQueryableExecuter.ToListAsync(query);
-                CurrentUnitOfWork.Items["cls"] = cls;
+                // await scope.CompleteAsync();
+                t2 = AsyncQueryableExecuter.ToListAsync(query);
+                //CurrentUnitOfWork.Items["cls"] = cls;
             }
+            // await scope.CompleteAsync();
+            //      return null;
+            //  }
+            //});
+            await Task.WhenAll(t1, t2);
+            CurrentUnitOfWork.Items["cls"] = t2.Result;
+            //var clsIds = new List<string>();
+            //foreach (var item in entityChanges)
+            //{
+            //    var ps = item.Entity.PropertyChanges.Where(d => d.PropertyName == clsPropertyName);
+            //    foreach (var item2 in ps)
+            //    {
+            //        if (!clsIds.Contains(item2.NewValue))
+            //            clsIds.Add(item2.NewValue);
+            //        if (!clsIds.Contains(item2.OriginalValue))
+            //            clsIds.Add(item2.OriginalValue);
+            //    }
+            //}
+            //if (clsIds.Count > 0)
+            //{
+            //    var query = clsRepository.GetAll().Where(c => clsIds.Contains(c.Id.ToString())).Select(c => new NameValueDto { Name = c.Id.ToString(), Value = c.DisplayName });
+            //    var cls = await AsyncQueryableExecuter.ToListAsync(query);
+            //    CurrentUnitOfWork.Items["cls"] = cls;
+            //}
         }
         protected override ValueTask ForEachPropertiesAsync(TDto dto, TPropertyDto property)
         {
@@ -79,17 +111,20 @@ namespace BXJG.WorkOrder.WorkOrder
             if (property.PropertyName == clsPropertyName)
             {
                 var cls = CurrentUnitOfWork.Items["cls"] as List<NameValueDto>;
-                property.OriginalValueDisplayName = cls.SingleOrDefault(c => c.Name == property.OriginalValue)?.Value;
+                if (!property.OriginalValue.IsNullOrEmpty())
+                    property.OriginalValueDisplayName = cls.SingleOrDefault(c => c.Name == property.OriginalValue)?.Value;
                 property.NewValueDisplayName = cls.SingleOrDefault(c => c.Name == property.NewValue)?.Value;
             }
             if (property.PropertyName == urgencyDegreePropertyName)
             {
-                property.OriginalValueDisplayName = Enum.Parse<WorkOrder.UrgencyDegree>(property.OriginalValue).BXJGWorkOrderEnum();
+                if (!property.OriginalValue.IsNullOrEmpty())
+                    property.OriginalValueDisplayName = Enum.Parse<WorkOrder.UrgencyDegree>(property.OriginalValue).BXJGWorkOrderEnum();
                 property.NewValueDisplayName = Enum.Parse<WorkOrder.UrgencyDegree>(property.NewValue).BXJGWorkOrderEnum();
             }
             if (property.PropertyName == statusPropertyName)
             {
-                property.OriginalValueDisplayName = Enum.Parse<WorkOrder.Status>(property.OriginalValue).BXJGWorkOrderEnum();
+                if (!property.OriginalValue.IsNullOrEmpty())
+                    property.OriginalValueDisplayName = Enum.Parse<WorkOrder.Status>(property.OriginalValue).BXJGWorkOrderEnum();
                 property.NewValueDisplayName = Enum.Parse<WorkOrder.Status>(property.NewValue).BXJGWorkOrderEnum();
             }
             return ValueTask.CompletedTask;

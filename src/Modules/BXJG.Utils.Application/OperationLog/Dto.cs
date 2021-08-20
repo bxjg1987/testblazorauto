@@ -145,7 +145,8 @@ namespace BXJG.Utils.OperationLog
     {
         public AutoMapperProfile()
         {
-            CreateMap(typeof(EntitySet), typeof(Dto<>));
+            CreateMap(typeof(EntitySet), typeof(Dto<>)).ForMember("ExtensionData",c=>c.MapFrom("Set.ExtensionData"))
+                                                       .ForMember("UserName", c => c.Ignore());
             CreateMap<EntityPropertyChange, PropertyDto>();
         }
     }
@@ -209,14 +210,14 @@ namespace BXJG.Utils.OperationLog
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        [UnitOfWork(IsDisabled = true)]
+        [UnitOfWork(false)]
         public async Task<long> GetTotalAsync(TGetAllInput input)
         {
             await CheckPermissionAsync();
             var query = await CreateFilterAsync(input);
             return await AsyncQueryableExecuter.CountAsync(query);
         }
-        [UnitOfWork(IsDisabled = true)]
+        [UnitOfWork(false)]
         public async Task<PagedResultDto<TDto>> GetAllAsync(TGetAllInput input)
         {
             await CheckPermissionAsync();

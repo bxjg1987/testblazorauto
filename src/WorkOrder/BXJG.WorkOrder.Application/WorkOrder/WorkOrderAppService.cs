@@ -22,6 +22,7 @@ using Abp.Application.Services;
 using BXJG.Utils.File;
 using System.Linq.Expressions;
 using Abp.Linq.Expressions;
+using Abp.EntityHistory;
 
 namespace BXJG.WorkOrder.WorkOrder
 {
@@ -161,6 +162,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
+        [UseCase(Description = "新增")]
         public virtual async Task<TEntityDto> CreateAsync(TCreateInput input)
         {
             await CheckCreatePermissionAsync();
@@ -177,6 +179,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
+        [UseCase(Description = "修改")]
         public virtual async Task<TEntityDto> UpdateAsync(TUpdateInput input)
         {
             await CheckUpdatePermissionAsync();
@@ -193,6 +196,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
+        [UseCase(Description = "删除")]
         public virtual async Task<TBatchDeleteOutput> DeleteAsync(TBatchDeleteInput input)
         {
             await CheckDeletePermissionAsync();
@@ -279,6 +283,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
+        [UseCase(Description = "调整状态")]
         public virtual async Task<TBatchChangeStatusOutput> ChangeStatusAsync(TBatchChangeStatusInput input)
         {
             //await CheckConfirmePermissionAsync();
@@ -323,6 +328,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
+        [UseCase(Description = "分配")]
         public virtual async Task<TBatchAllocateOutput> AllocateAsync(TBatchAllocateInput input)
         {
             //await CheckAllocatePermissionAsync();

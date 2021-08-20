@@ -27,6 +27,7 @@ using System.Linq.Expressions;
 using BXJG.WorkOrder.WorkOrderType;
 using Microsoft.EntityFrameworkCore;
 using BXJG.WorkOrder.Session;
+using Abp.EntityHistory;
 
 namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
 {
@@ -226,6 +227,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
+        [UseCase(Description = "领取")]
         public virtual async Task<TBatchAllocateOutput> AllocateAsync(TBatchAllocateInput input)
         {
             await CheckAllocatePermissionAsync();
@@ -257,6 +259,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
+        [UseCase(Description = "执行")]
         public virtual async Task<TBatchExcuteOutput> ExcuteAsync(TBatchExcuteInput input)
         {
             await CheckExecutePermissionAsync();
@@ -291,6 +294,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
+        [UseCase(Description = "完成")]
         public virtual async Task<TBatchCompletionOutput> CompletionAsync(TBatchCompletionInput input)
         {
             await CheckCompletionPermissionAsync();
@@ -324,6 +328,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
+        [UseCase(Description = "拒绝")]
         public virtual async Task<TBatchRejectOutput> RejectAsync(TBatchRejectInput input)
         {
             await CheckRejectPermissionAsync();
