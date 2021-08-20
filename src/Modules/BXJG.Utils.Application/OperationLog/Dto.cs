@@ -298,11 +298,11 @@ namespace BXJG.Utils.OperationLog
         }
     }
 
-    public class OperationLogAppService<TUser> : OperationLogAppService<Dto<PropertyDto>,
-                                                                        PropertyDto,
-                                                                        GetAllInput,
-                                                                        TUser,
-                                                                        EntitySet> where TUser : AbpUserBase
+    public abstract class OperationLogAppService<TUser> : OperationLogAppService<Dto<PropertyDto>,
+                                                                                 PropertyDto,
+                                                                                 GetAllInput,
+                                                                                 TUser,
+                                                                                 EntitySet> where TUser : AbpUserBase
     {
         public OperationLogAppService(IRepository<EntityChange, long> repository,
                                       IRepository<EntityChangeSet, long> setRepository,
