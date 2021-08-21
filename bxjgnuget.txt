@@ -1,7 +1,7 @@
 
 Libs
 -------------------------------
-dotnet nuget push D:\abp\src\Libs\BXJG.Common\bin\Release\BXJG.Common.1.2.4.nupkg --api-key oy2hfvewq4mg6xlsyhyadiwuonqaqboevepb4xghmibaim --source https://api.nuget.org/v3/index.json
+dotnet nuget push D:\abp\src\Libs\BXJG.Common\bin\Release\BXJG.Common.1.2.6.nupkg --api-key oy2hfvewq4mg6xlsyhyadiwuonqaqboevepb4xghmibaim --source https://api.nuget.org/v3/index.json
 dotnet nuget push D:\abp\src\Libs\BXJG.Common.Web\bin\Release\BXJG.Common.Web.1.2.4.nupkg --api-key oy2hfvewq4mg6xlsyhyadiwuonqaqboevepb4xghmibaim --source https://api.nuget.org/v3/index.json
 dotnet nuget push D:\abp\src\Libs\BXJG.Wechat\bin\Release\BXJG.WeChat.1.2.4.nupkg --api-key oy2hfvewq4mg6xlsyhyadiwuonqaqboevepb4xghmibaim --source https://api.nuget.org/v3/index.json
 dotnet nuget push D:\abp\src\Libs\BXJG.Wechat.Web\bin\Release\BXJG.Wechat.Web.1.2.4.nupkg --api-key oy2hfvewq4mg6xlsyhyadiwuonqaqboevepb4xghmibaim --source https://api.nuget.org/v3/index.json
@@ -9,16 +9,16 @@ dotnet nuget push D:\abp\src\Libs\BXJG.Wechat.Web\bin\Release\BXJG.Wechat.Web.1.
 Common abp modules
 -------------------------------
 dotnet nuget push D:\abp\src\Modules\BXJG.GeneralTree\bin\Release\BXJG.GeneralTree.1.2.4.nupkg --api-key oy2hfvewq4mg6xlsyhyadiwuonqaqboevepb4xghmibaim --source https://api.nuget.org/v3/index.json
-dotnet nuget push D:\abp\src\Modules\BXJG.Utils\bin\Release\BXJG.Utils.1.2.3.nupkg --api-key oy2hfvewq4mg6xlsyhyadiwuonqaqboevepb4xghmibaim --source https://api.nuget.org/v3/index.json
-dotnet nuget push D:\abp\src\Modules\BXJG.Utils.Application\bin\Release\BXJG.Utils.Application.1.2.5.nupkg --api-key oy2hfvewq4mg6xlsyhyadiwuonqaqboevepb4xghmibaim --source https://api.nuget.org/v3/index.json
+dotnet nuget push D:\abp\src\Modules\BXJG.Utils\bin\Release\BXJG.Utils.1.2.6.nupkg --api-key oy2hfvewq4mg6xlsyhyadiwuonqaqboevepb4xghmibaim --source https://api.nuget.org/v3/index.json
+dotnet nuget push D:\abp\src\Modules\BXJG.Utils.Application\bin\Release\BXJG.Utils.Application.1.2.6.nupkg --api-key oy2hfvewq4mg6xlsyhyadiwuonqaqboevepb4xghmibaim --source https://api.nuget.org/v3/index.json
 dotnet nuget push D:\abp\src\Modules\BXJG.Utils.Web\bin\Release\BXJG.Utils.Web.1.2.4.nupkg --api-key oy2hfvewq4mg6xlsyhyadiwuonqaqboevepb4xghmibaim --source https://api.nuget.org/v3/index.json
 dotnet nuget push D:\abp\src\Modules\BXJG.Utils.EFCore\bin\Release\BXJG.Utils.EFCore.1.2.4.nupkg --api-key oy2hfvewq4mg6xlsyhyadiwuonqaqboevepb4xghmibaim --source https://api.nuget.org/v3/index.json
 dotnet nuget push D:\abp\src\Modules\BXJG.WeChat.Abp\bin\Release\BXJG.WeChat.Abp.1.2.4.nupkg --api-key oy2hfvewq4mg6xlsyhyadiwuonqaqboevepb4xghmibaim --source https://api.nuget.org/v3/index.json
 
 WorkOrder modules
 -------------------------------
-dotnet nuget push D:\abp\src\WorkOrder\BXJG.WorkOrder.Application\bin\Release\BXJG.WorkOrder.Application.1.2.4.nupkg --api-key oy2hfvewq4mg6xlsyhyadiwuonqaqboevepb4xghmibaim --source https://api.nuget.org/v3/index.json
-dotnet nuget push D:\abp\src\WorkOrder\BXJG.WorkOrder.CommonApplication\bin\Release\BXJG.WorkOrder.CommonApplication.1.2.4.nupkg --api-key oy2hfvewq4mg6xlsyhyadiwuonqaqboevepb4xghmibaim --source https://api.nuget.org/v3/index.json
-dotnet nuget push D:\abp\src\WorkOrder\BXJG.WorkOrder.EmployeeApplication\bin\Release\BXJG.WorkOrder.EmployeeApplication.1.2.4.nupkg --api-key oy2hfvewq4mg6xlsyhyadiwuonqaqboevepb4xghmibaim --source https://api.nuget.org/v3/index.json
-dotnet nuget push D:\abp\src\WorkOrder\BXJG.WorkOrder.Core\bin\Release\BXJG.WorkOrder.Core.1.2.4.nupkg --api-key oy2hfvewq4mg6xlsyhyadiwuonqaqboevepb4xghmibaim --source https://api.nuget.org/v3/index.json
-dotnet nuget push D:\abp\src\WorkOrder\BXJG.WorkOrder.EFCore\bin\Release\BXJG.WorkOrder.EFCore.1.2.4.nupkg --api-key oy2hfvewq4mg6xlsyhyadiwuonqaqboevepb4xghmibaim --source https://api.nuget.org/v3/index.json
+dotnet nuget push D:\abp\src\WorkOrder\BXJG.WorkOrder.Application\bin\Release\BXJG.WorkOrder.Application.1.2.6.nupkg --api-key oy2hfvewq4mg6xlsyhyadiwuonqaqboevepb4xghmibaim --source https://api.nuget.org/v3/index.json
+dotnet nuget push D:\abp\src\WorkOrder\BXJG.WorkOrder.CommonApplication\bin\Release\BXJG.WorkOrder.CommonApplication.1.2.6.nupkg --api-key oy2hfvewq4mg6xlsyhyadiwuonqaqboevepb4xghmibaim --source https://api.nuget.org/v3/index.json
+dotnet nuget push D:\abp\src\WorkOrder\BXJG.WorkOrder.EmployeeApplication\bin\Release\BXJG.WorkOrder.EmployeeApplication.1.2.6.nupkg --api-key oy2hfvewq4mg6xlsyhyadiwuonqaqboevepb4xghmibaim --source https://api.nuget.org/v3/index.json
+dotnet nuget push D:\abp\src\WorkOrder\BXJG.WorkOrder.Core\bin\Release\BXJG.WorkOrder.Core.1.2.6.nupkg --api-key oy2hfvewq4mg6xlsyhyadiwuonqaqboevepb4xghmibaim --source https://api.nuget.org/v3/index.json
+dotnet nuget push D:\abp\src\WorkOrder\BXJG.WorkOrder.EFCore\bin\Release\BXJG.WorkOrder.EFCore.1.2.6.nupkg --api-key oy2hfvewq4mg6xlsyhyadiwuonqaqboevepb4xghmibaim --source https://api.nuget.org/v3/index.json

@@ -58,6 +58,10 @@ namespace BXJG.Utils.OperationLog
         /// </summary>
         public virtual string EntityEntityTypeFullName { get; set; }
         /// <summary>
+        /// 实体名
+        /// </summary>
+        public virtual string EntityTypeDisplayName { get; set; }
+        /// <summary>
         /// 被操作的实体的id
         /// </summary>
         public virtual string EntityEntityId { get; set; }
@@ -146,6 +150,7 @@ namespace BXJG.Utils.OperationLog
         public AutoMapperProfile()
         {
             CreateMap(typeof(EntitySet), typeof(Dto<>)).ForMember("ExtensionData",c=>c.MapFrom("Set.ExtensionData"))
+                                                       .ForMember("EntityTypeDisplayName", c => c.Ignore())
                                                        .ForMember("UserName", c => c.Ignore());
             CreateMap<EntityPropertyChange, PropertyDto>();
         }
@@ -284,6 +289,7 @@ namespace BXJG.Utils.OperationLog
             var r = base.ObjectMapper.Map<TDto>(entityChange);
             var users = CurrentUnitOfWork.Items["users"] as List<NameValueDto>;
             r.UserName = users.SingleOrDefault(c => c.Name == r.SetUserId.ToString())?.Value;
+            r.EntityTypeDisplayName = base.L(r.EntityEntityTypeFullName);
             //数量少，使用Parallel.For反而性能更低
             foreach (var item in r.EntityPropertyChanges)
             {

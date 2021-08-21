@@ -7,6 +7,15 @@
     <text name="BXJGWorkOrderCategory" value="工单分类" />
     <text name="BXJGWorkOrderCategoryManager" value="工单分类管理" />
     <text name="普通工单" value="普通工单" />
+    
+    <!--操作日志记录需要的字段定义-->
+    <text name="BXJGWorkOrder.CategoryId" value="分类" />
+    <text name="BXJGWorkOrder.EmployeeId" value="处理人" />
+    <text name="BXJGWorkOrder.EstimatedCompletionTime" value="预计完成时间" />
+    <text name="BXJGWorkOrder.EstimatedExecutionTime" value="预计开始时间" />
+    <text name="BXJGWorkOrder.UrgencyDegree" value="紧急程度" />
+    <text name="BXJGWorkOrder.Status" value="状态" />
+    <text name="BXJGWorkOrder.StatusChangedDescription" value="状态变更说明" />
 
     <text name="BXJG.WorkOrder.WorkOrder.Status" value="工单状态" />
     <text name="BXJG.WorkOrder.WorkOrder.Status.ToBeConfirmed" value="待确认" />
@@ -15,7 +24,7 @@
     <text name="BXJG.WorkOrder.WorkOrder.Status.Processing" value="执行中" />
     <text name="BXJG.WorkOrder.WorkOrder.Status.Rejected" value="已拒绝" />
     <text name="BXJG.WorkOrder.WorkOrder.Status.Completed" value="已完成" />
-    
+
     <text name="BXJG.WorkOrder.WorkOrder.UrgencyDegree" value="紧急程度" />
     <text name="BXJG.WorkOrder.WorkOrder.UrgencyDegree.Urgent" value="紧急" />
     <text name="BXJG.WorkOrder.WorkOrder.UrgencyDegree.Normalize" value="一般" />
