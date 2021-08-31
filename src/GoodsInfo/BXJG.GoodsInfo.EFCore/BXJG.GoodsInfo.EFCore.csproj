@@ -8,4 +8,9 @@
     <ProjectReference Include="..\BXJG.GoodsInfo.Core\BXJG.GoodsInfo.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Map\" />
+    <Folder Include="Seed\" />
+  </ItemGroup>
+
 </Project>
