@@ -19,9 +19,6 @@ using BXJG.Utils;
 
 namespace BXJG.GoodsInfo.EFCore
 {
-    /*
-     * 通用公共功能模块
-     */
     [DependsOn(typeof(BXJGGoodsInfoCoreModule))]
     public class BXJGGoodsInfoEFCoreModule : Abp.Modules.AbpModule
     {

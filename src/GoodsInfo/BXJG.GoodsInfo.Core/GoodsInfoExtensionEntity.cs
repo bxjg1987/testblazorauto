@@ -1,28 +1,18 @@
 ﻿using Abp.Domain.Entities;
-using Abp.Domain.Entities.Auditing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.GoodsInfo.GoodsInfo
+namespace BXJG.GoodsInfo
 {
     /// <summary>
-    /// 物品实体接口
+    /// 具体物品实体
+    /// 比如：整机、配件、耗材、办公用品
+    /// 它与GoodsInfoEntity双向一对一关联，而GoodsInfoEntity是物品基本信息表
+    /// 如果你有一种新的物品类型，需要实现此接口，更简单的方式是继承<see cref="GoodsInfoExtensionEntity"/>，它已实现此接口并提供基本属性
     /// </summary>
-    public interface IGoodsInfoExtensionEntity : IEntity<long>, IExtendableObject, IMayHaveTenant 
-    {
-        /// <summary>
-        /// 关联的物品信息id
-        /// </summary>
-        long GoodsInfoId { get; set; }
-        /// <summary>
-        /// 关联的物品信息
-        /// </summary>
-        GoodsInfoEntity GoodsInfo { get; set; }
-    }
-
     public abstract class GoodsInfoExtensionEntity : Entity<long>, IGoodsInfoExtensionEntity
     {
         /// <summary>
@@ -30,11 +20,12 @@ namespace BXJG.GoodsInfo.GoodsInfo
         /// </summary>
         public virtual long GoodsInfoId { get; set; }
         /// <summary>
-        /// 关联的物品信息
+        /// 关联的基本物品信息
         /// </summary>
         public virtual GoodsInfoEntity GoodsInfo { get; set; }
         /// <summary>
         /// 扩展属性
+        /// 虽然关联的GoodsInfo已提供这样的属性，但当前类是抽象，给调用方预留更多的扩展点
         /// </summary>
         public string ExtensionData { get; set; }
         /// <summary>

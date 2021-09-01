@@ -124,6 +124,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Utils.EFCore", "src\modules\BXJG.Utils.EFCore\BXJG.Utils.EFCore.csproj", "{1F1D6713-C18D-4449-83EC-BE1E0ACDE65C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GoodsInfo", "GoodsInfo", "{175D1E4E-D598-4F64-BF25-0A93EFF731E1}"
+	ProjectSection(SolutionItems) = preProject
+		src\GoodsInfo\物品模块说明.txt = src\GoodsInfo\物品模块说明.txt
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.GoodsInfo.Core", "src\GoodsInfo\BXJG.GoodsInfo.Core\BXJG.GoodsInfo.Core.csproj", "{82EB5629-28D8-4454-A7E2-B174806BD6BA}"
 EndProject
@@ -131,7 +134,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.GoodsInfo.EFCore", "sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.GoodsInfo.Application.Common", "src\GoodsInfo\BXJG.GoodsInfo.Application.Common\BXJG.GoodsInfo.Application.Common.csproj", "{BFACC276-6558-4C72-BC9D-CB6EE72C2696}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BXJG.GoodsInfo.Application.Admin", "src\goodsinfo\BXJG.GoodsInfo.Application.Admin\BXJG.GoodsInfo.Application.Admin.csproj", "{8AE4BA0C-167F-4D92-97C7-87CB5A754852}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.GoodsInfo.Application.Admin", "src\goodsinfo\BXJG.GoodsInfo.Application.Admin\BXJG.GoodsInfo.Application.Admin.csproj", "{8AE4BA0C-167F-4D92-97C7-87CB5A754852}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

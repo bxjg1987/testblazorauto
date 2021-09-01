@@ -6,10 +6,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.GoodsInfo.GoodsInfo
+namespace BXJG.GoodsInfo
 {
     /// <summary>
-    /// 物品实体
+    /// 基本物品实体
+    /// 它定义物品信息公共属性
+    /// 它与具体的物品类型<see cref="IGoodsInfoExtensionEntity"/>双向一对一关联
     /// </summary>
     public class GoodsInfoEntity : FullAuditedAggregateRoot<long>, IExtendableObject, IMayHaveTenant
     {

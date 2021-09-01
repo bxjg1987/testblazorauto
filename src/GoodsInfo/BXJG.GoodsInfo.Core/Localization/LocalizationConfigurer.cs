@@ -13,7 +13,7 @@ namespace BXJG.GoodsInfo.Localization
                 new DictionaryBasedLocalizationSource(BXJGGoodsInfoCoreConsts.LocalizationSourceName,
                     new XmlEmbeddedFileLocalizationDictionaryProvider(
                         typeof(LocalizationConfigurer).GetAssembly(),
-                        "BXJG.GoodsInfo.Core.Localization.SourceFiles"
+                        "BXJG.GoodsInfo.Localization.SourceFiles"
                     )
                 )
             );

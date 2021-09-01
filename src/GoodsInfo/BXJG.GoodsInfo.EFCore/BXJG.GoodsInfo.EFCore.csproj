@@ -9,8 +9,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Map\" />
     <Folder Include="Seed\" />
+    <Folder Include="Repository\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Abp.EntityFrameworkCore" Version="6.4.0" />
   </ItemGroup>
 
 </Project>

@@ -20,9 +20,6 @@ using BXJG.GoodsInfo.Localization;
 
 namespace BXJG.GoodsInfo
 {
-    /*
-     * 通用公共功能模块
-     */
     [DependsOn(typeof(BXJGUtilsModule))]
     public class BXJGGoodsInfoCoreModule : Abp.Modules.AbpModule
     {
