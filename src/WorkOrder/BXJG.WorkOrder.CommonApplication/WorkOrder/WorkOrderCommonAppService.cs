@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 
 namespace BXJG.WorkOrder.WorkOrder
 {
+    //考虑将getForSelect方法定义在这个类中
+
     [AbpAuthorize]
     public class WorkOrderCommonAppService : AppServiceBase
     {

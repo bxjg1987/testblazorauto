@@ -69,8 +69,8 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
                                                   TQueryTemp> : AppServiceBase
         #region MyRegion
         where TGetInput : EntityDto<long>
-        where TGetAllInput : GetAllInputBase<TGetTotalInput>
         where TGetTotalInput : GetTotalInputBase, new()
+        where TGetAllInput : GetAllInputBase<TGetTotalInput>
         where TDto : WorkOrderDtoBase, new()
         where TBatchAllocateInput : BatchAllocateInputBase
         where TBatchAllocateOutput : BatchOperationOutputLong, new()
@@ -191,7 +191,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
             //var ss2 = await service.GetAllAsync(define, "a", "d");
 
             await CheckGetPermissionAsync();
-            var query = await GetAllFilterAsync(input.GetTotalInput);
+            var query = await GetAllFilterAsync(input);
             var count = await AsyncQueryableExecuter.CountAsync(query);
             query = OrderBy(query, input);
             query = PageBy(query, input);
@@ -394,7 +394,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
             Expression<Func<TQueryTemp, bool>> where = c => c.Order.Title.Contains(keyword) || c.Order.Description.Contains(keyword);
             return ValueTask.FromResult(where);
         }
-        protected virtual ValueTask<IQueryable<TQueryTemp>> ApplyOther(IQueryable<TQueryTemp> query, TGetTotalInput input)
+        protected virtual ValueTask<IQueryable<TQueryTemp>> ApplyOther(IQueryable<TQueryTemp> query, IGetTotalInputBase input)
         {
             if (input.CategoryCodes != null)
             {
@@ -448,7 +448,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
             return query;
         }
 
-        protected virtual async Task<IQueryable<TQueryTemp>> GetAllFilterAsync(TGetTotalInput input)
+        protected virtual async Task<IQueryable<TQueryTemp>> GetAllFilterAsync(IGetTotalInputBase input)
         {
             var query = GetQuery();
             //if (input.CategoryCodes != null)
