@@ -259,13 +259,13 @@ namespace BXJG.WorkOrder.WorkOrder
             //var ss2 = await service.GetAllAsync(define, "a", "d");
 
             await CheckGetPermissionAsync();
-            var query = await GetAllFilterAsync(input);
+            var query = await GetAllFilterAsync(input.GetTotalInput);
             var count = await AsyncQueryableExecuter.CountAsync(query);
             query = OrderBy(query, input);
             query = PageBy(query, input);
             var list = await AsyncQueryableExecuter.ToListAsync(query);
 
-          
+
 
             var images = await attachmentManager.Value.GetAttachmentsAsync(list.Select(c => c.Order.Id.ToString()).ToArray());
 
@@ -375,24 +375,43 @@ namespace BXJG.WorkOrder.WorkOrder
         #endregion
 
         #region MyRegion
-        protected virtual async ValueTask<IQueryable<TQueryTemp>> GetFilterAsync(TGetInput input)
+        /// <summary>
+        /// 获取单个信息的查询，根据id查询，内部会join分类
+        /// 通常不需要重写此方法
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        protected virtual ValueTask<IQueryable<TQueryTemp>> GetFilterAsync(TGetInput input)
         {
             var q = GetQuery();
             q = q.Where(c => c.Order.Id == input.Id);
-            q = await GetAndAllFilterAsync(q);
+            //q = await GetAndAllFilterAsync(q);
             //var str = q.ToQueryString();
-            return q;
-        }
-        protected virtual ValueTask<IQueryable<TQueryTemp>> GetAndAllFilterAsync(IQueryable<TQueryTemp> q)
-        {
             return ValueTask.FromResult(q);
         }
+        //protected virtual ValueTask<IQueryable<TQueryTemp>> GetAndAllFilterAsync(IQueryable<TQueryTemp> q)
+        //{
+        //    return ValueTask.FromResult(q);
+        //}
+        /// <summary>
+        /// 应用关键字模糊搜索，默认模糊搜索标题、描述
+        /// 若你的工单类型某些字段需要参与关键字模糊搜索，则可以重写此方法，通常需要调用base.ApplyKeyword后，使用Or扩展方法应用更多模糊查询字段
+        /// </summary>
+        /// <param name="keyword"></param>
+        /// <returns></returns>
         protected virtual ValueTask<Expression<Func<TQueryTemp, bool>>> ApplyKeyword(string keyword)
         {
             Expression<Func<TQueryTemp, bool>> where = c => c.Order.Title.Contains(keyword) || c.Order.Description.Contains(keyword);
             return ValueTask.FromResult(where);
         }
-        protected virtual ValueTask<IQueryable<TQueryTemp>> ApplyOther(IQueryable<TQueryTemp> query, IGetTotalInputBase input)
+        /// <summary>
+        /// 获取数量或列表时都会调用，它主要用来应用过滤条件
+        /// keyword条件过滤比较特殊，若需要更多关键字模糊查询请重写<see cref="ApplyKeyword(string)"/>
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        protected virtual ValueTask<IQueryable<TQueryTemp>> ApplyOther(IQueryable<TQueryTemp> query, TGetTotalInput input)
         {
             if (input.CategoryCodes != null)
             {
@@ -416,14 +435,29 @@ namespace BXJG.WorkOrder.WorkOrder
                          .WhereIf(input.CompletionTimeEnd.HasValue, c => c.Order.CompletionTime < input.CompletionTimeEnd);
             return ValueTask.FromResult(query);
         }
+        /// <summary>
+        /// 获取查询对象，默认repository.GetAll()
+        /// 通常，当你的查询需要include时可以重写此方法
+        /// </summary>
+        /// <returns></returns>
         protected virtual IQueryable<TEntity> GetOrderQuery()
         {
             return repository.GetAll();
         }
+        /// <summary>
+        /// 获取分类的查询对象，默认categoryRepository.Value.GetAll()
+        /// </summary>
+        /// <returns></returns>
         protected virtual IQueryable<CategoryEntity> GetClsQuery()
         {
             return categoryRepository.Value.GetAll();
         }
+        /// <summary>
+        /// 获取工单和分类join后的查询对象
+        /// 此方法会被<see cref="GetAllAsync(TGetAllInput)"/>和<see cref="GetAllAsync(TGetAllInput)"/>调用
+        /// 可以重写此方法include更多导航属性
+        /// </summary>
+        /// <returns></returns>
         protected virtual IQueryable<TQueryTemp> GetQuery()
         {
             var query = from c in GetOrderQuery().AsNoTrackingWithIdentityResolution()
@@ -432,7 +466,8 @@ namespace BXJG.WorkOrder.WorkOrder
                         select new TQueryTemp { Order = c, Category = kk };
             return query;
         }
-        protected virtual async Task<IQueryable<TQueryTemp>> GetAllFilterAsync(IGetTotalInputBase input)
+        
+        protected virtual async Task<IQueryable<TQueryTemp>> GetAllFilterAsync(TGetTotalInput input)
         {
             var query = GetQuery();
             //if (input.CategoryCodes != null)
@@ -451,11 +486,11 @@ namespace BXJG.WorkOrder.WorkOrder
             //if (empIdsQuery != null && empIdsQuery.Count() > 0)
             //    query = query.Where(c => empIdsQuery.Contains(c.Order.EmployeeId));
 
-
+            //应用基本条件过滤
             query = await ApplyOther(query, input);
-
+            //关键字条件过滤比较特殊，定义在单独的方法中，允许重写
             query = query.WhereIf(!input.Keyword.IsNullOrWhiteSpace(), await ApplyKeyword(input.Keyword));
-            query = await GetAndAllFilterAsync(query);
+            //query = await GetAndAllFilterAsync(query);
             return query;
         }
         protected virtual IQueryable<TQueryTemp> PageBy(IQueryable<TQueryTemp> query, TGetAllInput input)
@@ -550,6 +585,7 @@ namespace BXJG.WorkOrder.WorkOrder
                                   rejected: d => CheckRejectPermissionAsync());
             }
         }
+
         protected virtual ValueTask BeforeEditAsync(TEntity entity, TUpdateInput input)
         {
             if (input.CategoryId.HasValue)
@@ -562,6 +598,13 @@ namespace BXJG.WorkOrder.WorkOrder
             entity.ChangeEstimatedTime(input.EstimatedExecutionTime, input.EstimatedCompletionTime);
             return ValueTask.CompletedTask;
         }
+
+        /// <summary>
+        /// 获取列表，在遍历生成dto集合前调用此方法
+        /// 在遍历生成dto列表过程中会传递给<see cref="EntityToDto(TQueryTemp, IDictionary{string, List{AttachmentEntity}}, object)"/>
+        /// </summary>
+        /// <param name="entities"></param>
+        /// <returns></returns>
         protected virtual ValueTask<object> GetStateAsync(IEnumerable<TQueryTemp> entities)
         {
             return ValueTask.FromResult<object>(null);

@@ -19,62 +19,62 @@ namespace BXJG.WorkOrder.WorkOrder
     /// 后台管理工单获取列表页数据时的输入模型<br />
     /// 不同类型的工单可以提供相应子类
     /// </summary>
-    public class GetAllInputBase<TGetTotal> : PagedAndSortedResultRequestDto, IGetTotalInputBase, IShouldNormalize
-        where TGetTotal : IGetTotalInputBase, new()
+    public class GetAllInputBase<TGetTotal> : PagedAndSortedResultRequestDto, /*IGetTotalInputBase,*/ IShouldNormalize
+        where TGetTotal :/*IGetTotalInputBase,*/ GetTotalInputBase, new()
     {
-        protected readonly TGetTotal GetTotalInput = new TGetTotal();
+        protected internal readonly TGetTotal GetTotalInput = new TGetTotal();
         /// <summary>
         /// 这包含这几种工单类别的
         /// </summary>
-        public virtual string[] CategoryCodes { get => ((IGetTotalInputBase)GetTotalInput).CategoryCodes; set => ((IGetTotalInputBase)GetTotalInput).CategoryCodes = value; }
+        public virtual string[] CategoryCodes { get => ((GetTotalInputBase)GetTotalInput).CategoryCodes; set => ((GetTotalInputBase)GetTotalInput).CategoryCodes = value; }
         /// <summary>
         /// 实际完成实际-结束
         /// </summary>
-        public virtual DateTimeOffset? CompletionTimeEnd { get => ((IGetTotalInputBase)GetTotalInput).CompletionTimeEnd; set => ((IGetTotalInputBase)GetTotalInput).CompletionTimeEnd = value; }
+        public virtual DateTimeOffset? CompletionTimeEnd { get => ((GetTotalInputBase)GetTotalInput).CompletionTimeEnd; set => ((GetTotalInputBase)GetTotalInput).CompletionTimeEnd = value; }
         /// <summary>
         /// 实际完成时间-开始
         /// </summary>
-        public virtual DateTimeOffset? CompletionTimeStart { get => ((IGetTotalInputBase)GetTotalInput).CompletionTimeStart; set => ((IGetTotalInputBase)GetTotalInput).CompletionTimeStart = value; }
+        public virtual DateTimeOffset? CompletionTimeStart { get => ((GetTotalInputBase)GetTotalInput).CompletionTimeStart; set => ((GetTotalInputBase)GetTotalInput).CompletionTimeStart = value; }
         /// <summary>
         /// 处理人Id
         /// </summary>
-        public virtual string EmployeeId { get => ((IGetTotalInputBase)GetTotalInput).EmployeeId; set => ((IGetTotalInputBase)GetTotalInput).EmployeeId = value; }
+        public virtual string EmployeeId { get => ((GetTotalInputBase)GetTotalInput).EmployeeId; set => ((GetTotalInputBase)GetTotalInput).EmployeeId = value; }
         /// <summary>
         /// 预计结束时间范围-结束
         /// </summary>
-        public virtual DateTimeOffset? EstimatedCompletionTimeEnd { get => ((IGetTotalInputBase)GetTotalInput).EstimatedCompletionTimeEnd; set => ((IGetTotalInputBase)GetTotalInput).EstimatedCompletionTimeEnd = value; }
+        public virtual DateTimeOffset? EstimatedCompletionTimeEnd { get => ((GetTotalInputBase)GetTotalInput).EstimatedCompletionTimeEnd; set => ((GetTotalInputBase)GetTotalInput).EstimatedCompletionTimeEnd = value; }
         /// <summary>
         /// 预计开始时间范围-开始
         /// </summary>
-        public virtual DateTimeOffset? EstimatedCompletionTimeStart { get => ((IGetTotalInputBase)GetTotalInput).EstimatedCompletionTimeStart; set => ((IGetTotalInputBase)GetTotalInput).EstimatedCompletionTimeStart = value; }
+        public virtual DateTimeOffset? EstimatedCompletionTimeStart { get => ((GetTotalInputBase)GetTotalInput).EstimatedCompletionTimeStart; set => ((GetTotalInputBase)GetTotalInput).EstimatedCompletionTimeStart = value; }
         /// <summary>
         /// 预计完成时间范围-结束
         /// </summary>
-        public virtual DateTimeOffset? EstimatedExecutionTimeEnd { get => ((IGetTotalInputBase)GetTotalInput).EstimatedExecutionTimeEnd; set => ((IGetTotalInputBase)GetTotalInput).EstimatedExecutionTimeEnd = value; }
+        public virtual DateTimeOffset? EstimatedExecutionTimeEnd { get => ((GetTotalInputBase)GetTotalInput).EstimatedExecutionTimeEnd; set => ((GetTotalInputBase)GetTotalInput).EstimatedExecutionTimeEnd = value; }
         /// <summary>
         /// 预计完成时间范围-开始
         /// </summary>
-        public virtual DateTimeOffset? EstimatedExecutionTimeStart { get => ((IGetTotalInputBase)GetTotalInput).EstimatedExecutionTimeStart; set => ((IGetTotalInputBase)GetTotalInput).EstimatedExecutionTimeStart = value; }
+        public virtual DateTimeOffset? EstimatedExecutionTimeStart { get => ((GetTotalInputBase)GetTotalInput).EstimatedExecutionTimeStart; set => ((GetTotalInputBase)GetTotalInput).EstimatedExecutionTimeStart = value; }
         /// <summary>
         /// 实际开始时间-结束
         /// </summary>
-        public virtual DateTimeOffset? ExecutionTimeEnd { get => ((IGetTotalInputBase)GetTotalInput).ExecutionTimeEnd; set => ((IGetTotalInputBase)GetTotalInput).ExecutionTimeEnd = value; }
+        public virtual DateTimeOffset? ExecutionTimeEnd { get => ((GetTotalInputBase)GetTotalInput).ExecutionTimeEnd; set => ((GetTotalInputBase)GetTotalInput).ExecutionTimeEnd = value; }
         /// <summary>
         /// 实际开始时间-开始
         /// </summary>
-        public virtual DateTimeOffset? ExecutionTimeStart { get => ((IGetTotalInputBase)GetTotalInput).ExecutionTimeStart; set => ((IGetTotalInputBase)GetTotalInput).ExecutionTimeStart = value; }
+        public virtual DateTimeOffset? ExecutionTimeStart { get => ((GetTotalInputBase)GetTotalInput).ExecutionTimeStart; set => ((GetTotalInputBase)GetTotalInput).ExecutionTimeStart = value; }
         /// <summary>
         /// 关键字，模糊匹配处理人名称、电话、工单标题等
         /// </summary>
-        public virtual string Keyword { get => ((IGetTotalInputBase)GetTotalInput).Keyword; set => ((IGetTotalInputBase)GetTotalInput).Keyword = value; }
+        public virtual string Keyword { get => ((GetTotalInputBase)GetTotalInput).Keyword; set => ((GetTotalInputBase)GetTotalInput).Keyword = value; }
         /// <summary>
         /// 只包含在这几种状态内的工单
         /// </summary>
-        public virtual Status[] Statuses { get => ((IGetTotalInputBase)GetTotalInput).Statuses; set => ((IGetTotalInputBase)GetTotalInput).Statuses = value; }
+        public virtual Status[] Statuses { get => ((GetTotalInputBase)GetTotalInput).Statuses; set => ((GetTotalInputBase)GetTotalInput).Statuses = value; }
         /// <summary>
         /// 只包含在这几种紧急程度内的工单
         /// </summary>
-        public virtual UrgencyDegree[] UrgencyDegrees { get => ((IGetTotalInputBase)GetTotalInput).UrgencyDegrees; set => ((IGetTotalInputBase)GetTotalInput).UrgencyDegrees = value; }
+        public virtual UrgencyDegree[] UrgencyDegrees { get => ((GetTotalInputBase)GetTotalInput).UrgencyDegrees; set => ((GetTotalInputBase)GetTotalInput).UrgencyDegrees = value; }
 
         /// <summary>
         /// 模型绑定后，abp会调用此方法来进一步初始化

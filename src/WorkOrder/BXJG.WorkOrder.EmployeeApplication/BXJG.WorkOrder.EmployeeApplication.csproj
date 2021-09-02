@@ -16,6 +16,7 @@
     <Compile Remove="WorkOrder\BatchChangeStatusInput.cs" />
     <Compile Remove="WorkOrder\BatchChangeStatusOutput.cs" />
     <Compile Remove="WorkOrder\CreateDto.cs" />
+    <Compile Remove="WorkOrder\IGetTotalInputBase.cs" />
     <Compile Remove="WorkOrder\UpdateDto.cs" />
   </ItemGroup>
 

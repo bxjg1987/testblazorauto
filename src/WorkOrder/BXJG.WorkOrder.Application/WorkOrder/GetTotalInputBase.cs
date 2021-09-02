@@ -10,7 +10,7 @@ namespace BXJG.WorkOrder.WorkOrder
     /// <summary>
     /// 获取工单数量时的输入模型
     /// </summary>
-    public class GetTotalInputBase : IGetTotalInputBase
+    public class GetTotalInputBase //: IGetTotalInputBase
     {
         /// <summary>
         /// 处理人Id

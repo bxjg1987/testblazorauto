@@ -14,6 +14,7 @@
   <ItemGroup>
     <Compile Remove="WorkOrder\BatchAllocateOutput.cs" />
     <Compile Remove="WorkOrder\BatchChangeStatusOutput.cs" />
+    <Compile Remove="WorkOrder\IGetTotalInputBase.cs" />
     <Compile Remove="WorkOrder\IWorkOrderAppService.cs" />
   </ItemGroup>
 

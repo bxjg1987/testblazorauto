@@ -152,7 +152,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
         {
             await CheckGetPermissionAsync();
             var query = await GetAllFilterAsync(input);
-            var sql = query.ToQueryString();
+            //var sql = query.ToQueryString();
             return await AsyncQueryableExecuter.CountAsync(query);
         }
         /// <summary>
@@ -191,7 +191,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
             //var ss2 = await service.GetAllAsync(define, "a", "d");
 
             await CheckGetPermissionAsync();
-            var query = await GetAllFilterAsync(input);
+            var query = await GetAllFilterAsync(input.GetTotalInput);
             var count = await AsyncQueryableExecuter.CountAsync(query);
             query = OrderBy(query, input);
             query = PageBy(query, input);
@@ -357,45 +357,61 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
             }
             return r;
         }
-
-        protected virtual async ValueTask<IQueryable<TQueryTemp>> GetFilterAsync(TGetInput input)
+        /// <summary>
+        /// 获取单个信息的查询，根据id查询，内部会join分类
+        /// 通常不需要重写此方法
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        protected virtual ValueTask<IQueryable<TQueryTemp>> GetFilterAsync(TGetInput input)
         {
             var q = GetQuery();
             q = q.Where(c => c.Order.Id == input.Id);
-            q = await GetAndAllFilterAsync(q);
+            //q = await GetAndAllFilterAsync(q);
             //var str = q.ToQueryString();
-            return q;
+            return ValueTask.FromResult( q);
         }
-        protected virtual ValueTask<IQueryable<TQueryTemp>> GetAndAllFilterAsync(IQueryable<TQueryTemp> q, params Status[] statuses)
-        {
-            Expression<Func<TQueryTemp, bool>> where = m => false;
-            if (statuses != null && statuses.Length > 0)
-            {
-                if (statuses.Contains(Status.ToBeAllocated))
-                {
-                    where = m => m.Order.Status == Status.ToBeAllocated && (m.Order.EmployeeId ==""|| m.Order.EmployeeId ==null);
-                }
-                var temp = statuses.Where(c => c != Status.ToBeAllocated);
-                where = where.Or(c => c.Order.EmployeeId == employeeSession.BusinessUserId && statuses.Contains(c.Order.Status));
-            }
-            else
-            {
-                where = m => m.Order.Status == Status.ToBeAllocated && (m.Order.EmployeeId == "" || m.Order.EmployeeId == null);
-                where = where.Or(c => c.Order.EmployeeId == employeeSession.BusinessUserId);
-            }
-            q = q.Where(where);
-            return ValueTask.FromResult(q);
-        }
+        //protected virtual ValueTask<IQueryable<TQueryTemp>> GetAndAllFilterAsync(IQueryable<TQueryTemp> q, params Status[] statuses)
+        //{
+        //    Expression<Func<TQueryTemp, bool>> where = m => false;
+        //    if (statuses != null && statuses.Length > 0)
+        //    {
+        //        if (statuses.Contains(Status.ToBeAllocated))
+        //        {
+        //            where = m => m.Order.Status == Status.ToBeAllocated && (m.Order.EmployeeId ==""|| m.Order.EmployeeId ==null);
+        //        }
+        //        var temp = statuses.Where(c => c != Status.ToBeAllocated);
+        //        where = where.Or(c => c.Order.EmployeeId == employeeSession.BusinessUserId && statuses.Contains(c.Order.Status));
+        //    }
+        //    else
+        //    {
+        //        where = m => m.Order.Status == Status.ToBeAllocated && (m.Order.EmployeeId == "" || m.Order.EmployeeId == null);
+        //        where = where.Or(c => c.Order.EmployeeId == employeeSession.BusinessUserId);
+        //    }
+        //    q = q.Where(where);
+        //    return ValueTask.FromResult(q);
+        //}
 
-
-     
+        /// <summary>
+        /// 应用关键字模糊搜索，默认模糊搜索标题、描述
+        /// 若你的工单类型某些字段需要参与关键字模糊搜索，则可以重写此方法，通常需要调用base.ApplyKeyword后，使用Or扩展方法应用更多模糊查询字段
+        /// </summary>
+        /// <param name="keyword"></param>
+        /// <returns></returns>
         protected virtual ValueTask<Expression<Func<TQueryTemp, bool>>> ApplyKeyword(string keyword)
         {
             Expression<Func<TQueryTemp, bool>> where = c => c.Order.Title.Contains(keyword) || c.Order.Description.Contains(keyword);
             return ValueTask.FromResult(where);
         }
-        protected virtual ValueTask<IQueryable<TQueryTemp>> ApplyOther(IQueryable<TQueryTemp> query, IGetTotalInputBase input)
+        /// <summary>
+        /// 获取数量或列表时都会调用，它主要用来应用过滤条件
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        protected virtual ValueTask<IQueryable<TQueryTemp>> ApplyOther(IQueryable<TQueryTemp> query, TGetTotalInput input)
         {
+            #region 分类条件
             if (input.CategoryCodes != null)
             {
                 Expression<Func<TQueryTemp, bool>> where = c => false;
@@ -405,7 +421,28 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
                 }
                 query = query.Where(where);
             }
+            #endregion
 
+            #region 状态条件
+            Expression<Func<TQueryTemp, bool>> where1 = m => false;
+            if (input.Statuses != null && input.Statuses.Length > 0)
+            {
+                if (input.Statuses.Contains(Status.ToBeAllocated))
+                {
+                    where1 = m => m.Order.Status == Status.ToBeAllocated && (m.Order.EmployeeId == "" || m.Order.EmployeeId == null);
+                }
+                var temp = input.Statuses.Where(c => c != Status.ToBeAllocated);
+                where1 = where1.Or(c => c.Order.EmployeeId == employeeSession.BusinessUserId && input.Statuses.Contains(c.Order.Status));
+            }
+            else
+            {
+                where1 = m => m.Order.Status == Status.ToBeAllocated && (m.Order.EmployeeId == "" || m.Order.EmployeeId == null);
+                where1 = where1.Or(c => c.Order.EmployeeId == employeeSession.BusinessUserId);
+            }
+            query = query.Where(where1);
+            #endregion
+
+            #region 其它条件
             query = query.WhereIf(input.UrgencyDegrees != null, c => input.UrgencyDegrees.Contains(c.Order.UrgencyDegree))
                         //.WhereIf(input.Statuses != null, c => input.Statuses.Contains(c.Order.Status))
                         //.WhereIf(input.EmployeeIds != null && input.EmployeeType == EmpType.Contains, c => input.EmployeeIds.Contains(c.Order.EmployeeId))
@@ -419,6 +456,9 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
                         .WhereIf(input.ExecutionTimeEnd.HasValue, c => c.Order.ExecutionTime < input.ExecutionTimeEnd)
                         .WhereIf(input.CompletionTimeStart.HasValue, c => c.Order.CompletionTime >= input.CompletionTimeStart)
                         .WhereIf(input.CompletionTimeEnd.HasValue, c => c.Order.CompletionTime < input.CompletionTimeEnd);
+
+            #endregion
+
             return ValueTask.FromResult(query);
         }
         //protected virtual Task<IEnumerable<string>> GetEmployeeIdsAsync(TGetTotalInput input)
@@ -448,7 +488,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
             return query;
         }
 
-        protected virtual async Task<IQueryable<TQueryTemp>> GetAllFilterAsync(IGetTotalInputBase input)
+        protected virtual async Task<IQueryable<TQueryTemp>> GetAllFilterAsync(TGetTotalInput input)
         {
             var query = GetQuery();
             //if (input.CategoryCodes != null)
@@ -471,7 +511,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
             query = await ApplyOther(query, input);
 
             query = query.WhereIf(!input.Keyword.IsNullOrWhiteSpace(), await ApplyKeyword(input.Keyword));
-            query = await GetAndAllFilterAsync(query, input.Statuses);
+            //query = await GetAndAllFilterAsync(query, input.Statuses);
             return query;
         }
         protected virtual IQueryable<TQueryTemp> PageBy(IQueryable<TQueryTemp> query, TGetAllInput input)
