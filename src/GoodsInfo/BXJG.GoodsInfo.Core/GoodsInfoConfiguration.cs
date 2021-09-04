@@ -19,6 +19,8 @@ namespace BXJG.GoodsInfo
     /// </summary>
     public class GoodsInfoConfiguration
     {
+        //不要定义一个无用的字段，直接在Module.Configuation.Set中存储，用完后再删除掉
+
         /// <summary>
         /// 注册具体物品类型的委托集合
         /// 当你实现具体物品类型时应通过此属性实现物品类型注册

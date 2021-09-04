@@ -27,7 +27,6 @@ namespace BXJG.GoodsInfo
         {
             //IocManager.Register<BXJGUtilsModuleConfig>();
             //Configuration.Modules.BXJGUtils().AddEnum("gender", typeof(Gender), BXJGUtilsConsts.LocalizationSourceName);
-
             LocalizationConfigurer.Configure(Configuration.Localization);
             //Configuration.Settings.Providers.Add<BXJGUtilsFileSettingProvider>();
         }
