@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 
 namespace BXJG.GoodsInfo
 {
+    //物品简单，没必要严格按照DDD的方式来
+
     /// <summary>
     /// 基本物品实体
     /// 它定义物品信息公共属性

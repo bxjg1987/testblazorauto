@@ -25,7 +25,8 @@ namespace BXJG.GoodsInfo
     {
         public override void PreInitialize()
         {
-            //IocManager.Register<BXJGUtilsModuleConfig>();
+            //物品模块配置对象
+            IocManager.Register<GoodsInfoConfiguration>();
             //Configuration.Modules.BXJGUtils().AddEnum("gender", typeof(Gender), BXJGUtilsConsts.LocalizationSourceName);
             LocalizationConfigurer.Configure(Configuration.Localization);
             //Configuration.Settings.Providers.Add<BXJGUtilsFileSettingProvider>();
@@ -48,8 +49,20 @@ namespace BXJG.GoodsInfo
             //IocManager.Register<IEnv, Utils.File.DefaultEnv>(Abp.Dependency.DependencyLifeStyle.Singleton);
         }
 
-        //public override void PostInitialize()
-        //{
+        public override void PostInitialize()
+        {
+            var zc = IocManager.Resolve<GoodsInfoConfiguration>().AddGoodsInfoTypes;
+            var ctx = new GoodsInfoTypeDefineAddContex();
+            var list = new List< GoodsInfoTypeDefine>();
+            foreach (var item in zc)
+            {
+                list.Add(item(ctx)); ;
+            }
+            var m = new GoodsInfoTypeManager(list);
+            //GoodsInfoTypeManager本身继承DomainService，会在Initialize注册，这里重复注册应该是后者生效，若不行考虑使用ReplaceService
+            //base.Configuration.ReplaceService(typeof(GoodsInfoTypeManager), () => IocManager...);
+            //单例 实例 注册
+            IocManager.RegService(s=>s.Add(new Microsoft.Extensions.DependencyInjection.ServiceDescriptor(typeof(GoodsInfoTypeManager),m)));
             //var workManager = IocManager.Resolve<IBackgroundWorkerManager>();
             ////运行ZLJ.Migrator时会确实依赖服务，所以这里try下
             //try
@@ -60,6 +73,6 @@ namespace BXJG.GoodsInfo
             //{
 
             //}
-        //}
+        }
     }
 }

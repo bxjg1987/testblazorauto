@@ -27,11 +27,11 @@ namespace BXJG.GoodsInfo
         /// 扩展属性
         /// 虽然关联的GoodsInfo已提供这样的属性，但当前类是抽象，给调用方预留更多的扩展点
         /// </summary>
-        public string ExtensionData { get; set; }
+        public virtual string ExtensionData { get; set; }
         /// <summary>
         /// 租户id，由于是抽象的，不确定将来调用方是否需要多租户，所以可空
         /// 虽然GoodsInfo里已经有了，但是考虑将来直接处理数据时更容易，这里也存储下租户id
         /// </summary>
-        public int? TenantId { get; set; }
+        public virtual int? TenantId { get; set; }
     }
 }

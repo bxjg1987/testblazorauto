@@ -31,7 +31,7 @@ namespace BXJG.GoodsInfo
         /// <summary>
         /// 获取具体物品类型
         /// </summary>
-        public virtual Type EntityType { get; private set; }
+        public Type EntityType { get; private set; }
         /// <summary>
         /// 获取具体物品类型的显示名
         /// </summary>
@@ -39,7 +39,11 @@ namespace BXJG.GoodsInfo
         /// <summary>
         /// 获取仓储类型
         /// </summary>
-        public virtual Type RepositoryType { get; private set; }
+        public Type RepositoryType { get; private set; }
+        /// <summary>
+        /// 顺序
+        /// </summary>
+        public int OrderIndex { get; set; }
     }
     /// <summary>
     /// 具体的物品类型描述类
