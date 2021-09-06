@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="BXJG.Utils" Version="*" />
+    <ProjectReference Include="..\..\modules\BXJG.Utils\BXJG.Utils.csproj" />
   </ItemGroup>
 
   <ItemGroup>

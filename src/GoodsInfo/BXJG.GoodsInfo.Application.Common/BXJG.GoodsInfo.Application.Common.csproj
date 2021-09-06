@@ -4,4 +4,9 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Modules\BXJG.Utils.Application\BXJG.Utils.Application.csproj" />
+    <ProjectReference Include="..\BXJG.GoodsInfo.Core\BXJG.GoodsInfo.Core.csproj" />
+  </ItemGroup>
+
 </Project>
