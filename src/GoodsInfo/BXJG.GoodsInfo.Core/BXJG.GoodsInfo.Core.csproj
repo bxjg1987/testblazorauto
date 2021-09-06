@@ -6,6 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="GoodsInfoExtensionEntity.cs" />
+    <Compile Remove="IGoodsInfoExtensionRepository.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Localization\SourceFiles\BXJGGoodsInfo-en.xml" />
     <None Remove="Localization\SourceFiles\BXJGGoodsInfo-zh-Hans.xml" />
   </ItemGroup>

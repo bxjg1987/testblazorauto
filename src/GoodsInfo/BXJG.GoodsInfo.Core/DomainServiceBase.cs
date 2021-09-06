@@ -9,7 +9,7 @@ using System.Text;
 namespace BXJG.GoodsInfo
 {
     /// <summary>
-    /// 商城系统 领域服务基类
+    /// 物品模块 领域服务基类
     /// </summary>
     public class DomainServiceBase : DomainService
     {

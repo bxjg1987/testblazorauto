@@ -29,7 +29,7 @@ namespace BXJG.GoodsInfo.EFCore.Map
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public abstract class GoodsInfoExtension<T> : IEntityTypeConfiguration<T>
-        where T : class, IGoodsInfoExtensionEntity
+        where T : class, IGoodsInfoEntity
     {
         public virtual void Configure(EntityTypeBuilder<T> builder)
         {

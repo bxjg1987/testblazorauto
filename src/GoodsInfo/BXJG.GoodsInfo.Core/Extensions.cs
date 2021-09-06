@@ -14,7 +14,7 @@ namespace BXJG.GoodsInfo
         /// </summary>
         /// <param name="config"></param>
         /// <returns></returns>
-        public static GoodsInfoConfiguration AddGoodsInfoType(this GoodsInfoConfiguration config, Func<GoodsInfoTypeDefineAddContex, GoodsInfoTypeDefine> func)
+        public static ModuleConfiguration AddGoodsInfoType(this ModuleConfiguration config, Func<GoodsInfoTypeDefineAddContex, GoodsInfoTypeDefine> func)
         {
             config.GoodsInfoTypeProviders.Add(func);
             return config;
@@ -24,16 +24,16 @@ namespace BXJG.GoodsInfo
         /// </summary>
         /// <param name="config"></param>
         /// <returns></returns>
-        public static GoodsInfoConfiguration AddGoodsInfoType(this GoodsInfoConfiguration config, GoodsInfoTypeDefine func)
+        public static ModuleConfiguration AddGoodsInfoType(this ModuleConfiguration config, GoodsInfoTypeDefine func)
         {
             return config.AddGoodsInfoType(c => func);
         }
         /// <summary>
         /// 获取物品模块配置对象
         /// </summary>
-        public static GoodsInfoConfiguration BXJGGoodsInfo(this IModuleConfigurations moduleConfigurations)
+        public static ModuleConfiguration BXJGGoodsInfo(this IModuleConfigurations moduleConfigurations)
         {
-            return moduleConfigurations.AbpConfiguration.Get<GoodsInfoConfiguration>();
+            return moduleConfigurations.AbpConfiguration.Get<ModuleConfiguration>();
         }
         /// <summary>
         /// 将模块内部的枚举值转换为本地化字符串

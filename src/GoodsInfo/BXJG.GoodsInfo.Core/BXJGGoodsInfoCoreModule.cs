@@ -26,7 +26,7 @@ namespace BXJG.GoodsInfo
         public override void PreInitialize()
         {
             //物品模块配置对象
-            IocManager.Register<GoodsInfoConfiguration>();
+            IocManager.Register<ModuleConfiguration>();
             //Configuration.Modules.BXJGUtils().AddEnum("gender", typeof(Gender), BXJGUtilsConsts.LocalizationSourceName);
             LocalizationConfigurer.Configure(Configuration.Localization);
             //Configuration.Settings.Providers.Add<BXJGUtilsFileSettingProvider>();
@@ -51,12 +51,12 @@ namespace BXJG.GoodsInfo
 
         public override void PostInitialize()
         {
-            var cfg = IocManager.Resolve<GoodsInfoConfiguration>();
+            var cfg = IocManager.Resolve<ModuleConfiguration>();
             var ctx = new GoodsInfoTypeDefineAddContex();
             var list = new List< GoodsInfoTypeDefine>();
             foreach (var item in cfg.GoodsInfoTypeProviders)
             {
-                list.Add(item(ctx)); ;
+                list.Add(item(ctx));
             }
             cfg.GoodsInfoTypeProviders = null;
             var m = new GoodsInfoTypeManager(list);
@@ -64,16 +64,7 @@ namespace BXJG.GoodsInfo
             //base.Configuration.ReplaceService(typeof(GoodsInfoTypeManager), () => IocManager...);
             //单例 实例 注册
             IocManager.RegService(s=>s.Add(new Microsoft.Extensions.DependencyInjection.ServiceDescriptor(typeof(GoodsInfoTypeManager),m)));
-            //var workManager = IocManager.Resolve<IBackgroundWorkerManager>();
-            ////运行ZLJ.Migrator时会确实依赖服务，所以这里try下
-            //try
-            //{
-            //    workManager.Add(IocManager.Resolve<RemoveUploadFileWorker>());
-            //}
-            //catch
-            //{
-
-            //}
+           
         }
     }
 }

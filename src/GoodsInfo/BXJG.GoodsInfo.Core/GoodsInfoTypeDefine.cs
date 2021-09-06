@@ -15,49 +15,27 @@ namespace BXJG.GoodsInfo
         /// <summary>
         /// 实例化具体的物品类型描述类
         /// </summary>
-        /// <param name="entityType">具体物品类型</param>
+        /// <param name="entityTypeName">具体物品类型名</param>
         /// <param name="displayName">具体物品类型的显示名</param>
-        /// <param name="repositoryType">仓储类型</param>
-        public GoodsInfoTypeDefine(Type entityType, ILocalizableString displayName, Type repositoryType)
+        /// <param name="orderIndex">顺序</param>
+        public GoodsInfoTypeDefine(string entityTypeName, ILocalizableString displayName, int orderIndex = int.MinValue)
         {
-            EntityType = entityType;
+            EntityTypeName = entityTypeName;
             DisplayName = displayName;
-            RepositoryType = repositoryType;
         }
         /// <summary>
-        /// 获取具体物品类型的完全限定名
+        /// 获取具体物品类型名
         /// </summary>
-        public string EntityTypeFullName => EntityType.FullName;
-        /// <summary>
-        /// 获取具体物品类型
-        /// </summary>
-        public Type EntityType { get; private set; }
+        public string EntityTypeName { get; private set; }
+
         /// <summary>
         /// 获取具体物品类型的显示名
         /// </summary>
         public ILocalizableString DisplayName { get; private set; }
-        /// <summary>
-        /// 获取仓储类型
-        /// </summary>
-        public Type RepositoryType { get; private set; }
+
         /// <summary>
         /// 顺序
         /// </summary>
-        public int OrderIndex { get; set; }
-    }
-    /// <summary>
-    /// 具体的物品类型描述类
-    /// </summary>
-    /// <typeparam name="TEntityType">具体物品类型</typeparam>
-    /// <typeparam name="TRepositoryType">仓储类型</typeparam>
-    public class GoodsInfoTypeDefine<TEntityType, TRepositoryType> : GoodsInfoTypeDefine
-    {
-        /// <summary>
-        /// 实例化具体的物品类型描述类
-        /// </summary>
-        /// <param name="displayName">具体物品类型的显示名</param>
-        public GoodsInfoTypeDefine(ILocalizableString displayName) : base(typeof(TEntityType), displayName, typeof(TRepositoryType))
-        {
-        }
+        public int OrderIndex { get; private set; }
     }
 }

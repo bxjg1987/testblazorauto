@@ -20,7 +20,7 @@ namespace BXJG.GoodsInfo
             this.dic = new Dictionary<string, GoodsInfoTypeDefine>();
             foreach (var item in list)
             {
-                dic.Add(item.EntityTypeFullName, item);
+                dic.Add(item.EntityTypeName, item);
             }
             this.list = list.OrderBy(c => c.OrderIndex).ToList();
         }
