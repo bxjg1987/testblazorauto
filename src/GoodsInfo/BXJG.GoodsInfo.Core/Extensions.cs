@@ -16,7 +16,7 @@ namespace BXJG.GoodsInfo
         /// <returns></returns>
         public static GoodsInfoConfiguration AddGoodsInfoType(this GoodsInfoConfiguration config, Func<GoodsInfoTypeDefineAddContex, GoodsInfoTypeDefine> func)
         {
-            config.AddGoodsInfoTypes.Add(func);
+            config.GoodsInfoTypeProviders.Add(func);
             return config;
         }
         /// <summary>

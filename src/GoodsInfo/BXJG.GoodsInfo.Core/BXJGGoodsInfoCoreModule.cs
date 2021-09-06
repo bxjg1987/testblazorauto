@@ -51,13 +51,14 @@ namespace BXJG.GoodsInfo
 
         public override void PostInitialize()
         {
-            var zc = IocManager.Resolve<GoodsInfoConfiguration>().AddGoodsInfoTypes;
+            var cfg = IocManager.Resolve<GoodsInfoConfiguration>();
             var ctx = new GoodsInfoTypeDefineAddContex();
             var list = new List< GoodsInfoTypeDefine>();
-            foreach (var item in zc)
+            foreach (var item in cfg.GoodsInfoTypeProviders)
             {
                 list.Add(item(ctx)); ;
             }
+            cfg.GoodsInfoTypeProviders = null;
             var m = new GoodsInfoTypeManager(list);
             //GoodsInfoTypeManager本身继承DomainService，会在Initialize注册，这里重复注册应该是后者生效，若不行考虑使用ReplaceService
             //base.Configuration.ReplaceService(typeof(GoodsInfoTypeManager), () => IocManager...);

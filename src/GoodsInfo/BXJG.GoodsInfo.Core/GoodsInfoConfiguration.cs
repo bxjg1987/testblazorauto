@@ -31,6 +31,6 @@ namespace BXJG.GoodsInfo
         /// 当你实现具体物品类型时应通过此属性实现物品类型注册
         /// 注册成功后此属性将被设置为null
         /// </summary>
-        public List<Func<GoodsInfoTypeDefineAddContex,GoodsInfoTypeDefine>> AddGoodsInfoTypes = new List<Func<GoodsInfoTypeDefineAddContex, GoodsInfoTypeDefine>>();
+        public List<Func<GoodsInfoTypeDefineAddContex,GoodsInfoTypeDefine>> GoodsInfoTypeProviders = new List<Func<GoodsInfoTypeDefineAddContex, GoodsInfoTypeDefine>>();
     }
 }
