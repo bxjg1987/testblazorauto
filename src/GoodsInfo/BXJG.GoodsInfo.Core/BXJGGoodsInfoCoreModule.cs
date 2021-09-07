@@ -26,7 +26,7 @@ namespace BXJG.GoodsInfo
         public override void PreInitialize()
         {
             //物品模块配置对象
-            IocManager.Register<ModuleConfiguration>();
+            IocManager.Register<Configuration>();
             //Configuration.Modules.BXJGUtils().AddEnum("gender", typeof(Gender), BXJGUtilsConsts.LocalizationSourceName);
             LocalizationConfigurer.Configure(Configuration.Localization);
             //Configuration.Settings.Providers.Add<BXJGUtilsFileSettingProvider>();
@@ -51,7 +51,7 @@ namespace BXJG.GoodsInfo
 
         public override void PostInitialize()
         {
-            var cfg = IocManager.Resolve<ModuleConfiguration>();
+            var cfg = IocManager.Resolve<Configuration>();
             var ctx = new GoodsInfoTypeDefineAddContex();
             var list = new List< GoodsInfoTypeDefine>();
             foreach (var item in cfg.GoodsInfoTypeProviders)
@@ -59,11 +59,11 @@ namespace BXJG.GoodsInfo
                 list.Add(item(ctx));
             }
             cfg.GoodsInfoTypeProviders = null;
-            var m = new GoodsInfoTypeManager(list);
+            var m = new GoodsInfoTypeDefineManager(list);
             //GoodsInfoTypeManager本身继承DomainService，会在Initialize注册，这里重复注册应该是后者生效，若不行考虑使用ReplaceService
             //base.Configuration.ReplaceService(typeof(GoodsInfoTypeManager), () => IocManager...);
             //单例 实例 注册
-            IocManager.RegService(s=>s.Add(new Microsoft.Extensions.DependencyInjection.ServiceDescriptor(typeof(GoodsInfoTypeManager),m)));
+            IocManager.RegService(s=>s.Add(new Microsoft.Extensions.DependencyInjection.ServiceDescriptor(typeof(GoodsInfoTypeDefineManager),m)));
            
         }
     }

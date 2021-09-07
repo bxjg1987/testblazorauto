@@ -10,14 +10,18 @@ using System.Threading.Tasks;
 
 namespace BXJG.GoodsInfo
 {
-    public class GoodsInfoTypeManager : DomainServiceBase, IReadOnlyDictionary<string, GoodsInfoTypeDefine>, IReadOnlyList<GoodsInfoTypeDefine>
+    /// <summary>
+    /// 物品类型定义管理器（领域服务），
+    /// 调用方在模块初始化阶段注册自己扩展的物品类型，在任何地方ioc注入此对象使用，它是单例注册倒ioc容器中的。
+    /// </summary>
+    public class GoodsInfoTypeDefineManager : DomainServiceBase, IReadOnlyDictionary<string, GoodsInfoTypeDefine>, IReadOnlyList<GoodsInfoTypeDefine>
     {
         Dictionary<string, GoodsInfoTypeDefine> dic;
         List<GoodsInfoTypeDefine> list;
 
-        public GoodsInfoTypeManager(IList<GoodsInfoTypeDefine> list)
+        public GoodsInfoTypeDefineManager(IList<GoodsInfoTypeDefine> list)
         {
-            this.dic = new Dictionary<string, GoodsInfoTypeDefine>();
+            this.dic = new Dictionary<string, GoodsInfoTypeDefine>(StringComparer.OrdinalIgnoreCase);
             foreach (var item in list)
             {
                 dic.Add(item.EntityTypeName, item);

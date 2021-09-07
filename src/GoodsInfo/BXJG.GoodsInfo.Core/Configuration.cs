@@ -10,7 +10,7 @@ namespace BXJG.GoodsInfo
     /// <summary>
     /// 物品模块配置对象
     /// </summary>
-    public class ModuleConfiguration
+    public class Configuration
     {
         //不要定义一个无用的字段，直接在Module.Configuation.Set中存储，用完后再删除掉
         //private readonly IAbpStartupConfiguration abpStartupConfiguration;

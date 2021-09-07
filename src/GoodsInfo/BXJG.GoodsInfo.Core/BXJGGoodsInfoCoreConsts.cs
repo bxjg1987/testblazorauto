@@ -7,6 +7,19 @@
         /// </summary>
         public const string LocalizationSourceName = "BXJGGoodsInfo";
 
+        #region 物品分类权限名
+        /// <summary>
+        /// 物品分类
+        /// </summary>
+        public const string GoodsInfoCategory = "GoodsInfoCategory";
+        /// <summary>
+        /// 物品分类管理
+        /// </summary>
+        public const string GoodsInfoCategoryManager = "GoodsInfoCategoryManager";
+        public const string GoodsInfoCategoryCreate = GoodsInfoCategoryManager+ "Create";
+        public const string GoodsInfoCategoryUpdate = GoodsInfoCategoryManager + "Update";
+        public const string GoodsInfoCategoryDelete = GoodsInfoCategoryManager + "Delete";
+        #endregion
         //public const string ConnectionStringName = "Default";
 
         //public const bool MultiTenancyEnabled = true;

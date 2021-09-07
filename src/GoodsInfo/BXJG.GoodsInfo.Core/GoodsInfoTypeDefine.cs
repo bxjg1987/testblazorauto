@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace BXJG.GoodsInfo
 {
     /// <summary>
-    /// 具体的物品类型描述类
+    /// 物品类型描述类
     /// </summary>
     public class GoodsInfoTypeDefine
     {
@@ -27,12 +27,10 @@ namespace BXJG.GoodsInfo
         /// 获取具体物品类型名
         /// </summary>
         public string EntityTypeName { get; private set; }
-
         /// <summary>
         /// 获取具体物品类型的显示名
         /// </summary>
         public ILocalizableString DisplayName { get; private set; }
-
         /// <summary>
         /// 顺序
         /// </summary>
