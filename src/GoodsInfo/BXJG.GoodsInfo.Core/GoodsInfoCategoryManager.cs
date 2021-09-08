@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace BXJG.GoodsInfo
 {
-    public class CategoryManager : GeneralTreeManager<CategoryEntity>
+    public class GoodsInfoCategoryManager : GeneralTreeManager<GoodsInfoCategoryEntity>
     {
-        public CategoryManager(IRepository<CategoryEntity, long> repository) : base(repository)
+        public GoodsInfoCategoryManager(IRepository<GoodsInfoCategoryEntity, long> repository) : base(repository)
         {
         }
     }

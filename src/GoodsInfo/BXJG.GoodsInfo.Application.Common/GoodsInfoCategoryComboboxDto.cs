@@ -5,12 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.GoodsInfo
+namespace BXJG.GoodsInfo.Application.Common
 {
     /// <summary>
-    /// 物品分类
+    /// 获取物品分类扁平化结构的下拉框数据模型
     /// </summary>
-    public class CategoryEntity : GeneralTreeEntity<CategoryEntity>
+    public class GoodsInfoCategoryComboboxDto: GeneralTreeComboboxDto
     {
     }
 }

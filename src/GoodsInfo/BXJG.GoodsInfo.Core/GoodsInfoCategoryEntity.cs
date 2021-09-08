@@ -5,12 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.GoodsInfo.Application.Common
+namespace BXJG.GoodsInfo
 {
     /// <summary>
-    /// 获取物品分类树形下拉框模型
+    /// 物品分类
     /// </summary>
-    public class CategoryTreeDto : GeneralTreeNodeDto<CategoryTreeDto>
+    public class GoodsInfoCategoryEntity : GeneralTreeEntity<GoodsInfoCategoryEntity>
     {
     }
 }

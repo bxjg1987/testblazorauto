@@ -22,7 +22,7 @@ namespace BXJG.GoodsInfo.Application.Common
     public class BXJGGoodsInfoCommonAppService<TEntity, TDto, TGetForSelectInput,TRepository> : ApplicationService
         where TEntity : GoodsInfoEntity
         where TDto : GoodsInfoDto
-        where TGetForSelectInput : GetForSelectInput
+        where TGetForSelectInput : GetGoodsInfoForSelectInput
         where TRepository : IGoodsInfoRepository<TEntity>
     {
         private readonly TRepository repository;

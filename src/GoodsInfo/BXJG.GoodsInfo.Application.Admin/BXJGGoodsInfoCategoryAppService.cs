@@ -20,11 +20,11 @@ namespace BXJG.GoodsInfo.Application.Admin
                                                                              CategoryGetAllInput,
                                                                              EntityDto<long>,
                                                                              CategoryMoveInput,
-                                                                             CategoryEntity,
-                                                                             CategoryManager>
+                                                                             GoodsInfoCategoryEntity,
+                                                                             GoodsInfoCategoryManager>
     {
-        public BXJGGoodsInfoCategoryAppService(IRepository<CategoryEntity, long> ownRepository,
-                                               CategoryManager manager) : base(ownRepository,
+        public BXJGGoodsInfoCategoryAppService(IRepository<GoodsInfoCategoryEntity, long> ownRepository,
+                                               GoodsInfoCategoryManager manager) : base(ownRepository,
                                                                                         manager,
                                                                                         BXJGGoodsInfoCoreConsts.GoodsInfoCategoryCreate,
                                                                                         BXJGGoodsInfoCoreConsts.GoodsInfoCategoryUpdate,

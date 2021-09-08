@@ -8,8 +8,8 @@ namespace BXJG.GoodsInfo.Application.Common
         public AutoMapperProfile()
         {
             CreateMap<GoodsInfoEntity, GoodsInfoDto>();
-            CreateMap(typeof(CategoryEntity), typeof(CategoryTreeDto)).EntityToComboTree();
-            CreateMap(typeof(CategoryEntity), typeof(CategoryComboboxDto)).EntityToCombobox();
+            CreateMap(typeof(GoodsInfoCategoryEntity), typeof(GoodsInfoCategoryTreeDto)).EntityToComboTree();
+            CreateMap(typeof(GoodsInfoCategoryEntity), typeof(GoodsInfoCategoryComboboxDto)).EntityToCombobox();
         }
     }
 }

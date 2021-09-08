@@ -1,4 +1,4 @@
-﻿using BXJG.GeneralTree;
+﻿using BXJG.Utils.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +8,10 @@ using System.Threading.Tasks;
 namespace BXJG.GoodsInfo.Application.Common
 {
     /// <summary>
-    /// 获取物品类别下拉框数据时的输入模型
+    /// 获取物品下拉框数据的输入模型
     /// </summary>
-    public class CategoryGetForSelectInput : GeneralTreeGetForSelectInput
+    public class GetGoodsInfoForSelectInput : GetPageForSelectInput
     {
+        public string Keywords { get; set; }
     }
 }

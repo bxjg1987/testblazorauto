@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 namespace BXJG.GoodsInfo.Application.Common
 {
     /// <summary>
-    /// 获取物品分类扁平化结构的下拉框数据模型
+    /// 获取物品类别下拉框数据时的输入模型
     /// </summary>
-    public class CategoryComboboxDto: GeneralTreeComboboxDto
+    public class GetGoodsInfoCategoryForSelectInput : GeneralTreeGetForSelectInput
     {
     }
 }
