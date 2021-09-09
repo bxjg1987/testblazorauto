@@ -11,7 +11,7 @@ namespace BXJG.GoodsInfo.Application.Common
     /// <summary>
     /// 后台管理物品的显示模型
     /// </summary>
-    public class GoodsInfoDto : EntityDto<long>, IExtendableDto
+    public class GoodsInfoDto : FullAuditedEntityDto<long>, IExtendableDto
     {
         /// <summary>
         /// 物品名称

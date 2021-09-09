@@ -16,6 +16,14 @@ namespace BXJG.GoodsInfo
     public class GoodsInfoEntity : FullAuditedAggregateRoot<long>, IGoodsInfoEntity
     {
         /// <summary>
+        /// 所属分类id
+        /// </summary>
+        public long CategoryId { get; set; }
+        /// <summary>
+        /// 所属分类实体
+        /// </summary>
+        public virtual GoodsInfoCategoryEntity Category { get; set; }
+        /// <summary>
         /// 物品名称
         /// </summary>
         public virtual string Name { get; set; }
