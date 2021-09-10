@@ -13,7 +13,7 @@ using BXJG.GoodsInfo.Application.Common;
 namespace BXJG.GoodsInfo.Application.Admin
 {
     [DependsOn(typeof(BXJGGoodsInfoApplicationCommonModule))]
-    public class BXJGGoodsInfoApplicationAdminModule : AbpModule
+    public class GoodsInfoApplicationAdminModule : AbpModule
     {
         //BXJGWorkOrderConfig configuration;
 

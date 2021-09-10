@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 namespace BXJG.GoodsInfo.Application.Admin
 {
     /// <summary>
-    /// 后台管理物品分类移动节点时的输入模型
+    /// 后台管理物品分类的编辑模型
     /// </summary>
-    public class CategoryMoveInput : GeneralTreeNodeMoveInput
+    public class GoodsInfoCategoryEditDto: GeneralTreeNodeEditBaseDto
     {
     }
 }

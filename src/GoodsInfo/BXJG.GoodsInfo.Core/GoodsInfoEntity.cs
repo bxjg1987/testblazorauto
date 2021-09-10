@@ -36,6 +36,10 @@ namespace BXJG.GoodsInfo
         /// </summary>
         public virtual string UnitId { get; set; }
         /// <summary>
+        /// 所属品牌id
+        /// </summary>
+        public virtual string BrandId { get; set; }
+        /// <summary>
         /// 扩展属性
         /// </summary>
         public virtual string ExtensionData { get; set; }

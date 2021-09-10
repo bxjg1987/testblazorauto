@@ -10,7 +10,7 @@ namespace BXJG.GoodsInfo.Application.Admin
     /// <summary>
     /// 后台管理物品分类的显示模型
     /// </summary>
-    public class CategoryDto : GeneralTreeGetTreeNodeBaseDto<CategoryDto>
+    public class GoodsInfoCategoryDto : GeneralTreeGetTreeNodeBaseDto<GoodsInfoCategoryDto>
     {
     }
 }

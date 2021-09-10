@@ -14,6 +14,14 @@ namespace BXJG.GoodsInfo.Application.Admin
     public class GoodsInfoDto : FullAuditedEntityDto<long>, IExtendableDto
     {
         /// <summary>
+        /// 所属分类id
+        /// </summary>
+        public virtual long CategoryId { get; set; }
+        /// <summary>
+        /// 所属分类名称
+        /// </summary>
+        public virtual long CategoryDisplayName { get; set; }
+        /// <summary>
         /// 物品名称
         /// </summary>
         public virtual string Name { get; set; }
@@ -26,8 +34,12 @@ namespace BXJG.GoodsInfo.Application.Admin
         /// </summary>
         public virtual string UnitId { get; set; }
         /// <summary>
+        /// 品牌id
+        /// </summary>
+        public virtual string BrandId { get; set; }
+        /// <summary>
         /// 扩展数据
         /// </summary>
-        public dynamic ExtensionData { get; set; }
+        public virtual dynamic ExtensionData { get; set; }
     }
 }

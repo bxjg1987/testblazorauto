@@ -16,10 +16,10 @@ namespace BXJG.GoodsInfo.Application.Common
 {
     [AbpAuthorize]
     public class GoodsInfoCategoryAppService : UnAuthGeneralTreeAppServiceBase<GetGoodsInfoCategoryForSelectInput,
-                                                                                       GoodsInfoCategoryTreeDto,
-                                                                                       GetGoodsInfoCategoryForSelectInput,
-                                                                                       GoodsInfoCategoryComboboxDto,
-                                                                                       GoodsInfoCategoryEntity>
+                                                                               GoodsInfoCategoryTreeDto,
+                                                                               GetGoodsInfoCategoryForSelectInput,
+                                                                               GoodsInfoCategoryComboboxDto,
+                                                                               GoodsInfoCategoryEntity>
     {
         public GoodsInfoCategoryAppService(IRepository<GoodsInfoCategoryEntity, long> repository) : base(repository)
         {

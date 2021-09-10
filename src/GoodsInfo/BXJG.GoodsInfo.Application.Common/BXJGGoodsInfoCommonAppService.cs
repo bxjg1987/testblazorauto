@@ -47,7 +47,6 @@ namespace BXJG.GoodsInfo.Application.Common
             this.repository = repository;
             this.clsRepository = clsRepository;
         }
-
         /// <summary>
         /// 获取符合条件的物品数量
         /// </summary>
@@ -66,26 +65,77 @@ namespace BXJG.GoodsInfo.Application.Common
         [UnitOfWork(false)]
         public virtual async Task<PagedResultDto<TDto>> GetAllAsync(TGetForSelectInput input)
         {
-            throw new NotImplementedException();
+            var query = await FilterAsync(input.GetTotalInput);
+            var total = await query.CountAsync();
+            query = await PageByAsync(query, input);
+            query = await OrderByAsync(query, input);
+            var list = await query.ToListAsync();
+            var dtos = new List<TDto>();
+            foreach (var item in list)
+            {
+                var dto = await this.Entity2DtoAsync(item);
+                dtos.Add(dto);
+            }
+            return new PagedResultDto<TDto>(total, dtos);
         }
-
+        /// <summary>
+        /// 实体映射为dto。
+        /// 默认使用ObjectMapper.Map(entity)
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        protected virtual ValueTask<TDto> Entity2DtoAsync(TQueryTemp item)
+        {
+            var dto = base.ObjectMapper.Map<TDto>(item.Entity);
+            return ValueTask.FromResult(dto);
+        }
+        /// <summary>
+        /// 通过查询条件生成查询对象
+        /// 默认include分类、AsNoTrackingWithIdentityResolution、关键字模糊查询
+        /// 你可以重写，应用更多include和条件
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         protected virtual async ValueTask<IQueryable<TQueryTemp>> FilterAsync(TGoodsInfoGetTotalInput input)
         {
             var query = from c in repository.GetAll().Include(c => c.Category).AsNoTrackingWithIdentityResolution()
-                        select new TQueryTemp { GoodsInfo = c };
+                        select new TQueryTemp { Entity = c };
             return query.WhereIf(!input.Keywords.IsNullOrWhiteSpace(), await ApplyKeywordsAsync(input.Keywords));
         }
+        /// <summary>
+        /// 应用关键字条件。
+        /// 默认模糊查询物品名称、助记码、分类名称等，
+        /// 你可以重写，调用base.ApplyKeywordsAsync后，通过扩展方法Or应用更多字段的模糊查询
+        /// </summary>
+        /// <param name="keywords"></param>
+        /// <returns></returns>
         protected virtual ValueTask<Expression<Func<TQueryTemp, bool>>> ApplyKeywordsAsync(string keywords)
         {
-            Expression<Func<TQueryTemp, bool>> where = c => c.GoodsInfo.Name.Contains(keywords) || c.GoodsInfo.Category.DisplayName.Contains(keywords);
+            Expression<Func<TQueryTemp, bool>> where = c => c.Entity.Name.Contains(keywords) ||
+                                                            c.Entity.MnemonicCode.Contains(keywords) ||
+                                                            c.Entity.Category.DisplayName.Contains(keywords);
             return ValueTask.FromResult(where);
         }
-        protected virtual ValueTask<IQueryable<TQueryTemp>> PageBy(IQueryable<TQueryTemp> query, TGetForSelectInput input)
+        /// <summary>
+        /// 应用分页。
+        /// 默认： query.PageBy(input);
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        protected virtual ValueTask<IQueryable<TQueryTemp>> PageByAsync(IQueryable<TQueryTemp> query, TGetForSelectInput input)
         {
             query = query.PageBy(input);
             return ValueTask.FromResult(query);
         }
-        protected virtual ValueTask<IQueryable<TQueryTemp>> OrderBy(IQueryable<TQueryTemp> query, TGetForSelectInput input)
+        /// <summary>
+        /// 应用排序。
+        /// 默认：query.OrderBy(input.Sorting);
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        protected virtual ValueTask<IQueryable<TQueryTemp>> OrderByAsync(IQueryable<TQueryTemp> query, TGetForSelectInput input)
         {
             query = query.OrderBy(input.Sorting);
             return ValueTask.FromResult(query);

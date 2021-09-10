@@ -6,8 +6,8 @@ namespace BXJG.GoodsInfo.Application.Admin
     {
         public AutoMapperProfile()
         {
-            CreateMap(typeof(CategoryEditDto), typeof(GoodsInfoCategoryEntity));
-            CreateMap(typeof(GoodsInfoCategoryEntity), typeof(CategoryDto));
+            CreateMap(typeof(GoodsInfoCategoryEditDto), typeof(GoodsInfoCategoryEntity));
+            CreateMap(typeof(GoodsInfoCategoryEntity), typeof(GoodsInfoCategoryDto));
         }
     }
 }

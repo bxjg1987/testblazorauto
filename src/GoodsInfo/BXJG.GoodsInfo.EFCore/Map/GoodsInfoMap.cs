@@ -17,7 +17,8 @@ namespace BXJG.GoodsInfo.EFCore.Map
         {
             builder.Property(c => c.Name).HasMaxLength(BXJGGoodsInfoCoreConsts.GoodsInfoNameMaxLength);
             builder.Property(c => c.MnemonicCode).HasMaxLength(BXJGGoodsInfoCoreConsts.GoodsInfoMnemonicCodeMaxLength);
-            builder.Property(c => c.UnitId).HasMaxLength(BXJGGoodsInfoCoreConsts.GoodsInfoUnitIdMaxLength);
+            builder.Property(c => c.UnitId).HasColumnType($"varchar({BXJGGoodsInfoCoreConsts.GoodsInfoUnitIdMaxLength})");
+            builder.Property(c => c.BrandId).HasColumnType($"varchar({BXJGGoodsInfoCoreConsts.GoodsInfoBrandIdMaxLength})");
             //builder.Property(c => c.GoodsInfoExtensionType).HasMaxLength(BXJGGoodsInfoCoreConsts.GoodsInfoExtensionTypeMaxLength);
         }
     }

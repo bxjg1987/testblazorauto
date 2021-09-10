@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BXJG.GoodsInfo.EFCore.Map
 {
-    public class OoodsInfoCategoryMap : IEntityTypeConfiguration<GoodsInfoCategoryEntity>
+    public class GoodsInfoCategoryMap : IEntityTypeConfiguration<GoodsInfoCategoryEntity>
     {
         public void Configure(EntityTypeBuilder<GoodsInfoCategoryEntity> builder)
         {

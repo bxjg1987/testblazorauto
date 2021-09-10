@@ -37,6 +37,10 @@
         /// </summary>
         public const int GoodsInfoUnitIdMaxLength = 80;
         /// <summary>
+        /// 基础物品信息品牌id长度
+        /// </summary>
+        public const int GoodsInfoBrandIdMaxLength = 80;
+        /// <summary>
         /// 基础物品信息关联具体物品类型的名称长度
         /// </summary>
         public const int GoodsInfoExtensionTypeMaxLength = 80;

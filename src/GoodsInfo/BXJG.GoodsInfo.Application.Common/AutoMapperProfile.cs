@@ -7,7 +7,9 @@ namespace BXJG.GoodsInfo.Application.Common
     {
         public AutoMapperProfile()
         {
-            CreateMap<GoodsInfoEntity, GoodsInfoDto>();
+            //automapper÷ß≥÷ºÃ≥–”≥…‰
+            CreateMap<GoodsInfoEntity, GoodsInfoDto>().ForMember(c=>c.CategoryDisplayName,c=>c.MapFrom(d=>d.Category.DisplayName));
+            //CreateMap(typeof(QueryTemp<>), typeof(GoodsInfoDto));
             CreateMap(typeof(GoodsInfoCategoryEntity), typeof(GoodsInfoCategoryTreeDto)).EntityToComboTree();
             CreateMap(typeof(GoodsInfoCategoryEntity), typeof(GoodsInfoCategoryComboboxDto)).EntityToCombobox();
         }
