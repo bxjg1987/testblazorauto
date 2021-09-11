@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 
 namespace BXJG.Utils.AutoMapper
 {
+    //entity 映射到 dto时会自动序列号ExtensionData
+    //反过来应该也会
     public class sss : IMemberValueResolver<IExtendableObject, IExtendableDto, string, object>
     {
         //public Dictionary<string, object> Resolve(IExtendableObject source, IExtendableDto destination, string sourceMember, Dictionary<string, object> destMember, ResolutionContext context)

@@ -31,7 +31,7 @@ namespace BXJG.GoodsInfo.Application.Common
     /// <typeparam name="TRepository"></typeparam>
     /// <typeparam name="TQueryTemp"></typeparam>
     [AbpAuthorize]
-    public class BXJGGoodsInfoCommonAppService<TEntity, TDto, TGoodsInfoGetTotalInput, TGetForSelectInput, TRepository, TQueryTemp> : ApplicationService
+    public class BXJGGoodsInfoCommonAppService<TEntity, TDto, TGoodsInfoGetTotalInput, TGetForSelectInput, TRepository, TQueryTemp> : AppServiceBase
         where TEntity : GoodsInfoEntity
         where TDto : GoodsInfoDto
         where TGoodsInfoGetTotalInput : GoodsInfoGetTotalInput, new()
@@ -86,7 +86,7 @@ namespace BXJG.GoodsInfo.Application.Common
         /// <returns></returns>
         protected virtual ValueTask<TDto> Entity2DtoAsync(TQueryTemp item)
         {
-            var dto = base.ObjectMapper.Map<TDto>(item.Entity);
+            var dto = ObjectMapper.Map<TDto>(item.Entity);
             return ValueTask.FromResult(dto);
         }
         /// <summary>
@@ -100,7 +100,9 @@ namespace BXJG.GoodsInfo.Application.Common
         {
             var query = from c in repository.GetAll().Include(c => c.Category).AsNoTrackingWithIdentityResolution()
                         select new TQueryTemp { Entity = c };
-            return query.WhereIf(!input.Keywords.IsNullOrWhiteSpace(), await ApplyKeywordsAsync(input.Keywords));
+            return query.WhereIf(!input.Keywords.IsNullOrWhiteSpace(), await ApplyKeywordsAsync(input.Keywords))
+                        .WhereIf(!input.CategoryCode.IsNullOrWhiteSpace(), c => c.Entity.Category.Code.StartsWith(input.CategoryCode))
+                        .WhereIf(!input.BrandId.IsNullOrWhiteSpace(), c => c.Entity.BrandId == input.BrandId);
         }
         /// <summary>
         /// 应用关键字条件。

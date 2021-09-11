@@ -12,8 +12,10 @@ namespace BXJG.GoodsInfo.Application.Admin
     /// <summary>
     /// 后台管理物品列表页获取数据时的输入模型
     /// </summary>
-    public class GoodsInfoGetAllInput<GetGoodsInfoTotalInput> : PagedAndSortedResultRequestDto, IShouldNormalize
-    { 
+    public class GoodsInfoGetAllInput<TWhere> : PagedAndSortedResultRequestDto, IShouldNormalize
+        where TWhere: GoodsInfoGetTotalInput,new()
+    {
+        public virtual TWhere Where { get; set; } = new TWhere();
         /// <summary>
       /// 模型绑定后，abp会调用此方法来进一步初始化
       /// </summary>

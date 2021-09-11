@@ -11,6 +11,19 @@ namespace BXJG.GoodsInfo.Application.Common
     /// </summary>
     public class GoodsInfoGetTotalInput
     {
+        /// <summary>
+        /// 类别code
+        /// 将查询此类别及其后台类别下的所有物品
+        /// </summary>
+        public string CategoryCode { get; set; }
+        /// <summary>
+        /// 品牌id
+        /// </summary>
+        public string BrandId { get; set; }
+        /// <summary>
+        /// 关键字
+        /// 模糊匹配：物品名、助记码、所属类别名称等
+        /// </summary>
         public string Keywords { get; set; }
     }
 }

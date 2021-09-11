@@ -13,7 +13,7 @@ namespace BXJG.GoodsInfo
     /// 它定义物品信息公共属性
     /// 你的物品类型实体应继承它
     /// </summary>
-    public class GoodsInfoEntity : FullAuditedAggregateRoot<long>, IGoodsInfoEntity
+    public abstract class GoodsInfoEntity : FullAuditedAggregateRoot<long>, IGoodsInfoEntity
     {
         /// <summary>
         /// 所属分类id

@@ -536,6 +536,13 @@ namespace BXJG.WorkOrder.WorkOrder
                 dto.Images = ObjectMapper.Map<List<AttachmentDto>>(images[entity.Order.Id.ToString()]);
             return dto;
         }
+        /// <summary>
+        /// 将实体映射为dto
+        /// 新增、修改、get时回调
+        /// 它内处理附件后回调<see cref="EntityToDto(TQueryTemp, IDictionary{string, List{AttachmentEntity}}, object)"/>
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         protected virtual async Task<TEntityDto> EntityToDto(TQueryTemp entity)
         {
             //var category = await categoryRepository.GetAsync(entity.CategoryId);

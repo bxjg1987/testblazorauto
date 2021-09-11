@@ -10,7 +10,7 @@ namespace BXJG.GoodsInfo.EFCore
     public static class ModelBuilderExt
     {
         /// <summary>
-        /// 注册商城系统中的ef映射
+        /// 注册物品模块ef映射
         /// </summary>
         /// <param name="modelBuilder"></param>
         /// <returns></returns>

@@ -10,13 +10,15 @@ namespace BXJG.GoodsInfo.EFCore.Map
 {
     /// <summary>
     /// 基础物品信息ef映射
+    /// 它对抽象部分的属性做了映射
+    /// 你实现的自定义物品类型的ef映射对象可以继承它
     /// </summary>
-    public class GoodsInfoMap : IEntityTypeConfiguration<GoodsInfoEntity>
+    public abstract class GoodsInfoMap<T> where T:GoodsInfoEntity
     {
-        public void Configure(EntityTypeBuilder<GoodsInfoEntity> builder)
+        public virtual void Configure(EntityTypeBuilder<T> builder)
         {
             builder.Property(c => c.Name).HasMaxLength(BXJGGoodsInfoCoreConsts.GoodsInfoNameMaxLength);
-            builder.Property(c => c.MnemonicCode).HasMaxLength(BXJGGoodsInfoCoreConsts.GoodsInfoMnemonicCodeMaxLength);
+            builder.Property(c => c.MnemonicCode).HasColumnType($"varchar({BXJGGoodsInfoCoreConsts.GoodsInfoMnemonicCodeMaxLength})");
             builder.Property(c => c.UnitId).HasColumnType($"varchar({BXJGGoodsInfoCoreConsts.GoodsInfoUnitIdMaxLength})");
             builder.Property(c => c.BrandId).HasColumnType($"varchar({BXJGGoodsInfoCoreConsts.GoodsInfoBrandIdMaxLength})");
             //builder.Property(c => c.GoodsInfoExtensionType).HasMaxLength(BXJGGoodsInfoCoreConsts.GoodsInfoExtensionTypeMaxLength);

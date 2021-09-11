@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace BXJG.Utils.AutoMapper
 {
+    //entity 映射到 dto时会自动序列号ExtensionData
+    //反过来应该也会
+
     public class ExtensionDataSS<TSource, TDestination> : IValueResolver<TSource, TDestination, Dictionary<string, object>>
         where TSource : IExtendableObject
         where TDestination : IExtendableDto
