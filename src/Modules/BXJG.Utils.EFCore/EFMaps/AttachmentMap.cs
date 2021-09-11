@@ -13,8 +13,7 @@ namespace BXJG.Utils.EFCore.EFMaps
         {
             builder.Property(c => c.EntityType).HasColumnType($"varchar({FileConsts.EntityFileEntityTypeMaxLength})");
             builder.Property(c => c.EntityId).HasColumnType($"varchar({FileConsts.EntityFileEntityIdMaxLength})");
-            builder.HasIndex(c => c.EntityType);
-            builder.HasIndex(c => c.EntityId);
+            builder.HasIndex(c => new { c.EntityType, c.EntityId });
 
             builder.Property(c => c.RelativeFileUrl).HasColumnType($"varchar({FileConsts.EntityFileFileUrlMaxLength})");
             builder.Ignore(c => c.RelativeThumUrl);
