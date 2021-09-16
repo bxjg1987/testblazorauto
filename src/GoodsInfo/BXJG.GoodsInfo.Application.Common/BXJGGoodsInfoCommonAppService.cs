@@ -32,7 +32,7 @@ namespace BXJG.GoodsInfo.Application.Common
     /// <typeparam name="TQueryTemp"></typeparam>
     [AbpAuthorize]
     public class BXJGGoodsInfoCommonAppService<TEntity, TDto, TGoodsInfoGetTotalInput, TGetForSelectInput, TRepository, TQueryTemp> : AppServiceBase
-        where TEntity : GoodsInfoEntity
+        where TEntity : class,IGoodsInfoEntity
         where TDto : GoodsInfoDto
         where TGoodsInfoGetTotalInput : GoodsInfoGetTotalInput, new()
         where TGetForSelectInput : GetGoodsInfoForSelectInput<TGoodsInfoGetTotalInput>
@@ -63,7 +63,7 @@ namespace BXJG.GoodsInfo.Application.Common
         /// <param name="input"></param>
         /// <returns></returns>
         [UnitOfWork(false)]
-        public virtual async Task<PagedResultDto<TDto>> GetAllAsync(TGetForSelectInput input)
+        public virtual async Task<PagedResultDto<TDto>> GetGetForSelectAsync(TGetForSelectInput input)
         {
             var query = await FilterAsync(input.GetTotalInput);
             var total = await query.CountAsync();

@@ -1,6 +1,7 @@
 ﻿using Abp.Authorization;
 using Abp.Configuration.Startup;
 using Abp.Localization;
+using Abp.Localization.Sources;
 using Abp.MultiTenancy;
 using BXJG.Utils.Localization;
 using System;
@@ -14,6 +15,10 @@ namespace BXJG.GoodsInfo
     /// </summary>
     public static class Extensions
     {
+        /// <summary>
+        /// 获取物品模块内部的本地化源
+        /// </summary>
+        public static readonly ILocalizationSource BXJGGoodsInfoLocalizationSource = LocalizationHelper.Manager.GetSource(BXJGGoodsInfoCoreConsts.LocalizationSourceName);
         /// <summary>
         /// 通常在你的模块PreInit阶段调用此方注册你自定义的物品类型
         /// </summary>
@@ -59,6 +64,15 @@ namespace BXJG.GoodsInfo
         public static ILocalizableString BXJGGoodsInfoLI(this string str)
         {
             return new LocalizableString(str, BXJGGoodsInfoCoreConsts.LocalizationSourceName);
+        }
+        /// <summary>
+        /// 获取当前模块的本地化
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string BXJGGoodsInfoL(this string str)
+        {
+            return BXJGGoodsInfoLocalizationSource.GetString(str);
         }
         /// <summary>
         /// 注册物品分类权限

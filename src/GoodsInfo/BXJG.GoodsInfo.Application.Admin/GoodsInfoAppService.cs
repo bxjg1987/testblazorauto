@@ -5,7 +5,6 @@ using Abp.Linq.Extensions;
 using Abp.Timing;
 using BXJG.Common.Dto;
 using BXJG.GeneralTree;
-using BXJG.WorkOrder.WorkOrderCategory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,7 +40,6 @@ namespace BXJG.GoodsInfo.Application.Admin
     /// <typeparam name="TEntityDto">列表页显示模型</typeparam>
     /// <typeparam name="TEntity">实体类型</typeparam>
     /// <typeparam name="TRepository">实体仓储类型</typeparam>
-    /// <typeparam name="TCategoryRepository">分类仓储</typeparam>
     /// <typeparam name="TQueryTemp">分类仓储</typeparam>
     public abstract class GoodsInfoAppService<TCreateInput,
                                               TUpdateInput,

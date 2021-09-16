@@ -12,18 +12,20 @@ using Abp.Threading;
 namespace BXJG.GoodsInfo.Application.Common
 {
     /// <summary>
-    /// 工单模块应用服务基类
+    /// 物品模块应用服务基类
+    /// 所有的物品模块应用服务都可以基础此类简化开发
     /// </summary>
     public abstract class AppServiceBase : ApplicationService
     {
         /// <summary>
-        /// 工单处理人端本地化源
+        /// 物品模块内部的本地化源
         /// </summary>
-        protected readonly ILocalizationSource BXJGGoodsInfoLocalizationSource;
+        protected readonly Lazy<ILocalizationSource> BXJGGoodsInfoLocalizationSource;
         protected IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; } = NullAsyncQueryableExecuter.Instance;
         protected AppServiceBase()
         {
-            BXJGGoodsInfoLocalizationSource = LocalizationManager.GetSource(BXJGGoodsInfoCoreConsts.LocalizationSourceName);
+            //构造函数中LocalizationManager应该是不可用的
+            BXJGGoodsInfoLocalizationSource = new Lazy<ILocalizationSource>(() => LocalizationManager.GetSource(BXJGGoodsInfoCoreConsts.LocalizationSourceName));
 
             //LocalizationSourceName = CoreConsts.LocalizationSourceName;
         }
@@ -43,11 +45,14 @@ namespace BXJG.GoodsInfo.Application.Common
                 await PermissionChecker.AuthorizeAsync(permissionName);
             }
         }
-
+        /// <summary>
+        /// 从物品模块内部的源中获取本地化文本
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         protected string BXJGGoodsInfoL(string name)
         {
-            return BXJGGoodsInfoLocalizationSource.GetString(name);
+            return BXJGGoodsInfoLocalizationSource.Value.GetString(name);
         }
-
     }
 }

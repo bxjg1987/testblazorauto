@@ -17,7 +17,7 @@ namespace BXJG.GoodsInfo.EFCore.Repository
     /// <typeparam name="TDbContext"></typeparam>
     public abstract class GoodsInfoRepository<TDbContext, TEntity> : EfCoreRepositoryBase<TDbContext, TEntity, long>, IGoodsInfoRepository<TEntity>
         where TDbContext : DbContext
-        where TEntity : Entity<long>
+        where TEntity : class, IGoodsInfoEntity
     {
         public GoodsInfoRepository(IDbContextProvider<TDbContext> dbContextProvider) : base(dbContextProvider)
         {
