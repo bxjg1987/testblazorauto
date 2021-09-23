@@ -41,13 +41,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Abp" Version="6.4.0" />
-    <PackageReference Include="Abp.AutoMapper" Version="6.4.0" />
-    <PackageReference Include="Abp.Zero.Common" Version="6.4.0" />
-    <PackageReference Include="Abp.ZeroCore" Version="6.4.0" />
+    <PackageReference Include="Abp" Version="6.5.0" />
+    <PackageReference Include="Abp.AutoMapper" Version="6.5.0" />
+    <PackageReference Include="Abp.Zero.Common" Version="6.5.0" />
+    <PackageReference Include="Abp.ZeroCore" Version="6.5.0" />
     <PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="3.4.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
     <PackageReference Include="MimeTypesMap" Version="1.0.8" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.3" />
     <PackageReference Include="System.Drawing.Common" Version="5.0.2" />

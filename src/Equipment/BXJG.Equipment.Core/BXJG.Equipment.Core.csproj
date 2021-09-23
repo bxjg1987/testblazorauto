@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Abp" Version="6.4.0" />
+    <PackageReference Include="Abp" Version="6.5.0" />
     <PackageReference Include="SuperSocket.Client" Version="2.0.0-beta6" />
   </ItemGroup>
 

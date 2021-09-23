@@ -34,7 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Abp.EntityFrameworkCore" Version="6.4.0" />
+    <PackageReference Include="Abp.EntityFrameworkCore" Version="6.5.0" />
   </ItemGroup>
 
 </Project>
