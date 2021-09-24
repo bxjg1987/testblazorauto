@@ -210,7 +210,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
             //    emps = await employeeAppService.GetByIdsAsync(empIds.ToArray());
             //}
 
-            var images = await attachmentManager.Value.GetAttachmentsAsync(list.Select(c => c.Order.Id.ToString()).ToArray());
+            var images = await attachmentManager.Value.GetAttachmentsAsync( entityIds: list.Select(c => c.Order.Id.ToString()).ToArray());
             // var images2 = images.ToDictionary(c => c.Key, c =>c.Value);
 
             var state = await GetStateAsync(list);
@@ -570,7 +570,7 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
             //    emps = await employeeAppService.GetByIdsAsync(temp.Order.EmployeeId);
             //}
             var state = await GetStateAsync(new TQueryTemp[] { temp });
-            var images = await attachmentManager.Value.GetAttachmentsAsync(temp.Order.Id.ToString());
+            var images = await attachmentManager.Value.GetAttachmentsAsync( entityIds: temp.Order.Id.ToString());
 
             return EntityToDto(temp, images, state);
         }

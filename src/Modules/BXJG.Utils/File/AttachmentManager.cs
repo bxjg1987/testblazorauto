@@ -40,13 +40,17 @@ namespace BXJG.Utils.File
         /// <param name="entityId">实体id</param>
         /// <param name="files">key文件相对路径，value扩展属性</param>
         /// <param name="act">移动新文件和删除旧文件之前回调</param>
+        /// <param name="propertyName">关联的属性名</param>
         /// <returns></returns>
-        public async Task<List<AttachmentEntity>> SetAttachmentsAsync(object entityId, IList<AttachmentEditDto> files, Func<List<AttachmentEntity>, ValueTask> act = default)
+        public async Task<List<AttachmentEntity>> SetAttachmentsAsync(object entityId, IList<AttachmentEditDto> files, Func<List<AttachmentEntity>, ValueTask> act = default, string propertyName = default)
         {
             //相应的文件处理参考：https://gitee.com/bxjg1987_admin/abp/wikis/pages?sort_id=4086113%26doc_id=627313#%E4%BA%8B%E5%8A%A1
             #region 删除旧文件
             //查询旧文件的相对url
-            var qq = repository.GetAll().Where(c => c.EntityType == entityType && c.EntityId == entityId.ToString()).Select(c => c.RelativeFileUrl);
+            var qq = repository.GetAll()
+                               .Where(c => c.EntityType == entityType && c.EntityId == entityId.ToString())
+                               .WhereIf(!propertyName.IsNullOrWhiteSpace(),c=>c.PropertyName==propertyName)
+                               .Select(c => c.RelativeFileUrl);
             var qqList = await AsyncQueryableExecuter.ToListAsync(qq);
             string[] needDelete = new string[0];
             if (qqList.Count > 0)
@@ -85,7 +89,8 @@ namespace BXJG.Utils.File
                     EntityType = entityType,
                     EntityId = entityId.ToString(),
                     RelativeFileUrl = tempFileManager.Absolute2RelativeUrl(tempFileManager.TempToOkPath(item.AbsoluteFileUrl)),
-                    OrderIndex = item.OrderIndex == default ? i : item.OrderIndex
+                    OrderIndex = item.OrderIndex == default ? i : item.OrderIndex,
+                    PropertyName = propertyName
                 };
                 entity.RelativeThumUrl = tempFileManager.ConvertToThumPath(entity.RelativeFileUrl);
                 entity.AbsoluteFileUrl = tempFileManager.Relative2AbsoluteUrl(entity.RelativeFileUrl);
@@ -134,11 +139,15 @@ namespace BXJG.Utils.File
         /// 获取附件
         /// </summary>
         /// <param name="entityIds"></param>
+        /// <param name="propertyName">关联的属性名</param>
         /// <returns>key为实体id，value为附件列表</returns>
-        public async Task<Dictionary<string, List<AttachmentEntity>>> GetAttachmentsAsync(params string[] entityIds)
+        public async Task<Dictionary<string, List<AttachmentEntity>>> GetAttachmentsAsync(string propertyName = default,params string[] entityIds)
         {
             entityIds = entityIds.Distinct().ToArray();
-            var q = repository.GetAll().Where(c => c.EntityType == entityType && entityIds.Contains(c.EntityId)).OrderBy(c => c.OrderIndex);
+            var q = repository.GetAll()
+                              .Where(c => c.EntityType == entityType && entityIds.Contains(c.EntityId))
+                              .WhereIf(!propertyName.IsNullOrWhiteSpace(), c => c.PropertyName == propertyName)
+                              .OrderBy(c => c.OrderIndex);
             var list = await AsyncQueryableExecuter.ToListAsync(q);
             list.ForEach(entity =>
             {
@@ -166,7 +175,7 @@ namespace BXJG.Utils.File
         public async Task<Dictionary<string, AttachmentEntity>> GetFirstAttachmentsAsync(params string[] entityIds)
         {
             //先用low的方式实现功能吧
-            var items = await GetAttachmentsAsync(entityIds);
+            var items = await GetAttachmentsAsync(entityIds:entityIds);
             foreach (var item in items)
             {
                 while (item.Value.Count > 1)

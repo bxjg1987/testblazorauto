@@ -22,6 +22,12 @@ namespace BXJG.Utils.File
         /// </summary>
         public string EntityId { get; set; }
         /// <summary>
+        /// 属性名
+        /// 比如工单：字段A表示要处理的问题相关图片，字段B表示处理完成时拍摄的图片，它们都使用附件表，当通过此字段来表示关联的不同的属性
+        /// 此字段是新加的，以前的功能此字段可能为空。现在你使用时必须添加此字段
+        /// </summary>
+        public string PropertyName { get; set; }
+        /// <summary>
         /// 文件url，相对url
         /// </summary>
         public string RelativeFileUrl { get; set; }

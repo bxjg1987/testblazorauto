@@ -12,6 +12,7 @@ namespace BXJG.Utils.File
         public const int EntityFileEntityTypeMaxLength = 100;
         public const int EntityFileEntityIdMaxLength = 60;
         public const int EntityFileFileUrlMaxLength = 500;
+        public const int EntityFilePropertyNameMaxLength = 100;
         #endregion
     }
 }

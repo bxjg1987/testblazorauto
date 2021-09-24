@@ -19,6 +19,7 @@ namespace BXJG.Utils.EFCore.EFMaps
             builder.Ignore(c => c.RelativeThumUrl);
             builder.Ignore(c => c.AbsoluteFileUrl);
             builder.Ignore(c => c.AbsoluteThumUrl);
+            builder.Property(c => c.PropertyName).HasColumnType($"varchar({FileConsts.EntityFilePropertyNameMaxLength})");
             //builder.HasMany(c => c.WorkOrderTypes).WithOne().HasForeignKey("CategoryId");
             //builder.Property(c => c.WorkOrderTypes).HasMaxLength(CoreConsts.WorkOrderClsTypeMaxLength);
             //builder.Property(c => c.Icon).HasColumnType($"varchar({CoreConsts.ItemCategoryIconMaxLength})");
