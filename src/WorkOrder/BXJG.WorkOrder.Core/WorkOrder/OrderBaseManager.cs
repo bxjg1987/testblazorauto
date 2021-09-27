@@ -88,10 +88,10 @@ namespace BXJG.WorkOrder.WorkOrder
     {
         public OrderManager(IRepository<OrderEntity, long> repository, 
                             IRepository<CategoryEntity, long> clsRepository,
-                            CategoryManager clsManager) : base(repository,
+                            CategoryManager clsManager,OrderNoGenerator orderNoGenerator) : base(repository,
                                                                clsRepository,
                                                                clsManager, 
-                                                               CoreConsts.DefaultWorkOrderTypeName)
+                                                               CoreConsts.DefaultWorkOrderTypeName, orderNoGenerator)
         {
         }
 
