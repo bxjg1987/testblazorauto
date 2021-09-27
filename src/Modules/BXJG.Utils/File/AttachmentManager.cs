@@ -146,7 +146,7 @@ namespace BXJG.Utils.File
             entityIds = entityIds.Distinct().ToArray();
             var q = repository.GetAll()
                               .Where(c => c.EntityType == entityType && entityIds.Contains(c.EntityId))
-                              .WhereIf(!propertyName.IsNullOrWhiteSpace(), c => c.PropertyName == propertyName)
+                              .Where(c => c.PropertyName == propertyName)
                               .OrderBy(c => c.OrderIndex);
             var list = await AsyncQueryableExecuter.ToListAsync(q);
             list.ForEach(entity =>
