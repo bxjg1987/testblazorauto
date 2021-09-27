@@ -23,6 +23,8 @@ namespace BXJG.WorkOrder.EFMaps
             //builder.Property(c => c.ContactPhone).HasColumnType($"varchar({CoreConsts.OrderContactPhoneMaxLength})");
             //外键好像默认会建立索引，但这里没有使用外键
             builder.HasIndex(p => new { p.CategoryId, p.EmployeeId });
+
+            builder.Property(c => c.Id).ValueGeneratedNever();
         }
     }
 

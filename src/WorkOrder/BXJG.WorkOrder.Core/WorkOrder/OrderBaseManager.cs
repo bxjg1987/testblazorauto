@@ -39,13 +39,16 @@ namespace BXJG.WorkOrder.WorkOrder
         protected readonly string workOrderType;
         protected readonly IRepository<CategoryEntity, long> clsRepository;
         protected readonly CategoryManager clsManager;
+        protected readonly OrderNoGenerator orderNoGenerator;
 
-        protected OrderBaseManager(IRepository<TEntity, long> repository, IRepository<CategoryEntity, long> clsRepository, CategoryManager clsManager, string workOrderType)
+
+        protected OrderBaseManager(IRepository<TEntity, long> repository, IRepository<CategoryEntity, long> clsRepository, CategoryManager clsManager, string workOrderType, OrderNoGenerator orderNoGenerator)
         {
             this.repository = repository;
             this.workOrderType = workOrderType;
             this.clsRepository = clsRepository;
             this.clsManager = clsManager;
+            this.orderNoGenerator = orderNoGenerator;
         }
         //分类 紧急程度可以定义参数默认值，进一步获取设置系统的默认值
         //工单的创建场景有：后台管理员创建、客户提交、某些事件如销售订单产生时自动创建，这些场景通常对应应用层方法或事件处理程序，它们都调用此方法
@@ -64,6 +67,7 @@ namespace BXJG.WorkOrder.WorkOrder
             if (!dto.UrgencyDegree.HasValue)
                 dto.UrgencyDegree = OrderBaseEntity.DefaultUrgencyDegree;
             var entity = Create(dto);
+            entity.Id = orderNoGenerator.NewLong();
             await repository.InsertAsync(entity);
             await CurrentUnitOfWork.SaveChangesAsync();//保存以更新id为自增id
             return entity;
