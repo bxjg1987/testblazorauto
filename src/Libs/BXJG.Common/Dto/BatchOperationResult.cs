@@ -17,7 +17,7 @@ namespace BXJG.Common.Dto
     {
         public BatchOperationErrorMessage(object id, string message = default, string code = default)
         {
-            Id = id.ToString();
+            Id = id;
             Message = message;
             Code = code;
         }
