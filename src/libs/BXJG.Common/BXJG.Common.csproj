@@ -9,11 +9,16 @@
   <ItemGroup>
     <Compile Remove="Dto\DynamicEntityPropertyValueDto.cs" />
     <Compile Remove="IWebEnvironment.cs" />
+    <Compile Remove="Validation\IValidator.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="hyjiacan.py4n" Version="4.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Validation\" />
   </ItemGroup>
 
 </Project>
