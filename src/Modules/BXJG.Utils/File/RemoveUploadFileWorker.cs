@@ -31,7 +31,13 @@ namespace BXJG.Utils.File
             {
                 var file = new FileInfo(item);
                 if ((DateTime.Now - file.CreationTime).TotalMinutes > 30)
-                    System.IO.File.Delete(item);
+                {
+                    try
+                    {
+                        System.IO.File.Delete(item);
+                    }
+                    catch { }
+                }
             }
             var dirs = Directory.GetDirectories(dir);
             if (dirs.Length > 0)
