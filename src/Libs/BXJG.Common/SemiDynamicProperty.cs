@@ -8,28 +8,58 @@ using System.Threading.Tasks;
 
 namespace BXJG.Common
 {
-    /*
-     * 套餐算法不太，所需要的属性不同，不同算法可能使用相同的属性，因此属性与算法是多对多关系
-     * 但算法基本就那几种，变动性不是特别强。可以将所有算法需要使用到的属性规定死，若将来增加
-     * 新的算法确实需要使用到新属性时再重构。
-     * 这种环境下不同算法所关联的属性并不需要完全动态，所以称为半动态
-     * 
-     */
-
     /// <summary>
     /// 半动态属性
     /// </summary>
     public class SemiDynamicProperty
     {
-        public SemiDynamicProperty(string propertyName, string propertyDisplayName, ICollection<ValidationAttribute> validators)
+        public SemiDynamicProperty(string name,
+                                   string displayName,
+                                   string inputType = "SINGLEINPUT",
+                                   string dateTimeFormatter = "yyyy-MM-dd HH:mm:ss",
+                                   int decimalPlaces = 2,
+                                   IDictionary<string, object> values = default,
+                                   ICollection<ValidationAttribute> validators = default)
         {
-            PropertyName = propertyName;
-            PropertyDisplayName = propertyDisplayName;
-            Validators = validators.ToList();
+            Name = name;
+            DisplayName = displayName;
+            InputType = inputType;
+            DateTimeFormatter = dateTimeFormatter;
+            DecimalPlaces = decimalPlaces;
+            Values = new ReadOnlyDictionary<string, object>(values ?? new Dictionary<string, object>());
+            Validators = validators?.ToList() ?? new List<ValidationAttribute>();
         }
-
-        public string PropertyName { get; init; }
-        public string PropertyDisplayName { get; init; }
+        /// <summary>
+        /// 字段名
+        /// </summary>
+        public string Name { get; init; }
+        /// <summary>
+        /// 显示名
+        /// </summary>
+        public string DisplayName { get; init; }
+        /// <summary>
+        /// 输入类型
+        /// </summary>
+        public string InputType { get; init; }
+        /// <summary>
+        /// 若是时间类型，则表示时间格式
+        /// </summary>
+        public string DateTimeFormatter { get; init; }
+        /// <summary>
+        /// 若是小数类型，则表示小数位数
+        /// </summary>
+        public int DecimalPlaces { get; init; }
+        /// <summary>
+        /// 若是下拉选择，可选值
+        /// </summary>
+        public IReadOnlyDictionary<string, object> Values { get; init; }
+        /// <summary>
+        /// 若是下拉选择，是否多选
+        /// </summary>
+        public bool MultipleSelect { get; init; }
+        /// <summary>
+        /// 多个验证器
+        /// </summary>
         public IReadOnlyCollection<ValidationAttribute> Validators { get; init; }
     }
 
@@ -38,7 +68,6 @@ namespace BXJG.Common
     //    public string PropertyDisplayName { get; set; }
     //    public IReadOnlyCollection<ValidationAttribute> Validators { get; set; }
     //}
-    //public class ValidationDto { 
+    //public class ValidationDto { }
 
-    //}
 }
