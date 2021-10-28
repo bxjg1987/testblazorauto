@@ -162,7 +162,10 @@ namespace BXJG.WorkOrder.WorkOrder
         /// </summary>
         [DisableAuditing]
         public virtual string Description { get; set; }
-
+        /// <summary>
+        /// 工单对应的积分（注:如果配置为单量模式,积分固定为1分，如果配置为积分模式，则确定工单时，必须设置工单对应积分值）
+        /// </summary>
+        public virtual int Points { get; set; }
         ///// <summary>
         ///// 关联的原始图片列表，多个用英文逗号分割
         ///// 缩略图与原始图片是按顺序关联的
