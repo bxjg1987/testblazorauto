@@ -15,6 +15,8 @@ using Abp.Domain.Entities;
 using System.Collections.Generic;
 using AutoMapper;
 using BXJG.Common.Dto;
+using System.Linq;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace BXJG.Utils
 {
@@ -24,12 +26,14 @@ namespace BXJG.Utils
     [DependsOn(typeof(AbpAutoMapperModule))]
     public class BXJGUtilsModule : AbpModule
     {
-       
         public override void PreInitialize()
         {
             IocManager.Register<BXJGUtilsModuleConfig>();
-            Configuration.Modules.BXJGUtils().AddEnum("gender", typeof(Gender), BXJGUtilsConsts.LocalizationSourceName);
-
+            //Configuration.Modules.BXJGUtils().AddEnum(typeof(Gender), "gender", BXJGUtilsConsts.LocalizationSourceName);
+            Configuration.Modules.BXJGUtils().EnumLocalizationProviders.Add(() => new[] {
+                new EnumLocalizationDefine(typeof(Gender), "gender"),
+                new EnumLocalizationDefine(typeof(Gender), "bool"),
+            });
             BXJGUtilsLocalizationConfigurer.Configure(Configuration.Localization);
             Configuration.Settings.Providers.Add<BXJGUtilsFileSettingProvider>();
         }
@@ -55,6 +59,7 @@ namespace BXJG.Utils
 
         public override void PostInitialize()
         {
+            var utilsCfg = Configuration.Modules.BXJGUtils();
             var workManager = IocManager.Resolve<IBackgroundWorkerManager>();
             //运行ZLJ.Migrator时会确实依赖服务，所以这里try下
             try
@@ -66,6 +71,26 @@ namespace BXJG.Utils
 
             }
 
+            #region 本地化枚举系统
+            var list = new List<EnumLocalizationDefine>();
+            foreach (var item in utilsCfg.EnumLocalizationProviders)
+            {
+                var items = item();
+
+                foreach (var item2 in items)
+                {
+                    var temp = list.SingleOrDefault(c => c.Name == item2.Name);
+                    if (temp != null)
+                    {
+                        list.Remove(temp);
+                    }
+                    list.Add(item2);
+                }
+            }
+            utilsCfg.EnumLocalizationProviders = null;
+            var sdf = new EnumLocalizationContainer(list);
+            base.IocManager.RegService(c => c.TryAddSingleton(sdf));
+            #endregion
         }
     }
 }

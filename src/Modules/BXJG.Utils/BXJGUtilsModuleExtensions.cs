@@ -16,14 +16,15 @@ namespace BXJG.Utils
             return moduleConfigurations.AbpConfiguration.Get<BXJGUtilsModuleConfig>();
         }
 
-        public static BXJGUtilsModuleConfig AddEnum(this BXJGUtilsModuleConfig cfg, string name, Type t, string locationSourceName)
-        {
-            // if (cfg.Enums == null)
-            //  cfg.Enums = new List<EnumConfigItem>();
-            //  var sdf = cfg.GetHashCode();
-            cfg.Enums.Add(new EnumConfigItem(name, t, locationSourceName));
-            return cfg;
-        }
+        //public static BXJGUtilsModuleConfig AddEnum(this BXJGUtilsModuleConfig cfg, Type t,string name=default,  string locationSourceName= BXJGUtilsConsts.LocalizationSourceName)
+        //{
+        //    // if (cfg.Enums == null)
+        //    //  cfg.Enums = new List<EnumConfigItem>();
+        //    //  var sdf = cfg.GetHashCode();
+        //    cfg.Enums.Add(new EnumLocalizationDefine( t, name,locationSourceName));
+        //    return cfg;
+        //}
+
         //我们写了一个库，它不依赖abp，因为希望这个库也可以给原生asp.net core程序使用，其它很多第三方库也是类似的
         //这样的库往往会扩展IServiceCollection来实现服务注册
         //我们在abpModule中无法直接获取IServiceCollection

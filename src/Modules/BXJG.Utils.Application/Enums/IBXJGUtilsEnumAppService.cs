@@ -15,7 +15,7 @@ namespace BXJG.Utils.Enums
     /// </summary>
     public interface IBXJGUtilsEnumAppService : IApplicationService
     {
-        IReadOnlyList<ComboboxItemDto> GetByName(GetEnumForCombboxInput input);
+        ValueTask<IReadOnlyList<ComboboxItemDto>> GetByNameAsync(GetEnumForCombboxInput input);
         //IList<ComboboxDto<int>> GetGender(NullableInput input);
         //IList<ComboboxDto<int>> GetOUType(NullableInput input );
         //IList<ComboboxDto<int>> GetWeekDay(NullableInput input);

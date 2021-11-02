@@ -7,8 +7,22 @@ namespace BXJG.Utils
 {
     public class BXJGUtilsModuleConfig
     {
-        //最终处理办法是属性类型直接用List 而不是IList
-        public List<EnumConfigItem> Enums { get; set; }=  new List<EnumConfigItem>();
+        //EnumLocalizationContainer enumLocalizationContainer;
+
+        //public BXJGUtilsModuleConfig(EnumLocalizationContainer enumLocalizationContainer)
+        //{
+        //    this.enumLocalizationContainer = enumLocalizationContainer;
+        //}
+
+        ////最终处理办法是属性类型直接用List 而不是IList
+        //[Obsolete("需要访问此对象时应直接注入EnumLocalizationContainer")]
+        //public IReadOnlyList<EnumLocalizationDefine> Enums => enumLocalizationContainer;
+
+        /// <summary>
+        /// 通过它注册本地化枚举定义
+        /// </summary>
+        public ICollection<Func<IEnumerable<EnumLocalizationDefine>>> EnumLocalizationProviders { get; internal set; } = new List<Func<IEnumerable<EnumLocalizationDefine>>>();
+
 
         public BXJGUtilsModuleConfig()
         {
