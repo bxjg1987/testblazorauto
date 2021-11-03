@@ -58,8 +58,4 @@
     <ProjectReference Include="..\..\libs\BXJG.Common\BXJG.Common.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Extensions\" />
-  </ItemGroup>
-
 </Project>
