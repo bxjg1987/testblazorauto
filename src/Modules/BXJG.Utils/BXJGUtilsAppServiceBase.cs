@@ -8,7 +8,6 @@ namespace BXJG.Utils
     /// <summary>
     /// Derive your application services from this class.
     /// </summary>
-   [Obsolete]
     public abstract class BXJGUtilsAppServiceBase : ApplicationService
     {
         //public TenantManager TenantManager { get; set; }

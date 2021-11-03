@@ -9,10 +9,13 @@ using System.Reflection;
 using BXJG.Utils.Localization;
 using Abp.Application.Services.Dto;
 using Abp.Extensions;
+using Abp.UI;
 
 namespace BXJG.Utils.Enums
 {
-    [Obsolete]
+    /// <summary>
+    /// 通用的获取枚举下拉框列表的服务
+    /// </summary>
     public class BXJGUtilsEnumAppService : BXJGUtilsAppServiceBase, IBXJGUtilsEnumAppService
     {
         //IList<ComboboxDto<int>> GetByType(Type t)
@@ -24,16 +27,31 @@ namespace BXJG.Utils.Enums
         //{
         //    return GetByType(e.GetType());
         //}
-        private BXJGUtilsModuleConfig cfg;
-        public BXJGUtilsEnumAppService(BXJGUtilsModuleConfig cfg)
+        private EnumLocalizationContainer cfg;
+        public BXJGUtilsEnumAppService(EnumLocalizationContainer cfg)
         {
             this.cfg = cfg;
         }
-
-        public IReadOnlyList<ComboboxItemDto> GetByName(GetEnumForCombboxInput input)
+        /// <summary>
+        /// 获取指定枚举的本地化列表
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async ValueTask<IReadOnlyList<ComboboxItemDto>> GetByNameAsync(GetEnumForCombboxInput input)
         {
-            var cfgItem = cfg.Enums.Single(c => c.Name.Equals(input.EnumTypeName, StringComparison.OrdinalIgnoreCase));
-
+            var cfgItem = cfg[input.EnumTypeName];
+            if (cfgItem.Permissions != null)
+            {
+                bool bsss = false;
+                foreach (var item in cfgItem.Permissions)
+                {
+                    bsss = await base.IsGrantedAsync(item);
+                    if (bsss)
+                        break;
+                }
+                if (!bsss)
+                    throw new Abp.Authorization.AbpAuthorizationException();
+            }
             var list = base.LocalizationManager.GetEnum(cfgItem.LocationSourceName, cfgItem.Type);
             var b = list.Select(c => new ComboboxItemDto { Value = c.Key.ToString(), DisplayText = c.Value }).ToList();
 
@@ -63,7 +81,7 @@ namespace BXJG.Utils.Enums
             b.Insert(0, temp);
             return b;
         }
-      
+
         //public IList<ComboboxItemDto> GetBool(GetStructForCombboxInput input)
         //{
         //    var list = base.LocalizationSource.GetBool().Select(c => new ComboboxItemDto(c.Key.ToString(), c.Value)).ToList();

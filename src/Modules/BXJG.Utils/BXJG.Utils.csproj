@@ -20,6 +20,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Enums\BXJGUtilsEnumAppService.cs" />
+    <Compile Remove="Enums\GetEnumForCombboxInput.cs" />
+    <Compile Remove="Enums\GetStructForCombboxInput.cs" />
+    <Compile Remove="Enums\IBXJGUtilsEnumAppService.cs" />
     <Compile Remove="Extensions\CommonExtensions.cs" />
     <Compile Remove="Extensions\DateTimeExt.cs" />
     <Compile Remove="Extensions\dfdfg.cs" />
