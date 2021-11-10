@@ -3,6 +3,7 @@ using Abp.Authorization;
 using Abp.Domain.Uow;
 using BXJG.Common.Dto;
 using BXJG.Utils;
+using BXJG.Utils.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BXJG.WorkOrder.WorkOrder
 {
-    public class StatusChangedEventData : EntityEventData<OrderBaseEntity>
+    public class StatusChangedEventData : EntityUpdatingEventData<OrderBaseEntity>
     {
         public Status Original { get; private set; }
         public StatusChangedEventData(OrderBaseEntity entity, Status original) : base(entity)
