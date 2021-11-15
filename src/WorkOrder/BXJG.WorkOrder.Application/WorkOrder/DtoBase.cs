@@ -27,6 +27,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// 所属分类id
         /// </summary>
         public long CategoryId { get; set; }
+        public int? Points { get; set; }
         /// <summary>
         /// 所属分类名称
         /// </summary>
