@@ -6,6 +6,7 @@ using Abp.UI;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using BXJG.Utils.Extensions;
 
 namespace BXJG.WorkOrder.WorkOrder
 {
@@ -109,32 +110,73 @@ namespace BXJG.WorkOrder.WorkOrder
                 categoryId = value;
             }
         }
+
+        private object lockerzt = new object();
+        private Status? yszt;
+        private Status status;
         /// <summary>
         /// 状态。核心属性，调用相应业务方法可以改变其值
         /// </summary>
-        public virtual Status Status { get; protected set; }
+        public virtual Status Status
+        {
+            get { return status; }
+            private set
+            {
+                if (!yszt.HasValue)
+                {
+                    lock (lockerzt)
+                    {
+                        if (!yszt.HasValue)
+                            yszt = value;
+                    }
+                }
+
+                //确保事件与状态同步
+                lock (lockerzt)
+                {
+                    status = value;
+                    if (value != yszt.Value)
+                        DomainEvents.AddOrReplace(new StatusChangeingEventData(this, yszt.Value));
+                    else
+                        DomainEvents.Remove<StatusChangeingEventData>();
+                }
+            }
+        }
+
+        private object lockerDegreeysz = new object();
+        private UrgencyDegree? urgencyDegreeysz;
         /// <summary>
         /// 紧急程度。子类需要访问时请尽量调用<see cref="UrgencyDegree"/>
         /// </summary>
-        protected UrgencyDegree urgencyDegree;
+        private UrgencyDegree urgencyDegree;
         /// <summary>
         /// 紧急程度。已完成或拒绝的工单不允许修改，其它状态可以修改
-        /// 修改后将触发<see cref="UrgencyDegreeChangedEventData"/>事件
+        /// 修改后将触发<see cref="UrgencyDegreeChangingEventData"/>事件
         /// </summary>
         public virtual UrgencyDegree UrgencyDegree
         {
             get { return urgencyDegree; }
             set
             {
-                if (value == urgencyDegree)
-                    return;
-
                 if (Status >= Status.Completed)
                     throw new UserFriendlyException("workorderSetUrgencyDegreeStatusException".BXJGWorkOrderL());
 
-                var o = value;
-                urgencyDegree = value;
-                DomainEvents.Add(new UrgencyDegreeChangedEventData(this, o));
+                if (!urgencyDegreeysz.HasValue) {
+                    lock (lockerDegreeysz)
+                    {
+                        if (!urgencyDegreeysz.HasValue)
+                            urgencyDegreeysz = value;
+                    }
+                }
+                //确保事件与状态同步
+                lock (lockerDegreeysz)
+                {
+                    urgencyDegree = value;
+                    if(value!=urgencyDegreeysz.Value)
+                        DomainEvents.Add(new UrgencyDegreeChangingEventData(this, urgencyDegreeysz.Value));
+                    else
+                        DomainEvents.Remove<UrgencyDegreeChangingEventData>();
+                }
             }
         }
         /// <summary>
@@ -162,10 +204,43 @@ namespace BXJG.WorkOrder.WorkOrder
         /// </summary>
         [DisableAuditing]
         public virtual string Description { get; set; }
+
+        bool pointscsh = false;
+        int? points, jfysz;
+        object lockerPoints = new object();
+
         /// <summary>
         /// 工单对应的积分（注:如果配置为单量模式,积分固定为1分，如果配置为积分模式，则确定工单时，必须设置工单对应积分值）
         /// </summary>
-        public virtual int? Points { get; set; }
+        public virtual int? Points
+        {
+            get { return points; }
+            set {
+                if (Status >= Status.Completed)
+                    throw new UserFriendlyException("已完成或拒绝的工单调整积分没有意义！".BXJGWorkOrderL());
+
+                if (!pointscsh)
+                {
+                    lock (lockerPoints)
+                    {
+                        if (!pointscsh)
+                        {
+                            jfysz = value;
+                            pointscsh = true;
+                        }
+                    }
+                }
+                //确保事件与状态同步
+                lock (lockerPoints)
+                {
+                    points = value;
+                    if (value != jfysz)
+                        DomainEvents.Add(new PointsChangingEventData(this, jfysz.Value));
+                    else
+                        DomainEvents.Remove<PointsChangingEventData>();
+                }
+            }
+        }
         ///// <summary>
         ///// 关联的原始图片列表，多个用英文逗号分割
         ///// 缩略图与原始图片是按顺序关联的
@@ -190,13 +265,57 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <summary>
         /// 预计开始时间。参考：<see cref="ChangeEstimatedTime"/>
         /// </summary>
-  
-        public virtual DateTimeOffset? EstimatedExecutionTime { get; protected set; }
+
+        private bool yjkscsh = false, yjjscsh = false;
+        private DateTimeOffset? estimatedExecutionTimeysz, estimatedCompletionTimeysz;
+
+        private DateTimeOffset? estimatedExecutionTime, estimatedCompletionTime;
+
+        private object lockeryjks = new object();
+        private object lockeryjwc = new object();
+        public virtual DateTimeOffset? EstimatedExecutionTime
+        {
+            get { return estimatedExecutionTime; }
+            set
+            {
+                estimatedExecutionTime = value;
+                if (!yjkscsh)
+                {
+                    lock (lockeryjks)
+                    {
+                        if (!yjkscsh)
+                        {
+                            estimatedExecutionTimeysz = value;
+                            yjkscsh = true;
+                        }
+                    }
+                }
+            }
+        }
         /// <summary>
         /// 预计结束时间。参考：<see cref="ChangeEstimatedTime"/>
         /// </summary>
-       
-        public virtual DateTimeOffset? EstimatedCompletionTime { get; protected set; }
+
+        public virtual DateTimeOffset? EstimatedCompletionTime
+        {
+            get { return estimatedCompletionTime; }
+            set
+            {
+                estimatedCompletionTime = value;
+                if (!yjjscsh)
+                {
+                    lock (lockeryjwc)
+                    {
+                        if (!yjjscsh)
+                        {
+                            estimatedCompletionTimeysz = value;
+                            yjjscsh = true;
+                        }
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// 执行时间。参考：<see cref="ChangePracticalTime"/>
         /// </summary>
@@ -242,7 +361,7 @@ namespace BXJG.WorkOrder.WorkOrder
         [DisableAuditing]
         public byte[] RowVersion { get; set; }
         /// <summary>
-        /// 调整状态。将引发<see cref="StatusChangedEventData"/>事件
+        /// 调整状态。将引发<see cref="StatusChangeingEventData"/>事件
         /// </summary>
         /// <param name="status">目标状态</param>
         /// <param name="time">时间</param>
@@ -258,11 +377,10 @@ namespace BXJG.WorkOrder.WorkOrder
 
             StatusChangedTime = time;
             StatusChangedDescription = description;
-
-            var o = status;
             Status = status;
-            DomainEvents.Add(new StatusChangedEventData(this, o));
         }
+
+        private object lockeryjkswc = new object();
         /// <summary>
         /// 一并设置预计开始和结束时间
         /// 预计开始时间必须小于等于结束时间
@@ -278,27 +396,31 @@ namespace BXJG.WorkOrder.WorkOrder
             if (estimatedExecutionTime.HasValue && estimatedCompletionTime.HasValue && estimatedExecutionTime > estimatedCompletionTime)
                 throw new UserFriendlyException("workorderChangeEstimatedTimeException1".BXJGWorkOrderL());
 
-            DateTimeOffset? os = EstimatedExecutionTime, oe = EstimatedCompletionTime;
-
-            bool b = false;
-            if (estimatedExecutionTime != EstimatedExecutionTime)
+            //DateTimeOffset? os = EstimatedExecutionTime, oe = EstimatedCompletionTime;
+            
+            //确保状态的改变跟事件触发是事务性的
+            lock (lockeryjkswc)
             {
-                if (Status >= Status.Processing)
-                    throw new UserFriendlyException("workorderChangeEstimatedTimeException2".BXJGWorkOrderL());
+                if (estimatedExecutionTime != EstimatedExecutionTime)
+                {
+                    if (Status >= Status.Processing)
+                        throw new UserFriendlyException("workorderChangeEstimatedTimeException2".BXJGWorkOrderL());
 
-                b = true;
-                EstimatedExecutionTime = estimatedExecutionTime;
-            }
-            if (estimatedCompletionTime != EstimatedCompletionTime)
-            {
-                if (Status >= Status.Completed)
-                    throw new UserFriendlyException("workorderChangeEstimatedTimeException3".BXJGWorkOrderL());
+                    EstimatedExecutionTime = estimatedExecutionTime;
+                }
+                if (estimatedCompletionTime != EstimatedCompletionTime)
+                {
+                    if (Status >= Status.Completed)
+                        throw new UserFriendlyException("workorderChangeEstimatedTimeException3".BXJGWorkOrderL());
 
-                b = true;
-                EstimatedCompletionTime = estimatedCompletionTime;
+                    EstimatedCompletionTime = estimatedCompletionTime;
+                }
+
+                if (estimatedCompletionTime != estimatedCompletionTimeysz || estimatedExecutionTime != estimatedExecutionTimeysz)
+                    DomainEvents.Add(new EstimatedTimeChangeingEventData(this, estimatedCompletionTimeysz, estimatedExecutionTimeysz));
+                else
+                    DomainEvents.Remove<EstimatedTimeChangeingEventData>();
             }
-            if (b)
-                DomainEvents.Add(new EstimatedTimeChangedEventData(this, os, oe));
         }
         /// <summary>
         /// 一并设置执行和完成时间<br />

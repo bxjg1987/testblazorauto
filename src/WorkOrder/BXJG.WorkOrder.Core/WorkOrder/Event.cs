@@ -8,33 +8,41 @@ using System.Threading.Tasks;
 
 namespace BXJG.WorkOrder.WorkOrder
 {
-    public class StatusChangedEventData : EntityUpdatingEventData<OrderBaseEntity>
+    public class StatusChangeingEventData : EntityChangingEventData<OrderBaseEntity>
     {
         public Status Original { get; private set; }
-        public StatusChangedEventData(OrderBaseEntity entity, Status original) : base(entity)
+        public StatusChangeingEventData(OrderBaseEntity entity, Status original) : base(entity)
         {
             Original = original;
         }
     }
     ////通知冗余字段引用方修改自己的数据
-    public class EstimatedTimeChangedEventData : EntityEventData<OrderBaseEntity>
+    public class EstimatedTimeChangeingEventData : EntityChangingEventData<OrderBaseEntity>
     {
         public DateTimeOffset? OriginalStart { get; private set; }
         public DateTimeOffset? OriginalEnd { get; private set; }
-        public EstimatedTimeChangedEventData(OrderBaseEntity entity, DateTimeOffset? s, DateTimeOffset? e) : base(entity)
+        public EstimatedTimeChangeingEventData(OrderBaseEntity entity, DateTimeOffset? s, DateTimeOffset? e) : base(entity)
         {
             OriginalStart = s;
             OriginalEnd = e;
         }
     }
 
-    public class UrgencyDegreeChangedEventData : EntityEventData<OrderBaseEntity>
+    public class UrgencyDegreeChangingEventData : EntityChangingEventData<OrderBaseEntity>
     {
         public UrgencyDegree Original { get; private set; }
-        public UrgencyDegreeChangedEventData(OrderBaseEntity entity, UrgencyDegree original) : base(entity)
+        public UrgencyDegreeChangingEventData(OrderBaseEntity entity, UrgencyDegree original) : base(entity)
         {
             Original = original;
         }
     }
 
+    public class PointsChangingEventData : EntityChangingEventData<OrderBaseEntity>
+    {
+        public int? Original { get; private set; }
+        public PointsChangingEventData(OrderBaseEntity entity, int? original) : base(entity)
+        {
+            Original = original;
+        }
+    }
 }
