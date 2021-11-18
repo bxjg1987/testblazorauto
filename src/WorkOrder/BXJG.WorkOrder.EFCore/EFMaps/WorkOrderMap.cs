@@ -13,7 +13,7 @@ namespace BXJG.WorkOrder.EFMaps
     {
         public virtual void Configure(EntityTypeBuilder<T> builder)
         {
-            builder.Property(c => c.RowVersion).IsRowVersion();
+            //builder.Property(c => c.RowVersion).IsRowVersion();
             //builder.Property(c => c.ExtensionData).HasMaxLength(int.MaxValue);
             builder.Property(c => c.Title).HasMaxLength(CoreConsts.OrderTitleMaxLength).IsRequired();
             builder.Property(c => c.Description).HasMaxLength(CoreConsts.OrderDescriptionMaxLength);
@@ -23,7 +23,7 @@ namespace BXJG.WorkOrder.EFMaps
             //builder.Property(c => c.ContactPhone).HasColumnType($"varchar({CoreConsts.OrderContactPhoneMaxLength})");
             //外键好像默认会建立索引，但这里没有使用外键
             builder.HasIndex(p => new { p.CategoryId, p.EmployeeId });
-
+            builder.Property(c => c.Status).IsConcurrencyToken();
             builder.Property(c => c.Id).ValueGeneratedNever();
         }
     }
