@@ -205,44 +205,6 @@ namespace BXJG.WorkOrder.WorkOrder
         /// </summary>
         [DisableAuditing]
         public virtual string Description { get; set; }
-
-        bool pointscsh = false;
-        int? points, jfysz;
-        object lockerPoints = new object();
-
-        /// <summary>
-        /// 工单对应的积分（注:如果配置为单量模式,积分固定为1分，如果配置为积分模式，则确定工单时，必须设置工单对应积分值）
-        /// </summary>
-        public virtual int? Points
-        {
-            get { return points; }
-            set
-            {
-                if (Status >= Status.Completed)
-                    throw new UserFriendlyException("已完成或拒绝的工单调整积分没有意义！".BXJGWorkOrderL());
-
-                if (!pointscsh)
-                {
-                    lock (lockerPoints)
-                    {
-                        if (!pointscsh)
-                        {
-                            jfysz = value;
-                            pointscsh = true;
-                        }
-                    }
-                }
-                //确保事件与状态同步
-                lock (lockerPoints)
-                {
-                    points = value;
-                    if (value != jfysz)
-                        DomainEvents.AddOrReplace(new PointsChangingEventData(this, jfysz.Value));
-                    else
-                        DomainEvents.Remove<PointsChangingEventData>();
-                }
-            }
-        }
         ///// <summary>
         ///// 关联的原始图片列表，多个用英文逗号分割
         ///// 缩略图与原始图片是按顺序关联的
@@ -457,17 +419,10 @@ namespace BXJG.WorkOrder.WorkOrder
             {
                 throw new UserFriendlyException("workorderConfirmeException1".BXJGWorkOrderL());
             }
-
-            CheckPoint();
-
             ChangeStatus(Status.ToBeAllocated, time, description);
         }
 
-        protected virtual void CheckPoint()
-        {
-            if (!Points.HasValue)
-                throw new UserFriendlyException("确认前请确保已设置积分！".BXJGWorkOrderL());
-        }
+      
 
         /// <summary>
         /// 反确认

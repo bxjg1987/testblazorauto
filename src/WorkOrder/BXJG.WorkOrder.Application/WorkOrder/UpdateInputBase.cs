@@ -15,7 +15,7 @@ namespace BXJG.WorkOrder.WorkOrder
     /// </summary>
     public abstract class UpdateInputBase : EntityDto<long>
     {
-        public int? Points { get; set; }
+
         /// <summary>
         /// 所属分类id
         /// </summary>

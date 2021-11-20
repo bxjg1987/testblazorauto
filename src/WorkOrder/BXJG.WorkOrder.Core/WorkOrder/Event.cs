@@ -37,12 +37,5 @@ namespace BXJG.WorkOrder.WorkOrder
         }
     }
 
-    public class PointsChangingEventData : EntityChangingEventData<OrderBaseEntity>
-    {
-        public int? Original { get; private set; }
-        public PointsChangingEventData(OrderBaseEntity entity, int? original) : base(entity)
-        {
-            Original = original;
-        }
-    }
+   
 }
