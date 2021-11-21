@@ -66,14 +66,14 @@ namespace BXJG.WorkOrder.WorkOrder
                 dto.Time = Clock.Now;
             if (!dto.UrgencyDegree.HasValue)
                 dto.UrgencyDegree = OrderBaseEntity.DefaultUrgencyDegree;
-            var entity = Create(dto);
+            var entity = await Create(dto);
             entity.Id = orderNoGenerator.NewLong();
             await repository.InsertAsync(entity);
             await CurrentUnitOfWork.SaveChangesAsync();//保存以更新id为自增id
             return entity;
         }
 
-        protected abstract TEntity Create(WorkOrderCreateDtoBase dto);
+        protected abstract ValueTask< TEntity> Create(WorkOrderCreateDtoBase dto);
 
         public virtual Task DeleteAsync(TEntity entity)
         {
@@ -95,10 +95,10 @@ namespace BXJG.WorkOrder.WorkOrder
         {
         }
 
-        protected override OrderEntity Create(WorkOrderCreateDtoBase input)
+        protected override ValueTask<OrderEntity> Create(WorkOrderCreateDtoBase input)
         {
             var dto = input as WorkOrderCreateDto;
-            return new OrderEntity(dto.Time.Value,
+            var entity = new OrderEntity(dto.Time.Value,
                                    dto.CategoryId.Value,
                                    dto.Title,
                                    dto.Description,
@@ -111,6 +111,7 @@ namespace BXJG.WorkOrder.WorkOrder
                                    dto.ExtendedField3,
                                    dto.ExtendedField4,
                                    dto.ExtendedField5);
+            return ValueTask.FromResult(entity);    
         }
     }
 }

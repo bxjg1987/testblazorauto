@@ -120,7 +120,7 @@ namespace BXJG.WorkOrder.WorkOrder
         public virtual Status Status
         {
             get { return status; }
-            private set
+            protected set
             {
                 if (!yszt.HasValue)
                 {
