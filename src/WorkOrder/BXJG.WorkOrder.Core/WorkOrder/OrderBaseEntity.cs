@@ -120,7 +120,7 @@ namespace BXJG.WorkOrder.WorkOrder
         public virtual Status Status
         {
             get { return status; }
-            private set
+            protected set
             {
                 if (!yszt.HasValue)
                 {
@@ -161,7 +161,8 @@ namespace BXJG.WorkOrder.WorkOrder
                 if (Status >= Status.Completed)
                     throw new UserFriendlyException("workorderSetUrgencyDegreeStatusException".BXJGWorkOrderL());
 
-                if (!urgencyDegreeysz.HasValue) {
+                if (!urgencyDegreeysz.HasValue)
+                {
                     lock (lockerDegreeysz)
                     {
                         if (!urgencyDegreeysz.HasValue)
@@ -172,7 +173,7 @@ namespace BXJG.WorkOrder.WorkOrder
                 lock (lockerDegreeysz)
                 {
                     urgencyDegree = value;
-                    if(value!=urgencyDegreeysz.Value)
+                    if (value != urgencyDegreeysz.Value)
                         DomainEvents.Add(new UrgencyDegreeChangingEventData(this, urgencyDegreeysz.Value));
                     else
                         DomainEvents.Remove<UrgencyDegreeChangingEventData>();
@@ -204,43 +205,6 @@ namespace BXJG.WorkOrder.WorkOrder
         /// </summary>
         [DisableAuditing]
         public virtual string Description { get; set; }
-
-        bool pointscsh = false;
-        int? points, jfysz;
-        object lockerPoints = new object();
-
-        /// <summary>
-        /// 工单对应的积分（注:如果配置为单量模式,积分固定为1分，如果配置为积分模式，则确定工单时，必须设置工单对应积分值）
-        /// </summary>
-        public virtual int? Points
-        {
-            get { return points; }
-            set {
-                if (Status >= Status.Completed)
-                    throw new UserFriendlyException("已完成或拒绝的工单调整积分没有意义！".BXJGWorkOrderL());
-
-                if (!pointscsh)
-                {
-                    lock (lockerPoints)
-                    {
-                        if (!pointscsh)
-                        {
-                            jfysz = value;
-                            pointscsh = true;
-                        }
-                    }
-                }
-                //确保事件与状态同步
-                lock (lockerPoints)
-                {
-                    points = value;
-                    if (value != jfysz)
-                        DomainEvents.Add(new PointsChangingEventData(this, jfysz.Value));
-                    else
-                        DomainEvents.Remove<PointsChangingEventData>();
-                }
-            }
-        }
         ///// <summary>
         ///// 关联的原始图片列表，多个用英文逗号分割
         ///// 缩略图与原始图片是按顺序关联的
@@ -316,6 +280,7 @@ namespace BXJG.WorkOrder.WorkOrder
             }
         }
 
+
         /// <summary>
         /// 执行时间。参考：<see cref="ChangePracticalTime"/>
         /// </summary>
@@ -324,6 +289,8 @@ namespace BXJG.WorkOrder.WorkOrder
         /// 完成时间。参考：<see cref="ChangePracticalTime"/>
         /// </summary>
         public virtual DateTimeOffset? CompletionTime { get; protected set; }
+
+
         /// <summary>
         /// 处理人Id。子类需要访问时请尽量调用<see cref="EmployeeId"/>
         /// </summary>
@@ -358,8 +325,9 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <summary>
         /// 状态变更有并发可能，使用乐观并发，偷个懒直接使用行级乐观并发
         /// </summary>
-        [DisableAuditing]
-        public byte[] RowVersion { get; set; }
+        //[DisableAuditing]
+        //只给状态加并发控制
+        //public byte[] RowVersion { get; set; }
         /// <summary>
         /// 调整状态。将引发<see cref="StatusChangeingEventData"/>事件
         /// </summary>
@@ -397,7 +365,7 @@ namespace BXJG.WorkOrder.WorkOrder
                 throw new UserFriendlyException("workorderChangeEstimatedTimeException1".BXJGWorkOrderL());
 
             //DateTimeOffset? os = EstimatedExecutionTime, oe = EstimatedCompletionTime;
-            
+
             //确保状态的改变跟事件触发是事务性的
             lock (lockeryjkswc)
             {
@@ -417,7 +385,7 @@ namespace BXJG.WorkOrder.WorkOrder
                 }
 
                 if (estimatedCompletionTime != estimatedCompletionTimeysz || estimatedExecutionTime != estimatedExecutionTimeysz)
-                    DomainEvents.Add(new EstimatedTimeChangeingEventData(this, estimatedCompletionTimeysz, estimatedExecutionTimeysz));
+                    DomainEvents.AddOrReplace(new EstimatedTimeChangeingEventData(this, estimatedCompletionTimeysz, estimatedExecutionTimeysz));
                 else
                     DomainEvents.Remove<EstimatedTimeChangeingEventData>();
             }
@@ -453,6 +421,9 @@ namespace BXJG.WorkOrder.WorkOrder
             }
             ChangeStatus(Status.ToBeAllocated, time, description);
         }
+
+      
+
         /// <summary>
         /// 反确认
         /// </summary>

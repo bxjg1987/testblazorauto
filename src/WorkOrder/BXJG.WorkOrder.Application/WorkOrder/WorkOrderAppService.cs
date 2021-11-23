@@ -167,7 +167,7 @@ namespace BXJG.WorkOrder.WorkOrder
         {
             await CheckCreatePermissionAsync();
             var entity = await manager.Value.CreateAsync(await CreateInputToCreateDto(input));
-            entity.Points = input.Points;
+            //entity.Points = input.Points;
             await BeforeCreateAsync(entity, input);
             await CurrentUnitOfWork.SaveChangesAsync();
             var cls = await clsRepository.Value.GetAsync(entity.CategoryId);
@@ -603,7 +603,7 @@ namespace BXJG.WorkOrder.WorkOrder
             entity.StatusChangedDescription = input.StatusChangedDescription;
             entity.UrgencyDegree = input.UrgencyDegree ?? OrderBaseEntity.DefaultUrgencyDegree;
             entity.EmployeeId = input.EmployeeId;
-            entity.Points = input.Points;
+            //entity.Points = input.Points;
             entity.ChangeEstimatedTime(input.EstimatedExecutionTime, input.EstimatedCompletionTime);
             return ValueTask.CompletedTask;
         }
