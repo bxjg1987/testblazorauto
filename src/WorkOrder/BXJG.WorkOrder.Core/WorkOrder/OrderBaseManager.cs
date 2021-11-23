@@ -73,7 +73,7 @@ namespace BXJG.WorkOrder.WorkOrder
             return entity;
         }
 
-        protected abstract ValueTask< TEntity> Create(WorkOrderCreateDtoBase dto);
+        protected abstract ValueTask<TEntity> Create(WorkOrderCreateDtoBase dto);
 
         public virtual Task DeleteAsync(TEntity entity)
         {
@@ -82,15 +82,23 @@ namespace BXJG.WorkOrder.WorkOrder
 
             return repository.DeleteAsync(entity);
         }
+
+        public virtual ValueTask ConfirmeAsync(TEntity entity, DateTimeOffset? dateTimeOffset=default, string desc="确认", params object[] ps)
+        {
+            //业务判断
+            entity.Confirme(dateTimeOffset ?? Clock.Now, desc);
+            return ValueTask.CompletedTask;
+            //后续处理
+        }
     }
 
     public class OrderManager : OrderBaseManager<OrderEntity>
     {
-        public OrderManager(IRepository<OrderEntity, long> repository, 
+        public OrderManager(IRepository<OrderEntity, long> repository,
                             IRepository<CategoryEntity, long> clsRepository,
-                            CategoryManager clsManager,OrderNoGenerator orderNoGenerator) : base(repository,
+                            CategoryManager clsManager, OrderNoGenerator orderNoGenerator) : base(repository,
                                                                clsRepository,
-                                                               clsManager, 
+                                                               clsManager,
                                                                CoreConsts.DefaultWorkOrderTypeName, orderNoGenerator)
         {
         }
@@ -111,7 +119,7 @@ namespace BXJG.WorkOrder.WorkOrder
                                    dto.ExtendedField3,
                                    dto.ExtendedField4,
                                    dto.ExtendedField5);
-            return ValueTask.FromResult(entity);    
+            return ValueTask.FromResult(entity);
         }
     }
 }
