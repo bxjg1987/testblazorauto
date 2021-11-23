@@ -26,6 +26,7 @@ namespace BXJG.Utils.File
 
         protected void DoWork(string dir)
         {
+            if (!Directory.Exists(dir)) return;
             var files = Directory.GetFiles(dir);
             foreach (var item in files)
             {
