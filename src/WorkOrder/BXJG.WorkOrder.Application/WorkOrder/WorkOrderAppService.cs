@@ -57,6 +57,8 @@ namespace BXJG.WorkOrder.WorkOrder
                                                   TEntityDto,
                                                   TBatchChangeStatusInput,
                                                   TBatchChangeStatusOutput,
+                                                  TBatchConfirmeInput,
+                                                  TBatchConfirmeOutput,
                                                   TBatchAllocateInput,
                                                   TBatchAllocateOutput,
                                                   TEntity,
@@ -76,6 +78,8 @@ namespace BXJG.WorkOrder.WorkOrder
         where TEntityDto : DtoBase, new()
         where TBatchChangeStatusInput : BatchChangeStatusInputBase
         where TBatchChangeStatusOutput : BatchOperationOutputLong, new()
+        where TBatchConfirmeInput : BatchConfirmeBaseInput
+        where TBatchConfirmeOutput : BatchOperationOutputLong, new()
         where TBatchAllocateInput : BatchAllocateInputBase
         where TBatchAllocateOutput : BatchOperationOutputLong, new()
         where TEntity : OrderBaseEntity
@@ -324,6 +328,16 @@ namespace BXJG.WorkOrder.WorkOrder
             }
             return r;
         }
+
+        [UseCase(Description = "确认")]
+        public virtual ValueTask ConfirmeAsync(TEntity entity, DateTimeOffset? dateTimeOffset = default, string desc = "确认", params object[] ps)
+        {
+            //业务判断
+            entity.Confirme(dateTimeOffset ?? Clock.Now, desc);
+            return ValueTask.CompletedTask;
+            //后续处理
+        }
+
         /// <summary>
         /// 批量分配工单
         /// </summary>

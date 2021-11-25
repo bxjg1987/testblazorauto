@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>BXJG.BaseInfo</RootNamespace>
     <Version>1.0.5</Version>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Abp.ZeroCore" Version="6.5.0" />
+    <PackageReference Include="Abp.ZeroCore" Version="7.0.0-rc.1" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>BXJG.WorkOrder</RootNamespace>
     <Version>1.2.8</Version>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Abp" Version="6.5.0" />
+    <PackageReference Include="Abp" Version="7.0.0-rc.1" />
     <PackageReference Include="Yitter.IdGenerator" Version="*" />
   </ItemGroup>
 

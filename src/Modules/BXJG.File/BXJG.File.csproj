@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Description>基于abp的文件管理模块
 提供一个基于本地文件的文件管理功能,附件模块也依赖它. 
@@ -36,7 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Abp.AutoMapper" Version="6.5.0" />
+    <PackageReference Include="Abp.AutoMapper" Version="7.0.0-rc.1" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
     <PackageReference Include="MimeMapping" Version="1.0.1.37" />
   </ItemGroup>

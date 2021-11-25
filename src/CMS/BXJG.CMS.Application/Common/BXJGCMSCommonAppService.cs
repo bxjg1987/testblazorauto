@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using BXJG.Utils.Localization;
 using BXJG.Utils;
+using BXJG.Utils.Enums;
 
 namespace BXJG.CMS.Common
 {
