@@ -39,6 +39,8 @@ namespace BXJG.WorkOrder.WorkOrder
     /// <typeparam name="TEntityDto">列表页显示模型</typeparam>
     /// <typeparam name="TBatchChangeStatusInput">批量状态修改时的输入模型</typeparam>
     /// <typeparam name="TBatchChangeStatusOutput">批量状态修改时的输出模型</typeparam>
+    /// <typeparam name="TBatchConfirmeInput">批量确认时的输入模型</typeparam>
+    /// <typeparam name="TBatchConfirmeOutput">批量确认时的输出模型</typeparam>
     /// <typeparam name="TBatchAllocateInput">批量分配时的输入模型</typeparam>
     /// <typeparam name="TBatchAllocateOutput">批量分配时的输出模型</typeparam>
     /// <typeparam name="TEntity">实体类型</typeparam>
@@ -328,16 +330,37 @@ namespace BXJG.WorkOrder.WorkOrder
             }
             return r;
         }
-
+        /// <summary>
+        /// 批量确认
+        /// </summary>
+        /// <param name="input"></param>
         [UseCase(Description = "确认")]
-        public virtual ValueTask ConfirmeAsync(TEntity entity, DateTimeOffset? dateTimeOffset = default, string desc = "确认", params object[] ps)
+        public virtual async Task<TBatchConfirmeOutput> ConfirmeAsync(TBatchConfirmeInput input)
         {
-            //业务判断
-            entity.Confirme(dateTimeOffset ?? Clock.Now, desc);
-            return ValueTask.CompletedTask;
-            //后续处理
+            await CheckConfirmePermissionAsync();
+            var query = repository.GetAll().Where(c => input.Ids.Contains(c.Id));
+            var list = await AsyncQueryableExecuter.ToListAsync(query);
+            var r = new TBatchConfirmeOutput();
+            foreach (var item in list)
+            {
+                try
+                {
+                    await ConfirmeSingleAsync(item, input);
+                    await CurrentUnitOfWork.SaveChangesAsync();
+                    r.Ids.Add(item.Id);
+                }
+                catch (UserFriendlyException ex)
+                {
+                    r.ErrorMessage.Add(new BatchOperationErrorMessage(item.Id, ex.Message));
+                }
+                catch (Exception ex)
+                {
+                    r.ErrorMessage.Add(item.Id.Message500());
+                    Logger.Warn("确认工单失败！".BXJGWorkOrderL(), ex);
+                }
+            }
+            return r;
         }
-
         /// <summary>
         /// 批量分配工单
         /// </summary>
@@ -390,6 +413,10 @@ namespace BXJG.WorkOrder.WorkOrder
         #endregion
 
         #region MyRegion
+        protected virtual ValueTask ConfirmeSingleAsync(TEntity entity, TBatchConfirmeInput input)
+        {
+            return this.manager.Value.ConfirmeAsync(entity, input.StatusChangedTime);
+        }
         /// <summary>
         /// 获取单个信息的查询，根据id查询，内部会join分类
         /// 通常不需要重写此方法
@@ -481,7 +508,7 @@ namespace BXJG.WorkOrder.WorkOrder
                         select new TQueryTemp { Order = c, Category = kk };
             return query;
         }
-        
+
         protected virtual async Task<IQueryable<TQueryTemp>> GetAllFilterAsync(TGetTotalInput input)
         {
             var query = GetQuery();
@@ -567,7 +594,7 @@ namespace BXJG.WorkOrder.WorkOrder
             //    emps = await employeeAppService.GetByIdsAsync(entity.EmployeeId);
             //}
             var state = await GetStateAsync(new TQueryTemp[] { entity });
-            var images = await attachmentManager.Value.GetAttachmentsAsync( entityIds: entity.Order.Id.ToString());
+            var images = await attachmentManager.Value.GetAttachmentsAsync(entityIds: entity.Order.Id.ToString());
 
             return EntityToDto(entity, images, state);
         }

@@ -327,9 +327,11 @@ namespace BXJG.Utils.Localization
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public static string UtilsL(this string key)
+        public static string UtilsL(this string key, params object[] args)
         {
-            return Abp.Localization.LocalizationHelper.GetString(BXJGUtilsConsts.LocalizationSourceName, key);
+            //return string.Format(LocalizationHelper.GetString(BXJGUtilsConsts.LocalizationSourceName, key), args);
+            //return Abp.Localization.LocalizationHelper.GetString(BXJGUtilsConsts.LocalizationSourceName, key);
+            return BXJGUtilsL(LocalizationHelper.Manager, key, args);
         }
         /// <summary>
         /// 获取Utils模块中的指定键的本地化ILocalizableString
