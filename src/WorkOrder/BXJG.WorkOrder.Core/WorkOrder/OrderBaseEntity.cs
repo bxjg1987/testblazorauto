@@ -80,7 +80,7 @@ namespace BXJG.WorkOrder.WorkOrder
                                            DateTimeOffset? estimatedCompletionTime = default)
         {
             CategoryId = categoryId;
-            this.urgencyDegree = urgencyDegree;
+            this.urgencyDegree1 = urgencyDegree;
             Title = title;
 
             Status = Status.ToBeConfirmed;
@@ -113,13 +113,13 @@ namespace BXJG.WorkOrder.WorkOrder
 
         private object lockerzt = new object();
         private Status? yszt;
-        private Status status;
+        private Status status1;
         /// <summary>
         /// 状态。核心属性，调用相应业务方法可以改变其值
         /// </summary>
         public virtual Status Status
         {
-            get { return status; }
+            get { return status1; }
             protected set
             {
                 if (!yszt.HasValue)
@@ -134,7 +134,7 @@ namespace BXJG.WorkOrder.WorkOrder
                 //确保事件与状态同步
                 lock (lockerzt)
                 {
-                    status = value;
+                    status1 = value;
                     if (value != yszt.Value)
                         DomainEvents.AddOrReplace(new StatusChangeingEventData(this, yszt.Value));
                     else
@@ -148,14 +148,14 @@ namespace BXJG.WorkOrder.WorkOrder
         /// <summary>
         /// 紧急程度。子类需要访问时请尽量调用<see cref="UrgencyDegree"/>
         /// </summary>
-        private UrgencyDegree urgencyDegree;
+        private UrgencyDegree urgencyDegree1;
         /// <summary>
         /// 紧急程度。已完成或拒绝的工单不允许修改，其它状态可以修改
         /// 修改后将触发<see cref="UrgencyDegreeChangingEventData"/>事件
         /// </summary>
         public virtual UrgencyDegree UrgencyDegree
         {
-            get { return urgencyDegree; }
+            get { return urgencyDegree1; }
             set
             {
                 if (Status >= Status.Completed)
@@ -172,7 +172,7 @@ namespace BXJG.WorkOrder.WorkOrder
                 //确保事件与状态同步
                 lock (lockerDegreeysz)
                 {
-                    urgencyDegree = value;
+                    urgencyDegree1 = value;
                     if (value != urgencyDegreeysz.Value)
                         DomainEvents.Add(new UrgencyDegreeChangingEventData(this, urgencyDegreeysz.Value));
                     else
@@ -233,16 +233,16 @@ namespace BXJG.WorkOrder.WorkOrder
         private bool yjkscsh = false, yjjscsh = false;
         private DateTimeOffset? estimatedExecutionTimeysz, estimatedCompletionTimeysz;
 
-        private DateTimeOffset? estimatedExecutionTime, estimatedCompletionTime;
+        private DateTimeOffset? estimatedExecutionTime1, estimatedCompletionTime1;
 
         private object lockeryjks = new object();
         private object lockeryjwc = new object();
         public virtual DateTimeOffset? EstimatedExecutionTime
         {
-            get { return estimatedExecutionTime; }
+            get { return estimatedExecutionTime1; }
             set
             {
-                estimatedExecutionTime = value;
+                estimatedExecutionTime1 = value;
                 if (!yjkscsh)
                 {
                     lock (lockeryjks)
@@ -262,10 +262,10 @@ namespace BXJG.WorkOrder.WorkOrder
 
         public virtual DateTimeOffset? EstimatedCompletionTime
         {
-            get { return estimatedCompletionTime; }
+            get { return estimatedCompletionTime1; }
             set
             {
-                estimatedCompletionTime = value;
+                estimatedCompletionTime1 = value;
                 if (!yjjscsh)
                 {
                     lock (lockeryjwc)
