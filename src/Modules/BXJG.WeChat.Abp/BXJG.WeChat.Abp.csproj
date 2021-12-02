@@ -12,7 +12,7 @@
     <Compile Remove="BXJGWeChatExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Abp" Version="7.0.0-rc.1" />
+    <PackageReference Include="Abp" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>

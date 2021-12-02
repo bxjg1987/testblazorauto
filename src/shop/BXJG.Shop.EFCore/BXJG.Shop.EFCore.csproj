@@ -16,9 +16,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Abp" Version="7.0.0-rc.1" />
-    <PackageReference Include="Abp.Zero.Common" Version="7.0.0-rc.1" />
-    <PackageReference Include="Abp.ZeroCore.EntityFrameworkCore" Version="7.0.0-rc.1" />
+    <PackageReference Include="Abp" Version="7.0.0" />
+    <PackageReference Include="Abp.Zero.Common" Version="7.0.0" />
+    <PackageReference Include="Abp.ZeroCore.EntityFrameworkCore" Version="7.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.0" />
   </ItemGroup>
 

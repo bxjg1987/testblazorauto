@@ -46,10 +46,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Abp" Version="7.0.0-rc.1" />
-    <PackageReference Include="Abp.AutoMapper" Version="7.0.0-rc.1" />
-    <PackageReference Include="Abp.Zero.Common" Version="7.0.0-rc.1" />
-    <PackageReference Include="Abp.ZeroCore" Version="7.0.0-rc.1" />
+    <PackageReference Include="Abp" Version="7.0.0" />
+    <PackageReference Include="Abp.AutoMapper" Version="7.0.0" />
+    <PackageReference Include="Abp.Zero.Common" Version="7.0.0" />
+    <PackageReference Include="Abp.ZeroCore" Version="7.0.0" />
     <PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="3.4.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />

@@ -5,9 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Abp" Version="7.0.0-rc.1" />
-    <PackageReference Include="Abp.ZeroCore" Version="7.0.0-rc.1" />
-    <PackageReference Include="Abp.ZeroCore.EntityFrameworkCore" Version="7.0.0-rc.1" />
+    <PackageReference Include="Abp" Version="7.0.0" />
+    <PackageReference Include="Abp.ZeroCore" Version="7.0.0" />
+    <PackageReference Include="Abp.ZeroCore.EntityFrameworkCore" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>

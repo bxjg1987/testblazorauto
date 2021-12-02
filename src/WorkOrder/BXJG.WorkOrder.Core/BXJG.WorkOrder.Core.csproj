@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Abp" Version="7.0.0-rc.1" />
+    <PackageReference Include="Abp" Version="7.0.0" />
     <PackageReference Include="Yitter.IdGenerator" Version="*" />
   </ItemGroup>
 

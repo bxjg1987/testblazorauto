@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29806.167
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZLJ.Core", "src\ZLJ.Core\ZLJ.Core.csproj", "{0FA75A5B-AB83-4FD0-B545-279774C01E87}"
 EndProject
@@ -135,6 +135,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.GoodsInfo.Application.Common", "src\GoodsInfo\BXJG.GoodsInfo.Application.Common\BXJG.GoodsInfo.Application.Common.csproj", "{BFACC276-6558-4C72-BC9D-CB6EE72C2696}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.GoodsInfo.Application.Admin", "src\goodsinfo\BXJG.GoodsInfo.Application.Admin\BXJG.GoodsInfo.Application.Admin.csproj", "{8AE4BA0C-167F-4D92-97C7-87CB5A754852}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZLJ.Web.Mvc", "src\ZLJ.Web.Mvc\ZLJ.Web.Mvc.csproj", "{970BE6F4-4616-4F2E-8AEB-E8A259591A44}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -318,6 +320,10 @@ Global
 		{8AE4BA0C-167F-4D92-97C7-87CB5A754852}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8AE4BA0C-167F-4D92-97C7-87CB5A754852}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8AE4BA0C-167F-4D92-97C7-87CB5A754852}.Release|Any CPU.Build.0 = Release|Any CPU
+		{970BE6F4-4616-4F2E-8AEB-E8A259591A44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{970BE6F4-4616-4F2E-8AEB-E8A259591A44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{970BE6F4-4616-4F2E-8AEB-E8A259591A44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{970BE6F4-4616-4F2E-8AEB-E8A259591A44}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -375,6 +381,7 @@ Global
 		{42FE21E5-6F0D-4446-8906-8F42C90C7BA1} = {175D1E4E-D598-4F64-BF25-0A93EFF731E1}
 		{BFACC276-6558-4C72-BC9D-CB6EE72C2696} = {175D1E4E-D598-4F64-BF25-0A93EFF731E1}
 		{8AE4BA0C-167F-4D92-97C7-87CB5A754852} = {175D1E4E-D598-4F64-BF25-0A93EFF731E1}
+		{970BE6F4-4616-4F2E-8AEB-E8A259591A44} = {04E5EC1B-C5AD-473B-A833-DC9C2CB4627E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F45DD46C-6040-4FCC-87E0-648786C36933}
