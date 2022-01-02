@@ -9,6 +9,11 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>d:\abp\src\WorkOrder\BXJG.WorkOrder.EFCore\BXJG.WorkOrder.EFCore.xml</DocumentationFile>
+    <LangVersion>default</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <LangVersion>default</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
