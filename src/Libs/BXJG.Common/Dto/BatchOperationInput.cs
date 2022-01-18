@@ -27,4 +27,15 @@ namespace BXJG.Common.Dto
     public class BatchOperationInputLong : BatchOperationInput<long>
     {
     }
+
+    public class BatchSwitchInput<TKey>: BatchOperationInput<TKey>
+    {
+        public bool IsActive { get; set; }
+    }
+    public class BatchSwitchInput : BatchSwitchInput<int>
+    {
+    }
+    public class BatchSwitchInputLong : BatchSwitchInput<long>
+    {
+    }
 }
