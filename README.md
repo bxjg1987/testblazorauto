@@ -1,5 +1,5 @@
 <h1>基本介绍</h1>
-在线演示地址：http://web.cqyuzuji.com:9000 账号密码：admin 123qwe<br />
+在线演示地址：http://web1.cqyuzuji.com:9000 账号密码：admin 123qwe<br />
 这是一个基于.net6 abp7.x的系统，非vNext版本，目的是累积日常开发中需要的模块 实现快速变现的目的。模块尽量按abp的方式实现。目前已经有几个模块了(下面会说明)，后续会慢慢累积<br />
 前后端分开，前端比较老的easyui，后端webApi接口。因为我对前端不熟，你可以按你喜欢的方式去实现<br />
 需要熟悉asp.net core 6.x  abp<br />
