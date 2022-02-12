@@ -39,7 +39,7 @@ namespace BXJG.Shop.Sale
         /// <returns></returns>
         public List<ComboboxItemDto> GetAllPaymentStatus(GetForSelectInput input)
         {
-            return enumManagerFactory.EnumManager.GetAllOrderStatus<PaymentStatus>(input);
+           // return enumManagerFactory.EnumManager.GetAllOrderStatus<PaymentStatus>(input);
         }
         /// <summary>
         /// 获取物流状态列表
@@ -48,7 +48,8 @@ namespace BXJG.Shop.Sale
         /// <returns></returns>
         public List<ComboboxItemDto> GetAllLogisticsStatus(GetForSelectInput input)
         {
-            return enumManagerFactory.EnumManager.GetAllOrderStatus<LogisticsStatus>(input);
+            throw new NotImplementedException();
+           // return enumManagerFactory.EnumManager.GetAllOrderStatus<LogisticsStatus>(input);
         }
 
 

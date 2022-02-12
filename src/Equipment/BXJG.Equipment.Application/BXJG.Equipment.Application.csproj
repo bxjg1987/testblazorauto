@@ -17,9 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Abp.ZeroCore" Version="7.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.0" />
-    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.14" />
+    <PackageReference Include="Abp.ZeroCore" Version="7.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.2" />
+    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.15" />
   </ItemGroup>
 
   <ItemGroup>

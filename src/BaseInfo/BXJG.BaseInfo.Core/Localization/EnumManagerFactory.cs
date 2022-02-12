@@ -9,12 +9,12 @@ namespace BXJG.BaseInfo.Localization
 {
     public class EnumManagerFactory : ISingletonDependency
     {
-        public readonly EnumManager EnumManager;
+        //public readonly EnumManager EnumManager;
 
-        public EnumManagerFactory(ILocalizationManager localizationManager)
-        {
-            EnumManager = new EnumManager(localizationManager, BXJGBaseInfoConst.LocalizationSourceName);
-        }
+        //public EnumManagerFactory(ILocalizationManager localizationManager)
+        //{
+        //    EnumManager = new EnumManager(localizationManager, BXJGBaseInfoConst.LocalizationSourceName);
+        //}
         //public static readonly EnumManager EnumManager = new EnumManager(base.LocalizationSource);
     }
 }
