@@ -22,6 +22,7 @@
     <Compile Remove="WorkOrder\BatchChangeStatusOutput.cs" />
     <Compile Remove="WorkOrder\IGetTotalInputBase.cs" />
     <Compile Remove="WorkOrder\IWorkOrderAppService.cs" />
+    <Compile Remove="WorkOrder\WorkOrderBaseAppService.cs" />
   </ItemGroup>
 
   <ItemGroup>

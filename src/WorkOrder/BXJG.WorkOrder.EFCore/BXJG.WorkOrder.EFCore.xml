@@ -11,5 +11,17 @@
             <param name="modelBuilder"></param>
             <returns></returns>
         </member>
+        <member name="T:BXJG.WorkOrder.EFMaps.WorkOrderMapExtensions">
+            <summary>
+            工单ef映射扩展类
+            </summary>
+        </member>
+        <member name="M:BXJG.WorkOrder.EFMaps.WorkOrderMapExtensions.MapWorkOrderBase``1(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder{``0})">
+            <summary>
+            配置工单抽象类
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="builder"></param>
+        </member>
     </members>
 </doc>

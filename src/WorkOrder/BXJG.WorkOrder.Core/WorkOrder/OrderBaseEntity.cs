@@ -53,6 +53,7 @@ namespace BXJG.WorkOrder.WorkOrder
     [Audited]
     public abstract class OrderBaseEntity : FullAuditedAggregateRoot<long>, IMustHaveTenant
     {
+        public string WorkOrderType { get; set; }
         public static readonly UrgencyDegree DefaultUrgencyDegree = UrgencyDegree.Normalize;
 
         /// <summary>
@@ -79,6 +80,7 @@ namespace BXJG.WorkOrder.WorkOrder
                                            DateTimeOffset? estimatedExecutionTime = default,
                                            DateTimeOffset? estimatedCompletionTime = default)
         {
+            WorkOrderType = this.GetType().FullName;
             CategoryId = categoryId;
             this.urgencyDegree1 = urgencyDegree;
             Title = title;
@@ -559,7 +561,7 @@ namespace BXJG.WorkOrder.WorkOrder
         /// 复制工单时创建逻辑
         /// </summary>
         /// <returns></returns>
-        protected abstract OrderBaseEntity CopyCreate();
+        protected abstract OrderBaseEntity CopyCreate();//=> default;
         /// <summary>
         /// 复制工单
         /// </summary>
