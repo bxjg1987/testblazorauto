@@ -1,5 +1,5 @@
 ﻿using Abp.Domain.Repositories;
-using BXJG.GeneralTree;
+using BXJG.Utils.GeneralTree;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,7 +13,6 @@ using BXJG.Utils.Localization;
 using Abp.Extensions;
 using System.Linq.Expressions;
 using Abp.UI;
-using Microsoft.EntityFrameworkCore;
 using Abp.Localization;
 namespace BXJG.WorkOrder.WorkOrderCategory
 {

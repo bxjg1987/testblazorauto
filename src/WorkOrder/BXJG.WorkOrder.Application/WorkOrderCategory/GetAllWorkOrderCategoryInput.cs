@@ -1,4 +1,4 @@
-﻿using BXJG.GeneralTree;
+﻿using BXJG.Utils.GeneralTree;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

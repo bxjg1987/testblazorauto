@@ -37,7 +37,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Modules\BXJG.GeneralTree\BXJG.GeneralTree.csproj" />
     <ProjectReference Include="..\..\Modules\BXJG.Utils\BXJG.Utils.csproj" />
   </ItemGroup>
 

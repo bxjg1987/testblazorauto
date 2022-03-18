@@ -49,7 +49,7 @@ namespace BXJG.Utils.GeneralTree
                                                                                         BXJGUtilsConsts.GeneralTreeCreatePermissionName,
                                                                                         BXJGUtilsConsts.GeneralTreeUpdatePermissionName,
                                                                                         BXJGUtilsConsts.GeneralTreeDeletePermissionName,
-                                                                                        BXJGUtilsConsts.GeneralTreeGetPermissionName)
+                                                                                        BXJGUtilsConsts.GeneralTreeMenuName)
         {
         }
 

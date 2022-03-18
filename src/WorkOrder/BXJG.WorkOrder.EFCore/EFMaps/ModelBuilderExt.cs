@@ -1,5 +1,5 @@
 ﻿using Abp.Authorization.Users;
-using BXJG.GeneralTree;
+using BXJG.Utils.GeneralTree;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

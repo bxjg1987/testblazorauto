@@ -16,8 +16,8 @@ namespace BXJG.Utils.GeneralTree
         /// <returns></returns>
         public static Permission AddGeneralTreePermission(this Permission parent)
         {
-            var root = parent.CreateChildPermission(BXJGUtilsConsts.GeneralTreeGetPermissionName,
-                                                    BXJGUtilsConsts.GeneralTreeGetPermissionName.UtilsLI(),
+            var root = parent.CreateChildPermission(BXJGUtilsConsts.GeneralTreeMenuName,
+                                                    BXJGUtilsConsts.GeneralTreeMenuName.UtilsLI(),
                                                     multiTenancySides: Abp.MultiTenancy.MultiTenancySides.Tenant);
             root.CreateChildPermission(BXJGUtilsConsts.GeneralTreeCreatePermissionName,
                                        "新增".UtilsLI(),

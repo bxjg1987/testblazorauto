@@ -4,7 +4,7 @@ using Abp.Extensions;
 using Abp.Linq.Extensions;
 using Abp.Timing;
 using BXJG.Common.Dto;
-using BXJG.GeneralTree;
+using BXJG.Utils.GeneralTree;
 using BXJG.WorkOrder.WorkOrderCategory;
 using System;
 using System.Collections.Generic;

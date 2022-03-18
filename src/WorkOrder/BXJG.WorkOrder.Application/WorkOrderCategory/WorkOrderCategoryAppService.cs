@@ -1,7 +1,7 @@
 ﻿using Abp.Domain.Repositories;
 using Abp.Extensions;
 using Abp.Linq.Extensions;
-using BXJG.GeneralTree;
+using BXJG.Utils.GeneralTree;
 using System;
 using System.Collections.Generic;
 using System.Linq;

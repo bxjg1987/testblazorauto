@@ -1,6 +1,6 @@
 ﻿using Abp.Authorization.Users;
 using BXJG.Common;
-using BXJG.GeneralTree;
+using BXJG.Utils.GeneralTree;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;

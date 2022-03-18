@@ -19,7 +19,7 @@ namespace BXJG.Utils.GeneralTree
             var zcgl = new MenuItemDefinition(BXJGUtilsConsts.GeneralTreeMenuName,
                                               BXJGUtilsConsts.GeneralTreeMenuName.UtilsLI(),
                                               icon: "generalTree",
-                                              permissionDependency: new SimplePermissionDependency(BXJGUtilsConsts.GeneralTreeGetPermissionName));
+                                              permissionDependency: new SimplePermissionDependency(BXJGUtilsConsts.GeneralTreeMenuName));
 
             return zcgl;
         }

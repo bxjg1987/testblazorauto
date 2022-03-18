@@ -1,6 +1,6 @@
 ﻿using Abp.Modules;
 using Abp.Reflection.Extensions;
-using BXJG.GeneralTree;
+using BXJG.Utils.GeneralTree;
 using BXJG.Utils;
 using System;
 using Abp.Dependency;
@@ -18,7 +18,7 @@ using BXJG.WorkOrder.Session;
 
 namespace BXJG.WorkOrder
 {
-    [DependsOn(typeof(GeneralTreeModule))]
+    //[DependsOn(typeof(GeneralTreeModule))]
     public class CoreModule : AbpModule
     {
         public override void PreInitialize()

@@ -1,5 +1,5 @@
 using AutoMapper;
-using BXJG.GeneralTree;
+using BXJG.Utils.GeneralTree;
 using BXJG.WorkOrder.EmployeeApplication.WorkOrder;
 using BXJG.WorkOrder.WorkOrder;
 using BXJG.WorkOrder.WorkOrderCategory;

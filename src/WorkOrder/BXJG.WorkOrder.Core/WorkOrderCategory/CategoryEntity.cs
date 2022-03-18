@@ -1,7 +1,7 @@
 ﻿using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
 using Abp.Events.Bus;
-using BXJG.GeneralTree;
+using BXJG.Utils.GeneralTree;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

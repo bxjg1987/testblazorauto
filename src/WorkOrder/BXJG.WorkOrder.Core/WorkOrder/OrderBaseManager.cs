@@ -56,11 +56,11 @@ namespace BXJG.WorkOrder.WorkOrder
         public virtual async Task<TEntity> CreateAsync(WorkOrderCreateDtoBase dto)
         {
             //其它逻辑，暂时忽略
-            if (!dto.CategoryId.HasValue)
-            {
-                dto.CategoryId = (await clsRepository.GetDefaultAsync(workOrderType)).Id;
-            }
-            else
+            //if (!dto.CategoryId.HasValue)
+            //{
+            //    dto.CategoryId = (await clsRepository.GetDefaultAsync(workOrderType)).Id;
+            //}
+            //else
                 dto.CategoryId = dto.CategoryId;
             if (!dto.Time.HasValue)
                 dto.Time = Clock.Now;
