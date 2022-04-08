@@ -1,8 +1,8 @@
 <h1>迁移说明</h1>
 当前项目中的模块是可以用的，通用树、附件管理、工单模块、微信小程序登陆等等..<br />
 但项目整体编译会报错，因为它目前只是用来存放通用模块，另外对应的前端项目也没有在更新。<br />
-目前在研究abp vNext + vue3 + element plus，会逐步把当前项目的模块迁移过去。
-[后端源码仓库](https://gitee.com/bxjg1987_admin/abp-vnext-api/)、
+目前在研究abp vNext + vue3 + element plus，会逐步把当前项目的模块迁移过去。<br />
+[后端源码仓库](https://gitee.com/bxjg1987_admin/abp-vnext-api/)、<br />
 [前端源码仓库](https://gitee.com/bxjg1987_admin/abp-vnext-vue3-element-plus/)
 
 
@@ -30,3 +30,7 @@
 
 <h1>期待你的加入</h1>
 abp是一个程序的框架，按它的模块化方式我们可以设计出适合常规业务的通用代码。如果你也在用abp，或在学习，那么我们可以一起来 **累积和分享 这些模块**，模块的设计我们可以一起探讨。
+
+```
+这里输入代码
+```
