@@ -1,3 +1,10 @@
+<h1>迁移说明</h1>
+当前项目中的模块是可以用的，通用树、附件管理、工单模块、微信小程序登陆等等..<br />
+但项目整体编译会报错，因为它目前只是用来存放通用模块，另外对应的前端项目也没有在更新。<br />
+目前在研究abp vNext + vue3 + element plus，会逐步把当前项目的模块迁移过去。<br />
+后端：[https://gitee.com/bxjg1987_admin/abp-vnext-api](https://gitee.com/bxjg1987_admin/abp-vnext-api)<br />
+前端：[https://gitee.com/bxjg1987_admin/abp-vnext-vue3-element-plus](https://gitee.com/bxjg1987_admin/abp-vnext-vue3-element-plus)
+
 <h1>基本介绍</h1>
 在线演示地址：http://web1.cqyuzuji.com:9000 账号密码：admin 123qwe<br />
 这是一个基于.net6 abp7.x的系统，非vNext版本，目的是累积日常开发中需要的模块 实现快速变现的目的。模块尽量按abp的方式实现。目前已经有几个模块了(下面会说明)，后续会慢慢累积<br />
@@ -8,7 +15,6 @@
 1. 早期项目是可以完整运行的，但由于个人精力有限，现在完整的项目已经无法运行。
 1. 但是在其它项目中使用到的通用模块依然会在此仓库中新增和维护，然后发布为nuget包供其它项目使用。一来是累积模块，再者也在生产中得到验证。
 1. 后期将切换到abp vNext上，那时会为每个可用模块编写完整的文档，目前你只能通过视频或源码了解设计思路，或直接联系我。
-
 
 <h1>各模块基本介绍</h1>
 目前没有整理文档，都是配套设计思路的视频
