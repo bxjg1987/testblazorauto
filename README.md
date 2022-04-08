@@ -1,9 +1,8 @@
 <h1>迁移说明</h1>
 当前项目中的模块是可以用的，通用树、附件管理、工单模块、微信小程序登陆等等..<br />
 但项目整体编译会报错，因为它目前只是用来存放通用模块，另外对应的前端项目也没有在更新。<br />
-目前在研究abp vNext + vue3 + element plus，会逐步把当前项目的模块迁移过去。<br />
-后端：[https://gitee.com/bxjg1987_admin/abp-vnext-api](https://gitee.com/bxjg1987_admin/abp-vnext-api)<br />
-前端：[https://gitee.com/bxjg1987_admin/abp-vnext-vue3-element-plus](https://gitee.com/bxjg1987_admin/abp-vnext-vue3-element-plus)
+目前在研究abp vNext + vue3 + element plus，会逐步把当前项目的模块迁移过去。[后端源码仓库](https://gitee.com/bxjg1987_admin/abp-vnext-api)、[前端源码仓库](https://gitee.com/bxjg1987_admin/abp-vnext-vue3-element-plus)
+
 
 <h1>基本介绍</h1>
 在线演示地址：http://web1.cqyuzuji.com:9000 账号密码：admin 123qwe<br />
