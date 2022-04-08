@@ -5,9 +5,6 @@
 [后端源码仓库](https://gitee.com/bxjg1987_admin/abp-vnext-api/) <br />
 [前端源码仓库](https://gitee.com/bxjg1987_admin/abp-vnext-vue3-element-plus/)
 
-
-[sdfsfd](https://www.baidu.com)
-
 <h1>基本介绍</h1>
 在线演示地址：http://web1.cqyuzuji.com:9000 账号密码：admin 123qwe<br />
 这是一个基于.net6 abp7.x的系统，非vNext版本，目的是累积日常开发中需要的模块 实现快速变现的目的。模块尽量按abp的方式实现。目前已经有几个模块了(下面会说明)，后续会慢慢累积<br />
