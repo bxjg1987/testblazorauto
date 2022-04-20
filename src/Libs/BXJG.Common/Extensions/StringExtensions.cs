@@ -1,4 +1,4 @@
-﻿using hyjiacan.py4n;
+using hyjiacan.py4n;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,6 +10,31 @@ namespace BXJG.Common.Extensions
 {
     public static class StringExtensions
     {
+
+         public static bool NavPropertySplit( this string sortString, out string ss, params string[] temp) {
+
+            ss = sortString;
+            var temp1 = "";
+            
+            foreach (var item in temp)
+            {
+                if (!string.IsNullOrWhiteSpace(temp1))
+                    temp1 += ".";
+                temp1 +=  item;
+                if (sortString.StartsWith(temp1, StringComparison.OrdinalIgnoreCase))
+                {
+                    sortString = sortString.Replace(temp1, temp1 + ".", StringComparison.OrdinalIgnoreCase);
+                }
+                //else
+                //    return false;
+            }
+            if (ss == sortString)
+                return false;
+            
+            ss = sortString;
+            //return sortString;
+            return true;
+        }
         public static string GetPinYinFirstLetter(this string chinese, bool toUpper = true)
         {
             var str = string.Empty;
