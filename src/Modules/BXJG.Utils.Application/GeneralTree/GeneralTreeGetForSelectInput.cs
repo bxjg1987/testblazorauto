@@ -29,8 +29,11 @@ namespace BXJG.Utils.GeneralTree
         /// <summary>
         /// 给前端一个机会来设置自己想要的值，注意是否需要本地化调用方来决定
         /// </summary>
-       // public string ParentText { get; set; }
+        // public string ParentText { get; set; }
 
-       public long? ParentId { get; set; }
+        //2022-5-3 变形精怪 增加
+        //通用树模块目前还未使用此字段，但应该添加此字段，它比ParentId会少一次查询
+        public string Code { get; set; }
+        public long? ParentId { get; set; }
     }
 }

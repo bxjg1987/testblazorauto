@@ -86,11 +86,14 @@ namespace BXJG.Utils.GeneralTree
 
             //得到实体扁平集合
             string parentCode = "";
-            if (input.ParentId.HasValue && input.ParentId.Value > 0)
+            if ( input.Code.IsNullOrWhiteSpace()&& input.ParentId.HasValue && input.ParentId.Value > 0)
             {
                 var top = await repository.GetAsync(input.ParentId.Value);
                 parentCode = top.Code;
             }
+            else
+                parentCode = input.Code??"";
+
             var ctx = new Dictionary<string, object> { { "input", input } };
             var query = await this.ComboTreeFilterAsync(input, parentCode, ctx);
             query = await this.ComboTreeSortAsync(input, query, ctx);
@@ -620,11 +623,13 @@ namespace BXJG.Utils.GeneralTree
             //获取父节点的code 方便后续查询所有子集
             string parentCode = "";
 
-            if (input.ParentId.HasValue && input.ParentId.Value > 0)
+            if ( input.ParentCode.IsNullOrWhiteSpace()&& input.ParentId.HasValue && input.ParentId.Value > 0)
             {
                 var top = await repository.SingleAsync(c => c.Id == input.ParentId.Value);
                 parentCode = top.Code;
             }
+            else
+                parentCode = input.ParentCode??"";
 
             var ctx = new Dictionary<string, object> { { "input", input } };
             //查询

@@ -14,6 +14,7 @@ namespace BXJG.Utils.GeneralTree
         //不要使用Nullable<TId>类型，因为某些情况此参数可能不允许为null
         //若数据很多 可能需要么次加载一个节点的数据，所以ParentId字段是必要的
 
+        public string ParentCode { get; set; }
         /// <summary>
         /// 父级节点id，非必填
         /// </summary>
