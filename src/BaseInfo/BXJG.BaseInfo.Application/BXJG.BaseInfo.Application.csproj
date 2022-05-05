@@ -20,10 +20,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Abp.ZeroCore" Version="7.1.0" />
+    <PackageReference Include="Abp.ZeroCore" Version="7.2.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Modules\BXJG.Utils.Application\BXJG.Utils.Application.csproj" />
     <ProjectReference Include="..\BXJG.BaseInfo.Core\BXJG.BaseInfo.Core.csproj" />
   </ItemGroup>
 

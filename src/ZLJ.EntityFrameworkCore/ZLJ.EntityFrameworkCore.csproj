@@ -11,8 +11,8 @@
     <Compile Remove="EntityFrameworkCore\Repositories\EquipmentInfoRepository.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Abp.ZeroCore.EntityFrameworkCore" Version="7.1.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.2">
+    <PackageReference Include="Abp.ZeroCore.EntityFrameworkCore" Version="7.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

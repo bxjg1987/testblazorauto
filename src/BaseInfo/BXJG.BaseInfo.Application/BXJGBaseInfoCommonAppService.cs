@@ -2,6 +2,7 @@
 using Abp.Application.Services.Dto;
 using BXJG.BaseInfo.Localization;
 using BXJG.Common.Dto;
+using BXJG.Utils.Enums;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,9 +12,9 @@ namespace BXJG.BaseInfo
 {
     public class BXJGBaseInfoCommonAppService : ApplicationService, IBXJGBaseInfoCommonAppService
     {
-        private readonly EnumManagerFactory enumManagerFactory;
+        private readonly EnumManager enumManagerFactory;
 
-        public BXJGBaseInfoCommonAppService(EnumManagerFactory enumManagerFactory)
+        public BXJGBaseInfoCommonAppService(EnumManager enumManagerFactory)
         {
             this.enumManagerFactory = enumManagerFactory;
         }
@@ -24,7 +25,7 @@ namespace BXJG.BaseInfo
         /// <returns></returns>
         public List<ComboboxItemDto> GetAdministrativeLevels(GetForSelectInput input)
         {
-            return enumManagerFactory.EnumManager.GetAllOrderStatus<AdministrativeLevel>(input);
+            return enumManagerFactory.ConvertToComboboxData<AdministrativeLevel>(input);
         }
     }
 }

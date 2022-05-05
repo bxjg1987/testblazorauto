@@ -27,12 +27,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Abp" Version="7.1.0" />
-    <PackageReference Include="Abp.Web.Common" Version="7.1.0" />
-    <PackageReference Include="Abp.Zero.Common" Version="7.1.0" />
-    <PackageReference Include="Abp.ZeroCore" Version="7.1.0" />
+    <PackageReference Include="Abp" Version="7.2.0" />
+    <PackageReference Include="Abp.Web.Common" Version="7.2.0" />
+    <PackageReference Include="Abp.Zero.Common" Version="7.2.0" />
+    <PackageReference Include="Abp.ZeroCore" Version="7.2.0" />
     <PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="3.4.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.4" />
   </ItemGroup>
 
   <ItemGroup>
