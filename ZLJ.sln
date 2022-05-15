@@ -74,7 +74,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Equipment.Share", "src
 EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "WebAdmin", "..\abpfront\src\WebAdmin\", "{55972824-9A8E-43C3-8CB8-6F438FE2E815}"
 	ProjectSection(WebsiteProperties) = preProject
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.8"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_52139"
 		Debug.AspNetCompiler.PhysicalPath = "..\abpfront\src\WebAdmin\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_52139\"
