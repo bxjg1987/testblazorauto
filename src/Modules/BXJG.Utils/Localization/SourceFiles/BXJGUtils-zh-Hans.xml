@@ -69,6 +69,14 @@
 		<text name="GetUsersKeywordsInputPrompt" value="姓名/登录名/邮箱/手机号 等..." />
 		<text name="Add" value="新增" />
 		<text name="AddRoot" value="新增顶级" />
+		<text name="Submit" value="提交" />
+		<text name="SubmitConfirm" value="提交确认" />
+		<text name="SubmitConfirmPropt" value="提交已选择的数据吗？" />
+		
+		<!--<text name="CancelSubmit" value="撤销提交" />
+		<text name="CancelSubmitConfirm" value="撤销提交确认" />
+		<text name="CancelSubmitConfirmPropt" value="撤销提交已选择的数据吗？" />-->
+		
 		<text name="AddSub" value="新增子级" />
 		<text name="Parent" value="上级" />
 		<text name="Edit" value="修改" />
