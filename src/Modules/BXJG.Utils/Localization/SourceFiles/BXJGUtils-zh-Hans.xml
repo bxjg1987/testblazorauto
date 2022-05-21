@@ -6,7 +6,8 @@
 		<text name="此节点不允许修改！" value="此节点不允许修改！" />
 		<text name="系统预设数据不允许删除！" value="系统预设数据不允许删除！" />
 		<text name="GeneralTreeMenu" value="数据字典" />
-		
+
+		<text name="warning" value="操作确认" />
 		<text name="操作成功！" value="操作成功！" />
 		<text name="操作失败！" value="操作失败！" />
 		<text name="新增成功！" value="新增成功！" />
