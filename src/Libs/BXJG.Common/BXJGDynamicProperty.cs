@@ -14,20 +14,22 @@ namespace BXJG.Common
         public BXJGDynamicProperty(string name,
                                    string displayName,
                                    string inputType = "text",
-                                   string dateTimeFormatter = "yyyy-MM-dd HH:mm:ss",
+                                   string displayFormatter = "yyyy-MM-dd HH:mm:ss",
                                    int decimalPlaces = 2,
                                    IDictionary<string, object> values = default,
                                    ICollection<ValidationAttribute> validators = default,
-                                   IDictionary<string, object> additionalData = default)
+                                   IDictionary<string, object> additionalData = default,
+                                   object defaultValue = null)
         {
             Name = name;
             DisplayName = displayName;
             InputType = inputType;
-            DateTimeFormatter = dateTimeFormatter;
+            DisplayFormatter = displayFormatter;
             Precision = decimalPlaces;
             Values = new ReadOnlyDictionary<string, object>(values ?? new Dictionary<string, object>());
             Validators = validators?.ToList() ?? new List<ValidationAttribute>();
-            AdditionalData =new ReadOnlyDictionary<string, object>(additionalData ?? new Dictionary<string, object>());
+            AdditionalData = new ReadOnlyDictionary<string, object>(additionalData ?? new Dictionary<string, object>());
+            DefaultValue = defaultValue;
         }
 
         public string Name { get; init; }
@@ -36,7 +38,7 @@ namespace BXJG.Common
 
         public string InputType { get; init; }
 
-        public string DateTimeFormatter { get; init; }
+        public string DisplayFormatter { get; init; }
 
         public int Precision { get; init; }
 
@@ -45,6 +47,8 @@ namespace BXJG.Common
         public bool MultipleSelect { get; init; }
 
         public IReadOnlyCollection<ValidationAttribute> Validators { get; init; }
+
+        public object DefaultValue { get; set; }
 
         public int OrderIndex { get; set; }
 
