@@ -15,5 +15,8 @@ namespace BXJG.Utils
         public const string GeneralTreeUpdatePermissionName = "GeneralTreeUpdatePermission";
         public const string GeneralTreeDeletePermissionName = "GeneralTreeDeletePermission";
         #endregion
+
+
+        public const string ExcludeEntities= "__excludeEntities";
     }
 }

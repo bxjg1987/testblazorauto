@@ -238,8 +238,10 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
             {
                 try
                 {
+                    var sw = UnitOfWorkManager.Begin(System.Transactions.TransactionScopeOption.RequiresNew);
                     item.Allocate(Clock.Now, CurrentEmployeeId, input.EstimatedExecutionTime, input.EstimatedCompletionTime, input.StatusChangedDescription);
-                    await CurrentUnitOfWork.SaveChangesAsync();
+                    //await CurrentUnitOfWork.SaveChangesAsync();
+                    await sw.CompleteAsync();
                     r.Ids.Add(item.Id);
                 }
                 catch (UserFriendlyException ex)
@@ -272,9 +274,10 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
                 {
                     if (item.EmployeeId != employeeSession.BusinessUserId)
                         throw new UserFriendlyException($"无权执行此操作！工单{item.Id + item.Title}不属于当前用户。");
-
+                    var sw = UnitOfWorkManager.Begin(System.Transactions.TransactionScopeOption.RequiresNew);
                     item.Execute(Clock.Now, input.StatusChangedDescription);
-                    await CurrentUnitOfWork.SaveChangesAsync();
+                   // await CurrentUnitOfWork.SaveChangesAsync();
+                    await sw.CompleteAsync();
                     r.Ids.Add(item.Id);
                 }
                 catch (UserFriendlyException ex)
@@ -307,8 +310,10 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
                 {
                     if (item.EmployeeId != employeeSession.BusinessUserId)
                         throw new UserFriendlyException($"无权执行此操作！工单{item.Id + item.Title}不属于当前用户。");
+                    var sw = UnitOfWorkManager.Begin(System.Transactions.TransactionScopeOption.RequiresNew);
                     item.Completion(Clock.Now, input.StatusChangedDescription);
-                    await CurrentUnitOfWork.SaveChangesAsync();
+                    //await CurrentUnitOfWork.SaveChangesAsync();
+                    await sw.CompleteAsync();
                     r.Ids.Add(item.Id);
                 }
                 catch (UserFriendlyException ex)
@@ -341,8 +346,10 @@ namespace BXJG.WorkOrder.EmployeeApplication.WorkOrder
                 {
                     if (item.EmployeeId != employeeSession.BusinessUserId)
                         throw new UserFriendlyException($"无权执行此操作！工单{item.Id + item.Title}不属于当前用户。");
+                    var sw = UnitOfWorkManager.Begin(System.Transactions.TransactionScopeOption.RequiresNew);
                     item.Reject(Clock.Now, input.StatusChangedDescription);
-                    await CurrentUnitOfWork.SaveChangesAsync();
+                    //await CurrentUnitOfWork.SaveChangesAsync();
+                    await sw.CompleteAsync();
                     r.Ids.Add(item.Id);
                 }
                 catch (UserFriendlyException ex)

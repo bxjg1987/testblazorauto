@@ -214,9 +214,11 @@ namespace BXJG.WorkOrder.WorkOrder
             {
                 try
                 {
+                    var sw = UnitOfWorkManager.Begin(System.Transactions.TransactionScopeOption.RequiresNew);
                     await manager.Value.DeleteAsync(item);
                     await CurrentUnitOfWork.SaveChangesAsync();
                     await attachmentManager.Value.SetAttachmentsAsync(item.Id, null);
+                    await sw.CompleteAsync();
                     r.Ids.Add(item.Id);
                 }
                 catch (UserFriendlyException ex)
@@ -301,6 +303,7 @@ namespace BXJG.WorkOrder.WorkOrder
             {
                 try
                 {
+                    var sw = UnitOfWorkManager.Begin(System.Transactions.TransactionScopeOption.RequiresNew);
                     await item.ChangeStatus(input.Status,
                                             input.StatusChangedTime ?? Clock.Now,
                                             input.Description,
@@ -315,7 +318,8 @@ namespace BXJG.WorkOrder.WorkOrder
                                             d => CheckExecutePermissionAsync(),
                                             d => CheckConfirmePermissionAsync(),
                                             d => CheckRejectPermissionAsync());
-                    await CurrentUnitOfWork.SaveChangesAsync();
+                   // await CurrentUnitOfWork.SaveChangesAsync();
+                    await sw.CompleteAsync();
                     r.Ids.Add(item.Id);
                 }
                 catch (UserFriendlyException ex)
@@ -345,8 +349,10 @@ namespace BXJG.WorkOrder.WorkOrder
             {
                 try
                 {
+                    var sw = UnitOfWorkManager.Begin(System.Transactions.TransactionScopeOption.RequiresNew);
                     await ConfirmeSingleAsync(item, input);
-                    await CurrentUnitOfWork.SaveChangesAsync();
+                   // await CurrentUnitOfWork.SaveChangesAsync();
+                    await sw.CompleteAsync();
                     r.Ids.Add(item.Id);
                 }
                 catch (UserFriendlyException ex)
@@ -377,6 +383,7 @@ namespace BXJG.WorkOrder.WorkOrder
             {
                 try
                 {
+                    var sw = UnitOfWorkManager.Begin(System.Transactions.TransactionScopeOption.RequiresNew);
                     if (item.Status >= Status.ToBeProcessed)
                     {
                         await item.BackOff(input.StatusChangedTime ?? Clock.Now,
@@ -395,7 +402,8 @@ namespace BXJG.WorkOrder.WorkOrder
                                     toBeAllocated: d => CheckConfirmePermissionAsync(),
                                     toBeProcessed: d => CheckAllocatePermissionAsync());
 
-                    await CurrentUnitOfWork.SaveChangesAsync();
+                    //await CurrentUnitOfWork.SaveChangesAsync();
+                    await sw.CompleteAsync();
                     r.Ids.Add(item.Id);
                 }
                 catch (UserFriendlyException ex)
