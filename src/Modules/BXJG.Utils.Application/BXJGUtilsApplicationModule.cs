@@ -14,6 +14,8 @@ using Abp.AutoMapper;
 using Abp.Domain.Entities;
 using BXJG.Utils.AutoMapper;
 using BXJG.Common.Dto;
+using BXJG.Utils.Concurrency;
+using System.Linq;
 
 namespace BXJG.Utils
 {
@@ -30,7 +32,19 @@ namespace BXJG.Utils
             //Configuration.Modules.AbpAutoMapper().Configurators.Add(cfg => cfg.AddProfile(new MapProfile(configuration)));
 
             //此行必加
-            Configuration.Modules.AbpAutoMapper().Configurators.Add(cfg => cfg.AddMaps(Assembly.GetExecutingAssembly()));
+            Configuration.Modules.AbpAutoMapper().Configurators.Add(cfg =>
+            {
+                cfg.ForAllMaps((a, b) =>
+                {
+                   // a.IncludedMembersNames
+                   if(  a.IncludedMembersNames.Contains("ConcurrencyStamp"))
+                  //  if (a.DestinationType == typeof(IHasConcurrencyStamp))
+                    {
+                        b.ForMember("ConcurrencyStamp", d => d.MapFrom("ConcurrencyStamp"));
+                    }
+                });
+                cfg.AddMaps(Assembly.GetExecutingAssembly());
+            });
 
             //Configuration.Modules.AbpAutoMapper().Configurators.Add(cfg => cfg.AddMaps(Assembly.GetExecutingAssembly()));
             //统一配置abp扩展属性映射
@@ -44,7 +58,6 @@ namespace BXJG.Utils
             //        }
             //    });
             //});
-
         }
         public override void Initialize()
         {

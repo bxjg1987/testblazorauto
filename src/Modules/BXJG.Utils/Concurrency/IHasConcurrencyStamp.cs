@@ -1,0 +1,27 @@
+﻿using Abp.Domain.Uow;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BXJG.Utils.Concurrency
+{
+    public interface IHasConcurrencyStamp
+    {
+        public string ConcurrencyStamp { get; set; }
+    }
+    //public class ConcurrencyException : Exception { 
+
+    //}
+    public static class ConcurrencyExt
+    {
+        public static void CheckAndUpdateConcurrency(this IHasConcurrencyStamp stamp, string str)
+        {
+            if (stamp.ConcurrencyStamp != str)
+                throw new AbpDbConcurrencyException();
+
+            stamp.ConcurrencyStamp = Guid.NewGuid().ToString("n");
+        }
+    }
+}

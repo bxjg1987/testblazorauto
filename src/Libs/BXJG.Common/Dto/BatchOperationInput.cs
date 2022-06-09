@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace BXJG.Common.Dto
@@ -11,6 +12,20 @@ namespace BXJG.Common.Dto
     public class BatchOperationInput<TKey>
     {
         public TKey[] Ids { get; set; }
+    }
+
+
+    public class BatchOperationConcurrencyInput<TKey>
+        : BatchOperationInput<KeyValuePair<TKey, string>>
+    {
+        public string this[TKey key]
+        {
+            get => Ids.Single(c => c.Key.Equals(key)).Value;
+        }
+    }
+    public class BatchOperationConcurrencyInputLong : BatchOperationConcurrencyInput<long>
+    {
+        //public TKey[] Ids { get; set; }
     }
     /// <summary>
     /// 批量操作的输入模型，id类型为int
@@ -28,7 +43,7 @@ namespace BXJG.Common.Dto
     {
     }
 
-    public class BatchSwitchInput<TKey>: BatchOperationInput<TKey>
+    public class BatchSwitchInput<TKey> : BatchOperationInput<TKey>
     {
         public bool IsActive { get; set; }
     }

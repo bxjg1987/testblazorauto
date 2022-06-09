@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Concurrency\MapperExtension.cs" />
     <Compile Remove="Enums\BXJGUtilsEnumAppService.cs" />
     <Compile Remove="Enums\GetEnumForCombboxInput.cs" />
     <Compile Remove="Enums\GetStructForCombboxInput.cs" />
@@ -60,7 +61,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="MimeTypesMap" Version="1.0.8" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="2.1.1" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="2.1.2" />
     <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
   </ItemGroup>
 
