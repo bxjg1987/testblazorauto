@@ -12,4 +12,10 @@ namespace BXJG.Common
         Woman = 2,
         Man = 1
     }
+
+    public enum CreatedAuditedStatus { 
+    
+        Created,
+        Audited
+    }
 }
