@@ -46,7 +46,7 @@ namespace BXJG.Utils.GeneralTree
         /// 扩展属性
         /// </summary>
        // [Ignore]
-        public dynamic ExtData { get; private set; }
+        public dynamic ExtData { get; set; }
     }
 
     public class GeneralTreeNodeDto : GeneralTreeNodeDto<GeneralTreeNodeDto> { }

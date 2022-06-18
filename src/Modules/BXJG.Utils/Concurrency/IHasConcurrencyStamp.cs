@@ -23,5 +23,13 @@ namespace BXJG.Utils.Concurrency
 
             stamp.ConcurrencyStamp = Guid.NewGuid().ToString("n");
         }
+        public static void CheckAndUpdateConcurrency(this IHasConcurrencyStamp stamp, IHasConcurrencyStamp stamp2)
+        {
+            if (stamp.ConcurrencyStamp != stamp2.ConcurrencyStamp)
+                throw new AbpDbConcurrencyException();
+
+            stamp.ConcurrencyStamp = Guid.NewGuid().ToString("n");
+            stamp2.ConcurrencyStamp = stamp.ConcurrencyStamp;
+        }
     }
 }

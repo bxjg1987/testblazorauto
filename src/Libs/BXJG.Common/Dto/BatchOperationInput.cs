@@ -27,6 +27,17 @@ namespace BXJG.Common.Dto
     {
         //public TKey[] Ids { get; set; }
     }
+    public class BatchAuditConcurrencyInput<TKey> : BatchOperationConcurrencyInput<TKey>
+    {
+        /// <summary>
+        /// 是否通过
+        /// </summary>
+        public bool IsPass { get; set; }
+        /// <summary>
+        /// 审核意见
+        /// </summary>
+        public string Reason { get; set; }
+    }
     /// <summary>
     /// 批量操作的输入模型，id类型为int
     /// </summary>

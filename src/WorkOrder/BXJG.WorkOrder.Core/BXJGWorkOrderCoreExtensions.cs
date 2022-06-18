@@ -40,9 +40,9 @@ namespace BXJG.WorkOrder
         public static Permission AddBXJGWorkOrderCategoryPermission(this Permission root)
         {
             var category = root.CreateChildPermission(CoreConsts.WorkOrderCategoryManager, CoreConsts.WorkOrderCategoryManager.BXJGWorkOrderLI(), multiTenancySides: MultiTenancySides.Tenant);
-            category.CreateChildPermission(CoreConsts.WorkOrderCategoryCreate, "新增".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
-            category.CreateChildPermission(CoreConsts.WorkOrderCategoryUpdate, "修改".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
-            category.CreateChildPermission(CoreConsts.WorkOrderCategoryDelete, "删除".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant);
+            category.CreateChildPermission(CoreConsts.WorkOrderCategoryCreate, "新增".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant, properties: new Dictionary<string, object> { { "btn", true } });
+            category.CreateChildPermission(CoreConsts.WorkOrderCategoryUpdate, "修改".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant, properties: new Dictionary<string, object> { { "btn", true } });
+            category.CreateChildPermission(CoreConsts.WorkOrderCategoryDelete, "删除".UtilsLI(), multiTenancySides: MultiTenancySides.Tenant, properties: new Dictionary<string, object> { { "btn", true } });
             return category;
         }
 

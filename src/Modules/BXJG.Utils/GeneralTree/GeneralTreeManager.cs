@@ -97,7 +97,10 @@ namespace BXJG.Utils.GeneralTree
                 }
             }
             else
+            {
+                //await Task.CompletedTask;
                 await repository.DeleteAsync(c => true);
+            }
         }
 
         //public virtual async Task<TEntity> GetEntityWithOffspringAsync(long id)

@@ -21,13 +21,13 @@ namespace BXJG.Utils.GeneralTree
                                                     multiTenancySides: Abp.MultiTenancy.MultiTenancySides.Tenant);
             root.CreateChildPermission(BXJGUtilsConsts.GeneralTreeCreatePermissionName,
                                        "新增".UtilsLI(),
-                                       multiTenancySides: Abp.MultiTenancy.MultiTenancySides.Tenant);
+                                       multiTenancySides: Abp.MultiTenancy.MultiTenancySides.Tenant, properties: new Dictionary<string, object> { { "btn", true } });
             root.CreateChildPermission(BXJGUtilsConsts.GeneralTreeUpdatePermissionName,
                                        "修改".UtilsLI(),
-                                       multiTenancySides: Abp.MultiTenancy.MultiTenancySides.Tenant);
+                                       multiTenancySides: Abp.MultiTenancy.MultiTenancySides.Tenant, properties: new Dictionary<string, object> { { "btn", true } });
             root.CreateChildPermission(BXJGUtilsConsts.GeneralTreeDeletePermissionName,
                                        "删除".UtilsLI(),
-                                       multiTenancySides: Abp.MultiTenancy.MultiTenancySides.Tenant);
+                                       multiTenancySides: Abp.MultiTenancy.MultiTenancySides.Tenant, properties: new Dictionary<string, object> { { "btn", true } });
             return root;
         }
     }
