@@ -9,6 +9,7 @@ namespace BXJG.Utils.GeneralTree
     /// <summary>
     /// 移动节点的类型
     /// </summary>
+    [Flags]
     public enum GeneralTreeMoveType
     {
         /// <summary>

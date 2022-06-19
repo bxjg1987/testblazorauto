@@ -10,6 +10,8 @@ namespace BXJG.WorkOrder.WorkOrder
     /// <summary>
     /// 紧急程度
     /// </summary>
+    
+    [Flags]
     public enum UrgencyDegree
     {
         /// <summary>

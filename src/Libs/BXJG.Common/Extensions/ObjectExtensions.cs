@@ -9,6 +9,12 @@ namespace System
 {
     public static class ObjectExtensions
     {
+        public static void SetValue(this object obj, string propertyName, object value) {
+            var t = obj.GetType();
+            var p = t.GetProperty(propertyName);
+            p.SetValue(obj, value,null);
+        }
+
         /// <summary>
         /// 反射获取指定属性的值
         /// </summary>

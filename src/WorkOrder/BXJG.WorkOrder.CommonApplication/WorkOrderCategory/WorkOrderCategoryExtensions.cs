@@ -12,6 +12,8 @@ using System.Threading.Tasks;
 
 namespace BXJG.WorkOrder.WorkOrderCategory
 {
+    
+    [Flags]
     public enum CategoryTypeQueryType
     {
         /// <summary>

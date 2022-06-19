@@ -10,6 +10,7 @@ namespace BXJG.WorkOrder.WorkOrder
     /// <summary>
     /// 工单状态
     /// </summary>
+    [Flags]
     public enum Status
     {
         /// <summary>

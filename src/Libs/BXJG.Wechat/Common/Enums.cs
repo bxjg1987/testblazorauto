@@ -9,6 +9,7 @@ namespace BXJG.WeChat.Common
         /// <summary>
         /// 跳转小程序类型：developer为开发版；trial为体验版；formal为正式版；默认为正式版
         /// </summary>
+        [Flags]
         public enum miniprogram_state
         {
             /// <summary>
@@ -24,7 +25,7 @@ namespace BXJG.WeChat.Common
             /// </summary>
             formal
         }
-
+        [Flags]
         public enum lang
         {
             /// <summary>
