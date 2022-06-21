@@ -9,10 +9,10 @@ namespace System
 {
     public static class ObjectExtensions
     {
-        public static void SetValue(this object obj, string propertyName, object value) {
+        public static void SetValue(this object obj, string propertyName, object value, BindingFlags flag = BindingFlags.Public | BindingFlags.IgnoreCase | BindingFlags.Instance) {
             var t = obj.GetType();
-            var p = t.GetProperty(propertyName);
-            p.SetValue(obj, value,null);
+            var p = t.GetProperty(propertyName,flag);
+            p.SetValue(obj,Convert.ChangeType( value,p.PropertyType) ,null);
         }
 
         /// <summary>
@@ -21,10 +21,10 @@ namespace System
         /// <param name="obj"></param>
         /// <param name="propertyName"></param>
         /// <returns></returns>
-        public static object GetValue(this object obj, string propertyName)
+        public static object GetPropertyValue(this object obj, string propertyName,BindingFlags flag = BindingFlags.Public | BindingFlags.IgnoreCase | BindingFlags.Instance)
         {
             var t = obj.GetType();
-            var p = t.GetProperty(propertyName);
+            var p = t.GetProperty(propertyName,flag);
             return p.GetValue(obj, null);
         }
         /// <summary>
@@ -34,9 +34,9 @@ namespace System
         /// <param name="obj"></param>
         /// <param name="propertyName"></param>
         /// <returns></returns>
-        public static T GetValue<T>(this object obj, string propertyName)
+        public static T GetValue<T>(this object obj, string propertyName, BindingFlags flag = BindingFlags.Public | BindingFlags.IgnoreCase | BindingFlags.Instance)
         {
-            var value = obj.GetValue(propertyName);
+            var value = obj.GetPropertyValue(propertyName,flag);
             return (T)Convert.ChangeType(value, typeof(T));
         }
         /// <summary>

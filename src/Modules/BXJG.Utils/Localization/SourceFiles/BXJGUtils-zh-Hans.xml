@@ -73,6 +73,17 @@
 		<text name="Submit" value="提交" />
 		<text name="SubmitConfirm" value="提交确认" />
 		<text name="SubmitConfirmPropt" value="提交已选择的数据吗？" />
+		<text name="BXJG.Common.AppliedAuditedStatus.Applied" value="已申请，待审核" />
+		<text name="BXJG.Common.AppliedAuditedStatus.Audited" value="已审核" />
+		<text name="撤销" value="撤销" />
+		<text name="作废" value="作废" />
+		<text name="提交" value="提交" />
+		<text name="审核" value="审核" />
+		<text name="拒绝" value="拒绝" />
+		<text name="完成" value="完成" />
+		<text name="分配" value="分配" />
+		<text name="确认" value="确认" />
+		<text name="执行" value="执行" />
 		
 		<!--<text name="CancelSubmit" value="撤销提交" />
 		<text name="CancelSubmitConfirm" value="撤销提交确认" />
