@@ -9,6 +9,36 @@ using System.Threading.Tasks;
 
 namespace BXJG.Common
 {
+    /// <summary>
+    /// 不需要用户输入的动态属性
+    /// </summary>
+    public class BXJGDynamicPropertyWithoutInput {
+        public BXJGDynamicPropertyWithoutInput() { }
+        public BXJGDynamicPropertyWithoutInput(string name, 
+                                               string displayName, 
+                                               Type type, 
+                                               IReadOnlyDictionary<string, object> additionalData=default, 
+                                               string displayFormatter=default, 
+                                               int precision= 2)
+        {
+            Name = name;
+            DisplayName = displayName;
+            Type = type;
+            AdditionalData = additionalData;
+            DisplayFormatter = displayFormatter;
+            Precision = precision;
+        }
+
+        public string Name { get; init; }
+
+        public string DisplayName { get; init; }
+
+        public Type Type { get; init; }
+        public string DisplayFormatter { get; init; }
+
+        public int Precision { get; init; }
+        public IReadOnlyDictionary<string, object> AdditionalData { get; init; }
+    }
     public class BXJGDynamicProperty //: DynamicObject
     {
         public BXJGDynamicProperty(string name,
@@ -50,6 +80,7 @@ namespace BXJG.Common
 
         public object DefaultValue { get; set; }
 
+        [Obsolete("初始化时可以直接指定顺序，所以此字段没用了")]
         public int OrderIndex { get; set; }
 
         public IReadOnlyDictionary<string, object> AdditionalData{ get; set; }
