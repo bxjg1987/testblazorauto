@@ -6,21 +6,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Common.Extensions
+namespace System
 {
     public static class StringExtensions
     {
 
-         public static bool NavPropertySplit( this string sortString, out string ss, params string[] temp) {
+        public static bool NavPropertySplit(this string sortString, out string ss, params string[] temp)
+        {
 
             ss = sortString;
             var temp1 = "";
-            
+
             foreach (var item in temp)
             {
                 if (!string.IsNullOrWhiteSpace(temp1))
                     temp1 += ".";
-                temp1 +=  item;
+                temp1 += item;
                 if (sortString.StartsWith(temp1, StringComparison.OrdinalIgnoreCase))
                 {
                     sortString = sortString.Replace(temp1, temp1 + ".", StringComparison.OrdinalIgnoreCase);
@@ -30,7 +31,7 @@ namespace BXJG.Common.Extensions
             }
             if (ss == sortString)
                 return false;
-            
+
             ss = sortString;
             //return sortString;
             return true;
@@ -107,6 +108,18 @@ namespace BXJG.Common.Extensions
         public static string UrlSeparatorChar2DirectorySeparatorChar(this string str)
         {
             return str.Replace('/', Path.DirectorySeparatorChar);
+        }
+        /// <summary>
+        /// 将json字符串转换为字典
+        /// 默认属性名忽略大小写
+        /// </summary>
+        /// <param name="str"></param>
+        /// <param name="comparer"></param>
+        /// <returns></returns>
+        public static Dictionary<string, object> JsonStringToDic(this string str, IEqualityComparer<string>? comparer = default)
+        {
+            comparer = comparer ?? StringComparer.OrdinalIgnoreCase;
+            return System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, object>>(str).ToDictionary(kvp => kvp.Key, kvp => kvp.Value, comparer);
         }
     }
 }
