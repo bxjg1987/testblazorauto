@@ -12,14 +12,15 @@ namespace BXJG.Common
     /// <summary>
     /// 不需要用户输入的动态属性
     /// </summary>
-    public class BXJGDynamicPropertyWithoutInput {
+    public class BXJGDynamicPropertyWithoutInput
+    {
         public BXJGDynamicPropertyWithoutInput() { }
-        public BXJGDynamicPropertyWithoutInput(string name, 
-                                               string displayName, 
-                                               Type type, 
-                                               IReadOnlyDictionary<string, object> additionalData=default, 
-                                               string displayFormatter=default, 
-                                               int precision= 2)
+        public BXJGDynamicPropertyWithoutInput(string name,
+                                               string displayName,
+                                               Type type,
+                                               IReadOnlyDictionary<string, object> additionalData = default,
+                                               string displayFormatter = default,
+                                               int precision = 2)
         {
             Name = name;
             DisplayName = displayName;
@@ -83,14 +84,26 @@ namespace BXJG.Common
         [Obsolete("初始化时可以直接指定顺序，所以此字段没用了")]
         public int OrderIndex { get; set; }
 
-        public IReadOnlyDictionary<string, object> AdditionalData{ get; set; }
+        public IReadOnlyDictionary<string, object> AdditionalData { get; set; }
     }
     public class DynamicPropertyDto
     {
         public string Name { get; set; }
         public string DisplayName { get; set; }
-
         public object Value { get; set; }
+    }
+
+    public class DynamicPropertyEditDto
+    {
+        /// <summary>
+        /// 属性名称
+        /// </summary>
+        [Required]
+        public string Name { get; set; }
+        /// <summary>
+        /// 当前值
+        /// </summary>
+        public string CurrentValue { get; set; }
     }
 
     /// <summary>
@@ -101,11 +114,11 @@ namespace BXJG.Common
         /// <summary>
         /// 属性名
         /// </summary>
-        public string PropertyName { get; set; }
+        public string Name { get; set; }
         /// <summary>
         /// 属性显示名
         /// </summary>
-        public string PropertyDisplayName { get; set; } //=> PropertyMap.GetDisplayName(PropertyName, !OrderItemId.HasValue);
+        public string DisplayName { get; set; } //=> PropertyMap.GetDisplayName(PropertyName, !OrderItemId.HasValue);
         /// <summary>
         /// 原始值
         /// </summary>
