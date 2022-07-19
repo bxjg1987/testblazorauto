@@ -131,6 +131,10 @@ namespace BXJG.Common
         /// 差值
         /// </summary>
         public string DifferenceValue { get; set; }
+        /// <summary>
+        /// 是否有变动
+        /// </summary>
+        public bool IsChanged => this.OriginalValue.Equals(this.CurrentValue);
     }
     //public class SemiDynamicPropertyDto {
     //    public string PropertyName { get; set; }
