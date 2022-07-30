@@ -202,10 +202,11 @@ namespace BXJG.Common
         /// </summary>
         public string CurrentValue { get; set; }
     }
+
     /// <summary>
     /// 后台管理合同属性变更显示模型
     /// </summary>
-    public class PropertyChangeRecordDto
+    public class PropertyChangeRecordDto<TValue>
     {
         /// <summary>
         /// 属性名
@@ -219,19 +220,26 @@ namespace BXJG.Common
         /// <summary>
         /// 原始值
         /// </summary>
-        public string OriginalValue { get; set; }
+        public TValue OriginalValue { get; set; }
         /// <summary>
         /// 当前值
         /// </summary>
-        public string CurrentValue { get; set; }
+        public TValue CurrentValue { get; set; }
         /// <summary>
         /// 差值
         /// </summary>
-        public string DifferenceValue { get; set; }
+        public TValue DifferenceValue { get; set; }
         /// <summary>
         /// 是否有变动
         /// </summary>
         public bool IsChanged => this.OriginalValue.Equals(this.CurrentValue);
+    }
+    /// <summary>
+    /// 后台管理合同属性变更显示模型
+    /// </summary>
+    public class PropertyChangeRecordDto: PropertyChangeRecordDto<string>
+    {
+       
     }
     //public class SemiDynamicPropertyDto {
     //    public string PropertyName { get; set; }
