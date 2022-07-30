@@ -182,14 +182,15 @@ namespace BXJG.Common
         //   public IReadOnlyDictionary<string, object> AdditionalData { get; set; }
     }
 
-    public class DisplayNameDto {
+    public class DisplayNameDto
+    {
         public string Name { get; set; }
         public string DisplayName { get; set; }
 
         public override bool Equals(object obj)
         {
             return obj is DisplayNameDto dto &&
-                   Name == dto.Name ;
+                   Name == dto.Name;
         }
 
         public override int GetHashCode()
@@ -216,7 +217,7 @@ namespace BXJG.Common
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Name,  Value);
+            return HashCode.Combine(Name, Value);
         }
     }
     public class DynamicPropertyEditDto
@@ -258,17 +259,20 @@ namespace BXJG.Common
         /// 差值
         /// </summary>
         public TValue DifferenceValue { get; set; }
+
+        //这个问题太复杂，如果让调用方设置，太繁琐
+        //如果自己来设置，简单的Equals无法满足需求，比如两个null值，返回true
         /// <summary>
         /// 是否有变动
         /// </summary>
-        public bool IsChanged => this.OriginalValue.Equals(this.CurrentValue);
+        public bool IsChanged => !this.OriginalValue.Equals(this.CurrentValue);
     }
     /// <summary>
     /// 后台管理合同属性变更显示模型
     /// </summary>
-    public class PropertyChangeRecordDto: PropertyChangeRecordDto<string>
+    public class PropertyChangeRecordDto : PropertyChangeRecordDto<string>
     {
-       
+
     }
     //public class SemiDynamicPropertyDto {
     //    public string PropertyName { get; set; }
