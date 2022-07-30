@@ -181,6 +181,23 @@ namespace BXJG.Common
 
         //   public IReadOnlyDictionary<string, object> AdditionalData { get; set; }
     }
+
+    public class DisplayNameDto {
+        public string Name { get; set; }
+        public string DisplayName { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            return obj is DisplayNameDto dto &&
+                   Name == dto.Name ;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Name);
+        }
+    }
+
     /// <summary>
     /// 关联显示时使用
     /// </summary>
@@ -189,6 +206,18 @@ namespace BXJG.Common
         public string Name { get; set; }
         public string DisplayName { get; set; }
         public object Value { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            return obj is DynamicPropertyDto dto &&
+                   Name == dto.Name &&
+                   EqualityComparer<object>.Default.Equals(Value, dto.Value);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Name,  Value);
+        }
     }
     public class DynamicPropertyEditDto
     {
