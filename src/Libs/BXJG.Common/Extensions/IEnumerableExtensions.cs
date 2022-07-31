@@ -27,7 +27,14 @@ namespace BXJG.Common.Extensions
             if (a.Count() != b.Count())
                 return true;
 
-            return a.Any(c => b.Any(d => !d.Equals(c)));
+            foreach (var item in a)
+            {
+                var item2 = b.Single(c=>c.GetHashCode()==item.GetHashCode());
+                if (!item2.Equals(item))
+                    return true;
+            }
+            return false;
+            //return a.Any(c => b.Any(d => !d.Equals(c)));
         }
 
         //public static Func<IEnumerable<T>, IEnumerable<T>, bool> CreateComparer<T>()

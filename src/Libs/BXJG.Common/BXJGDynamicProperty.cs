@@ -213,12 +213,12 @@ namespace BXJG.Common
         {
             return obj is DynamicPropertyDto dto &&
                    Name == dto.Name &&
-                   EqualityComparer<object>.Default.Equals(Value, dto.Value);
+                   EqualityComparer<object>.Default.Equals(Value.ToString(), dto.Value.ToString());
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Name, Value);
+            return HashCode.Combine(Name);
         }
     }
     public class DynamicPropertyEditDto
@@ -260,7 +260,9 @@ namespace BXJG.Common
         /// 差值
         /// </summary>
         public TValue DifferenceValue { get; set; }
-        public Func<TValue, TValue, bool> Comparer { get; set; }=(a, b) =>
+
+          //不要搞属性，不好处理序列号问题
+        private Func<TValue, TValue, bool> comparer { get; set; }=(a, b) =>
         {
             if (a is IEnumerable)
             {
@@ -270,12 +272,17 @@ namespace BXJG.Common
             }
             return !a.Equals(b);
         };
+        public void SetComparer(Func<TValue, TValue, bool> comparer) { 
+        this.comparer=comparer; 
+        }
+       
+        
         //这个问题太复杂，如果让调用方设置，太繁琐
         //如果自己来设置，简单的Equals无法满足需求，比如两个null值，返回true
         /// <summary>
         /// 是否有变动
         /// </summary>
-        public bool IsChanged => Comparer(OriginalValue, CurrentValue);
+        public bool IsChanged => comparer(OriginalValue, CurrentValue);
     }
     /// <summary>
     /// 后台管理合同属性变更显示模型
