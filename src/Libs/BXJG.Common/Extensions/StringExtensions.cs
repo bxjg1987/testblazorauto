@@ -109,17 +109,18 @@ namespace System
         {
             return str.Replace('/', Path.DirectorySeparatorChar);
         }
-        /// <summary>
-        /// 将json字符串转换为字典
-        /// 默认属性名忽略大小写
-        /// </summary>
-        /// <param name="str"></param>
-        /// <param name="comparer"></param>
-        /// <returns></returns>
-        public static Dictionary<string, object> JsonStringToDic(this string str, IEqualityComparer<string>? comparer = default)
-        {
-            comparer = comparer ?? StringComparer.OrdinalIgnoreCase;
-            return System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, object>>(str).ToDictionary(kvp => kvp.Key, kvp => kvp.Value, comparer);
-        }
+        ///// <summary>
+        ///// 将json字符串转换为字典
+        ///// 默认属性名忽略大小写
+        ///// </summary>
+        ///// <param name="str"></param>
+        ///// <param name="comparer"></param>
+        ///// <returns></returns>
+        //public static Dictionary<string, object> JsonStringToDic(this string str, IEqualityComparer<string>? comparer = default)
+        //{
+        //    comparer = comparer ?? StringComparer.OrdinalIgnoreCase;
+         
+        //    return System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, object>>(str).ToDictionary(kvp => kvp.Key, kvp => kvp.Value, comparer);
+        //}
     }
 }
