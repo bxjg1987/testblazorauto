@@ -17,6 +17,9 @@ using AutoMapper;
 using BXJG.Common.Dto;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Abp.Domain.Uow;
+using System;
+using Abp.Threading;
 
 namespace BXJG.Utils
 {
@@ -36,6 +39,34 @@ namespace BXJG.Utils
             });
             BXJGUtilsLocalizationConfigurer.Configure(Configuration.Localization);
             Configuration.Settings.Providers.Add<BXJGUtilsFileSettingProvider>();
+            //查看abp源码 uow拦截器调用manager.begin，内部从ioc获取uow对象efuow 然后设置到asynclocal上的
+            IocManager.IocContainer.Kernel.ComponentCreated += Kernel_ComponentCreated;
+        }
+
+        private void Kernel_ComponentCreated(Castle.Core.ComponentModel model, object instance)
+        {
+            if (instance is IActiveUnitOfWork uow)
+            {
+                uow.Disposed -= Uow_Disposed;//保险起见
+                uow.Disposed += Uow_Disposed;
+            }
+        }
+
+        private static void Uow_Disposed(object sender, EventArgs e)
+        {
+            //参考ActiveUnitOfWorkExtensions
+            var uow = sender as IActiveUnitOfWork;
+            if (uow.Items.TryGetValue(ActiveUnitOfWorkExtensions.__disposeableObject, out var t))
+            {
+                foreach (var item in (t as HashSet<object>))
+                {
+                    if (item is IAsyncDisposable d)
+                        AsyncHelper.RunSync(() => d.DisposeAsync().AsTask());
+
+                    if (item is IDisposable ee)
+                        ee.Dispose();
+                }
+            }
         }
 
         public override void Initialize()
