@@ -38,6 +38,20 @@ namespace BXJG.Common.Dto
         /// </summary>
         public string Reason { get; set; }
     }
+    public class BatchAuditInput<TKey> : BatchOperationInput<TKey>
+    {
+        /// <summary>
+        /// 是否通过
+        /// </summary>
+        public bool IsPass { get; set; }
+        /// <summary>
+        /// 审核意见
+        /// </summary>
+        public string Reason { get; set; }
+    }
+    public class BatchAuditInputLong : BatchAuditInput<long>
+    {
+    }
     /// <summary>
     /// 批量操作的输入模型，id类型为int
     /// </summary>
