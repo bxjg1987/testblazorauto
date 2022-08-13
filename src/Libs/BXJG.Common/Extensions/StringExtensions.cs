@@ -4,13 +4,30 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace System
 {
     public static class StringExtensions
     {
+        /// <summary>
+        /// 反序列化包含object类型属性的对象
+        /// <see href="https://docs.microsoft.com/zh-cn/dotnet/standard/serialization/system-text-json-converters-how-to?pivots=dotnet-6-0#deserialize-inferred-types-to-object-properties "/>
+        /// </summary>
+        /// <typeparam name="TValue"></typeparam>
+        /// <param name="json"></param>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public static TValue? DeserializeObject<TValue>(this string json, JsonSerializerOptions? options = null)
+        {
+            if (options == default)
+                options = new JsonSerializerOptions();
 
+            options.Converters.Add(new ObjectToInferredTypesConverter());
+
+            return JsonSerializer.Deserialize<TValue?>(json, options);
+        }
         public static bool NavPropertySplit(this string sortString, out string ss, params string[] temp)
         {
 
