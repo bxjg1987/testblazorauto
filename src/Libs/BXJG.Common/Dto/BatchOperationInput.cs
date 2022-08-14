@@ -38,6 +38,9 @@ namespace BXJG.Common.Dto
         /// </summary>
         public string Reason { get; set; }
     }
+    public class BatchAuditConcurrencyInputLong: BatchAuditConcurrencyInput<long>
+    {
+    }
     public class BatchAuditInput<TKey> : BatchOperationInput<TKey>
     {
         /// <summary>

@@ -14,6 +14,7 @@ namespace BXJG.Utils.Concurrency
     //public class ConcurrencyException : Exception { 
 
     //}
+    //这个扩展可以考虑 automapper也调用下
     public static class ConcurrencyExt
     {
         public static void CheckAndUpdateConcurrency(this IHasConcurrencyStamp stamp, string str)
