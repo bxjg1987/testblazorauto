@@ -12,6 +12,7 @@ namespace BXJG.WorkOrder.WorkOrder
     /// 单号生成器
     /// 基于雪花算法
     /// </summary>
+    [Obsolete("用全局的吧")]
     public class OrderNoGenerator : Abp.Dependency.ISingletonDependency,IIdGenerator
     {
         IIdGenerator idGenerator;
