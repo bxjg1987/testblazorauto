@@ -264,6 +264,15 @@ namespace BXJG.Common
           //不要搞属性，不好处理序列号问题
         private Func<TValue, TValue, bool> comparer { get; set; }=(a, b) =>
         {
+            if (a == null && b != null)
+                return false;
+
+            if (a != null && b == null)
+                return false;
+
+            if (a == null && b == null)
+                return true;
+
             if (a is IEnumerable)
             {
                 var a1 = a as IEnumerable<object>;
