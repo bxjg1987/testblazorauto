@@ -261,8 +261,8 @@ namespace BXJG.Common
         /// </summary>
         public TValue DifferenceValue { get; set; }
 
-          //不要搞属性，不好处理序列号问题
-        private Func<TValue, TValue, bool> comparer { get; set; }=(a, b) =>
+          //不要搞属性，不然序列化时会出现循环引用
+         Func<TValue, TValue, bool> comparer { get; set; }=(a, b) =>
         {
             if (a == null && b != null)
                 return false;
@@ -275,23 +275,25 @@ namespace BXJG.Common
 
             if (a is IEnumerable)
             {
-                var a1 = a as IEnumerable<object>;
-                var b1 = b as IEnumerable<object>;
-                return a1.HasChange(b1);
+                var a1 = a as IEnumerable;
+                var b1 = b as IEnumerable;
+             return   EqualityComparer<IEnumerable>.Default.Equals(a1, b1);
+                //return a1.HasChange(b1);
             }
-            return !a.Equals(b);
+            return a.Equals(b);
         };
-        public void SetComparer(Func<TValue, TValue, bool> comparer) { 
-        this.comparer=comparer; 
+        public void SetComparer(Func<TValue, TValue, bool> comparer)
+        {
+            this.comparer = comparer;
         }
-       
-        
+
+
         //这个问题太复杂，如果让调用方设置，太繁琐
         //如果自己来设置，简单的Equals无法满足需求，比如两个null值，返回true
         /// <summary>
         /// 是否有变动
         /// </summary>
-        public bool IsChanged => comparer(OriginalValue, CurrentValue);
+        public bool IsChanged => !comparer(OriginalValue, CurrentValue);
     }
     /// <summary>
     /// 后台管理合同属性变更显示模型

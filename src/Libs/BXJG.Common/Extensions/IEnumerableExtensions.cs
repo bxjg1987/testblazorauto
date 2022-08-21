@@ -15,7 +15,7 @@ namespace BXJG.Common.Extensions
         /// <typeparam name="T"></typeparam>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        /// <returns></returns>
+        /// <returns>true有变化 false无变化</returns>
         public static bool HasChange<T>(this IEnumerable<T> a, IEnumerable<T> b)
         {
             if (a == null && b != null)
