@@ -115,7 +115,7 @@ namespace BXJG.Common
         /// <summary>
         /// 额外状态数据
         /// </summary>
-        public IReadOnlyDictionary<string, object> AdditionalData { get; init; }
+        public IReadOnlyDictionary<string, object> AdditionalData { get; init; }=new Dictionary<string, object>();  
     }
     /// <summary>
     /// 字段元数据，包含输入
