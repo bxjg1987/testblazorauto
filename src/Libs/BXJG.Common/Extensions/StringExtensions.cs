@@ -1,4 +1,4 @@
-using hyjiacan.py4n;
+//using hyjiacan.py4n;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -53,24 +53,24 @@ namespace System
             //return sortString;
             return true;
         }
-        public static string GetPinYinFirstLetter(this string chinese, bool toUpper = true)
-        {
-            var str = string.Empty;
-            var c = chinese.ToCharArray();
-            for (int i = 0; i < c.Length; i++)
-            {
-                var letter = chinese[i];
-                if (letter >= 0x4e00 && letter <= 0x9fbb)//是汉字
-                    str += Pinyin4Net.GetFirstPinyin(chinese[i])[0];
-                else
-                    str += letter;
-            }
+        //public static string GetPinYinFirstLetter(this string chinese, bool toUpper = true)
+        //{
+        //    var str = string.Empty;
+        //    var c = chinese.ToCharArray();
+        //    for (int i = 0; i < c.Length; i++)
+        //    {
+        //        var letter = chinese[i];
+        //        if (letter >= 0x4e00 && letter <= 0x9fbb)//是汉字
+        //            str += Pinyin4Net.GetFirstPinyin(chinese[i])[0];
+        //        else
+        //            str += letter;
+        //    }
 
-            if (toUpper)
-                str = str.ToUpper();
+        //    if (toUpper)
+        //        str = str.ToUpper();
 
-            return str;
-        }
+        //    return str;
+        //}
         /// <summary>
         /// <para>More convenient than using T.TryParse(string, out T). 
         /// Works with primitive types, structs, and enums.
