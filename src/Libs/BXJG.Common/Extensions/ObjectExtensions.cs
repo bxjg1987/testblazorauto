@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
+using System.ComponentModel;
+using System.Globalization;
 
 namespace System
 {
@@ -11,8 +13,33 @@ namespace System
     {
         public static void SetValue(this object obj, string propertyName, object value, BindingFlags flag = BindingFlags.Public | BindingFlags.IgnoreCase | BindingFlags.Instance) {
             var t = obj.GetType();
-            var p = t.GetProperty(propertyName,flag);
-            p.SetValue(obj,Convert.ChangeType( value,p.PropertyType) ,null);
+            var prop = t.GetProperty(propertyName,flag);
+
+            //if (prop.PropertyType.IsGenericType && prop.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
+            //{
+            //  var sdf = new NullableConverter.StandardValuesCollection(prop.PropertyType.GetGenericArguments())
+            //    dynamic objValue = System.Activator.CreateInstance(prop.PropertyType);
+            //    objValue = value;
+            //    prop.SetValue(obj, (object)objValue, null);
+            //}
+            //else
+            //{
+            //    prop.SetValue(obj, value, null);
+            //}
+            object convertedValue = value;
+            if (value != null && value.GetType() != prop.PropertyType)
+            {
+                //PropertyDescriptor ss;
+                // ss.Converter.string
+                Type propertyType = Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType;
+
+                var converter = TypeDescriptor.GetConverter(propertyType);
+                convertedValue = converter.ConvertFromInvariantString(value.ToString());
+              //  converter.ConvertFromString()
+               // convertedValue =  Convert.ChangeType(value, propertyType);
+            }
+            prop.SetValue(obj, convertedValue, null);
+            //  prop.SetValue(obj, Convert.ChangeType( value,prop.PropertyType) ,null);
         }
 
         /// <summary>
