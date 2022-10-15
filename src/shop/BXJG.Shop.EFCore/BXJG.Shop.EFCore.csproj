@@ -16,10 +16,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Abp" Version="7.2.0" />
-    <PackageReference Include="Abp.Zero.Common" Version="7.2.0" />
-    <PackageReference Include="Abp.ZeroCore.EntityFrameworkCore" Version="7.2.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.4" />
+    <PackageReference Include="Abp" Version="*" />
+    <PackageReference Include="Abp.Zero.Common" Version="*" />
+    <PackageReference Include="Abp.ZeroCore.EntityFrameworkCore" Version="*" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="*" />
   </ItemGroup>
 
   <ItemGroup>

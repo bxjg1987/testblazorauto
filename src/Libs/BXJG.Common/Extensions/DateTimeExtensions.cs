@@ -103,5 +103,24 @@ namespace BXJG.Common.Extensions
         }
 
         #endregion
+
+        /// <summary>
+        /// 月初
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        public static DateTimeOffset MonthStart(this DateTimeOffset dt)
+        {
+          return  dt.AddDays(1 - dt.Day); //本月月初
+        }
+        /// <summary>
+        /// 月初
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        public static DateTime MonthStart(this DateTime dt)
+        {
+            return dt.AddDays(1 - dt.Day); //本月月初
+        }
     }
 }

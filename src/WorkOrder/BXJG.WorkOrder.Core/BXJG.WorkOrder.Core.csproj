@@ -32,8 +32,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Abp" Version="7.3.0" />
-    <PackageReference Include="Yitter.IdGenerator" Version="*" />
+    <PackageReference Include="Abp" Version="*" />
+    <PackageReference Include="Yitter.IdGenerator" Version="1.0.14" />
   </ItemGroup>
 
   <ItemGroup>

@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Abp.ZeroCore" Version="7.2.0" />
+    <PackageReference Include="Abp.ZeroCore" Version="*" />
   </ItemGroup>
 
   <ItemGroup>
