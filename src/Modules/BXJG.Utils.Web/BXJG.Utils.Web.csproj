@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Abp.AspNetCore" Version="*" />
+    <PackageReference Include="Abp.AspNetCore" Version="7.4.0" />
   </ItemGroup>
 
   <ItemGroup>

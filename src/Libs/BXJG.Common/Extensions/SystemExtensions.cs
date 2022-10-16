@@ -1,15 +1,18 @@
 //using hyjiacan.py4n;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace System
 {
-    public static class StringExtensions
+    public static class SystemExtensions
     {
         /// <summary>
         /// 反序列化包含object类型属性的对象
@@ -136,8 +139,82 @@ namespace System
         //public static Dictionary<string, object> JsonStringToDic(this string str, IEqualityComparer<string>? comparer = default)
         //{
         //    comparer = comparer ?? StringComparer.OrdinalIgnoreCase;
-         
+
         //    return System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, object>>(str).ToDictionary(kvp => kvp.Key, kvp => kvp.Value, comparer);
         //}
+
+        /// <summary>
+        /// 一个环（可以理解位首尾相连的数组，索引0规定为环的起始位），从里面取任意一段数据
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="enumerate"></param>
+        /// <param name="index"></param>
+        /// <param name="count"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static T[] CaptureClipFromLoop<T>(this T[] list, T index, int count, bool right = true)
+        { 
+            var idx = Array.IndexOf(list, index);
+            return list.CaptureClipFromLoop(index, count, right);
+        }
+        /// <summary>
+        /// 一个环（可以理解位首尾相连的数组，索引0规定为环的起始位），从里面取任意一段数据
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="enumerate"></param>
+        /// <param name="index"></param>
+        /// <param name="count"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static T[] CaptureClipFromLoop<T>(this T[] list, int index, int count, bool right = true)
+        {
+            //if (!right)
+            //   list = list.Reverse().ToArray();
+
+            T[] result = new T[count];
+
+            var span = new Span<T>(list, 0, list.Length);
+
+            if (right)
+            {
+                int endLength = Math.Min(index + count, list.Length);
+                int accrue = 0;
+
+                for (int i = index; i < endLength; i++)
+                {
+                    result[accrue] = span[i];
+                    accrue++;
+                }
+
+                var shortfall = count - accrue;
+                for (int i = 0; i < shortfall; i++)
+                {
+                    result[accrue] = span[i];
+                    accrue++;
+                }
+            }
+            else
+            {
+                //new int[] { 1,2,3,4,5,6,7,8,9,10,11,12 }.CaptureClipFromLoop(1, 3,false);
+                int endLength = Math.Max(index - count+1, 0);
+                int accrue = 0;
+
+                for (int i = index; i >= endLength; i--)
+                {
+                    result[accrue] = span[i];
+                    accrue++;
+                }
+
+                var shortfall = count - accrue;
+
+                for (int i = list.Length - 1; i > list.Length - 1 - shortfall; i--)
+                {
+                    result[accrue] = span[i];
+                    accrue++;
+                }
+
+            }
+            return result;
+        }
     }
 }

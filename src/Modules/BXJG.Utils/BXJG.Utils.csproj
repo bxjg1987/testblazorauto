@@ -52,10 +52,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Abp" Version="*" />
-    <PackageReference Include="Abp.AutoMapper" Version="*" />
+    <PackageReference Include="Abp" Version="7.4.0" />
+    <PackageReference Include="Abp.AutoMapper" Version="7.4.0" />
     <PackageReference Include="Abp.Zero.Common" Version="*" />
-    <PackageReference Include="Abp.ZeroCore" Version="*" />
+    <PackageReference Include="Abp.ZeroCore" Version="7.4.0" />
     <PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="*" />
     <PackageReference Include="DistributedLock.Core" Version="*" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="*" />
