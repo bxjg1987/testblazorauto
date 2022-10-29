@@ -1,0 +1,21 @@
+﻿
+@implements IDisposable
+
+<div class="my-component">
+    @foreach (var item in BlazorServerLoggerExt.MsgContainer)
+    {
+        <p>@item.Value</p>
+    }
+</div>
+
+@code{
+    protected override void OnInitialized()
+    {
+        BlazorServerLoggerExt.OnLog += StateHasChanged;
+    }
+   
+    public void Dispose()
+    { 
+        BlazorServerLoggerExt.OnLog -= StateHasChanged;
+    }
+}

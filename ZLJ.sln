@@ -138,6 +138,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.GoodsInfo.Application.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZLJ.Web.Mvc", "src\ZLJ.Web.Mvc\ZLJ.Web.Mvc.csproj", "{970BE6F4-4616-4F2E-8AEB-E8A259591A44}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BXJG.BlazorServerLogger", "src\Libs\BXJG.BlazorServerLogger\BXJG.BlazorServerLogger.csproj", "{4A642737-4C16-437D-A0FF-57A8FAEDB90F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -324,6 +326,10 @@ Global
 		{970BE6F4-4616-4F2E-8AEB-E8A259591A44}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{970BE6F4-4616-4F2E-8AEB-E8A259591A44}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{970BE6F4-4616-4F2E-8AEB-E8A259591A44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A642737-4C16-437D-A0FF-57A8FAEDB90F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A642737-4C16-437D-A0FF-57A8FAEDB90F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A642737-4C16-437D-A0FF-57A8FAEDB90F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A642737-4C16-437D-A0FF-57A8FAEDB90F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -382,6 +388,7 @@ Global
 		{BFACC276-6558-4C72-BC9D-CB6EE72C2696} = {175D1E4E-D598-4F64-BF25-0A93EFF731E1}
 		{8AE4BA0C-167F-4D92-97C7-87CB5A754852} = {175D1E4E-D598-4F64-BF25-0A93EFF731E1}
 		{970BE6F4-4616-4F2E-8AEB-E8A259591A44} = {04E5EC1B-C5AD-473B-A833-DC9C2CB4627E}
+		{4A642737-4C16-437D-A0FF-57A8FAEDB90F} = {40F12CA4-F153-4F4E-AB26-E044EF0D0F7E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F45DD46C-6040-4FCC-87E0-648786C36933}
