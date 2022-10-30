@@ -1,4 +1,5 @@
-﻿@implements IDisposable
+﻿@using Microsoft.AspNetCore.Components.Web.Virtualization
+@implements IDisposable
 
 <div class="bxjg-blazor-log-head">
     <label class="msg@(LogLevel.Debug.ToString())">
@@ -23,8 +24,7 @@
     <button @onclick="cz">重置</button>
 </div>
 <div class="bxjg-blazor-log-container">
-    @foreach (var item in BlazorServerLoggerExt.MsgContainer.Where(c => filter.Contains(c.Value.Level) && (c.Value.Message.Contains(kw) || c.Value.Cls.Contains(kw) || (c.Value.ScopeState!=default&& c.Value.ScopeState.ToString().Contains(kw))) && c.Value.Time >= ks && c.Value.Time < js).OrderByDescending(c => c.Value.Time))
-    {
+    <Virtualize TItem="KeyValuePair<int, LogMsg>" Items="Msgs" Context="item" OverscanCount="20">
         <p @key="item.Key" class="msg@(item.Value.Level.ToString())">
             <br />
             @item.Value.Time.ToString("HH:mm:ss fff")
@@ -35,7 +35,7 @@
             @item.Value.ScopeState
             <br />
         </p>
-    }
+    </Virtualize>
 </div>
 
 @code {
@@ -77,7 +77,7 @@
             return logLevels;
         }
     }
-
+    public ICollection<KeyValuePair<int, LogMsg>> Msgs => BlazorServerLoggerExt.MsgContainer.Where(c => filter.Contains(c.Value.Level) && (c.Value.Message.Contains(kw) || c.Value.Cls.Contains(kw) || (c.Value.ScopeState != default && c.Value.ScopeState.ToString().Contains(kw))) && c.Value.Time >= ks && c.Value.Time < js).OrderByDescending(c => c.Value.Time).ToList();
     //[Parameter]
     //public Dictionary<int, string> LogMap { get; set; } = new Dictionary<int, string>();
 
