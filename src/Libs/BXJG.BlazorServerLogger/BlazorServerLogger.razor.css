@@ -1,0 +1,35 @@
+
+.bxjg-blazor-log-container {
+    background-color:#1b1b1b;
+}
+.bxjg-blazor-log-head {
+    background-color: black;
+    text-align: center;
+    width:100%;
+    height:2rem;
+    line-height:2rem;
+    position:  fixed;
+    bottom:0;
+}
+.msgTrace {
+    color: green;
+}
+.msgDebug {
+    color:   limegreen;
+}
+.msgInformation {
+    color: white ;
+}
+.msgWarning {
+    color:   gold;
+
+}
+.msgError {
+    color:   #fc1414;
+}
+.msgCritical {
+    color:  darkblue;
+}
+.msgNone {
+    color:  darkorchid;
+}

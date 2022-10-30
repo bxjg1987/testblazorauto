@@ -1,0 +1,98 @@
+﻿@implements IDisposable
+
+<div class="bxjg-blazor-log-head">
+    <label class="msg@(LogLevel.Debug.ToString())">
+        <input type="checkbox" @bind="logDebug" />Debug
+    </label>
+    <label class="msg@(LogLevel.Information.ToString())">
+        <input type="checkbox" @bind="logInfo" />Info
+    </label>
+    <label class="msg@(LogLevel.Warning.ToString())">
+        <input type="checkbox" @bind="logWarn" />Warn
+    </label>
+    <label class="msg@(LogLevel.Error.ToString())">
+        <input type="checkbox" @bind="logError" />Error
+    </label>
+
+
+    <input @bind="ks" type="datetime" placeholder="开始时间" />
+    <input @bind="js" type="datetime" placeholder="结束时间" />
+
+    <input @bind="kw" placeholder="关键字" />
+
+    <button @onclick="cz">重置</button>
+</div>
+<div class="bxjg-blazor-log-container">
+    @foreach (var item in BlazorServerLoggerExt.MsgContainer.Where(c => filter.Contains(c.Value.Level) && (c.Value.Message.Contains(kw) || c.Value.Cls.Contains(kw)) && c.Value.Time >= ks && c.Value.Time < js).OrderByDescending(c => c.Value.Time))
+    {
+        <p @key="item.Key" class="msg@(item.Value.Level.ToString())">
+            <br />
+            @item.Value.Time.ToString("HH:mm:ss fff")
+            @item.Value.Level.ToString()
+            @item.Value.Cls <br />
+            @item.Value.Message<br />
+            --------------------------------------------------------------
+            <br />
+        </p>
+    }
+</div>
+
+@code {
+    string kw = string.Empty;
+
+    DateTime ks = DateTime.Now.AddYears(-1), js = DateTime.Now;
+
+    bool logDebug = true, logInfo = true, logWarn = true, logError = true;
+    //LogLevel>
+    //string getcls(int id) {
+    //    if (LogMap.TryGetValue(id, out var str))
+    //        return str;
+    //        return default;
+    //}
+
+    void cz()
+    {
+        ks = DateTime.Now.AddYears(-1);
+        js = DateTime.Now.AddYears(1);
+        logDebug = true;
+        logInfo = true;
+        logWarn = true;
+        logError = true;
+        kw = string.Empty;
+    }
+    public List<LogLevel> filter
+    {
+        get
+        {
+            List<LogLevel> logLevels = new List<LogLevel>();
+            if (logDebug)
+                logLevels.Add(LogLevel.Debug);
+            if (logInfo)
+                logLevels.Add(LogLevel.Information);
+            if (logWarn)
+                logLevels.Add(LogLevel.Warning);
+            if (logError)
+                logLevels.Add(LogLevel.Error);
+            return logLevels;
+        }
+    }
+
+    //[Parameter]
+    //public Dictionary<int, string> LogMap { get; set; } = new Dictionary<int, string>();
+
+    protected override void OnInitialized()
+    {
+        cz();
+        BlazorServerLoggerExt.OnLog += Log;
+    }
+
+    public void Dispose()
+    {
+        BlazorServerLoggerExt.OnLog -= Log;
+    }
+
+    void Log(LogMsg msg)
+    {
+        this.InvokeAsync(this.StateHasChanged);
+    }
+}
