@@ -19,7 +19,7 @@ namespace Microsoft.Extensions.Logging
     {
         public DateTime Time { get; set; }
         public LogLevel Level { get; set; }
-
+        public object ScopeState { get; set; }
         public string Cls { get; set; }
         public string Message { get; set; }
 
@@ -32,10 +32,10 @@ namespace Microsoft.Extensions.Logging
 
         public static readonly ConcurrentDictionary<int, LogMsg> MsgContainer = new ConcurrentDictionary<int, LogMsg>();
         // static long msgId = long.MinValue;
-        public static void Add(LogLevel level, string msg, string cls = default, object userState = default)
+        public static void Add(LogLevel level, string msg, string cls = default, object userState = default, object scopeState=default)
         {
             //   var tempMsgId = Interlocked.Increment(ref msgId);
-            var msg1 = new LogMsg { Cls = cls, Level = level, Message = msg, Time = DateTime.Now, UserState = userState };
+            var msg1 = new LogMsg { Cls = cls, Level = level, Message = msg, Time = DateTime.Now, UserState = userState,ScopeState=scopeState };
             MsgContainer.TryAdd(msg1.GetHashCode(), msg1);
             var min = MsgContainer.MinBy(c => c.Value.Time);
             if (MsgContainer.Count > 100000)
@@ -150,7 +150,7 @@ namespace Microsoft.Extensions.Logging
             var msg = formatter(state, exception);
 
             //这里可以把作用域丢进去 Yangcong.Current 目前没做
-            BlazorServerLoggerExt.Add(logLevel, msg, clsName, state);
+            BlazorServerLoggerExt.Add(logLevel, msg, clsName, state, Yangcong.Current.Value?.State);
         }
     }
 
