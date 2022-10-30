@@ -23,7 +23,7 @@
     <button @onclick="cz">重置</button>
 </div>
 <div class="bxjg-blazor-log-container">
-    @foreach (var item in BlazorServerLoggerExt.MsgContainer.Where(c => filter.Contains(c.Value.Level) && (c.Value.Message.Contains(kw) || c.Value.Cls.Contains(kw)) && c.Value.Time >= ks && c.Value.Time < js).OrderByDescending(c => c.Value.Time))
+    @foreach (var item in BlazorServerLoggerExt.MsgContainer.Where(c => filter.Contains(c.Value.Level) && (c.Value.Message.Contains(kw) || c.Value.Cls.Contains(kw) || (c.Value.ScopeState!=default&& c.Value.ScopeState.ToString().Contains(kw))) && c.Value.Time >= ks && c.Value.Time < js).OrderByDescending(c => c.Value.Time))
     {
         <p @key="item.Key" class="msg@(item.Value.Level.ToString())">
             <br />
@@ -32,6 +32,7 @@
             @item.Value.Cls <br />
             @item.Value.Message<br />
             --------------------------------------------------------------
+            @item.Value.ScopeState
             <br />
         </p>
     }

@@ -4,6 +4,13 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <Title>基于Blazor的日志提供器</Title>
+    <Authors>变形精怪</Authors>
+    <Description>日志被记录到内存中，默认10W条滚动删除，提供的blazor用于实时显示日志</Description>
+    <Copyright>变形精怪</Copyright>
+    <RepositoryUrl>https://gitee.com/bxjg1987_admin/abp/tree/master/src/Libs/BXJG.BlazorServerLogger</RepositoryUrl>
+    <PackageTags>blazor,log,日志,实时</PackageTags>
+    <PackageReleaseNotes>目前简单实现功能，没有提供更多的配置</PackageReleaseNotes>
   </PropertyGroup>
 
 

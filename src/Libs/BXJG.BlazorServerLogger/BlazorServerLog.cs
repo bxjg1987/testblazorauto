@@ -32,10 +32,10 @@ namespace Microsoft.Extensions.Logging
 
         public static readonly ConcurrentDictionary<int, LogMsg> MsgContainer = new ConcurrentDictionary<int, LogMsg>();
         // static long msgId = long.MinValue;
-        public static void Add(LogLevel level, string msg, string cls = default, object userState = default, object scopeState=default)
+        public static void Add(LogLevel level, string msg, string cls = default, object userState = default, object scopeState = default)
         {
             //   var tempMsgId = Interlocked.Increment(ref msgId);
-            var msg1 = new LogMsg { Cls = cls, Level = level, Message = msg, Time = DateTime.Now, UserState = userState,ScopeState=scopeState };
+            var msg1 = new LogMsg { Cls = cls, Level = level, Message = msg, Time = DateTime.Now, UserState = userState, ScopeState = scopeState };
             MsgContainer.TryAdd(msg1.GetHashCode(), msg1);
             var min = MsgContainer.MinBy(c => c.Value.Time);
             if (MsgContainer.Count > 100000)
@@ -102,7 +102,8 @@ namespace Microsoft.Extensions.Logging
             public void Dispose()
             {
                 Current.Value = Outer;
-                Outer.Inner = default;
+                if (Outer != default)
+                    Outer.Inner = default;
                 if (State is IDisposable m)
                 {
                     m?.Dispose();
@@ -112,7 +113,8 @@ namespace Microsoft.Extensions.Logging
             public async ValueTask DisposeAsync()
             {
                 Current.Value = Outer;
-                Outer.Inner = default;
+                if (Outer != default)
+                    Outer.Inner = default;
                 if (State is IAsyncDisposable m)
                 {
                     if (m != default)
@@ -170,7 +172,7 @@ namespace Microsoft.Extensions.Logging
     }
     //关于配置可以去看官方实现的provider的源码 或者asp.net core 6 框架揭秘
     public class lazorServerLoggerConfiguration
-    { 
-    
+    {
+
     }
 }
