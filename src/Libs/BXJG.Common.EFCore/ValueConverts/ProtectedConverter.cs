@@ -12,6 +12,7 @@ namespace BXJG.Common.EFCore.ValueConverts
 {
     /// <summary>
     /// 数据保护转换器
+    /// 这种方式是基于ef，最好的方式还是基于属性的拦截器，在应用层来做
     /// <see href="https://www.tabsoverspaces.com/233774-using-data-protection-in-entity-framework-core-with-value-converters">参考博客</see>
     /// <see href="https://learn.microsoft.com/zh-cn/ef/core/modeling/value-conversions?tabs=data-annotations#built-in-converters">参考官方文档</see>
     /// </summary>
