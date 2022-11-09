@@ -1,0 +1,35 @@
+﻿@implements IAsyncDisposable
+
+@inherits OwningComponentBase
+
+<div @ref="container"></div>
+
+
+@code {
+    private ElementReference container;
+    ExampleJsInterop js;
+
+    protected override void OnInitialized()
+    {
+        js = base.ScopedServices.GetService<ExampleJsInterop>();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        //return base.OnAfterRenderAsync(firstRender);
+        if (firstRender)
+        {
+
+            //初始化echarts
+            await js.Init(container);
+            //js.
+        }
+
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        //await js?.DisposeAsync();//它的生死应该由容器来决定
+
+    }
+}
