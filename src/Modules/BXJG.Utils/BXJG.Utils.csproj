@@ -52,17 +52,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Abp" Version="7.4.0" />
-    <PackageReference Include="Abp.AutoMapper" Version="7.4.0" />
-    <PackageReference Include="Abp.Zero.Common" Version="*" />
-    <PackageReference Include="Abp.ZeroCore" Version="7.4.0" />
-    <PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="*" />
-    <PackageReference Include="DistributedLock.Core" Version="*" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="*" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="*" />
-    <PackageReference Include="MimeTypesMap" Version="*" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="*" />
-    <PackageReference Include="System.Drawing.Common" Version="*" />
+    <PackageReference Include="Abp" Version="7.*" />
+    <PackageReference Include="Abp.AutoMapper" Version="7.*" />
+    <PackageReference Include="Abp.Zero.Common" Version="7.*" />
+    <PackageReference Include="Abp.ZeroCore" Version="7.*" />
+    <PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="3.*" />
+    <PackageReference Include="DistributedLock.Core" Version="1.*" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.*" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.*" />
+    <PackageReference Include="MimeTypesMap" Version="1.*" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="2.*" />
+    <PackageReference Include="System.Drawing.Common" Version="7.*" />
   </ItemGroup>
 
   <ItemGroup>

@@ -40,7 +40,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Abp.EntityFrameworkCore" Version="*" />
+    <PackageReference Include="Abp.EntityFrameworkCore" Version="7.*" />
   </ItemGroup>
 
 </Project>
