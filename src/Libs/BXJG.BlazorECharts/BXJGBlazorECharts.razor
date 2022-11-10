@@ -1,35 +1,45 @@
 ﻿@implements IAsyncDisposable
-
+@inject IJSRuntime JS
 @inherits OwningComponentBase
-
-<div @ref="container"></div>
-
-
+<div @ref="container" @attributes="InputAttributes"></div>
 @code {
+    private IJSObjectReference? module;
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> InputAttributes { get; set; }
+
     private ElementReference container;
-    ExampleJsInterop js;
+
+    /// <summary>
+    /// 可选的初始数据
+    /// </summary>
+    [Parameter]
+    public object Option { get; set; }
 
     protected override void OnInitialized()
     {
-        js = base.ScopedServices.GetService<ExampleJsInterop>();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        //return base.OnAfterRenderAsync(firstRender);
         if (firstRender)
         {
-
-            //初始化echarts
-            await js.Init(container);
-            //js.
+            module = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/BXJG.BlazorECharts/BXJGBlazorECharts.razor.js");
+            await module.InvokeVoidAsync("init", container,Option);
         }
+    }
 
+    public async Task SetOption(object option)
+    {
+        await module.InvokeVoidAsync("setOption", container, option);
     }
 
     public async ValueTask DisposeAsync()
     {
-        //await js?.DisposeAsync();//它的生死应该由容器来决定
-
+        if (module is not null)
+        {
+            await module.InvokeVoidAsync("dispose", container); //这里组件已经不在了，dom没有了，调用会报错
+            await module.DisposeAsync();
+        }
     }
 }
