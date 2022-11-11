@@ -16,6 +16,10 @@
 	  <LangVersion>11</LangVersion>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="ExampleJsInterop.cs" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <SupportedPlatform Include="browser" />

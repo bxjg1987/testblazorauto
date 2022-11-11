@@ -10,6 +10,7 @@
     line-height:2rem;
     position:  fixed;
     bottom:0;
+    z-index:9999;
 }
 .msgTrace {
     color: green;
