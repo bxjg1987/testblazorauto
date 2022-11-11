@@ -25,7 +25,9 @@
         if (firstRender)
         {
             module = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/BXJG.BlazorECharts/BXJGBlazorECharts.razor.js");
-            await module.InvokeVoidAsync("init", container,Option);
+         
+                await module.InvokeVoidAsync("init", container, Option);
+            
         }
     }
 
