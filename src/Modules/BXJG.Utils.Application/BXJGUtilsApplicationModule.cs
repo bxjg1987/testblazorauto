@@ -34,15 +34,17 @@ namespace BXJG.Utils
             //此行必加
             Configuration.Modules.AbpAutoMapper().Configurators.Add(cfg =>
             {
-                cfg.ForAllMaps((a, b) =>
-                {
-                   // a.IncludedMembersNames
-                   if(  a.IncludedMembersNames.Contains("ConcurrencyStamp"))
-                  //  if (a.DestinationType == typeof(IHasConcurrencyStamp))
-                    {
-                        b.ForMember("ConcurrencyStamp", d => d.MapFrom("ConcurrencyStamp"));
-                    }
-                });
+                //cfg.map
+                //cfg.
+                //cfg.ForAllMaps((a, b) =>
+                //{
+                //   // a.IncludedMembersNames
+                //   if(  a.IncludedMembersNames.Contains("ConcurrencyStamp"))
+                //  //  if (a.DestinationType == typeof(IHasConcurrencyStamp))
+                //    {
+                //        b.ForMember("ConcurrencyStamp", d => d.MapFrom("ConcurrencyStamp"));
+                //    }
+                //});
                 cfg.AddMaps(Assembly.GetExecutingAssembly());
             });
 
