@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <RootNamespace>BXJG.Shop</RootNamespace>
   </PropertyGroup>
 
@@ -16,9 +16,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Abp" Version="*" />
+    <PackageReference Include="Abp" Version="8.0.0" />
     <PackageReference Include="Abp.Zero.Common" Version="*" />
-    <PackageReference Include="Abp.ZeroCore.EntityFrameworkCore" Version="*" />
+    <PackageReference Include="Abp.ZeroCore.EntityFrameworkCore" Version="8.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="*" />
   </ItemGroup>
 

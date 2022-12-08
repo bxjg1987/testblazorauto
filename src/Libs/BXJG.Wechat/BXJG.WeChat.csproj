@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <AssemblyName>BXJG.WeChat</AssemblyName>
     <Authors>变形精怪</Authors>
     <RepositoryUrl>https://gitee.com/bxjg1987_admin/abp</RepositoryUrl>
@@ -59,10 +59,10 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.*" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.*" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.*" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="6.*" />
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="6.*" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
     <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
   </ItemGroup>
 

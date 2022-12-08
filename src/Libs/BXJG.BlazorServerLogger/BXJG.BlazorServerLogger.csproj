@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-	  <TargetFramework>net6.0</TargetFramework>
+	  <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <Title>基于Blazor的实时日志提供器</Title>
@@ -26,9 +26,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.*" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="6.*" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Configuration" Version="6.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.*" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="7.*" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Configuration" Version="7.*" />
   </ItemGroup>
 
 </Project>
