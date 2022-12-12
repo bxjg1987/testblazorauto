@@ -11,6 +11,10 @@
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BXJG.Utils.Application\BXJG.Utils.Application.csproj" />
+  </ItemGroup>
+
 
 
 </Project>
