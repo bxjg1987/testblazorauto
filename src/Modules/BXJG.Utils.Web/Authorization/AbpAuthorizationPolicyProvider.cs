@@ -1,4 +1,6 @@
 ﻿using Abp.Authorization;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using System;
@@ -15,14 +17,26 @@ namespace BXJG.Utils.Authorization
     public class AbpAuthorizationPolicyProvider : DefaultAuthorizationPolicyProvider
     {
         private readonly IPermissionManager permissionManager;
-        public AbpAuthorizationPolicyProvider(IOptions<AuthorizationOptions> options, IPermissionManager permissionManager) : base(options)
+     // private readonly IAuthenticationSchemeProvider authenticationSchemeProvider;
+        private readonly AuthenticationOptions authenticationOptions;
+        public AbpAuthorizationPolicyProvider(IOptions<AuthorizationOptions> options,
+                                              IPermissionManager permissionManager,
+                                             // IAuthenticationSchemeProvider authenticationSchemeProvider,
+                                              IOptions< AuthenticationOptions > authenticationOptions) : base(options)
         {
             this.permissionManager = permissionManager;
+          //  this.authenticationSchemeProvider = authenticationSchemeProvider;
+            this.authenticationOptions = authenticationOptions.Value;
+          
+            //  CookieAuthenticationOptions
         }
 
         //这里是高频访问，后期仔细考虑是否需要new对象出来，是否可以缓存或对象池方式来提高性能
         public override async Task<AuthorizationPolicy> GetPolicyAsync(string policyName)
         {
+            // var scheme = await authenticationSchemeProvider.GetAllSchemesAsync();
+          //  var ss = authenticationOptions.SchemeMap.Keys; // scheme.Select(c => c.Name);
+
             //blazor的授权组件会做AuthorizationPolicy.Combi，会合并schemes合并的，这里保持null就行了
             //权限1,权限2 true
             //不太有必要使用AuthorizationPolicy，因为它无非是对授权依据和身份验证方案的简化，少new个Builder，性能更高
@@ -34,12 +48,13 @@ namespace BXJG.Utils.Authorization
                 if(ary.Length > 1) {
                     all = bool.Parse(ary[1]);
                 }
-                return new AuthorizationPolicy(new IAuthorizationRequirement[] { new AbpOperationAuthorizationRequirement { PermissionNames =names, RequiredAll = all} }, null);
+               
+                return new AuthorizationPolicy(new IAuthorizationRequirement[] { new AbpOperationAuthorizationRequirement { PermissionNames =names, RequiredAll = all} }, authenticationOptions.SchemeMap.Keys);
             }
             else if (permissionManager.GetPermissionOrNull(policyName) != default)
             {
                 //针对非复合型权限判断，这里确实可以在应用启动时 直接初始化所有单一权限策略，这里的代码就不需要了，直接最后拿到策略返回
-                return new AuthorizationPolicy(new IAuthorizationRequirement[] { new AbpOperationAuthorizationRequirement { PermissionNames = new[] { policyName } } }, null);
+                return new AuthorizationPolicy(new IAuthorizationRequirement[] { new AbpOperationAuthorizationRequirement { PermissionNames = new[] { policyName } } }, authenticationOptions.SchemeMap.Keys);
             }
 
             return await base.GetPolicyAsync(policyName);
