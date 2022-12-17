@@ -10,29 +10,35 @@
 
     private ElementReference container;
 
+    public ValueTask vt { get; private set; }= default;
     /// <summary>
     /// 可选的初始数据
     /// </summary>
     [Parameter]
     public object Option { get; set; }
 
-    protected override void OnInitialized()
-    {
-    }
-
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
             module = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/BXJG.BlazorECharts/BXJGBlazorECharts.razor.js");
-         
-                await module.InvokeVoidAsync("init", container, Option);
-            
+            vt = module.InvokeVoidAsync("init", container, Option);
+            this.Option = default;
+            await vt;
         }
     }
 
     public async Task SetOption(object option)
     {
+        // if (module != default )
+        for (int i = 0; i < 500; i++)
+        {
+            if (vt != default && vt.IsCompleted)
+                break;
+
+            await Task.Delay(10);
+        }
+        //await Task.Yield(); //貌似这里根本没用,必须在调用地方去处理
         await module.InvokeVoidAsync("setOption", container, option);
     }
 
@@ -40,6 +46,7 @@
     {
         if (module is not null)
         {
+            vt = default;
             await module.InvokeVoidAsync("dispose", container); //这里组件已经不在了，dom没有了，调用会报错
             await module.DisposeAsync();
         }
