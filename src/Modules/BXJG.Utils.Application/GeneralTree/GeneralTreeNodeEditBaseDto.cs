@@ -8,6 +8,7 @@ using Abp.Application.Services.Dto;
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Dynamic;
 using System.Linq;
@@ -33,7 +34,9 @@ namespace BXJG.Utils.GeneralTree
         /// <summary>
         /// 显示名称
         /// </summary>
-        [Required]
+        //[Display( Name ="名称", Description ="aaaaa" )] //这些标签对mudblazor无效，但其它blazor ui库也许有用 还有本地化等问题
+        //[DisplayName("bbbbb")] //感觉过时了
+        [Required( ErrorMessage = "请输入名称")]
         [StringLength(GeneralTreeEntity.MaxDisplayNameLength)]
         public string DisplayName { get; set; }
         ///// <summary>
