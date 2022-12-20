@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Primitives;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,14 +25,23 @@ namespace Microsoft.AspNetCore.Http
 
             if (request.Headers != null)
             {
+                if (request.Headers.TryGetValue("Authorization", out var auth))
+                {
+                    
+                    if (auth.First().StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+                        return true;
+                }
+
                 if (request.Headers.TryGetValue("Sec-Fetch-Mode", out var cors))
                 {
                     if (cors == "cors")
                         return true;
                 }
 
-              return request.Headers["X-Requested-With"] == "XMLHttpRequest";//|| request.Headers.ContainsKey("Sec-Fetch-Dest");
+                return request.Headers["X-Requested-With"] == "XMLHttpRequest";//|| request.Headers.ContainsKey("Sec-Fetch-Dest");
             }
+
+           // request.HttpContext.RequestServices.GetService < Castle.Core.Logging .<>>
 
             return false;
         }
