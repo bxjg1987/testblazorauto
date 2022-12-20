@@ -36,7 +36,8 @@ namespace BXJG.Utils.Authorization
         //  [Abp.Domain.Uow.UnitOfWork]
         protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, AbpOperationAuthorizationRequirement requirement)
         {
-            using (var uow = unitOfWorkManager.Begin()) { 
+            using (var uow = unitOfWorkManager.Begin())
+            {
                 if (await permissionChecker.IsGrantedAsync(requirement.RequiredAll, requirement.PermissionNames))
                     context.Succeed(requirement);
             }
