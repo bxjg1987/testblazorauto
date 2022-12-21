@@ -21,11 +21,11 @@ namespace BXJG.Utils.Authorization
     public class AbpAuthorizationHandler : AuthorizationHandler<AbpOperationAuthorizationRequirement>
     {
         private readonly IUnitOfWorkManager unitOfWorkManager;
-        private readonly Microsoft.Extensions.Logging.ILogger logger;
+        private readonly Castle.Core.Logging.ILogger logger;
         private readonly IPermissionChecker permissionChecker;
         //private readonly IAbpSession abpSession;
-
-        public AbpAuthorizationHandler(IPermissionChecker permissionChecker, ILogger<AbpAuthorizationHandler> logger, IUnitOfWorkManager unitOfWorkManager)
+        //  ILogger 
+        public AbpAuthorizationHandler(IPermissionChecker permissionChecker, Castle.Core.Logging.ILogger logger, IUnitOfWorkManager unitOfWorkManager)
         {
             this.permissionChecker = permissionChecker;
             this.logger = logger;
@@ -36,11 +36,23 @@ namespace BXJG.Utils.Authorization
         //  [Abp.Domain.Uow.UnitOfWork]
         protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, AbpOperationAuthorizationRequirement requirement)
         {
-            using (var uow = unitOfWorkManager.Begin())
+            //permissionChecker的方法上已经应用UOW
+            //应用首次访问时未命中缓存，在执行数据库操作UserManager.FindById时会提示访问dispose对象的问题
+
+            //using (var uow = unitOfWorkManager.Begin( System.Transactions.TransactionScopeOption.RequiresNew))
+            //{
+            try
             {
                 if (await permissionChecker.IsGrantedAsync(requirement.RequiredAll, requirement.PermissionNames))
                     context.Succeed(requirement);
             }
+            catch (Exception ex)
+            {
+                logger.Debug("权限判断执行了同步操作", ex);
+                if (permissionChecker.IsGranted(requirement.RequiredAll, requirement.PermissionNames))
+                    context.Succeed(requirement);
+            }
+            //}
             //permissionChecker.IsGrantedAsync()
             //throw new NotImplementedException();
         }

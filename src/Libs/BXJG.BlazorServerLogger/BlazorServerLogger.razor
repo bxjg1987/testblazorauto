@@ -30,7 +30,7 @@
             @item.Value.Time.ToString("HH:mm:ss fff")
             @item.Value.Level.ToString()
             @item.Value.Cls <br />
-            @item.Value.Message<br />
+            @((MarkupString) item.Value.Message)<br />
             --------------------------------------------------------------
             @item.Value.ScopeState
             <br />
