@@ -149,10 +149,10 @@ namespace Microsoft.Extensions.Logging
 
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
         {
-            var msg = formatter(state, exception);
+           // var msg = formatter(state, exception);
 
             //这里可以把作用域丢进去 Yangcong.Current 目前没做
-            BlazorServerLoggerExt.Add(logLevel, msg, clsName, state, Yangcong.Current.Value?.State);
+            BlazorServerLoggerExt.Add(logLevel, exception?.Message+Environment.NewLine+exception?.StackTrace, clsName, state, Yangcong.Current.Value?.State);
         }
     }
 
