@@ -27,6 +27,7 @@ namespace BXJG.Common.Dto
     /// 列表页搜索框、表单页下拉框查询使用的输入模型
     /// 分页版本参考utils中的GetPageForSelectInput
     /// </summary>
+    [Obsolete("感觉没啥意义，前端自己处理就好")]
     public class GetForSelectInput
     {
         /// <summary>
@@ -39,6 +40,7 @@ namespace BXJG.Common.Dto
         /// 2 表单框
         /// 
         /// </summary>
+        [Obsolete]
         public int ForType { get; set; }
         /// <summary>
         /// 给前端一个机会来设置自己想要的值，注意是否需要本地化调用方来决定
