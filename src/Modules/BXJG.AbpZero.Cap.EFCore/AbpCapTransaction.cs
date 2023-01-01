@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Abp.Modules;
 using Abp.Configuration.Startup;
 using Microsoft.Extensions.DependencyInjection;
+using System.Security.Policy;
 
 namespace BXJG.AbpZero.Cap.EFCore
 {
@@ -13,10 +14,11 @@ namespace BXJG.AbpZero.Cap.EFCore
 
     public class AbpCapTransaction<TDbContext> : CapTransactionBase where TDbContext : DbContext
     {
-        public AbpCapTransaction(IDispatcher dispatcher, IActiveUnitOfWork uow) : base(dispatcher)
+        //   IUnitOfWorkManager uowManager;
+        public AbpCapTransaction(IDispatcher dispatcher, IUnitOfWorkManager uowManager) : base(dispatcher)
         {
-            Uow = uow as EfCoreUnitOfWork;
-            Uow.Completed += Uow_Completed;
+            this.uowManager = uowManager;
+
         }
 
         private void Uow_Completed(object? sender, EventArgs e)
@@ -24,14 +26,28 @@ namespace BXJG.AbpZero.Cap.EFCore
             Flush();
         }
 
-        public EfCoreUnitOfWork Uow { get; private set; }
+        public IUnitOfWorkManager uowManager { get; private set; }
 
-        public override object? DbTransaction => Uow.GetOrCreateDbContext<TDbContext>().Database.CurrentTransaction;
+        public override object? DbTransaction
+        {
+            get
+            {
+                var db = (uowManager.Current as EfCoreUnitOfWork);
+                db.Completed -= Uow_Completed;
+                db.Completed += Uow_Completed;
+                //db.Disposed += Db_Disposed;
+                return db.GetOrCreateDbContext<TDbContext>().Database.CurrentTransaction;
+
+            }
+        }
+
 
         //提交留给abp自动提交去做；回滚本来就是自动的
 
         public override void Commit()
         {
+            //  uowManager.Current.Completed -= Uow_Completed;
+            //  uowManager.Current.Completed += Uow_Completed;
             // Uow.
             //Uow.Complete();
             //Flush();
@@ -42,6 +58,8 @@ namespace BXJG.AbpZero.Cap.EFCore
             //  await Uow.CompleteAsync();
 
             //Flush();
+            // uowManager.Current.Completed -= Uow_Completed;
+            //uowManager.Current.Completed += Uow_Completed;
             return Task.CompletedTask;
         }
 
@@ -61,19 +79,17 @@ namespace BXJG.AbpZero.Cap.EFCore
 
         public override void Dispose()
         {
-            Uow.Completed -= Uow_Completed;
+            uowManager.Current.Completed -= Uow_Completed;
             //Uow.Dispose();
-            Uow = null;
+            uowManager = null;
         }
     }
     public class pzdx
     {
-       
-
-        internal Func<IDispatcher, IActiveUnitOfWork, ICapTransaction> wt;
+        internal Func<IDispatcher, IUnitOfWorkManager, ICapTransaction> wt;
         public void InitDbContext<T>() where T : DbContext
         {
-            wt = (c,uow) => new AbpCapTransaction<T>(c,uow);
+            wt = (c, uow) => new AbpCapTransaction<T>(c, uow);
         }
     }
 
@@ -82,6 +98,14 @@ namespace BXJG.AbpZero.Cap.EFCore
         public static pzdx AbpCapEFCore(this IModuleConfigurations moduleConfigurations)
         {
             return moduleConfigurations.AbpConfiguration.Get<pzdx>();
+        }
+
+        public static ICapTransaction sdfdf(this IUnitOfWorkManager uowManager,ICapPublisher publisher)
+        {
+            var temp = publisher.ServiceProvider.GetRequiredService<IDispatcher>();
+            var uow = publisher.ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
+            publisher.Transaction.Value = publisher.ServiceProvider.GetRequiredService<pzdx>().wt(temp, uow);
+            return publisher.Transaction.Value;
         }
     }
 
@@ -92,23 +116,25 @@ namespace BXJG.AbpZero.Cap.EFCore
         public override void PreInitialize()
         {
             IocManager.Register<pzdx>();
-            IocManager.IocContainer.Kernel.ComponentCreated += Kernel_ComponentCreated;
+            //IocManager.IocContainer.Kernel.ComponentCreated += Kernel_ComponentCreated;
         }
 
-        private void Kernel_ComponentCreated(Castle.Core.ComponentModel model, object instance)
-        {
-            // base.Configuration
-            if (instance is ICapPublisher publisher)
-            {
-                var temp = publisher.ServiceProvider.GetRequiredService<IDispatcher>();
-                var uow = IocManager.Resolve<IActiveUnitOfWork>();
-                publisher.Transaction.Value = Configuration.Modules.AbpCapEFCore().wt(temp, uow);
-            }
-        }
+        //cap
+        //private void Kernel_ComponentCreated(Castle.Core.ComponentModel model, object instance)
+        //{
+        //    // base.Configuration
+        //    if (instance is ICapPublisher publisher)
+        //    {
+        //        var temp = publisher.ServiceProvider.GetRequiredService<IDispatcher>();
+        //        var uow = IocManager.Resolve<IUnitOfWorkManager>();
+        //        publisher.Transaction.Value = Configuration.Modules.AbpCapEFCore().wt(temp, uow);
+        //        publisher.Transaction.Value.AutoCommit=true;
+        //    }
+        //}
 
-        public override void Shutdown()
-        {
-            IocManager.IocContainer.Kernel.ComponentCreated -= Kernel_ComponentCreated;
-        }
+        //public override void Shutdown()
+        //{
+        //    //IocManager.IocContainer.Kernel.ComponentCreated -= Kernel_ComponentCreated;
+        //}
     }
 }
