@@ -7,49 +7,74 @@ using Abp.Modules;
 using Abp.Configuration.Startup;
 using Microsoft.Extensions.DependencyInjection;
 using System.Security.Policy;
+using System.ComponentModel.DataAnnotations;
+using System.Reflection;
 
 namespace BXJG.AbpZero.Cap.EFCore
 {
-    //参考：https://www.cnblogs.com/savorboard/p/cap-6-2.html#5137563
 
+    /*
+     * 参考：https://www.cnblogs.com/savorboard/p/cap-6-2.html#5137563
+     * 由于cap要支持ef和数据库邓多种事务方式，因此定义了ICapTransaction对事务抽象
+     * 
+     * cap于业务系统的事务挂钩的核心思路如下：
+     * ICapPublisher是单例的,通过AsyncLocal的方式存储当前事务对象
+     * 业务系统的事务对象可以实现ICapTransaction，然后把这个对象赋值给ICapPublisher
+     * cap提供的提交是由cap来做事务提交，但在abp中事务提交是自动的
+     * 因此我们定义的事务对象AbpCapTransaction不处理提交和回滚相关操作
+     * 而事务本身的提交肯定还是基于底层的事务对象的，这个是改由我们的业务系统来提交
+     */
+
+    /// <summary>
+    /// 由于cap要支持ef和数据库邓多种事务方式，因此定义了ICapTransaction对事务抽象
+    /// 
+    /// </summary>
+    /// <typeparam name="TDbContext"></typeparam>
     public class AbpCapTransaction<TDbContext> : CapTransactionBase where TDbContext : DbContext
     {
-        //   IUnitOfWorkManager uowManager;
-        public AbpCapTransaction(IDispatcher dispatcher, IUnitOfWorkManager uowManager) : base(dispatcher)
+        public AbpCapTransaction(IDispatcher dispatcher, IActiveUnitOfWork uow) : base(dispatcher)
         {
-            this.uowManager = uowManager;
+            //IUnitOfWorkManager ss;
+            //ss.be
 
+            //没必要做这个担心
+            //因为最外层的uow提交，最终还是提交的数据库事务，还是基于数据库连接的事务
+            //而这个数据库连接的事务已经于publisher的事务挂钩了。
+
+            //IUnitOfWork temp = (IUnitOfWork)uow;
+            //while (temp.Outer!=null)
+            //{
+            //    temp = temp.Outer;
+            //}
+
+            this.uow = uow as EfCoreUnitOfWork;
+         
+
+           var ss = this.uow.Outer;
+            //var tempOu = uow;
+            //while (tempOu != null)
+            //{
+            //    tempOu = tempOu.Options
+            //}
+
+            this.uow.Completed += Uow_Completed;
         }
 
         private void Uow_Completed(object? sender, EventArgs e)
         {
             Flush();
+            Dispose();
         }
 
-        public IUnitOfWorkManager uowManager { get; private set; }
+        public EfCoreUnitOfWork uow { get; private set; }
 
-        public override object? DbTransaction
-        {
-            get
-            {
-                var db = (uowManager.Current as EfCoreUnitOfWork);
-                db.Completed -= Uow_Completed;
-                db.Completed += Uow_Completed;
-                //db.Disposed += Db_Disposed;
-                return db.GetOrCreateDbContext<TDbContext>().Database.CurrentTransaction;
-
-            }
-        }
-
+        public override object? DbTransaction => uow.GetOrCreateDbContext<TDbContext>().Database.CurrentTransaction;
 
         //提交留给abp自动提交去做；回滚本来就是自动的
 
         public override void Commit()
         {
-            //  uowManager.Current.Completed -= Uow_Completed;
-            //  uowManager.Current.Completed += Uow_Completed;
-            // Uow.
-            //Uow.Complete();
+            //uow.Complete();
             //Flush();
         }
 
@@ -65,28 +90,32 @@ namespace BXJG.AbpZero.Cap.EFCore
 
         public override void Rollback()
         {
-            //  Uow.Current.rol
+            // Uow.Current.rol
             // Uow.Rollback();
-
         }
 
         public override Task RollbackAsync(CancellationToken cancellationToken = default)
         {
-
             //  throw new NotImplementedException();
             return Task.CompletedTask;
         }
 
         public override void Dispose()
         {
-            uowManager.Current.Completed -= Uow_Completed;
+            uow.Completed -= Uow_Completed;
             //Uow.Dispose();
-            uowManager = null;
+            uow = null;
+            DbTransaction = null;
         }
     }
     public class pzdx
     {
-        internal Func<IDispatcher, IUnitOfWorkManager, ICapTransaction> wt;
+        internal Func<IDispatcher, IActiveUnitOfWork, ICapTransaction> wt;
+
+        /// <summary>
+        /// 指定cap使用的dbcontext类型
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
         public void InitDbContext<T>() where T : DbContext
         {
             wt = (c, uow) => new AbpCapTransaction<T>(c, uow);
@@ -95,17 +124,35 @@ namespace BXJG.AbpZero.Cap.EFCore
 
     public static class pzdxsdf
     {
+        /// <summary>
+        /// 获取配置abp cap集成模块的配置对象
+        /// </summary>
+        /// <param name="moduleConfigurations"></param>
+        /// <returns></returns>
         public static pzdx AbpCapEFCore(this IModuleConfigurations moduleConfigurations)
         {
             return moduleConfigurations.AbpConfiguration.Get<pzdx>();
         }
-
-        public static ICapTransaction sdfdf(this IUnitOfWorkManager uowManager,ICapPublisher publisher)
+        /// <summary>
+        /// 将cap的当前事务于abp uow的当前事务关联
+        /// </summary>
+        /// <param name="uow"></param>
+        /// <param name="publisher"></param>
+        public static void MountCapAbpEFCore(this IUnitOfWorkManager uowManager, ICapPublisher publisher)
+        {
+            uowManager.Current.MountCapAbpEFCore(publisher);
+        }
+        /// <summary>
+        /// 将cap的当前事务于abp uow的当前事务关联
+        /// </summary>
+        /// <param name="uow"></param>
+        /// <param name="publisher"></param>
+        public static void MountCapAbpEFCore(this IActiveUnitOfWork uow, ICapPublisher publisher)
         {
             var temp = publisher.ServiceProvider.GetRequiredService<IDispatcher>();
-            var uow = publisher.ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
+            //var uow = publisher.ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
             publisher.Transaction.Value = publisher.ServiceProvider.GetRequiredService<pzdx>().wt(temp, uow);
-            return publisher.Transaction.Value;
+            publisher.Transaction.Value.AutoCommit = true;
         }
     }
 
@@ -113,28 +160,44 @@ namespace BXJG.AbpZero.Cap.EFCore
     public class BXJGAbpCapEFCoreModule : AbpModule
     {
         // override pr
+
         public override void PreInitialize()
         {
             IocManager.Register<pzdx>();
             //IocManager.IocContainer.Kernel.ComponentCreated += Kernel_ComponentCreated;
         }
 
-        //cap
+        public override void Initialize()
+        {
+            IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
+        }
+
+        ////cap
         //private void Kernel_ComponentCreated(Castle.Core.ComponentModel model, object instance)
         //{
         //    // base.Configuration
-        //    if (instance is ICapPublisher publisher)
+        //    if (instance is EfCoreUnitOfWork uow)
         //    {
-        //        var temp = publisher.ServiceProvider.GetRequiredService<IDispatcher>();
-        //        var uow = IocManager.Resolve<IUnitOfWorkManager>();
-        //        publisher.Transaction.Value = Configuration.Modules.AbpCapEFCore().wt(temp, uow);
-        //        publisher.Transaction.Value.AutoCommit=true;
+        //        不行 uow.Option此时为空
+        //        //uow.
+        //        if (uow.Options.IsTransactional.HasValue && uow.Options.IsTransactional.Value)
+        //        {
+        //            var publisher = IocManager.Resolve<ICapPublisher>();
+        //           //ICapSubscribe sdf;
+
+        //            uow.MountCapAbpEFCore(publisher);
+        //            // var uow = IocManager.Resolve<IUnitOfWorkManager>();
+        //        }
+        //        //var temp = publisher.ServiceProvider.GetRequiredService<IDispatcher>();
+        //        //var uow = IocManager.Resolve<IUnitOfWorkManager>();
+        //        //publisher.Transaction.Value = Configuration.Modules.AbpCapEFCore().wt(temp, uow);
+        //        //publisher.Transaction.Value.AutoCommit = true;
         //    }
         //}
 
         //public override void Shutdown()
         //{
-        //    //IocManager.IocContainer.Kernel.ComponentCreated -= Kernel_ComponentCreated;
+        //    IocManager.IocContainer.Kernel.ComponentCreated -= Kernel_ComponentCreated;
         //}
     }
 }
