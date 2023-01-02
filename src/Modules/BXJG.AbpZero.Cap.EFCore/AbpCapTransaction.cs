@@ -23,6 +23,10 @@ namespace BXJG.AbpZero.Cap.EFCore
      * cap提供的提交是由cap来做事务提交，但在abp中事务提交是自动的
      * 因此我们定义的事务对象AbpCapTransaction不处理提交和回滚相关操作
      * 而事务本身的提交肯定还是基于底层的事务对象的，这个是改由我们的业务系统来提交
+     * 
+     * cap官方文档有说明幂等性的问题，cap实现的最少一次，所以存在多次消费，幂等性需要订阅放自己处理
+     * 因此猜测消费端只是消费和确认，但不保证消费与业务功能的幂等性，所以通常是 先消费（处理业务）然后确认（成功或是不都无所谓，大不了多消费一次）
+     * 消费服务类实现ICapSubscribe，然后在方法上 [CapSubscribe(EventConstants.EVENT_NAME_CREATE_ORDER)]，可以试试不实现那个接口行不
      */
 
     /// <summary>
