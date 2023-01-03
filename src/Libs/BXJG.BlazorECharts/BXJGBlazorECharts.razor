@@ -10,12 +10,23 @@
 
     private ElementReference container;
 
-    public ValueTask vt { get; private set; }= default;
+    public ValueTask vt { get; private set; } = default;
     /// <summary>
     /// 可选的初始数据
     /// </summary>
     [Parameter]
-    public object Option { get; set; }
+    public object Option { get; set; } = new object();
+
+    //public override Task SetParametersAsync(ParameterView parameters)
+    //{
+    //    if (parameters.TryGetValue<object>(nameof(Option), out var opt))
+    //    {
+    //        if (opt == null)
+    //            opt = new { };
+
+    //    }
+    //    return base.SetParametersAsync(parameters);
+    //}
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -30,6 +41,7 @@
 
     public async Task SetOption(object option)
     {
+        //await Task.Yield();
         // if (module != default )
         for (int i = 0; i < 500; i++)
         {
