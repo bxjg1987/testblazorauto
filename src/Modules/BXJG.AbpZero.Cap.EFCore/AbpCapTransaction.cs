@@ -54,7 +54,7 @@ namespace BXJG.AbpZero.Cap.EFCore
             this.uow = uow as EfCoreUnitOfWork;
          
 
-           var ss = this.uow.Outer;
+          // var ss = this.uow.Outer;
             //var tempOu = uow;
             //while (tempOu != null)
             //{
@@ -78,30 +78,22 @@ namespace BXJG.AbpZero.Cap.EFCore
 
         public override void Commit()
         {
-            //uow.Complete();
-            //Flush();
+         throw new NotImplementedException();
         }
 
         public override Task CommitAsync(CancellationToken cancellationToken = default)
         {
-            //  await Uow.CompleteAsync();
-
-            //Flush();
-            // uowManager.Current.Completed -= Uow_Completed;
-            //uowManager.Current.Completed += Uow_Completed;
-            return Task.CompletedTask;
+            throw new NotImplementedException();
         }
 
         public override void Rollback()
         {
-            // Uow.Current.rol
-            // Uow.Rollback();
+            throw new NotImplementedException();
         }
 
         public override Task RollbackAsync(CancellationToken cancellationToken = default)
         {
-            //  throw new NotImplementedException();
-            return Task.CompletedTask;
+            throw new NotImplementedException();
         }
 
         public override void Dispose()
