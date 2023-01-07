@@ -21,10 +21,6 @@ namespace BXJG.Utils.EFCore
         public override void PreInitialize()
         {
             IocManager.Register<BXJGEFCoreConfiguration>();
-            //引入cap动态解析连接字符串的方式会提示事务隔离级别报错，
-            //参考：https://github.com/aspnetboilerplate/aspnetboilerplate/issues/4538
-            //https://www.cnblogs.com/luckstar007/p/10949811.html
-            Configuration.UnitOfWork.IsolationLevel = System.Transactions.IsolationLevel.ReadCommitted;
         }
         public override void Initialize()
         {
