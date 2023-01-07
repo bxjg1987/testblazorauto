@@ -9,8 +9,11 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Security.Policy;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
+using System;
+using System.Threading.Tasks;
+using System.Threading;
 
-namespace BXJG.AbpZero.Cap.EFCore
+namespace BXJG.Utils.EFCore.CAP
 {
 
     /*
@@ -103,97 +106,5 @@ namespace BXJG.AbpZero.Cap.EFCore
             uow = null;
             DbTransaction = null;
         }
-    }
-    public class pzdx
-    {
-        internal Func<IDispatcher, IActiveUnitOfWork, ICapTransaction> wt;
-
-        /// <summary>
-        /// 指定cap使用的dbcontext类型
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        public void InitDbContext<T>() where T : DbContext
-        {
-            wt = (c, uow) => new AbpCapTransaction<T>(c, uow);
-        }
-    }
-
-    public static class pzdxsdf
-    {
-        /// <summary>
-        /// 获取配置abp cap集成模块的配置对象
-        /// </summary>
-        /// <param name="moduleConfigurations"></param>
-        /// <returns></returns>
-        public static pzdx AbpCapEFCore(this IModuleConfigurations moduleConfigurations)
-        {
-            return moduleConfigurations.AbpConfiguration.Get<pzdx>();
-        }
-        /// <summary>
-        /// 将cap的当前事务于abp uow的当前事务关联
-        /// </summary>
-        /// <param name="uow"></param>
-        /// <param name="publisher"></param>
-        public static void MountCapAbpEFCore(this IUnitOfWorkManager uowManager, ICapPublisher publisher)
-        {
-            uowManager.Current.MountCapAbpEFCore(publisher);
-        }
-        /// <summary>
-        /// 将cap的当前事务于abp uow的当前事务关联
-        /// </summary>
-        /// <param name="uow"></param>
-        /// <param name="publisher"></param>
-        public static void MountCapAbpEFCore(this IActiveUnitOfWork uow, ICapPublisher publisher)
-        {
-            var temp = publisher.ServiceProvider.GetRequiredService<IDispatcher>();
-            //var uow = publisher.ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
-            publisher.Transaction.Value = publisher.ServiceProvider.GetRequiredService<pzdx>().wt(temp, uow);
-            publisher.Transaction.Value.AutoCommit = true;
-        }
-    }
-
-    [DependsOn(typeof(Abp.EntityFrameworkCore.AbpEntityFrameworkCoreModule))]
-    public class BXJGAbpCapEFCoreModule : AbpModule
-    {
-        // override pr
-
-        public override void PreInitialize()
-        {
-            IocManager.Register<pzdx>();
-            //IocManager.IocContainer.Kernel.ComponentCreated += Kernel_ComponentCreated;
-        }
-
-        public override void Initialize()
-        {
-            IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
-        }
-
-        ////cap
-        //private void Kernel_ComponentCreated(Castle.Core.ComponentModel model, object instance)
-        //{
-        //    // base.Configuration
-        //    if (instance is EfCoreUnitOfWork uow)
-        //    {
-        //        不行 uow.Option此时为空
-        //        //uow.
-        //        if (uow.Options.IsTransactional.HasValue && uow.Options.IsTransactional.Value)
-        //        {
-        //            var publisher = IocManager.Resolve<ICapPublisher>();
-        //           //ICapSubscribe sdf;
-
-        //            uow.MountCapAbpEFCore(publisher);
-        //            // var uow = IocManager.Resolve<IUnitOfWorkManager>();
-        //        }
-        //        //var temp = publisher.ServiceProvider.GetRequiredService<IDispatcher>();
-        //        //var uow = IocManager.Resolve<IUnitOfWorkManager>();
-        //        //publisher.Transaction.Value = Configuration.Modules.AbpCapEFCore().wt(temp, uow);
-        //        //publisher.Transaction.Value.AutoCommit = true;
-        //    }
-        //}
-
-        //public override void Shutdown()
-        //{
-        //    IocManager.IocContainer.Kernel.ComponentCreated -= Kernel_ComponentCreated;
-        //}
     }
 }

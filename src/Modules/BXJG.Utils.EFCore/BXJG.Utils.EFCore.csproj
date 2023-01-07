@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <PackageReference Include="Abp.ZeroCore.EntityFrameworkCore" Version="8.0.0" />
+    <PackageReference Include="DotNetCore.CAP" Version="7.0.1" />
   </ItemGroup>
 
   <ItemGroup>
