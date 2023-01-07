@@ -20,6 +20,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Abp.Domain.Uow;
 using System;
 using Abp.Threading;
+using System.Threading.Tasks;
 
 namespace BXJG.Utils
 {
@@ -86,23 +87,14 @@ namespace BXJG.Utils
             //而asp.net core默认读取是在ZLJ.Web.Host\wwwroot 导致上传的文件看不到效果
             //发布到服务器后不存在这个问题，调试时需要在web.core模块PreInitialize中替换服务，注意经过测试一定要在PreInitialize中替换
             //IocManager.Register<IEnv, Utils.File.DefaultEnv>(Abp.Dependency.DependencyLifeStyle.Singleton);
+
+            IocManager.Register<IEnv, NullEnv>();
         }
 
         public override void PostInitialize()
         {
-            var utilsCfg = Configuration.Modules.BXJGUtils();
-            var workManager = IocManager.Resolve<IBackgroundWorkerManager>();
-            //运行ZLJ.Migrator时会确实依赖服务，所以这里try下
-            try
-            {
-                workManager.Add(IocManager.Resolve<RemoveUploadFileWorker>());
-            }
-            catch
-            {
-
-            }
-
             #region 本地化枚举系统
+            var utilsCfg = Configuration.Modules.BXJGUtils();
             var list = new List<EnumLocalizationDefine>();
             foreach (var item in utilsCfg.EnumLocalizationProviders)
             {
@@ -122,6 +114,22 @@ namespace BXJG.Utils
             var sdf = new EnumLocalizationContainer(list);
             base.IocManager.RegService(c => c.TryAddSingleton(sdf));
             #endregion
+
+
+
+
+            //运行ZLJ.Migrator时会确实依赖服务，所以这里try下 但是这里try了 若正式用的时候你都不晓得错没错
+            // try
+            //{
+
+            //Task.Yield();
+            var workManager = IocManager.Resolve<IBackgroundWorkerManager>();
+            workManager.Add(IocManager.Resolve<RemoveUploadFileWorker>());
+            //}
+            // catch
+            // {
+
+            //}
         }
     }
 }

@@ -31,4 +31,12 @@ namespace BXJG.Common
         /// </summary>
         string SecureDirectory { get; }
     }
+    public class NullEnv : IEnv
+    {
+        public string WebRoot => "wwwroot";
+
+        public string RootUrl => "/";
+
+        public string SecureDirectory => "SecureDirectory";
+    }
 }
