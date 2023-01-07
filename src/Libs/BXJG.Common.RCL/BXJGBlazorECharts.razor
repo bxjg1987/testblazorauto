@@ -1,4 +1,5 @@
-﻿@implements IAsyncDisposable
+﻿
+@implements IAsyncDisposable
 @inject IJSRuntime JS
 @inherits OwningComponentBase
 <div @ref="container" @attributes="InputAttributes"></div>
@@ -32,7 +33,7 @@
     {
         if (firstRender)
         {
-            module = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/BXJG.BlazorECharts/BXJGBlazorECharts.razor.js");
+            module = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/BXJG.Common.RCL/BXJGBlazorECharts.razor.js");
             vt = module.InvokeVoidAsync("init", container, Option);
             this.Option = default;
             await vt;
