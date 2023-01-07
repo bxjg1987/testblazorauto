@@ -1,0 +1,42 @@
+﻿@inject NavigationManager Navigation
+@inject IOptions<CookieAuthenticationOptions> cookieOption
+@inject AuthenticationStateProvider AuthenticationStateProvider
+正在跳转到登录页...
+@code {
+    /// <summary>
+    /// 登陆地址，为空则取CookieAuthenticationOptions的同名属性
+    /// </summary>
+    [Parameter]
+    public string LoginPath { get; set; }
+
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authenticationState = await authenticationStateTask;
+
+        if (authenticationState?.User?.Identity is null || !authenticationState.User.Identity.IsAuthenticated)
+        {
+            var bs = cookieOption.Value.LoginPath;
+            if (!string.IsNullOrWhiteSpace(LoginPath))
+                bs = LoginPath;
+
+            var returnUrl = Navigation.ToBaseRelativePath(Navigation.Uri).TrimStart('/');
+
+            if (string.IsNullOrWhiteSpace(returnUrl))
+                Navigation.NavigateTo(bs, true);
+            else
+            {
+                var tmp = bs.Value;
+
+                if (tmp.Contains("?"))
+                    tmp += "&";
+                else
+                    tmp += "?";
+
+                Navigation.NavigateTo($"{tmp}returnUrl=/{returnUrl}", true);
+            }
+        }
+    }
+}
