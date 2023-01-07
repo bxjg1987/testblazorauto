@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Libs\BXJG.Common.RCL\BXJG.Common.RCL.csproj" />
     <ProjectReference Include="..\BXJG.Utils.Application\BXJG.Utils.Application.csproj" />
   </ItemGroup>
 
