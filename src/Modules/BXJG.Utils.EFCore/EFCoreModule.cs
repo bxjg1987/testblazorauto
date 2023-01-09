@@ -11,17 +11,16 @@ using DotNetCore.CAP.Transport;
 using DotNetCore.CAP;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using BXJG.Utils.EFCore.CAP;
 
 namespace BXJG.Utils.EFCore
 {
     [DependsOn(typeof(BXJGUtilsModule))]
     public class EFCoreModule : AbpModule
     {
-        public override void PreInitialize()
-        {
-            IocManager.Register<BXJGEFCoreConfiguration>();
-        }
+        //public override void PreInitialize()
+        //{
+        //    IocManager.Register<BXJGEFCoreConfiguration>();
+        //}
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());

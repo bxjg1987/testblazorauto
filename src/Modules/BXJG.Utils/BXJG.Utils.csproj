@@ -58,6 +58,7 @@
     <PackageReference Include="Abp.ZeroCore" Version="8.0.0" />
     <PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="3.*" />
     <PackageReference Include="DistributedLock.Core" Version="1.*" />
+    <PackageReference Include="DotNetCore.CAP" Version="7.0.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="MimeTypesMap" Version="1.*" />

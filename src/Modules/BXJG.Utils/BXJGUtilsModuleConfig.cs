@@ -1,4 +1,7 @@
-﻿using BXJG.Utils.Enums;
+﻿using Abp.Domain.Uow;
+using BXJG.Utils.Enums;
+using DotNetCore.CAP.Transport;
+using DotNetCore.CAP;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -22,7 +25,7 @@ namespace BXJG.Utils
         /// 通过它注册本地化枚举定义
         /// </summary>
         public ICollection<Func<IEnumerable<EnumLocalizationDefine>>> EnumLocalizationProviders { get; internal set; } = new List<Func<IEnumerable<EnumLocalizationDefine>>>();
-
+        public Func<IDispatcher, IActiveUnitOfWork, ICapTransaction> wt;
 
         public BXJGUtilsModuleConfig()
         {

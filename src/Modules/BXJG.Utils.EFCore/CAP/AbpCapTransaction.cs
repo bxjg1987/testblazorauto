@@ -12,6 +12,7 @@ using System.Reflection;
 using System;
 using System.Threading.Tasks;
 using System.Threading;
+using Microsoft.AspNetCore.Mvc.TagHelpers.Cache;
 
 namespace BXJG.Utils.EFCore.CAP
 {
@@ -81,22 +82,23 @@ namespace BXJG.Utils.EFCore.CAP
 
         public override void Commit()
         {
-         throw new NotImplementedException();
+       //  throw new NotImplementedException();
         }
 
         public override Task CommitAsync(CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
+          //  throw new NotImplementedException();
         }
 
         public override void Rollback()
         {
-            throw new NotImplementedException();
+           // throw new NotImplementedException();
         }
 
         public override Task RollbackAsync(CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public override void Dispose()
