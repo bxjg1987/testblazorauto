@@ -5,7 +5,7 @@ using Abp.Reflection.Extensions;
 using Abp.Dependency;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
-using Castle.Windsor.MsDependencyInjection;
+//using Castle.Windsor.MsDependencyInjection;
 using Microsoft.AspNetCore.Authorization;
 using BXJG.Utils.Authorization;
 using System.Collections.Generic;

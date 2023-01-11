@@ -2,7 +2,7 @@
 using Abp.Modules;
 using BXJG.Utils;
 using BXJG.WeChat.Pay;
-using Castle.Windsor.MsDependencyInjection;
+//using Castle.Windsor.MsDependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
