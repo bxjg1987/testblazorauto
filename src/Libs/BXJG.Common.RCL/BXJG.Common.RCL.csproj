@@ -15,6 +15,10 @@
     <Folder Include="Areas\MyFeature\Pages\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BXJG.Common.Web\BXJG.Common.Web.csproj" />
+  </ItemGroup>
+
 
 
 </Project>
