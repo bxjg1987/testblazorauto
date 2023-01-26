@@ -22,7 +22,7 @@ namespace BXJG.Utils
         /// <typeparam name="T"></typeparam>
         public static void InitDbContext<T>(this BXJGUtilsModuleConfig cfg) where T : DbContext
         {
-           // cfg.wt = (c, uow) => new AbpCapTransaction<T>(c, uow);
+            cfg.wt = (c, uow) => new AbpCapTransaction<T>(c, uow);
         }
     }
 }

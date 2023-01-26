@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Castle.Core;
 using BXJG.Utils.EFCore.CAP;
+using Abp.Application.Services;
 
 namespace BXJG.Utils.EFCore
 {
@@ -25,12 +26,11 @@ namespace BXJG.Utils.EFCore
 
             IocManager.IocContainer.Kernel.ComponentRegistered += (key, handler) =>
             {
-                if (typeof(ICapSubscribe).IsAssignableFrom(handler.ComponentModel.Implementation))
+                if (typeof(IApplicationService).IsAssignableFrom(handler.ComponentModel.Implementation))
                 {
                     handler.ComponentModel.Interceptors.Add(new InterceptorReference(typeof(AbpAsyncDeterminationInterceptor<AbpCapTranInterceptor>)));
                 }
             };
-
         }
         public override void Initialize()
         {

@@ -1,7 +1,7 @@
 ﻿using Abp.Domain.Uow;
 using BXJG.Utils.Enums;
-using DotNetCore.CAP.Transport;
 using DotNetCore.CAP;
+using DotNetCore.CAP.Transport;
 using System;
 using System.Collections.Generic;
 using System.Text;

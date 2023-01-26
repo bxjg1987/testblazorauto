@@ -38,10 +38,9 @@ namespace BXJG.Utils.EFCore.CAP
     /// <summary>
     /// 由于cap要支持ef和数据库邓多种事务方式，因此定义了ICapTransaction对事务抽象
     /// </summary>
-    public class AbpCapTransaction : CapTransactionBase,ITransientDependency
+    public class AbpCapTransaction<TDbContext> : CapTransactionBase where TDbContext : DbContext
     {
-        private readonly IUnitOfWorkManager uowManager;
-        public AbpCapTransaction(IDispatcher dispatcher, IUnitOfWorkManager uowManager) : base(dispatcher)
+        public AbpCapTransaction(IDispatcher dispatcher, IActiveUnitOfWork uow) : base(dispatcher)
         {
             //IUnitOfWorkManager ss;
             //ss.be
@@ -66,43 +65,46 @@ namespace BXJG.Utils.EFCore.CAP
             //    tempOu = tempOu.Options
             //}
            // base.AutoCommit = true;
-            this.uowManager = uowManager;
-         //   this.uowManager.Current.Completed += Uow_Completed;
+            this.uow = uow as EfCoreUnitOfWork;
+          
+            this.uow.Completed += Uow_Completed;
             // this.uowManager.Current.com
         }
 
-        //private void Uow_Completed(object? sender, EventArgs e)
-        //{
-        //    Flush();
-        //    //Dispose();
-        //}
+        private void Uow_Completed(object? sender, EventArgs e)
+        {
+            Flush();
+            //Dispose();
+        }
 
-        public EfCoreUnitOfWork uow => this.uowManager.Current as EfCoreUnitOfWork;
+        public EfCoreUnitOfWork uow { get; private set; }
 
         public override object? DbTransaction
         {
             get
             {
-                var temp = uow.GetAllActiveDbContexts();
-                if (temp == null || temp.Count == 0)
-                {
-                    //throw new ApplicationException("无法从当前工作单元获取事务对象，请在工作单元事务激活后执行此操作。");
-                    return null;
-                }
-                return temp[0].Database.CurrentTransaction.GetDbTransaction();
+                var temp = uow.GetOrCreateDbContext<TDbContext>();
+                return temp.Database.CurrentTransaction;
+                //var temp = uow.GetAllActiveDbContexts();
+                //if (temp == null || temp.Count == 0 || uow.Options.IsTransactional==false)
+                //{
+                //    //throw new ApplicationException("无法从当前工作单元获取事务对象，请在工作单元事务激活后执行此操作。");
+                //    return null;
+                //}
+                //return temp[0].Database.CurrentTransaction.GetDbTransaction();
             }
         }
         //提交留给abp自动提交去做；回滚本来就是自动的
 
         public override void Commit()
         {
-            Flush();
-            //  throw new NotImplementedException();
+          //  Flush();
+            //throw new NotImplementedException();
         }
 
         public override Task CommitAsync(CancellationToken cancellationToken = default)
         {
-            Flush();
+          //  Flush();
             return Task.CompletedTask;
             //  throw new NotImplementedException();
         }
@@ -119,7 +121,7 @@ namespace BXJG.Utils.EFCore.CAP
 
         public override void Dispose()
         {
-            //uow.Completed -= Uow_Completed;
+            uow.Completed -= Uow_Completed;
             //Uow.Dispose();
             // uow = null;
             // this.uowManager = null;
