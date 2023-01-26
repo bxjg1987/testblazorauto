@@ -65,7 +65,7 @@ namespace BXJG.Utils.EFCore.CAP
             //{
             //    tempOu = tempOu.Options
             //}
-
+           // base.AutoCommit = true;
             this.uowManager = uowManager;
          //   this.uowManager.Current.Completed += Uow_Completed;
             // this.uowManager.Current.com

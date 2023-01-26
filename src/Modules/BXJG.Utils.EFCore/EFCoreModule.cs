@@ -11,19 +11,32 @@ using DotNetCore.CAP.Transport;
 using DotNetCore.CAP;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Castle.Core;
+using BXJG.Utils.EFCore.CAP;
 
 namespace BXJG.Utils.EFCore
 {
     [DependsOn(typeof(BXJGUtilsModule))]
     public class EFCoreModule : AbpModule
     {
-        //public override void PreInitialize()
-        //{
-        //    IocManager.Register<BXJGEFCoreConfiguration>();
-        //}
+        public override void PreInitialize()
+        {
+            // IocManager.Register<BXJGEFCoreConfiguration>();
+
+            IocManager.IocContainer.Kernel.ComponentRegistered += (key, handler) =>
+            {
+                if (typeof(ICapSubscribe).IsAssignableFrom(handler.ComponentModel.Implementation))
+                {
+                    handler.ComponentModel.Interceptors.Add(new InterceptorReference(typeof(AbpAsyncDeterminationInterceptor<AbpCapTranInterceptor>)));
+                }
+            };
+
+        }
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
+
+            IocManager.Register(typeof(AbpAsyncDeterminationInterceptor<AbpCapTranInterceptor>), DependencyLifeStyle.Transient);
         }
 
         public override void PostInitialize()
