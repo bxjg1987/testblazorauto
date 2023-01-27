@@ -37,7 +37,7 @@ namespace Abp.Domain.Uow
             var temp = publisher.ServiceProvider.GetRequiredService<IDispatcher>();
             //var uow = publisher.ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
             publisher.Transaction.Value = publisher.ServiceProvider.GetRequiredService<BXJGUtilsModuleConfig>().wt(temp, uow);
-            publisher.Transaction.Value.AutoCommit = true;
+            publisher.Transaction.Value.AutoCommit = false;
         }
     }
 
