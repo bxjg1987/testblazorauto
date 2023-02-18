@@ -16,6 +16,10 @@ using BXJG.Utils.AutoMapper;
 using BXJG.Common.Dto;
 using BXJG.Utils.Concurrency;
 using System.Linq;
+using Abp.Application.Services;
+using Castle.Core;
+using BXJG.Utils.CAP;
+using DotNetCore.CAP;
 
 namespace BXJG.Utils
 {
@@ -48,6 +52,14 @@ namespace BXJG.Utils
                 cfg.AddMaps(Assembly.GetExecutingAssembly());
             });
 
+            IocManager.IocContainer.Kernel.ComponentRegistered += (key, handler) =>
+            {
+                if (typeof(ICapSubscribe).IsAssignableFrom(handler.ComponentModel.Implementation))
+                {
+                    handler.ComponentModel.Interceptors.Add(new InterceptorReference(typeof(AbpAsyncDeterminationInterceptor<AbpCapSubscriptInterceptor>)));
+                }
+            };
+
             //Configuration.Modules.AbpAutoMapper().Configurators.Add(cfg => cfg.AddMaps(Assembly.GetExecutingAssembly()));
             //统一配置abp扩展属性映射
             //Configuration.Modules.AbpAutoMapper().Configurators.Add(cfg =>
@@ -64,7 +76,7 @@ namespace BXJG.Utils
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
-
+            IocManager.Register(typeof(AbpAsyncDeterminationInterceptor<AbpCapSubscriptInterceptor>), DependencyLifeStyle.Transient);
             //注册附件应用服务，它不实现abp的应用服务，所以不会生成动态webApi
             //IocManager.Register(typeof(AttachmentAppService<>), DependencyLifeStyle.Transient);
         }
