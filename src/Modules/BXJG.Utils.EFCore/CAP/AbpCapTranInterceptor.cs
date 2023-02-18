@@ -32,13 +32,13 @@ namespace BXJG.Utils.EFCore.CAP
 
         public override void InterceptSynchronous(IInvocation invocation)
         {
-            Intercept();
+            Intercept(invocation);
             invocation.Proceed();
         }
 
         protected override async Task InternalInterceptAsynchronous(IInvocation invocation)
         {
-            Intercept();
+            Intercept(invocation);
             var proceedInfo = invocation.CaptureProceedInfo();
             proceedInfo.Invoke();
             var task = (Task)invocation.ReturnValue;
@@ -47,16 +47,18 @@ namespace BXJG.Utils.EFCore.CAP
 
         protected override async Task<TResult> InternalInterceptAsynchronous<TResult>(IInvocation invocation)
         {
-            Intercept();
+            Intercept(invocation);
             var proceedInfo = invocation.CaptureProceedInfo();
             proceedInfo.Invoke();
             var taskResult = (Task<TResult>)invocation.ReturnValue;
             return await taskResult;
         }
 
-        private void Intercept()
+        private void Intercept(IInvocation invocation)
         {
-            if (unitOfWorkManager.Current != null && unitOfWorkManager.Current.Options.IsTransactional == true)
+            //if (invocation.Method.Name.Contains("TestCap"))
+            //    throw new Exception();
+            if (unitOfWorkManager.Current != null && unitOfWorkManager.Current.Options.IsTransactional == true&& capPublisher.Transaction?.Value==default)
             {
                 capPublisher.Transaction.Value = abpCapTransaction.wt(dispatcher, unitOfWorkManager.Current);
                 capPublisher.Transaction.Value.AutoCommit = false;
