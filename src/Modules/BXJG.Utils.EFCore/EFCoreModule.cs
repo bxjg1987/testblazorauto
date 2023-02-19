@@ -26,7 +26,7 @@ namespace BXJG.Utils.EFCore
 
             IocManager.IocContainer.Kernel.ComponentRegistered += (key, handler) =>
             {
-                if (typeof(IApplicationService).IsAssignableFrom(handler.ComponentModel.Implementation))
+                if (typeof(IApplicationService).IsAssignableFrom(handler.ComponentModel.Implementation) || typeof(ICapSubscribe).IsAssignableFrom(handler.ComponentModel.Implementation))
                 {
                     handler.ComponentModel.Interceptors.Add(new InterceptorReference(typeof(AbpAsyncDeterminationInterceptor<AbpCapTranInterceptor>)));
                 }
