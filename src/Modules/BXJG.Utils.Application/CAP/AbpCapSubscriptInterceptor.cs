@@ -25,7 +25,7 @@ namespace BXJG.Utils.CAP
 
         public override void InterceptSynchronous(IInvocation invocation)
         {
-            if (invocation.MethodInvocationTarget.GetCustomAttribute<CapSubscribeAttribute>() != default&& unitOfWorkManager.Current==default)
+            if (invocation.MethodInvocationTarget.GetCustomAttribute<CapSubscribeAttribute>() != default && unitOfWorkManager.Current == default)
             {
                 using (var scope = this.unitOfWorkManager.Begin())
                 {
@@ -50,6 +50,7 @@ namespace BXJG.Utils.CAP
                     proceedInfo.Invoke();
                     var task = (Task)invocation.ReturnValue;
                     await task;
+                    await scope.CompleteAsync();
                     return;
                 }
             }
@@ -69,7 +70,9 @@ namespace BXJG.Utils.CAP
                     var proceedInfo = invocation.CaptureProceedInfo();
                     proceedInfo.Invoke();
                     var taskResult = (Task<TResult>)invocation.ReturnValue;
-                    return await taskResult;
+                    var r = await taskResult;
+                    await scope.CompleteAsync();
+                    return r;
                 }
             }
             var proceedInfo1 = invocation.CaptureProceedInfo();
