@@ -27,7 +27,11 @@ namespace Abp.Authorization
         {
             if (permission.Properties.TryGetValue(sdf, out var r))
             {
-                var persmissions = IocManager.Instance.Resolve<IPermissionManager>().GetAllPermissions();
+                IReadOnlyList<Permission> persmissions = default;
+                IocManager.Instance.UsingScope(sr =>
+                {
+                    persmissions = IocManager.Instance.Resolve<IPermissionManager>().GetAllPermissions();
+                });
                 var ary = r as string[];
                 return persmissions.Where(c => ary.Contains(c.Name));
             }
@@ -35,7 +39,11 @@ namespace Abp.Authorization
         }
         public static IEnumerable<Permission> GetDependentedPermissions(this Permission permission)
         {
-            var persmissions = IocManager.Instance.Resolve<IPermissionManager>().GetAllPermissions();
+            IReadOnlyList<Permission> persmissions = default;
+            IocManager.Instance.UsingScope(sr =>
+            {
+                persmissions = IocManager.Instance.Resolve<IPermissionManager>().GetAllPermissions();
+            });
             foreach (var item in persmissions)
             {
                 if (item.Properties.TryGetValue(sdf, out var r))
