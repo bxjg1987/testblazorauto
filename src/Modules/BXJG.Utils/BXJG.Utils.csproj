@@ -52,17 +52,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Abp" Version="8.0.0" />
-    <PackageReference Include="Abp.AutoMapper" Version="8.0.0" />
-    <PackageReference Include="Abp.Zero.Common" Version="8.0.0" />
-    <PackageReference Include="Abp.ZeroCore" Version="8.0.0" />
+    <PackageReference Include="Abp" Version="8.1.0" />
+    <PackageReference Include="Abp.AutoMapper" Version="8.1.0" />
+    <PackageReference Include="Abp.Zero.Common" Version="8.1.0" />
+    <PackageReference Include="Abp.ZeroCore" Version="8.1.0" />
     <PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="3.*" />
     <PackageReference Include="DistributedLock.Core" Version="1.*" />
     <PackageReference Include="DotNetCore.CAP" Version="7.0.3" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="MimeTypesMap" Version="1.*" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="2.*" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.0.0" />
     <PackageReference Include="System.Drawing.Common" Version="7.*" />
   </ItemGroup>
 
