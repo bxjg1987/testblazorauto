@@ -30,7 +30,7 @@ namespace Abp.Authorization
                 IReadOnlyList<Permission> persmissions = default;
                 IocManager.Instance.UsingScope(sr =>
                 {
-                    persmissions = IocManager.Instance.Resolve<IPermissionManager>().GetAllPermissions();
+                    persmissions = sr.Resolve<IPermissionManager>().GetAllPermissions();
                 });
                 var ary = r as string[];
                 return persmissions.Where(c => ary.Contains(c.Name));
@@ -42,7 +42,7 @@ namespace Abp.Authorization
             IReadOnlyList<Permission> persmissions = default;
             IocManager.Instance.UsingScope(sr =>
             {
-                persmissions = IocManager.Instance.Resolve<IPermissionManager>().GetAllPermissions();
+                persmissions = sr.Resolve<IPermissionManager>().GetAllPermissions();
             });
             foreach (var item in persmissions)
             {
