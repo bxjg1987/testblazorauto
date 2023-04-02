@@ -155,7 +155,7 @@ namespace System
         /// <param name="right"></param>
         /// <returns></returns>
         public static T[] CaptureClipFromLoop<T>(this T[] list, T index, int count, bool right = true)
-        { 
+        {
             var idx = Array.IndexOf(list, index);
             return list.CaptureClipFromLoop(index, count, right);
         }
@@ -198,7 +198,7 @@ namespace System
             else
             {
                 //new int[] { 1,2,3,4,5,6,7,8,9,10,11,12 }.CaptureClipFromLoop(1, 3,false);
-                int endLength = Math.Max(index - count+1, 0);
+                int endLength = Math.Max(index - count + 1, 0);
                 int accrue = 0;
 
                 for (int i = index; i >= endLength; i--)
@@ -235,6 +235,16 @@ namespace System
                 name = attr.Description;
             }
             return name;
+        }
+
+        public static bool IsNullOrWhiteSpace(this string str)
+        {
+            return string.IsNullOrWhiteSpace(str);
+        }
+
+        public static bool IsNotNullOrWhiteSpace(this string str)
+        {
+            return !str.IsNullOrWhiteSpace();
         }
     }
 }

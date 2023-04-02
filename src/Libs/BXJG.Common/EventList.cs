@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace BXJG.Common
 {
+    [Obsolete("微软有自带的包含事件的集合ObservableCollection")]
     public class EventList<T> : IList<T>
     {
         public event Action<EventList<T>, T> OnAdd;
