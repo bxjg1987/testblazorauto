@@ -290,7 +290,7 @@ namespace BXJG.Utils.GeneralTree
             TEntity parent = null;
             IList<TEntity> children;
 
-            if (!parentCode.IsNullOrWhiteSpace())
+            if (!Abp.Extensions.StringExtensions.IsNullOrWhiteSpace(parentCode))
             {
                 children = await GetFlattenOffspringAsync(parentCode);
                 parent = children[0];

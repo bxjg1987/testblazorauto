@@ -61,7 +61,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\libs\BXJG.WeChat.Web\BXJG.WeChat.Web.csproj" />
-    <ProjectReference Include="..\ZLJ.Web.Core\ZLJ.Web.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Abp.Castle.Log4Net" Version="*" />

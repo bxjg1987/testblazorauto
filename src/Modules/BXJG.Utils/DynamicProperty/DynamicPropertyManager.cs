@@ -60,13 +60,13 @@ namespace BXJG.Utils.DynamicProperty
             foreach (var c in input)
             {
                 //若是不符要求的输入则跳过
-                if (c.DisplayName.IsNullOrWhiteSpace())
+                if (Abp.Extensions.StringExtensions.IsNullOrWhiteSpace(c.DisplayName))
                     continue;
-                if (c.PropertyName.IsNullOrWhiteSpace())
+                if (Abp.Extensions.StringExtensions.IsNullOrWhiteSpace(c.PropertyName))
                     continue;
-                if (c.InputType.IsNullOrWhiteSpace())
+                if (Abp.Extensions.StringExtensions.IsNullOrWhiteSpace(c.InputType))
                     continue;
-                if (c.InputType.Equals(inputType, StringComparison.OrdinalIgnoreCase) && c.PropertyValues.IsNullOrWhiteSpace())
+                if (c.InputType.Equals(inputType, StringComparison.OrdinalIgnoreCase) && Abp.Extensions.StringExtensions.IsNullOrWhiteSpace(c.PropertyValues))
                     continue;
 
                 //动态属性

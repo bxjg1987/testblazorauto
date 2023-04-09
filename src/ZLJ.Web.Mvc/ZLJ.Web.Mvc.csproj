@@ -28,9 +28,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ZLJ.Web.Core\ZLJ.Web.Core.csproj" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="*">
       <PrivateAssets>all</PrivateAssets>

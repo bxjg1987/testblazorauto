@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <RootNamespace>BXJG.Utils</RootNamespace>
-    <Version>1.2.8</Version>
+    <Version>1.2.10</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
@@ -25,11 +25,7 @@
 
   <ItemGroup>
     <PackageReference Include="Abp.AspNetCore" Version="8.1.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\libs\BXJG.Common.Web\BXJG.Common.Web.csproj" />
-    <ProjectReference Include="..\BXJG.Utils.Application\BXJG.Utils.Application.csproj" />
-    <ProjectReference Include="..\BXJG.Utils\BXJG.Utils.csproj" />
+    <PackageReference Include="BXJG.Common.Web" Version="1.2.10" />
+    <PackageReference Include="BXJG.Utils.Application" Version="1.2.10" />
   </ItemGroup>
 </Project>

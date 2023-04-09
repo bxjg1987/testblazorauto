@@ -52,10 +52,6 @@
     <Compile Remove="Shop\BXJGShopOrderAppService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BaseInfo\BXJG.BaseInfo.Application\BXJG.BaseInfo.Application.csproj" />
-    <ProjectReference Include="..\cms\BXJG.CMS.Application\BXJG.CMS.Application.csproj" />
-    <ProjectReference Include="..\Equipment\BXJG.Equipment.Application\BXJG.Equipment.Application.csproj" />
-    <ProjectReference Include="..\shop\BXJG.Shop.Application\BXJG.Shop.Application.csproj" />
     <ProjectReference Include="..\WorkOrder\BXJG.WorkOrder.Application\BXJG.WorkOrder.Application.csproj" />
     <ProjectReference Include="..\WorkOrder\BXJG.WorkOrder.EmployeeApplication\BXJG.WorkOrder.EmployeeApplication.csproj" />
     <ProjectReference Include="..\ZLJ.Core\ZLJ.Core.csproj" />

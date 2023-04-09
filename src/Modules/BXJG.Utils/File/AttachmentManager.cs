@@ -49,7 +49,7 @@ namespace BXJG.Utils.File
             //查询旧文件的相对url
             var qq = repository.GetAll()
                                .Where(c => c.EntityType == entityType && c.EntityId == entityId.ToString())
-                               .WhereIf(!propertyName.IsNullOrWhiteSpace(),c=>c.PropertyName==propertyName)
+                               .WhereIf(!Abp.Extensions.StringExtensions.IsNullOrWhiteSpace(propertyName),c=>c.PropertyName==propertyName)
                                .Select(c => c.RelativeFileUrl);
             var qqList = await AsyncQueryableExecuter.ToListAsync(qq);
             string[] needDelete = new string[0];
