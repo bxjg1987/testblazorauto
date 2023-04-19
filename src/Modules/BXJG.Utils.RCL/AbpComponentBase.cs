@@ -39,22 +39,19 @@ namespace BXJG.Utils.RCL
      * 总的来说，通常是不需要的，应用用例基本都是对应到应用服务的
      */
 
-    public class AbpComponentBase<TUser, TUserManager, TRole, TRoleManager, TTenant, TTenantManager> : OwningComponentBase
+    public class AbpComponentBase<TUser, TUserManager, TRole> : OwningComponentBase
         where TUser : AbpUser<TUser>
         where TRole : AbpRole<TUser>, new()
-        where TRoleManager : AbpRoleManager<TRole, TUser>
         where TUserManager : AbpUserManager<TRole, TUser>
-        where TTenant : AbpTenant<TUser>
-        where TTenantManager : AbpTenantManager<TTenant, TUser>
     {
         Lazy<IAbpSession> abpSession;
         protected IAbpSession AbpSession => abpSession.Value;
 
-        Lazy<TTenantManager> tenantManager;
-        protected TTenantManager TenantManager => tenantManager.Value;
+        //Lazy<TTenantManager> tenantManager;
+        //protected TTenantManager TenantManager => tenantManager.Value;
 
-        Lazy<TRoleManager> roleManager;
-        protected TRoleManager RoleManager => roleManager.Value;
+        //Lazy<TRoleManager> roleManager;
+        //protected TRoleManager RoleManager => roleManager.Value;
 
         Lazy<TUserManager> userManager;
         protected TUserManager UserManager => userManager.Value;
@@ -137,8 +134,8 @@ namespace BXJG.Utils.RCL
         protected override void OnInitialized()
         {
             abpSession = ScopedServices.GetRequiredService<Lazy<IAbpSession>>();
-            tenantManager = ScopedServices.GetRequiredService<Lazy<TTenantManager>>();
-            roleManager = ScopedServices.GetRequiredService<Lazy<TRoleManager>>();
+            //tenantManager = ScopedServices.GetRequiredService<Lazy<TTenantManager>>();
+            //roleManager = ScopedServices.GetRequiredService<Lazy<TRoleManager>>();
             userManager = ScopedServices.GetRequiredService<Lazy<TUserManager>>();
             unitOfWorkManager = ScopedServices.GetRequiredService<Lazy<IUnitOfWorkManager>>();
             localizationManager = ScopedServices.GetRequiredService<Lazy<ILocalizationManager>>();
