@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>1.2.10</Version>
+    <Version>1.2.11</Version>
     <!--<TargetFramework>netstandard2.1</TargetFramework>-->
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
@@ -56,7 +56,6 @@
     <PackageReference Include="Abp.AutoMapper" Version="8.1.0" />
     <PackageReference Include="Abp.Zero.Common" Version="8.1.0" />
     <PackageReference Include="Abp.ZeroCore" Version="8.1.0" />
-    <PackageReference Include="BXJG.Common" Version="1.2.10" />
     <PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="3.*" />
     <PackageReference Include="DistributedLock.Core" Version="1.*" />
     <PackageReference Include="DotNetCore.CAP" Version="7.1.1" />
@@ -65,6 +64,10 @@
     <PackageReference Include="MimeTypesMap" Version="1.*" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.0.1" />
     <PackageReference Include="System.Drawing.Common" Version="7.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\libs\BXJG.Common\BXJG.Common.csproj" />
   </ItemGroup>
 
 </Project>

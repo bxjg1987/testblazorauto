@@ -18,8 +18,11 @@
 
   <ItemGroup>
     <PackageReference Include="Abp.ZeroCore.EntityFrameworkCore" Version="8.1.0" />
-    <PackageReference Include="BXJG.Utils" Version="1.2.10" />
     <PackageReference Include="DotNetCore.CAP" Version="7.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BXJG.Utils\BXJG.Utils.csproj" />
   </ItemGroup>
 
 </Project>

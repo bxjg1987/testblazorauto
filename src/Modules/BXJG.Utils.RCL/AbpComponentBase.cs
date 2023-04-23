@@ -10,6 +10,7 @@ using Abp.Localization.Sources;
 using Abp.MultiTenancy;
 using Abp.ObjectMapping;
 using Abp.Runtime.Session;
+using Abp.UI;
 using Castle.Core.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -128,7 +129,7 @@ namespace BXJG.Utils.RCL
         //    this.roleManager = roleManager;
         //}
 
-      
+
 
         //不要用异步方法做服务注入
         protected override void OnInitialized()
@@ -163,6 +164,52 @@ namespace BXJG.Utils.RCL
         protected virtual string L(string name, CultureInfo culture, params object[] args)
         {
             return LocalizationSource.GetString(name, culture, args);
+        }
+
+        /// <summary>
+        /// 执行委托，用户友好异常时直接显示错误消息（记得重写ShowErrorAsync），否则记录日志并显示服务端错误消息。
+        /// </summary>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        protected virtual async Task SafeExecuteAsync(Func<Task> action)
+        {
+            try
+            {
+                await action();
+            }
+            catch (UserFriendlyException ex)
+            {
+                await ShowErrorAsync(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex.ToString(), ex);
+                await ShowErrorAsync(L("InternalServerError"));
+            }
+        }
+        public virtual ValueTask ShowErrorAsync(string msg) => ValueTask.CompletedTask;
+
+        public virtual void ShowError(string msg) { }
+        /// <summary>
+        /// 执行委托，用户友好异常时直接显示错误消息（记得重写ShowError），否则记录日志并显示服务端错误消息。
+        /// </summary>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        protected virtual void SafeExecute(Action action)
+        {
+            try
+            {
+                action();
+            }
+            catch (UserFriendlyException ex)
+            {
+                ShowError(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex.ToString(), ex);
+                ShowError(L("InternalServerError"));
+            }
         }
     }
 }
