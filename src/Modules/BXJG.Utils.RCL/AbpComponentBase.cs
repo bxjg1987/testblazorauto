@@ -187,6 +187,23 @@ namespace BXJG.Utils.RCL
                 await ShowErrorAsync(L("InternalServerError"));
             }
         }
+        protected virtual async Task<T> SafeExecuteAsync<T>(Func<Task<T>> action)
+        {
+            try
+            {
+                return await action();
+            }
+            catch (UserFriendlyException ex)
+            {
+                await ShowErrorAsync(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex.ToString(), ex);
+                await ShowErrorAsync(L("InternalServerError"));
+            }
+            return default;
+        }
         public virtual ValueTask ShowErrorAsync(string msg) => ValueTask.CompletedTask;
 
         public virtual void ShowError(string msg) { }
@@ -210,6 +227,23 @@ namespace BXJG.Utils.RCL
                 Logger.Error(ex.ToString(), ex);
                 ShowError(L("InternalServerError"));
             }
+        }
+        protected virtual T SafeExecute<T>(Func<T> action)
+        {
+            try
+            {
+                return action();
+            }
+            catch (UserFriendlyException ex)
+            {
+                ShowError(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex.ToString(), ex);
+                ShowError(L("InternalServerError")); 
+            }
+            return default;
         }
     }
 }
