@@ -6,7 +6,7 @@
 地址：http://222.178.145.148:19901/admin    
 租户：default\
 登录名：admin\
-密码：123qwe\
+密码：123qwe  
 
 备注：这是真实的、正在开发的项目\
 基于 orleans、blazorServer、abp(一代)8.x、.net7.x\
