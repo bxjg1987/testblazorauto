@@ -9,7 +9,7 @@
 密码：123qwe  
 
 备注：这是真实的、正在开发的项目\
-基于 orleans、blazorServer、abp(一代)8.x、.net7.x\
+基于 orleans7.x、blazorServer、mudblazor6.x、abp(一代)8.x、.net7.x、
 
 # 部分模块介绍
 目前没有整理文档，都是配套设计思路的视频
