@@ -48,6 +48,14 @@ namespace BXJG.Utils.RCL
         Lazy<IAbpSession> abpSession;
         protected IAbpSession AbpSession => abpSession.Value;
 
+        protected CancellationTokenSource cts { get;  set; }= new CancellationTokenSource();
+
+        protected override void Dispose(bool disposing)
+        {
+            cts?.Cancel();
+            base.Dispose(disposing);
+        }
+
         //Lazy<TTenantManager> tenantManager;
         //protected TTenantManager TenantManager => tenantManager.Value;
 
