@@ -1,5 +1,6 @@
 ﻿using Abp;
 using Abp.Application.Features;
+using Abp.AspNetCore.Configuration;
 using Abp.Authorization;
 using Abp.Authorization.Roles;
 using Abp.Authorization.Users;
@@ -10,6 +11,7 @@ using Abp.Localization.Sources;
 using Abp.MultiTenancy;
 using Abp.ObjectMapping;
 using Abp.Runtime.Session;
+using Abp.Threading;
 using Abp.UI;
 using Castle.Core.Logging;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,8 +19,11 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace BXJG.Utils.RCL
 {
@@ -48,7 +53,12 @@ namespace BXJG.Utils.RCL
         Lazy<IAbpSession> abpSession;
         protected IAbpSession AbpSession => abpSession.Value;
 
-        protected CancellationTokenSource cts { get;  set; }= new CancellationTokenSource();
+
+        //几乎始终会被使用到的对象，就不要延迟加载了
+        protected IUnitOfWorkDefaultOptions unitOfWorkDefaultOptions;
+        protected ICancellationTokenProvider cancellationTokenProvider;
+        protected IAbpAspNetCoreConfiguration aspnetCoreConfiguration;
+        protected CancellationTokenSource cts { get; set; } = new CancellationTokenSource();
 
         protected override void Dispose(bool disposing)
         {
@@ -155,6 +165,9 @@ namespace BXJG.Utils.RCL
             permissionManager = ScopedServices.GetRequiredService<Lazy<IPermissionManager>>();
             featureChecker = ScopedServices.GetRequiredService<Lazy<IFeatureChecker>>();
             featureManager = ScopedServices.GetRequiredService<Lazy<IFeatureManager>>();
+            unitOfWorkDefaultOptions = ScopedServices.GetRequiredService<IUnitOfWorkDefaultOptions>();
+            aspnetCoreConfiguration = ScopedServices.GetRequiredService<IAbpAspNetCoreConfiguration>();
+            cancellationTokenProvider = ScopedServices.GetRequiredService<ICancellationTokenProvider>();
         }
 
         protected virtual string L(string name)
@@ -174,8 +187,10 @@ namespace BXJG.Utils.RCL
             return LocalizationSource.GetString(name, culture, args);
         }
 
+
         /// <summary>
         /// 执行委托，用户友好异常时直接显示错误消息（记得重写ShowErrorAsync），否则记录日志并显示服务端错误消息。
+        /// 默认情况下自动处理取消问题，特殊情况修改cts或替换canceltokenprovider
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
@@ -183,7 +198,40 @@ namespace BXJG.Utils.RCL
         {
             try
             {
-                await action();
+                /*
+                 * 主cts = 连接 参数的ct？
+                 * 不好，因为主的可能被其它地方调用，当前调用取消是并不一定希望其它地方取消
+                 * 
+                 * 参数的ct引用主的?
+                 * 可以的，不过这不应该在抽象中来决定
+                 * 
+                 */
+                using (var ct = cancellationTokenProvider.Use(cts.Token))
+                {
+                    //https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp.AspNetCore/AspNetCore/Mvc/Uow/AbpUowActionFilter.cs#L14
+                    var unitOfWorkAttr = unitOfWorkDefaultOptions
+                        .GetUnitOfWorkAttributeOrNull(action.Method) ??
+                        aspnetCoreConfiguration.DefaultUnitOfWorkAttribute;
+
+                    if (!unitOfWorkAttr.IsDisabled)
+                    {
+
+                        //https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp/Domain/Uow/UnitOfWorkAttribute.cs#L189
+                        var opt = new UnitOfWorkOptions
+                        {
+                            IsTransactional = unitOfWorkAttr.IsTransactional,
+                            IsolationLevel = unitOfWorkAttr.IsolationLevel,
+                            Timeout = unitOfWorkAttr.Timeout,
+                            Scope = unitOfWorkAttr.Scope
+                        };
+                        using (var uow = UnitOfWorkManager.Begin(opt))
+                        {
+                            await action();
+                            if (opt.IsTransactional == true)
+                                await uow.CompleteAsync();
+                        }
+                    }
+                }
             }
             catch (UserFriendlyException ex)
             {
@@ -195,11 +243,51 @@ namespace BXJG.Utils.RCL
                 await ShowErrorAsync(L("InternalServerError"));
             }
         }
+        /// <summary>
+        /// 执行委托，用户友好异常时直接显示错误消息（记得重写ShowErrorAsync），否则记录日志并显示服务端错误消息。
+        /// 默认情况下自动处理取消问题，特殊情况修改cts或替换canceltokenprovider
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="action"></param>
+        /// <returns></returns>
         protected virtual async Task<T> SafeExecuteAsync<T>(Func<Task<T>> action)
         {
             try
             {
-                return await action();
+                /*
+                  * 主cts = 连接 参数的ct？
+                  * 不好，因为主的可能被其它地方调用，当前调用取消是并不一定希望其它地方取消
+                  * 
+                  * 参数的ct引用主的?
+                  * 可以的，不过这不应该在抽象中来决定
+                  * 
+                  */
+                using (var ct = cancellationTokenProvider.Use(cts.Token))
+                {
+                    //https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp.AspNetCore/AspNetCore/Mvc/Uow/AbpUowActionFilter.cs#L14
+                    var unitOfWorkAttr = unitOfWorkDefaultOptions
+                        .GetUnitOfWorkAttributeOrNull(action.Method) ??
+                        aspnetCoreConfiguration.DefaultUnitOfWorkAttribute;
+
+                    if (!unitOfWorkAttr.IsDisabled)
+                    {
+                        //https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp/Domain/Uow/UnitOfWorkAttribute.cs#L189
+                        var opt = new UnitOfWorkOptions
+                        {
+                            IsTransactional = unitOfWorkAttr.IsTransactional,
+                            IsolationLevel = unitOfWorkAttr.IsolationLevel,
+                            Timeout = unitOfWorkAttr.Timeout,
+                            Scope = unitOfWorkAttr.Scope
+                        };
+                        using (var uow = UnitOfWorkManager.Begin(opt))
+                        {
+                            var r = await action();
+                            if (opt.IsTransactional == true)
+                                await uow.CompleteAsync();
+                            return r;
+                        }
+                    }
+                }
             }
             catch (UserFriendlyException ex)
             {
@@ -224,7 +312,38 @@ namespace BXJG.Utils.RCL
         {
             try
             {
-                action();
+                /*
+                   * 主cts = 连接 参数的ct？
+                   * 不好，因为主的可能被其它地方调用，当前调用取消是并不一定希望其它地方取消
+                   * 
+                   * 参数的ct引用主的?
+                   * 可以的，不过这不应该在抽象中来决定
+                   * 
+                   */
+
+                //https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp.AspNetCore/AspNetCore/Mvc/Uow/AbpUowActionFilter.cs#L14
+                var unitOfWorkAttr = unitOfWorkDefaultOptions
+                    .GetUnitOfWorkAttributeOrNull(action.Method) ??
+                    aspnetCoreConfiguration.DefaultUnitOfWorkAttribute;
+
+                if (!unitOfWorkAttr.IsDisabled)
+                {
+                    //https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp/Domain/Uow/UnitOfWorkAttribute.cs#L189
+                    var opt = new UnitOfWorkOptions
+                    {
+                        IsTransactional = unitOfWorkAttr.IsTransactional,
+                        IsolationLevel = unitOfWorkAttr.IsolationLevel,
+                        Timeout = unitOfWorkAttr.Timeout,
+                        Scope = unitOfWorkAttr.Scope
+                    };
+                    using (var uow = UnitOfWorkManager.Begin(opt))
+                    {
+                        action();
+                        if (opt.IsTransactional == true)
+                            uow.Complete();
+                    }
+                }
+
             }
             catch (UserFriendlyException ex)
             {
@@ -240,7 +359,38 @@ namespace BXJG.Utils.RCL
         {
             try
             {
-                return action();
+                /*
+                    * 主cts = 连接 参数的ct？
+                    * 不好，因为主的可能被其它地方调用，当前调用取消是并不一定希望其它地方取消
+                    * 
+                    * 参数的ct引用主的?
+                    * 可以的，不过这不应该在抽象中来决定
+                    * 
+                    */
+
+                //https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp.AspNetCore/AspNetCore/Mvc/Uow/AbpUowActionFilter.cs#L14
+                var unitOfWorkAttr = unitOfWorkDefaultOptions
+                    .GetUnitOfWorkAttributeOrNull(action.Method) ??
+                    aspnetCoreConfiguration.DefaultUnitOfWorkAttribute;
+
+                if (!unitOfWorkAttr.IsDisabled)
+                {
+                    //https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp/Domain/Uow/UnitOfWorkAttribute.cs#L189
+                    var opt = new UnitOfWorkOptions
+                    {
+                        IsTransactional = unitOfWorkAttr.IsTransactional,
+                        IsolationLevel = unitOfWorkAttr.IsolationLevel,
+                        Timeout = unitOfWorkAttr.Timeout,
+                        Scope = unitOfWorkAttr.Scope
+                    };
+                    using (var uow = UnitOfWorkManager.Begin(opt))
+                    {
+                        var r = action();
+                        if (opt.IsTransactional == true)
+                            uow.Complete();
+                        return r;
+                    }
+                }
             }
             catch (UserFriendlyException ex)
             {
@@ -249,9 +399,41 @@ namespace BXJG.Utils.RCL
             catch (Exception ex)
             {
                 Logger.Error(ex.ToString(), ex);
-                ShowError(L("InternalServerError")); 
+                ShowError(L("InternalServerError"));
             }
             return default;
+        }
+    }
+
+
+    //https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp/Domain/Uow/UnitOfWorkDefaultOptionsExtensions.cs#L9
+    internal static class UnitOfWorkDefaultOptionsExtensions
+    {
+        public static UnitOfWorkAttribute GetUnitOfWorkAttributeOrNull(this IUnitOfWorkDefaultOptions unitOfWorkDefaultOptions, MethodInfo methodInfo)
+        {
+            var attrs = methodInfo.GetCustomAttributes(true).OfType<UnitOfWorkAttribute>().ToArray();
+            if (attrs.Length > 0)
+            {
+                return attrs[0];
+            }
+
+            attrs = methodInfo.DeclaringType.GetTypeInfo().GetCustomAttributes(true).OfType<UnitOfWorkAttribute>().ToArray();
+            if (attrs.Length > 0)
+            {
+                return attrs[0];
+            }
+
+            if (unitOfWorkDefaultOptions.IsConventionalUowClass(methodInfo.DeclaringType))
+            {
+                return new UnitOfWorkAttribute(); //Default
+            }
+
+            return null;
+        }
+
+        public static bool IsConventionalUowClass(this IUnitOfWorkDefaultOptions unitOfWorkDefaultOptions, Type type)
+        {
+            return unitOfWorkDefaultOptions.ConventionalUowSelectors.Any(selector => selector(type));
         }
     }
 }
