@@ -215,7 +215,6 @@ namespace BXJG.Utils.RCL
 
                     if (!unitOfWorkAttr.IsDisabled)
                     {
-
                         //https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp/Domain/Uow/UnitOfWorkAttribute.cs#L189
                         var opt = new UnitOfWorkOptions
                         {
@@ -230,6 +229,10 @@ namespace BXJG.Utils.RCL
                             if (opt.IsTransactional == true)
                                 await uow.CompleteAsync();
                         }
+                    }
+                    else
+                    {
+                        await action();
                     }
                 }
             }
@@ -287,6 +290,10 @@ namespace BXJG.Utils.RCL
                             return r;
                         }
                     }
+                    else
+                    {
+                        return await action();
+                    }
                 }
             }
             catch (UserFriendlyException ex)
@@ -343,7 +350,10 @@ namespace BXJG.Utils.RCL
                             uow.Complete();
                     }
                 }
-
+                else
+                {
+                     action();
+                }
             }
             catch (UserFriendlyException ex)
             {
@@ -390,6 +400,10 @@ namespace BXJG.Utils.RCL
                             uow.Complete();
                         return r;
                     }
+                }
+                else
+                {
+                    return action();
                 }
             }
             catch (UserFriendlyException ex)
