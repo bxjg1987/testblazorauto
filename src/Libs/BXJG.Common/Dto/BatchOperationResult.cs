@@ -35,17 +35,34 @@ namespace BXJG.Common.Dto
     /// 批量操作输出模型
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
-    public class BatchOperationOutput<TKey>
+    public class BatchOperationOutputBase
     {
         /// <summary>
         /// 操作成功的id集合
         /// </summary>
-        public IList<TKey> Ids { get; } = new List<TKey>();
+        public IList<object> Ids { get; } = new List<object>();
         /// <summary>
         /// 操作失败的id和原因<br />
         /// 理想的需要如下形式，但abp中 后端和前端都没有针对此方式做适配，因此也可以在错误时封装为UserFriendlyException
         /// </summary>
         public IList<BatchOperationErrorMessage> ErrorMessage { get; } = new List<BatchOperationErrorMessage>();
+    }
+
+    /// <summary>
+    /// 批量操作输出模型
+    /// </summary>
+    /// <typeparam name="TKey"></typeparam>
+    public class BatchOperationOutput<TKey>: BatchOperationOutputBase
+    {
+        /// <summary>
+        /// 操作成功的id集合
+        /// </summary>
+        public new IList<TKey> Ids { get; } = new List<TKey>();
+        ///// <summary>
+        ///// 操作失败的id和原因<br />
+        ///// 理想的需要如下形式，但abp中 后端和前端都没有针对此方式做适配，因此也可以在错误时封装为UserFriendlyException
+        ///// </summary>
+        //public IList<BatchOperationErrorMessage> ErrorMessage { get; } = new List<BatchOperationErrorMessage>();
     }
 
     public class BatchOperationOutput : BatchOperationOutput<int>

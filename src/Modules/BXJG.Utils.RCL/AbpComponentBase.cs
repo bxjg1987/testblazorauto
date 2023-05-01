@@ -13,6 +13,7 @@ using Abp.ObjectMapping;
 using Abp.Runtime.Session;
 using Abp.Threading;
 using Abp.UI;
+using BXJG.Common.Dto;
 using Castle.Core.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -58,11 +59,12 @@ namespace BXJG.Utils.RCL
         protected IUnitOfWorkDefaultOptions unitOfWorkDefaultOptions;
         protected ICancellationTokenProvider cancellationTokenProvider;
         protected IAbpAspNetCoreConfiguration aspnetCoreConfiguration;
-        protected CancellationTokenSource cts { get; set; } = new CancellationTokenSource();
+        protected readonly CancellationTokenSource cts = new CancellationTokenSource();
 
         protected override void Dispose(bool disposing)
         {
             cts?.Cancel();
+            cts?.Dispose();
             base.Dispose(disposing);
         }
 
@@ -189,12 +191,38 @@ namespace BXJG.Utils.RCL
 
 
         /// <summary>
+        /// 批量操作检查
+        /// </summary>
+        protected virtual void BatchOperationCheck(BatchOperationOutputBase output, string operationName = "操作", Func<BatchOperationOutputBase, string> errorItemFormatter = default)
+        {
+            if (output.ErrorMessage.Any())
+            {
+                string str;
+                if (errorItemFormatter != default)
+                    str = errorItemFormatter(output);
+                else
+                {
+                    var sb = new StringBuilder();
+                    foreach (var item in output.ErrorMessage)
+                    {
+                        sb.Append("[");
+                        sb.Append(item.Id);
+                        sb.Append("]");
+                        sb.AppendLine(item.Message);
+                    }
+                    str = sb.ToString();
+                }
+                throw new UserFriendlyException($"{operationName}时，部分成功！失败项：{str}");
+            }
+        }
+
+        /// <summary>
         /// 执行委托，用户友好异常时直接显示错误消息（记得重写ShowErrorAsync），否则记录日志并显示服务端错误消息。
         /// 默认情况下自动处理取消问题，特殊情况修改cts或替换canceltokenprovider
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        protected virtual async Task SafeExecuteAsync(Func<Task> action)
+        protected virtual async Task SafeExecuteAsync(Func<Task> action, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -206,34 +234,37 @@ namespace BXJG.Utils.RCL
                  * 可以的，不过这不应该在抽象中来决定
                  * 
                  */
-                using (var ct = cancellationTokenProvider.Use(cts.Token))
+                var ct1 = cancellationToken == default ? cts.Token : cancellationToken;
+                using (var ct = cancellationTokenProvider.Use(ct1))
                 {
-                    //https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp.AspNetCore/AspNetCore/Mvc/Uow/AbpUowActionFilter.cs#L14
-                    var unitOfWorkAttr = unitOfWorkDefaultOptions
-                        .GetUnitOfWorkAttributeOrNull(action.Method) ??
-                        aspnetCoreConfiguration.DefaultUnitOfWorkAttribute;
+                    await action();
+                    //查看集成blazor文档，已全局开启按约定的拦截器
+                    ////https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp.AspNetCore/AspNetCore/Mvc/Uow/AbpUowActionFilter.cs#L14
+                    //var unitOfWorkAttr = unitOfWorkDefaultOptions
+                    //    .GetUnitOfWorkAttributeOrNull(action.Method) ??
+                    //    aspnetCoreConfiguration.DefaultUnitOfWorkAttribute;
 
-                    if (!unitOfWorkAttr.IsDisabled)
-                    {
-                        //https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp/Domain/Uow/UnitOfWorkAttribute.cs#L189
-                        var opt = new UnitOfWorkOptions
-                        {
-                            IsTransactional = unitOfWorkAttr.IsTransactional,
-                            IsolationLevel = unitOfWorkAttr.IsolationLevel,
-                            Timeout = unitOfWorkAttr.Timeout,
-                            Scope = unitOfWorkAttr.Scope
-                        };
-                        using (var uow = UnitOfWorkManager.Begin(opt))
-                        {
-                            await action();
-                            if (opt.IsTransactional == true)
-                                await uow.CompleteAsync();
-                        }
-                    }
-                    else
-                    {
-                        await action();
-                    }
+                    //if (!unitOfWorkAttr.IsDisabled)
+                    //{
+                    //    //https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp/Domain/Uow/UnitOfWorkAttribute.cs#L189
+                    //    var opt = new UnitOfWorkOptions
+                    //    {
+                    //        IsTransactional = unitOfWorkAttr.IsTransactional,
+                    //        IsolationLevel = unitOfWorkAttr.IsolationLevel,
+                    //        Timeout = unitOfWorkAttr.Timeout,
+                    //        Scope = unitOfWorkAttr.Scope
+                    //    };
+                    //    using (var uow = UnitOfWorkManager.Begin(opt))
+                    //    {
+                    //        await action();
+                    //        if (opt.IsTransactional == true)
+                    //            await uow.CompleteAsync();
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    await action();
+                    //}
                 }
             }
             catch (UserFriendlyException ex)
@@ -253,7 +284,7 @@ namespace BXJG.Utils.RCL
         /// <typeparam name="T"></typeparam>
         /// <param name="action"></param>
         /// <returns></returns>
-        protected virtual async Task<T> SafeExecuteAsync<T>(Func<Task<T>> action)
+        protected virtual async Task<T> SafeExecuteAsync<T>(Func<Task<T>> action, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -265,35 +296,40 @@ namespace BXJG.Utils.RCL
                   * 可以的，不过这不应该在抽象中来决定
                   * 
                   */
-                using (var ct = cancellationTokenProvider.Use(cts.Token))
+                var ct1 = cancellationToken == default ? cts.Token : cancellationToken;
+                using (var ct = cancellationTokenProvider.Use(ct1))
                 {
-                    //https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp.AspNetCore/AspNetCore/Mvc/Uow/AbpUowActionFilter.cs#L14
-                    var unitOfWorkAttr = unitOfWorkDefaultOptions
-                        .GetUnitOfWorkAttributeOrNull(action.Method) ??
-                        aspnetCoreConfiguration.DefaultUnitOfWorkAttribute;
 
-                    if (!unitOfWorkAttr.IsDisabled)
-                    {
-                        //https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp/Domain/Uow/UnitOfWorkAttribute.cs#L189
-                        var opt = new UnitOfWorkOptions
-                        {
-                            IsTransactional = unitOfWorkAttr.IsTransactional,
-                            IsolationLevel = unitOfWorkAttr.IsolationLevel,
-                            Timeout = unitOfWorkAttr.Timeout,
-                            Scope = unitOfWorkAttr.Scope
-                        };
-                        using (var uow = UnitOfWorkManager.Begin(opt))
-                        {
-                            var r = await action();
-                            if (opt.IsTransactional == true)
-                                await uow.CompleteAsync();
-                            return r;
-                        }
-                    }
-                    else
-                    {
-                        return await action();
-                    }
+                    return await action();
+
+                    //已在全局开启按约定的拦截器，参考blazor集成文档
+                    ////https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp.AspNetCore/AspNetCore/Mvc/Uow/AbpUowActionFilter.cs#L14
+                    //var unitOfWorkAttr = unitOfWorkDefaultOptions
+                    //    .GetUnitOfWorkAttributeOrNull(action.Method) ??
+                    //    aspnetCoreConfiguration.DefaultUnitOfWorkAttribute;
+
+                    //if (!unitOfWorkAttr.IsDisabled)
+                    //{
+                    //    //https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp/Domain/Uow/UnitOfWorkAttribute.cs#L189
+                    //    var opt = new UnitOfWorkOptions
+                    //    {
+                    //        IsTransactional = unitOfWorkAttr.IsTransactional,
+                    //        IsolationLevel = unitOfWorkAttr.IsolationLevel,
+                    //        Timeout = unitOfWorkAttr.Timeout,
+                    //        Scope = unitOfWorkAttr.Scope
+                    //    };
+                    //    using (var uow = UnitOfWorkManager.Begin(opt))
+                    //    {
+                    //        var r = await action();
+                    //        if (opt.IsTransactional == true)
+                    //            await uow.CompleteAsync();
+                    //        return r;
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    return await action();
+                    //}
                 }
             }
             catch (UserFriendlyException ex)
@@ -328,32 +364,35 @@ namespace BXJG.Utils.RCL
                    * 
                    */
 
-                //https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp.AspNetCore/AspNetCore/Mvc/Uow/AbpUowActionFilter.cs#L14
-                var unitOfWorkAttr = unitOfWorkDefaultOptions
-                    .GetUnitOfWorkAttributeOrNull(action.Method) ??
-                    aspnetCoreConfiguration.DefaultUnitOfWorkAttribute;
+                action();
 
-                if (!unitOfWorkAttr.IsDisabled)
-                {
-                    //https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp/Domain/Uow/UnitOfWorkAttribute.cs#L189
-                    var opt = new UnitOfWorkOptions
-                    {
-                        IsTransactional = unitOfWorkAttr.IsTransactional,
-                        IsolationLevel = unitOfWorkAttr.IsolationLevel,
-                        Timeout = unitOfWorkAttr.Timeout,
-                        Scope = unitOfWorkAttr.Scope
-                    };
-                    using (var uow = UnitOfWorkManager.Begin(opt))
-                    {
-                        action();
-                        if (opt.IsTransactional == true)
-                            uow.Complete();
-                    }
-                }
-                else
-                {
-                     action();
-                }
+                //已在全局开启按约定的拦截器，参考blazor集成文档
+                ////https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp.AspNetCore/AspNetCore/Mvc/Uow/AbpUowActionFilter.cs#L14
+                //var unitOfWorkAttr = unitOfWorkDefaultOptions
+                //    .GetUnitOfWorkAttributeOrNull(action.Method) ??
+                //    aspnetCoreConfiguration.DefaultUnitOfWorkAttribute;
+
+                //if (!unitOfWorkAttr.IsDisabled)
+                //{
+                //    //https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp/Domain/Uow/UnitOfWorkAttribute.cs#L189
+                //    var opt = new UnitOfWorkOptions
+                //    {
+                //        IsTransactional = unitOfWorkAttr.IsTransactional,
+                //        IsolationLevel = unitOfWorkAttr.IsolationLevel,
+                //        Timeout = unitOfWorkAttr.Timeout,
+                //        Scope = unitOfWorkAttr.Scope
+                //    };
+                //    using (var uow = UnitOfWorkManager.Begin(opt))
+                //    {
+                //        action();
+                //        if (opt.IsTransactional == true)
+                //            uow.Complete();
+                //    }
+                //}
+                //else
+                //{
+                //    action();
+                //}
             }
             catch (UserFriendlyException ex)
             {
@@ -378,33 +417,36 @@ namespace BXJG.Utils.RCL
                     * 
                     */
 
-                //https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp.AspNetCore/AspNetCore/Mvc/Uow/AbpUowActionFilter.cs#L14
-                var unitOfWorkAttr = unitOfWorkDefaultOptions
-                    .GetUnitOfWorkAttributeOrNull(action.Method) ??
-                    aspnetCoreConfiguration.DefaultUnitOfWorkAttribute;
+                return action();
 
-                if (!unitOfWorkAttr.IsDisabled)
-                {
-                    //https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp/Domain/Uow/UnitOfWorkAttribute.cs#L189
-                    var opt = new UnitOfWorkOptions
-                    {
-                        IsTransactional = unitOfWorkAttr.IsTransactional,
-                        IsolationLevel = unitOfWorkAttr.IsolationLevel,
-                        Timeout = unitOfWorkAttr.Timeout,
-                        Scope = unitOfWorkAttr.Scope
-                    };
-                    using (var uow = UnitOfWorkManager.Begin(opt))
-                    {
-                        var r = action();
-                        if (opt.IsTransactional == true)
-                            uow.Complete();
-                        return r;
-                    }
-                }
-                else
-                {
-                    return action();
-                }
+                //已在全局开启按约定的拦截器，参考blazor集成文档
+                ////https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp.AspNetCore/AspNetCore/Mvc/Uow/AbpUowActionFilter.cs#L14
+                //var unitOfWorkAttr = unitOfWorkDefaultOptions
+                //    .GetUnitOfWorkAttributeOrNull(action.Method) ??
+                //    aspnetCoreConfiguration.DefaultUnitOfWorkAttribute;
+
+                //if (!unitOfWorkAttr.IsDisabled)
+                //{
+                //    //https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp/Domain/Uow/UnitOfWorkAttribute.cs#L189
+                //    var opt = new UnitOfWorkOptions
+                //    {
+                //        IsTransactional = unitOfWorkAttr.IsTransactional,
+                //        IsolationLevel = unitOfWorkAttr.IsolationLevel,
+                //        Timeout = unitOfWorkAttr.Timeout,
+                //        Scope = unitOfWorkAttr.Scope
+                //    };
+                //    using (var uow = UnitOfWorkManager.Begin(opt))
+                //    {
+                //        var r = action();
+                //        if (opt.IsTransactional == true)
+                //            uow.Complete();
+                //        return r;
+                //    }
+                //}
+                //else
+                //{
+                //    return action();
+                //}
             }
             catch (UserFriendlyException ex)
             {
@@ -419,35 +461,35 @@ namespace BXJG.Utils.RCL
         }
     }
 
+    //已在全局开启按约定的拦截器，参考blazor集成文档
+    ////https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp/Domain/Uow/UnitOfWorkDefaultOptionsExtensions.cs#L9
+    //internal static class UnitOfWorkDefaultOptionsExtensions
+    //{
+    //    public static UnitOfWorkAttribute GetUnitOfWorkAttributeOrNull(this IUnitOfWorkDefaultOptions unitOfWorkDefaultOptions, MethodInfo methodInfo)
+    //    {
+    //        var attrs = methodInfo.GetCustomAttributes(true).OfType<UnitOfWorkAttribute>().ToArray();
+    //        if (attrs.Length > 0)
+    //        {
+    //            return attrs[0];
+    //        }
 
-    //https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp/Domain/Uow/UnitOfWorkDefaultOptionsExtensions.cs#L9
-    internal static class UnitOfWorkDefaultOptionsExtensions
-    {
-        public static UnitOfWorkAttribute GetUnitOfWorkAttributeOrNull(this IUnitOfWorkDefaultOptions unitOfWorkDefaultOptions, MethodInfo methodInfo)
-        {
-            var attrs = methodInfo.GetCustomAttributes(true).OfType<UnitOfWorkAttribute>().ToArray();
-            if (attrs.Length > 0)
-            {
-                return attrs[0];
-            }
+    //        attrs = methodInfo.DeclaringType.GetTypeInfo().GetCustomAttributes(true).OfType<UnitOfWorkAttribute>().ToArray();
+    //        if (attrs.Length > 0)
+    //        {
+    //            return attrs[0];
+    //        }
 
-            attrs = methodInfo.DeclaringType.GetTypeInfo().GetCustomAttributes(true).OfType<UnitOfWorkAttribute>().ToArray();
-            if (attrs.Length > 0)
-            {
-                return attrs[0];
-            }
+    //        if (unitOfWorkDefaultOptions.IsConventionalUowClass(methodInfo.DeclaringType))
+    //        {
+    //            return new UnitOfWorkAttribute(); //Default
+    //        }
 
-            if (unitOfWorkDefaultOptions.IsConventionalUowClass(methodInfo.DeclaringType))
-            {
-                return new UnitOfWorkAttribute(); //Default
-            }
+    //        return null;
+    //    }
 
-            return null;
-        }
-
-        public static bool IsConventionalUowClass(this IUnitOfWorkDefaultOptions unitOfWorkDefaultOptions, Type type)
-        {
-            return unitOfWorkDefaultOptions.ConventionalUowSelectors.Any(selector => selector(type));
-        }
-    }
+    //    public static bool IsConventionalUowClass(this IUnitOfWorkDefaultOptions unitOfWorkDefaultOptions, Type type)
+    //    {
+    //        return unitOfWorkDefaultOptions.ConventionalUowSelectors.Any(selector => selector(type));
+    //    }
+    //}
 }
