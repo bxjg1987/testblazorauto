@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using System.Net;
 using Abp.Runtime.Session;
 using Abp.Domain.Uow;
+using System.Diagnostics;
 
 namespace BXJG.Utils.Authorization
 {
@@ -43,11 +44,17 @@ namespace BXJG.Utils.Authorization
             //{
             try
             {
+                //Stopwatch s = new Stopwatch();
+                //s.Start();
+                //经过测试有缓存，检查耗时通常是0毫秒
                 if (await permissionChecker.IsGrantedAsync(requirement.RequiredAll, requirement.PermissionNames))
                 {
+
                     context.Succeed(requirement);
                     //logger.Debug($"执行了异步权限判断，权限：{string.Join(",", requirement.PermissionNames)}");
                 }
+                //s.Stop();
+                //logger.Debug($"执行了异步权限判断，权限：{string.Join(",", requirement.PermissionNames)}，耗时：{s.ElapsedMilliseconds}ms");
             }
             catch (Exception ex)
             {
