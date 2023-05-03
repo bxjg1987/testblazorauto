@@ -44,13 +44,19 @@ namespace BXJG.Utils.Authorization
             try
             {
                 if (await permissionChecker.IsGrantedAsync(requirement.RequiredAll, requirement.PermissionNames))
+                {
                     context.Succeed(requirement);
+                    //logger.Debug($"执行了异步权限判断，权限：{string.Join(",", requirement.PermissionNames)}");
+                }
             }
             catch (Exception ex)
             {
-                logger.Debug("权限判断执行了同步操作", ex);
+                //logger.Debug("权限判断执行了同步操作", ex);
                 if (permissionChecker.IsGranted(requirement.RequiredAll, requirement.PermissionNames))
+                {
                     context.Succeed(requirement);
+                    logger.Debug($"执行了同步权限判断，权限：{string.Join(",", requirement.PermissionNames)}");
+                }
             }
             //}
             //permissionChecker.IsGrantedAsync()
