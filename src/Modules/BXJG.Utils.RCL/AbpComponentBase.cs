@@ -154,6 +154,12 @@ namespace BXJG.Utils.RCL
         //不要用异步方法做服务注入
         protected override void OnInitialized()
         {
+            InitCore();
+            SafeExecute(OnInitialized2);
+        }
+
+        protected virtual void InitCore()
+        {
             abpSession = ScopedServices.GetRequiredService<Lazy<IAbpSession>>();
             //tenantManager = ScopedServices.GetRequiredService<Lazy<TTenantManager>>();
             //roleManager = ScopedServices.GetRequiredService<Lazy<TRoleManager>>();
@@ -170,7 +176,6 @@ namespace BXJG.Utils.RCL
             unitOfWorkDefaultOptions = ScopedServices.GetRequiredService<IUnitOfWorkDefaultOptions>();
             aspnetCoreConfiguration = ScopedServices.GetRequiredService<IAbpAspNetCoreConfiguration>();
             cancellationTokenProvider = ScopedServices.GetRequiredService<ICancellationTokenProvider>();
-            SafeExecute(OnInitialized2);
         }
 
         /// <summary>
@@ -180,6 +185,7 @@ namespace BXJG.Utils.RCL
 
         protected override  Task OnInitializedAsync()
         {
+            InitCore();
             return SafeExecuteAsync( OnInitialized2Async);
             //  return base.OnInitializedAsync();
         }
