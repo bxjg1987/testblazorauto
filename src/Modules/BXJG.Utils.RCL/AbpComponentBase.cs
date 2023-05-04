@@ -170,7 +170,59 @@ namespace BXJG.Utils.RCL
             unitOfWorkDefaultOptions = ScopedServices.GetRequiredService<IUnitOfWorkDefaultOptions>();
             aspnetCoreConfiguration = ScopedServices.GetRequiredService<IAbpAspNetCoreConfiguration>();
             cancellationTokenProvider = ScopedServices.GetRequiredService<ICancellationTokenProvider>();
+            SafeExecute(OnInitialized2);
         }
+
+        /// <summary>
+        /// 子类重新次方法，可用避免手动调用SafeExecute
+        /// </summary>
+        protected virtual void OnInitialized2() { }
+
+        protected override  Task OnInitializedAsync()
+        {
+            return SafeExecuteAsync( OnInitialized2Async);
+            //  return base.OnInitializedAsync();
+        }
+        /// <summary>
+        /// 子类重新次方法，可用避免手动调用SafeExecute
+        /// </summary>
+        protected virtual Task OnInitialized2Async() => Task.CompletedTask;
+
+        protected override void OnAfterRender(bool firstRender)
+        {
+            SafeExecute(()=>OnAfterRender2(firstRender));
+            //base.OnAfterRender(firstRender);
+        }
+        protected virtual void OnAfterRender2(bool firstRender) { }
+
+        protected override  Task OnAfterRenderAsync(bool firstRender)
+        {
+            return SafeExecuteAsync(()=>OnAfterRender2Async(firstRender));
+        }
+        protected virtual Task OnAfterRender2Async(bool firstRender)=> Task.CompletedTask;
+
+
+        protected override void OnParametersSet()
+        {
+            SafeExecute(OnParametersSet2);
+            //base.OnParametersSet();
+        }
+        protected virtual void OnParametersSet2() { }
+
+        protected override Task OnParametersSetAsync()
+        {
+            return SafeExecuteAsync(OnParametersSet2Async);
+            //return base.OnParametersSetAsync();
+        }
+        protected virtual Task OnParametersSet2Async() => Task.CompletedTask;
+
+        public override Task SetParametersAsync(ParameterView parameters)
+        {
+            return SafeExecuteAsync(()=>SetParameters2Async(parameters));
+            //return base.SetParametersAsync(parameters);
+        }
+        public virtual Task SetParameters2Async(ParameterView parameters)=> Task.CompletedTask;
+
 
         protected virtual string L(string name)
         {
