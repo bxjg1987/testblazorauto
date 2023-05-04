@@ -16,8 +16,10 @@ using Abp.UI;
 using BXJG.Common.Dto;
 using Castle.Core.Logging;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -53,7 +55,8 @@ namespace BXJG.Utils.RCL
     {
         Lazy<IAbpSession> abpSession;
         protected IAbpSession AbpSession => abpSession.Value;
-
+        [Inject]
+        public IHostEnvironment HostEnvironment { get; set; }
 
         //几乎始终会被使用到的对象，就不要延迟加载了
         protected IUnitOfWorkDefaultOptions unitOfWorkDefaultOptions;
@@ -154,12 +157,6 @@ namespace BXJG.Utils.RCL
         //不要用异步方法做服务注入
         protected override void OnInitialized()
         {
-            InitCore();
-            SafeExecute(OnInitialized2);
-        }
-
-        protected virtual void InitCore()
-        {
             abpSession = ScopedServices.GetRequiredService<Lazy<IAbpSession>>();
             //tenantManager = ScopedServices.GetRequiredService<Lazy<TTenantManager>>();
             //roleManager = ScopedServices.GetRequiredService<Lazy<TRoleManager>>();
@@ -176,6 +173,8 @@ namespace BXJG.Utils.RCL
             unitOfWorkDefaultOptions = ScopedServices.GetRequiredService<IUnitOfWorkDefaultOptions>();
             aspnetCoreConfiguration = ScopedServices.GetRequiredService<IAbpAspNetCoreConfiguration>();
             cancellationTokenProvider = ScopedServices.GetRequiredService<ICancellationTokenProvider>();
+
+            SafeExecute(OnInitialized2);
         }
 
         /// <summary>
@@ -185,7 +184,6 @@ namespace BXJG.Utils.RCL
 
         protected override  Task OnInitializedAsync()
         {
-            InitCore();
             return SafeExecuteAsync( OnInitialized2Async);
             //  return base.OnInitializedAsync();
         }
@@ -215,19 +213,20 @@ namespace BXJG.Utils.RCL
         }
         protected virtual void OnParametersSet2() { }
 
-        protected override Task OnParametersSetAsync()
+        protected override async Task OnParametersSetAsync()
         {
-            return SafeExecuteAsync(OnParametersSet2Async);
+            await SafeExecuteAsync(OnParametersSet2Async);
             //return base.OnParametersSetAsync();
         }
         protected virtual Task OnParametersSet2Async() => Task.CompletedTask;
 
-        public override Task SetParametersAsync(ParameterView parameters)
-        {
-            return SafeExecuteAsync(()=>SetParameters2Async(parameters));
-            //return base.SetParametersAsync(parameters);
-        }
-        public virtual Task SetParameters2Async(ParameterView parameters)=> Task.CompletedTask;
+        //这里不要搞，它比init先执行
+        //public override async Task SetParametersAsync(ParameterView parameters)
+        //{
+        //    await SafeExecuteAsync(()=>SetParameters2Async(parameters));
+        //    await base.SetParametersAsync(parameters);
+        //}
+        //public virtual Task SetParameters2Async(ParameterView parameters)=> Task.CompletedTask;
 
 
         protected virtual string L(string name)
@@ -280,8 +279,10 @@ namespace BXJG.Utils.RCL
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        protected virtual async Task SafeExecuteAsync(Func<Task> action, CancellationToken cancellationToken = default)
+        protected virtual async Task SafeExecuteAsync(Func< Task> action, CancellationToken cancellationToken = default)
         {
+            Logger.Debug("aaa");
+            Logger.Debug(action.Method.Name);
             try
             {
                 /*
@@ -292,10 +293,14 @@ namespace BXJG.Utils.RCL
                  * 可以的，不过这不应该在抽象中来决定
                  * 
                  */
+                
                 var ct1 = cancellationToken == default ? cts.Token : cancellationToken;
+                Logger.Debug("bbbb");
                 using (var ct = cancellationTokenProvider.Use(ct1))
                 {
+                    Logger.Debug("ccc");
                     await action();
+                    Logger.Debug("dddd");
                     //查看集成blazor文档，已全局开启按约定的拦截器
                     ////https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp.AspNetCore/AspNetCore/Mvc/Uow/AbpUowActionFilter.cs#L14
                     //var unitOfWorkAttr = unitOfWorkDefaultOptions
@@ -331,6 +336,9 @@ namespace BXJG.Utils.RCL
             }
             catch (Exception ex)
             {
+                if (HostEnvironment.IsDevelopment())
+                    throw ex;
+
                 Logger.Error(ex.ToString(), ex);
                 await ShowErrorAsync(L("InternalServerError"));
             }
@@ -396,6 +404,9 @@ namespace BXJG.Utils.RCL
             }
             catch (Exception ex)
             {
+                if (HostEnvironment.IsDevelopment())
+                    throw ex;
+
                 Logger.Error(ex.ToString(), ex);
                 await ShowErrorAsync(L("InternalServerError"));
             }
@@ -458,6 +469,9 @@ namespace BXJG.Utils.RCL
             }
             catch (Exception ex)
             {
+                if (HostEnvironment.IsDevelopment())
+                    throw ex;
+
                 Logger.Error(ex.ToString(), ex);
                 ShowError(L("InternalServerError"));
             }
@@ -512,6 +526,9 @@ namespace BXJG.Utils.RCL
             }
             catch (Exception ex)
             {
+                if (HostEnvironment.IsDevelopment())
+                    throw ex;
+
                 Logger.Error(ex.ToString(), ex);
                 ShowError(L("InternalServerError"));
             }
