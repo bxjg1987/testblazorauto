@@ -281,8 +281,8 @@ namespace BXJG.Utils.RCL
         /// <returns></returns>
         protected virtual async Task SafeExecuteAsync(Func< Task> action, CancellationToken cancellationToken = default)
         {
-            Logger.Debug("aaa");
-            Logger.Debug(action.Method.Name);
+           // Logger.Debug("aaa");
+           // Logger.Debug(action.Method.Name);
             try
             {
                 /*
@@ -295,12 +295,12 @@ namespace BXJG.Utils.RCL
                  */
                 
                 var ct1 = cancellationToken == default ? cts.Token : cancellationToken;
-                Logger.Debug("bbbb");
+             //   Logger.Debug("bbbb");
                 using (var ct = cancellationTokenProvider.Use(ct1))
                 {
-                    Logger.Debug("ccc");
+               //     Logger.Debug("ccc");
                     await action();
-                    Logger.Debug("dddd");
+                 //   Logger.Debug("dddd");
                     //查看集成blazor文档，已全局开启按约定的拦截器
                     ////https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp.AspNetCore/AspNetCore/Mvc/Uow/AbpUowActionFilter.cs#L14
                     //var unitOfWorkAttr = unitOfWorkDefaultOptions
