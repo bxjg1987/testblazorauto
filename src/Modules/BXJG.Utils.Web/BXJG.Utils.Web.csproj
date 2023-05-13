@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <RootNamespace>BXJG.Utils</RootNamespace>
-    <Version>1.2.13</Version>
+    <Version>1.2.14</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Abp.AspNetCore" Version="8.1.0" />
+    <PackageReference Include="Abp.AspNetCore" Version="8.2.0" />
   </ItemGroup>
 
   <ItemGroup>
