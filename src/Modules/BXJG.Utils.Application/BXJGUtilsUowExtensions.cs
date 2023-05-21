@@ -14,9 +14,13 @@ namespace Abp.Domain.Uow
 {
     public static class BXJGUtilsUowExtensions
     {
-        public static void DisableTenantFilter(this IActiveUnitOfWork uow)
+        public static IDisposable DisableSoftDeleteFilter(this IActiveUnitOfWork uow)
         {
-            uow.DisableFilter(AbpDataFilters.MayHaveTenant, AbpDataFilters.MustHaveTenant);
+            return uow.DisableFilter(AbpDataFilters.SoftDelete);
+        }
+        public static IDisposable DisableTenantFilter(this IActiveUnitOfWork uow)
+        {
+           return uow.DisableFilter(AbpDataFilters.MayHaveTenant, AbpDataFilters.MustHaveTenant);
         }
         /// <summary>
         /// 将cap的当前事务于abp uow的当前事务关联
