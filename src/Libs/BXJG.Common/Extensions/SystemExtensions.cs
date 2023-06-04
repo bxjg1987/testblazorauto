@@ -251,14 +251,15 @@ namespace System
         /// </summary>
         /// <param name="str"></param>
         /// <param name="length"></param>
+        /// <param name="weiba"></param>
         /// <returns></returns>
-        public static string Baoliu(this string str, int length)
+        public static string Baoliu(this string str, int length,string weiba="...")
         {
             if (str.IsNullOrWhiteSpaceBXJG())
                 return string.Empty;
             if (str.Length <= length)
                 return str;
-            return str.Substring(0, length);
+            return str.Substring(0, length)+weiba;
         }
     }
 }
