@@ -246,5 +246,19 @@ namespace System
         {
             return !str.IsNullOrWhiteSpaceBXJG();
         }
+        /// <summary>
+        /// 保留几个字符
+        /// </summary>
+        /// <param name="str"></param>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        public static string Baoliu(this string str, int length)
+        {
+            if (str.IsNullOrWhiteSpaceBXJG())
+                return string.Empty;
+            if (str.Length <= length)
+                return str;
+            return str.Substring(0, length);
+        }
     }
 }
