@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using BXJG.Common.DongtaiZhongjie;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace BXJG.Common
     {
         public static IServiceCollection AddBXJGCommon(this IServiceCollection services)
         {
-            return services.AddSingleton<IClock, LocalClock>();
+            return services.AddSingleton<IClock, LocalClock>().AddSingleton<Zhongjie>().AddSingleton<ZhongjieWithoutParam>();
         }
     }
 }
