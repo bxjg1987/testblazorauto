@@ -16,10 +16,11 @@ namespace BXJG.Common.DongtaiZhongjie
      */
 
     /// <summary>
-    /// 有参事件中介
+    /// 有参事件中介 
+    /// Type事件（参数）类型
+    /// 委托 要执行的委托，key是原始委托，value是转换后的委托
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public class Zhongjie : ConcurrentDictionary<int, Func<object, ValueTask>>
+    public class Zhongjie : ConcurrentDictionary<Type, ConcurrentDictionary<Delegate, Func<object, ValueTask>>  >
     {
         //
 
@@ -37,30 +38,62 @@ namespace BXJG.Common.DongtaiZhongjie
 
         public virtual void Zhuce<T>(Func<T, ValueTask> weituo) where T : class
         {
-            TryAdd(weituo.GetHashCode(), oo => weituo(oo as T));
+            var t = typeof(T);
+
+            TryAdd(t, new ConcurrentDictionary<Delegate, Func<object, ValueTask>>() );
+
+            this[t].TryAdd(weituo, oo => weituo(oo as T));
+
+           // TryAdd(typeof(T), oo => weituo(oo as T));
         }
 
         public virtual void Zhuxiao<T>(Func<T, ValueTask> weituo)
         {
-            TryRemove(weituo.GetHashCode(), out _);
+            var t = typeof(T);
+            if (TryGetValue(t, out var dic))
+            {
+                dic.TryRemove(weituo, out _);
+            }
+          
+
+            // TryRemove(weituo.GetHashCode(), out _);
         }
-        public virtual void Zhuxiao(int hashCode)
-        {
-            TryRemove(hashCode, out _);
-        }
+     
         public virtual async ValueTask Chufa(object canshu)
         {
-            await Task.WhenAll(this.Select(c => c.Value(canshu).AsTask()));
+            var t = canshu.GetType();
+            if (TryGetValue(t, out var dic))
+            {
+                await Task.WhenAll(dic.Select(c => c.Value(canshu).AsTask()));
+            }
+           // await Task.WhenAll(this.Select(c => c.Value(canshu).AsTask()));
         }
     }
     /// <summary>
     /// 无参事件中介
     /// </summary>
-    public class ZhongjieWithoutParam : HashSet<Func<string, ValueTask>>
+    public class ZhongjieWithoutParam : ConcurrentDictionary< string, HashSet< Func< ValueTask>>>
     {
+        public virtual void Zhuce(string e, Func<ValueTask> func)
+        { 
+            this.TryAdd(e, new HashSet<Func<ValueTask>>());
+            this[e].Add(func);
+        }
+
+        public virtual void Zhuxiao( Func<ValueTask> func)
+        {
+            foreach (var item in this)
+            {
+                item.Value.Remove(func);
+            }
+        }
+
         public virtual async ValueTask Chufa(string shijian)
         {
-            await Task.WhenAll(this.Select(c => c(shijian).AsTask()));
+            if (TryGetValue(shijian, out var dic))
+            {
+                await Task.WhenAll(dic.Select(c => c().AsTask()));
+            }
         }
     }
 }
