@@ -1,5 +1,6 @@
 //using hyjiacan.py4n;
 using System;
+using System.Buffers;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -253,13 +254,65 @@ namespace System
         /// <param name="length"></param>
         /// <param name="weiba"></param>
         /// <returns></returns>
-        public static string Baoliu(this string str, int length,string weiba="...")
+        public static string Baoliu(this string str, int length, string weiba = "...")
         {
             if (str.IsNullOrWhiteSpaceBXJG())
                 return string.Empty;
             if (str.Length <= length)
                 return str;
-            return str.Substring(0, length)+weiba;
+            return str.Substring(0, length) + weiba;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <returns></returns>
+        public static string ToHexString(this byte[] bytes)
+        {
+            string hexString = string.Empty;
+            if (bytes != null)
+            {
+                StringBuilder strB = new StringBuilder();
+
+                for (int i = 0; i < bytes.Length; i++)
+                {
+                    strB.Append(bytes[i].ToString("X2"));
+                }
+                hexString = strB.ToString();
+            }
+            return hexString;
+        }
+
+        /// <summary>
+        /// 十六进制字符串转字节数组
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static byte[] HexStringToByteArray(this string s)
+        {
+            s = s.Replace(" ", "");
+            byte[] buffer = new byte[s.Length / 2];
+            for (int i = 0; i < s.Length; i += 2)
+            {
+                buffer[i / 2] = Convert.ToByte(s.Substring(i, 2), 16);
+            }
+            return buffer;
+        }
+
+        //ReadOnlySequence<byte>转十六禁止字符串
+        public static string ToHexString(this ReadOnlySequence<byte> bytes)
+        {
+            string hexString = string.Empty;
+
+            StringBuilder strB = new StringBuilder();
+            var rd = new SequenceReader<byte>(bytes);
+            while (rd.TryPeek(out var item))
+            {
+                strB.Append(item.ToString("X2"));
+            }
+            hexString = strB.ToString();
+            return hexString;
         }
     }
 }
