@@ -13,6 +13,7 @@ using Abp.ObjectMapping;
 using Abp.Runtime.Session;
 using Abp.Threading;
 using Abp.UI;
+using BXJG.Common.DongtaiZhongjie;
 using BXJG.Common.Dto;
 using Castle.Core.Logging;
 using Microsoft.Extensions.DependencyInjection;
@@ -57,6 +58,13 @@ namespace BXJG.Utils.RCL
         protected IAbpSession AbpSession => abpSession.Value;
         [Inject]
         public IHostEnvironment HostEnvironment { get; set; }
+
+        //反正是单例，不用延迟注册了
+        /// <summary>
+        /// 基于委托的事件总线
+        /// </summary>
+        [Inject]
+        public Zhongjie Zhongjie { get; set; }
 
         //几乎始终会被使用到的对象，就不要延迟加载了
         protected IUnitOfWorkDefaultOptions unitOfWorkDefaultOptions;
@@ -182,9 +190,9 @@ namespace BXJG.Utils.RCL
         /// </summary>
         protected virtual void OnInitialized2() { }
 
-        protected override  Task OnInitializedAsync()
+        protected override Task OnInitializedAsync()
         {
-            return SafeExecuteAsync( OnInitialized2Async);
+            return SafeExecuteAsync(OnInitialized2Async);
             //  return base.OnInitializedAsync();
         }
         /// <summary>
@@ -194,16 +202,16 @@ namespace BXJG.Utils.RCL
 
         protected override void OnAfterRender(bool firstRender)
         {
-            SafeExecute(()=>OnAfterRender2(firstRender));
+            SafeExecute(() => OnAfterRender2(firstRender));
             //base.OnAfterRender(firstRender);
         }
         protected virtual void OnAfterRender2(bool firstRender) { }
 
-        protected override  Task OnAfterRenderAsync(bool firstRender)
+        protected override Task OnAfterRenderAsync(bool firstRender)
         {
-            return SafeExecuteAsync(()=>OnAfterRender2Async(firstRender));
+            return SafeExecuteAsync(() => OnAfterRender2Async(firstRender));
         }
-        protected virtual Task OnAfterRender2Async(bool firstRender)=> Task.CompletedTask;
+        protected virtual Task OnAfterRender2Async(bool firstRender) => Task.CompletedTask;
 
 
         protected override void OnParametersSet()
@@ -279,10 +287,10 @@ namespace BXJG.Utils.RCL
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        protected virtual async Task SafeExecuteAsync(Func< Task> action, CancellationToken cancellationToken = default)
+        protected virtual async Task SafeExecuteAsync(Func<Task> action, CancellationToken cancellationToken = default)
         {
-           // Logger.Debug("aaa");
-           // Logger.Debug(action.Method.Name);
+            // Logger.Debug("aaa");
+            // Logger.Debug(action.Method.Name);
             try
             {
                 /*
@@ -293,14 +301,14 @@ namespace BXJG.Utils.RCL
                  * 可以的，不过这不应该在抽象中来决定
                  * 
                  */
-                
+
                 var ct1 = cancellationToken == default ? cts.Token : cancellationToken;
-             //   Logger.Debug("bbbb");
+                //   Logger.Debug("bbbb");
                 using (var ct = cancellationTokenProvider.Use(ct1))
                 {
-               //     Logger.Debug("ccc");
+                    //     Logger.Debug("ccc");
                     await action();
-                 //   Logger.Debug("dddd");
+                    //   Logger.Debug("dddd");
                     //查看集成blazor文档，已全局开启按约定的拦截器
                     ////https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp.AspNetCore/AspNetCore/Mvc/Uow/AbpUowActionFilter.cs#L14
                     //var unitOfWorkAttr = unitOfWorkDefaultOptions
