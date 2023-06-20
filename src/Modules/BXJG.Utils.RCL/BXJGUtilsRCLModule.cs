@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Utils.RCL
+namespace BXJG.Utils
 {
     [DependsOn(typeof(BXJGUtilsApplicationModule))]
     public class BXJGUtilsRCLModule: AbpModule

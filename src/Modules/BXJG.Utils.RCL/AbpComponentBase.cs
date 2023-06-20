@@ -29,7 +29,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using static System.Formats.Asn1.AsnWriter;
 
-namespace BXJG.Utils.RCL
+namespace BXJG.Utils
 {
     /*
      * 基本上把抽象的应用服务中的abp相关玩意搞过来
