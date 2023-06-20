@@ -37,7 +37,7 @@ namespace BXJG.Utils.Notification
             seleted = notificationDefinitions.Where(x => notificationSubscriptions.Any(y => y.NotificationName == x.Name)).Select(c => c.Name).ToHashSet();
         }
 
-        private async Task SelectChanged(string name, bool xuanze)
+        protected virtual async Task SelectChanged(string name, bool xuanze)
         {
             await base.SafeExecuteAsync(async () =>
             {
