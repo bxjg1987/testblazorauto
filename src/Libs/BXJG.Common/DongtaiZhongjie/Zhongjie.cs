@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -103,7 +103,8 @@ namespace BXJG.Common.DongtaiZhongjie
             {
                 foreach (var dic in this)
                 {
-                    dic.Value.TryRemove(weituo, out _);
+                    if(dic.Value.TryRemove(weituo, out _)) 
+                        break;
                 }
             }
             logger.LogDebug($"注销事件：{eventName}");
