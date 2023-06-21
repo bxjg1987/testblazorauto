@@ -53,7 +53,7 @@ namespace BXJG.Common.DongtaiZhongjie
             logger.LogDebug($"事件类型数量：{this.Count}，总委托数：{k}");
         }
 
-        public virtual IDispose Zhuce<T>(Func<T, ValueTask> weituo, string eventName = default) where T : class
+        public virtual IDisposable Zhuce<T>(Func<T, ValueTask> weituo, string eventName = default) where T : class
         {
             if (eventName.IsNullOrWhiteSpaceBXJG())
                 eventName = typeof(T).FullName;
@@ -71,9 +71,9 @@ namespace BXJG.Common.DongtaiZhongjie
 
             LogDebug();
             // TryAdd(typeof(T), oo => weituo(oo as T));
-            return new ZhongjieZhuxiaoqi(this,weituo,eventName);
+            return new ZhongjieZhuxiaoqi(this,eventName, weituo);
         }
-        public virtual IDispose Zhuce(Func<ValueTask> weituo, string eventName)
+        public virtual IDisposable Zhuce(Func<ValueTask> weituo, string eventName)
         {
             TryAdd(eventName, new ConcurrentDictionary<Delegate, Func<object, ValueTask>>());
 
@@ -82,7 +82,7 @@ namespace BXJG.Common.DongtaiZhongjie
             logger.LogDebug($"注册事件：{eventName}");
 
             LogDebug();
-            return new ZhongjieZhuxiaoqi(this,weituo,eventName);
+            return new ZhongjieZhuxiaoqi(this,eventName, weituo);
             // TryAdd(typeof(T), oo => weituo(oo as T));
         }
         //不用Delegate做参数类型，因为外面调用时，自动推导调用起来更容易
@@ -137,7 +137,7 @@ namespace BXJG.Common.DongtaiZhongjie
             }
         }
 
-        internal class ZhongjieZhuxiaoqi : IDispose
+        internal class ZhongjieZhuxiaoqi : IDisposable
         {
             private readonly Zhongjie zhongjie;
             private readonly string eventName;
