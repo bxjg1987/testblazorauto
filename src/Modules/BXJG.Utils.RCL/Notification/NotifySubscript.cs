@@ -18,13 +18,13 @@ namespace BXJG.Utils.Notification
     {
         [Inject]
         public INotificationDefinitionManager NotificationDefinitionManager { get; set; }
+
         [Inject]
         public INotificationSubscriptionManager NotificationSubscriptionManager { get; set; }
 
         protected UserIdentifier idf;
         protected IReadOnlyList<NotificationDefinition> notificationDefinitions = new List<NotificationDefinition>();
         protected HashSet<string> seleted = new HashSet<string>();
-
 
         protected override async Task OnInitialized2Async()
         {

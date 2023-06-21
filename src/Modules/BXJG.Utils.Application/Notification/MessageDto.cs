@@ -11,7 +11,7 @@ namespace BXJG.Utils.Notification
     /// <summary>
     /// 通用的消息列表模型
     /// </summary>
-    public class ListDto
+    public class MessageDto
     {
         public Guid UserNotificationInfoId { get; set; }
 
@@ -23,7 +23,7 @@ namespace BXJG.Utils.Notification
         /// <summary>
         /// 通知数据
         /// </summary>
-        public object Data { get; set; }
+        public string Data { get; set; }
         
         /// <summary>
         /// 消息状态

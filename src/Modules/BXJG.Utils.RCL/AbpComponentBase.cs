@@ -13,7 +13,6 @@ using Abp.ObjectMapping;
 using Abp.Runtime.Session;
 using Abp.Threading;
 using Abp.UI;
-using BXJG.Common.DongtaiZhongjie;
 using BXJG.Common.Dto;
 using Castle.Core.Logging;
 using Microsoft.Extensions.DependencyInjection;
@@ -59,12 +58,10 @@ namespace BXJG.Utils
         [Inject]
         public IHostEnvironment HostEnvironment { get; set; }
 
-        //反正是单例，不用延迟注册了
-        /// <summary>
-        /// 基于委托的事件总线
-        /// </summary>
+        
         [Inject]
-        public Zhongjie Zhongjie { get; set; }
+        public IEventBus EventBus {get;set; }
+
 
         //几乎始终会被使用到的对象，就不要延迟加载了
         protected IUnitOfWorkDefaultOptions unitOfWorkDefaultOptions;

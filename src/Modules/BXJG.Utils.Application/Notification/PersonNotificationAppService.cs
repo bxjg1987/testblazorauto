@@ -22,6 +22,7 @@ using Newtonsoft.Json;
 using Abp.UI;
 using Abp.Domain.Entities;
 using Abp.Authorization.Users;
+using Abp.Localization;
 
 namespace BXJG.Utils.Notification
 {
@@ -29,23 +30,53 @@ namespace BXJG.Utils.Notification
     /// 通用个人消息管理服务
     /// </summary>
     [AbpAuthorize]
-    public class PersonNotificationAppService<TUser> : ApplicationService where TUser : AbpUserBase, IEntity<int>
+    public class PersonNotificationAppService<TUser> : ApplicationService where TUser : AbpUserBase
     {
-        private readonly IRepository<TUser> userRepository;
-        private readonly Lazy<IUserNotificationManager> userNotificationManager;
+        protected readonly IRepository<TUser,long> userRepository;
+        protected readonly Lazy<IUserNotificationManager> userNotificationManager;
         //private readonly INotificationDefinitionManager 
-        private readonly Lazy<IRepository<UserNotificationInfo, Guid>> userNotificationRepository;
-        private readonly Lazy<IRepository<TenantNotificationInfo, Guid>> tenantNotificationRepository;
+        protected readonly Lazy<IRepository<UserNotificationInfo, Guid>> userNotificationRepository;
+        protected readonly Lazy<IRepository<TenantNotificationInfo, Guid>> tenantNotificationRepository;
+
+        protected readonly Lazy<INotificationDefinitionManager> notificationDefinitionManager;
 
         public PersonNotificationAppService(Lazy<IUserNotificationManager> userNotificationManager,
                                             Lazy<IRepository<UserNotificationInfo, Guid>> repository,
                                             Lazy<IRepository<TenantNotificationInfo, Guid>> tenantNotificationRepository,
-                                            IRepository<TUser> userRepository)
+                                            IRepository<TUser, long> userRepository,
+                                            Lazy<INotificationDefinitionManager> notificationDefinitionManager)
         {
             this.userNotificationManager = userNotificationManager;
             this.userNotificationRepository = repository;
             this.tenantNotificationRepository = tenantNotificationRepository;
             this.userRepository = userRepository;
+            this.notificationDefinitionManager = notificationDefinitionManager;
+
+            base.LocalizationSourceName = BXJGUtilsConsts.LocalizationSourceName;
+        }
+
+        /// <summary>
+        /// 获取当前用户可访问的消息定义
+        /// </summary>
+        /// <returns></returns>
+        [UnitOfWork(false)]
+        public virtual async Task<List<NotifyDefineDto>> GetDefines()
+        {
+            var list = await notificationDefinitionManager.Value.GetAllAvailableAsync(base.AbpSession.ToUserIdentifier());
+            var r = new List<NotifyDefineDto>();
+            foreach (var item in list)
+            {
+                var temp = new NotifyDefineDto
+                {
+                    Name = item.Name,
+                    DisplayName = item.DisplayName.Localize(LocalizationManager),
+                    EntityType = item.EntityType.FullName,
+                    Description = item.Description.Localize(LocalizationManager),
+                    Attributes = item.Attributes
+                };
+                r.Add(temp);
+            }
+            return r;
         }
 
         /// <summary>
@@ -54,7 +85,7 @@ namespace BXJG.Utils.Notification
         /// <param name="input"></param>
         /// <returns></returns>
         [UnitOfWork(false)]
-        public async Task<int> GetTotalAsync(GetTotalInput input)
+        public virtual async Task<int> GetTotalAsync(GetTotalInput input)
         {
             var query = GetQuery(input);
             return await query.CountAsync();
@@ -65,22 +96,18 @@ namespace BXJG.Utils.Notification
         /// <param name="input"></param>
         /// <returns></returns>
         [UnitOfWork(false)]
-        public async Task<Notification.ResultDto<ListDto>> GetAllAsync(GetAllInput input)
+        public virtual async Task<List<MessageDto>> GetAllAsync(GetAllInput input)
         {
-            var r = new Notification.ResultDto<ListDto>();
             //var u = new Abp.UserIdentifier(base.AbpSession.TenantId, AbpSession.UserId.Value);
             //r.TotalCount = await userNotificationManager.GetUserNotificationCountAsync(u, input.UserNotificationState, input.StartTime, input.EndTime);
             //r.Items = await userNotificationManager.GetUserNotificationsAsync(u, input.UserNotificationState, input.SkipCount, input.MaxResultCount, input.StartTime, input.EndTime);
             //UserNotificationInfo
 
             var query = GetQuery(input);
-            r.TotalCount = await query.CountAsync();
-            r.ReadCount = await query.Where(x => x.UserNotificationInfo.State == UserNotificationState.Read).CountAsync();
-            r.UnReadCount = r.TotalCount - r.ReadCount;
             query = query.OrderBy(input.Sorting).PageBy(input);
 
             var items = await query.ToListAsync();
-            var tempList = new List<ListDto>();
+            var tempList = new List<MessageDto>();
             foreach (var item in items)
             {
                 //var tn = ObjectMapper.Map<TenantNotification>(item.e);
@@ -91,13 +118,13 @@ namespace BXJG.Utils.Notification
 
 
                 //ZLJ.Notification.MessageNotificationData data = JsonConvert.DeserializeObject<ZLJ.Notification.MessageNotificationData>(item.TenantNotificationInfo.Data);
-                var temp = new ListDto
+                var temp = new MessageDto
                 {
-                    UserNotificationInfoId = item.UserNotificationInfo.Id, 
+                    UserNotificationInfoId = item.UserNotificationInfo.Id,
                     //Title = data.Title,
                     //Content = data.Message, 
                     State = item.UserNotificationInfo.State,
-                    Data = JsonConvert.DeserializeObject<dynamic>(item.TenantNotificationInfo.Data),
+                    Data = item.TenantNotificationInfo.Data,
                     Name = item.TenantNotificationInfo.NotificationName,
                     Severity = item.TenantNotificationInfo.Severity,
                     CreationTime = item.UserNotificationInfo.CreationTime,
@@ -123,8 +150,7 @@ namespace BXJG.Utils.Notification
                 //};
                 tempList.Add(temp);
             }
-            r.Items = new ReadOnlyCollection<ListDto>(tempList);
-            return r;
+            return tempList;
         }
 
         private IQueryable<temp> GetQuery(GetTotalInput input)

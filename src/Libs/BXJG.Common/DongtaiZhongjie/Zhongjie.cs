@@ -40,7 +40,7 @@ namespace BXJG.Common.DongtaiZhongjie
         public Zhongjie(ILoggerFactory logger)
         {
 
-            this.logger = logger.CreateLogger(this.GetType());
+            this.logger = logger.CreateLogger(GetType());
         }
 
         protected void LogDebug()
@@ -50,7 +50,7 @@ namespace BXJG.Common.DongtaiZhongjie
             {
                 k += item.Value.Count;
             }
-            logger.LogDebug($"事件类型数量：{this.Count}，总委托数：{k}");
+            logger.LogDebug($"事件类型数量：{Count}，总委托数：{k}");
         }
 
         public virtual IDisposable Zhuce<T>(Func<T, ValueTask> weituo, string eventName = default) where T : class
@@ -64,14 +64,14 @@ namespace BXJG.Common.DongtaiZhongjie
 
             //注册相同委托时，覆盖没意义
             //this[eventName].TryRemove(weituo);
-            
+
             this[eventName].TryAdd(weituo, oo => weituo(oo as T));
 
             logger.LogDebug($"注册事件：{eventName}");
 
             LogDebug();
             // TryAdd(typeof(T), oo => weituo(oo as T));
-            return new ZhongjieZhuxiaoqi(this,eventName, weituo);
+            return new ZhongjieZhuxiaoqi(this, eventName, weituo);
         }
         public virtual IDisposable Zhuce(Func<ValueTask> weituo, string eventName)
         {
@@ -82,7 +82,7 @@ namespace BXJG.Common.DongtaiZhongjie
             logger.LogDebug($"注册事件：{eventName}");
 
             LogDebug();
-            return new ZhongjieZhuxiaoqi(this,eventName, weituo);
+            return new ZhongjieZhuxiaoqi(this, eventName, weituo);
             // TryAdd(typeof(T), oo => weituo(oo as T));
         }
         //不用Delegate做参数类型，因为外面调用时，自动推导调用起来更容易
@@ -110,7 +110,7 @@ namespace BXJG.Common.DongtaiZhongjie
             {
                 foreach (var dic in this)
                 {
-                    if(dic.Value.TryRemove(weituo, out _)) 
+                    if (dic.Value.TryRemove(weituo, out _))
                         break;
                 }
             }
@@ -143,16 +143,16 @@ namespace BXJG.Common.DongtaiZhongjie
             private readonly string eventName;
             private readonly Delegate act;
 
-            public ZhongjieZhuxiaoqi(Zhongjie zj,string eventName, Delegate act)
+            public ZhongjieZhuxiaoqi(Zhongjie zj, string eventName, Delegate act)
             {
-                this.zhongjie=zj;
-                this.eventName=eventName;
-                this.act=act;
+                zhongjie = zj;
+                this.eventName = eventName;
+                this.act = act;
             }
 
             public void Dispose()
             {
-                this.zhongjie.Zhuxiao(act,eventName);
+                zhongjie.Zhuxiao(act, eventName);
             }
         }
     }
