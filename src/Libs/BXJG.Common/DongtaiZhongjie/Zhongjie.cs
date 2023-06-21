@@ -62,6 +62,9 @@ namespace BXJG.Common.DongtaiZhongjie
 
             TryAdd(eventName, new ConcurrentDictionary<Delegate, Func<object, ValueTask>>());
 
+            //注册相同委托时，覆盖没意义
+            //this[eventName].TryRemove(weituo);
+            
             this[eventName].TryAdd(weituo, oo => weituo(oo as T));
 
             logger.LogDebug($"注册事件：{eventName}");
