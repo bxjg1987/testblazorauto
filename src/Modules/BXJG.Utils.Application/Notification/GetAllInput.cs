@@ -20,8 +20,8 @@ namespace BXJG.Utils.Notification
     public class GetAllInput : GetTotalInput, IPagedAndSortedResultRequest, IShouldNormalize
     {
         //public GetTotalInput GetTotalInput { get; set; } = new GetTotalInput();
-        public int SkipCount { get; set; }
-        public int MaxResultCount { get; set; }
+        public int SkipCount { get; set; } = 0;
+        public int MaxResultCount { get; set; } = 20;
         public string Sorting { get; set; }
 
         public void Normalize()

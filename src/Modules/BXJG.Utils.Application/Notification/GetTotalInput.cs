@@ -47,5 +47,9 @@ namespace BXJG.Utils.Notification
         /// 只查询指定级别的通知，空则不限制
         /// </summary>
         public IEnumerable<NotificationSeverity> NotificationSeverities { get; set; }
+        /// <summary>
+        /// 关键字
+        /// </summary>
+        public string? Keywords { get; set; }
     }
 }

@@ -11,6 +11,13 @@ using Abp.Collections.Extensions;
 
 namespace BXJG.Utils.Notification
 {
+    /// <summary>
+    /// 通知订阅组件抽象类
+    /// 注：目前为实现实体通知的订阅
+    /// </summary>
+    /// <typeparam name="TUser"></typeparam>
+    /// <typeparam name="TUserManager"></typeparam>
+    /// <typeparam name="TRole"></typeparam>
     public class NotifySubscript<TUser, TUserManager, TRole> : AbpComponentBase<TUser, TUserManager, TRole>
         where TUser : AbpUser<TUser>
         where TRole : AbpRole<TUser>, new()
@@ -28,6 +35,9 @@ namespace BXJG.Utils.Notification
 
         protected override async Task OnInitialized2Async()
         {
+            if (idf != default)
+                return;
+
             idf = new Abp.UserIdentifier(base.AbpSession.TenantId, base.AbpSession.UserId.Value);
             //getall可能是获取所有，而GetAllAvailableAsync有权访问的通知定义
             notificationDefinitions = await NotificationDefinitionManager.GetAllAvailableAsync(idf);

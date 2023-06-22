@@ -37,7 +37,6 @@ namespace BXJG.Utils.Notification
         private readonly Lazy<IRepository<TUser, long>> userRepository;
         protected IRepository<TUser, long> UserRepository => userRepository.Value;
 
-
         private readonly Lazy<IUserNotificationManager> userNotificationManager;
         protected IUserNotificationManager UserNotificationManager => userNotificationManager.Value;
 
@@ -80,20 +79,6 @@ namespace BXJG.Utils.Notification
         {
             var list = await NotificationDefinitionManager.GetAllAvailableAsync(base.AbpSession.ToUserIdentifier());
             return base.ObjectMapper.Map<List<NotifyDefineDto>>(list);
-            //var r = new List<NotifyDefineDto>();
-            //foreach (var item in list)
-            //{
-            //    var temp = new NotifyDefineDto
-            //    {
-            //        Name = item.Name,
-            //        DisplayName = item.DisplayName.Localize(LocalizationManager),
-            //        EntityType = item.EntityType.FullName,
-            //        Description = item.Description.Localize(LocalizationManager),
-            //        Attributes = item.Attributes
-            //    };
-            //    r.Add(temp);
-            //}
-            //return r;
         }
         /// <summary>
         /// 批量订阅通知
@@ -162,7 +147,7 @@ namespace BXJG.Utils.Notification
         [UnitOfWork(false)]
         public virtual async Task<Dictionary<SubscriptNotifyItem, int>> GetTotalGroupBySubscript(GetTotalInput input)
         {
-            var query = GetQuery(input).GroupBy(c =>new SubscriptNotifyItem { NotifyName=  c.TenantNotificationInfo.NotificationName , EntityTypeName = c.TenantNotificationInfo.EntityTypeName, EntityId= c.TenantNotificationInfo.EntityId}).Select(c => new { c.Key, ct = c.Count() });
+            var query = GetQuery(input).GroupBy(c => new SubscriptNotifyItem { NotifyName = c.TenantNotificationInfo.NotificationName, EntityTypeName = c.TenantNotificationInfo.EntityTypeName, EntityId = c.TenantNotificationInfo.EntityId }).Select(c => new { c.Key, ct = c.Count() });
             var tm = await query.ToArrayAsync();
             return tm.ToDictionary(c => c.Key, c => c.ct);
         }
@@ -189,7 +174,7 @@ namespace BXJG.Utils.Notification
             return r;
         }
 
-        private IQueryable<temp> GetQuery(GetTotalInput input)
+        protected virtual IQueryable<temp> GetQuery(GetTotalInput input)
         {
             var query = from c in UserNotificationRepository.GetAll().AsNoTrackingWithIdentityResolution()
                         join d in TenantNotificationRepository.GetAll().AsNoTrackingWithIdentityResolution() on c.TenantNotificationId equals d.Id into temp
@@ -210,8 +195,9 @@ namespace BXJG.Utils.Notification
             query = query.WhereIf(input.UserNotificationState.HasValue, c => c.UserNotificationInfo.State == input.UserNotificationState.Value)
                          .WhereIf(input.StartTime.HasValue, c => c.TenantNotificationInfo.CreationTime >= input.StartTime)
                          .WhereIf(input.EndTime.HasValue, c => c.TenantNotificationInfo.CreationTime < input.EndTime)
-                         .WhereIf(input.EntityTypeName.IsNotNullOrWhiteSpaceBXJG(),c=>c.TenantNotificationInfo.EntityTypeName== input.EntityTypeName)
-                         .WhereIf(input.EntityId.IsNotNullOrWhiteSpaceBXJG(),c=>c.TenantNotificationInfo.EntityId== input.EntityId)
+                         .WhereIf(input.EntityTypeName.IsNotNullOrWhiteSpaceBXJG(), c => c.TenantNotificationInfo.EntityTypeName == input.EntityTypeName)
+                         .WhereIf(input.EntityId.IsNotNullOrWhiteSpaceBXJG(), c => c.TenantNotificationInfo.EntityId == input.EntityId)
+                         .WhereIf(input.Keywords.IsNotNullOrWhiteSpaceBXJG(),c=>c.TenantNotificationInfo.Data.Contains(input.Keywords))
                          .WhereIf(input.NotificationSeverities != null && input.NotificationSeverities.Any(), c => input.NotificationSeverities.Any(d => d == c.TenantNotificationInfo.Severity));
             //var sql = query.ToQueryString();
             return query;
@@ -222,7 +208,7 @@ namespace BXJG.Utils.Notification
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<BatchOperationOutput<Guid>> SetReadedAsync(BatchOperationInput<Guid> input)
+        public virtual async Task<BatchOperationOutput<Guid>> SetReadedAsync(BatchOperationInput<Guid> input)
         {
             var r = new BatchOperationOutput<Guid>();
             foreach (var item in input.Ids)
