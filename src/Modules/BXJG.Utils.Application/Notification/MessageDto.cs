@@ -19,28 +19,32 @@ namespace BXJG.Utils.Notification
         /// <summary>
         /// 通知类型
         /// </summary>
-        public string Name { get; set; }
+        public string TenantNotificationInfoNotificationName { get; set; }
         /// <summary>
         /// 通知数据
         /// </summary>
-        public string Data { get; set; }
+        public string TenantNotificationInfoData { get; set; }
         
         /// <summary>
         /// 消息状态
         /// </summary>
-        public UserNotificationState State { get; set; }
+        public UserNotificationState UserNotificationInfoState { get; set; }
         /// <summary>
         /// 消息级别
         /// </summary>
-        public NotificationSeverity Severity { get; set; }
+        public NotificationSeverity TenantNotificationInfoSeverity { get; set; }
         /// <summary>
         /// 发布人
         /// </summary>
-        public string CreateUserName { get; set; }
+        public string UserNotificationInfoCCreationTime { get; set; }
         /// <summary>
         /// 发布时间
         /// </summary>
         public DateTime CreationTime { get; set; }
+        /// <summary>
+        /// 发布人
+        /// </summary>
+        public string CreateUserName { get; set; }
         /// <summary>
         /// 发布显示时间
         /// </summary>

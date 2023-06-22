@@ -6,6 +6,7 @@ using Abp.Authorization.Roles;
 using Abp.Authorization.Users;
 using Abp.Configuration;
 using Abp.Domain.Uow;
+using Abp.Events.Bus;
 using Abp.Localization;
 using Abp.Localization.Sources;
 using Abp.MultiTenancy;
@@ -342,7 +343,7 @@ namespace BXJG.Utils
             catch (Exception ex)
             {
                 if (HostEnvironment.IsDevelopment())
-                    throw ex;
+                    throw;
 
                 Logger.Error(ex.ToString(), ex);
                 await ShowErrorAsync(L("InternalServerError"));
@@ -410,7 +411,7 @@ namespace BXJG.Utils
             catch (Exception ex)
             {
                 if (HostEnvironment.IsDevelopment())
-                    throw ex;
+                    throw;
 
                 Logger.Error(ex.ToString(), ex);
                 await ShowErrorAsync(L("InternalServerError"));
@@ -475,7 +476,7 @@ namespace BXJG.Utils
             catch (Exception ex)
             {
                 if (HostEnvironment.IsDevelopment())
-                    throw ex;
+                    throw;
 
                 Logger.Error(ex.ToString(), ex);
                 ShowError(L("InternalServerError"));
@@ -532,7 +533,7 @@ namespace BXJG.Utils
             catch (Exception ex)
             {
                 if (HostEnvironment.IsDevelopment())
-                    throw ex;
+                    throw;
 
                 Logger.Error(ex.ToString(), ex);
                 ShowError(L("InternalServerError"));

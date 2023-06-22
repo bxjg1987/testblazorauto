@@ -71,6 +71,10 @@ namespace BXJG.Common.Dto
     {
     }
 
+    public class BatchOperationInputString : BatchOperationInput<string>
+    {
+    }
+
     public class BatchSwitchInput<TKey> : BatchOperationInput<TKey>
     {
         public bool IsActive { get; set; }
@@ -79,6 +83,9 @@ namespace BXJG.Common.Dto
     {
     }
     public class BatchSwitchInputLong : BatchSwitchInput<long>
+    {
+    }
+    public class BatchSwitchInputString : BatchSwitchInput<string>
     {
     }
 }

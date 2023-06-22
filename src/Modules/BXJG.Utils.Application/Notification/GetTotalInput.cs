@@ -36,6 +36,14 @@ namespace BXJG.Utils.Notification
         /// </summary>
         public DateTime? EndTime { get; set; }
         /// <summary>
+        /// 实体类型id
+        /// </summary>
+        public string? EntityTypeName { get; set; }
+        /// <summary>
+        /// 实体id
+        /// </summary>
+        public string EntityId { get; set; }
+        /// <summary>
         /// 只查询指定级别的通知，空则不限制
         /// </summary>
         public IEnumerable<NotificationSeverity> NotificationSeverities { get; set; }

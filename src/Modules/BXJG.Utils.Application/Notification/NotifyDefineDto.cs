@@ -14,6 +14,10 @@ namespace BXJG.Utils.Notification
         public string Description { get;set;}
         public IDictionary<string, object> Attributes { get;  set; }
 
-        public bool Selected { get; set; }
+        //public bool Selected { get; set; }
+        ///// <summary>
+        ///// 未读数量
+        ///// </summary>
+        //public int UnReadCount { get; set; }
     }
 }

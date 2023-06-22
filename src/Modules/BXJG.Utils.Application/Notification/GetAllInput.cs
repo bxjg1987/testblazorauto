@@ -27,7 +27,7 @@ namespace BXJG.Utils.Notification
         public void Normalize()
         {
             if (Sorting.IsNullOrEmpty())
-                Sorting = "UserNotificationInfo.CreationTime desc, TenantNotificationInfo.Severity asc";
+                Sorting = "UserNotificationInfo.CreationTime desc, UserNotificationInfo.State asc, TenantNotificationInfo.Severity asc";
         }
     }
 }
