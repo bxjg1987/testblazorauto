@@ -78,17 +78,17 @@ namespace BXJG.Utils.Notification
             {
                 Attributes = c.Attributes,
                 Description = c.Description,
-                DisplayName = c.Description,
+                DisplayName = c.DisplayName,
                 EntityType = c.EntityType,
                 Name = c.Name,
                 UnReadCount = sl.Result.Where(d => d.Key.NotifyName == c.Name).Sum(c => c.Value),
                 Selected = false
             }).ToList();
 
-            foreach (var item in defines)
-            {
-                base.Logger.Debug(System.Text.Json.JsonSerializer.Serialize(item));
-            }
+            //foreach (var item in defines)
+            //{
+            //    base.Logger.Debug(System.Text.Json.JsonSerializer.Serialize(item));
+            //}
             if (defines.Any())
             {
                 await HeadChanged(defines.First().Name);
