@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <RootNamespace>BXJG.Utils</RootNamespace>
-    <Version>1.2.17</Version>
+    <Version>1.2.18</Version>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -28,7 +28,7 @@
 
   <ItemGroup>
     <PackageReference Include="Abp.AutoMapper" Version="8.2.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.8" />
   </ItemGroup>
 
   <ItemGroup>
