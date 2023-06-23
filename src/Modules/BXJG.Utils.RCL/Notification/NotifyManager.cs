@@ -12,7 +12,6 @@ using System.Xml.Linq;
 
 namespace BXJG.Utils.Notification
 {
-
     /// <summary>
     /// 通知管理组件抽象类
     /// </summary>
@@ -60,12 +59,10 @@ namespace BXJG.Utils.Notification
         /// </summary>
         [Inject]
         public TAppService AppService { get; set; }
-
         protected override async Task OnInitialized2Async()
         {
             await LoadDefinesAsync();
         }
-
         /// <summary>
         /// 加载头部列表及其未读数量
         /// </summary>
@@ -84,10 +81,14 @@ namespace BXJG.Utils.Notification
                 DisplayName = c.Description,
                 EntityType = c.EntityType,
                 Name = c.Name,
-                UnReadCount = sl.Result.Single(d => d.Key.NotifyName == c.Name).Value,
+                UnReadCount = sl.Result.Where(d => d.Key.NotifyName == c.Name).Sum(c => c.Value),
                 Selected = false
             }).ToList();
 
+            foreach (var item in defines)
+            {
+                base.Logger.Debug(System.Text.Json.JsonSerializer.Serialize(item));
+            }
             if (defines.Any())
             {
                 await HeadChanged(defines.First().Name);
@@ -139,7 +140,6 @@ namespace BXJG.Utils.Notification
             condition.EndTime = endTime;
             await ConditionChanged();
         }
-
         /// <summary>
         /// 条件-紧急程度变化时调用
         /// </summary>
