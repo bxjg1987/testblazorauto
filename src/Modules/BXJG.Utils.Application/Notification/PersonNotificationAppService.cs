@@ -23,6 +23,7 @@ using Abp.UI;
 using Abp.Domain.Entities;
 using Abp.Authorization.Users;
 using Abp.Localization;
+using Abp.Auditing;
 
 namespace BXJG.Utils.Notification
 {
@@ -32,42 +33,29 @@ namespace BXJG.Utils.Notification
     /// 此功能是所有类型的用户通用的
     /// </summary>
     [AbpAuthorize]
-    public class PersonNotificationAppService<TUser> : ApplicationService where TUser : AbpUserBase
+    public abstract class PersonNotificationAppService<TUser> : ApplicationService where TUser : AbpUserBase
     {
-        private readonly Lazy<IRepository<TUser, long>> userRepository;
+        public Lazy<IRepository<TUser, long>> userRepository { get; set; }
         protected IRepository<TUser, long> UserRepository => userRepository.Value;
 
-        private readonly Lazy<IUserNotificationManager> userNotificationManager;
+        public Lazy<IUserNotificationManager> userNotificationManager { get; set; }
         protected IUserNotificationManager UserNotificationManager => userNotificationManager.Value;
 
-        private readonly Lazy<IRepository<UserNotificationInfo, Guid>> userNotificationRepository;
+        public Lazy<IRepository<UserNotificationInfo, Guid>> userNotificationRepository { get; set; }
         protected IRepository<UserNotificationInfo, Guid> UserNotificationRepository => userNotificationRepository.Value;
 
-        private readonly Lazy<IRepository<TenantNotificationInfo, Guid>> tenantNotificationRepository;
+        public Lazy<IRepository<TenantNotificationInfo, Guid>> tenantNotificationRepository { get; set; }
         protected IRepository<TenantNotificationInfo, Guid> TenantNotificationRepository => tenantNotificationRepository.Value;
 
-        private readonly Lazy<INotificationDefinitionManager> notificationDefinitionManager;
+        public Lazy<INotificationDefinitionManager> notificationDefinitionManager { get; set; }
         protected INotificationDefinitionManager NotificationDefinitionManager => notificationDefinitionManager.Value;
 
-        private readonly Lazy<INotificationSubscriptionManager> notificationSubscriptionManager;
+        public Lazy<INotificationSubscriptionManager> notificationSubscriptionManager { get; set; }
         protected INotificationSubscriptionManager NotificationSubscriptionManager => notificationSubscriptionManager.Value;
 
-        public PersonNotificationAppService(Lazy<IUserNotificationManager> userNotificationManager,
-                                            Lazy<IRepository<UserNotificationInfo, Guid>> repository,
-                                            Lazy<IRepository<TenantNotificationInfo, Guid>> tenantNotificationRepository,
-                                            Lazy<IRepository<TUser, long>> userRepository,
-                                            Lazy<INotificationDefinitionManager> notificationDefinitionManager,
-                                            Lazy<INotificationSubscriptionManager> notificationSubscriptionManager)
+        public PersonNotificationAppService()
         {
-            this.userNotificationManager = userNotificationManager;
-            this.userNotificationRepository = repository;
-            this.tenantNotificationRepository = tenantNotificationRepository;
-            this.userRepository = userRepository;
-            this.notificationDefinitionManager = notificationDefinitionManager;
-
             base.LocalizationSourceName = BXJGUtilsConsts.LocalizationSourceName;
-
-            this.notificationSubscriptionManager = notificationSubscriptionManager;
         }
 
         /// <summary>
@@ -75,6 +63,7 @@ namespace BXJG.Utils.Notification
         /// </summary>
         /// <returns></returns>
         [UnitOfWork(false)]
+        [DisableAuditing]
         public virtual async Task<List<NotifyDefineDto>> GetDefines()
         {
             var list = await NotificationDefinitionManager.GetAllAvailableAsync(base.AbpSession.ToUserIdentifier());
@@ -90,38 +79,74 @@ namespace BXJG.Utils.Notification
         public virtual async Task<BatchOperationOutput<SubscriptNotifyItem>> Subscript(List<SubscriptNotifyItem> subscripts)
         {
             var r = new BatchOperationOutput<SubscriptNotifyItem>();
-            foreach (var name in subscripts)
+
+            foreach (var subscript in subscripts)
             {
                 EntityIdentifier? entityIdentifier = default;
-                if (name.EntityTypeName.IsNotNullOrWhiteSpaceBXJG())
+                if (subscript.EntityTypeName.IsNotNullOrWhiteSpaceBXJG())
                 {
-                    entityIdentifier = new EntityIdentifier(Type.GetType(name.EntityTypeName), name.EntityId);
+                    entityIdentifier = new EntityIdentifier(Type.GetType(subscript.EntityTypeName), subscript.EntityId);
                 }
                 try
                 {
                     using var uow = UnitOfWorkManager.Begin(System.Transactions.TransactionScopeOption.RequiresNew);
-                    await NotificationSubscriptionManager.SubscribeAsync(base.AbpSession.ToUserIdentifier(), name.NotifyName, entityIdentifier);
+                    await NotificationSubscriptionManager.SubscribeAsync(base.AbpSession.ToUserIdentifier(), subscript.NotifyName, entityIdentifier);
                     await uow.CompleteAsync();
-                    r.Ids.Add(name);
+                    r.Ids.Add(subscript);
                 }
                 catch (UserFriendlyException ex)
                 {
-                    r.ErrorMessage.Add(new BatchOperationErrorMessage(name, ex.Message));
+                    r.ErrorMessage.Add(new BatchOperationErrorMessage(subscript, ex.Message));
                 }
                 catch (Exception ex)
                 {
-                    r.ErrorMessage.Add(name.Message500());
-                    Logger.Warn($"部分订阅失败！{name}", ex);
+                    r.ErrorMessage.Add(subscript.Message500());
+                    Logger.Warn($"部分订阅失败！{subscript}", ex);
                 }
             }
             return r;
         }
-
+        /// <summary>
+        /// 批量取消订阅
+        /// </summary>
+        /// <param name="subscripts"></param>
+        /// <returns></returns>
+        [UnitOfWork(IsDisabled = true)]
+        public virtual async Task<BatchOperationOutput<SubscriptNotifyItem>> UnSubscript(List<SubscriptNotifyItem> subscripts)
+        {
+            var r = new BatchOperationOutput<SubscriptNotifyItem>();
+            foreach (var subscript in subscripts)
+            {
+                EntityIdentifier? entityIdentifier = default;
+                if (subscript.EntityTypeName.IsNotNullOrWhiteSpaceBXJG())
+                {
+                    entityIdentifier = new EntityIdentifier(Type.GetType(subscript.EntityTypeName), subscript.EntityId);
+                }
+                try
+                {
+                    using var uow = UnitOfWorkManager.Begin(System.Transactions.TransactionScopeOption.RequiresNew);
+                    await NotificationSubscriptionManager.UnsubscribeAsync(base.AbpSession.ToUserIdentifier(), subscript.NotifyName, entityIdentifier);
+                    await uow.CompleteAsync();
+                    r.Ids.Add(subscript);
+                }
+                catch (UserFriendlyException ex)
+                {
+                    r.ErrorMessage.Add(new BatchOperationErrorMessage(subscript, ex.Message));
+                }
+                catch (Exception ex)
+                {
+                    r.ErrorMessage.Add(subscript.Message500());
+                    Logger.Warn($"部分取消订阅失败！{subscript}", ex);
+                }
+            }
+            return r;
+        }
         /// <summary>
         /// 获取已订阅的通知定义
         /// </summary>
         /// <returns></returns>
         [UnitOfWork(false)]
+        [DisableAuditing]
         public virtual async Task<List<NotificationSubscription>> GetSubscriptedNotifyDefines()
         {
             return await NotificationSubscriptionManager.GetSubscribedNotificationsAsync(base.AbpSession.ToUserIdentifier());
@@ -133,6 +158,7 @@ namespace BXJG.Utils.Notification
         /// <param name="input"></param>
         /// <returns></returns>
         [UnitOfWork(false)]
+        [DisableAuditing]
         public virtual async Task<int> GetTotalAsync(GetTotalInput input)
         {
             var query = GetQuery(input);
@@ -145,11 +171,11 @@ namespace BXJG.Utils.Notification
         /// <param name="input"></param>
         /// <returns></returns>
         [UnitOfWork(false)]
+        [DisableAuditing]
         public virtual async Task<Dictionary<SubscriptNotifyItem, int>> GetTotalGroupBySubscript(GetTotalInput input)
         {
             var query = GetQuery(input).GroupBy(c => new SubscriptNotifyItem { NotifyName = c.TenantNotificationInfo.NotificationName, EntityTypeName = c.TenantNotificationInfo.EntityTypeName, EntityId = c.TenantNotificationInfo.EntityId }).Select(c => new { c.Key, ct = c.Count() });
-            var tm = await query.ToArrayAsync();
-            return tm.ToDictionary(c => c.Key, c => c.ct);
+            return await query.ToDictionaryAsync(c => c.Key, c => c.ct);
         }
 
         /// <summary>
@@ -158,6 +184,7 @@ namespace BXJG.Utils.Notification
         /// <param name="input"></param>
         /// <returns></returns>
         [UnitOfWork(false)]
+        [DisableAuditing]
         public virtual async Task<PagedResultDto<MessageDto>> GetAllAsync(GetAllInput input)
         {
             //var u = new Abp.UserIdentifier(base.AbpSession.TenantId, AbpSession.UserId.Value);
@@ -197,7 +224,7 @@ namespace BXJG.Utils.Notification
                          .WhereIf(input.EndTime.HasValue, c => c.TenantNotificationInfo.CreationTime < input.EndTime)
                          .WhereIf(input.EntityTypeName.IsNotNullOrWhiteSpaceBXJG(), c => c.TenantNotificationInfo.EntityTypeName == input.EntityTypeName)
                          .WhereIf(input.EntityId.IsNotNullOrWhiteSpaceBXJG(), c => c.TenantNotificationInfo.EntityId == input.EntityId)
-                         .WhereIf(input.Keywords.IsNotNullOrWhiteSpaceBXJG(),c=>c.TenantNotificationInfo.Data.Contains(input.Keywords))
+                         .WhereIf(input.Keywords.IsNotNullOrWhiteSpaceBXJG(), c => c.TenantNotificationInfo.Data.Contains(input.Keywords))
                          .WhereIf(input.NotificationSeverities != null && input.NotificationSeverities.Any(), c => input.NotificationSeverities.Any(d => d == c.TenantNotificationInfo.Severity));
             //var sql = query.ToQueryString();
             return query;
@@ -208,6 +235,7 @@ namespace BXJG.Utils.Notification
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
+        [UnitOfWork(IsDisabled = true)]
         public virtual async Task<BatchOperationOutput<Guid>> SetReadedAsync(BatchOperationInput<Guid> input)
         {
             var r = new BatchOperationOutput<Guid>();
@@ -232,11 +260,20 @@ namespace BXJG.Utils.Notification
             }
             return r;
         }
-
-        //获取当前用户可以订阅的通知列表
-
-        //订阅通知
-
-        //取消订阅通知
+        /// <summary>
+        /// 设置所有消息为已读
+        /// </summary>
+        /// <param name="name">通知类型名</param>
+        /// <returns></returns>
+        public virtual async Task SetReadedAllAsync(string name = default)
+        {
+            if (name.IsNullOrWhiteSpaceBXJG())
+                await UserNotificationManager.UpdateAllUserNotificationStatesAsync(AbpSession.ToUserIdentifier(), UserNotificationState.Read);
+            else
+            {
+                var msgs = await UserNotificationManager.GetUserNotificationsAsync(AbpSession.ToUserIdentifier(), UserNotificationState.Unread);
+                await SetReadedAsync(new BatchOperationInput<Guid> { Ids = msgs.Where(c => c.Notification.NotificationName == name).Select(c => c.Id).ToArray() });
+            }
+        }
     }
 }

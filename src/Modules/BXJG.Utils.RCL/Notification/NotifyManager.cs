@@ -2,6 +2,7 @@
 using Abp.Authorization.Roles;
 using Abp.Authorization.Users;
 using Abp.Notifications;
+using BXJG.Common.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,10 +19,11 @@ namespace BXJG.Utils.Notification
     /// <typeparam name="TUser"></typeparam>
     /// <typeparam name="TUserManager"></typeparam>
     /// <typeparam name="TRole"></typeparam>
-    public class NotifyManager<TUser, TUserManager, TRole> : AbpComponentBase<TUser, TUserManager, TRole>
+    public class NotifyManager<TUser, TUserManager, TRole, TAppService> : AbpComponentBase<TUser, TUserManager, TRole>
         where TUser : AbpUser<TUser>
         where TRole : AbpRole<TUser>, new()
         where TUserManager : AbpUserManager<TRole, TUser>
+        where TAppService : PersonNotificationAppService<TUser>
     {
         /// <summary>
         /// 当前选择的通知定义
@@ -41,7 +43,7 @@ namespace BXJG.Utils.Notification
         ///// </summary>
         //protected int pageSize =>condition.MaxResultCount;
         /// <summary>
-        /// 总行数
+        /// 当前消息列表的总行数
         /// </summary>
         protected int total = 0;
         /// <summary>
@@ -57,11 +59,11 @@ namespace BXJG.Utils.Notification
         /// 通知应用服务
         /// </summary>
         [Inject]
-        public PersonNotificationAppService<TUser> AppService { get; set; }
+        public TAppService AppService { get; set; }
 
-        protected override Task OnInitialized2Async()
+        protected override async Task OnInitialized2Async()
         {
-            return base.OnInitialized2Async();
+            await LoadDefinesAsync();
         }
 
         /// <summary>
@@ -101,12 +103,15 @@ namespace BXJG.Utils.Notification
             if (currDefine?.Name == name)
                 return;
 
-            if (currDefine != default)
-                currDefine.Selected = false;
+            await base.SafeExecute(async () =>
+            {
+                if (currDefine != default)
+                    currDefine.Selected = false;
 
-            defines.Single(c => c.Name == name).Selected = true;
-            condition.NotificationNames = new[] { name };
-            await ConditionChanged();
+                defines.Single(c => c.Name == name).Selected = true;
+                condition.NotificationNames = new[] { name };
+                await ConditionChanged();
+            });
         }
         /// <summary>
         /// 根据当前条件加载消息列表
@@ -140,9 +145,9 @@ namespace BXJG.Utils.Notification
         /// </summary>
         /// <param name="val"></param>
         /// <returns></returns>
-        protected virtual async Task LevelChanged(IEnumerable<NotificationSeverity> val)
+        protected virtual async Task SeverityChanged(NotificationSeverity val)
         {
-            condition.NotificationSeverities = val;
+            condition.NotificationSeverities = new[] { val };
             await ConditionChanged();
         }
 
@@ -151,7 +156,7 @@ namespace BXJG.Utils.Notification
         /// </summary>
         /// <param name="val"></param>
         /// <returns></returns>
-        protected virtual async Task ReadStatusChanged(UserNotificationState? val)
+        protected virtual async Task ReadStateChanged(UserNotificationState? val)
         {
             condition.UserNotificationState = val;
             await ConditionChanged();
@@ -176,9 +181,35 @@ namespace BXJG.Utils.Notification
             condition.SkipCount = 0;
             await LoadMessagesAsync();
         }
+        /// <summary>
+        /// 标记为已读
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        protected virtual async Task SetReadAsync(params Guid[] ids)
+        {
+            await SafeExecute(async () =>
+            {
+                await AppService.SetReadedAsync(new BatchOperationInput<Guid> { Ids = ids });
+            });
+        }
+
+        /// <summary>
+        /// 标记为已读
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        protected virtual async Task SetReadAllAsync()
+        {
+            await SafeExecute(async () =>
+            {
+                await AppService.SetReadedAsync(new BatchOperationInput<Guid> { Ids = ids });
+            });
+        }
 
         /// <summary>
         /// tab头
+        /// 通知定义，扩展应用层的通知定义dto
         /// </summary>
         protected class NotifyDefineDto : BXJG.Utils.Notification.NotifyDefineDto
         {

@@ -36,7 +36,7 @@ namespace BXJG.Utils.Notification
         /// <summary>
         /// 发布人
         /// </summary>
-        public string UserNotificationInfoCCreationTime { get; set; }
+        public string UserNotificationInfoCreationTime { get; set; }
         /// <summary>
         /// 发布时间
         /// </summary>
