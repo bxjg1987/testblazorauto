@@ -28,7 +28,7 @@ namespace BXJG.Utils.Notification
         /// <summary>
         /// 当前选择的通知定义
         /// </summary>
-        protected NotifyDefineDto currDefine => defines.SingleOrDefault(d => d.Selected);
+        protected NotifyDefineDto? currDefine => defines.SingleOrDefault(d => d.Selected);
         /// <summary>
         /// 通知定义列表
         /// </summary>
@@ -199,11 +199,11 @@ namespace BXJG.Utils.Notification
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        protected virtual async Task SetReadAllAsync()
+        protected virtual async Task SetReadAllAsync(string? name = default)
         {
             await SafeExecute(async () =>
             {
-                await AppService.SetReadedAsync(new BatchOperationInput<Guid> { Ids = ids });
+                await AppService.SetReadedAllAsync(name);
             });
         }
 
