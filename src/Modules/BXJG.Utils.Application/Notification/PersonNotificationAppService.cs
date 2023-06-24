@@ -168,13 +168,13 @@ namespace BXJG.Utils.Notification
         /// <summary>
         /// 获取消息数量
         /// </summary>
-        /// <param name="input"></param>
+        /// <param name="names"></param>
         /// <returns></returns>
         [UnitOfWork(false)]
         [DisableAuditing]
-        public virtual async Task<Dictionary<SubscriptNotifyItem, int>> GetTotalGroupBySubscript(GetTotalInput input)
+        public virtual async Task<Dictionary<SubscriptNotifyItem, int>> GetUnReadTotalGroupBySubscript(params string[] names)
         {
-            var query = GetQuery(input).GroupBy(c => new SubscriptNotifyItem { NotifyName = c.TenantNotificationInfo.NotificationName, EntityTypeName = c.TenantNotificationInfo.EntityTypeName, EntityId = c.TenantNotificationInfo.EntityId }).Select(c => new { c.Key, ct = c.Count() });
+            var query = GetQuery(new GetTotalInput { NotificationNames = names, UserNotificationState = UserNotificationState.Unread }).GroupBy(c => new SubscriptNotifyItem { NotifyName = c.TenantNotificationInfo.NotificationName, EntityTypeName = c.TenantNotificationInfo.EntityTypeName, EntityId = c.TenantNotificationInfo.EntityId }).Select(c => new { c.Key, ct = c.Count() });
             return await query.ToDictionaryAsync(c => c.Key, c => c.ct);
         }
 

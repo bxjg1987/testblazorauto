@@ -71,7 +71,7 @@ namespace BXJG.Utils.Notification
         {
             var r = AppService.GetDefines();//可订阅的列表
             var r1 = AppService.GetSubscriptedNotifyDefines();//已订阅的列表
-            var sl = AppService.GetTotalGroupBySubscript(condition);//按通知类型分组的未读数量
+            var sl = AppService.GetUnReadTotalGroupBySubscript(defines.Select(c => c.Name).ToArray());//按通知类型分组的未读数量
             await Task.WhenAll(r, r1, sl);
 
             defines = r.Result.Where(c => r1.Result.Any(d => d.NotificationName == c.Name)).Select(c => new NotifyDefineDto
@@ -120,9 +120,12 @@ namespace BXJG.Utils.Notification
         /// <returns></returns>
         protected virtual async Task LoadMessagesAsync()
         {
-            var r = await AppService.GetAllAsync(condition);
-            total = r.TotalCount;
-            messages = r.Items.ToList();
+            await SafeExecute(async () =>
+            {
+                var r = await AppService.GetAllAsync(condition);
+                total = r.TotalCount;
+                messages = r.Items.ToList();
+            });
         }
         /// <summary>
         /// 条件-开始时间变化时调用

@@ -26,11 +26,11 @@ namespace BXJG.Utils.Notification
         /// <summary>
         /// 读取状态 0未读 1已读 不提供此参数则不限制此条件
         /// </summary>
-        public UserNotificationState? UserNotificationState { get; set; }
+        public UserNotificationState? UserNotificationState { get; set; } = Abp.Notifications.UserNotificationState.Unread;
         /// <summary>
         /// 发布时间范围的开始时间
         /// </summary>
-        public DateTime? StartTime { get; set; }
+        public DateTime? StartTime { get; set; } 
         /// <summary>
         /// 发布时间范围的开始结束时间
         /// </summary>
