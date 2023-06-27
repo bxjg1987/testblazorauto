@@ -24,7 +24,10 @@ namespace BXJG.Utils.Notification
         /// 通知数据
         /// </summary>
         public string TenantNotificationInfoData { get; set; }
-        
+        /// <summary>
+        /// 通知数据类型名称
+        /// </summary>
+        public string TenantNotificationInfoDataTypeName { get; set; }
         /// <summary>
         /// 消息状态
         /// </summary>
@@ -33,14 +36,14 @@ namespace BXJG.Utils.Notification
         /// 消息级别
         /// </summary>
         public NotificationSeverity TenantNotificationInfoSeverity { get; set; }
-        /// <summary>
-        /// 发布人
-        /// </summary>
-        public string UserNotificationInfoCreationTime { get; set; }
+        ///// <summary>
+        ///// 发布人
+        ///// </summary>
+        //public string UserNotificationInfoCreationTime { get; set; }
         /// <summary>
         /// 发布时间
         /// </summary>
-        public DateTime CreationTime { get; set; }
+        public DateTime UserNotificationInfoCreationTime { get; set; }
         /// <summary>
         /// 发布人
         /// </summary>
@@ -54,7 +57,7 @@ namespace BXJG.Utils.Notification
             {
                 //这里的逻辑应结合abp本地化，放在BXJG.Utils包中，做为扩展方法
 
-                var sss = Clock.Now - this.CreationTime;
+                var sss = Clock.Now - this.UserNotificationInfoCreationTime;
 
                 if (sss.TotalSeconds <= 60)
                     return "刚刚";
