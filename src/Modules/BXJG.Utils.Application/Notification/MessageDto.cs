@@ -61,22 +61,21 @@ namespace BXJG.Utils.Notification
 
                 if (sss.TotalSeconds <= 60)
                     return "刚刚";
-                else if (sss.TotalMinutes <= 60)
+                if (sss.TotalMinutes <= 60)
                     return $"{sss.TotalMinutes}分钟前";
-                else if (sss.TotalHours <= 24)
+                if (sss.TotalHours <= 24)
                     return $"{sss.TotalHours}小时前";
-                else if (sss.TotalDays <= 7)
+                if (sss.TotalDays <= 30)
                     return $"{sss.TotalDays}天前";
-                else if (sss.TotalDays <= 30)
+                if (sss.TotalDays <= 30)
                     return $"{Convert.ToInt32(sss.TotalDays / 7)}周前";
-                else if (sss.TotalDays <= 365)
+                if (sss.TotalDays <= 365)
                     return $"{Convert.ToInt32(sss.TotalDays / 30)}个月前";
-                else
+                
                     return $"{Convert.ToInt32(sss.TotalDays / 365)}年前";
                 // return Clock.Now.Subtract(this.CreationTime).Duration().Days + "天前";
             }
         }
-        
 
     }
 }

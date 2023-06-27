@@ -63,7 +63,7 @@ namespace BXJG.Utils.Notification
                         await UserNotificationManager.DeleteAllUserNotificationsAsync(new Abp.UserIdentifier(user.TenantId, user.Id),
                                                                                       UserNotificationState.Read,
                                                                                       DateTime.Now.AddYears(-50),
-                                                                                      DateTime.Now.AddMonths(-6));
+                                                                                      DateTime.Now.AddMonths(-3));
                     }
                     catch (Exception ex)
                     {
