@@ -54,14 +54,15 @@ namespace BXJG.Utils
         where TRole : AbpRole<TUser>, new()
         where TUserManager : AbpUserManager<TRole, TUser>
     {
-        Lazy<IAbpSession> abpSession;
-        protected IAbpSession AbpSession => abpSession.Value;
+        //Lazy<IAbpSession> abpSession;
+        [Inject]
+        protected IAbpSession AbpSession { get; set; }
         [Inject]
         public IHostEnvironment HostEnvironment { get; set; }
 
-        
+
         [Inject]
-        public IEventBus EventBus {get;set; }
+        public IEventBus EventBus { get; set; }
 
 
         //几乎始终会被使用到的对象，就不要延迟加载了
@@ -158,12 +159,14 @@ namespace BXJG.Utils
         //    this.roleManager = roleManager;
         //}
 
-
+        protected int? TenantId;
+        protected long? UserId;
 
         //不要用异步方法做服务注入
         protected override void OnInitialized()
         {
-            abpSession = ScopedServices.GetRequiredService<Lazy<IAbpSession>>();
+            TenantId = AbpSession.TenantId; UserId = AbpSession.UserId;
+            //abpSession = ScopedServices.GetRequiredService<Lazy<IAbpSession>>();
             //tenantManager = ScopedServices.GetRequiredService<Lazy<TTenantManager>>();
             //roleManager = ScopedServices.GetRequiredService<Lazy<TRoleManager>>();
             userManager = ScopedServices.GetRequiredService<Lazy<TUserManager>>();
@@ -539,6 +542,11 @@ namespace BXJG.Utils
                 ShowError(L("InternalServerError"));
             }
             return default;
+        }
+
+        protected IDisposable ResumeSession() {
+            //if(AbpSession.TenantId.HasValue )
+          return  AbpSession.Use(TenantId,UserId);
         }
     }
 
