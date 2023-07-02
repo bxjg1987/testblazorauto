@@ -2,12 +2,13 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Schema;
 
-namespace BXJG.Common.DongtaiZhongjie
+namespace BXJG.Common
 {
 
     /*
@@ -118,7 +119,7 @@ namespace BXJG.Common.DongtaiZhongjie
             LogDebug();
         }
 
-        public virtual async ValueTask Chufa(object canshu, string eventName = default)
+        public virtual async Task Chufa(object canshu, string eventName = default)
         {
             if (eventName.IsNullOrWhiteSpaceBXJG())
                 eventName = canshu.GetType().FullName;
@@ -129,10 +130,11 @@ namespace BXJG.Common.DongtaiZhongjie
             }
         }
 
-        public virtual async ValueTask Chufa(string eventName)
+        public virtual async Task Chufa(string eventName)
         {
             if (TryGetValue(eventName, out var dic))
             {
+                //var func = dic.Select(c=>c.Value).ToImmutableHashSet();
                 await Task.WhenAll(dic.Select(c => c.Value(null).AsTask()));
             }
         }

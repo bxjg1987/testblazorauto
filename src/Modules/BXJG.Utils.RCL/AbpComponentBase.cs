@@ -14,6 +14,7 @@ using Abp.ObjectMapping;
 using Abp.Runtime.Session;
 using Abp.Threading;
 using Abp.UI;
+using BXJG.Common;
 using BXJG.Common.Dto;
 using Castle.Core.Logging;
 using Microsoft.Extensions.DependencyInjection;
@@ -83,7 +84,8 @@ namespace BXJG.Utils
 
         //Lazy<TRoleManager> roleManager;
         //protected TRoleManager RoleManager => roleManager.Value;
-
+        [Inject]
+        public Zhongjie Zhongjie { get; set; }
         Lazy<TUserManager> userManager;
         protected TUserManager UserManager => userManager.Value;
 
