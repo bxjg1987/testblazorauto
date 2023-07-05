@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace BXJG.Common
@@ -70,7 +71,19 @@ namespace BXJG.Common
             zhixingBiaoji = zxbj;
             Task.Run(async () =>
             {
-                await Task.Delay(yanchi == 0 ? Yanchi : yanchi);
+                if (yanchi == 0)
+                    yanchi = Yanchi;
+
+
+                //await Task.Delay(yanchi == 0 ? Yanchi : yanchi);
+                int tempI = 0;
+                while (zhixingBiaoji == zxbj)
+                {
+                    Thread.Sleep(1);
+                    tempI++;
+                    if (tempI > yanchi)
+                        break;
+                }
 
                 if ((DateTime.Now - zuihouZhixingShijian).TotalMilliseconds >= (chaoshi == 0 ? Chaoshi : chaoshi))
                 {
