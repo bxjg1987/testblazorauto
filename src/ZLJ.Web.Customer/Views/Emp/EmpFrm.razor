@@ -1,0 +1,212 @@
+﻿@using ZLJ.App.Common.Customer;
+@using ZLJ.App.Customer.StaffInfo;
+@inherits OwningComponentBase
+@inject StaffInfoAppService appService
+@inject OuProviderAppService ouProviderAppService
+@inject ISnackbar snackbar
+@*@inject IUnitOfWorkManager uowManager*@
+
+@*
+    官方说dialog已经包含MudFocusTrap，但实际测试没有。在表带和底部按钮分别包一个FocusTrap只有后者有效
+    OnlyValidateIfDirty无效，因为新增或修改因为初始值导致输入框值已经变化了
+*@
+<MudFocusTrap>
+    <MudDialog>
+        <TitleContent>
+            <MudStack Row>
+                <MudIcon Icon="@icon" />
+                <MudText Typo="Typo.h6">@(Pattern.GetDescriptionString())员工</MudText>
+            </MudStack>
+        </TitleContent>
+        <DialogContent>
+            <EditForm EditContext="@editContext">
+                <DataAnnotationsValidator />
+                <MudStack>
+                    <MudSelect @bind-Value="@model.OuId"
+                               Label="*所属部门"
+                               T="long?"
+                               For="@(()=>model.OuId)">
+                        @foreach (var item in ous)
+                        {
+                            <MudSelectItem Value="@(new Nullable<long>(long.Parse( item.Id) ))">@item.Text</MudSelectItem>
+                        }
+                    </MudSelect>
+
+                    <MudTextField OnlyValidateIfDirty
+                                  ReadOnly="Pattern== FrmPattern.Look"
+                                  Label="*姓名"
+                                  @bind-Value="@model.Name"
+                                  For="@(()=>model.Name)"
+                                  Clearable />
+
+                    <MudRadioGroup T="Gender" @bind-SelectedOption="@model.Gender" For="@(()=>model.Gender)">
+                        <MudRadio Option="@Gender.Man">男</MudRadio>
+                        <MudRadio Option="@Gender.Woman">女</MudRadio>
+                    </MudRadioGroup>
+
+                    <MudDatePicker Label="出生日期" Required="false" Clearable @bind-Date="@model.Birthday" For="@(()=>model.Birthday)" />
+
+                    <MudTextField OnlyValidateIfDirty
+                                  ReadOnly="Pattern== FrmPattern.Look"
+                                  Label="*登录名"
+                                  @bind-Value="@model.UserName"
+                                  For="@(()=>model.UserName)"
+                                  Clearable />
+
+                    <MudTextField OnlyValidateIfDirty
+                                  ReadOnly="Pattern== FrmPattern.Look"
+                                  Label="*密码"
+                                  InputType="@pwdInputType"
+                                  AdornmentIcon="@pwdIcon"
+                                  Adornment="Adornment.End"
+                                  OnAdornmentClick="ShowPwdClick"
+                                  AdornmentAriaLabel="@showPwd"
+                                  @bind-Value="@model.Password"
+                                  For="@(()=>model.Password)"
+                                  Clearable />
+
+                    <MudCheckBox ReadOnly="Pattern== FrmPattern.Look"
+                                 @bind-Checked="@model.IsActive"
+                                 Label="启用"
+                                 Dense
+                                 For="@(()=>model.IsActive)" />
+                </MudStack>
+            </EditForm>
+        </DialogContent>
+        <DialogActions>
+            <MudHidden Breakpoint="Breakpoint.None" IsHidden="@(Pattern== FrmPattern.Look)">
+                <MudButton Color="Color.Primary" Disabled="@(!success)" OnClick="Submit" StartIcon="@Icons.Outlined.Save" Variant="Variant.Filled">保存</MudButton>
+            </MudHidden>
+            <MudButton OnClick="Cancel" StartIcon="@Icons.Outlined.AssignmentReturn" Variant="Variant.Filled">关闭</MudButton>
+        </DialogActions>
+    </MudDialog>
+</MudFocusTrap>
+
+@code {
+    InputType pwdInputType = InputType.Password;
+    string pwdIcon = Icons.Material.Filled.Visibility;
+    string showPwd = "显示密码";
+    void ShowPwdClick()
+    {
+        if (pwdInputType == InputType.Password)
+        {
+            pwdInputType = InputType.Text;
+            pwdIcon = Icons.Material.Filled.VisibilityOff;
+            showPwd = "隐藏密码";
+        }
+        else
+        {
+            pwdInputType = InputType.Password;
+            pwdIcon = Icons.Material.Filled.Visibility;
+            showPwd = "显示密码";
+        }
+    }
+
+
+    List<OuDto> ous = new List<OuDto>();
+    /// <summary>
+    /// 弹窗左上角的图表
+    /// </summary>
+    string icon
+    {
+        get
+        {
+            switch (Pattern)
+            {
+                case FrmPattern.Add:
+                    return Icons.Outlined.Add;
+                case FrmPattern.Edit:
+                    return Icons.Outlined.Edit;
+                default:
+                    return Icons.Outlined.Shower;
+            }
+        }
+    }
+    /// <summary>
+    /// 当前弹窗对象
+    /// </summary>
+    [CascadingParameter]
+    MudDialogInstance MudDialog { get; set; }
+    /// <summary>
+    /// 当前弹窗模式，查看？修改？新增？
+    /// </summary>
+    [Parameter]
+    public FrmPattern Pattern { get; set; }
+    /// <summary>
+    /// 修改时传递id过来
+    /// </summary>
+    [Parameter]
+    public long Id { get; set; }
+    /// <summary>
+    /// 新增时传递过来的默认部门id过来
+    /// </summary>
+    [Parameter]
+    public long? OuId { get; set; }
+    ///// <summary>
+    ///// 当前编辑模型
+    ///// 通常新增模型继承于编程模型，但当前功能木有这种继承关系
+    ///// 表单bind-value无法动态决定绑定到新增还是编辑模型，只能一开始确定，因此这里新增和编辑使用较大范围新增模型
+    ///// 为毛不适应dto，因为它上面没有验证模型
+    ///// 需要考虑前后端分离的场景
+    ///// </summary>
+    //StaffInfoEditDto model = new StaffInfoEditDto();
+    /// <summary>
+    /// 当前修改模型
+    /// </summary>
+    StaffInfoCreateDto model = new StaffInfoCreateDto
+        {
+            IsActive = true,
+            Gender = Gender.Man,
+            Birthday = DateTime.Now.AddYears(-20),
+            EmailAddress = $"a@{Guid.NewGuid().ToString("n")}.com",
+            PhoneNumber = Guid.NewGuid().ToString("n"),
+        };
+    /// <summary>
+    /// 表单上下文
+    /// </summary>
+    EditContext editContext;
+    /// <summary>
+    /// 是否验证通过
+    /// </summary>
+    bool success => editContext.Validate();
+    /// <summary>
+    /// 初级初始化生命周期事件
+    /// </summary>
+    protected override async Task OnInitializedAsync()
+    {
+        //若后续有异步操作，必须先让表单正常显示，再异步后修改值，否则初始化时报错
+        model.OuId = OuId;
+        editContext = new EditContext(model);
+        Task t1 = Task.CompletedTask;
+        if (Pattern == FrmPattern.Edit)
+        {
+            t1 = appService.GetAsync(new EntityDto<long> { Id = this.Id }).ContinueWith(t => this.appService.ObjectMapper.Map(t.Result, model));
+        }
+        var t2 = ouProviderAppService.GetForSelectAsync(new OuGetAllInput { CustomerId = appService.CustomerSession.CustomerId.Value }).ContinueWith(t => ous = t.Result);
+        await Task.WhenAll(t1, t2);
+    }
+
+    /// <summary>
+    /// 提交
+    /// </summary>
+    /// <returns></returns>
+    async Task Submit()
+    {
+        using var uow = appService.UnitOfWorkManager.Begin();
+
+        if (Pattern == FrmPattern.Add)
+            await appService.CreateAsync(model);
+        else
+            await appService.UpdateAsync(appService.ObjectMapper.Map<StaffInfoEditDto>(model));
+
+        await uow.CompleteAsync();
+
+        snackbar.Add("保存成功！", Severity.Success);
+        MudDialog.Close(DialogResult.Ok(true));
+    }
+    /// <summary>
+    /// 不提交，直接关闭弹窗
+    /// </summary>
+    void Cancel() => MudDialog.Cancel();
+
+}

@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1701;1702;1591;1587</NoWarn>
+    <RootNamespace>ZLJ.App.Customer</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <LangVersion>default</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <LangVersion>default</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Auth\**" />
+    <Compile Remove="Sessions\Dto\**" />
+    <EmbeddedResource Remove="Auth\**" />
+    <EmbeddedResource Remove="Sessions\Dto\**" />
+    <None Remove="Auth\**" />
+    <None Remove="Sessions\Dto\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Localization\SourceFiles\Cust-en.xml" />
+    <None Remove="Localization\SourceFiles\Cust-zh-Hans.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Localization\SourceFiles\Cust-en.xml" />
+    <EmbeddedResource Include="Localization\SourceFiles\Cust-zh-Hans.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ZLJ.Application.Common\ZLJ.Application.Common.csproj" />
+  </ItemGroup>
+
+</Project>

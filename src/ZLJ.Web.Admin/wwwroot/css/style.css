@@ -1,0 +1,42 @@
+table.danbiankuang, table.danbiankuang tr th, table.danbiankuang tr td {
+    border-width: 1px;
+    border-style: solid;
+    border-color: #ddd;
+}
+
+table.danbiankuang {
+    border-collapse: collapse;
+}
+
+
+
+table.xiaojianju tr th, table.xiaojianju tr td {
+    padding: 0.2rem 0.3rem;
+}
+
+table.zhongjianju tr th, table.zhongjianju tr td {
+    padding: 0.4rem 0.6rem;
+}
+
+table.dajianju tr th, table.dajianju tr td {
+    padding: 0.8rem 1.2rem;
+}
+
+/*所有单元格上下间距为0*/
+table tr.y-0 th, table tr.y-0 td {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+table.th-right tr th {
+    text-align: right;
+}
+
+table.th-back tr th {
+    background-color: #f7f7f7;
+    min-width: 5rem;
+}
+
+table.th-no-weight tr th {
+    font-weight: normal;
+}

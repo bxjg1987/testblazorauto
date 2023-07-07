@@ -1,0 +1,392 @@
+﻿@page "/cust/dept"
+@attribute [Authorize(PermissionNames.Customer)]
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+@inject OuAppService ouAppService
+@*@implements Abp.Application.Services.IApplicationService 本想实现它，能在事件处理方法加uow标签，测试后不行*@
+@*
+    继承它以便获得abp提供的基础服务，session settings permissionchecker等
+    通常组件会注入关联的AppService，它上面也已经包含了这些abp服务，而且由于blazor server组件的特殊性，可能出现同一个对象在组件中存在一个对象
+    在关联的AppService中也出现这个对象，但其实我们可能只需要一个就行
+    所以建议是不要继承AbpComponentBase，除非将来此抽象有多余关联AppService的更多通用功能
+    但在blazor server中依然应该继承OwningComponentBase，具体参考官方文档Blazor主题的依赖注入部分
+
+    客服应用 CustomerSession通常也不需要，还是应为ouAppService中已经有了。
+
+    非必要，不要改变abp原来的套路，宁愿blazor中多写几行代码
+*@
+@*@inherits AbpComponentBase  *@
+@inherits OwningComponentBase
+
+<MudStack>
+    <MudGrid Spacing="1">
+        <MudItem>
+            <MudButtonGroup Color="Color.Default" Variant="Variant.Filled" OverrideStyles="false">
+                @*当前项目中统一一个权限字符串，所以没必要做按钮权限判断，需要细分功能权限时用如下方式验证*@
+                <AuthorizeView Policy="@PermissionNames.Customer">
+                    <MudButton StartIcon="@Icons.Outlined.Add"
+                               Color="@Color.Primary"
+                               Variant="@Variant.Filled"
+                               OnClick="xinzeng">新增</MudButton>
+                </AuthorizeView>
+                <AuthorizeView Policy="@PermissionNames.Customer">
+                    <MudButton Disabled="@(!selectedItems.Any())" StartIcon="@Icons.Outlined.DeleteForever"
+                               Color="Color.Error"
+                               Variant="@Variant.Filled"
+                               OnClick="shanchu">删除</MudButton>
+                </AuthorizeView>
+                <AuthorizeView Policy="@PermissionNames.Customer">
+                    <MudButton Disabled="@(!selectedItems.Any()|| selectedItems.All(c=>!c.IsActive))"
+                               StartIcon="@Icons.Outlined.VisibilityOff"
+                               Color="Color.Warning"
+                               Variant="@Variant.Filled"
+                               OnClick="c=>kaiguan(false)">禁用</MudButton>
+                </AuthorizeView>
+                <AuthorizeView Policy="@PermissionNames.Customer">
+                    <MudButton Disabled="@(!selectedItems.Any()|| selectedItems.All(c=>c.IsActive))" StartIcon="@Icons.Outlined.Visibility"
+                               Color="Color.Success"
+                               Variant="@Variant.Filled"
+                               OnClick="c=>kaiguan(true)">启用</MudButton>
+                </AuthorizeView>
+            </MudButtonGroup>
+        </MudItem>
+        <MudSpacer />
+        <MudItem Style="margin-top:-5px;">
+            <MudTextField Clearable="true"
+                          T="string"
+                          Variant="Variant.Outlined"
+                          Margin="Margin.Dense"
+                          Placeholder1="部门名称/拼音首字母模糊搜索"
+                          Label="部门名称/拼音首字母"
+                          Variant1="Variant.Text"
+                          Adornment1="Adornment.Start"
+                          Text="@textValue"
+                          Style1="margin-top:-3px"
+                          ValueChanged="guanjianzi"
+                          AdornmentIcon1="@Icons.Material.Outlined.Search"></MudTextField>
+        </MudItem>
+        <MudItem>
+            <MudChipSet bind-SelectedChip1="selected" Filter="true" Mandatory="false" SelectedChipChanged="qijinyong" SelectedChip="sousuoQijinyong">
+                <MudChip Value="@true" Color="Color.Default" SelectedColor="Color.Primary" Variant="Variant.Outlined">启用</MudChip>
+                <MudChip Value="@false" Color="Color.Default" SelectedColor="Color.Primary" Variant="Variant.Outlined">禁用</MudChip>
+            </MudChipSet>
+        </MudItem>
+
+        <MudItem>
+            <MudTooltip Text="刷新">
+                <MudIconButton @onclick="shuaxin" Icon="@Icons.Outlined.Refresh" Variant="@Variant.Filled" />
+            </MudTooltip>
+        </MudItem>
+        <MudItem>
+            <MudTooltip Text="清空条件">
+                <MudIconButton @onclick="chongzhiSousuo" Icon="@Icons.Outlined.FilterListOff" Variant="@Variant.Filled" />
+            </MudTooltip>
+        </MudItem>
+    </MudGrid>
+    <MudTable Items="@items"
+              Hover
+              Dense
+              Bordered
+              MultiSelection
+              FixedHeader
+              SelectOnRowClick="false"
+              Height="82.5vh"
+              OnRowClick="RowClick"
+              T="OUDto"
+              @bind-SelectedItems="selectedItems"
+              Striped>
+
+        <ColGroup>
+            <MudHidden Breakpoint="Breakpoint.Xs">
+                <col style="width: 0;" />
+                <col />
+                <col style="width: 100px;" />
+                <col style="width:175px;" />
+            </MudHidden>
+        </ColGroup>
+
+        <HeaderContent>
+            <MudTh>部门名称</MudTh>
+            <MudTh>是否启用</MudTh>
+            <MudTh>操作</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="客户名称">@context.DisplayName</MudTd>
+            <MudTd DataLabel="启用">
+                <MudSwitch Color="Color.Success" T="bool" CheckedChanged="e=>kaiguan(context)" Checked="context.IsActive" />
+            </MudTd>
+            <MudTd DataLabel="操作">
+                <MudButtonGroup OverrideStyles="false">
+                    @* <MudButton OnClick="e=>xiugai(context)"
+                    DisableElevation Size="Size.Small"
+                    Variant="Variant.Outlined"
+                    StartIcon="@Icons.Outlined.RemoveRedEye">详情</MudButton>*@
+
+                    @*有修改权限就显示修改，否则显示查看*@
+                    <MudButton OnClick="e=>xiugai(context)"
+                                  DisableElevation Size="Size.Small"
+                               Variant="Variant.Outlined"
+                               StartIcon="@Icons.Outlined.Edit">修改</MudButton>
+                    <MudButton OnClick="e=>shanchu(context.Id)"
+                                  DisableElevation Size="Size.Small"
+                               Variant="Variant.Outlined"
+                               Color="Color.Error"
+                               StartIcon="@Icons.Outlined.DeleteForever">删除</MudButton>
+                    </MudButtonGroup>
+                    </MudTd>
+                </RowTemplate>
+                <NoRecordsContent>
+                    <MudText>没有符合条件的数据！</MudText>
+                </NoRecordsContent>
+                </MudTable>
+                </MudStack>
+
+                @code {
+    //列表数据
+    List<OUDto> items = new List<OUDto>(0);
+    //启用禁用条件
+    bool? selected => sousuoQijinyong == default ? null : (bool)sousuoQijinyong.Value;
+    //关键字条件
+    string textValue;
+    //多选以便批量操作
+    HashSet<OUDto> selectedItems = new HashSet<OUDto>();
+    Task RowClick(TableRowClickEventArgs<OUDto> dto)
+    {
+        if (dto.MouseEventArgs.Detail > 1)
+        {
+            return xiugai(dto.Item);
+        }
+        return Task.CompletedTask;
+    }
+
+    //void SelectedItemChanged()
+    //{
+    //    var sdf = selectedItems;
+    //    StateHasChanged();
+    //}
+    /// <summary>
+    /// 删除单个
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    async Task shanchu(long id)
+    {
+        //没有处理异常，留给全局异常处理
+        bool? result = await DialogService.ShowMessageBox("操作确认",
+                                                          "否确定删除选择的行吗？",
+                                                          yesText: "确定",
+                                                          cancelText: "取消");
+
+        if (result.HasValue && result.Value)
+        {
+            var r = await ouAppService.DeleteAsync(new BXJG.Common.Dto.BatchOperationInputLong { Ids = new[] { id } });
+            if (r.Ids.Any())
+            {
+                Snackbar.Add("删除成功！", Severity.Success);
+                await shuaxin();
+            }
+            else
+            {
+                Snackbar.Add("删除失败！", Severity.Error);
+            }
+        }
+    }
+    /// <summary>
+    /// 批量删除
+    /// </summary>
+    /// <returns></returns>
+    async Task shanchu()
+    {
+        //没有处理异常，留给全局异常处理
+        bool? result = await DialogService.ShowMessageBox("操作确认",
+                                                          "否确定删除选择的行吗？",
+                                                          yesText: "确定",
+                                                          cancelText: "取消");
+
+        if (result.HasValue && result.Value)
+        {
+            var r = await ouAppService.DeleteAsync(new BXJG.Common.Dto.BatchOperationInputLong { Ids = selectedItems.Select(c => c.Id).ToArray() });
+            //StateHasChanged();
+            if (!r.ErrorMessage.Any())
+                Snackbar.Add("删除成功！", Severity.Success);
+            else if (r.Ids.Any())
+                Snackbar.Add("部分删除成功！", Severity.Warning);
+            else
+                Snackbar.Add("删除失败！", Severity.Error);
+
+            foreach (var item in r.ErrorMessage)
+            {
+                Snackbar.Add(item.Message, Severity.Error);
+            }
+
+            if (r.Ids.Any())
+                await shuaxin();
+        }
+    }
+    /// <summary>
+    /// 开关
+    /// </summary>
+    /// <param name="dto"></param>
+    /// <returns></returns>
+    async Task kaiguan(OUDto dto)
+    {
+        var cz = dto.IsActive ? "禁用" : "启用";
+        bool? result = await DialogService.ShowMessageBox("操作确认",
+                                                         $"否确定{cz}选择的行吗？",
+                                                         yesText: "确定",
+                                                         cancelText: "取消");
+
+        if (result.HasValue && result.Value)
+        {
+            BatchOperationOutputLong r = await ouAppService.SwitchActive(new BXJG.Common.Dto.BatchSwitchInputLong { Ids = new[] { dto.Id }, IsActive = !dto.IsActive });
+            if (r.Ids.Any())
+            {
+                Snackbar.Add($"{cz}成功！", Severity.Success);
+                await shuaxin(); //变动后 因为条件和排序 刷新下
+            }
+            else
+            {
+                Snackbar.Add($"{cz}失败！{r.ErrorMessage.Single().Message}", Severity.Error);
+            }
+        }
+    }
+    /// <summary>
+    /// 批量开关
+    /// </summary>
+    /// <returns></returns>
+    async Task kaiguan(bool isActive)
+    {
+        //没有处理异常，留给全局异常处理
+        var cz = isActive ? "启用" : "禁用";
+        bool? result = await DialogService.ShowMessageBox("操作确认",
+                                                         $"否确定{cz}选择的行吗？",
+                                                         yesText: "确定",
+                                                         cancelText: "取消");
+
+        if (result.HasValue && result.Value)
+        {
+            var r = await ouAppService.SwitchActive(new BXJG.Common.Dto.BatchSwitchInputLong { Ids = selectedItems.Select(c => c.Id).ToArray(), IsActive = isActive });
+            if (!r.ErrorMessage.Any())
+                Snackbar.Add($"{cz}成功！", Severity.Success);
+            else if (r.Ids.Any())
+                Snackbar.Add($"部分{cz}成功！", Severity.Warning);
+            else
+                Snackbar.Add($"{cz}失败！", Severity.Error);
+
+            foreach (var item in r.ErrorMessage)
+            {
+                Snackbar.Add(item.Message, Severity.Error);
+            }
+
+            if (r.Ids.Any())
+                await shuaxin(); //变动后 因为条件和排序 刷新下
+        }
+    }
+
+    /// <summary>
+    /// 点击新增
+    /// </summary>
+    async Task xinzeng()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true, FullWidth = true, Position = DialogPosition.TopCenter };
+        IDialogReference r = DialogService.Show<DeptFrm>("部门", new DialogParameters { { "Pattern", FrmPattern.Add } }, options);
+        var result = await r.Result;
+        if (!result.Cancelled)
+        {
+            await shuaxin();
+        }
+    }
+    /// <summary>
+    /// 点击修改按钮
+    /// </summary>
+    /// <param name="dto"></param>
+    async Task xiugai(OUDto dto)
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true, FullWidth = true, Position = DialogPosition.TopCenter };
+        IDialogReference r = DialogService.Show<DeptFrm>("部门", new DialogParameters { { "Pattern", FrmPattern.Edit }, { "Dto", dto } }, options);
+        var result = await r.Result;
+        if (!result.Cancelled)
+        {
+            await shuaxin();
+        }
+    }
+    /// <summary>
+    /// 关键字改变时触发
+    /// </summary>
+    /// <param name="str"></param>
+    /// <returns></returns>
+    async Task guanjianzi(string str)
+    {
+        textValue = str;
+        await shuaxin();
+    }
+    /// <summary>
+    /// 启用禁用条件变化时触发
+    /// </summary>
+    /// <param name="m"></param>
+    /// <returns></returns>
+    async Task qijinyong(MudChip m)
+    {
+        this.sousuoQijinyong = m;
+        await shuaxin();
+    }
+
+    //OuAppService ouAppService;//这个服务在组件初始化时就需要，所以没必要延迟加载 // Lazy<OuAppService>
+
+    //protected override void OnInitialized()
+    //{
+    //    //base.OnInitialized();//调用父类方法以便准备abp提供基础服务，不调用也行
+    //    ouAppService = base.ScopedServices.GetRequiredService<OuAppService>();
+    //}
+
+
+    //[UnitOfWork(false)] 手动刷新执行两次，用这个好像也会出问题，还是代码内部手动开启吧
+    //https://learn.microsoft.com/zh-cn/aspnet/core/blazor/components/lifecycle?view=aspnetcore-7.0#stateful-reconnection-after-prerendering
+    protected override async Task OnInitializedAsync()
+    {
+        //f5刷新时，此时可能出现工作单元释放，最终导致事务不生效，所以init中必须手动开启事务
+        // using var uow = ouAppService.UnitOfWorkManager.Begin(new UnitOfWorkOptions { IsTransactional = false }); //查询方法通常为了关闭事务，已经加了标签的
+        //未加标签的，目前必须手动开启uow
+        //items = await ouAppService.GetAllAsync(new GetAllInput { });
+        await shuaxin();
+    }
+    MudChip sousuoQijinyong;
+    /// <summary>
+    /// 重置导致多个控件变化，进而导致多次刷新，使用此标记来避免多次刷新
+    /// </summary>
+    bool shuaxinFlag = true;
+    /// <summary>
+    /// 重置搜索框
+    /// </summary>
+    /// <returns></returns>
+    async Task chongzhiSousuo()
+    {
+        try
+        {
+            shuaxinFlag = false;
+            textValue = default;
+            sousuoQijinyong = default;
+            //guanjianzishuru.Clear();
+            //sousuoQijinyong.SelectedChip = default;
+            shuaxinFlag = true;
+            await shuaxin();
+        }
+        finally { shuaxinFlag = true; }
+    }
+    /// <summary>
+    /// 刷新数据
+    /// </summary>
+    /// <returns></returns>
+    //[UnitOfWork(false)]//普通事件处理uow一切正常 由于appService内部已经存在uow标签，所以这里不用加，方法内部也不需要手动开启uow
+    async Task shuaxin()
+    {
+        if (!shuaxinFlag)
+            return;
+        items = new List<OUDto>();//情况数据，以免在未请求到数据时还显示原始数据，用户会以为操作后的就是最新数据，而实际可能是之前的数据
+        StateHasChanged();//由于此方法可能是被弹窗调用的，它不是普通事件，所以这里始终调用此方法
+                          //await Task.Delay(3000);//模拟耗时请求
+                          //由于这里是异步的，上面的清空数据会立即显示到页面上
+        items = await ouAppService.GetAllAsync(new GetAllInput { IsActive = selected, Keywords = textValue });
+        StateHasChanged();//由于此方法可能是被弹窗调用的，它不是普通事件，所以这里始终调用此方法
+    }
+}

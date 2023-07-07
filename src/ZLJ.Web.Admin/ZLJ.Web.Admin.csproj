@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
+	  <ImplicitUsings>enable</ImplicitUsings>
+	  <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Notify\NotifyListBase.cs" />
+    <Compile Remove="Notify\NotifySubscriptBase.cs" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <SupportedPlatform Include="browser" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Abp.AspNetCore" Version="8.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.8" />
+		<PackageReference Include="MudBlazor" Version="6.6.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\ZLJ.Application\ZLJ.Application.csproj" />
+		<ProjectReference Include="..\ZLJ.Web.Core\ZLJ.Web.Core.csproj" />
+	</ItemGroup>
+
+</Project>

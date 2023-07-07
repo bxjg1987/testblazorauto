@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<localizationDictionary culture="en">
+  <texts>
+    <text name="是否开启代码生成器" value="enable code genarator" />
+	  <text name="ZLJ.Equipments.EquipmentInstances.EquipmentInstanceEntity.LastAlarm.Changed" value="设备报警" />
+	  <text name="通知中心" value="Notices" />
+
+	  <!--codegenerator-->
+  </texts>
+</localizationDictionary>

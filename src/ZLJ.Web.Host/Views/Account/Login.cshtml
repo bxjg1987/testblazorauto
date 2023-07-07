@@ -1,0 +1,12 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<form method="post" action="/account/login">
+    @Html.AntiForgeryToken()
+    <input name="UserNameOrEmailAddress" />
+    <input name="Password" type="password" />
+    <input name="RememberClient" value="true" type="checkbox" checked />
+    <input type="submit" value="提交" />
+</form>
+@{
+}

@@ -1,0 +1,55 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
+		<RootNamespace>ZLJ.EntityFrameworkCore</RootNamespace>
+		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+		<GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+		<GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<LangVersion>default</LangVersion>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<LangVersion>default</LangVersion>
+	</PropertyGroup>
+	<ItemGroup>
+		<Compile Remove="EntityFrameworkCore\EFMap\WorkOrder\**" />
+		<Compile Remove="txdl\**" />
+		<EmbeddedResource Remove="EntityFrameworkCore\EFMap\WorkOrder\**" />
+		<EmbeddedResource Remove="txdl\**" />
+		<None Remove="EntityFrameworkCore\EFMap\WorkOrder\**" />
+		<None Remove="txdl\**" />
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Remove="EntityFrameworkCore\Repositories\EquipmentInfoRepository.cs" />
+		<Compile Remove="EntityFrameworkCore\Seed\WorkOrderBuilder.cs" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Abp.ZeroCore.EntityFrameworkCore" Version="8.2.0" />
+		<PackageReference Include="BXJG.Common.EFCore" Version="1.2.12" />
+		<PackageReference Include="BXJG.Utils.EFCore" Version="1.2.13" />
+		<!--<PackageReference Include="BXJG.Utils.EFCore" Version="1.2.1" />
+    <PackageReference Include="BXJG.WorkOrder.Core" Version="1.2.1" />
+    <PackageReference Include="BXJG.WorkOrder.EFCore" Version="1.2.1" />-->
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.8" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.8">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+	<ItemGroup>
+	
+		<ProjectReference Include="..\ZLJ.Core\ZLJ.Core.csproj" />
+	</ItemGroup>
+
+
+	<ItemGroup Condition="'$(SolutionName)' != 'ZLJWithModules'">
+		<PackageReference Include="BXJG.Common.EFCore" Version="*" />
+		<PackageReference Include="BXJG.Utils.EFCore" Version="*" />
+		<PackageReference Include="BXJG.WorkOrder.EFCore" Version="*" />
+		<PackageReference Include="BXJG.Common.EFCore" Version="*" />
+	</ItemGroup>
+
+
+</Project>

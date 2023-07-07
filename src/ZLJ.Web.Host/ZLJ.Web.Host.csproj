@@ -1,0 +1,149 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<!--<AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>-->
+		<!--<PreserveCompilationContext>true</PreserveCompilationContext>-->
+		<AssemblyName>ZLJ.Web.Host</AssemblyName>
+		<OutputType>Exe</OutputType>
+		<PackageId>ZLJ.Web.Host</PackageId>
+		<UserSecretsId>AbpCompanyName-ZLJ-56C2EF2F-DBD6-4EFC-AAF2-2E81C34E8FB1</UserSecretsId>
+		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+		<GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+
+		<!--<EnableDefaultContentItems>true</EnableDefaultContentItems>-->
+	</PropertyGroup>
+
+
+	<!--新增的razor组件会因为codegenerate导致无法在将类生产到当前项目，从而导致无法注册blazor路由，下面的设置是暂时性的
+		参考：https://github.com/dotnet/aspnetcore/issues/36535# 
+	<PropertyGroup>
+		<UseRazorSourceGenerator>false</UseRazorSourceGenerator>
+	</PropertyGroup>-->
+	
+	
+	<!--<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<LangVersion>default</LangVersion>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<LangVersion>default</LangVersion>
+	</PropertyGroup>-->
+	<ItemGroup>
+		<Compile Remove="App_Data\Logs\**" />
+		<Compile Remove="wwwroot\upload\contracts\**" />
+		<Compile Remove="wwwroot\upload\images\**" />
+		<Content Remove="App_Data\Logs\**" />
+		<Content Remove="wwwroot\upload\contracts\**" />
+		<Content Remove="wwwroot\upload\images\**" />
+		<EmbeddedResource Remove="App_Data\Logs\**" />
+		<EmbeddedResource Remove="wwwroot\upload\contracts\**" />
+		<EmbeddedResource Remove="wwwroot\upload\images\**" />
+		<None Remove="App_Data\Logs\**" />
+		<None Remove="wwwroot\upload\contracts\**" />
+		<None Remove="wwwroot\upload\images\**" />
+		<None Update="wwwroot\files\**">
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Remove="Controllers\FileController.cs" />
+		<Compile Remove="Controllers\WeChatMiniProgramPaymentController.cs" />
+		<Compile Remove="Startup\TxdlFirewall.cs" />
+		<Compile Remove="Startup\WeatherForecast.cs" />
+		<Compile Remove="Startup\WeatherForecastService.cs" />
+		<Compile Remove="Startup\WeChatPaymentNoticeHandler.cs" />
+	</ItemGroup>
+	<ItemGroup>
+		<Content Remove="Views\BLogger\Logger.razor" />
+		<Content Remove="wwwroot\swagger\ui\index.html" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Remove="appsettings.nwct.json" />
+		<None Remove="BXJG.CMS.Application.xml" />
+		<None Remove="BXJG.Shop.Application.xml" />
+		<None Remove="favicon.ico" />
+		<None Remove="Properties\PublishProfiles\IISProfile.pubxml" />
+		<None Remove="Views\BLogger\Logger.razor.css" />
+	</ItemGroup>
+	<ItemGroup>
+		<Content Include="favicon.ico">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+	</ItemGroup>
+	<ItemGroup>
+		<None Update="appsettings.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="BXJG.Utils.Application.xml">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="BXJG.WorkOrder.Application.xml">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="BXJG.WorkOrder.EmployeeApplication.xml">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Dockerfile">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="log4net.config">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</None>
+		<None Update="wwwroot\**\*">
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</None>
+	</ItemGroup>
+
+	<!--<ItemGroup Condition="'$(SolutionName)' != 'ZLJWithModules'">
+		<PackageReference Include="BXJG.BlazorServerLogger" Version="*" />
+	</ItemGroup>-->
+	
+	<ItemGroup>
+		<!--<ProjectReference Include="..\..\..\abp\src\Libs\BXJG.Common.Web\BXJG.Common.Web.csproj" />
+		<ProjectReference Include="..\..\..\abp\src\Modules\BXJG.Utils.Web\BXJG.Utils.Web.csproj" />-->
+		<ProjectReference Include="..\ZLJ.Application.Customer\ZLJ.Application.Customer.csproj" />
+		<ProjectReference Include="..\ZLJ.Application\ZLJ.Application.csproj" />
+		<ProjectReference Include="..\ZLJ.EntityFrameworkCore\ZLJ.EntityFrameworkCore.csproj" />
+		<ProjectReference Include="..\ZLJ.Web.Admin\ZLJ.Web.Admin.csproj" />
+		<ProjectReference Include="..\ZLJ.Web.Core\ZLJ.Web.Core.csproj" />
+		<ProjectReference Include="..\ZLJ.Web.Customer\ZLJ.Web.Customer.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Abp.Castle.Log4Net" Version="8.2.0" />
+		<PackageReference Include="DistributedLock.SqlServer" Version="1.*" />
+		<PackageReference Include="DotNetCore.CAP.Dashboard" Version="7.1.4" />
+		<PackageReference Include="DotNetCore.CAP.SqlServer" Version="7.1.4" />
+		<PackageReference Include="Hangfire.SqlServer" Version="1.8.3" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.8">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Savorboard.CAP.InMemoryMessageQueue" Version="7.0.0" />
+	</ItemGroup>
+
+
+
+
+	<ItemGroup>
+		<EmbeddedResource Include="wwwroot\swagger\ui\index.html">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</EmbeddedResource>
+	</ItemGroup>
+	<ItemGroup>
+		<Content Update="wwwroot\swagger\ui\abp.js">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Update="wwwroot\swagger\ui\abp.swagger.js">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+	<ItemGroup>
+		<Folder Include="App_Data\Logs\" />
+		<Folder Include="Views\BLogger\" />
+	</ItemGroup>
+	<ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" properties_4launchsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
+</Project>

@@ -1,0 +1,57 @@
+﻿@using System.Collections.Concurrent
+@using BXJG.BlazorServerLogger
+@using log4net.Appender
+
+@page "/log"
+<h3>BlazorServerLoggerProvider</h3>
+
+<BlazorServerLogger></BlazorServerLogger>
+@code {
+ 
+
+    //// StreamReader sr;
+    //CancellationTokenSource cts = new CancellationTokenSource();
+
+    ////long id = long.MinValue;
+
+    //class Msg
+    //{
+    //    public string Content { get; set; }
+    //}
+    //Dictionary<int, string> msgs = new();
+    //ConcurrentQueue<Msg> msgs = new ConcurrentQueue<Msg>();
+
+    //protected override Task OnInitializedAsync()
+    //{
+    //    return base.OnInitializedAsync();
+    //}
+
+    //protected override void OnInitialized()
+    //{
+    //    Task.Factory.StartNew(async () =>
+    //    {
+    //        while (!cts.IsCancellationRequested)
+    //        {
+    //            try
+    //            {
+    //                //using (var sr = new StreamReader(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "app_data", "logs", "logs.txt")))
+
+    //                var lines = await File.ReadAllLinesAsync(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "app_data", "logs", "logs.txt"));
+    //                msgs.Clear();
+    //                for (int i = 0; i < lines.Length; i++)
+    //                {
+    //                    msgs.Add(i, lines[i]);
+    //                }
+    //                await Task.Delay(100);
+    //            }
+    //            catch { }
+    //        }
+    //    }, TaskCreationOptions.LongRunning);
+    //}
+
+    //public void Dispose()
+    //{
+    //    cts?.Cancel();
+    //    // sr?.Dispose();
+    //}
+}
