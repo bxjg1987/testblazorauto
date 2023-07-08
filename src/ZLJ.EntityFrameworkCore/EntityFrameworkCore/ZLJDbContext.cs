@@ -70,8 +70,7 @@ namespace ZLJ.EntityFrameworkCore
         /// 客户处的员工
         /// </summary>
         public DbSet<CustomerStaffInfoEntity> CustomerStaffInfos { get; set; }
-        public DbSet<PaperUseReportOUEntity> CustomerPaperUseReportOU { get; set; }
-        public DbSet<PaperUseReportEquipmentInstanceEntity> CustomerPaperUseReportEquipmentInstance { get; set; }
+     
 
         protected long? CurrentCustomerId => GetCurrentCustomerIdOrNull();
         protected long? GetCurrentCustomerIdOrNull()

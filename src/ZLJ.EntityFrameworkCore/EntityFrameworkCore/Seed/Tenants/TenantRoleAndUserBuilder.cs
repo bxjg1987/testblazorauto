@@ -170,7 +170,7 @@ namespace ZLJ.EntityFrameworkCore.Seed.Tenants
             {
                 sdff = User.CreateTenantAdminUser(_tenantId, "admin@defaul98ttenant.com");
                 sdff.UserName = "sdff";
-                sdff.Password = new PasswordHasher<User>(new OptionsWrapper<PasswordHasherOptions>(new PasswordHasherOptions())).HashPassword(adminUser, "123qwe");
+                sdff.Password = new PasswordHasher<User>(new OptionsWrapper<PasswordHasherOptions>(new PasswordHasherOptions())).HashPassword(sdff, "123qwe");
                 sdff.IsEmailConfirmed = true;
                 sdff.IsActive = true;
                 sdff.PhoneNumber = "13333333321";

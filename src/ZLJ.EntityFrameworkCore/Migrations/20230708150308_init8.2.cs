@@ -425,56 +425,6 @@ namespace ZLJ.EntityFrameworkCore.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CustomerPaperUseReportEquipmentInstance",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ClsId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClsName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CustomerId = table.Column<long>(type: "bigint", nullable: false),
-                    Month = table.Column<int>(type: "int", nullable: false),
-                    A3BlackAndWhiteUse = table.Column<int>(type: "int", nullable: false),
-                    A3TrueColorUse = table.Column<int>(type: "int", nullable: false),
-                    A4BlackAndWhiteUse = table.Column<int>(type: "int", nullable: false),
-                    A4TrueColorUse = table.Column<int>(type: "int", nullable: false),
-                    A3Use = table.Column<int>(type: "int", nullable: false),
-                    A4Use = table.Column<int>(type: "int", nullable: false),
-                    TrueColorUse = table.Column<int>(type: "int", nullable: false),
-                    BlackWhiteUse = table.Column<int>(type: "int", nullable: false),
-                    Use = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CustomerPaperUseReportEquipmentInstance", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CustomerPaperUseReportOU",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ClsId = table.Column<long>(type: "bigint", nullable: false),
-                    ClsName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CustomerId = table.Column<long>(type: "bigint", nullable: false),
-                    Month = table.Column<int>(type: "int", nullable: false),
-                    A3BlackAndWhiteUse = table.Column<int>(type: "int", nullable: false),
-                    A3TrueColorUse = table.Column<int>(type: "int", nullable: false),
-                    A4BlackAndWhiteUse = table.Column<int>(type: "int", nullable: false),
-                    A4TrueColorUse = table.Column<int>(type: "int", nullable: false),
-                    A3Use = table.Column<int>(type: "int", nullable: false),
-                    A4Use = table.Column<int>(type: "int", nullable: false),
-                    TrueColorUse = table.Column<int>(type: "int", nullable: false),
-                    BlackWhiteUse = table.Column<int>(type: "int", nullable: false),
-                    Use = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CustomerPaperUseReportOU", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AbpDynamicEntityProperties",
                 columns: table => new
                 {
@@ -1647,12 +1597,6 @@ namespace ZLJ.EntityFrameworkCore.Migrations
 
             migrationBuilder.DropTable(
                 name: "BXJGAttachments");
-
-            migrationBuilder.DropTable(
-                name: "CustomerPaperUseReportEquipmentInstance");
-
-            migrationBuilder.DropTable(
-                name: "CustomerPaperUseReportOU");
 
             migrationBuilder.DropTable(
                 name: "AbpDynamicEntityProperties");

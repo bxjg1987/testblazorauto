@@ -12,7 +12,7 @@ using ZLJ.EntityFrameworkCore;
 namespace ZLJ.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(ZLJDbContext))]
-    [Migration("20230707145533_init8.2")]
+    [Migration("20230708150308_init8.2")]
     partial class init82
     {
         /// <inheritdoc />
@@ -1848,110 +1848,6 @@ namespace ZLJ.EntityFrameworkCore.Migrations
                     b.HasIndex("LevelId");
 
                     b.ToTable("baseinfo_associated_company", (string)null);
-                });
-
-            modelBuilder.Entity("ZLJ.Customer.PaperUseReportEquipmentInstanceEntity", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<int>("A3BlackAndWhiteUse")
-                        .HasColumnType("int");
-
-                    b.Property<int>("A3TrueColorUse")
-                        .HasColumnType("int");
-
-                    b.Property<int>("A3Use")
-                        .HasColumnType("int");
-
-                    b.Property<int>("A4BlackAndWhiteUse")
-                        .HasColumnType("int");
-
-                    b.Property<int>("A4TrueColorUse")
-                        .HasColumnType("int");
-
-                    b.Property<int>("A4Use")
-                        .HasColumnType("int");
-
-                    b.Property<int>("BlackWhiteUse")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ClsId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClsName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long>("CustomerId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("Month")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TrueColorUse")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Use")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CustomerPaperUseReportEquipmentInstance");
-                });
-
-            modelBuilder.Entity("ZLJ.Customer.PaperUseReportOUEntity", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<int>("A3BlackAndWhiteUse")
-                        .HasColumnType("int");
-
-                    b.Property<int>("A3TrueColorUse")
-                        .HasColumnType("int");
-
-                    b.Property<int>("A3Use")
-                        .HasColumnType("int");
-
-                    b.Property<int>("A4BlackAndWhiteUse")
-                        .HasColumnType("int");
-
-                    b.Property<int>("A4TrueColorUse")
-                        .HasColumnType("int");
-
-                    b.Property<int>("A4Use")
-                        .HasColumnType("int");
-
-                    b.Property<int>("BlackWhiteUse")
-                        .HasColumnType("int");
-
-                    b.Property<long>("ClsId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("ClsName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long>("CustomerId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("Month")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TrueColorUse")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Use")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CustomerPaperUseReportOU");
                 });
 
             modelBuilder.Entity("ZLJ.MultiTenancy.Tenant", b =>
