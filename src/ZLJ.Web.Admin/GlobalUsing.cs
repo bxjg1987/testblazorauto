@@ -14,3 +14,4 @@ global using ZLJ.App.Common;
 global using ZLJ.Components;
 global using ZLJ.Web.Admin.Shared;
 
+global using ZLJ.App.Admin.Authorization.Permissions;
