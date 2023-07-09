@@ -12,6 +12,7 @@ using ZLJ.Authorization;
 using ZLJ.App.Common.Notification;
 using System.Collections.Concurrent;
 using ZLJ.Authorization.Users;
+using ZLJ.App.Common.Authorization.Permissions;
 
 namespace ZLJ.App.Common
 {
@@ -43,7 +44,7 @@ namespace ZLJ.App.Common
             Configuration.Notifications.Providers.Add<CommonNotifyDefineProvider>();
 
             Configuration.Modules.CommonApplication().Apps.TryAdd("main", new AppInfo { Key = "main", DisplayName = "幽灵", LoginViewName = "" });
-            //Configuration.Authorization.Providers.Add<ZLJAuthorizationProvider>();
+            Configuration.Authorization.Providers.Add<CommonAppAuthorizationProvider>();
             //注册automapper映射
             Configuration.Modules.AbpAutoMapper().Configurators.Add(cfg => cfg.AddMaps(Assembly.GetExecutingAssembly()));
 

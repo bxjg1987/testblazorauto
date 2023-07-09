@@ -23,6 +23,8 @@
 	</ItemGroup>
 	<ItemGroup>
 		<Compile Remove="EntityFrameworkCore\Repositories\EquipmentInfoRepository.cs" />
+		<Compile Remove="EntityFrameworkCore\Seed\Host\HostRoleAndUserCreator.cs" />
+		<Compile Remove="EntityFrameworkCore\Seed\Tenants\TenantRoleAndUserBuilder.cs" />
 		<Compile Remove="EntityFrameworkCore\Seed\WorkOrderBuilder.cs" />
 	</ItemGroup>
 	<ItemGroup>

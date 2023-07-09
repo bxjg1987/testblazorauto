@@ -1,24 +1,14 @@
-﻿using Abp.Authorization;
-using Abp.Localization;
-using Abp.MultiTenancy;
-using BXJG.Utils.GeneralTree;
-//using BXJG.WorkOrder;
-using BXJG.Utils.Localization;
-using ZLJ.Localization;
+﻿using System;
 using System.Collections.Generic;
-using ZLJ.App.Customer;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using ZLJ.App.Customer.Authorization.Permissions;
 
-namespace ZLJ.App.Customer
+namespace ZLJ.App.Common.Authorization
 {
-    public  class CustPermissionProvider : AuthorizationProvider
+    public class CustAppAuthorizationProvider : AuthorizationProvider
     {
-        //GeneralTreeModuleConfig cfg;
-
-        //public ZLJAuthorizationProvider(GeneralTreeModuleConfig cfg)
-        //{
-        //    this.cfg = cfg;
-        //}
-
         public override void SetPermissions(IPermissionDefinitionContext context)
         {
             #region 被依赖的权限

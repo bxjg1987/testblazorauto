@@ -9,3 +9,4 @@ global using System.Text;
 global using System.Threading.Tasks;
 global using Microsoft.AspNetCore.Components.Authorization;
 global using BXJG.Common.Dto;
+ global using ZLJ.App.Customer.Authorization.Permissions;

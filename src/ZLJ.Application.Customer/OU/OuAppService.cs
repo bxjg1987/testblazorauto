@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZLJ.App.Customer.Authorization.Permissions;
 using ZLJ.BaseInfo;
 using ZLJ.Customer;
 

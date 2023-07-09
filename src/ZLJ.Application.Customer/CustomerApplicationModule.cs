@@ -5,6 +5,7 @@ using Abp.Localization.Dictionaries;
 using Abp.Modules;
 using System.Reflection;
 using ZLJ.App.Common;
+using ZLJ.App.Common.Authorization;
 
 namespace ZLJ.App.Customer
 {
@@ -16,7 +17,7 @@ namespace ZLJ.App.Customer
             //Configuration.Localization.ConfigureCust();
             Configuration.Modules.CommonApplication().Apps.TryAdd("cust", new AppInfo { Key = "cust", DisplayName = "客服平台", LoginViewName = "custlogin" });
 
-            Configuration.Authorization.Providers.Add<CustPermissionProvider>();
+            Configuration.Authorization.Providers.Add<CustAppAuthorizationProvider>();
             // Configuration.Authorization.Providers.Add<PermissionProvider>();
             Configuration.Modules.AbpAutoMapper().Configurators.Add(cfg => cfg.AddMaps(Assembly.GetExecutingAssembly()));
 

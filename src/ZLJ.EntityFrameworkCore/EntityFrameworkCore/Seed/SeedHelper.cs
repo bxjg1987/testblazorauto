@@ -33,7 +33,7 @@ namespace ZLJ.EntityFrameworkCore.Seed
 
             // Default tenant seed (in host database).
             new DefaultTenantBuilder(context).Create();
-            new TenantRoleAndUserBuilder(context, 1).Create();
+            //new TenantRoleAndUserBuilder(context, 1).Create();
 
             //以下内容应该放进DefaultTenantBuilder中
             new DefaultOrganizationUnit(context, 1).Create();

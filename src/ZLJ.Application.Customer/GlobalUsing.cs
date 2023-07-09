@@ -35,3 +35,4 @@ global using BXJG.Utils.File;
 global using System.Linq.Expressions;
 global using Abp.Linq.Expressions;
 global using Abp.EntityHistory;
+global using ZLJ.App.Customer.Authorization.Permissions;
