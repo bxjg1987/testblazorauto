@@ -8,7 +8,6 @@ using Abp.Domain.Repositories;
 using Abp.Extensions;
 using Abp.IdentityFramework;
 using Abp.Linq.Extensions;
-using ZLJ.Authorization;
 using ZLJ.App.Admin.Roles.Dto;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -22,10 +21,11 @@ using ZLJ.App.Common.OU;
 using Abp.Domain.Uow;
 using ZLJ.Authorization.Roles;
 using ZLJ.Authorization.Users;
+using ZLJ.App.Admin.Authorization.Permissions;
 
 namespace ZLJ.App.Admin.Roles
 {
-    
+
     [AbpAuthorize(PermissionNames.AdministratorSystemRole)]
     public class RoleAppService : AsyncCrudAppService<Role, RoleDto, int, PagedRoleResultRequestDto, CreateRoleDto>, IRoleAppService
     {
@@ -303,7 +303,7 @@ namespace ZLJ.App.Admin.Roles
             };
         }
 
-        [AbpAuthorize(ZLJ.Authorization.PermissionNames.AdministratorSystemRoleDelete)]
+        [AbpAuthorize(PermissionNames.AdministratorSystemRoleDelete)]
         public async Task<IEnumerable<int>> DeleteBatchAsync(params int[] input)
         {
             var list = new List<int>();

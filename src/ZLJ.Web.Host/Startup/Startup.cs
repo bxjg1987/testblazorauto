@@ -24,6 +24,7 @@ using Orleans.Hosting;
 using Microsoft.AspNetCore.Components.Server.Circuits;
 using Microsoft.Extensions.DependencyInjection;
 using Savorboard.CAP.InMemoryMessageQueue;
+using ZLJ.App.Admin.Authorization.Permissions;
 
 namespace ZLJ.Web.Host.Startup
 {

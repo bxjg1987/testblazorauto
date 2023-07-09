@@ -12,12 +12,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZLJ.App.Admin.Authorization.Permissions;
 using ZLJ.App.Admin.BaseInfo;
 using ZLJ.BaseInfo;
 
 namespace ZLJ.App.Admin.OU
 {
-    [AbpAuthorize(ZLJ.Authorization.PermissionNames.AdministratorBaseInfoOrganizationUnit)]
+    [AbpAuthorize(PermissionNames.AdministratorBaseInfoOrganizationUnit)]
     public class OuAppService : ApplicationService//<OrganizationUnit, OUDto, long, GetAllInput, OUEditDto>
     {
         OrganizationUnitManager organizationUnitManager;
@@ -28,7 +29,7 @@ namespace ZLJ.App.Admin.OU
             this.repository = repository;
             this.organizationUnitManager = organizationUnitManager;
         }
-        [AbpAuthorize(ZLJ.Authorization.PermissionNames.AdministratorBaseInfoOrganizationUnitAdd)]
+        [AbpAuthorize(PermissionNames.AdministratorBaseInfoOrganizationUnitAdd)]
         public async Task<OUDto> CreateAsync(OUEditDto input)
         {
             var ou = new OrganizationUnitEntity();
@@ -40,7 +41,7 @@ namespace ZLJ.App.Admin.OU
             return await Map2Dto(ou);
         }
 
-        [AbpAuthorize(ZLJ.Authorization.PermissionNames.AdministratorBaseInfoOrganizationUnitUpdate)]
+        [AbpAuthorize(PermissionNames.AdministratorBaseInfoOrganizationUnitUpdate)]
         public async Task<OUDto> UpdateAsync(OUEditDto input)
         {
             var ou = await repository.GetAsync(input.Id);
@@ -50,13 +51,13 @@ namespace ZLJ.App.Admin.OU
             await CurrentUnitOfWork.SaveChangesAsync();
             return await Map2Dto(ou);
         }
-        [AbpAuthorize(ZLJ.Authorization.PermissionNames.AdministratorBaseInfoOrganizationUnitUpdate)]
+        [AbpAuthorize(PermissionNames.AdministratorBaseInfoOrganizationUnitUpdate)]
         public async Task MoveAsync(BXJG.Utils.GeneralTree.GeneralTreeNodeMoveInput input)
         {
             await this.organizationUnitManager.MoveAsync(input.Id, input.TargetId);
         }
 
-        [AbpAuthorize(ZLJ.Authorization.PermissionNames.AdministratorBaseInfoOrganizationUnitDelete)]
+        [AbpAuthorize(PermissionNames.AdministratorBaseInfoOrganizationUnitDelete)]
         public async Task<BatchOperationOutputLong> DeleteAsync(BatchOperationInputLong input)
         {
             var r = new BatchOperationOutputLong();

@@ -5,6 +5,7 @@ using Abp.IdentityFramework;
 using Abp.Organizations;
 using Abp.Zero.Configuration;
 using Microsoft.AspNetCore.Identity;
+using ZLJ.App.Admin.Authorization.Permissions;
 using ZLJ.App.Admin.Post.Dto;
 using ZLJ.App.Admin.Roles.Dto;
 using ZLJ.App.Common.OU;
@@ -292,7 +293,7 @@ namespace ZLJ.App.Admin.Post
         }
 
 
-        [AbpAuthorize(ZLJ.Authorization.PermissionNames.AdministratorBaseInfoPostDelete)]
+        [AbpAuthorize(PermissionNames.AdministratorBaseInfoPostDelete)]
         public async Task<IEnumerable<int>> DeleteBatchAsync(params int[] input)
         {
             var list = new List<int>();
@@ -311,7 +312,7 @@ namespace ZLJ.App.Admin.Post
             return list;
         }
         [UnitOfWork(false)]
-        [AbpAuthorize(ZLJ.Authorization.PermissionNames.AdministratorBaseInfoPostUpdate)]
+        [AbpAuthorize(PermissionNames.AdministratorBaseInfoPostUpdate)]
         public async Task<GetPostForEditOutput> GetPostForEdit(EntityDto input)
         {
             var permissions = PermissionManager.GetAllPermissions();

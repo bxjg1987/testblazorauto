@@ -9,13 +9,13 @@ using Abp.AutoMapper;
 using Abp.Domain.Repositories;
 using Abp.Extensions;
 using Abp.Linq.Extensions;
-
-using ZLJ.Authorization;
 using ZLJ.Authorization.Users;
 using ZLJ.App.Admin.Auditing.Dto;
 using System;
 using Abp.Linq;
 using Microsoft.EntityFrameworkCore;
+using ZLJ.App.Admin.Authorization.Permissions;
+
 namespace ZLJ.App.Admin.Auditing
 {
     [Abp.Domain.Uow.UnitOfWork(false)]

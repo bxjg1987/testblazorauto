@@ -30,6 +30,8 @@
 		<None Remove="WorkOrder\**" />
 	</ItemGroup>
 	<ItemGroup>
+		<Compile Remove="Authorization\PermissionNames.cs" />
+		<Compile Remove="Authorization\ZLJAuthorizationProvider.cs" />
 		<Compile Remove="Authorization\ZLJWMSAuthorizationProvider.cs" />
 		<Compile Remove="Customer\PermissionNames.cs" />
 		<Compile Remove="Customer\PermissionProvider.cs" />

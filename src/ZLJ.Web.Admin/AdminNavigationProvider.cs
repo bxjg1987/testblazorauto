@@ -1,10 +1,10 @@
 ﻿using Abp.Application.Navigation;
 using Abp.Authorization;
 using Abp.Localization;
-using ZLJ.Authorization;
 using ZLJ.Localization;
 using BXJG.Utils.GeneralTree;
 using MudBlazor;
+using ZLJ.App.Admin.Authorization.Permissions;
 
 namespace ZLJ.Web.Admin
 {

@@ -1,11 +1,11 @@
 ﻿using Abp.Application.Navigation;
 using Abp.Authorization;
 using Abp.Localization;
-using ZLJ.Authorization;
 //using BXJG.WorkOrder;
 using ZLJ.Localization;
 using BXJG.Utils.GeneralTree;
 using BXJG.Utils;
+using ZLJ.App.Admin.Authorization.Permissions;
 
 namespace ZLJ.App.Admin
 {

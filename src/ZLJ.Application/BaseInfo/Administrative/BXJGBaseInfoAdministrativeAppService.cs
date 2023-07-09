@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 using Abp.Authorization;
 using ZLJ.App.Admin.BaseInfo.Administrative.Dto;
 using ZLJ.App.Admin.BaseInfo;
-using ZLJ.Authorization;
 using Abp.Application.Services.Dto;
 using BXJG.Common.Dto;
 using ZLJ.BaseInfo.Administrative;
+using ZLJ.App.Admin.Authorization.Permissions;
 
 namespace ZLJ.App.Admin.BaseInfo.Administrative
 {

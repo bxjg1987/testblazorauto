@@ -2,7 +2,6 @@
 using Abp.Dependency;
 using Abp.Modules;
 using System.Reflection;
-using ZLJ.Authorization;
 using ZLJ.App.Admin.BaseInfo.StaffInfo;
 using Abp.Configuration.Startup;
 using ZLJ.App.Common;
@@ -17,7 +16,7 @@ using Abp.Runtime.Session;
 using ZLJ.App.Admin.Sessions;
 using Abp.Localization.Dictionaries.Xml;
 using Abp.Localization.Dictionaries;
-
+using ZLJ.App.Admin.Authorization.Permissions;
 
 namespace ZLJ.App.Admin
 {
@@ -28,7 +27,7 @@ namespace ZLJ.App.Admin
         {
             Configuration.Navigation.Providers.Add<ZLJNavigationProvider>();
             Configuration.Modules.CommonApplication().Apps.TryAdd("admin", new AppInfo { Key = "admin", DisplayName = "后台管理", LoginViewName = "adminlogin" });
-            //Configuration.Authorization.Providers.Add<ZLJAuthorizationProvider>();
+            Configuration.Authorization.Providers.Add<ZLJAuthorizationProvider>();
             //注册automapper映射
             Configuration.Modules.AbpAutoMapper().Configurators
                 .Add(cfg => cfg.AddMaps(Assembly.GetExecutingAssembly()));

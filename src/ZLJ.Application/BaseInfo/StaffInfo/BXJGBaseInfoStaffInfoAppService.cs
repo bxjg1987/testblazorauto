@@ -6,6 +6,7 @@ using Abp.Authorization.Users;
 using ZLJ.App.Common.StaffInfo;
 using ZLJ.BaseInfo.Post;
 using ZLJ.BaseInfo;
+using ZLJ.App.Admin.Authorization.Permissions;
 
 namespace ZLJ.App.Admin.BaseInfo.StaffInfo
 {

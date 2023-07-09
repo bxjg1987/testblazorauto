@@ -43,7 +43,7 @@ namespace ZLJ.App.Common
             Configuration.Notifications.Providers.Add<CommonNotifyDefineProvider>();
 
             Configuration.Modules.CommonApplication().Apps.TryAdd("main", new AppInfo { Key = "main", DisplayName = "幽灵", LoginViewName = "" });
-            Configuration.Authorization.Providers.Add<ZLJAuthorizationProvider>();
+            //Configuration.Authorization.Providers.Add<ZLJAuthorizationProvider>();
             //注册automapper映射
             Configuration.Modules.AbpAutoMapper().Configurators.Add(cfg => cfg.AddMaps(Assembly.GetExecutingAssembly()));
 

@@ -10,7 +10,6 @@ using Abp.UI;
 using ZLJ.App.Admin.BaseInfo.AssociatedCompany.Dto;
 using BXJG.Common.Dto;
 using Microsoft.EntityFrameworkCore;
-using ZLJ.Authorization;
 using ZLJ.BaseInfo.AssociatedCompany;
 //using ZLJ.App.Admin.WorkOrder.RentOrderItem.Admin;
 using Abp.Events.Bus.Entities;
@@ -18,6 +17,7 @@ using Microsoft.AspNetCore.Identity;
 using ZLJ.Customer;
 using Abp.IdentityFramework;
 using ZLJ.Authorization.Users;
+using ZLJ.App.Admin.Authorization.Permissions;
 
 namespace ZLJ.App.Admin.BaseInfo.AssociatedCompany
 {

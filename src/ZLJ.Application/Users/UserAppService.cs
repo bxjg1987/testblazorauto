@@ -13,7 +13,6 @@ using Abp.Linq.Extensions;
 using Abp.Localization;
 using Abp.Runtime.Session;
 using Abp.UI;
-using ZLJ.Authorization;
 using ZLJ.App.Admin.Authorization.Accounts;
 using ZLJ.Authorization.Roles;
 using ZLJ.Authorization.Users;
@@ -21,6 +20,7 @@ using ZLJ.App.Admin.Roles.Dto;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ZLJ.App.Common.Users;
+using ZLJ.App.Admin.Authorization.Permissions;
 
 namespace ZLJ.App.Admin.Users
 {
@@ -50,11 +50,11 @@ namespace ZLJ.App.Admin.Users
             _abpSession = abpSession;
             _logInManager = logInManager;
 
-            CreatePermissionName = ZLJ.Authorization.PermissionNames.AdministratorSystemUserAdd;
-            UpdatePermissionName = ZLJ.Authorization.PermissionNames.AdministratorSystemUserUpdate;
-            DeletePermissionName = ZLJ.Authorization.PermissionNames.AdministratorSystemUserDelete;
-            GetAllPermissionName = ZLJ.Authorization.PermissionNames.AdministratorSystemUser;
-            GetPermissionName = ZLJ.Authorization.PermissionNames.AdministratorSystemUser;
+            CreatePermissionName = PermissionNames.AdministratorSystemUserAdd;
+            UpdatePermissionName = PermissionNames.AdministratorSystemUserUpdate;
+            DeletePermissionName = PermissionNames.AdministratorSystemUserDelete;
+            GetAllPermissionName = PermissionNames.AdministratorSystemUser;
+            GetPermissionName = PermissionNames.AdministratorSystemUser;
         }
 
         public override async Task<UserDto> CreateAsync(CreateUserDto input)
