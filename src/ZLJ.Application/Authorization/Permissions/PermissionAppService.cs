@@ -64,6 +64,7 @@ namespace ZLJ.App.Admin.Authorization.Permissions
         [AbpAuthorize]
         public IList<GeneralTreeNodeDto> GetAllPermissions()
         {
+            //若某个权限是用来被其它权限依赖的，那么在可选列表中不要显示
             var permissions = PermissionManager.GetAllPermissions().Where(c => !c.GetDependentedPermissions().Any());
             var list = permissions.Select(c => new GeneralTreeNodeDto
             {

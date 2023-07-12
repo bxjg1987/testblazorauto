@@ -17,18 +17,19 @@ namespace System
 {
     public static class SystemExtensions
     {
-        /// <summary>
-        /// 获取最里面的异常
-        /// </summary>
-        /// <param name="ex"></param>
-        /// <returns></returns>
-        public static Exception GetInnermost(this Exception ex)
-        {
-            if (ex.InnerException == null)
-                return ex;
-            else
-                return ex.InnerException.GetInnermost();
-        }
+        //ex.GetBasexxx已经实现了
+        ///// <summary>
+        ///// 获取最里面的异常
+        ///// </summary>
+        ///// <param name="ex"></param>
+        ///// <returns></returns>
+        //public static Exception GetInnermost(this Exception ex)
+        //{
+        //    if (ex.InnerException == null)
+        //        return ex;
+        //    else
+        //        return ex.InnerException.GetInnermost();
+        //}
 
         /// <summary>
         /// 反序列化包含object类型属性的对象

@@ -18,11 +18,22 @@ namespace Abp.Authorization
     public static class Class1
     {
         private const string sdf = "Dependences";
+        /// <summary>
+        /// 我依赖哪些权限
+        /// </summary>
+        /// <param name="permission"></param>
+        /// <param name="permissions"></param>
+        /// <returns></returns>
         public static Permission DependencePermissions(this Permission permission, params string[] permissions)
         {
             permission[sdf] = permissions;
             return permission;
         }
+        /// <summary>
+        /// 我依赖哪些权限
+        /// </summary>
+        /// <param name="permission"></param>
+        /// <returns></returns>
         public static IEnumerable<Permission> GetDependencePermissions(this Permission permission)
         {
             if (permission.Properties.TryGetValue(sdf, out var r))
@@ -37,6 +48,11 @@ namespace Abp.Authorization
             }
             return new Permission[0];
         }
+        /// <summary>
+        /// 哪些权限依赖我
+        /// </summary>
+        /// <param name="permission"></param>
+        /// <returns></returns>
         public static IEnumerable<Permission> GetDependentedPermissions(this Permission permission)
         {
             IReadOnlyList<Permission> persmissions = default;

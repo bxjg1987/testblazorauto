@@ -75,6 +75,7 @@
     <Compile Remove="Dto\TreeNodeEditBaseDto.cs" />
     <Compile Remove="Dto\TreeNodeMoveInput.cs" />
     <Compile Remove="EventHandlers\Companysf.cs" />
+    <Compile Remove="Roles\IRoleAppService.cs" />
     <Compile Remove="Sessions\ISessionAppService.cs" />
     <Compile Remove="Users\IUserAppService.cs" />
   </ItemGroup>

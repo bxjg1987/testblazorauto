@@ -27,7 +27,7 @@ namespace ZLJ.App.Admin.Roles
 {
 
     [AbpAuthorize(PermissionNames.AdministratorSystemRole)]
-    public class RoleAppService : AsyncCrudAppService<Role, RoleDto, int, PagedRoleResultRequestDto, CreateRoleDto>, IRoleAppService
+    public class RoleAppService : AsyncCrudAppService<Role, RoleDto, int, PagedRoleResultRequestDto, CreateRoleDto>//, IRoleAppService
     {
         private readonly RoleManager _roleManager;
         private readonly UserManager _userManager;
@@ -256,6 +256,7 @@ namespace ZLJ.App.Admin.Roles
         [UnitOfWork(false)]
         public Task<ListResultDto<PermissionDto>> GetAllPermissions()
         {
+            //若某个权限是用来被其它权限依赖的，那么在可选列表中不要显示
             var permissions = PermissionManager.GetAllPermissions().Where(c => !c.GetDependentedPermissions().Any());
 
             return Task.FromResult(new ListResultDto<PermissionDto>(

@@ -41,12 +41,13 @@ namespace ZLJ.Authorization.Roles
                 organizationUnitRoleRepository)
         {
         }
-
         //public override Task SetGrantedPermissionsAsync(int roleId, IEnumerable<Permission> permissions)
         //{
         //   var p= permissions.SelectMany(c => c.GetDependencePermissions());
         //    return base.SetGrantedPermissionsAsync(roleId, permissions.Union(p).GroupBy(c => c.Name).SelectMany(c => c));
         //}
+
+        //上面的方法内部会调用下面的方法。
         public override Task SetGrantedPermissionsAsync(Role role, IEnumerable<Permission> permissions)
         {
             var p = permissions.SelectMany(c => c.GetDependencePermissions()).Distinct();
