@@ -18,6 +18,19 @@ namespace System
     public static class SystemExtensions
     {
         /// <summary>
+        /// 获取最里面的异常
+        /// </summary>
+        /// <param name="ex"></param>
+        /// <returns></returns>
+        public static Exception GetInnermost(this Exception ex)
+        {
+            if (ex.InnerException == null)
+                return ex;
+            else
+                return ex.InnerException.GetInnermost();
+        }
+
+        /// <summary>
         /// 反序列化包含object类型属性的对象
         /// <see href="https://docs.microsoft.com/zh-cn/dotnet/standard/serialization/system-text-json-converters-how-to?pivots=dotnet-6-0#deserialize-inferred-types-to-object-properties "/>
         /// </summary>

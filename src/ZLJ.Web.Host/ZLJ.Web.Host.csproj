@@ -118,7 +118,7 @@
 		<PackageReference Include="DotNetCore.CAP.Dashboard" Version="7.1.4" />
 		<PackageReference Include="DotNetCore.CAP.SqlServer" Version="7.1.4" />
 		<PackageReference Include="Hangfire.SqlServer" Version="1.8.3" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.8">
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.9">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>

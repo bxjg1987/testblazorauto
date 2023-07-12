@@ -43,7 +43,7 @@
 
   <ItemGroup>
     <PackageReference Include="Abp.AutoMapper" Version="8.2.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.9" />
   </ItemGroup>
 
   <ItemGroup>

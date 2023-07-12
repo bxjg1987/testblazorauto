@@ -24,8 +24,8 @@
 
   <ItemGroup>
     <PackageReference Include="Abp.AspNetCore" Version="8.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.8" />
-    <PackageReference Include="MudBlazor" Version="6.6.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.9" />
+    <PackageReference Include="MudBlazor" Version="6.7.0" />
   </ItemGroup>
 
   <ItemGroup>
