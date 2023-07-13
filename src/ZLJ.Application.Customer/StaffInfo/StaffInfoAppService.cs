@@ -66,7 +66,7 @@ namespace ZLJ.App.Customer.StaffInfo
     /// <summary>
     /// 客户管理自己的员工的接口
     /// </summary>
-    public class StaffInfoAppService : CustomerAppServiceBase//, ICapSubscribe
+    public class StaffInfoAppService : CustomerBaseAppService//, ICapSubscribe
     {
         private readonly UserManager userManager;
         private readonly IPasswordHasher<User> passwordHasher;

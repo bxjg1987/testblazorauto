@@ -22,7 +22,7 @@ namespace ZLJ.App.Common.Customer
     /// </summary>
     [AbpAuthorize] //暂时用这个，以后缓存权限依赖 参考权限定义的DependencePermissions扩展方法
     [UnitOfWork(false)]
-    public class OuProviderAppService : ApplicationServiceBase
+    public class OuProviderAppService : CommonBaseApplicationService
     {
         IRepository<CustomerOUEntity, long> repository;
         public OuProviderAppService(IRepository<CustomerOUEntity, long> repository)

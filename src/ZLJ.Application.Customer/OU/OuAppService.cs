@@ -25,7 +25,7 @@ namespace ZLJ.App.Customer.OU
     /// 客户管理员对客户部门进行管理的接口
     /// </summary>
     [AbpAuthorize(PermissionNames.Customer)]
-    public class OuAppService : CustomerAppServiceBase
+    public class OuAppService : CustomerBaseAppService
     {
         public CustomerOUManager OrganizationUnitManager { get; private set; }
         IRepository<CustomerOUEntity, long> repository;

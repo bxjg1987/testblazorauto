@@ -21,7 +21,7 @@ namespace ZLJ.App.Admin.Auditing
     [Abp.Domain.Uow.UnitOfWork(false)]
     [DisableAuditing]//禁用它的审计日志功能
     [AbpAuthorize(PermissionNames.AdministratorSystemLog)]
-    public class AuditLogAppService : ZLJAppServiceBase, IAuditLogAppService
+    public class AuditLogAppService : ZLJBaseAppService, IAuditLogAppService
     {
         private readonly IRepository<AuditLog, long> _auditLogRepository;
         private readonly IRepository<User, long> _userRepository;

@@ -12,7 +12,7 @@ using BXJG.Utils.GeneralTree;
 
 namespace ZLJ.App.Admin.Authorization.Permissions
 {
-    public class PermissionAppService : ZLJAppServiceBase, IPermissionAppService
+    public class PermissionAppService : ZLJBaseAppService, IPermissionAppService
     {
         //public ListResultDto<FlatPermissionWithLevelDto> GetAllPermissions()
         //{
