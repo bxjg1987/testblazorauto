@@ -8,13 +8,12 @@ using System.Threading.Tasks;
 namespace BXJG.Utils.Dto
 {
     /// <summary>
-    /// 获取排序并分页的列表时的输入模型
+    /// 获取排序列表时的输入模型
     /// </summary>
     /// <typeparam name="TFilter">条件模型</typeparam>
-    public class PagedAndSortedResultRequest<TFilter> : SortedResultRequest<TFilter>, IPagedAndSortedResultRequest
+    public class SortedResultRequest<TFilter> : ISortedResultRequest
     {
         public TFilter Filter { get; set; }
-        public int SkipCount { get; set; }
-        public int MaxResultCount { get; set; }
+        public string Sorting { get; set; }
     }
 }
