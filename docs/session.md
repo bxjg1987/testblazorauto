@@ -58,3 +58,8 @@ appkey跟租户id有很多相似之处，所以也可以使用一样的实现
 在登陆时从httpcontext获取完全没问题，以为此时还没有blazor server
 
 登陆后直接从加密cookie中获取，应该也没问题，所以改下，若当前用户存在，则从加密cookie中获取，否则从httpcontext获取
+
+
+# 租户id的获取 vs appkey的获取
+租户id是通过一堆租户id解析器，在需要时去调用的
+appkey是通过中间件 先分析出appkey，存储在httpcontext，然后从session获取时，先尝试从当前用户获取，若没有则从httpcontext获取
