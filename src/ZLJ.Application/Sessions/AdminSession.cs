@@ -13,7 +13,7 @@ namespace ZLJ.App.Admin.Sessions
 {
     public class AdminSession : ZLJAppSession, ISingletonDependency
     {
-        public AdminSession(IPrincipalAccessor principalAccessor, IMultiTenancyConfig multiTenancy, ITenantResolver tenantResolver, IAmbientScopeProvider<SessionOverride> sessionOverrideScopeProvider, Func<AppInfo> appinfoProvider) : base(principalAccessor, multiTenancy, tenantResolver, sessionOverrideScopeProvider, appinfoProvider)
+        public AdminSession(IPrincipalAccessor principalAccessor, IMultiTenancyConfig multiTenancy, ITenantResolver tenantResolver, IAmbientScopeProvider<SessionOverride> sessionOverrideScopeProvider, Func<IPrincipalAccessor,AppInfo> appinfoProvider) : base(principalAccessor, multiTenancy, tenantResolver, sessionOverrideScopeProvider, appinfoProvider)
         {
         }
     }

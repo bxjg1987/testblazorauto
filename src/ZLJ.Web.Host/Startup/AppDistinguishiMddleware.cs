@@ -71,16 +71,15 @@ namespace ZLJ.Web.Host.Startup
             }
             //context.Items["appInfo"] = apps[appKey.ToString()];
            // await _next(context);
-            try
-            {
+            //try
+            //{
                 await _next(context);
-            }
-            catch (Exception ex)
-            {
+            //}
+            //catch (Exception ex)
+            //{
 
-                throw;
-            }
-          
+            //    throw;
+            //}
         }
     }
 }

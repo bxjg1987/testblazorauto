@@ -16,10 +16,10 @@ namespace ZLJ.App.Common.Sessions
         //可以参考abp的租户解析器（一堆），所以它的租户解析器是反着来的，
 
         // public virtual string AppKey { get; set; }
-
-        public virtual AppInfo AppInfo => appinfoProvider?.Invoke();
-        Func<AppInfo> appinfoProvider;
-        public ZLJAppSession(IPrincipalAccessor principalAccessor, IMultiTenancyConfig multiTenancy, ITenantResolver tenantResolver, IAmbientScopeProvider<SessionOverride> sessionOverrideScopeProvider, Func<AppInfo> appinfoProvider) : base(principalAccessor, multiTenancy, tenantResolver, sessionOverrideScopeProvider)
+      //  public IPrincipalAccessor PrincipalAcc => base.PrincipalAccessor;
+        public virtual AppInfo AppInfo => appinfoProvider?.Invoke(base.PrincipalAccessor);
+        Func<IPrincipalAccessor,AppInfo> appinfoProvider;
+        public ZLJAppSession(IPrincipalAccessor principalAccessor, IMultiTenancyConfig multiTenancy, ITenantResolver tenantResolver, IAmbientScopeProvider<SessionOverride> sessionOverrideScopeProvider, Func<IPrincipalAccessor, AppInfo> appinfoProvider) : base(principalAccessor, multiTenancy, tenantResolver, sessionOverrideScopeProvider)
         {
             this.appinfoProvider = appinfoProvider;
         }

@@ -26,6 +26,11 @@ using Abp.Reflection.Extensions;
 using System.Reflection;
 using ZLJ.App.Common;
 using ZLJ.Web.Admin;
+using Abp.Runtime.Session;
+using ZLJ.App.Common.Sessions;
+using Abp.Runtime.Security;
+using System.Security.Claims;
+using DocumentFormat.OpenXml.InkML;
 
 namespace ZLJ.Web.Host.Startup
 {
@@ -129,14 +134,28 @@ namespace ZLJ.Web.Host.Startup
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(typeof(ZLJWebHostModule).GetAssembly());
-            IocManager.RegService(services => {
-                services.AddSingleton(() => {
-                    return httpContextAccessor.HttpContext?.GetApp();
-                    //if (httpContextAccessor.HttpContext!.Items.TryGetValue("appKey", out var appKey))
-                    //{
-                    //    return Configuration.Modules.CommonApplication().Apps[appKey!.ToString()];
-                    //}
-                    //return default;
+            IocManager.RegService(services =>
+            {
+                services.AddSingleton(ss =>
+                {
+                    Func<IPrincipalAccessor, AppInfo> ss1 = (IPrincipalAccessor p) =>
+                    {
+                        var sdf = ss.GetService<IAbpSession>();
+                        if (sdf.UserId.HasValue)
+                        {
+                            var sdf1 = p.Principal.Claims.SingleOrDefault(c => c.Type.Equals("appKey", StringComparison.OrdinalIgnoreCase));
+                            ss.GetService<CommonApplicationConfiguration>()!.Apps.TryGetValue(sdf1.Value, out var app);
+                            return app;
+                        }
+                        else
+                            return httpContextAccessor.HttpContext?.GetApp();
+                        //if (httpContextAccessor.HttpContext!.Items.TryGetValue("appKey", out var appKey))
+                        //{
+                        //    return Configuration.Modules.CommonApplication().Apps[appKey!.ToString()];
+                        //}
+                        //return default;
+                    };
+                    return ss1;
                 });
             });
         }
@@ -145,7 +164,7 @@ namespace ZLJ.Web.Host.Startup
             IocManager.Resolve<ApplicationPartManager>().AddApplicationPartsIfNotAddedBefore(Assembly.GetExecutingAssembly());
 
             var workManager = IocManager.Resolve<IBackgroundWorkerManager>();
-           
+
             //workManager.Add(IocManager.Resolve<CreateWorkloadRecordMonthlyWorker>());
         }
 
