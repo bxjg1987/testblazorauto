@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZLJ.App.Customer.Sessions;
 using ZLJ.Authorization.Users;
 using ZLJ.MultiTenancy;
 
@@ -26,6 +27,7 @@ namespace ZLJ.App.Customer
         where TGetInput : IEntityDto<TPrimaryKey>
         where TDeleteInput : IEntityDto<TPrimaryKey>
     {
+        public CustomerSession CustomerSession { get; set; }
         public AsyncCrudCustomerBaseAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
         {
             LocalizationSourceName = CustConsts.Cust;

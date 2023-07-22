@@ -10,6 +10,7 @@ using ZLJ.App.Admin.BaseInfo.StaffInfo;
 using ZLJ.Authorization.Users;
 using Abp.Localization.Sources;
 using BXJG.Utils;
+using ZLJ.App.Admin.Sessions;
 
 namespace ZLJ.App.Admin
 {
@@ -18,6 +19,7 @@ namespace ZLJ.App.Admin
     /// </summary>
     public abstract class ZLJBaseAppService : CommonBaseApplicationService
     {
+        public AdminSession AdminSession { get; set; }
         protected ZLJBaseAppService()
         {
             LocalizationSourceName = AdminConsts.Admin;
