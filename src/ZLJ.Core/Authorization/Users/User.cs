@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Abp.Authorization.Users;
 using Abp.Extensions;
-using ZLJ.BaseInfo.StaffInfo;
 
 namespace ZLJ.Authorization.Users
 {
@@ -20,8 +19,7 @@ namespace ZLJ.Authorization.Users
         public virtual ICollection<UserOrganizationUnit> OrganizationUnits { get; set; }
         public static User CreateTenantAdminUser(int tenantId, string emailAddress)
         {
-            
-            var user = new StaffInfoEntity //User
+            var user = new User
             {
                 TenantId = tenantId,
                 UserName = AdminUserName,

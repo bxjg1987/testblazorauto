@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using ZLJ.Authorization.Users;
 using ZLJ.BaseInfo.Post;
+using ZLJ.Authorization.Roles;
 
 namespace ZLJ.EntityFrameworkCore.EntityFrameworkCore.Seed.BaseInfo
 {
@@ -140,6 +141,9 @@ namespace ZLJ.EntityFrameworkCore.EntityFrameworkCore.Seed.BaseInfo
 
 
             _context.SaveChanges();
+
+            var sdfsdf = _context.Roles.IgnoreQueryFilters().Where(c => c.TenantId == _tenantId && c.Name == StaticRoleNames.Tenants.Admin).Single();
+            _context.UserRoles.Add(new UserRole(_tenantId, ent1.Id, sdfsdf.Id));
         }
     }
 }

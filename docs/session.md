@@ -83,3 +83,11 @@ appkey是通过中间件 先分析出appkey，存储在httpcontext，然后从se
 如何移除呢？
 前后端分离的，只能用过期策略，blazorserver
 好麻烦。
+
+# 多用户的分析
+abp只得一个User，框架模板中的LoginManager Usermanager都指向的这个User
+多应用有自己的User，都实现User，这样可以公用原来的LoginManager和UserManager
+由于我们现在用三层，UserManager没啥用了。
+
+重点是后台管理到底是用员工还是原来的User
+原来的User保持不动，后台管理可以默认使用员工
