@@ -88,6 +88,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{31830F03-183C-4530-A73A-C165A1F5A739}"
 	ProjectSection(SolutionItems) = preProject
 		docs\session.md = docs\session.md
+		docs\依赖注入和AOP.md = docs\依赖注入和AOP.md
 	EndProjectSection
 EndProject
 Global
