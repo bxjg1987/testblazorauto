@@ -194,9 +194,9 @@ namespace ZLJ.EntityFrameworkCore
          */
 
         //去雄注释，所有软删除将变成硬删除
-        //protected override void CancelDeletionForSoftDelete(EntityEntry entry)
-        //{
-        //    //base.CancelDeletionForSoftDelete(entry);
-        //}
+        protected override void CancelDeletionForSoftDelete(EntityEntry entry)
+        {
+            //base.CancelDeletionForSoftDelete(entry);
+        }
     }
 }
