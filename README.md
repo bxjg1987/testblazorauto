@@ -25,7 +25,9 @@ redis7.x
 
 
 # 以前的部分模块介绍
+
 >此仓库一直在更新，你此前看到的视频或文章可能已经过时。wiki中的文档也可能与最新代码不匹配。
+
 [工单管理模块](https://www.bilibili.com/video/BV1ky4y1b79u/)  
 [商城模块->顾客](https://www.bilibili.com/video/BV1zy4y1k7uR/)  
 [结合supersocket的设备控制功能](https://www.bilibili.com/video/BV1M5411j7Lo/)   
