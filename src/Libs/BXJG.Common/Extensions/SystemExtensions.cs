@@ -11,6 +11,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace System
@@ -327,6 +328,27 @@ namespace System
             }
             hexString = strB.ToString();
             return hexString;
+        }
+
+        /// <summary>
+        /// 递归获取父节点的code
+        /// a.b.c  得到 [a,a.b]
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="separator"></param>
+        /// <returns></returns>
+        public static string[] RecursionGetParentCode(this string code, string separator = ".")
+        {
+            var ct = Regex.Matches(code, separator).Count;
+            var ary = new string[ct];
+            while (ct > 0)
+            {
+                var idx = code.LastIndexOf(separator);
+                code = code.Substring(0, idx);
+                ary[ct - 1] = code;
+                ct--;
+            }
+            return ary;
         }
     }
 }
