@@ -54,7 +54,7 @@ namespace BXJG.Utils
                 //});
                 cfg.AddMaps(Assembly.GetExecutingAssembly());
             });
-
+            //https://aspnetboilerplate.com/Pages/Documents/Articles/Aspect-Oriented-Programming-using-Interceptors/index.html
             IocManager.IocContainer.Kernel.ComponentRegistered += (key, handler) =>
             {
                 if (typeof(ICapSubscribe).IsAssignableFrom(handler.ComponentModel.Implementation))
