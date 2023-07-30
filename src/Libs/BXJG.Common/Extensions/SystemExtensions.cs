@@ -340,6 +340,9 @@ namespace System
         public static string[] RecursionGetParentCode(this string code, string separator = ".")
         {
             var ct = Regex.Matches(code, separator).Count;
+            if (ct == 0)
+                return new[] { code };
+
             var ary = new string[ct];
             while (ct > 0)
             {
