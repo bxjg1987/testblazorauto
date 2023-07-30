@@ -337,7 +337,7 @@ namespace System
         /// <param name="code"></param>
         /// <param name="separator"></param>
         /// <returns></returns>
-        public static string[] RecursionGetParentCode(this string code, string separator = ".")
+        public static string[] RecursionGetParentCode(this string code, string separator = "\.")
         {
             var ct = Regex.Matches(code, separator).Count;
             if (ct == 0)
