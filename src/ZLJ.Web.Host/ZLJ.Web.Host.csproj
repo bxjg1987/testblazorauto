@@ -115,9 +115,9 @@
 	<ItemGroup>
 		<PackageReference Include="Abp.Castle.Log4Net" Version="8.2.0" />
 		<PackageReference Include="DistributedLock.SqlServer" Version="1.*" />
-		<PackageReference Include="DotNetCore.CAP.Dashboard" Version="7.1.4" />
-		<PackageReference Include="DotNetCore.CAP.SqlServer" Version="7.1.4" />
-		<PackageReference Include="Hangfire.SqlServer" Version="1.8.3" />
+		<PackageReference Include="DotNetCore.CAP.Dashboard" Version="7.2.0" />
+		<PackageReference Include="DotNetCore.CAP.SqlServer" Version="7.2.0" />
+		<PackageReference Include="Hangfire.SqlServer" Version="1.8.4" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.9">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
