@@ -1,4 +1,5 @@
-﻿using Abp.Application.Services;
+﻿using Abp;
+using Abp.Application.Services;
 using Abp.IdentityFramework;
 using Abp.Linq;
 using Abp.Localization.Sources;
@@ -33,7 +34,15 @@ namespace ZLJ.App.Common
         //public IStaffSession StaffSession { get; set; }
         public UserManager UserManager { get; set; }
 
+        protected override TEntity MapToEntity(TCreateInput createInput)
+        {
+            var entity = base.MapToEntity(createInput);
 
+            if (entity is IEntity<Guid> et)
+                et.Id = SequentialGuidGenerator.Instance.Create();
+
+            return entity;
+        }
         protected virtual async Task<User> GetCurrentUserAsync()
         {
             var user = await UserManager.FindByIdAsync(AbpSession.GetUserId().ToString());
@@ -133,7 +142,7 @@ namespace ZLJ.App.Common
     /// crud的后台管理基类
     /// </summary>
     public abstract class AsyncCrudCommonBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput>
-               : AsyncCrudCommonBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TCreateInput, EntityDto<TPrimaryKey>>
+               : AsyncCrudCommonBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TCreateInput>
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TCreateInput : IEntityDto<TPrimaryKey>

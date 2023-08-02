@@ -67,7 +67,7 @@ namespace ZLJ.App.Admin
     /// crud的后台管理基类
     /// </summary>
     public class AsyncCrudAdminBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput>
-               : AsyncCrudAdminBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TCreateInput, EntityDto<TPrimaryKey>>
+               : AsyncCrudAdminBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TCreateInput>
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TCreateInput : IEntityDto<TPrimaryKey>
