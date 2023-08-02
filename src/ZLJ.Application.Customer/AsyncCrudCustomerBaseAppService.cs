@@ -66,7 +66,7 @@ namespace ZLJ.App.Customer
     /// crud的后台管理基类
     /// </summary>
     public class AsyncCrudCustomerBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput>
-               : AsyncCrudCustomerBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TCreateInput, EntityDto<TPrimaryKey>>
+               : AsyncCrudCustomerBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TCreateInput>
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TCreateInput : IEntityDto<TPrimaryKey>
