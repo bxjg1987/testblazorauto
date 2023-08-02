@@ -28,8 +28,6 @@ namespace ZLJ.App.Common
         where TGetInput : IEntityDto<TPrimaryKey>
         where TDeleteInput : IEntityDto<TPrimaryKey>
     {
-        public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }//属性注入
-
         public TenantManager TenantManager { get; set; }
         //public IStaffSession StaffSession { get; set; }
         public UserManager UserManager { get; set; }
