@@ -7,7 +7,7 @@ using ZLJ.Configuration;
 namespace ZLJ.App.Admin.Configuration
 {
     [AbpAuthorize]
-    public class ConfigurationAppService : ZLJBaseAppService, IConfigurationAppService
+    public class ConfigurationAppService : AdminBaseAppService, IConfigurationAppService
     {
         public async Task ChangeUiTheme(ChangeUiThemeInput input)
         {

@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 using System.Linq.Dynamic.Core;
 using Microsoft.EntityFrameworkCore;
 
-namespace ZLJ.App.Common
+namespace BXJG.Utils
 {
     /*
      * 一种数据除了curd功能等管理功能，还需要为其它功能提供可选数据（通常是下拉框或弹窗选择的数据）
@@ -55,7 +55,12 @@ namespace ZLJ.App.Common
             this.Repository = repository;
             AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
         }
-
+        /// <summary>
+        /// 获取可供选择的数据
+        /// 通常用来提供下拉框或弹窗选择的数据
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public virtual async Task<PagedResultDto<TEntityDto>> GetAllAsync(TGetAllInput input)
         {
             await CheckGetAllPermission();

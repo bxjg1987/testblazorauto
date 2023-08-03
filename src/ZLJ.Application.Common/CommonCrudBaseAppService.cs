@@ -1,17 +1,8 @@
 ﻿using Abp;
-using Abp.Application.Services;
 using Abp.IdentityFramework;
-using Abp.Linq;
 using Abp.Localization.Sources;
 using Abp.Runtime.Session;
-using BXJG.Utils;
-using BXJG.Utils.Dto;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ZLJ.Authorization.Users;
 using ZLJ.MultiTenancy;
 
@@ -20,7 +11,7 @@ namespace ZLJ.App.Common
     /// <summary>
     /// crud的后台管理基类
     /// </summary>
-    public abstract class AsyncCrudCommonBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, TDeleteInput>
+    public abstract class CommonCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, TDeleteInput>
                         : AsyncCrudAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, TDeleteInput>
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
@@ -59,7 +50,7 @@ namespace ZLJ.App.Common
 
         protected ILocalizationSource appCommonLocalizationSource, zljLocalizationSource, utilsLocalizationSource;
 
-        protected AsyncCrudCommonBaseAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
+        protected CommonCrudBaseAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
         {
         }
 
@@ -112,7 +103,7 @@ namespace ZLJ.App.Common
     /// crud的后台管理基类
     /// </summary>
     public abstract class AsyncCrudCommonBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput>
-               : AsyncCrudCommonBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, EntityDto<TPrimaryKey>>
+               : CommonCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, EntityDto<TPrimaryKey>>
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TUpdateInput : IEntityDto<TPrimaryKey>

@@ -19,8 +19,8 @@ namespace ZLJ.App.Customer
     /// <summary>
     /// crud的后台管理基类
     /// </summary>
-    public class AsyncCrudCustomerBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, TDeleteInput>
-                        : AsyncCrudCommonBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, TDeleteInput>
+    public class CustomerCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, TDeleteInput>
+                        : CommonCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, TDeleteInput>
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TUpdateInput : IEntityDto<TPrimaryKey>
@@ -28,7 +28,7 @@ namespace ZLJ.App.Customer
         where TDeleteInput : IEntityDto<TPrimaryKey>
     {
         public CustomerSession CustomerSession { get; set; }
-        public AsyncCrudCustomerBaseAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
+        public CustomerCrudBaseAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
         {
             LocalizationSourceName = CustConsts.Cust;
         }
@@ -37,27 +37,27 @@ namespace ZLJ.App.Customer
     /// <summary>
     /// crud的后台管理基类
     /// </summary>
-    public class AsyncCrudCustomerBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput>
-               : AsyncCrudCustomerBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, EntityDto<TPrimaryKey>>
+    public class CustomerCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput>
+               : CustomerCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, EntityDto<TPrimaryKey>>
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TGetInput : IEntityDto<TPrimaryKey>
     {
-        public AsyncCrudCustomerBaseAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
+        public CustomerCrudBaseAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
         {
         }
     }
     /// <summary>
     /// crud的后台管理基类
     /// </summary>
-    public class AsyncCrudCustomerBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
-               : AsyncCrudCustomerBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, EntityDto<TPrimaryKey>>
+    public class CustomerCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
+               : CustomerCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, EntityDto<TPrimaryKey>>
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TUpdateInput : IEntityDto<TPrimaryKey>
     {
-        public AsyncCrudCustomerBaseAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
+        public CustomerCrudBaseAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
         {
         }
     }
@@ -65,14 +65,14 @@ namespace ZLJ.App.Customer
     /// <summary>
     /// crud的后台管理基类
     /// </summary>
-    public class AsyncCrudCustomerBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput>
-               : AsyncCrudCustomerBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TCreateInput>
+    public class CustomerCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput>
+               : CustomerCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TCreateInput>
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TCreateInput : IEntityDto<TPrimaryKey>
     {
         // : AsyncCrudAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TUpdateInput>
-        public AsyncCrudCustomerBaseAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
+        public CustomerCrudBaseAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
         {
         }
     }

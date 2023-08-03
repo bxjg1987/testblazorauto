@@ -17,10 +17,10 @@ namespace ZLJ.App.Admin
     /// <summary>
     /// Derive your application services from this class.
     /// </summary>
-    public abstract class ZLJBaseAppService : CommonBaseApplicationService
+    public abstract class AdminBaseAppService : CommonBaseApplicationService
     {
         public AdminSession AdminSession { get; set; }
-        protected ZLJBaseAppService()
+        protected AdminBaseAppService()
         {
             LocalizationSourceName = AdminConsts.Admin;
         }

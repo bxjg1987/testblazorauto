@@ -17,7 +17,7 @@ namespace ZLJ.App.Admin.BaseInfo.StaffInfo
     /// <summary>
     /// 后台管理-员工档案
     /// </summary>
-    public class BXJGBaseInfoStaffInfoAppService : ZLJBaseAppService
+    public class BXJGBaseInfoStaffInfoAppService : AdminBaseAppService
     {
         private readonly UserManager userManager;
         private readonly IPasswordHasher<User> passwordHasher;
