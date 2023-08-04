@@ -47,7 +47,7 @@
 		<ProjectReference Include="..\..\..\..\abp\src\Modules\BXJG.Utils.Application\BXJG.Utils.Application.csproj" />
 	</ItemGroup>-->
 	<ItemGroup>
-		<PackageReference Include="BXJG.Utils.Application" Version="1.2.30" />
+		<PackageReference Include="BXJG.Utils.Application" Version="1.2.32" />
 		<PackageReference Include="DotNetCore.CAP" Version="7.2.0" />
 		<PackageReference Include="Hangfire.Core" Version="1.8.4" />
 		<PackageReference Include="Magicodes.IE.Excel" Version="2.7.4.5" />

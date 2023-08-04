@@ -13,6 +13,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq.Dynamic.Core;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Castle.Core;
+using Abp.Dependency;
+using Castle.MicroKernel.Lifestyle.Scoped;
+using Castle.Windsor.MsDependencyInjection;
 
 namespace BXJG.Utils
 {
@@ -36,6 +41,12 @@ namespace BXJG.Utils
      * 单独提供可选择的数据的接口不与crud接口放一起，因为它们的场景差别太大，一个是管理时的crud，一个是供别的功能选择的数据。
      * 
      * 这里是针对扁平数据，树形数据有自己的抽象。
+     * 
+     * 经过测试实现IIocManagerAccessor，定义IocManager属性（必须可写）拿到的容器是全局的
+     * 从全局的IocManager拿其它服务还好，拿实现了IDisposable的服务就会有问题，会内存泄漏，已经测试过了。
+     * https://learn.microsoft.com/zh-cn/dotnet/core/extensions/dependency-injection-guidelines#general-idisposable-guidelines
+     * 
+     * 经过测试发现，直接注入IServiceProvider，拿到的容器是局部的，估计是当前请求范围，不会内存泄漏。
      */
 
     /// <summary>
@@ -45,14 +56,25 @@ namespace BXJG.Utils
     /// <typeparam name="TKey">主键类型</typeparam>
     /// <typeparam name="TGetAllInput">查询时输入参数的类型</typeparam>
     /// <typeparam name="TEntityDto">可选数据的dto</typeparam>
-    public abstract class ProviderApplicationService<TEntity, TKey, TGetAllInput, TEntityDto> : ApplicationService
+    public abstract class ProviderAppService<TEntity, TKey, TGetAllInput, TEntityDto> : ApplicationService//, IIocManagerAccessor
         where TEntity : class, IEntity<TKey>
     {
-        protected readonly IRepository<TEntity, TKey> Repository;
+        private IRepository<TEntity, TKey> repository;
+        protected virtual string GetAllPermissionName { get; set; }
+        public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }
+
+        protected IRepository<TEntity, TKey> Repository => repository ??= Services.GetService<IRepository<TEntity, TKey>>();
+        // ScopedWindsorServiceProvider
+
+        //看顶部最后的注释
+        public IServiceProvider Services { get; set; }
+
         //AsyncCrudAppService
-        public ProviderApplicationService(IRepository<TEntity, TKey> repository)
+
+        //使用反模式，消除子类的构造函数
+        public ProviderAppService(/*IRepository<TEntity, TKey> repository*/)
         {
-            this.Repository = repository;
+            //this.Repository = repository;
             AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
         }
         /// <summary>
@@ -155,8 +177,6 @@ namespace BXJG.Utils
             return Repository.GetAll().AsNoTrackingWithIdentityResolution();
         }
 
-        protected virtual string GetAllPermissionName { get; set; }
-        public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }
 
         protected virtual TEntityDto MapToEntityDto(TEntity entity)
         {

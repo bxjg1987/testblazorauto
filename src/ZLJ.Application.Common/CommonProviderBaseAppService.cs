@@ -15,9 +15,9 @@ namespace ZLJ.App.Common
         protected ILocalizationSource appCommonLocalizationSource, zljLocalizationSource, utilsLocalizationSource;
 
 
-        protected CommonProviderBaseAppService(IRepository<TEntity, TKey> repository) : base(repository)
-        {
-        }
+        //protected CommonProviderBaseAppService(IRepository<TEntity, TKey> repository) : base(repository)
+        //{
+        //}
 
         protected virtual ILocalizationSource LocalizationSourceAppCommon
         {
