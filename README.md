@@ -1,38 +1,28 @@
-# 介绍
-基于.net7.x abp blazor的快速开发框架基础，
-先提供了帮助类的通用功能库，然后使用abp提供的业务框架能力，再进一步提供基于abp的扩展模块，最后使用mudblazor提供界面，参考下面的特征列表。
+> 文档的更新速度一般木有代码的更新速度快，请注意核对代码和文档的最后更新时间。
 
->此仓库一直在更新，你此前看到的视频或文章可能已经过时。wiki中的文档也可能与最新代码不匹配。
+# 简介
+[abp8.x(一代)](https://aspnetboilerplate.com/)是基于asp.net core 7.x的快速开发框架，包含：用户角色权限、多租户、多语言、模块化、日志、后台任务、缓存、对象映射、通知、等等大部分项目都会用到的特征，完整特征请查看它的官方文档。本项目是基于它搭建，并增加了更多功能。
+> 你应该先熟悉[abp8.x(一代)](https://aspnetboilerplate.com/)，因为本文档不会包含官方文档已存在的内容。
 
+**此项目 = [abp8.x(一代)](https://aspnetboilerplate.com/) + 通用abp模块 + 帮助库 + blazor** 
 
-# 技术和特征
-1. [dotnet7.x](https://learn.microsoft.com/zh-cn/aspnet/core/?view=aspnetcore-7.0)
-[abpzero](https://aspnetboilerplate.com/) (也就是老版本，不是vNext)
-mudblazor6.x
-sqlserver2012+ 
-redis7.x 
-1. 单体多应用。一套系统多种用户类型，需要多个端进入系统做不同业务处理，每个端作为一个应用。
-1. 通用树抽象。轻松实现一个新的无线层次结构的数据的crud。默认实现通用的数据字典。
-1. 小程序登录、小程序支付。
-1. 简单的通用附件
-1. cap集成
-1. 同时支持blazor和webapi
-1. 扩展abp权限实现依赖权限，A权限有个子权限A1,当给用户授予A权限时，自动授权A1权限
+**通用abp模块** 
+abp是模块化开发的，本项目按此方式创建了更多实用模块，如：cap集成、通用文件附件、通用树形结构的数据、数据字典 等等，更多模块会在单独的章节中介绍。
+
+**帮助库**
+同“通用abp模块”一样，也是一些通用功能和帮助类方法，如：对字符串、时间、集合提供的扩展方法、以及类似微信小程序登录、支付等、中介类等通用功能。
+“通用abp模块”依赖abp相关nuget包的，而“帮助库”不依赖abp的任何内容，它可以用于任何.net core的项目。
+
+**blazor** 
+[abp8.x(一代)](https://aspnetboilerplate.com/)默认是不支持blazor的，但本项目对blazor server做了集成，且默认使用mudblazor，你可以修改代码替换成其它ui框架。
 
 
-# 文档
-见[wiki](https://gitee.com/bxjg1987_admin/abp/wikis)
-
-
-# 以前的部分模块介绍
-
->此仓库一直在更新，你此前看到的视频或文章可能已经过时。wiki中的文档也可能与最新代码不匹配。
-
-[工单管理模块](https://www.bilibili.com/video/BV1ky4y1b79u/)  
-[商城模块->顾客](https://www.bilibili.com/video/BV1zy4y1k7uR/)  
-[结合supersocket的设备控制功能](https://www.bilibili.com/video/BV1M5411j7Lo/)   
-[微信小程序登录模块](https://www.bilibili.com/video/BV1Uk4y1d7Be/)  
-[微信小程序支付模块](https://www.bilibili.com/video/BV1Ac411h7Jo/)  
-[大文件分片上传/附件模块](https://www.bilibili.com/video/BV1m7411m7Es/)  
-[通用树形结构模块](https://www.bilibili.com/video/BV1m7411m7Es?p=7)  
-
+# 特征
+1. [abp8.x(一代)](https://aspnetboilerplate.com/)的所有特征
+1. 单体项目多应用支持。如：后台管理、供应商、客户服务 看作是3个应用，每个应用的用户不同、功能列表不同、登录页面和管理界面不同。
+1. 无限层次结构的数据的抽象。你可以轻松实现类似商品分类这种无限层次机构的功能。
+1. 通用文件/附件。
+1. 依赖权限。如：商品列表页访问权限，它依赖商品分类的查看权限，在授权商品列表查看权限时，会自动的一并授权商品分类的查看权限
+1. 微信小程序登录/支付
+1. blazor server集成
+1. CAP集成
