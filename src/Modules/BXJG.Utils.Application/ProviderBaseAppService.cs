@@ -23,7 +23,7 @@ namespace BXJG.Utils
 {
     /*
      * 一种数据除了curd功能等管理功能，还需要为其它功能提供可选数据（通常是下拉框或弹窗选择的数据）
-     * 这种数据往往比管理功能中的详情拥有更少的属性，因为仅仅是用来选择，只要用户能准确选择即可。
+     * 这种数据往往比管理功能中的详情拥有更少的属性，因为仅仅是用来选择，只要用户能准确识别即可。
      * 另外一般需要剔除敏感字段，如：成本价，因为是公共接口，很多功能都需要引用。
      * 具体定义多少字段，定义哪些字段，先得明确这个数据在整个项目中的功能范围，
      * 一般原则是在满足功能范围的情况下，且在用户能根据这些字段识别的情况下，提供尽可能少的字段，
@@ -56,7 +56,7 @@ namespace BXJG.Utils
     /// <typeparam name="TKey">主键类型</typeparam>
     /// <typeparam name="TGetAllInput">查询时输入参数的类型</typeparam>
     /// <typeparam name="TEntityDto">可选数据的dto</typeparam>
-    public abstract class ProviderAppService<TEntity, TKey, TGetAllInput, TEntityDto> : ApplicationService//, IIocManagerAccessor
+    public abstract class ProviderBaseAppService<TEntity, TKey, TGetAllInput, TEntityDto> : ApplicationService//, IIocManagerAccessor
         where TEntity : class, IEntity<TKey>
     {
         private IRepository<TEntity, TKey> repository;
@@ -72,7 +72,7 @@ namespace BXJG.Utils
         //AsyncCrudAppService
 
         //使用反模式，消除子类的构造函数
-        public ProviderAppService(/*IRepository<TEntity, TKey> repository*/)
+        public ProviderBaseAppService(/*IRepository<TEntity, TKey> repository*/)
         {
             //this.Repository = repository;
             AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
@@ -176,7 +176,6 @@ namespace BXJG.Utils
         {
             return Repository.GetAll().AsNoTrackingWithIdentityResolution();
         }
-
 
         protected virtual TEntityDto MapToEntityDto(TEntity entity)
         {
