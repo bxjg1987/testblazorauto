@@ -37,7 +37,7 @@ namespace BXJG.Utils.GeneralTree
     /// <typeparam name="TGetNodesForSelectInput"></typeparam>
     /// <typeparam name="TGetNodesForSelectOutput"></typeparam>
     /// <typeparam name="TEntity"></typeparam>
-    /// <typeparam name="TManager"></typeparam>
+    [UnitOfWork(false)]
     public class UnAuthGeneralTreeAppServiceBase<TGetTreeForSelectInput,
                                                  TGetTreeForSelectOutput,
                                                  TGetNodesForSelectInput,
@@ -46,21 +46,26 @@ namespace BXJG.Utils.GeneralTree
                                                                                                                  TGetTreeForSelectOutput,
                                                                                                                  TGetNodesForSelectInput,
                                                                                                                  TGetNodesForSelectOutput>
-        where TEntity : GeneralTreeEntity<TEntity>
-        where TGetTreeForSelectInput : GeneralTreeGetForSelectInput
-        where TGetTreeForSelectOutput : GeneralTreeNodeDto<TGetTreeForSelectOutput>, new()
-        where TGetNodesForSelectInput : GeneralTreeGetForSelectInput
-        where TGetNodesForSelectOutput : GeneralTreeComboboxDto, new()
+    where TEntity : GeneralTreeEntity<TEntity>
+    where TGetTreeForSelectInput : GeneralTreeGetForSelectInput
+    where TGetTreeForSelectOutput : GeneralTreeNodeDto<TGetTreeForSelectOutput>, new()
+    where TGetNodesForSelectInput : GeneralTreeGetForSelectInput
+    where TGetNodesForSelectOutput : GeneralTreeComboboxDto, new()
     {
         /* 
          * 数据显示地方有：管理页列表、作为一个搜索条件框、作为表单里一个下拉框
          * 顶级文本可能是 前端传过来的、上级节点文本、默认文本；除非根本不现实
          */
 
-        protected string allTextForSearch, allTextForForm;//注意这里代表的是本地化文本的key
-        public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }//属性注入
-        protected readonly IRepository<TEntity, long> repository;
+        // protected string allTextForSearch, allTextForForm;//注意这里代表的是本地化文本的key
 
+        public virtual string allTextForSearch { get; set; } = "不限";
+        public virtual string allTextForForm { get; set; } = "请选择";
+
+        public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }//属性注入
+        public IRepository<TEntity, long> repository { get; set; }
+
+        [Obsolete("子类继承时应使用无参的构造函数，当前构造函数是未简化子类实现以前的代码，已过时。")]
         public UnAuthGeneralTreeAppServiceBase(IRepository<TEntity, long> repository,
                                                string allTextForSearch = "不限",
                                                string allTextForForm = "请选择")//这里的字符串后期可以使用常量
@@ -72,27 +77,38 @@ namespace BXJG.Utils.GeneralTree
             this.allTextForSearch = allTextForSearch;
             this.allTextForForm = allTextForForm;
         }
+        public UnAuthGeneralTreeAppServiceBase()
+        {
+            this.AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
+        }
+
+        public virtual string PermissionName { get; set; }
+        private async Task CheckGetPermissionAsync()
+        {
+            if (PermissionName.IsNotNullOrWhiteSpaceBXJG())
+                await base.PermissionChecker.AuthorizeAsync(PermissionName);
+        }
         /// <summary>
         /// 获取树形的下拉框数据，不需要身份验证
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        [UnitOfWork(false)]
+        //[UnitOfWork(false)]
         public virtual async Task<IList<TGetTreeForSelectOutput>> GetTreeForSelectAsync(TGetTreeForSelectInput input)
         {
             //权限判断
-            //await CheckGetPermissionAsync();
+            await CheckGetPermissionAsync();
 
 
             //得到实体扁平集合
             string parentCode = "";
-            if ( input.Code.IsNullOrWhiteSpace()&& input.ParentId.HasValue && input.ParentId.Value > 0)
+            if (input.Code.IsNullOrWhiteSpace() && input.ParentId.HasValue && input.ParentId.Value > 0)
             {
                 var top = await repository.GetAsync(input.ParentId.Value);
                 parentCode = top.Code;
             }
             else
-                parentCode = input.Code??"";
+                parentCode = input.Code ?? "";
 
             var ctx = new Dictionary<string, object> { { "input", input } };
             var query = await this.ComboTreeFilterAsync(input, parentCode, ctx);
@@ -166,10 +182,10 @@ namespace BXJG.Utils.GeneralTree
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        [UnitOfWork(false)]
+        //[UnitOfWork(false)]
         public virtual async Task<IList<TGetNodesForSelectOutput>> GetNodesForSelectAsync(TGetNodesForSelectInput input)
         {
-            //await CheckGetPermissionAsync();
+            await CheckGetPermissionAsync();
             //得到实体扁平集合
             //string parentCode = "";
             //if (input.ParentId.HasValue && input.ParentId.Value > 0)
@@ -360,12 +376,17 @@ namespace BXJG.Utils.GeneralTree
          * 顶级文本可能是 前端传过来的、上级节点文本、默认文本；除非根本不现实
          */
         public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; } = NullAsyncQueryableExecuter.Instance;
-        protected readonly IRepository<TEntity, long> repository;
-        protected readonly TManager generalTreeManager;
-        protected string allTextForManager;//注意这里代表的是本地化文本的key
+        public IRepository<TEntity, long> repository { get; set; }
+        public TManager generalTreeManager { get; set; }
+        protected virtual string allTextForManager { get; set; } = "全部";//注意这里代表的是本地化文本的key
 
-        protected string createPermissionName, updatePermissionName, deletePermissionName, getPermissionName;
+        //protected string createPermissionName, updatePermissionName, deletePermissionName, getPermissionName;
+        public virtual string createPermissionName { get; set; }
+        public virtual string updatePermissionName { get; set; }
+        public virtual string deletePermissionName { get; set; }
+        public virtual string getPermissionName { get; set; }
 
+        [Obsolete("子类继承时应使用无参的构造函数，当前构造函数是未简化子类实现以前的代码，已过时。")]
         public GeneralTreeAppServiceBase(IRepository<TEntity, long> ownRepository,
                                          TManager manager,
                                          string createPermissionName = null,
@@ -385,6 +406,12 @@ namespace BXJG.Utils.GeneralTree
             this.deletePermissionName = deletePermissionName;
             this.getPermissionName = getPermissionName;
         }
+
+        public GeneralTreeAppServiceBase()
+        {
+            AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
+        }
+
         #region create
         /// <summary>
         /// 创建树形结构数据
@@ -623,13 +650,13 @@ namespace BXJG.Utils.GeneralTree
             //获取父节点的code 方便后续查询所有子集
             string parentCode = "";
 
-            if ( input.ParentCode.IsNullOrWhiteSpace()&& input.ParentId.HasValue && input.ParentId.Value > 0)
+            if (input.ParentCode.IsNullOrWhiteSpace() && input.ParentId.HasValue && input.ParentId.Value > 0)
             {
                 var top = await repository.SingleAsync(c => c.Id == input.ParentId.Value);
                 parentCode = top.Code;
             }
             else
-                parentCode = input.ParentCode??"";
+                parentCode = input.ParentCode ?? "";
 
             var ctx = new Dictionary<string, object> { { "input", input } };
             //查询

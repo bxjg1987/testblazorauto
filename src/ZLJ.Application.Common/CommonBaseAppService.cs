@@ -15,7 +15,10 @@ using ZLJ.MultiTenancy;
 
 namespace ZLJ.App.Common
 {
-    public abstract class CommonBaseApplicationService : ApplicationService
+    /// <summary>
+    /// 非常curd类型的应用服务基类
+    /// </summary>
+    public abstract class CommonBaseAppService : ApplicationService
     {
         public TenantManager TenantManager { get; set; }
         //public IStaffSession StaffSession { get; set; }
@@ -23,10 +26,10 @@ namespace ZLJ.App.Common
 
         public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }//属性注入
         //public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }//属性注入
-        protected CommonBaseApplicationService()
+        protected CommonBaseAppService()
         {
-           // LocalizationSourceName = ZLJConsts.LocalizationSourceName;
-            //  AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
+            LocalizationSourceName = App.Common.Consts.Common;
+            AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
         }
 
         protected virtual async Task<User> GetCurrentUserAsync()
@@ -52,7 +55,7 @@ namespace ZLJ.App.Common
 
 
 
-        protected ILocalizationSource appCommonLocalizationSource, zljLocalizationSource, utilsLocalizationSource;
+        private ILocalizationSource appCommonLocalizationSource, zljLocalizationSource, utilsLocalizationSource;
 
         protected virtual ILocalizationSource LocalizationSourceAppCommon
         {

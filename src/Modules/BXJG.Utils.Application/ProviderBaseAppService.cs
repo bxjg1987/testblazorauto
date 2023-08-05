@@ -18,6 +18,7 @@ using Castle.Core;
 using Abp.Dependency;
 using Castle.MicroKernel.Lifestyle.Scoped;
 using Castle.Windsor.MsDependencyInjection;
+using Abp.Domain.Uow;
 
 namespace BXJG.Utils
 {
@@ -56,18 +57,14 @@ namespace BXJG.Utils
     /// <typeparam name="TKey">主键类型</typeparam>
     /// <typeparam name="TGetAllInput">查询时输入参数的类型</typeparam>
     /// <typeparam name="TEntityDto">可选数据的dto</typeparam>
-    public abstract class ProviderBaseAppService<TEntity, TKey, TGetAllInput, TEntityDto> : ApplicationService//, IIocManagerAccessor
+    [UnitOfWork(false)]
+    public abstract class ProviderBaseAppService<TEntity, TKey, TGetAllInput, TEntityDto> : ApplicationService
         where TEntity : class, IEntity<TKey>
     {
-        private IRepository<TEntity, TKey> repository;
         protected virtual string GetAllPermissionName { get; set; }
         public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }
 
-        protected IRepository<TEntity, TKey> Repository => repository ??= Services.GetService<IRepository<TEntity, TKey>>();
-        // ScopedWindsorServiceProvider
-
-        //看顶部最后的注释
-        public IServiceProvider Services { get; set; }
+        public IRepository<TEntity, TKey> Repository { get; set; }
 
         //AsyncCrudAppService
 

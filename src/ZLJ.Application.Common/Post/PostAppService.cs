@@ -18,7 +18,7 @@ namespace ZLJ.App.Common.Post
 {
     [Abp.Authorization.AbpAuthorize]
     [Abp.Domain.Uow.UnitOfWork(false)]
-    public class PostAppService : CommonBaseApplicationService
+    public class PostAppService : CommonBaseAppService
     {
         private readonly Lazy<IQueryable<PostEntity>> repository;
         private readonly Lazy<IQueryable<OrganizationUnitRole>> ouRoleRepository;

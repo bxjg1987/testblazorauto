@@ -13,7 +13,7 @@ namespace ZLJ.App.Common.Sessions
     /// 登陆时获取全局应用程序信息和当前登陆用户信息
     /// 不同app可以直接使用此接口，也可以提供继承实现特定的功能
     /// </summary>
-    public class SessionAppService : CommonBaseApplicationService
+    public class SessionAppService : CommonBaseAppService
     {
         [DisableAuditing]
         public virtual async Task<GetCurrentLoginInformationsOutput> GetCurrentLoginInformations()

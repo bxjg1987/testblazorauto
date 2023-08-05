@@ -17,24 +17,27 @@ namespace ZLJ.App.Common
     /// <typeparam name="TGetNodesForSelectInput"></typeparam>
     /// <typeparam name="TGetNodesForSelectOutput"></typeparam>
     /// <typeparam name="TEntity"></typeparam>
-    public class CommonTreeProviderBaseAppService<TGetTreeForSelectInput,
-                                                  TGetTreeForSelectOutput,
-                                                  TGetNodesForSelectInput,
-                                                  TGetNodesForSelectOutput,
-                                                  TEntity> : UnAuthGeneralTreeAppServiceBase<TGetTreeForSelectInput,
-                                                                                             TGetTreeForSelectOutput,
-                                                                                             TGetNodesForSelectInput,
-                                                                                             TGetNodesForSelectOutput,
-                                                                                             TEntity>
-        where TGetTreeForSelectInput : GeneralTreeGetForSelectInput 
-        where TGetTreeForSelectOutput : GeneralTreeNodeDto<TGetTreeForSelectOutput>, new() 
-        where TGetNodesForSelectInput : GeneralTreeGetForSelectInput 
-        where TGetNodesForSelectOutput : GeneralTreeComboboxDto, new() 
+    public abstract class CommonTreeProviderBaseAppService<TGetTreeForSelectInput,
+                                                           TGetTreeForSelectOutput,
+                                                           TGetNodesForSelectInput,
+                                                           TGetNodesForSelectOutput,
+                                                           TEntity> : UnAuthGeneralTreeAppServiceBase<TGetTreeForSelectInput,
+                                                                                                      TGetTreeForSelectOutput,
+                                                                                                      TGetNodesForSelectInput,
+                                                                                                      TGetNodesForSelectOutput,
+                                                                                                      TEntity>
+        where TGetTreeForSelectInput : GeneralTreeGetForSelectInput
+        where TGetTreeForSelectOutput : GeneralTreeNodeDto<TGetTreeForSelectOutput>, new()
+        where TGetNodesForSelectInput : GeneralTreeGetForSelectInput
+        where TGetNodesForSelectOutput : GeneralTreeComboboxDto, new()
         where TEntity : GeneralTreeEntity<TEntity>
     {
-        protected ILocalizationSource appCommonLocalizationSource, zljLocalizationSource, utilsLocalizationSource;
-        public CommonTreeProviderBaseAppService(IRepository<TEntity, long> repository, string allTextForSearch = "不限", string allTextForForm = "请选择") : base(repository, allTextForSearch, allTextForForm)
+        private ILocalizationSource appCommonLocalizationSource, zljLocalizationSource, utilsLocalizationSource;
+
+        public CommonTreeProviderBaseAppService()
         {
+            LocalizationSourceName = App.Common.Consts.Common;
+
         }
         protected virtual ILocalizationSource LocalizationSourceAppCommon
         {

@@ -17,10 +17,18 @@ using ZLJ.MultiTenancy;
 namespace ZLJ.App.Customer
 {
     /// <summary>
-    /// crud的后台管理基类
+    /// 客户服务平台crud应用服务基类
     /// </summary>
-    public class CustomerCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, TDeleteInput>
-                        : CommonCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, TDeleteInput>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <typeparam name="TEntityDto"></typeparam>
+    /// <typeparam name="TPrimaryKey"></typeparam>
+    /// <typeparam name="TGetAllInput"></typeparam>
+    /// <typeparam name="TCreateInput"></typeparam>
+    /// <typeparam name="TUpdateInput"></typeparam>
+    /// <typeparam name="TGetInput"></typeparam>
+    /// <typeparam name="TDeleteInput"></typeparam>
+    public abstract class CustomerCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, TDeleteInput>
+                         : CommonCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, TDeleteInput>
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TUpdateInput : IEntityDto<TPrimaryKey>
@@ -28,52 +36,96 @@ namespace ZLJ.App.Customer
         where TDeleteInput : IEntityDto<TPrimaryKey>
     {
         public CustomerSession CustomerSession { get; set; }
-        public CustomerCrudBaseAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
+        public CustomerCrudBaseAppService()
         {
             LocalizationSourceName = CustConsts.Cust;
         }
     }
 
     /// <summary>
-    /// crud的后台管理基类
+    /// 客户服务平台crud应用服务基类
     /// </summary>
-    public class CustomerCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput>
-               : CustomerCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, EntityDto<TPrimaryKey>>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <typeparam name="TEntityDto"></typeparam>
+    /// <typeparam name="TPrimaryKey"></typeparam>
+    /// <typeparam name="TGetAllInput"></typeparam>
+    /// <typeparam name="TCreateInput"></typeparam>
+    /// <typeparam name="TUpdateInput"></typeparam>
+    /// <typeparam name="TGetInput"></typeparam>
+    public abstract class CustomerCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput>
+                        : CustomerCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, EntityDto<TPrimaryKey>>
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TGetInput : IEntityDto<TPrimaryKey>
     {
-        public CustomerCrudBaseAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
-        {
-        }
     }
     /// <summary>
-    /// crud的后台管理基类
+    /// 客户服务平台crud应用服务基类
     /// </summary>
-    public class CustomerCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
-               : CustomerCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, EntityDto<TPrimaryKey>>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <typeparam name="TEntityDto"></typeparam>
+    /// <typeparam name="TPrimaryKey"></typeparam>
+    /// <typeparam name="TGetAllInput"></typeparam>
+    /// <typeparam name="TCreateInput"></typeparam>
+    /// <typeparam name="TUpdateInput"></typeparam>
+    public abstract class CustomerCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
+                        : CustomerCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, EntityDto<TPrimaryKey>>
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TUpdateInput : IEntityDto<TPrimaryKey>
     {
-        public CustomerCrudBaseAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
-        {
-        }
     }
 
     /// <summary>
-    /// crud的后台管理基类
+    /// 客户服务平台crud应用服务基类
     /// </summary>
-    public class CustomerCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput>
-               : CustomerCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TCreateInput>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <typeparam name="TEntityDto"></typeparam>
+    /// <typeparam name="TPrimaryKey"></typeparam>
+    /// <typeparam name="TGetAllInput"></typeparam>
+    /// <typeparam name="TCreateInput"></typeparam>
+    public abstract class CustomerCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput>
+                        : CustomerCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TCreateInput>
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TCreateInput : IEntityDto<TPrimaryKey>
     {
-        // : AsyncCrudAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TUpdateInput>
-        public CustomerCrudBaseAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
-        {
-        }
+    }
+    /// <summary>
+    /// 客户服务平台crud应用服务基类
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <typeparam name="TEntityDto"></typeparam>
+    /// <typeparam name="TPrimaryKey"></typeparam>
+    /// <typeparam name="TGetAllInput"></typeparam>
+    public abstract class CustomerCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput>
+                        : CustomerCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TEntityDto>
+        where TEntity : class, IEntity<TPrimaryKey>
+        where TEntityDto : IEntityDto<TPrimaryKey>
+    {
+    }
+    /// <summary>
+    /// 客户服务平台crud应用服务基类
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <typeparam name="TEntityDto"></typeparam>
+    /// <typeparam name="TPrimaryKey"></typeparam>
+    public abstract class CustomerCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey>
+                        : CustomerCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, PagedAndSortedResultRequestDto>
+        where TEntity : class, IEntity<TPrimaryKey>
+        where TEntityDto : IEntityDto<TPrimaryKey>
+    {
+    }
+    /// <summary>
+    /// 客户服务平台crud应用服务基类
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <typeparam name="TEntityDto"></typeparam>
+    public abstract class CustomerCrudBaseAppService<TEntity, TEntityDto>
+                        : CustomerCrudBaseAppService<TEntity, TEntityDto, int>
+        where TEntity : class, IEntity<int>
+        where TEntityDto : IEntityDto<int>
+    {
     }
 }

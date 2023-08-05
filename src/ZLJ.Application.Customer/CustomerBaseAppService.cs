@@ -18,8 +18,8 @@ namespace ZLJ.App.Customer
     /// <summary>
     /// Derive your application services from this class.
     /// </summary>
-   [AbpAuthorize(PermissionNames.Customer)]
-    public abstract class CustomerBaseAppService : CommonBaseApplicationService
+    [AbpAuthorize(PermissionNames.Customer)]
+    public abstract class CustomerBaseAppService : CommonBaseAppService
     {
         public CustomerSession CustomerSession { get; set; }
         public Lazy<IRepository<AssociatedCompanyEntity, long>> CompanyRepository { get; set; }
@@ -29,8 +29,9 @@ namespace ZLJ.App.Customer
         //    this.companyRepository = userRepository;
 
         //}
-       // public long? CustomerId
-        public CustomerBaseAppService() {
+        // public long? CustomerId
+        public CustomerBaseAppService()
+        {
             LocalizationSourceName = CustConsts.Cust;
         }
 
@@ -42,6 +43,6 @@ namespace ZLJ.App.Customer
         }
 
 
-        
+
     }
 }

@@ -9,15 +9,16 @@ namespace ZLJ.App.Common
     /// <typeparam name="TKey">主键类型</typeparam>
     /// <typeparam name="TGetAllInput">查询时输入参数的类型</typeparam>
     /// <typeparam name="TEntityDto">可选数据的dto</typeparam>
-    public abstract class CommonProviderBaseAppService<TEntity, TKey, TGetAllInput, TEntityDto> : BXJG.Utils.ProviderApplicationService<TEntity, TKey, TGetAllInput, TEntityDto>
+    public abstract class CommonProviderBaseAppService<TEntity, TKey, TGetAllInput, TEntityDto>
+                              : ProviderBaseAppService<TEntity, TKey, TGetAllInput, TEntityDto>
        where TEntity : class, IEntity<TKey>
     {
-        protected ILocalizationSource appCommonLocalizationSource, zljLocalizationSource, utilsLocalizationSource;
+        private ILocalizationSource appCommonLocalizationSource, zljLocalizationSource, utilsLocalizationSource;
 
-
-        //protected CommonProviderBaseAppService(IRepository<TEntity, TKey> repository) : base(repository)
-        //{
-        //}
+        public CommonProviderBaseAppService()
+        {
+            LocalizationSourceName = App.Common.Consts.Common;
+        }
 
         protected virtual ILocalizationSource LocalizationSourceAppCommon
         {

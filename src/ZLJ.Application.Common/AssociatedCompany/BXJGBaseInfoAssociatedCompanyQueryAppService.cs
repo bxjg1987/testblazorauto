@@ -28,9 +28,9 @@ namespace ZLJ.App.Common.AssociatedCompany
         }
     }
 
-    [UnitOfWork(false)]
-    [AbpAuthorize]
-    public class BXJGBaseInfoAssociatedCompanyQueryAppService : CommonProviderBaseAppService<AssociatedCompanyEntity,long, GetAllInput, Dto>,IServiceProviderExAccessor
+    //[UnitOfWork(false)]
+    //[AbpAuthorize]
+    public class BXJGBaseInfoAssociatedCompanyQueryAppService : CommonProviderBaseAppService<AssociatedCompanyEntity, long, GetAllInput, Dto>//, IServiceProviderExAccessor
     // , IBXJGBaseInfoAssociatedCompanyQueryAppService
     {
         //private readonly IRepository<AssociatedCompanyEntity, long> _associatedCompanyRepository;
@@ -43,20 +43,24 @@ namespace ZLJ.App.Common.AssociatedCompany
         //    _associatedCompanyRepository = associatedCompanyRepository;
         //    _asyncQueryableExecuter = asyncQueryableExecuter;
         //}
-        tttt _tt;
+        //tttt _tt;
 
-        public IServiceProviderEx ServiceProvider { get; set; }
-        tttt tt => _tt ??= ServiceProvider.GetService<tttt>();
+        //public IServiceProviderEx ServiceProvider { get; set; }
+        //tttt tt => _tt ??= ServiceProvider.GetService<tttt>();
 
-        public override Task<PagedResultDto<Dto>> GetAllAsync(GetAllInput input)
+        //public override Task<PagedResultDto<Dto>> GetAllAsync(GetAllInput input)
+        //{
+        //    var sdf = tt.GetHashCode();
+        //    Logger.Debug($"_services的hashcode：{ServiceProvider.GetHashCode()}");
+        //  //  base.Logger.Debug($"iocmanager的hashcode：{base.IocManager.GetHashCode()}");
+        //    base.Logger.Debug($"repository的hashcode：{base.Repository.GetHashCode()}");
+        //    return base.GetAllAsync(input);
+        //}
+        [Obsolete("请直接使用GetAllAsync")]
+        public Task<ListResultDto<Dto>> GetCompaniesForSelectAsync(GetAllInput input)
         {
-            var sdf = tt.GetHashCode();
-            Logger.Debug($"_services的hashcode：{ServiceProvider.GetHashCode()}");
-            base.Logger.Debug($"iocmanager的hashcode：{base.IocManager.GetHashCode()}");
-            base.Logger.Debug($"repository的hashcode：{base.Repository.GetHashCode()}");
-            return base.GetAllAsync(input);
+            return GetAllAsync(input).ContinueWith(x => new ListResultDto<Dto>(x.Result.Items));
         }
-
         //public async Task<ListResultDto<Dto>> GetCompaniesForSelectAsync(GetAllInput input)
         //{
         //    var query = _associatedCompanyRepository.GetAll()

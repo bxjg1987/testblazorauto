@@ -17,7 +17,7 @@ namespace ZLJ.App.Admin
     /// <summary>
     /// Derive your application services from this class.
     /// </summary>
-    public abstract class AdminBaseAppService : CommonBaseApplicationService
+    public abstract class AdminBaseAppService : CommonBaseAppService
     {
         public AdminSession AdminSession { get; set; }
         protected AdminBaseAppService()

@@ -5,23 +5,23 @@ namespace ZLJ.App.Common
     /// <summary>
     /// 树形数据的crud抽象应用服务
     /// </summary>
-    public class CommonTreeCrudBaseAppService<TDto,
-                                        TCreateInput,
-                                        TEditDto,
-                                        TDeleteInput,
-                                        TGetAllInput,
-                                        TGetInput,
-                                        TMoveInput,
-                                        TEntity,
-                                        TManager> : GeneralTreeAppServiceBase<TDto,
-                                                                              TCreateInput,
-                                                                              TEditDto,
-                                                                              TDeleteInput,
-                                                                              TGetAllInput,
-                                                                              TGetInput,
-                                                                              TMoveInput,
-                                                                              TEntity,
-                                                                              TManager>
+    public abstract class CommonTreeCrudBaseAppService<TDto,
+                                                       TCreateInput,
+                                                       TEditDto,
+                                                       TDeleteInput,
+                                                       TGetAllInput,
+                                                       TGetInput,
+                                                       TMoveInput,
+                                                       TEntity,
+                                                       TManager> : GeneralTreeAppServiceBase<TDto,
+                                                                                             TCreateInput,
+                                                                                             TEditDto,
+                                                                                             TDeleteInput,
+                                                                                             TGetAllInput,
+                                                                                             TGetInput,
+                                                                                             TMoveInput,
+                                                                                             TEntity,
+                                                                                             TManager>
         where TDto : GeneralTreeGetTreeNodeBaseDto<TDto>, new()
         where TCreateInput : GeneralTreeNodeEditBaseDto
         where TEditDto : GeneralTreeNodeEditBaseDto
@@ -32,26 +32,13 @@ namespace ZLJ.App.Common
         where TEntity : GeneralTreeEntity<TEntity>
         where TManager : GeneralTreeManager<TEntity>
     {
-        protected ILocalizationSource appCommonLocalizationSource, zljLocalizationSource, utilsLocalizationSource;
+        private ILocalizationSource appCommonLocalizationSource, zljLocalizationSource, utilsLocalizationSource;
 
-
-        public CommonTreeCrudBaseAppService(IRepository<TEntity, long> ownRepository,
-                                      TManager manager, 
-                                      string createPermissionName = null,
-                                      string updatePermissionName = null,
-                                      string deletePermissionName = null,
-                                      string getPermissionName = null, 
-                                      string allTextForManager = "全部") : base(ownRepository,
-                                                                                manager,
-                                                                                createPermissionName,
-                                                                                updatePermissionName,
-                                                                                deletePermissionName, 
-                                                                                getPermissionName, 
-                                                                                allTextForManager)
+        public CommonTreeCrudBaseAppService()
         {
+            LocalizationSourceName = App.Common.Consts.Common;
+
         }
-
-
         protected virtual ILocalizationSource LocalizationSourceAppCommon
         {
             get
