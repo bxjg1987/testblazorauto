@@ -21,7 +21,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Abp" Version="8.2.0" />
-    <PackageReference Include="BXJG.Utils" Version="1.2.17" />
+    <PackageReference Include="BXJG.Utils" Version="1.2.19" />
     <PackageReference Include="BXJG.WeChat" Version="1.2.10" />
   </ItemGroup>
 

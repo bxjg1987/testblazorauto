@@ -56,11 +56,16 @@ namespace BXJG.WorkOrder.WorkOrderCategory
 
         //manager中已有新增或修改的逻辑
        
-        protected override async ValueTask<IQueryable<CategoryEntity>> GetQueryAsync(EntityDto<long> input, IDictionary<string, object> context = null)
+        //protected override async ValueTask<IQueryable<CategoryEntity>> GetQueryAsync(EntityDto<long> input, IDictionary<string, object> context = null)
+        //{
+        //    var query = await base.GetQueryAsync(input, context);
+        //    return query.Include(c => c.WorkOrderTypes);
+        //}
+        protected override Task<CategoryEntity> GetEntityByIdAsync(long id)
         {
-            var query = await base.GetQueryAsync(input, context);
-            return query.Include(c => c.WorkOrderTypes);
+            return base.repository.GetAll() .Include(c => c.WorkOrderTypes).Where(c=>c.Id==id).SingleAsync();
         }
+
         protected override async ValueTask<IQueryable<CategoryEntity>> GetAllFilteredAsync(GetAllWorkOrderCategoryInput input, string parentCode, IDictionary<string, object> context = null)
         {
             var query = await base.GetAllFilteredAsync(input, parentCode, context);
