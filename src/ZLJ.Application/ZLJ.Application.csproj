@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Remove="BaseInfo\Administrative\Dto\AdministrativeCombboxDto.cs" />
     <Compile Remove="BaseInfo\Administrative\Dto\AdministrativeTreeNodeDto.cs" />
+    <Compile Remove="BaseInfo\Administrative\IBXJGBaseInfoAdministrativeAppService.cs" />
     <Compile Remove="BaseInfo\AssociatedCompany\BXJGBaseInfoAssociatedCompanyQueryAppService.cs" />
     <Compile Remove="BaseInfo\AssociatedCompany\Dto\AssociatedCompanyGetForSelectOutputDto.cs" />
     <Compile Remove="BaseInfo\AssociatedCompany\IBXJGBaseInfoAssociatedCompanyAppService.cs" />

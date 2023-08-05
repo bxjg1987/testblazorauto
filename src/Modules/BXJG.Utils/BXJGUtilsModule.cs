@@ -21,6 +21,7 @@ using Abp.Domain.Uow;
 using System;
 using Abp.Threading;
 using System.Threading.Tasks;
+using BXJG.Utils.GeneralTree;
 
 namespace BXJG.Utils
 {
@@ -89,6 +90,8 @@ namespace BXJG.Utils
             //IocManager.Register<IEnv, Utils.File.DefaultEnv>(Abp.Dependency.DependencyLifeStyle.Singleton);
 
             IocManager.Register<IEnv, NullEnv>();
+            IocManager.Register(typeof(GeneralTreeManager<>), DependencyLifeStyle.Transient);
+
         }
 
         public override void PostInitialize()

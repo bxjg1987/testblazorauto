@@ -21,6 +21,8 @@ using Castle.Core;
 using BXJG.Utils.CAP;
 using DotNetCore.CAP;
 using BXJG.Utils.Notification;
+using BXJG.Utils.GeneralTree;
+using Abp.Configuration.Startup;
 
 namespace BXJG.Utils
 {
@@ -80,6 +82,9 @@ namespace BXJG.Utils
         {
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
             IocManager.Register(typeof(AbpAsyncDeterminationInterceptor<AbpCapSubscriptInterceptor>), DependencyLifeStyle.Transient);
+            //IocManager.Register(typeof(GeneralTreeManager<>), DependencyLifeStyle.Transient);
+            //Configuration.ReplaceService(typeof(GeneralTreeManager<>), () => default,DependencyLifeStyle.Transient);
+
             //注册附件应用服务，它不实现abp的应用服务，所以不会生成动态webApi
             //IocManager.Register(typeof(AttachmentAppService<>), DependencyLifeStyle.Transient);
         }

@@ -20,19 +20,26 @@ namespace BXJG.Utils.GeneralTree
     /// 通用树形领域服务
     /// </summary>
     /// <typeparam name="TEntity">通用树形实体类型</typeparam>
-    public abstract class GeneralTreeManager<TEntity> : DomainService
+    public class GeneralTreeManager<TEntity> : DomainService
         where TEntity : GeneralTreeEntity<TEntity>
     {
-        protected IRepository<TEntity, long> repository;
+        public IRepository<TEntity, long> repository { get; set; }
 
         //属性注入，需要public
         public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }
 
-        public GeneralTreeManager(IRepository<TEntity, long> repository)
+
+        public GeneralTreeManager()
         {
-            this.repository = repository;
             base.LocalizationSourceName = BXJGUtilsConsts.LocalizationSourceName;
             this.AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
+        }
+        [Obsolete]
+        public GeneralTreeManager(IRepository<TEntity, long> repository) : this()
+        {
+            this.repository = repository;
+            //base.LocalizationSourceName = BXJGUtilsConsts.LocalizationSourceName;
+            //this.AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
         }
 
         public virtual async Task<TEntity> CreateAsync(TEntity entity)
@@ -85,8 +92,8 @@ namespace BXJG.Utils.GeneralTree
 
         public virtual async Task DeleteAsync(Func<TEntity, ValueTask> act, params long[] keys)
         {
-            if (keys != null && keys.Length > 0)
-            {
+           // if (keys != null && keys.Length > 0)
+            //{
                 //默认情况下ParentId的外键关联没有做级联删除，因为我们想通过程序来控制
                 var entities = await repository.GetAllListAsync(c => keys.Contains(c.Id));
                 foreach (var item in entities)
@@ -95,12 +102,12 @@ namespace BXJG.Utils.GeneralTree
                         await act(item);
                     await repository.DeleteAsync(c => c.Code.StartsWith(item.Code));
                 }
-            }
-            else
-            {
-                //await Task.CompletedTask;
-                await repository.DeleteAsync(c => true);
-            }
+            //}
+            //else
+            //{
+            //    //await Task.CompletedTask;
+            //    await repository.DeleteAsync(c => true);
+            //}
         }
 
         //public virtual async Task<TEntity> GetEntityWithOffspringAsync(long id)

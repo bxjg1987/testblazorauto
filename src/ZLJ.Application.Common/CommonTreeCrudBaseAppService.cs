@@ -3,7 +3,7 @@
 namespace ZLJ.App.Common
 {
     /// <summary>
-    /// 树形数据的crud抽象应用服务
+    /// 树形数据的crud抽象应用服务（完整）
     /// </summary>
     public abstract class CommonTreeCrudBaseAppService<TDto,
                                                        TCreateInput,
@@ -78,4 +78,31 @@ namespace ZLJ.App.Common
             }
         }
     }
-}
+    /// <summary>
+    /// 通用树形数据的crud抽象应用服务（常用）
+    /// </summary>
+    /// <typeparam name="TDto"></typeparam>
+    /// <typeparam name="TCreateInput"></typeparam>
+    /// <typeparam name="TEditDto"></typeparam>
+    /// <typeparam name="TGetAllInput"></typeparam>
+    /// <typeparam name="TEntity"></typeparam>
+    public abstract class CommonTreeCrudBaseAppService<TDto,
+                                                       TCreateInput,
+                                                       TEditDto,
+                                                       TGetAllInput,
+                                                       TEntity> : CommonTreeCrudBaseAppService<TDto,
+                                                                                             TCreateInput,
+                                                                                             TEditDto,
+                                                                                             BatchOperationInputLong,
+                                                                                             TGetAllInput,
+                                                                                             EntityDto<long>,
+                                                                                             GeneralTreeNodeMoveInput,
+                                                                                             TEntity,
+                                                                                             GeneralTreeManager<TEntity>>
+        where TDto : GeneralTreeGetTreeNodeBaseDto<TDto>, new()
+        where TCreateInput : GeneralTreeNodeEditBaseDto
+        where TEditDto : GeneralTreeNodeEditBaseDto
+        where TGetAllInput : GeneralTreeGetTreeInput
+        where TEntity : GeneralTreeEntity<TEntity>
+    { }
+    }

@@ -42,7 +42,7 @@
 		<PackageReference Include="Abp.AutoMapper" Version="8.2.0" />
 		<PackageReference Include="Abp.ZeroCore" Version="8.2.0" />
 		<PackageReference Include="BXJG.Common" Version="1.2.40" />
-		<PackageReference Include="BXJG.Utils" Version="1.2.14" />
+		<PackageReference Include="BXJG.Utils" Version="1.2.17" />
 		<!--<PackageReference Include="BXJG.Common" Version="1.2.1" />
     <PackageReference Include="BXJG.Utils" Version="1.2.2" />-->
 		<!--<PackageReference Include="BXJG.WorkOrder.Core" Version="1.2.1" />-->

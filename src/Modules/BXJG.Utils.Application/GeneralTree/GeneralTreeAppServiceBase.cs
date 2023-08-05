@@ -335,7 +335,7 @@ namespace BXJG.Utils.GeneralTree
     }
 
     /// <summary>
-    /// 树形结构应用逻辑基类
+    /// 通用的树形结构的数据的crud抽象服务（完整）
     /// </summary>
     /// <typeparam name="TDto"></typeparam>
     /// <typeparam name="TCreateInput"></typeparam>
@@ -751,7 +751,7 @@ namespace BXJG.Utils.GeneralTree
         #region 权限判断
         protected virtual Task CheckCreatePermissionAsync()
         {
-            return CheckPermissionAsync(deletePermissionName);
+            return CheckPermissionAsync(createPermissionName);
         }
         protected virtual Task CheckUpdatePermissionAsync()
         {
@@ -781,4 +781,31 @@ namespace BXJG.Utils.GeneralTree
         }
         #endregion
     }
+    /// <summary>
+    /// 通用的树形结构的数据的crud抽象服务（常用）
+    /// </summary>
+    /// <typeparam name="TDto"></typeparam>
+    /// <typeparam name="TCreateInput"></typeparam>
+    /// <typeparam name="TEditDto"></typeparam>
+    /// <typeparam name="TGetAllInput"></typeparam>
+    /// <typeparam name="TEntity"></typeparam>
+    public class GeneralTreeAppServiceBase<TDto,
+                                           TCreateInput,
+                                           TEditDto,
+                                           TGetAllInput,
+                                           TEntity> : GeneralTreeAppServiceBase<TDto,
+                                                                               TCreateInput,
+                                                                               TEditDto,
+                                                                               BatchOperationInputLong,
+                                                                               TGetAllInput,
+                                                                               EntityDto<long>,
+                                                                               GeneralTreeNodeMoveInput,
+                                                                               TEntity,
+                                                                               GeneralTreeManager<TEntity>>
+        where TCreateInput : GeneralTreeNodeEditBaseDto //注意这里约束为TEditDto，这样强制要求继承编辑模型不合理
+        where TEntity : GeneralTreeEntity<TEntity>
+        where TDto : GeneralTreeGetTreeNodeBaseDto<TDto>, new()
+        where TEditDto : GeneralTreeNodeEditBaseDto//父类可以对输入做一定的处理
+        where TGetAllInput : GeneralTreeGetTreeInput
+    { }
 }
