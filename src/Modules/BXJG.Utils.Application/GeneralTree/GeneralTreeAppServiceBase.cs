@@ -26,6 +26,7 @@ using Abp.Linq.Extensions;
 using Abp.Domain.Uow;
 using BXJG.Common.Dto;
 using Abp.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 
 namespace BXJG.Utils.GeneralTree
 {
@@ -412,6 +413,13 @@ namespace BXJG.Utils.GeneralTree
             AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
         }
 
+        /// <summary>
+        /// 新增和修改都会执行的逻辑，若需要传递额外参数，请使用当前Uow.Items
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        protected virtual ValueTask MapToEntity(TEntity entity) => ValueTask.CompletedTask;
+
         #region create
         /// <summary>
         /// 创建树形结构数据
@@ -439,6 +447,7 @@ namespace BXJG.Utils.GeneralTree
             }
 
             await BeforeCreateAsync(input, m, ctx);
+            await MapToEntity(m);
             await generalTreeManager.CreateAsync(m);
             return await GetEntityToDtoAsync(m);
         }
@@ -446,7 +455,7 @@ namespace BXJG.Utils.GeneralTree
         /// 新增时的映射，默认使用automapper映射
         /// </summary>
         /// <param name="input"></param>
-        /// <param name="context"><see cref="GetAllAsync"/>的多个步骤间共享数据，默认存在input的key</param>
+        /// <param name="context">不要再使用此参数，请直接使用uow.Items</param>
         /// <returns></returns>
         protected virtual ValueTask<TEntity> CreateMapAsync(TCreateInput input, IDictionary<string, object> context = default)
         {
@@ -458,7 +467,7 @@ namespace BXJG.Utils.GeneralTree
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="input"></param>
-        /// <param name="context"><see cref="CreateAsync"/>的多个步骤间共享数据，默认存在input的key</param>
+        /// <param name="context">不要再使用此参数，请直接使用uow.Items</param>
         /// <returns></returns>
         protected virtual ValueTask BeforeCreateAsync(TCreateInput input, TEntity entity, IDictionary<string, object> context = default)
         {
@@ -507,7 +516,7 @@ namespace BXJG.Utils.GeneralTree
                 input.ParentId = null;
 
             var ctx = new Dictionary<string, object> { { "input", input } };
-            var m = await AsyncQueryableExecuter.FirstOrDefaultAsync(await UpdateGetAsync(input, ctx));
+            var m = await GetEntityByIdAsync(input.Id);
 
             await UpdateMapAsync(input, m, ctx);
             //扩展属性的处理后期放到Manager中去处理
@@ -520,25 +529,28 @@ namespace BXJG.Utils.GeneralTree
                 }
             }
             await BeforeUpdateAsync(input, m, ctx);
+            await MapToEntity(m);
             await generalTreeManager.UpdateAsync(m);
             return await GetEntityToDtoAsync(m);
         }
-        /// <summary>
-        /// 修改时的查询，默认根据id查询
-        /// </summary>
-        /// <param name="input"></param>
-        /// <param name="context"><see cref="UpdateAsync"/>的多个步骤间共享数据，默认存在input的key</param>
-        /// <returns></returns>
-        protected virtual ValueTask<IQueryable<TEntity>> UpdateGetAsync(TEditDto input, IDictionary<string, object> context = default)
-        {
-            return ValueTask.FromResult(repository.GetAll().Where(c => c.Id == input.Id));
-        }
+        ///// <summary>
+        ///// 修改时的查询，默认根据id查询
+        ///// 除了修改，其它地方也可能使用，等同于crudappservcie的GetEntityById，只是没把名词改过来
+        ///// </summary>
+        ///// <param name="input"></param>
+        ///// <param name="context"><see cref="UpdateAsync"/>不要再使用此参数，请直接使用uow.Items</param>
+        ///// <returns></returns>
+        //[Obsolete("请使用GetEntityByIdAsyn")]
+        //protected virtual ValueTask<IQueryable<TEntity>> UpdateGetAsync(TEditDto input, IDictionary<string, object> context = default)
+        //{
+        //    return ValueTask.FromResult(repository.GetAll().Where(c => c.Id == input.Id));
+        //}
         /// <summary>
         /// 修改时的映射，默认使用automapper
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="input"></param>
-        /// <param name="context"><see cref="UpdateAsync"/>的多个步骤间共享数据，默认存在input的key</param>
+        /// <param name="context">不要再使用此参数，请直接使用uow.Items</param>
         /// <returns></returns>
         protected virtual ValueTask UpdateMapAsync(TEditDto input, TEntity entity, IDictionary<string, object> context = default)
         {
@@ -558,25 +570,63 @@ namespace BXJG.Utils.GeneralTree
         }
         #endregion
 
+
+        /// <summary>
+        /// 批量处理
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="func"></param>
+        /// <returns></returns>
+        protected virtual async Task<BatchOperationOutputLong> BatchHandleAsync(BatchOperationInputLong input, Func<TEntity, ValueTask> func)
+        {
+            var r = new BatchOperationOutputLong();
+            foreach (var id in input.Ids)
+            {
+                try
+                {
+                    using var uow = UnitOfWorkManager.Begin(System.Transactions.TransactionScopeOption.RequiresNew);
+                    var entity = await GetEntityByIdAsync(id);
+                    await func(entity);
+                    await uow.CompleteAsync();
+                    r.Ids.Add(id);
+                }
+                catch (UserFriendlyException ex)
+                {
+                    r.ErrorMessage.Add(new BatchOperationErrorMessage(id, ex.Message));
+                }
+                catch (Exception ex)
+                {
+                    r.ErrorMessage.Add(id.Message500());
+                    Logger.Warn($"部分操作失败！{id}", ex);
+                }
+            }
+            return r;
+        }
+
+
         #region delete
+
         /// <summary>
         /// 删除树形结构的数据
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public virtual async Task DeleteAsync(TDeleteInput input)
+        [UnitOfWork(IsDisabled = true)]
+
+        public virtual async Task<BatchOperationOutputLong> DeleteAsync(TDeleteInput input)
         {
             await CheckDeletePermissionAsync();
-            await this.generalTreeManager.DeleteAsync(BeforeDeleteAsync, input.Ids);
+            ///  await this.generalTreeManager.DeleteAsync(BeforeDeleteAsync, input.Ids);
+            return await BatchHandleAsync(input, BeforeDeleteAsync);
         }
         /// <summary>
-        /// 删除前回调，默认啥也没干
+        /// 删除前回调，默认当前及其后代节点都删除
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        protected virtual ValueTask BeforeDeleteAsync(TEntity entity)
+        protected virtual async ValueTask BeforeDeleteAsync(TEntity entity)
         {
-            return ValueTask.CompletedTask;
+            await repository.DeleteAsync(c => c.Code.StartsWith(entity.Code));
         }
         #endregion
 
@@ -603,29 +653,33 @@ namespace BXJG.Utils.GeneralTree
         {
             await CheckGetPermissionAsync();
             var ctx = new Dictionary<string, object> { { "input", input } };
-            var entity = await AsyncQueryableExecuter.FirstOrDefaultAsync(await GetQueryAsync(input, ctx));
+            var entity = await GetEntityByIdAsync(input.Id);
 
             var n = await GetEntityToDtoAsync(entity, ctx);
             //if (!string.IsNullOrWhiteSpace(entity.ExtensionData))
             //    n.ExtData = JsonConvert.DeserializeObject<dynamic>(entity.ExtensionData);
             return n;
         }
-        /// <summary>
-        /// 根据id获取单个实体时将调用此方法获取IQueryable，默认已加入id比对条件
-        /// </summary>
-        /// <param name="input"></param>
-        /// <param name="context"><see cref="GetAsync"/>的多个步骤间共享数据，默认存在input的key</param>
-        /// <returns></returns>
-        protected virtual ValueTask<IQueryable<TEntity>> GetQueryAsync(TGetInput input, IDictionary<string, object> context = default)
+        protected virtual Task<TEntity> GetEntityByIdAsync(long id)
         {
-            var query = repository.GetAll().Where(c => c.Id == input.Id);
-            return ValueTask.FromResult(query);
+            return AsyncQueryableExecuter.FirstOrDefaultAsync(repository.GetAll().Where(c => c.Id == id));
         }
+        ///// <summary>
+        ///// 根据id获取单个实体时将调用此方法获取IQueryable，默认已加入id比对条件
+        ///// </summary>
+        ///// <param name="input"></param>
+        ///// <param name="context"><see cref="GetAsync"/>的多个步骤间共享数据，默认存在input的key</param>
+        ///// <returns></returns>
+        //protected virtual ValueTask<IQueryable<TEntity>> GetQueryAsync(TGetInput input, IDictionary<string, object> context = default)
+        //{
+        //    var query = repository.GetAll().Where(c => c.Id == input.Id);
+        //    return ValueTask.FromResult(query);
+        //}
         /// <summary>
         /// 根据id获取单个实体时的映射，默认使用automapper
         /// </summary>
         /// <param name="entity"></param>
-        /// <param name="context"><see cref="GetAsync"/>的多个步骤间共享数据，默认存在input的key</param>
+        /// <param name="context">不要再使用此参数，请直接使用uow.Items</param>
         /// <returns></returns>
         protected virtual async ValueTask<TDto> GetEntityToDtoAsync(TEntity entity, IDictionary<string, object> context = default)
         {
@@ -713,18 +767,18 @@ namespace BXJG.Utils.GeneralTree
         /// </summary>
         /// <param name="input">输入参数</param>
         /// <param name="parentCode">父节点code</param>
-        /// <param name="context"><see cref="GetAllAsync"/>的多个步骤间共享数据，默认存在input的key</param>
+        /// <param name="context">不要再使用此参数，请直接使用uow.Items</param>
         /// <returns></returns>
         protected virtual ValueTask<IQueryable<TEntity>> GetAllFilteredAsync(TGetAllInput input, string parentCode, IDictionary<string, object> context = default)
         {
-            return ValueTask.FromResult(repository.GetAll().Where(c => c.Code.StartsWith(parentCode)));
+            return ValueTask.FromResult(repository.GetAll().AsNoTrackingWithIdentityResolution().Where(c => c.Code.StartsWith(parentCode)));
         }
         /// <summary>
         /// 获取所有数据的排序
         /// </summary>
         /// <param name="input">输入参数</param>
         /// <param name="query">查询</param>
-        /// <param name="context"><see cref="GetAllAsync"/>的多个步骤间共享数据，默认存在input的key</param>
+        /// <param name="context">不要再使用此参数，请直接使用uow.Items</param>
         /// <returns></returns>
         protected virtual ValueTask<IQueryable<TEntity>> GetAllSortingAsync(TGetAllInput input, IQueryable<TEntity> query, IDictionary<string, object> context = default)
         {
@@ -734,7 +788,7 @@ namespace BXJG.Utils.GeneralTree
         /// 获取所有数据的实体到dto的映射
         /// </summary>
         /// <param name="entities">实体列表</param>
-        /// <param name="context"><see cref="GetAllAsync"/>的多个步骤间共享数据，默认存在input的key</param>
+        /// <param name="context">不要再使用此参数，请直接使用uow.Items</param>
         /// <returns></returns>
         protected virtual async ValueTask<List<TDto>> GetAllEntityToDtoAsync(IEnumerable<TEntity> entities, IDictionary<string, object> context = default)
         {

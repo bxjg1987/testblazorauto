@@ -1,6 +1,7 @@
 ﻿using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using Abp.Domain.Uow;
+using BXJG.Common.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -77,7 +78,7 @@ namespace BXJG.Utils.GeneralTree
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task DeleteAsync(TDeleteInput input);
+        Task<BatchOperationOutputLong> DeleteAsync(TDeleteInput input);
         /// <summary>
         /// 移动节点，服务端将自动重新生成所有兄弟节点的code
         /// </summary>
