@@ -29,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="BXJG.Utils.Application" Version="1.2.40" />
+    <PackageReference Include="BXJG.Utils.Application" Version="1.2.41" />
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.3.4" />
   </ItemGroup>
 

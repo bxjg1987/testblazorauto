@@ -66,14 +66,14 @@ namespace BXJG.WorkOrder.WorkOrderCategory
             return base.repository.GetAll() .Include(c => c.WorkOrderTypes).Where(c=>c.Id==id).SingleAsync();
         }
 
-        protected override async ValueTask<IQueryable<CategoryEntity>> GetAllFilteredAsync(GetAllWorkOrderCategoryInput input, string parentCode, IDictionary<string, object> context = null)
+        protected override async ValueTask<IQueryable<CategoryEntity>> GetAllFilteredAsync(GetAllWorkOrderCategoryInput input, string parentCode)
         {
-            var query = await base.GetAllFilteredAsync(input, parentCode, context);
+            var query = await base.GetAllFilteredAsync(input, parentCode);
             query = query.Include(c => c.WorkOrderTypes)
                          .WhereWorkOrderType(input.CategoryTypeQueryType, input.WorkOrderTypes, input.ContainsNullWorkOrderType);
             return query;
         }
-        protected override ValueTask EntityToDtoAsync(CategoryEntity entity, WorkOrderCategroyDto dto, IDictionary<string, object> context = null)
+        protected override ValueTask EntityToDtoAsync(CategoryEntity entity, WorkOrderCategroyDto dto)
         {
             dto.WorkOrderTypeDisplayName = "";
             foreach (var item in dto.WorkOrderTypes)
