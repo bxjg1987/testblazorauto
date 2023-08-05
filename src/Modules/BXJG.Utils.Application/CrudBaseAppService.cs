@@ -56,10 +56,13 @@ namespace BXJG.Utils
         where TGetInput : IEntityDto<TPrimaryKey>
         where TDeleteInput : IEntityDto<TPrimaryKey>
     {
-        protected new IRepository<TEntity, TPrimaryKey> Repository { get; set; }
-        public CrudBaseAppService() : base(null)
+        protected CrudBaseAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
         {
         }
+
+        //md，行不通
+        //public new IRepository<TEntity, TPrimaryKey> Repository { get; set; }
+
         /// <summary>
         /// 新增是dto映射到实体
         /// 若主键是guid类型，则赋使用<see cref="SequentialGuidGenerator.Instance"/>赋值；
@@ -191,6 +194,9 @@ namespace BXJG.Utils
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TGetInput : IEntityDto<TPrimaryKey>
     {
+        protected CrudBaseAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
+        {
+        }
     }
 
     /// <summary>
@@ -218,6 +224,9 @@ namespace BXJG.Utils
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TUpdateInput : IEntityDto<TPrimaryKey>
     {
+        protected CrudBaseAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
+        {
+        }
     }
     /// <summary>
     /// 继承abp的AsyncCrudAppService时都需要去写那个默认的构造函数，这个类就是为了解决这个问题
@@ -241,6 +250,9 @@ namespace BXJG.Utils
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TCreateInput : IEntityDto<TPrimaryKey>
     {
+        protected CrudBaseAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
+        {
+        }
     }
     /// <summary>
     /// 继承abp的AsyncCrudAppService时都需要去写那个默认的构造函数，这个类就是为了解决这个问题
@@ -260,6 +272,9 @@ namespace BXJG.Utils
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
     {
+        protected CrudBaseAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
+        {
+        }
     }
     /// <summary>
     /// 继承abp的AsyncCrudAppService时都需要去写那个默认的构造函数，这个类就是为了解决这个问题
@@ -276,6 +291,9 @@ namespace BXJG.Utils
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
     {
+        protected CrudBaseAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
+        {
+        }
     }
     /// <summary>
     /// 继承abp的AsyncCrudAppService时都需要去写那个默认的构造函数，这个类就是为了解决这个问题
@@ -289,5 +307,8 @@ namespace BXJG.Utils
         where TEntity : class, IEntity<int>
         where TEntityDto : IEntityDto<int>
     {
+        protected CrudBaseAppService(IRepository<TEntity, int> repository) : base(repository)
+        {
+        }
     }
 }

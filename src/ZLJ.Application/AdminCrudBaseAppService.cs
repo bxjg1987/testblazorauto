@@ -36,7 +36,7 @@ namespace ZLJ.App.Admin
         where TDeleteInput : IEntityDto<TPrimaryKey>
     {
         public AdminSession AdminSession { get; set; }
-        public AdminCrudBaseAppService()
+        public AdminCrudBaseAppService(IRepository<TEntity,TPrimaryKey> repository):base(repository)
         {
             LocalizationSourceName = AdminConsts.Admin;
         }
@@ -59,6 +59,9 @@ namespace ZLJ.App.Admin
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TGetInput : IEntityDto<TPrimaryKey>
     {
+        protected AdminCrudBaseAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
+        {
+        }
     }
     /// <summary>
     /// 后台管理crud应用服务基类
@@ -75,6 +78,9 @@ namespace ZLJ.App.Admin
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TUpdateInput : IEntityDto<TPrimaryKey>
     {
+        protected AdminCrudBaseAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
+        {
+        }
     }
 
     /// <summary>
@@ -91,6 +97,9 @@ namespace ZLJ.App.Admin
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TCreateInput : IEntityDto<TPrimaryKey>
     {
+        protected AdminCrudBaseAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
+        {
+        }
     }
     /// <summary>
     /// 后台管理crud应用服务基类
@@ -104,6 +113,9 @@ namespace ZLJ.App.Admin
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
     {
+        protected AdminCrudBaseAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
+        {
+        }
     }
     /// <summary>
     /// 后台管理crud应用服务基类
@@ -116,6 +128,9 @@ namespace ZLJ.App.Admin
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
     {
+        protected AdminCrudBaseAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
+        {
+        }
     }
     /// <summary>
     /// 后台管理crud应用服务基类
@@ -127,5 +142,8 @@ namespace ZLJ.App.Admin
         where TEntity : class, IEntity<int>
         where TEntityDto : IEntityDto<int>
     {
+        protected AdminCrudBaseAppService(IRepository<TEntity, int> repository) : base(repository)
+        {
+        }
     }
 }

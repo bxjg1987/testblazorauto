@@ -26,25 +26,25 @@ namespace ZLJ.App.Admin.BaseInfo.AssociatedCompany
     /// </summary>
    // [Obsolete("此接口应移动到common项目中去")]
     [AbpAuthorize]
-    public class BXJGBaseInfoAssociatedCompanyAppService : AsyncCrudAppService<AssociatedCompanyEntity,
+    public class BXJGBaseInfoAssociatedCompanyAppService : AdminCrudBaseAppService<AssociatedCompanyEntity,
                                                                                AssociatedCompanyDto,
                                                                                long,
                                                                                AssociatedCompanyGetAllInput,
                                                                                AssociatedCompanyEditDto>
     {
-        private readonly UserManager userManager;
-        private readonly IRepository<CustomerStaffInfoEntity, long> userRepository;
-        public BXJGBaseInfoAssociatedCompanyAppService(IRepository<AssociatedCompanyEntity, long> repository,
-                                                       UserManager userManager,
-                                                       IRepository<CustomerStaffInfoEntity, long> userRepository) : base(repository)
+        public BXJGBaseInfoAssociatedCompanyAppService(IRepository<AssociatedCompanyEntity, long> repository) : base(repository)
         {
-            CreatePermissionName = PermissionNames.BXJGBaseInfoAssociatedCompanyCreate;
-            UpdatePermissionName = PermissionNames.BXJGBaseInfoAssociatedCompanyUpdate;
-            DeletePermissionName = PermissionNames.BXJGBaseInfoAssociatedCompanyDelete;
-            GetPermissionName = PermissionNames.BXJGBaseInfoAssociatedCompany;
-            this.userManager = userManager;
-            this.userRepository = userRepository;
         }
+
+        public  UserManager userManager { get; set; }
+        public  IRepository<CustomerStaffInfoEntity, long> userRepository { get; set;  }
+
+        protected override string CreatePermissionName => PermissionNames.BXJGBaseInfoAssociatedCompanyCreate;
+        protected override string UpdatePermissionName => PermissionNames.BXJGBaseInfoAssociatedCompanyUpdate;
+        protected override string DeletePermissionName => PermissionNames.BXJGBaseInfoAssociatedCompanyDelete;
+        protected override string GetPermissionName => PermissionNames.BXJGBaseInfoAssociatedCompany;
+        protected override string GetAllPermissionName => PermissionNames.BXJGBaseInfoAssociatedCompany;
+
 
         public override async Task<AssociatedCompanyDto> CreateAsync(AssociatedCompanyEditDto input)
         {
@@ -106,66 +106,83 @@ namespace ZLJ.App.Admin.BaseInfo.AssociatedCompany
             var entity = await GetEntityByIdAsync(input.Id);
             MapToEntity(input, entity);
             await userManager.InitializeOptionsAsync(AbpSession.TenantId);
-            await  userManager.ChangePasswordAsync(entity.Admin, input.AdminEquipmentPwd);
+            await userManager.ChangePasswordAsync(entity.Admin, input.AdminEquipmentPwd);
             entity.Admin.EquipmentPwd = input.AdminEquipmentPwd;
             await base.CurrentUnitOfWork.SaveChangesAsync();
             return MapToEntityDto(entity);
 
-           // var entiy = Repository.GetAll().Include(c=>c.Admin).Where(x => x.Name == input.Name && input.Id != x.Id);
-           
+            // var entiy = Repository.GetAll().Include(c=>c.Admin).Where(x => x.Name == input.Name && input.Id != x.Id);
 
 
-           
-          //  return await base.UpdateAsync(input);
+
+
+            //  return await base.UpdateAsync(input);
         }
 
-        /// <summary>
-        /// 批量删除
-        /// </summary>
-        public async Task<BatchOperationOutputLong> DeleteBatchAsync(BatchOperationInputLong input)
+        protected override async ValueTask BatchDeleteItemAsync(AssociatedCompanyEntity u)
         {
-            CheckDeletePermission();
-            var result = new BatchOperationOutputLong();
-
-            foreach (var item in input.Ids)
+            if (u.CategoryId != 17)
             {
-                try
+                //新增的客户，没有添加其它信息时删除管理员，若存在其它的，则外键会约束
+                var statffs = userRepository.GetAll().Where(c => c.CustomerId == u.Id);
+                foreach (var custStaff in statffs)
                 {
-                    using var sw = base.UnitOfWorkManager.Begin(System.Transactions.TransactionScopeOption.RequiresNew);
-                    var u = await Repository.GetAsync(item);
-
-                    if (u.CategoryId != 17)
+                    if (await userManager.IsInRoleAsync(custStaff, CustomerRole.CustomerAdminRole))
                     {
-                        //新增的客户，没有添加其它信息时删除管理员，若存在其它的，则外键会约束
-                        var statffs = userRepository.GetAll().Where(c => c.CustomerId == item);
-                        foreach (var custStaff in statffs)
-                        {
-                            if (await userManager.IsInRoleAsync(custStaff, CustomerRole.CustomerAdminRole))
-                            {
-                                await userManager.DeleteAsync(custStaff);
-                            }
-                        }
+                        await userManager.DeleteAsync(custStaff);
                     }
-                    await Repository.DeleteAsync(u);
-                    result.Ids.Add(item);
-
-                    //userManager.role.GetUsersInRoleAsync(CustomerRole.CustomerAdminRole);
-
-                    await sw.CompleteAsync();
-                }
-                catch (UserFriendlyException ex)
-                {
-                    result.ErrorMessage.Add(new BatchOperationErrorMessage(item, ex.Message));
-                }
-                catch (Exception ex)
-                {
-                    result.ErrorMessage.Add(item.Message500());
-                    Logger.Warn($"删除来往单位失败，Id：{item}", ex);
                 }
             }
-
-            return result;
+          //  await Repository.DeleteAsync(u);
+            await base.BatchDeleteItemAsync(u);
         }
+        ///// <summary>
+        ///// 批量删除
+        ///// </summary>
+        //public async Task<BatchOperationOutputLong> DeleteBatchAsync(BatchOperationInputLong input)
+        //{
+        //    CheckDeletePermission();
+        //    var result = new BatchOperationOutputLong();
+
+        //    foreach (var item in input.Ids)
+        //    {
+        //        try
+        //        {
+        //            using var sw = base.UnitOfWorkManager.Begin(System.Transactions.TransactionScopeOption.RequiresNew);
+        //            var u = await Repository.GetAsync(item);
+
+        //            if (u.CategoryId != 17)
+        //            {
+        //                //新增的客户，没有添加其它信息时删除管理员，若存在其它的，则外键会约束
+        //                var statffs = userRepository.GetAll().Where(c => c.CustomerId == item);
+        //                foreach (var custStaff in statffs)
+        //                {
+        //                    if (await userManager.IsInRoleAsync(custStaff, CustomerRole.CustomerAdminRole))
+        //                    {
+        //                        await userManager.DeleteAsync(custStaff);
+        //                    }
+        //                }
+        //            }
+        //            await Repository.DeleteAsync(u);
+        //            result.Ids.Add(item);
+
+        //            //userManager.role.GetUsersInRoleAsync(CustomerRole.CustomerAdminRole);
+
+        //            await sw.CompleteAsync();
+        //        }
+        //        catch (UserFriendlyException ex)
+        //        {
+        //            result.ErrorMessage.Add(new BatchOperationErrorMessage(item, ex.Message));
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            result.ErrorMessage.Add(item.Message500());
+        //            Logger.Warn($"删除来往单位失败，Id：{item}", ex);
+        //        }
+        //    }
+
+        //    return result;
+        //}
 
         public override async Task DeleteAsync(EntityDto<long> input)
         {
@@ -195,7 +212,7 @@ namespace ZLJ.App.Admin.BaseInfo.AssociatedCompany
             return base.CreateFilteredQuery(input)
                 .Include(c => c.Area)
                 .Include(x => x.Level)
-                .Include(c=>c.Admin)
+                .Include(c => c.Admin)
                 .Include(x => x.Category)
                 //.WhereIf(!input.Q.IsNullOrWhiteSpace(), x => x.Name.Contains(input.Q))
                 .WhereIf(input.IsActive.HasValue, x => x.IsActive == input.IsActive)

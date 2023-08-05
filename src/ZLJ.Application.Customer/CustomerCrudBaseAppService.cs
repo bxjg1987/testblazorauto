@@ -36,7 +36,7 @@ namespace ZLJ.App.Customer
         where TDeleteInput : IEntityDto<TPrimaryKey>
     {
         public CustomerSession CustomerSession { get; set; }
-        public CustomerCrudBaseAppService()
+        public CustomerCrudBaseAppService(IRepository<TEntity,TPrimaryKey> repository):base(repository)
         {
             LocalizationSourceName = CustConsts.Cust;
         }
@@ -59,6 +59,9 @@ namespace ZLJ.App.Customer
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TGetInput : IEntityDto<TPrimaryKey>
     {
+        protected CustomerCrudBaseAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
+        {
+        }
     }
     /// <summary>
     /// 客户服务平台crud应用服务基类
@@ -75,6 +78,9 @@ namespace ZLJ.App.Customer
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TUpdateInput : IEntityDto<TPrimaryKey>
     {
+        protected CustomerCrudBaseAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
+        {
+        }
     }
 
     /// <summary>
@@ -91,6 +97,9 @@ namespace ZLJ.App.Customer
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TCreateInput : IEntityDto<TPrimaryKey>
     {
+        protected CustomerCrudBaseAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
+        {
+        }
     }
     /// <summary>
     /// 客户服务平台crud应用服务基类
@@ -104,6 +113,9 @@ namespace ZLJ.App.Customer
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
     {
+        protected CustomerCrudBaseAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
+        {
+        }
     }
     /// <summary>
     /// 客户服务平台crud应用服务基类
@@ -116,6 +128,9 @@ namespace ZLJ.App.Customer
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
     {
+        protected CustomerCrudBaseAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
+        {
+        }
     }
     /// <summary>
     /// 客户服务平台crud应用服务基类
@@ -127,5 +142,8 @@ namespace ZLJ.App.Customer
         where TEntity : class, IEntity<int>
         where TEntityDto : IEntityDto<int>
     {
+        protected CustomerCrudBaseAppService(IRepository<TEntity, int> repository) : base(repository)
+        {
+        }
     }
 }
