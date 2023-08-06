@@ -66,14 +66,14 @@ namespace BXJG.WorkOrder.WorkOrderCategory
             return base.repository.GetAll() .Include(c => c.WorkOrderTypes).Where(c=>c.Id==id).SingleAsync();
         }
 
-        protected override async ValueTask<IQueryable<CategoryEntity>> GetAllFilteredAsync(GetAllWorkOrderCategoryInput input, string parentCode)
+        protected override IQueryable<CategoryEntity> GetAllFiltered(GetAllWorkOrderCategoryInput input, string parentCode)
         {
-            var query = await base.GetAllFilteredAsync(input, parentCode);
+            var query =  base.GetAllFiltered(input, parentCode);
             query = query.Include(c => c.WorkOrderTypes)
                          .WhereWorkOrderType(input.CategoryTypeQueryType, input.WorkOrderTypes, input.ContainsNullWorkOrderType);
             return query;
         }
-        protected override ValueTask EntityToDtoAsync(CategoryEntity entity, WorkOrderCategroyDto dto)
+        protected override void EntityToDto(CategoryEntity entity, WorkOrderCategroyDto dto)
         {
             dto.WorkOrderTypeDisplayName = "";
             foreach (var item in dto.WorkOrderTypes)
@@ -87,7 +87,6 @@ namespace BXJG.WorkOrder.WorkOrderCategory
             dto.WorkOrderTypeDisplayName = dto.WorkOrderTypeDisplayName.TrimEnd(',');
             if (dto.WorkOrderTypes.Any())
                 dto.IsDefault = false;
-            return ValueTask.CompletedTask;
         }
     }
 }

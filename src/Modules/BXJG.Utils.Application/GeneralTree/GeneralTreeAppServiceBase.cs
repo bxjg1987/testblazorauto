@@ -30,6 +30,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BXJG.Utils.GeneralTree
 {
+    /*
+     * 原本很多地方返回了不必要的ValuTask，比如返回IQueryable的虚方法，最初的目的是希望允许子类有机会直接使用异步
+     * 但那些地方使用异步的机会特别少，反而由于返回ValuTask而导致子类编写起来更麻烦，无法使用链式编程
+     * 所以决定去掉ValuTask，若必须使用异步时，应在重写外层，如：GetAllAsync，然后在内部异步处理数据，若需要传递参数则使用当前Uow.Items
+     */
+
     /// <summary>
     /// 树形结构应用逻辑基类
     /// </summary>
@@ -84,7 +90,7 @@ namespace BXJG.Utils.GeneralTree
         }
 
         public virtual string PermissionName { get; set; }
-        private async Task CheckGetPermissionAsync()
+        protected virtual async Task CheckGetPermissionAsync()
         {
             if (PermissionName.IsNotNullOrWhiteSpaceBXJG())
                 await base.PermissionChecker.AuthorizeAsync(PermissionName);
@@ -111,14 +117,13 @@ namespace BXJG.Utils.GeneralTree
             else
                 parentCode = input.Code ?? "";
 
-            var ctx = new Dictionary<string, object> { { "input", input } };
-            var query = await this.ComboTreeFilterAsync(input, parentCode, ctx);
-            query = await this.ComboTreeSortAsync(input, query, ctx);
+            var query = this.ComboTreeFilter(input, parentCode);
+            query = this.ComboTreeSort(input, query);
 
 
             var list = await AsyncQueryableExecuter.ToListAsync(query);
 
-            var dtoList = await EntityToTreeDtoAsync(list, ctx);// ObjectMapper.Map<List<TGetTreeForSelectOutput>>(list);
+            var dtoList = EntityToTreeDto(list);// ObjectMapper.Map<List<TGetTreeForSelectOutput>>(list);
 
             //if (ComboTreeMap != null)
             //{
@@ -194,15 +199,14 @@ namespace BXJG.Utils.GeneralTree
             //    var top = await ownRepository.GetAsync(input.ParentId.Value);
             //    parentCode = top.Code;
             //}
-            var ctx = new Dictionary<string, object> { { "input", input } };
-            var query = await ComboboxFilterAsync(input, input.ParentId, ctx);
+            var query = ComboboxFilter(input, input.ParentId);
 
-            query = await ComboboxSortAsync(input, query, ctx);
+            query = ComboboxSort(input, query);
             //GetNodesForSelectProjection允许子类直接投影，这种情况可能不太灵活，因为子类可能不方便做ef投影，所以将来可能考虑完全获取实体，在内存中来做这个转换
 
             var list = await AsyncQueryableExecuter.ToListAsync(query);
 
-            var dtoList = await EntityToComboboDtoAsync(list, ctx);// ObjectMapper.Map<List<TGetNodesForSelectOutput>>(list);
+            var dtoList = EntityToComboboDto(list);// ObjectMapper.Map<List<TGetNodesForSelectOutput>>(list);
 
             //if (ComboboxMap != null)
             //{
@@ -242,6 +246,8 @@ namespace BXJG.Utils.GeneralTree
         }
 
         #region 获取树形下拉框数据时子类可以重写的方法
+
+
         /// <summary>
         /// 获取树形数据的queryable，默认StartsWith parentCode
         /// </summary>
@@ -249,9 +255,9 @@ namespace BXJG.Utils.GeneralTree
         /// <param name="parentCode"></param>
         /// <param name="context"><see cref="GetTreeForSelectAsync"/>的多个步骤间共享数据，默认存在input的key</param>
         /// <returns></returns>
-        protected virtual ValueTask<IQueryable<TEntity>> ComboTreeFilterAsync(TGetTreeForSelectInput input, string parentCode, IDictionary<string, object> context = default)
+        protected virtual IQueryable<TEntity> ComboTreeFilter(TGetTreeForSelectInput input, string parentCode)
         {
-            return ValueTask.FromResult(repository.GetAll().Where(c => c.Code.StartsWith(parentCode)));
+            return repository.GetAll().AsNoTrackingWithIdentityResolution().Where(c => c.Code.StartsWith(parentCode));
         }
         /// <summary>
         /// 获取树形数据的排序，默认按code
@@ -260,9 +266,9 @@ namespace BXJG.Utils.GeneralTree
         /// <param name="input"></param>
         /// <param name="context"><see cref="GetTreeForSelectAsync"/>的多个步骤间共享数据，默认存在input的key</param>
         /// <returns></returns>
-        protected virtual ValueTask<IQueryable<TEntity>> ComboTreeSortAsync(TGetTreeForSelectInput input, IQueryable<TEntity> query, IDictionary<string, object> context = default)
+        protected virtual IQueryable<TEntity> ComboTreeSort(TGetTreeForSelectInput input, IQueryable<TEntity> query)
         {
-            return ValueTask.FromResult(query.OrderBy(c => c.Code) as IQueryable<TEntity>);
+            return query.OrderBy(c => c.Code);
         }
         /// <summary>
         /// 实体转换为dto时调用，默认使用automapper
@@ -270,10 +276,9 @@ namespace BXJG.Utils.GeneralTree
         /// <param name="entities"></param>
         /// <param name="context"><see cref="GetTreeForSelectAsync"/>的多个步骤间共享数据，默认存在input的key</param>
         /// <returns></returns>
-        protected virtual ValueTask<List<TGetTreeForSelectOutput>> EntityToTreeDtoAsync(IEnumerable<TEntity> entities, IDictionary<string, object> context = default)
+        protected virtual List<TGetTreeForSelectOutput> EntityToTreeDto(IEnumerable<TEntity> entities)
         {
-            var dtos = ObjectMapper.Map<List<TGetTreeForSelectOutput>>(entities);
-            return ValueTask.FromResult(dtos);
+            return ObjectMapper.Map<List<TGetTreeForSelectOutput>>(entities);
         }
         #endregion
         #region 获取扁平化下拉框数据时子类可重写的方法
@@ -284,9 +289,9 @@ namespace BXJG.Utils.GeneralTree
         /// <param name="parentId"></param>
         /// <param name="context"><see cref="GetNodesForSelectAsync"/>的多个步骤间共享数据，默认存在input的key</param>
         /// <returns></returns>
-        protected virtual ValueTask<IQueryable<TEntity>> ComboboxFilterAsync(TGetNodesForSelectInput input, long? parentId, IDictionary<string, object> context = default)
+        protected virtual IQueryable<TEntity> ComboboxFilter(TGetNodesForSelectInput input, long? parentId)
         {
-            return ValueTask.FromResult(repository.GetAll().Where(c => c.ParentId == parentId));
+            return repository.GetAll().AsNoTrackingWithIdentityResolution().Where(c => c.ParentId == parentId);
             //return ownRepository.GetAll().Where(c => c.ParentId == input.ParentId || c.Id == input.ParentId);
         }
         /// <summary>
@@ -294,11 +299,10 @@ namespace BXJG.Utils.GeneralTree
         /// </summary>
         /// <param name="query"></param>
         /// <param name="input"></param>
-        /// <param name="context"><see cref="GetNodesForSelectAsync"/>的多个步骤间共享数据，默认存在input的key</param>
         /// <returns></returns>
-        protected virtual ValueTask<IQueryable<TEntity>> ComboboxSortAsync(TGetNodesForSelectInput input, IQueryable<TEntity> query, IDictionary<string, object> context = default)
+        protected virtual IQueryable<TEntity> ComboboxSort(TGetNodesForSelectInput input, IQueryable<TEntity> query)
         {
-            return ValueTask.FromResult(query.OrderBy(c => c.Code) as IQueryable<TEntity>);
+            return query.OrderBy(c => c.Code);
         }
         //protected virtual async Task<IList<TGetNodesForSelectOutput>> ComboboxProjectionAsync(IQueryable<TEntity> query)
         //{
@@ -325,12 +329,10 @@ namespace BXJG.Utils.GeneralTree
         /// 实体转换为dto时调用，默认使用automapper
         /// </summary>
         /// <param name="entities"></param>
-        /// <param name="context"><see cref="GetNodesForSelectAsync"/>的多个步骤间共享数据，默认存在input的key</param>
         /// <returns></returns>
-        protected virtual ValueTask<List<TGetNodesForSelectOutput>> EntityToComboboDtoAsync(IEnumerable<TEntity> entities, IDictionary<string, object> context = default)
+        protected virtual List<TGetNodesForSelectOutput> EntityToComboboDto(IEnumerable<TEntity> entities)
         {
-            var dtos = ObjectMapper.Map<List<TGetNodesForSelectOutput>>(entities);
-            return ValueTask.FromResult(dtos);
+            return ObjectMapper.Map<List<TGetNodesForSelectOutput>>(entities);
         }
         #endregion
     }
@@ -418,7 +420,7 @@ namespace BXJG.Utils.GeneralTree
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        protected virtual ValueTask MapToEntity(TEntity entity) => ValueTask.CompletedTask;
+        protected virtual ValueTask MapToEntityAsync(TEntity entity) => ValueTask.CompletedTask;
 
         #region create
         /// <summary>
@@ -430,11 +432,11 @@ namespace BXJG.Utils.GeneralTree
         {
             await CheckCreatePermissionAsync();
 
-            if (input.ParentId <= 0)
+            if (input.ParentId.HasValue && input.ParentId <= 0)
                 input.ParentId = null;
 
-           // var ctx = new Dictionary<string, object> { { "input", input } };
-            var m = await CreateMapAsync(input);// ObjectMapper.Map<TEntity>(input);
+            // var ctx = new Dictionary<string, object> { { "input", input } };
+            var m = CreateMap(input);// ObjectMapper.Map<TEntity>(input);
 
             //扩展属性的处理后期放到Manager中去处理
             if (input.ExtData != null)
@@ -447,9 +449,9 @@ namespace BXJG.Utils.GeneralTree
             }
 
             await BeforeCreateAsync(input, m);
-            await MapToEntity(m);
+            await MapToEntityAsync(m);
             await generalTreeManager.CreateAsync(m);
-            return await GetEntityToDtoAsync(m);
+            return GetEntityToDto(m);
         }
         /// <summary>
         /// 新增时的映射，默认使用automapper映射
@@ -457,10 +459,9 @@ namespace BXJG.Utils.GeneralTree
         /// <param name="input"></param>
         /// <param name="context">不要再使用此参数，请直接使用uow.Items</param>
         /// <returns></returns>
-        protected virtual ValueTask<TEntity> CreateMapAsync(TCreateInput input)
+        protected virtual TEntity CreateMap(TCreateInput input)
         {
-            var entity = ObjectMapper.Map<TEntity>(input);
-            return ValueTask.FromResult(entity);
+            return ObjectMapper.Map<TEntity>(input);
         }
         /// <summary>
         /// 新增前回调，默认啥也没干
@@ -515,7 +516,7 @@ namespace BXJG.Utils.GeneralTree
             if (input.ParentId == 0)
                 input.ParentId = null;
 
-          //  var ctx = new Dictionary<string, object> { { "input", input } };
+            //  var ctx = new Dictionary<string, object> { { "input", input } };
             var m = await GetEntityByIdAsync(input.Id);
 
             //await UpdateMapAsync(input, m, ctx);
@@ -529,9 +530,9 @@ namespace BXJG.Utils.GeneralTree
                 }
             }
             await BeforeUpdateAsync(input, m);
-            await MapToEntity(m);
+            await MapToEntityAsync(m);
             await generalTreeManager.UpdateAsync(m);
-            return await GetEntityToDtoAsync(m);
+            return GetEntityToDto(m);
         }
         ///// <summary>
         ///// 修改时的查询，默认根据id查询
@@ -552,10 +553,9 @@ namespace BXJG.Utils.GeneralTree
         /// <param name="input"></param>
         /// <param name="context">不要再使用此参数，请直接使用uow.Items</param>
         /// <returns></returns>
-        protected virtual ValueTask UpdateMapAsync(TEditDto input, TEntity entity)
+        protected virtual void UpdateMapAsync(TEditDto input, TEntity entity)
         {
             ObjectMapper.Map(input, entity);
-            return ValueTask.CompletedTask;
         }
         /// <summary>
         /// 修改前回调，默认啥也没干
@@ -612,7 +612,6 @@ namespace BXJG.Utils.GeneralTree
         /// <param name="input"></param>
         /// <returns></returns>
         [UnitOfWork(IsDisabled = true)]
-
         public virtual async Task<BatchOperationOutputLong> DeleteAsync(TDeleteInput input)
         {
             await CheckDeletePermissionAsync();
@@ -637,10 +636,8 @@ namespace BXJG.Utils.GeneralTree
         /// <param name="dto"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        protected virtual ValueTask EntityToDtoAsync(TEntity entity, TDto dto)
-        {
-            return ValueTask.CompletedTask;
-        }
+        protected virtual void EntityToDto(TEntity entity, TDto dto)
+        { }
 
         #region get
         /// <summary>
@@ -652,10 +649,10 @@ namespace BXJG.Utils.GeneralTree
         public virtual async Task<TDto> GetAsync(TGetInput input)
         {
             await CheckGetPermissionAsync();
-           // var ctx = new Dictionary<string, object> { { "input", input } };
+            // var ctx = new Dictionary<string, object> { { "input", input } };
             var entity = await GetEntityByIdAsync(input.Id);
 
-            var n = await GetEntityToDtoAsync(entity);
+            var n = GetEntityToDto(entity);
             //if (!string.IsNullOrWhiteSpace(entity.ExtensionData))
             //    n.ExtData = JsonConvert.DeserializeObject<dynamic>(entity.ExtensionData);
             return n;
@@ -664,7 +661,11 @@ namespace BXJG.Utils.GeneralTree
         {
             return GetEntityByIdInclude(repository.GetAll()).SingleAsync(c => c.Id == id);
         }
-
+        /// <summary>
+        /// 根据id获取实体时回调，你可以重写使用Include包含导航属性，默认不处理
+        /// </summary>
+        /// <param name="q"></param>
+        /// <returns></returns>
         protected virtual IQueryable<TEntity> GetEntityByIdInclude(IQueryable<TEntity> q) => q;
 
         ///// <summary>
@@ -684,10 +685,10 @@ namespace BXJG.Utils.GeneralTree
         /// <param name="entity"></param>
         /// <param name="context">不要再使用此参数，请直接使用uow.Items</param>
         /// <returns></returns>
-        protected virtual async ValueTask<TDto> GetEntityToDtoAsync(TEntity entity)
+        protected virtual TDto GetEntityToDto(TEntity entity)
         {
             var dto = ObjectMapper.Map<TDto>(entity);
-            await EntityToDtoAsync(entity, dto);
+            EntityToDto(entity, dto);
             return dto;
         }
         #endregion
@@ -715,17 +716,17 @@ namespace BXJG.Utils.GeneralTree
             else
                 parentCode = input.ParentCode ?? "";
 
-           // var ctx = new Dictionary<string, object> { { "input", input } };
+            // var ctx = new Dictionary<string, object> { { "input", input } };
             //查询
-            var query = await GetAllFilteredAsync(input, parentCode);//.Where(c => c.Code.StartsWith(parentCode));
-            query = await GetAllSortingAsync(input, query); //方便子类排序
+            var query = GetAllFiltered(input, parentCode);//.Where(c => c.Code.StartsWith(parentCode));
+            query = GetAllSorting(input, query); //方便子类排序
             var list = await AsyncQueryableExecuter.ToListAsync(query);//.ToListAsync();
             //建立dto以及处理父子关系
             //TEntity parent = list.SingleOrDefault(c => c.Id == input.ParentId);
             //if (parent != null)
             //    list.Remove(parent);
 
-            var list1 = await GetAllEntityToDtoAsync(list);// ObjectMapper.Map<IList<TDto>>(list);//使用映射的好处是子类扩展多个属性时都可以使用映射，避免大量属性赋值的代码
+            var list1 = GetAllEntityToDto(list);// ObjectMapper.Map<IList<TDto>>(list);//使用映射的好处是子类扩展多个属性时都可以使用映射，避免大量属性赋值的代码
 
 
             //这里应该加个开关，因为子类可能并不需要遍历
@@ -779,9 +780,9 @@ namespace BXJG.Utils.GeneralTree
         /// <param name="parentCode">父节点code</param>
         /// <param name="context">不要再使用此参数，请直接使用uow.Items</param>
         /// <returns></returns>
-        protected virtual ValueTask<IQueryable<TEntity>> GetAllFilteredAsync(TGetAllInput input, string parentCode)
+        protected virtual IQueryable<TEntity> GetAllFiltered(TGetAllInput input, string parentCode)
         {
-            return ValueTask.FromResult(GetAllInclude(repository.GetAll()).AsNoTrackingWithIdentityResolution().Where(c => c.Code.StartsWith(parentCode)));
+            return GetAllInclude(repository.GetAll()).AsNoTrackingWithIdentityResolution().Where(c => c.Code.StartsWith(parentCode));
         }
         /// <summary>
         /// 获取所有数据的排序
@@ -790,9 +791,9 @@ namespace BXJG.Utils.GeneralTree
         /// <param name="query">查询</param>
         /// <param name="context">不要再使用此参数，请直接使用uow.Items</param>
         /// <returns></returns>
-        protected virtual ValueTask<IQueryable<TEntity>> GetAllSortingAsync(TGetAllInput input, IQueryable<TEntity> query)
+        protected virtual IQueryable<TEntity> GetAllSorting(TGetAllInput input, IQueryable<TEntity> query)
         {
-            return ValueTask.FromResult(query.OrderBy(c => c.Code) as IQueryable<TEntity>);
+            return query.OrderBy(c => c.Code);
         }
         /// <summary>
         /// 获取所有数据的实体到dto的映射
@@ -800,13 +801,13 @@ namespace BXJG.Utils.GeneralTree
         /// <param name="entities">实体列表</param>
         /// <param name="context">不要再使用此参数，请直接使用uow.Items</param>
         /// <returns></returns>
-        protected virtual async ValueTask<List<TDto>> GetAllEntityToDtoAsync(IEnumerable<TEntity> entities)
+        protected virtual List<TDto> GetAllEntityToDto(IEnumerable<TEntity> entities)
         {
             var dtos = ObjectMapper.Map<List<TDto>>(entities);
             foreach (var item in dtos)
             {
                 var entity = entities.Single(c => c.Id == item.Id);
-                await EntityToDtoAsync(entity, item);
+                EntityToDto(entity, item);
             }
             return dtos;
         }

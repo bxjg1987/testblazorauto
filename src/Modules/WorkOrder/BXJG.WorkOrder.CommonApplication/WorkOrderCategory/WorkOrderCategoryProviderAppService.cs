@@ -30,10 +30,10 @@ namespace BXJG.WorkOrder.WorkOrderCategory
             //base.LocalizationSourceName = CoreConsts.LocalizationSourceName;//基类不能用
             this.categoryManager = categoryManager;
         }
-
-        protected override async ValueTask<IQueryable<CategoryEntity>> ComboboxFilterAsync(GetWorkOrderCategoryForSelectInput input, long? parentId, IDictionary<string, object> context = null)
+        //   override comfi
+        protected override IQueryable<CategoryEntity> ComboboxFilter(GetWorkOrderCategoryForSelectInput input, long? parentId)
         {
-            var query = await base.ComboboxFilterAsync(input, parentId, context);
+            var query = base.ComboboxFilter(input, parentId);
             return query.Include(c => c.WorkOrderTypes).WhereWorkOrderType(input.CategoryTypeQueryType, input.WorkOrderTypes, input.ContainsNullWorkOrderType);
         }
 
@@ -43,19 +43,20 @@ namespace BXJG.WorkOrder.WorkOrderCategory
         //    return base.EntityToComboboDtoAsync(entities, context);
         //}
 
-        protected override async ValueTask<IQueryable<CategoryEntity>> ComboTreeFilterAsync(GetWorkOrderCategoryForSelectInput input, string parentCode, IDictionary<string, object> context = null)
+        protected override IQueryable<CategoryEntity> ComboTreeFilter(GetWorkOrderCategoryForSelectInput input, string parentCode)
         {
-            var sdf = base.CurrentUnitOfWork;
-            var query = await base.ComboTreeFilterAsync(input, parentCode, context);
+            // var sdf = base.CurrentUnitOfWork;
+            var query = base.ComboTreeFilter(input, parentCode);
             return query.Include(c => c.WorkOrderTypes).WhereWorkOrderType(input.CategoryTypeQueryType, input.WorkOrderTypes, input.ContainsNullWorkOrderType);
         }
 
-        protected override async ValueTask<List<WorkOrderCategoryTreeNodeDto>> EntityToTreeDtoAsync(IEnumerable<CategoryEntity> entities, IDictionary<string, object> context = null)
+        protected override List<WorkOrderCategoryTreeNodeDto> EntityToTreeDto(IEnumerable<CategoryEntity> entities)
         {
-            var dtos = await base.EntityToTreeDtoAsync(entities, context);
+            var dtos = base.EntityToTreeDto(entities);
             foreach (var item in entities)
             {
-                if (item.WorkOrderTypes.Any(c => c.IsDefault)) {
+                if (item.WorkOrderTypes.Any(c => c.IsDefault))
+                {
                     dtos.Single(c => c.Id == item.Id.ToString()).IsDefault = false;
                 }
             }
