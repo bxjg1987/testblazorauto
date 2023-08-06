@@ -662,8 +662,11 @@ namespace BXJG.Utils.GeneralTree
         }
         protected virtual Task<TEntity> GetEntityByIdAsync(long id)
         {
-            return AsyncQueryableExecuter.FirstOrDefaultAsync(repository.GetAll().Where(c => c.Id == id));
+            return GetEntityByIdInclude(repository.GetAll()).SingleAsync(c => c.Id == id);
         }
+
+        protected virtual IQueryable<TEntity> GetEntityByIdInclude(IQueryable<TEntity> q) => q;
+
         ///// <summary>
         ///// 根据id获取单个实体时将调用此方法获取IQueryable，默认已加入id比对条件
         ///// </summary>
@@ -763,6 +766,13 @@ namespace BXJG.Utils.GeneralTree
             return list1;
         }
         /// <summary>
+        /// 获取列表时回调，你可以重写以Include更多导航属性
+        /// </summary>
+        /// <param name="q"></param>
+        /// <returns></returns>
+        protected virtual IQueryable<TEntity> GetAllInclude(IQueryable<TEntity> q) => q;
+
+        /// <summary>
         /// 获取所有数据的查询，默认已加入parentCode条件
         /// </summary>
         /// <param name="input">输入参数</param>
@@ -771,7 +781,7 @@ namespace BXJG.Utils.GeneralTree
         /// <returns></returns>
         protected virtual ValueTask<IQueryable<TEntity>> GetAllFilteredAsync(TGetAllInput input, string parentCode)
         {
-            return ValueTask.FromResult(repository.GetAll().AsNoTrackingWithIdentityResolution().Where(c => c.Code.StartsWith(parentCode)));
+            return ValueTask.FromResult(GetAllInclude(repository.GetAll()).AsNoTrackingWithIdentityResolution().Where(c => c.Code.StartsWith(parentCode)));
         }
         /// <summary>
         /// 获取所有数据的排序

@@ -128,7 +128,7 @@ namespace BXJG.Utils
             }
             return r;
         }
-    
+
         /// <summary>
         /// 批量删除
         /// </summary>
@@ -151,8 +151,14 @@ namespace BXJG.Utils
         }
         protected override IQueryable<TEntity> CreateFilteredQuery(TGetAllInput input)
         {
-            return base.CreateFilteredQuery(input).AsNoTrackingWithIdentityResolution();
+            return GetAllInclude(base.CreateFilteredQuery(input)).AsNoTrackingWithIdentityResolution();
         }
+        /// <summary>
+        /// 获取列表时回调，你可以重写以Include更多导航属性
+        /// </summary>
+        /// <param name="q"></param>
+        /// <returns></returns>
+        protected virtual IQueryable<TEntity> GetAllInclude(IQueryable<TEntity> q) => q;
         [UnitOfWork(false)]
         public override Task<PagedResultDto<TEntityDto>> GetAllAsync(TGetAllInput input)
         {
@@ -163,6 +169,18 @@ namespace BXJG.Utils
         {
             return base.GetAsync(input);
         }
+
+        protected override Task<TEntity> GetEntityByIdAsync(TPrimaryKey id)
+        {
+            //return base.GetEntityByIdAsync(id);
+            return GetEntityByIdInclude(base.Repository.GetAll()).SingleAsync(c => c.Id.Equals(id));
+        }
+        /// <summary>
+        /// 执行GetEntityByIdAsync将回调此方法，可重写此方法来包含导航属性，默认不包含任何导航属性。
+        /// </summary>
+        /// <param name="q"></param>
+        /// <returns></returns>
+        protected virtual IQueryable<TEntity> GetEntityByIdInclude(IQueryable<TEntity> q) => q;
     }
 
     /// <summary>
