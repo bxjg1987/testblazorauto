@@ -79,6 +79,9 @@ namespace BXJG.Common.Dto
     public class BatchOperationOutputString: BatchOperationOutput<string>
     {
     }
+    public class BatchOperationOutputGuid : BatchOperationOutput<Guid>
+    {
+    }
     public class BatchOperationOutputObject : BatchOperationOutput<object>
     {
     }

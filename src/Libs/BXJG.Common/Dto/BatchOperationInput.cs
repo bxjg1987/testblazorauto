@@ -27,6 +27,10 @@ namespace BXJG.Common.Dto
     {
         //public TKey[] Ids { get; set; }
     }
+    public class BatchOperationConcurrencyInputGuid : BatchOperationConcurrencyInput<Guid>
+    {
+        //public TKey[] Ids { get; set; }
+    }
     public class BatchAuditConcurrencyInput<TKey> : BatchOperationConcurrencyInput<TKey>
     {
         /// <summary>
@@ -41,6 +45,9 @@ namespace BXJG.Common.Dto
     public class BatchAuditConcurrencyInputLong: BatchAuditConcurrencyInput<long>
     {
     }
+    public class BatchAuditConcurrencyInputGuid : BatchAuditConcurrencyInput<Guid>
+    {
+    }
     public class BatchAuditInput<TKey> : BatchOperationInput<TKey>
     {
         /// <summary>
@@ -53,6 +60,9 @@ namespace BXJG.Common.Dto
         public string Reason { get; set; }
     }
     public class BatchAuditInputLong : BatchAuditInput<long>
+    {
+    }
+    public class BatchAuditInputGuid : BatchAuditInput<Guid>
     {
     }
     /// <summary>
@@ -70,7 +80,9 @@ namespace BXJG.Common.Dto
     public class BatchOperationInputLong : BatchOperationInput<long>
     {
     }
-
+    public class BatchOperationInputGuid : BatchOperationInput<Guid>
+    {
+    }
     public class BatchOperationInputString : BatchOperationInput<string>
     {
     }
@@ -83,6 +95,9 @@ namespace BXJG.Common.Dto
     {
     }
     public class BatchSwitchInputLong : BatchSwitchInput<long>
+    {
+    }
+    public class BatchSwitchInputGuid: BatchSwitchInput<Guid>
     {
     }
     public class BatchSwitchInputString : BatchSwitchInput<string>
