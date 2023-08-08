@@ -90,6 +90,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{31830F03-1
 		docs\blazorServer的集成.md = docs\blazorServer的集成.md
 		docs\session.md = docs\session.md
 		docs\依赖注入和AOP.md = docs\依赖注入和AOP.md
+		docs\菜单.md = docs\菜单.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "组织业务逻辑", "组织业务逻辑", "{249F7F7C-B391-43E1-B3B9-89373BEE77AD}"

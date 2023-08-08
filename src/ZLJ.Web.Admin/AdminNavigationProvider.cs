@@ -25,9 +25,9 @@ namespace ZLJ.Web.Admin
             
             //@Icons.Material.Filled.NotificationsNone
             menu.AddItem(new MenuItemDefinition("通知中心",
-                                               "通知中心".LICommon(),
-                                               url: "/admin/tongzhi",
-                                               icon: Icons.Material.Outlined.Notifications));
+                                                "通知中心".GetAdminLocalizableString(),
+                                                url: "/admin/tongzhi",
+                                                icon: Icons.Material.Outlined.Notifications));
 
 
 

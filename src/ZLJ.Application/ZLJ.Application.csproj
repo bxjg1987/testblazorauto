@@ -79,6 +79,7 @@
     <Compile Remove="Roles\IRoleAppService.cs" />
     <Compile Remove="Sessions\ISessionAppService.cs" />
     <Compile Remove="Users\IUserAppService.cs" />
+    <Compile Remove="ZLJNavigationProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Localization\SourceFiles\Admin-en.xml" />

@@ -22,17 +22,17 @@ namespace ZLJ.Web.Customer
             //{codegenerator}
 
             menu.AddItem(new MenuItemDefinition("tongji",
-                                                "Report".GetLocalizableString(),
+                                                "Report".GetCustLocalizableString(),
                                                 url: "/cust",
                                                 icon: Icons.Outlined.BarChart,
                                                 permissionDependency: new SimplePermissionDependency(PermissionNames.Customer)));
             menu.AddItem(new MenuItemDefinition("yuangong",
-                                                "Employee".GetLocalizableString(),
+                                                "Employee".GetCustLocalizableString(),
                                                 url: "/cust/emp",
                                                 icon: Icons.Outlined.EmojiPeople,
                                                 permissionDependency: new SimplePermissionDependency(PermissionNames.Customer)));
             menu.AddItem(new MenuItemDefinition("bumen",
-                                                "Department".GetLocalizableString(),
+                                                "Department".GetCustLocalizableString(),
                                                 url: "/cust/dept",
                                                 icon: Icons.Outlined.Group,
                                                 permissionDependency: new SimplePermissionDependency(PermissionNames.Customer)));
