@@ -48,8 +48,7 @@
 
 	<ItemGroup Condition="'$(SolutionName)' != 'ZLJWithModules'">
 		<PackageReference Include="BXJG.Common.EFCore" Version="*" />
-		<PackageReference Include="BXJG.Utils.EFCore" Version="*" />
-		<PackageReference Include="BXJG.WorkOrder.EFCore" Version="*" />
+		<PackageReference Include="BXJG.Utils.EFCore" Version="1.2.14" />
 		<PackageReference Include="BXJG.Common.EFCore" Version="*" />
 	</ItemGroup>
 
