@@ -48,7 +48,7 @@
     <Compile Remove="ZLJWMSNavigationProvider.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Abp.HangFire.AspNetCore" Version="8.2.0" />
+    <PackageReference Include="Abp.HangFire.AspNetCore" Version="8.3.1" />
     <PackageReference Include="BXJG.Common.Web" Version="1.2.13" />
     <PackageReference Include="BXJG.Utils.RCL" Version="1.2.48" />
     <PackageReference Include="DistributedLock.SqlServer" Version="1.*" />
@@ -57,8 +57,8 @@
     <!--<PackageReference Include="BXJG.Utils.Web" Version="1.2.1" />-->
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.10" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.*" />
-    <PackageReference Include="Abp.AspNetCore" Version="8.2.0" />
-    <PackageReference Include="Abp.AspNetCore.SignalR" Version="8.2.0" />
+    <PackageReference Include="Abp.AspNetCore" Version="8.3.1" />
+    <PackageReference Include="Abp.AspNetCore.SignalR" Version="8.3.1" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Authentication\WeChatMiniProgram\" />

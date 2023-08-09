@@ -28,7 +28,7 @@
 		<Compile Remove="EntityFrameworkCore\Seed\WorkOrderBuilder.cs" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Abp.ZeroCore.EntityFrameworkCore" Version="8.2.0" />
+		<PackageReference Include="Abp.ZeroCore.EntityFrameworkCore" Version="8.3.1" />
 		<PackageReference Include="BXJG.Common.EFCore" Version="1.2.12" />
 		<PackageReference Include="BXJG.Utils.EFCore" Version="1.2.13" />
 		<!--<PackageReference Include="BXJG.Utils.EFCore" Version="1.2.1" />
