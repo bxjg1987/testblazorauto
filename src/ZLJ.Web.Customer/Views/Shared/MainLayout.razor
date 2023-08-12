@@ -55,10 +55,10 @@
             }
         </MudNavMenu>
     </MudDrawer>
-    <MudMainContent>
+    <MudMainContent Style="height:100%;">
         <ErrorBoundary>
             <ChildContent>
-                <MudContainer MaxWidth="@MaxWidth.False" Style="padding:1.5rem; padding-bottom:0;">
+                <MudContainer MaxWidth="@MaxWidth.False" Style="padding:1rem;  position:relative; height:100%;">
                     @Body
                 </MudContainer>
             </ChildContent>
