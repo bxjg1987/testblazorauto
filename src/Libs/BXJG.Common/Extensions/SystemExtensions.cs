@@ -354,5 +354,14 @@ namespace System
             }
             return ary;
         }
+        /// <summary>
+        /// 判断类型是否可空
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public  static bool IsNullable(Type type)
+        {
+            return Nullable.GetUnderlyingType(type) != null;
+        }
     }
 }
