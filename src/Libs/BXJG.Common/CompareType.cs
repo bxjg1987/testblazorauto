@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace BXJG.Common
 {
     /// <summary>
-    /// 通用比较符号
+    /// 常用数据比较符
     /// </summary>
     public enum CompareType
     {
@@ -32,7 +32,7 @@ namespace BXJG.Common
     /// </summary>
     public static class CompareTypeMap //:Dictionary<string, CompareType[]>
     {
-        public static readonly IReadOnlyDictionary<string, IReadOnlySet<CompareType>> Items = new Dictionary<string, IReadOnlySet<CompareType>>
+        private static readonly IReadOnlyDictionary<string, IReadOnlySet<CompareType>> Items = new Dictionary<string, IReadOnlySet<CompareType>>
         {
             {
                 "string",
@@ -49,6 +49,7 @@ namespace BXJG.Common
                 }
             },
             {
+                //数字、时间等，可以做范围比较的
                 "val",
                 new HashSet <CompareType>
                 {
@@ -58,8 +59,8 @@ namespace BXJG.Common
                     CompareType.Xiaoyu,
                     CompareType.DayuDengyu,
                     CompareType.XiaoyuDengyu,
-                    CompareType.Kong,
-                    CompareType.Feikong
+                    //CompareType.Kong,
+                    //CompareType.Feikong
                 }
             },
             {
@@ -68,50 +69,109 @@ namespace BXJG.Common
                 {
                     CompareType.Dengyu,
                     CompareType.BuDengyu,
-                    CompareType.Kong,
-                    CompareType.Feikong
+                    //CompareType.Kong,
+                    //CompareType.Feikong
                 }
             }
         };
-        public static readonly IReadOnlyDictionary<string, IReadOnlySet<CompareType>> Maps = new Dictionary<string, IReadOnlySet<CompareType>>
+
+        //public static readonly IReadOnlyDictionary<Type, IReadOnlySet<CompareType>> Maps = new Dictionary<Type, IReadOnlySet<CompareType>>
+        //{
+        //    //基元类型名称本就不会重复，没必要用FullName
+        //    { typeof(string), Items["string"] },
+        //    { typeof(Guid), Items["string"] },
+        //    { typeof(int), Items["shu"] },
+        //    { typeof(uint), Items["shu"] },
+        //    { typeof(double), Items["shu"] },
+        //    { typeof(float), Items["shu"] },
+        //    { typeof(decimal), Items["shu"] },
+        //    { typeof(DateTime), Items["shu"] },
+        //    { typeof(DateOnly), Items["shu"] },
+        //    { typeof(TimeOnly), Items["shu"] },
+        //    { typeof(long), Items["shu"] },
+        //    { typeof(ulong), Items["shu"] },
+        //    { typeof(byte), Items["shu"] },
+        //    { typeof(sbyte), Items["shu"] },
+        //    { typeof(short), Items["shu"] },
+        //    { typeof(ushort), Items["shu"] },
+        //    { typeof(bool), Items["bool"] },
+        //    //{ typeof(Guid?), Items["string"] },
+        //    //{ typeof(int?), Items["shu"] },
+        //    //{ typeof(uint?), Items["shu"] },
+        //    //{ typeof(double?), Items["shu"] },
+        //    //{ typeof(float?), Items["shu"] },
+        //    //{ typeof(decimal?), Items["shu"] },
+        //    //{ typeof(DateTime?), Items["shu"] },
+        //    //{ typeof(DateOnly?), Items["shu"] },
+        //    //{ typeof(TimeOnly?), Items["shu"] },
+        //    //{ typeof(long?), Items["shu"] },
+        //    //{ typeof(ulong?), Items["shu"] },
+        //    //{ typeof(byte?), Items["shu"] },
+        //    //{ typeof(sbyte?), Items["shu"] },
+        //    //{ typeof(short?), Items["shu"] },
+        //    //{ typeof(ushort?), Items["shu"] },
+
+        //    //{ typeof(bool?), Items["bool"] },
+
+        //    //{ typeof(Enum), Items["boolOrEnum"] },
+        //    //{ typeof(Nullable<Enum>), Items["boolOrEnum"] },
+        //};
+
+        /// <summary>
+        /// 获取指定类型可以使用的比较符
+        /// </summary>
+        /// <param name="typeName">类型短名称，即：typeof(xxx).Name，内部自动忽略大小写</param>
+        /// <param name="nullabel">此类型是否可控</param>
+        /// <returns></returns>
+        public static IReadOnlySet<CompareType> GetCompareTypes(string typeName, bool nullabel = true)
         {
-            //基元类型名称本就不会重复，没必要用FullName
-            { typeof(string).Name, Items["string"] },
-            { typeof(Guid).Name, Items["string"] },
-            { typeof(int).Name, Items["shu"] },
-            { typeof(uint).Name, Items["shu"] },
-            { typeof(double).Name, Items["shu"] },
-            { typeof(float).Name, Items["shu"] },
-            { typeof(decimal).Name, Items["shu"] },
-            { typeof(DateTime).Name, Items["shu"] },
-            { typeof(DateOnly).Name, Items["shu"] },
-            { typeof(TimeOnly).Name, Items["shu"] },
-            { typeof(long).Name, Items["shu"] },
-            { typeof(ulong).Name, Items["shu"] },
-            { typeof(byte).Name, Items["shu"] },
-            { typeof(sbyte).Name, Items["shu"] },
-            { typeof(short).Name, Items["shu"] },
-            { typeof(ushort).Name, Items["shu"] },
+            HashSet<CompareType> hs;
+            typeName = typeName.ToLower();
 
-            { typeof(Guid?).Name, Items["string"] },
-            { typeof(int?).Name, Items["shu"] },
-            { typeof(uint?).Name, Items["shu"] },
-            { typeof(double?).Name, Items["shu"] },
-            { typeof(float?).Name, Items["shu"] },
-            { typeof(decimal?).Name, Items["shu"] },
-            { typeof(DateTime?).Name, Items["shu"] },
-            { typeof(DateOnly?).Name, Items["shu"] },
-            { typeof(TimeOnly?).Name, Items["shu"] },
-            { typeof(long?).Name, Items["shu"] },
-            { typeof(ulong?).Name, Items["shu"] },
-            { typeof(byte?).Name, Items["shu"] },
-            { typeof(sbyte?).Name, Items["shu"] },
-            { typeof(short?).Name, Items["shu"] },
-            { typeof(ushort?).Name, Items["shu"] },
-        };
+            if (typeName == typeof(bool).Name)
+            {
+                hs = Items[typeof(bool).Name].ToHashSet();
+            }
+            else if (typeName == "enum")
+            {
+                hs = Items["bool"].ToHashSet();
+            }
+            else if (typeName == typeof(string).Name)
+            {
+                hs = Items[typeof(string).Name].ToHashSet();
+                nullabel = false;
+            }
+            else
+            {
+                hs = Items["val"].ToHashSet();
+            }
 
-        public static IReadOnlySet<CompareType> GetCompareTypes(string typeName) => Maps[typeName];
-        public static IReadOnlySet<CompareType> GetCompareTypes<T>() => Maps[typeof(T).Name];
+            if (nullabel)
+            {
+                hs.Add(CompareType.Kong);
+                hs.Add(CompareType.Feikong);
+            }
+
+            return hs;
+        }
+        /// <summary>
+        /// 获取指定类型可以使用的比较符
+        /// </summary>
+        /// <typeparam name="T">类型</typeparam>
+        /// <returns></returns>
+        public static IReadOnlySet<CompareType> GetCompareTypes<T>()
+        {
+            var t = typeof(T);
+            var typeName = t.Name;
+
+            if (t.IsEnum)
+            {
+                typeName = "enum";
+            }
+            //var nullable = t.IsNullable();
+
+            return GetCompareTypes(typeName, t.IsNullable());
+        }
     }
 
     //从mudblazor的动态条件部分复制过来的

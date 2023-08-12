@@ -19,6 +19,7 @@ using Abp.Dependency;
 using Castle.MicroKernel.Lifestyle.Scoped;
 using Castle.Windsor.MsDependencyInjection;
 using Abp.Domain.Uow;
+using BXJG.Common.Dto;
 
 namespace BXJG.Utils
 {
@@ -171,7 +172,15 @@ namespace BXJG.Utils
         /// <param name="input">The input.</param>
         protected virtual IQueryable<TEntity> CreateFilteredQuery(TGetAllInput input)
         {
-            return Repository.GetAll().AsNoTrackingWithIdentityResolution();
+            var q = Repository.GetAll().AsNoTrackingWithIdentityResolution();
+            if (input is IEnumerable<ConditionFieldDefine> tj)
+            {
+                foreach (var item in tj)
+                {
+                    q = q.ApplyDynamicCondtion(item);
+                }
+            }
+            return q;
         }
 
         protected virtual TEntityDto MapToEntityDto(TEntity entity)

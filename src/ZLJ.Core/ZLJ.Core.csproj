@@ -41,14 +41,14 @@
 	<ItemGroup>
 		<PackageReference Include="Abp.AutoMapper" Version="8.3.1" />
 		<PackageReference Include="Abp.ZeroCore" Version="8.3.1" />
-		<PackageReference Include="BXJG.Common" Version="1.2.41" />
+		<PackageReference Include="BXJG.Common" Version="1.2.43" />
 		<PackageReference Include="BXJG.Utils" Version="1.2.20" />
 		<!--<PackageReference Include="BXJG.Common" Version="1.2.1" />
     <PackageReference Include="BXJG.Utils" Version="1.2.2" />-->
 		<!--<PackageReference Include="BXJG.WorkOrder.Core" Version="1.2.1" />-->
 		<PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="4.0.0" />
 		<PackageReference Include="DistributedLock.Core" Version="1.*" />
-		<PackageReference Include="Hangfire.Core" Version="1.8.4" />
+		<PackageReference Include="Hangfire.Core" Version="1.8.5" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.10" />
 		<PackageReference Include="SourceLink.Copy.PdbFiles" Version="2.*">
 			<PrivateAssets>all</PrivateAssets>

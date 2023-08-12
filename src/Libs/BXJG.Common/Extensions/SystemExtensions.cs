@@ -359,7 +359,7 @@ namespace System
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public  static bool IsNullable(Type type)
+        public  static bool IsNullable(this Type type)
         {
             return Nullable.GetUnderlyingType(type) != null;
         }

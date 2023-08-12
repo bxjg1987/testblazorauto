@@ -257,7 +257,15 @@ namespace BXJG.Utils.GeneralTree
         /// <returns></returns>
         protected virtual IQueryable<TEntity> ComboTreeFilter(TGetTreeForSelectInput input, string parentCode)
         {
-            return repository.GetAll().AsNoTrackingWithIdentityResolution().Where(c => c.Code.StartsWith(parentCode));
+            var q = repository.GetAll().AsNoTrackingWithIdentityResolution().Where(c => c.Code.StartsWith(parentCode));
+            if (input is IEnumerable<ConditionFieldDefine> tj)
+            {
+                foreach (var item in tj)
+                {
+                    q = q.ApplyDynamicCondtion(item);
+                }
+            }
+            return q;
         }
         /// <summary>
         /// 获取树形数据的排序，默认按code
@@ -291,7 +299,15 @@ namespace BXJG.Utils.GeneralTree
         /// <returns></returns>
         protected virtual IQueryable<TEntity> ComboboxFilter(TGetNodesForSelectInput input, long? parentId)
         {
-            return repository.GetAll().AsNoTrackingWithIdentityResolution().Where(c => c.ParentId == parentId);
+            var q = repository.GetAll().AsNoTrackingWithIdentityResolution().Where(c => c.ParentId == parentId);
+            if (input is IEnumerable<ConditionFieldDefine> tj)
+            {
+                foreach (var item in tj)
+                {
+                    q = q.ApplyDynamicCondtion(item);
+                }
+            }
+            return q;
             //return ownRepository.GetAll().Where(c => c.ParentId == input.ParentId || c.Id == input.ParentId);
         }
         /// <summary>
@@ -782,7 +798,15 @@ namespace BXJG.Utils.GeneralTree
         /// <returns></returns>
         protected virtual IQueryable<TEntity> GetAllFiltered(TGetAllInput input, string parentCode)
         {
-            return GetAllInclude(repository.GetAll()).AsNoTrackingWithIdentityResolution().Where(c => c.Code.StartsWith(parentCode));
+            var q=  GetAllInclude(repository.GetAll()).AsNoTrackingWithIdentityResolution().Where(c => c.Code.StartsWith(parentCode));
+            if (input is IEnumerable<ConditionFieldDefine> tj)
+            {
+                foreach (var item in tj)
+                {
+                    q = q.ApplyDynamicCondtion(item);
+                }
+            }
+            return q;
         }
         /// <summary>
         /// 获取所有数据的排序
