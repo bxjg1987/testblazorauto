@@ -29,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="BXJG.Utils.Application" Version="1.2.53" />
+    <PackageReference Include="BXJG.Utils.Application" Version="1.2.54" />
   </ItemGroup>
 
   <ItemGroup>

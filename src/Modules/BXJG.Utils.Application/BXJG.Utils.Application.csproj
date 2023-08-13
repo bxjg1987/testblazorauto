@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <RootNamespace>BXJG.Utils</RootNamespace>
-    <Version>1.2.53</Version>
+    <Version>1.2.54</Version>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
