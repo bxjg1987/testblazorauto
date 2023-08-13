@@ -18,10 +18,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="CompareType.cs" />
-    <Compile Remove="Dto\ConditionFieldDefine.cs" />
     <Compile Remove="Dto\DynamicEntityPropertyValueDto.cs" />
-    <Compile Remove="Extensions\LinqExt.cs" />
     <Compile Remove="IWebEnvironment.cs" />
     <Compile Remove="Validation\IValidator.cs" />
   </ItemGroup>

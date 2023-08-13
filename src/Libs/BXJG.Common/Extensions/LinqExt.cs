@@ -1,8 +1,10 @@
-﻿using BXJG.Common.Dto;
+﻿using BXJG.Common;
+using BXJG.Common.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,6 +20,66 @@ namespace System.Linq
         /// <returns></returns>
         public static IQueryable<T> ApplyDynamicCondtion<T>(this IQueryable<T> q, ConditionFieldDefine define)
         {
+            var t = typeof(T);
+
+            //若存在导航熟悉，则拿最终的导航熟悉的类型
+            var pnames = define.Name.Split('.');
+            for (int i = 0; i < pnames.Length; i++)
+            {
+                t = t.GetProperty(pnames[i]).PropertyType;
+            }
+
+            if (t == typeof(string))
+            {
+                switch (define.CompareType)
+                {
+                    case CompareType.Baohan:
+                        return q.Where($"{define.Name}.Contains(\"{define.Value}\")");
+                    case CompareType.BuBaohan:
+                        return q.Where($"!{define.Name}.Contains(\"{define.Value}\")");
+                    case CompareType.StartWith:
+                        return q.Where($"{define.Name}.StartsWith(\"{define.Value}\")");
+                    case CompareType.EndWith:
+                        return q.Where($"{define.Name}.EndsWith(\"{define.Value}\")");
+                    case CompareType.Kong:
+                        return q.Where($"{define.Name}==null");
+                    case CompareType.Feikong:
+                        return q.Where($"{define.Name}!=null");
+                    default:
+                        return q.Where($"{define.Name}==\"{define.Value}\"");
+                }
+            }
+
+            if (t.IsEnum)
+            {
+                switch (define.CompareType)
+                {
+                    case CompareType.Dengyu:
+                        return q.Where($"{define.Name}.ToString()==\"{define.Value}\"");
+                    case CompareType.BuDengyu:
+                        return q.Where($"{define.Name}.ToString()!=\"{define.Value}\"");
+                    case CompareType.Kong:
+                        return q.Where($"{define.Name}==null");
+                    case CompareType.Feikong:
+                        return q.Where($"{define.Name}!=null");
+                }
+            }
+
+            if (t == typeof(bool))
+            {
+                switch (define.CompareType)
+                {
+                    case CompareType.Dengyu:
+                        return q.Where($"{define.Name}.ToString()==\"{define.Value}\"");
+                    case CompareType.BuDengyu:
+                        return q.Where($"{define.Name}.ToString()!=\"{define.Value}\"");
+                    case CompareType.Kong:
+                        return q.Where($"{define.Name}==null");
+                    case CompareType.Feikong:
+                        return q.Where($"{define.Name}!=null");
+                }
+            }
+
             return q;
             //属性类型不同，linq写法不同，太难实现了。还要考虑导航属性
             //switch (define.CompareType)

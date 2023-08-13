@@ -161,7 +161,15 @@ namespace BXJG.Common
         /// <returns></returns>
         public static IReadOnlySet<CompareType> GetCompareTypes<T>()
         {
-            var t = typeof(T);
+            return GetCompareTypes(typeof(T));
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="t"></param>
+        /// <returns></returns>
+        public static IReadOnlySet<CompareType> GetCompareTypes(Type t)
+        {
             var typeName = t.Name;
 
             if (t.IsEnum)
@@ -172,6 +180,8 @@ namespace BXJG.Common
 
             return GetCompareTypes(typeName, t.IsNullable());
         }
+
+
     }
 
     //从mudblazor的动态条件部分复制过来的
