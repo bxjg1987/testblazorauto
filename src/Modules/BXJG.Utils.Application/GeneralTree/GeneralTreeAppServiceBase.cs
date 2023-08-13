@@ -257,7 +257,7 @@ namespace BXJG.Utils.GeneralTree
         /// <returns></returns>
         protected virtual IQueryable<TEntity> ComboTreeFilter(TGetTreeForSelectInput input, string parentCode)
         {
-            return repository.GetAll().AsNoTrackingWithIdentityResolution().Where(c => c.Code.StartsWith(parentCode));
+            return repository.GetAll().AsNoTrackingWithIdentityResolution().Where(c => c.Code.StartsWith(parentCode)).ApplyDynamicCondtion(input);
         }
         /// <summary>
         /// 获取树形数据的排序，默认按code
@@ -291,7 +291,7 @@ namespace BXJG.Utils.GeneralTree
         /// <returns></returns>
         protected virtual IQueryable<TEntity> ComboboxFilter(TGetNodesForSelectInput input, long? parentId)
         {
-            return repository.GetAll().AsNoTrackingWithIdentityResolution().Where(c => c.ParentId == parentId);
+            return repository.GetAll().AsNoTrackingWithIdentityResolution().Where(c => c.ParentId == parentId).ApplyDynamicCondtion(input);
             //return ownRepository.GetAll().Where(c => c.ParentId == input.ParentId || c.Id == input.ParentId);
         }
         /// <summary>
@@ -782,7 +782,7 @@ namespace BXJG.Utils.GeneralTree
         /// <returns></returns>
         protected virtual IQueryable<TEntity> GetAllFiltered(TGetAllInput input, string parentCode)
         {
-            return GetAllInclude(repository.GetAll()).AsNoTrackingWithIdentityResolution().Where(c => c.Code.StartsWith(parentCode));
+            return GetAllInclude(repository.GetAll()).AsNoTrackingWithIdentityResolution().Where(c => c.Code.StartsWith(parentCode)).ApplyDynamicCondtion(input);
         }
         /// <summary>
         /// 获取所有数据的排序

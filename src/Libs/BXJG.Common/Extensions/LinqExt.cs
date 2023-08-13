@@ -29,24 +29,34 @@ namespace System.Linq
                 t = t.GetProperty(pnames[i]).PropertyType;
             }
 
+            //将define.Value转换为t类型的值
+            var value = Convert.ChangeType(define.Value, t);
+
+            if (t.IsNullable())
+            {
+                switch (define.CompareType)
+                {
+                    case CompareType.Kong:
+                        return q.Where($"{define.Name} == null");
+                    case CompareType.Feikong:
+                        return q.Where($"{define.Name} != null");
+                }
+            }
+
             if (t == typeof(string))
             {
                 switch (define.CompareType)
                 {
                     case CompareType.Baohan:
-                        return q.Where($"{define.Name}.Contains(\"{define.Value}\")");
+                        return q.Where($"{define.Name}.Contains(\"{value}\")");
                     case CompareType.BuBaohan:
-                        return q.Where($"!{define.Name}.Contains(\"{define.Value}\")");
+                        return q.Where($"!{define.Name}.Contains(\"{value}\")");
                     case CompareType.StartWith:
-                        return q.Where($"{define.Name}.StartsWith(\"{define.Value}\")");
+                        return q.Where($"{define.Name}.StartsWith(\"{value}\")");
                     case CompareType.EndWith:
-                        return q.Where($"{define.Name}.EndsWith(\"{define.Value}\")");
-                    case CompareType.Kong:
-                        return q.Where($"{define.Name}==null");
-                    case CompareType.Feikong:
-                        return q.Where($"{define.Name}!=null");
+                        return q.Where($"{define.Name}.EndsWith(\"{value}\")");
                     default:
-                        return q.Where($"{define.Name}==\"{define.Value}\"");
+                        return q.Where($"{define.Name}==\"{value}\"");
                 }
             }
 
@@ -55,13 +65,9 @@ namespace System.Linq
                 switch (define.CompareType)
                 {
                     case CompareType.Dengyu:
-                        return q.Where($"{define.Name}.ToString()==\"{define.Value}\"");
+                        return q.Where($"{define.Name}.ToString()=={value}");
                     case CompareType.BuDengyu:
-                        return q.Where($"{define.Name}.ToString()!=\"{define.Value}\"");
-                    case CompareType.Kong:
-                        return q.Where($"{define.Name}==null");
-                    case CompareType.Feikong:
-                        return q.Where($"{define.Name}!=null");
+                        return q.Where($"{define.Name}.ToString()!={value}");
                 }
             }
 
@@ -70,17 +76,31 @@ namespace System.Linq
                 switch (define.CompareType)
                 {
                     case CompareType.Dengyu:
-                        return q.Where($"{define.Name}.ToString()==\"{define.Value}\"");
+                        return q.Where($"{define.Name}.ToString()=={value}");
                     case CompareType.BuDengyu:
-                        return q.Where($"{define.Name}.ToString()!=\"{define.Value}\"");
-                    case CompareType.Kong:
-                        return q.Where($"{define.Name}==null");
-                    case CompareType.Feikong:
-                        return q.Where($"{define.Name}!=null");
+                        return q.Where($"{define.Name}.ToString()!={value}");
                 }
             }
 
-            return q;
+            switch (define.CompareType)
+            {
+                case CompareType.Dayu:
+                    return q.Where($"{define.Name}>{value}");
+                case CompareType.Dengyu:
+                    return q.Where($"{define.Name}=={value}");
+                case CompareType.Xiaoyu:
+                    return q.Where($"{define.Name}<{value}");
+                case CompareType.DayuDengyu:
+                    return q.Where($"{define.Name}>={value}");
+                case CompareType.XiaoyuDengyu:
+                    return q.Where($"{define.Name}<={value}");
+                case CompareType.BuDengyu:
+                    return q.Where($"{define.Name}!={value}");
+                default:
+                    throw new Exception("未实现的比较类型");
+            }
+
+
             //属性类型不同，linq写法不同，太难实现了。还要考虑导航属性
             //switch (define.CompareType)
             //{
@@ -137,6 +157,10 @@ namespace System.Linq
             if (defines is IEnumerable<ConditionFieldDefine>)
             {
                 q = q.ApplyDynamicCondtion(defines as IEnumerable<ConditionFieldDefine>);
+            }
+            else if (defines is IDynamicCondition cc)
+            {
+                q = q.ApplyDynamicCondtion(cc.Conditions);
             }
             return q;
         }

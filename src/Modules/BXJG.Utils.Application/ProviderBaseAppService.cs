@@ -172,7 +172,7 @@ namespace BXJG.Utils
         /// <param name="input">The input.</param>
         protected virtual IQueryable<TEntity> CreateFilteredQuery(TGetAllInput input)
         {
-           return Repository.GetAll().AsNoTrackingWithIdentityResolution();
+           return Repository.GetAll().AsNoTrackingWithIdentityResolution().ApplyDynamicCondtion(input);
         }
 
         protected virtual TEntityDto MapToEntityDto(TEntity entity)

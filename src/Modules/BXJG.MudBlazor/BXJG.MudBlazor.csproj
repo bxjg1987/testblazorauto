@@ -8,10 +8,6 @@
 	  <Version>1.0.0</Version>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Extensions\xxx.cs" />
-  </ItemGroup>
-
 
   <ItemGroup>
     <SupportedPlatform Include="browser" />
@@ -24,10 +20,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BXJG.Utils.Application\BXJG.Utils.Application.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Extensions\" />
   </ItemGroup>
 
 </Project>
