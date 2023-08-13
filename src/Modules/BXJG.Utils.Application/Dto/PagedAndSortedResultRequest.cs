@@ -11,10 +11,10 @@ namespace BXJG.Utils.Dto
     /// 获取排序并分页的列表时的输入模型
     /// </summary>
     /// <typeparam name="TFilter">条件模型</typeparam>
-    public class PagedAndSortedResultRequest<TFilter> : SortedResultRequest<TFilter>, IPagedAndSortedResultRequest
+    public class PagedAndSortedResultRequest<TFilter> : PagedAndSortedResultRequestDto
     {
-        public TFilter Filter { get; set; }
-        public int SkipCount { get; set; }
-        public int MaxResultCount { get; set; }
+        public virtual TFilter Filter { get; set; }
+        //public virtual int SkipCount { get; set; }
+        //public virtual int MaxResultCount { get; set; }
     }
 }

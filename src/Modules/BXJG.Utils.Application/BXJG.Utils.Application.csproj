@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <RootNamespace>BXJG.Utils</RootNamespace>
-    <Version>1.2.51</Version>
+    <Version>1.2.52</Version>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -21,6 +21,7 @@
     <Compile Remove="AutoMapper\ExtensionDataSS.cs" />
     <Compile Remove="AutoMapper\IExtendableDto.cs" />
     <Compile Remove="Enums\GetStructForCombboxInput.cs" />
+    <Compile Remove="Extensions\ConditionFieldDefineExt.cs" />
     <Compile Remove="File\AttachmentEditDto.cs" />
     <Compile Remove="File\AttachmentService.cs" />
     <Compile Remove="File\FileInput.cs" />
@@ -33,6 +34,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BXJG.Utils\BXJG.Utils.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Extensions\" />
   </ItemGroup>
 
 </Project>

@@ -3,3 +3,6 @@ https://github.com/castleproject/Windsor/blob/master/docs/registering-components
 https://github.com/castleproject/Windsor/blob/master/docs/registering-components-one-by-one.md#supplying-the-component-for-a-dependency-to-use-service-override
 
 https://github.com/castleproject/Windsor/issues/313
+
+named注册
+使用windsor api 手动解析

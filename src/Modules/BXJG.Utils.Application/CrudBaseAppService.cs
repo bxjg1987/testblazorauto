@@ -151,17 +151,7 @@ namespace BXJG.Utils
         }
         protected override IQueryable<TEntity> CreateFilteredQuery(TGetAllInput input)
         {
-            var q = GetAllInclude(base.CreateFilteredQuery(input)).AsNoTrackingWithIdentityResolution();
-
-            if (input is IEnumerable<ConditionFieldDefine> tj)
-            {
-                foreach (var item in tj)
-                {
-                    q = q.ApplyDynamicCondtion(item);
-                }
-            }
-
-            return q;
+            return GetAllInclude(base.CreateFilteredQuery(input)).AsNoTrackingWithIdentityResolution().ApplyDynamicCondtion(input);
         }
         /// <summary>
         /// 获取列表时回调，你可以重写以Include更多导航属性

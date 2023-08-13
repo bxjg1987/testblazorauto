@@ -90,6 +90,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{31830F03-1
 		docs\blazorServer的集成.md = docs\blazorServer的集成.md
 		docs\session.md = docs\session.md
 		docs\依赖注入和AOP.md = docs\依赖注入和AOP.md
+		docs\动态条件.md = docs\动态条件.md
+		docs\扩展dto.md = docs\扩展dto.md
 		docs\菜单.md = docs\菜单.md
 	EndProjectSection
 EndProject
@@ -102,6 +104,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "界面", "界面", "{35FBBC
 	ProjectSection(SolutionItems) = preProject
 		docs\界面\概述.md = docs\界面\概述.md
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "应用层", "应用层", "{9E73E99D-19B1-486B-B15A-39EFEB37CF2F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -300,6 +304,7 @@ Global
 		{9F0BD77A-E8D0-40F1-8817-B2E7308DFBC3} = {04E5EC1B-C5AD-473B-A833-DC9C2CB4627E}
 		{249F7F7C-B391-43E1-B3B9-89373BEE77AD} = {31830F03-183C-4530-A73A-C165A1F5A739}
 		{35FBBC5F-EFB2-446A-A110-42C137FA2A74} = {31830F03-183C-4530-A73A-C165A1F5A739}
+		{9E73E99D-19B1-486B-B15A-39EFEB37CF2F} = {31830F03-183C-4530-A73A-C165A1F5A739}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F45DD46C-6040-4FCC-87E0-648786C36933}

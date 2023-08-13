@@ -10,10 +10,18 @@ namespace BXJG.Utils.Dto
     /// <summary>
     /// 获取排序列表时的输入模型
     /// </summary>
-    /// <typeparam name="TFilter">条件模型</typeparam>
-    public class SortedResultRequest<TFilter> : ISortedResultRequest
+    public class SortedResultRequest : ISortedResultRequest
     {
-        public TFilter Filter { get; set; }
-        public string Sorting { get; set; }
+        //Abp.Application.Services.Dto.PagedAndSortedResultRequestDto
+        //public virtual TFilter Filter { get; set; }
+        public virtual string Sorting { get; set; }
+    }
+
+    /// <summary>
+    /// 获取排序列表时的输入模型
+    /// </summary>
+    public class SortedResultRequest<TFilter> : SortedResultRequest
+    {
+        public virtual TFilter Filter { get; set; }
     }
 }

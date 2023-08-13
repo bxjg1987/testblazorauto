@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace BXJG.Common.Dto
 {
+
     public interface IExtendableDto
     {
         public dynamic ExtensionData { get; set; }
