@@ -89,6 +89,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{31830F03-1
 	ProjectSection(SolutionItems) = preProject
 		docs\blazorServer的集成.md = docs\blazorServer的集成.md
 		docs\session.md = docs\session.md
+		docs\与mudblazor的集成.md = docs\与mudblazor的集成.md
+		docs\以前的文档.zip = docs\以前的文档.zip
 		docs\依赖注入和AOP.md = docs\依赖注入和AOP.md
 		docs\动态条件.md = docs\动态条件.md
 		docs\扩展dto.md = docs\扩展dto.md
@@ -106,6 +108,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "界面", "界面", "{35FBBC
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "应用层", "应用层", "{9E73E99D-19B1-486B-B15A-39EFEB37CF2F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BXJG.MudBlazor", "src\Modules\BXJG.MudBlazor\BXJG.MudBlazor.csproj", "{A43BBE9A-BEA3-450E-ABD6-856D72723E91}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -257,6 +261,10 @@ Global
 		{9F0BD77A-E8D0-40F1-8817-B2E7308DFBC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F0BD77A-E8D0-40F1-8817-B2E7308DFBC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F0BD77A-E8D0-40F1-8817-B2E7308DFBC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A43BBE9A-BEA3-450E-ABD6-856D72723E91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A43BBE9A-BEA3-450E-ABD6-856D72723E91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A43BBE9A-BEA3-450E-ABD6-856D72723E91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A43BBE9A-BEA3-450E-ABD6-856D72723E91}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -305,6 +313,7 @@ Global
 		{249F7F7C-B391-43E1-B3B9-89373BEE77AD} = {31830F03-183C-4530-A73A-C165A1F5A739}
 		{35FBBC5F-EFB2-446A-A110-42C137FA2A74} = {31830F03-183C-4530-A73A-C165A1F5A739}
 		{9E73E99D-19B1-486B-B15A-39EFEB37CF2F} = {31830F03-183C-4530-A73A-C165A1F5A739}
+		{A43BBE9A-BEA3-450E-ABD6-856D72723E91} = {D42FF479-F331-48F6-AAA2-45B9FD451892}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F45DD46C-6040-4FCC-87E0-648786C36933}

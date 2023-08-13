@@ -151,7 +151,7 @@ namespace BXJG.Utils
         }
         protected override IQueryable<TEntity> CreateFilteredQuery(TGetAllInput input)
         {
-            return GetAllInclude(base.CreateFilteredQuery(input)).AsNoTrackingWithIdentityResolution().ApplyDynamicCondtion(input);
+            return GetAllInclude(base.CreateFilteredQuery(input)).AsNoTrackingWithIdentityResolution();
         }
         /// <summary>
         /// 获取列表时回调，你可以重写以Include更多导航属性

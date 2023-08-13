@@ -1,4 +1,5 @@
 ﻿using Abp.Modules;
+using BXJG.MudBlazor;
 using BXJG.Utils;
 using BXJG.Utils;
 using MudBlazor;
@@ -13,7 +14,7 @@ using ZLJ.App.Customer;
 
 namespace ZLJ.Web.Customer
 {
-    [DependsOn(typeof(ZLJWebCoreModule),typeof(CustomerApplicationModule))]
+    [DependsOn(typeof(ZLJWebCoreModule),typeof(CustomerApplicationModule), typeof(BXJGMudBlazorModule))]
     public class WebCustomerModule:AbpModule
     {
         public override void PreInitialize()
