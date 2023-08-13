@@ -89,6 +89,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{31830F03-1
 	ProjectSection(SolutionItems) = preProject
 		docs\blazorServer的集成.md = docs\blazorServer的集成.md
 		docs\session.md = docs\session.md
+		docs\ZLJ.Web.Core说明.md = docs\ZLJ.Web.Core说明.md
 		docs\与mudblazor的集成.md = docs\与mudblazor的集成.md
 		docs\以前的文档.zip = docs\以前的文档.zip
 		docs\依赖注入和AOP.md = docs\依赖注入和AOP.md
