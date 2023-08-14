@@ -19,6 +19,7 @@ using Abp.Organizations;
 using Abp.Authorization.Users;
 using ZLJ.BaseInfo.Post;
 using BXJG.Utils.Localization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ZLJ.App.Common.StaffInfo
 {
@@ -62,7 +63,8 @@ namespace ZLJ.App.Common.StaffInfo
                     .WhereIf(!input.OuCode.IsNullOrWhiteSpace(), c => c.Ou.Code.StartsWith(input.OuCode))
                     .Where(x=>x.Staff.IsActive)
                     .WhereIf(input.PostId.HasValue, c => c.Post.Id == input.PostId.Value)
-                    .WhereIf(!input.AreaCode.IsNullOrWhiteSpace(), c => c.Staff.Area.Code.StartsWith(input.OuCode));
+                    .WhereIf(!input.AreaCode.IsNullOrWhiteSpace(), c => c.Staff.Area.Code.StartsWith(input.OuCode))
+                    .ApplyDynamicCondtion<QueryTemp>(input.Conditions??new List<ConditionFieldDefine>());
         }
 
         //前期用join查询的方式，后期考虑冗余字段方式提高查询性能（注意依赖数据更新的情况）
@@ -72,21 +74,22 @@ namespace ZLJ.App.Common.StaffInfo
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
+        [HttpPost]
         public async Task<PagedResultDto<Dto>> GetListAsync(GetListInput input)
         {
             var r = new PagedResultDto<Dto>();
             var q = GetFullQuery();
             q = ApplyCondition(q, input);
 
+            var ss = q.ToQueryString();
+
             q = q.OrderBy("Staff." + input.Sorting);
 
             var q2 = q.GroupBy(c => c.Staff.Id).Select(c => c.Key);
-
-
-            // q = q.OrderBy( input.Sorting);
+            
+            q = q.OrderBy("Staff." + input.Sorting);
 
             r.TotalCount = await q2.CountAsync();
-
 
             q2 = q2.PageBy(input);
             var list = await q2.ToListAsync();

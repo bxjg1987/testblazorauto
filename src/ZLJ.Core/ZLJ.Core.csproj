@@ -38,11 +38,18 @@
 		<Compile Remove="Localization\LocalizationExt.cs" />
 		<Compile Remove="Notification\NotificationProvider.cs" />
 	</ItemGroup>
+
+	<ItemGroup Condition="'$(SolutionName)' != 'ZLJWithModules'">
+		<PackageReference Include="BXJG.Utils" Version="*" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(SolutionName)' == 'ZLJWithModules'">
+		<ProjectReference Include="..\Modules\BXJG.Utils\BXJG.Utils.csproj" />
+	</ItemGroup>
+
 	<ItemGroup>
 		<PackageReference Include="Abp.AutoMapper" Version="8.3.1" />
 		<PackageReference Include="Abp.ZeroCore" Version="8.3.1" />
-		<PackageReference Include="BXJG.Common" Version="1.2.47" />
-		<PackageReference Include="BXJG.Utils" Version="1.2.20" />
+		<!--<PackageReference Include="BXJG.Utils" Version="*" />-->
 		<!--<PackageReference Include="BXJG.Common" Version="1.2.1" />
     <PackageReference Include="BXJG.Utils" Version="1.2.2" />-->
 		<!--<PackageReference Include="BXJG.WorkOrder.Core" Version="1.2.1" />-->

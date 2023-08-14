@@ -29,8 +29,7 @@ namespace System.Linq
                 t = t.GetProperty(pnames[i]).PropertyType;
             }
 
-            //将define.Value转换为t类型的值
-            var value = Convert.ChangeType(define.Value, t);
+            //define.CompareType = Enum.Parse<CompareType>(define.CompareType.ToString());
 
             if (t.IsNullable())
             {
@@ -41,6 +40,7 @@ namespace System.Linq
                     case CompareType.Feikong:
                         return q.Where($"{define.Name} != null");
                 }
+                t = Nullable.GetUnderlyingType(t);
             }
 
             if (t == typeof(string))
@@ -48,54 +48,81 @@ namespace System.Linq
                 switch (define.CompareType)
                 {
                     case CompareType.Baohan:
-                        return q.Where($"{define.Name}.Contains(\"{value}\")");
+                        return q.Where($"{define.Name}.Contains(\"{define.Value}\")");
                     case CompareType.BuBaohan:
-                        return q.Where($"!{define.Name}.Contains(\"{value}\")");
+                        return q.Where($"!{define.Name}.Contains(\"{define.Value}\")");
                     case CompareType.StartWith:
-                        return q.Where($"{define.Name}.StartsWith(\"{value}\")");
+                        return q.Where($"{define.Name}.StartsWith(\"{define.Value}\")");
                     case CompareType.EndWith:
-                        return q.Where($"{define.Name}.EndsWith(\"{value}\")");
+                        return q.Where($"{define.Name}.EndsWith(\"{define.Value}\")");
                     default:
-                        return q.Where($"{define.Name}==\"{value}\"");
+                        return q.Where($"{define.Name}==\"{define.Value}\"");
                 }
             }
 
             if (t.IsEnum)
             {
+                //将define.Value转换为t类型的值
+                var value2 = Enum.Parse(t, define.Value);
+                var valus = value2.ToString();
+                var value = t.FullName + "." + valus;
+                //object value;
+                //var vs = Enum.GetValues(t);
+                // foreach (var item in vs)
+                // {
+                //     if (item.ToString() == define.Value)
+                //     {
+                //         value = item; break;
+                //     }
+                // }
+
+                //var value = Convert.ChangeType(int.Parse(define.Value), t);
+                //var value = int.Parse(define.Value);
                 switch (define.CompareType)
                 {
                     case CompareType.Dengyu:
-                        return q.Where($"{define.Name}.ToString()=={value}");
+                        return q.Where($"{define.Name}=={value}");
                     case CompareType.BuDengyu:
-                        return q.Where($"{define.Name}.ToString()!={value}");
+                        return q.Where($"{define.Name}!={value}");
                 }
             }
 
             if (t == typeof(bool))
             {
+                var value = define.Value.IsNotNullOrWhiteSpaceBXJG(); //Convert.ChangeType(int.Parse(define.Value), t);
                 switch (define.CompareType)
                 {
                     case CompareType.Dengyu:
-                        return q.Where($"{define.Name}.ToString()=={value}");
+                        return q.Where($"{define.Name}=={value}");
                     case CompareType.BuDengyu:
-                        return q.Where($"{define.Name}.ToString()!={value}");
+                        return q.Where($"{define.Name}!={value}");
                 }
             }
+
+
+            object value1;// = define.Value;// Convert.ChangeType(define.Value, t);
+
+            if (t == typeof(DateTime))
+                value1 = DateTime.Parse(define.Value);
+            else if (t == typeof(DateTimeOffset))
+                value1 = DateTimeOffset.Parse(define.Value);
+            else
+                value1 = Convert.ChangeType(define.Value, t);
 
             switch (define.CompareType)
             {
                 case CompareType.Dayu:
-                    return q.Where($"{define.Name}>{value}");
+                    return q.Where($"{define.Name}>@0", value1);
                 case CompareType.Dengyu:
-                    return q.Where($"{define.Name}=={value}");
+                    return q.Where($"{define.Name}==@0", value1);
                 case CompareType.Xiaoyu:
-                    return q.Where($"{define.Name}<{value}");
+                    return q.Where($"{define.Name}<@0", value1);
                 case CompareType.DayuDengyu:
-                    return q.Where($"{define.Name}>={value}");
+                    return q.Where($"{define.Name}>=@0", value1);
                 case CompareType.XiaoyuDengyu:
-                    return q.Where($"{define.Name}<={value}");
+                    return q.Where($"{define.Name}<=@0", value1);
                 case CompareType.BuDengyu:
-                    return q.Where($"{define.Name}!={value}");
+                    return q.Where($"{define.Name}!=@0", value1);
                 default:
                     throw new Exception("未实现的比较类型");
             }

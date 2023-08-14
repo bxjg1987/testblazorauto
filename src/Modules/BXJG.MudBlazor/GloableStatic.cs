@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace BXJG.MudBlazor
 {
+    /// <summary>
+    /// 此模块的全局静态变量、常量 容器
+    /// </summary>
     public class GloableStatic
     {
         /// <summary>

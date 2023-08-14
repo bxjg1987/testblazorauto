@@ -8,6 +8,18 @@
 	  <Version>1.0.1</Version>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="ExampleJsInterop.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Component1.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Component1.razor.css" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <SupportedPlatform Include="browser" />

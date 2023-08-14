@@ -9,8 +9,16 @@ namespace ZLJ.App.Common.StaffInfo
     /// <summary>
     /// 获取员工信息时的条件模型
     /// </summary>
-    public class GetTotalInput
+    public class GetTotalInput : IDynamicCondition
     {
+        /// <summary>
+        /// x
+        /// </summary>
+        //public List<ConditionFieldDefine> Conditions1
+        //{
+        //    get { return Conditions?.ToList(); }
+        //    set { Conditions = value; }
+        //}
         /// <summary>
         /// 公司和部门code
         /// </summary>
@@ -27,5 +35,6 @@ namespace ZLJ.App.Common.StaffInfo
         /// 岗位id
         /// </summary>
         public int? PostId { get; set; }
+        public IEnumerable<ConditionFieldDefine> Conditions { get; set; }
     }
 }

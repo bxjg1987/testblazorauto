@@ -12,12 +12,13 @@ namespace ZLJ.App.Common.StaffInfo
     /// <summary>
     /// 获取员工列表时的输入模型
     /// </summary>
-    public class GetListInput : GetTotalInput, IShouldNormalize,IPagedAndSortedResultRequest
+    public class GetListInput : GetTotalInput, IShouldNormalize, IPagedAndSortedResultRequest
     {
         //public GetTotalInput GetTotalInput { get; set; } = new GetTotalInput();
         public int SkipCount { get; set; }
         public int MaxResultCount { get; set; }
         public string Sorting { get; set; }
+  
         public virtual void Normalize()
         {
             //if (GetTotalInput == null)

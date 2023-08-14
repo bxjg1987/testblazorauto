@@ -21,10 +21,17 @@
   <ItemGroup>
     <SupportedPlatform Include="browser" />
   </ItemGroup>
-
+	
+	<ItemGroup Condition="'$(SolutionName)' != 'ZLJWithModules'">
+		<PackageReference Include="BXJG.MudBlazor" Version="*" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(SolutionName)' == 'ZLJWithModules'">
+		<ProjectReference Include="..\Modules\BXJG.MudBlazor\BXJG.MudBlazor.csproj" />
+	</ItemGroup>
+	
   <ItemGroup>
     <PackageReference Include="Abp.AspNetCore" Version="8.3.1" />
-    <PackageReference Include="BXJG.MudBlazor" Version="1.0.1" />
+    <!--<PackageReference Include="BXJG.MudBlazor" Version="*" />-->
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.10" />
     <PackageReference Include="MudBlazor" Version="6.8.0" />
   </ItemGroup>
