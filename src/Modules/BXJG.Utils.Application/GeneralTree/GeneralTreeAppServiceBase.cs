@@ -71,7 +71,13 @@ namespace BXJG.Utils.GeneralTree
 
         public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }//属性注入
         public IRepository<TEntity, long> repository { get; set; }
+        /// <summary>
+        /// 与当前请求关联的服务容器
+        /// 通常你可以使用构造函数或属性注入，框架级别或特殊情况可以使用此对象。
+        /// 注：IocManager是全局单例，解析实现IDisposeable的服务时比较危险，此时应使用ServiceProvider
+        /// </summary>
         public IServiceProvider ServiceProvider { get; set; }
+
         [Obsolete("子类继承时应使用无参的构造函数，当前构造函数是未简化子类实现以前的代码，已过时。")]
         public UnAuthGeneralTreeAppServiceBase(IRepository<TEntity, long> repository,
                                                string allTextForSearch = "不限",
@@ -382,6 +388,11 @@ namespace BXJG.Utils.GeneralTree
         public IRepository<TEntity, long> repository { get; set; }
         public TManager generalTreeManager { get; set; }
         protected virtual string allTextForManager { get; set; } = "全部";//注意这里代表的是本地化文本的key
+        /// <summary>
+        /// 与当前请求关联的服务容器
+        /// 通常你可以使用构造函数或属性注入，框架级别或特殊情况可以使用此对象。
+        /// 注：IocManager是全局单例，解析实现IDisposeable的服务时比较危险，此时应使用ServiceProvider
+        /// </summary>
         public IServiceProvider ServiceProvider { get; set; }
         //protected string createPermissionName, updatePermissionName, deletePermissionName, getPermissionName;
         public virtual string createPermissionName { get; set; }

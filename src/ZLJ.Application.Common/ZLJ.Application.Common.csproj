@@ -47,7 +47,7 @@
 		<ProjectReference Include="..\..\..\..\abp\src\Modules\BXJG.Utils.Application\BXJG.Utils.Application.csproj" />
 	</ItemGroup>-->
 	<ItemGroup Condition="'$(SolutionName)' != 'ZLJWithModules'">
-		<PackageReference Include="BXJG.Utils.Application" Version="*" />
+		<PackageReference Include="BXJG.Utils.Application" Version="1.2.57" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(SolutionName)' == 'ZLJWithModules'">
 		<ProjectReference Include="..\Modules\BXJG.Utils.Application\BXJG.Utils.Application.csproj" />

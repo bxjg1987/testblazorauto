@@ -66,7 +66,11 @@ namespace BXJG.Utils
         public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }
 
         public IRepository<TEntity, TKey> Repository { get; set; }
-
+        /// <summary>
+        /// 与当前请求关联的服务容器
+        /// 通常你可以使用构造函数或属性注入，框架级别或特殊情况可以使用此对象。
+        /// 注：IocManager是全局单例，解析实现IDisposeable的服务时比较危险，此时应使用ServiceProvider
+        /// </summary>
         public IServiceProvider ServiceProvider { get; set; }
 
         //AsyncCrudAppService

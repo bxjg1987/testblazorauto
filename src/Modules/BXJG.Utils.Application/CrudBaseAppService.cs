@@ -19,13 +19,8 @@ using System.Threading.Tasks;
 
 namespace BXJG.Utils
 {
-    /*
-     * 为了剔除构造函数这点小需求实现这么多的抽象类值得吗？
-     * 值得，这给了我们一个机会来加入与我们项目相关的抽象逻辑。
-     */
-
     /// <summary>
-    /// 继承abp的AsyncCrudAppService时都需要去写那个默认的构造函数，这个类就是为了解决这个问题
+    /// 对abp默认的AsyncCrudAppService的增强
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TEntityDto"></typeparam>
@@ -56,7 +51,11 @@ namespace BXJG.Utils
         where TGetInput : IEntityDto<TPrimaryKey>
         where TDeleteInput : IEntityDto<TPrimaryKey>
     {
-
+        /// <summary>
+        /// 与当前请求关联的服务容器
+        /// 通常你可以使用构造函数或属性注入，框架级别或特殊情况可以使用此对象。
+        /// 注：IocManager是全局单例，解析实现IDisposeable的服务时比较危险，此时应使用ServiceProvider
+        /// </summary>
         public IServiceProvider ServiceProvider { get; set; }
 
         protected CrudBaseAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
