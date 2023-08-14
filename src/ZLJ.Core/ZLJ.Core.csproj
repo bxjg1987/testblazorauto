@@ -40,7 +40,7 @@
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(SolutionName)' != 'ZLJWithModules'">
-		<PackageReference Include="BXJG.Utils" Version="*" />
+		<PackageReference Include="BXJG.Utils" Version="1.2.21" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(SolutionName)' == 'ZLJWithModules'">
 		<ProjectReference Include="..\Modules\BXJG.Utils\BXJG.Utils.csproj" />

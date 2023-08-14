@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <AssemblyVersion></AssemblyVersion>
     <FileVersion></FileVersion>
-    <Version>1.2.14</Version>
+    <Version>1.2.15</Version>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
