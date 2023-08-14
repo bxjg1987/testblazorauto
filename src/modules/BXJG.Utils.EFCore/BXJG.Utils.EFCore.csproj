@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-   <Version>1.2.14</Version>
+   <Version>1.2.16</Version>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
@@ -19,9 +19,11 @@
   <ItemGroup>
     <PackageReference Include="Abp.ZeroCore.EntityFrameworkCore" Version="8.3.1" />
     <PackageReference Include="DotNetCore.CAP" Version="7.2.0" />
+
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Libs\BXJG.Common.EFCore\BXJG.Common.EFCore.csproj" />
     <ProjectReference Include="..\BXJG.Utils\BXJG.Utils.csproj" />
   </ItemGroup>
 
