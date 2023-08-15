@@ -1,4 +1,4 @@
-﻿using Abp;
+using Abp;
 using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using Abp.Domain.Entities;
@@ -56,6 +56,9 @@ namespace BXJG.Utils
         where TGetInput : IEntityDto<TPrimaryKey>
         where TDeleteInput : IEntityDto<TPrimaryKey>
     {
+        
+        public IServiceProvider ServiceProvider { get; set; }
+
         protected CrudBaseAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
         {
         }

@@ -1,4 +1,4 @@
-﻿using Abp.Application.Services;
+using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using Abp.Authorization;
 using Abp.Domain.Entities;
@@ -66,6 +66,8 @@ namespace BXJG.Utils
         public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }
 
         public IRepository<TEntity, TKey> Repository { get; set; }
+
+        public IServiceProvider ServiceProvider { get; set; }
 
         //AsyncCrudAppService
 

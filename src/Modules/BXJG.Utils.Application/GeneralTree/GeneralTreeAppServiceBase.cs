@@ -1,4 +1,4 @@
-﻿/*
+/*
  * 作者：变形精怪 手机/微信17723896676 QQ/邮箱453008453
  * 创建时间：2018-10-10 22:49:57
  *
@@ -71,7 +71,7 @@ namespace BXJG.Utils.GeneralTree
 
         public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }//属性注入
         public IRepository<TEntity, long> repository { get; set; }
-
+        public IServiceProvider ServiceProvider { get; set; }
         [Obsolete("子类继承时应使用无参的构造函数，当前构造函数是未简化子类实现以前的代码，已过时。")]
         public UnAuthGeneralTreeAppServiceBase(IRepository<TEntity, long> repository,
                                                string allTextForSearch = "不限",
@@ -382,7 +382,7 @@ namespace BXJG.Utils.GeneralTree
         public IRepository<TEntity, long> repository { get; set; }
         public TManager generalTreeManager { get; set; }
         protected virtual string allTextForManager { get; set; } = "全部";//注意这里代表的是本地化文本的key
-
+        public IServiceProvider ServiceProvider { get; set; }
         //protected string createPermissionName, updatePermissionName, deletePermissionName, getPermissionName;
         public virtual string createPermissionName { get; set; }
         public virtual string updatePermissionName { get; set; }
