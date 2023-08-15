@@ -56,7 +56,7 @@ namespace BXJG.Utils
         where TGetInput : IEntityDto<TPrimaryKey>
         where TDeleteInput : IEntityDto<TPrimaryKey>
     {
-        
+
         public IServiceProvider ServiceProvider { get; set; }
 
         protected CrudBaseAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
@@ -103,8 +103,8 @@ namespace BXJG.Utils
         /// <summary>
         /// 批量处理
         /// </summary>
-        /// <param name="input"></param>
-        /// <param name="func"></param>
+        /// <param name="input">前端传入的参数</param>
+        /// <param name="func">处理其中每一个时回调</param>
         /// <returns></returns>
         protected virtual async Task<BatchOperationOutput<TPrimaryKey>> BatchHandleAsync(BatchOperationInput<TPrimaryKey> input, Func<TEntity, ValueTask> func)
         {
@@ -144,7 +144,7 @@ namespace BXJG.Utils
             return await BatchHandleAsync(input, BatchDeleteItemAsync);
         }
         /// <summary>
-        /// 批量删除过程中，删除每各实体时回调
+        /// 批量删除过程中，删除每个实体时回调
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
