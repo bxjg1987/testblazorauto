@@ -88,32 +88,32 @@ namespace ZLJ.EntityFrameworkCore.EntityFrameworkCore.Seed.BaseInfo
                 
             };
             _items.Add(zhkh);
-            _context.SaveChanges();
-            var gl15803695026 = new CustomerStaffInfoEntity
-            {
-                TenantId = _tenantId,
-                Name = "胡",
-                UserName = "15803695026",
-                //Password = new PasswordHasher<User>(new OptionsWrapper<PasswordHasherOptions>(new PasswordHasherOptions())).HashPassword(adminUser, "123qwe"),
-                IsEmailConfirmed = true,
-                IsPhoneNumberConfirmed = true,
-                EmailAddress = "xxx4@15803695026.com",
-                IsActive = true,
-                NormalizedEmailAddress = "XXX4@15803695026.COM",
-                Surname = "X",
-                NormalizedUserName = "15803695026",
-                Gender = BXJG.Common.Gender.Man,
-                Birthday = System.DateTimeOffset.Parse("1993-3-24"),
-                //No = "KG0004",
-                PhoneNumber = "15803695026",
-                EquipmentPwd = "123qwe",
-                Pinyin = "H"
-                //CurrentAddress = "重庆市渝中区",
-                //Post = Posts.FirstOrDefault(x => x.DisplayName == "售后"),
-            };
-            gl15803695026.CustomerId = zhkh.Id;
-            gl15803695026.Password = new PasswordHasher<User>(new OptionsWrapper<PasswordHasherOptions>(new PasswordHasherOptions())).HashPassword(gl15803695026, "123qwe");
-            zhkh.Staffs = new System.Collections.Generic.List<Customer.CustomerStaffInfoEntity> { gl15803695026 };
+            //_context.SaveChanges();
+            //var gl15803695026 = new CustomerStaffInfoEntity
+            //{
+            //    TenantId = _tenantId,
+            //    Name = "胡",
+            //    UserName = "15803695026",
+            //    //Password = new PasswordHasher<User>(new OptionsWrapper<PasswordHasherOptions>(new PasswordHasherOptions())).HashPassword(adminUser, "123qwe"),
+            //    IsEmailConfirmed = true,
+            //    IsPhoneNumberConfirmed = true,
+            //    EmailAddress = "xxx4@15803695026.com",
+            //    IsActive = true,
+            //    NormalizedEmailAddress = "XXX4@15803695026.COM",
+            //    Surname = "X",
+            //    NormalizedUserName = "15803695026",
+            //    Gender = BXJG.Common.Gender.Man,
+            //    Birthday = System.DateTimeOffset.Parse("1993-3-24"),
+            //    //No = "KG0004",
+            //    PhoneNumber = "15803695026",
+            //    EquipmentPwd = "123qwe",
+            //    Pinyin = "H"
+            //    //CurrentAddress = "重庆市渝中区",
+            //    //Post = Posts.FirstOrDefault(x => x.DisplayName == "售后"),
+            //};
+            //gl15803695026.CustomerId = zhkh.Id;
+            //gl15803695026.Password = new PasswordHasher<User>(new OptionsWrapper<PasswordHasherOptions>(new PasswordHasherOptions())).HashPassword(gl15803695026, "123qwe");
+            //zhkh.Staffs = new System.Collections.Generic.List<Customer.CustomerStaffInfoEntity> { gl15803695026 };
 
             /*
              *  var ent4 = new StaffInfoEntity

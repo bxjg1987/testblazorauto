@@ -23,8 +23,9 @@
 	</ItemGroup>
 	<ItemGroup>
 		<Compile Remove="EntityFrameworkCore\Repositories\EquipmentInfoRepository.cs" />
+		<Compile Remove="EntityFrameworkCore\Seed\BaseInfo\DefaultBXJGBaseInfoBuilder.cs" />
+		<Compile Remove="EntityFrameworkCore\Seed\DefaultDataDictionaryBuilder.cs" />
 		<Compile Remove="EntityFrameworkCore\Seed\Host\HostRoleAndUserCreator.cs" />
-		<Compile Remove="EntityFrameworkCore\Seed\Tenants\TenantRoleAndUserBuilder.cs" />
 		<Compile Remove="EntityFrameworkCore\Seed\WorkOrderBuilder.cs" />
 	</ItemGroup>
 
@@ -50,6 +51,10 @@
 		</PackageReference>
 	</ItemGroup>
 	<ItemGroup>
+	
+		<ProjectReference Include="..\ZLJ.Application.Customer\ZLJ.Application.Customer.csproj" />
+	
+		<ProjectReference Include="..\ZLJ.Application\ZLJ.Application.csproj" />
 	
 		<ProjectReference Include="..\ZLJ.Core\ZLJ.Core.csproj" />
 	</ItemGroup>

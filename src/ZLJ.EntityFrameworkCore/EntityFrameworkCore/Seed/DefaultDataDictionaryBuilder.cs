@@ -18,7 +18,6 @@ namespace ZLJ.EntityFrameworkCore.Seed
 
         public void Create()
         {
-            //未考虑多租户情况
 
             GeneralTreeEntity shebeiquyu = null;
             if (!_context.BXJGGeneralTreeEntities.IgnoreQueryFilters().Any(c => c.TenantId==_tenantId&& c.Code=="00001"))

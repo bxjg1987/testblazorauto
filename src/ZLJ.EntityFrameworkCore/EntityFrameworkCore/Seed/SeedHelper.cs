@@ -12,6 +12,7 @@ using ZLJ.Authorization.Roles;
 using ZLJ.Authorization.Users;
 using BXJG.Utils.GeneralTree;
 using ZLJ.EntityFrameworkCore.EntityFrameworkCore.Seed.BaseInfo;
+using DocumentFormat.OpenXml.InkML;
 
 namespace ZLJ.EntityFrameworkCore.Seed
 {
@@ -33,15 +34,24 @@ namespace ZLJ.EntityFrameworkCore.Seed
 
             // Default tenant seed (in host database).
             new DefaultTenantBuilder(context).Create();
-            //new TenantRoleAndUserBuilder(context, 1).Create();
 
-            //以下内容应该放进DefaultTenantBuilder中
+
             new DefaultOrganizationUnit(context, 1).Create();
-            new DefaultDataDictionaryBuilder(context, 1).Create();
+
+
+            //new DefaultDataDictionaryBuilder(context, 1).Create();
             // new DefaultAdministrativeBuilder(context, 1).Create();
 
             //初始化基础信息模块中的数据
-            new DefaultBXJGBaseInfoBuilder(context, 1).Create();
+            //new DefaultBXJGBaseInfoBuilder(context, 1).Create();
+            new DefaultBXJGBaseInfoDataDictionaryBuilder(context, 1).Create();
+            new DefaultBXJGBaseInfoAdministrativeBuilder(context, 1).Create();
+            new DefaultBXJGBaseInfoAssociatedCompanyBuilder(context, 1).Create();
+            //new DefaultPostBuilder(context, 1).Create();
+
+
+            new TenantRoleAndUserBuilder(context, 1).Create();
+            //new DefaultBXJGBaseInfoStaffInfoBuilder(context, 1).Create();
 
 
             //初始化工单模块中的数据
@@ -51,7 +61,7 @@ namespace ZLJ.EntityFrameworkCore.Seed
             //cms演示数据
             //  new DefaultBXJGCMSBuilder<Tenant, Role, User, ZLJDbContext, GeneralTreeEntity>(context, 1).Create();
 
-          //  new WorkOrderBuilder(context, 1).Create();
+            //  new WorkOrderBuilder(context, 1).Create();
         }
 
         private static void WithDbContext<TDbContext>(IIocResolver iocResolver, Action<TDbContext> contextAction)
