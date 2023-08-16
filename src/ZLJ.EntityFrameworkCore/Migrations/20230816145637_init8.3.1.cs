@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ZLJ.EntityFrameworkCore.Migrations
 {
     /// <inheritdoc />
-    public partial class init82 : Migration
+    public partial class init831 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -200,6 +200,7 @@ namespace ZLJ.EntityFrameworkCore.Migrations
                     EntityTypeName = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
                     EntityTypeAssemblyQualifiedName = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
                     EntityId = table.Column<string>(type: "nvarchar(96)", maxLength: 96, nullable: true),
+                    TargetNotifiers = table.Column<string>(type: "nvarchar(1024)", maxLength: 1024, nullable: true),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
@@ -683,7 +684,8 @@ namespace ZLJ.EntityFrameworkCore.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpRoles", x => x.Id);
-                });
+                },
+                comment: "客户那边用户的角色（也是岗位）");
 
             migrationBuilder.CreateTable(
                 name: "AbpSettings",

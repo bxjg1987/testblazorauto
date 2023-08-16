@@ -12,8 +12,8 @@ using ZLJ.EntityFrameworkCore;
 namespace ZLJ.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(ZLJDbContext))]
-    [Migration("20230809160328_updateabp8.3.1")]
-    partial class updateabp831
+    [Migration("20230816145637_init8.3.1")]
+    partial class init831
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -2007,6 +2007,18 @@ namespace ZLJ.EntityFrameworkCore.Migrations
                     b.ToTable("AbpRoles");
 
                     b.HasDiscriminator().HasValue("PostEntity");
+                });
+
+            modelBuilder.Entity("ZLJ.Customer.CustomerRole", b =>
+                {
+                    b.HasBaseType("ZLJ.Authorization.Roles.Role");
+
+                    b.ToTable("AbpRoles", t =>
+                        {
+                            t.HasComment("客户那边用户的角色（也是岗位）");
+                        });
+
+                    b.HasDiscriminator().HasValue("CustomerRole");
                 });
 
             modelBuilder.Entity("ZLJ.BaseInfo.StaffInfo.StaffInfoEntity", b =>
