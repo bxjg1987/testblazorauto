@@ -15,6 +15,7 @@ using ZLJ.App.Common.Authorization;
 using ZLJ.BaseInfo.StaffInfo;
 using System.Collections.Generic;
 using System.Net.Mail;
+using ZLJ.BaseInfo.Post;
 
 namespace ZLJ.EntityFrameworkCore.Seed.Tenants
 {
@@ -42,7 +43,7 @@ namespace ZLJ.EntityFrameworkCore.Seed.Tenants
             var adminRole = _context.Roles.IgnoreQueryFilters().FirstOrDefault(r => r.TenantId == _tenantId && r.Name == StaticRoleNames.Tenants.Admin);
             if (adminRole == null)
             {
-                adminRole = _context.Roles.Add(new Role(_tenantId, StaticRoleNames.Tenants.Admin, StaticRoleNames.Tenants.Admin) { IsStatic = true }).Entity;
+                adminRole = _context.Roles.Add(new PostEntity(_tenantId, StaticRoleNames.Tenants.Admin, StaticRoleNames.Tenants.Admin) { IsStatic = true }).Entity;
                 _context.SaveChanges();
             }
             //var wxry = _context.Roles.IgnoreQueryFilters().FirstOrDefault(r => r.TenantId == _tenantId && r.Name == "wxry");
@@ -55,7 +56,7 @@ namespace ZLJ.EntityFrameworkCore.Seed.Tenants
             var custAdmin = _context.Roles.IgnoreQueryFilters().FirstOrDefault(r => r.TenantId == _tenantId && r.Name == CustomerRole.CustomerAdminRole);
             if (custAdmin == null)
             {
-                custAdmin = _context.Roles.Add(new Role(_tenantId, CustomerRole.CustomerAdminRole, "客户管理员") { IsStatic = true }).Entity;
+                custAdmin = _context.Roles.Add(new CustomerRole(_tenantId, CustomerRole.CustomerAdminRole, "客户管理员") { IsStatic = true }).Entity;
                 _context.SaveChanges();
             }
 
