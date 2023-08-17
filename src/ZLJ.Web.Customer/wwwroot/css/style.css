@@ -49,4 +49,5 @@ table.th-no-weight tr th {
 /*mudblazorÄ¬ÈÏÑùÊ½¸²¸Ç*/
 .mud-navmenu.mud-navmenu-bordered .mud-nav-link.active:not(.mud-nav-link-disabled) {
     background-color: rgba(255, 255, 255, 0.2);
+    color: white;
 }

@@ -33,24 +33,58 @@
             </MudMenu>
         </MudStack>
     </MudAppBar>
-    <MudDrawer @bind-Open="@_drawerOpen">
-        <MudDrawerHeader Class="mud-theme-primary">
-            <MudStack Row Spacing="2">
+     <MudDrawer @bind-Open="@_drawerOpen" Width="12rem;" Variant="@DrawerVariant.Mini" OpenMiniOnHover="true">
+         <MudDrawerHeader Class="mud-theme-primary" Style="padding:12px 0 0 12px; width:12rem;">
+             @if (_drawerOpen)
+            {
+                <MudStack Row Spacing="2">
+                     <MudIcon Icon="@Icons.Custom.Brands.Discord" Color="Color.Surface" Size="Size.Large" />
+                     <MudText Align="Align.Center" Typo="Typo.h6" Style="line-height:2.2rem;">
+                         @if (_drawerOpen)
+                        {
+                            @:小管印
+                        }
+                    </MudText>
+                </MudStack>
+            }
+            else
+            {
                 <MudIcon Icon="@Icons.Custom.Brands.Discord" Color="Color.Surface" Size="Size.Large" />
-                <MudText Align="Align.Center" Typo="Typo.h6" Style="line-height:2.2rem;">
-                    元凯客服平台
-                </MudText>
-            </MudStack>
+            }
         </MudDrawerHeader>
         @*<MudDrawerContainer>
         士大夫地方
         </MudDrawerContainer>*@
-        <MudNavMenu Margin="Margin.Normal" Color="Color.Surface" Bordered Dense="false">
+        <MudNavMenu Margin="Margin.Normal" Color="Color.Surface" Bordered="true" Dense="false">
+            @* <MudNavLink Href="/admin" Match="NavLinkMatch.All" Icon="@Icons.Material.Outlined.Home">控制台</MudNavLink> *@
             @if (menu != null)
             {
                 foreach (var item in menu.Items)
                 {
-                    <MudNavLink Href="@item.Url" Match="NavLinkMatch.All" Icon="@item.Icon">@item.DisplayName</MudNavLink>
+                    @if (item.Items != default && item.Items.Any())
+                    {
+                        <MudNavGroup Title="@(_drawerOpen?item.DisplayName:string.Empty)" Style="width:12rem;" Icon="@item.Icon" HideExpandIcon="@(!_drawerOpen)">
+
+                            @foreach (var item2 in item.Items)
+                            {
+                                <MudNavLink Href="@item2.Url" Match="NavLinkMatch.All" Icon="@item2.Icon" Style="width:12rem;">
+                                    @if (_drawerOpen)
+                                    {
+                                        @item2.DisplayName
+                                    }
+                                </MudNavLink>
+                            }
+                        </MudNavGroup>
+                    }
+                    else
+                    {
+                        <MudNavLink Href="@item.Url" Match="NavLinkMatch.All" Icon="@item.Icon" Style="width:12rem;">
+                            @if (_drawerOpen)
+                            {
+                                @item.DisplayName
+                            }
+                        </MudNavLink>
+                    }
                 }
             }
         </MudNavMenu>
