@@ -39,12 +39,12 @@ namespace ZLJ.App.Admin.Authorization.Permissions
             #region 基础信息
 
             var permissionBaseInfo = admin.CreateChildPermission(PermissionNames.AdministratorBaseInfo,
-                PermissionNames.AdministratorBaseInfo.GetLocalizableString(),
+                L(PermissionNames.AdministratorBaseInfo),
                 multiTenancySides: MultiTenancySides.Tenant);
 
             #region 公司和部门
             var ou = permissionBaseInfo.CreateChildPermission(PermissionNames.AdministratorBaseInfoOrganizationUnit,
-               PermissionNames.AdministratorBaseInfoOrganizationUnit.GetLocalizableString(),
+               L(PermissionNames.AdministratorBaseInfoOrganizationUnit),
                multiTenancySides: MultiTenancySides.Tenant);
             ou.CreateChildPermission(PermissionNames.AdministratorBaseInfoOrganizationUnitAdd,
                 "新增".UtilsLI(),
@@ -60,7 +60,7 @@ namespace ZLJ.App.Admin.Authorization.Permissions
 
             #region 岗位
             var post = permissionBaseInfo.CreateChildPermission(PermissionNames.AdministratorBaseInfoPost,
-               PermissionNames.AdministratorBaseInfoPost.GetLocalizableString(),
+               L(PermissionNames.AdministratorBaseInfoPost),
                multiTenancySides: MultiTenancySides.Tenant);
             post.CreateChildPermission(PermissionNames.AdministratorBaseInfoPostCreate,
                 "新增".UtilsLI(),
@@ -76,7 +76,7 @@ namespace ZLJ.App.Admin.Authorization.Permissions
             #region 地区
 
             var sbxx = permissionBaseInfo.CreateChildPermission(PermissionNames.BXJGBaseInfoAdministrative,
-                PermissionNames.BXJGBaseInfoAdministrative.GetLocalizableString(),
+                L(PermissionNames.BXJGBaseInfoAdministrative),
                 multiTenancySides: MultiTenancySides.Tenant);
             sbxx.CreateChildPermission(PermissionNames.BXJGBaseInfoAdministrativeCreate,
                 "新增".UtilsLI(),
@@ -93,7 +93,7 @@ namespace ZLJ.App.Admin.Authorization.Permissions
             #region 员工档案
 
             var staffInfo = permissionBaseInfo.CreateChildPermission(PermissionNames.BXJGBaseInfoStaffInfo,
-                PermissionNames.BXJGBaseInfoStaffInfo.GetLocalizableString(),
+                L(PermissionNames.BXJGBaseInfoStaffInfo),
                 multiTenancySides: MultiTenancySides.Tenant);
             staffInfo.CreateChildPermission(PermissionNames.BXJGBaseInfoStaffInfoCreate,
                 "新增".UtilsLI(),
@@ -111,7 +111,7 @@ namespace ZLJ.App.Admin.Authorization.Permissions
 
             var associatedCompany = permissionBaseInfo.CreateChildPermission(
                 PermissionNames.BXJGBaseInfoAssociatedCompany,
-                PermissionNames.BXJGBaseInfoAssociatedCompany.GetLocalizableString(),
+               L( PermissionNames.BXJGBaseInfoAssociatedCompany),
                 multiTenancySides: MultiTenancySides.Tenant);
             associatedCompany.CreateChildPermission(PermissionNames.BXJGBaseInfoAssociatedCompanyCreate,
                 "新增".UtilsLI(),
@@ -166,18 +166,18 @@ namespace ZLJ.App.Admin.Authorization.Permissions
             //#region 系统管理
 
             //var sys = admin.CreateChildPermission(PermissionNames.AdministratorSystem, L("System"));
-            permissionBaseInfo.CreateChildPermission(PermissionNames.AdministratorSystemTenant, L("Tenant"),
-                multiTenancySides: MultiTenancySides.Host);
+            //permissionBaseInfo.CreateChildPermission(PermissionNames.AdministratorSystemTenant, L("Tenant"),
+            //    multiTenancySides: MultiTenancySides.Host);
 
-            var roleM = permissionBaseInfo.CreateChildPermission(PermissionNames.AdministratorSystemRole, L("Role"));
-            roleM.CreateChildPermission(PermissionNames.AdministratorSystemRoleAdd, L("Add"), properties: new Dictionary<string, object> { { "btn", true } });
-            roleM.CreateChildPermission(PermissionNames.AdministratorSystemRoleUpdate, L("Update"), properties: new Dictionary<string, object> { { "btn", true } });
-            roleM.CreateChildPermission(PermissionNames.AdministratorSystemRoleDelete, L("Delete"), properties: new Dictionary<string, object> { { "btn", true } });
+            //var roleM = permissionBaseInfo.CreateChildPermission(PermissionNames.AdministratorSystemRole, L("Role"));
+            //roleM.CreateChildPermission(PermissionNames.AdministratorSystemRoleAdd, L("Add"), properties: new Dictionary<string, object> { { "btn", true } });
+            //roleM.CreateChildPermission(PermissionNames.AdministratorSystemRoleUpdate, L("Update"), properties: new Dictionary<string, object> { { "btn", true } });
+            //roleM.CreateChildPermission(PermissionNames.AdministratorSystemRoleDelete, L("Delete"), properties: new Dictionary<string, object> { { "btn", true } });
 
-            var userM = permissionBaseInfo.CreateChildPermission(PermissionNames.AdministratorSystemUser, L("User"));
-            userM.CreateChildPermission(PermissionNames.AdministratorSystemUserAdd, L("Add"), properties: new Dictionary<string, object> { { "btn", true } });
-            userM.CreateChildPermission(PermissionNames.AdministratorSystemUserUpdate, L("Update"), properties: new Dictionary<string, object> { { "btn", true } });
-            userM.CreateChildPermission(PermissionNames.AdministratorSystemUserDelete, L("Delete"), properties: new Dictionary<string, object> { { "btn", true } });
+            //var userM = permissionBaseInfo.CreateChildPermission(PermissionNames.AdministratorSystemUser, L("User"));
+            //userM.CreateChildPermission(PermissionNames.AdministratorSystemUserAdd, L("Add"), properties: new Dictionary<string, object> { { "btn", true } });
+            //userM.CreateChildPermission(PermissionNames.AdministratorSystemUserUpdate, L("Update"), properties: new Dictionary<string, object> { { "btn", true } });
+            //userM.CreateChildPermission(PermissionNames.AdministratorSystemUserDelete, L("Delete"), properties: new Dictionary<string, object> { { "btn", true } });
 
             permissionBaseInfo.CreateChildPermission(PermissionNames.AdministratorSystemLog, L("Log"));
             permissionBaseInfo.CreateChildPermission(PermissionNames.AdministratorSystemConfig, L("Settings"));
@@ -202,7 +202,7 @@ namespace ZLJ.App.Admin.Authorization.Permissions
 
         private static ILocalizableString L(string name)
         {
-            return new LocalizableString(name, ZLJConsts.LocalizationSourceName);
+            return new LocalizableString(name,AdminConsts.Admin);
         }
     }
 }
