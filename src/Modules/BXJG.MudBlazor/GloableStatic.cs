@@ -18,6 +18,7 @@ namespace BXJG.MudBlazor
         /// </summary>
         public static readonly IReadOnlyDictionary<string, CompareType> FilterOperatorMapToCompareType = new Dictionary<string, CompareType>
         {
+            //注意剔除重复的key
             { FilterOperator.String.Contains, CompareType.Baohan },
             { FilterOperator.String.NotContains, CompareType.BuBaohan },
             { FilterOperator.String.StartsWith, CompareType.StartWith },
@@ -27,31 +28,31 @@ namespace BXJG.MudBlazor
             { FilterOperator.String.Empty, CompareType.Kong },
             { FilterOperator.String.NotEmpty, CompareType.Feikong },
 
-            { FilterOperator.Number.Equal, CompareType.Dengyu },
-            { FilterOperator.Number.NotEqual, CompareType.BuDengyu },
+            //{ FilterOperator.Number.Equal, CompareType.Dengyu },
+            //{ FilterOperator.Number.NotEqual, CompareType.BuDengyu },
             { FilterOperator.Number.LessThanOrEqual, CompareType.XiaoyuDengyu },
             { FilterOperator.Number.LessThan, CompareType.Xiaoyu },
             { FilterOperator.Number.GreaterThan, CompareType.Dayu },
             { FilterOperator.Number.GreaterThanOrEqual, CompareType.DayuDengyu },
-            { FilterOperator.Number.NotEmpty, CompareType.Feikong },
-            { FilterOperator.Number.Empty, CompareType.Kong },
+            //{ FilterOperator.Number.NotEmpty, CompareType.Feikong },
+            //{ FilterOperator.Number.Empty, CompareType.Kong },
 
             { FilterOperator.Enum.IsNot, CompareType.BuDengyu },
             { FilterOperator.Enum.Is, CompareType.Dengyu },
 
-            { FilterOperator.Boolean.Is, CompareType.Dengyu },
+            //{ FilterOperator.Boolean.Is, CompareType.Dengyu },
 
-            { FilterOperator.DateTime.Is, CompareType.Dengyu },
-            { FilterOperator.DateTime.IsNot, CompareType.BuDengyu },
+            //{ FilterOperator.DateTime.Is, CompareType.Dengyu },
+            //{ FilterOperator.DateTime.IsNot, CompareType.BuDengyu },
             { FilterOperator.DateTime.After, CompareType.Dayu },
             { FilterOperator.DateTime.OnOrAfter, CompareType.DayuDengyu },
             { FilterOperator.DateTime.Before, CompareType.Xiaoyu },
             { FilterOperator.DateTime.OnOrBefore, CompareType.XiaoyuDengyu },
-            { FilterOperator.DateTime.NotEmpty, CompareType.Feikong },
-            { FilterOperator.DateTime.Empty, CompareType.Kong },
+            //{ FilterOperator.DateTime.NotEmpty, CompareType.Feikong },
+            //{ FilterOperator.DateTime.Empty, CompareType.Kong },
 
-            { FilterOperator.Guid.Equal, CompareType.Dengyu },
-            { FilterOperator.Guid.NotEqual, CompareType.BuDengyu },
+            //{ FilterOperator.Guid.Equal, CompareType.Dengyu },
+            //{ FilterOperator.Guid.NotEqual, CompareType.BuDengyu },
         };
     }
 }

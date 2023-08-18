@@ -8,6 +8,7 @@ using Abp.Notifications;
 using Abp.Runtime.Session;
 using Abp.UI;
 using BXJG.Common.Dto;
+using BXJG.Utils.Dto;
 using BXJG.Utils.Notification;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -153,7 +154,11 @@ namespace BXJG.Utils
         }
         protected override IQueryable<TEntity> CreateFilteredQuery(TGetAllInput input)
         {
-            return GetAllInclude(base.CreateFilteredQuery(input)).AsNoTrackingWithIdentityResolution().ApplyDynamicCondtion(input);
+            var q = GetAllInclude(base.CreateFilteredQuery(input)).AsNoTrackingWithIdentityResolution();
+            if (input is IHaveFilter p)
+                q = q.ApplyDynamicCondtion(p.Filter);
+            return q;
+
         }
         /// <summary>
         /// 获取列表时回调，你可以重写以Include更多导航属性

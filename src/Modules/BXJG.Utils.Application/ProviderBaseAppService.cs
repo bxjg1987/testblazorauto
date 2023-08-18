@@ -20,6 +20,7 @@ using Castle.MicroKernel.Lifestyle.Scoped;
 using Castle.Windsor.MsDependencyInjection;
 using Abp.Domain.Uow;
 using BXJG.Common.Dto;
+using BXJG.Utils.Dto;
 
 namespace BXJG.Utils
 {
@@ -178,7 +179,10 @@ namespace BXJG.Utils
         /// <param name="input">The input.</param>
         protected virtual IQueryable<TEntity> CreateFilteredQuery(TGetAllInput input)
         {
-           return Repository.GetAll().AsNoTrackingWithIdentityResolution().ApplyDynamicCondtion(input);
+            var q = Repository.GetAll().AsNoTrackingWithIdentityResolution();
+            if (input is IHaveFilter p)
+                q = q.ApplyDynamicCondtion(p.Filter);
+            return q;
         }
 
         protected virtual TEntityDto MapToEntityDto(TEntity entity)

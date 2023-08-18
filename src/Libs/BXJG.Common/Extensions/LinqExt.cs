@@ -89,7 +89,10 @@ namespace System.Linq
 
             if (t == typeof(bool))
             {
-                var value = define.Value.IsNotNullOrWhiteSpaceBXJG(); //Convert.ChangeType(int.Parse(define.Value), t);
+                bool value = true;
+                if (define.Value.IsNullOrWhiteSpaceBXJG() || define.Value == "0" || define.Value.Equals("false", StringComparison.OrdinalIgnoreCase))
+                    value = false;
+
                 switch (define.CompareType)
                 {
                     case CompareType.Dengyu:
