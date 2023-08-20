@@ -6,14 +6,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MudBlazor;
+using ZLJ.Components;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ZLJ.Web.Admin.Shared
+namespace ZLJ.Web.Customer.Views.Shared
 {
     /// <summary>
     /// 后台管理端的blazor组件抽象类
     /// </summary>
-    public class AdminComponentBase : AbpComponentBase
+    public class CustomerComponentBase : AbpComponentBase
     {
         private Lazy<ISnackbar> _snackbar;
         protected IDialogService DialogService { get; private set; }
