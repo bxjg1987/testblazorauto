@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using MudBlazor;
 using ZLJ.Components;
 using Microsoft.Extensions.DependencyInjection;
+using ZLJ.App.Customer;
 
 namespace ZLJ.Web.Customer.Views.Shared
 {
@@ -37,14 +38,14 @@ namespace ZLJ.Web.Customer.Views.Shared
         // 摘要:
         //     Gets localization source. It's valid if Abp.AbpServiceBase.LocalizationSourceName
         //     is set.
-        protected ILocalizationSource LocalizationSourceAdmin
+        protected ILocalizationSource LocalizationSourceCustomer
         {
             get
             {
 
-                if (_localizationSourceAdmin == null || _localizationSourceAdmin.Name != AdminConsts.Admin)
+                if (_localizationSourceAdmin == null || _localizationSourceAdmin.Name != CustConsts.Cust)
                 {
-                    _localizationSourceAdmin = LocalizationManager.GetSource(AdminConsts.Admin);
+                    _localizationSourceAdmin = LocalizationManager.GetSource(CustConsts.Cust);
                 }
 
                 return _localizationSourceAdmin;
