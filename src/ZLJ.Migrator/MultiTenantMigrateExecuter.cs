@@ -56,7 +56,8 @@ namespace ZLJ.Migrator
             }
 
             _log.Write("HOST database migration started...");
-
+            Console.WriteLine("准备插入种子数据，是否同时插入演示数据？y-是；任意键-否");
+            SeedHelper.InserTestData.Value = Console.ReadLine().Trim() == "y";
             try
             {
                 _migrator.CreateOrMigrateForHost(SeedHelper.SeedHostDb);

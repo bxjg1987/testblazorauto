@@ -13,11 +13,16 @@ using ZLJ.Authorization.Users;
 using BXJG.Utils.GeneralTree;
 using ZLJ.EntityFrameworkCore.EntityFrameworkCore.Seed.BaseInfo;
 using DocumentFormat.OpenXml.InkML;
+using System.Threading;
 
 namespace ZLJ.EntityFrameworkCore.Seed
 {
     public static class SeedHelper
     {
+        /// <summary>
+        /// 是否插入演示数据
+        /// </summary>
+        public static AsyncLocal<bool> InserTestData { get; set; } = new AsyncLocal<bool>();
         public static void SeedHostDb(IIocResolver iocResolver)
         {
             WithDbContext<ZLJDbContext>(iocResolver, SeedHostDb);
@@ -52,7 +57,10 @@ namespace ZLJ.EntityFrameworkCore.Seed
 
             new TenantRoleAndUserBuilder(context, 1).Create();
             //new DefaultBXJGBaseInfoStaffInfoBuilder(context, 1).Create();
-
+            if (InserTestData.Value)
+            {
+                //初始化演示数据
+            }
 
             //初始化工单模块中的数据
             //new DefaultWordOrderBuilder<Tenant, Role, User, ZLJDbContext>(context, 1).Create();

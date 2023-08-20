@@ -36,6 +36,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{31830F03-1
 		docs\公司部门岗位角色用户.md = docs\公司部门岗位角色用户.md
 		docs\动态条件.md = docs\动态条件.md
 		docs\扩展dto.md = docs\扩展dto.md
+		docs\本地化.md = docs\本地化.md
 		docs\菜单.md = docs\菜单.md
 	EndProjectSection
 EndProject

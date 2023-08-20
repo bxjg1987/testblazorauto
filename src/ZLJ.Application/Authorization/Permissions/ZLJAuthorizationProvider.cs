@@ -72,24 +72,6 @@ namespace ZLJ.App.Admin.Authorization.Permissions
                 "删除".UtilsLI(),
                 multiTenancySides: MultiTenancySides.Tenant, properties: new Dictionary<string, object> { { "btn", true } });
             #endregion
-
-            #region 地区
-
-            var sbxx = permissionBaseInfo.CreateChildPermission(PermissionNames.BXJGBaseInfoAdministrative,
-                L(PermissionNames.BXJGBaseInfoAdministrative),
-                multiTenancySides: MultiTenancySides.Tenant);
-            sbxx.CreateChildPermission(PermissionNames.BXJGBaseInfoAdministrativeCreate,
-                "新增".UtilsLI(),
-                multiTenancySides: MultiTenancySides.Tenant, properties: new Dictionary<string, object> { { "btn", true } });
-            sbxx.CreateChildPermission(PermissionNames.BXJGBaseInfoAdministrativeUpdate,
-                "修改".UtilsLI(),
-                multiTenancySides: MultiTenancySides.Tenant, properties: new Dictionary<string, object> { { "btn", true } });
-            sbxx.CreateChildPermission(PermissionNames.BXJGBaseInfoAdministrativeDelete,
-                "删除".UtilsLI(),
-                multiTenancySides: MultiTenancySides.Tenant, properties: new Dictionary<string, object> { { "btn", true } });
-
-            #endregion
-
             #region 员工档案
 
             var staffInfo = permissionBaseInfo.CreateChildPermission(PermissionNames.BXJGBaseInfoStaffInfo,
@@ -106,12 +88,11 @@ namespace ZLJ.App.Admin.Authorization.Permissions
                 multiTenancySides: MultiTenancySides.Tenant, properties: new Dictionary<string, object> { { "btn", true } });
 
             #endregion
-
             # region 来往单位
 
             var associatedCompany = permissionBaseInfo.CreateChildPermission(
                 PermissionNames.BXJGBaseInfoAssociatedCompany,
-               L( PermissionNames.BXJGBaseInfoAssociatedCompany),
+               L(PermissionNames.BXJGBaseInfoAssociatedCompany),
                 multiTenancySides: MultiTenancySides.Tenant);
             associatedCompany.CreateChildPermission(PermissionNames.BXJGBaseInfoAssociatedCompanyCreate,
                 "新增".UtilsLI(),
@@ -124,44 +105,23 @@ namespace ZLJ.App.Admin.Authorization.Permissions
                 multiTenancySides: MultiTenancySides.Tenant, properties: new Dictionary<string, object> { { "btn", true } });
 
             #endregion
-
-
-
-            //耗材档案
-            //var consume = permissionBaseInfo.CreateChildPermission(PermissionNames.BXJGWMSConsumeArchives,
-            //    PermissionNames.BXJGWMSConsumeArchives.GetLocalizableString(),
-            //    multiTenancySides: MultiTenancySides.Tenant);
-            //consume.CreateChildPermission(PermissionNames.BXJGWMSConsumeArchivesCreate,
-            //    "新增".UtilsLI(),
-            //    multiTenancySides: MultiTenancySides.Tenant);
-            //consume.CreateChildPermission(PermissionNames.BXJGWMSConsumeArchivesUpdate,
-            //    "修改".UtilsLI(),
-            //    multiTenancySides: MultiTenancySides.Tenant);
-            //consume.CreateChildPermission(PermissionNames.BXJGWMSConsumeArchivesDelete,
-            //    "删除".UtilsLI(),
-            //    multiTenancySides: MultiTenancySides.Tenant);
-            //consume.CreateChildPermission(PermissionNames.BXJGWMSSFittingMachinePatternSetting,
-            //    "整机型号".UtilsLI(),
-            //    multiTenancySides: MultiTenancySides.Tenant);
-            //配件档案
-            //var fitting = permissionBaseInfo.CreateChildPermission(PermissionNames.BXJGWMSFittingArchives,
-            //    PermissionNames.BXJGWMSFittingArchives.GetLocalizableString(),
-            //    multiTenancySides: MultiTenancySides.Tenant);
-            //fitting.CreateChildPermission(PermissionNames.BXJGWMSFittingArchivesCreate,
-            //    "新增".UtilsLI(),
-            //    multiTenancySides: MultiTenancySides.Tenant);
-            //fitting.CreateChildPermission(PermissionNames.BXJGWMSFittingArchivesUpdate,
-            //    "修改".UtilsLI(),
-            //    multiTenancySides: MultiTenancySides.Tenant);
-            //fitting.CreateChildPermission(PermissionNames.BXJGWMSFittingArchivesDelete,
-            //    "删除".UtilsLI(),
-            //    multiTenancySides: MultiTenancySides.Tenant);
-
             permissionBaseInfo.AddGeneralTreePermission();
+            #region 地区
 
-            //--codegenerator.BaseInfo==
+            var sbxx = permissionBaseInfo.CreateChildPermission(PermissionNames.BXJGBaseInfoAdministrative,
+                L(PermissionNames.BXJGBaseInfoAdministrative),
+                multiTenancySides: MultiTenancySides.Tenant);
+            sbxx.CreateChildPermission(PermissionNames.BXJGBaseInfoAdministrativeCreate,
+                "新增".UtilsLI(),
+                multiTenancySides: MultiTenancySides.Tenant, properties: new Dictionary<string, object> { { "btn", true } });
+            sbxx.CreateChildPermission(PermissionNames.BXJGBaseInfoAdministrativeUpdate,
+                "修改".UtilsLI(),
+                multiTenancySides: MultiTenancySides.Tenant, properties: new Dictionary<string, object> { { "btn", true } });
+            sbxx.CreateChildPermission(PermissionNames.BXJGBaseInfoAdministrativeDelete,
+                "删除".UtilsLI(),
+                multiTenancySides: MultiTenancySides.Tenant, properties: new Dictionary<string, object> { { "btn", true } });
 
-            //#endregion
+            #endregion
 
             //#region 系统管理
 
@@ -181,9 +141,7 @@ namespace ZLJ.App.Admin.Authorization.Permissions
 
             permissionBaseInfo.CreateChildPermission(PermissionNames.AdministratorSystemLog, L("Log"));
             permissionBaseInfo.CreateChildPermission(PermissionNames.AdministratorSystemConfig, L("Settings"));
-
             permissionBaseInfo.CreateChildPermission(PermissionNames.HangFireDashboard, L("HangFireDashboard"));
-
             //sys.CreateChildPermission(PermissionNames.AdministratorSystemSetting, L("Settings"));
             #endregion
 

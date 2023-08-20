@@ -30,80 +30,67 @@ namespace ZLJ.Web.Admin
                                                 permissionDependency: new SimplePermissionDependency(PermissionNames.Administrator)));
 
 
-            #region 通知
-            menu.AddItem(new MenuItemDefinition("通知中心",
-                                                "通知中心".GetAdminLocalizableString(),
-                                                icon: Icons.Material.Outlined.NotificationsNone,
-                                                url: "/admin/tongzhi"));
-            #endregion
 
             #region 基础资料
             //基础数据
             var menuBaseInfo = new MenuItemDefinition(PermissionNames.AdministratorBaseInfo,
-                PermissionNames.AdministratorBaseInfo.GetAdminLocalizableString(),
-                icon: Icons.Material.Outlined.AutoAwesome,
-                permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorBaseInfo));
+                                                      PermissionNames.AdministratorBaseInfo.GetAdminLocalizableString(),
+                                                      icon: Icons.Material.Outlined.DisplaySettings,
+                                                      permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorBaseInfo));
             menu.AddItem(menuBaseInfo);
 
-            ////组织机构
-            //menuBaseInfo.AddItem(new MenuItemDefinition(name: PermissionNames.AdministratorBaseInfoOrganizationUnit,
-            //  displayName: PermissionNames.AdministratorBaseInfoOrganizationUnit.GetLocalizableString(),
-            //  icon: "zuzhi",
-            //  url: $"/bxjgbaseinfo/organizationUnit/index.html",
-            //  requiresAuthentication: true,
-            //  permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorBaseInfoOrganizationUnit)));
+            menuBaseInfo.AddItem(new MenuItemDefinition("通知中心",
+                                                        "通知中心".GetAdminLocalizableString(),
+                                                        icon: Icons.Material.Outlined.NotificationsNone,
+                                                        url: "/admin/tongzhi"));
+            //数据字典
+            menuBaseInfo.AddItem(new MenuItemDefinition(BXJGUtilsConsts.GeneralTreeMenuName,
+                                                        BXJGUtilsConsts.GeneralTreeMenuName.UtilsLI(),
+                                                        icon: Icons.Material.Outlined.Dataset,
+                                                        url: "/admin/data-dictionary",
+                                                        permissionDependency: new SimplePermissionDependency(BXJGUtilsConsts.GeneralTreeMenuName)));
+
+            //组织机构
+            menuBaseInfo.AddItem(new MenuItemDefinition(name: PermissionNames.AdministratorBaseInfoOrganizationUnit,
+              displayName: PermissionNames.AdministratorBaseInfoOrganizationUnit.GetAdminLocalizableString(),
+              // @Icons.Material.Outlined.AccountTree
+              icon: Icons.Material.Outlined.ReduceCapacity,
+              url: $"/admin/organizationUnit",
+              requiresAuthentication: true,
+              permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorBaseInfoOrganizationUnit)));
 
             //岗位
             menuBaseInfo.AddItem(new MenuItemDefinition(PermissionNames.AdministratorBaseInfoPost,
-                PermissionNames.AdministratorBaseInfoPost.GetAdminLocalizableString(),
-                icon: "groupbai",
-                url: "/bxjgbaseinfo/post/index.html",
-                permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorBaseInfoPost)));
+                                                        PermissionNames.AdministratorBaseInfoPost.GetAdminLocalizableString(),
+                                                        icon: Icons.Material.Outlined.People,
+                                                        url: "/admin/role",
+                                                        permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorBaseInfoPost)));
 
             //员工档案
             menuBaseInfo.AddItem(new MenuItemDefinition(name: PermissionNames.BXJGBaseInfoStaffInfo,
-                displayName: PermissionNames.BXJGBaseInfoStaffInfo.GetAdminLocalizableString(),
-                icon: Icons.Material.Outlined.Person,
-                url: $"/admin/employee",
-                //requiresAuthentication: true,
-                permissionDependency: new SimplePermissionDependency(PermissionNames.BXJGBaseInfoStaffInfo)));
+                                                        displayName: PermissionNames.BXJGBaseInfoStaffInfo.GetAdminLocalizableString(),
+                                                        icon: Icons.Material.Outlined.Person,
+                                                        url: $"/admin/employee",
+                                                        //requiresAuthentication: true,
+                                                        permissionDependency: new SimplePermissionDependency(PermissionNames.BXJGBaseInfoStaffInfo)));
 
-            ////来往单位
-            //menuBaseInfo.AddItem(new MenuItemDefinition(name: PermissionNames.BXJGBaseInfoAssociatedCompany,
-            //    displayName: PermissionNames.BXJGBaseInfoAssociatedCompany.GetLocalizableString(),
-            //    icon: "group",
-            //    url: $"/bxjgbaseinfo/associatedCompany/index.html",
-            //    requiresAuthentication: true,
-            //    permissionDependency: new SimplePermissionDependency(PermissionNames.BXJGBaseInfoAssociatedCompany)));
+            //来往单位
+            menuBaseInfo.AddItem(new MenuItemDefinition(name: PermissionNames.BXJGBaseInfoAssociatedCompany,
+                displayName: PermissionNames.BXJGBaseInfoAssociatedCompany.GetAdminLocalizableString(),
+                icon: Icons.Material.Filled.SwitchAccount,
+                url: $"/admin/related-company",
+                requiresAuthentication: true,
+                permissionDependency: new SimplePermissionDependency(PermissionNames.BXJGBaseInfoAssociatedCompany)));
 
 
 
-            //设备故障
-            //menuBaseInfo.AddItem(new MenuItemDefinition(name: PermissionNames.BXJGBaseInfoEquipmentFaultDefinition,
-            //    displayName: PermissionNames.BXJGBaseInfoEquipmentFaultDefinition.GetLocalizableString(),
-            //    icon: "zuzhi",
-            //    url: $"/bxjgbaseinfo/equipmentFaultDefinition/index.html",
-            //    requiresAuthentication: true,
-            //    permissionDependency: new SimplePermissionDependency(PermissionNames
-            //        .BXJGBaseInfoEquipmentFaultDefinition)));
-
-            //var sjzd = menuBaseInfo.AddGeneralTreeNavigation();
-            //sjzd.Icon = "shuju";
-            //sjzd.Url = "/bxjgbaseinfo/generalTree/index.html";
-
-            menuBaseInfo.AddItem(new MenuItemDefinition(BXJGUtilsConsts.GeneralTreeMenuName,
-                                                BXJGUtilsConsts.GeneralTreeMenuName.GetAdminLocalizableString(),
-                                                icon: Icons.Material.Outlined.Dataset,
-                                                url: "/admin/data-dictionary",
-                                                permissionDependency: new SimplePermissionDependency(BXJGUtilsConsts.GeneralTreeMenuName)));
-
-            ////行政区域
-            //menuBaseInfo.AddItem(new MenuItemDefinition(name: PermissionNames.BXJGBaseInfoAdministrative,
-            //    displayName: PermissionNames.BXJGBaseInfoAdministrative.GetLocalizableString(),
-            //    icon: "qizi",
-            //    url: $"/bxjgbaseinfo/Administrative/index.html",
-            //    requiresAuthentication: true,
-            //    permissionDependency: new SimplePermissionDependency(PermissionNames.BXJGBaseInfoAdministrative)));
+            //行政区域
+            menuBaseInfo.AddItem(new MenuItemDefinition(name: PermissionNames.BXJGBaseInfoAdministrative,
+                displayName: PermissionNames.BXJGBaseInfoAdministrative.GetAdminLocalizableString(),
+                icon: Icons.Material.Outlined.Map,
+                url: $"/admin/Administrative",
+                requiresAuthentication: true,
+                permissionDependency: new SimplePermissionDependency(PermissionNames.BXJGBaseInfoAdministrative)));
 
             //直接使用用户
             ////员工档案
@@ -142,15 +129,16 @@ namespace ZLJ.Web.Admin
             //    permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorSystemUser)));
 
             menuBaseInfo.AddItem(new MenuItemDefinition("SystemLog",
-                "Log".GetAdminLocalizableString(),
-                icon: Icons.Material.Outlined.History,
-                url: "/admin/auditing",
-                permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorSystemLog)));
+                                                        "Log".GetAdminLocalizableString(),
+                                                        icon: Icons.Material.Outlined.History,
+                                                        url: "/admin/auditing",
+                                                        permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorSystemLog)));
+
             menuBaseInfo.AddItem(new MenuItemDefinition("SystemConfig",
-                "Settings".GetAdminLocalizableString(),
-               icon: Icons.Material.Outlined.Settings,
-                url: "/admin/settings",
-                permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorSystemConfig)));
+                                                        "Settings".GetAdminLocalizableString(),
+                                                        icon: Icons.Material.Outlined.Settings,
+                                                        url: "/admin/settings",
+                                                        permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorSystemConfig)));
 
             #endregion
         }

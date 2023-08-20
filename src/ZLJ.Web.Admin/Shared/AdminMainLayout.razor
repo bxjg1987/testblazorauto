@@ -43,6 +43,7 @@
              </MudMenu>
          </MudStack>
      </MudAppBar>
+
      <MudDrawer @bind-Open="@_drawerOpen" Width="12rem;" Variant="@DrawerVariant.Mini" OpenMiniOnHover="true">
          <MudDrawerHeader Class="mud-theme-primary" Style="padding:12px 0 0 12px; width:12rem;">
              @if (_drawerOpen)
@@ -99,6 +100,7 @@
             }
         </MudNavMenu>
     </MudDrawer>
+
     <MudMainContent Style="height:100%;">
         <ErrorBoundary>
             <ChildContent>
@@ -117,7 +119,6 @@
     </MudMainContent>
 </MudLayout>
 @code {
-
     MudTheme MyCustomTheme = new MudTheme()
         {
             Palette = new Palette()
@@ -149,6 +150,7 @@
         _drawerOpen = !_drawerOpen;
     }
     UserMenu menu;
+    //路径
     private List<BreadcrumbItem> _items = new List<BreadcrumbItem>();
     ////顶部的注入不晓得为啥不行，但非布局页又可以
     //IAbpSession abpSession => AbpSession.Value;
