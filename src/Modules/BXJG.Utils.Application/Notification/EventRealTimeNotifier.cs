@@ -2,6 +2,7 @@
 using Abp.Events.Bus;
 using Abp.Net.Mail;
 using Abp.Notifications;
+using BXJG.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,9 +34,13 @@ namespace BXJG.Utils.Notification
 
         public IEventBus EventBus { get; set; } = NullEventBus.Instance;
 
+        public Zhongjie Zhongjie { get; set; }
+
         public async Task SendNotificationsAsync(UserNotification[] userNotifications)
         {
-            await this.EventBus.TriggerAsync<NotificationEventData>(new NotificationEventData { EventSource = this, EventTime = DateTime.Now, UserNotifications = userNotifications });
+            var d = new NotificationEventData { EventSource = this, EventTime = DateTime.Now, UserNotifications = userNotifications };
+            await Zhongjie.Chufa(d);
+            await this.EventBus.TriggerAsync<NotificationEventData>(d);
         }
     }
 }
