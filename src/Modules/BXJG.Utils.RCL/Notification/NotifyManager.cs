@@ -3,6 +3,7 @@ using Abp.Authorization.Roles;
 using Abp.Authorization.Users;
 using Abp.Notifications;
 using BXJG.Common.Dto;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,8 +58,12 @@ namespace BXJG.Utils.Notification
         /// <summary>
         /// 通知应用服务
         /// </summary>
-        [Inject]
         public TAppService AppService { get; set; }
+        protected override void OnInitialized2()
+        {
+            base.OnInitialized2();
+            AppService = base.ScopedServices.GetRequiredService<TAppService>();
+        }
         protected override async Task OnInitialized2Async()
         {
             await LoadDefinesAsync();

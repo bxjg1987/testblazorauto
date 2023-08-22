@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Abp.Authorization.Roles;
 using Abp.Authorization.Users;
 using Abp.Collections.Extensions;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BXJG.Utils.Notification
 {
@@ -23,15 +24,20 @@ namespace BXJG.Utils.Notification
         where TRole : AbpRole<TUser>, new()
         where TUserManager : AbpUserManager<TRole, TUser>
     {
-        [Inject]
-        public INotificationDefinitionManager NotificationDefinitionManager { get; set; }
+        public INotificationDefinitionManager NotificationDefinitionManager { get;  set; }
 
-        [Inject]
-        public INotificationSubscriptionManager NotificationSubscriptionManager { get; set; }
+        public INotificationSubscriptionManager NotificationSubscriptionManager { get;  set; }
 
         protected UserIdentifier idf;
         protected IReadOnlyList<NotificationDefinition> notificationDefinitions = new List<NotificationDefinition>();
         protected HashSet<string> seleted = new HashSet<string>();
+
+        protected override void OnInitialized2()
+        {
+            base.OnInitialized2();
+            NotificationDefinitionManager= base.ScopedServices.GetRequiredService<INotificationDefinitionManager>();
+            NotificationSubscriptionManager = base.ScopedServices.GetRequiredService<INotificationSubscriptionManager>();
+        }
 
         protected override async Task OnInitialized2Async()
         {
