@@ -160,7 +160,10 @@
     protected override void OnInitialized()
     {
         currUserId = abpSession.UserId;
-        tzsj = this.eventBus.AsyncRegister<BXJG.Utils.Notification.NotificationEventData>(EventNotify);
+        tzsj?.Dispose();
+        tzsj = zhongjie.Zhuce<BXJG.Utils.Notification.NotificationEventData>(EventNotify);
+        dianhubianhua?.Dispose();
+        dianhubianhua = zhongjie.Zhuce(async () => await InvokeAsync(StateHasChanged), "TrackingCircuitChanged");
         blazorNavManager.LocationChanged += HandleLocationChanged;
     }
     IDisposable dianhubianhua;
@@ -168,8 +171,7 @@
     //https://learn.microsoft.com/zh-cn/aspnet/core/blazor/components/lifecycle?view=aspnetcore-7.0#stateful-reconnection-after-prerendering
     protected override async Task OnInitializedAsync()
     {
-        dianhubianhua?.Dispose();
-        dianhubianhua = zhongjie.Zhuce(async () => await InvokeAsync(StateHasChanged), "TrackingCircuitChanged");
+       
 
         //f5刷新时，此时可能出现工作单元释放，最终导致事务不生效，所以init中必须手动开启事务
         using var scope = uowManager.Begin(new UnitOfWorkOptions { IsTransactional = false });
@@ -184,7 +186,7 @@
             menu = await abpNavManager.GetMenuAsync("adminBlazor", new Abp.UserIdentifier(abpSession.TenantId, abpSession.UserId.Value));
     }
     long? currUserId;
-    private async Task EventNotify(BXJG.Utils.Notification.NotificationEventData d)
+    private async ValueTask EventNotify(BXJG.Utils.Notification.NotificationEventData d)
     {
         foreach (var item in d.UserNotifications)
         {

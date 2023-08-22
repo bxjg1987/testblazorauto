@@ -17,6 +17,7 @@ using Abp.UI;
 using BXJG.Common;
 using BXJG.Common.Dto;
 using Castle.Core.Logging;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
@@ -55,15 +56,11 @@ namespace BXJG.Utils
         where TRole : AbpRole<TUser>, new()
         where TUserManager : AbpUserManager<TRole, TUser>
     {
-        //Lazy<IAbpSession> abpSession;
-        [Inject]
-        protected IAbpSession AbpSession { get; set; }
-        [Inject]
-        public IHostEnvironment HostEnvironment { get; set; }
-
-
-        [Inject]
-        public IEventBus EventBus { get; set; }
+       
+        protected IAbpSession AbpSession { get; private set; }
+        public IWebHostEnvironment WebHostEnvironment { get; private set; }
+        public IEventBus EventBus { get; private set; }
+        public Zhongjie Zhongjie { get; private set; }
 
 
         //几乎始终会被使用到的对象，就不要延迟加载了
@@ -76,6 +73,7 @@ namespace BXJG.Utils
         {
             cts?.Cancel();
             cts?.Dispose();
+          
             base.Dispose(disposing);
         }
 
@@ -84,8 +82,7 @@ namespace BXJG.Utils
 
         //Lazy<TRoleManager> roleManager;
         //protected TRoleManager RoleManager => roleManager.Value;
-        [Inject]
-        public Zhongjie Zhongjie { get; set; }
+       
         Lazy<TUserManager> userManager;
         protected TUserManager UserManager => userManager.Value;
 
@@ -167,8 +164,13 @@ namespace BXJG.Utils
         //不要用异步方法做服务注入
         protected override void OnInitialized()
         {
-            TenantId = AbpSession.TenantId; UserId = AbpSession.UserId;
-            //abpSession = ScopedServices.GetRequiredService<Lazy<IAbpSession>>();
+            AbpSession = ScopedServices.GetRequiredService<IAbpSession>();
+
+            TenantId = AbpSession.TenantId;
+            UserId = AbpSession.UserId;
+            EventBus = ScopedServices.GetRequiredService<IEventBus>();
+            WebHostEnvironment = ScopedServices.GetRequiredService<IWebHostEnvironment>();
+            Zhongjie = ScopedServices.GetRequiredService<Zhongjie>();
             //tenantManager = ScopedServices.GetRequiredService<Lazy<TTenantManager>>();
             //roleManager = ScopedServices.GetRequiredService<Lazy<TRoleManager>>();
             userManager = ScopedServices.GetRequiredService<Lazy<TUserManager>>();
@@ -347,7 +349,7 @@ namespace BXJG.Utils
             }
             catch (Exception ex)
             {
-                if (HostEnvironment.IsDevelopment())
+                if (WebHostEnvironment.IsDevelopment())
                     throw;
 
                 Logger.Error(ex.ToString(), ex);
@@ -415,7 +417,7 @@ namespace BXJG.Utils
             }
             catch (Exception ex)
             {
-                if (HostEnvironment.IsDevelopment())
+                if (WebHostEnvironment.IsDevelopment())
                     throw;
 
                 Logger.Error(ex.ToString(), ex);
@@ -480,7 +482,7 @@ namespace BXJG.Utils
             }
             catch (Exception ex)
             {
-                if (HostEnvironment.IsDevelopment())
+                if (WebHostEnvironment.IsDevelopment())
                     throw;
 
                 Logger.Error(ex.ToString(), ex);
@@ -537,7 +539,7 @@ namespace BXJG.Utils
             }
             catch (Exception ex)
             {
-                if (HostEnvironment.IsDevelopment())
+                if (WebHostEnvironment.IsDevelopment())
                     throw;
 
                 Logger.Error(ex.ToString(), ex);
@@ -546,9 +548,10 @@ namespace BXJG.Utils
             return default;
         }
 
-        protected IDisposable ResumeSession() {
+        protected IDisposable ResumeSession()
+        {
             //if(AbpSession.TenantId.HasValue )
-          return  AbpSession.Use(TenantId,UserId);
+            return AbpSession.Use(TenantId, UserId);
         }
     }
 
