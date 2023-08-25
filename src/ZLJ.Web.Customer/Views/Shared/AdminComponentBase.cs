@@ -16,7 +16,7 @@ namespace ZLJ.Web.Customer.Views.Shared
     /// <summary>
     /// 后台管理端的blazor组件抽象类
     /// </summary>
-    public class CustomerComponentBase : AbpComponentBase
+    public class CustomerComponentBase : ZLJComponentBase
     {
         private Lazy<ISnackbar> _snackbar;
         protected IDialogService DialogService { get; private set; }

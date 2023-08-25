@@ -24,9 +24,9 @@ namespace ZLJ.Components
     /// <summary>
     /// 当前项目的blazor组件抽象类
     /// </summary>
-    public class AbpComponentBase : BXJG.Utils.AbpBaseComponent
+    public class ZLJComponentBase : BXJG.Utils.AbpBaseComponent
     {
-        public AbpComponentBase()
+        public ZLJComponentBase()
         {
             //当前库作为公共rcl库 和 公共ui逻辑 应使用core的本地化和commonApp的本地化，前者是核心公共的，后者是应用层的
             //abp默认只允许设置一种，多出来的得自己做，可以考虑增加一个复合型的本地化管理器

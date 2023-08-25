@@ -13,7 +13,7 @@ namespace ZLJ.Web.Admin.Shared
     /// <summary>
     /// 后台管理端的blazor组件抽象类
     /// </summary>
-    public class AdminComponentBase : AbpComponentBase
+    public class AdminComponentBase : ZLJComponentBase
     {
         private Lazy<ISnackbar> _snackbar;
         protected IDialogService DialogService { get; private set; }

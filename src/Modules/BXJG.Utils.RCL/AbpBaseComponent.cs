@@ -352,7 +352,7 @@ namespace BXJG.Utils
 
                 var ct1 = cancellationToken == default ? CancellationTokenSource.Token : cancellationToken;
                 //   Logger.Debug("bbbb");
-                using (var ct = cancellationTokenProvider.Use(ct1))
+                using (var ct = CancellationTokenProvider.Use(ct1))
                 {
                     //     Logger.Debug("ccc");
                     await action();
@@ -419,7 +419,7 @@ namespace BXJG.Utils
                   * 
                   */
                 var ct1 = cancellationToken == default ? CancellationTokenSource.Token : cancellationToken;
-                using (var ct = cancellationTokenProvider.Use(ct1))
+                using (var ct = CancellationTokenProvider.Use(ct1))
                 {
 
                     return await action();
