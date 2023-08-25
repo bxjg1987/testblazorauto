@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BXJG.Utils
 {
-    [DependsOn(typeof(BXJGUtilsApplicationModule))]
+    [DependsOn(typeof(BXJG.Utils.BXJGUtilsWebModule))]
     public class BXJGUtilsRCLModule: AbpModule
     {
         public override void Initialize()

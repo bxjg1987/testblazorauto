@@ -17,12 +17,9 @@ namespace BXJG.Utils.Notification
     /// 通知管理组件抽象类
     /// </summary>
     /// <typeparam name="TUser"></typeparam>
-    /// <typeparam name="TUserManager"></typeparam>
-    /// <typeparam name="TRole"></typeparam>
-    public class NotifyManager<TUser, TUserManager, TRole, TAppService> : AbpComponentBase<TUser, TUserManager, TRole>
+    /// <typeparam name="TAppService"></typeparam>
+    public class NotifyManager<TUser, TAppService> : AbpBaseComponent
         where TUser : AbpUser<TUser>
-        where TRole : AbpRole<TUser>, new()
-        where TUserManager : AbpUserManager<TRole, TUser>
         where TAppService : PersonNotificationAppService<TUser>
     {
         /// <summary>

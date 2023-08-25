@@ -51,29 +51,64 @@ namespace BXJG.Utils
      * 总的来说，通常是不需要的，应用用例基本都是对应到应用服务的
      */
 
-    public class AbpComponentBase<TUser, TUserManager, TRole> : OwningComponentBase
-        where TUser : AbpUser<TUser>
-        where TRole : AbpRole<TUser>, new()
-        where TUserManager : AbpUserManager<TRole, TUser>
+    public class AbpBaseComponent/*<TUser, TUserManager, TRole>*/ : OwningComponentBase
+    //where TUser : AbpUser<TUser>
+    //where TRole : AbpRole<TUser>, new()
+    //where TUserManager : AbpUserManager<TRole, TUser>
     {
-       
-        protected IAbpSession AbpSession { get; private set; }
-        public IWebHostEnvironment WebHostEnvironment { get; private set; }
-        public IEventBus EventBus { get; private set; }
-        public Zhongjie Zhongjie { get; private set; }
+        private IAbpSession abpSession;
+        /// <summary>
+        /// 获取当前session
+        /// </summary>
+        protected IAbpSession AbpSession => abpSession ??= ScopedServices.GetRequiredService<IAbpSession>();
+
+        private IWebHostEnvironment webHostEnvironment;
+        /// <summary>
+        /// 获取当前环境
+        /// </summary>
+        protected IWebHostEnvironment WebHostEnvironment => webHostEnvironment ??= ScopedServices.GetRequiredService<IWebHostEnvironment>();
+
+        private IEventBus eventBus;
+        /// <summary>
+        /// 获取abp事件总线
+        /// </summary>
+        protected IEventBus EventBus => eventBus ??= ScopedServices.GetRequiredService<IEventBus>();
+
+        private Zhongjie zhongjie;
+        /// <summary>
+        /// 获取变形精怪中介
+        /// </summary>
+        protected Zhongjie Zhongjie => zhongjie ??= ScopedServices.GetRequiredService<Zhongjie>();
 
 
-        //几乎始终会被使用到的对象，就不要延迟加载了
-        protected IUnitOfWorkDefaultOptions unitOfWorkDefaultOptions;
-        protected ICancellationTokenProvider cancellationTokenProvider;
-        protected IAbpAspNetCoreConfiguration aspnetCoreConfiguration;
-        protected readonly CancellationTokenSource cts = new CancellationTokenSource();
+        private IUnitOfWorkDefaultOptions unitOfWorkDefaultOptions;
+        /// <summary>
+        /// 获取abp工作单元配置对象
+        /// </summary>
+        protected IUnitOfWorkDefaultOptions UnitOfWorkDefaultOptions => unitOfWorkDefaultOptions ??= ScopedServices.GetRequiredService<IUnitOfWorkDefaultOptions>();
+
+        private ICancellationTokenProvider cancellationTokenProvider;
+        /// <summary>
+        /// 获取abp取消令牌提供者
+        /// </summary>
+        public ICancellationTokenProvider CancellationTokenProvider => cancellationTokenProvider ??= ScopedServices.GetRequiredService<ICancellationTokenProvider>();
+
+        private IAbpAspNetCoreConfiguration aspnetCoreConfiguration;
+        /// <summary>
+        /// 获取abp aspnetcore配置对象
+        /// </summary>
+        public IAbpAspNetCoreConfiguration AspNetCoreConfiguration => aspnetCoreConfiguration ??= ScopedServices.GetRequiredService<IAbpAspNetCoreConfiguration>();
+
+        /// <summary>
+        /// 获取当前组件只读的全局取消令牌源
+        /// </summary>
+        protected readonly CancellationTokenSource CancellationTokenSource = new CancellationTokenSource();
 
         protected override void Dispose(bool disposing)
         {
-            cts?.Cancel();
-            cts?.Dispose();
-          
+            CancellationTokenSource?.Cancel();
+            CancellationTokenSource?.Dispose();
+
             base.Dispose(disposing);
         }
 
@@ -82,18 +117,26 @@ namespace BXJG.Utils
 
         //Lazy<TRoleManager> roleManager;
         //protected TRoleManager RoleManager => roleManager.Value;
-       
-        Lazy<TUserManager> userManager;
-        protected TUserManager UserManager => userManager.Value;
 
-        Lazy<IUnitOfWorkManager> unitOfWorkManager;
-        protected IUnitOfWorkManager UnitOfWorkManager => unitOfWorkManager.Value;
+        //Lazy<TUserManager> userManager;
+        //protected TUserManager UserManager => userManager.Value;
+
+        private IUnitOfWorkManager unitOfWorkManager;
+        /// <summary>
+        /// 获取abp工作单元管理器
+        /// </summary>
+        protected IUnitOfWorkManager UnitOfWorkManager => unitOfWorkManager ??= ScopedServices.GetRequiredService<IUnitOfWorkManager>();
 
         //这个是跟线程相关的，在blazor中不能用
         //protected IActiveUnitOfWork CurrentUnitOfWork => UnitOfWorkManager.Current;
 
-        Lazy<ILocalizationManager> localizationManager;
-        protected ILocalizationManager LocalizationManager => localizationManager.Value;
+        ILocalizationManager localizationManager;
+        /// <summary>
+        /// 获取abp本地化管理器
+        /// </summary>
+        protected ILocalizationManager LocalizationManager => localizationManager ??= ScopedServices.GetRequiredService<ILocalizationManager>();
+
+
         ILocalizationSource _localizationSource;
 
         protected string LocalizationSourceName { get; set; }
@@ -115,36 +158,36 @@ namespace BXJG.Utils
             }
         }
 
-        Lazy<ISettingManager> settingManager;
-        protected ISettingManager SettingManager => settingManager.Value;
+        private ISettingManager settingManager;
+        protected ISettingManager SettingManager => settingManager ??= ScopedServices.GetRequiredService<ISettingManager>();
 
-        Lazy<ILoggerFactory> loggerFactory;
+        //   ILoggerFactory loggerFactory;
 
-        ILogger _logger;
+        private ILogger _logger;
         protected ILogger Logger
         {
             get
             {
                 if (_logger == default)
-                    _logger = loggerFactory.Value.Create(this.GetType());
+                    _logger = ScopedServices.GetRequiredService<ILoggerFactory>().Create(this.GetType());
                 return _logger;
             }
         }
 
-        Lazy<IObjectMapper> objectMapper;
-        protected IObjectMapper ObjectMapper => objectMapper.Value;
+        private IObjectMapper objectMapper;
+        protected IObjectMapper ObjectMapper => objectMapper ??= ScopedServices.GetRequiredService<IObjectMapper>();
 
-        Lazy<IPermissionManager> permissionManager;
-        public IPermissionManager PermissionManager => permissionManager.Value;
+        private IPermissionManager permissionManager;
+        protected IPermissionManager PermissionManager => permissionManager ??= ScopedServices.GetRequiredService<IPermissionManager>();
 
-        Lazy<IPermissionChecker> permissionChecker;
-        public IPermissionChecker PermissionChecker => permissionChecker.Value;
+        private IPermissionChecker permissionChecker;
+        protected IPermissionChecker PermissionChecker => permissionChecker ??= ScopedServices.GetRequiredService<IPermissionChecker>();
 
-        Lazy<IFeatureManager> featureManager;
-        public IFeatureManager FeatureManager => featureManager.Value;
+        private IFeatureManager featureManager;
+        protected IFeatureManager FeatureManager => featureManager ??= ScopedServices.GetRequiredService<IFeatureManager>();
 
-        Lazy<IFeatureChecker> featureChecker;
-        public IFeatureChecker FeatureChecker => featureChecker.Value;
+        private IFeatureChecker featureChecker;
+        protected IFeatureChecker FeatureChecker => featureChecker ??= ScopedServices.GetRequiredService<IFeatureChecker>();
 
         //生命周期方法没有原生的aop支持，参考：https://github.com/dotnet/aspnetcore/issues/20986
 
@@ -164,28 +207,28 @@ namespace BXJG.Utils
         //不要用异步方法做服务注入
         protected override void OnInitialized()
         {
-            AbpSession = ScopedServices.GetRequiredService<IAbpSession>();
+            //AbpSession = ScopedServices.GetRequiredService<IAbpSession>();
 
             TenantId = AbpSession.TenantId;
             UserId = AbpSession.UserId;
-            EventBus = ScopedServices.GetRequiredService<IEventBus>();
-            WebHostEnvironment = ScopedServices.GetRequiredService<IWebHostEnvironment>();
-            Zhongjie = ScopedServices.GetRequiredService<Zhongjie>();
-            //tenantManager = ScopedServices.GetRequiredService<Lazy<TTenantManager>>();
-            //roleManager = ScopedServices.GetRequiredService<Lazy<TRoleManager>>();
-            userManager = ScopedServices.GetRequiredService<Lazy<TUserManager>>();
-            unitOfWorkManager = ScopedServices.GetRequiredService<Lazy<IUnitOfWorkManager>>();
-            localizationManager = ScopedServices.GetRequiredService<Lazy<ILocalizationManager>>();
-            settingManager = ScopedServices.GetRequiredService<Lazy<ISettingManager>>();
-            objectMapper = ScopedServices.GetRequiredService<Lazy<IObjectMapper>>();
-            loggerFactory = ScopedServices.GetRequiredService<Lazy<ILoggerFactory>>();
-            permissionChecker = ScopedServices.GetRequiredService<Lazy<IPermissionChecker>>();
-            permissionManager = ScopedServices.GetRequiredService<Lazy<IPermissionManager>>();
-            featureChecker = ScopedServices.GetRequiredService<Lazy<IFeatureChecker>>();
-            featureManager = ScopedServices.GetRequiredService<Lazy<IFeatureManager>>();
-            unitOfWorkDefaultOptions = ScopedServices.GetRequiredService<IUnitOfWorkDefaultOptions>();
-            aspnetCoreConfiguration = ScopedServices.GetRequiredService<IAbpAspNetCoreConfiguration>();
-            cancellationTokenProvider = ScopedServices.GetRequiredService<ICancellationTokenProvider>();
+            //EventBus = ScopedServices.GetRequiredService<IEventBus>();
+            //WebHostEnvironment = ScopedServices.GetRequiredService<IWebHostEnvironment>();
+            //Zhongjie = ScopedServices.GetRequiredService<Zhongjie>();
+            ////tenantManager = ScopedServices.GetRequiredService<Lazy<TTenantManager>>();
+            ////roleManager = ScopedServices.GetRequiredService<Lazy<TRoleManager>>();
+            ////userManager = ScopedServices.GetRequiredService<Lazy<TUserManager>>();
+            //unitOfWorkManager = ScopedServices.GetRequiredService<Lazy<IUnitOfWorkManager>>();
+            //localizationManager = ScopedServices.GetRequiredService<Lazy<ILocalizationManager>>();
+            //settingManager = ScopedServices.GetRequiredService<Lazy<ISettingManager>>();
+            //objectMapper = ScopedServices.GetRequiredService<Lazy<IObjectMapper>>();
+            //loggerFactory = ScopedServices.GetRequiredService<Lazy<ILoggerFactory>>();
+            //permissionChecker = ScopedServices.GetRequiredService<Lazy<IPermissionChecker>>();
+            //permissionManager = ScopedServices.GetRequiredService<Lazy<IPermissionManager>>();
+            //featureChecker = ScopedServices.GetRequiredService<Lazy<IFeatureChecker>>();
+            //featureManager = ScopedServices.GetRequiredService<Lazy<IFeatureManager>>();
+            //unitOfWorkDefaultOptions = ScopedServices.GetRequiredService<IUnitOfWorkDefaultOptions>();
+            //aspnetCoreConfiguration = ScopedServices.GetRequiredService<IAbpAspNetCoreConfiguration>();
+            //cancellationTokenProvider = ScopedServices.GetRequiredService<ICancellationTokenProvider>();
 
             SafeExecute(OnInitialized2);
         }
@@ -307,7 +350,7 @@ namespace BXJG.Utils
                  * 
                  */
 
-                var ct1 = cancellationToken == default ? cts.Token : cancellationToken;
+                var ct1 = cancellationToken == default ? CancellationTokenSource.Token : cancellationToken;
                 //   Logger.Debug("bbbb");
                 using (var ct = cancellationTokenProvider.Use(ct1))
                 {
@@ -375,7 +418,7 @@ namespace BXJG.Utils
                   * 可以的，不过这不应该在抽象中来决定
                   * 
                   */
-                var ct1 = cancellationToken == default ? cts.Token : cancellationToken;
+                var ct1 = cancellationToken == default ? CancellationTokenSource.Token : cancellationToken;
                 using (var ct = cancellationTokenProvider.Use(ct1))
                 {
 

@@ -13,7 +13,7 @@ namespace ZLJ.App.Common
                                                        TGetInput,
                                                        TMoveInput,
                                                        TEntity,
-                                                       TManager> : GeneralTreeAppServiceBase<TDto,
+                                                       TManager> : GeneralTreeBaseAppService<TDto,
                                                                                              TCreateInput,
                                                                                              TEditDto,
                                                                                              TDeleteInput,

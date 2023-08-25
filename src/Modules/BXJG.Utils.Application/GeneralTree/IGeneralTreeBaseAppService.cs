@@ -44,12 +44,8 @@ namespace BXJG.Utils.GeneralTree
     /// <typeparam name="TDeleteInput">删除时的输入模型</typeparam>
     /// <typeparam name="TGetAllInput">管理页面获取所有树形数据时的输入模型</typeparam>
     /// <typeparam name="TGetInput">获取单个信息的输入模型</typeparam>
-    /// <typeparam name="TGetTreeForSelectInput">获取树形下拉框数据时的输入模型</typeparam>
-    /// <typeparam name="TGetTreeForSelectOutput">获取树形下拉框数据时的输出模型</typeparam>
-    /// <typeparam name="TGetNodesForSelectInput">获取扁平下拉框数据时的输入模型</typeparam>
-    /// <typeparam name="TGetNodesForSelectOutput">获取扁平下拉框数据时的输出模型</typeparam>
     /// <typeparam name="TMoveInput">移动节点时的输入模型</typeparam>
-    public interface IGeneralTreeAppServiceBase<TDto,
+    public interface IGeneralTreeBaseAppService<TDto,
                                                 TCreateInput,
                                                 TEditDto,
                                                 TDeleteInput,

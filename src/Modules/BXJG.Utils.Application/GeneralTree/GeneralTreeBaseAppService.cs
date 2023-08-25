@@ -355,7 +355,7 @@ namespace BXJG.Utils.GeneralTree
     /// <typeparam name="TMoveInput"></typeparam>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TManager"></typeparam>
-    public class GeneralTreeAppServiceBase<TDto,
+    public class GeneralTreeBaseAppService<TDto,
                                            TCreateInput,
                                            TEditDto,
                                            TDeleteInput,
@@ -363,7 +363,7 @@ namespace BXJG.Utils.GeneralTree
                                            TGetInput,
                                            TMoveInput,
                                            TEntity,
-                                           TManager> : ApplicationService, IGeneralTreeAppServiceBase<TDto,
+                                           TManager> : ApplicationService, IGeneralTreeBaseAppService<TDto,
                                                                                                       TCreateInput,
                                                                                                       TEditDto,
                                                                                                       TDeleteInput,
@@ -401,7 +401,7 @@ namespace BXJG.Utils.GeneralTree
         public virtual string getPermissionName { get; set; }
 
         [Obsolete("子类继承时应使用无参的构造函数，当前构造函数是未简化子类实现以前的代码，已过时。")]
-        public GeneralTreeAppServiceBase(IRepository<TEntity, long> ownRepository,
+        public GeneralTreeBaseAppService(IRepository<TEntity, long> ownRepository,
                                          TManager manager,
                                          string createPermissionName = null,
                                          string updatePermissionName = null,
@@ -421,7 +421,7 @@ namespace BXJG.Utils.GeneralTree
             this.getPermissionName = getPermissionName;
         }
 
-        public GeneralTreeAppServiceBase()
+        public GeneralTreeBaseAppService()
         {
             AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
         }
@@ -869,7 +869,7 @@ namespace BXJG.Utils.GeneralTree
                                            TCreateInput,
                                            TEditDto,
                                            TGetAllInput,
-                                           TEntity> : GeneralTreeAppServiceBase<TDto,
+                                           TEntity> : GeneralTreeBaseAppService<TDto,
                                                                                TCreateInput,
                                                                                TEditDto,
                                                                                BatchOperationInputLong,

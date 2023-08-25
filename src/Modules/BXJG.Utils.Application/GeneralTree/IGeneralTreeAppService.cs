@@ -23,7 +23,7 @@ namespace BXJG.Utils.GeneralTree
     /// <summary>
     /// 数据字典应用服务接口
     /// </summary>
-    public interface IGeneralTreeAppService : IGeneralTreeAppServiceBase<GeneralTreeDto,
+    public interface IGeneralTreeAppService : IGeneralTreeBaseAppService<GeneralTreeDto,
                                                                          GeneralTreeEditDto,
                                                                          GeneralTreeEditDto,
                                                                          BatchOperationInputLong,

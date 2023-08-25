@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace BXJG.MudBlazor
 {
-    [DependsOn(typeof(BXJGUtilsApplicationModule))]
+    [DependsOn(typeof(BXJGUtilsRCLModule))]
     public class BXJGMudBlazorModule : AbpModule
     {
         public override void Initialize()

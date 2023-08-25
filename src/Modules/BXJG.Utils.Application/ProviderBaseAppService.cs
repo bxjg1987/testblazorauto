@@ -60,7 +60,7 @@ namespace BXJG.Utils
     /// <typeparam name="TGetAllInput">查询时输入参数的类型</typeparam>
     /// <typeparam name="TEntityDto">可选数据的dto</typeparam>
     [UnitOfWork(false)]
-    public abstract class ProviderBaseAppService<TEntity, TKey, TGetAllInput, TEntityDto> : ApplicationService
+    public abstract class ProviderBaseAppService<TEntity, TKey, TGetAllInput, TEntityDto> : ApplicationService, IProviderBaseAppService<TKey, TGetAllInput, TEntityDto>
         where TEntity : class, IEntity<TKey>
     {
         protected virtual string GetAllPermissionName { get; set; }
@@ -106,6 +106,7 @@ namespace BXJG.Utils
                 entities.Select(MapToEntityDto).ToList()
             );
         }
+       
         protected virtual async Task CheckPermission(string permissionName)
         {
             if (!string.IsNullOrEmpty(permissionName))
@@ -114,6 +115,10 @@ namespace BXJG.Utils
                 // PermissionChecker.Authorize(permissionName);
             }
         }
+        /// <summary>
+        /// 判断查询下拉或弹窗或关联的单个信息的详情的 权限，获取列表和单个都会调用
+        /// </summary>
+        /// <returns></returns>
         protected virtual Task CheckGetAllPermission()
         {
             return CheckPermission(GetAllPermissionName);
@@ -146,10 +151,11 @@ namespace BXJG.Utils
         }
 
         /// <summary>
-        /// Should apply paging if needed.
+        /// 获取列表时分页处理
         /// </summary>
-        /// <param name="query">The query.</param>
-        /// <param name="input">The input.</param>
+        /// <param name="query"></param>
+        /// <param name="input"></param>
+        /// <returns></returns>
         protected virtual IQueryable<TEntity> ApplyPaging(IQueryable<TEntity> query, TGetAllInput input)
         {
             //Try to use paging if available
@@ -171,23 +177,44 @@ namespace BXJG.Utils
         }
 
         /// <summary>
-        /// This method should create <see cref="IQueryable{TEntity}"/> based on given input.
-        /// It should filter query if needed, but should not do sorting or paging.
-        /// Sorting should be done in <see cref="ApplySorting"/> and paging should be done in <see cref="ApplyPaging"/>
-        /// methods.
+        /// 获取列表时调用，通常重写它来自定义条件过滤
         /// </summary>
-        /// <param name="input">The input.</param>
+        /// <param name="input"></param>
+        /// <returns></returns>
         protected virtual IQueryable<TEntity> CreateFilteredQuery(TGetAllInput input)
         {
-            var q = Repository.GetAll().AsNoTrackingWithIdentityResolution();
+            var q = BuildQuery();
             if (input is IHaveFilter p)
                 q = q.ApplyDynamicCondtion(p.Filter);
             return q;
         }
 
+        /// <summary>
+        /// 获取单个或列表时都会调用，通常重写它来自定义映射，默认使用AutoMapper
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         protected virtual TEntityDto MapToEntityDto(TEntity entity)
         {
             return ObjectMapper.Map<TEntityDto>(entity);
+        }
+
+        /// <summary>
+        /// 获取单个或列表时都会调用的方法，以获取查询对象
+        /// 通常重写它来应用Include
+        /// </summary>
+        /// <returns></returns>
+        protected virtual IQueryable<TEntity> BuildQuery()
+        {
+            return Repository.GetAll().AsNoTrackingWithIdentityResolution();
+        }
+
+        public virtual async Task<TEntityDto> Get(EntityDto<TKey> input)
+        {
+            await CheckGetAllPermission();
+            var query = BuildQuery().Where(c => c.Id.Equals(input.Id));
+            var enitity = await AsyncQueryableExecuter.FirstOrDefaultAsync(query);
+            return MapToEntityDto(enitity);
         }
     }
 }

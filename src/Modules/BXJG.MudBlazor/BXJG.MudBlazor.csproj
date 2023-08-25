@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-	  <Version>1.0.4</Version>
+	  <Version>1.0.7</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -31,7 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BXJG.Utils.Application\BXJG.Utils.Application.csproj" />
+    <ProjectReference Include="..\BXJG.Utils.RCL\BXJG.Utils.RCL.csproj" />
   </ItemGroup>
 
 </Project>

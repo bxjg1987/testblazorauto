@@ -33,7 +33,7 @@ namespace BXJG.Utils.GeneralTree
     /// <summary>
     /// 数据字典应用服务类
     /// </summary>
-    public class GeneralTreeAppService : GeneralTreeAppServiceBase<GeneralTreeDto,
+    public class GeneralTreeAppService : GeneralTreeBaseAppService<GeneralTreeDto,
                                                                    GeneralTreeEditDto,
                                                                    GeneralTreeEditDto,
                                                                    BatchOperationInputLong,

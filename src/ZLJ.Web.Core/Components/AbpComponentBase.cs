@@ -24,7 +24,7 @@ namespace ZLJ.Components
     /// <summary>
     /// 当前项目的blazor组件抽象类
     /// </summary>
-    public class AbpComponentBase : BXJG.Utils.AbpComponentBase<User, UserManager, Role>
+    public class AbpComponentBase : BXJG.Utils.AbpBaseComponent
     {
         public AbpComponentBase()
         {

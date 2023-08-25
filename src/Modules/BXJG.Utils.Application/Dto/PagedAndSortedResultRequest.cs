@@ -17,7 +17,7 @@ namespace BXJG.Utils.Dto
     /// <typeparam name="TFilter">条件模型</typeparam>
     public class PagedAndSortedResultRequest<TFilter> : PagedAndSortedResultRequestDto, IHaveFilter
     {
-        public new virtual TFilter Filter { get; set; }
+        public virtual TFilter Filter { get; set; }
 
         object IHaveFilter.Filter => this.Filter;
         //public virtual int SkipCount { get; set; }

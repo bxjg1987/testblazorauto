@@ -19,10 +19,7 @@ namespace BXJG.Utils.Notification
     /// <typeparam name="TUser"></typeparam>
     /// <typeparam name="TUserManager"></typeparam>
     /// <typeparam name="TRole"></typeparam>
-    public class NotifySubscript<TUser, TUserManager, TRole> : AbpComponentBase<TUser, TUserManager, TRole>
-        where TUser : AbpUser<TUser>
-        where TRole : AbpRole<TUser>, new()
-        where TUserManager : AbpUserManager<TRole, TUser>
+    public class NotifySubscript : AbpBaseComponent
     {
         public INotificationDefinitionManager NotificationDefinitionManager { get;  set; }
 
