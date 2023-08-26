@@ -30,8 +30,4 @@
     <PackageReference Include="MudBlazor" Version="6.9.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\BXJG.Utils.RCL\BXJG.Utils.RCL.csproj" />
-  </ItemGroup>
-
 </Project>

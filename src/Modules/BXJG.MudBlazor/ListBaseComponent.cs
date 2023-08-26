@@ -26,6 +26,7 @@ namespace BXJG.MudBlazor
     /// <typeparam name="TUpdateInput"></typeparam>
     /// <typeparam name="TGetInput"></typeparam>
     /// <typeparam name="TDeleteInput"></typeparam>
+    /// <typeparam name="TFormComponent"></typeparam>
     /// <typeparam name="TAppService"></typeparam>
     public class ListBaseComponent<TEntityDto,
                                    TPrimaryKey,
@@ -40,7 +41,7 @@ namespace BXJG.MudBlazor
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TGetAllInput : new()
         where TGetInput : IEntityDto<TPrimaryKey>
-        where TFormComponent: ComponentBase
+        where TFormComponent : ComponentBase
         where TDeleteInput : IEntityDto<TPrimaryKey>
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, TDeleteInput>
     {
@@ -181,7 +182,7 @@ namespace BXJG.MudBlazor
         /// <summary>
         /// 新增或修改弹窗的配置对象
         /// </summary>
-        protected DialogOptions DialogOptions = new DialogOptions { CloseOnEscapeKey=true };
+        protected DialogOptions DialogOptions = new DialogOptions { CloseOnEscapeKey = true };
         private void OpenDialog()
         {
             DialogService.Show<TFormComponent>($"Simple Dialog", DialogOptions);
@@ -198,6 +199,7 @@ namespace BXJG.MudBlazor
     /// <typeparam name="TCreateInput"></typeparam>
     /// <typeparam name="TUpdateInput"></typeparam>
     /// <typeparam name="TGetInput"></typeparam>
+    /// <typeparam name="TFormComponent"></typeparam>
     /// <typeparam name="TAppService"></typeparam>
     public class CrudBaseComponent<TEntityDto,
                                    TPrimaryKey,
@@ -205,6 +207,7 @@ namespace BXJG.MudBlazor
                                    TCreateInput,
                                    TUpdateInput,
                                    TGetInput,
+                                   TFormComponent,
                                    TAppService> : ListBaseComponent<TEntityDto,
                                                                     TPrimaryKey,
                                                                     TGetAllInput,
@@ -212,10 +215,12 @@ namespace BXJG.MudBlazor
                                                                     TUpdateInput,
                                                                     TGetInput,
                                                                     EntityDto<TPrimaryKey>,
+                                                                    TFormComponent,
                                                                     TAppService>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TGetInput : IEntityDto<TPrimaryKey>
+        where TFormComponent : ComponentBase
         where TGetAllInput : new()
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput>
     {
@@ -228,22 +233,26 @@ namespace BXJG.MudBlazor
     /// <typeparam name="TGetAllInput"></typeparam>
     /// <typeparam name="TCreateInput"></typeparam>
     /// <typeparam name="TUpdateInput"></typeparam>
+    /// <typeparam name="TFormComponent"></typeparam>
     /// <typeparam name="TAppService"></typeparam>
     public class CrudBaseComponent<TEntityDto,
                                    TPrimaryKey,
                                    TGetAllInput,
                                    TCreateInput,
                                    TUpdateInput,
+                                   TFormComponent,
                                    TAppService> : CrudBaseComponent<TEntityDto,
                                                                     TPrimaryKey,
                                                                     TGetAllInput,
                                                                     TCreateInput,
                                                                     TUpdateInput,
                                                                     EntityDto<TPrimaryKey>,
+                                                                    TFormComponent,
                                                                     TAppService>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TGetAllInput : new()
+        where TFormComponent : ComponentBase
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
     {
     }
@@ -254,19 +263,23 @@ namespace BXJG.MudBlazor
     /// <typeparam name="TPrimaryKey"></typeparam>
     /// <typeparam name="TGetAllInput"></typeparam>
     /// <typeparam name="TCreateInput"></typeparam>
+    /// <typeparam name="TFormComponent"></typeparam>
     /// <typeparam name="TAppService"></typeparam>
     public class CrudBaseComponent<TEntityDto,
                                    TPrimaryKey,
                                    TGetAllInput,
                                    TCreateInput,
+                                   TFormComponent,
                                    TAppService> : CrudBaseComponent<TEntityDto,
                                                                     TPrimaryKey,
                                                                     TGetAllInput,
                                                                     TCreateInput,
                                                                     TCreateInput,
+                                                                    TFormComponent,
                                                                     TAppService>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TCreateInput : IEntityDto<TPrimaryKey>
+        where TFormComponent : ComponentBase
         where TGetAllInput : new()
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput>
     {
@@ -277,17 +290,21 @@ namespace BXJG.MudBlazor
     /// <typeparam name="TEntityDto"></typeparam>
     /// <typeparam name="TPrimaryKey"></typeparam>
     /// <typeparam name="TGetAllInput"></typeparam>
+    /// <typeparam name="TFormComponent"></typeparam>
     /// <typeparam name="TAppService"></typeparam>
     public class CrudBaseComponent<TEntityDto,
                                    TPrimaryKey,
                                    TGetAllInput,
+                                   TFormComponent,
                                    TAppService> : CrudBaseComponent<TEntityDto,
                                                                     TPrimaryKey,
                                                                     TGetAllInput,
                                                                     TEntityDto,
+                                                                    TFormComponent,
                                                                     TAppService>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TGetAllInput : new()
+        where TFormComponent : ComponentBase
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput>
     {
     }
@@ -296,14 +313,18 @@ namespace BXJG.MudBlazor
     /// </summary>
     /// <typeparam name="TEntityDto"></typeparam>
     /// <typeparam name="TPrimaryKey"></typeparam>
+    /// <typeparam name="TFormComponent"></typeparam>
     /// <typeparam name="TAppService"></typeparam>
     public class CrudBaseComponent<TEntityDto,
                                    TPrimaryKey,
+                                   TFormComponent,
                                    TAppService> : CrudBaseComponent<TEntityDto,
                                                                     TPrimaryKey,
                                                                     PagedAndSortedResultRequestDto,
+                                                                    TFormComponent,
                                                                     TAppService>
         where TEntityDto : IEntityDto<TPrimaryKey>
+        where TFormComponent : ComponentBase
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey>
     {
     }
@@ -311,12 +332,16 @@ namespace BXJG.MudBlazor
     /// 抽象的crud组件，用于简化crud组件的开发
     /// </summary>
     /// <typeparam name="TEntityDto"></typeparam>
+    /// <typeparam name="TFormComponent"></typeparam>
     /// <typeparam name="TAppService"></typeparam>
     public class CrudBaseComponent<TEntityDto,
+                                   TFormComponent,
                                    TAppService> : CrudBaseComponent<TEntityDto,
                                                                     int,
+                                                                    TFormComponent,
                                                                     TAppService>
         where TEntityDto : IEntityDto<int>
+        where TFormComponent : ComponentBase
         where TAppService : ICrudBaseAppService<TEntityDto>
     {
     }
