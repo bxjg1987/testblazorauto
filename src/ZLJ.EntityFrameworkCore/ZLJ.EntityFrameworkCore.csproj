@@ -33,6 +33,7 @@
 		<!--虽然ef引用utils引用common，但有时候需要单独更新common或utils，所以这里还是要单独引用，不过core层引进引用了-->
 		<!--<PackageReference Include="BXJG.Utils" Version="*" />
 		<PackageReference Include="BXJG.Common" Version="*" />-->
+		<PackageReference Include="BXJG.Common.EFCore" Version="*" />
 		<PackageReference Include="BXJG.Utils.EFCore" Version="*" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(SolutionName)' == 'ZLJWithModules'">
