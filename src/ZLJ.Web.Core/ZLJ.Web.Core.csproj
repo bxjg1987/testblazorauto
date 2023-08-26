@@ -49,6 +49,7 @@
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(SolutionName)' != 'ZLJWithModules'">
+		<PackageReference Include="BXJG.Common.RCL" Version="*" />
 		<PackageReference Include="BXJG.Utils.RCL" Version="*" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(SolutionName)' == 'ZLJWithModules'">

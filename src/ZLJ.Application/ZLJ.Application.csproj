@@ -89,14 +89,10 @@
     <EmbeddedResource Include="Localization\SourceFiles\Admin-en.xml" />
     <EmbeddedResource Include="Localization\SourceFiles\Admin-zh-Hans.xml" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ZLJ.Application.Common\ZLJ.Application.Common.csproj" />
-  </ItemGroup>
 
-
-  <!--<ItemGroup Condition="'$(SolutionName)' != 'ZLJWithModules'">
-    <PackageReference Include="BXJG.WorkOrder.Application" Version="*" />
-  </ItemGroup>-->
+	<ItemGroup >
+		<ProjectReference Include="..\ZLJ.Application.Common\ZLJ.Application.Common.csproj" />
+	</ItemGroup>
 
   <ItemGroup>
     <Folder Include="EventHandlers\" />
