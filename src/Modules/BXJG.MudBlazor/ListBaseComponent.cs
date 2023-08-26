@@ -54,24 +54,36 @@ namespace BXJG.MudBlazor
         /// <summary>
         /// 获取主服务
         /// </summary>
-        protected TAppService AppService => appService ??= ScopedServices.GetRequiredService<TAppService>();
+        protected virtual TAppService AppService => appService ??= ScopedServices.GetRequiredService<TAppService>();
 
         private ISnackbar snackbar;
 
-        protected ISnackbar Snackbar => snackbar ??= ScopedServices.GetRequiredService<ISnackbar>();
+        protected virtual ISnackbar Snackbar => snackbar ??= ScopedServices.GetRequiredService<ISnackbar>();
 
         private IDialogService dialogService;
-        protected IDialogService DialogService => dialogService ??= ScopedServices.GetRequiredService<IDialogService>();
+        protected virtual IDialogService DialogService => dialogService ??= ScopedServices.GetRequiredService<IDialogService>();
         /// <summary>
         /// 此功能的名称
         /// </summary>
-        protected virtual string FuncName => "xxx";
+        protected virtual string FuncName => $"请重写{nameof(FuncName)}属性";
+
+        /// <summary>
+        /// 是否显示删除按钮，默认勾选了某个行且 没有正在加载数据时为true
+        /// </summary>
+        protected virtual bool ShouldEnableDelete => !isLoading && !isDeleting && selectedItems != default && selectedItems.Any();
+        /// <summary>
+        /// 是否显示修改按钮，默认勾选了某个行且 没有正在加载数据时为true 
+        /// </summary>
+        protected virtual bool ShouldEnableEdit => !isLoading && !isDeleting && selectedItems != default && selectedItems.Any();
+        /// <summary>
+        /// 是否应该显示新增按钮，默认 没有正在加载数据时 为true
+        /// </summary>
+        protected virtual bool ShouldEnableCreate => !isLoading && !isDeleting;
         #endregion
 
         #region 生命周期
         protected override async Task OnInitialized2Async()
         {
-            await base.OnInitialized2Async();
             await InitPermission();
         }
         #endregion
@@ -82,29 +94,53 @@ namespace BXJG.MudBlazor
         //不要靠应用层定义的权限，因为前后端分离时，应用接口就不应该提供权限名
 
         /// <summary>
-        /// 是否可以新增
+        /// 是否有新增权限
         /// </summary>
-        protected bool canCreate = true;
-        protected bool canUpdate = true;
-        protected bool canDelete = true;
+        protected bool createIsGranted = true;
+        /// <summary>
+        /// 是否有修改权限
+        /// </summary>
+        protected bool updateIsGranted = true;
+        /// <summary>
+        /// 是否有删除权限
+        /// </summary>
+        protected bool deleteIsGranted = true;
 
-        protected virtual string CreatePermissionName => "";
-        protected virtual string UpdatePermissionName => "";
-        protected virtual string DeletePermissionName => "";
+        //我们只需要状态，不需要存储，以免浪费性能
+        ///// <summary>
+        ///// 新增权限名称
+        ///// </summary>
+        //protected virtual string CreatePermissionName => "";
+        ///// <summary>
+        ///// 修改权限名称
+        ///// </summary>
+        //protected virtual string UpdatePermissionName => "";
+        ///// <summary>
+        ///// 删除权限名称
+        ///// </summary>
+        //protected virtual string DeletePermissionName => "";
 
-        protected virtual async Task InitPermission()
+        /// <summary>
+        /// 初始化权限状态
+        /// </summary>
+        /// <param name="createPermissionName"></param>
+        /// <param name="updatePermissionName"></param>
+        /// <param name="deletePermissionName"></param>
+        /// <returns></returns>
+        protected virtual async Task InitPermission(string createPermissionName = default, string updatePermissionName = default, string deletePermissionName = default)
         {
-            if (CreatePermissionName.IsNotNullOrWhiteSpaceBXJG())
-                canCreate = await base.PermissionChecker.IsGrantedAsync(CreatePermissionName);
-            if (UpdatePermissionName.IsNotNullOrWhiteSpaceBXJG())
-                canUpdate = await base.PermissionChecker.IsGrantedAsync(UpdatePermissionName);
-            if (DeletePermissionName.IsNotNullOrWhiteSpaceBXJG())
-                canDelete = await base.PermissionChecker.IsGrantedAsync(DeletePermissionName);
+            if (createPermissionName.IsNotNullOrWhiteSpaceBXJG())
+                createIsGranted = await base.PermissionChecker.IsGrantedAsync(createPermissionName);
+            if (updatePermissionName.IsNotNullOrWhiteSpaceBXJG())
+                updateIsGranted = await base.PermissionChecker.IsGrantedAsync(updatePermissionName);
+            if (deletePermissionName.IsNotNullOrWhiteSpaceBXJG())
+                deleteIsGranted = await base.PermissionChecker.IsGrantedAsync(deletePermissionName);
         }
 
         #endregion
 
         #region 列表
+        protected MudDataGrid<TEntityDto> dataGrid;
         /// <summary>
         /// 当前页码
         /// </summary>
@@ -114,58 +150,68 @@ namespace BXJG.MudBlazor
         /// </summary>
         protected int pageCount = 1;
         /// <summary>
+        /// 是否正在加载数据
+        /// </summary>
+        protected virtual bool isLoading => dataGrid != default && dataGrid.Loading;// false;
+        /// <summary>
         /// 表格数据加载
         /// </summary>
         /// <param name="state"></param>
         /// <returns></returns>
         protected virtual async Task<GridData<TEntityDto>> LoadDataAsync(GridState<TEntityDto> state)
         {
-            var cd = new TGetAllInput();
-            if (cd is IDynamicCondition cdd)
-                cdd.Conditions = state.FilterDefinitions.MapToDynamicCondition().ToList();
-
-            if (cd is IPagedAndSortedResultRequest cd2)
+            return await SafeExecuteAsync(async () =>
             {
-                cd2.MaxResultCount = state.PageSize;
-                cd2.SkipCount = state.Page == 0 ? 0 : ((state.Page - 1) * state.PageSize);
-            }
+                var cd = new TGetAllInput();
+                if (cd is IDynamicCondition cdd)
+                {
+                    cdd.Conditions = state.FilterDefinitions.MapToDynamicCondition().ToList();
+                }
+                if (cd is IPagedAndSortedResultRequest cd2)
+                {
+                    cd2.MaxResultCount = state.PageSize;
+                    cd2.SkipCount = state.Page == 0 ? 0 : ((state.Page - 1) * state.PageSize);
+                }
+                if (cd is ISortedResultRequest cd3)
+                {
+                    cd3.Sorting = state.SortDefinitions.ToLinqDynamicCore();
+                }
+                if (cd is IHaveKeywords cd4)
+                {
+                    cd4.Keywords = keywords;
+                }
+                var dtos = await AppService.GetAllAsync(cd);
+                pageCount = (int)Math.Ceiling(dtos.TotalCount / (state.PageSize * 1d));
+                if (pageCount == 0)
+                    pageCount = 1;
 
-            if (cd is ISortedResultRequest cd3)
-            {
-                cd3.Sorting = state.SortDefinitions.ToLinqDynamicCore();
-            }
+                //不加这个，进入最后一页会无限刷新，mudblazor的bug估计
+                if (pageIndex < pageCount)
+                    base.StateHasChanged();//不加这个，首次的页数显示不对
 
-            var dtos = await AppService.GetAllAsync(cd);
-            pageCount = (int)Math.Ceiling(dtos.TotalCount / (state.PageSize * 1d));
-            if (pageCount == 0)
-                pageCount = 1;
-
-            //不加这个，进入最后一页会无限刷新，mudblazor的bug估计
-            if (pageIndex < pageCount)
-                base.StateHasChanged();//不加这个，首次的页数显示不对
-
-            return new GridData<TEntityDto>
-            {
-                TotalItems = dtos.TotalCount,
-                Items = dtos.Items
-            };
+                return new GridData<TEntityDto>
+                {
+                    TotalItems = dtos.TotalCount,
+                    Items = dtos.Items
+                };
+            });
         }
 
         /// <summary>
         /// 已选中的项
         /// </summary>
-        protected HashSet<TEntityDto> selectedItems = new HashSet<TEntityDto>();
-        /// <summary>
-        /// 批量选择变化时回调
-        /// </summary>
-        /// <param name="items"></param>
-        /// <returns></returns>
-        protected virtual Task SelectedItemsChanged(HashSet<TEntityDto> items)
-        {
-            selectedItems = items;
-            return Task.CompletedTask;
-            //_events.Insert(0, $"Event = SelectedItemsChanged, Data = {System.Text.Json.JsonSerializer.Serialize(items)}");
-        }
+        protected virtual HashSet<TEntityDto> selectedItems => dataGrid?.SelectedItems;// new HashSet<TEntityDto>();
+        ///// <summary>
+        ///// 批量选择变化时回调
+        ///// </summary>
+        ///// <param name="items"></param>
+        ///// <returns></returns>
+        //protected virtual Task SelectedItemsChanged(HashSet<TEntityDto> items)
+        //{
+        //    selectedItems = items;
+        //    return Task.CompletedTask;
+        //    //_events.Insert(0, $"Event = SelectedItemsChanged, Data = {System.Text.Json.JsonSerializer.Serialize(items)}");
+        //}
         //未选中项时，直接禁用按钮
         ///// <summary>
         ///// 批量操作时，检查是否有选中项
@@ -175,7 +221,15 @@ namespace BXJG.MudBlazor
         //{
         //}
 
-
+        protected string keywords = "";
+        protected virtual async Task KeywordsChanged(string keywords)
+        {
+            await base.SafeExecuteAsync(async () =>
+            {
+                this.keywords = keywords;
+                await dataGrid.ReloadServerData();
+            });
+        }
         #endregion
 
         #region 表单
@@ -187,19 +241,101 @@ namespace BXJG.MudBlazor
         /// <summary>
         /// 新增或修改弹窗的配置对象
         /// </summary>
-        protected DialogOptions DialogOptions = new DialogOptions { CloseOnEscapeKey = true };
+        protected virtual DialogOptions DialogOptions => new DialogOptions { CloseOnEscapeKey = true };
         /// <summary>
         /// 点击新增按钮
         /// </summary>
         /// <returns></returns>
-        protected virtual async Task ClickAdd()
+        protected virtual async Task Add()
         {
-            var dr = await DialogService.Show<TFormComponent>("新增" + FuncName, DialogOptions).Result;
+            await base.SafeExecuteAsync(async () =>
+            {
+                var dr = await DialogService.Show<TFormComponent>("新增" + FuncName, DialogOptions).Result;
+                if (dr.Canceled)
+                    return;
+                //this.pageIndex = 1;
+                await dataGrid.ReloadServerData();
+            });
+        }
+        /// <summary>
+        /// 点击新增按钮
+        /// </summary>
+        /// <returns></returns>
+        protected virtual async Task Edit()
+        {
+            await base.SafeExecuteAsync(async () =>
+            {
+                var dr = await DialogService.Show<TFormComponent>("新增" + FuncName, DialogOptions).Result;
+                if (dr.Canceled)
+                    return;
+                await dataGrid.ReloadServerData();
+            });
+        }
+        #endregion
 
-            if (dr.Cancelled)
-                return;
+        #region 删除
+        /// <summary>
+        /// 是否正在执行删除操作
+        /// </summary>
+        protected bool isDeleting = false;
+        /// <summary>
+        /// 批量删除
+        /// </summary>
+        /// <returns></returns>
+        protected virtual async Task<BatchOperationOutput<TPrimaryKey>> Delete()
+        {
+            isDeleting = true;
+            var r = await SafeExecuteAsync(async () =>
+            {
+                var temp = await AppService.BatchDeleteAsync(new BatchOperationInput<TPrimaryKey> { Ids = selectedItems?.Select(x => x.Id).ToArray() }).ContinueWith(async t =>
+                {
+                    if (t.IsCompletedSuccessfully)
+                        _ = InvokeAsync(dataGrid.ReloadServerData);
 
-            await this.LoadDataAsync(new GridState<TEntityDto> { FilterDefinitions });
+                    return t.Result;
+                });
+                return await temp;
+            });
+            isDeleting = false;
+            return r;
+        }
+        /// <summary>
+        /// 删除单个项
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        protected virtual async Task Delete(TDeleteInput input)
+        {
+            await SafeExecuteAsync(async () =>
+            {
+                var curr = selectedItems.Single(c => c.Id!.Equals(input.Id));
+                var item = curr as IHaveIsDeleting;
+                if (item != default)
+                    item.IsDeleting = true;
+                try
+                {
+                    await AppService.DeleteAsync(input);
+                }
+                finally
+                {
+                    if (item != default)
+                        item.IsDeleting = false;
+                }
+                //若上面异常，下面不会执行
+                await dataGrid.ReloadServerData();
+            });
+        }
+        #endregion
+
+        #region 杂项
+        public override ValueTask ShowErrorAsync(string msg)
+        {
+            Snackbar.Add(msg, Severity.Error);
+            return ValueTask.CompletedTask;
+        }
+        public override void ShowError(string msg)
+        {
+            Snackbar.Add(msg, Severity.Error);
         }
         #endregion
     }
