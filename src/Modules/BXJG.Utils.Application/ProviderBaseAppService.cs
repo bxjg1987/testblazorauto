@@ -106,7 +106,7 @@ namespace BXJG.Utils
                 entities.Select(MapToEntityDto).ToList()
             );
         }
-       
+
         protected virtual async Task CheckPermission(string permissionName)
         {
             if (!string.IsNullOrEmpty(permissionName))

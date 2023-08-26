@@ -12,7 +12,7 @@ using ZLJ.App.Common.Administrative;
 namespace ZLJ.App.Common.AdministrativeCommon
 {
     [AbpAuthorize]
-    public class BaseInfoAdministrativeProviderAppService : UnAuthGeneralTreeAppServiceBase<GeneralTreeGetForSelectInput
+    public class BaseInfoAdministrativeProviderAppService : GeneralTreeProviderBaseAppService<GeneralTreeGetForSelectInput
         , AdministrativeTreeNodeDto,
         GeneralTreeGetForSelectInput,
         AdministrativeComboboxItemDto,

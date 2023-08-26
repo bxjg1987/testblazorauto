@@ -21,7 +21,7 @@ namespace ZLJ.App.Common
                                                            TGetTreeForSelectOutput,
                                                            TGetNodesForSelectInput,
                                                            TGetNodesForSelectOutput,
-                                                           TEntity> : UnAuthGeneralTreeAppServiceBase<TGetTreeForSelectInput,
+                                                           TEntity> : GeneralTreeProviderBaseAppService<TGetTreeForSelectInput,
                                                                                                       TGetTreeForSelectOutput,
                                                                                                       TGetNodesForSelectInput,
                                                                                                       TGetNodesForSelectOutput,

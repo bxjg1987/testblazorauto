@@ -45,14 +45,14 @@ namespace BXJG.Utils.GeneralTree
     /// <typeparam name="TGetNodesForSelectOutput"></typeparam>
     /// <typeparam name="TEntity"></typeparam>
     [UnitOfWork(false)]
-    public class UnAuthGeneralTreeAppServiceBase<TGetTreeForSelectInput,
-                                                 TGetTreeForSelectOutput,
-                                                 TGetNodesForSelectInput,
-                                                 TGetNodesForSelectOutput,
-                                                 TEntity> : ApplicationService, IUnAuthGeneralTreeAppServiceBase<TGetTreeForSelectInput,
-                                                                                                                 TGetTreeForSelectOutput,
-                                                                                                                 TGetNodesForSelectInput,
-                                                                                                                 TGetNodesForSelectOutput>
+    public class GeneralTreeProviderBaseAppService<TGetTreeForSelectInput,
+                                                   TGetTreeForSelectOutput,
+                                                   TGetNodesForSelectInput,
+                                                   TGetNodesForSelectOutput,
+                                                   TEntity> : ApplicationService, IUnAuthGeneralTreeAppServiceBase<TGetTreeForSelectInput,
+                                                                                                                   TGetTreeForSelectOutput,
+                                                                                                                   TGetNodesForSelectInput,
+                                                                                                                   TGetNodesForSelectOutput>
     where TEntity : GeneralTreeEntity<TEntity>
     where TGetTreeForSelectInput : GeneralTreeGetForSelectInput
     where TGetTreeForSelectOutput : GeneralTreeNodeDto<TGetTreeForSelectOutput>, new()
@@ -79,7 +79,7 @@ namespace BXJG.Utils.GeneralTree
         public IServiceProvider ServiceProvider { get; set; }
 
         [Obsolete("子类继承时应使用无参的构造函数，当前构造函数是未简化子类实现以前的代码，已过时。")]
-        public UnAuthGeneralTreeAppServiceBase(IRepository<TEntity, long> repository,
+        public GeneralTreeProviderBaseAppService(IRepository<TEntity, long> repository,
                                                string allTextForSearch = "不限",
                                                string allTextForForm = "请选择")//这里的字符串后期可以使用常量
         {
@@ -90,7 +90,7 @@ namespace BXJG.Utils.GeneralTree
             this.allTextForSearch = allTextForSearch;
             this.allTextForForm = allTextForForm;
         }
-        public UnAuthGeneralTreeAppServiceBase()
+        public GeneralTreeProviderBaseAppService()
         {
             this.AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
         }

@@ -220,11 +220,11 @@ namespace BXJG.Utils
                                                                              TUpdateInput,
                                                                              TGetInput,
                                                                              EntityDto<TPrimaryKey>>, ICrudBaseAppService<TEntityDto,
-                                                                                                                    TPrimaryKey,
-                                                                                                                    TGetAllInput,
-                                                                                                                    TCreateInput,
-                                                                                                                    TUpdateInput,
-                                                                                                                    TGetInput>
+                                                                                                                          TPrimaryKey,
+                                                                                                                          TGetAllInput,
+                                                                                                                          TCreateInput,
+                                                                                                                          TUpdateInput,
+                                                                                                                          TGetInput>
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TUpdateInput : IEntityDto<TPrimaryKey>
@@ -256,10 +256,10 @@ namespace BXJG.Utils
                                                                                 TCreateInput,
                                                                                 TUpdateInput,
                                                                                 EntityDto<TPrimaryKey>>, ICrudBaseAppService<TEntityDto,
-                                                                                                                    TPrimaryKey,
-                                                                                                                    TGetAllInput,
-                                                                                                                    TCreateInput,
-                                                                                                                    TUpdateInput>
+                                                                                                                             TPrimaryKey,
+                                                                                                                             TGetAllInput,
+                                                                                                                             TCreateInput,
+                                                                                                                             TUpdateInput>
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TUpdateInput : IEntityDto<TPrimaryKey>
@@ -286,9 +286,9 @@ namespace BXJG.Utils
                                                                                 TGetAllInput,
                                                                                 TCreateInput,
                                                                                 TCreateInput>, ICrudBaseAppService<TEntityDto,
-                                                                                                                    TPrimaryKey,
-                                                                                                                    TGetAllInput,
-                                                                                                                    TCreateInput>
+                                                                                                                   TPrimaryKey,
+                                                                                                                   TGetAllInput,
+                                                                                                                   TCreateInput>
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TCreateInput : IEntityDto<TPrimaryKey>
@@ -312,8 +312,8 @@ namespace BXJG.Utils
                                                                                 TPrimaryKey,
                                                                                 TGetAllInput,
                                                                                 TEntityDto>, ICrudBaseAppService<TEntityDto,
-                                                                                                                    TPrimaryKey,
-                                                                                                                    TGetAllInput>
+                                                                                                                 TPrimaryKey,
+                                                                                                                 TGetAllInput>
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
     {
@@ -330,10 +330,10 @@ namespace BXJG.Utils
     public abstract class CrudBaseAppService<TEntity,
                                              TEntityDto,
                                              TPrimaryKey> : CrudBaseAppService<TEntity,
-                                                                                TEntityDto,
-                                                                                TPrimaryKey,
-                                                                                PagedAndSortedResultRequestDto>, ICrudBaseAppService<TEntityDto,
-                                                                                                                    TPrimaryKey>
+                                                                               TEntityDto,
+                                                                               TPrimaryKey,
+                                                                               PagedAndSortedResultRequestDto>, ICrudBaseAppService<TEntityDto,
+                                                                                                                                    TPrimaryKey>
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
     {

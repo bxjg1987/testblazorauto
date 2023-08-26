@@ -20,7 +20,7 @@ namespace BXJG.Utils.GeneralTree
     /// <summary>
     /// 数据字典应用服务类
     /// </summary>
-    public class UnAuthGeneralTreeAppService : UnAuthGeneralTreeAppServiceBase<GeneralTreeGetForSelectInput,
+    public class UnAuthGeneralTreeAppService : GeneralTreeProviderBaseAppService<GeneralTreeGetForSelectInput,
                                                                                GeneralTreeNodeDto,
                                                                                GeneralTreeGetForSelectInput,
                                                                                GeneralTreeComboboxDto,

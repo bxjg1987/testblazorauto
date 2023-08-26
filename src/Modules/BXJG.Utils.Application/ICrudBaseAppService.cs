@@ -87,11 +87,11 @@ namespace BXJG.Utils
                                          in TGetAllInput,
                                          in TCreateInput,
                                          in TUpdateInput> : ICrudBaseAppService<TEntityDto,
-                                                                                 TPrimaryKey,
-                                                                                 TGetAllInput,
-                                                                                 TCreateInput,
-                                                                                 TUpdateInput,
-                                                                                 EntityDto<TPrimaryKey>>
+                                                                                TPrimaryKey,
+                                                                                TGetAllInput,
+                                                                                TCreateInput,
+                                                                                TUpdateInput,
+                                                                                EntityDto<TPrimaryKey>>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TUpdateInput : IEntityDto<TPrimaryKey>
     { }
@@ -107,10 +107,10 @@ namespace BXJG.Utils
                                          TPrimaryKey,
                                          in TGetAllInput,
                                          in TCreateInput> : ICrudBaseAppService<TEntityDto,
-                                                                                 TPrimaryKey,
-                                                                                 TGetAllInput,
-                                                                                 TCreateInput,
-                                                                                 TCreateInput>
+                                                                                TPrimaryKey,
+                                                                                TGetAllInput,
+                                                                                TCreateInput,
+                                                                                TCreateInput>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TCreateInput : IEntityDto<TPrimaryKey>
     { }
@@ -124,9 +124,9 @@ namespace BXJG.Utils
     public interface ICrudBaseAppService<TEntityDto,
                                          TPrimaryKey,
                                          in TGetAllInput> : ICrudBaseAppService<TEntityDto,
-                                                                                 TPrimaryKey,
-                                                                                 TGetAllInput,
-                                                                                 TEntityDto>
+                                                                                TPrimaryKey,
+                                                                                TGetAllInput,
+                                                                                TEntityDto>
         where TEntityDto : IEntityDto<TPrimaryKey>
     { }
     /// <summary>
@@ -137,8 +137,8 @@ namespace BXJG.Utils
     /// <typeparam name="TPrimaryKey"></typeparam>
     public interface ICrudBaseAppService<TEntityDto,
                                          TPrimaryKey> : ICrudBaseAppService<TEntityDto,
-                                                                             TPrimaryKey,
-                                                                             PagedAndSortedResultRequestDto>
+                                                                            TPrimaryKey,
+                                                                            PagedAndSortedResultRequestDto>
         where TEntityDto : IEntityDto<TPrimaryKey>
     { }
     /// <summary>
@@ -146,8 +146,7 @@ namespace BXJG.Utils
     /// 其它批量操作不应该在基础抽象接口中定义，因为它们不是crud操作。
     /// </summary>
     /// <typeparam name="TEntityDto"></typeparam>
-    public interface ICrudBaseAppService<TEntityDto> : ICrudBaseAppService<TEntityDto,
-                                                                            int>
+    public interface ICrudBaseAppService<TEntityDto> : ICrudBaseAppService<TEntityDto, int>
         where TEntityDto : IEntityDto<int>
     { }
 }
