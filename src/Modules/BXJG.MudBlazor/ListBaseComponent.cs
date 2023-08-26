@@ -180,12 +180,26 @@ namespace BXJG.MudBlazor
 
         #region 表单
         /// <summary>
+        /// 新增或修改的弹窗
+        /// </summary>
+        [CascadingParameter]
+        protected MudDialogInstance MudDialog { get; set; }
+        /// <summary>
         /// 新增或修改弹窗的配置对象
         /// </summary>
         protected DialogOptions DialogOptions = new DialogOptions { CloseOnEscapeKey = true };
-        private void OpenDialog()
+        /// <summary>
+        /// 点击新增按钮
+        /// </summary>
+        /// <returns></returns>
+        protected virtual async Task ClickAdd()
         {
-            DialogService.Show<TFormComponent>($"Simple Dialog", DialogOptions);
+            var dr = await DialogService.Show<TFormComponent>("新增" + FuncName, DialogOptions).Result;
+
+            if (dr.Cancelled)
+                return;
+
+            await this.LoadDataAsync(new GridState<TEntityDto> { FilterDefinitions });
         }
         #endregion
     }
