@@ -160,40 +160,52 @@ namespace BXJG.Utils
         }
         protected override IQueryable<TEntity> CreateFilteredQuery(TGetAllInput input)
         {
-            var q = GetAllInclude(base.CreateFilteredQuery(input)).AsNoTrackingWithIdentityResolution();
+            var q = BuildQuery().AsNoTrackingWithIdentityResolution();
             if (input is IHaveFilter p)
+            {
                 q = q.ApplyDynamicCondtion(p.Filter);
+            }
             return q;
-
         }
-        /// <summary>
-        /// 获取列表时回调，你可以重写以Include更多导航属性
-        /// </summary>
-        /// <param name="q"></param>
-        /// <returns></returns>
-        protected virtual IQueryable<TEntity> GetAllInclude(IQueryable<TEntity> q) => q;
+
+        ///// <summary>
+        ///// 获取列表时回调，你可以重写以Include更多导航属性
+        ///// </summary>
+        ///// <param name="q"></param>
+        ///// <returns></returns>
+        //protected virtual IQueryable<TEntity> GetAllInclude(IQueryable<TEntity> q) => GetInclude(q);
         [UnitOfWork(false)]
         public override Task<PagedResultDto<TEntityDto>> GetAllAsync(TGetAllInput input)
         {
             return base.GetAllAsync(input);
         }
         [UnitOfWork(false)]
-        public override Task<TEntityDto> GetAsync(TGetInput input)
+        public override async Task<TEntityDto> GetAsync(TGetInput input)
         {
-            return base.GetAsync(input);
+            var entity = await AsyncQueryableExecuter.FirstOrDefaultAsync(GetEntityByIdInclude(input.Id).AsNoTrackingWithIdentityResolution());//.SingleAsync(c => c.Id.Equals(id));
+            return base.MapToEntityDto(entity);
         }
 
-        protected override Task<TEntity> GetEntityByIdAsync(TPrimaryKey id)
+        protected override async Task<TEntity> GetEntityByIdAsync(TPrimaryKey id)
         {
             //return base.GetEntityByIdAsync(id);
-            return GetEntityByIdInclude(base.Repository.GetAll()).SingleAsync(c => c.Id.Equals(id));
+            return await AsyncQueryableExecuter.FirstOrDefaultAsync(GetEntityByIdInclude(id));//.SingleAsync(c => c.Id.Equals(id));
         }
+
         /// <summary>
         /// 执行GetEntityByIdAsync将回调此方法，可重写此方法来包含导航属性，默认不包含任何导航属性。
         /// </summary>
+        /// <param name="id"></param>
         /// <param name="q"></param>
         /// <returns></returns>
-        protected virtual IQueryable<TEntity> GetEntityByIdInclude(IQueryable<TEntity> q) => q;
+        protected virtual IQueryable<TEntity> GetEntityByIdInclude(TPrimaryKey id) => BuildQuery().Where(c => c.Id.Equals(id));
+
+        /// <summary>
+        /// 获取单个和列表时都会回调，你可以重写以Include更多导航属性
+        /// </summary>
+        /// <param name="q"></param>
+        /// <returns></returns>
+        protected virtual IQueryable<TEntity> BuildQuery() => Repository.GetAll();
     }
 
     /// <summary>

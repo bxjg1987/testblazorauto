@@ -185,7 +185,10 @@ namespace BXJG.Utils
         {
             var q = BuildQuery();
             if (input is IHaveFilter p)
+            {
                 q = q.ApplyDynamicCondtion(p.Filter);
+
+            }
             return q;
         }
 
@@ -209,10 +212,20 @@ namespace BXJG.Utils
             return Repository.GetAll().AsNoTrackingWithIdentityResolution();
         }
 
+        /// <summary>
+        /// 重写以应用include
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        protected virtual IQueryable<TEntity> GetById(TKey id)
+        {
+            return BuildQuery().Where(c => c.Id.Equals(id));
+        }
+
         public virtual async Task<TEntityDto> Get(EntityDto<TKey> input)
         {
             await CheckGetAllPermission();
-            var query = BuildQuery().Where(c => c.Id.Equals(input.Id));
+            var query = GetById(input.Id);
             var enitity = await AsyncQueryableExecuter.FirstOrDefaultAsync(query);
             return MapToEntityDto(enitity);
         }

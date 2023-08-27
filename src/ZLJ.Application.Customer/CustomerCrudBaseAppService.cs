@@ -29,6 +29,7 @@ namespace ZLJ.App.Customer
     /// <typeparam name="TDeleteInput"></typeparam>
     public abstract class CustomerCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, TDeleteInput>
                          : CommonCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, TDeleteInput>
+     , ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, TDeleteInput>
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TUpdateInput : IEntityDto<TPrimaryKey>
@@ -54,6 +55,7 @@ namespace ZLJ.App.Customer
     /// <typeparam name="TGetInput"></typeparam>
     public abstract class CustomerCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput>
                         : CustomerCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, EntityDto<TPrimaryKey>>
+      , ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput>
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TUpdateInput : IEntityDto<TPrimaryKey>
@@ -74,6 +76,7 @@ namespace ZLJ.App.Customer
     /// <typeparam name="TUpdateInput"></typeparam>
     public abstract class CustomerCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
                         : CustomerCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, EntityDto<TPrimaryKey>>
+        , ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TUpdateInput : IEntityDto<TPrimaryKey>
@@ -93,6 +96,7 @@ namespace ZLJ.App.Customer
     /// <typeparam name="TCreateInput"></typeparam>
     public abstract class CustomerCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput>
                         : CustomerCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TCreateInput>
+      , ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput>
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TCreateInput : IEntityDto<TPrimaryKey>
@@ -110,6 +114,7 @@ namespace ZLJ.App.Customer
     /// <typeparam name="TGetAllInput"></typeparam>
     public abstract class CustomerCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput>
                         : CustomerCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TEntityDto>
+      , ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput>
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
     {
@@ -125,6 +130,7 @@ namespace ZLJ.App.Customer
     /// <typeparam name="TPrimaryKey"></typeparam>
     public abstract class CustomerCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey>
                         : CustomerCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, PagedAndSortedResultRequestDto>
+      , ICrudBaseAppService<TEntityDto, TPrimaryKey>
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
     {
@@ -139,6 +145,7 @@ namespace ZLJ.App.Customer
     /// <typeparam name="TEntityDto"></typeparam>
     public abstract class CustomerCrudBaseAppService<TEntity, TEntityDto>
                         : CustomerCrudBaseAppService<TEntity, TEntityDto, int>
+      , ICrudBaseAppService<TEntityDto>
         where TEntity : class, IEntity<int>
         where TEntityDto : IEntityDto<int>
     {

@@ -170,6 +170,9 @@ namespace System.Linq
         /// <returns></returns>
         public static IQueryable<T> ApplyDynamicCondtion<T>(this IQueryable<T> q, IEnumerable<ConditionFieldDefine> defines)
         {
+            if (defines == default)
+                return q;
+
             foreach (var item in defines)
             {
                 q = q.ApplyDynamicCondtion(item);
@@ -184,6 +187,9 @@ namespace System.Linq
         /// <returns></returns>
         public static IQueryable<T> ApplyDynamicCondtion<T>(this IQueryable<T> q, object defines)
         {
+            if (defines == default)
+                return q;
+
             if (defines is IEnumerable<ConditionFieldDefine>)
             {
                 q = q.ApplyDynamicCondtion(defines as IEnumerable<ConditionFieldDefine>);

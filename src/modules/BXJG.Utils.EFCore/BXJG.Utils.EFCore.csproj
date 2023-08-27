@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-   <Version>1.2.17</Version>
+   <Version>1.2.18</Version>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>

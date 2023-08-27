@@ -27,6 +27,8 @@ using Abp.Domain.Uow;
 using BXJG.Common.Dto;
 using Abp.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using BXJG.Utils.Dto;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace BXJG.Utils.GeneralTree
 {
@@ -59,11 +61,6 @@ namespace BXJG.Utils.GeneralTree
     where TGetNodesForSelectInput : GeneralTreeGetForSelectInput
     where TGetNodesForSelectOutput : GeneralTreeComboboxDto, new()
     {
-        /* 
-         * 数据显示地方有：管理页列表、作为一个搜索条件框、作为表单里一个下拉框
-         * 顶级文本可能是 前端传过来的、上级节点文本、默认文本；除非根本不现实
-         */
-
         // protected string allTextForSearch, allTextForForm;//注意这里代表的是本地化文本的key
 
         public virtual string allTextForSearch { get; set; } = "不限";
@@ -80,8 +77,8 @@ namespace BXJG.Utils.GeneralTree
 
         [Obsolete("子类继承时应使用无参的构造函数，当前构造函数是未简化子类实现以前的代码，已过时。")]
         public GeneralTreeProviderBaseAppService(IRepository<TEntity, long> repository,
-                                               string allTextForSearch = "不限",
-                                               string allTextForForm = "请选择")//这里的字符串后期可以使用常量
+                                                 string allTextForSearch = "不限",
+                                                 string allTextForForm = "请选择")//这里的字符串后期可以使用常量
         {
             //base.LocalizationSourceName = BXJGUtilsConsts.LocalizationSourceName;
             this.repository = repository;
@@ -90,6 +87,7 @@ namespace BXJG.Utils.GeneralTree
             this.allTextForSearch = allTextForSearch;
             this.allTextForForm = allTextForForm;
         }
+
         public GeneralTreeProviderBaseAppService()
         {
             this.AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
@@ -124,7 +122,7 @@ namespace BXJG.Utils.GeneralTree
                 parentCode = input.Code ?? "";
 
             var query = this.ComboTreeFilter(input, parentCode);
-            query = this.ComboTreeSort(input, query);
+            query = this.ComboTreeSort(query, input);
 
 
             var list = await AsyncQueryableExecuter.ToListAsync(query);
@@ -251,9 +249,17 @@ namespace BXJG.Utils.GeneralTree
             return dtoList;
         }
 
+        /// <summary>
+        /// 获取单个 扁平和树形列表都会调用，以获取查询对象
+        /// 可以重写以应用所有查询都需要的Include
+        /// </summary>
+        /// <returns></returns>
+        protected virtual IQueryable<TEntity> BuildQuery()
+        {
+            return repository.GetAll().Include(c => c.Parent).AsNoTrackingWithIdentityResolution();
+        }
+
         #region 获取树形下拉框数据时子类可以重写的方法
-
-
         /// <summary>
         /// 获取树形数据的queryable，默认StartsWith parentCode
         /// </summary>
@@ -263,7 +269,10 @@ namespace BXJG.Utils.GeneralTree
         /// <returns></returns>
         protected virtual IQueryable<TEntity> ComboTreeFilter(TGetTreeForSelectInput input, string parentCode)
         {
-            return repository.GetAll().AsNoTrackingWithIdentityResolution().Where(c => c.Code.StartsWith(parentCode)).ApplyDynamicCondtion(input);
+            var q = BuildQuery().Where(c => c.Code.StartsWith(parentCode));
+            if (input is IHaveFilter p)
+                q = q.ApplyDynamicCondtion(p.Filter);
+            return q;
         }
         /// <summary>
         /// 获取树形数据的排序，默认按code
@@ -272,7 +281,7 @@ namespace BXJG.Utils.GeneralTree
         /// <param name="input"></param>
         /// <param name="context"><see cref="GetTreeForSelectAsync"/>的多个步骤间共享数据，默认存在input的key</param>
         /// <returns></returns>
-        protected virtual IQueryable<TEntity> ComboTreeSort(TGetTreeForSelectInput input, IQueryable<TEntity> query)
+        protected virtual IQueryable<TEntity> ComboTreeSort(IQueryable<TEntity> query, TGetTreeForSelectInput input)
         {
             return query.OrderBy(c => c.Code);
         }
@@ -297,7 +306,10 @@ namespace BXJG.Utils.GeneralTree
         /// <returns></returns>
         protected virtual IQueryable<TEntity> ComboboxFilter(TGetNodesForSelectInput input, long? parentId)
         {
-            return repository.GetAll().AsNoTrackingWithIdentityResolution().Where(c => c.ParentId == parentId).ApplyDynamicCondtion(input);
+            var q = BuildQuery().Where(c => c.ParentId == parentId);
+            if (input is IHaveFilter p)
+                q = q.ApplyDynamicCondtion(p.Filter);
+            return q;
             //return ownRepository.GetAll().Where(c => c.ParentId == input.ParentId || c.Id == input.ParentId);
         }
         /// <summary>
@@ -650,6 +662,13 @@ namespace BXJG.Utils.GeneralTree
         protected virtual void EntityToDto(TEntity entity, TDto dto)
         { }
 
+        /// <summary>
+        /// 所有查询都会调用，以获取查询对象。
+        /// 可以重写以应用所有查询都需要的Include
+        /// </summary>
+        /// <returns></returns>
+        protected IQueryable<TEntity> BuildQuery() => repository.GetAll().Include(c => c.Parent);
+
         #region get
         /// <summary>
         /// 获取指定节点的树形结构的数据
@@ -661,23 +680,29 @@ namespace BXJG.Utils.GeneralTree
         {
             await CheckGetPermissionAsync();
             // var ctx = new Dictionary<string, object> { { "input", input } };
-            var entity = await GetEntityByIdAsync(input.Id);
+            var entity = await AsyncQueryableExecuter.FirstOrDefaultAsync(GetEntityByIdInclude(input.Id).AsNoTrackingWithIdentityResolution());//.SingleAsync();
 
             var n = GetEntityToDto(entity);
             //if (!string.IsNullOrWhiteSpace(entity.ExtensionData))
             //    n.ExtData = JsonConvert.DeserializeObject<dynamic>(entity.ExtensionData);
             return n;
         }
+        /// <summary>
+        /// 增、删、改、获取单个时都会调用，用来根据id获取实体
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         protected virtual Task<TEntity> GetEntityByIdAsync(long id)
         {
-            return GetEntityByIdInclude(repository.GetAll()).SingleAsync(c => c.Id == id);
+            return GetEntityByIdInclude(id).SingleAsync();
         }
         /// <summary>
         /// 根据id获取实体时回调，你可以重写使用Include包含导航属性，默认不处理
         /// </summary>
         /// <param name="q"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        protected virtual IQueryable<TEntity> GetEntityByIdInclude(IQueryable<TEntity> q) => q;
+        protected virtual IQueryable<TEntity> GetEntityByIdInclude(long id) => BuildQuery().Where(c => c.Id == id);
 
         ///// <summary>
         ///// 根据id获取单个实体时将调用此方法获取IQueryable，默认已加入id比对条件
@@ -730,7 +755,7 @@ namespace BXJG.Utils.GeneralTree
             // var ctx = new Dictionary<string, object> { { "input", input } };
             //查询
             var query = GetAllFiltered(input, parentCode);//.Where(c => c.Code.StartsWith(parentCode));
-            query = GetAllSorting(input, query); //方便子类排序
+            query = GetAllSorting(query, input); //方便子类排序
             var list = await AsyncQueryableExecuter.ToListAsync(query);//.ToListAsync();
             //建立dto以及处理父子关系
             //TEntity parent = list.SingleOrDefault(c => c.Id == input.ParentId);
@@ -777,12 +802,12 @@ namespace BXJG.Utils.GeneralTree
             }
             return list1;
         }
-        /// <summary>
-        /// 获取列表时回调，你可以重写以Include更多导航属性
-        /// </summary>
-        /// <param name="q"></param>
-        /// <returns></returns>
-        protected virtual IQueryable<TEntity> GetAllInclude(IQueryable<TEntity> q) => q;
+        ///// <summary>
+        ///// 获取列表时回调，你可以重写以Include更多导航属性
+        ///// </summary>
+        ///// <param name="q"></param>
+        ///// <returns></returns>
+        //protected virtual IQueryable<TEntity> GetAllInclude(IQueryable<TEntity> q) => q;
 
         /// <summary>
         /// 获取所有数据的查询，默认已加入parentCode条件
@@ -793,7 +818,10 @@ namespace BXJG.Utils.GeneralTree
         /// <returns></returns>
         protected virtual IQueryable<TEntity> GetAllFiltered(TGetAllInput input, string parentCode)
         {
-            return GetAllInclude(repository.GetAll()).AsNoTrackingWithIdentityResolution().Where(c => c.Code.StartsWith(parentCode)).ApplyDynamicCondtion(input);
+            var q = BuildQuery().AsNoTrackingWithIdentityResolution().Where(c => c.Code.StartsWith(parentCode));//.ApplyDynamicCondtion(input);
+            if (input is IHaveFilter p)
+                q = q.ApplyDynamicCondtion(p.Filter);
+            return q;
         }
         /// <summary>
         /// 获取所有数据的排序
@@ -802,7 +830,7 @@ namespace BXJG.Utils.GeneralTree
         /// <param name="query">查询</param>
         /// <param name="context">不要再使用此参数，请直接使用uow.Items</param>
         /// <returns></returns>
-        protected virtual IQueryable<TEntity> GetAllSorting(TGetAllInput input, IQueryable<TEntity> query)
+        protected virtual IQueryable<TEntity> GetAllSorting(IQueryable<TEntity> query, TGetAllInput input)
         {
             return query.OrderBy(c => c.Code);
         }

@@ -12,5 +12,5 @@ global using BXJG.Common.Dto;
 global using ZLJ.App.Admin;
 global using ZLJ.App.Common;
 global using ZLJ.Web.Admin.Shared;
-
+global using BXJG.Utils.Dto;
 global using ZLJ.App.Admin.Authorization.Permissions;
