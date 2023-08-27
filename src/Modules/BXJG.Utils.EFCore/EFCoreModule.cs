@@ -23,20 +23,20 @@ namespace BXJG.Utils.EFCore
         public override void PreInitialize()
         {
             // IocManager.Register<BXJGEFCoreConfiguration>();
-
-            IocManager.IocContainer.Kernel.ComponentRegistered += (key, handler) =>
-            {
-                if (typeof(IApplicationService).IsAssignableFrom(handler.ComponentModel.Implementation) || typeof(ICapSubscribe).IsAssignableFrom(handler.ComponentModel.Implementation))
-                {
-                    handler.ComponentModel.Interceptors.Add(new InterceptorReference(typeof(AbpAsyncDeterminationInterceptor<AbpCapTranInterceptor>)));
-                }
-            };
+            // 应用层去注册
+            //IocManager.IocContainer.Kernel.ComponentRegistered += (key, handler) =>
+            //{
+            //    if (typeof(IApplicationService).IsAssignableFrom(handler.ComponentModel.Implementation) || typeof(ICapSubscribe).IsAssignableFrom(handler.ComponentModel.Implementation))
+            //    {
+            //        handler.ComponentModel.Interceptors.Add(new InterceptorReference(typeof(AbpAsyncDeterminationInterceptor<AbpCapTranInterceptor>)));
+            //    }
+            //};
         }
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
-
-            IocManager.Register(typeof(AbpAsyncDeterminationInterceptor<AbpCapTranInterceptor>), DependencyLifeStyle.Transient);
+            // 应用层去注册
+            //IocManager.Register(typeof(AbpAsyncDeterminationInterceptor<AbpCapTranInterceptor>), DependencyLifeStyle.Transient);
         }
 
         public override void PostInitialize()

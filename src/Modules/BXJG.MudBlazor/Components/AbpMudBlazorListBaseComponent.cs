@@ -5,6 +5,7 @@ using Abp.Authorization.Users;
 using Abp.Domain.Entities;
 using BXJG.Common.Dto;
 using BXJG.Utils;
+using BXJG.Utils.Dto;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using MudBlazor;
@@ -29,14 +30,14 @@ namespace BXJG.MudBlazor.Components
     /// <typeparam name="TFormComponent"></typeparam>
     /// <typeparam name="TAppService"></typeparam>
     public class AbpMudBlazorListBaseComponent<TEntityDto,
-                                   TPrimaryKey,
-                                   TGetAllInput,
-                                   TCreateInput,
-                                   TUpdateInput,
-                                   TGetInput,
-                                   TDeleteInput,
-                                   TFormComponent,
-                                   TAppService> : AbpMudBlazorBaseComponent
+                                               TPrimaryKey,
+                                               TGetAllInput,
+                                               TCreateInput,
+                                               TUpdateInput,
+                                               TGetInput,
+                                               TDeleteInput,
+                                               TFormComponent,
+                                               TAppService> : AbpMudBlazorBaseComponent
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TGetAllInput : new()
@@ -56,7 +57,7 @@ namespace BXJG.MudBlazor.Components
         /// </summary>
         protected virtual TAppService AppService => appService ??= ScopedServices.GetRequiredService<TAppService>();
 
-       
+
 
         private IDialogService dialogService;
         protected virtual IDialogService DialogService => dialogService ??= ScopedServices.GetRequiredService<IDialogService>();
@@ -142,11 +143,33 @@ namespace BXJG.MudBlazor.Components
         /// <summary>
         /// 当前页码
         /// </summary>
-        protected int pageIndex = 1;
+        protected virtual int pageIndex
+        {
+            get => dataGrid == default ? 1 : (dataGrid.CurrentPage == 0 ? 1 : dataGrid.CurrentPage);
+            set
+            {
+                if (dataGrid != default)
+                    dataGrid.CurrentPage = value;
+            }
+        }
+        /// <summary>
+        /// 页大小
+        /// </summary>
+        protected virtual int PageSize
+        {
+            get => dataGrid == default ? 10 : dataGrid.RowsPerPage;
+            set
+            {
+                if (dataGrid != default)
+                    dataGrid.RowsPerPage = value;
+            }
+        }
+
         /// <summary>
         /// 总页数
         /// </summary>
         protected int pageCount = 1;
+
         /// <summary>
         /// 是否正在加载数据
         /// </summary>
@@ -158,6 +181,7 @@ namespace BXJG.MudBlazor.Components
         /// <returns></returns>
         protected virtual async Task<GridData<TEntityDto>> LoadDataAsync(GridState<TEntityDto> state)
         {
+            // dataGrid.page
             return await SafeExecuteAsync(async () =>
             {
                 var cd = new TGetAllInput();
@@ -165,6 +189,11 @@ namespace BXJG.MudBlazor.Components
                 {
                     cdd.Conditions = state.FilterDefinitions.MapToDynamicCondition().ToList();
                 }
+                else if (cd is IHaveFilter cddq && cddq.Filter is IDynamicCondition cddqq)
+                {
+                    cddqq.Conditions = state.FilterDefinitions.MapToDynamicCondition().ToList();
+                }
+
                 if (cd is IPagedAndSortedResultRequest cd2)
                 {
                     cd2.MaxResultCount = state.PageSize;
@@ -174,17 +203,23 @@ namespace BXJG.MudBlazor.Components
                 {
                     cd3.Sorting = state.SortDefinitions.ToLinqDynamicCore();
                 }
+
                 if (cd is IHaveKeywords cd4)
                 {
                     cd4.Keywords = keywords;
                 }
+                else if (cd is IHaveFilter cddq && cddq.Filter is IHaveKeywords cddqq)
+                {
+                    cddqq.Keywords = keywords;// state.FilterDefinitions.MapToDynamicCondition().ToList();
+                }
+                await FillCondtion(cd);
                 var dtos = await AppService.GetAllAsync(cd);
                 pageCount = (int)Math.Ceiling(dtos.TotalCount / (state.PageSize * 1d));
                 if (pageCount == 0)
                     pageCount = 1;
 
-                //不加这个，进入最后一页会无限刷新，mudblazor的bug估计
-                if (pageIndex < pageCount)
+                ////不加这个，进入最后一页会无限刷新，mudblazor的bug估计
+                //if (pageIndex ==1)
                     StateHasChanged();//不加这个，首次的页数显示不对
 
                 return new GridData<TEntityDto>
@@ -194,6 +229,8 @@ namespace BXJG.MudBlazor.Components
                 };
             });
         }
+
+        protected virtual ValueTask FillCondtion(TGetAllInput input) => ValueTask.CompletedTask;
 
         /// <summary>
         /// 已选中的项

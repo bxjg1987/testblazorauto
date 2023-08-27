@@ -158,6 +158,7 @@ namespace BXJG.Utils
         {
             await Repository.DeleteAsync(entity);
         }
+        
         protected override IQueryable<TEntity> CreateFilteredQuery(TGetAllInput input)
         {
             var q = BuildQuery().AsNoTrackingWithIdentityResolution();

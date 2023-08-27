@@ -667,7 +667,10 @@ namespace BXJG.Utils.GeneralTree
         /// 可以重写以应用所有查询都需要的Include
         /// </summary>
         /// <returns></returns>
-        protected IQueryable<TEntity> BuildQuery() => repository.GetAll().Include(c => c.Parent);
+        protected virtual IQueryable<TEntity> BuildQuery()
+        {
+            return repository.GetAll().Include(c => c.Parent);
+        }
 
         #region get
         /// <summary>
