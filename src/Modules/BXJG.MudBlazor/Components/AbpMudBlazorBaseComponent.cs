@@ -27,5 +27,15 @@ namespace BXJG.MudBlazor.Components
         {
             Snackbar.Add(msg, Severity.Error);
         }
+
+        /// <summary>
+        /// 显示成功的消息，木有考虑本地化
+        /// </summary>
+        /// <param name="opt"></param>
+        /// <param name="msg"></param>
+        public virtual void ShowSuccess(string opt = "操作", string msg = "{0}成功！")
+        {
+            Snackbar.Add(string.Format(msg, opt), Severity.Success);
+        }
     }
 }

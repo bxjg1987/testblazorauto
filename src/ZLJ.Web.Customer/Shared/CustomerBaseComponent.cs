@@ -10,12 +10,12 @@ using Microsoft.Extensions.DependencyInjection;
 using BXJG.Utils;
 using BXJG.MudBlazor.Components;
 
-namespace ZLJ.Web.Admin.Shared
+namespace ZLJ.Web.Customer.Shared
 {
     /// <summary>
     /// 后台管理端的blazor组件抽象类
     /// </summary>
-    public class AdminBaseComponent : AbpMudBlazorBaseComponent
+    public class CustomerBaseComponent : AbpMudBlazorBaseComponent
     {
         private ILocalizationSource appCommonLocalizationSource, zljLocalizationSource, utilsLocalizationSource;
 
@@ -58,7 +58,7 @@ namespace ZLJ.Web.Admin.Shared
             }
         }
 
-        protected override string LocalizationSourceName => ZLJ.App.Admin.AdminConsts.Admin;
+        protected override string LocalizationSourceName => ZLJ.App.Customer.CustConsts.Cust;
 
      
 

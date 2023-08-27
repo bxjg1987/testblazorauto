@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="Views\Shared\_CustAppLayout.cshtml" />
+    <Content Remove="Shared\_CustAppLayout.cshtml" />
   </ItemGroup>
 
 
