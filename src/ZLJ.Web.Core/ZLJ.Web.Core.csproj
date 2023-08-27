@@ -42,6 +42,7 @@
 	</ItemGroup>
 	<ItemGroup>
 		<Compile Remove="Authentication\WeChatMiniProgram\WeChatMiniProgramLoginHandler.cs" />
+		<Compile Remove="Components\ZLJBaseComponent.cs" />
 		<Compile Remove="CustomTempFileManager.cs" />
 		<Compile Remove="ZLJEquipmentNavigationProvider.cs" />
 		<Compile Remove="ZLJNavigationProvider.cs" />
@@ -73,6 +74,7 @@
 	</ItemGroup>
 	<ItemGroup>
 		<Folder Include="Authentication\WeChatMiniProgram\" />
+		<Folder Include="Components\" />
 	</ItemGroup>
 
 

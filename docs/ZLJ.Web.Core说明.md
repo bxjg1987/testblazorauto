@@ -5,5 +5,6 @@
 
 跟web相关的初始化工作 移动到host项目中，
 
-现在它变成了rcl，被各blazor ui引用，
-注意它不引用具体的ui框架，比如 zlj.web.admin 引用mudblazor，但web.core不引用具体ui，因为不是所有ui项目 或者永远 使用mudblazor
+现在它变成了    跟web相关的公共库  +   rcl，每个应用的ui层都可以引用它。
+注意rcl并不是特指blazor，而 是包含razorpage mvc 和blazor的。
+注意此项目不引用具体的ui框架，比如 zlj.web.admin 引用mudblazor，但web.core不引用具体ui，因为不是所有ui项目 或者永远 使用mudblazor
