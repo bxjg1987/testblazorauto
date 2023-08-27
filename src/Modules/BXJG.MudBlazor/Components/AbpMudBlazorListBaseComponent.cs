@@ -14,7 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.MudBlazor
+namespace BXJG.MudBlazor.Components
 {
     /// <summary>
     /// 抽象的crud组件，用于简化crud组件的开发
@@ -28,7 +28,7 @@ namespace BXJG.MudBlazor
     /// <typeparam name="TDeleteInput"></typeparam>
     /// <typeparam name="TFormComponent"></typeparam>
     /// <typeparam name="TAppService"></typeparam>
-    public class ListBaseComponent<TEntityDto,
+    public class AbpMudBlazorListBaseComponent<TEntityDto,
                                    TPrimaryKey,
                                    TGetAllInput,
                                    TCreateInput,
@@ -36,7 +36,7 @@ namespace BXJG.MudBlazor
                                    TGetInput,
                                    TDeleteInput,
                                    TFormComponent,
-                                   TAppService> : AbpBaseComponent
+                                   TAppService> : AbpMudBlazorBaseComponent
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TGetAllInput : new()
@@ -56,9 +56,7 @@ namespace BXJG.MudBlazor
         /// </summary>
         protected virtual TAppService AppService => appService ??= ScopedServices.GetRequiredService<TAppService>();
 
-        private ISnackbar snackbar;
-
-        protected virtual ISnackbar Snackbar => snackbar ??= ScopedServices.GetRequiredService<ISnackbar>();
+       
 
         private IDialogService dialogService;
         protected virtual IDialogService DialogService => dialogService ??= ScopedServices.GetRequiredService<IDialogService>();
@@ -130,11 +128,11 @@ namespace BXJG.MudBlazor
         protected virtual async Task InitPermission(string createPermissionName = default, string updatePermissionName = default, string deletePermissionName = default)
         {
             if (createPermissionName.IsNotNullOrWhiteSpaceBXJG())
-                createIsGranted = await base.PermissionChecker.IsGrantedAsync(createPermissionName);
+                createIsGranted = await PermissionChecker.IsGrantedAsync(createPermissionName);
             if (updatePermissionName.IsNotNullOrWhiteSpaceBXJG())
-                updateIsGranted = await base.PermissionChecker.IsGrantedAsync(updatePermissionName);
+                updateIsGranted = await PermissionChecker.IsGrantedAsync(updatePermissionName);
             if (deletePermissionName.IsNotNullOrWhiteSpaceBXJG())
-                deleteIsGranted = await base.PermissionChecker.IsGrantedAsync(deletePermissionName);
+                deleteIsGranted = await PermissionChecker.IsGrantedAsync(deletePermissionName);
         }
 
         #endregion
@@ -170,7 +168,7 @@ namespace BXJG.MudBlazor
                 if (cd is IPagedAndSortedResultRequest cd2)
                 {
                     cd2.MaxResultCount = state.PageSize;
-                    cd2.SkipCount = state.Page == 0 ? 0 : ((state.Page - 1) * state.PageSize);
+                    cd2.SkipCount = state.Page == 0 ? 0 : (state.Page - 1) * state.PageSize;
                 }
                 if (cd is ISortedResultRequest cd3)
                 {
@@ -187,7 +185,7 @@ namespace BXJG.MudBlazor
 
                 //不加这个，进入最后一页会无限刷新，mudblazor的bug估计
                 if (pageIndex < pageCount)
-                    base.StateHasChanged();//不加这个，首次的页数显示不对
+                    StateHasChanged();//不加这个，首次的页数显示不对
 
                 return new GridData<TEntityDto>
                 {
@@ -327,17 +325,6 @@ namespace BXJG.MudBlazor
         }
         #endregion
 
-        #region 杂项
-        public override ValueTask ShowErrorAsync(string msg)
-        {
-            Snackbar.Add(msg, Severity.Error);
-            return ValueTask.CompletedTask;
-        }
-        public override void ShowError(string msg)
-        {
-            Snackbar.Add(msg, Severity.Error);
-        }
-        #endregion
     }
 
     /// <summary>
@@ -358,7 +345,7 @@ namespace BXJG.MudBlazor
                                    TUpdateInput,
                                    TGetInput,
                                    TFormComponent,
-                                   TAppService> : ListBaseComponent<TEntityDto,
+                                   TAppService> : AbpMudBlazorListBaseComponent<TEntityDto,
                                                                     TPrimaryKey,
                                                                     TGetAllInput,
                                                                     TCreateInput,

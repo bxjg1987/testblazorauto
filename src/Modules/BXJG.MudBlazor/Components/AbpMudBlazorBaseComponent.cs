@@ -1,0 +1,31 @@
+﻿using BXJG.Utils;
+using Microsoft.Extensions.DependencyInjection;
+using MudBlazor;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BXJG.MudBlazor.Components
+{
+    /// <summary>
+    /// 基于mudblazor的任何组件都可以继承它
+    /// </summary>
+    public class AbpMudBlazorBaseComponent : AbpBaseComponent
+    {
+        private ISnackbar snackbar;
+
+        protected virtual ISnackbar Snackbar => snackbar ??= ScopedServices.GetRequiredService<ISnackbar>();
+
+        public override ValueTask ShowErrorAsync(string msg)
+        {
+            Snackbar.Add(msg, Severity.Error);
+            return ValueTask.CompletedTask;
+        }
+        public override void ShowError(string msg)
+        {
+            Snackbar.Add(msg, Severity.Error);
+        }
+    }
+}

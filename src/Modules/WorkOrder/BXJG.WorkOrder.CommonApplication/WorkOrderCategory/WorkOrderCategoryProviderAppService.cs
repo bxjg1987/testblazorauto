@@ -16,11 +16,11 @@ using Abp.Linq.Extensions;
 namespace BXJG.WorkOrder.WorkOrderCategory
 {
     [AbpAuthorize]
-    public class WorkOrderCategoryProviderAppService : UnAuthGeneralTreeAppServiceBase<GetWorkOrderCategoryForSelectInput,
-                                                                                       WorkOrderCategoryTreeNodeDto,
-                                                                                       GetWorkOrderCategoryForSelectInput,
-                                                                                       WorkOrderCategoryComboboxItemDto,
-                                                                                       CategoryEntity>
+    public class WorkOrderCategoryProviderAppService : GeneralTreeProviderBaseAppService<GetWorkOrderCategoryForSelectInput,
+                                                                                         WorkOrderCategoryTreeNodeDto,
+                                                                                         GetWorkOrderCategoryForSelectInput,
+                                                                                         WorkOrderCategoryComboboxItemDto,
+                                                                                         CategoryEntity>
     {
         protected readonly CategoryManager categoryManager;
 

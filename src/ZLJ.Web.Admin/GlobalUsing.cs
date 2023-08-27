@@ -11,7 +11,6 @@ global using Microsoft.AspNetCore.Components.Authorization;
 global using BXJG.Common.Dto;
 global using ZLJ.App.Admin;
 global using ZLJ.App.Common;
-global using ZLJ.Components;
 global using ZLJ.Web.Admin.Shared;
 
 global using ZLJ.App.Admin.Authorization.Permissions;

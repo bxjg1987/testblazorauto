@@ -21,7 +21,7 @@ namespace BXJG.WorkOrder.WorkOrderCategory
     /// <summary>
     /// 工单分类应用服务
     /// </summary>
-    public class WorkOrderCategoryAppService : GeneralTreeAppServiceBase<WorkOrderCategroyDto,
+    public class WorkOrderCategoryAppService : GeneralTreeBaseAppService<WorkOrderCategroyDto,
                                                                          WorkOrderCategoryEditInput,
                                                                          WorkOrderCategoryEditInput,
                                                                          BatchOperationInputLong,

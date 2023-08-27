@@ -303,31 +303,31 @@ namespace BXJG.Utils
         }
 
 
-        /// <summary>
-        /// 批量操作检查
-        /// </summary>
-        protected virtual void BatchOperationCheck(BatchOperationOutputBase output, string operationName = "操作", Func<BatchOperationOutputBase, string> errorItemFormatter = default)
-        {
-            if (output.ErrorMessage.Any())
-            {
-                string str;
-                if (errorItemFormatter != default)
-                    str = errorItemFormatter(output);
-                else
-                {
-                    var sb = new StringBuilder();
-                    foreach (var item in output.ErrorMessage)
-                    {
-                        sb.Append("[");
-                        sb.Append(item.Id);
-                        sb.Append("]");
-                        sb.AppendLine(item.Message);
-                    }
-                    str = sb.ToString();
-                }
-                throw new UserFriendlyException($"{operationName}时，部分成功！失败项：{str}");
-            }
-        }
+        ///// <summary>
+        ///// 批量操作检查
+        ///// </summary>
+        //protected virtual void BatchOperationCheck(BatchOperationOutputBase output, string operationName = "操作", Func<BatchOperationOutputBase, string> errorItemFormatter = default)
+        //{
+        //    if (output.ErrorMessage.Any())
+        //    {
+        //        string str;
+        //        if (errorItemFormatter != default)
+        //            str = errorItemFormatter(output);
+        //        else
+        //        {
+        //            var sb = new StringBuilder();
+        //            foreach (var item in output.ErrorMessage)
+        //            {
+        //                sb.Append("[");
+        //                sb.Append(item.Id);
+        //                sb.Append("]");
+        //                sb.AppendLine(item.Message);
+        //            }
+        //            str = sb.ToString();
+        //        }
+        //        throw new UserFriendlyException($"{operationName}时，部分成功！失败项：{str}");
+        //    }
+        //}
 
         /// <summary>
         /// 执行委托，用户友好异常时直接显示错误消息（记得重写ShowErrorAsync），否则记录日志并显示服务端错误消息。
