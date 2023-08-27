@@ -139,7 +139,7 @@ namespace BXJG.Utils
 
         ILocalizationSource _localizationSource;
 
-        protected string LocalizationSourceName { get; set; }
+        protected virtual string LocalizationSourceName => default;
         protected ILocalizationSource LocalizationSource
         {
             get
