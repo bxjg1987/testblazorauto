@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace BXJG.Utils
 {
     //这个封装不是特别有必要，因为大部分逻辑都在应用服务中
-    //而这里也没有跟具体ui相关
+    //而这里也没有跟具体ui框架相关
     //所以此封装直接定义在BXJG.UtiLS.MudBlazor中更合适。
 
     /// <summary>

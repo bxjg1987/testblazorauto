@@ -7,13 +7,14 @@ using System.Text;
 using System.Threading.Tasks;
 using MudBlazor;
 using Microsoft.Extensions.DependencyInjection;
+using BXJG.Utils;
 
 namespace ZLJ.Web.Admin.Shared
 {
     /// <summary>
     /// 后台管理端的blazor组件抽象类
     /// </summary>
-    public class AdminComponentBase : ZLJBaseComponent
+    public class AdminBaseComponent : AbpBaseComponent
     {
         private Lazy<ISnackbar> _snackbar;
         protected IDialogService DialogService { get; private set; }
