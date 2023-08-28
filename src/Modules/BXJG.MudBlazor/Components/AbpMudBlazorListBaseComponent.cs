@@ -81,10 +81,10 @@ namespace BXJG.MudBlazor.Components
         #endregion
 
         #region 生命周期
-        protected override async Task OnInitialized2Async()
-        {
-            await InitPermission();
-        }
+        //protected override async Task OnInitialized2Async()
+        //{
+        //    await InitPermission();
+        //}
         #endregion
 
         #region 权限
