@@ -14,9 +14,12 @@ namespace BXJG.MudBlazor.Components
     /// </summary>
     public class AbpMudBlazorBaseComponent : AbpBaseComponent
     {
-        private ISnackbar snackbar;
+        //private ISnackbar snackbar;
 
-        protected virtual ISnackbar Snackbar => snackbar ??= ScopedServices.GetRequiredService<ISnackbar>();
+        /// <summary>
+        /// 经过测试，它是Scope的生命周期，且使用ScopedServices.GetRequiredService方式不能用
+        /// </summary>
+        protected virtual ISnackbar Snackbar { get; set; }// => snackbar ??= ScopedServices.GetRequiredService<ISnackbar>();
 
         public override ValueTask ShowErrorAsync(string msg)
         {

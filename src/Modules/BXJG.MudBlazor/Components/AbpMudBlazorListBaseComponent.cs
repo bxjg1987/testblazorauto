@@ -59,8 +59,13 @@ namespace BXJG.MudBlazor.Components
 
 
 
-        private IDialogService dialogService;
-        protected virtual IDialogService DialogService => dialogService ??= ScopedServices.GetRequiredService<IDialogService>();
+        //private IDialogService dialogService;
+
+        /// <summary>
+        /// 经过测试，它是Scope的生命周期，且使用ScopedServices.GetRequiredService方式不能用
+        /// </summary>
+        [Inject]
+        protected virtual IDialogService DialogService { get; set; }/// => dialogService ??= ScopedServices.GetRequiredService<IDialogService>();
         /// <summary>
         /// 此功能的名称
         /// </summary>
@@ -69,15 +74,15 @@ namespace BXJG.MudBlazor.Components
         /// <summary>
         /// 是否显示删除按钮，默认勾选了某个行且 没有正在加载数据时为true
         /// </summary>
-        protected virtual bool ShouldEnableDelete => !isLoading && !isDeleting && selectedItems != default && selectedItems.Any();
+        protected virtual bool ShouldEnableDelete => !dataGrid.Loading && !isDeleting && dataGrid.SelectedItems != default && dataGrid.SelectedItems.Any();
         /// <summary>
         /// 是否显示修改按钮，默认勾选了某个行且 没有正在加载数据时为true 
         /// </summary>
-        protected virtual bool ShouldEnableEdit => !isLoading && !isDeleting && selectedItems != default && selectedItems.Any();
+        protected virtual bool ShouldEnableEdit => !dataGrid.Loading && !isDeleting && dataGrid.SelectedItems != default && dataGrid.SelectedItems.Any();
         /// <summary>
         /// 是否应该显示新增按钮，默认 没有正在加载数据时 为true
         /// </summary>
-        protected virtual bool ShouldEnableCreate => !isLoading && !isDeleting;
+        protected virtual bool ShouldEnableCreate => !dataGrid.Loading && !isDeleting;
         #endregion
 
         #region 生命周期
@@ -140,40 +145,24 @@ namespace BXJG.MudBlazor.Components
 
         #region 列表
         protected MudDataGrid<TEntityDto> dataGrid;
-        /// <summary>
-        /// 当前页码
-        /// </summary>
-        protected virtual int pageIndex
-        {
-            get => dataGrid == default ? 1 : (dataGrid.CurrentPage == 0 ? 1 : dataGrid.CurrentPage);
-            set
-            {
-                if (dataGrid != default)
-                    dataGrid.CurrentPage = value;
-            }
-        }
-        /// <summary>
-        /// 页大小
-        /// </summary>
-        protected virtual int PageSize
-        {
-            get => dataGrid == default ? 10 : dataGrid.RowsPerPage;
-            set
-            {
-                if (dataGrid != default)
-                    dataGrid.RowsPerPage = value;
-            }
-        }
+        ///// <summary>
+        ///// 当前页码
+        ///// </summary>
+        //protected virtual int pageIndex { get => dataGrid.CurrentPage; set => dataGrid.CurrentPage = value; }
+        ///// <summary>
+        ///// 页大小
+        ///// </summary>
+        //protected virtual int PageSize{ get => dataGrid.RowsPerPage; set => dataGrid.RowsPerPage = value; }
 
-        /// <summary>
-        /// 总页数
-        /// </summary>
-        protected int pageCount = 1;
+        ///// <summary>
+        ///// 总页数
+        ///// </summary>
+        //protected int pageCount =1;
 
-        /// <summary>
-        /// 是否正在加载数据
-        /// </summary>
-        protected virtual bool isLoading => dataGrid != default && dataGrid.Loading;// false;
+        ///// <summary>
+        ///// 是否正在加载数据
+        ///// </summary>
+        //protected virtual bool isLoading => dataGrid != default && dataGrid.Loading;// false;
         /// <summary>
         /// 表格数据加载
         /// </summary>
@@ -197,7 +186,7 @@ namespace BXJG.MudBlazor.Components
                 if (cd is IPagedAndSortedResultRequest cd2)
                 {
                     cd2.MaxResultCount = state.PageSize;
-                    cd2.SkipCount = state.Page == 0 ? 0 : (state.Page - 1) * state.PageSize;
+                    cd2.SkipCount =state.Page * state.PageSize;
                 }
                 if (cd is ISortedResultRequest cd3)
                 {
@@ -214,13 +203,13 @@ namespace BXJG.MudBlazor.Components
                 }
                 await FillCondtion(cd);
                 var dtos = await AppService.GetAllAsync(cd);
-                pageCount = (int)Math.Ceiling(dtos.TotalCount / (state.PageSize * 1d));
-                if (pageCount == 0)
-                    pageCount = 1;
+                //pageCount = (int)Math.Ceiling(dtos.TotalCount / (state.PageSize * 1d));
+                //if (pageCount == 0)
+                //    pageCount = 1;
 
-                ////不加这个，进入最后一页会无限刷新，mudblazor的bug估计
-                //if (pageIndex ==1)
-                    StateHasChanged();//不加这个，首次的页数显示不对
+                //////不加这个，进入最后一页会无限刷新，mudblazor的bug估计
+                ////if (pageIndex ==1)
+                //StateHasChanged();//不加这个，首次的页数显示不对
 
                 return new GridData<TEntityDto>
                 {
@@ -229,24 +218,29 @@ namespace BXJG.MudBlazor.Components
                 };
             });
         }
-
+        /// <summary>
+        /// 默认已填充动态条件和关键字，你可以重写以填充其它条件
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         protected virtual ValueTask FillCondtion(TGetAllInput input) => ValueTask.CompletedTask;
 
-        /// <summary>
-        /// 已选中的项
-        /// </summary>
-        protected virtual HashSet<TEntityDto> selectedItems => dataGrid?.SelectedItems;// new HashSet<TEntityDto>();
         ///// <summary>
-        ///// 批量选择变化时回调
+        ///// 已选中的项
         ///// </summary>
-        ///// <param name="items"></param>
-        ///// <returns></returns>
-        //protected virtual Task SelectedItemsChanged(HashSet<TEntityDto> items)
-        //{
-        //    selectedItems = items;
-        //    return Task.CompletedTask;
-        //    //_events.Insert(0, $"Event = SelectedItemsChanged, Data = {System.Text.Json.JsonSerializer.Serialize(items)}");
-        //}
+        //protected virtual HashSet<TEntityDto> selectedItems => dataGrid?.SelectedItems;// new HashSet<TEntityDto>();
+        /// <summary>
+        /// 批量选择变化时回调
+        /// </summary>
+        /// <param name="items"></param>
+        /// <returns></returns>
+        protected virtual Task SelectedItemsChanged(HashSet<TEntityDto> items)
+        {
+            StateHasChanged();
+            //selectedItems = items;
+            return Task.CompletedTask;
+            //_events.Insert(0, $"Event = SelectedItemsChanged, Data = {System.Text.Json.JsonSerializer.Serialize(items)}");
+        }
         //未选中项时，直接禁用按钮
         ///// <summary>
         ///// 批量操作时，检查是否有选中项
@@ -300,7 +294,7 @@ namespace BXJG.MudBlazor.Components
         {
             await base.SafeExecuteAsync(async () =>
             {
-                var dr = await DialogService.Show<TFormComponent>("新增" + FuncName, DialogOptions).Result;
+                var dr = await DialogService.Show<TFormComponent>("修改" + FuncName, DialogOptions).Result;
                 if (dr.Canceled)
                     return;
                 await dataGrid.ReloadServerData();
@@ -322,7 +316,7 @@ namespace BXJG.MudBlazor.Components
             isDeleting = true;
             var r = await SafeExecuteAsync(async () =>
             {
-                var temp = await AppService.BatchDeleteAsync(new BatchOperationInput<TPrimaryKey> { Ids = selectedItems?.Select(x => x.Id).ToArray() }).ContinueWith(async t =>
+                var temp = await AppService.BatchDeleteAsync(new BatchOperationInput<TPrimaryKey> { Ids = dataGrid.SelectedItems?.Select(x => x.Id).ToArray() }).ContinueWith(async t =>
                 {
                     if (t.IsCompletedSuccessfully)
                         _ = InvokeAsync(dataGrid.ReloadServerData);
@@ -343,7 +337,7 @@ namespace BXJG.MudBlazor.Components
         {
             await SafeExecuteAsync(async () =>
             {
-                var curr = selectedItems.Single(c => c.Id!.Equals(input.Id));
+                var curr = dataGrid.SelectedItems.Single(c => c.Id!.Equals(input.Id));
                 var item = curr as IHaveIsDeleting;
                 if (item != default)
                     item.IsDeleting = true;
