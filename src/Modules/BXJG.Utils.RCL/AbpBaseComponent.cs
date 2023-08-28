@@ -1,4 +1,4 @@
-﻿using Abp;
+using Abp;
 using Abp.Application.Features;
 using Abp.AspNetCore.Configuration;
 using Abp.Authorization;
@@ -177,14 +177,14 @@ namespace BXJG.Utils
         private IObjectMapper objectMapper;
         protected IObjectMapper ObjectMapper => objectMapper ??= ScopedServices.GetRequiredService<IObjectMapper>();
 
-        private IPermissionManager permissionManager;
-        protected IPermissionManager PermissionManager => permissionManager ??= ScopedServices.GetRequiredService<IPermissionManager>();
+        //private IPermissionManager permissionManager;
+        //protected IPermissionManager PermissionManager => permissionManager ??= ScopedServices.GetRequiredService<IPermissionManager>();
 
         private IPermissionChecker permissionChecker;
         protected IPermissionChecker PermissionChecker => permissionChecker ??= ScopedServices.GetRequiredService<IPermissionChecker>();
 
-        private IFeatureManager featureManager;
-        protected IFeatureManager FeatureManager => featureManager ??= ScopedServices.GetRequiredService<IFeatureManager>();
+        //private IFeatureManager featureManager;
+        //protected IFeatureManager FeatureManager => featureManager ??= ScopedServices.GetRequiredService<IFeatureManager>();
 
         private IFeatureChecker featureChecker;
         protected IFeatureChecker FeatureChecker => featureChecker ??= ScopedServices.GetRequiredService<IFeatureChecker>();
