@@ -17,10 +17,10 @@ namespace BXJG.Utils.GeneralTree
     /// <typeparam name="TGetTreeForSelectOutput">获取树形下拉框数据时的输出模型</typeparam>
     /// <typeparam name="TGetNodesForSelectInput">获取扁平下拉框数据时的输入模型</typeparam>
     /// <typeparam name="TGetNodesForSelectOutput">获取扁平下拉框数据时的输出模型</typeparam>
-    public interface IUnAuthGeneralTreeAppServiceBase<TGetTreeForSelectInput,
-                                                      TGetTreeForSelectOutput,
-                                                      TGetNodesForSelectInput,
-                                                      TGetNodesForSelectOutput> : IApplicationService
+    public interface IGeneralTreeProviderBaseAppService<TGetTreeForSelectInput,
+                                                       TGetTreeForSelectOutput,
+                                                       TGetNodesForSelectInput,
+                                                       TGetNodesForSelectOutput> : IApplicationService
     {
         /// <summary>
         /// 获取简洁的树形数据，通常引用此数据的页面调用

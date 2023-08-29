@@ -2,7 +2,7 @@
 using Abp.Configuration.Startup;
 using Abp.Domain.Uow;
 using Abp.Modules;
-using DotNetCore.CAP;
+//using DotNetCore.CAP;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;

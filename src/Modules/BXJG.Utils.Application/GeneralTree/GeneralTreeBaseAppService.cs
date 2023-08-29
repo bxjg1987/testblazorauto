@@ -51,7 +51,7 @@ namespace BXJG.Utils.GeneralTree
                                                    TGetTreeForSelectOutput,
                                                    TGetNodesForSelectInput,
                                                    TGetNodesForSelectOutput,
-                                                   TEntity> : ApplicationService, IUnAuthGeneralTreeAppServiceBase<TGetTreeForSelectInput,
+                                                   TEntity> : ApplicationService, IGeneralTreeProviderBaseAppService<TGetTreeForSelectInput,
                                                                                                                    TGetTreeForSelectOutput,
                                                                                                                    TGetNodesForSelectInput,
                                                                                                                    TGetNodesForSelectOutput>

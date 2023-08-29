@@ -14,7 +14,7 @@ namespace BXJG.Utils.GeneralTree
     /// <summary>
     /// 数据字典应用服务接口
     /// </summary>
-    public interface IUnAuthGeneralTreeAppService : IUnAuthGeneralTreeAppServiceBase<GeneralTreeGetForSelectInput,
+    public interface IUnAuthGeneralTreeAppService : IGeneralTreeProviderBaseAppService<GeneralTreeGetForSelectInput,
                                                                                      GeneralTreeNodeDto,
                                                                                      GeneralTreeGetForSelectInput,
                                                                                      GeneralTreeComboboxDto>

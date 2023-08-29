@@ -50,6 +50,7 @@
 	<ItemGroup>
 		<Compile Remove="Controllers\FileController.cs" />
 		<Compile Remove="Controllers\WeChatMiniProgramPaymentController.cs" />
+		<Compile Remove="Startup\Class221.cs" />
 		<Compile Remove="Startup\TxdlFirewall.cs" />
 		<Compile Remove="Startup\WeatherForecast.cs" />
 		<Compile Remove="Startup\WeatherForecastService.cs" />
@@ -115,14 +116,14 @@
 	<ItemGroup>
 		<PackageReference Include="Abp.Castle.Log4Net" Version="8.3.1" />
 		<PackageReference Include="DistributedLock.SqlServer" Version="1.*" />
-		<PackageReference Include="DotNetCore.CAP.Dashboard" Version="7.2.0" />
-		<PackageReference Include="DotNetCore.CAP.SqlServer" Version="7.2.0" />
+		<!--<PackageReference Include="DotNetCore.CAP.Dashboard" Version="7.2.0" />
+		<PackageReference Include="DotNetCore.CAP.SqlServer" Version="7.2.0" />-->
 		<PackageReference Include="Hangfire.SqlServer" Version="1.8.5" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.10">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Savorboard.CAP.InMemoryMessageQueue" Version="7.0.0" />
+		<!--<PackageReference Include="Savorboard.CAP.InMemoryMessageQueue" Version="7.0.0" />-->
 	</ItemGroup>
 
 

@@ -23,7 +23,7 @@ using Orleans.Hosting;
 
 using Microsoft.AspNetCore.Components.Server.Circuits;
 using Microsoft.Extensions.DependencyInjection;
-using Savorboard.CAP.InMemoryMessageQueue;
+//using Savorboard.CAP.InMemoryMessageQueue;
 using ZLJ.App.Admin.Authorization.Permissions;
 
 namespace ZLJ.Web.Host.Startup
@@ -241,23 +241,23 @@ namespace ZLJ.Web.Host.Startup
 
 
 
-            #region CAP 依赖ef选项，所以放abp配置下面
+            //#region CAP 依赖ef选项，所以放abp配置下面
 
 
-            services.AddCap(config =>
-            {
-                config.UseInMemoryMessageQueue();
-                //config.UseRedis();
-                config.UseEntityFramework<ZLJDbContext>()
-                      .RegisterExtension(new zhuce());//cap在注册阶段会去通过dbcontext拿连接字符串，但abp中dbcontext的连接字符串是动态解析来的，所以这扩展替换cap的逻辑
-                                                      //若要改善这一点，要替换cap ef中的option对象
-                config.UseDashboard();
-            })
-                //abp的模块是在Configure方法中启动的，cap是在asp.net core上启动的，cap启动时abp的模块还没执行，所以相关服务还没注册完成，导致默认情况下cap启动时无法获取所有订阅服务
-                .AddSubscriberAssembly(typeof(CustomerApplicationModule),/* typeof(EmployeeApplicationModule),*/ typeof(ZLJApplicationModule), typeof(CommonApplicationModule));
+            //services.AddCap(config =>
+            //{
+            //    config.UseInMemoryMessageQueue();
+            //    //config.UseRedis();
+            //    config.UseEntityFramework<ZLJDbContext>()
+            //          .RegisterExtension(new zhuce());//cap在注册阶段会去通过dbcontext拿连接字符串，但abp中dbcontext的连接字符串是动态解析来的，所以这扩展替换cap的逻辑
+            //                                          //若要改善这一点，要替换cap ef中的option对象
+            //    config.UseDashboard();
+            //})
+            //    //abp的模块是在Configure方法中启动的，cap是在asp.net core上启动的，cap启动时abp的模块还没执行，所以相关服务还没注册完成，导致默认情况下cap启动时无法获取所有订阅服务
+            //    .AddSubscriberAssembly(typeof(CustomerApplicationModule),/* typeof(EmployeeApplicationModule),*/ typeof(ZLJApplicationModule), typeof(CommonApplicationModule));
 
 
-            #endregion
+            //#endregion
 
             #region abp
             //老的

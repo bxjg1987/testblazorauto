@@ -5,7 +5,7 @@ using Abp.Zero.EntityFrameworkCore;
 using BXJG.Utils;
 using BXJG.Utils.EFCore;
 //using BXJG.Utils.EFCore.CAP;
-using DotNetCore.CAP;
+//using DotNetCore.CAP;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;

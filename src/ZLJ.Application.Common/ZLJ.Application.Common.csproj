@@ -50,7 +50,7 @@
 
 		
 		<!--虽然ef引用utils引用common，但有时候需要单独更新common或utils，所以这里还是要单独引用
-		   不过core引进引用了这俩包-->
+		   不过core已经引用了这俩包-->
 		<!--<PackageReference Include="BXJG.Utils" Version="*" />
 		<PackageReference Include="BXJG.Common" Version="*" />-->
 		
@@ -62,7 +62,7 @@
 	
 	<ItemGroup>
 		<!--<PackageReference Include="BXJG.Utils.Application" Version="*" />-->
-		<PackageReference Include="DotNetCore.CAP" Version="7.2.0" />
+		<!--<PackageReference Include="DotNetCore.CAP" Version="7.2.0" />-->
 		<PackageReference Include="Hangfire.Core" Version="1.8.5" />
 		<PackageReference Include="Magicodes.IE.Excel" Version="2.7.4.5" />
 		<PackageReference Include="Microsoft.Orleans.Client" Version="7.2.1" />
