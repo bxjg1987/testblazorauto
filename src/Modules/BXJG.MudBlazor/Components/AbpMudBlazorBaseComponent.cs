@@ -1,4 +1,5 @@
 ﻿using BXJG.Utils;
+using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using MudBlazor;
 using System;
@@ -19,6 +20,7 @@ namespace BXJG.MudBlazor.Components
         /// <summary>
         /// 经过测试，它是Scope的生命周期，且使用ScopedServices.GetRequiredService方式不能用
         /// </summary>
+        [Inject]
         protected virtual ISnackbar Snackbar { get; set; }// => snackbar ??= ScopedServices.GetRequiredService<ISnackbar>();
 
         public override ValueTask ShowErrorAsync(string msg)
