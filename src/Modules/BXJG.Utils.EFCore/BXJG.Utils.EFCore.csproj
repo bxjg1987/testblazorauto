@@ -17,8 +17,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="CAP\**" />
+    <EmbeddedResource Remove="CAP\**" />
+    <None Remove="CAP\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Abp.ZeroCore.EntityFrameworkCore" Version="8.3.1" />
-    <PackageReference Include="DotNetCore.CAP" Version="7.2.0" />
+    <!--<PackageReference Include="DotNetCore.CAP" Version="7.2.0" />-->
 
   </ItemGroup>
 

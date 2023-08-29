@@ -18,6 +18,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="CAP\**" />
+    <EmbeddedResource Remove="CAP\**" />
+    <None Remove="CAP\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="AutoMapper\ExtensionDataSS.cs" />
     <Compile Remove="AutoMapper\IExtendableDto.cs" />
     <Compile Remove="Enums\GetStructForCombboxInput.cs" />

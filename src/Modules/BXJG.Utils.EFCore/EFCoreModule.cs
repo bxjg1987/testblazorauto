@@ -7,12 +7,12 @@ using Abp.Configuration.Startup;
 using Abp.EntityHistory;
 using BXJG.Utils.EFCore.EntityHistory;
 using Abp.Domain.Uow;
-using DotNetCore.CAP.Transport;
-using DotNetCore.CAP;
+//using DotNetCore.CAP.Transport;
+//using DotNetCore.CAP;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Castle.Core;
-using BXJG.Utils.EFCore.CAP;
+//using BXJG.Utils.EFCore.CAP;
 using Abp.Application.Services;
 
 namespace BXJG.Utils.EFCore

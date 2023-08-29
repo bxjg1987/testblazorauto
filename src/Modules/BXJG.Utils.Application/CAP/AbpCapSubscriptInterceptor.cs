@@ -1,8 +1,8 @@
 ﻿using Abp.Dependency;
 using Abp.Domain.Uow;
 using Castle.DynamicProxy;
-using DotNetCore.CAP.Transport;
-using DotNetCore.CAP;
+//using DotNetCore.CAP.Transport;
+//using DotNetCore.CAP;
 using System;
 using System.Collections.Generic;
 using System.Linq;

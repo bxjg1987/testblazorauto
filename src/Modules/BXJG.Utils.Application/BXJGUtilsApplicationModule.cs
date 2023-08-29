@@ -18,8 +18,8 @@ using BXJG.Utils.Concurrency;
 using System.Linq;
 using Abp.Application.Services;
 using Castle.Core;
-using BXJG.Utils.CAP;
-using DotNetCore.CAP;
+//using BXJG.Utils.CAP;
+//using DotNetCore.CAP;
 using BXJG.Utils.Notification;
 using BXJG.Utils.GeneralTree;
 using Abp.Configuration.Startup;
@@ -56,14 +56,14 @@ namespace BXJG.Utils
                 //});
                 cfg.AddMaps(Assembly.GetExecutingAssembly());
             });
-            //https://aspnetboilerplate.com/Pages/Documents/Articles/Aspect-Oriented-Programming-using-Interceptors/index.html
-            IocManager.IocContainer.Kernel.ComponentRegistered += (key, handler) =>
-            {
-                if (typeof(ICapSubscribe).IsAssignableFrom(handler.ComponentModel.Implementation))
-                {
-                    handler.ComponentModel.Interceptors.Add(new InterceptorReference(typeof(AbpAsyncDeterminationInterceptor<AbpCapSubscriptInterceptor>)));
-                }
-            };
+            ////https://aspnetboilerplate.com/Pages/Documents/Articles/Aspect-Oriented-Programming-using-Interceptors/index.html
+            //IocManager.IocContainer.Kernel.ComponentRegistered += (key, handler) =>
+            //{
+            //    if (typeof(ICapSubscribe).IsAssignableFrom(handler.ComponentModel.Implementation))
+            //    {
+            //        handler.ComponentModel.Interceptors.Add(new InterceptorReference(typeof(AbpAsyncDeterminationInterceptor<AbpCapSubscriptInterceptor>)));
+            //    }
+            //};
 
             //Configuration.Modules.AbpAutoMapper().Configurators.Add(cfg => cfg.AddMaps(Assembly.GetExecutingAssembly()));
             //统一配置abp扩展属性映射
@@ -81,7 +81,7 @@ namespace BXJG.Utils
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
-            IocManager.Register(typeof(AbpAsyncDeterminationInterceptor<AbpCapSubscriptInterceptor>), DependencyLifeStyle.Transient);
+           //IocManager.Register(typeof(AbpAsyncDeterminationInterceptor<AbpCapSubscriptInterceptor>), DependencyLifeStyle.Transient);
             //IocManager.Register(typeof(GeneralTreeManager<>), DependencyLifeStyle.Transient);
             //Configuration.ReplaceService(typeof(GeneralTreeManager<>), () => default,DependencyLifeStyle.Transient);
 

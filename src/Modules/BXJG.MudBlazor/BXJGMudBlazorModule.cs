@@ -2,7 +2,7 @@
 using Abp.Dependency;
 using Abp.Modules;
 using BXJG.Utils;
-using BXJG.Utils.CAP;
+//using BXJG.Utils.CAP;
 using System;
 using System.Collections.Generic;
 using System.Linq;
