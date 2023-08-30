@@ -12,11 +12,11 @@ using ZLJ.App.Common.Administrative;
 namespace ZLJ.App.Common.AdministrativeCommon
 {
     [AbpAuthorize]
-    public class BaseInfoAdministrativeProviderAppService : GeneralTreeProviderBaseAppService<GeneralTreeGetForSelectInput
+    public class BaseInfoAdministrativeProviderAppService : GeneralTreeProviderBaseAppService<
+        AdministrativeEntity,GeneralTreeGetForSelectInput
         , AdministrativeTreeNodeDto,
         GeneralTreeGetForSelectInput,
-        AdministrativeComboboxItemDto,
-        AdministrativeEntity>
+        AdministrativeComboboxItemDto>
     {
         public BaseInfoAdministrativeProviderAppService(IRepository<AdministrativeEntity, long> repository) :
             base(repository)

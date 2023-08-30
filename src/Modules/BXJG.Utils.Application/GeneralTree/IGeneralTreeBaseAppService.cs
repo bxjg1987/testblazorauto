@@ -232,11 +232,11 @@ namespace BXJG.Utils.GeneralTree
     public interface IGeneralTreeBaseAppService<TDto> : IGeneralTreeBaseAppService<TDto,
                                                                                    TDto>
     { }
-    /// <summary>
-    /// 通用树形结构服务接口，其它树形接口应该继承此接口以获得树形结构数据的通用功能
-    /// </summary>
-    public interface IGeneralTreeBaseAppService : IGeneralTreeBaseAppService<GeneralTreeDto>
-    { }
+    ///// <summary>
+    ///// 通用树形结构服务接口，其它树形接口应该继承此接口以获得树形结构数据的通用功能
+    ///// </summary>
+    //public interface IGeneralTreeBaseAppService : IGeneralTreeBaseAppService<GeneralTreeGetTreeNodeBaseDto<GeneralTreeGetTreeNodeBaseDto>>
+    //{ }
 
     ///// <summary>
     ///// 通用树形结构服务接口，其它树形接口应该继承此接口以获得树形结构数据的通用功能

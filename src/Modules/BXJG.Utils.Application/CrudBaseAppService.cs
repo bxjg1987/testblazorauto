@@ -31,27 +31,27 @@ namespace BXJG.Utils
     /// <typeparam name="TUpdateInput"></typeparam>
     /// <typeparam name="TGetInput"></typeparam>
     /// <typeparam name="TDeleteInput"></typeparam>
-    public abstract class CrudBaseAppService<TEntity,
-                                             TEntityDto,
-                                             TPrimaryKey,
-                                             TGetAllInput,
-                                             TCreateInput,
-                                             TUpdateInput,
-                                             TGetInput,
-                                             TDeleteInput> : AsyncCrudAppService<TEntity,
-                                                                                 TEntityDto,
-                                                                                 TPrimaryKey,
-                                                                                 TGetAllInput,
-                                                                                 TCreateInput,
-                                                                                 TUpdateInput,
-                                                                                 TGetInput,
-                                                                                 TDeleteInput>, ICrudBaseAppService<TEntityDto,
-                                                                                                                    TPrimaryKey,
-                                                                                                                    TGetAllInput,
-                                                                                                                    TCreateInput,
-                                                                                                                    TUpdateInput,
-                                                                                                                    TGetInput,
-                                                                                                                    TDeleteInput>
+    public class CrudBaseAppService<TEntity,
+                                    TEntityDto,
+                                    TPrimaryKey,
+                                    TGetAllInput,
+                                    TCreateInput,
+                                    TUpdateInput,
+                                    TGetInput,
+                                    TDeleteInput> : AsyncCrudAppService<TEntity,
+                                                                        TEntityDto,
+                                                                        TPrimaryKey,
+                                                                        TGetAllInput,
+                                                                        TCreateInput,
+                                                                        TUpdateInput,
+                                                                        TGetInput,
+                                                                        TDeleteInput>, ICrudBaseAppService<TEntityDto,
+                                                                                                        TPrimaryKey,
+                                                                                                        TGetAllInput,
+                                                                                                        TCreateInput,
+                                                                                                        TUpdateInput,
+                                                                                                        TGetInput,
+                                                                                                        TDeleteInput>
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TUpdateInput : IEntityDto<TPrimaryKey>
@@ -158,7 +158,7 @@ namespace BXJG.Utils
         {
             await Repository.DeleteAsync(entity);
         }
-        
+
         protected override IQueryable<TEntity> CreateFilteredQuery(TGetAllInput input)
         {
             var q = BuildQuery().AsNoTrackingWithIdentityResolution();
@@ -219,25 +219,25 @@ namespace BXJG.Utils
     /// <typeparam name="TCreateInput"></typeparam>
     /// <typeparam name="TUpdateInput"></typeparam>
     /// <typeparam name="TGetInput"></typeparam>
-    public abstract class CrudBaseAppService<TEntity,
-                                             TEntityDto,
-                                             TPrimaryKey,
-                                             TGetAllInput,
-                                             TCreateInput,
-                                             TUpdateInput,
-                                             TGetInput> : CrudBaseAppService<TEntity,
-                                                                             TEntityDto,
-                                                                             TPrimaryKey,
-                                                                             TGetAllInput,
-                                                                             TCreateInput,
-                                                                             TUpdateInput,
-                                                                             TGetInput,
-                                                                             EntityDto<TPrimaryKey>>, ICrudBaseAppService<TEntityDto,
-                                                                                                                          TPrimaryKey,
-                                                                                                                          TGetAllInput,
-                                                                                                                          TCreateInput,
-                                                                                                                          TUpdateInput,
-                                                                                                                          TGetInput>
+    public class CrudBaseAppService<TEntity,
+                                    TEntityDto,
+                                    TPrimaryKey,
+                                    TGetAllInput,
+                                    TCreateInput,
+                                    TUpdateInput,
+                                    TGetInput> : CrudBaseAppService<TEntity,
+                                                                    TEntityDto,
+                                                                    TPrimaryKey,
+                                                                    TGetAllInput,
+                                                                    TCreateInput,
+                                                                    TUpdateInput,
+                                                                    TGetInput,
+                                                                    EntityDto<TPrimaryKey>>, ICrudBaseAppService<TEntityDto,
+                                                                                                                 TPrimaryKey,
+                                                                                                                 TGetAllInput,
+                                                                                                                 TCreateInput,
+                                                                                                                 TUpdateInput,
+                                                                                                                 TGetInput>
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TUpdateInput : IEntityDto<TPrimaryKey>
@@ -257,22 +257,22 @@ namespace BXJG.Utils
     /// <typeparam name="TGetAllInput"></typeparam>
     /// <typeparam name="TCreateInput"></typeparam>
     /// <typeparam name="TUpdateInput"></typeparam>
-    public abstract class CrudBaseAppService<TEntity,
-                                             TEntityDto,
-                                             TPrimaryKey,
-                                             TGetAllInput,
-                                             TCreateInput,
-                                             TUpdateInput> : CrudBaseAppService<TEntity,
-                                                                                TEntityDto,
-                                                                                TPrimaryKey,
-                                                                                TGetAllInput,
-                                                                                TCreateInput,
-                                                                                TUpdateInput,
-                                                                                EntityDto<TPrimaryKey>>, ICrudBaseAppService<TEntityDto,
-                                                                                                                             TPrimaryKey,
-                                                                                                                             TGetAllInput,
-                                                                                                                             TCreateInput,
-                                                                                                                             TUpdateInput>
+    public class CrudBaseAppService<TEntity,
+                                    TEntityDto,
+                                    TPrimaryKey,
+                                    TGetAllInput,
+                                    TCreateInput,
+                                    TUpdateInput> : CrudBaseAppService<TEntity,
+                                                                       TEntityDto,
+                                                                       TPrimaryKey,
+                                                                       TGetAllInput,
+                                                                       TCreateInput,
+                                                                       TUpdateInput,
+                                                                       EntityDto<TPrimaryKey>>, ICrudBaseAppService<TEntityDto,
+                                                                                                                    TPrimaryKey,
+                                                                                                                    TGetAllInput,
+                                                                                                                    TCreateInput,
+                                                                                                                    TUpdateInput>
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TUpdateInput : IEntityDto<TPrimaryKey>
@@ -289,19 +289,19 @@ namespace BXJG.Utils
     /// <typeparam name="TPrimaryKey"></typeparam>
     /// <typeparam name="TGetAllInput"></typeparam>
     /// <typeparam name="TCreateInput"></typeparam>
-    public abstract class CrudBaseAppService<TEntity,
-                                             TEntityDto,
-                                             TPrimaryKey,
-                                             TGetAllInput,
-                                             TCreateInput> : CrudBaseAppService<TEntity,
-                                                                                TEntityDto,
-                                                                                TPrimaryKey,
-                                                                                TGetAllInput,
-                                                                                TCreateInput,
-                                                                                TCreateInput>, ICrudBaseAppService<TEntityDto,
-                                                                                                                   TPrimaryKey,
-                                                                                                                   TGetAllInput,
-                                                                                                                   TCreateInput>
+    public class CrudBaseAppService<TEntity,
+                                    TEntityDto,
+                                    TPrimaryKey,
+                                    TGetAllInput,
+                                    TCreateInput> : CrudBaseAppService<TEntity,
+                                                                       TEntityDto,
+                                                                       TPrimaryKey,
+                                                                       TGetAllInput,
+                                                                       TCreateInput,
+                                                                       TCreateInput>, ICrudBaseAppService<TEntityDto,
+                                                                                                          TPrimaryKey,
+                                                                                                          TGetAllInput,
+                                                                                                          TCreateInput>
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TCreateInput : IEntityDto<TPrimaryKey>
@@ -317,16 +317,16 @@ namespace BXJG.Utils
     /// <typeparam name="TEntityDto"></typeparam>
     /// <typeparam name="TPrimaryKey"></typeparam>
     /// <typeparam name="TGetAllInput"></typeparam>
-    public abstract class CrudBaseAppService<TEntity,
-                                             TEntityDto,
-                                             TPrimaryKey,
-                                             TGetAllInput> : CrudBaseAppService<TEntity,
-                                                                                TEntityDto,
-                                                                                TPrimaryKey,
-                                                                                TGetAllInput,
-                                                                                TEntityDto>, ICrudBaseAppService<TEntityDto,
-                                                                                                                 TPrimaryKey,
-                                                                                                                 TGetAllInput>
+    public class CrudBaseAppService<TEntity,
+                                    TEntityDto,
+                                    TPrimaryKey,
+                                    TGetAllInput> : CrudBaseAppService<TEntity,
+                                                                      TEntityDto,
+                                                                      TPrimaryKey,
+                                                                      TGetAllInput,
+                                                                      TEntityDto>, ICrudBaseAppService<TEntityDto,
+                                                                                                       TPrimaryKey,
+                                                                                                       TGetAllInput>
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
     {
@@ -340,13 +340,13 @@ namespace BXJG.Utils
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TEntityDto"></typeparam>
     /// <typeparam name="TPrimaryKey"></typeparam>
-    public abstract class CrudBaseAppService<TEntity,
-                                             TEntityDto,
-                                             TPrimaryKey> : CrudBaseAppService<TEntity,
-                                                                               TEntityDto,
-                                                                               TPrimaryKey,
-                                                                               PagedAndSortedResultRequestDto>, ICrudBaseAppService<TEntityDto,
-                                                                                                                                    TPrimaryKey>
+    public class CrudBaseAppService<TEntity,
+                                    TEntityDto,
+                                    TPrimaryKey> : CrudBaseAppService<TEntity,
+                                                                      TEntityDto,
+                                                                      TPrimaryKey,
+                                                                      PagedAndSortedResultRequestDto>, ICrudBaseAppService<TEntityDto,
+                                                                                                                           TPrimaryKey>
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
     {
@@ -359,10 +359,10 @@ namespace BXJG.Utils
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TEntityDto"></typeparam>
-    public abstract class CrudBaseAppService<TEntity,
-                                             TEntityDto> : CrudBaseAppService<TEntity,
-                                                                              TEntityDto,
-                                                                              int>, ICrudBaseAppService<TEntityDto>
+    public class CrudBaseAppService<TEntity,
+                                    TEntityDto> : CrudBaseAppService<TEntity,
+                                                                     TEntityDto,
+                                                                     int>, ICrudBaseAppService<TEntityDto>
         where TEntity : class, IEntity<int>
         where TEntityDto : IEntityDto<int>
     {

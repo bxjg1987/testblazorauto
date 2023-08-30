@@ -20,7 +20,7 @@ namespace ZLJ.App.Common
     /// <typeparam name="TUpdateInput"></typeparam>
     /// <typeparam name="TGetInput"></typeparam>
     /// <typeparam name="TDeleteInput"></typeparam>
-    public abstract class CommonCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, TDeleteInput>
+    public class CommonCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, TDeleteInput>
                               : CrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, TDeleteInput>
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
@@ -63,7 +63,7 @@ namespace ZLJ.App.Common
 
         private ILocalizationSource appCommonLocalizationSource, zljLocalizationSource, utilsLocalizationSource;
 
-       
+
 
         protected virtual ILocalizationSource LocalizationSourceAppCommon
         {
@@ -109,7 +109,6 @@ namespace ZLJ.App.Common
             identityResult.CheckErrors(LocalizationManager);
         }
     }
-
     /// <summary>
     /// crud应用服务基类
     /// </summary>
@@ -120,9 +119,9 @@ namespace ZLJ.App.Common
     /// <typeparam name="TCreateInput"></typeparam>
     /// <typeparam name="TUpdateInput"></typeparam>
     /// <typeparam name="TGetInput"></typeparam>
-    public abstract class CommonCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput>
+    public class CommonCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput>
                              : CommonCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, EntityDto<TPrimaryKey>>
-        ,ICrudBaseAppService< TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput>
+        , ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput>
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TUpdateInput : IEntityDto<TPrimaryKey>
@@ -141,9 +140,9 @@ namespace ZLJ.App.Common
     /// <typeparam name="TGetAllInput"></typeparam>
     /// <typeparam name="TCreateInput"></typeparam>
     /// <typeparam name="TUpdateInput"></typeparam>
-    public abstract class CommonCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
+    public class CommonCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
                         : CommonCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, EntityDto<TPrimaryKey>>
-        ,ICrudBaseAppService< TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
+        , ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TUpdateInput : IEntityDto<TPrimaryKey>
@@ -160,9 +159,9 @@ namespace ZLJ.App.Common
     /// <typeparam name="TPrimaryKey"></typeparam>
     /// <typeparam name="TGetAllInput"></typeparam>
     /// <typeparam name="TCreateInput"></typeparam>
-    public abstract class CommonCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput>
+    public class CommonCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput>
                         : CommonCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TCreateInput>
-        ,ICrudBaseAppService< TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput>
+        , ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput>
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TCreateInput : IEntityDto<TPrimaryKey>
@@ -178,9 +177,9 @@ namespace ZLJ.App.Common
     /// <typeparam name="TEntityDto"></typeparam>
     /// <typeparam name="TPrimaryKey"></typeparam>
     /// <typeparam name="TGetAllInput"></typeparam>
-    public abstract class CommonCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput>
+    public class CommonCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput>
                         : CommonCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TEntityDto>
-        ,ICrudBaseAppService< TEntityDto, TPrimaryKey, TGetAllInput>
+        , ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput>
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
     {
@@ -194,9 +193,9 @@ namespace ZLJ.App.Common
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TEntityDto"></typeparam>
     /// <typeparam name="TPrimaryKey"></typeparam>
-    public abstract class CommonCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey>
+    public class CommonCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey>
                         : CommonCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, PagedAndSortedResultRequestDto>
-        ,ICrudBaseAppService< TEntityDto, TPrimaryKey>
+        , ICrudBaseAppService<TEntityDto, TPrimaryKey>
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
     {
@@ -209,9 +208,9 @@ namespace ZLJ.App.Common
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TEntityDto"></typeparam>
-    public abstract class CommonCrudBaseAppService<TEntity, TEntityDto>
+    public class CommonCrudBaseAppService<TEntity, TEntityDto>
                         : CommonCrudBaseAppService<TEntity, TEntityDto, int>
-        ,ICrudBaseAppService< TEntityDto>
+        , ICrudBaseAppService<TEntityDto>
         where TEntity : class, IEntity<int>
         where TEntityDto : IEntityDto<int>
     {
