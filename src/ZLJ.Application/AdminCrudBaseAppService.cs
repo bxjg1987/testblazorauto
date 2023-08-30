@@ -27,7 +27,7 @@ namespace ZLJ.App.Admin
     /// <typeparam name="TUpdateInput"></typeparam>
     /// <typeparam name="TGetInput"></typeparam>
     /// <typeparam name="TDeleteInput"></typeparam>
-    public abstract class AdminCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, TDeleteInput>
+    public class AdminCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, TDeleteInput>
                        : CommonCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, TDeleteInput>
         //, ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, TDeleteInput>
         where TEntity : class, IEntity<TPrimaryKey>
@@ -37,7 +37,7 @@ namespace ZLJ.App.Admin
         where TDeleteInput : IEntityDto<TPrimaryKey>
     {
         public AdminSession AdminSession { get; set; }
-        public AdminCrudBaseAppService(IRepository<TEntity,TPrimaryKey> repository):base(repository)
+        public AdminCrudBaseAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
         {
             LocalizationSourceName = AdminConsts.Admin;
         }
@@ -53,7 +53,7 @@ namespace ZLJ.App.Admin
     /// <typeparam name="TCreateInput"></typeparam>
     /// <typeparam name="TUpdateInput"></typeparam>
     /// <typeparam name="TGetInput"></typeparam>
-    public abstract class AdminCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput>
+    public class AdminCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput>
                         : AdminCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, EntityDto<TPrimaryKey>>
        , ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput>
         where TEntity : class, IEntity<TPrimaryKey>
@@ -74,7 +74,7 @@ namespace ZLJ.App.Admin
     /// <typeparam name="TGetAllInput"></typeparam>
     /// <typeparam name="TCreateInput"></typeparam>
     /// <typeparam name="TUpdateInput"></typeparam>
-    public abstract class AdminCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
+    public class AdminCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
                         : AdminCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, EntityDto<TPrimaryKey>>
        , ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
         where TEntity : class, IEntity<TPrimaryKey>
@@ -94,7 +94,7 @@ namespace ZLJ.App.Admin
     /// <typeparam name="TPrimaryKey"></typeparam>
     /// <typeparam name="TGetAllInput"></typeparam>
     /// <typeparam name="TCreateInput"></typeparam>
-    public abstract class AdminCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput>
+    public class AdminCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput>
                         : AdminCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TCreateInput>
        , ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput>
         where TEntity : class, IEntity<TPrimaryKey>
@@ -112,7 +112,7 @@ namespace ZLJ.App.Admin
     /// <typeparam name="TEntityDto"></typeparam>
     /// <typeparam name="TPrimaryKey"></typeparam>
     /// <typeparam name="TGetAllInput"></typeparam>
-    public abstract class AdminCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput>
+    public class AdminCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput>
                         : AdminCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TEntityDto>
        , ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput>
         where TEntity : class, IEntity<TPrimaryKey>
@@ -128,7 +128,7 @@ namespace ZLJ.App.Admin
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TEntityDto"></typeparam>
     /// <typeparam name="TPrimaryKey"></typeparam>
-    public abstract class AdminCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey>
+    public class AdminCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey>
                         : AdminCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, PagedAndSortedResultRequestDto>
        , ICrudBaseAppService<TEntityDto, TPrimaryKey>
         where TEntity : class, IEntity<TPrimaryKey>
@@ -143,7 +143,7 @@ namespace ZLJ.App.Admin
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TEntityDto"></typeparam>
-    public abstract class AdminCrudBaseAppService<TEntity, TEntityDto>
+    public class AdminCrudBaseAppService<TEntity, TEntityDto>
                         : AdminCrudBaseAppService<TEntity, TEntityDto, int>
      , ICrudBaseAppService<TEntityDto>
         where TEntity : class, IEntity<int>

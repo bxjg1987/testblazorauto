@@ -15,11 +15,12 @@ using ZLJ.App.Admin.Authorization.Permissions;
 namespace ZLJ.App.Admin.BaseInfo.Administrative
 {
     // [AbpAuthorize]
-    public class BXJGBaseInfoAdministrativeAppService : AdminTreeCrudBaseAppService<AdministrativeDto,
+    public class BXJGBaseInfoAdministrativeAppService : AdminTreeCrudBaseAppService<AdministrativeEntity,
+                                                                                    AdministrativeDto,
                                                                                     AdministrativeEditDto,
                                                                                     AdministrativeEditDto,
-                                                                                    GeneralTreeGetTreeInput,
-                                                                                    AdministrativeEntity>//, IBXJGBaseInfoAdministrativeAppService
+                                                                                    BatchOperationInputLong,
+                                                                                    GeneralTreeGetTreeInput>//, IBXJGBaseInfoAdministrativeAppService
     {
         //public BXJGBaseInfoAdministrativeAppService(
         //    IRepository<AdministrativeEntity, long> repository,
