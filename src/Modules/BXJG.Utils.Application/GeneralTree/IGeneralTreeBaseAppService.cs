@@ -68,7 +68,7 @@ namespace BXJG.Utils.GeneralTree
     /// </summary>
     /// <typeparam name="TGetTreeForSelectInput">获取树形下拉框数据时的输入模型</typeparam>
     public interface IGeneralTreeProviderBaseAppService<TGetTreeForSelectInput> : IGeneralTreeProviderBaseAppService<TGetTreeForSelectInput,
-                                                                                                                     GeneralTreeNodeDto<GeneralTreeNodeDto>>
+                                                                                                                     GeneralTreeNodeDto>
     {
 
     }

@@ -47,11 +47,11 @@ namespace BXJG.Utils.GeneralTree
     /// <typeparam name="TGetNodesForSelectOutput"></typeparam>
     /// <typeparam name="TEntity"></typeparam>
     [UnitOfWork(false)]
-    public class GeneralTreeProviderBaseAppService<TGetTreeForSelectInput,
+    public class GeneralTreeProviderBaseAppService<TEntity,
+                                                   TGetTreeForSelectInput,
                                                    TGetTreeForSelectOutput,
                                                    TGetNodesForSelectInput,
-                                                   TGetNodesForSelectOutput,
-                                                   TEntity> : ApplicationService, IGeneralTreeProviderBaseAppService<TGetTreeForSelectInput,
+                                                   TGetNodesForSelectOutput> : ApplicationService, IGeneralTreeProviderBaseAppService<TGetTreeForSelectInput,
                                                                                                                    TGetTreeForSelectOutput,
                                                                                                                    TGetNodesForSelectInput,
                                                                                                                    TGetNodesForSelectOutput>
@@ -356,6 +356,77 @@ namespace BXJG.Utils.GeneralTree
     }
 
     /// <summary>
+    /// 树形结构应用逻辑基类
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <typeparam name="TGetTreeForSelectInput"></typeparam>
+    /// <typeparam name="TGetTreeForSelectOutput"></typeparam>
+    /// <typeparam name="TGetNodesForSelectInput"></typeparam>
+    [UnitOfWork(false)]
+    public class GeneralTreeProviderBaseAppService<TEntity,
+                                                   TGetTreeForSelectInput,
+                                                   TGetTreeForSelectOutput,
+                                                   TGetNodesForSelectInput> : GeneralTreeProviderBaseAppService<TEntity,
+                                                                                                                TGetTreeForSelectInput,
+                                                                                                                TGetTreeForSelectOutput,
+                                                                                                                TGetNodesForSelectInput,
+                                                                                                                GeneralTreeComboboxDto>, IGeneralTreeProviderBaseAppService<TGetTreeForSelectInput,
+                                                                                                                                                                            TGetTreeForSelectOutput,
+                                                                                                                                                                            TGetNodesForSelectInput>
+        where TEntity : GeneralTreeEntity<TEntity>
+        where TGetTreeForSelectInput : GeneralTreeGetForSelectInput
+        where TGetTreeForSelectOutput : GeneralTreeNodeDto<TGetTreeForSelectOutput>, new()
+        where TGetNodesForSelectInput : GeneralTreeGetForSelectInput
+    {
+    }
+
+    /// <summary>
+    /// 树形结构应用逻辑基类
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <typeparam name="TGetTreeForSelectInput"></typeparam>
+    /// <typeparam name="TGetTreeForSelectOutput"></typeparam>
+    [UnitOfWork(false)]
+    public class GeneralTreeProviderBaseAppService<TEntity,
+                                                   TGetTreeForSelectInput,
+                                                   TGetTreeForSelectOutput> : GeneralTreeProviderBaseAppService<TEntity,
+                                                                                                                TGetTreeForSelectInput,
+                                                                                                                TGetTreeForSelectOutput,
+                                                                                                                TGetTreeForSelectInput>, IGeneralTreeProviderBaseAppService<TGetTreeForSelectInput,
+                                                                                                                                                                            TGetTreeForSelectOutput>
+        where TEntity : GeneralTreeEntity<TEntity>
+        where TGetTreeForSelectInput : GeneralTreeGetForSelectInput
+        where TGetTreeForSelectOutput : GeneralTreeNodeDto<TGetTreeForSelectOutput>, new()
+    {
+    }
+
+    /// <summary>
+    /// 树形结构应用逻辑基类
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <typeparam name="TGetTreeForSelectInput"></typeparam>
+    [UnitOfWork(false)]
+    public class GeneralTreeProviderBaseAppService<TEntity,
+                                                   TGetTreeForSelectInput> : GeneralTreeProviderBaseAppService<TEntity,
+                                                                                                               TGetTreeForSelectInput,
+                                                                                                               GeneralTreeNodeDto>, IGeneralTreeProviderBaseAppService<TGetTreeForSelectInput>
+        where TEntity : GeneralTreeEntity<TEntity>
+        where TGetTreeForSelectInput : GeneralTreeGetForSelectInput
+    {
+    }
+
+    /// <summary>
+    /// 树形结构应用逻辑基类
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    [UnitOfWork(false)]
+    public class GeneralTreeProviderBaseAppService<TEntity> : GeneralTreeProviderBaseAppService<TEntity,
+                                                                                                GeneralTreeGetForSelectInput>, IGeneralTreeProviderBaseAppService
+        where TEntity : GeneralTreeEntity<TEntity>
+    {
+    }
+
+    /// <summary>
     /// 通用的树形结构的数据的crud抽象服务（完整）
     /// </summary>
     /// <typeparam name="TDto"></typeparam>
@@ -367,14 +438,14 @@ namespace BXJG.Utils.GeneralTree
     /// <typeparam name="TMoveInput"></typeparam>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TManager"></typeparam>
-    public class GeneralTreeBaseAppService<TDto,
+    public class GeneralTreeBaseAppService<TEntity,
+                                           TDto,
                                            TCreateInput,
                                            TEditDto,
                                            TDeleteInput,
                                            TGetAllInput,
                                            TGetInput,
                                            TMoveInput,
-                                           TEntity,
                                            TManager> : ApplicationService, IGeneralTreeBaseAppService<TDto,
                                                                                                       TCreateInput,
                                                                                                       TEditDto,
@@ -888,31 +959,229 @@ namespace BXJG.Utils.GeneralTree
         }
         #endregion
     }
+
+
     /// <summary>
-    /// 通用的树形结构的数据的crud抽象服务（常用）
+    /// 通用的树形结构的数据的crud抽象服务（完整）
     /// </summary>
     /// <typeparam name="TDto"></typeparam>
     /// <typeparam name="TCreateInput"></typeparam>
+    /// <typeparam name="TDeleteInput"></typeparam>
     /// <typeparam name="TEditDto"></typeparam>
     /// <typeparam name="TGetAllInput"></typeparam>
+    /// <typeparam name="TGetInput"></typeparam>
+    /// <typeparam name="TMoveInput"></typeparam>
     /// <typeparam name="TEntity"></typeparam>
-    public class GeneralTreeAppServiceBase<TDto,
+    public class GeneralTreeBaseAppService<TEntity,
+                                           TDto,
                                            TCreateInput,
                                            TEditDto,
+                                           TDeleteInput,
                                            TGetAllInput,
-                                           TEntity> : GeneralTreeBaseAppService<TDto,
-                                                                               TCreateInput,
-                                                                               TEditDto,
-                                                                               BatchOperationInputLong,
-                                                                               TGetAllInput,
-                                                                               EntityDto<long>,
-                                                                               GeneralTreeNodeMoveInput,
-                                                                               TEntity,
-                                                                               GeneralTreeManager<TEntity>>
+                                           TGetInput,
+                                           TMoveInput> : GeneralTreeBaseAppService<TEntity,
+                                                                                   TDto,
+                                                                                   TCreateInput,
+                                                                                   TEditDto,
+                                                                                   TDeleteInput,
+                                                                                   TGetAllInput,
+                                                                                   TGetInput,
+                                                                                   TMoveInput,
+                                                                                   GeneralTreeManager<TEntity>>, IGeneralTreeBaseAppService<TDto,
+                                                                                                                                            TCreateInput,
+                                                                                                                                            TEditDto,
+                                                                                                                                            TDeleteInput,
+                                                                                                                                            TGetAllInput,
+                                                                                                                                            TGetInput,
+                                                                                                                                            TMoveInput>
         where TCreateInput : GeneralTreeNodeEditBaseDto //注意这里约束为TEditDto，这样强制要求继承编辑模型不合理
+        where TDeleteInput : BatchOperationInputLong
+        where TGetInput : EntityDto<long>
         where TEntity : GeneralTreeEntity<TEntity>
         where TDto : GeneralTreeGetTreeNodeBaseDto<TDto>, new()
         where TEditDto : GeneralTreeNodeEditBaseDto//父类可以对输入做一定的处理
         where TGetAllInput : GeneralTreeGetTreeInput
-    { }
+        where TMoveInput : GeneralTreeNodeMoveInput
+    {
+
+    }
+
+    /// <summary>
+    /// 通用的树形结构的数据的crud抽象服务（完整）
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <typeparam name="TDto"></typeparam>
+    /// <typeparam name="TCreateInput"></typeparam>
+    /// <typeparam name="TDeleteInput"></typeparam>
+    /// <typeparam name="TEditDto"></typeparam>
+    /// <typeparam name="TGetAllInput"></typeparam>
+    /// <typeparam name="TGetInput"></typeparam>
+    public class GeneralTreeBaseAppService<TEntity,
+                                           TDto,
+                                           TCreateInput,
+                                           TEditDto,
+                                           TDeleteInput,
+                                           TGetAllInput,
+                                           TGetInput> : GeneralTreeBaseAppService<TEntity,
+                                                                                  TDto,
+                                                                                  TCreateInput,
+                                                                                  TEditDto,
+                                                                                  TDeleteInput,
+                                                                                  TGetAllInput,
+                                                                                  TGetInput,
+                                                                                  GeneralTreeNodeMoveInput>, IGeneralTreeBaseAppService<TDto,
+                                                                                                                                        TCreateInput,
+                                                                                                                                        TEditDto,
+                                                                                                                                        TDeleteInput,
+                                                                                                                                        TGetAllInput,
+                                                                                                                                        TGetInput>
+        where TCreateInput : GeneralTreeNodeEditBaseDto //注意这里约束为TEditDto，这样强制要求继承编辑模型不合理
+        where TDeleteInput : BatchOperationInputLong
+        where TGetInput : EntityDto<long>
+        where TEntity : GeneralTreeEntity<TEntity>
+        where TDto : GeneralTreeGetTreeNodeBaseDto<TDto>, new()
+        where TEditDto : GeneralTreeNodeEditBaseDto//父类可以对输入做一定的处理
+        where TGetAllInput : GeneralTreeGetTreeInput
+    {
+
+    }
+
+    /// <summary>
+    /// 通用的树形结构的数据的crud抽象服务（完整）
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <typeparam name="TDto"></typeparam>
+    /// <typeparam name="TCreateInput"></typeparam>
+    /// <typeparam name="TDeleteInput"></typeparam>
+    /// <typeparam name="TEditDto"></typeparam>
+    /// <typeparam name="TGetAllInput"></typeparam>
+    public class GeneralTreeBaseAppService<TEntity,
+                                           TDto,
+                                           TCreateInput,
+                                           TEditDto,
+                                           TDeleteInput,
+                                           TGetAllInput> : GeneralTreeBaseAppService<TEntity,
+                                                                                     TDto,
+                                                                                     TCreateInput,
+                                                                                     TEditDto,
+                                                                                     TDeleteInput,
+                                                                                     TGetAllInput,
+                                                                                     EntityDto<long>>, IGeneralTreeBaseAppService<TDto,
+                                                                                                                                  TCreateInput,
+                                                                                                                                  TEditDto,
+                                                                                                                                  TDeleteInput,
+                                                                                                                                  TGetAllInput>
+        where TCreateInput : GeneralTreeNodeEditBaseDto //注意这里约束为TEditDto，这样强制要求继承编辑模型不合理
+        where TDeleteInput : BatchOperationInputLong
+        where TEntity : GeneralTreeEntity<TEntity>
+        where TDto : GeneralTreeGetTreeNodeBaseDto<TDto>, new()
+        where TEditDto : GeneralTreeNodeEditBaseDto//父类可以对输入做一定的处理
+        where TGetAllInput : GeneralTreeGetTreeInput
+    {
+
+    }
+
+    /// <summary>
+    /// 通用的树形结构的数据的crud抽象服务（完整）
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <typeparam name="TDto"></typeparam>
+    /// <typeparam name="TCreateInput"></typeparam>
+    /// <typeparam name="TDeleteInput"></typeparam>
+    /// <typeparam name="TEditDto"></typeparam>
+    public class GeneralTreeBaseAppService<TEntity,
+                                           TDto,
+                                           TCreateInput,
+                                           TEditDto,
+                                           TDeleteInput> : GeneralTreeBaseAppService<TEntity,
+                                                                                     TDto,
+                                                                                     TCreateInput,
+                                                                                     TEditDto,
+                                                                                     TDeleteInput,
+                                                                                     GeneralTreeGetTreeInput>, IGeneralTreeBaseAppService<TDto,
+                                                                                                                                          TCreateInput,
+                                                                                                                                          TEditDto,
+                                                                                                                                          TDeleteInput>
+        where TCreateInput : GeneralTreeNodeEditBaseDto //注意这里约束为TEditDto，这样强制要求继承编辑模型不合理
+        where TDeleteInput : BatchOperationInputLong
+        where TEntity : GeneralTreeEntity<TEntity>
+        where TDto : GeneralTreeGetTreeNodeBaseDto<TDto>, new()
+        where TEditDto : GeneralTreeNodeEditBaseDto//父类可以对输入做一定的处理
+    {
+
+    }
+
+    /// <summary>
+    /// 通用的树形结构的数据的crud抽象服务（完整）
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <typeparam name="TDto"></typeparam>
+    /// <typeparam name="TCreateInput"></typeparam>
+    /// <typeparam name="TEditDto"></typeparam>
+    public class GeneralTreeBaseAppService<TEntity,
+                                           TDto,
+                                           TCreateInput,
+                                           TEditDto> : GeneralTreeBaseAppService<TEntity,
+                                                                                 TDto,
+                                                                                 TCreateInput,
+                                                                                 TEditDto,
+                                                                                 BatchOperationInputLong>, IGeneralTreeBaseAppService<TDto,
+                                                                                                                                      TCreateInput,
+                                                                                                                                      TEditDto>
+        where TCreateInput : GeneralTreeNodeEditBaseDto //注意这里约束为TEditDto，这样强制要求继承编辑模型不合理
+        where TEntity : GeneralTreeEntity<TEntity>
+        where TDto : GeneralTreeGetTreeNodeBaseDto<TDto>, new()
+        where TEditDto : GeneralTreeNodeEditBaseDto//父类可以对输入做一定的处理
+    {
+
+    }
+
+    /// <summary>
+    /// 通用的树形结构的数据的crud抽象服务（完整）
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <typeparam name="TDto"></typeparam>
+    /// <typeparam name="TCreateInput"></typeparam>
+    public class GeneralTreeBaseAppService<TEntity,
+                                           TDto,
+                                           TCreateInput> : GeneralTreeBaseAppService<TEntity,
+                                                                                     TDto,
+                                                                                     TCreateInput,
+                                                                                     TCreateInput>, IGeneralTreeBaseAppService<TDto,
+                                                                                                                               TCreateInput>
+        where TCreateInput : GeneralTreeNodeEditBaseDto //注意这里约束为TEditDto，这样强制要求继承编辑模型不合理
+        where TEntity : GeneralTreeEntity<TEntity>
+        where TDto : GeneralTreeGetTreeNodeBaseDto<TDto>, new()
+    {
+
+    }
+
+
+    ///// <summary>
+    ///// 通用的树形结构的数据的crud抽象服务（常用）
+    ///// </summary>
+    ///// <typeparam name="TDto"></typeparam>
+    ///// <typeparam name="TCreateInput"></typeparam>
+    ///// <typeparam name="TEditDto"></typeparam>
+    ///// <typeparam name="TGetAllInput"></typeparam>
+    ///// <typeparam name="TEntity"></typeparam>
+    //public class GeneralTreeAppServiceBase<TDto,
+    //                                   TCreateInput,
+    //                                   TEditDto,
+    //                                   TGetAllInput,
+    //                                   TEntity> : GeneralTreeBaseAppService<
+    //                                                                       TEntity, TDto,
+    //                                                                       TCreateInput,
+    //                                                                       TEditDto,
+    //                                                                       BatchOperationInputLong,
+    //                                                                       TGetAllInput,
+    //                                                                       EntityDto<long>,
+    //                                                                       GeneralTreeNodeMoveInput,
+    //                                                                       GeneralTreeManager<TEntity>>
+    //where TCreateInput : GeneralTreeNodeEditBaseDto //注意这里约束为TEditDto，这样强制要求继承编辑模型不合理
+    //where TEntity : GeneralTreeEntity<TEntity>
+    //where TDto : GeneralTreeGetTreeNodeBaseDto<TDto>, new()
+    //where TEditDto : GeneralTreeNodeEditBaseDto//父类可以对输入做一定的处理
+    //where TGetAllInput : GeneralTreeGetTreeInput
+    //{ }
 }

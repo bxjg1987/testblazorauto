@@ -20,30 +20,29 @@ namespace BXJG.Utils.GeneralTree
     /// <summary>
     /// 数据字典应用服务类
     /// </summary>
-    public class DataDictionaryProviderAppService : GeneralTreeProviderBaseAppService<GeneralTreeGetForSelectInput,
+    public class DataDictionaryProviderAppService : GeneralTreeProviderBaseAppService<GeneralTreeEntity, GeneralTreeGetForSelectInput,
                                                                                GeneralTreeNodeDto,
                                                                                GeneralTreeGetForSelectInput,
-                                                                               GeneralTreeComboboxDto,
-                                                                               GeneralTreeEntity>, IDataDictionaryProviderAppService
+                                                                               GeneralTreeComboboxDto>, IDataDictionaryProviderAppService
     {
-        public DataDictionaryProviderAppService(IRepository<GeneralTreeEntity, long> repository) : base(repository)
-        { }
+        //public DataDictionaryProviderAppService(IRepository<GeneralTreeEntity, long> repository) : base(repository)
+        //{ }
     }
 
     /// <summary>
     /// 数据字典应用服务类
     /// </summary>
-    public class DataDictionaryAppService : GeneralTreeBaseAppService<GeneralTreeDto,
-                                                                   GeneralTreeEditDto,
-                                                                   GeneralTreeEditDto,
-                                                                   BatchOperationInputLong,
-                                                                   GeneralTreeGetTreeInput,
-                                                                   EntityDto<long>,
-                                                                   GeneralTreeNodeMoveInput,
-                                                                   GeneralTreeEntity,
-                                                                   GeneralTreeManager>, IDataDictionaryAppService
+    public class DataDictionaryAppService : GeneralTreeBaseAppService<GeneralTreeEntity,
+                                                                      GeneralTreeDto,
+                                                                      GeneralTreeEditDto,
+                                                                      GeneralTreeEditDto,
+                                                                      BatchOperationInputLong,
+                                                                      GeneralTreeGetTreeInput,
+                                                                      EntityDto<long>,
+                                                                      GeneralTreeNodeMoveInput,
+                                                                      GeneralTreeManager>, IDataDictionaryAppService
     {
-        public DataDictionaryAppService(IRepository<GeneralTreeEntity, long> repository, 
+        public DataDictionaryAppService(IRepository<GeneralTreeEntity, long> repository,
                                      GeneralTreeManager organizationUnitManager) : base(repository,
                                                                                         organizationUnitManager,
                                                                                         BXJGUtilsConsts.GeneralTreeCreatePermissionName,
@@ -55,7 +54,7 @@ namespace BXJG.Utils.GeneralTree
 
         protected override ValueTask BeforeDeleteAsync(GeneralTreeEntity entity)
         {
-            if(entity.IsSysDefine)
+            if (entity.IsSysDefine)
                 throw new UserFriendlyException(L("系统预设数据不允许删除！"));
             return ValueTask.CompletedTask;
         }
