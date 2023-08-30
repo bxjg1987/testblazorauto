@@ -14,7 +14,7 @@ namespace BXJG.Utils.GeneralTree
     /// <summary>
     /// 数据字典应用服务接口
     /// </summary>
-    public interface IUnAuthGeneralTreeAppService : IGeneralTreeProviderBaseAppService<GeneralTreeGetForSelectInput,
+    public interface IDataDictionaryProviderAppService : IGeneralTreeProviderBaseAppService<GeneralTreeGetForSelectInput,
                                                                                      GeneralTreeNodeDto,
                                                                                      GeneralTreeGetForSelectInput,
                                                                                      GeneralTreeComboboxDto>
@@ -23,7 +23,7 @@ namespace BXJG.Utils.GeneralTree
     /// <summary>
     /// 数据字典应用服务接口
     /// </summary>
-    public interface IGeneralTreeAppService : IGeneralTreeBaseAppService<GeneralTreeDto,
+    public interface IDataDictionaryAppService : IGeneralTreeBaseAppService<GeneralTreeDto,
                                                                          GeneralTreeEditDto,
                                                                          GeneralTreeEditDto,
                                                                          BatchOperationInputLong,

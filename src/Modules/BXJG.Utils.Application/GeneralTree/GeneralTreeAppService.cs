@@ -20,20 +20,20 @@ namespace BXJG.Utils.GeneralTree
     /// <summary>
     /// 数据字典应用服务类
     /// </summary>
-    public class UnAuthGeneralTreeAppService : GeneralTreeProviderBaseAppService<GeneralTreeGetForSelectInput,
+    public class DataDictionaryProviderAppService : GeneralTreeProviderBaseAppService<GeneralTreeGetForSelectInput,
                                                                                GeneralTreeNodeDto,
                                                                                GeneralTreeGetForSelectInput,
                                                                                GeneralTreeComboboxDto,
-                                                                               GeneralTreeEntity>, IUnAuthGeneralTreeAppService
+                                                                               GeneralTreeEntity>, IDataDictionaryProviderAppService
     {
-        public UnAuthGeneralTreeAppService(IRepository<GeneralTreeEntity, long> repository) : base(repository)
+        public DataDictionaryProviderAppService(IRepository<GeneralTreeEntity, long> repository) : base(repository)
         { }
     }
 
     /// <summary>
     /// 数据字典应用服务类
     /// </summary>
-    public class GeneralTreeAppService : GeneralTreeBaseAppService<GeneralTreeDto,
+    public class DataDictionaryAppService : GeneralTreeBaseAppService<GeneralTreeDto,
                                                                    GeneralTreeEditDto,
                                                                    GeneralTreeEditDto,
                                                                    BatchOperationInputLong,
@@ -41,9 +41,9 @@ namespace BXJG.Utils.GeneralTree
                                                                    EntityDto<long>,
                                                                    GeneralTreeNodeMoveInput,
                                                                    GeneralTreeEntity,
-                                                                   GeneralTreeManager>, IGeneralTreeAppService
+                                                                   GeneralTreeManager>, IDataDictionaryAppService
     {
-        public GeneralTreeAppService(IRepository<GeneralTreeEntity, long> repository, 
+        public DataDictionaryAppService(IRepository<GeneralTreeEntity, long> repository, 
                                      GeneralTreeManager organizationUnitManager) : base(repository,
                                                                                         organizationUnitManager,
                                                                                         BXJGUtilsConsts.GeneralTreeCreatePermissionName,

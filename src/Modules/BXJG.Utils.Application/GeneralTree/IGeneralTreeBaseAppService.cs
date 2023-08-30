@@ -11,16 +11,16 @@ using System.Threading.Tasks;
 namespace BXJG.Utils.GeneralTree
 {
     /// <summary>
-    /// 这俩方法不需要登录就可以访问
+    /// 提供可选的树形或扁平化数据，通常作为下拉框和弹窗选择提供数据
     /// </summary>
     /// <typeparam name="TGetTreeForSelectInput">获取树形下拉框数据时的输入模型</typeparam>
     /// <typeparam name="TGetTreeForSelectOutput">获取树形下拉框数据时的输出模型</typeparam>
     /// <typeparam name="TGetNodesForSelectInput">获取扁平下拉框数据时的输入模型</typeparam>
     /// <typeparam name="TGetNodesForSelectOutput">获取扁平下拉框数据时的输出模型</typeparam>
     public interface IGeneralTreeProviderBaseAppService<TGetTreeForSelectInput,
-                                                       TGetTreeForSelectOutput,
-                                                       TGetNodesForSelectInput,
-                                                       TGetNodesForSelectOutput> : IApplicationService
+                                                        TGetTreeForSelectOutput,
+                                                        TGetNodesForSelectInput,
+                                                        TGetNodesForSelectOutput> : IApplicationService
     {
         /// <summary>
         /// 获取简洁的树形数据，通常引用此数据的页面调用
@@ -34,6 +34,52 @@ namespace BXJG.Utils.GeneralTree
         /// <returns></returns>
         Task<IList<TGetNodesForSelectOutput>> GetNodesForSelectAsync(TGetNodesForSelectInput input);
     }
+
+    /// <summary>
+    /// 提供可选的树形或扁平化数据，通常作为下拉框和弹窗选择提供数据
+    /// </summary>
+    /// <typeparam name="TGetTreeForSelectInput">获取树形下拉框数据时的输入模型</typeparam>
+    /// <typeparam name="TGetTreeForSelectOutput">获取树形下拉框数据时的输出模型</typeparam>
+    /// <typeparam name="TGetNodesForSelectInput">获取扁平下拉框数据时的输入模型</typeparam>
+    public interface IGeneralTreeProviderBaseAppService<TGetTreeForSelectInput,
+                                                        TGetTreeForSelectOutput,
+                                                        TGetNodesForSelectInput> : IGeneralTreeProviderBaseAppService<TGetTreeForSelectInput,
+                                                                                                                      TGetTreeForSelectOutput,
+                                                                                                                      TGetNodesForSelectInput,
+                                                                                                                      GeneralTreeComboboxDto>
+    {
+
+    }
+
+    /// <summary>
+    /// 提供可选的树形或扁平化数据，通常作为下拉框和弹窗选择提供数据
+    /// </summary>
+    /// <typeparam name="TGetTreeForSelectInput">获取树形下拉框数据时的输入模型</typeparam>
+    /// <typeparam name="TGetTreeForSelectOutput">获取树形下拉框数据时的输出模型</typeparam>
+    public interface IGeneralTreeProviderBaseAppService<TGetTreeForSelectInput,
+                                                        TGetTreeForSelectOutput> : IGeneralTreeProviderBaseAppService<TGetTreeForSelectInput,
+                                                                                                                      TGetTreeForSelectOutput,
+                                                                                                                      TGetTreeForSelectInput>
+    {
+
+    }
+    /// <summary>
+    /// 提供可选的树形或扁平化数据，通常作为下拉框和弹窗选择提供数据
+    /// </summary>
+    /// <typeparam name="TGetTreeForSelectInput">获取树形下拉框数据时的输入模型</typeparam>
+    public interface IGeneralTreeProviderBaseAppService<TGetTreeForSelectInput> : IGeneralTreeProviderBaseAppService<TGetTreeForSelectInput,
+                                                                                                                     GeneralTreeNodeDto<GeneralTreeNodeDto>>
+    {
+
+    }
+    /// <summary>
+    /// 提供可选的树形或扁平化数据，通常作为下拉框和弹窗选择提供数据
+    /// </summary>
+    public interface IGeneralTreeProviderBaseAppService : IGeneralTreeProviderBaseAppService<GeneralTreeGetForSelectInput>
+    {
+
+    }
+
 
     /// <summary>
     /// 通用树形结构服务接口，其它树形接口应该继承此接口以获得树形结构数据的通用功能
@@ -94,6 +140,103 @@ namespace BXJG.Utils.GeneralTree
         /// <returns></returns>
         Task<TDto> GetAsync(TGetInput input);
     }
+
+
+    /// <summary>
+    /// 通用树形结构服务接口，其它树形接口应该继承此接口以获得树形结构数据的通用功能
+    /// </summary>
+    /// <typeparam name="TDto">管理页面显示的Dto类型</typeparam>
+    /// <typeparam name="TCreateInput">新增模型</typeparam>
+    /// <typeparam name="TEditDto">编辑模型</typeparam>
+    /// <typeparam name="TDeleteInput">删除时的输入模型</typeparam>
+    /// <typeparam name="TGetAllInput">管理页面获取所有树形数据时的输入模型</typeparam>
+    /// <typeparam name="TGetInput">获取单个信息的输入模型</typeparam>
+    public interface IGeneralTreeBaseAppService<TDto,
+                                                TCreateInput,
+                                                TEditDto,
+                                                TDeleteInput,
+                                                TGetAllInput,
+                                                TGetInput> : IGeneralTreeBaseAppService<TDto,
+                                                                                        TCreateInput,
+                                                                                        TEditDto,
+                                                                                        TDeleteInput,
+                                                                                        TGetAllInput,
+                                                                                        TGetInput,
+                                                                                        GeneralTreeNodeMoveInput>
+    { }
+
+    /// <summary>
+    /// 通用树形结构服务接口，其它树形接口应该继承此接口以获得树形结构数据的通用功能
+    /// </summary>
+    /// <typeparam name="TDto">管理页面显示的Dto类型</typeparam>
+    /// <typeparam name="TCreateInput">新增模型</typeparam>
+    /// <typeparam name="TEditDto">编辑模型</typeparam>
+    /// <typeparam name="TDeleteInput">删除时的输入模型</typeparam>
+    /// <typeparam name="TGetAllInput">管理页面获取所有树形数据时的输入模型</typeparam>
+    public interface IGeneralTreeBaseAppService<TDto,
+                                                TCreateInput,
+                                                TEditDto,
+                                                TDeleteInput,
+                                                TGetAllInput> : IGeneralTreeBaseAppService<TDto,
+                                                                                           TCreateInput,
+                                                                                           TEditDto,
+                                                                                           TDeleteInput,
+                                                                                           TGetAllInput,
+                                                                                           EntityDto<long>>
+    { }
+
+
+    /// <summary>
+    /// 通用树形结构服务接口，其它树形接口应该继承此接口以获得树形结构数据的通用功能
+    /// </summary>
+    /// <typeparam name="TDto">管理页面显示的Dto类型</typeparam>
+    /// <typeparam name="TCreateInput">新增模型</typeparam>
+    /// <typeparam name="TEditDto">编辑模型</typeparam>
+    /// <typeparam name="TDeleteInput">删除时的输入模型</typeparam>
+    public interface IGeneralTreeBaseAppService<TDto,
+                                                TCreateInput,
+                                                TEditDto,
+                                                TDeleteInput> : IGeneralTreeBaseAppService<TDto,
+                                                                                           TCreateInput,
+                                                                                           TEditDto,
+                                                                                           TDeleteInput,
+                                                                                           GeneralTreeGetTreeInput>
+    { }
+    /// <summary>
+    /// 通用树形结构服务接口，其它树形接口应该继承此接口以获得树形结构数据的通用功能
+    /// </summary>
+    /// <typeparam name="TDto">管理页面显示的Dto类型</typeparam>
+    /// <typeparam name="TCreateInput">新增模型</typeparam>
+    /// <typeparam name="TEditDto">编辑模型</typeparam>
+    public interface IGeneralTreeBaseAppService<TDto,
+                                                TCreateInput,
+                                                TEditDto> : IGeneralTreeBaseAppService<TDto,
+                                                                                       TCreateInput,
+                                                                                       TEditDto,
+                                                                                       BatchOperationInputLong>
+    { }
+    /// <summary>
+    /// 通用树形结构服务接口，其它树形接口应该继承此接口以获得树形结构数据的通用功能
+    /// </summary>
+    /// <typeparam name="TDto">管理页面显示的Dto类型</typeparam>
+    /// <typeparam name="TCreateInput">新增模型</typeparam>
+    public interface IGeneralTreeBaseAppService<TDto,
+                                                TCreateInput> : IGeneralTreeBaseAppService<TDto,
+                                                                                           TCreateInput,
+                                                                                           TCreateInput>
+    { }
+    /// <summary>
+    /// 通用树形结构服务接口，其它树形接口应该继承此接口以获得树形结构数据的通用功能
+    /// </summary>
+    /// <typeparam name="TDto">管理页面显示的Dto类型</typeparam>
+    public interface IGeneralTreeBaseAppService<TDto> : IGeneralTreeBaseAppService<TDto,
+                                                                                   TDto>
+    { }
+    /// <summary>
+    /// 通用树形结构服务接口，其它树形接口应该继承此接口以获得树形结构数据的通用功能
+    /// </summary>
+    public interface IGeneralTreeBaseAppService : IGeneralTreeBaseAppService<GeneralTreeDto>
+    { }
 
     ///// <summary>
     ///// 通用树形结构服务接口，其它树形接口应该继承此接口以获得树形结构数据的通用功能
