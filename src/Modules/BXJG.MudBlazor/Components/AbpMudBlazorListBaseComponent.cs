@@ -58,7 +58,6 @@ namespace BXJG.MudBlazor.Components
         protected virtual TAppService AppService => appService ??= ScopedServices.GetRequiredService<TAppService>();
 
 
-
         //private IDialogService dialogService;
 
         /// <summary>
@@ -66,49 +65,21 @@ namespace BXJG.MudBlazor.Components
         /// </summary>
         [Inject]
         protected virtual IDialogService DialogService { get; set; }/// => dialogService ??= ScopedServices.GetRequiredService<IDialogService>();
-        /// <summary>
-        /// 此功能的名称
-        /// </summary>
+                                                                    /// <summary>
+                                                                    /// 此功能的名称
+                                                                    /// </summary>
         protected virtual string FuncName => $"请重写{nameof(FuncName)}属性";
 
-        /// <summary>
-        /// 是否显示删除按钮，默认勾选了某个行且 没有正在加载数据时为true
-        /// </summary>
-        protected virtual bool ShouldEnableDelete => !dataGrid.Loading && !isDeleting && dataGrid.SelectedItems != default && dataGrid.SelectedItems.Any();
-        /// <summary>
-        /// 是否显示修改按钮，默认勾选了某个行且 没有正在加载数据时为true 
-        /// </summary>
-        protected virtual bool ShouldEnableEdit => !dataGrid.Loading && !isDeleting && dataGrid.SelectedItems != default && dataGrid.SelectedItems.Any();
-        /// <summary>
-        /// 是否应该显示新增按钮，默认 没有正在加载数据时 为true
-        /// </summary>
-        protected virtual bool ShouldEnableCreate => !dataGrid.Loading && !isDeleting;
-        #endregion
+        //使用这个会导致add按钮的显示不太正常
+        ///// <summary>
+        ///// 是否应该显示新增按钮，默认 没有正在加载数据时 为true
+        ///// </summary>
+        //protected virtual bool ShouldEnableCreate => !dataGrid.Loading && !isDeleting;
 
-        #region 生命周期
-        //protected override async Task OnInitialized2Async()
-        //{
-        //    await InitPermission();
-        //}
-        #endregion
-
-        #region 权限
 
         //不要在组件中使用AuthorizeAttribute，因为这样会导致组件的渲染速度变慢，因为每次都要去检查权限
         //不要靠应用层定义的权限，因为前后端分离时，应用接口就不应该提供权限名
 
-        /// <summary>
-        /// 是否有新增权限
-        /// </summary>
-        protected bool createIsGranted = true;
-        /// <summary>
-        /// 是否有修改权限
-        /// </summary>
-        protected bool updateIsGranted = true;
-        /// <summary>
-        /// 是否有删除权限
-        /// </summary>
-        protected bool deleteIsGranted = true;
 
         //我们只需要状态，不需要存储，以免浪费性能
         ///// <summary>
@@ -140,6 +111,32 @@ namespace BXJG.MudBlazor.Components
             if (deletePermissionName.IsNotNullOrWhiteSpaceBXJG())
                 deleteIsGranted = await PermissionChecker.IsGrantedAsync(deletePermissionName);
         }
+        /// <summary>
+        /// 批量操作消息提醒
+        /// </summary>
+        /// <param name="output"></param>
+        protected virtual void BatchOperationMessage(BatchOperationOutput<TPrimaryKey> output, string funName = "操作")
+        {
+            if (output.ErrorMessage.Any())
+            {
+                if (output.Ids.Count == output.ErrorMessage.Count)
+                    Snackbar.Add($"批量{funName}全部失败！", Severity.Warning);
+                else
+                    Snackbar.Add($"批量{funName}部分失败！{string.Join(Environment.NewLine, output.ErrorMessage)}", Severity.Warning);
+            }
+            else
+                Snackbar.Add($"批量{funName}全部成功！", Severity.Success);
+        }
+        #endregion
+
+        #region 生命周期
+        //protected override async Task OnInitialized2Async()
+        //{
+        //    await InitPermission();
+        //}
+        #endregion
+
+        #region 权限
 
         #endregion
 
@@ -171,6 +168,7 @@ namespace BXJG.MudBlazor.Components
         protected virtual async Task<GridData<TEntityDto>> LoadDataAsync(GridState<TEntityDto> state)
         {
             // dataGrid.page
+
             return await SafeExecuteAsync(async () =>
             {
                 var cd = new TGetAllInput();
@@ -186,7 +184,7 @@ namespace BXJG.MudBlazor.Components
                 if (cd is IPagedAndSortedResultRequest cd2)
                 {
                     cd2.MaxResultCount = state.PageSize;
-                    cd2.SkipCount =state.Page * state.PageSize;
+                    cd2.SkipCount = state.Page * state.PageSize;
                 }
                 if (cd is ISortedResultRequest cd3)
                 {
@@ -203,13 +201,8 @@ namespace BXJG.MudBlazor.Components
                 }
                 await FillCondtion(cd);
                 var dtos = await AppService.GetAllAsync(cd);
-                //pageCount = (int)Math.Ceiling(dtos.TotalCount / (state.PageSize * 1d));
-                //if (pageCount == 0)
-                //    pageCount = 1;
 
-                //////不加这个，进入最后一页会无限刷新，mudblazor的bug估计
-                ////if (pageIndex ==1)
-                //StateHasChanged();//不加这个，首次的页数显示不对
+                _ = InvokeAsync(StateHasChanged);//让多选影响顶部按钮得以执行 包一层是因为需要加载完才执行
 
                 return new GridData<TEntityDto>
                 {
@@ -262,6 +255,20 @@ namespace BXJG.MudBlazor.Components
         #endregion
 
         #region 表单
+
+        /// <summary>
+        /// 是否显示修改按钮，默认勾选了某个行且 没有正在加载数据时为true 
+        /// </summary>
+        protected virtual bool ShouldEnableEdit => !dataGrid.Loading && !isDeleting && dataGrid.SelectedItems != default && dataGrid.SelectedItems.Any();
+
+        /// <summary>
+        /// 是否有新增权限
+        /// </summary>
+        protected bool createIsGranted = true;
+        /// <summary>
+        /// 是否有修改权限
+        /// </summary>
+        protected bool updateIsGranted = true;
         /// <summary>
         /// 新增或修改的弹窗
         /// </summary>
@@ -303,10 +310,37 @@ namespace BXJG.MudBlazor.Components
         #endregion
 
         #region 删除
+
+        /// <summary>
+        /// 是否有删除权限
+        /// </summary>
+        protected bool deleteIsGranted = true;
+        /// <summary>
+        /// 是否显示删除按钮，默认勾选了某个行且 没有正在加载数据时为true
+        /// </summary>
+        protected virtual bool ShouldEnableDelete => !dataGrid.Loading && !isDeleting && dataGrid.SelectedItems != default && dataGrid.SelectedItems.Any();
+        /// <summary>
+        /// 是否显示全局的删除确认
+        /// </summary>
+        protected bool isShowDeleteConfirm = false;
         /// <summary>
         /// 是否正在执行删除操作
         /// </summary>
         protected bool isDeleting = false;
+        /// <summary>
+        /// 显示删除确认
+        /// </summary>
+        protected virtual void ShowDeleteConfirm()
+        {
+            isShowDeleteConfirm = true;
+        }
+        /// <summary>
+        /// 隐藏删除确认框
+        /// </summary>
+        protected virtual void HideDeleteConfirm()
+        {
+            isShowDeleteConfirm = false;
+        }
         /// <summary>
         /// 批量删除
         /// </summary>
@@ -319,15 +353,22 @@ namespace BXJG.MudBlazor.Components
                 var temp = await AppService.BatchDeleteAsync(new BatchOperationInput<TPrimaryKey> { Ids = dataGrid.SelectedItems?.Select(x => x.Id).ToArray() }).ContinueWith(async t =>
                 {
                     if (t.IsCompletedSuccessfully)
-                        _ = InvokeAsync(dataGrid.ReloadServerData);
+                        _ = InvokeAsync(dataGrid.ReloadServerData); //内部会StateChange
 
                     return t.Result;
                 });
                 return await temp;
             });
             isDeleting = false;
+            isShowDeleteConfirm = false;
+            BatchOperationMessage(r, "批量删除");
             return r;
         }
+
+        //protected virtual void DeleteMessage()
+        //{
+
+        //}
         /// <summary>
         /// 删除单个项
         /// </summary>

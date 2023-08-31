@@ -4,8 +4,10 @@ using System.Text;
 
 namespace BXJG.Common.Dto
 {
-    public static class BatchOperationErrorMessageExt {
-        public static BatchOperationErrorMessage Message500(this object id) {
+    public static class BatchOperationErrorMessageExt
+    {
+        public static BatchOperationErrorMessage Message500(this object id)
+        {
             return new BatchOperationErrorMessage(id, "服务器内部异常");
         }
     }
@@ -25,6 +27,11 @@ namespace BXJG.Common.Dto
         public object Id { get; set; }
         public string Code { get; set; }
         public string Message { get; set; }
+
+        public override string ToString()
+        {
+            return $" {Message} （Id：{Id} 代码：{Code}）";
+        }
 
         //public static BatchOperationErrorMessage Message500(object id)
         //{
@@ -52,7 +59,7 @@ namespace BXJG.Common.Dto
     /// 批量操作输出模型
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
-    public class BatchOperationOutput<TKey>: BatchOperationOutputBase
+    public class BatchOperationOutput<TKey> : BatchOperationOutputBase
     {
         /// <summary>
         /// 操作成功的id集合
@@ -76,7 +83,7 @@ namespace BXJG.Common.Dto
     public class BatchOperationOutputLong : BatchOperationOutput<long>
     {
     }
-    public class BatchOperationOutputString: BatchOperationOutput<string>
+    public class BatchOperationOutputString : BatchOperationOutput<string>
     {
     }
     public class BatchOperationOutputGuid : BatchOperationOutput<Guid>

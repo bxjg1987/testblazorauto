@@ -302,7 +302,7 @@ namespace BXJG.Utils
             return LocalizationSource.GetString(name, culture, args);
         }
 
-
+        //批量操作不行时，禁用操作即可
         ///// <summary>
         ///// 批量操作检查
         ///// </summary>
