@@ -142,11 +142,6 @@ namespace BXJG.MudBlazor.Components
         #endregion
 
         #region 列表
-        /// <summary>
-        /// 多选时，存储已选择的行
-        /// </summary>
-        protected HashSet<TEntityDto> selectedItems = new HashSet<TEntityDto>();
-
 
         protected MudDataGrid<TEntityDto> dataGrid;
         ///// <summary>
@@ -174,7 +169,7 @@ namespace BXJG.MudBlazor.Components
         /// <returns></returns>
         protected virtual async Task<GridData<TEntityDto>> LoadDataAsync(GridState<TEntityDto> state)
         {
-            // dataGrid.page
+            
 
             return await SafeExecuteAsync(async () =>
             {
@@ -209,8 +204,9 @@ namespace BXJG.MudBlazor.Components
                 await FillCondtion(cd);
                 var dtos = await AppService.GetAllAsync(cd);
 
-                //_ = InvokeAsync(StateHasChanged);//让多选影响顶部按钮得以执行 包一层是因为需要加载完才执行
-
+                _ = InvokeAsync(StateHasChanged);//让多选影响顶部按钮得以执行 包一层是因为需要加载完才执行
+                dataGrid.SelectedItems.Clear();
+                
                 return new GridData<TEntityDto>
                 {
                     TotalItems = dtos.TotalCount,
@@ -234,13 +230,13 @@ namespace BXJG.MudBlazor.Components
         /// </summary>
         /// <param name="items"></param>
         /// <returns></returns>
-        // protected virtual Task SelectedItemsChanged(HashSet<TEntityDto> items)
-        // {
-        //     StateHasChanged();
-        //     //selectedItems = items;
-        //     return Task.CompletedTask;
-        //     //_events.Insert(0, $"Event = SelectedItemsChanged, Data = {System.Text.Json.JsonSerializer.Serialize(items)}");
-        // }
+        protected virtual Task SelectedItemsChanged(HashSet<TEntityDto> items)
+        {
+            StateHasChanged();
+            //selectedItems = items;
+            return Task.CompletedTask;
+            //_events.Insert(0, $"Event = SelectedItemsChanged, Data = {System.Text.Json.JsonSerializer.Serialize(items)}");
+        }
         //未选中项时，直接禁用按钮
         ///// <summary>
         ///// 批量操作时，检查是否有选中项
@@ -266,7 +262,7 @@ namespace BXJG.MudBlazor.Components
         /// <summary>
         /// 是否显示修改按钮，默认勾选了某个行且 没有正在加载数据时为true 
         /// </summary>
-        protected virtual bool ShouldEnableEdit => !dataGrid.Loading && !isDeleting && selectedItems != default && selectedItems.Any();
+        protected virtual bool ShouldEnableEdit => !dataGrid.Loading && !isDeleting && dataGrid.SelectedItems != default && dataGrid.SelectedItems.Any();
 
         /// <summary>
         /// 是否有新增权限
@@ -325,7 +321,7 @@ namespace BXJG.MudBlazor.Components
         /// <summary>
         /// 是否显示删除按钮，默认勾选了某个行且 没有正在加载数据时为true
         /// </summary>
-        protected virtual bool ShouldEnableDelete => !dataGrid.Loading && !isDeleting && selectedItems != default && selectedItems.Any();
+        protected virtual bool ShouldEnableDelete => !dataGrid.Loading && !isDeleting && dataGrid.SelectedItems != default && dataGrid.SelectedItems.Any();
         /// <summary>
         /// 是否显示全局的删除确认
         /// </summary>
@@ -357,7 +353,7 @@ namespace BXJG.MudBlazor.Components
             isDeleting = true;
             var r = await SafeExecuteAsync(async () =>
             {
-                var temp = await AppService.BatchDeleteAsync(new BatchOperationInput<TPrimaryKey> { Ids = selectedItems?.Select(x => x.Id).ToArray() }).ContinueWith(async t =>
+                var temp = await AppService.BatchDeleteAsync(new BatchOperationInput<TPrimaryKey> { Ids = dataGrid.SelectedItems?.Select(x => x.Id).ToArray() }).ContinueWith(async t =>
                 {
                     if (t.IsCompletedSuccessfully)
                         _ = InvokeAsync(dataGrid.ReloadServerData); //内部会StateChange
@@ -385,7 +381,7 @@ namespace BXJG.MudBlazor.Components
         {
             await SafeExecuteAsync(async () =>
             {
-                var curr = selectedItems.Single(c => c.Id!.Equals(input.Id));
+                var curr = dataGrid.SelectedItems.Single(c => c.Id!.Equals(input.Id));
                 var item = curr as IHaveIsDeleting;
                 if (item != default)
                     item.IsDeleting = true;
