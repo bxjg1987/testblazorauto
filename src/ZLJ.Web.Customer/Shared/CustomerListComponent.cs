@@ -22,23 +22,22 @@ namespace ZLJ.Web.Customer.Shared
     /// <typeparam name="TDeleteInput"></typeparam>
     /// <typeparam name="TFormComponent"></typeparam>
     /// <typeparam name="TAppService"></typeparam>
-    public class CustomerListComponent<TEntityDto,
-                                    TPrimaryKey,
-                                    TGetAllInput,
-                                    TCreateInput,
-                                    TUpdateInput,
-                                    TGetInput,
-                                    TDeleteInput,
-                                    TFormComponent,
-                                    TAppService> : AbpMudBlazorListBaseComponent<TEntityDto,
-                                                                                 TPrimaryKey,
-                                                                                 TGetAllInput,
-                                                                                 TCreateInput,
-                                                                                 TUpdateInput,
-                                                                                 TGetInput,
-                                                                                 TDeleteInput,
-                                                                                 TFormComponent,
-                                                                                 TAppService>
+    public class CustomerListComponent<TAppService,
+                                       TFormComponent,
+                                       TEntityDto,
+                                       TPrimaryKey,
+                                       TGetAllInput,
+                                       TCreateInput,
+                                       TUpdateInput,
+                                       TGetInput,
+                                       TDeleteInput> : AbpMudBlazorListBaseComponent<TAppService,
+                                                                                     TFormComponent, TEntityDto,
+                                                                                     TPrimaryKey,
+                                                                                     TGetAllInput,
+                                                                                     TCreateInput,
+                                                                                     TUpdateInput,
+                                                                                     TGetInput,
+                                                                                     TDeleteInput>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TGetAllInput : new()
@@ -102,22 +101,21 @@ namespace ZLJ.Web.Customer.Shared
     /// <typeparam name="TGetInput"></typeparam>
     /// <typeparam name="TFormComponent"></typeparam>
     /// <typeparam name="TAppService"></typeparam>
-    public class CustomerListComponent<TEntityDto,
-                                   TPrimaryKey,
-                                   TGetAllInput,
-                                   TCreateInput,
-                                   TUpdateInput,
-                                   TGetInput,
-                                   TFormComponent,
-                                   TAppService> : CustomerListComponent<TEntityDto,
-                                                                    TPrimaryKey,
-                                                                    TGetAllInput,
-                                                                    TCreateInput,
-                                                                    TUpdateInput,
-                                                                    TGetInput,
-                                                                    EntityDto<TPrimaryKey>,
-                                                                    TFormComponent,
-                                                                    TAppService>
+    public class CustomerListComponent<TAppService,
+                                       TFormComponent, TEntityDto,
+                                       TPrimaryKey,
+                                       TGetAllInput,
+                                       TCreateInput,
+                                       TUpdateInput,
+                                       TGetInput> : CustomerListComponent<TAppService,
+                                                                          TFormComponent,
+                                                                          TEntityDto,
+                                                                          TPrimaryKey,
+                                                                          TGetAllInput,
+                                                                          TCreateInput,
+                                                                          TUpdateInput,
+                                                                          TGetInput,
+                                                                          EntityDto<TPrimaryKey>>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TGetInput : IEntityDto<TPrimaryKey>
@@ -136,20 +134,20 @@ namespace ZLJ.Web.Customer.Shared
     /// <typeparam name="TUpdateInput"></typeparam>
     /// <typeparam name="TFormComponent"></typeparam>
     /// <typeparam name="TAppService"></typeparam>
-    public class CustomerListComponent<TEntityDto,
-                                   TPrimaryKey,
-                                   TGetAllInput,
-                                   TCreateInput,
-                                   TUpdateInput,
-                                   TFormComponent,
-                                   TAppService> : CustomerListComponent<TEntityDto,
-                                                                    TPrimaryKey,
-                                                                    TGetAllInput,
-                                                                    TCreateInput,
-                                                                    TUpdateInput,
-                                                                    EntityDto<TPrimaryKey>,
-                                                                    TFormComponent,
-                                                                    TAppService>
+    public class CustomerListComponent<TAppService,
+                                       TFormComponent,
+                                       TEntityDto,
+                                       TPrimaryKey,
+                                       TGetAllInput,
+                                       TCreateInput,
+                                       TUpdateInput> : CustomerListComponent<TAppService,
+                                                                             TFormComponent,
+                                                                             TEntityDto,
+                                                                             TPrimaryKey,
+                                                                             TGetAllInput,
+                                                                             TCreateInput,
+                                                                             TUpdateInput,
+                                                                             EntityDto<TPrimaryKey>>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TGetAllInput : new()
@@ -166,18 +164,18 @@ namespace ZLJ.Web.Customer.Shared
     /// <typeparam name="TCreateInput"></typeparam>
     /// <typeparam name="TFormComponent"></typeparam>
     /// <typeparam name="TAppService"></typeparam>
-    public class CustomerListComponent<TEntityDto,
-                                   TPrimaryKey,
-                                   TGetAllInput,
-                                   TCreateInput,
-                                   TFormComponent,
-                                   TAppService> : CustomerListComponent<TEntityDto,
-                                                                    TPrimaryKey,
-                                                                    TGetAllInput,
-                                                                    TCreateInput,
-                                                                    TCreateInput,
-                                                                    TFormComponent,
-                                                                    TAppService>
+    public class CustomerListComponent<TAppService,
+                                       TFormComponent,
+                                       TEntityDto,
+                                       TPrimaryKey,
+                                       TGetAllInput,
+                                       TCreateInput> : CustomerListComponent<TAppService,
+                                                                             TFormComponent,
+                                                                             TEntityDto,
+                                                                             TPrimaryKey,
+                                                                             TGetAllInput,
+                                                                             TCreateInput,
+                                                                             TCreateInput>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TCreateInput : IEntityDto<TPrimaryKey>
         where TFormComponent : ComponentBase
@@ -193,16 +191,16 @@ namespace ZLJ.Web.Customer.Shared
     /// <typeparam name="TGetAllInput"></typeparam>
     /// <typeparam name="TFormComponent"></typeparam>
     /// <typeparam name="TAppService"></typeparam>
-    public class CustomerListComponent<TEntityDto,
-                                   TPrimaryKey,
-                                   TGetAllInput,
-                                   TFormComponent,
-                                   TAppService> : CustomerListComponent<TEntityDto,
-                                                                    TPrimaryKey,
-                                                                    TGetAllInput,
-                                                                    TEntityDto,
-                                                                    TFormComponent,
-                                                                    TAppService>
+    public class CustomerListComponent<TAppService,
+                                       TFormComponent,
+                                       TEntityDto,
+                                       TPrimaryKey,
+                                       TGetAllInput> : CustomerListComponent<TAppService,
+                                                                             TFormComponent,
+                                                                             TEntityDto,
+                                                                             TPrimaryKey,
+                                                                             TGetAllInput,
+                                                                             TEntityDto>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TGetAllInput : new()
         where TFormComponent : ComponentBase
@@ -216,14 +214,14 @@ namespace ZLJ.Web.Customer.Shared
     /// <typeparam name="TPrimaryKey"></typeparam>
     /// <typeparam name="TFormComponent"></typeparam>
     /// <typeparam name="TAppService"></typeparam>
-    public class CustomerListComponent<TEntityDto,
-                                   TPrimaryKey,
-                                   TFormComponent,
-                                   TAppService> : CustomerListComponent<TEntityDto,
-                                                                    TPrimaryKey,
-                                                                    PagedAndSortedResultRequestDto,
-                                                                    TFormComponent,
-                                                                    TAppService>
+    public class CustomerListComponent<TAppService,
+                                       TFormComponent,
+                                       TEntityDto,
+                                       TPrimaryKey> : CustomerListComponent<TAppService,
+                                                                            TFormComponent,
+                                                                            TEntityDto,
+                                                                            TPrimaryKey,
+                                                                            PagedAndSortedResultRequestDto>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TFormComponent : ComponentBase
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey>
@@ -235,12 +233,12 @@ namespace ZLJ.Web.Customer.Shared
     /// <typeparam name="TEntityDto"></typeparam>
     /// <typeparam name="TFormComponent"></typeparam>
     /// <typeparam name="TAppService"></typeparam>
-    public class CustomerListComponent<TEntityDto,
-                                   TFormComponent,
-                                   TAppService> : CustomerListComponent<TEntityDto,
-                                                                    int,
-                                                                    TFormComponent,
-                                                                    TAppService>
+    public class CustomerListComponent<TAppService,
+                                       TFormComponent,
+                                       TEntityDto> : CustomerListComponent<TAppService,
+                                                                           TFormComponent,
+                                                                           TEntityDto,
+                                                                           int>
         where TEntityDto : IEntityDto<int>
         where TFormComponent : ComponentBase
         where TAppService : ICrudBaseAppService<TEntityDto>

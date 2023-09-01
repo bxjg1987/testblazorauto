@@ -22,23 +22,23 @@ namespace ZLJ.Web.Admin.Shared
     /// <typeparam name="TDeleteInput"></typeparam>
     /// <typeparam name="TFormComponent"></typeparam>
     /// <typeparam name="TAppService"></typeparam>
-    public class AdminListComponent<TEntityDto,
+    public class AdminListComponent<TAppService,
+                                    TFormComponent,
+                                    TEntityDto,
                                     TPrimaryKey,
                                     TGetAllInput,
                                     TCreateInput,
                                     TUpdateInput,
                                     TGetInput,
-                                    TDeleteInput,
-                                    TFormComponent,
-                                    TAppService> : AbpMudBlazorListBaseComponent<TEntityDto,
-                                                                                 TPrimaryKey,
-                                                                                 TGetAllInput,
-                                                                                 TCreateInput,
-                                                                                 TUpdateInput,
-                                                                                 TGetInput,
-                                                                                 TDeleteInput,
-                                                                                 TFormComponent,
-                                                                                 TAppService>
+                                    TDeleteInput> : AbpMudBlazorListBaseComponent<TAppService,
+                                                                                  TFormComponent,
+                                                                                  TEntityDto,
+                                                                                  TPrimaryKey,
+                                                                                  TGetAllInput,
+                                                                                  TCreateInput,
+                                                                                  TUpdateInput,
+                                                                                  TGetInput,
+                                                                                  TDeleteInput>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TGetAllInput : new()
@@ -46,7 +46,6 @@ namespace ZLJ.Web.Admin.Shared
         where TFormComponent : ComponentBase
         where TDeleteInput : IEntityDto<TPrimaryKey>
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, TDeleteInput>
-
     {
         #region 本地化
         private ILocalizationSource appCommonLocalizationSource, zljLocalizationSource, utilsLocalizationSource;
@@ -102,22 +101,22 @@ namespace ZLJ.Web.Admin.Shared
     /// <typeparam name="TGetInput"></typeparam>
     /// <typeparam name="TFormComponent"></typeparam>
     /// <typeparam name="TAppService"></typeparam>
-    public class AdminListComponent<TEntityDto,
-                                   TPrimaryKey,
-                                   TGetAllInput,
-                                   TCreateInput,
-                                   TUpdateInput,
-                                   TGetInput,
-                                   TFormComponent,
-                                   TAppService> : AdminListComponent<TEntityDto,
+    public class AdminListComponent<TAppService,
+                                    TFormComponent,
+                                    TEntityDto,
+                                    TPrimaryKey,
+                                    TGetAllInput,
+                                    TCreateInput,
+                                    TUpdateInput,
+                                    TGetInput> : AdminListComponent<TAppService,
+                                                                    TFormComponent,
+                                                                    TEntityDto,
                                                                     TPrimaryKey,
                                                                     TGetAllInput,
                                                                     TCreateInput,
                                                                     TUpdateInput,
                                                                     TGetInput,
-                                                                    EntityDto<TPrimaryKey>,
-                                                                    TFormComponent,
-                                                                    TAppService>
+                                                                    EntityDto<TPrimaryKey>>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TGetInput : IEntityDto<TPrimaryKey>
@@ -136,20 +135,20 @@ namespace ZLJ.Web.Admin.Shared
     /// <typeparam name="TUpdateInput"></typeparam>
     /// <typeparam name="TFormComponent"></typeparam>
     /// <typeparam name="TAppService"></typeparam>
-    public class AdminListComponent<TEntityDto,
-                                   TPrimaryKey,
-                                   TGetAllInput,
-                                   TCreateInput,
-                                   TUpdateInput,
-                                   TFormComponent,
-                                   TAppService> : AdminListComponent<TEntityDto,
-                                                                    TPrimaryKey,
-                                                                    TGetAllInput,
-                                                                    TCreateInput,
-                                                                    TUpdateInput,
-                                                                    EntityDto<TPrimaryKey>,
-                                                                    TFormComponent,
-                                                                    TAppService>
+    public class AdminListComponent<TAppService,
+                                    TFormComponent,
+                                    TEntityDto,
+                                    TPrimaryKey,
+                                    TGetAllInput,
+                                    TCreateInput,
+                                    TUpdateInput> : AdminListComponent<TAppService,
+                                                                       TFormComponent,
+                                                                       TEntityDto,
+                                                                       TPrimaryKey,
+                                                                       TGetAllInput,
+                                                                       TCreateInput,
+                                                                       TUpdateInput,
+                                                                       EntityDto<TPrimaryKey>>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TGetAllInput : new()
@@ -166,18 +165,18 @@ namespace ZLJ.Web.Admin.Shared
     /// <typeparam name="TCreateInput"></typeparam>
     /// <typeparam name="TFormComponent"></typeparam>
     /// <typeparam name="TAppService"></typeparam>
-    public class AdminListComponent<TEntityDto,
-                                   TPrimaryKey,
-                                   TGetAllInput,
-                                   TCreateInput,
-                                   TFormComponent,
-                                   TAppService> : AdminListComponent<TEntityDto,
-                                                                    TPrimaryKey,
-                                                                    TGetAllInput,
-                                                                    TCreateInput,
-                                                                    TCreateInput,
-                                                                    TFormComponent,
-                                                                    TAppService>
+    public class AdminListComponent<TAppService,
+                                    TFormComponent,
+                                    TEntityDto,
+                                    TPrimaryKey,
+                                    TGetAllInput,
+                                    TCreateInput> : AdminListComponent<TAppService,
+                                                                       TFormComponent,
+                                                                       TEntityDto,
+                                                                       TPrimaryKey,
+                                                                       TGetAllInput,
+                                                                       TCreateInput,
+                                                                       TCreateInput>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TCreateInput : IEntityDto<TPrimaryKey>
         where TFormComponent : ComponentBase
@@ -193,16 +192,16 @@ namespace ZLJ.Web.Admin.Shared
     /// <typeparam name="TGetAllInput"></typeparam>
     /// <typeparam name="TFormComponent"></typeparam>
     /// <typeparam name="TAppService"></typeparam>
-    public class AdminListComponent<TEntityDto,
-                                   TPrimaryKey,
-                                   TGetAllInput,
-                                   TFormComponent,
-                                   TAppService> : AdminListComponent<TEntityDto,
-                                                                    TPrimaryKey,
-                                                                    TGetAllInput,
-                                                                    TEntityDto,
-                                                                    TFormComponent,
-                                                                    TAppService>
+    public class AdminListComponent<TAppService,
+                                    TFormComponent,
+                                    TEntityDto,
+                                    TPrimaryKey,
+                                    TGetAllInput> : AdminListComponent<TAppService,
+                                                                       TFormComponent,
+                                                                       TEntityDto,
+                                                                       TPrimaryKey,
+                                                                       TGetAllInput,
+                                                                       TEntityDto>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TGetAllInput : new()
         where TFormComponent : ComponentBase
@@ -216,14 +215,14 @@ namespace ZLJ.Web.Admin.Shared
     /// <typeparam name="TPrimaryKey"></typeparam>
     /// <typeparam name="TFormComponent"></typeparam>
     /// <typeparam name="TAppService"></typeparam>
-    public class AdminListComponent<TEntityDto,
-                                   TPrimaryKey,
-                                   TFormComponent,
-                                   TAppService> : AdminListComponent<TEntityDto,
-                                                                    TPrimaryKey,
-                                                                    PagedAndSortedResultRequestDto,
-                                                                    TFormComponent,
-                                                                    TAppService>
+    public class AdminListComponent<TAppService,
+                                    TFormComponent,
+                                    TEntityDto,
+                                    TPrimaryKey> : AdminListComponent<TAppService,
+                                                                      TFormComponent,
+                                                                      TEntityDto,
+                                                                      TPrimaryKey,
+                                                                      PagedAndSortedResultRequestDto>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TFormComponent : ComponentBase
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey>
@@ -235,12 +234,12 @@ namespace ZLJ.Web.Admin.Shared
     /// <typeparam name="TEntityDto"></typeparam>
     /// <typeparam name="TFormComponent"></typeparam>
     /// <typeparam name="TAppService"></typeparam>
-    public class AdminListComponent<TEntityDto,
-                                   TFormComponent,
-                                   TAppService> : AdminListComponent<TEntityDto,
-                                                                    int,
-                                                                    TFormComponent,
-                                                                    TAppService>
+    public class AdminListComponent<TAppService,
+                                    TFormComponent,
+                                    TEntityDto> : AdminListComponent<TAppService,
+                                                                     TFormComponent,
+                                                                     TEntityDto,
+                                                                     int>
         where TEntityDto : IEntityDto<int>
         where TFormComponent : ComponentBase
         where TAppService : ICrudBaseAppService<TEntityDto>
