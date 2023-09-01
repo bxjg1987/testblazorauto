@@ -106,7 +106,7 @@ namespace BXJG.Utils.Notification
             if (currDefine?.Name == name)
                 return;
 
-            await base.SafeExecute(async () =>
+            await base.SafelyExecute(async () =>
             {
                 if (currDefine != default)
                     currDefine.Selected = false;
@@ -122,7 +122,7 @@ namespace BXJG.Utils.Notification
         /// <returns></returns>
         protected virtual async Task LoadMessagesAsync()
         {
-            await SafeExecute(async () =>
+            await SafelyExecute(async () =>
             {
                 var r = await AppService.GetAllAsync(condition);
                 total = r.TotalCount;
@@ -193,7 +193,7 @@ namespace BXJG.Utils.Notification
         /// <returns></returns>
         protected virtual async Task SetReadAsync(params Guid[] ids)
         {
-            await SafeExecute(async () =>
+            await SafelyExecute(async () =>
             {
                 await AppService.SetReadedAsync(new BatchOperationInput<Guid> { Ids = ids });
             });
@@ -206,7 +206,7 @@ namespace BXJG.Utils.Notification
         /// <returns></returns>
         protected virtual async Task SetReadAllAsync(string? name = default)
         {
-            await SafeExecute(async () =>
+            await SafelyExecute(async () =>
             {
                 await AppService.SetReadedAllAsync(name);
             });

@@ -7,10 +7,12 @@ using BXJG.Common.Dto;
 using BXJG.Utils;
 using BXJG.Utils.Dto;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
 using MudBlazor;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -70,6 +72,8 @@ namespace BXJG.MudBlazor.Components
         /// </summary>
         protected virtual string FuncName => $"请重写{nameof(FuncName)}属性";
 
+        //protected Type DtoType => typeof(TEntityDto);//不是太有必要的，就不要浪费内存了
+
         //使用这个会导致add按钮的显示不太正常
         ///// <summary>
         ///// 是否应该显示新增按钮，默认 没有正在加载数据时 为true
@@ -128,6 +132,11 @@ namespace BXJG.MudBlazor.Components
             else
                 Snackbar.Add($"批量{funName}全部成功！", Severity.Success);
         }
+        /// <summary>
+        /// 批量删除消息提醒
+        /// </summary>
+        /// <param name="output"></param>
+        protected virtual void BatchDeleteMessage(BatchOperationOutput<TPrimaryKey> output) => BatchOperationMessage(output, "删除");
         #endregion
 
         #region 生命周期
@@ -169,9 +178,7 @@ namespace BXJG.MudBlazor.Components
         /// <returns></returns>
         protected virtual async Task<GridData<TEntityDto>> LoadDataAsync(GridState<TEntityDto> state)
         {
-            
-
-            return await SafeExecuteAsync(async () =>
+            return await SafelyExecuteAsync(async () =>
             {
                 var cd = new TGetAllInput();
                 if (cd is IDynamicCondition cdd)
@@ -205,8 +212,21 @@ namespace BXJG.MudBlazor.Components
                 var dtos = await AppService.GetAllAsync(cd);
 
                 _ = InvokeAsync(StateHasChanged);//让多选影响顶部按钮得以执行 包一层是因为需要加载完才执行
-                dataGrid.SelectedItems.Clear();
-                
+                dataGrid.SelectedItems.Clear();//翻页时，已选择的好像木有清空，这里手动来下
+
+                //给每行属性附加额外状态
+                if (typeof(IExtendableDto).IsAssignableFrom(typeof(TEntityDto)))
+                {
+                    foreach (var item in dtos.Items)
+                    {
+                        var dto = item as IExtendableDto;
+                        dynamic dd = new ExpandoObject();
+                        dd.IsDeleting = false;
+                        dd.IsShowDeleteConfirmation = false;
+                        dto.ExtensionData = dd;
+                    }
+                }
+
                 return new GridData<TEntityDto>
                 {
                     TotalItems = dtos.TotalCount,
@@ -249,7 +269,7 @@ namespace BXJG.MudBlazor.Components
         protected string keywords = "";
         protected virtual async Task KeywordsChanged(string keywords)
         {
-            await base.SafeExecuteAsync(async () =>
+            await base.SafelyExecuteAsync(async () =>
             {
                 this.keywords = keywords;
                 await dataGrid.ReloadServerData();
@@ -287,7 +307,7 @@ namespace BXJG.MudBlazor.Components
         /// <returns></returns>
         protected virtual async Task Add()
         {
-            await base.SafeExecuteAsync(async () =>
+            await base.SafelyExecuteAsync(async () =>
             {
                 var dr = await DialogService.Show<TFormComponent>("新增" + FuncName, DialogOptions).Result;
                 if (dr.Canceled)
@@ -302,7 +322,7 @@ namespace BXJG.MudBlazor.Components
         /// <returns></returns>
         protected virtual async Task Edit()
         {
-            await base.SafeExecuteAsync(async () =>
+            await base.SafelyExecuteAsync(async () =>
             {
                 var dr = await DialogService.Show<TFormComponent>("修改" + FuncName, DialogOptions).Result;
                 if (dr.Canceled)
@@ -348,24 +368,18 @@ namespace BXJG.MudBlazor.Components
         /// 批量删除
         /// </summary>
         /// <returns></returns>
-        protected virtual async Task<BatchOperationOutput<TPrimaryKey>> Delete()
+        protected virtual async Task Delete()
         {
+            HideDeleteConfirm();
             isDeleting = true;
-            var r = await SafeExecuteAsync(async () =>
+            await SafelyExecuteAsync(async () =>
             {
-                var temp = await AppService.BatchDeleteAsync(new BatchOperationInput<TPrimaryKey> { Ids = dataGrid.SelectedItems?.Select(x => x.Id).ToArray() }).ContinueWith(async t =>
-                {
-                    if (t.IsCompletedSuccessfully)
-                        _ = InvokeAsync(dataGrid.ReloadServerData); //内部会StateChange
-
-                    return t.Result;
-                });
-                return await temp;
+                var temp = await AppService.BatchDeleteAsync(new BatchOperationInput<TPrimaryKey> { Ids = dataGrid.SelectedItems?.Select(x => x.Id).ToArray() });
+                BatchOperationMessage(temp, "批量删除");
+                if (temp.Ids.Count > 0)
+                    _ = InvokeAsync(dataGrid.ReloadServerData); //内部会StateChange
             });
             isDeleting = false;
-            isShowDeleteConfirm = false;
-            BatchOperationMessage(r, "批量删除");
-            return r;
         }
 
         //protected virtual void DeleteMessage()
@@ -379,24 +393,38 @@ namespace BXJG.MudBlazor.Components
         /// <returns></returns>
         protected virtual async Task Delete(TDeleteInput input)
         {
-            await SafeExecuteAsync(async () =>
+            var curr = dataGrid.Items.Single(c => c.Id!.Equals(input.Id));
+            HideDeleteConfirm(curr);
+            var item = curr as IExtendableDto;
+            if (item != default)
+                item.ExtensionData.IsDeleting = true;
+            await SafelyExecuteAsync(async () =>
             {
-                var curr = dataGrid.SelectedItems.Single(c => c.Id!.Equals(input.Id));
-                var item = curr as IHaveIsDeleting;
-                if (item != default)
-                    item.IsDeleting = true;
-                try
-                {
-                    await AppService.DeleteAsync(input);
-                }
-                finally
-                {
-                    if (item != default)
-                        item.IsDeleting = false;
-                }
+                await AppService.DeleteAsync(input);
+                Snackbar.Add("删除成功！", Severity.Success);
                 //若上面异常，下面不会执行
-                await dataGrid.ReloadServerData();
+                _ = InvokeAsync(dataGrid.ReloadServerData); //内部会StateChange
             });
+            if (item != default)
+                item.ExtensionData.IsDeleting = false;
+        }
+        /// <summary>
+        /// 显示删除明细的确认框
+        /// </summary>
+        /// <param name="dto"></param>
+        protected virtual void ShowDeleteConfirm(TEntityDto dto)
+        {
+            if (dto is IExtendableDto item)
+                item.ExtensionData.IsShowDeleteConfirmation = true;
+        }
+        /// <summary>
+        /// 隐藏删除明细的确认框
+        /// </summary>
+        /// <param name="dto"></param>
+        protected virtual void HideDeleteConfirm(TEntityDto dto)
+        {
+            if (dto is IExtendableDto item)
+                item.ExtensionData.IsShowDeleteConfirmation = true;
         }
         #endregion
 
@@ -531,7 +559,7 @@ namespace BXJG.MudBlazor.Components
                                                TFormComponent,
                                                TEntityDto,
                                                TPrimaryKey> : AbpMudBlazorListBaseComponent<TAppService,
-                                                                                            TFormComponent,TEntityDto,
+                                                                                            TFormComponent, TEntityDto,
                                                                                             TPrimaryKey,
                                                                                             PagedAndSortedResultRequestDto>
         where TEntityDto : IEntityDto<TPrimaryKey>
@@ -548,7 +576,7 @@ namespace BXJG.MudBlazor.Components
     public class AbpMudBlazorListBaseComponent<TAppService,
                                                TFormComponent,
                                                TEntityDto> : AbpMudBlazorListBaseComponent<TAppService,
-                                                                                           TFormComponent,TEntityDto,
+                                                                                           TFormComponent, TEntityDto,
                                                                                            int>
         where TEntityDto : IEntityDto<int>
         where TFormComponent : ComponentBase

@@ -52,7 +52,7 @@ namespace BXJG.Utils.Notification
 
         protected virtual async Task SelectChanged(string name, bool xuanze)
         {
-            await base.SafeExecuteAsync(async () =>
+            await base.SafelyExecuteAsync(async () =>
             {
                 if (xuanze)
                 {

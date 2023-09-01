@@ -230,7 +230,7 @@ namespace BXJG.Utils
             //aspnetCoreConfiguration = ScopedServices.GetRequiredService<IAbpAspNetCoreConfiguration>();
             //cancellationTokenProvider = ScopedServices.GetRequiredService<ICancellationTokenProvider>();
 
-            SafeExecute(OnInitialized2);
+            SafelyExecute(OnInitialized2);
         }
 
         /// <summary>
@@ -240,7 +240,7 @@ namespace BXJG.Utils
 
         protected override Task OnInitializedAsync()
         {
-            return SafeExecuteAsync(OnInitialized2Async);
+            return SafelyExecuteAsync(OnInitialized2Async);
             //  return base.OnInitializedAsync();
         }
         /// <summary>
@@ -250,28 +250,28 @@ namespace BXJG.Utils
 
         protected override void OnAfterRender(bool firstRender)
         {
-            SafeExecute(() => OnAfterRender2(firstRender));
+            SafelyExecute(() => OnAfterRender2(firstRender));
             //base.OnAfterRender(firstRender);
         }
         protected virtual void OnAfterRender2(bool firstRender) { }
 
         protected override Task OnAfterRenderAsync(bool firstRender)
         {
-            return SafeExecuteAsync(() => OnAfterRender2Async(firstRender));
+            return SafelyExecuteAsync(() => OnAfterRender2Async(firstRender));
         }
         protected virtual Task OnAfterRender2Async(bool firstRender) => Task.CompletedTask;
 
 
         protected override void OnParametersSet()
         {
-            SafeExecute(OnParametersSet2);
+            SafelyExecute(OnParametersSet2);
             //base.OnParametersSet();
         }
         protected virtual void OnParametersSet2() { }
 
         protected override async Task OnParametersSetAsync()
         {
-            await SafeExecuteAsync(OnParametersSet2Async);
+            await SafelyExecuteAsync(OnParametersSet2Async);
             //return base.OnParametersSetAsync();
         }
         protected virtual Task OnParametersSet2Async() => Task.CompletedTask;
@@ -335,7 +335,7 @@ namespace BXJG.Utils
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        protected virtual async Task SafeExecuteAsync(Func<Task> action, CancellationToken cancellationToken = default)
+        protected virtual async Task SafelyExecuteAsync(Func<Task> action, CancellationToken cancellationToken = default)
         {
             // Logger.Debug("aaa");
             // Logger.Debug(action.Method.Name);
@@ -406,7 +406,7 @@ namespace BXJG.Utils
         /// <typeparam name="T"></typeparam>
         /// <param name="action"></param>
         /// <returns></returns>
-        protected virtual async Task<T> SafeExecuteAsync<T>(Func<Task<T>> action, CancellationToken cancellationToken = default)
+        protected virtual async Task<T> SafelyExecuteAsync<T>(Func<Task<T>> action, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -476,7 +476,7 @@ namespace BXJG.Utils
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        protected virtual void SafeExecute(Action action)
+        protected virtual void SafelyExecute(Action action)
         {
             try
             {
@@ -532,7 +532,7 @@ namespace BXJG.Utils
                 ShowError(L("InternalServerError"));
             }
         }
-        protected virtual T SafeExecute<T>(Func<T> action)
+        protected virtual T SafelyExecute<T>(Func<T> action)
         {
             try
             {
