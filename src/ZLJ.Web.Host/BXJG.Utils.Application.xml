@@ -1,0 +1,1493 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>BXJG.Utils.Application</name>
+    </assembly>
+    <members>
+        <member name="T:BXJG.Utils.CrudBaseAppService`8">
+            <summary>
+            对abp默认的AsyncCrudAppService的增强
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TEntityDto"></typeparam>
+            <typeparam name="TPrimaryKey"></typeparam>
+            <typeparam name="TGetAllInput"></typeparam>
+            <typeparam name="TCreateInput"></typeparam>
+            <typeparam name="TUpdateInput"></typeparam>
+            <typeparam name="TGetInput"></typeparam>
+            <typeparam name="TDeleteInput"></typeparam>
+        </member>
+        <member name="P:BXJG.Utils.CrudBaseAppService`8.ServiceProvider">
+            <summary>
+            与当前请求关联的服务容器
+            通常你可以使用构造函数或属性注入，框架级别或特殊情况可以使用此对象。
+            注：IocManager是全局单例，解析实现IDisposeable的服务时比较危险，此时应使用ServiceProvider
+            </summary>
+        </member>
+        <member name="M:BXJG.Utils.CrudBaseAppService`8.MapToEntity(`4)">
+            <summary>
+            新增是dto映射到实体
+            若主键是guid类型，则赋使用<see cref="P:Abp.SequentialGuidGenerator.Instance"/>赋值；
+            特别注意：从ef7到以前，若配置为自增时，主动为其赋值id会爆异常，但这种情况很少，所以这种特殊情况你应该重写并删除id值。
+            </summary>
+            <param name="createInput"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.CrudBaseAppService`8.MapToEntity(`5,`0)">
+            <summary>
+            修改时dto映射到实体
+            </summary>
+            <param name="updateInput"></param>
+            <param name="entity"></param>
+        </member>
+        <member name="M:BXJG.Utils.CrudBaseAppService`8.MapToEntity(`0)">
+            <summary>
+            新增和修改都会执行的逻辑，若需要传递额外参数，请使用当前Uow.Items
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.CrudBaseAppService`8.BatchHandleAsync(BXJG.Common.Dto.BatchOperationInput{`2},System.Func{`0,System.Threading.Tasks.ValueTask})">
+            <summary>
+            批量处理
+            </summary>
+            <param name="input">前端传入的参数</param>
+            <param name="func">处理其中每一个时回调</param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.CrudBaseAppService`8.BatchDeleteAsync(BXJG.Common.Dto.BatchOperationInput{`2})">
+            <summary>
+            批量删除
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.CrudBaseAppService`8.BatchDeleteItemAsync(`0)">
+            <summary>
+            批量删除过程中，删除每个实体时回调
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.CrudBaseAppService`8.GetEntityByIdInclude(`2)">
+            <summary>
+            执行GetEntityByIdAsync将回调此方法，可重写此方法来包含导航属性，默认不包含任何导航属性。
+            </summary>
+            <param name="id"></param>
+            <param name="q"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.CrudBaseAppService`8.BuildQuery">
+            <summary>
+            获取单个和列表时都会回调，你可以重写以Include更多导航属性
+            </summary>
+            <param name="q"></param>
+            <returns></returns>
+        </member>
+        <member name="T:BXJG.Utils.CrudBaseAppService`7">
+            <summary>
+            继承abp的AsyncCrudAppService时都需要去写那个默认的构造函数，这个类就是为了解决这个问题
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TEntityDto"></typeparam>
+            <typeparam name="TPrimaryKey"></typeparam>
+            <typeparam name="TGetAllInput"></typeparam>
+            <typeparam name="TCreateInput"></typeparam>
+            <typeparam name="TUpdateInput"></typeparam>
+            <typeparam name="TGetInput"></typeparam>
+        </member>
+        <member name="T:BXJG.Utils.CrudBaseAppService`6">
+            <summary>
+            继承abp的AsyncCrudAppService时都需要去写那个默认的构造函数，这个类就是为了解决这个问题
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TEntityDto"></typeparam>
+            <typeparam name="TPrimaryKey"></typeparam>
+            <typeparam name="TGetAllInput"></typeparam>
+            <typeparam name="TCreateInput"></typeparam>
+            <typeparam name="TUpdateInput"></typeparam>
+        </member>
+        <member name="T:BXJG.Utils.CrudBaseAppService`5">
+            <summary>
+            继承abp的AsyncCrudAppService时都需要去写那个默认的构造函数，这个类就是为了解决这个问题
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TEntityDto"></typeparam>
+            <typeparam name="TPrimaryKey"></typeparam>
+            <typeparam name="TGetAllInput"></typeparam>
+            <typeparam name="TCreateInput"></typeparam>
+        </member>
+        <member name="T:BXJG.Utils.CrudBaseAppService`4">
+            <summary>
+            继承abp的AsyncCrudAppService时都需要去写那个默认的构造函数，这个类就是为了解决这个问题
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TEntityDto"></typeparam>
+            <typeparam name="TPrimaryKey"></typeparam>
+            <typeparam name="TGetAllInput"></typeparam>
+        </member>
+        <member name="T:BXJG.Utils.CrudBaseAppService`3">
+            <summary>
+            继承abp的AsyncCrudAppService时都需要去写那个默认的构造函数，这个类就是为了解决这个问题
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TEntityDto"></typeparam>
+            <typeparam name="TPrimaryKey"></typeparam>
+        </member>
+        <member name="T:BXJG.Utils.CrudBaseAppService`2">
+            <summary>
+            继承abp的AsyncCrudAppService时都需要去写那个默认的构造函数，这个类就是为了解决这个问题
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TEntityDto"></typeparam>
+        </member>
+        <member name="T:BXJG.Utils.Dto.GetPageForSelectInput">
+            <summary>
+            将信息作为下拉框数据选择时查询的输入模型
+            非分页版本参考<see cref="T:BXJG.Common.Dto.GetForSelectInput"/>
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.Dto.PagedAndSortedResultRequest`1">
+            <summary>
+            获取排序并分页的列表时的输入模型
+            </summary>
+            <typeparam name="TFilter">条件模型</typeparam>
+        </member>
+        <member name="T:BXJG.Utils.Dto.SortedResultRequest">
+            <summary>
+            获取排序列表时的输入模型
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.Dto.SortedResultRequest`1">
+            <summary>
+            获取排序列表时的输入模型
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.Enums.BXJGUtilsEnumAppService">
+            <summary>
+            通用的获取枚举下拉框列表的服务
+            </summary>
+        </member>
+        <member name="M:BXJG.Utils.Enums.BXJGUtilsEnumAppService.GetByNameAsync(BXJG.Utils.Enums.GetEnumForCombboxInput)">
+            <summary>
+            获取指定枚举的本地化列表
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="T:BXJG.Utils.Enums.EnumManager">
+            <summary>
+            各个模块内都有自己的枚举，各个模块应该提供自己的应用服务向前端提供枚举下拉框的值
+            <br />这些应用服务可以使用此类来简化列表的生成
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.Enums.GetEnumForCombboxInput">
+            <summary>
+            获取枚举作为下拉框数据时的输入模型
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Enums.GetEnumForCombboxInput.EnumTypeName">
+            <summary>
+            枚举类型名
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.Enums.IBXJGUtilsEnumAppService">
+            <summary>
+            系统枚举
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.File.AttachmentDto">
+            <summary>
+            通用显示模型
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.File.AttachmentDto.EntityId">
+            <summary>
+            关联实体id
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.File.AttachmentDto.AbsoluteFileUrl">
+            <summary>
+            文件url，可访问路径
+            例：http://xxx.xxx/upload/xxx.xx
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.File.AttachmentDto.AbsoluteThumUrl">
+            <summary>
+            缩略图url，可访问路径
+            例：http://xxx.xxx/upload/xxxthum.xx
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.File.AttachmentDto.OrderIndex">
+            <summary>
+            排序索引
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.File.AttachmentDto.ExtensionData">
+            <summary>
+            扩展属性
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.File.FileDto">
+            <summary>
+            上传文件的返回数据模型
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.File.FileDto.FileUrl">
+            <summary>
+            可访问的文件绝对url
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.File.FileDto.ThumUrl">
+            <summary>
+            可访问的缩略图url
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.GeneralTree.DataDictionaryProviderAppService">
+            <summary>
+            数据字典应用服务类
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.GeneralTree.DataDictionaryAppService">
+            <summary>
+            数据字典应用服务类
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.GeneralTree.GeneralTreeProviderBaseAppService`5">
+            <summary>
+            树形结构应用逻辑基类
+            </summary>
+            <typeparam name="TGetTreeForSelectInput"></typeparam>
+            <typeparam name="TGetTreeForSelectOutput"></typeparam>
+            <typeparam name="TGetNodesForSelectInput"></typeparam>
+            <typeparam name="TGetNodesForSelectOutput"></typeparam>
+            <typeparam name="TEntity"></typeparam>
+        </member>
+        <member name="P:BXJG.Utils.GeneralTree.GeneralTreeProviderBaseAppService`5.ServiceProvider">
+            <summary>
+            与当前请求关联的服务容器
+            通常你可以使用构造函数或属性注入，框架级别或特殊情况可以使用此对象。
+            注：IocManager是全局单例，解析实现IDisposeable的服务时比较危险，此时应使用ServiceProvider
+            </summary>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.GeneralTreeProviderBaseAppService`5.GetTreeForSelectAsync(`1)">
+            <summary>
+            获取树形的下拉框数据，不需要身份验证
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.GeneralTreeProviderBaseAppService`5.GetNodesForSelectAsync(`3)">
+            <summary>
+            获取扁平化的下拉框数据，不需要身份验证
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.GeneralTreeProviderBaseAppService`5.BuildQuery">
+            <summary>
+            获取单个 扁平和树形列表都会调用，以获取查询对象
+            可以重写以应用所有查询都需要的Include
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.GeneralTreeProviderBaseAppService`5.ComboTreeFilter(`1,System.String)">
+            <summary>
+            获取树形数据的queryable，默认StartsWith parentCode
+            </summary>
+            <param name="input"></param>
+            <param name="parentCode"></param>
+            <param name="context"><see cref="M:BXJG.Utils.GeneralTree.GeneralTreeProviderBaseAppService`5.GetTreeForSelectAsync(`1)"/>的多个步骤间共享数据，默认存在input的key</param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.GeneralTreeProviderBaseAppService`5.ComboTreeSort(System.Linq.IQueryable{`0},`1)">
+            <summary>
+            获取树形数据的排序，默认按code
+            </summary>
+            <param name="query"></param>
+            <param name="input"></param>
+            <param name="context"><see cref="M:BXJG.Utils.GeneralTree.GeneralTreeProviderBaseAppService`5.GetTreeForSelectAsync(`1)"/>的多个步骤间共享数据，默认存在input的key</param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.GeneralTreeProviderBaseAppService`5.EntityToTreeDto(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            实体转换为dto时调用，默认使用automapper
+            </summary>
+            <param name="entities"></param>
+            <param name="context"><see cref="M:BXJG.Utils.GeneralTree.GeneralTreeProviderBaseAppService`5.GetTreeForSelectAsync(`1)"/>的多个步骤间共享数据，默认存在input的key</param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.GeneralTreeProviderBaseAppService`5.ComboboxFilter(`3,System.Nullable{System.Int64})">
+            <summary>
+            获取扁平化下拉框数据queryable，默认ParentId等于parentId
+            </summary>
+            <param name="input"></param>
+            <param name="parentId"></param>
+            <param name="context"><see cref="M:BXJG.Utils.GeneralTree.GeneralTreeProviderBaseAppService`5.GetNodesForSelectAsync(`3)"/>的多个步骤间共享数据，默认存在input的key</param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.GeneralTreeProviderBaseAppService`5.ComboboxSort(`3,System.Linq.IQueryable{`0})">
+            <summary>
+            获取扁平化下拉框数据的排序，默认code
+            </summary>
+            <param name="query"></param>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.GeneralTreeProviderBaseAppService`5.EntityToComboboDto(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            实体转换为dto时调用，默认使用automapper
+            </summary>
+            <param name="entities"></param>
+            <returns></returns>
+        </member>
+        <member name="T:BXJG.Utils.GeneralTree.GeneralTreeProviderBaseAppService`4">
+            <summary>
+            树形结构应用逻辑基类
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TGetTreeForSelectInput"></typeparam>
+            <typeparam name="TGetTreeForSelectOutput"></typeparam>
+            <typeparam name="TGetNodesForSelectInput"></typeparam>
+        </member>
+        <member name="T:BXJG.Utils.GeneralTree.GeneralTreeProviderBaseAppService`3">
+            <summary>
+            树形结构应用逻辑基类
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TGetTreeForSelectInput"></typeparam>
+            <typeparam name="TGetTreeForSelectOutput"></typeparam>
+        </member>
+        <member name="T:BXJG.Utils.GeneralTree.GeneralTreeProviderBaseAppService`2">
+            <summary>
+            树形结构应用逻辑基类
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TGetTreeForSelectInput"></typeparam>
+        </member>
+        <member name="T:BXJG.Utils.GeneralTree.GeneralTreeProviderBaseAppService`1">
+            <summary>
+            树形结构应用逻辑基类
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+        </member>
+        <member name="T:BXJG.Utils.GeneralTree.GeneralTreeBaseAppService`9">
+            <summary>
+            通用的树形结构的数据的crud抽象服务（完整）
+            </summary>
+            <typeparam name="TDto"></typeparam>
+            <typeparam name="TCreateInput"></typeparam>
+            <typeparam name="TDeleteInput"></typeparam>
+            <typeparam name="TEditDto"></typeparam>
+            <typeparam name="TGetAllInput"></typeparam>
+            <typeparam name="TGetInput"></typeparam>
+            <typeparam name="TMoveInput"></typeparam>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TManager"></typeparam>
+        </member>
+        <member name="P:BXJG.Utils.GeneralTree.GeneralTreeBaseAppService`9.ServiceProvider">
+            <summary>
+            与当前请求关联的服务容器
+            通常你可以使用构造函数或属性注入，框架级别或特殊情况可以使用此对象。
+            注：IocManager是全局单例，解析实现IDisposeable的服务时比较危险，此时应使用ServiceProvider
+            </summary>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.GeneralTreeBaseAppService`9.MapToEntityAsync(`0)">
+            <summary>
+            新增和修改都会执行的逻辑，若需要传递额外参数，请使用当前Uow.Items
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.GeneralTreeBaseAppService`9.CreateAsync(`2)">
+            <summary>
+            创建树形结构数据
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.GeneralTreeBaseAppService`9.CreateMap(`2)">
+            <summary>
+            新增时的映射，默认使用automapper映射
+            </summary>
+            <param name="input"></param>
+            <param name="context">不要再使用此参数，请直接使用uow.Items</param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.GeneralTreeBaseAppService`9.BeforeCreateAsync(`2,`0)">
+            <summary>
+            新增前回调，默认啥也没干
+            </summary>
+            <param name="entity"></param>
+            <param name="input"></param>
+            <param name="context">不要再使用此参数，请直接使用uow.Items</param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.GeneralTreeBaseAppService`9.MoveAsync(`7)">
+            <summary>
+            移动树形结构数据的节点
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.GeneralTreeBaseAppService`9.BeforeMoveAsync(`7)">
+            <summary>
+            移动节点前回调，默认啥也没干
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.GeneralTreeBaseAppService`9.UpdateAsync(`3)">
+            <summary>
+            更新树形结构的数据
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.GeneralTreeBaseAppService`9.UpdateMapAsync(`3,`0)">
+            <summary>
+            修改时的映射，默认使用automapper
+            </summary>
+            <param name="entity"></param>
+            <param name="input"></param>
+            <param name="context">不要再使用此参数，请直接使用uow.Items</param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.GeneralTreeBaseAppService`9.BeforeUpdateAsync(`3,`0)">
+            <summary>
+            修改前回调，默认啥也没干
+            </summary>
+            <param name="entity"></param>
+            <param name="input"></param>
+            <param name="context"><see cref="M:BXJG.Utils.GeneralTree.GeneralTreeBaseAppService`9.UpdateAsync(`3)"/>的多个步骤间共享数据，默认存在input的key</param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.GeneralTreeBaseAppService`9.BatchHandleAsync(BXJG.Common.Dto.BatchOperationInputLong,System.Func{`0,System.Threading.Tasks.ValueTask})">
+            <summary>
+            批量处理
+            </summary>
+            <param name="input"></param>
+            <param name="func"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.GeneralTreeBaseAppService`9.DeleteAsync(`4)">
+            <summary>
+            删除树形结构的数据
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.GeneralTreeBaseAppService`9.BeforeDeleteAsync(`0)">
+            <summary>
+            删除前回调，默认当前及其后代节点都删除
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.GeneralTreeBaseAppService`9.EntityToDto(`0,`1)">
+            <summary>
+            获取列表和获取指定id的信息都将回调此方法，默认啥也没干
+            </summary>
+            <param name="entity"></param>
+            <param name="dto"></param>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.GeneralTreeBaseAppService`9.BuildQuery">
+            <summary>
+            所有查询都会调用，以获取查询对象。
+            可以重写以应用所有查询都需要的Include
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.GeneralTreeBaseAppService`9.GetAsync(`6)">
+            <summary>
+            获取指定节点的树形结构的数据
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.GeneralTreeBaseAppService`9.GetEntityByIdAsync(System.Int64)">
+            <summary>
+            增、删、改、获取单个时都会调用，用来根据id获取实体
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.GeneralTreeBaseAppService`9.GetEntityByIdInclude(System.Int64)">
+            <summary>
+            根据id获取实体时回调，你可以重写使用Include包含导航属性，默认不处理
+            </summary>
+            <param name="q"></param>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.GeneralTreeBaseAppService`9.GetEntityToDto(`0)">
+            <summary>
+            根据id获取单个实体时的映射，默认使用automapper
+            </summary>
+            <param name="entity"></param>
+            <param name="context">不要再使用此参数，请直接使用uow.Items</param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.GeneralTreeBaseAppService`9.GetAllAsync(`5)">
+            <summary>
+            获取所有树形结构的数据，以树形层次结构返回
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.GeneralTreeBaseAppService`9.GetAllFiltered(`5,System.String)">
+            <summary>
+            获取所有数据的查询，默认已加入parentCode条件
+            </summary>
+            <param name="input">输入参数</param>
+            <param name="parentCode">父节点code</param>
+            <param name="context">不要再使用此参数，请直接使用uow.Items</param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.GeneralTreeBaseAppService`9.GetAllSorting(System.Linq.IQueryable{`0},`5)">
+            <summary>
+            获取所有数据的排序
+            </summary>
+            <param name="input">输入参数</param>
+            <param name="query">查询</param>
+            <param name="context">不要再使用此参数，请直接使用uow.Items</param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.GeneralTreeBaseAppService`9.GetAllEntityToDto(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            获取所有数据的实体到dto的映射
+            </summary>
+            <param name="entities">实体列表</param>
+            <param name="context">不要再使用此参数，请直接使用uow.Items</param>
+            <returns></returns>
+        </member>
+        <member name="T:BXJG.Utils.GeneralTree.GeneralTreeBaseAppService`8">
+            <summary>
+            通用的树形结构的数据的crud抽象服务（完整）
+            </summary>
+            <typeparam name="TDto"></typeparam>
+            <typeparam name="TCreateInput"></typeparam>
+            <typeparam name="TDeleteInput"></typeparam>
+            <typeparam name="TEditDto"></typeparam>
+            <typeparam name="TGetAllInput"></typeparam>
+            <typeparam name="TGetInput"></typeparam>
+            <typeparam name="TMoveInput"></typeparam>
+            <typeparam name="TEntity"></typeparam>
+        </member>
+        <member name="T:BXJG.Utils.GeneralTree.GeneralTreeBaseAppService`7">
+            <summary>
+            通用的树形结构的数据的crud抽象服务（完整）
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TDto"></typeparam>
+            <typeparam name="TCreateInput"></typeparam>
+            <typeparam name="TDeleteInput"></typeparam>
+            <typeparam name="TEditDto"></typeparam>
+            <typeparam name="TGetAllInput"></typeparam>
+            <typeparam name="TGetInput"></typeparam>
+        </member>
+        <member name="T:BXJG.Utils.GeneralTree.GeneralTreeBaseAppService`6">
+            <summary>
+            通用的树形结构的数据的crud抽象服务（完整）
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TDto"></typeparam>
+            <typeparam name="TCreateInput"></typeparam>
+            <typeparam name="TDeleteInput"></typeparam>
+            <typeparam name="TEditDto"></typeparam>
+            <typeparam name="TGetAllInput"></typeparam>
+        </member>
+        <member name="T:BXJG.Utils.GeneralTree.GeneralTreeBaseAppService`5">
+            <summary>
+            通用的树形结构的数据的crud抽象服务（完整）
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TDto"></typeparam>
+            <typeparam name="TCreateInput"></typeparam>
+            <typeparam name="TDeleteInput"></typeparam>
+            <typeparam name="TEditDto"></typeparam>
+        </member>
+        <member name="T:BXJG.Utils.GeneralTree.GeneralTreeBaseAppService`4">
+            <summary>
+            通用的树形结构的数据的crud抽象服务（完整）
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TDto"></typeparam>
+            <typeparam name="TCreateInput"></typeparam>
+            <typeparam name="TEditDto"></typeparam>
+        </member>
+        <member name="T:BXJG.Utils.GeneralTree.GeneralTreeBaseAppService`3">
+            <summary>
+            通用的树形结构的数据的crud抽象服务（完整）
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TDto"></typeparam>
+            <typeparam name="TCreateInput"></typeparam>
+        </member>
+        <member name="T:BXJG.Utils.GeneralTree.GeneralTreeComboboxDto">
+            <summary>
+            Easyui的Combobox下拉框控件对应数据的模型，它是一个通用模型
+            </summary>
+            <typeparam name="TId"></typeparam>
+        </member>
+        <member name="P:BXJG.Utils.GeneralTree.GeneralTreeComboboxDto.ExtData">
+            <summary>
+            扩展属性
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.GeneralTree.GeneralTreeDto">
+            <summary>
+            通用树形的管理页面使用的显示模型
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.GeneralTree.GeneralTreeEditDto">
+            <summary>
+            通用树形数据更新模型
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.GeneralTree.GeneralTreeGetForSelectInput">
+            <summary>
+            列表页搜索框、表单页下拉框查询使用的输入模型
+            </summary>
+            <typeparam name="TId"></typeparam>
+        </member>
+        <member name="P:BXJG.Utils.GeneralTree.GeneralTreeGetForSelectInput.Code">
+            <summary>
+            给前端一个机会来设置自己想要的值，注意是否需要本地化调用方来决定
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.GeneralTree.GeneralTreeGetTreeInput">
+            <summary>
+            树形数据的管理页面查询时的请求模型
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.GeneralTree.GeneralTreeGetTreeInput.ParentId">
+            <summary>
+            父级节点id，非必填
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.GeneralTree.GeneralTreeGetTreeInput.LoadParent">
+            <summary>
+            是否加载父节点
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.GeneralTree.GeneralTreeGetTreeInput.ParentText">
+            <summary>
+            若LoadParent为true且ParentId为空，则自动以{id:0,text:L( ParentText) }创建一个虚拟父节点，注意L是处理本地化的方法，因此ParentText值的是本地化的key
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.GeneralTree.GeneralTreeGetTreeNodeBaseDto`1">
+            <summary>
+            树形数据管理的列表页使用的dto基类，它不是抽象的，可以直接使用
+            </summary>
+            <typeparam name="TChild"></typeparam>
+        </member>
+        <member name="P:BXJG.Utils.GeneralTree.GeneralTreeGetTreeNodeBaseDto`1.ParentId">
+            <summary>
+            父级组织单位id
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.GeneralTree.GeneralTreeGetTreeNodeBaseDto`1.Code">
+            <summary>
+            有层次结构的代码
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.GeneralTree.GeneralTreeGetTreeNodeBaseDto`1.DisplayName">
+            <summary>
+            显示名称
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.GeneralTree.GeneralTreeGetTreeNodeBaseDto`1.Children">
+            <summary>
+            子集
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.GeneralTree.GeneralTreeGetTreeNodeBaseDto`1.State">
+            <summary>
+            配合easyui，state：节点状态，'open' 或 'closed'，默认：'open'。如果为'closed'的时候，将不自动展开该节点。
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.GeneralTree.GeneralTreeGetTreeNodeBaseDto`1.Text">
+            <summary>
+            什么鬼
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.GeneralTree.GeneralTreeGetTreeNodeBaseDto`1.ExtData">
+            <summary>
+            扩展属性
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.GeneralTree.GeneralTreeMapProfileExt">
+            <summary>
+            经过测试,在有泛型的场景中AutoMapper使用继承并不能达到预期效果
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.GeneralTree.GeneralTreeNodeDto`1">
+            <summary>
+            获取树形下拉框数据的模型
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.GeneralTree.GeneralTreeNodeDto`1.ExtData">
+            <summary>
+            扩展属性
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.GeneralTree.GeneralTreeNodeEditBaseDto">
+            <summary>
+            树形结构抽象编辑模型
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.GeneralTree.GeneralTreeNodeEditBaseDto.ParentId">
+            <summary>
+            父级id
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.GeneralTree.GeneralTreeNodeEditBaseDto.DisplayName">
+            <summary>
+            显示名称
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.GeneralTree.GeneralTreeNodeEditBaseDto.ExtData">
+            <summary>
+            扩展属性
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.GeneralTree.GeneralTreeNodeMoveInput">
+            <summary>
+            移动树形节点时的请求参数
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.GeneralTree.GeneralTreeNodeMoveInput.TargetId">
+            <summary>
+            MoveTargetRelativePosition若为Append则此字段表示父节点id，否则表示目标节点id
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.GeneralTree.GeneralTreeNodeMoveInput.Id">
+            <summary>
+            源节点id
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.GeneralTree.GeneralTreeNodeMoveInput.MoveType">
+            <summary>
+            移动到目标节点的相对位置
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.GeneralTree.IDataDictionaryProviderAppService">
+            <summary>
+            数据字典应用服务接口
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.GeneralTree.IDataDictionaryAppService">
+            <summary>
+            数据字典应用服务接口
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.GeneralTree.IGeneralTreeProviderBaseAppService`4">
+            <summary>
+            提供可选的树形或扁平化数据，通常作为下拉框和弹窗选择提供数据
+            </summary>
+            <typeparam name="TGetTreeForSelectInput">获取树形下拉框数据时的输入模型</typeparam>
+            <typeparam name="TGetTreeForSelectOutput">获取树形下拉框数据时的输出模型</typeparam>
+            <typeparam name="TGetNodesForSelectInput">获取扁平下拉框数据时的输入模型</typeparam>
+            <typeparam name="TGetNodesForSelectOutput">获取扁平下拉框数据时的输出模型</typeparam>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.IGeneralTreeProviderBaseAppService`4.GetTreeForSelectAsync(`0)">
+            <summary>
+            获取简洁的树形数据，通常引用此数据的页面调用
+            </summary>
+            <param name="input">指定父节点，是否显示全部</param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.IGeneralTreeProviderBaseAppService`4.GetNodesForSelectAsync(`2)">
+            <summary>
+            获取指定父节点的子节点，以扁平结构返回
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:BXJG.Utils.GeneralTree.IGeneralTreeProviderBaseAppService`3">
+            <summary>
+            提供可选的树形或扁平化数据，通常作为下拉框和弹窗选择提供数据
+            </summary>
+            <typeparam name="TGetTreeForSelectInput">获取树形下拉框数据时的输入模型</typeparam>
+            <typeparam name="TGetTreeForSelectOutput">获取树形下拉框数据时的输出模型</typeparam>
+            <typeparam name="TGetNodesForSelectInput">获取扁平下拉框数据时的输入模型</typeparam>
+        </member>
+        <member name="T:BXJG.Utils.GeneralTree.IGeneralTreeProviderBaseAppService`2">
+            <summary>
+            提供可选的树形或扁平化数据，通常作为下拉框和弹窗选择提供数据
+            </summary>
+            <typeparam name="TGetTreeForSelectInput">获取树形下拉框数据时的输入模型</typeparam>
+            <typeparam name="TGetTreeForSelectOutput">获取树形下拉框数据时的输出模型</typeparam>
+        </member>
+        <member name="T:BXJG.Utils.GeneralTree.IGeneralTreeProviderBaseAppService`1">
+            <summary>
+            提供可选的树形或扁平化数据，通常作为下拉框和弹窗选择提供数据
+            </summary>
+            <typeparam name="TGetTreeForSelectInput">获取树形下拉框数据时的输入模型</typeparam>
+        </member>
+        <member name="T:BXJG.Utils.GeneralTree.IGeneralTreeProviderBaseAppService">
+            <summary>
+            提供可选的树形或扁平化数据，通常作为下拉框和弹窗选择提供数据
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.GeneralTree.IGeneralTreeBaseAppService`7">
+            <summary>
+            通用树形结构服务接口，其它树形接口应该继承此接口以获得树形结构数据的通用功能
+            </summary>
+            <typeparam name="TDto">管理页面显示的Dto类型</typeparam>
+            <typeparam name="TCreateInput">新增模型</typeparam>
+            <typeparam name="TEditDto">编辑模型</typeparam>
+            <typeparam name="TDeleteInput">删除时的输入模型</typeparam>
+            <typeparam name="TGetAllInput">管理页面获取所有树形数据时的输入模型</typeparam>
+            <typeparam name="TGetInput">获取单个信息的输入模型</typeparam>
+            <typeparam name="TMoveInput">移动节点时的输入模型</typeparam>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.IGeneralTreeBaseAppService`7.CreateAsync(`1)">
+            <summary>
+            创建树形结构数据的节点
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.IGeneralTreeBaseAppService`7.UpdateAsync(`2)">
+            <summary>
+            更新指定节点
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.IGeneralTreeBaseAppService`7.DeleteAsync(`3)">
+            <summary>
+            删除指定节点
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.IGeneralTreeBaseAppService`7.MoveAsync(`6)">
+            <summary>
+            移动节点，服务端将自动重新生成所有兄弟节点的code
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.IGeneralTreeBaseAppService`7.GetAllAsync(`4)">
+            <summary>
+            获取所有数据，通常由展示的列表页面调用
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.IGeneralTreeBaseAppService`7.GetAsync(`5)">
+            <summary>
+            获取指定节点
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="T:BXJG.Utils.GeneralTree.IGeneralTreeBaseAppService`6">
+            <summary>
+            通用树形结构服务接口，其它树形接口应该继承此接口以获得树形结构数据的通用功能
+            </summary>
+            <typeparam name="TDto">管理页面显示的Dto类型</typeparam>
+            <typeparam name="TCreateInput">新增模型</typeparam>
+            <typeparam name="TEditDto">编辑模型</typeparam>
+            <typeparam name="TDeleteInput">删除时的输入模型</typeparam>
+            <typeparam name="TGetAllInput">管理页面获取所有树形数据时的输入模型</typeparam>
+            <typeparam name="TGetInput">获取单个信息的输入模型</typeparam>
+        </member>
+        <member name="T:BXJG.Utils.GeneralTree.IGeneralTreeBaseAppService`5">
+            <summary>
+            通用树形结构服务接口，其它树形接口应该继承此接口以获得树形结构数据的通用功能
+            </summary>
+            <typeparam name="TDto">管理页面显示的Dto类型</typeparam>
+            <typeparam name="TCreateInput">新增模型</typeparam>
+            <typeparam name="TEditDto">编辑模型</typeparam>
+            <typeparam name="TDeleteInput">删除时的输入模型</typeparam>
+            <typeparam name="TGetAllInput">管理页面获取所有树形数据时的输入模型</typeparam>
+        </member>
+        <member name="T:BXJG.Utils.GeneralTree.IGeneralTreeBaseAppService`4">
+            <summary>
+            通用树形结构服务接口，其它树形接口应该继承此接口以获得树形结构数据的通用功能
+            </summary>
+            <typeparam name="TDto">管理页面显示的Dto类型</typeparam>
+            <typeparam name="TCreateInput">新增模型</typeparam>
+            <typeparam name="TEditDto">编辑模型</typeparam>
+            <typeparam name="TDeleteInput">删除时的输入模型</typeparam>
+        </member>
+        <member name="T:BXJG.Utils.GeneralTree.IGeneralTreeBaseAppService`3">
+            <summary>
+            通用树形结构服务接口，其它树形接口应该继承此接口以获得树形结构数据的通用功能
+            </summary>
+            <typeparam name="TDto">管理页面显示的Dto类型</typeparam>
+            <typeparam name="TCreateInput">新增模型</typeparam>
+            <typeparam name="TEditDto">编辑模型</typeparam>
+        </member>
+        <member name="T:BXJG.Utils.GeneralTree.IGeneralTreeBaseAppService`2">
+            <summary>
+            通用树形结构服务接口，其它树形接口应该继承此接口以获得树形结构数据的通用功能
+            </summary>
+            <typeparam name="TDto">管理页面显示的Dto类型</typeparam>
+            <typeparam name="TCreateInput">新增模型</typeparam>
+        </member>
+        <member name="T:BXJG.Utils.GeneralTree.IGeneralTreeBaseAppService`1">
+            <summary>
+            通用树形结构服务接口，其它树形接口应该继承此接口以获得树形结构数据的通用功能
+            </summary>
+            <typeparam name="TDto">管理页面显示的Dto类型</typeparam>
+        </member>
+        <member name="T:BXJG.Utils.ICrudBaseAppService`7">
+            <summary>
+            abp提供的crud接口未定义批量删除接口，这里定义了批量删除接口，它继承了abp的crud接口
+            其它批量操作不应该在基础抽象接口中定义，因为它们不是crud操作。
+            </summary>
+            <typeparam name="TEntityDto"></typeparam>
+            <typeparam name="TPrimaryKey"></typeparam>
+            <typeparam name="TGetAllInput"></typeparam>
+            <typeparam name="TCreateInput"></typeparam>
+            <typeparam name="TUpdateInput"></typeparam>
+            <typeparam name="TGetInput"></typeparam>
+            <typeparam name="TDeleteInput"></typeparam>
+        </member>
+        <member name="M:BXJG.Utils.ICrudBaseAppService`7.BatchDeleteAsync(BXJG.Common.Dto.BatchOperationInput{`1})">
+            <summary>
+            批量删除，此操作是一个具体的操作（通过id删除实体），输入输出参数没必要泛型化，这样简单些。
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="T:BXJG.Utils.ICrudBaseAppService`6">
+            <summary>
+            abp提供的crud接口未定义批量删除接口，这里定义了批量删除接口，它继承了abp的crud接口
+            其它批量操作不应该在基础抽象接口中定义，因为它们不是crud操作。
+            </summary>
+            <typeparam name="TEntityDto"></typeparam>
+            <typeparam name="TPrimaryKey"></typeparam>
+            <typeparam name="TGetAllInput"></typeparam>
+            <typeparam name="TCreateInput"></typeparam>
+            <typeparam name="TUpdateInput"></typeparam>
+            <typeparam name="TGetInput"></typeparam>
+        </member>
+        <member name="T:BXJG.Utils.ICrudBaseAppService`5">
+            <summary>
+            abp提供的crud接口未定义批量删除接口，这里定义了批量删除接口，它继承了abp的crud接口
+            其它批量操作不应该在基础抽象接口中定义，因为它们不是crud操作。
+            </summary>
+            <typeparam name="TEntityDto"></typeparam>
+            <typeparam name="TPrimaryKey"></typeparam>
+            <typeparam name="TGetAllInput"></typeparam>
+            <typeparam name="TCreateInput"></typeparam>
+            <typeparam name="TUpdateInput"></typeparam>
+        </member>
+        <member name="T:BXJG.Utils.ICrudBaseAppService`4">
+            <summary>
+            abp提供的crud接口未定义批量删除接口，这里定义了批量删除接口，它继承了abp的crud接口
+            其它批量操作不应该在基础抽象接口中定义，因为它们不是crud操作。
+            </summary>
+            <typeparam name="TEntityDto"></typeparam>
+            <typeparam name="TPrimaryKey"></typeparam>
+            <typeparam name="TGetAllInput"></typeparam>
+            <typeparam name="TCreateInput"></typeparam>
+        </member>
+        <member name="T:BXJG.Utils.ICrudBaseAppService`3">
+            <summary>
+            abp提供的crud接口未定义批量删除接口，这里定义了批量删除接口，它继承了abp的crud接口
+            其它批量操作不应该在基础抽象接口中定义，因为它们不是crud操作。
+            </summary>
+            <typeparam name="TEntityDto"></typeparam>
+            <typeparam name="TPrimaryKey"></typeparam>
+            <typeparam name="TGetAllInput"></typeparam>
+        </member>
+        <member name="T:BXJG.Utils.ICrudBaseAppService`2">
+            <summary>
+            abp提供的crud接口未定义批量删除接口，这里定义了批量删除接口，它继承了abp的crud接口
+            其它批量操作不应该在基础抽象接口中定义，因为它们不是crud操作。
+            </summary>
+            <typeparam name="TEntityDto"></typeparam>
+            <typeparam name="TPrimaryKey"></typeparam>
+        </member>
+        <member name="T:BXJG.Utils.ICrudBaseAppService`1">
+            <summary>
+            abp提供的crud接口未定义批量删除接口，这里定义了批量删除接口，它继承了abp的crud接口
+            其它批量操作不应该在基础抽象接口中定义，因为它们不是crud操作。
+            </summary>
+            <typeparam name="TEntityDto"></typeparam>
+        </member>
+        <member name="T:BXJG.Utils.IProviderBaseAppService`3">
+            <summary>
+            此接口为下拉或弹窗选择提供数据，abp默认未提供此接口。
+            </summary>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TGetAllInput"></typeparam>
+            <typeparam name="TEntityDto"></typeparam>
+        </member>
+        <member name="M:BXJG.Utils.IProviderBaseAppService`3.GetAllAsync(`1)">
+            <summary>
+            获取下拉或弹窗的可选分页数据
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.IProviderBaseAppService`3.Get(Abp.Application.Services.Dto.EntityDto{`0})">
+            <summary>
+            获取关联信息的详情
+            </summary>
+            <param name="input">id，之所以没有直接使用TKey，而是包一层是为了跟abp的方式保持统一</param>
+            <returns></returns>
+        </member>
+        <member name="T:BXJG.Utils.Notification.EventRealTimeNotifier">
+            <summary>
+            基于事件的实时通知器
+            它将通知发布为事件，以便界面的事件处理器发布基于界面的实时通知。
+            通常用于blazor项目
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Notification.EventRealTimeNotifier.UseOnlyIfRequestedAsTarget">
+            <summary>
+            If true, this real time notifier will be used for sending real time notifications when it is requested. Otherwise it will not be used.
+            <para>
+            If false, this realtime notifier will notify any notifications.
+            </para>
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.Notification.GetAllInput">
+            <summary>
+            获取通知列表的输入模型
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.Notification.GetTotalInput">
+            <summary>
+            获取消息数量的输入模型
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Notification.GetTotalInput.NotificationNames">
+            <summary>
+            通知类型，参考NotificationNameContains属性，配合使用
+            不提供此参数或为空则不限制此条件
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Notification.GetTotalInput.NotificationNameContains">
+            <summary>
+            true表示获取NotificationNames中指定的类型的通知
+            false表示获取除NotificationNames中指定的类型之外的其它类型的通知
+            NotificationNames为空时，此参数无意义。
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Notification.GetTotalInput.UserNotificationState">
+            <summary>
+            读取状态 0未读 1已读 不提供此参数则不限制此条件
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Notification.GetTotalInput.StartTime">
+            <summary>
+            发布时间范围的开始时间
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Notification.GetTotalInput.EndTime">
+            <summary>
+            发布时间范围的开始结束时间
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Notification.GetTotalInput.EntityTypeName">
+            <summary>
+            实体类型id
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Notification.GetTotalInput.EntityId">
+            <summary>
+            实体id
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Notification.GetTotalInput.NotificationSeverities">
+            <summary>
+            只查询指定级别的通知，空则不限制
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Notification.GetTotalInput.Keywords">
+            <summary>
+            关键字
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.Notification.MessageDto">
+            <summary>
+            通用的消息列表模型
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Notification.MessageDto.TenantNotificationInfoNotificationName">
+            <summary>
+            通知类型
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Notification.MessageDto.TenantNotificationInfoData">
+            <summary>
+            通知数据
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Notification.MessageDto.TenantNotificationInfoDataTypeName">
+            <summary>
+            通知数据类型名称
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Notification.MessageDto.UserNotificationInfoState">
+            <summary>
+            消息状态
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Notification.MessageDto.TenantNotificationInfoSeverity">
+            <summary>
+            消息级别
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Notification.MessageDto.UserNotificationInfoCreationTime">
+            <summary>
+            发布时间
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Notification.MessageDto.CreateUserName">
+            <summary>
+            发布人
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Notification.MessageDto.CreateTimeStr">
+            <summary>
+            发布显示时间
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.Notification.NotifyDefineDto">
+            <summary>
+            通知定义
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Notification.NotifyDefineDto.Name">
+            <summary>
+            唯一名称
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Notification.NotifyDefineDto.DisplayName">
+            <summary>
+            显示名称
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Notification.NotifyDefineDto.EntityType">
+            <summary>
+            关联的实体类型全名
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Notification.NotifyDefineDto.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Notification.NotifyDefineDto.Attributes">
+            <summary>
+            附加属性
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.Notification.PersonNotificationAppService`1">
+            <summary>
+            通用个人消息管理服务
+            由于通知是与个人相关的数据，所以不需要严格的权限控制
+            此功能是所有类型的用户通用的
+            </summary>
+        </member>
+        <member name="M:BXJG.Utils.Notification.PersonNotificationAppService`1.GetDefines">
+            <summary>
+            获取当前用户可以订阅的通知定义列表
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Notification.PersonNotificationAppService`1.Subscript(System.Collections.Generic.List{BXJG.Utils.Notification.SubscriptNotifyItem})">
+            <summary>
+            批量订阅通知
+            </summary>
+            <param name="subscripts"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Notification.PersonNotificationAppService`1.UnSubscript(System.Collections.Generic.List{BXJG.Utils.Notification.SubscriptNotifyItem})">
+            <summary>
+            批量取消订阅
+            </summary>
+            <param name="subscripts"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Notification.PersonNotificationAppService`1.GetSubscriptedNotifyDefines">
+            <summary>
+            获取已订阅的通知定义
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Notification.PersonNotificationAppService`1.GetTotalAsync(BXJG.Utils.Notification.GetTotalInput)">
+            <summary>
+            获取消息数量
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Notification.PersonNotificationAppService`1.GetUnReadTotalGroupBySubscript(System.String[])">
+            <summary>
+            获取消息数量
+            </summary>
+            <param name="names"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Notification.PersonNotificationAppService`1.GetAllAsync(BXJG.Utils.Notification.GetAllInput)">
+            <summary>
+            获取消息列表
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Notification.PersonNotificationAppService`1.SetReadedAsync(BXJG.Common.Dto.BatchOperationInput{System.Guid})">
+            <summary>
+            将指定消息设置为已读
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Notification.PersonNotificationAppService`1.SetReadedAllAsync(System.String)">
+            <summary>
+            设置所有消息为已读
+            </summary>
+            <param name="name">通知类型名</param>
+            <returns></returns>
+        </member>
+        <member name="T:BXJG.Utils.Notification.RemoveOldNotification`1">
+            <summary>
+            删除过期通知
+            需要调用方提供子类，给出TUser类型
+            </summary>
+            <typeparam name="TUser"></typeparam>
+        </member>
+        <member name="P:BXJG.Utils.Notification.ResultDto`1.UnReadCount">
+            <summary>
+            未读消息
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Notification.ResultDto`1.ReadCount">
+            <summary>
+            已读消息
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.Notification.SubscriptNotifyItem">
+            <summary>
+            批量订阅通知输入模型的项
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.OperationLog.Dto`1">
+            <summary>
+            操作日志dto
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.OperationLog.Dto`1.SetBrowserInfo">
+            <summary>
+            操作时的浏览器信息
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.OperationLog.Dto`1.SetClientIpAddress">
+            <summary>
+            客户端id
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.OperationLog.Dto`1.SetClientName">
+            <summary>
+            客户端名称
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.OperationLog.Dto`1.SetUserId">
+            <summary>
+            操作员id
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.OperationLog.Dto`1.UserName">
+            <summary>
+            操作员姓名
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.OperationLog.Dto`1.SetReason">
+            <summary>
+            原因
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.OperationLog.Dto`1.ExtensionData">
+            <summary>
+            扩展数据
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.OperationLog.Dto`1.EntityEntityTypeFullName">
+            <summary>
+            被操作的实体类型
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.OperationLog.Dto`1.EntityTypeDisplayName">
+            <summary>
+            实体名
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.OperationLog.Dto`1.EntityEntityId">
+            <summary>
+            被操作的实体的id
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.OperationLog.Dto`1.EntityChangeTime">
+            <summary>
+            操作时间
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.OperationLog.Dto`1.EntityPropertyChanges">
+            <summary>
+            被改过的字段
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.OperationLog.PropertyDto">
+            <summary>
+            操作日志字段dto
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.OperationLog.PropertyDto.PropertyName">
+            <summary>
+            字段名
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.OperationLog.PropertyDto.PropertyDisplayName">
+            <summary>
+            字段显示名
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.OperationLog.PropertyDto.PropertyTypeFullName">
+            <summary>
+            字段类型名
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.OperationLog.PropertyDto.NewValue">
+            <summary>
+            修改前的值
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.OperationLog.PropertyDto.NewValueDisplayName">
+            <summary>
+            修改前的值
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.OperationLog.PropertyDto.OriginalValue">
+            <summary>
+            修改后的值
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.OperationLog.PropertyDto.OriginalValueDisplayName">
+            <summary>
+            修改后的值
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.OperationLog.GetAllInput">
+            <summary>
+            获取操作日志时的输入模型
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.OperationLog.GetAllInput.EntityId">
+            <summary>
+            实体id
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.OperationLog.GetAllInput.StartTime">
+            <summary>
+            开始时间
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.OperationLog.GetAllInput.EndTime">
+            <summary>
+            结束时间
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.OperationLog.GetAllInput.Sorting">
+            <summary>
+            排序方式
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.OperationLog.EntitySet">
+            <summary>
+            查询时临时用的
+            </summary>
+        </member>
+        <member name="M:BXJG.Utils.OperationLog.OperationLogAppService`5.GetTotalAsync(`2)">
+            <summary>
+            获取数量
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="T:BXJG.Utils.ProviderBaseAppService`4">
+            <summary>
+            抽象的为其它功能提供可选数据的接口
+            </summary>
+            <typeparam name="TEntity">实体类</typeparam>
+            <typeparam name="TKey">主键类型</typeparam>
+            <typeparam name="TGetAllInput">查询时输入参数的类型</typeparam>
+            <typeparam name="TEntityDto">可选数据的dto</typeparam>
+        </member>
+        <member name="P:BXJG.Utils.ProviderBaseAppService`4.ServiceProvider">
+            <summary>
+            与当前请求关联的服务容器
+            通常你可以使用构造函数或属性注入，框架级别或特殊情况可以使用此对象。
+            注：IocManager是全局单例，解析实现IDisposeable的服务时比较危险，此时应使用ServiceProvider
+            </summary>
+        </member>
+        <member name="M:BXJG.Utils.ProviderBaseAppService`4.GetAllAsync(`2)">
+            <summary>
+            获取可供选择的数据
+            通常用来提供下拉框或弹窗选择的数据
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.ProviderBaseAppService`4.CheckGetAllPermission">
+            <summary>
+            判断查询下拉或弹窗或关联的单个信息的详情的 权限，获取列表和单个都会调用
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.ProviderBaseAppService`4.ApplySorting(System.Linq.IQueryable{`0},`2)">
+            <summary>
+            Should apply sorting if needed.
+            </summary>
+            <param name="query">The query.</param>
+            <param name="input">The input.</param>
+        </member>
+        <member name="M:BXJG.Utils.ProviderBaseAppService`4.ApplyPaging(System.Linq.IQueryable{`0},`2)">
+            <summary>
+            获取列表时分页处理
+            </summary>
+            <param name="query"></param>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.ProviderBaseAppService`4.CreateFilteredQuery(`2)">
+            <summary>
+            获取列表时调用，通常重写它来自定义条件过滤
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.ProviderBaseAppService`4.MapToEntityDto(`0)">
+            <summary>
+            获取单个或列表时都会调用，通常重写它来自定义映射，默认使用AutoMapper
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.ProviderBaseAppService`4.BuildQuery">
+            <summary>
+            获取单个或列表时都会调用的方法，以获取查询对象
+            通常重写它来应用Include
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.ProviderBaseAppService`4.GetById(`1)">
+            <summary>
+            重写以应用include
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

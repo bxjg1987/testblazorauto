@@ -31,6 +31,7 @@ namespace ZLJ.Web.Host.Startup
     public class Startup
     {
         private const string _defaultCorsPolicyName = "localhost";
+        private const string _apiVersion = "v1";
 
         private readonly IConfigurationRoot _appConfiguration;
         private readonly IWebHostEnvironment webHostEnvironment;
@@ -111,9 +112,9 @@ namespace ZLJ.Web.Host.Startup
             //services.AddTransient<WeatherForecastService>();
             //services.AddTableDemoDataService();
             services.AddServerSideBlazor();
-            services.AddSingleton< TrackingCircuitHandler>();
+            services.AddSingleton<TrackingCircuitHandler>();
 
-            services.AddSingleton<CircuitHandler, TrackingCircuitHandler>(p=>p.GetRequiredService<TrackingCircuitHandler>());
+            services.AddSingleton<CircuitHandler, TrackingCircuitHandler>(p => p.GetRequiredService<TrackingCircuitHandler>());
             //services.AddBootstrapBlazor();
             //services.AddSignalR(); //启用blazor时，已经包含这个
 
@@ -152,44 +153,64 @@ namespace ZLJ.Web.Host.Startup
             );
 
             #region Swagger
-
-            // Swagger - Enable this line and the related lines in Configure method to enable swagger UI
-            services.AddSwaggerGen(options =>
+            if (this.webHostEnvironment.IsDevelopment())
             {
-                options.SwaggerDoc("v1", new OpenApiInfo() { Title = "ZLJ API", Version = "v1" });
-                options.DocInclusionPredicate((docName, description) => true);
-
-                //解决不同命名空间中，同名模型导致冲突的问题
-                options.CustomSchemaIds(type => type.ToString());
-
-                //options.IncludeXmlComments(AppContext.BaseDirectory + typeof(GeneralTreeModule).Assembly.GetName().Name + ".XML");
-
-                //options.IncludeXmlComments(AppContext.BaseDirectory + typeof(BXJGUtilsModule).Assembly.GetName().Name + ".XML");
-                //options.IncludeXmlComments(AppContext.BaseDirectory + typeof(BXJGUtilsApplicationModule).Assembly.GetName().Name + ".XML");
-
-                //options.IncludeXmlComments(AppContext.BaseDirectory + typeof(BXJG.WorkOrder.ApplicationModule).Assembly.GetName().Name + ".XML");
-                //options.IncludeXmlComments(AppContext.BaseDirectory + typeof(BXJG.WorkOrder.BXJGCommonApplicationModule).Assembly.GetName().Name + ".XML");
-                //options.IncludeXmlComments(AppContext.BaseDirectory + typeof(BXJGWorkOrderEmployeeApplicationModule).Assembly.GetName().Name + ".XML");
-
-
-                options.IncludeXmlComments(AppContext.BaseDirectory + typeof(ZLJApplicationModule).Assembly.GetName().Name + ".XML");
-                options.IncludeXmlComments(AppContext.BaseDirectory + typeof(CommonApplicationModule).Assembly.GetName().Name + ".XML");
-                options.IncludeXmlComments(AppContext.BaseDirectory + typeof(CustomerApplicationModule).Assembly.GetName().Name + ".XML");
-               // options.IncludeXmlComments(AppContext.BaseDirectory + typeof(EmployeeApplicationModule).Assembly.GetName().Name + ".XML");
-                //options.IncludeXmlComments(AppContext.BaseDirectory + typeof(WebCustomerModule).Assembly.GetName().Name + ".XML");
-
-
-                // Define the BearerAuth scheme that's in use
-                options.AddSecurityDefinition("bearerAuth", new OpenApiSecurityScheme()
+                // Swagger - Enable this line and the related lines in Configure method to enable swagger UI
+                services.AddSwaggerGen(options =>
                 {
-                    Description =
-                    "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
-                    Name = "Authorization",
-                    In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.ApiKey
-                });
-            });
+                    options.SwaggerDoc(_apiVersion, new OpenApiInfo
+                    {
+                        Title = "ZLJ API",
+                        Version = _apiVersion,
+                        Description = "abp831",
+                        // uncomment if needed TermsOfService = new Uri("https://example.com/terms"),
+                        Contact = new OpenApiContact
+                        {
+                            Name = "abp831",
+                            Email = string.Empty,
+                            Url = new Uri("https://twitter.com/aspboilerplate"),
+                        },
+                        License = new OpenApiLicense
+                        {
+                            Name = "MIT License",
+                            Url = new Uri("https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/LICENSE"),
+                        }
+                    });
+                    options.DocInclusionPredicate((docName, description) => true);
 
+                    //解决不同命名空间中，同名模型导致冲突的问题
+                    options.CustomSchemaIds(type => type.ToString());
+
+                    //options.IncludeXmlComments(AppContext.BaseDirectory + typeof(GeneralTreeModule).Assembly.GetName().Name + ".XML");
+
+                    //options.IncludeXmlComments(AppContext.BaseDirectory + typeof(BXJGUtilsModule).Assembly.GetName().Name + ".XML");
+                    //options.IncludeXmlComments(AppContext.BaseDirectory + typeof(BXJGUtilsApplicationModule).Assembly.GetName().Name + ".XML");
+
+                    //options.IncludeXmlComments(AppContext.BaseDirectory + typeof(BXJG.WorkOrder.ApplicationModule).Assembly.GetName().Name + ".XML");
+                    //options.IncludeXmlComments(AppContext.BaseDirectory + typeof(BXJG.WorkOrder.BXJGCommonApplicationModule).Assembly.GetName().Name + ".XML");
+                    //options.IncludeXmlComments(AppContext.BaseDirectory + typeof(BXJGWorkOrderEmployeeApplicationModule).Assembly.GetName().Name + ".XML");
+
+
+                    options.IncludeXmlComments(AppContext.BaseDirectory + typeof(ZLJApplicationModule).Assembly.GetName().Name + ".XML");
+                    options.IncludeXmlComments(AppContext.BaseDirectory + typeof(CommonApplicationModule).Assembly.GetName().Name + ".XML");
+                    options.IncludeXmlComments(AppContext.BaseDirectory + typeof(CustomerApplicationModule).Assembly.GetName().Name + ".XML");
+                    options.IncludeXmlComments(AppContext.BaseDirectory + typeof(BXJGUtilsApplicationModule).Assembly.GetName().Name + ".XML");
+
+                    // options.IncludeXmlComments(AppContext.BaseDirectory + typeof(EmployeeApplicationModule).Assembly.GetName().Name + ".XML");
+                    //options.IncludeXmlComments(AppContext.BaseDirectory + typeof(WebCustomerModule).Assembly.GetName().Name + ".XML");
+
+
+                    // Define the BearerAuth scheme that's in use
+                    options.AddSecurityDefinition("bearerAuth", new OpenApiSecurityScheme()
+                    {
+                        Description =
+                        "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                        Name = "Authorization",
+                        In = ParameterLocation.Header,
+                        Type = SecuritySchemeType.ApiKey
+                    });
+                });
+            }
             #endregion
 
 
@@ -274,32 +295,35 @@ namespace ZLJ.Web.Host.Startup
                 // Configure Log4Net logging
                 //options => options.IocManager.IocContainer.AddFacility<LoggingFacility>(f => f.UseAbpLog4Net().WithConfig(webHostEnvironment.IsDevelopment() ? "log4net.config" : "log4net.Production.config"))
                 options => options.IocManager.IocContainer.AddFacility<LoggingFacility>(f => f.UseAbpLog4Net().WithConfig("log4net.config"))
-            ,false);
+            , false);
             //注意这里的第2个参数，abp模板项目没有这个参数，使用的默认true
             //改为false是希望保留按约定拦截，具体看文档中的blazor集成
 
             #endregion
-           // var sdf = services.Where(c =>( c.ServiceType.FullName.Contains("Abp", StringComparison.OrdinalIgnoreCase)|| c.ServiceType.FullName.Contains("zlj", StringComparison.OrdinalIgnoreCase))).ToList();
+            // var sdf = services.Where(c =>( c.ServiceType.FullName.Contains("Abp", StringComparison.OrdinalIgnoreCase)|| c.ServiceType.FullName.Contains("zlj", StringComparison.OrdinalIgnoreCase))).ToList();
 
             //var sdf = services.Where(c =>c.Lifetime== ServiceLifetime.Singleton&&( c.ServiceType.FullName.Contains("Abp", StringComparison.OrdinalIgnoreCase)|| c.ServiceType.FullName.Contains("zlj", StringComparison.OrdinalIgnoreCase))).ToList();
         }
 
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
-            // UiMiddleware
-            // URL: /swagger
-            // Enable middleware to serve generated Swagger as a JSON endpoint
-            app.UseSwagger();
-            // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)
-            app.UseSwaggerUI(options =>
+            if (this.webHostEnvironment.IsDevelopment())
             {
-                //options.SwaggerEndpoint(
-                //    _appConfiguration["App:ServerRootAddress"].EnsureEndsWith('/') + "swagger/v1/swagger.json",
-                //    "ZLJ API V1");
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "ZLJ API V1");
-                options.IndexStream = () => Assembly.GetExecutingAssembly()
-                    .GetManifestResourceStream("ZLJ.Web.Host.wwwroot.swagger.ui.index.html");
-            });
+                // Enable middleware to serve generated Swagger as a JSON endpoint
+                app.UseSwagger(c => { c.RouteTemplate = "swagger/{documentName}/swagger.json"; });
+                // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)
+                app.UseSwaggerUI(options =>
+                {
+                    //options.SwaggerEndpoint(
+                    //    _appConfiguration["App:ServerRootAddress"].EnsureEndsWith('/') + "swagger/v1/swagger.json",
+                    //    "ZLJ API V1");
+                    options.SwaggerEndpoint($"/swagger/{_apiVersion}/swagger.json", $"ZLJ API {_apiVersion}");
+                    options.IndexStream = () => Assembly.GetExecutingAssembly()
+                        .GetManifestResourceStream("ZLJ.Web.Host.wwwroot.swagger.ui.index.html");
+                    options.DisplayRequestDuration(); // Controls the display of the request duration (in milliseconds) for "Try it out" requests.  
+
+                });
+            }
             app.Use((ctx, next) =>
             {
                 ctx.Request.Headers["Accept-Language"] = ctx.Request.Headers["Accept-Language"].ToString()
@@ -347,26 +371,24 @@ namespace ZLJ.Web.Host.Startup
             app.UseAbpRequestLocalization();
             app.UseAuthorization();
 
-            //app.UseWeChatPayment();
-            app.UseHangfireDashboard("/hangfire", new Hangfire.DashboardOptions
-            {
-                //Authorization=null 
-                //swagger那里的登陆是基于token的，而hangfire自己的
-                //Authorization = new[] { new aaa() }
-                //由于hangfire请求时不携带token，因此是基于cookie的身份验证，且不太好改造
-                //所以我们需要单独为它提供一个登陆页面
-                Authorization = new[] { new AbpHangfireAuthorizationFilter(PermissionNames.HangFireDashboard) }
-                //Authorization = new[] { new aaa(PermissionNames.HangFireDashboard) }
-            });
+            ////app.UseWeChatPayment();
+            //app.UseHangfireDashboard("/hangfire", new Hangfire.DashboardOptions
+            //{
+            //    //Authorization=null 
+            //    //swagger那里的登陆是基于token的，而hangfire自己的
+            //    //Authorization = new[] { new aaa() }
+            //    //由于hangfire请求时不携带token，因此是基于cookie的身份验证，且不太好改造
+            //    //所以我们需要单独为它提供一个登陆页面
+            //    Authorization = new[] { new AbpHangfireAuthorizationFilter(PermissionNames.HangFireDashboard) }
+            //    //Authorization = new[] { new aaa(PermissionNames.HangFireDashboard) }
+            //});
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHub<AbpCommonHub>("/signalr");
-                //endpoints.MapHangfireDashboard("/hangfire", new DashboardOptions
+                endpoints.MapHangfireDashboardWithAuthorizationPolicy(PermissionNames.HangFireDashboard);
+                //endpoints.MapHangfireDashboard(PermissionNames.HangFireDashboard, "/hangfire", new DashboardOptions
                 //{
-                //    //默认情况下，abp没有注册cookie身份验证方案，swagger里是将token存储到本地然后请求时提交到header里
-                //    //因此这里需要hangfire请求时添加header
-                //    //这里就无法身份验证，授权检查就一直false
                 //    Authorization = new[] { new AbpHangfireAuthorizationFilter(PermissionNames.HangFireDashboard) }
                 //});
                 endpoints.MapBlazorHub();
