@@ -13,11 +13,11 @@ namespace ZLJ.Web.Admin.Shared
     /// <summary>
     /// 后台管理 crud中的列表页
     /// </summary>
+    /// <typeparam name="TAppService"></typeparam>
+    /// <typeparam name="TFormComponent"></typeparam>
     /// <typeparam name="TEntityDto"></typeparam>
     /// <typeparam name="TPrimaryKey"></typeparam>
     /// <typeparam name="TGetAllInput"></typeparam>
-    /// <typeparam name="TFormComponent"></typeparam>
-    /// <typeparam name="TAppService"></typeparam>
     /// <typeparam name="TCreateInput"></typeparam>
     /// <typeparam name="TUpdateInput"></typeparam>
     /// 
@@ -86,11 +86,11 @@ namespace ZLJ.Web.Admin.Shared
     /// <summary>
     /// 后台管理 crud中的列表页
     /// </summary>
+    /// <typeparam name="TAppService"></typeparam>
+    /// <typeparam name="TFormComponent"></typeparam>
     /// <typeparam name="TEntityDto"></typeparam>
     /// <typeparam name="TPrimaryKey"></typeparam>
     /// <typeparam name="TGetAllInput"></typeparam>
-    /// <typeparam name="TFormComponent"></typeparam>
-    /// <typeparam name="TAppService"></typeparam>
     /// <typeparam name="TCreateInput"></typeparam>
     /// 
     public class AdminListComponent<TAppService,
@@ -114,11 +114,11 @@ namespace ZLJ.Web.Admin.Shared
     /// <summary>
     /// 后台管理 crud中的列表页
     /// </summary>
+    /// <typeparam name="TAppService"></typeparam>
+    /// <typeparam name="TFormComponent"></typeparam>
     /// <typeparam name="TEntityDto"></typeparam>
     /// <typeparam name="TPrimaryKey"></typeparam>
     /// <typeparam name="TGetAllInput"></typeparam>
-    /// <typeparam name="TFormComponent"></typeparam>
-    /// <typeparam name="TAppService"></typeparam>
     /// 
     public class AdminListComponent<TAppService,
                                     TFormComponent,
@@ -138,10 +138,10 @@ namespace ZLJ.Web.Admin.Shared
     /// <summary>
     /// 抽象的crud组件，用于简化crud组件的开发
     /// </summary>
+    /// <typeparam name="TAppService"></typeparam>
+    /// <typeparam name="TFormComponent"></typeparam>
     /// <typeparam name="TEntityDto"></typeparam>
     /// <typeparam name="TPrimaryKey"></typeparam>
-    /// <typeparam name="TFormComponent"></typeparam>
-    /// <typeparam name="TAppService"></typeparam>
     public class AdminListComponent<TAppService,
                                     TFormComponent,
                                     TEntityDto,
@@ -158,9 +158,9 @@ namespace ZLJ.Web.Admin.Shared
     /// <summary>
     /// 抽象的crud组件，用于简化crud组件的开发
     /// </summary>
-    /// <typeparam name="TEntityDto"></typeparam>
-    /// <typeparam name="TFormComponent"></typeparam>
     /// <typeparam name="TAppService"></typeparam>
+    /// <typeparam name="TFormComponent"></typeparam>
+    /// <typeparam name="TEntityDto"></typeparam>
     public class AdminListComponent<TAppService,
                                     TFormComponent,
                                     TEntityDto> : AdminListComponent<TAppService,

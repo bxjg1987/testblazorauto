@@ -27,7 +27,8 @@ namespace ZLJ.Web.Customer.Shared
                                        TGetAllInput,
                                        TCreateInput,
                                        TUpdateInput> : AbpMudBlazorListBaseComponent<TAppService,
-                                                                                     TFormComponent, TEntityDto,
+                                                                                     TFormComponent,
+                                                                                     TEntityDto,
                                                                                      TPrimaryKey,
                                                                                      TGetAllInput,
                                                                                      TCreateInput,
@@ -85,12 +86,12 @@ namespace ZLJ.Web.Customer.Shared
     /// <summary>
     /// 抽象的crud组件，用于简化crud组件的开发
     /// </summary>
+    /// <typeparam name="TFormComponent"></typeparam>
+    /// <typeparam name="TAppService"></typeparam>
     /// <typeparam name="TEntityDto"></typeparam>
     /// <typeparam name="TPrimaryKey"></typeparam>
     /// <typeparam name="TGetAllInput"></typeparam>
     /// <typeparam name="TCreateInput"></typeparam>
-    /// <typeparam name="TFormComponent"></typeparam>
-    /// <typeparam name="TAppService"></typeparam>
     public class CustomerListComponent<TAppService,
                                        TFormComponent,
                                        TEntityDto,
@@ -113,11 +114,11 @@ namespace ZLJ.Web.Customer.Shared
     /// <summary>
     /// 抽象的crud组件，用于简化crud组件的开发
     /// </summary>
+    /// <typeparam name="TFormComponent"></typeparam>
+    /// <typeparam name="TAppService"></typeparam>
     /// <typeparam name="TEntityDto"></typeparam>
     /// <typeparam name="TPrimaryKey"></typeparam>
     /// <typeparam name="TGetAllInput"></typeparam>
-    /// <typeparam name="TFormComponent"></typeparam>
-    /// <typeparam name="TAppService"></typeparam>
     public class CustomerListComponent<TAppService,
                                        TFormComponent,
                                        TEntityDto,
@@ -137,10 +138,10 @@ namespace ZLJ.Web.Customer.Shared
     /// <summary>
     /// 抽象的crud组件，用于简化crud组件的开发
     /// </summary>
-    /// <typeparam name="TEntityDto"></typeparam>
-    /// <typeparam name="TPrimaryKey"></typeparam>
     /// <typeparam name="TFormComponent"></typeparam>
     /// <typeparam name="TAppService"></typeparam>
+    /// <typeparam name="TEntityDto"></typeparam>
+    /// <typeparam name="TPrimaryKey"></typeparam>
     public class CustomerListComponent<TAppService,
                                        TFormComponent,
                                        TEntityDto,
