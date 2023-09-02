@@ -16,36 +16,29 @@ namespace ZLJ.Web.Admin.Shared
     /// <typeparam name="TEntityDto"></typeparam>
     /// <typeparam name="TPrimaryKey"></typeparam>
     /// <typeparam name="TGetAllInput"></typeparam>
-    /// <typeparam name="TCreateInput"></typeparam>
-    /// <typeparam name="TUpdateInput"></typeparam>
-    /// <typeparam name="TGetInput"></typeparam>
-    /// <typeparam name="TDeleteInput"></typeparam>
     /// <typeparam name="TFormComponent"></typeparam>
     /// <typeparam name="TAppService"></typeparam>
+    /// <typeparam name="TCreateInput"></typeparam>
+    /// <typeparam name="TUpdateInput"></typeparam>
+    /// 
     public class AdminListComponent<TAppService,
                                     TFormComponent,
                                     TEntityDto,
                                     TPrimaryKey,
-                                    TGetAllInput,
+                                    TGetAllInput, 
                                     TCreateInput,
-                                    TUpdateInput,
-                                    TGetInput,
-                                    TDeleteInput> : AbpMudBlazorListBaseComponent<TAppService,
+                                    TUpdateInput> : AbpMudBlazorListBaseComponent<TAppService,
                                                                                   TFormComponent,
                                                                                   TEntityDto,
                                                                                   TPrimaryKey,
-                                                                                  TGetAllInput,
-                                                                                  TCreateInput,
-                                                                                  TUpdateInput,
-                                                                                  TGetInput,
-                                                                                  TDeleteInput>
+                                                                                  TGetAllInput, 
+                                                                                  TCreateInput, 
+                                                                                  TUpdateInput>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TGetAllInput : new()
-        where TGetInput : IEntityDto<TPrimaryKey>
         where TFormComponent : ComponentBase
-        where TDeleteInput : IEntityDto<TPrimaryKey>
-        where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, TDeleteInput>
+        where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
     {
         #region 本地化
         private ILocalizationSource appCommonLocalizationSource, zljLocalizationSource, utilsLocalizationSource;
@@ -91,123 +84,57 @@ namespace ZLJ.Web.Admin.Shared
         #endregion
     }
     /// <summary>
-    /// 抽象的crud组件，用于简化crud组件的开发
+    /// 后台管理 crud中的列表页
     /// </summary>
     /// <typeparam name="TEntityDto"></typeparam>
     /// <typeparam name="TPrimaryKey"></typeparam>
     /// <typeparam name="TGetAllInput"></typeparam>
-    /// <typeparam name="TCreateInput"></typeparam>
-    /// <typeparam name="TUpdateInput"></typeparam>
-    /// <typeparam name="TGetInput"></typeparam>
     /// <typeparam name="TFormComponent"></typeparam>
     /// <typeparam name="TAppService"></typeparam>
+    /// <typeparam name="TCreateInput"></typeparam>
+    /// 
     public class AdminListComponent<TAppService,
                                     TFormComponent,
                                     TEntityDto,
                                     TPrimaryKey,
                                     TGetAllInput,
-                                    TCreateInput,
-                                    TUpdateInput,
-                                    TGetInput> : AdminListComponent<TAppService,
-                                                                    TFormComponent,
-                                                                    TEntityDto,
-                                                                    TPrimaryKey,
-                                                                    TGetAllInput,
-                                                                    TCreateInput,
-                                                                    TUpdateInput,
-                                                                    TGetInput,
-                                                                    EntityDto<TPrimaryKey>>
-        where TEntityDto : IEntityDto<TPrimaryKey>
-        where TUpdateInput : IEntityDto<TPrimaryKey>
-        where TGetInput : IEntityDto<TPrimaryKey>
-        where TFormComponent : ComponentBase
-        where TGetAllInput : new()
-        where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput>
-    {
-    }
-    /// <summary>
-    /// 抽象的crud组件，用于简化crud组件的开发
-    /// </summary>
-    /// <typeparam name="TEntityDto"></typeparam>
-    /// <typeparam name="TPrimaryKey"></typeparam>
-    /// <typeparam name="TGetAllInput"></typeparam>
-    /// <typeparam name="TCreateInput"></typeparam>
-    /// <typeparam name="TUpdateInput"></typeparam>
-    /// <typeparam name="TFormComponent"></typeparam>
-    /// <typeparam name="TAppService"></typeparam>
-    public class AdminListComponent<TAppService,
-                                    TFormComponent,
-                                    TEntityDto,
-                                    TPrimaryKey,
-                                    TGetAllInput,
-                                    TCreateInput,
-                                    TUpdateInput> : AdminListComponent<TAppService,
-                                                                       TFormComponent,
-                                                                       TEntityDto,
-                                                                       TPrimaryKey,
-                                                                       TGetAllInput,
-                                                                       TCreateInput,
-                                                                       TUpdateInput,
-                                                                       EntityDto<TPrimaryKey>>
-        where TEntityDto : IEntityDto<TPrimaryKey>
-        where TUpdateInput : IEntityDto<TPrimaryKey>
-        where TGetAllInput : new()
-        where TFormComponent : ComponentBase
-        where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
-    {
-    }
-    /// <summary>
-    /// 抽象的crud组件，用于简化crud组件的开发
-    /// </summary>
-    /// <typeparam name="TEntityDto"></typeparam>
-    /// <typeparam name="TPrimaryKey"></typeparam>
-    /// <typeparam name="TGetAllInput"></typeparam>
-    /// <typeparam name="TCreateInput"></typeparam>
-    /// <typeparam name="TFormComponent"></typeparam>
-    /// <typeparam name="TAppService"></typeparam>
-    public class AdminListComponent<TAppService,
-                                    TFormComponent,
-                                    TEntityDto,
-                                    TPrimaryKey,
-                                    TGetAllInput,
-                                    TCreateInput> : AdminListComponent<TAppService,
-                                                                       TFormComponent,
-                                                                       TEntityDto,
-                                                                       TPrimaryKey,
-                                                                       TGetAllInput,
-                                                                       TCreateInput,
-                                                                       TCreateInput>
+                                    TCreateInput> : AbpMudBlazorListBaseComponent<TAppService,
+                                                                                  TFormComponent,
+                                                                                  TEntityDto,
+                                                                                  TPrimaryKey,
+                                                                                  TGetAllInput,
+                                                                                  TCreateInput,
+                                                                                  TCreateInput>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TCreateInput : IEntityDto<TPrimaryKey>
-        where TFormComponent : ComponentBase
         where TGetAllInput : new()
+        where TFormComponent : ComponentBase
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput>
-    {
-    }
+    { }
     /// <summary>
-    /// 抽象的crud组件，用于简化crud组件的开发
+    /// 后台管理 crud中的列表页
     /// </summary>
     /// <typeparam name="TEntityDto"></typeparam>
     /// <typeparam name="TPrimaryKey"></typeparam>
     /// <typeparam name="TGetAllInput"></typeparam>
     /// <typeparam name="TFormComponent"></typeparam>
     /// <typeparam name="TAppService"></typeparam>
+    /// 
     public class AdminListComponent<TAppService,
                                     TFormComponent,
                                     TEntityDto,
                                     TPrimaryKey,
-                                    TGetAllInput> : AdminListComponent<TAppService,
-                                                                       TFormComponent,
-                                                                       TEntityDto,
-                                                                       TPrimaryKey,
-                                                                       TGetAllInput,
-                                                                       TEntityDto>
+                                    TGetAllInput> : AbpMudBlazorListBaseComponent<TAppService,
+                                                                                  TFormComponent,
+                                                                                  TEntityDto,
+                                                                                  TPrimaryKey,
+                                                                                  TGetAllInput,
+                                                                                  TEntityDto>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TGetAllInput : new()
         where TFormComponent : ComponentBase
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput>
-    {
-    }
+    { }
     /// <summary>
     /// 抽象的crud组件，用于简化crud组件的开发
     /// </summary>
