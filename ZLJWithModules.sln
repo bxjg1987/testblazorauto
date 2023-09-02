@@ -105,12 +105,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "组织业务逻辑", "组�
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "界面", "界面", "{35FBBC5F-EFB2-446A-A110-42C137FA2A74}"
 	ProjectSection(SolutionItems) = preProject
+		docs\界面\抽象的mudblazor表单组件.md = docs\界面\抽象的mudblazor表单组件.md
 		docs\界面\概述.md = docs\界面\概述.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "应用层", "应用层", "{9E73E99D-19B1-486B-B15A-39EFEB37CF2F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BXJG.MudBlazor", "src\Modules\BXJG.MudBlazor\BXJG.MudBlazor.csproj", "{A43BBE9A-BEA3-450E-ABD6-856D72723E91}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.MudBlazor", "src\Modules\BXJG.MudBlazor\BXJG.MudBlazor.csproj", "{A43BBE9A-BEA3-450E-ABD6-856D72723E91}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
