@@ -3,7 +3,9 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.ComponentModel;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Schema;
@@ -36,7 +38,7 @@ namespace BXJG.Common
 
         //}
 
-        protected readonly ILogger logger;
+        internal protected readonly ILogger logger;
 
         public Zhongjie(ILoggerFactory logger)
         {
@@ -44,7 +46,7 @@ namespace BXJG.Common
             this.logger = logger.CreateLogger(GetType());
         }
 
-        protected void LogDebug()
+        internal protected void LogDebug()
         {
             int k = 0;
             foreach (var item in this)
@@ -53,8 +55,14 @@ namespace BXJG.Common
             }
             logger.LogDebug($"事件类型数量：{Count}，总委托数：{k}");
         }
-
-        public virtual IDisposable Zhuce<T>(Func<T, ValueTask> weituo, string eventName = default) where T : class
+        /// <summary>
+        /// 注册事件处理程序
+        /// </summary>
+        /// <typeparam name="T">事件参数类型</typeparam>
+        /// <param name="weituo">事件发生时要执行的委托</param>
+        /// <param name="eventName">事件名，如：有新的好友请求</param>
+        /// <returns></returns>
+        public virtual IDisposable Zhuce<T>(Func<T, ValueTask> weituo, string eventName = default)// where T : class
         {
             if (eventName.IsNullOrWhiteSpaceBXJG())
                 eventName = typeof(T).FullName;
@@ -66,7 +74,7 @@ namespace BXJG.Common
             //注册相同委托时，覆盖没意义
             //this[eventName].TryRemove(weituo);
 
-            this[eventName].TryAdd(weituo, oo => weituo(oo as T));
+            this[eventName].TryAdd(weituo, oo => weituo((T)oo));
 
             logger.LogDebug($"注册事件：{eventName}");
 
@@ -74,6 +82,13 @@ namespace BXJG.Common
             // TryAdd(typeof(T), oo => weituo(oo as T));
             return new ZhongjieZhuxiaoqi(this, eventName, weituo);
         }
+        /// <summary>
+        /// 注册事件处理程序
+        /// </summary>
+        /// <typeparam name="T">事件参数类型</typeparam>
+        /// <param name="weituo">事件发生时要执行的委托</param>
+        /// <param name="eventName">事件名，如：有新的好友请求</param>
+        /// <returns></returns>
         public virtual IDisposable Zhuce(Func<ValueTask> weituo, string eventName)
         {
             TryAdd(eventName, new ConcurrentDictionary<Delegate, Func<object, ValueTask>>());
@@ -87,17 +102,16 @@ namespace BXJG.Common
             // TryAdd(typeof(T), oo => weituo(oo as T));
         }
         //不用Delegate做参数类型，因为外面调用时，自动推导调用起来更容易
-        public virtual void Zhuxiao<T>(Func<T, ValueTask> weituo)
+        public virtual void Zhuxiao<T>(Delegate weituo)
         {
             var eventName = typeof(T).FullName;
-            if (TryGetValue(eventName, out var dic))
-            {
-                dic.TryRemove(weituo, out _);
-            }
-            logger.LogDebug($"注销事件：{eventName}");
-            LogDebug();
+            Zhuxiao(weituo, eventName);
         }
-
+        /// <summary>
+        /// 注销指定事件下的指定处理程序
+        /// </summary>
+        /// <param name="weituo"></param>
+        /// <param name="eventName"></param>
         public virtual void Zhuxiao(Delegate weituo, string eventName = default)
         {
             if (eventName.IsNotNullOrWhiteSpaceBXJG())
@@ -118,6 +132,31 @@ namespace BXJG.Common
             logger.LogDebug($"注销事件：{eventName}");
             LogDebug();
         }
+        /// <summary>
+        /// 注销指定事件下的所有处理程序
+        /// </summary>
+        /// <param name="eventName"></param>
+        public virtual void Zhuxiao(string eventName = default)
+        {
+            if (eventName.IsNullOrWhiteSpaceBXJG())
+                this.Clear();
+
+
+            this.TryRemove(eventName, out _);
+            logger.LogDebug($"注销事件：{eventName}");
+
+            LogDebug();
+        }
+        /// <summary>
+        /// 注销指定事件下的所有处理程序
+        /// </summary>
+        /// <typeparam name="T">事件参数类型</typeparam>
+        public virtual void Zhuxiao<T>()
+        {
+            var eventName = typeof(T).FullName;
+            Zhuxiao(eventName);
+        }
+
 
         public virtual async Task Chufa(object canshu, string eventName = default)
         {
@@ -132,11 +171,12 @@ namespace BXJG.Common
 
         public virtual async Task Chufa(string eventName)
         {
-            if (TryGetValue(eventName, out var dic))
-            {
-                //var func = dic.Select(c=>c.Value).ToImmutableHashSet();
-                await Task.WhenAll(dic.Select(c => c.Value(null).AsTask()));
-            }
+            await Chufa(null, eventName);
+            //if (TryGetValue(eventName, out var dic))
+            //{
+            //    //var func = dic.Select(c=>c.Value).ToImmutableHashSet();
+            //    await Task.WhenAll(dic.Select(c => c.Value(null).AsTask()));
+            //}
         }
 
         internal class ZhongjieZhuxiaoqi : IDisposable
@@ -156,6 +196,147 @@ namespace BXJG.Common
             {
                 zhongjie.Zhuxiao(act, eventName);
             }
+        }
+    }
+
+    public static class ZhongjieExt
+    {
+        /// <summary>
+        /// 注册带有层次的事件
+        /// 如：应用、租户、用户、http连接等范围
+        /// 事件名_level1_level2
+        /// </summary>
+        /// <typeparam name="T">事件参数类型</typeparam>
+        /// <param name="zhongjie"></param>
+        /// <param name="weituo">事件发生时要执行的委托</param>
+        /// <param name="eventName">事件名，如：有新的好友请求</param>
+        /// <param name="level">如：应用、租户、用户、http连接等范围 事件名_level1_level2</param>
+        /// <returns></returns>
+        public static IDisposable Zhuce<T>(this Zhongjie zhongjie, Func<T, ValueTask> weituo, string eventName = default, params string[] level)
+        {
+            if (eventName.IsNullOrWhiteSpaceBXJG())
+                eventName = typeof(T).FullName;
+
+            eventName = eventName.BuildEventName(level);
+
+            return zhongjie.Zhuce(weituo, eventName);
+        }
+        /// <summary>
+        /// 注册带有层次的事件
+        /// 如：应用、租户、用户、http连接等范围
+        /// 事件名_level1_level2
+        /// </summary>
+        /// <typeparam name="T">事件参数类型</typeparam>
+        /// <param name="zhongjie"></param>
+        /// <param name="weituo">事件发生时要执行的委托</param>
+        /// <param name="eventName">事件名，如：有新的好友请求</param>
+        /// <param name="level">如：应用、租户、用户、http连接等范围 事件名_level1_level2</param>
+        /// <returns></returns>
+        public static IDisposable Zhuce(this Zhongjie zhongjie, Func<ValueTask> weituo, string eventName, params string[] level)
+        {
+            eventName = eventName.BuildEventName(level);
+
+            return zhongjie.Zhuce(weituo, eventName);
+        }
+
+        /// <summary>
+        /// 批量注销指定事件
+        /// </summary>
+        /// <param name="zhongjie"></param>
+        /// <param name="weituo"></param>
+        /// <param name="eventName"></param>
+        ///  <param name="level">如：应用、租户、用户、http连接等范围 事件名_level1_level2</param>
+        public static void Zhuxiao(this Zhongjie zhongjie, Delegate weituo, string eventName, params string[] level)
+        {
+            eventName = eventName.BuildEventName(level);
+
+            var items = zhongjie.Where(c => c.Key.StartsWith(eventName));
+            foreach (var item in items)
+            {
+                zhongjie.Zhuxiao(weituo, item.Key);
+            }
+        }
+        /// <summary>
+        /// 注销事件处理程序
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="zhongjie"></param>
+        /// <param name="weituo"></param>
+        /// <param name="level">如：应用、租户、用户、http连接等范围 事件名_level1_level2</param>
+        public static void Zhuxiao<T>(this Zhongjie zhongjie, Delegate weituo, params string[] level)
+        {
+            var eventName = typeof(T).FullName;
+            zhongjie.Zhuxiao(weituo, eventName, level);
+        }
+        /// <summary>
+        /// 批量注销事件
+        /// </summary>
+        /// <param name="zhongjie"></param>
+        /// <param name="eventName"></param>
+        ///  <param name="level">如：应用、租户、用户、http连接等范围 事件名_level1_level2</param>
+        public static void Zhuxiao(this Zhongjie zhongjie, string eventName, params string[] level)
+        {
+            eventName = eventName.BuildEventName(level);
+
+            var items = zhongjie.Where(c => c.Key.StartsWith(eventName));
+
+            foreach (var item in items)
+            {
+                zhongjie.Zhuxiao(item.Key);
+            }
+        }
+
+        private static string BuildEventName(this string eventName, params string[] level)
+        {
+            if (level.Any())
+                eventName += "_" + string.Join('_', level);
+            return eventName;
+        }
+        /// <summary>
+        /// 批量注销事件
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="zhongjie"></param>
+        ///  <param name="level">如：应用、租户、用户、http连接等范围 事件名_level1_level2</param>
+        public static void Zhuxiao<T>(this Zhongjie zhongjie, params string[] level)
+        {
+            var eventName = typeof(T).FullName;
+            zhongjie.Zhuxiao(eventName, level);
+        }
+
+        public static async Task Chufa(this Zhongjie zhongjie, object canshu, string eventName = default, params string[] level)
+        {
+            if (eventName.IsNullOrWhiteSpaceBXJG())
+                eventName = canshu.GetType().FullName;
+
+            eventName = eventName.BuildEventName(level);
+
+            var items = zhongjie.Where(c => c.Key.StartsWith(eventName));
+            var ts = new List<Task>();
+            foreach (var item in items)
+            {
+                ts.Add(zhongjie.Chufa(canshu, item.Key));
+            }
+            await Task.WhenAll(ts);
+        }
+        /// <summary>
+        /// 触发指定层次下的指定事件
+        /// </summary>
+        /// <param name="zhongjie"></param>
+        /// <param name="eventName"></param>
+        /// <param name="level"></param>
+        /// <returns></returns>
+        public static async Task Chufa(this Zhongjie zhongjie, string eventName, params string[] level)
+        {
+            //eventName = eventName.BuildEventName(level);
+            //var items = zhongjie.Where(c => c.Key.StartsWith(eventName));
+            //var ts = new List<Task>();
+            //foreach (var item in items)
+            //{
+            //    ts.Add(zhongjie.Chufa(item.Key));
+            //}
+            //await Task.WhenAll(ts);
+            await zhongjie.Chufa(null, eventName, level);
         }
     }
 }
