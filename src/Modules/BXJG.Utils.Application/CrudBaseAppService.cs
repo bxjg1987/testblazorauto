@@ -46,7 +46,7 @@ namespace BXJG.Utils
                                                                         TUpdateInput,
                                                                         TGetInput,
                                                                         TDeleteInput>, ICrudBaseAppService<TEntityDto,
-                                                                                                        TPrimaryKey,
+                                                                                                           TPrimaryKey,
                                                                                                         TGetAllInput,
                                                                                                         TCreateInput,
                                                                                                         TUpdateInput,
