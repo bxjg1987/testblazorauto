@@ -22,8 +22,12 @@ namespace BXJG.Common
      */
 
 
-    public class Zhongjie : ConcurrentDictionary<string, ConcurrentDictionary<Delegate, Func<object, ValueTask>>>
+    public class Zhongjie //: ConcurrentDictionary<string, ConcurrentDictionary<Delegate, Func<object, ValueTask>>>
     {
+        //private readonly ConcurrentBag<Weituo> weituos = new ConcurrentBag<Weituo>();
+
+        internal protected readonly ConcurrentDictionary<string, ConcurrentDictionary<Delegate, Weituo>> weituos = new ConcurrentDictionary<string, ConcurrentDictionary<Delegate, Weituo>>();
+
         //
 
         // private readonly ConcurrentBag<Func< object, Func<object, ValueTask>>> tongbuChuliqi = new ConcurrentBag<Func< object, Func<object, ValueTask>>>();
@@ -42,18 +46,17 @@ namespace BXJG.Common
 
         public Zhongjie(ILoggerFactory logger)
         {
-
             this.logger = logger.CreateLogger(GetType());
         }
 
         internal protected void LogDebug()
         {
             int k = 0;
-            foreach (var item in this)
+            foreach (var item in weituos)
             {
                 k += item.Value.Count;
             }
-            logger.LogDebug($"事件类型数量：{Count}，总委托数：{k}");
+            logger.LogDebug($"事件类型数量：{weituos.Count}，总委托数：{k}");
         }
         /// <summary>
         /// 注册事件处理程序
@@ -69,12 +72,12 @@ namespace BXJG.Common
 
             //  var t = typeof(T);
 
-            TryAdd(eventName, new ConcurrentDictionary<Delegate, Func<object, ValueTask>>());
+            weituos.TryAdd(eventName, new ConcurrentDictionary<Delegate, Weituo>());
 
             //注册相同委托时，覆盖没意义
             //this[eventName].TryRemove(weituo);
 
-            this[eventName].TryAdd(weituo, oo => weituo((T)oo));
+            weituos[eventName].TryAdd(weituo, new Weituo { Func = oo => weituo((T)oo), AddTime = DateTime.Now });
 
             logger.LogDebug($"注册事件：{eventName}");
 
@@ -91,9 +94,9 @@ namespace BXJG.Common
         /// <returns></returns>
         public virtual IDisposable Zhuce(Func<ValueTask> weituo, string eventName)
         {
-            TryAdd(eventName, new ConcurrentDictionary<Delegate, Func<object, ValueTask>>());
+            weituos.TryAdd(eventName, new ConcurrentDictionary<Delegate, Weituo>());
 
-            this[eventName].TryAdd(weituo, o => weituo());
+            weituos[eventName].TryAdd(weituo, new Weituo { Func = o => weituo(), AddTime = DateTime.Now });
 
             logger.LogDebug($"注册事件：{eventName}");
 
@@ -116,14 +119,14 @@ namespace BXJG.Common
         {
             if (eventName.IsNotNullOrWhiteSpaceBXJG())
             {
-                if (TryGetValue(eventName, out var dic))
+                if (weituos.TryGetValue(eventName, out var dic))
                 {
                     dic.TryRemove(weituo, out _);
                 }
             }
             else
             {
-                foreach (var dic in this)
+                foreach (var dic in this.weituos)
                 {
                     if (dic.Value.TryRemove(weituo, out _))
                         break;
@@ -139,10 +142,10 @@ namespace BXJG.Common
         public virtual void Zhuxiao(string eventName = default)
         {
             if (eventName.IsNullOrWhiteSpaceBXJG())
-                this.Clear();
+                this.weituos.Clear();
 
 
-            this.TryRemove(eventName, out _);
+            this.weituos.TryRemove(eventName, out _);
             logger.LogDebug($"注销事件：{eventName}");
 
             LogDebug();
@@ -163,9 +166,13 @@ namespace BXJG.Common
             if (eventName.IsNullOrWhiteSpaceBXJG())
                 eventName = canshu.GetType().FullName;
 
-            if (TryGetValue(eventName, out var dic))
+            if (this.weituos.TryGetValue(eventName, out var dic))
             {
-                await Task.WhenAll(dic.Select(c => c.Value(canshu).AsTask()));
+                await Task.WhenAll(dic.Select(c =>
+                {
+                    c.Value.LastExecuteTime = DateTime.Now; //有线程冲突也无所谓
+                    return c.Value.Func(canshu).AsTask();
+                }));
             }
         }
 
@@ -198,7 +205,6 @@ namespace BXJG.Common
             }
         }
     }
-
     public static class ZhongjieExt
     {
         /// <summary>
@@ -250,7 +256,7 @@ namespace BXJG.Common
         {
             eventName = eventName.BuildEventName(level);
 
-            var items = zhongjie.Where(c => c.Key.StartsWith(eventName));
+            var items = zhongjie.weituos.Where(c => c.Key.StartsWith(eventName));
             foreach (var item in items)
             {
                 zhongjie.Zhuxiao(weituo, item.Key);
@@ -278,7 +284,7 @@ namespace BXJG.Common
         {
             eventName = eventName.BuildEventName(level);
 
-            var items = zhongjie.Where(c => c.Key.StartsWith(eventName));
+            var items = zhongjie.weituos.Where(c => c.Key.StartsWith(eventName));
 
             foreach (var item in items)
             {
@@ -311,7 +317,7 @@ namespace BXJG.Common
 
             eventName = eventName.BuildEventName(level);
 
-            var items = zhongjie.Where(c => c.Key.StartsWith(eventName));
+            var items = zhongjie.weituos.Where(c => c.Key.StartsWith(eventName));
             var ts = new List<Task>();
             foreach (var item in items)
             {
@@ -338,5 +344,28 @@ namespace BXJG.Common
             //await Task.WhenAll(ts);
             await zhongjie.Chufa(null, eventName, level);
         }
+    }
+
+    /// <summary>
+    /// 封装要执行的委托
+    /// </summary>
+    public class Weituo
+    {
+        ///// <summary>
+        ///// 原始委托
+        ///// </summary>
+        //public Delegate Act { get; set; }
+        /// <summary>
+        /// 转换后的委托
+        /// </summary>
+        public Func<object, ValueTask> Func { get; set; }
+        /// <summary>
+        /// 注册时间
+        /// </summary>
+        public DateTime AddTime { get; set; } = DateTime.Now;
+        /// <summary>
+        /// 最后执行时间
+        /// </summary>
+        public DateTime LastExecuteTime { get; set; } = DateTime.MinValue;
     }
 }
