@@ -7,6 +7,7 @@ using Abp.Domain.Uow;
 using Abp.Notifications;
 using Abp.Runtime.Session;
 using Abp.UI;
+using BXJG.Common;
 using BXJG.Common.Dto;
 using BXJG.Utils.Dto;
 using BXJG.Utils.Notification;
@@ -64,6 +65,10 @@ namespace BXJG.Utils
         /// 注：IocManager是全局单例，解析实现IDisposeable的服务时比较危险，此时应使用ServiceProvider
         /// </summary>
         public IServiceProvider ServiceProvider { get; set; }
+
+        public Zhongjie Zhongjie { get; set; }
+
+
 
         protected CrudBaseAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
         {

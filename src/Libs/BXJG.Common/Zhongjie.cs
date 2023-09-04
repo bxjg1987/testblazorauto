@@ -24,7 +24,7 @@ namespace BXJG.Common
 
     public class Zhongjie //: ConcurrentDictionary<string, ConcurrentDictionary<Delegate, Func<object, ValueTask>>>
     {
-        //private readonly ConcurrentBag<Weituo> weituos = new ConcurrentBag<Weituo>();
+        //private readonly ConcurrentBag<Weituo> weituos = new ConcurrentBag<Weituo>();//不好做删除
 
         internal protected readonly ConcurrentDictionary<string, ConcurrentDictionary<Delegate, Weituo>> weituos = new ConcurrentDictionary<string, ConcurrentDictionary<Delegate, Weituo>>();
 

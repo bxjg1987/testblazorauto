@@ -29,6 +29,7 @@ using Abp.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using BXJG.Utils.Dto;
 using Microsoft.AspNetCore.Components.Forms;
+using BXJG.Common;
 
 namespace BXJG.Utils.GeneralTree
 {
@@ -463,6 +464,7 @@ namespace BXJG.Utils.GeneralTree
         where TGetAllInput : GeneralTreeGetTreeInput
         where TMoveInput : GeneralTreeNodeMoveInput
     {
+        public Zhongjie Zhongjie { get; set; }
         /* 
          * 数据显示地方有：管理页列表、作为一个搜索条件框、作为表单里一个下拉框
          * 顶级文本可能是 前端传过来的、上级节点文本、默认文本；除非根本不现实

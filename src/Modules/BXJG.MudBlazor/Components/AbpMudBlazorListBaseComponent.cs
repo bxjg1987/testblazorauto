@@ -23,14 +23,12 @@ namespace BXJG.MudBlazor.Components
     /// 抽象的，基于MudBlazor的列表页 抽象组件
     /// </summary>
     /// <typeparam name="TAppService">应用服务类型</typeparam>
-    /// <typeparam name="TFormComponent">表单弹窗组件类型</typeparam>
     /// <typeparam name="TEntityDto">列表项的数据类型</typeparam>
     /// <typeparam name="TPrimaryKey">唯一id类型</typeparam>
     /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
     /// <typeparam name="TCreateInput">新增时的输入类型</typeparam>
     /// <typeparam name="TUpdateInput">修改时的输入类型</typeparam>
     public class AbpMudBlazorListBaseComponent<TAppService,
-                                               TFormComponent,
                                                TEntityDto,
                                                TPrimaryKey,
                                                TGetAllInput,
@@ -38,7 +36,6 @@ namespace BXJG.MudBlazor.Components
                                                TUpdateInput> : AbpMudBlazorBaseComponent
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TGetAllInput : new()
-        where TFormComponent : ComponentBase
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
     {
@@ -285,44 +282,44 @@ namespace BXJG.MudBlazor.Components
         /// 是否有修改权限
         /// </summary>
         protected bool updateIsGranted = true;
-        /// <summary>
-        /// 新增或修改的弹窗
-        /// </summary>
-        [CascadingParameter]
-        protected MudDialogInstance MudDialog { get; set; }
-        /// <summary>
-        /// 新增或修改弹窗的配置对象
-        /// </summary>
-        protected virtual DialogOptions DialogOptions => new DialogOptions { CloseOnEscapeKey = true };
-        /// <summary>
-        /// 点击新增按钮
-        /// </summary>
-        /// <returns></returns>
-        protected virtual async Task Add()
-        {
-            await base.SafelyExecuteAsync(async () =>
-            {
-                var dr = await DialogService.Show<TFormComponent>("新增" + FuncName, DialogOptions).Result;
-                if (dr.Canceled)
-                    return;
-                //this.pageIndex = 1;
-                await dataGrid.ReloadServerData();
-            });
-        }
-        /// <summary>
-        /// 点击新增按钮
-        /// </summary>
-        /// <returns></returns>
-        protected virtual async Task Edit()
-        {
-            await base.SafelyExecuteAsync(async () =>
-            {
-                var dr = await DialogService.Show<TFormComponent>("修改" + FuncName, DialogOptions).Result;
-                if (dr.Canceled)
-                    return;
-                await dataGrid.ReloadServerData();
-            });
-        }
+        ///// <summary>
+        ///// 新增或修改的弹窗
+        ///// </summary>
+        //[CascadingParameter]
+        //protected MudDialogInstance MudDialog { get; set; }
+        ///// <summary>
+        ///// 新增或修改弹窗的配置对象
+        ///// </summary>
+        //protected virtual DialogOptions DialogOptions => new DialogOptions { CloseOnEscapeKey = true };
+        ///// <summary>
+        ///// 点击新增按钮
+        ///// </summary>
+        ///// <returns></returns>
+        //protected virtual async Task Add()
+        //{
+        //    await base.SafelyExecuteAsync(async () =>
+        //    {
+        //        var dr = await DialogService.Show<TFormComponent>("新增" + FuncName, DialogOptions).Result;
+        //        if (dr.Canceled)
+        //            return;
+        //        //this.pageIndex = 1;
+        //        await dataGrid.ReloadServerData();
+        //    });
+        //}
+        ///// <summary>
+        ///// 点击新增按钮
+        ///// </summary>
+        ///// <returns></returns>
+        //protected virtual async Task Edit()
+        //{
+        //    await base.SafelyExecuteAsync(async () =>
+        //    {
+        //        var dr = await DialogService.Show<TFormComponent>("修改" + FuncName, DialogOptions).Result;
+        //        if (dr.Canceled)
+        //            return;
+        //        await dataGrid.ReloadServerData();
+        //    });
+        //}
         #endregion
 
         #region 删除
@@ -335,7 +332,7 @@ namespace BXJG.MudBlazor.Components
         /// 是否显示删除按钮，默认勾选了某个行且 没有正在加载数据时为true
         /// </summary>
         protected virtual bool ShouldEnableDelete => !dataGrid.Loading && !isDeleting && dataGrid.SelectedItems != default && dataGrid.SelectedItems.Any();
-       
+
 
         /// <summary>
         /// 是否显示全局的删除确认
@@ -433,18 +430,15 @@ namespace BXJG.MudBlazor.Components
     /// 抽象的，基于MudBlazor的列表页 抽象组件
     /// </summary>
     /// <typeparam name="TAppService">应用服务类型</typeparam>
-    /// <typeparam name="TFormComponent">表单弹窗组件类型</typeparam>
     /// <typeparam name="TEntityDto">列表项的数据类型</typeparam>
     /// <typeparam name="TPrimaryKey">唯一id类型</typeparam>
     /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
     /// <typeparam name="TCreateInput">新增时的输入类型</typeparam>
     public class AbpMudBlazorListBaseComponent<TAppService,
-                                               TFormComponent,
                                                TEntityDto,
                                                TPrimaryKey,
                                                TGetAllInput,
                                                TCreateInput> : AbpMudBlazorListBaseComponent<TAppService,
-                                                                                             TFormComponent,
                                                                                              TEntityDto,
                                                                                              TPrimaryKey,
                                                                                              TGetAllInput,
@@ -453,7 +447,6 @@ namespace BXJG.MudBlazor.Components
         where TCreateInput : IEntityDto<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TGetAllInput : new()
-        where TFormComponent : ComponentBase
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput>
     {
     }
@@ -462,23 +455,19 @@ namespace BXJG.MudBlazor.Components
     /// 抽象的，基于MudBlazor的列表页 抽象组件
     /// </summary>
     /// <typeparam name="TAppService">应用服务类型</typeparam>
-    /// <typeparam name="TFormComponent">表单弹窗组件类型</typeparam>
     /// <typeparam name="TEntityDto">列表项的数据类型</typeparam>
     /// <typeparam name="TPrimaryKey">唯一id类型</typeparam>
     /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
     public class AbpMudBlazorListBaseComponent<TAppService,
-                                               TFormComponent,
                                                TEntityDto,
                                                TPrimaryKey,
                                                TGetAllInput> : AbpMudBlazorListBaseComponent<TAppService,
-                                                                                             TFormComponent,
                                                                                              TEntityDto,
                                                                                              TPrimaryKey,
                                                                                              TGetAllInput,
                                                                                              TEntityDto>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TGetAllInput : new()
-        where TFormComponent : ComponentBase
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput>
     {
     }
@@ -486,19 +475,15 @@ namespace BXJG.MudBlazor.Components
     /// 抽象的，基于MudBlazor的列表页 抽象组件
     /// </summary>
     /// <typeparam name="TAppService">应用服务类型</typeparam>
-    /// <typeparam name="TFormComponent">表单弹窗组件类型</typeparam>
     /// <typeparam name="TEntityDto">列表项的数据类型</typeparam>
     /// <typeparam name="TPrimaryKey">唯一id类型</typeparam>
     public class AbpMudBlazorListBaseComponent<TAppService,
-                                               TFormComponent,
                                                TEntityDto,
                                                TPrimaryKey> : AbpMudBlazorListBaseComponent<TAppService,
-                                                                                            TFormComponent,
                                                                                             TEntityDto,
                                                                                             TPrimaryKey,
                                                                                             PagedAndSortedResultRequestDto>
         where TEntityDto : IEntityDto<TPrimaryKey>
-        where TFormComponent : ComponentBase
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey>
     {
     }
@@ -506,15 +491,12 @@ namespace BXJG.MudBlazor.Components
     /// 抽象的，基于MudBlazor的列表页 抽象组件
     /// </summary>
     /// <typeparam name="TAppService">应用服务类型</typeparam>
-    /// <typeparam name="TFormComponent">表单弹窗组件类型</typeparam>
     /// <typeparam name="TEntityDto">列表项的数据类型</typeparam>
     public class AbpMudBlazorListBaseComponent<TAppService,
-                                               TFormComponent,
                                                TEntityDto> : AbpMudBlazorListBaseComponent<TAppService,
-                                                                                           TFormComponent, TEntityDto,
+                                                                                           TEntityDto,
                                                                                            int>
         where TEntityDto : IEntityDto<int>
-        where TFormComponent : ComponentBase
         where TAppService : ICrudBaseAppService<TEntityDto>
     {
     }
