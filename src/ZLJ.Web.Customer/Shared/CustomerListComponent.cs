@@ -14,20 +14,17 @@ namespace ZLJ.Web.Customer.Shared
     /// 后台管理 crud中的列表页
     /// </summary>
     /// <typeparam name="TAppService"></typeparam>
-    /// <typeparam name="TFormComponent"></typeparam>
     /// <typeparam name="TEntityDto"></typeparam>
     /// <typeparam name="TPrimaryKey"></typeparam>
     /// <typeparam name="TGetAllInput"></typeparam>
     /// <typeparam name="TCreateInput"></typeparam>
     /// <typeparam name="TUpdateInput"></typeparam>
     public class CustomerListComponent<TAppService,
-                                       TFormComponent,
                                        TEntityDto,
                                        TPrimaryKey,
                                        TGetAllInput,
                                        TCreateInput,
                                        TUpdateInput> : AbpMudBlazorListBaseComponent<TAppService,
-                                                                                     TFormComponent,
                                                                                      TEntityDto,
                                                                                      TPrimaryKey,
                                                                                      TGetAllInput,
@@ -36,7 +33,6 @@ namespace ZLJ.Web.Customer.Shared
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TGetAllInput : new()
-        where TFormComponent : ComponentBase
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
 
     {
@@ -86,19 +82,16 @@ namespace ZLJ.Web.Customer.Shared
     /// <summary>
     /// 抽象的crud组件，用于简化crud组件的开发
     /// </summary>
-    /// <typeparam name="TFormComponent"></typeparam>
     /// <typeparam name="TAppService"></typeparam>
     /// <typeparam name="TEntityDto"></typeparam>
     /// <typeparam name="TPrimaryKey"></typeparam>
     /// <typeparam name="TGetAllInput"></typeparam>
     /// <typeparam name="TCreateInput"></typeparam>
     public class CustomerListComponent<TAppService,
-                                       TFormComponent,
                                        TEntityDto,
                                        TPrimaryKey,
                                        TGetAllInput,
                                        TCreateInput> : CustomerListComponent<TAppService,
-                                                                             TFormComponent,
                                                                              TEntityDto,
                                                                              TPrimaryKey,
                                                                              TGetAllInput,
@@ -106,7 +99,7 @@ namespace ZLJ.Web.Customer.Shared
                                                                              TCreateInput>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TCreateInput : IEntityDto<TPrimaryKey>
-        where TFormComponent : ComponentBase
+        
         where TGetAllInput : new()
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput>
     {
@@ -114,44 +107,38 @@ namespace ZLJ.Web.Customer.Shared
     /// <summary>
     /// 抽象的crud组件，用于简化crud组件的开发
     /// </summary>
-    /// <typeparam name="TFormComponent"></typeparam>
     /// <typeparam name="TAppService"></typeparam>
     /// <typeparam name="TEntityDto"></typeparam>
     /// <typeparam name="TPrimaryKey"></typeparam>
     /// <typeparam name="TGetAllInput"></typeparam>
     public class CustomerListComponent<TAppService,
-                                       TFormComponent,
+                                       
                                        TEntityDto,
                                        TPrimaryKey,
                                        TGetAllInput> : CustomerListComponent<TAppService,
-                                                                             TFormComponent,
                                                                              TEntityDto,
                                                                              TPrimaryKey,
                                                                              TGetAllInput,
                                                                              TEntityDto>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TGetAllInput : new()
-        where TFormComponent : ComponentBase
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput>
     {
     }
     /// <summary>
     /// 抽象的crud组件，用于简化crud组件的开发
     /// </summary>
-    /// <typeparam name="TFormComponent"></typeparam>
     /// <typeparam name="TAppService"></typeparam>
     /// <typeparam name="TEntityDto"></typeparam>
     /// <typeparam name="TPrimaryKey"></typeparam>
     public class CustomerListComponent<TAppService,
-                                       TFormComponent,
+                                       
                                        TEntityDto,
                                        TPrimaryKey> : CustomerListComponent<TAppService,
-                                                                            TFormComponent,
                                                                             TEntityDto,
                                                                             TPrimaryKey,
                                                                             PagedAndSortedResultRequestDto>
         where TEntityDto : IEntityDto<TPrimaryKey>
-        where TFormComponent : ComponentBase
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey>
     {
     }
@@ -159,16 +146,12 @@ namespace ZLJ.Web.Customer.Shared
     /// 抽象的crud组件，用于简化crud组件的开发
     /// </summary>
     /// <typeparam name="TEntityDto"></typeparam>
-    /// <typeparam name="TFormComponent"></typeparam>
     /// <typeparam name="TAppService"></typeparam>
     public class CustomerListComponent<TAppService,
-                                       TFormComponent,
                                        TEntityDto> : CustomerListComponent<TAppService,
-                                                                           TFormComponent,
                                                                            TEntityDto,
                                                                            int>
         where TEntityDto : IEntityDto<int>
-        where TFormComponent : ComponentBase
         where TAppService : ICrudBaseAppService<TEntityDto>
     {
     }

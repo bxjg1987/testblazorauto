@@ -76,92 +76,93 @@ namespace BXJG.Utils
 
         private Zhongjie zhongjie;
         /// <summary>
-        /// 获取变形精怪中介
+        /// 获取变形精怪中介，整个应用全局的
         /// </summary>
         protected Zhongjie Zhongjie => zhongjie ??= ScopedServices.GetRequiredService<Zhongjie>();
 
         #region 界面专用事件
-        const string bs = "bs";
-        /// <summary>
-        /// 界面专用事件的层次
-        /// </summary>
-        protected string[] EventLevel => new string[] { bs, AbpSession.UserId.ToString() };
-        /// <summary>
-        /// 注册按用户的界面专用事件，事件名_bs_userid
-        /// </summary>
-        /// <param name="func"></param>
-        /// <param name="eventName"></param>
-        /// <returns></returns>
-        protected virtual IDisposable ZhongjieZhuce(Func<ValueTask> func, string eventName)
-        {
-            var r = Zhongjie.Zhuce(func, eventName, EventLevel);
-            sj.Add(r);
-            return r;
-        }
-        private readonly ICollection<IDisposable> sj = new List<IDisposable>();
-        /// <summary>
-        /// 注册按用户的界面专用事件，事件名_bs_userid
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="func">处理事件的委托</param>
-        /// <param name="eventName">事件名</param>
-        /// <returns></returns>
-        protected virtual IDisposable ZhongjieZhuce<T>(Func<T, ValueTask> func, string? eventName = default)
-        {
-            var r = Zhongjie.Zhuce(func, eventName, EventLevel);
-            sj.Add(r);
-            return r;
-        }
-        protected virtual void ZhongjieZhuxiao(Delegate del, string? eventName = default)
-        {
-            Zhongjie.Zhuxiao(del, eventName, EventLevel);
-        }
-        /// <summary>
-        /// 注销事件处理程序
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="zhongjie"></param>
-        /// <param name="weituo"></param>
-        /// <param name="level">如：应用、租户、用户、http连接等范围 事件名_level1_level2</param>
-        public virtual void ZhongjieZhuxiao<T>(Delegate weituo, params string[] level)
-        {
-            Zhongjie.Zhuxiao<T>(weituo, EventLevel);
-        }
-        /// <summary>
-        /// 批量注销事件
-        /// </summary>
-        /// <param name="zhongjie"></param>
-        /// <param name="eventName"></param>
-        ///  <param name="level">如：应用、租户、用户、http连接等范围 事件名_level1_level2</param>
-        public virtual void ZhongjieZhuxiao(string eventName)
-        {
-            Zhongjie.Zhuxiao(eventName, EventLevel);
-        }
-        /// <summary>
-        /// 批量注销事件
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="zhongjie"></param>
-        ///  <param name="level">如：应用、租户、用户、http连接等范围 事件名_level1_level2</param>
-        public virtual void ZhongjieZhuxiao<T>(params string[] level)
-        {
-            Zhongjie.Zhuxiao<T>(EventLevel);
-        }
-        public virtual Task ZhongjieChufa(object canshu, string? eventName = default)
-        {
-            return Zhongjie.Chufa(canshu, eventName, EventLevel);
-        }
-        /// <summary>
-        /// 触发指定层次下的指定事件
-        /// </summary>
-        /// <param name="zhongjie"></param>
-        /// <param name="eventName"></param>
-        /// <param name="level"></param>
-        /// <returns></returns>
-        public virtual Task ZhongjieChufa(string eventName)
-        {
-            return Zhongjie.Chufa(eventName, EventLevel);
-        }
+        //界面由于事件使用非常频繁，通过电路Circuit或App组件级联 关联一个单独的 Zhongjie实例
+        //const string bs = "bs";
+        ///// <summary>
+        ///// 界面专用事件的层次
+        ///// </summary>
+        //protected string[] EventLevel => new string[] { bs, AbpSession.UserId.ToString() };
+        ///// <summary>
+        ///// 注册按用户的界面专用事件，事件名_bs_userid
+        ///// </summary>
+        ///// <param name="func"></param>
+        ///// <param name="eventName"></param>
+        ///// <returns></returns>
+        //protected virtual IDisposable ZhongjieZhuce(Func<ValueTask> func, string eventName)
+        //{
+        //    var r = Zhongjie.Zhuce(func, eventName, EventLevel);
+        //    sj.Add(r);
+        //    return r;
+        //}
+        //private readonly ICollection<IDisposable> sj = new List<IDisposable>();
+        ///// <summary>
+        ///// 注册按用户的界面专用事件，事件名_bs_userid
+        ///// </summary>
+        ///// <typeparam name="T"></typeparam>
+        ///// <param name="func">处理事件的委托</param>
+        ///// <param name="eventName">事件名</param>
+        ///// <returns></returns>
+        //protected virtual IDisposable ZhongjieZhuce<T>(Func<T, ValueTask> func, string? eventName = default)
+        //{
+        //    var r = Zhongjie.Zhuce(func, eventName, EventLevel);
+        //    sj.Add(r);
+        //    return r;
+        //}
+        //protected virtual void ZhongjieZhuxiao(Delegate del, string? eventName = default)
+        //{
+        //    Zhongjie.Zhuxiao(del, eventName, EventLevel);
+        //}
+        ///// <summary>
+        ///// 注销事件处理程序
+        ///// </summary>
+        ///// <typeparam name="T"></typeparam>
+        ///// <param name="zhongjie"></param>
+        ///// <param name="weituo"></param>
+        ///// <param name="level">如：应用、租户、用户、http连接等范围 事件名_level1_level2</param>
+        //public virtual void ZhongjieZhuxiao<T>(Delegate weituo, params string[] level)
+        //{
+        //    Zhongjie.Zhuxiao<T>(weituo, EventLevel);
+        //}
+        ///// <summary>
+        ///// 批量注销事件
+        ///// </summary>
+        ///// <param name="zhongjie"></param>
+        ///// <param name="eventName"></param>
+        /////  <param name="level">如：应用、租户、用户、http连接等范围 事件名_level1_level2</param>
+        //public virtual void ZhongjieZhuxiao(string eventName)
+        //{
+        //    Zhongjie.Zhuxiao(eventName, EventLevel);
+        //}
+        ///// <summary>
+        ///// 批量注销事件
+        ///// </summary>
+        ///// <typeparam name="T"></typeparam>
+        ///// <param name="zhongjie"></param>
+        /////  <param name="level">如：应用、租户、用户、http连接等范围 事件名_level1_level2</param>
+        //public virtual void ZhongjieZhuxiao<T>(params string[] level)
+        //{
+        //    Zhongjie.Zhuxiao<T>(EventLevel);
+        //}
+        //public virtual Task ZhongjieChufa(object canshu, string? eventName = default)
+        //{
+        //    return Zhongjie.Chufa(canshu, eventName, EventLevel);
+        //}
+        ///// <summary>
+        ///// 触发指定层次下的指定事件
+        ///// </summary>
+        ///// <param name="zhongjie"></param>
+        ///// <param name="eventName"></param>
+        ///// <param name="level"></param>
+        ///// <returns></returns>
+        //public virtual Task ZhongjieChufa(string eventName)
+        //{
+        //    return Zhongjie.Chufa(eventName, EventLevel);
+        //}
         #endregion
 
         private IUnitOfWorkDefaultOptions unitOfWorkDefaultOptions;
@@ -189,11 +190,6 @@ namespace BXJG.Utils
 
         protected override void Dispose(bool disposing)
         {
-            //  this.ZhongjieZhuxiao();
-            foreach (var item in sj)
-            {
-                item.Dispose();
-            }
             CancellationTokenSource?.Cancel();
             CancellationTokenSource?.Dispose();
 
