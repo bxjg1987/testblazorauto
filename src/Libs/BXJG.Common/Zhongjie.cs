@@ -224,7 +224,6 @@ namespace BXJG.Common
                     Zhuxiao(weituo, item.Key);
                 }
         }
-
         /// <summary>
         /// 批量注销指定事件
         /// </summary>
@@ -249,7 +248,6 @@ namespace BXJG.Common
             var eventName = typeof(T).FullName;
             Zhuxiao(weituo, eventName, level);
         }
-
         /// <summary>
         /// 批量注销事件
         /// </summary>
@@ -261,7 +259,6 @@ namespace BXJG.Common
             eventName = BuildEventName(eventName, level);
             Zhuxiao(c => c.Key.StartsWith(eventName));
         }
-
         /// <summary>
         /// 批量注销事件
         /// </summary>
@@ -275,8 +272,6 @@ namespace BXJG.Common
         #endregion
 
         #region 触发
-
-
         /// <summary>
         /// 触发事件
         /// </summary>
@@ -311,8 +306,6 @@ namespace BXJG.Common
             //    await Task.WhenAll(dic.Select(c => c.Value(null).AsTask()));
             //}
         }
-
-
         /// <summary>
         /// 批量触发符合条件的事件
         /// </summary>
@@ -366,18 +359,15 @@ namespace BXJG.Common
             // await Chufa(c => c.Key.StartsWith(eventName));
             return Chufa(null, eventName, level);
         }
-
         #endregion
 
         #region 辅助
-
         private string BuildEventName(string eventName, params string[] level)
         {
             if (level.Any())
                 eventName += "_" + string.Join('_', level);
             return eventName;
         }
-
         /// <summary>
         /// 封装要执行的委托
         /// </summary>
