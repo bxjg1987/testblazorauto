@@ -13,40 +13,40 @@ using System.Xml.Schema;
 namespace BXJG.Common
 {
 
-    /*
-     * 注意：abp文档事件底部已经说明了可以动态注册，所以在abp项目中不需要使用Zhongjie类，直接用abp的就好
+    /* 
+     * 一般的事件总线库，都是在事件触发时，从ioc中解析处理器然后执行，在Blazor或客户端开发中，需要随时动态的注册、注销、触发事件。
+     * abp文档事件底部已经说明了可以动态注册，但目前（abp8.3.1）中存在线程安全问题，导致偶尔报错，若某个事件正在触发，会遍历事件处理器列表，此时若另一个线程正在注册，就有几率报错。
+     * 
+     * 一个字符串就是一个事件，一个事件有多个处理程序，每个处理程序都是一个委托，这里规定事件最多允许一个事件参数，若有多个请封装成一个类。 
      *
      * 触发事件时，触发方并不晓得事件处理方需要同步还是异步，定义事件时也无法确定，因为事件处理程序是动态注册的。
      * 也无法等待返回，因为可能存在多个处理方
-     * 通用的办法是假定所有处理方都是异步的，使用ValueTask，触发时使用Task.WhenAll
+     * 通用的办法是假定所有处理方都是异步的，使用ValueTask，触发时使用Task.WhenAll 
+     *
+     * 有两种办法处理线程安全，1、注册和遍历时，都使用ConcurrentDictionary 2、用Dictinary<string,事件处理委托>存储，注册时TryAdd，遍历时先ToImmutableList下。
+     * 目前来看，用方式1开发起来简单些，还不确定它的性能是否比第2种方式差多少
      */
 
-
+    /// <summary>
+    /// 轻量级的本地事件总线
+    /// 它约等于ConcurrentDictionary<事件名称,事件处理委托>
+    /// 主要api：注册、触发、注销
+    /// </summary>
     public class Zhongjie //: ConcurrentDictionary<string, ConcurrentDictionary<Delegate, Func<object, ValueTask>>>
     {
         //private readonly ConcurrentBag<Weituo> weituos = new ConcurrentBag<Weituo>();//不好做删除
-
+        //核心存储事件和对应的处理程序（委托）
         internal protected readonly ConcurrentDictionary<string, ConcurrentDictionary<Delegate, Weituo>> weituos = new ConcurrentDictionary<string, ConcurrentDictionary<Delegate, Weituo>>();
-
-        //
-
-        // private readonly ConcurrentBag<Func< object, Func<object, ValueTask>>> tongbuChuliqi = new ConcurrentBag<Func< object, Func<object, ValueTask>>>();
-
-
-        //public void Zhuce(Action act) 
-        //{ 
-
-        //}
-
-        //public void Zhuxiao() { 
-
-        //}
 
         internal protected readonly ILogger logger;
 
         public Zhongjie(ILoggerFactory logger)
         {
             this.logger = logger.CreateLogger(GetType());
+        }
+        public Zhongjie() 
+        {
+            logger= NullLogger.Instance;
         }
 
         internal protected void LogDebug()
@@ -63,7 +63,7 @@ namespace BXJG.Common
         /// </summary>
         /// <typeparam name="T">事件参数类型</typeparam>
         /// <param name="weituo">事件发生时要执行的委托</param>
-        /// <param name="eventName">事件名，如：有新的好友请求</param>
+        /// <param name="eventName">事件名，如：有新的好友请求；若为空则取typeof(T).FullName</param>
         /// <returns></returns>
         public virtual IDisposable Zhuce<T>(Func<T, ValueTask> weituo, string eventName = default)// where T : class
         {
@@ -72,12 +72,14 @@ namespace BXJG.Common
 
             //  var t = typeof(T);
 
-            weituos.TryAdd(eventName, new ConcurrentDictionary<Delegate, Weituo>());
+            //weituos.TryAdd(eventName, new ConcurrentDictionary<Delegate, Weituo>());
 
             //注册相同委托时，覆盖没意义
             //this[eventName].TryRemove(weituo);
 
-            weituos[eventName].TryAdd(weituo, new Weituo { Func = oo => weituo((T)oo), AddTime = DateTime.Now });
+            //weituos[eventName].TryAdd(weituo, new Weituo { Func = oo => weituo((T)oo), AddTime = DateTime.Now });
+            var sj = weituos.GetOrAdd(eventName, new ConcurrentDictionary<Delegate, Weituo>());
+            sj.TryAdd(weituo, new Weituo { Func = oo => weituo((T)oo), AddTime = DateTime.Now });
 
             logger.LogDebug($"注册事件：{eventName}");
 
@@ -94,9 +96,12 @@ namespace BXJG.Common
         /// <returns></returns>
         public virtual IDisposable Zhuce(Func<ValueTask> weituo, string eventName)
         {
-            weituos.TryAdd(eventName, new ConcurrentDictionary<Delegate, Weituo>());
-
-            weituos[eventName].TryAdd(weituo, new Weituo { Func = o => weituo(), AddTime = DateTime.Now });
+            //weituos.TryAdd(eventName, new ConcurrentDictionary<Delegate, Weituo>());
+            //weituos[eventName].TryAdd(weituo, new Weituo { Func = o => weituo(), AddTime = DateTime.Now });
+            
+            var sj = weituos.GetOrAdd(eventName, new ConcurrentDictionary<Delegate, Weituo>());
+            sj.TryAdd(weituo, new Weituo { Func = o => weituo(), AddTime = DateTime.Now });
+            
 
             logger.LogDebug($"注册事件：{eventName}");
 
@@ -104,17 +109,21 @@ namespace BXJG.Common
             return new ZhongjieZhuxiaoqi(this, eventName, weituo);
             // TryAdd(typeof(T), oo => weituo(oo as T));
         }
-        //不用Delegate做参数类型，因为外面调用时，自动推导调用起来更容易
+        /// <summary>
+        /// 注销指定事件（typeof(T).FullName）中的指定委托
+        /// </summary>
+        /// <typeparam name="T">事件参数类型，typeof(T).FullName将作为事件名</typeparam>
+        /// <param name="weituo">事件发生时要执行的委托</param>
         public virtual void Zhuxiao<T>(Delegate weituo)
         {
             var eventName = typeof(T).FullName;
             Zhuxiao(weituo, eventName);
         }
         /// <summary>
-        /// 注销指定事件下的指定处理程序
+        /// 注销指定事件中的指定委托
         /// </summary>
-        /// <param name="weituo"></param>
-        /// <param name="eventName"></param>
+        /// <param name="weituo">事件发生时要执行的委托</param>
+        /// <param name="eventName">事件名，如：有新的好友请求；若为空则遍历整个事件中心尝试注销</param>
         public virtual void Zhuxiao(Delegate weituo, string eventName = default)
         {
             if (eventName.IsNotNullOrWhiteSpaceBXJG())
@@ -251,7 +260,7 @@ namespace BXJG.Common
         /// <param name="zhongjie"></param>
         /// <param name="weituo"></param>
         /// <param name="eventName"></param>
-        ///  <param name="level">如：应用、租户、用户、http连接等范围 事件名_level1_level2</param>
+        /// <param name="level">如：租户id 2，部门id 3，则表示注销这个范围内的所有事件处理程序</param>
         public static void Zhuxiao(this Zhongjie zhongjie, Delegate weituo, string eventName, params string[] level)
         {
             eventName = eventName.BuildEventName(level);
@@ -268,7 +277,7 @@ namespace BXJG.Common
         /// <typeparam name="T"></typeparam>
         /// <param name="zhongjie"></param>
         /// <param name="weituo"></param>
-        /// <param name="level">如：应用、租户、用户、http连接等范围 事件名_level1_level2</param>
+        /// <param name="level">如：租户id 2，部门id 3，则表示注销这个范围内的所有事件处理程序</param>
         public static void Zhuxiao<T>(this Zhongjie zhongjie, Delegate weituo, params string[] level)
         {
             var eventName = typeof(T).FullName;
@@ -278,8 +287,8 @@ namespace BXJG.Common
         /// 批量注销事件
         /// </summary>
         /// <param name="zhongjie"></param>
-        /// <param name="eventName"></param>
-        ///  <param name="level">如：应用、租户、用户、http连接等范围 事件名_level1_level2</param>
+        /// <param name="eventName">事件名称</param>
+        /// <param name="level">如：租户id 2，部门id 3，则表示注销这个范围内的所有事件处理程序</param>
         public static void Zhuxiao(this Zhongjie zhongjie, string eventName, params string[] level)
         {
             eventName = eventName.BuildEventName(level);
@@ -292,24 +301,26 @@ namespace BXJG.Common
             }
         }
 
-        private static string BuildEventName(this string eventName, params string[] level)
-        {
-            if (level.Any())
-                eventName += "_" + string.Join('_', level);
-            return eventName;
-        }
         /// <summary>
         /// 批量注销事件
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="zhongjie"></param>
-        ///  <param name="level">如：应用、租户、用户、http连接等范围 事件名_level1_level2</param>
+        /// <param name="level">如：租户id 2，部门id 3，则表示注销这个范围内的所有事件处理程序</param>
         public static void Zhuxiao<T>(this Zhongjie zhongjie, params string[] level)
         {
             var eventName = typeof(T).FullName;
             zhongjie.Zhuxiao(eventName, level);
         }
 
+        /// <summary>
+        /// 触发指定层次下的指定事件
+        /// </summary>
+        /// <param name="zhongjie"></param>
+        /// <param name="canshu">事件参数</param>
+        /// <param name="eventName">事件名称，若为空则取canshu.GetType().FullName</param>
+        /// <param name="level">如：租户id 2，部门id 3，则表示只在这个范围内触发指定事件</param>
+        /// <returns></returns>
         public static async Task Chufa(this Zhongjie zhongjie, object canshu, string eventName = default, params string[] level)
         {
             if (eventName.IsNullOrWhiteSpaceBXJG())
@@ -329,8 +340,8 @@ namespace BXJG.Common
         /// 触发指定层次下的指定事件
         /// </summary>
         /// <param name="zhongjie"></param>
-        /// <param name="eventName"></param>
-        /// <param name="level"></param>
+        /// <param name="eventName">事件名称</param>
+        /// <param name="level">如：租户id 2，部门id 3，则表示只在这个范围内触发指定事件</param>
         /// <returns></returns>
         public static async Task Chufa(this Zhongjie zhongjie, string eventName, params string[] level)
         {
@@ -343,6 +354,14 @@ namespace BXJG.Common
             //}
             //await Task.WhenAll(ts);
             await zhongjie.Chufa(null, eventName, level);
+        }
+
+        
+        private static string BuildEventName(this string eventName, params string[] level)
+        {
+            if (level.Any())
+                eventName += "_" + string.Join('_', level);
+            return eventName;
         }
     }
 
