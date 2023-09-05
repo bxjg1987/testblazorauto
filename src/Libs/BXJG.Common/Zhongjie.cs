@@ -64,7 +64,7 @@ namespace BXJG.Common
         /// <typeparam name="T">事件参数类型</typeparam>
         /// <param name="weituo">事件发生时要执行的委托</param>
         /// <param name="eventName">事件名，如：有新的好友请求；若为空则取typeof(T).FullName</param>
-        /// <returns></returns>
+        /// <returns>返回IDispose，释放它将注销此事件</returns>
         public virtual IDisposable Zhuce<T>(Func<T, ValueTask> weituo, string eventName = default)// where T : class
         {
             if (eventName.IsNullOrWhiteSpaceBXJG())
@@ -93,7 +93,7 @@ namespace BXJG.Common
         /// <typeparam name="T">事件参数类型</typeparam>
         /// <param name="weituo">事件发生时要执行的委托</param>
         /// <param name="eventName">事件名，如：有新的好友请求</param>
-        /// <returns></returns>
+        /// <returns>返回IDispose，释放它将注销此事件</returns>
         public virtual IDisposable Zhuce(Func<ValueTask> weituo, string eventName)
         {
             //weituos.TryAdd(eventName, new ConcurrentDictionary<Delegate, Weituo>());
@@ -123,7 +123,7 @@ namespace BXJG.Common
         /// 注销指定事件中的指定委托
         /// </summary>
         /// <param name="weituo">事件发生时要执行的委托</param>
-        /// <param name="eventName">事件名，如：有新的好友请求；若为空则遍历整个事件中心尝试注销</param>
+        /// <param name="eventName">事件名，若为空则遍历整个事件中心尝试注销weituo</param>
         public virtual void Zhuxiao(Delegate weituo, string eventName = default)
         {
             if (eventName.IsNotNullOrWhiteSpaceBXJG())
@@ -147,29 +147,32 @@ namespace BXJG.Common
         /// <summary>
         /// 注销指定事件下的所有处理程序
         /// </summary>
-        /// <param name="eventName"></param>
+        /// <param name="eventName">若为空则清空整个事件总线，否则清空指定事件下的委托列表</param>
         public virtual void Zhuxiao(string eventName = default)
         {
             if (eventName.IsNullOrWhiteSpaceBXJG())
                 this.weituos.Clear();
+            else
+                this.weituos.TryRemove(eventName, out _);
 
-
-            this.weituos.TryRemove(eventName, out _);
             logger.LogDebug($"注销事件：{eventName}");
-
             LogDebug();
         }
         /// <summary>
         /// 注销指定事件下的所有处理程序
         /// </summary>
-        /// <typeparam name="T">事件参数类型</typeparam>
+        /// <typeparam name="T">事件参数类型，typeof(T).FullName将作为事件名</typeparam>
         public virtual void Zhuxiao<T>()
         {
             var eventName = typeof(T).FullName;
             Zhuxiao(eventName);
         }
-
-
+        /// <summary>
+        /// 触发事件
+        /// </summary>
+        /// <param name="canshu">事件参数</param>
+        /// <param name="eventName">事件名，若为空则取canshu.GetType().FullName</param>
+        /// <returns></returns>
         public virtual async Task Chufa(object canshu, string eventName = default)
         {
             if (eventName.IsNullOrWhiteSpaceBXJG())
@@ -184,7 +187,11 @@ namespace BXJG.Common
                 }));
             }
         }
-
+        /// <summary>
+        /// 触发事件
+        /// </summary>
+        /// <param name="eventName">事件名</param>
+        /// <returns></returns>
         public virtual async Task Chufa(string eventName)
         {
             await Chufa(null, eventName);
@@ -213,9 +220,7 @@ namespace BXJG.Common
                 zhongjie.Zhuxiao(act, eventName);
             }
         }
-    }
-    public static class ZhongjieExt
-    {
+
         /// <summary>
         /// 注册带有层次的事件
         /// 如：应用、租户、用户、http连接等范围
@@ -227,7 +232,7 @@ namespace BXJG.Common
         /// <param name="eventName">事件名，如：有新的好友请求</param>
         /// <param name="level">如：应用、租户、用户、http连接等范围 事件名_level1_level2</param>
         /// <returns></returns>
-        public static IDisposable Zhuce<T>(this Zhongjie zhongjie, Func<T, ValueTask> weituo, string eventName = default, params string[] level)
+        public virtual IDisposable Zhuce<T>(this Zhongjie zhongjie, Func<T, ValueTask> weituo, string eventName = default, params string[] level)
         {
             if (eventName.IsNullOrWhiteSpaceBXJG())
                 eventName = typeof(T).FullName;
@@ -247,7 +252,7 @@ namespace BXJG.Common
         /// <param name="eventName">事件名，如：有新的好友请求</param>
         /// <param name="level">如：应用、租户、用户、http连接等范围 事件名_level1_level2</param>
         /// <returns></returns>
-        public static IDisposable Zhuce(this Zhongjie zhongjie, Func<ValueTask> weituo, string eventName, params string[] level)
+        public virtual IDisposable Zhuce(this Zhongjie zhongjie, Func<ValueTask> weituo, string eventName, params string[] level)
         {
             eventName = eventName.BuildEventName(level);
 
@@ -261,7 +266,7 @@ namespace BXJG.Common
         /// <param name="weituo"></param>
         /// <param name="eventName"></param>
         /// <param name="level">如：租户id 2，部门id 3，则表示注销这个范围内的所有事件处理程序</param>
-        public static void Zhuxiao(this Zhongjie zhongjie, Delegate weituo, string eventName, params string[] level)
+        public virtual void Zhuxiao(this Zhongjie zhongjie, Delegate weituo, string eventName, params string[] level)
         {
             eventName = eventName.BuildEventName(level);
 
@@ -278,18 +283,37 @@ namespace BXJG.Common
         /// <param name="zhongjie"></param>
         /// <param name="weituo"></param>
         /// <param name="level">如：租户id 2，部门id 3，则表示注销这个范围内的所有事件处理程序</param>
-        public static void Zhuxiao<T>(this Zhongjie zhongjie, Delegate weituo, params string[] level)
+        public virtual void Zhuxiao<T>(this Zhongjie zhongjie, Delegate weituo, params string[] level)
         {
             var eventName = typeof(T).FullName;
             zhongjie.Zhuxiao(weituo, eventName, level);
         }
+
+
+        /// <summary>
+        /// 批量注销事件
+        /// </summary>
+        /// <param name="zhongjie"></param>
+        /// <param name="where">条件表达式</param>
+        public virtual void Zhuxiao(this Zhongjie zhongjie, Func<KeyValuePair<string, ConcurrentDictionary<Delegate, Weituo>>, bool> where)
+        {
+            eventName = eventName.BuildEventName(level);
+
+            var items = zhongjie.weituos.Where(c => c.Key.StartsWith(eventName));
+
+            foreach (var item in items)
+            {
+                zhongjie.Zhuxiao(item.Key);
+            }
+        }
+
         /// <summary>
         /// 批量注销事件
         /// </summary>
         /// <param name="zhongjie"></param>
         /// <param name="eventName">事件名称</param>
         /// <param name="level">如：租户id 2，部门id 3，则表示注销这个范围内的所有事件处理程序</param>
-        public static void Zhuxiao(this Zhongjie zhongjie, string eventName, params string[] level)
+        public virtual void Zhuxiao(this Zhongjie zhongjie, string eventName, params string[] level)
         {
             eventName = eventName.BuildEventName(level);
 
@@ -307,12 +331,28 @@ namespace BXJG.Common
         /// <typeparam name="T"></typeparam>
         /// <param name="zhongjie"></param>
         /// <param name="level">如：租户id 2，部门id 3，则表示注销这个范围内的所有事件处理程序</param>
-        public static void Zhuxiao<T>(this Zhongjie zhongjie, params string[] level)
+        public virtual void Zhuxiao<T>(this Zhongjie zhongjie, params string[] level)
         {
             var eventName = typeof(T).FullName;
             zhongjie.Zhuxiao(eventName, level);
         }
 
+        /// <summary>
+        /// 批量触发符合条件的事件
+        /// </summary>
+        /// <param name="canshu">事件参数</param>
+        /// <param name="where">条件表达式</param>
+        /// <returns></returns>
+        public virtual async Task Chufa(object canshu, Func<KeyValuePair<string, ConcurrentDictionary<Delegate, Weituo>>, bool> where)
+        {
+            var items = weituos.Where(where);
+            var ts = new List<Task>();
+            foreach (var item in items)
+            {
+                ts.Add(Chufa(canshu, item.Key));
+            }
+            await Task.WhenAll(ts);
+        }
         /// <summary>
         /// 触发指定层次下的指定事件
         /// </summary>
@@ -321,29 +361,21 @@ namespace BXJG.Common
         /// <param name="eventName">事件名称，若为空则取canshu.GetType().FullName</param>
         /// <param name="level">如：租户id 2，部门id 3，则表示只在这个范围内触发指定事件</param>
         /// <returns></returns>
-        public static async Task Chufa(this Zhongjie zhongjie, object canshu, string eventName = default, params string[] level)
+        public virtual async Task Chufa(object canshu, string eventName = default, params string[] level)
         {
             if (eventName.IsNullOrWhiteSpaceBXJG())
                 eventName = canshu.GetType().FullName;
-
             eventName = eventName.BuildEventName(level);
 
-            var items = zhongjie.weituos.Where(c => c.Key.StartsWith(eventName));
-            var ts = new List<Task>();
-            foreach (var item in items)
-            {
-                ts.Add(zhongjie.Chufa(canshu, item.Key));
-            }
-            await Task.WhenAll(ts);
+            return Chufa(canshu, c => c.Key.StartsWith(eventName));
         }
         /// <summary>
         /// 触发指定层次下的指定事件
         /// </summary>
-        /// <param name="zhongjie"></param>
         /// <param name="eventName">事件名称</param>
         /// <param name="level">如：租户id 2，部门id 3，则表示只在这个范围内触发指定事件</param>
         /// <returns></returns>
-        public static async Task Chufa(this Zhongjie zhongjie, string eventName, params string[] level)
+        public virtual async Task Chufa(string eventName, params string[] level)
         {
             //eventName = eventName.BuildEventName(level);
             //var items = zhongjie.Where(c => c.Key.StartsWith(eventName));
@@ -353,38 +385,38 @@ namespace BXJG.Common
             //    ts.Add(zhongjie.Chufa(item.Key));
             //}
             //await Task.WhenAll(ts);
-            await zhongjie.Chufa(null, eventName, level);
+            await Chufa(null, eventName, level);
         }
 
         
-        private static string BuildEventName(this string eventName, params string[] level)
+        private virtual string BuildEventName(this string eventName, params string[] level)
         {
             if (level.Any())
                 eventName += "_" + string.Join('_', level);
             return eventName;
         }
-    }
 
-    /// <summary>
-    /// 封装要执行的委托
-    /// </summary>
-    public class Weituo
-    {
-        ///// <summary>
-        ///// 原始委托
-        ///// </summary>
-        //public Delegate Act { get; set; }
         /// <summary>
-        /// 转换后的委托
+        /// 封装要执行的委托
         /// </summary>
-        public Func<object, ValueTask> Func { get; set; }
-        /// <summary>
-        /// 注册时间
-        /// </summary>
-        public DateTime AddTime { get; set; } = DateTime.Now;
-        /// <summary>
-        /// 最后执行时间
-        /// </summary>
-        public DateTime LastExecuteTime { get; set; } = DateTime.MinValue;
+        internal protected class Weituo
+        {
+            ///// <summary>
+            ///// 原始委托
+            ///// </summary>
+            //public Delegate Act { get; set; }
+            /// <summary>
+            /// 转换后的委托
+            /// </summary>
+            public Func<object, ValueTask> Func { get; set; }
+            /// <summary>
+            /// 注册时间
+            /// </summary>
+            public DateTime AddTime { get; set; } = DateTime.Now;
+            /// <summary>
+            /// 最后执行时间
+            /// </summary>
+            public DateTime LastExecuteTime { get; set; } = DateTime.MinValue;
+        }
     }
 }
