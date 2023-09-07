@@ -35,8 +35,8 @@ namespace ZLJ
             CancellationToken cancellationToken)
         {
             circuits.Add(circuit);
-           await  zhongjie.Chufa("TrackingCircuitChanged");
-           // return Task.CompletedTask;
+            await zhongjie.Chufa("TrackingCircuitChanged");
+            // return Task.CompletedTask;
         }
 
         public override async Task OnConnectionDownAsync(Circuit circuit,
