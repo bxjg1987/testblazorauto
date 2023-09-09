@@ -49,18 +49,10 @@ namespace BXJG.MudBlazor.Components
         /// 获取主服务
         /// </summary>
         protected virtual TAppService AppService => appService ??= ScopedServices.GetRequiredService<TAppService>();
-        //private IDialogService dialogService;
-
-        /// <summary>
-        /// 经过测试，它是Scope的生命周期，且使用ScopedServices.GetRequiredService方式不能用
-        /// </summary>
-        [Inject]
-        protected virtual IDialogService DialogService { get; set; }
         /// <summary>
         /// 此功能的名称
         /// </summary>
         protected virtual string FuncName => $"请重写{nameof(FuncName)}属性";
-
 
         //protected Type DtoType => typeof(TEntityDto);//不是太有必要的，就不要浪费内存了
 
@@ -91,6 +83,7 @@ namespace BXJG.MudBlazor.Components
 
         /// <summary>
         /// 初始化权限状态
+        /// 我们只需要最终是否有某个状态，不需要保留原本的权限字符串，所以使用方法定义，而非虚属性
         /// </summary>
         /// <param name="createPermissionName"></param>
         /// <param name="updatePermissionName"></param>
@@ -122,11 +115,11 @@ namespace BXJG.MudBlazor.Components
             else
                 Snackbar.Add($"批量{funName}全部成功！", Severity.Success);
         }
-        /// <summary>
-        /// 批量删除消息提醒
-        /// </summary>
-        /// <param name="output"></param>
-        protected virtual void BatchDeleteMessage(BatchOperationOutput<TPrimaryKey> output) => BatchOperationMessage(output, "删除");
+        ///// <summary>
+        ///// 批量删除消息提醒
+        ///// </summary>
+        ///// <param name="output"></param>
+        //protected virtual void BatchDeleteMessage(BatchOperationOutput<TPrimaryKey> output) => BatchOperationMessage(output, "删除");
         #endregion
 
         #region 生命周期
@@ -371,8 +364,8 @@ namespace BXJG.MudBlazor.Components
             await SafelyExecuteAsync(async () =>
             {
                 var temp = await AppService.BatchDeleteAsync(new BatchOperationInput<TPrimaryKey> { Ids = dataGrid.SelectedItems?.Select(x => x.Id).ToArray() });
-                //BatchOperationMessage(temp, "批量删除");
-                BatchDeleteMessage(temp);
+                BatchOperationMessage(temp, "批量删除");
+                //BatchDeleteMessage(temp);
                 if (temp.Ids.Count > 0)
                     _ = InvokeAsync(dataGrid.ReloadServerData); //内部会StateChange
             });

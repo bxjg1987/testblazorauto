@@ -16,6 +16,7 @@ using Abp.Threading;
 using Abp.UI;
 using BXJG.Common;
 using BXJG.Common.Dto;
+using BXJG.Common.RCL;
 using Castle.Core.Logging;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -51,7 +52,7 @@ namespace BXJG.Utils
      * 总的来说，通常是不需要的，应用用例基本都是对应到应用服务的
      */
 
-    public class AbpBaseComponent/*<TUser, TUserManager, TRole>*/ : OwningComponentBase
+    public class AbpBaseComponent/*<TUser, TUserManager, TRole>*/ : CommonBaseComponent// OwningComponentBase
     //where TUser : AbpUser<TUser>
     //where TRole : AbpRole<TUser>, new()
     //where TUserManager : AbpUserManager<TRole, TUser>
@@ -60,25 +61,25 @@ namespace BXJG.Utils
         /// <summary>
         /// 获取当前session
         /// </summary>
-        protected IAbpSession AbpSession => abpSession ??= ScopedServices.GetRequiredService<IAbpSession>();
+        protected virtual IAbpSession AbpSession => abpSession ??= ScopedServices.GetRequiredService<IAbpSession>();
 
         private IWebHostEnvironment webHostEnvironment;
         /// <summary>
         /// 获取当前环境
         /// </summary>
-        protected IWebHostEnvironment WebHostEnvironment => webHostEnvironment ??= ScopedServices.GetRequiredService<IWebHostEnvironment>();
+        protected virtual IWebHostEnvironment WebHostEnvironment => webHostEnvironment ??= ScopedServices.GetRequiredService<IWebHostEnvironment>();
 
         private IEventBus eventBus;
         /// <summary>
         /// 获取abp事件总线
         /// </summary>
-        protected IEventBus EventBus => eventBus ??= ScopedServices.GetRequiredService<IEventBus>();
+        protected virtual IEventBus EventBus => eventBus ??= ScopedServices.GetRequiredService<IEventBus>();
 
-        private Zhongjie zhongjie;
-        /// <summary>
-        /// 获取变形精怪中介，整个应用全局的
-        /// </summary>
-        protected Zhongjie Zhongjie => zhongjie ??= ScopedServices.GetRequiredService<Zhongjie>();
+        //private Zhongjie zhongjie;
+        ///// <summary>
+        ///// 获取变形精怪中介，整个应用全局的
+        ///// </summary>
+        //protected Zhongjie Zhongjie => zhongjie ??= ScopedServices.GetRequiredService<Zhongjie>();
 
         #region 界面专用事件
         //界面由于事件使用非常频繁，通过电路Circuit或App组件级联 关联一个单独的 Zhongjie实例
@@ -169,19 +170,19 @@ namespace BXJG.Utils
         /// <summary>
         /// 获取abp工作单元配置对象
         /// </summary>
-        protected IUnitOfWorkDefaultOptions UnitOfWorkDefaultOptions => unitOfWorkDefaultOptions ??= ScopedServices.GetRequiredService<IUnitOfWorkDefaultOptions>();
+        protected virtual IUnitOfWorkDefaultOptions UnitOfWorkDefaultOptions => unitOfWorkDefaultOptions ??= ScopedServices.GetRequiredService<IUnitOfWorkDefaultOptions>();
 
         private ICancellationTokenProvider cancellationTokenProvider;
         /// <summary>
         /// 获取abp取消令牌提供者
         /// </summary>
-        public ICancellationTokenProvider CancellationTokenProvider => cancellationTokenProvider ??= ScopedServices.GetRequiredService<ICancellationTokenProvider>();
+        protected virtual ICancellationTokenProvider CancellationTokenProvider => cancellationTokenProvider ??= ScopedServices.GetRequiredService<ICancellationTokenProvider>();
 
         private IAbpAspNetCoreConfiguration aspnetCoreConfiguration;
         /// <summary>
         /// 获取abp aspnetcore配置对象
         /// </summary>
-        public IAbpAspNetCoreConfiguration AspNetCoreConfiguration => aspnetCoreConfiguration ??= ScopedServices.GetRequiredService<IAbpAspNetCoreConfiguration>();
+        protected virtual IAbpAspNetCoreConfiguration AspNetCoreConfiguration => aspnetCoreConfiguration ??= ScopedServices.GetRequiredService<IAbpAspNetCoreConfiguration>();
 
         /// <summary>
         /// 获取当前组件只读的全局取消令牌源
@@ -209,7 +210,7 @@ namespace BXJG.Utils
         /// <summary>
         /// 获取abp工作单元管理器
         /// </summary>
-        protected IUnitOfWorkManager UnitOfWorkManager => unitOfWorkManager ??= ScopedServices.GetRequiredService<IUnitOfWorkManager>();
+        protected virtual IUnitOfWorkManager UnitOfWorkManager => unitOfWorkManager ??= ScopedServices.GetRequiredService<IUnitOfWorkManager>();
 
         //这个是跟线程相关的，在blazor中不能用
         //protected IActiveUnitOfWork CurrentUnitOfWork => UnitOfWorkManager.Current;
@@ -218,13 +219,13 @@ namespace BXJG.Utils
         /// <summary>
         /// 获取abp本地化管理器
         /// </summary>
-        protected ILocalizationManager LocalizationManager => localizationManager ??= ScopedServices.GetRequiredService<ILocalizationManager>();
+        protected virtual ILocalizationManager LocalizationManager => localizationManager ??= ScopedServices.GetRequiredService<ILocalizationManager>();
 
 
         ILocalizationSource _localizationSource;
 
         protected virtual string LocalizationSourceName => default;
-        protected ILocalizationSource LocalizationSource
+        protected virtual ILocalizationSource LocalizationSource
         {
             get
             {
@@ -243,12 +244,12 @@ namespace BXJG.Utils
         }
 
         private ISettingManager settingManager;
-        protected ISettingManager SettingManager => settingManager ??= ScopedServices.GetRequiredService<ISettingManager>();
+        protected virtual ISettingManager SettingManager => settingManager ??= ScopedServices.GetRequiredService<ISettingManager>();
 
-        //   ILoggerFactory loggerFactory;
+        ////   ILoggerFactory loggerFactory;
 
         private ILogger _logger;
-        protected ILogger Logger
+        protected virtual ILogger Logger
         {
             get
             {
@@ -259,19 +260,19 @@ namespace BXJG.Utils
         }
 
         private IObjectMapper objectMapper;
-        protected IObjectMapper ObjectMapper => objectMapper ??= ScopedServices.GetRequiredService<IObjectMapper>();
+        protected virtual IObjectMapper ObjectMapper => objectMapper ??= ScopedServices.GetRequiredService<IObjectMapper>();
 
         //private IPermissionManager permissionManager;
         //protected IPermissionManager PermissionManager => permissionManager ??= ScopedServices.GetRequiredService<IPermissionManager>();
 
         private IPermissionChecker permissionChecker;
-        protected IPermissionChecker PermissionChecker => permissionChecker ??= ScopedServices.GetRequiredService<IPermissionChecker>();
+        protected virtual IPermissionChecker PermissionChecker => permissionChecker ??= ScopedServices.GetRequiredService<IPermissionChecker>();
 
         //private IFeatureManager featureManager;
         //protected IFeatureManager FeatureManager => featureManager ??= ScopedServices.GetRequiredService<IFeatureManager>();
 
         private IFeatureChecker featureChecker;
-        protected IFeatureChecker FeatureChecker => featureChecker ??= ScopedServices.GetRequiredService<IFeatureChecker>();
+        protected virtual IFeatureChecker FeatureChecker => featureChecker ??= ScopedServices.GetRequiredService<IFeatureChecker>();
 
         //生命周期方法没有原生的aop支持，参考：https://github.com/dotnet/aspnetcore/issues/20986
 
