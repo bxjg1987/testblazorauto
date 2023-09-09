@@ -121,19 +121,20 @@ namespace ZLJ.Web.Customer.Shared
             };
             return ValueTask.FromResult(ps);
         }
-        /// <summary>
-        /// 准备修改时传入弹窗的参数
-        /// </summary>
-        /// <returns></returns>
-        public virtual ValueTask<DialogParameters<TFormDialogCoponent>> GetEditParams()
-        {
-            var ps = new DialogParameters<TFormDialogCoponent>
-            {
-                { "Pattern", FrmPattern.Edit },
-                { "Model", dataGrid.SelectedItem }
-            };
-            return ValueTask.FromResult(ps);
-        }
+        ///// <summary>
+        ///// 准备修改时传入弹窗的参数
+        ///// </summary>
+        ///// <param name="dto"></param>
+        ///// <returns></returns>
+        //public virtual ValueTask<DialogParameters<TFormDialogCoponent>> GetEditParams(TEntityDto dto = default)
+        //{
+        //    var ps = new DialogParameters<TFormDialogCoponent>
+        //    {
+        //        { "Pattern", FrmPattern.Edit },
+        //        { "Model",dto ?? dataGrid.SelectedItem }
+        //    };
+        //    return ValueTask.FromResult(ps);
+        //}
         /// <summary>
         /// 点击新增按钮时执行
         /// </summary>
@@ -152,12 +153,17 @@ namespace ZLJ.Web.Customer.Shared
         /// 点击修改按钮时执行
         /// </summary>
         /// <returns></returns>
-        protected virtual async Task EditClick()
+        protected virtual async Task EditClick(TEntityDto dto = default)
         {
             //没有选择数据时，修改按钮是禁用的，所以没必要再判断一次
             await base.SafelyExecuteAsync(async delegate
             {
-                if (!(await DialogService.Show<TFormDialogCoponent>("修改" + FuncName, await GetEditParams(), DialogEditOptions).Result).Canceled)
+                var ps = new DialogParameters<TFormDialogCoponent>
+                {
+                    { "Pattern", FrmPattern.Edit },
+                    { "Model",dto ?? dataGrid.SelectedItem }
+                };
+                if (!(await DialogService.Show<TFormDialogCoponent>("修改" + FuncName, ps, DialogEditOptions).Result).Canceled)
                 {
                     await dataGrid.ReloadServerData();
                 }

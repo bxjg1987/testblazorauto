@@ -21,7 +21,7 @@ namespace BXJG.MudBlazor.Components
         /// 经过测试，它是Scope的生命周期，且使用ScopedServices.GetRequiredService方式不能用
         /// </summary>
         [Inject]
-        protected virtual ISnackbar Snackbar { get;  set; }// => snackbar ??= ScopedServices.GetRequiredService<ISnackbar>();
+        protected virtual ISnackbar Snackbar { get; private set; }// => snackbar ??= ScopedServices.GetRequiredService<ISnackbar>();
 
         public override ValueTask ShowErrorAsync(string msg)
         {

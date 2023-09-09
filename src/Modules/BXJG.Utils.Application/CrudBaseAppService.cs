@@ -87,10 +87,8 @@ namespace BXJG.Utils
         protected override TEntity MapToEntity(TCreateInput createInput)
         {
             var r = base.MapToEntity(createInput);
-            if (typeof(TPrimaryKey) == typeof(Guid))
-            {
-                (r as IEntity<Guid>).Id = SequentialGuidGenerator.Instance.Create();
-            }
+            if (r is IEntity<Guid> et)
+                et.Id = SequentialGuidGenerator.Instance.Create();
             MapToEntity(r);
             return r;
         }

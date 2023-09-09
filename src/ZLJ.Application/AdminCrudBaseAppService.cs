@@ -17,19 +17,31 @@ using ZLJ.MultiTenancy;
 namespace ZLJ.App.Admin
 {
     /// <summary>
-    /// 后台管理crud应用服务基类
+    /// 后台管理 扁平化数据的crud应用服务基类，继承它以简化扁平化数据crud应用服务的开发
     /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <typeparam name="TEntityDto"></typeparam>
-    /// <typeparam name="TPrimaryKey"></typeparam>
-    /// <typeparam name="TGetAllInput"></typeparam>
-    /// <typeparam name="TCreateInput"></typeparam>
-    /// <typeparam name="TUpdateInput"></typeparam>
-    /// <typeparam name="TGetInput"></typeparam>
-    /// <typeparam name="TDeleteInput"></typeparam>
-    public class AdminCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, TDeleteInput>
-                       : CommonCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, TDeleteInput>
-        //, ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, TDeleteInput>
+    /// <typeparam name="TEntity">实体类型</typeparam>
+    /// <typeparam name="TEntityDto">详情对象类型</typeparam>
+    /// <typeparam name="TPrimaryKey">主键类型</typeparam>
+    /// <typeparam name="TGetAllInput">获取分页列表数据时的输入类型</typeparam>
+    /// <typeparam name="TCreateInput">新增时输入参数的类型</typeparam>
+    /// <typeparam name="TUpdateInput">修改时输入参数的类型</typeparam>
+    /// <typeparam name="TGetInput">获取单个数据时输入参数的类型</typeparam>
+    /// <typeparam name="TDeleteInput">删除单个数据时输入参数的类型</typeparam>
+    public class AdminCrudBaseAppService<TEntity,
+                                         TEntityDto,
+                                         TPrimaryKey,
+                                         TGetAllInput,
+                                         TCreateInput,
+                                         TUpdateInput,
+                                         TGetInput,
+                                         TDeleteInput> : CommonCrudBaseAppService<TEntity,
+                                                                                  TEntityDto,
+                                                                                  TPrimaryKey,
+                                                                                  TGetAllInput,
+                                                                                  TCreateInput,
+                                                                                  TUpdateInput,
+                                                                                  TGetInput,
+                                                                                  TDeleteInput>
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TUpdateInput : IEntityDto<TPrimaryKey>
@@ -42,20 +54,35 @@ namespace ZLJ.App.Admin
             LocalizationSourceName = AdminConsts.Admin;
         }
     }
-
     /// <summary>
-    /// 后台管理crud应用服务基类
+    /// 后台管理 扁平化数据的crud应用服务基类，继承它以简化扁平化数据crud应用服务的开发
     /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <typeparam name="TEntityDto"></typeparam>
-    /// <typeparam name="TPrimaryKey"></typeparam>
-    /// <typeparam name="TGetAllInput"></typeparam>
-    /// <typeparam name="TCreateInput"></typeparam>
-    /// <typeparam name="TUpdateInput"></typeparam>
-    /// <typeparam name="TGetInput"></typeparam>
-    public class AdminCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput>
-                        : AdminCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, EntityDto<TPrimaryKey>>
-       , ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput>
+    /// <typeparam name="TEntity">实体类型</typeparam>
+    /// <typeparam name="TEntityDto">详情对象类型</typeparam>
+    /// <typeparam name="TPrimaryKey">主键类型</typeparam>
+    /// <typeparam name="TGetAllInput">获取分页列表数据时的输入类型</typeparam>
+    /// <typeparam name="TCreateInput">新增时输入参数的类型</typeparam>
+    /// <typeparam name="TUpdateInput">修改时输入参数的类型</typeparam>
+    /// <typeparam name="TGetInput">获取单个数据时输入参数的类型</typeparam>
+    public class AdminCrudBaseAppService<TEntity,
+                                         TEntityDto,
+                                         TPrimaryKey,
+                                         TGetAllInput,
+                                         TCreateInput,
+                                         TUpdateInput,
+                                         TGetInput> : AdminCrudBaseAppService<TEntity,
+                                                                              TEntityDto,
+                                                                              TPrimaryKey,
+                                                                              TGetAllInput,
+                                                                              TCreateInput,
+                                                                              TUpdateInput,
+                                                                              TGetInput,
+                                                                              EntityDto<TPrimaryKey>>, ICrudBaseAppService<TEntityDto,
+                                                                                                                           TPrimaryKey,
+                                                                                                                           TGetAllInput,
+                                                                                                                           TCreateInput,
+                                                                                                                           TUpdateInput,
+                                                                                                                           TGetInput>
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TUpdateInput : IEntityDto<TPrimaryKey>
@@ -66,17 +93,30 @@ namespace ZLJ.App.Admin
         }
     }
     /// <summary>
-    /// 后台管理crud应用服务基类
+    /// 后台管理 扁平化数据的crud应用服务基类，继承它以简化扁平化数据crud应用服务的开发
     /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <typeparam name="TEntityDto"></typeparam>
-    /// <typeparam name="TPrimaryKey"></typeparam>
-    /// <typeparam name="TGetAllInput"></typeparam>
-    /// <typeparam name="TCreateInput"></typeparam>
-    /// <typeparam name="TUpdateInput"></typeparam>
-    public class AdminCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
-                        : AdminCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, EntityDto<TPrimaryKey>>
-       , ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
+    /// <typeparam name="TEntity">实体类型</typeparam>
+    /// <typeparam name="TEntityDto">详情对象类型</typeparam>
+    /// <typeparam name="TPrimaryKey">主键类型</typeparam>
+    /// <typeparam name="TGetAllInput">获取分页列表数据时的输入类型</typeparam>
+    /// <typeparam name="TCreateInput">新增时输入参数的类型</typeparam>
+    /// <typeparam name="TUpdateInput">修改时输入参数的类型</typeparam>
+    public class AdminCrudBaseAppService<TEntity,
+                                         TEntityDto,
+                                         TPrimaryKey,
+                                         TGetAllInput,
+                                         TCreateInput,
+                                         TUpdateInput> : AdminCrudBaseAppService<TEntity,
+                                                                                 TEntityDto,
+                                                                                 TPrimaryKey,
+                                                                                 TGetAllInput,
+                                                                                 TCreateInput,
+                                                                                 TUpdateInput,
+                                                                                 EntityDto<TPrimaryKey>>, ICrudBaseAppService<TEntityDto,
+                                                                                                                              TPrimaryKey,
+                                                                                                                              TGetAllInput,
+                                                                                                                              TCreateInput,
+                                                                                                                              TUpdateInput>
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TUpdateInput : IEntityDto<TPrimaryKey>
@@ -85,18 +125,27 @@ namespace ZLJ.App.Admin
         {
         }
     }
-
     /// <summary>
-    /// 后台管理crud应用服务基类
+    /// 后台管理 扁平化数据的crud应用服务基类，继承它以简化扁平化数据crud应用服务的开发
     /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <typeparam name="TEntityDto"></typeparam>
-    /// <typeparam name="TPrimaryKey"></typeparam>
-    /// <typeparam name="TGetAllInput"></typeparam>
-    /// <typeparam name="TCreateInput"></typeparam>
-    public class AdminCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput>
-                        : AdminCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TCreateInput>
-       , ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput>
+    /// <typeparam name="TEntity">实体类型</typeparam>
+    /// <typeparam name="TEntityDto">详情对象类型</typeparam>
+    /// <typeparam name="TPrimaryKey">主键类型</typeparam>
+    /// <typeparam name="TGetAllInput">获取分页列表数据时的输入类型</typeparam>
+    /// <typeparam name="TCreateInput">新增时输入参数的类型</typeparam>
+    public class AdminCrudBaseAppService<TEntity,
+                                         TEntityDto,
+                                         TPrimaryKey,
+                                         TGetAllInput,
+                                         TCreateInput> : AdminCrudBaseAppService<TEntity,
+                                                                                 TEntityDto,
+                                                                                 TPrimaryKey,
+                                                                                 TGetAllInput,
+                                                                                 TCreateInput,
+                                                                                 TCreateInput>, ICrudBaseAppService<TEntityDto,
+                                                                                                                    TPrimaryKey,
+                                                                                                                    TGetAllInput,
+                                                                                                                    TCreateInput>
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TCreateInput : IEntityDto<TPrimaryKey>
@@ -105,16 +154,24 @@ namespace ZLJ.App.Admin
         {
         }
     }
+
     /// <summary>
-    /// 后台管理crud应用服务基类
+    /// 后台管理 扁平化数据的crud应用服务基类，继承它以简化扁平化数据crud应用服务的开发
     /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <typeparam name="TEntityDto"></typeparam>
-    /// <typeparam name="TPrimaryKey"></typeparam>
-    /// <typeparam name="TGetAllInput"></typeparam>
-    public class AdminCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput>
-                        : AdminCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TEntityDto>
-       , ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput>
+    /// <typeparam name="TEntity">实体类型</typeparam>
+    /// <typeparam name="TEntityDto">详情对象类型</typeparam>
+    /// <typeparam name="TPrimaryKey">主键类型</typeparam>
+    /// <typeparam name="TGetAllInput">获取分页列表数据时的输入类型</typeparam>
+    public class AdminCrudBaseAppService<TEntity,
+                                         TEntityDto,
+                                         TPrimaryKey,
+                                         TGetAllInput> : AdminCrudBaseAppService<TEntity,
+                                                                                 TEntityDto,
+                                                                                 TPrimaryKey,
+                                                                                 TGetAllInput,
+                                                                                 TEntityDto>, ICrudBaseAppService<TEntityDto,
+                                                                                                                  TPrimaryKey,
+                                                                                                                  TGetAllInput>
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
     {
@@ -123,14 +180,18 @@ namespace ZLJ.App.Admin
         }
     }
     /// <summary>
-    /// 后台管理crud应用服务基类
+    /// 后台管理 扁平化数据的crud应用服务基类，继承它以简化扁平化数据crud应用服务的开发
     /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <typeparam name="TEntityDto"></typeparam>
-    /// <typeparam name="TPrimaryKey"></typeparam>
-    public class AdminCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey>
-                        : AdminCrudBaseAppService<TEntity, TEntityDto, TPrimaryKey, PagedAndSortedResultRequestDto>
-       , ICrudBaseAppService<TEntityDto, TPrimaryKey>
+    /// <typeparam name="TEntity">实体类型</typeparam>
+    /// <typeparam name="TEntityDto">详情对象类型</typeparam>
+    /// <typeparam name="TPrimaryKey">主键类型</typeparam>
+    public class AdminCrudBaseAppService<TEntity,
+                                         TEntityDto,
+                                         TPrimaryKey> : AdminCrudBaseAppService<TEntity,
+                                                                                TEntityDto,
+                                                                                TPrimaryKey,
+                                                                                PagedAndSortedResultRequestDto>, ICrudBaseAppService<TEntityDto,
+                                                                                                                                     TPrimaryKey>
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
     {
@@ -138,11 +199,12 @@ namespace ZLJ.App.Admin
         {
         }
     }
+
     /// <summary>
-    /// 后台管理crud应用服务基类
+    /// 后台管理 扁平化数据的crud应用服务基类，继承它以简化扁平化数据crud应用服务的开发
     /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <typeparam name="TEntityDto"></typeparam>
+    /// <typeparam name="TEntity">实体类型</typeparam>
+    /// <typeparam name="TEntityDto">详情对象类型</typeparam>
     public class AdminCrudBaseAppService<TEntity, TEntityDto>
                         : AdminCrudBaseAppService<TEntity, TEntityDto, int>
      , ICrudBaseAppService<TEntityDto>

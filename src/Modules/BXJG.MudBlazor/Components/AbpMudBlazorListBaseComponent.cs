@@ -316,7 +316,6 @@ namespace BXJG.MudBlazor.Components
         #endregion
 
         #region 删除
-
         /// <summary>
         /// 是否有删除权限
         /// </summary>
@@ -325,8 +324,6 @@ namespace BXJG.MudBlazor.Components
         /// 是否显示删除按钮，默认勾选了某个行且 没有正在加载数据时为true
         /// </summary>
         protected virtual bool ShouldEnableDelete => !dataGrid.Loading && !isDeleting && dataGrid.SelectedItems != default && dataGrid.SelectedItems.Any();
-
-
         /// <summary>
         /// 是否显示全局的删除确认
         /// </summary>
@@ -371,7 +368,6 @@ namespace BXJG.MudBlazor.Components
             });
             isDeleting = false;
         }
-
         //protected virtual void DeleteMessage()
         //{
 
