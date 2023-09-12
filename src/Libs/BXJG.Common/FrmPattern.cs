@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace BXJG.Common
 {
     /// <summary>
-    /// 弹窗模式
+    /// 表单模式
     /// </summary>
     public enum FrmPattern
     {

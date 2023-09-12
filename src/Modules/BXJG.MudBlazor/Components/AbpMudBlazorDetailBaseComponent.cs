@@ -19,14 +19,13 @@ namespace BXJG.MudBlazor.Components
     /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
     /// <typeparam name="TCreateInput">新增时的输入类型</typeparam>
     /// <typeparam name="TUpdateInput">修改时的输入类型</typeparam>
-    public class AbpMudBlazorFormBaseComponent<TAppService,
-                                               TEntityDto,
-                                               TPrimaryKey,
-                                               TGetAllInput,
-                                               TCreateInput,
-                                               TUpdateInput> : AbpMudBlazorBaseComponent
+    public class AbpMudBlazorDetailBaseComponent<TAppService,
+                                                 TEntityDto,
+                                                 TPrimaryKey,
+                                                 TGetAllInput,
+                                                 TCreateInput,
+                                                 TUpdateInput> : AbpMudBlazorBaseComponent
         where TEntityDto : IEntityDto<TPrimaryKey>
-        where TGetAllInput : new()
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
     {

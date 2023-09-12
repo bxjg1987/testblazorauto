@@ -31,6 +31,7 @@ namespace BXJG.Common
     /// <summary>
     /// 延迟处理
     /// </summary>
+    [Obsolete("请使用DelayCoverExecutor")]
     public class YanchiChuli
     {
         /// <summary>
