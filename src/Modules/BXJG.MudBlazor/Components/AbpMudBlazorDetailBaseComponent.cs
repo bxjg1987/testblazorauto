@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace BXJG.MudBlazor.Components
 {
     /// <summary>
-    /// 新增和修改的表单抽象组件
+    /// 基于mudblazor和abp的通用详情页组件
     /// </summary>
     /// <typeparam name="TAppService">应用服务类型</typeparam>
     /// <typeparam name="TEntityDto">列表项的数据类型</typeparam>
@@ -25,9 +25,9 @@ namespace BXJG.MudBlazor.Components
                                                  TGetAllInput,
                                                  TCreateInput,
                                                  TUpdateInput> : AbpMudBlazorBaseComponent
+        where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TUpdateInput : IEntityDto<TPrimaryKey>
-        where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
     {
         /// <summary>
         /// 缓存当前主服务对象

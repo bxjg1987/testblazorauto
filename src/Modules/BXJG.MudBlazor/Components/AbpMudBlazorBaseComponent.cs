@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace BXJG.MudBlazor.Components
 {
     /// <summary>
-    /// 基于mudblazor的任何组件都可以继承它
+    /// 基于mudblazor和abp的组件
     /// </summary>
     public class AbpMudBlazorBaseComponent : AbpBaseComponent
     {

@@ -29,14 +29,6 @@ namespace BXJG.Common.RCL
         /// <summary>
         /// 日志
         /// </summary>
-        protected virtual ILogger MicrosoftLogger
-        {
-            get
-            {
-                if (_logger == default)
-                    _logger = ScopedServices.GetRequiredService<ILoggerFactory>().CreateLogger(GetType());
-                return _logger;
-            }
-        }
+        protected virtual ILogger MicrosoftLogger => _logger ??= ScopedServices.GetRequiredService<ILoggerFactory>().CreateLogger(GetType());
     }
 }
