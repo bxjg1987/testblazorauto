@@ -15,7 +15,7 @@ namespace ZLJ.Web.Customer.Shared
     /// <summary>
     /// 后台管理端的blazor组件抽象类
     /// </summary>
-    public class CustomerBaseComponent : AbpMudBlazorBaseComponent
+    public class CustomerBaseComponent : AbpMudBaseComponent
     {
         private ILocalizationSource appCommonLocalizationSource, zljLocalizationSource, utilsLocalizationSource;
 

@@ -1,0 +1,14 @@
+﻿@inherits AbpMudCarryingCreateBaseComponent
+@using MudBlazor
+
+<MudDialog>
+    <DialogContent>
+        @Children
+        @* <DynamicComponent Type="CreateComponentType" @ref="base.CreateComponent"></DynamicComponent> *@
+    </DialogContent>
+    <DialogActions>
+        @Buttons
+        <MudButton OnClick="SaveClick">保存</MudButton>
+        <MudButton OnClick="()=>MudDialog.Cancel()">关闭</MudButton>
+    </DialogActions>
+</MudDialog>

@@ -28,7 +28,7 @@ namespace ZLJ.Web.Admin.Shared
                                     TPrimaryKey,
                                     TGetAllInput,
                                     TCreateInput,
-                                    TUpdateInput> : AbpMudBlazorListBaseComponent<TAppService,
+                                    TUpdateInput> : AbpMudListBaseComponent<TAppService,
                                                                                   TEntityDto,
                                                                                   TPrimaryKey,
                                                                                   TGetAllInput,

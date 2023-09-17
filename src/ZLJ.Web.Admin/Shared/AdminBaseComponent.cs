@@ -15,7 +15,7 @@ namespace ZLJ.Web.Admin.Shared
     /// <summary>
     /// 后台管理端的blazor组件抽象类
     /// </summary>
-    public class AdminBaseComponent : AbpMudBlazorBaseComponent
+    public class AdminBaseComponent : AbpMudBaseComponent
     {
         private ILocalizationSource appCommonLocalizationSource, zljLocalizationSource, utilsLocalizationSource;
 

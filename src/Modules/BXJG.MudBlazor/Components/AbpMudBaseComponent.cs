@@ -13,7 +13,7 @@ namespace BXJG.MudBlazor.Components
     /// <summary>
     /// 基于mudblazor和abp的组件
     /// </summary>
-    public class AbpMudBlazorBaseComponent : AbpBaseComponent
+    public class AbpMudBaseComponent : AbpBaseComponent
     {
         //private ISnackbar snackbar;
 
