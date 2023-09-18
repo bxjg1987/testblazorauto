@@ -1,6 +1,8 @@
 ﻿using Abp.Domain.Entities;
 using Abp.Notifications;
 using BXJG.Common;
+using BXJG.MudBlazor.Components;
+using MudBlazor;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +16,9 @@ namespace ZLJ.Web.Admin
     {
         [Inject]
         public INotificationPublisher NotificationPublisher { get; set; }
+
+        [Inject]
+        IDialogService DialogService { get; set; }
         //protected override async Task OnInitialized2Async()
         //{
         //await  this.NotificationPublisher.PublishAsync(ZLJ.App.Common.Consts.ENEquipmentInstanceLastAlarmChanged,
@@ -40,6 +45,11 @@ namespace ZLJ.Web.Admin
             //await uow.CompleteAsync();
         }
 
+        private async void baojingtongzhi2()
+        {
+            var dr = DialogService.Show<AbpMudCreateDialog>();
+            var r = await dr.Result;
+        }
 
         private async Task baojingtongzhi()
         {
