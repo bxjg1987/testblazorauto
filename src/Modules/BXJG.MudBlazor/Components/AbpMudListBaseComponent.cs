@@ -423,7 +423,7 @@ namespace BXJG.MudBlazor.Components
     /// <typeparam name="TPrimaryKey">唯一id类型</typeparam>
     /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
     /// <typeparam name="TCreateInput">新增时的输入类型</typeparam>
-    public class AbpMudBlazorListBaseComponent<TAppService,
+    public class AbpMudListBaseComponent<TAppService,
                                                TEntityDto,
                                                TPrimaryKey,
                                                TGetAllInput,
@@ -447,10 +447,10 @@ namespace BXJG.MudBlazor.Components
     /// <typeparam name="TEntityDto">列表项的数据类型</typeparam>
     /// <typeparam name="TPrimaryKey">唯一id类型</typeparam>
     /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
-    public class AbpMudBlazorListBaseComponent<TAppService,
+    public class AbpMudListBaseComponent<TAppService,
                                                TEntityDto,
                                                TPrimaryKey,
-                                               TGetAllInput> : AbpMudBlazorListBaseComponent<TAppService,
+                                               TGetAllInput> : AbpMudListBaseComponent<TAppService,
                                                                                              TEntityDto,
                                                                                              TPrimaryKey,
                                                                                              TGetAllInput,
@@ -466,9 +466,9 @@ namespace BXJG.MudBlazor.Components
     /// <typeparam name="TAppService">应用服务类型</typeparam>
     /// <typeparam name="TEntityDto">列表项的数据类型</typeparam>
     /// <typeparam name="TPrimaryKey">唯一id类型</typeparam>
-    public class AbpMudBlazorListBaseComponent<TAppService,
+    public class AbpMudListBaseComponent<TAppService,
                                                TEntityDto,
-                                               TPrimaryKey> : AbpMudBlazorListBaseComponent<TAppService,
+                                               TPrimaryKey> : AbpMudListBaseComponent<TAppService,
                                                                                             TEntityDto,
                                                                                             TPrimaryKey,
                                                                                             PagedAndSortedResultRequestDto>
@@ -481,8 +481,8 @@ namespace BXJG.MudBlazor.Components
     /// </summary>
     /// <typeparam name="TAppService">应用服务类型</typeparam>
     /// <typeparam name="TEntityDto">列表项的数据类型</typeparam>
-    public class AbpMudBlazorListBaseComponent<TAppService,
-                                               TEntityDto> : AbpMudBlazorListBaseComponent<TAppService,
+    public class AbpMudListBaseComponent<TAppService,
+                                               TEntityDto> : AbpMudListBaseComponent<TAppService,
                                                                                            TEntityDto,
                                                                                            int>
         where TEntityDto : IEntityDto<int>
