@@ -5,16 +5,17 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-	  <Version>1.0.38</Version>
+	  <Version>1.0.40</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Components\AbpMudDetailBaseComponent.cs" />
+    <Compile Remove="Components\AbpMudDetailDialog.razor.cs" />
     <Compile Remove="ExampleJsInterop.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Remove="Component1.razor" />
+    <Content Remove="Components\AbpMudDetailDialog.razor" />
   </ItemGroup>
 
   <ItemGroup>

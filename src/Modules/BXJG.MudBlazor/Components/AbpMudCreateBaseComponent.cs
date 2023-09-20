@@ -10,24 +10,25 @@ using System.Threading.Tasks;
 
 namespace BXJG.AbpMudBlazor.Components
 {
+    /*
+     * 新增是从无到有的创建，跟修改、查询详情、删除不同，后者是数据已经存在后的操作，因此分开定义
+     * 由于应用服务接口是开放泛型，所以这里可以省略些泛型
+     */
+
     /// <summary>
-    /// 基于mudblazor和abp的通用详情页组件
+    /// 基于mudblazor和abp的通用新增页组件
     /// </summary>
     /// <typeparam name="TAppService">应用服务类型</typeparam>
     /// <typeparam name="TEntityDto">列表项的数据类型</typeparam>
     /// <typeparam name="TPrimaryKey">唯一id类型</typeparam>
-    /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
     /// <typeparam name="TCreateInput">新增时的输入类型</typeparam>
-    /// <typeparam name="TUpdateInput">修改时的输入类型</typeparam>
-    public class AbpMudDetailBaseComponent<TAppService,
+    public class AbpMudCreateBaseComponent<TAppService,
                                                  TEntityDto,
                                                  TPrimaryKey,
-                                                 TGetAllInput,
-                                                 TCreateInput,
-                                                 TUpdateInput> : AbpMudBaseComponent
-        where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
+                                                 TCreateInput> : AbpMudBaseComponent
+        where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, PagedAndSortedResultRequestDto, TCreateInput>
         where TEntityDto : IEntityDto<TPrimaryKey>
-        where TUpdateInput : IEntityDto<TPrimaryKey>
+        where TCreateInput : IEntityDto<TPrimaryKey>
     {
         /// <summary>
         /// 缓存当前主服务对象
@@ -41,20 +42,17 @@ namespace BXJG.AbpMudBlazor.Components
         /// 此功能的名称
         /// </summary>
         protected virtual string FuncName => $"请重写{nameof(FuncName)}属性";
-        /// <summary>
-        /// 表单模式
-        /// </summary>
-        public virtual FrmPattern Pattern { get; set; }
+
         /// <summary>
         /// 编辑时的模型
         /// </summary>
-        public virtual TEntityDto Model { get; set; }
+        public virtual TCreateInput Model { get; set; }
 
-        protected override async Task OnInitialized2Async()
-        {
-            //列表传递过来的dto信息没有详情中的dto多
-            Model = await AppService.GetAsync(new EntityDto<TPrimaryKey>(Model.Id));
-        }
+        //protected override async Task OnInitialized2Async()
+        //{
+        //    //列表传递过来的dto信息没有详情中的dto多
+        //    Model = await AppService.GetAsync(new EntityDto<TPrimaryKey>(Model.Id));
+        //}
 
         #region 权限
         /// <summary>

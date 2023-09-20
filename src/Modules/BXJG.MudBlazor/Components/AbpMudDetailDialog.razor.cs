@@ -35,7 +35,6 @@ namespace BXJG.AbpMudBlazor.Components
 
         IDetailComponent detail => dynamicComponent?.Instance as IDetailComponent;
 
-        Color color = Color.Default;
         //protected override void OnInitialized2()
         //{
         //    var sdf = createComponent.Instance as IDsd;
