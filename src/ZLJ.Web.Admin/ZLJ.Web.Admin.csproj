@@ -23,7 +23,7 @@
 		<PackageReference Include="BXJG.MudBlazor" Version="*" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(SolutionName)' == 'ZLJWithModules'">
-		<ProjectReference Include="..\Modules\BXJG.MudBlazor\BXJG.MudBlazor.csproj" />
+		<ProjectReference Include="..\Modules\BXJG.MudBlazor\BXJG.AbpMudBlazor.csproj" />
 	</ItemGroup>
 	
 	<ItemGroup>

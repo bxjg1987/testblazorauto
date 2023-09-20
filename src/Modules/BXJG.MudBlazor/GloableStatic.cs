@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.MudBlazor
+namespace BXJG.AbpMudBlazor
 {
     /// <summary>
     /// 此模块的全局静态变量、常量 容器

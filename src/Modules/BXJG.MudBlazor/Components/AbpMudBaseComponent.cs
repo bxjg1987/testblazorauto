@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.MudBlazor.Components
+namespace BXJG.AbpMudBlazor.Components
 {
     /// <summary>
     /// 基于mudblazor和abp的组件

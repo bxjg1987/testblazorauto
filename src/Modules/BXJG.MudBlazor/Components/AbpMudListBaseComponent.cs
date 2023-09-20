@@ -17,7 +17,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.MudBlazor.Components
+namespace BXJG.AbpMudBlazor.Components
 {
     /// <summary>
     /// 抽象的，基于MudBlazor的列表页 抽象组件

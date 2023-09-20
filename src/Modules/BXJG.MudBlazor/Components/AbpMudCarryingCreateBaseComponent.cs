@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.MudBlazor.Components
+namespace BXJG.AbpMudBlazor.Components
 {
     ///// <summary>
     ///// 用来承载新增组件的组件，可以看作是个容器。（查看详情、修改 是用单独的承载组件）

@@ -73,7 +73,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{31830F03-1
 		docs\菜单.md = docs\菜单.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.MudBlazor", "src\Modules\BXJG.MudBlazor\BXJG.MudBlazor.csproj", "{A43BBE9A-BEA3-450E-ABD6-856D72723E91}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.AbpMudBlazor", "src\Modules\BXJG.MudBlazor\BXJG.AbpMudBlazor.csproj", "{A43BBE9A-BEA3-450E-ABD6-856D72723E91}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{044A19F6-90C2-458D-B3B1-4EB0428E9981}"
 EndProject

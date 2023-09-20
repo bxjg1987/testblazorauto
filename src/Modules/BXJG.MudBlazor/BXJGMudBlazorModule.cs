@@ -10,7 +10,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.MudBlazor
+namespace BXJG.AbpMudBlazor
 {
     [DependsOn(typeof(BXJGUtilsRCLModule))]
     public class BXJGMudBlazorModule : AbpModule
