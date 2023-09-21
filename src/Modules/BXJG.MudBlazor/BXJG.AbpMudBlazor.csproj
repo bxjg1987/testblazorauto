@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Components\AbpMudCarryingCreateBaseComponent.cs" />
     <Compile Remove="Components\AbpMudDetailDialog.razor.cs" />
     <Compile Remove="ExampleJsInterop.cs" />
   </ItemGroup>

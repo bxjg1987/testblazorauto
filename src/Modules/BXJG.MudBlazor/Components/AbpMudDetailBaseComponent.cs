@@ -10,6 +10,10 @@ using System.Threading.Tasks;
 
 namespace BXJG.AbpMudBlazor.Components
 {
+    /*
+     * 由于abp的crud接口和抽象类把crud搞一起了，不想动它，所以这里的应用服务中包含TGetAllInput
+     */
+
     /// <summary>
     /// 基于mudblazor和abp的通用详情页组件
     /// </summary>
@@ -20,14 +24,15 @@ namespace BXJG.AbpMudBlazor.Components
     /// <typeparam name="TCreateInput">新增时的输入类型</typeparam>
     /// <typeparam name="TUpdateInput">修改时的输入类型</typeparam>
     public class AbpMudDetailBaseComponent<TAppService,
-                                                 TEntityDto,
-                                                 TPrimaryKey,
-                                                 TGetAllInput,
-                                                 TCreateInput,
-                                                 TUpdateInput> : AbpMudBaseComponent
-        where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
+                                           TEntityDto,
+                                           TPrimaryKey,
+                                           TGetAllInput,
+                                           TCreateInput,
+                                           TUpdateInput> : AbpMudBaseComponent
         where TEntityDto : IEntityDto<TPrimaryKey>
+        where TGetAllInput : new()
         where TUpdateInput : IEntityDto<TPrimaryKey>
+        where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
     {
         /// <summary>
         /// 缓存当前主服务对象

@@ -721,7 +721,10 @@ namespace BXJG.Utils.GeneralTree
         /// <returns></returns>
         protected virtual async ValueTask BeforeDeleteAsync(TEntity entity)
         {
+
             await repository.DeleteAsync(c => c.Code.StartsWith(entity.Code));
+
+            //这里后台节点 还需要重置code，以后来改，或者在Manager中去实现，这里再调用Manager中的Delete
         }
         #endregion
 

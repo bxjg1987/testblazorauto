@@ -1,7 +1,9 @@
 ﻿using Abp.Application.Services.Dto;
 using BXJG.Common;
 using BXJG.Utils;
+using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
+using MudBlazor;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +14,8 @@ namespace BXJG.AbpMudBlazor.Components
 {
     /*
      * 新增是从无到有的创建，跟修改、查询详情、删除不同，后者是数据已经存在后的操作，因此分开定义
-     * 由于应用服务接口是开放泛型，所以这里可以省略些泛型
+     * 
+     * 由于abp的crud接口和抽象类把crud搞一起了，不想动它，所以这里的应用服务中包含TGetAllInput、TUpdateInput
      */
 
     /// <summary>
@@ -21,14 +24,19 @@ namespace BXJG.AbpMudBlazor.Components
     /// <typeparam name="TAppService">应用服务类型</typeparam>
     /// <typeparam name="TEntityDto">列表项的数据类型</typeparam>
     /// <typeparam name="TPrimaryKey">唯一id类型</typeparam>
+    /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
     /// <typeparam name="TCreateInput">新增时的输入类型</typeparam>
+    /// <typeparam name="TUpdateInput">修改时的输入类型</typeparam>
     public class AbpMudCreateBaseComponent<TAppService,
-                                                 TEntityDto,
-                                                 TPrimaryKey,
-                                                 TCreateInput> : AbpMudBaseComponent
-        where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, PagedAndSortedResultRequestDto, TCreateInput>
+                                           TEntityDto,
+                                           TPrimaryKey,
+                                           TGetAllInput,
+                                           TCreateInput,
+                                           TUpdateInput> : AbpMudBaseComponent
         where TEntityDto : IEntityDto<TPrimaryKey>
-        where TCreateInput : IEntityDto<TPrimaryKey>
+        where TGetAllInput : new()
+        where TUpdateInput : IEntityDto<TPrimaryKey>
+        where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
     {
         /// <summary>
         /// 缓存当前主服务对象
@@ -42,9 +50,8 @@ namespace BXJG.AbpMudBlazor.Components
         /// 此功能的名称
         /// </summary>
         protected virtual string FuncName => $"请重写{nameof(FuncName)}属性";
-
         /// <summary>
-        /// 编辑时的模型
+        /// 新增时的模型
         /// </summary>
         public virtual TCreateInput Model { get; set; }
 
@@ -60,29 +67,82 @@ namespace BXJG.AbpMudBlazor.Components
         /// </summary>
         protected bool createIsGranted = true;
         /// <summary>
-        /// 是否有修改权限
-        /// </summary>
-        protected bool updateIsGranted = true;
-        /// <summary>
-        /// 是否有删除权限
-        /// </summary>
-        protected bool deleteIsGranted = true;
-        /// <summary>
         /// 初始化权限状态
         /// </summary>
         /// <param name="createPermissionName"></param>
         /// <param name="updatePermissionName"></param>
         /// <param name="deletePermissionName"></param>
         /// <returns></returns>
-        protected virtual async Task InitPermission(string createPermissionName = default, string updatePermissionName = default, string deletePermissionName = default)
+        protected virtual async Task InitPermission(string createPermissionName = default)
         {
             if (createPermissionName.IsNotNullOrWhiteSpaceBXJG())
                 createIsGranted = await PermissionChecker.IsGrantedAsync(createPermissionName);
-            if (updatePermissionName.IsNotNullOrWhiteSpaceBXJG())
-                updateIsGranted = await PermissionChecker.IsGrantedAsync(updatePermissionName);
-            if (deletePermissionName.IsNotNullOrWhiteSpaceBXJG())
-                deleteIsGranted = await PermissionChecker.IsGrantedAsync(deletePermissionName);
         }
         #endregion
+        protected bool Saving = false;
+        /// <summary>
+        /// 核心的保存逻辑
+        /// </summary>
+        /// <returns></returns>
+        protected virtual async Task<TEntityDto> Save()
+        {
+            Saving = true;
+            var r = await base.SafelyExecuteAsync(() =>
+            {
+                return AppService.CreateAsync(Model);
+            });
+            Saving = false;
+            return r;
+        }
+    }
+
+    /// <summary>
+    /// 基于mudblazor和abp的通用新增弹窗页组件
+    /// </summary>
+    /// <typeparam name="TAppService">应用服务类型</typeparam>
+    /// <typeparam name="TEntityDto">列表项的数据类型</typeparam>
+    /// <typeparam name="TPrimaryKey">唯一id类型</typeparam>
+    /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
+    /// <typeparam name="TCreateInput">新增时的输入类型</typeparam>
+    /// <typeparam name="TUpdateInput">修改时的输入类型</typeparam>
+    public class AbpMudCreateDialogBaseComponent<TAppService,
+                                                 TEntityDto,
+                                                 TPrimaryKey,
+                                                 TGetAllInput,
+                                                 TCreateInput,
+                                                 TUpdateInput> : AbpMudCreateBaseComponent<TAppService,
+                                                                                           TEntityDto,
+                                                                                           TPrimaryKey,
+                                                                                           TGetAllInput,
+                                                                                           TCreateInput,
+                                                                                           TUpdateInput>
+        where TEntityDto : IEntityDto<TPrimaryKey>
+        where TGetAllInput : new()
+        where TUpdateInput : IEntityDto<TPrimaryKey>
+        where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
+    {
+        /// <summary>
+        /// 当前弹窗对象
+        /// </summary>
+        [CascadingParameter]
+        protected MudDialogInstance MudDialog { get; set; }
+        /// <summary>
+        /// 点击关闭按钮时执行
+        /// </summary>
+        protected virtual void Cancel() => MudDialog.Cancel();
+        /// <summary>
+        /// 点击保存按钮时执行
+        /// </summary>
+        /// <returns></returns>
+        protected virtual async Task SaveClick()
+        {
+            var r = await base.Save();
+            if (r != null)
+            {
+                MudDialog.Close(r);
+                base.Snackbar.Add("新增成功！", Severity.Success);
+            }
+            //失败时Save方法中会提示。
+        }
     }
 }

@@ -102,6 +102,7 @@ namespace BXJG.Utils.GeneralTree
                         await act(item);
                     await repository.DeleteAsync(c => c.Code.StartsWith(item.Code));
                 }
+                //这里后台节点 还需要重置code，以后来改
             //}
             //else
             //{

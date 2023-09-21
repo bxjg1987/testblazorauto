@@ -19,6 +19,10 @@ using System.Threading.Tasks;
 
 namespace BXJG.AbpMudBlazor.Components
 {
+    /*
+     * 由于abp的crud接口和抽象类把crud搞一起了，不想动它，所以这里的应用服务中包含TCreateInput、TUpdateInput
+     */
+
     /// <summary>
     /// 抽象的，基于MudBlazor的列表页 抽象组件
     /// </summary>
@@ -29,18 +33,17 @@ namespace BXJG.AbpMudBlazor.Components
     /// <typeparam name="TCreateInput">新增时的输入类型</typeparam>
     /// <typeparam name="TUpdateInput">修改时的输入类型</typeparam>
     public class AbpMudListBaseComponent<TAppService,
-                                               TEntityDto,
-                                               TPrimaryKey,
-                                               TGetAllInput,
-                                               TCreateInput,
-                                               TUpdateInput> : AbpMudBaseComponent
+                                         TEntityDto,
+                                         TPrimaryKey,
+                                         TGetAllInput,
+                                         TCreateInput,
+                                         TUpdateInput> : AbpMudBaseComponent
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TGetAllInput : new()
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
     {
         #region 基础
-
         /// <summary>
         /// 缓存当前主服务对象
         /// </summary>
@@ -413,80 +416,37 @@ namespace BXJG.AbpMudBlazor.Components
                 item.ExtensionData.IsShowDeleteConfirmation = false;
         }
         #endregion
-
     }
+
     /// <summary>
     /// 抽象的，基于MudBlazor的列表页 抽象组件
+    /// 使用弹窗弹出新增和详情窗口
     /// </summary>
     /// <typeparam name="TAppService">应用服务类型</typeparam>
     /// <typeparam name="TEntityDto">列表项的数据类型</typeparam>
     /// <typeparam name="TPrimaryKey">唯一id类型</typeparam>
     /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
     /// <typeparam name="TCreateInput">新增时的输入类型</typeparam>
-    public class AbpMudListBaseComponent<TAppService,
+    /// <typeparam name="TUpdateInput">修改时的输入类型</typeparam>
+    public class AbpMudListDialogBaseComponent<TAppService,
                                                TEntityDto,
                                                TPrimaryKey,
                                                TGetAllInput,
-                                               TCreateInput> : AbpMudListBaseComponent<TAppService,
-                                                                                             TEntityDto,
-                                                                                             TPrimaryKey,
-                                                                                             TGetAllInput,
-                                                                                             TCreateInput,
-                                                                                             TCreateInput>
-        where TCreateInput : IEntityDto<TPrimaryKey>
+                                               TCreateInput,
+                                               TUpdateInput> : AbpMudListBaseComponent<TAppService,
+                                                                                       TEntityDto,
+                                                                                       TPrimaryKey,
+                                                                                       TGetAllInput,
+                                                                                       TCreateInput,
+                                                                                       TUpdateInput>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TGetAllInput : new()
-        where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput>
+        where TUpdateInput : IEntityDto<TPrimaryKey>
+        where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
     {
-    }
+        [Inject]
+        protected virtual IDialogService DialogService { get; set; }
 
-    /// <summary>
-    /// 抽象的，基于MudBlazor的列表页 抽象组件
-    /// </summary>
-    /// <typeparam name="TAppService">应用服务类型</typeparam>
-    /// <typeparam name="TEntityDto">列表项的数据类型</typeparam>
-    /// <typeparam name="TPrimaryKey">唯一id类型</typeparam>
-    /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
-    public class AbpMudListBaseComponent<TAppService,
-                                               TEntityDto,
-                                               TPrimaryKey,
-                                               TGetAllInput> : AbpMudListBaseComponent<TAppService,
-                                                                                             TEntityDto,
-                                                                                             TPrimaryKey,
-                                                                                             TGetAllInput,
-                                                                                             TEntityDto>
-        where TEntityDto : IEntityDto<TPrimaryKey>
-        where TGetAllInput : new()
-        where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput>
-    {
-    }
-    /// <summary>
-    /// 抽象的，基于MudBlazor的列表页 抽象组件
-    /// </summary>
-    /// <typeparam name="TAppService">应用服务类型</typeparam>
-    /// <typeparam name="TEntityDto">列表项的数据类型</typeparam>
-    /// <typeparam name="TPrimaryKey">唯一id类型</typeparam>
-    public class AbpMudListBaseComponent<TAppService,
-                                               TEntityDto,
-                                               TPrimaryKey> : AbpMudListBaseComponent<TAppService,
-                                                                                            TEntityDto,
-                                                                                            TPrimaryKey,
-                                                                                            PagedAndSortedResultRequestDto>
-        where TEntityDto : IEntityDto<TPrimaryKey>
-        where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey>
-    {
-    }
-    /// <summary>
-    /// 抽象的，基于MudBlazor的列表页 抽象组件
-    /// </summary>
-    /// <typeparam name="TAppService">应用服务类型</typeparam>
-    /// <typeparam name="TEntityDto">列表项的数据类型</typeparam>
-    public class AbpMudListBaseComponent<TAppService,
-                                               TEntityDto> : AbpMudListBaseComponent<TAppService,
-                                                                                           TEntityDto,
-                                                                                           int>
-        where TEntityDto : IEntityDto<int>
-        where TAppService : ICrudBaseAppService<TEntityDto>
-    {
+
     }
 }
