@@ -24,7 +24,7 @@ namespace BXJG.AbpMudBlazor.Components
      */
 
     /// <summary>
-    /// 抽象的，基于MudBlazor的列表页 抽象组件
+    /// 抽象的，基于MudBlazor的列表页抽象组件
     /// </summary>
     /// <typeparam name="TAppService">应用服务类型</typeparam>
     /// <typeparam name="TEntityDto">列表项的数据类型</typeparam>
@@ -32,12 +32,12 @@ namespace BXJG.AbpMudBlazor.Components
     /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
     /// <typeparam name="TCreateInput">新增时的输入类型</typeparam>
     /// <typeparam name="TUpdateInput">修改时的输入类型</typeparam>
-    public class AbpMudListBaseComponent<TAppService,
-                                         TEntityDto,
-                                         TPrimaryKey,
-                                         TGetAllInput,
-                                         TCreateInput,
-                                         TUpdateInput> : AbpMudBaseComponent
+    public abstract class AbpMudListBaseComponent<TAppService,
+                                                  TEntityDto,
+                                                  TPrimaryKey,
+                                                  TGetAllInput,
+                                                  TCreateInput,
+                                                  TUpdateInput> : AbpMudBaseComponent
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TGetAllInput : new()
         where TUpdateInput : IEntityDto<TPrimaryKey>
@@ -417,36 +417,123 @@ namespace BXJG.AbpMudBlazor.Components
         }
         #endregion
     }
-
     /// <summary>
     /// 抽象的，基于MudBlazor的列表页 抽象组件
     /// 使用弹窗弹出新增和详情窗口
     /// </summary>
+    /// <typeparam name="TCreateDialog">新增弹窗组件</typeparam>
+    /// <typeparam name="TDetailDialog">详情弹窗组件</typeparam>
     /// <typeparam name="TAppService">应用服务类型</typeparam>
     /// <typeparam name="TEntityDto">列表项的数据类型</typeparam>
     /// <typeparam name="TPrimaryKey">唯一id类型</typeparam>
     /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
     /// <typeparam name="TCreateInput">新增时的输入类型</typeparam>
     /// <typeparam name="TUpdateInput">修改时的输入类型</typeparam>
-    public class AbpMudListDialogBaseComponent<TAppService,
-                                               TEntityDto,
-                                               TPrimaryKey,
-                                               TGetAllInput,
-                                               TCreateInput,
-                                               TUpdateInput> : AbpMudListBaseComponent<TAppService,
-                                                                                       TEntityDto,
-                                                                                       TPrimaryKey,
-                                                                                       TGetAllInput,
-                                                                                       TCreateInput,
-                                                                                       TUpdateInput>
+    public abstract class AbpMudListDialogBaseComponent<TCreateDialog,
+                                                        TDetailDialog,
+                                                        TAppService,
+                                                        TEntityDto,
+                                                        TPrimaryKey,
+                                                        TGetAllInput,
+                                                        TCreateInput,
+                                                        TUpdateInput> : AbpMudListBaseComponent<TAppService,
+                                                                                                TEntityDto,
+                                                                                                TPrimaryKey,
+                                                                                                TGetAllInput,
+                                                                                                TCreateInput,
+                                                                                                TUpdateInput>
+        where TCreateDialog : ComponentBase
+        where TDetailDialog : ComponentBase
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TGetAllInput : new()
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
     {
+        /// <summary>
+        /// 弹窗服务
+        /// </summary>
         [Inject]
         protected virtual IDialogService DialogService { get; set; }
-
-
+        /// <summary>
+        /// 新增时的弹窗选项对象
+        /// </summary>
+        protected virtual DialogOptions DialogAddOptions => new DialogOptions { CloseOnEscapeKey = true };
+        /// <summary>
+        /// 修改时的弹窗选项对象
+        /// </summary>
+        protected virtual DialogOptions DialogDetailOptions => DialogAddOptions;
+        /// <summary>
+        /// 获取新增时传入弹窗的参数
+        /// 如：在新增商品时，把列表页当前选中的分类id传递过去
+        /// </summary>
+        /// <returns></returns>
+        protected virtual ValueTask<DialogParameters> GetCreateParameter()
+        {
+            return ValueTask.FromResult(new DialogParameters());
+        }
+        /// <summary>
+        /// 点击新增按钮时执行
+        /// </summary>
+        /// <returns></returns>
+        protected virtual async Task BtnAddClick()
+        {
+            await base.SafelyExecuteAsync(async () =>
+            {
+                var ps = await GetCreateParameter();
+                if (!(await DialogService.Show<TCreateDialog>("新增" + FuncName, ps, DialogAddOptions).Result).Canceled)
+                {
+                    await dataGrid.ReloadServerData();
+                }
+            });
+        }
+        /// <summary>
+        /// 行修改按钮点击时执行
+        /// 注：不要全局修改按钮，因为木有必要
+        /// </summary>
+        /// <param name="dto">当前dto对象</param>
+        /// <returns></returns>
+        protected virtual async Task BtnEditClick(TEntityDto dto)
+        {
+            await base.SafelyExecuteAsync(async () =>
+            {
+                //能传的都丢过去，对方要接收哪些自己定义对应的即可
+                //若有必要，将来可以考虑顶一个获取修改参数的抽象方法
+                var ps = new DialogParameters<TDetailDialog>
+                {
+                    { "Model",dto },
+                    { "Id",dto.Id },
+                    { "IsEdit",true } //true编辑模式  false查看模式
+                };
+                if (!(await DialogService.Show<TDetailDialog>("修改" + FuncName, ps, DialogDetailOptions).Result).Canceled)
+                {
+                    await dataGrid.ReloadServerData();
+                }
+            });
+        }
+        /// <summary>
+        /// 行详情按钮点击时执行
+        /// 注：不要全局详情按钮，因为木有必要
+        /// </summary>
+        /// <param name="dto">当前dto对象</param>
+        /// <returns></returns>
+        protected virtual async Task BtnDetailClick(TEntityDto dto)
+        {
+            await base.SafelyExecuteAsync(async () =>
+            {
+                //能传的都丢过去，对方要接收哪些自己定义对应的即可
+                //若有必要，将来可以考虑顶一个获取修详情数的抽象方法
+                var ps = new DialogParameters<TDetailDialog>
+                {
+                    { "Model",dto },
+                    { "Id",dto.Id },
+                    { "IsEdit",false } //true编辑模式  false查看模式
+                };
+                if (!(await DialogService.Show<TDetailDialog>("查看" + FuncName + "详情", ps, DialogDetailOptions).Result).Canceled)
+                {
+                    //说明在详情页面 又进入了修改 且修改后保存了数据
+                    await dataGrid.ReloadServerData();
+                }
+            });
+        }
     }
 }

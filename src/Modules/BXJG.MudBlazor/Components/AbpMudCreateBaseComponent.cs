@@ -70,8 +70,6 @@ namespace BXJG.AbpMudBlazor.Components
         /// 初始化权限状态
         /// </summary>
         /// <param name="createPermissionName"></param>
-        /// <param name="updatePermissionName"></param>
-        /// <param name="deletePermissionName"></param>
         /// <returns></returns>
         protected virtual async Task InitPermission(string createPermissionName = default)
         {
@@ -79,6 +77,9 @@ namespace BXJG.AbpMudBlazor.Components
                 createIsGranted = await PermissionChecker.IsGrantedAsync(createPermissionName);
         }
         #endregion
+        /// <summary>
+        /// 正在保存...
+        /// </summary>
         protected bool Saving = false;
         /// <summary>
         /// 核心的保存逻辑
@@ -139,8 +140,8 @@ namespace BXJG.AbpMudBlazor.Components
             var r = await base.Save();
             if (r != null)
             {
-                MudDialog.Close(r);
                 base.Snackbar.Add("新增成功！", Severity.Success);
+                MudDialog.Close(r);
             }
             //失败时Save方法中会提示。
         }
