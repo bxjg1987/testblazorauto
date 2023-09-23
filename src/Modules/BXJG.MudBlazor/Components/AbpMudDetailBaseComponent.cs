@@ -17,7 +17,7 @@ namespace BXJG.AbpMudBlazor.Components
      */
 
     /// <summary>
-    /// 基于mudblazor和abp的通用详情页组件，它包含查看详情页修改，以及此模式的切换
+    /// 基于mudblazor和abp的通用详情页组件，它包含查看详情页和修改，以及二者之间的切换
     /// 新增抽象组件是单独定义的，因为它是对数据从无到有的创建，而详情组件是对以后的数据进行查看和处理
     /// </summary>
     /// <typeparam name="TAppService">应用服务类型</typeparam>
@@ -53,13 +53,15 @@ namespace BXJG.AbpMudBlazor.Components
         /// 与Dto二选一
         /// </summary>
         [Parameter]
-        public virtual TPrimaryKey Id { get; set; }
+        public TPrimaryKey Id { get; set; }
         /// <summary>
         /// 列表页传递过来的视图模型
         /// 与Id二选一
         /// </summary>
         [Parameter]
-        public virtual TEntityDto Dto { get; set; }
+        public TEntityDto Dto { get; set; }
+
+
         /// <summary>
         /// 当前编辑模型
         /// </summary>
@@ -124,29 +126,52 @@ namespace BXJG.AbpMudBlazor.Components
         [Parameter]
         public bool IsEdit { get; set; }
         /// <summary>
+        /// true修改模式，false查看模式
+        /// 参考：https://learn.microsoft.com/zh-cn/aspnet/core/blazor/components/overwriting-parameters?view=aspnetcore-6.0
+        /// </summary>
+        protected bool isEdit;
+
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+
+            isEdit = IsEdit;
+        }
+
+        /// <summary>
         /// 是否显示保存按钮和进入只读模式的按钮
         /// </summary>
-        protected virtual bool IsShowSave => IsEdit && updateIsGranted;
+        protected virtual bool IsShowSave => isEdit && updateIsGranted;
         /// <summary>
         /// 是否显示进入编辑模式的按钮
         /// </summary>
-        protected virtual bool IsShowGoEdit => !IsEdit && updateIsGranted;
+        protected virtual bool IsShowGoEdit => !isEdit && updateIsGranted;
         /// <summary>
         /// 点击修改按钮时执行，点击后进入修改模式
         /// </summary>
-        protected virtual void BtnGoEditClick() => IsEdit = true;
+        protected virtual void BtnGoEditClick()
+        {
+            isEdit = true;
+        }
         /// <summary>
         /// 点击取消修改按钮时执行，点击后进入查看模式
         /// </summary>
-        protected virtual void BtnBackEditClick() => IsEdit = false;
+        protected virtual void BtnBackEditClick() => isEdit = false;
         /// <summary>
         /// 点击保存按钮时执行
         /// </summary>
         /// <returns></returns>
         protected virtual Task BtnSaveClick()
         {
+
+            AfterSave();
             throw new NotImplementedException();
         }
+        /// <summary>
+        /// 保存后回调
+        /// </summary>
+        protected virtual void AfterSave() { }
+
         /// <summary>
         /// 点击删除按钮时执行
         /// </summary>
@@ -157,10 +182,18 @@ namespace BXJG.AbpMudBlazor.Components
             {
                 await AppService.DeleteAsync(new EntityDto<TPrimaryKey>(Id));
                 ShowError($"删除成功！");
+                AfterDelete();
             });
         }
         /// <summary>
-        /// 显示模型转换为编辑模型
+        /// 删除之后执行的逻辑
+        /// </summary>
+        /// <returns></returns>
+        protected virtual void AfterDelete() { }
+
+        //public virtual void BtnCancelClick() =>
+        /// <summary>
+        /// 显示模型转换为编辑模型，默认使用automapper
         /// </summary>
         protected virtual void DtoMapToEditDto() => editDto = base.ObjectMapper.Map<TUpdateInput>(Dto);
     }
@@ -180,7 +213,31 @@ namespace BXJG.AbpMudBlazor.Components
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
     {
-        [Inject]
-        public IDialogService DialogService { get; set; }
+        /// <summary>
+        /// 当前弹窗对象
+        /// </summary>
+        [CascadingParameter]
+        protected MudDialogInstance MudDialog { get; private set; }
+        /// <summary>
+        /// 删除后回调，默认关闭弹窗
+        /// </summary>
+        protected override void AfterDelete()
+        {
+            MudDialog.Close(Dto);
+        }
+        /// <summary>
+        /// 保存后回调，默认关闭弹窗
+        /// </summary>
+        protected override void AfterSave()
+        {
+            MudDialog.Close(Dto);
+        }
+        /// <summary>
+        /// 点击关闭按钮时回调
+        /// </summary>
+        protected virtual void BtnCancelClick()
+        {
+            MudDialog.Cancel();
+        }
     }
 }
