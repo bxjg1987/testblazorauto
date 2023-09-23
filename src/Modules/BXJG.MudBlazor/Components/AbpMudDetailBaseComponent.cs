@@ -60,8 +60,6 @@ namespace BXJG.AbpMudBlazor.Components
         /// </summary>
         [Parameter]
         public TEntityDto Dto { get; set; }
-
-
         /// <summary>
         /// 当前编辑模型
         /// </summary>
@@ -88,12 +86,12 @@ namespace BXJG.AbpMudBlazor.Components
             }
             DtoMapToEditDto();
         }
+        /// <summary>
+        /// 显示模型转换为编辑模型，默认使用automapper
+        /// </summary>
+        protected virtual void DtoMapToEditDto() => editDto = base.ObjectMapper.Map<TUpdateInput>(Dto);
 
         #region 权限
-        /// <summary>
-        /// 是否有新增权限
-        /// </summary>
-        protected bool createIsGranted = true;
         /// <summary>
         /// 是否有修改权限
         /// </summary>
@@ -109,10 +107,8 @@ namespace BXJG.AbpMudBlazor.Components
         /// <param name="updatePermissionName"></param>
         /// <param name="deletePermissionName"></param>
         /// <returns></returns>
-        protected virtual async Task InitPermission(string createPermissionName = default, string updatePermissionName = default, string deletePermissionName = default)
+        protected virtual async Task InitPermission( string updatePermissionName = default, string deletePermissionName = default)
         {
-            if (createPermissionName.IsNotNullOrWhiteSpaceBXJG())
-                createIsGranted = await PermissionChecker.IsGrantedAsync(createPermissionName);
             if (updatePermissionName.IsNotNullOrWhiteSpaceBXJG())
                 updateIsGranted = await PermissionChecker.IsGrantedAsync(updatePermissionName);
             if (deletePermissionName.IsNotNullOrWhiteSpaceBXJG())
@@ -134,10 +130,9 @@ namespace BXJG.AbpMudBlazor.Components
         protected override void OnInitialized()
         {
             base.OnInitialized();
-
             isEdit = IsEdit;
         }
-
+        #region 保存
         /// <summary>
         /// 是否显示保存按钮和进入只读模式的按钮
         /// </summary>
@@ -147,55 +142,60 @@ namespace BXJG.AbpMudBlazor.Components
         /// </summary>
         protected virtual bool IsShowGoEdit => !isEdit && updateIsGranted;
         /// <summary>
-        /// 点击修改按钮时执行，点击后进入修改模式
+        /// 是否正在保存
         /// </summary>
-        protected virtual void BtnGoEditClick()
-        {
-            isEdit = true;
-        }
-        /// <summary>
-        /// 点击取消修改按钮时执行，点击后进入查看模式
-        /// </summary>
-        protected virtual void BtnBackEditClick() => isEdit = false;
+        protected bool saving = false;
         /// <summary>
         /// 点击保存按钮时执行
         /// </summary>
         /// <returns></returns>
-        protected virtual Task BtnSaveClick()
+        protected virtual async Task BtnSaveClick()
         {
-
-            AfterSave();
-            throw new NotImplementedException();
+            saving = true;
+            await SafelyExecuteAsync(async () =>
+            {
+                Dto = await AppService.UpdateAsync(editDto);
+                Snackbar.Add("修改成功！", Severity.Success);
+                AfterSave();
+            });
+            saving = false;
         }
         /// <summary>
         /// 保存后回调
         /// </summary>
         protected virtual void AfterSave() { }
-
+        #endregion
+        #region 删除
+        /// <summary>
+        /// 是否显示删除确认
+        /// </summary>
+        protected bool isShowDeleteConfirm = false;
+        /// <summary>
+        /// 是否正在删除
+        /// </summary>
+        protected bool deleting = false;
         /// <summary>
         /// 点击删除按钮时执行
         /// </summary>
         /// <returns></returns>
-        public virtual async Task BtnDeleteClick()
+        protected virtual async Task BtnDeleteClick()
         {
+            isShowDeleteConfirm = false;
+            deleting = true;
             await SafelyExecuteAsync(async () =>
             {
                 await AppService.DeleteAsync(new EntityDto<TPrimaryKey>(Id));
                 ShowError($"删除成功！");
                 AfterDelete();
             });
+            deleting = false;
         }
         /// <summary>
         /// 删除之后执行的逻辑
         /// </summary>
         /// <returns></returns>
         protected virtual void AfterDelete() { }
-
-        //public virtual void BtnCancelClick() =>
-        /// <summary>
-        /// 显示模型转换为编辑模型，默认使用automapper
-        /// </summary>
-        protected virtual void DtoMapToEditDto() => editDto = base.ObjectMapper.Map<TUpdateInput>(Dto);
+        #endregion
     }
     public abstract class AbpMudDetailDialogBaseComponent<TAppService,
                                                           TEntityDto,
@@ -238,6 +238,22 @@ namespace BXJG.AbpMudBlazor.Components
         protected virtual void BtnCancelClick()
         {
             MudDialog.Cancel();
+        }
+        /// <summary>
+        /// 开始编辑
+        /// </summary>
+        protected virtual void BeginEdit()
+        {
+            isEdit = true;
+            MudDialog.SetTitle($"修改{FuncName}");
+        }
+        /// <summary>
+        /// 放弃编辑
+        /// </summary>
+        protected virtual void CancelEdit()
+        {
+            isEdit = false;
+            MudDialog.SetTitle($"查看{FuncName}详情");
         }
     }
 }

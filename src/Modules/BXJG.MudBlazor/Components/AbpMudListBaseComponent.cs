@@ -468,7 +468,7 @@ namespace BXJG.AbpMudBlazor.Components
         /// 如：在新增商品时，把列表页当前选中的分类id传递过去
         /// </summary>
         /// <returns></returns>
-        protected virtual ValueTask<DialogParameters> GetCreateParameter() => ValueTask.FromResult<DialogParameters>(new DialogParameters());
+        protected virtual ValueTask<DialogParameters> BuildCreateParameter() => ValueTask.FromResult<DialogParameters>(new DialogParameters());
         /// <summary>
         /// 点击新增按钮时执行
         /// </summary>
@@ -477,14 +477,13 @@ namespace BXJG.AbpMudBlazor.Components
         {
             await base.SafelyExecuteAsync(async () =>
             {
-                var ps = await GetCreateParameter();
+                var ps = await BuildCreateParameter();
                 if (!(await DialogService.Show<TCreateDialog>("新增" + FuncName, ps, DialogAddOptions).Result).Canceled)
                 {
                     await dataGrid.ReloadServerData();
                 }
             });
         }
-
         /// <summary>
         /// 行修改按钮点击时执行
         /// 注：不要全局修改按钮，因为木有必要
@@ -495,13 +494,9 @@ namespace BXJG.AbpMudBlazor.Components
         {
             await base.SafelyExecuteAsync(async () =>
             {
-                //传dto过去，如果列表中的视图模型属性没查询完整，详情页自己再查一次
-                //若有必要，将来可以考虑顶一个获取修改参数的抽象方法
-                var ps = new DialogParameters<TDetailDialog>
-                {
-                    { "Model",dto },
-                    { "IsEdit",true } //true编辑模式  false查看模式
-                };
+                var ps = new DialogParameters<TDetailDialog>();
+                FillDetailParameters(ps, dto);
+                ps.Add("IsEdit", true);
                 if (!(await DialogService.Show<TDetailDialog>("修改" + FuncName, ps, DialogDetailOptions).Result).Canceled)
                 {
                     await dataGrid.ReloadServerData();
@@ -518,19 +513,24 @@ namespace BXJG.AbpMudBlazor.Components
         {
             await base.SafelyExecuteAsync(async () =>
             {
-                //传dto过去，如果列表中的视图模型属性没查询完整，详情页自己再查一次
-                //若有必要，将来可以考虑顶一个获取修详情数的抽象方法
-                var ps = new DialogParameters<TDetailDialog>
-                {
-                    { "Model",dto },
-                    { "IsEdit",false } //true编辑模式  false查看模式
-                };
+                var ps = new DialogParameters<TDetailDialog>();
+                FillDetailParameters(ps, dto);
+                ps.Add("IsEdit", false);
                 if (!(await DialogService.Show<TDetailDialog>("查看" + FuncName + "详情", ps, DialogDetailOptions).Result).Canceled)
                 {
                     //说明在详情页面 又进入了修改 且修改后保存了数据
                     await dataGrid.ReloadServerData();
                 }
             });
+        }
+        /// <summary>
+        /// 弹出详情弹窗时传入参数
+        /// </summary>
+        /// <param name="pms"></param>
+        /// <param name="dto"></param>
+        protected virtual void FillDetailParameters(DialogParameters<TDetailDialog> pms, TEntityDto dto)
+        {
+            pms.Add("Dto", dto);
         }
     }
 }

@@ -54,7 +54,7 @@ namespace BXJG.AbpMudBlazor.Components
         /// <summary>
         /// 新增时的模型
         /// </summary>
-        public virtual TCreateInput Model { get; set; }
+        protected virtual TCreateInput CreateDto { get; set; }
 
         //protected override async Task OnInitialized2Async()
         //{
@@ -72,7 +72,7 @@ namespace BXJG.AbpMudBlazor.Components
         /// </summary>
         /// <param name="createPermissionName"></param>
         /// <returns></returns>
-        protected virtual async Task InitPermission(string createPermissionName = default)
+        protected virtual async Task InitPermission(string? createPermissionName = default)
         {
             if (createPermissionName.IsNotNullOrWhiteSpaceBXJG())
                 createIsGranted = await PermissionChecker.IsGrantedAsync(createPermissionName);
@@ -86,16 +86,21 @@ namespace BXJG.AbpMudBlazor.Components
         /// 核心的保存逻辑
         /// </summary>
         /// <returns></returns>
-        protected virtual async Task<TEntityDto> Save()
+        protected virtual async Task Save()
         {
             Saving = true;
-            var r = await base.SafelyExecuteAsync(() =>
+            await base.SafelyExecuteAsync(async () =>
             {
-                return AppService.CreateAsync(Model);
+                var r = await AppService.CreateAsync(CreateDto);
+                Snackbar.Add("新增成功！", Severity.Success);
+                AfterSave(r);
             });
             Saving = false;
-            return r;
         }
+        /// <summary>
+        /// 保存后回调
+        /// </summary>
+        protected virtual void AfterSave(TEntityDto dto) { }
     }
 
     /// <summary>
@@ -127,24 +132,18 @@ namespace BXJG.AbpMudBlazor.Components
         /// 当前弹窗对象
         /// </summary>
         [CascadingParameter]
-        protected MudDialogInstance MudDialog { get; set; }
+        protected MudDialogInstance MudDialog { get; private set; }
         /// <summary>
         /// 点击关闭按钮时执行
         /// </summary>
         protected virtual void Cancel() => MudDialog.Cancel();
         /// <summary>
-        /// 点击保存按钮时执行
+        /// 新增成功后回调
         /// </summary>
-        /// <returns></returns>
-        protected virtual async Task SaveClick()
+        /// <param name="dto"></param>
+        protected override void AfterSave(TEntityDto dto)
         {
-            var r = await base.Save();
-            if (r != null)
-            {
-                base.Snackbar.Add("新增成功！", Severity.Success);
-                MudDialog.Close(r);
-            }
-            //失败时Save方法中会提示。
+            MudDialog.Close(dto);
         }
     }
 }
