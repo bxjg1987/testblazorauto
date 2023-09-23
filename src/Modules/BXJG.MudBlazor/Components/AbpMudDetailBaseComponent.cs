@@ -91,7 +91,11 @@ namespace BXJG.AbpMudBlazor.Components
         /// </summary>
         protected virtual void DtoMapToEditDto() => editDto = base.ObjectMapper.Map<TUpdateInput>(Dto);
 
-        #region 权限
+        #region 权限 
+        ///// <summary>
+        ///// 是否有查看权限
+        ///// </summary>
+        //protected bool getIsGranted = true;
         /// <summary>
         /// 是否有修改权限
         /// </summary>
@@ -103,16 +107,17 @@ namespace BXJG.AbpMudBlazor.Components
         /// <summary>
         /// 初始化权限状态
         /// </summary>
-        /// <param name="createPermissionName"></param>
         /// <param name="updatePermissionName"></param>
         /// <param name="deletePermissionName"></param>
         /// <returns></returns>
-        protected virtual async Task InitPermission( string updatePermissionName = default, string deletePermissionName = default)
+        protected virtual async Task InitPermission( string updatePermissionName = default, string deletePermissionName = default/*, string getPermissionName =default*/)
         {
             if (updatePermissionName.IsNotNullOrWhiteSpaceBXJG())
                 updateIsGranted = await PermissionChecker.IsGrantedAsync(updatePermissionName);
             if (deletePermissionName.IsNotNullOrWhiteSpaceBXJG())
                 deleteIsGranted = await PermissionChecker.IsGrantedAsync(deletePermissionName);
+            //if (getPermissionName.IsNotNullOrWhiteSpaceBXJG())
+            //    getIsGranted = await PermissionChecker.IsGrantedAsync(getPermissionName);
         }
         #endregion
 
@@ -140,7 +145,7 @@ namespace BXJG.AbpMudBlazor.Components
         /// <summary>
         /// 是否显示进入编辑模式的按钮
         /// </summary>
-        protected virtual bool IsShowGoEdit => !isEdit && updateIsGranted;
+        protected virtual bool IsShowBeginEdit => !isEdit && updateIsGranted;
         /// <summary>
         /// 是否正在保存
         /// </summary>
@@ -151,6 +156,7 @@ namespace BXJG.AbpMudBlazor.Components
         /// <returns></returns>
         protected virtual async Task BtnSaveClick()
         {
+            //不要验证权限了，没权限的按钮本来就隐藏了，况且应用服务本身也会验证权限
             saving = true;
             await SafelyExecuteAsync(async () =>
             {

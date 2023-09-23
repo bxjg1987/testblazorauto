@@ -83,7 +83,11 @@ namespace BXJG.AbpMudBlazor.Components
         ///// 删除权限名称
         ///// </summary>
         //protected virtual string DeletePermissionName => "";
-
+        //组件顶部做权限验证即可
+        ///// <summary>
+        ///// 是否有查看权限
+        ///// </summary>
+        //protected bool getIsGranted = true;
         /// <summary>
         /// 初始化权限状态
         /// 我们只需要最终是否有某个状态，不需要保留原本的权限字符串，所以使用方法定义，而非虚属性
@@ -92,7 +96,8 @@ namespace BXJG.AbpMudBlazor.Components
         /// <param name="updatePermissionName"></param>
         /// <param name="deletePermissionName"></param>
         /// <returns></returns>
-        protected virtual async Task InitPermission(string createPermissionName = default, string updatePermissionName = default, string deletePermissionName = default)
+        protected virtual async Task InitPermission(string createPermissionName = default, string updatePermissionName = default, 
+            string deletePermissionName = default/*, string getPermissionName = default*/)
         {
             if (createPermissionName.IsNotNullOrWhiteSpaceBXJG())
                 createIsGranted = await PermissionChecker.IsGrantedAsync(createPermissionName);
@@ -100,6 +105,8 @@ namespace BXJG.AbpMudBlazor.Components
                 updateIsGranted = await PermissionChecker.IsGrantedAsync(updatePermissionName);
             if (deletePermissionName.IsNotNullOrWhiteSpaceBXJG())
                 deleteIsGranted = await PermissionChecker.IsGrantedAsync(deletePermissionName);
+            //if (getPermissionName.IsNotNullOrWhiteSpaceBXJG())
+            //    getIsGranted = await PermissionChecker.IsGrantedAsync(getPermissionName);
         }
         /// <summary>
         /// 批量操作消息提醒
@@ -329,7 +336,7 @@ namespace BXJG.AbpMudBlazor.Components
         /// </summary>
         protected virtual bool ShouldEnableDelete => !dataGrid.Loading && !isDeleting && dataGrid.SelectedItems != default && dataGrid.SelectedItems.Any();
         /// <summary>
-        /// 是否显示全局的删除确认
+        /// 是否批量删除的确认框
         /// </summary>
         protected bool isShowDeleteConfirm = false;
         /// <summary>
@@ -337,14 +344,14 @@ namespace BXJG.AbpMudBlazor.Components
         /// </summary>
         protected bool isDeleting = false;
         /// <summary>
-        /// 显示删除确认
+        /// 显示批量删除的确认框
         /// </summary>
         protected virtual void ShowDeleteConfirm()
         {
             isShowDeleteConfirm = true;
         }
         /// <summary>
-        /// 隐藏删除确认框
+        /// 隐藏批量删除的确认框
         /// </summary>
         protected virtual void HideDeleteConfirm()
         {
@@ -360,6 +367,7 @@ namespace BXJG.AbpMudBlazor.Components
         /// <returns></returns>
         protected virtual async Task Delete()
         {
+            //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限
             HideDeleteConfirm();
             isDeleting = true;
             await SafelyExecuteAsync(async () =>
@@ -368,7 +376,8 @@ namespace BXJG.AbpMudBlazor.Components
                 BatchOperationMessage(temp, "批量删除");
                 //BatchDeleteMessage(temp);
                 if (temp.Ids.Count > 0)
-                    _ = InvokeAsync(dataGrid.ReloadServerData); //内部会StateChange
+                    await dataGrid.ReloadServerData();
+                    //_ = InvokeAsync(dataGrid.ReloadServerData); //内部会StateChange
             });
             isDeleting = false;
         }
@@ -383,6 +392,7 @@ namespace BXJG.AbpMudBlazor.Components
         /// <returns></returns>
         protected virtual async Task Delete(TEntityDto curr)
         {
+            //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限
             // var curr = dataGrid.Items.Single(c => c.Id!.Equals(input.Id));
             HideDeleteConfirm(curr);
             var item = curr as IExtendableDto;
@@ -393,7 +403,8 @@ namespace BXJG.AbpMudBlazor.Components
                 await AppService.DeleteAsync(new EntityDto<TPrimaryKey>(curr.Id));
                 Snackbar.Add("删除成功！", Severity.Success);
                 //若上面异常，下面不会执行
-                _ = InvokeAsync(dataGrid.ReloadServerData); //内部会StateChange
+                //_ = InvokeAsync(dataGrid.ReloadServerData);
+                await dataGrid.ReloadServerData();
             });
             if (item != default)
                 item.ExtensionData.IsDeleting = false;
@@ -468,7 +479,7 @@ namespace BXJG.AbpMudBlazor.Components
         /// 如：在新增商品时，把列表页当前选中的分类id传递过去
         /// </summary>
         /// <returns></returns>
-        protected virtual ValueTask<DialogParameters> BuildCreateParameter() => ValueTask.FromResult<DialogParameters>(new DialogParameters());
+        protected virtual DialogParameters BuildCreateParameter() => new DialogParameters();
         /// <summary>
         /// 点击新增按钮时执行
         /// </summary>
@@ -477,7 +488,7 @@ namespace BXJG.AbpMudBlazor.Components
         {
             await base.SafelyExecuteAsync(async () =>
             {
-                var ps = await BuildCreateParameter();
+                var ps =  BuildCreateParameter();
                 if (!(await DialogService.Show<TCreateDialog>("新增" + FuncName, ps, DialogAddOptions).Result).Canceled)
                 {
                     await dataGrid.ReloadServerData();

@@ -13,14 +13,13 @@ using System.Threading.Tasks;
 namespace BXJG.AbpMudBlazor.Components
 {
     /*
-     * 新增是从无到有的创建，跟修改、查询详情、删除不同，后者是数据已经存在后的操作，因此分开定义
-     * 
      * 由于abp的crud接口和抽象类把crud搞一起了，不想动它，所以这里的应用服务中包含TGetAllInput、TUpdateInput
      */
 
     /// <summary>
     /// 基于mudblazor和abp的通用新增页组件
-    /// 修改抽象组件是单独定义的，详情组件是对以后的数据进行查看和处理，而新增组件它是对数据从无到有的创建
+    /// 查看详情和修改数据的抽象组件是单独定义的（因为要切换查看和编辑模式，所以定义在同一个组件中的），
+    /// 查看详情和修改组件是对以后的数据进行查看和处理，而新增组件它是对数据从无到有的创建，因此分开定义的。
     /// </summary>
     /// <typeparam name="TAppService">应用服务类型</typeparam>
     /// <typeparam name="TEntityDto">列表项的数据类型</typeparam>
@@ -105,6 +104,8 @@ namespace BXJG.AbpMudBlazor.Components
 
     /// <summary>
     /// 基于mudblazor和abp的通用新增弹窗页组件
+    /// 查看详情和修改数据的抽象组件是单独定义的（因为要切换查看和编辑模式，所以定义在同一个组件中的），
+    /// 查看详情和修改组件是对以后的数据进行查看和处理，而新增组件它是对数据从无到有的创建，因此分开定义的。
     /// </summary>
     /// <typeparam name="TAppService">应用服务类型</typeparam>
     /// <typeparam name="TEntityDto">列表项的数据类型</typeparam>
