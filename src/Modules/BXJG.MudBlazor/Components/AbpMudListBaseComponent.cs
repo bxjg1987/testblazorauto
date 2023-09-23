@@ -103,6 +103,7 @@ namespace BXJG.AbpMudBlazor.Components
         }
         /// <summary>
         /// 批量操作消息提醒
+        /// 如：批量删除、批量审核时消息提醒
         /// </summary>
         /// <param name="output">批量操作结果</param>
         /// <param name="funName">操作名</param>
@@ -467,10 +468,7 @@ namespace BXJG.AbpMudBlazor.Components
         /// 如：在新增商品时，把列表页当前选中的分类id传递过去
         /// </summary>
         /// <returns></returns>
-        protected virtual ValueTask<DialogParameters> GetCreateParameter()
-        {
-            return ValueTask.FromResult(new DialogParameters());
-        }
+        protected virtual ValueTask<DialogParameters> GetCreateParameter() => ValueTask.FromResult<DialogParameters>(new DialogParameters());
         /// <summary>
         /// 点击新增按钮时执行
         /// </summary>
@@ -486,6 +484,7 @@ namespace BXJG.AbpMudBlazor.Components
                 }
             });
         }
+
         /// <summary>
         /// 行修改按钮点击时执行
         /// 注：不要全局修改按钮，因为木有必要
@@ -496,12 +495,11 @@ namespace BXJG.AbpMudBlazor.Components
         {
             await base.SafelyExecuteAsync(async () =>
             {
-                //能传的都丢过去，对方要接收哪些自己定义对应的即可
+                //传dto过去，如果列表中的视图模型属性没查询完整，详情页自己再查一次
                 //若有必要，将来可以考虑顶一个获取修改参数的抽象方法
                 var ps = new DialogParameters<TDetailDialog>
                 {
                     { "Model",dto },
-                    { "Id",dto.Id },
                     { "IsEdit",true } //true编辑模式  false查看模式
                 };
                 if (!(await DialogService.Show<TDetailDialog>("修改" + FuncName, ps, DialogDetailOptions).Result).Canceled)
@@ -520,12 +518,11 @@ namespace BXJG.AbpMudBlazor.Components
         {
             await base.SafelyExecuteAsync(async () =>
             {
-                //能传的都丢过去，对方要接收哪些自己定义对应的即可
+                //传dto过去，如果列表中的视图模型属性没查询完整，详情页自己再查一次
                 //若有必要，将来可以考虑顶一个获取修详情数的抽象方法
                 var ps = new DialogParameters<TDetailDialog>
                 {
                     { "Model",dto },
-                    { "Id",dto.Id },
                     { "IsEdit",false } //true编辑模式  false查看模式
                 };
                 if (!(await DialogService.Show<TDetailDialog>("查看" + FuncName + "详情", ps, DialogDetailOptions).Result).Canceled)

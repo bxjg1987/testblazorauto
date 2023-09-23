@@ -20,6 +20,7 @@ namespace BXJG.AbpMudBlazor.Components
 
     /// <summary>
     /// 基于mudblazor和abp的通用新增页组件
+    /// 修改抽象组件是单独定义的，详情组件是对以后的数据进行查看和处理，而新增组件它是对数据从无到有的创建
     /// </summary>
     /// <typeparam name="TAppService">应用服务类型</typeparam>
     /// <typeparam name="TEntityDto">列表项的数据类型</typeparam>
