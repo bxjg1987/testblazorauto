@@ -96,7 +96,7 @@ namespace BXJG.AbpMudBlazor.Components
         /// <param name="updatePermissionName"></param>
         /// <param name="deletePermissionName"></param>
         /// <returns></returns>
-        protected virtual async Task InitPermission(string createPermissionName = default, string updatePermissionName = default, 
+        protected virtual async Task InitPermission(string createPermissionName = default, string updatePermissionName = default,
             string deletePermissionName = default/*, string getPermissionName = default*/)
         {
             if (createPermissionName.IsNotNullOrWhiteSpaceBXJG())
@@ -273,10 +273,11 @@ namespace BXJG.AbpMudBlazor.Components
 
         #region 表单
 
-        /// <summary>
-        /// 是否显示修改按钮，默认勾选了某个行且 没有正在加载数据时为true 
-        /// </summary>
-        protected virtual bool ShouldEnableEdit => !dataGrid.Loading && !isDeleting && dataGrid.SelectedItems != default && dataGrid.SelectedItems.Any();
+        //不要顶部的修改按钮
+        ///// <summary>
+        ///// 是否显示修改按钮，默认勾选了某个行且 没有正在加载数据时为true 
+        ///// </summary>
+        //protected virtual bool ShouldEnableEdit => !dataGrid.Loading && !isDeleting && dataGrid.SelectedItems != default && dataGrid.SelectedItems.Any();
 
         /// <summary>
         /// 是否有新增权限
@@ -286,44 +287,29 @@ namespace BXJG.AbpMudBlazor.Components
         /// 是否有修改权限
         /// </summary>
         protected bool updateIsGranted = true;
-        ///// <summary>
-        ///// 新增或修改的弹窗
-        ///// </summary>
-        //[CascadingParameter]
-        //protected MudDialogInstance MudDialog { get; set; }
-        ///// <summary>
-        ///// 新增或修改弹窗的配置对象
-        ///// </summary>
-        //protected virtual DialogOptions DialogOptions => new DialogOptions { CloseOnEscapeKey = true };
-        ///// <summary>
-        ///// 点击新增按钮
-        ///// </summary>
-        ///// <returns></returns>
-        //protected virtual async Task Add()
-        //{
-        //    await base.SafelyExecuteAsync(async () =>
-        //    {
-        //        var dr = await DialogService.Show<TFormComponent>("新增" + FuncName, DialogOptions).Result;
-        //        if (dr.Canceled)
-        //            return;
-        //        //this.pageIndex = 1;
-        //        await dataGrid.ReloadServerData();
-        //    });
-        //}
-        ///// <summary>
-        ///// 点击新增按钮
-        ///// </summary>
-        ///// <returns></returns>
-        //protected virtual async Task Edit()
-        //{
-        //    await base.SafelyExecuteAsync(async () =>
-        //    {
-        //        var dr = await DialogService.Show<TFormComponent>("修改" + FuncName, DialogOptions).Result;
-        //        if (dr.Canceled)
-        //            return;
-        //        await dataGrid.ReloadServerData();
-        //    });
-        //}
+        /// <summary>
+        /// 单击行时回调
+        /// 要绑定双击事件时，也只需要绑定此事件，它内部会判断是否是双击，并执行<see cref="RowDoubleClick"/>回调
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
+        protected virtual async Task RowClick(DataGridRowClickEventArgs<TEntityDto> arg)
+        {
+            //短时间内点击的次数>1 就表示双击
+            if (arg.MouseEventArgs.Detail > 1)
+            {
+                await RowDoubleClick(arg);
+            }
+        }
+        /// <summary>
+        /// 行双击时回调
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
+        protected virtual ValueTask RowDoubleClick(DataGridRowClickEventArgs<TEntityDto> arg)
+        {
+            return ValueTask.CompletedTask;
+        }
         #endregion
 
         #region 删除
@@ -348,6 +334,7 @@ namespace BXJG.AbpMudBlazor.Components
         /// </summary>
         protected virtual void ShowDeleteConfirm()
         {
+            HideDeleteConfirm();
             isShowDeleteConfirm = true;
         }
         /// <summary>
@@ -358,7 +345,8 @@ namespace BXJG.AbpMudBlazor.Components
             isShowDeleteConfirm = false;
             foreach (var item in dataGrid.FilteredItems)
             {
-                HideDeleteConfirm(item);
+                if (item is IExtendableDto dto)
+                    dto.ExtensionData.IsShowDeleteConfirmation = false;
             }
         }
         /// <summary>
@@ -377,7 +365,7 @@ namespace BXJG.AbpMudBlazor.Components
                 //BatchDeleteMessage(temp);
                 if (temp.Ids.Count > 0)
                     await dataGrid.ReloadServerData();
-                    //_ = InvokeAsync(dataGrid.ReloadServerData); //内部会StateChange
+                //_ = InvokeAsync(dataGrid.ReloadServerData); //内部会StateChange
             });
             isDeleting = false;
         }
@@ -394,7 +382,7 @@ namespace BXJG.AbpMudBlazor.Components
         {
             //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限
             // var curr = dataGrid.Items.Single(c => c.Id!.Equals(input.Id));
-            HideDeleteConfirm(curr);
+            HideDeleteConfirm();
             var item = curr as IExtendableDto;
             if (item != default)
                 item.ExtensionData.IsDeleting = true;
@@ -415,23 +403,25 @@ namespace BXJG.AbpMudBlazor.Components
         /// <param name="dto"></param>
         protected virtual void ShowDeleteConfirm(TEntityDto dto)
         {
+            HideDeleteConfirm();
             if (dto is IExtendableDto item)
                 item.ExtensionData.IsShowDeleteConfirmation = true;
         }
-        /// <summary>
-        /// 隐藏删除明细的确认框
-        /// </summary>
-        /// <param name="dto"></param>
-        protected virtual void HideDeleteConfirm(TEntityDto dto)
-        {
-            if (dto is IExtendableDto item)
-                item.ExtensionData.IsShowDeleteConfirmation = false;
-        }
+        ///// <summary>
+        ///// 隐藏删除明细的确认框
+        ///// </summary>
+        ///// <param name="dto"></param>
+        //protected virtual void HideDeleteConfirm(TEntityDto dto)
+        //{
+        //    if (dto is IExtendableDto item)
+        //        item.ExtensionData.IsShowDeleteConfirmation = false;
+        //}
         #endregion
     }
     /// <summary>
     /// 抽象的，基于MudBlazor的列表页 抽象组件
     /// 使用弹窗弹出新增和详情窗口
+    /// 若不是所以弹窗，而是使用tab、页面等其它方式时，应提供其它子类
     /// </summary>
     /// <typeparam name="TCreateDialog">新增弹窗组件</typeparam>
     /// <typeparam name="TDetailDialog">详情弹窗组件</typeparam>
@@ -488,7 +478,7 @@ namespace BXJG.AbpMudBlazor.Components
         {
             await base.SafelyExecuteAsync(async () =>
             {
-                var ps =  BuildCreateParameter();
+                var ps = BuildCreateParameter();
                 if (!(await DialogService.Show<TCreateDialog>("新增" + FuncName, ps, DialogAddOptions).Result).Canceled)
                 {
                     await dataGrid.ReloadServerData();
@@ -533,6 +523,10 @@ namespace BXJG.AbpMudBlazor.Components
                     await dataGrid.ReloadServerData();
                 }
             });
+        }
+        protected override async ValueTask RowDoubleClick(DataGridRowClickEventArgs<TEntityDto> arg)
+        {
+            await BtnDetailClick(arg.Item);
         }
         /// <summary>
         /// 弹出详情弹窗时传入参数
