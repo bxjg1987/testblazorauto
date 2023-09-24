@@ -317,10 +317,15 @@ namespace BXJG.AbpMudBlazor.Components
         /// 是否有删除权限
         /// </summary>
         protected bool deleteIsGranted = true;
+
+        //没权限时不显示的，所以不加入这个判断
         /// <summary>
         /// 是否显示删除按钮，默认勾选了某个行且 没有正在加载数据时为true
         /// </summary>
-        protected virtual bool ShouldEnableDelete => !dataGrid.Loading && !isDeleting && dataGrid.SelectedItems != default && dataGrid.SelectedItems.Any();
+        protected virtual bool ShouldDisableDelete => dataGrid.Loading || isDeleting || dataGrid.SelectedItems == default || !dataGrid.SelectedItems.Any();
+
+        
+
         /// <summary>
         /// 是否批量删除的确认框
         /// </summary>

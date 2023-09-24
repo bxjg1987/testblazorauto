@@ -2,6 +2,7 @@
 using BXJG.Common;
 using BXJG.Utils;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Extensions.DependencyInjection;
 using MudBlazor;
 using System;
@@ -14,6 +15,8 @@ namespace BXJG.AbpMudBlazor.Components
 {
     /*
      * 由于abp的crud接口和抽象类把crud搞一起了，不想动它，所以这里的应用服务中包含TGetAllInput、TUpdateInput
+     * 不使用MudForm，因为它使用了另外一套表单验证方式，懒得学，因为我们可能不用mud，
+     * mudblazor中的输入控件本身也支持blazor原生的editform
      */
 
     /// <summary>
@@ -54,7 +57,32 @@ namespace BXJG.AbpMudBlazor.Components
         /// 新增时的模型
         /// </summary>
         protected virtual TCreateInput CreateDto { get; set; }
+        /// <summary>
+        /// 编辑上下文
+        /// </summary>
+        protected EditContext editContext;
+        /// <summary>
+        /// 自定义的验证消息存储器
+        /// 推荐尽可能使用数据注释Attribute的验证，若有特殊验证可以订阅<see cref="editContext"/>的事件
+        /// </summary>
+        protected ValidationMessageStore validationMessageStore;
+        /// <summary>
+        /// 表单对象，之类界面中的EditForm应该使用ref关联此字段
+        /// </summary>
+        protected EditForm editForm;
 
+        //在异步中初始化表单相关信息，这样可以给子类一个机会去异步初始化CreateDto
+        protected override Task OnInitializedAsync()
+        {
+            var r = base.OnInitializedAsync();
+            if (CreateDto == null)
+            {
+                CreateDto = Activator.CreateInstance<TCreateInput>();
+            }
+            editContext = new EditContext(CreateDto!);
+            validationMessageStore = new ValidationMessageStore(editContext);
+            return r;
+        }
         //protected override async Task OnInitialized2Async()
         //{
         //    //列表传递过来的dto信息没有详情中的dto多
@@ -78,6 +106,11 @@ namespace BXJG.AbpMudBlazor.Components
         }
         #endregion
         /// <summary>
+        /// 是否禁用保存按钮
+        /// 没授权的根本不显示
+        /// </summary>
+        public virtual bool ShouldDisableSaveBtn => Saving|| editContext == null || editContext.GetValidationMessages().Any();
+        /// <summary>
         /// 正在保存...
         /// </summary>
         protected bool Saving = false;
@@ -87,6 +120,9 @@ namespace BXJG.AbpMudBlazor.Components
         /// <returns></returns>
         protected virtual async Task Save()
         {
+            if (!editContext.Validate())
+                return;
+
             Saving = true;
             await base.SafelyExecuteAsync(async () =>
             {
