@@ -110,7 +110,7 @@ namespace BXJG.AbpMudBlazor.Components
         /// <param name="updatePermissionName"></param>
         /// <param name="deletePermissionName"></param>
         /// <returns></returns>
-        protected virtual async Task InitPermission( string updatePermissionName = default, string deletePermissionName = default/*, string getPermissionName =default*/)
+        protected virtual async Task InitPermission(string updatePermissionName = default, string deletePermissionName = default/*, string getPermissionName =default*/)
         {
             if (updatePermissionName.IsNotNullOrWhiteSpaceBXJG())
                 updateIsGranted = await PermissionChecker.IsGrantedAsync(updatePermissionName);

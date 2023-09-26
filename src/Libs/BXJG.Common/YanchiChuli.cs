@@ -31,87 +31,108 @@ namespace BXJG.Common
     /// <summary>
     /// 延迟处理
     /// </summary>
-    [Obsolete("请使用DelayCoverExecutor")]
     public class YanchiChuli
-    {
+    {/// <summary>
+     /// 需要延迟处理的任务
+     /// 耗费资源的处理才需要做这种处理，所以它一定是异步
+     /// 注意，其内部不应该抛出异常。
+     /// </summary>
+        Func<Task> job;// { get; set; }
         /// <summary>
-        /// 需要延迟处理的任务
-        /// 耗费资源的处理才需要做这种处理，所以它一定是异步
-        /// 注意，其内部不应该抛出异常。
+        /// 延迟任务执行后触发
         /// </summary>
-        public Func<Task> Job { get; set; }
+        public event Func<YanchiChuli, Task, ValueTask> OnExecuted;
+        /// <summary>
+        /// 延迟执行报错时触发
+        /// </summary>
+        public event Func<YanchiChuli, Exception, Task, ValueTask> OnError;
         /// <summary>
         /// 延迟多久，单位毫秒
         /// </summary>
-        public int Yanchi { get; set; } = 2000;
-        /// <summary>
-        /// 若任务一直被延迟，超过此时间，则强制执行。单位毫秒。
-        /// 注意，它必须大于Yanchi
-        /// </summary>
-        public int Chaoshi { get; set; } = 4000;
-        /// <summary>
-        /// 最后执行时间
-        /// </summary>
-        private DateTime zuihouZhixingShijian = DateTime.MinValue;
-        /// <summary>
-        /// 执行标记
-        /// </summary>
-        private Guid zhixingBiaoji = Guid.Empty;
+        int delay;//{ get; set; } = 2000;
+        ///// <summary>
+        ///// 最后执行时间
+        ///// </summary>
+        //public DateTime lastExecuteTime { get; private set; } = DateTime.MinValue;
 
-        public ILogger Logger { get; set; } = NullLogger.Instance;
+        private readonly object locker = new object();
 
-        private Task Zhixing()
+        private bool executing = false;
+
+        ILogger logger { get; set; } = NullLogger.Instance;
+
+        public YanchiChuli(Func<Task> job, int delay = 2000, ILogger logger = default)
         {
-            zuihouZhixingShijian = DateTime.Now;
-            return Job();
-        }
-
-        public void Qingqiu(int yanchi = 0, int chaoshi = 0)
-        {
-            var zxbj = Guid.NewGuid();
-            zhixingBiaoji = zxbj;
-            Task.Run(async () =>
-            {
-                if (yanchi == 0)
-                    yanchi = Yanchi;
-
-
-                //await Task.Delay(yanchi == 0 ? Yanchi : yanchi);
-                int tempI = 0;
-                while (zhixingBiaoji == zxbj)
-                {
-                    Thread.Sleep(1);
-                    tempI++;
-                    if (tempI > yanchi)
-                        break;
-                }
-
-                if ((DateTime.Now - zuihouZhixingShijian).TotalMilliseconds >= (chaoshi == 0 ? Chaoshi : chaoshi))
-                {
-                    this.Logger.LogDebug($"延迟处理已超时，强制执行。");
-                    await Zhixing();
-                    return;
-                }
-
-                //注意与上面的处理顺序不要动，否则上面的逻辑不符合要求。
-                if (zhixingBiaoji != zxbj)
-                {
-                    this.Logger.LogDebug($"延迟处理已被覆盖。");
-                    return;
-                }
-
-                this.Logger.LogDebug($"延迟处理开始执行。");
-                await Zhixing();
-            });
-        }
-
-        public static YanchiChuli Create(Func<Task> job, int yanchi = 2000, int chaoshi = 4000, ILogger logger = default)
-        {
+            this.job = job;
+            this.delay = delay;
             if (logger == default)
-            {
-                logger = NullLogger.Instance;
-            }
-            return new YanchiChuli { Job = job, Yanchi = yanchi, Chaoshi = chaoshi, Logger = logger };
+                this.logger = NullLogger.Instance;
+            else
+                this.logger = logger;
         }
+        // //超时执行，或 执行时长大于   延迟  都可能造成并发调用
+        //private Task Execute()
+        //{
+        //  //  lastExecuteTime = DateTime.Now;
+        //    return Job();
+        //}
+
+        /// <summary>
+        /// 请求执行
+        /// </summary>
+        /// <param name="yanchi"></param>
+        /// <param name="chaoshi"></param>
+        /// <returns>每次请求的唯一id</returns>
+        public void Request()
+        {
+            if (executing)
+                return;
+
+            lock (locker)
+            {
+                if (executing)
+                    return;
+
+                executing = true;
+
+                Task.Run(async () =>
+                {
+                    Thread.Sleep(delay);
+                    var t = job();
+                    try
+                    {
+                        await t;
+                        if (OnExecuted != default)
+                            await OnExecuted(this, t);
+                    }
+                    catch (Exception ex)
+                    {
+                        if (OnError != default)
+                            await OnError(this, ex, t);
+                    }
+                    finally
+                    {
+                        executing = false;
+                    }
+                });
+            }
+        }
+
+        ///// <summary>
+        ///// 延时覆盖执行器
+        ///// </summary>
+        ///// <param name="job"></param>
+        ///// <param name="yanchi"></param>
+        ///// <param name="chaoshi"></param>
+        ///// <param name="logger"></param>
+        ///// <returns></returns>
+        //public static DelayCoverExecutor Create(Func<Task> job, int yanchi = 2000, int chaoshi = 4000, ILogger logger = default)
+        //{
+        //    if (logger == default)
+        //    {
+        //        logger = NullLogger.Instance;
+        //    }
+        //    return new DelayCoverExecutor { job = job, Delay = yanchi, Timeout = chaoshi, Logger = logger };
+        //}
     }
 }
