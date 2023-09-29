@@ -56,11 +56,50 @@ namespace BXJG.AbpMudBlazor.Components
         /// <summary>
         /// 新增时的模型
         /// </summary>
-        protected virtual TCreateInput CreateDto { get; set; }
+        protected TCreateInput createDto;
         /// <summary>
         /// 编辑上下文
         /// </summary>
         protected EditContext editContext;
+
+        protected virtual ValueTask<TCreateInput> CreateDtoInstance()
+        {
+            return ValueTask.FromResult(Activator.CreateInstance<TCreateInput>());
+        }
+        /// <summary>
+        /// 保存后是否继续新增
+        /// </summary>
+        protected bool saveAndContinue = false;
+        /// <summary>
+        /// 正在执行重置
+        /// </summary>
+        protected bool reseting = false;
+        /// <summary>
+        /// 重置
+        /// </summary>
+        /// <returns></returns>
+        protected virtual async Task Reset()
+        {
+            await SafelyExecuteAsync(async ()=>await ResetCore());
+        }
+        /// <summary>
+        /// 重置
+        /// </summary>
+        /// <returns></returns>
+        protected virtual async ValueTask ResetCore()
+        {
+            reseting = true;
+            try
+            {
+                createDto = await CreateDtoInstance();
+                editContext = new EditContext(createDto!);
+                validationMessageStore = new ValidationMessageStore(editContext);
+            }
+            finally
+            {
+                reseting = false;
+            }
+        }
         /// <summary>
         /// 自定义的验证消息存储器
         /// 推荐尽可能使用数据注释Attribute的验证，若有特殊验证可以订阅<see cref="editContext"/>的事件
@@ -70,19 +109,25 @@ namespace BXJG.AbpMudBlazor.Components
         /// 表单对象，之类界面中的EditForm应该使用ref关联此字段
         /// </summary>
         protected EditForm editForm;
-
-        //在异步中初始化表单相关信息，这样可以给子类一个机会去异步初始化CreateDto
-        protected override Task OnInitializedAsync()
+        protected override async Task OnInitialized2Async()
         {
-            var r = base.OnInitializedAsync();
-            if (CreateDto == null)
-            {
-                CreateDto = Activator.CreateInstance<TCreateInput>();
-            }
-            editContext = new EditContext(CreateDto!);
-            validationMessageStore = new ValidationMessageStore(editContext);
-            return r;
+            await Reset();
         }
+        ////在异步中初始化表单相关信息，这样可以给子类一个机会去异步初始化CreateDto
+        //protected override async Task OnInitializedAsync()
+        //{
+        //    await OnInitializedAsync();
+        //    await Reset();
+        //    // editContext.OnValidationRequested += EditContext_OnValidationRequested;
+        //}
+
+        //private void EditContext_OnValidationRequested(object? sender, ValidationRequestedEventArgs e)
+        //{
+        //    if (btnSaveDisabled)
+        //        btnSaveDisabled = false;
+        //    // throw new NotImplementedException();
+        //}
+
         //protected override async Task OnInitialized2Async()
         //{
         //    //列表传递过来的dto信息没有详情中的dto多
@@ -105,15 +150,19 @@ namespace BXJG.AbpMudBlazor.Components
                 createIsGranted = await PermissionChecker.IsGrantedAsync(createPermissionName);
         }
         #endregion
+        ///// <summary>
+        ///// 保存按钮初始禁用
+        ///// </summary>
+        //protected bool btnSaveDisabled = true;
         /// <summary>
         /// 是否禁用保存按钮
         /// 没授权的根本不显示
         /// </summary>
-        public virtual bool ShouldDisableSaveBtn => Saving|| editContext == null || editContext.GetValidationMessages().Any();
+        public virtual bool ShouldDisableSaveBtn =>/* btnSaveDisabled && Saving ||*/ editContext == null || editContext.GetValidationMessages().Any();
         /// <summary>
         /// 正在保存...
         /// </summary>
-        protected bool Saving = false;
+        protected bool saving = false;
         /// <summary>
         /// 核心的保存逻辑
         /// </summary>
@@ -123,19 +172,26 @@ namespace BXJG.AbpMudBlazor.Components
             if (!editContext.Validate())
                 return;
 
-            Saving = true;
+            saving = true;
             await base.SafelyExecuteAsync(async () =>
             {
-                var r = await AppService.CreateAsync(CreateDto);
+                var r = await AppService.CreateAsync(createDto);
                 Snackbar.Add("新增成功！", Severity.Success);
-                AfterSave(r);
+                await AfterSave(r);
+                if (saveAndContinue)
+                    await Reset();
             });
-            Saving = false;
+            saving = false;
         }
         /// <summary>
         /// 保存后回调
         /// </summary>
-        protected virtual void AfterSave(TEntityDto dto) { }
+        protected virtual ValueTask AfterSave(TEntityDto dto) => ValueTask.CompletedTask;
+        //protected override void Dispose(bool disposing)
+        //{
+        //    base.Dispose(disposing);
+        //    editContext.OnValidationRequested -= EditContext_OnValidationRequested;
+        //}
     }
 
     /// <summary>
@@ -178,9 +234,11 @@ namespace BXJG.AbpMudBlazor.Components
         /// 新增成功后回调
         /// </summary>
         /// <param name="dto"></param>
-        protected override void AfterSave(TEntityDto dto)
+        protected override ValueTask AfterSave(TEntityDto dto)
         {
-            MudDialog.Close(dto);
+            if (!saveAndContinue)
+                MudDialog.Close(dto);
+            return ValueTask.CompletedTask;
         }
     }
 }

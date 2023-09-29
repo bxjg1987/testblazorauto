@@ -21,10 +21,15 @@ namespace BXJG.AbpMudBlazor.Components
 {
     /*
      * 由于abp的crud接口和抽象类把crud搞一起了，不想动它，所以这里的应用服务中包含TCreateInput、TUpdateInput
+     * 
+     * 原本考虑再做一层抽象，不与具体ui框架关联，这样就可以更容易替换成其它的ui框架
+     * 简单起见，暂时不搞了，若以后需要可以在这个类再抽象下
+     * 
+     * 只保留逻辑部分的抽象，因为这里的抽象是与具体项目无关的，所以应该由具体项目的子类去按自己需求做布局
      */
 
     /// <summary>
-    /// 抽象的，基于MudBlazor的列表页抽象组件
+    /// 抽象的，基于MudBlazor datagrid的列表页抽象组件
     /// </summary>
     /// <typeparam name="TAppService">应用服务类型</typeparam>
     /// <typeparam name="TEntityDto">列表项的数据类型</typeparam>
@@ -320,10 +325,9 @@ namespace BXJG.AbpMudBlazor.Components
 
         //没权限时不显示的，所以不加入这个判断
         /// <summary>
-        /// 是否显示删除按钮，默认勾选了某个行且 没有正在加载数据时为true
+        /// 是否禁用批量删除按钮，出现任意情况，则为true：正在加载数据；正在删除数据；没有选择数据；
         /// </summary>
         protected virtual bool ShouldDisableDelete => dataGrid.Loading || isDeleting || dataGrid.SelectedItems == default || !dataGrid.SelectedItems.Any();
-
         
 
         /// <summary>
@@ -331,7 +335,7 @@ namespace BXJG.AbpMudBlazor.Components
         /// </summary>
         protected bool isShowDeleteConfirm = false;
         /// <summary>
-        /// 是否正在执行删除操作
+        /// 是否正在执行批量删除操作
         /// </summary>
         protected bool isDeleting = false;
         /// <summary>
@@ -423,10 +427,12 @@ namespace BXJG.AbpMudBlazor.Components
         //}
         #endregion
     }
+
+    // 若不是使用弹窗，而是使用tab、页面等其它方式时，应提供其它子类
+
     /// <summary>
-    /// 抽象的，基于MudBlazor的列表页 抽象组件
+    /// 抽象的，基于MudBlazor datagrid的列表页 抽象组件
     /// 使用弹窗弹出新增和详情窗口
-    /// 若不是所以弹窗，而是使用tab、页面等其它方式时，应提供其它子类
     /// </summary>
     /// <typeparam name="TCreateDialog">新增弹窗组件</typeparam>
     /// <typeparam name="TDetailDialog">详情弹窗组件</typeparam>
@@ -535,6 +541,7 @@ namespace BXJG.AbpMudBlazor.Components
         }
         /// <summary>
         /// 弹出详情弹窗时传入参数
+        /// 通常，复杂数据时只传入id，让详情组件自己去重新查询；简单数据时传入当前选择的dto
         /// </summary>
         /// <param name="pms"></param>
         /// <param name="dto"></param>

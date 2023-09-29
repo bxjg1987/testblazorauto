@@ -2,6 +2,7 @@
 using BXJG.Common;
 using BXJG.Utils;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Extensions.DependencyInjection;
 using MudBlazor;
 using System;
@@ -14,6 +15,10 @@ namespace BXJG.AbpMudBlazor.Components
 {
     /*
      * 由于abp的crud接口和抽象类把crud搞一起了，不想动它，所以这里的应用服务中包含TGetAllInput和TCreateInput
+     * 
+     * 同一个编辑组件可以 反复用于不同数据数据编辑
+     * 
+     * 最好的方式是在首次进入编辑时，才去加载编辑时才需要的东东，比如加载下拉框数据
      */
 
     /// <summary>
@@ -63,7 +68,34 @@ namespace BXJG.AbpMudBlazor.Components
         /// <summary>
         /// 当前编辑模型
         /// </summary>
-        protected TUpdateInput editDto;
+        protected TUpdateInput? editDto;
+
+        protected EditContext editContext;
+
+        protected ValidationMessageStore vms;// = new ValidationMessageStore();
+
+        /// <summary>
+        /// 正在执行重置
+        /// </summary>
+        protected bool reseting = false;
+        /// <summary>
+        /// 重置
+        /// </summary>
+        /// <returns></returns>
+        protected virtual async ValueTask ResetCore()
+        {
+            reseting = true;
+            try
+            {
+                await DtoMapToEditDto();
+                editContext = new EditContext(editDto);
+                vms = new ValidationMessageStore(editContext);
+            }
+            finally
+            {
+                reseting = false;
+            }
+        }
         ///// <summary>
         ///// 有时候数据比较复杂时，列表页中加载的数据只包含部分属性
         ///// 而详情页中需要更详细的信息，此时可能需要重新查询一次
@@ -74,7 +106,21 @@ namespace BXJG.AbpMudBlazor.Components
         //    //列表传递过来的dto信息没有详情中的dto多
         //    Dto = await AppService.GetAsync(new EntityDto<TPrimaryKey>(Dto.Id));
         //}
-        protected override async Task OnInitialized2Async()
+        //protected override async Task OnInitialized2Async()
+        //{
+        //    if (!default(TPrimaryKey)!.Equals(Id))
+        //    {
+        //        Dto = await AppService.GetAsync(new EntityDto<TPrimaryKey>(Id));
+        //    }
+        //    else
+        //    {
+        //        Id = Dto.Id;
+        //    }
+        //    //DtoMapToEditDto();首次进入编辑模式是映射
+        //}
+
+        //比起init，这样允许同一个编辑组件允许重复利用
+        protected override async Task OnParametersSet2Async()
         {
             if (!default(TPrimaryKey)!.Equals(Id))
             {
@@ -84,12 +130,17 @@ namespace BXJG.AbpMudBlazor.Components
             {
                 Id = Dto.Id;
             }
-            DtoMapToEditDto();
+            await Reset();
         }
+
         /// <summary>
         /// 显示模型转换为编辑模型，默认使用automapper
         /// </summary>
-        protected virtual void DtoMapToEditDto() => editDto = base.ObjectMapper.Map<TUpdateInput>(Dto);
+        protected virtual ValueTask DtoMapToEditDto()
+        {
+            editDto = base.ObjectMapper.Map<TUpdateInput>(Dto);
+            return ValueTask.CompletedTask;
+        }
 
         #region 权限 
         ///// <summary>
@@ -137,7 +188,49 @@ namespace BXJG.AbpMudBlazor.Components
             base.OnInitialized();
             isEdit = IsEdit;
         }
-        #region 保存
+        #region 修改
+        /// <summary>
+        /// 是否是首次进入编辑模式
+        /// </summary>
+        protected bool editInited = false;
+        /// <summary>
+        /// 进入编辑模型
+        /// </summary>
+        protected virtual async Task BeginEdit()
+        {
+            isEdit = true;
+            // MudDialog.SetTitle($"修改{FuncName}");//需要处理图标，子类自己去处理吧
+
+            //首次进入下拉框时可能需要做些 初始化下拉框值的操作
+            if (editInited)
+                return;
+
+            editInited = true;
+
+            await SafelyExecuteAsync(async () =>
+            {
+                await BeginEditFirst();
+            });
+        }
+        /// <summary>
+        /// 首次进入编辑模式
+        /// </summary>
+        /// <returns></returns>
+        protected virtual ValueTask BeginEditFirst()
+        {
+            //this.DtoMapToEditDto();
+            //editContext = new EditContext(editDto);
+            //vms = new ValidationMessageStore(editContext);
+            return ValueTask.CompletedTask;
+        }
+        ///// <summary>
+        ///// 放弃编辑
+        ///// </summary>
+        //protected virtual void CancelEdit()
+        //{
+        //    isEdit = false;
+        //    MudDialog.SetTitle($"查看{FuncName}详情");
+        //}
         /// <summary>
         /// 是否显示保存按钮和进入只读模式的按钮
         /// </summary>
@@ -146,6 +239,11 @@ namespace BXJG.AbpMudBlazor.Components
         /// 是否显示进入编辑模式的按钮
         /// </summary>
         protected virtual bool IsShowBeginEdit => !isEdit && updateIsGranted;
+
+        /// <summary>
+        /// 是否禁用保存按钮
+        /// </summary>
+        public virtual bool ShowldDisableSaveBtn => !IsShowSave || saving || editDto == null || editContext == default || editContext.GetValidationMessages().Any();
         /// <summary>
         /// 是否正在保存
         /// </summary>
@@ -170,6 +268,7 @@ namespace BXJG.AbpMudBlazor.Components
         /// 保存后回调
         /// </summary>
         protected virtual void AfterSave() { }
+
         #endregion
         #region 删除
         /// <summary>
@@ -245,21 +344,6 @@ namespace BXJG.AbpMudBlazor.Components
         {
             MudDialog.Cancel();
         }
-        /// <summary>
-        /// 开始编辑
-        /// </summary>
-        protected virtual void BeginEdit()
-        {
-            isEdit = true;
-            MudDialog.SetTitle($"修改{FuncName}");
-        }
-        /// <summary>
-        /// 放弃编辑
-        /// </summary>
-        protected virtual void CancelEdit()
-        {
-            isEdit = false;
-            MudDialog.SetTitle($"查看{FuncName}详情");
-        }
+
     }
 }
