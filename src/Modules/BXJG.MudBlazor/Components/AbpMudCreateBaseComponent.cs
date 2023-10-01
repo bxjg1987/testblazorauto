@@ -91,9 +91,9 @@ namespace BXJG.AbpMudBlazor.Components
         /// 重置
         /// </summary>
         /// <returns></returns>
-        protected virtual async Task Reset()
+        protected virtual  Task BtnResetClick()
         {
-            await SafelyExecuteAsync(ResetCore().AsTask);
+            return SafelyExecuteAsync(async ()=>await ResetCore());
         }
         /// <summary>
         /// 重置
@@ -193,7 +193,7 @@ namespace BXJG.AbpMudBlazor.Components
                 Snackbar.Add("新增成功！", Severity.Success);
                 await AfterSave(r);
                 if (saveAndContinue)
-                    await Reset();
+                    await ResetCore();
             }
             finally
             {

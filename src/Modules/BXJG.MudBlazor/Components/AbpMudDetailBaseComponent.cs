@@ -79,10 +79,7 @@ namespace BXJG.AbpMudBlazor.Components
         /// 验证消息存储器
         /// </summary>
         protected ValidationMessageStore? validationMessageStore;
-        /// <summary>
-        /// 正在执行重置
-        /// </summary>
-        protected bool isReseting = false;
+
         /// <summary>
         /// 点击重置按钮时回调
         /// </summary>
@@ -91,6 +88,10 @@ namespace BXJG.AbpMudBlazor.Components
         {
             await SafelyExecuteAsync(async () => await ResetCore());
         }
+        /// <summary>
+        /// 正在执行重置
+        /// </summary>
+        protected bool isReseting = false;
         /// <summary>
         /// 重置
         /// </summary>
@@ -109,6 +110,8 @@ namespace BXJG.AbpMudBlazor.Components
                 isReseting = false;
             }
         }
+
+
         /// <summary>
         /// 初始化时回调，默认根据id从应用服务接口获取单个数据，然后判断并进入编辑模式
         /// </summary>
@@ -116,6 +119,10 @@ namespace BXJG.AbpMudBlazor.Components
         protected override async Task OnInitialized2Async()
         {
             dto = await AppService.GetAsync(new EntityDto<TPrimaryKey>(Id));
+            isEdit = IsEdit;
+
+
+
             if (isEdit)
             {
                 await BeginEditCore();
@@ -172,18 +179,19 @@ namespace BXJG.AbpMudBlazor.Components
         /// 参考：https://learn.microsoft.com/zh-cn/aspnet/core/blazor/components/overwriting-parameters?view=aspnetcore-6.0
         /// </summary>
         protected bool isEdit;
-        public override async Task SetParametersAsync(ParameterView parameters)
-        {
-            await base.SetParametersAsync(parameters);
-            isEdit = IsEdit;
-        }
+        //public override async Task SetParametersAsync(ParameterView parameters)
+        //{
+        //    await base.SetParametersAsync(parameters);
+
+        //}
 
         /// <summary>
         /// 取消编辑按钮点击时执行
         /// </summary>
         protected virtual void BtnEndEditClick()
-        { 
-            isEdit = false; 
+        {
+            isEdit = false;
+            //  StateHasChanged();
         }
 
         //protected override void OnInitialized()
@@ -204,6 +212,7 @@ namespace BXJG.AbpMudBlazor.Components
         protected virtual async ValueTask BeginEditCore()
         {
             isEdit = true;
+            // StateHasChanged();
             // MudDialog.SetTitle($"修改{FuncName}");//需要处理图标，子类自己去处理吧
 
             //首次进入下拉框时可能需要做些 初始化下拉框值的操作
@@ -211,6 +220,7 @@ namespace BXJG.AbpMudBlazor.Components
                 return;
 
             isFormIniting = true;
+            //    StateHasChanged();
             try
             {
                 await InitForm();
@@ -267,11 +277,11 @@ namespace BXJG.AbpMudBlazor.Components
         /// <summary>
         /// 是否禁用保存按钮
         /// </summary>
-        public virtual bool IsSaveDisabled => isDeleting || 
+        public virtual bool IsSaveDisabled => isDeleting ||
                                               isFormIniting ||
-                                              isReseting || 
-                                              isSaving || 
-                                              editDto == null || 
+                                              isReseting ||
+                                              isSaving ||
+                                              editDto == null ||
                                               editContext == default || editContext.GetValidationMessages().Any();
         /// <summary>
         /// 是否正在保存
@@ -283,7 +293,7 @@ namespace BXJG.AbpMudBlazor.Components
         /// <returns></returns>
         protected virtual async Task BtnSaveClick()
         {
-            await SafelyExecuteAsync(DeleteCore);
+            await SafelyExecuteAsync(SaveCore);
         }
         /// <summary>
         /// 保存的核心逻辑
@@ -323,10 +333,25 @@ namespace BXJG.AbpMudBlazor.Components
         /// </summary>
         protected bool isDeleting = false;
         /// <summary>
-        /// 点击删除按钮时执行
+        /// 显示删除确认框
+        /// 通常绑定到删除按钮，它将显示删除确认，而不是真正删除
+        /// </summary>
+        protected virtual void BtnDeleteClick()
+        {
+            isShowDeleteConfirm = true;
+        }
+        /// <summary>
+        /// 隐藏删除确认框
+        /// </summary>
+        protected virtual void BtnCancelDelete()
+        {
+            isShowDeleteConfirm = false;
+        }
+        /// <summary>
+        /// 最终执行删除的按钮被点击时
         /// </summary>
         /// <returns></returns>
-        protected virtual async Task BtnDeleteClick()
+        protected virtual async Task BtnOkDeleteClick()
         {
             await SafelyExecuteAsync(DeleteCore);
         }
@@ -373,6 +398,10 @@ namespace BXJG.AbpMudBlazor.Components
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
     {
+
+        //protected string Icon => string.Empty;
+        //protected string Title => isEdit ? $"修改{FuncName}" : $"查看{FuncName}详情";
+
         /// <summary>
         /// 当前弹窗对象
         /// </summary>
@@ -400,6 +429,16 @@ namespace BXJG.AbpMudBlazor.Components
         protected virtual void BtnCancelClick()
         {
             MudDialog.Cancel();
+        }
+        protected override async ValueTask BeginEditCore()
+        {
+            await base.BeginEditCore();
+            MudDialog.SetTitle($"修改{FuncName}");
+        }
+        protected override void BtnEndEditClick()
+        {
+            base.BtnEndEditClick();
+            MudDialog.SetTitle($"查看{FuncName}详情");
         }
     }
 }

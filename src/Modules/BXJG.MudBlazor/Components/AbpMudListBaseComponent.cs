@@ -472,7 +472,7 @@ namespace BXJG.AbpMudBlazor.Components
         /// <summary>
         /// 新增时的弹窗选项对象
         /// </summary>
-        protected virtual DialogOptions DialogAddOptions => new DialogOptions { CloseOnEscapeKey = true };
+        protected virtual DialogOptions DialogAddOptions => new DialogOptions { CloseOnEscapeKey = true, FullWidth=true/*, DisableBackdropClick=true*/ };//DisableBackdropClick保留它，以便我们可以使用弹窗的OnBackdropClick事件
         /// <summary>
         /// 修改时的弹窗选项对象
         /// </summary>
@@ -539,7 +539,14 @@ namespace BXJG.AbpMudBlazor.Components
         }
         protected override async ValueTask RowDoubleClick(DataGridRowClickEventArgs<TEntityDto> arg)
         {
-            await BtnDetailClick(arg.Item);
+           // if (updateIsGranted)
+          //  {
+          //      await BtnEditClick(arg.Item); }
+          //  else
+         //   {
+                await BtnDetailClick(arg.Item);
+          //  }
+         
         }
         /// <summary>
         /// 弹出详情弹窗时传入参数
@@ -549,7 +556,7 @@ namespace BXJG.AbpMudBlazor.Components
         /// <param name="dto"></param>
         protected virtual void FillDetailParameters(DialogParameters<TDetailDialog> pms, TEntityDto dto)
         {
-            pms.Add("Dto", dto);
+            pms.Add("Id", dto.Id);
         }
     }
 }
