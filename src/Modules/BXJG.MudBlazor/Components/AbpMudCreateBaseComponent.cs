@@ -173,21 +173,32 @@ namespace BXJG.AbpMudBlazor.Components
         /// 核心的保存逻辑
         /// </summary>
         /// <returns></returns>
-        protected virtual async Task Save()
+        protected virtual async Task BtnSaveClick()
+        {
+            await base.SafelyExecuteAsync(SaveCore);
+        }
+        /// <summary>
+        /// 核心的保存逻辑
+        /// </summary>
+        /// <returns></returns>
+        protected virtual async Task SaveCore()
         {
             if (!editContext!.Validate())
                 return;
 
             isSaving = true;
-            await base.SafelyExecuteAsync(async () =>
+            try
             {
                 var r = await AppService.CreateAsync(createDto);
                 Snackbar.Add("新增成功！", Severity.Success);
                 await AfterSave(r);
                 if (saveAndContinue)
                     await Reset();
-            });
-            isSaving = false;
+            }
+            finally
+            {
+                isSaving = false;
+            }
         }
         /// <summary>
         /// 保存后回调
