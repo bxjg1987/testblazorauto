@@ -164,11 +164,11 @@ namespace BXJG.AbpMudBlazor.Components
         /// 是否禁用保存按钮
         /// 没授权的根本不显示
         /// </summary>
-        public virtual bool ShouldDisableSaveBtn =>/* btnSaveDisabled && Saving ||*/ editContext == null || editContext.GetValidationMessages().Any();
+        public virtual bool IsBtnSaveDisabled =>/* btnSaveDisabled && Saving ||*/ editContext == null || editContext.GetValidationMessages().Any();
         /// <summary>
         /// 正在保存...
         /// </summary>
-        protected bool saving = false;
+        protected bool isSaving = false;
         /// <summary>
         /// 核心的保存逻辑
         /// </summary>
@@ -178,7 +178,7 @@ namespace BXJG.AbpMudBlazor.Components
             if (!editContext!.Validate())
                 return;
 
-            saving = true;
+            isSaving = true;
             await base.SafelyExecuteAsync(async () =>
             {
                 var r = await AppService.CreateAsync(createDto);
@@ -187,7 +187,7 @@ namespace BXJG.AbpMudBlazor.Components
                 if (saveAndContinue)
                     await Reset();
             });
-            saving = false;
+            isSaving = false;
         }
         /// <summary>
         /// 保存后回调
