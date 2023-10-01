@@ -259,7 +259,12 @@ namespace BXJG.Utils
         }
         protected virtual Task OnAfterRender2Async(bool firstRender) => Task.CompletedTask;
 
-
+        public override async Task SetParametersAsync(ParameterView parameters)
+        {
+            await SafelyExecuteAsync(OnParametersSet2Async);
+             await base.SetParametersAsync(parameters);
+        }
+        public virtual Task SetParameters2Async(ParameterView parameters) => Task.CompletedTask;
         protected override void OnParametersSet()
         {
             SafelyExecute(OnParametersSet2);

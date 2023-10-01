@@ -16,9 +16,13 @@ namespace BXJG.AbpMudBlazor.Components
     /*
      * 由于abp的crud接口和抽象类把crud搞一起了，不想动它，所以这里的应用服务中包含TGetAllInput和TCreateInput
      * 
-     * 同一个编辑组件可以 反复用于不同数据数据编辑
+     * 不要考虑同一个组件反复编辑不同的数据，那样稍微复杂了点，是特殊情况，就具体项目中特殊处理，暂时不考虑放抽象类中
      * 
-     * 最好的方式是在首次进入编辑时，才去加载编辑时才需要的东东，比如加载下拉框数据
+     * 编辑时可能要加载些下拉框数据，这通常比较耗时，若在初始化组件时就加载，在用户仅仅查看时就比较浪费，所以在首次进入编辑模式时再做这些操作。
+     * 
+     * blazor文档中推荐不要在组件内部修改 [Parameter]属性，这种属性仅仅用于外部组件向其传递参数用，可能由于外部组件的刷新，导致此组件状态异常
+     * 
+     * 虽然有些简单的数据列表页可能直接传递dto过来进行处理，但有时候列表数据过于复杂，需要重新查询下，简单期间统一为根据id重新查询。
      */
 
     /// <summary>
@@ -55,82 +59,68 @@ namespace BXJG.AbpMudBlazor.Components
         /// </summary>
         protected virtual string FuncName => $"请重写{nameof(FuncName)}属性";
         /// <summary>
-        /// 与Dto二选一
+        /// id
         /// </summary>
         [Parameter]
         public TPrimaryKey Id { get; set; }
         /// <summary>
-        /// 列表页传递过来的视图模型
-        /// 与Id二选一
+        /// 查询模型
         /// </summary>
-        [Parameter]
-        public TEntityDto Dto { get; set; }
+        protected TEntityDto? dto;
         /// <summary>
         /// 当前编辑模型
         /// </summary>
         protected TUpdateInput? editDto;
-
-        protected EditContext editContext;
-
-        protected ValidationMessageStore vms;// = new ValidationMessageStore();
-
+        /// <summary>
+        /// 编辑上下文
+        /// </summary>
+        protected EditContext? editContext;
+        /// <summary>
+        /// 验证消息存储器
+        /// </summary>
+        protected ValidationMessageStore? validationMessageStore;
         /// <summary>
         /// 正在执行重置
         /// </summary>
-        protected bool reseting = false;
+        protected bool isReseting = false;
+        /// <summary>
+        /// 点击重置按钮时回调
+        /// </summary>
+        /// <returns></returns>
+        protected virtual async Task BtnResetClick()
+        {
+            await SafelyExecuteAsync(async () => await ResetCore());
+        }
         /// <summary>
         /// 重置
         /// </summary>
         /// <returns></returns>
         protected virtual async ValueTask ResetCore()
         {
-            reseting = true;
+            isReseting = true;
             try
             {
                 await DtoMapToEditDto();
-                editContext = new EditContext(editDto);
-                vms = new ValidationMessageStore(editContext);
+                editContext = new EditContext(editDto!);
+                validationMessageStore = new ValidationMessageStore(editContext);
             }
             finally
             {
-                reseting = false;
+                isReseting = false;
             }
         }
-        ///// <summary>
-        ///// 有时候数据比较复杂时，列表页中加载的数据只包含部分属性
-        ///// 而详情页中需要更详细的信息，此时可能需要重新查询一次
-        ///// </summary>
-        ///// <returns></returns>
-        //protected virtual async Task Reload()
-        //{
-        //    //列表传递过来的dto信息没有详情中的dto多
-        //    Dto = await AppService.GetAsync(new EntityDto<TPrimaryKey>(Dto.Id));
-        //}
-        //protected override async Task OnInitialized2Async()
-        //{
-        //    if (!default(TPrimaryKey)!.Equals(Id))
-        //    {
-        //        Dto = await AppService.GetAsync(new EntityDto<TPrimaryKey>(Id));
-        //    }
-        //    else
-        //    {
-        //        Id = Dto.Id;
-        //    }
-        //    //DtoMapToEditDto();首次进入编辑模式是映射
-        //}
-
-        //比起init，这样允许同一个编辑组件允许重复利用
-        protected override async Task OnParametersSet2Async()
+        /// <summary>
+        /// 初始化时回调，默认根据id从应用服务接口获取单个数据，然后判断并进入编辑模式
+        /// </summary>
+        /// <returns></returns>
+        protected override async Task OnInitialized2Async()
         {
-            if (!default(TPrimaryKey)!.Equals(Id))
+            dto = await AppService.GetAsync(new EntityDto<TPrimaryKey>(Id));
+            if (isEdit)
             {
-                Dto = await AppService.GetAsync(new EntityDto<TPrimaryKey>(Id));
+                await BeginEditCore();
+                // await ResetCore();
             }
-            else
-            {
-                Id = Dto.Id;
-            }
-            await Reset();
         }
 
         /// <summary>
@@ -138,7 +128,7 @@ namespace BXJG.AbpMudBlazor.Components
         /// </summary>
         protected virtual ValueTask DtoMapToEditDto()
         {
-            editDto = base.ObjectMapper.Map<TUpdateInput>(Dto);
+            editDto = base.ObjectMapper.Map<TUpdateInput>(dto);
             return ValueTask.CompletedTask;
         }
 
@@ -182,21 +172,36 @@ namespace BXJG.AbpMudBlazor.Components
         /// 参考：https://learn.microsoft.com/zh-cn/aspnet/core/blazor/components/overwriting-parameters?view=aspnetcore-6.0
         /// </summary>
         protected bool isEdit;
-
-        protected override void OnInitialized()
+        public override async Task SetParametersAsync(ParameterView parameters)
         {
-            base.OnInitialized();
+            await base.SetParametersAsync(parameters);
             isEdit = IsEdit;
         }
+
+        /// <summary>
+        /// 取消编辑按钮点击时执行
+        /// </summary>
+        protected virtual void BtnEndEditClick()
+        { 
+            isEdit = false; 
+        }
+
+        //protected override void OnInitialized()
+        //{
+        //    base.OnInitialized();
+        //    isEdit = IsEdit;
+        //}
         #region 修改
         /// <summary>
-        /// 是否是首次进入编辑模式
+        /// 表单是否初始化过了
         /// </summary>
         protected bool editInited = false;
+
         /// <summary>
-        /// 进入编辑模型
+        /// 进入编辑模式时执行
         /// </summary>
-        protected virtual async Task BeginEdit()
+        /// <returns></returns>
+        protected virtual async ValueTask BeginEditCore()
         {
             isEdit = true;
             // MudDialog.SetTitle($"修改{FuncName}");//需要处理图标，子类自己去处理吧
@@ -205,18 +210,37 @@ namespace BXJG.AbpMudBlazor.Components
             if (editInited)
                 return;
 
-            editInited = true;
-
-            await SafelyExecuteAsync(async () =>
+            isFormIniting = true;
+            try
             {
-                await BeginEditFirst();
-            });
+                await InitForm();
+            }
+            finally
+            {
+                isFormIniting = false;
+            }
+
+            if (editDto == null)
+                await ResetCore();
+
+            editInited = true;
         }
         /// <summary>
-        /// 首次进入编辑模式
+        /// 点击进入编辑模式的按钮时回调
+        /// </summary>
+        protected virtual async Task BtnBeginEditClick()
+        {
+            await SafelyExecuteAsync(async () => await BeginEditCore());
+        }
+        /// <summary>
+        /// 是否正在对表单进行首次初始化
+        /// </summary>
+        protected bool isFormIniting = false;
+        /// <summary>
+        /// 首次进入编辑模式时初始化表单，如：初始化加载下拉框数据
         /// </summary>
         /// <returns></returns>
-        protected virtual ValueTask BeginEditFirst()
+        protected virtual ValueTask InitForm()
         {
             //this.DtoMapToEditDto();
             //editContext = new EditContext(editDto);
@@ -243,32 +267,51 @@ namespace BXJG.AbpMudBlazor.Components
         /// <summary>
         /// 是否禁用保存按钮
         /// </summary>
-        public virtual bool ShowldDisableSaveBtn => !IsShowSave || saving || editDto == null || editContext == default || editContext.GetValidationMessages().Any();
+        public virtual bool IsSaveDisabled => isDeleting || 
+                                              isFormIniting ||
+                                              isReseting || 
+                                              isSaving || 
+                                              editDto == null || 
+                                              editContext == default || editContext.GetValidationMessages().Any();
         /// <summary>
         /// 是否正在保存
         /// </summary>
-        protected bool saving = false;
+        protected bool isSaving = false;
         /// <summary>
         /// 点击保存按钮时执行
         /// </summary>
         /// <returns></returns>
         protected virtual async Task BtnSaveClick()
         {
-            //不要验证权限了，没权限的按钮本来就隐藏了，况且应用服务本身也会验证权限
-            saving = true;
-            await SafelyExecuteAsync(async () =>
+            await SafelyExecuteAsync(DeleteCore);
+        }
+        /// <summary>
+        /// 保存的核心逻辑
+        /// </summary>
+        /// <returns></returns>
+        protected virtual async Task SaveCore()
+        {
+            //没有权限的按钮直接隐藏，况且应用服务还会判断权限兜底的，因此这里无需判断权限
+
+            if (!editContext!.Validate())
+                return;
+
+            isSaving = true;
+            try
             {
-                Dto = await AppService.UpdateAsync(editDto);
+                dto = await AppService.UpdateAsync(editDto!);
                 Snackbar.Add("修改成功！", Severity.Success);
-                AfterSave();
-            });
-            saving = false;
+                await AfterSave();
+            }
+            finally
+            {
+                isSaving = false;
+            }
         }
         /// <summary>
         /// 保存后回调
         /// </summary>
-        protected virtual void AfterSave() { }
-
+        protected virtual ValueTask AfterSave() => ValueTask.CompletedTask;
         #endregion
         #region 删除
         /// <summary>
@@ -278,28 +321,40 @@ namespace BXJG.AbpMudBlazor.Components
         /// <summary>
         /// 是否正在删除
         /// </summary>
-        protected bool deleting = false;
+        protected bool isDeleting = false;
         /// <summary>
         /// 点击删除按钮时执行
         /// </summary>
         /// <returns></returns>
         protected virtual async Task BtnDeleteClick()
         {
-            isShowDeleteConfirm = false;
-            deleting = true;
-            await SafelyExecuteAsync(async () =>
-            {
-                await AppService.DeleteAsync(new EntityDto<TPrimaryKey>(Id));
-                ShowError($"删除成功！");
-                AfterDelete();
-            });
-            deleting = false;
+            await SafelyExecuteAsync(DeleteCore);
         }
         /// <summary>
-        /// 删除之后执行的逻辑
+        /// 删除的核心逻辑
         /// </summary>
         /// <returns></returns>
-        protected virtual void AfterDelete() { }
+        protected virtual async Task DeleteCore()
+        {
+            //没有权限的按钮直接隐藏，况且应用服务还会判断权限兜底的，因此这里无需判断权限
+            isShowDeleteConfirm = false;
+            isDeleting = true;
+            try
+            {
+                await AppService.DeleteAsync(new EntityDto<TPrimaryKey>(Id));
+                Snackbar.Add($"删除成功！", Severity.Success);
+                await AfterDelete();
+            }
+            finally
+            {
+                isDeleting = false;
+            }
+        }
+        /// <summary>
+        /// 删除之后之后回调
+        /// </summary>
+        /// <returns></returns>
+        protected virtual ValueTask AfterDelete() => ValueTask.CompletedTask;
         #endregion
     }
     public abstract class AbpMudDetailDialogBaseComponent<TAppService,
@@ -326,16 +381,18 @@ namespace BXJG.AbpMudBlazor.Components
         /// <summary>
         /// 删除后回调，默认关闭弹窗
         /// </summary>
-        protected override void AfterDelete()
+        protected override ValueTask AfterDelete()
         {
-            MudDialog.Close(Dto);
+            MudDialog.Close(dto);
+            return ValueTask.CompletedTask;
         }
         /// <summary>
         /// 保存后回调，默认关闭弹窗
         /// </summary>
-        protected override void AfterSave()
+        protected override ValueTask AfterSave()
         {
-            MudDialog.Close(Dto);
+            MudDialog.Close(dto);
+            return ValueTask.CompletedTask;
         }
         /// <summary>
         /// 点击关闭按钮时回调
@@ -344,6 +401,5 @@ namespace BXJG.AbpMudBlazor.Components
         {
             MudDialog.Cancel();
         }
-
     }
 }
