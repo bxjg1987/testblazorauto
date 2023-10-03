@@ -1,7 +1,7 @@
 ﻿using Abp.Application.Services.Dto;
 using Abp.Localization.Sources;
+using BXJG.AbpMudBlazor.Components;
 using BXJG.Common;
-using BXJG.MudBlazor.Components;
 using BXJG.Utils;
 using MudBlazor;
 using System;
@@ -35,7 +35,7 @@ namespace ZLJ.Web.Customer.Shared
                                                                                      TCreateInput,
                                                                                      TUpdateInput>
         where TFormDialogCoponent : ComponentBase
-        where TEntityDto : IEntityDto<TPrimaryKey>
+        where TEntityDto : IEntityDto<TPrimaryKey>, IExtendableDto
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TGetAllInput : new()
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
@@ -192,7 +192,7 @@ namespace ZLJ.Web.Customer.Shared
                                                                              TGetAllInput,
                                                                              TCreateInput,
                                                                              TCreateInput>
-        where TEntityDto : IEntityDto<TPrimaryKey>
+        where TEntityDto : IEntityDto<TPrimaryKey>, IExtendableDto
         where TCreateInput : IEntityDto<TPrimaryKey>
         where TFormDialogCoponent : ComponentBase
         where TGetAllInput : new()
@@ -217,7 +217,7 @@ namespace ZLJ.Web.Customer.Shared
                                                                              TPrimaryKey,
                                                                              TGetAllInput,
                                                                              TEntityDto>
-        where TEntityDto : IEntityDto<TPrimaryKey>
+        where TEntityDto : IEntityDto<TPrimaryKey>, IExtendableDto
         where TFormDialogCoponent : ComponentBase
         where TGetAllInput : new()
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput>
@@ -239,7 +239,7 @@ namespace ZLJ.Web.Customer.Shared
                                                                             TPrimaryKey,
                                                                             PagedAndSortedResultRequestDto>
         where TFormDialogCoponent : ComponentBase
-        where TEntityDto : IEntityDto<TPrimaryKey>
+        where TEntityDto : IEntityDto<TPrimaryKey>, IExtendableDto
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey>
     {
     }
@@ -255,7 +255,7 @@ namespace ZLJ.Web.Customer.Shared
                                                                            TFormDialogCoponent,
                                                                            TEntityDto,
                                                                            int>
-        where TEntityDto : IEntityDto<int>
+        where TEntityDto : IEntityDto<int>, IExtendableDto
         where TFormDialogCoponent : ComponentBase
         where TAppService : ICrudBaseAppService<TEntityDto>
     {

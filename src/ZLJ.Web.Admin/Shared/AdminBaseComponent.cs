@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using MudBlazor;
 using Microsoft.Extensions.DependencyInjection;
 using BXJG.Utils;
-using BXJG.MudBlazor.Components;
+using BXJG.AbpMudBlazor.Components;
 
 namespace ZLJ.Web.Admin.Shared
 {
