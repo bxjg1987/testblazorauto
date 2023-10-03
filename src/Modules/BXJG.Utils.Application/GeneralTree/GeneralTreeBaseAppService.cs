@@ -443,15 +443,15 @@ namespace BXJG.Utils.GeneralTree
                                            TDto,
                                            TCreateInput,
                                            TEditDto,
-                                           TDeleteInput,
                                            TGetAllInput,
+                                           TDeleteInput,
                                            TGetInput,
                                            TMoveInput,
                                            TManager> : ApplicationService, IGeneralTreeBaseAppService<TDto,
                                                                                                       TCreateInput,
                                                                                                       TEditDto,
-                                                                                                      TDeleteInput,
                                                                                                       TGetAllInput,
+                                                                                                      TDeleteInput,
                                                                                                       TGetInput,
                                                                                                       TMoveInput>
         where TCreateInput : GeneralTreeNodeEditBaseDto //注意这里约束为TEditDto，这样强制要求继承编辑模型不合理
@@ -981,22 +981,22 @@ namespace BXJG.Utils.GeneralTree
                                            TDto,
                                            TCreateInput,
                                            TEditDto,
-                                           TDeleteInput,
                                            TGetAllInput,
+                                           TDeleteInput,
                                            TGetInput,
                                            TMoveInput> : GeneralTreeBaseAppService<TEntity,
                                                                                    TDto,
                                                                                    TCreateInput,
                                                                                    TEditDto,
-                                                                                   TDeleteInput,
                                                                                    TGetAllInput,
+                                                                                   TDeleteInput,
                                                                                    TGetInput,
                                                                                    TMoveInput,
                                                                                    GeneralTreeManager<TEntity>>, IGeneralTreeBaseAppService<TDto,
                                                                                                                                             TCreateInput,
                                                                                                                                             TEditDto,
-                                                                                                                                            TDeleteInput,
                                                                                                                                             TGetAllInput,
+                                                                                                                                            TDeleteInput,
                                                                                                                                             TGetInput,
                                                                                                                                             TMoveInput>
         where TCreateInput : GeneralTreeNodeEditBaseDto //注意这里约束为TEditDto，这样强制要求继承编辑模型不合理
@@ -1025,20 +1025,20 @@ namespace BXJG.Utils.GeneralTree
                                            TDto,
                                            TCreateInput,
                                            TEditDto,
-                                           TDeleteInput,
                                            TGetAllInput,
+                                           TDeleteInput,
                                            TGetInput> : GeneralTreeBaseAppService<TEntity,
                                                                                   TDto,
                                                                                   TCreateInput,
                                                                                   TEditDto,
-                                                                                  TDeleteInput,
                                                                                   TGetAllInput,
+                                                                                  TDeleteInput,
                                                                                   TGetInput,
                                                                                   GeneralTreeNodeMoveInput>, IGeneralTreeBaseAppService<TDto,
                                                                                                                                         TCreateInput,
                                                                                                                                         TEditDto,
-                                                                                                                                        TDeleteInput,
                                                                                                                                         TGetAllInput,
+                                                                                                                                        TDeleteInput,
                                                                                                                                         TGetInput>
         where TCreateInput : GeneralTreeNodeEditBaseDto //注意这里约束为TEditDto，这样强制要求继承编辑模型不合理
         where TDeleteInput : BatchOperationInputLong
@@ -1064,18 +1064,18 @@ namespace BXJG.Utils.GeneralTree
                                            TDto,
                                            TCreateInput,
                                            TEditDto,
-                                           TDeleteInput,
-                                           TGetAllInput> : GeneralTreeBaseAppService<TEntity,
+                                           TGetAllInput,
+                                           TDeleteInput> : GeneralTreeBaseAppService<TEntity,
                                                                                      TDto,
                                                                                      TCreateInput,
                                                                                      TEditDto,
-                                                                                     TDeleteInput,
                                                                                      TGetAllInput,
+                                                                                     TDeleteInput,
                                                                                      EntityDto<long>>, IGeneralTreeBaseAppService<TDto,
                                                                                                                                   TCreateInput,
                                                                                                                                   TEditDto,
-                                                                                                                                  TDeleteInput,
-                                                                                                                                  TGetAllInput>
+                                                                                                                                  TGetAllInput,
+                                                                                                                                  TDeleteInput>
         where TCreateInput : GeneralTreeNodeEditBaseDto //注意这里约束为TEditDto，这样强制要求继承编辑模型不合理
         where TDeleteInput : BatchOperationInputLong
         where TEntity : GeneralTreeEntity<TEntity>
@@ -1092,23 +1092,24 @@ namespace BXJG.Utils.GeneralTree
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TDto"></typeparam>
     /// <typeparam name="TCreateInput"></typeparam>
-    /// <typeparam name="TDeleteInput"></typeparam>
+    /// <typeparam name="TGetAllInput"></typeparam>
     /// <typeparam name="TEditDto"></typeparam>
     public class GeneralTreeBaseAppService<TEntity,
                                            TDto,
                                            TCreateInput,
                                            TEditDto,
-                                           TDeleteInput> : GeneralTreeBaseAppService<TEntity,
+                                           TGetAllInput> : GeneralTreeBaseAppService<TEntity,
                                                                                      TDto,
                                                                                      TCreateInput,
                                                                                      TEditDto,
-                                                                                     TDeleteInput,
-                                                                                     GeneralTreeGetTreeInput>, IGeneralTreeBaseAppService<TDto,
+                                                                                     TGetAllInput,
+                                                                                     BatchOperationInputLong/* GeneralTreeGetTreeInput*/>, IGeneralTreeBaseAppService<TDto,
                                                                                                                                           TCreateInput,
                                                                                                                                           TEditDto,
-                                                                                                                                          TDeleteInput>
+                                                                                                                                          TGetAllInput>
         where TCreateInput : GeneralTreeNodeEditBaseDto //注意这里约束为TEditDto，这样强制要求继承编辑模型不合理
-        where TDeleteInput : BatchOperationInputLong
+     //   where TDeleteInput : BatchOperationInputLong
+            where TGetAllInput : GeneralTreeGetTreeInput
         where TEntity : GeneralTreeEntity<TEntity>
         where TDto : GeneralTreeGetTreeNodeBaseDto<TDto>, new()
         where TEditDto : GeneralTreeNodeEditBaseDto//父类可以对输入做一定的处理
@@ -1130,7 +1131,7 @@ namespace BXJG.Utils.GeneralTree
                                                                                  TDto,
                                                                                  TCreateInput,
                                                                                  TEditDto,
-                                                                                 BatchOperationInputLong>, IGeneralTreeBaseAppService<TDto,
+                                                                                 GeneralTreeGetTreeInput>, IGeneralTreeBaseAppService<TDto,
                                                                                                                                       TCreateInput,
                                                                                                                                       TEditDto>
         where TCreateInput : GeneralTreeNodeEditBaseDto //注意这里约束为TEditDto，这样强制要求继承编辑模型不合理

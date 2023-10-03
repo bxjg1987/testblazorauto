@@ -36,8 +36,8 @@ namespace BXJG.Utils.GeneralTree
                                                                       GeneralTreeDto,
                                                                       GeneralTreeEditDto,
                                                                       GeneralTreeEditDto,
-                                                                      BatchOperationInputLong,
                                                                       GeneralTreeGetTreeInput,
+                                                                      BatchOperationInputLong,
                                                                       EntityDto<long>,
                                                                       GeneralTreeNodeMoveInput,
                                                                       GeneralTreeManager>, IDataDictionaryAppService

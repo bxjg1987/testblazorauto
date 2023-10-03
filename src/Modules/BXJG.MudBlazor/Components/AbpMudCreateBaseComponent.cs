@@ -38,7 +38,7 @@ namespace BXJG.AbpMudBlazor.Components
                                            TCreateInput,
                                            TUpdateInput> : AbpMudBaseComponent
         where TEntityDto : IEntityDto<TPrimaryKey>
-        where TGetAllInput : new()
+        where TCreateInput : new()
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
     {
@@ -77,7 +77,7 @@ namespace BXJG.AbpMudBlazor.Components
         /// <returns></returns>
         protected virtual ValueTask<TCreateInput> CreateDtoInstance()
         {
-            return ValueTask.FromResult(Activator.CreateInstance<TCreateInput>());
+            return ValueTask.FromResult(/*Activator.CreateInstance<TCreateInput>()*/new TCreateInput());
         }
         /// <summary>
         /// 保存后是否继续新增
@@ -234,7 +234,7 @@ namespace BXJG.AbpMudBlazor.Components
                                                                                            TCreateInput,
                                                                                            TUpdateInput>
         where TEntityDto : IEntityDto<TPrimaryKey>
-        where TGetAllInput : new()
+        where TCreateInput : new()
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
     {

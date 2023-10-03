@@ -19,16 +19,16 @@ namespace ZLJ.App.Customer
                                                 TDto,
                                                 TCreateInput,
                                                 TEditDto,
-                                                TDeleteInput,
                                                 TGetAllInput,
+                                                TDeleteInput,
                                                 TGetInput,
                                                 TMoveInput,
                                                 TManager> : CommonTreeCrudBaseAppService<TEntity,
                                                                                          TDto,
                                                                                          TCreateInput,
                                                                                          TEditDto,
-                                                                                         TDeleteInput,
                                                                                          TGetAllInput,
+                                                                                         TDeleteInput,
                                                                                          TGetInput,
                                                                                          TMoveInput,
                                                                                          TManager>
@@ -65,22 +65,22 @@ namespace ZLJ.App.Customer
                                                 TDto,
                                                 TCreateInput,
                                                 TEditDto,
-                                                TDeleteInput,
                                                 TGetAllInput,
+                                                TDeleteInput,
                                                 TGetInput,
                                                 TMoveInput> : CustomerTreeCrudBaseAppService<TEntity,
                                                                                              TDto,
                                                                                              TCreateInput,
                                                                                              TEditDto,
-                                                                                             TDeleteInput,
                                                                                              TGetAllInput,
+                                                                                             TDeleteInput,
                                                                                              TGetInput,
                                                                                              TMoveInput,
                                                                                              GeneralTreeManager<TEntity>>, IGeneralTreeBaseAppService<TDto,
                                                                                                                                                       TCreateInput,
                                                                                                                                                       TEditDto,
-                                                                                                                                                      TDeleteInput,
                                                                                                                                                       TGetAllInput,
+                                                                                                                                                      TDeleteInput,
                                                                                                                                                       TGetInput,
                                                                                                                                                       TMoveInput>
         where TDto : GeneralTreeGetTreeNodeBaseDto<TDto>, new()
@@ -107,20 +107,20 @@ namespace ZLJ.App.Customer
                                                 TDto,
                                                 TCreateInput,
                                                 TEditDto,
-                                                TDeleteInput,
                                                 TGetAllInput,
+                                                TDeleteInput,
                                                 TGetInput> : CustomerTreeCrudBaseAppService<TEntity,
                                                                                             TDto,
                                                                                             TCreateInput,
                                                                                             TEditDto,
-                                                                                            TDeleteInput,
                                                                                             TGetAllInput,
+                                                                                            TDeleteInput,
                                                                                             TGetInput,
                                                                                             GeneralTreeNodeMoveInput>, IGeneralTreeBaseAppService<TDto,
                                                                                                                                                   TCreateInput,
                                                                                                                                                   TEditDto,
-                                                                                                                                                  TDeleteInput,
                                                                                                                                                   TGetAllInput,
+                                                                                                                                                  TDeleteInput,
                                                                                                                                                   TGetInput>
         where TDto : GeneralTreeGetTreeNodeBaseDto<TDto>, new()
         where TCreateInput : GeneralTreeNodeEditBaseDto
@@ -144,18 +144,18 @@ namespace ZLJ.App.Customer
                                                 TDto,
                                                 TCreateInput,
                                                 TEditDto,
-                                                TDeleteInput,
-                                                TGetAllInput> : CustomerTreeCrudBaseAppService<TEntity,
+                                                TGetAllInput,
+                                                TDeleteInput> : CustomerTreeCrudBaseAppService<TEntity,
                                                                                             TDto,
                                                                                             TCreateInput,
                                                                                             TEditDto,
-                                                                                            TDeleteInput,
                                                                                             TGetAllInput,
+                                                                                            TDeleteInput,
                                                                                             EntityDto<long>>, IGeneralTreeBaseAppService<TDto,
                                                                                                                                                   TCreateInput,
                                                                                                                                                   TEditDto,
-                                                                                                                                                  TDeleteInput,
-                                                                                                                                                  TGetAllInput>
+                                                                                                                                                  TGetAllInput,
+                                                                                                                                                  TDeleteInput>
         where TDto : GeneralTreeGetTreeNodeBaseDto<TDto>, new()
         where TCreateInput : GeneralTreeNodeEditBaseDto
         where TEditDto : GeneralTreeNodeEditBaseDto
@@ -171,24 +171,24 @@ namespace ZLJ.App.Customer
     /// <typeparam name="TDto">列表和详情返回的模型</typeparam>
     /// <typeparam name="TCreateInput">新增时的输入模型</typeparam>
     /// <typeparam name="TEditDto">修改时的输入模型</typeparam>
-    /// <typeparam name="TDeleteInput">批量删除输入模型</typeparam>
+    /// <typeparam name="TGetAllInput">批量删除输入模型</typeparam>
     public class CustomerTreeCrudBaseAppService<TEntity,
                                                 TDto,
                                                 TCreateInput,
                                                 TEditDto,
-                                                TDeleteInput> : CustomerTreeCrudBaseAppService<TEntity,
+                                                TGetAllInput> : CustomerTreeCrudBaseAppService<TEntity,
                                                                                                TDto,
                                                                                                TCreateInput,
                                                                                                TEditDto,
-                                                                                               TDeleteInput,
-                                                                                               GeneralTreeGetTreeInput>, IGeneralTreeBaseAppService<TDto,
+                                                                                               TGetAllInput,
+                                                                                             BatchOperationInputLong>, IGeneralTreeBaseAppService<TDto,
                                                                                                                                                     TCreateInput,
                                                                                                                                                     TEditDto,
-                                                                                                                                                    TDeleteInput>
+                                                                                                                                                    TGetAllInput>
         where TDto : GeneralTreeGetTreeNodeBaseDto<TDto>, new()
         where TCreateInput : GeneralTreeNodeEditBaseDto
         where TEditDto : GeneralTreeNodeEditBaseDto
-        where TDeleteInput : BatchOperationInputLong
+        where TGetAllInput : GeneralTreeGetTreeInput
         where TEntity : GeneralTreeEntity<TEntity>
     { }
 
@@ -206,7 +206,7 @@ namespace ZLJ.App.Customer
                                                                                                TDto,
                                                                                                TCreateInput,
                                                                                                TEditDto,
-                                                                                               BatchOperationInputLong>, IGeneralTreeBaseAppService<TDto,
+                                                                                                 GeneralTreeGetTreeInput>, IGeneralTreeBaseAppService<TDto,
                                                                                                                                                     TCreateInput,
                                                                                                                                                     TEditDto>
         where TDto : GeneralTreeGetTreeNodeBaseDto<TDto>, new()

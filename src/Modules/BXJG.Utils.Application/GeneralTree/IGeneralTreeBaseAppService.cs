@@ -94,8 +94,8 @@ namespace BXJG.Utils.GeneralTree
     public interface IGeneralTreeBaseAppService<TDto,
                                                 in TCreateInput,
                                                 in TEditDto,
-                                                in TDeleteInput,
                                                 in TGetAllInput,
+                                                in TDeleteInput,
                                                 in TGetInput,
                                                 in TMoveInput> : IApplicationService
     {
@@ -154,13 +154,13 @@ namespace BXJG.Utils.GeneralTree
     public interface IGeneralTreeBaseAppService<TDto,
                                                 in TCreateInput,
                                                 in TEditDto,
-                                                in TDeleteInput,
                                                 in TGetAllInput,
+                                                in TDeleteInput,
                                                 in TGetInput> : IGeneralTreeBaseAppService<TDto,
                                                                                            TCreateInput,
                                                                                            TEditDto,
-                                                                                           TDeleteInput,
                                                                                            TGetAllInput,
+                                                                                           TDeleteInput,
                                                                                            TGetInput,
                                                                                            GeneralTreeNodeMoveInput>
     { }
@@ -176,12 +176,12 @@ namespace BXJG.Utils.GeneralTree
     public interface IGeneralTreeBaseAppService<TDto,
                                                 in TCreateInput,
                                                 in TEditDto,
-                                                in TDeleteInput,
-                                                in TGetAllInput> : IGeneralTreeBaseAppService<TDto,
+                                                in TGetAllInput,
+                                                in TDeleteInput> : IGeneralTreeBaseAppService<TDto,
                                                                                               TCreateInput,
                                                                                               TEditDto,
-                                                                                              TDeleteInput,
                                                                                               TGetAllInput,
+                                                                                              TDeleteInput,
                                                                                               EntityDto<long>>
     { }
 
@@ -192,15 +192,15 @@ namespace BXJG.Utils.GeneralTree
     /// <typeparam name="TDto">管理页面显示的Dto类型</typeparam>
     /// <typeparam name="TCreateInput">新增模型</typeparam>
     /// <typeparam name="TEditDto">编辑模型</typeparam>
-    /// <typeparam name="TDeleteInput">删除时的输入模型</typeparam>
+    /// <typeparam name="TGetAllInput">删除时的输入模型</typeparam>
     public interface IGeneralTreeBaseAppService<TDto,
                                                 in TCreateInput,
                                                 in TEditDto,
-                                                in TDeleteInput> : IGeneralTreeBaseAppService<TDto,
+                                                in TGetAllInput> : IGeneralTreeBaseAppService<TDto,
                                                                                               TCreateInput,
                                                                                               TEditDto,
-                                                                                              TDeleteInput,
-                                                                                              GeneralTreeGetTreeInput>
+                                                                                              TGetAllInput,
+                                                                                             BatchOperationInputLong>
     { }
     /// <summary>
     /// 通用树形结构服务接口，其它树形接口应该继承此接口以获得树形结构数据的通用功能
@@ -213,7 +213,7 @@ namespace BXJG.Utils.GeneralTree
                                                 in TEditDto> : IGeneralTreeBaseAppService<TDto,
                                                                                           TCreateInput,
                                                                                           TEditDto,
-                                                                                          BatchOperationInputLong>
+                                                                                          GeneralTreeGetTreeInput>
     { }
     /// <summary>
     /// 通用树形结构服务接口，其它树形接口应该继承此接口以获得树形结构数据的通用功能

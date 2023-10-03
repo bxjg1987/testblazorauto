@@ -42,7 +42,7 @@ namespace BXJG.AbpMudBlazor.Components
                                                     TCreateInput,
                                                     TUpdateInput> : AbpMudBaseComponent
         where TEntityDto : IEntityDto<TPrimaryKey>
-        where TGetAllInput : new()
+        //where TGetAllInput : new()
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
     {
@@ -394,7 +394,7 @@ namespace BXJG.AbpMudBlazor.Components
                                                                                                     TCreateInput,
                                                                                                     TUpdateInput>
         where TEntityDto : IEntityDto<TPrimaryKey>
-        where TGetAllInput : new()
+        //where TGetAllInput : new()
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
     {

@@ -43,7 +43,7 @@ namespace BXJG.AbpMudBlazor.Components
                                                   TGetAllInput,
                                                   TCreateInput,
                                                   TUpdateInput> : AbpMudBaseComponent
-        where TEntityDto : IEntityDto<TPrimaryKey>
+        where TEntityDto : IEntityDto<TPrimaryKey>, IExtendableDto
         where TGetAllInput : new()
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
@@ -214,17 +214,15 @@ namespace BXJG.AbpMudBlazor.Components
                 dataGrid.SelectedItems.Clear();//翻页时，已选择的好像木有清空，这里手动来下
 
                 //给每行属性附加额外状态
-                if (typeof(IExtendableDto).IsAssignableFrom(typeof(TEntityDto)))
-                {
-                    foreach (var item in dtos.Items)
+               
+                    foreach (var dto in dtos.Items)
                     {
-                        var dto = item as IExtendableDto;
                         dynamic dd = new ExpandoObject();
                         dd.IsDeleting = false;
                         dd.IsShowDeleteConfirmation = false;
                         dto.ExtensionData = dd;
                     }
-                }
+              
 
                 return new GridData<TEntityDto>
                 {
@@ -354,9 +352,9 @@ namespace BXJG.AbpMudBlazor.Components
         protected virtual void HideDeleteConfirm()
         {
             isShowDeleteConfirm = false;
-            foreach (var item in dataGrid.FilteredItems)
+            foreach (var dto in dataGrid.FilteredItems)
             {
-                if (item is IExtendableDto dto)
+         
                     dto.ExtensionData.IsShowDeleteConfirmation = false;
             }
         }
@@ -387,25 +385,24 @@ namespace BXJG.AbpMudBlazor.Components
         /// <summary>
         /// 删除单个项
         /// </summary>
-        /// <param name="input"></param>
+        /// <param name="item"></param>
         /// <returns></returns>
-        protected virtual async Task Delete(TEntityDto curr)
+        protected virtual async Task Delete(TEntityDto item)
         {
             //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限
             // var curr = dataGrid.Items.Single(c => c.Id!.Equals(input.Id));
             HideDeleteConfirm();
-            var item = curr as IExtendableDto;
-            if (item != default)
+         
                 item.ExtensionData.IsDeleting = true;
             await SafelyExecuteAsync(async () =>
             {
-                await AppService.DeleteAsync(new EntityDto<TPrimaryKey>(curr.Id));
+                await AppService.DeleteAsync(new EntityDto<TPrimaryKey>(item.Id));
                 Snackbar.Add("删除成功！", Severity.Success);
                 //若上面异常，下面不会执行
                 //_ = InvokeAsync(dataGrid.ReloadServerData);
                 await dataGrid.ReloadServerData();
             });
-            if (item != default)
+        
                 item.ExtensionData.IsDeleting = false;
         }
         /// <summary>
@@ -415,8 +412,8 @@ namespace BXJG.AbpMudBlazor.Components
         protected virtual void ShowDeleteConfirm(TEntityDto dto)
         {
             HideDeleteConfirm();
-            if (dto is IExtendableDto item)
-                item.ExtensionData.IsShowDeleteConfirmation = true;
+
+            dto.ExtensionData.IsShowDeleteConfirmation = true;
         }
         ///// <summary>
         ///// 隐藏删除明细的确认框
@@ -459,7 +456,7 @@ namespace BXJG.AbpMudBlazor.Components
                                                                                                 TUpdateInput>
         where TCreateDialog : ComponentBase
         where TDetailDialog : ComponentBase
-        where TEntityDto : IEntityDto<TPrimaryKey>
+        where TEntityDto : IEntityDto<TPrimaryKey>, IExtendableDto
         where TGetAllInput : new()
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
