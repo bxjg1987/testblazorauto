@@ -19,8 +19,8 @@ namespace ZLJ.App.Admin.BaseInfo.Administrative
                                                                                     AdministrativeDto,
                                                                                     AdministrativeEditDto,
                                                                                     AdministrativeEditDto,
-                                                                                    BatchOperationInputLong,
-                                                                                    GeneralTreeGetTreeInput>//, IBXJGBaseInfoAdministrativeAppService
+                                                                                    GeneralTreeGetTreeInput,
+                                                                                    BatchOperationInputLong>//, IBXJGBaseInfoAdministrativeAppService
     {
         //public BXJGBaseInfoAdministrativeAppService(
         //    IRepository<AdministrativeEntity, long> repository,

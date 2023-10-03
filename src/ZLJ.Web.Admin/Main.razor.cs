@@ -1,7 +1,6 @@
 ﻿using Abp.Domain.Entities;
 using Abp.Notifications;
 using BXJG.Common;
-using BXJG.MudBlazor.Components;
 using MudBlazor;
 using System;
 using System.Collections.Generic;
@@ -45,11 +44,11 @@ namespace ZLJ.Web.Admin
             //await uow.CompleteAsync();
         }
 
-        private async void baojingtongzhi2()
-        {
-            var dr = DialogService.Show<AbpMudCreateDialog>();
-            var r = await dr.Result;
-        }
+        //private async void baojingtongzhi2()
+        //{
+        //    var dr = DialogService.Show<AbpMudCreateDialog>();
+        //    var r = await dr.Result;
+        //}
 
         private async Task baojingtongzhi()
         {
