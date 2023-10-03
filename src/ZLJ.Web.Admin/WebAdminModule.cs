@@ -1,6 +1,5 @@
 ﻿using Abp.Modules;
-using BXJG.MudBlazor;
-using BXJG.Utils;
+using BXJG.AbpMudBlazor;
 using BXJG.Utils;
 using MudBlazor;
 using MudBlazor.Services;
