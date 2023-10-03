@@ -46,6 +46,10 @@
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
+		<Compile Remove="App_Data\**" />
+		<EmbeddedResource Remove="App_Data\**" />
+		<Content Remove="App_Data\**" />
+		<None Remove="App_Data\**" />
 	</ItemGroup>
 	<ItemGroup>
 		<Compile Remove="Controllers\FileController.cs" />
@@ -146,7 +150,6 @@
 		</Content>
 	</ItemGroup>
 	<ItemGroup>
-		<Folder Include="App_Data\Logs\" />
 		<Folder Include="Views\BLogger\" />
 	</ItemGroup>
 	<ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" properties_4launchsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
