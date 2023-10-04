@@ -38,6 +38,11 @@ namespace BXJG.Utils.GeneralTree
         public virtual int? TenantId { get; set; }
 
         public virtual IList<TEntity> Children { get; set; }
+        /// <summary>
+        /// 子节点数量
+        /// </summary>
+        [ConcurrencyCheck]
+        public int ChildrenCount { get; set; }
 
         [Required]
         [StringLength(MaxDisplayNameLength)]

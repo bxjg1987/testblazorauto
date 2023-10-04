@@ -270,7 +270,11 @@ namespace BXJG.Utils.GeneralTree
         /// <returns></returns>
         protected virtual IQueryable<TEntity> ComboTreeFilter(TGetTreeForSelectInput input, string parentCode)
         {
-            var q = BuildQuery().Where(c => c.Code.StartsWith(parentCode));
+            var q = BuildQuery().WhereIf(!input.IsOnlyLoadChild, c => c.Code.StartsWith(parentCode))
+                                .WhereIf(input.IsOnlyLoadChild&&parentCode.IsNotNullOrWhiteSpaceBXJG(), c => c.Parent.Code==parentCode || c.Code == parentCode)
+                                .WhereIf(input.IsOnlyLoadChild && parentCode.IsNullOrWhiteSpaceBXJG(), c => !c.ParentId.HasValue);
+
+
             if (input is IHaveFilter p)
                 q = q.ApplyDynamicCondtion(p.Filter);
             return q;
@@ -897,7 +901,9 @@ namespace BXJG.Utils.GeneralTree
         /// <returns></returns>
         protected virtual IQueryable<TEntity> GetAllFiltered(TGetAllInput input, string parentCode)
         {
-            var q = BuildQuery().AsNoTrackingWithIdentityResolution().Where(c => c.Code.StartsWith(parentCode));//.ApplyDynamicCondtion(input);
+            var q = BuildQuery().AsNoTrackingWithIdentityResolution().WhereIf(!input.IsOnlyLoadChild, c => c.Code.StartsWith(parentCode))
+                                                                      .WhereIf(input.IsOnlyLoadChild && parentCode.IsNotNullOrWhiteSpaceBXJG(), c => c.Parent.Code==parentCode|| c.Code==parentCode)
+                                .WhereIf(input.IsOnlyLoadChild && parentCode.IsNullOrWhiteSpaceBXJG(), c => !c.ParentId.HasValue);
             if (input is IHaveFilter p)
                 q = q.ApplyDynamicCondtion(p.Filter);
             return q;

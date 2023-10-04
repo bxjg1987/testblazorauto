@@ -1,4 +1,5 @@
 ﻿using Abp;
+using Abp.Collections.Extensions;
 using Abp.Domain.Repositories;
 using Abp.Domain.Services;
 using Abp.Domain.Uow;
@@ -44,10 +45,12 @@ namespace BXJG.Utils.GeneralTree
 
         public virtual async Task<TEntity> CreateAsync(TEntity entity)
         {
+            TEntity parent = null;
             if (entity.ParentId.HasValue)
             {
-                var parentCodeQuery = repository.GetAll().Where(c => c.Id == entity.ParentId.Value).Select(c => c.Code);
-                var parentCode = await AsyncQueryableExecuter.FirstOrDefaultAsync(parentCodeQuery);
+                parent = await AsyncQueryableExecuter.FirstOrDefaultAsync(repository.GetAll().Where(c => c.Id == entity.ParentId.Value));
+                //  var parentCodeQuery = repository.GetAll().Where(c => c.Id == entity.ParentId.Value).Select(c => c.Code);
+                var parentCode = parent.Code;// await AsyncQueryableExecuter.FirstOrDefaultAsync(parentCodeQuery);
                 var childrenCount = await repository.CountAsync(c => c.ParentId == entity.ParentId);
                 entity.Code = BuildCode(parentCode, childrenCount);
             }
@@ -58,7 +61,19 @@ namespace BXJG.Utils.GeneralTree
             }
             await repository.InsertAsync(entity);
             await base.CurrentUnitOfWork.SaveChangesAsync();
+            if (parent != null)
+                await UpdateChildrenCount(parent);
             return entity;
+        }
+
+        /// <summary>
+        /// 更新节点的子节点数量
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public virtual async Task UpdateChildrenCount(TEntity entity)
+        {
+            entity.ChildrenCount = await AsyncQueryableExecuter.CountAsync(repository.GetAll().Where(c => c.ParentId == entity.Id));
         }
 
         public virtual async Task<TEntity> UpdateAsync(TEntity entity)
@@ -92,17 +107,31 @@ namespace BXJG.Utils.GeneralTree
 
         public virtual async Task DeleteAsync(Func<TEntity, ValueTask> act, params long[] keys)
         {
-           // if (keys != null && keys.Length > 0)
+            // if (keys != null && keys.Length > 0)
             //{
-                //默认情况下ParentId的外键关联没有做级联删除，因为我们想通过程序来控制
-                var entities = await repository.GetAllListAsync(c => keys.Contains(c.Id));
-                foreach (var item in entities)
+            //默认情况下ParentId的外键关联没有做级联删除，因为我们想通过程序来控制
+            var entities = await repository.GetAllListAsync(c => keys.Contains(c.Id));
+            HashSet<long> parentIds = new HashSet<long>();
+            foreach (var item in entities)
+            {
+                if (item.ParentId.HasValue)
+                    parentIds.AddIfNotContains(item.ParentId.Value);
+
+                if (act != null)
+                    await act(item);
+                await repository.DeleteAsync(c => c.Code.StartsWith(item.Code));
+
+            }
+            await CurrentUnitOfWork.SaveChangesAsync();
+            if (parentIds.Any())
+            {
+                var parents = await AsyncQueryableExecuter.ToListAsync(repository.GetAll().Where(c => parentIds.Contains(c.Id)));
+                foreach (var item in parents)
                 {
-                    if (act != null)
-                        await act(item);
-                    await repository.DeleteAsync(c => c.Code.StartsWith(item.Code));
+                    await UpdateChildrenCount(item);
                 }
-                //这里后台节点 还需要重置code，以后来改
+            }
+            //这里后台节点 还需要重置code，以后来改
             //}
             //else
             //{
@@ -134,6 +163,9 @@ namespace BXJG.Utils.GeneralTree
         }
         public virtual async Task<TEntity> MoveAsync(TEntity source, TEntity target, GeneralTreeMoveType moveType)
         {
+            HashSet<long> parentIds = new HashSet<long>();
+           if(source.ParentId.HasValue)
+                parentIds.AddIfNotContains(source.ParentId.Value);
 
             TEntity targetParent = null;
             IList<TEntity> targetChildren = null;
@@ -151,6 +183,9 @@ namespace BXJG.Utils.GeneralTree
             //else
             if (moveType != GeneralTreeMoveType.Append)
             {
+             
+                    parentIds.AddIfNotContains(target.Id);
+
                 var temp1 = await GetBrotherWithOffspringAsync(target);
                 targetParent = temp1.Item1;
                 targetChildren = temp1.Item2;
@@ -158,6 +193,9 @@ namespace BXJG.Utils.GeneralTree
             }
             else
             {
+                if (target.ParentId.HasValue)
+                    parentIds.AddIfNotContains(target.ParentId.Value);
+
                 targetParent = target;
                 if (target != null)
                 {
@@ -171,7 +209,20 @@ namespace BXJG.Utils.GeneralTree
                 }
                 targetIndex = targetChildren.Count;
             }
-            return await MoveAsync(source, targetParent, targetChildren, targetIndex);
+            var r = await MoveAsync(source, targetParent, targetChildren, targetIndex);
+
+            await CurrentUnitOfWork.SaveChangesAsync();
+            if (parentIds.Any())
+            {
+                var parents = await AsyncQueryableExecuter.ToListAsync(repository.GetAll().Where(c => parentIds.Contains(c.Id)));
+                foreach (var item in parents)
+                {
+                    await UpdateChildrenCount(item);
+                }
+            }
+
+
+            return r;
         }
 
 

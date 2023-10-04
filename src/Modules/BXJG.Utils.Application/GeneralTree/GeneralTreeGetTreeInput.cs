@@ -28,6 +28,11 @@ namespace BXJG.Utils.GeneralTree
         /// </summary>
         public string? ParentText { get; set; }
 
+        /// <summary>
+        /// 是否仅仅加载子节点，true只加载子节点，false加载所有后台节点
+        /// </summary>
+        public bool IsOnlyLoadChild { get; set; } = true;
+
         //由于关键字是or查询，若要让子类和父类的关键字条件在一个or链中，会让父类变得复杂，因此决定不在父类中定义关键字
         ///// <summary>
         ///// 关键字，若为空则限制

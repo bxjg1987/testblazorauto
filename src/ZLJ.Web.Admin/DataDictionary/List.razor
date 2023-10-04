@@ -5,7 +5,7 @@
 <MudStack Style="height:100%;" onclick="@(()=>HideDeleteConfirm())">
     <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
         <MudButtonGroup OverrideStyles="false">
-            @if (createIsGranted)
+            @if (isCreateGranted)
             {
                 <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Outlined.Add" Color="Color.Primary">新增</MudButton>
             }
@@ -13,9 +13,9 @@
             {
             <MudButton OnClick="()=>EditClick()" Disabled="!ShouldEnableEdit" Variant="Variant.Filled" StartIcon="@Icons.Material.Outlined.Edit" Color="Color.Default">修改</MudButton>
             }*@
-            @if (deleteIsGranted)
+            @if (isDeleteGranted)
             {
-                <MudButton OnClick="ShowDeleteConfirm" Disabled="ShouldDisableDelete" Variant="Variant.Filled" Color="Color.Warning">
+                <MudButton OnClick="ShowDeleteConfirm" Disabled="IsDisableDelete" Variant="Variant.Filled" Color="Color.Warning">
                     @if (isDeleting)
                     {
                         <MudProgressCircular Color="Color.Surface" Size="Size.Small" Indeterminate="true" />
@@ -30,7 +30,7 @@
                         <MudStack>
                             <MudAlert Severity="Severity.Warning">确定删除已选择的数据吗？</MudAlert>
                             <MudStack Row="true" Justify="Justify.Center">
-                                <MudButton OnClick="Delete" Size="Size.Small" Variant="Variant.Filled" Color="Color.Error">删除</MudButton>
+                                <MudButton OnClick="BtnDeleteClick" Size="Size.Small" Variant="Variant.Filled" Color="Color.Error">删除</MudButton>
                                 <MudButton OnClick="HideDeleteConfirm" Size="Size.Small" Variant="Variant.Filled" Color="Color.Default">取消</MudButton>
                             </MudStack>
                         </MudStack>
@@ -65,7 +65,7 @@
         @bind-SelectedValues="selected"
                      ExpandOnDoubleClick="true">
             <ItemTemplate>
-                <MudTreeViewItem Value="context" CanExpand="context.Children.Any()" LoadingIconColor="Color.Info">
+                <MudTreeViewItem Value="context" CanExpand="context.ChildrenCount>0" LoadingIconColor="Color.Info">
                     <BodyContent Context="item">
                         <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center" Style="width:100%;" Class="py-1">
                             <MudText Style="justify-self: start; width:20rem;">@context.DisplayName</MudText>
@@ -75,10 +75,33 @@
                             }
                             <MudButtonGroup OverrideStyles="false">
                                 <MudButton StartIcon="@Icons.Material.Filled.Info" Size="Size.Small" Variant="Variant.Outlined" Color="Color.Primary">详情</MudButton>
-                                <MudButton StartIcon="@Icons.Material.Filled.Edit" Size="Size.Small" Variant="Variant.Outlined">修改</MudButton>
-                                @if (!context.IsSysDefine)
+                                @if (isUpdateGranted)
                                 {
-                                    <MudButton StartIcon="@Icons.Material.Filled.Delete" Size="Size.Small" Variant="Variant.Outlined" Color="Color.Warning">删除</MudButton>
+                                    <MudButton StartIcon="@Icons.Material.Filled.Edit" Size="Size.Small" Variant="Variant.Outlined">修改</MudButton>
+                                }
+                                @if (!context.IsSysDefine&& isDeleteGranted)
+                                {
+                                    <MudButton OnClick="()=>ShowDeleteItemConfirm(context)" Size="Size.Small" Variant="Variant.Outlined" Color="Color.Warning">
+                                        @if ((context as IExtendableDto).ExtensionData.IsDeleting)
+                                        {
+                                            <MudProgressCircular Color="Color.Surface" Size="Size.Small" Indeterminate="true" />
+                                            <MudText class="ml-1">正在删除...</MudText>
+                                        }
+                                        else
+                                        {
+                                            <MudIcon Icon="@Icons.Material.Outlined.Delete" Size="Size.Small" />
+                                            <MudText Class="ml-1">删除</MudText>
+                                        }
+                                        <MudPopover Open="(context as IExtendableDto).ExtensionData.IsShowDeleteConfirmation" Fixed="true" Class="pa-3" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter">
+                                            <MudStack>
+                                                <MudAlert Severity="Severity.Warning">确定删除已选择的数据吗？</MudAlert>
+                                                <MudStack Row="true" Justify="Justify.Center">
+                                                    <MudButton OnClick="()=>BtnDeleteItemClick(context)" Size="Size.Small" Variant="Variant.Filled" Color="Color.Error">删除</MudButton>
+                                                    <MudButton OnClick="HideDeleteConfirm" Size="Size.Small" Variant="Variant.Filled" Color="Color.Default">取消</MudButton>
+                                                </MudStack>
+                                            </MudStack>
+                                        </MudPopover>
+                                    </MudButton>
                                 }
                             </MudButtonGroup>
                         </MudStack>

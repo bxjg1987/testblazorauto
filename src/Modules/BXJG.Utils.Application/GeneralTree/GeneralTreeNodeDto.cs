@@ -17,6 +17,10 @@ namespace BXJG.Utils.GeneralTree
         public string IconCls { get; set; }
         public bool Checked { get; set; }
         public string State => this.Children != null && this.Children.Count > 0 && !string.IsNullOrWhiteSpace(this.Code) ? "closed" : "open";
+        /// <summary>
+        /// 子节点数量
+        /// </summary>
+        public int ChildrenCount { get; set; }
         //public dynamic attributes { get; set; }
         public IList<T> Children { get; set; }
 

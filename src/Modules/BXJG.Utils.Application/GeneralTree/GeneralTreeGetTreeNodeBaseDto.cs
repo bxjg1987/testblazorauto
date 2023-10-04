@@ -40,6 +40,11 @@ namespace BXJG.Utils.GeneralTree
         /// </summary>
        // [Ignore]
         public string State => this.Children != null && this.Children.Count > 0&& !string.IsNullOrWhiteSpace(this.Code) ? "closed" : "open";
+        /// <summary>
+        /// 子节点数量
+        /// </summary>
+        public int ChildrenCount { get; set; }
+
         //{
         //    get
         //    {

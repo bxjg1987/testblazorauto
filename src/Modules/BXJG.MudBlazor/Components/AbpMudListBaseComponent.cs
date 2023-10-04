@@ -369,11 +369,12 @@ namespace BXJG.AbpMudBlazor.Components
             isDeleting = true;
             await SafelyExecuteAsync(async () =>
             {
-                var temp = await AppService.BatchDeleteAsync(new BatchOperationInput<TPrimaryKey> { Ids = dataGrid.SelectedItems?.Select(x => x.Id).ToArray() });
-                BatchOperationMessage(temp, "批量删除");
+                var r = await AppService.BatchDeleteAsync(new BatchOperationInput<TPrimaryKey> { Ids = dataGrid.SelectedItems?.Select(x => x.Id).ToArray() });
+                BatchOperationMessage(r, "批量删除");
                 //BatchDeleteMessage(temp);
-                if (temp.Ids.Count > 0)
+                if (r.Ids.Any())
                     await dataGrid.ReloadServerData();
+                BatchOperationMessage(r, "删除");
                 //_ = InvokeAsync(dataGrid.ReloadServerData); //内部会StateChange
             });
             isDeleting = false;

@@ -1,7 +1,9 @@
 ﻿using Abp.Application.Services.Dto;
+using Abp.UI;
 using BXJG.Common.Dto;
 using BXJG.Utils.Dto;
 using BXJG.Utils.GeneralTree;
+using BXJG.Utils.Notification;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using MudBlazor;
@@ -101,11 +103,11 @@ namespace BXJG.AbpMudBlazor.Components
         protected virtual async Task InitPermission(string createPermissionName = default, string updatePermissionName = default, string deletePermissionName = default/*, string getPermissionName = default*/)
         {
             if (createPermissionName.IsNotNullOrWhiteSpaceBXJG())
-                createIsGranted = await PermissionChecker.IsGrantedAsync(createPermissionName);
+                isCreateGranted = await PermissionChecker.IsGrantedAsync(createPermissionName);
             if (updatePermissionName.IsNotNullOrWhiteSpaceBXJG())
-                updateIsGranted = await PermissionChecker.IsGrantedAsync(updatePermissionName);
+                isUpdateGranted = await PermissionChecker.IsGrantedAsync(updatePermissionName);
             if (deletePermissionName.IsNotNullOrWhiteSpaceBXJG())
-                deleteIsGranted = await PermissionChecker.IsGrantedAsync(deletePermissionName);
+                isDeleteGranted = await PermissionChecker.IsGrantedAsync(deletePermissionName);
             //if (getPermissionName.IsNotNullOrWhiteSpaceBXJG())
             //    getIsGranted = await PermissionChecker.IsGrantedAsync(getPermissionName);
         }
@@ -229,15 +231,23 @@ namespace BXJG.AbpMudBlazor.Components
             //dataGrid.SelectedItems.Clear();//翻页时，已选择的好像木有清空，这里手动来下
             foreach (var dto in dtos)
             {
+              //  dto.State= dto.Children!=null&& dto.Children
+              //  dto.Children.Clear();
+
                 dynamic dd = new ExpandoObject();
                 dd.IsDeleting = false;
                 dd.IsShowDeleteConfirmation = false;
-              //  dd.Control = new MudTreeViewItem<TEntityDto>();//准备一个变量，用于引用节点的控件
+                dd.Control = new MudTreeViewItem<TEntityDto>();//准备一个变量，用于引用节点的控件
                 dd.ExtData = dto.ExtensionData;
                 (dto as IExtendableDto).ExtensionData = dd;
+
+               // 
             }
             if (parentNode != null)
+            {
                 parentNode.Children = dtos;
+                //这里也许需要刷新下界面
+            }
             else
             {
                 tops = dtos.ToHashSet();
@@ -302,11 +312,11 @@ namespace BXJG.AbpMudBlazor.Components
         /// <summary>
         /// 是否有新增权限
         /// </summary>
-        protected bool createIsGranted = true;
+        protected bool isCreateGranted = true;
         /// <summary>
         /// 是否有修改权限
         /// </summary>
-        protected bool updateIsGranted = true;
+        protected bool isUpdateGranted = true;
 
         #endregion
 
@@ -314,13 +324,12 @@ namespace BXJG.AbpMudBlazor.Components
         /// <summary>
         /// 是否有删除权限
         /// </summary>
-        protected bool deleteIsGranted = true;
-
+        protected bool isDeleteGranted = true;
         //没权限时不显示的，所以不加入这个判断
         /// <summary>
         /// 是否禁用批量删除按钮，出现任意情况，则为true：正在加载数据；正在删除数据；没有选择数据；
         /// </summary>
-        protected virtual bool ShouldDisableDelete => isDeleting || selected == default || !selected.Any();
+        protected virtual bool IsDisableDelete => isDeleting || selected == default || !selected.Any();
 
         /// <summary>
         /// 是否批量删除的确认框
@@ -346,14 +355,28 @@ namespace BXJG.AbpMudBlazor.Components
             isShowDeleteConfirm = false;
             foreach (var item in mudTreeView.Items)
             {
-                (item as IExtendableDto).ExtensionData.IsShowDeleteConfirmation = false;
+                HideDeleteItemConfirm(item);
+            }
+        }
+        /// <summary>
+        /// 递归向下，隐藏所有明细的删除确认框
+        /// </summary>
+        protected virtual void HideDeleteItemConfirm(TEntityDto dto)
+        {
+            (dto as IExtendableDto).ExtensionData.IsShowDeleteConfirmation = false;
+            if (dto.Children != null && dto.Children.Any())
+            {
+                foreach (var item in dto.Children)
+                {
+                    HideDeleteItemConfirm(item);
+                }
             }
         }
         /// <summary>
         /// 批量删除
         /// </summary>
         /// <returns></returns>
-        protected virtual async Task Delete()
+        protected virtual async Task BtnDeleteClick()
         {
             await SafelyExecuteAsync(DeleteCore);
         }
@@ -370,11 +393,14 @@ namespace BXJG.AbpMudBlazor.Components
             {
                 HideDeleteConfirm();
 
-                var temp = await AppService.DeleteAsync(new BatchOperationInputLong { Ids = selected.Select(x => x.Id).ToArray() });
-                BatchOperationMessage(temp, "批量删除");
+                var r = await AppService.DeleteAsync(new BatchOperationInputLong { Ids = selected.Select(x => x.Id).ToArray() });
+               // BatchOperationMessage(temp, "批量删除");
                 //BatchDeleteMessage(temp);
-                if (temp.Ids.Count > 0)
+                if (r.Ids.Any())
+                {
                     await Refresh(mudTreeView.Items.SingleOrDefault(d => d.Id == selected.OrderBy(c => c.Code.Length).First().ParentId));
+                }
+                BatchOperationMessage(r, "删除");
                 //刷新选择节点中最短code的父节点，也就是所有选择节点的公共父节点
                 //_ = InvokeAsync(dataGrid.ReloadServerData); //内部会StateChange
             }
@@ -388,9 +414,9 @@ namespace BXJG.AbpMudBlazor.Components
         /// </summary>
         /// <param name="curr"></param>
         /// <returns></returns>
-        protected virtual async Task Delete(TEntityDto curr)
+        protected virtual async Task BtnDeleteItemClick(TEntityDto curr)
         {
-            await SafelyExecuteAsync(async () => await DeleteCore(curr));
+            await SafelyExecuteAsync(async () => await DeleteItemCore(curr));
         }
 
         /// <summary>
@@ -398,7 +424,7 @@ namespace BXJG.AbpMudBlazor.Components
         /// </summary>
         /// <param name="curr"></param>
         /// <returns></returns>
-        protected virtual async Task DeleteCore(TEntityDto curr)
+        protected virtual async Task DeleteItemCore(TEntityDto curr)
         {
             //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限
             // var curr = dataGrid.Items.Single(c => c.Id!.Equals(input.Id));
@@ -409,11 +435,12 @@ namespace BXJG.AbpMudBlazor.Components
             try
             {
                 HideDeleteConfirm();
-                await AppService.DeleteAsync(new BatchOperationInputLong { Ids = new[] { curr.Id } });
-                Snackbar.Add("删除成功！", Severity.Success);
-                //若上面异常，下面不会执行
-                //_ = InvokeAsync(dataGrid.ReloadServerData);
-                await Refresh(curr);
+                var r = await AppService.DeleteAsync(new BatchOperationInputLong { Ids = new[] { curr.Id } });
+                if (r.Ids.Any())
+                {
+                    await Refresh(curr);
+                }
+                BatchOperationMessage(r, "删除");
             }
             finally
             {
@@ -426,7 +453,7 @@ namespace BXJG.AbpMudBlazor.Components
         /// 显示删除明细的确认框
         /// </summary>
         /// <param name="dto"></param>
-        protected virtual void ShowDeleteConfirm(TEntityDto dto)
+        protected virtual void ShowDeleteItemConfirm(TEntityDto dto)
         {
             HideDeleteConfirm();
             (dto as IExtendableDto).ExtensionData.IsShowDeleteConfirmation = true;
