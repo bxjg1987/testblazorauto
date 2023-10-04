@@ -673,7 +673,7 @@ namespace BXJG.Utils.GeneralTree
         /// <param name="input"></param>
         /// <param name="func"></param>
         /// <returns></returns>
-        protected virtual async Task<BatchOperationOutputLong> BatchHandleAsync(BatchOperationInputLong input, Func<TEntity, ValueTask> func)
+        protected virtual async Task<BatchOperationOutputLong> BatchHandleAsync(TDeleteInput input, Func<TEntity, ValueTask> func)
         {
             var r = new BatchOperationOutputLong();
             foreach (var id in input.Ids)

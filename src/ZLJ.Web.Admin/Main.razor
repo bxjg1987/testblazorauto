@@ -7,8 +7,8 @@
 @*@inject NavigationManager Navigation*@
 @using ZLJ.Web.Admin.Notify
 
-<MudButton Variant="Variant.Filled" OnClick="suojitongzhi">测试发送解/锁机通知</MudButton>
-<MudButton Variant="Variant.Filled" OnClick="suojitongzhi2">测试发送解/锁机通知22</MudButton>
+<MudButton Variant="Variant.Filled" OnClick="suojitongzhi" @ref="buttons[0]" >测试发送解/锁机通知</MudButton>
+<MudButton Variant="Variant.Filled" OnClick="suojitongzhi2" @ref="buttons[1]">测试发送解/锁机通知22</MudButton>
 
 <MudButton Variant="Variant.Filled" OnClick="baojingtongzhi">测试报警通知</MudButton>
 

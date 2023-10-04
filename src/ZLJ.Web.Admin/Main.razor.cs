@@ -23,9 +23,11 @@ namespace ZLJ.Web.Admin
         //await  this.NotificationPublisher.PublishAsync(ZLJ.App.Common.Consts.ENEquipmentInstanceLastAlarmChanged,
         //    new MessageNotificationData($"设备{DateTime.Now.ToLongTimeString()}报警信息发送了变化，"), severity: NotificationSeverity.Error);  
         //}
-
+        MudButton[] buttons= new MudButton[2];
         private async Task suojitongzhi()
         {
+         //   MudTreeViewItem<object> sdf;
+           // sdf.click
             //var uow = base.UnitOfWorkManager.Begin();
             //await NotificationPublisher.PublishAsync(Consts.ENEquipmentInstanceLockStatusChanged,
             //                                                    new MessageNotificationData($"测试锁机通知...{RandomHelper.GetRandomString(12)}"),

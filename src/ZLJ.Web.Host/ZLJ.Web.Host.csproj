@@ -8,7 +8,8 @@
 		<AssemblyName>ZLJ.Web.Host</AssemblyName>
 		<OutputType>Exe</OutputType>
 		<PackageId>ZLJ.Web.Host</PackageId>
-		<UserSecretsId>ZLJ-56C2EF2F-DBD6-4EFC-AAF2-2E81C34E8FFF</UserSecretsId>
+		<!--去ZLJ.Core中设置，参考AppConfigurations-->
+		<!--<UserSecretsId>ZLJ-56C2EF2F-ABD6-4EFC-AAF2-2E81C34E8FB1</UserSecretsId>-->
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
 		<GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
 

@@ -1,6 +1,7 @@
 ﻿using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
 using AutoMapper.Configuration.Annotations;
+using BXJG.Common.Dto;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace BXJG.Utils.GeneralTree
     /// 树形数据管理的列表页使用的dto基类，它不是抽象的，可以直接使用
     /// </summary>
     /// <typeparam name="TChild"></typeparam>
-    public class GeneralTreeGetTreeNodeBaseDto<TChild> : AuditedEntityDto<long>
+    public class GeneralTreeGetTreeNodeBaseDto<TChild> : AuditedEntityDto<long>, IExtendableDto
         where TChild : GeneralTreeGetTreeNodeBaseDto<TChild>
     {
         /// <summary>
@@ -77,10 +78,12 @@ namespace BXJG.Utils.GeneralTree
                     ExtData = JsonConvert.DeserializeObject<dynamic>(value);
             }
         }
+        // public dynamic ExtensionData { get; set; } 
         /// <summary>
         /// 扩展属性
         /// </summary>
-       // [Ignore]
+        // [Ignore]
         public dynamic ExtData { get; private set; }
+        dynamic IExtendableDto.ExtensionData { get; set; }
     }
 }

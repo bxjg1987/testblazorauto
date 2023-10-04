@@ -10,19 +10,22 @@ using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static MudBlazor.CategoryTypes;
 
 namespace BXJG.AbpMudBlazor.Components
 {
     /*
-     * mudblazor目前不支持tree grid
-     * 决定左侧显示简单树，右侧显示普通的datagrid
-     * 原本的抽象应用服务获取列表虽然是查询的所有数据，但是按层次结构返回的。
-     * 这里需要重新展平
-     * 另外原本是不考虑分页的，这里可以将分页去掉
+     * c u d 某个节点后，会希望刷新下它所在的列表，也就是重新加载其父节点下的子节点。
+     * mudblazor的MudTreeViewItem提供了此方法，但我们不方便拿到它的引用
+     * 所以在dto的扩展属性中定义对MudTreeViewItem控件本身的引用，因为在逻辑代码中我们很容易拿到dto，进而拿到控件的引用
+     * 
+     * 由于treeView本身没有实现重新加载整个树，而只是 MudTreeViewItem上实现了重新加载
+     * 所以在管理时，我们需要一个 顶级的，id为空0的节点，
+     * 参考：https://github.com/MudBlazor/MudBlazor/issues/4434
      */
 
     /// <summary>
-    /// 抽象的，基于MudBlazor datagrid和treeView的列表页抽象组件
+    /// 抽象的，基于MudBlazor treeView的列表页抽象组件
     /// </summary>
     /// <typeparam name="TAppService">应用服务类型</typeparam>
     /// <typeparam name="TEntityDto">列表项的数据类型</typeparam>
@@ -144,6 +147,7 @@ namespace BXJG.AbpMudBlazor.Components
         #region 列表
         protected MudTreeView<TEntityDto> mudTreeView;
         protected HashSet<TEntityDto> selected;
+        //protected Dictionary<long, MudTreeViewItem<TEntityDto>> mudTreeViewItem;
         //protected HashSet<TEntityDto> items;
         ///// <summary>
         ///// 当前页码
@@ -181,6 +185,7 @@ namespace BXJG.AbpMudBlazor.Components
                     dynamic dd = new ExpandoObject();
                     dd.IsDeleting = false;
                     dd.IsShowDeleteConfirmation = false;
+                    dd.Control = new MudTreeViewItem<TEntityDto>();//准备一个变量，用于引用节点的控件
                     dto.ExtensionData = dd;
                 }
                 return dtos.ToHashSet();
@@ -192,12 +197,9 @@ namespace BXJG.AbpMudBlazor.Components
         /// </summary>
         /// <param name="code">若为空则刷新整棵树</param>
         /// <returns></returns>
-        public async Task Refresh(string code = default)
+        public async Task Refresh(TEntityDto dto)
         {
-            if (code.IsNullOrWhiteSpaceBXJG())
-                mudTreeView.Items.Clear();
-            else
-                mudTreeView.Items.SingleOrDefault(c=>c.Code==code);
+            await ((dto as IExtendableDto).ExtensionData.Control as MudTreeViewItem<TEntityDto>).ReloadAsync();
         }
 
         /// <summary>
@@ -259,29 +261,7 @@ namespace BXJG.AbpMudBlazor.Components
         /// 是否有修改权限
         /// </summary>
         protected bool updateIsGranted = true;
-        /// <summary>
-        /// 单击行时回调
-        /// 要绑定双击事件时，也只需要绑定此事件，它内部会判断是否是双击，并执行<see cref="RowDoubleClick"/>回调
-        /// </summary>
-        /// <param name="arg"></param>
-        /// <returns></returns>
-        protected virtual async Task RowClick(DataGridRowClickEventArgs<TEntityDto> arg)
-        {
-            //短时间内点击的次数>1 就表示双击
-            if (arg.MouseEventArgs.Detail > 1)
-            {
-                await RowDoubleClick(arg);
-            }
-        }
-        /// <summary>
-        /// 行双击时回调
-        /// </summary>
-        /// <param name="arg"></param>
-        /// <returns></returns>
-        protected virtual ValueTask RowDoubleClick(DataGridRowClickEventArgs<TEntityDto> arg)
-        {
-            return ValueTask.CompletedTask;
-        }
+    
         #endregion
 
         #region 删除
@@ -294,8 +274,7 @@ namespace BXJG.AbpMudBlazor.Components
         /// <summary>
         /// 是否禁用批量删除按钮，出现任意情况，则为true：正在加载数据；正在删除数据；没有选择数据；
         /// </summary>
-        protected virtual bool ShouldDisableDelete => dataGrid.Loading || isDeleting || dataGrid.SelectedItems == default || !dataGrid.SelectedItems.Any();
-
+        protected virtual bool ShouldDisableDelete =>  isDeleting || selected == default || !selected.Any();
 
         /// <summary>
         /// 是否批量删除的确认框
@@ -319,10 +298,9 @@ namespace BXJG.AbpMudBlazor.Components
         protected virtual void HideDeleteConfirm()
         {
             isShowDeleteConfirm = false;
-            foreach (var item in dataGrid.FilteredItems)
+            foreach (var item in mudTreeView.Items)
             {
-                if (item is IExtendableDto dto)
-                    dto.ExtensionData.IsShowDeleteConfirmation = false;
+                (item as IExtendableDto).ExtensionData.IsShowDeleteConfirmation = false;
             }
         }
         /// <summary>
@@ -331,24 +309,34 @@ namespace BXJG.AbpMudBlazor.Components
         /// <returns></returns>
         protected virtual async Task Delete()
         {
+            await SafelyExecuteAsync(DeleteCore);
+        }
+        /// <summary>
+        /// 批量删除核心逻辑
+        /// </summary>
+        /// <returns></returns>
+        protected virtual async Task DeleteCore()
+        {
             //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限
-            HideDeleteConfirm();
+            //木有选择时，删除按钮是禁用的，因此这里木有必要判断是否有选择项
             isDeleting = true;
-            await SafelyExecuteAsync(async () =>
+            try
             {
-                var temp = await AppService.BatchDeleteAsync(new BatchOperationInput<TPrimaryKey> { Ids = dataGrid.SelectedItems?.Select(x => x.Id).ToArray() });
+                HideDeleteConfirm();
+
+                var temp = await AppService.DeleteAsync(new BatchOperationInputLong { Ids = selected.Select(x => x.Id).ToArray() });
                 BatchOperationMessage(temp, "批量删除");
                 //BatchDeleteMessage(temp);
                 if (temp.Ids.Count > 0)
-                    await dataGrid.ReloadServerData();
+                    await Refresh(mudTreeView.Items.SingleOrDefault(d => d.Id == selected.OrderBy(c => c.Code.Length).First().ParentId));
+                //刷新选择节点中最短code的父节点，也就是所有选择节点的公共父节点
                 //_ = InvokeAsync(dataGrid.ReloadServerData); //内部会StateChange
-            });
-            isDeleting = false;
+            }
+            finally
+            {
+                isDeleting = false;
+            }
         }
-        //protected virtual void DeleteMessage()
-        //{
-
-        //}
         /// <summary>
         /// 删除单个项
         /// </summary>
@@ -356,23 +344,38 @@ namespace BXJG.AbpMudBlazor.Components
         /// <returns></returns>
         protected virtual async Task Delete(TEntityDto curr)
         {
+            await SafelyExecuteAsync(async () => await DeleteCore(curr));
+        }
+
+        /// <summary>
+        /// 删除单个项的核心逻辑
+        /// </summary>
+        /// <param name="curr"></param>
+        /// <returns></returns>
+        protected virtual async Task DeleteCore(TEntityDto curr)
+        {
             //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限
             // var curr = dataGrid.Items.Single(c => c.Id!.Equals(input.Id));
-            HideDeleteConfirm();
             var item = curr as IExtendableDto;
-            if (item != default)
-                item.ExtensionData.IsDeleting = true;
-            await SafelyExecuteAsync(async () =>
+            //  if (item != default)
+            item.ExtensionData.IsDeleting = true;
+
+            try
             {
+                HideDeleteConfirm();
                 await AppService.DeleteAsync(new BatchOperationInputLong { Ids = new[] { curr.Id } });
                 Snackbar.Add("删除成功！", Severity.Success);
                 //若上面异常，下面不会执行
                 //_ = InvokeAsync(dataGrid.ReloadServerData);
-                await dataGrid.ReloadServerData();
-            });
-            if (item != default)
+                await Refresh(curr);
+            }
+            finally
+            {
+                //  if (item != default)
                 item.ExtensionData.IsDeleting = false;
+            }
         }
+
         /// <summary>
         /// 显示删除明细的确认框
         /// </summary>
@@ -380,18 +383,8 @@ namespace BXJG.AbpMudBlazor.Components
         protected virtual void ShowDeleteConfirm(TEntityDto dto)
         {
             HideDeleteConfirm();
-            if (dto is IExtendableDto item)
-                item.ExtensionData.IsShowDeleteConfirmation = true;
+            (dto as IExtendableDto).ExtensionData.IsShowDeleteConfirmation = true;
         }
-        ///// <summary>
-        ///// 隐藏删除明细的确认框
-        ///// </summary>
-        ///// <param name="dto"></param>
-        //protected virtual void HideDeleteConfirm(TEntityDto dto)
-        //{
-        //    if (dto is IExtendableDto item)
-        //        item.ExtensionData.IsShowDeleteConfirmation = false;
-        //}
         #endregion
     }
 }
