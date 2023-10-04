@@ -15,20 +15,16 @@ namespace BXJG.Utils.GeneralTree
     /// 数据字典应用服务接口
     /// </summary>
     public interface IDataDictionaryProviderAppService : IGeneralTreeProviderBaseAppService<GeneralTreeGetForSelectInput,
-                                                                                     GeneralTreeNodeDto,
-                                                                                     GeneralTreeGetForSelectInput,
-                                                                                     GeneralTreeComboboxDto>
+                                                                                            GeneralTreeNodeDto,
+                                                                                            GeneralTreeGetForSelectInput,
+                                                                                            GeneralTreeComboboxDto>
     { }
-
     /// <summary>
     /// 数据字典应用服务接口
     /// </summary>
     public interface IDataDictionaryAppService : IGeneralTreeBaseAppService<GeneralTreeDto,
-                                                                         GeneralTreeEditDto,
-                                                                         GeneralTreeEditDto,
-                                                                         GeneralTreeGetTreeInput,
-                                                                         BatchOperationInputLong,
-                                                                         EntityDto<long>,
-                                                                         GeneralTreeNodeMoveInput>
+                                                                            GeneralTreeEditDto,
+                                                                            GeneralTreeEditDto,
+                                                                            GeneralTreeGetTreeInput>
     { }
 }
