@@ -52,11 +52,11 @@ namespace BXJG.Utils.GeneralTree
         {
         }
 
-        protected override ValueTask BeforeDeleteAsync(GeneralTreeEntity entity)
+        protected override async ValueTask BeforeDeleteAsync(GeneralTreeEntity entity)
         {
             if (entity.IsSysDefine)
                 throw new UserFriendlyException(L("系统预设数据不允许删除！"));
-            return ValueTask.CompletedTask;
+            await base.BeforeDeleteAsync(entity);
         }
     }
 }

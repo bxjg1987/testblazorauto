@@ -139,7 +139,7 @@ namespace BXJG.AbpMudBlazor.Components
         #region 生命周期
         protected override async Task OnInitialized2Async()
         {
-            await Refresh();
+            await Reload();
         }
         #endregion
 
@@ -204,11 +204,17 @@ namespace BXJG.AbpMudBlazor.Components
         //        await ((dto as IExtendableDto).ExtensionData.Control as MudTreeViewItem<TEntityDto>).ReloadAsync();
         //    }
         //}
-
-
-        protected virtual async Task<HashSet<TEntityDto>> Refresh(TEntityDto? parentNode = null)
+        /// <summary>
+        /// 是否正在加载顶级节点
+        /// </summary>
+        protected bool isLoadingTops;
+        /// <summary>
+        /// 刷新节点
+        /// </summary>
+        /// <param name="parentNode"></param>
+        /// <returns></returns>
+        protected virtual async Task<HashSet<TEntityDto>> Load(TEntityDto? parentNode = null)
         {
-
             var cd = new TGetAllInput();
             await FillCondtion(cd);
             if (cd.ParentCode.IsNullOrWhiteSpaceBXJG())
@@ -231,31 +237,55 @@ namespace BXJG.AbpMudBlazor.Components
             //dataGrid.SelectedItems.Clear();//翻页时，已选择的好像木有清空，这里手动来下
             foreach (var dto in dtos)
             {
-              //  dto.State= dto.Children!=null&& dto.Children
-              //  dto.Children.Clear();
+                //  dto.State= dto.Children!=null&& dto.Children
+                //  dto.Children.Clear();
 
                 dynamic dd = new ExpandoObject();
                 dd.IsDeleting = false;
                 dd.IsShowDeleteConfirmation = false;
-                dd.Control = new MudTreeViewItem<TEntityDto>();//准备一个变量，用于引用节点的控件
+                dd.Control = new object();// new MudTreeViewItem<TEntityDto>();//准备一个变量，用于引用节点的控件
                 dd.ExtData = dto.ExtensionData;
                 (dto as IExtendableDto).ExtensionData = dd;
-
-               // 
             }
+
             if (parentNode != null)
-            {
                 parentNode.Children = dtos;
-                //这里也许需要刷新下界面
+
+            return dtos.ToHashSet();
+          
+       
+        }
+        /// <summary>
+        /// 重新加载子节点列表
+        /// </summary>
+        /// <param name="parentNode">父节点</param>
+        /// <returns></returns>
+        protected virtual async Task Reload(TEntityDto? parentNode = null)
+        {
+            if (parentNode == null)
+            {
+                isLoadingTops = true;
+                try
+                {
+                    tops = await Load();
+                }
+                finally
+                {
+                    isLoadingTops = false;
+                }
             }
             else
             {
-                tops = dtos.ToHashSet();
-                return tops;
+            
+
+              //  var dtos = await Load(parentNode);
+              //  parentNode.Children= dtos.ToList();
+
+                var ct = (parentNode as IExtendableDto).ExtensionData.Control as MudTreeViewItem<TEntityDto>;//配合界面的ref，这里可以拿到控件引用，
+                await ct.ReloadAsync();
+              
             }
-
-            return dtos.ToHashSet();
-
+            this.StateHasChanged();
         }
 
         /// <summary>
@@ -336,10 +366,6 @@ namespace BXJG.AbpMudBlazor.Components
         /// </summary>
         protected bool isShowDeleteConfirm = false;
         /// <summary>
-        /// 是否正在执行批量删除操作
-        /// </summary>
-        protected bool isDeleting = false;
-        /// <summary>
         /// 显示批量删除的确认框
         /// </summary>
         protected virtual void ShowDeleteConfirm()
@@ -381,6 +407,10 @@ namespace BXJG.AbpMudBlazor.Components
             await SafelyExecuteAsync(DeleteCore);
         }
         /// <summary>
+        /// 是否正在执行批量删除操作
+        /// </summary>
+        protected bool isDeleting = false;
+        /// <summary>
         /// 批量删除核心逻辑
         /// </summary>
         /// <returns></returns>
@@ -394,13 +424,15 @@ namespace BXJG.AbpMudBlazor.Components
                 HideDeleteConfirm();
 
                 var r = await AppService.DeleteAsync(new BatchOperationInputLong { Ids = selected.Select(x => x.Id).ToArray() });
-               // BatchOperationMessage(temp, "批量删除");
+                BatchOperationMessage(r, "批量删除");
                 //BatchDeleteMessage(temp);
                 if (r.Ids.Any())
                 {
-                    await Refresh(mudTreeView.Items.SingleOrDefault(d => d.Id == selected.OrderBy(c => c.Code.Length).First().ParentId));
+
+                   var node = mudTreeView.Items.FindRecursiveDown(selected.OrderBy(c => c.Code.Length).First().ParentId);
+                    await Reload(node);
                 }
-                BatchOperationMessage(r, "删除");
+
                 //刷新选择节点中最短code的父节点，也就是所有选择节点的公共父节点
                 //_ = InvokeAsync(dataGrid.ReloadServerData); //内部会StateChange
             }
@@ -418,6 +450,10 @@ namespace BXJG.AbpMudBlazor.Components
         {
             await SafelyExecuteAsync(async () => await DeleteItemCore(curr));
         }
+
+        //protected TEntityDto Find() { 
+        
+        //}
 
         /// <summary>
         /// 删除单个项的核心逻辑
@@ -438,9 +474,14 @@ namespace BXJG.AbpMudBlazor.Components
                 var r = await AppService.DeleteAsync(new BatchOperationInputLong { Ids = new[] { curr.Id } });
                 if (r.Ids.Any())
                 {
-                    await Refresh(curr);
+                    //   if(curr.ParentId)
+                    var node = mudTreeView.Items.FindRecursiveDown(curr.ParentId);
+                    await Reload(node);
+
+                    Snackbar.Add("删除成功！", Severity.Success);
                 }
-                BatchOperationMessage(r, "删除");
+                else
+                    Snackbar.Add("删除失败！" + r.ErrorMessage.SingleOrDefault()?.Message, Severity.Error);
             }
             finally
             {

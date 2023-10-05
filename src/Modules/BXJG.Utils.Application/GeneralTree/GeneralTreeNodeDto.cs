@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +9,8 @@ namespace BXJG.Utils.GeneralTree
     /// <summary>
     /// 获取树形下拉框数据的模型
     /// </summary>
-    public class GeneralTreeNodeDto<T> where T : GeneralTreeNodeDto<T>
+    public class GeneralTreeNodeDto<T> : IGeneralTree<T>
+        where T : GeneralTreeNodeDto<T>
     {
         public string Id { get; set; }//用id是为了适配easyui的tree  combotree共用此模型
         public string Text { get; set; }
@@ -24,13 +24,21 @@ namespace BXJG.Utils.GeneralTree
         //public dynamic attributes { get; set; }
         public IList<T> Children { get; set; }
 
+        /// <summary>
+        /// 父节点
+        /// </summary>
+        [System.Text.Json.Serialization.JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
+        public T Parent { get; set; }
+
         public string ParentId { get; set; }
 
         //因为不确定前端是否支持这样自定义的字段，因此保险起见数据都保存到attributes，这里只提供读取
         public string Code { get; set; }
 
         private string extensionData;
-        [JsonIgnore]//目前默认使用的并非.net 3.x的json序列化
+        [System.Text.Json.Serialization.JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public string ExtensionData
         {
             get
@@ -43,7 +51,7 @@ namespace BXJG.Utils.GeneralTree
                 if (string.IsNullOrWhiteSpace(value))
                     ExtData = null;
                 else
-                    ExtData = JsonConvert.DeserializeObject<dynamic>(value);
+                    ExtData = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(value);
             }
         }
         /// <summary>
@@ -51,6 +59,9 @@ namespace BXJG.Utils.GeneralTree
         /// </summary>
        // [Ignore]
         public dynamic ExtData { get; set; }
+        long IGeneralTree<T>.Id { get => long.Parse(Id); set => Id = value.ToString(); }
+        long? IGeneralTree<T>.ParentId { get =>  ParentId.IsNullOrWhiteSpaceBXJG()?default:long.Parse(ParentId)  ; set => ParentId= value.HasValue?value.ToString():default; }
+        string IGeneralTree<T>.DisplayName { get => Text; set => Text=value; }
     }
 
     public class GeneralTreeNodeDto : GeneralTreeNodeDto<GeneralTreeNodeDto> { }

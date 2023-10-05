@@ -16,9 +16,15 @@ namespace BXJG.Utils.GeneralTree
     /// 树形数据管理的列表页使用的dto基类，它不是抽象的，可以直接使用
     /// </summary>
     /// <typeparam name="TChild"></typeparam>
-    public class GeneralTreeGetTreeNodeBaseDto<TChild> : AuditedEntityDto<long>, IExtendableDto
+    public class GeneralTreeGetTreeNodeBaseDto<TChild> : AuditedEntityDto<long>, IExtendableDto, IGeneralTree<TChild>
         where TChild : GeneralTreeGetTreeNodeBaseDto<TChild>
-    {
+    { 
+        /// <summary>
+      /// 父节点
+      /// </summary>
+        [System.Text.Json.Serialization.JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
+        public TChild Parent { get; set; }
         /// <summary>
         /// 父级组织单位id
         /// </summary>

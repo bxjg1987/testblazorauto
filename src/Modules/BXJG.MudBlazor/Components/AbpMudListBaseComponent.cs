@@ -374,7 +374,6 @@ namespace BXJG.AbpMudBlazor.Components
                 //BatchDeleteMessage(temp);
                 if (r.Ids.Any())
                     await dataGrid.ReloadServerData();
-                BatchOperationMessage(r, "删除");
                 //_ = InvokeAsync(dataGrid.ReloadServerData); //内部会StateChange
             });
             isDeleting = false;

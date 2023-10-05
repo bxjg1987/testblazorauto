@@ -669,7 +669,7 @@ namespace BXJG.Utils.GeneralTree
             return ValueTask.CompletedTask;
         }
         #endregion
-
+       
 
         /// <summary>
         /// 批量处理
@@ -725,8 +725,8 @@ namespace BXJG.Utils.GeneralTree
         /// <returns></returns>
         protected virtual async ValueTask BeforeDeleteAsync(TEntity entity)
         {
-
-            await repository.DeleteAsync(c => c.Code.StartsWith(entity.Code));
+       await     generalTreeManager.DeleteAsync(entity);
+           // await repository.DeleteAsync(c => c.Code.StartsWith(entity.Code));
 
             //这里后台节点 还需要重置code，以后来改，或者在Manager中去实现，这里再调用Manager中的Delete
         }
@@ -840,6 +840,8 @@ namespace BXJG.Utils.GeneralTree
             var query = GetAllFiltered(input, parentCode);//.Where(c => c.Code.StartsWith(parentCode));
             query = GetAllSorting(query, input); //方便子类排序
             var list = await AsyncQueryableExecuter.ToListAsync(query);//.ToListAsync();
+            if(!input.ParentId.HasValue)
+                input.ParentId = list.OrderBy(c => c.Code.Length).FirstOrDefault()?.ParentId;
             //建立dto以及处理父子关系
             //TEntity parent = list.SingleOrDefault(c => c.Id == input.ParentId);
             //if (parent != null)

@@ -105,32 +105,29 @@ namespace BXJG.Utils.GeneralTree
             return entity;
         }
 
-        public virtual async Task DeleteAsync(Func<TEntity, ValueTask> act, params long[] keys)
+        public virtual async Task DeleteAsync(TEntity item)
         {
             // if (keys != null && keys.Length > 0)
             //{
             //默认情况下ParentId的外键关联没有做级联删除，因为我们想通过程序来控制
-            var entities = await repository.GetAllListAsync(c => keys.Contains(c.Id));
-            HashSet<long> parentIds = new HashSet<long>();
-            foreach (var item in entities)
-            {
-                if (item.ParentId.HasValue)
-                    parentIds.AddIfNotContains(item.ParentId.Value);
+            // var entities = await repository.GetAllListAsync(c => keys.Contains(c.Id));
+            //  HashSet<long> parentIds = new HashSet<long>();
+            //  foreach (var item in entities)
+            //   {
+            //  if (item.ParentId.HasValue)
+            //      parentIds.AddIfNotContains(item.ParentId.Value);
 
-                if (act != null)
-                    await act(item);
-                await repository.DeleteAsync(c => c.Code.StartsWith(item.Code));
+            //    if (act != null)
+            //      await act(item);
+            await repository.DeleteAsync(c => c.Code.StartsWith(item.Code));
 
-            }
+            //}
             await CurrentUnitOfWork.SaveChangesAsync();
-            if (parentIds.Any())
-            {
-                var parents = await AsyncQueryableExecuter.ToListAsync(repository.GetAll().Where(c => parentIds.Contains(c.Id)));
-                foreach (var item in parents)
-                {
-                    await UpdateChildrenCount(item);
-                }
-            }
+
+            if (item.Parent != null)
+                await UpdateChildrenCount(item.Parent);
+
+
             //这里后台节点 还需要重置code，以后来改
             //}
             //else
@@ -146,6 +143,7 @@ namespace BXJG.Utils.GeneralTree
         //    var list = await GetFlattenOffspringAsync(parent.Code);
         //    return parent;//ef自动建立父子关系，
         //}
+
         /// <summary>
         /// 移动节点
         /// </summary>
@@ -164,7 +162,7 @@ namespace BXJG.Utils.GeneralTree
         public virtual async Task<TEntity> MoveAsync(TEntity source, TEntity target, GeneralTreeMoveType moveType)
         {
             HashSet<long> parentIds = new HashSet<long>();
-           if(source.ParentId.HasValue)
+            if (source.ParentId.HasValue)
                 parentIds.AddIfNotContains(source.ParentId.Value);
 
             TEntity targetParent = null;
@@ -183,8 +181,8 @@ namespace BXJG.Utils.GeneralTree
             //else
             if (moveType != GeneralTreeMoveType.Append)
             {
-             
-                    parentIds.AddIfNotContains(target.Id);
+
+                parentIds.AddIfNotContains(target.Id);
 
                 var temp1 = await GetBrotherWithOffspringAsync(target);
                 targetParent = temp1.Item1;

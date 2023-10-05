@@ -1,5 +1,6 @@
 ﻿using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
+using Castle.MicroKernel.Registration;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace BXJG.Utils.GeneralTree
 {
-    public abstract class GeneralTreeEntity<TEntity> : FullAuditedEntity<long>, IExtendableObject, IMayHaveTenant
+    public abstract class GeneralTreeEntity<TEntity> : FullAuditedEntity<long>, IExtendableObject, IMayHaveTenant, IGeneralTree<TEntity>
         where TEntity : GeneralTreeEntity<TEntity>
     {
         public const int MaxDisplayNameLength = 128;
