@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -33,7 +34,7 @@ namespace BXJG.Utils.GeneralTree
 
         public virtual long? ParentId { get; set; }
 
-        [ForeignKey("ParentId")]
+        //[ForeignKey("ParentId")]
         public virtual TEntity Parent { get; set; }
 
         public virtual int? TenantId { get; set; }

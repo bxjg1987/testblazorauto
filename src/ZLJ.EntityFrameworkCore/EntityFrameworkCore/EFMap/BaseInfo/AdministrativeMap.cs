@@ -13,7 +13,7 @@ namespace ZLJ.EntityFrameworkCore.EntityFrameworkCore.EFMap.BaseInfo
     {
         public void Configure(EntityTypeBuilder<AdministrativeEntity> builder)
         {
-            builder.ToTable("baseinfo_administrative");
+            builder.MapGeneralTree().ToTable("baseinfo_administrative");
             //builder.Property(c => c.Title).HasColumnType($"varchar({BXJGShopDictionaryEntity.IconMaxLength})");
             //builder.Property(c => c.Name).HasMaxLength(ZLJConsts.BaseInfoInfoNameMaxLength).IsRequired();
             //builder.Property(c => c.Longitude).IsRequired();

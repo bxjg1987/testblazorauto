@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ZLJ.EntityFrameworkCore;
 
@@ -11,9 +12,11 @@ using ZLJ.EntityFrameworkCore;
 namespace ZLJ.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(ZLJDbContext))]
-    partial class ZLJDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231005133703_updatetree2")]
+    partial class updatetree2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1477,9 +1480,6 @@ namespace ZLJ.EntityFrameworkCore.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Code")
-                        .IsUnique();
 
                     b.HasIndex("ParentId");
 

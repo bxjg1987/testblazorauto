@@ -1,4 +1,5 @@
 ﻿using BXJG.Utils.File;
+using BXJG.Utils.GeneralTree;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
@@ -27,5 +28,10 @@ namespace BXJG.Utils.EFCore.EFMaps
             //builder.Property(c => c.Image2).HasColumnType($"varchar({CoreConsts.ItemCategoryImage2MaxLength})");
         }
     }
-
+    public class GeneralTreeMap : IEntityTypeConfiguration<GeneralTreeEntity> {
+        public void Configure(EntityTypeBuilder<GeneralTreeEntity> builder)
+        {
+            builder.MapGeneralTree();
+        }
+    }
 }
