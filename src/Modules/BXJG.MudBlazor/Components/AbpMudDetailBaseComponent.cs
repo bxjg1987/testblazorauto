@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Services.Dto;
+using BXJG.AbpMudBlazor.Interceptor;
 using BXJG.Common;
 using BXJG.Utils;
 using Microsoft.AspNetCore.Components;
@@ -80,14 +81,7 @@ namespace BXJG.AbpMudBlazor.Components
         /// </summary>
         protected ValidationMessageStore? validationMessageStore;
 
-        /// <summary>
-        /// 点击重置按钮时回调
-        /// </summary>
-        /// <returns></returns>
-        protected virtual async Task BtnResetClick()
-        {
-            await SafelyExecuteAsync(async () => await ResetCore());
-        }
+      
         /// <summary>
         /// 正在执行重置
         /// </summary>
@@ -96,7 +90,8 @@ namespace BXJG.AbpMudBlazor.Components
         /// 重置
         /// </summary>
         /// <returns></returns>
-        protected virtual async ValueTask ResetCore()
+        [ExceptionInterceptor]
+        protected virtual async ValueTask BtnResetClick()
         {
             isReseting = true;
             try
@@ -116,7 +111,7 @@ namespace BXJG.AbpMudBlazor.Components
         /// 初始化时回调，默认根据id从应用服务接口获取单个数据，然后判断并进入编辑模式
         /// </summary>
         /// <returns></returns>
-        protected override async Task OnInitialized2Async()
+        protected override async Task OnInitializedAsync()
         {
             dto = await AppService.GetAsync(new EntityDto<TPrimaryKey>(Id));
             isEdit = IsEdit;
@@ -125,7 +120,7 @@ namespace BXJG.AbpMudBlazor.Components
 
             if (isEdit)
             {
-                await BeginEditCore();
+                await BtnBeginEditClick();
                 // await ResetCore();
             }
         }
@@ -209,7 +204,8 @@ namespace BXJG.AbpMudBlazor.Components
         /// 进入编辑模式时执行
         /// </summary>
         /// <returns></returns>
-        protected virtual async ValueTask BeginEditCore()
+        [ExceptionInterceptor]
+        protected virtual async Task BtnBeginEditClick()
         {
             isEdit = true;
             // StateHasChanged();
@@ -231,17 +227,11 @@ namespace BXJG.AbpMudBlazor.Components
             }
 
             if (editDto == null)
-                await ResetCore();
+                await BtnResetClick();
 
             editInited = true;
         }
-        /// <summary>
-        /// 点击进入编辑模式的按钮时回调
-        /// </summary>
-        protected virtual async Task BtnBeginEditClick()
-        {
-            await SafelyExecuteAsync(async () => await BeginEditCore());
-        }
+      
         /// <summary>
         /// 是否正在对表单进行首次初始化
         /// </summary>
@@ -287,19 +277,13 @@ namespace BXJG.AbpMudBlazor.Components
         /// 是否正在保存
         /// </summary>
         protected bool isSaving = false;
-        /// <summary>
-        /// 点击保存按钮时执行
-        /// </summary>
-        /// <returns></returns>
-        protected virtual async Task BtnSaveClick()
-        {
-            await SafelyExecuteAsync(SaveCore);
-        }
+
         /// <summary>
         /// 保存的核心逻辑
         /// </summary>
         /// <returns></returns>
-        protected virtual async Task SaveCore()
+        [ExceptionInterceptor]
+        protected virtual async Task BtnSaveClick()
         {
             //没有权限的按钮直接隐藏，况且应用服务还会判断权限兜底的，因此这里无需判断权限
 
@@ -347,19 +331,13 @@ namespace BXJG.AbpMudBlazor.Components
         {
             isShowDeleteConfirm = false;
         }
-        /// <summary>
-        /// 最终执行删除的按钮被点击时
-        /// </summary>
-        /// <returns></returns>
-        protected virtual async Task BtnOkDeleteClick()
-        {
-            await SafelyExecuteAsync(DeleteCore);
-        }
+
         /// <summary>
         /// 删除的核心逻辑
         /// </summary>
         /// <returns></returns>
-        protected virtual async Task DeleteCore()
+        [ExceptionInterceptor]
+        protected virtual async Task BtnOkDeleteClick()
         {
             //没有权限的按钮直接隐藏，况且应用服务还会判断权限兜底的，因此这里无需判断权限
             isShowDeleteConfirm = false;
@@ -430,9 +408,9 @@ namespace BXJG.AbpMudBlazor.Components
         {
             MudDialog.Cancel();
         }
-        protected override async ValueTask BeginEditCore()
+        protected override async Task BtnBeginEditClick()
         {
-            await base.BeginEditCore();
+            await base.BtnBeginEditClick();
             MudDialog.SetTitle($"修改{FuncName}");
         }
         protected override void BtnEndEditClick()

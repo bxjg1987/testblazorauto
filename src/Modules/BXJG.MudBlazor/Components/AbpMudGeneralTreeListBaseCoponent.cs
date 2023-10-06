@@ -1,5 +1,6 @@
 ﻿using Abp.Application.Services.Dto;
 using Abp.UI;
+using BXJG.AbpMudBlazor.Interceptor;
 using BXJG.Common.Dto;
 using BXJG.Utils.Dto;
 using BXJG.Utils.GeneralTree;
@@ -35,6 +36,7 @@ namespace BXJG.AbpMudBlazor.Components
     /// <typeparam name="TCreateInput">新增时的输入类型</typeparam>
     /// <typeparam name="TEditDto">修改时的输入类型</typeparam>
     /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
+   
     public abstract class AbpMudGeneralTreeListBaseCoponent<TAppService,
                                                             TEntityDto,
                                                             TCreateInput,
@@ -137,7 +139,8 @@ namespace BXJG.AbpMudBlazor.Components
         #endregion
 
         #region 生命周期
-        protected override async Task OnInitialized2Async()
+       // [ExceptionInterceptor]
+        protected override async Task OnInitializedAsync()
         {
             await Reload();
         }
@@ -213,6 +216,7 @@ namespace BXJG.AbpMudBlazor.Components
         /// </summary>
         /// <param name="parentNode"></param>
         /// <returns></returns>
+        [ExceptionInterceptor]
         protected virtual async Task<HashSet<TEntityDto>> Load(TEntityDto? parentNode = null)
         {
             var cd = new TGetAllInput();
@@ -398,14 +402,14 @@ namespace BXJG.AbpMudBlazor.Components
                 }
             }
         }
-        /// <summary>
-        /// 批量删除
-        /// </summary>
-        /// <returns></returns>
-        protected virtual async Task BtnDeleteClick()
-        {
-            await SafelyExecuteAsync(DeleteCore);
-        }
+        ///// <summary>
+        ///// 批量删除
+        ///// </summary>
+        ///// <returns></returns>
+        //protected virtual async Task BtnDeleteClick()
+        //{
+        //    await SafelyExecuteAsync(DeleteCore);
+        //}
         /// <summary>
         /// 是否正在执行批量删除操作
         /// </summary>
@@ -414,7 +418,8 @@ namespace BXJG.AbpMudBlazor.Components
         /// 批量删除核心逻辑
         /// </summary>
         /// <returns></returns>
-        protected virtual async Task DeleteCore()
+        [ExceptionInterceptor]
+        protected virtual async Task BtnDeleteClick()
         {
             //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限
             //木有选择时，删除按钮是禁用的，因此这里木有必要判断是否有选择项
@@ -441,18 +446,10 @@ namespace BXJG.AbpMudBlazor.Components
                 isDeleting = false;
             }
         }
-        /// <summary>
-        /// 删除单个项
-        /// </summary>
-        /// <param name="curr"></param>
-        /// <returns></returns>
-        protected virtual async Task BtnDeleteItemClick(TEntityDto curr)
-        {
-            await SafelyExecuteAsync(async () => await DeleteItemCore(curr));
-        }
+
 
         //protected TEntityDto Find() { 
-        
+
         //}
 
         /// <summary>
@@ -460,7 +457,8 @@ namespace BXJG.AbpMudBlazor.Components
         /// </summary>
         /// <param name="curr"></param>
         /// <returns></returns>
-        protected virtual async Task DeleteItemCore(TEntityDto curr)
+        [ExceptionInterceptor]
+        protected virtual async Task BtnDeleteItemClick(TEntityDto curr)
         {
             //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限
             // var curr = dataGrid.Items.Single(c => c.Id!.Equals(input.Id));

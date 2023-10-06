@@ -228,56 +228,56 @@ namespace BXJG.Utils
             //aspnetCoreConfiguration = ScopedServices.GetRequiredService<IAbpAspNetCoreConfiguration>();
             //cancellationTokenProvider = ScopedServices.GetRequiredService<ICancellationTokenProvider>();
 
-            SafelyExecute(OnInitialized2);
+            //SafelyExecute(OnInitialized2);
         }
 
-        /// <summary>
-        /// 子类重新次方法，可用避免手动调用SafeExecute
-        /// </summary>
-        protected virtual void OnInitialized2() { }
+        ///// <summary>
+        ///// 子类重新次方法，可用避免手动调用SafeExecute
+        ///// </summary>
+        //protected virtual void OnInitialized2() { }
 
-        protected override Task OnInitializedAsync()
-        {
-            return SafelyExecuteAsync(OnInitialized2Async);
-            //  return base.OnInitializedAsync();
-        }
-        /// <summary>
-        /// 子类重新次方法，可用避免手动调用SafeExecute
-        /// </summary>
-        protected virtual Task OnInitialized2Async() => Task.CompletedTask;
+        //protected override Task OnInitializedAsync()
+        //{
+        //    return SafelyExecuteAsync(OnInitialized2Async);
+        //    //  return base.OnInitializedAsync();
+        //}
+        ///// <summary>
+        ///// 子类重新次方法，可用避免手动调用SafeExecute
+        ///// </summary>
+        //protected virtual Task OnInitialized2Async() => Task.CompletedTask;
 
-        protected override void OnAfterRender(bool firstRender)
-        {
-            SafelyExecute(() => OnAfterRender2(firstRender));
-            //base.OnAfterRender(firstRender);
-        }
-        protected virtual void OnAfterRender2(bool firstRender) { }
+        //protected override void OnAfterRender(bool firstRender)
+        //{
+        //    SafelyExecute(() => OnAfterRender2(firstRender));
+        //    //base.OnAfterRender(firstRender);
+        //}
+        //protected virtual void OnAfterRender2(bool firstRender) { }
 
-        protected override Task OnAfterRenderAsync(bool firstRender)
-        {
-            return SafelyExecuteAsync(() => OnAfterRender2Async(firstRender));
-        }
-        protected virtual Task OnAfterRender2Async(bool firstRender) => Task.CompletedTask;
+        //protected override Task OnAfterRenderAsync(bool firstRender)
+        //{
+        //    return SafelyExecuteAsync(() => OnAfterRender2Async(firstRender));
+        //}
+        //protected virtual Task OnAfterRender2Async(bool firstRender) => Task.CompletedTask;
 
-        public override async Task SetParametersAsync(ParameterView parameters)
-        {
-            await SafelyExecuteAsync(OnParametersSet2Async);
-             await base.SetParametersAsync(parameters);
-        }
-        public virtual Task SetParameters2Async(ParameterView parameters) => Task.CompletedTask;
-        protected override void OnParametersSet()
-        {
-            SafelyExecute(OnParametersSet2);
-            //base.OnParametersSet();
-        }
-        protected virtual void OnParametersSet2() { }
+        //public override async Task SetParametersAsync(ParameterView parameters)
+        //{
+        //    await SafelyExecuteAsync(OnParametersSet2Async);
+        //     await base.SetParametersAsync(parameters);
+        //}
+        //public virtual Task SetParameters2Async(ParameterView parameters) => Task.CompletedTask;
+        //protected override void OnParametersSet()
+        //{
+        //    SafelyExecute(OnParametersSet2);
+        //    //base.OnParametersSet();
+        //}
+        //protected virtual void OnParametersSet2() { }
 
-        protected override async Task OnParametersSetAsync()
-        {
-            await SafelyExecuteAsync(OnParametersSet2Async);
-            //return base.OnParametersSetAsync();
-        }
-        protected virtual Task OnParametersSet2Async() => Task.CompletedTask;
+        //protected override async Task OnParametersSetAsync()
+        //{
+        //    await SafelyExecuteAsync(OnParametersSet2Async);
+        //    //return base.OnParametersSetAsync();
+        //}
+      //  protected virtual Task OnParametersSet2Async() => Task.CompletedTask;
 
         //这里不要搞，它比init先执行
         //public override async Task SetParametersAsync(ParameterView parameters)
@@ -332,267 +332,267 @@ namespace BXJG.Utils
         //    }
         //}
 
-        /// <summary>
-        /// 执行委托，用户友好异常时直接显示错误消息（记得重写ShowErrorAsync），否则记录日志并显示服务端错误消息。
-        /// 默认情况下自动处理取消问题，特殊情况修改cts或替换canceltokenprovider
-        /// </summary>
-        /// <param name="action"></param>
-        /// <returns></returns>
-        protected virtual async Task SafelyExecuteAsync(Func<Task> action, CancellationToken cancellationToken = default)
-        {
-            // Logger.Debug("aaa");
-            // Logger.Debug(action.Method.Name);
-            try
-            {
-                /*
-                 * 主cts = 连接 参数的ct？
-                 * 不好，因为主的可能被其它地方调用，当前调用取消是并不一定希望其它地方取消
-                 * 
-                 * 参数的ct引用主的?
-                 * 可以的，不过这不应该在抽象中来决定
-                 * 
-                 */
+        ///// <summary>
+        ///// 执行委托，用户友好异常时直接显示错误消息（记得重写ShowErrorAsync），否则记录日志并显示服务端错误消息。
+        ///// 默认情况下自动处理取消问题，特殊情况修改cts或替换canceltokenprovider
+        ///// </summary>
+        ///// <param name="action"></param>
+        ///// <returns></returns>
+        //protected virtual async Task SafelyExecuteAsync(Func<Task> action, CancellationToken cancellationToken = default)
+        //{
+        //    // Logger.Debug("aaa");
+        //    // Logger.Debug(action.Method.Name);
+        //    try
+        //    {
+        //        /*
+        //         * 主cts = 连接 参数的ct？
+        //         * 不好，因为主的可能被其它地方调用，当前调用取消是并不一定希望其它地方取消
+        //         * 
+        //         * 参数的ct引用主的?
+        //         * 可以的，不过这不应该在抽象中来决定
+        //         * 
+        //         */
 
-                var ct1 = cancellationToken == default ? CancellationTokenSource.Token : cancellationToken;
-                //   Logger.Debug("bbbb");
-                using (var ct = CancellationTokenProvider.Use(ct1))
-                {
-                    //     Logger.Debug("ccc");
-                    await action();
-                    //   Logger.Debug("dddd");
-                    //查看集成blazor文档，已全局开启按约定的拦截器
-                    ////https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp.AspNetCore/AspNetCore/Mvc/Uow/AbpUowActionFilter.cs#L14
-                    //var unitOfWorkAttr = unitOfWorkDefaultOptions
-                    //    .GetUnitOfWorkAttributeOrNull(action.Method) ??
-                    //    aspnetCoreConfiguration.DefaultUnitOfWorkAttribute;
+        //        var ct1 = cancellationToken == default ? CancellationTokenSource.Token : cancellationToken;
+        //        //   Logger.Debug("bbbb");
+        //        using (var ct = CancellationTokenProvider.Use(ct1))
+        //        {
+        //            //     Logger.Debug("ccc");
+        //            await action();
+        //            //   Logger.Debug("dddd");
+        //            //查看集成blazor文档，已全局开启按约定的拦截器
+        //            ////https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp.AspNetCore/AspNetCore/Mvc/Uow/AbpUowActionFilter.cs#L14
+        //            //var unitOfWorkAttr = unitOfWorkDefaultOptions
+        //            //    .GetUnitOfWorkAttributeOrNull(action.Method) ??
+        //            //    aspnetCoreConfiguration.DefaultUnitOfWorkAttribute;
 
-                    //if (!unitOfWorkAttr.IsDisabled)
-                    //{
-                    //    //https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp/Domain/Uow/UnitOfWorkAttribute.cs#L189
-                    //    var opt = new UnitOfWorkOptions
-                    //    {
-                    //        IsTransactional = unitOfWorkAttr.IsTransactional,
-                    //        IsolationLevel = unitOfWorkAttr.IsolationLevel,
-                    //        Timeout = unitOfWorkAttr.Timeout,
-                    //        Scope = unitOfWorkAttr.Scope
-                    //    };
-                    //    using (var uow = UnitOfWorkManager.Begin(opt))
-                    //    {
-                    //        await action();
-                    //        if (opt.IsTransactional == true)
-                    //            await uow.CompleteAsync();
-                    //    }
-                    //}
-                    //else
-                    //{
-                    //    await action();
-                    //}
-                }
-            }
-            catch (UserFriendlyException ex)
-            {
-                await ShowErrorAsync(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                if (WebHostEnvironment.IsDevelopment())
-                    throw;
+        //            //if (!unitOfWorkAttr.IsDisabled)
+        //            //{
+        //            //    //https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp/Domain/Uow/UnitOfWorkAttribute.cs#L189
+        //            //    var opt = new UnitOfWorkOptions
+        //            //    {
+        //            //        IsTransactional = unitOfWorkAttr.IsTransactional,
+        //            //        IsolationLevel = unitOfWorkAttr.IsolationLevel,
+        //            //        Timeout = unitOfWorkAttr.Timeout,
+        //            //        Scope = unitOfWorkAttr.Scope
+        //            //    };
+        //            //    using (var uow = UnitOfWorkManager.Begin(opt))
+        //            //    {
+        //            //        await action();
+        //            //        if (opt.IsTransactional == true)
+        //            //            await uow.CompleteAsync();
+        //            //    }
+        //            //}
+        //            //else
+        //            //{
+        //            //    await action();
+        //            //}
+        //        }
+        //    }
+        //    catch (UserFriendlyException ex)
+        //    {
+        //        await ShowErrorAsync(ex.Message);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        if (WebHostEnvironment.IsDevelopment())
+        //            throw;
 
-                Logger.Error(ex.ToString(), ex);
-                await ShowErrorAsync(L("InternalServerError"));
-            }
-        }
-        /// <summary>
-        /// 执行委托，用户友好异常时直接显示错误消息（记得重写ShowErrorAsync），否则记录日志并显示服务端错误消息。
-        /// 默认情况下自动处理取消问题，特殊情况修改cts或替换canceltokenprovider
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="action"></param>
-        /// <returns></returns>
-        protected virtual async Task<T> SafelyExecuteAsync<T>(Func<Task<T>> action, CancellationToken cancellationToken = default)
-        {
-            try
-            {
-                /*
-                  * 主cts = 连接 参数的ct？
-                  * 不好，因为主的可能被其它地方调用，当前调用取消是并不一定希望其它地方取消
-                  * 
-                  * 参数的ct引用主的?
-                  * 可以的，不过这不应该在抽象中来决定
-                  * 
-                  */
-                var ct1 = cancellationToken == default ? CancellationTokenSource.Token : cancellationToken;
-                using (var ct = CancellationTokenProvider.Use(ct1))
-                {
+        //        Logger.Error(ex.ToString(), ex);
+        //        await ShowErrorAsync(L("InternalServerError"));
+        //    }
+        //}
+        ///// <summary>
+        ///// 执行委托，用户友好异常时直接显示错误消息（记得重写ShowErrorAsync），否则记录日志并显示服务端错误消息。
+        ///// 默认情况下自动处理取消问题，特殊情况修改cts或替换canceltokenprovider
+        ///// </summary>
+        ///// <typeparam name="T"></typeparam>
+        ///// <param name="action"></param>
+        ///// <returns></returns>
+        //protected virtual async Task<T> SafelyExecuteAsync<T>(Func<Task<T>> action, CancellationToken cancellationToken = default)
+        //{
+        //    try
+        //    {
+        //        /*
+        //          * 主cts = 连接 参数的ct？
+        //          * 不好，因为主的可能被其它地方调用，当前调用取消是并不一定希望其它地方取消
+        //          * 
+        //          * 参数的ct引用主的?
+        //          * 可以的，不过这不应该在抽象中来决定
+        //          * 
+        //          */
+        //        var ct1 = cancellationToken == default ? CancellationTokenSource.Token : cancellationToken;
+        //        using (var ct = CancellationTokenProvider.Use(ct1))
+        //        {
 
-                    return await action();
+        //            return await action();
 
-                    //已在全局开启按约定的拦截器，参考blazor集成文档
-                    ////https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp.AspNetCore/AspNetCore/Mvc/Uow/AbpUowActionFilter.cs#L14
-                    //var unitOfWorkAttr = unitOfWorkDefaultOptions
-                    //    .GetUnitOfWorkAttributeOrNull(action.Method) ??
-                    //    aspnetCoreConfiguration.DefaultUnitOfWorkAttribute;
+        //            //已在全局开启按约定的拦截器，参考blazor集成文档
+        //            ////https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp.AspNetCore/AspNetCore/Mvc/Uow/AbpUowActionFilter.cs#L14
+        //            //var unitOfWorkAttr = unitOfWorkDefaultOptions
+        //            //    .GetUnitOfWorkAttributeOrNull(action.Method) ??
+        //            //    aspnetCoreConfiguration.DefaultUnitOfWorkAttribute;
 
-                    //if (!unitOfWorkAttr.IsDisabled)
-                    //{
-                    //    //https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp/Domain/Uow/UnitOfWorkAttribute.cs#L189
-                    //    var opt = new UnitOfWorkOptions
-                    //    {
-                    //        IsTransactional = unitOfWorkAttr.IsTransactional,
-                    //        IsolationLevel = unitOfWorkAttr.IsolationLevel,
-                    //        Timeout = unitOfWorkAttr.Timeout,
-                    //        Scope = unitOfWorkAttr.Scope
-                    //    };
-                    //    using (var uow = UnitOfWorkManager.Begin(opt))
-                    //    {
-                    //        var r = await action();
-                    //        if (opt.IsTransactional == true)
-                    //            await uow.CompleteAsync();
-                    //        return r;
-                    //    }
-                    //}
-                    //else
-                    //{
-                    //    return await action();
-                    //}
-                }
-            }
-            catch (UserFriendlyException ex)
-            {
-                await ShowErrorAsync(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                if (WebHostEnvironment.IsDevelopment())
-                    throw;
+        //            //if (!unitOfWorkAttr.IsDisabled)
+        //            //{
+        //            //    //https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp/Domain/Uow/UnitOfWorkAttribute.cs#L189
+        //            //    var opt = new UnitOfWorkOptions
+        //            //    {
+        //            //        IsTransactional = unitOfWorkAttr.IsTransactional,
+        //            //        IsolationLevel = unitOfWorkAttr.IsolationLevel,
+        //            //        Timeout = unitOfWorkAttr.Timeout,
+        //            //        Scope = unitOfWorkAttr.Scope
+        //            //    };
+        //            //    using (var uow = UnitOfWorkManager.Begin(opt))
+        //            //    {
+        //            //        var r = await action();
+        //            //        if (opt.IsTransactional == true)
+        //            //            await uow.CompleteAsync();
+        //            //        return r;
+        //            //    }
+        //            //}
+        //            //else
+        //            //{
+        //            //    return await action();
+        //            //}
+        //        }
+        //    }
+        //    catch (UserFriendlyException ex)
+        //    {
+        //        await ShowErrorAsync(ex.Message);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        if (WebHostEnvironment.IsDevelopment())
+        //            throw;
 
-                Logger.Error(ex.ToString(), ex);
-                await ShowErrorAsync(L("InternalServerError"));
-            }
-            return default;
-        }
-        public virtual ValueTask ShowErrorAsync(string msg) => ValueTask.CompletedTask;
+        //        Logger.Error(ex.ToString(), ex);
+        //        await ShowErrorAsync(L("InternalServerError"));
+        //    }
+        //    return default;
+        //}
+       // public virtual ValueTask ShowErrorAsync(string msg) => ValueTask.CompletedTask;
 
-        public virtual void ShowError(string msg) { }
-        /// <summary>
-        /// 执行委托，用户友好异常时直接显示错误消息（记得重写ShowError），否则记录日志并显示服务端错误消息。
-        /// </summary>
-        /// <param name="action"></param>
-        /// <returns></returns>
-        protected virtual void SafelyExecute(Action action)
-        {
-            try
-            {
-                /*
-                   * 主cts = 连接 参数的ct？
-                   * 不好，因为主的可能被其它地方调用，当前调用取消是并不一定希望其它地方取消
-                   * 
-                   * 参数的ct引用主的?
-                   * 可以的，不过这不应该在抽象中来决定
-                   * 
-                   */
+        //public virtual void ShowError(string msg) { }
+        ///// <summary>
+        ///// 执行委托，用户友好异常时直接显示错误消息（记得重写ShowError），否则记录日志并显示服务端错误消息。
+        ///// </summary>
+        ///// <param name="action"></param>
+        ///// <returns></returns>
+        //protected virtual void SafelyExecute(Action action)
+        //{
+        //    try
+        //    {
+        //        /*
+        //           * 主cts = 连接 参数的ct？
+        //           * 不好，因为主的可能被其它地方调用，当前调用取消是并不一定希望其它地方取消
+        //           * 
+        //           * 参数的ct引用主的?
+        //           * 可以的，不过这不应该在抽象中来决定
+        //           * 
+        //           */
 
-                action();
+        //        action();
 
-                //已在全局开启按约定的拦截器，参考blazor集成文档
-                ////https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp.AspNetCore/AspNetCore/Mvc/Uow/AbpUowActionFilter.cs#L14
-                //var unitOfWorkAttr = unitOfWorkDefaultOptions
-                //    .GetUnitOfWorkAttributeOrNull(action.Method) ??
-                //    aspnetCoreConfiguration.DefaultUnitOfWorkAttribute;
+        //        //已在全局开启按约定的拦截器，参考blazor集成文档
+        //        ////https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp.AspNetCore/AspNetCore/Mvc/Uow/AbpUowActionFilter.cs#L14
+        //        //var unitOfWorkAttr = unitOfWorkDefaultOptions
+        //        //    .GetUnitOfWorkAttributeOrNull(action.Method) ??
+        //        //    aspnetCoreConfiguration.DefaultUnitOfWorkAttribute;
 
-                //if (!unitOfWorkAttr.IsDisabled)
-                //{
-                //    //https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp/Domain/Uow/UnitOfWorkAttribute.cs#L189
-                //    var opt = new UnitOfWorkOptions
-                //    {
-                //        IsTransactional = unitOfWorkAttr.IsTransactional,
-                //        IsolationLevel = unitOfWorkAttr.IsolationLevel,
-                //        Timeout = unitOfWorkAttr.Timeout,
-                //        Scope = unitOfWorkAttr.Scope
-                //    };
-                //    using (var uow = UnitOfWorkManager.Begin(opt))
-                //    {
-                //        action();
-                //        if (opt.IsTransactional == true)
-                //            uow.Complete();
-                //    }
-                //}
-                //else
-                //{
-                //    action();
-                //}
-            }
-            catch (UserFriendlyException ex)
-            {
-                ShowError(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                if (WebHostEnvironment.IsDevelopment())
-                    throw;
+        //        //if (!unitOfWorkAttr.IsDisabled)
+        //        //{
+        //        //    //https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp/Domain/Uow/UnitOfWorkAttribute.cs#L189
+        //        //    var opt = new UnitOfWorkOptions
+        //        //    {
+        //        //        IsTransactional = unitOfWorkAttr.IsTransactional,
+        //        //        IsolationLevel = unitOfWorkAttr.IsolationLevel,
+        //        //        Timeout = unitOfWorkAttr.Timeout,
+        //        //        Scope = unitOfWorkAttr.Scope
+        //        //    };
+        //        //    using (var uow = UnitOfWorkManager.Begin(opt))
+        //        //    {
+        //        //        action();
+        //        //        if (opt.IsTransactional == true)
+        //        //            uow.Complete();
+        //        //    }
+        //        //}
+        //        //else
+        //        //{
+        //        //    action();
+        //        //}
+        //    }
+        //    catch (UserFriendlyException ex)
+        //    {
+        //        ShowError(ex.Message);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        if (WebHostEnvironment.IsDevelopment())
+        //            throw;
 
-                Logger.Error(ex.ToString(), ex);
-                ShowError(L("InternalServerError"));
-            }
-        }
-        protected virtual T SafelyExecute<T>(Func<T> action)
-        {
-            try
-            {
-                /*
-                    * 主cts = 连接 参数的ct？
-                    * 不好，因为主的可能被其它地方调用，当前调用取消是并不一定希望其它地方取消
-                    * 
-                    * 参数的ct引用主的?
-                    * 可以的，不过这不应该在抽象中来决定
-                    * 
-                    */
+        //        Logger.Error(ex.ToString(), ex);
+        //        ShowError(L("InternalServerError"));
+        //    }
+        //}
+        //protected virtual T SafelyExecute<T>(Func<T> action)
+        //{
+        //    try
+        //    {
+        //        /*
+        //            * 主cts = 连接 参数的ct？
+        //            * 不好，因为主的可能被其它地方调用，当前调用取消是并不一定希望其它地方取消
+        //            * 
+        //            * 参数的ct引用主的?
+        //            * 可以的，不过这不应该在抽象中来决定
+        //            * 
+        //            */
 
-                return action();
+        //        return action();
 
-                //已在全局开启按约定的拦截器，参考blazor集成文档
-                ////https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp.AspNetCore/AspNetCore/Mvc/Uow/AbpUowActionFilter.cs#L14
-                //var unitOfWorkAttr = unitOfWorkDefaultOptions
-                //    .GetUnitOfWorkAttributeOrNull(action.Method) ??
-                //    aspnetCoreConfiguration.DefaultUnitOfWorkAttribute;
+        //        //已在全局开启按约定的拦截器，参考blazor集成文档
+        //        ////https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp.AspNetCore/AspNetCore/Mvc/Uow/AbpUowActionFilter.cs#L14
+        //        //var unitOfWorkAttr = unitOfWorkDefaultOptions
+        //        //    .GetUnitOfWorkAttributeOrNull(action.Method) ??
+        //        //    aspnetCoreConfiguration.DefaultUnitOfWorkAttribute;
 
-                //if (!unitOfWorkAttr.IsDisabled)
-                //{
-                //    //https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp/Domain/Uow/UnitOfWorkAttribute.cs#L189
-                //    var opt = new UnitOfWorkOptions
-                //    {
-                //        IsTransactional = unitOfWorkAttr.IsTransactional,
-                //        IsolationLevel = unitOfWorkAttr.IsolationLevel,
-                //        Timeout = unitOfWorkAttr.Timeout,
-                //        Scope = unitOfWorkAttr.Scope
-                //    };
-                //    using (var uow = UnitOfWorkManager.Begin(opt))
-                //    {
-                //        var r = action();
-                //        if (opt.IsTransactional == true)
-                //            uow.Complete();
-                //        return r;
-                //    }
-                //}
-                //else
-                //{
-                //    return action();
-                //}
-            }
-            catch (UserFriendlyException ex)
-            {
-                ShowError(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                if (WebHostEnvironment.IsDevelopment())
-                    throw;
+        //        //if (!unitOfWorkAttr.IsDisabled)
+        //        //{
+        //        //    //https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp/Domain/Uow/UnitOfWorkAttribute.cs#L189
+        //        //    var opt = new UnitOfWorkOptions
+        //        //    {
+        //        //        IsTransactional = unitOfWorkAttr.IsTransactional,
+        //        //        IsolationLevel = unitOfWorkAttr.IsolationLevel,
+        //        //        Timeout = unitOfWorkAttr.Timeout,
+        //        //        Scope = unitOfWorkAttr.Scope
+        //        //    };
+        //        //    using (var uow = UnitOfWorkManager.Begin(opt))
+        //        //    {
+        //        //        var r = action();
+        //        //        if (opt.IsTransactional == true)
+        //        //            uow.Complete();
+        //        //        return r;
+        //        //    }
+        //        //}
+        //        //else
+        //        //{
+        //        //    return action();
+        //        //}
+        //    }
+        //    catch (UserFriendlyException ex)
+        //    {
+        //        ShowError(ex.Message);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        if (WebHostEnvironment.IsDevelopment())
+        //            throw;
 
-                Logger.Error(ex.ToString(), ex);
-                ShowError(L("InternalServerError"));
-            }
-            return default;
-        }
+        //        Logger.Error(ex.ToString(), ex);
+        //        ShowError(L("InternalServerError"));
+        //    }
+        //    return default;
+        //}
 
         protected IDisposable ResumeSession()
         {

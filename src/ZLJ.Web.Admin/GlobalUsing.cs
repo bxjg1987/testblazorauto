@@ -18,3 +18,4 @@ global using Abp.Localization.Sources;
 global using BXJG.AbpMudBlazor.Components;
 global using BXJG.Utils;
 global using BXJG.Utils.GeneralTree;
+global using Abp.UI;

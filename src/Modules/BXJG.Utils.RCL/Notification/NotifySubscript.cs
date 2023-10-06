@@ -29,14 +29,14 @@ namespace BXJG.Utils.Notification
         protected IReadOnlyList<NotificationDefinition> notificationDefinitions = new List<NotificationDefinition>();
         protected HashSet<string> seleted = new HashSet<string>();
 
-        protected override void OnInitialized2()
+        protected override void OnInitialized()
         {
-            base.OnInitialized2();
+            base.OnInitialized();
             NotificationDefinitionManager= base.ScopedServices.GetRequiredService<INotificationDefinitionManager>();
             NotificationSubscriptionManager = base.ScopedServices.GetRequiredService<INotificationSubscriptionManager>();
         }
 
-        protected override async Task OnInitialized2Async()
+        protected override async Task OnInitializedAsync()
         {
             if (idf != default)
                 return;
@@ -52,8 +52,7 @@ namespace BXJG.Utils.Notification
 
         protected virtual async Task SelectChanged(string name, bool xuanze)
         {
-            await base.SafelyExecuteAsync(async () =>
-            {
+          
                 if (xuanze)
                 {
                     await NotificationSubscriptionManager.SubscribeAsync(idf, name);
@@ -65,7 +64,7 @@ namespace BXJG.Utils.Notification
                     seleted.Remove(name);
                 }
                 //base.ShowSuccess("");
-            });
+        
         }
     }
 }

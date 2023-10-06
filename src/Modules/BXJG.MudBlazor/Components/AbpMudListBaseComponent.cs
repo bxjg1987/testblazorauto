@@ -3,6 +3,7 @@ using Abp.Application.Services.Dto;
 using Abp.Authorization.Roles;
 using Abp.Authorization.Users;
 using Abp.Domain.Entities;
+using BXJG.AbpMudBlazor.Interceptor;
 using BXJG.Common.Dto;
 using BXJG.Utils;
 using BXJG.Utils.Dto;
@@ -175,10 +176,10 @@ namespace BXJG.AbpMudBlazor.Components
         /// </summary>
         /// <param name="state"></param>
         /// <returns></returns>
+        [ExceptionInterceptor]
         protected virtual async Task<GridData<TEntityDto>> LoadDataAsync(GridState<TEntityDto> state)
         {
-            return await SafelyExecuteAsync(async () =>
-            {
+           
                 var cd = new TGetAllInput();
                 if (cd is IDynamicCondition cdd)
                 {
@@ -229,7 +230,7 @@ namespace BXJG.AbpMudBlazor.Components
                     TotalItems = dtos.TotalCount,
                     Items = dtos.Items
                 };
-            });
+         
         }
       
         
@@ -266,13 +267,13 @@ namespace BXJG.AbpMudBlazor.Components
         //}
 
         protected string keywords = "";
+        [ExceptionInterceptor]
         protected virtual async Task KeywordsChanged(string keywords)
         {
-            await base.SafelyExecuteAsync(async () =>
-            {
+           
                 this.keywords = keywords;
                 await dataGrid.ReloadServerData();
-            });
+           
         }
         #endregion
 
@@ -311,6 +312,7 @@ namespace BXJG.AbpMudBlazor.Components
         /// </summary>
         /// <param name="arg"></param>
         /// <returns></returns>
+        [ExceptionInterceptor]
         protected virtual ValueTask RowDoubleClick(DataGridRowClickEventArgs<TEntityDto> arg)
         {
             return ValueTask.CompletedTask;
@@ -362,20 +364,20 @@ namespace BXJG.AbpMudBlazor.Components
         /// 批量删除
         /// </summary>
         /// <returns></returns>
+        [ExceptionInterceptor]
         protected virtual async Task Delete()
         {
             //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限
             HideDeleteConfirm();
             isDeleting = true;
-            await SafelyExecuteAsync(async () =>
-            {
+          
                 var r = await AppService.BatchDeleteAsync(new BatchOperationInput<TPrimaryKey> { Ids = dataGrid.SelectedItems?.Select(x => x.Id).ToArray() });
                 BatchOperationMessage(r, "批量删除");
                 //BatchDeleteMessage(temp);
                 if (r.Ids.Any())
                     await dataGrid.ReloadServerData();
                 //_ = InvokeAsync(dataGrid.ReloadServerData); //内部会StateChange
-            });
+         
             isDeleting = false;
         }
         //protected virtual void DeleteMessage()
@@ -387,6 +389,7 @@ namespace BXJG.AbpMudBlazor.Components
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
+        [ExceptionInterceptor]
         protected virtual async Task Delete(TEntityDto item)
         {
             //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限
@@ -394,14 +397,13 @@ namespace BXJG.AbpMudBlazor.Components
             HideDeleteConfirm();
          
                 item.ExtensionData.IsDeleting = true;
-            await SafelyExecuteAsync(async () =>
-            {
+          
                 await AppService.DeleteAsync(new EntityDto<TPrimaryKey>(item.Id));
                 Snackbar.Add("删除成功！", Severity.Success);
                 //若上面异常，下面不会执行
                 //_ = InvokeAsync(dataGrid.ReloadServerData);
                 await dataGrid.ReloadServerData();
-            });
+         
         
                 item.ExtensionData.IsDeleting = false;
         }
@@ -484,16 +486,16 @@ namespace BXJG.AbpMudBlazor.Components
         /// 点击新增按钮时执行
         /// </summary>
         /// <returns></returns>
+        [ExceptionInterceptor]
         protected virtual async Task BtnAddClick()
         {
-            await base.SafelyExecuteAsync(async () =>
-            {
+         
                 var ps = BuildCreateParameter();
                 if (!(await DialogService.Show<TCreateDialog>("新增" + FuncName, ps, DialogAddOptions).Result).Canceled)
                 {
                     await dataGrid.ReloadServerData();
                 }
-            });
+           
         }
         /// <summary>
         /// 行修改按钮点击时执行
@@ -501,10 +503,10 @@ namespace BXJG.AbpMudBlazor.Components
         /// </summary>
         /// <param name="dto">当前dto对象</param>
         /// <returns></returns>
+        [ExceptionInterceptor]
         protected virtual async Task BtnEditClick(TEntityDto dto)
         {
-            await base.SafelyExecuteAsync(async () =>
-            {
+           
                 var ps = new DialogParameters<TDetailDialog>();
                 FillDetailParameters(ps, dto);
                 ps.Add("IsEdit", true);
@@ -512,7 +514,7 @@ namespace BXJG.AbpMudBlazor.Components
                 {
                     await dataGrid.ReloadServerData();
                 }
-            });
+           
         }
         /// <summary>
         /// 行详情按钮点击时执行
@@ -520,10 +522,10 @@ namespace BXJG.AbpMudBlazor.Components
         /// </summary>
         /// <param name="dto">当前dto对象</param>
         /// <returns></returns>
+        [ExceptionInterceptor]
         protected virtual async Task BtnDetailClick(TEntityDto dto)
         {
-            await base.SafelyExecuteAsync(async () =>
-            {
+           
                 var ps = new DialogParameters<TDetailDialog>();
                 FillDetailParameters(ps, dto);
                 ps.Add("IsEdit", false);
@@ -532,7 +534,7 @@ namespace BXJG.AbpMudBlazor.Components
                     //说明在详情页面 又进入了修改 且修改后保存了数据
                     await dataGrid.ReloadServerData();
                 }
-            });
+         
         }
         protected override async ValueTask RowDoubleClick(DataGridRowClickEventArgs<TEntityDto> arg)
         {

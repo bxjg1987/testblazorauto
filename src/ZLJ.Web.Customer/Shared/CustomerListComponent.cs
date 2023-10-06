@@ -1,6 +1,7 @@
 ﻿using Abp.Application.Services.Dto;
 using Abp.Localization.Sources;
 using BXJG.AbpMudBlazor.Components;
+using BXJG.AbpMudBlazor.Interceptor;
 using BXJG.Common;
 using BXJG.Utils;
 using MudBlazor;
@@ -139,25 +140,25 @@ namespace ZLJ.Web.Customer.Shared
         /// 点击新增按钮时执行
         /// </summary>
         /// <returns></returns>
+        [ExceptionInterceptor]
         protected virtual async Task AddClick()
         {
-            await base.SafelyExecuteAsync(async delegate
-            {
+           
                 if (!(await DialogService.Show<TFormDialogCoponent>("新增" + FuncName, await GetAddParams(), DialogAddOptions).Result).Canceled)
                 {
                     await dataGrid.ReloadServerData();
                 }
-            });
+       
         }
         /// <summary>
         /// 点击修改按钮时执行
         /// </summary>
         /// <returns></returns>
+        [ExceptionInterceptor]
         protected virtual async Task EditClick(TEntityDto dto = default)
         {
             //没有选择数据时，修改按钮是禁用的，所以没必要再判断一次
-            await base.SafelyExecuteAsync(async delegate
-            {
+          
                 var ps = new DialogParameters<TFormDialogCoponent>
                 {
                     { "Pattern", FrmPattern.Edit },
@@ -167,7 +168,7 @@ namespace ZLJ.Web.Customer.Shared
                 {
                     await dataGrid.ReloadServerData();
                 }
-            });
+         
         }
         #endregion
     }

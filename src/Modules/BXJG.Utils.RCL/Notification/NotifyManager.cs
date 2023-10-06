@@ -56,12 +56,12 @@ namespace BXJG.Utils.Notification
         /// 通知应用服务
         /// </summary>
         public TAppService AppService { get; set; }
-        protected override void OnInitialized2()
+        protected override void OnInitialized()
         {
-            base.OnInitialized2();
+            base.OnInitialized();
             AppService = base.ScopedServices.GetRequiredService<TAppService>();
         }
-        protected override async Task OnInitialized2Async()
+        protected override async Task OnInitializedAsync()
         {
             await LoadDefinesAsync();
         }
@@ -101,20 +101,20 @@ namespace BXJG.Utils.Notification
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
+      //  [ExceptionInterceptor]
         protected virtual async Task HeadChanged(string name)
         {
             if (currDefine?.Name == name)
                 return;
 
-            await base.SafelyExecute(async () =>
-            {
+           
                 if (currDefine != default)
                     currDefine.Selected = false;
 
                 defines.Single(c => c.Name == name).Selected = true;
                 condition.NotificationNames = new[] { name };
                 await ConditionChanged();
-            });
+         
         }
         /// <summary>
         /// 根据当前条件加载消息列表
@@ -122,12 +122,12 @@ namespace BXJG.Utils.Notification
         /// <returns></returns>
         protected virtual async Task LoadMessagesAsync()
         {
-            await SafelyExecute(async () =>
-            {
+           // await SafelyExecute(async () =>
+           // {
                 var r = await AppService.GetAllAsync(condition);
                 total = r.TotalCount;
                 messages = r.Items.ToList();
-            });
+          //  });
         }
         /// <summary>
         /// 条件-开始时间变化时调用
@@ -193,10 +193,10 @@ namespace BXJG.Utils.Notification
         /// <returns></returns>
         protected virtual async Task SetReadAsync(params Guid[] ids)
         {
-            await SafelyExecute(async () =>
-            {
+           // await SafelyExecute(async () =>
+          //  {
                 await AppService.SetReadedAsync(new BatchOperationInput<Guid> { Ids = ids });
-            });
+          //  });
         }
 
         /// <summary>
@@ -206,10 +206,10 @@ namespace BXJG.Utils.Notification
         /// <returns></returns>
         protected virtual async Task SetReadAllAsync(string? name = default)
         {
-            await SafelyExecute(async () =>
-            {
+           // await SafelyExecute(async () =>
+          //  {
                 await AppService.SetReadedAllAsync(name);
-            });
+          //  });
         }
 
         /// <summary>

@@ -12,6 +12,7 @@
     <Compile Remove="Components\AbpMudCarryingCreateBaseComponent.cs" />
     <Compile Remove="Components\AbpMudDetailDialog.razor.cs" />
     <Compile Remove="ExampleJsInterop.cs" />
+    <Compile Remove="Interceptor\CancellationTokenInterceptorAttribute.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,6 +33,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.11" />
     <PackageReference Include="MudBlazor" Version="6.10.0" />
+    <PackageReference Include="Rougamo.Fody" Version="1.4.1" IncludeAssets="all" PrivateAssets="contentfiles;analyzers" />
   </ItemGroup>
 
   <ItemGroup>

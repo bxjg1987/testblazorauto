@@ -1,25 +1,23 @@
-﻿using BXJG.AbpMudBlazor.Interceptor;
-using DocumentFormat.OpenXml.InkML;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+
 
 namespace ZLJ.Web.Admin.DataDictionary
 {
+    //[ExceptionInterceptor]
     public partial class List
     {
         protected override string FuncName => "数据字典";
 
-        [ExceptionInterceptor]
-        protected override async Task OnInitialized2Async()
+    // [ExceptionInterceptor]
+        protected override async Task OnInitializedAsync()
         {
+          //  base.CancellationTokenProvider
+           // base.CancellationTokenSource
            // base.Logger.Debug($"业务逻辑 线程id：{Thread.CurrentThread.ManagedThreadId}");
 
+            throw new UserFriendlyException("xxxxxxxxxxxxx");
             await InitPermission(BXJGUtilsConsts.GeneralTreeCreatePermissionName, BXJGUtilsConsts.GeneralTreeUpdatePermissionName, BXJGUtilsConsts.GeneralTreeDeletePermissionName);
-            await base.OnInitialized2Async();
+            await base.OnInitializedAsync();
            // base.Logger.Debug($"业务逻辑2222222222 线程id：{Thread.CurrentThread.ManagedThreadId}");
         }
     }

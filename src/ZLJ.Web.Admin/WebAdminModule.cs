@@ -1,8 +1,10 @@
 ﻿using Abp.Modules;
 using BXJG.AbpMudBlazor;
+using BXJG.AbpMudBlazor.Interceptor;
 using BXJG.Utils;
 using MudBlazor;
 using MudBlazor.Services;
+using Rougamo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +13,13 @@ using System.Text;
 using System.Threading.Tasks;
 using ZLJ.App.Admin;
 
+//[assembly: ExceptionInterceptor]
+
+
+
 namespace ZLJ.Web.Admin
 {
+  //  [IgnoreMo(MoTypes = new[] { typeof(ExceptionInterceptorAttribute) })]
     [DependsOn(typeof(ZLJWebCoreModule), typeof(ZLJApplicationModule), typeof(BXJGMudBlazorModule))]
     public class WebAdminModule : AbpModule
     {

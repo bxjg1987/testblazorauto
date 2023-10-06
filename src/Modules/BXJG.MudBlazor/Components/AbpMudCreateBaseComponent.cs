@@ -1,10 +1,12 @@
 ﻿using Abp.Application.Services.Dto;
+using BXJG.AbpMudBlazor.Interceptor;
 using BXJG.Common;
 using BXJG.Utils;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Extensions.DependencyInjection;
 using MudBlazor;
+using Rougamo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -87,19 +89,20 @@ namespace BXJG.AbpMudBlazor.Components
         /// 正在执行重置
         /// </summary>
         protected bool isReseting = false;
+        ///// <summary>
+        ///// 重置
+        ///// </summary>
+        ///// <returns></returns>
+        //protected virtual  Task BtnResetClick()
+        //{
+        //    return SafelyExecuteAsync(async ()=>await ResetCore());
+        //}
         /// <summary>
         /// 重置
         /// </summary>
         /// <returns></returns>
-        protected virtual  Task BtnResetClick()
-        {
-            return SafelyExecuteAsync(async ()=>await ResetCore());
-        }
-        /// <summary>
-        /// 重置
-        /// </summary>
-        /// <returns></returns>
-        protected virtual async ValueTask ResetCore()
+        [ExceptionInterceptor]
+        protected virtual async Task BtnResetClick()
         {
             isReseting = true;
             try
@@ -115,9 +118,9 @@ namespace BXJG.AbpMudBlazor.Components
                 isReseting = false;
             }
         }
-        protected override async Task OnInitialized2Async()
+        protected override async Task OnInitializedAsync()
         {
-            await ResetCore();
+            await BtnResetClick();
         }
         ////在异步中初始化表单相关信息，这样可以给子类一个机会去异步初始化CreateDto
         //protected override async Task OnInitializedAsync()
@@ -169,19 +172,13 @@ namespace BXJG.AbpMudBlazor.Components
         /// 正在保存...
         /// </summary>
         protected bool isSaving = false;
+
         /// <summary>
         /// 核心的保存逻辑
         /// </summary>
         /// <returns></returns>
+        [ExceptionInterceptor]
         protected virtual async Task BtnSaveClick()
-        {
-            await base.SafelyExecuteAsync(SaveCore);
-        }
-        /// <summary>
-        /// 核心的保存逻辑
-        /// </summary>
-        /// <returns></returns>
-        protected virtual async Task SaveCore()
         {
             if (!editContext!.Validate())
                 return;
@@ -193,7 +190,7 @@ namespace BXJG.AbpMudBlazor.Components
                 Snackbar.Add("新增成功！", Severity.Success);
                 await AfterSave(r);
                 if (saveAndContinue)
-                    await ResetCore();
+                    await BtnResetClick();
             }
             finally
             {
