@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <None Remove="Component1.razor.css" />
+    <None Remove="FodyWeavers.xml" />
   </ItemGroup>
 
 

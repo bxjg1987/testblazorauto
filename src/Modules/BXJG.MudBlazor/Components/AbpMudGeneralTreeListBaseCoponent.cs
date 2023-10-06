@@ -285,7 +285,7 @@ namespace BXJG.AbpMudBlazor.Components
                 await ct.ReloadAsync();
               
             }
-            this.StateHasChanged();
+            //this.StateHasChanged();
         }
 
         /// <summary>

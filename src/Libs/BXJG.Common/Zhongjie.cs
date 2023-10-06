@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Schema;
 
@@ -411,5 +412,14 @@ namespace BXJG.Common
         }
 
         #endregion
+
+        /// <summary>
+        /// 整个应用全局的
+        /// </summary>
+        public static readonly Zhongjie Instance = new Zhongjie();
+        /// <summary>
+        /// 当前线程全局的
+        /// </summary>
+        public static readonly AsyncLocal<Zhongjie> Current = new AsyncLocal<Zhongjie>();
     }
 }

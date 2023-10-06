@@ -11,7 +11,7 @@ namespace BXJG.Common
     {
         public static IServiceCollection AddBXJGCommon(this IServiceCollection services)
         {
-            return services.AddSingleton<IClock, LocalClock>().AddSingleton<Zhongjie>();
+            return services.AddSingleton<IClock, LocalClock>().AddSingleton(Zhongjie.Instance);
         }
     }
 }

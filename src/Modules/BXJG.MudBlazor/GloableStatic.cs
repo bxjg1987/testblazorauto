@@ -14,6 +14,12 @@ namespace BXJG.AbpMudBlazor
     public class GloableStatic
     {
         /// <summary>
+        /// 当前线程的通知器，
+        /// 在blazor server中不可用，因为控件事件处理未必在主线程
+        /// </summary>
+        public static readonly AsyncLocal< ISnackbar> Snackbar = new AsyncLocal<ISnackbar>();
+
+        /// <summary>
         /// mudblazor中的动态条件比较符与BXJG.Common中的比较符的映射
         /// </summary>
         public static readonly IReadOnlyDictionary<string, CompareType> FilterOperatorMapToCompareType = new Dictionary<string, CompareType>
