@@ -20,8 +20,11 @@
 
   <ItemGroup>
     <Compile Remove="AutoMapper\**" />
+    <Compile Remove="Interceptor\**" />
     <EmbeddedResource Remove="AutoMapper\**" />
+    <EmbeddedResource Remove="Interceptor\**" />
     <None Remove="AutoMapper\**" />
+    <None Remove="Interceptor\**" />
   </ItemGroup>
 
   <ItemGroup>
