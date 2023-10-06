@@ -59,7 +59,7 @@ namespace BXJG.AbpMudBlazor.Interceptor
             {
                 var logger = context.Datas[loggerKey] as ILogger;
                 logger.Error(@" {context.TargetType.FullName }.{context.Method.Name}" + context.Exception.StackTrace);
-                snackbar.Add($"错误！服务端发生未处理异常，请稍后重试，若多次失败，请联系系统管理员。", Severity.Error);
+                snackbar.Add($"服务端发生未处理异常！请稍后重试，若多次失败，请联系系统管理员。", Severity.Error);
             }
 
             // 处理异常并将返回值设置为newReturnValue，如果方法无返回值(void)，直接传入null即可
