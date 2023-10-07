@@ -15,6 +15,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using static MudBlazor.CategoryTypes;
 
 namespace BXJG.AbpMudBlazor.Components
@@ -434,9 +435,16 @@ namespace BXJG.AbpMudBlazor.Components
                 //BatchDeleteMessage(temp);
                 if (r.Ids.Any())
                 {
+                    var tmp = selected.OrderBy(c => c.Code.Length).FirstOrDefault();
+                    if(tmp!=null)
 
-                    var node = mudTreeView.Items.FindRecursiveDown(selected.OrderBy(c => c.Code.Length).First().ParentId);
-                    await Reload(node);
+                    {
+                        var node = mudTreeView.Items.FindRecursiveDown(tmp.ParentId.Value);
+                        await Reload(node);
+                    }
+          else
+                        await Reload();
+
                 }
 
                 //刷新选择节点中最短code的父节点，也就是所有选择节点的公共父节点
