@@ -66,7 +66,7 @@ namespace BXJG.Utils.GeneralTree
         /// <typeparam name="TChild"></typeparam>
         /// <param name="id">目标节点id</param>
         /// <returns></returns>
-        public static TChild FindRecursiveDown<TChild>( this TChild node, long? id) where TChild : IGeneralTree<TChild>
+        public static TChild FindRecursiveDown<TChild>( this TChild node, long id) where TChild : IGeneralTree<TChild>
         { 
             if(node.Id==id)
                 return node;
@@ -88,7 +88,7 @@ namespace BXJG.Utils.GeneralTree
         /// <typeparam name="TChild"></typeparam>
         /// <param name="id">目标节点id</param>
         /// <returns></returns>
-        public static TChild FindRecursiveDown<TChild>(this IEnumerable<TChild> nodes, long? id) where TChild : IGeneralTree<TChild>
+        public static TChild FindRecursiveDown<TChild>(this IEnumerable<TChild> nodes, long id) where TChild : IGeneralTree<TChild>
         {
             foreach (var item in nodes)
             {

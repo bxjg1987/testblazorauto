@@ -5,6 +5,7 @@ using BXJG.Common.Dto;
 using BXJG.Utils.Dto;
 using BXJG.Utils.GeneralTree;
 using BXJG.Utils.Notification;
+using Castle.MicroKernel.Registration;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using MudBlazor;
@@ -36,7 +37,7 @@ namespace BXJG.AbpMudBlazor.Components
     /// <typeparam name="TCreateInput">新增时的输入类型</typeparam>
     /// <typeparam name="TEditDto">修改时的输入类型</typeparam>
     /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
-   
+
     public abstract class AbpMudGeneralTreeListBaseCoponent<TAppService,
                                                             TEntityDto,
                                                             TCreateInput,
@@ -139,7 +140,7 @@ namespace BXJG.AbpMudBlazor.Components
         #endregion
 
         #region 生命周期
-       // [ExceptionInterceptor]
+        // [ExceptionInterceptor]
         protected override async Task OnInitializedAsync()
         {
             await Reload();
@@ -256,8 +257,8 @@ namespace BXJG.AbpMudBlazor.Components
                 parentNode.Children = dtos;
 
             return dtos.ToHashSet();
-          
-       
+
+
         }
         /// <summary>
         /// 重新加载子节点列表
@@ -280,20 +281,20 @@ namespace BXJG.AbpMudBlazor.Components
             }
             else
             {
-            
 
-              //  var dtos = await Load(parentNode);
-              //  parentNode.Children= dtos.ToList();
+
+                //  var dtos = await Load(parentNode);
+                //  parentNode.Children= dtos.ToList();
 
                 var ct = (parentNode as IExtendableDto).ExtensionData.Control as MudTreeViewItem<TEntityDto>;//配合界面的ref，这里可以拿到控件引用，
                 await ct.ReloadAsync();
-              
+
             }
             //this.StateHasChanged();
         }
 
         /// <summary>
-        /// 默认已填充动态条件和关键字，你可以重写以填充其它条件
+        /// 你可以重写以填充其它条件
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
@@ -434,7 +435,7 @@ namespace BXJG.AbpMudBlazor.Components
                 if (r.Ids.Any())
                 {
 
-                   var node = mudTreeView.Items.FindRecursiveDown(selected.OrderBy(c => c.Code.Length).First().ParentId);
+                    var node = mudTreeView.Items.FindRecursiveDown(selected.OrderBy(c => c.Code.Length).First().ParentId);
                     await Reload(node);
                 }
 
@@ -453,7 +454,7 @@ namespace BXJG.AbpMudBlazor.Components
         //}
 
         /// <summary>
-        /// 删除单个项的核心逻辑
+        /// 点击删除单个项的按钮时回调
         /// </summary>
         /// <param name="curr"></param>
         /// <returns></returns>
@@ -472,14 +473,21 @@ namespace BXJG.AbpMudBlazor.Components
                 var r = await AppService.DeleteAsync(new BatchOperationInputLong { Ids = new[] { curr.Id } });
                 if (r.Ids.Any())
                 {
-                    //   if(curr.ParentId)
-                    var node = mudTreeView.Items.FindRecursiveDown(curr.ParentId);
-                    await Reload(node);
-
+                    if (curr.ParentId.HasValue)
+                    {
+                        var node = mudTreeView.Items.FindRecursiveDown(curr.ParentId.Value);
+                        await Reload(node);
+                    }
+                    else
+                        await Reload();
                     Snackbar.Add("删除成功！", Severity.Success);
                 }
                 else
-                    Snackbar.Add("删除失败！" + r.ErrorMessage.SingleOrDefault()?.Message, Severity.Error);
+                {
+                    //因为有全局异常拦截器，直接抛出异常吧
+                    throw new UserFriendlyException($"删除失败！{r.ErrorMessage.SingleOrDefault()?.Message}");
+                    //Snackbar.Add("删除失败！" + r.ErrorMessage.SingleOrDefault()?.Message, Severity.Error);
+                }
             }
             finally
             {
@@ -527,6 +535,7 @@ namespace BXJG.AbpMudBlazor.Components
         /// </summary>
         [Inject]
         protected virtual IDialogService DialogService { get; set; }
+
         /// <summary>
         /// 新增时的弹窗选项对象
         /// </summary>
@@ -541,80 +550,6 @@ namespace BXJG.AbpMudBlazor.Components
         /// </summary>
         /// <returns></returns>
         protected virtual DialogParameters BuildCreateParameter() => new DialogParameters();
-        ///// <summary>
-        ///// 点击新增按钮时执行
-        ///// </summary>
-        ///// <returns></returns>
-        //protected virtual async Task BtnAddClick()
-        //{
-        //    await base.SafelyExecuteAsync(async () =>
-        //    {
-        //        var ps = BuildCreateParameter();
-        //        if (!(await DialogService.Show<TCreateDialog>("新增" + FuncName, ps, DialogAddOptions).Result).Canceled)
-        //        {
-        //            await dataGrid.ReloadServerData();
-        //        }
-        //    });
-        //}
-        ///// <summary>
-        ///// 行修改按钮点击时执行
-        ///// 注：不要全局修改按钮，因为木有必要
-        ///// </summary>
-        ///// <param name="dto">当前dto对象</param>
-        ///// <returns></returns>
-        //protected virtual async Task BtnEditClick(TEntityDto dto)
-        //{
-        //    await base.SafelyExecuteAsync(async () =>
-        //    {
-        //        var ps = new DialogParameters<TDetailDialog>();
-        //        FillDetailParameters(ps, dto);
-        //        ps.Add("IsEdit", true);
-        //        if (!(await DialogService.Show<TDetailDialog>("修改" + FuncName, ps, DialogDetailOptions).Result).Canceled)
-        //        {
-        //            await dataGrid.ReloadServerData();
-        //        }
-        //    });
-        //}
-        ///// <summary>
-        ///// 行详情按钮点击时执行
-        ///// 注：不要全局详情按钮，因为木有必要
-        ///// </summary>
-        ///// <param name="dto">当前dto对象</param>
-        ///// <returns></returns>
-        //protected virtual async Task BtnDetailClick(TEntityDto dto)
-        //{
-        //    await base.SafelyExecuteAsync(async () =>
-        //    {
-        //        var ps = new DialogParameters<TDetailDialog>();
-        //        FillDetailParameters(ps, dto);
-        //        ps.Add("IsEdit", false);
-        //        if (!(await DialogService.Show<TDetailDialog>("查看" + FuncName + "详情", ps, DialogDetailOptions).Result).Canceled)
-        //        {
-        //            //说明在详情页面 又进入了修改 且修改后保存了数据
-        //            await dataGrid.ReloadServerData();
-        //        }
-        //    });
-        //}
-        //protected override async ValueTask RowDoubleClick(DataGridRowClickEventArgs<TEntityDto> arg)
-        //{
-        //    // if (updateIsGranted)
-        //    //  {
-        //    //      await BtnEditClick(arg.Item); }
-        //    //  else
-        //    //   {
-        //    await BtnDetailClick(arg.Item);
-        //    //  }
-
-        //}
-        ///// <summary>
-        ///// 弹出详情弹窗时传入参数
-        ///// 通常，复杂数据时只传入id，让详情组件自己去重新查询；简单数据时传入当前选择的dto
-        ///// </summary>
-        ///// <param name="pms"></param>
-        ///// <param name="dto"></param>
-        //protected virtual void FillDetailParameters(DialogParameters<TDetailDialog> pms, TEntityDto dto)
-        //{
-        //    pms.Add("Id", dto.Id);
-        //}
+       
     }
 }
