@@ -1,4 +1,4 @@
-﻿using Abp;
+using Abp;
 using Abp.Collections.Extensions;
 using Abp.Domain.Repositories;
 using Abp.Domain.Services;
@@ -161,12 +161,13 @@ namespace BXJG.Utils.GeneralTree
         }
         public virtual async Task<TEntity> MoveAsync(TEntity source, TEntity target, GeneralTreeMoveType moveType)
         {
+            //保存父节点id，方便后续更新子节点数量
             HashSet<long> parentIds = new HashSet<long>();
             if (source.ParentId.HasValue)
                 parentIds.AddIfNotContains(source.ParentId.Value);
 
-            TEntity targetParent = null;
-            IList<TEntity> targetChildren = null;
+            TEntity targetParent = null;//目标节点的父节点
+            IList<TEntity> targetChildren = null;//目标节点的子节点
             int targetIndex = 0;
 
             //if (target == null)
@@ -181,8 +182,8 @@ namespace BXJG.Utils.GeneralTree
             //else
             if (moveType != GeneralTreeMoveType.Append)
             {
-
-                parentIds.AddIfNotContains(target.Id);
+                if (target.ParentId.HasValue)
+                    parentIds.AddIfNotContains(target.ParentId.Value);
 
                 var temp1 = await GetBrotherWithOffspringAsync(target);
                 targetParent = temp1.Item1;
@@ -191,8 +192,7 @@ namespace BXJG.Utils.GeneralTree
             }
             else
             {
-                if (target.ParentId.HasValue)
-                    parentIds.AddIfNotContains(target.ParentId.Value);
+                parentIds.AddIfNotContains(target.Id);
 
                 targetParent = target;
                 if (target != null)
