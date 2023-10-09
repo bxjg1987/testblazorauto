@@ -72,30 +72,8 @@
             {
                 foreach (var item in menu.Items)
                 {
-                    @if (item.Items != default && item.Items.Any())
-                    {
-                        <MudNavGroup Title="@(_drawerOpen?item.DisplayName:string.Empty)" Style="width:12rem;" Icon="@item.Icon" HideExpandIcon="@(!_drawerOpen)">
-
-                            @foreach (var item2 in item.Items)
-                            {
-                                <MudNavLink Href="@item2.Url" Match="NavLinkMatch.All" Icon="@item2.Icon" Style="width:12rem;">
-                                    @if (_drawerOpen)
-                                    {
-                                        @item2.DisplayName
-                                    }
-                                </MudNavLink>
-                            }
-                        </MudNavGroup>
-                    }
-                    else
-                    {
-                        <MudNavLink Href="@item.Url" Match="NavLinkMatch.All" Icon="@item.Icon" Style="width:12rem;">
-                            @if (_drawerOpen)
-                            {
-                                @item.DisplayName
-                            }
-                        </MudNavLink>
-                    }
+                        <RecursionNavGroup MenuItem="item" DrawerOpen="_drawerOpen"></RecursionNavGroup>
+                   
                 }
             }
         </MudNavMenu>
