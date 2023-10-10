@@ -52,12 +52,12 @@ namespace BXJG.Utils.GeneralTree
                 //  var parentCodeQuery = repository.GetAll().Where(c => c.Id == entity.ParentId.Value).Select(c => c.Code);
                 var parentCode = parent.Code;// await AsyncQueryableExecuter.FirstOrDefaultAsync(parentCodeQuery);
                 var childrenCount = await repository.CountAsync(c => c.ParentId == entity.ParentId);
-                entity.Code = BuildCode(parentCode, childrenCount);
+                entity.Code = GeneralTreeExtensions.BuildCode(parentCode, childrenCount);
             }
             else
             {
                 var childrenCount = await repository.CountAsync(c => c.ParentId == null);
-                entity.Code = BuildCode("", childrenCount);
+                entity.Code = GeneralTreeExtensions.BuildCode("", childrenCount);
             }
             await repository.InsertAsync(entity);
             await base.CurrentUnitOfWork.SaveChangesAsync();
@@ -166,9 +166,9 @@ namespace BXJG.Utils.GeneralTree
             if (source.ParentId.HasValue)
                 parentIds.AddIfNotContains(source.ParentId.Value);
 
-            TEntity targetParent = null;//目标节点的父节点
-            IList<TEntity> targetChildren = null;//目标节点的子节点
-            int targetIndex = 0;
+            TEntity targetParent = null;//真正的目标父节点
+            IList<TEntity> targetChildren = null;//真正的目标父节点的子节点
+            int targetIndex = 0;//真正的目标索引
 
             //if (target == null)
             //{
@@ -180,12 +180,15 @@ namespace BXJG.Utils.GeneralTree
             //    targetIndex = targetChildren.Count;
             //}
             //else
+
+            #region 真正的目标父节点、真正的目标父节点的子节点、真正的目标索引 赋值
+            //若不是移动到目标节点内部
             if (moveType != GeneralTreeMoveType.Append)
             {
                 if (target.ParentId.HasValue)
                     parentIds.AddIfNotContains(target.ParentId.Value);
 
-                var temp1 = await GetBrotherWithOffspringAsync(target);
+                var temp1 = await repository.GetBrotherWithOffspringAsync(target);
                 targetParent = temp1.Item1;
                 targetChildren = temp1.Item2;
                 targetIndex = targetChildren.IndexOf(target) + (moveType == GeneralTreeMoveType.Front ? 0 : 1);
@@ -195,18 +198,21 @@ namespace BXJG.Utils.GeneralTree
                 parentIds.AddIfNotContains(target.Id);
 
                 targetParent = target;
-                if (target != null)
-                {
-                    targetChildren = await GetFlattenOffspringAsync(target.Code);
-                    targetChildren = targetChildren.Where(c => c.ParentId == target.Id).ToList();
-                }
-                else
-                {
-                    targetChildren = await GetFlattenOffspringAsync();
-                    targetChildren = targetChildren.Where(c => c.ParentId == null).ToList();
-                }
+                //既然是append了，那么target就不可能为空
+                // if (target != null)
+                // {
+                targetChildren = await repository.GetFlattenOffspringAsync(target.Code);
+                targetChildren = targetChildren.Where(c => c.ParentId == target.Id).ToList();
+                // }
+                // else
+                // {
+                //     targetChildren = await GetFlattenOffspringAsync();
+                //     targetChildren = targetChildren.Where(c => c.ParentId == null).ToList();
+                // }
                 targetIndex = targetChildren.Count;
             }
+            #endregion
+
             var r = await MoveAsync(source, targetParent, targetChildren, targetIndex);
 
             await CurrentUnitOfWork.SaveChangesAsync();
@@ -232,11 +238,11 @@ namespace BXJG.Utils.GeneralTree
         {
             return repository.GetAll().Where(c => c.Id == id).Select(c => c.Code).Single();
         }
-        async Task<TEntity> MoveAsync(long sourceId, TEntity target, IList<TEntity> targetList, int targetIndex)
-        {
-            var source = await repository.GetAsync(sourceId);
-            return await MoveAsync(source, target, targetList, targetIndex);
-        }
+        //async Task<TEntity> MoveAsync(long sourceId, TEntity target, IList<TEntity> targetList, int targetIndex)
+        //{
+        //    var source = await repository.GetAsync(sourceId);
+        //    return await MoveAsync(source, target, targetList, targetIndex);
+        //}
 
         /*
          * 00001
@@ -262,9 +268,9 @@ namespace BXJG.Utils.GeneralTree
         {
             //如果调用方让节点移动到原来的位置，这种情况暂时没处理
 
-            var sourceParentCode = source.GetParentCode();
+            var sourceParentCode = source.GetParentCode();//源节点的父节点code
 
-            IList<TEntity> brotherList;
+            IList<TEntity> brotherList; //源节点所在的列表
             bool betweenBrother = false;//是否本身就是在同级节点下移动
 
             //1、准备源节点的兄弟节点列表
@@ -275,7 +281,7 @@ namespace BXJG.Utils.GeneralTree
             }
             else
             {
-                var temp = await GetBrotherWithOffspringAsync(source);
+                var temp = await repository.GetBrotherWithOffspringAsync(source);
                 brotherList = temp.Item2;
             }
 
@@ -312,9 +318,9 @@ namespace BXJG.Utils.GeneralTree
             }
 
             //6、重置相关节点code
-            ResetCode(sourceParentCode, brotherList, souteceIndex);
+            GeneralTreeExtensions.ResetCode(sourceParentCode, brotherList, souteceIndex);
             var taregetCode = target == null ? "" : target.Code;
-            ResetCode(taregetCode, targetList, targetIndex);
+            GeneralTreeExtensions.ResetCode(taregetCode, targetList, targetIndex);
             //source.Parent = target;//千万不要在重新生成code前设置Parent，因为后面递归生成code
             //if (betweenBrother)
             //{
@@ -329,107 +335,12 @@ namespace BXJG.Utils.GeneralTree
 
             return source;
         }
-        async Task<Tuple<TEntity, IList<TEntity>>> GetBrotherWithOffspringAsync(long id)
-        {
-            return await GetBrotherWithOffspringAsync(await repository.GetAsync(id));
+        //async Task<Tuple<TEntity, IList<TEntity>>> GetBrotherWithOffspringAsync(long id)
+        //{
+        //    return await repository.GetBrotherWithOffspringAsync(await repository.GetAsync(id));
 
-        }
-        /// <summary>
-        /// 获取指定节点的兄弟节点、父节点
-        /// 均包含其后代节点
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <returns>Item1父节点，Item2兄弟节点</returns>
-        async Task<Tuple<TEntity, IList<TEntity>>> GetBrotherWithOffspringAsync(TEntity entity)
-        {
-            var parentCode = entity.GetParentCode();
+        //}
 
-            TEntity parent = null;
-            IList<TEntity> children;
-
-            if (!Abp.Extensions.StringExtensions.IsNullOrWhiteSpace(parentCode))
-            {
-                children = await GetFlattenOffspringAsync(parentCode);
-                parent = children[0];
-            }
-            else
-            {
-                //本来也可以用上面的StartsWith，但是直接getAll性能更好
-                children = await GetFlattenOffspringAsync();
-            }
-            children = children.Where(c => c.ParentId.Equals(entity.ParentId)).ToList();
-            return new Tuple<TEntity, IList<TEntity>>(parent, children);
-        }
-        /// <summary>
-        /// 根据code获取所有后代节点，并以平铺结构的集合返回
-        /// </summary>
-        /// <param name="code"></param>
-        /// <returns></returns>
-        public async Task<IList<TEntity>> GetFlattenOffspringAsync(string code = null)
-        {
-            var query = repository.GetAll();
-            if (!code.IsNullOrWhiteSpace())
-                query = query.Where(c => c.Code.StartsWith(code));
-            query = query.OrderBy(c => c.Code);
-            return await AsyncQueryableExecuter.ToListAsync(query);
-        }
-        /// <summary>
-        /// 递归重新设置code
-        /// </summary>
-        /// <param name="parentCode">父节点code</param>
-        /// <param name="children">子节点集合</param>
-        /// <param name="startIndex">从children中指定索引节点开始（跳过前面的）</param>
-        public static void ResetCode(string parentCode, IList<TEntity> children, int startIndex = 0)
-        {
-            for (int i = startIndex; i < children.Count; i++)
-            {
-                var item = children[i];
-                item.Code = BuildCode(parentCode, i);
-                if (item.Children != null)
-                    ResetCode(item.Code, item.Children);
-            }
-        }
-        /// <summary>
-        /// 生成新的code
-        /// </summary>
-        /// <param name="parentCode"></param>
-        /// <param name="lasttCode"></param>
-        /// <returns></returns>
-        public static string BuildCode(string parentCode, string lasttCode)
-        {
-            if (parentCode.IsNullOrEmpty())
-            {
-                if (lasttCode.IsNullOrEmpty())
-                    return "1".PadLeft(GeneralTreeEntity.CodeUnitLength, '0');
-                else
-                {
-                    var lastBlock1 = lasttCode.Split('.').Last();
-                    var temp1 = Convert.ToInt32(lastBlock1) + 1;
-                    return temp1.ToString().PadLeft(GeneralTreeEntity.CodeUnitLength, '0');
-                }
-            }
-            else
-            {
-                if (lasttCode.IsNullOrEmpty())
-                    return parentCode + "." + "1".PadLeft(GeneralTreeEntity.CodeUnitLength, '0');
-                else
-                {
-                    var lastBlock = lasttCode.Split('.').Last();
-                    var temp = Convert.ToInt32(lastBlock) + 1;
-                    return parentCode + "." + temp.ToString().PadLeft(GeneralTreeEntity.CodeUnitLength, '0');
-                }
-            }
-        }
-        /// <summary>
-        /// 生成新的code
-        /// </summary>
-        /// <param name="parentCode"></param>
-        /// <param name="lasttCode"></param>
-        /// <returns></returns>
-        public static string BuildCode(string parentCode, int lasttCode)
-        {
-            return BuildCode(parentCode, lasttCode.ToString());
-        }
         //protected class LastOrParent
         //{
         //    public long Id { get; set; }

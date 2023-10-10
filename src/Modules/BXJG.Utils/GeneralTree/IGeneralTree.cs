@@ -1,4 +1,5 @@
-﻿using Castle.MicroKernel.Registration;
+﻿using Abp.Extensions;
+using Castle.MicroKernel.Registration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,49 +54,5 @@ namespace BXJG.Utils.GeneralTree
         /// 有些时候可能不会加载子节点，仅仅想获取子节点的数量
         /// </summary>
         public int ChildrenCount { get; set; }
-    }
-
-    /// <summary>
-    /// 实现树的一些通用操作
-    /// </summary>
-    public static class GeneralTreeExtensions
-    {
-        /// <summary>
-        /// 递归向下查找节点
-        /// </summary>
-        /// <typeparam name="TChild"></typeparam>
-        /// <param name="id">目标节点id</param>
-        /// <returns></returns>
-        public static TChild FindRecursiveDown<TChild>( this TChild node, long id) where TChild : IGeneralTree<TChild>
-        { 
-            if(node.Id==id)
-                return node;
-
-            if (node.Children != null && node.Children.Any())
-            {
-                foreach (var item in node.Children)
-                {
-                    var r = FindRecursiveDown(item,id);
-                    if (r!=null) return r;
-                }
-            }
-            return default;
-        }
-
-        /// <summary>
-        /// 递归向下查找节点
-        /// </summary>
-        /// <typeparam name="TChild"></typeparam>
-        /// <param name="id">目标节点id</param>
-        /// <returns></returns>
-        public static TChild FindRecursiveDown<TChild>(this IEnumerable<TChild> nodes, long id) where TChild : IGeneralTree<TChild>
-        {
-            foreach (var item in nodes)
-            {
-                var r = item.FindRecursiveDown(id);
-                if (r!=null) return r;
-            }
-            return default;
-        }
     }
 }
