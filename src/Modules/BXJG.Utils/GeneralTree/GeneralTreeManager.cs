@@ -264,7 +264,7 @@ namespace BXJG.Utils.GeneralTree
         /// <param name="targetList">目标节点的子节点集合，对应0001.00001、00001.00002</param>
         /// <param name="targetIndex">移动后所处目标的目标位置的索引，对应1</param>
         /// <returns></returns>
-        async Task<TEntity> MoveAsync(TEntity source, TEntity target, IList<TEntity> targetList, int targetIndex)
+        async Task<TEntity> MoveAsync(TEntity source, TEntity targetParent, IList<TEntity> targetBrotherList, int targetIndex)
         {
             //如果调用方让节点移动到原来的位置，这种情况暂时没处理
 
@@ -274,9 +274,9 @@ namespace BXJG.Utils.GeneralTree
             bool betweenBrother = false;//是否本身就是在同级节点下移动
 
             //1、准备源节点的兄弟节点列表
-            if ((target == null && !source.ParentId.HasValue) || target != null && source.ParentId.Equals(target.Id))
+            if ((targetParent == null && !source.ParentId.HasValue) || (targetParent != null && source.ParentId.Equals(targetParent.Id)))
             {
-                brotherList = targetList;
+                brotherList = targetBrotherList;
                 betweenBrother = true;
             }
             else
@@ -298,29 +298,29 @@ namespace BXJG.Utils.GeneralTree
 
             if (targetIndex < 0)
                 targetIndex = 0;
-            if (targetIndex > targetList.Count)
-                targetIndex = targetList.Count;
+            if (targetIndex > targetBrotherList.Count)
+                targetIndex = targetBrotherList.Count;
 
-            targetList.Insert(targetIndex, source);
-            if (target != null)
-                target.Children = targetList;
-
+            targetBrotherList.Insert(targetIndex, source);
+           
             //5、设置目标的父节点
-            if (target == null)
+            if (targetParent == null)
             {
                 source.ParentId = null;
                 source.Parent = null;
             }
             else
             {
-                source.ParentId = target.Id;
-                source.Parent = target;
+                source.ParentId = targetParent.Id;
+                source.Parent = targetParent;
+                targetParent.Children = targetBrotherList;
             }
 
             //6、重置相关节点code
+            //这里有点浪费，懒得想了，毕竟是在内存中，况且移动节点的情况并不多
             GeneralTreeExtensions.ResetCode(sourceParentCode, brotherList, souteceIndex);
-            var taregetCode = target == null ? "" : target.Code;
-            GeneralTreeExtensions.ResetCode(taregetCode, targetList, targetIndex);
+            var taregetCode = targetParent == null ? "" : targetParent.Code;
+            GeneralTreeExtensions.ResetCode(taregetCode, targetBrotherList, targetIndex);
             //source.Parent = target;//千万不要在重新生成code前设置Parent，因为后面递归生成code
             //if (betweenBrother)
             //{
