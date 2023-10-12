@@ -17,7 +17,7 @@ namespace ZLJ.Web.Admin.Shared
                                                    TEntityDto,
                                                    TCreateInput,
                                                    TEditDto,
-                                                   TGetAllInput> : AbpMudGeneralTreeListDialogBaseCoponent<TCreateDialog,
+                                                   TGetAllInput> : AbpMudGeneralTreeListDialogBaseComponent<TCreateDialog,
                                                                                                            TDetailDialog, 
                                                                                                            TAppService,
                                                                                                            TEntityDto,

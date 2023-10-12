@@ -39,11 +39,11 @@ namespace BXJG.AbpMudBlazor.Components
     /// <typeparam name="TEditDto">修改时的输入类型</typeparam>
     /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
 
-    public abstract class AbpMudGeneralTreeListBaseCoponent<TAppService,
-                                                            TEntityDto,
-                                                            TCreateInput,
-                                                            TEditDto,
-                                                            TGetAllInput> : AbpMudBaseComponent
+    public abstract class AbpMudGeneralTreeListBaseComponent<TAppService,
+                                                             TEntityDto,
+                                                             TCreateInput,
+                                                             TEditDto,
+                                                             TGetAllInput> : AbpMudBaseComponent
         //where TCreateInput : GeneralTreeNodeEditBaseDto //注意这里约束为TEditDto，这样强制要求继承编辑模型不合理
         where TEntityDto : GeneralTreeGetTreeNodeBaseDto<TEntityDto>, IExtendableDto//, new()
         //where TEditDto : GeneralTreeNodeEditBaseDto//父类可以对输入做一定的处理
@@ -523,13 +523,13 @@ namespace BXJG.AbpMudBlazor.Components
     /// <typeparam name="TCreateInput">新增时的输入类型</typeparam>
     /// <typeparam name="TEditDto">修改时的输入类型</typeparam>
     /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
-    public abstract class AbpMudGeneralTreeListDialogBaseCoponent<TCreateDialog,
+    public abstract class AbpMudGeneralTreeListDialogBaseComponent<TCreateDialog,
                                                                   TDetailDialog,
                                                                   TAppService,
                                                                   TEntityDto,
                                                                   TCreateInput,
                                                                   TEditDto,
-                                                                  TGetAllInput> : AbpMudGeneralTreeListBaseCoponent<TAppService,
+                                                                  TGetAllInput> : AbpMudGeneralTreeListBaseComponent<TAppService,
                                                                                                                     TEntityDto,
                                                                                                                     TCreateInput,
                                                                                                                     TEditDto,
