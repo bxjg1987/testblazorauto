@@ -56,7 +56,7 @@ namespace BXJG.Utils.GeneralTree
                                                                                                                    TGetTreeForSelectOutput,
                                                                                                                    TGetNodesForSelectInput,
                                                                                                                    TGetNodesForSelectOutput>
-    where TEntity : GeneralTreeEntity<TEntity>
+    where TEntity : Entity<long>, IGeneralTree<TEntity>// GeneralTreeEntity<TEntity>
     where TGetTreeForSelectInput : GeneralTreeGetForSelectInput
     where TGetTreeForSelectOutput : GeneralTreeNodeDto<TGetTreeForSelectOutput>, new()
     where TGetNodesForSelectInput : GeneralTreeGetForSelectInput
@@ -461,7 +461,7 @@ namespace BXJG.Utils.GeneralTree
         where TCreateInput : GeneralTreeNodeEditBaseDto //注意这里约束为TEditDto，这样强制要求继承编辑模型不合理
         where TDeleteInput : BatchOperationInputLong
         where TGetInput : EntityDto<long>
-        where TEntity : GeneralTreeEntity<TEntity>
+        where TEntity : Entity<long>, IGeneralTree<TEntity>// GeneralTreeEntity<TEntity>
         where TDto : GeneralTreeGetTreeNodeBaseDto<TDto>, new()
         where TEditDto : GeneralTreeNodeEditBaseDto//父类可以对输入做一定的处理
         where TManager : GeneralTreeManager<TEntity>
@@ -539,12 +539,12 @@ namespace BXJG.Utils.GeneralTree
             var m = CreateMap(input);// ObjectMapper.Map<TEntity>(input);
 
             //扩展属性的处理后期放到Manager中去处理
-            if (input.ExtData != null)
+            if (input.ExtData != null && m is IExtendableObject kk)
             {
                 foreach (var item in input.ExtData)
                 {
-                    m.RemoveData(item.Key);
-                    m.SetData(item.Key, item.Value);
+                    kk.RemoveData(item.Key);
+                    kk.SetData(item.Key, item.Value);
                 }
             }
 
@@ -621,12 +621,12 @@ namespace BXJG.Utils.GeneralTree
 
             //await UpdateMapAsync(input, m, ctx);
             //扩展属性的处理后期放到Manager中去处理
-            if (input.ExtData != null)
+            if (input.ExtData != null&& m is IExtendableObject kk)
             {
                 foreach (var item in input.ExtData)
                 {
-                    m.RemoveData(item.Key);
-                    m.SetData(item.Key, item.Value);
+                    kk.RemoveData(item.Key);
+                    kk.SetData(item.Key, item.Value);
                 }
             }
             await BeforeUpdateAsync(input, m);

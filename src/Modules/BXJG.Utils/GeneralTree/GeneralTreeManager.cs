@@ -1,5 +1,6 @@
 using Abp;
 using Abp.Collections.Extensions;
+using Abp.Domain.Entities;
 using Abp.Domain.Repositories;
 using Abp.Domain.Services;
 using Abp.Domain.Uow;
@@ -22,7 +23,7 @@ namespace BXJG.Utils.GeneralTree
     /// </summary>
     /// <typeparam name="TEntity">通用树形实体类型</typeparam>
     public class GeneralTreeManager<TEntity> : DomainService
-        where TEntity : GeneralTreeEntity<TEntity>
+        where TEntity : Entity<long>, IGeneralTree<TEntity>// GeneralTreeEntity<TEntity>
     {
         public IRepository<TEntity, long> repository { get; set; }
 
@@ -268,7 +269,7 @@ namespace BXJG.Utils.GeneralTree
         {
             //如果调用方让节点移动到原来的位置，这种情况暂时没处理
 
-            var sourceParentCode = source.GetParentCode();//源节点的父节点code
+            var sourceParentCode = source.Code.GetParentCode();//源节点的父节点code
 
             IList<TEntity> brotherList; //源节点所在的列表
             bool betweenBrother = false;//是否本身就是在同级节点下移动

@@ -14,8 +14,8 @@ namespace BXJG.AbpMudBlazor.Components
                                                                        TUpdateInput,
                                                                        TCreateInput,
                                                                        TGetAllInput> : AbpMudBaseComponent
-        where TEntityDto : IGeneralTree<TEntityDto>, IExtendableDto
-        where TUpdateInput : IGeneralTree<TEntityDto>
+        where TEntityDto : IGeneralTree<TEntityDto>//, IExtendableDto
+        where TUpdateInput : IHaveParentId<long> //IGeneralTree<TEntityDto>
         where TAppService : IGeneralTreeBaseAppService<TEntityDto, TCreateInput, TUpdateInput, TGetAllInput>
     {
     }
