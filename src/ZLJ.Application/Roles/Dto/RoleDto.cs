@@ -14,7 +14,7 @@ namespace ZLJ.App.Admin.Roles.Dto
     /// </summary>
     public class RoleDto : EntityDto<int>
     {
-        public IEnumerable<int> OuIds => Ous != null && Ous.Count > 0 ?  Ous.Select(c =>int.Parse( c.Id)) : new int[0];
+        public IEnumerable<int> OuIds => Ous != null && Ous.Count > 0 ?  Ous.Select(c =>int.Parse( c.Id.ToString())) : new int[0];
         public string OusText => Ous != null && Ous.Count > 0 ? string.Join(',', Ous.Select(c => c.Text)) : "";
         public List<OuDto> Ous { get; set; }
         //[Required]

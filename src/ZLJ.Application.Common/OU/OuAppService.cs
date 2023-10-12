@@ -57,10 +57,10 @@ namespace ZLJ.App.Common.OU
                     Checked = default,
                     Code = item.Code,
                     IconCls = "ou",
-                    Id = item.Id.ToString(),
+                    Id = item.Id,
                     Text = item.DisplayName,
                     //State = item.Children.Count>0"opend":"closed"
-                    ParentId = item.ParentId?.ToString(),
+                    ParentId = item.ParentId,
                     OUType = item2.OUType
                 });
             }
@@ -70,7 +70,7 @@ namespace ZLJ.App.Common.OU
             if (p != null)
                 dtos = dtos.Where(c => c.Code == p.Code).ToList();
             else
-                dtos = dtos.Where(c => c.ParentId.IsNullOrWhiteSpace()).ToList();
+                dtos = dtos.Where(c => !c.ParentId.HasValue).ToList();
 
             if (input.ForType <= 0)
                 return dtos;

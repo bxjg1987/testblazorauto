@@ -1,4 +1,6 @@
-﻿using Abp.Extensions;
+﻿using Abp.Application.Services.Dto;
+using Abp.Domain.Entities;
+using Abp.Extensions;
 using Castle.MicroKernel.Registration;
 using System;
 using System.Collections.Generic;
@@ -16,22 +18,54 @@ namespace BXJG.Utils.GeneralTree
      */
 
     /// <summary>
-    /// 树
+    /// 
     /// </summary>
-    public interface IGeneralTree<TChild> where TChild: IGeneralTree<TChild>
+    public interface IHaveParentId
     {
         /// <summary>
-        /// 主键、唯一id
+        /// 
         /// </summary>
-        public long Id { get; set; }
+        public object Id { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public object? ParentId { get; set; }
+    }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public interface IHaveParentId<T>: IHaveParentId  /*, IEntity<T>, IEntityDto<T>*/ where T:struct
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        public new T Id { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public new T? ParentId { get; set; }
+    }
+
+    /// <summary>
+    /// 树
+    /// </summary>
+    public interface IGeneralTree<TChild> : IHaveParentId<long>
+        where TChild : IGeneralTree<TChild>
+    {
+    
+        ///// <summary>
+        ///// 主键、唯一id
+        ///// </summary>
+        //public new long Id { get; set; }
         /// <summary>
         /// 父节点
         /// </summary>
         public TChild? Parent { get; set; }
-        /// <summary>
-        /// 父节点id
-        /// </summary>
-        public long? ParentId { get; set; }
+        ///// <summary>
+        ///// 父节点id
+        ///// </summary>
+        //public long? ParentId { get; set; }
         ///// <summary>
         ///// code中，每一段的长度
         ///// </summary>

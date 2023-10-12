@@ -28,7 +28,7 @@
                                For="@(()=>model.OuId)">
                         @foreach (var item in ous)
                         {
-                            <MudSelectItem Value="@(new Nullable<long>(long.Parse( item.Id) ))">@item.Text</MudSelectItem>
+                            <MudSelectItem Value="@(new Nullable<long>( item.Id ))">@item.Text</MudSelectItem>
                         }
                     </MudSelect>
 

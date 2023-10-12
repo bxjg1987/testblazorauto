@@ -15,7 +15,7 @@ namespace ZLJ.Web.Admin.Shared
                                                  TPrimaryKey,
                                                  TGetAllInput,
                                                  TCreateInput,
-                                                 TUpdateInput> : AbpMudDetailDialogBaseComponent<TAppService,
+                                                 TUpdateInput> : AbpMudDetailOrUpdateDialogBaseComponent<TAppService,
                                                  TEntityDto,
                                                  TPrimaryKey,
                                                  TGetAllInput,

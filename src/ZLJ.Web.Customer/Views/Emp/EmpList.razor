@@ -315,7 +315,7 @@
     async Task xinzeng()
     {
         var options = new DialogOptions { CloseOnEscapeKey = true, FullWidth = true, Position = DialogPosition.TopCenter };
-        IDialogReference r = dialogService.Show<EmpFrm>("员工", new DialogParameters { { "Pattern", FrmPattern.Add }, { "OuId",  currOu==default||currOu.Id.IsNullOrWhiteSpace()?null:long.Parse(currOu.Id) } }, options);
+        IDialogReference r = dialogService.Show<EmpFrm>("员工", new DialogParameters { { "Pattern", FrmPattern.Add }, { "OuId",  currOu==default||currOu.Id==null?null:currOu.Id } }, options);
         var result = await r.Result;
         if (!result.Cancelled)
             await shuaxin();

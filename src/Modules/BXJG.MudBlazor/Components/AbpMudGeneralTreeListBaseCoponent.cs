@@ -16,7 +16,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using static MudBlazor.CategoryTypes;
+
 
 namespace BXJG.AbpMudBlazor.Components
 {
@@ -282,8 +282,6 @@ namespace BXJG.AbpMudBlazor.Components
             }
             else
             {
-
-
                 //  var dtos = await Load(parentNode);
                 //  parentNode.Children= dtos.ToList();
 
@@ -574,7 +572,7 @@ namespace BXJG.AbpMudBlazor.Components
             var ps = BuildCreateParameter();
             if (!(await DialogService.Show<TCreateDialog>("新增" + FuncName, ps, DialogAddOptions).Result).Canceled)
             {
-                await dataGrid.ReloadServerData();
+                await Reload();
             }
         }
         /// <summary>
@@ -591,7 +589,7 @@ namespace BXJG.AbpMudBlazor.Components
             ps.Add("IsEdit", true);
             if (!(await DialogService.Show<TDetailDialog>("修改" + FuncName, ps, DialogDetailOptions).Result).Canceled)
             {
-                await dataGrid.ReloadServerData();
+                await Reload(dto.Parent);
             }
         }
         /// <summary>
@@ -609,7 +607,8 @@ namespace BXJG.AbpMudBlazor.Components
             if (!(await DialogService.Show<TDetailDialog>("查看" + FuncName + "详情", ps, DialogDetailOptions).Result).Canceled)
             {
                 //说明在详情页面 又进入了修改 且修改后保存了数据
-                await dataGrid.ReloadServerData();
+
+                await Reload(dto.Parent);
             }
         }
         // 树的双击是用来展开折叠的

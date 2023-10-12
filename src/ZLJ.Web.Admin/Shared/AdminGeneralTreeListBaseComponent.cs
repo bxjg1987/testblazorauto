@@ -4,20 +4,28 @@ namespace ZLJ.Web.Admin.Shared
     /// <summary>
     /// 后台管理中，抽象的，基于MudBlazor treeView的列表页抽象组件
     /// </summary>
+    /// <typeparam name="TCreateDialog">弹窗组件类型</typeparam>
+    /// <typeparam name="TDetailDialog">弹窗组件类型</typeparam>
     /// <typeparam name="TAppService">应用服务类型</typeparam>
     /// <typeparam name="TEntityDto">列表项的数据类型</typeparam>
     /// <typeparam name="TCreateInput">新增时的输入类型</typeparam>
     /// <typeparam name="TEditDto">修改时的输入类型</typeparam>
     /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
-    public class AdminGeneralTreeListBaseComponent<TAppService,
+    public class AdminGeneralTreeListBaseComponent<TCreateDialog,
+                                                   TDetailDialog, 
+                                                   TAppService,
                                                    TEntityDto,
                                                    TCreateInput,
                                                    TEditDto,
-                                                   TGetAllInput> : AbpMudGeneralTreeListDialogBaseCoponent<TAppService,
+                                                   TGetAllInput> : AbpMudGeneralTreeListDialogBaseCoponent<TCreateDialog,
+                                                                                                           TDetailDialog, 
+                                                                                                           TAppService,
                                                                                                            TEntityDto,
                                                                                                            TCreateInput,
                                                                                                            TEditDto,
                                                                                                            TGetAllInput>
+        where TCreateDialog : ComponentBase
+        where TDetailDialog : ComponentBase
         where TEntityDto : GeneralTreeGetTreeNodeBaseDto<TEntityDto>, IExtendableDto
         where TGetAllInput : GeneralTreeGetTreeInput, new()
         where TAppService : IGeneralTreeBaseAppService<TEntityDto, TCreateInput, TEditDto, TGetAllInput>

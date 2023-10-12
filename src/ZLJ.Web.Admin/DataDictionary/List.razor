@@ -1,6 +1,6 @@
 ﻿@page "/admin/data-dictionary"
 @attribute [Authorize(BXJGUtilsConsts.GeneralTreeMenuName)]
-@inherits AdminGeneralTreeListBaseComponent<IDataDictionaryAppService, GeneralTreeDto, GeneralTreeEditDto, GeneralTreeEditDto, GeneralTreeGetTreeInput>
+@inherits AdminGeneralTreeListBaseComponent< Create,DetailOrUpdate, IDataDictionaryAppService, GeneralTreeDto, GeneralTreeEditDto, GeneralTreeEditDto, GeneralTreeGetTreeInput>
 
 <MudStack Style="height:100%;" onclick="@HideDeleteConfirm">
     <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">

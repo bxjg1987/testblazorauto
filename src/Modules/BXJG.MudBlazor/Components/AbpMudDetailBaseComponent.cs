@@ -36,12 +36,12 @@ namespace BXJG.AbpMudBlazor.Components
     /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
     /// <typeparam name="TCreateInput">新增时的输入类型</typeparam>
     /// <typeparam name="TUpdateInput">修改时的输入类型</typeparam>
-    public abstract class AbpMudDetailBaseComponent<TAppService,
-                                                    TEntityDto,
-                                                    TPrimaryKey,
-                                                    TGetAllInput,
-                                                    TCreateInput,
-                                                    TUpdateInput> : AbpMudBaseComponent
+    public abstract class AbpMudDetailOrUpdateBaseComponent<TAppService,
+                                                            TEntityDto,
+                                                            TPrimaryKey,
+                                                            TGetAllInput,
+                                                            TCreateInput,
+                                                            TUpdateInput> : AbpMudBaseComponent
         where TEntityDto : IEntityDto<TPrimaryKey>
         //where TGetAllInput : new()
         where TUpdateInput : IEntityDto<TPrimaryKey>
@@ -81,7 +81,7 @@ namespace BXJG.AbpMudBlazor.Components
         /// </summary>
         protected ValidationMessageStore? validationMessageStore;
 
-      
+
         /// <summary>
         /// 正在执行重置
         /// </summary>
@@ -231,7 +231,7 @@ namespace BXJG.AbpMudBlazor.Components
 
             editInited = true;
         }
-      
+
         /// <summary>
         /// 是否正在对表单进行首次初始化
         /// </summary>
@@ -360,17 +360,17 @@ namespace BXJG.AbpMudBlazor.Components
         protected virtual ValueTask AfterDelete() => ValueTask.CompletedTask;
         #endregion
     }
-    public abstract class AbpMudDetailDialogBaseComponent<TAppService,
-                                                          TEntityDto,
-                                                          TPrimaryKey,
-                                                          TGetAllInput,
-                                                          TCreateInput,
-                                                          TUpdateInput> : AbpMudDetailBaseComponent<TAppService,
-                                                                                                    TEntityDto,
-                                                                                                    TPrimaryKey,
-                                                                                                    TGetAllInput,
-                                                                                                    TCreateInput,
-                                                                                                    TUpdateInput>
+    public abstract class AbpMudDetailOrUpdateDialogBaseComponent<TAppService,
+                                                                  TEntityDto,
+                                                                  TPrimaryKey,
+                                                                  TGetAllInput,
+                                                                  TCreateInput,
+                                                                  TUpdateInput> : AbpMudDetailOrUpdateBaseComponent<TAppService,
+                                                                                                                    TEntityDto,
+                                                                                                                    TPrimaryKey,
+                                                                                                                    TGetAllInput,
+                                                                                                                    TCreateInput,
+                                                                                                                    TUpdateInput>
         where TEntityDto : IEntityDto<TPrimaryKey>
         //where TGetAllInput : new()
         where TUpdateInput : IEntityDto<TPrimaryKey>

@@ -18,17 +18,22 @@ namespace BXJG.Utils.GeneralTree
     /// <typeparam name="TChild"></typeparam>
     public class GeneralTreeGetTreeNodeBaseDto<TChild> : AuditedEntityDto<long>, IExtendableDto, IGeneralTree<TChild>
         where TChild : GeneralTreeGetTreeNodeBaseDto<TChild>
-    { 
+    {
+        long? parentId;
+        public long? ParentId { get => parentId; set => parentId = value; }
+        object IHaveParentId.Id { get => Id; set => Id = Convert.ToInt64(value); }
+        object IHaveParentId.ParentId { get => ParentId; set => ParentId = value == null ? null : Convert.ToInt64(value); }
+
         /// <summary>
-      /// 父节点
-      /// </summary>
+        /// 父节点
+        /// </summary>
         [System.Text.Json.Serialization.JsonIgnore]
         [Newtonsoft.Json.JsonIgnore]
         public TChild Parent { get; set; }
-        /// <summary>
-        /// 父级组织单位id
-        /// </summary>
-        public long? ParentId { get; set; }
+        ///// <summary>
+        ///// 父级组织单位id
+        ///// </summary>
+        //public long? ParentId { get; set; }
         /// <summary>
         /// 有层次结构的代码
         /// </summary>

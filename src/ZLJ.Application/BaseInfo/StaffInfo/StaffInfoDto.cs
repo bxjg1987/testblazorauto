@@ -82,7 +82,7 @@ namespace ZLJ.App.Admin.BaseInfo.StaffInfo
         /// </summary>
         public string OusText =>  Ous!=default? string.Join(',', Ous.Select(c=>c?.Text)):"";
 
-        public IEnumerable<long> OuIds => Ous?.Select(c => long.Parse( c.Id));
+        public IEnumerable<long> OuIds => Ous?.Select(c =>  c.Id);
         /// <summary>
         /// 所属岗位
         /// </summary>

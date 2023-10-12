@@ -64,19 +64,20 @@ namespace ZLJ.App.Admin.Authorization.Permissions
         [AbpAuthorize]
         public IList<GeneralTreeNodeDto> GetAllPermissions()
         {
-            //若某个权限是用来被其它权限依赖的，那么在可选列表中不要显示
-            var permissions = PermissionManager.GetAllPermissions().Where(c => !c.GetDependentedPermissions().Any());
-            var list = permissions.Select(c => new GeneralTreeNodeDto
-            {
-                Id = c.Name,
-                Text = c.DisplayName?.Localize(base.LocalizationManager),
-                //State = c.Children != null && c.Children.Count > 0 ? "closed" : "open",
-                ParentId = c.Parent?.Name,
-                ExtData = c.Properties// new { btn = c.Properties.ContainsKey("btn") && Convert.ToBoolean(c.Properties["btn"]) }
-            }).ToList();
-            list.ForEach(c => c.Children = list.Where(d => d.ParentId == c.Id).ToList());
+            return null;
+            ////若某个权限是用来被其它权限依赖的，那么在可选列表中不要显示
+            //var permissions = PermissionManager.GetAllPermissions().Where(c => !c.GetDependentedPermissions().Any());
+            //var list = permissions.Select(c => new GeneralTreeNodeDto
+            //{
+            //    Id = long.Parse( c.Name,
+            //    Text = c.DisplayName?.Localize(base.LocalizationManager),
+            //    //State = c.Children != null && c.Children.Count > 0 ? "closed" : "open",
+            //    ParentId = c.Parent?.Name,
+            //    ExtData = c.Properties// new { btn = c.Properties.ContainsKey("btn") && Convert.ToBoolean(c.Properties["btn"]) }
+            //}).ToList();
+            //list.ForEach(c => c.Children = list.Where(d => d.ParentId == c.Id).ToList());
 
-            return list.Where(c => c.ParentId.IsNullOrWhiteSpace()).ToList();
+            //return list.Where(c => c.ParentId.IsNullOrWhiteSpace()).ToList();
 
         }
         [AbpAuthorize]

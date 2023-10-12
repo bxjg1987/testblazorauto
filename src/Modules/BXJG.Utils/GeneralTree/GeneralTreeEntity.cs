@@ -32,7 +32,14 @@ namespace BXJG.Utils.GeneralTree
         [StringLength(MaxCodeLength)]
         public virtual string Code { get; set; }
 
-        public virtual long? ParentId { get; set; }
+        // public virtual long? ParentId { get; set; }
+
+
+
+        long? parentId;
+
+
+
 
         //[ForeignKey("ParentId")]
         public virtual TEntity Parent { get; set; }
@@ -51,6 +58,9 @@ namespace BXJG.Utils.GeneralTree
         public virtual string DisplayName { get; set; }
 
         public string ExtensionData { get; set; }
+        public long? ParentId { get => parentId; set => parentId = value; }
+        object IHaveParentId.Id { get => Id; set => Id =   Convert.ToInt64(value); }
+        object IHaveParentId.ParentId { get => ParentId; set => ParentId =  value == null ? null : Convert.ToInt64(value); }
 
         public string GetParentCode()
         {
