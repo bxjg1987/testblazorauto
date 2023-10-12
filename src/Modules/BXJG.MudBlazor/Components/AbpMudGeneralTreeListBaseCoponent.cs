@@ -1,4 +1,4 @@
-﻿using Abp.Application.Services.Dto;
+using Abp.Application.Services.Dto;
 using Abp.UI;
 using BXJG.AbpMudBlazor.Interceptor;
 using BXJG.Common.Dto;
@@ -518,12 +518,16 @@ namespace BXJG.AbpMudBlazor.Components
     /// <summary>
     /// 抽象的，基于MudBlazor treeView的列表页抽象组件
     /// </summary>
+    /// <typeparam name="TCreateDialog">新增弹窗组件</typeparam>
+    /// <typeparam name="TDetailDialog">详情弹窗组件</typeparam>
     /// <typeparam name="TAppService">应用服务类型</typeparam>
     /// <typeparam name="TEntityDto">列表项的数据类型</typeparam>
     /// <typeparam name="TCreateInput">新增时的输入类型</typeparam>
     /// <typeparam name="TEditDto">修改时的输入类型</typeparam>
     /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
-    public abstract class AbpMudGeneralTreeListDialogBaseCoponent<TAppService,
+    public abstract class AbpMudGeneralTreeListDialogBaseCoponent<TCreateDialog,
+                                                                  TDetailDialog,
+                                                                  TAppService,
                                                                   TEntityDto,
                                                                   TCreateInput,
                                                                   TEditDto,
@@ -532,6 +536,8 @@ namespace BXJG.AbpMudBlazor.Components
                                                                                                                     TCreateInput,
                                                                                                                     TEditDto,
                                                                                                                     TGetAllInput>
+        where TCreateDialog : ComponentBase
+        where TDetailDialog : ComponentBase
         //where TCreateInput : GeneralTreeNodeEditBaseDto //注意这里约束为TEditDto，这样强制要求继承编辑模型不合理
         where TEntityDto : GeneralTreeGetTreeNodeBaseDto<TEntityDto>, IExtendableDto//, new()
         //where TEditDto : GeneralTreeNodeEditBaseDto//父类可以对输入做一定的处理
@@ -558,6 +564,75 @@ namespace BXJG.AbpMudBlazor.Components
         /// </summary>
         /// <returns></returns>
         protected virtual DialogParameters BuildCreateParameter() => new DialogParameters();
-       
+        /// <summary>
+        /// 点击新增按钮时执行
+        /// </summary>
+        /// <returns></returns>
+        [ExceptionInterceptor]
+        protected virtual async Task BtnAddClick()
+        {
+            var ps = BuildCreateParameter();
+            if (!(await DialogService.Show<TCreateDialog>("新增" + FuncName, ps, DialogAddOptions).Result).Canceled)
+            {
+                await dataGrid.ReloadServerData();
+            }
+        }
+        /// <summary>
+        /// 行修改按钮点击时执行
+        /// 注：不要全局修改按钮，因为木有必要
+        /// </summary>
+        /// <param name="dto">当前dto对象</param>
+        /// <returns></returns>
+        [ExceptionInterceptor]
+        protected virtual async Task BtnEditClick(TEntityDto dto)
+        {
+            var ps = new DialogParameters<TDetailDialog>();
+            FillDetailParameters(ps, dto);
+            ps.Add("IsEdit", true);
+            if (!(await DialogService.Show<TDetailDialog>("修改" + FuncName, ps, DialogDetailOptions).Result).Canceled)
+            {
+                await dataGrid.ReloadServerData();
+            }
+        }
+        /// <summary>
+        /// 行详情按钮点击时执行
+        /// 注：不要全局详情按钮，因为木有必要
+        /// </summary>
+        /// <param name="dto">当前dto对象</param>
+        /// <returns></returns>
+        [ExceptionInterceptor]
+        protected virtual async Task BtnDetailClick(TEntityDto dto)
+        {
+            var ps = new DialogParameters<TDetailDialog>();
+            FillDetailParameters(ps, dto);
+            ps.Add("IsEdit", false);
+            if (!(await DialogService.Show<TDetailDialog>("查看" + FuncName + "详情", ps, DialogDetailOptions).Result).Canceled)
+            {
+                //说明在详情页面 又进入了修改 且修改后保存了数据
+                await dataGrid.ReloadServerData();
+            }
+        }
+        // 树的双击是用来展开折叠的
+        // protected override async ValueTask RowDoubleClick(DataGridRowClickEventArgs<TEntityDto> arg)
+        // {
+        //    // if (updateIsGranted)
+        //   //  {
+        //   //      await BtnEditClick(arg.Item); }
+        //   //  else
+        //  //   {
+        //         await BtnDetailClick(arg.Item);
+        //   //  }
+         
+        // }
+        /// <summary>
+        /// 弹出详情弹窗时传入参数
+        /// 通常，复杂数据时只传入id，让详情组件自己去重新查询；简单数据时传入当前选择的dto
+        /// </summary>
+        /// <param name="pms"></param>
+        /// <param name="dto"></param>
+        protected virtual void FillDetailParameters(DialogParameters<TDetailDialog> pms, TEntityDto dto)
+        {
+            pms.Add("Id", dto.Id);
+        }
     }
 }
