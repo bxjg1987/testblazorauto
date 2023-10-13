@@ -75,7 +75,7 @@ namespace BXJG.AbpMudBlazor.Components
         /// </summary>
         /// <returns></returns>
         [ExceptionInterceptor]
-        protected virtual async ValueTask BtnResetClick()
+        protected virtual async Task BtnResetClick()
         {
             isReseting = true;
             try
@@ -320,7 +320,7 @@ namespace BXJG.AbpMudBlazor.Components
         /// </summary>
         /// <returns></returns>
         [ExceptionInterceptor]
-        protected virtual async Task BtnOkDeleteClick()
+        protected virtual async Task BtnDeleteClickOk()
         {
             //没有权限的按钮直接隐藏，况且应用服务还会判断权限兜底的，因此这里无需判断权限
             isShowDeleteConfirm = false;
@@ -331,21 +331,37 @@ namespace BXJG.AbpMudBlazor.Components
                 if (r.Ids.Any())
                 {
                     Snackbar.Add($"删除成功！", Severity.Success);
-                    await AfterDelete();
+                    await AfterDeleteSuccessed();
                 }
-                //else
-                throw new UserFriendlyException(r.ErrorMessage.First().Message);
+                else
+                {
+                    var cl = await AfterDeleteFailed();
+                    if (!cl)
+                        throw new UserFriendlyException(r.ErrorMessage.First().Message);
+                }
             }
             finally
             {
                 isDeleting = false;
+                await AfterDeleted();
             }
         }
         /// <summary>
-        /// 删除之后之后回调
+        /// 删除成功之后回调
         /// </summary>
         /// <returns></returns>
-        protected virtual ValueTask AfterDelete() => ValueTask.CompletedTask;
+        protected virtual ValueTask AfterDeleteSuccessed() => ValueTask.CompletedTask;
+        /// <summary>
+        /// 删除成功之后回调
+        /// </summary>
+        /// <param name="r"></param>
+        /// <returns>true回调中已经处理错误了，主逻辑不要再抛出异常，默认false</returns>
+        protected virtual ValueTask<bool> AfterDeleteFailed() => ValueTask.FromResult(false);
+        /// <summary>
+        /// 无论成功还是失败都会回调
+        /// </summary>
+        /// <returns>true回调中已经处理错误了，主逻辑不要再抛出异常，默认false</returns>
+        protected virtual ValueTask AfterDeleted() => ValueTask.CompletedTask;
         #endregion
     }
 
@@ -378,7 +394,7 @@ namespace BXJG.AbpMudBlazor.Components
         /// <summary>
         /// 删除后回调，默认关闭弹窗
         /// </summary>
-        protected override ValueTask AfterDelete()
+        protected override ValueTask AfterDeleteSuccessed()
         {
             MudDialog.Close(dto);
             return ValueTask.CompletedTask;

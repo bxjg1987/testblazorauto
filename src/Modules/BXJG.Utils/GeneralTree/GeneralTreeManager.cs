@@ -1,11 +1,14 @@
 using Abp;
 using Abp.Collections.Extensions;
 using Abp.Domain.Entities;
+using Abp.Domain.Entities.Auditing;
 using Abp.Domain.Repositories;
 using Abp.Domain.Services;
 using Abp.Domain.Uow;
 using Abp.Extensions;
 using Abp.Linq;
+using Abp.Runtime.Session;
+using Abp.Timing;
 using Abp.UI;
 using System;
 using System.Collections.Generic;
@@ -30,6 +33,7 @@ namespace BXJG.Utils.GeneralTree
         //属性注入，需要public
         public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }
 
+        public IAbpSession AbpSession { get; set; }
 
         public GeneralTreeManager()
         {
@@ -60,6 +64,26 @@ namespace BXJG.Utils.GeneralTree
                 var childrenCount = await repository.CountAsync(c => c.ParentId == null);
                 entity.Code = GeneralTreeExtensions.BuildCode("", childrenCount);
             }
+
+
+            //不晓得为啥abp不自动设置这些值，手动来吧
+            if (entity is IMayHaveTenant mayt)
+                mayt.TenantId = AbpSession.TenantId;
+
+            if (entity is IMustHaveTenant mustt)
+                mustt.TenantId = AbpSession.TenantId.Value;
+
+            if (entity is ICreationAudited ca)
+            {
+                ca.CreationTime = Clock.Now;
+                ca.CreatorUserId = AbpSession.UserId;
+            }
+
+            //  IAudited
+
+            //var ssss = AbpSession;
+           
+
             await repository.InsertAsync(entity);
             await base.CurrentUnitOfWork.SaveChangesAsync();
             if (parent != null)
@@ -91,6 +115,18 @@ namespace BXJG.Utils.GeneralTree
             var needMove = old != entity.ParentId;
             //entity.Code = old.Code;
             entity.ParentId = old;
+
+
+
+            ////经过测试，这里又有效
+            //if (entity is IHasModificationTime ca)
+            //    ca.LastModificationTime = Clock.Now;
+
+            //if(entity is IModificationAudited hc)
+            //    hc.LastModifierUserId = AbpSession.UserId;
+          
+       
+
 
             await repository.UpdateAsync(entity);
             if (needMove)
@@ -303,7 +339,7 @@ namespace BXJG.Utils.GeneralTree
                 targetIndex = targetBrotherList.Count;
 
             targetBrotherList.Insert(targetIndex, source);
-           
+
             //5、设置目标的父节点
             if (targetParent == null)
             {

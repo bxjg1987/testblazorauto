@@ -370,15 +370,17 @@ namespace BXJG.AbpMudBlazor.Components
             //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限
             HideDeleteConfirm();
             isDeleting = true;
-          
+            try
+            {
                 var r = await AppService.BatchDeleteAsync(new BatchOperationInput<TPrimaryKey> { Ids = dataGrid.SelectedItems?.Select(x => x.Id).ToArray() });
                 BatchOperationMessage(r, "批量删除");
                 //BatchDeleteMessage(temp);
                 if (r.Ids.Any())
                     await dataGrid.ReloadServerData();
                 //_ = InvokeAsync(dataGrid.ReloadServerData); //内部会StateChange
-         
-            isDeleting = false;
+            }
+            finally
+            { isDeleting = false; }
         }
         //protected virtual void DeleteMessage()
         //{
@@ -397,15 +399,16 @@ namespace BXJG.AbpMudBlazor.Components
             HideDeleteConfirm();
          
                 item.ExtensionData.IsDeleting = true;
-          
+            try
+            {
                 await AppService.DeleteAsync(new EntityDto<TPrimaryKey>(item.Id));
                 Snackbar.Add("删除成功！", Severity.Success);
                 //若上面异常，下面不会执行
                 //_ = InvokeAsync(dataGrid.ReloadServerData);
                 await dataGrid.ReloadServerData();
-         
-        
-                item.ExtensionData.IsDeleting = false;
+            }finally
+            { item.ExtensionData.IsDeleting = false; }
+               
         }
         /// <summary>
         /// 显示删除明细的确认框

@@ -17,7 +17,7 @@ namespace BXJG.Utils.GeneralTree
             //    .ForMember("ExtData", opt => opt.Ignore());
 
             CreateMap<GeneralTreeEntity, GeneralTreeDto>();//.IncludeBase(typeof(GeneralTreeEntity<>), typeof(GeneralTreeGetTreeNodeBaseDto<>));
-
+            CreateMap<GeneralTreeDto, GeneralTreeEditDto>();
             //经过测试,在有泛型的场景中AutoMapper使用继承并不能达到预期效果。因此使用扩展方法形式配置父类映射
             //CreateMap(typeof(GeneralTreeEntity<>), typeof(GeneralTreeNodeDto<>))
             //    .IncludeAllDerived()

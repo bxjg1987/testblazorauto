@@ -1,5 +1,83 @@
-﻿<h3>DetailOrUpdate</h3>
+﻿@inherits AdminGeneralTreeDetailOrUpdateBaseComponent<DataDictionaryAppService,
+                                                      GeneralTreeDto,
+                                                      GeneralTreeEditDto,
+                                                      GeneralTreeEditDto,
+                                                      GeneralTreeGetTreeInput>
 
-@code {
-
-}
+@* 要想OnBackdropClick生效，DisableBackdropClick属性不能为true；onclick确保弹窗主体点击时，也可以执行BtnCancelDelete*@
+<MudDialog onclick="@BtnCancelDelete" OnBackdropClick="BtnCancelDelete">
+    @*    <TitleContent>
+    <MudText Typo="@Typo.h6">查看@FuncName详情</MudText>
+    </TitleContent> *@
+    <DialogContent>
+        @if (isEdit && editContext != null)
+        {
+            <EditForm EditContext="editContext">
+                <DataAnnotationsValidator />
+           
+                <MudTextField @bind-Value="editDto.DisplayName" For="() => editDto.DisplayName" Label="显示名称" Clearable="true" />
+                <MudSwitch @bind-Checked="editDto.IsTree" Label="是否启用" Color="Color.Success" />
+            </EditForm>
+        }
+        else
+        {
+          
+            <MudField Label="显示名称">@dto?.DisplayName</MudField>
+            <MudCheckBox Label="是否启用" Checked="@(dto==null?false:dto.IsTree)" ReadOnly="true" />
+        }
+    </DialogContent>
+    <DialogActions>
+        @if (deleteIsGranted)
+        {
+            <MudButton Color="Color.Warning" Variant="Variant.Filled" OnClick="BtnDeleteClick">
+                <MudIcon Icon="@Icons.Material.Outlined.Delete" Size="Size.Small" />
+                <MudText Class="ml-1">删除</MudText>
+                <MudPopover Open="isShowDeleteConfirm" Fixed="true" Class="pa-3" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter">
+                    <MudStack>
+                        <MudAlert Severity="Severity.Warning">确定删除此数据吗？</MudAlert>
+                        <MudStack Row="true" Justify="Justify.Center">
+                            <MudButton OnClick="BtnDeleteClickOk" Size="Size.Small" Variant="Variant.Filled" Color="Color.Error">删除</MudButton>
+                            <MudButton OnClick="BtnCancelDelete" Size="Size.Small" Variant="Variant.Filled" Color="Color.Default">取消</MudButton>
+                        </MudStack>
+                    </MudStack>
+                </MudPopover>
+            </MudButton>
+        }
+        @if (IsShowBeginEdit)
+        {
+            <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="BtnBeginEditClick">
+                <MudIcon Icon="@Icons.Material.Outlined.Edit" Size="Size.Small" />
+                <MudText Class="ml-1">修改</MudText>
+            </MudButton>
+        }
+        @if (IsShowSave)
+        {
+            <MudButton Color="Color.Default" Variant="Variant.Filled" OnClick="BtnResetClick">
+                @if (isReseting)
+                {
+                    <MudProgressCircular Color="Color.Primary" Size="Size.Small" Indeterminate="true" />
+                    <MudText Class="ml-1">正在重置...</MudText>
+                }
+                else
+                {
+                    @* <MudIcon Icon="@Icons.Material.Outlined.Save" Size="Size.Small" /> *@
+                    <MudText Class="ml-1">重置</MudText>
+                }
+            </MudButton>
+            <MudButton Color="Color.Default" Variant="Variant.Filled" OnClick="BtnEndEditClick">放弃修改</MudButton>
+            <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="BtnSaveClick" Disabled="@IsSaveDisabled">
+                @if (isSaving)
+                {
+                    <MudProgressCircular Color="Color.Primary" Size="Size.Small" Indeterminate="true" />
+                    <MudText Class="ml-1">正在保存...</MudText>
+                }
+                else
+                {
+                    <MudIcon Icon="@Icons.Material.Outlined.Save" Size="Size.Small" />
+                    <MudText Class="ml-1">保存</MudText>
+                }
+            </MudButton>
+        }
+        <MudButton Color="Color.Default" Variant="Variant.Filled" OnClick="BtnCancelClick">关闭</MudButton>
+    </DialogActions>
+</MudDialog>

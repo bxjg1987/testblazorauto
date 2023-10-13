@@ -7,7 +7,7 @@
         <MudButtonGroup OverrideStyles="false">
             @if (isCreateGranted)
             {
-                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Outlined.Add" Color="Color.Primary">新增</MudButton>
+                <MudButton OnClick="BtnAddClick" Variant="Variant.Filled" StartIcon="@Icons.Material.Outlined.Add" Color="Color.Primary">新增</MudButton>
             }
             @*@if (updateIsGranted)
             {
@@ -83,10 +83,10 @@
                                     <MudText>系统预设</MudText>
                                 }
                                 <MudButtonGroup OverrideStyles="false">
-                                    <MudButton StartIcon="@Icons.Material.Filled.Info" Size="Size.Small" Variant="Variant.Outlined" Color="Color.Primary">详情</MudButton>
+                                    <MudButton StartIcon="@Icons.Material.Filled.Info" Size="Size.Small" Variant="Variant.Outlined" Color="Color.Primary" OnClick="()=>BtnDetailClick(context)">详情</MudButton>
                                     @if (isUpdateGranted)
                                     {
-                                        <MudButton StartIcon="@Icons.Material.Filled.Edit" Size="Size.Small" Variant="Variant.Outlined">修改</MudButton>
+                                        <MudButton StartIcon="@Icons.Material.Filled.Edit" Size="Size.Small" Variant="Variant.Outlined" OnClick="()=>BtnEditClick(context)">修改</MudButton>
                                     }
                                     @if (!context.IsSysDefine && isDeleteGranted)
                                     {

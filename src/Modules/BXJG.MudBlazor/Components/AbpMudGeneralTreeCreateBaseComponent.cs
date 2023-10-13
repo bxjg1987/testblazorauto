@@ -37,10 +37,7 @@ namespace BXJG.AbpMudBlazor.Components
                                                       TCreateInput,
                                                       TEditDto,
                                                       TGetAllInput> : AbpMudBaseComponent
-        where TCreateInput : IHaveParentId<long>, new() // GeneralTreeNodeEditBaseDto //注意这里约束为TEditDto，这样强制要求继承编辑模型不合理
-        //where TEntityDto : IGeneralTree<TEntityDto>// GeneralTreeGetTreeNodeBaseDto<TEntityDto>, IExtendableDto//, new()
-        //where TEditDto : GeneralTreeNodeEditBaseDto//父类可以对输入做一定的处理
-        //where TGetAllInput : GeneralTreeGetTreeInput, new()
+        where TCreateInput : IHaveParentId<long>, new() 
         where TAppService : IGeneralTreeBaseAppService<TEntityDto, TCreateInput, TEditDto, TGetAllInput>
     {
         /// <summary>
@@ -175,16 +172,12 @@ namespace BXJG.AbpMudBlazor.Components
     /// <summary>
     /// 基于mud abp 的通用树 新增弹窗组件 抽象类
     /// </summary>
-    /// <typeparam name="TCreateDialog">新增弹窗组件</typeparam>
-    /// <typeparam name="TDetailDialog">详情弹窗组件</typeparam>
     /// <typeparam name="TAppService">主应用服务</typeparam>
     /// <typeparam name="TEntityDto">查询模型类型</typeparam>
     /// <typeparam name="TCreateInput">新增时的输入参数类型</typeparam>
     /// <typeparam name="TEditDto">修改时的输入参数类型</typeparam>
     /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
-    public class AbpMudGeneralTreeCreateDialogBaseComponent<TCreateDialog,
-                                                            TDetailDialog,
-                                                            TAppService,
+    public class AbpMudGeneralTreeCreateDialogBaseComponent<TAppService,
                                                             TEntityDto,
                                                             TCreateInput,
                                                             TEditDto,

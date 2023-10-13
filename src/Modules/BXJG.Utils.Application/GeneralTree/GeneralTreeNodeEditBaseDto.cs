@@ -20,17 +20,24 @@ namespace BXJG.Utils.GeneralTree
     /// <summary>
     /// 树形结构抽象编辑模型
     /// </summary>
-    public class GeneralTreeNodeEditBaseDto : EntityDto<long>
+    public class GeneralTreeNodeEditBaseDto : EntityDto<long>, IHaveParentId<long>
     {
         /// <summary>
         /// Id
         /// </summary>
         //[Range(0, long.MaxValue)]
-       // public long Id { get; set; }
-        /// <summary>
-        /// 父级id
-        /// </summary>
-        public long? ParentId { get; set; }
+        // public long Id { get; set; }
+        ///// <summary>
+        ///// 父级id
+        ///// </summary>
+        //public long? ParentId { get; set; }
+
+        long? parentId;
+        public long? ParentId { get => parentId; set => parentId = value; }
+        object IHaveParentId.Id { get => Id; set => Id = Convert.ToInt64(value); }
+        object IHaveParentId.ParentId { get => ParentId; set => ParentId = value == null ? null : Convert.ToInt64(value); }
+
+
         /// <summary>
         /// 显示名称
         /// </summary>

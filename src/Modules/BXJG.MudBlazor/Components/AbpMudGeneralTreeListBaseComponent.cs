@@ -433,16 +433,16 @@ namespace BXJG.AbpMudBlazor.Components
                 //BatchDeleteMessage(temp);
                 if (r.Ids.Any())
                 {
-                    var tmp = selected.OrderBy(c => c.Code.Length).FirstOrDefault();
-                    if(tmp!=null)
+                    selected.Clear();
 
+                    var tmp = selected.OrderBy(c => c.Code.Length).First();
+                    if (tmp.ParentId.HasValue)
                     {
                         var node = mudTreeView.Items.FindRecursiveDown(tmp.ParentId.Value);
                         await Reload(node);
                     }
-          else
+                    else
                         await Reload();
-
                 }
 
                 //刷新选择节点中最短code的父节点，也就是所有选择节点的公共父节点
@@ -524,16 +524,16 @@ namespace BXJG.AbpMudBlazor.Components
     /// <typeparam name="TEditDto">修改时的输入类型</typeparam>
     /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
     public abstract class AbpMudGeneralTreeListDialogBaseComponent<TCreateDialog,
-                                                                  TDetailDialog,
-                                                                  TAppService,
-                                                                  TEntityDto,
-                                                                  TCreateInput,
-                                                                  TEditDto,
-                                                                  TGetAllInput> : AbpMudGeneralTreeListBaseComponent<TAppService,
-                                                                                                                    TEntityDto,
-                                                                                                                    TCreateInput,
-                                                                                                                    TEditDto,
-                                                                                                                    TGetAllInput>
+                                                                   TDetailDialog,
+                                                                   TAppService,
+                                                                   TEntityDto,
+                                                                   TCreateInput,
+                                                                   TEditDto,
+                                                                   TGetAllInput> : AbpMudGeneralTreeListBaseComponent<TAppService,
+                                                                                                                      TEntityDto,
+                                                                                                                      TCreateInput,
+                                                                                                                      TEditDto,
+                                                                                                                      TGetAllInput>
         where TCreateDialog : ComponentBase
         where TDetailDialog : ComponentBase
         //where TCreateInput : GeneralTreeNodeEditBaseDto //注意这里约束为TEditDto，这样强制要求继承编辑模型不合理
@@ -621,7 +621,7 @@ namespace BXJG.AbpMudBlazor.Components
         //  //   {
         //         await BtnDetailClick(arg.Item);
         //   //  }
-         
+
         // }
         /// <summary>
         /// 弹出详情弹窗时传入参数
