@@ -18,7 +18,7 @@
     "ZLJ.Web.Host": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "http://localhost:21021",
+      "launchUrl": "http://localhost:21021/admin",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

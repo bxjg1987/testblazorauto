@@ -1,0 +1,52 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Shared\AdminBaseComponent.cs" />
+    <Compile Remove="Shared\AdminCreateBaseComponent.cs" />
+    <Compile Remove="Shared\AdminDetailBaseComponent.cs" />
+    <Compile Remove="Shared\AdminGeneralTreeCreateBaseComponent.cs" />
+    <Compile Remove="Shared\AdminGeneralTreeDetailOrUpdateBaseComponent.cs" />
+    <Compile Remove="Shared\AdminGeneralTreeListBaseComponent.cs" />
+    <Compile Remove="Shared\AdminListBaseComponent.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Shared\RecursionNavGroup.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\libs\font-awesome\webfonts\fa-brands-400.woff2" />
+    <None Include="wwwroot\libs\font-awesome\webfonts\fa-regular-400.woff2" />
+    <None Include="wwwroot\libs\font-awesome\webfonts\fa-solid-900.woff2" />
+    <None Include="wwwroot\libs\font-awesome\webfonts\fa-v4compatibility.woff2" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Abp.AspNetCore" Version="8.4.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.12" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\ZLJ.Application\ZLJ.Application.csproj" />
+		<ProjectReference Include="..\ZLJ.Web.Core\ZLJ.Web.Core.csproj" />
+	</ItemGroup>
+	
+	<ItemGroup Condition="'$(SolutionName)' != 'ZLJWithModules'">
+		<PackageReference Include="BXJG.AbpBootstrapBlazor" Version="*" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(SolutionName)' == 'ZLJWithModules'">
+		<ProjectReference Include="..\Modules\BXJG.AbpBootstrapBlazor\BXJG.AbpBootstrapBlazor.csproj" />
+	</ItemGroup>
+	
+</Project>

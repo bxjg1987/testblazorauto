@@ -1,0 +1,31 @@
+﻿<CascadingValue Value="@zhongjie">
+
+    <CascadingAuthenticationState>
+        <BootstrapBlazorRoot>
+            <Router AppAssembly="@typeof(App).Assembly">
+                <Found Context="routeData">
+                    <AuthorizeRouteView RouteData="@routeData" DefaultLayout="typeof(ZLJ.Web.Admin.BootstrapServer.Shared.AdminMainLayout)">
+                        <NotAuthorized>
+                            权限验证失败！
+                            <AuthenticationRedirectory LoginPath="/account/login?appKey=admin" />
+                        </NotAuthorized>
+                        <Authorizing>
+                            正在验证权限...
+                            @*   <Button OnClick="@ButtonClick" Color="Color.Danger">危险按钮</Button> *@
+                        </Authorizing>
+                     
+                    </AuthorizeRouteView>
+                    <PageTitle>Bootstrap Blazor Project Template</PageTitle>
+                    <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+                </Found>
+                <NotFound>
+                    <PageTitle>未找到页面</PageTitle>
+                    <LayoutView Layout="@typeof(ZLJ.Web.Admin.BootstrapServer.Shared.AdminMainLayout)">
+                        <p role="alert">抱歉！没有找到页面，请联系系统管理员。</p>
+                    </LayoutView>
+                </NotFound>
+            </Router>
+        </BootstrapBlazorRoot>
+    </CascadingAuthenticationState>
+
+</CascadingValue>

@@ -129,7 +129,9 @@ namespace ZLJ.Web.Host.Startup
             });
             #endregion
 
-
+            #region bootstrapblazor
+            services.AddBootstrapBlazor();
+            #endregion
 
             // Configure CORS for angular2 UI
             services.AddCors(

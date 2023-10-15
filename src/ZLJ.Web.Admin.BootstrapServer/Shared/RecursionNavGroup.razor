@@ -1,0 +1,32 @@
+﻿@using Abp.Application.Navigation;
+@if (MenuItem.Items != default && MenuItem.Items.Any())
+{
+    <MudNavGroup Title="@(DrawerOpen?MenuItem.DisplayName:string.Empty)" Style="width:12rem;" Icon="@MenuItem.Icon" HideExpandIcon="@(!DrawerOpen)">
+        @foreach (var item2 in MenuItem.Items)
+        {
+            <RecursionNavGroup MenuItem="item2" DrawerOpen="DrawerOpen"></RecursionNavGroup>
+        }
+    </MudNavGroup>
+}
+else
+{
+    <MudNavLink Href="@MenuItem.Url" Match="NavLinkMatch.All" Icon="@MenuItem.Icon" Style="width:12rem;">
+        @if (DrawerOpen)
+        {
+            @MenuItem.DisplayName
+        }
+    </MudNavLink>
+}
+@code
+{
+    /// <summary>
+    /// 菜单容器是否是展开状态
+    /// </summary>
+    [Parameter]
+    public bool DrawerOpen { get; set; }
+    /// <summary>
+    /// 菜单明细
+    /// </summary>
+    [Parameter]
+    public UserMenuItem MenuItem { get; set; }
+}

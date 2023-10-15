@@ -9,6 +9,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\Account\**" />
+    <Compile Remove="Views\Home\**" />
+    <Content Remove="Views\Account\**" />
+    <Content Remove="Views\Home\**" />
+    <EmbeddedResource Remove="Views\Account\**" />
+    <EmbeddedResource Remove="Views\Home\**" />
+    <None Remove="Views\Account\**" />
+    <None Remove="Views\Home\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Notify\NotifyListBase.cs" />
     <Compile Remove="Notify\NotifySubscriptBase.cs" />
   </ItemGroup>
@@ -34,6 +45,11 @@
 	<ItemGroup>
 		<ProjectReference Include="..\ZLJ.Application\ZLJ.Application.csproj" />
 		<ProjectReference Include="..\ZLJ.Web.Core\ZLJ.Web.Core.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Views\Account\" />
+	  <Folder Include="Views\Home\" />
 	</ItemGroup>
 
 </Project>
