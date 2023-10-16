@@ -13,7 +13,7 @@
 
 hangfire mysql不好整，目前还是保留的sqlserver方式，
 将来换成：https://github.com/marcoCasamento/Hangfire.Redis.StackExchange
-或花钱买官方的，或者换成quartz
+或花钱买官方的，或者换成quartz，或者干脆只使用abp自带的
 
 分布式锁，由于我们希望只做单体，所以原本的分布式锁DistributedLock.SqlServer引用了包，但是没使用
 下载并配置DistributedLock.MySql也很简单，不过目前确实不打算使用分布式锁
