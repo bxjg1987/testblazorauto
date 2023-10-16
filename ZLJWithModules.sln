@@ -71,6 +71,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{31830F03-1
 		docs\抽象的mudblazorCRUD组件.md = docs\抽象的mudblazorCRUD组件.md
 		docs\本地化.md = docs\本地化.md
 		docs\菜单.md = docs\菜单.md
+		docs\集成mysql.md = docs\集成mysql.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.AbpMudBlazor", "src\Modules\BXJG.MudBlazor\BXJG.AbpMudBlazor.csproj", "{A43BBE9A-BEA3-450E-ABD6-856D72723E91}"
@@ -83,9 +84,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "admin", "admin", "{13D06701
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "framework", "framework", "{1D558C5F-E7F7-422F-B7D8-54F5135BDF3E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZLJ.Web.Admin.BootstrapServer", "src\ZLJ.Web.Admin.BootstrapServer\ZLJ.Web.Admin.BootstrapServer.csproj", "{C96E63F3-4B6A-406A-9E68-0492EB166285}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZLJ.Web.Admin.BootstrapServer", "src\ZLJ.Web.Admin.BootstrapServer\ZLJ.Web.Admin.BootstrapServer.csproj", "{C96E63F3-4B6A-406A-9E68-0492EB166285}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BXJG.AbpBootstrapBlazor", "src\Modules\BXJG.AbpBootstrapBlazor\BXJG.AbpBootstrapBlazor.csproj", "{50D26120-0F89-4C40-91B6-5A679339BEA3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.AbpBootstrapBlazor", "src\Modules\BXJG.AbpBootstrapBlazor\BXJG.AbpBootstrapBlazor.csproj", "{50D26120-0F89-4C40-91B6-5A679339BEA3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

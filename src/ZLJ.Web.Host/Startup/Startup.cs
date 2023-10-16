@@ -25,6 +25,7 @@ using Microsoft.AspNetCore.Components.Server.Circuits;
 using Microsoft.Extensions.DependencyInjection;
 //using Savorboard.CAP.InMemoryMessageQueue;
 using ZLJ.App.Admin.Authorization.Permissions;
+using Medallion.Threading;
 
 namespace ZLJ.Web.Host.Startup
 {
@@ -237,12 +238,14 @@ namespace ZLJ.Web.Host.Startup
             //UseRecommendedIsolationLevel = true,
             //DisableGlobalLocks = true
             //};
+            string hangfireConnectionString = _appConfiguration.GetConnectionString("HangfireSqlServer")!;
+
             services.AddHangfire(configuration => configuration
                     .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
                     .UseSimpleAssemblyNameTypeSerializer()
                     .UseRecommendedSerializerSettings()
                     //.UseDashboardMetric( ),
-                    .UseSqlServerStorage(defaultConnectionString, new SqlServerStorageOptions
+                    .UseSqlServerStorage(hangfireConnectionString, new SqlServerStorageOptions
                     {
                         //默认值已满足需求
                     }));
@@ -251,10 +254,11 @@ namespace ZLJ.Web.Host.Startup
             //GlobalConfiguration.Configuration.UseSqlServerStorage(defaultConnectionString, hangfireOpt);
             //首次迁移后abp的表会生成，hangfire表不会生成，然后启动主项目hangfire会报错，但表会生成，然后再次启动主项目就好了
             //下面的配置可以解决这个问题，或者考虑在迁移项目中初始化hangfire，让其生成表
-            JobStorage.Current = new SqlServerStorage(defaultConnectionString);
+            JobStorage.Current = new SqlServerStorage(hangfireConnectionString);
 
             //services.AddSingleton<IDistributedLockProvider>(_ => new SqlDistributedSynchronizationProvider(this._appConfiguration.GetConnectionString("Default")));
-
+            //services.AddSingleton<IDistributedLockProvider>(_=>new MySqlDistributedSynchronizationProvider(defaultConnectionString));
+            
             //services.AddHangfireServer(opt => {
             //    opt.Queues = new[] { "abp" };
             //});
