@@ -32,7 +32,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using static System.Formats.Asn1.AsnWriter;
 
-namespace BXJG.Utils
+namespace BXJG.Utils.Components
 {
     /*
      * 基本上把抽象的应用服务中的abp相关玩意搞过来
@@ -61,6 +61,8 @@ namespace BXJG.Utils
     //where TRole : AbpRole<TUser>, new()
     //where TUserManager : AbpUserManager<TRole, TUser>
     {
+        //当前界面和全局Zhongjie在CommonBaseComponent中定义
+
         private IAbpSession abpSession;
         /// <summary>
         /// 获取当前session
@@ -101,7 +103,7 @@ namespace BXJG.Utils
         /// </summary>
         protected virtual IAbpAspNetCoreConfiguration AspNetCoreConfiguration => aspnetCoreConfiguration ??= ScopedServices.GetRequiredService<IAbpAspNetCoreConfiguration>();
 
-       
+
         protected override void Dispose(bool disposing)
         {
             CancellationTokenSource?.Cancel();
@@ -167,7 +169,7 @@ namespace BXJG.Utils
             get
             {
                 if (_logger == default)
-                    _logger = ScopedServices.GetRequiredService<ILoggerFactory>().Create(this.GetType());
+                    _logger = ScopedServices.GetRequiredService<ILoggerFactory>().Create(GetType());
                 return _logger;
             }
         }
@@ -277,7 +279,7 @@ namespace BXJG.Utils
         //    await SafelyExecuteAsync(OnParametersSet2Async);
         //    //return base.OnParametersSetAsync();
         //}
-      //  protected virtual Task OnParametersSet2Async() => Task.CompletedTask;
+        //  protected virtual Task OnParametersSet2Async() => Task.CompletedTask;
 
         //这里不要搞，它比init先执行
         //public override async Task SetParametersAsync(ParameterView parameters)
@@ -471,7 +473,7 @@ namespace BXJG.Utils
         //    }
         //    return default;
         //}
-       // public virtual ValueTask ShowErrorAsync(string msg) => ValueTask.CompletedTask;
+        // public virtual ValueTask ShowErrorAsync(string msg) => ValueTask.CompletedTask;
 
         //public virtual void ShowError(string msg) { }
         ///// <summary>

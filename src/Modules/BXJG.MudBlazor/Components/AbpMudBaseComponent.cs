@@ -1,5 +1,5 @@
 ﻿using BXJG.AbpMudBlazor.Interceptor;
-using BXJG.Utils;
+using BXJG.Utils.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using MudBlazor;

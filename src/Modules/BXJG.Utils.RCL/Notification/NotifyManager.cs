@@ -3,6 +3,7 @@ using Abp.Authorization.Roles;
 using Abp.Authorization.Users;
 using Abp.Notifications;
 using BXJG.Common.Dto;
+using BXJG.Utils.Components;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;

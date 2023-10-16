@@ -9,6 +9,7 @@ using Abp.Authorization.Roles;
 using Abp.Authorization.Users;
 using Abp.Collections.Extensions;
 using Microsoft.Extensions.DependencyInjection;
+using BXJG.Utils.Components;
 
 namespace BXJG.Utils.Notification
 {

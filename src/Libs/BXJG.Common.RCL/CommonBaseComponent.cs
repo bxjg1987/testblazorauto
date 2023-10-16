@@ -29,5 +29,13 @@ namespace BXJG.Common.RCL
         /// 日志
         /// </summary>
         protected virtual ILogger MicrosoftLogger => _logger ??= ScopedServices.GetRequiredService<ILoggerFactory>().CreateLogger(GetType());
+        /// <summary>
+        /// 显示操作成功逻辑，具体项目使用自己的UI框架提示
+        /// </summary>
+        protected virtual void ShowSuccessMessage(string title = "操作提示", string msg = "操作成功！") { }
+        /// <summary>
+        /// 显示操作失败逻辑，具体项目使用自己的UI框架提示
+        /// </summary>
+        protected virtual void ShowFailMessage(string title = "操作提示", string msg = "操作失败！") { }
     }
 }
