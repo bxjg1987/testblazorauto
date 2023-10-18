@@ -12,8 +12,9 @@ namespace ZLJ.App.Admin.Roles.Dto
     /// <summary>
     /// 后台管理角色使用的显示模型
     /// </summary>
-    public class RoleDto : EntityDto<int>
+    public class RoleDto : EntityDto<int>,IExtendableDto
     {
+        public dynamic ExtensionData { get; set; }
         public IEnumerable<int> OuIds => Ous != null && Ous.Count > 0 ?  Ous.Select(c =>int.Parse( c.Id.ToString())) : new int[0];
         public string OusText => Ous != null && Ous.Count > 0 ? string.Join(',', Ous.Select(c => c.Text)) : "";
         public List<OuDto> Ous { get; set; }

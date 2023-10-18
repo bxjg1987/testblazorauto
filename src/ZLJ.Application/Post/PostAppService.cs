@@ -7,6 +7,7 @@ using Abp.Zero.Configuration;
 using Microsoft.AspNetCore.Identity;
 using ZLJ.App.Admin.Authorization.Permissions;
 using ZLJ.App.Admin.Post.Dto;
+using ZLJ.App.Admin.Roles;
 using ZLJ.App.Admin.Roles.Dto;
 using ZLJ.App.Common.OU;
 using ZLJ.Authorization.Roles;
@@ -17,11 +18,7 @@ namespace ZLJ.App.Admin.Post
 {
 
     [AbpAuthorize(PermissionNames.AdministratorBaseInfoPost)]
-    public class PostAppService : AsyncCrudAppService<Role,
-                                                      PostDto,
-                                                      int,
-                                                      PagedPostResultRequestDto,
-                                                      CreatePostDto>, IPostAppService
+    public class PostAppService : AdminCrudBaseAppService<PostEntity, PostDto, int, PagedAndSortedResultRequest<PagedPostResultRequestDto>, CreatePostDto, PostEditDto>, IPostAppService
     {
         private readonly RoleManager _roleManager;
         private readonly UserManager _userManager;
@@ -30,7 +27,7 @@ namespace ZLJ.App.Admin.Post
         IRepository<OrganizationUnit, long> ouRepository;
         OrganizationUnitManager unitManager;
 
-        public PostAppService(IRepository<Role> repository,
+        public PostAppService(IRepository<PostEntity> repository,
                               RoleManager roleManager, 
                               UserManager userManager,
                               IRoleManagementConfig roleManagementConfig, 
@@ -64,7 +61,7 @@ namespace ZLJ.App.Admin.Post
             return dto;
         }
 
-        protected override PostDto MapToEntityDto(Role role)
+        protected override PostDto MapToEntityDto(PostEntity role)
         {
             var dto = base.MapToEntityDto(role);
             var ous = CurrentUnitOfWork.Items["ous"] as IDictionary<int, IEnumerable<OrganizationUnit>>;
@@ -177,7 +174,7 @@ namespace ZLJ.App.Admin.Post
         //{
         //    return base.UpdateAsync(input);
         //}
-        public override async Task<PostDto> UpdateAsync(CreatePostDto input)
+        public override async Task<PostDto> UpdateAsync(PostEditDto input)
         {
             CheckUpdatePermission();
             var role = await _roleManager.GetRoleByIdAsync(input.Id) as PostEntity;

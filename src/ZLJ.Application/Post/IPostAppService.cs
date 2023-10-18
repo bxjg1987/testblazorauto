@@ -6,16 +6,20 @@ using BXJG.Utils.GeneralTree;
 using BXJG.Common.Dto;
 using ZLJ.App.Admin.Roles.Dto;
 using ZLJ.App.Admin.Post.Dto;
+using BXJG.Utils;
 
 namespace ZLJ.App.Admin.Post
 {
-    public interface IPostAppService : IAsyncCrudAppService<PostDto, int, PagedPostResultRequestDto,  CreatePostDto>
+    public interface IPostAppService :
+
+         ICrudBaseAppService<PostDto, int, PagedAndSortedResultRequest<PagedPostResultRequestDto>, CreatePostDto, PostEditDto>
+        
     {
-        Task<ListResultDto<PermissionDto>> GetAllPermissions();
+        //Task<ListResultDto<PermissionDto>> GetAllPermissions();
 
-        Task<GetPostForEditOutput> GetPostForEdit(EntityDto input);
+        //Task<GetPostForEditOutput> GetPostForEdit(EntityDto input);
 
-        Task<IList<PostDto>> GetPostsAsync(GetPostsInput input);
-        Task<IEnumerable<int>> DeleteBatchAsync(params int[] input);
+        //Task<IList<PostDto>> GetPostsAsync(GetPostsInput input);
+        //Task<IEnumerable<int>> DeleteBatchAsync(params int[] input);
     }
 }

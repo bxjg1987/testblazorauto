@@ -25,9 +25,8 @@ using ZLJ.App.Admin.Authorization.Permissions;
 
 namespace ZLJ.App.Admin.Roles
 {
-
     [AbpAuthorize(PermissionNames.AdministratorSystemRole)]
-    public class RoleAppService : AsyncCrudAppService<Role, RoleDto, int, PagedRoleResultRequestDto, CreateRoleDto>//, IRoleAppService
+    public class RoleAppService : AdminCrudBaseAppService<Role, RoleDto, int, PagedAndSortedResultRequest<PagedRoleResultRequestDto>, CreateRoleDto, RoleEditDto>, IRoleAppService
     {
         private readonly RoleManager _roleManager;
         private readonly UserManager _userManager;
@@ -55,13 +54,14 @@ namespace ZLJ.App.Admin.Roles
             this.ouRepository = ouRepository;
             this.unitManager = unitManager;
         }
+        
         [UnitOfWork(false)]
         public override async Task<RoleDto> GetAsync(EntityDto<int> input)
         {
             var role = await GetEntityByIdAsync(input.Id);
             await sdfsdf(role);
-            var dto = MapToEntityDto(role); 
-            dto.GrantedPermissions = (await _roleManager.GetGrantedPermissionsAsync(role)).Where(c=>c.Children.Count==0).Select(c => c.Name).ToList();
+            var dto = MapToEntityDto(role);
+            dto.GrantedPermissions = (await _roleManager.GetGrantedPermissionsAsync(role)).Where(c => c.Children.Count == 0).Select(c => c.Name).ToList();
             return dto;
         }
 
@@ -70,20 +70,21 @@ namespace ZLJ.App.Admin.Roles
             var dto = base.MapToEntityDto(role);
             var ous = CurrentUnitOfWork.Items["ous"] as IDictionary<int, IEnumerable<OrganizationUnit>>;
             if (ous != default)
-                dto.Ous = ObjectMapper.Map<List<OuDto>>(ous[role.Id].Where(c=>c!=default));
-            return  dto;
+                dto.Ous = ObjectMapper.Map<List<OuDto>>(ous[role.Id].Where(c => c != default));
+            return dto;
         }
 
-        async Task sdfsdf(Role entity) {
+        async Task sdfsdf(Role entity)
+        {
             var q2 = from role in Repository.GetAll().AsNoTrackingWithIdentityResolution()
                      join ouRole in ouRoleRepository.GetAll().AsNoTrackingWithIdentityResolution() on role.Id equals ouRole.RoleId into tem1
                      from ouRole in tem1.DefaultIfEmpty()
                      join ou in ouRepository.GetAll().AsNoTrackingWithIdentityResolution() on ouRole.OrganizationUnitId equals ou.Id into tem2
                      from ou in tem2.DefaultIfEmpty()
-                     where role.Id==entity.Id
+                     where role.Id == entity.Id
                      select new { role, ou };
             var list = await q2.ToListAsync();
-            var groups =  list.GroupBy(c => c.role, c => c.ou);
+            var groups = list.GroupBy(c => c.role, c => c.ou);
             CurrentUnitOfWork.Items["ous"] = groups.ToDictionary(c => c.Key.Id, c => c.AsEnumerable());
         }
 
@@ -92,7 +93,7 @@ namespace ZLJ.App.Admin.Roles
             CheckCreatePermission();
             //input.nam
             var role = ObjectMapper.Map<Role>(input);
-            role.Name = TinyPinyin.PinyinHelper.GetPinyin(input.DisplayName,"");//.GetPinYinFirstLetter();
+            role.Name = TinyPinyin.PinyinHelper.GetPinyin(input.DisplayName, "");//.GetPinYinFirstLetter();
             role.SetNormalizedName();
 
             CheckErrors(await _roleManager.CreateAsync(role));
@@ -126,9 +127,9 @@ namespace ZLJ.App.Admin.Roles
         [UnitOfWork(false)]
         public async Task<IList<RoleDto>> GetRolesAsync(GetRolesInput input)
         {
-            
+
             var q2 = from role in Repository.GetAll().AsNoTrackingWithIdentityResolution()
-                                                     .Where(c=> EF.Property<string>(c, "Discriminator") =="Role")//ef也支持将某个实体属性作为鉴别列
+                                                     .Where(c => EF.Property<string>(c, "Discriminator") == "Role")//ef也支持将某个实体属性作为鉴别列
                      join ouRole in ouRoleRepository.GetAll().AsNoTrackingWithIdentityResolution() on role.Id equals ouRole.RoleId into tem1
                      from ouRole in tem1.DefaultIfEmpty()
                      join ou in ouRepository.GetAll().AsNoTrackingWithIdentityResolution() on ouRole.OrganizationUnitId equals ou.Id into tem2
@@ -139,7 +140,7 @@ namespace ZLJ.App.Admin.Roles
 
             q2 = q2.OrderBy(c => c.role.DisplayName);
 
-            q2 = from role in q2.Select(c=>c.role).Distinct()
+            q2 = from role in q2.Select(c => c.role).Distinct()
                  join ouRole in ouRoleRepository.GetAll().AsNoTrackingWithIdentityResolution() on role.Id equals ouRole.RoleId into tem1
                  from ouRole in tem1.DefaultIfEmpty()
                  join ou in ouRepository.GetAll().AsNoTrackingWithIdentityResolution() on ouRole.OrganizationUnitId equals ou.Id into tem2
@@ -151,7 +152,7 @@ namespace ZLJ.App.Admin.Roles
             var list = await q2.ToListAsync();
 
             var groups = list.GroupBy(c => c.role, c => c.ou);
-            CurrentUnitOfWork.Items["ous"] = groups.ToDictionary(c=>c.Key.Id,c=>c.AsEnumerable());
+            CurrentUnitOfWork.Items["ous"] = groups.ToDictionary(c => c.Key.Id, c => c.AsEnumerable());
             var roles = groups.Select(c => c.Key);
             //var roles = await _roleManager
             //    .Roles
@@ -166,14 +167,14 @@ namespace ZLJ.App.Admin.Roles
                 dtos.Add(MapToEntityDto(item));
             }
             return dtos;
-          //  return ObjectMapper.Map<List<RoleDto>>(roles);
+            //  return ObjectMapper.Map<List<RoleDto>>(roles);
         }
 
         //public override Task<RoleDto> UpdateAsync(RoleDto input)
         //{
         //    return base.UpdateAsync(input);
         //}
-        public override async Task<RoleDto> UpdateAsync(CreateRoleDto input)
+        public override async Task<RoleDto> UpdateAsync(RoleEditDto input)
         {
             CheckUpdatePermission();
             var role = await _roleManager.GetRoleByIdAsync(input.Id);
@@ -234,7 +235,7 @@ namespace ZLJ.App.Admin.Roles
             await sdfsdf(role);
             var dto = MapToEntityDto(role);
 
-           // var dto = ObjectMapper.Map<RoleDto>(role);
+            // var dto = ObjectMapper.Map<RoleDto>(role);
             dto.GrantedPermissions = (await _roleManager.GetGrantedPermissionsAsync(role)).Select(c => c.Name).ToList();
             return dto;
         }
@@ -300,7 +301,7 @@ namespace ZLJ.App.Admin.Roles
             {
                 Role = roleEditDto,
                 Permissions = ObjectMapper.Map<List<FlatPermissionDto>>(permissions).OrderBy(p => p.DisplayName).ToList(),
-                GrantedPermissionNames = grantedPermissions.Where(c=>c.Children.Count==0).Select(p => p.Name).ToList()
+                GrantedPermissionNames = grantedPermissions.Where(c => c.Children.Count == 0).Select(p => p.Name).ToList()
             };
         }
 
@@ -324,23 +325,23 @@ namespace ZLJ.App.Admin.Roles
         }
 
 
-        [Obsolete("应该单独定义应用服务，而不是在后台管理角色的服务中提供此方法")]
-        public async Task<IReadOnlyList<RoleSelectDto>> GetForSelectAsync(GetForSelectInput a)
-        {
-            var list = await _roleManager.Roles.OrderBy(c => c.DisplayName).Select(c => new RoleSelectDto
-            {
-                Value = c.Id.ToString(),
-                DisplayText = c.DisplayName,
-                Name = c.Name
-            }).ToListAsync();
-            if (a.ForType == 0)
-                list.Insert(0, new RoleSelectDto(null, string.IsNullOrWhiteSpace(a.ParentText) ? L("Please select role") : a.ParentText));
-            else if (a.ForType == 1)
-                list.Insert(0, new RoleSelectDto(null, string.IsNullOrWhiteSpace(a.ParentText) ? L("Please select") : a.ParentText));
-            return list;
+        //[Obsolete("应该单独定义应用服务，而不是在后台管理角色的服务中提供此方法")]
+        //public async Task<IReadOnlyList<RoleSelectDto>> GetForSelectAsync(GetForSelectInput a)
+        //{
+        //    var list = await _roleManager.Roles.OrderBy(c => c.DisplayName).Select(c => new RoleSelectDto
+        //    {
+        //        Value = c.Id.ToString(),
+        //        DisplayText = c.DisplayName,
+        //        Name = c.Name
+        //    }).ToListAsync();
+        //    if (a.ForType == 0)
+        //        list.Insert(0, new RoleSelectDto(null, string.IsNullOrWhiteSpace(a.ParentText) ? L("Please select role") : a.ParentText));
+        //    else if (a.ForType == 1)
+        //        list.Insert(0, new RoleSelectDto(null, string.IsNullOrWhiteSpace(a.ParentText) ? L("Please select") : a.ParentText));
+        //    return list;
 
 
-        }
+        //}
 
     }
 }

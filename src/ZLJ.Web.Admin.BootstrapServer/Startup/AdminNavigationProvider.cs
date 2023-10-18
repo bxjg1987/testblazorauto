@@ -62,7 +62,7 @@ namespace ZLJ.Web.Admin.BootstrapServer.Startup
             menuBaseInfo.AddItem(new MenuItemDefinition(PermissionNames.AdministratorBaseInfoPost,
                                                         PermissionNames.AdministratorBaseInfoPost.GetAdminLocalizableString(),
                                                         icon: "fas fa-user-group",
-                                                        url: "/admin/role",
+                                                        url: "/admin/post",
                                                         permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorBaseInfoPost)));
 
             //员工档案

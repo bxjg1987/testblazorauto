@@ -2,9 +2,9 @@
 
 namespace ZLJ.App.Admin.Roles.Dto
 {
-    public class PagedRoleResultRequestDto : PagedAndSortedResultRequestDto
+    public class PagedRoleResultRequestDto:IHaveKeywords //: PagedAndSortedResultRequestDto
     {
-        public string Keyword { get; set; }
+        public string Keywords { get; set; }
     }
 }
 

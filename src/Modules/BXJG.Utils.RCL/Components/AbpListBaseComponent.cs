@@ -118,14 +118,14 @@ namespace BXJG.Utils.Components
         /// </summary>
         /// <param name="output">批量操作结果</param>
         /// <param name="funName">操作名</param>
-        protected virtual void BatchOperationMessage(BatchOperationOutput<TPrimaryKey> output, string funName = "操作")
+        protected virtual void BatchOperationMessage(BatchOperationOutput<TPrimaryKey> output, string funName = "删除")
         {
             if (output.ErrorMessage.Any())
             {
                 if (output.Ids.Count == output.ErrorMessage.Count)
-                    ShowFailMessage(msg: $"批量{funName}全部失败！");
+                    ShowFailMessage($"批量{funName}全部失败！");
                 else
-                    ShowFailMessage(msg: $"批量{funName}部分失败！成功数量：{output.Ids.Count}；失败数量：{output.ErrorMessage.Count}");
+                    ShowFailMessage($"批量{funName}部分失败！成功数量：{output.Ids.Count}；失败数量：{output.ErrorMessage.Count}");
             }
             else
                 ShowSuccessMessage($"批量{funName}全部成功！");
@@ -150,27 +150,34 @@ namespace BXJG.Utils.Components
 
         #region 列表
         /// <summary>
-        /// 构建动态条件
+        /// 填充动态条件
         /// </summary>
         /// <returns></returns>
-        protected virtual ValueTask<IEnumerable<ConditionFieldDefine>> BuildDynamicCondition() => default;
-        protected virtual int PageSize => 20;
+        protected virtual ValueTask FillDynamicConditions(ICollection<ConditionFieldDefine> conditions) => ValueTask.CompletedTask;
+        /// <summary>
+        /// 获取每页行数，若不做分页请返回0
+        /// </summary>
+        protected abstract int PageSize { get;  }
 
         /// <summary>
         /// 当前列表数据
         /// 通常是当前页的数据
         /// </summary>
         protected virtual HashSet<TEntityDto> Items { get; set; }
+
         /// <summary>
         /// 当前条件下的总数据数量
         /// </summary>
         protected virtual int TotalCount { get; set; }
-        protected virtual int PageIndex => 1;
+        /// <summary>
+        /// 当前是第几页
+        /// </summary>
+        protected abstract int PageIndex { get; }
 
         /// <summary>
         /// 父类仅仅需要读，至于是否可写由子类自己决定
         /// </summary>
-        protected abstract HashSet<TEntityDto> SelectedItems { get; }
+        protected virtual HashSet<TEntityDto> SelectedItems { get; set; }
         /// <summary>
         /// 父类仅仅需要读，至于是否可写由子类自己决定
         /// </summary>
@@ -180,24 +187,6 @@ namespace BXJG.Utils.Components
         /// </summary>
         protected virtual string Sorting => "Id";
 
-        ///// <summary>
-        ///// 当前页码
-        ///// </summary>
-        //protected virtual int pageIndex { get => dataGrid.CurrentPage; set => dataGrid.CurrentPage = value; }
-        ///// <summary>
-        ///// 页大小
-        ///// </summary>
-        //protected virtual int PageSize{ get => dataGrid.RowsPerPage; set => dataGrid.RowsPerPage = value; }
-
-        ///// <summary>
-        ///// 总页数
-        ///// </summary>
-        //protected int pageCount =1;
-
-        ///// <summary>
-        ///// 是否正在加载数据
-        ///// </summary>
-        //protected virtual bool isLoading => dataGrid != default && dataGrid.Loading;// false;
         ///// <summary>
         ///// 表格数据加载
         ///// </summary>
@@ -258,7 +247,6 @@ namespace BXJG.Utils.Components
 
         //}
 
-
         /// <summary>
         /// 默认已填充动态条件和关键字，你可以重写以填充其它条件
         /// </summary>
@@ -266,10 +254,6 @@ namespace BXJG.Utils.Components
         /// <returns></returns>
         protected virtual ValueTask FillCondtion(TGetAllInput input) => ValueTask.CompletedTask;
 
-        ///// <summary>
-        ///// 已选中的项
-        ///// </summary>
-        //protected virtual HashSet<TEntityDto> selectedItems => dataGrid?.SelectedItems;// new HashSet<TEntityDto>();
         ///// <summary>
         ///// 批量选择变化时回调
         ///// </summary>
@@ -295,11 +279,13 @@ namespace BXJG.Utils.Components
                 var cd = new TGetAllInput();
                 if (cd is IDynamicCondition cdd)
                 {
-                    cdd.Conditions = await BuildDynamicCondition();// state.FilterDefinitions.MapToDynamicCondition().ToList();
+                    cdd.Conditions = new List<ConditionFieldDefine>();// await BuildDynamicCondition();// state.FilterDefinitions.MapToDynamicCondition().ToList();
+                    await FillDynamicConditions(cdd.Conditions as List<ConditionFieldDefine>);
                 }
                 else if (cd is IHaveFilter cddq && cddq.Filter is IDynamicCondition cddqq)
                 {
-                    cddqq.Conditions = await BuildDynamicCondition();//state.FilterDefinitions.MapToDynamicCondition().ToList();
+                    cddqq.Conditions = new List<ConditionFieldDefine>();// await BuildDynamicCondition();//state.FilterDefinitions.MapToDynamicCondition().ToList();
+                    await FillDynamicConditions(cddqq.Conditions as List<ConditionFieldDefine>);
                 }
                 if (cd is IPagedAndSortedResultRequest cd2)
                 {
@@ -332,6 +318,7 @@ namespace BXJG.Utils.Components
                     dynamic dd = new ExpandoObject();
                     dd.IsDeleting = false;
                     dd.IsShowDeleteConfirmation = false;
+                    await AddItemExtData(dto, dd);
                     dto.ExtensionData = dd;
                 }
                 Items = dtos.Items.ToHashSet();
@@ -342,6 +329,13 @@ namespace BXJG.Utils.Components
                 IsLoading = false;
             }
         }
+        /// <summary>
+        /// 获取列表时，为其中的每项添加额外的数据
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        protected virtual ValueTask AddItemExtData(TEntityDto dto, dynamic data) => ValueTask.CompletedTask;
         /// <summary>
         /// 搜索关键字
         /// </summary>

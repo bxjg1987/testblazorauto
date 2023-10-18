@@ -34,6 +34,8 @@
 
 	<ItemGroup>
 		<PackageReference Include="Abp.AspNetCore" Version="8.4.0" />
+		<PackageReference Include="BootstrapBlazor" Version="7.11.1" />
+		<PackageReference Include="BootstrapBlazor.FontAwesome" Version="7.5.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.12" />
 	</ItemGroup>
 
@@ -44,9 +46,6 @@
 	
 	<ItemGroup Condition="'$(SolutionName)' != 'ZLJWithModules'">
 		<PackageReference Include="BXJG.AbpBootstrapBlazor" Version="*" />
-	</ItemGroup>
-	<ItemGroup Condition="'$(SolutionName)' == 'ZLJWithModules'">
-		<ProjectReference Include="..\Modules\BXJG.AbpBootstrapBlazor\BXJG.AbpBootstrapBlazor.csproj" />
 	</ItemGroup>
 	
 </Project>

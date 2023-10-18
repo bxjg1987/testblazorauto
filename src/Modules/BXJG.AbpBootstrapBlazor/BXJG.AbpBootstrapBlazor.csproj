@@ -16,6 +16,10 @@
     <PackageReference Include="BootstrapBlazor.FontAwesome" Version="7.5.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BXJG.Utils.RCL\BXJG.Utils.RCL.csproj" />
+  </ItemGroup>
+
 
 
 </Project>

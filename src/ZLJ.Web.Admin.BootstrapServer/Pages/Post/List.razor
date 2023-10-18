@@ -1,0 +1,14 @@
+﻿@page "/admin/post"
+@using ZLJ.App.Admin.Post;
+@using ZLJ.App.Admin.Post.Dto;
+@attribute [TabItemOption(Text = "岗位角色")]
+@attribute [Authorize(PermissionNames.AdministratorBaseInfoPost)]
+@inherits AbpListBaseComponent<IPostAppService, PostDto, int, PagedAndSortedResultRequest< PagedPostResultRequestDto>, CreatePostDto, PostEditDto>
+
+
+        <Table TItem="PostDto" Items="Items" IsBordered="true"  IsFixedHeader="true" ShowSearch="true" ShowToolbar="true">
+            <TableColumns>
+                <TableColumn @bind-Field="@context.Name" />
+                <TableColumn @bind-Field="@context.DisplayName" />
+            </TableColumns>
+        </Table>

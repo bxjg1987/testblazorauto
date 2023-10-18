@@ -76,7 +76,6 @@
     <Compile Remove="Dto\TreeNodeEditBaseDto.cs" />
     <Compile Remove="Dto\TreeNodeMoveInput.cs" />
     <Compile Remove="EventHandlers\Companysf.cs" />
-    <Compile Remove="Roles\IRoleAppService.cs" />
     <Compile Remove="Sessions\ISessionAppService.cs" />
     <Compile Remove="Users\IUserAppService.cs" />
     <Compile Remove="ZLJNavigationProvider.cs" />
@@ -90,7 +89,7 @@
     <EmbeddedResource Include="Localization\SourceFiles\Admin-zh-Hans.xml" />
   </ItemGroup>
 
-	<ItemGroup >
+	<ItemGroup>
 		<ProjectReference Include="..\ZLJ.Application.Common\ZLJ.Application.Common.csproj" />
 	</ItemGroup>
 
