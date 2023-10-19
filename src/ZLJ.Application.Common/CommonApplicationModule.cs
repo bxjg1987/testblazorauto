@@ -67,7 +67,7 @@ namespace ZLJ.App.Common
             //IocManager.Register<YCSDK.Sdf>(DependencyLifeStyle.Transient);
             IocManager.RegService(service => 
             {
-                service.AddYCSDK(IocManager.Resolve<IConfiguration>().GetSection("YCSDK"));
+                //service.AddYCSDK(IocManager.Resolve<IConfiguration>().GetSection("YCSDK"));
             });
            
             //Configuration.ReplaceService<BXJG.Utils.Notification.PersonNotificationAppService<User>, NotifyAppServie>(DependencyLifeStyle.Transient);

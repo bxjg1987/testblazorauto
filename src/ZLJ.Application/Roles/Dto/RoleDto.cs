@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Abp.Application.Services.Dto;
@@ -17,22 +18,26 @@ namespace ZLJ.App.Admin.Roles.Dto
         public dynamic ExtensionData { get; set; }
         public IEnumerable<int> OuIds => Ous != null && Ous.Count > 0 ?  Ous.Select(c =>int.Parse( c.Id.ToString())) : new int[0];
         public string OusText => Ous != null && Ous.Count > 0 ? string.Join(',', Ous.Select(c => c.Text)) : "";
+        [DisplayName("所属部门")]
         public List<OuDto> Ous { get; set; }
         //[Required]
         //[StringLength(AbpRoleBase.MaxNameLength)]
+        [DisplayName("唯一名称")]
         public string Name { get; set; }
 
         //[Required]
         //[StringLength(AbpRoleBase.MaxDisplayNameLength)]
+        [DisplayName("显示名称")]
         public string DisplayName { get; set; }
 
         //public string NormalizedName { get; set; }
 
-        [StringLength(Role.MaxDescriptionLength)]
+        // [StringLength(Role.MaxDescriptionLength)]
+        [DisplayName("备注")]
         public string Description { get; set; }
-
+        [DisplayName("系统预设")]
         public bool IsStatic { get; set; }
-
+        [DisplayName("拥有的权限列表")]
         public List<string> GrantedPermissions { get; set; }
     }
 

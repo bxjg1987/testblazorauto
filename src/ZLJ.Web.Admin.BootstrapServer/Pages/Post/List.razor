@@ -6,9 +6,57 @@
 @inherits AbpListBaseComponent<IPostAppService, PostDto, int, PagedAndSortedResultRequest< PagedPostResultRequestDto>, CreatePostDto, PostEditDto>
 
 
-        <Table TItem="PostDto" Items="Items" IsBordered="true"  IsFixedHeader="true" ShowSearch="true" ShowToolbar="true">
-            <TableColumns>
-                <TableColumn @bind-Field="@context.Name" />
-                <TableColumn @bind-Field="@context.DisplayName" />
-            </TableColumns>
-        </Table>
+<Table TItem="PostDto"
+       IsBordered="true" 
+       IsFixedHeader="true" 
+       ShowSearch="true" 
+       style="height:600px;"
+       ShowLoading="true"
+       ShowSkeleton="false"
+       AllowResizing="true"
+       
+       OnQueryAsync="Load"
+       ShowToolbar="true" 
+       IsAutoQueryFirstRender="true" 
+       IsMultipleSelect="true"
+       ShowAdvancedSearch="false" 
+       ShowSearchButton="false"
+       ShowResetButton="false"
+       ShowRefresh="false" 
+       ShowLineNo="true"
+       IsPagination="true"
+       ShowEditButton="false">
+    
+    <TableExtensionToolbarBeforeTemplate>
+        <Button>右侧按钮前</Button>
+    </TableExtensionToolbarBeforeTemplate>
+
+    <TableExtensionToolbarTemplate>
+        <Button>右侧按钮后</Button>
+    </TableExtensionToolbarTemplate>
+
+   
+    <TableToolbarBeforeTemplate>
+        <TableToolbarButton Color="Color.Primary"
+                            Icon="fa-fw fa-solid fa-floppy-disk"
+                            Text="插入10条随机数据" OnClick="AddRandomData"
+                                        IsAsync />
+      
+     </TableToolbarBeforeTemplate>
+   
+     <TableToolbarTemplate>
+         <TableToolbarButton Color="Color.Primary"
+                             Icon="fa-fw fa-solid fa-floppy-disk"
+                             Text="左侧按钮后"
+                                        IsAsync />
+     </TableToolbarTemplate>
+
+
+
+     <TableColumns>
+         <TableColumn @bind-Field="@context.Name" Filterable="true" Sortable="true" DefaultSort="true" />
+         <TableColumn @bind-Field="@context.DisplayName" />
+         <TableColumn @bind-Field="@context.IsStatic" />
+         <TableColumn @bind-Field="@context.Description" />
+     </TableColumns>
+ </Table>

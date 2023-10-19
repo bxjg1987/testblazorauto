@@ -121,7 +121,6 @@
 		<ProjectReference Include="..\ZLJ.Application\ZLJ.Application.csproj" />
 		<ProjectReference Include="..\ZLJ.EntityFrameworkCore\ZLJ.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\ZLJ.Web.Admin.BootstrapServer\ZLJ.Web.Admin.BootstrapServer.csproj" />
-		<ProjectReference Include="..\ZLJ.Web.Admin\ZLJ.Web.Admin.csproj" />
 		<ProjectReference Include="..\ZLJ.Web.Core\ZLJ.Web.Core.csproj" />
 		<ProjectReference Include="..\ZLJ.Web.Customer\ZLJ.Web.Customer.csproj" />
 	</ItemGroup>
@@ -131,7 +130,7 @@
 		<PackageReference Include="DistributedLock.MySql" Version="1.*" />-->
 		<!--<PackageReference Include="DotNetCore.CAP.Dashboard" Version="7.2.0" />
 		<PackageReference Include="DotNetCore.CAP.SqlServer" Version="7.2.0" />-->
-		<PackageReference Include="Hangfire.SqlServer" Version="1.8.5" />
+		<PackageReference Include="Hangfire.SqlServer" Version="1.8.6" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.12">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

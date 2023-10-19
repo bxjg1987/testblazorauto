@@ -138,9 +138,9 @@ namespace BXJG.Utils.Components
         #endregion
 
         #region 生命周期
-        //protected override async Task OnInitialized2Async()
+        //protected override async Task OnInitializedAsync()
         //{
-        //    await InitPermission();
+        //    await Refresh();
         //}
         #endregion
 
@@ -290,7 +290,7 @@ namespace BXJG.Utils.Components
                 if (cd is IPagedAndSortedResultRequest cd2)
                 {
                     cd2.MaxResultCount = PageSize; //state.PageSize;
-                    cd2.SkipCount = PageIndex * PageSize;
+                    cd2.SkipCount = (PageIndex-1) * PageSize;
                 }
                 if (cd is ISortedResultRequest cd3)
                 {

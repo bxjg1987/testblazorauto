@@ -5,6 +5,7 @@ using Abp.IdentityFramework;
 using Abp.Organizations;
 using Abp.Zero.Configuration;
 using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
 using ZLJ.App.Admin.Authorization.Permissions;
 using ZLJ.App.Admin.Post.Dto;
 using ZLJ.App.Admin.Roles;
@@ -64,9 +65,16 @@ namespace ZLJ.App.Admin.Post
         protected override PostDto MapToEntityDto(PostEntity role)
         {
             var dto = base.MapToEntityDto(role);
-            var ous = CurrentUnitOfWork.Items["ous"] as IDictionary<int, IEnumerable<OrganizationUnit>>;
-            if (ous != default)
+            if( CurrentUnitOfWork.Items.TryGetValue("ous" ,out var ousTemp))
+            {
+                var ous = ousTemp as IDictionary<int, IEnumerable<OrganizationUnit>>;
                 dto.Ous = ObjectMapper.Map<List<OuDto>>(ous[role.Id].Where(c => c != default));
+            }
+                
+            //    var ous = CurrentUnitOfWork.Items["ous"] as IDictionary<int, IEnumerable<OrganizationUnit>>;
+         //   if (ous != default)
+             
+
             return dto;
         }
 
@@ -113,12 +121,16 @@ namespace ZLJ.App.Admin.Post
             // 
             //unitManager.role
 
-            var grantedPermissions = PermissionManager
+            if (input.GrantedPermissions != default)
+            {
+                var grantedPermissions = PermissionManager
                 .GetAllPermissions()
                 .Where(p => input.GrantedPermissions.Contains(p.Name))
                 .ToList();
 
-            await _roleManager.SetGrantedPermissionsAsync(role, grantedPermissions);
+                await _roleManager.SetGrantedPermissionsAsync(role, grantedPermissions);
+            }
+
             await CurrentUnitOfWork.SaveChangesAsync();
             await sdfsdf(role);
             var dto = MapToEntityDto(role);

@@ -18,8 +18,8 @@ using ZLJ.App.Admin;
 using ZLJ.EntityFrameworkCore;
 using MudBlazor.Services;
 using ZLJ.Web.Customer;
-using Orleans.Configuration;
-using Orleans.Hosting;
+//using Orleans.Configuration;
+//using Orleans.Hosting;
 
 using Microsoft.AspNetCore.Components.Server.Circuits;
 using Microsoft.Extensions.DependencyInjection;
