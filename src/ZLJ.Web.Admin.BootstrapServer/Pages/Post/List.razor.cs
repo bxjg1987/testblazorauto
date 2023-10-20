@@ -16,6 +16,8 @@ namespace ZLJ.Web.Admin.BootstrapServer.Pages.Post
         int pageSize=20;
         protected override int PageSize => pageSize;
 
+      List<PostDto> selectedRows { get => base.SelectedItems.ToList(); set => base.SelectedItems = value.ToHashSet(); }
+
         private async Task<QueryData<PostDto>> Load(QueryPageOptions condition)
         {
             pageSize = condition.PageItems;
@@ -36,6 +38,7 @@ namespace ZLJ.Web.Admin.BootstrapServer.Pages.Post
         protected override Task Refresh()
         {
             return base.Refresh();
+          //
         }
 
         private async Task AddRandomData()

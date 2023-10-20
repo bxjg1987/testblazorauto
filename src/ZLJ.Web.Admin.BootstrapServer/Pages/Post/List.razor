@@ -7,26 +7,34 @@
 
 
 <Table TItem="PostDto"
-       IsBordered="true" 
-       IsFixedHeader="true" 
-       ShowSearch="true" 
-       style="height:600px;"
+       IsBordered="true"
+       IsFixedHeader="true"
+       ShowSearch="true"
+       style="height:800px;"
        ShowLoading="true"
        ShowSkeleton="false"
        AllowResizing="true"
-       
+       ShowColumnList="true"
+       IsStriped="true"
+       AllowDragColumn="true"
        OnQueryAsync="Load"
-       ShowToolbar="true" 
-       IsAutoQueryFirstRender="true" 
+       ShowToolbar="true"
+       IsAutoQueryFirstRender="true"
        IsMultipleSelect="true"
-       ShowAdvancedSearch="false" 
+       ShowAdvancedSearch="false"
        ShowSearchButton="false"
        ShowResetButton="false"
-       ShowRefresh="false" 
+       ShowRefresh="false"
        ShowLineNo="true"
-       IsPagination="true"
+       ShowExtendButtons="true"
+       ExtendButtonColumnWidth="240"
+       FixedExtendButtonsColumn="true"
+       FixedMultipleColumn="true"
+       IsPagination="true" 
+       @bind-SelectedRows="selectedRows"
+       FixedLineNoColumn="true"
        ShowEditButton="false">
-    
+
     <TableExtensionToolbarBeforeTemplate>
         <Button>右侧按钮前</Button>
     </TableExtensionToolbarBeforeTemplate>
@@ -35,28 +43,46 @@
         <Button>右侧按钮后</Button>
     </TableExtensionToolbarTemplate>
 
-   
+
     <TableToolbarBeforeTemplate>
         <TableToolbarButton Color="Color.Primary"
                             Icon="fa-fw fa-solid fa-floppy-disk"
                             Text="插入10条随机数据" OnClick="AddRandomData"
                                         IsAsync />
-      
+
      </TableToolbarBeforeTemplate>
-   
+
      <TableToolbarTemplate>
          <TableToolbarButton Color="Color.Primary"
                              Icon="fa-fw fa-solid fa-floppy-disk"
                              Text="左侧按钮后"
-                                        IsAsync />
+                             IsAsync="true" />
      </TableToolbarTemplate>
 
 
 
      <TableColumns>
-         <TableColumn @bind-Field="@context.Name" Filterable="true" Sortable="true" DefaultSort="true" />
-         <TableColumn @bind-Field="@context.DisplayName" />
-         <TableColumn @bind-Field="@context.IsStatic" />
-         <TableColumn @bind-Field="@context.Description" />
+         <TableColumn @bind-Field="@context.Name" Filterable="true" Sortable="true" DefaultSort="true" Fixed="true" Width="300" />
+         <TableColumn @bind-Field="@context.DisplayName" Width="400" />
+         <TableColumn @bind-Field="@context.IsStatic" Width="400" />
+         <TableColumn @bind-Field="@context.Description" Width="700" />
+
      </TableColumns>
+
+     @* Table.ShowExtendButtons设置为true 显示行操作按钮
+    Table.ExtendButtonColumnWidth 控制操作列的宽度
+    修改、删除按钮可以单独控制是否显示
+    BeforeRowButtonTemplate 模板在默认行操作按钮前加入更多按钮，RowButtonTemplate模板在行操作按钮后加入自定义按钮
+
+    *@
+     <BeforeRowButtonTemplate>
+         <TableCellButton Color="Color.Warning" Icon="fa-solid fa-pen" Text="前按钮" />
+     </BeforeRowButtonTemplate>
+     <RowButtonTemplate>
+         <TableCellButton Color="Color.Primary" Icon="fa-solid fa-pen" Text="后按钮" />
+         @*  <TableCellButton Color="Color.Success" Icon="fa-solid fa-pen" Text="编辑"  />
+        <TableCellButton Color="Color.Warning" Icon="fa-solid fa-pen" Text="权限"  />
+        <TableCellButton Color="Color.Danger" Icon="fa-solid fa-pen" Text="审批"  />
+        <TableCellPopconfirmButton Color="Color.Info" Icon="fa-solid fa-pen" Text="确认"  /> *@
+     </RowButtonTemplate>
  </Table>

@@ -132,6 +132,8 @@ namespace ZLJ.Web.Host.Startup
 
             #region bootstrapblazor
             services.AddBootstrapBlazor();
+            // 增加 Table Excel 导出服务
+            services.AddBootstrapBlazorTableExcelExport();
             #endregion
 
             // Configure CORS for angular2 UI

@@ -177,7 +177,7 @@ namespace BXJG.Utils.Components
         /// <summary>
         /// 父类仅仅需要读，至于是否可写由子类自己决定
         /// </summary>
-        protected virtual HashSet<TEntityDto> SelectedItems { get; set; }
+        protected virtual HashSet<TEntityDto> SelectedItems { get; set; } = new HashSet<TEntityDto>();
         /// <summary>
         /// 父类仅仅需要读，至于是否可写由子类自己决定
         /// </summary>

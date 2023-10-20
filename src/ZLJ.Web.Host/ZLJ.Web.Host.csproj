@@ -126,6 +126,7 @@
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Abp.Castle.Log4Net" Version="8.4.0" />
+		<PackageReference Include="BootstrapBlazor.TableExport" Version="7.6.1" />
 		<!--<PackageReference Include="DistributedLock.SqlServer" Version="1.*" />
 		<PackageReference Include="DistributedLock.MySql" Version="1.*" />-->
 		<!--<PackageReference Include="DotNetCore.CAP.Dashboard" Version="7.2.0" />
