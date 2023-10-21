@@ -3,7 +3,6 @@ using ZLJ.Configuration;
 using Abp.Hangfire;
 using Abp.Threading.BackgroundWorkers;
 //using ZLJ.App.Admin.WorkOrder.Workload;
-using ZLJ.Web.Customer;
 using BXJG.Utils;
 using ZLJ.EntityFrameworkCore;
 using Abp.AspNetCore.SignalR;
@@ -25,19 +24,15 @@ using BXJG.Utils;
 using Abp.Reflection.Extensions;
 using System.Reflection;
 using ZLJ.App.Common;
-using ZLJ.Web.Admin;
 using Abp.Runtime.Session;
 using ZLJ.App.Common.Sessions;
 using Abp.Runtime.Security;
 using System.Security.Claims;
 using DocumentFormat.OpenXml.InkML;
-using ZLJ.Web.Admin.BootstrapServer.Startup;
 
 namespace ZLJ.Web.Host.Startup
 {
-    [DependsOn(typeof(WebCustomerModule),
-               //typeof(WebAdminModule),
-               typeof(WebAdminBootstrapServerModule),
+    [DependsOn(//typeof(WebAdminModule),
                //typeof(AbpHangfireAspNetCoreModule),
                typeof(BXJGUtilsWebModule),
                typeof(ZLJApplicationModule),
