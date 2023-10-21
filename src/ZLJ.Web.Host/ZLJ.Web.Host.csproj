@@ -120,10 +120,13 @@
 		<ProjectReference Include="..\ZLJ.Application.Customer\ZLJ.Application.Customer.csproj" />
 		<ProjectReference Include="..\ZLJ.Application\ZLJ.Application.csproj" />
 		<ProjectReference Include="..\ZLJ.EntityFrameworkCore\ZLJ.EntityFrameworkCore.csproj" />
+		<ProjectReference Include="..\ZLJ.Web.Admin.BootstrapServer\ZLJ.Web.Admin.BootstrapServer.csproj" />
 		<ProjectReference Include="..\ZLJ.Web.Core\ZLJ.Web.Core.csproj" />
+		<ProjectReference Include="..\ZLJ.Web.Customer\ZLJ.Web.Customer.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Abp.Castle.Log4Net" Version="8.4.0" />
+		<PackageReference Include="BootstrapBlazor.TableExport" Version="7.6.1" />
 		<!--<PackageReference Include="DistributedLock.SqlServer" Version="1.*" />
 		<PackageReference Include="DistributedLock.MySql" Version="1.*" />-->
 		<!--<PackageReference Include="DotNetCore.CAP.Dashboard" Version="7.2.0" />
