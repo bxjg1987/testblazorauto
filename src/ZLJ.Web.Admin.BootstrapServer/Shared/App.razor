@@ -1,7 +1,7 @@
 ﻿<CascadingValue Value="@zhongjie">
 
     <CascadingAuthenticationState>
-        <BootstrapBlazorRoot>
+        <BootstrapBlazorRoot OnErrorHandleAsync="OnErrorHandleAsync">
             <Router AppAssembly="@typeof(App).Assembly">
                 <Found Context="routeData">
                     <AuthorizeRouteView RouteData="@routeData" DefaultLayout="typeof(ZLJ.Web.Admin.BootstrapServer.Shared.AdminMainLayout)">

@@ -121,17 +121,17 @@ namespace BXJG.Utils.Components
         /// </summary>
         /// <param name="output">批量操作结果</param>
         /// <param name="funName">操作名</param>
-        protected virtual void BatchOperationMessage(BatchOperationOutput<TPrimaryKey> output, string funName = "删除")
+        protected virtual async ValueTask BatchOperationMessage(BatchOperationOutput<TPrimaryKey> output, string funName = "删除")
         {
             if (output.ErrorMessage.Any())
             {
                 if (output.Ids.Count == output.ErrorMessage.Count)
-                    ShowFailMessage($"批量{funName}全部失败！");
+                    await ShowFailMessage(msg: $"批量{funName}全部失败！");
                 else
-                    ShowFailMessage($"批量{funName}部分失败！成功数量：{output.Ids.Count}；失败数量：{output.ErrorMessage.Count}");
+                    await ShowFailMessage(msg: $"批量{funName}部分失败！成功数量：{output.Ids.Count}；失败数量：{output.ErrorMessage.Count}");
             }
             else
-                ShowSuccessMessage($"批量{funName}全部成功！");
+                await ShowSuccessMessage(msg: $"批量{funName}全部成功！");
         }
         ///// <summary>
         ///// 批量删除消息提醒
@@ -171,7 +171,7 @@ namespace BXJG.Utils.Components
         /// <summary>
         /// 当前条件下的总数据数量
         /// </summary>
-        protected virtual int TotalCount { get; set; } 
+        protected virtual int TotalCount { get; set; }
         /// <summary>
         /// 当前是第几页
         /// </summary>
@@ -422,7 +422,7 @@ namespace BXJG.Utils.Components
         /// 批量删除
         /// </summary>
         /// <returns></returns>
-        protected virtual async Task Delete()
+        protected virtual async Task DeleteBatch()
         {
             //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限
             HideDeleteConfirm();
@@ -430,7 +430,7 @@ namespace BXJG.Utils.Components
             try
             {
                 var r = await AppService.BatchDeleteAsync(new BatchOperationInput<TPrimaryKey> { Ids = SelectedItems.Select(x => x.Id).ToArray() });
-                BatchOperationMessage(r, "批量删除");
+                await BatchOperationMessage(r, "批量删除");
                 //BatchDeleteMessage(temp);
                 if (r.Ids.Any())
                     await Refresh();
@@ -446,7 +446,7 @@ namespace BXJG.Utils.Components
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        protected virtual async Task Delete(TEntityDto item)
+        protected virtual async Task DeleteItem(TEntityDto item)
         {
             //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限
             // var curr = dataGrid.Items.Single(c => c.Id!.Equals(input.Id));
@@ -455,7 +455,7 @@ namespace BXJG.Utils.Components
             try
             {
                 await AppService.DeleteAsync(new EntityDto<TPrimaryKey>(item.Id));
-                ShowSuccessMessage("删除成功！");
+                await ShowSuccessMessage(msg: "删除成功！");
                 //若上面异常，下面不会执行
                 //_ = InvokeAsync(dataGrid.ReloadServerData);
                 await Refresh();

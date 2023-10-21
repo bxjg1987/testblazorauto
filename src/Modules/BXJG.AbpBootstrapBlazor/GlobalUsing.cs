@@ -8,3 +8,4 @@ global using System.Security.Claims;
 global using System.Text;
 global using System.Threading.Tasks;
 global using Microsoft.AspNetCore.Components.Authorization;
+global using BootstrapBlazor.Components;

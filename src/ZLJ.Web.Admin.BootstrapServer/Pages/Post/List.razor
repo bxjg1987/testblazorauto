@@ -1,9 +1,10 @@
 ﻿@page "/admin/post"
+
 @using ZLJ.App.Admin.Post;
 @using ZLJ.App.Admin.Post.Dto;
 @attribute [TabItemOption(Text = "岗位角色")]
 @attribute [Authorize(PermissionNames.AdministratorBaseInfoPost)]
-@inherits AbpListBaseComponent<IPostAppService, PostDto, int, PagedAndSortedResultRequest< PagedPostResultRequestDto>, CreatePostDto, PostEditDto,List<PostDto>>
+@inherits AbpBootstrapBlazorListBaseComponent<IPostAppService, PostDto, int, PagedAndSortedResultRequest< PagedPostResultRequestDto>, CreatePostDto, PostEditDto>
 
 
 <Table TItem="PostDto"
@@ -17,7 +18,7 @@
        ShowColumnList="true"
        IsStriped="true"
        AllowDragColumn="true"
-       OnQueryAsync="Load"
+       OnQueryAsync="OnQuery"
        ShowToolbar="true"
        IsAutoQueryFirstRender="true"
        IsMultipleSelect="true"
@@ -25,7 +26,8 @@
        ShowSearchButton="false"
        ShowResetButton="false"
        ShowRefresh="false"
-       OnDeleteAsync="DeleteOwn" 
+       OnDeleteAsync="OnDeleteBatch" 
+       ShowToastAfterSaveOrDeleteModel="false"
        ShowDeleteButton="deleteIsGranted"
        ShowExtendDeleteButton="deleteIsGranted"
        @ref="table"
@@ -35,6 +37,7 @@
        FixedExtendButtonsColumn="true"
        FixedMultipleColumn="true"
        IsPagination="true" 
+       select
        @bind-SelectedRows="SelectedItems"
        FixedLineNoColumn="true"
        ShowEditButton="false">

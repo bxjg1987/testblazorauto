@@ -36,7 +36,6 @@ using ZLJ.Web.Admin.BootstrapServer.Startup;
 namespace ZLJ.Web.Host.Startup
 {
     [DependsOn(typeof(WebCustomerModule),
-               //typeof(WebAdminModule),
                typeof(WebAdminBootstrapServerModule),
                //typeof(AbpHangfireAspNetCoreModule),
                typeof(BXJGUtilsWebModule),

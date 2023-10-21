@@ -1,4 +1,5 @@
-﻿using BXJG.Common;
+﻿using BootstrapBlazor.Components;
+using BXJG.Common;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -26,16 +27,45 @@ namespace ZLJ.Web.Admin.BootstrapServer.Shared
         {
             zhongjie = new Zhongjie(loggerFactory);
             //行不通，blazor server 控件事件并不一定在主线程中
-           // Zhongjie.Current.Value = zhongjie;
-           // BXJG.AbpMudBlazor.GloableStatic.Snackbar.Value = Snackbar;
+            // Zhongjie.Current.Value = zhongjie;
+            // BXJG.AbpMudBlazor.GloableStatic.Snackbar.Value = Snackbar;
         }
 
         public void Dispose()
         {
             //
-          //  Zhongjie.Current.Value= null;
-           // BXJG.AbpMudBlazor.GloableStatic.Snackbar.Value = null;
+            //  Zhongjie.Current.Value= null;
+            // BXJG.AbpMudBlazor.GloableStatic.Snackbar.Value = null;
             zhongjie.Zhuxiao();
+        }
+        [Inject]
+        protected MessageService MessageService { get; private set; }
+        [Inject]
+        protected Castle.Core.Logging.ILoggerFactory LoggerFactory {get; private set;}
+        private async Task OnErrorHandleAsync(ILogger logger, Exception ex)
+        {
+            var l = LoggerFactory.Create("App");
+            if (ex is UserFriendlyException uex)
+            {
+                await MessageService.Show(new MessageOption
+                {
+                    Color = Color.Danger,
+                    Content = uex.Message,
+                    ShowBorder = true,
+                    ShowShadow = true
+                });
+            }
+            else
+            {
+                l.Error("未处理异常！", ex);
+                await MessageService.Show(new MessageOption
+                {
+                    Color = Color.Danger,
+                    Content = "发生未处理异常！请稍后重试，若多次失败，请联系系统管理员。",
+                    ShowBorder = true,
+                    ShowShadow = true
+                });
+            }
         }
     }
 }
