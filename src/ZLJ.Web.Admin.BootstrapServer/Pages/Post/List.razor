@@ -3,7 +3,7 @@
 @using ZLJ.App.Admin.Post.Dto;
 @attribute [TabItemOption(Text = "岗位角色")]
 @attribute [Authorize(PermissionNames.AdministratorBaseInfoPost)]
-@inherits AbpListBaseComponent<IPostAppService, PostDto, int, PagedAndSortedResultRequest< PagedPostResultRequestDto>, CreatePostDto, PostEditDto>
+@inherits AbpListBaseComponent<IPostAppService, PostDto, int, PagedAndSortedResultRequest< PagedPostResultRequestDto>, CreatePostDto, PostEditDto,List<PostDto>>
 
 
 <Table TItem="PostDto"
@@ -25,13 +25,17 @@
        ShowSearchButton="false"
        ShowResetButton="false"
        ShowRefresh="false"
+       OnDeleteAsync="DeleteOwn" 
+       ShowDeleteButton="deleteIsGranted"
+       ShowExtendDeleteButton="deleteIsGranted"
+       @ref="table"
        ShowLineNo="true"
        ShowExtendButtons="true"
        ExtendButtonColumnWidth="240"
        FixedExtendButtonsColumn="true"
        FixedMultipleColumn="true"
        IsPagination="true" 
-       @bind-SelectedRows="selectedRows"
+       @bind-SelectedRows="SelectedItems"
        FixedLineNoColumn="true"
        ShowEditButton="false">
 
@@ -62,9 +66,9 @@
 
 
      <TableColumns>
-         <TableColumn @bind-Field="@context.Name" Filterable="true" Sortable="true" DefaultSort="true" Fixed="true" Width="300" />
-         <TableColumn @bind-Field="@context.DisplayName" Width="400" />
-         <TableColumn @bind-Field="@context.IsStatic" Width="400" />
+         <TableColumn @bind-Field="@context.Name" Sortable="true" DefaultSort="true" Fixed="true" Width="300" />
+         <TableColumn @bind-Field="@context.DisplayName" Width="400" Sortable="true" />
+         <TableColumn @bind-Field="@context.IsStatic" Width="400" Sortable="true" />
          <TableColumn @bind-Field="@context.Description" Width="700" />
 
      </TableColumns>
@@ -76,10 +80,10 @@
 
     *@
      <BeforeRowButtonTemplate>
-         <TableCellButton Color="Color.Warning" Icon="fa-solid fa-pen" Text="前按钮" />
+         <TableCellButton Color="Color.Warning" Icon="fa-solid fa-pen" OnClick="async()=>await ShowFailMessage()" Text="前按钮" />
      </BeforeRowButtonTemplate>
      <RowButtonTemplate>
-         <TableCellButton Color="Color.Primary" Icon="fa-solid fa-pen" Text="后按钮" />
+         <TableCellButton Color="Color.Primary" Icon="fa-solid fa-pen" OnClick="async()=>await ShowSuccessMessage()" Text="后按钮" />
          @*  <TableCellButton Color="Color.Success" Icon="fa-solid fa-pen" Text="编辑"  />
         <TableCellButton Color="Color.Warning" Icon="fa-solid fa-pen" Text="权限"  />
         <TableCellButton Color="Color.Danger" Icon="fa-solid fa-pen" Text="审批"  />

@@ -29,11 +29,11 @@ namespace ZLJ.App.Admin.Post
         OrganizationUnitManager unitManager;
 
         public PostAppService(IRepository<PostEntity> repository,
-                              RoleManager roleManager, 
+                              RoleManager roleManager,
                               UserManager userManager,
-                              IRoleManagementConfig roleManagementConfig, 
+                              IRoleManagementConfig roleManagementConfig,
                               IRepository<OrganizationUnitRole, long> ouRoleRepository,
-                              IRepository<OrganizationUnit, long> ouRepository, 
+                              IRepository<OrganizationUnit, long> ouRepository,
                               OrganizationUnitManager unitManager)
             : base(repository)
         {
@@ -58,22 +58,22 @@ namespace ZLJ.App.Admin.Post
             var role = await GetEntityByIdAsync(input.Id) as PostEntity;
             await sdfsdf(role);
             var dto = MapToEntityDto(role);
-            dto.GrantedPermissions = (await _roleManager.GetGrantedPermissionsAsync(role)).Where(c=>c.Children.Count==0).Select(c => c.Name).ToList();
+            dto.GrantedPermissions = (await _roleManager.GetGrantedPermissionsAsync(role)).Where(c => c.Children.Count == 0).Select(c => c.Name).ToList();
             return dto;
         }
 
         protected override PostDto MapToEntityDto(PostEntity role)
         {
             var dto = base.MapToEntityDto(role);
-            if( CurrentUnitOfWork.Items.TryGetValue("ous" ,out var ousTemp))
+            if (CurrentUnitOfWork.Items.TryGetValue("ous", out var ousTemp))
             {
                 var ous = ousTemp as IDictionary<int, IEnumerable<OrganizationUnit>>;
                 dto.Ous = ObjectMapper.Map<List<OuDto>>(ous[role.Id].Where(c => c != default));
             }
-                
+
             //    var ous = CurrentUnitOfWork.Items["ous"] as IDictionary<int, IEnumerable<OrganizationUnit>>;
-         //   if (ous != default)
-             
+            //   if (ous != default)
+
 
             return dto;
         }
@@ -104,7 +104,7 @@ namespace ZLJ.App.Admin.Post
 
             //input.nam
             var role = ObjectMapper.Map<PostEntity>(input);
-            role.Name = TinyPinyin.PinyinHelper.GetPinyin(input.DisplayName,"");//多音字咋搞？
+            role.Name = TinyPinyin.PinyinHelper.GetPinyin(input.DisplayName, "");//多音字咋搞？
             role.SetNormalizedName();
 
             CheckErrors(await _roleManager.CreateAsync(role));
@@ -138,8 +138,10 @@ namespace ZLJ.App.Admin.Post
             dto.GrantedPermissions = (await _roleManager.GetGrantedPermissionsAsync(role)).Select(c => c.Name).ToList();
             return dto;
         }
+
+
         [UnitOfWork(false)]
-        public async Task<IList<PostDto>> GetPostsAsync(GetPostsInput input)
+        public override async Task<PagedResultDto<PostDto>> GetAllAsync(PagedAndSortedResultRequest<PagedPostResultRequestDto> input)
         {
             var q2 = from role in Repository.GetAll().AsNoTrackingWithIdentityResolution().OfType<PostEntity>()
                      join ouRole in ouRoleRepository.GetAll().AsNoTrackingWithIdentityResolution() on role.Id equals ouRole.RoleId into tem1
@@ -148,9 +150,9 @@ namespace ZLJ.App.Admin.Post
                      from ou in tem2.DefaultIfEmpty()
                      select new { role, ou };
 
-            q2 = q2.WhereIf(!input.OuCode.IsNullOrWhiteSpace(), c => c.ou.Code.StartsWith(input.OuCode));
+            q2 = q2.WhereIf(input.Filter.OuCode.IsNotNullOrWhiteSpaceBXJG(), c => c.ou.Code.StartsWith(input.Filter.OuCode))
+                   .WhereIf(input.Filter.Keywords.IsNotNullOrWhiteSpaceBXJG(), c => c.role.Name.Contains(input.Filter.Keywords)|| c.role.DisplayName.Contains(input.Filter.Keywords));
 
-            q2 = q2.OrderBy(c => c.role.DisplayName);
 
             q2 = from role in q2.Select(c => c.role).Distinct()
                  join ouRole in ouRoleRepository.GetAll().AsNoTrackingWithIdentityResolution() on role.Id equals ouRole.RoleId into tem1
@@ -158,8 +160,10 @@ namespace ZLJ.App.Admin.Post
                  join ou in ouRepository.GetAll().AsNoTrackingWithIdentityResolution() on ouRole.OrganizationUnitId equals ou.Id into tem2
                  from ou in tem2.DefaultIfEmpty()
                  select new { role, ou };
-
-
+            //input.Sorting.Replace("DisplayName");
+            var ct = await q2.CountAsync();
+            // q2 = q2.OrderBy(input.Sorting);
+            q2 = q2.OrderBy(c => c.role.DisplayName).PageBy(input);
 
             var list = await q2.ToListAsync();
 
@@ -178,9 +182,55 @@ namespace ZLJ.App.Admin.Post
             {
                 dtos.Add(MapToEntityDto(item));
             }
-            return dtos;
-            //  return ObjectMapper.Map<List<RoleDto>>(roles);
+            return new PagedResultDto<PostDto>(ct, dtos);
         }
+
+        //[UnitOfWork(false)]
+        //public async Task<IList<PostDto>> GetPostsAsync(GetPostsInput input)
+        //{
+        //    var q2 = from role in Repository.GetAll().AsNoTrackingWithIdentityResolution().OfType<PostEntity>()
+        //             join ouRole in ouRoleRepository.GetAll().AsNoTrackingWithIdentityResolution() on role.Id equals ouRole.RoleId into tem1
+        //             from ouRole in tem1.DefaultIfEmpty()
+        //             join ou in ouRepository.GetAll().AsNoTrackingWithIdentityResolution() on ouRole.OrganizationUnitId equals ou.Id into tem2
+        //             from ou in tem2.DefaultIfEmpty()
+        //             select new { role, ou };
+
+        //    q2 = q2.WhereIf(!input.OuCode.IsNullOrWhiteSpace(), c => c.ou.Code.StartsWith(input.OuCode));
+
+        //    q2 = q2.OrderBy(c => c.role.DisplayName);
+
+        //    q2 = from role in q2.Select(c => c.role).Distinct()
+        //         join ouRole in ouRoleRepository.GetAll().AsNoTrackingWithIdentityResolution() on role.Id equals ouRole.RoleId into tem1
+        //         from ouRole in tem1.DefaultIfEmpty()
+        //         join ou in ouRepository.GetAll().AsNoTrackingWithIdentityResolution() on ouRole.OrganizationUnitId equals ou.Id into tem2
+        //         from ou in tem2.DefaultIfEmpty()
+        //         select new { role, ou };
+
+
+
+        //    var list = await q2.ToListAsync();
+
+        //    var groups = list.GroupBy(c => c.role, c => c.ou);
+        //    CurrentUnitOfWork.Items["ous"] = groups.ToDictionary(c => c.Key.Id, c => c.AsEnumerable());
+        //    var roles = groups.Select(c => c.Key);
+        //    //var roles = await _roleManager
+        //    //    .Roles
+        //    //    .WhereIf(
+        //    //        !input.Permission.IsNullOrWhiteSpace(),
+        //    //        r => r.Permissions.Any(rp => rp.Name == input.Permission && rp.IsGranted)
+        //    //    )
+        //    //    .ToListAsync();
+        //    var dtos = new List<PostDto>();
+        //    foreach (var item in roles)
+        //    {
+        //        dtos.Add(MapToEntityDto(item));
+        //    }
+        //    return dtos;
+        //    //  return ObjectMapper.Map<List<RoleDto>>(roles);
+        //}
+
+
+
 
         //public override Task<RoleDto> UpdateAsync(RoleDto input)
         //{
@@ -230,7 +280,7 @@ namespace ZLJ.App.Admin.Post
             #region 处理组织单位
             if (input.OuIds != null)
             {
-                var ous =(await ouRoleRepository.GetAllListAsync(c => c.RoleId==role.Id)).Select(c=>c.OrganizationUnitId);
+                var ous = (await ouRoleRepository.GetAllListAsync(c => c.RoleId == role.Id)).Select(c => c.OrganizationUnitId);
                 foreach (var ousId in ous)
                 {
                     await _roleManager.RemoveFromOrganizationUnitAsync(role.Id, ousId);

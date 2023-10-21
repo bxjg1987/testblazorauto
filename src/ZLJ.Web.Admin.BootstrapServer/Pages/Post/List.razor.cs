@@ -10,20 +10,34 @@ namespace ZLJ.Web.Admin.BootstrapServer.Pages.Post
 {
     public partial class List
     {
-        int pageIndex=1;
-        protected override int PageIndex => pageIndex;
+        Table<PostDto> table;
 
-        int pageSize=20;
-        protected override int PageSize => pageSize;
 
-      List<PostDto> selectedRows { get => base.SelectedItems.ToList(); set => base.SelectedItems = value.ToHashSet(); }
 
+        protected override async Task OnInitializedAsync()
+        {
+            await base.InitPermission(PermissionNames.AdministratorBaseInfoPostCreate, PermissionNames.AdministratorBaseInfoPostUpdate, PermissionNames.AdministratorBaseInfoPostDelete);
+        }
+        private async Task<bool> DeleteOwn(IEnumerable<PostDto> items)
+        {
+            await base.Delete();
+            return true;
+        }
         private async Task<QueryData<PostDto>> Load(QueryPageOptions condition)
         {
-            pageSize = condition.PageItems;
-            pageIndex = condition.PageIndex;
-           
-            await Refresh();
+            PageSize = condition.PageItems;
+            PageIndex = condition.PageIndex;
+            if (condition.SortList != null && condition.SortList.Count > 0)
+                Sorting = string.Join(",", condition.SortList);
+            else if (condition.SortOrder != SortOrder.Unset)
+                Sorting = condition.SortName + " " + condition.SortOrder.ToString();
+            else
+                Sorting = default;
+
+            Keywords = condition.SearchText;
+
+            await LoadListData();
+
             return new QueryData<PostDto>
             {
                 IsAdvanceSearch = false,
@@ -35,10 +49,10 @@ namespace ZLJ.Web.Admin.BootstrapServer.Pages.Post
             };
         }
 
-        protected override Task Refresh()
+        //这里也可以用肉夹馍的全局注册处理
+        protected override async Task Refresh()
         {
-            return base.Refresh();
-          //
+            await table.QueryAsync();
         }
 
         private async Task AddRandomData()
@@ -48,10 +62,42 @@ namespace ZLJ.Web.Admin.BootstrapServer.Pages.Post
                 await base.AppService.CreateAsync(new CreatePostDto
                 {
                     Description = "演示数据" + Random.Shared.Next(),
-                    DisplayName = "测试名称" + Random.Shared.Next(), Name= "test"+Random.Shared.Next(), 
-                   // GrantedPermissions = new List<string> { }
+                    DisplayName = "测试名称" + Random.Shared.Next(),
+                    Name = "test" + Random.Shared.Next(),
+                    // GrantedPermissions = new List<string> { }
                 });
             }
         }
+
+        #region 下面的可以用肉夹馍的全局注册处理
+
+
+
+
+        [Inject]
+        public MessageService MessageService { get; set; }
+        protected override async ValueTask ShowFailMessage(string title = "操作提示", string msg = "操作失败！")
+        {
+            await MessageService.Show(new MessageOption()
+            {
+                Content = msg,
+                Color = Color.Danger,
+                ShowShadow = true,
+                ShowBorder = true
+            });
+        }
+
+        protected override async ValueTask ShowSuccessMessage(string title = "操作提示", string msg = "操作成功！")
+        {
+            await MessageService.Show(new MessageOption()
+            {
+                Content = msg,
+                Color = Color.Success,
+                ShowShadow = true,
+                ShowBorder = true
+            });
+        }
+
+        #endregion
     }
 }

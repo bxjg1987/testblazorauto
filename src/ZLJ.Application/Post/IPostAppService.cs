@@ -11,7 +11,7 @@ using BXJG.Utils;
 namespace ZLJ.App.Admin.Post
 {
     public interface IPostAppService :
-
+      
          ICrudBaseAppService<PostDto, int, PagedAndSortedResultRequest<PagedPostResultRequestDto>, CreatePostDto, PostEditDto>
         
     {

@@ -36,15 +36,18 @@ namespace BXJG.Utils.Components
     /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
     /// <typeparam name="TCreateInput">新增时的输入类型</typeparam>
     /// <typeparam name="TUpdateInput">修改时的输入类型</typeparam>
+    /// <typeparam name="TList">列表类型</typeparam>
     public abstract class AbpListBaseComponent<TAppService,
                                                TEntityDto,
                                                TPrimaryKey,
                                                TGetAllInput,
                                                TCreateInput,
-                                               TUpdateInput> : AbpBaseComponent
+                                               TUpdateInput,
+                                               TList> : AbpBaseComponent
         where TEntityDto : IEntityDto<TPrimaryKey>, IExtendableDto
         where TGetAllInput : new()
         where TUpdateInput : IEntityDto<TPrimaryKey>
+        where TList : class, IEnumerable<TEntityDto>
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
     {
         #region 基础
@@ -157,27 +160,27 @@ namespace BXJG.Utils.Components
         /// <summary>
         /// 获取每页行数，若不做分页请返回0
         /// </summary>
-        protected abstract int PageSize { get;  }
+        protected virtual int PageSize { get; set; } = 20;
 
         /// <summary>
         /// 当前列表数据
         /// 通常是当前页的数据
         /// </summary>
-        protected virtual HashSet<TEntityDto> Items { get; set; }
+        protected virtual TList Items { get; set; } = new List<TEntityDto>() as TList;
 
         /// <summary>
         /// 当前条件下的总数据数量
         /// </summary>
-        protected virtual int TotalCount { get; set; }
+        protected virtual int TotalCount { get; set; } 
         /// <summary>
         /// 当前是第几页
         /// </summary>
-        protected abstract int PageIndex { get; }
+        protected virtual int PageIndex { get; set; } = 1;
 
         /// <summary>
         /// 父类仅仅需要读，至于是否可写由子类自己决定
         /// </summary>
-        protected virtual HashSet<TEntityDto> SelectedItems { get; set; } = new HashSet<TEntityDto>();
+        protected virtual TList SelectedItems { get; set; } = new List<TEntityDto>() as TList;
         /// <summary>
         /// 父类仅仅需要读，至于是否可写由子类自己决定
         /// </summary>
@@ -185,7 +188,7 @@ namespace BXJG.Utils.Components
         /// <summary>
         /// 获取排序字符串
         /// </summary>
-        protected virtual string Sorting => "Id";
+        protected virtual string Sorting { get; set; } = "Id";
 
         ///// <summary>
         ///// 表格数据加载
@@ -273,6 +276,15 @@ namespace BXJG.Utils.Components
         /// <returns></returns>
         protected virtual async Task Refresh()
         {
+            await LoadListData();
+        }
+
+        /// <summary>
+        /// 加载列表数据
+        /// </summary>
+        /// <returns></returns>
+        protected virtual async Task LoadListData()
+        {
             IsLoading = true;
             try
             {
@@ -290,7 +302,7 @@ namespace BXJG.Utils.Components
                 if (cd is IPagedAndSortedResultRequest cd2)
                 {
                     cd2.MaxResultCount = PageSize; //state.PageSize;
-                    cd2.SkipCount = (PageIndex-1) * PageSize;
+                    cd2.SkipCount = (PageIndex - 1) * PageSize;
                 }
                 if (cd is ISortedResultRequest cd3)
                 {
@@ -299,11 +311,11 @@ namespace BXJG.Utils.Components
 
                 if (cd is IHaveKeywords cd4)
                 {
-                    cd4.Keywords = keywords;
+                    cd4.Keywords = Keywords;
                 }
                 else if (cd is IHaveFilter cddq && cddq.Filter is IHaveKeywords cddqq)
                 {
-                    cddqq.Keywords = keywords;// state.FilterDefinitions.MapToDynamicCondition().ToList();
+                    cddqq.Keywords = Keywords;// state.FilterDefinitions.MapToDynamicCondition().ToList();
                 }
                 await FillCondtion(cd);
                 var dtos = await AppService.GetAllAsync(cd);
@@ -321,7 +333,7 @@ namespace BXJG.Utils.Components
                     await AddItemExtData(dto, dd);
                     dto.ExtensionData = dd;
                 }
-                Items = dtos.Items.ToHashSet();
+                Items = dtos.Items as TList;
                 TotalCount = dtos.TotalCount;
             }
             finally
@@ -329,6 +341,7 @@ namespace BXJG.Utils.Components
                 IsLoading = false;
             }
         }
+
         /// <summary>
         /// 获取列表时，为其中的每项添加额外的数据
         /// </summary>
@@ -339,7 +352,7 @@ namespace BXJG.Utils.Components
         /// <summary>
         /// 搜索关键字
         /// </summary>
-        protected string keywords = "";
+        protected virtual string Keywords { get; set; }
         /// <summary>
         /// 关键字变化时回调，默认修改关键字字段并刷新列表
         /// </summary>
@@ -347,7 +360,7 @@ namespace BXJG.Utils.Components
         /// <returns></returns>
         protected virtual async Task KeywordsChanged(string keywords)
         {
-            this.keywords = keywords;
+            this.Keywords = keywords;
             await Refresh();
         }
         #endregion
