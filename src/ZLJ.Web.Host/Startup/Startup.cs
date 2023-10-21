@@ -16,6 +16,8 @@ using Abp.Hangfire;
 using ZLJ.App.Customer;
 using ZLJ.App.Admin;
 using ZLJ.EntityFrameworkCore;
+using MudBlazor.Services;
+using ZLJ.Web.Customer;
 //using Orleans.Configuration;
 //using Orleans.Hosting;
 
@@ -117,8 +119,22 @@ namespace ZLJ.Web.Host.Startup
             //services.AddBootstrapBlazor();
             //services.AddSignalR(); //启用blazor时，已经包含这个
 
-          
+            #region Mudblazor
+            //各app可以提供自己的配置
+            services.AddMudServices(config =>
+            {
+                config.SnackbarConfiguration.PositionClass = MudBlazor.Defaults.Classes.Position.TopCenter;
+                config.SnackbarConfiguration.VisibleStateDuration = 4000; //显示多久才开始小时
+                config.SnackbarConfiguration.ShowTransitionDuration = 200;
+                config.SnackbarConfiguration.HideTransitionDuration = 200;
+            });
+            #endregion
 
+            #region bootstrapblazor
+            services.AddBootstrapBlazor();
+            // 增加 Table Excel 导出服务
+            services.AddBootstrapBlazorTableExcelExport();
+            #endregion
 
             // Configure CORS for angular2 UI
             services.AddCors(
