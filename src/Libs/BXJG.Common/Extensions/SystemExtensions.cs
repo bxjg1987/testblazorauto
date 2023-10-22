@@ -18,6 +18,22 @@ namespace System
 {
     public static class SystemExtensions
     {
+        /// <summary>
+        /// 获取类型默认值
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static object? GetDefaultValue(this Type type)
+        {
+
+            if (type.Name.ToLower() == "void")
+                return null;
+
+            if (type.IsValueType)
+                return RuntimeHelpers.GetUninitializedObject(type);
+
+            return null;
+        }
         //ex.GetBasexxx已经实现了
         ///// <summary>
         ///// 获取最里面的异常
@@ -359,7 +375,7 @@ namespace System
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public  static bool IsNullable(this Type type)
+        public static bool IsNullable(this Type type)
         {
             return Nullable.GetUnderlyingType(type) != null;
         }

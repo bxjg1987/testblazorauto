@@ -17,8 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="BootstrapBlazor" Version="7.11.0" />
+    <PackageReference Include="BootstrapBlazor" Version="7.11.1" />
     <PackageReference Include="BootstrapBlazor.FontAwesome" Version="7.5.0" />
+	  <PackageReference Include="Rougamo.Fody" Version="2.0.0" IncludeAssets="all" PrivateAssets="contentfiles;analyzers" />
   </ItemGroup>
 
   <ItemGroup>

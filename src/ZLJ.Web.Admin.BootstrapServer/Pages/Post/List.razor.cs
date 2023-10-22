@@ -1,4 +1,7 @@
 ﻿using BootstrapBlazor.Components;
+using BXJG.AbpBootstrapBlazor;
+using BXJG.AbpBootstrapBlazor.Interceptors;
+using DocumentFormat.OpenXml.Office2013.PowerPoint.Roaming;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,17 +14,37 @@ namespace ZLJ.Web.Admin.BootstrapServer.Pages.Post
     public partial class List
     {
         protected override string FuncName => "角色岗位";
-
+        [AbpBBException]
         protected override async Task OnInitializedAsync()
         {
+
             await base.InitPermission(PermissionNames.AdministratorBaseInfoPostCreate, PermissionNames.AdministratorBaseInfoPostUpdate, PermissionNames.AdministratorBaseInfoPostDelete);
         }
-      
+        //protected override Task LoadListData()
+        //{
+        //    throw new Exception("ttttttt");
+        //    return base.LoadListData();
+        //}
+
+        //protected override void OnAfterRender(bool firstRender)
+        //{  
+        //    throw new Exception("ttttttt");
+        //    base.OnAfterRender(firstRender);
+        //}
+        //[AbpBBException]
+        //protected override Task OnAfterRenderAsync(bool firstRender)
+        //{
+        //    throw new Exception("ttttttt");
+        //    return base.OnAfterRenderAsync(firstRender);
+        //}
+
+
         //这里也可以用肉夹馍的全局注册处理
-       
+        [AbpBBException]
         private async Task AddRandomData()
         {
-           
+            //   sfsdf();
+            //  throw new Exception("xxxxxx");
             for (int i = 0; i < 10; i++)
             {
                 await base.AppService.CreateAsync(new CreatePostDto
@@ -34,6 +57,11 @@ namespace ZLJ.Web.Admin.BootstrapServer.Pages.Post
             }
         }
 
-      
+        //[AbpBBException]
+        //private void sfsdf()
+        //{
+        //    throw new Exception("yyyy");
+
+        //}
     }
 }

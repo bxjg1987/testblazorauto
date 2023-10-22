@@ -5,7 +5,6 @@
             <Router AppAssembly="@typeof(App).Assembly">
                 <Found Context="routeData">
 
-
                     @* bootstrapblazor中，多标签模式时，此方式无效，它提供了在 layout中去处理的方式 *@
                     @* <AuthorizeRouteView RouteData="@routeData" DefaultLayout="typeof(ZLJ.Web.Admin.BootstrapServer.Shared.AdminMainLayout)">
                         <NotAuthorized>
@@ -15,16 +14,11 @@
                         <Authorizing>
                             正在验证权限...
                         </Authorizing>
-                     
                     </AuthorizeRouteView> *@
-
-
-                    
 
                     <PageTitle>Title</PageTitle>
                     <RouteView RouteData="@routeData" DefaultLayout="@typeof(ZLJ.Web.Admin.BootstrapServer.Shared.AdminMainLayout)" />
                   @*   <BootstrapBlazorAuthorizeView RouteData="@routeData" DefaultLayout="@typeof(ZLJ.Web.Admin.BootstrapServer.Shared.AdminMainLayout)">
-
                          </BootstrapBlazorAuthorizeView> *@
                     <FocusOnNavigate RouteData="@routeData" Selector="h1" />
 
