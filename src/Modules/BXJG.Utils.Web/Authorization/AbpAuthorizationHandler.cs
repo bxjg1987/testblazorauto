@@ -47,7 +47,7 @@ namespace BXJG.Utils.Authorization
                 //Stopwatch s = new Stopwatch();
                 //s.Start();
                 //经过测试有缓存，检查耗时通常是0毫秒
-                if (await permissionChecker.IsGrantedAsync(requirement.RequiredAll, requirement.PermissionNames))
+                 if (await permissionChecker.IsGrantedAsync(requirement.RequiredAll, requirement.PermissionNames))
                 {
 
                     context.Succeed(requirement);

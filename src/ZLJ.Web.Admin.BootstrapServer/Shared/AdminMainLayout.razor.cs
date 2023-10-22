@@ -38,7 +38,10 @@ namespace ZLJ.Web.Admin.BootstrapServer.Shared
 
         //    Menus = GetIconSideMenuItems();
         //}
-      
+        //private async Task<bool> OnAuthorizing(string name) 
+        //{
+        //    return false;
+        //}
         protected override async Task OnInitializedAsync()
         {
             if (abpSession.UserId.HasValue)
