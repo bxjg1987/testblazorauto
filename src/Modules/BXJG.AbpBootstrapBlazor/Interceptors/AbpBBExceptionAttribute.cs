@@ -27,9 +27,19 @@ namespace BXJG.AbpBootstrapBlazor.Interceptors
     /// </summary>
     public class AbpBBExceptionAttribute : MoAttribute
     {
-        public override AccessFlags Flags => AccessFlags.Method;
+        //public override AccessFlags Flags => AccessFlags.Method;
+
+        /*
+         * 省略访问修饰符标识拦截所有方法
+         * 返回类型* 就是忽略
+         * 继承于Microsoft.AspNetCore.Components.ComponentBase的所有子类
+         * 的所有方法
+         */
+        public override string? Pattern => "method(protected * BXJG.Utils.Components.AbpBaseComponent+.*(..))";
 
         //public override Feature Features => Feature.Observe;//加了这个就不灵了，不晓得为啥
+     //   ComponentBase
+     
 
         const string scopedServicesKey = nameof(scopedServicesKey);// "scopedServices";
         const string loggerKey = nameof(loggerKey);
@@ -49,12 +59,7 @@ namespace BXJG.AbpBootstrapBlazor.Interceptors
             var temp = context.Target.GetType().GetProperty("MessageService", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public).GetValue(context.Target);
             var snackbar = temp as MessageService;
             context.Datas.Add(snackbarKey, snackbar);
-
-            //也可以定义个接口让组件实现
-            //snackbar.Add($"全局异常拦截器执行前！context对象：{context.GetHashCode()} 线程id：{Thread.CurrentThread.ManagedThreadId} 方法：{ context.Method.Name }");
-            //logger.Debug($"全局异常拦截器执行前！context对象：{context.GetHashCode()} 线程id：{Thread.CurrentThread.ManagedThreadId} 方法：{context.Method.Name}"  );
-            //GloableStatic.Snackbar.Value.Add("全局异常拦截器执行前！context对象：" + context.GetHashCode());
-        }
+       }
 
         public override void OnException(MethodContext context)
         {
@@ -80,7 +85,7 @@ namespace BXJG.AbpBootstrapBlazor.Interceptors
 
                 snackbar.Show(new MessageOption
                 {
-                    Content = $"服务端发生未处理异常！请稍后重试，若多次失败，请联系系统管理员11。",
+                    Content = $"服务端发生未处理异常！请稍后重试，若多次失败，请联系系统管理员。",
                     Color = Color.Danger,
                     ShowBorder = true,
                     ShowShadow = true
@@ -98,7 +103,6 @@ namespace BXJG.AbpBootstrapBlazor.Interceptors
             //}
 
             // 处理异常并将返回值设置为newReturnValue，如果方法无返回值(void)，直接传入null即可
-     // default(context.ret)
             context.HandledException(this, context.RealReturnType.GetDefaultValue());
         }
 

@@ -51,7 +51,8 @@ namespace ZLJ.Web.Admin.BootstrapServer.Shared
                 Menus = menu.Items.Select( NewMethod).ToList();
             }
         }
-
+        [Inject]
+        public MessageService MessageService { get; set; }
         private static MenuItem NewMethod(UserMenuItem c)
         {
             var temp = new MenuItem(c.DisplayName, c.Url, c.Icon);

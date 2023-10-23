@@ -11,6 +11,7 @@ using BXJG.Utils.Dto;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
+using Rougamo;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -97,17 +98,23 @@ namespace BXJG.AbpBootstrapBlazor.Components
                 TotalCount = base.TotalCount
             };
         }
+      
+        [IgnoreMo]
+        protected override Task InitPermission(string createPermissionName = null, string updatePermissionName = null, string deletePermissionName = null)
+        {
+            return base.InitPermission(createPermissionName, updatePermissionName, deletePermissionName);
+        }
 
         //这里也可以用肉夹馍的全局注册处理
-       // [AbpBBException]
+        
         protected override async Task Refresh()
         {
-          //  await Task.Delay(2000);
             await table.QueryAsync();
         }
 
         //[Inject]
         //protected MessageService MessageService { get; private set; }
+        [IgnoreMo]
         protected override async ValueTask ShowFailMessage(string title = "操作提示", string msg = "操作失败！")
         {
             await MessageService.Show(new MessageOption()
@@ -118,7 +125,7 @@ namespace BXJG.AbpBootstrapBlazor.Components
                 ShowBorder = true,
             });
         }
-
+        [IgnoreMo]
         protected override async ValueTask ShowSuccessMessage(string title = "操作提示", string msg = "操作成功！")
         {
             await MessageService.Show(new MessageOption()
@@ -130,61 +137,8 @@ namespace BXJG.AbpBootstrapBlazor.Components
             });
         }
 
-        //[AbpBBException]
-        //protected override void OnInitialized()
-        //{
-        //    base.OnInitialized();
-        //}
-        //[AbpBBException]
-        //protected override async Task OnInitializedAsync()
-        //{
-        //    await base.OnInitializedAsync();
-        //}
-        //[AbpBBException]
-        //public override async Task SetParametersAsync(ParameterView parameters)
-        //{
-        //    await base.SetParametersAsync(parameters);
-        //}
-        //[AbpBBException]
-        //protected override void OnParametersSet()
-        //{
-        //    base.OnParametersSet();
-        //}
-        //[AbpBBException]
-        //protected override async Task OnParametersSetAsync()
-        //{
-        //    await base.OnParametersSetAsync();
-        //}
-        //[AbpBBException]
-        //protected override void OnAfterRender(bool firstRender)
-        //{
-        //    base.OnAfterRender(firstRender);
-        //}
-        //[AbpBBException]
-        //protected override async Task OnAfterRenderAsync(bool firstRender)
-        //{
-        //    await base.OnAfterRenderAsync(firstRender);
-        //}
-        //[AbpBBException]
-        //protected override async Task KeywordsChanged(string keywords)
-        //{
-        //    await base.KeywordsChanged(keywords);
-        //}
-        //[AbpBBException]
-        //protected override async Task DeleteBatch()
-        //{
-        //    await base.DeleteBatch();
-        //}
-        //[AbpBBException]
-        //protected override async Task DeleteItem(TEntityDto item)
-        //{
-        //    await base.DeleteItem(item);
-        //}
-        //[AbpBBException]
-        //protected override async Task LoadListData()
-        //{
-        //    await base.LoadListData();
-        //}
+
+        
     }
 
     // 若不是使用弹窗，而是使用tab、页面等其它方式时，应提供其它子类

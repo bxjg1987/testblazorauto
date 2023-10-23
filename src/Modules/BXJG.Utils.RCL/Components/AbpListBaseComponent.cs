@@ -9,6 +9,7 @@ using BXJG.Utils.Dto;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
+using Rougamo;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -103,6 +104,7 @@ namespace BXJG.Utils.Components
         /// <param name="updatePermissionName"></param>
         /// <param name="deletePermissionName"></param>
         /// <returns></returns>
+        
         protected virtual async Task InitPermission(string createPermissionName = default, string updatePermissionName = default,
             string deletePermissionName = default/*, string getPermissionName = default*/)
         {
@@ -121,6 +123,7 @@ namespace BXJG.Utils.Components
         /// </summary>
         /// <param name="output">批量操作结果</param>
         /// <param name="funName">操作名</param>
+        
         protected virtual async ValueTask BatchOperationMessage(BatchOperationOutput<TPrimaryKey> output, string funName = "删除")
         {
             if (output.ErrorMessage.Any())
@@ -156,6 +159,7 @@ namespace BXJG.Utils.Components
         /// 填充动态条件
         /// </summary>
         /// <returns></returns>
+        
         protected virtual ValueTask FillDynamicConditions(ICollection<ConditionFieldDefine> conditions) => ValueTask.CompletedTask;
         /// <summary>
         /// 获取每页行数，若不做分页请返回0
@@ -255,6 +259,7 @@ namespace BXJG.Utils.Components
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
+        
         protected virtual ValueTask FillCondtion(TGetAllInput input) => ValueTask.CompletedTask;
 
         ///// <summary>
@@ -283,6 +288,7 @@ namespace BXJG.Utils.Components
         /// 加载列表数据
         /// </summary>
         /// <returns></returns>
+        
         protected virtual async Task LoadListData()
         {
             IsLoading = true;
@@ -348,6 +354,7 @@ namespace BXJG.Utils.Components
         /// <param name="dto"></param>
         /// <param name="data"></param>
         /// <returns></returns>
+        
         protected virtual ValueTask AddItemExtData(TEntityDto dto, dynamic data) => ValueTask.CompletedTask;
         /// <summary>
         /// 搜索关键字
@@ -402,6 +409,7 @@ namespace BXJG.Utils.Components
         /// <summary>
         /// 显示批量删除的确认框
         /// </summary>
+        
         protected virtual void ShowDeleteConfirm()
         {
             HideDeleteConfirm();
@@ -410,6 +418,7 @@ namespace BXJG.Utils.Components
         /// <summary>
         /// 隐藏批量删除的确认框
         /// </summary>
+        
         protected virtual void HideDeleteConfirm()
         {
             isShowDeleteConfirm = false;
@@ -469,6 +478,7 @@ namespace BXJG.Utils.Components
         /// 显示删除明细的确认框
         /// </summary>
         /// <param name="dto"></param>
+        
         protected virtual void ShowDeleteConfirm(TEntityDto dto)
         {
             HideDeleteConfirm();

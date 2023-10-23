@@ -2,6 +2,7 @@
 using BXJG.AbpBootstrapBlazor;
 using BXJG.AbpBootstrapBlazor.Interceptors;
 using DocumentFormat.OpenXml.Office2013.PowerPoint.Roaming;
+using Rougamo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +15,10 @@ namespace ZLJ.Web.Admin.BootstrapServer.Pages.Post
     public partial class List
     {
         protected override string FuncName => "角色岗位";
-        [AbpBBException]
+
         protected override async Task OnInitializedAsync()
         {
-
+            throw new UserFriendlyException("用户友好异常，不会记录日志，仅仅提示用户。");
             await base.InitPermission(PermissionNames.AdministratorBaseInfoPostCreate, PermissionNames.AdministratorBaseInfoPostUpdate, PermissionNames.AdministratorBaseInfoPostDelete);
         }
         //protected override Task LoadListData()
@@ -40,10 +41,10 @@ namespace ZLJ.Web.Admin.BootstrapServer.Pages.Post
 
 
         //这里也可以用肉夹馍的全局注册处理
-        [AbpBBException]
-        private async Task AddRandomData()
+       // [AbpBBException]
+        protected async Task AddRandomData()
         {
-            //   sfsdf();
+            sfsdf();
             //  throw new Exception("xxxxxx");
             for (int i = 0; i < 10; i++)
             {
@@ -57,11 +58,10 @@ namespace ZLJ.Web.Admin.BootstrapServer.Pages.Post
             }
         }
 
-        //[AbpBBException]
-        //private void sfsdf()
-        //{
-        //    throw new Exception("yyyy");
-
-        //}
+      //  [IgnoreMo]
+        private void sfsdf()
+        {
+            throw new Exception("系统异常，会记录日志后提示用户");
+        }
     }
 }

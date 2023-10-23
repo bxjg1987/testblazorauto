@@ -1,18 +1,21 @@
 ﻿using Abp.Modules;
 using BXJG.AbpBootstrapBlazor;
+using BXJG.AbpBootstrapBlazor.Interceptors;
 using BXJG.Utils;
 using Rougamo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
 using ZLJ.App.Admin;
 
 //[assembly: ExceptionInterceptor]
-
+//全局异常处理拦截器
+[assembly: AbpBBException]
 
 
 namespace ZLJ.Web.Admin.BootstrapServer.Startup

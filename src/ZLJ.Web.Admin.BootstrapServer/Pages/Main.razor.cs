@@ -1,5 +1,6 @@
 ﻿using Abp.Domain.Entities;
 using Abp.Notifications;
+using BootstrapBlazor.Components;
 using BXJG.Common;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,8 @@ namespace ZLJ.Web.Admin.BootstrapServer.Pages
         {
             base.OnInitialized();
         }
-
+        [Inject]
+        public MessageService MessageService { get; set; }
         void ButtonClick() {
             btnText = DateTime.Now.ToString();
         }
