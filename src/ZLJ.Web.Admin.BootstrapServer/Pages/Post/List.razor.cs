@@ -18,7 +18,6 @@ namespace ZLJ.Web.Admin.BootstrapServer.Pages.Post
 
         protected override async Task OnInitializedAsync()
         {
-            throw new UserFriendlyException("用户友好异常，不会记录日志，仅仅提示用户。");
             await base.InitPermission(PermissionNames.AdministratorBaseInfoPostCreate, PermissionNames.AdministratorBaseInfoPostUpdate, PermissionNames.AdministratorBaseInfoPostDelete);
         }
         //protected override Task LoadListData()
@@ -44,8 +43,6 @@ namespace ZLJ.Web.Admin.BootstrapServer.Pages.Post
        // [AbpBBException]
         protected async Task AddRandomData()
         {
-            sfsdf();
-            //  throw new Exception("xxxxxx");
             for (int i = 0; i < 10; i++)
             {
                 await base.AppService.CreateAsync(new CreatePostDto
@@ -56,12 +53,6 @@ namespace ZLJ.Web.Admin.BootstrapServer.Pages.Post
                     // GrantedPermissions = new List<string> { }
                 });
             }
-        }
-
-      //  [IgnoreMo]
-        private void sfsdf()
-        {
-            throw new Exception("系统异常，会记录日志后提示用户");
         }
     }
 }

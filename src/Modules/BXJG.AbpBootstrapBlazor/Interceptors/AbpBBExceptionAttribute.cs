@@ -38,32 +38,38 @@ namespace BXJG.AbpBootstrapBlazor.Interceptors
         public override string? Pattern => "method(protected * BXJG.Utils.Components.AbpBaseComponent+.*(..))";
 
         //public override Feature Features => Feature.Observe;//加了这个就不灵了，不晓得为啥
-     //   ComponentBase
+        //ComponentBase
      
 
         const string scopedServicesKey = nameof(scopedServicesKey);// "scopedServices";
-        const string loggerKey = nameof(loggerKey);
-        const string snackbarKey = nameof(snackbarKey);
+        //const string loggerKey = nameof(loggerKey);
+        //const string snackbarKey = nameof(snackbarKey);
         //const string isIntercepKey = nameof(isIntercepKey);//是否拦截
 
-        public override void OnEntry(MethodContext context)
+       // public override void OnEntry(MethodContext context)
+       // {
+       //     var services = IocManager.Instance.CreateScope();
+       //     context.Datas.Add(scopedServicesKey, services);
+
+       //     var loggerFactory = services.Resolve<ILoggerFactory>();
+       //     var logger = loggerFactory.Create(context.TargetType.FullName);
+
+       //     context.Datas.Add(loggerKey, logger);
+
+       //     var temp = context.Target.GetType().GetProperty("MessageService", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public).GetValue(context.Target);
+       //     var snackbar = temp as MessageService;
+       //     context.Datas.Add(snackbarKey, snackbar);
+       //}
+
+        public override void OnException(MethodContext context)
         {
             var services = IocManager.Instance.CreateScope();
             context.Datas.Add(scopedServicesKey, services);
 
-            var loggerFactory = services.Resolve<ILoggerFactory>();
-            var logger = loggerFactory.Create(context.TargetType.FullName);
-
-            context.Datas.Add(loggerKey, logger);
+         
 
             var temp = context.Target.GetType().GetProperty("MessageService", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public).GetValue(context.Target);
             var snackbar = temp as MessageService;
-            context.Datas.Add(snackbarKey, snackbar);
-       }
-
-        public override void OnException(MethodContext context)
-        {
-            var snackbar = context.Datas[snackbarKey] as MessageService;
             //Task t;
 
             if (context.Exception is UserFriendlyException)
@@ -78,7 +84,9 @@ namespace BXJG.AbpBootstrapBlazor.Interceptors
             }
             else
             {
-                var logger = context.Datas[loggerKey] as ILogger;
+                var loggerFactory = services.Resolve<ILoggerFactory>();
+                var logger = loggerFactory.Create(context.TargetType.FullName);
+                //  var logger = context.Datas[loggerKey] as ILogger;
                 logger.Error(@"{context.TargetType.FullName }.{context.Method.Name}" + context.Exception.StackTrace);
 
                 //  (  context.Target as ComponentBase).tryinv
@@ -108,7 +116,7 @@ namespace BXJG.AbpBootstrapBlazor.Interceptors
 
         public override void OnExit(MethodContext context)
         {
-            (context.Datas[scopedServicesKey] as IScopedIocResolver)!.Dispose();
+            (context.Datas[scopedServicesKey] as IScopedIocResolver)?.Dispose();
         }
     }
 }
