@@ -24,7 +24,8 @@ namespace ZLJ.Web.Admin.BootstrapServer.Pages
         public MessageService MessageService { get; set; }
       async   Task ButtonClick() {
           await  this.NotificationPublisher.PublishAsync("xxx",
-              new MessageNotificationData("xxxxxx"), userIds: new Abp.UserIdentifier[] { Abp.UserIdentifier.Parse($"{UserId}@{TenantId}") } );
+              new MessageNotificationData("xxxxxx"),
+              userIds: new Abp.UserIdentifier[] { Abp.UserIdentifier.Parse($"{UserId}@{TenantId}") } );
             btnText = DateTime.Now.ToString();
         }
     }

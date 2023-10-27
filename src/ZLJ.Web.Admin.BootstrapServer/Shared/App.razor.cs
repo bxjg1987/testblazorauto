@@ -94,15 +94,20 @@ namespace ZLJ.Web.Admin.BootstrapServer.Shared
                 msg = xx.Message;
             else
                 msg = "未知的通知内容！";
-            await MessageService.Show(new MessageOption
+
+            await InvokeAsync(async () =>
             {
-                Color = color,
-                Content = msg,
-                ShowBar = true,
-                ShowBorder = true,
-                ShowShadow = true,
-                Icon = icon
+                await MessageService.Show(new MessageOption
+                {
+                    Color = color,
+                    Content = msg,
+                    ShowBar = true,
+                    ShowBorder = true,
+                    ShowShadow = true,
+                    Icon = icon
+                });
             });
+
         }
     }
 }
