@@ -16,36 +16,39 @@ namespace ZLJ
 
     //}
 
-    //https://learn.microsoft.com/zh-cn/aspnet/core/blazor/fundamentals/signalr?view=aspnetcore-7.0
-    /// <summary>
-    /// 所有app公用的电路处理器
-    /// </summary>
-    public class TrackingCircuitHandler : CircuitHandler//,ISingletonDependency
-    {
 
-        private readonly Zhongjie zhongjie;
-        private HashSet<Circuit> circuits = new();
+    //请使用CircuitStateContainer
 
-        public TrackingCircuitHandler(Zhongjie zhongjie)
-        {
-            this.zhongjie = zhongjie;
-        }
+    ////https://learn.microsoft.com/zh-cn/aspnet/core/blazor/fundamentals/signalr?view=aspnetcore-7.0
+    ///// <summary>
+    ///// 所有app公用的电路处理器
+    ///// </summary>
+    //public class TrackingCircuitHandler : CircuitHandler//,ISingletonDependency
+    //{
 
-        public override async Task OnConnectionUpAsync(Circuit circuit,
-            CancellationToken cancellationToken)
-        {
-            circuits.Add(circuit);
-            await zhongjie.Chufa("TrackingCircuitChanged");
-            // return Task.CompletedTask;
-        }
+    //    private readonly Zhongjie zhongjie;
+    //    private HashSet<Circuit> circuits = new();
 
-        public override async Task OnConnectionDownAsync(Circuit circuit,
-            CancellationToken cancellationToken)
-        {
-            circuits.Remove(circuit);
-            await zhongjie.Chufa("TrackingCircuitChanged");
-        }
+    //    public TrackingCircuitHandler(Zhongjie zhongjie)
+    //    {
+    //        this.zhongjie = zhongjie;
+    //    }
 
-        public int ConnectedCircuits => circuits.Count;
-    }
+    //    public override async Task OnConnectionUpAsync(Circuit circuit,
+    //        CancellationToken cancellationToken)
+    //    {
+    //        circuits.Add(circuit);
+    //        await zhongjie.Chufa("TrackingCircuitChanged");
+    //        // return Task.CompletedTask;
+    //    }
+
+    //    public override async Task OnConnectionDownAsync(Circuit circuit,
+    //        CancellationToken cancellationToken)
+    //    {
+    //        circuits.Remove(circuit);
+    //        await zhongjie.Chufa("TrackingCircuitChanged");
+    //    }
+
+    //    public int ConnectedCircuits => circuits.Count;
+    //}
 }

@@ -55,6 +55,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZLJ.Web.Host", "src\ZLJ.Web
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{31830F03-183C-4530-A73A-C165A1F5A739}"
 	ProjectSection(SolutionItems) = preProject
+		docs\blazorserver中的统一异常处理.md = docs\blazorserver中的统一异常处理.md
 		docs\blazorServer的集成.md = docs\blazorServer的集成.md
 		docs\session.md = docs\session.md
 		docs\ZLJ.Web.Core说明.md = docs\ZLJ.Web.Core说明.md
@@ -65,6 +66,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{31830F03-1
 		docs\公司部门岗位角色用户.md = docs\公司部门岗位角色用户.md
 		docs\动态条件.md = docs\动态条件.md
 		docs\应用服务.md = docs\应用服务.md
+		docs\开发随记.md = docs\开发随记.md
 		docs\扩展dto.md = docs\扩展dto.md
 		docs\抽象的mudblazorCRUD组件.md = docs\抽象的mudblazorCRUD组件.md
 		docs\本地化.md = docs\本地化.md

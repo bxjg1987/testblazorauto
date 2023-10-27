@@ -22,7 +22,9 @@ namespace ZLJ.Web.Admin.BootstrapServer.Pages
         }
         [Inject]
         public MessageService MessageService { get; set; }
-        void ButtonClick() {
+      async   Task ButtonClick() {
+          await  this.NotificationPublisher.PublishAsync("xxx",
+              new MessageNotificationData("xxxxxx"), userIds: new Abp.UserIdentifier[] { Abp.UserIdentifier.Parse($"{UserId}@{TenantId}") } );
             btnText = DateTime.Now.ToString();
         }
     }

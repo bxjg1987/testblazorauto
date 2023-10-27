@@ -113,9 +113,9 @@ namespace ZLJ.Web.Host.Startup
             //services.AddTransient<WeatherForecastService>();
             //services.AddTableDemoDataService();
             services.AddServerSideBlazor();
-            services.AddSingleton<TrackingCircuitHandler>();
+            //services.AddSingleton<TrackingCircuitHandler>();
 
-            services.AddSingleton<CircuitHandler, TrackingCircuitHandler>(p => p.GetRequiredService<TrackingCircuitHandler>());
+            //services.AddSingleton<CircuitHandler, TrackingCircuitHandler>(p => p.GetRequiredService<TrackingCircuitHandler>());
             //services.AddBootstrapBlazor();
             //services.AddSignalR(); //启用blazor时，已经包含这个
 

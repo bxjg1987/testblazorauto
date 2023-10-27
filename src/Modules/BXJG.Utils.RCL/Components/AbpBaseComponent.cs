@@ -18,6 +18,7 @@ using BXJG.Common;
 using BXJG.Common.Dto;
 using BXJG.Common.RCL;
 using Castle.Core.Logging;
+using Microsoft.AspNetCore.Components.Server.Circuits;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -62,6 +63,27 @@ namespace BXJG.Utils.Components
     //where TUserManager : AbpUserManager<TRole, TUser>
     {
         //当前界面和全局Zhongjie在CommonBaseComponent中定义
+
+        /// <summary>
+        /// 反正是单例的，直接注入吧
+        /// </summary>
+        [Inject]
+        protected CircuitStateContainer CircuitStateContainer { get; private set; }
+        /// <summary>
+        /// 它是范围注册的，可以直接注入
+        /// </summary>
+        [Inject]
+        protected CircuitStateHandler CircuitStateHandler { get; private set; }
+        /// <summary>
+        /// 获取当前电路及其附加属性
+        /// </summary>
+        protected KeyValuePair<Circuit, Dictionary<string, object>> CurrentCircuit => CircuitStateContainer.SingleOrDefault(c => c.Key == CircuitStateHandler.Current);
+        /// <summary>
+        /// 当前线路的中介
+        /// </summary>
+        protected Zhongjie Zhongjie => CircuitStateContainer.GetZhongjie(CurrentCircuit.Key);
+
+
 
         private IAbpSession abpSession;
         /// <summary>
@@ -204,6 +226,10 @@ namespace BXJG.Utils.Components
         protected int? TenantId;
         protected long? UserId;
 
+
+
+
+
         //不要用异步方法做服务注入
         protected override void OnInitialized()
         {
@@ -211,6 +237,9 @@ namespace BXJG.Utils.Components
 
             TenantId = AbpSession.TenantId;
             UserId = AbpSession.UserId;
+            //  if(UserId.HasValue)
+            //  this.Zhongjie = CircuitStateContainer.GetByUserId(UserId.Value);
+
             //EventBus = ScopedServices.GetRequiredService<IEventBus>();
             //WebHostEnvironment = ScopedServices.GetRequiredService<IWebHostEnvironment>();
             //Zhongjie = ScopedServices.GetRequiredService<Zhongjie>();

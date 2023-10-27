@@ -4,6 +4,7 @@
 @using ZLJ.App.Admin.Authorization.Permissions;
 @attribute [TabItemOption(Text = "控制台")]
 @attribute [Authorize(PermissionNames.Administrator)]
+@inherits AbpBaseComponent
 @*@inject NavigationManager Navigation*@
 
 

@@ -1,5 +1,7 @@
-﻿using BootstrapBlazor.Components;
+﻿using Abp.Notifications;
+using BootstrapBlazor.Components;
 using BXJG.Common;
+using Microsoft.AspNetCore.Components.Server.Circuits;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -11,39 +13,20 @@ namespace ZLJ.Web.Admin.BootstrapServer.Shared
 {
     public partial class App
     {
-        ///// <summary>
-        ///// 必须使用这种方式，不能从服务中获取
-        ///// 它不需要级联，内层组件需要时，自己inject即可
-        ///// </summary>
-        //[Inject]
-        //public ISnackbar Snackbar { get; set; }
-        /// <summary>
-        /// 级联传递给所有内层组件，以便在当前界面共享一个事件总线，用于界面解耦通信
-        /// </summary>
-        Zhongjie zhongjie;
-        [Inject]
-        public ILoggerFactory loggerFactory { get; set; }
-        protected override void OnInitialized()
-        {
-            zhongjie = new Zhongjie(loggerFactory);
-            //行不通，blazor server 控件事件并不一定在主线程中
-            // Zhongjie.Current.Value = zhongjie;
-            // BXJG.AbpMudBlazor.GloableStatic.Snackbar.Value = Snackbar;
-        }
-
-        public void Dispose()
-        {
-            //
-            //  Zhongjie.Current.Value= null;
-            // BXJG.AbpMudBlazor.GloableStatic.Snackbar.Value = null;
-            zhongjie.Zhuxiao();
-        }
         [Inject]
         protected MessageService MessageService { get; private set; }
         [Inject]
-        protected Castle.Core.Logging.ILoggerFactory LoggerFactory {get; private set;}
+        protected Castle.Core.Logging.ILoggerFactory LoggerFactory { get; private set; }
+        /// <summary>
+        /// 这里的错误仅仅是兜底，错误后当前页面的控件状态很可能无法恢复，我们通过肉夹馍的aop实现了统一异常处理
+        /// 参考文档中的详细描述，或者 https://www.cnblogs.com/jionsoft/p/17783675.html
+        /// </summary>
+        /// <param name="logger"></param>
+        /// <param name="ex"></param>
+        /// <returns></returns>
         private async Task OnErrorHandleAsync(ILogger logger, Exception ex)
         {
+
             var l = LoggerFactory.Create("App");
             if (ex is UserFriendlyException uex)
             {
@@ -66,6 +49,60 @@ namespace ZLJ.Web.Admin.BootstrapServer.Shared
                     ShowShadow = true
                 });
             }
+        }
+        IDisposable xxtz;//消息通知释放对象
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+            xxtz = base.Zhongjie.Zhuce<UserNotification>(ShowUsernotification);
+        }
+        protected override void Dispose(bool disposing)
+        {
+            xxtz?.Dispose();
+            base.Dispose(disposing);
+        }
+        private async ValueTask ShowUsernotification(UserNotification userNotification)
+        {
+            string icon = string.Empty;
+            Color color = Color.None;
+            switch (userNotification.Notification.Severity)
+            {
+                case NotificationSeverity.Info:
+                    color = Color.Info;
+                    icon = "fas fa-info";
+                    break;
+                case NotificationSeverity.Success:
+                    color = Color.Success;
+                    icon = "fas fa-check";
+                    break;
+                case NotificationSeverity.Warn:
+                    color = Color.Warning;
+                    icon = "fas fa-triangle-exclamation";
+                    break;
+                case NotificationSeverity.Error:
+                    color = Color.Danger;
+                    icon = "fas fa-xmark";
+                    break;
+                case NotificationSeverity.Fatal:
+                    color = Color.Danger;
+                    icon = "fas fa-xmark";
+                    break;
+            }
+
+            string msg = string.Empty;
+            if (userNotification.Notification.Data is MessageNotificationData xx)
+                msg = xx.Message;
+            else
+                msg = "未知的通知内容！";
+            await MessageService.Show(new MessageOption
+            {
+                Color = color,
+                Content = msg,
+                ShowBar = true,
+                ShowBorder = true,
+                ShowShadow = true,
+                Icon = icon
+            });
         }
     }
 }

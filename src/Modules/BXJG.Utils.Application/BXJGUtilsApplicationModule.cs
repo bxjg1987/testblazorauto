@@ -38,7 +38,7 @@ namespace BXJG.Utils
             //需要模块调用方提供必要的泛型参数，所以映射的配置由调用方主动来执行，参考BXJGShopMapProfile
             //Configuration.Modules.AbpAutoMapper().Configurators.Add(cfg => cfg.AddProfile(new MapProfile(configuration)));
 
-            Configuration.Notifications.Notifiers.Add<EventRealTimeNotifier>();
+
 
             //此行必加
             Configuration.Modules.AbpAutoMapper().Configurators.Add(cfg =>
