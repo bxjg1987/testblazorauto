@@ -21,7 +21,7 @@ using ZLJ.App.Admin;
 namespace ZLJ.Web.Admin.BootstrapServer.Startup
 {
     //  [IgnoreMo(MoTypes = new[] { typeof(ExceptionInterceptorAttribute) })]
-    [DependsOn(typeof(ZLJWebCoreModule), typeof(ZLJApplicationModule))]
+    [DependsOn(typeof(ZLJWebCoreModule), typeof(AbpBootstrapBlazorModule), typeof(ZLJApplicationModule))]
     public class WebAdminBootstrapServerModule : AbpModule
     {
         public override void PreInitialize()
