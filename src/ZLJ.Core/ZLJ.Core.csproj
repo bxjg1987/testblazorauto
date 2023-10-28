@@ -55,10 +55,10 @@
 		<!--<PackageReference Include="BXJG.Common" Version="1.2.1" />
     <PackageReference Include="BXJG.Utils" Version="1.2.2" />-->
 		<!--<PackageReference Include="BXJG.WorkOrder.Core" Version="1.2.1" />-->
-		<PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="4.0.0" />
+		<PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="4.1.0" />
 		<PackageReference Include="DistributedLock.Core" Version="1.*" />
 		<PackageReference Include="Hangfire.Core" Version="1.8.6" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.12" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.13" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="7.0.0" />
 		<PackageReference Include="SourceLink.Copy.PdbFiles" Version="2.*">
 			<PrivateAssets>all</PrivateAssets>
