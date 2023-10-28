@@ -64,24 +64,24 @@ namespace BXJG.Utils.Components
     {
         //当前界面和全局Zhongjie在CommonBaseComponent中定义
 
-        /// <summary>
-        /// 反正是单例的，直接注入吧
-        /// </summary>
-        [Inject]
-        protected CircuitStateContainer CircuitStateContainer { get; private set; }
-        /// <summary>
-        /// 它是范围注册的，可以直接注入
-        /// </summary>
-        [Inject]
-        protected CircuitStateHandler CircuitStateHandler { get; private set; }
+        ///// <summary>
+        ///// 反正是单例的，直接注入吧
+        ///// </summary>
+        //[Inject]
+        //protected CircuitStateContainer CircuitStateContainer { get; private set; }
+        ///// <summary>
+        ///// 它是范围注册的，可以直接注入
+        ///// </summary>
+        //[Inject]
+        //protected CircuitStateHandler CircuitStateHandler { get; private set; }
         /// <summary>
         /// 获取当前电路及其附加属性
         /// </summary>
-        protected KeyValuePair<Circuit, Dictionary<string, object>> CurrentCircuit => CircuitStateContainer.SingleOrDefault(c => c.Key == CircuitStateHandler.Current);
+        protected BlazorServerContext Context { get; private set; }// => CircuitStateContainer.SingleOrDefault(c => c.Key == CircuitStateHandler.Current);
         /// <summary>
         /// 当前线路的中介
         /// </summary>
-        protected Zhongjie Zhongjie => CircuitStateContainer.GetZhongjie(CurrentCircuit.Key);
+        protected Zhongjie Zhongjie => Context.Zhongjie;
 
 
 
@@ -227,13 +227,20 @@ namespace BXJG.Utils.Components
         protected long? UserId;
 
 
-
-
+        //[Inject]
+        //public CircuitStateContainer CircuitStateContainer { get; private set; }
+        [Inject]
+        protected CircuitStateHandler CircuitStateHandler { get; private set; }
 
         //不要用异步方法做服务注入
         protected override void OnInitialized()
         {
             //AbpSession = ScopedServices.GetRequiredService<IAbpSession>();
+            var container = ScopedServices.GetRequiredService<CircuitStateContainer>();//不晓得为啥，必须用注入方式，这样获取不到
+
+            //var cir = ScopedServices.GetRequiredService<CircuitStateHandler>();//这样获取的，Current属性为空
+
+            Context = container[CircuitStateHandler.Current];
 
             TenantId = AbpSession.TenantId;
             UserId = AbpSession.UserId;

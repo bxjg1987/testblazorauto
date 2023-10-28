@@ -468,7 +468,8 @@ namespace BXJG.Utils.GeneralTree
         where TGetAllInput : GeneralTreeGetTreeInput
         where TMoveInput : GeneralTreeNodeMoveInput
     {
-        public Zhongjie Zhongjie { get; set; }
+        //Zhongjie仅用于界面，业务逻辑层任然使用abp的事件总线（它不是为界面设计的，默认也没提供多个实例），在ui提供abpk事件处理器 来连接到zhongjie实例
+        //public Zhongjie Zhongjie { get; set; }
         /* 
          * 数据显示地方有：管理页列表、作为一个搜索条件框、作为表单里一个下拉框
          * 顶级文本可能是 前端传过来的、上级节点文本、默认文本；除非根本不现实

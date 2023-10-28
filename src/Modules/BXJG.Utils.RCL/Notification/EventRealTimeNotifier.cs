@@ -55,7 +55,7 @@ namespace BXJG.Utils.Notification
                 var zhongjies = circuitStateContainer.GetByUserId(item.UserId);
                 foreach (var item2 in zhongjies)
                 {
-                    await (item2.Value[CircuitStateContainer.zhongjie] as Zhongjie).Chufa(item);
+                    await item2.Zhongjie.Chufa(item);
                 }
             }
         }

@@ -22,24 +22,34 @@ namespace BXJG.Utils
         Microsoft.Extensions.Logging.ILoggerFactory loggerFactory;
         IAbpSession session;
         ILogger logger;
+        IHttpContextAccessor httpContextAccessor;
 
+        /// <summary>
+        /// 组件中可以注入CircuitStateHandler，进而拿到当前线路
+        /// </summary>
         public Circuit Current { get; private set; }
 
-        public CircuitStateHandler(CircuitStateContainer container, Microsoft.Extensions.Logging.ILoggerFactory loggerFactory, IAbpSession session, ILogger logger)
+        public CircuitStateHandler(CircuitStateContainer container, Microsoft.Extensions.Logging.ILoggerFactory loggerFactory, IAbpSession session, ILogger logger, IHttpContextAccessor httpContextAccessor)
         {
             this.container = container;
             this.loggerFactory = loggerFactory;
             this.session = session;
             this.logger = logger;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         public override Task OnConnectionUpAsync(Circuit circuit, CancellationToken cancellationToken)
         {
             Current = circuit;
-            container.Add(circuit, new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase) {
-                { CircuitStateContainer.userId , session.UserId},
-                { CircuitStateContainer.zhongjie, new Zhongjie(loggerFactory)},
-            });
+            var ctx = new BlazorServerContext
+            {
+                Circuit = circuit,
+                HttpContext = httpContextAccessor.HttpContext,
+                UserId = session.UserId,
+                Zhongjie = new Zhongjie(loggerFactory)
+            };
+            //ctx["session"] = session;  租户id一般不是非常常用，少量需要时直接通过接口拿吧
+            container.Add(circuit, ctx);
             logger.Debug($"blazor server上线，用户id：{session.UserId} 此用户的线路数量：{container.GetByUserId(session.UserId).Count()} 总线路容器数量：{container.Count}");
 
             return base.OnConnectionUpAsync(circuit, cancellationToken); //担心父类此方法会修改，所以调用下更保险
@@ -47,9 +57,13 @@ namespace BXJG.Utils
         }
         public override Task OnConnectionDownAsync(Circuit circuit, CancellationToken cancellationToken)
         {
-            container.GetZhongjie(circuit)?.Zhuxiao();
-            container.Remove(circuit);
-            logger.Debug($"blazor server下线，用户id：{session.UserId}  此用户的线路数量：{container.GetByUserId(session.UserId).Count()} 总线路容器数量：{container.Count}");
+            if (container.TryGetValue(circuit, out var ls))
+            {
+                ls.Zhongjie?.Zhuxiao();
+
+                container.Remove(circuit);
+            }
+                logger.Debug($"blazor server下线，用户id：{session.UserId}  此用户的线路数量：{container.GetByUserId(session.UserId).Count()} 总线路容器数量：{container.Count}");
             return base.OnConnectionDownAsync(circuit, cancellationToken); //担心父类此方法会修改，所以调用下更保险
         }
     }
