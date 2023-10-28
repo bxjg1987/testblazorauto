@@ -23,19 +23,21 @@ namespace BXJG.Utils
         IAbpSession session;
         ILogger logger;
         IHttpContextAccessor httpContextAccessor;
+        Zhongjie Zhongjie;
 
         /// <summary>
         /// 组件中可以注入CircuitStateHandler，进而拿到当前线路
         /// </summary>
         public Circuit Current { get; private set; }
 
-        public CircuitStateHandler(CircuitStateContainer container, Microsoft.Extensions.Logging.ILoggerFactory loggerFactory, IAbpSession session, ILogger logger, IHttpContextAccessor httpContextAccessor)
+        public CircuitStateHandler(CircuitStateContainer container, Microsoft.Extensions.Logging.ILoggerFactory loggerFactory, IAbpSession session, ILogger logger, IHttpContextAccessor httpContextAccessor, Zhongjie zhongjie)
         {
             this.container = container;
             this.loggerFactory = loggerFactory;
             this.session = session;
             this.logger = logger;
             this.httpContextAccessor = httpContextAccessor;
+            Zhongjie = zhongjie;
         }
 
         public override Task OnConnectionUpAsync(Circuit circuit, CancellationToken cancellationToken)
@@ -43,10 +45,11 @@ namespace BXJG.Utils
             Current = circuit;
             var ctx = new BlazorServerContext
             {
-                Circuit = circuit,
-                HttpContext = httpContextAccessor.HttpContext,
+                //Circuit = circuit,
+               HttpContext = httpContextAccessor.HttpContext,
                 UserId = session.UserId,
-                Zhongjie = new Zhongjie(loggerFactory)
+                Zhongjie = new Zhongjie(loggerFactory),
+                //GlobalZhongjie = Zhongjie
             };
             //ctx["session"] = session;  租户id一般不是非常常用，少量需要时直接通过接口拿吧
             container.Add(circuit, ctx);
@@ -63,7 +66,7 @@ namespace BXJG.Utils
 
                 container.Remove(circuit);
             }
-                logger.Debug($"blazor server下线，用户id：{session.UserId}  此用户的线路数量：{container.GetByUserId(session.UserId).Count()} 总线路容器数量：{container.Count}");
+            logger.Debug($"blazor server下线，用户id：{session.UserId}  此用户的线路数量：{container.GetByUserId(session.UserId).Count()} 总线路容器数量：{container.Count}");
             return base.OnConnectionDownAsync(circuit, cancellationToken); //担心父类此方法会修改，所以调用下更保险
         }
     }

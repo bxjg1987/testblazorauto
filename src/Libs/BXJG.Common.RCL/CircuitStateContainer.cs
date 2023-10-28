@@ -49,14 +49,15 @@ namespace BXJG.Common.RCL
 
     /// <summary>
     /// blazor server 专用上下文，一个线路Circuit关联一个此实例
+    /// 这里只定义无法直接从容器中后去的
     /// </summary>
     public class BlazorServerContext
     {
-        /// <summary>
-        /// 当前电路
-        /// </summary>
-        public Circuit Circuit { get; init; }
-       
+        ///// <summary>
+        ///// 当前电路
+        ///// </summary>
+        //public Circuit Circuit { get; init; }
+
         /// <summary>
         /// 尽量别用，官方说的
         /// </summary>
@@ -66,9 +67,20 @@ namespace BXJG.Common.RCL
         /// </summary>
         public object UserId { get; init; }
         /// <summary>
-        /// 界面专用事件总线
+        /// 与线路关联的Zhongjie
         /// </summary>
         public Zhongjie Zhongjie { get; init; }
+        ///// <summary>
+        ///// 整个应用程序的中介
+        ///// </summary>
+        //public Zhongjie GlobalZhongjie { get; init; }// => Zhongjie.Instance;
+
+        //好些没啥意义，抽象中就不做了，浪费内存，哪里需要的自己去做
+        ///// <summary>
+        ///// 线程中介
+        ///// </summary>
+        //public AsyncLocal<Zhongjie> ThreadZhongjie { get; set; }
+
 
         public object this[object key]
         {

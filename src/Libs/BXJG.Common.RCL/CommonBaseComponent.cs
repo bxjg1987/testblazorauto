@@ -13,16 +13,21 @@ namespace BXJG.Common.RCL
     /// </summary>
     public abstract class CommonBaseComponent : OwningComponentBase
     {
-        private Zhongjie zhongjieGlobal;
-        /// <summary>
-        /// 获取变形精怪中介，整个应用全局的
-        /// </summary>
-        protected virtual Zhongjie GlobalZhongjie => zhongjieGlobal ??= ScopedServices.GetRequiredService<Zhongjie>();
-        /// <summary>
-        /// 级联的事件总线，外层组件所处的层次决定此事件总线的范围
-        /// </summary>
+        //// private Zhongjie zhongjieGlobal;
+        // /// <summary>
+        // /// 获取变形精怪中介，整个应用全局的
+        // /// </summary>
+        // protected virtual Zhongjie GlobalZhongjie => Context.GlobalZhongjie;// zhongjieGlobal ??= ScopedServices.GetRequiredService<Zhongjie>();
+        // /// <summary>
+        // /// 级联的事件总线，外层组件所处的层次决定此事件总线的范围
+        // /// </summary>
+        // protected virtual Zhongjie? Zhongjie => Context.Zhongjie;
+
+        [Inject]
+        protected virtual Zhongjie GlobalZhongjie { get; private set; }
+
         [CascadingParameter]
-        protected virtual Zhongjie? OwnZhongjie { get; set; }
+        protected BlazorServerContext Context { get; set; }
 
         private ILogger _logger;
         /// <summary>

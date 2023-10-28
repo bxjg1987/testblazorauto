@@ -1,7 +1,7 @@
-﻿@inherits AbpBaseComponent
+﻿@implements IDisposable
 
 @* 能从ioc容器拿的，就别通过级联传递，免得混乱 *@
-
+<CascadingValue Value="context">
     <CascadingAuthenticationState>
         <BootstrapBlazorRoot OnErrorHandleAsync="OnErrorHandleAsync">
             <Router AppAssembly="@typeof(App).Assembly">
@@ -34,4 +34,4 @@
             </Router>
         </BootstrapBlazorRoot>
     </CascadingAuthenticationState>
-
+    </CascadingValue>
