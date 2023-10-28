@@ -15,8 +15,7 @@ namespace ZLJ.Web.Admin.BootstrapServer.Shared
     {
         [Inject]
         protected MessageService MessageService { get; private set; }
-        [Inject]
-        protected Castle.Core.Logging.ILoggerFactory LoggerFactory { get; private set; }
+    
         /// <summary>
         /// 这里的错误仅仅是兜底，错误后当前页面的控件状态很可能无法恢复，我们通过肉夹馍的aop实现了统一异常处理
         /// 参考文档中的详细描述，或者 https://www.cnblogs.com/jionsoft/p/17783675.html
@@ -27,7 +26,7 @@ namespace ZLJ.Web.Admin.BootstrapServer.Shared
         private async Task OnErrorHandleAsync(ILogger logger, Exception ex)
         {
 
-            var l = LoggerFactory.Create("App");
+       
             if (ex is UserFriendlyException uex)
             {
                 await MessageService.Show(new MessageOption
@@ -40,7 +39,7 @@ namespace ZLJ.Web.Admin.BootstrapServer.Shared
             }
             else
             {
-                l.Error("未处理异常！", ex);
+              Logger.Error("未处理异常！", ex);
                 await MessageService.Show(new MessageOption
                 {
                     Color = Color.Danger,
