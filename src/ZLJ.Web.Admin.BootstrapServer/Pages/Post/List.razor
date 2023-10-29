@@ -6,11 +6,15 @@
 @attribute [Authorize(PermissionNames.AdministratorBaseInfoPost)]
 @inherits AbpBootstrapBlazorListBaseComponent<IPostAppService, PostDto, int, PagedAndSortedResultRequest< PagedPostResultRequestDto>, CreatePostDto, PostEditDto>
 
-
+ @* " *@
 <Table TItem="PostDto"
        IsBordered="true"
        IsFixedHeader="true"
        ShowSearch="true"
+       ShowSearchText="true"
+       SearchMode="SearchMode.Popup"
+       CustomerSearchModel="this"
+       PageItems="GetAllInput.MaxResultCount"
        style="height:800px;"
        ShowLoading="true"
        ShowSkeleton="false"
@@ -22,8 +26,6 @@
        ShowToolbar="true"
        IsAutoQueryFirstRender="true"
        IsMultipleSelect="true"
-       ShowAdvancedSearch="false"
-       ShowSearchButton="false"
        ShowResetButton="false"
        ShowRefresh="false"
        OnDeleteAsync="OnDeleteBatch" 
@@ -37,10 +39,19 @@
        FixedExtendButtonsColumn="true"
        FixedMultipleColumn="true"
        IsPagination="true" 
-       select
        @bind-SelectedRows="SelectedItems"
        FixedLineNoColumn="true"
        ShowEditButton="false">
+       
+       <CustomerSearchTemplate>
+            <BootstrapInput @bind-Value="GetAllInput.Filter.OuCode" ShowLabel="true" DisplayText="所属部门" />
+       </CustomerSearchTemplate>
+
+       @* 当不设置CustomerSearchModel和CustomerSearchTemplate时，它用来自定义搜索栏，不过我们用不着 *@
+       <SearchTemplate>
+          这个标签貌似没啥卵用了
+       </SearchTemplate>
+
 
     <TableExtensionToolbarBeforeTemplate>
         <Button>右侧按钮前</Button>
@@ -71,7 +82,7 @@
      <TableColumns>
          <TableColumn @bind-Field="@context.Name" Sortable="true" DefaultSort="true" Fixed="true" Width="300" />
          <TableColumn @bind-Field="@context.DisplayName" Width="400" Sortable="true" />
-         <TableColumn @bind-Field="@context.IsStatic" Width="400" Sortable="true" />
+         <TableColumn @bind-Field="@context.IsStatic" Width="400" Sortable="true" Searchable="true" />
          <TableColumn @bind-Field="@context.Description" Width="700" />
 
      </TableColumns>

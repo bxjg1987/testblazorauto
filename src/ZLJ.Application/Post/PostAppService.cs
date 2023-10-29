@@ -162,8 +162,12 @@ namespace ZLJ.App.Admin.Post
                  select new { role, ou };
             //input.Sorting.Replace("DisplayName");
             var ct = await q2.CountAsync();
-            // q2 = q2.OrderBy(input.Sorting);
-            q2 = q2.OrderBy(c => c.role.DisplayName).PageBy(input);
+
+            
+
+            q2 = q2.OrderBy(input.Sorting).PageBy(input);
+
+          //q2 = q2.OrderBy(c => c.role.DisplayName).PageBy(input);
 
             var list = await q2.ToListAsync();
 

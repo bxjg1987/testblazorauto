@@ -34,7 +34,7 @@ namespace BXJG.Utils.Components
     /// <typeparam name="TAppService">应用服务类型</typeparam>
     /// <typeparam name="TEntityDto">列表项的数据类型</typeparam>
     /// <typeparam name="TPrimaryKey">唯一id类型</typeparam>
-    /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
+    /// <typeparam name="TGetAllInput">获取列表时的输入参数类型，分页或不分页</typeparam>
     /// <typeparam name="TCreateInput">新增时的输入类型</typeparam>
     /// <typeparam name="TUpdateInput">修改时的输入类型</typeparam>
     /// <typeparam name="TList">列表类型</typeparam>
@@ -104,7 +104,7 @@ namespace BXJG.Utils.Components
         /// <param name="updatePermissionName"></param>
         /// <param name="deletePermissionName"></param>
         /// <returns></returns>
-        
+
         protected virtual async Task InitPermission(string createPermissionName = default, string updatePermissionName = default,
             string deletePermissionName = default/*, string getPermissionName = default*/)
         {
@@ -123,7 +123,7 @@ namespace BXJG.Utils.Components
         /// </summary>
         /// <param name="output">批量操作结果</param>
         /// <param name="funName">操作名</param>
-        
+
         protected virtual async ValueTask BatchOperationMessage(BatchOperationOutput<TPrimaryKey> output, string funName = "删除")
         {
             if (output.ErrorMessage.Any())
@@ -156,15 +156,40 @@ namespace BXJG.Utils.Components
 
         #region 列表
         /// <summary>
+        /// 搜索条件
+        /// </summary>
+        protected TGetAllInput GetAllInput = new TGetAllInput();
+        /// <summary>
+        /// 是否是分页模式
+        /// </summary>
+        public bool IsPage => GetAllInput is IPagedResultRequest;
+
+        /// <summary>
         /// 填充动态条件
         /// </summary>
         /// <returns></returns>
-        
-        protected virtual ValueTask FillDynamicConditions(ICollection<ConditionFieldDefine> conditions) => ValueTask.CompletedTask;
+
+        //protected virtual ValueTask FillDynamicConditions(ICollection<ConditionFieldDefine> conditions) => ValueTask.CompletedTask;
+
+
         /// <summary>
         /// 获取每页行数，若不做分页请返回0
         /// </summary>
-        protected virtual int PageSize { get; set; } = 20;
+        protected virtual int PageSize
+        {
+            get
+            {
+                if (GetAllInput is ILimitedResultRequest dx)
+                {
+                    return dx.MaxResultCount;
+                }
+                else if (GetAllInput is IHaveFilter dx1 && dx1.Filter is ILimitedResultRequest dx2)
+                {
+                    return dx2.MaxResultCount;
+                }
+                return int.MaxValue;
+            }
+        }
 
         /// <summary>
         /// 当前列表数据
@@ -179,7 +204,22 @@ namespace BXJG.Utils.Components
         /// <summary>
         /// 当前是第几页
         /// </summary>
-        protected virtual int PageIndex { get; set; } = 1;
+        protected virtual int PageIndex
+        {
+            get
+            {
+                int pageIndex = 1;
+                if (GetAllInput is IPagedResultRequest dx)
+                    pageIndex = (int)Math.Ceiling((decimal)dx.SkipCount / PageSize);
+
+                //若是纯条件，就木有必要
+
+                if (pageIndex <= 0)
+                    pageIndex = 1;
+
+                return pageIndex;
+            }
+        }
 
         /// <summary>
         /// 父类仅仅需要读，至于是否可写由子类自己决定
@@ -192,7 +232,18 @@ namespace BXJG.Utils.Components
         /// <summary>
         /// 获取排序字符串
         /// </summary>
-        protected virtual string Sorting { get; set; } = "Id";
+        protected virtual string Sorting
+        {
+            get
+            {
+                if (GetAllInput is ISortedResultRequest dx)
+                    return dx.Sorting;
+                else if (GetAllInput is IHaveFilter dx1 && dx1.Filter is ISortedResultRequest dx2)
+                    return dx2.Sorting;
+
+                return "Id";
+            }
+        }
 
         ///// <summary>
         ///// 表格数据加载
@@ -259,8 +310,8 @@ namespace BXJG.Utils.Components
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        
-        protected virtual ValueTask FillCondtion(TGetAllInput input) => ValueTask.CompletedTask;
+
+        //protected virtual ValueTask FillCondtion(TGetAllInput input) => ValueTask.CompletedTask;
 
         ///// <summary>
         ///// 批量选择变化时回调
@@ -288,43 +339,43 @@ namespace BXJG.Utils.Components
         /// 加载列表数据
         /// </summary>
         /// <returns></returns>
-        
+
         protected virtual async Task LoadListData()
         {
             IsLoading = true;
             try
             {
-                var cd = new TGetAllInput();
-                if (cd is IDynamicCondition cdd)
-                {
-                    cdd.Conditions = new List<ConditionFieldDefine>();// await BuildDynamicCondition();// state.FilterDefinitions.MapToDynamicCondition().ToList();
-                    await FillDynamicConditions(cdd.Conditions as List<ConditionFieldDefine>);
-                }
-                else if (cd is IHaveFilter cddq && cddq.Filter is IDynamicCondition cddqq)
-                {
-                    cddqq.Conditions = new List<ConditionFieldDefine>();// await BuildDynamicCondition();//state.FilterDefinitions.MapToDynamicCondition().ToList();
-                    await FillDynamicConditions(cddqq.Conditions as List<ConditionFieldDefine>);
-                }
-                if (cd is IPagedAndSortedResultRequest cd2)
-                {
-                    cd2.MaxResultCount = PageSize; //state.PageSize;
-                    cd2.SkipCount = (PageIndex - 1) * PageSize;
-                }
-                if (cd is ISortedResultRequest cd3)
-                {
-                    cd3.Sorting = Sorting;// state.SortDefinitions.ToLinqDynamicCore();
-                }
+                //var cd = GetAllInput;
+                //if (cd is IDynamicCondition cdd)
+                //{
+                //    cdd.Conditions = new List<ConditionFieldDefine>();// await BuildDynamicCondition();// state.FilterDefinitions.MapToDynamicCondition().ToList();
+                //    await FillDynamicConditions(cdd.Conditions as List<ConditionFieldDefine>);
+                //}
+                //else if (cd is IHaveFilter cddq && cddq.Filter is IDynamicCondition cddqq)
+                //{
+                //    cddqq.Conditions = new List<ConditionFieldDefine>();// await BuildDynamicCondition();//state.FilterDefinitions.MapToDynamicCondition().ToList();
+                //    await FillDynamicConditions(cddqq.Conditions as List<ConditionFieldDefine>);
+                //}
+                //if (cd is IPagedAndSortedResultRequest cd2)
+                //{
+                //    cd2.MaxResultCount = PageSize; //state.PageSize;
+                //    cd2.SkipCount = (PageIndex - 1) * PageSize;
+                //}
+                //if (cd is ISortedResultRequest cd3)
+                //{
+                //    cd3.Sorting = Sorting;// state.SortDefinitions.ToLinqDynamicCore();
+                //}
 
-                if (cd is IHaveKeywords cd4)
-                {
-                    cd4.Keywords = Keywords;
-                }
-                else if (cd is IHaveFilter cddq && cddq.Filter is IHaveKeywords cddqq)
-                {
-                    cddqq.Keywords = Keywords;// state.FilterDefinitions.MapToDynamicCondition().ToList();
-                }
-                await FillCondtion(cd);
-                var dtos = await AppService.GetAllAsync(cd);
+                //if (cd is IHaveKeywords cd4)
+                //{
+                //    cd4.Keywords = Keywords;
+                //}
+                //else if (cd is IHaveFilter cddq && cddq.Filter is IHaveKeywords cddqq)
+                //{
+                //    cddqq.Keywords = Keywords;// state.FilterDefinitions.MapToDynamicCondition().ToList();
+                //}
+                //await FillCondtion(cd);
+                var dtos = await AppService.GetAllAsync(GetAllInput);
 
                 //_ = InvokeAsync(StateHasChanged);//让多选影响顶部按钮得以执行 包一层是因为需要加载完才执行
                 //dataGrid.SelectedItems.Clear();//翻页时，已选择的好像木有清空，这里手动来下
@@ -354,12 +405,26 @@ namespace BXJG.Utils.Components
         /// <param name="dto"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        
+
         protected virtual ValueTask AddItemExtData(TEntityDto dto, dynamic data) => ValueTask.CompletedTask;
         /// <summary>
         /// 搜索关键字
         /// </summary>
-        protected virtual string Keywords { get; set; }
+        protected virtual string Keywords
+        {
+            get
+            {
+                if (GetAllInput is IHaveKeywords cd4)
+                {
+                    return cd4.Keywords;
+                }
+                else if (GetAllInput is IHaveFilter cddq && cddq.Filter is IHaveKeywords cddqq)
+                {
+                    return cddqq.Keywords;// state.FilterDefinitions.MapToDynamicCondition().ToList();
+                }
+                return string.Empty;
+            }
+        }
         /// <summary>
         /// 关键字变化时回调，默认修改关键字字段并刷新列表
         /// </summary>
@@ -367,7 +432,15 @@ namespace BXJG.Utils.Components
         /// <returns></returns>
         protected virtual async Task KeywordsChanged(string keywords)
         {
-            this.Keywords = keywords;
+            if (GetAllInput is IHaveKeywords cd4)
+            {
+                cd4.Keywords = Keywords;
+            }
+            else if (GetAllInput is IHaveFilter cddq && cddq.Filter is IHaveKeywords cddqq)
+            {
+                cddqq.Keywords = Keywords;// state.FilterDefinitions.MapToDynamicCondition().ToList();
+            }
+
             await Refresh();
         }
         #endregion
@@ -409,7 +482,7 @@ namespace BXJG.Utils.Components
         /// <summary>
         /// 显示批量删除的确认框
         /// </summary>
-        
+
         protected virtual void ShowDeleteConfirm()
         {
             HideDeleteConfirm();
@@ -418,7 +491,7 @@ namespace BXJG.Utils.Components
         /// <summary>
         /// 隐藏批量删除的确认框
         /// </summary>
-        
+
         protected virtual void HideDeleteConfirm()
         {
             isShowDeleteConfirm = false;
@@ -478,7 +551,7 @@ namespace BXJG.Utils.Components
         /// 显示删除明细的确认框
         /// </summary>
         /// <param name="dto"></param>
-        
+
         protected virtual void ShowDeleteConfirm(TEntityDto dto)
         {
             HideDeleteConfirm();
