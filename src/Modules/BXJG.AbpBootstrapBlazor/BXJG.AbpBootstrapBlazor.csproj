@@ -20,7 +20,9 @@
   <ItemGroup>
     <PackageReference Include="BootstrapBlazor" Version="7.11.2" />
     <PackageReference Include="BootstrapBlazor.FontAwesome" Version="7.5.0" />
-	  <PackageReference Include="Rougamo.Fody" Version="2.0.0" IncludeAssets="all" PrivateAssets="contentfiles;analyzers" />
+	<!--当前项目定义了拦截器，就算当前项目引用的其它项目已经引用rougamo，这里也必须引用，
+	IncludeAssets="all" PrivateAssets="contentfiles;analyzers"是确保拦截器使用方不用引用rougamo的包-->
+	<PackageReference Include="Rougamo.Fody" Version="2.0.0" IncludeAssets="all" PrivateAssets="contentfiles;analyzers" />
   </ItemGroup>
 
   <ItemGroup>
