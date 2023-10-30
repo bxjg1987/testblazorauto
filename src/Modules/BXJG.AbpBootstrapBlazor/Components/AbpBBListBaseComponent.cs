@@ -255,6 +255,8 @@ namespace BXJG.AbpBootstrapBlazor.Components
             GetAllInput = new TGetAllInput();
         }
 
+     
+
         #region 生命周期方法增加统一异常处理拦截器
         [AbpBBException]
         public override async Task SetParametersAsync(ParameterView parameters)

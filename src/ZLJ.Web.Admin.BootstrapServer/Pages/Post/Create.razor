@@ -1,0 +1,12 @@
+﻿@using ZLJ.App.Admin.Post;
+@using ZLJ.App.Admin.Post.Dto;
+@attribute [Authorize(PermissionNames.AdministratorBaseInfoPostCreate)]
+
+@inherits AdminCreateBaseComponent<IPostAppService, PostDto, int, PagedAndSortedResultRequest< PagedPostResultRequestDto>, CreatePostDto, PostEditDto>
+手动阀手动阀
+<ValidateForm Model="createDto">
+    <EditorForm Model="@createDto"  >
+        
+    </EditorForm>
+</ValidateForm>
+手动阀手动阀

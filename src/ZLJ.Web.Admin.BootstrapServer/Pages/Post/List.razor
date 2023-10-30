@@ -8,7 +8,7 @@
 @inherits AdminListBaseComponent<IPostAppService, PostDto, int, PagedAndSortedResultRequest< PagedPostResultRequestDto>, CreatePostDto, PostEditDto>
 
  @* " *@
-<Table TItem="PostDto"
+<Table TItem="PostDto" 
        IsBordered="true"
        IsFixedHeader="true"
        ShowSearch="true"
@@ -21,14 +21,14 @@
        ShowSkeleton="false"
        AllowResizing="true"
        ShowColumnList="true"
-       IsStriped="true"
+       IsStriped="true" OnSaveAsync="OnSaveAsync"
        AllowDragColumn="true"
        OnQueryAsync="OnQuery"
        ShowToolbar="true"
        IsAutoQueryFirstRender="true"
        IsMultipleSelect="true"
        ShowResetButton="false"
-       ShowRefresh="false"
+       ShowRefresh="false" 
        OnDeleteAsync="OnDeleteBatch" 
        ShowToastAfterSaveOrDeleteModel="false"
        ShowDeleteButton="deleteIsGranted"
@@ -52,6 +52,13 @@
        <SearchTemplate>
           这个标签貌似没啥卵用了
        </SearchTemplate>
+
+       @* 新增和修改时都调用这个 配合OnAdd *@
+       <EditTemplate   >
+
+           <Create  CreatedDto="context" />
+       </EditTemplate>
+
 
 
     <TableExtensionToolbarBeforeTemplate>
@@ -104,4 +111,6 @@
         <TableCellButton Color="Color.Danger" Icon="fa-solid fa-pen" Text="审批"  />
         <TableCellPopconfirmButton Color="Color.Info" Icon="fa-solid fa-pen" Text="确认"  /> *@
      </RowButtonTemplate>
+
+    
  </Table>

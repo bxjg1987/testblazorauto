@@ -15,10 +15,11 @@ namespace ZLJ.Web.Admin.BootstrapServer.Pages.Post
     public partial class List
     {
         protected override string FuncName => "角色岗位";
-
+        [AbpBBException]
         protected override async Task OnInitializedAsync()
         {
             await base.InitPermission(PermissionNames.AdministratorBaseInfoPostCreate, PermissionNames.AdministratorBaseInfoPostUpdate, PermissionNames.AdministratorBaseInfoPostDelete);
+            await base.OnInitializedAsync();
         }
         //protected override Task LoadListData()
         //{
@@ -60,6 +61,10 @@ namespace ZLJ.Web.Admin.BootstrapServer.Pages.Post
             GetAllInput.Sorting = $"role.{GetAllInput.Sorting}";//目前值考虑单列排序
             return base.LoadListData();
         }
-      
+        protected virtual async Task<bool> OnSaveAsync(PostDto dto, ItemChangedType itemChangedType)
+        {
+
+            return true;
+        }
     }
 }

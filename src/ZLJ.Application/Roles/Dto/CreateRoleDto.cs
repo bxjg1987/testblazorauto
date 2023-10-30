@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Abp.Application.Services.Dto;
 using Abp.Authorization.Roles;
@@ -12,6 +13,7 @@ namespace ZLJ.App.Admin.Roles.Dto
         ///// 所属组织单位集合
         ///// </summary>
         //public long[] OuIds { get; set; }
+        [DisplayName("唯一名称")]
         [Required]
         [StringLength(AbpRoleBase.MaxNameLength)]
         public string Name { get; set; }
