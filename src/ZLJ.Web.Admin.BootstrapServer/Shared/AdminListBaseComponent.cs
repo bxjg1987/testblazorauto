@@ -25,12 +25,23 @@ namespace ZLJ.Web.Admin.Shared
                                                  TPrimaryKey,
                                                  TGetAllInput,
                                                  TCreateInput,
-                                                 TUpdateInput> : AbpBBListBaseComponent<TAppService,
-                                                                                         TEntityDto,
-                                                                                         TPrimaryKey,
-                                                                                         TGetAllInput,
-                                                                                         TCreateInput,
-                                                                                         TUpdateInput>
+                                                 TUpdateInput,
+                                                 TCreateComponent,
+                                                 TEditOrDetailComponent> : AbpBBListBaseComponent<TAppService,
+                                                                                                  TEntityDto,
+                                                                                                  TPrimaryKey,
+                                                                                                  TGetAllInput,
+                                                                                                  TCreateInput,
+                                                                                                  TUpdateInput,
+                                                                                                  TCreateComponent,
+                                                                                                  TEditOrDetailComponent>
+        where TCreateComponent : AbpBBCreateBaseComponent<TAppService,
+                                                          TEntityDto,
+                                                          TPrimaryKey,
+                                                          TGetAllInput,
+                                                          TCreateInput,
+                                                          TUpdateInput>
+        where TCreateInput : new()
         where TEntityDto : class, IEntityDto<TPrimaryKey>, IExtendableDto, new()
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TGetAllInput : new()

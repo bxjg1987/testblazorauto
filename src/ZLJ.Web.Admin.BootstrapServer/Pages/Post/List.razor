@@ -5,7 +5,7 @@
 
 @attribute [TabItemOption(Text = "岗位角色")]
 @attribute [Authorize(PermissionNames.AdministratorBaseInfoPost)]
-@inherits AdminListBaseComponent<IPostAppService, PostDto, int, PagedAndSortedResultRequest< PagedPostResultRequestDto>, CreatePostDto, PostEditDto>
+@inherits AdminListBaseComponent<IPostAppService, PostDto, int, PagedAndSortedResultRequest< PagedPostResultRequestDto>, CreatePostDto, PostEditDto,Create,EditOrDetail>
 
  @* " *@
 <Table TItem="PostDto" 
@@ -56,7 +56,7 @@
        @* 新增和修改时都调用这个 配合OnAdd *@
        <EditTemplate   >
 
-           <Create  CreatedDto="context" />
+        <Create @ref="createComponent" CreatedDto="context" />
        </EditTemplate>
 
 

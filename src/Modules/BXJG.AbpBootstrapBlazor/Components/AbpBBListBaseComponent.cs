@@ -58,24 +58,35 @@ namespace BXJG.AbpBootstrapBlazor.Components
     /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
     /// <typeparam name="TCreateInput">新增时的输入类型</typeparam>
     /// <typeparam name="TUpdateInput">修改时的输入类型</typeparam>
-    /// <typeparam name="TList">列表类型</typeparam>
+    /// <typeparam name="TCreateComponent">新增组件类型</typeparam>
+    /// <typeparam name="TEditOrDetailComponent">修改和详情组件类型</typeparam>
     public abstract class AbpBBListBaseComponent<TAppService,
                                                  TEntityDto,
                                                  TPrimaryKey,
                                                  TGetAllInput,
                                                  TCreateInput,
-                                                 TUpdateInput> : AbpListBaseComponent<TAppService,
-                                                                                      TEntityDto,
-                                                                                      TPrimaryKey,
-                                                                                      TGetAllInput,
-                                                                                      TCreateInput,
-                                                                                      TUpdateInput,
-                                                                                      List<TEntityDto>>, ITableSearchModel
+                                                 TUpdateInput,
+                                                 TCreateComponent,
+                                                 TEditOrDetailComponent> : AbpListBaseComponent<TAppService,
+                                                                                                TEntityDto,
+                                                                                                TPrimaryKey,
+                                                                                                TGetAllInput,
+                                                                                                TCreateInput,
+                                                                                                TUpdateInput,
+                                                                                                List<TEntityDto>>, ITableSearchModel
+        where TCreateComponent : AbpBBCreateBaseComponent<TAppService,
+                                                          TEntityDto,
+                                                          TPrimaryKey,
+                                                          TGetAllInput,
+                                                          TCreateInput,
+                                                          TUpdateInput>
+        where TCreateInput : new()
         where TEntityDto : class, IEntityDto<TPrimaryKey>, IExtendableDto, new()
         where TGetAllInput : new()
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
     {
+
         protected Table<TEntityDto> table;
         [AbpBBException]
         protected override async Task DeleteBatch()
@@ -247,15 +258,27 @@ namespace BXJG.AbpBootstrapBlazor.Components
         }
 
         /// <summary>
-        /// 重置操作
+        /// 搜索条件重置操作
         /// </summary>
         [AbpBBException]
         public virtual void Reset()
         {
             GetAllInput = new TGetAllInput();
         }
-
-     
+        /// <summary>
+        /// 对新增组件的引用
+        /// </summary>
+        protected TCreateComponent createComponent;
+        /// <summary>
+        /// 点击列表中弹出新增框底部的保存按钮时执行
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <param name="itemChangedType"></param>
+        /// <returns></returns>
+        protected virtual async Task<bool> OnSaveAsync(TEntityDto dto, ItemChangedType itemChangedType)
+        {
+            return await createComponent.BtnSaveClick();
+        }
 
         #region 生命周期方法增加统一异常处理拦截器
         [AbpBBException]

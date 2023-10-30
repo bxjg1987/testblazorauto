@@ -64,7 +64,7 @@ namespace BXJG.Utils.Components
         /// 重置按钮点击时回调，由于事件无法使用ValueTask，所以这里用了Task
         /// </summary>
         /// <returns></returns>
-        protected virtual async Task BtnResetClick()
+        public virtual async Task BtnResetClick()
         {
             isReseting = true;
             try
@@ -118,15 +118,15 @@ namespace BXJG.Utils.Components
         /// <summary>
         /// 核心的保存逻辑
         /// </summary>
-        /// <returns></returns>
-        protected virtual async Task BtnSaveClick()
+        /// <returns>新增任务是否结束</returns>
+        public virtual async Task<bool> BtnSaveClick()
         {
             //木有权限时保存按钮不可点击
             //验证不过时此方法不应该被调用
             isSaving = true;
             try
             {
-                await SaveCore();
+                return await SaveCore();
             }
             finally
             {
@@ -136,15 +136,27 @@ namespace BXJG.Utils.Components
         /// <summary>
         /// 保存的核心逻辑
         /// </summary>
-        /// <returns></returns>
-        protected virtual async Task SaveCore()
+        /// <returns>新增任务是否结束</returns>
+        protected virtual async Task<bool> SaveCore()
         {
+            var yz = await Validate();
+            if (!yz)
+                return false;
             //木有权限时保存按钮不可点击
             //验证不过时此方法不应该被调用
             var r = await AppService.CreateAsync(createDto);
             await ShowSuccessMessage(msg: "新增成功！");
             if (saveAndContinue)
+            {
                 await BtnResetClick();
+                return false;
+            }
+            return true;
         }
+        /// <summary>
+        /// 表单验证的核心逻辑
+        /// </summary>
+        /// <returns>true验证成功；false验证失败</returns>
+        protected abstract ValueTask<bool> Validate();
     }
 }

@@ -61,10 +61,6 @@ namespace ZLJ.Web.Admin.BootstrapServer.Pages.Post
             GetAllInput.Sorting = $"role.{GetAllInput.Sorting}";//目前值考虑单列排序
             return base.LoadListData();
         }
-        protected virtual async Task<bool> OnSaveAsync(PostDto dto, ItemChangedType itemChangedType)
-        {
-
-            return true;
-        }
+      
     }
 }

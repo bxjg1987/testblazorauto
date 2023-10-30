@@ -3,10 +3,11 @@
 @attribute [Authorize(PermissionNames.AdministratorBaseInfoPostCreate)]
 
 @inherits AdminCreateBaseComponent<IPostAppService, PostDto, int, PagedAndSortedResultRequest< PagedPostResultRequestDto>, CreatePostDto, PostEditDto>
-手动阀手动阀
-<ValidateForm Model="createDto">
-    <EditorForm Model="@createDto"  >
-        
+<ValidateForm Model="createDto" @ref="validateForm">
+    <EditorForm Model="@createDto" RowType="RowType.Inline" LabelAlign="Alignment.Right">
+        <FieldItems>
+            <EditorItem @bind-Field="@context.Id" Editable="false" />
+            <EditorItem @bind-Field="@context.GrantedPermissions" Editable="false" />
+        </FieldItems>
     </EditorForm>
 </ValidateForm>
-手动阀手动阀

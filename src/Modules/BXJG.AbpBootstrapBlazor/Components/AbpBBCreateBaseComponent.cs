@@ -47,14 +47,18 @@ namespace BXJG.AbpBootstrapBlazor.Components
         /// </summary>
         protected ValidateForm validateForm;
         [AbpBBException]
-        protected override async Task BtnResetClick()
+        public override async Task BtnResetClick()
         {
             await base.BtnResetClick();
         }
         [AbpBBException]
-        protected override async Task BtnSaveClick()
+        public override async Task<bool> BtnSaveClick()
         {
-            await base.BtnSaveClick();
+            return await base.BtnSaveClick();
+        }
+        protected override ValueTask<bool> Validate()
+        {
+            return ValueTask.FromResult(validateForm.Validate());
         }
         [Inject]
         public MessageService MessageService { get; set; }
