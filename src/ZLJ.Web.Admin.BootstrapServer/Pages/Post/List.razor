@@ -2,9 +2,10 @@
 
 @using ZLJ.App.Admin.Post;
 @using ZLJ.App.Admin.Post.Dto;
+
 @attribute [TabItemOption(Text = "岗位角色")]
 @attribute [Authorize(PermissionNames.AdministratorBaseInfoPost)]
-@inherits AbpBootstrapBlazorListBaseComponent<IPostAppService, PostDto, int, PagedAndSortedResultRequest< PagedPostResultRequestDto>, CreatePostDto, PostEditDto>
+@inherits AdminListBaseComponent<IPostAppService, PostDto, int, PagedAndSortedResultRequest< PagedPostResultRequestDto>, CreatePostDto, PostEditDto>
 
  @* " *@
 <Table TItem="PostDto"

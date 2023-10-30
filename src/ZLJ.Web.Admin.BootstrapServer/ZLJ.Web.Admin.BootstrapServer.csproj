@@ -8,13 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Shared\AdminBaseComponent.cs" />
-    <Compile Remove="Shared\AdminCreateBaseComponent.cs" />
     <Compile Remove="Shared\AdminDetailBaseComponent.cs" />
     <Compile Remove="Shared\AdminGeneralTreeCreateBaseComponent.cs" />
     <Compile Remove="Shared\AdminGeneralTreeDetailOrUpdateBaseComponent.cs" />
     <Compile Remove="Shared\AdminGeneralTreeListBaseComponent.cs" />
-    <Compile Remove="Shared\AdminListBaseComponent.cs" />
   </ItemGroup>
 
   <ItemGroup>

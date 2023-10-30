@@ -27,7 +27,7 @@ namespace BXJG.AbpBootstrapBlazor.Interceptors
     /// </summary>
     public class AbpBBExceptionAttribute : MoAttribute
     {
-        //public override AccessFlags Flags => AccessFlags.Method;
+        public override AccessFlags Flags => AccessFlags.Method| AccessFlags.Instance;
 
         /*
          * 省略访问修饰符标识拦截所有方法
@@ -35,7 +35,7 @@ namespace BXJG.AbpBootstrapBlazor.Interceptors
          * 继承于Microsoft.AspNetCore.Components.ComponentBase的所有子类
          * 的所有方法
          */
-        public override string? Pattern => "method(protected * BXJG.Utils.Components.AbpBaseComponent+.*(..))";
+        //public override string? Pattern => "method(protected * BXJG.Utils.Components.AbpBaseComponent+.*(..))";
 
         //public override Feature Features => Feature.Observe;//加了这个就不灵了，不晓得为啥
         //ComponentBase

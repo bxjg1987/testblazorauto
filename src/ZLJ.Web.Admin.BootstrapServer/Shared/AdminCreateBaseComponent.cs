@@ -1,6 +1,6 @@
 ﻿using Abp.Application.Services.Dto;
 using Abp.Localization.Sources;
-using BXJG.AbpMudBlazor.Components;
+using BXJG.AbpBootstrapBlazor.Components;
 using BXJG.Utils;
 using System;
 using System.Collections.Generic;
@@ -24,14 +24,14 @@ namespace ZLJ.Web.Admin.Shared
                                           TPrimaryKey,
                                           TGetAllInput,
                                           TCreateInput,
-                                          TUpdateInput> : AbpMudCreateDialogBaseComponent<TAppService,
-                                                                                          TEntityDto,
-                                                                                          TPrimaryKey,
-                                                                                          TGetAllInput,
-                                                                                          TCreateInput,
-                                                                                          TUpdateInput>
+                                          TUpdateInput> : AbpBBCreateBaseComponent<TAppService,
+                                                                                   TEntityDto,
+                                                                                   TPrimaryKey,
+                                                                                   TGetAllInput,
+                                                                                   TCreateInput,
+                                                                                   TUpdateInput>
         where TEntityDto : IEntityDto<TPrimaryKey>
-       // where TGetAllInput : new()
+         // where TGetAllInput : new()
          where TCreateInput : new()
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>

@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Services.Dto;
+using BXJG.AbpBootstrapBlazor.Interceptors;
 using BXJG.Common;
 using BXJG.Utils;
 using BXJG.Utils.Components;
@@ -25,23 +26,98 @@ namespace BXJG.AbpBootstrapBlazor.Components
     /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
     /// <typeparam name="TCreateInput">新增时的输入类型</typeparam>
     /// <typeparam name="TUpdateInput">修改时的输入类型</typeparam>
-    public abstract class AbpBootstrapBlazorCreateBaseComponent<TAppService,
-                                                                TEntityDto,
-                                                                TPrimaryKey,
-                                                                TGetAllInput,
-                                                                TCreateInput,
-                                                                TUpdateInput> : AbpCreateBaseComponent<TAppService,
-                                                                                                       TEntityDto,
-                                                                                                       TPrimaryKey,
-                                                                                                       TGetAllInput,
-                                                                                                       TCreateInput,
-                                                                                                       TUpdateInput>
+    public abstract class AbpBBCreateBaseComponent<TAppService,
+                                                   TEntityDto,
+                                                   TPrimaryKey,
+                                                   TGetAllInput,
+                                                   TCreateInput,
+                                                   TUpdateInput> : AbpCreateBaseComponent<TAppService,
+                                                                                          TEntityDto,
+                                                                                          TPrimaryKey,
+                                                                                          TGetAllInput,
+                                                                                          TCreateInput,
+                                                                                          TUpdateInput>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TCreateInput : new()
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
     {
-       
+        /// <summary>
+        /// 对表单的引用
+        /// </summary>
+        protected ValidateForm validateForm;
+        [AbpBBException]
+        protected override async Task BtnResetClick()
+        {
+            await base.BtnResetClick();
+        }
+        [AbpBBException]
+        protected override async Task BtnSaveClick()
+        {
+            await base.BtnSaveClick();
+        }
+        [Inject]
+        public MessageService MessageService { get; set; }
+
+        protected override async ValueTask ShowFailMessage(string title = "操作提示", string msg = "操作失败！")
+        {
+            await MessageService.Show(new MessageOption()
+            {
+                Content = msg,
+                Color = Color.Danger,
+                ShowShadow = true,
+                ShowBorder = true,
+            });
+        }
+        protected override async ValueTask ShowSuccessMessage(string title = "操作提示", string msg = "操作成功！")
+        {
+            await MessageService.Show(new MessageOption()
+            {
+                Content = msg,
+                Color = Color.Success,
+                ShowShadow = true,
+                ShowBorder = true
+            });
+        }
+
+        #region 生命周期方法增加统一异常处理拦截器
+        [AbpBBException]
+        public override async Task SetParametersAsync(ParameterView parameters)
+        {
+            await base.SetParametersAsync(parameters);
+        }
+        [AbpBBException]
+        protected override void OnParametersSet()
+        {
+            base.OnParametersSet();
+        }
+        [AbpBBException]
+        protected override async Task OnParametersSetAsync()
+        {
+            await base.OnParametersSetAsync();
+        }
+        [AbpBBException]
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+        }
+        [AbpBBException]
+        protected override async Task OnInitializedAsync()
+        {
+            await base.OnInitializedAsync();
+        }
+        [AbpBBException]
+        protected override void OnAfterRender(bool firstRender)
+        {
+            base.OnAfterRender(firstRender);
+        }
+        [AbpBBException]
+        protected override Task OnAfterRenderAsync(bool firstRender)
+        {
+            return base.OnAfterRenderAsync(firstRender);
+        }
+        #endregion
+
     }
 
     ///// <summary>

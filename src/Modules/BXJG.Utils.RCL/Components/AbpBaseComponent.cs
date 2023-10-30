@@ -632,7 +632,7 @@ namespace BXJG.Utils.Components
         //    return default;
         //}
 
-        protected IDisposable ResumeSession()
+        protected virtual IDisposable ResumeSession()
         {
             //if(AbpSession.TenantId.HasValue )
             return AbpSession.Use(TenantId, UserId);

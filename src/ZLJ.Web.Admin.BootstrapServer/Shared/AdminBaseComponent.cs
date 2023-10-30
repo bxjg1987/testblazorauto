@@ -5,20 +5,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MudBlazor;
 using Microsoft.Extensions.DependencyInjection;
 using BXJG.Utils;
-using BXJG.AbpMudBlazor.Components;
+using BXJG.AbpBootstrapBlazor.Components;
 
 namespace ZLJ.Web.Admin.Shared
 {
     /// <summary>
-    /// 后台管理端的blazor组件抽象类
+    /// 后台管理端的blazor组件抽象类，与crud抽象组件是平级
     /// </summary>
-    public class AdminBaseComponent : AbpMudBaseComponent
+    public abstract class AdminBaseComponent : AbpBBBaseComponent
     {
         private ILocalizationSource appCommonLocalizationSource, zljLocalizationSource, utilsLocalizationSource;
-
         protected virtual ILocalizationSource LocalizationSourceAppCommon
         {
             get
@@ -57,20 +55,6 @@ namespace ZLJ.Web.Admin.Shared
                 return utilsLocalizationSource;
             }
         }
-
         protected override string LocalizationSourceName => ZLJ.App.Admin.AdminConsts.Admin;
-
-     
-
-        //public override void ShowError(string msg)
-        //{
-        //    Snackbar.Add(msg, Severity.Error);
-        //}
-
-        //public override ValueTask ShowErrorAsync(string msg)
-        //{
-        //    Snackbar.Add(msg, Severity.Error);
-        //    return ValueTask.CompletedTask;
-        //}
     }
 }

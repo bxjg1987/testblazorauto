@@ -16,7 +16,6 @@ namespace BXJG.Utils.Components
     /*
      * 由于abp的crud接口和抽象类把crud搞一起了，不想动它，所以这里的应用服务中包含TGetAllInput、TUpdateInput
      * 很多ui都提供了自己的表单验证方式，有些还不支持微软默认的表单验证逻辑，但通常都支持基于Attribute验证方式，所以抽象类中不定义验证相关的东东
-     * 某些ui库提供了便捷的表单，根据模型自动生成表单，那样有点复杂，且不是每个ui库都支持这种方式，所以抽象类中不要考虑这个方式。
      */
 
     /// <summary>
@@ -58,28 +57,11 @@ namespace BXJG.Utils.Components
         /// </summary>
         protected TCreateInput? createDto;
         /// <summary>
-        /// 创建初始的新增模型对象，默认通过无参构造函数反射创建
-        /// </summary>
-        /// <returns></returns>
-        protected virtual async ValueTask FillCreateDto(TCreateInput createInput) { }
-        /// <summary>
-        /// 保存后是否继续新增
-        /// </summary>
-        protected bool saveAndContinue = false;
-        /// <summary>
         /// 正在执行重置
         /// </summary>
         protected bool isReseting = false;
-        ///// <summary>
-        ///// 重置
-        ///// </summary>
-        ///// <returns></returns>
-        //protected virtual  Task BtnResetClick()
-        //{
-        //    return SafelyExecuteAsync(async ()=>await ResetCore());
-        //}
         /// <summary>
-        /// 重置
+        /// 重置按钮点击时回调，由于事件无法使用ValueTask，所以这里用了Task
         /// </summary>
         /// <returns></returns>
         protected virtual async Task BtnResetClick()
@@ -87,20 +69,30 @@ namespace BXJG.Utils.Components
             isReseting = true;
             try
             {
-                createDto = new TCreateInput();
-                await FillCreateDto(createDto);
+                await ResetCore();
             }
             finally
             {
                 isReseting = false;
             }
         }
+        /// <summary>
+        /// 重置的核心逻辑
+        /// </summary>
+        /// <returns></returns>
+        protected virtual ValueTask ResetCore()
+        {
+            createDto = new TCreateInput();
+            return ValueTask.CompletedTask;
+        }
+        /// <summary>
+        /// 初始化时，初始化新增模型
+        /// </summary>
+        /// <returns></returns>
         protected override async Task OnInitializedAsync()
         {
             await BtnResetClick();
         }
-
-        #region 权限
         /// <summary>
         /// 是否有新增权限
         /// </summary>
@@ -115,8 +107,10 @@ namespace BXJG.Utils.Components
             if (createPermissionName.IsNotNullOrWhiteSpaceBXJG())
                 createIsGranted = await PermissionChecker.IsGrantedAsync(createPermissionName);
         }
-        #endregion
-        #region 保存
+        /// <summary>
+        /// 保存后是否继续新增
+        /// </summary>
+        protected bool saveAndContinue = false;
         /// <summary>
         /// 正在保存...
         /// </summary>
@@ -125,18 +119,14 @@ namespace BXJG.Utils.Components
         /// 核心的保存逻辑
         /// </summary>
         /// <returns></returns>
-        protected virtual async Task Save()
+        protected virtual async Task BtnSaveClick()
         {
             //木有权限时保存按钮不可点击
             //验证不过时此方法不应该被调用
             isSaving = true;
             try
             {
-                var r = await AppService.CreateAsync(createDto);
-                await ShowSuccessMessage(msg: "新增成功！");
-                await SaveAfter(r);
-                if (saveAndContinue)
-                    await BtnResetClick();
+                await SaveCore();
             }
             finally
             {
@@ -144,9 +134,17 @@ namespace BXJG.Utils.Components
             }
         }
         /// <summary>
-        /// 保存后回调
+        /// 保存的核心逻辑
         /// </summary>
-        protected virtual async ValueTask SaveAfter(TEntityDto dto) { }
-        #endregion
+        /// <returns></returns>
+        protected virtual async Task SaveCore()
+        {
+            //木有权限时保存按钮不可点击
+            //验证不过时此方法不应该被调用
+            var r = await AppService.CreateAsync(createDto);
+            await ShowSuccessMessage(msg: "新增成功！");
+            if (saveAndContinue)
+                await BtnResetClick();
+        }
     }
 }

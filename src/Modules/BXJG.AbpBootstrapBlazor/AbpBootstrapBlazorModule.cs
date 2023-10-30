@@ -8,7 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-[assembly: AbpBBException]
+//[assembly: AbpBBException]
 
 namespace BXJG.AbpBootstrapBlazor
 {

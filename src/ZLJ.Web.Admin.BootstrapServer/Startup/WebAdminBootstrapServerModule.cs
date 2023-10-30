@@ -15,7 +15,7 @@ using ZLJ.App.Admin;
 
 //[assembly: ExceptionInterceptor]
 //全局异常处理拦截器
-[assembly: AbpBBException]
+//[assembly: AbpBBException]
 
 
 namespace ZLJ.Web.Admin.BootstrapServer.Startup

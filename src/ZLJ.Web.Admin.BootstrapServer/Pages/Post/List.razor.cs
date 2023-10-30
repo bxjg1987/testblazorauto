@@ -40,7 +40,8 @@ namespace ZLJ.Web.Admin.BootstrapServer.Pages.Post
 
 
         //这里也可以用肉夹馍的全局注册处理
-       // [AbpBBException]
+        // [AbpBBException]
+        [AbpBBException]
         protected async Task AddRandomData()
         {
             for (int i = 0; i < 10; i++)
