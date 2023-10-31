@@ -15,7 +15,7 @@ namespace ZLJ.App.Common.OU
         /// 0获取我们自己公司的部门
         /// 1获取租赁客户公司的部门
         /// </summary>
-        [Obsolete("请调用OuProviderAppService")]
+       // [Obsolete("请调用OuProviderAppService")]
         public int WhatType { get; set; } = 0;
     }
 }

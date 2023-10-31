@@ -37,6 +37,6 @@ namespace BXJG.Utils.GeneralTree
         /// <summary>
         /// 是否仅仅加载子节点，true只加载子节点，false加载所有后台节点
         /// </summary>
-        public bool IsOnlyLoadChild { get; set; }=true;
+        public bool IsOnlyLoadChild { get; set; }=false;
     }
 }

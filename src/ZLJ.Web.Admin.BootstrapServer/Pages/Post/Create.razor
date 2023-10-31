@@ -6,11 +6,11 @@
 <ValidateForm Model="createDto" @ref="validateForm">
     <EditorForm Model="@createDto" RowType="RowType.Inline" LabelAlign="Alignment.Right">
         <FieldItems>
-            <EditorItem @bind-Field="@context.OuIds" Context="ctx" >
+            <EditorItem @bind-Field="@context.OuIds" Context="ctx">
                 <EditTemplate>
-                    <SelectTree TValue="ZLJ.App.Common.OU.OuDto" Items="items"  OnExpandNodeAsync="ExpandNodeAsync" >
+                    <SelectTree TValue="long" Items="items">
 
-                        </SelectTree>
+                    </SelectTree>
                 </EditTemplate>
             </EditorItem>
             <EditorItem @bind-Field="@context.GrantedPermissions" Editable="false" />
