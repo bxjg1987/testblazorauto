@@ -44,6 +44,7 @@ namespace ZLJ.Web.Admin.BootstrapServer.Pages.Post
                     Parent = parent,
                     HasChildren = item.ChildrenCount > 0,
                     Value = item.Id,
+                     
                 };
                 if (item.ChildrenCount > 0)
                 {
