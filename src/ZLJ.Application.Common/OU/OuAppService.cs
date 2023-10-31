@@ -13,11 +13,14 @@ using ZLJ.BaseInfo;
 
 namespace ZLJ.App.Common.OU
 {
+    public interface IOuAppService : IApplicationService {
+        Task<IList<OuDto>> GetListAsync(GetListInput input);
+    }
     /// <summary>
     /// 提供公司、部门下拉树形数据；登陆用户即可访问，将来增加权限依赖
     /// </summary>
     [AbpAuthorize]
-    public class OuAppService : Abp.Application.Services.ApplicationService
+    public class OuAppService : Abp.Application.Services.ApplicationService, IOuAppService
     {
         IRepository<OrganizationUnit, long> repository;
 
@@ -37,14 +40,25 @@ namespace ZLJ.App.Common.OU
                 input.Code = await repository.GetAll().Where(c => c.Id == input.ParentId).Select(c => c.Code).SingleAsync();
 
             var q = repository.GetAll();
+          
             if (input.WhatType == 0)
                 q = q.OfType<OrganizationUnitEntity>();
             else
                 q = q.OfType<ZLJ.Customer.CustomerOUEntity>();
             q = q.AsNoTrackingWithIdentityResolution()
                  .Include(c => c.Children)
-                 .WhereIf(!input.Code.IsNullOrWhiteSpace(), c => c.Code.StartsWith(input.Code))
+                 //.WhereIf(input.Code.IsNotNullOrWhiteSpaceBXJG(), c => c.Code.StartsWith(input.Code))
                  .WhereIf(input.ForType <= 0 || !input.ParentText.IsNullOrWhiteSpace(), c => c.Code != input.Code);
+
+            if (input.IsOnlyLoadChild)
+            {
+                q = q.WhereIf(input.Code.IsNotNullOrWhiteSpaceBXJG(), c => c.Parent.Code == input.Code)
+                     .WhereIf(input.Code.IsNullOrWhiteSpaceBXJG(), c => !c.ParentId.HasValue);
+            }
+            else
+            {
+                q = q.WhereIf(input.Code.IsNotNullOrWhiteSpaceBXJG(), c => c.Code.StartsWith(input.Code));
+            }
 
             q = q.OrderBy(c => c.Code);
             var list = await q.ToListAsync();
