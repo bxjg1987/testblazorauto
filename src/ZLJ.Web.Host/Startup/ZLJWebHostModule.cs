@@ -31,12 +31,12 @@ using ZLJ.App.Common.Sessions;
 using Abp.Runtime.Security;
 using System.Security.Claims;
 using DocumentFormat.OpenXml.InkML;
-using ZLJ.Web.Admin.BootstrapServer.Startup;
+using ZLJ.Web.Admin.Startup;
 
 namespace ZLJ.Web.Host.Startup
 {
     [DependsOn(typeof(WebCustomerModule),
-               typeof(WebAdminBootstrapServerModule),
+               typeof(WebAdminModule),
                //typeof(AbpHangfireAspNetCoreModule),
                typeof(BXJGUtilsWebModule),
                typeof(ZLJApplicationModule),

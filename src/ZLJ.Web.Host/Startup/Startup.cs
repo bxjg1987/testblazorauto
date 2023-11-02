@@ -26,6 +26,7 @@ using Microsoft.Extensions.DependencyInjection;
 //using Savorboard.CAP.InMemoryMessageQueue;
 using ZLJ.App.Admin.Authorization.Permissions;
 using Medallion.Threading;
+using AntDesign.ProLayout;
 
 namespace ZLJ.Web.Host.Startup
 {
@@ -131,9 +132,14 @@ namespace ZLJ.Web.Host.Startup
             #endregion
 
             #region bootstrapblazor
-            services.AddBootstrapBlazor();
-            // 增加 Table Excel 导出服务
-            services.AddBootstrapBlazorTableExcelExport();
+            //services.AddBootstrapBlazor();
+            //// 增加 Table Excel 导出服务
+            //services.AddBootstrapBlazorTableExcelExport();
+            #endregion
+
+            #region antblaor
+            services.AddAntDesign();
+            services.Configure<ProSettings>(_appConfiguration.GetSection("ProSettings"));
             #endregion
 
             // Configure CORS for angular2 UI

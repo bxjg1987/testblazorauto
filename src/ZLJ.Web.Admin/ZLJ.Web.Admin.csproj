@@ -20,8 +20,46 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Notify\NotifyListBase.cs" />
-    <Compile Remove="Notify\NotifySubscriptBase.cs" />
+    <Compile Remove="Pages\DataDictionary\Create.razor.cs" />
+    <Compile Remove="Pages\DataDictionary\DetailOrUpdate.razor.cs" />
+    <Compile Remove="Pages\DataDictionary\List.razor.cs" />
+    <Compile Remove="Pages\Notification\NotifyManager.razor.cs" />
+    <Compile Remove="Pages\Notification\NotifySubscript.razor.cs" />
+    <Compile Remove="Pages\Post\Create.razor.cs" />
+    <Compile Remove="Pages\Post\List.razor.cs" />
+    <Compile Remove="Shared\AdminBaseComponent.cs" />
+    <Compile Remove="Shared\AdminCreateBaseComponent.cs" />
+    <Compile Remove="Shared\AdminDetailBaseComponent.cs" />
+    <Compile Remove="Shared\AdminGeneralTreeCreateBaseComponent.cs" />
+    <Compile Remove="Shared\AdminGeneralTreeDetailOrUpdateBaseComponent.cs" />
+    <Compile Remove="Shared\AdminGeneralTreeListBaseComponent.cs" />
+    <Compile Remove="Shared\AdminListBaseComponent.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Pages\DataDictionary\Create.razor" />
+    <Content Remove="Pages\DataDictionary\DetailOrUpdate.razor" />
+    <Content Remove="Pages\DataDictionary\List.razor" />
+    <Content Remove="Pages\Notification\NotifyManager.razor" />
+    <Content Remove="Pages\Notification\NotifySubscript.razor" />
+    <Content Remove="Pages\Notification\Simple.razor" />
+    <Content Remove="Pages\Post\Create.razor" />
+    <Content Remove="Pages\Post\EditOrDetail.razor" />
+    <Content Remove="Pages\Post\List.razor" />
+    <Content Remove="Shared\BasicLayout.razor" />
+    <Content Remove="Shared\RecursionNavGroup.razor" />
+    <Content Remove="Shared\Widget.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Views\Account\AdminLogin.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Views\Home\_AdminHost.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
 
@@ -31,15 +69,16 @@
 
 
 	<ItemGroup Condition="'$(SolutionName)' != 'ZLJWithModules'">
-		<PackageReference Include="BXJG.MudBlazor" Version="*" />
+		<PackageReference Include="BXJG.AbpAntBlazor" Version="*" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(SolutionName)' == 'ZLJWithModules'">
-		<ProjectReference Include="..\Modules\BXJG.MudBlazor\BXJG.AbpMudBlazor.csproj" />
+		<ProjectReference Include="..\Modules\BXJG.AbpAntBlazor\BXJG.AbpAntBlazor.csproj" />
 	</ItemGroup>
 	
 	<ItemGroup>
 		<PackageReference Include="Abp.AspNetCore" Version="8.4.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.12" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.*" />
+		<PackageReference Include="AntDesign.ProLayout" Version="0.16.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -48,8 +87,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Views\Account\" />
-	  <Folder Include="Views\Home\" />
+	  <Folder Include="Pages\DataDictionary\" />
+	  <Folder Include="Pages\Post\" />
 	</ItemGroup>
 
 </Project>

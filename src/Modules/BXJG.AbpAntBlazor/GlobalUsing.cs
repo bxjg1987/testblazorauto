@@ -8,17 +8,11 @@ global using System.Security.Claims;
 global using System.Text;
 global using System.Threading.Tasks;
 global using Microsoft.AspNetCore.Components.Authorization;
-global using BXJG.Common.Dto;
-global using ZLJ.App.Admin;
-global using ZLJ.App.Common;
-global using ZLJ.Web.Admin.Shared;
-global using BXJG.Utils.Dto;
-global using ZLJ.App.Admin.Authorization.Permissions;
-global using Abp.Localization.Sources;
-global using BXJG.AbpBlazor;
-global using BXJG.Utils;
-global using BXJG.Utils.GeneralTree;
-global using Abp.UI;
-
 global using AntDesign;
-global using AntDesign.ProLayout;
+global using BXJG.AbpBlazor.Interceptors;
+
+global using BXJG.Utils;
+
+global using Abp;
+global using Abp.Application.Services.Dto;
+
