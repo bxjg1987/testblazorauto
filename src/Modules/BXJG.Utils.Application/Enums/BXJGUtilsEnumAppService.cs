@@ -55,30 +55,30 @@ namespace BXJG.Utils.Enums
             var list = base.LocalizationManager.GetEnum(cfgItem.LocationSourceName, cfgItem.Type);
             var b = list.Select(c => new ComboboxItemDto { Value = c.Key.ToString(), DisplayText = c.Value }).ToList();
 
-            if (input.ForType == 0)
-                return b;
+            //if (input.ForType == 0)
+            //    return b;
 
-            var temp = new ComboboxItemDto { Value = null };
-            //列表页 不限 类型名    表单页  请选择  
-            if (input.ForType > 0 && !input.ParentText.IsNullOrWhiteSpace())
-            {
-                temp.DisplayText = base.LocalizationManager.GetSource(cfgItem.LocationSourceName).GetStringOrNull(input.ParentText);
-                if (temp.DisplayText.IsNullOrWhiteSpace())
-                    temp.DisplayText = L(input.ParentText);
-            }
-            else if (input.ForType == 1)
-            {
-                temp.DisplayText = base.LocalizationManager.GetForType(cfgItem.LocationSourceName, cfgItem.Type);
-            }
-            else if (input.ForType == 2)
-            {
-                temp.DisplayText = L("==不限==");
-            }
-            else
-            {
-                temp.DisplayText = L("==请选择==");
-            }
-            b.Insert(0, temp);
+            //var temp = new ComboboxItemDto { Value = null };
+            ////列表页 不限 类型名    表单页  请选择  
+            //if (input.ForType > 0 && !input.ParentText.IsNullOrWhiteSpace())
+            //{
+            //    temp.DisplayText = base.LocalizationManager.GetSource(cfgItem.LocationSourceName).GetStringOrNull(input.ParentText);
+            //    if (temp.DisplayText.IsNullOrWhiteSpace())
+            //        temp.DisplayText = L(input.ParentText);
+            //}
+            //else if (input.ForType == 1)
+            //{
+            //    temp.DisplayText = base.LocalizationManager.GetForType(cfgItem.LocationSourceName, cfgItem.Type);
+            //}
+            //else if (input.ForType == 2)
+            //{
+            //    temp.DisplayText = L("==不限==");
+            //}
+            //else
+            //{
+            //    temp.DisplayText = L("==请选择==");
+            //}
+            //b.Insert(0, temp);
             return b;
         }
 

@@ -35,30 +35,30 @@ namespace BXJG.Utils.Enums
             var list = localizationSource.GetEnum<T>();
             var b = list.Select(c => new ComboboxItemDto { Value = c.Key.ToString(), DisplayText = c.Value }).ToList();
 
-            if (input.ForType == 0)
-                return b;
+            //if (input.ForType == 0)
+            //    return b;
 
-            var temp = new ComboboxItemDto { Value = null };
-            //列表页 不限 类型名    表单页  请选择  
-            if (input.ForType > 0 && !input.ParentText.IsNullOrWhiteSpace())
-            {
-                temp.DisplayText = localizationSource.GetStringOrNull(input.ParentText);
-                if (temp.DisplayText.IsNullOrWhiteSpace())
-                    temp.DisplayText = input.ParentText;
-            }
-            else if (input.ForType == 1)
-            {
-                temp.DisplayText = localizationSource.GetForType<T>();
-            }
-            else if (input.ForType == 2)
-            {
-                temp.DisplayText = "==不限==".UtilsL();
-            }
-            else
-            {
-                temp.DisplayText = "==请选择==".UtilsL();
-            }
-            b.Insert(0, temp);
+            //var temp = new ComboboxItemDto { Value = null };
+            ////列表页 不限 类型名    表单页  请选择  
+            //if (input.ForType > 0 && !input.ParentText.IsNullOrWhiteSpace())
+            //{
+            //    temp.DisplayText = localizationSource.GetStringOrNull(input.ParentText);
+            //    if (temp.DisplayText.IsNullOrWhiteSpace())
+            //        temp.DisplayText = input.ParentText;
+            //}
+            //else if (input.ForType == 1)
+            //{
+            //    temp.DisplayText = localizationSource.GetForType<T>();
+            //}
+            //else if (input.ForType == 2)
+            //{
+            //    temp.DisplayText = "==不限==".UtilsL();
+            //}
+            //else
+            //{
+            //    temp.DisplayText = "==请选择==".UtilsL();
+            //}
+            //b.Insert(0, temp);
             return b;
         }
     }

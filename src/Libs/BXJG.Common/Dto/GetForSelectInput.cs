@@ -40,12 +40,12 @@ namespace BXJG.Common.Dto
         /// 2 表单框
         /// 
         /// </summary>
-        [Obsolete]
-        public int ForType { get; set; }
-        /// <summary>
-        /// 给前端一个机会来设置自己想要的值，注意是否需要本地化调用方来决定
-        /// </summary>
-        [Obsolete]
-        public string ParentText { get; set; }
+        //[Obsolete]
+        //public int ForType { get; set; }
+        ///// <summary>
+        ///// 给前端一个机会来设置自己想要的值，注意是否需要本地化调用方来决定
+        ///// </summary>
+        //[Obsolete]
+        //public string ParentText { get; set; }
     }
 }

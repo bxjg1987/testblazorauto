@@ -58,9 +58,9 @@ namespace BXJG.Utils.GeneralTree
                                                                                                                    TGetNodesForSelectOutput>
     where TEntity : Entity<long>, IGeneralTree<TEntity>// GeneralTreeEntity<TEntity>
     where TGetTreeForSelectInput : GeneralTreeGetForSelectInput
-    where TGetTreeForSelectOutput : GeneralTreeNodeDto<TGetTreeForSelectOutput>, new()
+    where TGetTreeForSelectOutput : GeneralTreeNodeDto<TGetTreeForSelectOutput>//, new()
     where TGetNodesForSelectInput : GeneralTreeGetForSelectInput
-    where TGetNodesForSelectOutput : GeneralTreeComboboxDto, new()
+    where TGetNodesForSelectOutput : GeneralTreeComboboxDto//, new()
     {
         // protected string allTextForSearch, allTextForForm;//注意这里代表的是本地化文本的key
 
@@ -156,34 +156,34 @@ namespace BXJG.Utils.GeneralTree
             }
 
 
-            //通用树是通过继承来实现扩展的，所以这里L引用的本地化源可能被子类重写，因此这里用L是可以的
-            if (input.ForType > 0 && input.ForType < 5 && !string.IsNullOrWhiteSpace(input.ParentText))
-            {
-                dtoList.Insert(0, new TGetTreeForSelectOutput { Id = default, Text = input.ParentText });
-                return dtoList;
-            }
-            //return new List<TGetTreeForSelectOutput> { new TGetTreeForSelectOutput { Id = null, Text = L(input.ParentText), Children = dtoList } };
+            ////通用树是通过继承来实现扩展的，所以这里L引用的本地化源可能被子类重写，因此这里用L是可以的
+            //if (input.ForType > 0 && input.ForType < 5 && !string.IsNullOrWhiteSpace(input.ParentText))
+            //{
+            //    dtoList.Insert(0, new TGetTreeForSelectOutput { Id = default, Text = input.ParentText });
+            //    return dtoList;
+            //}
+            ////return new List<TGetTreeForSelectOutput> { new TGetTreeForSelectOutput { Id = null, Text = L(input.ParentText), Children = dtoList } };
 
-            if ((input.ForType == 1 || input.ForType == 3) && input.ParentId.HasValue)
-            {
-                parentDto.Text = "==" + parentDto.Text + "==";
-                parentDto.Id = default;
-                return new List<TGetTreeForSelectOutput> { parentDto };
-            }
+            //if ((input.ForType == 1 || input.ForType == 3) && input.ParentId.HasValue)
+            //{
+            //    parentDto.Text = "==" + parentDto.Text + "==";
+            //    parentDto.Id = default;
+            //    return new List<TGetTreeForSelectOutput> { parentDto };
+            //}
 
 
-            if (input.ForType == 1 || input.ForType == 2)
-            {
-                dtoList.Insert(0, new TGetTreeForSelectOutput { Id = default, Text = allTextForSearch });
-                return dtoList;
-            }
-            //return new List<TGetTreeForSelectOutput> { new TGetTreeForSelectOutput { Id = null, Text = this.allTextForSearch, Children = dtoList } };
+            //if (input.ForType == 1 || input.ForType == 2)
+            //{
+            //    dtoList.Insert(0, new TGetTreeForSelectOutput { Id = default, Text = allTextForSearch });
+            //    return dtoList;
+            //}
+            ////return new List<TGetTreeForSelectOutput> { new TGetTreeForSelectOutput { Id = null, Text = this.allTextForSearch, Children = dtoList } };
 
-            if (input.ForType == 3 || input.ForType == 4)
-            {
-                dtoList.Insert(0, new TGetTreeForSelectOutput { Id = default, Text = allTextForForm });
-                return dtoList;
-            }
+            //if (input.ForType == 3 || input.ForType == 4)
+            //{
+            //    dtoList.Insert(0, new TGetTreeForSelectOutput { Id = default, Text = allTextForForm });
+            //    return dtoList;
+            //}
             // return new List<TGetTreeForSelectOutput> { new TGetTreeForSelectOutput { Id = null, Text = this.allTextForForm, Children = dtoList } };
 
             return dtoList;
@@ -238,14 +238,14 @@ namespace BXJG.Utils.GeneralTree
             }
             //dtoList = dtoList.Where(c => c.Value != input.Id).ToList();
 
-            if (input.ForType > 0 && input.ForType < 5 && !string.IsNullOrWhiteSpace(input.ParentText))
-                dtoList.Insert(0, new TGetNodesForSelectOutput { Value = null, DisplayText = input.ParentText });
-            else if ((input.ForType == 1 || input.ForType == 3) && input.ParentId.HasValue)
-                dtoList.Insert(0, parentDto);
-            else if (input.ForType == 1 || input.ForType == 2)
-                dtoList.Insert(0, new TGetNodesForSelectOutput { Value = null, DisplayText = allTextForSearch });
-            else if (input.ForType == 3 || input.ForType == 4)
-                dtoList.Insert(0, new TGetNodesForSelectOutput { Value = null, DisplayText = allTextForForm });
+            //if (input.ForType > 0 && input.ForType < 5 && !string.IsNullOrWhiteSpace(input.ParentText))
+            //    dtoList.Insert(0, new TGetNodesForSelectOutput { Value = null, DisplayText = input.ParentText });
+            //else if ((input.ForType == 1 || input.ForType == 3) && input.ParentId.HasValue)
+            //    dtoList.Insert(0, parentDto);
+            //else if (input.ForType == 1 || input.ForType == 2)
+            //    dtoList.Insert(0, new TGetNodesForSelectOutput { Value = null, DisplayText = allTextForSearch });
+            //else if (input.ForType == 3 || input.ForType == 4)
+            //    dtoList.Insert(0, new TGetNodesForSelectOutput { Value = null, DisplayText = allTextForForm });
 
             return dtoList;
         }
