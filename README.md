@@ -67,7 +67,7 @@ vs2022 .net7 sqlserver2012+
     1. BXJG.Utils.Application 一些通用功能的应用服务，以及对abp应用服务的扩展。如：抽象crud应用服务接口和抽象类
     1. BXJG.Utils.Web 一些通用功能，跟web相关的，以及对abpweb相关扩展。
     1. BXJG.Utils.RCL 跟abp相关的blazor组件库，如：抽象组件AbpBaseComponent，它是个组件，里面定义了对abp常用属性的引用
-    1. BXJG.AbpBootstrapBlazor 与abp和BootstrapBlazor相关的组件库，如：crud抽象组件
+    1. BXJG.AbpBlazor 与abp和AntBlazor相关的组件库，如：crud抽象组件
     1. BXJG.WeChat.Abp 让我们的微信库与abp的继承
 
 ## 主项目
