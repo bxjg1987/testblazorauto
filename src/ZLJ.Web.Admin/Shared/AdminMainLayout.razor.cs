@@ -12,6 +12,7 @@ namespace ZLJ.Web.Admin.Shared
 {
     public partial class AdminMainLayout
     {
+
         private MenuDataItem[] _menuData = new MenuDataItem[0];
         [Inject]
         protected IMessageService MessageService { get; set; }
@@ -43,8 +44,12 @@ namespace ZLJ.Web.Admin.Shared
         [AbpExceptionInterceptor]
         protected override async Task OnInitializedAsync()
         {
-            var menu = await abpNavManager.GetMenuAsync("adminBlazor", new Abp.UserIdentifier(abpSession.TenantId, abpSession.UserId.Value));
-            _menuData = MapMenu(menu.Items);
+
+            if (abpSession.TenantId.HasValue && abpSession.UserId.HasValue)
+            {
+                var menu = await abpNavManager.GetMenuAsync("adminBlazor", new Abp.UserIdentifier(abpSession.TenantId, abpSession.UserId.Value));
+                _menuData = MapMenu(menu.Items);
+            }
         }
 
         MenuDataItem[] MapMenu(IList<UserMenuItem> items, MenuDataItem parent = default)

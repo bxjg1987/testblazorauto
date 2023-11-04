@@ -1,0 +1,21 @@
+::deep .ant-pro-basicLayout-content {
+    margin:0;
+}
+::deep .ant-tabs-nav {
+    background: #fff;
+    margin:0;
+    box-shadow: 0 0 1px;
+}
+::deep .ant-tabs-card.ant-tabs-top > .ant-tabs-nav .ant-tabs-tab-active, .ant-tabs-card.ant-tabs-top > div > .ant-tabs-nav .ant-tabs-tab-active {
+    border-bottom: 1px solid #1890ff;
+    
+}
+::deep .ant-pro-global-header {
+    box-shadow: none;
+}
+
+::deep .ant-tabs-content-holder {
+    margin:1rem;
+    background:white;
+    min-height:72vh;
+}

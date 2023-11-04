@@ -2,18 +2,20 @@
 @inherits LayoutComponentBase
 @inject IAbpSession abpSession
 @inject IUserNavigationManager abpNavManager
+<layout>
+    <AntDesign.ProLayout.BasicLayout Logo="@("https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg")"
+                                     MenuData="_menuData" FixedHeader="false">
+        <RightContentRender>
+            <RightContent />
+        </RightContentRender>
 
+        <ChildContent>
+            <ReuseTabs />
+        </ChildContent>
 
-<AntDesign.ProLayout.BasicLayout Logo="@("https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg")"
-                                 MenuData="_menuData">
-    <RightContentRender>
-        <RightContent />
-    </RightContentRender>
-    <ChildContent>
-        @Body
-    </ChildContent>
-    <FooterRender>
-        <FooterView Copyright="2021 Ant Design Blazor" Links="Links"></FooterView>
-    </FooterRender>
-</AntDesign.ProLayout.BasicLayout>
-<SettingDrawer />
+        <FooterRender>
+            <FooterView Copyright="2021 Ant Design Blazor" Links="Links"></FooterView>
+        </FooterRender>
+    </AntDesign.ProLayout.BasicLayout>
+    <SettingDrawer />
+</layout>

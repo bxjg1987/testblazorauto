@@ -2,7 +2,7 @@
 但现在敢进度，现在直接全部写在这个页面里吧*@
 @page "/admin"
 @using ZLJ.App.Admin.Authorization.Permissions;
-@* @attribute [TabItemOption(Text = "控制台")] *@
+@attribute [ReuseTabsPage(Title = "控制台", Pin = true, Closable =false)]
 @attribute [Authorize(PermissionNames.Administrator)]
 @inherits BXJG.AbpBlazor.Components.AbpBaseComponent
 @*@inject NavigationManager Navigation*@

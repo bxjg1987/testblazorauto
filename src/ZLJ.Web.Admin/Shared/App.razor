@@ -3,26 +3,30 @@
 @* 能从ioc容器拿的，就别通过级联传递，免得混乱 *@
 <CascadingValue Value="context">
     <CascadingAuthenticationState>
+        <AuthenticationRedirectory LoginPath="/account/login?appKey=admin" />
 
         <Router AppAssembly="@typeof(App).Assembly">
             <Found Context="routeData">
+                <CascadingValue Value="routeData">
+                    @* antblazor多标签布局时，好像NotAuthorized不会被执行 直接在跳转组件中去处理吧 *@
+                    <AuthorizeRouteView RouteData="@routeData" DefaultLayout="typeof(ZLJ.Web.Admin.Shared.AdminMainLayout)">
+                        <NotAuthorized>
+                            权限验证失败！
+                            @* <AuthenticationRedirectory LoginPath="/account/login?appKey=admin" /> *@
+                        </NotAuthorized>
+                        <Authorizing>
+                            正在验证权限...
+                        </Authorizing>
+                    </AuthorizeRouteView>
+                    @* <AntDesign.Components.Authentication.AuthorizeReuseTabsRouteView RouteData="@routeData" DefaultLayout="@typeof(ZLJ.Web.Admin.Shared.AdminMainLayout)" /> *@
+                </CascadingValue>
 
-                @* bootstrapblazor中，多标签模式时，此方式无效，它提供了在 layout中去处理的方式 *@
-                <AuthorizeRouteView RouteData="@routeData" DefaultLayout="typeof(ZLJ.Web.Admin.Shared.AdminMainLayout)">
-                    <NotAuthorized>
-                        权限验证失败！
-                        <AuthenticationRedirectory LoginPath="/account/login?appKey=admin" />
-                    </NotAuthorized>
-                    <Authorizing>
-                        正在验证权限...
-                    </Authorizing>
-                </AuthorizeRouteView>
-
-                <PageTitle>Title</PageTitle>
+                
+                @* <PageTitle>Title</PageTitle> *@
                 @*  <RouteView RouteData="@routeData" DefaultLayout="@typeof(ZLJ.Web.Admin.Shared.AdminMainLayout)" /> *@
                 @*   <BootstrapBlazorAuthorizeView RouteData="@routeData" DefaultLayout="@typeof(ZLJ.Web.Admin.BootstrapServer.Shared.AdminMainLayout)">
                 </BootstrapBlazorAuthorizeView> *@
-                <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+                @* <FocusOnNavigate RouteData="@routeData" Selector="h1" /> *@
 
             </Found>
             <NotFound>
@@ -32,6 +36,7 @@
                 </LayoutView>
             </NotFound>
         </Router>
-        <AntContainer />
+
     </CascadingAuthenticationState>
 </CascadingValue>
+<AntContainer />
