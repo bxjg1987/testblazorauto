@@ -7,6 +7,7 @@ using BXJG.Utils.GeneralTree;
 using ZLJ.App.Admin.Authorization.Permissions;
 using BXJG.Utils;
 using BXJG.Utils.Localization;
+using DocumentFormat.OpenXml.Drawing;
 
 namespace ZLJ.Web.Admin.Startup
 {
@@ -21,11 +22,10 @@ namespace ZLJ.Web.Admin.Startup
             context.Manager.Menus.Add("adminBlazor", menu);
 
             //{codegenerator}
-
             menu.AddItem(new MenuItemDefinition("adminBlazor_home",
                                                 "后台管理首页".GetAdminLocalizableString(),
                                                 url: "/admin",
-                                                icon: "fas fa-solar-panel",
+                                                icon: "dashboard",
                                                 permissionDependency: new SimplePermissionDependency(PermissionNames.Administrator)));
 
 
@@ -34,18 +34,18 @@ namespace ZLJ.Web.Admin.Startup
             //基础数据
             var menuBaseInfo = new MenuItemDefinition(PermissionNames.AdministratorBaseInfo,
                                                       PermissionNames.AdministratorBaseInfo.GetAdminLocalizableString(),
-                                                      icon: "fas fa-table",
+                                                      icon: IconType.Outline.Appstore,
                                                       permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorBaseInfo));
             menu.AddItem(menuBaseInfo);
 
             menuBaseInfo.AddItem(new MenuItemDefinition("通知中心",
                                                         "通知中心".GetAdminLocalizableString(),
-                                                        icon: "fas fa-bullhorn",
+                                                        icon: IconType.Outline.Notification,
                                                         url: "/admin/tongzhi"));
             //数据字典
             menuBaseInfo.AddItem(new MenuItemDefinition(BXJGUtilsConsts.GeneralTreeMenuName,
                                                         BXJGUtilsConsts.GeneralTreeMenuName.UtilsLI(),
-                                                        icon: "fas fa-clipboard-list",
+                                                        icon: IconType.Outline.Table,
                                                         url: "/admin/data-dictionary",
                                                         permissionDependency: new SimplePermissionDependency(BXJGUtilsConsts.GeneralTreeMenuName)));
 
@@ -53,7 +53,7 @@ namespace ZLJ.Web.Admin.Startup
             menuBaseInfo.AddItem(new MenuItemDefinition(name: PermissionNames.AdministratorBaseInfoOrganizationUnit,
               displayName: PermissionNames.AdministratorBaseInfoOrganizationUnit.GetAdminLocalizableString(),
               // @Icons.Material.Outlined.AccountTree
-              icon: "fas fa-city",
+              icon: IconType.Outline.Compass,
               url: $"/admin/organizationUnit",
               requiresAuthentication: true,
               permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorBaseInfoOrganizationUnit)));
@@ -61,14 +61,14 @@ namespace ZLJ.Web.Admin.Startup
             //岗位
             menuBaseInfo.AddItem(new MenuItemDefinition(PermissionNames.AdministratorBaseInfoPost,
                                                         PermissionNames.AdministratorBaseInfoPost.GetAdminLocalizableString(),
-                                                        icon: "fas fa-user-group",
+                                                        icon: IconType.Outline.UsergroupAdd,
                                                         url: "/admin/post",
                                                         permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorBaseInfoPost)));
 
             //员工档案
             menuBaseInfo.AddItem(new MenuItemDefinition(name: PermissionNames.BXJGBaseInfoStaffInfo,
                                                         displayName: PermissionNames.BXJGBaseInfoStaffInfo.GetAdminLocalizableString(),
-                                                        icon: "fas fa-user",
+                                                        icon: IconType.Outline.User,
                                                         url: $"/admin/employee",
                                                         //requiresAuthentication: true,
                                                         permissionDependency: new SimplePermissionDependency(PermissionNames.BXJGBaseInfoStaffInfo)));
@@ -76,7 +76,7 @@ namespace ZLJ.Web.Admin.Startup
             //来往单位
             menuBaseInfo.AddItem(new MenuItemDefinition(name: PermissionNames.BXJGBaseInfoAssociatedCompany,
                 displayName: PermissionNames.BXJGBaseInfoAssociatedCompany.GetAdminLocalizableString(),
-                icon: "fas fa-handshake",
+                icon: IconType.Outline.CustomerService,
                 url: $"/admin/related-company",
                 requiresAuthentication: true,
                 permissionDependency: new SimplePermissionDependency(PermissionNames.BXJGBaseInfoAssociatedCompany)));
@@ -86,7 +86,7 @@ namespace ZLJ.Web.Admin.Startup
             //行政区域
             menuBaseInfo.AddItem(new MenuItemDefinition(name: PermissionNames.BXJGBaseInfoAdministrative,
                 displayName: PermissionNames.BXJGBaseInfoAdministrative.GetAdminLocalizableString(),
-                icon: "fas fa-location-dot",
+                icon: IconType.Outline.BoxPlot,
                 url: $"/admin/Administrative",
                 requiresAuthentication: true,
                 permissionDependency: new SimplePermissionDependency(PermissionNames.BXJGBaseInfoAdministrative)));
@@ -129,13 +129,13 @@ namespace ZLJ.Web.Admin.Startup
 
             menuBaseInfo.AddItem(new MenuItemDefinition("SystemLog",
                                                         "Log".GetAdminLocalizableString(),
-                                                        icon: "fas fa-clock-rotate-left",
+                                                        icon: IconType.Outline.History,
                                                         url: "/admin/auditing",
                                                         permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorSystemLog)));
 
             menuBaseInfo.AddItem(new MenuItemDefinition("SystemConfig",
                                                         "Settings".GetAdminLocalizableString(),
-                                                        icon: "fas fa-gear",
+                                                        icon: IconType.Outline.Setting,
                                                         url: "/admin/settings",
                                                         permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorSystemConfig)));
 

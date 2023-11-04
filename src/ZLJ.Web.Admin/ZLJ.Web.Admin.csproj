@@ -89,6 +89,12 @@
 	<ItemGroup>
 	  <Folder Include="Pages\DataDictionary\" />
 	  <Folder Include="Pages\Post\" />
+	  <Folder Include="Properties\PublishProfiles\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="wwwroot\assets\403.svg" />
+	  <None Include="wwwroot\assets\logo.svg" />
 	</ItemGroup>
 
 </Project>

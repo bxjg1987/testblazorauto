@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Navigation;
+using BXJG.AbpBlazor.Interceptors;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.AspNetCore.Components.Routing;
 using System;
@@ -11,17 +12,9 @@ namespace ZLJ.Web.Admin.Shared
 {
     public partial class AdminMainLayout
     {
-        private readonly MenuDataItem[] _menuData =
-        {
-            new MenuDataItem
-            {
-                Path = "/admin",
-                Name = "welcome",
-                Key = "welcome",
-                Icon = "smile",
-            }
-        };
-
+        private MenuDataItem[] _menuData = new MenuDataItem[0];
+        [Inject]
+        protected IMessageService MessageService { get; set; }
         public LinkItem[] Links { get; set; } =
         {
             new LinkItem
@@ -47,8 +40,46 @@ namespace ZLJ.Web.Admin.Shared
             }
         };
 
+        [AbpExceptionInterceptor]
+        protected override async Task OnInitializedAsync()
+        {
+            var menu = await abpNavManager.GetMenuAsync("adminBlazor", new Abp.UserIdentifier(abpSession.TenantId, abpSession.UserId.Value));
+            _menuData = MapMenu(menu.Items);
+        }
 
-      //  private List<MenuItem>? Menus { get; set; }
+        MenuDataItem[] MapMenu(IList<UserMenuItem> items, MenuDataItem parent = default)
+        {
+            var jg = new List<MenuDataItem>();
+            foreach (var item in items)
+            {
+                var tmp = new MenuDataItem
+                {
+                    Key = item.Name,
+                    Path = item.Url,
+                    Name = item.DisplayName,
+                    Match = NavLinkMatch.Prefix,
+                    HideChildrenInMenu = !item.Items.Any(),
+                    Icon = item.Icon,
+                 
+                    //Authority 权限
+                    Authority = default,
+                    HideInMenu = false,
+                    Locale = default,
+                    ParentKeys = default
+                };
+                if (item.Items != default)
+                  tmp.  Children = MapMenu(item.Items, tmp);
+                jg.Add(tmp);
+            }
+            var jg2 = jg.ToArray();
+            if (parent != default)
+                parent.Children = jg2;
+            return jg2;
+        }
+
+
+
+        //  private List<MenuItem>? Menus { get; set; }
 
         ///// <summary>
         ///// OnInitialized 方法
@@ -63,7 +94,7 @@ namespace ZLJ.Web.Admin.Shared
         //{
         //    return false;
         //}
-        
+
         //protected override async Task OnInitializedAsync()
         //{
         //    if (abpSession.UserId.HasValue)
