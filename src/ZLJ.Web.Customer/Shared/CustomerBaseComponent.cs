@@ -5,17 +5,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MudBlazor;
 using Microsoft.Extensions.DependencyInjection;
 using BXJG.Utils;
-using BXJG.AbpMudBlazor.Components;
+using BXJG.AbpBlazor.Components;
 
 namespace ZLJ.Web.Customer.Shared
 {
     /// <summary>
     /// 后台管理端的blazor组件抽象类
     /// </summary>
-    public class CustomerBaseComponent : AbpMudBaseComponent
+    public class CustomerBaseComponent : AbpBaseComponent
     {
         private ILocalizationSource appCommonLocalizationSource, zljLocalizationSource, utilsLocalizationSource;
 

@@ -5,7 +5,6 @@ using ZLJ.Authorization;
 using ZLJ.Localization;
 using BXJG.Utils.GeneralTree;
 using ZLJ.App.Customer;
-using MudBlazor;
 
 namespace ZLJ.Web.Customer
 {
@@ -24,17 +23,17 @@ namespace ZLJ.Web.Customer
             menu.AddItem(new MenuItemDefinition("tongji",
                                                 "Report".GetCustLocalizableString(),
                                                 url: "/cust",
-                                                icon: Icons.Outlined.BarChart,
+                                                icon:"",// Icons.Outlined.BarChart,
                                                 permissionDependency: new SimplePermissionDependency(PermissionNames.Customer)));
             menu.AddItem(new MenuItemDefinition("yuangong",
                                                 "Employee".GetCustLocalizableString(),
                                                 url: "/cust/emp",
-                                                icon: Icons.Outlined.EmojiPeople,
+                                                icon: "",//Icons.Outlined.EmojiPeople,
                                                 permissionDependency: new SimplePermissionDependency(PermissionNames.Customer)));
             menu.AddItem(new MenuItemDefinition("bumen",
                                                 "Department".GetCustLocalizableString(),
                                                 url: "/cust/dept",
-                                                icon: Icons.Outlined.Group,
+                                                icon: "",// Icons.Outlined.Group,
                                                 permissionDependency: new SimplePermissionDependency(PermissionNames.Customer)));
 
         }
