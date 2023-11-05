@@ -1,9 +1,9 @@
 ﻿@using ZLJ.App.Admin.Post;
 @using ZLJ.App.Admin.Post.Dto;
-@attribute [Authorize(PermissionNames.AdministratorBaseInfoPostCreate)]
+@* @attribute [Authorize(PermissionNames.AdministratorBaseInfoPostCreate)] *@
 
 @inherits AdminCreateBaseComponent<IPostAppService, PostDto, int, PagedAndSortedResultRequest< PagedPostResultRequestDto>, CreatePostDto, PostEditDto>
-<ValidateForm Model="createDto" @ref="validateForm">
+@* <ValidateForm Model="createDto" @ref="validateForm">
     <EditorForm Model="@createDto" RowType="RowType.Inline" LabelAlign="Alignment.Right">
         <FieldItems>
             <EditorItem @bind-Field="@context.OuIds" Context="ctx">
@@ -16,4 +16,4 @@
             <EditorItem @bind-Field="@context.GrantedPermissions" Editable="false" />
         </FieldItems>
     </EditorForm>
-</ValidateForm>
+</ValidateForm> *@

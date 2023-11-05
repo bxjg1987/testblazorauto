@@ -25,32 +25,18 @@ namespace BXJG.AbpBlazor.Components
     /*
      * 由于abp的crud接口和抽象类把crud搞一起了，不想动它，所以这里的应用服务中包含TCreateInput、TUpdateInput
      * 
-     * 与具体的ui框架无关，建议具体项目直接集成它，不要再为了某套UI再封装一次
      * 只保留逻辑部分的抽象，因为这里的抽象是与具体项目无关的，所以应该由具体项目的子类去按自己需求做布局
-     * 
-     * 不做全局异常处理，因为大部分的ui框架自带了处理方式，即使木有，用肉夹馍在具体项目去做就行了，因为具体项目引用具体ui
      * 
      * 之前我们实现过动态条件，参考BXJG.MudBlazor中的实现
      * 动态条件对于用户来讲有点复杂，所以我们暂时不考虑
      * 
-     * bb支持弹出和顶部的搜索，最终决定选额顶部的方式，这样用户查看列表时可以看到自己的条件，而且顶部的方式本身可以收缩的
-     * 
-     * bb里支持动态条件，且高级搜索依然转化为动态条件，下面说说高级中的流程
-     * 我们的条件dto应该实现ITableSearchModel，然后赋值给CustomerSearchModel，但我们的dto是定义在应用层的，不可能引入bb的东东
-     * 所以我们可以让页面本身来实现这个接口，将this赋值给CustomerSearchModel
-     * 
-     * 然后重新动态条件方法
-     * 搜索按钮点击后，OnQuery执行前会回调动态条件构造，然后才执行OnQuery
-     * 我们在OnQuery中通过参数拿到动态条件，然后转换为我们查询dto的值，或查询dto的动态条件
-     * 
      * 这样有个好处，我们不用在应用层的查询dto定义一堆条件了，也不需要应用层写一堆查询逻辑了
      * 但还是要保留，防止有高级处理
      * 但这里需要转两次，有点浪费，我们决定直接将表单值转换为动态条件，这样bb的CustomerSearchModel就不需要了
-     * 但为了能显示出自定义搜索框，还行需要实现ITableSearchModel，只不过实现为空
      */
 
     /// <summary>
-    /// 抽象的，基于bootstrap table的列表页抽象组件
+    /// 抽象的，基于ant table的列表页抽象组件
     /// </summary>
     /// <typeparam name="TAppService">应用服务类型</typeparam>
     /// <typeparam name="TEntityDto">列表项的数据类型</typeparam>
@@ -86,7 +72,6 @@ namespace BXJG.AbpBlazor.Components
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
     {
-
         protected Table<TEntityDto> table;
         [AbpExceptionInterceptor]
         protected override async Task DeleteBatch()
@@ -104,7 +89,7 @@ namespace BXJG.AbpBlazor.Components
             await base.KeywordsChanged(keywords);
         }
         [Inject]
-        public MessageService MessageService { get; set; }
+        public IMessageService MessageService { get; set; }
         [AbpExceptionInterceptor]
         protected virtual async Task<bool> OnDeleteBatch(IEnumerable<TEntityDto> items)
         {
@@ -187,7 +172,7 @@ namespace BXJG.AbpBlazor.Components
         [AbpExceptionInterceptor]
         protected override async Task Refresh()
         {
-             table.ReloadData();
+            table.ReloadData();
         }
         protected override async ValueTask ShowFailMessage(string title = "操作提示", string msg = "操作失败！")
         {
@@ -206,13 +191,13 @@ namespace BXJG.AbpBlazor.Components
         public virtual void Reset()
         {
             //GetAllInput = new TGetAllInput();
-           table.ResetData();
+            table.ResetData();
         }
         /// <summary>
         /// 对新增组件的引用
         /// </summary>
         protected TCreateComponent createComponent;
-    
+
         ///// <summary>
         ///// 点击列表中弹出新增框底部的保存按钮时执行
         ///// </summary>
@@ -256,9 +241,9 @@ namespace BXJG.AbpBlazor.Components
             base.OnAfterRender(firstRender);
         }
         [AbpExceptionInterceptor]
-        protected override Task OnAfterRenderAsync(bool firstRender)
+        protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            return base.OnAfterRenderAsync(firstRender);
+            await base.OnAfterRenderAsync(firstRender);
         }
         #endregion
     }

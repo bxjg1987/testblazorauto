@@ -7,14 +7,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using BXJG.Utils;
-using BXJG.AbpBootstrapBlazor.Components;
+using BXJG.AbpBlazor.Components;
 
 namespace ZLJ.Web.Admin.Shared
 {
     /// <summary>
     /// 后台管理端的blazor组件抽象类，与crud抽象组件是平级
     /// </summary>
-    public abstract class AdminBaseComponent : AbpBBBaseComponent
+    public abstract class AdminBaseComponent : AbpBaseComponent
     {
         private ILocalizationSource appCommonLocalizationSource, zljLocalizationSource, utilsLocalizationSource;
         protected virtual ILocalizationSource LocalizationSourceAppCommon

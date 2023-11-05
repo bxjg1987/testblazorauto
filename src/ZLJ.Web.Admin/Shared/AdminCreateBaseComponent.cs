@@ -1,6 +1,6 @@
 ﻿using Abp.Application.Services.Dto;
 using Abp.Localization.Sources;
-using BXJG.AbpBootstrapBlazor.Components;
+using BXJG.AbpBlazor.Components;
 using BXJG.Utils;
 using System;
 using System.Collections.Generic;
@@ -24,7 +24,7 @@ namespace ZLJ.Web.Admin.Shared
                                           TPrimaryKey,
                                           TGetAllInput,
                                           TCreateInput,
-                                          TUpdateInput> : AbpBBCreateBaseComponent<TAppService,
+                                          TUpdateInput> : AbpCreateBaseComponent<TAppService,
                                                                                    TEntityDto,
                                                                                    TPrimaryKey,
                                                                                    TGetAllInput,

@@ -14,8 +14,22 @@
     box-shadow: none;
 }
 
+::deep .ant-pro-basicLayout-children-content-wrap {
+    height:100%;
+}
+::deep .ant-pro-basicLayout-children-content-wrap > .ant-tabs {
+    height: 100%;
+}
+
+
 ::deep .ant-tabs-content-holder {
-    margin:1rem;
-    background:white;
-    min-height:72vh;
+    margin: 1rem;
+    margin-bottom: 0;
+    /*  background: white;
+    min-height:72vh;*/
+}
+
+::deep .ant-layout-footer {
+    margin: .7rem auto;
+    padding: 0;
 }

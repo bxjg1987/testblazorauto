@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BXJG.AbpBootstrapBlazor.Components;
+using BXJG.AbpBlazor.Components;
 
 namespace ZLJ.Web.Admin.Shared
 {
@@ -20,6 +20,8 @@ namespace ZLJ.Web.Admin.Shared
     /// <typeparam name="TGetAllInput">获取列表时输入参数类型</typeparam>
     /// <typeparam name="TCreateInput">新增时输入参数类型</typeparam>
     /// <typeparam name="TUpdateInput">修改时输入参数类型</typeparam>
+    /// <typeparam name="TCreateComponent">新增组件类型</typeparam>
+    /// <typeparam name="TEditOrDetailComponent">修改和详情组件类型</typeparam>
     public abstract class AdminListBaseComponent<TAppService,
                                                  TEntityDto,
                                                  TPrimaryKey,
@@ -27,20 +29,20 @@ namespace ZLJ.Web.Admin.Shared
                                                  TCreateInput,
                                                  TUpdateInput,
                                                  TCreateComponent,
-                                                 TEditOrDetailComponent> : AbpBBListBaseComponent<TAppService,
-                                                                                                  TEntityDto,
-                                                                                                  TPrimaryKey,
-                                                                                                  TGetAllInput,
-                                                                                                  TCreateInput,
-                                                                                                  TUpdateInput,
-                                                                                                  TCreateComponent,
-                                                                                                  TEditOrDetailComponent>
-        where TCreateComponent : AbpBBCreateBaseComponent<TAppService,
-                                                          TEntityDto,
-                                                          TPrimaryKey,
-                                                          TGetAllInput,
-                                                          TCreateInput,
-                                                          TUpdateInput>
+                                                 TEditOrDetailComponent> : AbpListBaseComponent<TAppService,
+                                                                                                TEntityDto,
+                                                                                                TPrimaryKey,
+                                                                                                TGetAllInput,
+                                                                                                TCreateInput,
+                                                                                                TUpdateInput,
+                                                                                                TCreateComponent,
+                                                                                                TEditOrDetailComponent>
+        where TCreateComponent : AbpCreateBaseComponent<TAppService,
+                                                        TEntityDto,
+                                                        TPrimaryKey,
+                                                        TGetAllInput,
+                                                        TCreateInput,
+                                                        TUpdateInput>
         where TCreateInput : new()
         where TEntityDto : class, IEntityDto<TPrimaryKey>, IExtendableDto, new()
         where TUpdateInput : IEntityDto<TPrimaryKey>

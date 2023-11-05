@@ -25,15 +25,10 @@
     <Compile Remove="Pages\DataDictionary\List.razor.cs" />
     <Compile Remove="Pages\Notification\NotifyManager.razor.cs" />
     <Compile Remove="Pages\Notification\NotifySubscript.razor.cs" />
-    <Compile Remove="Pages\Post\Create.razor.cs" />
-    <Compile Remove="Pages\Post\List.razor.cs" />
-    <Compile Remove="Shared\AdminBaseComponent.cs" />
-    <Compile Remove="Shared\AdminCreateBaseComponent.cs" />
     <Compile Remove="Shared\AdminDetailBaseComponent.cs" />
     <Compile Remove="Shared\AdminGeneralTreeCreateBaseComponent.cs" />
     <Compile Remove="Shared\AdminGeneralTreeDetailOrUpdateBaseComponent.cs" />
     <Compile Remove="Shared\AdminGeneralTreeListBaseComponent.cs" />
-    <Compile Remove="Shared\AdminListBaseComponent.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -43,9 +38,6 @@
     <Content Remove="Pages\Notification\NotifyManager.razor" />
     <Content Remove="Pages\Notification\NotifySubscript.razor" />
     <Content Remove="Pages\Notification\Simple.razor" />
-    <Content Remove="Pages\Post\Create.razor" />
-    <Content Remove="Pages\Post\EditOrDetail.razor" />
-    <Content Remove="Pages\Post\List.razor" />
     <Content Remove="Shared\BasicLayout.razor" />
     <Content Remove="Shared\RecursionNavGroup.razor" />
     <Content Remove="Shared\Widget.razor" />
@@ -88,7 +80,6 @@
 
 	<ItemGroup>
 	  <Folder Include="Pages\DataDictionary\" />
-	  <Folder Include="Pages\Post\" />
 	  <Folder Include="Properties\PublishProfiles\" />
 	</ItemGroup>
 

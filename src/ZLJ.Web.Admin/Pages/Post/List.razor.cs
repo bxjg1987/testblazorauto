@@ -1,6 +1,4 @@
-﻿using BootstrapBlazor.Components;
-using BXJG.AbpBootstrapBlazor;
-using BXJG.AbpBootstrapBlazor.Interceptors;
+﻿using BXJG.AbpBlazor.Interceptors;
 using DocumentFormat.OpenXml.Office2013.PowerPoint.Roaming;
 using Rougamo;
 using System;
@@ -10,12 +8,12 @@ using System.Text;
 using System.Threading.Tasks;
 using ZLJ.App.Admin.Post.Dto;
 
-namespace ZLJ.Web.Admin.BootstrapServer.Pages.Post
+namespace ZLJ.Web.Admin.Pages.Post
 {
     public partial class List
     {
         protected override string FuncName => "角色岗位";
-        [AbpBBException]
+        [AbpExceptionInterceptor]
         protected override async Task OnInitializedAsync()
         {
             await base.InitPermission(PermissionNames.AdministratorBaseInfoPostCreate, PermissionNames.AdministratorBaseInfoPostUpdate, PermissionNames.AdministratorBaseInfoPostDelete);
@@ -42,7 +40,7 @@ namespace ZLJ.Web.Admin.BootstrapServer.Pages.Post
 
         //这里也可以用肉夹馍的全局注册处理
         // [AbpBBException]
-        [AbpBBException]
+        [AbpExceptionInterceptor]
         protected async Task AddRandomData()
         {
             for (int i = 0; i < 10; i++)
