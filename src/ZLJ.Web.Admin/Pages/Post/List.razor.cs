@@ -16,30 +16,10 @@ namespace ZLJ.Web.Admin.Pages.Post
         [AbpExceptionInterceptor]
         protected override async Task OnInitializedAsync()
         {
-            await base.InitPermission(PermissionNames.AdministratorBaseInfoPostCreate, PermissionNames.AdministratorBaseInfoPostUpdate, PermissionNames.AdministratorBaseInfoPostDelete);
             await base.OnInitializedAsync();
+            await base.InitPermission(PermissionNames.AdministratorBaseInfoPostCreate, PermissionNames.AdministratorBaseInfoPostUpdate, PermissionNames.AdministratorBaseInfoPostDelete);
         }
-        //protected override Task LoadListData()
-        //{
-        //    throw new Exception("ttttttt");
-        //    return base.LoadListData();
-        //}
 
-        //protected override void OnAfterRender(bool firstRender)
-        //{  
-        //    throw new Exception("ttttttt");
-        //    base.OnAfterRender(firstRender);
-        //}
-        //[AbpBBException]
-        //protected override Task OnAfterRenderAsync(bool firstRender)
-        //{
-        //    throw new Exception("ttttttt");
-        //    return base.OnAfterRenderAsync(firstRender);
-        //}
-
-
-        //这里也可以用肉夹馍的全局注册处理
-        // [AbpBBException]
         [AbpExceptionInterceptor]
         protected async Task AddRandomData()
         {
@@ -59,6 +39,5 @@ namespace ZLJ.Web.Admin.Pages.Post
             GetAllInput.Sorting = $"role.{GetAllInput.Sorting}";//目前值考虑单列排序
             return base.LoadListData();
         }
-      
     }
 }

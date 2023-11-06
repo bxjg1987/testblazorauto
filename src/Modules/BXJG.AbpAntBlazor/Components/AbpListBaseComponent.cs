@@ -59,7 +59,7 @@ namespace BXJG.AbpBlazor.Components
                                                                                               TGetAllInput,
                                                                                               TCreateInput,
                                                                                               TUpdateInput,
-                                                                                              List<TEntityDto>>
+                                                                                              IEnumerable<TEntityDto>>
         where TCreateComponent : AbpCreateBaseComponent<TAppService,
                                                         TEntityDto,
                                                         TPrimaryKey,
@@ -67,11 +67,47 @@ namespace BXJG.AbpBlazor.Components
                                                         TCreateInput,
                                                         TUpdateInput>
         where TCreateInput : new()
-        where TEntityDto : class, IEntityDto<TPrimaryKey>, IExtendableDto, new()
+        where TEntityDto : IEntityDto<TPrimaryKey>, IExtendableDto//, new()
         where TGetAllInput : new()
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
     {
+        public new int PageIndex
+        {
+            get => base.PageIndex;
+            set
+            {
+                if (GetAllInput is IPagedResultRequest dx)
+                {
+                    dx.SkipCount = (value - 1) * PageSize;
+                }
+            }
+        }
+
+        public new int PageSize
+        {
+            get => base.PageSize;
+            set
+            {
+                if (GetAllInput is ILimitedResultRequest dx)
+                {
+                    dx.MaxResultCount = value;
+                }
+                else if (GetAllInput is IHaveFilter dx1 && dx1.Filter is ILimitedResultRequest dx2)
+                {
+                    dx2.MaxResultCount = value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 必须的，统一异常处理拦截器要用
+        /// </summary>
+        [Inject]
+        public IMessageService MessageService { get; set; }
+        /// <summary>
+        /// 对ant表格的引用
+        /// </summary>
         protected Table<TEntityDto> table;
         [AbpExceptionInterceptor]
         protected override async Task DeleteBatch()
@@ -88,53 +124,40 @@ namespace BXJG.AbpBlazor.Components
         {
             await base.KeywordsChanged(keywords);
         }
-        [Inject]
-        public IMessageService MessageService { get; set; }
-        [AbpExceptionInterceptor]
-        protected virtual async Task<bool> OnDeleteBatch(IEnumerable<TEntityDto> items)
-        {
-            if (SelectedItems != default && SelectedItems.Count > 1)
-                await DeleteBatch();
-            else
-                await DeleteItem(items.Single());
-            //table.SelectedRows?.Clear();
-            SelectedItems?.Clear();
-            return true;
-        }
+        //[AbpExceptionInterceptor]
+        //protected virtual async Task<bool> OnDeleteBatch(IEnumerable<TEntityDto> items)
+        //{
+        //    if (SelectedItems != default && SelectedItems.Count > 1)
+        //        await DeleteBatch();
+        //    else
+        //        await DeleteItem(items.Single());
+        //    //table.SelectedRows?.Clear();
+        //    SelectedItems?.Clear();
+        //    return true;
+        //}
         [AbpExceptionInterceptor]
         protected virtual async Task OnQuery(QueryModel condition)
         {
             /*
-             * 由于bootstrap关于分页和关键字，木有双休绑定，因此这里手动赋值
              * 目前只考虑高级搜索方式，不考虑动态条件
              */
 
-            //if (GetAllInput is ILimitedResultRequest dx)
-            //{
-            //    dx.MaxResultCount = condition.PageItems;
-            //}
-            //if (GetAllInput is IHaveFilter dx1 && dx1.Filter is ILimitedResultRequest dx2)
-            //{
-            //    dx2.MaxResultCount = condition.PageItems;
-            //}
+            ISortedResultRequest sd222 = null;
+            if (GetAllInput is ISortedResultRequest dxx)
+                sd222 = dxx;
+            else if (GetAllInput is IHaveFilter dx11 && dx11.Filter is ISortedResultRequest dx22)
+                sd222 = dx22;
 
+            var ls = condition.SortModel.Where(c => c.Sort.IsNotNullOrWhiteSpaceBXJG()).OrderBy(c => c.Priority).Select(c => c.FieldName + " " + c.Sort.Replace("end", ""));
+            sd222.Sorting = string.Join(",", ls);
 
-            //if (GetAllInput is IPagedResultRequest tj1)
-            //    tj1.SkipCount = (condition.PageIndex - 1) * condition.PageItems;
-            //else if (GetAllInput is IHaveFilter tj2 && tj2.Filter is IPagedResultRequest tj3)
-            //    tj3.SkipCount = (condition.PageIndex - 1) * condition.PageItems;
+            if (sd222.Sorting.IsNullOrWhiteSpaceBXJG())
+                sd222.Sorting = "Id";
+            
 
-
-            ////if (pageIndex <= 0)
-            ////    pageIndex = 1;
-
-            ////return pageIndex;
-
-            //ISortedResultRequest sd222 = null;
-            //if (GetAllInput is ISortedResultRequest dxx)
-            //    sd222 = dxx;
-            //else if (GetAllInput is IHaveFilter dx11 && dx11.Filter is ISortedResultRequest dx22)
-            //    sd222 = dx22;
+            // var r =await AppService.GetAllAsync(GetAllInput);
+            //Items = r.Items;
+            // TotalCount = r.TotalCount;
             //if (condition.SortList != null && condition.SortList.Count > 0)
             //    sd222.Sorting = string.Join(",", condition.SortList);
             //else if (condition.SortOrder != SortOrder.Unset)
@@ -157,7 +180,7 @@ namespace BXJG.AbpBlazor.Components
 
             ////动态条件的填充请已在父类中定义
 
-            //await LoadListData();
+            await LoadListData();
 
             //return new QueryData<TEntityDto>
             //{
@@ -193,6 +216,7 @@ namespace BXJG.AbpBlazor.Components
             //GetAllInput = new TGetAllInput();
             table.ResetData();
         }
+
         /// <summary>
         /// 对新增组件的引用
         /// </summary>

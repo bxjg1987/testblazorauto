@@ -1,8 +1,44 @@
 ﻿@page "/admin/post"
 
-@using ZLJ.App.Admin.Post;
-@using ZLJ.App.Admin.Post.Dto;
+@using ZLJ.App.Admin.Post
+@using ZLJ.App.Admin.Post.Dto
 
 @attribute [ReuseTabsPageTitle("员工档案")]
 @attribute [Authorize(PermissionNames.AdministratorBaseInfoPost)]
 @inherits AdminListBaseComponent<IPostAppService, PostDto, int, PagedAndSortedResultRequest< PagedPostResultRequestDto>, CreatePostDto, PostEditDto,Create,EditOrDetail>
+
+<Space Direction="DirectionVHType.Vertical" Style="width:100%;">
+    <SpaceItem>
+        <GridRow Justify="space-between">
+            @* 左侧 *@
+            <GridCol Span="8">
+                <Button Type="@ButtonType.Primary" Icon="@IconType.Outline.Search">新增</Button>
+                <Button Type="@ButtonType.Primary" Icon="@IconType.Outline.Delete" Danger="true">删除</Button>
+            </GridCol>
+            @* 右侧 *@
+            <GridCol Span="8" Offset="8" Flex=@("none")>
+                <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Search">Search</Button>
+            </GridCol>
+        </GridRow>
+
+    </SpaceItem>
+    <SpaceItem>
+        <Table TItem="PostDto"
+               @ref="table"
+               Total="TotalCount"
+               @bind-PageIndex="PageIndex"
+               @bind-PageSize="PageSize"
+               @bind-SelectedRows="SelectedItems"
+               OnChange="OnQuery"
+               DataSource="Items"
+               Loading="IsLoading"
+               RemoteDataSource="true"
+               Size="TableSize.Middle"
+               Bordered="true">
+
+            <Selection Key="@(context.Id.ToString())" />
+            <PropertyColumn Property="c=>c.DisplayName" Sortable="true" DefaultSortOrder="SortDirection.Ascending" ShowSorterTooltip="false" />
+            <PropertyColumn Property="c=>c.Name" />
+        </Table>
+    </SpaceItem>
+</Space>
