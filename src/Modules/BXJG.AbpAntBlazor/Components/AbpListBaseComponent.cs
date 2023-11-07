@@ -72,33 +72,7 @@ namespace BXJG.AbpBlazor.Components
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
     {
-        public new int PageIndex
-        {
-            get => base.PageIndex;
-            set
-            {
-                if (GetAllInput is IPagedResultRequest dx)
-                {
-                    dx.SkipCount = (value - 1) * PageSize;
-                }
-            }
-        }
-
-        public new int PageSize
-        {
-            get => base.PageSize;
-            set
-            {
-                if (GetAllInput is ILimitedResultRequest dx)
-                {
-                    dx.MaxResultCount = value;
-                }
-                else if (GetAllInput is IHaveFilter dx1 && dx1.Filter is ILimitedResultRequest dx2)
-                {
-                    dx2.MaxResultCount = value;
-                }
-            }
-        }
+      
 
         /// <summary>
         /// 必须的，统一异常处理拦截器要用
@@ -120,7 +94,7 @@ namespace BXJG.AbpBlazor.Components
             await base.DeleteItem(item);
         }
         [AbpExceptionInterceptor]
-        protected override async Task KeywordsChanged(string keywords)
+        protected override async Task KeywordsChanged(string keywords=default)
         {
             await base.KeywordsChanged(keywords);
         }
@@ -142,18 +116,12 @@ namespace BXJG.AbpBlazor.Components
              * 目前只考虑高级搜索方式，不考虑动态条件
              */
 
-            ISortedResultRequest sd222 = null;
-            if (GetAllInput is ISortedResultRequest dxx)
-                sd222 = dxx;
-            else if (GetAllInput is IHaveFilter dx11 && dx11.Filter is ISortedResultRequest dx22)
-                sd222 = dx22;
+        
 
             var ls = condition.SortModel.Where(c => c.Sort.IsNotNullOrWhiteSpaceBXJG()).OrderBy(c => c.Priority).Select(c => c.FieldName + " " + c.Sort.Replace("end", ""));
-            sd222.Sorting = string.Join(",", ls);
+         Sorting = string.Join(",", ls);
 
-            if (sd222.Sorting.IsNullOrWhiteSpaceBXJG())
-                sd222.Sorting = "Id";
-            
+          
 
             // var r =await AppService.GetAllAsync(GetAllInput);
             //Items = r.Items;
@@ -197,6 +165,12 @@ namespace BXJG.AbpBlazor.Components
         {
             table.ReloadData();
         }
+        [AbpExceptionInterceptor]
+        protected override async Task Reset()
+        {
+           // table.ResetData();//不晓得为啥不行
+           await base.Reset();
+        }
         protected override async ValueTask ShowFailMessage(string title = "操作提示", string msg = "操作失败！")
         {
             await MessageService.Error(msg);
@@ -207,15 +181,15 @@ namespace BXJG.AbpBlazor.Components
         }
 
 
-        /// <summary>
-        /// 搜索条件重置操作
-        /// </summary>
-        [AbpExceptionInterceptor]
-        public virtual void Reset()
-        {
-            //GetAllInput = new TGetAllInput();
-            table.ResetData();
-        }
+        ///// <summary>
+        ///// 搜索条件重置操作
+        ///// </summary>
+        //[AbpExceptionInterceptor]
+        //public virtual void Reset()
+        //{
+        //    //GetAllInput = new TGetAllInput();
+        //    table.ResetData();
+        //}
 
         /// <summary>
         /// 对新增组件的引用

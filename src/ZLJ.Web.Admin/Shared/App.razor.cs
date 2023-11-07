@@ -67,13 +67,13 @@ namespace ZLJ.Web.Admin.Shared
         {
             base.OnInitialized();
 
-           // var container = ScopedServices.GetRequiredService<CircuitStateContainer>();//不晓得为啥，必须用注入方式，这样获取不到
+            // var container = ScopedServices.GetRequiredService<CircuitStateContainer>();//不晓得为啥，必须用注入方式，这样获取不到
 
             //var cir = ScopedServices.GetRequiredService<CircuitStateHandler>();//这样获取的，Current属性为空
-
-            context = CircuitStateContainer[CircuitStateHandler.Current];
-
-            xxtz = context.Zhongjie.Zhuce<UserNotification>(ShowUsernotification);
+            if (CircuitStateContainer.TryGetValue(CircuitStateHandler.Current, out var x)) {
+                context = x;
+                xxtz = context.Zhongjie.Zhuce<UserNotification>(ShowUsernotification);
+            }
         }
         public  void Dispose()
         {

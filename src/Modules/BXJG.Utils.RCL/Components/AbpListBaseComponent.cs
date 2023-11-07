@@ -188,7 +188,52 @@ namespace BXJG.Utils.Components
                 }
                 return int.MaxValue;
             }
+            set
+            {
+                if (GetAllInput is ILimitedResultRequest dx)
+                {
+                    dx.MaxResultCount = value;
+                }
+                else if (GetAllInput is IHaveFilter dx1 && dx1.Filter is ILimitedResultRequest dx2)
+                {
+                    dx2.MaxResultCount = value;
+                }
+            }
         }
+
+
+        public virtual string Sorting
+        {
+            get
+            {
+                if (GetAllInput is ISortedResultRequest dxx)
+                    return dxx.Sorting;
+                else if (GetAllInput is IHaveFilter dx11 && dx11.Filter is ISortedResultRequest dx22)
+                    return dx22.Sorting;
+                return "Id";
+            }
+            set
+            {
+
+                ISortedResultRequest sd222 = null;
+                if (GetAllInput is ISortedResultRequest dxx)
+                    sd222 = dxx;
+                else if (GetAllInput is IHaveFilter dx11 && dx11.Filter is ISortedResultRequest dx22)
+                    sd222 = dx22;
+
+                // var ls = condition.SortModel.Where(c => c.Sort.IsNotNullOrWhiteSpaceBXJG()).OrderBy(c => c.Priority).Select(c => c.FieldName + " " + c.Sort.Replace("end", ""));
+                //  sd222.Sorting = string.Join(",", ls);
+                sd222.Sorting = value;
+
+                if (sd222.Sorting.IsNullOrWhiteSpaceBXJG())
+                    sd222.Sorting = "Id";
+
+
+            }
+        }
+
+
+
 
         /// <summary>
         /// 当前列表数据
@@ -207,16 +252,23 @@ namespace BXJG.Utils.Components
         {
             get
             {
-                int pageIndex = 1;
-                if (GetAllInput is IPagedResultRequest dx)
-                    pageIndex = (int)Math.Ceiling((decimal)dx.SkipCount / PageSize);
+                //  int pageIndex = 1;
+                //  if (GetAllInput is IPagedResultRequest dx)
+                return (GetAllInput as IPagedResultRequest).SkipCount / PageSize + 1;
 
                 //若是纯条件，就木有必要
 
-                if (pageIndex <= 0)
-                    pageIndex = 1;
+                //if (pageIndex <= 0)
+                //    pageIndex = 1;
 
-                return pageIndex;
+
+            }
+            set
+            {
+                if (GetAllInput is IPagedResultRequest dx)
+                {
+                    dx.SkipCount = (value - 1) * PageSize;
+                }
             }
         }
 
@@ -228,21 +280,7 @@ namespace BXJG.Utils.Components
         /// 父类仅仅需要读，至于是否可写由子类自己决定
         /// </summary>
         protected virtual bool IsLoading { get; set; }
-        /// <summary>
-        /// 获取排序字符串
-        /// </summary>
-        protected virtual string Sorting
-        {
-            get
-            {
-                if (GetAllInput is ISortedResultRequest dx)
-                    return dx.Sorting;
-                else if (GetAllInput is IHaveFilter dx1 && dx1.Filter is ISortedResultRequest dx2)
-                    return dx2.Sorting;
 
-                return "Id";
-            }
-        }
 
         ///// <summary>
         ///// 表格数据加载
@@ -324,7 +362,7 @@ namespace BXJG.Utils.Components
         //    //_events.Insert(0, $"Event = SelectedItemsChanged, Data = {System.Text.Json.JsonSerializer.Serialize(items)}");
         //}
         //未选中项时，直接禁用按钮
-       
+
         /// <summary>
         /// 刷新列表
         /// </summary>
@@ -420,23 +458,45 @@ namespace BXJG.Utils.Components
                 }
                 return string.Empty;
             }
+            set
+            {
+                if (GetAllInput is IHaveKeywords cd4)
+                {
+                    cd4.Keywords = value;
+                }
+                else if (GetAllInput is IHaveFilter cddq && cddq.Filter is IHaveKeywords cddqq)
+                {
+                    cddqq.Keywords = value;// state.FilterDefinitions.MapToDynamicCondition().ToList();
+                }
+            }
         }
         /// <summary>
         /// 关键字变化时回调，默认修改关键字字段并刷新列表
         /// </summary>
         /// <param name="keywords"></param>
         /// <returns></returns>
-        protected virtual async Task KeywordsChanged(string keywords)
+        protected virtual async Task KeywordsChanged(string keywords = default)
         {
-            if (GetAllInput is IHaveKeywords cd4)
-            {
-                cd4.Keywords = keywords;
-            }
-            else if (GetAllInput is IHaveFilter cddq && cddq.Filter is IHaveKeywords cddqq)
-            {
-                cddqq.Keywords = keywords;// state.FilterDefinitions.MapToDynamicCondition().ToList();
-            }
-
+            //if (GetAllInput is IHaveKeywords cd4)
+            //{
+            //    cd4.Keywords = keywords;
+            //}
+            //else if (GetAllInput is IHaveFilter cddq && cddq.Filter is IHaveKeywords cddqq)
+            //{
+            //    cddqq.Keywords = keywords;// state.FilterDefinitions.MapToDynamicCondition().ToList();
+            //}
+            Keywords = keywords;
+            await Refresh();
+        }
+        /// <summary>
+        /// 重置搜索条件后刷新
+        /// </summary>
+        /// <returns></returns>
+        protected virtual async Task Reset()
+        {
+            PageIndex = 1;
+            PageSize = 20;
+            Keywords = string.Empty;
             await Refresh();
         }
         #endregion

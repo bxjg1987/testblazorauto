@@ -151,8 +151,8 @@ namespace ZLJ.App.Admin.Post
                      select new { role, ou };
 
             q2 = q2.WhereIf(input.Filter.OuCode.IsNotNullOrWhiteSpaceBXJG(), c => c.ou.Code.StartsWith(input.Filter.OuCode))
+                   .WhereIf(input.Filter.IsStatic.HasValue,c=>c.role.IsStatic==input.Filter.IsStatic.Value)
                    .WhereIf(input.Filter.Keywords.IsNotNullOrWhiteSpaceBXJG(), c => c.role.Name.Contains(input.Filter.Keywords)|| c.role.DisplayName.Contains(input.Filter.Keywords));
-
 
             q2 = from role in q2.Select(c => c.role).Distinct()
                  join ouRole in ouRoleRepository.GetAll().AsNoTrackingWithIdentityResolution() on role.Id equals ouRole.RoleId into tem1
