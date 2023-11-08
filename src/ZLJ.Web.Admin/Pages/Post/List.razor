@@ -13,7 +13,14 @@
             @* 左侧 *@
             <GridCol Span="6">
                 <Button Type="@ButtonType.Primary" Icon="@IconType.Outline.Plus">新增</Button>
-                <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Clear" Danger="true">删除</Button>
+                @if (deleteIsGranted)
+                {
+                    <Popconfirm Title="确定删除已选择的项吗?"
+                                OnConfirm="Delete"
+                                OnCancel="HideDeleteConfirm">
+                        <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Clear" Danger="true" Disabled="@ShouldDisableDelete">删除</Button>
+                    </Popconfirm>
+                }
             </GridCol>
             @* 右侧 *@
             <GridCol Span="18" Flex=@("none")>
@@ -71,8 +78,18 @@
                 @* ButtonGroup设置Size好像没啥卵用 *@
                 <ButtonGroup Size="@ButtonSize.Small">
                     <Button Size="@ButtonSize.Small" Type="@ButtonType.Primary">详情</Button>
-                    <Button Size="@ButtonSize.Small">修改</Button>
-                    <Button Size="@ButtonSize.Small" Danger="true">删除</Button>
+                    @if (updateIsGranted)
+                    {
+                        <Button Size="@ButtonSize.Small">修改</Button>
+                    }
+                    @if (deleteIsGranted)
+                    {
+                        <Popconfirm Title="确定删除此项吗?"
+                                    OnConfirm="()=>Delete(context)"
+                                    OnCancel="HideDeleteConfirm">
+                            <Button Size="@ButtonSize.Small" Danger="true">删除</Button>
+                        </Popconfirm>
+                    }
                 </ButtonGroup>
             </ActionColumn>
         </Table>

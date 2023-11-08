@@ -72,7 +72,7 @@ namespace BXJG.AbpBlazor.Components
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
     {
-      
+
 
         /// <summary>
         /// 必须的，统一异常处理拦截器要用
@@ -84,17 +84,17 @@ namespace BXJG.AbpBlazor.Components
         /// </summary>
         protected Table<TEntityDto> table;
         [AbpExceptionInterceptor]
-        protected override async Task DeleteBatch()
+        protected override async Task Delete()
         {
-            await base.DeleteBatch();
+            await base.Delete();
         }
         [AbpExceptionInterceptor]
-        protected override async Task DeleteItem(TEntityDto item)
+        protected override async Task Delete(TEntityDto item)
         {
-            await base.DeleteItem(item);
+            await base.Delete(item);
         }
         [AbpExceptionInterceptor]
-        protected override async Task KeywordsChanged(string keywords=default)
+        protected override async Task KeywordsChanged(string keywords = default)
         {
             await base.KeywordsChanged(keywords);
         }
@@ -116,12 +116,12 @@ namespace BXJG.AbpBlazor.Components
              * 目前只考虑高级搜索方式，不考虑动态条件
              */
 
-        
+
 
             var ls = condition.SortModel.Where(c => c.Sort.IsNotNullOrWhiteSpaceBXJG()).OrderBy(c => c.Priority).Select(c => c.FieldName + " " + c.Sort.Replace("end", ""));
-         Sorting = string.Join(",", ls);
+            Sorting = string.Join(",", ls);
 
-          
+
 
             // var r =await AppService.GetAllAsync(GetAllInput);
             //Items = r.Items;
@@ -163,13 +163,27 @@ namespace BXJG.AbpBlazor.Components
         [AbpExceptionInterceptor]
         protected override async Task Refresh()
         {
-            table.ReloadData();
+            var qm = table.GetQueryModel();
+            var nqm = new QueryModel(1, qm.PageSize, qm.StartIndex, qm.SortModel, qm.FilterModel);
+            table.ReloadData(nqm);
+
+            SelectedItems = new List<TEntityDto>();
         }
         [AbpExceptionInterceptor]
         protected override async Task Reset()
         {
-           // table.ResetData();//不晓得为啥不行
+            // table.ResetData();//不晓得为啥不行
+
+            //  PageIndex = 1;
+            //  PageSize = 20;
+            //  Keywords = string.Empty;
+            //await Refresh();
+            //  await base.Reset();
+            // table.ResetData();
+            // table.ReloadData();
+            table.ResetData();
            await base.Reset();
+
         }
         protected override async ValueTask ShowFailMessage(string title = "操作提示", string msg = "操作失败！")
         {

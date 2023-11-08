@@ -281,7 +281,6 @@ namespace BXJG.Utils.Components
         /// </summary>
         protected virtual bool IsLoading { get; set; }
 
-
         ///// <summary>
         ///// 表格数据加载
         ///// </summary>
@@ -370,6 +369,10 @@ namespace BXJG.Utils.Components
         protected virtual async Task Refresh()
         {
             await LoadListData();
+            if (SelectedItems != default && SelectedItems is ICollection<TEntityDto> list)
+                list.Clear();
+            else
+                SelectedItems = new List<TEntityDto>() as TList;
         }
 
         /// <summary>
@@ -558,7 +561,7 @@ namespace BXJG.Utils.Components
         /// 批量删除
         /// </summary>
         /// <returns></returns>
-        protected virtual async Task DeleteBatch()
+        protected virtual async Task Delete()
         {
             //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限
             HideDeleteConfirm();
@@ -566,7 +569,7 @@ namespace BXJG.Utils.Components
             try
             {
                 var r = await AppService.BatchDeleteAsync(new BatchOperationInput<TPrimaryKey> { Ids = SelectedItems.Select(x => x.Id).ToArray() });
-                await BatchOperationMessage(r, "批量删除");
+                BatchOperationMessage(r, "批量删除");//这里木有必要await
                 //BatchDeleteMessage(temp);
                 if (r.Ids.Any())
                     await Refresh();
@@ -582,7 +585,7 @@ namespace BXJG.Utils.Components
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        protected virtual async Task DeleteItem(TEntityDto item)
+        protected virtual async Task Delete(TEntityDto item)
         {
             //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限
             // var curr = dataGrid.Items.Single(c => c.Id!.Equals(input.Id));
@@ -591,7 +594,7 @@ namespace BXJG.Utils.Components
             try
             {
                 await AppService.DeleteAsync(new EntityDto<TPrimaryKey>(item.Id));
-                await ShowSuccessMessage("删除提示", "删除成功！");
+                ShowSuccessMessage("删除提示", "删除成功！");//这里木有必要await
                 //若上面异常，下面不会执行
                 //_ = InvokeAsync(dataGrid.ReloadServerData);
                 await Refresh();
