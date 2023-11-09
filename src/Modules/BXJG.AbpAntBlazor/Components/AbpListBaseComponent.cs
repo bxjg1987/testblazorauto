@@ -181,6 +181,7 @@ namespace BXJG.AbpBlazor.Components
             //  await base.Reset();
             // table.ResetData();
             // table.ReloadData();
+            
             table.ResetData();
            await base.Reset();
 

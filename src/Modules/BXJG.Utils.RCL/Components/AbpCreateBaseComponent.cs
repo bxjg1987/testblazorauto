@@ -64,7 +64,7 @@ namespace BXJG.Utils.Components
         /// 重置按钮点击时回调，由于事件无法使用ValueTask，所以这里用了Task
         /// </summary>
         /// <returns></returns>
-        public virtual async Task BtnResetClick()
+        public virtual async Task Reset()
         {
             isReseting = true;
             try
@@ -91,7 +91,7 @@ namespace BXJG.Utils.Components
         /// <returns></returns>
         protected override async Task OnInitializedAsync()
         {
-            await BtnResetClick();
+            await Reset();
         }
         /// <summary>
         /// 是否有新增权限
@@ -116,10 +116,26 @@ namespace BXJG.Utils.Components
         /// </summary>
         protected bool isSaving = false;
         /// <summary>
+        /// 新增返回对象
+        /// </summary>
+        public class SaveResult
+        {
+            /// <summary>
+            /// 新增后返回的dto对象
+            /// </summary>
+            public TEntityDto Dto { get; set; }
+            /// <summary>
+            /// 新增是否结束了，
+            /// 若没有勾选“保存并继续”，则新增后表示新增结束
+            /// 验证不过也会返回false
+            /// </summary>
+            public bool End { get; set; }
+        }
+        /// <summary>
         /// 核心的保存逻辑
         /// </summary>
         /// <returns>新增任务是否结束</returns>
-        public virtual async Task<bool> BtnSaveClick()
+        public virtual async Task<SaveResult> Save()
         {
             //木有权限时保存按钮不可点击
             //验证不过时此方法不应该被调用
@@ -137,21 +153,21 @@ namespace BXJG.Utils.Components
         /// 保存的核心逻辑
         /// </summary>
         /// <returns>新增任务是否结束</returns>
-        protected virtual async Task<bool> SaveCore()
+        protected virtual async Task<SaveResult> SaveCore()
         {
             var yz = await Validate();
             if (!yz)
-                return false;
+                return new SaveResult();
             //木有权限时保存按钮不可点击
             //验证不过时此方法不应该被调用
             var r = await AppService.CreateAsync(createDto);
-            await ShowSuccessMessage(msg: "新增成功！");
+            ShowSuccessMessage(msg: "新增成功！");//没必要等待
             if (saveAndContinue)
             {
-                await BtnResetClick();
-                return false;
+                await Reset();
+                return new SaveResult();
             }
-            return true;
+            return new SaveResult { Dto = r, End = true };
         }
         /// <summary>
         /// 表单验证的核心逻辑
