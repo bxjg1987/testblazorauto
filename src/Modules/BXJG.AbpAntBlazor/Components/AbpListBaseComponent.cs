@@ -3,6 +3,7 @@ using Abp.Application.Services.Dto;
 using Abp.Authorization.Roles;
 using Abp.Authorization.Users;
 using Abp.Domain.Entities;
+using AntDesign;
 using AntDesign.TableModels;
 using BXJG.Common.Dto;
 using BXJG.Utils;
@@ -60,20 +61,20 @@ namespace BXJG.AbpBlazor.Components
                                                                                               TCreateInput,
                                                                                               TUpdateInput,
                                                                                               IEnumerable<TEntityDto>>
+        //列表中需要调用新增组件的方法，所以需要类型约束
         where TCreateComponent : AbpCreateBaseComponent<TAppService,
                                                         TEntityDto,
                                                         TPrimaryKey,
                                                         TGetAllInput,
                                                         TCreateInput,
                                                         TUpdateInput>
+        //由于TCreateComponent约束了类型，简介导致这里需要new约束
         where TCreateInput : new()
         where TEntityDto : IEntityDto<TPrimaryKey>, IExtendableDto//, new()
         where TGetAllInput : new()
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
     {
-
-
         /// <summary>
         /// 必须的，统一异常处理拦截器要用
         /// </summary>
@@ -181,9 +182,9 @@ namespace BXJG.AbpBlazor.Components
             //  await base.Reset();
             // table.ResetData();
             // table.ReloadData();
-            
+
             table.ResetData();
-           await base.Reset();
+            await base.Reset();
 
         }
         protected override async ValueTask ShowFailMessage(string title = "操作提示", string msg = "操作失败！")
@@ -195,7 +196,6 @@ namespace BXJG.AbpBlazor.Components
             await MessageService.Success(msg);
         }
 
-
         ///// <summary>
         ///// 搜索条件重置操作
         ///// </summary>
@@ -206,10 +206,29 @@ namespace BXJG.AbpBlazor.Components
         //    table.ResetData();
         //}
 
-        /// <summary>
-        /// 对新增组件的引用
-        /// </summary>
-        protected TCreateComponent createComponent;
+        ///// <summary>
+        ///// 对新增组件的引用
+        ///// </summary>
+        //protected TCreateComponent createComponent;
+        [Inject]
+        protected ModalService ModalService { get; private set; }
+        protected void Add()
+        {
+            // ModalService.CreateModalAsync(new ModalOptions { });
+
+            var config = new ModalOptions { };
+
+            void Child(RenderTreeBuilder builder)
+            {
+                builder.OpenComponent<TCreateComponent>(0);
+                // builder.AddAttribute(1, "FeedbackRef", modalRef);
+                // builder.AddAttribute(2, "Options", componentOptions); //传参
+                builder.CloseComponent();
+            }
+            config.Content = Child;
+            //  config.ModalRef = modalRef;
+            var sdf = ModalService.CreateModalAsync(config);
+        }
 
         ///// <summary>
         ///// 点击列表中弹出新增框底部的保存按钮时执行

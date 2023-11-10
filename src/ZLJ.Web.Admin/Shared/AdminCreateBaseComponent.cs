@@ -19,20 +19,20 @@ namespace ZLJ.Web.Admin.Shared
     /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
     /// <typeparam name="TCreateInput">新增时的输入类型</typeparam>
     /// <typeparam name="TUpdateInput">修改时的输入类型</typeparam>
-    public class AdminCreateBaseComponent<TAppService,
-                                          TEntityDto,
-                                          TPrimaryKey,
-                                          TGetAllInput,
-                                          TCreateInput,
-                                          TUpdateInput> : AbpCreateBaseComponent<TAppService,
-                                                                                   TEntityDto,
-                                                                                   TPrimaryKey,
-                                                                                   TGetAllInput,
-                                                                                   TCreateInput,
-                                                                                   TUpdateInput>
+    public abstract class AdminCreateBaseComponent<TAppService,
+                                                   TEntityDto,
+                                                   TPrimaryKey,
+                                                   TGetAllInput,
+                                                   TCreateInput,
+                                                   TUpdateInput> : AbpCreateBaseComponent<TAppService,
+                                                                                          TEntityDto,
+                                                                                          TPrimaryKey,
+                                                                                          TGetAllInput,
+                                                                                          TCreateInput,
+                                                                                          TUpdateInput>
         where TEntityDto : IEntityDto<TPrimaryKey>
-         // where TGetAllInput : new()
-         where TCreateInput : new()
+        // where TGetAllInput : new()
+        where TCreateInput : new()
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
     {

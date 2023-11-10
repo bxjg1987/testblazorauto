@@ -1,4 +1,5 @@
-﻿using BXJG.AbpBlazor.Interceptors;
+﻿using Abp.Authorization;
+using BXJG.AbpBlazor.Interceptors;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -11,9 +12,16 @@ namespace ZLJ.Web.Admin.Pages.Post
 {
     public partial class Create
     {
-        ZLJ.App.Common.OU.IOuAppService ouProviderAppService;
+        //ZLJ.App.Common.OU.IOuAppService ouProviderAppService;
 
-        protected ZLJ.App.Common.OU.IOuAppService OuProviderAppService => ouProviderAppService ?? ScopedServices.GetRequiredService<ZLJ.App.Common.OU.IOuAppService>();
+        protected ZLJ.App.Common.OU.IOuAppService OuProviderAppService => ScopedServices.GetRequiredService<ZLJ.App.Common.OU.IOuAppService>();
+
+        protected override string FuncName => "角色岗位";
+
+        protected override async Task CheckPermission()
+        {
+            await base.PermissionChecker.AuthorizeAsync(PermissionNames.AdministratorBaseInfoPostCreate);
+        }
 
         [AbpExceptionInterceptor]
         protected override async Task OnInitializedAsync()

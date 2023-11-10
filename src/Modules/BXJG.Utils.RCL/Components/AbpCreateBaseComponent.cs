@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Services.Dto;
+using Abp.UI;
 using BXJG.Common;
 using BXJG.Utils;
 using Microsoft.AspNetCore.Components;
@@ -41,17 +42,13 @@ namespace BXJG.Utils.Components
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
     {
         /// <summary>
-        /// 缓存当前主服务对象
-        /// </summary>
-        private TAppService? appService;
-        /// <summary>
         /// 获取主服务
         /// </summary>
-        protected virtual TAppService AppService => appService ??= ScopedServices.GetRequiredService<TAppService>();
+        protected virtual TAppService AppService => ScopedServices.GetRequiredService<TAppService>();
         /// <summary>
         /// 此功能的名称
         /// </summary>
-        protected virtual string FuncName => $"请重写{nameof(FuncName)}属性";
+        protected abstract string FuncName { get; }// => $"请重写{nameof(FuncName)}属性";
         /// <summary>
         /// 新增时的模型
         /// </summary>
@@ -91,22 +88,14 @@ namespace BXJG.Utils.Components
         /// <returns></returns>
         protected override async Task OnInitializedAsync()
         {
+            await CheckPermission();
             await Reset();
         }
         /// <summary>
-        /// 是否有新增权限
+        /// 新增权限判断
         /// </summary>
-        protected bool createIsGranted = true;
-        /// <summary>
-        /// 初始化权限状态
-        /// </summary>
-        /// <param name="createPermissionName"></param>
         /// <returns></returns>
-        protected virtual async Task InitPermission(string? createPermissionName = default)
-        {
-            if (createPermissionName.IsNotNullOrWhiteSpaceBXJG())
-                createIsGranted = await PermissionChecker.IsGrantedAsync(createPermissionName);
-        }
+        protected abstract Task CheckPermission();
         /// <summary>
         /// 保存后是否继续新增
         /// </summary>
@@ -165,7 +154,7 @@ namespace BXJG.Utils.Components
             if (saveAndContinue)
             {
                 await Reset();
-                return new SaveResult();
+                return new SaveResult { Dto = r };
             }
             return new SaveResult { Dto = r, End = true };
         }

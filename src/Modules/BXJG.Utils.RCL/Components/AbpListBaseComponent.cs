@@ -53,17 +53,13 @@ namespace BXJG.Utils.Components
     {
         #region 基础
         /// <summary>
-        /// 缓存当前主服务对象
-        /// </summary>
-        private TAppService? appService;
-        /// <summary>
         /// 获取主服务
         /// </summary>
-        protected virtual TAppService AppService => appService ??= ScopedServices.GetRequiredService<TAppService>();
+        protected virtual TAppService AppService => ScopedServices.GetRequiredService<TAppService>();
         /// <summary>
         /// 此功能的名称
         /// </summary>
-        protected virtual string FuncName => $"请重写{nameof(FuncName)}属性";
+        protected abstract string FuncName { get; }
 
         //protected Type DtoType => typeof(TEntityDto);//不是太有必要的，就不要浪费内存了
 

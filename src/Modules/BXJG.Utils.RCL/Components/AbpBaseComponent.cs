@@ -126,6 +126,7 @@ namespace BXJG.Utils.Components
         protected virtual IAbpAspNetCoreConfiguration AspNetCoreConfiguration => aspnetCoreConfiguration ??= ScopedServices.GetRequiredService<IAbpAspNetCoreConfiguration>();
 
 
+
         protected override void Dispose(bool disposing)
         {
             CancellationTokenSource?.Cancel();
@@ -204,6 +205,13 @@ namespace BXJG.Utils.Components
 
         private IPermissionChecker permissionChecker;
         protected virtual IPermissionChecker PermissionChecker => permissionChecker ??= ScopedServices.GetRequiredService<IPermissionChecker>();
+
+        //protected virtual async Task CheckPermission(string name)
+        //{
+        //    PermissionCheckerExtensions
+        //    if (await PermissionChecker.IsGrantedAsync(name) == false)
+        //        throw new UserFriendlyException("权限不足");
+        //}
 
         //private IFeatureManager featureManager;
         //protected IFeatureManager FeatureManager => featureManager ??= ScopedServices.GetRequiredService<IFeatureManager>();
