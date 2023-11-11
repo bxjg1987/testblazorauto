@@ -12,7 +12,11 @@
         <GridRow Justify="space-between">
             @* 左侧 *@
             <GridCol Span="6">
-                <Button Type="@ButtonType.Primary" Icon="@IconType.Outline.Plus">新增</Button>
+                <Button Type="@ButtonType.Primary" Icon="@IconType.Outline.Plus" OnClick="ShowCreateDialog1">新增1</Button>
+                @if (createIsGranted)
+                {
+                    <Button Type="@ButtonType.Primary" Icon="@IconType.Outline.Plus" OnClick="ShowCreateDialog">新增</Button>
+                }
                 @if (deleteIsGranted)
                 {
                     <Popconfirm Title="确定删除已选择的项吗?"
@@ -40,7 +44,7 @@
                         <ButtonGroup>
                             @* <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Search" OnClick="AddRandomData">搜索</Button> *@
                             <Tooltip Title="清空条件">
-                            <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Clear" OnClick="Reset"></Button>
+                                <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Clear" OnClick="Reset"></Button>
                             </Tooltip>
                         </ButtonGroup>
                     </SpaceItem>
@@ -53,11 +57,11 @@
     </SpaceItem>
     <SpaceItem>
         <Table TItem="PostDto"
-               @ref="table"
+        @ref="table"
                Total="TotalCount"
-               @bind-PageIndex="PageIndex"
-               @bind-PageSize="PageSize"
-               @bind-SelectedRows="SelectedItems"
+        @bind-PageIndex="PageIndex"
+        @bind-PageSize="PageSize"
+        @bind-SelectedRows="SelectedItems"
                OnChange="OnQuery"
                DataSource="Items"
                Loading="IsLoading"
@@ -72,7 +76,7 @@
             <PropertyColumn Property="c=>c.Name" />
             <PropertyColumn Property="c=>c.IsStatic">
                 <Switch @bind-Value="@context.IsStatic" Size="@InputSize.Small"></Switch>
-                </PropertyColumn>
+            </PropertyColumn>
             <PropertyColumn Property="c=>c.Description" />
             <ActionColumn Title="操作">
                 @* ButtonGroup设置Size好像没啥卵用 *@
@@ -95,3 +99,22 @@
         </Table>
     </SpaceItem>
 </Space>
+
+@{
+    RenderFragment sxxx =@<Template>
+        <Checkbox @bind-Checked="@SaveAndContinue">
+            保存后继续新增
+        </Checkbox>
+        <Button OnClick="RestCreateForm">重置</Button>
+        <Button OnClick="SaveCreateClick" Type="@ButtonType.Primary" Loading="@IsCreating" Icon="@IconType.Outline.Save">保存</Button>
+        <Button OnClick="HideCreateDialog">取消</Button>
+    </Template>;
+}
+<Modal @bind-Visible="isShowCreateDialog" Footer="sxxx" DestroyOnClose="true">
+
+    <Create @ref="createComponent">
+
+    </Create>
+
+</Modal>
+

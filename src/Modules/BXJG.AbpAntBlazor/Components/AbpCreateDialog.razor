@@ -1,0 +1,29 @@
+﻿@using BXJG.Common.Dto
+@typeparam TAppService where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
+@typeparam TEntityDto where TEntityDto : IEntityDto<TPrimaryKey> , IExtendableDto
+@typeparam TPrimaryKey
+@typeparam TGetAllInput where TGetAllInput : new()
+@typeparam TCreateInput where TCreateInput : new()
+@typeparam TUpdateInput where TUpdateInput : IEntityDto<TPrimaryKey>
+
+@typeparam TCreateComponent where TCreateComponent : AbpCreateBaseComponent<TAppService,  TEntityDto,TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
+@typeparam TComponentOptions
+
+@inherits FeedbackComponent<TComponentOptions>
+
+@{
+    RenderFragment sxxx =@<Template>
+        <Checkbox @bind-Checked="@SaveAndContinue">
+            保存后继续新增
+        </Checkbox>
+        <Button OnClick="RestCreateForm">重置</Button>
+        <Button OnClick="SaveCreateClick" Type="@ButtonType.Primary" Loading="@IsCreating" Icon="@IconType.Outline.Save">保存</Button>
+        <Button OnClick="CloseFeedbackAsync">取消</Button>
+            </Template> ;
+    sss = sxxx;
+}
+
+
+
+    <DynamicComponent Type="@typeof(TComponentOptions)" Parameters="@parameters" @ref="dc" />
+

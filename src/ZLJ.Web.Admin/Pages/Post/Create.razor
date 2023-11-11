@@ -3,6 +3,7 @@
 @* @attribute [Authorize(PermissionNames.AdministratorBaseInfoPostCreate)] *@
 
 @inherits AdminCreateBaseComponent<IPostAppService, PostDto, int, PagedAndSortedResultRequest< PagedPostResultRequestDto>, CreatePostDto, PostEditDto>
+新增
 @* <ValidateForm Model="createDto" @ref="validateForm">
     <EditorForm Model="@createDto" RowType="RowType.Inline" LabelAlign="Alignment.Right">
         <FieldItems>

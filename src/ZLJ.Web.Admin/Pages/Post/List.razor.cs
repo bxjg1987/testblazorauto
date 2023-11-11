@@ -1,4 +1,5 @@
-﻿using BXJG.AbpBlazor.Interceptors;
+﻿using BXJG.AbpBlazor.Components;
+using BXJG.AbpBlazor.Interceptors;
 using DocumentFormat.OpenXml.Office2013.PowerPoint.Roaming;
 using Rougamo;
 using System;
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZLJ.App.Admin.Post;
 using ZLJ.App.Admin.Post.Dto;
 
 namespace ZLJ.Web.Admin.Pages.Post
@@ -46,5 +48,17 @@ namespace ZLJ.Web.Admin.Pages.Post
             GetAllInput.Filter.IsStatic = default ;
             await base.Reset();
         }
+
+        public async Task ShowCreateDialog1() {
+            var modal = await ModalService.CreateModalAsync<AbpCreateDialog<IPostAppService, 
+                                                            PostDto,
+                                                            int,
+                                                            PagedAndSortedResultRequest<PagedPostResultRequestDto>,
+                                                            CreatePostDto,
+                                                            PostEditDto,
+                                                            Create,
+                                                            object>, object>(new ModalOptions { }, new object());
+        }
+
     }
 }

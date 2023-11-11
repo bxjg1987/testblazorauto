@@ -34,6 +34,9 @@ namespace BXJG.AbpBlazor.Components
      * 这样有个好处，我们不用在应用层的查询dto定义一堆条件了，也不需要应用层写一堆查询逻辑了
      * 但还是要保留，防止有高级处理
      * 但这里需要转两次，有点浪费，我们决定直接将表单值转换为动态条件，这样bb的CustomerSearchModel就不需要了
+     * 
+
+     * 
      */
 
     /// <summary>
@@ -68,7 +71,7 @@ namespace BXJG.AbpBlazor.Components
                                                         TGetAllInput,
                                                         TCreateInput,
                                                         TUpdateInput>
-        //由于TCreateComponent约束了类型，简介导致这里需要new约束
+        //由于TCreateComponent约束了类型，间接导致这里需要new约束
         where TCreateInput : new()
         where TEntityDto : IEntityDto<TPrimaryKey>, IExtendableDto//, new()
         where TGetAllInput : new()
@@ -206,40 +209,70 @@ namespace BXJG.AbpBlazor.Components
         //    table.ResetData();
         //}
 
-        ///// <summary>
-        ///// 对新增组件的引用
-        ///// </summary>
-        //protected TCreateComponent createComponent;
+        #region 弹窗
         [Inject]
-        protected ModalService ModalService { get; private set; }
-        protected void Add()
+        protected ModalService ModalService { get; set; }
+        protected virtual bool SaveAndContinue
         {
-            // ModalService.CreateModalAsync(new ModalOptions { });
-
-            var config = new ModalOptions { };
-
-            void Child(RenderTreeBuilder builder)
+            get => createComponent == default ? false : createComponent.SaveAndContinue;
+            set
             {
-                builder.OpenComponent<TCreateComponent>(0);
-                // builder.AddAttribute(1, "FeedbackRef", modalRef);
-                // builder.AddAttribute(2, "Options", componentOptions); //传参
-                builder.CloseComponent();
+                if (createIsGranted != default)
+                    createComponent.SaveAndContinue = value;
             }
-            config.Content = Child;
-            //  config.ModalRef = modalRef;
-            var sdf = ModalService.CreateModalAsync(config);
         }
 
-        ///// <summary>
-        ///// 点击列表中弹出新增框底部的保存按钮时执行
-        ///// </summary>
-        ///// <param name="dto"></param>
-        ///// <param name="itemChangedType"></param>
-        ///// <returns></returns>
-        //protected virtual async Task<bool> OnSaveAsync(TEntityDto dto, ItemChangedType itemChangedType)
-        //{
-        //    return await createComponent.BtnSaveClick();
-        //}
+        protected virtual async Task RestCreateForm() {
+            if (createIsGranted != default)
+                createComponent.Reset();
+            //ModalService.CreateModalAsync<>
+        }
+        /*
+         * 在抽象中最好的方式是使用modalservice来做弹窗，这样能更简化子类弹窗相关代码
+         * 但弹窗内部组件必须继承FeedbackComponent<TComponentOptions>
+         * 我们的新增和详情组件有自己的父类，所以外面还需要包一层，简单点是包一层通用组件
+         * 包一层的组件使用动态组件来渲染真正的内部组件，也许还可以拿到内部组件的引用
+         * 这样开发和使用都比较复杂
+         * 
+         * 简单一点，使用Visible的方式吧，抽象类中之定义弹窗相关方法，子类去做具体布局
+         */
+        /// <summary>
+        /// 对新增组件的引用
+        /// </summary>
+        protected TCreateComponent createComponent;
+        /// <summary>
+        /// 是否显示新增弹窗
+        /// </summary>
+        protected bool isShowCreateDialog;
+        /// <summary>
+        /// 点击新增按钮时执行
+        /// 需要异步获取的初始化参数去内部组件处理，这里只给简单参数
+        /// </summary>
+        protected virtual void ShowCreateDialog()
+        {
+            isShowCreateDialog = true;
+        }
+        protected virtual void HideCreateDialog()
+        {
+            isShowCreateDialog = false;
+        }
+
+        protected virtual bool IsCreating => createComponent == default ? false : createComponent.IsSaving;
+        /// <summary>
+        /// 点击新增弹窗的保存按钮时执行
+        /// </summary>
+        /// <returns></returns>
+        //[AbpExceptionInterceptor]
+        protected virtual async Task SaveCreateClick()
+        {
+            var r = await createComponent.Save();
+            if (r.End)
+            {
+                HideCreateDialog();
+                await Refresh();
+            }
+        }
+        #endregion
 
         #region 生命周期方法增加统一异常处理拦截器
         [AbpExceptionInterceptor]

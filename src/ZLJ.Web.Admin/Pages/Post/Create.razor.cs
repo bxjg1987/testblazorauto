@@ -16,7 +16,7 @@ namespace ZLJ.Web.Admin.Pages.Post
 
         protected ZLJ.App.Common.OU.IOuAppService OuProviderAppService => ScopedServices.GetRequiredService<ZLJ.App.Common.OU.IOuAppService>();
 
-        protected override string FuncName => "角色岗位";
+        public override string FuncName => "角色岗位";
 
         protected override async Task CheckPermission()
         {

@@ -44,33 +44,33 @@ namespace BXJG.Utils.Components
         /// <summary>
         /// 获取主服务
         /// </summary>
-        protected virtual TAppService AppService => ScopedServices.GetRequiredService<TAppService>();
+        public virtual TAppService AppService => ScopedServices.GetRequiredService<TAppService>();
         /// <summary>
         /// 此功能的名称
         /// </summary>
-        protected abstract string FuncName { get; }// => $"请重写{nameof(FuncName)}属性";
+        public abstract string FuncName { get; }// => $"请重写{nameof(FuncName)}属性";
         /// <summary>
         /// 新增时的模型
         /// </summary>
-        protected TCreateInput? createDto;
+        public TCreateInput? CreateDto { get; protected set; }
         /// <summary>
         /// 正在执行重置
         /// </summary>
-        protected bool isReseting = false;
+        public bool IsReseting { get; protected set; }
         /// <summary>
         /// 重置按钮点击时回调，由于事件无法使用ValueTask，所以这里用了Task
         /// </summary>
         /// <returns></returns>
         public virtual async Task Reset()
         {
-            isReseting = true;
+            IsReseting = true;
             try
             {
                 await ResetCore();
             }
             finally
             {
-                isReseting = false;
+                IsReseting = false;
             }
         }
         /// <summary>
@@ -79,7 +79,7 @@ namespace BXJG.Utils.Components
         /// <returns></returns>
         protected virtual ValueTask ResetCore()
         {
-            createDto = new TCreateInput();
+            CreateDto = new TCreateInput();
             return ValueTask.CompletedTask;
         }
         /// <summary>
@@ -99,11 +99,11 @@ namespace BXJG.Utils.Components
         /// <summary>
         /// 保存后是否继续新增
         /// </summary>
-        protected bool saveAndContinue = false;
+        public bool SaveAndContinue { get;  set; }
         /// <summary>
         /// 正在保存...
         /// </summary>
-        protected bool isSaving = false;
+        public bool IsSaving { get; protected set; }
         /// <summary>
         /// 新增返回对象
         /// </summary>
@@ -128,14 +128,14 @@ namespace BXJG.Utils.Components
         {
             //木有权限时保存按钮不可点击
             //验证不过时此方法不应该被调用
-            isSaving = true;
+            IsSaving = true;
             try
             {
                 return await SaveCore();
             }
             finally
             {
-                isSaving = false;
+                IsSaving = false;
             }
         }
         /// <summary>
@@ -149,9 +149,9 @@ namespace BXJG.Utils.Components
                 return new SaveResult();
             //木有权限时保存按钮不可点击
             //验证不过时此方法不应该被调用
-            var r = await AppService.CreateAsync(createDto);
+            var r = await AppService.CreateAsync(CreateDto);
             ShowSuccessMessage(msg: "新增成功！");//没必要等待
-            if (saveAndContinue)
+            if (SaveAndContinue)
             {
                 await Reset();
                 return new SaveResult { Dto = r };
