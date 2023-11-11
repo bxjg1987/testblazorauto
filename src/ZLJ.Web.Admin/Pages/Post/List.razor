@@ -12,10 +12,9 @@
         <GridRow Justify="space-between">
             @* 左侧 *@
             <GridCol Span="6">
-                <Button Type="@ButtonType.Primary" Icon="@IconType.Outline.Plus" OnClick="ShowCreateDialog1">新增1</Button>
                 @if (createIsGranted)
                 {
-                    <Button Type="@ButtonType.Primary" Icon="@IconType.Outline.Plus" OnClick="ShowCreateDialog">新增</Button>
+                    <Button Type="@ButtonType.Primary" Icon="@IconType.Outline.Plus" OnClick="ShowCreateDialog1">新增</Button>
                 }
                 @if (deleteIsGranted)
                 {
@@ -100,21 +99,10 @@
     </SpaceItem>
 </Space>
 
-@{
-    RenderFragment sxxx =@<Template>
-        <Checkbox @bind-Checked="@SaveAndContinue">
-            保存后继续新增
-        </Checkbox>
-        <Button OnClick="RestCreateForm">重置</Button>
-        <Button OnClick="SaveCreateClick" Type="@ButtonType.Primary" Loading="@IsCreating" Icon="@IconType.Outline.Save">保存</Button>
-        <Button OnClick="HideCreateDialog">取消</Button>
-    </Template>;
-}
-<Modal @bind-Visible="isShowCreateDialog" Footer="sxxx" DestroyOnClose="true">
+<AbpCreateDialog TAppService="IPostAppService" TEntityDto="PostDto" TPrimaryKey="int"
+                 TGetAllInput="PagedAndSortedResultRequest< PagedPostResultRequestDto>"
+                 TCreateInput="CreatePostDto" TUpdateInput="PostEditDto" TCreateComponent="Create"
+                 @bind-Visible="xs">
 
-    <Create @ref="createComponent">
-
-    </Create>
-
-</Modal>
+</AbpCreateDialog>
 

@@ -210,68 +210,69 @@ namespace BXJG.AbpBlazor.Components
         //}
 
         #region 弹窗
-        [Inject]
-        protected ModalService ModalService { get; set; }
-        protected virtual bool SaveAndContinue
-        {
-            get => createComponent == default ? false : createComponent.SaveAndContinue;
-            set
-            {
-                if (createIsGranted != default)
-                    createComponent.SaveAndContinue = value;
-            }
-        }
 
-        protected virtual async Task RestCreateForm() {
-            if (createIsGranted != default)
-                createComponent.Reset();
-            //ModalService.CreateModalAsync<>
-        }
-        /*
-         * 在抽象中最好的方式是使用modalservice来做弹窗，这样能更简化子类弹窗相关代码
-         * 但弹窗内部组件必须继承FeedbackComponent<TComponentOptions>
-         * 我们的新增和详情组件有自己的父类，所以外面还需要包一层，简单点是包一层通用组件
-         * 包一层的组件使用动态组件来渲染真正的内部组件，也许还可以拿到内部组件的引用
-         * 这样开发和使用都比较复杂
-         * 
-         * 简单一点，使用Visible的方式吧，抽象类中之定义弹窗相关方法，子类去做具体布局
-         */
-        /// <summary>
-        /// 对新增组件的引用
-        /// </summary>
-        protected TCreateComponent createComponent;
-        /// <summary>
-        /// 是否显示新增弹窗
-        /// </summary>
-        protected bool isShowCreateDialog;
-        /// <summary>
-        /// 点击新增按钮时执行
-        /// 需要异步获取的初始化参数去内部组件处理，这里只给简单参数
-        /// </summary>
-        protected virtual void ShowCreateDialog()
-        {
-            isShowCreateDialog = true;
-        }
-        protected virtual void HideCreateDialog()
-        {
-            isShowCreateDialog = false;
-        }
+        //[Inject]
+        //protected ModalService ModalService { get; set; }
+        //protected virtual bool SaveAndContinue
+        //{
+        //    get => createComponent == default ? false : createComponent.SaveAndContinue;
+        //    set
+        //    {
+        //        if (createIsGranted != default)
+        //            createComponent.SaveAndContinue = value;
+        //    }
+        //}
 
-        protected virtual bool IsCreating => createComponent == default ? false : createComponent.IsSaving;
-        /// <summary>
-        /// 点击新增弹窗的保存按钮时执行
-        /// </summary>
-        /// <returns></returns>
-        //[AbpExceptionInterceptor]
-        protected virtual async Task SaveCreateClick()
-        {
-            var r = await createComponent.Save();
-            if (r.End)
-            {
-                HideCreateDialog();
-                await Refresh();
-            }
-        }
+        //protected virtual async Task RestCreateForm() {
+        //    if (createIsGranted != default)
+        //        createComponent.Reset();
+        //    //ModalService.CreateModalAsync<>
+        //}
+        ///*
+        // * 在抽象中最好的方式是使用modalservice来做弹窗，这样能更简化子类弹窗相关代码
+        // * 但弹窗内部组件必须继承FeedbackComponent<TComponentOptions>
+        // * 我们的新增和详情组件有自己的父类，所以外面还需要包一层，简单点是包一层通用组件
+        // * 包一层的组件使用动态组件来渲染真正的内部组件，也许还可以拿到内部组件的引用
+        // * 这样开发和使用都比较复杂
+        // * 
+        // * 简单一点，使用Visible的方式吧，抽象类中之定义弹窗相关方法，子类去做具体布局
+        // */
+        ///// <summary>
+        ///// 对新增组件的引用
+        ///// </summary>
+        //protected TCreateComponent createComponent;
+        ///// <summary>
+        ///// 是否显示新增弹窗
+        ///// </summary>
+        //protected bool isShowCreateDialog;
+        ///// <summary>
+        ///// 点击新增按钮时执行
+        ///// 需要异步获取的初始化参数去内部组件处理，这里只给简单参数
+        ///// </summary>
+        //protected virtual void ShowCreateDialog()
+        //{
+        //    isShowCreateDialog = true;
+        //}
+        //protected virtual void HideCreateDialog()
+        //{
+        //    isShowCreateDialog = false;
+        //}
+
+        //protected virtual bool IsCreating => createComponent == default ? false : createComponent.IsSaving;
+        ///// <summary>
+        ///// 点击新增弹窗的保存按钮时执行
+        ///// </summary>
+        ///// <returns></returns>
+        ////[AbpExceptionInterceptor]
+        //protected virtual async Task SaveCreateClick()
+        //{
+        //    var r = await createComponent.Save();
+        //    if (r.End)
+        //    {
+        //        HideCreateDialog();
+        //        await Refresh();
+        //    }
+        //}
         #endregion
 
         #region 生命周期方法增加统一异常处理拦截器

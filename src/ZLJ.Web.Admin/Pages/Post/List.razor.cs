@@ -48,16 +48,9 @@ namespace ZLJ.Web.Admin.Pages.Post
             GetAllInput.Filter.IsStatic = default ;
             await base.Reset();
         }
-
+        bool xs;
         public async Task ShowCreateDialog1() {
-            var modal = await ModalService.CreateModalAsync<AbpCreateDialog<IPostAppService, 
-                                                            PostDto,
-                                                            int,
-                                                            PagedAndSortedResultRequest<PagedPostResultRequestDto>,
-                                                            CreatePostDto,
-                                                            PostEditDto,
-                                                            Create,
-                                                            object>, object>(new ModalOptions { }, new object());
+            xs = true;
         }
 
     }

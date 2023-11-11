@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace BXJG.AbpBlazor.Components
 {
     /// <summary>
-    /// 通用新增弹窗组件
+    /// 抽象的新增弹窗组件
     /// </summary>
     /// <typeparam name="TAppService"></typeparam>
     /// <typeparam name="TEntityDto"></typeparam>
@@ -24,8 +24,7 @@ namespace BXJG.AbpBlazor.Components
                                          TGetAllInput,
                                          TCreateInput,
                                          TUpdateInput,
-                                         TCreateComponent,
-                                         TComponentOptions> 
+                                         TCreateComponent>
        where TCreateComponent : AbpCreateBaseComponent<TAppService,
                                                         TEntityDto,
                                                         TPrimaryKey,
@@ -38,8 +37,13 @@ namespace BXJG.AbpBlazor.Components
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
     {
-        private DynamicComponent? dc;
-        private IDictionary<string, object> parameters => base.Options.ToDictionary();   
+        protected DynamicComponent? dc;
+        [Parameter]
+        public IDictionary<string, object> parameters { get; set; }
+        [Parameter]
+        public bool Visible { get; set; }
+        [Parameter]
+        public EventCallback<bool> VisibleChanged { get; set; }
 
         #region 弹窗
         protected virtual bool SaveAndContinue
@@ -51,21 +55,14 @@ namespace BXJG.AbpBlazor.Components
                     createComponent.SaveAndContinue = value;
             }
         }
-        RenderFragment sss;
+
         protected virtual async Task RestCreateForm()
         {
             if (createComponent != default)
                 createComponent.Reset();
-     // (   this.FeedbackRef as ModalOptions).Footer= xx
+            // (   this.FeedbackRef as ModalOptions).Footer= xx
         }
-        protected override void OnInitialized()
-        {
-            //base.OnInitialized();
-           // base.Options
-          //  var ft = FeedbackRef as ModalRef;//.Footer;
-           // if(ft.Footer.Value== DialogOptions.DefaultFooter)
-         //         ft.Config.Footer = sss;
-        }
+
         /*
          * 在抽象中最好的方式是使用modalservice来做弹窗，这样能更简化子类弹窗相关代码
          * 但弹窗内部组件必须继承FeedbackComponent<TComponentOptions>
@@ -78,10 +75,13 @@ namespace BXJG.AbpBlazor.Components
         /// <summary>
         /// 对新增组件的引用
         /// </summary>
-        protected TCreateComponent createComponent => dc.Instance as TCreateComponent;
-       
+        public TCreateComponent createComponent => dc?.Instance as TCreateComponent;
 
-        protected virtual bool IsCreating => createComponent == default ? false : createComponent.IsSaving;
+
+        /// <summary>
+        /// 正在执行新增的保存
+        /// </summary>
+        protected virtual bool isSaving => createComponent == default ? false : createComponent.IsSaving;
         /// <summary>
         /// 点击新增弹窗的保存按钮时执行
         /// </summary>
@@ -92,9 +92,10 @@ namespace BXJG.AbpBlazor.Components
             var r = await createComponent.Save();
             if (r.End)
             {
-               // HideCreateDialog();
-               // await Refresh();
-               await this.CloseFeedbackAsync();
+                // HideCreateDialog();
+                // await Refresh();
+                //  await this.CloseFeedbackAsync();
+                Visible = false;
             }
         }
         #endregion

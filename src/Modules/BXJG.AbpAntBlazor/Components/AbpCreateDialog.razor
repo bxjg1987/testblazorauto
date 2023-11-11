@@ -1,4 +1,5 @@
 ﻿@using BXJG.Common.Dto
+
 @typeparam TAppService where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
 @typeparam TEntityDto where TEntityDto : IEntityDto<TPrimaryKey> , IExtendableDto
 @typeparam TPrimaryKey
@@ -7,9 +8,7 @@
 @typeparam TUpdateInput where TUpdateInput : IEntityDto<TPrimaryKey>
 
 @typeparam TCreateComponent where TCreateComponent : AbpCreateBaseComponent<TAppService,  TEntityDto,TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
-@typeparam TComponentOptions
 
-@inherits FeedbackComponent<TComponentOptions>
 
 @{
     RenderFragment sxxx =@<Template>
@@ -17,13 +16,14 @@
             保存后继续新增
         </Checkbox>
         <Button OnClick="RestCreateForm">重置</Button>
-        <Button OnClick="SaveCreateClick" Type="@ButtonType.Primary" Loading="@IsCreating" Icon="@IconType.Outline.Save">保存</Button>
-        <Button OnClick="CloseFeedbackAsync">取消</Button>
-            </Template> ;
-    sss = sxxx;
+        <Button OnClick="SaveCreateClick" Type="@ButtonType.Primary" Loading="@isSaving" Icon="@IconType.Outline.Save">保存</Button>
+        <Button OnClick="()=>Visible=false">取消</Button>
+    </Template>;
 }
 
+<Modal DestroyOnClose="true" Footer="sxxx" @bind-Visible="Visible">
+    <DynamicComponent Type="@typeof(TCreateComponent)" Parameters="@parameters" @ref="dc" />
+</Modal>
 
 
-    <DynamicComponent Type="@typeof(TComponentOptions)" Parameters="@parameters" @ref="dc" />
 
