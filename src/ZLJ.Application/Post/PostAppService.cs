@@ -104,7 +104,7 @@ namespace ZLJ.App.Admin.Post
 
             //input.nam
             var role = ObjectMapper.Map<PostEntity>(input);
-            role.Name = TinyPinyin.PinyinHelper.GetPinyin(input.DisplayName, "");//多音字咋搞？
+            role.Name = TinyPinyin.PinyinHelper.GetPinyin(input.DisplayName, "")+ BXJG.Common.RandomHelper.GetRandomString(6);//多音字咋搞？
             role.SetNormalizedName();
 
             CheckErrors(await _roleManager.CreateAsync(role));

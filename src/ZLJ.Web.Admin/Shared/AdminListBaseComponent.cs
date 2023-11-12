@@ -20,8 +20,6 @@ namespace ZLJ.Web.Admin.Shared
     /// <typeparam name="TGetAllInput">获取列表时输入参数类型</typeparam>
     /// <typeparam name="TCreateInput">新增时输入参数类型</typeparam>
     /// <typeparam name="TUpdateInput">修改时输入参数类型</typeparam>
-    /// <typeparam name="TCreateComponent">新增组件类型</typeparam>
-    /// <typeparam name="TEditOrDetailComponent">修改和详情组件类型</typeparam>
     public abstract class AdminListBaseComponent<TAppService,
                                                  TEntityDto,
                                                  TPrimaryKey,

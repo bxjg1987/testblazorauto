@@ -3,18 +3,15 @@
 @* @attribute [Authorize(PermissionNames.AdministratorBaseInfoPostCreate)] *@
 
 @inherits AdminCreateBaseComponent<IPostAppService, PostDto, int, PagedAndSortedResultRequest< PagedPostResultRequestDto>, CreatePostDto, PostEditDto>
-新增
-@* <ValidateForm Model="createDto" @ref="validateForm">
-    <EditorForm Model="@createDto" RowType="RowType.Inline" LabelAlign="Alignment.Right">
-        <FieldItems>
-            <EditorItem @bind-Field="@context.OuIds" Context="ctx">
-                <EditTemplate>
-                    <SelectTree TValue="long" Items="items">
 
-                    </SelectTree>
-                </EditTemplate>
-            </EditorItem>
-            <EditorItem @bind-Field="@context.GrantedPermissions" Editable="false" />
-        </FieldItems>
-    </EditorForm>
-</ValidateForm> *@
+<Form @ref="validateForm" ValidateOnChange="true" Model="CreateDto" LabelColSpan="4" WrapperColSpan="20">
+   @*  <FormItem Label="唯一名称">
+        <Input @bind-Value="@context.Name" />
+    </FormItem> *@
+    <FormItem Label="显示名">
+        <Input @bind-Value="@context.DisplayName" />
+    </FormItem>
+    <FormItem Label="备注">
+        <Input @bind-Value="@context.Description" />
+    </FormItem>
+</Form>

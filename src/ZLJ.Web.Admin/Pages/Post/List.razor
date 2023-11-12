@@ -72,9 +72,9 @@
 
             <Selection Key="@(context.Id.ToString())" />
             <PropertyColumn Property="c=>c.DisplayName" Sortable="true" DefaultSortOrder="SortDirection.Ascending" ShowSorterTooltip="false" />
-            <PropertyColumn Property="c=>c.Name" />
+            @* <PropertyColumn Property="c=>c.Name" /> *@
             <PropertyColumn Property="c=>c.IsStatic">
-                <Switch @bind-Value="@context.IsStatic" Size="@InputSize.Small"></Switch>
+                <Switch @bind-Value="@context.IsStatic" Size="@InputSize.Small" Disabled="true"></Switch>
             </PropertyColumn>
             <PropertyColumn Property="c=>c.Description" />
             <ActionColumn Title="操作">
@@ -101,8 +101,8 @@
 
 <AbpCreateDialog TAppService="IPostAppService" TEntityDto="PostDto" TPrimaryKey="int"
                  TGetAllInput="PagedAndSortedResultRequest<PagedPostResultRequestDto>"
-                 TCreateInput="CreatePostDto" TUpdateInput="PostEditDto" TCreateComponent="Create"
-                 @bind-Visible="isCreateDialogVisible">
+                 TCreateInput="CreatePostDto" TUpdateInput="PostEditDto" TCreateComponent="Create" 
+@ref="dalRef">
 
 </AbpCreateDialog>
 

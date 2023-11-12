@@ -37,6 +37,7 @@ namespace BXJG.AbpBlazor.Components
         public override async Task Reset()
         {
             await base.Reset();
+            StateHasChanged();
         }
         [AbpExceptionInterceptor]
         public override async Task<SaveResult> Save()

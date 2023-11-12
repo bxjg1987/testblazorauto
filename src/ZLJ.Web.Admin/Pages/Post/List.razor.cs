@@ -45,13 +45,19 @@ namespace ZLJ.Web.Admin.Pages.Post
         //[AbpExceptionInterceptor]
         protected override async Task Reset()
         {
-            GetAllInput.Filter.IsStatic = default ;
+            GetAllInput.Filter.IsStatic = default;
             await base.Reset();
         }
+
+        AbpCreateDialog<IPostAppService, PostDto, int, PagedAndSortedResultRequest<PagedPostResultRequestDto>, CreatePostDto, PostEditDto, Create> dalRef;
+
+
         bool isCreateDialogVisible;
         public async Task ShowCreateDialog()
         {
-            isCreateDialogVisible = true;
+            var r = await dalRef.Show();
+            if (r)
+                await Reset();
         }
     }
 }

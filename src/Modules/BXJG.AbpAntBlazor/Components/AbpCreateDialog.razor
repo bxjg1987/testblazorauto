@@ -1,6 +1,3 @@
-@* 
-
-*@
 
 @typeparam TAppService where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
 @typeparam TEntityDto where TEntityDto : IEntityDto<TPrimaryKey>
@@ -18,7 +15,7 @@
         <Button OnClick="Close">取消</Button>
     </Template>;
 }
-
-<Modal DestroyOnClose="true" Footer="renderFragment" @bind-Visible="Visible" >
-    <DynamicComponent Type="@typeof(TCreateComponent)" Parameters="@Parameters" @ref="dc" />
+@* 必须给个titla，否则初始化时引用启用了拖拽会报错 *@
+<Modal @ref="ModalRef" DestroyOnClose="true" Footer="renderFragment" Title="@("新增"+ CreateComponent?.FuncName)" @bind-Visible="isVisible" Draggable="true">
+   <DynamicComponent Type="@typeof(TCreateComponent)" Parameters="@Parameters" @ref="dcRef" />
 </Modal>
