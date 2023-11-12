@@ -69,6 +69,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{31830F03-1
 		docs\应用服务.md = docs\应用服务.md
 		docs\开发随记.md = docs\开发随记.md
 		docs\扩展dto.md = docs\扩展dto.md
+		docs\抽象的antblazor_crud组件.rd = docs\抽象的antblazor_crud组件.rd
 		docs\抽象的mudblazorCRUD组件.md = docs\抽象的mudblazorCRUD组件.md
 		docs\本地化.md = docs\本地化.md
 		docs\菜单.md = docs\菜单.md

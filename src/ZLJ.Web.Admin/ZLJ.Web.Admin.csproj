@@ -25,6 +25,7 @@
     <Compile Remove="Pages\DataDictionary\List.razor.cs" />
     <Compile Remove="Pages\Notification\NotifyManager.razor.cs" />
     <Compile Remove="Pages\Notification\NotifySubscript.razor.cs" />
+    <Compile Remove="Shared\AdminCreateDialog.razor.cs" />
     <Compile Remove="Shared\AdminDetailBaseComponent.cs" />
     <Compile Remove="Shared\AdminGeneralTreeCreateBaseComponent.cs" />
     <Compile Remove="Shared\AdminGeneralTreeDetailOrUpdateBaseComponent.cs" />
@@ -38,6 +39,7 @@
     <Content Remove="Pages\Notification\NotifyManager.razor" />
     <Content Remove="Pages\Notification\NotifySubscript.razor" />
     <Content Remove="Pages\Notification\Simple.razor" />
+    <Content Remove="Shared\AdminCreateDialog.razor" />
     <Content Remove="Shared\BasicLayout.razor" />
     <Content Remove="Shared\RecursionNavGroup.razor" />
     <Content Remove="Shared\Widget.razor" />

@@ -1,6 +1,4 @@
-@* 
-
-*@
+ï»¿
 
 @typeparam TAppService where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
 @typeparam TEntityDto where TEntityDto : IEntityDto<TPrimaryKey>
@@ -10,12 +8,13 @@
 @typeparam TUpdateInput where TUpdateInput : IEntityDto<TPrimaryKey>
 @typeparam TCreateComponent where TCreateComponent : AbpCreateBaseComponent<TAppService,  TEntityDto,TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
 
+
 @{
     RenderFragment renderFragment =@<Template>
-        <Checkbox @bind-Checked="@IsSaveAndContinue">±£´æºó¼ÌĞøĞÂÔö</Checkbox>
-        <Button OnClick="Reset">ÖØÖÃ</Button>
-        <Button OnClick="SaveCreateClick" Type="@ButtonType.Primary" Loading="@IsSaving" Disabled="@IsSaving" Icon="@IconType.Outline.Save">±£´æ</Button>
-        <Button OnClick="Close">È¡Ïû</Button>
+        <Checkbox @bind-Checked="@IsSaveAndContinue">ä¿å­˜åç»§ç»­æ–°å¢</Checkbox>
+        <Button OnClick="Reset">é‡ç½®</Button>
+        <Button OnClick="SaveCreateClick" Type="@ButtonType.Primary" Loading="@IsSaving" Disabled="@IsSaving" Icon="@IconType.Outline.Save">ä¿å­˜</Button>
+        <Button OnClick="Close">å–æ¶ˆ</Button>
     </Template>;
 }
 

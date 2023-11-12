@@ -5,7 +5,7 @@
 
 @attribute [ReuseTabsPageTitle("员工岗位权限")]
 @attribute [Authorize(PermissionNames.AdministratorBaseInfoPost)]
-@inherits AdminListBaseComponent<IPostAppService, PostDto, int, PagedAndSortedResultRequest< PagedPostResultRequestDto>, CreatePostDto, PostEditDto,Create,EditOrDetail>
+@inherits AdminListBaseComponent<IPostAppService, PostDto, int, PagedAndSortedResultRequest< PagedPostResultRequestDto>, CreatePostDto, PostEditDto>
 
 <Space Direction="DirectionVHType.Vertical" Style="width:100%;">
     <SpaceItem>
@@ -14,7 +14,7 @@
             <GridCol Span="6">
                 @if (createIsGranted)
                 {
-                    <Button Type="@ButtonType.Primary" Icon="@IconType.Outline.Plus" OnClick="ShowCreateDialog1">新增</Button>
+                    <Button Type="@ButtonType.Primary" Icon="@IconType.Outline.Plus" OnClick="ShowCreateDialog">新增</Button>
                 }
                 @if (deleteIsGranted)
                 {
@@ -100,9 +100,9 @@
 </Space>
 
 <AbpCreateDialog TAppService="IPostAppService" TEntityDto="PostDto" TPrimaryKey="int"
-                 TGetAllInput="PagedAndSortedResultRequest< PagedPostResultRequestDto>"
+                 TGetAllInput="PagedAndSortedResultRequest<PagedPostResultRequestDto>"
                  TCreateInput="CreatePostDto" TUpdateInput="PostEditDto" TCreateComponent="Create"
-                 @bind-Visible="xs">
+                 @bind-Visible="isCreateDialogVisible">
 
 </AbpCreateDialog>
 

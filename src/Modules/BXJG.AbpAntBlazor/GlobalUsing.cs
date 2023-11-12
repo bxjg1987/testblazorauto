@@ -15,4 +15,4 @@ global using BXJG.Utils;
 
 global using Abp;
 global using Abp.Application.Services.Dto;
-
+global using BXJG.Common.Dto;

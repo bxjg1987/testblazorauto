@@ -19,17 +19,10 @@ using System.Threading.Tasks;
 
 namespace BXJG.Utils.Components
 {
-    /*
-     * 由于abp的crud接口和抽象类把crud搞一起了，不想动它，所以这里的应用服务中包含TCreateInput、TUpdateInput
-     * 
-     * 与具体的ui框架无关，建议具体项目直接集成它，不要再为了某套UI再封装一次
-     * 只保留逻辑部分的抽象，因为这里的抽象是与具体项目无关的，所以应该由具体项目的子类去按自己需求做布局
-     * 
-     * 不做全局异常处理，因为大部分的ui框架自带了处理方式，即使木有，用肉夹馍在具体项目去做就行了，因为具体项目引用具体ui
-     */
-
     /// <summary>
-    /// 抽象的，基于MudBlazor datagrid的列表页抽象组件
+    /// 抽象的，与具体的ui框架无关的，列表页抽象组件
+    /// 由于abp的crud接口和抽象类把crud搞一起了，不想动它，所以这里的应用服务中包含TCreateInput、TUpdateInput
+    /// 木有应用统一异常处理拦截器，它的子类（与具体ui有关的抽象列表组件）应使用aop统一异常处理拦截器
     /// </summary>
     /// <typeparam name="TAppService">应用服务类型</typeparam>
     /// <typeparam name="TEntityDto">列表项的数据类型</typeparam>
@@ -37,7 +30,7 @@ namespace BXJG.Utils.Components
     /// <typeparam name="TGetAllInput">获取列表时的输入参数类型，分页或不分页</typeparam>
     /// <typeparam name="TCreateInput">新增时的输入类型</typeparam>
     /// <typeparam name="TUpdateInput">修改时的输入类型</typeparam>
-    /// <typeparam name="TList">列表类型</typeparam>
+    /// <typeparam name="TList">列表类型，不同的ui库，列表组件使用的列表对象类型可能不同</typeparam>
     public abstract class AbpListBaseComponent<TAppService,
                                                TEntityDto,
                                                TPrimaryKey,
@@ -51,7 +44,6 @@ namespace BXJG.Utils.Components
         where TList : class, IEnumerable<TEntityDto>
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
     {
-        #region 基础
         /// <summary>
         /// 获取主服务
         /// </summary>
@@ -132,23 +124,7 @@ namespace BXJG.Utils.Components
             else
                 await ShowSuccessMessage(msg: $"批量{funName}全部成功！");
         }
-        ///// <summary>
-        ///// 批量删除消息提醒
-        ///// </summary>
-        ///// <param name="output"></param>
-        //protected virtual void BatchDeleteMessage(BatchOperationOutput<TPrimaryKey> output) => BatchOperationMessage(output, "删除");
-        #endregion
-
-        #region 生命周期
-        //protected override async Task OnInitializedAsync()
-        //{
-        //    await Refresh();
-        //}
-        #endregion
-
-        #region 权限
-
-        #endregion
+     
 
         #region 列表
         /// <summary>
@@ -197,7 +173,9 @@ namespace BXJG.Utils.Components
             }
         }
 
-
+        /// <summary>
+        /// 排序规则，格式："field1 aes,field2 desc"
+        /// </summary>
         public virtual string Sorting
         {
             get
@@ -277,86 +255,7 @@ namespace BXJG.Utils.Components
         /// </summary>
         protected virtual bool IsLoading { get; set; }
 
-        ///// <summary>
-        ///// 表格数据加载
-        ///// </summary>
-        ///// <param name="state"></param>
-        ///// <returns></returns>
-        //protected virtual async Task<GridData<TEntityDto>> LoadDataAsync(GridState<TEntityDto> state)
-        //{
-        //    var cd = new TGetAllInput();
-        //    if (cd is IDynamicCondition cdd)
-        //    {
-        //        cdd.Conditions = state.FilterDefinitions.MapToDynamicCondition().ToList();
-        //    }
-        //    else if (cd is IHaveFilter cddq && cddq.Filter is IDynamicCondition cddqq)
-        //    {
-        //        cddqq.Conditions = state.FilterDefinitions.MapToDynamicCondition().ToList();
-        //    }
-
-        //    if (cd is IPagedAndSortedResultRequest cd2)
-        //    {
-        //        cd2.MaxResultCount = state.PageSize;
-        //        cd2.SkipCount = state.Page * state.PageSize;
-        //    }
-        //    if (cd is ISortedResultRequest cd3)
-        //    {
-        //        cd3.Sorting = state.SortDefinitions.ToLinqDynamicCore();
-        //    }
-
-        //    if (cd is IHaveKeywords cd4)
-        //    {
-        //        cd4.Keywords = keywords;
-        //    }
-        //    else if (cd is IHaveFilter cddq && cddq.Filter is IHaveKeywords cddqq)
-        //    {
-        //        cddqq.Keywords = keywords;// state.FilterDefinitions.MapToDynamicCondition().ToList();
-        //    }
-        //    await FillCondtion(cd);
-        //    var dtos = await AppService.GetAllAsync(cd);
-
-        //    _ = InvokeAsync(StateHasChanged);//让多选影响顶部按钮得以执行 包一层是因为需要加载完才执行
-        //    dataGrid.SelectedItems.Clear();//翻页时，已选择的好像木有清空，这里手动来下
-
-        //    //给每行属性附加额外状态
-
-        //    foreach (var dto in dtos.Items)
-        //    {
-        //        dynamic dd = new ExpandoObject();
-        //        dd.IsDeleting = false;
-        //        dd.IsShowDeleteConfirmation = false;
-        //        dto.ExtensionData = dd;
-        //    }
-
-
-        //    return new GridData<TEntityDto>
-        //    {
-        //        TotalItems = dtos.TotalCount,
-        //        Items = dtos.Items
-        //    };
-
-        //}
-
-        ///// <summary>
-        ///// 默认已填充动态条件和关键字，你可以重写以填充其它条件
-        ///// </summary>
-        ///// <param name="input"></param>
-        ///// <returns></returns>
-        //protected virtual ValueTask FillCondtion(TGetAllInput input) => ValueTask.CompletedTask;
-
-        ///// <summary>
-        ///// 批量选择变化时回调
-        ///// </summary>
-        ///// <param name="items"></param>
-        ///// <returns></returns>
-        //protected virtual Task SelectedItemsChanged(HashSet<TEntityDto> items)
-        //{
-        //    //StateHasChanged();
-        //    //selectedItems = items;
-        //    return Task.CompletedTask;
-        //    //_events.Insert(0, $"Event = SelectedItemsChanged, Data = {System.Text.Json.JsonSerializer.Serialize(items)}");
-        //}
-        //未选中项时，直接禁用按钮
+        
 
         /// <summary>
         /// 刷新列表

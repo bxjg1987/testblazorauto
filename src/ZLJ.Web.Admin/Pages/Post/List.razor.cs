@@ -48,10 +48,10 @@ namespace ZLJ.Web.Admin.Pages.Post
             GetAllInput.Filter.IsStatic = default ;
             await base.Reset();
         }
-        bool xs;
-        public async Task ShowCreateDialog1() {
-            xs = true;
+        bool isCreateDialogVisible;
+        public async Task ShowCreateDialog()
+        {
+            isCreateDialogVisible = true;
         }
-
     }
 }

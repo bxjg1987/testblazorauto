@@ -44,7 +44,7 @@ namespace BXJG.Utils.Components
         /// <summary>
         /// 获取主服务
         /// </summary>
-        public virtual TAppService AppService => ScopedServices.GetRequiredService<TAppService>();
+        protected virtual TAppService AppService => ScopedServices.GetRequiredService<TAppService>();
         /// <summary>
         /// 此功能的名称
         /// </summary>
