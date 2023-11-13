@@ -30,7 +30,7 @@ namespace ZLJ.App.Common.AssociatedCompany
 
     //[UnitOfWork(false)]
     //[AbpAuthorize]
-    public class BXJGBaseInfoAssociatedCompanyQueryAppService : CommonProviderBaseAppService<AssociatedCompanyEntity, long, GetAllInput, Dto>//, IServiceProviderExAccessor
+    public class BXJGBaseInfoAssociatedCompanyQueryAppService : CommonProviderBaseAppService<AssociatedCompanyEntity, GetAllInput, Dto, long>//, IServiceProviderExAccessor
     // , IBXJGBaseInfoAssociatedCompanyQueryAppService
     {
         //private readonly IRepository<AssociatedCompanyEntity, long> _associatedCompanyRepository;
