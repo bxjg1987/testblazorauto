@@ -6,7 +6,7 @@
 bxjg.utils.rcl是抽象的组件，只包含逻辑部分，不包含ui部分。
 
 原本的BXJG.AbpBootstrapBlazor中的组件集成 bxjg.utils.rcl的组件，在抽象的基础上加了与 bootstrap相关的东东，如：操作提示
-所以删除原来的，然后新增一个 BXJG.AbpAntBlazor，这次里面的类命名为统一的，刚才的库默认命名空间改为：BXJG.AbpBlazor，方便以后替换，里面的类也按这个规则命名，而不是按之前的UI框架命名
+所以删除原来的，然后新增一个 ZLJ.Web.Blazor，这次里面的类命名为统一的，刚才的库默认命名空间改为：ZLJ.Web.Blazor，方便以后替换，里面的类也按这个规则命名，而不是按之前的UI框架命名
 然后 添加肉夹馍、定义全局异常拦截器，然后引用bxjg.utils.rcl等等
 这个库 中定义 crud抽象组件，具体项目的crud往往继承这里的组件
 

@@ -1,5 +1,5 @@
 ﻿using Abp.Authorization;
-using BXJG.AbpBlazor.Interceptors;
+using ZLJ.Web.Blazor.Interceptors;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 //[assembly: AbpBBException]
 
-namespace BXJG.AbpBlazor
+namespace ZLJ.Web.Blazor
 {
     [DependsOn(typeof(BXJG.Utils.BXJGUtilsRCLModule))]
     public class AbpBlazorModule: AbpModule

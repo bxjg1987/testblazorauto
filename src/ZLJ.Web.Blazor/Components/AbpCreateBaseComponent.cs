@@ -1,6 +1,6 @@
 ﻿
 
-namespace BXJG.AbpBlazor.Components
+namespace ZLJ.Web.Blazor.Components
 {
     /// <summary>
     /// 基于BootstrapBlazor和abp的通用新增页组件
@@ -18,7 +18,7 @@ namespace BXJG.AbpBlazor.Components
                                                  TPrimaryKey,
                                                  TGetAllInput,
                                                  TCreateInput,
-                                                 TUpdateInput> : Utils.Components.AbpCreateBaseComponent<TAppService,
+                                                 TUpdateInput> : BXJG.Utils.Components.AbpCreateBaseComponent<TAppService,
                                                                                                          TEntityDto,
                                                                                                          TPrimaryKey,
                                                                                                          TGetAllInput,

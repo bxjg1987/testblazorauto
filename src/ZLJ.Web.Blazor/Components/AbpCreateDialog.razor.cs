@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace BXJG.AbpBlazor.Components
+namespace ZLJ.Web.Blazor.Components
 {
     /*
      * 通常我们在列表页做弹窗新增，但有时候我们希望在选择数据时，若数据不存在则弹出新增，而不是回到列表页去新增。

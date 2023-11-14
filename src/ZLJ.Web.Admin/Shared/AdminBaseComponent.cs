@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using BXJG.Utils;
-using BXJG.AbpBlazor.Components;
+using ZLJ.Web.Blazor.Components;
 
 namespace ZLJ.Web.Admin.Shared
 {

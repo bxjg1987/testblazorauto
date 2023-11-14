@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.AbpBlazor.Components
+namespace ZLJ.Web.Blazor.Components
 {
     /*
      * 已经定义了干净的列表和新增表单抽象组件，列表和新增抽象组件均是独立的，它们互相不知道对方

@@ -15,7 +15,7 @@ global using ZLJ.Web.Admin.Shared;
 global using BXJG.Utils.Dto;
 global using ZLJ.App.Admin.Authorization.Permissions;
 global using Abp.Localization.Sources;
-global using BXJG.AbpBlazor;
+global using ZLJ.Web.Blazor;
 global using BXJG.Utils;
 global using BXJG.Utils.GeneralTree;
 global using Abp.UI;

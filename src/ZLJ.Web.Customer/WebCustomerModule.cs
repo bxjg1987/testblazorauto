@@ -11,7 +11,7 @@ using ZLJ.App.Customer;
 
 namespace ZLJ.Web.Customer
 {
-    [DependsOn(typeof(ZLJWebCoreModule),typeof(CustomerApplicationModule), typeof(BXJG.AbpBlazor.AbpBlazorModule))]
+    [DependsOn(typeof(ZLJWebCoreModule),typeof(CustomerApplicationModule), typeof(ZLJ.Web.Blazor.AbpBlazorModule))]
     public class WebCustomerModule:AbpModule
     {
         public override void PreInitialize()

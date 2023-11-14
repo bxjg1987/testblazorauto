@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.AbpBlazor.Components
+namespace ZLJ.Web.Blazor.Components
 {
     public partial class AbpTreeSelect< TGetTreeForSelectInput,
                                                         TGetTreeForSelectOutput,

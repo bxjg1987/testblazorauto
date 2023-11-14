@@ -63,10 +63,7 @@
 
 
 	<ItemGroup Condition="'$(SolutionName)' != 'ZLJWithModules'">
-		<PackageReference Include="BXJG.AbpAntBlazor" Version="*" />
-	</ItemGroup>
-	<ItemGroup Condition="'$(SolutionName)' == 'ZLJWithModules'">
-		<ProjectReference Include="..\Modules\BXJG.AbpAntBlazor\BXJG.AbpAntBlazor.csproj" />
+		<PackageReference Include="ZLJ.Web.Blazor" Version="*" />
 	</ItemGroup>
 	
 	<ItemGroup>
@@ -77,6 +74,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\ZLJ.Web.Blazor\ZLJ.Web.Blazor.csproj" />
 		<ProjectReference Include="..\ZLJ.Application\ZLJ.Application.csproj" />
 		<ProjectReference Include="..\ZLJ.Web.Core\ZLJ.Web.Core.csproj" />
 	</ItemGroup>

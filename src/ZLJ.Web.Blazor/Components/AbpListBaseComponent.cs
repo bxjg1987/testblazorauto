@@ -21,7 +21,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace BXJG.AbpBlazor.Components
+namespace ZLJ.Web.Blazor.Components
 {
     /*
      * 

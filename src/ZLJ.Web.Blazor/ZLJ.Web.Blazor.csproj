@@ -4,7 +4,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>BXJG.AbpBlazor</RootNamespace>
+    <RootNamespace>ZLJ.Web.Blazor</RootNamespace>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
@@ -26,12 +26,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BXJG.Utils.RCL\BXJG.Utils.RCL.csproj" />
-	  
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
+	<ItemGroup Condition="'$(SolutionName)' != 'ZLJWithModules'">
+		<PackageReference Include="BXJG.Utils.RCL" Version="*" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(SolutionName)' == 'ZLJWithModules'">
+		<ProjectReference Include="..\Modules\BXJG.Utils.RCL\BXJG.Utils.RCL.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\ZLJ.Application.Common\ZLJ.Application.Common.csproj" />
+	</ItemGroup>
 </Project>
