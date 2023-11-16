@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<VersionPrefix>1.0.0.0</VersionPrefix>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
 		<AssemblyName>ZLJ.Core</AssemblyName>
 		<PackageId>ZLJ.Core</PackageId>
@@ -49,8 +49,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Abp.AutoMapper" Version="8.4.0" />
-		<PackageReference Include="Abp.ZeroCore" Version="8.4.0" />
+		<PackageReference Include="Abp.AutoMapper" Version="9.0.0" />
+		<PackageReference Include="Abp.ZeroCore" Version="9.0.0" />
 		<!--<PackageReference Include="BXJG.Utils" Version="*" />-->
 		<!--<PackageReference Include="BXJG.Common" Version="1.2.1" />
     <PackageReference Include="BXJG.Utils" Version="1.2.2" />-->
@@ -58,13 +58,13 @@
 		<PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="4.1.0" />
 		<PackageReference Include="DistributedLock.Core" Version="1.*" />
 		<PackageReference Include="Hangfire.Core" Version="1.8.6" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.13" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="7.0.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="8.0.0" />
 		<PackageReference Include="SourceLink.Copy.PdbFiles" Version="2.*">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="DocumentFormat.OpenXml" Version="2.*" />
+		<PackageReference Include="DocumentFormat.OpenXml" Version="3.0.0" />
 		<PackageReference Include="OpenScraping" Version="1.*" />
 		<PackageReference Include="OpenXmlPowerTools-NetStandard" Version="4.*" />
 		<PackageReference Include="SuperSocket.Client" Version="2.0.0-beta7" />

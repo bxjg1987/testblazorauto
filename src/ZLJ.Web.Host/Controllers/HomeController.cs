@@ -47,37 +47,37 @@ namespace ZLJ.Web.Host.Controllers
 
                 return View($"_{appKey}Host");
         }
-        //public IActionResult Blazor()
+        ////public IActionResult Blazor()
+        ////{
+        ////    return View("_host");
+        ////}
+        ///// <summary>
+        ///// This is a demo code to demonstrate sending notification to default tenant admin and host admin uers.
+        ///// Don't use this code in production !!!
+        ///// </summary>
+        ///// <param name="message"></param>
+        ///// <returns></returns>
+        //public async Task<ActionResult> TestNotification(string message = "")
         //{
-        //    return View("_host");
+        //    var onlineClients = _onlineClientManager.GetAllByUserId(new UserIdentifier(1, 2));
+        //    var sf = sdf.Notifiers;
+        //    if (message.IsNullOrEmpty())
+        //    {
+        //        message = "This is a test notification, created at " + Clock.Now;
+        //    }
+
+        //    var defaultTenantAdmin = new UserIdentifier(1, 2);
+        //    var hostAdmin = new UserIdentifier(null, 1);
+
+        //    await _notificationPublisher.PublishAsync(
+        //        "App.SimpleMessage",
+        //        new MessageNotificationData(message),
+        //        severity: NotificationSeverity.Info,
+        //        userIds: new[] { defaultTenantAdmin, hostAdmin }
+        //    );
+
+        //    return Content("Sent notification: " + message);
         //}
-        /// <summary>
-        /// This is a demo code to demonstrate sending notification to default tenant admin and host admin uers.
-        /// Don't use this code in production !!!
-        /// </summary>
-        /// <param name="message"></param>
-        /// <returns></returns>
-        public async Task<ActionResult> TestNotification(string message = "")
-        {
-            var onlineClients = _onlineClientManager.GetAllByUserId(new UserIdentifier(1, 2));
-            var sf = sdf.Notifiers;
-            if (message.IsNullOrEmpty())
-            {
-                message = "This is a test notification, created at " + Clock.Now;
-            }
-
-            var defaultTenantAdmin = new UserIdentifier(1, 2);
-            var hostAdmin = new UserIdentifier(null, 1);
-
-            await _notificationPublisher.PublishAsync(
-                "App.SimpleMessage",
-                new MessageNotificationData(message),
-                severity: NotificationSeverity.Info,
-                userIds: new[] { defaultTenantAdmin, hostAdmin }
-            );
-
-            return Content("Sent notification: " + message);
-        }
 
         //public ActionResult Distinguishi()
         //{

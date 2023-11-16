@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
 	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
 	  <ImplicitUsings>enable</ImplicitUsings>
@@ -67,9 +67,9 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-		<PackageReference Include="Abp.AspNetCore" Version="8.4.0" />
+		<PackageReference Include="Abp.AspNetCore" Version="9.0.0" />
 		<PackageReference Include="AntDesign" Version="0.16.1" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.*" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.0" />
 		<PackageReference Include="AntDesign.ProLayout" Version="0.16.0" />
 	</ItemGroup>
 
