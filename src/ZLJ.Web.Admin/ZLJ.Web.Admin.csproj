@@ -68,9 +68,9 @@
 	
 	<ItemGroup>
 		<PackageReference Include="Abp.AspNetCore" Version="9.0.0" />
-		<PackageReference Include="AntDesign" Version="0.16.1" />
+		<PackageReference Include="AntDesign" Version="0.16.2" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.0" />
-		<PackageReference Include="AntDesign.ProLayout" Version="0.16.0" />
+		<PackageReference Include="AntDesign.ProLayout" Version="0.16.2" />
 	</ItemGroup>
 
 	<ItemGroup>
