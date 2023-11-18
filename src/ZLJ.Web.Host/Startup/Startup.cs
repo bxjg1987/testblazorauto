@@ -24,6 +24,13 @@ using Microsoft.Extensions.DependencyInjection;
 using ZLJ.App.Admin.Authorization.Permissions;
 using Medallion.Threading;
 using AntDesign.ProLayout;
+using ZLJ.Web.Host.Shared;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using static OpenXmlPowerTools.RevisionProcessor;
+using Microsoft.Net.Http.Headers;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authentication;
 
 namespace ZLJ.Web.Host.Startup
 {
@@ -105,7 +112,12 @@ namespace ZLJ.Web.Host.Startup
             //});
             //services.AddTransient<WeatherForecastService>();
             //services.AddTableDemoDataService();
-            services.AddServerSideBlazor();
+            //services.AddServerSideBlazor();
+            services.AddRazorComponents().AddInteractiveServerComponents();
+
+            //等同于在根组件外面加了个CascadingAuthenticationState
+            services.AddCascadingAuthenticationState();
+
             //services.AddSingleton<TrackingCircuitHandler>();
 
             //services.AddSingleton<CircuitHandler, TrackingCircuitHandler>(p => p.GetRequiredService<TrackingCircuitHandler>());
@@ -257,7 +269,7 @@ namespace ZLJ.Web.Host.Startup
 
             //services.AddSingleton<IDistributedLockProvider>(_ => new SqlDistributedSynchronizationProvider(this._appConfiguration.GetConnectionString("Default")));
             //services.AddSingleton<IDistributedLockProvider>(_=>new MySqlDistributedSynchronizationProvider(defaultConnectionString));
-            
+
             //services.AddHangfireServer(opt => {
             //    opt.Queues = new[] { "abp" };
             //});
@@ -284,7 +296,7 @@ namespace ZLJ.Web.Host.Startup
 
 
             //#endregion
-
+         
             #region abp
             //老的
             //Configure Abp and Dependency Injection
@@ -308,6 +320,47 @@ namespace ZLJ.Web.Host.Startup
             // var sdf = services.Where(c =>( c.ServiceType.FullName.Contains("Abp", StringComparison.OrdinalIgnoreCase)|| c.ServiceType.FullName.Contains("zlj", StringComparison.OrdinalIgnoreCase))).ToList();
 
             //var sdf = services.Where(c =>c.Lifetime== ServiceLifetime.Singleton&&( c.ServiceType.FullName.Contains("Abp", StringComparison.OrdinalIgnoreCase)|| c.ServiceType.FullName.Contains("zlj", StringComparison.OrdinalIgnoreCase))).ToList();
+
+            //services.Configure<JwtBearerOptions>(opt =>
+            //{
+
+            //    opt.Events.OnAuthenticationFailed = x =>
+            //    {
+            //        return Task.CompletedTask;
+            //    };
+
+            //    opt.Events.OnChallenge = x =>
+            //    {
+            //        return Task.CompletedTask;
+            //    };
+            //    //     opt.Events.OnRedirectToLogin = c => {
+
+            //    //         var request = c.HttpContext.Request;
+            //    //        var sdf =  string.Equals(request.Query[HeaderNames.XRequestedWith], "XMLHttpRequest", StringComparison.Ordinal) ||
+            //    //string.Equals(request.Headers.XRequestedWith, "XMLHttpRequest", StringComparison.Ordinal);
+
+            //    //         c.HttpContext.Response.Redirect(opt.LoginPath);
+            //    //         return Task.CompletedTask;
+            //    //     };
+            //});
+
+            //services.Configure<CookieAuthenticationOptions>(opt =>
+            //{
+            //    opt.Events.OnValidatePrincipal = x => 
+            //    {
+            //        return Task.CompletedTask;
+            //    };
+            //    opt.Events.OnRedirectToLogin = c =>
+            //    {
+
+            //        var request = c.HttpContext.Request;
+            //        var sdf = string.Equals(request.Query[HeaderNames.XRequestedWith], "XMLHttpRequest", StringComparison.Ordinal) ||
+            //        string.Equals(request.Headers.XRequestedWith, "XMLHttpRequest", StringComparison.Ordinal);
+
+            //        c.HttpContext.Response.Redirect(opt.LoginPath);
+            //        return Task.CompletedTask;
+            //    };
+            //});
         }
 
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
@@ -373,7 +426,6 @@ namespace ZLJ.Web.Host.Startup
             //});
 
             app.UseAbpRequestLocalization();
-            app.UseAuthorization();
 
             ////app.UseWeChatPayment();
             //app.UseHangfireDashboard("/hangfire", new Hangfire.DashboardOptions
@@ -386,27 +438,70 @@ namespace ZLJ.Web.Host.Startup
             //    Authorization = new[] { new AbpHangfireAuthorizationFilter(PermissionNames.HangFireDashboard) }
             //    //Authorization = new[] { new aaa(PermissionNames.HangFireDashboard) }
             //});
+            //app.Use(async (a, b) => {
+            //    //  var sdfsdf = app.ApplicationServices.GetRequiredService<IAuthorizationMiddlewareResultHandler>();
+            //    //       a.ChallengeAsync
+            //    var sdfsdf = a.RequestServices.GetService<IAuthorizationPolicyProvider>();
+            //    var sdfsfd = await sdfsdf.GetDefaultPolicyAsync();
+
+            //    var sdfs = sdfsfd.AuthenticationSchemes;
+
+            //    a.ChallengeAsync();
+
+            //    var zz = a.RequestServices.GetService<IAuthenticationService>();
+            //    zz.ChallengeAsync(a,null,null);
+
+
+
+            //    var zc = a.RequestServices.GetService<IAuthenticationSchemeProvider>();
+            // var q = await   zc.GetDefaultChallengeSchemeAsync();
+
+            //     await b(a);
+            //});
+
+            app.UseAuthorization();
+
+           
+
+            app.UseAntiforgery();
+
+          //  var opt = app.ApplicationServices.GetRequiredService<IOptionsMonitor<CookieAuthenticationOptions>>().CurrentValue;
+
+           // var opt = app.ApplicationServices.GetRequiredService<IEnumerable< IOptionsMonitor<CookieAuthenticationOptions>>>();
+           // opt.Events.OnRedirectToLogin = c =>
+            //{
+
+            //    var request = c.HttpContext.Request;
+            //    var sdf = string.Equals(request.Query[HeaderNames.XRequestedWith], "XMLHttpRequest", StringComparison.Ordinal) ||
+            //    string.Equals(request.Headers.XRequestedWith, "XMLHttpRequest", StringComparison.Ordinal);
+
+            //    c.HttpContext.Response.Redirect(opt.LoginPath);
+            //    return Task.CompletedTask;
+            //};
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapRazorComponents<Shared.App>().AddInteractiveServerRenderMode();
+
                 endpoints.MapHub<AbpCommonHub>("/signalr");
                 endpoints.MapHangfireDashboardWithAuthorizationPolicy(PermissionNames.HangFireDashboard);
                 //endpoints.MapHangfireDashboard(PermissionNames.HangFireDashboard, "/hangfire", new DashboardOptions
                 //{
                 //    Authorization = new[] { new AbpHangfireAuthorizationFilter(PermissionNames.HangFireDashboard) }
                 //});
-                endpoints.MapBlazorHub();
+                // endpoints.MapBlazorHub();
+                endpoints.MapDefaultControllerRoute(); //mvc路由
+                //endpoints.MapControllers();
 
                 //endpoints.MapHangfireDashboard();
-
 
                 //找不到rcl中的controller，怀疑：要么用application part把rcl加入进去， 要么使用特征路由（导致controller被加入）
                 //若使用razor页面就没这个问题了，因为rcl本来就可以放页面
                 //参考：https://learn.microsoft.com/zh-cn/aspnet/core/mvc/advanced/app-parts?view=aspnetcore-7.0#load-aspnet-core-features
 
-                endpoints.MapDefaultControllerRoute(); //等于与下面这行
+
                 //endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
-                endpoints.MapControllerRoute("defaultWithArea", "{area}/{controller=Home}/{action=Index}/{id?}");
+                //  endpoints.MapControllerRoute("defaultWithArea", "{area}/{controller=Home}/{action=Index}/{id?}");
 
                 //endpoints.MapFallbackToAreaPage("_Host1", "customer");
                 //endpoints.MapFallbackToPage("/customer/{*all}", "/_Host1");
@@ -431,6 +526,8 @@ namespace ZLJ.Web.Host.Startup
 
             });
 
+
+          
 
             //不晓得为啥，放上面无法身份验证
             //app.UseHangfireServer();

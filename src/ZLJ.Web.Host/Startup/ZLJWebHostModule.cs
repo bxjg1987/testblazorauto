@@ -55,7 +55,7 @@ namespace ZLJ.Web.Host.Startup
             //多租户开关
             Configuration.MultiTenancy.IsEnabled = ZLJConsts.MultiTenancyEnabled;
             //Configuration.Modules.BXJGUtils().InitDbContext<ZLJDbContext>();
-
+            Configuration.Navigation.Providers.Add<AdminNavigationProvider>();
             //参考docs/后台作业.txt
             //Configuration.BackgroundJobs.UseHangfire();
 

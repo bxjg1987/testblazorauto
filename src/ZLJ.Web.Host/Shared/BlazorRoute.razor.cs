@@ -1,18 +1,9 @@
 ﻿using Abp.Notifications;
-using BXJG.Common;
 using BXJG.Common.RCL;
-using Microsoft.AspNetCore.Components.Server.Circuits;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ZLJ.Web.Host.Shared
 {
-    public partial class App
+    public partial class BlazorRoute
     {
         [Inject]
         protected INotificationService MessageService { get; private set; }
@@ -26,8 +17,8 @@ namespace ZLJ.Web.Host.Shared
 
 
         BlazorServerContext context;
-        
-      //  ILogger
+
+        //  ILogger
 
         ///// <summary>
         ///// 这里的错误仅仅是兜底，错误后当前页面的控件状态很可能无法恢复，我们通过肉夹馍的aop实现了统一异常处理
@@ -39,7 +30,7 @@ namespace ZLJ.Web.Host.Shared
         //private async Task OnErrorHandleAsync(ILogger logger, Exception ex)
         //{
 
-       
+
         //    if (ex is UserFriendlyException uex)
         //    {
         //        await MessageService.Show(new MessageOption
@@ -63,6 +54,8 @@ namespace ZLJ.Web.Host.Shared
         //    }
         //}
         IDisposable xxtz;//消息通知释放对象
+
+
         protected override void OnInitialized()
         {
             base.OnInitialized();
@@ -70,18 +63,19 @@ namespace ZLJ.Web.Host.Shared
             // var container = ScopedServices.GetRequiredService<CircuitStateContainer>();//不晓得为啥，必须用注入方式，这样获取不到
 
             //var cir = ScopedServices.GetRequiredService<CircuitStateHandler>();//这样获取的，Current属性为空
-            if (CircuitStateContainer.TryGetValue(CircuitStateHandler.Current, out var x)) {
+            if (CircuitStateContainer.TryGetValue(CircuitStateHandler.Current, out var x))
+            {
                 context = x;
                 xxtz = context.Zhongjie.Zhuce<UserNotification>(ShowUsernotification);
             }
         }
-        public  void Dispose()
+        public void Dispose()
         {
             xxtz?.Dispose();
         }
         private async ValueTask ShowUsernotification(UserNotification userNotification)
         {
-           // string icon = string.Empty;
+            // string icon = string.Empty;
             NotificationType color = NotificationType.None;
             switch (userNotification.Notification.Severity)
             {
@@ -112,7 +106,7 @@ namespace ZLJ.Web.Host.Shared
             {
                 await MessageService.Open(new NotificationConfig
                 {
-                    Message = userNotification.Notification.NotificationName ,
+                    Message = userNotification.Notification.NotificationName,
                     Description = msg,//"This is the content of the notification. This is the content of the notification. This is the content of the notification.",
                     NotificationType = color
                 });

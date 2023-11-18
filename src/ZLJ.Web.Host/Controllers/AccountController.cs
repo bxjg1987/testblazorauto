@@ -67,52 +67,59 @@ namespace ZLJ.Web.Host.Controllers
             //this.authenticationSchemeProvider = authenticationSchemeProvider;
             //this.authenticationHandlerProvider = authenticationHandlerProvider;
         }
-     
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        ///// <param name="model"></param>
-        ///// <returns></returns>
-        //[UnitOfWork]
-        //[HttpPost]
-        //public async Task<IActionResult> Login([FromForm] AuthenticateModel model, [FromQuery] string returnUrl = "/")
-        //{
-        //    try
-        //    {
-        //        //var zh = 
-        //        var loginResult = await GetLoginResultAsync(
-        //            model.UserNameOrEmailAddress,
-        //            model.Password,
-        //            model.TenancyName //先粗暴点就这么写吧，后期参考zero登陆租户原理调整
-        //            //GetTenancyNameOrNull()
-        //        );
-        //        //await base.HttpContext.SignInAsync("Identity.Application",
-        //        //                                   new System.Security.Claims.ClaimsPrincipal(loginResult.Identity), new AuthenticationProperties
-        //        //                                   {
-        //        //                                       IsPersistent = model.RememberClient
-        //        //                                   });
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult Login()
+        {
+            // var defaultAuthenticate = await authenticationSchemeProvider.GetDefaultAuthenticateSchemeAsync();
+                return View();
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [UnitOfWork]
+        [HttpPost]
+        public async Task<IActionResult> Login([FromForm] AuthenticateModel model, [FromQuery] string returnUrl = "/")
+        {
+            try
+            {
+                //var zh = 
+                var loginResult = await GetLoginResultAsync(
+                    model.UserNameOrEmailAddress,
+                    model.Password,
+                    model.TenancyName //先粗暴点就这么写吧，后期参考zero登陆租户原理调整
+                                      //GetTenancyNameOrNull()
+                );
+                //await base.HttpContext.SignInAsync("Identity.Application",
+                //                                   new System.Security.Claims.ClaimsPrincipal(loginResult.Identity), new AuthenticationProperties
+                //                                   {
+                //                                       IsPersistent = model.RememberClient
+                //                                   });
 
-        //        await signInManager1.SignInAsync(loginResult.Identity, model.RememberClient);
-        //        return Redirect(returnUrl);
-        //    }
-        //    catch (UserFriendlyException ufe) {
-        //        ViewBag.ErrorMsg = $"{ufe.Message}，{ufe.Details}";
-        //        if (CurrApp.LoginViewName.IsNullOrWhiteSpace())
-        //            return View();
-        //        return View(CurrApp.LoginViewName);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        ViewBag.ErrorMsg = "登陆失败！服务器内部发生错误，请联系系统管理员。";
-        //        throw;
-        //    }
-        //}
+                await signInManager1.SignInAsync(loginResult.Identity, model.RememberClient);
+                return Redirect(returnUrl);
+            }
+            catch (UserFriendlyException ufe)
+            {
+                ViewBag.ErrorMsg = $"{ufe.Message}，{ufe.Details}";
+                    return View();
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMsg = "登陆失败！服务器内部发生错误，请联系系统管理员。";
+                throw;
+            }
+        }
 
-        //public async Task<ActionResult> Logout()
-        //{
-        //    await signInManager1.SignOutAsync();
-        //    return Redirect("/" + base.HttpContext.GetAppKey());
-        //}
+        public async Task<ActionResult> Logout()
+        {
+            await signInManager1.SignOutAsync();
+            return Redirect("/admin");
+        }
 
 
         private async Task<AbpLoginResult<Tenant, User>> GetLoginResultAsync(string usernameOrEmailAddress, string password, string tenancyName)
