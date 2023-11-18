@@ -24,7 +24,7 @@ using ZLJ.App.Admin;
 
 namespace ZLJ.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Microsoft.AspNetCore.Mvc.Route("api/[controller]/[action]")]
     public class TokenAuthController : ZLJControllerBase
     {
         private readonly UserManager userManager;

@@ -3,13 +3,11 @@ using ZLJ.Configuration;
 using Abp.Hangfire;
 using Abp.Threading.BackgroundWorkers;
 //using ZLJ.App.Admin.WorkOrder.Workload;
-using ZLJ.Web.Customer;
 using BXJG.Utils;
 using ZLJ.EntityFrameworkCore;
 using Abp.AspNetCore.SignalR;
 using Abp.AspNetCore;
 using ZLJ.App.Admin;
-using ZLJ.App.Customer;
 //using ZLJ.App.Employee;
 using Medallion.Threading.SqlServer;
 using Medallion.Threading;
@@ -21,29 +19,17 @@ using Abp.AspNetCore.Configuration;
 //using BXJG.WorkOrder;
 using Castle.MicroKernel.Resolvers;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
-using BXJG.Utils;
-using Abp.Reflection.Extensions;
-using System.Reflection;
-using ZLJ.App.Common;
-using ZLJ.Web.Admin;
 using Abp.Runtime.Session;
-using ZLJ.App.Common.Sessions;
-using Abp.Runtime.Security;
-using System.Security.Claims;
-using DocumentFormat.OpenXml.InkML;
-using ZLJ.Web.Admin.Startup;
 
 namespace ZLJ.Web.Host.Startup
 {
-    [DependsOn(typeof(WebCustomerModule),
-               typeof(WebAdminModule),
-               //typeof(AbpHangfireAspNetCoreModule),
+    [DependsOn(//typeof(AbpHangfireAspNetCoreModule),
                typeof(BXJGUtilsWebModule),
                typeof(ZLJApplicationModule),
                typeof(ZLJEntityFrameworkModule),
                typeof(AbpAspNetCoreModule),
                typeof(AbpAspNetCoreSignalRModule),
-               typeof(CustomerApplicationModule),
+               typeof(ZLJWebCoreModule), 
                //typeof(EmployeeApplicationModule),
                typeof(BXJGUtilsRCLModule))]
     public class ZLJWebHostModule : AbpModule
@@ -109,7 +95,6 @@ namespace ZLJ.Web.Host.Startup
             //Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(BXJG.WorkOrder.BXJGCommonApplicationModule).Assembly, "bxjgworkorder");
 
             Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(CommonApplicationModule).Assembly, "common");
-            Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(CustomerApplicationModule).Assembly, "cust");
             //Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(EmployeeApplicationModule).Assembly, "emp");
 
             #endregion
@@ -135,30 +120,7 @@ namespace ZLJ.Web.Host.Startup
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(typeof(ZLJWebHostModule).GetAssembly());
-            IocManager.RegService(services =>
-            {
-                services.AddSingleton(ss =>
-                {
-                    Func<IPrincipalAccessor, AppInfo> ss1 = (IPrincipalAccessor p) =>
-                    {
-                        var sdf = ss.GetService<IAbpSession>();
-                        if (sdf.UserId.HasValue)
-                        {
-                            var sdf1 = p.Principal.Claims.SingleOrDefault(c => c.Type.Equals("appKey", StringComparison.OrdinalIgnoreCase));
-                            ss.GetService<CommonApplicationConfiguration>()!.Apps.TryGetValue(sdf1.Value, out var app);
-                            return app;
-                        }
-                        else
-                            return httpContextAccessor.HttpContext?.GetApp();
-                        //if (httpContextAccessor.HttpContext!.Items.TryGetValue("appKey", out var appKey))
-                        //{
-                        //    return Configuration.Modules.CommonApplication().Apps[appKey!.ToString()];
-                        //}
-                        //return default;
-                    };
-                    return ss1;
-                });
-            });
+         
         }
         public override void PostInitialize()
         {

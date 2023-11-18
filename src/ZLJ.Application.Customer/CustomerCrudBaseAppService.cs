@@ -36,7 +36,7 @@ namespace ZLJ.App.Customer
         where TGetInput : IEntityDto<TPrimaryKey>
         where TDeleteInput : IEntityDto<TPrimaryKey>
     {
-        public CustomerSession CustomerSession { get; set; }
+        
         public CustomerCrudBaseAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
         {
             LocalizationSourceName = CustConsts.Cust;

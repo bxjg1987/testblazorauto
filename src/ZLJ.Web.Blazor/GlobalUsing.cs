@@ -12,7 +12,7 @@ global using AntDesign;
 global using ZLJ.Web.Blazor.Interceptors;
 
 global using BXJG.Utils;
-
+global using ZLJ.Web.Blazor.Interceptors;
 global using Abp;
 global using Abp.Application.Services.Dto;
 global using BXJG.Common.Dto;

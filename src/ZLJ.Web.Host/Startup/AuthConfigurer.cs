@@ -111,33 +111,6 @@ namespace ZLJ.Web.Host.Startup
             return Task.CompletedTask;
         }
 
-        /// <summary>
-        /// 获取应用key
-        /// </summary>
-        /// <param name="httpContext"></param>
-        /// <returns></returns>
-        public static string GetAppKey(this HttpContext httpContext)
-        {
-            if (httpContext.Items.TryGetValue("appKey", out var appKey))
-                return appKey.ToString();
-            return default;
-           // return httpContext.Items["appKey"].ToString();
-        }
-
-        /// <summary>
-        /// 获取应用
-        /// </summary>
-        /// <param name="httpContext"></param>
-        /// <returns></returns>
-        public static AppInfo GetApp(this HttpContext httpContext)
-        {
-            var appKey = httpContext.GetAppKey();
-            if (!string.IsNullOrWhiteSpace(appKey))
-            {
-                var apps = httpContext.RequestServices.GetRequiredService<CommonApplicationConfiguration>().Apps;
-                return apps[httpContext.GetAppKey()];
-            }
-            return default;
-        }
+     
     }
 }

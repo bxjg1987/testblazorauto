@@ -33,15 +33,55 @@
 	</PropertyGroup>-->
 	<ItemGroup>
 		<Compile Remove="App_Data\Logs\**" />
+		<Compile Remove="Pages\Administrative\**" />
+		<Compile Remove="Pages\AuditLog\**" />
+		<Compile Remove="Pages\DataDictionary\**" />
+		<Compile Remove="Pages\Employee\**" />
+		<Compile Remove="Pages\Notification\**" />
+		<Compile Remove="Pages\OU\**" />
+		<Compile Remove="Pages\Post\**" />
+		<Compile Remove="Pages\RelatedCompany\**" />
+		<Compile Remove="Pages\Settings\**" />
+		<Compile Remove="Views\**" />
 		<Compile Remove="wwwroot\upload\contracts\**" />
 		<Compile Remove="wwwroot\upload\images\**" />
 		<Content Remove="App_Data\Logs\**" />
+		<Content Remove="Pages\Administrative\**" />
+		<Content Remove="Pages\AuditLog\**" />
+		<Content Remove="Pages\DataDictionary\**" />
+		<Content Remove="Pages\Employee\**" />
+		<Content Remove="Pages\Notification\**" />
+		<Content Remove="Pages\OU\**" />
+		<Content Remove="Pages\Post\**" />
+		<Content Remove="Pages\RelatedCompany\**" />
+		<Content Remove="Pages\Settings\**" />
+		<Content Remove="Views\**" />
 		<Content Remove="wwwroot\upload\contracts\**" />
 		<Content Remove="wwwroot\upload\images\**" />
 		<EmbeddedResource Remove="App_Data\Logs\**" />
+		<EmbeddedResource Remove="Pages\Administrative\**" />
+		<EmbeddedResource Remove="Pages\AuditLog\**" />
+		<EmbeddedResource Remove="Pages\DataDictionary\**" />
+		<EmbeddedResource Remove="Pages\Employee\**" />
+		<EmbeddedResource Remove="Pages\Notification\**" />
+		<EmbeddedResource Remove="Pages\OU\**" />
+		<EmbeddedResource Remove="Pages\Post\**" />
+		<EmbeddedResource Remove="Pages\RelatedCompany\**" />
+		<EmbeddedResource Remove="Pages\Settings\**" />
+		<EmbeddedResource Remove="Views\**" />
 		<EmbeddedResource Remove="wwwroot\upload\contracts\**" />
 		<EmbeddedResource Remove="wwwroot\upload\images\**" />
 		<None Remove="App_Data\Logs\**" />
+		<None Remove="Pages\Administrative\**" />
+		<None Remove="Pages\AuditLog\**" />
+		<None Remove="Pages\DataDictionary\**" />
+		<None Remove="Pages\Employee\**" />
+		<None Remove="Pages\Notification\**" />
+		<None Remove="Pages\OU\**" />
+		<None Remove="Pages\Post\**" />
+		<None Remove="Pages\RelatedCompany\**" />
+		<None Remove="Pages\Settings\**" />
+		<None Remove="Views\**" />
 		<None Remove="wwwroot\upload\contracts\**" />
 		<None Remove="wwwroot\upload\images\**" />
 		<None Update="wwwroot\files\**">
@@ -56,6 +96,12 @@
 	<ItemGroup>
 		<Compile Remove="Controllers\FileController.cs" />
 		<Compile Remove="Controllers\WeChatMiniProgramPaymentController.cs" />
+		<Compile Remove="Shared\AdminCreateDialog.razor.cs" />
+		<Compile Remove="Shared\AdminDetailBaseComponent.cs" />
+		<Compile Remove="Shared\AdminGeneralTreeCreateBaseComponent.cs" />
+		<Compile Remove="Shared\AdminGeneralTreeDetailOrUpdateBaseComponent.cs" />
+		<Compile Remove="Shared\AdminGeneralTreeListBaseComponent.cs" />
+		<Compile Remove="Startup\AppDistinguishiMddleware.cs" />
 		<Compile Remove="Startup\Class221.cs" />
 		<Compile Remove="Startup\TxdlFirewall.cs" />
 		<Compile Remove="Startup\WeatherForecast.cs" />
@@ -63,9 +109,11 @@
 		<Compile Remove="Startup\WeChatPaymentNoticeHandler.cs" />
 	</ItemGroup>
 	<ItemGroup>
-		<Content Remove="Locales\en.json" />
-		<Content Remove="Locales\zh.json" />
-		<Content Remove="Views\BLogger\Logger.razor" />
+		<Content Remove="App.razor" />
+		<Content Remove="Shared\AdminCreateDialog.razor" />
+		<Content Remove="Shared\RecursionNavGroup.razor" />
+		<Content Remove="wwwroot\assets\403.svg" />
+		<Content Remove="wwwroot\assets\logo.svg" />
 		<Content Remove="wwwroot\swagger\ui\index.html" />
 	</ItemGroup>
 	<ItemGroup>
@@ -74,7 +122,18 @@
 		<None Remove="BXJG.Shop.Application.xml" />
 		<None Remove="favicon.ico" />
 		<None Remove="Properties\PublishProfiles\IISProfile.pubxml" />
-		<None Remove="Views\BLogger\Logger.razor.css" />
+	</ItemGroup>
+	<ItemGroup>
+	  <_ContentIncludedByDefault Remove="wwwroot\assets\403.svg" />
+	  <_ContentIncludedByDefault Remove="wwwroot\assets\logo.svg" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\a3common.css" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap.min.css" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\font_43459_lbtux0zjkr6yldi.css" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\login.css" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\site.css" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\style.css" />
+	  <_ContentIncludedByDefault Remove="wwwroot\images\authn.png" />
+	  <_ContentIncludedByDefault Remove="wwwroot\images\loginback.png" />
 	</ItemGroup>
 	<ItemGroup>
 		<Content Include="favicon.ico">
@@ -117,15 +176,15 @@
 	<ItemGroup>
 		<!--<ProjectReference Include="..\..\..\abp\src\Libs\BXJG.Common.Web\BXJG.Common.Web.csproj" />
 		<ProjectReference Include="..\..\..\abp\src\Modules\BXJG.Utils.Web\BXJG.Utils.Web.csproj" />-->
-		<ProjectReference Include="..\ZLJ.Application.Customer\ZLJ.Application.Customer.csproj" />
 		<ProjectReference Include="..\ZLJ.Application\ZLJ.Application.csproj" />
 		<ProjectReference Include="..\ZLJ.EntityFrameworkCore\ZLJ.EntityFrameworkCore.csproj" />
-		<ProjectReference Include="..\ZLJ.Web.Admin\ZLJ.Web.Admin.csproj" />
+		<ProjectReference Include="..\ZLJ.Web.Blazor\ZLJ.Web.Blazor.csproj" />
 		<ProjectReference Include="..\ZLJ.Web.Core\ZLJ.Web.Core.csproj" />
-		<ProjectReference Include="..\ZLJ.Web.Customer\ZLJ.Web.Customer.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Abp.Castle.Log4Net" Version="9.0.0" />
+		<PackageReference Include="AntDesign" Version="0.16.2" />
+		<PackageReference Include="AntDesign.ProLayout" Version="0.16.2" />
 		<PackageReference Include="BootstrapBlazor.TableExport" Version="8.0.0" />
 		<!--<PackageReference Include="DistributedLock.SqlServer" Version="1.*" />
 		<PackageReference Include="DistributedLock.MySql" Version="1.*" />-->
@@ -143,13 +202,31 @@
 
 
 	<ItemGroup>
-		<EmbeddedResource Include="Locales\en.json" />
-		<EmbeddedResource Include="Locales\zh.json" />
 		<EmbeddedResource Include="wwwroot\swagger\ui\index.html">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</EmbeddedResource>
 	</ItemGroup>
 	<ItemGroup>
+		<Content Update="Pages\Main.razor">
+		  <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+		</Content>
+		<Content Update="Shared\AdminMainLayout.razor">
+		  <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+		</Content>
+		<Content Update="Shared\App.razor">
+		  <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+		</Content>
+		<Content Update="Shared\RightContent.razor">
+		  <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+		</Content>
+		<Content Update="wwwroot\favicon.ico">
+		  <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+		  <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+		<Content Update="wwwroot\pro_icon.svg">
+		  <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+		  <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
 		<Content Update="wwwroot\swagger\ui\abp.js">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
@@ -158,7 +235,8 @@
 		</Content>
 	</ItemGroup>
 	<ItemGroup>
-		<Folder Include="Views\BLogger\" />
+	  <None Include="wwwroot\assets\403.svg" />
+	  <None Include="wwwroot\assets\logo.svg" />
 	</ItemGroup>
 	<ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" properties_4launchsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 </Project>

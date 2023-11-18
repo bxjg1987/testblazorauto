@@ -15,7 +15,6 @@ namespace ZLJ.App.Common.Sessions
         //应用的某些功能可能不需要登陆，因此不能单纯使用claim
         //可以参考abp的租户解析器（一堆），所以它的租户解析器是反着来的，
 
-        // public virtual string AppKey { get; set; }
       //  public IPrincipalAccessor PrincipalAcc => base.PrincipalAccessor;
         public virtual AppInfo AppInfo => appinfoProvider?.Invoke(base.PrincipalAccessor);
         Func<IPrincipalAccessor,AppInfo> appinfoProvider;

@@ -57,7 +57,6 @@
 	</ItemGroup>
 	<ItemGroup>
 	
-		<ProjectReference Include="..\ZLJ.Application.Customer\ZLJ.Application.Customer.csproj" />
 	
 		<ProjectReference Include="..\ZLJ.Application\ZLJ.Application.csproj" />
 	

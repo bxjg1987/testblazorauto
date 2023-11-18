@@ -43,9 +43,8 @@ namespace ZLJ.Web.Host.Controllers
         public IActionResult Index()
         {
             //return Redirect("/swagger");
-            var appKey = base.HttpContext.Items["appKey"].ToString();
 
-                return View($"_{appKey}Host");
+                return View($"_Host");
         }
         ////public IActionResult Blazor()
         ////{
@@ -79,13 +78,6 @@ namespace ZLJ.Web.Host.Controllers
         //    return Content("Sent notification: " + message);
         //}
 
-        //public ActionResult Distinguishi()
-        //{
-        //    var appKey = base.HttpContext.Items["appKey"].ToString();
-
-        //    if(!appKey.IsNullOrWhiteSpace())
-        //        return View($"_{appKey}Host");
-        //    return View("_AdminHost");
-        //}
+       
     }
 }

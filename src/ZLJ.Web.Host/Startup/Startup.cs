@@ -13,10 +13,8 @@ using Hangfire.SqlServer;
 using Abp.Hangfire;
 //using BXJG.WorkOrder.EmployeeApplication;
 //using ZLJ.App.Employee;
-using ZLJ.App.Customer;
 using ZLJ.App.Admin;
 using ZLJ.EntityFrameworkCore;
-using ZLJ.Web.Customer;
 //using Orleans.Configuration;
 //using Orleans.Hosting;
 
@@ -79,13 +77,8 @@ namespace ZLJ.Web.Host.Startup
                     NamingStrategy = new CamelCaseNamingStrategy()
                 };
             });
+            //services.AddControllers();
 
-            //注册自定义路由约束
-            services.AddRouting(options =>
-            {
-                //appKey的路由约束
-                options.ConstraintMap.Add("appKey", typeof(AppRouteConstraint));
-            });
 
             //经过测试不加ApplicationParts，直接引用的项目中的视图和控制器也可以用，注意是控制器必须有自己的路由，通常是特征路由
             //加不加ApplicationParts，主项目中的路由好像都无法路由到rcl中的控制器
@@ -97,7 +90,7 @@ namespace ZLJ.Web.Host.Startup
 
             //    PartManager.ApplicationParts.Add(ApplicationPart);
             //});
-            services.AddRazorPages(); //目前只是为了承载blazor才加这个，若使用mvc承载，则不需要它，注意：AddControllersWithViews并不会注册RazorPages
+            //  services.AddRazorPages(); //目前只是为了承载blazor才加这个，若使用mvc承载，则不需要它，注意：AddControllersWithViews并不会注册RazorPages
             //services.Configure<RazorPagesOptions>(options => options.RootDirectory = "/ZLJ.Blazor.Admin/Pages");
             //services.Configure<RazorPagesOptions>(options => options.RootDirectory = "/Pages");//这是默认值
 
@@ -203,7 +196,6 @@ namespace ZLJ.Web.Host.Startup
 
                     options.IncludeXmlComments(AppContext.BaseDirectory + typeof(ZLJApplicationModule).Assembly.GetName().Name + ".XML");
                     options.IncludeXmlComments(AppContext.BaseDirectory + typeof(CommonApplicationModule).Assembly.GetName().Name + ".XML");
-                    options.IncludeXmlComments(AppContext.BaseDirectory + typeof(CustomerApplicationModule).Assembly.GetName().Name + ".XML");
                     options.IncludeXmlComments(AppContext.BaseDirectory + typeof(BXJGUtilsApplicationModule).Assembly.GetName().Name + ".XML");
 
                     // options.IncludeXmlComments(AppContext.BaseDirectory + typeof(EmployeeApplicationModule).Assembly.GetName().Name + ".XML");
@@ -360,7 +352,6 @@ namespace ZLJ.Web.Host.Startup
             //若存在IAuthenticationRequestHandler，则执行它并放弃其它的身份验证
             //否则使用默认身份验证方案
             app.UseAuthentication();
-            app.UseMiddleware<AppDistinguishiMddleware>();
 
             ////身份验证会走默认的jwt身份验证方案，它使httpcontext.user不为空，但里面没有claim，所以这里需要替换下
             ////参考：https://github.com/dotnet/aspnetcore/blob/b034a7da67b5f81161e82b19b3ade458139f9c2b/src/Security/Authentication/Core/src/AuthAppBuilderExtensions.cs
@@ -408,13 +399,10 @@ namespace ZLJ.Web.Host.Startup
 
                 //endpoints.MapHangfireDashboard();
 
-                //目前app都使用blazor，将来也不可能使用mvc，所以特别的视图直接使用特征路由吧
-                //endpoints.MapControllerRoute("appRoute", "{appKey}/{controller}/{action}/{id?}");
 
                 //找不到rcl中的controller，怀疑：要么用application part把rcl加入进去， 要么使用特征路由（导致controller被加入）
                 //若使用razor页面就没这个问题了，因为rcl本来就可以放页面
                 //参考：https://learn.microsoft.com/zh-cn/aspnet/core/mvc/advanced/app-parts?view=aspnetcore-7.0#load-aspnet-core-features
-                //endpoints.MapControllerRoute("default", "{appKey=mainApp}/{controller}/{action}/{id?}", new { controller = "home", action = "index" });
 
                 endpoints.MapDefaultControllerRoute(); //等于与下面这行
                 //endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
@@ -430,20 +418,13 @@ namespace ZLJ.Web.Host.Startup
 
                 //endpoints.MapSwagger();
 
-                //blazor有自己的路由，这里只要确保跳转过去，blazor那边所有的页面 以appKey打头就行
                 //我们这里是以统一的Home控制权来分发的，也可以每个app单独自己的controller
 
 
                 //endpoints.MapControllerRoute("account", "{appKey=main}/account/{action}");
                 //endpoints.MapFallbackToFile("cap", "");
 
-                //:appKey为限定应用标识的自定义路由约束，参考 https://learn.microsoft.com/zh-cn/aspnet/core/fundamentals/routing?view=aspnetcore-7.0#custom-route-constraints
 
-                //各应用中手动controller的路由
-                //endpoints.MapControllerRoute("appController", "{appKey:appKey=main}/{controller=home}/{action=index}");
-
-                //各应用的回退路由，适配blazor
-                endpoints.MapFallbackToController("{appKey:appKey=main}/{controller=home}/{action=index}", "Index", "Home");//或者可以使用这个
 
                 //endpoints.MapFallbackToPage("custApp/{*p}", "_CustApp");
                 //endpoints.MapDynamicControllerRoute()

@@ -8,8 +8,6 @@ namespace ZLJ.Controllers
 {
     public abstract class ZLJControllerBase: AbpController
     {
-        protected string CurrAppKey => base.HttpContext.GetAppKey();
-        protected AppInfo CurrApp => base.HttpContext.GetApp();
         protected ZLJControllerBase()
         {
             LocalizationSourceName = ZLJConsts.LocalizationSourceName;

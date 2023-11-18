@@ -26,7 +26,6 @@ namespace ZLJ.App.Admin
         public override void PreInitialize()
         {
             //Configuration.Navigation.Providers.Add<ZLJNavigationProvider>();
-            Configuration.Modules.CommonApplication().Apps.TryAdd("admin", new AppInfo { Key = "admin", DisplayName = "后台管理", LoginViewName = "adminlogin" });
             Configuration.Authorization.Providers.Add<ZLJAuthorizationProvider>();
             //注册automapper映射
             Configuration.Modules.AbpAutoMapper().Configurators

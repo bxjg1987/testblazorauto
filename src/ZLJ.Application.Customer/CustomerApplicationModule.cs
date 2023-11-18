@@ -15,7 +15,6 @@ namespace ZLJ.App.Customer
         public override void PreInitialize()
         {
             //Configuration.Localization.ConfigureCust();
-            Configuration.Modules.CommonApplication().Apps.TryAdd("cust", new AppInfo { Key = "cust", DisplayName = "客服平台", LoginViewName = "custlogin" });
 
             Configuration.Authorization.Providers.Add<CustAppAuthorizationProvider>();
             // Configuration.Authorization.Providers.Add<PermissionProvider>();

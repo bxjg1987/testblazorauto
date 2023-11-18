@@ -26,8 +26,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Compile Remove="App.cs" />
 		<Compile Remove="AssociatedCompany\IBXJGBaseInfoAssociatedCompanyQueryAppService.cs" />
 		<Compile Remove="NotifyEventHandler.cs" />
+		<Compile Remove="Sessions\ZLJAppSession.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
