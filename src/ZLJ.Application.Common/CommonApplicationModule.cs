@@ -17,19 +17,6 @@ using ZLJ.App.Common.Authorization.Permissions;
 namespace ZLJ.App.Common
 {
 
-    public class CommonApplicationConfiguration
-    {
-        public ConcurrentDictionary<string, AppInfo> Apps { get; } = new ConcurrentDictionary<string, AppInfo>();
-    }
-
-
-    public static class CommonApplicationModuleConfigurationExtensions
-    {
-        public static CommonApplicationConfiguration CommonApplication(this IModuleConfigurations moduleConfigurations)
-        {
-            return moduleConfigurations.AbpConfiguration.Get<CommonApplicationConfiguration>();
-        }
-    }
 
     [DependsOn(
         typeof(ZLJCoreModule),
@@ -39,11 +26,9 @@ namespace ZLJ.App.Common
     {
         public override void PreInitialize()
         {
-            IocManager.Register<CommonApplicationConfiguration>();
 
             Configuration.Notifications.Providers.Add<CommonNotifyDefineProvider>();
 
-            Configuration.Modules.CommonApplication().Apps.TryAdd("main", new AppInfo { Key = "main", DisplayName = "幽灵", LoginViewName = "" });
             Configuration.Authorization.Providers.Add<CommonAppAuthorizationProvider>();
             //注册automapper映射
             Configuration.Modules.AbpAutoMapper().Configurators.Add(cfg => cfg.AddMaps(Assembly.GetExecutingAssembly()));

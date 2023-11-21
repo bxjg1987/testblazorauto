@@ -16,6 +16,7 @@ using Abp.Extensions;
 using Abp.Domain.Uow;
 using ZLJ.Web.Host.Startup;
 using Abp.UI;
+using ZLJ.Application.Common.Share.Models.TokenAuth;
 
 namespace ZLJ.Web.Host.Controllers
 {
@@ -74,9 +75,7 @@ namespace ZLJ.Web.Host.Controllers
         public IActionResult Login()
         {
             // var defaultAuthenticate = await authenticationSchemeProvider.GetDefaultAuthenticateSchemeAsync();
-            if (CurrApp.LoginViewName.IsNullOrWhiteSpace())
                 return View();
-            return View(CurrApp.LoginViewName);
         }
         /// <summary>
         /// 
@@ -94,24 +93,21 @@ namespace ZLJ.Web.Host.Controllers
                     model.UserNameOrEmailAddress,
                     model.Password,
                     model.TenancyName //先粗暴点就这么写吧，后期参考zero登陆租户原理调整
-                    //GetTenancyNameOrNull()
+                                      //GetTenancyNameOrNull()
                 );
                 //await base.HttpContext.SignInAsync("Identity.Application",
                 //                                   new System.Security.Claims.ClaimsPrincipal(loginResult.Identity), new AuthenticationProperties
                 //                                   {
                 //                                       IsPersistent = model.RememberClient
                 //                                   });
-                var appKey = HttpContext.GetAppKey();
-                if (!appKey.IsNullOrWhiteSpace())
-                    loginResult.Identity.AddClaim( new System.Security.Claims.Claim( "appKey", appKey));
+
                 await signInManager1.SignInAsync(loginResult.Identity, model.RememberClient);
                 return Redirect(returnUrl);
             }
-            catch (UserFriendlyException ufe) {
+            catch (UserFriendlyException ufe)
+            {
                 ViewBag.ErrorMsg = $"{ufe.Message}，{ufe.Details}";
-                if (CurrApp.LoginViewName.IsNullOrWhiteSpace())
                     return View();
-                return View(CurrApp.LoginViewName);
             }
             catch (Exception ex)
             {
@@ -123,7 +119,7 @@ namespace ZLJ.Web.Host.Controllers
         public async Task<ActionResult> Logout()
         {
             await signInManager1.SignOutAsync();
-            return Redirect("/" + base.HttpContext.GetAppKey());
+            return Redirect("/admin");
         }
 
 

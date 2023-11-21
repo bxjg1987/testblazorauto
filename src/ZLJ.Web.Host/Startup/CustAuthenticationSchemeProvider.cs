@@ -25,12 +25,14 @@ namespace ZLJ.Web.Host.Startup
             if (httpContextAccessor.HttpContext.Request.IsAjaxRequestBXJG())
             {
                 //httpContextAccessor.HttpContext.RequestServices.GetService<Castle.Core.Logging.ILogger>().Debug($"获取默认身份验证方案：是ajax请求");
-                return func();
+                return  func();
             }
             else
             {
                 //httpContextAccessor.HttpContext.RequestServices.GetService<Castle.Core.Logging.ILogger>().Debug($"获取默认身份验证方案：不是ajax请求");
-                return GetSchemeAsync(IdentityConstants.ApplicationScheme);
+              return GetSchemeAsync(IdentityConstants.ApplicationScheme);
+
+             //   return rr;  
             }
             //经常命中adminApp，用上面的方式更容易
             // return GetSchemeAsync(IdentityConstants.ApplicationScheme);

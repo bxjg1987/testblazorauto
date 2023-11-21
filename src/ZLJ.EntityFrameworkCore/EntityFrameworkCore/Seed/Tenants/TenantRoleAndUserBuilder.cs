@@ -93,31 +93,31 @@ namespace ZLJ.EntityFrameworkCore.Seed.Tenants
                 _context.SaveChanges();
             }
             #endregion
-            #region 客户
-            grantedPermissions = _context.Permissions.IgnoreQueryFilters()
-                .OfType<RolePermissionSetting>()
-                .Where(p => p.TenantId == _tenantId && p.RoleId == custAdmin.Id)
-                .Select(p => p.Name)
-                .ToList();
+            //#region 客户
+            //grantedPermissions = _context.Permissions.IgnoreQueryFilters()
+            //    .OfType<RolePermissionSetting>()
+            //    .Where(p => p.TenantId == _tenantId && p.RoleId == custAdmin.Id)
+            //    .Select(p => p.Name)
+            //    .ToList();
 
-            permissions = PermissionFinder.GetAllPermissions(new CustAppAuthorizationProvider())
-                                          .Where(p => p.MultiTenancySides.HasFlag(MultiTenancySides.Tenant) &&
-                                                      !grantedPermissions.Contains(p.Name))
-                                          .ToList();
-            if (permissions.Any())
-            {
-                _context.Permissions.AddRange(
-                   permissions.Select(permission => new RolePermissionSetting
-                   {
-                       TenantId = _tenantId,
-                       Name = permission.Name,
-                       IsGranted = true,
-                       RoleId = custAdmin.Id
-                   })
-               );
-                _context.SaveChanges();
-            }
-            #endregion
+            //permissions = PermissionFinder.GetAllPermissions(new CustAppAuthorizationProvider())
+            //                              .Where(p => p.MultiTenancySides.HasFlag(MultiTenancySides.Tenant) &&
+            //                                          !grantedPermissions.Contains(p.Name))
+            //                              .ToList();
+            //if (permissions.Any())
+            //{
+            //    _context.Permissions.AddRange(
+            //       permissions.Select(permission => new RolePermissionSetting
+            //       {
+            //           TenantId = _tenantId,
+            //           Name = permission.Name,
+            //           IsGranted = true,
+            //           RoleId = custAdmin.Id
+            //       })
+            //   );
+            //    _context.SaveChanges();
+            //}
+            //#endregion
 
             #endregion
 

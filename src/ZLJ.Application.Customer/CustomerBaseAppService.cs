@@ -21,7 +21,7 @@ namespace ZLJ.App.Customer
     [AbpAuthorize(PermissionNames.Customer)]
     public abstract class CustomerBaseAppService : CommonBaseAppService
     {
-        public CustomerSession CustomerSession { get; set; }
+        
         public Lazy<IRepository<AssociatedCompanyEntity, long>> CompanyRepository { get; set; }
         //protected CustomerAppServiceBase(CustomerSession customerSession, Lazy<IRepository<AssociatedCompanyEntity, long>> userRepository)
         //{
@@ -37,8 +37,8 @@ namespace ZLJ.App.Customer
 
         public async Task<AssociatedCompanyEntity> GetCurrentCompanyAsync()
         {
-            if (CustomerSession.CustomerId.HasValue)
-                return await CompanyRepository.Value.GetAsync(CustomerSession.CustomerId.Value);
+            //if (CustomerSession.CustomerId.HasValue)
+            //    return await CompanyRepository.Value.GetAsync(CustomerSession.CustomerId.Value);
             return default;
         }
 

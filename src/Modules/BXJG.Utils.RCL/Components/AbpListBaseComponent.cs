@@ -19,17 +19,10 @@ using System.Threading.Tasks;
 
 namespace BXJG.Utils.Components
 {
-    /*
-     * 由于abp的crud接口和抽象类把crud搞一起了，不想动它，所以这里的应用服务中包含TCreateInput、TUpdateInput
-     * 
-     * 与具体的ui框架无关，建议具体项目直接集成它，不要再为了某套UI再封装一次
-     * 只保留逻辑部分的抽象，因为这里的抽象是与具体项目无关的，所以应该由具体项目的子类去按自己需求做布局
-     * 
-     * 不做全局异常处理，因为大部分的ui框架自带了处理方式，即使木有，用肉夹馍在具体项目去做就行了，因为具体项目引用具体ui
-     */
-
     /// <summary>
-    /// 抽象的，基于MudBlazor datagrid的列表页抽象组件
+    /// 抽象的，与具体的ui框架无关的，列表页抽象组件
+    /// 由于abp的crud接口和抽象类把crud搞一起了，不想动它，所以这里的应用服务中包含TCreateInput、TUpdateInput
+    /// 木有应用统一异常处理拦截器，它的子类（与具体ui有关的抽象列表组件）应使用aop统一异常处理拦截器
     /// </summary>
     /// <typeparam name="TAppService">应用服务类型</typeparam>
     /// <typeparam name="TEntityDto">列表项的数据类型</typeparam>
@@ -37,7 +30,7 @@ namespace BXJG.Utils.Components
     /// <typeparam name="TGetAllInput">获取列表时的输入参数类型，分页或不分页</typeparam>
     /// <typeparam name="TCreateInput">新增时的输入类型</typeparam>
     /// <typeparam name="TUpdateInput">修改时的输入类型</typeparam>
-    /// <typeparam name="TList">列表类型</typeparam>
+    /// <typeparam name="TList">列表类型，不同的ui库，列表组件使用的列表对象类型可能不同</typeparam>
     public abstract class AbpListBaseComponent<TAppService,
                                                TEntityDto,
                                                TPrimaryKey,
@@ -51,19 +44,14 @@ namespace BXJG.Utils.Components
         where TList : class, IEnumerable<TEntityDto>
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
     {
-        #region 基础
-        /// <summary>
-        /// 缓存当前主服务对象
-        /// </summary>
-        private TAppService? appService;
         /// <summary>
         /// 获取主服务
         /// </summary>
-        protected virtual TAppService AppService => appService ??= ScopedServices.GetRequiredService<TAppService>();
+        protected virtual TAppService AppService => ScopedServices.GetRequiredService<TAppService>();
         /// <summary>
         /// 此功能的名称
         /// </summary>
-        protected virtual string FuncName => $"请重写{nameof(FuncName)}属性";
+        protected abstract string FuncName { get; }
 
         //protected Type DtoType => typeof(TEntityDto);//不是太有必要的，就不要浪费内存了
 
@@ -91,11 +79,13 @@ namespace BXJG.Utils.Components
         ///// 删除权限名称
         ///// </summary>
         //protected virtual string DeletePermissionName => "";
+
         //组件顶部做权限验证即可
         ///// <summary>
         ///// 是否有查看权限
         ///// </summary>
         //protected bool getIsGranted = true;
+
         /// <summary>
         /// 初始化权限状态
         /// 我们只需要最终是否有某个状态，不需要保留原本的权限字符串，所以使用方法定义，而非虚属性
@@ -104,7 +94,6 @@ namespace BXJG.Utils.Components
         /// <param name="updatePermissionName"></param>
         /// <param name="deletePermissionName"></param>
         /// <returns></returns>
-
         protected virtual async Task InitPermission(string createPermissionName = default, string updatePermissionName = default,
             string deletePermissionName = default/*, string getPermissionName = default*/)
         {
@@ -123,7 +112,6 @@ namespace BXJG.Utils.Components
         /// </summary>
         /// <param name="output">批量操作结果</param>
         /// <param name="funName">操作名</param>
-
         protected virtual async ValueTask BatchOperationMessage(BatchOperationOutput<TPrimaryKey> output, string funName = "删除")
         {
             if (output.ErrorMessage.Any())
@@ -136,23 +124,7 @@ namespace BXJG.Utils.Components
             else
                 await ShowSuccessMessage(msg: $"批量{funName}全部成功！");
         }
-        ///// <summary>
-        ///// 批量删除消息提醒
-        ///// </summary>
-        ///// <param name="output"></param>
-        //protected virtual void BatchDeleteMessage(BatchOperationOutput<TPrimaryKey> output) => BatchOperationMessage(output, "删除");
-        #endregion
-
-        #region 生命周期
-        //protected override async Task OnInitializedAsync()
-        //{
-        //    await Refresh();
-        //}
-        #endregion
-
-        #region 权限
-
-        #endregion
+     
 
         #region 列表
         /// <summary>
@@ -164,11 +136,10 @@ namespace BXJG.Utils.Components
         /// </summary>
         public bool IsPage => GetAllInput is IPagedResultRequest;
 
-        /// <summary>
-        /// 填充动态条件
-        /// </summary>
-        /// <returns></returns>
-
+        ///// <summary>
+        ///// 填充动态条件
+        ///// </summary>
+        ///// <returns></returns>
         //protected virtual ValueTask FillDynamicConditions(ICollection<ConditionFieldDefine> conditions) => ValueTask.CompletedTask;
 
 
@@ -189,7 +160,54 @@ namespace BXJG.Utils.Components
                 }
                 return int.MaxValue;
             }
+            set
+            {
+                if (GetAllInput is ILimitedResultRequest dx)
+                {
+                    dx.MaxResultCount = value;
+                }
+                else if (GetAllInput is IHaveFilter dx1 && dx1.Filter is ILimitedResultRequest dx2)
+                {
+                    dx2.MaxResultCount = value;
+                }
+            }
         }
+
+        /// <summary>
+        /// 排序规则，格式："field1 aes,field2 desc"
+        /// </summary>
+        public virtual string Sorting
+        {
+            get
+            {
+                if (GetAllInput is ISortedResultRequest dxx)
+                    return dxx.Sorting;
+                else if (GetAllInput is IHaveFilter dx11 && dx11.Filter is ISortedResultRequest dx22)
+                    return dx22.Sorting;
+                return "Id";
+            }
+            set
+            {
+
+                ISortedResultRequest sd222 = null;
+                if (GetAllInput is ISortedResultRequest dxx)
+                    sd222 = dxx;
+                else if (GetAllInput is IHaveFilter dx11 && dx11.Filter is ISortedResultRequest dx22)
+                    sd222 = dx22;
+
+                // var ls = condition.SortModel.Where(c => c.Sort.IsNotNullOrWhiteSpaceBXJG()).OrderBy(c => c.Priority).Select(c => c.FieldName + " " + c.Sort.Replace("end", ""));
+                //  sd222.Sorting = string.Join(",", ls);
+                sd222.Sorting = value;
+
+                if (sd222.Sorting.IsNullOrWhiteSpaceBXJG())
+                    sd222.Sorting = "Id";
+
+
+            }
+        }
+
+
+
 
         /// <summary>
         /// 当前列表数据
@@ -208,16 +226,23 @@ namespace BXJG.Utils.Components
         {
             get
             {
-                int pageIndex = 1;
-                if (GetAllInput is IPagedResultRequest dx)
-                    pageIndex = (int)Math.Ceiling((decimal)dx.SkipCount / PageSize);
+                //  int pageIndex = 1;
+                //  if (GetAllInput is IPagedResultRequest dx)
+                return (GetAllInput as IPagedResultRequest).SkipCount / PageSize + 1;
 
                 //若是纯条件，就木有必要
 
-                if (pageIndex <= 0)
-                    pageIndex = 1;
+                //if (pageIndex <= 0)
+                //    pageIndex = 1;
 
-                return pageIndex;
+
+            }
+            set
+            {
+                if (GetAllInput is IPagedResultRequest dx)
+                {
+                    dx.SkipCount = (value - 1) * PageSize;
+                }
             }
         }
 
@@ -229,103 +254,9 @@ namespace BXJG.Utils.Components
         /// 父类仅仅需要读，至于是否可写由子类自己决定
         /// </summary>
         protected virtual bool IsLoading { get; set; }
-        /// <summary>
-        /// 获取排序字符串
-        /// </summary>
-        protected virtual string Sorting
-        {
-            get
-            {
-                if (GetAllInput is ISortedResultRequest dx)
-                    return dx.Sorting;
-                else if (GetAllInput is IHaveFilter dx1 && dx1.Filter is ISortedResultRequest dx2)
-                    return dx2.Sorting;
 
-                return "Id";
-            }
-        }
+        
 
-        ///// <summary>
-        ///// 表格数据加载
-        ///// </summary>
-        ///// <param name="state"></param>
-        ///// <returns></returns>
-        //protected virtual async Task<GridData<TEntityDto>> LoadDataAsync(GridState<TEntityDto> state)
-        //{
-        //    var cd = new TGetAllInput();
-        //    if (cd is IDynamicCondition cdd)
-        //    {
-        //        cdd.Conditions = state.FilterDefinitions.MapToDynamicCondition().ToList();
-        //    }
-        //    else if (cd is IHaveFilter cddq && cddq.Filter is IDynamicCondition cddqq)
-        //    {
-        //        cddqq.Conditions = state.FilterDefinitions.MapToDynamicCondition().ToList();
-        //    }
-
-        //    if (cd is IPagedAndSortedResultRequest cd2)
-        //    {
-        //        cd2.MaxResultCount = state.PageSize;
-        //        cd2.SkipCount = state.Page * state.PageSize;
-        //    }
-        //    if (cd is ISortedResultRequest cd3)
-        //    {
-        //        cd3.Sorting = state.SortDefinitions.ToLinqDynamicCore();
-        //    }
-
-        //    if (cd is IHaveKeywords cd4)
-        //    {
-        //        cd4.Keywords = keywords;
-        //    }
-        //    else if (cd is IHaveFilter cddq && cddq.Filter is IHaveKeywords cddqq)
-        //    {
-        //        cddqq.Keywords = keywords;// state.FilterDefinitions.MapToDynamicCondition().ToList();
-        //    }
-        //    await FillCondtion(cd);
-        //    var dtos = await AppService.GetAllAsync(cd);
-
-        //    _ = InvokeAsync(StateHasChanged);//让多选影响顶部按钮得以执行 包一层是因为需要加载完才执行
-        //    dataGrid.SelectedItems.Clear();//翻页时，已选择的好像木有清空，这里手动来下
-
-        //    //给每行属性附加额外状态
-
-        //    foreach (var dto in dtos.Items)
-        //    {
-        //        dynamic dd = new ExpandoObject();
-        //        dd.IsDeleting = false;
-        //        dd.IsShowDeleteConfirmation = false;
-        //        dto.ExtensionData = dd;
-        //    }
-
-
-        //    return new GridData<TEntityDto>
-        //    {
-        //        TotalItems = dtos.TotalCount,
-        //        Items = dtos.Items
-        //    };
-
-        //}
-
-        /// <summary>
-        /// 默认已填充动态条件和关键字，你可以重写以填充其它条件
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-
-        //protected virtual ValueTask FillCondtion(TGetAllInput input) => ValueTask.CompletedTask;
-
-        ///// <summary>
-        ///// 批量选择变化时回调
-        ///// </summary>
-        ///// <param name="items"></param>
-        ///// <returns></returns>
-        //protected virtual Task SelectedItemsChanged(HashSet<TEntityDto> items)
-        //{
-        //    //StateHasChanged();
-        //    //selectedItems = items;
-        //    return Task.CompletedTask;
-        //    //_events.Insert(0, $"Event = SelectedItemsChanged, Data = {System.Text.Json.JsonSerializer.Serialize(items)}");
-        //}
-        //未选中项时，直接禁用按钮
         /// <summary>
         /// 刷新列表
         /// </summary>
@@ -333,13 +264,16 @@ namespace BXJG.Utils.Components
         protected virtual async Task Refresh()
         {
             await LoadListData();
+            if (SelectedItems != default && SelectedItems is ICollection<TEntityDto> list)
+                list.Clear();
+            else
+                SelectedItems = new List<TEntityDto>() as TList;
         }
 
         /// <summary>
         /// 加载列表数据
         /// </summary>
         /// <returns></returns>
-
         protected virtual async Task LoadListData()
         {
             IsLoading = true;
@@ -398,14 +332,12 @@ namespace BXJG.Utils.Components
                 IsLoading = false;
             }
         }
-
         /// <summary>
         /// 获取列表时，为其中的每项添加额外的数据
         /// </summary>
         /// <param name="dto"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-
         protected virtual ValueTask AddItemExtData(TEntityDto dto, dynamic data) => ValueTask.CompletedTask;
         /// <summary>
         /// 搜索关键字
@@ -424,23 +356,45 @@ namespace BXJG.Utils.Components
                 }
                 return string.Empty;
             }
+            set
+            {
+                if (GetAllInput is IHaveKeywords cd4)
+                {
+                    cd4.Keywords = value;
+                }
+                else if (GetAllInput is IHaveFilter cddq && cddq.Filter is IHaveKeywords cddqq)
+                {
+                    cddqq.Keywords = value;// state.FilterDefinitions.MapToDynamicCondition().ToList();
+                }
+            }
         }
         /// <summary>
         /// 关键字变化时回调，默认修改关键字字段并刷新列表
         /// </summary>
         /// <param name="keywords"></param>
         /// <returns></returns>
-        protected virtual async Task KeywordsChanged(string keywords)
+        protected virtual async Task KeywordsChanged(string keywords = default)
         {
-            if (GetAllInput is IHaveKeywords cd4)
-            {
-                cd4.Keywords = Keywords;
-            }
-            else if (GetAllInput is IHaveFilter cddq && cddq.Filter is IHaveKeywords cddqq)
-            {
-                cddqq.Keywords = Keywords;// state.FilterDefinitions.MapToDynamicCondition().ToList();
-            }
-
+            //if (GetAllInput is IHaveKeywords cd4)
+            //{
+            //    cd4.Keywords = keywords;
+            //}
+            //else if (GetAllInput is IHaveFilter cddq && cddq.Filter is IHaveKeywords cddqq)
+            //{
+            //    cddqq.Keywords = keywords;// state.FilterDefinitions.MapToDynamicCondition().ToList();
+            //}
+            Keywords = keywords;
+            await Refresh();
+        }
+        /// <summary>
+        /// 重置搜索条件后刷新
+        /// </summary>
+        /// <returns></returns>
+        protected virtual async Task Reset()
+        {
+            PageIndex = 1;
+            PageSize = 20;
+            Keywords = string.Empty;
             await Refresh();
         }
         #endregion
@@ -482,7 +436,6 @@ namespace BXJG.Utils.Components
         /// <summary>
         /// 显示批量删除的确认框
         /// </summary>
-
         protected virtual void ShowDeleteConfirm()
         {
             HideDeleteConfirm();
@@ -491,7 +444,6 @@ namespace BXJG.Utils.Components
         /// <summary>
         /// 隐藏批量删除的确认框
         /// </summary>
-
         protected virtual void HideDeleteConfirm()
         {
             isShowDeleteConfirm = false;
@@ -504,7 +456,7 @@ namespace BXJG.Utils.Components
         /// 批量删除
         /// </summary>
         /// <returns></returns>
-        protected virtual async Task DeleteBatch()
+        protected virtual async Task Delete()
         {
             //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限
             HideDeleteConfirm();
@@ -512,7 +464,7 @@ namespace BXJG.Utils.Components
             try
             {
                 var r = await AppService.BatchDeleteAsync(new BatchOperationInput<TPrimaryKey> { Ids = SelectedItems.Select(x => x.Id).ToArray() });
-                await BatchOperationMessage(r, "批量删除");
+                BatchOperationMessage(r, "批量删除");//这里木有必要await
                 //BatchDeleteMessage(temp);
                 if (r.Ids.Any())
                     await Refresh();
@@ -528,7 +480,7 @@ namespace BXJG.Utils.Components
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        protected virtual async Task DeleteItem(TEntityDto item)
+        protected virtual async Task Delete(TEntityDto item)
         {
             //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限
             // var curr = dataGrid.Items.Single(c => c.Id!.Equals(input.Id));
@@ -537,7 +489,7 @@ namespace BXJG.Utils.Components
             try
             {
                 await AppService.DeleteAsync(new EntityDto<TPrimaryKey>(item.Id));
-                await ShowSuccessMessage(msg: "删除成功！");
+                ShowSuccessMessage("删除提示", "删除成功！");//这里木有必要await
                 //若上面异常，下面不会执行
                 //_ = InvokeAsync(dataGrid.ReloadServerData);
                 await Refresh();
@@ -551,151 +503,11 @@ namespace BXJG.Utils.Components
         /// 显示删除明细的确认框
         /// </summary>
         /// <param name="dto"></param>
-
         protected virtual void ShowDeleteConfirm(TEntityDto dto)
         {
             HideDeleteConfirm();
             dto.ExtensionData.IsShowDeleteConfirmation = true;
         }
-        ///// <summary>
-        ///// 隐藏删除明细的确认框
-        ///// </summary>
-        ///// <param name="dto"></param>
-        //protected virtual void HideDeleteConfirm(TEntityDto dto)
-        //{
-        //    if (dto is IExtendableDto item)
-        //        item.ExtensionData.IsShowDeleteConfirmation = false;
-        //}
         #endregion
     }
-
-    // 若不是使用弹窗，而是使用tab、页面等其它方式时，应提供其它子类
-
-    ///// <summary>
-    ///// 抽象的，基于MudBlazor datagrid的列表页 抽象组件
-    ///// 使用弹窗弹出新增和详情窗口
-    ///// </summary>
-    ///// <typeparam name="TCreateDialog">新增弹窗组件</typeparam>
-    ///// <typeparam name="TDetailDialog">详情弹窗组件</typeparam>
-    ///// <typeparam name="TAppService">应用服务类型</typeparam>
-    ///// <typeparam name="TEntityDto">列表项的数据类型</typeparam>
-    ///// <typeparam name="TPrimaryKey">唯一id类型</typeparam>
-    ///// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
-    ///// <typeparam name="TCreateInput">新增时的输入类型</typeparam>
-    ///// <typeparam name="TUpdateInput">修改时的输入类型</typeparam>
-    //public abstract class AbpMudListDialogBaseComponent<TCreateDialog,
-    //                                                    TDetailDialog,
-    //                                                    TAppService,
-    //                                                    TEntityDto,
-    //                                                    TPrimaryKey,
-    //                                                    TGetAllInput,
-    //                                                    TCreateInput,
-    //                                                    TUpdateInput> : AbpListBaseComponent<TAppService,
-    //                                                                                            TEntityDto,
-    //                                                                                            TPrimaryKey,
-    //                                                                                            TGetAllInput,
-    //                                                                                            TCreateInput,
-    //                                                                                            TUpdateInput>
-    //    where TCreateDialog : ComponentBase
-    //    where TDetailDialog : ComponentBase
-    //    where TEntityDto : IEntityDto<TPrimaryKey>, IExtendableDto
-    //    where TGetAllInput : new()
-    //    where TUpdateInput : IEntityDto<TPrimaryKey>
-    //    where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
-    //{
-    //    /// <summary>
-    //    /// 弹窗服务
-    //    /// </summary>
-    //    [Inject]
-    //    protected virtual IDialogService DialogService { get; set; }
-    //    /// <summary>
-    //    /// 新增时的弹窗选项对象
-    //    /// </summary>
-    //    protected virtual DialogOptions DialogAddOptions => new DialogOptions { CloseOnEscapeKey = true, FullWidth = true/*, DisableBackdropClick=true*/ };//DisableBackdropClick保留它，以便我们可以使用弹窗的OnBackdropClick事件
-    //    /// <summary>
-    //    /// 修改时的弹窗选项对象
-    //    /// </summary>
-    //    protected virtual DialogOptions DialogDetailOptions => DialogAddOptions;
-    //    /// <summary>
-    //    /// 获取新增时传入弹窗的参数
-    //    /// 如：在新增商品时，把列表页当前选中的分类id传递过去
-    //    /// </summary>
-    //    /// <returns></returns>
-    //    protected virtual DialogParameters BuildCreateParameter() => new DialogParameters();
-    //    /// <summary>
-    //    /// 点击新增按钮时执行
-    //    /// </summary>
-    //    /// <returns></returns>
-    //    [ExceptionInterceptor]
-    //    protected virtual async Task BtnAddClick()
-    //    {
-
-    //        var ps = BuildCreateParameter();
-    //        if (!(await DialogService.Show<TCreateDialog>("新增" + FuncName, ps, DialogAddOptions).Result).Canceled)
-    //        {
-    //            await dataGrid.ReloadServerData();
-    //        }
-
-    //    }
-    //    /// <summary>
-    //    /// 行修改按钮点击时执行
-    //    /// 注：不要全局修改按钮，因为木有必要
-    //    /// </summary>
-    //    /// <param name="dto">当前dto对象</param>
-    //    /// <returns></returns>
-    //    [ExceptionInterceptor]
-    //    protected virtual async Task BtnEditClick(TEntityDto dto)
-    //    {
-
-    //        var ps = new DialogParameters<TDetailDialog>();
-    //        FillDetailParameters(ps, dto);
-    //        ps.Add("IsEdit", true);
-    //        if (!(await DialogService.Show<TDetailDialog>("修改" + FuncName, ps, DialogDetailOptions).Result).Canceled)
-    //        {
-    //            await dataGrid.ReloadServerData();
-    //        }
-
-    //    }
-    //    /// <summary>
-    //    /// 行详情按钮点击时执行
-    //    /// 注：不要全局详情按钮，因为木有必要
-    //    /// </summary>
-    //    /// <param name="dto">当前dto对象</param>
-    //    /// <returns></returns>
-    //    [ExceptionInterceptor]
-    //    protected virtual async Task BtnDetailClick(TEntityDto dto)
-    //    {
-
-    //        var ps = new DialogParameters<TDetailDialog>();
-    //        FillDetailParameters(ps, dto);
-    //        ps.Add("IsEdit", false);
-    //        if (!(await DialogService.Show<TDetailDialog>("查看" + FuncName + "详情", ps, DialogDetailOptions).Result).Canceled)
-    //        {
-    //            //说明在详情页面 又进入了修改 且修改后保存了数据
-    //            await dataGrid.ReloadServerData();
-    //        }
-
-    //    }
-    //    protected override async ValueTask RowDoubleClick(DataGridRowClickEventArgs<TEntityDto> arg)
-    //    {
-    //        // if (updateIsGranted)
-    //        //  {
-    //        //      await BtnEditClick(arg.Item); }
-    //        //  else
-    //        //   {
-    //        await BtnDetailClick(arg.Item);
-    //        //  }
-
-    //    }
-    //    /// <summary>
-    //    /// 弹出详情弹窗时传入参数
-    //    /// 通常，复杂数据时只传入id，让详情组件自己去重新查询；简单数据时传入当前选择的dto
-    //    /// </summary>
-    //    /// <param name="pms"></param>
-    //    /// <param name="dto"></param>
-    //    protected virtual void FillDetailParameters(DialogParameters<TDetailDialog> pms, TEntityDto dto)
-    //    {
-    //        pms.Add("Id", dto.Id);
-    //    }
-    //}
 }

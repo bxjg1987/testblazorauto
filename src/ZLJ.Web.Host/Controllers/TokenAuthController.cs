@@ -21,10 +21,11 @@ using Microsoft.AspNetCore.Authentication;
 using System.Security.Cryptography;
 using ZLJ.App.Admin.Authorization;
 using ZLJ.App.Admin;
+using ZLJ.Application.Common.Share.Models.TokenAuth;
 
 namespace ZLJ.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Microsoft.AspNetCore.Mvc.Route("api/[controller]/[action]")]
     public class TokenAuthController : ZLJControllerBase
     {
         private readonly UserManager userManager;

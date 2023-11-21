@@ -1,0 +1,35 @@
+﻿@using BXJG.Utils.GeneralTree;
+
+@typeparam TGetTreeForSelectInput
+@typeparam TGetTreeForSelectOutput where TGetTreeForSelectOutput:GeneralTreeNodeDto<TGetTreeForSelectOutput>
+@typeparam    TGetNodesForSelectInput
+@typeparam TGetNodesForSelectOutput where TGetNodesForSelectOutput:ComboboxItemDto
+@if (IsTree)
+{
+    <TreeSelect TItem="TGetTreeForSelectOutput"
+        
+    Style="width:100%;"
+            DataSource="treeData"
+            @bind-Value="@Value"
+            @bind-Values="@Values"
+            Placeholder="Please select"
+            AllowClear="true"
+            Multiple="Multiple"
+            ChildrenExpression="node=>node.DataItem.Children"
+            TitleExpression="node=>node.DataItem.DisplayName"
+            KeyExpression="node=>node.DataItem.Id.ToString()"
+            IsLeafExpression="node=>node.DataItem.Children==null||!node.DataItem.Children.Any()">
+    </TreeSelect>
+}else
+{
+    <Select TItem="TGetNodesForSelectOutput"
+            TItemValue="string"
+            DataSource="@dataSource"
+            @bind-Value="@NodeValue"
+            @bind-Values="@NodeValues"
+            DefaultValue="@("lucy")"
+            ValueName="@nameof(ComboboxItemDto.Value)"
+            LabelName="@nameof(ComboboxItemDto.DisplayText)">
+    </Select>
+
+}

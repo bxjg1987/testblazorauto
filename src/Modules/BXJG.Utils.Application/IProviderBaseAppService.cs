@@ -14,7 +14,7 @@ namespace BXJG.Utils
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TGetAllInput"></typeparam>
     /// <typeparam name="TEntityDto"></typeparam>
-    public interface IProviderBaseAppService<TKey, in TGetAllInput, TEntityDto> : IApplicationService
+    public interface IProviderBaseAppService<in TGetAllInput, TEntityDto, TKey> : IApplicationService
     {
         /// <summary>
         /// 获取下拉或弹窗的可选分页数据

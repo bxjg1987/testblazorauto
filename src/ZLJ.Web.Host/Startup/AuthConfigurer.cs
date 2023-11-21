@@ -13,6 +13,8 @@ using ZLJ.App.Admin;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using ZLJ.App.Common;
+using Azure.Core;
+using Microsoft.Net.Http.Headers;
 //using ZLJ.Authentication.WeChatMiniProgram;
 
 namespace ZLJ.Web.Host.Startup
@@ -23,12 +25,30 @@ namespace ZLJ.Web.Host.Startup
         {
             var authBuilder = services.AddAuthentication(options =>
             {
-                //options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
+                //  options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
+               
                 options.DefaultAuthenticateScheme = "JwtBearer";
                 options.DefaultChallengeScheme = "JwtBearer";
+
+                //options.DefaultScheme = IdentityConstants.ApplicationScheme;
+                //options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
+                //options.DefaultSignInScheme = IdentityConstants.ApplicationScheme;
+                // options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
+                //options.SchemeMap["Identity.Application"]
+                // var sdfsd =   options.Schemes.SingleOrDefault(c => c.HandlerType == typeof(CookieAuthenticationHandler));
+                //var sdf =    options.SchemeMap;
+
+                // sdfsd.eve
+                //  options.DefaultChallengeScheme= "Identity.Application";
+                //  options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
+                //options.DefaultSignInScheme = "Identity.Application";
             });
+         
+          //  Microsoft.AspNetCore.Authentication.SuppressAutoDefaultScheme
             // services.AddCookie("Identity.Application"); //提示已经注册了
             // CookieAuthenticationHandler
+
+
 
             //authBuilder.AddCookie();
             if (bool.Parse(configuration["Authentication:JwtBearer:IsEnabled"]))
@@ -111,33 +131,6 @@ namespace ZLJ.Web.Host.Startup
             return Task.CompletedTask;
         }
 
-        /// <summary>
-        /// 获取应用key
-        /// </summary>
-        /// <param name="httpContext"></param>
-        /// <returns></returns>
-        public static string GetAppKey(this HttpContext httpContext)
-        {
-            if (httpContext.Items.TryGetValue("appKey", out var appKey))
-                return appKey.ToString();
-            return default;
-           // return httpContext.Items["appKey"].ToString();
-        }
 
-        /// <summary>
-        /// 获取应用
-        /// </summary>
-        /// <param name="httpContext"></param>
-        /// <returns></returns>
-        public static AppInfo GetApp(this HttpContext httpContext)
-        {
-            var appKey = httpContext.GetAppKey();
-            if (!string.IsNullOrWhiteSpace(appKey))
-            {
-                var apps = httpContext.RequestServices.GetRequiredService<CommonApplicationConfiguration>().Apps;
-                return apps[httpContext.GetAppKey()];
-            }
-            return default;
-        }
     }
 }

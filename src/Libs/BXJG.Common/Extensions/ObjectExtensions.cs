@@ -11,9 +11,10 @@ namespace System
 {
     public static class ObjectExtensions
     {
-        public static void SetValue(this object obj, string propertyName, object value, BindingFlags flag = BindingFlags.Public | BindingFlags.IgnoreCase | BindingFlags.Instance) {
+        public static void SetValue(this object obj, string propertyName, object value, BindingFlags flag = BindingFlags.Public | BindingFlags.IgnoreCase | BindingFlags.Instance)
+        {
             var t = obj.GetType();
-            var prop = t.GetProperty(propertyName,flag);
+            var prop = t.GetProperty(propertyName, flag);
 
             //if (prop.PropertyType.IsGenericType && prop.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
             //{
@@ -35,8 +36,8 @@ namespace System
 
                 var converter = TypeDescriptor.GetConverter(propertyType);
                 convertedValue = converter.ConvertFromInvariantString(value.ToString());
-              //  converter.ConvertFromString()
-               // convertedValue =  Convert.ChangeType(value, propertyType);
+                //  converter.ConvertFromString()
+                // convertedValue =  Convert.ChangeType(value, propertyType);
             }
             prop.SetValue(obj, convertedValue, null);
             //  prop.SetValue(obj, Convert.ChangeType( value,prop.PropertyType) ,null);
@@ -48,10 +49,10 @@ namespace System
         /// <param name="obj"></param>
         /// <param name="propertyName"></param>
         /// <returns></returns>
-        public static object GetPropertyValue(this object obj, string propertyName,BindingFlags flag = BindingFlags.Public | BindingFlags.IgnoreCase | BindingFlags.Instance)
+        public static object GetPropertyValue(this object obj, string propertyName, BindingFlags flag = BindingFlags.Public | BindingFlags.IgnoreCase | BindingFlags.Instance)
         {
             var t = obj.GetType();
-            var p = t.GetProperty(propertyName,flag);
+            var p = t.GetProperty(propertyName, flag);
             return p.GetValue(obj, null);
         }
         /// <summary>
@@ -63,7 +64,7 @@ namespace System
         /// <returns></returns>
         public static T GetValue<T>(this object obj, string propertyName, BindingFlags flag = BindingFlags.Public | BindingFlags.IgnoreCase | BindingFlags.Instance)
         {
-            var value = obj.GetPropertyValue(propertyName,flag);
+            var value = obj.GetPropertyValue(propertyName, flag);
             return (T)Convert.ChangeType(value, typeof(T));
         }
         /// <summary>
@@ -111,6 +112,18 @@ namespace System
                 return p;
 
             return val;
+        }
+
+        public static Dictionary<string, object> ToDictionary(this object obj)
+        {
+            var t = obj.GetType();
+            var ps = t.GetProperties(BindingFlags.Public | BindingFlags.IgnoreCase | BindingFlags.Instance);
+            var dic = new Dictionary<string, object>();
+            foreach (var p in ps)
+            {
+                dic.Add(p.Name, p.GetValue(obj, null));
+            }
+            return dic;
         }
     }
 }

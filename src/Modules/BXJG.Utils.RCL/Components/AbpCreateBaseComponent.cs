@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Services.Dto;
+using Abp.UI;
 using BXJG.Common;
 using BXJG.Utils;
 using Microsoft.AspNetCore.Components;
@@ -41,39 +42,35 @@ namespace BXJG.Utils.Components
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
     {
         /// <summary>
-        /// 缓存当前主服务对象
-        /// </summary>
-        private TAppService? appService;
-        /// <summary>
         /// 获取主服务
         /// </summary>
-        protected virtual TAppService AppService => appService ??= ScopedServices.GetRequiredService<TAppService>();
+        protected virtual TAppService AppService => ScopedServices.GetRequiredService<TAppService>();
         /// <summary>
         /// 此功能的名称
         /// </summary>
-        protected virtual string FuncName => $"请重写{nameof(FuncName)}属性";
+        public abstract string FuncName { get; }// => $"请重写{nameof(FuncName)}属性";
         /// <summary>
         /// 新增时的模型
         /// </summary>
-        protected TCreateInput? createDto;
+        public TCreateInput? CreateDto { get; protected set; }
         /// <summary>
         /// 正在执行重置
         /// </summary>
-        protected bool isReseting = false;
+        public bool IsReseting { get; protected set; }
         /// <summary>
         /// 重置按钮点击时回调，由于事件无法使用ValueTask，所以这里用了Task
         /// </summary>
         /// <returns></returns>
-        public virtual async Task BtnResetClick()
+        public virtual async Task Reset()
         {
-            isReseting = true;
+            IsReseting = true;
             try
             {
                 await ResetCore();
             }
             finally
             {
-                isReseting = false;
+                IsReseting = false;
             }
         }
         /// <summary>
@@ -82,7 +79,7 @@ namespace BXJG.Utils.Components
         /// <returns></returns>
         protected virtual ValueTask ResetCore()
         {
-            createDto = new TCreateInput();
+            CreateDto = new TCreateInput();
             return ValueTask.CompletedTask;
         }
         /// <summary>
@@ -91,67 +88,75 @@ namespace BXJG.Utils.Components
         /// <returns></returns>
         protected override async Task OnInitializedAsync()
         {
-            await BtnResetClick();
+            await CheckPermission();
+            await Reset();
         }
         /// <summary>
-        /// 是否有新增权限
+        /// 新增权限判断
         /// </summary>
-        protected bool createIsGranted = true;
-        /// <summary>
-        /// 初始化权限状态
-        /// </summary>
-        /// <param name="createPermissionName"></param>
         /// <returns></returns>
-        protected virtual async Task InitPermission(string? createPermissionName = default)
-        {
-            if (createPermissionName.IsNotNullOrWhiteSpaceBXJG())
-                createIsGranted = await PermissionChecker.IsGrantedAsync(createPermissionName);
-        }
+        protected abstract Task CheckPermission();
         /// <summary>
         /// 保存后是否继续新增
         /// </summary>
-        protected bool saveAndContinue = false;
+        public bool SaveAndContinue { get;  set; }
         /// <summary>
         /// 正在保存...
         /// </summary>
-        protected bool isSaving = false;
+        public bool IsSaving { get; protected set; }
+        /// <summary>
+        /// 新增返回对象
+        /// </summary>
+        public class SaveResult
+        {
+            /// <summary>
+            /// 新增后返回的dto对象
+            /// </summary>
+            public TEntityDto Dto { get; set; }
+            /// <summary>
+            /// 新增是否结束了，
+            /// 若没有勾选“保存并继续”，则新增后表示新增结束
+            /// 验证不过也会返回false
+            /// </summary>
+            public bool End { get; set; }
+        }
         /// <summary>
         /// 核心的保存逻辑
         /// </summary>
         /// <returns>新增任务是否结束</returns>
-        public virtual async Task<bool> BtnSaveClick()
+        public virtual async Task<SaveResult> Save()
         {
             //木有权限时保存按钮不可点击
             //验证不过时此方法不应该被调用
-            isSaving = true;
+            IsSaving = true;
             try
             {
                 return await SaveCore();
             }
             finally
             {
-                isSaving = false;
+                IsSaving = false;
             }
         }
         /// <summary>
         /// 保存的核心逻辑
         /// </summary>
         /// <returns>新增任务是否结束</returns>
-        protected virtual async Task<bool> SaveCore()
+        protected virtual async Task<SaveResult> SaveCore()
         {
             var yz = await Validate();
             if (!yz)
-                return false;
+                return new SaveResult();
             //木有权限时保存按钮不可点击
             //验证不过时此方法不应该被调用
-            var r = await AppService.CreateAsync(createDto);
-            await ShowSuccessMessage(msg: "新增成功！");
-            if (saveAndContinue)
+            var r = await AppService.CreateAsync(CreateDto);
+            ShowSuccessMessage(msg: "新增成功！");//没必要等待
+            if (SaveAndContinue)
             {
-                await BtnResetClick();
-                return false;
+                await Reset();
+                return new SaveResult { Dto = r };
             }
-            return true;
+            return new SaveResult { Dto = r, End = true };
         }
         /// <summary>
         /// 表单验证的核心逻辑

@@ -1,6 +1,7 @@
 ﻿using Abp.Application.Services.Dto;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,7 +22,9 @@ namespace BXJG.Utils.Dto
 
         public virtual TFilter Filter { get; set; } = new TFilter();
         object IHaveFilter.Filter { get => Filter; set => Filter = value as TFilter; }
-
+      
+        [Range(1, int.MaxValue)]
+        public override int MaxResultCount { get; set; } = 20;
         // object IHaveFilter.Filter => this.Filter;
         //public virtual int SkipCount { get; set; }
         //public virtual int MaxResultCount { get; set; }

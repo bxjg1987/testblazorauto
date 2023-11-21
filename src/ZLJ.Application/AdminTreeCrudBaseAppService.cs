@@ -42,7 +42,6 @@ namespace ZLJ.App.Admin
         where TEntity : GeneralTreeEntity<TEntity>
         where TManager : GeneralTreeManager<TEntity>
     {
-        public AdminSession AdminSession { get; set; }
 
         public AdminTreeCrudBaseAppService()
         {

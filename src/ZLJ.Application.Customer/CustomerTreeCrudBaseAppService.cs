@@ -42,7 +42,7 @@ namespace ZLJ.App.Customer
         where TEntity : GeneralTreeEntity<TEntity>
         where TManager : GeneralTreeManager<TEntity>
     {
-        public CustomerSession CustomerSession { get; set; }
+        
 
         public CustomerTreeCrudBaseAppService()
         {

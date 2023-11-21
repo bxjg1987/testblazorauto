@@ -183,7 +183,7 @@
 		<text name="RegisterFormUserNameInvalidMessage">请不要在用户名中输入邮箱地址.</text>
 		<text name="DatabaseConnectionString" value="数据库连接串" />
 		<text name="User" value="系统用户" />
-		<text name="Administrator.BaseInfo.Post" value="员工岗位权限" />
+		<text name="Administrator.BaseInfo.Post" value="岗位权限" />
 		<text name="Role" value="角色权限" />
 		<text name="IsActive" value="是否激活" />
 		<text name="FullName" value="姓名" />

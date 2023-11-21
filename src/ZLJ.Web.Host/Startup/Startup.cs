@@ -13,11 +13,8 @@ using Hangfire.SqlServer;
 using Abp.Hangfire;
 //using BXJG.WorkOrder.EmployeeApplication;
 //using ZLJ.App.Employee;
-using ZLJ.App.Customer;
 using ZLJ.App.Admin;
 using ZLJ.EntityFrameworkCore;
-using MudBlazor.Services;
-using ZLJ.Web.Customer;
 //using Orleans.Configuration;
 //using Orleans.Hosting;
 
@@ -26,6 +23,14 @@ using Microsoft.Extensions.DependencyInjection;
 //using Savorboard.CAP.InMemoryMessageQueue;
 using ZLJ.App.Admin.Authorization.Permissions;
 using Medallion.Threading;
+using AntDesign.ProLayout;
+using ZLJ.Web.Host.Shared;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using static OpenXmlPowerTools.RevisionProcessor;
+using Microsoft.Net.Http.Headers;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authentication;
 
 namespace ZLJ.Web.Host.Startup
 {
@@ -79,13 +84,8 @@ namespace ZLJ.Web.Host.Startup
                     NamingStrategy = new CamelCaseNamingStrategy()
                 };
             });
+            //services.AddControllers();
 
-            //注册自定义路由约束
-            services.AddRouting(options =>
-            {
-                //appKey的路由约束
-                options.ConstraintMap.Add("appKey", typeof(AppRouteConstraint));
-            });
 
             //经过测试不加ApplicationParts，直接引用的项目中的视图和控制器也可以用，注意是控制器必须有自己的路由，通常是特征路由
             //加不加ApplicationParts，主项目中的路由好像都无法路由到rcl中的控制器
@@ -97,7 +97,7 @@ namespace ZLJ.Web.Host.Startup
 
             //    PartManager.ApplicationParts.Add(ApplicationPart);
             //});
-            services.AddRazorPages(); //目前只是为了承载blazor才加这个，若使用mvc承载，则不需要它，注意：AddControllersWithViews并不会注册RazorPages
+            //  services.AddRazorPages(); //目前只是为了承载blazor才加这个，若使用mvc承载，则不需要它，注意：AddControllersWithViews并不会注册RazorPages
             //services.Configure<RazorPagesOptions>(options => options.RootDirectory = "/ZLJ.Blazor.Admin/Pages");
             //services.Configure<RazorPagesOptions>(options => options.RootDirectory = "/Pages");//这是默认值
 
@@ -112,7 +112,12 @@ namespace ZLJ.Web.Host.Startup
             //});
             //services.AddTransient<WeatherForecastService>();
             //services.AddTableDemoDataService();
-            services.AddServerSideBlazor();
+            //services.AddServerSideBlazor();
+            services.AddRazorComponents().AddInteractiveServerComponents();
+
+            //等同于在根组件外面加了个CascadingAuthenticationState
+            services.AddCascadingAuthenticationState();
+
             //services.AddSingleton<TrackingCircuitHandler>();
 
             //services.AddSingleton<CircuitHandler, TrackingCircuitHandler>(p => p.GetRequiredService<TrackingCircuitHandler>());
@@ -121,19 +126,24 @@ namespace ZLJ.Web.Host.Startup
 
             #region Mudblazor
             //各app可以提供自己的配置
-            services.AddMudServices(config =>
-            {
-                config.SnackbarConfiguration.PositionClass = MudBlazor.Defaults.Classes.Position.TopCenter;
-                config.SnackbarConfiguration.VisibleStateDuration = 4000; //显示多久才开始小时
-                config.SnackbarConfiguration.ShowTransitionDuration = 200;
-                config.SnackbarConfiguration.HideTransitionDuration = 200;
-            });
+            //services.AddMudServices(config =>
+            //{
+            //    config.SnackbarConfiguration.PositionClass = MudBlazor.Defaults.Classes.Position.TopCenter;
+            //    config.SnackbarConfiguration.VisibleStateDuration = 4000; //显示多久才开始小时
+            //    config.SnackbarConfiguration.ShowTransitionDuration = 200;
+            //    config.SnackbarConfiguration.HideTransitionDuration = 200;
+            //});
             #endregion
 
             #region bootstrapblazor
-            services.AddBootstrapBlazor();
-            // 增加 Table Excel 导出服务
-            services.AddBootstrapBlazorTableExcelExport();
+            //services.AddBootstrapBlazor();
+            //// 增加 Table Excel 导出服务
+            //services.AddBootstrapBlazorTableExcelExport();
+            #endregion
+
+            #region antblaor
+            services.AddAntDesign();
+            services.Configure<ProSettings>(_appConfiguration.GetSection("ProSettings"));
             #endregion
 
             // Configure CORS for angular2 UI
@@ -198,7 +208,6 @@ namespace ZLJ.Web.Host.Startup
 
                     options.IncludeXmlComments(AppContext.BaseDirectory + typeof(ZLJApplicationModule).Assembly.GetName().Name + ".XML");
                     options.IncludeXmlComments(AppContext.BaseDirectory + typeof(CommonApplicationModule).Assembly.GetName().Name + ".XML");
-                    options.IncludeXmlComments(AppContext.BaseDirectory + typeof(CustomerApplicationModule).Assembly.GetName().Name + ".XML");
                     options.IncludeXmlComments(AppContext.BaseDirectory + typeof(BXJGUtilsApplicationModule).Assembly.GetName().Name + ".XML");
 
                     // options.IncludeXmlComments(AppContext.BaseDirectory + typeof(EmployeeApplicationModule).Assembly.GetName().Name + ".XML");
@@ -260,7 +269,7 @@ namespace ZLJ.Web.Host.Startup
 
             //services.AddSingleton<IDistributedLockProvider>(_ => new SqlDistributedSynchronizationProvider(this._appConfiguration.GetConnectionString("Default")));
             //services.AddSingleton<IDistributedLockProvider>(_=>new MySqlDistributedSynchronizationProvider(defaultConnectionString));
-            
+
             //services.AddHangfireServer(opt => {
             //    opt.Queues = new[] { "abp" };
             //});
@@ -287,7 +296,7 @@ namespace ZLJ.Web.Host.Startup
 
 
             //#endregion
-
+         
             #region abp
             //老的
             //Configure Abp and Dependency Injection
@@ -311,6 +320,47 @@ namespace ZLJ.Web.Host.Startup
             // var sdf = services.Where(c =>( c.ServiceType.FullName.Contains("Abp", StringComparison.OrdinalIgnoreCase)|| c.ServiceType.FullName.Contains("zlj", StringComparison.OrdinalIgnoreCase))).ToList();
 
             //var sdf = services.Where(c =>c.Lifetime== ServiceLifetime.Singleton&&( c.ServiceType.FullName.Contains("Abp", StringComparison.OrdinalIgnoreCase)|| c.ServiceType.FullName.Contains("zlj", StringComparison.OrdinalIgnoreCase))).ToList();
+
+            //services.Configure<JwtBearerOptions>(opt =>
+            //{
+
+            //    opt.Events.OnAuthenticationFailed = x =>
+            //    {
+            //        return Task.CompletedTask;
+            //    };
+
+            //    opt.Events.OnChallenge = x =>
+            //    {
+            //        return Task.CompletedTask;
+            //    };
+            //    //     opt.Events.OnRedirectToLogin = c => {
+
+            //    //         var request = c.HttpContext.Request;
+            //    //        var sdf =  string.Equals(request.Query[HeaderNames.XRequestedWith], "XMLHttpRequest", StringComparison.Ordinal) ||
+            //    //string.Equals(request.Headers.XRequestedWith, "XMLHttpRequest", StringComparison.Ordinal);
+
+            //    //         c.HttpContext.Response.Redirect(opt.LoginPath);
+            //    //         return Task.CompletedTask;
+            //    //     };
+            //});
+
+            //services.Configure<CookieAuthenticationOptions>(opt =>
+            //{
+            //    opt.Events.OnValidatePrincipal = x => 
+            //    {
+            //        return Task.CompletedTask;
+            //    };
+            //    opt.Events.OnRedirectToLogin = c =>
+            //    {
+
+            //        var request = c.HttpContext.Request;
+            //        var sdf = string.Equals(request.Query[HeaderNames.XRequestedWith], "XMLHttpRequest", StringComparison.Ordinal) ||
+            //        string.Equals(request.Headers.XRequestedWith, "XMLHttpRequest", StringComparison.Ordinal);
+
+            //        c.HttpContext.Response.Redirect(opt.LoginPath);
+            //        return Task.CompletedTask;
+            //    };
+            //});
         }
 
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
@@ -355,7 +405,6 @@ namespace ZLJ.Web.Host.Startup
             //若存在IAuthenticationRequestHandler，则执行它并放弃其它的身份验证
             //否则使用默认身份验证方案
             app.UseAuthentication();
-            app.UseMiddleware<AppDistinguishiMddleware>();
 
             ////身份验证会走默认的jwt身份验证方案，它使httpcontext.user不为空，但里面没有claim，所以这里需要替换下
             ////参考：https://github.com/dotnet/aspnetcore/blob/b034a7da67b5f81161e82b19b3ade458139f9c2b/src/Security/Authentication/Core/src/AuthAppBuilderExtensions.cs
@@ -377,7 +426,6 @@ namespace ZLJ.Web.Host.Startup
             //});
 
             app.UseAbpRequestLocalization();
-            app.UseAuthorization();
 
             ////app.UseWeChatPayment();
             //app.UseHangfireDashboard("/hangfire", new Hangfire.DashboardOptions
@@ -390,30 +438,70 @@ namespace ZLJ.Web.Host.Startup
             //    Authorization = new[] { new AbpHangfireAuthorizationFilter(PermissionNames.HangFireDashboard) }
             //    //Authorization = new[] { new aaa(PermissionNames.HangFireDashboard) }
             //});
+            //app.Use(async (a, b) => {
+            //    //  var sdfsdf = app.ApplicationServices.GetRequiredService<IAuthorizationMiddlewareResultHandler>();
+            //    //       a.ChallengeAsync
+            //    var sdfsdf = a.RequestServices.GetService<IAuthorizationPolicyProvider>();
+            //    var sdfsfd = await sdfsdf.GetDefaultPolicyAsync();
+
+            //    var sdfs = sdfsfd.AuthenticationSchemes;
+
+            //    a.ChallengeAsync();
+
+            //    var zz = a.RequestServices.GetService<IAuthenticationService>();
+            //    zz.ChallengeAsync(a,null,null);
+
+
+
+            //    var zc = a.RequestServices.GetService<IAuthenticationSchemeProvider>();
+            // var q = await   zc.GetDefaultChallengeSchemeAsync();
+
+            //     await b(a);
+            //});
+
+            app.UseAuthorization();
+
+           
+
+            app.UseAntiforgery();
+
+          //  var opt = app.ApplicationServices.GetRequiredService<IOptionsMonitor<CookieAuthenticationOptions>>().CurrentValue;
+
+           // var opt = app.ApplicationServices.GetRequiredService<IEnumerable< IOptionsMonitor<CookieAuthenticationOptions>>>();
+           // opt.Events.OnRedirectToLogin = c =>
+            //{
+
+            //    var request = c.HttpContext.Request;
+            //    var sdf = string.Equals(request.Query[HeaderNames.XRequestedWith], "XMLHttpRequest", StringComparison.Ordinal) ||
+            //    string.Equals(request.Headers.XRequestedWith, "XMLHttpRequest", StringComparison.Ordinal);
+
+            //    c.HttpContext.Response.Redirect(opt.LoginPath);
+            //    return Task.CompletedTask;
+            //};
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapRazorComponents<Shared.App>().AddInteractiveServerRenderMode();
+
                 endpoints.MapHub<AbpCommonHub>("/signalr");
                 endpoints.MapHangfireDashboardWithAuthorizationPolicy(PermissionNames.HangFireDashboard);
                 //endpoints.MapHangfireDashboard(PermissionNames.HangFireDashboard, "/hangfire", new DashboardOptions
                 //{
                 //    Authorization = new[] { new AbpHangfireAuthorizationFilter(PermissionNames.HangFireDashboard) }
                 //});
-                endpoints.MapBlazorHub();
+                // endpoints.MapBlazorHub();
+                endpoints.MapDefaultControllerRoute(); //mvc路由
+                //endpoints.MapControllers();
 
                 //endpoints.MapHangfireDashboard();
-
-                //目前app都使用blazor，将来也不可能使用mvc，所以特别的视图直接使用特征路由吧
-                //endpoints.MapControllerRoute("appRoute", "{appKey}/{controller}/{action}/{id?}");
 
                 //找不到rcl中的controller，怀疑：要么用application part把rcl加入进去， 要么使用特征路由（导致controller被加入）
                 //若使用razor页面就没这个问题了，因为rcl本来就可以放页面
                 //参考：https://learn.microsoft.com/zh-cn/aspnet/core/mvc/advanced/app-parts?view=aspnetcore-7.0#load-aspnet-core-features
-                //endpoints.MapControllerRoute("default", "{appKey=mainApp}/{controller}/{action}/{id?}", new { controller = "home", action = "index" });
 
-                endpoints.MapDefaultControllerRoute(); //等于与下面这行
+
                 //endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
-                endpoints.MapControllerRoute("defaultWithArea", "{area}/{controller=Home}/{action=Index}/{id?}");
+                //  endpoints.MapControllerRoute("defaultWithArea", "{area}/{controller=Home}/{action=Index}/{id?}");
 
                 //endpoints.MapFallbackToAreaPage("_Host1", "customer");
                 //endpoints.MapFallbackToPage("/customer/{*all}", "/_Host1");
@@ -425,26 +513,21 @@ namespace ZLJ.Web.Host.Startup
 
                 //endpoints.MapSwagger();
 
-                //blazor有自己的路由，这里只要确保跳转过去，blazor那边所有的页面 以appKey打头就行
                 //我们这里是以统一的Home控制权来分发的，也可以每个app单独自己的controller
 
 
                 //endpoints.MapControllerRoute("account", "{appKey=main}/account/{action}");
                 //endpoints.MapFallbackToFile("cap", "");
 
-                //:appKey为限定应用标识的自定义路由约束，参考 https://learn.microsoft.com/zh-cn/aspnet/core/fundamentals/routing?view=aspnetcore-7.0#custom-route-constraints
 
-                //各应用中手动controller的路由
-                //endpoints.MapControllerRoute("appController", "{appKey:appKey=main}/{controller=home}/{action=index}");
-
-                //各应用的回退路由，适配blazor
-                endpoints.MapFallbackToController("{appKey:appKey=main}/{controller=home}/{action=index}", "Index", "Home");//或者可以使用这个
 
                 //endpoints.MapFallbackToPage("custApp/{*p}", "_CustApp");
                 //endpoints.MapDynamicControllerRoute()
 
             });
 
+
+          
 
             //不晓得为啥，放上面无法身份验证
             //app.UseHangfireServer();

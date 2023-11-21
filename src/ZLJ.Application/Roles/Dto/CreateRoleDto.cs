@@ -14,7 +14,7 @@ namespace ZLJ.App.Admin.Roles.Dto
         ///// </summary>
         //public long[] OuIds { get; set; }
         [DisplayName("Î¨Ò»Ãû³Æ")]
-        [Required]
+        //[Required]
         [StringLength(AbpRoleBase.MaxNameLength)]
         public string Name { get; set; }
 

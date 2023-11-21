@@ -60,7 +60,7 @@ namespace BXJG.Utils
     /// <typeparam name="TGetAllInput">查询时输入参数的类型</typeparam>
     /// <typeparam name="TEntityDto">可选数据的dto</typeparam>
     [UnitOfWork(false)]
-    public abstract class ProviderBaseAppService<TEntity, TKey, TGetAllInput, TEntityDto> : ApplicationService, IProviderBaseAppService<TKey, TGetAllInput, TEntityDto>
+    public abstract class ProviderBaseAppService<TEntity, TGetAllInput, TEntityDto, TKey> : ApplicationService, IProviderBaseAppService< TGetAllInput, TEntityDto, TKey>
         where TEntity : class, IEntity<TKey>
     {
         protected virtual string GetAllPermissionName { get; set; }

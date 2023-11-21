@@ -43,7 +43,7 @@ namespace ZLJ.App.Customer.OU
             ou.ParentId = input.ParentId;
             ou.DisplayName = input.DisplayName;
             ou.IsActive = input.IsActive;
-            ou.CustomerId = CustomerSession.CustomerId.Value;
+            //ou.CustomerId = CustomerSession.CustomerId.Value;
             await OrganizationUnitManager.CreateAsync(ou);
             await CurrentUnitOfWork.SaveChangesAsync();
             return await Map2Dto(ou);

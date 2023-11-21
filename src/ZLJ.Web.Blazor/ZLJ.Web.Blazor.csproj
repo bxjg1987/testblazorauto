@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>ZLJ.Web.Blazor</RootNamespace>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Components\FileName.cs" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <SupportedPlatform Include="browser" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AntDesign" Version="0.16.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.0" />
+	  <!--当前项目定义了拦截器，就算当前项目引用的其它项目已经引用rougamo，这里也必须引用，
+	IncludeAssets="all" PrivateAssets="contentfiles;analyzers"是确保拦截器使用方不用引用rougamo的包-->
+	  <PackageReference Include="Rougamo.Fody" Version="2.0.1" IncludeAssets="all" PrivateAssets="contentfiles;analyzers" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+	<ItemGroup Condition="'$(SolutionName)' != 'ZLJWithModules'">
+		<PackageReference Include="BXJG.Utils.RCL" Version="*" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(SolutionName)' == 'ZLJWithModules'">
+		<ProjectReference Include="..\Modules\BXJG.Utils.RCL\BXJG.Utils.RCL.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\ZLJ.Application.Common\ZLJ.Application.Common.csproj" />
+	</ItemGroup>
+</Project>

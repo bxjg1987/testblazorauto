@@ -9,24 +9,22 @@ using ZLJ.Customer;
 
 namespace ZLJ.App.Customer.Sessions
 {
-    public class SessionAppService : Common.Sessions.SessionAppService
-    {
-        private readonly CustomerSession customerSession;
-        private readonly IRepository<AssociatedCompanyEntity, long> repository;
-        public SessionAppService(CustomerSession customerSession, IRepository<AssociatedCompanyEntity, long> repository)
-        {
-            this.customerSession = customerSession;
-            this.repository = repository;
-        }
-        [UnitOfWork(false)]
-        protected override async ValueTask<ZLJ.App.Common.Sessions.Dto.GetCurrentLoginInformationsOutput> Create()
-        {
-            var ss = new GetCurrentLoginInformationsOutput();
-            ss.Customer = new CustomerInfo();
+    //public class SessionAppService : Common.Sessions.SessionAppService
+    //{
+    //    private readonly IRepository<AssociatedCompanyEntity, long> repository;
+    //    public SessionAppService( IRepository<AssociatedCompanyEntity, long> repository)
+    //    {
+    //        this.repository = repository;
+    //    }
+    //    [UnitOfWork(false)]
+    //    protected override async ValueTask<ZLJ.App.Common.Sessions.Dto.GetCurrentLoginInformationsOutput> Create()
+    //    {
+    //        var ss = new GetCurrentLoginInformationsOutput();
+    //        ss.Customer = new CustomerInfo();
 
-            ss.Customer.Name = await repository.GetAll().Where(c => c.Id == customerSession.CustomerId).Select(c => c.Name).SingleOrDefaultAsync();
+    //        ss.Customer.Name = await repository.GetAll().Where(c => c.Id == customerSession.CustomerId).Select(c => c.Name).SingleOrDefaultAsync();
 
-            return ss;
-        }
-    }
+    //        return ss;
+    //    }
+    //}
 }

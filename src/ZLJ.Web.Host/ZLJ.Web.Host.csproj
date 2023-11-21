@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<!--<AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>-->
@@ -10,9 +10,9 @@
 		<PackageId>ZLJ.Web.Host</PackageId>
 		<!--去ZLJ.Core中设置，参考AppConfigurations-->
 		<!--<UserSecretsId>ZLJ-56C2EF2F-ABD6-4EFC-AAF2-2E81C34E8FB1</UserSecretsId>-->
-		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-		<GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
-		<UserSecretsId>bd70b512-f3cf-47e1-8224-da97d4e57dda</UserSecretsId>
+		<!--<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+		<GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>-->
+		<!--<UserSecretsId>bd70b512-f3cf-47e1-8224-da97d4e57dda</UserSecretsId>-->
 
 		<!--<EnableDefaultContentItems>true</EnableDefaultContentItems>-->
 	</PropertyGroup>
@@ -23,8 +23,8 @@
 	<PropertyGroup>
 		<UseRazorSourceGenerator>false</UseRazorSourceGenerator>
 	</PropertyGroup>-->
-	
-	
+
+
 	<!--<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<LangVersion>default</LangVersion>
 	</PropertyGroup>
@@ -33,15 +33,19 @@
 	</PropertyGroup>-->
 	<ItemGroup>
 		<Compile Remove="App_Data\Logs\**" />
+		<Compile Remove="Locales\**" />
 		<Compile Remove="wwwroot\upload\contracts\**" />
 		<Compile Remove="wwwroot\upload\images\**" />
 		<Content Remove="App_Data\Logs\**" />
+		<Content Remove="Locales\**" />
 		<Content Remove="wwwroot\upload\contracts\**" />
 		<Content Remove="wwwroot\upload\images\**" />
 		<EmbeddedResource Remove="App_Data\Logs\**" />
+		<EmbeddedResource Remove="Locales\**" />
 		<EmbeddedResource Remove="wwwroot\upload\contracts\**" />
 		<EmbeddedResource Remove="wwwroot\upload\images\**" />
 		<None Remove="App_Data\Logs\**" />
+		<None Remove="Locales\**" />
 		<None Remove="wwwroot\upload\contracts\**" />
 		<None Remove="wwwroot\upload\images\**" />
 		<None Update="wwwroot\files\**">
@@ -56,6 +60,18 @@
 	<ItemGroup>
 		<Compile Remove="Controllers\FileController.cs" />
 		<Compile Remove="Controllers\WeChatMiniProgramPaymentController.cs" />
+		<Compile Remove="Pages\DataDictionary\Create.razor.cs" />
+		<Compile Remove="Pages\DataDictionary\DetailOrUpdate.razor.cs" />
+		<Compile Remove="Pages\DataDictionary\List.razor.cs" />
+		<Compile Remove="Pages\Notification\NotifyManager.razor.cs" />
+		<Compile Remove="Pages\Notification\NotifySubscript.razor.cs" />
+		<Compile Remove="Pages\Post\Create.razor.cs" />
+		<Compile Remove="Pages\Post\List.razor.cs" />
+		<Compile Remove="Shared\AdminCreateDialog.razor.cs" />
+		<Compile Remove="Shared\AdminDetailBaseComponent.cs" />
+		<Compile Remove="Shared\AdminGeneralTreeCreateBaseComponent.cs" />
+		<Compile Remove="Shared\AdminGeneralTreeDetailOrUpdateBaseComponent.cs" />
+		<Compile Remove="Shared\AdminGeneralTreeListBaseComponent.cs" />
 		<Compile Remove="Startup\Class221.cs" />
 		<Compile Remove="Startup\TxdlFirewall.cs" />
 		<Compile Remove="Startup\WeatherForecast.cs" />
@@ -63,9 +79,23 @@
 		<Compile Remove="Startup\WeChatPaymentNoticeHandler.cs" />
 	</ItemGroup>
 	<ItemGroup>
-		<Content Remove="Locales\en.json" />
-		<Content Remove="Locales\zh.json" />
+		<Content Remove="Pages\DataDictionary\Create.razor" />
+		<Content Remove="Pages\DataDictionary\DetailOrUpdate.razor" />
+		<Content Remove="Pages\DataDictionary\List.razor" />
+		<Content Remove="Pages\Notification\NotifyManager.razor" />
+		<Content Remove="Pages\Notification\NotifySubscript.razor" />
+		<Content Remove="Pages\Notification\Simple.razor" />
+		<Content Remove="Pages\Post\Create.razor" />
+		<Content Remove="Pages\Post\EditOrDetail.razor" />
+		<Content Remove="Pages\Post\List.razor" />
+		<Content Remove="Shared\AdminCreateDialog.razor" />
+		<Content Remove="Shared\BasicLayout.razor" />
 		<Content Remove="Views\BLogger\Logger.razor" />
+		<Content Remove="Views\Home\_AdminHost.cshtml" />
+		<Content Remove="Views\Home\_MainHost.cshtml" />
+		<Content Remove="Views\Shared\MainLayout.razor" />
+		<Content Remove="Views\Shared\NavMenu.razor" />
+		<Content Remove="Views\Shared\_Layout.cshtml" />
 		<Content Remove="wwwroot\swagger\ui\index.html" />
 	</ItemGroup>
 	<ItemGroup>
@@ -75,6 +105,8 @@
 		<None Remove="favicon.ico" />
 		<None Remove="Properties\PublishProfiles\IISProfile.pubxml" />
 		<None Remove="Views\BLogger\Logger.razor.css" />
+		<None Remove="Views\Shared\MainLayout.razor.css" />
+		<None Remove="Views\Shared\NavMenu.razor.css" />
 	</ItemGroup>
 	<ItemGroup>
 		<Content Include="favicon.ico">
@@ -87,7 +119,7 @@
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<None Update="BXJG.Common.xml">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="BXJG.Utils.Application.xml">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -113,26 +145,24 @@
 	<!--<ItemGroup Condition="'$(SolutionName)' != 'ZLJWithModules'">
 		<PackageReference Include="BXJG.BlazorServerLogger" Version="*" />
 	</ItemGroup>-->
-	
+
 	<ItemGroup>
 		<!--<ProjectReference Include="..\..\..\abp\src\Libs\BXJG.Common.Web\BXJG.Common.Web.csproj" />
 		<ProjectReference Include="..\..\..\abp\src\Modules\BXJG.Utils.Web\BXJG.Utils.Web.csproj" />-->
-		<ProjectReference Include="..\ZLJ.Application.Customer\ZLJ.Application.Customer.csproj" />
 		<ProjectReference Include="..\ZLJ.Application\ZLJ.Application.csproj" />
 		<ProjectReference Include="..\ZLJ.EntityFrameworkCore\ZLJ.EntityFrameworkCore.csproj" />
-		<ProjectReference Include="..\ZLJ.Web.Admin.BootstrapServer\ZLJ.Web.Admin.BootstrapServer.csproj" />
+		<ProjectReference Include="..\ZLJ.Web.Blazor\ZLJ.Web.Blazor.csproj" />
 		<ProjectReference Include="..\ZLJ.Web.Core\ZLJ.Web.Core.csproj" />
-		<ProjectReference Include="..\ZLJ.Web.Customer\ZLJ.Web.Customer.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Abp.Castle.Log4Net" Version="8.4.0" />
-		<PackageReference Include="BootstrapBlazor.TableExport" Version="7.6.1" />
+		<PackageReference Include="Abp.Castle.Log4Net" Version="9.0.0" />
+		<PackageReference Include="AntDesign.ProLayout" Version="0.16.2" />
 		<!--<PackageReference Include="DistributedLock.SqlServer" Version="1.*" />
 		<PackageReference Include="DistributedLock.MySql" Version="1.*" />-->
 		<!--<PackageReference Include="DotNetCore.CAP.Dashboard" Version="7.2.0" />
 		<PackageReference Include="DotNetCore.CAP.SqlServer" Version="7.2.0" />-->
 		<PackageReference Include="Hangfire.SqlServer" Version="1.8.6" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.13">
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
@@ -143,8 +173,6 @@
 
 
 	<ItemGroup>
-		<EmbeddedResource Include="Locales\en.json" />
-		<EmbeddedResource Include="Locales\zh.json" />
 		<EmbeddedResource Include="wwwroot\swagger\ui\index.html">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</EmbeddedResource>
@@ -158,7 +186,15 @@
 		</Content>
 	</ItemGroup>
 	<ItemGroup>
+		<Folder Include="Pages\DataDictionary\" />
+		<Folder Include="Pages\Post\" />
 		<Folder Include="Views\BLogger\" />
+		<Folder Include="Views\Home\" />
+		<Folder Include="Views\Shared\" />
 	</ItemGroup>
-	<ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" properties_4launchsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
+	<ProjectExtensions>
+		<VisualStudio>
+			<UserProperties appsettings_1json__JsonSchema="" properties_4launchsettings_1json__JsonSchema="" />
+		</VisualStudio>
+	</ProjectExtensions>
 </Project>

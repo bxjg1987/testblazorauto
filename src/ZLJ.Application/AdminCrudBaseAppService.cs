@@ -48,7 +48,6 @@ namespace ZLJ.App.Admin
         where TGetInput : IEntityDto<TPrimaryKey>
         where TDeleteInput : IEntityDto<TPrimaryKey>
     {
-        public AdminSession AdminSession { get; set; }
         public AdminCrudBaseAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
         {
             LocalizationSourceName = AdminConsts.Admin;
