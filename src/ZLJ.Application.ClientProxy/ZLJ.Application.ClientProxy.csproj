@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ZLJ.Application.Common.ClientProxy\ZLJ.Application.Common.ClientProxy.csproj" />
     <ProjectReference Include="..\ZLJ.Application.Share\ZLJ.Application.Share.csproj" />
   </ItemGroup>
 

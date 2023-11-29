@@ -20,6 +20,7 @@ using Abp.AspNetCore.Configuration;
 using Castle.MicroKernel.Resolvers;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Abp.Runtime.Session;
+using Abp.Zero.Configuration;
 
 namespace ZLJ.Web.Host.Startup
 {
@@ -55,10 +56,10 @@ namespace ZLJ.Web.Host.Startup
             //多租户开关
             Configuration.MultiTenancy.IsEnabled = ZLJConsts.MultiTenancyEnabled;
             //Configuration.Modules.BXJGUtils().InitDbContext<ZLJDbContext>();
-            Configuration.Navigation.Providers.Add<AdminNavigationProvider>();
+            //Configuration.Navigation.Providers.Add<AdminNavigationProvider>();
             //参考docs/后台作业.txt
             //Configuration.BackgroundJobs.UseHangfire();
-
+            // Use database for language management
             //引入cap动态解析连接字符串的方式会提示事务隔离级别报错，
             //参考：https://github.com/aspnetboilerplate/aspnetboilerplate/issues/4538
             //https://www.cnblogs.com/luckstar007/p/10949811.html
@@ -69,6 +70,7 @@ namespace ZLJ.Web.Host.Startup
 
 
             #region 从web.core移动过来的
+            Configuration.Modules.Zero().LanguageManagement.EnableDbLocalization();
             //使用mvc的时间格式化起为动态api处理时间格式
             Configuration.Modules.AbpAspNetCore().UseMvcDateTimeFormatForAppServices = true;
 

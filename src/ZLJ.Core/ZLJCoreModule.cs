@@ -45,8 +45,7 @@ namespace ZLJ
             Configuration.Modules.Zero().EntityTypes.Tenant = typeof(Tenant);
             Configuration.Modules.Zero().EntityTypes.Role = typeof(Role);
             Configuration.Modules.Zero().EntityTypes.User = typeof(User);
-            // Use database for language management
-            Configuration.Modules.Zero().LanguageManagement.EnableDbLocalization();
+       
            // Configuration.Modules.BXJGWorkOrder().EnableDefaultWorkOrder = false;
             ZLJLocalizationConfigurer.Configure(Configuration.Localization);
 

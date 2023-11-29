@@ -52,5 +52,5 @@ global using ZLJ.App.Admin;
 global using ZLJ.App.Admin.Authorization.Permissions;
 global using Abp.Localization.Sources;
 
-global using AntDesign;
-global using AntDesign.ProLayout;
+//global using AntDesign;
+//global using AntDesign.ProLayout;
