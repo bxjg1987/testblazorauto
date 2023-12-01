@@ -58,6 +58,9 @@
 	<ItemGroup Condition="'$(SolutionName)' == 'ZLJWithModules'">
 		<ProjectReference Include="..\Modules\BXJG.Utils.RCL\BXJG.Utils.RCL.csproj" />
 	</ItemGroup>
+	<ItemGroup>
+	  <Compile Include="Configuration\HostingEnvironmentExtensions.cs" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Abp.HangFire.AspNetCore" Version="9.0.0" />
@@ -80,6 +83,8 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\ZLJ.Application.Common\ZLJ.Application.Common.csproj" />
+		<ProjectReference Include="..\ZLJ.Application\ZLJ.Application.csproj" />
+		<ProjectReference Include="..\ZLJ.EntityFrameworkCore\ZLJ.EntityFrameworkCore.csproj" />
 	</ItemGroup>
 
 

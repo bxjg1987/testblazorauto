@@ -75,6 +75,7 @@
 		<Compile Remove="Startup\AdminNavigationProvider.cs" />
 		<Compile Remove="Startup\Class221.cs" />
 		<Compile Remove="Startup\CustAuthenticationSchemeProvider.cs" />
+		<Compile Remove="Startup\HostingEnvironmentExtensions.cs" />
 		<Compile Remove="Startup\TxdlFirewall.cs" />
 		<Compile Remove="Startup\WeatherForecast.cs" />
 		<Compile Remove="Startup\WeatherForecastService.cs" />
