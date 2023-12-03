@@ -1,0 +1,61 @@
+﻿@page "/account/login"
+@using Abp.Authorization.Users
+@using ZLJ.App.Admin.Authorization
+@using ZLJ.Application.Common.Share.Models.TokenAuth
+@using ZLJ.Authorization.Users
+@using ZLJ.Identity
+@using ZLJ.MultiTenancy
+@inject SignInManager signInManager1;
+@inject LogInManager _logInManager
+@inject NavigationManager nav;
+@inject AbpLoginResultTypeHelper _abpLoginResultTypeHelper
+
+<PageTitle>登录</PageTitle>
+
+
+<EditForm Model="model" method="post" OnValidSubmit="LoginUser" FormName="login">
+    租户： <InputText @bind-Value="model.TenancyName" />
+    登录名： <InputText @bind-Value="model.UserNameOrEmailAddress" />
+    密码： <InputText @bind-Value="model.Password" type="password" />
+    <button type="submit" >登录</button>
+</EditForm>
+
+@code {
+    [SupplyParameterFromForm]
+    public AuthenticateModel model { get; set; } = new AuthenticateModel();
+
+    [Parameter]
+    public string ReturnUrl { get; set; }
+
+    public async Task LoginUser()
+    {
+        //var zh =
+        var loginResult = await GetLoginResultAsync(
+            model.UserNameOrEmailAddress,
+            model.Password,
+            model.TenancyName //先粗暴点就这么写吧，后期参考zero登陆租户原理调整
+                              //GetTenancyNameOrNull()
+        );
+        //await base.HttpContext.SignInAsync("Identity.Application",
+        //                                   new System.Security.Claims.ClaimsPrincipal(loginResult.Identity), new AuthenticationProperties
+        //                                   {
+        //                                       IsPersistent = model.RememberClient
+        //                                   });
+        await signInManager1.SignInAsync(loginResult.Identity, model.RememberClient);
+        // return Redirect(returnUrl);
+        nav.NavigateTo(ReturnUrl);
+
+    }
+    private async Task<AbpLoginResult<Tenant, User>> GetLoginResultAsync(string usernameOrEmailAddress, string password, string tenancyName)
+    {
+        var loginResult = await _logInManager.LoginAsync(usernameOrEmailAddress, password, tenancyName);
+
+        switch (loginResult.Result)
+        {
+            case AbpLoginResultType.Success:
+                return loginResult;
+            default:
+                throw _abpLoginResultTypeHelper.CreateExceptionForFailedLoginAttempt(loginResult.Result, usernameOrEmailAddress, tenancyName);
+        }
+    }
+}

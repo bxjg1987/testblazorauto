@@ -18,7 +18,7 @@ var _apiVersion = "v1";
 
 var _appConfiguration = builder.Configuration;
 var webHostEnvironment = builder.Environment;
-
+//AuthorizeAttribute
 string defaultConnectionString = _appConfiguration.GetConnectionString(ZLJConsts.ConnectionStringName)!;
 
 builder.Services.AddMvcCore();//经过测试，这个必须加
@@ -82,6 +82,6 @@ app.UseAuthorization();
 app.UseAbpRequestLocalization();
 
 app.MapRazorComponents<App>()
-    .AddInteractiveServerRenderMode();
+    .AddInteractiveServerRenderMode().AddAdditionalAssemblies(typeof(ZLJ.Admin.CoreRCL.Routes).Assembly);
 
 app.Run();

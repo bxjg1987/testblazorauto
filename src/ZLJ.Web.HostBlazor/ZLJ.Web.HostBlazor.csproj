@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Components\Layout\**" />
+    <Content Remove="Components\Layout\**" />
+    <EmbeddedResource Remove="Components\Layout\**" />
+    <None Remove="Components\Layout\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Startup\AdminNavigationProvider.cs" />
     <Compile Remove="Startup\AuthConfigurer.cs" />
     <Compile Remove="Startup\Class221.cs" />
@@ -21,12 +28,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Components\Routes.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Abp.Castle.Log4Net" Version="9.0.0" />
     <PackageReference Include="Hangfire.SqlServer" Version="1.8.6" />
     <PackageReference Include="log4net" Version="2.0.15" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ZLJ.Admin.CoreRCL\ZLJ.Admin.CoreRCL.csproj" />
     <ProjectReference Include="..\ZLJ.Application\ZLJ.Application.csproj" />
     <ProjectReference Include="..\ZLJ.EntityFrameworkCore\ZLJ.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\ZLJ.Web.Core\ZLJ.Web.Core.csproj" />

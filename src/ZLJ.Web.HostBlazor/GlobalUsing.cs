@@ -51,6 +51,7 @@ global using Microsoft.AspNetCore.Components.Authorization;
 global using ZLJ.App.Admin;
 global using ZLJ.App.Admin.Authorization.Permissions;
 global using Abp.Localization.Sources;
+global using ZLJ.Admin.CoreRCL;
 
 //global using AntDesign;
 //global using AntDesign.ProLayout;
