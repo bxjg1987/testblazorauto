@@ -52,6 +52,8 @@ builder.Services.AddAbpWithoutCreatingServiceProvider<ZLJWebHostModule>(
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+builder.Services.Adddd(builder.Configuration);
+
 var app = builder.Build();
 app.Use((ctx, next) =>
 {

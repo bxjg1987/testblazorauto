@@ -8,8 +8,9 @@ using ZLJ.App.Admin.Authorization.Permissions;
 using BXJG.Utils;
 using BXJG.Utils.Localization;
 using DocumentFormat.OpenXml.Drawing;
+using AntDesign;
 
-namespace ZLJ.Web.HostBlazor.Startup
+namespace ZLJ.Web.HostBlazor
 {
     /// <summary>
     /// This class defines menus for the application.
@@ -24,7 +25,7 @@ namespace ZLJ.Web.HostBlazor.Startup
             //{codegenerator}
             menu.AddItem(new MenuItemDefinition("adminBlazor_home",
                                                 "后台管理首页".GetAdminLocalizableString(),
-                                                url: "/admin",
+                                                url: "/",
                                                 icon: "dashboard",
                                                 permissionDependency: new SimplePermissionDependency(PermissionNames.Administrator)));
 
@@ -41,12 +42,12 @@ namespace ZLJ.Web.HostBlazor.Startup
             menuBaseInfo.AddItem(new MenuItemDefinition("通知中心",
                                                         "通知中心".GetAdminLocalizableString(),
                                                         icon: IconType.Outline.Notification,
-                                                        url: "/admin/tongzhi"));
+                                                        url: "/tongzhi"));
             //数据字典
             menuBaseInfo.AddItem(new MenuItemDefinition(BXJGUtilsConsts.GeneralTreeMenuName,
                                                         BXJGUtilsConsts.GeneralTreeMenuName.UtilsLI(),
                                                         icon: IconType.Outline.Table,
-                                                        url: "/admin/data-dictionary",
+                                                        url: "/data-dictionary",
                                                         permissionDependency: new SimplePermissionDependency(BXJGUtilsConsts.GeneralTreeMenuName)));
 
             //组织机构
@@ -54,7 +55,7 @@ namespace ZLJ.Web.HostBlazor.Startup
               displayName: PermissionNames.AdministratorBaseInfoOrganizationUnit.GetAdminLocalizableString(),
               // @Icons.Material.Outlined.AccountTree
               icon: IconType.Outline.Compass,
-              url: $"/admin/organizationUnit",
+              url: $"/organizationUnit",
               requiresAuthentication: true,
               permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorBaseInfoOrganizationUnit)));
 
@@ -62,14 +63,14 @@ namespace ZLJ.Web.HostBlazor.Startup
             menuBaseInfo.AddItem(new MenuItemDefinition(PermissionNames.AdministratorBaseInfoPost,
                                                         PermissionNames.AdministratorBaseInfoPost.GetAdminLocalizableString(),
                                                         icon: IconType.Outline.UsergroupAdd,
-                                                        url: "/admin/post",
+                                                        url: "/post",
                                                         permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorBaseInfoPost)));
 
             //员工档案
             menuBaseInfo.AddItem(new MenuItemDefinition(name: PermissionNames.BXJGBaseInfoStaffInfo,
                                                         displayName: PermissionNames.BXJGBaseInfoStaffInfo.GetAdminLocalizableString(),
                                                         icon: IconType.Outline.User,
-                                                        url: $"/admin/employee",
+                                                        url: $"/employee",
                                                         //requiresAuthentication: true,
                                                         permissionDependency: new SimplePermissionDependency(PermissionNames.BXJGBaseInfoStaffInfo)));
 
@@ -77,7 +78,7 @@ namespace ZLJ.Web.HostBlazor.Startup
             menuBaseInfo.AddItem(new MenuItemDefinition(name: PermissionNames.BXJGBaseInfoAssociatedCompany,
                 displayName: PermissionNames.BXJGBaseInfoAssociatedCompany.GetAdminLocalizableString(),
                 icon: IconType.Outline.CustomerService,
-                url: $"/admin/related-company",
+                url: $"/related-company",
                 requiresAuthentication: true,
                 permissionDependency: new SimplePermissionDependency(PermissionNames.BXJGBaseInfoAssociatedCompany)));
 
@@ -87,7 +88,7 @@ namespace ZLJ.Web.HostBlazor.Startup
             menuBaseInfo.AddItem(new MenuItemDefinition(name: PermissionNames.BXJGBaseInfoAdministrative,
                 displayName: PermissionNames.BXJGBaseInfoAdministrative.GetAdminLocalizableString(),
                 icon: IconType.Outline.BoxPlot,
-                url: $"/admin/Administrative",
+                url: $"/Administrative",
                 requiresAuthentication: true,
                 permissionDependency: new SimplePermissionDependency(PermissionNames.BXJGBaseInfoAdministrative)));
 
@@ -119,7 +120,7 @@ namespace ZLJ.Web.HostBlazor.Startup
             //menu.AddItem(new MenuItemDefinition("AdminRole",
             //   "Role".GetAdminLocalizableString(),
             //    icon: Icons.Material.Outlined.Group,
-            //    url: "/admin/role",
+            //    url: "/role",
             //    permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorSystemRole)));
             //menuBaseInfo.AddItem(new MenuItemDefinition("AdminUser",
             //    L("User"),
@@ -130,13 +131,13 @@ namespace ZLJ.Web.HostBlazor.Startup
             menuBaseInfo.AddItem(new MenuItemDefinition("SystemLog",
                                                         "Log".GetAdminLocalizableString(),
                                                         icon: IconType.Outline.History,
-                                                        url: "/admin/auditing",
+                                                        url: "/auditing",
                                                         permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorSystemLog)));
 
             menuBaseInfo.AddItem(new MenuItemDefinition("SystemConfig",
                                                         "Settings".GetAdminLocalizableString(),
                                                         icon: IconType.Outline.Setting,
-                                                        url: "/admin/settings",
+                                                        url: "/settings",
                                                         permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorSystemConfig)));
 
             #endregion
