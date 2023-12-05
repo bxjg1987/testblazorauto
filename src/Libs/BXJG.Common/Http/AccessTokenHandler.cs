@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
-namespace ZLJ.Application.Common.ClientProxy
+namespace BXJG.Common.Http
 {
     /// <summary>
     /// 引用此库的项目应提供实现，并注入到ioc容器，同时它还应该处理accessToken的更新

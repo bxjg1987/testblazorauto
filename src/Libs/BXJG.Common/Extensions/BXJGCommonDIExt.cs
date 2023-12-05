@@ -1,0 +1,30 @@
+﻿using BXJG.Common;
+using BXJG.Common.Http;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Microsoft.Extensions.DependencyInjection
+{
+    public static class BXJGCommonDIExt
+    {
+        public static IServiceCollection AddBXJGCommon(this IServiceCollection services)
+        {
+            return services.AddSingleton<IClock, LocalClock>().AddSingleton(Zhongjie.Instance);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddAccessTokenHandler(this IServiceCollection services)
+        {
+             services.TryAddTransient<AccessTokenHandler>();
+            return services;
+        }
+    }
+}

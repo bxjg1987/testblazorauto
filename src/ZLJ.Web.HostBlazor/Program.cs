@@ -50,7 +50,8 @@ builder.Services.AddAbpWithoutCreatingServiceProvider<ZLJWebHostModule>(
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents();
+    .AddInteractiveServerComponents()
+    .AddInteractiveWebAssemblyComponents();
 
 builder.Services.Adddd(builder.Configuration);
 
@@ -68,7 +69,11 @@ app.UseAbp(options => { options.UseAbpRequestLocalization = false; }); // Initia
 
 
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
+{
+    app.UseWebAssemblyDebugging();
+}
+else
 {
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
 }
@@ -84,6 +89,8 @@ app.UseAuthorization();
 app.UseAbpRequestLocalization();
 
 app.MapRazorComponents<App>()
-    .AddInteractiveServerRenderMode().AddAdditionalAssemblies(typeof(ZLJ.Admin.CoreRCL.Routes).Assembly);
+    .AddInteractiveServerRenderMode()
+    .AddInteractiveWebAssemblyRenderMode()
+    .AddAdditionalAssemblies(typeof(ZLJ.Admin.CoreRCL.Routes).Assembly);
 
 app.Run();
