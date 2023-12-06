@@ -1,6 +1,19 @@
-﻿@page "/test"
+﻿@rendermode InteractiveAuto
+@page "/test"
 @attribute [Authorize("Administrator")]
 <PageTitle>测试</PageTitle>
-
-
+<p>
+    @count
+</p>
+<Button OnClick="ccc">
+    测试
+</Button>
 测试访问受保护的页面
+
+
+@code{
+    int count;
+    void ccc(){
+        count++;
+    }
+}
