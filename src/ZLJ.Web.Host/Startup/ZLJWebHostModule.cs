@@ -94,7 +94,7 @@ namespace ZLJ.Web.Host.Startup
 
             #endregion
 
-            ConfigureTokenAuth();
+           // ConfigureTokenAuth();
 
             // //默认每次启动都会尝试数据库迁移，这里禁用它提高系统启动速度
             //  abpProjectNameEntityFrameworkModule.SkipDbSeed = true;
@@ -127,21 +127,7 @@ namespace ZLJ.Web.Host.Startup
         }
 
         #region 从web.core移动过来的
-        private void ConfigureTokenAuth()
-        {
-            IocManager.Register<TokenAuthConfiguration>();
-            //IocManager.Register<IWeChatMiniProgramLoginHandler, WeChatMiniProgramLoginHandler>(DependencyLifeStyle.Transient);
-            var tokenAuthConfig = IocManager.Resolve<TokenAuthConfiguration>();
-
-            tokenAuthConfig.SecurityKey =
-                new SymmetricSecurityKey(
-                    Encoding.ASCII.GetBytes(_appConfiguration["Authentication:JwtBearer:SecurityKey"]));
-            tokenAuthConfig.Issuer = _appConfiguration["Authentication:JwtBearer:Issuer"];
-            tokenAuthConfig.Audience = _appConfiguration["Authentication:JwtBearer:Audience"];
-            tokenAuthConfig.SigningCredentials =
-                new SigningCredentials(tokenAuthConfig.SecurityKey, SecurityAlgorithms.HmacSha256);
-            tokenAuthConfig.Expiration = TimeSpan.FromDays(1);
-        }
+       
 
 
         #endregion

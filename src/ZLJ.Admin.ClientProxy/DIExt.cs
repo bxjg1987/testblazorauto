@@ -16,9 +16,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>
-        public static IHttpClientBuilder AddApiClientProxy(this IServiceCollection services, Action<HttpClient> act = default) //where T : class
+        public static IHttpClientBuilder AddAdminApiClientProxy(this IServiceCollection services, Action<HttpClient> act = default) //where T : class
         {
-            return services.AddApiClientProxy<AdminAppClientProxy>(act);
+            return services.AddApiClientProxy(act);
         }
     }
 }

@@ -146,6 +146,9 @@ namespace ZLJ
             ConfigureDistributedLock();
             //全局雪花id生成器
             ConfigureIdGenarator();
+
+            IocManager.Register<TokenAuthConfiguration>();
+
             ////Lazy<TService>注入
             //IocManager.IocContainer.Register(
             //   Castle.MicroKernel.Registration.Component.For<ILazyComponentLoader>().ImplementedBy<LazyOfTComponentLoader>()
@@ -178,7 +181,7 @@ namespace ZLJ
             //    //});
             //});
         }
-       
+
         public override void PostInitialize()
         {
             IocManager.Resolve<ApplicationPartManager>().AddApplicationPartsIfNotAddedBefore(Assembly.GetExecutingAssembly());
@@ -189,8 +192,18 @@ namespace ZLJ
             //    //https://learn.microsoft.com/zh-cn/aspnet/core/security/data-protection/configuration/overview?view=aspnetcore-6.0#persistkeystodbcontext
             //    services.AddDataProtection().PersistKeysToDbContext<ZLJDbContext>();
             //});
-        }
+            var tokenAuthConfig = IocManager.Resolve<TokenAuthConfiguration>();
 
+            tokenAuthConfig.SecurityKey =
+                new SymmetricSecurityKey(
+                    Encoding.ASCII.GetBytes(_appConfiguration["Authentication:JwtBearer:SecurityKey"]));
+            tokenAuthConfig.Issuer = _appConfiguration["Authentication:JwtBearer:Issuer"];
+            tokenAuthConfig.Audience = _appConfiguration["Authentication:JwtBearer:Audience"];
+            tokenAuthConfig.SigningCredentials =
+                new SigningCredentials(tokenAuthConfig.SecurityKey, SecurityAlgorithms.HmacSha256);
+            tokenAuthConfig.Expiration = TimeSpan.FromDays(1);
+        }
+       
         /// <summary>
         /// 使用原生的雪花id生成器
         /// </summary>

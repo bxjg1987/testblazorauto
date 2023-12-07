@@ -1,12 +1,16 @@
 ﻿@rendermode InteractiveAuto
 @page "/test"
+@using BXJG.Common.Http
 @attribute [Authorize("Administrator")]
-<PageTitle>测试</PageTitle>
+@inject IAccessTokenProvider tp
+
+
+<PageTitle>测试1111111</PageTitle>
 <p>
     @count
 </p>
 <Button OnClick="ccc">
-    测试
+    测试11111111111 @tp.GetAccessToken()
 </Button>
 测试访问受保护的页面
 

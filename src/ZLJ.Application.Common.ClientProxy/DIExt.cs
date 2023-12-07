@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BXJG.Common.Extensions;
+using ZLJ.Application.Common.ClientProxy;
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class DIExt
@@ -15,11 +16,12 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>
-        public static IHttpClientBuilder AddApiClientProxy<T>(this IServiceCollection services, Action<HttpClient> act = default) where T : class
+        public static IHttpClientBuilder AddApiClientProxy(this IServiceCollection services, Action<HttpClient> act = default)
         {
             if (act == default)
                 act = hc=> { };
-            return services.AddAccessTokenHandler().AddHttpClient<T>(act).AddHttpMessageHandler<AccessTokenHandler>();
+           
+            return services.AddAccessTokenHandler().AddHttpClient(Consts.ZLJ_ADMIN_HTTP_CLIENT_NAME,act).AddHttpMessageHandler<AccessTokenHandler>();
         }
     }
 }

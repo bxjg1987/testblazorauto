@@ -9,6 +9,8 @@ using ZLJ.Web.HostBlazor.Components;
 using ZLJ.Web.HostBlazor.Startup;
 using Hangfire;
 using Hangfire.SqlServer;
+using ZLJ.Web.HostBlazor.Components.Account;
+using ZLJ.Admin.CoreRCL.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseCastleWindsor(IocManager.Instance.IocContainer);
@@ -53,7 +55,9 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
 
-builder.Services.Adddd(builder.Configuration);
+builder.Services.AddScoped<AuthenticationStateProvider, PersistingRevalidatingAuthenticationStateProvider>();
+
+builder.Services.AddBlazorClientCore(builder.Configuration);
 
 var app = builder.Build();
 app.Use((ctx, next) =>
