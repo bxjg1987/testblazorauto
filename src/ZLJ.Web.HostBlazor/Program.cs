@@ -9,8 +9,8 @@ using ZLJ.Web.HostBlazor.Components;
 using ZLJ.Web.HostBlazor.Startup;
 using Hangfire;
 using Hangfire.SqlServer;
-using ZLJ.Web.HostBlazor.Components.Account;
 using ZLJ.Admin.CoreRCL.Extensions;
+using ZLJ.Web.HostBlazor.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseCastleWindsor(IocManager.Instance.IocContainer);
