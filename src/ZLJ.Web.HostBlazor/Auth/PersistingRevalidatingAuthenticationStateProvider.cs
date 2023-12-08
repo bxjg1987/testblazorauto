@@ -13,7 +13,7 @@ using ZLJ.Application.Common.Share.Models.TokenAuth;
 using ZLJ.Authentication.JwtBearer;
 using ZLJ.Authorization.Users;
 
-namespace ZLJ.Web.HostBlazor.Components.Account
+namespace ZLJ.Web.HostBlazor.Auth
 {
     // This is a server-side AuthenticationStateProvider that revalidates the security stamp for the connected user
     // every 30 minutes an interactive circuit is connected. It also uses PersistentComponentState to flow the
