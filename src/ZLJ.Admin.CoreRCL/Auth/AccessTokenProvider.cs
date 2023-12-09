@@ -29,20 +29,22 @@ namespace ZLJ.Admin.CoreRCL.Auth
         string accessToken, refreshToken;
         int expiration;//有效时常，单位秒
         ILogger logger;
+        AuthenticationStateProvider authenticationStateProvider;
 
-        public AccessTokenProvider(ILogger<AccessTokenProvider> logger)
+        public AccessTokenProvider(ILogger<AccessTokenProvider> logger, AuthenticationStateProvider authenticationStateProvider)
         {
             this.logger = logger;
+            this.authenticationStateProvider = authenticationStateProvider;
         }
 
-        public string GetAccessToken() => accessToken;
-        public void Update(string a, string b, int c)
-        {
-            logger.LogDebug($"accessToken被设置了:{a}");
-            accessToken = a;
-            refreshToken = b;
-            expiration = c;
-        }
+        public string GetAccessToken() => authenticationStateProvider.GetAuthenticationStateAsync().ConfigureAwait(false).GetAwaiter().GetResult().User.FindFirst(c=>c.Type=="AccessToken")?.Value;
+        //public void Update(string a, string b, int c)
+        //{
+        //    logger.LogDebug($"accessToken被设置了:{a}");
+        //    accessToken = a;
+        //    refreshToken = b;
+        //    expiration = c;
+        //}
         //CancellationTokenSource cts = new CancellationTokenSource();
 
         //public AccessTokenProvider()

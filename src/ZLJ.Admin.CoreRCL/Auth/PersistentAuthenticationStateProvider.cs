@@ -21,16 +21,16 @@ namespace ZLJ.Admin.CoreRCL.Auth
 
         private readonly Task<AuthenticationState> authenticationStateTask = defaultUnauthenticatedTask;
 
-        public PersistentAuthenticationStateProvider(PersistentComponentState state, AccessTokenProvider tokenProvider)
+        public PersistentAuthenticationStateProvider(PersistentComponentState state)
         {
             if (!state.TryTakeFromJson<UserInfo>(nameof(UserInfo), out var userInfo) || userInfo is null)
             {
                 return;
             }
 
-            tokenProvider.Update(userInfo.AccessToken, default, 0);
+           // tokenProvider.Update(userInfo.AccessToken, default, 0);
 
-            Claim[] claims = [
+            Claim[] claims = [new Claim("AccessToken", userInfo.AccessToken),
                 new Claim(ClaimTypes.NameIdentifier, userInfo.Id.ToString())];
 
             authenticationStateTask = Task.FromResult(
