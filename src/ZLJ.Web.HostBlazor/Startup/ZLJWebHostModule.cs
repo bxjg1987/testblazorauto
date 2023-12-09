@@ -41,6 +41,7 @@ namespace ZLJ.Web.HostBlazor.Startup
         public override void PreInitialize()
         {
             Configuration.Navigation.Providers.Add<AdminNavigationProvider>();
+            Configuration.BackgroundJobs.IsJobExecutionEnabled = false;
         }
         public override void Initialize()
         {

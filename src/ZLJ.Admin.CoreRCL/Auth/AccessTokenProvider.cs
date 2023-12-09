@@ -26,8 +26,6 @@ namespace ZLJ.Admin.CoreRCL.Auth
 
     public class AccessTokenProvider : IAccessTokenProvider//, IDisposable
     {
-        string accessToken, refreshToken;
-        int expiration;//有效时常，单位秒
         ILogger logger;
         AuthenticationStateProvider authenticationStateProvider;
 
@@ -37,7 +35,12 @@ namespace ZLJ.Admin.CoreRCL.Auth
             this.authenticationStateProvider = authenticationStateProvider;
         }
 
-        public string GetAccessToken() => authenticationStateProvider.GetAuthenticationStateAsync().ConfigureAwait(false).GetAwaiter().GetResult().User.FindFirst(c=>c.Type=="AccessToken")?.Value;
+        public string GetAccessToken()
+        {
+            var str = authenticationStateProvider.GetAuthenticationStateAsync().ConfigureAwait(false).GetAwaiter().GetResult().User.FindFirst(c => c.Type == "AccessToken")?.Value;
+            Console.WriteLine("请求前获取accessToken:" + str);
+            return str;
+        }
         //public void Update(string a, string b, int c)
         //{
         //    logger.LogDebug($"accessToken被设置了:{a}");

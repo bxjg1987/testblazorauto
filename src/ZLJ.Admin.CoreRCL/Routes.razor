@@ -1,7 +1,11 @@
 ﻿@using Microsoft.AspNetCore.Components.Authorization
+@using ZLJ.Admin.ClientProxy
+@* @inject AppContainer appContainer *@
+@* @inject AbpUserConfigurationService abpUserCfgService *@
+
 <Router AppAssembly="@typeof(Routes).Assembly">
     <Found Context="routeData">
-          @* <CascadingValue Value="routeData"> *@
+        @* <CascadingValue Value="routeData"> *@
         <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(Layout.StaticLayout)">
             <NotAuthorized>
                 <RedirectToLogin />
@@ -20,3 +24,4 @@
     </NotFound>
 </Router>
 <AntContainer />
+

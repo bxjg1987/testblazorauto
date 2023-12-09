@@ -11,6 +11,7 @@ using Hangfire;
 using Hangfire.SqlServer;
 using ZLJ.Admin.CoreRCL.Extensions;
 using ZLJ.Web.HostBlazor.Auth;
+using Abp.AspNetCore.Mvc.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseCastleWindsor(IocManager.Instance.IocContainer);
@@ -49,7 +50,7 @@ builder.Services.AddAbpWithoutCreatingServiceProvider<ZLJWebHostModule>(
           , true);
 #endregion
 
-
+//AbpUserConfigurationController
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
@@ -57,7 +58,7 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddScoped<AuthenticationStateProvider, PersistingRevalidatingAuthenticationStateProvider>();
 
-builder.Services.AddBlazorClientCore(builder.Configuration);
+builder.Services.AddBlazorClientCore();
 
 var app = builder.Build();
 app.Use((ctx, next) =>

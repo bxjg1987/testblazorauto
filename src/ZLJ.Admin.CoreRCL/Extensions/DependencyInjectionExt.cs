@@ -16,17 +16,15 @@ namespace ZLJ.Admin.CoreRCL.Extensions
         /// <param name="services"></param>
         /// <param name="_appConfiguration"></param>
         /// <returns></returns>
-        public static IServiceCollection AddBlazorClientCore(this IServiceCollection services, IConfiguration _appConfiguration)
+        public static IServiceCollection AddBlazorClientCore(this IServiceCollection services)
         {
             //注意，客户端单独注册的东东不要定义在这里
-            services.AddAntDesign().AddAdminApiClientProxy();
+
 
             //服务端要注册，否则报错，不过可以不用
-            services.AddSingleton<AccessTokenProvider>();
-            services.AddSingleton<IAccessTokenProvider>(s => s.GetRequiredService<AccessTokenProvider>());
-
-            services.AddCascadingAuthenticationState();
-
+            services.AddAntDesign()
+                   
+                    .AddCascadingAuthenticationState();
 
             //services.Configure<ProSettings>(_appConfiguration.GetSection("ProSettings"));
             return services;

@@ -43,8 +43,8 @@ namespace BXJG.Common.Http
         void sdfdsf(HttpRequestMessage request)
         {
             var token = accessTokenProvider.GetAccessToken();
-
-            if (!string.IsNullOrWhiteSpace(token))
+            Console.WriteLine($"请求前设置accessToken：{token}");
+            if (token.IsNotNullOrWhiteSpaceBXJG())
                 request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer ", token);
 
         }
