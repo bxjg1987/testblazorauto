@@ -24,7 +24,7 @@
     [SupplyParameterFromForm]
     public AuthenticateModel model { get; set; } = new AuthenticateModel();
 
-    [Parameter]
+    [SupplyParameterFromQuery]
     public string ReturnUrl { get; set; }
 
     public async Task LoginUser()

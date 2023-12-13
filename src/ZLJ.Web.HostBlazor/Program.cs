@@ -93,6 +93,12 @@ app.UseAuthorization();
 
 app.UseAbpRequestLocalization();
 
+app.Map("/account/logout", async (HttpContext x) =>
+{
+    await x.RequestServices.GetRequiredService<SignInManager>().SignOutAsync();
+    x.Response.Redirect("/");
+});
+
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
     .AddInteractiveWebAssemblyRenderMode()
