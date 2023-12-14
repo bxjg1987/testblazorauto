@@ -21,7 +21,6 @@ using Microsoft.AspNetCore.Authentication;
 using System.Security.Cryptography;
 using ZLJ.App.Admin.Authorization;
 using ZLJ.App.Admin;
-using ZLJ.Application.Common.Share.Models.TokenAuth;
 
 namespace ZLJ.Controllers
 {

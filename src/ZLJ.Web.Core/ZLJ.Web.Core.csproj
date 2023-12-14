@@ -44,8 +44,6 @@
 		<Compile Remove="Authentication\WeChatMiniProgram\WeChatMiniProgramLoginHandler.cs" />
 		<Compile Remove="Components\ZLJBaseComponent.cs" />
 		<Compile Remove="CustomTempFileManager.cs" />
-		<Compile Remove="Models\TokenAuth\AuthenticateModel.cs" />
-		<Compile Remove="Models\TokenAuth\AuthenticateResultModel.cs" />
 		<Compile Remove="ZLJEquipmentNavigationProvider.cs" />
 		<Compile Remove="ZLJNavigationProvider.cs" />
 		<Compile Remove="ZLJWMSNavigationProvider.cs" />

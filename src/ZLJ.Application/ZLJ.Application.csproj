@@ -92,7 +92,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\ZLJ.Application.Common\ZLJ.Application.Common.csproj" />
-		<ProjectReference Include="..\ZLJ.Application.Share\ZLJ.Application.Share.csproj" />
 	</ItemGroup>
 
   <ItemGroup>

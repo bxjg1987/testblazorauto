@@ -15,10 +15,6 @@
     <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
     <PackageReference Include="System.Net.Http.Json" Version="8.0.0" />
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\ZLJ.Application.Common.Share\ZLJ.Application.Common.Share.csproj" />
-  </ItemGroup>
 	<ItemGroup Condition="'$(SolutionName)' != 'ZLJWithModules'">
 		<!--虽然ef引用utils引用common，但有时候需要单独更新common或utils，所以这里还是要单独引用-->
 		<PackageReference Include="BXJG.Common" Version="*" />
