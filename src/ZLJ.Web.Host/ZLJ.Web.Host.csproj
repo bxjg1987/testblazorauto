@@ -135,6 +135,7 @@
 		<ProjectReference Include="..\..\..\abp\src\Modules\BXJG.Utils.Web\BXJG.Utils.Web.csproj" />-->
 		<ProjectReference Include="..\ZLJ.Application\ZLJ.Application.csproj" />
 		<ProjectReference Include="..\ZLJ.EntityFrameworkCore\ZLJ.EntityFrameworkCore.csproj" />
+		<ProjectReference Include="..\ZLJ.Web.Admin\ZLJ.Web.Admin.csproj" />
 		<ProjectReference Include="..\ZLJ.Web.Core\ZLJ.Web.Core.csproj" />
 	</ItemGroup>
 	<ItemGroup>

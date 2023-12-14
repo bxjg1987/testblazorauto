@@ -1,0 +1,92 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
+	  <ImplicitUsings>enable</ImplicitUsings>
+	  <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Views\Account\**" />
+    <Compile Remove="Views\Home\**" />
+    <Content Remove="Views\Account\**" />
+    <Content Remove="Views\Home\**" />
+    <EmbeddedResource Remove="Views\Account\**" />
+    <EmbeddedResource Remove="Views\Home\**" />
+    <None Remove="Views\Account\**" />
+    <None Remove="Views\Home\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Pages\DataDictionary\Create.razor.cs" />
+    <Compile Remove="Pages\DataDictionary\DetailOrUpdate.razor.cs" />
+    <Compile Remove="Pages\DataDictionary\List.razor.cs" />
+    <Compile Remove="Pages\Notification\NotifyManager.razor.cs" />
+    <Compile Remove="Pages\Notification\NotifySubscript.razor.cs" />
+    <Compile Remove="Shared\AdminCreateDialog.razor.cs" />
+    <Compile Remove="Shared\AdminDetailBaseComponent.cs" />
+    <Compile Remove="Shared\AdminGeneralTreeCreateBaseComponent.cs" />
+    <Compile Remove="Shared\AdminGeneralTreeDetailOrUpdateBaseComponent.cs" />
+    <Compile Remove="Shared\AdminGeneralTreeListBaseComponent.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Pages\DataDictionary\Create.razor" />
+    <Content Remove="Pages\DataDictionary\DetailOrUpdate.razor" />
+    <Content Remove="Pages\DataDictionary\List.razor" />
+    <Content Remove="Pages\Notification\NotifyManager.razor" />
+    <Content Remove="Pages\Notification\NotifySubscript.razor" />
+    <Content Remove="Pages\Notification\Simple.razor" />
+    <Content Remove="Shared\AdminCreateDialog.razor" />
+    <Content Remove="Shared\BasicLayout.razor" />
+    <Content Remove="Shared\RecursionNavGroup.razor" />
+    <Content Remove="Shared\Widget.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Views\Account\AdminLogin.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Views\Home\_AdminHost.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <SupportedPlatform Include="browser" />
+  </ItemGroup>
+
+
+	<!--<ItemGroup Condition="'$(SolutionName)' != 'ZLJWithModules'">
+		<PackageReference Include="ZLJ.Web.Blazor" Version="*" />
+	</ItemGroup>-->
+	
+	<ItemGroup>
+		<PackageReference Include="Abp.AspNetCore" Version="9.*" />
+		<PackageReference Include="AntDesign" Version="*" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.*" />
+		<PackageReference Include="AntDesign.ProLayout" Version="*" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\ZLJ.Application\ZLJ.Application.csproj" />
+		<ProjectReference Include="..\ZLJ.Web.Blazor\ZLJ.Web.Blazor.csproj" />
+		<ProjectReference Include="..\ZLJ.Web.Core\ZLJ.Web.Core.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Pages\DataDictionary\" />
+	  <Folder Include="Properties\PublishProfiles\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="wwwroot\assets\403.svg" />
+	  <None Include="wwwroot\assets\logo.svg" />
+	</ItemGroup>
+
+</Project>

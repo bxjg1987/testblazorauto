@@ -1,0 +1,87 @@
+﻿
+namespace ZLJ.Web.Admin.Shared
+{
+    /// <summary>
+    /// 后台管理中，抽象的，基于MudBlazor treeView的列表页抽象组件
+    /// </summary>
+    /// <typeparam name="TCreateDialog">弹窗组件类型</typeparam>
+    /// <typeparam name="TDetailDialog">弹窗组件类型</typeparam>
+    /// <typeparam name="TAppService">应用服务类型</typeparam>
+    /// <typeparam name="TEntityDto">列表项的数据类型</typeparam>
+    /// <typeparam name="TCreateInput">新增时的输入类型</typeparam>
+    /// <typeparam name="TEditDto">修改时的输入类型</typeparam>
+    /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
+    public class AdminGeneralTreeListBaseComponent<TCreateDialog,
+                                                   TDetailDialog, 
+                                                   TAppService,
+                                                   TEntityDto,
+                                                   TCreateInput,
+                                                   TEditDto,
+                                                   TGetAllInput> : AbpMudGeneralTreeListDialogBaseComponent<TCreateDialog,
+                                                                                                           TDetailDialog, 
+                                                                                                           TAppService,
+                                                                                                           TEntityDto,
+                                                                                                           TCreateInput,
+                                                                                                           TEditDto,
+                                                                                                           TGetAllInput>
+        where TCreateDialog : ComponentBase
+        where TDetailDialog : ComponentBase
+        where TEntityDto : GeneralTreeGetTreeNodeBaseDto<TEntityDto>, IExtendableDto
+        where TGetAllInput : GeneralTreeGetTreeInput, new()
+        where TAppService : IGeneralTreeBaseAppService<TEntityDto, TCreateInput, TEditDto, TGetAllInput>
+    {
+        #region 本地化
+        private ILocalizationSource appCommonLocalizationSource, zljLocalizationSource, utilsLocalizationSource;
+        /// <summary>
+        /// 获取App.Common中的本地化源
+        /// </summary>
+        protected virtual ILocalizationSource LocalizationSourceAppCommon
+        {
+            get
+            {
+                if (appCommonLocalizationSource == null || appCommonLocalizationSource.Name != ZLJ.App.Common.Consts.Common)
+                {
+                    appCommonLocalizationSource = LocalizationManager.GetSource(ZLJ.App.Common.Consts.Common);
+                }
+
+                return appCommonLocalizationSource;
+            }
+        }
+        /// <summary>
+        /// 获取ZLJ.Core中的本地化源
+        /// </summary>
+        protected virtual ILocalizationSource LocalizationSourceAppZLJ
+        {
+            get
+            {
+
+                if (zljLocalizationSource == null || zljLocalizationSource.Name != ZLJConsts.LocalizationSourceName)
+                {
+                    zljLocalizationSource = LocalizationManager.GetSource(ZLJConsts.LocalizationSourceName);
+                }
+
+                return zljLocalizationSource;
+            }
+        }
+        /// <summary>
+        /// 获取BXJG.Utils中的本地化源
+        /// </summary>
+        protected virtual ILocalizationSource LocalizationSourceUtils
+        {
+            get
+            {
+                if (utilsLocalizationSource == null || utilsLocalizationSource.Name != BXJGUtilsConsts.LocalizationSourceName)
+                {
+                    utilsLocalizationSource = LocalizationManager.GetSource(BXJGUtilsConsts.LocalizationSourceName);
+                }
+
+                return utilsLocalizationSource;
+            }
+        }
+        /// <summary>
+        /// 获取App.Admin中的本地化源
+        /// </summary>
+        protected override string LocalizationSourceName => ZLJ.App.Admin.AdminConsts.Admin;
+        #endregion
+    }
+}

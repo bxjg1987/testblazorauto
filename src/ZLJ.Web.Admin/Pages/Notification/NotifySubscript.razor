@@ -1,0 +1,14 @@
+﻿@inherits BXJG.Utils.Notification.NotifySubscript
+<MudDialog >
+    <DialogContent>
+        @foreach (var item in notificationDefinitions)
+        {
+            var ck = seleted.Contains(item.Name);
+            <MudCheckBox Checked="ck" T="bool" CheckedChanged="x=>SelectChanged(item.Name,x)">@item.DisplayName.Localize(base.LocalizationManager)</MudCheckBox>
+        }
+    </DialogContent>
+   @* <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+    </DialogActions>*@
+</MudDialog>

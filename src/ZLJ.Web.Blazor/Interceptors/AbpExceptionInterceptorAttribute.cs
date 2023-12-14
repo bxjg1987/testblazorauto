@@ -70,7 +70,7 @@ namespace ZLJ.Web.Blazor.Interceptors
             var temp = context.Target.GetType().GetProperty("MessageService", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public).GetValue(context.Target);
             var snackbar = temp as IMessageService;
             //Task t;
-            //BXJG.Common.Extensions.us
+
             if (context.Exception is UserFriendlyException)
             {
                 snackbar.Error(context.Exception.Message);
