@@ -49,5 +49,6 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\Libs\BXJG.Common.RCL\BXJG.Common.RCL.csproj" />
+	  <ProjectReference Include="..\ZLJ.Application.Common.ClientProxy\ZLJ.Application.Common.ClientProxy.csproj" />
 	</ItemGroup>
 </Project>

@@ -42,6 +42,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ZLJ.Admin.CoreRCL\ZLJ.Admin.CoreRCL.csproj" />
     <ProjectReference Include="..\ZLJ.Application\ZLJ.Application.csproj" />
     <ProjectReference Include="..\ZLJ.EntityFrameworkCore\ZLJ.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\ZLJ.Web.Core\ZLJ.Web.Core.csproj" />
