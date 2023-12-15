@@ -1,0 +1,16 @@
+﻿@inherits LayoutComponentBase
+<Layout>
+    <Sider Style="overflow: auto;height: 100vh;position: fixed;left: 0;" >
+        <div class="logo" style="height:32px; margin:16px;" />
+        @* 菜单需要交互式 *@
+        <MainMenu @rendermode="InteractiveAuto" />
+    </Sider>
+    <Layout Class="site-layout" Style=" margin-left: 200px">
+        <Header Class="site-layout-background" Style="padding: 0" ></Header>
+        <Content Style="margin: 24px 16px 0; overflow: initial; ">
+            @* 内页的模式由页面自己决定 *@
+            @Body
+        </Content>
+        <Footer Style=" text-align: center;">Ant Design ©2018 Created by Ant UED</Footer>
+    </Layout>
+</Layout>

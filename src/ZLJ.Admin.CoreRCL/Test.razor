@@ -1,0 +1,28 @@
+﻿@rendermode InteractiveAuto
+@page "/test"
+@using BXJG.Common.Http
+@attribute [Authorize("Administrator")]
+@inject AuthenticationStateProvider authSP
+
+<PageTitle>测试1111111</PageTitle>
+<p>
+    @count
+</p>
+<Button OnClick="ccc">
+    测试
+</Button>
+测试访问受保护的页面
+
+@kkk
+
+@code{
+    string kkk=string.Empty;
+    int count;
+    async Task ccc(){
+        Console.WriteLine(DateTime.Now.ToLongTimeString());
+        var sdfsd = await authSP.GetAuthenticationStateAsync();
+       kkk= sdfsd.User.Claims.SingleOrDefault(c => c.Type == "AccessToken")?.Value;
+
+        count++;
+    }
+}
