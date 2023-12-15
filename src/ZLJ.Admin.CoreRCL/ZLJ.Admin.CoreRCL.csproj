@@ -19,6 +19,7 @@
 	<ItemGroup>
 		<Content Remove="Layout\MainLayout.razor" />
 		<Content Remove="MainLayout.razor" />
+		<Content Remove="Statup\RenderModeItem.razor" />
 		<Content Remove="wwwroot\css\site.css" />
 	</ItemGroup>
 
@@ -50,9 +51,12 @@
 
 	<ItemGroup Condition="'$(SolutionName)' != 'ZLJWithModules'">
 		<PackageReference Include="BXJG.Common" Version="*" />
+		<!--<PackageReference Include="BXJG.Common.RCL" Version="*" />-->
 	</ItemGroup>
 	<ItemGroup Condition="'$(SolutionName)' == 'ZLJWithModules'">
 		<ProjectReference Include="..\libs\BXJG.Common\BXJG.Common.csproj" />
+		<!--<ProjectReference Include="..\Libs\BXJG.Common.RCL\BXJG.Common.RCL.csproj" />-->
+
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\ZLJ.Admin.ClientProxy\ZLJ.Admin.ClientProxy.csproj" />

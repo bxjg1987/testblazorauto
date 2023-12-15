@@ -7,8 +7,8 @@ namespace ZLJ.Web.HostBlazor.Components
     {
         [CascadingParameter]
         private HttpContext HttpContext { get; set; } = default!;
-        private IComponentRenderMode? RenderModeForPage => HttpContext.Request.Path.StartsWithSegments("/Account")
-      ? null
-      : RenderMode.InteractiveServer;
+        private IComponentRenderMode? RenderModeForPage => HttpContext.Request.Path.StartsWithSegments("/test")
+      ? RenderMode.InteractiveWebAssembly
+      : null;
     }
 }
