@@ -11,7 +11,7 @@ namespace ZLJ.App.Common
     /// <typeparam name="TEntityDto">可选数据的dto</typeparam>
     public class CommonProviderBaseAppService<TEntity,  TGetAllInput, TEntityDto, TKey>
                               : ProviderBaseAppService<TEntity, TGetAllInput, TEntityDto, TKey>
-       where TEntity : class, IEntity<TKey>
+      where TEntity : class, IEntity<TKey>
     {
         private ILocalizationSource appCommonLocalizationSource, zljLocalizationSource, utilsLocalizationSource;
 
