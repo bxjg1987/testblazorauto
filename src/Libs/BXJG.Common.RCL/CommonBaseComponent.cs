@@ -26,8 +26,8 @@ namespace BXJG.Common.RCL
         [Inject]
         protected virtual Zhongjie GlobalZhongjie { get; private set; }
 
-        [CascadingParameter]
-        protected BlazorServerContext Context { get; set; }
+        //[CascadingParameter]
+        //protected BlazorServerContext Context { get; set; }
 
         private ILogger _logger;
         /// <summary>

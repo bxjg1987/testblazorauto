@@ -5,20 +5,44 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
-    <Version>1.2.17</Version>
+    <Version>1.2.18</Version>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <Compile Remove="BlazorServerLog.cs" />
+    <Compile Remove="CircuitStateContainer.cs" />
+    <Compile Remove="ServiceCollectionExtensions.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Remove="AuthenticationRedirectory.razor" />
+    <Content Remove="BlazorLoggerPage.razor" />
+    <Content Remove="BlazorServerLogger.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="BlazorServerLogger.razor.css" />
+  </ItemGroup>
+
+  <!--<ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>-->
+
+	
+	
   <ItemGroup>
     <Folder Include="Areas\MyFeature\Pages\" />
   </ItemGroup>
+	<ItemGroup>
+		<SupportedPlatform Include="browser" />
+	</ItemGroup>
 
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.0" />
+	</ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BXJG.Common.Web\BXJG.Common.Web.csproj" />
+    <ProjectReference Include="..\BXJG.Common\BXJG.Common.csproj" />
   </ItemGroup>
 
 

@@ -51,11 +51,11 @@
 
 	<ItemGroup Condition="'$(SolutionName)' != 'ZLJWithModules'">
 		<PackageReference Include="BXJG.Common" Version="*" />
-		<!--<PackageReference Include="BXJG.Common.RCL" Version="*" />-->
+		<PackageReference Include="BXJG.Common.RCL" Version="*" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(SolutionName)' == 'ZLJWithModules'">
-		<ProjectReference Include="..\libs\BXJG.Common\BXJG.Common.csproj" />
-		<!--<ProjectReference Include="..\Libs\BXJG.Common.RCL\BXJG.Common.RCL.csproj" />-->
+		<!--<ProjectReference Include="..\libs\BXJG.Common\BXJG.Common.csproj" />-->
+		<ProjectReference Include="..\Libs\BXJG.Common.RCL\BXJG.Common.RCL.csproj" />
 
 	</ItemGroup>
 	<ItemGroup>

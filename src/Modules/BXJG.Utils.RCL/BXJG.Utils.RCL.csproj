@@ -11,7 +11,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="CircuitStateHandler.cs" />
     <Compile Remove="CrudBaseComponent.cs" />
+    <Compile Remove="Notification\EventRealTimeNotifier.cs" />
   </ItemGroup>
 
   <ItemGroup>

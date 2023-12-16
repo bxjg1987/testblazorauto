@@ -17,16 +17,16 @@ namespace BXJG.Utils
     {
         public override void PreInitialize()
         {
-            Configuration.Notifications.Notifiers.Add<EventRealTimeNotifier>();
+            //Configuration.Notifications.Notifiers.Add<EventRealTimeNotifier>();
         }
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
             IocManager.RegService(services =>
             {
-                services.AddBXJGCommonRCL();
-                services.AddScoped<CircuitStateHandler>();
-                services.AddScoped<CircuitHandler>(c=>c.GetRequiredService<CircuitStateHandler>());
+               // services.AddBXJGCommonRCL();
+                //services.AddScoped<CircuitStateHandler>();
+              //  services.AddScoped<CircuitHandler>(c=>c.GetRequiredService<CircuitStateHandler>());
             });
         }
     }

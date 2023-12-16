@@ -32,7 +32,7 @@ namespace ZLJ.Web.HostBlazor.Startup
             }
             msg += Environment.NewLine + msg2;
             //loggingEvent.MessageObject
-            BlazorServerLoggerExt.Add(logLevel, msg, loggingEvent.LoggerName);
+            //BlazorServerLoggerExt.Add(logLevel, msg, loggingEvent.LoggerName);
         }
     }
 
