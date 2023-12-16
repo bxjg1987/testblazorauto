@@ -14,7 +14,7 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddBXJGCommon(this IServiceCollection services)
         {
-            return services.AddSingleton<IClock, LocalClock>().AddSingleton(Zhongjie.Instance);
+            return services.AddAccessTokenHandler();
         }
         /// <summary>
         /// 
@@ -23,7 +23,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IServiceCollection AddAccessTokenHandler(this IServiceCollection services)
         {
-             services.TryAddTransient<AccessTokenHandler>();
+            services.TryAddSingleton<IClock, LocalClock>();
+            services.TryAddSingleton(Zhongjie.Instance);
+            services.TryAddTransient<AccessTokenHandler>();
             return services;
         }
     }

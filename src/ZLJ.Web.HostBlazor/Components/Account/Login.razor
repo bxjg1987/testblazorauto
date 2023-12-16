@@ -43,7 +43,7 @@
         //                                   });
         await signInManager1.SignInAsync(loginResult.Identity, model.RememberClient);
         // return Redirect(returnUrl);
-        nav.NavigateTo(ReturnUrl);
+        nav.NavigateTo(ReturnUrl,true);
 
     }
     private async Task<AbpLoginResult<Tenant, User>> GetLoginResultAsync(string usernameOrEmailAddress, string password, string tenancyName)

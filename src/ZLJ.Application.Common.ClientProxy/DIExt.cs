@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using BXJG.Common.Extensions;
 using ZLJ.Application.Common.ClientProxy;
+using Abp.Application.Navigation;
+using ZLJ.Admin.ClientProxy;
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class DIExt
@@ -19,9 +21,11 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IHttpClientBuilder AddApiClientProxy(this IServiceCollection services, Action<HttpClient> act = default)
         {
             if (act == default)
-                act = hc=> { };
-           
-            return services.AddAccessTokenHandler().AddHttpClient(Consts.ZLJ_ADMIN_HTTP_CLIENT_NAME,act).AddHttpMessageHandler<AccessTokenHandler>();
+                act = hc => { };
+
+            var b = services.AddAccessTokenHandler().AddHttpClient(Consts.ZLJ_ADMIN_HTTP_CLIENT_NAME, act).AddHttpMessageHandler<AccessTokenHandler>();
+            services.AddTransient<AbpUserConfigurationService>().AddTransient<IUserNavigationManager,UserNavigationManager>();
+            return b;
         }
     }
 }

@@ -1,0 +1,25 @@
+﻿@using ZLJ.Admin.ClientProxy
+@* <RenderModeItem @ref="server" @rendermode="InteractiveServer" /> *@
+
+@inject AppContainer appContainer
+@inject AbpUserConfigurationService abpUserCfgService
+
+@code {
+    // RenderModeItem server;
+
+    // bool cs => (DateTime.Now - server.LastTime).TotalSeconds > 30;
+    protected override void OnInitialized()
+    {
+        if (OperatingSystem.IsBrowser())
+            Console.WriteLine("客户端模式");
+        else
+            Console.WriteLine("服务端模式");
+        // base.OnInitialized();
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        appContainer.AbpUserConfiguration = await abpUserCfgService.GetAll();
+        Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(appContainer));
+    }
+
+}

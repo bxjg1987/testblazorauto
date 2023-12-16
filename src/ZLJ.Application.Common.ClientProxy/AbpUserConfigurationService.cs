@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ZLJ.Application.Common.ClientProxy;
 
-namespace ZLJ.Admin.ClientProxy
+namespace ZLJ.Application.Common.ClientProxy
 {
     //貌似客户端才需要此接口
     public class AbpUserConfigurationService : BaseAppServiceClient

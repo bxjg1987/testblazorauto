@@ -7,31 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Components\Layout\**" />
-    <Content Remove="Components\Layout\**" />
-    <EmbeddedResource Remove="Components\Layout\**" />
-    <None Remove="Components\Layout\**" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <Compile Remove="Startup\AdminNavigationProvider.cs" />
     <Compile Remove="Startup\AuthConfigurer.cs" />
     <Compile Remove="Startup\Class221.cs" />
     <Compile Remove="Startup\CustAuthenticationSchemeProvider.cs" />
     <Compile Remove="Startup\HostingEnvironmentExtensions.cs" />
-    <Compile Remove="Startup\Program.cs" />
+    <Compile Remove="Startup\Program2.cs" />
     <Compile Remove="Startup\Startup.cs" />
     <Compile Remove="Startup\TxdlFirewall.cs" />
     <Compile Remove="Startup\WeatherForecast.cs" />
     <Compile Remove="Startup\WeatherForecastService.cs" />
     <Compile Remove="Startup\WeChatPaymentNoticeHandler.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Remove="Components\Routes.razor" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="wwwroot\app.js" />
   </ItemGroup>
 
   <ItemGroup>

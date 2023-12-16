@@ -12,14 +12,17 @@
 
 	<ItemGroup>
 		<Compile Remove="Layout\MainLayout.razor.cs" />
+		<Compile Remove="Layout\RightContent.razor.cs" />
 		<Compile Remove="MainLayout.razor.cs" />
+		<Compile Remove="Startup\TenantProvider.cs" />
 	</ItemGroup>
 
 
 	<ItemGroup>
 		<Content Remove="Layout\MainLayout.razor" />
+		<Content Remove="Layout\RightContent.razor" />
 		<Content Remove="MainLayout.razor" />
-		<Content Remove="Statup\RenderModeItem.razor" />
+		<Content Remove="Startup\RenderModeItem.razor" />
 		<Content Remove="wwwroot\css\site.css" />
 	</ItemGroup>
 

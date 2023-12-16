@@ -1,59 +1,107 @@
-﻿using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using System.IO;
-using log4net.Config;
+using Abp.AspNetCore;
 using Abp.AspNetCore.Dependency;
+using Abp.Dependency;
+using Castle.Facilities.Logging;
+using Abp.Castle.Logging.Log4Net;
+using ZLJ;
+using ZLJ.Identity;
+using ZLJ.Web.HostBlazor.Components;
+using ZLJ.Web.HostBlazor.Startup;
+using Hangfire;
+using Hangfire.SqlServer;
+using ZLJ.Admin.CoreRCL.Extensions;
+using ZLJ.Web.HostBlazor.Auth;
+using Abp.AspNetCore.Mvc.Controllers;
 
-namespace ZLJ.Web.HostBlazor.Startup
-{
-    public class Program
-    {
-        public static void Main(string[] args)
+var builder = WebApplication.CreateBuilder(args);
+builder.Host.UseCastleWindsor(IocManager.Instance.IocContainer);
+
+var _defaultCorsPolicyName = "localhost";
+var _apiVersion = "v1";
+
+var _appConfiguration = builder.Configuration;
+var webHostEnvironment = builder.Environment;
+//AuthorizeAttribute
+string defaultConnectionString = _appConfiguration.GetConnectionString(ZLJConsts.ConnectionStringName)!;
+
+builder.Services.AddMvcCore();//�������ԣ���������
+
+IdentityRegistrar.Register(builder.Services);
+
+#region hangfire
+string hangfireConnectionString = _appConfiguration.GetConnectionString("HangfireSqlServer")!;
+
+builder.Services.AddHangfire(configuration => configuration
+        .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+        .UseSimpleAssemblyNameTypeSerializer()
+        .UseRecommendedSerializerSettings()
+        //.UseDashboardMetric( ),
+        .UseSqlServerStorage(hangfireConnectionString, new SqlServerStorageOptions
         {
-            CreateHostBuilder(args).Build().Run();
-        }
-        internal static IHostBuilder CreateHostBuilder(string[] args) =>
-          Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder(args)
-              .ConfigureWebHostDefaults(webBuilder =>
-              {
-                  //webBuilder.UseStaticWebAssets();
-                  webBuilder.UseStartup<Startup>();
-              })
-              .UseCastleWindsor(IocManager.Instance.IocContainer);
-      
+            //Ĭ��ֵ����������
+        }));
+#endregion
 
-        //public static void Main(string[] args)
-        //{
-        //    //var sd = Directory.GetCurrentDirectory();
-        //    //var sss = AppContext.BaseDirectory;
-        //    BuildWebHost(args).Run();
-        //}
+#region abp
+builder.Services.AddAbpWithoutCreatingServiceProvider<ZLJWebHostModule>(
+              // Configure Log4Net logging
+              //options => options.IocManager.IocContainer.AddFacility<LoggingFacility>(f => f.UseAbpLog4Net().WithConfig(webHostEnvironment.IsDevelopment() ? "log4net.config" : "log4net.Production.config"))
+              options => options.IocManager.IocContainer.AddFacility<LoggingFacility>(f => f.UseAbpLog4Net().WithConfig("log4net.config"))
+          , true);
+#endregion
 
-        //public static IWebHost BuildWebHost(string[] args)
-        //{
-        //    //var cfgHosting = new ConfigurationBuilder()
-        //    //     .SetBasePath(Directory.GetCurrentDirectory())
-        //    //     //.AddJsonFile("hosting.json", true)
-        //    //     .Build();
+//AbpUserConfigurationController
+// Add services to the container.
+builder.Services.AddRazorComponents()
+    .AddInteractiveServerComponents()
+    .AddInteractiveWebAssemblyComponents();
 
-        //    return WebHost.CreateDefaultBuilder(args)
-        //        //不设置的话，默认是Directory.GetCurrentDirectory()，调试时它指向ZLJ.Web.Host，
-        //        //但RCL中的静态资源编译后只会复制到debug下，就会出现访问静态资源404
-        //        //.UseContentRoot(AppContext.BaseDirectory) 
-        //        //参考，说了一堆，反正下面这样配置就正常了
-        //        //https://learn.microsoft.com/zh-cn/aspnet/core/razor-pages/ui-class?view=aspnetcore-7.0&tabs=visual-studio#consume-content-from-a-referenced-rcl
-        //        //.UseWebRoot("wwwroot")
-        //        .UseStaticWebAssets()
+builder.Services.AddScoped<AuthenticationStateProvider, PersistingRevalidatingAuthenticationStateProvider>();
 
-        //        //.ConfigureLogging(b =>
-        //        //{
-        //        //    //b.log()
-        //        //    //b.AddBlazorServerLogger();
-        //        //})
-        //        .UseStartup<Startup>()
-        //        //.UseConfiguration(cfgHosting)
-        //        .Build();
-        //}
-    }
+builder.Services.AddBlazorClientCore();
+
+var app = builder.Build();
+app.Use((ctx, next) =>
+{
+    ctx.Request.Headers["Accept-Language"] = ctx.Request.Headers["Accept-Language"].ToString()
+                                                                                   .Replace("zh-CN,", "zh-Hans,")
+                                                                                   .Replace("zh-CN;", "zh-Hans;")
+                                                                                   .Replace("zh,", "zh-Hans,")
+                                                                                   .Replace("zh;", "zh-Hans;");
+    return next();
+});
+app.UseAbp(options => { options.UseAbpRequestLocalization = false; }); // Initializes ABP framework.
+
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseWebAssemblyDebugging();
 }
+else
+{
+    app.UseExceptionHandler("/Error", createScopeForErrors: true);
+}
+
+app.UseStaticFiles();
+app.UseRouting();
+
+app.UseAntiforgery();
+app.UseAuthentication();
+app.UseAuthorization();
+
+
+app.UseAbpRequestLocalization();
+
+app.Map("/account/logout", async (HttpContext x) =>
+{
+    await x.RequestServices.GetRequiredService<SignInManager>().SignOutAsync();
+    x.Response.Redirect("/");
+});
+
+app.MapRazorComponents<App>()
+    .AddInteractiveServerRenderMode()
+    .AddInteractiveWebAssemblyRenderMode()
+    .AddAdditionalAssemblies(typeof(ZLJ.Admin.CoreRCL.Startup.Routes).Assembly);
+
+app.Run();

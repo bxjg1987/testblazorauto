@@ -15,7 +15,7 @@ namespace ZLJ.Admin.CoreRCL.Auth
     // cookie that will be included on HttpClient requests to the server.
     internal class PersistentAuthenticationStateProvider : AuthenticationStateProvider
     {
-       // private readonly AccessTokenProvider _tokenProvider;
+        // private readonly AccessTokenProvider _tokenProvider;
 
         private static readonly Task<AuthenticationState> defaultUnauthenticatedTask =
             Task.FromResult(new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity())));
@@ -33,6 +33,7 @@ namespace ZLJ.Admin.CoreRCL.Auth
             Console.WriteLine($"PersistentAuthenticationStateProvider构造函数执行了：{JsonSerializer.Serialize(userInfo)}");
 
             Claim[] claims = [new Claim("AccessToken", userInfo.AccessToken),
+              //  new Claim("TenantId", userInfo.TenantId.HasValue? userInfo.TenantId.Value.ToString():""),
                 new Claim(ClaimTypes.NameIdentifier, userInfo.Id.ToString())];
 
             authenticationStateTask = Task.FromResult(

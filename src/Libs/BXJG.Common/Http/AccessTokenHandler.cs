@@ -16,7 +16,7 @@ namespace BXJG.Common.Http
         string GetAccessToken();
     }
     /// <summary>
-    /// 自动处理accessToken
+    /// 为http请求设置accesstoken的http header
     /// </summary>
     public class AccessTokenHandler : DelegatingHandler
     {
@@ -45,7 +45,7 @@ namespace BXJG.Common.Http
             var token = accessTokenProvider.GetAccessToken();
             Console.WriteLine($"请求前设置accessToken：{token}");
             if (token.IsNotNullOrWhiteSpaceBXJG())
-                request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer ", token);
+                request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
         }
     }
