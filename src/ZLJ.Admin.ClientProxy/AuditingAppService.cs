@@ -18,6 +18,7 @@ namespace ZLJ.Admin.ClientProxy
 
         public async Task<PagedResultDto<AuditLogListDto>> GetAuditLogs(GetAuditLogsInput input)
         {
+            //最好把这个方法变成post的，传参更简单，或把api整体配置为post
             return await Get<PagedResultDto<AuditLogListDto>>("api/services/app/AuditLog/GetAuditLogs", new { input.SkipCount,input.MaxResultCount });
         }
     }
