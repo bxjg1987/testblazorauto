@@ -2,7 +2,7 @@
 {
     @if (MenuItem.Items != default && MenuItem.Items.Any())
     {
-        <SubMenu Key="@MenuItem.Name">
+        <SubMenu Key="@MenuItem.Name" Title="@MenuItem.DisplayName">
             @foreach (var item in MenuItem.Items)
             {
                 <MainMenuItem MenuItem="item" />

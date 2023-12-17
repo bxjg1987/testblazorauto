@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <base href="/" />
     <link href="_content/AntDesign/css/ant-design-blazor.css" rel="stylesheet" />
-    <link href="_content/AntDesign.ProLayout/css/ant-design-pro-layout-blazor.css" rel="stylesheet" />
+    @* <link href="_content/AntDesign.ProLayout/css/ant-design-pro-layout-blazor.css" rel="stylesheet" /> *@
     <link rel="stylesheet" href="ZLJ.Web.HostBlazor.styles.css" />
 
     @* 下面这个引用不了，也没必要 *@
@@ -18,7 +18,7 @@
 
 <body>
     <app>
-        <ZLJ.Admin.CoreRCL.Startup.Routes />
+        <ZLJ.Admin.CoreRCL.Startup.Routes  />
     </app>
 
     <ZLJ.Admin.CoreRCL.Startup.RenderModeHelper @rendermode="new InteractiveWebAssemblyRenderMode(prerender: false)" />

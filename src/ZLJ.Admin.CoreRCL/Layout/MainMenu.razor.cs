@@ -20,7 +20,14 @@ namespace ZLJ.Admin.CoreRCL.Layout
             if (abpSession.UserId.HasValue)
             {
                 menu = await UserNavigationManager.GetMenuAsync("MainMenu", new Abp.UserIdentifier(abpSession.TenantId, abpSession.UserId.Value));
-                await Console.Out.WriteLineAsync(   System.Text.Json.JsonSerializer.Serialize(menu));
+                menu.Items.Add(new UserMenuItem { 
+                     DisplayName="测试",
+                      Name= "test",
+                       Url="/test",
+                      IsEnabled=true,
+                      IsVisible=true,
+                });
+                // await Console.Out.WriteLineAsync(   System.Text.Json.JsonSerializer.Serialize(menu));
             }
         }
 

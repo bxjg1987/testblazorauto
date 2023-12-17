@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AntDesign;
 
-namespace ZLJ.Admin.CoreRCL
+namespace ZLJ.Admin.CoreRCL.Layout
 {
     public partial class RightContent
     {
@@ -52,7 +52,7 @@ namespace ZLJ.Admin.CoreRCL
         [Inject] protected NavigationManager NavigationManager { get; set; }
 
         [Inject] protected MessageService MessageService { get; set; }
-
+      
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();

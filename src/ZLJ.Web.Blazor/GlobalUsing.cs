@@ -7,6 +7,5 @@ global using System.Linq;
 global using System.Security.Claims;
 global using System.Text;
 global using System.Threading.Tasks;
-global using Microsoft.AspNetCore.Components.Authorization;
 global using AntDesign;
 global using BXJG.Common.Dto;

@@ -1,5 +1,6 @@
 ﻿@page "/account/login"
 @using Abp.Authorization.Users
+@using ZLJ.Admin.CoreRCL.Layout
 @using ZLJ.App.Admin.Authorization
 @using ZLJ.Application.Common.Share.Models.TokenAuth
 @using ZLJ.Authorization.Users
@@ -9,6 +10,8 @@
 @inject LogInManager _logInManager
 @inject NavigationManager nav;
 @inject AbpLoginResultTypeHelper _abpLoginResultTypeHelper
+
+@layout NullLayout
 
 <PageTitle>登录</PageTitle>
 
@@ -21,6 +24,7 @@
 </EditForm>
 
 @code {
+   
     [SupplyParameterFromForm]
     public AuthenticateModel model { get; set; } = new AuthenticateModel();
 

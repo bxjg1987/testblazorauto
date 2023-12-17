@@ -42,9 +42,9 @@ namespace ZLJ.Web.Host.Controllers
 
         public IActionResult Index()
         {
-            //return Redirect("/swagger");
+            return Redirect("/swagger");
 
-                return View($"_Host");
+          //      return View($"_Host");
         }
         ////public IActionResult Blazor()
         ////{
