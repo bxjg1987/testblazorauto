@@ -9,7 +9,10 @@ using BXJG.Common.Extensions;
 using ZLJ.Application.Common.ClientProxy;
 using Abp.Application.Navigation;
 using ZLJ.Admin.ClientProxy;
-namespace Microsoft.Extensions.DependencyInjection
+using Microsoft.Extensions.DependencyInjection;
+using ZLJ.Application.Common.ClientProxy.Http;
+
+namespace ZLJ.Application.Common.ClientProxy.Extensions
 {
     public static class DIExt
     {
@@ -23,8 +26,13 @@ namespace Microsoft.Extensions.DependencyInjection
             if (act == default)
                 act = hc => { };
 
-            var b = services.AddAccessTokenHandler().AddHttpClient(Consts.ZLJ_ADMIN_HTTP_CLIENT_NAME, act).AddHttpMessageHandler<AccessTokenHandler>();
-            services.AddTransient<AbpUserConfigurationService>().AddTransient<IUserNavigationManager,UserNavigationManager>();
+            services.AddTransient<AbpWraperDelegatHandler>();
+            var b = services.AddAccessTokenHandler().AddHttpClient(Consts.ZLJ_ADMIN_HTTP_CLIENT_NAME, act).AddHttpMessageHandler<AbpWraperDelegatHandler>().AddHttpMessageHandler<AccessTokenHandler>();
+            
+            
+            services.AddTransient<AbpUserConfigurationService>().AddTransient<IUserNavigationManager, UserNavigationManager>();
+
+
             return b;
         }
     }

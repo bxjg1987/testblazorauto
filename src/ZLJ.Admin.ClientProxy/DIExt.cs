@@ -1,10 +1,10 @@
 ﻿using BXJG.Common.Http;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZLJ.Application.Common.ClientProxy.Extensions;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

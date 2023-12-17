@@ -1,4 +1,5 @@
 //using hyjiacan.py4n;
+using Microsoft.AspNetCore.WebUtilities;
 using System;
 using System.Buffers;
 using System.Collections.Concurrent;
@@ -320,7 +321,23 @@ namespace System
             }
             return name;
         }
+        /// <summary>
+        /// 想url追加参数，若重复则保留多个同名参数,若参数为空，则原样返回url，不会报错
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="queryParams"></param>
+        /// <returns></returns>
+        public static string AddQueryString(this string url, object queryParams)
+        {
+            if (queryParams == null)
+                return url;
 
+            var dictionary = queryParams.GetType()
+                .GetProperties()
+                .ToDictionary(prop => prop.Name, prop => prop.GetValue(queryParams, null).ToString());
+            //任何项目都可能向后端发起http请求，所以在common库中引入Microsfot.AspNetCore包可以接受
+            return QueryHelpers.AddQueryString(url, dictionary);
+        }
         public static bool IsNullOrWhiteSpaceBXJG(this string str)
         {
             return string.IsNullOrWhiteSpace(str);

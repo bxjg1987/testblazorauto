@@ -13,18 +13,14 @@ namespace ZLJ.Admin.ClientProxy
 
         }
 
-
-        public async Task<UserMenu> GetMenuAsync(string menuName, UserIdentifier user)
+        public Task<UserMenu> GetMenuAsync(string menuName, UserIdentifier user)
         {
-            var r = await CreateHttpClient().GetFromJsonAsync<AjaxResponse<UserMenu>>($"api/services/common/UserNavigation/GetMenu?menuName={menuName}");
-            return r.Result;
+            return GetFromJsonAsync<UserMenu>($"api/services/common/UserNavigation/GetMenu?menuName={menuName}");//简单参数直接传递，免得浪费性能
         }
 
-        public async Task<IReadOnlyList<UserMenu>> GetMenusAsync(UserIdentifier user)
+        public Task<IReadOnlyList<UserMenu>> GetMenusAsync(UserIdentifier user)
         {
-            var r = await CreateHttpClient().GetFromJsonAsync<AjaxResponse<IReadOnlyList<UserMenu>>>("api/services/common/UserNavigation/GetMenus");
-
-            return r.Result;
+            return GetFromJsonAsync<IReadOnlyList<UserMenu>>("api/services/common/UserNavigation/GetMenus");
         }
     }
 }

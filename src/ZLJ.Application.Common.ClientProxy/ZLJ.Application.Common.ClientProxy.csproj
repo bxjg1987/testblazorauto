@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Compile Remove="AccessTokenHandler.cs" />
+    <Compile Remove="Extensions\NetHttpExt.cs" />
     <Compile Remove="HttpClientInstance.cs" />
   </ItemGroup>
 
