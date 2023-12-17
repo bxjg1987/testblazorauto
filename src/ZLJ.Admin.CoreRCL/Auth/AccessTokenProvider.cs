@@ -38,7 +38,7 @@ namespace ZLJ.Admin.CoreRCL.Auth
         public string GetAccessToken()
         {
             var str = authenticationStateProvider.GetAuthenticationStateAsync().ConfigureAwait(false).GetAwaiter().GetResult().User.FindFirst(c => c.Type == "AccessToken")?.Value;
-            Console.WriteLine("请求前获取accessToken:" + str);
+            //Console.WriteLine("请求前获取accessToken:" + str);
             return str;
         }
         //public void Update(string a, string b, int c)

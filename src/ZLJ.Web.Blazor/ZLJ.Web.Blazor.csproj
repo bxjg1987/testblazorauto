@@ -10,14 +10,12 @@
 
   <ItemGroup>
     <Compile Remove="AbpBlazorModule.cs" />
-    <Compile Remove="Components\AbpBaseComponent.cs" />
     <Compile Remove="Components\AbpCreateBaseComponent.cs" />
     <Compile Remove="Components\AbpCreateDialog.razor.cs" />
     <Compile Remove="Components\AbpCreateDialogBaseComponent.cs" />
     <Compile Remove="Components\AbpListBaseComponent.cs" />
     <Compile Remove="Components\AbpTreeSelect.razor.cs" />
     <Compile Remove="Components\FileName.cs" />
-    <Compile Remove="Interceptors\AbpExceptionInterceptorAttribute.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,8 +37,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Components\" />
-    <Folder Include="Interceptors\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 

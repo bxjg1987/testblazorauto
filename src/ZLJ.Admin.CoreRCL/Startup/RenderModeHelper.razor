@@ -19,7 +19,7 @@
     protected override async Task OnInitializedAsync()
     {
         appContainer.AbpUserConfiguration = await abpUserCfgService.GetAll();
-        Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(appContainer));
+      //  Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(appContainer));
     }
 
 }

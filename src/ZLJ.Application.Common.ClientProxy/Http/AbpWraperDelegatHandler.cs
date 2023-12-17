@@ -1,5 +1,6 @@
 ﻿using Abp.UI;
 using Abp.Web.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,11 @@ namespace ZLJ.Application.Common.ClientProxy.Http
         protected override HttpResponseMessage Send(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             var jg = base.Send(request, cancellationToken);
-            var r = jg.Content.ReadFromJsonAsync<AjaxResponse>(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
+            var xxx = jg.Content.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+            var r = JsonConvert.DeserializeObject<AjaxResponse>(xxx,BaseAppServiceClient.settings);
+
+            //  var r = jg.Content.ReadFromJsonAsync<AjaxResponse>(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
             cl(jg, r);
             return jg;
         }
@@ -25,7 +30,8 @@ namespace ZLJ.Application.Common.ClientProxy.Http
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             var jg = await base.SendAsync(request, cancellationToken);
-            var r =await jg.Content.ReadFromJsonAsync<AjaxResponse>(cancellationToken);
+            var xxx = await jg.Content.ReadAsStringAsync();
+            var r = JsonConvert.DeserializeObject<AjaxResponse>(xxx, BaseAppServiceClient.settings);
             cl(jg, r);
             return jg;
         }
@@ -34,7 +40,10 @@ namespace ZLJ.Application.Common.ClientProxy.Http
         {
             if (!r.Success)
                 throw new UserFriendlyException(r.Error.Code, r.Error.Message, r.Error.Details);
-            jg.Content = new StringContent(System.Text.Json.JsonSerializer.Serialize(r.Result));
+
+            var json = JsonConvert.SerializeObject(r.Result, BaseAppServiceClient.settings);
+            //  Console.WriteLine(  json);
+            jg.Content = new StringContent(json);
         }
     }
 }

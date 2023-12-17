@@ -26,11 +26,11 @@ namespace ZLJ.Admin.CoreRCL.Auth
         {
             if (!state.TryTakeFromJson<UserInfo>(nameof(UserInfo), out var userInfo) || userInfo is null)
             {
-                Console.WriteLine($"PersistentAuthenticationStateProvider构造函数跳过了");
+                //Console.WriteLine($"PersistentAuthenticationStateProvider构造函数跳过了");
                 return;
             }
 
-            Console.WriteLine($"PersistentAuthenticationStateProvider构造函数执行了：{JsonSerializer.Serialize(userInfo)}");
+            //Console.WriteLine($"PersistentAuthenticationStateProvider构造函数执行了：{JsonSerializer.Serialize(userInfo)}");
 
             Claim[] claims = [new Claim("AccessToken", userInfo.AccessToken),
               //  new Claim("TenantId", userInfo.TenantId.HasValue? userInfo.TenantId.Value.ToString():""),

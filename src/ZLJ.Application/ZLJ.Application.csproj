@@ -20,6 +20,7 @@
     <LangVersion>default</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Auditing\Dto\**" />
     <Compile Remove="Auditing\Exporting\**" />
     <Compile Remove="Authorization\Permissions\Dto\**" />
     <Compile Remove="BaseInfoCommon\**" />
@@ -32,6 +33,7 @@
     <Compile Remove="txdl\**" />
     <Compile Remove="WorkOrderEmployee\**" />
     <Compile Remove="WorkOrder\**" />
+    <EmbeddedResource Remove="Auditing\Dto\**" />
     <EmbeddedResource Remove="Auditing\Exporting\**" />
     <EmbeddedResource Remove="Authorization\Permissions\Dto\**" />
     <EmbeddedResource Remove="BaseInfoCommon\**" />
@@ -44,6 +46,7 @@
     <EmbeddedResource Remove="txdl\**" />
     <EmbeddedResource Remove="WorkOrderEmployee\**" />
     <EmbeddedResource Remove="WorkOrder\**" />
+    <None Remove="Auditing\Dto\**" />
     <None Remove="Auditing\Exporting\**" />
     <None Remove="Authorization\Permissions\Dto\**" />
     <None Remove="BaseInfoCommon\**" />
