@@ -42,7 +42,7 @@ vs2022 .net8 sqlserver2012+
 1. 将ZLJ.Web.Host(后端api)和ZLJ.Web.HostBlazor(blazor web app auto 模式)设为启动项，并启动它，登录信息（租户：default   账号：admin  密码：123qwe）
 
 # 项目结构
-![输入图片说明](docs/imgsimage.png)
+![输入图片说明](image.png)
 
 分为公共库和主项目库，通常我们将公共库发布为nuget包，然后被主项目引用。
 主项目就是具体项目，来个新项目时需要复制一份，多个具体项目都是引用相同公共库的nuget包
