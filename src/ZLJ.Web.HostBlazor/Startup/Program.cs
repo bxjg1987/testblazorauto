@@ -9,7 +9,6 @@ using ZLJ.Web.HostBlazor.Components;
 using ZLJ.Web.HostBlazor.Startup;
 using Hangfire;
 using Hangfire.SqlServer;
-using ZLJ.Admin.CoreRCL.Extensions;
 using ZLJ.Web.HostBlazor.Auth;
 using Abp.AspNetCore.Mvc.Controllers;
 

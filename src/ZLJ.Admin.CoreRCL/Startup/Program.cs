@@ -2,10 +2,10 @@ using Abp.Runtime.Session;
 using BXJG.Common.Http;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using System.Text.Json;
 using ZLJ.Admin.ClientProxy;
 using ZLJ.Admin.CoreRCL.Auth;
-using ZLJ.Admin.CoreRCL.Extensions;
 using ZLJ.Admin.CoreRCL.Startup;
 
 
@@ -18,7 +18,17 @@ builder.Services.AddBlazorClientCore()
                 .AddSingleton<AccessTokenProvider>()
                 .AddSingleton<IAccessTokenProvider>(s => s.GetRequiredService<AccessTokenProvider>())
                 .AddSingleton<AppContainer>()
-                .AddTransient<IAbpSession,MyAbpSession>();
+                .AddCommonRCLForClient(s =>
+                {
+                    var fw = s.GetRequiredService<AppContainer>();
+                    if (fw.AbpUserConfiguration != null && fw.AbpUserConfiguration.Auth != default)
+                    {
+                        //Console.WriteLine(JsonConvert.SerializeObject(fw.AbpUserConfiguration.Auth));
+                        return fw.AbpUserConfiguration.Auth.GrantedPermissions.Keys;
+                    }
+                    return new string[0];
+                })
+                .AddTransient<IAbpSession, MyAbpSession>();
 
 builder.Services.AddAdminApiClientProxy(hc =>
 {

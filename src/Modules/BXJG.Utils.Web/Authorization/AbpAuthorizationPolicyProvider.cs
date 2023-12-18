@@ -17,17 +17,17 @@ namespace BXJG.Utils.Authorization
     public class AbpAuthorizationPolicyProvider : DefaultAuthorizationPolicyProvider
     {
         private readonly IPermissionManager permissionManager;
-     // private readonly IAuthenticationSchemeProvider authenticationSchemeProvider;
+        // private readonly IAuthenticationSchemeProvider authenticationSchemeProvider;
         private readonly AuthenticationOptions authenticationOptions;
         public AbpAuthorizationPolicyProvider(IOptions<AuthorizationOptions> options,
                                               IPermissionManager permissionManager,
-                                             // IAuthenticationSchemeProvider authenticationSchemeProvider,
-                                              IOptions< AuthenticationOptions > authenticationOptions) : base(options)
+                                              // IAuthenticationSchemeProvider authenticationSchemeProvider,
+                                              IOptions<AuthenticationOptions> authenticationOptions) : base(options)
         {
             this.permissionManager = permissionManager;
-          //  this.authenticationSchemeProvider = authenticationSchemeProvider;
+            //  this.authenticationSchemeProvider = authenticationSchemeProvider;
             this.authenticationOptions = authenticationOptions.Value;
-          
+
             //  CookieAuthenticationOptions
         }
 
@@ -35,21 +35,27 @@ namespace BXJG.Utils.Authorization
         public override async Task<AuthorizationPolicy> GetPolicyAsync(string policyName)
         {
             // var scheme = await authenticationSchemeProvider.GetAllSchemesAsync();
-          //  var ss = authenticationOptions.SchemeMap.Keys; // scheme.Select(c => c.Name);
+            //  var ss = authenticationOptions.SchemeMap.Keys; // scheme.Select(c => c.Name);
 
             //blazor的授权组件会做AuthorizationPolicy.Combi，会合并schemes合并的，这里保持null就行了
             //权限1,权限2 true
             //不太有必要使用AuthorizationPolicy，因为它无非是对授权依据和身份验证方案的简化，少new个Builder，性能更高
+
+            var r = await base.GetPolicyAsync(policyName);//若是
+            if (r != null)
+                return r;
+
             if (policyName.Contains(","))
             {
                 var ary = policyName.Split(' ');
                 var names = ary[0].Split(',');
                 var all = false;
-                if(ary.Length > 1) {
+                if (ary.Length > 1)
+                {
                     all = bool.Parse(ary[1]);
                 }
-               
-                return new AuthorizationPolicy(new IAuthorizationRequirement[] { new AbpOperationAuthorizationRequirement { PermissionNames =names, RequiredAll = all} }, authenticationOptions.SchemeMap.Keys);
+
+                return new AuthorizationPolicy(new IAuthorizationRequirement[] { new AbpOperationAuthorizationRequirement { PermissionNames = names, RequiredAll = all } }, authenticationOptions.SchemeMap.Keys);
             }
             else if (permissionManager.GetPermissionOrNull(policyName) != default)
             {
@@ -57,7 +63,7 @@ namespace BXJG.Utils.Authorization
                 return new AuthorizationPolicy(new IAuthorizationRequirement[] { new AbpOperationAuthorizationRequirement { PermissionNames = new[] { policyName } } }, authenticationOptions.SchemeMap.Keys);
             }
 
-            return await base.GetPolicyAsync(policyName);
+            return await base.GetDefaultPolicyAsync();
         }
     }
 }

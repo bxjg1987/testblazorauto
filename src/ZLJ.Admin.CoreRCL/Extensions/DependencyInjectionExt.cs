@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZLJ.Admin.CoreRCL.Extensions
+namespace Microsoft.Extensions.DependencyInjection
 {
     public static class DependencyInjectionExt
     {
