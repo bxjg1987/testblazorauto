@@ -11,6 +11,9 @@
 
 
 	<ItemGroup>
+		<Compile Remove="Auth\AccessTokenProvider.cs" />
+		<Compile Remove="Auth\PersistentAuthenticationStateProvider.cs" />
+		<Compile Remove="Auth\UserInfo.cs" />
 		<Compile Remove="Layout\MainLayout.razor.cs" />
 		<Compile Remove="Layout\RightContent.razor.cs" />
 		<Compile Remove="MainLayout.razor.cs" />

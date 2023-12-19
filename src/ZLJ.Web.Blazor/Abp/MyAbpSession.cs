@@ -1,7 +1,7 @@
 ﻿using Abp.MultiTenancy;
 using Abp.Runtime.Session;
 
-namespace ZLJ.Admin.CoreRCL.Startup
+namespace ZLJ.Web.Blazor.Abp
 {
     /*
      * 服务端模式中使用的是abp的实现

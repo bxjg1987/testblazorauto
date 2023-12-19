@@ -8,17 +8,9 @@ using ZLJ.Admin.ClientProxy;
 using ZLJ.Admin.CoreRCL.Auth;
 using ZLJ.Admin.CoreRCL.Startup;
 
-
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
-
-builder.Services.AddBlazorClientCore()
-                .AddAuthorizationCore()
-                .AddSingleton<AuthenticationStateProvider, PersistentAuthenticationStateProvider>()
-                .AddSingleton<AccessTokenProvider>()
-                .AddSingleton<IAccessTokenProvider>(s => s.GetRequiredService<AccessTokenProvider>())
-                .AddSingleton<AppContainer>()
-                .AddCommonRCLForClient(s =>
+builder.Services.AddZLJBlazorClient(s =>
                 {
                     var fw = s.GetRequiredService<AppContainer>();
                     if (fw.AbpUserConfiguration != null && fw.AbpUserConfiguration.Auth != default)
@@ -28,7 +20,9 @@ builder.Services.AddBlazorClientCore()
                     }
                     return new string[0];
                 })
-                .AddTransient<IAbpSession, MyAbpSession>();
+                .AddAdminBlazor()
+                .AddAuthorizationCore()
+                .AddSingleton<AppContainer>();
 
 builder.Services.AddAdminApiClientProxy(hc =>
 {
