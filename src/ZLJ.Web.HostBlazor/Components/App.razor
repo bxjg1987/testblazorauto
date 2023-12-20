@@ -13,19 +13,24 @@
     @* <link href="_content/ZLJ.Admin.CoreRCL/css/site.css" rel="stylesheet"> *@
 
     <link href="/app.css" rel="stylesheet" />
-    <HeadOutlet  />
+    <HeadOutlet />
 </head>
 
 <body>
     <app>
-        <ZLJ.Admin.CoreRCL.Startup.Routes  />
+        <ZLJ.Admin.CoreRCL.Startup.Routes />
     </app>
 
-    <ZLJ.Admin.CoreRCL.Startup.RenderModeHelper @rendermode="new InteractiveWebAssemblyRenderMode(prerender: false)" />
-
+    @* 由于下面的问题，暂时 *@
+    @* https://github.com/dotnet/aspnetcore/issues/52740#issuecomment-1852841365 *@
+    @if (xs)
+    {
+        <ZLJ.Admin.CoreRCL.Startup.RenderModeHelper @rendermode="new InteractiveWebAssemblyRenderMode(prerender: false)" />
+    }
+    <NavLink @rendermode="new InteractiveServerRenderMode(prerender: false)"></NavLink>
     @* 图表库，cdn经常访问不了 *@
     @* <script type="text/javascript" src="@("https://unpkg.com/@antv/g2plot@2.4.17/dist/g2plot.min.js")"></script> *@
-     @* <script type="text/javascript" src="g2plot.min.js"></script> *@
+    @* <script type="text/javascript" src="g2plot.min.js"></script> *@
 
     <script src="_content/AntDesign/js/ant-design-blazor.js"></script>
     @* <script src="_content/AntDesign.Charts/ant-design-charts-blazor.js"></script> *@
