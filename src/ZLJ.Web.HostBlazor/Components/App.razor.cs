@@ -11,7 +11,7 @@ namespace ZLJ.Web.HostBlazor.Components
       ? null
       : RenderMode.InteractiveServer;
 
-        bool xs = false;
+        //bool xs = false;
 
         protected override void OnInitialized()
         {
@@ -25,22 +25,22 @@ namespace ZLJ.Web.HostBlazor.Components
              * 要么去看blazor.boot.json的处理有木有预留事件，若有则在前端清空此cookie
              * 否则将核心程序集hash写入cookie，然后这里比对，此办法相对简单
              */
-            if (xs == false)
-            {
-                if (HttpContext.Request.Cookies.TryGetValue("dqsj", out var sj))
-                {
-                    if ((DateTime.Now - DateTime.Parse(sj)).TotalSeconds > 60)
-                    {
-                        xs = true;
-                        //不要清空，
-                    }
-                    //否则继续等
-                }
-                else
-                {
-                    HttpContext.Response.Cookies.Append("dqsj",DateTime.Now.ToLongTimeString());
-                }
-            }
+            //if (xs == false)
+            //{
+            //    if (HttpContext.Request.Cookies.TryGetValue("dqsj", out var sj))
+            //    {
+            //        if ((DateTime.Now - DateTime.Parse(sj)).TotalSeconds > 60)
+            //        {
+            //            xs = true;
+            //            //不要清空，
+            //        }
+            //        //否则继续等
+            //    }
+            //    else
+            //    {
+            //        HttpContext.Response.Cookies.Append("dqsj",DateTime.Now.ToLongTimeString());
+            //    }
+            //}
 
             //Console.WriteLine(this.GetHashCode());
         }
