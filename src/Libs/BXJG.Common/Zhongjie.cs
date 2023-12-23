@@ -422,4 +422,17 @@ namespace BXJG.Common
         /// </summary>
         public static readonly AsyncLocal<Zhongjie> Current = new AsyncLocal<Zhongjie>();
     }
+
+    /*
+     * 有些场景不适合用全局的事件总线
+     * 比如blazor server中最好是一个 线路一个事件总线对象
+     * 再比如 多租户系统中 可能希望一个租户一个事件总线对象
+     * 
+     * 这里定义一个接口，若你发现可以在你的场景中用，就用，否则自己去定义
+     */
+
+    public interface IZhongjieProvider
+    {
+        Zhongjie GetCurrent();
+    }
 }

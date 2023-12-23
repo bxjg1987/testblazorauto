@@ -15,7 +15,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IServiceCollection AddZLJBlazorClient(this IServiceCollection services, Func<IServiceProvider, IEnumerable<string>> permissionNamesProvider)
         {
-            services.AddZLJBlazor().AddCommonRCLClient(permissionNamesProvider).AddTransient<IAbpSession, MyAbpSession>();
+            services.AddZLJBlazor()
+                    .AddCommonRCLClient(permissionNamesProvider)
+                    .AddTransient<IAbpSession, MyAbpSession>();
             return services;
         }
         /// <summary>
@@ -23,10 +25,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>
-        public static IServiceCollection AddZLJBlazor(this IServiceCollection services)
+        static IServiceCollection AddZLJBlazor(this IServiceCollection services)
         {
             services.AddAntDesign()
-                    .AddCommonRCL()
                     .AddCascadingAuthenticationState();
             return services;
         }
@@ -37,7 +38,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IServiceCollection AddZLJBlazorServer(this IServiceCollection services)
         {
-            return services.AddZLJBlazor().AddCommonRCLServer();
+            services.AddZLJBlazor()
+                    .AddCommonRCLServer();
+            return services;
         }
     }
 }

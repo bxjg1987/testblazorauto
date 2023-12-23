@@ -23,10 +23,12 @@ using Abp.Runtime.Session;
 using Abp.Zero.Configuration;
 using System.Reflection;
 using Abp.Reflection.Extensions;
+using Microsoft.AspNetCore.Components.Server.Circuits;
+using BXJG.Common;
 
 namespace ZLJ.Web.HostBlazor.Startup
 {
-    [DependsOn( typeof(ZLJWebCoreModule))]
+    [DependsOn(typeof(ZLJWebCoreModule),typeof(BXJGUtilsRCLModule))]
     public class ZLJWebHostModule : AbpModule
     {
         private readonly IWebHostEnvironment _env;
@@ -40,16 +42,21 @@ namespace ZLJ.Web.HostBlazor.Startup
         }
         public override void PreInitialize()
         {
-           
+
             Configuration.BackgroundJobs.IsJobExecutionEnabled = false;
         }
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(typeof(ZLJWebHostModule).GetAssembly());
+
+            //IocManager.RegService(services =>
+            //{
+              
+            //});
         }
         public override void PostInitialize()
         {
-          //  IocManager.Resolve<ApplicationPartManager>().AddApplicationPartsIfNotAddedBefore(Assembly.GetExecutingAssembly());
+            //  IocManager.Resolve<ApplicationPartManager>().AddApplicationPartsIfNotAddedBefore(Assembly.GetExecutingAssembly());
 
             var workManager = IocManager.Resolve<IBackgroundWorkerManager>();
 

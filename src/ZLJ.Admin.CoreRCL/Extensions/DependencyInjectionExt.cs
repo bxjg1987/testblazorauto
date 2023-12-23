@@ -19,7 +19,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IServiceCollection AddAdminBlazor(this IServiceCollection services)
         {
-            return services.AddZLJBlazor();
+            return services;
         }
     }
 }

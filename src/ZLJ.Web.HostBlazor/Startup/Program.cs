@@ -57,7 +57,7 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddScoped<AuthenticationStateProvider, PersistingRevalidatingAuthenticationStateProvider>();
 
-builder.Services.AddZLJBlazorServer().AddZLJBlazor();
+builder.Services.AddZLJBlazorServer().AddAdminBlazor();
 
 var app = builder.Build();
 app.Use((ctx, next) =>

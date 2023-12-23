@@ -1,5 +1,7 @@
-﻿using BXJG.Common.Http;
+﻿using BXJG.Common;
+using BXJG.Common.Http;
 using BXJG.Common.RCL.Auth;
+using BXJG.Common.RCL.Event;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -23,22 +25,25 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IServiceCollection AddCommonRCLClient(this IServiceCollection services, Func<IServiceProvider, IEnumerable<string>> permissionNamesProvider)
         {
-            services.AddCommonRCL();
-            services.AddTransient<IAuthorizationPolicyProvider, PermissionNameAuthorizationPolicyProvider>()
+            services.AddCommonRCL()
+                    .AddSingleton<IZhongjieProvider, ZhongjieProvider>()
+                    .AddTransient<IAuthorizationPolicyProvider, PermissionNameAuthorizationPolicyProvider>()
                     .AddKeyedSingleton<Func<IEnumerable<string>>>(OperationAuthorizationRequirement.GrantedPermissionNamesProvider, (s, o) => () => permissionNamesProvider(s))
                     .AddSingleton<AuthenticationStateProvider, PersistentAuthenticationStateProvider>()
                     .AddSingleton<AccessTokenProvider>()
                     .AddSingleton<IAccessTokenProvider>(s => s.GetRequiredService<AccessTokenProvider>());
             return services;
         }
-        public static IServiceCollection AddCommonRCL(this IServiceCollection services)
+        static IServiceCollection AddCommonRCL(this IServiceCollection services)
         {
             //可能被重复调用，注册时要注意
-            return services;
+            return services.AddBXJGCommon();
         }
+        //引用服务端的包，客户端启动时会报错
         public static IServiceCollection AddCommonRCLServer(this IServiceCollection services)
         {
-            return services.AddCommonRCL();
+            services.AddCommonRCL();
+            return services;
         }
         //public static IServiceCollection AddCommonRCLPermissionProvider(this IServiceCollection services, Func<IServiceProvider, Func<IEnumerable<string>>> permissionNamesProvider)
         //{

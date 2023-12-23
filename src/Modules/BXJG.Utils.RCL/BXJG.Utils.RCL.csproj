@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <Folder Include="Areas\MyFeature\Pages\" />
+    <Folder Include="Event\" />
   </ItemGroup>
 
 

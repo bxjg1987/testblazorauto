@@ -1,12 +1,13 @@
 ﻿@rendermode InteractiveAuto
 @page "/test"
+@using BXJG.Common
 @using BXJG.Common.Http
 @using Microsoft.AspNetCore.Components.Authorization
 @attribute [Authorize("Administrator")]
 @inject AuthenticationStateProvider authSP
 @* @attribute [ReuseTabsPage(Title = "测试")] *@
-
-
+@implements IDisposable
+@inherits OwningComponentBase
 <PageTitle>测试1111111</PageTitle>
 <p>
     @count
@@ -23,20 +24,45 @@ accessToken：
 同时登陆后才能看到，为了测试身份验证。
 <br />
 F12查看浏览器日志，以确定它是否在浏览器种执行
-
+<br />
 
 <AuthorizeView Policy="Administrator">
-
-    xxx
+    鉴权Administrator成功！
 </AuthorizeView>
-@code{
-    string kkk=string.Empty;
+<br />
+
+
+@code {
+    IDisposable sj;
+    Zhongjie zhongjie;
+    [Inject]
+    IZhongjieProvider sdfsdf { get; set; }
+    public void Dispose()
+    {
+        sj?.Dispose();
+    }
+
+    string kkk = string.Empty;
     int count;
-    async Task ccc(){
+    async Task ccc()
+    {
         Console.WriteLine(DateTime.Now.ToLongTimeString());
         var sdfsd = await authSP.GetAuthenticationStateAsync();
-       kkk= sdfsd.User.Claims.SingleOrDefault(c => c.Type == "AccessToken")?.Value;
-
+        kkk = sdfsd.User.Claims.SingleOrDefault(c => c.Type == "AccessToken")?.Value;
+        if (zhongjie != default)
+        await zhongjie.Chufa("aaa");
         count++;
     }
+    protected override void OnInitialized()
+    {
+       // var sdfsdf = base.ScopedServices.GetRequiredService<IZhongjieProvider>();
+        zhongjie = sdfsdf.GetCurrent();
+        if(zhongjie!=default)
+     {   sj = zhongjie.Zhuce(() =>
+        {
+            Console.WriteLine("事件触发了");
+            return ValueTask.CompletedTask;
+        }, "aaa");
+    }
+}
 }

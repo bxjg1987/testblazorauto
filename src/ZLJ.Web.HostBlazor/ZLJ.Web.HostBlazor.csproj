@@ -14,6 +14,7 @@
     <Compile Remove="Startup\HostingEnvironmentExtensions.cs" />
     <Compile Remove="Startup\Program2.cs" />
     <Compile Remove="Startup\Startup.cs" />
+    <Compile Remove="Startup\TrackingCircuitHandler.cs" />
     <Compile Remove="Startup\TxdlFirewall.cs" />
     <Compile Remove="Startup\WeatherForecast.cs" />
     <Compile Remove="Startup\WeatherForecastService.cs" />
@@ -33,5 +34,11 @@
     <ProjectReference Include="..\ZLJ.EntityFrameworkCore\ZLJ.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\ZLJ.Web.Core\ZLJ.Web.Core.csproj" />
   </ItemGroup>
-
+	
+	<ItemGroup Condition="'$(SolutionName)' == 'ZLJWithModules'">
+		<ProjectReference Include="..\Modules\BXJG.Utils.RCL\BXJG.Utils.RCL.csproj" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(SolutionName)' != 'ZLJWithModules'">
+		<PackageReference Include="BXJG.Utils.RCL" Version="*" />
+	</ItemGroup>
 </Project>

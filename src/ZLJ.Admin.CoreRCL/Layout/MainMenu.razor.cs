@@ -1,6 +1,7 @@
 ﻿using Abp.Application.Navigation;
 using Abp.Runtime.Session;
 using AntDesign;
+using BXJG.Common;
 
 namespace ZLJ.Admin.CoreRCL.Layout
 {
@@ -17,21 +18,38 @@ namespace ZLJ.Admin.CoreRCL.Layout
 
         private PersistingComponentStateSubscription subscription;
 
+
+        IDisposable sj;
+        Zhongjie zhongjie;
+        [Inject]
+        IZhongjieProvider sdfsdf { get; set; }
         public void Dispose()
         {
+            sj?.Dispose();
+
             subscription.Dispose();
         }
 
         [Inject]
         public IconService iconService { get; set; }
-        async Task OnPersisting()
+        Task OnPersisting()
         {
             state.PersistAsJson("main", menu);
+            return Task.CompletedTask;
         }
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
-
+            zhongjie = sdfsdf.GetCurrent();
+            //注意预渲染
+            if (zhongjie != default)
+            {
+                sj = zhongjie.Zhuce(() =>
+                {
+                    Console.WriteLine("事件触发了2");
+                    return ValueTask.CompletedTask;
+                }, "aaa");
+            }
             subscription = state.RegisterOnPersisting(OnPersisting);
 
             if (!state.TryTakeFromJson("main", out menu))
