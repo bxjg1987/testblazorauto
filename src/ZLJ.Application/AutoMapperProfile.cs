@@ -20,6 +20,8 @@ using ZLJ.Authorization.Users;
 using ZLJ.BaseInfo.Administrative;
 using ZLJ.BaseInfo.AssociatedCompany;
 using ZLJ.App.Common.Users;
+using Abp.Auditing;
+using ZLJ.Application.Share.Auditing;
 
 namespace ZLJ.App.Admin
 {
@@ -33,7 +35,7 @@ namespace ZLJ.App.Admin
         /// </summary>
         public AutoMapperProfile()
         {
-
+            CreateMap<AuditLog, AuditLogListDto>();
 
             #region 组织单位
             //CreateMap<OUEditDto,Abp.Organizations.OrganizationUnit >().ForMember(c=>c.)

@@ -34,6 +34,9 @@ namespace ZLJ.Authorization.Users
         {
             var claim = await base.CreateAsync(user);
 
+            //TenantId
+           // claim.Identities.First().AddClaim(new Claim("TenantId", user.TenantId.HasValue?user.TenantId.Value.ToString():"0"));
+
             if (user is CustomerStaffInfoEntity cs)
             {
                 claim.Identities.First().AddClaim(new Claim("customerId", cs.CustomerId.ToString()));

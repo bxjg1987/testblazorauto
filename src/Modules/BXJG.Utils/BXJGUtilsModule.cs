@@ -22,6 +22,7 @@ using System;
 using Abp.Threading;
 using System.Threading.Tasks;
 using BXJG.Utils.GeneralTree;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BXJG.Utils
 {

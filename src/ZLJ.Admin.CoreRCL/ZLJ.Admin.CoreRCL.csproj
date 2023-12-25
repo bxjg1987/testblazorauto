@@ -1,0 +1,71 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
+		<StaticWebAssetProjectMode>Default</StaticWebAssetProjectMode>
+	</PropertyGroup>
+
+
+	<ItemGroup>
+		<Compile Remove="Auth\AccessTokenProvider.cs" />
+		<Compile Remove="Auth\PersistentAuthenticationStateProvider.cs" />
+		<Compile Remove="Auth\UserInfo.cs" />
+		<Compile Remove="Layout\MainLayout.razor.cs" />
+		<Compile Remove="Layout\RightContent.razor.cs" />
+		<Compile Remove="MainLayout.razor.cs" />
+		<Compile Remove="Startup\TenantProvider.cs" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+		<Content Remove="Layout\MainLayout.razor" />
+		<Content Remove="Layout\RightContent.razor" />
+		<Content Remove="MainLayout.razor" />
+		<Content Remove="Startup\RenderModeItem.razor" />
+		<Content Remove="wwwroot\css\site.css" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+		<None Remove="Layout\MainLayout.razor.css" />
+		<None Remove="MainLayout.razor.css" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+		<SupportedPlatform Include="browser" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Abp.Web.Common" Version="9.0.0" />
+		<PackageReference Include="AntDesign.ProLayout" Version="0.16.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.0" />
+
+		<PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="wwwroot\css\" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(SolutionName)' != 'ZLJWithModules'">
+		<PackageReference Include="BXJG.Common" Version="*" />
+		<PackageReference Include="BXJG.Common.RCL" Version="*" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(SolutionName)' == 'ZLJWithModules'">
+		<!--<ProjectReference Include="..\libs\BXJG.Common\BXJG.Common.csproj" />-->
+		<ProjectReference Include="..\Libs\BXJG.Common.RCL\BXJG.Common.RCL.csproj" />
+
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\ZLJ.Admin.ClientProxy\ZLJ.Admin.ClientProxy.csproj" />
+	  <ProjectReference Include="..\ZLJ.Web.Blazor\ZLJ.Web.Blazor.csproj" />
+	</ItemGroup>
+</Project>

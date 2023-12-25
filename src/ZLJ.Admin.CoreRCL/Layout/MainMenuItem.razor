@@ -1,0 +1,33 @@
+﻿@if (MenuItem.IsVisible)
+{
+    @if (MenuItem.Items != default && MenuItem.Items.Any())
+    {
+        <SubMenu Key="@MenuItem.Name" >
+            <TitleTemplate>
+                <Icon Type="mail" Theme="outline"></Icon>
+                <span>@MenuItem.DisplayName</span>
+            </TitleTemplate>
+            <ChildContent>
+            @foreach (var item in MenuItem.Items)
+            {
+                <MainMenuItem MenuItem="item" />
+            }
+            </ChildContent>
+        </SubMenu>
+    }
+    else
+    {
+        <MenuItem Key="@MenuItem.Name" Icon="pie-chart">
+            <IconTemplate>
+                <IconFont Type="icon-c-sharp-l" />
+            </IconTemplate>
+            <ChildContent>
+                <MenuLink Href="@MenuItem.Url">@MenuItem.DisplayName</MenuLink>
+            </ChildContent>
+        </MenuItem>
+    }
+}
+@code {
+    [Parameter]
+    public Abp.Application.Navigation.UserMenuItem MenuItem { get; set; }
+}

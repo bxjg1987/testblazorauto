@@ -30,6 +30,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.DataProtection;
 using BXJG.Utils;
 using ZLJ.App.Common;
+using ZLJ.App.Admin;
+using ZLJ.EntityFrameworkCore;
+using BXJG.Common;
+using Abp.Configuration.Startup;
 
 namespace ZLJ
 {
@@ -47,40 +51,42 @@ namespace ZLJ
 
     [DependsOn(
         //typeof(AbpHangfireAspNetCoreModule),
-     
-        //typeof(ZLJApplicationModule),
-        //typeof(ZLJEntityFrameworkModule),
-        //typeof(AbpAspNetCoreModule),
+        typeof(BXJGUtilsWebModule),
+        typeof(ZLJApplicationModule),
+        typeof(ZLJEntityFrameworkModule),
+        typeof(AbpAspNetCoreModule),
         //typeof(AbpAspNetCoreSignalRModule),
         //typeof(CustomerApplicationModule),
-        typeof(CommonApplicationModule),
-        typeof(BXJGUtilsRCLModule))]
+        typeof(CommonApplicationModule))]
     public class ZLJWebCoreModule : AbpModule
     {
-        //private readonly IWebHostEnvironment _env;
-        //private readonly IConfigurationRoot _appConfiguration;
-        //ZLJEntityFrameworkModule abpProjectNameEntityFrameworkModule;
+        private readonly IWebHostEnvironment _env;
+        private readonly IConfigurationRoot _appConfiguration;
+        ZLJEntityFrameworkModule abpProjectNameEntityFrameworkModule;
         //AppOptions appOptions;
-        //public ZLJWebCoreModule(  IWebHostEnvironment env, ZLJEntityFrameworkModule abpProjectNameEntityFrameworkModule)
-        //{
-        //    _env = env;
-        //    _appConfiguration = env.GetAppConfiguration();
-        //    this.abpProjectNameEntityFrameworkModule = abpProjectNameEntityFrameworkModule;
-        //}
+        public ZLJWebCoreModule(IWebHostEnvironment env, ZLJEntityFrameworkModule abpProjectNameEntityFrameworkModule)
+        {
+            _env = env;
+            _appConfiguration = env.GetAppConfiguration();
+            this.abpProjectNameEntityFrameworkModule = abpProjectNameEntityFrameworkModule;
+        }
 
-      //  public override void PreInitialize()
-       // {
-           
+        public override void PreInitialize()
+        {
 
-            //使用mvc的时间格式化起为动态api处理时间格式
+
+            //    使用mvc的时间格式化起为动态api处理时间格式
             //Configuration.Modules.AbpAspNetCore().UseMvcDateTimeFormatForAppServices = true;
 
+            abpProjectNameEntityFrameworkModule.SkipDbSeed=true;
 
-            //Configuration.DefaultNameOrConnectionString = _appConfiguration.GetConnectionString(
-            //    ZLJConsts.ConnectionStringName
-            //);
+            Configuration.DefaultNameOrConnectionString = _appConfiguration.GetConnectionString(
+                ZLJConsts.ConnectionStringName
+            );
 
-          
+            // Use database for language management
+            Configuration.Modules.Zero().LanguageManagement.EnableDbLocalization();
+            
 
             //Configuration.Modules.AbpAspNetCore()
             //    .CreateControllersForAppServices(
@@ -105,11 +111,11 @@ namespace ZLJ
 
             //ConfigureTokenAuth();
 
-            ////默认每次启动都会尝试数据库迁移，这里禁用它提高系统启动速度
-            //abpProjectNameEntityFrameworkModule.SkipDbSeed = true;
+            //默认每次启动都会尝试数据库迁移，这里禁用它提高系统启动速度
+            // abpProjectNameEntityFrameworkModule.SkipDbSeed = true;
 
-            // Configuration.ReplaceService<IEnv, NetCoreEnv>(DependencyLifeStyle.Singleton); //经过测试没什么卵用
-      //  }
+            //   Configuration.ReplaceService<IEnv, NetCoreEnv>(DependencyLifeStyle.Singleton); //经过测试没什么卵用
+        }
 
         //private void ConfigureTokenAuth()
         //{
@@ -130,6 +136,18 @@ namespace ZLJ
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(typeof(ZLJWebCoreModule).GetAssembly());
+            //Lazy<TService>注入
+            IocManager.IocContainer.Register(
+               Castle.MicroKernel.Registration.Component.For<ILazyComponentLoader>().ImplementedBy<LazyOfTComponentLoader>()
+            );
+
+
+            //使用sqlserver作为分布式锁https://github.com/madelson/DistributedLock
+            ConfigureDistributedLock();
+            //全局雪花id生成器
+            ConfigureIdGenarator();
+
+            IocManager.Register<TokenAuthConfiguration>();
 
             ////Lazy<TService>注入
             //IocManager.IocContainer.Register(
@@ -146,7 +164,7 @@ namespace ZLJ
             //{
             //    services.Configure<AppOptions>( _appConfiguration  .GetSection("app"));
 
-             
+
             //    //services.PostConfigure<AppOptions>(opt =>
             //    //{
             //    //    if (opt.sbslzxpdsc == default)
@@ -164,45 +182,55 @@ namespace ZLJ
             //});
         }
 
-        //public override void PostInitialize()
-        //{
-        //    //IocManager.Resolve<ApplicationPartManager>().AddApplicationPartsIfNotAddedBefore(Assembly.GetExecutingAssembly());
-        //    // Configuration.ReplaceService<IEnv, NetCoreEnv>(DependencyLifeStyle.Singleton);//经过测试没什么卵用
-        //    // var workManager = IocManager.Resolve<IBackgroundWorkerManager>();
-        //    //IocManager.RegService(services => {
-        //    //    //用ef存储asp.net core数据保护密钥
-        //    //    //https://learn.microsoft.com/zh-cn/aspnet/core/security/data-protection/configuration/overview?view=aspnetcore-6.0#persistkeystodbcontext
-        //    //    services.AddDataProtection().PersistKeysToDbContext<ZLJDbContext>();
-        //    //});
-        //}
-      
-        ///// <summary>
-        ///// 使用原生的雪花id生成器
-        ///// </summary>
-        //private void ConfigureIdGenarator()
-        //{
-        //    YitIdHelper.SetIdGenerator(new IdGeneratorOptions { WorkerId = ushort.Parse( this._appConfiguration["idGeneratorWorkerId"]) });
-        //    //   IocManager.IocContainer.Register(compo)
-        //    IocManager.IocContainer.Register(Castle.MicroKernel.Registration.Component.For<IIdGenerator>().Instance(YitIdHelper.IdGenInstance));
-        //    //IocManager.Register<IIdGenerator>(Abp.Dependency.DependencyLifeStyle.Singleton, )
-        //    //IocManager.Register()
-        //    //IocManager.IocContainer.Kernel.re
-        //    //IocManager.Register()
-        //    //IocManager.RegService(services => {
-        //    //    services.TryAddSingleton(YitIdHelper.IdGenInstance);
-        //    //});
-        //}
-        ///// <summary>
-        ///// 使用原生的分布式锁
-        ///// </summary>
-        //private void ConfigureDistributedLock()
-        //{
-        //    IocManager.IocContainer.Register(Castle.MicroKernel.Registration.Component.For<IDistributedLockProvider>().Instance(new SqlDistributedSynchronizationProvider(Configuration.DefaultNameOrConnectionString)));
+        public override void PostInitialize()
+        {
+            IocManager.Resolve<ApplicationPartManager>().AddApplicationPartsIfNotAddedBefore(Assembly.GetExecutingAssembly());
+            // Configuration.ReplaceService<IEnv, NetCoreEnv>(DependencyLifeStyle.Singleton);//经过测试没什么卵用
+            // var workManager = IocManager.Resolve<IBackgroundWorkerManager>();
+            //IocManager.RegService(services => {
+            //    //用ef存储asp.net core数据保护密钥
+            //    //https://learn.microsoft.com/zh-cn/aspnet/core/security/data-protection/configuration/overview?view=aspnetcore-6.0#persistkeystodbcontext
+            //    services.AddDataProtection().PersistKeysToDbContext<ZLJDbContext>();
+            //});
+            var tokenAuthConfig = IocManager.Resolve<TokenAuthConfiguration>();
 
-        //    //IocManager.RegService(srevices =>
-        //    //{
-        //    //    srevices.TryAddSingleton<IDistributedLockProvider>(_ => new SqlDistributedSynchronizationProvider(Configuration.DefaultNameOrConnectionString));
-        //    //});
-        //}
+            tokenAuthConfig.SecurityKey =
+                new SymmetricSecurityKey(
+                    Encoding.ASCII.GetBytes(_appConfiguration["Authentication:JwtBearer:SecurityKey"]));
+            tokenAuthConfig.Issuer = _appConfiguration["Authentication:JwtBearer:Issuer"];
+            tokenAuthConfig.Audience = _appConfiguration["Authentication:JwtBearer:Audience"];
+            tokenAuthConfig.SigningCredentials =
+                new SigningCredentials(tokenAuthConfig.SecurityKey, SecurityAlgorithms.HmacSha256);
+            tokenAuthConfig.Expiration = TimeSpan.FromDays(1);
+        }
+       
+        /// <summary>
+        /// 使用原生的雪花id生成器
+        /// </summary>
+        private void ConfigureIdGenarator()
+        {
+            YitIdHelper.SetIdGenerator(new IdGeneratorOptions { WorkerId = ushort.Parse(this._appConfiguration["idGeneratorWorkerId"]) });
+            //   IocManager.IocContainer.Register(compo)
+            IocManager.IocContainer.Register(Castle.MicroKernel.Registration.Component.For<IIdGenerator>().Instance(YitIdHelper.IdGenInstance));
+            //IocManager.Register<IIdGenerator>(Abp.Dependency.DependencyLifeStyle.Singleton, )
+            //IocManager.Register()
+            //IocManager.IocContainer.Kernel.re
+            //IocManager.Register()
+            //IocManager.RegService(services => {
+            //    services.TryAddSingleton(YitIdHelper.IdGenInstance);
+            //});
+        }
+        /// <summary>
+        /// 使用原生的分布式锁
+        /// </summary>
+        private void ConfigureDistributedLock()
+        {
+            IocManager.IocContainer.Register(Castle.MicroKernel.Registration.Component.For<IDistributedLockProvider>().Instance(new SqlDistributedSynchronizationProvider(Configuration.DefaultNameOrConnectionString)));
+
+            //IocManager.RegService(srevices =>
+            //{
+            //    srevices.TryAddSingleton<IDistributedLockProvider>(_ => new SqlDistributedSynchronizationProvider(Configuration.DefaultNameOrConnectionString));
+            //});
+        }
     }
 }

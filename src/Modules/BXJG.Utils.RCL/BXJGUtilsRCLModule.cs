@@ -1,6 +1,8 @@
 ﻿using Abp.AutoMapper;
 using Abp.Modules;
+using BXJG.Common;
 using BXJG.Utils.Notification;
+using BXJG.Utils.RCL;
 using Microsoft.AspNetCore.Components.Server.Circuits;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -17,16 +19,19 @@ namespace BXJG.Utils
     {
         public override void PreInitialize()
         {
-            Configuration.Notifications.Notifiers.Add<EventRealTimeNotifier>();
+            //Configuration.Notifications.Notifiers.Add<EventRealTimeNotifier>();
         }
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
             IocManager.RegService(services =>
             {
-                services.AddBXJGCommonRCL();
-                services.AddScoped<CircuitStateHandler>();
-                services.AddScoped<CircuitHandler>(c=>c.GetRequiredService<CircuitStateHandler>());
+                // services.AddBXJGCommonRCL();
+                //services.AddScoped<CircuitStateHandler>();
+                //  services.AddScoped<CircuitHandler>(c=>c.GetRequiredService<CircuitStateHandler>());
+                services.AddScoped<TrackingCircuitHandler>();
+                services.AddScoped<CircuitHandler>(x => x.GetRequiredService<TrackingCircuitHandler>());
+                services.AddScoped<IZhongjieProvider>(x => x.GetRequiredService<TrackingCircuitHandler>());
             });
         }
     }

@@ -1,10 +1,12 @@
 
+using ZLJ.Web.Blazor.Interceptors;
+
 namespace ZLJ.Web.Blazor.Components
 {
     /// <summary>
     /// 与Abp和BB有关的抽象组件（注意它与crud抽象组件是平级的）
     /// </summary>
-    public abstract class AbpBaseComponent/*<TUser, TUserManager, TRole>*/ : BXJG.Utils.Components.AbpBaseComponent// OwningComponentBase
+    public abstract class AbpBaseComponent:BXJG.Common.RCL.CommonBaseComponent
     //where TUser : AbpUser<TUser>
     //where TRole : AbpRole<TUser>, new()
     //where TUserManager : AbpUserManager<TRole, TUser>

@@ -10,11 +10,12 @@ using Abp.Domain.Repositories;
 using Abp.Extensions;
 using Abp.Linq.Extensions;
 using ZLJ.Authorization.Users;
-using ZLJ.App.Admin.Auditing.Dto;
 using System;
 using Abp.Linq;
 using Microsoft.EntityFrameworkCore;
 using ZLJ.App.Admin.Authorization.Permissions;
+using ZLJ.Application.Share.Auditing;
+using ZLJ.Application.Share.Auditing.Dto;
 
 namespace ZLJ.App.Admin.Auditing
 {
@@ -52,11 +53,11 @@ namespace ZLJ.App.Admin.Auditing
 
             if (input.Sorting.IsNullOrWhiteSpace())
                 input.Sorting = "AuditLog.ExecutionTime desc";
-            else if (input.Sorting.ToLower().StartsWith("username"))
+            else if (input.Sorting.ToLower().StartsWith("username")&& !input.Sorting.StartsWith("User."))
             {
                 input.Sorting = "User." + input.Sorting;
             }
-            else
+            else if( !input.Sorting.StartsWith("AuditLog."))
             {
                 input.Sorting = "AuditLog." + input.Sorting;
             }
@@ -64,9 +65,9 @@ namespace ZLJ.App.Admin.Auditing
             var query = CreateAuditLogAndUsersQuery(input);
 
             var resultCount = await AsyncQueryableExecuter.CountAsync(query);
-            var results = await AsyncQueryableExecuter.ToListAsync(query
+            var results = await query
                 .OrderBy(input.Sorting)
-                .PageBy(input));
+                .PageBy(input).ToListAsync();
 
             var auditLogListDtos = ConvertToAuditLogListDtos(results);
 

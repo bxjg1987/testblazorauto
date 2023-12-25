@@ -34,18 +34,30 @@
 	<ItemGroup>
 		<Compile Remove="App_Data\Logs\**" />
 		<Compile Remove="Locales\**" />
+		<Compile Remove="Pages\**" />
+		<Compile Remove="Shared\**" />
+		<Compile Remove="Views\**" />
 		<Compile Remove="wwwroot\upload\contracts\**" />
 		<Compile Remove="wwwroot\upload\images\**" />
 		<Content Remove="App_Data\Logs\**" />
 		<Content Remove="Locales\**" />
+		<Content Remove="Pages\**" />
+		<Content Remove="Shared\**" />
+		<Content Remove="Views\**" />
 		<Content Remove="wwwroot\upload\contracts\**" />
 		<Content Remove="wwwroot\upload\images\**" />
 		<EmbeddedResource Remove="App_Data\Logs\**" />
 		<EmbeddedResource Remove="Locales\**" />
+		<EmbeddedResource Remove="Pages\**" />
+		<EmbeddedResource Remove="Shared\**" />
+		<EmbeddedResource Remove="Views\**" />
 		<EmbeddedResource Remove="wwwroot\upload\contracts\**" />
 		<EmbeddedResource Remove="wwwroot\upload\images\**" />
 		<None Remove="App_Data\Logs\**" />
 		<None Remove="Locales\**" />
+		<None Remove="Pages\**" />
+		<None Remove="Shared\**" />
+		<None Remove="Views\**" />
 		<None Remove="wwwroot\upload\contracts\**" />
 		<None Remove="wwwroot\upload\images\**" />
 		<None Update="wwwroot\files\**">
@@ -60,43 +72,18 @@
 	<ItemGroup>
 		<Compile Remove="Controllers\FileController.cs" />
 		<Compile Remove="Controllers\WeChatMiniProgramPaymentController.cs" />
-		<Compile Remove="Pages\DataDictionary\Create.razor.cs" />
-		<Compile Remove="Pages\DataDictionary\DetailOrUpdate.razor.cs" />
-		<Compile Remove="Pages\DataDictionary\List.razor.cs" />
-		<Compile Remove="Pages\Notification\NotifyManager.razor.cs" />
-		<Compile Remove="Pages\Notification\NotifySubscript.razor.cs" />
-		<Compile Remove="Pages\Post\Create.razor.cs" />
-		<Compile Remove="Pages\Post\List.razor.cs" />
-		<Compile Remove="Shared\AdminCreateDialog.razor.cs" />
-		<Compile Remove="Shared\AdminDetailBaseComponent.cs" />
-		<Compile Remove="Shared\AdminGeneralTreeCreateBaseComponent.cs" />
-		<Compile Remove="Shared\AdminGeneralTreeDetailOrUpdateBaseComponent.cs" />
-		<Compile Remove="Shared\AdminGeneralTreeListBaseComponent.cs" />
+		<Compile Remove="Startup\AdminNavigationProvider.cs" />
 		<Compile Remove="Startup\Class221.cs" />
+		<Compile Remove="Startup\CustAuthenticationSchemeProvider.cs" />
+		<Compile Remove="Startup\HostingEnvironmentExtensions.cs" />
 		<Compile Remove="Startup\TxdlFirewall.cs" />
 		<Compile Remove="Startup\WeatherForecast.cs" />
 		<Compile Remove="Startup\WeatherForecastService.cs" />
 		<Compile Remove="Startup\WeChatPaymentNoticeHandler.cs" />
 	</ItemGroup>
 	<ItemGroup>
-		<Content Remove="Pages\DataDictionary\Create.razor" />
-		<Content Remove="Pages\DataDictionary\DetailOrUpdate.razor" />
-		<Content Remove="Pages\DataDictionary\List.razor" />
-		<Content Remove="Pages\Notification\NotifyManager.razor" />
-		<Content Remove="Pages\Notification\NotifySubscript.razor" />
-		<Content Remove="Pages\Notification\Simple.razor" />
-		<Content Remove="Pages\Post\Create.razor" />
-		<Content Remove="Pages\Post\EditOrDetail.razor" />
-		<Content Remove="Pages\Post\List.razor" />
-		<Content Remove="Shared\AdminCreateDialog.razor" />
-		<Content Remove="Shared\BasicLayout.razor" />
-		<Content Remove="Views\BLogger\Logger.razor" />
-		<Content Remove="Views\Home\_AdminHost.cshtml" />
-		<Content Remove="Views\Home\_MainHost.cshtml" />
-		<Content Remove="Views\Shared\MainLayout.razor" />
-		<Content Remove="Views\Shared\NavMenu.razor" />
-		<Content Remove="Views\Shared\_Layout.cshtml" />
 		<Content Remove="wwwroot\swagger\ui\index.html" />
+		<Content Remove="_Imports.razor" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Remove="appsettings.nwct.json" />
@@ -104,9 +91,6 @@
 		<None Remove="BXJG.Shop.Application.xml" />
 		<None Remove="favicon.ico" />
 		<None Remove="Properties\PublishProfiles\IISProfile.pubxml" />
-		<None Remove="Views\BLogger\Logger.razor.css" />
-		<None Remove="Views\Shared\MainLayout.razor.css" />
-		<None Remove="Views\Shared\NavMenu.razor.css" />
 	</ItemGroup>
 	<ItemGroup>
 		<Content Include="favicon.ico">
@@ -151,12 +135,10 @@
 		<ProjectReference Include="..\..\..\abp\src\Modules\BXJG.Utils.Web\BXJG.Utils.Web.csproj" />-->
 		<ProjectReference Include="..\ZLJ.Application\ZLJ.Application.csproj" />
 		<ProjectReference Include="..\ZLJ.EntityFrameworkCore\ZLJ.EntityFrameworkCore.csproj" />
-		<ProjectReference Include="..\ZLJ.Web.Blazor\ZLJ.Web.Blazor.csproj" />
 		<ProjectReference Include="..\ZLJ.Web.Core\ZLJ.Web.Core.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Abp.Castle.Log4Net" Version="9.0.0" />
-		<PackageReference Include="AntDesign.ProLayout" Version="0.16.2" />
 		<!--<PackageReference Include="DistributedLock.SqlServer" Version="1.*" />
 		<PackageReference Include="DistributedLock.MySql" Version="1.*" />-->
 		<!--<PackageReference Include="DotNetCore.CAP.Dashboard" Version="7.2.0" />
@@ -184,13 +166,6 @@
 		<Content Update="wwwroot\swagger\ui\abp.swagger.js">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
-	</ItemGroup>
-	<ItemGroup>
-		<Folder Include="Pages\DataDictionary\" />
-		<Folder Include="Pages\Post\" />
-		<Folder Include="Views\BLogger\" />
-		<Folder Include="Views\Home\" />
-		<Folder Include="Views\Shared\" />
 	</ItemGroup>
 	<ProjectExtensions>
 		<VisualStudio>

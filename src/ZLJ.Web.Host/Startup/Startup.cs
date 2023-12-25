@@ -23,8 +23,8 @@ using Microsoft.Extensions.DependencyInjection;
 //using Savorboard.CAP.InMemoryMessageQueue;
 using ZLJ.App.Admin.Authorization.Permissions;
 using Medallion.Threading;
-using AntDesign.ProLayout;
-using ZLJ.Web.Host.Shared;
+//using AntDesign.ProLayout;
+//using ZLJ.Web.Host.Shared;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using static OpenXmlPowerTools.RevisionProcessor;
@@ -113,16 +113,16 @@ namespace ZLJ.Web.Host.Startup
             //services.AddTransient<WeatherForecastService>();
             //services.AddTableDemoDataService();
             //services.AddServerSideBlazor();
-            services.AddRazorComponents().AddInteractiveServerComponents();
+            //services.AddRazorComponents().AddInteractiveServerComponents();
 
             //等同于在根组件外面加了个CascadingAuthenticationState
-            services.AddCascadingAuthenticationState();
+           // services.AddCascadingAuthenticationState();
 
             //services.AddSingleton<TrackingCircuitHandler>();
 
             //services.AddSingleton<CircuitHandler, TrackingCircuitHandler>(p => p.GetRequiredService<TrackingCircuitHandler>());
             //services.AddBootstrapBlazor();
-            //services.AddSignalR(); //启用blazor时，已经包含这个
+            services.AddSignalR(); //启用blazor时，已经包含这个
 
             #region Mudblazor
             //各app可以提供自己的配置
@@ -142,8 +142,8 @@ namespace ZLJ.Web.Host.Startup
             #endregion
 
             #region antblaor
-            services.AddAntDesign();
-            services.Configure<ProSettings>(_appConfiguration.GetSection("ProSettings"));
+            //services.AddAntDesign();
+            //services.Configure<ProSettings>(_appConfiguration.GetSection("ProSettings"));
             #endregion
 
             // Configure CORS for angular2 UI
@@ -312,7 +312,7 @@ namespace ZLJ.Web.Host.Startup
                 // Configure Log4Net logging
                 //options => options.IocManager.IocContainer.AddFacility<LoggingFacility>(f => f.UseAbpLog4Net().WithConfig(webHostEnvironment.IsDevelopment() ? "log4net.config" : "log4net.Production.config"))
                 options => options.IocManager.IocContainer.AddFacility<LoggingFacility>(f => f.UseAbpLog4Net().WithConfig("log4net.config"))
-            , false);
+            , true);
             //注意这里的第2个参数，abp模板项目没有这个参数，使用的默认true
             //改为false是希望保留按约定拦截，具体看文档中的blazor集成
 
@@ -365,23 +365,7 @@ namespace ZLJ.Web.Host.Startup
 
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
-            if (this.webHostEnvironment.IsDevelopment())
-            {
-                // Enable middleware to serve generated Swagger as a JSON endpoint
-                app.UseSwagger(c => { c.RouteTemplate = "swagger/{documentName}/swagger.json"; });
-                // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)
-                app.UseSwaggerUI(options =>
-                {
-                    //options.SwaggerEndpoint(
-                    //    _appConfiguration["App:ServerRootAddress"].EnsureEndsWith('/') + "swagger/v1/swagger.json",
-                    //    "ZLJ API V1");
-                    options.SwaggerEndpoint($"/swagger/{_apiVersion}/swagger.json", $"ZLJ API {_apiVersion}");
-                    options.IndexStream = () => Assembly.GetExecutingAssembly()
-                        .GetManifestResourceStream("ZLJ.Web.Host.wwwroot.swagger.ui.index.html");
-                    options.DisplayRequestDuration(); // Controls the display of the request duration (in milliseconds) for "Try it out" requests.  
-
-                });
-            }
+           
             app.Use((ctx, next) =>
             {
                 ctx.Request.Headers["Accept-Language"] = ctx.Request.Headers["Accept-Language"].ToString()
@@ -401,6 +385,30 @@ namespace ZLJ.Web.Host.Startup
 
             app.UseRouting();
 
+            //app.Use(async (HttpContext a, Func<Task> b) =>
+            //{
+            //    //  var sdfsdf = app.ApplicationServices.GetRequiredService<IAuthorizationMiddlewareResultHandler>();
+            //    //       a.ChallengeAsync
+            //    // var sdfsdf = a.RequestServices.GetService<IAuthorizationPolicyProvider>();
+            //    // var sdfsfd = await sdfsdf.GetDefaultPolicyAsync();
+
+            //    //  var sdfs = sdfsfd.AuthenticationSchemes;
+
+            //    // a.ChallengeAsync();
+
+            //    var zz = a.RequestServices.GetService<IAuthenticationService>();
+            //    await zz.AuthenticateAsync(a,default);
+
+
+
+            //    var zc = a.RequestServices.GetService<IAuthenticationSchemeProvider>();
+            //    var q = await zc.GetDefaultChallengeSchemeAsync();
+            //    var q1 = await zc.GetDefaultForbidSchemeAsync();
+            //    var q3 = await zc.GetDefaultAuthenticateSchemeAsync();
+
+            //    //    await b(a);
+            //}
+            //);
 
             //若存在IAuthenticationRequestHandler，则执行它并放弃其它的身份验证
             //否则使用默认身份验证方案
@@ -425,7 +433,6 @@ namespace ZLJ.Web.Host.Startup
             //    // Do logging or other work that doesn't write to the Response.
             //});
 
-            app.UseAbpRequestLocalization();
 
             ////app.UseWeChatPayment();
             //app.UseHangfireDashboard("/hangfire", new Hangfire.DashboardOptions
@@ -438,32 +445,14 @@ namespace ZLJ.Web.Host.Startup
             //    Authorization = new[] { new AbpHangfireAuthorizationFilter(PermissionNames.HangFireDashboard) }
             //    //Authorization = new[] { new aaa(PermissionNames.HangFireDashboard) }
             //});
-            //app.Use(async (a, b) => {
-            //    //  var sdfsdf = app.ApplicationServices.GetRequiredService<IAuthorizationMiddlewareResultHandler>();
-            //    //       a.ChallengeAsync
-            //    var sdfsdf = a.RequestServices.GetService<IAuthorizationPolicyProvider>();
-            //    var sdfsfd = await sdfsdf.GetDefaultPolicyAsync();
-
-            //    var sdfs = sdfsfd.AuthenticationSchemes;
-
-            //    a.ChallengeAsync();
-
-            //    var zz = a.RequestServices.GetService<IAuthenticationService>();
-            //    zz.ChallengeAsync(a,null,null);
-
-
-
-            //    var zc = a.RequestServices.GetService<IAuthenticationSchemeProvider>();
-            // var q = await   zc.GetDefaultChallengeSchemeAsync();
-
-            //     await b(a);
-            //});
+           
 
             app.UseAuthorization();
 
-           
 
-            app.UseAntiforgery();
+            app.UseAbpRequestLocalization();
+
+            //app.UseAntiforgery();
 
           //  var opt = app.ApplicationServices.GetRequiredService<IOptionsMonitor<CookieAuthenticationOptions>>().CurrentValue;
 
@@ -481,16 +470,18 @@ namespace ZLJ.Web.Host.Startup
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapRazorComponents<Shared.App>().AddInteractiveServerRenderMode();
+               // endpoints.MapRazorComponents<Shared.App>().AddInteractiveServerRenderMode();
 
                 endpoints.MapHub<AbpCommonHub>("/signalr");
                 endpoints.MapHangfireDashboardWithAuthorizationPolicy(PermissionNames.HangFireDashboard);
+                endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute("defaultWithArea", "{area}/{controller=Home}/{action=Index}/{id?}");
                 //endpoints.MapHangfireDashboard(PermissionNames.HangFireDashboard, "/hangfire", new DashboardOptions
                 //{
                 //    Authorization = new[] { new AbpHangfireAuthorizationFilter(PermissionNames.HangFireDashboard) }
                 //});
                 // endpoints.MapBlazorHub();
-                endpoints.MapDefaultControllerRoute(); //mvc路由
+                //endpoints.MapDefaultControllerRoute(); //mvc路由
                 //endpoints.MapControllers();
 
                 //endpoints.MapHangfireDashboard();
@@ -526,8 +517,24 @@ namespace ZLJ.Web.Host.Startup
 
             });
 
+            if (this.webHostEnvironment.IsDevelopment())
+            {
+                // Enable middleware to serve generated Swagger as a JSON endpoint
+                app.UseSwagger(c => { c.RouteTemplate = "swagger/{documentName}/swagger.json"; });
+                // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)
+                app.UseSwaggerUI(options =>
+                {
+                    //options.SwaggerEndpoint(
+                    //    _appConfiguration["App:ServerRootAddress"].EnsureEndsWith('/') + "swagger/v1/swagger.json",
+                    //    "ZLJ API V1");
+                    options.SwaggerEndpoint($"/swagger/{_apiVersion}/swagger.json", $"ZLJ API {_apiVersion}");
+                    options.IndexStream = () => Assembly.GetExecutingAssembly()
+                        .GetManifestResourceStream("ZLJ.Web.Host.wwwroot.swagger.ui.index.html");
+                    options.DisplayRequestDuration(); // Controls the display of the request duration (in milliseconds) for "Try it out" requests.  
 
-          
+                });
+            }
+
 
             //不晓得为啥，放上面无法身份验证
             //app.UseHangfireServer();

@@ -6,4 +6,12 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Abp" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ZLJ.Application.Common.Share\ZLJ.Application.Common.Share.csproj" />
+  </ItemGroup>
+
 </Project>
