@@ -1,0 +1,28 @@
+﻿@page "/"
+@* @attribute [ReuseTabsPage(Title = "控制台", Pin = true, Closable = false)] *@
+
+
+@rendermode InteractiveServer
+
+<PageTitle>Home</PageTitle>
+
+<h1>Hello, world!</h1>
+这个页面使用server模式渲染，可以点击按钮时，观察 websocket通信 <br />
+
+左侧菜单使用的是auto模式，具有交互性的。
+<p>
+    @count
+</p>
+<Button OnClick="ccc">
+    增加
+</Button>
+首页
+
+
+@code {
+    int count;
+    void ccc()
+    {
+        count++;
+    }
+}

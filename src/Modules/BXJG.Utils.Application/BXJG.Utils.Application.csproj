@@ -1,0 +1,50 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>BXJG.Utils</RootNamespace>
+    <Version>1.2.72</Version>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <LangVersion>default</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <LangVersion>default</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="CAP\**" />
+    <EmbeddedResource Remove="CAP\**" />
+    <None Remove="CAP\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="AutoMapper\ExtensionDataSS.cs" />
+    <Compile Remove="AutoMapper\IExtendableDto.cs" />
+    <Compile Remove="Enums\GetStructForCombboxInput.cs" />
+    <Compile Remove="Extensions\ConditionFieldDefineExt.cs" />
+    <Compile Remove="File\AttachmentEditDto.cs" />
+    <Compile Remove="File\AttachmentService.cs" />
+    <Compile Remove="File\FileInput.cs" />
+    <Compile Remove="Notification\EventRealTimeNotifier.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Abp.AutoMapper" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BXJG.Utils\BXJG.Utils.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Extensions\" />
+  </ItemGroup>
+
+</Project>

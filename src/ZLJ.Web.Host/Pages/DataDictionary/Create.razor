@@ -1,0 +1,52 @@
+﻿@inherits AbpMudGeneralTreeCreateDialogBaseComponent<DataDictionaryAppService,
+                                                     GeneralTreeDto,
+                                                     GeneralTreeEditDto,
+                                                     GeneralTreeEditDto,
+                                                     GeneralTreeGetTreeInput>
+
+<MudDialog>
+    <TitleContent>
+        <MudStack Row="true" AlignItems="@AlignItems.Center">
+            <MudIcon Icon="@Icons.Material.Outlined.Add" />
+            <MudText Typo="@Typo.h6">新增@(FuncName)</MudText>
+            </MudStack>
+        </TitleContent>
+        <DialogContent>
+            <EditForm EditContext="editContext" @ref="editForm">
+                <DataAnnotationsValidator />
+
+                <MudTextField @bind-Value="createDto.DisplayName" For="() => createDto.DisplayName" Label="显示名称" Clearable="true" />
+                <MudSwitch @bind-Checked="createDto.IsTree" Label="是否启用" Color="Color.Success" />
+            </EditForm>
+        </DialogContent>
+        <DialogActions>
+            <MudButton Color="Color.Default" Variant="Variant.Filled" OnClick="BtnResetClick">
+                @if (isReseting)
+            {
+                <MudProgressCircular Color="Color.Primary" Size="Size.Small" Indeterminate="true" />
+                <MudText Class="ml-1">正在重置...</MudText>
+            }
+            else
+            {
+                @* <MudIcon Icon="@Icons.Material.Outlined.Save" Size="Size.Small" /> *@
+                <MudText Class="ml-1">重置</MudText>
+            }
+        </MudButton>
+        <MudTooltip Text="保存后继续新增">
+            <MudCheckBox @bind-Checked="saveAndContinue" />
+        </MudTooltip>
+        <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="BtnSaveClick" Disabled="IsBtnSaveDisabled">
+            @if (isSaving)
+            {
+                <MudProgressCircular Color="Color.Primary" Size="Size.Small" Indeterminate="true" />
+                <MudText Class="ml-1">正在保存...</MudText>
+            }
+            else
+            {
+                <MudIcon Icon="@Icons.Material.Outlined.Save" Size="Size.Small" />
+                <MudText Class="ml-1">保存</MudText>
+            }
+        </MudButton>
+        <MudButton Color="Color.Default" Variant="Variant.Filled" OnClick="Cancel">关闭</MudButton>
+    </DialogActions>
+</MudDialog>

@@ -1,0 +1,67 @@
+﻿
+@implements IAsyncDisposable
+@inject IJSRuntime JS
+@inherits OwningComponentBase
+<div @ref="container" @attributes="InputAttributes"></div>
+@code {
+    private IJSObjectReference? module;
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> InputAttributes { get; set; }
+
+    private ElementReference container;
+
+    public ValueTask vt { get; private set; } = default;
+    /// <summary>
+    /// 可选的初始数据
+    /// </summary>
+    [Parameter]
+    public object Option { get; set; } = new object();
+
+    //public override Task SetParametersAsync(ParameterView parameters)
+    //{
+    //    if (parameters.TryGetValue<object>(nameof(Option), out var opt))
+    //    {
+    //        if (opt == null)
+    //            opt = new { };
+
+    //    }
+    //    return base.SetParametersAsync(parameters);
+    //}
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            module = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/BXJG.Common.RCL/BXJGBlazorECharts.razor.js");
+            vt = module.InvokeVoidAsync("init", container, Option);
+            this.Option = default;
+            await vt;
+        }
+    }
+
+    public async Task SetOption(object option)
+    {
+        //await Task.Yield();
+        // if (module != default )
+        for (int i = 0; i < 500; i++)
+        {
+            if (vt != default && vt.IsCompleted)
+                break;
+
+            await Task.Delay(10);
+        }
+        //await Task.Yield(); //貌似这里根本没用,必须在调用地方去处理
+        await module.InvokeVoidAsync("setOption", container, option);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (module is not null)
+        {
+            vt = default;
+            await module.InvokeVoidAsync("dispose", container); //这里组件已经不在了，dom没有了，调用会报错
+            await module.DisposeAsync();
+        }
+    }
+}

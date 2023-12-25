@@ -1,0 +1,19 @@
+﻿@namespace ZLJ.Notice
+
+<MudText>@msg.Message</MudText>
+
+@code {
+    [Parameter]
+    public string? Data { get; set; }
+
+    Abp.Notifications.MessageNotificationData? msg;
+
+    protected override void OnParametersSet()
+    {
+        
+        if (Data.IsNotNullOrWhiteSpaceBXJG())
+            msg = System.Text.Json.JsonSerializer.Deserialize<Abp.Notifications.MessageNotificationData>(Data!)!;
+        else
+            msg = default;
+    }
+}

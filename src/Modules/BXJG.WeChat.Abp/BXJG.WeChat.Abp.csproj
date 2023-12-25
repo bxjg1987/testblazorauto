@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>BXJG.WeChat</RootNamespace>
+    <Version>1.2.10</Version>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <LangVersion>default</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <LangVersion>default</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="BXJGWeChartModuleConfig.cs" />
+    <Compile Remove="BXJGWeChatExtensions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Abp" Version="9.0.0" />
+    <PackageReference Include="BXJG.Utils" Version="*" />
+    <PackageReference Include="BXJG.WeChat" Version="*" />
+  </ItemGroup>
+
+</Project>

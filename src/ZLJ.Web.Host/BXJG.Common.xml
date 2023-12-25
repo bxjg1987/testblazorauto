@@ -1,0 +1,767 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>BXJG.Common</name>
+    </assembly>
+    <members>
+        <member name="T:BXJG.Common.BXJGDynamicPropertyWithoutInput">
+            <summary>
+            不需要用户输入的动态属性
+            </summary>
+        </member>
+        <member name="P:BXJG.Common.BXJGDynamicPropertyWithoutInput.Name">
+            <summary>
+            字段名称
+            </summary>
+        </member>
+        <member name="P:BXJG.Common.BXJGDynamicPropertyWithoutInput.DisplayName">
+            <summary>
+            字段显示名称
+            </summary>
+        </member>
+        <member name="P:BXJG.Common.BXJGDynamicPropertyWithoutInput.Type">
+            <summary>
+            字段类型
+            </summary>
+        </member>
+        <member name="P:BXJG.Common.BXJGDynamicPropertyWithoutInput.DisplayFormatter">
+            <summary>
+            格式化显示模式
+            </summary>
+        </member>
+        <member name="P:BXJG.Common.BXJGDynamicPropertyWithoutInput.Precision">
+            <summary>
+            小数位数
+            </summary>
+        </member>
+        <member name="P:BXJG.Common.BXJGDynamicPropertyWithoutInput.AdditionalData">
+            <summary>
+            额外状态数据
+            </summary>
+        </member>
+        <member name="T:BXJG.Common.BXJGDynamicProperty">
+            <summary>
+            字段元数据，包含输入
+            </summary>
+        </member>
+        <member name="P:BXJG.Common.BXJGDynamicProperty.InputType">
+            <summary>
+            前端输入框类型
+            </summary>
+        </member>
+        <member name="P:BXJG.Common.BXJGDynamicProperty.Values">
+            <summary>
+            可选值
+            </summary>
+        </member>
+        <member name="P:BXJG.Common.BXJGDynamicProperty.MultipleSelect">
+            <summary>
+            是否允许多选
+            </summary>
+        </member>
+        <member name="P:BXJG.Common.BXJGDynamicProperty.Validators">
+            <summary>
+            验证规则
+            </summary>
+        </member>
+        <member name="P:BXJG.Common.BXJGDynamicProperty.DefaultValue">
+            <summary>
+            默认值
+            </summary>
+        </member>
+        <member name="T:BXJG.Common.DynamicPropertyDto">
+            <summary>
+            关联显示时使用
+            </summary>
+        </member>
+        <member name="P:BXJG.Common.DynamicPropertyEditDto.Name">
+            <summary>
+            属性名称
+            </summary>
+        </member>
+        <member name="P:BXJG.Common.DynamicPropertyEditDto.CurrentValue">
+            <summary>
+            当前值
+            </summary>
+        </member>
+        <member name="T:BXJG.Common.PropertyChangeRecordDto`1">
+            <summary>
+            后台管理合同属性变更显示模型
+            </summary>
+        </member>
+        <member name="P:BXJG.Common.PropertyChangeRecordDto`1.Name">
+            <summary>
+            属性名
+            </summary>
+        </member>
+        <member name="P:BXJG.Common.PropertyChangeRecordDto`1.DisplayName">
+            <summary>
+            属性显示名
+            </summary>
+        </member>
+        <member name="P:BXJG.Common.PropertyChangeRecordDto`1.OriginalValue">
+            <summary>
+            原始值
+            </summary>
+        </member>
+        <member name="P:BXJG.Common.PropertyChangeRecordDto`1.CurrentValue">
+            <summary>
+            当前值
+            </summary>
+        </member>
+        <member name="P:BXJG.Common.PropertyChangeRecordDto`1.DifferenceValue">
+            <summary>
+            差值
+            </summary>
+        </member>
+        <member name="P:BXJG.Common.PropertyChangeRecordDto`1.IsChanged">
+            <summary>
+            是否有变动
+            </summary>
+        </member>
+        <member name="T:BXJG.Common.PropertyChangeRecordDto">
+            <summary>
+            后台管理合同属性变更显示模型
+            </summary>
+        </member>
+        <member name="T:BXJG.Common.CompareType">
+            <summary>
+            常用数据比较符
+            </summary>
+        </member>
+        <member name="T:BXJG.Common.CompareTypeMap">
+            <summary>
+            字段类型到可用比较符的映射
+            </summary>
+        </member>
+        <member name="M:BXJG.Common.CompareTypeMap.GetCompareTypes(System.String,System.Boolean)">
+            <summary>
+            获取指定类型可以使用的比较符
+            </summary>
+            <param name="typeName">类型短名称，即：typeof(xxx).Name，内部自动忽略大小写</param>
+            <param name="nullabel">此类型是否可控</param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Common.CompareTypeMap.GetCompareTypes``1">
+            <summary>
+            获取指定类型可以使用的比较符
+            </summary>
+            <typeparam name="T">类型</typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Common.CompareTypeMap.GetCompareTypes(System.Type)">
+            <summary>
+            
+            </summary>
+            <param name="t"></param>
+            <returns></returns>
+        </member>
+        <member name="T:BXJG.Common.Dto.BatchOperationInput`1">
+            <summary>
+            批量操作的输入模型
+            </summary>
+            <typeparam name="TKey"></typeparam>
+        </member>
+        <member name="T:BXJG.Common.Dto.BatchOperationConcurrencyInput`1">
+            <summary>
+            批量操作的输入模型
+            </summary>
+            <typeparam name="TKey">id类型</typeparam>
+        </member>
+        <member name="T:BXJG.Common.Dto.BatchOperationConcurrencyInputLong">
+            <summary>
+            批量操作输入模型，id类型为long
+            </summary>
+        </member>
+        <member name="T:BXJG.Common.Dto.BatchOperationConcurrencyInputGuid">
+            <summary>
+            批量操作输入模型，id类型为guid
+            </summary>
+        </member>
+        <member name="T:BXJG.Common.Dto.BatchAuditConcurrencyInput`1">
+            <summary>
+            批量审核的输入模型
+            </summary>
+            <typeparam name="TKey">id类型</typeparam>
+        </member>
+        <member name="P:BXJG.Common.Dto.BatchAuditConcurrencyInput`1.IsPass">
+            <summary>
+            是否通过
+            </summary>
+        </member>
+        <member name="P:BXJG.Common.Dto.BatchAuditConcurrencyInput`1.Reason">
+            <summary>
+            审核意见
+            </summary>
+        </member>
+        <member name="T:BXJG.Common.Dto.BatchAuditConcurrencyInputLong">
+            <summary>
+            批量审核的输入模型，id类型为long
+            </summary>
+        </member>
+        <member name="T:BXJG.Common.Dto.BatchAuditConcurrencyInputGuid">
+            <summary>
+            批量审核的输入模型，id类型为guid
+            </summary>
+        </member>
+        <member name="T:BXJG.Common.Dto.BatchAuditInput`1">
+            <summary>
+            批量审核的输入模型
+            </summary>
+            <typeparam name="TKey">id类型</typeparam>
+        </member>
+        <member name="P:BXJG.Common.Dto.BatchAuditInput`1.IsPass">
+            <summary>
+            是否通过
+            </summary>
+        </member>
+        <member name="P:BXJG.Common.Dto.BatchAuditInput`1.Reason">
+            <summary>
+            审核意见
+            </summary>
+        </member>
+        <member name="T:BXJG.Common.Dto.BatchAuditInputLong">
+            <summary>
+            批量审核的输入模型，id类型为long
+            </summary>
+        </member>
+        <member name="T:BXJG.Common.Dto.BatchAuditInputGuid">
+            <summary>
+            批量审核的输入模型，id类型为guid
+            </summary>
+        </member>
+        <member name="T:BXJG.Common.Dto.BatchOperationInput">
+            <summary>
+            批量操作的输入模型，id类型为int
+            </summary>
+            <typeparam name="TKey"></typeparam>
+        </member>
+        <member name="T:BXJG.Common.Dto.BatchOperationInputLong">
+            <summary>
+            批量操作的输入模型，id类型为long
+            </summary>
+        </member>
+        <member name="T:BXJG.Common.Dto.BatchOperationInputGuid">
+            <summary>
+            批量操作的输入模型，id类型为guid
+            </summary>
+        </member>
+        <member name="T:BXJG.Common.Dto.BatchOperationInputString">
+            <summary>
+            批量操作的输入模型，id类型为string
+            </summary>
+        </member>
+        <member name="T:BXJG.Common.Dto.BatchSwitchInput`1">
+            <summary>
+            批量开关
+            </summary>
+            <typeparam name="TKey">id类型</typeparam>
+        </member>
+        <member name="T:BXJG.Common.Dto.BatchSwitchInput">
+            <summary>
+            批量开关输入模型，id类型为int
+            </summary>
+        </member>
+        <member name="T:BXJG.Common.Dto.BatchSwitchInputLong">
+            <summary>
+            批量开关输入模型，id类型为int
+            </summary>
+        </member>
+        <member name="T:BXJG.Common.Dto.BatchSwitchInputGuid">
+            <summary>
+            批量开关输入模型，id类型为guid
+            </summary>
+        </member>
+        <member name="T:BXJG.Common.Dto.BatchSwitchInputString">
+            <summary>
+            批量开关输入模型，id类型为string
+            </summary>
+        </member>
+        <member name="T:BXJG.Common.Dto.BatchOperationErrorMessage">
+            <summary>
+            批量操作错误消息
+            </summary>
+        </member>
+        <member name="T:BXJG.Common.Dto.BatchOperationOutputBase">
+            <summary>
+            批量操作输出模型
+            </summary>
+            <typeparam name="TKey"></typeparam>
+        </member>
+        <member name="P:BXJG.Common.Dto.BatchOperationOutputBase.Ids">
+            <summary>
+            操作成功的id集合
+            </summary>
+        </member>
+        <member name="P:BXJG.Common.Dto.BatchOperationOutputBase.ErrorMessage">
+            <summary>
+            操作失败的id和原因<br />
+            理想的需要如下形式，但abp中 后端和前端都没有针对此方式做适配，因此也可以在错误时封装为UserFriendlyException
+            </summary>
+        </member>
+        <member name="T:BXJG.Common.Dto.BatchOperationOutput`1">
+            <summary>
+            批量操作输出模型
+            </summary>
+            <typeparam name="TKey"></typeparam>
+        </member>
+        <member name="P:BXJG.Common.Dto.BatchOperationOutput`1.Ids">
+            <summary>
+            操作成功的id集合
+            </summary>
+        </member>
+        <member name="T:BXJG.Common.Dto.BatchOperationOutputLong">
+            <summary>
+            批量操作的返回模型，id类型为long
+            </summary>
+            <typeparam name="TKey"></typeparam>
+        </member>
+        <member name="T:BXJG.Common.Dto.ConditionFieldDefine">
+            <summary>
+            动态条件字段定义
+            </summary>
+        </member>
+        <member name="P:BXJG.Common.Dto.ConditionFieldDefine.Name">
+            <summary>
+            属性名称
+            </summary>
+        </member>
+        <member name="P:BXJG.Common.Dto.ConditionFieldDefine.CompareType">
+            <summary>
+            比较符
+            </summary>
+        </member>
+        <member name="P:BXJG.Common.Dto.ConditionFieldDefine.Value">
+            <summary>
+            比较值
+            </summary>
+        </member>
+        <member name="T:BXJG.Common.Dto.GetForSelectInput">
+            <summary>
+            列表页搜索框、表单页下拉框查询使用的输入模型
+            分页版本参考utils中的GetPageForSelectInput
+            </summary>
+        </member>
+        <member name="P:BXJG.Common.Dto.GetForSelectInput.ForType">
+            <summary>
+            0直接返回查找到的后代节点，
+            
+            大于0的都会尝试增加父节点的返回
+            若ParentText不为空，则取ParentText的本地化文本后创建一个虚拟节点作为父节点，子节点为查询到的列表
+            
+            1 搜索框
+            2 表单框
+            
+            </summary>
+        </member>
+        <member name="P:BXJG.Common.Dto.GetForSelectInput.ParentText">
+            <summary>
+            给前端一个机会来设置自己想要的值，注意是否需要本地化调用方来决定
+            </summary>
+        </member>
+        <member name="T:BXJG.Common.Dto.IDynamicCondition">
+            <summary>
+            包含动态条件的输入模型应实现此接口
+            </summary>
+        </member>
+        <member name="M:BXJG.Common.Extensions.IEnumerableExtensions.HasChange``1(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            判断两个集合是否有变化
+            项使用Eq
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns>true有变化 false无变化</returns>
+        </member>
+        <member name="T:BXJG.Common.IClock">
+            <summary>
+            时钟
+            系统中很多地方都需要使用当前时间，但本机的时间不一定准确
+            根据情况可以考虑提供一个获取网络上的准确时间获取对象
+            默认还是本地时间，LocalClock
+            </summary>
+        </member>
+        <member name="T:BXJG.Common.LocalClock">
+            <summary>
+            本地时钟
+            </summary>
+        </member>
+        <member name="T:BXJG.Common.IEnv">
+            <summary>
+            用来获取当前程序宿主环境相关数据
+            </summary>
+        </member>
+        <member name="P:BXJG.Common.IEnv.WebRoot">
+            <summary>
+            web根目录，在asp.net core中就是wwwroot目录
+            </summary>
+        </member>
+        <member name="P:BXJG.Common.IEnv.RootUrl">
+            <summary>
+            当前请求的根url地址 https://www.abc.com/
+            </summary>
+        </member>
+        <member name="P:BXJG.Common.IEnv.SecureDirectory">
+            <summary>
+            安全目录，此目录不能被普通用户请求。类似asp.net webform中的app_data app_code 等
+            在asp.net core中好像只有wwwroot默认能被外网普通用户请求到，应用程序根目录应该是外网用户不能随意访问的
+            </summary>
+        </member>
+        <member name="M:BXJG.Common.RandomHelper.GetRandomString(System.Int32,System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            获取随机字符串
+            </summary>
+            <param name="length"></param>
+            <param name="includeLowercase"></param>
+            <param name="includeUppercase"></param>
+            <param name="includeNumber"></param>
+            <param name="includeSpecial"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Common.SecurityHelper.RandomBase64(System.Int32)">
+            <summary>
+            a-z A-Z 0-9 生成的随机值 性能略高于Random255
+            </summary>
+            <param name="length"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Common.SecurityHelper.Random255(System.String,System.Byte)">
+            <summary>
+            从指定字符串中生成随机值，做想生成a-z A-Z 0-9的随机值 RandomBase64方法性能略高
+            </summary>
+            <param name="str"></param>
+            <param name="length"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Common.SecurityHelper.RandomNumber(System.Byte)">
+            <summary>
+            随机纯数字的字符串
+            比如生成手机验证码
+            </summary>
+            <param name="length"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Common.SecurityHelper.GetMD532(System.String,System.Text.Encoding)">
+            <summary>
+            计算指定字符串的32位md5值
+            微信小程序支付签名算法使用的此方式，编码为utf8
+            已转换为大写
+            </summary>
+            <param name="str"></param>
+            <param name="encoding"></param>
+            <returns></returns>
+        </member>
+        <member name="T:BXJG.Common.YanchiChuli">
+            <summary>
+            延迟处理
+            </summary>
+        </member>
+        <member name="P:BXJG.Common.YanchiChuli.Job">
+            <summary>
+            需要延迟处理的任务
+            耗费资源的处理才需要做这种处理，所以它一定是异步
+            注意，其内部不应该抛出异常。
+            </summary>
+        </member>
+        <member name="P:BXJG.Common.YanchiChuli.Yanchi">
+            <summary>
+            延迟多久，单位毫秒
+            </summary>
+        </member>
+        <member name="P:BXJG.Common.YanchiChuli.Chaoshi">
+            <summary>
+            若任务一直被延迟，超过此时间，则强制执行。单位毫秒。
+            注意，它必须大于Yanchi
+            </summary>
+        </member>
+        <member name="F:BXJG.Common.YanchiChuli.zuihouZhixingShijian">
+            <summary>
+            最后执行时间
+            </summary>
+        </member>
+        <member name="F:BXJG.Common.YanchiChuli.zhixingBiaoji">
+            <summary>
+            执行标记
+            </summary>
+        </member>
+        <member name="M:System.Collections.Generic.CollectionExtensions.Xiangdeng``2(System.Collections.Generic.IDictionary{``0,``1},System.Collections.Generic.IDictionary{``0,``1})">
+            <summary>
+            判断两个字典是否相等
+            key数量相同，且每个值相等
+            </summary>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+            <param name="dic"></param>
+            <param name="dic2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.DateTimeExtensions.GetAgeString(System.DateTime)">
+            <summary>
+            获得年龄字符串：某个日期点到今天的年龄
+            默认返回：xx岁xx月xx天
+            </summary>
+            <param name="p_FirstDateTime">第1个日期参数</param>
+        </member>
+        <member name="M:System.DateTimeExtensions.GetAgeString(System.DateTime,System.String)">
+            <summary>
+            获得年龄字符串：某个日期点到今天的年龄
+            默认返回：xx岁xx月xx天
+            </summary>
+            <param name="p_FirstDateTime">第1个日期参数</param>
+            <param name="p_Format">返回字符串的格式，默认为：{0}岁{1}月{2}天</param>
+        </member>
+        <member name="M:System.DateTimeExtensions.GetAgeString(System.DateTime,System.DateTime)">
+            <summary>
+            获得年龄字符串：两个日期点之间的年龄
+            默认返回：xx岁xx月xx天
+            </summary>
+            <param name="p_FirstDateTime">第1个日期参数</param>
+            <param name="p_SecondDateTime">第2个日期参数</param>
+        </member>
+        <member name="M:System.DateTimeExtensions.GetAgeString(System.DateTime,System.DateTime,System.String)">
+            <summary>
+            获得年龄字符串：两个日期点之间的年龄
+            默认返回：xx岁xx月xx天
+            </summary>
+            <param name="p_FirstDateTime">第1个日期参数</param>
+            <param name="p_SecondDateTime">第2个日期参数</param>
+            <param name="p_Format">返回字符串的格式，默认为：{0}岁{1}月{2}天</param>
+        </member>
+        <member name="M:System.DateTimeExtensions.CalculateAgeString(System.DateTime,System.DateTime,System.String)">
+            <summary>
+            计算年龄字符串
+            默认返回：xx岁xx月xx天
+            </summary>
+            <param name="p_FirstDateTime">第1个日期参数</param>
+            <param name="p_SecondDateTime">第2个日期参数</param>
+            <param name="p_Format">返回字符串的格式，默认为：{0}岁{1}月{2}天</param>
+        </member>
+        <member name="M:System.DateTimeExtensions.MonthStart(System.DateTimeOffset)">
+            <summary>
+            月初
+            </summary>
+            <param name="dt"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.DateTimeExtensions.MonthStart(System.DateTime)">
+            <summary>
+            月初
+            </summary>
+            <param name="dt"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.DateTimeExtensions.MonthEnd(System.DateTime)">
+            <summary>
+            月末
+            </summary>
+            <param name="startMonth"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.DateTimeExtensions.Efface(System.DateTime,System.DateTimeEffaceType)">
+            <summary>
+            抹去时间的后面部分
+            </summary>
+            <param name="dt"></param>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.DateTimeExtensions.Efface(System.DateTimeOffset,System.DateTimeEffaceType)">
+            <summary>
+            抹去时间的后面部分
+            </summary>
+            <param name="dt"></param>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.DateTimeExtensions.WeekStart(System.DateTime)">
+            <summary>
+            本周一
+            </summary>
+            <param name="nowTime"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.DateTimeExtensions.WeekEnd(System.DateTime)">
+            <summary>
+            本周最后一天
+            </summary>
+            <param name="nowTime"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Linq.LinqExt.ApplyDynamicCondtion``1(System.Linq.IQueryable{``0},BXJG.Common.Dto.ConditionFieldDefine)">
+            <summary>
+            应用动态条件
+            </summary>
+            <param name="q"></param>
+            <param name="define"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Linq.LinqExt.ApplyDynamicCondtion``1(System.Linq.IQueryable{``0},System.Collections.Generic.IEnumerable{BXJG.Common.Dto.ConditionFieldDefine})">
+            <summary>
+            应用动态条件
+            </summary>
+            <param name="q"></param>
+            <param name="defines"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Linq.LinqExt.ApplyDynamicCondtion``1(System.Linq.IQueryable{``0},System.Object)">
+            <summary>
+            应用动态条件
+            </summary>
+            <param name="q"></param>
+            <param name="defines"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.ObjectExtensions.GetPropertyValue(System.Object,System.String,System.Reflection.BindingFlags)">
+            <summary>
+            反射获取指定属性的值
+            </summary>
+            <param name="obj"></param>
+            <param name="propertyName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.ObjectExtensions.GetValue``1(System.Object,System.String,System.Reflection.BindingFlags)">
+            <summary>
+            反射获取对象属性值并转换为指定类型
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="obj"></param>
+            <param name="propertyName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.ObjectExtensions.GetValueString(System.Object,System.String)">
+            <summary>
+            反射获取对象属性并转换为字符串
+            </summary>
+            <param name="obj"></param>
+            <param name="propertyName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.ObjectExtensions.TrySubtract(System.Object,System.Object,System.Object@)">
+            <summary>
+            尝试做减法运算
+            </summary>
+            <param name="obj"></param>
+            <param name="obj2"></param>
+            <param name="val"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.ObjectExtensions.TrySubtract(System.Object,System.Object,System.Object)">
+            <summary>
+            尝试做减法运算
+            </summary>
+            <param name="obj"></param>
+            <param name="obj2"></param>
+            <param name="val">失败时的默认值</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.SystemExtensions.DeserializeObject``1(System.String,System.Text.Json.JsonSerializerOptions)">
+            <summary>
+            反序列化包含object类型属性的对象
+            <see href="https://docs.microsoft.com/zh-cn/dotnet/standard/serialization/system-text-json-converters-how-to?pivots=dotnet-6-0#deserialize-inferred-types-to-object-properties "/>
+            </summary>
+            <typeparam name="TValue"></typeparam>
+            <param name="json"></param>
+            <param name="options"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.SystemExtensions.ToNullable``1(System.String)">
+            <summary>
+            <para>More convenient than using T.TryParse(string, out T). 
+            Works with primitive types, structs, and enums.
+            Tries to parse the string to an instance of the type specified.
+            If the input cannot be parsed, null will be returned.
+            </para>
+            <para>
+            If the value of the caller is null, null will be returned.
+            So if you have "string s = null;" and then you try "s.ToNullable...",
+            null will be returned. No null exception will be thrown. 
+            </para>
+            <author>Contributed by Taylor Love (Pangamma)</author>
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="p_self"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.SystemExtensions.DirectorySeparatorChar2UrlSeparatorChar(System.String)">
+            <summary>
+            将路径中的反斜杠转换为url中的正斜杠，已适配多操作系统
+            </summary>
+            <param name="str"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.SystemExtensions.UrlSeparatorChar2DirectorySeparatorChar(System.String)">
+            <summary>
+            将url中的正斜杠转换为路径中的反斜杠，已适配多操作系统
+            </summary>
+            <param name="str"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.SystemExtensions.CaptureClipFromLoop``1(``0[],``0,System.Int32,System.Boolean)">
+            <summary>
+            一个环（可以理解位首尾相连的数组，索引0规定为环的起始位），从里面取任意一段数据
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="enumerate"></param>
+            <param name="index"></param>
+            <param name="count"></param>
+            <param name="right"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.SystemExtensions.CaptureClipFromLoop``1(``0[],System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            一个环（可以理解位首尾相连的数组，索引0规定为环的起始位），从里面取任意一段数据
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="enumerate"></param>
+            <param name="index"></param>
+            <param name="count"></param>
+            <param name="right"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.SystemExtensions.GetDescriptionString(System.Enum)">
+            <summary>
+            获取枚举的描述信息
+            </summary>
+        </member>
+        <member name="M:System.SystemExtensions.Baoliu(System.String,System.Int32,System.String)">
+            <summary>
+            保留几个字符
+            </summary>
+            <param name="str"></param>
+            <param name="length"></param>
+            <param name="weiba"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.SystemExtensions.ToHexString(System.Byte[])">
+            <summary>
+            
+            </summary>
+            <param name="bytes"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.SystemExtensions.HexStringToByteArray(System.String)">
+            <summary>
+            十六进制字符串转字节数组
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.SystemExtensions.RecursionGetParentCode(System.String,System.String)">
+            <summary>
+            递归获取父节点的code
+            a.b.c  得到 [a,a.b]
+            </summary>
+            <param name="code"></param>
+            <param name="separator"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.SystemExtensions.IsNullable(System.Type)">
+            <summary>
+            判断类型是否可空
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

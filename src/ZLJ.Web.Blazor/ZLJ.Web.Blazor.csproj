@@ -1,0 +1,52 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>ZLJ.Web.Blazor</RootNamespace>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="AbpBlazorModule.cs" />
+    <Compile Remove="Components\AbpCreateBaseComponent.cs" />
+    <Compile Remove="Components\AbpCreateDialog.razor.cs" />
+    <Compile Remove="Components\AbpCreateDialogBaseComponent.cs" />
+    <Compile Remove="Components\AbpListBaseComponent.cs" />
+    <Compile Remove="Components\AbpTreeSelect.razor.cs" />
+    <Compile Remove="Components\FileName.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Components\AbpCreateDialog.razor" />
+    <Content Remove="Components\AbpTreeSelect.razor" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <SupportedPlatform Include="browser" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AntDesign" Version="0.16.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.0" />
+	  <!--当前项目定义了拦截器，就算当前项目引用的其它项目已经引用rougamo，这里也必须引用，
+	IncludeAssets="all" PrivateAssets="contentfiles;analyzers"是确保拦截器使用方不用引用rougamo的包-->
+	  <PackageReference Include="Rougamo.Fody" Version="2.1.1" IncludeAssets="all" PrivateAssets="contentfiles;analyzers" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Auth\" />
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+	<ItemGroup Condition="'$(SolutionName)' != 'ZLJWithModules'">
+		<PackageReference Include="BXJG.Utils.RCL" Version="*" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\Libs\BXJG.Common.RCL\BXJG.Common.RCL.csproj" />
+	  <ProjectReference Include="..\ZLJ.Application.Common.ClientProxy\ZLJ.Application.Common.ClientProxy.csproj" />
+	</ItemGroup>
+</Project>

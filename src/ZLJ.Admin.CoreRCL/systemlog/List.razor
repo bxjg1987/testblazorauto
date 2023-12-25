@@ -1,0 +1,17 @@
+﻿@page "/auditing"
+@rendermode InteractiveAuto
+@inherits AbpBaseComponent
+@using ZLJ.Application.Share.Auditing
+
+<Table @ref="table"
+       TItem="AuditLogListDto"
+       OnChange="OnChange"
+       RemoteDataSource="true"
+       DataSource="data"
+       Total="total"
+       RowKey="x=>x.Id">
+    <Selection Key="@(context.Id.ToString())" />
+    <PropertyColumn Property="c=>c.Id" Sortable />
+     <PropertyColumn Property="c=>c.BrowserInfo" Sortable />
+ </Table>
+
