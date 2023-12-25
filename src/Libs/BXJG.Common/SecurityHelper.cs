@@ -81,7 +81,7 @@ namespace BXJG.Common
 
         public static string GetMD5ByFilePath(this string fileName)
         {
-            using (FileStream file = new FileStream(fileName, FileMode.Open))
+            using (FileStream file = new FileStream(fileName, FileMode.Open, FileAccess.Read))
             {
                 return file.GetMD5();
             }

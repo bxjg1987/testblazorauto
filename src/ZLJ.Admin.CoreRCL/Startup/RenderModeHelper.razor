@@ -1,8 +1,9 @@
-﻿@using ZLJ.Admin.ClientProxy
+﻿@inherits OwningComponentBase
+@using ZLJ.Admin.ClientProxy
 @* <RenderModeItem @ref="server" @rendermode="InteractiveServer" /> *@
-
+@*
 @inject AppContainer appContainer
-@inject AbpUserConfigurationService abpUserCfgService
+@inject AbpUserConfigurationService abpUserCfgService *@
 
 @code {
     // RenderModeItem server;
@@ -18,8 +19,14 @@
     }
     protected override async Task OnInitializedAsync()
     {
-        appContainer.AbpUserConfiguration = await abpUserCfgService.GetAll();
-      //  Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(appContainer));
+        if (OperatingSystem.IsBrowser())
+        {
+            var abpUserCfgService = ScopedServices.GetRequiredService<AbpUserConfigurationService>();
+            var appContainer = ScopedServices.GetRequiredService<AppContainer>();
+            appContainer.AbpUserConfiguration = await abpUserCfgService.GetAll();
+        }
+        // appContainer.AbpUserConfiguration = await abpUserCfgService.GetAll();
+        //  Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(appContainer));
     }
 
 }
