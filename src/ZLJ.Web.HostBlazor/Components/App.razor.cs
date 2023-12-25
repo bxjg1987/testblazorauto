@@ -27,7 +27,7 @@ namespace ZLJ.Web.HostBlazor.Components
              */
             if (xs == false)
             {
-                var assemblyName = typeof(ZLJ.Admin.CoreRCL.Startup.Routes).Assembly.GetName() + ".dll";
+                var assemblyName = typeof(ZLJ.Admin.CoreRCL.Startup.Routes).Assembly.GetName().Name + ".dll";
                 var dir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
                 var hash = Path.Combine(dir, assemblyName).GetMD5ByFilePath();
                 // Console.WriteLine(Environment.CurrentDirectory + "===" + hash);

@@ -1,3 +1,5 @@
+> 文档的更新速度一般木有代码的更新速度快，请注意核对代码和文档的最后更新时间。
+
 # 简介
 [abp9.x(一代)](https://aspnetboilerplate.com/)是基于asp.net core 8.x的快速开发框架，包含：用户角色权限、多租户、多语言、模块化、日志、后台任务、缓存、对象映射、通知、等等大部分项目都会用到的特征，完整特征请查看它的官方文档。本项目是基于它搭建，并增加了更多功能。
 > 你应该先熟悉[abp9.x(一代)](https://aspnetboilerplate.com/)，因为本文档不会包含官方文档已存在的内容。
@@ -46,7 +48,7 @@ vs2022 .net8 sqlserver2012+
 主项目就是具体项目，来个新项目时需要复制一份，多个具体项目都是引用相同公共库的nuget包
 这样公共库可以一直升级下去。
 
-若使用ZLJ.sln打开解决方案，主项目将以nuget包形式引用公共库，此时你需要添加：http://222.178.145.148:19904/v3/index.json
+若使用ZLJ.sln打开解决方案，主项目将以nuget包形式引用公共库，此时你需要添加：http://192.168.200.81:8087/v3/index.json
 因为公共库经常在更新，所以我建了这个私有包源，你也可以将其打包后发布到nuget.org
 
 ## 公共库
@@ -63,23 +65,14 @@ vs2022 .net8 sqlserver2012+
     1. BXJG.Utils.Application 一些通用功能的应用服务，以及对abp应用服务的扩展。如：抽象crud应用服务接口和抽象类
     1. BXJG.Utils.Web 一些通用功能，跟web相关的，以及对abpweb相关扩展。
     1. BXJG.Utils.RCL 跟abp相关的blazor组件库，如：抽象组件AbpBaseComponent，它是个组件，里面定义了对abp常用属性的引用
-    1. BXJG.AbpBlazor 与abp和AntBlazor相关的组件库，如：crud抽象组件
+    1. BXJG.AbpBootstrapBlazor 与abp和BootstrapBlazor相关的组件库，如：crud抽象组件
     1. BXJG.WeChat.Abp 让我们的微信库与abp的继承
 
 ## 主项目
-1. framework下是标准的abp模板项目中的库，以下是特殊项目说明
-    1.1 ZLJ.Application.Common仅仅是公共的应用服务，里面存放所有应用共享的功能。
-    1.1 ZLJ.Application.Common.ClientProxy 公共应用服务的c#客户端代理
-    1.1 ZLJ.Application.Common.Share公共应用服务的接口、dto和验证规则，它在后端和blazor前端共享
-    1.1 ZLJ.Web.Core基本不用，不过也不能删；它在本项目中已经失去了原本的意义。
-    1.1 ZLJ.Web.Blazor在多个应用之间共享、在blazor auto模式中的server和client端共享。
-1. admin文件夹下是“后台管理应用”相关项目
-    1.1 ZLJ.Admin.ClientProxy 后台管理端的c#客户端代理，在blazor auto的client端用于与后端api交互。
-    1.1 ZLJ.Admin.CoreRCL blazor auto模式的客户端库，同时它还会被blazor auto中的server端引用
-    1.1 ZLJ.Application 后台管理端的应用服务
-    1.1 ZLJ.Application.Share 后台管理端的应用服务接口、dto等，它在前后端共享
-    1.1 ZLJ.Web.Host 后台管理服务的webapi
-    1.1 ZLJ.Web.HostBlazor 后台管理的blazor auto模式中的server端
+1. framework下是标准的abp模板项目中的库，但由于我们是单体框架，多应用，所以ZLJ.Application.Common仅仅是公共的应用服务，里面存放所有应用共享的功能。注：ZLJ.Web.Core基本不用，不过也不能删；它在本项目中已经失去了原本的意义。
+1. admin文件夹下是“后台管理应用”的应用服务（ZLJ.Application）和界面（ZLJ.Web.Admin）
+1. customer同上，它是“客户服务应用”的应用服务（ZLJ.Application.Customer）和界面（ZLJ.Web.Customer）
+1. ZLJ.Web.Host 它承载admin和custome这俩应用，也是我们的启动项目
 
 ## 各项目的引用关系
 自己打开先看看哈。
