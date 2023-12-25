@@ -41,7 +41,7 @@ vs2022 .net8 mssql/mysql5.7+(推荐8)
 1. 将ZLJ.Web.HostBlazor设为启动项，并启动它，会跳转到登录页面，租户：default   账号：admin      密码：123qwe
 
 # 项目结构
-![输入图片说明](docs/imgsimage.png)
+![输入图片说明](docs/image.png)
 
 分为公共库和主项目库，通常我们将公共库发布为nuget包，然后被主项目引用。
 主项目就是具体项目，来个新项目时需要复制一份，多个具体项目都是引用相同公共库的nuget包
