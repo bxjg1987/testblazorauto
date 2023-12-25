@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Razor">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 	<PropertyGroup>
 		<VersionPrefix>1.0.0.0</VersionPrefix>
 		<TargetFramework>net8.0</TargetFramework>
@@ -44,6 +44,8 @@
 		<Compile Remove="Authentication\WeChatMiniProgram\WeChatMiniProgramLoginHandler.cs" />
 		<Compile Remove="Components\ZLJBaseComponent.cs" />
 		<Compile Remove="CustomTempFileManager.cs" />
+		<Compile Remove="Models\TokenAuth\AuthenticateModel.cs" />
+		<Compile Remove="Models\TokenAuth\AuthenticateResultModel.cs" />
 		<Compile Remove="ZLJEquipmentNavigationProvider.cs" />
 		<Compile Remove="ZLJNavigationProvider.cs" />
 		<Compile Remove="ZLJWMSNavigationProvider.cs" />
@@ -57,9 +59,6 @@
 	</ItemGroup>
 	<ItemGroup Condition="'$(SolutionName)' == 'ZLJWithModules'">
 		<ProjectReference Include="..\Modules\BXJG.Utils.RCL\BXJG.Utils.RCL.csproj" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Compile Include="Configuration\HostingEnvironmentExtensions.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -83,8 +82,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\ZLJ.Application.Common\ZLJ.Application.Common.csproj" />
-		<ProjectReference Include="..\ZLJ.Application\ZLJ.Application.csproj" />
-		<ProjectReference Include="..\ZLJ.EntityFrameworkCore\ZLJ.EntityFrameworkCore.csproj" />
 	</ItemGroup>
 
 
