@@ -1,5 +1,3 @@
-> 准备搞abp vNext + blazor auto模式了，这个仓库停了
-
 # 简介
 [abp9.x(一代)](https://aspnetboilerplate.com/)是基于asp.net core 8.x的快速开发框架，包含：用户角色权限、多租户、多语言、模块化、日志、后台任务、缓存、对象映射、通知、等等大部分项目都会用到的特征，完整特征请查看它的官方文档。本项目是基于它搭建，并增加了更多功能。
 > 你应该先熟悉[abp9.x(一代)](https://aspnetboilerplate.com/)，因为本文档不会包含官方文档已存在的内容。
