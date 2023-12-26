@@ -18,6 +18,8 @@ namespace ZLJ.Admin.ClientProxy
 
         public async Task<PagedResultDto<AuditLogListDto>> GetAuditLogs(GetAuditLogsInput input)
         {
+            if (input.MaxResultCount <= 0)
+                input.MaxResultCount = 20;
             //最好把这个方法变成post的，传参更简单，或把api整体配置为post
             return await Post<PagedResultDto<AuditLogListDto>>("api/services/app/AuditLog/GetAuditLogs", input);
         }

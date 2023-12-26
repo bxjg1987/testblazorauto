@@ -17,10 +17,15 @@ namespace ZLJ.Admin.CoreRCL.Layout
         protected PersistentComponentState state { get; private set; }
 
         private PersistingComponentStateSubscription subscription;
-
-
+        //[SupplyParameterFromQuery]
+        //public int mmc { get; set; }
+        ///// <summary>
+        ///// true折叠菜单，false折叠
+        ///// </summary>
+        //bool collapsed => mmc > 0;
+        //MenuMode MenuMode => collapsed ? AntDesign.MenuMode.Inline : AntDesign.MenuMode.Vertical;
         IDisposable sj;
-        Zhongjie zhongjie;
+
         [Inject]
         IZhongjieProvider sdfsdf { get; set; }
         public void Dispose()
@@ -40,15 +45,17 @@ namespace ZLJ.Admin.CoreRCL.Layout
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
-            zhongjie = sdfsdf.GetCurrent();
+            var zhongjie = sdfsdf.GetCurrent();
             //注意预渲染
             if (zhongjie != default)
             {
-                sj = zhongjie.Zhuce(() =>
-                {
-                    Console.WriteLine("事件触发了2");
-                    return ValueTask.CompletedTask;
-                }, "aaa");
+                //Console.WriteLine("客户端事件：totalmainmenu注册了");
+                //sj = zhongjie.Zhuce<bool>(async (col) =>
+                //{
+                //    Console.WriteLine("客户但事件totalmainmenu执行了" + col);
+                //    collapsed = col;
+                //    await this.InvokeAsync(StateHasChanged);
+                //}, "totalmainmenu");
             }
             subscription = state.RegisterOnPersisting(OnPersisting);
 

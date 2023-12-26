@@ -1,0 +1,22 @@
+﻿<Button Type="primary" OnClick="ToggleCollapsed" Style="margin-bottom: 16px">
+	@if (collapsed)
+	{
+		<Icon Type="menu-unfold" Theme="outline"></Icon>
+	}
+	else
+	{
+		<Icon Type="menu-fold" Theme="outline"></Icon>
+	}
+</Button>
+@code {
+    bool collapsed = false;
+
+    [Inject]
+    IZhongjieProvider sdfsdf { get; set; }
+    async Task ToggleCollapsed()
+    {
+        Console.WriteLine("cccccccccccccc");
+        collapsed = !collapsed;
+        await sdfsdf.GetCurrent().Chufa(collapsed, "totalmainmenu");
+    }
+}

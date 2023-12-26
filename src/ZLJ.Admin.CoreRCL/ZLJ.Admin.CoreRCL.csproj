@@ -23,6 +23,7 @@
 
 	<ItemGroup>
 		<Content Remove="Layout\MainLayout.razor" />
+		<Content Remove="Layout\MainMenuToggleButton.razor" />
 		<Content Remove="Layout\RightContent.razor" />
 		<Content Remove="MainLayout.razor" />
 		<Content Remove="Startup\RenderModeItem.razor" />
