@@ -1,10 +1,12 @@
 ﻿using Abp.Extensions;
+using Abp.UI;
 using AntDesign.TableModels;
 using Microsoft.Extensions.DependencyInjection;
 using ZLJ.Application.Share.Auditing;
 using ZLJ.Application.Share.Auditing.Dto;
+using ZLJ.Web.Blazor.Interceptors;
 
-namespace ZLJ.Admin.CoreRCL.systemlog
+namespace ZLJ.Admin.CoreRCL.Systemlog
 {
     public partial class List
     {
@@ -19,10 +21,12 @@ namespace ZLJ.Admin.CoreRCL.systemlog
         //{
         //    return base.OnInitializedAsync();
         //}
-
+        // [AbpExceptionInterceptor]
         protected override void OnInitialized()
         {
+
             appService = ScopedServices.GetRequiredService<IAuditLogAppService>();
+            // throw new UserFriendlyException("xxxxxxxxxxxxx");
         }
 
         async Task OnChange(QueryModel<AuditLogListDto> queryModel)
@@ -42,8 +46,8 @@ namespace ZLJ.Admin.CoreRCL.systemlog
 
             var r = await appService.GetAuditLogs(condition);
 
-          // Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(r));
-          //  table.DataSource = r.Items;
+            // Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(r));
+            //  table.DataSource = r.Items;
 
             data = r.Items.ToArray();
             total = r.TotalCount;

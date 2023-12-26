@@ -22,41 +22,42 @@ namespace ZLJ.Web.Blazor.Components
             await MessageService.Success(msg);
         }
         #region 生命周期方法增加统一异常处理拦截器
-        [AbpExceptionInterceptor]
-        public override async Task SetParametersAsync(ParameterView parameters)
-        {
-           await base.SetParametersAsync(parameters);
-        }
-        [AbpExceptionInterceptor]
-        protected override void OnParametersSet()
-        {
-            base.OnParametersSet();
-        }
-        [AbpExceptionInterceptor]
-        protected override async Task OnParametersSetAsync()
-        {
-            await base.OnParametersSetAsync();
-        }
-        [AbpExceptionInterceptor]
-        protected override void OnInitialized()
-        {
-            base.OnInitialized();
-        }
-        [AbpExceptionInterceptor]
-        protected override async Task OnInitializedAsync()
-        {
-            await base.OnInitializedAsync();
-        }
-        [AbpExceptionInterceptor]
-        protected override void OnAfterRender(bool firstRender)
-        {
-            base.OnAfterRender(firstRender);
-        }
-        [AbpExceptionInterceptor]
-        protected override Task OnAfterRenderAsync(bool firstRender)
-        {
-            return base.OnAfterRenderAsync(firstRender);
-        }
+        //肉夹馍不会拦截子类，但往往子类才是主要逻辑，才是出错的地方，所以父类加这个意义不大
+        //[AbpExceptionInterceptor]
+        //public override async Task SetParametersAsync(ParameterView parameters)
+        //{
+        //   await base.SetParametersAsync(parameters);
+        //}
+        //[AbpExceptionInterceptor]
+        //protected override void OnParametersSet()
+        //{
+        //    base.OnParametersSet();
+        //}
+        //[AbpExceptionInterceptor]
+        //protected override async Task OnParametersSetAsync()
+        //{
+        //    await base.OnParametersSetAsync();
+        //}
+        //[AbpExceptionInterceptor]
+        //protected override void OnInitialized()
+        //{
+        //    base.OnInitialized();
+        //}
+        //[AbpExceptionInterceptor]
+        //protected override async Task OnInitializedAsync()
+        //{
+        //    await base.OnInitializedAsync();
+        //}
+        //[AbpExceptionInterceptor]
+        //protected override void OnAfterRender(bool firstRender)
+        //{
+        //    base.OnAfterRender(firstRender);
+        //}
+        //[AbpExceptionInterceptor]
+        //protected override Task OnAfterRenderAsync(bool firstRender)
+        //{
+        //    return base.OnAfterRenderAsync(firstRender);
+        //}
         #endregion
     }
 }

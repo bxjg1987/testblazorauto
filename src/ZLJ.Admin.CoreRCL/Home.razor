@@ -1,9 +1,8 @@
 ﻿@page "/"
 @* @attribute [ReuseTabsPage(Title = "控制台", Pin = true, Closable = false)] *@
 
-
+@inherits AbpBaseComponent
 @rendermode InteractiveServer
-
 <PageTitle>Home</PageTitle>
 
 <h1>Hello, world!</h1>
@@ -23,6 +22,7 @@
     int count;
     void ccc()
     {
-        count++;
+        count+=3;
+        base.MessageService.Info("This is a normal message");
     }
 }
