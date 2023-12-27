@@ -42,6 +42,8 @@ namespace ZLJ.Admin.CoreRCL.Layout
             state.PersistAsJson("main", menu);
             return Task.CompletedTask;
         }
+        [Inject]
+        public IMessageService MessageService { get; set; }
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
@@ -50,12 +52,13 @@ namespace ZLJ.Admin.CoreRCL.Layout
             if (zhongjie != default)
             {
                 //Console.WriteLine("客户端事件：totalmainmenu注册了");
-                //sj = zhongjie.Zhuce<bool>(async (col) =>
-                //{
-                //    Console.WriteLine("客户但事件totalmainmenu执行了" + col);
-                //    collapsed = col;
-                //    await this.InvokeAsync(StateHasChanged);
-                //}, "totalmainmenu");
+                sj = zhongjie.Zhuce(async () =>
+                {
+                    //Console.WriteLine("客户但事件totalmainmenu执行了" + col);
+                    //collapsed = col;
+                    //await this.InvokeAsync(StateHasChanged);
+                   await MessageService.Warning("若看到此消息，说明基于事件总线的跨组件通信成功");
+                }, "aaa");
             }
             subscription = state.RegisterOnPersisting(OnPersisting);
 

@@ -27,6 +27,13 @@ accessToken：
 F12查看浏览器日志，以确定它是否在浏览器种执行
 <br />
 
+<Button OnClick="sjzxcs">
+    基于事件的跨组件通信测试
+</Button>
+<Button OnClick="qjyccs">
+   全局异常aop测试
+</Button>
+
 <AuthorizeView Policy="Administrator">
     鉴权Administrator成功！
 </AuthorizeView>
@@ -34,37 +41,43 @@ F12查看浏览器日志，以确定它是否在浏览器种执行
 
 
 @code {
-    IDisposable sj;
+   // IDisposable sj;
     //  Zhongjie zhongjie;
     [Inject]
     IZhongjieProvider sdfsdf { get; set; }
     public void Dispose()
     {
-        sj?.Dispose();
+       // sj?.Dispose();
     }
     string kkk = string.Empty;
     int count;
-   [AbpExceptionInterceptor]
+   
     async Task ccc()
     {
-        Console.WriteLine(DateTime.Now.ToLongTimeString());
+       // Console.WriteLine(DateTime.Now.ToLongTimeString());
         var sdfsd = await authSP.GetAuthenticationStateAsync();
         kkk = sdfsd.User.Claims.SingleOrDefault(c => c.Type == "AccessToken")?.Value;
-        // if (zhongjie != default)
-        //await zhongjie.Chufa("aaa");
         count++;
-        throw new Exception("xxxxzz");
     }
+    async Task sjzxcs()
+    {
+        await sdfsdf.GetCurrent().Chufa("aaa");
+    }
+    [AbpExceptionInterceptor]
+    async void qjyccs()
+    {
+        throw new UserFriendlyException("若看到此消息，说明全局异常拦截执行成功！");
+    }
+
     protected override void OnInitialized()
     {
-       // var sdfsdf = base.ScopedServices.GetRequiredService<IZhongjieProvider>();
-     //    zhongjie = sdfsdf.GetCurrent();
-     //    if(zhongjie!=default)
-     // {   sj = zhongjie.Zhuce(() =>
-     //    {
-     //        Console.WriteLine("事件触发了");
-     //        return ValueTask.CompletedTask;
-     //    }, "aaa");
+        // var sdfsdf = base.ScopedServices.GetRequiredService<IZhongjieProvider>();
+        //    zhongjie = sdfsdf.GetCurrent();
+        //    if(zhongjie!=default)
+        // {   sj = zhongjie.Zhuce(() =>
+        //    {
+        //        Console.WriteLine("事件触发了");
+        //        return ValueTask.CompletedTask;
+        //    }, "aaa");
     }
-}
 }
