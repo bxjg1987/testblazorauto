@@ -7,8 +7,11 @@ namespace ZLJ.Admin.CoreRCL.Startup
     /// </summary>
     public class AppContainer
     {
+        public static readonly AppContainer App = new AppContainer();
+
         public AbpUserConfigurationDto AbpUserConfiguration { get; set; }
 
+        public  IServiceProvider Services { get; set; }
        // public UserInfo UserInfo { get; set; }
 
     }

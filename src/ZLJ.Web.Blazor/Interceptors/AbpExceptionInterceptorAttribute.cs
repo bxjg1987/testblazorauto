@@ -78,14 +78,20 @@ namespace ZLJ.Web.Blazor.Interceptors
             }
             else
             {
-                using var services = IocManager.Instance.CreateScope();
-                //context.Datas.Add(scopedServicesKey, services);
+                if (!OperatingSystem.IsBrowser())
+                {
+                    using var services = IocManager.Instance.CreateScope();
+                    //context.Datas.Add(scopedServicesKey, services);
 
-                var loggerFactory = services.Resolve<ILoggerFactory>();
-                var logger = loggerFactory.Create(context.TargetType.FullName);
-                //  var logger = context.Datas[loggerKey] as ILogger;
-                logger.Error(@"{context.TargetType.FullName }.{context.Method.Name}" + context.Exception.StackTrace);
-
+                    var loggerFactory = services.Resolve<ILoggerFactory>();
+                    var logger = loggerFactory.Create(context.TargetType.FullName);
+                    //  var logger = context.Datas[loggerKey] as ILogger;
+                    logger.Error(@"{context.TargetType.FullName }.{context.Method.Name}" + context.Exception.StackTrace);
+                }
+                else
+                {
+                    Console.WriteLine(@"{context.TargetType.FullName }.{context.Method.Name}" + context.Exception.StackTrace);
+                }
                 //  (  context.Target as ComponentBase).tryinv
                 snackbar.Error($"服务端发生未处理异常！请稍后重试，若多次失败，请联系系统管理员。");
               

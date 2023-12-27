@@ -35,7 +35,7 @@ namespace ZLJ.Web.HostBlazor.Components
                 var cookieKey = prefix + hash;
                 if (HttpContext.Request.Cookies.TryGetValue(cookieKey, out var sj))
                 {
-                    if ((DateTime.Now - DateTime.Parse(sj)).TotalSeconds > 60)
+                    if ((DateTime.Now - DateTime.Parse(sj)).TotalSeconds > 30)
                     {
                         xs = true;
                         //别删cookie

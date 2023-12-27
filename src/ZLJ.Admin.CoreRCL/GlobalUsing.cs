@@ -10,7 +10,7 @@ global using System.Threading.Tasks;
 global using Microsoft.AspNetCore.Components.Authorization;
 
 global using AntDesign;
-global using AntDesign.ProLayout;
+//global using AntDesign.ProLayout;
 global using ZLJ.Admin.CoreRCL.Auth;
 global using ZLJ.Web.Blazor.Components;
 global using BXJG.Common;

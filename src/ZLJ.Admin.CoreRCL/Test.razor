@@ -8,6 +8,7 @@
 @inject AuthenticationStateProvider authSP
 @* @attribute [ReuseTabsPage(Title = "测试")] *@
 @implements IDisposable
+@inherits AbpBaseComponent
 <PageTitle>测试1111111</PageTitle>
 <p>
     @count
@@ -41,11 +42,9 @@ F12查看浏览器日志，以确定它是否在浏览器种执行
     {
         sj?.Dispose();
     }
-    [Inject]
-    public IMessageService MessageService { get; set; }
     string kkk = string.Empty;
     int count;
-   // [AbpExceptionInterceptor]
+   [AbpExceptionInterceptor]
     async Task ccc()
     {
         Console.WriteLine(DateTime.Now.ToLongTimeString());
@@ -54,8 +53,7 @@ F12查看浏览器日志，以确定它是否在浏览器种执行
         // if (zhongjie != default)
         //await zhongjie.Chufa("aaa");
         count++;
-        MessageService.Error("testtest");
-        //throw new Exception("xxxxzz");
+        throw new Exception("xxxxzz");
     }
     protected override void OnInitialized()
     {

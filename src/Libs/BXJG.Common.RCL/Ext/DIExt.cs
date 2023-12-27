@@ -26,12 +26,17 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddCommonRCLClient(this IServiceCollection services, Func<IServiceProvider, IEnumerable<string>> permissionNamesProvider)
         {
             services.AddCommonRCL()
-                    .AddSingleton<IZhongjieProvider, ZhongjieProvider>()
-                    .AddTransient<IAuthorizationPolicyProvider, PermissionNameAuthorizationPolicyProvider>()
-                    .AddKeyedSingleton<Func<IEnumerable<string>>>(OperationAuthorizationRequirement.GrantedPermissionNamesProvider, (s, o) => () => permissionNamesProvider(s))
-                    .AddSingleton<AuthenticationStateProvider, PersistentAuthenticationStateProvider>()
-                    .AddSingleton<AccessTokenProvider>()
-                    .AddSingleton<IAccessTokenProvider>(s => s.GetRequiredService<AccessTokenProvider>());
+                    //.AddSingleton<IZhongjieProvider, ZhongjieProvider>()
+                    //.AddTransient<IAuthorizationPolicyProvider, PermissionNameAuthorizationPolicyProvider>()
+                    .AddKeyedSingleton<Func<IEnumerable<string>>>(OperationAuthorizationRequirement.GrantedPermissionNamesProvider, (s, o) => () => permissionNamesProvider(s));
+                    //.AddSingleton<AuthenticationStateProvider, PersistentAuthenticationStateProvider>()
+                    //.AddSingleton<AccessTokenProvider>()
+                    //.AddSingleton<IAccessTokenProvider>(s => s.GetRequiredService<AccessTokenProvider>());
+            services.TryAddSingleton<IZhongjieProvider, ZhongjieProvider>();
+            services.TryAddTransient<IAuthorizationPolicyProvider, PermissionNameAuthorizationPolicyProvider>();
+            services.TryAddSingleton<AuthenticationStateProvider, PersistentAuthenticationStateProvider>();
+            services.TryAddSingleton<AccessTokenProvider>();
+            services.TryAddSingleton<IAccessTokenProvider>(s => s.GetRequiredService<AccessTokenProvider>());
             return services;
         }
         static IServiceCollection AddCommonRCL(this IServiceCollection services)

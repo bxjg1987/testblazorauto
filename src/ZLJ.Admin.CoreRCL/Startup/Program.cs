@@ -1,4 +1,5 @@
 using Abp.Runtime.Session;
+//using Blazor.Extensions.Logging;
 using BXJG.Common.Http;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,6 +11,9 @@ using ZLJ.Admin.CoreRCL.Startup;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
+//builder.Services.AddLogging(lb => { 
+//    lb.AddBrowserConsole(); 
+//});
 builder.Services.AddZLJBlazorClient(s =>
                 {
                     var fw = s.GetRequiredService<AppContainer>();
@@ -22,7 +26,7 @@ builder.Services.AddZLJBlazorClient(s =>
                 })
                 .AddAdminBlazor()
                 .AddAuthorizationCore()
-                .AddSingleton<AppContainer>();
+                .AddSingleton(AppContainer.App);
 
 builder.Services.AddAdminApiClientProxy(hc =>
 {
@@ -30,6 +34,7 @@ builder.Services.AddAdminApiClientProxy(hc =>
 });
 
 var host = builder.Build();
+host.Services.GetRequiredService<AppContainer>().Services = host.Services;
 //var a = host.Services.GetRequiredService<AbpUserConfigurationService>();
 //var b = host.Services.GetRequiredService<AppContainer>();
 ////这里调用接口会导致PersistentAuthenticationStateProvider构造函数理解执行，由于是单例，后续永远无法获取accesstoken

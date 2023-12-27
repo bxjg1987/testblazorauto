@@ -18,7 +18,9 @@
 
 <body>
     <app>
-        <ZLJ.Admin.CoreRCL.Startup.Routes Xianshi="xs" />
+        <CascadingValue Value="xs" Name="dqms">
+            <ZLJ.Admin.CoreRCL.Startup.Routes />
+        </CascadingValue>
     </app>
 
     @* 由于下面的问题，暂时 *@
@@ -26,8 +28,6 @@
     @if (xs)
     {
         <ZLJ.Admin.CoreRCL.Startup.RenderModeHelper @rendermode="new InteractiveWebAssemblyRenderMode(prerender: false)" />
-        
-
     }
     else
     {
