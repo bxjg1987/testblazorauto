@@ -1,6 +1,7 @@
 ﻿using Abp.Runtime.Session;
 using BXJG.Common.Http;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using ZLJ.Web.Blazor.Abp;
 using ZLJ.Web.Blazor.Auth;
 
@@ -16,8 +17,8 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddZLJBlazorClient(this IServiceCollection services, Func<IServiceProvider, IEnumerable<string>> permissionNamesProvider)
         {
             services.AddZLJBlazor()
-                    .AddCommonRCLClient(permissionNamesProvider)
-                    .AddTransient<IAbpSession, MyAbpSession>();
+                    .AddCommonRCLClient(permissionNamesProvider);
+            services.TryAddTransient<IAbpSession, MyAbpSession>();
             return services;
         }
         /// <summary>
