@@ -29,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AntDesign" Version="0.16.*" />
+    <PackageReference Include="AntDesign" Version="0.17.*" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.0" />
 	  <!--当前项目定义了拦截器，就算当前项目引用的其它项目已经引用rougamo，这里也必须引用，

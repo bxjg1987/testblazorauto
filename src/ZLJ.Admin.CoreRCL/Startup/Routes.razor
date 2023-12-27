@@ -23,8 +23,12 @@
         </LayoutView>
     </NotFound>
 </Router>
-<AntContainer />
-
+@if (Xianshi)
+{
+    <AntContainer @rendermode="InteractiveWebAssembly" />
+}
+<AntContainer @rendermode="InteractiveServer" />
 @code {
-   
+    [Parameter]
+    public bool Xianshi { get; set; }
 }
