@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BXJG.Utils.Application.Share.GeneralTree;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ namespace ZLJ.App.Common.OU
     /// <summary>
     /// 获取公司和部门下拉树的输入模型
     /// </summary>
-    public class GetListInput:BXJG.Utils.GeneralTree.GeneralTreeGetForSelectInput
+    public class GetListInput:GeneralTreeGetForSelectInput
     {
         /// <summary>
         /// 0获取我们自己公司的部门

@@ -94,6 +94,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZLJ.Admin.ClientProxy", "sr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BXJG.Utils.Application.Share", "src\Modules\BXJG.Utils.Application.Share\BXJG.Utils.Application.Share.csproj", "{E9F6E2B0-E4F4-47ED-8A2A-1456136D88F9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BXJG.Utils.Share", "src\Modules\BXJG.Utils.Share\BXJG.Utils.Share.csproj", "{9E256A2F-6F76-469C-8387-7C5A35274B55}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -208,6 +210,10 @@ Global
 		{E9F6E2B0-E4F4-47ED-8A2A-1456136D88F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E9F6E2B0-E4F4-47ED-8A2A-1456136D88F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E9F6E2B0-E4F4-47ED-8A2A-1456136D88F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E256A2F-6F76-469C-8387-7C5A35274B55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E256A2F-6F76-469C-8387-7C5A35274B55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E256A2F-6F76-469C-8387-7C5A35274B55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E256A2F-6F76-469C-8387-7C5A35274B55}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -246,6 +252,7 @@ Global
 		{35BD13A6-A4B6-494E-834C-1F9DCB1BFCBD} = {13B83AF8-1FE7-45AB-B2BB-9D892C958891}
 		{FAECA5E3-8F86-4D07-95F8-D83BE503F84C} = {13B83AF8-1FE7-45AB-B2BB-9D892C958891}
 		{E9F6E2B0-E4F4-47ED-8A2A-1456136D88F9} = {A7F7BC2D-CEE6-4249-BD52-F26615109442}
+		{9E256A2F-6F76-469C-8387-7C5A35274B55} = {A7F7BC2D-CEE6-4249-BD52-F26615109442}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F45DD46C-6040-4FCC-87E0-648786C36933}

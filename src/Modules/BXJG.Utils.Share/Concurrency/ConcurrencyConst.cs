@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Utils.Concurrency
+namespace BXJG.Utils.Share.Concurrency
 {
     public class ConcurrencyConst
     {

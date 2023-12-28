@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Utils.GeneralTree
+namespace BXJG.Utils.Application.Share.GeneralTree
 {
     /// <summary>
     /// 数据字典应用服务接口

@@ -5,7 +5,7 @@
  * 说明：略...
  */
 using Abp.Application.Services.Dto;
-
+using BXJG.Utils.Share.GeneralTree;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,7 +15,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Utils.GeneralTree
+namespace BXJG.Utils.Application.Share.GeneralTree
 {
     /// <summary>
     /// 树形结构抽象编辑模型
@@ -44,7 +44,7 @@ namespace BXJG.Utils.GeneralTree
         //[Display( Name ="名称", Description ="aaaaa" )] //这些标签对mudblazor无效，但其它blazor ui库也许有用 还有本地化等问题
         //[DisplayName("bbbbb")] //感觉过时了
         [Required( ErrorMessage = "请输入名称")]
-        [StringLength(GeneralTreeEntity.MaxDisplayNameLength)]
+        //[StringLength(GeneralTreeEntity.MaxDisplayNameLength)]
         public string DisplayName { get; set; }
         ///// <summary>
         ///// 排序索引

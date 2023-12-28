@@ -1,6 +1,7 @@
 ﻿using Abp.Application.Navigation;
 using Abp.Application.Services;
 using Abp.Application.Services.Dto;
+using BXJG.Utils.Application.Share.GeneralTree;
 using BXJG.Utils.GeneralTree;
 using System.Collections.Generic;
 using System.Threading.Tasks;

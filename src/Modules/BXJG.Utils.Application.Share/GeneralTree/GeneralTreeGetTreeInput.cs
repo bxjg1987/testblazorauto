@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Utils.GeneralTree
+namespace BXJG.Utils.Application.Share.GeneralTree
 {
     /// <summary>
     /// 树形数据的管理页面查询时的请求模型

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BXJG.Utils.Application.Share.GeneralTree;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,7 @@ namespace ZLJ.App.Common.OU
     /// <summary>
     /// 获取公司和部门下拉树的输出模型
     /// </summary>
-    public class OuDto : BXJG.Utils.GeneralTree.GeneralTreeNodeDto<OuDto>
+    public class OuDto : GeneralTreeNodeDto<OuDto>
     {
         /// <summary>
         /// 0总公司 1分公司 2部门

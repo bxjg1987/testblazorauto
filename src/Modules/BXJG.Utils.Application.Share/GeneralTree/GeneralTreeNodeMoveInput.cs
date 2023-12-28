@@ -1,10 +1,11 @@
-﻿using System;
+﻿using BXJG.Utils.Share.GeneralTree;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Utils.GeneralTree
+namespace BXJG.Utils.Application.Share.GeneralTree
 {
     /// <summary>
     /// 移动树形节点时的请求参数

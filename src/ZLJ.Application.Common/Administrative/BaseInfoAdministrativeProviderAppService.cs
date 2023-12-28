@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using BXJG.Common.Dto;
 using BXJG.Utils.Enums;
 using ZLJ.App.Common.Administrative;
+using BXJG.Utils.Application.Share.GeneralTree;
 
 namespace ZLJ.App.Common.AdministrativeCommon
 {

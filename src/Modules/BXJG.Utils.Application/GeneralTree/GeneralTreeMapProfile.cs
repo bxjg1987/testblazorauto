@@ -3,6 +3,7 @@ using AutoMapper;
 using Abp.Authorization;
 using Newtonsoft.Json;
 using BXJG.Utils.Localization;
+using BXJG.Utils.Application.Share.GeneralTree;
 
 namespace BXJG.Utils.GeneralTree
 {

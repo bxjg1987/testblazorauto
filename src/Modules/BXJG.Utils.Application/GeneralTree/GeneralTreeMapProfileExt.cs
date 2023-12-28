@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BXJG.Utils.Application.Share.GeneralTree;
 using System;
 using System.Collections.Generic;
 using System.Text;

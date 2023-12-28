@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\libs\BXJG.Common\BXJG.Common.csproj" />
+    <ProjectReference Include="..\BXJG.Utils.Share\BXJG.Utils.Share.csproj" />
   </ItemGroup>
 
 </Project>

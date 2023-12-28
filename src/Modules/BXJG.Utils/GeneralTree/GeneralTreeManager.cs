@@ -10,6 +10,7 @@ using Abp.Linq;
 using Abp.Runtime.Session;
 using Abp.Timing;
 using Abp.UI;
+using BXJG.Utils.Share.GeneralTree;
 using System;
 using System.Collections.Generic;
 using System.Linq;

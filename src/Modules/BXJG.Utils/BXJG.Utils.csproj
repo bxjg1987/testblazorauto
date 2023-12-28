@@ -28,7 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Concurrency\MapperExtension.cs" />
     <Compile Remove="Enums\BXJGUtilsEnumAppService.cs" />
     <Compile Remove="Enums\GetEnumForCombboxInput.cs" />
     <Compile Remove="Enums\GetStructForCombboxInput.cs" />
@@ -74,6 +73,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\libs\BXJG.Common\BXJG.Common.csproj" />
+    <ProjectReference Include="..\BXJG.Utils.Share\BXJG.Utils.Share.csproj" />
   </ItemGroup>
 
 </Project>

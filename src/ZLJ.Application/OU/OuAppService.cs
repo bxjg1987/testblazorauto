@@ -6,6 +6,7 @@ using Abp.Extensions;
 using Abp.Linq.Extensions;
 using Abp.Organizations;
 using BXJG.Common.Dto;
+using BXJG.Utils.Application.Share.GeneralTree;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -52,7 +53,7 @@ namespace ZLJ.App.Admin.OU
             return await Map2Dto(ou);
         }
         [AbpAuthorize(PermissionNames.AdministratorBaseInfoOrganizationUnitUpdate)]
-        public async Task MoveAsync(BXJG.Utils.GeneralTree.GeneralTreeNodeMoveInput input)
+        public async Task MoveAsync(GeneralTreeNodeMoveInput input)
         {
             await this.organizationUnitManager.MoveAsync(input.Id, input.TargetId);
         }

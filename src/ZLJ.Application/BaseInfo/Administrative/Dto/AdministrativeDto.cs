@@ -2,6 +2,7 @@
 using BXJG.Utils.GeneralTree;
 using ZLJ.App.Admin.BaseInfo.Administrative;
 using ZLJ.BaseInfo.Administrative;
+using BXJG.Utils.Application.Share.GeneralTree;
 
 namespace ZLJ.App.Admin.BaseInfo.Administrative.Dto
 {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BXJG.Utils.Application.Share.GeneralTree;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ZLJ.App.Admin.OU
 {
-    public class OUEditDto:BXJG.Utils.GeneralTree.GeneralTreeNodeEditBaseDto
+    public class OUEditDto:GeneralTreeNodeEditBaseDto
     {  /// <summary>
        /// 0总公司 1分公司 2部门
        /// </summary>

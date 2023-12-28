@@ -12,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Utils.GeneralTree
+namespace BXJG.Utils.Application.Share.GeneralTree
 {
     //abp默认提供的CombboxItemDto只是一个辅助类，我们可以定义一个更符合我们要求的辅助类
     //其实用他的也可以，只是不是很方便

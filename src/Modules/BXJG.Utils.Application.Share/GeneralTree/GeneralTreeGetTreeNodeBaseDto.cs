@@ -1,7 +1,6 @@
 ﻿using Abp.Application.Services.Dto;
-using Abp.AutoMapper;
-using AutoMapper.Configuration.Annotations;
 using BXJG.Common.Dto;
+using BXJG.Utils.Share.GeneralTree;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -10,7 +9,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace BXJG.Utils.GeneralTree
+namespace BXJG.Utils.Application.Share.GeneralTree
 {
     /// <summary>
     /// 树形数据管理的列表页使用的dto基类，它不是抽象的，可以直接使用

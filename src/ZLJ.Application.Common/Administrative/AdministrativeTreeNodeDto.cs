@@ -1,4 +1,5 @@
-﻿using BXJG.Utils.GeneralTree;
+﻿using BXJG.Utils.Application.Share.GeneralTree;
+using BXJG.Utils.GeneralTree;
 using System;
 using System.Collections.Generic;
 using System.Linq;

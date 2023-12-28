@@ -8,6 +8,7 @@ using Abp.AutoMapper;
 using Abp.Extensions;
 using Abp.Localization;
 using Abp.UI;
+using BXJG.Utils.Application.Share.GeneralTree;
 using BXJG.Utils.GeneralTree;
 
 namespace ZLJ.App.Admin.Authorization.Permissions

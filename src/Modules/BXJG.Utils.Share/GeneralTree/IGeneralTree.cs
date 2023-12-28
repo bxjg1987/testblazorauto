@@ -1,14 +1,10 @@
-﻿using Abp.Application.Services.Dto;
-using Abp.Domain.Entities;
-using Abp.Extensions;
-using Castle.MicroKernel.Registration;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Utils.GeneralTree
+namespace BXJG.Utils.Share.GeneralTree
 {
     /*
      * 通用树模块的核心逻辑目前并不依赖此接口，而是依赖的抽象类

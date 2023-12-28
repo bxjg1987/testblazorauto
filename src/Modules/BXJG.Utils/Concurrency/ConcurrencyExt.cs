@@ -1,4 +1,5 @@
 ﻿using Abp.Domain.Uow;
+using BXJG.Utils.Share.Concurrency;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,14 +8,6 @@ using System.Threading.Tasks;
 
 namespace BXJG.Utils.Concurrency
 {
-    public interface IHasConcurrencyStamp
-    {
-        public string ConcurrencyStamp { get; set; }
-    }
-    //public class ConcurrencyException : Exception { 
-
-    //}
-    //这个扩展可以考虑 automapper也调用下
     public static class ConcurrencyExt
     {
         //public static void CheckConcurrency(this IHasConcurrencyStamp stamp, string str)

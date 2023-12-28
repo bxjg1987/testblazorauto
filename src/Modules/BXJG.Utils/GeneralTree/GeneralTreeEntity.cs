@@ -1,5 +1,6 @@
 ﻿using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
+using BXJG.Utils.Share.GeneralTree;
 using Castle.MicroKernel.Registration;
 using System;
 using System.Collections.Generic;

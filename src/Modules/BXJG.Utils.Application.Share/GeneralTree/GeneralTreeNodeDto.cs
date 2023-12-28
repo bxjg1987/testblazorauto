@@ -1,12 +1,13 @@
 ﻿using Abp.Application.Services.Dto;
 using Abp.Extensions;
+using BXJG.Utils.Share.GeneralTree;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Utils.GeneralTree
+namespace BXJG.Utils.Application.Share.GeneralTree
 {
     /// <summary>
     /// 获取树形下拉框数据的模型

@@ -2,6 +2,7 @@
 using Abp.Domain.Repositories;
 using Abp.Extensions;
 using Abp.Linq;
+using BXJG.Utils.Share.GeneralTree;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

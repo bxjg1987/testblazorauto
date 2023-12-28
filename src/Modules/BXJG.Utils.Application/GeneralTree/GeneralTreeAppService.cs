@@ -14,6 +14,7 @@ using Abp.Domain.Entities;
 using Abp.MultiTenancy;
 using Microsoft.EntityFrameworkCore;
 using BXJG.Common.Dto;
+using BXJG.Utils.Application.Share.GeneralTree;
 
 namespace BXJG.Utils.GeneralTree
 {
