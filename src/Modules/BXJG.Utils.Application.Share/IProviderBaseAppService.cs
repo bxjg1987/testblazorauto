@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Utils
+namespace BXJG.Utils.Application.Share
 {
     /// <summary>
     /// 此接口为下拉或弹窗选择提供数据，abp默认未提供此接口。

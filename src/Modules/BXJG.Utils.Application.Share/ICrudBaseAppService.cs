@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Utils
+namespace BXJG.Utils.Application.Share
 {
     /// <summary>
     /// abp提供的crud接口未定义批量删除接口，这里定义了批量删除接口，它继承了abp的crud接口

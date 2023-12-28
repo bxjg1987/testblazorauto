@@ -21,6 +21,7 @@ using Castle.Windsor.MsDependencyInjection;
 using Abp.Domain.Uow;
 using BXJG.Common.Dto;
 using BXJG.Utils.Dto;
+using BXJG.Utils.Application.Share;
 
 namespace BXJG.Utils
 {

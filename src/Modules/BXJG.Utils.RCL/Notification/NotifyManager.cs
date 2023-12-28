@@ -3,6 +3,7 @@ using Abp.Authorization.Roles;
 using Abp.Authorization.Users;
 using Abp.Notifications;
 using BXJG.Common.Dto;
+using BXJG.Utils.Application.Share.Notification;
 using BXJG.Utils.Components;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -217,7 +218,7 @@ namespace BXJG.Utils.Notification
         /// tab头
         /// 通知定义，扩展应用层的通知定义dto
         /// </summary>
-        protected class NotifyDefineDto : BXJG.Utils.Notification.NotifyDefineDto
+        protected class NotifyDefineDto : BXJG.Utils.Application.Share.Notification.NotifyDefineDto
         {
             /// <summary>
             /// 未读数量

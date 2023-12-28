@@ -24,6 +24,7 @@ using Abp.Domain.Entities;
 using Abp.Authorization.Users;
 using Abp.Localization;
 using Abp.Auditing;
+using BXJG.Utils.Application.Share.Notification;
 
 namespace BXJG.Utils.Notification
 {

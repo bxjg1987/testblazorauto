@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Utils.Notification
+namespace BXJG.Utils.Application.Share.Notification
 {
     /*
      * 不要像之前那样组合GetTotalInput，那样前端传参麻烦

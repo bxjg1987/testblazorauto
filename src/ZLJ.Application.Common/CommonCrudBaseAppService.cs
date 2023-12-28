@@ -3,6 +3,7 @@ using Abp.IdentityFramework;
 using Abp.Localization.Sources;
 using Abp.Runtime.Session;
 using BXJG.Utils;
+using BXJG.Utils.Application.Share;
 using Microsoft.AspNetCore.Identity;
 using ZLJ.Authorization.Users;
 using ZLJ.MultiTenancy;

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Utils.Notification
+namespace BXJG.Utils.Application.Share.Notification
 {
     /// <summary>
     /// 获取消息数量的输入模型

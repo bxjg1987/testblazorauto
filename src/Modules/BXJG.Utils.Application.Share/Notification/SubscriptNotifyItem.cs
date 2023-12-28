@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Utils.Notification
+namespace BXJG.Utils.Application.Share.Notification
 {
     /// <summary>
     /// 批量订阅通知输入模型的项

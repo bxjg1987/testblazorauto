@@ -2,6 +2,7 @@
 using Abp.UI;
 using BXJG.Common;
 using BXJG.Utils;
+using BXJG.Utils.Application.Share;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Extensions.DependencyInjection;

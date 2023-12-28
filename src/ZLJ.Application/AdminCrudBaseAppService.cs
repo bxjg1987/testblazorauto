@@ -3,6 +3,7 @@ using Abp.IdentityFramework;
 using Abp.Localization.Sources;
 using Abp.Runtime.Session;
 using BXJG.Utils;
+using BXJG.Utils.Application.Share;
 using BXJG.Utils.Dto;
 using Microsoft.AspNetCore.Identity;
 using System;

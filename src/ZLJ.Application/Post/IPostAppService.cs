@@ -7,6 +7,7 @@ using BXJG.Common.Dto;
 using ZLJ.App.Admin.Roles.Dto;
 using ZLJ.App.Admin.Post.Dto;
 using BXJG.Utils;
+using BXJG.Utils.Application.Share;
 
 namespace ZLJ.App.Admin.Post
 {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Utils.Notification
+namespace BXJG.Utils.Application.Share.Notification
 {
     /// <summary>
     /// 通知定义
