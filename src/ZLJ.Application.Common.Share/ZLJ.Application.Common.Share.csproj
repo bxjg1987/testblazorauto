@@ -6,4 +6,20 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+	
+	<ItemGroup Condition="'$(SolutionName)' != 'ZLJWithModules'">
+
+
+		<!--虽然ef引用utils引用common，但有时候需要单独更新common或utils，所以这里还是要单独引用
+		   不过core已经引用了这俩包-->
+		<!--<PackageReference Include="BXJG.Utils" Version="*" />
+		<PackageReference Include="BXJG.Common" Version="*" />-->
+
+		<PackageReference Include="BXJG.Utils.Application.Share" Version="*" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(SolutionName)' == 'ZLJWithModules'">
+		<ProjectReference Include="..\Modules\BXJG.Utils.Application.Share\BXJG.Utils.Application.Share.csproj" />
+	</ItemGroup>
+	
+	
 </Project>
