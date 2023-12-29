@@ -23,5 +23,9 @@
 @code {
     // [SupplyParameterFromQuery]
     // public int mmc { get; set; }
+
     // bool collapsed => mmc > 0;
+
+    [CascadingParameter(Name ="mmc")]
+    public bool MainMenuCollapsed { get; set; }
 }

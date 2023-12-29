@@ -35,6 +35,12 @@ namespace ZLJ.Admin.CoreRCL.Layout
             subscription.Dispose();
         }
 
+        [CascadingParameter(Name = "mmc")]
+        public bool MainMenuCollapsed { get; set; }
+        // MenuMode mm => MainMenuCollapsed ?  MenuMode.Inline: MenuMode.Vertical;
+
+        bool mmc;
+
         [Inject]
         public IconService iconService { get; set; }
         Task OnPersisting()
@@ -57,7 +63,7 @@ namespace ZLJ.Admin.CoreRCL.Layout
                     //Console.WriteLine("客户但事件totalmainmenu执行了" + col);
                     //collapsed = col;
                     //await this.InvokeAsync(StateHasChanged);
-                   await MessageService.Warning("若看到此消息，说明基于事件总线的跨组件通信成功");
+                    await MessageService.Warning("若看到此消息，说明基于事件总线的跨组件通信成功");
                 }, "aaa");
             }
             subscription = state.RegisterOnPersisting(OnPersisting);
@@ -72,6 +78,15 @@ namespace ZLJ.Admin.CoreRCL.Layout
                     // await Console.Out.WriteLineAsync(   System.Text.Json.JsonSerializer.Serialize(menu));
                 }
             }
+
+
+         _=  Task.Run(async () =>
+            {
+                await Task.Delay(1);
+                mmc = MainMenuCollapsed;
+                Console.WriteLine("xxx:"+mmc);
+                this.InvokeAsync(StateHasChanged);
+            });
         }
 
         void initMenu()
@@ -84,6 +99,8 @@ namespace ZLJ.Admin.CoreRCL.Layout
             if (firstRender)
             {
                 await iconService.CreateFromIconfontCN("//at.alicdn.com/t/font_2735473_hi62ezq5579.js");
+               // mmc = MainMenuCollapsed;
+                //StateHasChanged();
             }
         }
     }

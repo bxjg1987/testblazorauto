@@ -13,6 +13,31 @@ namespace ZLJ.Web.HostBlazor.Components
 
         bool xs = false;
         const string prefix = "dqsj_";
+
+        const string mainMenuCollapsedCookieName = "mmc";
+
+        ///// <summary>
+        ///// 0折叠 1展开 null取cookie中的值
+        ///// </summary>
+        //[SupplyParameterFromQuery]
+        //public int? mmc { get; set; }
+        bool mainMenuCollapsed;
+
+        //public override async Task SetParametersAsync(ParameterView parameters)
+        //{
+        //    await base.SetParametersAsync(parameters);
+
+          
+
+           
+        //}
+
+        //protected override void OnParametersSet()
+        //{
+        //    base.OnParametersSet();
+        //    if(mmc)
+        //}
+
         protected override void OnInitialized()
         {
             /*
@@ -53,6 +78,16 @@ namespace ZLJ.Web.HostBlazor.Components
                 }
             }
 
+
+            if (HttpContext.Request.Query.TryGetValue(mainMenuCollapsedCookieName, out var mmc))
+            {
+                mainMenuCollapsed = mmc == "0";
+                HttpContext.Response.Cookies.Append(mainMenuCollapsedCookieName, mmc.ToString());
+            }
+            else if (HttpContext.Request.Cookies.TryGetValue(mainMenuCollapsedCookieName, out var str))
+            {
+                mainMenuCollapsed = str == "0";
+            }
             //Console.WriteLine(this.GetHashCode());
         }
     }
