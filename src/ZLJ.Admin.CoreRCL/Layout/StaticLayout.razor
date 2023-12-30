@@ -1,6 +1,9 @@
-﻿@inherits LayoutComponentBase
+﻿@using System.Text.RegularExpressions
+@inherits LayoutComponentBase
+@inject NavigationManager Navigation
 <Layout>
-    <Sider Style="overflow: auto;height: 100vh;position: fixed;left: 0; " >
+    <Sider Style="overflow: auto;height: 100vh;position: fixed;left: 0; " Collapsible=false Collapsed=MainMenuCollapsed DefaultCollapsed=false>
+
         <div class="logo" style="height:29px; margin:15px;">
             <img src="bxjglogo.png" style="width:37px; height:30px; float:left;" />
             <h3 style="    color: #ddd;    float: left;    margin-left: 0.5rem;    line-height: 35px;    font-size: 1.2rem;">
@@ -8,10 +11,18 @@
             </h3>
         </div>
         @* 菜单需要交互式 *@
-        <MainMenu @rendermode="InteractiveAuto" />
+        <MainMenu @rendermode="new  InteractiveAutoRenderMode(false)" MainMenuCollapsed=true />
         @* <MainMenuToggleButton @rendermode="InteractiveAuto" /> *@
+        @if (MainMenuCollapsed)
+        {
+            <NavLink href="@TogleSider">展开</NavLink>
+        }
+        else
+        {
+            <NavLink href="@TogleSider">折叠</NavLink>
+        }
     </Sider>
-    <Layout Class="site-layout" Style=" margin-left: 200px">
+    <Layout Class="site-layout" style="@LayoutStyle">
         <Header Class="site-layout-background" Style="padding: 0"></Header>
         <Content Style="margin: 24px 16px 0; overflow: initial; ">
             @* 内页的模式由页面自己决定 *@
@@ -26,6 +37,29 @@
 
     // bool collapsed => mmc > 0;
 
-    [CascadingParameter(Name ="mmc")]
+    [CascadingParameter(Name = "mmc")]
     public bool MainMenuCollapsed { get; set; }
+
+    //int left => MainMenuCollapsed ? 80 : 200;
+    string LayoutStyle => "margin-left:" + (MainMenuCollapsed ? 80 : 200) + "px";
+
+    string TogleSider
+    {
+        get
+        {
+            var url = Navigation.Uri;
+           // Regex.
+            url = Regex.Replace(url,@"(\?|&)mmc=\d+","");
+            if (url.Contains("?"))
+                url += "&";
+            else
+                url += "?";
+            url += "mmc=";
+            if (MainMenuCollapsed == false)
+                url += 0;
+            else
+                url += 1;
+            return url;
+        }
+    }
 }

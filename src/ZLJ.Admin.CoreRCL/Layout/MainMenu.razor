@@ -1,7 +1,7 @@
 ﻿@inherits BXJG.Common.RCL.CommonBaseComponent
 @implements IDisposable
 <div>
-    <Menu Theme=MenuTheme.Dark Mode=MenuMode.Inline InlineCollapsed=mmc>
+    <Menu Theme=MenuTheme.Dark Mode=MenuMode.Inline InlineCollapsed=MainMenuCollapsed>
         @foreach (var item in menu.Items)
         {
             <MainMenuItem MenuItem="item" />

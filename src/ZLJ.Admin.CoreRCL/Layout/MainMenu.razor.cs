@@ -35,11 +35,14 @@ namespace ZLJ.Admin.CoreRCL.Layout
             subscription.Dispose();
         }
 
-        [CascadingParameter(Name = "mmc")]
+        //静态传入auto，不能用级联，或者可以试试全局级联
+        //https://learn.microsoft.com/zh-cn/aspnet/core/blazor/components/cascading-values-and-parameters?view=aspnetcore-8.0#cascading-valuesparameters-and-render-mode-boundaries
+        //  [CascadingParameter(Name = "mmc")]
+        [Parameter]
         public bool MainMenuCollapsed { get; set; }
         // MenuMode mm => MainMenuCollapsed ?  MenuMode.Inline: MenuMode.Vertical;
 
-        bool mmc;
+        //bool mmc;
 
         [Inject]
         public IconService iconService { get; set; }
@@ -80,13 +83,13 @@ namespace ZLJ.Admin.CoreRCL.Layout
             }
 
 
-         _=  Task.Run(async () =>
-            {
-                await Task.Delay(1);
-                mmc = MainMenuCollapsed;
-                Console.WriteLine("xxx:"+mmc);
-                this.InvokeAsync(StateHasChanged);
-            });
+         //_=  Task.Run(async () =>
+         //   {
+         //       await Task.Delay(1);
+         //       mmc = MainMenuCollapsed;
+         //       Console.WriteLine("xxx:"+mmc);
+         //       this.InvokeAsync(StateHasChanged);
+         //   });
         }
 
         void initMenu()
@@ -96,6 +99,7 @@ namespace ZLJ.Admin.CoreRCL.Layout
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
+            await Console.Out.WriteLineAsync(MainMenuCollapsed.ToString());
             if (firstRender)
             {
                 await iconService.CreateFromIconfontCN("//at.alicdn.com/t/font_2735473_hi62ezq5579.js");

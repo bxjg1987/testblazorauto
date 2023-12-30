@@ -11,13 +11,21 @@ namespace ZLJ.Web.HostBlazor.Components
       ? null
       : RenderMode.InteractiveServer;
 
+        /// <summary>
+        /// true wasm已运行 falsewasm未运行
+        /// </summary>
         bool xs = false;
+        /// <summary>
+        /// 当前用户首次访问此应用最新版本的时间存储在cookie种，此字段表示此cookie的前缀，后面跟核心程序集的md5值
+        /// </summary>
         const string prefix = "dqsj_";
-
+        /// <summary>
+        /// 通过querstring参数和cookie存储菜单的展开折叠模式，此字段表示这个参数和cookie的名称
+        /// </summary>
         const string mainMenuCollapsedCookieName = "mmc";
 
         ///// <summary>
-        ///// 0折叠 1展开 null取cookie中的值
+        ///// 0折叠 1展开
         ///// </summary>
         //[SupplyParameterFromQuery]
         //public int? mmc { get; set; }
@@ -27,9 +35,6 @@ namespace ZLJ.Web.HostBlazor.Components
         //{
         //    await base.SetParametersAsync(parameters);
 
-          
-
-           
         //}
 
         //protected override void OnParametersSet()
@@ -37,7 +42,6 @@ namespace ZLJ.Web.HostBlazor.Components
         //    base.OnParametersSet();
         //    if(mmc)
         //}
-
         protected override void OnInitialized()
         {
             /*
@@ -60,7 +64,7 @@ namespace ZLJ.Web.HostBlazor.Components
                 var cookieKey = prefix + hash;
                 if (HttpContext.Request.Cookies.TryGetValue(cookieKey, out var sj))
                 {
-                    if ((DateTime.Now - DateTime.Parse(sj)).TotalSeconds > 30)
+                    if ((DateTime.Now - DateTime.Parse(sj)).TotalSeconds > 30000)
                     {
                         xs = true;
                         //别删cookie
@@ -78,16 +82,19 @@ namespace ZLJ.Web.HostBlazor.Components
                 }
             }
 
-
-            if (HttpContext.Request.Query.TryGetValue(mainMenuCollapsedCookieName, out var mmc))
+            string mmc = string.Empty;
+            if (HttpContext.Request.Query.TryGetValue(mainMenuCollapsedCookieName, out var mmc1))
             {
-                mainMenuCollapsed = mmc == "0";
+                mmc = mmc1;
+                //mainMenuCollapsed = mmc == "0";
                 HttpContext.Response.Cookies.Append(mainMenuCollapsedCookieName, mmc.ToString());
             }
             else if (HttpContext.Request.Cookies.TryGetValue(mainMenuCollapsedCookieName, out var str))
             {
-                mainMenuCollapsed = str == "0";
+                mmc = str;
+                //mainMenuCollapsed = str == "0";
             }
+            mainMenuCollapsed = mmc == "0";
             //Console.WriteLine(this.GetHashCode());
         }
     }
