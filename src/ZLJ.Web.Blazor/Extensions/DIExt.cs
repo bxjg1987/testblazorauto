@@ -1,4 +1,5 @@
 ﻿using Abp.Authorization;
+using Abp.Localization;
 using Abp.Runtime.Session;
 using BXJG.Common.Http;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -31,6 +32,8 @@ namespace Microsoft.Extensions.DependencyInjection
                     });
             services.TryAddTransient<IAbpSession, MyAbpSession>();
             services.TryAddSingleton<IPermissionChecker, ClientPermissionChecker>();
+            //不好实现，所以不要使用多语言
+            //services.TryAddSingleton<ILocalizationManager, NullLocalizationManager>();
             return services;
         }
         /// <summary>

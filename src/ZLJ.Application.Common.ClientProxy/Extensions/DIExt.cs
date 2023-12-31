@@ -11,6 +11,7 @@ using Abp.Application.Navigation;
 using ZLJ.Admin.ClientProxy;
 using Microsoft.Extensions.DependencyInjection;
 using ZLJ.Application.Common.ClientProxy.Http;
+using Abp.Configuration;
 
 namespace ZLJ.Application.Common.ClientProxy.Extensions
 {
@@ -30,9 +31,11 @@ namespace ZLJ.Application.Common.ClientProxy.Extensions
             var b = services.AddAccessTokenHandler().AddHttpClient(Consts.ZLJ_ADMIN_HTTP_CLIENT_NAME, act).AddHttpMessageHandler<AbpWraperDelegatHandler>().AddHttpMessageHandler<AccessTokenHandler>();
             
             
-            services.AddTransient<AbpUserConfigurationService>().AddTransient<IUserNavigationManager, UserNavigationManager>();
+            services.AddTransient<AbpUserConfigurationService>()
+                    .AddTransient<IUserNavigationManager, UserNavigationManager>()
+                    .AddTransient<ISettingManager, SettingManager>();
 
-
+            
             return b;
         }
     }

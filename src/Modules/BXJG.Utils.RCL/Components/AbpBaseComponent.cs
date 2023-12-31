@@ -85,6 +85,7 @@ namespace BXJG.Utils.Components
         /// 获取abp取消令牌提供者
         /// </summary>
         protected virtual ICancellationTokenProvider CancellationTokenProvider => cancellationTokenProvider ??= ScopedServices.GetRequiredService<ICancellationTokenProvider>();
+        
         /// <summary>
         /// 获取当前组件只读的全局取消令牌源
         /// </summary>

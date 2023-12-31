@@ -61,7 +61,7 @@ namespace ZLJ.Web.Blazor.Components
         /// 请调用PermissionChecker
         /// </summary>
         IPermissionChecker permissionChecker;
-        protected virtual IPermissionChecker PermissionChecker => permissionChecker ?? ScopedServices.GetRequiredService<IPermissionChecker>();
+        protected virtual IPermissionChecker PermissionChecker => permissionChecker ??= ScopedServices.GetRequiredService<IPermissionChecker>();
         /// <summary>
         /// 请调用AppService
         /// </summary>
@@ -69,7 +69,7 @@ namespace ZLJ.Web.Blazor.Components
         /// <summary>
         /// 获取主服务
         /// </summary>
-        protected virtual TAppService AppService => appService ?? ScopedServices.GetRequiredService<TAppService>();
+        protected virtual TAppService AppService => appService ??= ScopedServices.GetRequiredService<TAppService>();
         /// <summary>
         /// 此功能的名称
         /// </summary>

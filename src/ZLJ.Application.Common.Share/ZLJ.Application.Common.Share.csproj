@@ -21,6 +21,11 @@
 		<ProjectReference Include="..\Modules\BXJG.Utils.Application.Share\BXJG.Utils.Application.Share.csproj" />
 	</ItemGroup>
 	<ItemGroup>
+	  <Compile Remove="SettingManager\**" />
+	  <EmbeddedResource Remove="SettingManager\**" />
+	  <None Remove="SettingManager\**" />
+	</ItemGroup>
+	<ItemGroup>
 	  <ProjectReference Include="..\ZLJ.Core.Share\ZLJ.Core.Share.csproj" />
 	</ItemGroup>
 	
