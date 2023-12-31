@@ -34,20 +34,20 @@ namespace ZLJ.Admin.CoreRCL.Layout
 
             subscription.Dispose();
         }
-
+       
         //静态传入auto，不能用级联，或者可以试试全局级联
         //https://learn.microsoft.com/zh-cn/aspnet/core/blazor/components/cascading-values-and-parameters?view=aspnetcore-8.0#cascading-valuesparameters-and-render-mode-boundaries
         //  [CascadingParameter(Name = "mmc")]
         [Parameter]
-        public bool MainMenuCollapsed { get; set; }
-        // MenuMode mm => MainMenuCollapsed ?  MenuMode.Inline: MenuMode.Vertical;
-
-        //bool mmc;
+        public bool Collapsed { get; set; }
+        //antblazor菜单有问题，所以单独定义这个字段，在首次渲染后将其赋值为Collapsed
+        bool collapsed;
 
         [Inject]
         public IconService iconService { get; set; }
         Task OnPersisting()
         {
+            //Console.WriteLine(  "菜单持久化执行了"+System.Text.Json.JsonSerializer.Serialize(menu));
             state.PersistAsJson("main", menu);
             return Task.CompletedTask;
         }
@@ -63,9 +63,6 @@ namespace ZLJ.Admin.CoreRCL.Layout
                 //Console.WriteLine("客户端事件：totalmainmenu注册了");
                 sj = zhongjie.Zhuce(async () =>
                 {
-                    //Console.WriteLine("客户但事件totalmainmenu执行了" + col);
-                    //collapsed = col;
-                    //await this.InvokeAsync(StateHasChanged);
                     await MessageService.Warning("若看到此消息，说明基于事件总线的跨组件通信成功");
                 }, "aaa");
             }
@@ -73,38 +70,21 @@ namespace ZLJ.Admin.CoreRCL.Layout
 
             if (!state.TryTakeFromJson("main", out menu))
             {
-                initMenu();//下面有异步，这里初始化下
+                menu = new UserMenu() { Items = new List<UserMenuItem>() };//这里初始化下，否则界面渲染为空估计要报错
                 if (abpSession.UserId.HasValue)
                 {
                     menu = await UserNavigationManager.GetMenuAsync("MainMenu", new Abp.UserIdentifier(abpSession.TenantId, abpSession.UserId.Value));
-                    // menu.Items.Add();
-                    // await Console.Out.WriteLineAsync(   System.Text.Json.JsonSerializer.Serialize(menu));
                 }
             }
-
-
-         //_=  Task.Run(async () =>
-         //   {
-         //       await Task.Delay(1);
-         //       mmc = MainMenuCollapsed;
-         //       Console.WriteLine("xxx:"+mmc);
-         //       this.InvokeAsync(StateHasChanged);
-         //   });
-        }
-
-        void initMenu()
-        {
-            menu = new UserMenu() { Items = new List<UserMenuItem>() };
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            await Console.Out.WriteLineAsync(MainMenuCollapsed.ToString());
             if (firstRender)
             {
-                await iconService.CreateFromIconfontCN("//at.alicdn.com/t/font_2735473_hi62ezq5579.js");
-               // mmc = MainMenuCollapsed;
-                //StateHasChanged();
+                await iconService.CreateFromIconfontCN("https://at.alicdn.com/t/font_2735473_hi62ezq5579.js");
+                collapsed = Collapsed;
+                StateHasChanged();
             }
         }
     }

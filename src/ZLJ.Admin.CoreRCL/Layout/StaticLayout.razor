@@ -6,12 +6,16 @@
 
         <div class="logo" style="height:29px; margin:15px;">
             <img src="bxjglogo.png" style="width:37px; height:30px; float:left;" />
-            <h3 style="    color: #ddd;    float: left;    margin-left: 0.5rem;    line-height: 35px;    font-size: 1.2rem;">
-                变形精怪
-            </h3>
+
+            @if (!MainMenuCollapsed)
+            {
+                <h3 style="    color: #ddd;    float: left;    margin-left: 0.5rem;    line-height: 35px;    font-size: 1.2rem;">
+                    变形精怪
+                </h3>
+            }
         </div>
         @* 菜单需要交互式 *@
-        <MainMenu @rendermode="new  InteractiveAutoRenderMode(false)" MainMenuCollapsed=true />
+        <MainMenu @rendermode="InteractiveAuto" Collapsed=MainMenuCollapsed />
         @* <MainMenuToggleButton @rendermode="InteractiveAuto" /> *@
         @if (MainMenuCollapsed)
         {
@@ -41,15 +45,15 @@
     public bool MainMenuCollapsed { get; set; }
 
     //int left => MainMenuCollapsed ? 80 : 200;
-    string LayoutStyle => "margin-left:" + (MainMenuCollapsed ? 80 : 200) + "px";
+    string LayoutStyle => "margin-left:" + (MainMenuCollapsed ? 80 : 200) + "px;transition-property: margin-left";
 
     string TogleSider
     {
         get
         {
             var url = Navigation.Uri;
-           // Regex.
-            url = Regex.Replace(url,@"(\?|&)mmc=\d+","");
+            // Regex.
+            url = Regex.Replace(url, @"(\?|&)mmc=\d+", "");
             if (url.Contains("?"))
                 url += "&";
             else

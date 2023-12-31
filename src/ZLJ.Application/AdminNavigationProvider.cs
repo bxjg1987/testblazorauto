@@ -48,7 +48,7 @@ namespace ZLJ.App.Admin
             menuBaseInfo.AddItem(new MenuItemDefinition("通知中心",
                                                         "通知中心".GetAdminLocalizableString(),
                                                         icon: ".Outline.Notification",
-                                                        url: "/tongzhi"));
+                                                        url: "/notification"));
             //数据字典
             menuBaseInfo.AddItem(new MenuItemDefinition(BXJGUtilsConsts.GeneralTreeMenuName,
                                                         BXJGUtilsConsts.GeneralTreeMenuName.UtilsLI(),
@@ -61,7 +61,7 @@ namespace ZLJ.App.Admin
               displayName: PermissionNames.AdministratorBaseInfoOrganizationUnit.GetAdminLocalizableString(),
               // @Icons.Material.Outlined.AccountTree
               icon: ".Outline.Compass",
-              url: $"/organizationUnit",
+              url: $"/organization-unit",
               requiresAuthentication: true,
               permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorBaseInfoOrganizationUnit)));
 

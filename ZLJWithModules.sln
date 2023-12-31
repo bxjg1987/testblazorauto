@@ -92,9 +92,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZLJ.Admin.CoreRCL", "src\ZL
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZLJ.Admin.ClientProxy", "src\ZLJ.Admin.ClientProxy\ZLJ.Admin.ClientProxy.csproj", "{FAECA5E3-8F86-4D07-95F8-D83BE503F84C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BXJG.Utils.Application.Share", "src\Modules\BXJG.Utils.Application.Share\BXJG.Utils.Application.Share.csproj", "{E9F6E2B0-E4F4-47ED-8A2A-1456136D88F9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Utils.Application.Share", "src\Modules\BXJG.Utils.Application.Share\BXJG.Utils.Application.Share.csproj", "{E9F6E2B0-E4F4-47ED-8A2A-1456136D88F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BXJG.Utils.Share", "src\Modules\BXJG.Utils.Share\BXJG.Utils.Share.csproj", "{9E256A2F-6F76-469C-8387-7C5A35274B55}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Utils.Share", "src\Modules\BXJG.Utils.Share\BXJG.Utils.Share.csproj", "{9E256A2F-6F76-469C-8387-7C5A35274B55}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
