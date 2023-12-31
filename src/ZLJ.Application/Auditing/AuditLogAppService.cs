@@ -16,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using ZLJ.App.Admin.Authorization.Permissions;
 using ZLJ.Application.Share.Auditing;
 using ZLJ.Application.Share.Auditing.Dto;
+using ZLJ.Application.Share.Authorization.Permissions;
 
 namespace ZLJ.App.Admin.Auditing
 {

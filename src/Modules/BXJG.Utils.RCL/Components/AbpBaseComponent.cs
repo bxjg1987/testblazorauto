@@ -1,36 +1,4 @@
-using Abp;
-using Abp.Application.Features;
-using Abp.AspNetCore.Configuration;
-using Abp.Authorization;
-using Abp.Authorization.Roles;
-using Abp.Authorization.Users;
-using Abp.Configuration;
-using Abp.Domain.Uow;
-using Abp.Events.Bus;
-using Abp.Localization;
-using Abp.Localization.Sources;
-using Abp.MultiTenancy;
-using Abp.ObjectMapping;
-using Abp.Runtime.Session;
-using Abp.Threading;
-using Abp.UI;
-using BXJG.Common;
-using BXJG.Common.Dto;
-using BXJG.Common.RCL;
-using Castle.Core.Logging;
-using Microsoft.AspNetCore.Components.Server.Circuits;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+
 using static System.Formats.Asn1.AsnWriter;
 
 namespace BXJG.Utils.Components
@@ -53,9 +21,12 @@ namespace BXJG.Utils.Components
      * 总的来说，通常是不需要的，应用用例基本都是对应到应用服务的
      */
 
+    //仅服务端组件才可以基础它，详细的查看此项目.md
+
     /// <summary>
     /// 与abp关联的抽象组件
     /// 它使用延迟引用了abp常用接口
+    /// 仅服务端组件才可以基础它，详细的查看此项目.md
     /// </summary>
     public abstract class AbpBaseComponent/*<TUser, TUserManager, TRole>*/ : CommonBaseComponent// OwningComponentBase
     //where TUser : AbpUser<TUser>

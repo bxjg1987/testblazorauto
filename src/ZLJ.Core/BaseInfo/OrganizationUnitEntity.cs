@@ -8,6 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZLJ.Core.Share;
 
 namespace ZLJ.BaseInfo
 {
@@ -18,7 +19,7 @@ namespace ZLJ.BaseInfo
         /// <summary>
         /// 0总公司 1分公司 2部门
         /// </summary>
-        public Enums.OUType OUType { get; set; }
+        public OUType OUType { get; set; }
         [NotMapped]
         public string OUTypeText { get; set; }
     }

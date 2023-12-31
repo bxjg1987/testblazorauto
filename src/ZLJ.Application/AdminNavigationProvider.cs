@@ -8,6 +8,7 @@ using ZLJ.App.Admin.Authorization.Permissions;
 using BXJG.Utils;
 using BXJG.Utils.Localization;
 using DocumentFormat.OpenXml.Drawing;
+using ZLJ.Application.Share.Authorization.Permissions;
 
 namespace ZLJ.App.Admin
 {

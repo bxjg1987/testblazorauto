@@ -18,6 +18,7 @@ using ZLJ.Customer;
 using Abp.IdentityFramework;
 using ZLJ.Authorization.Users;
 using ZLJ.App.Admin.Authorization.Permissions;
+using ZLJ.Application.Share.Authorization.Permissions;
 
 namespace ZLJ.App.Admin.BaseInfo.AssociatedCompany
 {

@@ -71,6 +71,10 @@
 		<PackageReference Include="Yitter.IdGenerator" Version="1.*" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\ZLJ.Core.Share\ZLJ.Core.Share.csproj" />
+	</ItemGroup>
+
 
 	<!--<ItemGroup Condition="'$(SolutionName)' != 'ZLJWithModules'">
 		<PackageReference Include="BXJG.WorkOrder.Core" Version="*" />

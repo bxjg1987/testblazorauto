@@ -4,7 +4,6 @@ using Abp.Authorization.Users;
 using Abp.Notifications;
 using BXJG.Common.Dto;
 using BXJG.Utils.Application.Share.Notification;
-using BXJG.Utils.Components;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;

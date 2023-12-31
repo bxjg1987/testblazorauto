@@ -20,6 +20,9 @@
 	<ItemGroup Condition="'$(SolutionName)' == 'ZLJWithModules'">
 		<ProjectReference Include="..\Modules\BXJG.Utils.Application.Share\BXJG.Utils.Application.Share.csproj" />
 	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\ZLJ.Core.Share\ZLJ.Core.Share.csproj" />
+	</ItemGroup>
 	
 	
 </Project>

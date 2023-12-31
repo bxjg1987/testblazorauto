@@ -22,6 +22,10 @@ using Abp.Domain.Uow;
 using ZLJ.Authorization.Roles;
 using ZLJ.Authorization.Users;
 using ZLJ.App.Admin.Authorization.Permissions;
+using BXJG.Utils.Application.Share;
+using ZLJ.Application.Share.Authorization.Permissions;
+using ZLJ.Application.Share.Roles;
+using ZLJ.Application.Common.Share.OU;
 
 namespace ZLJ.App.Admin.Roles
 {

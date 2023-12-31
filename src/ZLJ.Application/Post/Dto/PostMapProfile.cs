@@ -4,6 +4,8 @@ using Abp.Authorization;
 using Abp.Authorization.Roles;
 using ZLJ.Authorization.Roles;
 using ZLJ.BaseInfo.Post;
+using ZLJ.Application.Share.Post;
+using ZLJ.Application.Share.Roles;
 
 namespace ZLJ.App.Admin.Post.Dto
 {
@@ -11,9 +13,9 @@ namespace ZLJ.App.Admin.Post.Dto
     {
         public PostMapProfile()
         {
-            CreateMap<CreatePostDto, PostEntity>().IncludeBase<ZLJ.App.Admin.Roles.Dto.CreateRoleDto, Role>();
-            CreateMap<Role, PostDto>().IncludeBase<Role, ZLJ.App.Admin.Roles.Dto.RoleDto>();
-            CreateMap<PostEntity, PostDto>().IncludeBase<Role, ZLJ.App.Admin.Roles.Dto.RoleDto>();
+            CreateMap<CreatePostDto, PostEntity>().IncludeBase<CreateRoleDto, Role>();
+            CreateMap<Role, PostDto>().IncludeBase<Role, RoleDto>();
+            CreateMap<PostEntity, PostDto>().IncludeBase<Role, RoleDto>();
             //CreateMap<Role, PostEditDto>().IncludeBase<Role, Roles.Dto.RoleEditDto>(); ;
         }
     }

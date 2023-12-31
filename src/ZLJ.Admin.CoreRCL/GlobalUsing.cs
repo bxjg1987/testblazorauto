@@ -14,3 +14,8 @@ global using AntDesign;
 global using ZLJ.Admin.CoreRCL.Auth;
 global using ZLJ.Web.Blazor.Components;
 global using BXJG.Common;
+global using ZLJ.Application.Share;
+global using ZLJ.Application.Share.Authorization;
+global using ZLJ.Application.Share.Authorization.Permissions;
+global using BXJG.Utils.Application.Share;
+global using ZLJ.Web.Blazor.Interceptors;

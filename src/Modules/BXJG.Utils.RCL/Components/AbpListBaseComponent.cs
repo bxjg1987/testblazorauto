@@ -6,7 +6,7 @@ using Abp.Domain.Entities;
 using BXJG.Common.Dto;
 using BXJG.Utils;
 using BXJG.Utils.Application.Share;
-using BXJG.Utils.Dto;
+
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;

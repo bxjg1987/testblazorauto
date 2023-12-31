@@ -16,6 +16,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="GeneralTree\**" />
+    <EmbeddedResource Remove="GeneralTree\**" />
+    <None Remove="GeneralTree\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Authorization\AuthorizationExtensionts.cs" />
   </ItemGroup>
 

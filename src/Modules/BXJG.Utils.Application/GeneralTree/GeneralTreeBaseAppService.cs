@@ -27,11 +27,12 @@ using Abp.Domain.Uow;
 using BXJG.Common.Dto;
 using Abp.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
-using BXJG.Utils.Dto;
+
 using Microsoft.AspNetCore.Components.Forms;
 using BXJG.Common;
 using BXJG.Utils.Application.Share.GeneralTree;
 using BXJG.Utils.Share.GeneralTree;
+using BXJG.Utils.Application.Share;
 
 namespace BXJG.Utils.GeneralTree
 {

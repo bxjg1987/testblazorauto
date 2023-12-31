@@ -8,25 +8,15 @@ using System.Text.Json;
 using ZLJ.Admin.ClientProxy;
 using ZLJ.Admin.CoreRCL.Auth;
 using ZLJ.Admin.CoreRCL.Startup;
+using ZLJ.Web.Blazor;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
 //builder.Services.AddLogging(lb => { 
 //    lb.AddBrowserConsole(); 
 //});
-builder.Services.AddZLJBlazorClient(s =>
-                {
-                    var fw = s.GetRequiredService<AppContainer>();
-                    if (fw.AbpUserConfiguration != null && fw.AbpUserConfiguration.Auth != default)
-                    {
-                        //Console.WriteLine(JsonConvert.SerializeObject(fw.AbpUserConfiguration.Auth));
-                        return fw.AbpUserConfiguration.Auth.GrantedPermissions.Keys;
-                    }
-                    return new string[0];
-                })
-                .AddAdminBlazor()
-                .AddAuthorizationCore()
-                .AddSingleton(AppContainer.App);
+builder.Services.AddAdminBlazor().AddZLJBlazorClient()
+                .AddAuthorizationCore();
 
 builder.Services.AddAdminApiClientProxy(hc =>
 {

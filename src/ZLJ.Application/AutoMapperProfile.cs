@@ -22,6 +22,7 @@ using ZLJ.BaseInfo.AssociatedCompany;
 using ZLJ.App.Common.Users;
 using Abp.Auditing;
 using ZLJ.Application.Share.Auditing;
+using ZLJ.Application.Share.Roles;
 
 namespace ZLJ.App.Admin
 {

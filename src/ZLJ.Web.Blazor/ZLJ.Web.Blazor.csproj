@@ -13,7 +13,6 @@
     <Compile Remove="Components\AbpCreateBaseComponent.cs" />
     <Compile Remove="Components\AbpCreateDialog.razor.cs" />
     <Compile Remove="Components\AbpCreateDialogBaseComponent.cs" />
-    <Compile Remove="Components\AbpListBaseComponent.cs" />
     <Compile Remove="Components\AbpTreeSelect.razor.cs" />
     <Compile Remove="Components\FileName.cs" />
   </ItemGroup>
@@ -38,7 +37,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Auth\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
@@ -48,5 +46,6 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\Libs\BXJG.Common.RCL\BXJG.Common.RCL.csproj" />
 	  <ProjectReference Include="..\ZLJ.Application.Common.ClientProxy\ZLJ.Application.Common.ClientProxy.csproj" />
+	  <ProjectReference Include="..\ZLJ.Application.Share\ZLJ.Application.Share.csproj" />
 	</ItemGroup>
 </Project>

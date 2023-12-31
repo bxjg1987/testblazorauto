@@ -1,4 +1,5 @@
 using AutoMapper;
+using BXJG.Utils.Application.Share.Files;
 using BXJG.Utils.AutoMapper;
 using System.Collections.Generic;
 using System.Text.Json;

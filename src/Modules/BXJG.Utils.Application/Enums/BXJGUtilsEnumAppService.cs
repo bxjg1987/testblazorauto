@@ -10,6 +10,7 @@ using BXJG.Utils.Localization;
 using Abp.Application.Services.Dto;
 using Abp.Extensions;
 using Abp.UI;
+using BXJG.Utils.Application.Share.Enums;
 
 namespace BXJG.Utils.Enums
 {

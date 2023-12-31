@@ -4,6 +4,7 @@
 using Abp.IdentityFramework;
 using Abp.Organizations;
 using Abp.Zero.Configuration;
+using BXJG.Utils.Application.Share;
 using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 using ZLJ.App.Admin.Authorization.Permissions;
@@ -11,6 +12,10 @@ using ZLJ.App.Admin.Post.Dto;
 using ZLJ.App.Admin.Roles;
 using ZLJ.App.Admin.Roles.Dto;
 using ZLJ.App.Common.OU;
+using ZLJ.Application.Common.Share.OU;
+using ZLJ.Application.Share.Authorization.Permissions;
+using ZLJ.Application.Share.Post;
+using ZLJ.Application.Share.Roles;
 using ZLJ.Authorization.Roles;
 using ZLJ.Authorization.Users;
 using ZLJ.BaseInfo.Post;

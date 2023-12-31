@@ -1,5 +1,5 @@
 ﻿using Abp.Application.Services.Dto;
-using ZLJ.Enums;
+using ZLJ.Core.Share;
 using ZLJ.Localization;
 
 namespace ZLJ.App.Admin.BaseInfo.Dto.Fitting

@@ -21,6 +21,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ZLJ.App.Common.Users;
 using ZLJ.App.Admin.Authorization.Permissions;
+using ZLJ.Application.Share.Roles;
+using ZLJ.Application.Share.Authorization.Permissions;
 
 namespace ZLJ.App.Admin.Users
 {

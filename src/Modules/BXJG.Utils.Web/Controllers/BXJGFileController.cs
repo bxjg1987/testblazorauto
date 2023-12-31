@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
 using Abp.AspNetCore.Mvc.Controllers;
 using Abp.Authorization;
+using BXJG.Utils.Application.Share.Files;
 using BXJG.Utils.File;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

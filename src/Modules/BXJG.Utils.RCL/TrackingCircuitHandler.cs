@@ -1,6 +1,7 @@
 ﻿using BXJG.Common;
 using Microsoft.AspNetCore.Components.Server.Circuits;
 using Microsoft.Extensions.Logging;
+using ILoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
 
 namespace BXJG.Utils.RCL
 {
@@ -22,6 +23,7 @@ namespace BXJG.Utils.RCL
             curr = circuit;
             zhongjies.Add(circuit, new Zhongjie(loggerFactory));
             return Task.CompletedTask;
+
         }
 
         public override Task OnConnectionDownAsync(Circuit circuit,

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using ZLJ.Admin.ClientProxy;
 using ZLJ.Application.Common.ClientProxy.Extensions;
 using ZLJ.Application.Share.Auditing;
+using ZLJ.Application.Share.Post;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -19,7 +20,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IHttpClientBuilder AddAdminApiClientProxy(this IServiceCollection services, Action<HttpClient> act = default) //where T : class
         {
-            services.AddTransient<IAuditLogAppService, AuditingAppService>();
+            services.AddTransient<IAuditLogAppService, AuditingAppService>()
+                    .AddTransient<IPostAppService, PostAppService>();
             return services.AddApiClientProxy(act);
         }
     }

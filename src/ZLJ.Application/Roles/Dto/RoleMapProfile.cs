@@ -3,6 +3,7 @@ using AutoMapper;
 using Abp.Authorization;
 using Abp.Authorization.Roles;
 using ZLJ.Authorization.Roles;
+using ZLJ.Application.Share.Roles;
 
 namespace ZLJ.App.Admin.Roles.Dto
 {
@@ -24,6 +25,7 @@ namespace ZLJ.App.Admin.Roles.Dto
             CreateMap<Role, RoleListDto>();
             CreateMap<Role, RoleEditDto>();
             CreateMap<Permission, FlatPermissionDto>();
+            CreateMap<Permission, PermissionDto>();
         }
     }
 }

@@ -6,6 +6,7 @@ using BXJG.Utils.GeneralTree;
 using BXJG.Utils.Localization;
 using ZLJ.Localization;
 using System.Collections.Generic;
+using ZLJ.Application.Share.Authorization.Permissions;
 
 namespace ZLJ.App.Admin.Authorization.Permissions
 {

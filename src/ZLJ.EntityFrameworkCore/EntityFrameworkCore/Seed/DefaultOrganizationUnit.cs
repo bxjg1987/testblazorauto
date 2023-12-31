@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZLJ.BaseInfo;
+using ZLJ.Core.Share;
 
 namespace ZLJ.EntityFrameworkCore.Seed
 {
@@ -27,33 +28,33 @@ namespace ZLJ.EntityFrameworkCore.Seed
             }
             var o = new OrganizationUnitEntity(tenantId, n);
             o.Code = OrganizationUnit.CreateCode(1);
-            o.OUType = Enums.OUType.HeadOffice;
+            o.OUType = OUType.HeadOffice;
             o.Children = new List<OrganizationUnit>();
 
             o.Children.Add(new OrganizationUnitEntity(tenantId, "销售部")
             {
                  Code = OrganizationUnit.CreateCode(1,1),
-                OUType = Enums.OUType.Department
+                OUType = OUType.Department
             });
             o.Children.Add(new OrganizationUnitEntity(tenantId, "采购部")
             {
                 Code = OrganizationUnit.CreateCode(1, 2),
-                OUType = Enums.OUType.Department
+                OUType = OUType.Department
             });
             o.Children.Add(new OrganizationUnitEntity(tenantId, "仓储")
             {
                 Code = OrganizationUnit.CreateCode(1, 3),
-                OUType = Enums.OUType.Department
+                OUType = OUType.Department
             });
             o.Children.Add(new OrganizationUnitEntity(tenantId, "技术部")
             {
                 Code = OrganizationUnit.CreateCode(1, 4),
-                OUType = Enums.OUType.Department
+                OUType = OUType.Department
             });
             o.Children.Add(new OrganizationUnitEntity(tenantId, "财务部")
             {
                 Code = OrganizationUnit.CreateCode(1, 5),
-                OUType = Enums.OUType.Department
+                OUType = OUType.Department
             });
             //o.Children = new List<OrganizationUnitEntity>
             //{

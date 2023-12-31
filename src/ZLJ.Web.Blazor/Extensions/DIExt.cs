@@ -1,9 +1,10 @@
-﻿using Abp.Runtime.Session;
+﻿using Abp.Authorization;
+using Abp.Runtime.Session;
 using BXJG.Common.Http;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using ZLJ.Web.Blazor;
 using ZLJ.Web.Blazor.Abp;
-using ZLJ.Web.Blazor.Auth;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -14,11 +15,22 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>
-        public static IServiceCollection AddZLJBlazorClient(this IServiceCollection services, Func<IServiceProvider, IEnumerable<string>> permissionNamesProvider)
+        public static IServiceCollection AddZLJBlazorClient(this IServiceCollection services)
         {
             services.AddZLJBlazor()
-                    .AddCommonRCLClient(permissionNamesProvider);
+                    //.AddZLJBlazorClient()
+                    .AddSingleton(AppContainer.App)
+                    .AddCommonRCLClient(s => {
+                        var fw = s.GetRequiredService<AppContainer>();
+                        if (fw.AbpUserConfiguration != null && fw.AbpUserConfiguration.Auth != default)
+                        {
+                            //Console.WriteLine(JsonConvert.SerializeObject(fw.AbpUserConfiguration.Auth));
+                            return fw.AbpUserConfiguration.Auth.GrantedPermissions.Keys;
+                        }
+                        return new string[0];
+                    });
             services.TryAddTransient<IAbpSession, MyAbpSession>();
+            services.TryAddSingleton<IPermissionChecker, ClientPermissionChecker>();
             return services;
         }
         /// <summary>

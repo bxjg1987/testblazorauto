@@ -12,6 +12,7 @@ using BXJG.Common.Dto;
 using ZLJ.BaseInfo.Administrative;
 using ZLJ.App.Admin.Authorization.Permissions;
 using BXJG.Utils.Application.Share.GeneralTree;
+using ZLJ.Application.Share.Authorization.Permissions;
 
 namespace ZLJ.App.Admin.BaseInfo.Administrative
 {

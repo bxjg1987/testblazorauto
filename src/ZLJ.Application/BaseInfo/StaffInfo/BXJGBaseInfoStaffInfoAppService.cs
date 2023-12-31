@@ -7,6 +7,8 @@ using ZLJ.App.Common.StaffInfo;
 using ZLJ.BaseInfo.Post;
 using ZLJ.BaseInfo;
 using ZLJ.App.Admin.Authorization.Permissions;
+using ZLJ.Application.Share.Authorization.Permissions;
+using ZLJ.Application.Common.Share.OU;
 
 namespace ZLJ.App.Admin.BaseInfo.StaffInfo
 {
@@ -346,7 +348,7 @@ namespace ZLJ.App.Admin.BaseInfo.StaffInfo
             var dto = ObjectMapper.Map<StaffInfoDto>(entity);
             dto.Posts = ObjectMapper.Map<List<App.Common.Post.PostDto>>(posts.Where(c => c != default).DistinctBy(c => c.Id));
             dto.RoleNames = dto.Posts.Where(c=>c!=default).DistinctBy(c=>c.Id).Select(c => c.Name).ToArray();
-            dto.Ous = ObjectMapper.Map<List<App.Common.OU.OuDto>>(ous.Where(c => c != default).DistinctBy(c => c.Id));
+            dto.Ous = ObjectMapper.Map<List<OuDto>>(ous.Where(c => c != default).DistinctBy(c => c.Id));
             return dto;
         }
     }

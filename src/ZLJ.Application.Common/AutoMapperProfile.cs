@@ -12,6 +12,7 @@ using Abp.Extensions;
 using Abp.Dependency;
 using ZLJ.App.Common.Administrative;
 using ZLJ.BaseInfo.Administrative;
+using ZLJ.Application.Common.Share.OU;
 
 namespace ZLJ.App.Common
 {

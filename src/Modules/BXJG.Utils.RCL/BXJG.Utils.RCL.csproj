@@ -11,9 +11,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Components\**" />
+    <Compile Remove="Notification\**" />
+    <Content Remove="Components\**" />
+    <Content Remove="Notification\**" />
+    <EmbeddedResource Remove="Components\**" />
+    <EmbeddedResource Remove="Notification\**" />
+    <None Remove="Components\**" />
+    <None Remove="Notification\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="CircuitStateHandler.cs" />
     <Compile Remove="CrudBaseComponent.cs" />
-    <Compile Remove="Notification\EventRealTimeNotifier.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Components\AbpBaseComponent.cs" />
   </ItemGroup>
 
   <ItemGroup>

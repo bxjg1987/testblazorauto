@@ -15,6 +15,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ZLJ.App.Admin.Authorization.Permissions;
 using ZLJ.App.Admin.BaseInfo;
+using ZLJ.Application.Share.Authorization.Permissions;
 using ZLJ.BaseInfo;
 
 namespace ZLJ.App.Admin.OU

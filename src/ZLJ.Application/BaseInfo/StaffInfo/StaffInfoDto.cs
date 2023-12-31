@@ -7,6 +7,7 @@ using System.Linq;
 using ZLJ.App.Common.OU;
 using ZLJ.App.Common.Post;
 using ZLJ.App.Common.Users;
+using ZLJ.Application.Common.Share.OU;
 
 namespace ZLJ.App.Admin.BaseInfo.StaffInfo
 {

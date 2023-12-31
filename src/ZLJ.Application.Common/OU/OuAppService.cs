@@ -9,7 +9,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZLJ.Application.Common.Share.OU;
 using ZLJ.BaseInfo;
+using ZLJ.Core.Share;
 
 namespace ZLJ.App.Common.OU
 {
@@ -69,7 +71,7 @@ namespace ZLJ.App.Common.OU
                     Text = item.DisplayName,
                     //State = item.Children.Count>0"opend":"closed"
                     ParentId = item.ParentId,
-                    OUType = item2 == default ? Enums.OUType.HeadOffice : item2.OUType,
+                    OUType = item2 == default ? OUType.HeadOffice : item2.OUType,
                     DisplayName = item.DisplayName,
                 });
             }
