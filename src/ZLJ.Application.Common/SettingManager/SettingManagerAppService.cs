@@ -9,6 +9,12 @@ using System.Threading.Tasks;
 
 namespace ZLJ.App.Common.SettingManager
 {
+    //设置配置页面用server模式的blazor组件
+    //前端读取时 server模式时注入ISettingManager，客户端时，注入自定义的实现，它从缓存中获取，
+    //管理页面保存时刷新，以达到前端更新的目的
+    //所以此接口目前意义不大
+    //但将来若有非blazor前端时，可能需要
+
     public class SettingManagerAppService : CommonBaseAppService //: ISettingManagerAppService
     {
         //public void ChangeSettingForApplication([FromQuery] string name, [FromQuery] string value)
@@ -167,7 +173,7 @@ namespace ZLJ.App.Common.SettingManager
         //    throw new NotImplementedException();
         //}
 
-        public Task<string> GetSettingValueForUserAsync([FromQuery] string name, [FromQuery] int? tenantId, [FromQuery] long userId, [FromQuery] bool fallbackToDefault)
+        public Task<string> GetSettingValueForUserAsync([FromForm] string name, [FromForm] int? tenantId, [FromForm] long userId, [FromForm] bool fallbackToDefault)
         {
             return settingManager.GetSettingValueForUserAsync(name, tenantId, userId, fallbackToDefault);
         }

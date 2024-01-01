@@ -21,7 +21,7 @@ namespace ZLJ.Web.Blazor.Components
         [Inject]
         public IMessageService MessageService { get; set; }
         /// <summary>
-        /// 请使用MessageService
+        /// 请使用AbpSession
         /// </summary>
         private IAbpSession abpSession;
         /// <summary>
@@ -33,9 +33,13 @@ namespace ZLJ.Web.Blazor.Components
         /// </summary>
         [Inject]
         protected virtual IZhongjieProvider ZhongjieProvider { get; private set; }
-
+        /// <summary>
+        /// 请使用SettingManager
+        /// </summary>
         private ISettingManager settingManager;
-
+        /// <summary>
+        /// 设置，通常仅用于读取，若需用于修改则组件必须是server模式
+        /// </summary>
         public ISettingManager SettingManager=> settingManager ??= ScopedServices.GetRequiredService<ISettingManager>();
 
         protected override async ValueTask ShowFailMessage(string title = "操作提示", string msg = "操作失败！")

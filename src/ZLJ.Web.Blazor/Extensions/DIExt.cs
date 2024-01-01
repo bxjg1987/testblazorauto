@@ -1,11 +1,13 @@
-﻿using Abp.Authorization;
+﻿using Abp.Application.Navigation;
+using Abp.Authorization;
+using Abp.Configuration;
 using Abp.Localization;
 using Abp.Runtime.Session;
 using BXJG.Common.Http;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using ZLJ.Web.Blazor;
-using ZLJ.Web.Blazor.Abp;
+using ZLJ.Web.Blazor.Abps;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -32,6 +34,8 @@ namespace Microsoft.Extensions.DependencyInjection
                     });
             services.TryAddTransient<IAbpSession, MyAbpSession>();
             services.TryAddSingleton<IPermissionChecker, ClientPermissionChecker>();
+            services.TryAddTransient<ISettingManager, ZLJ.Web.Blazor.Abps.SettingManager>();
+            services.TryAddTransient<IUserNavigationManager, UserNavigationManager>();
             //不好实现，所以不要使用多语言
             //services.TryAddSingleton<ILocalizationManager, NullLocalizationManager>();
             return services;
