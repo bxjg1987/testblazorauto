@@ -1,12 +1,13 @@
 ﻿@using Microsoft.AspNetCore.Components.Authorization
 @using ZLJ.Admin.ClientProxy
+@using ZLJ.Admin.CoreRCL.Auth
 @* @inject AppContainer appContainer
 @inject AbpUserConfigurationService abpUserCfgService *@
 
 <Router AppAssembly="@typeof(Routes).Assembly">
     <Found Context="routeData">
         @* <CascadingValue Value="routeData"> *@
-        <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof( ZLJ.Admin.CoreRCL.Layout.StaticLayout)">
+        <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof( ZLJ.Admin.CoreRCL.Share.StaticLayout)">
             <NotAuthorized>
                 <RedirectToLogin />
             </NotAuthorized>
@@ -18,7 +19,7 @@
     </Found>
     <NotFound>
         <PageTitle>未找到页面</PageTitle>
-        <LayoutView Layout="@typeof(ZLJ.Admin.CoreRCL.Layout.StaticLayout)">
+        <LayoutView Layout="@typeof(ZLJ.Admin.CoreRCL.Share.StaticLayout)">
             <p role="alert">抱歉！没有找到页面，请联系系统管理员。</p>
         </LayoutView>
     </NotFound>

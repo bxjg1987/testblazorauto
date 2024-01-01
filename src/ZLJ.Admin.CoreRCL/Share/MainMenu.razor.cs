@@ -3,7 +3,7 @@ using Abp.Runtime.Session;
 using AntDesign;
 using BXJG.Common;
 
-namespace ZLJ.Admin.CoreRCL.Layout
+namespace ZLJ.Admin.CoreRCL.Share
 {
     public partial class MainMenu
     {

@@ -10,7 +10,7 @@ namespace ZLJ.Web.Blazor.Abps
      * 这里的实现，唯一目的是让组件的开发方式保持客户端和服务端一致
      */
 
-    public class MyAbpSession : IAbpSession
+    public class ClientAbpSession : IAbpSession
     {
         //AuthenticationStateProvider _authenticationStateProvider;
 

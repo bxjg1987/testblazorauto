@@ -16,23 +16,31 @@
         </div>
         @* 菜单需要交互式 *@
         <MainMenu @rendermode="InteractiveAuto" Collapsed=MainMenuCollapsed />
-        @* <MainMenuToggleButton @rendermode="InteractiveAuto" /> *@
-        @if (MainMenuCollapsed)
-        {
-            <NavLink href="@TogleSider">展开</NavLink>
-        }
-        else
-        {
-            <NavLink href="@TogleSider">折叠</NavLink>
-        }
+
     </Sider>
     <Layout Class="site-layout" style="@LayoutStyle">
-        <Header Class="site-layout-background" Style="padding: 0"></Header>
+        <Header Style="padding-left:0">
+            @* <MainMenuToggleButton @rendermode="InteractiveAuto" /> *@
+            @if (MainMenuCollapsed)
+            {
+                <NavLink href="@TogleSider">
+                    <Icon Type="menu-unfold" Theme="outline" />
+                </NavLink>
+            }
+            else
+            {
+                <NavLink href="@TogleSider">
+                    <Icon Type="menu-fold" Theme="outline" />
+                </NavLink>
+            }
+        </Header>
         <Content Style="margin: 24px 16px 0; overflow: initial; ">
             @* 内页的模式由页面自己决定 *@
             @Body
         </Content>
-        <Footer Style=" text-align: center;">Ant Design ©2018 Created by Ant UED</Footer>
+        <Footer Style="text-align: center; padding:0.5rem 0; color:rgba(100,100,100,0.7)">
+            Copyright ©1900-2024 变形精怪, All Rights Reserved | Power by <a href="https://dotnet.microsoft.com/zh-cn/apps/aspnet" target="_blank">asp.net 8.x</a> / <a href="https://aspnetboilerplate.com" target="_blank">abp 9.x</a> / <a href="https://antblazor.com" target="_blank">antblazor 0.17.x</a>
+        </Footer>
     </Layout>
 </Layout>
 @code {
@@ -45,7 +53,7 @@
     public bool MainMenuCollapsed { get; set; }
 
     //int left => MainMenuCollapsed ? 80 : 200;
-    string LayoutStyle => "margin-left:" + (MainMenuCollapsed ? 80 : 200) + "px;transition-property: margin-left";
+    string LayoutStyle => "background-color:#e2ebf9; margin-left:" + (MainMenuCollapsed ? 80 : 200) + "px;transition-property: margin-left";
 
     string TogleSider
     {

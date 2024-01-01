@@ -1,4 +1,5 @@
-﻿using Abp.Application.Navigation;
+﻿using Abp.Application.Features;
+using Abp.Application.Navigation;
 using Abp.Authorization;
 using Abp.Configuration;
 using Abp.Localization;
@@ -23,7 +24,8 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddZLJBlazor()
                     //.AddZLJBlazorClient()
                     .AddSingleton(AppContainer.App)
-                    .AddCommonRCLClient(s => {
+                    .AddCommonRCLClient(s =>
+                    {
                         var fw = s.GetRequiredService<AppContainer>();
                         if (fw.AbpUserConfiguration != null && fw.AbpUserConfiguration.Auth != default)
                         {
@@ -32,10 +34,11 @@ namespace Microsoft.Extensions.DependencyInjection
                         }
                         return new string[0];
                     });
-            services.TryAddTransient<IAbpSession, MyAbpSession>();
+            services.TryAddTransient<IAbpSession, ClientAbpSession>();
             services.TryAddSingleton<IPermissionChecker, ClientPermissionChecker>();
-            services.TryAddTransient<ISettingManager, ZLJ.Web.Blazor.Abps.SettingManager>();
-            services.TryAddTransient<IUserNavigationManager, UserNavigationManager>();
+            services.TryAddTransient<ISettingManager, ClientSettingManager>();
+            services.TryAddTransient<IUserNavigationManager, ClientNavigationManager>();
+            services.TryAddTransient<IFeatureChecker, ClientFeatureChecker>();
             //不好实现，所以不要使用多语言
             //services.TryAddSingleton<ILocalizationManager, NullLocalizationManager>();
             return services;

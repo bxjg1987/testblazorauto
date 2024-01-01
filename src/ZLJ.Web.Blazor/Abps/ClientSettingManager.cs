@@ -12,11 +12,11 @@ namespace ZLJ.Web.Blazor.Abps
     /// <summary>
     /// 前端实现，仅支持读取，写入blazorserver组件
     /// </summary>
-    public class SettingManager : ISettingManager
+    public class ClientSettingManager : ISettingManager
     {
         AppContainer _appContainer;
 
-        public SettingManager(AppContainer appContainer)
+        public ClientSettingManager(AppContainer appContainer)
         {
             _appContainer = appContainer;
         }

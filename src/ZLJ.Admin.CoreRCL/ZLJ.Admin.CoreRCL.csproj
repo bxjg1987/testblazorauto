@@ -14,25 +14,24 @@
 		<Compile Remove="Auth\AccessTokenProvider.cs" />
 		<Compile Remove="Auth\PersistentAuthenticationStateProvider.cs" />
 		<Compile Remove="Auth\UserInfo.cs" />
-		<Compile Remove="Layout\MainLayout.razor.cs" />
-		<Compile Remove="Layout\RightContent.razor.cs" />
+		<Compile Remove="Share\MainLayout.razor.cs" />
+		<Compile Remove="Share\RightContent.razor.cs" />
 		<Compile Remove="MainLayout.razor.cs" />
-		<Compile Remove="Startup\TenantProvider.cs" />
 	</ItemGroup>
 
 
 	<ItemGroup>
-		<Content Remove="Layout\MainLayout.razor" />
-		<Content Remove="Layout\MainMenuToggleButton.razor" />
-		<Content Remove="Layout\RightContent.razor" />
+		<Content Remove="Share\MainLayout.razor" />
+		<Content Remove="Share\MainMenuToggleButton.razor" />
+		<Content Remove="Share\NullLayout.razor" />
+		<Content Remove="Share\RightContent.razor" />
 		<Content Remove="MainLayout.razor" />
-		<Content Remove="Startup\RenderModeItem.razor" />
 		<Content Remove="wwwroot\css\site.css" />
 	</ItemGroup>
 
 
 	<ItemGroup>
-		<None Remove="Layout\MainLayout.razor.css" />
+		<None Remove="Share\MainLayout.razor.css" />
 		<None Remove="MainLayout.razor.css" />
 	</ItemGroup>
 

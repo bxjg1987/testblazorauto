@@ -1,4 +1,5 @@
 
+using Abp.Application.Features;
 using Abp.Configuration;
 using Abp.Runtime.Session;
 using BXJG.Common;
@@ -41,6 +42,14 @@ namespace ZLJ.Web.Blazor.Components
         /// 设置，通常仅用于读取，若需用于修改则组件必须是server模式
         /// </summary>
         public ISettingManager SettingManager=> settingManager ??= ScopedServices.GetRequiredService<ISettingManager>();
+        /// <summary>
+        /// 请使用FeatureChecker
+        /// </summary>
+        private IFeatureChecker featureChecker;
+        /// <summary>
+        /// 特征检查器
+        /// </summary>
+        public IFeatureChecker FeatureChecker=> featureChecker??= ScopedServices.GetRequiredService<IFeatureChecker>();
 
         protected override async ValueTask ShowFailMessage(string title = "操作提示", string msg = "操作失败！")
         {

@@ -101,6 +101,6 @@ app.Map("/account/logout", async (HttpContext x) =>
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
     .AddInteractiveWebAssemblyRenderMode()
-    .AddAdditionalAssemblies(typeof(ZLJ.Admin.CoreRCL.Startup.Routes).Assembly);
+    .AddAdditionalAssemblies(typeof(ZLJ.Admin.CoreRCL.Share.Routes).Assembly);
 
 app.Run();

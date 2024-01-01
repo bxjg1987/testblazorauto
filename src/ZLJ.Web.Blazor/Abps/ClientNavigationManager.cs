@@ -7,11 +7,11 @@ using ZLJ.Application.Common.ClientProxy;
 
 namespace ZLJ.Web.Blazor.Abps
 {
-    public class UserNavigationManager : /*BaseAppServiceClient,*/ IUserNavigationManager
+    public class ClientNavigationManager : /*BaseAppServiceClient,*/ IUserNavigationManager
     {
         AppContainer _appContainer;
 
-        public UserNavigationManager(AppContainer appContainer)
+        public ClientNavigationManager(AppContainer appContainer)
         {
             _appContainer = appContainer;
         }

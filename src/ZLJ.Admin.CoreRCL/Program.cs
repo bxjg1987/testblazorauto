@@ -7,7 +7,6 @@ using Newtonsoft.Json;
 using System.Text.Json;
 using ZLJ.Admin.ClientProxy;
 using ZLJ.Admin.CoreRCL.Auth;
-using ZLJ.Admin.CoreRCL.Startup;
 using ZLJ.Web.Blazor;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);

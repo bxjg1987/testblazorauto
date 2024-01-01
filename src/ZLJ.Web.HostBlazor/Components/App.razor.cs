@@ -56,7 +56,7 @@ namespace ZLJ.Web.HostBlazor.Components
              */
             if (xs == false)
             {
-                var assemblyName = typeof(ZLJ.Admin.CoreRCL.Startup.Routes).Assembly.GetName().Name + ".dll";
+                var assemblyName = typeof(ZLJ.Admin.CoreRCL.Share.Routes).Assembly.GetName().Name + ".dll";
                 var dir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
                 var hash = Path.Combine(dir, assemblyName).GetMD5ByFilePath();
                 // Console.WriteLine(Environment.CurrentDirectory + "===" + hash);
@@ -64,7 +64,7 @@ namespace ZLJ.Web.HostBlazor.Components
                 var cookieKey = prefix + hash;
                 if (HttpContext.Request.Cookies.TryGetValue(cookieKey, out var sj))
                 {
-                    if ((DateTime.Now - DateTime.Parse(sj)).TotalSeconds > 15)
+                    if ((DateTime.Now - DateTime.Parse(sj)).TotalSeconds > 30)
                     {
                         xs = true;
                         //别删cookie
