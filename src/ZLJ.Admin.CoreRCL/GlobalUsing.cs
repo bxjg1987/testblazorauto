@@ -21,3 +21,4 @@ global using BXJG.Utils.Application.Share;
 global using ZLJ.Web.Blazor.Interceptors;
 global using Abp.Configuration;
 global using Abp.Localization;
+global using Abp.Runtime.Session;

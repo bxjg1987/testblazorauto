@@ -1,0 +1,12 @@
+﻿
+::deep .ant-breadcrumb, ::deep .ant-breadcrumb-separator, ::deep a {
+    color: #6293c1;
+}
+
+    ::deep .ant-breadcrumb li:last-child, ::deep a:hover {
+        color: #95c1eb;
+    }
+
+::deep .ant-breadcrumb {
+    line-height: inherit;
+}

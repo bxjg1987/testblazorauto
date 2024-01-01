@@ -1,6 +1,7 @@
 ﻿@using System.Text.RegularExpressions
 @inherits LayoutComponentBase
 @inject NavigationManager Navigation
+<div style="height:100vh">
 <Layout>
     <Sider Style="overflow: auto;height: 100vh;position: fixed;left: 0; " Collapsible=false Collapsed=MainMenuCollapsed DefaultCollapsed=false>
 
@@ -18,23 +19,26 @@
         <MainMenu @rendermode="InteractiveAuto" Collapsed=MainMenuCollapsed />
 
     </Sider>
-    <Layout Class="site-layout" style="@LayoutStyle">
+    <Layout  style="@LayoutStyle">
         <Header Style="padding-left:0">
-            @* <MainMenuToggleButton @rendermode="InteractiveAuto" /> *@
-            @if (MainMenuCollapsed)
-            {
-                <NavLink href="@TogleSider">
-                    <Icon Type="menu-unfold" Theme="outline" />
-                </NavLink>
-            }
-            else
-            {
-                <NavLink href="@TogleSider">
-                    <Icon Type="menu-fold" Theme="outline" />
-                </NavLink>
-            }
+            <Flex Vertical=false>
+                @* <MainMenuToggleButton @rendermode="InteractiveAuto" /> *@
+                @if (MainMenuCollapsed)
+                {
+                    <NavLink href="@TogleSider">
+                        <Icon Type="menu-unfold" Theme="outline" />
+                    </NavLink>
+                }
+                else
+                {
+                    <NavLink href="@TogleSider">
+                        <Icon Type="menu-fold" Theme="outline" />
+                    </NavLink>
+                }
+                <MainBreadcrumb style="padding-left:1rem;" />
+            </Flex>
         </Header>
-        <Content Style="margin: 24px 16px 0; overflow: initial; ">
+        <Content Style="margin:24px; overflow: initial; ">
             @* 内页的模式由页面自己决定 *@
             @Body
         </Content>
@@ -42,7 +46,8 @@
             Copyright ©1900-2024 变形精怪, All Rights Reserved | Power by <a href="https://dotnet.microsoft.com/zh-cn/apps/aspnet" target="_blank">asp.net 8.x</a> / <a href="https://aspnetboilerplate.com" target="_blank">abp 9.x</a> / <a href="https://antblazor.com" target="_blank">antblazor 0.17.x</a>
         </Footer>
     </Layout>
-</Layout>
+    </Layout>
+</div>
 @code {
     // [SupplyParameterFromQuery]
     // public int mmc { get; set; }

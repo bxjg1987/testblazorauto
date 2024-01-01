@@ -96,7 +96,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Utils.Application.Shar
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Utils.Share", "src\Modules\BXJG.Utils.Share\BXJG.Utils.Share.csproj", "{9E256A2F-6F76-469C-8387-7C5A35274B55}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZLJ.Core.Share", "src\ZLJ.Core.Share\ZLJ.Core.Share.csproj", "{8D8D1FAD-A35D-4793-A325-30EBE380FE06}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZLJ.Core.Share", "src\ZLJ.Core.Share\ZLJ.Core.Share.csproj", "{8D8D1FAD-A35D-4793-A325-30EBE380FE06}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
