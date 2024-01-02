@@ -7,6 +7,4 @@
         color: #95c1eb;
     }
 
-::deep .ant-breadcrumb {
-    line-height: inherit;
-}
+

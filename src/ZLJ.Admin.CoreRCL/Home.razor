@@ -2,19 +2,64 @@
 @* @attribute [ReuseTabsPage(Title = "控制台", Pin = true, Closable = false)] *@
 @inherits AbpBaseComponent
 @rendermode InteractiveServer
-<PageTitle>Home</PageTitle>
+<PageTitle>blazor渐进式分离全栈框架</PageTitle>
 
-<h1>Hello, world!</h1>
-这个页面使用server模式渲染，可以点击按钮时，观察 websocket通信 <br />
+<h1>基于blazor的渐进式分离全栈框架</h1>
+一开始我们基于blazor server做不分离开发，这样更快速、更简单<br />
+项目后期，在线用户数量越来越多时，纯server模式下，服务器的压力会越来越大<br />
+此时，我们可以将部分访问量高的、占用资源多的页面配置为webassembly模式，不用一次性配置所有页面，而是循序渐进的，这个更改是非常简单的。<br />
+若项目在线用户数量没有继续增加，则一直保持server模式运行即可。<br />
+或者项目后期死了，那起码我们前期的不分离模式，投入成本比分离更低。
 
+<br />
+<br />
+
+
+
+<h1>blazor auto模式</h1>
+首次访问页面时，以server模式响应，所以页面会很快显示出来
+<br />
+然后后台会默默下载wasm文件，之后auto模式的组件会以客户端模式运行。
+<br />
+<span style="color:red;">
+    若你想测试auto模式的效果，请清空缓存 和 <b>cookie</b>，然后刷新页面。
+</span>
+<br />
+blazor auto模式允许在同一个静态渲染模式的页面中，同时存在server、webassembly、auto等渲染模式的组件，以此特点实现上面说的渐进式分离模式。
+<br />
+<br />
+
+<h1>在同一个页面同时存在server和webassembly模式的组件的另一个好处</h1>
+项目中某些页面或组件可能本身就需要实时性，而其它普通业务功能，如常见的crud功能则使用auto模式。
+
+<p>
+    比如通知、聊天功能<br /><br />
+    再必须物联网系统中，展示设备实例列表的页面，最好是实时的，这样可以实时观察设备状态或控制它们。
+</p>
+
+这种实时场景虽然可以通过signlR来实现，但由于实时场景不只一个，不同场景可能需要依赖signlR来做不同处理，而基于blazor server方式实现起来更简单。
+
+
+
+<br />
+<br />
+
+<h1>当前页面</h1>
 左侧菜单使用的是auto模式，具有交互性的。
+<br />
+基础信息中的岗位角色、日志、配置 是auto模式的。
+<br />
+受保护的页面 则是用来演示身份验证和授权的。
+
+<br />
+<br />
+当前首页，使用server模式渲染，可以点击按钮时，观察 websocket通信 <br />
 <p>
     @count
 </p>
 <Button OnClick="ccc">
     增加
 </Button>
-首页
 
 
 @code {

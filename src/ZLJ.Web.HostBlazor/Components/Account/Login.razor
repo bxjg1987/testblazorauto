@@ -20,13 +20,19 @@
     租户： <InputText @bind-Value="model.TenancyName" />
     登录名： <InputText @bind-Value="model.UserNameOrEmailAddress" />
     密码： <InputText @bind-Value="model.Password" type="password" />
-    <button type="submit" >登录</button>
+    <button type="submit">登录</button>
 </EditForm>
 
 @code {
-   
+
     [SupplyParameterFromForm]
-    public AuthenticateModel model { get; set; } = new AuthenticateModel();
+    public AuthenticateModel model { get; set; } = new AuthenticateModel
+        {
+            Password = "123qwe",
+            RememberClient = true,
+            TenancyName = "default",
+            UserNameOrEmailAddress = "admin"
+        };
 
     [SupplyParameterFromQuery]
     public string ReturnUrl { get; set; }
@@ -47,7 +53,7 @@
         //                                   });
         await signInManager1.SignInAsync(loginResult.Identity, model.RememberClient);
         // return Redirect(returnUrl);
-        nav.NavigateTo(ReturnUrl,true);
+        nav.NavigateTo(ReturnUrl, true);
 
     }
     private async Task<AbpLoginResult<Tenant, User>> GetLoginResultAsync(string usernameOrEmailAddress, string password, string tenancyName)

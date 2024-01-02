@@ -2,50 +2,56 @@
 @inherits LayoutComponentBase
 @inject NavigationManager Navigation
 <div style="height:100vh">
-<Layout>
-    <Sider Style="overflow: auto;height: 100vh;position: fixed;left: 0; " Collapsible=false Collapsed=MainMenuCollapsed DefaultCollapsed=false>
+    <Layout>
+        <Sider Style="overflow: auto;height: 100vh;position: fixed;left: 0; " Collapsible=false Collapsed=MainMenuCollapsed DefaultCollapsed=false>
 
-        <div class="logo" style="height:29px; margin:15px;">
-            <img src="bxjglogo.png" style="width:37px; height:30px; float:left;" />
+            <div class="logo" style="height:29px; margin:15px;">
+                <img src="bxjglogo.png" style="width:37px; height:30px; float:left;" />
 
-            @if (!MainMenuCollapsed)
-            {
-                <h3 style="    color: #ddd;    float: left;    margin-left: 0.5rem;    line-height: 35px;    font-size: 1.2rem;">
-                    变形精怪
-                </h3>
-            }
-        </div>
-        @* 菜单需要交互式 *@
-        <MainMenu @rendermode="InteractiveAuto" Collapsed=MainMenuCollapsed />
-
-    </Sider>
-    <Layout  style="@LayoutStyle">
-        <Header Style="padding-left:0">
-            <Flex Vertical=false>
-                @* <MainMenuToggleButton @rendermode="InteractiveAuto" /> *@
-                @if (MainMenuCollapsed)
+                @if (!MainMenuCollapsed)
                 {
-                    <NavLink href="@TogleSider">
-                        <Icon Type="menu-unfold" Theme="outline" />
-                    </NavLink>
+                    <h3 style="    color: #ddd;    float: left;    margin-left: 0.5rem;    line-height: 35px;    font-size: 1.2rem;">
+                        变形精怪
+                    </h3>
                 }
-                else
-                {
-                    <NavLink href="@TogleSider">
-                        <Icon Type="menu-fold" Theme="outline" />
-                    </NavLink>
-                }
-                <MainBreadcrumb style="padding-left:1rem;" />
-            </Flex>
-        </Header>
-        <Content Style="margin:24px; overflow: initial; ">
-            @* 内页的模式由页面自己决定 *@
-            @Body
-        </Content>
-        <Footer Style="text-align: center; padding:0.5rem 0; color:rgba(100,100,100,0.7)">
-            Copyright ©1900-2024 变形精怪, All Rights Reserved | Power by <a href="https://dotnet.microsoft.com/zh-cn/apps/aspnet" target="_blank">asp.net 8.x</a> / <a href="https://aspnetboilerplate.com" target="_blank">abp 9.x</a> / <a href="https://antblazor.com" target="_blank">antblazor 0.17.x</a>
-        </Footer>
-    </Layout>
+            </div>
+            @* 菜单需要交互式 *@
+            <MainMenu @rendermode="InteractiveAuto" Collapsed=MainMenuCollapsed />
+
+        </Sider>
+        <Layout style="@LayoutStyle">
+            <Header Style="padding:0 2rem 0 0; color:#aaa; line-height:0;">
+                <Flex Vertical=false Justify="space-between" Align="center" Style="height:100%;">
+                    @* 左边 *@
+                    <Flex Vertical=false Align="center">
+                        @* <MainMenuToggleButton @rendermode="InteractiveAuto" /> *@
+                        @if (MainMenuCollapsed)
+                        {
+                            <NavLink href="@TogleSider">
+                                <Icon Type="menu-unfold" Theme="outline" />
+                            </NavLink>
+                        }
+                        else
+                        {
+                            <NavLink href="@TogleSider">
+                                <Icon Type="menu-fold" Theme="outline" />
+                            </NavLink>
+                        }
+                        <MainBreadcrumb style="padding-left:1rem;" />
+                    </Flex>
+                    @* 右边 *@
+                    <HeaderRight @rendermode="InteractiveAuto" />
+                </Flex>
+
+            </Header>
+            <Content Style="margin:24px; overflow: initial; ">
+                @* 内页的模式由页面自己决定 *@
+                @Body
+            </Content>
+            <Footer Style="text-align: center; padding:0.5rem 0; color:rgba(100,100,100,0.7)">
+                Copyright ©1900-2024 变形精怪, All Rights Reserved | Power by <a href="https://dotnet.microsoft.com/zh-cn/apps/aspnet" target="_blank">asp.net 8.x</a> / <a href="https://aspnetboilerplate.com" target="_blank">abp 9.x</a> / <a href="https://antblazor.com" target="_blank">antblazor 0.17.x</a>
+            </Footer>
+        </Layout>
     </Layout>
 </div>
 @code {
@@ -58,7 +64,7 @@
     public bool MainMenuCollapsed { get; set; }
 
     //int left => MainMenuCollapsed ? 80 : 200;
-    string LayoutStyle => "background-color:#e2ebf9; margin-left:" + (MainMenuCollapsed ? 80 : 200) + "px;transition-property: margin-left";
+    string LayoutStyle => "background-color:#f3f6fb; margin-left:" + (MainMenuCollapsed ? 80 : 200) + "px;transition-property: margin-left";
 
     string TogleSider
     {

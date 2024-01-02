@@ -1,0 +1,51 @@
+﻿@inject NavigationManager nav
+
+@inject AuthenticationStateProvider authState
+<Space @attributes=AdditionalAttributes Size="@("large")">
+    @if (isAuthed )
+    {
+          <SpaceItem>
+            <Dropdown>
+                <Overlay>
+                    <Menu>
+                        <MenuItem Icon="user" @key="1" OnClick="UserCenterClick"> 个人中心</MenuItem>
+                        <MenuItem Icon="logout" @key="2" OnClick="LogoutClick"> 注销</MenuItem>
+                    </Menu>
+
+                </Overlay>
+                <ChildContent>
+                    <Icon Type="user" Theme="outline" />
+               管理员
+                </ChildContent>
+            </Dropdown>
+        </SpaceItem>
+    }
+
+    <SpaceItem>
+        <Tooltip Placement="@Placement.Bottom" Title="在线人数">
+            <Badge Size="small" Count="5" OverflowCount="99">
+                <Icon Type="user-switch" Theme="outline" Style="color:#aaa;" />
+            </Badge>
+        </Tooltip>
+
+    </SpaceItem>
+</Space>
+@code {
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IDictionary<string, object>? AdditionalAttributes { get; set; }
+    bool isAuthed;
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        isAuthed = (await authState.GetAuthenticationStateAsync()).User.Identity.IsAuthenticated;
+    }
+    void UserCenterClick()
+    {
+        nav.NavigateTo("/user-center");
+    }
+
+    void LogoutClick(MouseEventArgs e)
+    {
+        nav.NavigateTo("/account/logout", true);
+    }
+}
