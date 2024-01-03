@@ -69,10 +69,14 @@ vs2022 .net8 sqlserver2012+
     1. BXJG.WeChat.Abp 让我们的微信库与abp的继承
 
 ## 主项目
-1. framework下是标准的abp模板项目中的库，但由于我们是单体框架，多应用，所以ZLJ.Application.Common仅仅是公共的应用服务，里面存放所有应用共享的功能。注：ZLJ.Web.Core基本不用，不过也不能删；它在本项目中已经失去了原本的意义。
+1. framework下是标准的abp模板项目中的库，一个项目可能有多个应用（如：学校系统中，有教师端、学生端、家长、教务等），我们希望是core、ef等层公用，但应用和UI层分开定义，framework文件夹下common相关项目是在多个应用之间共享的，且仅包含引用层功能。
+    1. ZLJ.Application.Common 公共应用服务实现
+    1. ZLJ.Application.Common.Share 公共应用服务中，前端与后端共享的部分，通常包含接口、dto、验证规则、和其它共享功能。
+    1. ZLJ.Application.Common.ClientProxy 
 1. admin文件夹下是“后台管理应用”的应用服务（ZLJ.Application）和界面（ZLJ.Web.Admin）
 1. customer同上，它是“客户服务应用”的应用服务（ZLJ.Application.Customer）和界面（ZLJ.Web.Customer）
 1. ZLJ.Web.Host 它承载admin和custome这俩应用，也是我们的启动项目
+1. ZLJ.Web.Core 它是ZLJ.Web.Host和ZLJ.Web.HostBlazor之间共享的且仅与web相关的功能
 
 ## 各项目的引用关系
 自己打开先看看哈。
