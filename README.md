@@ -42,7 +42,7 @@ vs2022 .net8 sqlserver2012+
 1. 将ZLJ.Web.Host(后端api)和ZLJ.Web.HostBlazor(blazor web app auto 模式)设为启动项，并启动它，登录信息（租户：default   账号：admin  密码：123qwe）
 
 # 项目结构
-![输入图片说明](image.png)
+![输入图片说明](docs/image.png)
 
 分为公共库和主项目库，通常我们将公共库发布为nuget包，然后被主项目引用。
 主项目就是具体项目，来个新项目时需要复制一份，多个具体项目都是引用相同公共库的nuget包
@@ -69,15 +69,27 @@ vs2022 .net8 sqlserver2012+
     1. BXJG.WeChat.Abp 让我们的微信库与abp的继承
 
 ## 主项目
-1. framework下是标准的abp模板项目中的库，一个项目可能有多个应用（如：学校系统中，有教师端、学生端、家长、教务等），我们希望是core、ef等层公用，但应用和UI层分开定义，framework文件夹下common相关项目是在多个应用之间共享的，且仅包含引用层功能。
-    1. ZLJ.Application.Common 公共应用服务实现
+1. framework下是标准的abp模板项目中的库，然而，一个项目可能有多个应用（如：学校系统中，有教师端、学生端、家长、教务等），我们希望多个应用之间部分逻辑公用，但应用和UI层分开定义，各项目具体含义如下：
+    1. ZLJ.Application.Common 公共应用服务实现，多个应用之间共享，前端不引用此库。
+    1. ZLJ.Application.Common.ClientProxy 渐进式分离后期，部分页面使用httpclient访问后台api，多应用间的前端共享，后端不引用此库。
     1. ZLJ.Application.Common.Share 公共应用服务中，前端与后端共享的部分，通常包含接口、dto、验证规则、和其它共享功能。
-    1. ZLJ.Application.Common.ClientProxy 
-1. admin文件夹下是“后台管理应用”的应用服务（ZLJ.Application）和界面（ZLJ.Web.Admin）
-1. customer同上，它是“客户服务应用”的应用服务（ZLJ.Application.Customer）和界面（ZLJ.Web.Customer）
-1. ZLJ.Web.Host 它承载admin和custome这俩应用，也是我们的启动项目
-1. ZLJ.Web.Core 它是ZLJ.Web.Host和ZLJ.Web.HostBlazor之间共享的且仅与web相关的功能
+    1. ZLJ.Core 这是abp项目模板的领域层，里面包含实体 领域服务 领域事件等，但注意，我们不打算使用DDD。
+    1. ZLJ.Core.Share 领域层的某些对象可以需要在UI和应用服务层使用，通常这里定义些常量、枚举等，这样UI层不必引用领域层。
+    1. ZLJ.EntityFrameworkCore 基于efcore的仓储
+    1. ZLJ.Migrator 数据迁移
+    1. ZLJ.Web.Blazor 在多个应用和前后端之间共享的，与blazor相关的公共功能。
+    1. ZLJ.Web.Core 在ZLJ.WEB.Host和blazor host之间共享的，跟web相关的功能。
+1. admin文件夹下是“后台管理应用”的应用服务和UI，若你有另一个应用，应该按类似的结构建立文件夹和项目。
+    1. ZLJ.Admin.ClientProxy 渐进式分离后期，后台管理端在auto模式的客户端运行时，通过此库访问后端api
+    1. ZLJ.Admin.CoreRCL 后台管理端的核心组件，它们可以使用任何渲染模式，它是auto模式的client部分。
+    1. ZLJ.Application 后台管理端的应用服务
+    1. ZLJ.Application.Share 后台管理中，前后端共享的功能，通常包含：后台管理端的应用服务接口、dto、验证规则等。
+    1. ZLJ.Web.Host 承载后台管理端的webapi
+    1. ZLJ.Web.HostBlazor 承载后台管理端的UI，它引用ZLJ.Admin.CoreRCL，它是auto模式的server部分。
 
 ## 各项目的引用关系
 自己打开先看看哈。
+
+# 关于DDD
+不打算使用DDD
 
