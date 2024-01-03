@@ -1,5 +1,6 @@
 ﻿@inherits OwningComponentBase
 @using ZLJ.Admin.ClientProxy
+@using ZLJ.Application.Common.Share.Session
 @using ZLJ.Web.Blazor
 @* <RenderModeItem @ref="server" @rendermode="InteractiveServer" /> *@
 @*
@@ -23,8 +24,13 @@
         if (OperatingSystem.IsBrowser())
         {
             var abpUserCfgService = ScopedServices.GetRequiredService<AbpUserConfigurationService>();
+            var sessionAppService = ScopedServices.GetRequiredService<SessionAppService>();
             var appContainer = ScopedServices.GetRequiredService<AppContainer>();
-            appContainer.AbpUserConfiguration = await abpUserCfgService.GetAll();
+            var t1 = abpUserCfgService.GetAll().ContinueWith(r =>
+            {
+                appContainer.AbpUserConfiguration = r.Result;
+            });
+            appContainer.CurrentLoginInformations= sessionAppService.GetCurrentLoginInformations();
         }
         // appContainer.AbpUserConfiguration = await abpUserCfgService.GetAll();
         //  Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(appContainer));

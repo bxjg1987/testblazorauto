@@ -13,6 +13,9 @@ using Abp.Dependency;
 using ZLJ.App.Common.Administrative;
 using ZLJ.BaseInfo.Administrative;
 using ZLJ.Application.Common.Share.OU;
+using ZLJ.MultiTenancy;
+using ZLJ.Application.Common.Share.Session;
+using ZLJ.Authorization.Users;
 
 namespace ZLJ.App.Common
 {
@@ -43,6 +46,9 @@ namespace ZLJ.App.Common
             CreateMap<AdministrativeEntity, AdministrativeTreeNodeDto>().EntityToComboTree();
             CreateMap<AdministrativeEntity, AdministrativeComboboxItemDto>().EntityToCombobox();
             CreateMap<ZLJ.Customer.CustomerOUEntity, Customer.OuDto>().ForMember(c=>c.Text,c=>c.MapFrom(d=>d.DisplayName));
+
+            CreateMap<Tenant, TenantLoginInfoDto>();
+            CreateMap<User, UserLoginInfoDto>();
         }
     }
 }

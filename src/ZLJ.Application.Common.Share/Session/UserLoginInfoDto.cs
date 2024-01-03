@@ -1,10 +1,9 @@
 ﻿using Abp.Application.Services.Dto;
-using Abp.AutoMapper;
-using ZLJ.Authorization.Users;
 
-namespace ZLJ.App.Common.Sessions.Dto
+
+namespace ZLJ.Application.Common.Share.Session
 {
-    [AutoMapFrom(typeof(User))]
+
     public class UserLoginInfoDto : EntityDto<long>
     {
         public string Name { get; set; }

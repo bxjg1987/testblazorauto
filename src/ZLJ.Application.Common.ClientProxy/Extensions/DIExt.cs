@@ -31,7 +31,7 @@ namespace ZLJ.Application.Common.ClientProxy.Extensions
             
             
             services.AddTransient<AbpUserConfigurationService>();
-
+            services.AddTransient<SessionAppService>();
             
             return b;
         }

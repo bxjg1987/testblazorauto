@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Abp.Auditing;
 using Abp.Runtime.Session;
-using ZLJ.App.Common.Sessions.Dto;
+using ZLJ.Application.Common.Share.Session;
 
 namespace ZLJ.App.Common.Sessions
 {
@@ -13,9 +13,9 @@ namespace ZLJ.App.Common.Sessions
     /// 登陆时获取全局应用程序信息和当前登陆用户信息
     /// 不同app可以直接使用此接口，也可以提供继承实现特定的功能
     /// </summary>
-    public class SessionAppService : CommonBaseAppService
+    public class SessionAppService : CommonBaseAppService, ISessionAppService
     {
-        [DisableAuditing]
+       // [DisableAuditing]
         public virtual async Task<GetCurrentLoginInformationsOutput> GetCurrentLoginInformations()
         {
             var ainfo = Assembly.GetExecutingAssembly();
@@ -47,9 +47,9 @@ namespace ZLJ.App.Common.Sessions
             return output;
         }
 
-        protected virtual ValueTask< GetCurrentLoginInformationsOutput> Create()
+        protected virtual ValueTask<GetCurrentLoginInformationsOutput> Create()
         {
-            return ValueTask.FromResult( new GetCurrentLoginInformationsOutput());
+            return ValueTask.FromResult(new GetCurrentLoginInformationsOutput());
         }
     }
 }

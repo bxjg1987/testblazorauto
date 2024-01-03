@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ZLJ.App.Common.Sessions.Dto
+namespace ZLJ.Application.Common.Share.Session
 {
     public class ApplicationInfoDto
     {

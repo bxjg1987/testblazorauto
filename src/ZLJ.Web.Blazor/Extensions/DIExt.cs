@@ -7,6 +7,7 @@ using Abp.Runtime.Session;
 using BXJG.Common.Http;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using ZLJ.Application.Common.Share.Session;
 using ZLJ.Web.Blazor;
 using ZLJ.Web.Blazor.Abps;
 
@@ -39,6 +40,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddTransient<ISettingManager, ClientSettingManager>();
             services.TryAddTransient<IUserNavigationManager, ClientNavigationManager>();
             services.TryAddTransient<IFeatureChecker, ClientFeatureChecker>();
+            services.TryAddTransient<ISessionAppService, SessionAppService>();
             //不好实现，所以不要使用多语言
             //services.TryAddSingleton<ILocalizationManager, NullLocalizationManager>();
             return services;

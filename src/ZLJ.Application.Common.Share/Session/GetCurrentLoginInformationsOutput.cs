@@ -1,4 +1,4 @@
-﻿namespace ZLJ.App.Common.Sessions.Dto
+﻿namespace ZLJ.Application.Common.Share.Session
 {
     public class GetCurrentLoginInformationsOutput
     {
