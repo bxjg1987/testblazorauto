@@ -54,19 +54,20 @@ vs2022 .net8 sqlserver2012+
 
 ## 公共库
 1. Libs文件夹里是 **普通的.net core项目，与abp无关的** ，它包含一些公共帮助类、扩展方法等。
-    1. BXJG.Common最基础是帮助类，扩展方法等
-    1. BXJG.Common.EFCore对efcore的一些扩展
-    1. BXJG.Common.RCL对razor（blazor）组件的扩展或抽象组件
-    1. BXJG.Common.Web跟web相关的一些扩展或帮助类方法
-    1. BXJG.WeChat微信小程序登录、支付
-    1. BXJG.WeChat.Web微信小程序中某些功能是跟web相关的，定义在这里的。
-1. Modules此文件夹下是 **跟abp相关，但与具体项目无关的，都是按abp模块方式定义的** ，包含一些对abp的扩展，或一些公共功能，如：通用树的抽象、通用附件、同意crud应用服务的抽象等
+    1. BXJG.Common 最基础是帮助类，扩展方法等，可以被blazor前端引用
+    1. BXJG.Common.EFCore 对efcore的一些扩展
+    1. BXJG.Common.RCL 对razor（blazor）组件的扩展或抽象组件，可以被blazor前端引用。
+    1. BXJG.Common.Web 跟web相关的一些扩展或帮助类方法
+    1. BXJG.WeChat 微信小程序登录、支付
+    1. BXJG.WeChat.Web 微信小程序中某些功能是跟web相关的，定义在这里的。
+1. Modules此文件夹下是 **跟abp相关，但与具体项目无关的，都是按abp模块方式定义的** ，包含一些对abp的扩展，或一些公共功能，如：通用树的抽象、通用附件、同意crud应用服务的抽象等，注意这些库不能被blazor前端引用。
     1. BXJG.Utils 一些通用功能的实体、领域服务，以及对abp的一些扩展。
-    1. BXJG.Utils.EFCore 一些通用功能的ef相关定义在这里的，也包含一些对abp的ef相关的扩展
     1. BXJG.Utils.Application 一些通用功能的应用服务，以及对abp应用服务的扩展。如：抽象crud应用服务接口和抽象类
+    1. BXJG.Utils.Application.Share 应用服务接口、dto和验证规则
+    1. BXJG.Utils.EFCore 一些通用功能的ef相关定义在这里的，也包含一些对abp的ef相关的扩展
+    1. BXJG.Utils.RCL 跟abp相关的blazor组件库，注意仅blazor的服务端部分才能引用它
+    1. BXJG.Utils.Share 领域层中一些常量、辅助方法等，以类似BXJG.Utils.Application.Share这种库引用它，而不直接引用BXJG.Utils
     1. BXJG.Utils.Web 一些通用功能，跟web相关的，以及对abpweb相关扩展。
-    1. BXJG.Utils.RCL 跟abp相关的blazor组件库，如：抽象组件AbpBaseComponent，它是个组件，里面定义了对abp常用属性的引用
-    1. BXJG.AbpBootstrapBlazor 与abp和BootstrapBlazor相关的组件库，如：crud抽象组件
     1. BXJG.WeChat.Abp 让我们的微信库与abp的继承
 
 ## 主项目
