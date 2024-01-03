@@ -71,7 +71,7 @@ vs2022 .net8 sqlserver2012+
     1. BXJG.WeChat.Abp 让我们的微信库与abp的继承
 
 ## 主项目
-1. framework下是标准的abp模板项目中的库，然而，一个项目可能有多个应用（如：学校系统中，有教师端、学生端、家长、教务等），我们希望多个应用之间部分逻辑公用，但应用和UI层分开定义，各项目具体含义如下：
+1. **framework下是多个应用共享的库**，它是标准的abp模板项目中的库，然而，一个项目可能有多个应用（如：学校系统中，有教师端、学生端、家长、教务等），我们希望多个应用之间部分逻辑公用，但应用和UI层分开定义，各项目具体含义如下：
     1. ZLJ.Application.Common 公共应用服务实现，多个应用之间共享，前端不引用此库。
     1. ZLJ.Application.Common.ClientProxy 渐进式分离后期，部分页面使用httpclient访问后台api，多应用间的前端共享，后端不引用此库。
     1. ZLJ.Application.Common.Share 公共应用服务中，前端与后端共享的部分，通常包含接口、dto、验证规则、和其它共享功能。
@@ -81,7 +81,7 @@ vs2022 .net8 sqlserver2012+
     1. ZLJ.Migrator 数据迁移
     1. ZLJ.Web.Blazor 在多个应用和前后端之间共享的，与blazor相关的公共功能。
     1. ZLJ.Web.Core 在ZLJ.WEB.Host和blazor host之间共享的，跟web相关的功能。
-1. admin文件夹下是“后台管理应用”的应用服务和UI，若你有另一个应用，应该按类似的结构建立文件夹和项目。
+1.  **admin文件夹下是“后台管理应用”的应用服务和UI** ，若你有另一个应用，应该按类似的结构建立文件夹和项目。
     1. ZLJ.Admin.ClientProxy 渐进式分离后期，后台管理端在auto模式的客户端运行时，通过此库访问后端api
     1. ZLJ.Admin.CoreRCL 后台管理端的核心组件，它们可以使用任何渲染模式，它是auto模式的client部分。
     1. ZLJ.Application 后台管理端的应用服务
