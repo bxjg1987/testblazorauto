@@ -81,7 +81,7 @@ vs2022 .net8 sqlserver2012+
     1. ZLJ.Migrator 数据迁移
     1. ZLJ.Web.Blazor 在多个应用和前后端之间共享的，与blazor相关的公共功能。
     1. ZLJ.Web.Core 在ZLJ.WEB.Host和blazor host之间共享的，跟web相关的功能。
-1.  **admin文件夹下是“后台管理应用”的应用服务和UI** ，若你有另一个应用，应该按类似的结构建立文件夹和项目。
+1.  **admin下是“后台管理应用”的应用服务和UI** ，若你有另一个应用，应该按类似的结构建立文件夹和项目。
     1. ZLJ.Admin.ClientProxy 渐进式分离后期，后台管理端在auto模式的客户端运行时，通过此库访问后端api
     1. ZLJ.Admin.CoreRCL 后台管理端的核心组件，它们可以使用任何渲染模式，它是auto模式的client部分。
     1. ZLJ.Application 后台管理端的应用服务
