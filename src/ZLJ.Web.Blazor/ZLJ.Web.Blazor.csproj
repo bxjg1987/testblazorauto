@@ -11,7 +11,6 @@
   <ItemGroup>
     <Compile Remove="AbpBlazorModule.cs" />
     <Compile Remove="Abps\LocalizationSource.cs" />
-    <Compile Remove="Components\AbpCreateBaseComponent.cs" />
     <Compile Remove="Components\AbpCreateDialog.razor.cs" />
     <Compile Remove="Components\AbpCreateDialogBaseComponent.cs" />
     <Compile Remove="Components\AbpTreeSelect.razor.cs" />

@@ -1,5 +1,10 @@
 ﻿
 
+using Abp.Application.Services.Dto;
+using BXJG.Utils.Application.Share;
+using Microsoft.Extensions.DependencyInjection;
+using ZLJ.Web.Blazor.Interceptors;
+
 namespace ZLJ.Web.Blazor.Components
 {
     /// <summary>
@@ -18,85 +23,148 @@ namespace ZLJ.Web.Blazor.Components
                                                  TPrimaryKey,
                                                  TGetAllInput,
                                                  TCreateInput,
-                                                 TUpdateInput> : BXJG.Utils.Components.AbpCreateBaseComponent<TAppService,
-                                                                                                         TEntityDto,
-                                                                                                         TPrimaryKey,
-                                                                                                         TGetAllInput,
-                                                                                                         TCreateInput,
-                                                                                                         TUpdateInput>
+                                                 TUpdateInput> : AbpBaseComponent
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TCreateInput : new()
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
     {
         /// <summary>
-        /// 对表单的引用
+        /// 请使用AppService
         /// </summary>
-        protected Form<TCreateInput> validateForm;
+        TAppService appService;
+        /// <summary>
+        /// 获取主服务
+        /// </summary>
+        protected virtual TAppService AppService => appService ??= ScopedServices.GetRequiredService<TAppService>();
+        /// <summary>
+        /// 此功能的名称
+        /// </summary>
+        public abstract string FuncName { get; }// => $"请重写{nameof(FuncName)}属性";
+        /// <summary>
+        /// 新增时的模型
+        /// </summary>
+        public TCreateInput? CreateDto { get; protected set; }
+        /// <summary>
+        /// 正在执行重置
+        /// </summary>
+        public bool IsReseting { get; protected set; }
+        /// <summary>
+        /// 重置按钮点击时回调，由于事件无法使用ValueTask，所以这里用了Task
+        /// </summary>
+        /// <returns></returns>
         [AbpExceptionInterceptor]
-        public override async Task Reset()
+        public virtual async Task Reset()
         {
-            await base.Reset();
+            IsReseting = true;
+            try
+            {
+                await ResetCore();
+            }
+            finally
+            {
+                IsReseting = false;
+            }
             StateHasChanged();
         }
-        [AbpExceptionInterceptor]
-        public override async Task<SaveResult> Save()
+        /// <summary>
+        /// 重置的核心逻辑
+        /// </summary>
+        /// <returns></returns>
+        protected virtual ValueTask ResetCore()
         {
-            return await base.Save();
+            CreateDto = new TCreateInput();
+            return ValueTask.CompletedTask;
         }
-        protected override ValueTask<bool> Validate()
-        {
-            return ValueTask.FromResult(validateForm.Validate());
-        }
-        [Inject]
-        public IMessageService MessageService { get; set; }
-
-        protected override async ValueTask ShowFailMessage(string title = "操作提示", string msg = "操作失败！")
-        {
-            await MessageService.Error(msg);
-        }
-        protected override async ValueTask ShowSuccessMessage(string title = "操作提示", string msg = "操作成功！")
-        {
-            await MessageService.Success(msg);
-        }
-
-        #region 生命周期方法增加统一异常处理拦截器
-        [AbpExceptionInterceptor]
-        public override async Task SetParametersAsync(ParameterView parameters)
-        {
-            await base.SetParametersAsync(parameters);
-        }
-        [AbpExceptionInterceptor]
-        protected override void OnParametersSet()
-        {
-            base.OnParametersSet();
-        }
-        [AbpExceptionInterceptor]
-        protected override async Task OnParametersSetAsync()
-        {
-            await base.OnParametersSetAsync();
-        }
-        [AbpExceptionInterceptor]
-        protected override void OnInitialized()
-        {
-            base.OnInitialized();
-        }
+        /// <summary>
+        /// 初始化时，初始化新增模型
+        /// </summary>
+        /// <returns></returns>
         [AbpExceptionInterceptor]
         protected override async Task OnInitializedAsync()
         {
-            await base.OnInitializedAsync();
+            await CheckPermission();
+            await Reset();
         }
-        [AbpExceptionInterceptor]
-        protected override void OnAfterRender(bool firstRender)
+        /// <summary>
+        /// 新增权限判断
+        /// </summary>
+        /// <returns></returns>
+        protected abstract Task CheckPermission();
+        /// <summary>
+        /// 保存后是否继续新增
+        /// </summary>
+        public bool SaveAndContinue { get; set; }
+        /// <summary>
+        /// 正在保存...
+        /// </summary>
+        public bool IsSaving { get; protected set; }
+        /// <summary>
+        /// 新增返回对象
+        /// </summary>
+        public class SaveResult
         {
-            base.OnAfterRender(firstRender);
+            /// <summary>
+            /// 新增后返回的dto对象
+            /// </summary>
+            public TEntityDto Dto { get; set; }
+            /// <summary>
+            /// 新增是否结束了，
+            /// 若没有勾选“保存并继续”，则新增后表示新增结束
+            /// 验证不过也会返回false
+            /// </summary>
+            public bool End { get; set; }
         }
+        /// <summary>
+        /// 核心的保存逻辑
+        /// </summary>
+        /// <returns>新增任务是否结束</returns>
         [AbpExceptionInterceptor]
-        protected override Task OnAfterRenderAsync(bool firstRender)
+        public virtual async Task<SaveResult> Save()
         {
-            return base.OnAfterRenderAsync(firstRender);
+            //木有权限时保存按钮不可点击
+            //验证不过时此方法不应该被调用
+            IsSaving = true;
+            try
+            {
+                return await SaveCore();
+            }
+            finally
+            {
+                IsSaving = false;
+            }
         }
-        #endregion
-
+        /// <summary>
+        /// 保存的核心逻辑
+        /// </summary>
+        /// <returns>新增任务是否结束</returns>
+        protected virtual async Task<SaveResult> SaveCore()
+        {
+            var yz = await Validate();
+            if (!yz)
+                return new SaveResult();
+            //木有权限时保存按钮不可点击
+            //验证不过时此方法不应该被调用
+            var r = await AppService.CreateAsync(CreateDto);
+            ShowSuccessMessage(msg: "新增成功！");//没必要等待
+            if (SaveAndContinue)
+            {
+                await Reset();
+                return new SaveResult { Dto = r };
+            }
+            return new SaveResult { Dto = r, End = true };
+        }
+        /// <summary>
+        /// 表单验证的核心逻辑
+        /// </summary>
+        /// <returns>true验证成功；false验证失败</returns>
+        protected virtual ValueTask<bool> Validate()
+        {
+            return ValueTask.FromResult(validateForm.Validate());
+        }
+        /// <summary>
+        /// 对表单的引用
+        /// </summary>
+        protected Form<TCreateInput> validateForm;
     }
 }
