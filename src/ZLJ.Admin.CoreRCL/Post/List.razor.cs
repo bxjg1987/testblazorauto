@@ -32,7 +32,7 @@ namespace ZLJ.Admin.CoreRCL.Post
         }
         protected override Task LoadListData()
         {
-            GetAllInput.Sorting = $"role.{GetAllInput.Sorting}";//目前值考虑单列排序
+            GetAllInput.Sorting = $"role.{GetAllInput.Sorting.Replace("role.","")}";//目前值考虑单列排序
             return base.LoadListData();
         }
 
@@ -40,6 +40,8 @@ namespace ZLJ.Admin.CoreRCL.Post
         protected override async Task Reset()
         {
             GetAllInput.Filter.IsStatic = default;
+            GetAllInput.Filter.OuCode=default;
+            GetAllInput.Filter.Permission = default;    
             await base.Reset();
         }
 

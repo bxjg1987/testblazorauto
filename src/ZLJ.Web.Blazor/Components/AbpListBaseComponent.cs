@@ -56,12 +56,21 @@ namespace ZLJ.Web.Blazor.Components
         where TGetAllInput : new()
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
-    {     
+    {
+        ///// <summary>
+        ///// 请调用PermissionChecker
+        ///// </summary>
+        //IPermissionChecker permissionChecker;
+        //protected virtual IPermissionChecker PermissionChecker => permissionChecker ??= ScopedServices.GetRequiredService<IPermissionChecker>();
         /// <summary>
-        /// 请调用PermissionChecker
+        /// 请使用AuthorizationService
         /// </summary>
-        IPermissionChecker permissionChecker;
-        protected virtual IPermissionChecker PermissionChecker => permissionChecker ??= ScopedServices.GetRequiredService<IPermissionChecker>();
+        IAuthorizationService authorizationService;
+        /// <summary>
+        /// 授权检查服务
+        /// </summary>
+        protected virtual IAuthorizationService AuthorizationService => authorizationService ??= ScopedServices.GetRequiredService<IAuthorizationService>();
+
         /// <summary>
         /// 请调用AppService
         /// </summary>
@@ -86,6 +95,10 @@ namespace ZLJ.Web.Blazor.Components
         /// 是否有删除权限
         /// </summary>
         protected bool deleteIsGranted = true;
+
+        [Inject]
+        public AuthenticationStateProvider AuthStateProvider { get; set; }
+
         /// <summary>
         /// 初始化权限状态
         /// 我们只需要最终是否有某个状态，不需要保留原本的权限字符串，所以使用方法定义，而非虚属性
@@ -97,12 +110,15 @@ namespace ZLJ.Web.Blazor.Components
         protected virtual async Task InitPermission(string createPermissionName = default, string updatePermissionName = default,
             string deletePermissionName = default/*, string getPermissionName = default*/)
         {
+            var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+
             if (createPermissionName.IsNotNullOrWhiteSpaceBXJG())
-                createIsGranted = await PermissionChecker.IsGrantedAsync(createPermissionName);
+                createIsGranted = (await AuthorizationService.AuthorizeAsync(authState.User, createPermissionName)).Succeeded;//await PermissionChecker.IsGrantedAsync(createPermissionName);
             if (updatePermissionName.IsNotNullOrWhiteSpaceBXJG())
-                updateIsGranted = await PermissionChecker.IsGrantedAsync(updatePermissionName);
+                updateIsGranted = (await AuthorizationService.AuthorizeAsync(authState.User, updatePermissionName)).Succeeded;// await PermissionChecker.IsGrantedAsync(updatePermissionName);
             if (deletePermissionName.IsNotNullOrWhiteSpaceBXJG())
-                deleteIsGranted = await PermissionChecker.IsGrantedAsync(deletePermissionName);
+                deleteIsGranted = (await AuthorizationService.AuthorizeAsync(authState.User, deletePermissionName)).Succeeded;//await PermissionChecker.IsGrantedAsync(deletePermissionName);
+
             //if (getPermissionName.IsNotNullOrWhiteSpaceBXJG())
             //    getIsGranted = await PermissionChecker.IsGrantedAsync(getPermissionName);
         }
@@ -211,7 +227,7 @@ namespace ZLJ.Web.Blazor.Components
         /// 当前列表数据
         /// 通常是当前页的数据
         /// </summary>
-        protected virtual List<TEntityDto> Items { get; set; } = new List<TEntityDto>() ;
+        protected virtual List<TEntityDto> Items { get; set; } = new List<TEntityDto>();
 
         /// <summary>
         /// 当前条件下的总数据数量
@@ -322,7 +338,7 @@ namespace ZLJ.Web.Blazor.Components
                     await AddItemExtData(dto, dd);
                     dto.ExtensionData = dd;
                 }
-                Items = dtos.Items .ToList();
+                Items = dtos.Items.ToList();
                 TotalCount = dtos.TotalCount;
             }
             finally
@@ -398,7 +414,7 @@ namespace ZLJ.Web.Blazor.Components
         //}
         #endregion
 
-      
+
 
         #region 删除
         //没权限时不显示的，所以不加入这个判断
@@ -501,10 +517,6 @@ namespace ZLJ.Web.Blazor.Components
         protected Table<TEntityDto> table;
 
 
-        protected virtual void OnQuery1(QueryModel<PostDto> condition) { 
-        
-        }
-
 
         [AbpExceptionInterceptor]
         protected virtual async Task OnQuery(QueryModel condition)
@@ -560,30 +572,35 @@ namespace ZLJ.Web.Blazor.Components
         [AbpExceptionInterceptor]
         protected virtual async Task Refresh()
         {
-            var qm = table.GetQueryModel();
-            var nqm = new QueryModel(1, qm.PageSize, qm.StartIndex, qm.SortModel, qm.FilterModel);
-            table.ReloadData(nqm);
+            await LoadListData();
+            if (SelectedItems != default && SelectedItems is ICollection<TEntityDto> list)
+                list.Clear();
+            else
+                SelectedItems = new List<TEntityDto>();
 
-            SelectedItems = new List<TEntityDto>();
+            //var qm = table.GetQueryModel();
+            //var nqm = new QueryModel(1, qm.PageSize, qm.StartIndex, qm.SortModel, qm.FilterModel);
+            //table.ReloadData(nqm);
+
+            //SelectedItems = new List<TEntityDto>();
         }
+        /// <summary>
+        /// 清空所有条件并重新加载
+        /// </summary>
+        /// <returns></returns>
         [AbpExceptionInterceptor]
         protected virtual async Task Reset()
         {
-            // table.ResetData();//不晓得为啥不行
-
-            //  PageIndex = 1;
-            //  PageSize = 20;
-            //  Keywords = string.Empty;
-            //await Refresh();
+            PageIndex = 1;
+            PageSize = 20;
+            Keywords = string.Empty;
+            await Refresh();
             //  await base.Reset();
             // table.ResetData();
             // table.ReloadData();
 
-            table.ResetData();//它仅仅是将条件复位，并不会加载数据
+            // table.ResetData();//它仅仅是将条件复位，并不会加载数据
 
         }
-      
-
-
     }
 }

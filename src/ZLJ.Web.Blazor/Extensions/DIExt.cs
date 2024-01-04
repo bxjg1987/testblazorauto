@@ -36,7 +36,7 @@ namespace Microsoft.Extensions.DependencyInjection
                         return new string[0];
                     });
             services.TryAddTransient<IAbpSession, ClientAbpSession>();
-            services.TryAddSingleton<IPermissionChecker, ClientPermissionChecker>();
+            //services.TryAddSingleton<IPermissionChecker, ClientPermissionChecker>();
             services.TryAddTransient<ISettingManager, ClientSettingManager>();
             services.TryAddTransient<IUserNavigationManager, ClientNavigationManager>();
             services.TryAddTransient<IFeatureChecker, ClientFeatureChecker>();

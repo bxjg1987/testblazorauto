@@ -12,6 +12,7 @@ namespace ZLJ.Web.Blazor.Abps
 {
     //注意：服务端刚好是反的，是IAuthorizationService内部调用IPermissionChecker
     //目的是为了组件中统一使用IPermissionChekcer，并确保blazor授权标签、路由、组件等能正常工作。
+    //案例说，组件中应该统一使用IAuthorizationService
 
     /// <summary>
     /// 客户端权限检查器
