@@ -83,14 +83,8 @@ namespace ZLJ.Web.Blazor.Components
         [AbpExceptionInterceptor]
         protected override async Task OnInitializedAsync()
         {
-            await CheckPermission();
             await Reset();
         }
-        /// <summary>
-        /// 新增权限判断
-        /// </summary>
-        /// <returns></returns>
-        protected abstract Task CheckPermission();
         /// <summary>
         /// 保存后是否继续新增
         /// </summary>

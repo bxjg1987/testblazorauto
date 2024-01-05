@@ -65,7 +65,7 @@ namespace ZLJ.Web.HostBlazor.Components
                 if (HttpContext.Request.Cookies.TryGetValue(cookieKey, out var sj))
                 {
                     //在网络好时，15秒左右下载完成，网络不好时设置久点，大不了首次请求时服务器多支撑一会
-                    if ((DateTime.Now - DateTime.Parse(sj)).TotalSeconds > 120)
+                    if ((DateTime.Now - DateTime.Parse(sj)).TotalSeconds > 15)
                     {
                         xs = true;
                         //别删cookie

@@ -1,5 +1,5 @@
 ﻿@page "/auditing"
-@rendermode InteractiveAuto
+@rendermode @(new InteractiveAutoRenderMode(prerender: false))
 @inherits AbpBaseComponent
 @using ZLJ.Application.Share.Auditing
 

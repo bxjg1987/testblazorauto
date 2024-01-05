@@ -45,15 +45,16 @@ namespace ZLJ.Admin.CoreRCL.Post
             await base.Reset();
         }
 
-        //AbpCreateDialog<IPostAppService, PostDto, int, PagedAndSortedResultRequest<PagedPostResultRequestDto>, CreatePostDto, PostEditDto, Create> dalRef;
+      // AbpCreateDialog<IPostAppService, PostDto, int, PagedAndSortedResultRequest<PagedPostResultRequestDto>, CreatePostDto, PostEditDto, Create> dalRef;
 
 
         bool isCreateDialogVisible;
         public async Task ShowCreateDialog()
         {
-            //var r = await dalRef.Show();
-            //if (r)
-            //    await Reset();
+          
+          //  var r = await dalRef.Show();
+         //   if (r)
+         //       await Reset();
         }
 
     }

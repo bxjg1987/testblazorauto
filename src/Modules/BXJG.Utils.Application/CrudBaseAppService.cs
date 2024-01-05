@@ -33,6 +33,7 @@ namespace BXJG.Utils
     /// <typeparam name="TUpdateInput"></typeparam>
     /// <typeparam name="TGetInput"></typeparam>
     /// <typeparam name="TDeleteInput"></typeparam>
+    [UnitOfWork]//在blazor server中，加这个更保险
     public class CrudBaseAppService<TEntity,
                                     TEntityDto,
                                     TPrimaryKey,

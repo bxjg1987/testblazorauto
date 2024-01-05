@@ -24,9 +24,9 @@ namespace ZLJ.Admin.ClientProxy
             throw new NotImplementedException();
         }
 
-        public Task<PostDto> CreateAsync(CreatePostDto input)
+        public async Task<PostDto> CreateAsync(CreatePostDto input)
         {
-            throw new NotImplementedException();
+            return await Post<PostDto>("api/services/app/post/Create", input);
         }
 
         public Task DeleteAsync(EntityDto<int> input)

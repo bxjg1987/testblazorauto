@@ -1,5 +1,5 @@
 ﻿@page "/post"
-@rendermode InteractiveAuto
+@rendermode @(new InteractiveAutoRenderMode(prerender: false))
 
 @using ZLJ.Application.Share.Post
 
@@ -101,8 +101,8 @@
 @* <AbpCreateDialog TAppService="IPostAppService" TEntityDto="PostDto" TPrimaryKey="int"
                  TGetAllInput="PagedAndSortedResultRequest<PagedPostResultRequestDto>"
                  TCreateInput="CreatePostDto" TUpdateInput="PostEditDto" TCreateComponent="Create" 
-@ref="dalRef">
+@ref="dalRef"
+>
 
-</AbpCreateDialog>
+</AbpCreateDialog> *@
 
- *@

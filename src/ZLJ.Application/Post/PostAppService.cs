@@ -97,6 +97,7 @@ namespace ZLJ.App.Admin.Post
             CurrentUnitOfWork.Items["ous"] = groups.ToDictionary(c => c.Key.Id, c => c.AsEnumerable());
         }
 
+        //[UnitOfWork]
         public override async Task<PostDto> CreateAsync(CreatePostDto input)
         {
             CheckCreatePermission();
