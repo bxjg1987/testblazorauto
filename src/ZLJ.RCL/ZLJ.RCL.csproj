@@ -9,6 +9,12 @@
 
   <ItemGroup>
     <Compile Remove="Abps\LocalizationSource.cs" />
+    <Compile Remove="Components\AbpCreateDialog.razor.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Components\AbpCreateDialog.razor" />
+    <Content Remove="Components\ZljDialog.razor" />
   </ItemGroup>
 
 

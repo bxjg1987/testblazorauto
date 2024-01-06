@@ -11,6 +11,7 @@
 
 
 	<ItemGroup>
+		<Compile Remove="AdminListBaseComponent.cs" />
 		<Compile Remove="Auth\AccessTokenProvider.cs" />
 		<Compile Remove="Auth\PersistentAuthenticationStateProvider.cs" />
 		<Compile Remove="Auth\UserInfo.cs" />

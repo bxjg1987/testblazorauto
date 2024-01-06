@@ -14,16 +14,16 @@ namespace ZLJ.Application.Share.Roles
         /// 所属组织单位集合
         /// </summary>
         [DisplayName("所属部门")]
-        public long[] OuIds { get; set; }
+        public long[]? OuIds { get; set; }
         [DisplayName("显示名")]
         [Required]
        // [StringLength(AbpRoleBase.MaxDisplayNameLength)]
         public string DisplayName { get; set; }
         [DisplayName("备注")]
       //  [StringLength(Role.MaxDescriptionLength)]
-        public string Description { get; set; }
+        public string? Description { get; set; }
         [DisplayName("拥有的权限")]
-        public List<string> GrantedPermissions { get; set; }
+        public List<string>? GrantedPermissions { get; set; }
         //public bool IsStatic { get; set; }
     }
 }

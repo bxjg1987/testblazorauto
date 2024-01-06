@@ -358,3 +358,4 @@ App_Data/Logs/
 /src/ZLJ.Web.Host/APIXML
 *.1
 /src/ZLJ.Web.Host/wx
+/src/ZLJ.RCL/Components/AbpCreateBaseComponent.cs

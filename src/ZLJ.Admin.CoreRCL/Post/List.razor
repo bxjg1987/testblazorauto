@@ -6,7 +6,7 @@
 
 @* @attribute [ReuseTabsPageTitle("员工岗位权限")] *@
 @attribute [Authorize(PermissionNames.AdministratorBaseInfoPost)]
-@inherits AdminListBaseComponent<IPostAppService, PostDto, int, PagedAndSortedResultRequest< PagedPostResultRequestDto>, CreatePostDto, PostEditDto>
+@inherits AbpListBaseComponent<IPostAppService, PostDto, int, PagedAndSortedResultRequest< PagedPostResultRequestDto>, CreatePostDto, PostEditDto>
 
 <Space Direction="DirectionVHType.Vertical" Style="width:100%;">
     <SpaceItem>
@@ -97,12 +97,22 @@
         </Table>
     </SpaceItem>
 </Space>
-<Component1></Component1>
+
 @* <AbpCreateDialog TAppService="IPostAppService" TEntityDto="PostDto" TPrimaryKey="int"
                  TGetAllInput="PagedAndSortedResultRequest<PagedPostResultRequestDto>"
                  TCreateInput="CreatePostDto" TUpdateInput="PostEditDto" TCreateComponent="Create" 
-
 >
 
 </AbpCreateDialog>
  *@
+
+@{
+    RenderFragment renderFragment =@<Template>
+        <SectionOutlet SectionName="dlg-btns-post" />
+        <Button OnClick="CloseDialog">取消</Button>
+    </Template>;
+}
+<Modal DestroyOnClose="true" Footer="renderFragment" Title="@("新增"+FuncName)" @bind-Visible="isCreateDialogVisible" Draggable="true">
+    <SectionOutlet SectionName="dlg-body-post" />
+    <Create OnAddEnd="OnAddEnd" />
+</Modal>

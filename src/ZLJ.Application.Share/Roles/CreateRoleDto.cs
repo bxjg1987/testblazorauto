@@ -14,7 +14,7 @@ namespace ZLJ.Application.Share.Roles
         [DisplayName("Î¨Ò»Ãû³Æ")]
         //[Required]
         //[StringLength(AbpRoleBase.MaxNameLength)]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         //[Required]
         //[StringLength(AbpRoleBase.MaxDisplayNameLength)]

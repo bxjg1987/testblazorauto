@@ -6,14 +6,22 @@
 
 @inherits AbpCreateBaseComponent<IPostAppService, PostDto, int, PagedAndSortedResultRequest< PagedPostResultRequestDto>, CreatePostDto, PostEditDto>
 
-<Form @ref="validateForm" ValidateOnChange="true" Model="CreateDto" LabelColSpan="4" WrapperColSpan="20">
-   @*  <FormItem Label="唯一名称">
+<SectionContent SectionName="dlg-body-post">
+    <Form @ref="validateForm" ValidateOnChange="true" Model="CreateDto" LabelColSpan="4" WrapperColSpan="20">
+        @*  <FormItem Label="唯一名称">
         <Input @bind-Value="@context.Name" />
-    </FormItem> *@
-    <FormItem Label="显示名">
-        <Input @bind-Value="@context.DisplayName" />
-    </FormItem>
-    <FormItem Label="备注">
-        <Input @bind-Value="@context.Description" />
-    </FormItem>
-</Form>
+        </FormItem> *@
+        <FormItem Label="显示名">
+            <Input @bind-Value="@context.DisplayName" />
+        </FormItem>
+        <FormItem Label="备注">
+            <Input @bind-Value="@context.Description" />
+        </FormItem>
+    </Form>
+</SectionContent>
+
+<SectionContent SectionName="dlg-btns-post">
+    <Checkbox @bind-Checked="SaveAndContinue">保存后继续新增</Checkbox>
+    <Button OnClick="Reset">重置</Button>
+    <Button OnClick="Save" Type="@ButtonType.Primary" Loading="@IsSaving" Disabled="@IsSaving" Icon="@IconType.Outline.Save">保存</Button>
+</SectionContent>

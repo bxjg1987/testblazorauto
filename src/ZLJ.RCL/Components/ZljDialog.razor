@@ -1,0 +1,30 @@
+﻿@typeparam T
+
+@{
+    RenderFragment renderFragment =@<Template>
+        <SectionOutlet SectionName="host-btns" />
+        <Button OnClick="Close">取消</Button>
+    </Template>;
+}
+<Modal DestroyOnClose="true" Footer="renderFragment"  @bind-Visible="isVisible" Draggable="true">
+    <TitleTemplate>
+        <SectionOutlet SectionName="host-title" />
+    </TitleTemplate>
+    <ChildContent>
+        <SectionOutlet SectionName="host-body" />
+    <DynamicComponent Type="typeof(T)" Parameters="Parameters" />
+    </ChildContent>
+</Modal>
+
+
+@code {
+    bool isVisible;
+
+    [Parameter]
+    public Dictionary<string, object> Parameters { get; set; } = [];
+
+    public virtual void Close()
+    {
+        isVisible = false;
+    }
+}

@@ -7,6 +7,25 @@ using ZLJ.RCL.Interceptors;
 
 namespace ZLJ.RCL.Components
 {
+
+    /// <summary>
+    /// 新增返回对象
+    /// </summary>
+    public class SaveResult<TEntityDto>
+    {
+        /// <summary>
+        /// 新增后返回的dto对象
+        /// </summary>
+        public TEntityDto Dto { get; set; }
+        /// <summary>
+        /// 新增是否结束了，
+        /// 若没有勾选“保存并继续”，则新增后表示新增结束
+        /// 验证不过也会返回false
+        /// </summary>
+        public bool End { get; set; }
+    }
+
+
     /// <summary>
     /// 基于BootstrapBlazor和abp的通用新增页组件
     /// 查看详情和修改数据的抽象组件是单独定义的（因为要切换查看和编辑模式，所以定义在同一个组件中的），
@@ -93,35 +112,22 @@ namespace ZLJ.RCL.Components
         /// 正在保存...
         /// </summary>
         public bool IsSaving { get; protected set; }
-        /// <summary>
-        /// 新增返回对象
-        /// </summary>
-        public class SaveResult
-        {
-            /// <summary>
-            /// 新增后返回的dto对象
-            /// </summary>
-            public TEntityDto Dto { get; set; }
-            /// <summary>
-            /// 新增是否结束了，
-            /// 若没有勾选“保存并继续”，则新增后表示新增结束
-            /// 验证不过也会返回false
-            /// </summary>
-            public bool End { get; set; }
-        }
+
+
+        //protected bool isAdded;
         /// <summary>
         /// 核心的保存逻辑
         /// </summary>
         /// <returns>新增任务是否结束</returns>
         [AbpExceptionInterceptor]
-        public virtual async Task<SaveResult> Save()
+        public virtual async Task Save()
         {
             //木有权限时保存按钮不可点击
             //验证不过时此方法不应该被调用
             IsSaving = true;
             try
             {
-                return await SaveCore();
+                await SaveCore();
             }
             finally
             {
@@ -129,14 +135,19 @@ namespace ZLJ.RCL.Components
             }
         }
         /// <summary>
+        /// 新增成功，且不再继续新增时触发
+        /// </summary>
+        [Parameter]
+        public EventCallback<SaveResult<TEntityDto>> OnAddEnd { get; set; }
+        /// <summary>
         /// 保存的核心逻辑
         /// </summary>
         /// <returns>新增任务是否结束</returns>
-        protected virtual async Task<SaveResult> SaveCore()
+        protected virtual async Task SaveCore()
         {
             var yz = await Validate();
             if (!yz)
-                return new SaveResult();
+                return;
             //木有权限时保存按钮不可点击
             //验证不过时此方法不应该被调用
             var r = await AppService.CreateAsync(CreateDto);
@@ -144,9 +155,10 @@ namespace ZLJ.RCL.Components
             if (SaveAndContinue)
             {
                 await Reset();
-                return new SaveResult { Dto = r };
+                await OnAddEnd.InvokeAsync(new SaveResult<TEntityDto> { Dto = r });
             }
-            return new SaveResult { Dto = r, End = true };
+            else
+                await OnAddEnd.InvokeAsync(new SaveResult<TEntityDto> { Dto = r, End = true });
         }
         /// <summary>
         /// 表单验证的核心逻辑
@@ -160,5 +172,7 @@ namespace ZLJ.RCL.Components
         /// 对表单的引用
         /// </summary>
         protected Form<TCreateInput> validateForm;
+
+
     }
 }

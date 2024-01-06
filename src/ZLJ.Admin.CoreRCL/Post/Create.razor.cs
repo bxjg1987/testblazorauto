@@ -14,18 +14,18 @@ namespace ZLJ.Admin.CoreRCL.Post
     {
         //ZLJ.App.Common.OU.IOuAppService ouProviderAppService;
 
-        protected IOuAppService OuProviderAppService => ScopedServices.GetRequiredService<IOuAppService>();
+        //protected IOuAppService OuProviderAppService => ScopedServices.GetRequiredService<IOuAppService>();
 
         public override string FuncName => "角色岗位";
 
       
 
-        [AbpExceptionInterceptor]
-        protected override async Task OnInitializedAsync()
-        {
-            await base.OnInitializedAsync();
+        //[AbpExceptionInterceptor]
+        //protected override async Task OnInitializedAsync()
+        //{
+        //    await base.OnInitializedAsync();
 
-            var list = await OuProviderAppService.GetListAsync(new GetListInput { Code = string.Empty, IsOnlyLoadChild = false });
-        }
+        //    //var list = await OuProviderAppService.GetListAsync(new GetListInput { Code = string.Empty, IsOnlyLoadChild = false });
+        //}
     }
 }
