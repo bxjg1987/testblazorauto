@@ -82,7 +82,7 @@ vs2022 .net8 sqlserver2012+
     1. ZLJ.Core.Share 领域层的某些对象可以需要在UI和应用服务层使用，通常这里定义些常量、枚举等，这样UI层不必引用领域层。
     1. ZLJ.EntityFrameworkCore 基于efcore的仓储
     1. ZLJ.Migrator 数据迁移
-    1. ZLJ.Web.Blazor 在多个应用和前后端之间共享的，与blazor相关的公共功能。
+    1. ZLJ.RCL 在多个应用和前后端之间共享的，与blazor相关的公共功能。
     1. ZLJ.Web.Core 在ZLJ.WEB.Host和blazor host之间共享的，跟web相关的功能。
 1.  **admin下是“后台管理应用”的应用服务和UI** ，若你有另一个应用，应该按类似的结构建立文件夹和项目。
     1. ZLJ.Admin.ClientProxy 渐进式分离后期，后台管理端在auto模式的客户端运行时，通过此库访问后端api
