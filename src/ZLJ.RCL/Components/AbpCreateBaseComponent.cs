@@ -3,9 +3,9 @@
 using Abp.Application.Services.Dto;
 using BXJG.Utils.Application.Share;
 using Microsoft.Extensions.DependencyInjection;
-using ZLJ.Web.Blazor.Interceptors;
+using ZLJ.RCL.Interceptors;
 
-namespace ZLJ.Web.Blazor.Components
+namespace ZLJ.RCL.Components
 {
     /// <summary>
     /// 基于BootstrapBlazor和abp的通用新增页组件

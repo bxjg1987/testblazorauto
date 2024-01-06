@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel;
 
-namespace ZLJ.Web.Blazor.Auth
+namespace BXJG.Common.RCL.Auth
 {
     /*
      * 貌似blazor客户端模式中无法使用BackgroundService

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Collections.Immutable;
 
-namespace ZLJ.Web.Blazor.Abp
+namespace ZLJ.RCL.Abp
 {
     public class LocalizationSource : ILocalizationSource
     {

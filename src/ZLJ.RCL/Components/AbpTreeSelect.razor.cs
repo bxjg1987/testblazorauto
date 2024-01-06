@@ -1,11 +1,11 @@
-﻿using BXJG.Utils.GeneralTree;
+﻿using BXJG.Utils.Application.Share.GeneralTree;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZLJ.Web.Blazor.Components
+namespace ZLJ.RCL.Components
 {
     public partial class AbpTreeSelect< TGetTreeForSelectInput,
                                                         TGetTreeForSelectOutput,

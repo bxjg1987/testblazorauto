@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZLJ.Web.Blazor.Abps
+namespace ZLJ.RCL.Abps
 {
     /// <summary>
     /// 前端实现，仅支持读取，写入blazorserver组件

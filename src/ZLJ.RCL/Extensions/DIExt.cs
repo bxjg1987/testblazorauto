@@ -8,8 +8,8 @@ using BXJG.Common.Http;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using ZLJ.Application.Common.Share.Session;
-using ZLJ.Web.Blazor;
-using ZLJ.Web.Blazor.Abps;
+using ZLJ.RCL.Abps;
+using ZLJ.RCL;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

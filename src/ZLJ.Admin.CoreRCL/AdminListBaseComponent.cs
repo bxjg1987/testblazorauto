@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ZLJ.Web.Blazor.Components;
+using ZLJ.RCL.Components;
 
 namespace ZLJ.Admin.CoreRCL
 {

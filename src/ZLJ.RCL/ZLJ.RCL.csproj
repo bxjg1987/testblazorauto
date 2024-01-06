@@ -1,29 +1,23 @@
 <Project Sdk="Microsoft.NET.Sdk.Razor">
 
-	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
-		<Nullable>enable</Nullable>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<!--<RootNamespace>ZLJ.Web.Blazor</RootNamespace>-->
-		<GenerateDocumentationFile>True</GenerateDocumentationFile>
-	</PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>	<GenerateDocumentationFile>True</GenerateDocumentationFile>
+	  
+  </PropertyGroup>
 
-	<ItemGroup>
-		<Compile Remove="AbpBlazorModule.cs" />
-		<Compile Remove="Abps\LocalizationSource.cs" />
-		<Compile Remove="Components\AbpCreateDialogBaseComponent.cs" />
-		<Compile Remove="Components\AbpTreeSelect.razor.cs" />
-		<Compile Remove="Components\FileName.cs" />
-	
-		<Content Remove="Components\AbpTreeSelect.razor" />
-	</ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Abps\LocalizationSource.cs" />
+  </ItemGroup>
 
 
-	<ItemGroup>
-		<SupportedPlatform Include="browser" />
-	</ItemGroup>
+  <ItemGroup>
+    <SupportedPlatform Include="browser" />
+  </ItemGroup>
 
-	<ItemGroup>
+  <ItemGroup>
+
 		<PackageReference Include="AntDesign" Version="0.17.*" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.0" />
@@ -41,8 +35,5 @@
 	<ItemGroup>
 		<ProjectReference Include="..\ZLJ.Application.Common.ClientProxy\ZLJ.Application.Common.ClientProxy.csproj" />
 		<ProjectReference Include="..\ZLJ.Application.Share\ZLJ.Application.Share.csproj" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="wwwroot\" />
 	</ItemGroup>
 </Project>

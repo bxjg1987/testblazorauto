@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZLJ.Web.Blazor.Interceptors
+namespace ZLJ.RCL.Interceptors
 {
     /*
      * boostrapblazor默认的全局异常处理仅仅关注未处理的异常，它让应用程序不会崩溃，但它不会尝试恢复控件本身的状态

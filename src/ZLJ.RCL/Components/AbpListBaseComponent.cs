@@ -20,9 +20,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using ZLJ.Application.Share.Post;
-using ZLJ.Web.Blazor.Interceptors;
+using ZLJ.RCL.Interceptors;
 
-namespace ZLJ.Web.Blazor.Components
+namespace ZLJ.RCL.Components
 {
     /*
      * 

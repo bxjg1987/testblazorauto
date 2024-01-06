@@ -4,9 +4,9 @@ using Abp.Configuration;
 using Abp.Runtime.Session;
 using BXJG.Common;
 using Microsoft.Extensions.DependencyInjection;
-using ZLJ.Web.Blazor.Interceptors;
+using ZLJ.RCL.Interceptors;
 
-namespace ZLJ.Web.Blazor.Components
+namespace ZLJ.RCL.Components
 {
     /// <summary>
     /// 与Abp和BB有关的抽象组件（注意它与crud抽象组件是平级的）

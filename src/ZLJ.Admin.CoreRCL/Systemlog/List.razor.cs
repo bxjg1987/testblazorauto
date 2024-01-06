@@ -4,7 +4,7 @@ using AntDesign.TableModels;
 using Microsoft.Extensions.DependencyInjection;
 using ZLJ.Application.Share.Auditing;
 using ZLJ.Application.Share.Auditing.Dto;
-using ZLJ.Web.Blazor.Interceptors;
+using ZLJ.RCL.Interceptors;
 
 namespace ZLJ.Admin.CoreRCL.Systemlog
 {

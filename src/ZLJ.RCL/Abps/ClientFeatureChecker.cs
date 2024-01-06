@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace ZLJ.Web.Blazor.Abps
+namespace ZLJ.RCL.Abps
 {
     /*
      * 设计思路同setting，客户端只读取，设置部分有blazor server页面完成，保存是刷新页面以便客户端拿到新的值

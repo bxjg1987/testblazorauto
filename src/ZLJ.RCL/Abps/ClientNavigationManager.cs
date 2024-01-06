@@ -5,7 +5,7 @@ using System.Collections.Immutable;
 using System.Net.Http.Json;
 using ZLJ.Application.Common.ClientProxy;
 
-namespace ZLJ.Web.Blazor.Abps
+namespace ZLJ.RCL.Abps
 {
     public class ClientNavigationManager : /*BaseAppServiceClient,*/ IUserNavigationManager
     {

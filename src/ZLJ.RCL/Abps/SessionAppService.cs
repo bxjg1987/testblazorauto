@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ZLJ.Application.Common.Share.Session;
 
-namespace ZLJ.Web.Blazor.Abps
+namespace ZLJ.RCL.Abps
 {
     public class SessionAppService : ISessionAppService
     {
