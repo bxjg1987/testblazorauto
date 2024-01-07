@@ -19,9 +19,9 @@ namespace ZLJ.Admin.ClientProxy
         {
         }
 
-        public Task<BatchOperationOutput<int>> BatchDeleteAsync(BatchOperationInput<int> input)
+        public async Task<BatchOperationOutput<int>> BatchDeleteAsync(BatchOperationInput<int> input)
         {
-            throw new NotImplementedException();
+            return await Post<BatchOperationOutput<int>>("api/services/app/post/BatchDelete", input);
         }
 
         public async Task<PostDto> CreateAsync(CreatePostDto input)
@@ -29,9 +29,9 @@ namespace ZLJ.Admin.ClientProxy
             return await Post<PostDto>("api/services/app/post/Create", input);
         }
 
-        public Task DeleteAsync(EntityDto<int> input)
+        public async Task DeleteAsync(EntityDto<int> input)
         {
-            throw new NotImplementedException();
+             await Post("api/services/app/post/Delete", input);
         }
 
         public async Task<PagedResultDto<PostDto>> GetAllAsync(PagedAndSortedResultRequest<PagedPostResultRequestDto> input)
@@ -39,9 +39,9 @@ namespace ZLJ.Admin.ClientProxy
             return await Post<PagedResultDto<PostDto>>("api/services/app/post/getall", input);
         }
 
-        public Task<PostDto> GetAsync(EntityDto<int> input)
+        public async Task<PostDto> GetAsync(EntityDto<int> input)
         {
-            throw new NotImplementedException();
+            return await Post<PostDto>("api/services/app/post/Get", input);
         }
 
         //public async Task<PagedResultDto<AuditLogListDto>> GetAuditLogs(GetAuditLogsInput input)
@@ -52,9 +52,9 @@ namespace ZLJ.Admin.ClientProxy
         //    return await Post<PagedResultDto<AuditLogListDto>>("api/services/app/AuditLog/GetAuditLogs", input);
         //}
 
-        public Task<PostDto> UpdateAsync(PostEditDto input)
+        public async Task<PostDto> UpdateAsync(PostEditDto input)
         {
-            throw new NotImplementedException();
+            return await Post<PostDto>("api/services/app/post/Update", input);
         }
     }
 }

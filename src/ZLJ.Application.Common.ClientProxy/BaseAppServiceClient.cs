@@ -81,5 +81,12 @@ namespace ZLJ.Application.Common.ClientProxy
             var str = await r.Content.ReadAsStringAsync(cancellationToken);
             return JsonConvert.DeserializeObject<T>(str, settings);
         }
+        protected async Task Post(string url, object ps = default, object qs = default, CancellationToken cancellationToken = default)
+        {
+            url = url.AddQueryString(qs);
+
+           await CreateHttpClient().PostAsJsonAsync(url, ps, cancellationToken);
+           
+        }
     }
 }

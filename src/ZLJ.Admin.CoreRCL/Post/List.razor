@@ -109,10 +109,17 @@
 @{
     RenderFragment renderFragment =@<Template>
         <SectionOutlet SectionName="dlg-btns-post" />
-        <Button OnClick="CloseDialog">取消</Button>
+        <Button OnClick="CloseDialog">管理</Button>
     </Template>;
 }
-<Modal DestroyOnClose="true" Footer="renderFragment" Title="@("新增"+FuncName)" @bind-Visible="isCreateDialogVisible" Draggable="true">
+<Modal DestroyOnClose="true" Footer="renderFragment"  @bind-Visible="isCreateDialogVisible" Draggable="true">
+  <TitleTemplate>
+        <Icon Type="plus" Theme="outline" />
+        新增@(FuncName)
+  </TitleTemplate>
+    
+  <ChildContent>
     <SectionOutlet SectionName="dlg-body-post" />
     <Create OnAddEnd="OnAddEnd" />
+    </ChildContent>
 </Modal>
