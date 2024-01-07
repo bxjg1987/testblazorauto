@@ -9,7 +9,7 @@ namespace ZLJ.Application.Share.Auditing.Dto
     /// <summary>
     /// 过滤查询审计日志时提供的条件输入模型
     /// </summary>
-    public class GetAuditLogsInput : PagedAndSortedResultRequestDto
+    public class GetAuditLogsInput : PagedAndSortedResultRequestDto, IShouldNormalize
     {
         /// <summary>
         /// 开始日期
@@ -33,5 +33,11 @@ namespace ZLJ.Application.Share.Auditing.Dto
         public int? MinExecutionDuration { get; set; }
 
         public int? MaxExecutionDuration { get; set; }
+
+        public void Normalize()
+        {
+            if (Sorting.IsNullOrWhiteSpaceBXJG())
+                Sorting = "ExecutionTime desc";
+        }
     }
 }

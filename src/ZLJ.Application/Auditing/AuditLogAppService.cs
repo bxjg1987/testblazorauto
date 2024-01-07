@@ -52,15 +52,13 @@ namespace ZLJ.App.Admin.Auditing
             //else
             //    input.EndDate = input.EndDate.Value.AddDays(1).AddSeconds(-1);
 
-            if (input.Sorting.IsNullOrWhiteSpace())
-                input.Sorting = "AuditLog.ExecutionTime desc";
-            else if (input.Sorting.ToLower().StartsWith("username")&& !input.Sorting.StartsWith("User."))
+           if (input.Sorting.ToLower().StartsWith("user")&& !input.Sorting.StartsWith("User."))
             {
-                input.Sorting = "User." + input.Sorting;
+                input.Sorting = input.Sorting.Replace("user","User.",StringComparison.OrdinalIgnoreCase);// "User." + input.Sorting;
             }
             else if( !input.Sorting.StartsWith("AuditLog."))
             {
-                input.Sorting = "AuditLog." + input.Sorting;
+                input.Sorting = "AuditLog." + input.Sorting.Replace(",", ",AuditLog."); //"AuditLog." + input.Sorting;
             }
 
             var query = CreateAuditLogAndUsersQuery(input);

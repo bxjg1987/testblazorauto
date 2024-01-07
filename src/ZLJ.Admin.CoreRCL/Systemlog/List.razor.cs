@@ -22,13 +22,14 @@ namespace ZLJ.Admin.CoreRCL.Systemlog
         //    return base.OnInitializedAsync();
         //}
         // [AbpExceptionInterceptor]
+
         protected override void OnInitialized()
         {
 
             appService = ScopedServices.GetRequiredService<IAuditLogAppService>();
             // throw new UserFriendlyException("xxxxxxxxxxxxx");
         }
-
+        [AbpExceptionInterceptor]
         async Task OnChange(QueryModel<AuditLogListDto> queryModel)
         {
             //await Task.Delay(2000);
@@ -39,10 +40,22 @@ namespace ZLJ.Admin.CoreRCL.Systemlog
 
             //有bug，静态渲染时，无论是否开启流式渲染 界面都无法显示数据，server模式是ok的
 
+
+
             condition.SkipCount = (queryModel.PageIndex - 1) * queryModel.PageSize;
             condition.MaxResultCount = queryModel.PageSize;
+             await Console.Out.WriteLineAsync(   System.Text.Json.JsonSerializer.Serialize(queryModel.SortModel));
+            condition.Sorting = string.Empty;
+            foreach (var item in queryModel.SortModel.Where(c=>c.Sort.IsNotNullOrWhiteSpaceBXJG()).OrderBy(c => c.Priority))
+            {
+                condition.Sorting += $"{item.FieldName} {item.Sort.TrimEnd("end".ToArray())},";
+            }  
             if (condition.Sorting.IsNullOrWhiteSpaceBXJG())
-                condition.Sorting = "Id";
+                condition.Sorting = "ExecutionTime desc";
+            else
+                condition.Sorting = condition.Sorting.TrimEnd(',');
+            // if (condition.Sorting.IsNullOrWhiteSpaceBXJG())
+            //       condition.Sorting = "ExecutionTime desc";
 
             var r = await appService.GetAuditLogs(condition);
 

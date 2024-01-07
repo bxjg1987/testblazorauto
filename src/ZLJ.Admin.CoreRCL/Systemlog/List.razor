@@ -7,11 +7,22 @@
        TItem="AuditLogListDto"
        OnChange="OnChange"
        RemoteDataSource="true"
-       DataSource="data"
-       Total="total"
+       DataSource="data" 
+       Size="TableSize.Small" 
+       Total="total" 
+       ScrollX="2300"
+       ScrollY="78.5vh"
        RowKey="x=>x.Id">
-    <Selection Key="@(context.Id.ToString())" />
-    <PropertyColumn Property="c=>c.Id" Sortable />
-     <PropertyColumn Property="c=>c.BrowserInfo" Sortable />
- </Table>
 
+    <Selection Key="@(context.Id.ToString())" Width="60" />
+    <PropertyColumn Property="c=>c.UserName" Sortable Width="200" />
+     <PropertyColumn Property="c=>c.ClientName" Width="200" />
+     <PropertyColumn Property="c=>c.ClientIpAddress" Width="200" />
+     <PropertyColumn Property="c=>c.ServiceName" Sortable Width="200" />
+     <PropertyColumn Property="c=>c.MethodName" Sortable Width="200" />
+     <PropertyColumn Property="c=>c.Parameters" />
+     <PropertyColumn Property="c=>c.ExecutionTime" Sortable Width="200" />
+     <PropertyColumn Property="c=>c.ExecutionDuration" Sortable Width="150" />
+     <PropertyColumn Property="c=>c.Exception" />
+     <PropertyColumn Property="c=>c.BrowserInfo" />
+ </Table>
