@@ -8,18 +8,25 @@ namespace ZLJ.Admin.CoreRCL.Post
 {
     public partial class List
     {
+        bool sj;
         protected override string FuncName => "角色岗位";
         [AbpExceptionInterceptor]
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
             await base.InitPermission(PermissionNames.AdministratorBaseInfoPostCreate, PermissionNames.AdministratorBaseInfoPostUpdate, PermissionNames.AdministratorBaseInfoPostDelete);
+            if ((await base.AppService.GetAllAsync(new PagedAndSortedResultRequest<PagedPostResultRequestDto> { SkipCount = 0, MaxResultCount = 1, Sorting = "Id" })).TotalCount >= 500)
+            {
+                sj = true;
+            }
         }
 
         [AbpExceptionInterceptor]
         protected async Task AddRandomData()
         {
-            for (int i = 0; i < 10; i++)
+            
+
+            for (int i = 0; i < 500; i++)
             {
                 await base.AppService.CreateAsync(new CreatePostDto
                 {
@@ -37,12 +44,12 @@ namespace ZLJ.Admin.CoreRCL.Post
         }
 
         //[AbpExceptionInterceptor]
-        protected override async Task Reset()
+        protected override async Task ReLoad()
         {
             GetAllInput.Filter.IsStatic = default;
             GetAllInput.Filter.OuCode = default;
             GetAllInput.Filter.Permission = default;
-            await base.Reset();
+            await base.ReLoad();
         }
 
         // AbpCreateDialog<IPostAppService, PostDto, int, PagedAndSortedResultRequest<PagedPostResultRequestDto>, CreatePostDto, PostEditDto, Create> dalRef;
@@ -104,7 +111,7 @@ namespace ZLJ.Admin.CoreRCL.Post
         {
             isCreateDialogVisible = false;
             if (isAdded)
-                await Refresh();
+                await Search();
         }
         #endregion
     }

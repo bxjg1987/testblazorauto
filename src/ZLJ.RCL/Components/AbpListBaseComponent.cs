@@ -25,14 +25,8 @@ using ZLJ.RCL.Interceptors;
 namespace ZLJ.RCL.Components
 {
     /*
-     * 
      * 之前我们实现过动态条件，参考BXJG.MudBlazor中的实现
      * 动态条件对于用户来讲有点复杂，所以我们暂时不考虑
-     * 
-     * 这样有个好处，我们不用在应用层的查询dto定义一堆条件了，也不需要应用层写一堆查询逻辑了
-     * 但还是要保留，防止有高级处理
-     * 但这里需要转两次，有点浪费，我们决定直接将表单值转换为动态条件，这样bb的CustomerSearchModel就不需要了
-     * 
      */
 
     //由于abp的crud接口和抽象类把crud搞一起了，不想动它，所以这里的应用服务中包含TCreateInput、TUpdateInput
@@ -57,11 +51,10 @@ namespace ZLJ.RCL.Components
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
     {
-        ///// <summary>
-        ///// 请调用PermissionChecker
-        ///// </summary>
-        //IPermissionChecker permissionChecker;
-        //protected virtual IPermissionChecker PermissionChecker => permissionChecker ??= ScopedServices.GetRequiredService<IPermissionChecker>();
+        //界面部分就不要用IPermissionChecker了，不过server模式时AuthorizationService内部会使用IPermissionChecker
+        //请查看自定义授权策略提供器
+        //客户端部分是直接在前端内存中比对的，有区别于server模式的，自定义的授权策略提供器
+
         /// <summary>
         /// 请使用AuthorizationService
         /// </summary>
@@ -95,10 +88,11 @@ namespace ZLJ.RCL.Components
         /// 是否有删除权限
         /// </summary>
         protected bool deleteIsGranted = true;
-
+        /// <summary>
+        /// 身份验证状态，server、wasm的实现不同
+        /// </summary>
         [Inject]
         public AuthenticationStateProvider AuthStateProvider { get; set; }
-
         /// <summary>
         /// 初始化权限状态
         /// 我们只需要最终是否有某个状态，不需要保留原本的权限字符串，所以使用方法定义，而非虚属性
@@ -156,7 +150,6 @@ namespace ZLJ.RCL.Components
         ///// <returns></returns>
         //protected virtual ValueTask FillDynamicConditions(ICollection<ConditionFieldDefine> conditions) => ValueTask.CompletedTask;
 
-
         /// <summary>
         /// 获取每页行数，若不做分页请返回0
         /// </summary>
@@ -202,7 +195,6 @@ namespace ZLJ.RCL.Components
             }
             set
             {
-
                 ISortedResultRequest sd222 = null;
                 if (GetAllInput is ISortedResultRequest dxx)
                     sd222 = dxx;
@@ -215,13 +207,8 @@ namespace ZLJ.RCL.Components
 
                 if (sd222.Sorting.IsNullOrWhiteSpaceBXJG())
                     sd222.Sorting = "Id";
-
-
             }
         }
-
-
-
 
         /// <summary>
         /// 当前列表数据
@@ -268,8 +255,6 @@ namespace ZLJ.RCL.Components
         /// 父类仅仅需要读，至于是否可写由子类自己决定
         /// </summary>
         protected virtual bool IsLoading { get; set; }
-
-
 
         ///// <summary>
         ///// 刷新列表
@@ -340,6 +325,11 @@ namespace ZLJ.RCL.Components
                 }
                 Items = dtos.Items.ToList();
                 TotalCount = dtos.TotalCount;
+
+                if (SelectedItems != default && SelectedItems is ICollection<TEntityDto> list)
+                    list.Clear();
+                else
+                    SelectedItems = new List<TEntityDto>();
             }
             finally
             {
@@ -383,12 +373,11 @@ namespace ZLJ.RCL.Components
             }
         }
         /// <summary>
-        /// 关键字变化时回调，默认修改关键字字段并刷新列表
+        /// 条件变化时回调
         /// </summary>
-        /// <param name="keywords"></param>
         /// <returns></returns>
         [AbpExceptionInterceptor]
-        protected virtual async Task KeywordsChanged(string keywords = default)
+        protected virtual async Task Search()
         {
             //if (GetAllInput is IHaveKeywords cd4)
             //{
@@ -398,8 +387,36 @@ namespace ZLJ.RCL.Components
             //{
             //    cddqq.Keywords = keywords;// state.FilterDefinitions.MapToDynamicCondition().ToList();
             //}
-            Keywords = keywords;
-            await Refresh();
+            //PageIndex = 1;
+            table.ResetData();
+            //PageIndex = 1;
+            //PageSize = 20;
+            //Keywords = string.Empty;
+            await OnQuery(table.GetQueryModel());
+            // Keywords = keywords;
+            // await LoadListData();
+            //table.ReloadData();
+        }
+        /// <summary>
+        /// 条件分页都不变，重新加载当前数据
+        /// </summary>
+        [AbpExceptionInterceptor]
+        protected virtual async Task  Refresh()
+        {
+            //if (GetAllInput is IHaveKeywords cd4)
+            //{
+            //    cd4.Keywords = keywords;
+            //}
+            //else if (GetAllInput is IHaveFilter cddq && cddq.Filter is IHaveKeywords cddqq)
+            //{
+            //    cddqq.Keywords = keywords;// state.FilterDefinitions.MapToDynamicCondition().ToList();
+            //}
+            //PageIndex = 1;
+            //table.ReloadData(PageIndex);
+            // Keywords = keywords;
+            //table.cac
+            await LoadListData();
+            //table.ReloadData();
         }
         ///// <summary>
         ///// 重置搜索条件后刷新
@@ -413,8 +430,6 @@ namespace ZLJ.RCL.Components
         //    await Refresh();
         //}
         #endregion
-
-
 
         #region 删除
         //没权限时不显示的，所以不加入这个判断
@@ -489,8 +504,9 @@ namespace ZLJ.RCL.Components
             {
                 await AppService.DeleteAsync(new EntityDto<TPrimaryKey>(item.Id));
                 ShowSuccessMessage("删除提示", "删除成功！");//这里木有必要await
-                //若上面异常，下面不会执行
-                //_ = InvokeAsync(dataGrid.ReloadServerData);
+                                                    //若上面异常，下面不会执行
+                                                    //_ = InvokeAsync(dataGrid.ReloadServerData);
+                                                    // await LoadListData();
                 await Refresh();
             }
             finally
@@ -529,9 +545,10 @@ namespace ZLJ.RCL.Components
 
             var ls = condition.SortModel.Where(c => c.Sort.IsNotNullOrWhiteSpaceBXJG()).OrderBy(c => c.Priority).Select(c => c.FieldName + " " + c.Sort.Replace("end", ""));
             Sorting = string.Join(",", ls);
-
-
-
+            //页码和页索引直接在table做bingd-xxx
+            //但若在这里做，则子类无需再绑定了
+            this.PageSize = condition.PageSize;
+            this.PageIndex = condition.PageIndex;
             // var r =await AppService.GetAllAsync(GetAllInput);
             //Items = r.Items;
             // TotalCount = r.TotalCount;
@@ -569,35 +586,24 @@ namespace ZLJ.RCL.Components
             //    TotalCount = base.TotalCount
             //};
         }
-        [AbpExceptionInterceptor]
-        protected virtual async Task Refresh()
-        {
-            await LoadListData();
-            if (SelectedItems != default && SelectedItems is ICollection<TEntityDto> list)
-                list.Clear();
-            else
-                SelectedItems = new List<TEntityDto>();
 
-            //var qm = table.GetQueryModel();
-            //var nqm = new QueryModel(1, qm.PageSize, qm.StartIndex, qm.SortModel, qm.FilterModel);
-            //table.ReloadData(nqm);
-
-            //SelectedItems = new List<TEntityDto>();
-        }
         /// <summary>
         /// 清空所有条件并重新加载
+        /// 若有更多条件，子类应重写此方法清空条件，并执行base.ReLoad()
         /// </summary>
         /// <returns></returns>
         [AbpExceptionInterceptor]
-        protected virtual async Task Reset()
+        protected virtual async Task ReLoad()
         {
-            PageIndex = 1;
-            PageSize = 20;
+            table.ResetData();
+            //PageIndex = 1;
+            //PageSize = 20;
             Keywords = string.Empty;
-            await Refresh();
+            //StateHasChanged();
+            await OnQuery(table.GetQueryModel());
             //  await base.Reset();
             // table.ResetData();
-            // table.ReloadData();
+            //table.ReloadData(); 远程加载时，根本不会执行这里
 
             // table.ResetData();//它仅仅是将条件复位，并不会加载数据
 

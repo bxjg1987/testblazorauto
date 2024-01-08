@@ -9,12 +9,10 @@ using ZLJ.RCL.Interceptors;
 namespace ZLJ.RCL.Components
 {
     /// <summary>
-    /// 与Abp和BB有关的抽象组件（注意它与crud抽象组件是平级的）
+    /// 抽象组件，提供abp相关和antblazor相关功能
+    /// 不跨项目、跨应用 共享
     /// </summary>
     public abstract class AbpBaseComponent : BXJG.Common.RCL.CommonBaseComponent
-    //where TUser : AbpUser<TUser>
-    //where TRole : AbpRole<TUser>, new()
-    //where TUserManager : AbpUserManager<TRole, TUser>
     {
         /// <summary>
         /// 界面消息服务

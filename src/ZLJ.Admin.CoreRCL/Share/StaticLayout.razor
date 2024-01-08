@@ -19,8 +19,8 @@
             <MainMenu @rendermode="InteractiveAuto" Collapsed=MainMenuCollapsed />
 
         </Sider>
-        <Layout style="@LayoutStyle">
-            <Header Style="padding:0 2rem 0 0; color:#aaa; line-height:0;position: fixed; z-index:999; width:100%; height:6.5vh;">
+        <Layout Style=@($"background-color:#e5e9ef; margin-left:{left}px;transition-property: margin-left")>
+            <Header Style=@($"padding:0 2rem 0 0; color:#aaa; position: fixed;  width: calc(100% - {left}px); z-index:999; height:6.5vh;  ")>
                 <Flex Vertical=false Justify="space-between" Align="center" Style="height:100%;">
                     @* 左边 *@
                     <Flex Vertical=false Align="center">
@@ -42,9 +42,8 @@
                     @* 右边 *@
                     <HeaderRight @rendermode="InteractiveAuto" />
                 </Flex>
-
             </Header>
-            <Content Style="margin:24px; margin-top:9vh;   ">
+            <Content Style="padding:24px; padding-top:9vh;   ">
                 @* 内页的模式由页面自己决定 *@
                 @Body
             </Content>
@@ -63,8 +62,8 @@
     [CascadingParameter(Name = "mmc")]
     public bool MainMenuCollapsed { get; set; }
 
-    //int left => MainMenuCollapsed ? 80 : 200;
-    string LayoutStyle => "background-color:#f3f6fb; margin-left:" + (MainMenuCollapsed ? 80 : 200) + "px;transition-property: margin-left";
+    int left => MainMenuCollapsed ? 80 : 200;
+    //string LayoutStyle => "background-color:#f3f6fb; margin-left:" + (MainMenuCollapsed ? 80 : 200) + "px;transition-property: margin-left";
 
     string TogleSider
     {

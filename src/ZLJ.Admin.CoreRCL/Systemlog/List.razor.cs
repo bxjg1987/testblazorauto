@@ -44,7 +44,7 @@ namespace ZLJ.Admin.CoreRCL.Systemlog
 
             condition.SkipCount = (queryModel.PageIndex - 1) * queryModel.PageSize;
             condition.MaxResultCount = queryModel.PageSize;
-             await Console.Out.WriteLineAsync(   System.Text.Json.JsonSerializer.Serialize(queryModel.SortModel));
+            // await Console.Out.WriteLineAsync(   System.Text.Json.JsonSerializer.Serialize(queryModel.SortModel));
             condition.Sorting = string.Empty;
             foreach (var item in queryModel.SortModel.Where(c=>c.Sort.IsNotNullOrWhiteSpaceBXJG()).OrderBy(c => c.Priority))
             {

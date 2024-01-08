@@ -25,12 +25,13 @@
                         <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Clear" Danger="true" Disabled="@ShouldDisableDelete">删除</Button>
                     </Popconfirm>
                 }
+                <Button OnClick="AddRandomData" Disabled=sj>新增一堆随机数据</Button>
             </GridCol>
             @* 右侧 *@
             <GridCol Span="18" Flex=@("none")>
                 <Space>
                     <SpaceItem>
-                        <RadioGroup TValue="bool?" @bind-Value="@GetAllInput.Filter.IsStatic" OnChange="Refresh">
+                        <RadioGroup TValue="bool?" @bind-Value="@GetAllInput.Filter.IsStatic" OnChange="Search">
                             <Radio TValue="bool?" RadioButton="true" Value="@(default(bool?))">全部</Radio>
                             <Radio TValue="bool?" RadioButton="true" Value="@(true)">预设</Radio>
                             <Radio TValue="bool?" RadioButton="true" Value="@(false)">非预设</Radio>
@@ -38,36 +39,44 @@
                     </SpaceItem>
 
                     <SpaceItem>
-                        <Search Placeholder="请输入关键字..." @bind-Value="@Keywords" OnSearch="Refresh" AllowClear="true" ClassicSearchIcon="true" />
+                        <Search Placeholder="请输入关键字..." @bind-Value="@Keywords" OnSearch="Search" AllowClear="true" ClassicSearchIcon="true" />
                     </SpaceItem>
                     <SpaceItem>
-                        <ButtonGroup>
-                            @* <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Search" OnClick="AddRandomData">搜索</Button> *@
+                      
                             <Tooltip Title="清空条件">
-                                <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Clear" OnClick="Reset"></Button>
+                                <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Clear" OnClick="ReLoad"></Button>
                             </Tooltip>
-                        </ButtonGroup>
+                         
+                
                     </SpaceItem>
-
+                    <SpaceItem>
+                      
+                          
+                            <Tooltip Title="刷新">
+                                <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Reload" OnClick="Refresh"></Button>
+                            </Tooltip>
+                    </SpaceItem>
                 </Space>
 
             </GridCol>
         </GridRow>
     </SpaceItem>
     <SpaceItem>
-        <Table @ref="table" TItem="PostDto"
+        <Table @ref="table" 
+               TItem="PostDto"
                Total="TotalCount"
-        @bind-PageIndex="PageIndex"
-        @bind-PageSize="PageSize"
                @bind-SelectedRows="SelectedItems"
-     OnChange="OnQuery"
+               OnChange="OnQuery"
                DataSource="Items"
+               PageIndex="PageIndex"
+               PageSize="PageSize"
                Loading="IsLoading"
+               HidePagination=false
                RemoteDataSource="true"
-               ScrollY="69.78vh"
-               ScrollBarWidth="10px"
+               RowKey="x=>x.Id"
                Size="TableSize.Small"
-               Bordered="true">
+               Bordered="true"
+               ScrollY="73.5vh">
 
             <Selection Key="@(context.Id.ToString())" />
             <PropertyColumn Property="c=>c.DisplayName" Sortable="true" DefaultSortOrder="SortDirection.Ascending" ShowSorterTooltip="false" />
@@ -109,7 +118,7 @@
 @{
     RenderFragment renderFragment =@<Template>
         <SectionOutlet SectionName="dlg-btns-post" />
-        <Button OnClick="CloseDialog">管理</Button>
+        <Button OnClick="CloseDialog">关闭</Button>
     </Template>;
 }
 <Modal DestroyOnClose="true" Footer="renderFragment"  @bind-Visible="isCreateDialogVisible" Draggable="true">
