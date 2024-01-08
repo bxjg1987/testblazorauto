@@ -13,12 +13,13 @@ namespace ZLJ.Admin.CoreRCL.Post
         [AbpExceptionInterceptor]
         protected override async Task OnInitializedAsync()
         {
-            await base.OnInitializedAsync();
-            await base.InitPermission(PermissionNames.AdministratorBaseInfoPostCreate, PermissionNames.AdministratorBaseInfoPostUpdate, PermissionNames.AdministratorBaseInfoPostDelete);
-            if ((await base.AppService.GetAllAsync(new PagedAndSortedResultRequest<PagedPostResultRequestDto> { SkipCount = 0, MaxResultCount = 1, Sorting = "Id" })).TotalCount >= 500)
+            if ((await base.AppService.GetAllAsync(new PagedAndSortedResultRequest<PagedPostResultRequestDto> { SkipCount = 0, MaxResultCount = 1, Sorting = "role.Id", Filter = new PagedPostResultRequestDto() })).TotalCount >= 500)
             {
                 sj = true;
             }
+            await base.OnInitializedAsync();
+            await base.InitPermission(PermissionNames.AdministratorBaseInfoPostCreate, PermissionNames.AdministratorBaseInfoPostUpdate, PermissionNames.AdministratorBaseInfoPostDelete);
+           
         }
 
         [AbpExceptionInterceptor]
