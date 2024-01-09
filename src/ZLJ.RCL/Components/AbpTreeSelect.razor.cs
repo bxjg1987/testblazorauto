@@ -39,8 +39,7 @@ namespace ZLJ.RCL.Components
         where TGetTreeForSelectOutput : IGeneralTree<TGetTreeForSelectOutput>
         where TGetTreeForSelectInput : GeneralTreeGetForSelectInput, new()
         //where TGetNodesForSelectOutput : ComboboxItemDto 由于我们规定了统一使用树，所以这个约束没有必要
-        //按理说应该约束为ZLJ.Common.Application.Share中的接口，但因为目前木有特殊性，所以暂时约束为Utils中的接口
-        //保险起见约束为顶层接口，比约束为子接口更具通用性
+        //这里的接口应该换成application.common.share中的接口
         where TAppService : IGeneralTreeProviderBaseAppService<TGetTreeForSelectInput,
                                                                TGetTreeForSelectOutput,
                                                                TGetNodesForSelectInput,

@@ -1,4 +1,5 @@
 ﻿using Abp.Localization.Sources;
+using ZLJ.Application.Common.Share;
 
 namespace ZLJ.App.Common
 {
@@ -9,8 +10,15 @@ namespace ZLJ.App.Common
     /// <typeparam name="TKey">主键类型</typeparam>
     /// <typeparam name="TGetAllInput">查询时输入参数的类型</typeparam>
     /// <typeparam name="TEntityDto">可选数据的dto</typeparam>
-    public class CommonProviderBaseAppService<TEntity,  TGetAllInput, TEntityDto, TKey>
-                              : ProviderBaseAppService<TEntity, TGetAllInput, TEntityDto, TKey>
+    public class CommonProviderBaseAppService<TEntity,
+                                              TGetAllInput,
+                                              TEntityDto,
+                                              TKey> : ProviderBaseAppService<TEntity,
+                                                                             TGetAllInput,
+                                                                             TEntityDto,
+                                                                             TKey>, IProviderBaseAppService<TGetAllInput,
+                                                                                                            TEntityDto,
+                                                                                                            TKey>
       where TEntity : class, IEntity<TKey>
     {
         private ILocalizationSource appCommonLocalizationSource, zljLocalizationSource, utilsLocalizationSource;

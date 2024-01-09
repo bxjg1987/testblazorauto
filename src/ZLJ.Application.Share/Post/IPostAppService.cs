@@ -1,10 +1,13 @@
 ﻿
+
+
 using BXJG.Utils.Application.Share;
+using ZLJ.Application.Common.Share;
 
 namespace ZLJ.Application.Share.Post
 {
-    public interface IPostAppService : ICrudBaseAppService<PostDto, int, PagedAndSortedResultRequest<PagedPostResultRequestDto>, CreatePostDto, PostEditDto>
-        
+    public interface IPostAppService : Common.Share.ICrudBaseAppService<PostDto, int, PagedAndSortedResultRequest<PagedPostResultRequestDto>, CreatePostDto, PostEditDto>
+
     {
         //Task<ListResultDto<PermissionDto>> GetAllPermissions();
 

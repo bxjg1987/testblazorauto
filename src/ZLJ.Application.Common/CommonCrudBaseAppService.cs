@@ -1,10 +1,8 @@
-﻿using Abp;
-using Abp.IdentityFramework;
+﻿using Abp.IdentityFramework;
 using Abp.Localization.Sources;
 using Abp.Runtime.Session;
-using BXJG.Utils;
-using BXJG.Utils.Application.Share;
 using Microsoft.AspNetCore.Identity;
+using ZLJ.Application.Common.Share;
 using ZLJ.Authorization.Users;
 using ZLJ.MultiTenancy;
 
@@ -35,7 +33,13 @@ namespace ZLJ.App.Common
                                                                              TCreateInput,
                                                                              TUpdateInput,
                                                                              TGetInput,
-                                                                             TDeleteInput>
+                                                                             TDeleteInput>, ICrudBaseAppService<TEntityDto,
+                                                                                                                TPrimaryKey,
+                                                                                                                TGetAllInput,
+                                                                                                                TCreateInput,
+                                                                                                                TUpdateInput,
+                                                                                                                TGetInput,
+                                                                                                                TDeleteInput>
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TUpdateInput : IEntityDto<TPrimaryKey>

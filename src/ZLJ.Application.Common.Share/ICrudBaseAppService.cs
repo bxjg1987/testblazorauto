@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Utils.Application.Share
+namespace ZLJ.Application.Common.Share
 {
     /// <summary>
     /// abp提供的crud接口未定义批量删除接口，这里定义了批量删除接口，它继承了abp的crud接口
@@ -27,26 +27,19 @@ namespace BXJG.Utils.Application.Share
                                          in TCreateInput,
                                          in TUpdateInput,
                                          in TGetInput,
-                                         in TDeleteInput> : IAsyncCrudAppService<TEntityDto,
-                                                                                 TPrimaryKey,
-                                                                                 TGetAllInput,
-                                                                                 TCreateInput,
-                                                                                 TUpdateInput,
-                                                                                 TGetInput,
-                                                                                 TDeleteInput>
+                                         in TDeleteInput> : BXJG.Utils.Application.Share.ICrudBaseAppService<TEntityDto,
+                                                                                                             TPrimaryKey,
+                                                                                                             TGetAllInput,
+                                                                                                             TCreateInput,
+                                                                                                             TUpdateInput,
+                                                                                                             TGetInput,
+                                                                                                             TDeleteInput>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TGetInput : IEntityDto<TPrimaryKey>
         where TDeleteInput : IEntityDto<TPrimaryKey>
     {
-        /// <summary>
-        /// 批量删除，此操作是一个具体的操作（通过id删除实体），输入输出参数没必要泛型化，这样简单些。
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        Task<BatchOperationOutput<TPrimaryKey>> BatchDeleteAsync(BatchOperationInput<TPrimaryKey> input);
-
-        // 其它批量操作不应该在基础抽象接口中定义。
+        //这里可以定义此项目相关的、多应用共享的、公共的接口
     }
     /// <summary>
     /// abp提供的crud接口未定义批量删除接口，这里定义了批量删除接口，它继承了abp的crud接口
