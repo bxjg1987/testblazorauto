@@ -31,16 +31,24 @@ namespace BXJG.Utils.Share.GeneralTree
     /// 
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface IHaveParentId<T>: IHaveParentId  /*, IEntity<T>, IEntityDto<T>*/ where T:struct
+    public interface IHaveParentId<T> : IHaveParentId  /*, IEntity<T>, IEntityDto<T>*/ where T : struct
     {
         /// <summary>
         /// 
         /// </summary>
-        public new T Id { get; set; }
+        public new T Id
+        {
+            get { return (T)(this as IHaveParentId).Id; }
+            set { (this as IHaveParentId).Id = value; }
+        }
         /// <summary>
         /// 
         /// </summary>
-        public new T? ParentId { get; set; }
+        public new T? ParentId
+        {
+            get { return (T?)(this as IHaveParentId).ParentId; }
+            set { (this as IHaveParentId).ParentId = value; }
+        }
     }
 
     /// <summary>
