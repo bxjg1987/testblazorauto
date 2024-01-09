@@ -84,7 +84,7 @@ namespace ZLJ.RCL.Components
             {
                 IsReseting = false;
             }
-            StateHasChanged();
+            //StateHasChanged();
         }
         /// <summary>
         /// 重置的核心逻辑
