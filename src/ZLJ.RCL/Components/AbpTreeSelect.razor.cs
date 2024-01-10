@@ -8,6 +8,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using ZLJ.RCL.Interceptors;
 
 namespace ZLJ.RCL.Components
 {
@@ -45,6 +46,12 @@ namespace ZLJ.RCL.Components
                                                                TGetNodesForSelectInput,
                                                                TGetNodesForSelectOutput>
     {
+        /// <summary>
+        /// 只加载此节点下的后代节点
+        /// </summary>
+        [Parameter]
+        public long? ParentId { get; set; }
+
         public override Task SetParametersAsync(ParameterView parameters)
         {
             //这里重写ant treeSelct的默认值
@@ -63,31 +70,43 @@ namespace ZLJ.RCL.Components
             }
             if (!dic.ContainsKey(nameof(KeyExpression)))
             {
-                KeyExpression = node => node.DataItem.Id.ToString();
+                KeyExpression = node => node.DataItem.Id.ToString() + "," + node.DataItem.Code;
             }
             if (!dic.ContainsKey(nameof(IsLeafExpression)))
             {
                 IsLeafExpression = node => node.DataItem.Children == null || !node.DataItem.Children.Any();
             }
-            if (!dic.ContainsKey(nameof(OnSearch)))
-            {
-                OnSearch = EventCallback.Factory.Create<string>(this, Search);
-            }
-            //base.EnableSearch
+            //if (!dic.ContainsKey(nameof(OnSearch)))
+            //{
+            //    OnSearch = EventCallback.Factory.Create<string>(this, Search);
+            //}
+        
             return base.SetParametersAsync(parameters);
         }
 
         [Inject]
         public IServiceProvider ServiceProvider { get; set; }
 
-        async Task Search(string str)
+        [AbpExceptionInterceptor]
+        protected override async Task OnInitializedAsync()
         {
-            //由于当前组件继承了TreeSelect，无法继承blazor自带的OwnComponentBase，所以这里自己通过ServiceProvider拿服务，注意创建范围
-            //范围使用异步版本，参考：https://andrewlock.net/exploring-dotnet-6-part-10-new-dependency-injection-features-in-dotnet-6/
-            //In general, if you're manually creating scopes in your application (as in the above example), it seems to me that you should use CreateAsyncScope() wherever possible.
+            await base.OnInitializedAsync();
+
             await using var service = ServiceProvider.CreateAsyncScope();
             var appService = service.ServiceProvider.GetRequiredService<TAppService>();
-            DataSource = await appService.GetTreeForSelectAsync(new TGetTreeForSelectInput { ParentId = long.Parse(str) });
+            DataSource = await appService.GetTreeForSelectAsync(new TGetTreeForSelectInput { });
         }
+
+        //[AbpExceptionInterceptor]
+        //async Task Search(string str)
+        //{
+        //    //str = str ?? ParentId?.ToString();
+        //    //由于当前组件继承了TreeSelect，无法继承blazor自带的OwnComponentBase，所以这里自己通过ServiceProvider拿服务，注意创建范围
+        //    //范围使用异步版本，参考：https://andrewlock.net/exploring-dotnet-6-part-10-new-dependency-injection-features-in-dotnet-6/
+        //    //In general, if you're manually creating scopes in your application (as in the above example), it seems to me that you should use CreateAsyncScope() wherever possible.
+        //    await using var service = ServiceProvider.CreateAsyncScope();
+        //    var appService = service.ServiceProvider.GetRequiredService<TAppService>();
+        //    DataSource = await appService.GetTreeForSelectAsync(new TGetTreeForSelectInput {  });
+        //}
     }
 }

@@ -3,6 +3,7 @@ using Abp.Domain.Repositories;
 using Abp.Extensions;
 using Abp.Linq.Extensions;
 using Abp.Organizations;
+using BXJG.Utils.Application.Share.GeneralTree;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -19,11 +20,12 @@ namespace ZLJ.App.Common.OU
     /// 提供公司、部门下拉树形数据；登陆用户即可访问，将来增加权限依赖
     /// </summary>
     [AbpAuthorize]
-    public class OuAppService : Abp.Application.Services.ApplicationService, IOuAppService
+    [UnitOfWork(false)]
+    public class OuProviderAppService : CommonBaseAppService, IOuProviderAppService
     {
         IRepository<OrganizationUnit, long> repository;
 
-        public OuAppService(IRepository<OrganizationUnit, long> repository)
+        public OuProviderAppService(IRepository<OrganizationUnit, long> repository)
         {
             this.repository = repository;
         }
@@ -32,8 +34,8 @@ namespace ZLJ.App.Common.OU
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        [UnitOfWork(false)]
-        public async Task<IList<OuDto>> GetListAsync(GetListInput input)
+     
+        public async Task<IList<OuDto>> GetTreeForSelectAsync(GetListInput input)
         {
             if (input.Code.IsNullOrWhiteSpace() && input.ParentId.HasValue && input.ParentId.Value > 0)
                 input.Code = await repository.GetAll().Where(c => c.Id == input.ParentId).Select(c => c.Code).SingleAsync();
@@ -90,6 +92,11 @@ namespace ZLJ.App.Common.OU
             {
                 return dtos;
             }
+        }
+
+        public Task<IList<GeneralTreeComboboxDto>> GetNodesForSelectAsync(GeneralTreeGetForSelectInput input)
+        {
+            throw new NotImplementedException();
         }
     }
 }

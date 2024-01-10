@@ -31,6 +31,9 @@
             <GridCol Span="18" Flex=@("none")>
                 <Space>
                     <SpaceItem>
+                        <StOu @bind-Value=currOu Style="min-width:10rem;" AllowClear OnSelectedItemChanged="Search" />
+                    </SpaceItem>
+                    <SpaceItem>
                         <RadioGroup TValue="bool?" @bind-Value="@GetAllInput.Filter.IsStatic" OnChange="Search">
                             <Radio TValue="bool?" RadioButton="true" Value="@(default(bool?))">全部</Radio>
                             <Radio TValue="bool?" RadioButton="true" Value="@(true)">预设</Radio>
@@ -42,19 +45,19 @@
                         <Search Placeholder="请输入关键字..." @bind-Value="@Keywords" OnSearch="Search" AllowClear="true" ClassicSearchIcon="true" />
                     </SpaceItem>
                     <SpaceItem>
-                      
-                            <Tooltip Title="清空条件">
-                                <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Clear" OnClick="ReLoad"></Button>
-                            </Tooltip>
-                         
-                
+
+                        <Tooltip Title="清空条件">
+                            <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Clear" OnClick="ReLoad"></Button>
+                        </Tooltip>
+
+
                     </SpaceItem>
                     <SpaceItem>
-                      
-                          
-                            <Tooltip Title="刷新">
-                                <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Reload" OnClick="Refresh"></Button>
-                            </Tooltip>
+
+
+                        <Tooltip Title="刷新">
+                            <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Reload" OnClick="Refresh"></Button>
+                        </Tooltip>
                     </SpaceItem>
                 </Space>
 
@@ -62,7 +65,7 @@
         </GridRow>
     </SpaceItem>
     <SpaceItem>
-        <Table @ref="table" 
+        <Table @ref="table"
                TItem="PostDto"
                Total="TotalCount"
                @bind-SelectedRows="SelectedItems"
@@ -109,7 +112,7 @@
 
 @* <AbpCreateDialog TAppService="IPostAppService" TEntityDto="PostDto" TPrimaryKey="int"
                  TGetAllInput="PagedAndSortedResultRequest<PagedPostResultRequestDto>"
-                 TCreateInput="CreatePostDto" TUpdateInput="PostEditDto" TCreateComponent="Create" 
+                 TCreateInput="CreatePostDto" TUpdateInput="PostEditDto" TCreateComponent="Create"
 >
 
 </AbpCreateDialog>
@@ -121,14 +124,14 @@
         <Button OnClick="CloseDialog">关闭</Button>
     </Template>;
 }
-<Modal DestroyOnClose="true" Footer="renderFragment"  @bind-Visible="isCreateDialogVisible" Draggable="true">
-  <TitleTemplate>
+<Modal DestroyOnClose="true" Footer="renderFragment" @bind-Visible="isCreateDialogVisible" Draggable="true">
+    <TitleTemplate>
         <Icon Type="plus" Theme="outline" />
         新增@(FuncName)
-  </TitleTemplate>
-    
-  <ChildContent>
-    <SectionOutlet SectionName="dlg-body-post" />
-    <Create OnAddEnd="OnAddEnd" />
+    </TitleTemplate>
+
+    <ChildContent>
+        <SectionOutlet SectionName="dlg-body-post" />
+        <Create OnAddEnd="OnAddEnd" />
     </ChildContent>
 </Modal>

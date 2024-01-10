@@ -2,6 +2,7 @@
 
 
 
+using AntDesign.TableModels;
 using ZLJ.Application.Share.Post;
 
 namespace ZLJ.Admin.CoreRCL.Post
@@ -9,6 +10,9 @@ namespace ZLJ.Admin.CoreRCL.Post
     public partial class List
     {
         bool sj;
+
+        string currOu;
+
         protected override string FuncName => "角色岗位";
         [AbpExceptionInterceptor]
         protected override async Task OnInitializedAsync()
@@ -19,13 +23,13 @@ namespace ZLJ.Admin.CoreRCL.Post
             }
             await base.OnInitializedAsync();
             await base.InitPermission(PermissionNames.AdministratorBaseInfoPostCreate, PermissionNames.AdministratorBaseInfoPostUpdate, PermissionNames.AdministratorBaseInfoPostDelete);
-           
+
         }
 
         [AbpExceptionInterceptor]
         protected async Task AddRandomData()
         {
-            
+
 
             for (int i = 0; i < 500; i++)
             {
@@ -51,6 +55,13 @@ namespace ZLJ.Admin.CoreRCL.Post
             GetAllInput.Filter.OuCode = default;
             GetAllInput.Filter.Permission = default;
             await base.ReLoad();
+        }
+
+        protected override Task OnQuery(QueryModel condition)
+        {
+            if (currOu.IsNotNullOrWhiteSpaceBXJG())
+                base.GetAllInput.Filter.OuCode = currOu.Split(',')[1];
+            return base.OnQuery(condition);
         }
 
         // AbpCreateDialog<IPostAppService, PostDto, int, PagedAndSortedResultRequest<PagedPostResultRequestDto>, CreatePostDto, PostEditDto, Create> dalRef;
