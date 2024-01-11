@@ -51,7 +51,7 @@
         //                                   {
         //                                       IsPersistent = model.RememberClient
         //                                   });
-        await signInManager1.SignInAsync(loginResult.Identity, model.RememberClient);
+        await signInManager1.SignInAsync(loginResult.Identity, true);
         // return Redirect(returnUrl);
         nav.NavigateTo(ReturnUrl, true);
 

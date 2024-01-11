@@ -49,7 +49,7 @@ namespace ZLJ.RCL.Components
         where TEntityDto : IEntityDto<TPrimaryKey>, IExtendableDto//, new()
         where TGetAllInput : new()
         where TUpdateInput : IEntityDto<TPrimaryKey>
-        where TAppService : ZLJ.Application.Common.Share. ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
+        where TAppService : ZLJ.Application.Common.Share.ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
     {
         //界面部分就不要用IPermissionChecker了，不过server模式时AuthorizationService内部会使用IPermissionChecker
         //请查看自定义授权策略提供器
@@ -275,6 +275,9 @@ namespace ZLJ.RCL.Components
         /// <returns></returns>
         protected virtual async Task LoadListData()
         {
+            if (IsLoading)
+                return;
+
             IsLoading = true;
             try
             {
@@ -379,6 +382,8 @@ namespace ZLJ.RCL.Components
         [AbpExceptionInterceptor]
         protected virtual async Task Search()
         {
+            //  Console.WriteLine(DateTime.Now.ToString("fff"));
+            //await Task.Delay(1);
             //if (GetAllInput is IHaveKeywords cd4)
             //{
             //    cd4.Keywords = keywords;
@@ -388,6 +393,7 @@ namespace ZLJ.RCL.Components
             //    cddqq.Keywords = keywords;// state.FilterDefinitions.MapToDynamicCondition().ToList();
             //}
             //PageIndex = 1;
+
             table.ResetData();
             //PageIndex = 1;
             //PageSize = 20;
@@ -401,7 +407,7 @@ namespace ZLJ.RCL.Components
         /// 条件分页都不变，重新加载当前数据
         /// </summary>
         [AbpExceptionInterceptor]
-        protected virtual async Task  Refresh()
+        protected virtual async Task Refresh()
         {
             //if (GetAllInput is IHaveKeywords cd4)
             //{

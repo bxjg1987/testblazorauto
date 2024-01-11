@@ -3,6 +3,7 @@
 
 
 using AntDesign.TableModels;
+using ZLJ.Application.Common.Share.OU;
 using ZLJ.Application.Share.Post;
 
 namespace ZLJ.Admin.CoreRCL.Post
@@ -11,7 +12,7 @@ namespace ZLJ.Admin.CoreRCL.Post
     {
         bool sj;
 
-        string currOu;
+        // string currOu;
 
         protected override string FuncName => "角色岗位";
         [AbpExceptionInterceptor]
@@ -52,18 +53,29 @@ namespace ZLJ.Admin.CoreRCL.Post
         protected override async Task ReLoad()
         {
             GetAllInput.Filter.IsStatic = default;
-            GetAllInput.Filter.OuCode = default;
             GetAllInput.Filter.Permission = default;
+            GetAllInput.Filter.OuCode = default;
+            if(ou!=default)
+            ou.Value= default;
             await base.ReLoad();
         }
+        TsOu ou;
+        //protected override Task OnQuery(QueryModel condition)
+        //{
+        //    if (currOu.IsNotNullOrWhiteSpaceBXJG())
+        //        base.GetAllInput.Filter.OuCode = currOu.Split(',')[1];
+        //    return base.OnQuery(condition);
+        //}
 
-        protected override Task OnQuery(QueryModel condition)
+        async Task OnOuChanged(string ou)
         {
-            if (currOu.IsNotNullOrWhiteSpaceBXJG())
-                base.GetAllInput.Filter.OuCode = currOu.Split(',')[1];
-            return base.OnQuery(condition);
-        }
+            //OnSelectedItemChanged 会触发两次
+            //ValueChanged 选择时只会触发一次，但清空时又会触发两次
 
+            // Console.WriteLine(   System.Text.Json.JsonSerializer.Serialize(ou));
+            GetAllInput.Filter.OuCode = ou.IsNullOrWhiteSpaceBXJG() ? string.Empty : ou.Split(',')[1];
+            await base.Search();
+        }
         // AbpCreateDialog<IPostAppService, PostDto, int, PagedAndSortedResultRequest<PagedPostResultRequestDto>, CreatePostDto, PostEditDto, Create> dalRef;
 
         #region 新增

@@ -2,6 +2,7 @@
 using Abp.Application.Features;
 using Abp.Configuration;
 using Abp.Runtime.Session;
+using Abp.Threading;
 using BXJG.Common;
 using Microsoft.Extensions.DependencyInjection;
 using ZLJ.RCL.Interceptors;
@@ -14,6 +15,8 @@ namespace ZLJ.RCL.Components
     /// </summary>
     public abstract class AbpBaseComponent : BXJG.Common.RCL.CommonBaseComponent
     {
+        //[Inject]
+        public ICancellationTokenProvider CancellationTokenProvider=> ScopedServices.GetService< ICancellationTokenProvider >()?? NullCancellationTokenProvider.Instance;
         /// <summary>
         /// 界面消息服务
         /// </summary>

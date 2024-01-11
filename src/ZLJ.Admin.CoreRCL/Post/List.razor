@@ -31,10 +31,10 @@
             <GridCol Span="18" Flex=@("none")>
                 <Space>
                     <SpaceItem>
-                        <StOu @bind-Value=currOu Style="min-width:10rem;" AllowClear OnSelectedItemChanged="Search" />
+                        <TsOu Style="min-width:10rem;" AllowClear ValueChanged="OnOuChanged" @ref=ou Disabled=IsLoading />
                     </SpaceItem>
                     <SpaceItem>
-                        <RadioGroup TValue="bool?" @bind-Value="@GetAllInput.Filter.IsStatic" OnChange="Search">
+                         <RadioGroup TValue="bool?" @bind-Value="@GetAllInput.Filter.IsStatic" OnChange="Search" Disabled=IsLoading>
                             <Radio TValue="bool?" RadioButton="true" Value="@(default(bool?))">全部</Radio>
                             <Radio TValue="bool?" RadioButton="true" Value="@(true)">预设</Radio>
                             <Radio TValue="bool?" RadioButton="true" Value="@(false)">非预设</Radio>
@@ -42,12 +42,12 @@
                     </SpaceItem>
 
                     <SpaceItem>
-                        <Search Placeholder="请输入关键字..." @bind-Value="@Keywords" OnSearch="Search" AllowClear="true" ClassicSearchIcon="true" />
+                         <Search Placeholder="请输入关键字..." @bind-Value="@Keywords" OnSearch="Search" AllowClear="true" ClassicSearchIcon="true" Disabled=IsLoading />
                     </SpaceItem>
                     <SpaceItem>
 
                         <Tooltip Title="清空条件">
-                            <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Clear" OnClick="ReLoad"></Button>
+                             <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Clear" OnClick="ReLoad" Disabled=IsLoading></Button>
                         </Tooltip>
 
 
@@ -56,7 +56,7 @@
 
 
                         <Tooltip Title="刷新">
-                            <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Reload" OnClick="Refresh"></Button>
+                             <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Reload" OnClick="Refresh" Disabled=IsLoading></Button>
                         </Tooltip>
                     </SpaceItem>
                 </Space>

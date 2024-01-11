@@ -11,11 +11,12 @@ namespace ZLJ.RCL.Components
     /// <summary>
     /// 部门选择下拉框
     /// </summary>
-    public class StOu : AbpTreeSelect<GetListInput,
+    public class TsOu : AbpTreeSelect<GetListInput,
                                       OuDto,
                                       GeneralTreeGetForSelectInput,
                                       GeneralTreeComboboxDto,
                                       IOuProviderAppService>
     {
+        protected override string sy => "请选择部门";
     }
 }

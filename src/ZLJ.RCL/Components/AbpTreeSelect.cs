@@ -48,17 +48,18 @@ namespace ZLJ.RCL.Components
     {
         /// <summary>
         /// 只加载此节点下的后代节点
+        /// 不用用code，因为code会变
         /// </summary>
         [Parameter]
-        public long? ParentId { get; set; }
-
+        public long? ParentId{ get; set; }
+        protected virtual string sy => "请选择";
         public override Task SetParametersAsync(ParameterView parameters)
         {
             //这里重写ant treeSelct的默认值
             var dic = parameters.ToDictionary();
             if (!dic.ContainsKey(nameof(Placeholder)))
             {
-                Placeholder = "请选择";
+                Placeholder = sy;
             }
             if (!dic.ContainsKey(nameof(TitleExpression)))
             {
@@ -76,14 +77,58 @@ namespace ZLJ.RCL.Components
             {
                 IsLeafExpression = node => node.DataItem.Children == null || !node.DataItem.Children.Any();
             }
+            //if (!dic.ContainsKey(nameof(ValueOnClear)))
+            //{
+            //    ValueOnClear = string.Empty;
+            //    // Value
+            //}
+            //if (!dic.ContainsKey(nameof(OnClearSelected)))
+            //{
+            //    OnClearSelected = EventCallback.Factory.Create(this, ClearSelected);
+
+            //}
+            //
+
             //if (!dic.ContainsKey(nameof(OnSearch)))
             //{
             //    OnSearch = EventCallback.Factory.Create<string>(this, Search);
             //}
-        
+
             return base.SetParametersAsync(parameters);
         }
+        //protected override void OnValueChange(string value)
+        //{
+        //    //  base.OnValueChange(value);
+        //    ValueChanged.InvokeAsync(value);
+        //}
+        //protected override void OnCurrentValueChange(string value)
+        //{
+        //    Value = value;
 
+
+        //    CurrentValue = value;
+
+        //    //base.OnCurrentValueChange(value);
+        //}
+        //// override value
+        //void ClearSelected()
+        //{
+        //    //this.Value = string.Empty;
+        //    //OnCurrentValueChange(string.Empty);
+        //    Value = string.Empty;
+        //    CurrentValue = string.Empty;
+
+        //    //this.SetValueAsync
+        //    ValueChanged.InvokeAsync().ContinueWith(t =>
+        //    {
+        //        InvokeOnSelectedItemChanged();
+        //        Console.WriteLine("xxxxxxxxxxxxx");
+        //    });
+        //    // InvokeOnSelectedItemChanged();
+        //    // OnCurrentValueChange(string.Empty);
+        //    //StateHasChanged();
+        //    // _ = ValueChanged.InvokeAsync(string.Empty);
+        //}
         [Inject]
         public IServiceProvider ServiceProvider { get; set; }
 
@@ -91,10 +136,12 @@ namespace ZLJ.RCL.Components
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
-
-            await using var service = ServiceProvider.CreateAsyncScope();
-            var appService = service.ServiceProvider.GetRequiredService<TAppService>();
-            DataSource = await appService.GetTreeForSelectAsync(new TGetTreeForSelectInput { });
+            if (DataSource == null)
+            {
+                await using var service = ServiceProvider.CreateAsyncScope();
+                var appService = service.ServiceProvider.GetRequiredService<TAppService>();
+                DataSource = await appService.GetTreeForSelectAsync(new TGetTreeForSelectInput {ParentId=ParentId });
+            }
         }
 
         //[AbpExceptionInterceptor]
