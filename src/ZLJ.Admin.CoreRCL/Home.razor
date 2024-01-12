@@ -1,7 +1,6 @@
 ﻿@page "/"
 @* @attribute [ReuseTabsPage(Title = "控制台", Pin = true, Closable = false)] *@
 @inherits AbpBaseComponent
-@rendermode InteractiveServer
 <PageTitle>blazor渐进式分离全栈框架</PageTitle>
 
 <h1>基于blazor的渐进式分离全栈框架</h1>
@@ -35,7 +34,7 @@ blazor auto模式允许在同一个静态渲染模式的页面中，同时存在
 
 <p>
     比如通知、聊天功能<br /><br />
-    再必须物联网系统中，展示设备实例列表的页面，最好是实时的，这样可以实时观察设备状态或控制它们。
+    再比如物联网系统中，展示设备实例列表的页面，最好是实时的，这样可以实时观察设备状态或控制它们。
 </p>
 
 这种实时场景虽然可以通过signlR来实现，但由于实时场景不只一个，不同场景可能需要依赖signlR来做不同处理，而基于blazor server方式实现起来更简单。
@@ -54,18 +53,21 @@ blazor auto模式允许在同一个静态渲染模式的页面中，同时存在
 
 <br />
 <br />
-当前首页，使用server模式渲染，可以点击按钮时，观察 websocket通信 <br />
-<p>
-    @count
-</p>
-<Button OnClick="ccc">
-    增加
-</Button>
-
-@code {
-    int count; 
-    void ccc()
-    {
-        count++;
-    }
-}
+当前页面为静态渲染模式，下面演示同一个页面中，同时加载多种渲染模式的组件：
+<table border="1" style="width:90%">
+    <tr>
+        <td>静态渲染模式</td>
+        <td>server渲染模式</td>
+        <td>webassembly渲染模式</td>
+        <td>auto渲染模式</td>
+    </tr>
+    <tr>
+        <td><ZLJ.Admin.CoreRCL.Share.Counter></ZLJ.Admin.CoreRCL.Share.Counter></td>
+        <td>
+            <ZLJ.Admin.CoreRCL.Share.Counter @rendermode="InteractiveServer"></ZLJ.Admin.CoreRCL.Share.Counter>
+  
+        </td>
+        <td><ZLJ.Admin.CoreRCL.Share.Counter @rendermode="InteractiveWebAssembly"></ZLJ.Admin.CoreRCL.Share.Counter></td>
+        <td><ZLJ.Admin.CoreRCL.Share.Counter @rendermode="InteractiveAuto"></ZLJ.Admin.CoreRCL.Share.Counter></td>
+    </tr>
+</table>
