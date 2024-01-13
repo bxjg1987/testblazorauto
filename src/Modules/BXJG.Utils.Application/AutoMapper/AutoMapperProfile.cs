@@ -2,10 +2,10 @@ using Abp.Notifications;
 using AutoMapper;
 using BXJG.Utils.Application.Share.Notification;
 using BXJG.Utils.GeneralTree;
-using BXJG.Utils.Notification;
+
 using System.Text.Json;
 
-namespace BXJG.Utils.AutoMapper
+namespace BXJG.Utils.Application.AutoMapper
 {
     public class AutoMapperProfile : Profile
     {

@@ -1,9 +1,9 @@
 using AutoMapper;
 using BXJG.Utils.Application.Share.Files;
-using BXJG.Utils.AutoMapper;
+using BXJG.Utils.File;
 using System.Collections.Generic;
 using System.Text.Json;
-namespace BXJG.Utils.File
+namespace BXJG.Utils.Application.File
 {
     public class AutoMapperProfile : Profile
     {

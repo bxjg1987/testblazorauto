@@ -6,7 +6,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 
-namespace BXJG.WeChat.MiniProgram
+namespace BXJG.WeChat.Web.MiniProgram
 {
     public class LoginContext 
     {

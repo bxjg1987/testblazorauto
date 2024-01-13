@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Extensions.Configuration;
 using System;
 
-namespace BXJG.Common
+namespace BXJG.Common.Web
 {
     public class AspNetEnv : IEnv
     {

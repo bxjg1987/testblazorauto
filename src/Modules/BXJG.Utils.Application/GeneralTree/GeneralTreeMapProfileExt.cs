@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
 using BXJG.Utils.Application.Share.GeneralTree;
+using BXJG.Utils.GeneralTree;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BXJG.Utils.GeneralTree
+namespace AutoMapper
 {
     /// <summary>
     /// 经过测试,在有泛型的场景中AutoMapper使用继承并不能达到预期效果

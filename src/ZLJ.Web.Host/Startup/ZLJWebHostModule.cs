@@ -21,6 +21,7 @@ using Castle.MicroKernel.Resolvers;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Abp.Runtime.Session;
 using Abp.Zero.Configuration;
+using BXJG.Utils.Application;
 
 namespace ZLJ.Web.Host.Startup
 {

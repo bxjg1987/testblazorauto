@@ -25,6 +25,7 @@ using System.Reflection;
 using Abp.Reflection.Extensions;
 using Microsoft.AspNetCore.Components.Server.Circuits;
 using BXJG.Common;
+using BXJG.Utils.RCL;
 
 namespace ZLJ.Web.HostBlazor.Startup
 {

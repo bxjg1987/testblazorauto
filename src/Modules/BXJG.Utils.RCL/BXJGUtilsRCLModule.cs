@@ -1,8 +1,9 @@
 ﻿using Abp.AutoMapper;
 using Abp.Modules;
 using BXJG.Common;
-using BXJG.Utils.Notification;
+
 using BXJG.Utils.RCL;
+using BXJG.Utils.Web;
 using Microsoft.AspNetCore.Components.Server.Circuits;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -12,9 +13,9 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Utils
+namespace BXJG.Utils.RCL
 {
-    [DependsOn(typeof(BXJG.Utils.BXJGUtilsWebModule))]
+    [DependsOn(typeof(BXJGUtilsWebModule))]
     public class BXJGUtilsRCLModule : AbpModule
     {
         public override void PreInitialize()

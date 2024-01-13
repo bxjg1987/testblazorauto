@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Utils.Authorization
+namespace BXJG.Utils.Web.Authorization
 {
         /// <summary>
         /// 基于abp的授权机制的授权要求

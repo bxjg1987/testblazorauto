@@ -1,5 +1,6 @@
 ﻿using Abp.Notifications;
 using BXJG.Utils;
+using BXJG.Utils.Application.Notification;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ using ZLJ.Authorization.Users;
 
 namespace ZLJ.App.Common.Notification
 {
-    public class NotifyAppServie : BXJG.Utils.Notification.PersonNotificationAppService<User>
+    public class NotifyAppServie : PersonNotificationAppService<User>
     {
         public NotifyAppServie()
         {

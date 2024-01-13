@@ -19,7 +19,7 @@ global using Abp.Extensions;
 global using Abp.Linq.Extensions;
 global using Abp.Timing;
 global using BXJG.Utils.GeneralTree;
-global using BXJG.Utils.Components;
+
 //global using BXJG.WorkOrder.WorkOrderCategory;
 global using System.Linq.Dynamic.Core;
 global using Abp.Domain.Entities;

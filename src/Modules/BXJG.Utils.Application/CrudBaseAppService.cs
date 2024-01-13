@@ -11,7 +11,7 @@ using BXJG.Common;
 using BXJG.Common.Dto;
 using BXJG.Utils.Application.Share;
 
-using BXJG.Utils.Notification;
+
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -20,7 +20,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Utils
+namespace BXJG.Utils.Application
 {
     /// <summary>
     /// 对abp默认的AsyncCrudAppService的增强

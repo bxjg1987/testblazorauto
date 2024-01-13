@@ -1,5 +1,5 @@
 ﻿using Abp.Threading.Timers;
-using BXJG.Utils.Notification;
+using BXJG.Utils.Application.Notification;
 using System;
 using System.Collections.Generic;
 using System.Linq;

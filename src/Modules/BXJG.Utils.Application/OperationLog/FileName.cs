@@ -19,7 +19,7 @@ using System.Linq.Dynamic.Core;
 using System.ComponentModel.DataAnnotations;
 using BXJG.Common.Dto;
 
-namespace BXJG.Utils.OperationLog
+namespace BXJG.Utils.Application.OperationLog
 {
 
     public class AutoMapperProfile : Profile

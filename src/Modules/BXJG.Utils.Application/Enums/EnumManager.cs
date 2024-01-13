@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace BXJG.Utils.Enums
+namespace BXJG.Utils.Application.Enums
 {
     /// <summary>
     /// 各个模块内都有自己的枚举，各个模块应该提供自己的应用服务向前端提供枚举下拉框的值

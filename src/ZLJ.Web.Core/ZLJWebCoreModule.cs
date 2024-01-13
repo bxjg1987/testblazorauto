@@ -34,6 +34,7 @@ using ZLJ.App.Admin;
 using ZLJ.EntityFrameworkCore;
 using BXJG.Common;
 using Abp.Configuration.Startup;
+using BXJG.Utils.Web;
 
 namespace ZLJ
 {

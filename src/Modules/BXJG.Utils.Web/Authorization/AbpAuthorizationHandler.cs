@@ -14,7 +14,7 @@ using Abp.Runtime.Session;
 using Abp.Domain.Uow;
 using System.Diagnostics;
 
-namespace BXJG.Utils.Authorization
+namespace BXJG.Utils.Web.Authorization
 {
     /// <summary>
     /// 基于abp的授权处理器

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.WeChat.MiniProgram
+namespace BXJG.WeChat.Web.MiniProgram
 {
     public interface ILoginHandler
     {

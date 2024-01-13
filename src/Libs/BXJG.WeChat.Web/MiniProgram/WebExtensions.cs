@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.WeChat.MiniProgram
+namespace BXJG.WeChat.Web.MiniProgram
 {
     public static class WebExtensions
     {

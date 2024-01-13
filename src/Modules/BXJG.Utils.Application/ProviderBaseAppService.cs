@@ -23,7 +23,7 @@ using BXJG.Common.Dto;
 
 using BXJG.Utils.Application.Share;
 
-namespace BXJG.Utils
+namespace BXJG.Utils.Application
 {
     /*
      * 一种数据除了curd功能等管理功能，还需要为其它功能提供可选数据（通常是下拉框或弹窗选择的数据）

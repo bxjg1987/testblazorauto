@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Common
+namespace BXJG.Common.Web
 {
     public static class BXJGCommonWebExtensions
     {

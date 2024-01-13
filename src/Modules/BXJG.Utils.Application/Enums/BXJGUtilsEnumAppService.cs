@@ -11,8 +11,9 @@ using Abp.Application.Services.Dto;
 using Abp.Extensions;
 using Abp.UI;
 using BXJG.Utils.Application.Share.Enums;
+using BXJG.Utils.Enums;
 
-namespace BXJG.Utils.Enums
+namespace BXJG.Utils.Application.Enums
 {
     /// <summary>
     /// 通用的获取枚举下拉框列表的服务

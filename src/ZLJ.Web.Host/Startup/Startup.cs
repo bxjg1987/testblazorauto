@@ -32,6 +32,7 @@ using Microsoft.Net.Http.Headers;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authentication;
 using ZLJ.Application.Share.Authorization.Permissions;
+using BXJG.Utils.Application;
 
 namespace ZLJ.Web.Host.Startup
 {

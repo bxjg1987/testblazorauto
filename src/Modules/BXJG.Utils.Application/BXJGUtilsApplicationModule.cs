@@ -12,7 +12,6 @@ using BXJG.Utils.DynamicProperty;
 using System.Reflection;
 using Abp.AutoMapper;
 using Abp.Domain.Entities;
-using BXJG.Utils.AutoMapper;
 using BXJG.Common.Dto;
 using BXJG.Utils.Concurrency;
 using System.Linq;
@@ -20,11 +19,10 @@ using Abp.Application.Services;
 using Castle.Core;
 //using BXJG.Utils.CAP;
 //using DotNetCore.CAP;
-using BXJG.Utils.Notification;
 using BXJG.Utils.GeneralTree;
 using Abp.Configuration.Startup;
 
-namespace BXJG.Utils
+namespace BXJG.Utils.Application
 {
     [DependsOn(typeof(BXJGUtilsModule),
                typeof(AbpAutoMapperModule))]

@@ -16,7 +16,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
-namespace BXJG.Utils.Controllers
+namespace BXJG.Utils.Web.Controllers
 {
     /*
      * 简单的文件上传功能，后期再详细设计

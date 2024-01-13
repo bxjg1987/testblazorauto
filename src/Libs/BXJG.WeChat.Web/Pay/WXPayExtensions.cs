@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.WeChat.Pay
+namespace BXJG.WeChat.Web.Pay
 {
     /// <summary>
     /// 微信支付模块与web相关的扩展方法

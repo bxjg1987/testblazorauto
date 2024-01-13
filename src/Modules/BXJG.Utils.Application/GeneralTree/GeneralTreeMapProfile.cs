@@ -4,8 +4,9 @@ using Abp.Authorization;
 using Newtonsoft.Json;
 using BXJG.Utils.Localization;
 using BXJG.Utils.Application.Share.GeneralTree;
+using BXJG.Utils.GeneralTree;
 
-namespace BXJG.Utils.GeneralTree
+namespace BXJG.Utils.Application.GeneralTree
 {
     public class GeneralTreeMapProfile : Profile
     {

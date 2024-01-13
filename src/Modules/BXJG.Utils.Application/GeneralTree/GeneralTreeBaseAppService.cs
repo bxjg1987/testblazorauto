@@ -33,8 +33,9 @@ using BXJG.Common;
 using BXJG.Utils.Application.Share.GeneralTree;
 using BXJG.Utils.Share.GeneralTree;
 using BXJG.Utils.Application.Share;
+using BXJG.Utils.GeneralTree;
 
-namespace BXJG.Utils.GeneralTree
+namespace BXJG.Utils.Application.GeneralTree
 {
     /*
      * 原本很多地方返回了不必要的ValuTask，比如返回IQueryable的虚方法，最初的目的是希望允许子类有机会直接使用异步

@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Reflection;
 using BXJG.WeChat.MiniProgram;
-namespace BXJG.WeChat
+namespace BXJG.WeChat.Abp
 {
     [DependsOn(typeof(BXJGUtilsModule))]
     public class BXJGWeChatModule : AbpModule

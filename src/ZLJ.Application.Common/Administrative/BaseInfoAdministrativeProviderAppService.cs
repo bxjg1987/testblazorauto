@@ -9,6 +9,8 @@ using BXJG.Common.Dto;
 using BXJG.Utils.Enums;
 using ZLJ.App.Common.Administrative;
 using BXJG.Utils.Application.Share.GeneralTree;
+using BXJG.Utils.Application.GeneralTree;
+using BXJG.Utils.Application.Enums;
 
 namespace ZLJ.App.Common.AdministrativeCommon
 {

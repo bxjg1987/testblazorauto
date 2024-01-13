@@ -15,7 +15,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace BXJG.Utils.Notification
+namespace BXJG.Utils.Application.Notification
 {
     /// <summary>
     /// 删除过期通知

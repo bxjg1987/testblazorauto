@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Utils.Authorization
+namespace BXJG.Utils.Web.Authorization
 {
     /// <summary>
     /// 基于abp的权限点的方式动态创建授权策略的提供器

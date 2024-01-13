@@ -15,7 +15,7 @@ using System.Web;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.AspNetCore.WebUtilities;
 
-namespace BXJG.WeChat.MiniProgram
+namespace BXJG.WeChat.Web.MiniProgram
 {
     public class LoginMiddleware
     {

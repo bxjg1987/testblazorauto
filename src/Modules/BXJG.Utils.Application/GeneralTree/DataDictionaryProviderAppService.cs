@@ -15,8 +15,9 @@ using Abp.MultiTenancy;
 using Microsoft.EntityFrameworkCore;
 using BXJG.Common.Dto;
 using BXJG.Utils.Application.Share.GeneralTree;
+using BXJG.Utils.GeneralTree;
 
-namespace BXJG.Utils.GeneralTree
+namespace BXJG.Utils.Application.GeneralTree
 {
     /// <summary>
     /// 数据字典应用服务类

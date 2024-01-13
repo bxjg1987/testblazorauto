@@ -1,7 +1,7 @@
 
 using static System.Formats.Asn1.AsnWriter;
 
-namespace BXJG.Utils.Components
+namespace BXJG.Utils.RCL.Components
 {
     /*
      * 基本上把抽象的应用服务中的abp相关玩意搞过来

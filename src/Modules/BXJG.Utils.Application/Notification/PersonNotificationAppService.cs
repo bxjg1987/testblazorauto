@@ -26,7 +26,7 @@ using Abp.Localization;
 using Abp.Auditing;
 using BXJG.Utils.Application.Share.Notification;
 
-namespace BXJG.Utils.Notification
+namespace BXJG.Utils.Application.Notification
 {
     /// <summary>
     /// 通用个人消息管理服务

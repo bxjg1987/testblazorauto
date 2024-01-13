@@ -7,12 +7,14 @@ using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 //using Castle.Windsor.MsDependencyInjection;
 using Microsoft.AspNetCore.Authorization;
-using BXJG.Utils.Authorization;
 using System.Collections.Generic;
 using Abp.Configuration.Startup;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using BXJG.Common.Web;
+using BXJG.Utils.Application;
+using BXJG.Utils.Web.Authorization;
 
-namespace BXJG.Utils
+namespace BXJG.Utils.Web
 {
     [DependsOn(typeof(BXJGUtilsApplicationModule))]
     public class BXJGUtilsWebModule : AbpModule
