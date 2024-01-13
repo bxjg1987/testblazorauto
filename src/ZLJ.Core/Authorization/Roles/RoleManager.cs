@@ -8,11 +8,11 @@ using Abp.Domain.Uow;
 using Abp.Organizations;
 using Abp.Runtime.Caching;
 using Abp.Zero.Configuration;
-using ZLJ.Authorization.Users;
+using ZLJ.Core.Authorization.Users;
 using System.Threading.Tasks;
 using System.Linq;
 
-namespace ZLJ.Authorization.Roles
+namespace ZLJ.Core.Authorization.Roles
 {
     public class RoleManager : AbpRoleManager<Role, User>
     {

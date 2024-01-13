@@ -1,6 +1,6 @@
 ﻿using System.Security.Cryptography;
 
-namespace ZLJ.Validation
+namespace ZLJ.Core.Validation
 {
     public static class EncryptHelper
     {

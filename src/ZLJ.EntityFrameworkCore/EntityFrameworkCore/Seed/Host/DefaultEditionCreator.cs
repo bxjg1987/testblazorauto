@@ -2,7 +2,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Abp.Application.Editions;
 using Abp.Application.Features;
-using ZLJ.Editions;
+using ZLJ.Core.Editions;
 
 namespace ZLJ.EntityFrameworkCore.Seed.Host
 {

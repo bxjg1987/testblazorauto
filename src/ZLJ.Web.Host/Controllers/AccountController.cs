@@ -1,16 +1,16 @@
 ﻿using Abp.Authorization.Users;
 using Abp.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ZLJ.App.Admin.Authorization;
-using ZLJ.Authorization.Users;
-using ZLJ.Authorization;
+using ZLJ.Application.Admin.Authorization;
+using ZLJ.Core.Authorization.Users;
+using ZLJ.Core.Authorization;
 using ZLJ.Controllers;
-using ZLJ.Models.TokenAuth;
-using ZLJ.MultiTenancy;
+
+using ZLJ.Core.MultiTenancy;
 using Abp.MultiTenancy;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
-using ZLJ.Identity;
+using ZLJ.Core.Identity;
 using DocumentFormat.OpenXml.InkML;
 using Abp.Extensions;
 using Abp.Domain.Uow;

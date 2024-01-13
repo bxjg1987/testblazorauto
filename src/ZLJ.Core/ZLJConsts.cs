@@ -1,4 +1,4 @@
-﻿namespace ZLJ
+﻿namespace ZLJ.Core
 {
     public class ZLJConsts
     {

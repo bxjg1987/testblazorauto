@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZLJ.App.Common.Post
+namespace ZLJ.Application.Common.Post
 {
     public class GetListInput
     {

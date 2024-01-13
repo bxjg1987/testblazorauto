@@ -1,7 +1,7 @@
 ﻿using System;
 using Abp.Dependency;
 
-namespace ZLJ.Timing
+namespace ZLJ.Core.Timing
 {
     public class AppTimes : ISingletonDependency
     {

@@ -7,20 +7,20 @@ using Abp.Zero.Configuration;
 using BXJG.Utils.Application.Share;
 using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
-using ZLJ.App.Admin.Authorization.Permissions;
-using ZLJ.App.Admin.Post.Dto;
-using ZLJ.App.Admin.Roles;
-using ZLJ.App.Admin.Roles.Dto;
-using ZLJ.App.Common.OU;
+using ZLJ.Application.Admin.Authorization.Permissions;
+using ZLJ.Application.Admin.Post.Dto;
+using ZLJ.Application.Admin.Roles;
+using ZLJ.Application.Admin.Roles.Dto;
+using ZLJ.Application.Common.OU;
 using ZLJ.Application.Common.Share.OU;
 using ZLJ.Application.Share.Authorization.Permissions;
 using ZLJ.Application.Share.Post;
 using ZLJ.Application.Share.Roles;
-using ZLJ.Authorization.Roles;
-using ZLJ.Authorization.Users;
-using ZLJ.BaseInfo.Post;
+using ZLJ.Core.Authorization.Roles;
+using ZLJ.Core.Authorization.Users;
+using ZLJ.Core.BaseInfo.Post;
 
-namespace ZLJ.App.Admin.Post
+namespace ZLJ.Application.Admin.Post
 {
 
     [AbpAuthorize(PermissionNames.AdministratorBaseInfoPost)]
@@ -46,7 +46,7 @@ namespace ZLJ.App.Admin.Post
             _userManager = userManager;
             this.roleManagementConfig = roleManagementConfig;
 
-            LocalizationSourceName = ZLJConsts.LocalizationSourceName;
+            LocalizationSourceName = ZLJ.Core.ZLJConsts.LocalizationSourceName;
 
             base.CreatePermissionName = PermissionNames.AdministratorBaseInfoPostCreate;
             base.UpdatePermissionName = PermissionNames.AdministratorBaseInfoPostUpdate;

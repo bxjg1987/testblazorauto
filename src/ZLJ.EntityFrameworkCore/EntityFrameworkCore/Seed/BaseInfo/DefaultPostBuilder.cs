@@ -6,11 +6,11 @@ using Abp.Authorization;
 using Abp.Authorization.Roles;
 using Abp.Authorization.Users;
 using Abp.MultiTenancy;
-using ZLJ.Authorization;
-using ZLJ.Authorization.Roles;
-using ZLJ.Authorization.Users;
+using ZLJ.Core.Authorization;
+using ZLJ.Core.Authorization.Roles;
+using ZLJ.Core.Authorization.Users;
 using Abp.Zero.EntityFrameworkCore;
-using ZLJ.BaseInfo.Post;
+using ZLJ.Core.BaseInfo.Post;
 
 namespace ZLJ.EntityFrameworkCore.EntityFrameworkCore.Seed.BaseInfo
 {

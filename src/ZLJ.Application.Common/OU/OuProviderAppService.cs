@@ -11,10 +11,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ZLJ.Application.Common.Share.OU;
-using ZLJ.BaseInfo;
+using ZLJ.Core.BaseInfo;
 using ZLJ.Core.Share;
 
-namespace ZLJ.App.Common.OU
+namespace ZLJ.Application.Common.OU
 {
     /// <summary>
     /// 提供公司、部门下拉树形数据；登陆用户即可访问，将来增加权限依赖
@@ -45,7 +45,7 @@ namespace ZLJ.App.Common.OU
             if (input.WhatType == 0)
                 q = q.OfType<OrganizationUnitEntity>();
             else
-                q = q.OfType<ZLJ.Customer.CustomerOUEntity>();
+                q = q.OfType<ZLJ.Core.Customer.CustomerOUEntity>();
             q = q.AsNoTrackingWithIdentityResolution();
 
             if (input.IsOnlyLoadChild)

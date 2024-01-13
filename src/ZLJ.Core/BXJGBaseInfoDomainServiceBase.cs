@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ZLJ
+namespace ZLJ.Core
 {
     /// <summary>
     /// 领域服务基类
@@ -26,7 +26,7 @@ namespace ZLJ
 
         public BXJGBaseInfoDomainServiceBase()
         {
-            base.LocalizationSourceName = ZLJConsts.LocalizationSourceName;
+            base.LocalizationSourceName = ZLJ.Core.ZLJConsts.LocalizationSourceName;
             
             //空模式
             //EventBus = NullEventBus.Instance;

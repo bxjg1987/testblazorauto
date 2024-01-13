@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Abp.Authorization.Users;
 
-namespace ZLJ.Models.TokenAuth
+namespace ZLJ.Web.Core.Models.TokenAuth
 {
     public class ExternalAuthenticateModel
     {

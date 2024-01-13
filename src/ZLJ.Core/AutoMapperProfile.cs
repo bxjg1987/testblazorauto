@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZLJ
+namespace ZLJ.Core
 {
     public class AutoMapperProfile : Profile
     {

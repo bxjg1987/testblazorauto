@@ -2,9 +2,9 @@ using System.ComponentModel.DataAnnotations;
 using Abp.Authorization.Users;
 using Abp.AutoMapper;
 using Abp.MultiTenancy;
-using ZLJ.MultiTenancy;
+using ZLJ.Core.MultiTenancy;
 
-namespace ZLJ.App.Admin.MultiTenancy.Dto
+namespace ZLJ.Application.Admin.MultiTenancy.Dto
 {
     [AutoMapTo(typeof(Tenant))]
     public class CreateTenantDto

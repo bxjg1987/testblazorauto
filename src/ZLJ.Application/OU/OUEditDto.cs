@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ZLJ.Core.Share;
 
-namespace ZLJ.App.Admin.OU
+namespace ZLJ.Application.Admin.OU
 {
     public class OUEditDto:GeneralTreeNodeEditBaseDto
     {  /// <summary>

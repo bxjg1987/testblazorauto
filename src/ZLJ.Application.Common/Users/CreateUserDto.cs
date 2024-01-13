@@ -5,9 +5,9 @@ using Abp.Authorization.Users;
 using Abp.AutoMapper;
 using Abp.Domain.Entities;
 using Abp.Runtime.Validation;
-using ZLJ.Authorization.Users;
+using ZLJ.Core.Authorization.Users;
 
-namespace ZLJ.App.Common.Users
+namespace ZLJ.Application.Common.Users
 {
     [AutoMapTo(typeof(User))]
     public class CreateUserDto : EntityDto<long>, IShouldNormalize

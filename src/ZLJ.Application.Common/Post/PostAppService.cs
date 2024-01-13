@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ZLJ.BaseInfo.Post;
+using ZLJ.Core.BaseInfo.Post;
 using Microsoft.EntityFrameworkCore;
 using Abp.Organizations;
 using Abp.Extensions;
@@ -14,7 +14,7 @@ using System.Linq.Expressions;
 using Abp.Linq.Expressions;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ZLJ.App.Common.Post
+namespace ZLJ.Application.Common.Post
 {
     [Abp.Authorization.AbpAuthorize]
     [Abp.Domain.Uow.UnitOfWork(false)]

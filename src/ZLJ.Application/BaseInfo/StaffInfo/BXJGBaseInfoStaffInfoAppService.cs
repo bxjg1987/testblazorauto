@@ -1,16 +1,16 @@
-using ZLJ.Authorization.Users;
-using ZLJ.Authorization.Roles;
+using ZLJ.Core.Authorization.Users;
+using ZLJ.Core.Authorization.Roles;
 using Microsoft.AspNetCore.Identity;
 using Abp.Organizations;
 using Abp.Authorization.Users;
-using ZLJ.App.Common.StaffInfo;
-using ZLJ.BaseInfo.Post;
-using ZLJ.BaseInfo;
-using ZLJ.App.Admin.Authorization.Permissions;
+using ZLJ.Application.Common.StaffInfo;
+using ZLJ.Core.BaseInfo.Post;
+using ZLJ.Core.BaseInfo;
+using ZLJ.Application.Admin.Authorization.Permissions;
 using ZLJ.Application.Share.Authorization.Permissions;
 using ZLJ.Application.Common.Share.OU;
 
-namespace ZLJ.App.Admin.BaseInfo.StaffInfo
+namespace ZLJ.Application.Admin.BaseInfo.StaffInfo
 {
     /*
      * 目前是笛卡尔查询，性能低，考虑分次查询
@@ -44,7 +44,7 @@ namespace ZLJ.App.Admin.BaseInfo.StaffInfo
                                                IRepository<UserOrganizationUnit, long> ouUserRepository,
                                                IRepository<UserRole, long> userRoleRepository)
         {
-            LocalizationSourceName = ZLJConsts.LocalizationSourceName;
+            LocalizationSourceName = ZLJ.Core.ZLJConsts.LocalizationSourceName;
             this.repository = repository;
 
             //CreatePermissionName = PermissionNames.BXJGBaseInfoStaffInfoCreate;
@@ -346,7 +346,7 @@ namespace ZLJ.App.Admin.BaseInfo.StaffInfo
         private StaffInfoDto MapToEntityDto(StaffInfoEntity entity, IEnumerable<PostEntity> posts, IEnumerable<OrganizationUnitEntity> ous)
         {
             var dto = ObjectMapper.Map<StaffInfoDto>(entity);
-            dto.Posts = ObjectMapper.Map<List<App.Common.Post.PostDto>>(posts.Where(c => c != default).DistinctBy(c => c.Id));
+            dto.Posts = ObjectMapper.Map<List<Application.Common.Post.PostDto>>(posts.Where(c => c != default).DistinctBy(c => c.Id));
             dto.RoleNames = dto.Posts.Where(c=>c!=default).DistinctBy(c=>c.Id).Select(c => c.Name).ToArray();
             dto.Ous = ObjectMapper.Map<List<OuDto>>(ous.Where(c => c != default).DistinctBy(c => c.Id));
             return dto;

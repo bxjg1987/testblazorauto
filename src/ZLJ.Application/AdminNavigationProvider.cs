@@ -1,16 +1,16 @@
 ﻿using Abp.Application.Navigation;
 using Abp.Authorization;
 using Abp.Localization;
-using ZLJ.Authorization;
-using ZLJ.Localization;
+using ZLJ.Core.Authorization;
+using ZLJ.Core.Localization;
 using BXJG.Utils.GeneralTree;
-using ZLJ.App.Admin.Authorization.Permissions;
+using ZLJ.Application.Admin.Authorization.Permissions;
 using BXJG.Utils;
 using BXJG.Utils.Localization;
 using DocumentFormat.OpenXml.Drawing;
 using ZLJ.Application.Share.Authorization.Permissions;
 
-namespace ZLJ.App.Admin
+namespace ZLJ.Application.Admin
 {
     /*
      * 这个需要在host和blazorhost间共享，属于ui部分的东东，放这里其实不太合适

@@ -1,6 +1,6 @@
 ﻿using Abp.Application.Services.Dto;
 
-namespace ZLJ.App.Admin.MultiTenancy.Dto
+namespace ZLJ.Application.Admin.MultiTenancy.Dto
 {
     public class PagedTenantResultRequestDto : PagedResultRequestDto
     {

@@ -5,16 +5,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Abp.Authorization;
-using ZLJ.App.Admin.BaseInfo.Administrative.Dto;
-using ZLJ.App.Admin.BaseInfo;
+using ZLJ.Application.Admin.BaseInfo.Administrative.Dto;
+using ZLJ.Application.Admin.BaseInfo;
 using Abp.Application.Services.Dto;
 using BXJG.Common.Dto;
-using ZLJ.BaseInfo.Administrative;
-using ZLJ.App.Admin.Authorization.Permissions;
+using ZLJ.Core.BaseInfo.Administrative;
+using ZLJ.Application.Admin.Authorization.Permissions;
 using BXJG.Utils.Application.Share.GeneralTree;
 using ZLJ.Application.Share.Authorization.Permissions;
 
-namespace ZLJ.App.Admin.BaseInfo.Administrative
+namespace ZLJ.Application.Admin.BaseInfo.Administrative
 {
     // [AbpAuthorize]
     public class BXJGBaseInfoAdministrativeAppService : AdminTreeCrudBaseAppService<AdministrativeEntity,

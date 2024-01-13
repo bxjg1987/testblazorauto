@@ -7,20 +7,20 @@ using Abp.Authorization;
 using Abp.Domain.Repositories;
 using Abp.Linq.Extensions;
 using Abp.UI;
-using ZLJ.App.Admin.BaseInfo.AssociatedCompany.Dto;
+using ZLJ.Application.Admin.BaseInfo.AssociatedCompany.Dto;
 using BXJG.Common.Dto;
 using Microsoft.EntityFrameworkCore;
-using ZLJ.BaseInfo.AssociatedCompany;
-//using ZLJ.App.Admin.WorkOrder.RentOrderItem.Admin;
+using ZLJ.Core.BaseInfo.AssociatedCompany;
+//using ZLJ.Application.Admin.WorkOrder.RentOrderItem.Admin;
 using Abp.Events.Bus.Entities;
 using Microsoft.AspNetCore.Identity;
-using ZLJ.Customer;
+using ZLJ.Core.Customer;
 using Abp.IdentityFramework;
-using ZLJ.Authorization.Users;
-using ZLJ.App.Admin.Authorization.Permissions;
+using ZLJ.Core.Authorization.Users;
+using ZLJ.Application.Admin.Authorization.Permissions;
 using ZLJ.Application.Share.Authorization.Permissions;
 
-namespace ZLJ.App.Admin.BaseInfo.AssociatedCompany
+namespace ZLJ.Application.Admin.BaseInfo.AssociatedCompany
 {
     /// <summary>
     /// 基础信息-来往单位

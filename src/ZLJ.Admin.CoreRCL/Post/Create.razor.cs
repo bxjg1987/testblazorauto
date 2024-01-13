@@ -12,7 +12,7 @@ namespace ZLJ.Admin.CoreRCL.Post
 {
     public partial class Create
     {
-        //ZLJ.App.Common.OU.IOuAppService ouProviderAppService;
+        //ZLJ.Application.Common.OU.IOuAppService ouProviderAppService;
 
         //protected IOuAppService OuProviderAppService => ScopedServices.GetRequiredService<IOuAppService>();
 

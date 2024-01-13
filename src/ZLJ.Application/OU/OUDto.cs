@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ZLJ.Core.Share;
-using ZLJ.Localization;
+using ZLJ.Core.Localization;
 
-namespace ZLJ.App.Admin.OU
+namespace ZLJ.Application.Admin.OU
 {
     public class OUDto: GeneralTreeGetTreeNodeBaseDto<OUDto>
     {  /// <summary>

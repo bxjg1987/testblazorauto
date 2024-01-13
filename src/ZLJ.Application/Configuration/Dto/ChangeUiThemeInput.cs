@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ZLJ.App.Admin.Configuration.Dto
+namespace ZLJ.Application.Admin.Configuration.Dto
 {
     public class ChangeUiThemeInput
     {

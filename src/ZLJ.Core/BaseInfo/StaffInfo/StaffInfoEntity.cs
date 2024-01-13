@@ -4,13 +4,13 @@ using BXJG.Utils.GeneralTree;
 using BXJG.Utils.BusinessUser;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
-using ZLJ.Authorization.Users;
-using ZLJ.BaseInfo.Administrative;
-using ZLJ.BaseInfo.Post;
+using ZLJ.Core.Authorization.Users;
+using ZLJ.Core.BaseInfo.Administrative;
+using ZLJ.Core.BaseInfo.Post;
 using BXJG.Common.Extensions;
 using Abp.Timing;
 
-namespace ZLJ.BaseInfo.StaffInfo
+namespace ZLJ.Core.BaseInfo.StaffInfo
 {
     /// <summary>
     /// 员工档案实体类

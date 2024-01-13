@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Abp.Dependency;
 
-namespace ZLJ.Authentication.External
+namespace ZLJ.Web.Core.Authentication.External
 {
     public class ExternalAuthConfiguration : IExternalAuthConfiguration, ISingletonDependency
     {

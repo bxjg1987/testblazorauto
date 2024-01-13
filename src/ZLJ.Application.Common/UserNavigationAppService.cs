@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZLJ.App.Common
+namespace ZLJ.Application.Common
 {
     public class UserNavigationAppService : CommonBaseAppService//, IUserNavigationManager
     {

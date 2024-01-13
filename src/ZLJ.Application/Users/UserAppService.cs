@@ -13,18 +13,18 @@ using Abp.Linq.Extensions;
 using Abp.Localization;
 using Abp.Runtime.Session;
 using Abp.UI;
-using ZLJ.App.Admin.Authorization.Accounts;
-using ZLJ.Authorization.Roles;
-using ZLJ.Authorization.Users;
-using ZLJ.App.Admin.Roles.Dto;
+using ZLJ.Application.Admin.Authorization.Accounts;
+using ZLJ.Core.Authorization.Roles;
+using ZLJ.Core.Authorization.Users;
+using ZLJ.Application.Admin.Roles.Dto;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using ZLJ.App.Common.Users;
-using ZLJ.App.Admin.Authorization.Permissions;
+using ZLJ.Application.Common.Users;
+using ZLJ.Application.Admin.Authorization.Permissions;
 using ZLJ.Application.Share.Roles;
 using ZLJ.Application.Share.Authorization.Permissions;
 
-namespace ZLJ.App.Admin.Users
+namespace ZLJ.Application.Admin.Users
 {
     public class UserAppService : AsyncCrudAppService<User, UserDto, long, PagedUserResultRequestDto, CreateUserDto, EditUserDto>//, IUserAppService
     {

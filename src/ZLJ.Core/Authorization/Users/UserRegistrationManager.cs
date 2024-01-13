@@ -9,10 +9,10 @@ using Abp.Domain.Services;
 using Abp.IdentityFramework;
 using Abp.Runtime.Session;
 using Abp.UI;
-using ZLJ.Authorization.Roles;
-using ZLJ.MultiTenancy;
+using ZLJ.Core.Authorization.Roles;
+using ZLJ.Core.MultiTenancy;
 
-namespace ZLJ.Authorization.Users
+namespace ZLJ.Core.Authorization.Users
 {
     public class UserRegistrationManager : DomainService
     {

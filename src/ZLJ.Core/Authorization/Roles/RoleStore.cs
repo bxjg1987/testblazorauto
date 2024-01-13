@@ -1,9 +1,9 @@
 using Abp.Authorization.Roles;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
-using ZLJ.Authorization.Users;
+using ZLJ.Core.Authorization.Users;
 
-namespace ZLJ.Authorization.Roles
+namespace ZLJ.Core.Authorization.Roles
 {
     public class RoleStore : AbpRoleStore<Role, User>
     {

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZLJ.App.Common.Authorization.Permissions
+namespace ZLJ.Application.Common.Authorization.Permissions
 {
     public class CommonAppAuthorizationProvider : AuthorizationProvider
     {

@@ -5,7 +5,7 @@ using BXJG.Utils.Application.Share.GeneralTree;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ZLJ.App.Admin.Authorization.Permissions
+namespace ZLJ.Application.Share.Authorization.Permissions
 {
     /// <summary>
     /// 权限管理类(应用层)

@@ -6,14 +6,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ZLJ.Localization;
+using ZLJ.Core.Localization;
 
-namespace ZLJ.App.Common.Customer
+namespace ZLJ.Application.Common.Customer
 {
     /// <summary>
     /// 公共的 获取客户部门下拉框数据的 返回模型
     /// </summary>
-   // [AutoMapFrom(typeof(ZLJ.Customer.CustomerOUEntity))]
+   // [AutoMapFrom(typeof(ZLJ.Core.Customer.CustomerOUEntity))]
     public class OuDto: GeneralTreeNodeDto
     {
     }

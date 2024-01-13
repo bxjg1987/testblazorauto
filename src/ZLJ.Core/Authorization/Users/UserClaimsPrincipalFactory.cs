@@ -1,16 +1,16 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Abp.Authorization;
-using ZLJ.Authorization.Roles;
-using ZLJ.BaseInfo.StaffInfo;
+using ZLJ.Core.Authorization.Roles;
+using ZLJ.Core.BaseInfo.StaffInfo;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Linq;
 using Abp.Domain.Uow;
 using Microsoft.AspNetCore.Http;
-using ZLJ.Customer;
+using ZLJ.Core.Customer;
 
-namespace ZLJ.Authorization.Users
+namespace ZLJ.Core.Authorization.Users
 {
     public class UserClaimsPrincipalFactory : AbpUserClaimsPrincipalFactory<User, Role>
     {

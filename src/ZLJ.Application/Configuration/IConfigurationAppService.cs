@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using ZLJ.App.Admin.Configuration.Dto;
+using ZLJ.Application.Admin.Configuration.Dto;
 
-namespace ZLJ.App.Admin.Configuration
+namespace ZLJ.Application.Admin.Configuration
 {
     public interface IConfigurationAppService
     {

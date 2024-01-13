@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Abp.Application.Services;
-using ZLJ.App.Admin.Authorization.Accounts.Dto;
+using ZLJ.Application.Admin.Authorization.Accounts.Dto;
 
-namespace ZLJ.App.Admin.Authorization.Accounts
+namespace ZLJ.Application.Admin.Authorization.Accounts
 {
     public interface IAccountAppService : IApplicationService
     {

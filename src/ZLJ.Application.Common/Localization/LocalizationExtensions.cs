@@ -8,11 +8,11 @@ namespace System
     {
         //public static string Enum<TEnum>(this TEnum val) where TEnum : Enum
         //{
-        //    return LocalizationHelper.Manager.GetEnum(ZLJConsts.LocalizationSourceName, val);
+        //    return LocalizationHelper.Manager.GetEnum(ZLJ.Core.ZLJConsts.LocalizationSourceName, val);
         //}
 
-        public static ILocalizableString LICommon(this object key) => new LocalizableString(key.ToString(),ZLJ.App.Common.Consts.Common);
+        public static ILocalizableString LICommon(this object key) => new LocalizableString(key.ToString(),ZLJ.Application.Common.Consts.Common);
 
-        public static string LCommon(this object key) => LocalizationHelper.GetString(ZLJ.App.Common.Consts.Common, key.ToString());
+        public static string LCommon(this object key) => LocalizationHelper.GetString(ZLJ.Application.Common.Consts.Common, key.ToString());
     }
 }

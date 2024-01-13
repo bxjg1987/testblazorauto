@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZLJ.Customer
+namespace ZLJ.Core.Customer
 {
     public class CustomerOUManager : OrganizationUnitManager
     {

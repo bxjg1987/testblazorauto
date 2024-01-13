@@ -6,16 +6,16 @@ using Abp.Authorization;
 using Abp.Authorization.Roles;
 using Abp.Authorization.Users;
 using Abp.MultiTenancy;
-using ZLJ.Authorization;
-using ZLJ.Authorization.Roles;
-using ZLJ.Authorization.Users;
-using ZLJ.Customer;
-using ZLJ.App.Admin.Authorization.Permissions;
-using ZLJ.App.Common.Authorization;
-using ZLJ.BaseInfo.StaffInfo;
+using ZLJ.Core.Authorization;
+using ZLJ.Core.Authorization.Roles;
+using ZLJ.Core.Authorization.Users;
+using ZLJ.Core.Customer;
+using ZLJ.Application.Admin.Authorization.Permissions;
+using ZLJ.Application.Common.Authorization;
+using ZLJ.Core.BaseInfo.StaffInfo;
 using System.Collections.Generic;
 using System.Net.Mail;
-using ZLJ.BaseInfo.Post;
+using ZLJ.Core.BaseInfo.Post;
 
 namespace ZLJ.EntityFrameworkCore.Seed.Tenants
 {

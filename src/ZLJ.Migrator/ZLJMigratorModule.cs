@@ -3,7 +3,7 @@ using Castle.MicroKernel.Registration;
 using Abp.Events.Bus;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
-using ZLJ.Configuration;
+using ZLJ.Core.Configuration;
 using ZLJ.EntityFrameworkCore;
 using ZLJ.Migrator.DependencyInjection;
 
@@ -26,7 +26,7 @@ namespace ZLJ.Migrator
         public override void PreInitialize()
         {
             Configuration.DefaultNameOrConnectionString = _appConfiguration.GetConnectionString(
-                ZLJConsts.ConnectionStringName
+                ZLJ.Core.ZLJConsts.ConnectionStringName
             );
 
             Configuration.BackgroundJobs.IsJobExecutionEnabled = false;

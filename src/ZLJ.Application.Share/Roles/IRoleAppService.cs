@@ -7,7 +7,7 @@ using BXJG.Utils;
 
 using BXJG.Utils.Application.Share;
 
-namespace ZLJ.App.Admin.Roles
+namespace ZLJ.Application.Share.Roles
 {
     public interface IRoleAppService : ICrudBaseAppService <RoleDto, int, PagedAndSortedResultRequest< PagedRoleResultRequestDto>,  CreateRoleDto, RoleEditDto>
     {

@@ -1,4 +1,4 @@
-﻿namespace ZLJ.App.Admin.Auditing
+﻿namespace ZLJ.Application.Admin.Auditing
 {
     public interface INamespaceStripper
     {

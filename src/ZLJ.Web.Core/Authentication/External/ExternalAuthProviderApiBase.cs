@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Abp.Dependency;
 
-namespace ZLJ.Authentication.External
+namespace ZLJ.Web.Core.Authentication.External
 {
     public abstract class ExternalAuthProviderApiBase : IExternalAuthProviderApi, ITransientDependency
     {

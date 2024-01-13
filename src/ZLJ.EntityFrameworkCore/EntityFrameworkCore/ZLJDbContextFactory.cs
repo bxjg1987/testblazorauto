@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
-using ZLJ.Configuration;
-using ZLJ.Web;
+using ZLJ.Core;
+using ZLJ.Core.Configuration;
+using ZLJ.Core.Web;
+
 
 namespace ZLJ.EntityFrameworkCore
 {
@@ -14,7 +16,7 @@ namespace ZLJ.EntityFrameworkCore
             var builder = new DbContextOptionsBuilder<ZLJDbContext>();
             var configuration = AppConfigurations.Get(WebContentDirectoryFinder.CalculateContentRootFolder());
 
-            ZLJDbContextConfigurer.Configure(builder, configuration.GetConnectionString(ZLJConsts.ConnectionStringName));
+            ZLJDbContextConfigurer.Configure(builder, configuration.GetConnectionString(ZLJ.Core.ZLJConsts.ConnectionStringName));
 
             return new ZLJDbContext(builder.Options);
         }

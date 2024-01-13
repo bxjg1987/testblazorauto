@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZLJ.App.Admin
+namespace ZLJ.Application.Admin
 {
     public class SeleteOption
     {

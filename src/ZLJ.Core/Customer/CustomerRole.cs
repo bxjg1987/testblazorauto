@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZLJ.Customer
+namespace ZLJ.Core.Customer
 {
     /// <summary>
     /// 客户那边用户的角色（也是岗位）

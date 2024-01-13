@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZLJ.App.Common.Role
+namespace ZLJ.Application.Common.Role
 {
     public class RoleDto:EntityDto
     {

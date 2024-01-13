@@ -1,7 +1,7 @@
 ﻿using Abp.MultiTenancy;
-using ZLJ.Authorization.Users;
+using ZLJ.Core.Authorization.Users;
 
-namespace ZLJ.MultiTenancy
+namespace ZLJ.Core.MultiTenancy
 {
     public class Tenant : AbpTenant<User>
     {

@@ -10,10 +10,10 @@ using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
 using Abp.Organizations;
 using Abp.Runtime.Caching;
-using ZLJ.Authorization.Roles;
+using ZLJ.Core.Authorization.Roles;
 using System.Linq;
 
-namespace ZLJ.Authorization.Users
+namespace ZLJ.Core.Authorization.Users
 {
     public class UserManager : AbpUserManager<Role, User>
     {

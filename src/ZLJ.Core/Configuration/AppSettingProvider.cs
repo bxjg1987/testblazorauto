@@ -4,10 +4,10 @@ using Abp.Configuration;
 using BXJG.Utils.File;
 using BXJG.Utils.Localization;
 using Microsoft.Extensions.Configuration;
-using ZLJ.Localization;
+using ZLJ.Core.Localization;
 //using ZLJ.WorkOrder.Workload;
 
-namespace ZLJ.Configuration
+namespace ZLJ.Core.Configuration
 {
     public class AppSettingProvider : SettingProvider
     {
@@ -16,12 +16,12 @@ namespace ZLJ.Configuration
             var sys = new SettingDefinitionGroup(Consts.SettingKeyUploadGroup, "文件上传设置".UtilsLI());
 
             var sys2 = new SettingDefinitionGroup(
-                   ZLJConsts.DataDictionaryMigrationValueSettingGroupKey,
+                   ZLJ.Core.ZLJConsts.DataDictionaryMigrationValueSettingGroupKey,
                    "数据字典下拉值".GetLocalizableString());
             var list=new[]
             {
                 new SettingDefinition(
-                    ZLJConsts.DataDictionaryMigrationValuePrinterBrand,
+                    ZLJ.Core.ZLJConsts.DataDictionaryMigrationValuePrinterBrand,
                     "0",
                     "设备品牌数据字典Id".GetLocalizableString(),
                     sys2,
@@ -29,21 +29,21 @@ namespace ZLJ.Configuration
                     isVisibleToClients: true),
 
                 new SettingDefinition(
-                    ZLJConsts.DataDictionaryMigrationValueCustomerCategory,
+                    ZLJ.Core.ZLJConsts.DataDictionaryMigrationValueCustomerCategory,
                     "0",
                     "客户类别数据字典Id".GetLocalizableString(),
                     sys2,
                     scopes: SettingScopes.Tenant,
                     isVisibleToClients: true),
                 new SettingDefinition(
-                    ZLJConsts.DataDictionaryMigrationValueCustomerLevel,
+                    ZLJ.Core.ZLJConsts.DataDictionaryMigrationValueCustomerLevel,
                     "0",
                     "客户级别数据字典Id".GetLocalizableString(),
                     sys2,
                     scopes: SettingScopes.Tenant,
                     isVisibleToClients: true),
                 new SettingDefinition(
-                    ZLJConsts.DataDictionaryMigrationValuePost,
+                    ZLJ.Core.ZLJConsts.DataDictionaryMigrationValuePost,
                     "0",
                     "岗位字典Id".GetLocalizableString(),
                     sys2,

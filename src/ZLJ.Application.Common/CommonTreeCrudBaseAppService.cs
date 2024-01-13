@@ -2,7 +2,7 @@
 using BXJG.Utils.Application.GeneralTree;
 using BXJG.Utils.Application.Share.GeneralTree;
 
-namespace ZLJ.App.Common
+namespace ZLJ.Application.Common
 {
     /// <summary>
     /// 树形数据的crud抽象应用服务（完整）
@@ -47,16 +47,16 @@ namespace ZLJ.App.Common
 
         public CommonTreeCrudBaseAppService()
         {
-            LocalizationSourceName = App.Common.Consts.Common;
+            LocalizationSourceName = Application.Common.Consts.Common;
 
         }
         protected virtual ILocalizationSource LocalizationSourceAppCommon
         {
             get
             {
-                if (appCommonLocalizationSource == null || appCommonLocalizationSource.Name != App.Common.Consts.Common)
+                if (appCommonLocalizationSource == null || appCommonLocalizationSource.Name != Application.Common.Consts.Common)
                 {
-                    appCommonLocalizationSource = LocalizationManager.GetSource(App.Common.Consts.Common);
+                    appCommonLocalizationSource = LocalizationManager.GetSource(Application.Common.Consts.Common);
                 }
 
                 return appCommonLocalizationSource;
@@ -67,9 +67,9 @@ namespace ZLJ.App.Common
             get
             {
 
-                if (zljLocalizationSource == null || zljLocalizationSource.Name != ZLJConsts.LocalizationSourceName)
+                if (zljLocalizationSource == null || zljLocalizationSource.Name != ZLJ.Core.ZLJConsts.LocalizationSourceName)
                 {
-                    zljLocalizationSource = LocalizationManager.GetSource(ZLJConsts.LocalizationSourceName);
+                    zljLocalizationSource = LocalizationManager.GetSource(ZLJ.Core.ZLJConsts.LocalizationSourceName);
                 }
 
                 return zljLocalizationSource;

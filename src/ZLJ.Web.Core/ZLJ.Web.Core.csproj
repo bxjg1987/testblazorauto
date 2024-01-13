@@ -14,7 +14,7 @@
 		<GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
 		<GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
 		<OpenApiGenerateDocuments>false</OpenApiGenerateDocuments>
-		<RootNamespace>ZLJ</RootNamespace>
+		<RootNamespace>$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
 		<LangVersion>7.2</LangVersion>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -46,6 +46,7 @@
 		<Compile Remove="CustomTempFileManager.cs" />
 		<Compile Remove="Models\TokenAuth\AuthenticateModel.cs" />
 		<Compile Remove="Models\TokenAuth\AuthenticateResultModel.cs" />
+		<Compile Remove="TrackingCircuitHandler.cs" />
 		<Compile Remove="ZLJEquipmentNavigationProvider.cs" />
 		<Compile Remove="ZLJNavigationProvider.cs" />
 		<Compile Remove="ZLJWMSNavigationProvider.cs" />

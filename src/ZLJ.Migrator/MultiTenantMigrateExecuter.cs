@@ -10,7 +10,7 @@ using Abp.MultiTenancy;
 using Abp.Runtime.Security;
 using ZLJ.EntityFrameworkCore;
 using ZLJ.EntityFrameworkCore.Seed;
-using ZLJ.MultiTenancy;
+using ZLJ.Core.MultiTenancy;
 
 namespace ZLJ.Migrator
 {

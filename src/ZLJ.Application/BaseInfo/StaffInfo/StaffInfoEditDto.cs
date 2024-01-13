@@ -4,9 +4,10 @@ using Abp.Authorization.Users;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using ZLJ.App.Common.Users;
+using ZLJ.Application.Common.Users;
+using ZLJ.Core;
 
-namespace ZLJ.App.Admin.BaseInfo.StaffInfo
+namespace ZLJ.Application.Admin.BaseInfo.StaffInfo
 {
     public class StaffInfoEditDto : EditUserDto// EntityDto<long>
     {
@@ -23,7 +24,7 @@ namespace ZLJ.App.Admin.BaseInfo.StaffInfo
         /// <summary>
         /// 身份证
         /// </summary>
-        [StringLength(ZLJConsts.StaffInfoIdNumberMaxLength)]
+        [StringLength(ZLJ.Core.ZLJConsts.StaffInfoIdNumberMaxLength)]
         public string IdNumber { get; set; }
         /// <summary>
         /// 入职日期
@@ -37,7 +38,7 @@ namespace ZLJ.App.Admin.BaseInfo.StaffInfo
         ///// 员工编号
         ///// 暂时不要
         ///// </summary>
-        //[StringLength(ZLJConsts.StaffInfoNoMaxLength)]
+        //[StringLength(ZLJ.Core.ZLJConsts.StaffInfoNoMaxLength)]
         //public string No { get; set; }
         /// <summary>
         /// 所属区域Id
@@ -46,7 +47,7 @@ namespace ZLJ.App.Admin.BaseInfo.StaffInfo
         /// <summary>
         /// 现住地址
         /// </summary>
-        [StringLength(ZLJConsts.StaffInfoCurrentAddressMaxLength)]
+        [StringLength(ZLJ.Core.ZLJConsts.StaffInfoCurrentAddressMaxLength)]
         public string CurrentAddress { get; set; }
         #endregion
 
@@ -71,7 +72,7 @@ namespace ZLJ.App.Admin.BaseInfo.StaffInfo
         /// <summary>
         /// 身份证
         /// </summary>
-       [StringLength(ZLJConsts.StaffInfoIdNumberMaxLength)]
+       [StringLength(ZLJ.Core.ZLJConsts.StaffInfoIdNumberMaxLength)]
         public string IdNumber { get; set; }
         /// <summary>
         /// 入职日期
@@ -85,7 +86,7 @@ namespace ZLJ.App.Admin.BaseInfo.StaffInfo
         ///// 员工编号
         ///// 暂时不要
         ///// </summary>
-        //[StringLength(ZLJConsts.StaffInfoNoMaxLength)]
+        //[StringLength(ZLJ.Core.ZLJConsts.StaffInfoNoMaxLength)]
         //public string No { get; set; }
         /// <summary>
         /// 所属区域Id
@@ -94,7 +95,7 @@ namespace ZLJ.App.Admin.BaseInfo.StaffInfo
         /// <summary>
         /// 现住地址
         /// </summary>
-        [StringLength(ZLJConsts.StaffInfoCurrentAddressMaxLength)]
+        [StringLength(ZLJ.Core.ZLJConsts.StaffInfoCurrentAddressMaxLength)]
         public string CurrentAddress { get; set; }
           
         #endregion

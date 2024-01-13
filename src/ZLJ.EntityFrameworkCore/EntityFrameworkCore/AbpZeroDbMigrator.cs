@@ -4,10 +4,10 @@ using Abp.MultiTenancy;
 using Abp.Zero.EntityFrameworkCore;
 using BXJG.Utils.GeneralTree;
 
-using ZLJ.Authorization.Roles;
-using ZLJ.Authorization.Users;
+using ZLJ.Core.Authorization.Roles;
+using ZLJ.Core.Authorization.Users;
 using ZLJ.EntityFrameworkCore.Seed;
-using ZLJ.MultiTenancy;
+using ZLJ.Core.MultiTenancy;
 
 namespace ZLJ.EntityFrameworkCore
 {

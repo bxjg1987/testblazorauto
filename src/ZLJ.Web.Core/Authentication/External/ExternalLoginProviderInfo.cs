@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ZLJ.Authentication.External
+namespace ZLJ.Web.Core.Authentication.External
 {
     public class ExternalLoginProviderInfo
     {

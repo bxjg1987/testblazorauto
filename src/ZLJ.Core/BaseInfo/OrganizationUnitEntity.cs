@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ZLJ.Core.Share;
 
-namespace ZLJ.BaseInfo
+namespace ZLJ.Core.BaseInfo
 {
     public class OrganizationUnitEntity : OrganizationUnit
     {

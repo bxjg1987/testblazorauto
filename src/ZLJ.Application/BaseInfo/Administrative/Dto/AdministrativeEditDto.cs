@@ -1,9 +1,9 @@
 ﻿using BXJG.Utils.Application.Share.GeneralTree;
 using BXJG.Utils.GeneralTree;
-using ZLJ.App.Admin.BaseInfo.Administrative;
-using ZLJ.BaseInfo.Administrative;
+using ZLJ.Application.Admin.BaseInfo.Administrative;
+using ZLJ.Core.BaseInfo.Administrative;
 
-namespace ZLJ.App.Admin.BaseInfo.Administrative.Dto
+namespace ZLJ.Application.Admin.BaseInfo.Administrative.Dto
 {
     public class AdministrativeEditDto : GeneralTreeNodeEditBaseDto
     {

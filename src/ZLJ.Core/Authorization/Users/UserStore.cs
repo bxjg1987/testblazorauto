@@ -8,9 +8,9 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
-using ZLJ.Authorization.Roles;
+using ZLJ.Core.Authorization.Roles;
 
-namespace ZLJ.Authorization.Users
+namespace ZLJ.Core.Authorization.Users
 {
     public class UserStore : AbpUserStore<Role, User>
     {

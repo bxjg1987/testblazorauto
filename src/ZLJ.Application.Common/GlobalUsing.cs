@@ -14,7 +14,7 @@ global using BXJG.Utils.Extensions;
 global using BXJG.Utils.Localization;
 global using Abp.Application.Services.Dto;
 global using Abp.Domain.Repositories;
-global using ZLJ.Authorization;
+global using ZLJ.Core.Authorization;
 global using Abp.Extensions;
 global using Abp.Linq.Extensions;
 global using Abp.Timing;

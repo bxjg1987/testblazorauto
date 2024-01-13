@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using ZLJ.Core.Configuration;
 
-namespace ZLJ.Configuration
+namespace ZLJ.Web.Core.Configuration
 {
     public static class HostingEnvironmentExtensions
     {

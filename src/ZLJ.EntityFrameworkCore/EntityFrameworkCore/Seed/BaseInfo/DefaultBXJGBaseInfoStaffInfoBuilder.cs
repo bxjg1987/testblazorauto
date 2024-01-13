@@ -6,12 +6,12 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using BXJG.Utils.GeneralTree;
 using BXJG.Utils.File;
-using ZLJ.BaseInfo.StaffInfo;
+using ZLJ.Core.BaseInfo.StaffInfo;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
-using ZLJ.Authorization.Users;
-using ZLJ.BaseInfo.Post;
-using ZLJ.Authorization.Roles;
+using ZLJ.Core.Authorization.Users;
+using ZLJ.Core.BaseInfo.Post;
+using ZLJ.Core.Authorization.Roles;
 
 namespace ZLJ.EntityFrameworkCore.EntityFrameworkCore.Seed.BaseInfo
 {

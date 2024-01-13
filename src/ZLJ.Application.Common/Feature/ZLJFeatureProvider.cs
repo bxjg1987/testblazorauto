@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZLJ.App.Common.Feature
+namespace ZLJ.Application.Common.Feature
 {
     public class ZLJFeatureProvider : FeatureProvider
     {

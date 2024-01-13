@@ -33,13 +33,13 @@ namespace ZLJ.EntityFrameworkCore.EntityFrameworkCore.Seed.BaseInfo
             var items = new List<Tuple<string, List<string>, string>>
             {
                 new("设备品牌", new List<string> {"夏普", "施乐", "爱普生", "理光",},
-                    ZLJConsts.DataDictionaryMigrationValuePrinterBrand),
+                    ZLJ.Core.ZLJConsts.DataDictionaryMigrationValuePrinterBrand),
                 new("客户类别", new List<string> { "供应商及客户","供应商", "客户",  },
-                    ZLJConsts.DataDictionaryMigrationValueCustomerCategory),
+                    ZLJ.Core.ZLJConsts.DataDictionaryMigrationValueCustomerCategory),
                 new("客户级别", new List<string> {"A级", "B级", "C级",},
-                    ZLJConsts.DataDictionaryMigrationValueCustomerLevel),
+                    ZLJ.Core.ZLJConsts.DataDictionaryMigrationValueCustomerLevel),
                 new("岗位", new List<string> {"维修人员", "售后", "库管",},
-                    ZLJConsts.DataDictionaryMigrationValuePost),
+                    ZLJ.Core.ZLJConsts.DataDictionaryMigrationValuePost),
             };
 
             foreach (var itemConfig in items)

@@ -11,17 +11,18 @@ using Abp.Authorization.Users;
 using Abp.MultiTenancy;
 using Abp.Runtime.Security;
 using Abp.UI;
-using ZLJ.Authentication.External;
-using ZLJ.Authentication.JwtBearer;
-using ZLJ.Authorization;
-using ZLJ.Authorization.Users;
-using ZLJ.Models.TokenAuth;
-using ZLJ.MultiTenancy;
+
+using ZLJ.Core.Authorization;
+using ZLJ.Core.Authorization.Users;
+using ZLJ.Core.MultiTenancy;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Cryptography;
-using ZLJ.App.Admin.Authorization;
-using ZLJ.App.Admin;
+using ZLJ.Application.Admin.Authorization;
+using ZLJ.Application.Admin;
 using ZLJ.Application.Common.Share.Models.TokenAuth;
+using ZLJ.Web.Core.Models.TokenAuth;
+using ZLJ.Web.Core.Authentication.External;
+using ZLJ.Web.Core.Authentication.JwtBearer;
 
 namespace ZLJ.Controllers
 {
@@ -232,7 +233,7 @@ namespace ZLJ.Controllers
                 externalUser.Surname,
                 externalUser.EmailAddress,
                 externalUser.EmailAddress,
-                Authorization.Users.User.CreateRandomPassword(),
+              ZLJ.Core.  Authorization.Users.User.CreateRandomPassword(),
                 true
             );
 

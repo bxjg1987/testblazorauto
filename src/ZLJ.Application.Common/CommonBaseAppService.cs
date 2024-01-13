@@ -10,10 +10,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ZLJ.Authorization.Users;
-using ZLJ.MultiTenancy;
+using ZLJ.Core.Authorization.Users;
+using ZLJ.Core.MultiTenancy;
 
-namespace ZLJ.App.Common
+namespace ZLJ.Application.Common
 {
     /// <summary>
     /// 非常curd类型的应用服务基类
@@ -28,7 +28,7 @@ namespace ZLJ.App.Common
         //public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }//属性注入
         protected CommonBaseAppService()
         {
-            LocalizationSourceName = App.Common.Consts.Common;
+            LocalizationSourceName = Application.Common.Consts.Common;
             AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
         }
 
@@ -61,9 +61,9 @@ namespace ZLJ.App.Common
         {
             get
             {
-                if (appCommonLocalizationSource == null || appCommonLocalizationSource.Name != App.Common.Consts.Common)
+                if (appCommonLocalizationSource == null || appCommonLocalizationSource.Name != Application.Common.Consts.Common)
                 {
-                    appCommonLocalizationSource = LocalizationManager.GetSource(App.Common.Consts.Common);
+                    appCommonLocalizationSource = LocalizationManager.GetSource(Application.Common.Consts.Common);
                 }
 
                 return appCommonLocalizationSource;
@@ -74,9 +74,9 @@ namespace ZLJ.App.Common
             get
             {
 
-                if (zljLocalizationSource == null || zljLocalizationSource.Name != ZLJConsts.LocalizationSourceName)
+                if (zljLocalizationSource == null || zljLocalizationSource.Name != ZLJ.Core.ZLJConsts.LocalizationSourceName)
                 {
-                    zljLocalizationSource = LocalizationManager.GetSource(ZLJConsts.LocalizationSourceName);
+                    zljLocalizationSource = LocalizationManager.GetSource(ZLJ.Core.ZLJConsts.LocalizationSourceName);
                 }
 
                 return zljLocalizationSource;

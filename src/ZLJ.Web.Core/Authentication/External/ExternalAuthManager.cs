@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Abp.Dependency;
 
-namespace ZLJ.Authentication.External
+namespace ZLJ.Web.Core.Authentication.External
 {
     public class ExternalAuthManager : IExternalAuthManager, ITransientDependency
     {

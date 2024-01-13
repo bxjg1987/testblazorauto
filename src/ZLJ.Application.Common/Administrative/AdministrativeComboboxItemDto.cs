@@ -6,9 +6,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ZLJ.BaseInfo.Administrative;
+using ZLJ.Core.BaseInfo.Administrative;
 
-namespace ZLJ.App.Common.Administrative
+namespace ZLJ.Application.Common.Administrative
 {
     /// <summary>
     /// 工单类别下拉框数据源显示模型

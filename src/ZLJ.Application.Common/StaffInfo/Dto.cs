@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZLJ.App.Common.StaffInfo
+namespace ZLJ.Application.Common.StaffInfo
 {
     /// <summary>
     /// 员工信息的显示模型

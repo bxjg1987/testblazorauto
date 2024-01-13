@@ -1,10 +1,10 @@
-﻿using ZLJ.Localization;
+﻿using ZLJ.Core.Localization;
 using BXJG.Utils.GeneralTree;
-using ZLJ.App.Admin.BaseInfo.Administrative;
-using ZLJ.BaseInfo.Administrative;
+using ZLJ.Application.Admin.BaseInfo.Administrative;
+using ZLJ.Core.BaseInfo.Administrative;
 using BXJG.Utils.Application.Share.GeneralTree;
 
-namespace ZLJ.App.Admin.BaseInfo.Administrative.Dto
+namespace ZLJ.Application.Admin.BaseInfo.Administrative.Dto
 {
     /// <summary>
     /// 行政区域后台管理 列表页的显示模型

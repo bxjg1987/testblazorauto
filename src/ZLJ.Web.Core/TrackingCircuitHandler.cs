@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ZLJ
+namespace ZLJ.Web.Core
 {
     //public class TrackingCircuitEventData : Abp.Events.Bus.EventData
     //{

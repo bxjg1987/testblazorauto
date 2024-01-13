@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace ZLJ.Authentication.External
+namespace ZLJ.Web.Core.Authentication.External
 {
     public interface IExternalAuthManager
     {

@@ -1,4 +1,4 @@
-namespace ZLJ.Authorization.Roles
+namespace ZLJ.Core.Authorization.Roles
 {
     public static class StaticRoleNames
     {

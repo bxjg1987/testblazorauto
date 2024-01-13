@@ -1,8 +1,8 @@
 ﻿using Abp.MultiTenancy;
 using Abp.Zero.Configuration;
-using ZLJ.Customer;
+using ZLJ.Core.Customer;
 
-namespace ZLJ.Authorization.Roles
+namespace ZLJ.Core.Authorization.Roles
 {
     public static class AppRoleConfig
     {

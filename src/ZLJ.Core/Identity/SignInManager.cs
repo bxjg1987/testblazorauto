@@ -7,11 +7,11 @@ using Abp.Authorization;
 using Abp.Authorization.Users;
 using Abp.Configuration;
 using Abp.Domain.Uow;
-using ZLJ.Authorization.Roles;
-using ZLJ.Authorization.Users;
-using ZLJ.MultiTenancy;
+using ZLJ.Core.Authorization.Roles;
+using ZLJ.Core.Authorization.Users;
+using ZLJ.Core.MultiTenancy;
 
-namespace ZLJ.Identity
+namespace ZLJ.Core.Identity
 {
     public class SignInManager : AbpSignInManager<Tenant, Role, User>
     {

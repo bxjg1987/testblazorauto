@@ -9,13 +9,13 @@ using Microsoft.IdentityModel.Tokens;
 using Abp.Runtime.Security;
 //using BXJG.WeChat.MiniProgram;
 using Microsoft.AspNetCore.Authentication;
-using ZLJ.App.Admin;
+using ZLJ.Application.Admin;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using ZLJ.App.Common;
+using ZLJ.Application.Common;
 using Azure.Core;
 using Microsoft.Net.Http.Headers;
-//using ZLJ.Authentication.WeChatMiniProgram;
+//using ZLJ.Core.Authentication.WeChatMiniProgram;
 
 namespace ZLJ.Web.Host.Startup
 {

@@ -2,12 +2,12 @@ using System.Linq;
 using AutoMapper;
 using Abp.Authorization;
 using Abp.Authorization.Roles;
-using ZLJ.Authorization.Roles;
-using ZLJ.BaseInfo.Post;
+using ZLJ.Core.Authorization.Roles;
+using ZLJ.Core.BaseInfo.Post;
 using ZLJ.Application.Share.Post;
 using ZLJ.Application.Share.Roles;
 
-namespace ZLJ.App.Admin.Post.Dto
+namespace ZLJ.Application.Admin.Post.Dto
 {
     public class PostMapProfile : Profile
     {

@@ -1,4 +1,4 @@
-﻿namespace ZLJ.App.Admin
+﻿namespace ZLJ.Application.Admin
 {
     public class AdminConsts
     {

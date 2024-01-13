@@ -1,23 +1,23 @@
 using AutoMapper;
-using ZLJ.BaseInfo.AssociatedCompany;
+using ZLJ.Core.BaseInfo.AssociatedCompany;
 using Abp.Organizations;
-using ZLJ.App.Common.OU;
-using ZLJ.BaseInfo;
-using ZLJ.BaseInfo.Post;
-using ZLJ.App.Common.Post;
-using ZLJ.App.Common.Role;
-using ZLJ.BaseInfo.StaffInfo;
+using ZLJ.Application.Common.OU;
+using ZLJ.Core.BaseInfo;
+using ZLJ.Core.BaseInfo.Post;
+using ZLJ.Application.Common.Post;
+using ZLJ.Application.Common.Role;
+using ZLJ.Core.BaseInfo.StaffInfo;
 using BXJG.Utils.Localization;
 using Abp.Extensions;
 using Abp.Dependency;
-using ZLJ.App.Common.Administrative;
-using ZLJ.BaseInfo.Administrative;
+using ZLJ.Application.Common.Administrative;
+using ZLJ.Core.BaseInfo.Administrative;
 using ZLJ.Application.Common.Share.OU;
-using ZLJ.MultiTenancy;
+using ZLJ.Core.MultiTenancy;
 using ZLJ.Application.Common.Share.Session;
-using ZLJ.Authorization.Users;
+using ZLJ.Core.Authorization.Users;
 
-namespace ZLJ.App.Common
+namespace ZLJ.Application.Common
 {
     public partial class AutoMapperProfile : Profile
     {
@@ -25,13 +25,13 @@ namespace ZLJ.App.Common
         {
 
             //角色
-            CreateMap<ZLJ.Authorization.Roles.Role, RoleDto>();
+            CreateMap<ZLJ.Core.Authorization.Roles.Role, RoleDto>();
             //岗位
-            CreateMap<PostEntity, PostDto>().IncludeBase<ZLJ.Authorization.Roles.Role, RoleDto>();
+            CreateMap<PostEntity, PostDto>().IncludeBase<ZLJ.Core.Authorization.Roles.Role, RoleDto>();
             //员工
-            CreateMap<StaffInfoEntity, ZLJ.App.Common.StaffInfo.Dto>();//.ForMember(c=>c.GenderText,c=>c.MapFrom(d=>d.Gender.ToLocalizationString()));
+            CreateMap<StaffInfoEntity, ZLJ.Application.Common.StaffInfo.Dto>();//.ForMember(c=>c.GenderText,c=>c.MapFrom(d=>d.Gender.ToLocalizationString()));
 
-            CreateMap<AssociatedCompanyEntity, ZLJ.App.Common.AssociatedCompany.Dto>()
+            CreateMap<AssociatedCompanyEntity, ZLJ.Application.Common.AssociatedCompany.Dto>()
                 .ForMember(x => x.Value, o => o.MapFrom(m => m.Id.ToString()))
                 .ForMember(x => x.DisplayText, o => o.MapFrom(m => m.Name));
 
@@ -45,7 +45,7 @@ namespace ZLJ.App.Common
 
             CreateMap<AdministrativeEntity, AdministrativeTreeNodeDto>().EntityToComboTree();
             CreateMap<AdministrativeEntity, AdministrativeComboboxItemDto>().EntityToCombobox();
-            CreateMap<ZLJ.Customer.CustomerOUEntity, Customer.OuDto>().ForMember(c=>c.Text,c=>c.MapFrom(d=>d.DisplayName));
+            CreateMap<ZLJ.Core.Customer.CustomerOUEntity, Customer.OuDto>().ForMember(c=>c.Text,c=>c.MapFrom(d=>d.DisplayName));
 
             CreateMap<Tenant, TenantLoginInfoDto>();
             CreateMap<User, UserLoginInfoDto>();

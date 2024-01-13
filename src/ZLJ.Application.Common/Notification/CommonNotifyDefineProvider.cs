@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace ZLJ.App.Common.Notification
+namespace ZLJ.Application.Common.Notification
 {
     /// <summary>
     /// 整个系统公用的通知定义，各app可以自己定义自己的

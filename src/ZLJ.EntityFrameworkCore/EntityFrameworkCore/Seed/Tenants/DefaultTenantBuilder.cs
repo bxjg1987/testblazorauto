@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Abp.MultiTenancy;
-using ZLJ.Editions;
-using ZLJ.MultiTenancy;
+using ZLJ.Core.Editions;
+using ZLJ.Core.MultiTenancy;
 
 namespace ZLJ.EntityFrameworkCore.Seed.Tenants
 {

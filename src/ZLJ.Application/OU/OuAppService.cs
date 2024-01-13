@@ -13,12 +13,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ZLJ.App.Admin.Authorization.Permissions;
-using ZLJ.App.Admin.BaseInfo;
+using ZLJ.Application.Admin.Authorization.Permissions;
+using ZLJ.Application.Admin.BaseInfo;
 using ZLJ.Application.Share.Authorization.Permissions;
-using ZLJ.BaseInfo;
+using ZLJ.Core.BaseInfo;
 
-namespace ZLJ.App.Admin.OU
+namespace ZLJ.Application.Admin.OU
 {
     [AbpAuthorize(PermissionNames.AdministratorBaseInfoOrganizationUnit)]
     public class OuAppService : ApplicationService//<OrganizationUnit, OUDto, long, GetAllInput, OUEditDto>
@@ -27,7 +27,7 @@ namespace ZLJ.App.Admin.OU
         IRepository<OrganizationUnit, long> repository;
         public OuAppService(IRepository<OrganizationUnit, long> repository, OrganizationUnitManager organizationUnitManager)// : base(repository)
         {
-            LocalizationSourceName = ZLJConsts.LocalizationSourceName;
+            LocalizationSourceName = ZLJ.Core.ZLJConsts.LocalizationSourceName;
             this.repository = repository;
             this.organizationUnitManager = organizationUnitManager;
         }

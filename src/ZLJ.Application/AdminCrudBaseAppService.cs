@@ -12,10 +12,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using ZLJ.Authorization.Users;
-using ZLJ.MultiTenancy;
+using ZLJ.Core.Authorization.Users;
+using ZLJ.Core.MultiTenancy;
 
-namespace ZLJ.App.Admin
+namespace ZLJ.Application.Admin
 {
     /// <summary>
     /// 后台管理 扁平化数据的crud应用服务基类，继承它以简化扁平化数据crud应用服务的开发

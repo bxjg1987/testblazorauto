@@ -1,6 +1,6 @@
 ﻿using Abp.Application.Services.Dto;
 
-namespace ZLJ.App.Admin.BaseInfo.Dto.ConsumeMachine
+namespace ZLJ.Application.Admin.BaseInfo.Dto.ConsumeMachine
 {
     public class ConsumeMachineDTO : FullAuditedEntityDto<long>
     {

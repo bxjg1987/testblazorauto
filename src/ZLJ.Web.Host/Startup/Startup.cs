@@ -2,8 +2,8 @@
 using Abp.AspNetCore;
 using Abp.AspNetCore.Mvc.Antiforgery;
 using Abp.Castle.Logging.Log4Net;
-using ZLJ.Configuration;
-using ZLJ.Identity;
+using ZLJ.Core.Configuration;
+using ZLJ.Core.Identity;
 using Abp.AspNetCore.SignalR.Hubs;
 using Abp.Json;
 using Microsoft.OpenApi.Models;
@@ -13,7 +13,7 @@ using Hangfire.SqlServer;
 using Abp.Hangfire;
 //using BXJG.WorkOrder.EmployeeApplication;
 //using ZLJ.App.Employee;
-using ZLJ.App.Admin;
+using ZLJ.Application.Admin;
 using ZLJ.EntityFrameworkCore;
 //using Orleans.Configuration;
 //using Orleans.Hosting;
@@ -21,7 +21,7 @@ using ZLJ.EntityFrameworkCore;
 using Microsoft.AspNetCore.Components.Server.Circuits;
 using Microsoft.Extensions.DependencyInjection;
 //using Savorboard.CAP.InMemoryMessageQueue;
-using ZLJ.App.Admin.Authorization.Permissions;
+using ZLJ.Application.Admin.Authorization.Permissions;
 using Medallion.Threading;
 //using AntDesign.ProLayout;
 //using ZLJ.Web.Host.Shared;
@@ -33,6 +33,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authentication;
 using ZLJ.Application.Share.Authorization.Permissions;
 using BXJG.Utils.Application;
+using ZLJ.Web.Core.Configuration;
 
 namespace ZLJ.Web.Host.Startup
 {
@@ -73,7 +74,7 @@ namespace ZLJ.Web.Host.Startup
 
         public void ConfigureServices(IServiceCollection services)
         {
-            string defaultConnectionString = _appConfiguration.GetConnectionString(ZLJConsts.ConnectionStringName)!;
+            string defaultConnectionString = _appConfiguration.GetConnectionString(ZLJ.Core.ZLJConsts.ConnectionStringName)!;
             //services.AddLettuceEncrypt();
             //MVC
             var mvcBuilder = services.AddControllersWithViews(

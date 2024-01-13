@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ZLJ.Customer;
+using ZLJ.Core.Customer;
 using Abp.Authorization.Users;
 using Abp.Organizations;
 
@@ -33,8 +33,8 @@ namespace ZLJ.EntityFrameworkCore.EntityFrameworkCore.EFMap.Customer
     //    public void Configure(EntityTypeBuilder<PaperUseReportEquipmentInstanceEntity> builder)
     //    {
     //        builder.ToTable("cust_report_pu_equipment");
-    //        builder.Property(c => c.ClsId).HasMaxLength(ZLJConsts.EquipmentInstanceMachineNoMaxLength);
-    //        builder.Property(c => c.ClsName).HasMaxLength(ZLJConsts.EquipmentInfoNameMaxLength);
+    //        builder.Property(c => c.ClsId).HasMaxLength(ZLJ.Core.ZLJConsts.EquipmentInstanceMachineNoMaxLength);
+    //        builder.Property(c => c.ClsName).HasMaxLength(ZLJ.Core.ZLJConsts.EquipmentInfoNameMaxLength);
     //    }
     //}
 }

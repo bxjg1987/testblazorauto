@@ -1,30 +1,30 @@
 using AutoMapper;
 using BXJG.Utils.GeneralTree;
 using Abp.Application.Services.Dto;
-using ZLJ.App.Admin.BaseInfo.AssociatedCompany;
-using ZLJ.App.Admin.BaseInfo.AssociatedCompany.Dto;
-using ZLJ.App.Admin.BaseInfo.StaffInfo;
-using ZLJ.App.Admin.BaseInfo.Administrative.Dto;
-using ZLJ.App.Admin.BaseInfo.Administrative;
+using ZLJ.Application.Admin.BaseInfo.AssociatedCompany;
+using ZLJ.Application.Admin.BaseInfo.AssociatedCompany.Dto;
+using ZLJ.Application.Admin.BaseInfo.StaffInfo;
+using ZLJ.Application.Admin.BaseInfo.Administrative.Dto;
+using ZLJ.Application.Admin.BaseInfo.Administrative;
 //using ZLJ.WorkOrder.RentOrderItemWorkOrder;
-using ZLJ.Authorization.Roles;
-using ZLJ.App.Admin.Roles.Dto;
+using ZLJ.Core.Authorization.Roles;
+using ZLJ.Application.Admin.Roles.Dto;
 using Newtonsoft.Json;
 //using ZLJ.Rent.Redeliveries;
 //using ZLJ.Rent.Redeliveries.Dto;
-//using ZLJ.App.Admin.WorkOrder.Workload.Dto;
+//using ZLJ.Application.Admin.WorkOrder.Workload.Dto;
 //using ZLJ.WorkOrder.Workload;
-//using ZLJ.App.Admin.WorkOrder.Workload.WorkloadRecord.Dto;
-using ZLJ.App.Common.Administrative;
-using ZLJ.Authorization.Users;
-using ZLJ.BaseInfo.Administrative;
-using ZLJ.BaseInfo.AssociatedCompany;
-using ZLJ.App.Common.Users;
+//using ZLJ.Application.Admin.WorkOrder.Workload.WorkloadRecord.Dto;
+using ZLJ.Application.Common.Administrative;
+using ZLJ.Core.Authorization.Users;
+using ZLJ.Core.BaseInfo.Administrative;
+using ZLJ.Core.BaseInfo.AssociatedCompany;
+using ZLJ.Application.Common.Users;
 using Abp.Auditing;
 using ZLJ.Application.Share.Auditing;
 using ZLJ.Application.Share.Roles;
 
-namespace ZLJ.App.Admin
+namespace ZLJ.Application.Admin
 {
     /// <summary>
     /// 统一的automapper映射文件
@@ -55,7 +55,7 @@ namespace ZLJ.App.Admin
                                                           //.ForMember(c => c.AgeString, c => c.Ignore())
                                                           .ForMember(c => c.AgeYears, c => c.Ignore())
                                                           .IncludeBase<CreateUserDto, User>();
-            CreateMap<CreateUserDto, ZLJ.Authorization.Users.User>()
+            CreateMap<CreateUserDto, ZLJ.Core.Authorization.Users.User>()
                 //.ForMember(c => c.Id, c => c.MapFrom(d => d.UserId))
                 .ForMember(c => c.Password, c => c.Ignore())
                 //.ForMember(c => c.Name, c => c.MapFrom(d => d.Name))
@@ -68,7 +68,7 @@ namespace ZLJ.App.Admin
                                                           //.ForMember(c => c.AgeString, c => c.Ignore())
                                                           .ForMember(c => c.AgeYears, c => c.Ignore())
                                                           .IncludeBase<EditUserDto, User>();
-            CreateMap<EditUserDto, ZLJ.Authorization.Users.User>()
+            CreateMap<EditUserDto, ZLJ.Core.Authorization.Users.User>()
                 //.ForMember(c => c.Id, c => c.MapFrom(d => d.UserId))
                 .ForMember(c => c.Password, c => c.Ignore())
                 //.ForMember(c => c.Name, c => c.MapFrom(d => d.Name))

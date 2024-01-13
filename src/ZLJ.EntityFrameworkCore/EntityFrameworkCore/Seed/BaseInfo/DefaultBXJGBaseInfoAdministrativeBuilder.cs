@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ZLJ.BaseInfo.Administrative;
+using ZLJ.Core.BaseInfo.Administrative;
 
 namespace ZLJ.EntityFrameworkCore.EntityFrameworkCore.Seed.BaseInfo
 {

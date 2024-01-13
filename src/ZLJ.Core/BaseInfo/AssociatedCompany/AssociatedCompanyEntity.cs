@@ -1,10 +1,10 @@
 using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
 using BXJG.Utils.GeneralTree;
-using ZLJ.BaseInfo.Administrative;
-using ZLJ.Customer;
+using ZLJ.Core.BaseInfo.Administrative;
+using ZLJ.Core.Customer;
 
-namespace ZLJ.BaseInfo.AssociatedCompany
+namespace ZLJ.Core.BaseInfo.AssociatedCompany
 {
     /// <summary>
     /// 来往单位

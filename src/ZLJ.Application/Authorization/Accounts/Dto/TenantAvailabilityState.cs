@@ -1,4 +1,4 @@
-﻿namespace ZLJ.App.Admin.Authorization.Accounts.Dto
+﻿namespace ZLJ.Application.Admin.Authorization.Accounts.Dto
 {
     [Flags]
     public enum TenantAvailabilityState

@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ZLJ.BaseInfo;
-using ZLJ.BaseInfo.Post;
-using ZLJ.BaseInfo.StaffInfo;
+using ZLJ.Core.BaseInfo;
+using ZLJ.Core.BaseInfo.Post;
+using ZLJ.Core.BaseInfo.StaffInfo;
 
-namespace ZLJ.App.Common.StaffInfo
+namespace ZLJ.Application.Common.StaffInfo
 {
     public class QueryTemp
     {

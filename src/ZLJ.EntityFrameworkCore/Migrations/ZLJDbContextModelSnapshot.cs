@@ -1489,7 +1489,7 @@ namespace ZLJ.EntityFrameworkCore.Migrations
                     b.ToTable("BXJGGeneralTrees");
                 });
 
-            modelBuilder.Entity("ZLJ.Authorization.Roles.Role", b =>
+            modelBuilder.Entity("ZLJ.Core.Authorization.Roles.Role", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1573,7 +1573,7 @@ namespace ZLJ.EntityFrameworkCore.Migrations
                     b.UseTphMappingStrategy();
                 });
 
-            modelBuilder.Entity("ZLJ.Authorization.Users.User", b =>
+            modelBuilder.Entity("ZLJ.Core.Authorization.Users.User", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -1999,7 +1999,7 @@ namespace ZLJ.EntityFrameworkCore.Migrations
                     b.HasDiscriminator().HasValue("OrganizationUnitEntity");
                 });
 
-            modelBuilder.Entity("ZLJ.Customer.CustomerOUEntity", b =>
+            modelBuilder.Entity("ZLJ.Core.Customer.CustomerOUEntity", b =>
                 {
                     b.HasBaseType("Abp.Organizations.OrganizationUnit");
 
@@ -2018,16 +2018,16 @@ namespace ZLJ.EntityFrameworkCore.Migrations
 
             modelBuilder.Entity("ZLJ.BaseInfo.Post.PostEntity", b =>
                 {
-                    b.HasBaseType("ZLJ.Authorization.Roles.Role");
+                    b.HasBaseType("ZLJ.Core.Authorization.Roles.Role");
 
                     b.ToTable("AbpRoles");
 
                     b.HasDiscriminator().HasValue("PostEntity");
                 });
 
-            modelBuilder.Entity("ZLJ.Customer.CustomerRole", b =>
+            modelBuilder.Entity("ZLJ.Core.Customer.CustomerRole", b =>
                 {
-                    b.HasBaseType("ZLJ.Authorization.Roles.Role");
+                    b.HasBaseType("ZLJ.Core.Authorization.Roles.Role");
 
                     b.ToTable("AbpRoles", t =>
                         {
@@ -2039,7 +2039,7 @@ namespace ZLJ.EntityFrameworkCore.Migrations
 
             modelBuilder.Entity("ZLJ.BaseInfo.StaffInfo.StaffInfoEntity", b =>
                 {
-                    b.HasBaseType("ZLJ.Authorization.Users.User");
+                    b.HasBaseType("ZLJ.Core.Authorization.Users.User");
 
                     b.Property<int?>("AgeDays")
                         .HasColumnType("int");
@@ -2091,9 +2091,9 @@ namespace ZLJ.EntityFrameworkCore.Migrations
                     b.HasDiscriminator().HasValue("StaffInfoEntity");
                 });
 
-            modelBuilder.Entity("ZLJ.Customer.CustomerStaffInfoEntity", b =>
+            modelBuilder.Entity("ZLJ.Core.Customer.CustomerStaffInfoEntity", b =>
                 {
-                    b.HasBaseType("ZLJ.Authorization.Users.User");
+                    b.HasBaseType("ZLJ.Core.Authorization.Users.User");
 
                     b.Property<long?>("AssociatedCompanyEntityId")
                         .HasColumnType("bigint");
@@ -2125,7 +2125,7 @@ namespace ZLJ.EntityFrameworkCore.Migrations
 
             modelBuilder.Entity("Abp.Authorization.Roles.RoleClaim", b =>
                 {
-                    b.HasOne("ZLJ.Authorization.Roles.Role", null)
+                    b.HasOne("ZLJ.Core.Authorization.Roles.Role", null)
                         .WithMany("Claims")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2134,7 +2134,7 @@ namespace ZLJ.EntityFrameworkCore.Migrations
 
             modelBuilder.Entity("Abp.Authorization.Users.UserClaim", b =>
                 {
-                    b.HasOne("ZLJ.Authorization.Users.User", null)
+                    b.HasOne("ZLJ.Core.Authorization.Users.User", null)
                         .WithMany("Claims")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2143,7 +2143,7 @@ namespace ZLJ.EntityFrameworkCore.Migrations
 
             modelBuilder.Entity("Abp.Authorization.Users.UserLogin", b =>
                 {
-                    b.HasOne("ZLJ.Authorization.Users.User", null)
+                    b.HasOne("ZLJ.Core.Authorization.Users.User", null)
                         .WithMany("Logins")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2152,7 +2152,7 @@ namespace ZLJ.EntityFrameworkCore.Migrations
 
             modelBuilder.Entity("Abp.Authorization.Users.UserOrganizationUnit", b =>
                 {
-                    b.HasOne("ZLJ.Authorization.Users.User", null)
+                    b.HasOne("ZLJ.Core.Authorization.Users.User", null)
                         .WithMany("OrganizationUnits")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2161,7 +2161,7 @@ namespace ZLJ.EntityFrameworkCore.Migrations
 
             modelBuilder.Entity("Abp.Authorization.Users.UserRole", b =>
                 {
-                    b.HasOne("ZLJ.Authorization.Users.User", null)
+                    b.HasOne("ZLJ.Core.Authorization.Users.User", null)
                         .WithMany("Roles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2170,7 +2170,7 @@ namespace ZLJ.EntityFrameworkCore.Migrations
 
             modelBuilder.Entity("Abp.Authorization.Users.UserToken", b =>
                 {
-                    b.HasOne("ZLJ.Authorization.Users.User", null)
+                    b.HasOne("ZLJ.Core.Authorization.Users.User", null)
                         .WithMany("Tokens")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2179,7 +2179,7 @@ namespace ZLJ.EntityFrameworkCore.Migrations
 
             modelBuilder.Entity("Abp.Configuration.Setting", b =>
                 {
-                    b.HasOne("ZLJ.Authorization.Users.User", null)
+                    b.HasOne("ZLJ.Core.Authorization.Users.User", null)
                         .WithMany("Settings")
                         .HasForeignKey("UserId");
                 });
@@ -2264,17 +2264,17 @@ namespace ZLJ.EntityFrameworkCore.Migrations
                     b.Navigation("Parent");
                 });
 
-            modelBuilder.Entity("ZLJ.Authorization.Roles.Role", b =>
+            modelBuilder.Entity("ZLJ.Core.Authorization.Roles.Role", b =>
                 {
-                    b.HasOne("ZLJ.Authorization.Users.User", "CreatorUser")
+                    b.HasOne("ZLJ.Core.Authorization.Users.User", "CreatorUser")
                         .WithMany()
                         .HasForeignKey("CreatorUserId");
 
-                    b.HasOne("ZLJ.Authorization.Users.User", "DeleterUser")
+                    b.HasOne("ZLJ.Core.Authorization.Users.User", "DeleterUser")
                         .WithMany()
                         .HasForeignKey("DeleterUserId");
 
-                    b.HasOne("ZLJ.Authorization.Users.User", "LastModifierUser")
+                    b.HasOne("ZLJ.Core.Authorization.Users.User", "LastModifierUser")
                         .WithMany()
                         .HasForeignKey("LastModifierUserId");
 
@@ -2285,17 +2285,17 @@ namespace ZLJ.EntityFrameworkCore.Migrations
                     b.Navigation("LastModifierUser");
                 });
 
-            modelBuilder.Entity("ZLJ.Authorization.Users.User", b =>
+            modelBuilder.Entity("ZLJ.Core.Authorization.Users.User", b =>
                 {
-                    b.HasOne("ZLJ.Authorization.Users.User", "CreatorUser")
+                    b.HasOne("ZLJ.Core.Authorization.Users.User", "CreatorUser")
                         .WithMany()
                         .HasForeignKey("CreatorUserId");
 
-                    b.HasOne("ZLJ.Authorization.Users.User", "DeleterUser")
+                    b.HasOne("ZLJ.Core.Authorization.Users.User", "DeleterUser")
                         .WithMany()
                         .HasForeignKey("DeleterUserId");
 
-                    b.HasOne("ZLJ.Authorization.Users.User", "LastModifierUser")
+                    b.HasOne("ZLJ.Core.Authorization.Users.User", "LastModifierUser")
                         .WithMany()
                         .HasForeignKey("LastModifierUserId");
 
@@ -2317,7 +2317,7 @@ namespace ZLJ.EntityFrameworkCore.Migrations
 
             modelBuilder.Entity("ZLJ.BaseInfo.AssociatedCompany.AssociatedCompanyEntity", b =>
                 {
-                    b.HasOne("ZLJ.Customer.CustomerStaffInfoEntity", "Admin")
+                    b.HasOne("ZLJ.Core.Customer.CustomerStaffInfoEntity", "Admin")
                         .WithMany()
                         .HasForeignKey("AdminId");
 
@@ -2344,11 +2344,11 @@ namespace ZLJ.EntityFrameworkCore.Migrations
 
             modelBuilder.Entity("ZLJ.MultiTenancy.Tenant", b =>
                 {
-                    b.HasOne("ZLJ.Authorization.Users.User", "CreatorUser")
+                    b.HasOne("ZLJ.Core.Authorization.Users.User", "CreatorUser")
                         .WithMany()
                         .HasForeignKey("CreatorUserId");
 
-                    b.HasOne("ZLJ.Authorization.Users.User", "DeleterUser")
+                    b.HasOne("ZLJ.Core.Authorization.Users.User", "DeleterUser")
                         .WithMany()
                         .HasForeignKey("DeleterUserId");
 
@@ -2356,7 +2356,7 @@ namespace ZLJ.EntityFrameworkCore.Migrations
                         .WithMany()
                         .HasForeignKey("EditionId");
 
-                    b.HasOne("ZLJ.Authorization.Users.User", "LastModifierUser")
+                    b.HasOne("ZLJ.Core.Authorization.Users.User", "LastModifierUser")
                         .WithMany()
                         .HasForeignKey("LastModifierUserId");
 
@@ -2382,7 +2382,7 @@ namespace ZLJ.EntityFrameworkCore.Migrations
 
             modelBuilder.Entity("Abp.Authorization.Roles.RolePermissionSetting", b =>
                 {
-                    b.HasOne("ZLJ.Authorization.Roles.Role", null)
+                    b.HasOne("ZLJ.Core.Authorization.Roles.Role", null)
                         .WithMany("Permissions")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2391,14 +2391,14 @@ namespace ZLJ.EntityFrameworkCore.Migrations
 
             modelBuilder.Entity("Abp.Authorization.Users.UserPermissionSetting", b =>
                 {
-                    b.HasOne("ZLJ.Authorization.Users.User", null)
+                    b.HasOne("ZLJ.Core.Authorization.Users.User", null)
                         .WithMany("Permissions")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ZLJ.Customer.CustomerOUEntity", b =>
+            modelBuilder.Entity("ZLJ.Core.Customer.CustomerOUEntity", b =>
                 {
                     b.HasOne("ZLJ.BaseInfo.AssociatedCompany.AssociatedCompanyEntity", "Customer")
                         .WithMany("Ous")
@@ -2418,7 +2418,7 @@ namespace ZLJ.EntityFrameworkCore.Migrations
                     b.Navigation("Area");
                 });
 
-            modelBuilder.Entity("ZLJ.Customer.CustomerStaffInfoEntity", b =>
+            modelBuilder.Entity("ZLJ.Core.Customer.CustomerStaffInfoEntity", b =>
                 {
                     b.HasOne("ZLJ.BaseInfo.AssociatedCompany.AssociatedCompanyEntity", null)
                         .WithMany("Staffs")
@@ -2458,14 +2458,14 @@ namespace ZLJ.EntityFrameworkCore.Migrations
                     b.Navigation("Children");
                 });
 
-            modelBuilder.Entity("ZLJ.Authorization.Roles.Role", b =>
+            modelBuilder.Entity("ZLJ.Core.Authorization.Roles.Role", b =>
                 {
                     b.Navigation("Claims");
 
                     b.Navigation("Permissions");
                 });
 
-            modelBuilder.Entity("ZLJ.Authorization.Users.User", b =>
+            modelBuilder.Entity("ZLJ.Core.Authorization.Users.User", b =>
                 {
                     b.Navigation("Claims");
 

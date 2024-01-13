@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZLJ.App.Common.AssociatedCompany
+namespace ZLJ.Application.Common.AssociatedCompany
 {
     public class GetAllInput
     {

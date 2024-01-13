@@ -1,18 +1,19 @@
 ﻿using Abp.Domain.Repositories;
 using BXJG.Utils.GeneralTree;
 using Abp.Authorization;
-using ZLJ.BaseInfo.Administrative;
+using ZLJ.Core.BaseInfo.Administrative;
 using System;
 using Abp.Application.Services.Dto;
 using System.Collections.Generic;
 using BXJG.Common.Dto;
 using BXJG.Utils.Enums;
-using ZLJ.App.Common.Administrative;
+using ZLJ.Application.Common.Administrative;
 using BXJG.Utils.Application.Share.GeneralTree;
 using BXJG.Utils.Application.GeneralTree;
 using BXJG.Utils.Application.Enums;
+using ZLJ.Core;
 
-namespace ZLJ.App.Common.AdministrativeCommon
+namespace ZLJ.Application.Common.AdministrativeCommon
 {
     [AbpAuthorize]
     public class BaseInfoAdministrativeProviderAppService : GeneralTreeProviderBaseAppService<
@@ -24,7 +25,7 @@ namespace ZLJ.App.Common.AdministrativeCommon
         public BaseInfoAdministrativeProviderAppService(IRepository<AdministrativeEntity, long> repository) :
             base(repository)
         {
-            base.LocalizationSourceName = ZLJConsts.LocalizationSourceName;
+            base.LocalizationSourceName = ZLJ.Core.ZLJConsts.LocalizationSourceName;
         }
 
         /// <summary>

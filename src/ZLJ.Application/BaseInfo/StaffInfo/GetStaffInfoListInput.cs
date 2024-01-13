@@ -2,7 +2,7 @@
 using Abp.Extensions;
 using Abp.Runtime.Validation;
 
-namespace ZLJ.App.Admin.BaseInfo.StaffInfo
+namespace ZLJ.Application.Admin.BaseInfo.StaffInfo
 {
     /// <summary>
     /// 列表分页查询

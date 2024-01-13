@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Castle.Windsor.MsDependencyInjection;
 using Abp.Dependency;
-using ZLJ.Identity;
+using ZLJ.Core.Identity;
 
 namespace ZLJ.Migrator.DependencyInjection
 {

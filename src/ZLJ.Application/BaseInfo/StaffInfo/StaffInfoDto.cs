@@ -1,15 +1,15 @@
 ﻿using Abp.Application.Services.Dto;
 using System;
 using System.Collections.Generic;
-using ZLJ.App.Admin.Roles.Dto;
+using ZLJ.Application.Admin.Roles.Dto;
 using BXJG.Utils.Localization;
 using System.Linq;
-using ZLJ.App.Common.OU;
-using ZLJ.App.Common.Post;
-using ZLJ.App.Common.Users;
+using ZLJ.Application.Common.OU;
+using ZLJ.Application.Common.Post;
+using ZLJ.Application.Common.Users;
 using ZLJ.Application.Common.Share.OU;
 
-namespace ZLJ.App.Admin.BaseInfo.StaffInfo
+namespace ZLJ.Application.Admin.BaseInfo.StaffInfo
 {
     /// <summary>
     /// 后台管理员工时的显示模型

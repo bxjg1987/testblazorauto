@@ -8,7 +8,7 @@ using Abp.Domain.Repositories;
 using Abp.Extensions;
 using Abp.IdentityFramework;
 using Abp.Linq.Extensions;
-using ZLJ.App.Admin.Roles.Dto;
+using ZLJ.Application.Admin.Roles.Dto;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Abp.Zero.Configuration;
@@ -17,17 +17,17 @@ using BXJG.Utils.GeneralTree;
 using BXJG.Common.Dto;
 using BXJG.Common.Extensions;
 using Abp.Organizations;
-using ZLJ.App.Common.OU;
+using ZLJ.Application.Common.OU;
 using Abp.Domain.Uow;
-using ZLJ.Authorization.Roles;
-using ZLJ.Authorization.Users;
-using ZLJ.App.Admin.Authorization.Permissions;
+using ZLJ.Core.Authorization.Roles;
+using ZLJ.Core.Authorization.Users;
+using ZLJ.Application.Admin.Authorization.Permissions;
 using BXJG.Utils.Application.Share;
 using ZLJ.Application.Share.Authorization.Permissions;
 using ZLJ.Application.Share.Roles;
 using ZLJ.Application.Common.Share.OU;
 
-namespace ZLJ.App.Admin.Roles
+namespace ZLJ.Application.Admin.Roles
 {
     [AbpAuthorize(PermissionNames.AdministratorSystemRole)]
     public class RoleAppService : AdminCrudBaseAppService<Role, RoleDto, int, PagedAndSortedResultRequest<PagedRoleResultRequestDto>, CreateRoleDto, RoleEditDto>, IRoleAppService
@@ -47,7 +47,7 @@ namespace ZLJ.App.Admin.Roles
             _userManager = userManager;
             this.roleManagementConfig = roleManagementConfig;
 
-            LocalizationSourceName = ZLJConsts.LocalizationSourceName;
+            LocalizationSourceName = ZLJ.Core.ZLJConsts.LocalizationSourceName;
 
             base.CreatePermissionName = PermissionNames.AdministratorSystemRoleAdd;
             base.UpdatePermissionName = PermissionNames.AdministratorSystemRoleUpdate;

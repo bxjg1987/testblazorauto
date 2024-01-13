@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Abp.Authorization.Users;
 using Abp.Extensions;
 
-namespace ZLJ.Authorization.Users
+namespace ZLJ.Core.Authorization.Users
 {
     public class User : AbpUser<User>
     {

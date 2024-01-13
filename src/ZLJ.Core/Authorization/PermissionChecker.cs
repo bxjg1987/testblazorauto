@@ -1,8 +1,8 @@
 ﻿using Abp.Authorization;
-using ZLJ.Authorization.Roles;
-using ZLJ.Authorization.Users;
+using ZLJ.Core.Authorization.Roles;
+using ZLJ.Core.Authorization.Users;
 
-namespace ZLJ.Authorization
+namespace ZLJ.Core.Authorization
 {
     public class PermissionChecker : PermissionChecker<Role, User>
     {

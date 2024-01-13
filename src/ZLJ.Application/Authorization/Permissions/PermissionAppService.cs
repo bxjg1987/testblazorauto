@@ -10,8 +10,9 @@ using Abp.Localization;
 using Abp.UI;
 using BXJG.Utils.Application.Share.GeneralTree;
 using BXJG.Utils.GeneralTree;
+using ZLJ.Application.Share.Authorization.Permissions;
 
-namespace ZLJ.App.Admin.Authorization.Permissions
+namespace ZLJ.Application.Admin.Authorization.Permissions
 {
     public class PermissionAppService : AdminBaseAppService, IPermissionAppService
     {

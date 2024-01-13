@@ -1,4 +1,4 @@
-﻿namespace ZLJ.Configuration
+﻿namespace ZLJ.Core.Configuration
 {
     public static class AppSettingNames
     {

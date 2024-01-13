@@ -11,17 +11,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ZLJ.BaseInfo.StaffInfo;
+using ZLJ.Core.BaseInfo.StaffInfo;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Dynamic.Core;
-using ZLJ.BaseInfo;
+using ZLJ.Core.BaseInfo;
 using Abp.Organizations;
 using Abp.Authorization.Users;
-using ZLJ.BaseInfo.Post;
+using ZLJ.Core.BaseInfo.Post;
 using BXJG.Utils.Localization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ZLJ.App.Common.StaffInfo
+namespace ZLJ.Application.Common.StaffInfo
 {
 
 

@@ -4,7 +4,7 @@ using Abp.Dependency;
 using Castle.Facilities.Logging;
 using Abp.Castle.Logging.Log4Net;
 using ZLJ;
-using ZLJ.Identity;
+using ZLJ.Core.Identity;
 using ZLJ.Web.HostBlazor.Components;
 using ZLJ.Web.HostBlazor.Startup;
 using Hangfire;
@@ -21,7 +21,7 @@ var _apiVersion = "v1";
 var _appConfiguration = builder.Configuration;
 var webHostEnvironment = builder.Environment;
 //AuthorizeAttribute
-string defaultConnectionString = _appConfiguration.GetConnectionString(ZLJConsts.ConnectionStringName)!;
+string defaultConnectionString = _appConfiguration.GetConnectionString(ZLJ.Core.ZLJConsts.ConnectionStringName)!;
 
 builder.Services.AddMvcCore();//经过测试，这个必须加
 

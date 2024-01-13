@@ -3,7 +3,7 @@ using System.Linq;
 using System.Security.Claims;
 using Abp.Extensions;
 
-namespace ZLJ.Identity
+namespace ZLJ.Web.Core.Identity
 {
     public class ExternalLoginInfoHelper
     {

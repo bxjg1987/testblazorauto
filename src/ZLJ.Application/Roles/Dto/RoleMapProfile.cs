@@ -2,10 +2,10 @@ using System.Linq;
 using AutoMapper;
 using Abp.Authorization;
 using Abp.Authorization.Roles;
-using ZLJ.Authorization.Roles;
+using ZLJ.Core.Authorization.Roles;
 using ZLJ.Application.Share.Roles;
 
-namespace ZLJ.App.Admin.Roles.Dto
+namespace ZLJ.Application.Admin.Roles.Dto
 {
     public class RoleMapProfile : Profile
     {

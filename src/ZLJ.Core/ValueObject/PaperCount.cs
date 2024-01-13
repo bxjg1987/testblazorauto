@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZLJ.ValueObject
+namespace ZLJ.Core.ValueObject
 {
     public struct PaperCount
     {

@@ -3,10 +3,10 @@ using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
 using Abp.MultiTenancy;
 using Abp.Runtime.Caching;
-using ZLJ.Authorization.Users;
-using ZLJ.MultiTenancy;
+using ZLJ.Core.Authorization.Users;
+using ZLJ.Core.MultiTenancy;
 
-namespace ZLJ.Features
+namespace ZLJ.Core.Features
 {
     public class FeatureValueStore : AbpFeatureValueStore<Tenant, User>
     {

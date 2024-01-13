@@ -9,16 +9,16 @@ using Abp.AutoMapper;
 using Abp.Domain.Repositories;
 using Abp.Extensions;
 using Abp.Linq.Extensions;
-using ZLJ.Authorization.Users;
+using ZLJ.Core.Authorization.Users;
 using System;
 using Abp.Linq;
 using Microsoft.EntityFrameworkCore;
-using ZLJ.App.Admin.Authorization.Permissions;
+using ZLJ.Application.Admin.Authorization.Permissions;
 using ZLJ.Application.Share.Auditing;
 using ZLJ.Application.Share.Auditing.Dto;
 using ZLJ.Application.Share.Authorization.Permissions;
 
-namespace ZLJ.App.Admin.Auditing
+namespace ZLJ.Application.Admin.Auditing
 {
     [Abp.Domain.Uow.UnitOfWork(false)]
     [DisableAuditing]//禁用它的审计日志功能

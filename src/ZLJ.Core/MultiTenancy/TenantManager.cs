@@ -1,10 +1,10 @@
 ﻿using Abp.Application.Features;
 using Abp.Domain.Repositories;
 using Abp.MultiTenancy;
-using ZLJ.Authorization.Users;
-using ZLJ.Editions;
+using ZLJ.Core.Authorization.Users;
+using ZLJ.Core.Editions;
 
-namespace ZLJ.MultiTenancy
+namespace ZLJ.Core.MultiTenancy
 {
     public class TenantManager : AbpTenantManager<Tenant, User>
     {

@@ -1,4 +1,4 @@
-namespace ZLJ.App.Admin.BaseInfo.Dto
+namespace ZLJ.Application.Admin.BaseInfo.Dto
 {
     public class ComboboxInputDto
     {

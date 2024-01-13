@@ -1,5 +1,5 @@
 ﻿using Abp.Application.Services.Dto;
-namespace ZLJ.App.Common.Customer
+namespace ZLJ.Application.Common.Customer
 {
     /// <summary>
     /// 公共的 获取客户部门下拉框数据的 查询参数

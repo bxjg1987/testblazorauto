@@ -4,10 +4,10 @@ using Abp.Runtime.Session;
 using BXJG.Utils.Application;
 using Microsoft.AspNetCore.Identity;
 using ZLJ.Application.Common.Share;
-using ZLJ.Authorization.Users;
-using ZLJ.MultiTenancy;
+using ZLJ.Core.Authorization.Users;
+using ZLJ.Core.MultiTenancy;
 
-namespace ZLJ.App.Common
+namespace ZLJ.Application.Common
 {
     /// <summary>
     /// 扁平化数据的crud应用服务基类，继承它以简化扁平化数据crud应用服务的开发
@@ -62,7 +62,7 @@ namespace ZLJ.App.Common
         /// <param name="repository"></param>
         protected CommonCrudBaseAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
         {
-            LocalizationSourceName = App.Common.Consts.Common;
+            LocalizationSourceName = Application.Common.Consts.Common;
         }
         //protected override TEntity MapToEntity(TCreateInput createInput)
         //{
@@ -99,15 +99,15 @@ namespace ZLJ.App.Common
 
         private ILocalizationSource appCommonLocalizationSource, zljLocalizationSource, utilsLocalizationSource;
         /// <summary>
-        /// 获取App.Common中的本地化源
+        /// 获取Application.Common中的本地化源
         /// </summary>
         protected virtual ILocalizationSource LocalizationSourceAppCommon
         {
             get
             {
-                if (appCommonLocalizationSource == null || appCommonLocalizationSource.Name != App.Common.Consts.Common)
+                if (appCommonLocalizationSource == null || appCommonLocalizationSource.Name != Application.Common.Consts.Common)
                 {
-                    appCommonLocalizationSource = LocalizationManager.GetSource(App.Common.Consts.Common);
+                    appCommonLocalizationSource = LocalizationManager.GetSource(Application.Common.Consts.Common);
                 }
 
                 return appCommonLocalizationSource;
@@ -121,9 +121,9 @@ namespace ZLJ.App.Common
             get
             {
 
-                if (zljLocalizationSource == null || zljLocalizationSource.Name != ZLJConsts.LocalizationSourceName)
+                if (zljLocalizationSource == null || zljLocalizationSource.Name != ZLJ.Core.ZLJConsts.LocalizationSourceName)
                 {
-                    zljLocalizationSource = LocalizationManager.GetSource(ZLJConsts.LocalizationSourceName);
+                    zljLocalizationSource = LocalizationManager.GetSource(ZLJ.Core.ZLJConsts.LocalizationSourceName);
                 }
 
                 return zljLocalizationSource;

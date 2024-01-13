@@ -1,6 +1,6 @@
 using Abp.Application.Services.Dto;
 
-namespace ZLJ.App.Common.AssociatedCompany
+namespace ZLJ.Application.Common.AssociatedCompany
 {
     public class Dto : ComboboxItemDto
     {

@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Abp.Authorization.Roles;
-using ZLJ.Authorization.Users;
+using ZLJ.Core.Authorization.Users;
 
-namespace ZLJ.Authorization.Roles
+namespace ZLJ.Core.Authorization.Roles
 {
     public class Role : AbpRole<User>
     {

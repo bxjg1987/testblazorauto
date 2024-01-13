@@ -1,7 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using Abp.Extensions;
 
-namespace ZLJ.Validation
+namespace ZLJ.Core.Validation
 {
     public static class ValidationHelper
     {

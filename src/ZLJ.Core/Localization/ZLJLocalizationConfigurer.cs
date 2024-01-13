@@ -3,14 +3,14 @@ using Abp.Localization.Dictionaries;
 using Abp.Localization.Dictionaries.Xml;
 using Abp.Reflection.Extensions;
 
-namespace ZLJ.Localization
+namespace ZLJ.Core.Localization
 {
     public static class ZLJLocalizationConfigurer
     {
         public static void Configure(ILocalizationConfiguration localizationConfiguration)
         {
             localizationConfiguration.Sources.Add(
-                new DictionaryBasedLocalizationSource(ZLJConsts.LocalizationSourceName,
+                new DictionaryBasedLocalizationSource(ZLJ.Core.ZLJConsts.LocalizationSourceName,
                     new XmlEmbeddedFileLocalizationDictionaryProvider(
                         typeof(ZLJLocalizationConfigurer).GetAssembly(),
                         "ZLJ.Localization.SourceFiles"

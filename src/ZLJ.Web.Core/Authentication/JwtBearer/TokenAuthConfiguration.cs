@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.IdentityModel.Tokens;
 
-namespace ZLJ.Authentication.JwtBearer
+namespace ZLJ.Web.Core.Authentication.JwtBearer
 {
     public class TokenAuthConfiguration
     {

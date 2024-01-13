@@ -7,15 +7,15 @@ using Abp.Dependency;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
 using Abp.Zero.Configuration;
-using ZLJ.Authorization.Roles;
-using ZLJ.Authorization.Users;
-using ZLJ.MultiTenancy;
+using ZLJ.Core.Authorization.Roles;
+using ZLJ.Core.Authorization.Users;
+using ZLJ.Core.MultiTenancy;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore.Internal;
 using System.Linq;
 
-namespace ZLJ.Authorization
+namespace ZLJ.Core.Authorization
 {
     public class LogInManager : AbpLogInManager<Tenant, Role, User>
     {

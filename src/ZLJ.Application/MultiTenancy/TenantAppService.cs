@@ -9,15 +9,15 @@ using Abp.IdentityFramework;
 using Abp.Linq.Extensions;
 using Abp.MultiTenancy;
 using Abp.Runtime.Security;
-using ZLJ.Authorization;
-using ZLJ.Authorization.Roles;
-using ZLJ.Authorization.Users;
-using ZLJ.Editions;
-using ZLJ.App.Admin.MultiTenancy.Dto;
+using ZLJ.Core.Authorization;
+using ZLJ.Core.Authorization.Roles;
+using ZLJ.Core.Authorization.Users;
+using ZLJ.Core.Editions;
+using ZLJ.Application.Admin.MultiTenancy.Dto;
 using Microsoft.AspNetCore.Identity;
-using ZLJ.MultiTenancy;
+using ZLJ.Core.MultiTenancy;
 
-namespace ZLJ.App.Admin.MultiTenancy
+namespace ZLJ.Application.Admin.MultiTenancy
 {
     //[AbpAuthorize(PermissionNames.Pages_Tenants)]
     public class TenantAppService : AsyncCrudAppService<Tenant, TenantDto, int, PagedTenantResultRequestDto, CreateTenantDto, TenantDto>, ITenantAppService

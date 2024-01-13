@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using ZLJ.Authorization;
-using ZLJ.Authorization.Roles;
-using ZLJ.Authorization.Users;
-using ZLJ.Editions;
-using ZLJ.MultiTenancy;
+using ZLJ.Core.Authorization;
+using ZLJ.Core.Authorization.Roles;
+using ZLJ.Core.Authorization.Users;
+using ZLJ.Core.Editions;
+using ZLJ.Core.MultiTenancy;
 
-namespace ZLJ.Identity
+namespace ZLJ.Core.Identity
 {
     public static class IdentityRegistrar
     {

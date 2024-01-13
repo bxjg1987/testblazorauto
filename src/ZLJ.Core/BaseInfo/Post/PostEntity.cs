@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ZLJ.Authorization.Roles;
+using ZLJ.Core.Authorization.Roles;
 
-namespace ZLJ.BaseInfo.Post
+namespace ZLJ.Core.BaseInfo.Post
 {
     public class PostEntity : Role
     {

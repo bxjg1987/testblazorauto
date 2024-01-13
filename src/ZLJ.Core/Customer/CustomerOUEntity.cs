@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ZLJ.BaseInfo.AssociatedCompany;
+using ZLJ.Core.BaseInfo.AssociatedCompany;
 
-namespace ZLJ.Customer
+namespace ZLJ.Core.Customer
 {
     public class CustomerOUEntity : OrganizationUnit, IMustHaveCustomer,IPassivable
     {

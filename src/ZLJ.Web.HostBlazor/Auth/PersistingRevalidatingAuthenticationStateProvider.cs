@@ -11,8 +11,9 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using ZLJ.Admin.CoreRCL.Auth;
 using ZLJ.Application.Common.Share.Models.TokenAuth;
-using ZLJ.Authentication.JwtBearer;
-using ZLJ.Authorization.Users;
+
+using ZLJ.Core.Authorization.Users;
+using ZLJ.Web.Core.Authentication.JwtBearer;
 
 namespace ZLJ.Web.HostBlazor.Auth
 {

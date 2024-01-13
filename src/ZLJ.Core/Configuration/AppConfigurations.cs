@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Abp.Extensions;
 using Abp.Reflection.Extensions;
 
-namespace ZLJ.Configuration
+namespace ZLJ.Core.Configuration
 {
     public static class AppConfigurations
     {

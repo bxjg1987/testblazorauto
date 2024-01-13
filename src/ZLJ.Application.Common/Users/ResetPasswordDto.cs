@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ZLJ.App.Common.Users
+namespace ZLJ.Application.Common.Users
 {
     public class ResetPasswordDto
     {

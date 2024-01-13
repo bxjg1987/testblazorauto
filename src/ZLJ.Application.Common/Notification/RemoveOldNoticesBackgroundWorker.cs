@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ZLJ.Authorization.Users;
+using ZLJ.Core.Authorization.Users;
 
-namespace ZLJ.App.Common.Notification
+namespace ZLJ.Application.Common.Notification
 {
     public class RemoveOldNoticesBackgroundWorker : RemoveOldNotification<User>
     {

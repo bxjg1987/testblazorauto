@@ -3,9 +3,9 @@ using System.ComponentModel.DataAnnotations;
 using Abp.Application.Services.Dto;
 using Abp.Authorization.Users;
 using Abp.AutoMapper;
-using ZLJ.Authorization.Users;
+using ZLJ.Core.Authorization.Users;
 
-namespace ZLJ.App.Common.Users
+namespace ZLJ.Application.Common.Users
 {
     [AutoMapFrom(typeof(User))]
     public class UserDto : EntityDto<long>

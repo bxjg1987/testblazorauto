@@ -14,9 +14,9 @@ using Castle.Core.Logging;
 using Castle.Windsor.MsDependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using ZLJ.BaseInfo.AssociatedCompany;
+using ZLJ.Core.BaseInfo.AssociatedCompany;
 
-namespace ZLJ.App.Common.AssociatedCompany
+namespace ZLJ.Application.Common.AssociatedCompany
 {
     public class tttt : IDisposable, ITransientDependency
     {

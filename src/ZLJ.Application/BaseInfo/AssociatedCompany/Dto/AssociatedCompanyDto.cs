@@ -1,6 +1,6 @@
 ﻿using Abp.Application.Services.Dto;
 
-namespace ZLJ.App.Admin.BaseInfo.AssociatedCompany.Dto
+namespace ZLJ.Application.Admin.BaseInfo.AssociatedCompany.Dto
 {
     /// <summary>
     /// 

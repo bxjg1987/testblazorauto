@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZLJ.App.Common.StaffInfo
+namespace ZLJ.Application.Common.StaffInfo
 {
     /// <summary>
     /// 获取员工信息时的条件模型

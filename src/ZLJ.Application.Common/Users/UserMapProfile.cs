@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using ZLJ.Authorization.Users;
+using ZLJ.Core.Authorization.Users;
 
-namespace ZLJ.App.Common.Users
+namespace ZLJ.Application.Common.Users
 {
     public class UserMapProfile : Profile
     {

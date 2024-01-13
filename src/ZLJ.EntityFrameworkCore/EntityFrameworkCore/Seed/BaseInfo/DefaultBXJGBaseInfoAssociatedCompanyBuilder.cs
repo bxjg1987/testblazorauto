@@ -4,12 +4,12 @@ using Abp.MultiTenancy;
 using Abp.Zero.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using ZLJ.BaseInfo.AssociatedCompany;
+using ZLJ.Core.BaseInfo.AssociatedCompany;
 using BXJG.Utils.GeneralTree;
-using ZLJ.Customer;
+using ZLJ.Core.Customer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
-using ZLJ.Authorization.Users;
+using ZLJ.Core.Authorization.Users;
 
 namespace ZLJ.EntityFrameworkCore.EntityFrameworkCore.Seed.BaseInfo
 {

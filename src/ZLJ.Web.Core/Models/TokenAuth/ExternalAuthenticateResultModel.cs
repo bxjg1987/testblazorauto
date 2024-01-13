@@ -1,4 +1,4 @@
-﻿namespace ZLJ.Models.TokenAuth
+﻿namespace ZLJ.Web.Core.Models.TokenAuth
 {
     public class ExternalAuthenticateResultModel
     {

@@ -1,19 +1,19 @@
 ﻿using Abp.Modules;
-using ZLJ.Configuration;
+using ZLJ.Core.Configuration;
 using Abp.Hangfire;
 using Abp.Threading.BackgroundWorkers;
-//using ZLJ.App.Admin.WorkOrder.Workload;
+//using ZLJ.Application.Admin.WorkOrder.Workload;
 using BXJG.Utils;
 using ZLJ.EntityFrameworkCore;
 using Abp.AspNetCore.SignalR;
 using Abp.AspNetCore;
-using ZLJ.App.Admin;
+using ZLJ.Application.Admin;
 //using ZLJ.App.Employee;
 using Medallion.Threading.SqlServer;
 using Medallion.Threading;
 using Yitter.IdGenerator;
 using Microsoft.IdentityModel.Tokens;
-using ZLJ.Authentication.JwtBearer;
+
 using Abp.AspNetCore.Configuration;
 //using BXJG.WorkOrder.EmployeeApplication;
 //using BXJG.WorkOrder;
@@ -26,6 +26,8 @@ using Abp.Reflection.Extensions;
 using Microsoft.AspNetCore.Components.Server.Circuits;
 using BXJG.Common;
 using BXJG.Utils.RCL;
+using ZLJ.Web.Core;
+using ZLJ.Web.Core.Configuration;
 
 namespace ZLJ.Web.HostBlazor.Startup
 {

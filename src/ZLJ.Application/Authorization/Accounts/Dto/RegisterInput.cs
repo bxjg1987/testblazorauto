@@ -3,9 +3,9 @@ using System.ComponentModel.DataAnnotations;
 using Abp.Auditing;
 using Abp.Authorization.Users;
 using Abp.Extensions;
-using ZLJ.Validation;
+using ZLJ.Core.Validation;
 
-namespace ZLJ.App.Admin.Authorization.Accounts.Dto
+namespace ZLJ.Application.Admin.Authorization.Accounts.Dto
 {
     public class RegisterInput : IValidatableObject
     {

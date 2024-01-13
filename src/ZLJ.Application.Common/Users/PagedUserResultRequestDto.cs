@@ -1,7 +1,7 @@
 ﻿using Abp.Application.Services.Dto;
 using System;
 
-namespace ZLJ.App.Common.Users
+namespace ZLJ.Application.Common.Users
 {
     //custom PagedResultRequestDto
     public class PagedUserResultRequestDto : PagedResultRequestDto

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZLJ.App.Common.StaffInfo
+namespace ZLJ.Application.Common.StaffInfo
 {
     /// <summary>
     /// 获取员工列表时的输入模型

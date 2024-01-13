@@ -6,10 +6,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ZLJ.App.Common.Administrative;
-using ZLJ.BaseInfo.Administrative;
+using ZLJ.Application.Common.Administrative;
+using ZLJ.Core;
+using ZLJ.Core.BaseInfo.Administrative;
 
-namespace ZLJ.App.Common
+namespace ZLJ.Application.Common
 {
     /// <summary>
     /// 树形数据作为下拉框或弹窗中的可选数据的通用服务基类
@@ -38,16 +39,16 @@ namespace ZLJ.App.Common
 
         public CommonTreeProviderBaseAppService()
         {
-            LocalizationSourceName = App.Common.Consts.Common;
+            LocalizationSourceName = Application.Common.Consts.Common;
 
         }
         protected virtual ILocalizationSource LocalizationSourceAppCommon
         {
             get
             {
-                if (appCommonLocalizationSource == null || appCommonLocalizationSource.Name != App.Common.Consts.Common)
+                if (appCommonLocalizationSource == null || appCommonLocalizationSource.Name != Application.Common.Consts.Common)
                 {
-                    appCommonLocalizationSource = LocalizationManager.GetSource(App.Common.Consts.Common);
+                    appCommonLocalizationSource = LocalizationManager.GetSource(Application.Common.Consts.Common);
                 }
 
                 return appCommonLocalizationSource;
@@ -58,9 +59,9 @@ namespace ZLJ.App.Common
             get
             {
 
-                if (zljLocalizationSource == null || zljLocalizationSource.Name != ZLJConsts.LocalizationSourceName)
+                if (zljLocalizationSource == null || zljLocalizationSource.Name != ZLJ.Core.ZLJConsts.LocalizationSourceName)
                 {
-                    zljLocalizationSource = LocalizationManager.GetSource(ZLJConsts.LocalizationSourceName);
+                    zljLocalizationSource = LocalizationManager.GetSource(ZLJ.Core.ZLJConsts.LocalizationSourceName);
                 }
 
                 return zljLocalizationSource;

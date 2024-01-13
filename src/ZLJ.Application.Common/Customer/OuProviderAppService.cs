@@ -12,10 +12,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ZLJ.BaseInfo;
-using ZLJ.Customer;
+using ZLJ.Core.BaseInfo;
+using ZLJ.Core.Customer;
 
-namespace ZLJ.App.Common.Customer
+namespace ZLJ.Application.Common.Customer
 {
     /// <summary>
     /// 公共的 获取客户部门下拉框数据

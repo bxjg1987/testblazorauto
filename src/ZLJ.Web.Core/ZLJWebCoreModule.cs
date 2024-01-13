@@ -9,8 +9,8 @@ using Abp.AspNetCore.SignalR;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
 using Abp.Zero.Configuration;
-using ZLJ.Authentication.JwtBearer;
-using ZLJ.Configuration;
+
+using ZLJ.Core.Configuration;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using BXJG.Utils;
 using BXJG.Utils.GeneralTree;
@@ -29,14 +29,17 @@ using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.DataProtection;
 using BXJG.Utils;
-using ZLJ.App.Common;
-using ZLJ.App.Admin;
+
+using ZLJ.Application.Admin;
 using ZLJ.EntityFrameworkCore;
 using BXJG.Common;
 using Abp.Configuration.Startup;
 using BXJG.Utils.Web;
+using ZLJ.Application.Common;
+using ZLJ.Web.Core.Configuration;
+using ZLJ.Web.Core.Authentication.JwtBearer;
 
-namespace ZLJ
+namespace ZLJ.Web.Core
 {
     /*
      * 此文件的重要说明
@@ -82,7 +85,7 @@ namespace ZLJ
             abpProjectNameEntityFrameworkModule.SkipDbSeed=true;
 
             Configuration.DefaultNameOrConnectionString = _appConfiguration.GetConnectionString(
-                ZLJConsts.ConnectionStringName
+                ZLJ.Core.ZLJConsts.ConnectionStringName
             );
 
             // Use database for language management

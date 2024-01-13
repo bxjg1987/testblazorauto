@@ -1,7 +1,8 @@
 ﻿using Abp.AutoMapper;
-using ZLJ.Authentication.External;
+using ZLJ.Web.Core.Authentication.External;
 
-namespace ZLJ.Models.TokenAuth
+
+namespace ZLJ.Web.Core.Models.TokenAuth
 {
     [AutoMapFrom(typeof(ExternalLoginProviderInfo))]
     public class ExternalLoginProviderInfoModel

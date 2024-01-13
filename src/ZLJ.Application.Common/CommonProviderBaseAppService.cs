@@ -1,8 +1,9 @@
 ﻿using Abp.Localization.Sources;
 using BXJG.Utils.Application;
 using ZLJ.Application.Common.Share;
+using ZLJ.Core;
 
-namespace ZLJ.App.Common
+namespace ZLJ.Application.Common
 {
     /// <summary>
     /// 抽象的为其它功能提供可选数据的接口
@@ -26,16 +27,16 @@ namespace ZLJ.App.Common
 
         public CommonProviderBaseAppService()
         {
-            LocalizationSourceName = App.Common.Consts.Common;
+            LocalizationSourceName = Application.Common.Consts.Common;
         }
 
         protected virtual ILocalizationSource LocalizationSourceAppCommon
         {
             get
             {
-                if (appCommonLocalizationSource == null || appCommonLocalizationSource.Name != App.Common.Consts.Common)
+                if (appCommonLocalizationSource == null || appCommonLocalizationSource.Name != Application.Common.Consts.Common)
                 {
-                    appCommonLocalizationSource = LocalizationManager.GetSource(App.Common.Consts.Common);
+                    appCommonLocalizationSource = LocalizationManager.GetSource(Application.Common.Consts.Common);
                 }
 
                 return appCommonLocalizationSource;
@@ -46,9 +47,9 @@ namespace ZLJ.App.Common
             get
             {
 
-                if (zljLocalizationSource == null || zljLocalizationSource.Name != ZLJConsts.LocalizationSourceName)
+                if (zljLocalizationSource == null || zljLocalizationSource.Name != ZLJ.Core.ZLJConsts.LocalizationSourceName)
                 {
-                    zljLocalizationSource = LocalizationManager.GetSource(ZLJConsts.LocalizationSourceName);
+                    zljLocalizationSource = LocalizationManager.GetSource(ZLJ.Core.ZLJConsts.LocalizationSourceName);
                 }
 
                 return zljLocalizationSource;

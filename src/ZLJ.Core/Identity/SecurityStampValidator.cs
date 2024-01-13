@@ -2,13 +2,13 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Abp.Authorization;
-using ZLJ.Authorization.Roles;
-using ZLJ.Authorization.Users;
-using ZLJ.MultiTenancy;
+using ZLJ.Core.Authorization.Roles;
+using ZLJ.Core.Authorization.Users;
+using ZLJ.Core.MultiTenancy;
 using Microsoft.Extensions.Logging;
 using Abp.Domain.Uow;
 
-namespace ZLJ.Identity
+namespace ZLJ.Core.Identity
 {
     public class SecurityStampValidator : AbpSecurityStampValidator<Tenant, Role, User>
     {

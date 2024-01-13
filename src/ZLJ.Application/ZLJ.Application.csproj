@@ -11,7 +11,7 @@
 
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1701;1702;1591;1587</NoWarn>
-    <RootNamespace>ZLJ.App.Admin</RootNamespace>
+    <RootNamespace>$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <LangVersion>default</LangVersion>

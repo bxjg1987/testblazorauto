@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZLJ.Notification
+namespace ZLJ.Core.Notification
 {
     /// <summary>
     /// 简易的，通用的消息通知模型

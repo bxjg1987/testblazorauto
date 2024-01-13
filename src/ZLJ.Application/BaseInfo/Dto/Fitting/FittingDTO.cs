@@ -1,8 +1,8 @@
 ﻿using Abp.Application.Services.Dto;
 using ZLJ.Core.Share;
-using ZLJ.Localization;
+using ZLJ.Core.Localization;
 
-namespace ZLJ.App.Admin.BaseInfo.Dto.Fitting
+namespace ZLJ.Application.Admin.BaseInfo.Dto.Fitting
 {
     public class FittingDTO : FullAuditedEntityDto<long>
     {

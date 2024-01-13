@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 
-namespace ZLJ.Authentication.JwtBearer
+namespace ZLJ.Web.Core.Authentication.JwtBearer
 {
     public static class JwtTokenMiddleware
     {

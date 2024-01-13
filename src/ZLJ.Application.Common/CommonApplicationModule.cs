@@ -8,14 +8,15 @@ using BXJG.Utils;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
-using ZLJ.Authorization;
-using ZLJ.App.Common.Notification;
+using ZLJ.Core.Authorization;
+using ZLJ.Application.Common.Notification;
 using System.Collections.Concurrent;
-using ZLJ.Authorization.Users;
-using ZLJ.App.Common.Authorization.Permissions;
+using ZLJ.Core.Authorization.Users;
+using ZLJ.Application.Common.Authorization.Permissions;
 using BXJG.Utils.Application;
+using ZLJ.Core;
 
-namespace ZLJ.App.Common
+namespace ZLJ.Application.Common
 {
 
 
@@ -35,10 +36,10 @@ namespace ZLJ.App.Common
             Configuration.Modules.AbpAutoMapper().Configurators.Add(cfg => cfg.AddMaps(Assembly.GetExecutingAssembly()));
 
             Configuration.Localization.Sources.Add(
-              new DictionaryBasedLocalizationSource(ZLJ.App.Common.Consts.Common,
+              new DictionaryBasedLocalizationSource(ZLJ.Application.Common.Consts.Common,
                   new XmlEmbeddedFileLocalizationDictionaryProvider(
                      Assembly.GetExecutingAssembly(),
-                      "ZLJ.App.Common.Localization.SourceFiles"
+                      "ZLJ.Application.Common.Localization.SourceFiles"
                   )
               )
           );

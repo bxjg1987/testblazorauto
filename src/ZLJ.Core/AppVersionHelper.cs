@@ -2,7 +2,7 @@
 using System.IO;
 using Abp.Reflection.Extensions;
 
-namespace ZLJ
+namespace ZLJ.Core
 {
     /// <summary>
     /// Central point for application version.

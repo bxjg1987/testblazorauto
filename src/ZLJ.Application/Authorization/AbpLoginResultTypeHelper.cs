@@ -4,13 +4,13 @@ using Abp.Authorization;
 using Abp.Dependency;
 using Abp.UI;
 
-namespace ZLJ.App.Admin.Authorization
+namespace ZLJ.Application.Admin.Authorization
 {
     public class AbpLoginResultTypeHelper : AbpServiceBase, ITransientDependency
     {
         public AbpLoginResultTypeHelper()
         {
-            LocalizationSourceName = ZLJConsts.LocalizationSourceName;
+            LocalizationSourceName = ZLJ.Core.ZLJConsts.LocalizationSourceName;
         }
 
         public Exception CreateExceptionForFailedLoginAttempt(AbpLoginResultType result, string usernameOrEmailAddress, string tenancyName)
