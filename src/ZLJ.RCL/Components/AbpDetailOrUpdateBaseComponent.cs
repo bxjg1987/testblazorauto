@@ -14,6 +14,7 @@ namespace ZLJ.RCL.Components
      * blazor文档中推荐不要在组件内部修改 [Parameter]属性，这种属性仅仅用于外部组件向其传递参数用，可能由于外部组件的刷新，导致此组件状态异常
      * 
      * 虽然有些简单的数据列表页可能直接传递dto过来进行处理，但有时候列表数据过于复杂，需要重新查询下，简单起见统一为根据id重新查询。
+     * 若方法是虚的，则返回类型通通使用ValueTask，因为子类重写时可能不是异步的
      */
 
     /// <summary>
@@ -37,6 +38,7 @@ namespace ZLJ.RCL.Components
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TAppService : ZLJ.Application.Common.Share.ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
     {
+        #region 字段和属性
         /// <summary>
         /// 请调用ObjectMapper
         /// </summary>
@@ -61,7 +63,7 @@ namespace ZLJ.RCL.Components
         /// id
         /// </summary>
         [Parameter]
-        public TPrimaryKey Id { get; set; }
+        public virtual TPrimaryKey Id { get; set; }
         /// <summary>
         /// 查询模型
         /// </summary>
@@ -78,59 +80,27 @@ namespace ZLJ.RCL.Components
         /// 验证消息存储器
         /// </summary>
         protected ValidationMessageStore? validationMessageStore;
+        protected Form<TUpdateInput> frm;
+        #endregion
 
-
-        /// <summary>
-        /// 正在执行重置
-        /// </summary>
-        protected bool isReseting = false;
-        /// <summary>
-        /// 重置
-        /// </summary>
-        /// <returns></returns>
-        [AbpExceptionInterceptor]
-        protected virtual async ValueTask BtnResetClick()
-        {
-            isReseting = true;
-            try
-            {
-                await DtoMapToEditDto();
-                editContext = new EditContext(editDto!);
-                validationMessageStore = new ValidationMessageStore(editContext);
-            }
-            finally
-            {
-                isReseting = false;
-            }
-        }
-
-
+        #region 生命周期
         /// <summary>
         /// 初始化时回调，默认根据id从应用服务接口获取单个数据，然后判断并进入编辑模式
         /// </summary>
         /// <returns></returns>
+        [AbpExceptionInterceptor]
         protected override async Task OnInitializedAsync()
         {
-            dto = await AppService.GetAsync(new EntityDto<TPrimaryKey>(Id));
             isEdit = IsEdit;
-
-
-
-            if (isEdit)
-            {
-                await BtnBeginEditClick();
-                // await ResetCore();
-            }
+            //dto = await AppService.GetAsync(new EntityDto<TPrimaryKey>(Id));
+            await ResetOrReloadCore();
+            //if (isEdit)
+            //{
+            //    await BtnBeginEditClick();
+            //    // await ResetCore();
+            //}
         }
-
-        /// <summary>
-        /// 显示模型转换为编辑模型，默认使用automapper
-        /// </summary>
-        protected virtual ValueTask DtoMapToEditDto()
-        {
-            editDto = ObjectMapper.Map<TUpdateInput>(dto);
-            return ValueTask.CompletedTask;
-        }
+        #endregion
 
         #region 权限
         [Inject]
@@ -161,7 +131,7 @@ namespace ZLJ.RCL.Components
         /// <param name="updatePermissionName"></param>
         /// <param name="deletePermissionName"></param>
         /// <returns></returns>
-        protected virtual async Task InitPermission(string updatePermissionName = default, string deletePermissionName = default/*, string getPermissionName =default*/)
+        protected virtual async ValueTask InitPermission(string updatePermissionName = default, string deletePermissionName = default/*, string getPermissionName =default*/)
         {
             var authState = await AuthStateProvider.GetAuthenticationStateAsync();
             if (updatePermissionName.IsNotNullOrWhiteSpaceBXJG())
@@ -173,6 +143,52 @@ namespace ZLJ.RCL.Components
         }
         #endregion
 
+        #region 重置
+        /// <summary>
+        /// 是否禁用重置按钮
+        /// </summary>
+        protected virtual bool IsResetOrReloadDisabled => isDeleting ||
+                                                          isFormIniting ||
+                                                          isResetOrReloading ||
+                                                          isUpdating;
+        /// <summary>
+        /// 正在执行重置
+        /// </summary>
+        protected bool isResetOrReloading = false;
+        /// <summary>
+        /// 重置
+        /// </summary>
+        /// <returns></returns>
+        [AbpExceptionInterceptor]
+        protected virtual async Task BtnResetOrReloadClick()
+        {
+            await ResetOrReloadCore();
+        }
+        /// <summary>
+        /// 重置核心
+        /// </summary>
+        /// <returns></returns>
+        protected virtual async Task ResetOrReloadCore()
+        {
+            if (isResetOrReloading)
+                return;
+
+            isResetOrReloading = true;
+            try
+            {
+                dto = await AppService.GetAsync(new EntityDto<TPrimaryKey>(Id));
+                await DtoMapToEditDto();
+                editContext = new EditContext(editDto!);
+                validationMessageStore = new ValidationMessageStore(editContext);
+            }
+            finally
+            {
+                isResetOrReloading = false;
+            }
+        }
+        #endregion
+
+        #region 修改
         /// <summary>
         /// true修改模式，false查看模式
         /// </summary>
@@ -180,19 +196,13 @@ namespace ZLJ.RCL.Components
         public bool IsEdit { get; set; }
         /// <summary>
         /// true修改模式，false查看模式
-        /// 参考：https://learn.microsoft.com/zh-cn/aspnet/core/blazor/components/overwriting-parameters?view=aspnetcore-6.0
+        /// 参考：https://learn.microsoft.com/zh-cn/aspnet/core/blazor/components/overwriting-parameters?view=aspnetcore-8.0
         /// </summary>
         protected bool isEdit;
-        //public override async Task SetParametersAsync(ParameterView parameters)
-        //{
-        //    await base.SetParametersAsync(parameters);
-
-        //}
-
         /// <summary>
         /// 取消编辑按钮点击时执行
         /// </summary>
-        protected virtual void BtnEndEditClick()
+        protected virtual void BtnCancelEditClick()
         {
             isEdit = false;
             //  StateHasChanged();
@@ -203,9 +213,9 @@ namespace ZLJ.RCL.Components
         //    base.OnInitialized();
         //    isEdit = IsEdit;
         //}
-        #region 修改
+
         /// <summary>
-        /// 表单是否初始化过了
+        /// 表单是否初始化过了，通常为表单中的下拉框初始化
         /// </summary>
         protected bool editInited = false;
 
@@ -216,12 +226,25 @@ namespace ZLJ.RCL.Components
         [AbpExceptionInterceptor]
         protected virtual async Task BtnBeginEditClick()
         {
+            await BeginEditCore();
+        }
+        /// <summary>
+        /// 进入编辑模式的核心逻辑
+        /// </summary>
+        /// <returns></returns>
+        public virtual async ValueTask BeginEditCore()
+        {
             isEdit = true;
+
+
             // StateHasChanged();
             // MudDialog.SetTitle($"修改{FuncName}");//需要处理图标，子类自己去处理吧
 
             //首次进入下拉框时可能需要做些 初始化下拉框值的操作
             if (editInited)
+                return;
+
+            if (isFormIniting)
                 return;
 
             isFormIniting = true;
@@ -236,9 +259,18 @@ namespace ZLJ.RCL.Components
             }
 
             if (editDto == null)
-                await BtnResetClick();
+                await BtnResetOrReloadClick();
 
             editInited = true;
+        }
+
+        /// <summary>
+        /// 显示模型转换为编辑模型，默认使用automapper
+        /// </summary>
+        protected virtual ValueTask DtoMapToEditDto()
+        {
+            editDto = ObjectMapper.Map<TUpdateInput>(dto);
+            return ValueTask.CompletedTask;
         }
 
         /// <summary>
@@ -267,56 +299,85 @@ namespace ZLJ.RCL.Components
         /// <summary>
         /// 是否显示保存按钮和进入只读模式的按钮
         /// </summary>
-        protected virtual bool IsShowSave => isEdit && updateIsGranted;
+        protected virtual bool IsShowUpdate => isEdit && updateIsGranted;
         /// <summary>
         /// 是否显示进入编辑模式的按钮
         /// </summary>
         protected virtual bool IsShowBeginEdit => !isEdit && updateIsGranted;
-
         /// <summary>
         /// 是否禁用保存按钮
         /// </summary>
-        public virtual bool IsSaveDisabled => isDeleting ||
-                                              isFormIniting ||
-                                              isReseting ||
-                                              isSaving ||
-                                              editDto == null ||
-                                              editContext == default || editContext.GetValidationMessages().Any();
+        public virtual bool IsUpdateDisabled => isDeleting ||
+                                                isFormIniting ||
+                                                isResetOrReloading ||
+                                                isUpdating ||
+                                                frm == default ||
+                                                editDto == null ||
+                                                editContext == default ||
+                                                editContext.GetValidationMessages().Any();
         /// <summary>
         /// 是否正在保存
         /// </summary>
-        protected bool isSaving = false;
-
+        protected bool isUpdating = false;
+        /// <summary>
+        /// 点击保存按钮时回调
+        /// </summary>
+        /// <returns></returns>
+        protected virtual async Task BtnUpdateClick()
+        {
+            //没有权限的按钮直接隐藏，况且应用服务还会判断权限兜底的，因此这里无需判断权限
+            frm.Submit();
+        }
         /// <summary>
         /// 保存的核心逻辑
         /// </summary>
         /// <returns></returns>
         [AbpExceptionInterceptor]
-        protected virtual async Task BtnSaveClick()
+        protected virtual async Task OnFinish(EditContext editContext)
         {
-            //没有权限的按钮直接隐藏，况且应用服务还会判断权限兜底的，因此这里无需判断权限
-
-            if (!editContext!.Validate())
+            await UpdateCore();
+        }
+        /// <summary>
+        /// 删除的核心逻辑
+        /// </summary>
+        /// <returns></returns>
+        protected virtual async Task UpdateCore()
+        {
+            if (isUpdating)
                 return;
 
-            isSaving = true;
+            isUpdating = true;
             try
             {
                 dto = await AppService.UpdateAsync(editDto!);
                 _ = base.MessageService.Success("修改成功！");
-                await AfterSave();
+                await AfterUpdated();
             }
             finally
             {
-                isSaving = false;
+                isUpdating = false;
             }
         }
         /// <summary>
         /// 保存后回调
         /// </summary>
-        protected virtual ValueTask AfterSave() => ValueTask.CompletedTask;
+        protected virtual async ValueTask AfterUpdated()
+        {
+            await OnUpdated.InvokeAsync(dto);
+        }
+        /// <summary>
+        /// 保存后触发的事件
+        /// </summary>
+        [Parameter]
+        public EventCallback<TEntityDto> OnUpdated { get; set; }
         #endregion
+
         #region 删除
+        ///// <summary>
+        ///// 是否显示进入编辑模式的按钮
+        ///// 直接用权限状态即可
+        ///// </summary>
+        //protected virtual bool IsShowDelete => deleteIsGranted;
         /// <summary>
         /// 是否显示删除确认
         /// </summary>
@@ -326,7 +387,7 @@ namespace ZLJ.RCL.Components
         /// </summary>
         protected bool isDeleting = false;
         /// <summary>
-        /// 显示删除确认框
+        /// 点击删除按钮时执行，默认弹出确认框
         /// 通常绑定到删除按钮，它将显示删除确认，而不是真正删除
         /// </summary>
         protected virtual void BtnDeleteClick()
@@ -334,22 +395,31 @@ namespace ZLJ.RCL.Components
             isShowDeleteConfirm = true;
         }
         /// <summary>
-        /// 隐藏删除确认框
+        /// 点击删除确认框的取消按钮时执行
         /// </summary>
         protected virtual void BtnCancelDelete()
         {
             isShowDeleteConfirm = false;
         }
-
         /// <summary>
-        /// 删除的核心逻辑
+        /// 点击删除确认按钮时执行
         /// </summary>
         /// <returns></returns>
         [AbpExceptionInterceptor]
         protected virtual async Task BtnOkDeleteClick()
         {
+            await DeleteCore();
+        }
+        /// <summary>
+        /// 删除的核心逻辑
+        /// </summary>
+        /// <returns></returns>
+        protected virtual async Task DeleteCore()
+        {
             //没有权限的按钮直接隐藏，况且应用服务还会判断权限兜底的，因此这里无需判断权限
             isShowDeleteConfirm = false;
+            if (isDeleting)
+                return;
             isDeleting = true;
             try
             {
@@ -366,7 +436,15 @@ namespace ZLJ.RCL.Components
         /// 删除之后之后回调
         /// </summary>
         /// <returns></returns>
-        protected virtual ValueTask AfterDelete() => ValueTask.CompletedTask;
+        protected virtual async ValueTask AfterDelete()
+        {
+            await OnDeleted.InvokeAsync(dto);
+        }
+        /// <summary>
+        /// 删除后触发的事件
+        /// </summary>
+        [Parameter]
+        public EventCallback<TEntityDto> OnDeleted { get; set; }
         #endregion
     }
 }
