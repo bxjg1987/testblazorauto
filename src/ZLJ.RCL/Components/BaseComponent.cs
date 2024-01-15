@@ -13,7 +13,7 @@ namespace ZLJ.RCL.Components
     /// 抽象组件，提供abp相关和antblazor相关功能
     /// 不跨项目、跨应用 共享
     /// </summary>
-    public abstract class AbpBaseComponent : BXJG.Common.RCL.CommonBaseComponent
+    public abstract class BaseComponent : BXJG.Common.RCL.CommonBaseComponent
     {
         //[Inject]
         public ICancellationTokenProvider CancellationTokenProvider=> ScopedServices.GetService< ICancellationTokenProvider >()?? NullCancellationTokenProvider.Instance;

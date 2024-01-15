@@ -37,12 +37,12 @@ namespace ZLJ.RCL.Components
     /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
     /// <typeparam name="TCreateInput">新增时的输入类型</typeparam>
     /// <typeparam name="TUpdateInput">修改时的输入类型</typeparam>
-    public abstract class AbpCreateBaseComponent<TAppService,
+    public abstract class CreateBaseComponent<TAppService,
                                                  TEntityDto,
                                                  TPrimaryKey,
                                                  TGetAllInput,
                                                  TCreateInput,
-                                                 TUpdateInput> : AbpBaseComponent
+                                                 TUpdateInput> : BaseComponent
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TCreateInput : new()
         where TUpdateInput : IEntityDto<TPrimaryKey>

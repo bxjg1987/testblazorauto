@@ -13,6 +13,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using BXJG.WeChat.Pay;
 namespace BXJG.WeChat.Web.Pay
 {
     /// <summary>

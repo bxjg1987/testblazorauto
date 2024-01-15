@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using System.Web;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.AspNetCore.WebUtilities;
+using BXJG.WeChat.MiniProgram;
 
 namespace BXJG.WeChat.Web.MiniProgram
 {

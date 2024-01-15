@@ -1,0 +1,42 @@
+﻿@using Microsoft.AspNetCore.Components.Sections
+@using ZLJ.Application.Share.Post
+@inherits DetailUpdateBaseComponent<IPostAppService, PostDto, int, PagedAndSortedResultRequest< PagedPostResultRequestDto>, CreatePostDto, PostEditDto>
+
+<SectionContent SectionName="post-detail-update-body">
+    <Form @ref="frm" ValidateOnChange="true" Model="editDto" LabelColSpan="4" WrapperColSpan="20">
+     
+        <FormItem Label="显示名">
+            <Input @bind-Value="@context.DisplayName" />
+        </FormItem>
+        <FormItem Label="备注">
+            <Input @bind-Value="@context.Description" />
+        </FormItem>   
+        <FormItem NoStyle=true>
+            <Input Value="@context.Id" Type="hidden" />
+        </FormItem>
+       @*  <ChildContent>
+
+        </ChildContent> *@
+    </Form>
+</SectionContent>
+
+<SectionContent SectionName="post-detail-update-btns">
+    @if (IsShowDelete)
+    {
+        <Button OnClick="BtnDeleteClick" Loading=isDeleting>删除</Button>
+    }
+    @if (IsShowRefresh)
+    {
+        <Button OnClick="BtnRefreshClick" Loading=isRefreshing Disabled=IsRefreshDisabled>刷新</Button>
+    }
+    @if (IsShowBeginEdit)
+    {
+        <Button OnClick="BtnBeginEditClick" Loading=isFormIniting>修改</Button>
+    }
+    else if (IsShowUpdate)
+    {
+        <Button OnClick="BtnCancelEditClick" Disabled=IsUpdateDisabled Icon="@IconType.Outline.Rollback">放弃修改</Button>
+        <Button OnClick="BtnResetClick" Loading=isReseting Disabled=IsUpdateDisabled Icon="@IconType.Outline.Redo">重置</Button>
+        <Button OnClick="BtnUpdateClick" Type="@ButtonType.Primary" Loading="@isUpdating" Disabled="@IsUpdateDisabled" Icon="@IconType.Outline.Save">保存</Button>
+    }
+</SectionContent>

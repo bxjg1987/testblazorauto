@@ -11,7 +11,7 @@ namespace ZLJ.RCL.Components
     /// <summary>
     /// 部门选择下拉框
     /// </summary>
-    public class TsOu : AbpTreeSelect<GetListInput,
+    public class TsOu : TreeSelect<GetListInput,
                                       OuDto,
                                       GeneralTreeGetForSelectInput,
                                       GeneralTreeComboboxDto,

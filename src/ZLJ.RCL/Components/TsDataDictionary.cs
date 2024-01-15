@@ -12,7 +12,7 @@ namespace ZLJ.RCL.Components
     /// <summary>
     /// 数据字典树形下拉框
     /// </summary>
-    public class TsDataDictionary : AbpTreeSelect<GeneralTreeGetForSelectInput,
+    public class TsDataDictionary : TreeSelect<GeneralTreeGetForSelectInput,
                                                   GeneralTreeNodeDto,
                                                   GeneralTreeGetForSelectInput,
                                                   GeneralTreeComboboxDto,

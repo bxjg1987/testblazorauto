@@ -78,6 +78,20 @@ namespace ZLJ.Admin.CoreRCL.Post
         }
         // AbpCreateDialog<IPostAppService, PostDto, int, PagedAndSortedResultRequest<PagedPostResultRequestDto>, CreatePostDto, PostEditDto, Create> dalRef;
 
+        /// <summary>
+        /// 是否需要刷新列表页面
+        /// </summary>
+        bool isChanged;  
+        /// <summary>
+        /// 关闭新增弹窗的核心逻辑
+        /// </summary>
+        /// <returns></returns>
+        async Task CloseDialogCore()
+        {
+            isCreateDialogVisible = false;
+            if (isChanged)
+                await Search();
+        }
         #region 新增
 
         /*
@@ -102,10 +116,6 @@ namespace ZLJ.Admin.CoreRCL.Post
             //       await Reset();
         }
         /// <summary>
-        /// 弹窗是否新增成功过
-        /// </summary>
-        bool isAdded;
-        /// <summary>
         /// 点击关闭新增弹窗时执行
         /// </summary>
         /// <returns></returns>
@@ -121,21 +131,59 @@ namespace ZLJ.Admin.CoreRCL.Post
         /// <returns></returns>
         async Task OnAddEnd(SaveResult<PostDto> sr)
         {
-            isAdded = true;
+            isChanged = true;
             if (sr.End)
             {
                 await CloseDialogCore();
             }
         }
+
+        #endregion
+
+        #region 详情和修改
         /// <summary>
-        /// 关闭新增弹窗的核心逻辑
+        /// 是否显示详情和修改弹窗
         /// </summary>
+        bool isShowDetailUpdate;
+        /// <summary>
+        /// 当前详情弹窗是否是修改模式
+        /// false查看模式 true修改模式
+        /// </summary>
+        bool isEdit;
+        /// <summary>
+        /// 
+        /// </summary>
+        string detailUpdateText => isEdit ? "修改" : "查看";
+
+        string detailUpdateIcon => isEdit ? IconType.Outline.Edit : IconType.Outline.File;
+       /// <summary>
+       /// 当前详情或修改的实体的id
+       /// </summary>
+        int detailUpdateId = 0;
+
+        /// <summary>
+        /// 新增后回调
+        /// </summary>
+        /// <param name="sr"></param>
         /// <returns></returns>
-        async Task CloseDialogCore()
+        async Task OnDetailUpdate(PostDto sr)
         {
-            isCreateDialogVisible = false;
-            if (isAdded)
-                await Search();
+            isChanged = true;
+            
+                await CloseDialogCore();
+           
+        }
+
+        void OnEdit(PostDto sr) {
+            isEdit = true;
+            detailUpdateId = sr.Id;
+            isShowDetailUpdate = true;
+        }
+
+        void OnDetail(PostDto sr) {
+            isEdit = false;
+            detailUpdateId = sr.Id;
+            isShowDetailUpdate = true;
         }
         #endregion
     }

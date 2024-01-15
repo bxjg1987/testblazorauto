@@ -32,7 +32,7 @@ namespace ZLJ.RCL.Components
     /// <typeparam name="TGetNodesForSelectInput"></typeparam>
     /// <typeparam name="TGetNodesForSelectOutput"></typeparam>
     /// <typeparam name="TAppService"></typeparam>
-    public class AbpTreeSelect<TGetTreeForSelectInput,
+    public class TreeSelect<TGetTreeForSelectInput,
                                TGetTreeForSelectOutput,
                                TGetNodesForSelectInput,
                                TGetNodesForSelectOutput,

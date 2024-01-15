@@ -27,12 +27,12 @@ namespace ZLJ.RCL.Components
     /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
     /// <typeparam name="TCreateInput">新增时的输入类型</typeparam>
     /// <typeparam name="TUpdateInput">修改时的输入类型</typeparam>
-    public abstract class AbpDetailOrUpdateBaseComponent<TAppService,
+    public abstract class DetailUpdateBaseComponent<TAppService,
                                                          TEntityDto,
                                                          TPrimaryKey,
                                                          TGetAllInput,
                                                          TCreateInput,
-                                                         TUpdateInput> : AbpBaseComponent
+                                                         TUpdateInput> : BaseComponent
         where TEntityDto : IEntityDto<TPrimaryKey>
         //where TGetAllInput : new()
         where TUpdateInput : IEntityDto<TPrimaryKey>
@@ -80,6 +80,9 @@ namespace ZLJ.RCL.Components
         /// 验证消息存储器
         /// </summary>
         protected ValidationMessageStore? validationMessageStore;
+        /// <summary>
+        /// 表单引用
+        /// </summary>
         protected Form<TUpdateInput> frm;
         #endregion
 
@@ -93,7 +96,7 @@ namespace ZLJ.RCL.Components
         {
             isEdit = IsEdit;
             //dto = await AppService.GetAsync(new EntityDto<TPrimaryKey>(Id));
-            await ResetOrReloadCore();
+            await RefreshCore();
             //if (isEdit)
             //{
             //    await BtnBeginEditClick();
@@ -103,6 +106,7 @@ namespace ZLJ.RCL.Components
         #endregion
 
         #region 权限
+
         [Inject]
         public AuthenticationStateProvider AuthStateProvider { get; set; }
         /// <summary>
@@ -125,6 +129,9 @@ namespace ZLJ.RCL.Components
         /// 是否有删除权限
         /// </summary>
         protected bool deleteIsGranted = true;
+        
+        //木有必要管查询权限，因为UI层面的权限本就是让界面更友好，应用服务本身有权限判断兜底了，没有查询权限时，外出组件不应显示响应按钮导航或显示此组件
+
         /// <summary>
         /// 初始化权限状态
         /// </summary>
@@ -143,52 +150,134 @@ namespace ZLJ.RCL.Components
         }
         #endregion
 
-        #region 重置
+        #region 刷新
+
+        /*
+         * 尽管重置时，决定从后端获取最新数据后重新初始化表单
+         * 但也可能在查看模式时重新加载数据，所以重置和刷新并不能合并
+         */
+
         /// <summary>
-        /// 是否禁用重置按钮
+        /// 是否显示刷新按钮
         /// </summary>
-        protected virtual bool IsResetOrReloadDisabled => isDeleting ||
-                                                          isFormIniting ||
-                                                          isResetOrReloading ||
-                                                          isUpdating;
+        protected virtual bool IsShowRefresh => !isEdit;
+        /// <summary>
+        /// 刷新按钮是否禁用
+        /// </summary>
+        protected virtual bool IsRefreshDisabled => isFormIniting ||
+                                                    isReseting ||
+                                                    isDeleting ||
+                                                    isUpdating;
+        /// <summary>
+        /// 是否正在加载
+        /// </summary>
+        protected bool isRefreshing = false;
+
+        /// 点击刷新按钮时回调
+        /// </summary>
+        /// <returns></returns>
+        [AbpExceptionInterceptor]
+        protected virtual async Task BtnRefreshClick()
+        {
+            await RefreshCore();
+        }
+        /// <summary>
+        /// 刷新核心逻辑
+        /// </summary>
+        /// <returns></returns>
+        protected virtual async Task RefreshCore()
+        {
+            if (isRefreshing)
+                return;
+
+            isRefreshing = true;
+            try
+            {
+                dto = await AppService.GetAsync(new EntityDto<TPrimaryKey>(Id));
+                //刷新和重置按钮只能二显一
+                //if (isEdit)
+                //{
+                //    await BeginEditCore();
+                //}
+            }
+            finally
+            {
+                isRefreshing = false;
+            }
+        }
+        #endregion
+
+        #region 重置
+        ///// <summary>
+        ///// 是否显示重置按钮
+        ///// </summary>
+        //protected virtual bool IsShowReset => IsShowUpdate;//有点多次一举，只是为了统一编程思路
         /// <summary>
         /// 正在执行重置
         /// </summary>
-        protected bool isResetOrReloading = false;
+        protected bool isReseting = false;
+        ///// <summary>
+        ///// 是否禁用重置按钮
+        ///// </summary>
+        //protected virtual bool IsResetDisabled => isDeleting ||
+        //                                          isRefreshing ||
+        //                                          isFormIniting ||
+        //                                          isReseting ||
+        //                                          isUpdating;
         /// <summary>
         /// 重置
         /// </summary>
         /// <returns></returns>
         [AbpExceptionInterceptor]
-        protected virtual async Task BtnResetOrReloadClick()
+        protected virtual async Task BtnResetClick()
         {
-            await ResetOrReloadCore();
+            await ResetCore();
         }
         /// <summary>
         /// 重置核心
         /// </summary>
         /// <returns></returns>
-        protected virtual async Task ResetOrReloadCore()
+        protected virtual async Task ResetCore()
         {
-            if (isResetOrReloading)
+            if (isReseting)
                 return;
 
-            isResetOrReloading = true;
+            isReseting = true;
+
+            await RefreshCore();
+
             try
             {
-                dto = await AppService.GetAsync(new EntityDto<TPrimaryKey>(Id));
+                //dto = await AppService.GetAsync(new EntityDto<TPrimaryKey>(Id));
                 await DtoMapToEditDto();
-                editContext = new EditContext(editDto!);
-                validationMessageStore = new ValidationMessageStore(editContext);
+ 
             }
             finally
             {
-                isResetOrReloading = false;
+                isReseting = false;
             }
+        }
+        /// <summary>
+        /// 显示模型转换为编辑模型，默认使用automapper
+        /// </summary>
+        protected virtual ValueTask DtoMapToEditDto()
+        {
+            editDto = ObjectMapper.Map<TUpdateInput>(dto);
+            editContext = new EditContext(editDto!);
+            validationMessageStore = new ValidationMessageStore(editContext);
+            return ValueTask.CompletedTask;
         }
         #endregion
 
         #region 修改
+        /// <summary>
+        /// 是否显示保存按钮和进入只读模式的按钮
+        /// </summary>
+        protected virtual bool IsShowUpdate => isEdit && updateIsGranted;
+        /// <summary>
+        /// 是否显示进入编辑模式的按钮
+        /// </summary>
+        protected virtual bool IsShowBeginEdit => !isEdit && updateIsGranted;
         /// <summary>
         /// true修改模式，false查看模式
         /// </summary>
@@ -218,7 +307,18 @@ namespace ZLJ.RCL.Components
         /// 表单是否初始化过了，通常为表单中的下拉框初始化
         /// </summary>
         protected bool editInited = false;
-
+        /// <summary>
+        /// 是否正在对表单进行首次初始化
+        /// </summary>
+        protected bool isFormIniting = false;
+        ///// <summary>
+        ///// 放弃编辑
+        ///// </summary>
+        //protected virtual void CancelEdit()
+        //{
+        //    isEdit = false;
+        //    MudDialog.SetTitle($"查看{FuncName}详情");
+        //}
         /// <summary>
         /// 进入编辑模式时执行
         /// </summary>
@@ -232,10 +332,9 @@ namespace ZLJ.RCL.Components
         /// 进入编辑模式的核心逻辑
         /// </summary>
         /// <returns></returns>
-        public virtual async ValueTask BeginEditCore()
+        protected virtual async ValueTask BeginEditCore()
         {
             isEdit = true;
-
 
             // StateHasChanged();
             // MudDialog.SetTitle($"修改{FuncName}");//需要处理图标，子类自己去处理吧
@@ -259,24 +358,12 @@ namespace ZLJ.RCL.Components
             }
 
             if (editDto == null)
-                await BtnResetOrReloadClick();
+                await DtoMapToEditDto();
 
             editInited = true;
         }
 
-        /// <summary>
-        /// 显示模型转换为编辑模型，默认使用automapper
-        /// </summary>
-        protected virtual ValueTask DtoMapToEditDto()
-        {
-            editDto = ObjectMapper.Map<TUpdateInput>(dto);
-            return ValueTask.CompletedTask;
-        }
 
-        /// <summary>
-        /// 是否正在对表单进行首次初始化
-        /// </summary>
-        protected bool isFormIniting = false;
         /// <summary>
         /// 首次进入编辑模式时初始化表单，如：初始化加载下拉框数据
         /// </summary>
@@ -288,33 +375,19 @@ namespace ZLJ.RCL.Components
             //vms = new ValidationMessageStore(editContext);
             return ValueTask.CompletedTask;
         }
-        ///// <summary>
-        ///// 放弃编辑
-        ///// </summary>
-        //protected virtual void CancelEdit()
-        //{
-        //    isEdit = false;
-        //    MudDialog.SetTitle($"查看{FuncName}详情");
-        //}
-        /// <summary>
-        /// 是否显示保存按钮和进入只读模式的按钮
-        /// </summary>
-        protected virtual bool IsShowUpdate => isEdit && updateIsGranted;
-        /// <summary>
-        /// 是否显示进入编辑模式的按钮
-        /// </summary>
-        protected virtual bool IsShowBeginEdit => !isEdit && updateIsGranted;
+
         /// <summary>
         /// 是否禁用保存按钮
         /// </summary>
-        public virtual bool IsUpdateDisabled => isDeleting ||
-                                                isFormIniting ||
-                                                isResetOrReloading ||
-                                                isUpdating ||
-                                                frm == default ||
-                                                editDto == null ||
-                                                editContext == default ||
-                                                editContext.GetValidationMessages().Any();
+        protected virtual bool IsUpdateDisabled => isDeleting ||
+                                                   isRefreshing ||
+                                                   isFormIniting ||
+                                                   isReseting ||
+                                                   isUpdating ||
+                                                   frm == default ||
+                                                   editDto == null ||
+                                                   editContext == default ||
+                                                   editContext.GetValidationMessages().Any();
         /// <summary>
         /// 是否正在保存
         /// </summary>
@@ -373,11 +446,10 @@ namespace ZLJ.RCL.Components
         #endregion
 
         #region 删除
-        ///// <summary>
-        ///// 是否显示进入编辑模式的按钮
-        ///// 直接用权限状态即可
-        ///// </summary>
-        //protected virtual bool IsShowDelete => deleteIsGranted;
+        /// <summary>
+        /// 是否显示进入编辑模式的按钮
+        /// </summary>
+        protected virtual bool IsShowDelete => deleteIsGranted;
         /// <summary>
         /// 是否显示删除确认
         /// </summary>
