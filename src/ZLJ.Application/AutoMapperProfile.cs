@@ -23,6 +23,8 @@ using ZLJ.Application.Common.Users;
 using Abp.Auditing;
 using ZLJ.Application.Share.Auditing;
 using ZLJ.Application.Share.Roles;
+using ZLJ.Application.Share.Post;
+using ZLJ.Core.BaseInfo.Post;
 
 namespace ZLJ.Application.Admin
 {
@@ -92,9 +94,13 @@ namespace ZLJ.Application.Admin
 
             #region 角色
             CreateMap<Role, RoleRelationDto>();
+            CreateMap<RoleEditDto, Role>();
+
+            CreateMap<CreatePostDto, PostEntity>().IncludeBase<CreateRoleDto, Role>();
+            CreateMap<Role, PostDto>().IncludeBase<Role, RoleDto>();
+            CreateMap<PostEntity, PostDto>().IncludeBase<Role, RoleDto>();
+            CreateMap<PostEditDto, PostEntity>().IncludeBase<RoleEditDto, Role>();
             #endregion
-
-
         }
     }
 }

@@ -144,8 +144,8 @@
 }
 <Modal DestroyOnClose="true" Footer="renderFragment1" @bind-Visible="isShowDetailUpdate" Draggable="true">
     <TitleTemplate>
-        <Icon Type=@detailUpdateIcon Theme=@IconThemeType.Outline />
-        @(detailUpdateText)@(FuncName)
+    
+          <SectionOutlet SectionName="post-detail-update-title" />
     </TitleTemplate>
     <ChildContent>
         <SectionOutlet SectionName="post-detail-update-body" />

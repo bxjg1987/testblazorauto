@@ -1,42 +1,66 @@
 ﻿@using Microsoft.AspNetCore.Components.Sections
 @using ZLJ.Application.Share.Post
 @inherits DetailUpdateBaseComponent<IPostAppService, PostDto, int, PagedAndSortedResultRequest< PagedPostResultRequestDto>, CreatePostDto, PostEditDto>
-
+<SectionContent SectionName="post-detail-update-title">
+    <Icon Type=@detailUpdateIcon Theme=@IconThemeType.Outline />
+    @(detailUpdateText)@(FuncName)
+</SectionContent>
 <SectionContent SectionName="post-detail-update-body">
-    <Form @ref="frm" ValidateOnChange="true" Model="editDto" LabelColSpan="4" WrapperColSpan="20">
-     
-        <FormItem Label="显示名">
-            <Input @bind-Value="@context.DisplayName" />
-        </FormItem>
-        <FormItem Label="备注">
-            <Input @bind-Value="@context.Description" />
-        </FormItem>   
-        <FormItem NoStyle=true>
-            <Input Value="@context.Id" Type="hidden" />
-        </FormItem>
-       @*  <ChildContent>
+
+    @if (isEdit)
+    {
+        <Form @ref="frm" ValidateOnChange="true" Model="editDto" LabelColSpan="4" WrapperColSpan="20" OnFinish="OnFinish">
+
+            <FormItem Label="显示名">
+                <Input @bind-Value="@context.DisplayName" />
+            </FormItem>
+            <FormItem Label="备注">
+                <Input @bind-Value="@context.Description" />
+            </FormItem>
+            <FormItem NoStyle=true>
+                <Input Value="@context.Id" Type="hidden" />
+            </FormItem>
+            @*  <ChildContent>
 
         </ChildContent> *@
-    </Form>
+        </Form>
+    }
+    else
+    {
+        <GridRow>
+            <GridCol Span="4">显示名</GridCol>
+            <GridCol Span="20">@dto?.DisplayName</GridCol>
+            </GridRow>
+        <GridRow>
+            <GridCol Span="4">备注</GridCol>
+            <GridCol Span="20">@dto?.Description</GridCol>
+            </GridRow>
+    }
+
+
 </SectionContent>
 
 <SectionContent SectionName="post-detail-update-btns">
     @if (IsShowDelete)
     {
-        <Button OnClick="BtnDeleteClick" Loading=isDeleting>删除</Button>
+        <Popconfirm Title="确定删除此项吗?" OnConfirm=BtnOkDeleteClick OnCancel=BtnCancelDelete>
+            <Button OnClick="BtnDeleteClick" Loading=isDeleting Danger=true>删除</Button>
+        </Popconfirm>
     }
-    @if (IsShowRefresh)
-    {
-        <Button OnClick="BtnRefreshClick" Loading=isRefreshing Disabled=IsRefreshDisabled>刷新</Button>
-    }
-    @if (IsShowBeginEdit)
-    {
-        <Button OnClick="BtnBeginEditClick" Loading=isFormIniting>修改</Button>
-    }
-    else if (IsShowUpdate)
-    {
-        <Button OnClick="BtnCancelEditClick" Disabled=IsUpdateDisabled Icon="@IconType.Outline.Rollback">放弃修改</Button>
-        <Button OnClick="BtnResetClick" Loading=isReseting Disabled=IsUpdateDisabled Icon="@IconType.Outline.Redo">重置</Button>
-        <Button OnClick="BtnUpdateClick" Type="@ButtonType.Primary" Loading="@isUpdating" Disabled="@IsUpdateDisabled" Icon="@IconType.Outline.Save">保存</Button>
-    }
+    <ButtonGroup>
+        @if (IsShowRefresh)
+        {
+            <Button OnClick="BtnRefreshClick" Loading=isRefreshing Disabled=IsRefreshDisabled>刷新</Button>
+        }
+        @if (IsShowBeginEdit)
+        {
+            <Button OnClick="BtnBeginEditClick" Loading=isFormIniting Type="@ButtonType.Primary">修改</Button>
+        }
+        else if (IsShowUpdate)
+        {
+            <Button OnClick="BtnResetClick" Loading=isReseting Disabled=IsUpdateDisabled Icon="@IconType.Outline.Redo">重置</Button>
+            <Button OnClick="BtnCancelEditClick" Disabled=IsUpdateDisabled Icon="@IconType.Outline.Rollback">放弃修改</Button>
+            <Button OnClick="BtnUpdateClick" Type="@ButtonType.Primary" Loading="@isUpdating" Disabled="@IsUpdateDisabled" Icon="@IconType.Outline.Save">保存</Button>
+        }
+    </ButtonGroup>
 </SectionContent>

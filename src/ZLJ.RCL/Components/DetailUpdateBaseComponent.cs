@@ -1,5 +1,6 @@
 ﻿
 using Abp.ObjectMapping;
+using MapsterMapper;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,18 +36,21 @@ namespace ZLJ.RCL.Components
                                                          TUpdateInput> : BaseComponent
         where TEntityDto : IEntityDto<TPrimaryKey>
         //where TGetAllInput : new()
-        where TUpdateInput : IEntityDto<TPrimaryKey>
+        where TUpdateInput : IEntityDto<TPrimaryKey>,new()
         where TAppService : ZLJ.Application.Common.Share.ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
     {
         #region 字段和属性
+
+        //ui比较独立，使用更简单的库做映射
+
         /// <summary>
         /// 请调用ObjectMapper
         /// </summary>
-        IObjectMapper objectMapper;
+        IMapper objectMapper;
         /// <summary>
         /// 对象映射接口
         /// </summary>
-        protected virtual IObjectMapper ObjectMapper => objectMapper ??= ScopedServices.GetRequiredService<IObjectMapper>();
+        protected virtual IMapper ObjectMapper => objectMapper ??= ScopedServices.GetRequiredService<IMapper>();
         /// <summary>
         /// 缓存当前主服务对象
         /// </summary>
@@ -72,14 +76,15 @@ namespace ZLJ.RCL.Components
         /// 当前编辑模型
         /// </summary>
         protected TUpdateInput? editDto;
-        /// <summary>
-        /// 编辑上下文
-        /// </summary>
-        protected EditContext? editContext;
-        /// <summary>
-        /// 验证消息存储器
-        /// </summary>
-        protected ValidationMessageStore? validationMessageStore;
+        //ant好像木有很好的支持这俩
+        ///// <summary>
+        ///// 编辑上下文
+        ///// </summary>
+        //protected EditContext? editContext;
+        ///// <summary>
+        ///// 验证消息存储器
+        ///// </summary>
+        //protected ValidationMessageStore? validationMessageStore;
         /// <summary>
         /// 表单引用
         /// </summary>
@@ -94,15 +99,25 @@ namespace ZLJ.RCL.Components
         [AbpExceptionInterceptor]
         protected override async Task OnInitializedAsync()
         {
+            //Abp.ObjectMapping.
             isEdit = IsEdit;
             //dto = await AppService.GetAsync(new EntityDto<TPrimaryKey>(Id));
-            await RefreshCore();
+            if (isEdit)
+            {
+                editDto=new TUpdateInput();
+                //editContext = new EditContext(editDto);
+                await ResetCore(); 
+                
+            }
+            else
+                await RefreshCore();
             //if (isEdit)
             //{
             //    await BtnBeginEditClick();
             //    // await ResetCore();
             //}
         }
+        //protected virtual ValueTask<TUpdateInput> Create
         #endregion
 
         #region 权限
@@ -129,7 +144,7 @@ namespace ZLJ.RCL.Components
         /// 是否有删除权限
         /// </summary>
         protected bool deleteIsGranted = true;
-        
+
         //木有必要管查询权限，因为UI层面的权限本就是让界面更友好，应用服务本身有权限判断兜底了，没有查询权限时，外出组件不应显示响应按钮导航或显示此组件
 
         /// <summary>
@@ -250,7 +265,7 @@ namespace ZLJ.RCL.Components
             {
                 //dto = await AppService.GetAsync(new EntityDto<TPrimaryKey>(Id));
                 await DtoMapToEditDto();
- 
+
             }
             finally
             {
@@ -263,8 +278,8 @@ namespace ZLJ.RCL.Components
         protected virtual ValueTask DtoMapToEditDto()
         {
             editDto = ObjectMapper.Map<TUpdateInput>(dto);
-            editContext = new EditContext(editDto!);
-            validationMessageStore = new ValidationMessageStore(editContext);
+            //editContext = new EditContext(editDto!);
+            //validationMessageStore = new ValidationMessageStore(editContext);
             return ValueTask.CompletedTask;
         }
         #endregion
@@ -385,9 +400,7 @@ namespace ZLJ.RCL.Components
                                                    isReseting ||
                                                    isUpdating ||
                                                    frm == default ||
-                                                   editDto == null ||
-                                                   editContext == default ||
-                                                   editContext.GetValidationMessages().Any();
+                                                   editDto == null;
         /// <summary>
         /// 是否正在保存
         /// </summary>

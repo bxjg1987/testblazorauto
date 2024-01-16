@@ -78,22 +78,22 @@ namespace ZLJ.Admin.CoreRCL.Post
         }
         // AbpCreateDialog<IPostAppService, PostDto, int, PagedAndSortedResultRequest<PagedPostResultRequestDto>, CreatePostDto, PostEditDto, Create> dalRef;
 
+
+        #region 新增
         /// <summary>
         /// 是否需要刷新列表页面
         /// </summary>
-        bool isChanged;  
+        bool isCreated;
         /// <summary>
         /// 关闭新增弹窗的核心逻辑
         /// </summary>
         /// <returns></returns>
-        async Task CloseDialogCore()
+        async Task CloseCreateDialogCore()
         {
             isCreateDialogVisible = false;
-            if (isChanged)
+            if (isCreated)
                 await Search();
         }
-        #region 新增
-
         /*
          * 结合blazor8的section时，新增弹窗太简单，不用单独封装弹窗组件，也便于传参到新增表单中
          * 也不要放抽象组件中，因为抽象组件是多个应用共享的，它们可能不用弹窗
@@ -122,7 +122,7 @@ namespace ZLJ.Admin.CoreRCL.Post
         [AbpExceptionInterceptor]
         private async Task CloseDialog()
         {
-            await CloseDialogCore();
+            await CloseCreateDialogCore();
         }
         /// <summary>
         /// 新增后回调
@@ -131,10 +131,10 @@ namespace ZLJ.Admin.CoreRCL.Post
         /// <returns></returns>
         async Task OnAddEnd(SaveResult<PostDto> sr)
         {
-            isChanged = true;
+            isCreated = true;
             if (sr.End)
             {
-                await CloseDialogCore();
+                await CloseCreateDialogCore();
             }
         }
 
@@ -150,12 +150,7 @@ namespace ZLJ.Admin.CoreRCL.Post
         /// false查看模式 true修改模式
         /// </summary>
         bool isEdit;
-        /// <summary>
-        /// 
-        /// </summary>
-        string detailUpdateText => isEdit ? "修改" : "查看";
-
-        string detailUpdateIcon => isEdit ? IconType.Outline.Edit : IconType.Outline.File;
+    
        /// <summary>
        /// 当前详情或修改的实体的id
        /// </summary>
@@ -168,10 +163,10 @@ namespace ZLJ.Admin.CoreRCL.Post
         /// <returns></returns>
         async Task OnDetailUpdate(PostDto sr)
         {
-            isChanged = true;
-            
-                await CloseDialogCore();
+            isShowDetailUpdate = false;
            
+                await Search();
+
         }
 
         void OnEdit(PostDto sr) {
@@ -185,6 +180,8 @@ namespace ZLJ.Admin.CoreRCL.Post
             detailUpdateId = sr.Id;
             isShowDetailUpdate = true;
         }
+
+
         #endregion
     }
 }
