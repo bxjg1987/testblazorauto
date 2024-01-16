@@ -31,7 +31,7 @@
             <GridCol Span="18" Flex=@("none")>
                 <Space>
                     <SpaceItem>
-                        <TsOu Style="min-width:10rem;" AllowClear ValueChanged="OnOuChanged" @ref=ou Disabled=IsLoading />
+                        <TsOuForSearch Style="min-width:10rem;" AllowClear Value="@GetAllInput.Filter.OuCode" ValueChanged="OnOuChanged" @ref=ou Disabled=IsLoading />
                      </SpaceItem>
                      <SpaceItem>
                          <RadioGroup TValue="bool?" @bind-Value="@GetAllInput.Filter.IsStatic" OnChange="Search" Disabled=IsLoading>

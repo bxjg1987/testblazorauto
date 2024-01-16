@@ -31,8 +31,6 @@ namespace ZLJ.Admin.CoreRCL.Post
         [AbpExceptionInterceptor]
         protected async Task AddRandomData()
         {
-
-
             for (int i = 0; i < 500; i++)
             {
                 await base.AppService.CreateAsync(new CreatePostDto
@@ -60,7 +58,7 @@ namespace ZLJ.Admin.CoreRCL.Post
                 ou.Value = default;
             await base.ReLoad();
         }
-        TsOu ou;
+        TsOuForSearch ou;
         //protected override Task OnQuery(QueryModel condition)
         //{
         //    if (currOu.IsNotNullOrWhiteSpaceBXJG())
@@ -74,7 +72,7 @@ namespace ZLJ.Admin.CoreRCL.Post
             //ValueChanged 选择时只会触发一次，但清空时又会触发两次
 
             // Console.WriteLine(   System.Text.Json.JsonSerializer.Serialize(ou));
-            GetAllInput.Filter.OuCode = ou.IsNullOrWhiteSpaceBXJG() ? string.Empty : ou.Split(',')[1];
+            GetAllInput.Filter.OuCode = ou;// ou.IsNullOrWhiteSpaceBXJG() ? string.Empty : ou.Split(',')[1];
             await base.Search();
         }
         // AbpCreateDialog<IPostAppService, PostDto, int, PagedAndSortedResultRequest<PagedPostResultRequestDto>, CreatePostDto, PostEditDto, Create> dalRef;
@@ -85,14 +83,11 @@ namespace ZLJ.Admin.CoreRCL.Post
                 OnDetail(row.DataItem.Data);
                 StateHasChanged();
             };
-
             return new Dictionary<string, object>
             {
                 { "ondblclick", OnDblClick },
             };
         }
-
-        
 
         #region 新增
         /// <summary>
