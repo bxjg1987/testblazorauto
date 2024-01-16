@@ -62,3 +62,10 @@ ol {
 .ant-dropdown-menu-item .ant-menu-title-content {
     margin-left: 0.5rem;
 }
+
+.ant-table-row.odd, .ant-table-row.odd td.ant-table-column-sort {
+    background-color: #f8f8f8;
+}
+.ant-table-row.even td.ant-table-column-sort {
+    background-color:white;
+}

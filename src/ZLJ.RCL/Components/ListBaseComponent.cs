@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using ZLJ.Application.Share.Post;
 using ZLJ.RCL.Interceptors;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ZLJ.RCL.Components
 {
@@ -179,7 +180,7 @@ namespace ZLJ.RCL.Components
                 }
             }
         }
-
+      
         /// <summary>
         /// 排序规则，格式："field1 aes,field2 desc"
         /// </summary>

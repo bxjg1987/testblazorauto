@@ -3,6 +3,7 @@
 
 
 using AntDesign.TableModels;
+using Microsoft.AspNetCore.Components.Web;
 using ZLJ.Application.Common.Share.OU;
 using ZLJ.Application.Share.Post;
 
@@ -55,8 +56,8 @@ namespace ZLJ.Admin.CoreRCL.Post
             GetAllInput.Filter.IsStatic = default;
             GetAllInput.Filter.Permission = default;
             GetAllInput.Filter.OuCode = default;
-            if(ou!=default)
-            ou.Value= default;
+            if (ou != default)
+                ou.Value = default;
             await base.ReLoad();
         }
         TsOu ou;
@@ -77,7 +78,21 @@ namespace ZLJ.Admin.CoreRCL.Post
             await base.Search();
         }
         // AbpCreateDialog<IPostAppService, PostDto, int, PagedAndSortedResultRequest<PagedPostResultRequestDto>, CreatePostDto, PostEditDto, Create> dalRef;
+        Dictionary<string, object> OnRow(RowData<PostDto> row)
+        {
+            Action<MouseEventArgs> OnDblClick = args =>
+            {
+                OnDetail(row.DataItem.Data);
+                StateHasChanged();
+            };
 
+            return new Dictionary<string, object>
+            {
+                { "ondblclick", OnDblClick },
+            };
+        }
+
+        
 
         #region 新增
         /// <summary>
@@ -150,10 +165,10 @@ namespace ZLJ.Admin.CoreRCL.Post
         /// false查看模式 true修改模式
         /// </summary>
         bool isEdit;
-    
-       /// <summary>
-       /// 当前详情或修改的实体的id
-       /// </summary>
+
+        /// <summary>
+        /// 当前详情或修改的实体的id
+        /// </summary>
         int detailUpdateId = 0;
 
         /// <summary>
@@ -164,18 +179,20 @@ namespace ZLJ.Admin.CoreRCL.Post
         async Task OnDetailUpdate(PostDto sr)
         {
             isShowDetailUpdate = false;
-           
-                await Search();
+
+            await Search();
 
         }
 
-        void OnEdit(PostDto sr) {
+        void OnEdit(PostDto sr)
+        {
             isEdit = true;
             detailUpdateId = sr.Id;
             isShowDetailUpdate = true;
         }
 
-        void OnDetail(PostDto sr) {
+        void OnDetail(PostDto sr)
+        {
             isEdit = false;
             detailUpdateId = sr.Id;
             isShowDetailUpdate = true;

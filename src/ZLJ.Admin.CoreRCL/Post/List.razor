@@ -32,67 +32,72 @@
                 <Space>
                     <SpaceItem>
                         <TsOu Style="min-width:10rem;" AllowClear ValueChanged="OnOuChanged" @ref=ou Disabled=IsLoading />
-                    </SpaceItem>
-                    <SpaceItem>
+                     </SpaceItem>
+                     <SpaceItem>
                          <RadioGroup TValue="bool?" @bind-Value="@GetAllInput.Filter.IsStatic" OnChange="Search" Disabled=IsLoading>
-                            <Radio TValue="bool?" RadioButton="true" Value="@(default(bool?))">全部</Radio>
-                            <Radio TValue="bool?" RadioButton="true" Value="@(true)">预设</Radio>
-                            <Radio TValue="bool?" RadioButton="true" Value="@(false)">非预设</Radio>
-                        </RadioGroup>
-                    </SpaceItem>
+                             <Radio TValue="bool?" RadioButton="true" Value="@(default(bool?))">全部</Radio>
+                             <Radio TValue="bool?" RadioButton="true" Value="@(true)">预设</Radio>
+                             <Radio TValue="bool?" RadioButton="true" Value="@(false)">非预设</Radio>
+                         </RadioGroup>
+                     </SpaceItem>
 
-                    <SpaceItem>
+                     <SpaceItem>
                          <Search Placeholder="请输入关键字..." @bind-Value="@Keywords" OnSearch="Search" AllowClear="true" ClassicSearchIcon="true" Disabled=IsLoading />
-                    </SpaceItem>
-                    <SpaceItem>
+                     </SpaceItem>
+                     <SpaceItem>
 
-                        <Tooltip Title="清空条件">
+                         <Tooltip Title="清空条件">
                              <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Clear" OnClick="ReLoad" Disabled=IsLoading></Button>
-                        </Tooltip>
+                         </Tooltip>
 
 
-                    </SpaceItem>
-                    <SpaceItem>
+                     </SpaceItem>
+                     <SpaceItem>
 
 
-                        <Tooltip Title="刷新">
+                         <Tooltip Title="刷新">
                              <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Reload" OnClick="Refresh" Disabled=IsLoading></Button>
-                        </Tooltip>
-                    </SpaceItem>
-                </Space>
+                         </Tooltip>
+                     </SpaceItem>
+                 </Space>
 
-            </GridCol>
-        </GridRow>
-    </SpaceItem>
-    <SpaceItem>
-        <Table @ref="table"
-               TItem="PostDto"
-               Total="TotalCount"
-               @bind-SelectedRows="SelectedItems"
-               OnChange="OnQuery"
-               DataSource="Items"
-               PageIndex="PageIndex"
-               PageSize="PageSize"
-               Loading="IsLoading"
-               HidePagination=false
-               RemoteDataSource="true"
-               RowKey="x=>x.Id"
-               Size="TableSize.Small"
-               Bordered="true"
-               ScrollY="73.5vh">
+             </GridCol>
+         </GridRow>
+     </SpaceItem>
+     <SpaceItem>
+         <Table @ref="table"
+                TItem="PostDto"
+                Total="TotalCount"
+                @bind-SelectedRows="SelectedItems"
+                OnChange="OnQuery"
+                DataSource="Items"
+                PageIndex="PageIndex"
+                PageSize="PageSize"
+                Loading="IsLoading"
+                HidePagination=false
+                RowClassName="@(r=>r.RowIndex%2==0?"even":"odd")"
+                RemoteDataSource="true"
+                RowKey="x=>x.Id"
+                OnRow="OnRow"
+                Size="TableSize.Small"
+                Bordered="true"
+                ScrollY="73.5vh">
 
-            <Selection Key="@(context.Id.ToString())" />
-            <PropertyColumn Property="c=>c.DisplayName" Sortable="true" DefaultSortOrder="SortDirection.Ascending" ShowSorterTooltip="false" />
-            @* <PropertyColumn Property="c=>c.Name" /> *@
-            <PropertyColumn Property="c=>c.IsStatic">
-                <Switch @bind-Value="@context.IsStatic" Size="@InputSize.Small" Disabled="true"></Switch>
-            </PropertyColumn>
-            <PropertyColumn Property="c=>c.Description" />
-            <ActionColumn Title="操作">
-                @* ButtonGroup设置Size好像没啥卵用 *@
-                <ButtonGroup Size="@ButtonSize.Small">
+             <Selection Key="@(context.Id.ToString())" />
+             <Column TData="PostDto" Title="行号" Width="60">
+                 @(PageSize * (PageIndex - 1) + Items.IndexOf(context) + 1)
+             </Column>
+             <PropertyColumn Property="c=>c.DisplayName" Sortable="true" DefaultSortOrder="SortDirection.Ascending" ShowSorterTooltip="false" Width="300" />
+             @* <PropertyColumn Property="c=>c.Name" /> *@
+             <PropertyColumn Property="c=>c.IsStatic" Width="80">
+                 <Switch @bind-Value="@context.IsStatic" Size="@InputSize.Small" Disabled="true" ></Switch>
+             </PropertyColumn>
+             <PropertyColumn Property="c=>c.Description" />
+             <ActionColumn Title="操作" Width="200">
+                 @* ButtonGroup设置Size好像没啥卵用 *@
+                 <ButtonGroup Size="@ButtonSize.Small">
                      <Button Size="@ButtonSize.Small" Type="@ButtonType.Primary" OnClick="x=>OnDetail(context)">详情</Button>
-                    @if (updateIsGranted)
+                     @if (updateIsGranted)
                     {
                         <Button Size="@ButtonSize.Small" OnClick="x=>OnEdit(context)">修改</Button>
                     }
@@ -144,8 +149,8 @@
 }
 <Modal DestroyOnClose="true" Footer="renderFragment1" @bind-Visible="isShowDetailUpdate" Draggable="true">
     <TitleTemplate>
-    
-          <SectionOutlet SectionName="post-detail-update-title" />
+
+        <SectionOutlet SectionName="post-detail-update-title" />
     </TitleTemplate>
     <ChildContent>
         <SectionOutlet SectionName="post-detail-update-body" />
