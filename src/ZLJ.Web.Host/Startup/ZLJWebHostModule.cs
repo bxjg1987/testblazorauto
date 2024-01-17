@@ -24,6 +24,7 @@ using Abp.Zero.Configuration;
 using BXJG.Utils.Application;
 using ZLJ.Web.Core;
 using ZLJ.Web.Core.Configuration;
+using ZLJ.Web.Core.Authentication.JwtBearer;
 
 namespace ZLJ.Web.Host.Startup
 {
@@ -118,7 +119,6 @@ namespace ZLJ.Web.Host.Startup
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(typeof(ZLJWebHostModule).GetAssembly());
-
         }
         public override void PostInitialize()
         {
@@ -127,6 +127,9 @@ namespace ZLJ.Web.Host.Startup
             // var workManager = IocManager.Resolve<IBackgroundWorkerManager>();
 
             //workManager.Add(IocManager.Resolve<CreateWorkloadRecordMonthlyWorker>());
+
+          
+
         }
 
         #region 从web.core移动过来的

@@ -15,6 +15,7 @@ using ZLJ.Core.Authorization.Users;
 using ZLJ.Application.Common.Authorization.Permissions;
 using BXJG.Utils.Application;
 using ZLJ.Core;
+using Abp.Reflection.Extensions;
 
 namespace ZLJ.Application.Common
 {
@@ -50,12 +51,12 @@ namespace ZLJ.Application.Common
             //经过测试，这样abp还是无法生成动态webapi，手动提供实现类吧
             //IocManager.Register(typeof(IBXJGShopItemAppService), typeof(BXJGShopItemAppService<Tenant, User, Role, TenantManager, UserManager, GeneralTreeEntity>), DependencyLifeStyle.Transient);
             //IocManager.Register(typeof(IBXJGShopFrontItemAppService), typeof(BXJGShopFrontItemAppService<GeneralTreeEntity>), DependencyLifeStyle.Transient);
-            IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
+            IocManager.RegisterAssemblyByConvention(typeof(CommonApplicationModule).GetAssembly());
             //IocManager.Register<YCSDK.Sdf>(DependencyLifeStyle.Transient);
-            IocManager.RegService(service => 
-            {
+            //IocManager.RegService(service => 
+            //{
                 //service.AddYCSDK(IocManager.Resolve<IConfiguration>().GetSection("YCSDK"));
-            });
+            //});
            
             //Configuration.ReplaceService<BXJG.Utils.Notification.PersonNotificationAppService<User>, NotifyAppServie>(DependencyLifeStyle.Transient);
 

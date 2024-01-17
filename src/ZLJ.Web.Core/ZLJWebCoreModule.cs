@@ -90,8 +90,8 @@ namespace ZLJ.Web.Core
 
             // Use database for language management
             Configuration.Modules.Zero().LanguageManagement.EnableDbLocalization();
-            
 
+            ConfigureTokenAuth();
             //Configuration.Modules.AbpAspNetCore()
             //    .CreateControllersForAppServices(
             //        typeof(ZLJApplicationModule).GetAssembly()
@@ -151,7 +151,8 @@ namespace ZLJ.Web.Core
             //全局雪花id生成器
             ConfigureIdGenarator();
 
-            IocManager.Register<TokenAuthConfiguration>();
+
+            //IocManager.Register<TokenAuthConfiguration>();
 
             ////Lazy<TService>注入
             //IocManager.IocContainer.Register(
@@ -196,18 +197,28 @@ namespace ZLJ.Web.Core
             //    //https://learn.microsoft.com/zh-cn/aspnet/core/security/data-protection/configuration/overview?view=aspnetcore-6.0#persistkeystodbcontext
             //    services.AddDataProtection().PersistKeysToDbContext<ZLJDbContext>();
             //});
+            //var tokenAuthConfig = IocManager.Resolve<TokenAuthConfiguration>();
+
+            //tokenAuthConfig.SecurityKey =
+            //    new SymmetricSecurityKey(
+            //        Encoding.ASCII.GetBytes(_appConfiguration["Authentication:JwtBearer:SecurityKey"]));
+            //tokenAuthConfig.Issuer = _appConfiguration["Authentication:JwtBearer:Issuer"];
+            //tokenAuthConfig.Audience = _appConfiguration["Authentication:JwtBearer:Audience"];
+            //tokenAuthConfig.SigningCredentials =
+            //    new SigningCredentials(tokenAuthConfig.SecurityKey, SecurityAlgorithms.HmacSha256);
+            //tokenAuthConfig.Expiration = TimeSpan.FromDays(1);
+        }
+        private void ConfigureTokenAuth()
+        {
+            IocManager.Register<TokenAuthConfiguration>();
             var tokenAuthConfig = IocManager.Resolve<TokenAuthConfiguration>();
 
-            tokenAuthConfig.SecurityKey =
-                new SymmetricSecurityKey(
-                    Encoding.ASCII.GetBytes(_appConfiguration["Authentication:JwtBearer:SecurityKey"]));
+            tokenAuthConfig.SecurityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_appConfiguration["Authentication:JwtBearer:SecurityKey"]));
             tokenAuthConfig.Issuer = _appConfiguration["Authentication:JwtBearer:Issuer"];
             tokenAuthConfig.Audience = _appConfiguration["Authentication:JwtBearer:Audience"];
-            tokenAuthConfig.SigningCredentials =
-                new SigningCredentials(tokenAuthConfig.SecurityKey, SecurityAlgorithms.HmacSha256);
+            tokenAuthConfig.SigningCredentials = new SigningCredentials(tokenAuthConfig.SecurityKey, SecurityAlgorithms.HmacSha256);
             tokenAuthConfig.Expiration = TimeSpan.FromDays(1);
         }
-       
         /// <summary>
         /// 使用原生的雪花id生成器
         /// </summary>
