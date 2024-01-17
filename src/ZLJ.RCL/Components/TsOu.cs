@@ -11,30 +11,20 @@ namespace ZLJ.RCL.Components
     /// <summary>
     /// 部门选择下拉框
     /// </summary>
-    public class TsOuForSearch : TreeSelectForSearch<GetListInput,
-                                                     OuDto,
-                                                     GeneralTreeGetForSelectInput,
-                                                     GeneralTreeComboboxDto,
-                                                     IOuProviderAppService>
+    public class TsOuForSearch : TreeSelect<GetListInput,
+                                            OuDto,
+                                            GeneralTreeGetForSelectInput,
+                                            GeneralTreeComboboxDto,
+                                            IOuProviderAppService>
     {
-        protected override ValueTask SetDefault(IReadOnlyDictionary<string, object> dic)
+
+        protected override Task OnInitializedAsync()
         {
-            if (!dic.ContainsKey(nameof(Placeholder)))
+            if (Placeholder.IsNullOrWhiteSpaceBXJG())
             {
                 Placeholder = "请选择部门";
             }
-            return base.SetDefault(dic);
+            return base.OnInitializedAsync();
         }
-    }
-    /// <summary>
-    /// 部门选择下拉框
-    /// </summary>
-    public class TsOuForForm : TreeSelectForSearch<GetListInput,
-                                                   OuDto,
-                                                   GeneralTreeGetForSelectInput,
-                                                   GeneralTreeComboboxDto,
-                                                   IOuProviderAppService>
-    {
-        //protected override string sy => "请选择部门";
     }
 }

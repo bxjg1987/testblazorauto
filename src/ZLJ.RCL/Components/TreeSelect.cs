@@ -51,50 +51,12 @@ namespace ZLJ.RCL.Components
         /// 不用用code，因为code会变
         /// </summary>
         [Parameter]
-        public long? ParentId { get; set; }
-        //protected virtual string sy => "请选择";
-        public override Task SetParametersAsync(ParameterView parameters)
-        {
-            //这里重写ant treeSelct的默认值
-            var dic = parameters.ToDictionary();
-            
-            if (!dic.ContainsKey(nameof(TitleExpression)))
-            {
-                TitleExpression = node => node.DataItem.DisplayName;
-            }
-            if (!dic.ContainsKey(nameof(ChildrenExpression)))
-            {
-                ChildrenExpression = node => node.DataItem.Children;
-            }
-            //if (!dic.ContainsKey(nameof(KeyExpression)))
-            //{
-            //    KeyExpression = node => node.DataItem.Code;
-            //}
-            if (!dic.ContainsKey(nameof(IsLeafExpression)))
-            {
-                IsLeafExpression = node => node.DataItem.Children == null || !node.DataItem.Children.Any();
-            }
-            //if (!dic.ContainsKey(nameof(ValueOnClear)))
-            //{
-            //    ValueOnClear = string.Empty;
-            //    // Value
-            //}
-            //if (!dic.ContainsKey(nameof(OnClearSelected)))
-            //{
-            //    OnClearSelected = EventCallback.Factory.Create(this, ClearSelected);
+        public virtual long? ParentId { get; set; }
 
-            //}
-            //
+        [Parameter]
+        public virtual bool IsKeyId { get; set; }
 
-            //if (!dic.ContainsKey(nameof(OnSearch)))
-            //{
-            //    OnSearch = EventCallback.Factory.Create<string>(this, Search);
-            //}
-            SetDefault(dic);
-            return base.SetParametersAsync(parameters);
-        }
-
-        protected virtual ValueTask SetDefault(IReadOnlyDictionary<string, object> dic) => ValueTask.CompletedTask;
+        //protected virtual ValueTask SetDefault(IReadOnlyDictionary<string, object> dic) => ValueTask.CompletedTask;
         //protected override void OnValueChange(string value)
         //{
         //    //  base.OnValueChange(value);
@@ -135,6 +97,24 @@ namespace ZLJ.RCL.Components
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
+
+            if (TitleExpression == default)
+                TitleExpression = node => node.DataItem.DisplayName;
+
+            if (ChildrenExpression == default)
+                ChildrenExpression = node => node.DataItem.Children;
+
+            if (KeyExpression == default)
+            {
+                if (IsKeyId)
+                    KeyExpression = node => node.DataItem.Id.ToString();
+                else
+                    KeyExpression = node => node.DataItem.Code;
+            }
+
+            if (IsLeafExpression == default)
+                IsLeafExpression = node => node.DataItem.Children == null || !node.DataItem.Children.Any();
+
             if (DataSource == null)
             {
                 await using var service = ServiceProvider.CreateAsyncScope();
@@ -154,80 +134,5 @@ namespace ZLJ.RCL.Components
         //    var appService = service.ServiceProvider.GetRequiredService<TAppService>();
         //    DataSource = await appService.GetTreeForSelectAsync(new TGetTreeForSelectInput {  });
         //}
-    }
-
-    /// <summary>
-    /// 参考开发随记中的设计思路
-    /// 这是泛型的、通用的、统一树形的 下拉树选择框，它不限定是用在搜索（重在事件触发数据加载）还是表单（重在双向绑定）
-    /// 推荐所有树形数据的选择都继承它
-    /// </summary>
-    /// <typeparam name="TGetTreeForSelectInput"></typeparam>
-    /// <typeparam name="TGetTreeForSelectOutput"></typeparam>
-    /// <typeparam name="TGetNodesForSelectInput"></typeparam>
-    /// <typeparam name="TGetNodesForSelectOutput"></typeparam>
-    /// <typeparam name="TAppService"></typeparam>
-    public class TreeSelectForSearch<TGetTreeForSelectInput,
-                                     TGetTreeForSelectOutput,
-                                     TGetNodesForSelectInput,
-                                     TGetNodesForSelectOutput,
-                                     TAppService> : TreeSelect<TGetTreeForSelectInput,
-                                                               TGetTreeForSelectOutput,
-                                                               TGetNodesForSelectInput,
-                                                               TGetNodesForSelectOutput,
-                                                               TAppService>
-        where TGetTreeForSelectOutput : IGeneralTree<TGetTreeForSelectOutput>
-        where TGetTreeForSelectInput : GeneralTreeGetForSelectInput, new()
-        //where TGetNodesForSelectOutput : ComboboxItemDto 由于我们规定了统一使用树，所以这个约束没有必要
-        //这里的接口应该换成application.common.share中的接口
-        where TAppService : IGeneralTreeProviderBaseAppService<TGetTreeForSelectInput,
-                                                               TGetTreeForSelectOutput,
-                                                               TGetNodesForSelectInput,
-                                                               TGetNodesForSelectOutput>
-    {
-        protected override ValueTask SetDefault(IReadOnlyDictionary<string, object> dic)
-        {
-            if (!dic.ContainsKey(nameof(KeyExpression)))
-            {
-                KeyExpression = node => node.DataItem.Code;
-            }
-            return base.SetDefault(dic);
-        }
-    }
-    /// <summary>
-    /// 参考开发随记中的设计思路
-    /// 这是泛型的、通用的、统一树形的 下拉树选择框，它不限定是用在搜索（重在事件触发数据加载）还是表单（重在双向绑定）
-    /// 推荐所有树形数据的选择都继承它
-    /// </summary>
-    /// <typeparam name="TGetTreeForSelectInput"></typeparam>
-    /// <typeparam name="TGetTreeForSelectOutput"></typeparam>
-    /// <typeparam name="TGetNodesForSelectInput"></typeparam>
-    /// <typeparam name="TGetNodesForSelectOutput"></typeparam>
-    /// <typeparam name="TAppService"></typeparam>
-    public class TreeSelectForForm<TGetTreeForSelectInput,
-                                   TGetTreeForSelectOutput,
-                                   TGetNodesForSelectInput,
-                                   TGetNodesForSelectOutput,
-                                   TAppService> : TreeSelect<TGetTreeForSelectInput,
-                                                             TGetTreeForSelectOutput,
-                                                             TGetNodesForSelectInput,
-                                                             TGetNodesForSelectOutput,
-                                                             TAppService>
-        where TGetTreeForSelectOutput : IGeneralTree<TGetTreeForSelectOutput>
-        where TGetTreeForSelectInput : GeneralTreeGetForSelectInput, new()
-        //where TGetNodesForSelectOutput : ComboboxItemDto 由于我们规定了统一使用树，所以这个约束没有必要
-        //这里的接口应该换成application.common.share中的接口
-        where TAppService : IGeneralTreeProviderBaseAppService<TGetTreeForSelectInput,
-                                                               TGetTreeForSelectOutput,
-                                                               TGetNodesForSelectInput,
-                                                               TGetNodesForSelectOutput>
-    {
-        protected override ValueTask SetDefault(IReadOnlyDictionary<string, object> dic)
-        {
-            if (!dic.ContainsKey(nameof(KeyExpression)))
-            {
-                KeyExpression = node => node.DataItem.Id.ToString();
-            }
-            return base.SetDefault(dic);
-        }
     }
 }
