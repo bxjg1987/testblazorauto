@@ -132,7 +132,7 @@ namespace BXJG.Utils.Application.Share.GeneralTree
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task<IList<TDto>> GetAllAsync(TGetAllInput input);
+        Task<List<TDto>> GetAllAsync(TGetAllInput input);
         /// <summary>
         /// 获取指定节点
         /// </summary>

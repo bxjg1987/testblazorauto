@@ -79,7 +79,7 @@ namespace ZLJ.Web.HostBlazor.Components
                         if (item.StartsWith(prefix))
                             HttpContext.Response.Cookies.Delete(item);
                     }
-                    HttpContext.Response.Cookies.Append(cookieKey, DateTime.Now.ToLongTimeString(),new CookieOptions {  Expires= DateTimeOffset.Now.AddYears(100) });
+                    HttpContext.Response.Cookies.Append(cookieKey, DateTime.Now.ToLongTimeString(),new CookieOptions {  Expires= DateTimeOffset.Now.AddYears(10) });
                 }
             }
 

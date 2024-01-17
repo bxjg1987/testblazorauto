@@ -38,7 +38,7 @@ namespace AutoMapper
         {
             return config;
 
-            return config.ForMember(c => c.ExtData, opt => opt.Ignore());
+           // return config.ForMember(c => c.ExtData, opt => opt.Ignore());
         }
 
         [Obsolete]

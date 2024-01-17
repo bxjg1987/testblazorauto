@@ -824,7 +824,7 @@ namespace BXJG.Utils.Application.GeneralTree
         /// <param name="input"></param>
         /// <returns></returns>
         [UnitOfWork(false)]
-        public virtual async Task<IList<TDto>> GetAllAsync(TGetAllInput input)
+        public virtual async Task<List<TDto>> GetAllAsync(TGetAllInput input)
         {
             //权限判断
             await CheckGetPermissionAsync();

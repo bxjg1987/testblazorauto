@@ -7,12 +7,14 @@ using AntDesign.TableModels;
 using BXJG.Common.Dto;
 using BXJG.Utils;
 using BXJG.Utils.Application.Share;
+using BXJG.Utils.Application.Share.GeneralTree;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
 using Rougamo;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
@@ -30,27 +32,24 @@ namespace ZLJ.RCL.Components
      * 动态条件对于用户来讲有点复杂，所以我们暂时不考虑
      */
 
-    //由于abp的crud接口和抽象类把crud搞一起了，不想动它，所以这里的应用服务中包含TCreateInput、TUpdateInput
-
     /// <summary>
-    /// 抽象的，基于ant table的列表页抽象组件
+    /// 抽象的，基于MudBlazor treeView的列表页抽象组件
     /// </summary>
     /// <typeparam name="TAppService">应用服务类型</typeparam>
     /// <typeparam name="TEntityDto">列表项的数据类型</typeparam>
-    /// <typeparam name="TPrimaryKey">唯一id类型</typeparam>
-    /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
     /// <typeparam name="TCreateInput">新增时的输入类型</typeparam>
-    /// <typeparam name="TUpdateInput">修改时的输入类型</typeparam>
-    public abstract class ListBaseComponent<TAppService,
-                                            TEntityDto,
-                                            TPrimaryKey,
-                                            TGetAllInput,
-                                            TCreateInput,
-                                            TUpdateInput> : BaseComponent
-        where TEntityDto : IEntityDto<TPrimaryKey>, IExtendableDto//, new()
-        where TGetAllInput : new()
-        where TUpdateInput : IEntityDto<TPrimaryKey>
-        where TAppService : ZLJ.Application.Common.Share.ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
+    /// <typeparam name="TEditDto">修改时的输入类型</typeparam>
+    /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
+    public abstract class TreeListBaseComponent<TAppService,
+                                                TEntityDto,
+                                                TCreateInput,
+                                                TEditDto,
+                                                TGetAllInput> : BaseComponent
+        //where TCreateInput : GeneralTreeNodeEditBaseDto //注意这里约束为TEditDto，这样强制要求继承编辑模型不合理
+        where TEntityDto : GeneralTreeGetTreeNodeBaseDto<TEntityDto>, IExtendableDto//, new()
+        //where TEditDto : GeneralTreeNodeEditBaseDto//父类可以对输入做一定的处理
+        where TGetAllInput : GeneralTreeGetTreeInput, new()
+        where TAppService : IGeneralTreeBaseAppService<TEntityDto, TCreateInput, TEditDto, TGetAllInput>
     {
         //界面部分就不要用IPermissionChecker了，不过server模式时AuthorizationService内部会使用IPermissionChecker
         //请查看自定义授权策略提供器
@@ -68,7 +67,7 @@ namespace ZLJ.RCL.Components
         /// <summary>
         /// 请调用AppService
         /// </summary>
-        TAppService appService;
+        TAppService? appService;
         /// <summary>
         /// 获取主服务
         /// </summary>
@@ -123,7 +122,7 @@ namespace ZLJ.RCL.Components
         /// </summary>
         /// <param name="output">批量操作结果</param>
         /// <param name="funName">操作名</param>
-        protected virtual async ValueTask BatchOperationMessage(BatchOperationOutput<TPrimaryKey> output, string funName = "删除")
+        protected virtual async ValueTask BatchOperationMessage(BatchOperationOutputLong output, string funName = "删除")
         {
             if (output.ErrorMessage.Any())
             {
@@ -140,47 +139,7 @@ namespace ZLJ.RCL.Components
         /// 搜索条件
         /// </summary>
         protected TGetAllInput GetAllInput = new TGetAllInput();
-        /// <summary>
-        /// 是否是分页模式
-        /// </summary>
-        public bool IsPage => GetAllInput is IPagedResultRequest;
-
-        ///// <summary>
-        ///// 填充动态条件
-        ///// </summary>
-        ///// <returns></returns>
-        //protected virtual ValueTask FillDynamicConditions(ICollection<ConditionFieldDefine> conditions) => ValueTask.CompletedTask;
-
-        /// <summary>
-        /// 获取每页行数，若不做分页请返回0
-        /// </summary>
-        protected virtual int PageSize
-        {
-            get
-            {
-                if (GetAllInput is ILimitedResultRequest dx)
-                {
-                    return dx.MaxResultCount;
-                }
-                else if (GetAllInput is IHaveFilter dx1 && dx1.Filter is ILimitedResultRequest dx2)
-                {
-                    return dx2.MaxResultCount;
-                }
-                return int.MaxValue;
-            }
-            set
-            {
-                if (GetAllInput is ILimitedResultRequest dx)
-                {
-                    dx.MaxResultCount = value;
-                }
-                else if (GetAllInput is IHaveFilter dx1 && dx1.Filter is ILimitedResultRequest dx2)
-                {
-                    dx2.MaxResultCount = value;
-                }
-            }
-        }
-      
+        
         /// <summary>
         /// 排序规则，格式："field1 aes,field2 desc"
         /// </summary>
@@ -221,33 +180,7 @@ namespace ZLJ.RCL.Components
         /// 当前条件下的总数据数量
         /// </summary>
         protected virtual int TotalCount { get; set; }
-        /// <summary>
-        /// 当前是第几页
-        /// </summary>
-        protected virtual int PageIndex
-        {
-            get
-            {
-                //  int pageIndex = 1;
-                //  if (GetAllInput is IPagedResultRequest dx)
-                return (GetAllInput as IPagedResultRequest).SkipCount / PageSize + 1;
-
-                //若是纯条件，就木有必要
-
-                //if (pageIndex <= 0)
-                //    pageIndex = 1;
-
-
-            }
-            set
-            {
-                if (GetAllInput is IPagedResultRequest dx)
-                {
-                    dx.SkipCount = (value - 1) * PageSize;
-                }
-            }
-        }
-
+      
         /// <summary>
         /// 父类仅仅需要读，至于是否可写由子类自己决定
         /// </summary>
@@ -319,7 +252,7 @@ namespace ZLJ.RCL.Components
 
                 //给每行属性附加额外状态
 
-                foreach (var dto in dtos.Items)
+                foreach (var dto in dtos)
                 {
                     dynamic dd = new ExpandoObject();
                     dd.IsDeleting = false;
@@ -327,8 +260,8 @@ namespace ZLJ.RCL.Components
                     await AddItemExtData(dto, dd);
                     dto.ExtensionData = dd;
                 }
-                Items = dtos.Items.ToList();
-                TotalCount = dtos.TotalCount;
+                Items = dtos;
+                TotalCount = dtos.Count;
 
                 if (SelectedItems != default && SelectedItems is ICollection<TEntityDto> list)
                     list.Clear();
@@ -483,8 +416,8 @@ namespace ZLJ.RCL.Components
             isDeleting = true;
             try
             {
-                var r = await AppService.BatchDeleteAsync(new BatchOperationInput<TPrimaryKey> { Ids = SelectedItems.Select(x => x.Id).ToArray() });
-                BatchOperationMessage(r, "批量删除");//这里木有必要await
+                var r = await AppService.DeleteAsync(new BatchOperationInputLong { Ids = SelectedItems.Select(x => x.Id).ToArray() });
+                _ = BatchOperationMessage(r, "批量删除");//这里木有必要await
                 //BatchDeleteMessage(temp);
                 if (r.Ids.Any())
                     await Refresh();
@@ -509,8 +442,8 @@ namespace ZLJ.RCL.Components
             item.ExtensionData.IsDeleting = true;
             try
             {
-                await AppService.DeleteAsync(new EntityDto<TPrimaryKey>(item.Id));
-                ShowSuccessMessage("删除提示", "删除成功！");//这里木有必要await
+                await AppService.DeleteAsync(new() { Ids = new[] { item.Id}  });
+                _ = ShowSuccessMessage("删除提示", "删除成功！");//这里木有必要await
                                                     //若上面异常，下面不会执行
                                                     //_ = InvokeAsync(dataGrid.ReloadServerData);
                                                     // await LoadListData();
@@ -532,14 +465,12 @@ namespace ZLJ.RCL.Components
         }
         #endregion
 
-
-
         /// <summary>
         /// 对ant表格的引用
         /// </summary>
         protected Table<TEntityDto> table;
 
-
+        protected virtual Func<TEntityDto, IEnumerable> GetTreeChildren { get; } = x => x.Children;
 
         [AbpExceptionInterceptor]
         protected virtual async Task OnQuery(QueryModel condition)
@@ -554,8 +485,8 @@ namespace ZLJ.RCL.Components
             Sorting = string.Join(",", ls);
             //页码和页索引直接在table做bingd-xxx
             //但若在这里做，则子类无需再绑定了
-            this.PageSize = condition.PageSize;
-            this.PageIndex = condition.PageIndex;
+          //  this.PageSize = condition.PageSize;
+          //  this.PageIndex = condition.PageIndex;
             // var r =await AppService.GetAllAsync(GetAllInput);
             //Items = r.Items;
             // TotalCount = r.TotalCount;

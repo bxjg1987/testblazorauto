@@ -77,28 +77,28 @@ namespace BXJG.Utils.Application.Share.GeneralTree
         //因此AutoMapper映射原始的ExtensionData，在属性内部设置ExtData
         //ExtensionData本身就不需要序列化到前端了
 
-        [Newtonsoft.Json.JsonIgnore]//目前默认使用的并非.net 3.x的json序列化
-        public string ExtensionData
-        {
-            get
-            {
-                return extensionData;
-            }
-            set
-            {
-                extensionData = value;
-                if (string.IsNullOrWhiteSpace(value))
-                    ExtData = null;
-                else
-                    ExtData = JsonConvert.DeserializeObject<dynamic>(value);
-            }
-        }
-        // public dynamic ExtensionData { get; set; } 
-        /// <summary>
-        /// 扩展属性
-        /// </summary>
-        // [Ignore]
-        public dynamic ExtData { get; private set; }
-        dynamic IExtendableDto.ExtensionData { get; set; }
+        //[Newtonsoft.Json.JsonIgnore]//目前默认使用的并非.net 3.x的json序列化
+        //public string ExtensionData
+        //{
+        //    get
+        //    {
+        //        return extensionData;
+        //    }
+        //    set
+        //    {
+        //        extensionData = value;
+        //        if (string.IsNullOrWhiteSpace(value))
+        //            ExtData = null;
+        //        else
+        //            ExtData = JsonConvert.DeserializeObject<dynamic>(value);
+        //    }
+        //}
+        //// public dynamic ExtensionData { get; set; } 
+        ///// <summary>
+        ///// 扩展属性
+        ///// </summary>
+        //// [Ignore]
+        //public dynamic ExtData { get; private set; }
+        public dynamic ExtensionData { get; set; }
     }
 }

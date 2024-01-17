@@ -11,6 +11,7 @@ using Hangfire;
 using Hangfire.SqlServer;
 using ZLJ.Web.HostBlazor.Auth;
 using Abp.AspNetCore.Mvc.Controllers;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseCastleWindsor(IocManager.Instance.IocContainer);
@@ -26,6 +27,19 @@ string defaultConnectionString = _appConfiguration.GetConnectionString(ZLJ.Core.
 builder.Services.AddMvcCore();//经过测试，这个必须加
 
 IdentityRegistrar.Register(builder.Services);
+builder.Services.ConfigureApplicationCookie(opt =>
+{
+    //滑动过期1小时，api token过期时间在配置对象TokenAuthConfiguration中
+    opt.SlidingExpiration = true;
+    opt.ExpireTimeSpan = TimeSpan.FromHours(1);
+});
+//builder.Services.AddAuthentication().AddCookie
+//builder.Services.Configure<CookieAuthenticationOptions>(opt =>
+//{
+//    opt.SlidingExpiration = true;
+// //   opt.ex
+//    opt.ExpireTimeSpan = TimeSpan.Zero;
+//});
 
 #region hangfire
 string hangfireConnectionString = _appConfiguration.GetConnectionString("HangfireSqlServer")!;
@@ -60,6 +74,7 @@ builder.Services.AddScoped<AuthenticationStateProvider, PersistingRevalidatingAu
 builder.Services.AddZLJBlazorServer().AddAdminBlazor();
 
 var app = builder.Build();
+
 app.Use((ctx, next) =>
 {
     ctx.Request.Headers["Accept-Language"] = ctx.Request.Headers["Accept-Language"].ToString()
