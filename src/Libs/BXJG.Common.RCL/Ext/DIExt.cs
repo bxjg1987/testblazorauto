@@ -2,7 +2,7 @@
 using BXJG.Common.Http;
 using BXJG.Common.RCL.Auth;
 using BXJG.Common.RCL.Event;
-using Mapster;
+
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -42,7 +42,6 @@ namespace Microsoft.Extensions.DependencyInjection
         }
         static IServiceCollection AddCommonRCL(this IServiceCollection services)
         {
-            services.AddMapster();
             //可能被重复调用，注册时要注意
             return services.AddBXJGCommon();
         }

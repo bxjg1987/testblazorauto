@@ -18,6 +18,8 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.Services.AddAdminBlazor().AddZLJBlazorClient()
                 .AddAuthorizationCore();
 
+builder.Services.AddAutoMapper(typeof(Program),typeof(ZLJ.RCL.AppContainer));
+
 builder.Services.AddAdminApiClientProxy(hc =>
 {
     hc.BaseAddress = new Uri(builder.Configuration["ApiUrlRoot"].TrimEnd('/') + "/");

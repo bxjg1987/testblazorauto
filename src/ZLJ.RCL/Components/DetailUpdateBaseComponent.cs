@@ -1,6 +1,5 @@
 ﻿
 using Abp.ObjectMapping;
-using MapsterMapper;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Extensions.DependencyInjection;
@@ -46,11 +45,11 @@ namespace ZLJ.RCL.Components
         /// <summary>
         /// 请调用ObjectMapper
         /// </summary>
-        IMapper objectMapper;
+        IObjectMapper objectMapper;
         /// <summary>
         /// 对象映射接口
         /// </summary>
-        protected virtual IMapper ObjectMapper => objectMapper ??= ScopedServices.GetRequiredService<IMapper>();
+        protected virtual IObjectMapper ObjectMapper => objectMapper ??= ScopedServices.GetRequiredService<IObjectMapper>();
         /// <summary>
         /// 缓存当前主服务对象
         /// </summary>

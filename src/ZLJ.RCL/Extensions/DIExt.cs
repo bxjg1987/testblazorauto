@@ -10,6 +10,8 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using ZLJ.Application.Common.Share.Session;
 using ZLJ.RCL.Abps;
 using ZLJ.RCL;
+using Abp.ObjectMapping;
+using Abp.AutoMapper;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -41,6 +43,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddTransient<IUserNavigationManager, ClientNavigationManager>();
             services.TryAddTransient<IFeatureChecker, ClientFeatureChecker>();
             services.TryAddTransient<ISessionAppService, SessionAppService>();
+            services.TryAddSingleton<IObjectMapper, AutoMapperObjectMapper>();
             //不好实现，所以不要使用多语言
             //services.TryAddSingleton<ILocalizationManager, NullLocalizationManager>();
             return services;

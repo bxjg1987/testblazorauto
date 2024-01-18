@@ -28,6 +28,7 @@ using BXJG.Common;
 using BXJG.Utils.RCL;
 using ZLJ.Web.Core;
 using ZLJ.Web.Core.Configuration;
+using Abp.AutoMapper;
 
 namespace ZLJ.Web.HostBlazor.Startup
 {
@@ -45,8 +46,12 @@ namespace ZLJ.Web.HostBlazor.Startup
         }
         public override void PreInitialize()
         {
-
             Configuration.BackgroundJobs.IsJobExecutionEnabled = false;
+
+            //注册automapper映射
+            Configuration.Modules.AbpAutoMapper().Configurators
+                .Add(cfg => cfg.AddMaps(typeof(ZLJ.RCL.AppContainer),typeof(ZLJ.Admin.CoreRCL._Imports)));
+
         }
         public override void Initialize()
         {
