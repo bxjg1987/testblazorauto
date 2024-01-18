@@ -1,5 +1,4 @@
-﻿using Abp.Authorization;
-using Abp.Localization;
+﻿using Abp.Localization;
 using Abp.MultiTenancy;
 using BXJG.Utils.GeneralTree;
 //using BXJG.WorkOrder;
@@ -7,6 +6,7 @@ using BXJG.Utils.Localization;
 using ZLJ.Core.Localization;
 using System.Collections.Generic;
 using ZLJ.Application.Share.Authorization.Permissions;
+using BXJG.Utils.Application.GeneralTree;
 
 namespace ZLJ.Application.Admin.Authorization.Permissions
 {

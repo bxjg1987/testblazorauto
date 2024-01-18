@@ -163,10 +163,13 @@ namespace ZLJ.RCL.Components
 
                 // var ls = condition.SortModel.Where(c => c.Sort.IsNotNullOrWhiteSpaceBXJG()).OrderBy(c => c.Priority).Select(c => c.FieldName + " " + c.Sort.Replace("end", ""));
                 //  sd222.Sorting = string.Join(",", ls);
-                sd222.Sorting = value;
+                if (sd222 != default)
+                {
+                    sd222.Sorting = value;
 
-                if (sd222.Sorting.IsNullOrWhiteSpaceBXJG())
-                    sd222.Sorting = "Id";
+                    if (sd222.Sorting.IsNullOrWhiteSpaceBXJG())
+                        sd222.Sorting = "Id";
+                }
             }
         }
 
@@ -470,7 +473,7 @@ namespace ZLJ.RCL.Components
         /// </summary>
         protected Table<TEntityDto> table;
 
-        protected virtual Func<TEntityDto, IEnumerable> GetTreeChildren { get; } = x => x.Children;
+        protected virtual Func<TEntityDto, IEnumerable<TEntityDto>> GetTreeChildren { get; } = x => x.Children;
 
         [AbpExceptionInterceptor]
         protected virtual async Task OnQuery(QueryModel condition)

@@ -1,11 +1,12 @@
 ﻿using Abp.Authorization;
+using BXJG.Utils.Application.Share.Auth;
 using BXJG.Utils.Localization;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace BXJG.Utils.GeneralTree
+namespace Abp.Authorization
 {
     public static class GeneralTreePermissionExt
     {
@@ -17,15 +18,15 @@ namespace BXJG.Utils.GeneralTree
         public static Permission AddGeneralTreePermission(this Permission parent)
         {
             var root = parent.CreateChildPermission(PermissionNames.GeneralTreeMenuName,
-                                                    BXJGUtilsConsts.GeneralTreeMenuName.UtilsLI(),
+                                                    PermissionNames.GeneralTreeMenuName.UtilsLI(),
                                                     multiTenancySides: Abp.MultiTenancy.MultiTenancySides.Tenant);
-            root.CreateChildPermission(BXJGUtilsConsts.GeneralTreeCreatePermissionName,
+            root.CreateChildPermission(PermissionNames.GeneralTreeCreatePermissionName,
                                        "新增".UtilsLI(),
                                        multiTenancySides: Abp.MultiTenancy.MultiTenancySides.Tenant, properties: new Dictionary<string, object> { { "btn", true } });
-            root.CreateChildPermission(BXJGUtilsConsts.GeneralTreeUpdatePermissionName,
+            root.CreateChildPermission(PermissionNames.GeneralTreeUpdatePermissionName,
                                        "修改".UtilsLI(),
                                        multiTenancySides: Abp.MultiTenancy.MultiTenancySides.Tenant, properties: new Dictionary<string, object> { { "btn", true } });
-            root.CreateChildPermission(BXJGUtilsConsts.GeneralTreeDeletePermissionName,
+            root.CreateChildPermission(PermissionNames.GeneralTreeDeletePermissionName,
                                        "删除".UtilsLI(),
                                        multiTenancySides: Abp.MultiTenancy.MultiTenancySides.Tenant, properties: new Dictionary<string, object> { { "btn", true } });
             return root;

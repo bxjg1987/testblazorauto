@@ -51,11 +51,11 @@ namespace ZLJ.Application.Admin
                                                         icon: ".Outline.Notification",
                                                         url: "/notification"));
             //数据字典
-            menuBaseInfo.AddItem(new MenuItemDefinition(BXJGUtilsConsts.GeneralTreeMenuName,
-                                                        BXJGUtilsConsts.GeneralTreeMenuName.UtilsLI(),
+            menuBaseInfo.AddItem(new MenuItemDefinition(BXJG.Utils.Application.Share.Auth.PermissionNames.GeneralTreeMenuName,
+                                                        BXJG.Utils.Application.Share.Auth.PermissionNames.GeneralTreeMenuName.UtilsLI(),
                                                         icon: ".Outline.Table",
                                                         url: "/data-dictionary",
-                                                        permissionDependency: new SimplePermissionDependency(BXJGUtilsConsts.GeneralTreeMenuName)));
+                                                        permissionDependency: new SimplePermissionDependency(BXJG.Utils.Application.Share.Auth.PermissionNames.GeneralTreeMenuName)));
 
             //组织机构
             menuBaseInfo.AddItem(new MenuItemDefinition(name: PermissionNames.AdministratorBaseInfoOrganizationUnit,

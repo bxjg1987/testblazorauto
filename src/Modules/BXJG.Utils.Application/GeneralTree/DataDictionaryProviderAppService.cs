@@ -16,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using BXJG.Common.Dto;
 using BXJG.Utils.Application.Share.GeneralTree;
 using BXJG.Utils.GeneralTree;
+using BXJG.Utils.Application.Share.Auth;
 
 namespace BXJG.Utils.Application.GeneralTree
 {
@@ -47,10 +48,10 @@ namespace BXJG.Utils.Application.GeneralTree
         public DataDictionaryAppService(IRepository<GeneralTreeEntity, long> repository,
                                      GeneralTreeManager organizationUnitManager) : base(repository,
                                                                                         organizationUnitManager,
-                                                                                        BXJGUtilsConsts.GeneralTreeCreatePermissionName,
-                                                                                        BXJGUtilsConsts.GeneralTreeUpdatePermissionName,
-                                                                                        BXJGUtilsConsts.GeneralTreeDeletePermissionName,
-                                                                                        BXJGUtilsConsts.GeneralTreeMenuName)
+                                                                                        PermissionNames.GeneralTreeCreatePermissionName,
+                                                                                        PermissionNames.GeneralTreeUpdatePermissionName,
+                                                                                        PermissionNames.GeneralTreeDeletePermissionName,
+                                                                                        PermissionNames.GeneralTreeMenuName)
         {
         }
 
