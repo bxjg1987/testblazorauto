@@ -49,14 +49,14 @@ namespace ZLJ.Admin.CoreRCL.Post
         }
 
         //[AbpExceptionInterceptor]
-        protected override async Task ReLoad()
+        protected override async Task BtnReLoadClick()
         {
             GetAllInput.Filter.IsStatic = default;
             GetAllInput.Filter.Permission = default;
             GetAllInput.Filter.OuCode = default;
             if (ou != default)
                 ou.Value = default;
-            await base.ReLoad();
+            await base.BtnReLoadClick();
         }
         TsOuForSearch ou;
         //protected override Task OnQuery(QueryModel condition)
@@ -73,7 +73,7 @@ namespace ZLJ.Admin.CoreRCL.Post
 
             // Console.WriteLine(   System.Text.Json.JsonSerializer.Serialize(ou));
             GetAllInput.Filter.OuCode = ou;// ou.IsNullOrWhiteSpaceBXJG() ? string.Empty : ou.Split(',')[1];
-            await base.Search();
+            await base.BtnSearchClick();
         }
         // AbpCreateDialog<IPostAppService, PostDto, int, PagedAndSortedResultRequest<PagedPostResultRequestDto>, CreatePostDto, PostEditDto, Create> dalRef;
         Dictionary<string, object> OnRow(RowData<PostDto> row)
@@ -102,7 +102,7 @@ namespace ZLJ.Admin.CoreRCL.Post
         {
             isCreateDialogVisible = false;
             if (isCreated)
-                await Search();
+                await BtnSearchClick();
         }
         /*
          * 结合blazor8的section时，新增弹窗太简单，不用单独封装弹窗组件，也便于传参到新增表单中
@@ -175,7 +175,7 @@ namespace ZLJ.Admin.CoreRCL.Post
         {
             isShowDetailUpdate = false;
 
-            await Search();
+            await BtnSearchClick();
 
         }
 

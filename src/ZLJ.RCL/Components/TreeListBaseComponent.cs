@@ -141,7 +141,7 @@ namespace ZLJ.RCL.Components
         /// 搜索条件
         /// </summary>
         protected TGetAllInput GetAllInput = new TGetAllInput();
-        
+
         /// <summary>
         /// 排序规则，格式："field1 aes,field2 desc"
         /// </summary>
@@ -185,7 +185,7 @@ namespace ZLJ.RCL.Components
         /// 当前条件下的总数据数量
         /// </summary>
         protected virtual int TotalCount { get; set; }
-      
+
         /// <summary>
         /// 父类仅仅需要读，至于是否可写由子类自己决定
         /// </summary>
@@ -250,34 +250,44 @@ namespace ZLJ.RCL.Components
                 //    cddqq.Keywords = Keywords;// state.FilterDefinitions.MapToDynamicCondition().ToList();
                 //}
                 //await FillCondtion(cd);
-                var dtos = await AppService.GetAllAsync(GetAllInput);
-
-                //_ = InvokeAsync(StateHasChanged);//让多选影响顶部按钮得以执行 包一层是因为需要加载完才执行
-                //dataGrid.SelectedItems.Clear();//翻页时，已选择的好像木有清空，这里手动来下
-
-                //给每行属性附加额外状态
-
-                foreach (var dto in dtos)
-                {
-                    dynamic dd = new ExpandoObject();
-                    dd.IsDeleting = false;
-                    dd.IsShowDeleteConfirmation = false;
-                    await AddItemExtData(dto, dd);
-                    dto.ExtensionData = dd;
-                }
-                Items = dtos;
-                TotalCount = dtos.Count;
-
-                if (SelectedItems != default && SelectedItems is ICollection<TEntityDto> list)
-                    list.Clear();
-                else
-                    SelectedItems = new List<TEntityDto>();
+                await LoadCore();
             }
             finally
             {
                 IsLoading = false;
             }
         }
+
+        /// <summary>
+        /// 根据条件TGetAllInput加载数据的核心方法
+        /// </summary>
+        /// <returns></returns>
+        protected virtual async Task LoadCore()
+        {
+            var dtos = await AppService.GetAllAsync(GetAllInput);
+
+            //_ = InvokeAsync(StateHasChanged);//让多选影响顶部按钮得以执行 包一层是因为需要加载完才执行
+            //dataGrid.SelectedItems.Clear();//翻页时，已选择的好像木有清空，这里手动来下
+
+            //给每行属性附加额外状态
+
+            foreach (var dto in dtos)
+            {
+                dynamic dd = new ExpandoObject();
+                dd.IsDeleting = false;
+                dd.IsShowDeleteConfirmation = false;
+                await AddItemExtData(dto, dd);
+                dto.ExtensionData = dd;
+            }
+            Items = dtos;
+            TotalCount = dtos.Count;
+
+            if (SelectedItems != default && SelectedItems is ICollection<TEntityDto> list)
+                list.Clear();
+            else
+                SelectedItems = new List<TEntityDto>();
+        }
+
         /// <summary>
         /// 获取列表时，为其中的每项添加额外的数据
         /// </summary>
@@ -319,9 +329,9 @@ namespace ZLJ.RCL.Components
         /// </summary>
         /// <returns></returns>
         [AbpExceptionInterceptor]
-        protected virtual async Task Search()
+        protected virtual async Task BtnSearchClick()
         {
-            //  Console.WriteLine(DateTime.Now.ToString("fff"));
+            //Console.WriteLine(DateTime.Now.ToString("fff"));
             //await Task.Delay(1);
             //if (GetAllInput is IHaveKeywords cd4)
             //{
@@ -333,20 +343,111 @@ namespace ZLJ.RCL.Components
             //}
             //PageIndex = 1;
 
-            table.ResetData();
+            //table.ResetData();
+          
             //PageIndex = 1;
             //PageSize = 20;
             //Keywords = string.Empty;
-            await OnQuery(table.GetQueryModel());
+            //await OnQuery(table.GetQueryModel());
+            await LoadListData();
             // Keywords = keywords;
             // await LoadListData();
             //table.ReloadData();
+        }    
+        /// <summary>
+        /// 对ant表格的引用
+        /// </summary>
+        protected Table<TEntityDto> table;
+        /// <summary>
+        /// 获取指定节点的子节点的委托，ant table组件实现树时需要此委托
+        /// </summary>
+        protected virtual Func<TEntityDto, IEnumerable<TEntityDto>> GetTreeChildren { get; } = x => x.Children;
+        /// <summary>
+        /// 将ant table条件转换为TGetAllInput后加载数据
+        /// </summary>
+        /// <param name="condition"></param>
+        /// <returns></returns>
+        [AbpExceptionInterceptor]//首次由ant触发调用，因此需要加这个
+        protected virtual async Task OnQuery(QueryModel condition)
+        {
+            /*
+             * 目前只考虑高级搜索方式，不考虑动态条件
+             */
+
+
+
+            var ls = condition.SortModel.Where(c => c.Sort.IsNotNullOrWhiteSpaceBXJG()).OrderBy(c => c.Priority).Select(c => c.FieldName + " " + c.Sort.Replace("end", ""));
+            Sorting = string.Join(",", ls);
+            //页码和页索引直接在table做bingd-xxx
+            //但若在这里做，则子类无需再绑定了
+            //  this.PageSize = condition.PageSize;
+            //  this.PageIndex = condition.PageIndex;
+            // var r =await AppService.GetAllAsync(GetAllInput);
+            //Items = r.Items;
+            // TotalCount = r.TotalCount;
+            //if (condition.SortList != null && condition.SortList.Count > 0)
+            //    sd222.Sorting = string.Join(",", condition.SortList);
+            //else if (condition.SortOrder != SortOrder.Unset)
+            //    sd222.Sorting = condition.SortName + " " + condition.SortOrder.ToString();
+            //else
+            //    sd222.Sorting = "Id";
+
+            //#region 关键字
+            //IHaveKeywords gjz = null;
+            //if (GetAllInput is IHaveKeywords cd4)
+            //{
+            //    gjz = cd4;
+            //}
+            //else if (GetAllInput is IHaveFilter cddq && cddq.Filter is IHaveKeywords cddqq)
+            //{
+            //    gjz = cddqq;
+            //}
+            //gjz.Keywords = condition.SearchText;
+            //#endregion
+
+            ////动态条件的填充请已在父类中定义
+
+            await LoadListData();
+
+            //return new QueryData<TEntityDto>
+            //{
+            //    IsAdvanceSearch = true,
+            //    IsFiltered = true,
+            //    IsSearch = true,
+            //    IsSorted = true,
+            //    Items = Items,
+            //    TotalCount = base.TotalCount
+            //};
+        }
+
+        /// <summary>
+        /// 清空所有条件并重新加载
+        /// 若有更多条件，子类应重写此方法清空条件，并执行base.ReLoad()
+        /// </summary>
+        /// <returns></returns>
+        [AbpExceptionInterceptor]
+        protected virtual async Task BtnReLoadClick()
+        {
+            table.ResetData();
+            //PageIndex = 1;
+            //PageSize = 20;
+            Keywords = string.Empty;
+            //StateHasChanged();
+            //await OnQuery(table.GetQueryModel());
+            await LoadListData();
+            //  await base.Reset();
+            // table.ResetData();
+            //table.ReloadData(); 远程加载时，根本不会执行这里
+
+            // table.ResetData();//它仅仅是将条件复位，并不会加载数据
+
         }
         /// <summary>
+        /// 绑定到刷新按钮的点击事件
         /// 条件分页都不变，重新加载当前数据
         /// </summary>
         [AbpExceptionInterceptor]
-        protected virtual async Task Refresh()
+        protected virtual async Task BtnRefreshClick()
         {
             //if (GetAllInput is IHaveKeywords cd4)
             //{
@@ -425,7 +526,7 @@ namespace ZLJ.RCL.Components
                 _ = BatchOperationMessage(r, "批量删除");//这里木有必要await
                 //BatchDeleteMessage(temp);
                 if (r.Ids.Any())
-                    await Refresh();
+                    await BtnRefreshClick();
                 //_ = InvokeAsync(dataGrid.ReloadServerData); //内部会StateChange
             }
             finally
@@ -447,12 +548,12 @@ namespace ZLJ.RCL.Components
             item.ExtensionData.IsDeleting = true;
             try
             {
-                await AppService.DeleteAsync(new() { Ids = new[] { item.Id}  });
+                await AppService.DeleteAsync(new() { Ids = new[] { item.Id } });
                 _ = ShowSuccessMessage("删除提示", "删除成功！");//这里木有必要await
-                                                    //若上面异常，下面不会执行
-                                                    //_ = InvokeAsync(dataGrid.ReloadServerData);
-                                                    // await LoadListData();
-                await Refresh();
+                                                        //若上面异常，下面不会执行
+                                                        //_ = InvokeAsync(dataGrid.ReloadServerData);
+                                                        // await LoadListData();
+                await BtnRefreshClick();
             }
             finally
             {
@@ -470,86 +571,6 @@ namespace ZLJ.RCL.Components
         }
         #endregion
 
-        /// <summary>
-        /// 对ant表格的引用
-        /// </summary>
-        protected Table<TEntityDto> table;
 
-        protected virtual Func<TEntityDto, IEnumerable<TEntityDto>> GetTreeChildren { get; } = x => x.Children;
-
-        [AbpExceptionInterceptor]
-        protected virtual async Task OnQuery(QueryModel condition)
-        {
-            /*
-             * 目前只考虑高级搜索方式，不考虑动态条件
-             */
-
-
-
-            var ls = condition.SortModel.Where(c => c.Sort.IsNotNullOrWhiteSpaceBXJG()).OrderBy(c => c.Priority).Select(c => c.FieldName + " " + c.Sort.Replace("end", ""));
-            Sorting = string.Join(",", ls);
-            //页码和页索引直接在table做bingd-xxx
-            //但若在这里做，则子类无需再绑定了
-          //  this.PageSize = condition.PageSize;
-          //  this.PageIndex = condition.PageIndex;
-            // var r =await AppService.GetAllAsync(GetAllInput);
-            //Items = r.Items;
-            // TotalCount = r.TotalCount;
-            //if (condition.SortList != null && condition.SortList.Count > 0)
-            //    sd222.Sorting = string.Join(",", condition.SortList);
-            //else if (condition.SortOrder != SortOrder.Unset)
-            //    sd222.Sorting = condition.SortName + " " + condition.SortOrder.ToString();
-            //else
-            //    sd222.Sorting = "Id";
-
-            //#region 关键字
-            //IHaveKeywords gjz = null;
-            //if (GetAllInput is IHaveKeywords cd4)
-            //{
-            //    gjz = cd4;
-            //}
-            //else if (GetAllInput is IHaveFilter cddq && cddq.Filter is IHaveKeywords cddqq)
-            //{
-            //    gjz = cddqq;
-            //}
-            //gjz.Keywords = condition.SearchText;
-            //#endregion
-
-            ////动态条件的填充请已在父类中定义
-
-            await LoadListData();
-
-            //return new QueryData<TEntityDto>
-            //{
-            //    IsAdvanceSearch = true,
-            //    IsFiltered = true,
-            //    IsSearch = true,
-            //    IsSorted = true,
-            //    Items = Items,
-            //    TotalCount = base.TotalCount
-            //};
-        }
-
-        /// <summary>
-        /// 清空所有条件并重新加载
-        /// 若有更多条件，子类应重写此方法清空条件，并执行base.ReLoad()
-        /// </summary>
-        /// <returns></returns>
-        [AbpExceptionInterceptor]
-        protected virtual async Task ReLoad()
-        {
-            table.ResetData();
-            //PageIndex = 1;
-            //PageSize = 20;
-            Keywords = string.Empty;
-            //StateHasChanged();
-            await OnQuery(table.GetQueryModel());
-            //  await base.Reset();
-            // table.ResetData();
-            //table.ReloadData(); 远程加载时，根本不会执行这里
-
-            // table.ResetData();//它仅仅是将条件复位，并不会加载数据
-
-        }
     }
 }

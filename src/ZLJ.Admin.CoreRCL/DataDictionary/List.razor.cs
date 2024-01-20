@@ -25,15 +25,15 @@ namespace ZLJ.Admin.CoreRCL.DataDictionary
         }
 
         //[AbpExceptionInterceptor]
-        protected override async Task ReLoad()
+        protected override async Task BtnReLoadClick()
         {
             //GetAllInput.Filter.IsStatic = default;
             //GetAllInput.Filter.Permission = default;
             //GetAllInput.Filter.OuCode = default;
             //GetAllInput.IsOnlyLoadChild = false;
-
+            GetAllInput.IsSysDefine = default;
          
-            await base.ReLoad();
+            await base.BtnReLoadClick();
         }
         
       
@@ -65,7 +65,7 @@ namespace ZLJ.Admin.CoreRCL.DataDictionary
         {
             isCreateDialogVisible = false;
             if (isCreated)
-                await Search();
+                await LoadListData();
         }
         /*
          * 结合blazor8的section时，新增弹窗太简单，不用单独封装弹窗组件，也便于传参到新增表单中
@@ -138,7 +138,7 @@ namespace ZLJ.Admin.CoreRCL.DataDictionary
         {
             isShowDetailUpdate = false;
 
-            await Search();
+            await LoadListData();
 
         }
 

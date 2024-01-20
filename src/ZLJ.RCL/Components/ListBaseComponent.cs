@@ -282,64 +282,73 @@ namespace ZLJ.RCL.Components
             IsLoading = true;
             try
             {
-                //var cd = GetAllInput;
-                //if (cd is IDynamicCondition cdd)
-                //{
-                //    cdd.Conditions = new List<ConditionFieldDefine>();// await BuildDynamicCondition();// state.FilterDefinitions.MapToDynamicCondition().ToList();
-                //    await FillDynamicConditions(cdd.Conditions as List<ConditionFieldDefine>);
-                //}
-                //else if (cd is IHaveFilter cddq && cddq.Filter is IDynamicCondition cddqq)
-                //{
-                //    cddqq.Conditions = new List<ConditionFieldDefine>();// await BuildDynamicCondition();//state.FilterDefinitions.MapToDynamicCondition().ToList();
-                //    await FillDynamicConditions(cddqq.Conditions as List<ConditionFieldDefine>);
-                //}
-                //if (cd is IPagedAndSortedResultRequest cd2)
-                //{
-                //    cd2.MaxResultCount = PageSize; //state.PageSize;
-                //    cd2.SkipCount = (PageIndex - 1) * PageSize;
-                //}
-                //if (cd is ISortedResultRequest cd3)
-                //{
-                //    cd3.Sorting = Sorting;// state.SortDefinitions.ToLinqDynamicCore();
-                //}
-
-                //if (cd is IHaveKeywords cd4)
-                //{
-                //    cd4.Keywords = Keywords;
-                //}
-                //else if (cd is IHaveFilter cddq && cddq.Filter is IHaveKeywords cddqq)
-                //{
-                //    cddqq.Keywords = Keywords;// state.FilterDefinitions.MapToDynamicCondition().ToList();
-                //}
-                //await FillCondtion(cd);
-                var dtos = await AppService.GetAllAsync(GetAllInput);
-
-                //_ = InvokeAsync(StateHasChanged);//让多选影响顶部按钮得以执行 包一层是因为需要加载完才执行
-                //dataGrid.SelectedItems.Clear();//翻页时，已选择的好像木有清空，这里手动来下
-
-                //给每行属性附加额外状态
-
-                foreach (var dto in dtos.Items)
-                {
-                    dynamic dd = new ExpandoObject();
-                    dd.IsDeleting = false;
-                    dd.IsShowDeleteConfirmation = false;
-                    await AddItemExtData(dto, dd);
-                    dto.ExtensionData = dd;
-                }
-                Items = dtos.Items.ToList();
-                TotalCount = dtos.TotalCount;
-
-                if (SelectedItems != default && SelectedItems is ICollection<TEntityDto> list)
-                    list.Clear();
-                else
-                    SelectedItems = new List<TEntityDto>();
+                await LoadCore();
             }
             finally
             {
                 IsLoading = false;
             }
         }
+        /// <summary>
+        /// 根据条件TGetAllInput加载数据的核心方法
+        /// </summary>
+        /// <returns></returns>
+        private async Task LoadCore()
+        {
+            //var cd = GetAllInput;
+            //if (cd is IDynamicCondition cdd)
+            //{
+            //    cdd.Conditions = new List<ConditionFieldDefine>();// await BuildDynamicCondition();// state.FilterDefinitions.MapToDynamicCondition().ToList();
+            //    await FillDynamicConditions(cdd.Conditions as List<ConditionFieldDefine>);
+            //}
+            //else if (cd is IHaveFilter cddq && cddq.Filter is IDynamicCondition cddqq)
+            //{
+            //    cddqq.Conditions = new List<ConditionFieldDefine>();// await BuildDynamicCondition();//state.FilterDefinitions.MapToDynamicCondition().ToList();
+            //    await FillDynamicConditions(cddqq.Conditions as List<ConditionFieldDefine>);
+            //}
+            //if (cd is IPagedAndSortedResultRequest cd2)
+            //{
+            //    cd2.MaxResultCount = PageSize; //state.PageSize;
+            //    cd2.SkipCount = (PageIndex - 1) * PageSize;
+            //}
+            //if (cd is ISortedResultRequest cd3)
+            //{
+            //    cd3.Sorting = Sorting;// state.SortDefinitions.ToLinqDynamicCore();
+            //}
+
+            //if (cd is IHaveKeywords cd4)
+            //{
+            //    cd4.Keywords = Keywords;
+            //}
+            //else if (cd is IHaveFilter cddq && cddq.Filter is IHaveKeywords cddqq)
+            //{
+            //    cddqq.Keywords = Keywords;// state.FilterDefinitions.MapToDynamicCondition().ToList();
+            //}
+            //await FillCondtion(cd);
+            var dtos = await AppService.GetAllAsync(GetAllInput);
+
+            //_ = InvokeAsync(StateHasChanged);//让多选影响顶部按钮得以执行 包一层是因为需要加载完才执行
+            //dataGrid.SelectedItems.Clear();//翻页时，已选择的好像木有清空，这里手动来下
+
+            //给每行属性附加额外状态
+
+            foreach (var dto in dtos.Items)
+            {
+                dynamic dd = new ExpandoObject();
+                dd.IsDeleting = false;
+                dd.IsShowDeleteConfirmation = false;
+                await AddItemExtData(dto, dd);
+                dto.ExtensionData = dd;
+            }
+            Items = dtos.Items.ToList();
+            TotalCount = dtos.TotalCount;
+
+            if (SelectedItems != default && SelectedItems is ICollection<TEntityDto> list)
+                list.Clear();
+            else
+                SelectedItems = new List<TEntityDto>();
+        }
+
         /// <summary>
         /// 获取列表时，为其中的每项添加额外的数据
         /// </summary>
@@ -381,7 +390,7 @@ namespace ZLJ.RCL.Components
         /// </summary>
         /// <returns></returns>
         [AbpExceptionInterceptor]
-        protected virtual async Task Search()
+        protected virtual async Task BtnSearchClick()
         {
             //  Console.WriteLine(DateTime.Now.ToString("fff"));
             //await Task.Delay(1);
@@ -395,11 +404,13 @@ namespace ZLJ.RCL.Components
             //}
             //PageIndex = 1;
 
-            table.ResetData();
+            // table.ResetData();
             //PageIndex = 1;
             //PageSize = 20;
             //Keywords = string.Empty;
-            await OnQuery(table.GetQueryModel());
+            // await OnQuery(table.GetQueryModel());
+            PageIndex = 1;
+           await LoadListData();
             // Keywords = keywords;
             // await LoadListData();
             //table.ReloadData();
@@ -408,7 +419,7 @@ namespace ZLJ.RCL.Components
         /// 条件分页都不变，重新加载当前数据
         /// </summary>
         [AbpExceptionInterceptor]
-        protected virtual async Task Refresh()
+        protected virtual async Task BtnRefreshClick()
         {
             //if (GetAllInput is IHaveKeywords cd4)
             //{
@@ -425,115 +436,6 @@ namespace ZLJ.RCL.Components
             await LoadListData();
             //table.ReloadData();
         }
-        ///// <summary>
-        ///// 重置搜索条件后刷新
-        ///// </summary>
-        ///// <returns></returns>
-        //protected virtual async Task Reset()
-        //{
-        //    PageIndex = 1;
-        //    PageSize = 20;
-        //    Keywords = string.Empty;
-        //    await Refresh();
-        //}
-        #endregion
-
-        #region 删除
-        //没权限时不显示的，所以不加入这个判断
-        /// <summary>
-        /// 是否禁用批量删除按钮，出现任意情况，则为true：正在加载数据；正在删除数据；没有选择数据；
-        /// </summary>
-        protected virtual bool ShouldDisableDelete => IsLoading || isDeleting || SelectedItems == default || !SelectedItems.Any();
-        /// <summary>
-        /// 是否批量删除的确认框
-        /// </summary>
-        protected bool isShowDeleteConfirm = false;
-        /// <summary>
-        /// 是否正在执行批量删除操作
-        /// </summary>
-        protected bool isDeleting = false;
-        /// <summary>
-        /// 显示批量删除的确认框
-        /// </summary>
-        protected virtual void ShowDeleteConfirm()
-        {
-            HideDeleteConfirm();
-            isShowDeleteConfirm = true;
-        }
-        /// <summary>
-        /// 隐藏批量删除的确认框
-        /// </summary>
-        protected virtual void HideDeleteConfirm()
-        {
-            isShowDeleteConfirm = false;
-            foreach (var dto in Items)
-            {
-                dto.ExtensionData.IsShowDeleteConfirmation = false;
-            }
-        }
-        /// <summary>
-        /// 批量删除
-        /// </summary>
-        /// <returns></returns>
-        [AbpExceptionInterceptor]
-        protected virtual async Task Delete()
-        {
-            //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限
-            HideDeleteConfirm();
-            isDeleting = true;
-            try
-            {
-                var r = await AppService.BatchDeleteAsync(new BatchOperationInput<TPrimaryKey> { Ids = SelectedItems.Select(x => x.Id).ToArray() });
-                BatchOperationMessage(r, "批量删除");//这里木有必要await
-                //BatchDeleteMessage(temp);
-                if (r.Ids.Any())
-                    await Refresh();
-                //_ = InvokeAsync(dataGrid.ReloadServerData); //内部会StateChange
-            }
-            finally
-            {
-                isDeleting = false;
-            }
-        }
-        /// <summary>
-        /// 删除单个项
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        [AbpExceptionInterceptor]
-        protected virtual async Task Delete(TEntityDto item)
-        {
-            //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限
-            // var curr = dataGrid.Items.Single(c => c.Id!.Equals(input.Id));
-            HideDeleteConfirm();
-            item.ExtensionData.IsDeleting = true;
-            try
-            {
-                await AppService.DeleteAsync(new EntityDto<TPrimaryKey>(item.Id));
-                ShowSuccessMessage("删除提示", "删除成功！");//这里木有必要await
-                                                    //若上面异常，下面不会执行
-                                                    //_ = InvokeAsync(dataGrid.ReloadServerData);
-                                                    // await LoadListData();
-                await Refresh();
-            }
-            finally
-            {
-                item.ExtensionData.IsDeleting = false;
-            }
-        }
-        /// <summary>
-        /// 显示删除明细的确认框
-        /// </summary>
-        /// <param name="dto"></param>
-        protected virtual void ShowDeleteConfirm(TEntityDto dto)
-        {
-            HideDeleteConfirm();
-            dto.ExtensionData.IsShowDeleteConfirmation = true;
-        }
-        #endregion
-
-
-
         /// <summary>
         /// 对ant表格的引用
         /// </summary>
@@ -600,14 +502,15 @@ namespace ZLJ.RCL.Components
         /// </summary>
         /// <returns></returns>
         [AbpExceptionInterceptor]
-        protected virtual async Task ReLoad()
+        protected virtual async Task BtnReLoadClick()
         {
             table.ResetData();
             //PageIndex = 1;
             //PageSize = 20;
             Keywords = string.Empty;
             //StateHasChanged();
-            await OnQuery(table.GetQueryModel());
+            //await OnQuery(table.GetQueryModel());
+            await LoadListData();
             //  await base.Reset();
             // table.ResetData();
             //table.ReloadData(); 远程加载时，根本不会执行这里
@@ -615,5 +518,114 @@ namespace ZLJ.RCL.Components
             // table.ResetData();//它仅仅是将条件复位，并不会加载数据
 
         }
+        ///// <summary>
+        ///// 重置搜索条件后刷新
+        ///// </summary>
+        ///// <returns></returns>
+        //protected virtual async Task Reset()
+        //{
+        //    PageIndex = 1;
+        //    PageSize = 20;
+        //    Keywords = string.Empty;
+        //    await Refresh();
+        //}
+        #endregion
+
+        #region 删除
+        //没权限时不显示的，所以不加入这个判断
+        /// <summary>
+        /// 是否禁用批量删除按钮，出现任意情况，则为true：正在加载数据；正在删除数据；没有选择数据；
+        /// </summary>
+        protected virtual bool ShouldDisableDelete => IsLoading || isDeleting || SelectedItems == default || !SelectedItems.Any();
+        /// <summary>
+        /// 是否批量删除的确认框
+        /// </summary>
+        protected bool isShowDeleteConfirm = false;
+        /// <summary>
+        /// 是否正在执行批量删除操作
+        /// </summary>
+        protected bool isDeleting = false;
+        /// <summary>
+        /// 显示批量删除的确认框
+        /// </summary>
+        protected virtual void ShowDeleteConfirm()
+        {
+            HideDeleteConfirm();
+            isShowDeleteConfirm = true;
+        }
+        /// <summary>
+        /// 隐藏批量删除的确认框
+        /// </summary>
+        protected virtual void HideDeleteConfirm()
+        {
+            isShowDeleteConfirm = false;
+            foreach (var dto in Items)
+            {
+                dto.ExtensionData.IsShowDeleteConfirmation = false;
+            }
+        }
+        /// <summary>
+        /// 批量删除
+        /// </summary>
+        /// <returns></returns>
+        [AbpExceptionInterceptor]
+        protected virtual async Task Delete()
+        {
+            //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限
+            HideDeleteConfirm();
+            isDeleting = true;
+            try
+            {
+                var r = await AppService.BatchDeleteAsync(new BatchOperationInput<TPrimaryKey> { Ids = SelectedItems.Select(x => x.Id).ToArray() });
+                BatchOperationMessage(r, "批量删除");//这里木有必要await
+                //BatchDeleteMessage(temp);
+                if (r.Ids.Any())
+                    await BtnRefreshClick();
+                //_ = InvokeAsync(dataGrid.ReloadServerData); //内部会StateChange
+            }
+            finally
+            {
+                isDeleting = false;
+            }
+        }
+        /// <summary>
+        /// 删除单个项
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        [AbpExceptionInterceptor]
+        protected virtual async Task Delete(TEntityDto item)
+        {
+            //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限
+            // var curr = dataGrid.Items.Single(c => c.Id!.Equals(input.Id));
+            HideDeleteConfirm();
+            item.ExtensionData.IsDeleting = true;
+            try
+            {
+                await AppService.DeleteAsync(new EntityDto<TPrimaryKey>(item.Id));
+                ShowSuccessMessage("删除提示", "删除成功！");//这里木有必要await
+                                                    //若上面异常，下面不会执行
+                                                    //_ = InvokeAsync(dataGrid.ReloadServerData);
+                                                    // await LoadListData();
+                await BtnRefreshClick();
+            }
+            finally
+            {
+                item.ExtensionData.IsDeleting = false;
+            }
+        }
+        /// <summary>
+        /// 显示删除明细的确认框
+        /// </summary>
+        /// <param name="dto"></param>
+        protected virtual void ShowDeleteConfirm(TEntityDto dto)
+        {
+            HideDeleteConfirm();
+            dto.ExtensionData.IsShowDeleteConfirmation = true;
+        }
+        #endregion
+
+
+
     }
 }

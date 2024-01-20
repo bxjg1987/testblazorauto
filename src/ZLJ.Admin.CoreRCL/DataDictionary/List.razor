@@ -27,23 +27,23 @@
             <GridCol Span="18" Flex=@("none")>
                 <Space>
                     <SpaceItem>
-                        <RadioGroup TValue="bool?" @bind-Value="@GetAllInput.IsSysDefine" OnChange="Search" Disabled=IsLoading>
+                        <RadioGroup TValue="bool?" @bind-Value="@GetAllInput.IsSysDefine" OnChange="BtnSearchClick" Disabled=IsLoading>
                             <Radio TValue="bool?" RadioButton="true" Value="@(default(bool?))">全部</Radio>
                             <Radio TValue="bool?" RadioButton="true" Value="@(true)">预设</Radio>
                             <Radio TValue="bool?" RadioButton="true" Value="@(false)">非预设</Radio>
                         </RadioGroup>
                     </SpaceItem>
                     <SpaceItem>
-                        <Search Placeholder="请输入关键字..." @bind-Value="@Keywords" OnSearch="Search" AllowClear="true" ClassicSearchIcon="true" Disabled=IsLoading />
+                        <Search Placeholder="请输入关键字..." @bind-Value="@Keywords" OnSearch="BtnSearchClick" AllowClear="true" OnClear="BtnSearchClick" ClassicSearchIcon="true" Disabled=IsLoading />
                     </SpaceItem>
                     <SpaceItem>
                         <Tooltip Title="清空条件">
-                            <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Clear" OnClick="ReLoad" Disabled=IsLoading></Button>
+                            <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Clear" OnClick="BtnReLoadClick" Disabled=IsLoading></Button>
                         </Tooltip>
                     </SpaceItem>
                     <SpaceItem>
                         <Tooltip Title="刷新">
-                            <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Reload" OnClick="Refresh" Disabled=IsLoading></Button>
+                            <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Reload" OnClick="BtnRefreshClick" Disabled=IsLoading></Button>
                         </Tooltip>
                     </SpaceItem>
                 </Space>
@@ -59,7 +59,7 @@
                OnChange="OnQuery"
                DataSource="Items"
                Loading="IsLoading"
-               HidePagination=false
+               HidePagination=true
                RowClassName="@(r=>r.RowIndex%2==0?"even":"odd")"
                RemoteDataSource="true"
                RowKey="x=>x.Id"
