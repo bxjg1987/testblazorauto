@@ -1,4 +1,5 @@
 ﻿using BXJG.Common.Http;
+using BXJG.Utils.Application.Share.GeneralTree;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,8 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IHttpClientBuilder AddAdminApiClientProxy(this IServiceCollection services, Action<HttpClient> act = default) //where T : class
         {
             services.AddTransient<IAuditLogAppService, AuditingAppService>()
-                    .AddTransient<IPostAppService, PostAppService>();
+                    .AddTransient<IPostAppService, PostAppService>()
+                    .AddTransient<IDataDictionaryAppService, DataDictionaryAppService>();
             return services.AddApiClientProxy(act);
         }
     }
