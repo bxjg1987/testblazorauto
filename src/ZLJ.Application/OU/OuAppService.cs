@@ -95,8 +95,7 @@ namespace ZLJ.Application.Admin.OU
                               .OfType<OrganizationUnitEntity>()
                               .AsNoTrackingWithIdentityResolution()
                               .Include(c => c.Children)
-                              .WhereIf(!code.IsNullOrWhiteSpace(), c => c.Code.StartsWith(code))
-                              .WhereIf(!input.LoadParent || !input.ParentText.IsNullOrWhiteSpace(), c => c.Code != code);
+                              .WhereIf(!code.IsNullOrWhiteSpace(), c => c.Code.StartsWith(code));
             q = q.OrderBy(c => c.Code);
             var list = await q.ToListAsync();
             var dtos = new List<OUDto>();
@@ -107,19 +106,6 @@ namespace ZLJ.Application.Admin.OU
             }
             dtos.ForEach(c => c.Children = dtos.Where(d => d.ParentId == c.Id).ToList());
 
-            var p = list.SingleOrDefault(c => c.Code == code);
-            if (!input.LoadParent)
-            {
-                if (p == default)
-                    return dtos.Where(c => !c.ParentId.HasValue).ToList();
-                return dtos.Where(c => c.ParentId == p.Id).ToList();
-            }
-            var pDto = new OUDto();// {  DisplayName = "" };
-            if (input.ParentText.IsNullOrWhiteSpace())
-                pDto.DisplayName = "全部";
-            else
-                pDto.DisplayName = input.ParentText;
-            dtos.Insert(0, pDto);
 
             return dtos;
         }

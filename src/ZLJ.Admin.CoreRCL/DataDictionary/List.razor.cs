@@ -30,8 +30,7 @@ namespace ZLJ.Admin.CoreRCL.DataDictionary
             //GetAllInput.Filter.IsStatic = default;
             //GetAllInput.Filter.Permission = default;
             //GetAllInput.Filter.OuCode = default;
-
-
+            //GetAllInput.IsOnlyLoadChild = false;
 
          
             await base.ReLoad();

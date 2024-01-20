@@ -2,6 +2,7 @@
 using Abp.Localization;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
@@ -15,9 +16,13 @@ namespace BXJG.Utils.Application.Share.GeneralTree
     //[AutoMapFrom(typeof(GeneralTreeEntity))]
     public class GeneralTreeDto : GeneralTreeGetTreeNodeBaseDto<GeneralTreeDto>
     {
+        [DisplayName("树形")]
         public bool IsTree { get; set; }
+        [DisplayName("树形")]
         public string IsTreeText => IsTree ? "是" : "否";// IsTree.ToString().UtilsL() ;
+        [DisplayName("系统预设")]
         public bool IsSysDefine { get; set; }
+        [DisplayName("系统预设")]
         public string IsSysDefineText => IsSysDefine ? "是" : "否";//.ToString().UtilsL();
     }
 

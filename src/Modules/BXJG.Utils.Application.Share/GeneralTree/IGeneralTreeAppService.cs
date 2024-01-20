@@ -25,6 +25,6 @@ namespace BXJG.Utils.Application.Share.GeneralTree
     public interface IDataDictionaryAppService : IGeneralTreeBaseAppService<GeneralTreeDto,
                                                                             GeneralTreeEditDto,
                                                                             GeneralTreeEditDto,
-                                                                            GeneralTreeGetTreeInput>
+                                                                            DataDictionaryGetTreeInput>
     { }
 }

@@ -877,20 +877,8 @@ namespace BXJG.Utils.Application.GeneralTree
 
             var parentDto = input.ParentId.HasValue ? list1.SingleOrDefault(c => c.Id == input.ParentId) : null;
             //得到顶级节点集合
-            list1 = list1.Where(c => c.ParentId == input.ParentId).ToList();
+            return list1.Where(c => c.ParentId == input.ParentId).ToList();
 
-            //处理顶级文本
-            if (input.LoadParent)
-            {
-                if (!string.IsNullOrWhiteSpace(input.ParentText))
-                    return new List<TDto> { new TDto { DisplayName = input.ParentText, Children = list1 } };
-
-                if (input.ParentId.HasValue)
-                    return new List<TDto> { parentDto };
-
-                return new List<TDto> { new TDto { DisplayName = allTextForManager, Children = list1 } };
-            }
-            return list1;
         }
         ///// <summary>
         ///// 获取列表时回调，你可以重写以Include更多导航属性

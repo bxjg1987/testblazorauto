@@ -1,22 +1,16 @@
-﻿using Abp.Application.Services;
-using Abp.Application.Services.Dto;
-using Abp.Authorization;
+﻿
 
-using Abp.AutoMapper;
+using Abp.Application.Services.Dto;
 using Abp.Domain.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Abp.Linq.Extensions;
 using Abp.UI;
-using Abp.Domain.Entities;
-using Abp.MultiTenancy;
-using Microsoft.EntityFrameworkCore;
 using BXJG.Common.Dto;
+using BXJG.Utils.Application.Share.Auth;
 using BXJG.Utils.Application.Share.GeneralTree;
 using BXJG.Utils.GeneralTree;
-using BXJG.Utils.Application.Share.Auth;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BXJG.Utils.Application.GeneralTree
 {
@@ -39,7 +33,7 @@ namespace BXJG.Utils.Application.GeneralTree
                                                                       GeneralTreeDto,
                                                                       GeneralTreeEditDto,
                                                                       GeneralTreeEditDto,
-                                                                      GeneralTreeGetTreeInput,
+                                                                      DataDictionaryGetTreeInput,
                                                                       BatchOperationInputLong,
                                                                       EntityDto<long>,
                                                                       GeneralTreeNodeMoveInput,
@@ -60,6 +54,12 @@ namespace BXJG.Utils.Application.GeneralTree
             if (entity.IsSysDefine)
                 throw new UserFriendlyException(L("系统预设数据不允许删除！"));
             await base.BeforeDeleteAsync(entity);
+        }
+
+        protected override IQueryable<GeneralTreeEntity> GetAllFiltered(DataDictionaryGetTreeInput input, string parentCode)
+        {
+            return base.GetAllFiltered(input, parentCode).WhereIf(input.IsSysDefine.HasValue, x => x.IsSysDefine == input.IsSysDefine.Value)
+                                                         .WhereIf(input.Keywords.IsNotNullOrWhiteSpaceBXJG(), x => x.DisplayName.Contains(input.Keywords));
         }
     }
 }

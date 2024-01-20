@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BXJG.Common.Dto;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,19 +20,19 @@ namespace BXJG.Utils.Application.Share.GeneralTree
         /// 父级节点id，非必填
         /// </summary>
         public long? ParentId { get; set; } //树形父节点本身就可能是空，所以这里就用long?吧
-        /// <summary>
-        /// 是否加载父节点
-        /// </summary>
-        public bool LoadParent { get; set; }
-        /// <summary>
-        /// 若LoadParent为true且ParentId为空，则自动以{id:0,text:L( ParentText) }创建一个虚拟父节点，注意L是处理本地化的方法，因此ParentText值的是本地化的key
-        /// </summary>
-        public string? ParentText { get; set; }
+        ///// <summary>
+        ///// 是否加载父节点
+        ///// </summary>
+        //public bool LoadParent { get; set; }
+        ///// <summary>
+        ///// 若LoadParent为true且ParentId为空，则自动以{id:0,text:L( ParentText) }创建一个虚拟父节点，注意L是处理本地化的方法，因此ParentText值的是本地化的key
+        ///// </summary>
+        //public string? ParentText { get; set; }
 
         /// <summary>
         /// 是否仅仅加载子节点，true只加载子节点，false加载所有后台节点
         /// </summary>
-        public bool IsOnlyLoadChild { get; set; } = true;
+        public bool IsOnlyLoadChild { get; set; } = false;
 
         //由于关键字是or查询，若要让子类和父类的关键字条件在一个or链中，会让父类变得复杂，因此决定不在父类中定义关键字
         ///// <summary>
@@ -41,5 +42,16 @@ namespace BXJG.Utils.Application.Share.GeneralTree
 
         //没必要在这里定义初始值，因为需要处理本地化
         //若想在这里处理需要引入LocationManager，但是这个类是被模型绑定实例化的，因此比较麻烦，不确定abp的模型绑定是否注入本地化相关类，所以不再这个类的内部来做本地化
+    }
+
+    /// <summary>
+    /// 后台管理数据字典时，获取列表的输入参数
+    /// </summary>
+    public class DataDictionaryGetTreeInput : GeneralTreeGetTreeInput,IHaveKeywords { 
+        /// <summary>
+        /// 是否是系统预定义的
+        /// </summary>
+        public bool? IsSysDefine { get; set; }
+        public string? Keywords { get; set; }
     }
 }

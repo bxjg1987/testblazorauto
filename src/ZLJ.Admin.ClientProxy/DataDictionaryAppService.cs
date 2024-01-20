@@ -37,7 +37,7 @@ namespace ZLJ.Admin.ClientProxy
 
        
 
-        public async Task<List<GeneralTreeDto>> GetAllAsync(GeneralTreeGetTreeInput input)
+        public async Task<List<GeneralTreeDto>> GetAllAsync(DataDictionaryGetTreeInput input)
         {
             return await Post<List<GeneralTreeDto>>("api/services/bxjgutils/DataDictionary/getall", input);
         }

@@ -21,30 +21,29 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZLJ.Web.Host", "src\ZLJ.Web
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{31830F03-183C-4530-A73A-C165A1F5A739}"
 	ProjectSection(SolutionItems) = preProject
+		docs\blazorserver中的统一异常处理.md = docs\blazorserver中的统一异常处理.md
 		docs\blazorServer的集成.md = docs\blazorServer的集成.md
+		docs\image.png = docs\image.png
+		docs\imgsimage.png = docs\imgsimage.png
 		docs\session.md = docs\session.md
 		docs\ZLJ.Web.Core说明.md = docs\ZLJ.Web.Core说明.md
 		docs\与mudblazor的集成.md = docs\与mudblazor的集成.md
+		docs\事件.md = docs\事件.md
 		docs\以前的文档.zip = docs\以前的文档.zip
 		docs\依赖注入和AOP.md = docs\依赖注入和AOP.md
 		docs\公司部门岗位角色用户.md = docs\公司部门岗位角色用户.md
 		docs\动态条件.md = docs\动态条件.md
+		docs\如何切换新的UI组件库.md = docs\如何切换新的UI组件库.md
+		docs\对象映射.md = docs\对象映射.md
+		docs\应用服务.md = docs\应用服务.md
+		docs\开发随记.md = docs\开发随记.md
 		docs\扩展dto.md = docs\扩展dto.md
+		docs\抽象的antblazor_crud组件.rd = docs\抽象的antblazor_crud组件.rd
+		docs\抽象的mudblazorCRUD组件.md = docs\抽象的mudblazorCRUD组件.md
 		docs\本地化.md = docs\本地化.md
 		docs\菜单.md = docs\菜单.md
+		docs\集成mysql.md = docs\集成mysql.md
 	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "组织业务逻辑", "组织业务逻辑", "{249F7F7C-B391-43E1-B3B9-89373BEE77AD}"
-	ProjectSection(SolutionItems) = preProject
-		docs\组织业务逻辑\应用服务.md = docs\组织业务逻辑\应用服务.md
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "界面", "界面", "{35FBBC5F-EFB2-446A-A110-42C137FA2A74}"
-	ProjectSection(SolutionItems) = preProject
-		docs\界面\概述.md = docs\界面\概述.md
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "应用层", "应用层", "{9E73E99D-19B1-486B-B15A-39EFEB37CF2F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZLJ.Admin.ClientProxy", "src\ZLJ.Admin.ClientProxy\ZLJ.Admin.ClientProxy.csproj", "{DB3483B7-C36C-4BE9-9D8D-8562A17F09DA}"
 EndProject
@@ -134,9 +133,6 @@ Global
 		{2F545EC5-3116-4B8D-95FB-91936346D3B9} = {04E5EC1B-C5AD-473B-A833-DC9C2CB4627E}
 		{445D8039-4E7C-44EA-A6E4-55608F8620E6} = {04E5EC1B-C5AD-473B-A833-DC9C2CB4627E}
 		{9F0BD77A-E8D0-40F1-8817-B2E7308DFBC3} = {04E5EC1B-C5AD-473B-A833-DC9C2CB4627E}
-		{249F7F7C-B391-43E1-B3B9-89373BEE77AD} = {31830F03-183C-4530-A73A-C165A1F5A739}
-		{35FBBC5F-EFB2-446A-A110-42C137FA2A74} = {31830F03-183C-4530-A73A-C165A1F5A739}
-		{9E73E99D-19B1-486B-B15A-39EFEB37CF2F} = {31830F03-183C-4530-A73A-C165A1F5A739}
 		{DB3483B7-C36C-4BE9-9D8D-8562A17F09DA} = {04E5EC1B-C5AD-473B-A833-DC9C2CB4627E}
 		{638B41A1-C141-4FC0-B4A2-38E32F56C89F} = {04E5EC1B-C5AD-473B-A833-DC9C2CB4627E}
 		{5EFD1ACF-BE93-4954-A980-3B4AC581E75A} = {04E5EC1B-C5AD-473B-A833-DC9C2CB4627E}

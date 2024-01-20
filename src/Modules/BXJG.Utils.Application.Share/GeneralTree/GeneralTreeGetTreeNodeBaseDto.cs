@@ -4,6 +4,7 @@ using BXJG.Utils.Share.GeneralTree;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -36,10 +37,12 @@ namespace BXJG.Utils.Application.Share.GeneralTree
         /// <summary>
         /// 有层次结构的代码
         /// </summary>
+        [DisplayName("代码")]
         public string Code { get; set; }
         /// <summary>
         /// 显示名称
         /// </summary>
+        [DisplayName("名称")]
         public string DisplayName { get; set; }
         /// <summary>
         /// 子集
@@ -53,6 +56,7 @@ namespace BXJG.Utils.Application.Share.GeneralTree
         /// <summary>
         /// 子节点数量
         /// </summary>
+        [DisplayName("子节点数量")]
         public int ChildrenCount { get; set; }
 
         //{
@@ -64,6 +68,7 @@ namespace BXJG.Utils.Application.Share.GeneralTree
         /// <summary>
         /// 什么鬼
         /// </summary>
+        [DisplayName("名称")]
         public string Text { get { return DisplayName; } }
         ///// <summary>
         ///// 排序索引
@@ -99,6 +104,7 @@ namespace BXJG.Utils.Application.Share.GeneralTree
         ///// </summary>
         //// [Ignore]
         //public dynamic ExtData { get; private set; }
+        [DisplayName("扩展属性")]
         public dynamic ExtensionData { get; set; }
     }
 }

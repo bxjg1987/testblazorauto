@@ -8,6 +8,8 @@ using BXJG.Common.Dto;
 using BXJG.Utils;
 using BXJG.Utils.Application.Share;
 using BXJG.Utils.Application.Share.GeneralTree;
+using BXJG.Utils.Share.GeneralTree;
+using Castle.MicroKernel.Registration;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
@@ -46,9 +48,9 @@ namespace ZLJ.RCL.Components
                                                 TEditDto,
                                                 TGetAllInput> : BaseComponent
         //where TCreateInput : GeneralTreeNodeEditBaseDto //注意这里约束为TEditDto，这样强制要求继承编辑模型不合理
-        where TEntityDto : GeneralTreeGetTreeNodeBaseDto<TEntityDto>, IExtendableDto//, new()
+        where TEntityDto : IGeneralTree<TEntityDto>, IExtendableDto//, new()
         //where TEditDto : GeneralTreeNodeEditBaseDto//父类可以对输入做一定的处理
-        where TGetAllInput : GeneralTreeGetTreeInput, new()
+        where TGetAllInput : new()
         where TAppService : IGeneralTreeBaseAppService<TEntityDto, TCreateInput, TEditDto, TGetAllInput>
     {
         //界面部分就不要用IPermissionChecker了，不过server模式时AuthorizationService内部会使用IPermissionChecker
@@ -151,7 +153,7 @@ namespace ZLJ.RCL.Components
                     return dxx.Sorting;
                 else if (GetAllInput is IHaveFilter dx11 && dx11.Filter is ISortedResultRequest dx22)
                     return dx22.Sorting;
-                return "Id";
+                return "Code";
             }
             set
             {
@@ -168,7 +170,7 @@ namespace ZLJ.RCL.Components
                     sd222.Sorting = value;
 
                     if (sd222.Sorting.IsNullOrWhiteSpaceBXJG())
-                        sd222.Sorting = "Id";
+                        sd222.Sorting = "Code";
                 }
             }
         }
