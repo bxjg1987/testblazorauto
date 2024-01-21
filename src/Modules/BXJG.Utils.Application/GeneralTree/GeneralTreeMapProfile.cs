@@ -18,7 +18,7 @@ namespace BXJG.Utils.Application.GeneralTree
             //    .ForMember("State", opt => opt.Ignore())
             //    .ForMember("ExtData", opt => opt.Ignore());
 
-            CreateMap<GeneralTreeEntity, GeneralTreeDto>();//.IncludeBase(typeof(GeneralTreeEntity<>), typeof(GeneralTreeGetTreeNodeBaseDto<>));
+            CreateMap<DataDictionaryEntity, GeneralTreeDto>();//.IncludeBase(typeof(GeneralTreeEntity<>), typeof(GeneralTreeGetTreeNodeBaseDto<>));
             CreateMap<GeneralTreeDto, GeneralTreeEditDto>();
             //经过测试,在有泛型的场景中AutoMapper使用继承并不能达到预期效果。因此使用扩展方法形式配置父类映射
             //CreateMap(typeof(GeneralTreeEntity<>), typeof(GeneralTreeNodeDto<>))
@@ -29,9 +29,9 @@ namespace BXJG.Utils.Application.GeneralTree
             //    .ForMember("State", opt => opt.Ignore())
             //    .ForMember("ExtData", opt => opt.Ignore());
 
-            CreateMap<GeneralTreeEntity, GeneralTreeNodeDto>().EntityToComboTree();//.IncludeBase(typeof(GeneralTreeEntity<>), typeof(GeneralTreeNodeDto<>));
+            CreateMap<DataDictionaryEntity, GeneralTreeNodeDto>().EntityToComboTree();//.IncludeBase(typeof(GeneralTreeEntity<>), typeof(GeneralTreeNodeDto<>));
 
-            CreateMap<GeneralTreeEntity, GeneralTreeComboboxDto>().EntityToCombobox();
+            CreateMap<DataDictionaryEntity, GeneralTreeComboboxDto>().EntityToCombobox();
 
             //.ForMember(c => c.ExtData, opt => opt.MapFrom(c => JsonConvert.DeserializeObject<dynamic>(c.ExtensionData)))  在DTO的属性中做了处理
             // .ForMember(c => c.Children, opt => opt.Ignore())

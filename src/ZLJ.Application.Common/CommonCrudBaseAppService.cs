@@ -2,6 +2,7 @@
 using Abp.Localization.Sources;
 using Abp.Runtime.Session;
 using BXJG.Utils.Application;
+using BXJG.Utils.Share;
 using Microsoft.AspNetCore.Identity;
 using ZLJ.Application.Common.Share;
 using ZLJ.Core.Authorization.Users;

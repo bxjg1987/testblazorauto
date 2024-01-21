@@ -2,6 +2,7 @@
 using Abp.Localization.Dictionaries;
 using Abp.Localization.Dictionaries.Xml;
 using Abp.Reflection.Extensions;
+using BXJG.Utils.Share;
 
 namespace BXJG.Utils.Localization
 {

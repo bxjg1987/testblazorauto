@@ -67,23 +67,23 @@ namespace BXJG.Utils.GeneralTree
             if (parentCode.IsNullOrEmpty())
             {
                 if (lasttCode.IsNullOrEmpty())
-                    return "1".PadLeft(GeneralTreeEntity.CodeUnitLength, '0');
+                    return "1".PadLeft(Share.BXJGUtilsConsts.CodeUnitLength, '0');
                 else
                 {
                     var lastBlock1 = lasttCode.Split('.').Last();
                     var temp1 = Convert.ToInt32(lastBlock1) + 1;
-                    return temp1.ToString().PadLeft(GeneralTreeEntity.CodeUnitLength, '0');
+                    return temp1.ToString().PadLeft(Share.BXJGUtilsConsts.CodeUnitLength, '0');
                 }
             }
             else
             {
                 if (lasttCode.IsNullOrEmpty())
-                    return parentCode + "." + "1".PadLeft(GeneralTreeEntity.CodeUnitLength, '0');
+                    return parentCode + "." + "1".PadLeft(Share.BXJGUtilsConsts.CodeUnitLength, '0');
                 else
                 {
                     var lastBlock = lasttCode.Split('.').Last();
                     var temp = Convert.ToInt32(lastBlock) + 1;
-                    return parentCode + "." + temp.ToString().PadLeft(GeneralTreeEntity.CodeUnitLength, '0');
+                    return parentCode + "." + temp.ToString().PadLeft(Share.BXJGUtilsConsts.CodeUnitLength, '0');
                 }
             }
         }
@@ -133,13 +133,13 @@ namespace BXJG.Utils.GeneralTree
 
         public static string GetParentCode(this string code)
         {
-            if (code.Length == GeneralTreeEntity.CodeUnitLength)
+            if (code.Length == Share.BXJGUtilsConsts.CodeUnitLength)
             {
                 return default;
             }
             else
             {
-                return code.Substring(0, code.Length - GeneralTreeEntity.CodeUnitLength).TrimEnd('.');
+                return code.Substring(0, code.Length - Share.BXJGUtilsConsts.CodeUnitLength).TrimEnd('.');
             }
         }
 

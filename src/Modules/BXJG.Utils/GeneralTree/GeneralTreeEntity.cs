@@ -16,10 +16,7 @@ namespace BXJG.Utils.GeneralTree
     public abstract class GeneralTreeEntity<TEntity> : FullAuditedEntity<long>, IExtendableObject, IMayHaveTenant, IGeneralTree<TEntity>
         where TEntity : GeneralTreeEntity<TEntity>
     {
-        public const int MaxDisplayNameLength = 128;
-        public const int MaxDepth = 16;
-        public const int CodeUnitLength = 5;
-        public const int MaxCodeLength = 95;
+       
 
         public GeneralTreeEntity() { }
         public GeneralTreeEntity(int? tenantId, string displayName, long? parentId = null)
@@ -30,7 +27,7 @@ namespace BXJG.Utils.GeneralTree
         }
 
         [Required]
-        [StringLength(MaxCodeLength)]
+        [StringLength(BXJG.Utils.Share.BXJGUtilsConsts.MaxCodeLength)]
         public virtual string Code { get; set; }
 
         // public virtual long? ParentId { get; set; }
@@ -55,7 +52,7 @@ namespace BXJG.Utils.GeneralTree
         public int ChildrenCount { get; set; }
 
         [Required]
-        [StringLength(MaxDisplayNameLength)]
+        [StringLength(Share.BXJGUtilsConsts. MaxDisplayNameLength)]
         public virtual string DisplayName { get; set; }
 
         public string ExtensionData { get; set; }
@@ -68,12 +65,12 @@ namespace BXJG.Utils.GeneralTree
             if (Parent != null)
                 return Parent.Code;
             else
-                return Code.Substring(0, Code.Length - GeneralTreeEntity.CodeUnitLength).TrimEnd('.');
+                return Code.Substring(0, Code.Length - Share.BXJGUtilsConsts.CodeUnitLength).TrimEnd('.');
         }
     }
 
     [Table("BXJGGeneralTrees")]
-    public class GeneralTreeEntity : GeneralTreeEntity<GeneralTreeEntity>
+    public class DataDictionaryEntity : GeneralTreeEntity<DataDictionaryEntity>
     {
         public bool IsSysDefine { get; set; }
         public bool IsTree { get; set; }

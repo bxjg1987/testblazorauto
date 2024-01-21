@@ -1,5 +1,6 @@
 ﻿using Abp.Localization;
 using Abp.Localization.Sources;
+using BXJG.Utils.Share;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -143,7 +144,7 @@ namespace BXJG.Utils.Localization
             return localizationManager.GetSource(sourceName).GetEnum<T>(obj);
         }
 
-        public static string ToLocalizationString(this Enum e, string sourceName = BXJGUtilsConsts.LocalizationSourceName)
+        public static string ToLocalizationString(this Enum e, string sourceName =BXJGUtilsConsts.LocalizationSourceName)
         {
             return LocalizationHelper.GetSource(sourceName).GetEnum(e);
         }
@@ -329,8 +330,8 @@ namespace BXJG.Utils.Localization
         /// <returns></returns>
         public static string UtilsL(this string key, params object[] args)
         {
-            //return string.Format(LocalizationHelper.GetString(BXJGUtilsConsts.LocalizationSourceName, key), args);
-            //return Abp.Localization.LocalizationHelper.GetString(BXJGUtilsConsts.LocalizationSourceName, key);
+            //return string.Format(LocalizationHelper.GetString(UtilsConsts.LocalizationSourceName, key), args);
+            //return Abp.Localization.LocalizationHelper.GetString(UtilsConsts.LocalizationSourceName, key);
             return BXJGUtilsL(LocalizationHelper.Manager, key, args);
         }
         /// <summary>

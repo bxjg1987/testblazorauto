@@ -35,7 +35,7 @@ namespace BXJG.Utils
         public override void PreInitialize()
         {
             IocManager.Register<BXJGUtilsModuleConfig>();
-            //Configuration.Modules.BXJGUtils().AddEnum(typeof(Gender), "gender", BXJGUtilsConsts.LocalizationSourceName);
+            //Configuration.Modules.BXJGUtils().AddEnum(typeof(Gender), "gender", UtilsConsts.LocalizationSourceName);
             Configuration.Modules.BXJGUtils().EnumLocalizationProviders.Add(() => new[] {
                 new EnumLocalizationDefine(typeof(Gender), "gender"),
                 new EnumLocalizationDefine(typeof(Gender), "bool"),

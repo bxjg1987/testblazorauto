@@ -85,7 +85,7 @@ namespace BXJG.Utils.Application.GeneralTree
                                                  string allTextForSearch = "不限",
                                                  string allTextForForm = "请选择")//这里的字符串后期可以使用常量
         {
-            //base.LocalizationSourceName = BXJGUtilsConsts.LocalizationSourceName;
+            //base.LocalizationSourceName = UtilsConsts.LocalizationSourceName;
             this.repository = repository;
             this.AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
             //L内部调用的LocationSource是使用的属性注入，所以在构造函数中无法使用L()  此规则.net framework版本是这个规则，.net core版本未测试过

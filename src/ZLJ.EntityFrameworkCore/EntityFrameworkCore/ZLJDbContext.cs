@@ -38,7 +38,7 @@ namespace ZLJ.EntityFrameworkCore
         #region 主模块
         public DbSet<PostEntity> BaseInfoPosts { get; set; }
         public DbSet<OrganizationUnitEntity> OrganizationUnitEntities { get; set; }
-        public DbSet<GeneralTreeEntity> BXJGGeneralTreeEntities { get; set; }
+        public DbSet<DataDictionaryEntity> BXJGGeneralTreeEntities { get; set; }
 
         public DbSet<AdministrativeEntity> BXJGBaseInfoAdministratives { get; set; }
 

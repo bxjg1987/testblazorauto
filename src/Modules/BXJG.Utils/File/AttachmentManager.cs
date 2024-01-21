@@ -12,6 +12,7 @@ using Abp.Domain.Entities;
 using System.Linq.Dynamic.Core;
 using BXJG.Common.Extensions;
 using System.IO;
+using BXJG.Utils.Share;
 
 namespace BXJG.Utils.File
 {

@@ -19,7 +19,7 @@ namespace Microsoft.EntityFrameworkCore
         /// <returns></returns>
         public static ModelBuilder ApplyConfigurationBXJGUtils(this ModelBuilder modelBuilder)
         {
-            return modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            return modelBuilder.ApplyConfigurationsFromAssembly(typeof(ModelBuilderExt).Assembly);
         }
 
         /// <summary>

@@ -11,8 +11,6 @@ namespace ZLJ.Core.BaseInfo.Administrative
     /// </summary>
     public class AdministrativeManager : GeneralTreeManager<AdministrativeEntity>
     {
-        public AdministrativeManager(IRepository<AdministrativeEntity, long> repository) : base(repository)
-        {
-        }
+       
     }
 }

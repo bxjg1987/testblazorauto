@@ -1,5 +1,6 @@
 ﻿using Abp.Domain.Uow;
 using Abp.EntityHistory;
+using BXJG.Utils.Share;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;

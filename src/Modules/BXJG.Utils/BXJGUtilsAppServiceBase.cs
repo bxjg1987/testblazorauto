@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Abp.Application.Services;
 using Abp.Runtime.Session;
+using BXJG.Utils.Share;
 
 namespace BXJG.Utils
 {

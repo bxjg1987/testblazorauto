@@ -10,6 +10,7 @@ using Abp.Linq;
 using Abp.Runtime.Session;
 using Abp.Timing;
 using Abp.UI;
+using BXJG.Utils.Share;
 using BXJG.Utils.Share.GeneralTree;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,12 @@ namespace BXJG.Utils.GeneralTree
 {
     //************************EF6 linq中不支持泛型属性的操作************************
 
+    /*
+     * code用数据库唯一索引，这样能简化编程
+     * 通常大部分数据库支持唯一索引所以这不会有问题。
+     * 在分布式场景中，通常也是单库写入，所以也不会有问题
+     */
+
     /// <summary>
     /// 通用树形领域服务
     /// </summary>
@@ -29,40 +36,48 @@ namespace BXJG.Utils.GeneralTree
     public class GeneralTreeManager<TEntity> : DomainService
         where TEntity : Entity<long>, IGeneralTree<TEntity>// GeneralTreeEntity<TEntity>
     {
-        public IRepository<TEntity, long> repository { get; set; }
+        protected IRepository<TEntity, long> Repository { get; set; }
 
-        //属性注入，需要public
-        public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }
+        //由于Utils模块是通用模块，所以需要这个来做异步操作，我们的主项目中直接引用ef的，所以不需要
+        protected IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }
 
-        public IAbpSession AbpSession { get; set; }
+        protected IAbpSession AbpSession { get; set; }
 
         public GeneralTreeManager()
         {
             base.LocalizationSourceName = BXJGUtilsConsts.LocalizationSourceName;
             this.AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
         }
-        [Obsolete]
-        public GeneralTreeManager(IRepository<TEntity, long> repository) : this()
-        {
-            this.repository = repository;
-            //base.LocalizationSourceName = BXJGUtilsConsts.LocalizationSourceName;
-            //this.AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
-        }
 
+        //用属性注入，这样子类不用重写烦人的构造函数
+        //public GeneralTreeManager(IRepository<TEntity, long> repository) : this()
+        //{
+        //    this.repository = repository;
+        //    //base.LocalizationSourceName = UtilsConsts.LocalizationSourceName;
+        //    //this.AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
+        //}
+
+        /// <summary>
+        /// 往数据库中插入节点
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         public virtual async Task<TEntity> CreateAsync(TEntity entity)
         {
+            //处理节点数量和code，数据库唯一索引确保并发时code不重复
+
             TEntity parent = null;
             if (entity.ParentId.HasValue)
             {
-                parent = await AsyncQueryableExecuter.FirstOrDefaultAsync(repository.GetAll().Where(c => c.Id == entity.ParentId.Value));
+                parent = await AsyncQueryableExecuter.FirstOrDefaultAsync(Repository.GetAll().Where(c => c.Id == entity.ParentId.Value));
                 //  var parentCodeQuery = repository.GetAll().Where(c => c.Id == entity.ParentId.Value).Select(c => c.Code);
                 var parentCode = parent.Code;// await AsyncQueryableExecuter.FirstOrDefaultAsync(parentCodeQuery);
-                var childrenCount = await repository.CountAsync(c => c.ParentId == entity.ParentId);
+                var childrenCount = await Repository.CountAsync(c => c.ParentId == entity.ParentId);
                 entity.Code = GeneralTreeExtensions.BuildCode(parentCode, childrenCount);
             }
             else
             {
-                var childrenCount = await repository.CountAsync(c => c.ParentId == null);
+                var childrenCount = await Repository.CountAsync(c => c.ParentId == null);
                 entity.Code = GeneralTreeExtensions.BuildCode("", childrenCount);
             }
 
@@ -71,7 +86,7 @@ namespace BXJG.Utils.GeneralTree
             if (entity is IMayHaveTenant mayt)
                 mayt.TenantId = AbpSession.TenantId;
 
-            if (entity is IMustHaveTenant mustt)
+            if (entity is IMustHaveTenant mustt&& AbpSession.TenantId.HasValue)
                 mustt.TenantId = AbpSession.TenantId.Value;
 
             if (entity is ICreationAudited ca)
@@ -83,9 +98,9 @@ namespace BXJG.Utils.GeneralTree
             //  IAudited
 
             //var ssss = AbpSession;
-           
 
-            await repository.InsertAsync(entity);
+
+            await Repository.InsertAsync(entity);
             await base.CurrentUnitOfWork.SaveChangesAsync();
             if (parent != null)
                 await UpdateChildrenCount(parent);
@@ -99,50 +114,56 @@ namespace BXJG.Utils.GeneralTree
         /// <returns></returns>
         public virtual async Task UpdateChildrenCount(TEntity entity)
         {
-            entity.ChildrenCount = await AsyncQueryableExecuter.CountAsync(repository.GetAll().Where(c => c.ParentId == entity.Id));
+            entity.ChildrenCount = await AsyncQueryableExecuter.CountAsync(Repository.GetAll().Where(c => c.ParentId == entity.Id));
         }
-
+        /// <summary>
+        /// 修改节点，内部会自动处理节点移动的问题
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         public virtual async Task<TEntity> UpdateAsync(TEntity entity)
         {
+            //正常修改、节点移动、节点数量计算
+
             //var o = await repository.GetAsync(entity.Id);
             //o.ExtensionData = entity.ExtensionData;
             //o.DisplayName = entity.DisplayName;
-
-
+            
             long? newParentId = entity.ParentId;
 
-            var oldQuery = repository.GetAll().Where(c => c.Id == entity.Id).Select(c => c.ParentId);
-            var old = await AsyncQueryableExecuter.FirstOrDefaultAsync(oldQuery);
-            var needMove = old != entity.ParentId;
+            var oldIdQuery = Repository.GetAll().Where(c => c.Id == entity.Id).Select(c => c.ParentId);
+            var oldId = await AsyncQueryableExecuter.FirstOrDefaultAsync(oldIdQuery);
+            var needMove = oldId != entity.ParentId;
             //entity.Code = old.Code;
-            entity.ParentId = old;
-
-
-
+            //先将新节点的父节点设置为老节点，方便后续处理移动，因为移动时要同时处理新老节点的相邻及其子代节点
+            entity.ParentId = oldId;
             ////经过测试，这里又有效
             //if (entity is IHasModificationTime ca)
             //    ca.LastModificationTime = Clock.Now;
-
             //if(entity is IModificationAudited hc)
             //    hc.LastModifierUserId = AbpSession.UserId;
-          
-       
+            await Repository.UpdateAsync(entity);
 
+            await CurrentUnitOfWork.SaveChangesAsync();
 
-            await repository.UpdateAsync(entity);
             if (needMove)
             {
                 if (newParentId.HasValue)
-                    await MoveAsync(entity, await repository.GetAsync(newParentId.Value), GeneralTreeMoveType.Append);
+                    await MoveAsync(entity, await Repository.GetAsync(newParentId.Value), GeneralTreeMoveType.Append);
                 else
                 {
-                    var ds = await AsyncQueryableExecuter.FirstOrDefaultAsync(repository.GetAll().Where(c => c.ParentId == null).OrderByDescending(c => c.Code));
+                    var ds = await AsyncQueryableExecuter.FirstOrDefaultAsync(Repository.GetAll().Where(c => c.ParentId == null).OrderByDescending(c => c.Code));
                     await MoveAsync(entity, ds, GeneralTreeMoveType.After);
                 }
             }
             return entity;
         }
-
+        /// <summary>
+        /// 删除节点及其后代节点
+        /// 目前不会处理相邻节点的code问题，因为不影响查询和排序
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         public virtual async Task DeleteAsync(TEntity item)
         {
             // if (keys != null && keys.Length > 0)
@@ -157,10 +178,12 @@ namespace BXJG.Utils.GeneralTree
 
             //    if (act != null)
             //      await act(item);
-            await repository.DeleteAsync(c => c.Code.StartsWith(item.Code));
+            await Repository.DeleteAsync(c => c.Code.StartsWith(item.Code));
 
             //}
             await CurrentUnitOfWork.SaveChangesAsync();
+
+            
 
             if (item.Parent != null)
                 await UpdateChildrenCount(item.Parent);
@@ -193,8 +216,8 @@ namespace BXJG.Utils.GeneralTree
         {
             if (targetId == 0)
                 targetId = null;
-            var source = await repository.GetAsync(sourceId);
-            var target = targetId.HasValue ? await repository.GetAsync(targetId.Value) : null;
+            var source = await Repository.GetAsync(sourceId);
+            var target = targetId.HasValue ? await Repository.GetAsync(targetId.Value) : null;
             return await MoveAsync(source, target, moveType);
         }
         public virtual async Task<TEntity> MoveAsync(TEntity source, TEntity target, GeneralTreeMoveType moveType)
@@ -226,7 +249,7 @@ namespace BXJG.Utils.GeneralTree
                 if (target.ParentId.HasValue)
                     parentIds.AddIfNotContains(target.ParentId.Value);
 
-                var temp1 = await repository.GetBrotherWithOffspringAsync(target);
+                var temp1 = await Repository.GetBrotherWithOffspringAsync(target);
                 targetParent = temp1.Item1;
                 targetChildren = temp1.Item2;
                 targetIndex = targetChildren.IndexOf(target) + (moveType == GeneralTreeMoveType.Front ? 0 : 1);
@@ -239,7 +262,7 @@ namespace BXJG.Utils.GeneralTree
                 //既然是append了，那么target就不可能为空
                 // if (target != null)
                 // {
-                targetChildren = await repository.GetFlattenOffspringAsync(target.Code);
+                targetChildren = await Repository.GetFlattenOffspringAsync(target.Code);
                 targetChildren = targetChildren.Where(c => c.ParentId == target.Id).ToList();
                 // }
                 // else
@@ -256,7 +279,7 @@ namespace BXJG.Utils.GeneralTree
             await CurrentUnitOfWork.SaveChangesAsync();
             if (parentIds.Any())
             {
-                var parents = await AsyncQueryableExecuter.ToListAsync(repository.GetAll().Where(c => parentIds.Contains(c.Id)));
+                var parents = await AsyncQueryableExecuter.ToListAsync(Repository.GetAll().Where(c => parentIds.Contains(c.Id)));
                 foreach (var item in parents)
                 {
                     await UpdateChildrenCount(item);
@@ -270,12 +293,12 @@ namespace BXJG.Utils.GeneralTree
 
         public Task<string> GetCodeAsync(long id)
         {
-            return AsyncQueryableExecuter.FirstOrDefaultAsync(repository.GetAll().Where(c => c.Id == id).Select(c => c.Code));
+            return AsyncQueryableExecuter.FirstOrDefaultAsync(Repository.GetAll().Where(c => c.Id == id).Select(c => c.Code));
         }
-        public string GetCode(long id)
-        {
-            return repository.GetAll().Where(c => c.Id == id).Select(c => c.Code).Single();
-        }
+        //public string GetCode(long id)
+        //{
+        //    return Repository.GetAll().Where(c => c.Id == id).Select(c => c.Code).Single();
+        //}
         //async Task<TEntity> MoveAsync(long sourceId, TEntity target, IList<TEntity> targetList, int targetIndex)
         //{
         //    var source = await repository.GetAsync(sourceId);
@@ -298,8 +321,8 @@ namespace BXJG.Utils.GeneralTree
         /// 移动节点
         /// </summary>
         /// <param name="source">源节点，对应00002.00002</param>
-        /// <param name="target">目标位置的父节点，对应00001</param>
-        /// <param name="targetList">目标节点的子节点集合，对应0001.00001、00001.00002</param>
+        /// <param name="targetParent">目标位置的父节点，对应00001</param>
+        /// <param name="targetBrotherList">目标节点的子节点集合，对应0001.00001、00001.00002</param>
         /// <param name="targetIndex">移动后所处目标的目标位置的索引，对应1</param>
         /// <returns></returns>
         async Task<TEntity> MoveAsync(TEntity source, TEntity targetParent, IList<TEntity> targetBrotherList, int targetIndex)
@@ -319,7 +342,7 @@ namespace BXJG.Utils.GeneralTree
             }
             else
             {
-                var temp = await repository.GetBrotherWithOffspringAsync(source);
+                var temp = await Repository.GetBrotherWithOffspringAsync(source);
                 brotherList = temp.Item2;
             }
 
@@ -435,13 +458,5 @@ namespace BXJG.Utils.GeneralTree
         //    return BuildCodeByLastCode(parentCode, q);
         //}
     }
-    /// <summary>
-    /// 通用字典领域服务
-    /// </summary>
-    public class GeneralTreeManager : GeneralTreeManager<GeneralTreeEntity>
-    {
-        public GeneralTreeManager(IRepository<GeneralTreeEntity, long> repository) : base(repository)
-        {
-        }
-    }
+   
 }

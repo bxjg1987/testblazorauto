@@ -1,6 +1,7 @@
 ﻿using Abp.Localization.Sources;
 using BXJG.Utils.Application.GeneralTree;
 using BXJG.Utils.Application.Share.GeneralTree;
+using BXJG.Utils.Share;
 
 namespace ZLJ.Application.Common
 {

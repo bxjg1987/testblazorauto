@@ -4,6 +4,7 @@ using Abp.Linq;
 using Abp.Localization.Sources;
 using Abp.Runtime.Session;
 using BXJG.Utils;
+using BXJG.Utils.Share;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;

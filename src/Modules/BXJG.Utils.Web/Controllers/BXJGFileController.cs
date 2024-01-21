@@ -8,6 +8,7 @@ using Abp.AspNetCore.Mvc.Controllers;
 using Abp.Authorization;
 using BXJG.Utils.Application.Share.Files;
 using BXJG.Utils.File;
+using BXJG.Utils.Share;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;

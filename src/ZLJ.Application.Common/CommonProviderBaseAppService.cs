@@ -1,5 +1,6 @@
 ﻿using Abp.Localization.Sources;
 using BXJG.Utils.Application;
+using BXJG.Utils.Share;
 using ZLJ.Application.Common.Share;
 using ZLJ.Core;
 

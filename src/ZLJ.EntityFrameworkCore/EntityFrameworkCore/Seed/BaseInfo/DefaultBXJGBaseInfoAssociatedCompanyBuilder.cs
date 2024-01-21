@@ -31,12 +31,12 @@ namespace ZLJ.EntityFrameworkCore.EntityFrameworkCore.Seed.BaseInfo
             if (_items.Any())
                 return;
 
-            var levels = _context.Set<GeneralTreeEntity>()
+            var levels = _context.Set<DataDictionaryEntity>()
                 .Include(x => x.Children)
                 .Where(x => x.IsSysDefine && x.DisplayName == "客户级别")
                 .SelectMany(x => x.Children)
                 .ToList();
-            var categorys = _context.Set<GeneralTreeEntity>()
+            var categorys = _context.Set<DataDictionaryEntity>()
                 .Include(x => x.Children)
                 .Where(x => x.IsSysDefine && x.DisplayName == "客户类别")
                 .SelectMany(x => x.Children)

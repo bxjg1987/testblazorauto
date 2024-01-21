@@ -17,7 +17,7 @@ namespace ZLJ.EntityFrameworkCore.EntityFrameworkCore.Seed.BaseInfo
     {
         private readonly ZLJDbContext _context;
         private readonly int _tenantId;
-        private readonly DbSet<GeneralTreeEntity> _set;
+        private readonly DbSet<DataDictionaryEntity> _set;
         private readonly long? _parentId;
 
         public DefaultBXJGBaseInfoDataDictionaryBuilder(ZLJDbContext context, int tenantId, long? parentId = default)
@@ -25,7 +25,7 @@ namespace ZLJ.EntityFrameworkCore.EntityFrameworkCore.Seed.BaseInfo
             _context = context;
             _tenantId = tenantId;
             _parentId = parentId;
-            _set = context.Set<GeneralTreeEntity>();
+            _set = context.Set<DataDictionaryEntity>();
         }
 
         public void Create()
@@ -57,19 +57,19 @@ namespace ZLJ.EntityFrameworkCore.EntityFrameworkCore.Seed.BaseInfo
                 }
 
                 var currentCode = last == null ? "00001" : (lastIndex + 1).ToString().PadLeft(5, '0');
-                var item = new GeneralTreeEntity
+                var item = new DataDictionaryEntity
                 {
                     Code = currentCode,
                     DisplayName = itemConfig.Item1,
                     TenantId = _tenantId,
-                    Children = new List<GeneralTreeEntity>(),
+                    Children = new List<DataDictionaryEntity>(),
                     IsSysDefine = true,
                 };
                 if (!itemConfig.Item2.IsNullOrEmpty())
                 {
                     for (var i = 0; i < itemConfig.Item2.Count; i++)
                     {
-                        item.Children.Add(new GeneralTreeEntity
+                        item.Children.Add(new DataDictionaryEntity
                         {
                             Code = $"{currentCode}.{(i + 1).ToString().PadLeft(5, '0')}",
                             DisplayName = itemConfig.Item2[i],

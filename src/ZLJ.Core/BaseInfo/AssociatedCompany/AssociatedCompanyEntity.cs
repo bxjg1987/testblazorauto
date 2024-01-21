@@ -66,7 +66,7 @@ namespace ZLJ.Core.BaseInfo.AssociatedCompany
         /// <summary>
         /// 客户等级实体
         /// </summary>
-        public virtual GeneralTreeEntity Level { get; set; }
+        public virtual DataDictionaryEntity Level { get; set; }
 
         /// <summary>
         /// 客户类别Id
@@ -79,7 +79,7 @@ namespace ZLJ.Core.BaseInfo.AssociatedCompany
         /// <summary>
         /// 客户类别实体
         /// </summary>
-        public virtual GeneralTreeEntity Category { get; set; }
+        public virtual DataDictionaryEntity Category { get; set; }
         /// <summary>
         /// 部门集合
         /// </summary>

@@ -16,7 +16,7 @@ namespace BXJG.Utils
             return moduleConfigurations.AbpConfiguration.Get<BXJGUtilsModuleConfig>();
         }
 
-        //public static BXJGUtilsModuleConfig AddEnum(this BXJGUtilsModuleConfig cfg, Type t,string name=default,  string locationSourceName= BXJGUtilsConsts.LocalizationSourceName)
+        //public static BXJGUtilsModuleConfig AddEnum(this BXJGUtilsModuleConfig cfg, Type t,string name=default,  string locationSourceName= UtilsConsts.LocalizationSourceName)
         //{
         //    // if (cfg.Enums == null)
         //    //  cfg.Enums = new List<EnumConfigItem>();

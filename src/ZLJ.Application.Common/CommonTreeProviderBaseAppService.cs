@@ -1,6 +1,7 @@
 ﻿using Abp.Localization.Sources;
 using BXJG.Utils.Application.GeneralTree;
 using BXJG.Utils.Application.Share.GeneralTree;
+using BXJG.Utils.Share;
 using System;
 using System.Collections.Generic;
 using System.Linq;

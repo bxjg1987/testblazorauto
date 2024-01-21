@@ -28,8 +28,8 @@ namespace BXJG.Utils.EFCore.EFMaps
             //builder.Property(c => c.Image2).HasColumnType($"varchar({CoreConsts.ItemCategoryImage2MaxLength})");
         }
     }
-    public class GeneralTreeMap : IEntityTypeConfiguration<GeneralTreeEntity> {
-        public void Configure(EntityTypeBuilder<GeneralTreeEntity> builder)
+    public class GeneralTreeMap : IEntityTypeConfiguration<DataDictionaryEntity> {
+        public void Configure(EntityTypeBuilder<DataDictionaryEntity> builder)
         {
             builder.MapGeneralTree();
         }
