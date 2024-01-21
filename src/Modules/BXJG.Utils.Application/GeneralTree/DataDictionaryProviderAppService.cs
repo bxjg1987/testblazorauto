@@ -39,20 +39,15 @@ namespace BXJG.Utils.Application.GeneralTree
                                                                       GeneralTreeNodeMoveInput,
                                                                       DataDictionaryManager>, IDataDictionaryAppService
     {
-        public DataDictionaryAppService(IRepository<DataDictionaryEntity, long> repository,
-                                     DataDictionaryManager organizationUnitManager) : base(repository,
-                                                                                        organizationUnitManager,
-                                                                                        PermissionNames.GeneralTreeCreatePermissionName,
-                                                                                        PermissionNames.GeneralTreeUpdatePermissionName,
-                                                                                        PermissionNames.GeneralTreeDeletePermissionName,
-                                                                                        PermissionNames.GeneralTreeMenuName)
-        {
-        }
+        protected override string CreatePermissionName  => PermissionNames.GeneralTreeCreatePermissionName;
+        protected override string UpdatePermissionName => PermissionNames.GeneralTreeUpdatePermissionName;
+        protected override string DeletePermissionName => PermissionNames.GeneralTreeDeletePermissionName;
+        protected override string GetPermissionName => PermissionNames.GeneralTreeMenuName;
 
         protected override async ValueTask BeforeDeleteAsync(DataDictionaryEntity entity)
         {
             if (entity.IsSysDefine)
-                throw new UserFriendlyException(L("系统预设数据不允许删除！"));
+                throw new UserFriendlyException("系统预设数据不允许删除！");
             await base.BeforeDeleteAsync(entity);
         }
 

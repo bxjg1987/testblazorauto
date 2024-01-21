@@ -577,7 +577,7 @@ namespace ZLJ.RCL.Components
             try
             {
                 var r = await AppService.BatchDeleteAsync(new BatchOperationInput<TPrimaryKey> { Ids = SelectedItems.Select(x => x.Id).ToArray() });
-                BatchOperationMessage(r, "批量删除");//这里木有必要await
+               _= BatchOperationMessage(r, "批量删除");//这里木有必要await
                 //BatchDeleteMessage(temp);
                 if (r.Ids.Any())
                     await BtnRefreshClick();
@@ -603,7 +603,7 @@ namespace ZLJ.RCL.Components
             try
             {
                 await AppService.DeleteAsync(new EntityDto<TPrimaryKey>(item.Id));
-                ShowSuccessMessage("删除提示", "删除成功！");//这里木有必要await
+               _= ShowSuccessMessage("删除提示", "删除成功！");//这里木有必要await
                                                     //若上面异常，下面不会执行
                                                     //_ = InvokeAsync(dataGrid.ReloadServerData);
                                                     // await LoadListData();

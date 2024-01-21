@@ -35,10 +35,10 @@ namespace ZLJ.Application.Admin.BaseInfo.Administrative
         //    getPermissionName = PermissionNames.BXJGBaseInfoAdministrative;
         //}
 
-        public override string getPermissionName => PermissionNames.BXJGBaseInfoAdministrative;
-        public override string createPermissionName => PermissionNames.BXJGBaseInfoAdministrativeCreate;
-        public override string updatePermissionName => PermissionNames.BXJGBaseInfoAdministrativeUpdate;
-        public override string deletePermissionName => PermissionNames.BXJGBaseInfoAdministrativeDelete;
+        protected override string GetPermissionName => PermissionNames.BXJGBaseInfoAdministrative;
+        protected override string CreatePermissionName => PermissionNames.BXJGBaseInfoAdministrativeCreate;
+        protected override string UpdatePermissionName => PermissionNames.BXJGBaseInfoAdministrativeUpdate;
+        protected override string DeletePermissionName => PermissionNames.BXJGBaseInfoAdministrativeDelete;
         //public override Task<AdministrativeDto> CreateAsync(AdministrativeEditDto input)
         //{
         //    return base.CreateAsync(input);

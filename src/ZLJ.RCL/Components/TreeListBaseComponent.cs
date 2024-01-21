@@ -344,7 +344,7 @@ namespace ZLJ.RCL.Components
             //PageIndex = 1;
 
             //table.ResetData();
-          
+
             //PageIndex = 1;
             //PageSize = 20;
             //Keywords = string.Empty;
@@ -353,7 +353,7 @@ namespace ZLJ.RCL.Components
             // Keywords = keywords;
             // await LoadListData();
             //table.ReloadData();
-        }    
+        }
         /// <summary>
         /// 对ant表格的引用
         /// </summary>
@@ -548,12 +548,19 @@ namespace ZLJ.RCL.Components
             item.ExtensionData.IsDeleting = true;
             try
             {
-                await AppService.DeleteAsync(new() { Ids = new[] { item.Id } });
-                _ = ShowSuccessMessage("删除提示", "删除成功！");//这里木有必要await
-                                                        //若上面异常，下面不会执行
-                                                        //_ = InvokeAsync(dataGrid.ReloadServerData);
-                                                        // await LoadListData();
-                await BtnRefreshClick();
+                var r = await AppService.DeleteAsync(new() { Ids = new[] { item.Id } });
+
+               // _ = BatchOperationMessage(r);//这里木有必要await
+                //BatchDeleteMessage(temp);
+                if (r.Ids.Any())
+                {
+                    _ = ShowSuccessMessage(msg: "删除成功！");
+                    await BtnRefreshClick();
+                }
+                else
+                {
+                    _ = ShowFailMessage(title: "删除失败！", r.ErrorMessage.FirstOrDefault()?.Message);
+                }
             }
             finally
             {

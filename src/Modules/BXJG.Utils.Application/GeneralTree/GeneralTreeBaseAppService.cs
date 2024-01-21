@@ -489,36 +489,36 @@ namespace BXJG.Utils.Application.GeneralTree
         /// </summary>
         public IServiceProvider ServiceProvider { get; set; }
         //protected string createPermissionName, updatePermissionName, deletePermissionName, getPermissionName;
-        public virtual string createPermissionName { get; set; }
-        public virtual string updatePermissionName { get; set; }
-        public virtual string deletePermissionName { get; set; }
-        public virtual string getPermissionName { get; set; }
+        protected virtual string CreatePermissionName { get;  }
+        protected virtual string UpdatePermissionName { get;  }
+        protected virtual string DeletePermissionName { get; }
+        protected virtual string GetPermissionName { get; }
 
-        [Obsolete("子类继承时应使用无参的构造函数，当前构造函数是未简化子类实现以前的代码，已过时。")]
-        public GeneralTreeBaseAppService(IRepository<TEntity, long> ownRepository,
-                                         TManager manager,
-                                         string createPermissionName = null,
-                                         string updatePermissionName = null,
-                                         string deletePermissionName = null,
-                                         string getPermissionName = null,
-                                         string allTextForManager = "全部")
-        {
-            //L内部调用的LocationSource是使用的属性注入，所以在构造函数中无法使用L()  此规则.net framework版本是这个规则，.net core版本未测试过
-            this.allTextForManager = allTextForManager;
-            this.repository = ownRepository;
+        //[Obsolete("子类继承时应使用无参的构造函数，当前构造函数是未简化子类实现以前的代码，已过时。")]
+        //public GeneralTreeBaseAppService(IRepository<TEntity, long> ownRepository,
+        //                                 TManager manager,
+        //                                 string createPermissionName = null,
+        //                                 string updatePermissionName = null,
+        //                                 string deletePermissionName = null,
+        //                                 string getPermissionName = null,
+        //                                 string allTextForManager = "全部")
+        //{
+        //    //L内部调用的LocationSource是使用的属性注入，所以在构造函数中无法使用L()  此规则.net framework版本是这个规则，.net core版本未测试过
+        //    this.allTextForManager = allTextForManager;
+        //    this.repository = ownRepository;
 
-            this.generalTreeManager = manager;
+        //    this.generalTreeManager = manager;
 
-            this.createPermissionName = createPermissionName;
-            this.updatePermissionName = updatePermissionName;
-            this.deletePermissionName = deletePermissionName;
-            this.getPermissionName = getPermissionName;
-        }
+        //    this.CreatePermissionName = createPermissionName;
+        //    this.UpdatePermissionName = updatePermissionName;
+        //    this.DeletePermissionName = deletePermissionName;
+        //    this.GetPermissionName = getPermissionName;
+        //}
 
-        public GeneralTreeBaseAppService()
-        {
-            AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
-        }
+        //public GeneralTreeBaseAppService()
+        //{
+        //    AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
+        //}
 
         /// <summary>
         /// 新增和修改都会执行的逻辑，若需要传递额外参数，请使用当前Uow.Items
@@ -935,19 +935,19 @@ namespace BXJG.Utils.Application.GeneralTree
         #region 权限判断
         protected virtual Task CheckCreatePermissionAsync()
         {
-            return CheckPermissionAsync(createPermissionName);
+            return CheckPermissionAsync(CreatePermissionName);
         }
         protected virtual Task CheckUpdatePermissionAsync()
         {
-            return CheckPermissionAsync(updatePermissionName);
+            return CheckPermissionAsync(UpdatePermissionName);
         }
         protected virtual Task CheckDeletePermissionAsync()
         {
-            return CheckPermissionAsync(deletePermissionName);
+            return CheckPermissionAsync(DeletePermissionName);
         }
         protected virtual Task CheckGetPermissionAsync()
         {
-            return CheckPermissionAsync(getPermissionName);
+            return CheckPermissionAsync(GetPermissionName);
         }
         protected virtual async Task CheckPermissionAsync(string permissionName)
         {
