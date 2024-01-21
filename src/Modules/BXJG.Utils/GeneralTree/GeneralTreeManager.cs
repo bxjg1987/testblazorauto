@@ -86,7 +86,7 @@ namespace BXJG.Utils.GeneralTree
             if (entity is IMayHaveTenant mayt)
                 mayt.TenantId = AbpSession.TenantId;
 
-            if (entity is IMustHaveTenant mustt&& AbpSession.TenantId.HasValue)
+            if (entity is IMustHaveTenant mustt && AbpSession.TenantId.HasValue)
                 mustt.TenantId = AbpSession.TenantId.Value;
 
             if (entity is ICreationAudited ca)
@@ -128,7 +128,7 @@ namespace BXJG.Utils.GeneralTree
             //var o = await repository.GetAsync(entity.Id);
             //o.ExtensionData = entity.ExtensionData;
             //o.DisplayName = entity.DisplayName;
-            
+
             long? newParentId = entity.ParentId;
 
             var oldIdQuery = Repository.GetAll().Where(c => c.Id == entity.Id).Select(c => c.ParentId);
@@ -183,7 +183,7 @@ namespace BXJG.Utils.GeneralTree
             //}
             await CurrentUnitOfWork.SaveChangesAsync();
 
-            
+
 
             if (item.Parent != null)
                 await UpdateChildrenCount(item.Parent);
@@ -331,27 +331,27 @@ namespace BXJG.Utils.GeneralTree
 
             var sourceParentCode = source.Code.GetParentCode();//源节点的父节点code
 
-            IList<TEntity> brotherList; //源节点所在的列表
+            IList<TEntity> sourceBrotherList; //源节点所在的列表
             bool betweenBrother = false;//是否本身就是在同级节点下移动
 
-            //1、准备源节点的兄弟节点列表
+            //1、准备源节点的兄弟节点列表 顶层兄弟节点之间移动 或 在某个指定节点下的兄弟节点之间移动
             if ((targetParent == null && !source.ParentId.HasValue) || (targetParent != null && source.ParentId.Equals(targetParent.Id)))
             {
-                brotherList = targetBrotherList;
+                sourceBrotherList = targetBrotherList;
                 betweenBrother = true;
             }
             else
             {
                 var temp = await Repository.GetBrotherWithOffspringAsync(source);
-                brotherList = temp.Item2;
+                sourceBrotherList = temp.Item2;
             }
 
             //2、从源列表中移除源节点
             // var tempSource = brotherList.Single(c => c.Id.Equals(source.Id));
-            var souteceIndex = brotherList.IndexOf(source);//source和brotherList集合中存在的那个对象也许不是同一个引用，在EF中有可能是
-            brotherList.RemoveAt(souteceIndex);
+            var souteceIndex = sourceBrotherList.IndexOf(source);//source和brotherList集合中存在的那个对象也许不是同一个引用，在EF中有可能是
+            sourceBrotherList.RemoveAt(souteceIndex);
             if (source.Parent != null)
-                source.Parent.Children = brotherList;
+                source.Parent.Children = sourceBrotherList;
 
             //3、将源节点放到目标位置
             if (betweenBrother && targetIndex > souteceIndex)
@@ -378,10 +378,29 @@ namespace BXJG.Utils.GeneralTree
             }
 
             //6、重置相关节点code
-            //这里有点浪费，懒得想了，毕竟是在内存中，况且移动节点的情况并不多
-            GeneralTreeExtensions.ResetCode(sourceParentCode, brotherList, souteceIndex);
-            var taregetCode = targetParent == null ? "" : targetParent.Code;
-            GeneralTreeExtensions.ResetCode(taregetCode, targetBrotherList, targetIndex);
+            if (betweenBrother)
+            {
+                var idx = 0;
+                if (targetIndex > souteceIndex)
+                    idx = souteceIndex;
+                else
+                    idx = targetIndex;
+                GeneralTreeExtensions.ResetCode(sourceParentCode, targetBrotherList, idx);
+            }
+            else
+            {
+                var taregetCode = targetParent == null ? "" : targetParent.Code;
+                if (taregetCode.StartsWith(sourceParentCode))
+                {
+                    GeneralTreeExtensions.ResetCode(sourceParentCode, sourceBrotherList, 0);
+                }
+                else
+                {
+                    GeneralTreeExtensions.ResetCode(taregetCode, targetBrotherList, 0);
+                }
+            }
+            //GeneralTreeExtensions.ResetCode(sourceParentCode, sourceBrotherList, souteceIndex);
+            //GeneralTreeExtensions.ResetCode(taregetCode, targetBrotherList, targetIndex);
             //source.Parent = target;//千万不要在重新生成code前设置Parent，因为后面递归生成code
             //if (betweenBrother)
             //{
@@ -393,7 +412,6 @@ namespace BXJG.Utils.GeneralTree
             //    ResetCode(sourceParentCode, brotherList, souteceIndex);
             //    ResetCode(taregetCode, targetList, targetIndex);
             //}
-
             return source;
         }
         //async Task<Tuple<TEntity, IList<TEntity>>> GetBrotherWithOffspringAsync(long id)
@@ -458,5 +476,5 @@ namespace BXJG.Utils.GeneralTree
         //    return BuildCodeByLastCode(parentCode, q);
         //}
     }
-   
+
 }
