@@ -7,7 +7,7 @@
 @inherits CreateBaseComponent<IPostAppService, PostDto, int, PagedAndSortedResultRequest< PagedPostResultRequestDto>, CreatePostDto, PostEditDto>
 
 <SectionContent SectionName="post-create-body">
-    <Form @ref="validateForm" ValidateOnChange="true" Model="CreateDto" LabelColSpan="4" WrapperColSpan="20">
+    <Form @ref="frm" ValidateOnChange="true" Model="createDto" LabelColSpan="4" WrapperColSpan="20" OnFinish="OnFinish">
         @*  <FormItem Label="唯一名称">
         <Input @bind-Value="@context.Name" />
         </FormItem> *@
@@ -21,7 +21,7 @@
 </SectionContent>
 
 <SectionContent SectionName="post-create-btns">
-    <Checkbox @bind-Checked=SaveAndContinue>保存后继续新增</Checkbox>
+    <Checkbox @bind-Checked=saveAndContinue>保存后继续新增</Checkbox>
     <Button OnClick="Reset" Icon=@IconType.Outline.Redo>重置</Button>
-    <Button OnClick="Save" Type=@ButtonType.Primary Loading=IsSaving Disabled=IsSaving Icon=@IconType.Outline.Save>保存</Button>
+    <Button OnClick="BtnSaveClick" Type=@ButtonType.Primary Loading=isSaving Disabled=isSaving Icon=@IconType.Outline.Save>保存</Button>
 </SectionContent>

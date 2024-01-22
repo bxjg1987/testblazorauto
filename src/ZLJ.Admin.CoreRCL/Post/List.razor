@@ -20,7 +20,7 @@
                 @if (deleteIsGranted)
                 {
                     <Popconfirm Title="确定删除已选择的项吗?"
-                                OnConfirm="Delete"
+                                OnConfirm="BtnDeleteClick"
                                 OnCancel="HideDeleteConfirm">
                         <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Clear" Danger="true" Disabled="@ShouldDisableDelete">删除</Button>
                     </Popconfirm>
@@ -31,7 +31,7 @@
             <GridCol Span="18" Flex=@("none")>
                 <Space>
                     <SpaceItem>
-                        <TsOuForSearch Style="min-width:10rem;" AllowClear Value="@GetAllInput.Filter.OuCode" ValueChanged="OnOuChanged" @ref=ou Disabled=IsLoading />
+                        <TreeSelectOu Style="min-width:10rem;" AllowClear Value="@GetAllInput.Filter.OuCode" ValueChanged="OnOuChanged" @ref=ou Disabled=IsLoading />
                      </SpaceItem>
                      <SpaceItem>
                          <RadioGroup TValue="bool?" @bind-Value="@GetAllInput.Filter.IsStatic" OnChange="BtnSearchClick" Disabled=IsLoading>
@@ -104,7 +104,7 @@
                     @if (deleteIsGranted)
                     {
                         <Popconfirm Title="确定删除此项吗?"
-                                    OnConfirm="()=>Delete(context)"
+                                    OnConfirm="()=>BtnDeleteItemClick(context)"
                                     OnCancel="HideDeleteConfirm">
                             <Button Size="@ButtonSize.Small" Danger="true">删除</Button>
                         </Popconfirm>

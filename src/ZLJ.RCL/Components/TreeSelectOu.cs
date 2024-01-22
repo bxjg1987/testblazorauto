@@ -11,11 +11,11 @@ namespace ZLJ.RCL.Components
     /// <summary>
     /// 部门选择下拉框
     /// </summary>
-    public class TsOuForSearch : TreeSelect<GetListInput,
-                                            OuDto,
-                                            GeneralTreeGetForSelectInput,
-                                            GeneralTreeComboboxDto,
-                                            IOuProviderAppService>
+    public class TreeSelectOu : TreeSelect<GetListInput,
+                                           OuDto,
+                                           GeneralTreeGetForSelectInput,
+                                           GeneralTreeComboboxDto,
+                                           IOuProviderAppService>
     {
 
         protected override Task OnInitializedAsync()

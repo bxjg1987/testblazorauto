@@ -10,11 +10,11 @@ namespace BXJG.Utils.Share.GeneralTree
      * 通用树模块的核心逻辑目前并不依赖此接口，而是依赖的抽象类
      * 后续也许会让核心逻辑依赖此接口，而不是抽象类。
      * 
-     * 目前这个接口用于扩展根树相关的功能，让实体和dto能有些通用功能
+     * 目前这个接口用于扩展跟树相关的功能，让实体和dto能有些通用功能
      */
 
     /// <summary>
-    /// 
+    /// 通常新增dto实现此接口，因为它仅仅需要提供父节点
     /// </summary>
     public interface IHaveParentId
     {

@@ -58,7 +58,7 @@ namespace ZLJ.Admin.CoreRCL.Post
                 ou.Value = default;
             await base.BtnReLoadClick();
         }
-        TsOuForSearch ou;
+        TreeSelectOu ou;
         //protected override Task OnQuery(QueryModel condition)
         //{
         //    if (currOu.IsNotNullOrWhiteSpaceBXJG())

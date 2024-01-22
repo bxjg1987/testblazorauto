@@ -1,38 +1,41 @@
 ﻿
 
 using Abp.Application.Services.Dto;
+using AntDesign;
 using BXJG.Utils.Application.Share;
+using BXJG.Utils.Application.Share.GeneralTree;
+using BXJG.Utils.Share.GeneralTree;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Extensions.DependencyInjection;
 using ZLJ.RCL.Interceptors;
 
 namespace ZLJ.RCL.Components
 {
-
-   
-
+    /*
+     * 某些操作都定义了三个方法
+     * 顶层是为了应用全局异常拦截器
+     * 二层方法是为了当前类和子类方便调用，里面包含loading的处理，不能直接调用顶层方法，免得全局异常拦截器被多次应用
+     * 三层方法是方便子类重写
+     * 
+     */
 
     /// <summary>
-    /// 基于BootstrapBlazor和abp的通用新增页组件
+    /// 基于antblazor和abp的通用新增页组件
     /// 查看详情和修改数据的抽象组件是单独定义的（因为要切换查看和编辑模式，所以定义在同一个组件中的），
     /// 查看详情和修改组件是对以后的数据进行查看和处理，而新增组件它是对数据从无到有的创建，因此分开定义的。
     /// </summary>
     /// <typeparam name="TAppService">应用服务类型</typeparam>
     /// <typeparam name="TEntityDto">列表项的数据类型</typeparam>
-    /// <typeparam name="TPrimaryKey">唯一id类型</typeparam>
     /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
     /// <typeparam name="TCreateInput">新增时的输入类型</typeparam>
-    /// <typeparam name="TUpdateInput">修改时的输入类型</typeparam>
-    public abstract class CreateBaseComponent<TAppService,
-                                                 TEntityDto,
-                                                 TPrimaryKey,
-                                                 TGetAllInput,
-                                                 TCreateInput,
-                                                 TUpdateInput> : BaseComponent
-        where TEntityDto : IEntityDto<TPrimaryKey>
-        where TCreateInput : new()
-        where TUpdateInput : IEntityDto<TPrimaryKey>
-        where TAppService : ZLJ.Application.Common.Share.ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
+    /// <typeparam name="TEditDto">修改时的输入类型</typeparam>
+    public abstract class TreeCreateBaseComponent<TAppService,
+                                                  TEntityDto,
+                                                  TCreateInput,
+                                                  TEditDto,
+                                                  TGetAllInput> : BaseComponent
+        where TAppService : IGeneralTreeBaseAppService<TEntityDto, TCreateInput, TEditDto, TGetAllInput>
+        where TCreateInput : IHaveParentId<long>, new()
     {
         /// <summary>
         /// 请使用AppService
@@ -104,7 +107,7 @@ namespace ZLJ.RCL.Components
         /// <summary>
         /// 保存后是否继续新增
         /// </summary>
-        public bool saveAndContinue;
+        protected bool saveAndContinue;
         /// <summary>
         /// 正在保存...
         /// </summary>
@@ -119,8 +122,6 @@ namespace ZLJ.RCL.Components
         {
             await Save();
         }
-
-        //protected bool isAdded;
         /// <summary>
         /// 核心的保存逻辑
         /// </summary>
@@ -129,7 +130,7 @@ namespace ZLJ.RCL.Components
         {
             //木有权限时保存按钮不可点击
             //验证不过时此方法不应该被调用
-            if (isSaving) return;
+            if(isSaving) return;
             isSaving = true;
             try
             {
@@ -141,17 +142,14 @@ namespace ZLJ.RCL.Components
             }
         }
         /// <summary>
-        /// 新增成功，且不再继续新增时触发
-        /// </summary>
-        [Parameter]
-        public EventCallback<SaveResult<TEntityDto>> OnAddEnd { get; set; }
-        /// <summary>
         /// 保存的核心逻辑
         /// </summary>
         /// <returns>新增任务是否结束</returns>
         protected virtual async Task SaveCore()
         {
-           
+            //var yz = await Validate();
+            //if (!yz)
+            //    return;
             //木有权限时保存按钮不可点击
             //验证不过时此方法不应该被调用
             var r = await AppService.CreateAsync(createDto);
@@ -164,12 +162,14 @@ namespace ZLJ.RCL.Components
             else
                 await OnAddEnd.InvokeAsync(new SaveResult<TEntityDto> { Dto = r, End = true });
         }
-      
+        /// <summary>
+        /// 新增成功，且不再继续新增时触发
+        /// </summary>
+        [Parameter]
+        public EventCallback<SaveResult<TEntityDto>> OnAddEnd { get; set; }
         /// <summary>
         /// 对表单的引用
         /// </summary>
         protected Form<TCreateInput> frm;
-
-
     }
 }

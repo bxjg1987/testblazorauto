@@ -193,13 +193,9 @@ namespace ZLJ.RCL.Components
         [AbpExceptionInterceptor]
         protected virtual async Task BtnRefreshClick()
         {
-            await RefreshCore();
+            await Refresh();
         }
-        /// <summary>
-        /// 刷新核心逻辑
-        /// </summary>
-        /// <returns></returns>
-        protected virtual async Task RefreshCore()
+        protected virtual async Task Refresh()
         {
             if (isRefreshing)
                 return;
@@ -207,17 +203,22 @@ namespace ZLJ.RCL.Components
             isRefreshing = true;
             try
             {
-                dto = await AppService.GetAsync(new EntityDto<TPrimaryKey>(Id));
-                //刷新和重置按钮只能二显一
-                //if (isEdit)
-                //{
-                //    await BeginEditCore();
-                //}
+                await RefreshCore();
             }
             finally
             {
                 isRefreshing = false;
             }
+        }
+        /// <summary>
+        /// 刷新核心逻辑
+        /// </summary>
+        /// <returns></returns>
+        protected virtual async Task RefreshCore()
+        {
+           
+                dto = await AppService.GetAsync(new EntityDto<TPrimaryKey>(Id));
+              
         }
         #endregion
 
@@ -420,13 +421,13 @@ namespace ZLJ.RCL.Components
         [AbpExceptionInterceptor]
         protected virtual async Task OnFinish(EditContext editContext)
         {
-            await UpdateCore();
+            await Update();
         }
         /// <summary>
         /// 删除的核心逻辑
         /// </summary>
         /// <returns></returns>
-        protected virtual async Task UpdateCore()
+        protected virtual async Task Update()
         {
             if (isUpdating)
                 return;
@@ -434,14 +435,20 @@ namespace ZLJ.RCL.Components
             isUpdating = true;
             try
             {
-                dto = await AppService.UpdateAsync(editDto!);
-                _ = base.MessageService.Success("修改成功！");
-                await AfterUpdated();
+                await UpdateCore();
             }
             finally
             {
                 isUpdating = false;
             }
+        }
+        protected virtual async Task UpdateCore()
+        {
+            
+                dto = await AppService.UpdateAsync(editDto!);
+                _ = base.MessageService.Success("修改成功！");
+                await AfterUpdated();
+           
         }
         /// <summary>
         /// 保存后回调
@@ -492,13 +499,13 @@ namespace ZLJ.RCL.Components
         [AbpExceptionInterceptor]
         protected virtual async Task BtnOkDeleteClick()
         {
-            await DeleteCore();
+            await Delete();
         }
         /// <summary>
         /// 删除的核心逻辑
         /// </summary>
         /// <returns></returns>
-        protected virtual async Task DeleteCore()
+        protected virtual async Task Delete()
         {
             //没有权限的按钮直接隐藏，况且应用服务还会判断权限兜底的，因此这里无需判断权限
             isShowDeleteConfirm = false;
@@ -507,14 +514,21 @@ namespace ZLJ.RCL.Components
             isDeleting = true;
             try
             {
-                await AppService.DeleteAsync(new EntityDto<TPrimaryKey>(Id));
-                _ = MessageService.Success($"删除成功！");
-                await AfterDelete();
+               
+                await DeleteCore();
             }
             finally
             {
                 isDeleting = false;
             }
+        }
+        protected virtual async Task DeleteCore()
+        {
+           
+                await AppService.DeleteAsync(new EntityDto<TPrimaryKey>(Id));
+                _ = MessageService.Success($"删除成功！");
+                await AfterDelete();
+         
         }
         /// <summary>
         /// 删除之后之后回调

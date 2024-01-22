@@ -180,7 +180,7 @@ namespace ZLJ.RCL.Components
                 }
             }
         }
-      
+
         /// <summary>
         /// 排序规则，格式："field1 aes,field2 desc"
         /// </summary>
@@ -410,7 +410,7 @@ namespace ZLJ.RCL.Components
             //Keywords = string.Empty;
             // await OnQuery(table.GetQueryModel());
             PageIndex = 1;
-           await LoadListData();
+            await LoadListData();
             // Keywords = keywords;
             // await LoadListData();
             //table.ReloadData();
@@ -569,6 +569,10 @@ namespace ZLJ.RCL.Components
         /// </summary>
         /// <returns></returns>
         [AbpExceptionInterceptor]
+        protected virtual async Task BtnDeleteClick()
+        {
+            await Delete();
+        }
         protected virtual async Task Delete()
         {
             //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限
@@ -576,17 +580,22 @@ namespace ZLJ.RCL.Components
             isDeleting = true;
             try
             {
-                var r = await AppService.BatchDeleteAsync(new BatchOperationInput<TPrimaryKey> { Ids = SelectedItems.Select(x => x.Id).ToArray() });
-               _= BatchOperationMessage(r, "批量删除");//这里木有必要await
-                //BatchDeleteMessage(temp);
-                if (r.Ids.Any())
-                    await BtnRefreshClick();
-                //_ = InvokeAsync(dataGrid.ReloadServerData); //内部会StateChange
+                await DeleteCore();
             }
             finally
             {
                 isDeleting = false;
             }
+        }
+        protected virtual async Task DeleteCore()
+        {
+          
+                var r = await AppService.BatchDeleteAsync(new BatchOperationInput<TPrimaryKey> { Ids = SelectedItems.Select(x => x.Id).ToArray() });
+                _ = BatchOperationMessage(r, "批量删除");//这里木有必要await
+                //BatchDeleteMessage(temp);
+                if (r.Ids.Any())
+                    await BtnRefreshClick();
+          
         }
         /// <summary>
         /// 删除单个项
@@ -594,7 +603,13 @@ namespace ZLJ.RCL.Components
         /// <param name="item"></param>
         /// <returns></returns>
         [AbpExceptionInterceptor]
-        protected virtual async Task Delete(TEntityDto item)
+        protected virtual async Task BtnDeleteItemClick(TEntityDto item)
+        {
+            //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限
+            // var curr = dataGrid.Items.Single(c => c.Id!.Equals(input.Id));
+            await DeleteItem(item);
+        }
+        protected virtual async Task DeleteItem(TEntityDto item)
         {
             //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限
             // var curr = dataGrid.Items.Single(c => c.Id!.Equals(input.Id));
@@ -602,17 +617,23 @@ namespace ZLJ.RCL.Components
             item.ExtensionData.IsDeleting = true;
             try
             {
-                await AppService.DeleteAsync(new EntityDto<TPrimaryKey>(item.Id));
-               _= ShowSuccessMessage("删除提示", "删除成功！");//这里木有必要await
-                                                    //若上面异常，下面不会执行
-                                                    //_ = InvokeAsync(dataGrid.ReloadServerData);
-                                                    // await LoadListData();
-                await BtnRefreshClick();
+                await DeleteItemCore(item);
             }
             finally
             {
                 item.ExtensionData.IsDeleting = false;
             }
+        }
+        protected virtual async Task DeleteItemCore(TEntityDto item)
+        {
+
+            await AppService.DeleteAsync(new EntityDto<TPrimaryKey>(item.Id));
+            _ = ShowSuccessMessage("删除提示", "删除成功！");//这里木有必要await
+                                                    //若上面异常，下面不会执行
+                                                    //_ = InvokeAsync(dataGrid.ReloadServerData);
+                                                    // await LoadListData();
+            await BtnRefreshClick();
+
         }
         /// <summary>
         /// 显示删除明细的确认框
