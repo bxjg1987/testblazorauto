@@ -56,12 +56,14 @@ namespace ZLJ.Web.HostBlazor.Components
              */
             if (xs == false)
             {
-                var assemblyName = typeof(ZLJ.Admin.CoreRCL.Share.Routes).Assembly.GetName().Name + ".dll";
-                var dir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-                var hash = Path.Combine(dir, assemblyName).GetMD5ByFilePath();
+                //var assemblyName = typeof(ZLJ.Admin.CoreRCL.Share.Routes).Assembly.GetName().Name + ".dll";
+                //var dir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+                //var hash = Path.Combine(dir, assemblyName).GetMD5ByFilePath();
                 // Console.WriteLine(Environment.CurrentDirectory + "===" + hash);
-
-                var cookieKey = prefix + hash;
+                
+                //部分dll更新时，blazor只会自动下载更新那部分dll，所以不用与dll的hash关联，而且这里之关联一个dll也不方便，也该是所有dll的hash之后再hash下
+                //所以干脆不管了
+                var cookieKey = prefix;// + hash; 
                 if (HttpContext.Request.Cookies.TryGetValue(cookieKey, out var sj))
                 {
                     //在网络好时，15秒左右下载完成，网络不好时设置久点，大不了首次请求时服务器多支撑一会
@@ -79,7 +81,7 @@ namespace ZLJ.Web.HostBlazor.Components
                         if (item.StartsWith(prefix))
                             HttpContext.Response.Cookies.Delete(item);
                     }
-                    HttpContext.Response.Cookies.Append(cookieKey, DateTime.Now.ToLongTimeString(),new CookieOptions {  Expires= DateTimeOffset.Now.AddYears(10) });
+                    HttpContext.Response.Cookies.Append(cookieKey, DateTime.Now.ToString(),new CookieOptions { Expires= DateTimeOffset.Now.AddYears(10) });
                 }
             }
 
