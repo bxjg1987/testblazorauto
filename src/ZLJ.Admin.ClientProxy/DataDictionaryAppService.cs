@@ -23,9 +23,9 @@ namespace ZLJ.Admin.ClientProxy
      
 
       
-        public async Task<GeneralTreeDto> CreateAsync(GeneralTreeEditDto input)
+        public async Task<DataDictionaryDto> CreateAsync(DataDictionaryEditDto input)
         {
-            return await Post<GeneralTreeDto>("api/services/bxjgutils/DataDictionary/Create", input);
+            return await Post<DataDictionaryDto>("api/services/bxjgutils/DataDictionary/Create", input);
         }
 
     
@@ -37,25 +37,25 @@ namespace ZLJ.Admin.ClientProxy
 
        
 
-        public async Task<List<GeneralTreeDto>> GetAllAsync(DataDictionaryGetTreeInput input)
+        public async Task<List<DataDictionaryDto>> GetAllAsync(DataDictionaryGetTreeInput input)
         {
-            return await Post<List<GeneralTreeDto>>("api/services/bxjgutils/DataDictionary/getall", input);
+            return await Post<List<DataDictionaryDto>>("api/services/bxjgutils/DataDictionary/getall", input);
         }
 
 
-        public async Task<GeneralTreeDto> GetAsync(EntityDto<long> input)
+        public async Task<DataDictionaryDto> GetAsync(EntityDto<long> input)
         {
-            return await Post<GeneralTreeDto>("api/services/bxjgutils/DataDictionary/Get", input);
+            return await Post<DataDictionaryDto>("api/services/bxjgutils/DataDictionary/Get", input);
         }
 
-        public async Task<GeneralTreeDto> MoveAsync(GeneralTreeNodeMoveInput input)
+        public async Task<DataDictionaryDto> MoveAsync(GeneralTreeNodeMoveInput input)
         {
-            return await Post<GeneralTreeDto>("api/services/bxjgutils/DataDictionary/Move", input);
+            return await Post<DataDictionaryDto>("api/services/bxjgutils/DataDictionary/Move", input);
         }
 
-        public async Task<GeneralTreeDto> UpdateAsync(GeneralTreeEditDto input)
+        public async Task<DataDictionaryDto> UpdateAsync(DataDictionaryEditDto input)
         {
-            return await Post<GeneralTreeDto>("api/services/bxjgutils/DataDictionary/Update", input);
+            return await Post<DataDictionaryDto>("api/services/bxjgutils/DataDictionary/Update", input);
         }
     }
 }

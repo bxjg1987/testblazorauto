@@ -53,7 +53,7 @@ namespace BXJG.Utils.Application.Share.GeneralTree
         /// <summary>
         /// 扩展属性
         /// </summary>
-        public IDictionary<string, object> ExtData { get; set; } //访问时由于可以配合nameof，对dynamic访问更简单
+        public IDictionary<string, object>? ExtData { get; set; } //访问时由于可以配合nameof，对dynamic访问更简单
 
         //public dynamic ExtData { get; set; }
     }

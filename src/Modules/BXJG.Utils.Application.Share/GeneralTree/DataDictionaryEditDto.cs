@@ -13,7 +13,7 @@ namespace BXJG.Utils.Application.Share.GeneralTree
     /// 通用树形数据更新模型
     /// </summary>
     //[AutoMapTo(typeof(GeneralTreeEntity))]
-    public class GeneralTreeEditDto : GeneralTreeNodeEditBaseDto
+    public class DataDictionaryEditDto : GeneralTreeNodeEditBaseDto
     {
         public bool IsTree { get; set; } = false;
     }

@@ -36,12 +36,12 @@ namespace BXJG.Utils.GeneralTree
     public class GeneralTreeManager<TEntity> : DomainService
         where TEntity : Entity<long>, IGeneralTree<TEntity>// GeneralTreeEntity<TEntity>
     {
-        protected IRepository<TEntity, long> Repository { get; set; }
+        public IRepository<TEntity, long> Repository { get; set; }
 
         //由于Utils模块是通用模块，所以需要这个来做异步操作，我们的主项目中直接引用ef的，所以不需要
-        protected IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }
+        public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }
 
-        protected IAbpSession AbpSession { get; set; }
+        public IAbpSession AbpSession { get; set; }
 
         public GeneralTreeManager()
         {

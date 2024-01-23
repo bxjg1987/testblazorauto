@@ -39,7 +39,7 @@ namespace ZLJ.Admin.CoreRCL.DataDictionary
       
 
         // AbpCreateDialog<IPostAppService, PostDto, int, PagedAndSortedResultRequest<PagedPostResultRequestDto>, CreatePostDto, PostEditDto, Create> dalRef;
-        Dictionary<string, object> OnRow(RowData<GeneralTreeDto> row)
+        Dictionary<string, object> OnRow(RowData<DataDictionaryDto> row)
         {
             Action<MouseEventArgs> OnDblClick = args =>
             {
@@ -102,7 +102,7 @@ namespace ZLJ.Admin.CoreRCL.DataDictionary
         /// </summary>
         /// <param name="sr"></param>
         /// <returns></returns>
-        async Task OnAddEnd(SaveResult<GeneralTreeDto> sr)
+        async Task OnAddEnd(SaveResult<DataDictionaryDto> sr)
         {
             isCreated = true;
             if (sr.End)
@@ -134,7 +134,7 @@ namespace ZLJ.Admin.CoreRCL.DataDictionary
         /// </summary>
         /// <param name="sr"></param>
         /// <returns></returns>
-        async Task OnDetailUpdate(GeneralTreeDto sr)
+        async Task OnDetailUpdate(DataDictionaryDto sr)
         {
             isShowDetailUpdate = false;
 
@@ -142,14 +142,14 @@ namespace ZLJ.Admin.CoreRCL.DataDictionary
 
         }
 
-        void OnEdit(GeneralTreeDto sr)
+        void OnEdit(DataDictionaryDto sr)
         {
             isEdit = true;
             detailUpdateId = sr.Id;
             isShowDetailUpdate = true;
         }
 
-        void OnDetail(GeneralTreeDto sr)
+        void OnDetail(DataDictionaryDto sr)
         {
             isEdit = false;
             detailUpdateId = sr.Id;

@@ -22,9 +22,9 @@ namespace BXJG.Utils.Application.Share.GeneralTree
     /// <summary>
     /// 数据字典应用服务接口
     /// </summary>
-    public interface IDataDictionaryAppService : IGeneralTreeBaseAppService<GeneralTreeDto,
-                                                                            GeneralTreeEditDto,
-                                                                            GeneralTreeEditDto,
+    public interface IDataDictionaryAppService : IGeneralTreeBaseAppService<DataDictionaryDto,
+                                                                            DataDictionaryEditDto,
+                                                                            DataDictionaryEditDto,
                                                                             DataDictionaryGetTreeInput>
     { }
 }

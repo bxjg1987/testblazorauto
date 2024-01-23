@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using ZLJ.Application.Common.ClientProxy.Http;
 using Abp.Configuration;
 using ZLJ.Application.Common.Share.OU;
+using BXJG.Utils.Application.Share.GeneralTree;
 
 namespace ZLJ.Application.Common.ClientProxy.Extensions
 {
@@ -34,6 +35,7 @@ namespace ZLJ.Application.Common.ClientProxy.Extensions
             services.AddTransient<AbpUserConfigurationService>();
             services.AddTransient<SessionAppService>();
             services.AddTransient<IOuProviderAppService, OuProviderAppService>();
+            services.AddTransient<IDataDictionaryProviderAppService, DataDictionaryProviderAppService>();
             return b;
         }
     }

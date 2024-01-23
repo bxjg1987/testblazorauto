@@ -1,21 +1,15 @@
-﻿@using Microsoft.AspNetCore.Components.Sections
-@using ZLJ.Application.Share.Post
+﻿@using BXJG.Utils.Application.Share.GeneralTree
+@using Microsoft.AspNetCore.Components.Sections
 
-@* 可能用弹窗或页面承载，所以核心组件不应该这样判断权限 *@
-@* @attribute [Authorize(PermissionNames.AdministratorBaseInfoPost)] *@
-
-@inherits CreateBaseComponent<IPostAppService, PostDto, int, PagedAndSortedResultRequest< PagedPostResultRequestDto>, CreatePostDto, PostEditDto>
+@inherits TreeCreateBaseComponent<IDataDictionaryAppService, DataDictionaryDto, DataDictionaryEditDto, DataDictionaryEditDto,DataDictionaryGetTreeInput>
 
 <SectionContent SectionName=@(FuncName + "-create-body")>
     <Form @ref="frm" ValidateOnChange="true" Model="createDto" LabelColSpan="4" WrapperColSpan="20" OnFinish="OnFinish">
-        @*  <FormItem Label="唯一名称">
-        <Input @bind-Value="@context.Name" />
-        </FormItem> *@
+        <FormItem Label="父节点">
+            <TreeSelectDataDictionary @bind-Value="pid" IsKeyId=true />
+        </FormItem>
         <FormItem Label="显示名">
             <Input @bind-Value="@context.DisplayName" />
-        </FormItem>
-        <FormItem Label="备注">
-            <Input @bind-Value="@context.Description" />
         </FormItem>
     </Form>
 </SectionContent>
