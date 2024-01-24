@@ -13,7 +13,7 @@ namespace ZLJ.RCL.Components
     /// 数据字典树形下拉框
     /// </summary>
     public class TreeSelectDataDictionary : TreeSelect<GeneralTreeGetForSelectInput,
-                                                       GeneralTreeNodeDto,
+                                                       DataDictionaryForSelectDto,
                                                        GeneralTreeGetForSelectInput,
                                                        GeneralTreeComboboxDto,
                                                        IDataDictionaryProviderAppService>

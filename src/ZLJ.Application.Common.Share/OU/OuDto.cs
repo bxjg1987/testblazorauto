@@ -11,7 +11,7 @@ namespace ZLJ.Application.Common.Share.OU
     /// <summary>
     /// 获取公司和部门下拉树的输出模型
     /// </summary>
-    public class OuDto : GeneralTreeNodeDto<OuDto>
+    public class OuDto : GeneralTreeNodeForSelectDto<OuDto>
     {
         /// <summary>
         /// 0总公司 1分公司 2部门

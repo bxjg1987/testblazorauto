@@ -9,7 +9,7 @@ namespace ZLJ.Application.Admin.BaseInfo.Administrative.Dto
     /// <summary>
     /// 行政区域后台管理 列表页的显示模型
     /// </summary>
-    public class AdministrativeDto : GeneralTreeGetTreeNodeBaseDto<AdministrativeDto>
+    public class AdministrativeDto : GeneralTreeNodeBaseDto<AdministrativeDto>
     {
         /// <summary>
         /// 行政区域级别

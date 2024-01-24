@@ -271,14 +271,7 @@ namespace ZLJ.RCL.Components
 
             //给每行属性附加额外状态
 
-            foreach (var dto in dtos)
-            {
-                dynamic dd = new ExpandoObject();
-                dd.IsDeleting = false;
-                dd.IsShowDeleteConfirmation = false;
-                await AddItemExtData(dto, dd);
-                dto.ExtensionData = dd;
-            }
+            await Map(dtos);
             Items = dtos;
             TotalCount = dtos.Count;
 
@@ -286,6 +279,20 @@ namespace ZLJ.RCL.Components
                 list.Clear();
             else
                 SelectedItems = new List<TEntityDto>();
+        }
+
+        async ValueTask Map(IList<TEntityDto> dtos) {
+            foreach (var dto in dtos)
+            {
+                dynamic dd = new ExpandoObject();
+                dd.IsDeleting = false;
+                dd.IsShowDeleteConfirmation = false;
+                await AddItemExtData(dto, dd);
+                dto.ExtensionData = dd;
+
+                if (dto.Children != default && dto.Children.Any())
+                   await Map(dto.Children);
+            }
         }
 
         /// <summary>

@@ -34,7 +34,7 @@ namespace AutoMapper
         [Obsolete]
         public static IMappingExpression<TSource, TDestination> EntityToDto<TSource, TDestination>(this IMappingExpression<TSource, TDestination> config)
            where TSource : GeneralTreeEntity<TSource>
-           where TDestination : GeneralTreeGetTreeNodeBaseDto<TDestination>
+           where TDestination : GeneralTreeNodeBaseDto<TDestination>
         {
             return config;
 
@@ -51,7 +51,7 @@ namespace AutoMapper
 
         public static IMappingExpression<TSource, TDestination> EntityToComboTree<TSource, TDestination>(this IMappingExpression<TSource, TDestination> config)
             where TSource : GeneralTreeEntity<TSource>
-            where TDestination : GeneralTreeNodeDto<TDestination>
+            where TDestination : GeneralTreeNodeForSelectDto<TDestination>
         {
             return config.ForMember(c => c.Text, opt => opt.MapFrom(c => c.DisplayName));
 

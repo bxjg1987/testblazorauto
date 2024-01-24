@@ -12,8 +12,8 @@ namespace BXJG.Utils.Application.Share.GeneralTree
     /// <summary>
     /// 获取树形下拉框数据的模型
     /// </summary>
-    public class GeneralTreeNodeDto<T> : EntityDto<long>, IGeneralTree<T>
-        where T : GeneralTreeNodeDto<T>
+    public class GeneralTreeNodeForSelectDto<T> : EntityDto<long>, IGeneralTree<T>
+        where T : GeneralTreeNodeForSelectDto<T>
     {
         //public string Id { get; set; }//用id是为了适配easyui的tree  combotree共用此模型
         public string Text { get; set; }
@@ -72,5 +72,5 @@ namespace BXJG.Utils.Application.Share.GeneralTree
 
     }
 
-    public class GeneralTreeNodeDto : GeneralTreeNodeDto<GeneralTreeNodeDto> { }
+    public class DataDictionaryForSelectDto : GeneralTreeNodeForSelectDto<DataDictionaryForSelectDto> { }
 }

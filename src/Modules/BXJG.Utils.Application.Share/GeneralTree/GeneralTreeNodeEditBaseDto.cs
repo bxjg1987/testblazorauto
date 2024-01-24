@@ -43,7 +43,7 @@ namespace BXJG.Utils.Application.Share.GeneralTree
         /// </summary>
         //[Display( Name ="名称", Description ="aaaaa" )] //这些标签对mudblazor无效，但其它blazor ui库也许有用 还有本地化等问题
         //[DisplayName("bbbbb")] //感觉过时了
-        [Required( ErrorMessage = "请输入名称")]
+        [Required(ErrorMessage = "请输入名称")]
         //[StringLength(GeneralTreeEntity.MaxDisplayNameLength)]
         public string DisplayName { get; set; }
         ///// <summary>
@@ -55,6 +55,14 @@ namespace BXJG.Utils.Application.Share.GeneralTree
         /// </summary>
         public IDictionary<string, object>? ExtData { get; set; } //访问时由于可以配合nameof，对dynamic访问更简单
 
+        /// <summary>
+        /// 某些UI框架(如antblazor)，下拉框只能绑定string，所以这里提供个多余的属性
+        /// </summary>
+        public string? ParentIdString
+        {
+            get => ParentId.HasValue ? ParentId.ToString() : default;
+            set => ParentId = value.IsNotNullOrWhiteSpaceBXJG() ? long.Parse(value) : default;
+        }
         //public dynamic ExtData { get; set; }
     }
 

@@ -64,7 +64,7 @@ namespace ZLJ.Application.Admin.Authorization.Permissions
             this.sdf = sdf;
         }
         [AbpAuthorize]
-        public IList<GeneralTreeNodeDto> GetAllPermissions()
+        public IList<DataDictionaryForSelectDto> GetAllPermissions()
         {
             return null;
             ////若某个权限是用来被其它权限依赖的，那么在可选列表中不要显示

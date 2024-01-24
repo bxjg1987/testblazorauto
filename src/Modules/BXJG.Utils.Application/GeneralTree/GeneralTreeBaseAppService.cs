@@ -62,7 +62,7 @@ namespace BXJG.Utils.Application.GeneralTree
                                                                                                                    TGetNodesForSelectOutput>
     where TEntity : Entity<long>, IGeneralTree<TEntity>// GeneralTreeEntity<TEntity>
     where TGetTreeForSelectInput : GeneralTreeGetForSelectInput
-    where TGetTreeForSelectOutput : GeneralTreeNodeDto<TGetTreeForSelectOutput>//, new()
+    where TGetTreeForSelectOutput : GeneralTreeNodeForSelectDto<TGetTreeForSelectOutput>//, new()
     where TGetNodesForSelectInput : GeneralTreeGetForSelectInput
     where TGetNodesForSelectOutput : GeneralTreeComboboxDto//, new()
     {
@@ -384,7 +384,7 @@ namespace BXJG.Utils.Application.GeneralTree
                                                                                                                                                                             TGetNodesForSelectInput>
         where TEntity : GeneralTreeEntity<TEntity>
         where TGetTreeForSelectInput : GeneralTreeGetForSelectInput
-        where TGetTreeForSelectOutput : GeneralTreeNodeDto<TGetTreeForSelectOutput>, new()
+        where TGetTreeForSelectOutput : GeneralTreeNodeForSelectDto<TGetTreeForSelectOutput>, new()
         where TGetNodesForSelectInput : GeneralTreeGetForSelectInput
     {
     }
@@ -405,7 +405,7 @@ namespace BXJG.Utils.Application.GeneralTree
                                                                                                                                                                             TGetTreeForSelectOutput>
         where TEntity : GeneralTreeEntity<TEntity>
         where TGetTreeForSelectInput : GeneralTreeGetForSelectInput
-        where TGetTreeForSelectOutput : GeneralTreeNodeDto<TGetTreeForSelectOutput>, new()
+        where TGetTreeForSelectOutput : GeneralTreeNodeForSelectDto<TGetTreeForSelectOutput>, new()
     {
     }
 
@@ -418,7 +418,7 @@ namespace BXJG.Utils.Application.GeneralTree
     public class GeneralTreeProviderBaseAppService<TEntity,
                                                    TGetTreeForSelectInput> : GeneralTreeProviderBaseAppService<TEntity,
                                                                                                                TGetTreeForSelectInput,
-                                                                                                               GeneralTreeNodeDto>, IGeneralTreeProviderBaseAppService<TGetTreeForSelectInput>
+                                                                                                               DataDictionaryForSelectDto>, IGeneralTreeProviderBaseAppService<TGetTreeForSelectInput>
         where TEntity : GeneralTreeEntity<TEntity>
         where TGetTreeForSelectInput : GeneralTreeGetForSelectInput
     {
@@ -466,7 +466,7 @@ namespace BXJG.Utils.Application.GeneralTree
         where TDeleteInput : BatchOperationInputLong
         where TGetInput : EntityDto<long>
         where TEntity : Entity<long>, IGeneralTree<TEntity>// GeneralTreeEntity<TEntity>
-        where TDto : GeneralTreeGetTreeNodeBaseDto<TDto>, new()
+        where TDto : GeneralTreeNodeBaseDto<TDto>, new()
         where TEditDto : GeneralTreeNodeEditBaseDto//父类可以对输入做一定的处理
         where TManager : GeneralTreeManager<TEntity>
         where TGetAllInput : GeneralTreeGetTreeInput
@@ -1004,7 +1004,7 @@ namespace BXJG.Utils.Application.GeneralTree
         where TDeleteInput : BatchOperationInputLong
         where TGetInput : EntityDto<long>
         where TEntity : GeneralTreeEntity<TEntity>
-        where TDto : GeneralTreeGetTreeNodeBaseDto<TDto>, new()
+        where TDto : GeneralTreeNodeBaseDto<TDto>, new()
         where TEditDto : GeneralTreeNodeEditBaseDto//父类可以对输入做一定的处理
         where TGetAllInput : GeneralTreeGetTreeInput
         where TMoveInput : GeneralTreeNodeMoveInput
@@ -1045,7 +1045,7 @@ namespace BXJG.Utils.Application.GeneralTree
         where TDeleteInput : BatchOperationInputLong
         where TGetInput : EntityDto<long>
         where TEntity : GeneralTreeEntity<TEntity>
-        where TDto : GeneralTreeGetTreeNodeBaseDto<TDto>, new()
+        where TDto : GeneralTreeNodeBaseDto<TDto>, new()
         where TEditDto : GeneralTreeNodeEditBaseDto//父类可以对输入做一定的处理
         where TGetAllInput : GeneralTreeGetTreeInput
     {
@@ -1080,7 +1080,7 @@ namespace BXJG.Utils.Application.GeneralTree
         where TCreateInput : GeneralTreeNodeEditBaseDto //注意这里约束为TEditDto，这样强制要求继承编辑模型不合理
         where TDeleteInput : BatchOperationInputLong
         where TEntity : GeneralTreeEntity<TEntity>
-        where TDto : GeneralTreeGetTreeNodeBaseDto<TDto>, new()
+        where TDto : GeneralTreeNodeBaseDto<TDto>, new()
         where TEditDto : GeneralTreeNodeEditBaseDto//父类可以对输入做一定的处理
         where TGetAllInput : GeneralTreeGetTreeInput
     {
@@ -1112,7 +1112,7 @@ namespace BXJG.Utils.Application.GeneralTree
      //   where TDeleteInput : BatchOperationInputLong
             where TGetAllInput : GeneralTreeGetTreeInput
         where TEntity : GeneralTreeEntity<TEntity>
-        where TDto : GeneralTreeGetTreeNodeBaseDto<TDto>, new()
+        where TDto : GeneralTreeNodeBaseDto<TDto>, new()
         where TEditDto : GeneralTreeNodeEditBaseDto//父类可以对输入做一定的处理
     {
 
@@ -1137,7 +1137,7 @@ namespace BXJG.Utils.Application.GeneralTree
                                                                                                                                       TEditDto>
         where TCreateInput : GeneralTreeNodeEditBaseDto //注意这里约束为TEditDto，这样强制要求继承编辑模型不合理
         where TEntity : GeneralTreeEntity<TEntity>
-        where TDto : GeneralTreeGetTreeNodeBaseDto<TDto>, new()
+        where TDto : GeneralTreeNodeBaseDto<TDto>, new()
         where TEditDto : GeneralTreeNodeEditBaseDto//父类可以对输入做一定的处理
     {
 
@@ -1158,7 +1158,7 @@ namespace BXJG.Utils.Application.GeneralTree
                                                                                                                                TCreateInput>
         where TCreateInput : GeneralTreeNodeEditBaseDto //注意这里约束为TEditDto，这样强制要求继承编辑模型不合理
         where TEntity : GeneralTreeEntity<TEntity>
-        where TDto : GeneralTreeGetTreeNodeBaseDto<TDto>, new()
+        where TDto : GeneralTreeNodeBaseDto<TDto>, new()
     {
 
     }

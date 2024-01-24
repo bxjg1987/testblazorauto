@@ -30,7 +30,7 @@ namespace BXJG.Utils.Application.GeneralTree
             //    .ForMember("State", opt => opt.Ignore())
             //    .ForMember("ExtData", opt => opt.Ignore());
 
-            CreateMap<DataDictionaryEntity, GeneralTreeNodeDto>().EntityToComboTree();//.IncludeBase(typeof(GeneralTreeEntity<>), typeof(GeneralTreeNodeDto<>));
+            CreateMap<DataDictionaryEntity, DataDictionaryForSelectDto>().EntityToComboTree();//.IncludeBase(typeof(GeneralTreeEntity<>), typeof(GeneralTreeNodeDto<>));
 
             CreateMap<DataDictionaryEntity, GeneralTreeComboboxDto>().EntityToCombobox();
 

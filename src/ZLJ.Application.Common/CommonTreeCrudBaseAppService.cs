@@ -34,7 +34,7 @@ namespace ZLJ.Application.Common
                                                                                     TGetInput,
                                                                                     TMoveInput,
                                                                                     TManager>
-        where TDto : GeneralTreeGetTreeNodeBaseDto<TDto>, new()
+        where TDto : GeneralTreeNodeBaseDto<TDto>, new()
         where TCreateInput : GeneralTreeNodeEditBaseDto
         where TEditDto : GeneralTreeNodeEditBaseDto
         where TDeleteInput : BatchOperationInputLong
@@ -124,7 +124,7 @@ namespace ZLJ.Application.Common
                                                                                                                                                   TDeleteInput,
                                                                                                                                                   TGetInput,
                                                                                                                                                   TMoveInput>
-        where TDto : GeneralTreeGetTreeNodeBaseDto<TDto>, new()
+        where TDto : GeneralTreeNodeBaseDto<TDto>, new()
         where TCreateInput : GeneralTreeNodeEditBaseDto
         where TEditDto : GeneralTreeNodeEditBaseDto
         where TDeleteInput : BatchOperationInputLong
@@ -164,7 +164,7 @@ namespace ZLJ.Application.Common
                                                                                                                                               TGetAllInput,
                                                                                                                                               TDeleteInput,
                                                                                                                                               TGetInput>
-        where TDto : GeneralTreeGetTreeNodeBaseDto<TDto>, new()
+        where TDto : GeneralTreeNodeBaseDto<TDto>, new()
         where TCreateInput : GeneralTreeNodeEditBaseDto
         where TEditDto : GeneralTreeNodeEditBaseDto
         where TDeleteInput : BatchOperationInputLong
@@ -198,7 +198,7 @@ namespace ZLJ.Application.Common
                                                                                                                                         TEditDto,
                                                                                                                                         TGetAllInput,
                                                                                                                                         TDeleteInput>
-        where TDto : GeneralTreeGetTreeNodeBaseDto<TDto>, new()
+        where TDto : GeneralTreeNodeBaseDto<TDto>, new()
         where TCreateInput : GeneralTreeNodeEditBaseDto
         where TEditDto : GeneralTreeNodeEditBaseDto
         where TDeleteInput : BatchOperationInputLong
@@ -227,7 +227,7 @@ namespace ZLJ.Application.Common
                                                                                                                                                 TCreateInput,
                                                                                                                                                 TEditDto,
                                                                                                                                                 TGetAllInput>
-        where TDto : GeneralTreeGetTreeNodeBaseDto<TDto>, new()
+        where TDto : GeneralTreeNodeBaseDto<TDto>, new()
         where TCreateInput : GeneralTreeNodeEditBaseDto
         where TEditDto : GeneralTreeNodeEditBaseDto
           where TGetAllInput : GeneralTreeGetTreeInput
@@ -250,7 +250,7 @@ namespace ZLJ.Application.Common
                                                                                          GeneralTreeGetTreeInput>, IGeneralTreeBaseAppService<TDto,
                                                                                                                                             TCreateInput,
                                                                                                                                             TEditDto>
-        where TDto : GeneralTreeGetTreeNodeBaseDto<TDto>, new()
+        where TDto : GeneralTreeNodeBaseDto<TDto>, new()
         where TCreateInput : GeneralTreeNodeEditBaseDto
         where TEditDto : GeneralTreeNodeEditBaseDto
         where TEntity : GeneralTreeEntity<TEntity>
@@ -269,7 +269,7 @@ namespace ZLJ.Application.Common
                                                                                            TCreateInput,
                                                                                            TCreateInput>, IGeneralTreeBaseAppService<TDto,
                                                                                                                                      TCreateInput>
-        where TDto : GeneralTreeGetTreeNodeBaseDto<TDto>, new()
+        where TDto : GeneralTreeNodeBaseDto<TDto>, new()
         where TCreateInput : GeneralTreeNodeEditBaseDto
         where TEntity : GeneralTreeEntity<TEntity>
     { }

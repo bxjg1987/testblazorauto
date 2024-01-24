@@ -14,7 +14,7 @@ namespace BXJG.Utils.Application.Share.GeneralTree
     /// 通用树形的管理页面使用的显示模型
     /// </summary>
     //[AutoMapFrom(typeof(GeneralTreeEntity))]
-    public class DataDictionaryDto : GeneralTreeGetTreeNodeBaseDto<DataDictionaryDto>
+    public class DataDictionaryDto : GeneralTreeNodeBaseDto<DataDictionaryDto>
     {
         [DisplayName("树形")]
         public bool IsTree { get; set; }

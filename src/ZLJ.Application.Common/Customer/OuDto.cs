@@ -14,7 +14,7 @@ namespace ZLJ.Application.Common.Customer
     /// 公共的 获取客户部门下拉框数据的 返回模型
     /// </summary>
    // [AutoMapFrom(typeof(ZLJ.Core.Customer.CustomerOUEntity))]
-    public class OuDto: GeneralTreeNodeDto
+    public class OuDto: DataDictionaryForSelectDto
     {
     }
 }

@@ -20,9 +20,9 @@ namespace ZLJ.Application.Common.ClientProxy
             throw new NotImplementedException();
         }
 
-        public Task<IList<GeneralTreeNodeDto>> GetTreeForSelectAsync(GeneralTreeGetForSelectInput input)
+        public Task<IList<DataDictionaryForSelectDto>> GetTreeForSelectAsync(GeneralTreeGetForSelectInput input)
         {
-            return Post<IList<GeneralTreeNodeDto>>("api/services/bxjgutils/DataDictionaryProvider/GetTreeForSelect", input);
+            return Post<IList<DataDictionaryForSelectDto>>("api/services/bxjgutils/DataDictionaryProvider/GetTreeForSelect", input);
         }
 
         //public Task<IList<GeneralTreeNodeDto>> GetTreeForSelectAsync(GeneralTreeGetForSelectInput input)

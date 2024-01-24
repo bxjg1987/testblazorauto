@@ -12,7 +12,7 @@ namespace ZLJ.Application.Common.Administrative
     /// <summary>
     /// 工单类别下拉树形数据源显示模型
     /// </summary>
-    public class AdministrativeTreeNodeDto : GeneralTreeNodeDto<AdministrativeTreeNodeDto>
+    public class AdministrativeTreeNodeDto : GeneralTreeNodeForSelectDto<AdministrativeTreeNodeDto>
     {
         public AdministrativeLevel Level { get; set; }
     }

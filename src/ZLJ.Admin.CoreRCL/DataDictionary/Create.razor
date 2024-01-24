@@ -5,8 +5,8 @@
 
 <SectionContent SectionName=@(FuncName + "-create-body")>
     <Form @ref="frm" ValidateOnChange="true" Model="createDto" LabelColSpan="4" WrapperColSpan="20" OnFinish="OnFinish">
-        <FormItem Label="父节点">
-            <TreeSelectDataDictionary @bind-Value="pid" IsKeyId=true />
+        <FormItem Label="父级">
+            <TreeSelectDataDictionary @bind-Value="@context.ParentIdString" IsKeyId=true />
         </FormItem>
         <FormItem Label="显示名">
             <Input @bind-Value="@context.DisplayName" />

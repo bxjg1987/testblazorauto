@@ -10,7 +10,7 @@ using ZLJ.Core.Localization;
 
 namespace ZLJ.Application.Admin.OU
 {
-    public class OUDto: GeneralTreeGetTreeNodeBaseDto<OUDto>
+    public class OUDto: GeneralTreeNodeBaseDto<OUDto>
     {  /// <summary>
        /// 0总公司 1分公司 2部门
        /// </summary>

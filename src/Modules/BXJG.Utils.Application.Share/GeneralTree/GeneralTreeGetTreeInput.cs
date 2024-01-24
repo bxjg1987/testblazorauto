@@ -14,7 +14,10 @@ namespace BXJG.Utils.Application.Share.GeneralTree
     {
         //不要使用Nullable<TId>类型，因为某些情况此参数可能不允许为null
         //若数据很多 可能需要么次加载一个节点的数据，所以ParentId字段是必要的
-
+        /// <summary>
+        /// 架子指定code下所有后代节点下的数据
+        /// code可能会变，所以不要在硬编码时使用code
+        /// </summary>
         public string? ParentCode { get; set; }
         /// <summary>
         /// 父级节点id，非必填
@@ -47,7 +50,8 @@ namespace BXJG.Utils.Application.Share.GeneralTree
     /// <summary>
     /// 后台管理数据字典时，获取列表的输入参数
     /// </summary>
-    public class DataDictionaryGetTreeInput : GeneralTreeGetTreeInput,IHaveKeywords { 
+    public class DataDictionaryGetTreeInput : GeneralTreeGetTreeInput, IHaveKeywords
+    {
         /// <summary>
         /// 是否是系统预定义的
         /// </summary>

@@ -68,7 +68,7 @@ namespace ZLJ.Application.Common.Share
     /// </summary>
     /// <typeparam name="TGetTreeForSelectInput">获取树形下拉框数据时的输入模型</typeparam>
     public interface IGeneralTreeProviderBaseAppService<in TGetTreeForSelectInput> : IGeneralTreeProviderBaseAppService<TGetTreeForSelectInput,
-                                                                                                                     GeneralTreeNodeDto>
+                                                                                                                     DataDictionaryForSelectDto>
     {
 
     }

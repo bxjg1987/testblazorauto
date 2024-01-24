@@ -31,7 +31,7 @@ namespace ZLJ.Application.Common
                                                                                                                          TGetNodesForSelectInput,
                                                                                                                          TGetNodesForSelectOutput>
         where TGetTreeForSelectInput : GeneralTreeGetForSelectInput
-        where TGetTreeForSelectOutput : GeneralTreeNodeDto<TGetTreeForSelectOutput>, new()
+        where TGetTreeForSelectOutput : GeneralTreeNodeForSelectDto<TGetTreeForSelectOutput>, new()
         where TGetNodesForSelectInput : GeneralTreeGetForSelectInput
         where TGetNodesForSelectOutput : GeneralTreeComboboxDto, new()
         where TEntity : GeneralTreeEntity<TEntity>
@@ -100,7 +100,7 @@ namespace ZLJ.Application.Common
                                                                                                                        GeneralTreeComboboxDto>
         , IGeneralTreeProviderBaseAppService<TGetTreeForSelectInput, TGetTreeForSelectOutput, TGetNodesForSelectInput>
         where TGetTreeForSelectInput : GeneralTreeGetForSelectInput
-        where TGetTreeForSelectOutput : GeneralTreeNodeDto<TGetTreeForSelectOutput>, new()
+        where TGetTreeForSelectOutput : GeneralTreeNodeForSelectDto<TGetTreeForSelectOutput>, new()
         where TGetNodesForSelectInput : GeneralTreeGetForSelectInput
         where TEntity : GeneralTreeEntity<TEntity>
     {
@@ -120,7 +120,7 @@ namespace ZLJ.Application.Common
                                                                                                                        TGetTreeForSelectInput>
           , IGeneralTreeProviderBaseAppService<TGetTreeForSelectInput, TGetTreeForSelectOutput>
         where TGetTreeForSelectInput : GeneralTreeGetForSelectInput
-        where TGetTreeForSelectOutput : GeneralTreeNodeDto<TGetTreeForSelectOutput>, new()
+        where TGetTreeForSelectOutput : GeneralTreeNodeForSelectDto<TGetTreeForSelectOutput>, new()
         where TEntity : GeneralTreeEntity<TEntity>
     {
     }
@@ -133,7 +133,7 @@ namespace ZLJ.Application.Common
     public abstract class CommonTreeProviderBaseAppService<TEntity,
                                                            TGetTreeForSelectInput> : CommonTreeProviderBaseAppService<TEntity,
                                                                                                                        TGetTreeForSelectInput,
-                                                                                                                       GeneralTreeNodeDto>
+                                                                                                                       DataDictionaryForSelectDto>
             , IGeneralTreeProviderBaseAppService<TGetTreeForSelectInput>
         where TGetTreeForSelectInput : GeneralTreeGetForSelectInput
         where TEntity : GeneralTreeEntity<TEntity>

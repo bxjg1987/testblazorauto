@@ -18,7 +18,7 @@ namespace BXJG.Utils.Application.GeneralTree
     /// 数据字典应用服务类
     /// </summary>
     public class DataDictionaryProviderAppService : GeneralTreeProviderBaseAppService<DataDictionaryEntity, GeneralTreeGetForSelectInput,
-                                                                               GeneralTreeNodeDto,
+                                                                               DataDictionaryForSelectDto,
                                                                                GeneralTreeGetForSelectInput,
                                                                                GeneralTreeComboboxDto>, IDataDictionaryProviderAppService
     {
