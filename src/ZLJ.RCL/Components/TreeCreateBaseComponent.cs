@@ -50,6 +50,11 @@ namespace ZLJ.RCL.Components
         /// </summary>
         public abstract string FuncName { get; }// => $"请重写{nameof(FuncName)}属性";
         /// <summary>
+        /// 父级id
+        /// </summary>
+        [Parameter]
+        public long? ParentId { get; set; }
+        /// <summary>
         /// 新增时的模型
         /// </summary>
         protected TCreateInput createDto = new TCreateInput();
@@ -93,6 +98,7 @@ namespace ZLJ.RCL.Components
         protected virtual ValueTask ResetCore()
         {
             createDto = new TCreateInput();
+            createDto.ParentId = ParentId;
             return ValueTask.CompletedTask;
         }
         /// <summary>

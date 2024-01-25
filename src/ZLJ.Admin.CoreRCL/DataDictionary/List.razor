@@ -72,9 +72,13 @@
             <PropertyColumn Property="c=>c.IsSysDefine" Width="80">
                 <Switch @bind-Value="@context.IsSysDefine" Size="@InputSize.Small" Disabled="true"></Switch>
             </PropertyColumn>
-            <ActionColumn Title="操作" Width="200">
+            <ActionColumn Title="操作" Width="240">
                 <ButtonGroup Size="@ButtonSize.Small">
                     <Button Size="@ButtonSize.Small" Type="@ButtonType.Primary" OnClick="x=>OnDetail(context)">详情</Button>
+                    @if (createIsGranted)
+                    {
+                        <Button Size="@ButtonSize.Small" OnClick="x=>AddSub(context.Id)">添加子节点</Button>
+                    }
                     @if (updateIsGranted)
                     {
                         <Button Size="@ButtonSize.Small" OnClick="x=>OnEdit(context)">修改</Button>
@@ -107,7 +111,7 @@
 
     <ChildContent>
         <SectionOutlet SectionName="@(FuncName+"-create-body" )" />
-         <Create OnAddEnd="OnAddEnd" />
+         <Create OnAddEnd="OnAddEnd" ParentId="parentId" />
     </ChildContent>
 </Modal>
 

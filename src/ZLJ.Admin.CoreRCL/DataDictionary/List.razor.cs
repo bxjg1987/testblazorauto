@@ -6,8 +6,11 @@ namespace ZLJ.Admin.CoreRCL.DataDictionary
 {
     public partial class List
     {
-       
-
+        long? parentId;
+        void AddSub(long pid) {
+            parentId = pid;
+            ShowCreateDialog();
+        }
         // string currOu;
 
         protected override string FuncName => "数据字典";
