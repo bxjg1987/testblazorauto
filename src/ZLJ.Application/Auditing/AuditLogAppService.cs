@@ -52,11 +52,11 @@ namespace ZLJ.Application.Admin.Auditing
             //else
             //    input.EndDate = input.EndDate.Value.AddDays(1).AddSeconds(-1);
 
-           if (input.Sorting.ToLower().StartsWith("user")&& !input.Sorting.StartsWith("User."))
+            if (input.Sorting.ToLower().StartsWith("user") && !input.Sorting.StartsWith("User."))
             {
-                input.Sorting = input.Sorting.Replace("user","User.",StringComparison.OrdinalIgnoreCase);// "User." + input.Sorting;
+                input.Sorting = input.Sorting.Replace("user", "User.", StringComparison.OrdinalIgnoreCase);// "User." + input.Sorting;
             }
-            else if( !input.Sorting.StartsWith("AuditLog."))
+            else if (!input.Sorting.StartsWith("AuditLog."))
             {
                 input.Sorting = "AuditLog." + input.Sorting.Replace(",", ",AuditLog."); //"AuditLog." + input.Sorting;
             }
@@ -102,7 +102,7 @@ namespace ZLJ.Application.Admin.Auditing
             var query = from auditLog in _auditLogRepository.GetAll().AsNoTrackingWithIdentityResolution()
                         join user in _userRepository.GetAll().AsNoTrackingWithIdentityResolution() on auditLog.UserId equals user.Id into userJoin
                         from joinedUser in userJoin.DefaultIfEmpty()
-                        //where auditLog.ExecutionTime >= input.StartDate && auditLog.ExecutionTime <= input.EndDate
+                            //where auditLog.ExecutionTime >= input.StartDate && auditLog.ExecutionTime <= input.EndDate
                         select new AuditLogAndUser { AuditLog = auditLog, User = joinedUser };
             //这里很诡异， User = new User 然后所有字段赋值查询就快，直接赋值joinedUser 到了后面几页就慢
             //生成的语句在数据库中直接执行也快
@@ -110,10 +110,10 @@ namespace ZLJ.Application.Admin.Auditing
 
             query = query.WhereIf(input.StartDate.HasValue, c => c.AuditLog.ExecutionTime >= input.StartDate.Value)
                          .WhereIf(input.EndDate.HasValue, c => c.AuditLog.ExecutionTime < input.EndDate.Value)
-                         .WhereIf(!input.UserName.IsNullOrWhiteSpace(), item => item.User.UserName.Contains(input.UserName))
-                         .WhereIf(!input.ServiceName.IsNullOrWhiteSpace(), item => item.AuditLog.ServiceName.Contains(input.ServiceName))
-                         .WhereIf(!input.MethodName.IsNullOrWhiteSpace(), item => item.AuditLog.MethodName.Contains(input.MethodName))
-                         .WhereIf(!input.BrowserInfo.IsNullOrWhiteSpace(), item => item.AuditLog.BrowserInfo.Contains(input.BrowserInfo))
+                         .WhereIf(input.Keywords.IsNotNullOrWhiteSpaceBXJG(), item => item.User.UserName.Contains(input.Keywords) ||
+                                                                                      item.AuditLog.ServiceName.Contains(input.Keywords) ||
+                                                                                      item.AuditLog.MethodName.Contains(input.Keywords)||
+                                                                                      item.AuditLog.BrowserInfo.Contains(input.Keywords))
                          .WhereIf(input.MinExecutionDuration.HasValue && input.MinExecutionDuration > 0, item => item.AuditLog.ExecutionDuration >= input.MinExecutionDuration.Value)
                          .WhereIf(input.MaxExecutionDuration.HasValue && input.MaxExecutionDuration < int.MaxValue, item => item.AuditLog.ExecutionDuration <= input.MaxExecutionDuration.Value)
                          .WhereIf(input.HasException == true, item => item.AuditLog.Exception != null && item.AuditLog.Exception != "")

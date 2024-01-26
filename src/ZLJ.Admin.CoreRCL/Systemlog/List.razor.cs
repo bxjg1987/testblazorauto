@@ -1,7 +1,9 @@
-﻿using Abp.Extensions;
+﻿using Abp.Application.Services.Dto;
+using Abp.Extensions;
 using Abp.UI;
 using AntDesign.TableModels;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json.Linq;
 using ZLJ.Application.Share.Auditing;
 using ZLJ.Application.Share.Auditing.Dto;
 using ZLJ.RCL.Interceptors;
@@ -15,8 +17,8 @@ namespace ZLJ.Admin.CoreRCL.Systemlog
         Table<AuditLogListDto> table;
         GetAuditLogsInput condition = new GetAuditLogsInput();
         AuditLogListDto[] data = Array.Empty<AuditLogListDto>();
-        int total = 1;
-
+        int total = 0;
+        bool isLoading;
         //protected override Task OnInitializedAsync()
         //{
         //    return base.OnInitializedAsync();
@@ -29,6 +31,7 @@ namespace ZLJ.Admin.CoreRCL.Systemlog
             appService = ScopedServices.GetRequiredService<IAuditLogAppService>();
             // throw new UserFriendlyException("xxxxxxxxxxxxx");
         }
+      
         [AbpExceptionInterceptor]
         async Task OnChange(QueryModel<AuditLogListDto> queryModel)
         {
@@ -46,10 +49,10 @@ namespace ZLJ.Admin.CoreRCL.Systemlog
             condition.MaxResultCount = queryModel.PageSize;
             // await Console.Out.WriteLineAsync(   System.Text.Json.JsonSerializer.Serialize(queryModel.SortModel));
             condition.Sorting = string.Empty;
-            foreach (var item in queryModel.SortModel.Where(c=>c.Sort.IsNotNullOrWhiteSpaceBXJG()).OrderBy(c => c.Priority))
+            foreach (var item in queryModel.SortModel.Where(c => c.Sort.IsNotNullOrWhiteSpaceBXJG()).OrderBy(c => c.Priority))
             {
                 condition.Sorting += $"{item.FieldName} {item.Sort.TrimEnd("end".ToArray())},";
-            }  
+            }
             if (condition.Sorting.IsNullOrWhiteSpaceBXJG())
                 condition.Sorting = "ExecutionTime desc";
             else
@@ -69,5 +72,14 @@ namespace ZLJ.Admin.CoreRCL.Systemlog
             // queryModel.CurrentPagedRecords(data.AsQueryable());  
             //StateHasChanged();
         }
+        int pageIndex = 1;
+        private void Search()
+        {
+            pageIndex = 1;
+            var qm = table.GetQueryModel();
+            //qm.FilterModel.Clear();//这里清不清没啥意义，因为我们使用的查询模型
+            table.ReloadData(qm);
+        }
+
     }
 }

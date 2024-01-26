@@ -8,8 +8,9 @@ namespace ZLJ.Admin.CoreRCL.DataDictionary
     {
         long? parentId;
         void AddSub(long pid) {
-            parentId = pid;
+            
             ShowCreateDialog();
+            parentId = pid;
         }
         // string currOu;
 
@@ -87,6 +88,7 @@ namespace ZLJ.Admin.CoreRCL.DataDictionary
         public void ShowCreateDialog()
         {
             isCreateDialogVisible = true;
+            parentId = default;
             //  var r = await dalRef.Show();
             //   if (r)
             //       await Reset();

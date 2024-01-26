@@ -1,28 +1,48 @@
 ﻿@page "/auditing"
 @rendermode @(new InteractiveAutoRenderMode(prerender: false))
 @inherits BaseComponent
+@attribute [Authorize(PermissionNames.AdministratorBaseInfoPost)]
 @using ZLJ.Application.Share.Auditing
 
-<Table @ref="table"
-       TItem="AuditLogListDto"
-       OnChange="OnChange"
-       RemoteDataSource="true"
-       DataSource="data" 
-       Size="TableSize.Small" 
-       Total="total" 
-       ScrollX="2300"
-       ScrollY="78.5vh" 
-       RowKey="x=>x.Id">
+<Flex Gap="small" Vertical Justify="space-between">
 
-    <Selection Key="@(context.Id.ToString())" Width="60" />
-    <PropertyColumn Property="c=>c.UserName" Sortable Width="200" />
-     <PropertyColumn Property="c=>c.ClientName" Width="200" />
-     <PropertyColumn Property="c=>c.ClientIpAddress" Width="200" />
-     <PropertyColumn Property="c=>c.ServiceName" Sortable Width="200" />
-     <PropertyColumn Property="c=>c.MethodName" Sortable Width="200" />
-     <PropertyColumn Property="c=>c.Parameters" />
-     <PropertyColumn Property="c=>c.ExecutionTime" Sortable Width="200" />
-     <PropertyColumn Property="c=>c.ExecutionDuration" Sortable Width="150" />
-     <PropertyColumn Property="c=>c.Exception" />
-     <PropertyColumn Property="c=>c.BrowserInfo" />
- </Table>
+     <Flex Gap="small" Justify="flex-end">
+         <DatePicker TValue="DateTime?" @bind-Value="condition.StartDate" Placeholder=@("开始时间") AllowClear ChangeOnClose OnChange="Search"></DatePicker>
+         <DatePicker TValue="DateTime?" @bind-Value="condition.EndDate" Placeholder=@("结束时间") AllowClear ChangeOnClose OnChange="Search"></DatePicker>
+         @* <RangePicker TValue="DateTime?[]" ShowTime='@("HH:mm")' OnChange="OnRangeChange" AllowClear ChangeOnClose /> *@
+
+         @*  <Button>xxxx</Button>
+        <Button>xxxx</Button>
+        <Button>xxxx</Button> *@
+     </Flex>
+
+     <Table @ref="table"
+            TItem="AuditLogListDto"
+            OnChange="OnChange"
+            RemoteDataSource="true" 
+            Loading=isLoading
+            DataSource="data"
+            Size="TableSize.Small"
+            @bind-PageIndex=pageIndex
+            @bind-Total="total"
+            RowClassName="@(r=>r.RowIndex%2==0?"even":"odd")"
+            ScrollX="2300"
+            ScrollY="74.2vh" 
+            Bordered
+            RowKey="x=>x.Id">
+
+         <Selection Key="@(context.Id.ToString())" Width="50" />
+         <PropertyColumn Property="c=>c.ExecutionTime" Sortable Width="180" />
+         <PropertyColumn Property="c=>c.ExecutionDuration" Sortable Width="100" />
+
+         <PropertyColumn Property="c=>c.UserName" Sortable Width="200" />
+         @* <PropertyColumn Property="c=>c.ClientName" Width="200" /> *@
+         <PropertyColumn Property="c=>c.ClientIpAddress" Width="150" />
+         <PropertyColumn Property="c=>c.ServiceName" Sortable Width="250" />
+         <PropertyColumn Property="c=>c.MethodName" Sortable Width="250" />
+         <PropertyColumn Property="c=>c.Parameters" />
+         <PropertyColumn Property="c=>c.Exception" />
+         <PropertyColumn Property="c=>c.BrowserInfo" />
+     </Table>
+
+ </Flex>

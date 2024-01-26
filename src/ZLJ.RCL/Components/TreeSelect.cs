@@ -52,7 +52,9 @@ namespace ZLJ.RCL.Components
         /// </summary>
         [Parameter]
         public virtual long? ParentId { get; set; }
-
+        /// <summary>
+        /// true绑定id，false绑定code
+        /// </summary>
         [Parameter]
         public virtual bool IsKeyId { get; set; }
 
