@@ -8,112 +8,94 @@
 @attribute [Authorize(PermissionNames.AdministratorBaseInfoPost)]
 @inherits ListBaseComponent<IPostAppService, PostDto, int, PagedAndSortedResultRequest< PagedPostResultRequestDto>, CreatePostDto, PostEditDto>
 
-<Space Direction="DirectionVHType.Vertical" Style="width:100%;">
-    <SpaceItem>
-        <GridRow Justify="space-between">
-            @* 左侧 *@
-            <GridCol Span="6">
-                @if (createIsGranted)
+<Flex Gap="small" Vertical Justify="space-between">
+     <Flex Justify="space-between">
+         @* 左侧 *@
+         <Flex Gap="small">
+             @if (createIsGranted)
+            {
+                <Button Type="@ButtonType.Primary" Icon="@IconType.Outline.Plus" OnClick="ShowCreateDialog">新增</Button>
+            }
+            @if (deleteIsGranted)
+            {
+                <Popconfirm Title="确定删除已选择的项吗?"
+                            OnConfirm="BtnDeleteClick"
+                            OnCancel="HideDeleteConfirm">
+                    <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Clear" Danger="true" Disabled="@ShouldDisableDelete">删除</Button>
+                </Popconfirm>
+            }
+            <Button OnClick="AddRandomData" Disabled=sj>新增一堆随机数据</Button>
+        </Flex>
+        @* 右侧 *@
+        <Flex Gap="small">
+            <TreeSelectOu Style="min-width:10rem;" AllowClear Value="@GetAllInput.Filter.OuCode" ValueChanged="OnOuChanged" @ref=ou Disabled=IsLoading />
+             <RadioGroup TValue="bool?" @bind-Value="@GetAllInput.Filter.IsStatic" OnChange="BtnSearchClick" Disabled=IsLoading>
+                 <Radio TValue="bool?" RadioButton="true" Value="@(default(bool?))">全部</Radio>
+                 <Radio TValue="bool?" RadioButton="true" Value="@(true)">预设</Radio>
+                 <Radio TValue="bool?" RadioButton="true" Value="@(false)">非预设</Radio>
+             </RadioGroup>
+             @*Search组件有问题，设置宽度会错位 *@
+             <div style="width:15rem;">
+                 <Search Placeholder="请输入关键字..." @bind-Value="@Keywords" OnChange=BtnSearchClick AllowClear="true" ClassicSearchIcon="true" Disabled=IsLoading />
+             </div>
+             <Tooltip Title="清空条件">
+                 <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Clear" OnClick="BtnReLoadClick" Disabled=IsLoading></Button>
+             </Tooltip>
+             <Tooltip Title="刷新">
+                 <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Reload" OnClick="BtnRefreshClick" Disabled=IsLoading></Button>
+             </Tooltip>
+         </Flex>
+     </Flex>
+
+     <Table @ref="table"
+            TItem="PostDto"
+            Total="TotalCount"
+            @bind-SelectedRows="SelectedItems"
+            OnChange="OnQuery"
+            DataSource="Items"
+            PageIndex="PageIndex"
+            PageSize="PageSize"
+            Loading="IsLoading"
+            HidePagination=false
+            RowClassName="@(r=>r.RowIndex%2==0?"even":"odd")"
+            RemoteDataSource="true"
+            RowKey="x=>x.Id"
+            OnRow="OnRow"
+            Size="TableSize.Small"
+            Bordered="true"
+            ScrollY="73.5vh">
+
+         <Selection Key="@(context.Id.ToString())" />
+         <Column TData="PostDto" Title="行号" Width="60">
+             @(PageSize * (PageIndex - 1) + Items.IndexOf(context) + 1)
+         </Column>
+         <PropertyColumn Property="c=>c.DisplayName" Sortable="true" DefaultSortOrder="SortDirection.Ascending" ShowSorterTooltip="false" Width="300" />
+         @* <PropertyColumn Property="c=>c.Name" /> *@
+         <PropertyColumn Property="c=>c.IsStatic" Width="80">
+             <Switch @bind-Value="@context.IsStatic" Size="@InputSize.Small" Disabled="true"></Switch>
+         </PropertyColumn>
+         <PropertyColumn Property="c=>c.Description" />
+         <ActionColumn Title="操作" Width="200">
+             @* ButtonGroup设置Size好像没啥卵用 *@
+             <ButtonGroup Size="@ButtonSize.Small">
+                 <Button Size="@ButtonSize.Small" Type="@ButtonType.Primary" OnClick="x=>OnDetail(context)">详情</Button>
+                 @if (updateIsGranted)
                 {
-                    <Button Type="@ButtonType.Primary" Icon="@IconType.Outline.Plus" OnClick="ShowCreateDialog">新增</Button>
+                    <Button Size="@ButtonSize.Small" OnClick="x=>OnEdit(context)">修改</Button>
                 }
                 @if (deleteIsGranted)
                 {
-                    <Popconfirm Title="确定删除已选择的项吗?"
-                                OnConfirm="BtnDeleteClick"
+                    <Popconfirm Title="确定删除此项吗?"
+                                OnConfirm="()=>BtnDeleteItemClick(context)"
                                 OnCancel="HideDeleteConfirm">
-                        <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Clear" Danger="true" Disabled="@ShouldDisableDelete">删除</Button>
+                        <Button Size="@ButtonSize.Small" Danger="true">删除</Button>
                     </Popconfirm>
                 }
-                <Button OnClick="AddRandomData" Disabled=sj>新增一堆随机数据</Button>
-            </GridCol>
-            @* 右侧 *@
-            <GridCol Span="18" Flex=@("none")>
-                <Space>
-                    <SpaceItem>
-                        <TreeSelectOu Style="min-width:10rem;" AllowClear Value="@GetAllInput.Filter.OuCode" ValueChanged="OnOuChanged" @ref=ou Disabled=IsLoading />
-                     </SpaceItem>
-                     <SpaceItem>
-                         <RadioGroup TValue="bool?" @bind-Value="@GetAllInput.Filter.IsStatic" OnChange="BtnSearchClick" Disabled=IsLoading>
-                             <Radio TValue="bool?" RadioButton="true" Value="@(default(bool?))">全部</Radio>
-                             <Radio TValue="bool?" RadioButton="true" Value="@(true)">预设</Radio>
-                             <Radio TValue="bool?" RadioButton="true" Value="@(false)">非预设</Radio>
-                         </RadioGroup>
-                     </SpaceItem>
+            </ButtonGroup>
+        </ActionColumn>
+    </Table>
 
-                     <SpaceItem>
-                         <Search Placeholder="请输入关键字..." @bind-Value="@Keywords" OnSearch="BtnSearchClick" AllowClear="true" ClassicSearchIcon="true" Disabled=IsLoading OnClear="BtnSearchClick" />
-                     </SpaceItem>
-                     <SpaceItem>
-
-                         <Tooltip Title="清空条件">
-                             <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Clear" OnClick="BtnReLoadClick" Disabled=IsLoading></Button>
-                         </Tooltip>
-
-
-                     </SpaceItem>
-                     <SpaceItem>
-
-
-                         <Tooltip Title="刷新">
-                             <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Reload" OnClick="BtnRefreshClick" Disabled=IsLoading></Button>
-                         </Tooltip>
-                     </SpaceItem>
-                 </Space>
-
-             </GridCol>
-         </GridRow>
-     </SpaceItem>
-     <SpaceItem>
-         <Table @ref="table"
-                TItem="PostDto"
-                Total="TotalCount"
-                @bind-SelectedRows="SelectedItems"
-                OnChange="OnQuery"
-                DataSource="Items"
-                PageIndex="PageIndex"
-                PageSize="PageSize"
-                Loading="IsLoading"
-                HidePagination=false
-                RowClassName="@(r=>r.RowIndex%2==0?"even":"odd")"
-                RemoteDataSource="true"
-                RowKey="x=>x.Id"
-                OnRow="OnRow"
-                Size="TableSize.Small"
-                Bordered="true"
-                ScrollY="73.5vh">
-
-             <Selection Key="@(context.Id.ToString())" />
-             <Column TData="PostDto" Title="行号" Width="60">
-                 @(PageSize * (PageIndex - 1) + Items.IndexOf(context) + 1)
-             </Column>
-             <PropertyColumn Property="c=>c.DisplayName" Sortable="true" DefaultSortOrder="SortDirection.Ascending" ShowSorterTooltip="false" Width="300" />
-             @* <PropertyColumn Property="c=>c.Name" /> *@
-             <PropertyColumn Property="c=>c.IsStatic" Width="80">
-                 <Switch @bind-Value="@context.IsStatic" Size="@InputSize.Small" Disabled="true" ></Switch>
-             </PropertyColumn>
-             <PropertyColumn Property="c=>c.Description" />
-             <ActionColumn Title="操作" Width="200">
-                 @* ButtonGroup设置Size好像没啥卵用 *@
-                 <ButtonGroup Size="@ButtonSize.Small">
-                     <Button Size="@ButtonSize.Small" Type="@ButtonType.Primary" OnClick="x=>OnDetail(context)">详情</Button>
-                     @if (updateIsGranted)
-                    {
-                        <Button Size="@ButtonSize.Small" OnClick="x=>OnEdit(context)">修改</Button>
-                    }
-                    @if (deleteIsGranted)
-                    {
-                        <Popconfirm Title="确定删除此项吗?"
-                                    OnConfirm="()=>BtnDeleteItemClick(context)"
-                                    OnCancel="HideDeleteConfirm">
-                            <Button Size="@ButtonSize.Small" Danger="true">删除</Button>
-                        </Popconfirm>
-                    }
-                </ButtonGroup>
-            </ActionColumn>
-        </Table>
-    </SpaceItem>
-</Space>
+</Flex>
 
 @* <AbpCreateDialog TAppService="IPostAppService" TEntityDto="PostDto" TPrimaryKey="int"
                  TGetAllInput="PagedAndSortedResultRequest<PagedPostResultRequestDto>"

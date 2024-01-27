@@ -27,7 +27,6 @@ namespace ZLJ.Admin.CoreRCL.Systemlog
 
         protected override void OnInitialized()
         {
-
             appService = ScopedServices.GetRequiredService<IAuditLogAppService>();
             // throw new UserFriendlyException("xxxxxxxxxxxxx");
         }
@@ -72,14 +71,23 @@ namespace ZLJ.Admin.CoreRCL.Systemlog
             // queryModel.CurrentPagedRecords(data.AsQueryable());  
             //StateHasChanged();
         }
-        int pageIndex = 1;
+        //DatePicker<DateTime?> kssj;
+        // int pageIndex = 1;
+    
         private void Search()
         {
-            pageIndex = 1;
+            //pageIndex = 1;
+            table.PageIndex = 1;
             var qm = table.GetQueryModel();
             //qm.FilterModel.Clear();//这里清不清没啥意义，因为我们使用的查询模型
             table.ReloadData(qm);
+            StateHasChanged();
+           //kssj.Focus();
         }
 
+        void BtnReLoadClick() {
+            condition = new GetAuditLogsInput();
+            Search();
+        }
     }
 }

@@ -7,28 +7,33 @@
 <Flex Gap="small" Vertical Justify="space-between">
 
      <Flex Gap="small" Justify="flex-end">
-         <DatePicker TValue="DateTime?" @bind-Value="condition.StartDate" Placeholder=@("开始时间") AllowClear ChangeOnClose OnChange="Search"></DatePicker>
-         <DatePicker TValue="DateTime?" @bind-Value="condition.EndDate" Placeholder=@("结束时间") AllowClear ChangeOnClose OnChange="Search"></DatePicker>
-         @* <RangePicker TValue="DateTime?[]" ShowTime='@("HH:mm")' OnChange="OnRangeChange" AllowClear ChangeOnClose /> *@
-
-         @*  <Button>xxxx</Button>
-        <Button>xxxx</Button>
-        <Button>xxxx</Button> *@
+         @*
+        0.17.3.1 andblazor 的 ChangeOnClose 属性会导致DatePicker很卡，且清空按钮不正常
+        清空时OnChang会触发两次，与ChangeOnClose无关
+        *@
+         <DatePicker TValue="DateTime?" @bind-Value="condition.StartDate" Placeholder=@("开始时间") ShowTime=true OnClear="Search" OnOk="Search" Disabled=isLoading AllowClear=true></DatePicker>
+         <DatePicker TValue="DateTime?" @bind-Value="condition.EndDate" Placeholder=@("结束时间") ShowTime=true OnClear="Search" OnOk="Search" Disabled=isLoading AllowClear=true></DatePicker>
+         @* Search组件有问题，设置宽度会错位 *@
+         <div style="width:15rem;">
+             <Search Placeholder="请输入关键字..." @bind-Value="condition.Keywords" OnChange=Search AllowClear="true" ClassicSearchIcon="true" Disabled=isLoading />
+         </div>
+         <Tooltip Title="清空条件">
+             <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Clear" OnClick="BtnReLoadClick" Disabled=isLoading></Button>
+         </Tooltip>
      </Flex>
 
      <Table @ref="table"
             TItem="AuditLogListDto"
             OnChange="OnChange"
-            RemoteDataSource="true" 
+            RemoteDataSource="true"
             Loading=isLoading
             DataSource="data"
             Size="TableSize.Small"
-            @bind-PageIndex=pageIndex
-            @bind-Total="total"
+            Total="total"
             RowClassName="@(r=>r.RowIndex%2==0?"even":"odd")"
             ScrollX="2300"
-            ScrollY="74.2vh" 
-            Bordered
+            ScrollY="74.2vh"
+           Bordered
             RowKey="x=>x.Id">
 
          <Selection Key="@(context.Id.ToString())" Width="50" />
