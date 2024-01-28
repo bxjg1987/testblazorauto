@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BXJG.Utils.Application.Share.GeneralTree;
 using ZLJ.Application.Share.Post;
 
 namespace ZLJ.Admin.CoreRCL
@@ -12,6 +13,7 @@ namespace ZLJ.Admin.CoreRCL
         public AutoMpperProfile()
         {
             CreateMap<PostDto, PostEditDto>();
+            CreateMap<DataDictionaryDto, DataDictionaryEditDto>();
         }
     }
 }

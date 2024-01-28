@@ -624,7 +624,7 @@ namespace BXJG.Utils.Application.GeneralTree
             //  var ctx = new Dictionary<string, object> { { "input", input } };
             var m = await GetEntityByIdAsync(input.Id);
 
-            //await UpdateMapAsync(input, m, ctx);
+           UpdateMapAsync(input, m);
             //扩展属性的处理后期放到Manager中去处理
             if (input.ExtData != null&& m is IExtendableObject kk)
             {

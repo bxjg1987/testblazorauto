@@ -39,6 +39,8 @@ namespace BXJG.Utils.Application.Share.GeneralTree
         /// </summary>
         [DisplayName("代码")]
         public string Code { get; set; }
+
+        public string ParentDisplayName { get; set; }
         /// <summary>
         /// 显示名称
         /// </summary>

@@ -50,7 +50,7 @@ namespace ZLJ.RCL.Components
         where TEntityDto : IEntityDto<TPrimaryKey>, IExtendableDto//, new()
         where TGetAllInput : new()
         where TUpdateInput : IEntityDto<TPrimaryKey>
-        where TAppService : ZLJ.Application.Common.Share.ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
+        where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
     {
         //界面部分就不要用IPermissionChecker了，不过server模式时AuthorizationService内部会使用IPermissionChecker
         //请查看自定义授权策略提供器

@@ -85,7 +85,11 @@ namespace ZLJ.Application.Common.Share
                                                                                 TGetAllInput,
                                                                                 TCreateInput,
                                                                                 TUpdateInput,
-                                                                                EntityDto<TPrimaryKey>>
+                                                                                EntityDto<TPrimaryKey>>, BXJG.Utils.Application.Share.ICrudBaseAppService<TEntityDto,
+                                                                                                                                                          TPrimaryKey,
+                                                                                                                                                          TGetAllInput,
+                                                                                                                                                          TCreateInput,
+                                                                                                                                                          TUpdateInput>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TUpdateInput : IEntityDto<TPrimaryKey>
     { }

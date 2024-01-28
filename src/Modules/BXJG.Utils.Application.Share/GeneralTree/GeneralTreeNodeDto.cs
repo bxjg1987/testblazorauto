@@ -16,9 +16,11 @@ namespace BXJG.Utils.Application.Share.GeneralTree
         where T : GeneralTreeNodeForSelectDto<T>
     {
         //public string Id { get; set; }//用id是为了适配easyui的tree  combotree共用此模型
+        [Obsolete]
         public string Text { get; set; }
         public string IconCls { get; set; }
         public bool Checked { get; set; }
+
         public string State => this.Children != null && this.Children.Count > 0 && !string.IsNullOrWhiteSpace(this.Code) ? "closed" : "open";
         /// <summary>
         /// 子节点数量

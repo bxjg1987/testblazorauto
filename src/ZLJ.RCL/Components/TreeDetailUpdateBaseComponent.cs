@@ -1,5 +1,7 @@
 ﻿
 using Abp.ObjectMapping;
+using BXJG.Utils.Application.Share.GeneralTree;
+using BXJG.Utils.Share.GeneralTree;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,20 +25,18 @@ namespace ZLJ.RCL.Components
     /// </summary>
     /// <typeparam name="TAppService">应用服务类型</typeparam>
     /// <typeparam name="TEntityDto">列表项的数据类型</typeparam>
-    /// <typeparam name="TPrimaryKey">唯一id类型</typeparam>
     /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
     /// <typeparam name="TCreateInput">新增时的输入类型</typeparam>
-    /// <typeparam name="TUpdateInput">修改时的输入类型</typeparam>
-    public abstract class DetailUpdateBaseComponent<TAppService,
-                                                         TEntityDto,
-                                                         TPrimaryKey,
-                                                         TGetAllInput,
-                                                         TCreateInput,
-                                                         TUpdateInput> : BaseComponent
-        where TEntityDto : IEntityDto<TPrimaryKey>
+    /// <typeparam name="TEditDto">修改时的输入类型</typeparam>
+    public abstract class TreeDetailUpdateBaseComponent<TAppService,
+                                                        TEntityDto,
+                                                        TCreateInput,
+                                                        TEditDto,
+                                                        TGetAllInput> : BaseComponent
+        where TEntityDto : IGeneralTree<TEntityDto>, IExtendableDto
         //where TGetAllInput : new()
-        where TUpdateInput : IEntityDto<TPrimaryKey>,new()
-        where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
+        where TEditDto : IHaveParentId<long>,new()
+        where TAppService : IGeneralTreeBaseAppService<TEntityDto, TCreateInput, TEditDto, TGetAllInput>
     {
         #region 字段和属性
 
@@ -66,7 +66,7 @@ namespace ZLJ.RCL.Components
         /// id
         /// </summary>
         [Parameter]
-        public virtual TPrimaryKey Id { get; set; }
+        public virtual long Id { get; set; }
         /// <summary>
         /// 查询模型
         /// </summary>
@@ -74,7 +74,7 @@ namespace ZLJ.RCL.Components
         /// <summary>
         /// 当前编辑模型
         /// </summary>
-        protected TUpdateInput? editDto;
+        protected TEditDto? editDto;
         //ant好像木有很好的支持这俩
         ///// <summary>
         ///// 编辑上下文
@@ -87,7 +87,7 @@ namespace ZLJ.RCL.Components
         /// <summary>
         /// 表单引用
         /// </summary>
-        protected Form<TUpdateInput> frm;
+        protected Form<TEditDto> frm;
         #endregion
 
         #region 生命周期
@@ -103,10 +103,10 @@ namespace ZLJ.RCL.Components
             //dto = await AppService.GetAsync(new EntityDto<TPrimaryKey>(Id));
             if (isEdit)
             {
-                editDto=new TUpdateInput();
+                editDto = new TEditDto();
                 //editContext = new EditContext(editDto);
-                await ResetCore(); 
-                
+                await ResetCore();
+
             }
             else
                 await RefreshCore();
@@ -216,9 +216,9 @@ namespace ZLJ.RCL.Components
         /// <returns></returns>
         protected virtual async Task RefreshCore()
         {
-           
-                dto = await AppService.GetAsync(new EntityDto<TPrimaryKey>(Id));
-              
+
+            dto = await AppService.GetAsync(new EntityDto<long>(Id));
+
         }
         #endregion
 
@@ -277,7 +277,7 @@ namespace ZLJ.RCL.Components
         /// </summary>
         protected virtual ValueTask DtoMapToEditDto()
         {
-            editDto = ObjectMapper.Map<TUpdateInput>(dto);
+            editDto = ObjectMapper.Map<TEditDto>(dto);
             //editContext = new EditContext(editDto!);
             //validationMessageStore = new ValidationMessageStore(editContext);
             return ValueTask.CompletedTask;
@@ -444,11 +444,11 @@ namespace ZLJ.RCL.Components
         }
         protected virtual async Task UpdateCore()
         {
-            
-                dto = await AppService.UpdateAsync(editDto!);
-                _ = base.MessageService.Success("修改成功！");
-                await AfterUpdated();
-           
+
+            dto = await AppService.UpdateAsync(editDto!);
+            _ = base.MessageService.Success("修改成功！");
+            await AfterUpdated();
+
         }
         /// <summary>
         /// 保存后回调
@@ -514,7 +514,7 @@ namespace ZLJ.RCL.Components
             isDeleting = true;
             try
             {
-               
+
                 await DeleteCore();
             }
             finally
@@ -524,11 +524,26 @@ namespace ZLJ.RCL.Components
         }
         protected virtual async Task DeleteCore()
         {
-           
-                await AppService.DeleteAsync(new EntityDto<TPrimaryKey>(Id));
-                _ = MessageService.Success($"删除成功！");
+
+            var r = await AppService.DeleteAsync(new() { Ids = new[] {Id } });
+
+            // _ = BatchOperationMessage(r);//这里木有必要await
+            //BatchDeleteMessage(temp);
+            if (r.Ids.Any())
+            {
+                _ = ShowSuccessMessage(msg: "删除成功！");
                 await AfterDelete();
-         
+            }
+            else
+            {
+                _ = ShowFailMessage(title: "删除失败！", r.ErrorMessage.FirstOrDefault()?.Message);
+            }
+
+
+            //await AppService.DeleteAsync(new BatchOperationInputLong { Ids = new[] { Id} });
+            //_ = MessageService.Success($"删除成功！");
+            //await AfterDelete();
+
         }
         /// <summary>
         /// 删除之后之后回调

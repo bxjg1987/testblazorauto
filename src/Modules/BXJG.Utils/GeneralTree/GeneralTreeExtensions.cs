@@ -135,7 +135,7 @@ namespace BXJG.Utils.GeneralTree
         {
             if (code.Length == Share.BXJGUtilsConsts.CodeUnitLength)
             {
-                return default;
+                return string.Empty;
             }
             else
             {

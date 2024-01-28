@@ -32,7 +32,7 @@ namespace ZLJ.RCL.Components
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TCreateInput : new()
         where TUpdateInput : IEntityDto<TPrimaryKey>
-        where TAppService : ZLJ.Application.Common.Share.ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
+        where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
     {
         /// <summary>
         /// 请使用AppService

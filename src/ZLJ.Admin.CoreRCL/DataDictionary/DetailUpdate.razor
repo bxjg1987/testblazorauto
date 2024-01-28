@@ -1,0 +1,56 @@
+﻿@using BXJG.Utils.Application.Share.GeneralTree
+@using Microsoft.AspNetCore.Components.Sections
+
+@inherits TreeDetailUpdateBaseComponent<IDataDictionaryAppService, DataDictionaryDto, DataDictionaryEditDto, DataDictionaryEditDto,DataDictionaryGetTreeInput>
+<SectionContent SectionName=@(FuncName+"-detail-update-title")>
+    <Icon Type=@detailUpdateIcon Theme=@IconThemeType.Outline />
+    @(detailUpdateText)@(FuncName)
+</SectionContent>
+<SectionContent SectionName=@(FuncName + "-detail-update-body")>
+    @if (isEdit)
+    {
+        <Form @ref="frm" ValidateOnChange="true" Model="editDto" LabelColSpan="4" WrapperColSpan="20" OnFinish="OnFinish">
+            <FormItem Label="父级">
+                <TreeSelectDataDictionary @bind-Value="@context.ParentIdString" IsKeyId AllowClear />
+             </FormItem>
+             <FormItem Label="显示名">
+                 <Input @bind-Value="@context.DisplayName" />
+             </FormItem>
+         </Form>
+    }
+    else
+    {
+        <GridRow>
+            <GridCol Span="4">父级</GridCol>
+            <GridCol Span="20">@dto?.ParentDisplayName</GridCol>
+        </GridRow>
+        <GridRow>
+            <GridCol Span="4">显示名</GridCol>
+            <GridCol Span="20">@dto?.DisplayName</GridCol>
+        </GridRow>
+    }
+</SectionContent>
+<SectionContent SectionName=@(FuncName + "-detail-update-btns")>
+    @if (IsShowDelete)
+    {
+        <Popconfirm Title="确定删除此项吗?" OnConfirm=BtnOkDeleteClick OnCancel=BtnCancelDelete>
+            <Button OnClick="BtnDeleteClick" Loading=isDeleting Danger=true>删除</Button>
+        </Popconfirm>
+    }
+    <ButtonGroup>
+        @if (IsShowRefresh)
+        {
+            <Button OnClick="BtnRefreshClick" Loading=isRefreshing Disabled=IsRefreshDisabled>刷新</Button>
+        }
+        @if (IsShowBeginEdit)
+        {
+            <Button OnClick="BtnBeginEditClick" Loading=isFormIniting Type="@ButtonType.Primary">修改</Button>
+        }
+        else if (IsShowUpdate)
+        {
+            <Button OnClick="BtnResetClick" Loading=isReseting Disabled=IsUpdateDisabled Icon="@IconType.Outline.Redo">重置</Button>
+            <Button OnClick="BtnCancelEditClick" Disabled=IsUpdateDisabled Icon="@IconType.Outline.Rollback">放弃修改</Button>
+            <Button OnClick="BtnUpdateClick" Type="@ButtonType.Primary" Loading="@isUpdating" Disabled="@IsUpdateDisabled" Icon="@IconType.Outline.Save">保存</Button>
+        }
+    </ButtonGroup>
+</SectionContent>
