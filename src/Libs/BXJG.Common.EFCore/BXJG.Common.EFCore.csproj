@@ -1,8 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>netstandard2.1;net8</TargetFrameworks>
-		<VersionPrefix>1.2.21</VersionPrefix>
+		<!--ef貌似不支持stand版本-->
+		<TargetFrameworks>net6;net7;net8</TargetFrameworks>
+		<VersionPrefix>1.2.22</VersionPrefix>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
