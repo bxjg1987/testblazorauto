@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
 using BXJG.Common;
@@ -63,7 +64,7 @@ namespace BXJG.WeChat.Pay
 
             //调用微信支付平台api并返回结果
             var response = await wxClientFactory.CreateClientPay().PostAsJsonAsync("pay/transactions/jsapi", input);
-            return await response.Content.ReadAsAsync<ReadyToPayForJSAPIOrMiniProgramResult>();
+            return await response.Content.ReadFromJsonAsync<ReadyToPayForJSAPIOrMiniProgramResult>();
         }
     }
 }

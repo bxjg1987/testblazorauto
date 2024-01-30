@@ -95,27 +95,27 @@ namespace BXJG.Common
         /// <summary>
         /// 字段名称
         /// </summary>
-        public string Name { get; init; }
+        public string Name { get; set; }
         /// <summary>
         /// 字段显示名称
         /// </summary>
-        public string DisplayName { get; init; }
+        public string DisplayName { get; set; }
         /// <summary>
         /// 字段类型
         /// </summary>
-        public Type Type { get; init; }
+        public Type Type { get; set; }
         /// <summary>
         /// 格式化显示模式
         /// </summary>
-        public string DisplayFormatter { get; init; }
+        public string DisplayFormatter { get; set; }
         /// <summary>
         /// 小数位数
         /// </summary>
-        public int Precision { get; init; }
+        public int Precision { get; set; }
         /// <summary>
         /// 额外状态数据
         /// </summary>
-        public IReadOnlyDictionary<string, object> AdditionalData { get; init; }=new Dictionary<string, object>();  
+        public IReadOnlyDictionary<string, object> AdditionalData { get; set; }=new Dictionary<string, object>();  
     }
     /// <summary>
     /// 字段元数据，包含输入
@@ -149,29 +149,29 @@ namespace BXJG.Common
             DefaultValue = defaultValue;
         }
 
-        //public string Name { get; init; }
+        //public string Name { get; set; }
 
-        //public string DisplayName { get; init; }
+        //public string DisplayName { get; set; }
 
         /// <summary>
         /// 前端输入框类型
         /// </summary>
-        public string InputType { get; init; }
-        //  public string DisplayFormatter { get; init; }
+        public string InputType { get; set; }
+        //  public string DisplayFormatter { get; set; }
 
-        //        public int Precision { get; init; }
+        //        public int Precision { get; set; }
         /// <summary>
         /// 可选值
         /// </summary>
-        public IReadOnlyDictionary<string, object> Values { get; init; }
+        public IReadOnlyDictionary<string, object> Values { get; set; }
         /// <summary>
         /// 是否允许多选
         /// </summary>
-        public bool MultipleSelect { get; init; }
+        public bool MultipleSelect { get; set; }
         /// <summary>
         /// 验证规则
         /// </summary>
-        public IReadOnlyCollection<ValidationAttribute> Validators { get; init; }
+        public IReadOnlyCollection<ValidationAttribute> Validators { get; set; }
         /// <summary>
         /// 默认值
         /// </summary>

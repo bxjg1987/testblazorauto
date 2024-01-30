@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -63,10 +62,10 @@ namespace BXJG.WeChat.Web.Pay
                 throw new Exception("验签失败！");//这里需要测试，也许微信需要返回 {code :'ERROR',message:'验签失败'}
 
             //3、解密得到通知的数据
-            var json = JsonConvert.DeserializeObject<PayNotifyResult>(body);
+            var json = System.Text.Json.JsonSerializer.Deserialize<PayNotifyResult>(body);
             //忽略部分验证
             var resource = secretHelper.AesGcmDecrypt(json.resource.associated_data, json.resource.nonce, json.resource.ciphertext);
-            var json2 = JsonConvert.DeserializeObject<PayNotifySuccessResult>(resource);
+            var json2 = System.Text.Json.JsonSerializer.Deserialize<PayNotifySuccessResult>(resource);
 
             //4、回调
             //如果将来需要，这里可以换成可替换的工厂

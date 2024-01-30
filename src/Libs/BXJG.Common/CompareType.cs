@@ -32,11 +32,11 @@ namespace BXJG.Common
     /// </summary>
     public static class CompareTypeMap //:Dictionary<string, CompareType[]>
     {
-        private static readonly IReadOnlyDictionary<string, IReadOnlySet<CompareType>> Items = new Dictionary<string, IReadOnlySet<CompareType>>
+        private static readonly IReadOnlyDictionary<string, IReadOnlyList<CompareType>> Items = new Dictionary<string, IReadOnlyList<CompareType>>
         {
             {
                 "string",
-                new HashSet <CompareType>
+                new List <CompareType>
                 {
                     CompareType.Dengyu,
                     CompareType.BuDengyu,
@@ -51,7 +51,7 @@ namespace BXJG.Common
             {
                 //数字、时间等，可以做范围比较的
                 "val",
-                new HashSet <CompareType>
+                new List <CompareType>
                 {
                     CompareType.Dengyu,
                     CompareType.BuDengyu,
@@ -65,7 +65,7 @@ namespace BXJG.Common
             },
             {
                 "bool",
-                new HashSet <CompareType>
+                new List <CompareType>
                 {
                     CompareType.Dengyu,
                     CompareType.BuDengyu,
@@ -75,7 +75,7 @@ namespace BXJG.Common
             }
         };
 
-        //public static readonly IReadOnlyDictionary<Type, IReadOnlySet<CompareType>> Maps = new Dictionary<Type, IReadOnlySet<CompareType>>
+        //public static readonly IReadOnlyDictionary<Type, IReadOnlyList<CompareType>> Maps = new Dictionary<Type, IReadOnlyList<CompareType>>
         //{
         //    //基元类型名称本就不会重复，没必要用FullName
         //    { typeof(string), Items["string"] },
@@ -123,27 +123,28 @@ namespace BXJG.Common
         /// <param name="typeName">类型短名称，即：typeof(xxx).Name，内部自动忽略大小写</param>
         /// <param name="nullabel">此类型是否可控</param>
         /// <returns></returns>
-        public static IReadOnlySet<CompareType> GetCompareTypes(string typeName, bool nullabel = true)
+        public static IReadOnlyList<CompareType> GetCompareTypes(string typeName, bool nullabel = true)
         {
-            HashSet<CompareType> hs;
+
+            List<CompareType> hs;
             typeName = typeName.ToLower();
 
             if (typeName == typeof(bool).Name)
             {
-                hs = Items[typeof(bool).Name].ToHashSet();
+                hs = Items[typeof(bool).Name].ToList();
             }
             else if (typeName == "enum")
             {
-                hs = Items["bool"].ToHashSet();
+                hs = Items["bool"].ToList();
             }
             else if (typeName == typeof(string).Name)
             {
-                hs = Items[typeof(string).Name].ToHashSet();
+                hs = Items[typeof(string).Name].ToList();
                 nullabel = false;
             }
             else
             {
-                hs = Items["val"].ToHashSet();
+                hs = Items["val"].ToList();
             }
 
             if (nullabel)
@@ -159,7 +160,7 @@ namespace BXJG.Common
         /// </summary>
         /// <typeparam name="T">类型</typeparam>
         /// <returns></returns>
-        public static IReadOnlySet<CompareType> GetCompareTypes<T>()
+        public static IReadOnlyList<CompareType> GetCompareTypes<T>()
         {
             return GetCompareTypes(typeof(T));
         }
@@ -168,7 +169,7 @@ namespace BXJG.Common
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
-        public static IReadOnlySet<CompareType> GetCompareTypes(Type t)
+        public static IReadOnlyList<CompareType> GetCompareTypes(Type t)
         {
             var typeName = t.Name;
 
@@ -320,19 +321,19 @@ namespace BXJG.Common
     //}
     //public class FieldType
     //{
-    //    public Type? InnerType { get; init; }
+    //    public Type? InnerType { get; set; }
 
-    //    public bool IsString { get; init; }
+    //    public bool IsString { get; set; }
 
-    //    public bool IsNumber { get; init; }
+    //    public bool IsNumber { get; set; }
 
-    //    public bool IsEnum { get; init; }
+    //    public bool IsEnum { get; set; }
 
-    //    public bool IsDateTime { get; init; }
+    //    public bool IsDateTime { get; set; }
 
-    //    public bool IsBoolean { get; init; }
+    //    public bool IsBoolean { get; set; }
 
-    //    public bool IsGuid { get; init; }
+    //    public bool IsGuid { get; set; }
 
     //    public static FieldType Identify(Type? type)
     //    {

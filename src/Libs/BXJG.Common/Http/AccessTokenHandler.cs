@@ -18,22 +18,22 @@ namespace BXJG.Common.Http
     /// <summary>
     /// 为http请求设置accesstoken的http header
     /// </summary>
-    public class AccessTokenHandler : DelegatingHandler
+    public class AccessTokenHandler :  DelegatingHandler
     {
         private readonly IAccessTokenProvider accessTokenProvider;
 
         //这里去做 accessToken的滑动过期
 
-        // public Func<string> AccessTokenProvider { get; init; }
+        // public Func<string> AccessTokenProvider { get; set; }
         public AccessTokenHandler(IAccessTokenProvider accessTokenProvider)
         {
             this.accessTokenProvider = accessTokenProvider;
         }
-        protected override HttpResponseMessage Send(HttpRequestMessage request, CancellationToken cancellationToken)
-        {
-            sdfdsf(request);
-            return base.Send(request, cancellationToken);
-        }
+        //protected override HttpResponseMessage Send(HttpRequestMessage request, CancellationToken cancellationToken)
+        //{
+        //    sdfdsf(request);
+        //    return base.Send(request, cancellationToken);
+        //}
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             sdfdsf(request);

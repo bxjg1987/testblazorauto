@@ -12,6 +12,7 @@ using Microsoft.Extensions.Options;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using System.Net.Http.Json;
 
 namespace BXJG.WeChat.Pay
 {
@@ -138,7 +139,7 @@ namespace BXJG.WeChat.Pay
             //var apiUrl = "https://api.mch.weixin.qq.com/v3/certificates";
             var apiUrl = "certificates";
             var response = await httpClientFactory.CreateClientPay().GetAsync(apiUrl);
-            return await response.Content.ReadAsAsync<WXCertificateResult>(cancellationToken);
+            return await response.Content.ReadFromJsonAsync<WXCertificateResult>(cancellationToken);
         }
     }
 }

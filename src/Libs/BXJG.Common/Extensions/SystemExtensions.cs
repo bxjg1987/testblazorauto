@@ -1,5 +1,8 @@
 //using hyjiacan.py4n;
+#if NET8_0_OR_GREATER
 using Microsoft.AspNetCore.WebUtilities;
+#endif
+using Microsoft.AspNetCore.Http.Extensions;
 using System;
 using System.Buffers;
 using System.Collections.Concurrent;
@@ -100,7 +103,7 @@ namespace System
         //    else
         //        return ex.InnerException.GetInnermost();
         //}
-
+#if NET8_0_OR_GREATER
         /// <summary>
         /// 反序列化包含object类型属性的对象
         /// <see href="https://docs.microsoft.com/zh-cn/dotnet/standard/serialization/system-text-json-converters-how-to?pivots=dotnet-6-0#deserialize-inferred-types-to-object-properties "/>
@@ -118,6 +121,7 @@ namespace System
 
             return JsonSerializer.Deserialize<TValue?>(json, options);
         }
+#endif
         public static bool NavPropertySplit(this string sortString, out string ss, params string[] temp)
         {
 
@@ -341,7 +345,16 @@ namespace System
                 //})
                 .ToDictionary(prop => prop.Name, prop => prop.GetValue(queryParams, null).ToString());
             //任何项目都可能向后端发起http请求，所以在common库中引入Microsfot.AspNetCore包可以接受
+#if NET8_0_OR_GREATER
             return QueryHelpers.AddQueryString(url, dictionary);
+#else
+            var qb = new QueryBuilder();
+            foreach (var item in dictionary)
+            {
+                qb.Add(item.Key,item.Value);
+            }
+            return $"{url}{qb.ToQueryString().Value}";
+#endif
         }
         public static bool IsNullOrWhiteSpaceBXJG(this string str)
         {

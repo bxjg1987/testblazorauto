@@ -1,10 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFrameworks>net6;net7;net8</TargetFrameworks>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Version>1.2.19</Version>
+		<VersionPrefix>1.2.20</VersionPrefix>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
 	<ItemGroup>
 		<Compile Remove="BlazorServerLog.cs" />
@@ -22,10 +23,20 @@
 	<ItemGroup>
 		<SupportedPlatform Include="browser" />
 	</ItemGroup>
-	<ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net8'">
 		<!--<PackageReference Include="Mapster.DependencyInjection" Version="1.0.1" />-->
 		<PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.1" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net7'">
+		<!--<PackageReference Include="Mapster.DependencyInjection" Version="1.0.1" />-->
+		<PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="7.*" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.*" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net6'">
+		<!--<PackageReference Include="Mapster.DependencyInjection" Version="1.0.1" />-->
+		<PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="6.*" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.*" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\BXJG.Common\BXJG.Common.csproj" />

@@ -1,11 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <RootNamespace>$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
-    <Version>1.2.20</Version>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	  <TargetFrameworks>net6;net7;net8</TargetFrameworks>
+
+	  <VersionPrefix>1.2.21</VersionPrefix>
+
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
+	  <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

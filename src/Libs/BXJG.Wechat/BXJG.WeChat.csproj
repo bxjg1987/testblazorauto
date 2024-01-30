@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+	  <TargetFrameworks>netstandard2.1;net8</TargetFrameworks>
     <AssemblyName>BXJG.WeChat</AssemblyName>
     <Authors>变形精怪</Authors>
     <RepositoryUrl>https://gitee.com/bxjg1987_admin/abp</RepositoryUrl>
@@ -9,13 +9,14 @@
     <Description>微信小程序登录、支付。
 视频教程：https://www.bilibili.com/video/BV1Uk4y1d7Be/
 源码：https://gitee.com/bxjg1987_admin/abp</Description>
-    <Version>1.2.11</Version>
+	  <VersionPrefix>1.2.12</VersionPrefix>
     <PackageProjectUrl>https://gitee.com/bxjg1987_admin/abp</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageId>BXJG.WeChat</PackageId>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
+	  <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -59,7 +60,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />
+    <!--<PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />-->
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
