@@ -59,6 +59,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZLJ.Web.HostBlazor", "src\Z
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZLJ.Core.Share", "src\ZLJ.Core.Share\ZLJ.Core.Share.csproj", "{87465017-AFB2-4202-BFDD-CD189C30178A}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZLJ.Application.Share", "src\ZLJ.Application.Share\ZLJ.Application.Share.csproj", "{CD74C446-C9DA-4E2B-978C-C699A8AC5B3E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -121,6 +123,10 @@ Global
 		{87465017-AFB2-4202-BFDD-CD189C30178A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{87465017-AFB2-4202-BFDD-CD189C30178A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{87465017-AFB2-4202-BFDD-CD189C30178A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD74C446-C9DA-4E2B-978C-C699A8AC5B3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD74C446-C9DA-4E2B-978C-C699A8AC5B3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD74C446-C9DA-4E2B-978C-C699A8AC5B3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD74C446-C9DA-4E2B-978C-C699A8AC5B3E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -140,6 +146,7 @@ Global
 		{EF6D83BA-9915-4724-8C34-FD7B70D9392C} = {04E5EC1B-C5AD-473B-A833-DC9C2CB4627E}
 		{67FD1D85-840D-4EF3-A5A6-4F11F3697BE1} = {04E5EC1B-C5AD-473B-A833-DC9C2CB4627E}
 		{87465017-AFB2-4202-BFDD-CD189C30178A} = {04E5EC1B-C5AD-473B-A833-DC9C2CB4627E}
+		{CD74C446-C9DA-4E2B-978C-C699A8AC5B3E} = {04E5EC1B-C5AD-473B-A833-DC9C2CB4627E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F45DD46C-6040-4FCC-87E0-648786C36933}
