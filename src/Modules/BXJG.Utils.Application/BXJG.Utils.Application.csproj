@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
-    <Version>1.2.75</Version>
+    <Version>1.2.76</Version>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
