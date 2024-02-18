@@ -15,9 +15,9 @@ namespace ZLJ.Core.Identity
         public SecurityStampValidator(
             IOptions<SecurityStampValidatorOptions> options,
             SignInManager signInManager,
-            ISystemClock systemClock,
-            ILoggerFactory loggerFactory, IUnitOfWorkManager unitOfWorkManager) 
-            : base(options, signInManager, systemClock, loggerFactory, unitOfWorkManager)
+      
+            ILoggerFactory loggerFactory, IUnitOfWorkManager unitOfWorkManager) : base(options,signInManager,loggerFactory, unitOfWorkManager)
+            
         {
         }
     }
