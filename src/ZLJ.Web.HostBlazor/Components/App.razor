@@ -45,8 +45,8 @@
 
     <script src="_content/AntDesign/js/ant-design-blazor.js"></script>
     @* <script src="_content/AntDesign.Charts/ant-design-charts-blazor.js"></script> *@
-    @* <script src="_framework/blazor.web.js"></script> *@
-    <script src="/blazor.web.patched.js" autostart="false"></script>
+    <script src="_framework/blazor.web.js" autostart="false"></script>
+    @* <script src="/blazor.web.patched.js" autostart="false"></script> *@
     @* <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.4.3/echarts.min.js"></script> *@
     <script src="/echarts.5.4.3.min.js"></script>
     @* <script src="/axios.1.6.2.min.js"></script> *@
@@ -54,18 +54,21 @@
     <script>
         Blazor.start({
             webAssembly: {
-                loadBootResource: function (type, name, defaultUri, integrity) {
-                    if (type === 'dotnetjs' && name === 'dotnet.js') {
-                        return '/dotnet.patched.js';
-                    }
-                    return `_framework/${name}`;
-                },
+                // loadBootResource: function (type, name, defaultUri, integrity) {
+                //     if (type === 'dotnetjs' && name === 'dotnet.js') {
+                //         return '/dotnet.patched.js';
+                //     }
+                //     return `_framework/${name}`;
+                // },
                 configureRuntime: (builder) => {
-                    if (!@(xs.ToString().ToLower())) {
-                        builder.withConfig({
-                            maxParallelDownloads: 1, // Adjust this to change the WebAssembly resource throttling amount
-                        });
-                    }
+                    // if (!@(xs.ToString().ToLower())) {
+                    //     builder.withConfig({
+                    //         maxParallelDownloads: 1, // Adjust this to change the WebAssembly resource throttling amount
+                    //     });
+                    // }
+                    builder.withConfig({
+                        maxParallelDownloads:@(xs.ToString().ToLower())?50:1, // Adjust this to change the WebAssembly resource throttling amount
+                    });
                 },
             },
         });
