@@ -82,7 +82,7 @@ namespace ZLJ.Web.Host.Startup
             ).AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
-                options.SerializerSettings.ContractResolver = new AbpMvcContractResolver(IocManager.Instance)
+                options.SerializerSettings.ContractResolver = new AbpMvcContractResolver()
                 {
                     NamingStrategy = new CamelCaseNamingStrategy()
                 };
