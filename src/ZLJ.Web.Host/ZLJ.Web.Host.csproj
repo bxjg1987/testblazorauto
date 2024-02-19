@@ -138,7 +138,7 @@
 		<ProjectReference Include="..\ZLJ.Web.Core\ZLJ.Web.Core.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Abp.Castle.Log4Net" Version="9.1.0" />
+		<PackageReference Include="Abp.Castle.Log4Net" Version="9.1.1" />
 		<!--<PackageReference Include="DistributedLock.SqlServer" Version="1.*" />
 		<PackageReference Include="DistributedLock.MySql" Version="1.*" />-->
 		<!--<PackageReference Include="DotNetCore.CAP.Dashboard" Version="7.2.0" />

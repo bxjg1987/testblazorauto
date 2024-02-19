@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ZLJ.EntityFrameworkCore;
 
@@ -11,9 +12,11 @@ using ZLJ.EntityFrameworkCore;
 namespace ZLJ.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(ZLJDbContext))]
-    partial class ZLJDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240219135346_xxs1")]
+    partial class xxs1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -418,10 +421,6 @@ namespace ZLJ.EntityFrameworkCore.Migrations
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("FailReason")
-                        .HasMaxLength(1024)
-                        .HasColumnType("nvarchar(1024)");
 
                     b.Property<byte>("Result")
                         .HasColumnType("tinyint");

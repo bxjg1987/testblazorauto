@@ -20,9 +20,11 @@
     <Compile Remove="BXJGWeChatExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Abp" Version="9.1.0" />
-    <PackageReference Include="BXJG.Utils" Version="*" />
-    <PackageReference Include="BXJG.WeChat" Version="*" />
+    <PackageReference Include="Abp" Version="9.1.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\libs\BXJG.Wechat\BXJG.WeChat.csproj" />
+    <ProjectReference Include="..\BXJG.Utils\BXJG.Utils.csproj" />
   </ItemGroup>
 
 </Project>

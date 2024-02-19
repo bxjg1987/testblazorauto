@@ -67,7 +67,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="HangFire.Core" Version="1.8.*" />
-		<PackageReference Include="Abp.HangFire.AspNetCore" Version="9.1.0" />
+		<PackageReference Include="Abp.HangFire.AspNetCore" Version="9.1.1" />
 		<!--<PackageReference Include="BXJG.Common.Web" Version="*" />
 		<PackageReference Include="BXJG.Utils.RCL" Version="*" />-->
 		<PackageReference Include="DistributedLock.SqlServer" Version="1.*" />
@@ -75,8 +75,8 @@
 		<!--<PackageReference Include="BXJG.Utils.Web" Version="1.2.1" />-->
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.2" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.*" />
-		<PackageReference Include="Abp.AspNetCore" Version="9.1.0" />
-		<PackageReference Include="Abp.AspNetCore.SignalR" Version="9.1.0" />
+		<PackageReference Include="Abp.AspNetCore" Version="9.1.1" />
+		<PackageReference Include="Abp.AspNetCore.SignalR" Version="9.1.1" />
 	</ItemGroup>
 	<ItemGroup>
 		<Folder Include="Authentication\WeChatMiniProgram\" />
