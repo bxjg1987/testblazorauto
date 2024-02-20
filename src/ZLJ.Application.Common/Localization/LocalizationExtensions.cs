@@ -8,7 +8,7 @@ namespace System
     {
         //public static string Enum<TEnum>(this TEnum val) where TEnum : Enum
         //{
-        //    return LocalizationHelper.Manager.GetEnum(ZLJ.Core.ZLJConsts.LocalizationSourceName, val);
+        //    return LocalizationHelper.Manager.GetEnum(ZLJ.Core.Share.ZLJConsts.LocalizationSourceName, val);
         //}
 
         public static ILocalizableString LICommon(this object key) => new LocalizableString(key.ToString(),ZLJ.Application.Common.Consts.Common);

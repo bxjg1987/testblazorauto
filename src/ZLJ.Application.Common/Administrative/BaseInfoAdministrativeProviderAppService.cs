@@ -25,7 +25,7 @@ namespace ZLJ.Application.Common.AdministrativeCommon
         public BaseInfoAdministrativeProviderAppService(IRepository<AdministrativeEntity, long> repository) :
             base(repository)
         {
-            base.LocalizationSourceName = ZLJ.Core.ZLJConsts.LocalizationSourceName;
+            base.LocalizationSourceName = ZLJ.Core.Share.ZLJConsts.LocalizationSourceName;
         }
 
         /// <summary>

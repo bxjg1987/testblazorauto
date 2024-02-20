@@ -10,7 +10,7 @@ namespace ZLJ.Core.Localization
         public static void Configure(ILocalizationConfiguration localizationConfiguration)
         {
             localizationConfiguration.Sources.Add(
-                new DictionaryBasedLocalizationSource(ZLJ.Core.ZLJConsts.LocalizationSourceName,
+                new DictionaryBasedLocalizationSource(ZLJ.Core.Share.ZLJConsts.LocalizationSourceName,
                     new XmlEmbeddedFileLocalizationDictionaryProvider(
                         typeof(ZLJLocalizationConfigurer).GetAssembly(),
                         "ZLJ.Localization.SourceFiles"

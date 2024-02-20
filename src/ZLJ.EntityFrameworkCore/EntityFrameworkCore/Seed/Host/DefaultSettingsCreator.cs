@@ -20,7 +20,7 @@ namespace ZLJ.EntityFrameworkCore.Seed.Host
         {
             int? tenantId = null;
 
-            if (ZLJ.Core.ZLJConsts.MultiTenancyEnabled == false)
+            if (ZLJ.Core.Share.ZLJConsts.MultiTenancyEnabled == false)
             {
                 tenantId = MultiTenancyConsts.DefaultTenantId;
             }

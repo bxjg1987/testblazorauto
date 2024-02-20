@@ -34,7 +34,7 @@ namespace ZLJ.Core
         public override void PreInitialize()
         { 
             //多租户开关
-            Configuration.MultiTenancy.IsEnabled = ZLJ.Core.ZLJConsts.MultiTenancyEnabled;
+            Configuration.MultiTenancy.IsEnabled = ZLJ.Core.Share.ZLJConsts.MultiTenancyEnabled;
             try
             {
                 cfg = IocManager.Resolve<IConfiguration>();//注意 迁移时为空，迁移时不会依赖webcoreModule，所以那里没问题
@@ -57,7 +57,7 @@ namespace ZLJ.Core
             ZLJLocalizationConfigurer.Configure(Configuration.Localization);
 
             ////多租户开关
-            //Configuration.MultiTenancy.IsEnabled = ZLJ.Core.ZLJConsts.MultiTenancyEnabled;
+            //Configuration.MultiTenancy.IsEnabled = ZLJ.Core.Share.ZLJConsts.MultiTenancyEnabled;
 
             // Configure roles
             AppRoleConfig.Configure(Configuration.Modules.Zero().RoleManagement);
@@ -75,7 +75,7 @@ namespace ZLJ.Core
             #region 注册枚举
             //缺个自动注册机制
             Configuration.Modules.BXJGUtils().EnumLocalizationProviders.Add(() => new EnumLocalizationDefine[] {
-                new EnumLocalizationDefine(typeof(AdministrativeLevel),"administrativeLevel", locationSourceName: ZLJ.Core.ZLJConsts.LocalizationSourceName),
+                new EnumLocalizationDefine(typeof(AdministrativeLevel),"administrativeLevel", locationSourceName: ZLJ.Core.Share.ZLJConsts.LocalizationSourceName),
             });
             #endregion
 

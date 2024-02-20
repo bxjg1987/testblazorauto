@@ -24,7 +24,7 @@ namespace ZLJ.Application.Admin.BaseInfo.StaffInfo
         /// <summary>
         /// 身份证
         /// </summary>
-        [StringLength(ZLJ.Core.ZLJConsts.StaffInfoIdNumberMaxLength)]
+        [StringLength(ZLJ.Core.Share.ZLJConsts.StaffInfoIdNumberMaxLength)]
         public string IdNumber { get; set; }
         /// <summary>
         /// 入职日期
@@ -38,7 +38,7 @@ namespace ZLJ.Application.Admin.BaseInfo.StaffInfo
         ///// 员工编号
         ///// 暂时不要
         ///// </summary>
-        //[StringLength(ZLJ.Core.ZLJConsts.StaffInfoNoMaxLength)]
+        //[StringLength(ZLJ.Core.Share.ZLJConsts.StaffInfoNoMaxLength)]
         //public string No { get; set; }
         /// <summary>
         /// 所属区域Id
@@ -47,7 +47,7 @@ namespace ZLJ.Application.Admin.BaseInfo.StaffInfo
         /// <summary>
         /// 现住地址
         /// </summary>
-        [StringLength(ZLJ.Core.ZLJConsts.StaffInfoCurrentAddressMaxLength)]
+        [StringLength(ZLJ.Core.Share.ZLJConsts.StaffInfoCurrentAddressMaxLength)]
         public string CurrentAddress { get; set; }
         #endregion
 
@@ -72,7 +72,7 @@ namespace ZLJ.Application.Admin.BaseInfo.StaffInfo
         /// <summary>
         /// 身份证
         /// </summary>
-       [StringLength(ZLJ.Core.ZLJConsts.StaffInfoIdNumberMaxLength)]
+       [StringLength(ZLJ.Core.Share.ZLJConsts.StaffInfoIdNumberMaxLength)]
         public string IdNumber { get; set; }
         /// <summary>
         /// 入职日期
@@ -86,7 +86,7 @@ namespace ZLJ.Application.Admin.BaseInfo.StaffInfo
         ///// 员工编号
         ///// 暂时不要
         ///// </summary>
-        //[StringLength(ZLJ.Core.ZLJConsts.StaffInfoNoMaxLength)]
+        //[StringLength(ZLJ.Core.Share.ZLJConsts.StaffInfoNoMaxLength)]
         //public string No { get; set; }
         /// <summary>
         /// 所属区域Id
@@ -95,7 +95,7 @@ namespace ZLJ.Application.Admin.BaseInfo.StaffInfo
         /// <summary>
         /// 现住地址
         /// </summary>
-        [StringLength(ZLJ.Core.ZLJConsts.StaffInfoCurrentAddressMaxLength)]
+        [StringLength(ZLJ.Core.Share.ZLJConsts.StaffInfoCurrentAddressMaxLength)]
         public string CurrentAddress { get; set; }
           
         #endregion

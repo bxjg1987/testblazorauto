@@ -10,7 +10,7 @@ namespace ZLJ.Controllers
     {
         protected ZLJControllerBase()
         {
-            LocalizationSourceName = ZLJ.Core.ZLJConsts.LocalizationSourceName;
+            LocalizationSourceName = ZLJ.Core.Share.ZLJConsts.LocalizationSourceName;
         }
 
         protected void CheckErrors(IdentityResult identityResult)

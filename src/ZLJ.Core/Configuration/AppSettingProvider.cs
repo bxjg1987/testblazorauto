@@ -16,12 +16,12 @@ namespace ZLJ.Core.Configuration
             var sys = new SettingDefinitionGroup(Consts.SettingKeyUploadGroup, "文件上传设置".UtilsLI());
 
             var sys2 = new SettingDefinitionGroup(
-                   ZLJ.Core.ZLJConsts.DataDictionaryMigrationValueSettingGroupKey,
+                   ZLJ.Core.Share.ZLJConsts.DataDictionaryMigrationValueSettingGroupKey,
                    "数据字典下拉值".GetLocalizableString());
             var list=new[]
             {
                 new SettingDefinition(
-                    ZLJ.Core.ZLJConsts.DataDictionaryMigrationValuePrinterBrand,
+                    ZLJ.Core.Share.ZLJConsts.DataDictionaryMigrationValuePrinterBrand,
                     "0",
                     "设备品牌数据字典Id".GetLocalizableString(),
                     sys2,
@@ -29,21 +29,21 @@ namespace ZLJ.Core.Configuration
                     isVisibleToClients: true),
 
                 new SettingDefinition(
-                    ZLJ.Core.ZLJConsts.DataDictionaryMigrationValueCustomerCategory,
+                    ZLJ.Core.Share.ZLJConsts.DataDictionaryMigrationValueCustomerCategory,
                     "0",
                     "客户类别数据字典Id".GetLocalizableString(),
                     sys2,
                     scopes: SettingScopes.Tenant,
                     isVisibleToClients: true),
                 new SettingDefinition(
-                    ZLJ.Core.ZLJConsts.DataDictionaryMigrationValueCustomerLevel,
+                    ZLJ.Core.Share.ZLJConsts.DataDictionaryMigrationValueCustomerLevel,
                     "0",
                     "客户级别数据字典Id".GetLocalizableString(),
                     sys2,
                     scopes: SettingScopes.Tenant,
                     isVisibleToClients: true),
                 new SettingDefinition(
-                    ZLJ.Core.ZLJConsts.DataDictionaryMigrationValuePost,
+                    ZLJ.Core.Share.ZLJConsts.DataDictionaryMigrationValuePost,
                     "0",
                     "岗位字典Id".GetLocalizableString(),
                     sys2,

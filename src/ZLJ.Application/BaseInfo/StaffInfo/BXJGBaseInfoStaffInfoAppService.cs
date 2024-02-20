@@ -44,7 +44,7 @@ namespace ZLJ.Application.Admin.BaseInfo.StaffInfo
                                                IRepository<UserOrganizationUnit, long> ouUserRepository,
                                                IRepository<UserRole, long> userRoleRepository)
         {
-            LocalizationSourceName = ZLJ.Core.ZLJConsts.LocalizationSourceName;
+            LocalizationSourceName = ZLJ.Core.Share.ZLJConsts.LocalizationSourceName;
             this.repository = repository;
 
             //CreatePermissionName = PermissionNames.BXJGBaseInfoStaffInfoCreate;

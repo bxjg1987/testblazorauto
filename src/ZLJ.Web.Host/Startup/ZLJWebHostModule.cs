@@ -51,7 +51,7 @@ namespace ZLJ.Web.Host.Startup
         public override void PreInitialize()
         {
             ////多租户开关
-            //Configuration.MultiTenancy.IsEnabled = ZLJ.Core.ZLJConsts.MultiTenancyEnabled;
+            //Configuration.MultiTenancy.IsEnabled = ZLJ.Core.Share.ZLJConsts.MultiTenancyEnabled;
             //Configuration.Modules.BXJGUtils().InitDbContext<ZLJDbContext>();
             //Configuration.Navigation.Providers.Add<AdminNavigationProvider>();
             //参考docs/后台作业.txt

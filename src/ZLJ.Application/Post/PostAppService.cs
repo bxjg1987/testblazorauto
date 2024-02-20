@@ -45,7 +45,7 @@ namespace ZLJ.Application.Admin.Post
             _userManager = userManager;
             this.roleManagementConfig = roleManagementConfig;
 
-            LocalizationSourceName = ZLJ.Core.ZLJConsts.LocalizationSourceName;
+            LocalizationSourceName = ZLJ.Core.Share.ZLJConsts.LocalizationSourceName;
 
             base.CreatePermissionName = PermissionNames.AdministratorBaseInfoPostCreate;
             base.UpdatePermissionName = PermissionNames.AdministratorBaseInfoPostUpdate;

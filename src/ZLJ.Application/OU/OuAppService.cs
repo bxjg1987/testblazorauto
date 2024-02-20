@@ -27,7 +27,7 @@ namespace ZLJ.Application.Admin.OU
         IRepository<OrganizationUnit, long> repository;
         public OuAppService(IRepository<OrganizationUnit, long> repository, OrganizationUnitManager organizationUnitManager)// : base(repository)
         {
-            LocalizationSourceName = ZLJ.Core.ZLJConsts.LocalizationSourceName;
+            LocalizationSourceName = ZLJ.Core.Share.ZLJConsts.LocalizationSourceName;
             this.repository = repository;
             this.organizationUnitManager = organizationUnitManager;
         }

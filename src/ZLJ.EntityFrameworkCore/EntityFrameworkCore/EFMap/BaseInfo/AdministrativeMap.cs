@@ -15,7 +15,7 @@ namespace ZLJ.EntityFrameworkCore.EntityFrameworkCore.EFMap.BaseInfo
         {
             builder.MapGeneralTree().ToTable("baseinfo_administrative");
             //builder.Property(c => c.Title).HasColumnType($"varchar({BXJGShopDictionaryEntity.IconMaxLength})");
-            //builder.Property(c => c.Name).HasMaxLength(ZLJ.Core.ZLJConsts.BaseInfoInfoNameMaxLength).IsRequired();
+            //builder.Property(c => c.Name).HasMaxLength(ZLJ.Core.Share.ZLJConsts.BaseInfoInfoNameMaxLength).IsRequired();
             //builder.Property(c => c.Longitude).IsRequired();
             //builder.Property(c => c.Latitude).IsRequired();
         }

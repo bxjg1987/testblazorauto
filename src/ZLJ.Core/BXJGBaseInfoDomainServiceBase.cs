@@ -26,7 +26,7 @@ namespace ZLJ.Core
 
         public BXJGBaseInfoDomainServiceBase()
         {
-            base.LocalizationSourceName = ZLJ.Core.ZLJConsts.LocalizationSourceName;
+            base.LocalizationSourceName = ZLJ.Core.Share.ZLJConsts.LocalizationSourceName;
             
             //空模式
             //EventBus = NullEventBus.Instance;

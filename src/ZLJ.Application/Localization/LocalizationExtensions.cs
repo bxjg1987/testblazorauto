@@ -9,7 +9,7 @@ namespace System
     {
         //public static string Enum<TEnum>(this TEnum val) where TEnum : Enum
         //{
-        //    return LocalizationHelper.Manager.GetEnum(ZLJ.Core.ZLJConsts.LocalizationSourceName, val);
+        //    return LocalizationHelper.Manager.GetEnum(ZLJ.Core.Share.ZLJConsts.LocalizationSourceName, val);
         //}
 
         public static ILocalizableString GetAdminLocalizableString(this object key) => new LocalizableString(key.ToString(),AdminConsts.Admin);

@@ -10,7 +10,7 @@ namespace ZLJ.Application.Admin.Authorization
     {
         public AbpLoginResultTypeHelper()
         {
-            LocalizationSourceName = ZLJ.Core.ZLJConsts.LocalizationSourceName;
+            LocalizationSourceName = ZLJ.Core.Share.ZLJConsts.LocalizationSourceName;
         }
 
         public Exception CreateExceptionForFailedLoginAttempt(AbpLoginResultType result, string usernameOrEmailAddress, string tenancyName)

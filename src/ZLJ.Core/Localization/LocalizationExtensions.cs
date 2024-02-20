@@ -8,11 +8,11 @@ namespace ZLJ.Core.Localization
     {
         public static string Enum<TEnum>(this TEnum val) where TEnum : Enum
         {
-            return LocalizationHelper.Manager.GetEnum(ZLJ.Core.ZLJConsts.LocalizationSourceName, val);
+            return LocalizationHelper.Manager.GetEnum(ZLJ.Core.Share.ZLJConsts.LocalizationSourceName, val);
         }
 
-        public static ILocalizableString GetLocalizableString(this object key) => new LocalizableString(key.ToString(), ZLJ.Core.ZLJConsts.LocalizationSourceName);
+        public static ILocalizableString GetLocalizableString(this object key) => new LocalizableString(key.ToString(), ZLJ.Core.Share.ZLJConsts.LocalizationSourceName);
 
-        public static string L(this object key) => LocalizationHelper.GetString(ZLJ.Core.ZLJConsts.LocalizationSourceName, key.ToString());
+        public static string L(this object key) => LocalizationHelper.GetString(ZLJ.Core.Share.ZLJConsts.LocalizationSourceName, key.ToString());
     }
 }

@@ -47,7 +47,7 @@ namespace ZLJ.Application.Admin.Roles
             _userManager = userManager;
             this.roleManagementConfig = roleManagementConfig;
 
-            LocalizationSourceName = ZLJ.Core.ZLJConsts.LocalizationSourceName;
+            LocalizationSourceName = ZLJ.Core.Share.ZLJConsts.LocalizationSourceName;
 
             base.CreatePermissionName = PermissionNames.AdministratorSystemRoleAdd;
             base.UpdatePermissionName = PermissionNames.AdministratorSystemRoleUpdate;
