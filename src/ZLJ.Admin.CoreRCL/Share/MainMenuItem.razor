@@ -2,28 +2,23 @@
 {
     @if (MenuItem.Items != default && MenuItem.Items.Any())
     {
-        <SubMenu Key="@MenuItem.Name" >
+        <SubMenu Key="@MenuItem.Name">
             <TitleTemplate>
-                <Icon Type="mail" Theme="outline"></Icon>
-                <span>@MenuItem.DisplayName</span>
+                <Icon Type="@(MenuItem.Icon)" Theme="outline"></Icon>
+                @MenuItem.DisplayName
             </TitleTemplate>
             <ChildContent>
-            @foreach (var item in MenuItem.Items)
-            {
-                <MainMenuItem MenuItem="item" />
-            }
+                @foreach (var item in MenuItem.Items)
+                {
+                    <MainMenuItem MenuItem="item" />
+                }
             </ChildContent>
         </SubMenu>
     }
     else
     {
-        <MenuItem Key="@MenuItem.Name" Icon="pie-chart">
-            <IconTemplate>
-                <IconFont Type="icon-c-sharp-l" />
-            </IconTemplate>
-            <ChildContent>
-                <MenuLink Href="@MenuItem.Url">@MenuItem.DisplayName</MenuLink>
-            </ChildContent>
+        <MenuItem Key="@MenuItem.Name" Icon="@(MenuItem.Icon)">
+            <MenuLink Href="@MenuItem.Url">@MenuItem.DisplayName</MenuLink>
         </MenuItem>
     }
 }
