@@ -25,6 +25,7 @@ using BXJG.Utils.Application;
 using ZLJ.Web.Core;
 using ZLJ.Web.Core.Configuration;
 using ZLJ.Web.Core.Authentication.JwtBearer;
+using Abp.Hangfire.Configuration;
 
 namespace ZLJ.Web.Host.Startup
 {
@@ -54,8 +55,7 @@ namespace ZLJ.Web.Host.Startup
             //Configuration.MultiTenancy.IsEnabled = ZLJ.Core.Share.ZLJConsts.MultiTenancyEnabled;
             //Configuration.Modules.BXJGUtils().InitDbContext<ZLJDbContext>();
             //Configuration.Navigation.Providers.Add<AdminNavigationProvider>();
-            //参考docs/后台作业.txt
-            //Configuration.BackgroundJobs.UseHangfire();
+           
             // Use database for language management
             //引入cap动态解析连接字符串的方式会提示事务隔离级别报错，
             //参考：https://github.com/aspnetboilerplate/aspnetboilerplate/issues/4538

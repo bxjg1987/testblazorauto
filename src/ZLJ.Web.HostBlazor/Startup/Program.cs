@@ -12,6 +12,8 @@ using Hangfire.SqlServer;
 using ZLJ.Web.HostBlazor.Auth;
 using Abp.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Abp.Hangfire;
+using ZLJ.Application.Share.Authorization.Permissions;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseCastleWindsor(IocManager.Instance.IocContainer);
@@ -42,7 +44,7 @@ builder.Services.ConfigureApplicationCookie(opt =>
 //});
 
 #region hangfire
-string hangfireConnectionString = _appConfiguration.GetConnectionString("HangfireSqlServer")!;
+string hangfireConnectionString =defaultConnectionString;// _appConfiguration.GetConnectionString("HangfireSqlServer")!;
 
 builder.Services.AddHangfire(configuration => configuration
         .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
@@ -112,7 +114,10 @@ app.Map("/account/logout", async (HttpContext x) =>
     await x.RequestServices.GetRequiredService<SignInManager>().SignOutAsync();
     x.Response.Redirect("/");
 });
-
+app.UseHangfireDashboard(options: new DashboardOptions
+{
+    Authorization = new[] { new AbpHangfireAuthorizationFilter(PermissionNames.HangFireDashboard) }
+});
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
     .AddInteractiveWebAssemblyRenderMode()

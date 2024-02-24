@@ -252,7 +252,7 @@ namespace ZLJ.Web.Host.Startup
             //UseRecommendedIsolationLevel = true,
             //DisableGlobalLocks = true
             //};
-            string hangfireConnectionString = _appConfiguration.GetConnectionString("HangfireSqlServer")!;
+            string hangfireConnectionString = defaultConnectionString;// _appConfiguration.GetConnectionString("HangfireSqlServer")!;
 
             services.AddHangfire(configuration => configuration
                     .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
@@ -457,10 +457,10 @@ namespace ZLJ.Web.Host.Startup
 
             //app.UseAntiforgery();
 
-          //  var opt = app.ApplicationServices.GetRequiredService<IOptionsMonitor<CookieAuthenticationOptions>>().CurrentValue;
+            //  var opt = app.ApplicationServices.GetRequiredService<IOptionsMonitor<CookieAuthenticationOptions>>().CurrentValue;
 
-           // var opt = app.ApplicationServices.GetRequiredService<IEnumerable< IOptionsMonitor<CookieAuthenticationOptions>>>();
-           // opt.Events.OnRedirectToLogin = c =>
+            // var opt = app.ApplicationServices.GetRequiredService<IEnumerable< IOptionsMonitor<CookieAuthenticationOptions>>>();
+            // opt.Events.OnRedirectToLogin = c =>
             //{
 
             //    var request = c.HttpContext.Request;
@@ -470,13 +470,13 @@ namespace ZLJ.Web.Host.Startup
             //    c.HttpContext.Response.Redirect(opt.LoginPath);
             //    return Task.CompletedTask;
             //};
-
+           
             app.UseEndpoints(endpoints =>
             {
                // endpoints.MapRazorComponents<Shared.App>().AddInteractiveServerRenderMode();
 
                 endpoints.MapHub<AbpCommonHub>("/signalr");
-                endpoints.MapHangfireDashboardWithAuthorizationPolicy(PermissionNames.HangFireDashboard);
+                //endpoints.MapHangfireDashboardWithAuthorizationPolicy(PermissionNames.HangFireDashboard);
                 endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapControllerRoute("defaultWithArea", "{area}/{controller=Home}/{action=Index}/{id?}");
                 //endpoints.MapHangfireDashboard(PermissionNames.HangFireDashboard, "/hangfire", new DashboardOptions

@@ -54,7 +54,7 @@ namespace ZLJ.Web.Core
      */
 
     [DependsOn(
-        //typeof(AbpHangfireAspNetCoreModule),
+        typeof(AbpHangfireAspNetCoreModule),
         typeof(BXJGUtilsWebModule),
         typeof(ZLJApplicationModule),
         typeof(ZLJEntityFrameworkModule),
@@ -77,7 +77,8 @@ namespace ZLJ.Web.Core
 
         public override void PreInitialize()
         {
-
+            //参考docs/后台作业.txt
+            Configuration.BackgroundJobs.UseHangfire();
 
             //    使用mvc的时间格式化起为动态api处理时间格式
             //Configuration.Modules.AbpAspNetCore().UseMvcDateTimeFormatForAppServices = true;
