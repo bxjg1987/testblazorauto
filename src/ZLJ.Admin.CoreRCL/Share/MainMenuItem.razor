@@ -5,7 +5,7 @@
         <SubMenu Key="@MenuItem.Name">
             <TitleTemplate>
                 <Icon Type="@(MenuItem.Icon)" Theme="outline"></Icon>
-                @MenuItem.DisplayName
+                <span style="margin-left:6px">@MenuItem.DisplayName</span>
             </TitleTemplate>
             <ChildContent>
                 @foreach (var item in MenuItem.Items)

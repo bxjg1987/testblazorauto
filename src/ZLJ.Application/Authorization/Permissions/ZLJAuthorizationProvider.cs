@@ -1,153 +1,167 @@
-﻿using Abp.Application.Navigation;
-using Abp.Authorization;
-using Abp.Localization;
-using ZLJ.Core.Authorization;
-using ZLJ.Core.Localization;
+﻿using Abp.Localization;
+using Abp.MultiTenancy;
 using BXJG.Utils.GeneralTree;
-using ZLJ.Application.Admin.Authorization.Permissions;
-using BXJG.Utils;
+//using BXJG.WorkOrder;
 using BXJG.Utils.Localization;
-using DocumentFormat.OpenXml.Drawing;
+using ZLJ.Core.Localization;
+using System.Collections.Generic;
 using ZLJ.Application.Share.Authorization.Permissions;
+using BXJG.Utils.Application.GeneralTree;
 
-namespace ZLJ.Application.Admin
+namespace ZLJ.Application.Admin.Authorization.Permissions
 {
-    /*
-     * 这个需要在host和blazorhost间共享，属于ui部分的东东，放这里其实不太合适
-     * 后期如果发现host和blazorhost之间需要共享更多东东时再单独建个类
-     * 
-     * 放blazor客户端更不合适，因为它一来依赖abp，况且客户端是调用webapi拿有权访问的菜单的
-     */
-
-    /// <summary>
-    /// This class defines menus for the application.
-    /// </summary>
-    public class AdminNavigationProvider : NavigationProvider
+    public partial class ZLJAuthorizationProvider : AuthorizationProvider
     {
-        public override void SetNavigation(INavigationProviderContext context)
+        //GeneralTreeModuleConfig cfg;
+
+        //public ZLJAuthorizationProvider(GeneralTreeModuleConfig cfg)
+        //{
+        //    this.cfg = cfg;
+        //}
+
+        public override void SetPermissions(IPermissionDefinitionContext context)
         {
-            var menu = context.Manager.MainMenu; //new MenuDefinition("adminBlazor", PermissionNames.Administrator.GetLocalizableString());
-            //context.Manager.Menus.Add("adminBlazor", menu);
 
-            //{codegenerator}
-            menu.AddItem(new MenuItemDefinition("adminBlazor_home",
-                                                "后台管理首页".GetAdminLocalizableString(),
-                                                url: "/",
-                                                icon: "dashboard",
-                                                permissionDependency: new SimplePermissionDependency(PermissionNames.Administrator)));
+            #region 被依赖的权限
+            //context.CreatePermission(PermissionNames.CommonGetRentOrderDetail);
+            #endregion
 
-           
-
-            #region 基础资料
-            //基础数据
-            var menuBaseInfo = new MenuItemDefinition(PermissionNames.AdministratorBaseInfo,
-                                                      PermissionNames.AdministratorBaseInfo.GetAdminLocalizableString(),
-                                                      icon: "appstore",
-                                                      permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorBaseInfo));
-            menu.AddItem(menuBaseInfo);
-
-            menuBaseInfo.AddItem(new MenuItemDefinition("通知中心",
-                                                        "通知中心".GetAdminLocalizableString(),
-                                                        icon: "notification",
-                                                        url: "/notification"));
-            //数据字典
-            menuBaseInfo.AddItem(new MenuItemDefinition(BXJG.Utils.Application.Share.Auth.PermissionNames.GeneralTreeMenuName,
-                                                        BXJG.Utils.Application.Share.Auth.PermissionNames.GeneralTreeMenuName.UtilsLI(),
-                                                        icon: "table",
-                                                        url: "/data-dictionary",
-                                                        permissionDependency: new SimplePermissionDependency(BXJG.Utils.Application.Share.Auth.PermissionNames.GeneralTreeMenuName)));
-
-            //组织机构
-            menuBaseInfo.AddItem(new MenuItemDefinition(name: PermissionNames.AdministratorBaseInfoOrganizationUnit,
-              displayName: PermissionNames.AdministratorBaseInfoOrganizationUnit.GetAdminLocalizableString(),
-              // @Icons.Material.Outlined.AccountTree
-              icon: "compass",
-              url: $"/organization-unit",
-              requiresAuthentication: true,
-              permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorBaseInfoOrganizationUnit)));
-
-            //岗位
-            menuBaseInfo.AddItem(new MenuItemDefinition(PermissionNames.AdministratorBaseInfoPost,
-                                                        PermissionNames.AdministratorBaseInfoPost.GetAdminLocalizableString(),
-                                                        icon: "team",
-                                                        url: "/post",
-                                                        permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorBaseInfoPost)));
-
-            //员工档案
-            menuBaseInfo.AddItem(new MenuItemDefinition(name: PermissionNames.BXJGBaseInfoStaffInfo,
-                                                        displayName: PermissionNames.BXJGBaseInfoStaffInfo.GetAdminLocalizableString(),
-                                                        icon: "user",
-                                                        url: $"/employee",
-                                                        //requiresAuthentication: true,
-                                                        permissionDependency: new SimplePermissionDependency(PermissionNames.BXJGBaseInfoStaffInfo)));
-
-            //来往单位
-            menuBaseInfo.AddItem(new MenuItemDefinition(name: PermissionNames.BXJGBaseInfoAssociatedCompany,
-                displayName: PermissionNames.BXJGBaseInfoAssociatedCompany.GetAdminLocalizableString(),
-                icon: "bank",
-                url: $"/related-company",
-                requiresAuthentication: true,
-                permissionDependency: new SimplePermissionDependency(PermissionNames.BXJGBaseInfoAssociatedCompany)));
+            #region 后端
+            var admin = context.CreatePermission(PermissionNames.Administrator, L("Administrator"));
 
 
 
-            //行政区域
-            menuBaseInfo.AddItem(new MenuItemDefinition(name: PermissionNames.BXJGBaseInfoAdministrative,
-                displayName: PermissionNames.BXJGBaseInfoAdministrative.GetAdminLocalizableString(),
-                icon: "flag",
-                url: $"/Administrative",
-                requiresAuthentication: true,
-                permissionDependency: new SimplePermissionDependency(PermissionNames.BXJGBaseInfoAdministrative)));
-
-            //直接使用用户
-            ////员工档案
-            //menuBaseInfo.AddItem(new MenuItemDefinition(name: PermissionNames.BXJGBaseInfoStaffInfo,
-            //    displayName: PermissionNames.BXJGBaseInfoStaffInfo.GetLocalizableString(),
-            //    icon: "user",
-            //    url: $"/bxjgbaseinfo/staffInfo/index.html",
-            //    requiresAuthentication: true,
-            //    permissionDependency: new SimplePermissionDependency(PermissionNames.BXJGBaseInfoStaffInfo)));
 
 
-            //--codegenerator.BaseInfo==
-
-
-            //var xtsz = new MenuItemDefinition("System",
-            //    L("System"),
-            //    icon: "config",
-            //    permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorSystem));
-            //context.Manager.MainMenu.AddItem(xtsz);
-
-            //menuBaseInfo.AddItem(new MenuItemDefinition("AdminTenant",
-            //    L("Tenant"),
-            //    icon: "filter",
-            //    url: "/system/tenant/index.html",
-            //    permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorSystemTenant)));
-
-            //menu.AddItem(new MenuItemDefinition("AdminRole",
-            //   "Role".GetAdminLocalizableString(),
-            //    icon: Icons.Material.Outlined.Group,
-            //    url: "/role",
-            //    permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorSystemRole)));
-            //menuBaseInfo.AddItem(new MenuItemDefinition("AdminUser",
-            //    L("User"),
-            //    icon: "user",
-            //    url: "/system/user/index.html",
-            //    permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorSystemUser)));
-
-            menuBaseInfo.AddItem(new MenuItemDefinition("SystemLog",
-                                                        "Log".GetAdminLocalizableString(),
-                                                        icon: "history",
-                                                        url: "/auditing",
-                                                        permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorSystemLog)));
-
-            menuBaseInfo.AddItem(new MenuItemDefinition("SystemConfig",
-                                                        "Settings".GetAdminLocalizableString(),
-                                                        icon: "setting",
-                                                        url: "/settings",
-                                                        permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorSystemConfig)));
 
             #endregion
+
+
+            #region 基础信息
+
+            var permissionBaseInfo = admin.CreateChildPermission(PermissionNames.AdministratorBaseInfo,
+                L(PermissionNames.AdministratorBaseInfo),
+                multiTenancySides: MultiTenancySides.Tenant);
+
+            #region 公司和部门
+            var ou = permissionBaseInfo.CreateChildPermission(PermissionNames.AdministratorBaseInfoOrganizationUnit,
+               L(PermissionNames.AdministratorBaseInfoOrganizationUnit),
+               multiTenancySides: MultiTenancySides.Tenant);
+            ou.CreateChildPermission(PermissionNames.AdministratorBaseInfoOrganizationUnitAdd,
+                "新增".UtilsLI(),
+                multiTenancySides: MultiTenancySides.Tenant, properties: new Dictionary<string, object> { { "btn", true } });
+            ou.CreateChildPermission(PermissionNames.AdministratorBaseInfoOrganizationUnitUpdate,
+                "修改".UtilsLI(),
+                multiTenancySides: MultiTenancySides.Tenant, properties: new Dictionary<string, object> { { "btn", true } });
+            ou.CreateChildPermission(PermissionNames.AdministratorBaseInfoOrganizationUnitDelete,
+                "删除".UtilsLI(),
+                multiTenancySides: MultiTenancySides.Tenant, properties: new Dictionary<string, object> { { "btn", true } });
+            #endregion
+
+
+            #region 岗位
+            var post = permissionBaseInfo.CreateChildPermission(PermissionNames.AdministratorBaseInfoPost,
+               L(PermissionNames.AdministratorBaseInfoPost),
+               multiTenancySides: MultiTenancySides.Tenant);
+            post.CreateChildPermission(PermissionNames.AdministratorBaseInfoPostCreate,
+                "新增".UtilsLI(),
+                multiTenancySides: MultiTenancySides.Tenant, properties: new Dictionary<string, object> { { "btn", true } });
+            post.CreateChildPermission(PermissionNames.AdministratorBaseInfoPostUpdate,
+                "修改".UtilsLI(),
+                multiTenancySides: MultiTenancySides.Tenant, properties: new Dictionary<string, object> { { "btn", true } });
+            post.CreateChildPermission(PermissionNames.AdministratorBaseInfoPostDelete,
+                "删除".UtilsLI(),
+                multiTenancySides: MultiTenancySides.Tenant, properties: new Dictionary<string, object> { { "btn", true } });
+            #endregion
+            #region 员工档案
+
+            var staffInfo = permissionBaseInfo.CreateChildPermission(PermissionNames.BXJGBaseInfoStaffInfo,
+                L(PermissionNames.BXJGBaseInfoStaffInfo),
+                multiTenancySides: MultiTenancySides.Tenant);
+            staffInfo.CreateChildPermission(PermissionNames.BXJGBaseInfoStaffInfoCreate,
+                "新增".UtilsLI(),
+                multiTenancySides: MultiTenancySides.Tenant, properties: new Dictionary<string, object> { { "btn", true } });
+            staffInfo.CreateChildPermission(PermissionNames.BXJGBaseInfoStaffInfoUpdate,
+                "修改".UtilsLI(),
+                multiTenancySides: MultiTenancySides.Tenant, properties: new Dictionary<string, object> { { "btn", true } });
+            staffInfo.CreateChildPermission(PermissionNames.BXJGBaseInfoStaffInfoDelete,
+                "删除".UtilsLI(),
+                multiTenancySides: MultiTenancySides.Tenant, properties: new Dictionary<string, object> { { "btn", true } });
+
+            #endregion
+            # region 来往单位
+
+            var associatedCompany = permissionBaseInfo.CreateChildPermission(
+                PermissionNames.BXJGBaseInfoAssociatedCompany,
+               L(PermissionNames.BXJGBaseInfoAssociatedCompany),
+                multiTenancySides: MultiTenancySides.Tenant);
+            associatedCompany.CreateChildPermission(PermissionNames.BXJGBaseInfoAssociatedCompanyCreate,
+                "新增".UtilsLI(),
+                multiTenancySides: MultiTenancySides.Tenant, properties: new Dictionary<string, object> { { "btn", true } });
+            associatedCompany.CreateChildPermission(PermissionNames.BXJGBaseInfoAssociatedCompanyUpdate,
+                "修改".UtilsLI(),
+                multiTenancySides: MultiTenancySides.Tenant, properties: new Dictionary<string, object> { { "btn", true } });
+            associatedCompany.CreateChildPermission(PermissionNames.BXJGBaseInfoAssociatedCompanyDelete,
+                "删除".UtilsLI(),
+                multiTenancySides: MultiTenancySides.Tenant, properties: new Dictionary<string, object> { { "btn", true } });
+
+            #endregion
+            permissionBaseInfo.AddGeneralTreePermission();
+            #region 地区
+
+            var sbxx = permissionBaseInfo.CreateChildPermission(PermissionNames.BXJGBaseInfoAdministrative,
+                L(PermissionNames.BXJGBaseInfoAdministrative),
+                multiTenancySides: MultiTenancySides.Tenant);
+            sbxx.CreateChildPermission(PermissionNames.BXJGBaseInfoAdministrativeCreate,
+                "新增".UtilsLI(),
+                multiTenancySides: MultiTenancySides.Tenant, properties: new Dictionary<string, object> { { "btn", true } });
+            sbxx.CreateChildPermission(PermissionNames.BXJGBaseInfoAdministrativeUpdate,
+                "修改".UtilsLI(),
+                multiTenancySides: MultiTenancySides.Tenant, properties: new Dictionary<string, object> { { "btn", true } });
+            sbxx.CreateChildPermission(PermissionNames.BXJGBaseInfoAdministrativeDelete,
+                "删除".UtilsLI(),
+                multiTenancySides: MultiTenancySides.Tenant, properties: new Dictionary<string, object> { { "btn", true } });
+
+            #endregion
+
+            //#region 系统管理
+
+            //var sys = admin.CreateChildPermission(PermissionNames.AdministratorSystem, L("System"));
+            //permissionBaseInfo.CreateChildPermission(PermissionNames.AdministratorSystemTenant, L("Tenant"),
+            //    multiTenancySides: MultiTenancySides.Host);
+
+            //var roleM = permissionBaseInfo.CreateChildPermission(PermissionNames.AdministratorSystemRole, L("Role"));
+            //roleM.CreateChildPermission(PermissionNames.AdministratorSystemRoleAdd, L("Add"), properties: new Dictionary<string, object> { { "btn", true } });
+            //roleM.CreateChildPermission(PermissionNames.AdministratorSystemRoleUpdate, L("Update"), properties: new Dictionary<string, object> { { "btn", true } });
+            //roleM.CreateChildPermission(PermissionNames.AdministratorSystemRoleDelete, L("Delete"), properties: new Dictionary<string, object> { { "btn", true } });
+
+            //var userM = permissionBaseInfo.CreateChildPermission(PermissionNames.AdministratorSystemUser, L("User"));
+            //userM.CreateChildPermission(PermissionNames.AdministratorSystemUserAdd, L("Add"), properties: new Dictionary<string, object> { { "btn", true } });
+            //userM.CreateChildPermission(PermissionNames.AdministratorSystemUserUpdate, L("Update"), properties: new Dictionary<string, object> { { "btn", true } });
+            //userM.CreateChildPermission(PermissionNames.AdministratorSystemUserDelete, L("Delete"), properties: new Dictionary<string, object> { { "btn", true } });
+
+            permissionBaseInfo.CreateChildPermission(PermissionNames.AdministratorSystemLog, L("Log"));
+            permissionBaseInfo.CreateChildPermission(PermissionNames.AdministratorSystemConfig, L("Settings"));
+            permissionBaseInfo.CreateChildPermission(PermissionNames.HangFireDashboard, L("HangFireDashboard"));
+            //sys.CreateChildPermission(PermissionNames.AdministratorSystemSetting, L("Settings"));
+            #endregion
+
+
+            //#endregion
+
+
+
+
+            //           var cust = context.CreatePermission(PermissionNames.Customer,
+            //PermissionNames.Customer.GetLocalizableString(),
+            //multiTenancySides: Abp.MultiTenancy.MultiTenancySides.Tenant);
+
+
+        }
+
+        private static ILocalizableString L(string name)
+        {
+            return new LocalizableString(name, AdminConsts.Admin);
         }
     }
 }

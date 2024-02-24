@@ -42,18 +42,18 @@ namespace ZLJ.Application.Admin
             //基础数据
             var menuBaseInfo = new MenuItemDefinition(PermissionNames.AdministratorBaseInfo,
                                                       PermissionNames.AdministratorBaseInfo.GetAdminLocalizableString(),
-                                                      icon: ".Outline.Appstore",
+                                                      icon: "appstore",
                                                       permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorBaseInfo));
             menu.AddItem(menuBaseInfo);
 
             menuBaseInfo.AddItem(new MenuItemDefinition("通知中心",
                                                         "通知中心".GetAdminLocalizableString(),
-                                                        icon: ".Outline.Notification",
+                                                        icon: "notification",
                                                         url: "/notification"));
             //数据字典
             menuBaseInfo.AddItem(new MenuItemDefinition(BXJG.Utils.Application.Share.Auth.PermissionNames.GeneralTreeMenuName,
                                                         BXJG.Utils.Application.Share.Auth.PermissionNames.GeneralTreeMenuName.UtilsLI(),
-                                                        icon: ".Outline.Table",
+                                                        icon: "table",
                                                         url: "/data-dictionary",
                                                         permissionDependency: new SimplePermissionDependency(BXJG.Utils.Application.Share.Auth.PermissionNames.GeneralTreeMenuName)));
 
@@ -61,7 +61,7 @@ namespace ZLJ.Application.Admin
             menuBaseInfo.AddItem(new MenuItemDefinition(name: PermissionNames.AdministratorBaseInfoOrganizationUnit,
               displayName: PermissionNames.AdministratorBaseInfoOrganizationUnit.GetAdminLocalizableString(),
               // @Icons.Material.Outlined.AccountTree
-              icon: ".Outline.Compass",
+              icon: "compass",
               url: $"/organization-unit",
               requiresAuthentication: true,
               permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorBaseInfoOrganizationUnit)));
@@ -69,14 +69,14 @@ namespace ZLJ.Application.Admin
             //岗位
             menuBaseInfo.AddItem(new MenuItemDefinition(PermissionNames.AdministratorBaseInfoPost,
                                                         PermissionNames.AdministratorBaseInfoPost.GetAdminLocalizableString(),
-                                                        icon: ".Outline.UsergroupAdd",
+                                                        icon: "team",
                                                         url: "/post",
                                                         permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorBaseInfoPost)));
 
             //员工档案
             menuBaseInfo.AddItem(new MenuItemDefinition(name: PermissionNames.BXJGBaseInfoStaffInfo,
                                                         displayName: PermissionNames.BXJGBaseInfoStaffInfo.GetAdminLocalizableString(),
-                                                        icon: ".Outline.User",
+                                                        icon: "user",
                                                         url: $"/employee",
                                                         //requiresAuthentication: true,
                                                         permissionDependency: new SimplePermissionDependency(PermissionNames.BXJGBaseInfoStaffInfo)));
@@ -84,7 +84,7 @@ namespace ZLJ.Application.Admin
             //来往单位
             menuBaseInfo.AddItem(new MenuItemDefinition(name: PermissionNames.BXJGBaseInfoAssociatedCompany,
                 displayName: PermissionNames.BXJGBaseInfoAssociatedCompany.GetAdminLocalizableString(),
-                icon: ".Outline.CustomerService",
+                icon: "bank",
                 url: $"/related-company",
                 requiresAuthentication: true,
                 permissionDependency: new SimplePermissionDependency(PermissionNames.BXJGBaseInfoAssociatedCompany)));
@@ -94,7 +94,7 @@ namespace ZLJ.Application.Admin
             //行政区域
             menuBaseInfo.AddItem(new MenuItemDefinition(name: PermissionNames.BXJGBaseInfoAdministrative,
                 displayName: PermissionNames.BXJGBaseInfoAdministrative.GetAdminLocalizableString(),
-                icon: ".Outline.BoxPlot",
+                icon: "flag",
                 url: $"/Administrative",
                 requiresAuthentication: true,
                 permissionDependency: new SimplePermissionDependency(PermissionNames.BXJGBaseInfoAdministrative)));
@@ -137,13 +137,13 @@ namespace ZLJ.Application.Admin
 
             menuBaseInfo.AddItem(new MenuItemDefinition("SystemLog",
                                                         "Log".GetAdminLocalizableString(),
-                                                        icon: ".Outline.History",
+                                                        icon: "history",
                                                         url: "/auditing",
                                                         permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorSystemLog)));
 
             menuBaseInfo.AddItem(new MenuItemDefinition("SystemConfig",
                                                         "Settings".GetAdminLocalizableString(),
-                                                        icon: ".Outline.Setting",
+                                                        icon: "setting",
                                                         url: "/settings",
                                                         permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorSystemConfig)));
 
