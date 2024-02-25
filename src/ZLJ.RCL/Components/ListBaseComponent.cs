@@ -188,11 +188,14 @@ namespace ZLJ.RCL.Components
         {
             get
             {
+                var str = string.Empty;
                 if (GetAllInput is ISortedResultRequest dxx)
-                    return dxx.Sorting;
+                    str = dxx.Sorting;
                 else if (GetAllInput is IHaveFilter dx11 && dx11.Filter is ISortedResultRequest dx22)
-                    return dx22.Sorting;
-                return "Id";
+                    str = dx22.Sorting;
+                if (str.IsNullOrWhiteSpace())
+                    return "Id";
+                return str;
             }
             set
             {
@@ -293,7 +296,7 @@ namespace ZLJ.RCL.Components
         /// 根据条件TGetAllInput加载数据的核心方法
         /// </summary>
         /// <returns></returns>
-        private async Task LoadCore()
+        protected virtual async Task LoadCore()
         {
             //var cd = GetAllInput;
             //if (cd is IDynamicCondition cdd)
