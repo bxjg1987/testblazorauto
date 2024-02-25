@@ -89,6 +89,18 @@ app.Use((ctx, next) =>
 app.UseAbp(options => { options.UseAbpRequestLocalization = false; }); // Initializes ABP framework.
 
 
+app.UseStatusCodePages(async statusCodeContext =>
+{
+    if (statusCodeContext.HttpContext.Response.StatusCode == 404)
+        statusCodeContext.HttpContext.Response.Redirect("/404");
+    //if(statusCodeContext.respo)
+    //// using static System.Net.Mime.MediaTypeNames;
+    //statusCodeContext.HttpContext.Response.ContentType = Text.Plain;
+
+    //await statusCodeContext.HttpContext.Response.WriteAsync(
+    //    $"Status Code Page: {statusCodeContext.HttpContext.Response.StatusCode}");
+});
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
