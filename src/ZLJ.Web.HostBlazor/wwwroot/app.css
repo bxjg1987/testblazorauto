@@ -69,3 +69,6 @@ ol {
 .ant-table-row.odd td.ant-table-column-sort {
     background-color:white;
 }
+.ant-modal-body {
+    background-color:#f7f7f7;
+}
