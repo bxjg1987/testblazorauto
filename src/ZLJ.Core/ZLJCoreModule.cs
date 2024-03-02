@@ -40,7 +40,7 @@ namespace ZLJ.Core
             {
                 cfg = IocManager.Resolve<IConfiguration>();//注意 迁移时为空，迁移时不会依赖webcoreModule，所以那里没问题
             }
-            catch { }
+            catch { cfg = AppConfigurations.Get(WebContentDirectoryFinder.CalculateContentRootFolder()); }
             Configuration.Features.Providers.Add<ZLJFeatureProvider>();
 
             Configuration.Modules.AbpAutoMapper().Configurators
