@@ -25,6 +25,8 @@ using ZLJ.Application.Share.Auditing;
 using ZLJ.Application.Share.Roles;
 using ZLJ.Application.Share.Post;
 using ZLJ.Core.BaseInfo.Post;
+using ZLJ.Core.MultiTenancy;
+using ZLJ.Application.Share.MultiTenancy;
 
 namespace ZLJ.Application.Admin
 {
@@ -100,6 +102,11 @@ namespace ZLJ.Application.Admin
             CreateMap<Role, PostDto>().IncludeBase<Role, RoleDto>();
             CreateMap<PostEntity, PostDto>().IncludeBase<Role, RoleDto>();
             CreateMap<PostEditDto, PostEntity>().IncludeBase<RoleEditDto, Role>();
+            #endregion
+
+            #region 租户
+            CreateMap<EditTenantDto,Tenant>();
+            CreateMap<Tenant, TenantDto>();
             #endregion
         }
     }

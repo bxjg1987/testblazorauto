@@ -27,7 +27,7 @@
 
 		<PackageReference Include="Abp.AutoMapper" Version="9.1.1" />
 
-		<PackageReference Include="AntDesign" Version="0.17.*" />
+		<PackageReference Include="AntDesign" Version="0.18.0" />
 
 
 		<!--<PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.2" />

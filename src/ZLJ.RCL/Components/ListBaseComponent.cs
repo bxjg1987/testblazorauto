@@ -2,6 +2,7 @@ using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using Abp.Authorization;
 using Abp.Domain.Entities;
+using Abp.Extensions;
 using AntDesign;
 using AntDesign.TableModels;
 using BXJG.Common.Dto;
@@ -209,7 +210,7 @@ namespace ZLJ.RCL.Components
                 //  sd222.Sorting = string.Join(",", ls);
                 sd222.Sorting = value;
 
-                if (sd222.Sorting.IsNullOrWhiteSpaceBXJG())
+                if (sd222==default|| sd222.Sorting.IsNullOrWhiteSpaceBXJG())
                     sd222.Sorting = "Id";
             }
         }

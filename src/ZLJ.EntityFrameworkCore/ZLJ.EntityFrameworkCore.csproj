@@ -25,7 +25,6 @@
 		<Compile Remove="EntityFrameworkCore\Repositories\EquipmentInfoRepository.cs" />
 		<Compile Remove="EntityFrameworkCore\Seed\BaseInfo\DefaultBXJGBaseInfoBuilder.cs" />
 		<Compile Remove="EntityFrameworkCore\Seed\DefaultDataDictionaryBuilder.cs" />
-		<Compile Remove="EntityFrameworkCore\Seed\Host\HostRoleAndUserCreator.cs" />
 		<Compile Remove="EntityFrameworkCore\Seed\WorkOrderBuilder.cs" />
 	</ItemGroup>
 
@@ -53,7 +52,7 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.0" />
+		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.1" />
 	</ItemGroup>
 	<ItemGroup>
 	

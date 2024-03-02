@@ -23,7 +23,8 @@
     <text name="Upload" value="Upload" />
     <text name="Settings" value="Settings" />
     <text name="HangFireDashboard" value="HangFireDashboard" />
-
+	  <text name="AdminMultiTenancy" value="Multi tenancy" />
+	  <text name="AdminTenant" value="Tenant" />
 	  <text name="设备中心" value="设备中心" />
     <text name="详情" value="Detail" />
     <text name="EmployeeApp" value="Employee APP" />

@@ -146,7 +146,28 @@ namespace ZLJ.Application.Admin.Authorization.Permissions
             //sys.CreateChildPermission(PermissionNames.AdministratorSystemSetting, L("Settings"));
             #endregion
 
+            #region 多租户
 
+            #region 租户
+            var multiTenancy = admin.CreateChildPermission(PermissionNames.AdminMultiTenancy,
+             L(PermissionNames.AdminMultiTenancy),
+             multiTenancySides: MultiTenancySides.Host);
+
+            var tenant = multiTenancy.CreateChildPermission(PermissionNames.AdminTenant,
+             L(PermissionNames.AdminTenant),
+             multiTenancySides: MultiTenancySides.Host);
+            tenant.CreateChildPermission(PermissionNames.AdminTenantCreate,
+                "新增".UtilsLI(),
+                multiTenancySides: MultiTenancySides.Host, properties: new Dictionary<string, object> { { "btn", true } });
+            tenant.CreateChildPermission(PermissionNames.AdminTenantUpdate,
+                "修改".UtilsLI(),
+                multiTenancySides: MultiTenancySides.Host, properties: new Dictionary<string, object> { { "btn", true } });
+            tenant.CreateChildPermission(PermissionNames.AdminTenantDelete,
+                "删除".UtilsLI(),
+                multiTenancySides: MultiTenancySides.Host, properties: new Dictionary<string, object> { { "btn", true } });
+            #endregion
+            //特征 版本...后续添加
+            #endregion
             //#endregion
 
 

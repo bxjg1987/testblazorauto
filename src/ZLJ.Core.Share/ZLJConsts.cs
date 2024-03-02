@@ -64,9 +64,36 @@
         //#endregion
         #endregion
 
+        #region 版本特征
+        public const string Feature_1 = "Feature_1";
+        #endregion
 
 
-        
+        #region 租户
+        //
+        // 摘要:
+        //     Max length of the Abp.MultiTenancy.AbpTenantBase.TenancyName property.
+        public const int MaxTenancyNameLength = 64;
 
+        //
+        // 摘要:
+        //     Max length of the Abp.MultiTenancy.AbpTenantBase.ConnectionString property.
+        public const int MaxConnectionStringLength = 1024;
+
+        //
+        // 摘要:
+        //     "Default".
+        public const string DefaultTenantName = "Default";
+
+        //
+        // 摘要:
+        //     "^[a-zA-Z][a-zA-Z0-9_-]{1,}$".
+        public const string TenancyNameRegex = "^[a-zA-Z][a-zA-Z0-9_-]{1,}$";
+        public const int MaxEmailAddressLength = 256;
+        //
+        // 摘要:
+        //     Max length of the Abp.MultiTenancy.AbpTenantBase.Name property.
+        public const int MaxNameLength = 128;
+        #endregion
     }
 }

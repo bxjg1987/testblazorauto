@@ -72,14 +72,24 @@
 
         #endregion
 
+        #region 多租户
+        public const string AdminMultiTenancy = "AdminMultiTenancy";
 
+        #region 租户
+        public const string AdminTenant = "AdminTenant";
+        public const string AdminTenantCreate = "AdminTenantCreate";
+        public const string AdminTenantUpdate = "AdminTenantUpdate";
+        public const string AdminTenantDelete= "AdminTenantDelete";
+        #endregion
 
+        //版本
 
+        //特征
 
-
+        #endregion
 
         public const string AdministratorSystem = "Administrator.System";
-        public const string AdministratorSystemTenant = "Administrator.System.Tenant";
+  
 
         public const string AdministratorSystemRole = "Administrator.System.Role";
         public const string AdministratorSystemRoleAdd = "Administrator.System.Role.Add";

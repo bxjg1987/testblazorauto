@@ -36,7 +36,21 @@ namespace ZLJ.Application.Admin
                                                 icon: "dashboard",
                                                 permissionDependency: new SimplePermissionDependency(PermissionNames.Administrator)));
 
+            #region 多租户
+            var multiTenancy = new MenuItemDefinition(PermissionNames.AdminMultiTenancy,
+                                                      PermissionNames.AdminMultiTenancy.GetAdminLocalizableString(),
+                                                      icon: "appstore",
+                                                      permissionDependency: new SimplePermissionDependency(PermissionNames.AdminMultiTenancy));
+            menu.AddItem(multiTenancy);
 
+            multiTenancy.AddItem(new MenuItemDefinition(PermissionNames.AdminTenant,
+                                                        PermissionNames.AdminTenant.GetAdminLocalizableString(),
+                                                        icon: "block",
+                                                        url: "/tenant",
+                                                        permissionDependency: new SimplePermissionDependency(PermissionNames.AdminTenant)));
+            //特征 版本...后续添加
+
+            #endregion
 
             #region 基础资料
             //基础数据

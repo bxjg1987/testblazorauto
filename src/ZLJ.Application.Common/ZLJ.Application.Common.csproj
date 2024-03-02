@@ -20,10 +20,13 @@
 	</ItemGroup>-->
 
 	<ItemGroup>
+		<Compile Remove="Feature\**" />
 		<Compile Remove="SettingManager\**" />
 		<Compile Remove="txdl\**" />
+		<EmbeddedResource Remove="Feature\**" />
 		<EmbeddedResource Remove="SettingManager\**" />
 		<EmbeddedResource Remove="txdl\**" />
+		<None Remove="Feature\**" />
 		<None Remove="SettingManager\**" />
 		<None Remove="txdl\**" />
 	</ItemGroup>

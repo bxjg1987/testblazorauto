@@ -14,6 +14,7 @@ using ZLJ.Core.MultiTenancy;
 using ZLJ.Core.Configuration;
 using ZLJ.Core.Timing;
 using ZLJ.Core.BaseInfo.Administrative;
+using ZLJ.Core.Features;
 
 namespace ZLJ.Core
 {
@@ -40,7 +41,7 @@ namespace ZLJ.Core
                 cfg = IocManager.Resolve<IConfiguration>();//注意 迁移时为空，迁移时不会依赖webcoreModule，所以那里没问题
             }
             catch { }
-            
+            Configuration.Features.Providers.Add<ZLJFeatureProvider>();
 
             Configuration.Modules.AbpAutoMapper().Configurators
              .Add(cfg => cfg.AddMaps(Assembly.GetExecutingAssembly()));

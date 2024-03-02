@@ -34,9 +34,9 @@
 		<text name="ZLJ.App.Admin.Rent.Order.OrderItemTag.Updated" value="修改" />
 		<text name="ZLJ.App.Admin.Rent.Order.OrderItemTag.Changeabl" value="未变动" />
 		<text name="ZLJ.App.Admin.Rent.Order.OrderItemTag.Readonly" value="只读" />
-
-
-
+		
+		
+		
 		<text name="BXJG.BaseInfo.WorkloadRuleDefinition" value="工作量规则设置" />
 		<text name="WorkOrder.Config" value="工单设置" />
 		<text name="ZLJ.WorkOrder.RentOrderItemWorkOrder.RentOrderItemWorkOrderEntity" value="客户设备工单" />

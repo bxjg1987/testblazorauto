@@ -13,14 +13,16 @@ using ZLJ.Core.Authorization;
 using ZLJ.Core.Authorization.Roles;
 using ZLJ.Core.Authorization.Users;
 using ZLJ.Core.Editions;
-using ZLJ.Application.Admin.MultiTenancy.Dto;
 using Microsoft.AspNetCore.Identity;
 using ZLJ.Core.MultiTenancy;
+using ZLJ.Application.Share.MultiTenancy;
+using BXJG.Utils.Application.Share;
+using ZLJ.Application.Share.Authorization.Permissions;
 
 namespace ZLJ.Application.Admin.MultiTenancy
 {
     //[AbpAuthorize(PermissionNames.Pages_Tenants)]
-    public class TenantAppService : AsyncCrudAppService<Tenant, TenantDto, int, PagedTenantResultRequestDto, CreateTenantDto, TenantDto>, ITenantAppService
+    public class TenantAppService : AdminCrudBaseAppService<Tenant, TenantDto, int, PagedAndSortedResultRequest< Condition>, EditTenantDto, EditTenantDto>, ITenantAppService
     {
         private readonly TenantManager _tenantManager;
         private readonly EditionManager _editionManager;
@@ -42,9 +44,14 @@ namespace ZLJ.Application.Admin.MultiTenancy
             _userManager = userManager;
             _roleManager = roleManager;
             _abpZeroDbMigrator = abpZeroDbMigrator;
+
+            GetAllPermissionName = PermissionNames.AdminTenant;
+            UpdatePermissionName = PermissionNames.AdminTenantUpdate;
+            DeletePermissionName = PermissionNames.AdminTenantDelete;
+            CreatePermissionName = PermissionNames.AdminTenantCreate;
         }
 
-        public override async Task<TenantDto> CreateAsync(CreateTenantDto input)
+        public override async Task<TenantDto> CreateAsync(EditTenantDto input)
         {
             CheckCreatePermission();
 
@@ -92,14 +99,14 @@ namespace ZLJ.Application.Admin.MultiTenancy
             return MapToEntityDto(tenant);
         }
 
-        protected override IQueryable<Tenant> CreateFilteredQuery(PagedTenantResultRequestDto input)
+        protected override IQueryable<Tenant> CreateFilteredQuery(PagedAndSortedResultRequest<Condition> input)
         {
             return Repository.GetAll()
-                .WhereIf(!input.Keyword.IsNullOrWhiteSpace(), x => x.TenancyName.Contains(input.Keyword) || x.Name.Contains(input.Keyword))
-                .WhereIf(input.IsActive.HasValue, x => x.IsActive == input.IsActive);
+                .WhereIf(!input.Filter.Keywords.IsNullOrWhiteSpace(), x => x.TenancyName.Contains(input.Filter.Keywords) || x.Name.Contains(input.Filter.Keywords))
+                .WhereIf(input.Filter.IsActive.HasValue, x => x.IsActive == input.Filter.IsActive);
         }
 
-        protected override void MapToEntity(TenantDto updateInput, Tenant entity)
+        protected override void MapToEntity(EditTenantDto updateInput, Tenant entity)
         {
             // Manually mapped since TenantDto contains non-editable properties too.
             entity.Name = updateInput.Name;
@@ -119,6 +126,8 @@ namespace ZLJ.Application.Admin.MultiTenancy
         {
             identityResult.CheckErrors(LocalizationManager);
         }
+
+       
     }
 }
 

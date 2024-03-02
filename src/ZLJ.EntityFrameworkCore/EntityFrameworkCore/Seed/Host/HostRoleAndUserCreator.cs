@@ -4,11 +4,11 @@ using Abp.Authorization;
 using Abp.Authorization.Roles;
 using Abp.Authorization.Users;
 using Abp.MultiTenancy;
-using ZLJ.Authorization;
-using ZLJ.Authorization.Roles;
-using ZLJ.Authorization.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
+using ZLJ.Core.Authorization.Roles;
+using ZLJ.Core.Authorization.Users;
+using ZLJ.Application.Admin.Authorization.Permissions;
 
 namespace ZLJ.EntityFrameworkCore.Seed.Host
 {
@@ -46,9 +46,7 @@ namespace ZLJ.EntityFrameworkCore.Seed.Host
                 .ToList();
 
             var permissions = PermissionFinder
-                .GetAllPermissions(
-                    new ZLJAuthorizationProvider()
-                )
+                .GetAllPermissions(new ZLJAuthorizationProvider())
                 .Where(p => p.MultiTenancySides.HasFlag(MultiTenancySides.Host) &&
                             !grantedPermissions.Contains(p.Name))
                 .ToList();
@@ -91,6 +89,8 @@ namespace ZLJ.EntityFrameworkCore.Seed.Host
 
                 // Assign Admin role to admin user
                 _context.UserRoles.Add(new UserRole(null, adminUserForHost.Id, adminRoleForHost.Id));
+                _context.SaveChanges();
+
                 _context.SaveChanges();
             }
         }
