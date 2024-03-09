@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using System.IO;
-using log4net.Config;
 using Abp.AspNetCore.Dependency;
 
 namespace ZLJ.Web.Host.Startup

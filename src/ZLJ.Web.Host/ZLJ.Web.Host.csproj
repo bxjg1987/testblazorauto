@@ -73,6 +73,7 @@
 		<Compile Remove="Controllers\FileController.cs" />
 		<Compile Remove="Controllers\WeChatMiniProgramPaymentController.cs" />
 		<Compile Remove="Startup\AdminNavigationProvider.cs" />
+		<Compile Remove="Startup\BlazorAppender.cs" />
 		<Compile Remove="Startup\Class221.cs" />
 		<Compile Remove="Startup\CustAuthenticationSchemeProvider.cs" />
 		<Compile Remove="Startup\HostingEnvironmentExtensions.cs" />
@@ -134,21 +135,7 @@
 		<!--<ProjectReference Include="..\..\..\abp\src\Libs\BXJG.Common.Web\BXJG.Common.Web.csproj" />
 		<ProjectReference Include="..\..\..\abp\src\Modules\BXJG.Utils.Web\BXJG.Utils.Web.csproj" />-->
 		<ProjectReference Include="..\ZLJ.Application\ZLJ.Application.csproj" />
-		<ProjectReference Include="..\ZLJ.EntityFrameworkCore\ZLJ.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\ZLJ.Web.Core\ZLJ.Web.Core.csproj" />
-	</ItemGroup>
-	<ItemGroup>
-		<PackageReference Include="Abp.Castle.Log4Net" Version="9.1.1" />
-		<!--<PackageReference Include="DistributedLock.SqlServer" Version="1.*" />
-		<PackageReference Include="DistributedLock.MySql" Version="1.*" />-->
-		<!--<PackageReference Include="DotNetCore.CAP.Dashboard" Version="7.2.0" />
-		<PackageReference Include="DotNetCore.CAP.SqlServer" Version="7.2.0" />-->
-		<PackageReference Include="Hangfire.SqlServer" Version="1.8.11" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.2">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<!--<PackageReference Include="Savorboard.CAP.InMemoryMessageQueue" Version="7.0.0" />-->
 	</ItemGroup>
 
 

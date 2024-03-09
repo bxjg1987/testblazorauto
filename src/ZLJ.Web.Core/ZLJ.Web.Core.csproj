@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<VersionPrefix>1.0.0.0</VersionPrefix>
 		<TargetFramework>net8.0</TargetFramework>
@@ -53,19 +53,30 @@
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(SolutionName)' != 'ZLJWithModules'">
-		<PackageReference Include="BXJG.Common.RCL" Version="*" />
-		<PackageReference Include="BXJG.Utils.RCL" Version="*" />
+
 		<PackageReference Include="BXJG.Common.Web" Version="*" />
 		<PackageReference Include="BXJG.Utils.Web" Version="*" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(SolutionName)' == 'ZLJWithModules'">
-		<ProjectReference Include="..\Modules\BXJG.Utils.RCL\BXJG.Utils.RCL.csproj" />
+		<ProjectReference Include="..\modules\BXJG.Utils.Web\BXJG.Utils.Web.csproj" />
 	</ItemGroup>
+
+
+
+
 	<ItemGroup>
 	  <Compile Include="Configuration\HostingEnvironmentExtensions.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Abp.Castle.Log4Net" Version="9.1.1" />
+		<!--<PackageReference Include="DistributedLock.SqlServer" Version="1.*" />
+		<PackageReference Include="DistributedLock.MySql" Version="1.*" />-->
+		<!--<PackageReference Include="DotNetCore.CAP.Dashboard" Version="7.2.0" />
+		<PackageReference Include="DotNetCore.CAP.SqlServer" Version="7.2.0" />-->
+		<PackageReference Include="Hangfire.SqlServer" Version="1.8.11" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.2" />
+			
 		<PackageReference Include="HangFire.Core" Version="1.8.*" />
 		<PackageReference Include="Abp.HangFire.AspNetCore" Version="9.1.1" />
 		<!--<PackageReference Include="BXJG.Common.Web" Version="*" />
@@ -86,7 +97,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\ZLJ.Application.Common\ZLJ.Application.Common.csproj" />
-		<ProjectReference Include="..\ZLJ.Application\ZLJ.Application.csproj" />
 		<ProjectReference Include="..\ZLJ.EntityFrameworkCore\ZLJ.EntityFrameworkCore.csproj" />
 	</ItemGroup>
 
