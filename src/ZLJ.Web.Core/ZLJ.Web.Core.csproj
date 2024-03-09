@@ -101,5 +101,12 @@
 	</ItemGroup>
 
 
+	<ItemGroup>
+	  <None Update="webcore.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
+
 
 </Project>

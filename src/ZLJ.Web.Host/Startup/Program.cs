@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using System.IO;
 using Abp.AspNetCore.Dependency;
-
+using ZLJ.Core.Configuration;
 namespace ZLJ.Web.Host.Startup
 {
     public class Program
@@ -13,7 +13,14 @@ namespace ZLJ.Web.Host.Startup
             CreateHostBuilder(args).Build().Run();
         }
         internal static IHostBuilder CreateHostBuilder(string[] args) =>
-          Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder(args)
+          Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder(args).ConfigureHostConfiguration(x =>
+          {
+              x.AddCommon();
+              //var cfg1 = new ConfigurationManager();
+              //cfg1.ConfigWebCore();
+              //var sdfdf = cfg1["IotXuanxiangLujing"];
+              //x.ConfigWebCore();//.AddJsonFile(sdfdf);
+          })
               .ConfigureWebHostDefaults(webBuilder =>
               {
                   //webBuilder.UseStaticWebAssets();

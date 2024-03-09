@@ -14,10 +14,11 @@ using Abp.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Abp.Hangfire;
 using ZLJ.Application.Share.Authorization.Permissions;
+using ZLJ.Core.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseCastleWindsor(IocManager.Instance.IocContainer);
-
+builder.Configuration.AddCommon();
 var _defaultCorsPolicyName = "localhost";
 var _apiVersion = "v1";
 
