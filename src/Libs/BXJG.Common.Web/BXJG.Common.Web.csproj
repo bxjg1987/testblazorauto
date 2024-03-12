@@ -3,7 +3,7 @@
   <PropertyGroup>
 	  <TargetFrameworks>net6;net7;net8</TargetFrameworks>
 
-	  <VersionPrefix>1.2.24</VersionPrefix>
+	  <VersionPrefix>1.2.25</VersionPrefix>
 
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
 	  <LangVersion>latest</LangVersion>
