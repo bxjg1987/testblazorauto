@@ -47,8 +47,8 @@
 		<PackageReference Include="BXJG.Utils.EFCore" Version="1.2.1" />
     <PackageReference Include="BXJG.WorkOrder.Core" Version="1.2.1" />
     <PackageReference Include="BXJG.WorkOrder.EFCore" Version="1.2.1" />-->
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.2" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.2">
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.3" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.3">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
