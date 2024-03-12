@@ -2,7 +2,12 @@
 
 //每个任务一个委托，然后统一执行，这样做是便于排序步骤
 
+using AutoScript;
+using Masuit.Tools;
 using Masuit.Tools.Win32;
+using System;
+using System.Data.Common;
+using System.Diagnostics;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
@@ -32,6 +37,8 @@ Console.WriteLine($"解决方案目录：{jjfaml}");
 
 var ymml = Path.Combine(jjfaml, "src");
 Console.WriteLine($"src：{jjfaml}");
+
+var nugetkey = string.Empty;
 #endregion
 
 #region 准备任务
@@ -40,63 +47,48 @@ var topTasks = new List<(string, Action)>();
 
 topTasks.Add(new("退出", null));
 
-topTasks.Add(new("打包：BXJG.Common", PackBXJGCommon));
+topTasks.Add(new("打包：BXJG.Common", FabuXindeBXJGCommon));
 
 
 #endregion
 
 #region 任务选择
 
-
 while (true)
 {
-
-
     Console.WriteLine("请选择要执行的任务：");
-
-
-
     for (int i = 0; i < topTasks.Count; i++)
     {
         var item = topTasks[i];
         Console.WriteLine($"{i}\t{item.Item1}");
     }
-
     var zx = int.Parse(Console.ReadLine().Trim());
     if (zx == 0)
         return;
 
     var act = topTasks[zx];
-
     act.Item2();
-
 }
 #endregion
 
 
-//void BuildBXJGCommon(){
-
-//    WindowsCommand.Execute("");
-//}
-
 //打包BXJGCommon项目
-void PackBXJGCommon()
+void FabuXindeBXJGCommon()
 {
     DabaoNuget("BXJG.Common");
-}
-void shangchuanBXJGCommon()
-{
-    //  var r = WindowsCommand.Execute($"{panfu}: && cd {projDir} && dotnet pack");
+    FabuNuget("BXJG.Common");
 }
 //打包nuget
 void DabaoNuget(string xmm)
 {
     Console.WriteLine($"开始打包{xmm}...");
-    var projDir = Path.Combine(ymml, "libs", xmm);
+    //项目文件
+    var xmwj = Directory.GetFiles(ymml, $"{xmm}.csproj", SearchOption.AllDirectories).Single();
+    //项目目录
+    var projDir = Path.GetDirectoryName(xmwj);
 
     #region 更新csproj中的nuget版本号
 
-    var xmwj = Directory.GetFiles(projDir, "*.csproj").Single();
     Console.WriteLine($"修改项目文件：{xmwj}的版本号");
 
     var txt = File.ReadAllText(xmwj);
@@ -111,7 +103,7 @@ void DabaoNuget(string xmm)
     bbary.RemoveAt(bbary.Count - 1);
     bbary.Add(zuihoubanben.ToString());
     var xbb = string.Join(".", bbary);
-    
+
     Console.WriteLine($"{ff.Value}\t===>\t{xbb}");
 
     txt = Regex.Replace(txt, @"<VersionPrefix>\s*\d+\.\d+\.\d+\s*</VersionPrefix>", $"<VersionPrefix>{xbb}</VersionPrefix>");
@@ -122,20 +114,38 @@ void DabaoNuget(string xmm)
     //Console.WriteLine($"{xcvxcv}");
 
     Console.WriteLine($"开始打包...");
-    var r = WindowsCommand.Execute($"{panfu}: && cd {projDir} && dotnet pack && exit",15000);
-    Console.WriteLine($"{r}");
+    cmdexecute($"{panfu}: && cd {projDir} && dotnet pack");
 
-    Console.WriteLine($"{xmm}打包完成！");
+    //Console.WriteLine($"{xmm}打包完成！");
 }
 //发布nuget到私有仓库
 void FabuNuget(string xmm)
 {
-    Console.WriteLine($"正在将{xmm}的nuget包发布到私有包服务器...");
-    var projDir = Path.Combine(ymml, "libs", xmm, "bin", "Release");
-
-    //dotnet nuget push -s http://222.178.145.148:19904/v3/index.ison -k xxx .\BXJG.Wechat.Abp.1.2.13.nupkg
-    var r = WindowsCommand.Execute($"{panfu}: && cd {projDir} && dotnet pack");
+    //项目文件
+    var xmwj = Directory.GetFiles(ymml, $"{xmm}.csproj", SearchOption.AllDirectories).Single();
+    //项目目录
+    var projDir = Path.GetDirectoryName(xmwj);
+    var bao = Directory.GetFiles(projDir, $"{xmm}.*.nupkg", SearchOption.AllDirectories).Order().Last();
+    Console.WriteLine($"正在将nuget包{bao}发布到私有包源...");
+    yaoqiushurunugetkey();
+    cmdexecute($"dotnet nuget push -s http://222.178.145.148:19904/v3/index.json -k {nugetkey} {bao}");
     Console.WriteLine($"{xmm}已成功发送到私有包仓库！");
 }
-///获取项目目录物理路径，也就是项目csproj所在物理路径
-//string huoquxiangmumulu(string xmm) => Path.Combine(ymml,);
+//执行cmd命令
+void cmdexecute(string cmd)
+{
+    //p.StandardInput.WriteLine(cmd);
+    CMDHelper.Execute(cmd, P_DataReceived);
+}
+void P_DataReceived(object sender, DataReceivedEventArgs e)
+{
+    Console.WriteLine(e.Data);
+}
+void yaoqiushurunugetkey()
+{
+    if (nugetkey.IsNullOrEmpty())
+    {
+        Console.WriteLine("请输入nuget上传需要的key：");
+        nugetkey = Console.ReadLine();
+    }
+}
