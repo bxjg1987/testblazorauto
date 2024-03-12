@@ -68,7 +68,7 @@
 		<PackageReference Include="OpenScraping" Version="1.*" />
 		<PackageReference Include="OpenXmlPowerTools-NetStandard" Version="4.*" />
 		<PackageReference Include="SuperSocket.Client" Version="2.0.0-beta7" />
-		<PackageReference Include="Yitter.IdGenerator" Version="1.0.15" />
+		<PackageReference Include="Yitter.IdGenerator" Version="1.0.14" />
 	</ItemGroup>
 
 	<ItemGroup>
