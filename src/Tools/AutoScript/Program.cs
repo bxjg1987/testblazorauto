@@ -47,7 +47,7 @@ var nugetkey = string.Empty;
 var topTasks = new List<(string, Action)>
 {
     new("退出", null),
-    new("打包：BXJG.Common", FabuXindeBXJGCommon)
+    new("重新发布所有公共包", FabuSuoyouGonggongBao)
 };
 #endregion
 
@@ -184,11 +184,8 @@ void DabaoNuget(string xmm)
     #endregion
     //var xcvxcv = WindowsCommand.Execute($"{panfu}: && cd {projDir} && dir && exit");
     //Console.WriteLine($"{xcvxcv}");
-
-    Console.WriteLine($"开始打包...");
     cmdexecute($"{panfu}: && cd {projDir} && dotnet pack");
-
-    //Console.WriteLine($"{xmm}打包完成！");
+    Console.WriteLine($"{xmm}打包完成！");
 }
 //发布nuget到私有仓库
 void FabuNuget(string xmm)
