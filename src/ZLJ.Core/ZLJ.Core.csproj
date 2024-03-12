@@ -41,8 +41,8 @@
 
 	<ItemGroup Condition="'$(SolutionName)' != 'ZLJWithModules'">
 		<!--虽然ef引用utils引用common，但有时候需要单独更新common或utils，所以这里还是要单独引用-->
-		<PackageReference Include="BXJG.Utils" Version="*" />
-		<PackageReference Include="BXJG.Common" Version="*" />
+		<PackageReference Include="BXJG.Utils" Version="1.3.7" />
+		<PackageReference Include="BXJG.Common" Version="1.3.7" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(SolutionName)' == 'ZLJWithModules'">
 		<ProjectReference Include="..\Modules\BXJG.Utils\BXJG.Utils.csproj" />

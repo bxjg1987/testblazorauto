@@ -2,20 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <RootNamespace>$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
-	  <VersionPrefix>1.3.4</VersionPrefix>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <NoWarn>$(NoWarn);1591</NoWarn>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	  <VersionPrefix>1.3.7</VersionPrefix>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>  <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <LangVersion>default</LangVersion>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <LangVersion>default</LangVersion>
-  </PropertyGroup>
+ 
 
   <ItemGroup>
     <Compile Remove="CAP\**" />
@@ -44,8 +35,6 @@
     <ProjectReference Include="..\BXJG.Utils\BXJG.Utils.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Extensions\" />
-  </ItemGroup>
+
 
 </Project>

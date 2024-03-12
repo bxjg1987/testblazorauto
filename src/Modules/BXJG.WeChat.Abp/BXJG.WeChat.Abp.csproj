@@ -2,18 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <RootNamespace>$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
 	  <VersionPrefix>1.3.2</VersionPrefix>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	  <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <LangVersion>default</LangVersion>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <LangVersion>default</LangVersion>
-  </PropertyGroup>
+ 
 
   <ItemGroup>
     <Compile Remove="BXJGWeChartModuleConfig.cs" />
