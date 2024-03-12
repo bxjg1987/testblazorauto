@@ -10,6 +10,7 @@ using System.Data.Common;
 using System.Diagnostics;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 //当在d盘下直接运行 完整路径的程序时，输出D：\
 //string currentWorkingDirectory = Directory.GetCurrentDirectory();
@@ -36,24 +37,21 @@ var jjfaml = AppContext.BaseDirectory.Substring(0, AppContext.BaseDirectory.Inde
 Console.WriteLine($"解决方案目录：{jjfaml}");
 
 var ymml = Path.Combine(jjfaml, "src");
-Console.WriteLine($"src：{jjfaml}");
+Console.WriteLine($"src：{ymml}");
 
 var nugetkey = string.Empty;
 #endregion
 
 #region 准备任务
 //顶级任务列表
-var topTasks = new List<(string, Action)>();
-
-topTasks.Add(new("退出", null));
-
-topTasks.Add(new("打包：BXJG.Common", FabuXindeBXJGCommon));
-
-
+var topTasks = new List<(string, Action)>
+{
+    new("退出", null),
+    new("打包：BXJG.Common", FabuXindeBXJGCommon)
+};
 #endregion
 
-#region 任务选择
-
+#region 选择并执行任务
 while (true)
 {
     Console.WriteLine("请选择要执行的任务：");
@@ -70,8 +68,82 @@ while (true)
     act.Item2();
 }
 #endregion
+//重新发布所有公共包
+void FabuSuoyouGonggongBao()
+{
+    FabuXindeBXJGCommon();
+    FabuXindeBXJGCommonEFCore();
+    FabuXindeBXJGCommonRCL();
+    FabuXindeBXJGCommonWeb();
 
-
+    FabuXindeBXJGUtilsShare();
+    FabuXindeBXJGUtils();
+    FabuXindeBXJGUtilsEFCore();
+    FabuXindeBXJGUtilsApplicationShare();
+    FabuXindeBXJGUtilsApplication();
+    FabuXindeBXJGUtilsRCL();
+    FabuXindeBXJGUtilsWeb();
+}
+//打包BXJG.Utils.Web
+void FabuXindeBXJGUtilsWeb()
+{
+    DabaoNuget("BXJG.Utils.Web");
+    FabuNuget("BXJG.Utils.Web");
+}
+//打包BXJG.Utils.Share
+void FabuXindeBXJGUtilsShare()
+{
+    DabaoNuget("BXJG.Utils.Share");
+    FabuNuget("BXJG.Utils.Share");
+}
+//打包BXJG.Utils.RCL
+void FabuXindeBXJGUtilsRCL()
+{
+    DabaoNuget("BXJG.Utils.RCL");
+    FabuNuget("BXJG.Utils.RCL");
+}
+//打包BXJG.Utils.EFCore项目
+void FabuXindeBXJGUtilsEFCore()
+{
+    DabaoNuget("BXJG.Utils.EFCore");
+    FabuNuget("BXJG.Utils.EFCore");
+}
+//打包BXJG.Utils.Application.Share项目
+void FabuXindeBXJGUtilsApplicationShare()
+{
+    DabaoNuget("BXJG.Utils.Application.Share");
+    FabuNuget("BXJG.Utils.Application.Share");
+}
+//打包BXJG.Utils.Application项目
+void FabuXindeBXJGUtilsApplication()
+{
+    DabaoNuget("BXJG.Utils.Application");
+    FabuNuget("BXJG.Utils.Application");
+}
+//打包BXJG.Utils项目
+void FabuXindeBXJGUtils()
+{
+    DabaoNuget("BXJG.Utils");
+    FabuNuget("BXJG.Utils");
+}
+//打包BXJG.Common.Web项目
+void FabuXindeBXJGCommonWeb()
+{
+    DabaoNuget("BXJG.Common.Web");
+    FabuNuget("BXJG.Common.Web");
+}
+//打包BXJG.Common.RCL项目
+void FabuXindeBXJGCommonRCL()
+{
+    DabaoNuget("BXJG.Common.RCL");
+    FabuNuget("BXJG.Common.RCL");
+}
+//打包BXJG.Common.EFCore项目
+void FabuXindeBXJGCommonEFCore()
+{
+    DabaoNuget("BXJG.Common.EFCore");
+    FabuNuget("BXJG.Common.EFCore");
+}
 //打包BXJGCommon项目
 void FabuXindeBXJGCommon()
 {
