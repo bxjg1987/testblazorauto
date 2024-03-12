@@ -1,8 +1,8 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
 	  <TargetFrameworks>netstandard2.1;net8</TargetFrameworks>
-	  <VersionPrefix>1.2.76</VersionPrefix>
+	  <VersionPrefix>1.2.77</VersionPrefix>
     <!--<Version></Version>-->
     <!--<GeneratePackageOnBuild>true</GeneratePackageOnBuild>-->
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
