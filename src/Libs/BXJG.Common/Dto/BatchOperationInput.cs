@@ -13,7 +13,15 @@ namespace BXJG.Common.Dto
     {
         public TKey[] Ids { get; set; }
     }
-
+    /// <summary>
+    /// 批量状态调整
+    /// </summary>
+    /// <typeparam name="TKey"></typeparam>
+    /// <typeparam name="TState"></typeparam>
+    public class BatchChangeStateInput<TKey, TState>: BatchOperationInput<TKey>
+    {
+        public TState State { get; set; }
+    }
     /// <summary>
     /// 批量操作的输入模型
     /// </summary>
