@@ -17,8 +17,7 @@
             @if (deleteIsGranted)
             {
                 <Popconfirm Title="将删除已经的项及其所有子项，确定删除吗?"
-                            OnConfirm="BtnDeleteClick"
-                            OnCancel="HideDeleteConfirm">
+                            OnConfirm="BtnDeleteClick">
                     <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Clear" Danger="true" Disabled="@ShouldDisableDelete">删除</Button>
                 </Popconfirm>
             }
@@ -78,8 +77,7 @@
                 @if (deleteIsGranted)
                 {
                     <Popconfirm Title="将删除此项及其所有子项，确定删除吗?"
-                                OnConfirm="()=>BtnDeleteItemClick(context)"
-                                OnCancel="HideDeleteConfirm">
+                                OnConfirm="()=>BtnDeleteItemClick(context)">
                         <Button Size="@ButtonSize.Small" Danger="true">删除</Button>
                     </Popconfirm>
                 }
