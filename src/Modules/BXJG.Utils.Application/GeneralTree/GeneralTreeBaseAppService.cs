@@ -371,7 +371,6 @@ namespace BXJG.Utils.Application.GeneralTree
     /// <typeparam name="TGetTreeForSelectInput"></typeparam>
     /// <typeparam name="TGetTreeForSelectOutput"></typeparam>
     /// <typeparam name="TGetNodesForSelectInput"></typeparam>
-    [UnitOfWork(false)]
     public class GeneralTreeProviderBaseAppService<TEntity,
                                                    TGetTreeForSelectInput,
                                                    TGetTreeForSelectOutput,
@@ -395,7 +394,6 @@ namespace BXJG.Utils.Application.GeneralTree
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TGetTreeForSelectInput"></typeparam>
     /// <typeparam name="TGetTreeForSelectOutput"></typeparam>
-    [UnitOfWork(false)]
     public class GeneralTreeProviderBaseAppService<TEntity,
                                                    TGetTreeForSelectInput,
                                                    TGetTreeForSelectOutput> : GeneralTreeProviderBaseAppService<TEntity,
@@ -414,7 +412,6 @@ namespace BXJG.Utils.Application.GeneralTree
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TGetTreeForSelectInput"></typeparam>
-    [UnitOfWork(false)]
     public class GeneralTreeProviderBaseAppService<TEntity,
                                                    TGetTreeForSelectInput> : GeneralTreeProviderBaseAppService<TEntity,
                                                                                                                TGetTreeForSelectInput,
@@ -428,7 +425,6 @@ namespace BXJG.Utils.Application.GeneralTree
     /// 树形结构应用逻辑基类
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
-    [UnitOfWork(false)]
     public class GeneralTreeProviderBaseAppService<TEntity> : GeneralTreeProviderBaseAppService<TEntity,
                                                                                                 GeneralTreeGetForSelectInput>, IGeneralTreeProviderBaseAppService
         where TEntity : GeneralTreeEntity<TEntity>
@@ -447,6 +443,7 @@ namespace BXJG.Utils.Application.GeneralTree
     /// <typeparam name="TMoveInput"></typeparam>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TManager"></typeparam>
+    [UnitOfWork]
     public class GeneralTreeBaseAppService<TEntity,
                                            TDto,
                                            TCreateInput,

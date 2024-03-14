@@ -60,7 +60,7 @@ namespace BXJG.Utils.Application
     /// <typeparam name="TKey">主键类型</typeparam>
     /// <typeparam name="TGetAllInput">查询时输入参数的类型</typeparam>
     /// <typeparam name="TEntityDto">可选数据的dto</typeparam>
-    [UnitOfWork(false)]
+    [UnitOfWork(false)] 
     public abstract class ProviderBaseAppService<TEntity, TGetAllInput, TEntityDto, TKey> : ApplicationService, IProviderBaseAppService< TGetAllInput, TEntityDto, TKey>
         where TEntity : class, IEntity<TKey>
     {
