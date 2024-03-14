@@ -104,7 +104,7 @@ namespace ZLJ.RCL.Components
         /// <param name="deletePermissionName"></param>
         /// <returns></returns>
         protected virtual async Task InitPermission(string createPermissionName = default, string updatePermissionName = default,
-            string deletePermissionName = default/*, string getPermissionName = default*/)
+            string deletePermissionName = default/*, string getPermissionName = default*/, IDictionary<string, bool> others = default)
         {
             var authState = await AuthStateProvider.GetAuthenticationStateAsync();
 
@@ -114,7 +114,13 @@ namespace ZLJ.RCL.Components
                 updateIsGranted = (await AuthorizationService.AuthorizeAsync(authState.User, updatePermissionName)).Succeeded;// await PermissionChecker.IsGrantedAsync(updatePermissionName);
             if (deletePermissionName.IsNotNullOrWhiteSpaceBXJG())
                 deleteIsGranted = (await AuthorizationService.AuthorizeAsync(authState.User, deletePermissionName)).Succeeded;//await PermissionChecker.IsGrantedAsync(deletePermissionName);
-
+            if (others != default)
+            {
+                foreach (var item in others)
+                {
+                    others[item.Key] = (await AuthorizationService.AuthorizeAsync(authState.User, item.Key)).Succeeded;
+                }
+            }
             //if (getPermissionName.IsNotNullOrWhiteSpaceBXJG())
             //    getIsGranted = await PermissionChecker.IsGrantedAsync(getPermissionName);
         }
