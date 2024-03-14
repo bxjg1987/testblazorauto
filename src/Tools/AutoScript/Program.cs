@@ -197,7 +197,7 @@ void FabuNuget(string xmm)
     var xmwj = Directory.GetFiles(ymml, $"{xmm}.csproj", SearchOption.AllDirectories).Single();
     //项目目录
     var projDir = Path.GetDirectoryName(xmwj);
-    var bao = Directory.GetFiles(projDir, $"{xmm}.*.nupkg", SearchOption.AllDirectories).Order().Last();
+    var bao = Directory.GetFiles(projDir, $"{xmm}.*.nupkg", SearchOption.AllDirectories).OrderBy(x=>File.GetCreationTime(x)).Last();
     Console.WriteLine($"正在将nuget包{bao}发布到私有包源...");
     yaoqiushurunugetkey();
     cmdexecute($"dotnet nuget push -s http://222.178.145.148:19904/v3/index.json -k {nugetkey} {bao}");
