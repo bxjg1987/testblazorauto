@@ -23,10 +23,10 @@ namespace ZLJ.Admin.CoreRCL.DataDictionary
 
         }
         
-        protected override Task LoadListData()
-        {
-            return base.LoadListData();
-        }
+        //protected override Task LoadListData()
+        //{
+        //    return base.LoadListData();
+        //}
 
         //[AbpExceptionInterceptor]
         protected override async Task BtnReLoadClick()

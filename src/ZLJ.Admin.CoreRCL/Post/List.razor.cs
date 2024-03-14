@@ -175,7 +175,7 @@ namespace ZLJ.Admin.CoreRCL.Post
         {
             isShowDetailUpdate = false;
 
-            await BtnSearchClick();
+            await LoadListData();
 
         }
 

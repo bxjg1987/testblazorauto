@@ -554,7 +554,7 @@ namespace ZLJ.RCL.Components
             _ = BatchOperationMessage(r, "批量删除");//这里木有必要await
                                                  //BatchDeleteMessage(temp);
             if (r.Ids.Any())
-                await BtnRefreshClick();
+                await LoadListData();
             //_ = InvokeAsync(dataGrid.ReloadServerData); //内部会StateChange
 
         }
@@ -593,7 +593,7 @@ namespace ZLJ.RCL.Components
             if (r.Ids.Any())
             {
                 _ = ShowSuccessMessage(msg: "删除成功！");
-                await BtnRefreshClick();
+                await LoadListData();
             }
             else
             {
