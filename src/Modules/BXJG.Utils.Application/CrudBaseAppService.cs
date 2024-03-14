@@ -78,9 +78,10 @@ namespace BXJG.Utils.Application
         {
             return base.UpdateAsync(input);
         }
-        public override Task DeleteAsync(TDeleteInput input)
+        public override async Task DeleteAsync(TDeleteInput input)
         {
-            return base.DeleteAsync(input);
+            var entity =await Repository.GetAsync(input.Id);
+            await BatchDeleteItemAsync(entity);
         }
 
         protected CrudBaseAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
