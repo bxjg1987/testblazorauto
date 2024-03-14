@@ -80,6 +80,7 @@ namespace BXJG.Utils.Application
         }
         public override async Task DeleteAsync(TDeleteInput input)
         {
+            CheckDeletePermission();
             var entity =await Repository.GetAsync(input.Id);
             await BatchDeleteItemAsync(entity);
         }
