@@ -3,7 +3,6 @@ using Abp.Application.Navigation;
 using Abp.Web.Models;
 using System.Collections.Immutable;
 using System.Net.Http.Json;
-using ZLJ.Application.Common.ClientProxy;
 
 namespace ZLJ.RCL.Abps
 {

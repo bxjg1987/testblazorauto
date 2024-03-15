@@ -27,6 +27,8 @@
 
 		<PackageReference Include="Abp.AutoMapper" Version="9.1.2" />
 
+		<PackageReference Include="Abp.Web.Common" Version="9.1.2" />
+
 		<PackageReference Include="AntDesign" Version="0.18.0" />
 
 
@@ -44,7 +46,6 @@
 		<ProjectReference Include="..\Libs\BXJG.Common.RCL\BXJG.Common.RCL.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\ZLJ.Application.Common.ClientProxy\ZLJ.Application.Common.ClientProxy.csproj" />
-		<ProjectReference Include="..\ZLJ.Application.Share\ZLJ.Application.Share.csproj" />
+	  <ProjectReference Include="..\ZLJ.Application.Common.Share\ZLJ.Application.Common.Share.csproj" />
 	</ItemGroup>
 </Project>

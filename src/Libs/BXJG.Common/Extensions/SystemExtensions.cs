@@ -17,6 +17,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace System
 {
@@ -325,6 +326,22 @@ namespace System
             }
             return name;
         }
+        /// <summary>
+        ///  [Display(Name = "待使用")]
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string GetDisplayName(this Enum value)
+            {
+                Type enumType = value.GetType();
+                FieldInfo field = enumType.GetField(value.ToString());
+
+                DisplayAttribute attr = Attribute.GetCustomAttribute(field, typeof(DisplayAttribute)) as DisplayAttribute;
+
+                return attr == null ? value.ToString() : attr.Name;
+            }
+      
+
         /// <summary>
         /// 想url追加参数，若重复则保留多个同名参数,若参数为空，则原样返回url，不会报错
         /// </summary>
