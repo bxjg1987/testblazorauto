@@ -5,6 +5,7 @@ using System.Text;
 
 namespace BXJG.Common.Dto
 {
+    #region 批量操作
     /// <summary>
     /// 批量操作的输入模型
     /// </summary>
@@ -13,15 +14,35 @@ namespace BXJG.Common.Dto
     {
         public TKey[] Ids { get; set; }
     }
+
     /// <summary>
-    /// 批量状态调整
+    /// 批量操作的输入模型，id类型为int
     /// </summary>
-    /// <typeparam name="TKey"></typeparam>
-    /// <typeparam name="TState"></typeparam>
-    public class BatchChangeStateInput<TKey, TState>: BatchOperationInput<TKey>
+    public class BatchOperationInputInt : BatchOperationInput<int>
     {
-        public TState State { get; set; }
     }
+
+    /// <summary>
+    /// 批量操作的输入模型，id类型为long
+    /// </summary>
+    public class BatchOperationInputLong : BatchOperationInput<long>
+    {
+    }
+    /// <summary>
+    /// 批量操作的输入模型，id类型为guid
+    /// </summary>
+    public class BatchOperationInputGuid : BatchOperationInput<Guid>
+    {
+    }
+    /// <summary>
+    /// 批量操作的输入模型，id类型为string
+    /// </summary>
+    public class BatchOperationInputString : BatchOperationInput<string>
+    {
+    }
+    #endregion
+
+    #region 并发
     /// <summary>
     /// 批量操作的输入模型
     /// </summary>
@@ -48,6 +69,10 @@ namespace BXJG.Common.Dto
     {
         //public TKey[] Ids { get; set; }
     }
+    #endregion
+
+    #region 审核并发
+
     /// <summary>
     /// 批量审核的输入模型
     /// </summary>
@@ -75,6 +100,9 @@ namespace BXJG.Common.Dto
     public class BatchAuditConcurrencyInputGuid : BatchAuditConcurrencyInput<Guid>
     {
     }
+    #endregion
+
+    #region 审核
     /// <summary>
     /// 批量审核的输入模型
     /// </summary>
@@ -102,39 +130,55 @@ namespace BXJG.Common.Dto
     public class BatchAuditInputGuid : BatchAuditInput<Guid>
     {
     }
+    #endregion
+
+    #region 批量状态变更
+    #region 批量状态变更
     /// <summary>
-    /// 批量操作的输入模型，id类型为int
+    /// 批量状态调整
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
-    public class BatchOperationInput : BatchOperationInput<int>
+    /// <typeparam name="TState"></typeparam>
+    public class BatchChangeStateInput<TKey, TState> : BatchOperationInput<TKey>
     {
-    }
-
-    /// <summary>
-    /// 批量操作的输入模型，id类型为long
-    /// </summary>
-    public class BatchOperationInputLong : BatchOperationInput<long>
-    {
+        public TState State { get; set; }
     }
     /// <summary>
-    /// 批量操作的输入模型，id类型为guid
+    /// 批量状态调整
     /// </summary>
-    public class BatchOperationInputGuid : BatchOperationInput<Guid>
+    /// <typeparam name="TState"></typeparam>
+    public class BatchChangeStateInputInt<TState> : BatchChangeStateInput<int,TState>
     {
     }
     /// <summary>
-    /// 批量操作的输入模型，id类型为string
+    /// 批量状态调整
     /// </summary>
-    public class BatchOperationInputString : BatchOperationInput<string>
+    /// <typeparam name="TState"></typeparam>
+    public class BatchChangeStateInputString<TState> : BatchChangeStateInput<string, TState>
     {
     }
+    /// <summary>
+    /// 批量状态调整
+    /// </summary>
+    /// <typeparam name="TState"></typeparam>
+    public class BatchChangeStateInputLong<TState> : BatchChangeStateInput<long, TState>
+    {
+    }
+    /// <summary>
+    /// 批量状态调整
+    /// </summary>
+    /// <typeparam name="TState"></typeparam>
+    public class BatchChangeStateInputGuid<TState> : BatchChangeStateInput<Guid, TState>
+    {
+    }
+    #endregion
+    #region 批量开关
     /// <summary>
     /// 批量开关
     /// </summary>
     /// <typeparam name="TKey">id类型</typeparam>
-    public class BatchSwitchInput<TKey> : BatchOperationInput<TKey>
+    public class BatchSwitchInput<TKey> : BatchChangeStateInput<TKey,bool>
     {
-        public bool IsActive { get; set; }
     }
     /// <summary>
     /// 批量开关输入模型，id类型为int
@@ -160,4 +204,6 @@ namespace BXJG.Common.Dto
     public class BatchSwitchInputString : BatchSwitchInput<string>
     {
     }
+    #endregion
+    #endregion
 }

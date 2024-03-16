@@ -11,3 +11,4 @@ global using AntDesign;
 global using BXJG.Common.Dto;
 global using Abp.Application.Services.Dto;
 global using BXJG.Utils.Application.Share;
+global using Abp.UI;

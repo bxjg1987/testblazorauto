@@ -22,3 +22,4 @@ global using ZLJ.RCL.Interceptors;
 global using Abp.Configuration;
 global using Abp.Localization;
 global using Abp.Runtime.Session;
+global using Abp.UI;

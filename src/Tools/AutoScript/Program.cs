@@ -50,7 +50,8 @@ var topTasks = new List<(string, Action)>
     new("重新发布所有公共包", FabuSuoyouGonggongBao),
     new("重新发布：BXJG.Common", FabuXindeBXJGCommon),
     new("重新发布：BXJG.Utils.Share", FabuXindeBXJGUtilsShare),
-    new("重新发布：BXJG.Utils.Application", FabuXindeBXJGUtilsApplication)
+    new("重新发布：BXJG.Utils.Application", FabuXindeBXJGUtilsApplication),
+    new("重新发布：BXJG.Utils.Application.Share", FabuXindeBXJGUtilsApplicationShare)
 };
 #endregion
 
