@@ -81,7 +81,7 @@ namespace ZLJ.Web.Host.Startup
                  options => { options.Filters.Add(new AbpAutoValidateAntiforgeryTokenAttribute()); }
             ).AddNewtonsoftJson(options =>
             {
-                options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
+                //options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
                 options.SerializerSettings.ContractResolver = new AbpMvcContractResolver()
                 {
                     NamingStrategy = new CamelCaseNamingStrategy()

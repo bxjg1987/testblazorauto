@@ -1,4 +1,10 @@
-//host��blazor���õ����ã������Ǹ��Կ��Ը��ǣ�ע���������Ӧ���޹ص�
 {
-  
+  "Authentication": {
+    "JwtBearer": {
+      "IsEnabled": "true",
+      "SecurityKey": "ZLJ_C421AAEE0D114E9C11345dddd4545xxvdDFDSSER52XZCWX435dfvv",
+      "Issuer": "ZLJ",
+      "Audience": "ZLJ"
+    }
+  }
 }
