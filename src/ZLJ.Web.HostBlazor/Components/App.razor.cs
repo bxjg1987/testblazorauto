@@ -7,9 +7,9 @@ namespace ZLJ.Web.HostBlazor.Components
     {
         [CascadingParameter]
         private HttpContext HttpContext { get; set; } = default!;
-        private IComponentRenderMode? RenderModeForPage => HttpContext.Request.Path.StartsWithSegments("/account")
-      ? null
-      : RenderMode.InteractiveServer;
+      //  private IComponentRenderMode? RenderModeForPage => HttpContext.Request.Path.StartsWithSegments("/account")
+      //? null
+      //: RenderMode.InteractiveServer;
 
         /// <summary>
         /// true wasm已运行 falsewasm未运行
