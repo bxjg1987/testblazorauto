@@ -399,7 +399,7 @@ namespace ZLJ.RCL.Components
                                                    isFormIniting ||
                                                    isReseting ||
                                                    isUpdating ||
-                                                   frm == default ||
+                                                   //frm == default || 复杂编辑页面的按钮可能在body而不是footer里，所以不能判断这个
                                                    editDto == null;
         /// <summary>
         /// 是否正在保存
