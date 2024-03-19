@@ -35,7 +35,7 @@ namespace ZLJ.RCL.Components
                                                          TUpdateInput> : BaseComponent
         where TEntityDto : IEntityDto<TPrimaryKey>
         //where TGetAllInput : new()
-        where TUpdateInput : IEntityDto<TPrimaryKey>,new()
+        where TUpdateInput : IEntityDto<TPrimaryKey>, new()
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
     {
         #region 字段和属性
@@ -103,10 +103,10 @@ namespace ZLJ.RCL.Components
             //dto = await AppService.GetAsync(new EntityDto<TPrimaryKey>(Id));
             if (isEdit)
             {
-                editDto=new TUpdateInput();
+                editDto = new TUpdateInput();
                 //editContext = new EditContext(editDto);
-                await ResetCore(); 
-                
+                await ResetCore();
+
             }
             else
                 await RefreshCore();
@@ -152,15 +152,23 @@ namespace ZLJ.RCL.Components
         /// <param name="updatePermissionName"></param>
         /// <param name="deletePermissionName"></param>
         /// <returns></returns>
-        protected virtual async ValueTask InitPermission(string updatePermissionName = default, string deletePermissionName = default/*, string getPermissionName =default*/)
+        protected virtual async ValueTask InitPermission(string updatePermissionName = default, string deletePermissionName = default, IDictionary<string, bool> others = default/*, string getPermissionName =default*/)
         {
             var authState = await AuthStateProvider.GetAuthenticationStateAsync();
             if (updatePermissionName.IsNotNullOrWhiteSpaceBXJG())
                 updateIsGranted = (await AuthorizationService.AuthorizeAsync(authState.User, updatePermissionName)).Succeeded;// await PermissionChecker.IsGrantedAsync(updatePermissionName);
             if (deletePermissionName.IsNotNullOrWhiteSpaceBXJG())
-                deleteIsGranted = (await AuthorizationService.AuthorizeAsync(authState.User, deletePermissionName)).Succeeded;//await PermissionChecker.IsGrantedAsync(deletePermissionName);
+                deleteIsGranted = (await AuthorizationService.AuthorizeAsync(authState.User, deletePermissionName)).Succeeded;
+            //await PermissionChecker.IsGrantedAsync(deletePermissionName);
             //if (getPermissionName.IsNotNullOrWhiteSpaceBXJG())
             //    getIsGranted = await PermissionChecker.IsGrantedAsync(getPermissionName);
+            if (others != default)
+            {
+                foreach (var item in others)
+                {
+                    others[item.Key] = (await AuthorizationService.AuthorizeAsync(authState.User, item.Key)).Succeeded;
+                }
+            }
         }
         #endregion
 
@@ -216,9 +224,9 @@ namespace ZLJ.RCL.Components
         /// <returns></returns>
         protected virtual async Task RefreshCore()
         {
-           
-                dto = await AppService.GetAsync(new EntityDto<TPrimaryKey>(Id));
-              
+
+            dto = await AppService.GetAsync(new EntityDto<TPrimaryKey>(Id));
+
         }
         #endregion
 
@@ -444,11 +452,11 @@ namespace ZLJ.RCL.Components
         }
         protected virtual async Task UpdateCore()
         {
-            
-                dto = await AppService.UpdateAsync(editDto!);
-                _ = base.MessageService.Success("修改成功！");
-                await AfterUpdated();
-           
+
+            dto = await AppService.UpdateAsync(editDto!);
+            _ = base.MessageService.Success("修改成功！");
+            await AfterUpdated();
+
         }
         /// <summary>
         /// 保存后回调
@@ -514,7 +522,7 @@ namespace ZLJ.RCL.Components
             isDeleting = true;
             try
             {
-               
+
                 await DeleteCore();
             }
             finally
@@ -524,11 +532,11 @@ namespace ZLJ.RCL.Components
         }
         protected virtual async Task DeleteCore()
         {
-           
-                await AppService.DeleteAsync(new EntityDto<TPrimaryKey>(Id));
-                _ = MessageService.Success($"删除成功！");
-                await AfterDelete();
-         
+
+            await AppService.DeleteAsync(new EntityDto<TPrimaryKey>(Id));
+            _ = MessageService.Success($"删除成功！");
+            await AfterDelete();
+
         }
         /// <summary>
         /// 删除之后之后回调
