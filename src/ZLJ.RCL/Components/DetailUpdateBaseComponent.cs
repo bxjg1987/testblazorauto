@@ -70,7 +70,7 @@ namespace ZLJ.RCL.Components
         /// <summary>
         /// 查询模型
         /// </summary>
-        protected TEntityDto dto = new TEntityDto();
+        protected virtual TEntityDto dto { get; set; } = new TEntityDto();
         /// <summary>
         /// 当前编辑模型
         /// </summary>

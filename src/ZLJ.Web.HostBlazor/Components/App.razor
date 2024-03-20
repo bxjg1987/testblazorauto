@@ -31,7 +31,7 @@
     @* https://github.com/dotnet/aspnetcore/issues/52740#issuecomment-1852841365 *@
 
     @* 路由中已经强制包含server和wasm了，当存在wasm时，所有auto才会自动以wasm模式运行，否则若仅存在server时，auto会以server模式运行 *@
-  @*@if (xs)
+  @if (xs)
     {
         <RenderModeHelper @rendermode="new InteractiveWebAssemblyRenderMode(prerender: false)" />
     }
@@ -39,7 +39,7 @@
     {
         <NavLink @rendermode="new InteractiveServerRenderMode(prerender: false)"></NavLink>
     } 
-    *@
+   
 
     @* <ZLJ.Admin.CoreRCL.Startup.RenderModeHelper @rendermode="InteractiveWebAssembly" /> *@
 
