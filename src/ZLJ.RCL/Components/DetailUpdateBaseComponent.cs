@@ -28,12 +28,12 @@ namespace ZLJ.RCL.Components
     /// <typeparam name="TCreateInput">新增时的输入类型</typeparam>
     /// <typeparam name="TUpdateInput">修改时的输入类型</typeparam>
     public abstract class DetailUpdateBaseComponent<TAppService,
-                                                         TEntityDto,
-                                                         TPrimaryKey,
-                                                         TGetAllInput,
-                                                         TCreateInput,
-                                                         TUpdateInput> : BaseComponent
-        where TEntityDto : IEntityDto<TPrimaryKey>
+                                                    TEntityDto,
+                                                    TPrimaryKey,
+                                                    TGetAllInput,
+                                                    TCreateInput,
+                                                    TUpdateInput> : BaseComponent
+        where TEntityDto : IEntityDto<TPrimaryKey>, new()
         //where TGetAllInput : new()
         where TUpdateInput : IEntityDto<TPrimaryKey>, new()
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
@@ -70,7 +70,7 @@ namespace ZLJ.RCL.Components
         /// <summary>
         /// 查询模型
         /// </summary>
-        protected TEntityDto? dto;
+        protected TEntityDto dto = new TEntityDto();
         /// <summary>
         /// 当前编辑模型
         /// </summary>
@@ -106,10 +106,9 @@ namespace ZLJ.RCL.Components
                 editDto = new TUpdateInput();
                 //editContext = new EditContext(editDto);
                 await ResetCore();
-
             }
             else
-                await RefreshCore();
+                await Refresh();
             //if (isEdit)
             //{
             //    await BtnBeginEditClick();
@@ -152,7 +151,7 @@ namespace ZLJ.RCL.Components
         /// <param name="updatePermissionName"></param>
         /// <param name="deletePermissionName"></param>
         /// <returns></returns>
-        protected virtual async ValueTask InitPermission(string updatePermissionName = default, string deletePermissionName = default, IDictionary<string, bool> others = default/*, string getPermissionName =default*/)
+        protected virtual async ValueTask InitPermission(string updatePermissionName = default, string deletePermissionName = default/*, string getPermissionName =default*/, IDictionary<string, bool> others = default)
         {
             var authState = await AuthStateProvider.GetAuthenticationStateAsync();
             if (updatePermissionName.IsNotNullOrWhiteSpaceBXJG())
@@ -161,7 +160,7 @@ namespace ZLJ.RCL.Components
                 deleteIsGranted = (await AuthorizationService.AuthorizeAsync(authState.User, deletePermissionName)).Succeeded;
             //await PermissionChecker.IsGrantedAsync(deletePermissionName);
             //if (getPermissionName.IsNotNullOrWhiteSpaceBXJG())
-            //    getIsGranted = await PermissionChecker.IsGrantedAsync(getPermissionName);
+            //  getIsGranted = await PermissionChecker.IsGrantedAsync(getPermissionName);
             if (others != default)
             {
                 foreach (var item in others)
@@ -189,7 +188,8 @@ namespace ZLJ.RCL.Components
         protected virtual bool IsRefreshDisabled => isFormIniting ||
                                                     isReseting ||
                                                     isDeleting ||
-                                                    isUpdating;
+                                                    isUpdating ||
+                                                    isRefreshing;
         /// <summary>
         /// 是否正在加载
         /// </summary>
@@ -224,9 +224,7 @@ namespace ZLJ.RCL.Components
         /// <returns></returns>
         protected virtual async Task RefreshCore()
         {
-
             dto = await AppService.GetAsync(new EntityDto<TPrimaryKey>(Id));
-
         }
         #endregion
 
@@ -267,13 +265,11 @@ namespace ZLJ.RCL.Components
 
             isReseting = true;
 
-            await RefreshCore();
-
             try
             {
+                await RefreshCore();
                 //dto = await AppService.GetAsync(new EntityDto<TPrimaryKey>(Id));
                 await DtoMapToEditDto();
-
             }
             finally
             {
@@ -301,6 +297,20 @@ namespace ZLJ.RCL.Components
         /// 是否显示进入编辑模式的按钮
         /// </summary>
         protected virtual bool IsShowBeginEdit => !isEdit && updateIsGranted;
+        /// <summary>
+        /// 是否禁用保存按钮
+        /// </summary>
+        protected virtual bool IsUpdateDisabled => isDeleting ||
+                                                   isRefreshing ||
+                                                   isFormIniting ||
+                                                   isReseting ||
+                                                   isUpdating ||
+                                                   //frm == default ||
+                                                   editDto == null;
+        /// <summary>
+        /// 是否正在保存
+        /// </summary>
+        protected bool isUpdating = false;
         /// <summary>
         /// true修改模式，false查看模式
         /// </summary>
@@ -386,7 +396,6 @@ namespace ZLJ.RCL.Components
             editInited = true;
         }
 
-
         /// <summary>
         /// 首次进入编辑模式时初始化表单，如：初始化加载下拉框数据
         /// </summary>
@@ -399,20 +408,6 @@ namespace ZLJ.RCL.Components
             return ValueTask.CompletedTask;
         }
 
-        /// <summary>
-        /// 是否禁用保存按钮
-        /// </summary>
-        protected virtual bool IsUpdateDisabled => isDeleting ||
-                                                   isRefreshing ||
-                                                   isFormIniting ||
-                                                   isReseting ||
-                                                   isUpdating ||
-                                                   //frm == default || 复杂编辑页面的按钮可能在body而不是footer里，所以不能判断这个
-                                                   editDto == null;
-        /// <summary>
-        /// 是否正在保存
-        /// </summary>
-        protected bool isUpdating = false;
         /// <summary>
         /// 点击保存按钮时回调
         /// </summary>
@@ -452,11 +447,9 @@ namespace ZLJ.RCL.Components
         }
         protected virtual async Task UpdateCore()
         {
-
             dto = await AppService.UpdateAsync(editDto!);
             _ = base.MessageService.Success("修改成功！");
             await AfterUpdated();
-
         }
         /// <summary>
         /// 保存后回调
