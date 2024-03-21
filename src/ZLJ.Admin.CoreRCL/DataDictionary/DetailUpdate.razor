@@ -10,24 +10,34 @@
     @if (isEdit)
     {
         <Form @ref="frm" ValidateOnChange="true" Model="editDto" LabelColSpan="4" WrapperColSpan="20" OnFinish="OnFinish">
-            <FormItem Label="父级">
-                <TreeSelectDataDictionary @bind-Value="@context.ParentIdString" IsKeyId AllowClear />
-             </FormItem>
-             <FormItem Label="显示名">
-                 <Input @bind-Value="@context.DisplayName" />
-             </FormItem>
-         </Form>
+
+
+
+
+            <Descriptions Bordered Size="small">
+                <DescriptionsItem Title="父级">
+                    <TreeSelectDataDictionary @bind-Value="@context.ParentIdString" IsKeyId AllowClear />
+                </DescriptionsItem>
+                <DescriptionsItem Title="名称">
+                    <Input @bind-Value="@context.DisplayName" />
+                </DescriptionsItem>
+            </Descriptions>
+
+
+
+        </Form>
     }
     else
     {
-        <GridRow>
-            <GridCol Span="4">父级</GridCol>
-            <GridCol Span="20">@dto?.ParentDisplayName</GridCol>
-        </GridRow>
-        <GridRow>
-            <GridCol Span="4">显示名</GridCol>
-            <GridCol Span="20">@dto?.DisplayName</GridCol>
-        </GridRow>
+
+        <Descriptions Bordered Size="small">
+            <DescriptionsItem Title="父级">
+                <TreeSelectDataDictionary @bind-Value="@dto.ParentDisplayName" IsKeyId AllowClear />
+            </DescriptionsItem>
+            <DescriptionsItem Title="名称">
+                <Input @bind-Value="@dto.DisplayName" />
+            </DescriptionsItem>
+        </Descriptions>
     }
 </SectionContent>
 <SectionContent SectionName=@(FuncName + "-detail-update-btns")>

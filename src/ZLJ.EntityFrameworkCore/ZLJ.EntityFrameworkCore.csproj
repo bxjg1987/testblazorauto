@@ -41,7 +41,7 @@
 	
 	
 	<ItemGroup>
-		<PackageReference Include="Abp.ZeroCore.EntityFrameworkCore" Version="9.1.2" />
+		<PackageReference Include="Abp.ZeroCore.EntityFrameworkCore" Version="9.1.3" />
 		<!--<PackageReference Include="BXJG.Common.EFCore" Version="*" />
 		<PackageReference Include="BXJG.Utils.EFCore" Version="*" />
 		<PackageReference Include="BXJG.Utils.EFCore" Version="1.2.1" />

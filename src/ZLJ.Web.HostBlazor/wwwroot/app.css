@@ -69,6 +69,17 @@ ol {
 .ant-table-row.odd td.ant-table-column-sort {
     background-color:white;
 }
-.ant-modal-body {
+/*.ant-modal-body {
     background-color:#f7f7f7;
+}*/
+.ant-descriptions-bordered .ant-descriptions-item-label {
+    background-color: #f8f8f8;
+}
+
+.ant-descriptions-bordered .ant-descriptions-row {
+    border-bottom-color: #eeeeee;
+}
+
+.ant-descriptions-item-label {
+    text-align: end;
 }

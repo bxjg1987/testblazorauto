@@ -11,30 +11,47 @@
     {
         <Form @ref="frm" ValidateOnChange="true" Model="editDto" LabelColSpan="4" WrapperColSpan="20" OnFinish="OnFinish">
 
-            <FormItem Label="显示名">
-                <Input @bind-Value="@context.DisplayName" />
-            </FormItem>
-            <FormItem Label="备注">
-                <Input @bind-Value="@context.Description" />
-            </FormItem>
-            <FormItem NoStyle=true>
-                <Input Value="@context.Id" Type="hidden" />
-            </FormItem>
-            @*  <ChildContent>
+            @*    <FormItem Label="显示名">
+        <Input @bind-Value="@context.DisplayName" />
+        </FormItem>
+        <FormItem Label="备注">
+        <Input @bind-Value="@context.Description" />
+        </FormItem>
+        <FormItem NoStyle=true>
+        <Input Value="@context.Id" Type="hidden" />
+        </FormItem>
+        *@
+            <Descriptions Bordered Size="small">
+                <DescriptionsItem Title="名称">
+                    <Input @bind-Value="@context.DisplayName" />
+                </DescriptionsItem>
+                <DescriptionsItem Title="名称">
+                    <Input @bind-Value="@context.Description" />
+                </DescriptionsItem>
+            </Descriptions>
 
-        </ChildContent> *@
+
+
         </Form>
     }
     else
     {
-        <GridRow>
-            <GridCol Span="4">显示名</GridCol>
-            <GridCol Span="20">@dto?.DisplayName</GridCol>
-            </GridRow>
-        <GridRow>
-            <GridCol Span="4">备注</GridCol>
-            <GridCol Span="20">@dto?.Description</GridCol>
-            </GridRow>
+        <Descriptions Bordered Size="small">
+            <DescriptionsItem Title="名称">
+                <Input @bind-Value="@dto.DisplayName" />
+            </DescriptionsItem>
+            <DescriptionsItem Title="名称">
+                <Input @bind-Value="@dto.Description" />
+            </DescriptionsItem>
+        </Descriptions>
+        @*    <GridRow>
+    <GridCol Span="4">显示名</GridCol>
+    <GridCol Span="20">@dto?.DisplayName</GridCol>
+    </GridRow>
+    <GridRow>
+    <GridCol Span="4">备注</GridCol>
+    <GridCol Span="20">@dto?.Description</GridCol>
+    </GridRow> *@
     }
 
 

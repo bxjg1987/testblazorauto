@@ -93,7 +93,7 @@
         <Button OnClick="CloseDialog">关闭</Button>
     </Template>;
 }
-<Modal DestroyOnClose="true" Footer="renderFragment" @bind-Visible="isCreateDialogVisible" Draggable="true">
+<Modal DestroyOnClose="true" Footer="renderFragment" @bind-Visible="isCreateDialogVisible" Draggable="true" Width=@("40vw")>
     <TitleTemplate>
         <Icon Type="plus" Theme="outline" />
         新增@(FuncName)
@@ -111,7 +111,7 @@
         <Button OnClick="x=>isShowDetailUpdate=false">关闭</Button>
     </Template>;
 }
-<Modal DestroyOnClose="true" Footer="renderFragment1" @bind-Visible="isShowDetailUpdate" Draggable="true">
+<Modal DestroyOnClose="true" Footer="renderFragment1" @bind-Visible="isShowDetailUpdate" Draggable="true" Width=@("40vw")>
     <TitleTemplate>
         <SectionOutlet SectionName=@(FuncName+ "-detail-update-title") />
     </TitleTemplate>
