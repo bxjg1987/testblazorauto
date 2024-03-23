@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Abp.Domain.Uow;
-using BXJG.Utils;
 using BXJG.Utils.Share;
 
 namespace Abp.Domain.Uow

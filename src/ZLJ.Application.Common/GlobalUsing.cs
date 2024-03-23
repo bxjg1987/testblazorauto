@@ -28,7 +28,7 @@ global using Abp.Domain.Uow;
 global using Microsoft.EntityFrameworkCore;
 global using System.Collections.ObjectModel;
 global using Abp.Application.Services;
-global using BXJG.Utils.File;
+global using BXJG.Utils.Files;
 global using System.Linq.Expressions;
 global using Abp.Linq.Expressions;
 global using Abp.EntityHistory;

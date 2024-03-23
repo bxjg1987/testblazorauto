@@ -5,7 +5,7 @@
 		<text name="数据字典" value="Data dictionary" />
 		<text name="此节点不允许修改！" value="This node is not allowed to be modified!" />
 		<text name="系统预设数据不允许删除！" value="System preset data cannot be deleted!" />
-
+		<text name="QuanjuPeizhi" value="global configuraion" />
 		<text name="操作成功！" value="操作成功！" />
 		<text name="操作失败！" value="操作失败！" />
 		<text name="新增成功！" value="新增成功！" />
@@ -44,7 +44,8 @@
 		<text name="删除" value="Delete" />
 		<text name="查询" value="Search" />
 		<text name="Insufficient data rights">Insufficient data rights！</text>
-
+		
+		<text name="文件管理">file manager</text>
 		<text name="记住我" value="Remember me" />
 		<text name="忘记密码？" value="Forget the password?" />
 

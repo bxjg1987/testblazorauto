@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Utils.File
+namespace BXJG.Utils.Share.Files
 {
     /// <summary>
     /// 附件编辑模型

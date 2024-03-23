@@ -4,6 +4,9 @@ using Abp.Configuration;
 using Abp.Localization;
 using Abp.MultiTenancy;
 using Abp.Net.Mail;
+using BXJG.Utils.Share;
+using ZLJ.Core.Configuration;
+using ZLJ.Core.Web;
 
 namespace ZLJ.EntityFrameworkCore.Seed.Host
 {
@@ -43,8 +46,9 @@ namespace ZLJ.EntityFrameworkCore.Seed.Host
             {
                 return;
             }
-
+            //var configuration = AppConfigurations.Get(WebContentDirectoryFinder.CalculateContentRootFolder());
             _context.Settings.Add(new Setting(tenantId, null, name, value));
+            //_context.Settings.Add(new Setting(default, default, BXJGUtilsConsts.FuwuqiGen, configuration["App:ServerRootAddress"] ));
             _context.SaveChanges();
         }
     }

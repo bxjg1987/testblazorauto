@@ -11,7 +11,7 @@ using System.Reflection;
 //using ZLJ.WorkOrder.RentOrderItemWorkOrder;
 using ZLJ.EntityFrameworkCore.EntityFrameworkCore.EFMap.BaseInfo;
 //using BXJG.WorkOrder.EFMaps;
-using BXJG.Utils.File;
+using BXJG.Utils.Files;
 using BXJG.Utils.EFCore.EFMaps;
 //using ZLJ.WorkOrder.Workload;
 using System;

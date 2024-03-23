@@ -7,7 +7,7 @@ using Abp.Application.Services.Dto;
 using Abp.AspNetCore.Mvc.Controllers;
 using Abp.Authorization;
 using BXJG.Utils.Application.Share.Files;
-using BXJG.Utils.File;
+using BXJG.Utils.Files;
 using BXJG.Utils.Share;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -20,35 +20,44 @@ using Microsoft.Extensions.Options;
 namespace BXJG.Utils.Web.Controllers
 {
     /*
-     * 简单的文件上传功能，后期再详细设计
-     * 目前考虑直接面向外网发布时使用Kestrel服务器。好像没有内置的文件的大小和类型限制
-     * 简单的办法使用asp.net core的配置或选项系统来实现
-     * 考虑多一点可能需要abp的settings或版本特征系统来完成
      * 目前只做以下限制：
      *      大小
      *      后缀（这种方式并不安全）
      *      必须为登录的用户
      */
 
-    [Route("api/BXJGFile/[action]")]
+    /// <summary>
+    /// 通用的文件管理接口
+    /// 上传、下载、删除等
+    /// 目前仅考虑操作权限，不考虑数据权限
+    /// </summary>
+    [Route("api/[controller]]/[action]")]
     [ApiController]
+    [AbpAuthorize]
     public class BXJGFileController : AbpController
     {
-        private readonly TempFileManager tempFileManager;
+        private readonly FileManager tempFileManager;
 
-        public BXJGFileController(TempFileManager tempFileManager)
+        public BXJGFileController(FileManager tempFileManager)
         {
             base.LocalizationSourceName = BXJGUtilsConsts.LocalizationSourceName;
             this.tempFileManager = tempFileManager;
         }
 
+        //图片均生成缩略图，考虑到pc和移动端，目前自动生成两种尺寸的缩略图
+        //尺寸大小直接硬编码，因为目前市面上的大屏 小屏就那几种
+
+        /// <summary>
+        /// 上传一个或多个文件，仅存储到临时目录
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
         [HttpPost]
-        [AbpAuthorize]
-        public async Task<List<FileDto>> UploadAsync(IFormFileCollection file, [FromHeader] bool createThum = false, [FromHeader] int thumSize = 300)
+        public async Task<List<FileDto>> UploadAsync(IFormFileCollection file)
         {
             // var rts = new List<FileUploadResult>();
-            var fs = file.Select(c => new FileInput(c.FileName, c.OpenReadStream(), c.ContentType));
-            var r = await tempFileManager.UploadAsync(createThum, thumSize, fs.ToArray());
+            var fs = file.Select(c => new FileInput(c.FileName, c.OpenReadStream()));
+            var r = await tempFileManager.UploadAsync( fs.ToArray());
             return ObjectMapper.Map<List<FileDto>>(r);
             //return r.Select(c => new FileDto
             //{

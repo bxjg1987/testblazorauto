@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Abp.Configuration;
-using BXJG.Utils.File;
 using BXJG.Utils.Localization;
+using BXJG.Utils.Share;
+using BXJG.Utils.Share.Files;
 using Microsoft.Extensions.Configuration;
 using ZLJ.Core.Localization;
 //using ZLJ.WorkOrder.Workload;
@@ -13,7 +14,7 @@ namespace ZLJ.Core.Configuration
     {
         public override IEnumerable<SettingDefinition> GetSettingDefinitions(SettingDefinitionProviderContext context)
         {
-            var sys = new SettingDefinitionGroup(Consts.SettingKeyUploadGroup, "文件上传设置".UtilsLI());
+            var sys = new SettingDefinitionGroup(BXJGUtilsConsts.SettingKeyUploadGroup, "文件上传设置".UtilsLI());
 
             var sys2 = new SettingDefinitionGroup(
                    ZLJ.Core.Share.ZLJConsts.DataDictionaryMigrationValueSettingGroupKey,
@@ -49,13 +50,13 @@ namespace ZLJ.Core.Configuration
                     sys2,
                     scopes: SettingScopes.Tenant,
                     isVisibleToClients: true),
-                new SettingDefinition(
-                    Consts.SettingKeyUploadType,
-                    Consts.DefaultUploadTypes + ",docx",
-                    "允许的文件类型".UtilsLI(),
-                    sys2,
-                    scopes: SettingScopes.Application,
-                    isVisibleToClients: false),
+                //new SettingDefinition(
+                //    BXJGUtilsConsts.SettingKeyUploadType,
+                //    BXJGUtilsConsts.DefaultUploadTypes + ",docx",
+                //    "允许的文件类型".UtilsLI(),
+                //    sys2,
+                //    scopes: SettingScopes.Application,
+                //    isVisibleToClients: false),
                 new SettingDefinition(AppSettingNames.UiTheme, "red", scopes: SettingScopes.Application | SettingScopes.Tenant | SettingScopes.User, isVisibleToClients: true)
             };
             return list;

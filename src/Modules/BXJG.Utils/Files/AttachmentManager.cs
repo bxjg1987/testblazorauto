@@ -13,8 +13,9 @@ using System.Linq.Dynamic.Core;
 using BXJG.Common.Extensions;
 using System.IO;
 using BXJG.Utils.Share;
+using BXJG.Utils.Share.Files;
 
-namespace BXJG.Utils.File
+namespace BXJG.Utils.Files
 {
     /// <summary>
     /// 一个low版附件管理器
@@ -23,14 +24,14 @@ namespace BXJG.Utils.File
     /// </summary>
     public class AttachmentManager : DomainService
     {
-        private readonly TempFileManager tempFileManager;
+        private readonly FileManager tempFileManager;
         private readonly IRepository<AttachmentEntity, Guid> repository;
         public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; } = NullAsyncQueryableExecuter.Instance;
         private readonly string entityType;
 
-        public AttachmentManager(TempFileManager tempFileManager, IRepository<AttachmentEntity, Guid> repository, string entityType)
+        public AttachmentManager(FileManager tempFileManager, IRepository<AttachmentEntity, Guid> repository, string entityType)
         {
-            base.LocalizationSourceName = BXJGUtilsConsts.LocalizationSourceName;
+            base.LocalizationSourceName = Share.BXJGUtilsConsts.LocalizationSourceName;
             this.tempFileManager = tempFileManager;
             this.repository = repository;
             this.entityType = entityType;
@@ -193,7 +194,7 @@ namespace BXJG.Utils.File
     /// <typeparam name="TEntity">附件所属实体类型</typeparam>
     public class AttachmentManager<TEntity> : AttachmentManager
     {
-        public AttachmentManager(TempFileManager tempFileManager, IRepository<AttachmentEntity, Guid> repository)
+        public AttachmentManager(FileManager tempFileManager, IRepository<AttachmentEntity, Guid> repository)
             : base(tempFileManager, repository, typeof(TEntity).FullName)
         {
         }

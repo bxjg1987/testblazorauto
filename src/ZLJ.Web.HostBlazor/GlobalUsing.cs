@@ -33,7 +33,7 @@ global using Abp;
 global using Abp.Authorization;
 global using Abp.Threading;
 global using Abp.Threading.Extensions;
-global using BXJG.Utils.File;
+global using BXJG.Utils.Files;
 global using System.Linq.Expressions;
 global using Abp.Linq.Expressions;
 global using Abp.EntityHistory;

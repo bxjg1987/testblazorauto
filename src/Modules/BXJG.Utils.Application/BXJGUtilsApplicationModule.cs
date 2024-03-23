@@ -5,7 +5,7 @@ using Abp;
 using BXJG.Utils.Localization;
 using BXJG.Utils.Enums;
 using Abp.Threading.BackgroundWorkers;
-using BXJG.Utils.File;
+using BXJG.Utils.Files;
 using BXJG.Common;
 using Abp.Dependency;
 using BXJG.Utils.DynamicProperty;

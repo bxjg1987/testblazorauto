@@ -5,7 +5,7 @@ using Abp;
 using BXJG.Utils.Localization;
 using BXJG.Utils.Enums;
 using Abp.Threading.BackgroundWorkers;
-using BXJG.Utils.File;
+using BXJG.Utils.Files;
 using BXJG.Common;
 using Abp.Dependency;
 using BXJG.Utils.DynamicProperty;
@@ -41,7 +41,7 @@ namespace BXJG.Utils
                 new EnumLocalizationDefine(typeof(Gender), "bool"),
             });
             BXJGUtilsLocalizationConfigurer.Configure(Configuration.Localization);
-            Configuration.Settings.Providers.Add<BXJGUtilsFileSettingProvider>();
+            Configuration.Settings.Providers.Add<BXJGUtilsSettingProvider>();
             //查看abp源码 uow拦截器调用manager.begin，内部从ioc获取uow对象efuow 然后设置到asynclocal上的
             IocManager.IocContainer.Kernel.ComponentCreated += Kernel_ComponentCreated;
         }
@@ -84,7 +84,7 @@ namespace BXJG.Utils
             IocManager.RegService(services => services.AddBXJGCommon());
             IocManager.Register(typeof(DynamicPropertyManager<>), DependencyLifeStyle.Singleton);
 
-            IocManager.Register(typeof(AttachmentManager<>), DependencyLifeStyle.Transient);
+            //IocManager.Register(typeof(AttachmentManager<>), DependencyLifeStyle.Transient);
             //调试模式时默认实现获取的路径是 ..\bin\debug\wwwroot
             //而asp.net core默认读取是在ZLJ.Web.Host\wwwroot 导致上传的文件看不到效果
             //发布到服务器后不存在这个问题，调试时需要在web.core模块PreInitialize中替换服务，注意经过测试一定要在PreInitialize中替换
@@ -127,8 +127,8 @@ namespace BXJG.Utils
             //{
 
             //Task.Yield();
-            var workManager = IocManager.Resolve<IBackgroundWorkerManager>();
-            workManager.Add(IocManager.Resolve<RemoveUploadFileWorker>());
+          //  var workManager = IocManager.Resolve<IBackgroundWorkerManager>();
+         //   workManager.Add(IocManager.Resolve<RemoveUploadFileWorker>());
             //}
             // catch
             // {

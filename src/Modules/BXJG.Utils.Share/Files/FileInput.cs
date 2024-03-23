@@ -3,20 +3,19 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace BXJG.Utils.File
+namespace BXJG.Utils.Share.Files
 {
     public class FileInput
     {
-        public FileInput(string fileName, Stream stream, string contentType)
+        public FileInput(string fileName, Stream stream, string ct)
         {
             FileName = fileName;
             Stream = stream;
-            ContentType = contentType;
+            ContentType = ct;
         }
-
+        public string ContentType { get; set; }
         public string FileName { get; private set; }
         public Stream Stream { get; private set; }
-        public string ContentType { get; private set; }
         public long Length => Stream.Length;
     }
 

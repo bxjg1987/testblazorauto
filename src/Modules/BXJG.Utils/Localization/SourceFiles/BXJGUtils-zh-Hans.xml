@@ -6,7 +6,7 @@
 		<text name="此节点不允许修改！" value="此节点不允许修改！" />
 		<text name="系统预设数据不允许删除！" value="系统预设数据不允许删除！" />
 		<text name="GeneralTreeMenu" value="数据字典" />
-
+		<text name="QuanjuPeizhi" value="全局配置" />
 		<text name="warning" value="操作确认" />
 		<text name="操作成功！" value="操作成功！" />
 		<text name="操作失败！" value="操作失败！" />
@@ -29,6 +29,7 @@
 		<text name="修改" value="修改" />
 		<text name="删除" value="删除" />
 		<text name="查询" value="查询" />
+		<text name="文件管理">文件管理</text>
 		<text name="Nationwide" value="全国" />
 		<text name="HomePage" value="主页" />
 		<text name="About" value="关于我们" />

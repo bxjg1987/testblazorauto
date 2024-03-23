@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <Compile Remove="Authorization\AuthorizationExtensionts.cs" />
+    <Compile Remove="Controllers\BXJGFileController.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,5 +31,9 @@
   <ItemGroup>
     <ProjectReference Include="..\..\libs\BXJG.Common.Web\BXJG.Common.Web.csproj" />
     <ProjectReference Include="..\BXJG.Utils.Application\BXJG.Utils.Application.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\" />
   </ItemGroup>
 </Project>

@@ -3,19 +3,21 @@ using Abp.Domain.Uow;
 using Abp.Threading.BackgroundWorkers;
 using Abp.Threading.Timers;
 using BXJG.Common;
+using BXJG.Utils.Share;
+using BXJG.Utils.Share.Files;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace BXJG.Utils.File
+namespace BXJG.Utils.Files
 {
     public class RemoveUploadFileWorker : PeriodicBackgroundWorkerBase, ISingletonDependency
     {
         string dir;
         public RemoveUploadFileWorker(AbpTimer timer, IEnv env) : base(timer)
         {
-            dir = Path.Combine(env.WebRoot, Consts.UploadTemp);
+            dir = Path.Combine(env.WebRoot, BXJGUtilsConsts.UploadTemp);
             Timer.Period = 1000 * 60;//时间别太长，默认情况下应用长时间不被访问，应用会终止
         }
         //[UnitOfWork]
