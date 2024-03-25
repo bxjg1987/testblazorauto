@@ -16,10 +16,10 @@ namespace BXJG.Utils.Files
 {
     public class RemoveUploadFileWorker : PeriodicBackgroundWorkerBase, ITransientDependency
     {
-        /// <summary>
-        /// 获取安全的上传目录，一般是非应用程序目录 可读写 不可执行
-        /// </summary>
-        protected string _uploadDir;
+        ///// <summary>
+        ///// 获取安全的上传目录，一般是非应用程序目录 可读写 不可执行
+        ///// </summary>
+        //protected string _uploadDir;
         /// <summary>
         /// 安全上传时的临时目录
         /// </summary>
@@ -27,9 +27,9 @@ namespace BXJG.Utils.Files
 
         public RemoveUploadFileWorker(AbpTimer timer, IConfiguration Configuration) : base(timer)
         {
-            Timer.Period = 1000 * 60*10;//时间别太长，默认情况下应用长时间不被访问，应用会终止
-                                     //未考虑并发冲突，也基本不需要
-            _uploadDir = Configuration["Upload:SaveDir"]; // d:\app\wwwroot\upload 
+            Timer.Period = 1000 * 60 * 10;//时间别太长，默认情况下应用长时间不被访问，应用会终止
+                                          //未考虑并发冲突，也基本不需要
+            var _uploadDir = Configuration["Upload:SaveDir"]; // d:\app\wwwroot\upload 
             _tempDir = Path.Combine(_uploadDir, BXJGUtilsConsts.UploadTemp); // d:\app\wwwroot\upload\temp
         }
         //[UnitOfWork]
