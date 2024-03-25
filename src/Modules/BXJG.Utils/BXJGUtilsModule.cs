@@ -127,8 +127,8 @@ namespace BXJG.Utils
             //{
 
             //Task.Yield();
-          //  var workManager = IocManager.Resolve<IBackgroundWorkerManager>();
-         //   workManager.Add(IocManager.Resolve<RemoveUploadFileWorker>());
+            var workManager = IocManager.Resolve<IBackgroundWorkerManager>();
+            workManager.Add(IocManager.Resolve<RemoveUploadFileWorker>());
             //}
             // catch
             // {
