@@ -20,8 +20,6 @@ namespace BXJG.Utils.Share
         /// </summary>
         public const int ExtDataMaxLength = 4000;
 
-
-
         static BXJGUtilsConsts()
         {
           //  UploadTemp = @$"upload{Path.DirectorySeparatorChar}temp";
@@ -32,9 +30,8 @@ namespace BXJG.Utils.Share
         /// <summary>
         /// upload\temp
         /// </summary>
-        public const string UploadTemp= nameof (UploadTemp);
+        public const string UploadTemp= "temp";
         public static readonly string UploadTempUrl;
-
 
         #region 全局配置
         /// <summary>
@@ -50,7 +47,6 @@ namespace BXJG.Utils.Share
         /// </summary>
         public const string Shangchuangen = nameof(Shangchuangen);
         #endregion
-
 
         public const string SettingKeyUploadGroup = "BXJGUtilsFileUploadGroup";
         public const string SettingKeyUploadSize = "BXJGUtilsFileUploadSize";
@@ -82,7 +78,6 @@ namespace BXJG.Utils.Share
         #endregion
 
         #region 附件权限
-
         public const int AttachmentPermissionNameMaxLength = 100;
         #endregion
 

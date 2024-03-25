@@ -28,6 +28,8 @@ using Abp;
 using Abp.Domain.Repositories;
 using Microsoft.EntityFrameworkCore.ValueGeneration;
 using Abp.Timing;
+using Abp.Runtime.Session;
+using Abp.BackgroundJobs;
 namespace BXJG.Utils.Files
 {
     /// <summary>
@@ -35,7 +37,7 @@ namespace BXJG.Utils.Files
     /// mvc或web api层的controller接收上传的文件，并通过此类进行文件的验证和保存
     /// 开始将文件存储在临时目录中，确认后移动到正式目录
     /// </summary>
-    public class FileManager : BXJGUtilsAppServiceBase, IShouldInitialize
+    public class FileManager : BXJGBaseDomainService, IShouldInitialize, IBackgroundJob<sdfsdf>
     {
         //api服务器根和上传目录是不允许修改的，因此不使用abp的settings系统
 
@@ -68,15 +70,17 @@ namespace BXJG.Utils.Files
 
         public IConfiguration Configuration { get; set; }
 
+        public IAbpSession AbpSession { get; set; }
+        public IBackgroundJobManager BackgroundJobManager { get; set; }
         #endregion
 
         //去掉构造函数，便于子类重写
         public void Initialize()
         {
-           // _serverRootUrl = Configuration["App:ServerRootAddress"];
+            // _serverRootUrl = Configuration["App:ServerRootAddress"];
             //_regex = new Regex($@"<img.+?src=['""]{_serverRootUrl}(\S+)['""]", RegexOptions.Multiline | RegexOptions.IgnoreCase);
             //_settingManager = settingManager;
-
+            //base.LocalizationSourceName = 
             //_webRootDir = env.WebRoot; // d:\app\wwwroot
             //未考虑并发冲突，也基本不需要
             _uploadDir = Configuration["Upload:SaveDir"]; // d:\app\wwwroot\upload 
@@ -92,7 +96,7 @@ namespace BXJG.Utils.Files
         /// </summary>
         /// <param name="stream"></param>
         /// <returns></returns>
-        public virtual async Task<string> UploadAsync( Stream stream)
+        public virtual async Task<string> Upload2Temp(Stream stream)
         {
             var ts = await SettingManager.GetSettingValueAsync(BXJGUtilsConsts.SettingKeyUploadType); //设置中允许的后缀名 pdf,jpg...
             var aryts = ts.Split(','); //设置中允许的后缀名 ["pdf","jpg"...]
@@ -116,7 +120,7 @@ namespace BXJG.Utils.Files
             #region 保存文件
 
             //var hz = Path.GetExtension(item.FileName); //文件后缀.jpg
-            var wjm = Guid.NewGuid().ToString("n") + hzm2; //xxx.jpg  xxx=guid
+            var wjm = GuidGenerator.Create().ToString("n") + hzm2; //xxx.jpg  xxx=guid
 
             //var dateDir = Path.Combine(_tempDir, DateTime.Now.ToString("yyyyMMdd")); //d:\app\wwwroot\upload\temp\20201003
             //if (!Directory.Exists(dateDir))
@@ -147,8 +151,15 @@ namespace BXJG.Utils.Files
             //}
             #endregion
 
-            //return Absolute2RelativePath(absolutePath);
-            return absolutePath;
+            return Absolute2RelativePath(absolutePath);
+            //  return absolutePath;
+        }
+
+        public virtual async Task<FileEntity> Upload(string fileName, string fileRelativePath)
+        {
+            var file = await AddFileRecord(fileName, fileRelativePath);
+            Move(fileRelativePath, file);
+            return file;
         }
 
         /// <summary>
@@ -157,7 +168,7 @@ namespace BXJG.Utils.Files
         /// <param name="fileName"></param>
         /// <param name="fileRelativePath"></param>
         /// <returns></returns>
-        public virtual async Task<FileEntity> AddFileRecord(string fileName, string fileRelativePath)
+        protected virtual async Task<FileEntity> AddFileRecord(string fileName, string fileRelativePath)
         {
             /*
              * dbcontext是一个请求一个实例，所以在业务系统中先开事务，然后执行此逻辑，最后提交事务
@@ -172,9 +183,9 @@ namespace BXJG.Utils.Files
             {
                 Ext = Path.GetExtension(fileRelativePath),
                 // FullName = ur.FileName,
-                Id = GuidGenerator.Create(),
+                Id = Guid.Parse(Path.GetFileNameWithoutExtension(fileRelativePath)),
                 //Name = Path.GetFileName(ur.TempPath),
-                Status = FileStatus.Moving,
+                //Status = FileStatus.Moving,
                 RealName = fileName,
                 ResponseContentType = MimeGuesser.GuessMimeType(jdlj), //ur.ContentType,
 
@@ -182,17 +193,23 @@ namespace BXJG.Utils.Files
                 //ThumbnailRelativePath = Path.Combine(TimingProvider.Get().ToString("yyyyMMdd"), Path.GetFileName(ur.TempPath).Replace(".", "_thum.")),
 
             };
+            var nyr = Clock.Now.ToString("yyyyMMdd");
 
             if (AbpSession.TenantId.HasValue)
             {
-                file.RelativePath = Path.Combine(AbpSession.TenantId.Value.ToString(),
-                                                 Clock.Now.ToString("yyyyMMdd"),
-                                                 file.RealFullName);
-
-                MimeGuesser.GuessFileType("");
+                file.RelativePath = Path.Combine(AbpSession.TenantId.Value.ToString(), nyr, Path.GetFileName(fileRelativePath));
                 if (file.ResponseContentType.StartsWith("image/"))
-                    file.ThumbnailRelativePath = file.RelativePath.Replace(file.RealFullName, "thum_" + file.RelativePath);
-                //ur.FileRelativePath.Replace(BXJGUtilsConsts.UploadTemp, _uploadDir);
+                {
+                    file.RelativePathThumbnail = Path.Combine(AbpSession.TenantId.Value.ToString(), nyr, Path.GetFileNameWithoutExtension(fileRelativePath) + ".jpg");
+                }
+            }
+            else
+            {
+                file.RelativePath = Path.Combine(nyr, Path.GetFileName(fileRelativePath));
+                if (file.ResponseContentType.StartsWith("image/"))
+                {
+                    file.RelativePathThumbnail = Path.Combine(nyr, Path.GetFileNameWithoutExtension(fileRelativePath) + ".jpg");
+                }
             }
             //if (permissions != default)
             //{
@@ -207,7 +224,6 @@ namespace BXJG.Utils.Files
             //await db.Set<FileEntity>().AddAsync(file, cancellationToken);
             //await db.SaveChangesAsync(cancellationToken);
             #endregion
-
             return file;
         }
 
@@ -221,134 +237,72 @@ namespace BXJG.Utils.Files
         //    }
         //}
 
-        
-        public ValueTask<List<FileResult>> MoveAsync(string file, string str, string str2 = default)
+        protected virtual void Move(string tempRelativePath, FileEntity file, int w = 180)
         {
-            var list = new List<FileResult>();
-
-            string item = file;
-
-            item = Absolute2RelativeUrl(item);
-
-            item = item.UrlSeparatorChar2DirectorySeparatorChar();
-
-            //修改时，有部分文件是不需要移动的
-            if (!item.Contains(BXJGUtilsConsts.UploadTemp, StringComparison.OrdinalIgnoreCase))
+            var des = Relative2AbsolutePath(file.RelativePath);                     //目标文件绝对路径
+            var dir = Path.GetDirectoryName(des);
+            if (!Directory.Exists(dir))
             {
-                var rr = new FileResult
-                {
-                    FileAbsolutePath = Relative2AbsolutePath(item),
-                    FileRelativePath = item,
-                    FileUrl = Relative2AbsoluteUrl(item.DirectorySeparatorChar2UrlSeparatorChar())
-                };
-                rr.ThumAbsolutePath = ConvertToThumPath(rr.FileAbsolutePath);
-                if (System.IO.File.Exists(rr.ThumAbsolutePath))
-                {
-                    rr.ThumRelativePath = Absolute2RelativePath(rr.ThumAbsolutePath);
-                    rr.ThumUrl = ConvertToThumPath(rr.FileUrl);
-                }
-                else
-                    rr.ThumAbsolutePath = default;
-
-                list.Add(rr);
-                continue;
+                Directory.CreateDirectory(dir);
             }
-
-            var moveResult = new FileResult();
-
-            //移动文件
-            var sourceAbsolutePath = Relative2AbsolutePath(item); //temp绝对路径
-            moveResult.FileRelativePath = TempToOkPath(item); //正式目录相对路径
-            moveResult.FileUrl = Relative2AbsoluteUrl(moveResult.FileRelativePath.DirectorySeparatorChar2UrlSeparatorChar());
-            moveResult.FileAbsolutePath = Relative2AbsolutePath(moveResult.FileRelativePath); //正式目录绝对路径
-            if (!System.IO.File.Exists(moveResult.FileAbsolutePath))
+            File.Move(Relative2AbsolutePath(tempRelativePath), des);
+            if (file.RelativePathThumbnail.IsNotNullOrWhiteSpaceBXJG())
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(moveResult.FileAbsolutePath));
-                System.IO.File.Move(sourceAbsolutePath, moveResult.FileAbsolutePath);
+                //file.RelativePathThumbnail = Path.Combine(TimingProvider.Get().ToString("yyyyMMdd"), Path.GetFileNameWithoutExtension(file.RelativePath)) + ".jpg";
+                ImageHelper.MakeThumb(des, Relative2AbsolutePath(file.RelativePathThumbnail));
+                //Helper.MakeThumb(des, Relative2Absolute(file.RelativePathThumbnail), w);
             }
-
-            //移动缩略图
-            var thumItem = ConvertToThumPath(item); //temp缩略图相对路径
-            var sourceThumAbsolutePath = Relative2AbsolutePath(thumItem); //temp缩略图绝对路径
-            if (System.IO.File.Exists(sourceThumAbsolutePath))
-            {
-                moveResult.ThumRelativePath = TempToOkPath(thumItem); //缩略图正式目录相对路径
-                moveResult.ThumAbsolutePath = Relative2AbsolutePath(moveResult.ThumRelativePath); //缩略图正式目录绝对路径
-                moveResult.ThumUrl = ConvertToThumPath(moveResult.FileUrl);
-                System.IO.File.Move(sourceThumAbsolutePath, moveResult.ThumAbsolutePath);
-            }
-
-            list.Add(moveResult);
-
-
-            return new ValueTask<List<FileResult>>(list);
         }
 
         /// <summary>
-        /// 删除图像
+        /// 删除文件
         /// </summary>
-        /// <param name="inputs"></param>
+        /// <param name="file"></param>
         /// <returns></returns>
-        public ValueTask RemoveAsync(params string[] inputs)
+        public virtual async Task Remove(FileEntity file)
         {
-            foreach (var item1 in inputs)
+            await Repository.DeleteAsync(file);
+            //BackgroundJob.Enqueue(() => File.Delete(Relative2AbsolutePath(file.RelativePath)));
+            //BackgroundJob.Enqueue(() => File.Delete(Relative2AbsolutePath(file.RelativePathThumbnail)));
+            await BackgroundJobManager.EnqueueAsync<FileManager, sdfsdf>(new sdfsdf
             {
-                string item = item1;
-                //if (item.StartsWith(_serverRootUrl))
-                item = Absolute2RelativeUrl(item);
-                item = item.UrlSeparatorChar2DirectorySeparatorChar();
-                item = Relative2AbsolutePath(item);
-                try
-                {
-                    //  var f = Relative2AbsolutePath(item);
-                    System.IO.File.Delete(item);
-                }
-                catch (Exception ex)
-                {
-                    Logger.Warn("文件删除失败", ex);
-                }
-
-                try
-                {
-                    //  var f = Relative2AbsolutePath(item);
-                    var d = ConvertToThumPath(item);
-                    System.IO.File.Delete(d);
-                }
-                catch (Exception ex)
-                {
-                    Logger.Warn("缩略图删除失败", ex);
-                }
-            }
-
-            return new ValueTask();
+                file1 = Relative2AbsolutePath(file.RelativePath),
+                file2 = Relative2AbsolutePath(file.RelativePathThumbnail),
+            });
         }
 
-        #region 文章中的图片处理
-
-        /// <summary>
-        /// 获取指定内容中所包含的图片的相对路径
-        /// /aaa/bbb/cc.jpg
-        /// </summary>
-        /// <param name="content"></param>
-        /// <returns></returns>
-        public string[] GetMatchedImagePath(string content)
+        public void Execute(sdfsdf args)
         {
-            //Regex rg = new Regex($@"<img.+src=('|""){server}/(\S+)('|"")", RegexOptions.Multiline);
-            return _regex.Matches(content).Select(c => c.Groups[1].Value).ToArray();
+            File.Delete(args.file1);
+            File.Delete(args.file2);
         }
 
-        /// <summary>
-        /// 去掉文本中图片地址的temp路径片段
-        /// 建议在保存时调用，而不是每次查询时替换
-        /// </summary>
-        /// <param name="content"></param>
-        /// <returns></returns>
-        public string ReplaceImagePath(string content)
-        {
-            return _regex.Replace(content, c => c.Value.Replace("temp" + Path.DirectorySeparatorChar, ""));
-        }
+        //#region 文章中的图片处理
 
-        #endregion
+        ///// <summary>
+        ///// 获取指定内容中所包含的图片的相对路径
+        ///// /aaa/bbb/cc.jpg
+        ///// </summary>
+        ///// <param name="content"></param>
+        ///// <returns></returns>
+        //public string[] GetMatchedImagePath(string content)
+        //{
+        //    //Regex rg = new Regex($@"<img.+src=('|""){server}/(\S+)('|"")", RegexOptions.Multiline);
+        //    return _regex.Matches(content).Select(c => c.Groups[1].Value).ToArray();
+        //}
+
+        ///// <summary>
+        ///// 去掉文本中图片地址的temp路径片段
+        ///// 建议在保存时调用，而不是每次查询时替换
+        ///// </summary>
+        ///// <param name="content"></param>
+        ///// <returns></returns>
+        //public string ReplaceImagePath(string content)
+        //{
+        //    return _regex.Replace(content, c => c.Value.Replace("temp" + Path.DirectorySeparatorChar, ""));
+        //}
+
+        //#endregion
 
         ///// <summary>
         ///// 将不带host的文件相对路径转换为完整路径
@@ -376,18 +330,18 @@ namespace BXJG.Utils.Files
         //    return p;
         //}
 
-        /// <summary>
-        /// 转换为缩略图路径
-        /// ...xx.jpg -> ...xxthum.jpg
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public string ConvertToThumPath(string path)
-        {
-            if (!path.Contains("thum."))
-                return path.Insert(path.LastIndexOf("."), "thum");
-            return path;
-        }
+        ///// <summary>
+        ///// 转换为缩略图路径
+        ///// ...xx.jpg -> ...xxthum.jpg
+        ///// </summary>
+        ///// <param name="path"></param>
+        ///// <returns></returns>
+        //public string ConvertToThumPath(string path)
+        //{
+        //    if (!path.Contains("thum."))
+        //        return path.Insert(path.LastIndexOf("."), "thum");
+        //    return path;
+        //}
 
         /// <summary>
         /// 绝对路径转相对路径
@@ -415,16 +369,16 @@ namespace BXJG.Utils.Files
             return path;
         }
 
-        /// <summary>
-        /// 临时目录转换为正式目录
-        /// 去掉temp
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public string TempToOkPath(string path)
-        {
-            return path.Replace(BXJGUtilsConsts.UploadTemp, BXJGUtilsConsts.UploadDir).Replace(BXJGUtilsConsts.UploadTempUrl, BXJGUtilsConsts.UploadDir);
-        }
+        ///// <summary>
+        ///// 临时目录转换为正式目录
+        ///// 去掉temp
+        ///// </summary>
+        ///// <param name="path"></param>
+        ///// <returns></returns>
+        //public string TempToOkPath(string path)
+        //{
+        //    return path.Replace(BXJGUtilsConsts.UploadTemp, BXJGUtilsConsts.UploadDir).Replace(BXJGUtilsConsts.UploadTempUrl, BXJGUtilsConsts.UploadDir);
+        //}
 
         ///// <summary>
         ///// 尝试获取缩略图的相对url

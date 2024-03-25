@@ -4,18 +4,18 @@ using Abp.Application.Services;
 using Abp.Runtime.Session;
 using BXJG.Utils.Share;
 
-namespace BXJG.Utils
+namespace BXJG.Utils.Application
 {
     /// <summary>
     /// Derive your application services from this class.
     /// </summary>
-    public abstract class BXJGUtilsAppServiceBase : ApplicationService
+    public abstract class BXJGUtilsBaseAppService : ApplicationService
     {
         //public TenantManager TenantManager { get; set; }
 
         //public UserManager UserManager { get; set; }
 
-        protected BXJGUtilsAppServiceBase()
+        protected BXJGUtilsBaseAppService()
         {
             LocalizationSourceName = BXJGUtilsConsts.LocalizationSourceName;
         }

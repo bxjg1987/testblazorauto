@@ -48,11 +48,11 @@ namespace BXJG.Utils.Files
         /// <summary>
         /// 缩略图相对路径
         /// </summary>
-        public string? ThumbnailRelativePath { get; set; }
-        /// <summary>
-        /// 文件状态
-        /// </summary>
-        public FileStatus Status { get; set; }
+        public string? RelativePathThumbnail { get; set; }
+        ///// <summary>
+        ///// 文件状态
+        ///// </summary>
+        //public FileStatus Status { get; set; }
         ///// <summary>
         ///// 访问文件时，当前用户必须拥有这里这定义权限中的任意一个
         ///// 为空则不限制

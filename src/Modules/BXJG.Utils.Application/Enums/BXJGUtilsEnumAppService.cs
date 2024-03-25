@@ -18,7 +18,7 @@ namespace BXJG.Utils.Application.Enums
     /// <summary>
     /// 通用的获取枚举下拉框列表的服务
     /// </summary>
-    public class BXJGUtilsEnumAppService : BXJGUtilsAppServiceBase, IBXJGUtilsEnumAppService
+    public class BXJGUtilsEnumAppService : BXJGUtilsBaseAppService, IBXJGUtilsEnumAppService
     {
         //IList<ComboboxDto<int>> GetByType(Type t)
         //{

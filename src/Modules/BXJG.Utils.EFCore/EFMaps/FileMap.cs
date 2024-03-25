@@ -21,7 +21,7 @@ namespace BXJG.Utils.EFCore.EFMaps
             builder.Property(c => c.Ext).HasColumnType($"varchar({BXJGUtilsConsts.FileExtMaxLength})").HasComment("文件扩展名，如：.jpg"); ;
             builder.Property(c => c.ResponseContentType).IsRequired().HasColumnType($"varchar({BXJGUtilsConsts.FileContentTypeMaxLength})").HasComment("响应的文件类型，mime");
             builder.Property(c => c.RelativePath).IsRequired().HasColumnType($"varchar({BXJGUtilsConsts.FileRelativePathMaxLength})").HasComment("相对于文件存储目录的 相对路径");
-            builder.Property(c => c.ThumbnailRelativePath).HasColumnType($"varchar({BXJGUtilsConsts.FileThumbnailRelativePathMaxLength})").HasComment("缩略图相对路径");
+            builder.Property(c => c.RelativePathThumbnail).HasColumnType($"varchar({BXJGUtilsConsts.FileThumbnailRelativePathMaxLength})").HasComment("缩略图相对路径");
         }
     }
 }
