@@ -29,11 +29,15 @@ namespace BXJG.Common
         {
             return new ValueTask<DateTime>(DateTime.Now);
         }
-      
+
         public ValueTask<DateTimeOffset> GetNowOffsetAsync()
         {
+#if NET8_0_OR_GREATER
+            return new ValueTask<DateTimeOffset>(TimeProvider.System.GetLocalNow());
+#else
             return new ValueTask<DateTimeOffset>(DateTimeOffset.Now);
+#endif
         }
-     
+
     }
 }

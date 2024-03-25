@@ -37,7 +37,7 @@ namespace BXJG.Utils.Files
     /// mvc或web api层的controller接收上传的文件，并通过此类进行文件的验证和保存
     /// 开始将文件存储在临时目录中，确认后移动到正式目录
     /// </summary>
-    public class FileManager : BXJGBaseDomainService, IShouldInitialize, IBackgroundJob<sdfsdf>
+    public class FileManager : BXJGBaseDomainService, IShouldInitialize
     {
         //api服务器根和上传目录是不允许修改的，因此不使用abp的settings系统
 
@@ -53,7 +53,7 @@ namespace BXJG.Utils.Files
         /// <summary>
         /// 安全上传时的临时目录
         /// </summary>
-        string _tempDir;
+        protected string _tempDir;
         /// <summary>
         /// abp提供的异步取消
         /// </summary>
@@ -134,21 +134,6 @@ namespace BXJG.Utils.Files
             {
                 await stream.CopyToAsync(fs, CancellationTokenProvider.Token);
             }
-            #endregion
-
-            #region 生成缩略图
-            //移动后生成
-            //if (createThum && item.ContentType.Contains("image"))
-            //{
-            //    output.ThumAbsolutePath = ConvertToThumPath(output.FileAbsolutePath);
-            //    output.ThumRelativePath = Absolute2RelativePath(output.ThumAbsolutePath);
-            //    output.ThumUrl = ConvertToThumPath(output.FileUrl);
-            //    //参考：https://docs.sixlabors.com/articles/imagesharp/resize.html
-            //    //经过测试这里load item.Stream会报错
-            //    using var img = await Image.LoadAsync(output.FileAbsolutePath, cancellationTokenProvider.Token);
-            //    img.Mutate(x => x.Resize(500, 0)); //按给定的宽度缩放
-            //    await img.SaveAsync(output.ThumAbsolutePath);
-            //}
             #endregion
 
             return Absolute2RelativePath(absolutePath);
@@ -264,18 +249,17 @@ namespace BXJG.Utils.Files
             await Repository.DeleteAsync(file);
             //BackgroundJob.Enqueue(() => File.Delete(Relative2AbsolutePath(file.RelativePath)));
             //BackgroundJob.Enqueue(() => File.Delete(Relative2AbsolutePath(file.RelativePathThumbnail)));
-            await BackgroundJobManager.EnqueueAsync<FileManager, sdfsdf>(new sdfsdf
-            {
-                file1 = Relative2AbsolutePath(file.RelativePath),
-                file2 = Relative2AbsolutePath(file.RelativePathThumbnail),
-            });
+            await BackgroundJobManager.EnqueueAsync<DeleteFileBackgroundJob, IEnumerable<string>>([
+              Relative2AbsolutePath(file.RelativePath),
+                Relative2AbsolutePath(file.RelativePathThumbnail),
+            ]);
         }
 
-        public void Execute(sdfsdf args)
-        {
-            File.Delete(args.file1);
-            File.Delete(args.file2);
-        }
+        //public void Execute(sdfsdf args)
+        //{
+        //    File.Delete(args.file1);
+        //    File.Delete(args.file2);
+        //}
 
         //#region 文章中的图片处理
 

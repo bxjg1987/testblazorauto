@@ -1,4 +1,5 @@
 ﻿using Abp.BackgroundJobs;
+using Abp.Dependency;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,13 +10,15 @@ using System.Threading.Tasks;
 namespace BXJG.Utils.Files
 {
 
-    public class sdfsdf
+    
+    public class DeleteFileBackgroundJob : IBackgroundJob<IEnumerable<string>>, ITransientDependency
     {
-        public string file1 { get; set; }
-        public string file2 { get; set; }
+        public void Execute(IEnumerable<string> args)
+        {
+            foreach (var item in args)
+            {
+                File.Delete(item);
+            }
+        }
     }
-    //public class DeleteFileBackgroundJob : IBackgroundJob<sdfsdf>
-    //{
-       
-    //}
 }
