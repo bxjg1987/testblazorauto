@@ -55,6 +55,7 @@ namespace ZLJ.EntityFrameworkCore
 
         #region 通用附件
         public DbSet<AttachmentEntity> BXJGAttachments { get; set; }
+        public DbSet<FileEntity> BXJGFiles { get; set; }
         #endregion
 
         //后期考虑实现动态DbSet简化实体注册

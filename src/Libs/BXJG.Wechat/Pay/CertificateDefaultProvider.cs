@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 using System.Threading;
 using BXJG.WeChat.Pay.Entities;
 using System.IO;
-using BXJG.Common;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System.Net.Http.Json;
+using BXJG.Common.Contracts;
 
 namespace BXJG.WeChat.Pay
 {

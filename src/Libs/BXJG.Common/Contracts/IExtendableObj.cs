@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Common.Dto
+namespace BXJG.Common.Contracts
 {
 
-    public interface IExtendableDto
+    public interface IExtendableObj
     {
         public dynamic ExtensionData { get; set; }
     }

@@ -16,7 +16,7 @@ namespace BXJG.Utils.EFCore.EFMaps
     {
         public void Configure(EntityTypeBuilder<AttachmentPermissionEntity> builder)
         {
-            builder.ToTable("bxjg_utils_attachment_permissions");
+            builder.ToTable("BXJGUtilsAttchmentPermissions");
             builder.Property(c => c.EntityType).IsRequired().HasColumnType($"varchar({BXJGUtilsConsts.EntityFileEntityTypeMaxLength})").HasComment("关联实体类型，可以是任意唯一字符串，通常是实体类型.FullTypeName");
             builder.Property(c => c.EntityId).HasColumnType($"varchar({BXJGUtilsConsts.EntityFileEntityIdMaxLength})").HasComment("关联实体id");
             builder.Property(c => c.DownloadPermissionName).HasColumnType($"varchar({BXJGUtilsConsts.AttachmentPermissionNameMaxLength})").HasComment("允许下载的权限名称");

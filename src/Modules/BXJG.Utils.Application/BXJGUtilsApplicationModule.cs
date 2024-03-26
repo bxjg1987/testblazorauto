@@ -5,7 +5,6 @@ using Abp;
 using BXJG.Utils.Localization;
 using BXJG.Utils.Enums;
 using Abp.Threading.BackgroundWorkers;
-using BXJG.Utils.Files;
 using BXJG.Common;
 using Abp.Dependency;
 using BXJG.Utils.DynamicProperty;
@@ -21,6 +20,7 @@ using Castle.Core;
 //using DotNetCore.CAP;
 using BXJG.Utils.GeneralTree;
 using Abp.Configuration.Startup;
+using BXJG.Utils.Application.File;
 
 namespace BXJG.Utils.Application
 {
@@ -86,5 +86,12 @@ namespace BXJG.Utils.Application
             //注册附件应用服务，它不实现abp的应用服务，所以不会生成动态webApi
             //IocManager.Register(typeof(AttachmentAppService<>), DependencyLifeStyle.Transient);
         }
+
+        //public override void PostInitialize()
+        //{
+        //    base.PostInitialize();
+
+          
+        //}
     }
 }

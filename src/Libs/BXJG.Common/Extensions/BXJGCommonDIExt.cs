@@ -1,4 +1,5 @@
-﻿using BXJG.Common;
+﻿using BXJG.Common.Contracts;
+using BXJG.Common.Events;
 using BXJG.Common.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;

@@ -1,5 +1,5 @@
 ﻿using Abp.Application.Services.Dto;
-using BXJG.Common.Dto;
+using BXJG.Common.Contracts;
 using System.ComponentModel;
 using ZLJ.Application.Share.Roles;
 

@@ -19,6 +19,7 @@ using Abp.IdentityFramework;
 using ZLJ.Core.Authorization.Users;
 using ZLJ.Application.Admin.Authorization.Permissions;
 using ZLJ.Application.Share.Authorization.Permissions;
+using BXJG.Common.Contracts;
 
 namespace ZLJ.Application.Admin.BaseInfo.AssociatedCompany
 {

@@ -3,7 +3,7 @@ using Abp.Application.Features;
 using Abp.Configuration;
 using Abp.Runtime.Session;
 using Abp.Threading;
-using BXJG.Common;
+using BXJG.Common.Events;
 using Microsoft.Extensions.DependencyInjection;
 using ZLJ.RCL.Interceptors;
 

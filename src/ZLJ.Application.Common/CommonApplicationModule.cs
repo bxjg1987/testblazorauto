@@ -73,10 +73,9 @@ namespace ZLJ.Application.Common
 
         }
 
-        public override void PostInitialize()
-        {
-            var workManager = IocManager.Resolve<IBackgroundWorkerManager>();
-            workManager.Add(IocManager.Resolve<RemoveOldNoticesBackgroundWorker>());
-        }
+        //public override void PostInitialize()
+        //{
+           
+        //}
     }
 }

@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Abp.Authorization
 {
-    public static class Class1
+    public static class PermissionExtensions
     {
         private const string sdf = "Dependences";
         /// <summary>

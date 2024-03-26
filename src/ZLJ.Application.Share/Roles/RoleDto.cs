@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Abp.Application.Services.Dto;
+using BXJG.Common.Contracts;
 using ZLJ.Application.Common.Share.OU;
 
 namespace ZLJ.Application.Share.Roles
@@ -10,7 +11,7 @@ namespace ZLJ.Application.Share.Roles
     /// <summary>
     /// 后台管理角色使用的显示模型
     /// </summary>
-    public class RoleDto : EntityDto<int>,IExtendableDto
+    public class RoleDto : EntityDto<int>,IExtendableObj
     {
         public dynamic ExtensionData { get; set; }
         public IEnumerable<int> OuIds => Ous != null && Ous.Count > 0 ?  Ous.Select(c =>int.Parse( c.Id.ToString())) : new int[0];

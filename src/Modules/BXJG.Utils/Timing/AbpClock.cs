@@ -1,14 +1,14 @@
 ﻿using Abp.Timing;
-using BXJG.Common;
+using BXJG.Common.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Utils
+namespace BXJG.Utils.Timing
 {
-    class AbpClock : IClock,Abp.Dependency.ISingletonDependency
+    class AbpClock : IClock, Abp.Dependency.ISingletonDependency
     {
         public ValueTask<DateTime> GetNowAsync()
         {

@@ -4,7 +4,7 @@ using Abp.Authorization;
 using Abp.Domain.Entities;
 using AntDesign;
 using AntDesign.TableModels;
-using BXJG.Common.Dto;
+using BXJG.Common.Contracts;
 using BXJG.Utils;
 using BXJG.Utils.Application.Share;
 using BXJG.Utils.Application.Share.GeneralTree;
@@ -47,7 +47,7 @@ namespace ZLJ.RCL.Components
                                                 TEditDto,
                                                 TGetAllInput> : BaseComponent
         //where TCreateInput : GeneralTreeNodeEditBaseDto //注意这里约束为TEditDto，这样强制要求继承编辑模型不合理
-        where TEntityDto : IGeneralTree<TEntityDto>, IExtendableDto//, new()
+        where TEntityDto : IGeneralTree<TEntityDto>, IExtendableObj//, new()
         //where TEditDto : GeneralTreeNodeEditBaseDto//父类可以对输入做一定的处理
         where TGetAllInput : new()
         where TAppService : IGeneralTreeBaseAppService<TEntityDto, TCreateInput, TEditDto, TGetAllInput>

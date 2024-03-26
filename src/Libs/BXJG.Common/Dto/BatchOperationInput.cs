@@ -183,7 +183,7 @@ namespace BXJG.Common.Dto
     /// <summary>
     /// 批量开关输入模型，id类型为int
     /// </summary>
-    public class BatchSwitchInput : BatchSwitchInput<int>
+    public class BatchSwitchInputInt : BatchSwitchInput<int>
     {
     }
     /// <summary>

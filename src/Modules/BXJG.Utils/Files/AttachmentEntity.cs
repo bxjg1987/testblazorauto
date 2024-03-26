@@ -1,5 +1,5 @@
 ﻿using Abp.Domain.Entities;
-using BXJG.Common;
+using BXJG.Common.Contracts;
 using BXJG.Utils.Share;
 using Microsoft.EntityFrameworkCore;
 using System;

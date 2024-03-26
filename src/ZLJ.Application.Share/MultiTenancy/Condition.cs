@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Services.Dto;
+using BXJG.Common.Contracts;
 
 namespace ZLJ.Application.Share.MultiTenancy
 {

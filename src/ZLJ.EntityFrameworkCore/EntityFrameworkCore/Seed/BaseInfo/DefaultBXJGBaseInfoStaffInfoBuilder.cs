@@ -12,6 +12,7 @@ using Microsoft.Extensions.Options;
 using ZLJ.Core.Authorization.Users;
 using ZLJ.Core.BaseInfo.Post;
 using ZLJ.Core.Authorization.Roles;
+using BXJG.Common.Contracts;
 
 namespace ZLJ.EntityFrameworkCore.EntityFrameworkCore.Seed.BaseInfo
 {
@@ -49,7 +50,7 @@ namespace ZLJ.EntityFrameworkCore.EntityFrameworkCore.Seed.BaseInfo
                  Surname= "X",
                   NormalizedUserName="LIBAI",
                  
-                Gender = BXJG.Common.Gender.Man,
+                Gender = Gender.Man,
                 Birthday = System.DateTimeOffset.Parse("1995-12-15"),
                 No = "KG0001",
                 PhoneNumber = "13800138001",
@@ -76,7 +77,7 @@ namespace ZLJ.EntityFrameworkCore.EntityFrameworkCore.Seed.BaseInfo
                 NormalizedEmailAddress = "XXX2@XXX.COM",
                 Surname = "X",
                 NormalizedUserName = "LIQINGZHAO",
-                Gender = BXJG.Common.Gender.Woman,
+                Gender = Gender.Woman,
                 Birthday = System.DateTimeOffset.Parse("1996-2-15"),
                 No = "KG0002",
                 PhoneNumber = "13800138002",
@@ -101,7 +102,7 @@ namespace ZLJ.EntityFrameworkCore.EntityFrameworkCore.Seed.BaseInfo
                 NormalizedEmailAddress = "XXX3@XXX.COM",
                 Surname = "X",
                 NormalizedUserName = "DUFU",
-                Gender = BXJG.Common.Gender.Man,
+                Gender = Gender.Man,
                 Birthday = System.DateTimeOffset.Parse("1994-2-15"),
                 No = "KG0003",
                 PhoneNumber = "13800138003",
@@ -128,7 +129,7 @@ namespace ZLJ.EntityFrameworkCore.EntityFrameworkCore.Seed.BaseInfo
                 NormalizedEmailAddress = "XXX4@XXX.COM",
                 Surname = "X",
                 NormalizedUserName = "MENGHAORAN",
-                Gender = BXJG.Common.Gender.Man,
+                Gender = Gender.Man,
                 Birthday = System.DateTimeOffset.Parse("1993-3-24"),
                 No = "KG0004",
                 PhoneNumber = "13800138004",

@@ -1,5 +1,5 @@
 ﻿using Abp.Application.Services.Dto;
-using BXJG.Common.Dto;
+using BXJG.Common.Contracts;
 using BXJG.Utils.Share.GeneralTree;
 using Newtonsoft.Json;
 using System;
@@ -16,7 +16,7 @@ namespace BXJG.Utils.Application.Share.GeneralTree
     /// 树形数据管理的列表页使用的dto基类，它不是抽象的，可以直接使用
     /// </summary>
     /// <typeparam name="TChild"></typeparam>
-    public class GeneralTreeNodeBaseDto<TChild> : AuditedEntityDto<long>, IExtendableDto, IGeneralTree<TChild>
+    public class GeneralTreeNodeBaseDto<TChild> : AuditedEntityDto<long>, IExtendableObj, IGeneralTree<TChild>
         where TChild : GeneralTreeNodeBaseDto<TChild>
     {
         long? parentId;

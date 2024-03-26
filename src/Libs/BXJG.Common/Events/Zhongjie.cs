@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace BXJG.Common
+namespace BXJG.Common.Events
 {
 
     /* 
@@ -169,7 +169,7 @@ namespace BXJG.Common
             }
             else
             {
-                foreach (var dic in this.weituos)
+                foreach (var dic in weituos)
                 {
                     if (dic.Value.TryRemove(weituo, out _))
                         break;

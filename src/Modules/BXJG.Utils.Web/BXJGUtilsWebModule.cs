@@ -1,6 +1,5 @@
 ﻿using Abp.Modules;
 using System;
-using BXJG.Common;
 using Abp.Reflection.Extensions;
 using Abp.Dependency;
 using System.Reflection;
@@ -13,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using BXJG.Common.Web;
 using BXJG.Utils.Application;
 using BXJG.Utils.Web.Authorization;
+using BXJG.Common.Contracts;
 
 namespace BXJG.Utils.Web
 {

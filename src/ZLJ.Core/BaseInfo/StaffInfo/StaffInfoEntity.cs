@@ -9,6 +9,7 @@ using ZLJ.Core.BaseInfo.Administrative;
 using ZLJ.Core.BaseInfo.Post;
 using BXJG.Common.Extensions;
 using Abp.Timing;
+using BXJG.Common.Contracts;
 
 namespace ZLJ.Core.BaseInfo.StaffInfo
 {
@@ -20,7 +21,7 @@ namespace ZLJ.Core.BaseInfo.StaffInfo
         /// <summary>
         /// 性别
         /// </summary>
-        public BXJG.Common.Gender Gender { get; set; }
+        public Gender Gender { get; set; }
 
         private DateTimeOffset? sr;
         /// <summary>

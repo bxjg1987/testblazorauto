@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BXJG.Common.Dto;
 
-namespace BXJG.Common.Dto
+namespace BXJG.Common.Contracts
 {
     /// <summary>
     /// 包含动态条件的输入模型应实现此接口

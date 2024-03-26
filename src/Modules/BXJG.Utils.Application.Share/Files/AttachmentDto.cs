@@ -1,6 +1,6 @@
 ﻿using Abp.Application.Services.Dto;
 using Abp.Domain.Entities;
-using BXJG.Common.Dto;
+using BXJG.Common.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +12,7 @@ namespace BXJG.Utils.Application.Share.Files
     /// <summary>
     /// 通用显示模型
     /// </summary>
-    public class AttachmentDto : EntityDto<Guid>,IExtendableDto
+    public class AttachmentDto : EntityDto<Guid>,IExtendableObj
     {
         /// <summary>
         /// 关联实体id

@@ -8,6 +8,7 @@ using ZLJ.Application.Common.OU;
 using ZLJ.Application.Common.Post;
 using ZLJ.Application.Common.Users;
 using ZLJ.Application.Common.Share.OU;
+using BXJG.Common.Contracts;
 
 namespace ZLJ.Application.Admin.BaseInfo.StaffInfo
 {
@@ -25,7 +26,7 @@ namespace ZLJ.Application.Admin.BaseInfo.StaffInfo
         /// <summary>
         /// 性别
         /// </summary>
-        public BXJG.Common.Gender Gender { get; set; }
+        public Gender Gender { get; set; }
         /// <summary>
         /// 性别
         /// </summary>

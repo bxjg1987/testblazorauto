@@ -26,6 +26,8 @@ using ZLJ.Web.Core;
 using ZLJ.Web.Core.Configuration;
 using ZLJ.Web.Core.Authentication.JwtBearer;
 using Abp.Hangfire.Configuration;
+using ZLJ.Application.Common.Notification;
+using BXJG.Utils.Application.File;
 
 namespace ZLJ.Web.Host.Startup
 {
@@ -128,8 +130,9 @@ namespace ZLJ.Web.Host.Startup
 
             //workManager.Add(IocManager.Resolve<CreateWorkloadRecordMonthlyWorker>());
 
-          
-
+            var workManager = IocManager.Resolve<IBackgroundWorkerManager>();
+            workManager.Add(IocManager.Resolve<RemoveOldNoticesBackgroundWorker>());
+            workManager.Add(IocManager.Resolve<RemoveUploadFileWorker>());
         }
 
         #region 从web.core移动过来的

@@ -13,15 +13,15 @@ using Abp.Linq;
 using Abp.Authorization;
 using System.ComponentModel.DataAnnotations;
 using Abp.Linq.Extensions;
-using BXJG.Common.Dto;
 using Abp.Domain.Uow;
+using BXJG.Common.Contracts;
 
 namespace BXJG.Utils.Application.Share.OperationLog
 {
     /// <summary>
     /// 操作日志dto
     /// </summary>
-    public class Dto<TPropertyDto> : IExtendableDto
+    public class Dto<TPropertyDto> : IExtendableObj
     {
         /// <summary>
         /// 操作时的浏览器信息

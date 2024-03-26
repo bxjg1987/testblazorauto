@@ -40,7 +40,13 @@ namespace ZLJ.Core.Configuration
             {
                 builder.AddUserSecrets(typeof(AppConfigurations).GetAssembly());
             }
-            builder.AddCommon();
+            //迁移数据库时要报错
+            try
+            {
+                builder.AddCommon();
+            }
+            catch { }
+
             return builder.Build();
         }
 

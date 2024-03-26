@@ -1,5 +1,4 @@
-﻿using BXJG.Common;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using Org.BouncyCastle.Crypto.Engines;
 using Org.BouncyCastle.Crypto.Modes;
 using Org.BouncyCastle.Crypto.Parameters;
@@ -14,6 +13,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using BXJG.Common.Contracts;
 namespace BXJG.WeChat.Pay
 {
     /// <summary>

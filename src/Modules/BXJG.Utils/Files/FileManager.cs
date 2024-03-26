@@ -151,9 +151,9 @@ namespace BXJG.Utils.Files
         /// 生成文件的数据库记录
         /// </summary>
         /// <param name="fileName"></param>
-        /// <param name="fileRelativePath"></param>
+        /// <param name="tempFileRelativePath"></param>
         /// <returns></returns>
-        protected virtual async Task<FileEntity> AddFileRecord(string fileName, string fileRelativePath)
+        protected virtual async Task<FileEntity> AddFileRecord(string fileName, string tempFileRelativePath)
         {
             /*
              * dbcontext是一个请求一个实例，所以在业务系统中先开事务，然后执行此逻辑，最后提交事务
@@ -161,14 +161,14 @@ namespace BXJG.Utils.Files
             // ur.TempPath = ur.TempPath.AESDecryptUtf8String();
 
             //临时文件的绝对路径
-            var jdlj = Relative2AbsolutePath(fileRelativePath);
+            var jdlj = Relative2AbsolutePath(tempFileRelativePath);
 
             #region 存储数据
             var file = new FileEntity
             {
-                Ext = Path.GetExtension(fileRelativePath),
+                Ext = Path.GetExtension(tempFileRelativePath),
                 // FullName = ur.FileName,
-                Id = Guid.Parse(Path.GetFileNameWithoutExtension(fileRelativePath)),
+                Id = Guid.Parse(Path.GetFileNameWithoutExtension(tempFileRelativePath)),
                 //Name = Path.GetFileName(ur.TempPath),
                 //Status = FileStatus.Moving,
                 RealName = fileName,
@@ -179,23 +179,21 @@ namespace BXJG.Utils.Files
 
             };
             var nyr = Clock.Now.ToString("yyyyMMdd");
+            file.RelativePath = Path.Combine(nyr, Path.GetFileName(tempFileRelativePath));
+            if (file.ResponseContentType.StartsWith("image/"))
+            {
+                file.RelativePathThumbnail = Path.Combine(nyr, Path.GetFileNameWithoutExtension(tempFileRelativePath) + ".jpg");
+            }
 
             if (AbpSession.TenantId.HasValue)
             {
-                file.RelativePath = Path.Combine(AbpSession.TenantId.Value.ToString(), nyr, Path.GetFileName(fileRelativePath));
+                file.RelativePath = Path.Combine(AbpSession.TenantId.Value.ToString(), file.RelativePath);
                 if (file.ResponseContentType.StartsWith("image/"))
                 {
-                    file.RelativePathThumbnail = Path.Combine(AbpSession.TenantId.Value.ToString(), nyr, Path.GetFileNameWithoutExtension(fileRelativePath) + ".jpg");
+                    file.RelativePathThumbnail = Path.Combine(AbpSession.TenantId.Value.ToString(), file.RelativePathThumbnail);
                 }
             }
-            else
-            {
-                file.RelativePath = Path.Combine(nyr, Path.GetFileName(fileRelativePath));
-                if (file.ResponseContentType.StartsWith("image/"))
-                {
-                    file.RelativePathThumbnail = Path.Combine(nyr, Path.GetFileNameWithoutExtension(fileRelativePath) + ".jpg");
-                }
-            }
+
             //if (permissions != default)
             //{
             //    file.Permissions = permissions.Select(c => new FilePermissionEntity
@@ -249,10 +247,8 @@ namespace BXJG.Utils.Files
             await Repository.DeleteAsync(file);
             //BackgroundJob.Enqueue(() => File.Delete(Relative2AbsolutePath(file.RelativePath)));
             //BackgroundJob.Enqueue(() => File.Delete(Relative2AbsolutePath(file.RelativePathThumbnail)));
-            await BackgroundJobManager.EnqueueAsync<DeleteFileBackgroundJob, IEnumerable<string>>([
-              Relative2AbsolutePath(file.RelativePath),
-                Relative2AbsolutePath(file.RelativePathThumbnail),
-            ]);
+            await BackgroundJobManager.EnqueueAsync<DeleteFileBackgroundJob, string>(Relative2AbsolutePath(file.RelativePath));
+            await BackgroundJobManager.EnqueueAsync<DeleteFileBackgroundJob, string>(Relative2AbsolutePath(file.RelativePathThumbnail));
         }
 
         //public void Execute(sdfsdf args)
@@ -336,20 +332,20 @@ namespace BXJG.Utils.Files
         public string Absolute2RelativePath(string path)
         {
             if (path.StartsWith(_uploadDir))
-                return path.Substring(_uploadDir.Length);
+                return path.Substring(_uploadDir.Length + 1);
             return path;
         }
 
         /// <summary>
         /// 相对路径转绝对路径
-        /// \wwwroot\upload\20201022\a.jpg -> d:\app\wwwroot\upload\20201022\a.jpg
+        /// upload\20201022\a.jpg -> d:\\upload\20201022\a.jpg
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
         public string Relative2AbsolutePath(string path)
         {
             if (!path.StartsWith(_uploadDir))
-                return Path.Combine(_uploadDir, path.TrimStart(Path.DirectorySeparatorChar));
+                return Path.Combine(_uploadDir, path);
             return path;
         }
 

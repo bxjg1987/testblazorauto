@@ -1,5 +1,6 @@
 ﻿
 using Abp.ObjectMapping;
+using BXJG.Common.Contracts;
 using BXJG.Utils.Application.Share.GeneralTree;
 using BXJG.Utils.Share.GeneralTree;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -33,7 +34,7 @@ namespace ZLJ.RCL.Components
                                                         TCreateInput,
                                                         TEditDto,
                                                         TGetAllInput> : BaseComponent
-        where TEntityDto : IGeneralTree<TEntityDto>, IExtendableDto
+        where TEntityDto : IGeneralTree<TEntityDto>, IExtendableObj
         //where TGetAllInput : new()
         where TEditDto : IHaveParentId<long>,new()
         where TAppService : IGeneralTreeBaseAppService<TEntityDto, TCreateInput, TEditDto, TGetAllInput>

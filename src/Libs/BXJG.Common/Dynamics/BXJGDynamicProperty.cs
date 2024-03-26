@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Common
+namespace BXJG.Common.Dynamics
 {
     /*
      * 有必要用ioc吗？
@@ -26,8 +26,8 @@ namespace BXJG.Common
         List<TProperty> list;
         public PropertyMetadataManager(IList<TProperty> properties)
         {
-            this.list = properties.ToList();
-            this.list.ForEach(c => dic.Add(c.Name, c));
+            list = properties.ToList();
+            list.ForEach(c => dic.Add(c.Name, c));
             //list.ToDictionary<string, TProperty>(c => c.Name, c=>c);
         }
 
@@ -115,7 +115,7 @@ namespace BXJG.Common
         /// <summary>
         /// 额外状态数据
         /// </summary>
-        public IReadOnlyDictionary<string, object> AdditionalData { get; set; }=new Dictionary<string, object>();  
+        public IReadOnlyDictionary<string, object> AdditionalData { get; set; } = new Dictionary<string, object>();
     }
     /// <summary>
     /// 字段元数据，包含输入
@@ -261,27 +261,27 @@ namespace BXJG.Common
         /// </summary>
         public TValue DifferenceValue { get; set; }
 
-          //不要搞属性，不然序列化时会出现循环引用
-         Func<TValue, TValue, bool> comparer { get; set; }=(a, b) =>
-        {
-            if (a == null && b != null)
-                return false;
+        //不要搞属性，不然序列化时会出现循环引用
+        Func<TValue, TValue, bool> comparer { get; set; } = (a, b) =>
+       {
+           if (a == null && b != null)
+               return false;
 
-            if (a != null && b == null)
-                return false;
+           if (a != null && b == null)
+               return false;
 
-            if (a == null && b == null)
-                return true;
+           if (a == null && b == null)
+               return true;
 
-            if (a is IEnumerable)
-            {
-                var a1 = a as IEnumerable;
-                var b1 = b as IEnumerable;
-             return   EqualityComparer<IEnumerable>.Default.Equals(a1, b1);
-                //return a1.HasChange(b1);
-            }
-            return a.Equals(b);
-        };
+           if (a is IEnumerable)
+           {
+               var a1 = a as IEnumerable;
+               var b1 = b as IEnumerable;
+               return EqualityComparer<IEnumerable>.Default.Equals(a1, b1);
+               //return a1.HasChange(b1);
+           }
+           return a.Equals(b);
+       };
         public void SetComparer(Func<TValue, TValue, bool> comparer)
         {
             this.comparer = comparer;

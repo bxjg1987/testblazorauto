@@ -69,7 +69,7 @@ namespace BXJG.Utils.GeneralTree
         }
     }
 
-    [Table("BXJGGeneralTrees")]
+    [Table("BXJGUtilsDataDictionaries")]
     public class DataDictionaryEntity : GeneralTreeEntity<DataDictionaryEntity>
     {
         public bool IsSysDefine { get; set; }

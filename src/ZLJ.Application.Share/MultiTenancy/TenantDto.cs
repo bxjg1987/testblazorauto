@@ -1,12 +1,13 @@
 using System.ComponentModel.DataAnnotations;
 using Abp.Application.Services.Dto;
 using Abp.MultiTenancy;
+using BXJG.Common.Contracts;
 using ZLJ.Core.Share;
 
 namespace ZLJ.Application.Share.MultiTenancy
 {
-   // [AutoMapFrom(typeof(Tenant))]
-    public class TenantDto : EntityDto,IExtendableDto
+    // [AutoMapFrom(typeof(Tenant))]
+    public class TenantDto : EntityDto,IExtendableObj
     {
         public dynamic ExtensionData { get; set; }
         // [Required]

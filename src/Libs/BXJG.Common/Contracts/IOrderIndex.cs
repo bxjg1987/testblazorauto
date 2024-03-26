@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BXJG.Common
+namespace BXJG.Common.Contracts
 {
     public interface IOrderIndex
     {

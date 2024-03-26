@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BXJG.Common.Contracts;
 
 namespace ZLJ.Application.Common.StaffInfo
 {

@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
-using Abp.Authorization;
 using Abp.Authorization.Roles;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
@@ -11,6 +10,7 @@ using Abp.Zero.Configuration;
 using ZLJ.Core.Authorization.Users;
 using System.Threading.Tasks;
 using System.Linq;
+using BXJG.Utils.Extensions;
 
 namespace ZLJ.Core.Authorization.Roles
 {

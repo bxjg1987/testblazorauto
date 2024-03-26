@@ -64,11 +64,11 @@ namespace ZLJ.Web.HostBlazor.Startup
         }
         //public override void PostInitialize()
         //{
-            //  IocManager.Resolve<ApplicationPartManager>().AddApplicationPartsIfNotAddedBefore(Assembly.GetExecutingAssembly());
+            //IocManager.Resolve<ApplicationPartManager>().AddApplicationPartsIfNotAddedBefore(Assembly.GetExecutingAssembly());
 
-            //var workManager = IocManager.Resolve<IBackgroundWorkerManager>();
-
+           // var workManager = IocManager.Resolve<IBackgroundWorkerManager>();
+           // workManager.Add
             //workManager.Add(IocManager.Resolve<CreateWorkloadRecordMonthlyWorker>());
-        //}
+       // }
     }
 }

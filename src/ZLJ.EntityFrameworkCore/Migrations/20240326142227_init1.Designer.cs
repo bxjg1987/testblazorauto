@@ -12,15 +12,15 @@ using ZLJ.EntityFrameworkCore;
 namespace ZLJ.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(ZLJDbContext))]
-    [Migration("20240219135346_xxs1")]
-    partial class xxs1
+    [Migration("20240326142227_init1")]
+    partial class init1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.2")
+                .HasAnnotation("ProductVersion", "8.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -421,6 +421,10 @@ namespace ZLJ.EntityFrameworkCore.Migrations
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("FailReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
 
                     b.Property<byte>("Result")
                         .HasColumnType("tinyint");
@@ -1390,38 +1394,136 @@ namespace ZLJ.EntityFrameworkCore.Migrations
                     b.ToTable("AbpWebhookSubscriptions");
                 });
 
-            modelBuilder.Entity("BXJG.Utils.File.AttachmentEntity", b =>
+            modelBuilder.Entity("BXJG.Utils.Files.AttachmentEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("EntityId")
-                        .HasColumnType("varchar(60)");
+                        .IsRequired()
+                        .HasColumnType("varchar(60)")
+                        .HasComment("关联实体id");
 
                     b.Property<string>("EntityType")
-                        .HasColumnType("varchar(100)");
+                        .IsRequired()
+                        .HasColumnType("varchar(100)")
+                        .HasComment("关联实体类型，可以是任意唯一字符串，通常是实体类型.FullTypeName");
 
                     b.Property<string>("ExtensionData")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(4000)");
+
+                    b.Property<Guid>("FileId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("OrderIndex")
                         .HasColumnType("int");
 
                     b.Property<string>("PropertyName")
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("varchar(100)")
+                        .HasComment("属性名，可空 比如工单：字段A表示要处理的问题相关图片，字段B表示处理完成时拍摄的图片，它们都使用附件表，当通过此字段来表示关联的不同的属性");
 
-                    b.Property<string>("RelativeFileUrl")
-                        .HasColumnType("varchar(500)");
-
-                    b.Property<int>("TenantId")
+                    b.Property<int?>("TenantId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EntityType", "EntityId");
+                    b.HasIndex("FileId");
 
-                    b.ToTable("BXJGAttachments");
+                    b.HasIndex("EntityType", "EntityId", "PropertyName");
+
+                    b.ToTable("BXJGUtilsAttachments", (string)null);
+                });
+
+            modelBuilder.Entity("BXJG.Utils.Files.AttachmentPermissionEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("DeletePermissionName")
+                        .HasColumnType("varchar(100)")
+                        .HasComment("允许删除的权限名称");
+
+                    b.Property<string>("DownloadPermissionName")
+                        .HasColumnType("varchar(100)")
+                        .HasComment("允许下载的权限名称");
+
+                    b.Property<string>("EntityId")
+                        .HasColumnType("varchar(60)")
+                        .HasComment("关联实体id");
+
+                    b.Property<string>("EntityType")
+                        .IsRequired()
+                        .HasColumnType("varchar(100)")
+                        .HasComment("关联实体类型，可以是任意唯一字符串，通常是实体类型.FullTypeName");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BXJGUtilsAttchmentPermissions", (string)null);
+                });
+
+            modelBuilder.Entity("BXJG.Utils.Files.FileEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Ext")
+                        .HasColumnType("varchar(20)")
+                        .HasComment("文件扩展名，如：.jpg");
+
+                    b.Property<string>("ExtensionData")
+                        .HasColumnType("varchar(4000)")
+                        .HasComment("扩展数据");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("RealName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasComment("真实的文件名 c#高级编程");
+
+                    b.Property<string>("RelativePath")
+                        .IsRequired()
+                        .HasColumnType("varchar(500)")
+                        .HasComment("相对于文件存储目录的 相对路径");
+
+                    b.Property<string>("RelativePathThumbnail")
+                        .HasColumnType("varchar(500)")
+                        .HasComment("缩略图相对路径");
+
+                    b.Property<string>("ResponseContentType")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasComment("响应的文件类型，mime");
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BXJGUtilsFiles", (string)null);
                 });
 
             modelBuilder.Entity("BXJG.Utils.GeneralTree.DataDictionaryEntity", b =>
@@ -1489,7 +1591,7 @@ namespace ZLJ.EntityFrameworkCore.Migrations
 
                     b.HasIndex("ParentId");
 
-                    b.ToTable("BXJGGeneralTrees");
+                    b.ToTable("BXJGUtilsDataDictionaries");
                 });
 
             modelBuilder.Entity("ZLJ.Core.Authorization.Roles.Role", b =>
@@ -2256,6 +2358,17 @@ namespace ZLJ.EntityFrameworkCore.Migrations
                         .IsRequired();
 
                     b.Navigation("WebhookEvent");
+                });
+
+            modelBuilder.Entity("BXJG.Utils.Files.AttachmentEntity", b =>
+                {
+                    b.HasOne("BXJG.Utils.Files.FileEntity", "File")
+                        .WithMany()
+                        .HasForeignKey("FileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("File");
                 });
 
             modelBuilder.Entity("BXJG.Utils.GeneralTree.DataDictionaryEntity", b =>

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Utils.Share.Concurrency
+namespace BXJG.Common.Contracts
 {
     public interface IHasConcurrencyStamp
     {
@@ -14,5 +14,5 @@ namespace BXJG.Utils.Share.Concurrency
 
     //}
     //这个扩展可以考虑 automapper也调用下
-   
+
 }

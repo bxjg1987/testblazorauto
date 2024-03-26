@@ -1,5 +1,6 @@
-﻿using BXJG.Common;
+﻿using BXJG.Common.Contracts;
 using BXJG.Common.Dto;
+using BXJG.Common.Dynamics;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -6,7 +6,6 @@ using BXJG.Utils.Localization;
 using BXJG.Utils.Enums;
 using Abp.Threading.BackgroundWorkers;
 using BXJG.Utils.Files;
-using BXJG.Common;
 using Abp.Dependency;
 using BXJG.Utils.DynamicProperty;
 using Abp.AutoMapper;
@@ -23,6 +22,9 @@ using Abp.Threading;
 using System.Threading.Tasks;
 using BXJG.Utils.GeneralTree;
 using Microsoft.Extensions.DependencyInjection;
+using BXJG.Common.Contracts;
+using BXJG.Utils.Settings;
+using BXJG.Utils.Extensions;
 
 namespace BXJG.Utils
 {
@@ -127,8 +129,7 @@ namespace BXJG.Utils
             //{
 
             //Task.Yield();
-            var workManager = IocManager.Resolve<IBackgroundWorkerManager>();
-            workManager.Add(IocManager.Resolve<RemoveUploadFileWorker>());
+          
             //}
             // catch
             // {

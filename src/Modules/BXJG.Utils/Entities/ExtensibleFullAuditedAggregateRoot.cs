@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Utils
+namespace BXJG.Utils.Entities
 {
     /*
      * abp提供的IExtendableObject/ExtensionData是以json格式存储的，不便于直接对数据做查询，适合只扩展用来简单显示的字段

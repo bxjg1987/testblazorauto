@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace BXJG.Common
+namespace BXJG.Common.Contracts
 {
     /*
      * 有时候希望获取当前环境相关数据，但又不想直接引用依赖的包

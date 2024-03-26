@@ -1,8 +1,7 @@
-﻿using BXJG.Common;
+﻿using BXJG.Common.Events;
 using BXJG.Common.Http;
 using BXJG.Common.RCL.Auth;
-using BXJG.Common.RCL.Event;
-
+using BXJG.Common.RCL.Events;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;

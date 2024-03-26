@@ -1,4 +1,4 @@
-﻿using BXJG.Common;
+﻿using BXJG.Common.Events;
 using Microsoft.AspNetCore.Components.Server.Circuits;
 using Microsoft.Extensions.Logging;
 using ILoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;

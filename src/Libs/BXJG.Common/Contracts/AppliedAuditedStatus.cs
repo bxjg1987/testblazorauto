@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 
-namespace BXJG.Common
+namespace BXJG.Common.Contracts
 {
     //常用枚举
     [Flags]
@@ -15,7 +15,7 @@ namespace BXJG.Common
     [Flags]
     public enum AppliedAuditedStatus
     {
-        Applied=1,
-        Audited=2
+        Applied = 1,
+        Audited = 2
     }
 }

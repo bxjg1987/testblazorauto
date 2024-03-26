@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ZLJ.EntityFrameworkCore.Migrations
 {
     /// <inheritdoc />
-    public partial class initnet8abp9 : Migration
+    public partial class init1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -286,6 +286,7 @@ namespace ZLJ.EntityFrameworkCore.Migrations
                     ClientName = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
                     BrowserInfo = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
                     Result = table.Column<byte>(type: "tinyint", nullable: false),
+                    FailReason = table.Column<string>(type: "nvarchar(1024)", maxLength: 1024, nullable: true),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -378,25 +379,22 @@ namespace ZLJ.EntityFrameworkCore.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BXJGAttachments",
+                name: "BXJGUtilsAttchmentPermissions",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    EntityType = table.Column<string>(type: "varchar(100)", nullable: true),
-                    EntityId = table.Column<string>(type: "varchar(60)", nullable: true),
-                    PropertyName = table.Column<string>(type: "varchar(100)", nullable: true),
-                    RelativeFileUrl = table.Column<string>(type: "varchar(500)", nullable: true),
-                    OrderIndex = table.Column<int>(type: "int", nullable: false),
-                    ExtensionData = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TenantId = table.Column<int>(type: "int", nullable: false)
+                    EntityType = table.Column<string>(type: "varchar(100)", nullable: false, comment: "关联实体类型，可以是任意唯一字符串，通常是实体类型.FullTypeName"),
+                    EntityId = table.Column<string>(type: "varchar(60)", nullable: true, comment: "关联实体id"),
+                    DownloadPermissionName = table.Column<string>(type: "varchar(100)", nullable: true, comment: "允许下载的权限名称"),
+                    DeletePermissionName = table.Column<string>(type: "varchar(100)", nullable: true, comment: "允许删除的权限名称")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BXJGAttachments", x => x.Id);
+                    table.PrimaryKey("PK_BXJGUtilsAttchmentPermissions", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "BXJGGeneralTrees",
+                name: "BXJGUtilsDataDictionaries",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -419,12 +417,37 @@ namespace ZLJ.EntityFrameworkCore.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BXJGGeneralTrees", x => x.Id);
+                    table.PrimaryKey("PK_BXJGUtilsDataDictionaries", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BXJGGeneralTrees_BXJGGeneralTrees_ParentId",
+                        name: "FK_BXJGUtilsDataDictionaries_BXJGUtilsDataDictionaries_ParentId",
                         column: x => x.ParentId,
-                        principalTable: "BXJGGeneralTrees",
+                        principalTable: "BXJGUtilsDataDictionaries",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BXJGUtilsFiles",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ExtensionData = table.Column<string>(type: "varchar(4000)", nullable: true, comment: "扩展数据"),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    RealName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false, comment: "真实的文件名 c#高级编程"),
+                    Ext = table.Column<string>(type: "varchar(20)", nullable: true, comment: "文件扩展名，如：.jpg"),
+                    ResponseContentType = table.Column<string>(type: "varchar(50)", nullable: false, comment: "响应的文件类型，mime"),
+                    RelativePath = table.Column<string>(type: "varchar(500)", nullable: false, comment: "相对于文件存储目录的 相对路径"),
+                    RelativePathThumbnail = table.Column<string>(type: "varchar(500)", nullable: true, comment: "缩略图相对路径"),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BXJGUtilsFiles", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -538,6 +561,30 @@ namespace ZLJ.EntityFrameworkCore.Migrations
                         name: "FK_AbpWebhookSendAttempts_AbpWebhookEvents_WebhookEventId",
                         column: x => x.WebhookEventId,
                         principalTable: "AbpWebhookEvents",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BXJGUtilsAttachments",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    EntityType = table.Column<string>(type: "varchar(100)", nullable: false, comment: "关联实体类型，可以是任意唯一字符串，通常是实体类型.FullTypeName"),
+                    EntityId = table.Column<string>(type: "varchar(60)", nullable: false, comment: "关联实体id"),
+                    PropertyName = table.Column<string>(type: "varchar(100)", nullable: true, comment: "属性名，可空 比如工单：字段A表示要处理的问题相关图片，字段B表示处理完成时拍摄的图片，它们都使用附件表，当通过此字段来表示关联的不同的属性"),
+                    FileId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OrderIndex = table.Column<int>(type: "int", nullable: false),
+                    ExtensionData = table.Column<string>(type: "varchar(4000)", nullable: true),
+                    TenantId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BXJGUtilsAttachments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BXJGUtilsAttachments_BXJGUtilsFiles_FileId",
+                        column: x => x.FileId,
+                        principalTable: "BXJGUtilsFiles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -944,14 +991,14 @@ namespace ZLJ.EntityFrameworkCore.Migrations
                         principalTable: "AbpUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_baseinfo_associated_company_BXJGGeneralTrees_CategoryId",
+                        name: "FK_baseinfo_associated_company_BXJGUtilsDataDictionaries_CategoryId",
                         column: x => x.CategoryId,
-                        principalTable: "BXJGGeneralTrees",
+                        principalTable: "BXJGUtilsDataDictionaries",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_baseinfo_associated_company_BXJGGeneralTrees_LevelId",
+                        name: "FK_baseinfo_associated_company_BXJGUtilsDataDictionaries_LevelId",
                         column: x => x.LevelId,
-                        principalTable: "BXJGGeneralTrees",
+                        principalTable: "BXJGUtilsDataDictionaries",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_baseinfo_associated_company_baseinfo_administrative_AreaId",
@@ -1376,19 +1423,24 @@ namespace ZLJ.EntityFrameworkCore.Migrations
                 column: "LevelId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BXJGAttachments_EntityType_EntityId",
-                table: "BXJGAttachments",
-                columns: new[] { "EntityType", "EntityId" });
+                name: "IX_BXJGUtilsAttachments_EntityType_EntityId_PropertyName",
+                table: "BXJGUtilsAttachments",
+                columns: new[] { "EntityType", "EntityId", "PropertyName" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_BXJGGeneralTrees_Code",
-                table: "BXJGGeneralTrees",
+                name: "IX_BXJGUtilsAttachments_FileId",
+                table: "BXJGUtilsAttachments",
+                column: "FileId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BXJGUtilsDataDictionaries_Code",
+                table: "BXJGUtilsDataDictionaries",
                 column: "Code",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_BXJGGeneralTrees_ParentId",
-                table: "BXJGGeneralTrees",
+                name: "IX_BXJGUtilsDataDictionaries_ParentId",
+                table: "BXJGUtilsDataDictionaries",
                 column: "ParentId");
 
             migrationBuilder.AddForeignKey(
@@ -1612,7 +1664,10 @@ namespace ZLJ.EntityFrameworkCore.Migrations
                 name: "AbpWebhookSubscriptions");
 
             migrationBuilder.DropTable(
-                name: "BXJGAttachments");
+                name: "BXJGUtilsAttachments");
+
+            migrationBuilder.DropTable(
+                name: "BXJGUtilsAttchmentPermissions");
 
             migrationBuilder.DropTable(
                 name: "AbpDynamicEntityProperties");
@@ -1630,6 +1685,9 @@ namespace ZLJ.EntityFrameworkCore.Migrations
                 name: "AbpWebhookEvents");
 
             migrationBuilder.DropTable(
+                name: "BXJGUtilsFiles");
+
+            migrationBuilder.DropTable(
                 name: "AbpDynamicProperties");
 
             migrationBuilder.DropTable(
@@ -1642,7 +1700,7 @@ namespace ZLJ.EntityFrameworkCore.Migrations
                 name: "AbpUsers");
 
             migrationBuilder.DropTable(
-                name: "BXJGGeneralTrees");
+                name: "BXJGUtilsDataDictionaries");
 
             migrationBuilder.DropTable(
                 name: "baseinfo_administrative");

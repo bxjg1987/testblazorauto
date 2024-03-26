@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Common
+namespace BXJG.Common.Contracts
 {
     /// <summary>
     /// 时钟

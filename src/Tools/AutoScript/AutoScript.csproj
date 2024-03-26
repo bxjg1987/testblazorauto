@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Masuit.Tools.Core" Version="2.6.9.7" />
+    <PackageReference Include="Masuit.Tools.Core" Version="2.6.9.8" />
   </ItemGroup>
 
 </Project>

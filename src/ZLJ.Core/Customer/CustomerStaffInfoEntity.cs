@@ -11,6 +11,7 @@ using BXJG.Common.Extensions;
 using Abp.Timing;
 using ZLJ.Core.BaseInfo.AssociatedCompany;
 using BXJG.Utils.Localization;
+using BXJG.Common.Contracts;
 
 namespace ZLJ.Core.Customer
 {
@@ -30,7 +31,7 @@ namespace ZLJ.Core.Customer
         /// <summary>
         /// 性别
         /// </summary>
-        public BXJG.Common.Gender Gender { get; set; }
+        public Gender Gender { get; set; }
         /// <summary>
         /// 出生日期
         /// </summary>

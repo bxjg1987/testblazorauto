@@ -3,6 +3,7 @@ using Abp.Dependency;
 using Abp.Domain.Uow;
 using Abp.Threading.BackgroundWorkers;
 using Abp.Threading.Timers;
+using Abp.Timing;
 using BXJG.Common;
 using BXJG.Utils.Share;
 using BXJG.Utils.Share.Files;
@@ -12,7 +13,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace BXJG.Utils.Files
+namespace BXJG.Utils.Application.File
 {
     public class RemoveUploadFileWorker : PeriodicBackgroundWorkerBase, ITransientDependency
     {
@@ -35,12 +36,14 @@ namespace BXJG.Utils.Files
         //[UnitOfWork]
         protected override void DoWork()
         {
-            if (!Directory.Exists(_tempDir)) return;
+            if (!Directory.Exists(_tempDir))
+                return;
+
             var files = Directory.GetFiles(_tempDir);
             foreach (var item in files)
             {
                 var file = new FileInfo(item);
-                if ((DateTime.Now - file.CreationTime).TotalMinutes > 30)
+                if ((Clock.Now - file.CreationTime).TotalMinutes > 30)
                 {
                     try
                     {

@@ -72,14 +72,13 @@ namespace BXJG.Common.Dto
         //public IList<BatchOperationErrorMessage> ErrorMessage { get; } = new List<BatchOperationErrorMessage>();
     }
 
-    public class BatchOperationOutput : BatchOperationOutput<int>
+    public class BatchOperationOutputInt : BatchOperationOutput<int>
     {
     }
 
     /// <summary>
     /// 批量操作的返回模型，id类型为long
     /// </summary>
-    /// <typeparam name="TKey"></typeparam>
     public class BatchOperationOutputLong : BatchOperationOutput<long>
     {
     }

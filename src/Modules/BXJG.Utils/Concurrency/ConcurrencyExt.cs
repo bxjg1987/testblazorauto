@@ -1,5 +1,5 @@
 ﻿using Abp.Domain.Uow;
-using BXJG.Utils.Share.Concurrency;
+using BXJG.Common.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;

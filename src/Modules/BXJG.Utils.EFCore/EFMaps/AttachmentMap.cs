@@ -14,7 +14,7 @@ namespace BXJG.Utils.EFCore.EFMaps
     {
         public void Configure(EntityTypeBuilder<AttachmentEntity> builder)
         {
-            builder.ToTable("bxjg_utils_attachments");
+            builder.ToTable("BXJGUtilsAttachments");
             builder.Property(c => c.EntityType).IsRequired().HasColumnType($"varchar({BXJGUtilsConsts.EntityFileEntityTypeMaxLength})").HasComment("关联实体类型，可以是任意唯一字符串，通常是实体类型.FullTypeName");
             builder.Property(c => c.EntityId).IsRequired().HasColumnType($"varchar({BXJGUtilsConsts.EntityFileEntityIdMaxLength})").HasComment("关联实体id");
             builder.Property(c => c.PropertyName).HasColumnType($"varchar({BXJGUtilsConsts.EntityFilePropertyNameMaxLength})").HasComment("属性名，可空 比如工单：字段A表示要处理的问题相关图片，字段B表示处理完成时拍摄的图片，它们都使用附件表，当通过此字段来表示关联的不同的属性"); ;

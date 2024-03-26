@@ -3,6 +3,7 @@ using Abp.Application.Services.Dto;
 using Abp.Extensions;
 using Abp.Runtime.Validation;
 using Abp.Timing;
+using BXJG.Common.Contracts;
 
 namespace ZLJ.Application.Share.Auditing.Dto
 {

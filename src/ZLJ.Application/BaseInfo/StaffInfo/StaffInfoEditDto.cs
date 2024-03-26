@@ -1,6 +1,7 @@
 ﻿using Abp.Application.Services.Dto;
 using Abp.Auditing;
 using Abp.Authorization.Users;
+using BXJG.Common.Contracts;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -15,7 +16,7 @@ namespace ZLJ.Application.Admin.BaseInfo.StaffInfo
         /// <summary>
         /// 性别
         /// </summary>
-        public BXJG.Common.Gender Gender { get; set; }
+        public Gender Gender { get; set; }
         /// <summary>
         /// 生日
         /// </summary>
@@ -63,7 +64,7 @@ namespace ZLJ.Application.Admin.BaseInfo.StaffInfo
         /// <summary>
         /// 性别
         /// </summary>
-        public BXJG.Common.Gender Gender { get; set; }
+        public Gender Gender { get; set; }
         /// <summary>
         /// 生日
         /// </summary>

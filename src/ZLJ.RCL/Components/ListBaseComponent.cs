@@ -5,7 +5,7 @@ using Abp.Domain.Entities;
 using Abp.Extensions;
 using AntDesign;
 using AntDesign.TableModels;
-using BXJG.Common.Dto;
+using BXJG.Common.Contracts;
 using BXJG.Utils;
 using BXJG.Utils.Application.Share;
 using Microsoft.AspNetCore.Components;
@@ -47,7 +47,7 @@ namespace ZLJ.RCL.Components
                                             TGetAllInput,
                                             TCreateInput,
                                             TUpdateInput> : BaseComponent
-        where TEntityDto : IEntityDto<TPrimaryKey>, IExtendableDto//, new()
+        where TEntityDto : IEntityDto<TPrimaryKey>, IExtendableObj//, new()
         where TGetAllInput : new()
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>

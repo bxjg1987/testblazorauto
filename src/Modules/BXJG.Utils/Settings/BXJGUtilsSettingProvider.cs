@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace BXJG.Utils
+namespace BXJG.Utils.Settings
 {
     /// <summary>
     /// 这里只是通用设置，各模块可以有自己的设置

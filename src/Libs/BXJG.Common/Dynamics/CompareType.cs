@@ -5,7 +5,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Common
+namespace BXJG.Common.Dynamics
 {
     /// <summary>
     /// 常用数据比较符

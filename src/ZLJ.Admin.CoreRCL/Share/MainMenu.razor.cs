@@ -1,7 +1,7 @@
 ﻿using Abp.Application.Navigation;
 using Abp.Runtime.Session;
 using AntDesign;
-using BXJG.Common;
+using BXJG.Common.Events;
 
 namespace ZLJ.Admin.CoreRCL.Share
 {

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Utils
+namespace Abp.Domain.Uow
 {
 
     /*
@@ -24,7 +24,7 @@ namespace BXJG.Utils
         {
             if (uow.Items.TryGetValue(__disposeableObject, out var t))
             {
-                (t as HashSet<object>).Add(obj);
+                (t as HashSet<object>).Add(obj); 
             }
             else
             {
@@ -38,6 +38,6 @@ namespace BXJG.Utils
             //uow.Disposed += Uow_Disposed;
         }
 
-        
+
     }
 }
