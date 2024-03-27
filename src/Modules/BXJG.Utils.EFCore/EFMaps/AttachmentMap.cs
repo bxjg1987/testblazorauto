@@ -21,12 +21,14 @@ namespace BXJG.Utils.EFCore.EFMaps
 
             builder.HasIndex(c => new { c.EntityType, c.EntityId, c.PropertyName });
 
+            builder.OwnsOne(x => x.File).HasKey(x => x.Id);
+
             //builder.HasOne(x => x.File).WithMany().HasForeignKey(x => x.Id);
             //builder.Property(c => c.RelativeFileUrl).HasColumnType($"varchar({Consts.EntityFileFileUrlMaxLength})");
             //builder.Ignore(c => c.RelativeThumUrl);
             //builder.Ignore(c => c.AbsoluteFileUrl);
             //builder.Ignore(c => c.AbsoluteThumUrl);
-            builder.Property(c => c.ExtensionData).HasColumnType($"varchar({BXJGUtilsConsts.ExtDataMaxLength})");
+            //builder.Property(c => c.ExtensionData).HasColumnType($"varchar({BXJGUtilsConsts.ExtDataMaxLength})");
             //builder.HasMany(c => c.WorkOrderTypes).WithOne().HasForeignKey("CategoryId");
             //builder.Property(c => c.WorkOrderTypes).HasMaxLength(CoreConsts.WorkOrderClsTypeMaxLength);
             //builder.Property(c => c.Icon).HasColumnType($"varchar({CoreConsts.ItemCategoryIconMaxLength})");

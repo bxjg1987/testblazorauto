@@ -57,7 +57,6 @@ namespace BXJG.Utils.Files
         /// <summary>
         /// abp提供的异步取消
         /// </summary>
-        public ICancellationTokenProvider CancellationTokenProvider { get; set; } = NullCancellationTokenProvider.Instance; //空模式
 
         //替换 文本中 文件引用的，改用固定字符串替换的方式更简单
         ///// <summary>
@@ -72,6 +71,8 @@ namespace BXJG.Utils.Files
 
         public IAbpSession AbpSession { get; set; }
         public IBackgroundJobManager BackgroundJobManager { get; set; }
+
+        
         #endregion
 
         //去掉构造函数，便于子类重写
@@ -143,6 +144,7 @@ namespace BXJG.Utils.Files
         public virtual async Task<FileEntity> Upload(string fileName, string fileRelativePath)
         {
             var file = await AddFileRecord(fileName, fileRelativePath);
+            await CurrentUnitOfWork.SaveChangesAsync(); //数据库操作成功时才移动文件
             Move(fileRelativePath, file);
             return file;
         }
@@ -228,7 +230,9 @@ namespace BXJG.Utils.Files
             {
                 Directory.CreateDirectory(dir);
             }
-            File.Move(Relative2AbsolutePath(tempRelativePath), des);
+            //可能移动文件成功，数据库混滚，导致下次提交时临时文件中找不到，所以这里复制过去，且不删除临时文件
+            //这样短时间内重新提交也没问题，时间久了，定时任务会删除临时文件的
+            File.Copy(Relative2AbsolutePath(tempRelativePath), des);
             if (file.RelativePathThumbnail.IsNotNullOrWhiteSpaceBXJG())
             {
                 //file.RelativePathThumbnail = Path.Combine(TimingProvider.Get().ToString("yyyyMMdd"), Path.GetFileNameWithoutExtension(file.RelativePath)) + ".jpg";

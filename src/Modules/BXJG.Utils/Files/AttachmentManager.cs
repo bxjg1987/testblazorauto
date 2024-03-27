@@ -14,179 +14,149 @@ using BXJG.Common.Extensions;
 using System.IO;
 using BXJG.Utils.Share;
 using BXJG.Utils.Share.Files;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Immutable;
+using Abp;
+using System.Linq.Expressions;
+using Abp.Linq.Expressions;
 
 namespace BXJG.Utils.Files
 {
     /// <summary>
-    /// 一个low版附件管理器
-    /// 它与实体建立弱引用(EntityType,EntityId)关系，将所有实体的附件统一存储到一张表中
-    /// <see href="https://gitee.com/bxjg1987_admin/abp/wikis/pages?sort_id=4086113%26doc_id=627313" />
+    /// 附件管理器
+    /// 每个实体类型对应一个附件管理器
+    /// 它与实体建立弱引用(EntityType,EntityId和可选的属性名)关系，将所有实体的附件统一存储到一张表中
     /// </summary>
-    public class AttachmentManager : DomainService
+    public class AttachmentManager : BXJGBaseDomainService
     {
-        private readonly FileManager tempFileManager;
-        private readonly IRepository<AttachmentEntity, Guid> repository;
-        public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; } = NullAsyncQueryableExecuter.Instance;
-        private readonly string entityType;
-
-        public AttachmentManager(FileManager tempFileManager, IRepository<AttachmentEntity, Guid> repository, string entityType)
+        /// <summary>
+        /// 文件管理器
+        /// </summary>
+        public FileManager FileManager { get; set; }
+        /// <summary>
+        /// 仓储
+        /// </summary>
+        public IRepository<AttachmentEntity, Guid> Repository { get; set; }
+        /// <summary>
+        /// 关联的实体类型，也就表明当前附件管理器是专用于管理此类型实体的
+        /// </summary>
+        protected readonly string entityType;
+        // public IGuidGenerator GuidGenerator { get; set; }
+        /// <summary>
+        /// 实例化附件管理器
+        /// </summary>
+        /// <param name="entityType">实体类型</param>
+        public AttachmentManager(string entityType)
         {
-            base.LocalizationSourceName = Share.BXJGUtilsConsts.LocalizationSourceName;
-            this.tempFileManager = tempFileManager;
-            this.repository = repository;
+            this.FileManager = FileManager;
+            this.Repository = Repository;
             this.entityType = entityType;
         }
         /// <summary>
-        /// 设置附件，请在你的业务数据操作最后一个步骤调用此方法，或者将你的带事务的操作放在act中
+        /// 设置附件，删除和新增关联的文件
         /// </summary>
         /// <param name="entityId">实体id</param>
-        /// <param name="files">key文件相对路径，value扩展属性</param>
-        /// <param name="act">移动新文件和删除旧文件之前回调</param>
+        /// <param name="files">文件列表，注意顺序，若是纯删除则保持空</param>
         /// <param name="propertyName">关联的属性名</param>
         /// <returns></returns>
-        public async Task<List<AttachmentEntity>> SetAttachmentsAsync(object entityId, IList<AttachmentEditDto> files, Func<List<AttachmentEntity>, ValueTask> act = default, string propertyName = default)
+        public async Task<List<AttachmentEntity>> SetAttachments(object entityId, IList<SetAttachmentFile> files = default, string propertyName = default)
         {
-            //相应的文件处理参考：https://gitee.com/bxjg1987_admin/abp/wikis/pages?sort_id=4086113%26doc_id=627313#%E4%BA%8B%E5%8A%A1
-            #region 删除旧文件
-            //查询旧文件的相对url
-            var qq = repository.GetAll()
-                               .Where(c => c.EntityType == entityType && c.EntityId == entityId.ToString())
-                               .WhereIf(!Abp.Extensions.StringExtensions.IsNullOrWhiteSpace(propertyName),c=>c.PropertyName==propertyName)
-                               .Select(c => c.RelativeFileUrl);
-            var qqList = await AsyncQueryableExecuter.ToListAsync(qq);
-            string[] needDelete = new string[0];
-            if (qqList.Count > 0)
+            var id = entityId.ToString();
+
+            var oldEntities = await Repository.GetAll()
+                                              .Include(x => x.File)
+                                              .Where(c => c.EntityType == entityType && c.EntityId == id)
+                                              .WhereIf(propertyName.IsNotNullOrWhiteSpaceBXJG(), x => x.PropertyName == propertyName)
+                                              .ToArrayAsync();
+
+            if (files == default)
+                files = new List<SetAttachmentFile>();
+
+            var needDeletes = oldEntities.Where(x => !files.Any(d => d.FileId == x.Id)).ToImmutableArray();
+            foreach (var item in needDeletes)
             {
-                //旧文件的名称集合
-                var oldNames = qqList.Select(c => Path.GetFileName(c));
-
-                //新文件的名称集合
-                if (files == null)
-                    files = new List<AttachmentEditDto>();
-                var newNames = files.Select(c => Path.GetFileName(c.AbsoluteFileUrl));
-
-                //找到需要删除的文件名，不含路径，注意文件名是guid，所以可用这样做
-                var xj = oldNames.Except(newNames);
-
-                //得到需要删除的文件集合，包含路径
-                needDelete = qqList.Where(c => xj.Any(d => c.Contains(d))).ToArray();
-
-                //删除旧文件的数据库记录
-                await repository.DeleteAsync(c => c.EntityType==entityType&& c.EntityId == entityId.ToString());
-                await CurrentUnitOfWork.SaveChangesAsync();
+                await Repository.DeleteAsync(item);
+                await FileManager.Remove(item.File);
             }
-            //不要在这里删，要在数据库操作之后删除文件
-            //await tempFileManager.RemoveAsync(needDelete);
-            #endregion
 
-            #region 添加新的
-            var list = new List<AttachmentEntity>();
-
-            for (var i = 0; i < files.Count; i++)
+            var newEntities = new List<AttachmentEntity>();
+            for (int i = 0; i < files.Count; i++)
             {
-                var item = files[i];
-
-                var entity = new AttachmentEntity
+                var file = files[i];
+                var entity = oldEntities.SingleOrDefault(x => x.Id == file.FileId);
+                if (entity == default)
                 {
-                    EntityType = entityType,
-                    EntityId = entityId.ToString(),
-                    RelativeFileUrl = tempFileManager.Absolute2RelativeUrl(tempFileManager.TempToOkPath(item.AbsoluteFileUrl)),
-                    OrderIndex = item.OrderIndex == default ? i : item.OrderIndex,
-                    PropertyName = propertyName
-                };
-                entity.RelativeThumUrl = tempFileManager.ConvertToThumPath(entity.RelativeFileUrl);
-                entity.AbsoluteFileUrl = tempFileManager.Relative2AbsoluteUrl(entity.RelativeFileUrl);
-                if (!entity.RelativeThumUrl.IsNullOrWhiteSpace())
-                    entity.AbsoluteThumUrl = tempFileManager.Relative2AbsoluteUrl(entity.RelativeThumUrl);
-                if (item.ExtensionData != null)
-                {
-                    foreach (var ext in item.ExtensionData)
+                    var f = await FileManager.Upload(file.FileName, file.TempPath);
+                    entity = new AttachmentEntity
                     {
-                        entity.SetData(ext.Key, ext.Value);
-                    }
+                        EntityId = id,
+                        EntityType = entityType,
+                        Id = f.Id,
+                        File = f,
+                        OrderIndex = i,
+                        PropertyName = propertyName
+                    };
+                    await Repository.InsertAsync(entity);
                 }
-
-                await repository.InsertAsync(entity);
-                list.Add(entity);
-            }
-
-            await CurrentUnitOfWork.SaveChangesAsync();
-            #endregion
-
-            #region 回调
-            if (act != default)
-                await act(list);
-            #endregion
-
-            #region 最后移动新文件，删除旧文件
-
-            //移动所有文件
-            await tempFileManager.MoveAsync(files.Select(c => c.AbsoluteFileUrl).ToArray());
-
-            try
-            {
-                //最后删除旧文件，内部不会异常
-                await tempFileManager.RemoveAsync(needDelete);
-            }
-            catch (Exception ex)
-            {
-                Logger.Warn("删除附件旧文件失败！", ex);
-            }
-
-            #endregion
-
-            return list;
-        }
-        /// <summary>
-        /// 获取附件
-        /// </summary>
-        /// <param name="entityIds"></param>
-        /// <param name="propertyName">关联的属性名</param>
-        /// <returns>key为实体id，value为附件列表</returns>
-        public async Task<Dictionary<string, List<AttachmentEntity>>> GetAttachmentsAsync(string propertyName = default,params string[] entityIds)
-        {
-            entityIds = entityIds.Distinct().ToArray();
-            var q = repository.GetAll()
-                              .Where(c => c.EntityType == entityType && entityIds.Contains(c.EntityId))
-                              .Where(c => c.PropertyName == propertyName)
-                              .OrderBy(c => c.OrderIndex);
-            var list = await AsyncQueryableExecuter.ToListAsync(q);
-            list.ForEach(entity =>
-            {
-                entity.AbsoluteFileUrl = tempFileManager.Relative2AbsoluteUrl(entity.RelativeFileUrl);
-                entity.RelativeThumUrl = tempFileManager.TryGetThumRelativeUrl(entity.AbsoluteFileUrl);
-                if (!entity.RelativeThumUrl.IsNullOrWhiteSpace())
-                    entity.AbsoluteThumUrl = tempFileManager.Relative2AbsoluteUrl(entity.RelativeThumUrl);
-            });
-            var dic = new Dictionary<string, List<AttachmentEntity>>();
-
-            foreach (var item in entityIds)
-            {
-                var sss = list.Where(c => c.EntityId == item).ToList();
-                if (sss.Count > 0)
-                    dic.Add(item, sss);
-            }
-            return dic;
-        }
-
-        /// <summary>
-        /// 获取附件
-        /// </summary>
-        /// <param name="entityIds"></param>
-        /// <returns>key为实体id，value第一个附件</returns>
-        public async Task<Dictionary<string, AttachmentEntity>> GetFirstAttachmentsAsync(params string[] entityIds)
-        {
-            //先用low的方式实现功能吧
-            var items = await GetAttachmentsAsync(entityIds:entityIds);
-            foreach (var item in items)
-            {
-                while (item.Value.Count > 1)
+                else
                 {
-                    item.Value.RemoveAt(item.Value.Count - 1);
+                    entity.OrderIndex = i;
                 }
+                newEntities.Add(entity);
             }
-            return items.ToDictionary(c => c.Key, c => c.Value.FirstOrDefault());
+
+            return newEntities;
         }
+        ///// <summary>
+        ///// 获取附件
+        ///// </summary>
+        ///// <param name="entityIds"></param>
+        ///// <param name="propertyName">关联的属性名</param>
+        ///// <returns>key为实体id，value为附件列表</returns>
+        //public async Task<Dictionary<string, List<AttachmentEntity>>> GetAttachmentsAsync(string propertyName = default, params string[] entityIds)
+        //{
+        //    entityIds = entityIds.Distinct().ToArray();
+        //    var q = Repository.GetAll()
+        //                      .Where(c => c.EntityType == entityType && entityIds.Contains(c.EntityId))
+        //                      .Where(c => c.PropertyName == propertyName)
+        //                      .OrderBy(c => c.OrderIndex);
+        //    var list = await q.ToListAsync();
+        //    list.ForEach(entity =>
+        //    {
+        //        entity.AbsoluteFileUrl = FileManager.Relative2AbsoluteUrl(entity.RelativeFileUrl);
+        //        entity.RelativeThumUrl = FileManager.TryGetThumRelativeUrl(entity.AbsoluteFileUrl);
+        //        if (!entity.RelativeThumUrl.IsNullOrWhiteSpace())
+        //            entity.AbsoluteThumUrl = FileManager.Relative2AbsoluteUrl(entity.RelativeThumUrl);
+        //    });
+        //    var dic = new Dictionary<string, List<AttachmentEntity>>();
+
+        //    foreach (var item in entityIds)
+        //    {
+        //        var sss = list.Where(c => c.EntityId == item).ToList();
+        //        if (sss.Count > 0)
+        //            dic.Add(item, sss);
+        //    }
+        //    return dic;
+        //}
+
+        ///// <summary>
+        ///// 获取附件
+        ///// </summary>
+        ///// <param name="entityIds"></param>
+        ///// <returns>key为实体id，value第一个附件</returns>
+        //public async Task<Dictionary<string, AttachmentEntity>> GetFirstAttachmentsAsync(params string[] entityIds)
+        //{
+        //    //先用low的方式实现功能吧
+        //    var items = await GetAttachmentsAsync(entityIds: entityIds);
+        //    foreach (var item in items)
+        //    {
+        //        while (item.Value.Count > 1)
+        //        {
+        //            item.Value.RemoveAt(item.Value.Count - 1);
+        //        }
+        //    }
+        //    return items.ToDictionary(c => c.Key, c => c.Value.FirstOrDefault());
+        //}
     }
     /// <summary>
     /// 一个简单的附件管理器
@@ -194,8 +164,7 @@ namespace BXJG.Utils.Files
     /// <typeparam name="TEntity">附件所属实体类型</typeparam>
     public class AttachmentManager<TEntity> : AttachmentManager
     {
-        public AttachmentManager(FileManager tempFileManager, IRepository<AttachmentEntity, Guid> repository)
-            : base(tempFileManager, repository, typeof(TEntity).FullName)
+        public AttachmentManager() : base(typeof(TEntity).FullName)
         {
         }
     }

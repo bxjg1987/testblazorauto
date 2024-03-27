@@ -32,7 +32,6 @@
     <Compile Remove="Extensions\dfdfg.cs" />
     <Compile Remove="Extensions\HashHelper.cs" />
     <Compile Remove="Extensions\StringExtension.cs" />
-    <Compile Remove="Files\AttachmentManager.cs" />
     <Compile Remove="Files\FileDto.cs" />
     <Compile Remove="GeneralTree\GeneralTreePermissionExt.cs" />
     <Compile Remove="RandomHelper.cs" />
