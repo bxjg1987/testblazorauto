@@ -30,6 +30,7 @@ using Microsoft.EntityFrameworkCore.ValueGeneration;
 using Abp.Timing;
 using Abp.Runtime.Session;
 using Abp.BackgroundJobs;
+using Microsoft.Extensions.Logging;
 namespace BXJG.Utils.Files
 {
     /// <summary>
@@ -72,7 +73,7 @@ namespace BXJG.Utils.Files
         public IAbpSession AbpSession { get; set; }
         public IBackgroundJobManager BackgroundJobManager { get; set; }
 
-        
+
         #endregion
 
         //去掉构造函数，便于子类重写
@@ -121,7 +122,7 @@ namespace BXJG.Utils.Files
             #region 保存文件
 
             //var hz = Path.GetExtension(item.FileName); //文件后缀.jpg
-            var wjm = GuidGenerator.Create().ToString("n") + hzm2; //xxx.jpg  xxx=guid
+            var wjm = Guid.NewGuid().ToString("n") + hzm2; //xxx.jpg  xxx=guid
 
             //var dateDir = Path.Combine(_tempDir, DateTime.Now.ToString("yyyyMMdd")); //d:\app\wwwroot\upload\temp\20201003
             //if (!Directory.Exists(dateDir))
@@ -170,7 +171,7 @@ namespace BXJG.Utils.Files
             {
                 Ext = Path.GetExtension(tempFileRelativePath),
                 // FullName = ur.FileName,
-                Id = Guid.Parse(Path.GetFileNameWithoutExtension(tempFileRelativePath)),
+                Id = GuidGenerator.Create(),// Guid.Parse(Path.GetFileNameWithoutExtension(tempFileRelativePath)),
                 //Name = Path.GetFileName(ur.TempPath),
                 //Status = FileStatus.Moving,
                 RealName = fileName,
@@ -181,10 +182,10 @@ namespace BXJG.Utils.Files
 
             };
             var nyr = Clock.Now.ToString("yyyyMMdd");
-            file.RelativePath = Path.Combine(nyr, Path.GetFileName(tempFileRelativePath));
+            file.RelativePath = Path.Combine(nyr, file.Id.ToString()) + Path.GetExtension(tempFileRelativePath);
             if (file.ResponseContentType.StartsWith("image/"))
             {
-                file.RelativePathThumbnail = Path.Combine(nyr, Path.GetFileNameWithoutExtension(tempFileRelativePath) + ".jpg");
+                file.RelativePathThumbnail = Path.Combine(nyr, Path.GetFileNameWithoutExtension(file.RelativePath) + ".jpg");
             }
 
             if (AbpSession.TenantId.HasValue)
@@ -251,8 +252,34 @@ namespace BXJG.Utils.Files
             await Repository.DeleteAsync(file);
             //BackgroundJob.Enqueue(() => File.Delete(Relative2AbsolutePath(file.RelativePath)));
             //BackgroundJob.Enqueue(() => File.Delete(Relative2AbsolutePath(file.RelativePathThumbnail)));
-            await BackgroundJobManager.EnqueueAsync<DeleteFileBackgroundJob, string>(Relative2AbsolutePath(file.RelativePath));
-            await BackgroundJobManager.EnqueueAsync<DeleteFileBackgroundJob, string>(Relative2AbsolutePath(file.RelativePathThumbnail));
+            //await BackgroundJobManager.EnqueueAsync<DeleteFileBackgroundJob, string>(Relative2AbsolutePath(file.RelativePath));
+            //await BackgroundJobManager.EnqueueAsync<DeleteFileBackgroundJob, string>(Relative2AbsolutePath(file.RelativePathThumbnail));
+            await DeleteEffortless(file.RelativePath, file.RelativePathThumbnail);
+        }
+
+
+        /// <summary>
+        /// 尽力而为的删除物理文件
+        /// </summary>
+        /// <param name="pathRelative">相对路径</param>
+        public virtual async Task DeleteEffortless(params string[] pathRelative)
+        {
+            foreach (var item in pathRelative)
+            {
+                if (item.IsNullOrWhiteSpaceBXJG())
+                    continue;
+
+                try
+                {
+                    var p = Relative2AbsolutePath(item);
+                    //BackgroundJob.Enqueue(() => File.Delete(p));
+                    await BackgroundJobManager.EnqueueAsync<DeleteFileBackgroundJob, string>(p);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error("添加删除文件的任务时失败！", ex);
+                }
+            }
         }
 
         //public void Execute(sdfsdf args)

@@ -19,6 +19,8 @@ using System.Collections.Immutable;
 using Abp;
 using System.Linq.Expressions;
 using Abp.Linq.Expressions;
+using Abp.BackgroundJobs;
+using Microsoft.Extensions.Logging;
 
 namespace BXJG.Utils.Files
 {
@@ -107,6 +109,10 @@ namespace BXJG.Utils.Files
 
             return newEntities;
         }
+
+       
+
+
         ///// <summary>
         ///// 获取附件
         ///// </summary>
