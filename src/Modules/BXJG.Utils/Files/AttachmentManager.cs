@@ -28,6 +28,7 @@ namespace BXJG.Utils.Files
     /// 附件管理器
     /// 每个实体类型对应一个附件管理器
     /// 它与实体建立弱引用(EntityType,EntityId和可选的属性名)关系，将所有实体的附件统一存储到一张表中
+    /// 它内部使用FileManager进行文件管理
     /// </summary>
     public class AttachmentManager : BXJGBaseDomainService
     {
@@ -36,7 +37,7 @@ namespace BXJG.Utils.Files
         /// </summary>
         public FileManager FileManager { get; set; }
         /// <summary>
-        /// 仓储
+        /// 附件仓储
         /// </summary>
         public IRepository<AttachmentEntity, Guid> Repository { get; set; }
         /// <summary>
@@ -58,10 +59,10 @@ namespace BXJG.Utils.Files
         /// 设置附件，删除和新增关联的文件
         /// </summary>
         /// <param name="entityId">实体id</param>
-        /// <param name="files">文件列表，注意顺序，若是纯删除则保持空</param>
+        /// <param name="files">包含新老文件的列表，注意顺序，若是纯删除则保持空</param>
         /// <param name="propertyName">关联的属性名</param>
-        /// <returns></returns>
-        public async Task<List<AttachmentEntity>> SetAttachments(object entityId, IList<SetAttachmentFile> files = default, string propertyName = default)
+        /// <returns>没必要返回附件，直接返回文件吧</returns>
+        public async Task<List<FileEntity>> SetAttachments(object entityId, IList<SetAttachmentFile> files = default, string propertyName = default)
         {
             var id = entityId.ToString();
 
@@ -69,7 +70,7 @@ namespace BXJG.Utils.Files
                                               .Include(x => x.File)
                                               .Where(c => c.EntityType == entityType && c.EntityId == id)
                                               .WhereIf(propertyName.IsNotNullOrWhiteSpaceBXJG(), x => x.PropertyName == propertyName)
-                                              .ToArrayAsync();
+                                              .ToArrayAsync(CancellationTokenProvider.Token);
 
             if (files == default)
                 files = new List<SetAttachmentFile>();
@@ -77,11 +78,13 @@ namespace BXJG.Utils.Files
             var needDeletes = oldEntities.Where(x => !files.Any(d => d.FileId == x.Id)).ToImmutableArray();
             foreach (var item in needDeletes)
             {
+                
+
                 await Repository.DeleteAsync(item);
                 await FileManager.Remove(item.File);
             }
 
-            var newEntities = new List<AttachmentEntity>();
+            var newEntities = new List<FileEntity>();
             for (int i = 0; i < files.Count; i++)
             {
                 var file = files[i];
@@ -104,13 +107,13 @@ namespace BXJG.Utils.Files
                 {
                     entity.OrderIndex = i;
                 }
-                newEntities.Add(entity);
+                newEntities.Add(entity.File);
             }
 
             return newEntities;
         }
 
-       
+        //获取以仓储扩展方法提供
 
 
         ///// <summary>

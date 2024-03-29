@@ -1,0 +1,72 @@
+﻿using Abp.Domain.Repositories;
+using BXJG.Utils.Files;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Collections.Specialized;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace Abp.Domain.Repositories
+{
+    public static class FileRepositoryExt
+    {
+        //这里只定义常用场景需要的查询，更多场景不要定义扩展，而是直接在需要时自己查询
+
+        /// <summary>
+        /// 从附件中获取文件
+        /// </summary>
+        /// <param name="repository"></param>
+        /// <param name="entityType">实体类型</param>
+        /// <param name="entityId">实体id</param>
+        /// <param name="track"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>key属性名，value文件列表</returns>
+        public static async Task<Dictionary<string, List<FileEntity>>> GetFilesByAttachment(this IRepository<AttachmentEntity, Guid> repository, string entityType, string entityId, bool track = false, CancellationToken cancellationToken = default)
+        {
+            IQueryable<AttachmentEntity> q = repository.GetAll().WhereAttachment(entityType, track: track).Where(x => x.EntityId == entityId);
+            var list = await q.ToArrayAsync(cancellationToken);
+            return list.GroupBy(x => x.PropertyName).ToDictionary(x => x.Key, x => x.OrderBy(c => c.OrderIndex).Select(c => c.File).ToList());
+        }
+
+        /// <summary>
+        /// 从附件中获取文件
+        /// </summary>
+        /// <param name="repository"></param>
+        /// <param name="entityType">实体类型</param>
+        /// <param name="entityIds">实体id</param>
+        /// <param name="track"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns> key实体id；value：属性名和文件列表</returns>
+        public static async Task<Dictionary<string, Dictionary<string, List<FileEntity>>>> GetFilesByAttachment(this IRepository<AttachmentEntity, Guid> repository, string entityType, IEnumerable<string> entityIds, bool track = false, CancellationToken cancellationToken = default)
+        {
+            IQueryable<AttachmentEntity> q = repository.GetAll().WhereAttachment(entityType, track: track, entityIds: entityIds.ToArray());
+            var list = await q.ToArrayAsync(cancellationToken);
+            return list.GroupBy(x => x.EntityId)
+                       .ToDictionary(x => x.Key,
+                                     x => x.GroupBy(y => y.PropertyName)
+                                           .ToDictionary(z => z.Key,
+                                                         z => z.OrderBy(v => v.OrderIndex).Select(g => g.File).ToList()));
+        }
+
+        /// <summary>
+        /// 从附件中获取文件
+        /// </summary>
+        /// <param name="repository"></param>
+        /// <param name="entityType">实体类型</param>
+        /// <param name="entityId">实体id</param>
+        /// <param name="propertyName">实体id</param>
+        /// <param name="track"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>文件列表</returns>
+        public static async Task<List<FileEntity>> GetFilesByAttachment(this IRepository<AttachmentEntity, Guid> repository, string entityType, string entityId, string propertyName, bool track = false, CancellationToken cancellationToken = default)
+        {
+            IQueryable<AttachmentEntity> q = repository.GetAll().WhereAttachment(entityType, propertyName, track).Where(x => x.EntityId == entityId).OrderBy(x => x.OrderIndex);
+            var list = await q.ToArrayAsync(cancellationToken);
+            return list.Select(x => x.File).ToList();
+        }
+    }
+}

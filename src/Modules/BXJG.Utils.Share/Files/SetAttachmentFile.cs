@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Utils.Files
+namespace BXJG.Utils.Share.Files
 {
     /// <summary>
     /// 设置附件的模型
