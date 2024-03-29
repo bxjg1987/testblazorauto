@@ -66,7 +66,7 @@ namespace ZLJ.Application.Admin.Auditing
             var resultCount = await AsyncQueryableExecuter.CountAsync(query);
             var results = await query
                 .OrderBy(input.Sorting)
-                .PageBy(input).ToListAsync();
+                .PageBy(input).ToListAsync(CancellationTokenProvider.Token);
 
             var auditLogListDtos = ConvertToAuditLogListDtos(results);
 

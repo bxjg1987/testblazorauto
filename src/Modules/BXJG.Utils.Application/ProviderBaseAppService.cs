@@ -22,6 +22,7 @@ using Abp.Domain.Uow;
 using BXJG.Common.Dto;
 
 using BXJG.Utils.Application.Share;
+using Abp.Threading;
 
 namespace BXJG.Utils.Application
 {
@@ -60,12 +61,13 @@ namespace BXJG.Utils.Application
     /// <typeparam name="TKey">主键类型</typeparam>
     /// <typeparam name="TGetAllInput">查询时输入参数的类型</typeparam>
     /// <typeparam name="TEntityDto">可选数据的dto</typeparam>
-    [UnitOfWork(false)] 
-    public abstract class ProviderBaseAppService<TEntity, TGetAllInput, TEntityDto, TKey> : ApplicationService, IProviderBaseAppService< TGetAllInput, TEntityDto, TKey>
+    [UnitOfWork(false)]
+    public abstract class ProviderBaseAppService<TEntity, TGetAllInput, TEntityDto, TKey> : BXJGUtilsBaseAppService, IProviderBaseAppService<TGetAllInput, TEntityDto, TKey>
         where TEntity : class, IEntity<TKey>
     {
         protected virtual string GetAllPermissionName { get; set; }
-        public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }
+
+        //public virtual ICancellationTokenProvider CancellationTokenProvider { get; set; } = NullCancellationTokenProvider.Instance;
 
         public IRepository<TEntity, TKey> Repository { get; set; }
         /// <summary>
@@ -75,14 +77,14 @@ namespace BXJG.Utils.Application
         /// </summary>
         public IServiceProvider ServiceProvider { get; set; }
 
-        //AsyncCrudAppService
+        ////AsyncCrudAppService
 
-        //使用反模式，消除子类的构造函数
-        public ProviderBaseAppService(/*IRepository<TEntity, TKey> repository*/)
-        {
-            //this.Repository = repository;
-            AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
-        }
+        ////使用反模式，消除子类的构造函数
+        //public ProviderBaseAppService(/*IRepository<TEntity, TKey> repository*/)
+        //{
+        //    //this.Repository = repository;
+        //  //  AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
+        //}
         /// <summary>
         /// 获取可供选择的数据
         /// 通常用来提供下拉框或弹窗选择的数据

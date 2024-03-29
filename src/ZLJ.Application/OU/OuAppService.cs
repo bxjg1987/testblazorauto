@@ -5,6 +5,7 @@ using Abp.Domain.Repositories;
 using Abp.Extensions;
 using Abp.Linq.Extensions;
 using Abp.Organizations;
+using Abp.Threading;
 using BXJG.Common.Dto;
 using BXJG.Utils.Application.Share.GeneralTree;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +22,7 @@ using ZLJ.Core.BaseInfo;
 namespace ZLJ.Application.Admin.OU
 {
     [AbpAuthorize(PermissionNames.AdministratorBaseInfoOrganizationUnit)]
-    public class OuAppService : ApplicationService//<OrganizationUnit, OUDto, long, GetAllInput, OUEditDto>
+    public class OuAppService : AdminBaseAppService//<OrganizationUnit, OUDto, long, GetAllInput, OUEditDto>
     {
         OrganizationUnitManager organizationUnitManager;
         IRepository<OrganizationUnit, long> repository;
@@ -97,7 +98,7 @@ namespace ZLJ.Application.Admin.OU
                               .Include(c => c.Children)
                               .WhereIf(!code.IsNullOrWhiteSpace(), c => c.Code.StartsWith(code));
             q = q.OrderBy(c => c.Code);
-            var list = await q.ToListAsync();
+            var list = await q.ToListAsync(CancellationTokenProvider.Token);
             var dtos = new List<OUDto>();
             foreach (var item in list)
             {

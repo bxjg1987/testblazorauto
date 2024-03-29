@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Abp.Application.Services;
+using Abp.Linq;
 using Abp.Runtime.Session;
+using Abp.Threading;
 using BXJG.Utils.Share;
 
 namespace BXJG.Utils.Application
@@ -14,7 +16,9 @@ namespace BXJG.Utils.Application
         //public TenantManager TenantManager { get; set; }
 
         //public UserManager UserManager { get; set; }
+        public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; } = NullAsyncQueryableExecuter.Instance;
 
+        public ICancellationTokenProvider CancellationTokenProvider { get; set; } = NullCancellationTokenProvider.Instance;
         protected BXJGUtilsBaseAppService()
         {
             LocalizationSourceName = BXJGUtilsConsts.LocalizationSourceName;

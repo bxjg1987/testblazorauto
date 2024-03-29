@@ -56,7 +56,7 @@ namespace BXJG.Utils.Application.GeneralTree
                                                    TGetTreeForSelectInput,
                                                    TGetTreeForSelectOutput,
                                                    TGetNodesForSelectInput,
-                                                   TGetNodesForSelectOutput> : ApplicationService, IGeneralTreeProviderBaseAppService<TGetTreeForSelectInput,
+                                                   TGetNodesForSelectOutput> : BXJGUtilsBaseAppService, IGeneralTreeProviderBaseAppService<TGetTreeForSelectInput,
                                                                                                                    TGetTreeForSelectOutput,
                                                                                                                    TGetNodesForSelectInput,
                                                                                                                    TGetNodesForSelectOutput>
@@ -71,7 +71,7 @@ namespace BXJG.Utils.Application.GeneralTree
         public virtual string allTextForSearch { get; set; } = "不限";
         public virtual string allTextForForm { get; set; } = "请选择";
 
-        public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }//属性注入
+        //public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }//属性注入
         public IRepository<TEntity, long> repository { get; set; }
         /// <summary>
         /// 与当前请求关联的服务容器
@@ -452,7 +452,7 @@ namespace BXJG.Utils.Application.GeneralTree
                                            TDeleteInput,
                                            TGetInput,
                                            TMoveInput,
-                                           TManager> : ApplicationService, IGeneralTreeBaseAppService<TDto,
+                                           TManager> : BXJGUtilsBaseAppService, IGeneralTreeBaseAppService<TDto,
                                                                                                       TCreateInput,
                                                                                                       TEditDto,
                                                                                                       TGetAllInput,
@@ -475,7 +475,7 @@ namespace BXJG.Utils.Application.GeneralTree
          * 数据显示地方有：管理页列表、作为一个搜索条件框、作为表单里一个下拉框
          * 顶级文本可能是 前端传过来的、上级节点文本、默认文本；除非根本不现实
          */
-        public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; } = NullAsyncQueryableExecuter.Instance;
+        //public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; } = NullAsyncQueryableExecuter.Instance;
         public IRepository<TEntity, long> repository { get; set; }
         public TManager generalTreeManager { get; set; }
         protected virtual string allTextForManager { get; set; } = "全部";//注意这里代表的是本地化文本的key

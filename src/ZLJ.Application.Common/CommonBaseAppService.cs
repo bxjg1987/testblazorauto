@@ -18,18 +18,18 @@ namespace ZLJ.Application.Common
     /// <summary>
     /// 非常curd类型的应用服务基类
     /// </summary>
-    public abstract class CommonBaseAppService : ApplicationService
+    public abstract class CommonBaseAppService : BXJG.Utils.Application.BXJGUtilsBaseAppService
     {
         public TenantManager TenantManager { get; set; }
         //public IStaffSession StaffSession { get; set; }
         public UserManager UserManager { get; set; }
 
-        public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }//属性注入
+        //public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }//属性注入
         //public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }//属性注入
         protected CommonBaseAppService()
         {
             LocalizationSourceName = Application.Common.Consts.Common;
-            AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
+           // AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
         }
 
         protected virtual async Task<User> GetCurrentUserAsync()

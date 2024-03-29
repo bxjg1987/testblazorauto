@@ -86,7 +86,7 @@ namespace ZLJ.Application.Admin.Roles
                      from ou in tem2.DefaultIfEmpty()
                      where role.Id == entity.Id
                      select new { role, ou };
-            var list = await q2.ToListAsync();
+            var list = await q2.ToListAsync(CancellationTokenProvider.Token);
             var groups = list.GroupBy(c => c.role, c => c.ou);
             CurrentUnitOfWork.Items["ous"] = groups.ToDictionary(c => c.Key.Id, c => c.AsEnumerable());
         }
@@ -152,7 +152,7 @@ namespace ZLJ.Application.Admin.Roles
 
 
 
-            var list = await q2.ToListAsync();
+            var list = await q2.ToListAsync(CancellationTokenProvider.Token);
 
             var groups = list.GroupBy(c => c.role, c => c.ou);
             CurrentUnitOfWork.Items["ous"] = groups.ToDictionary(c => c.Key.Id, c => c.AsEnumerable());

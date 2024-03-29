@@ -59,7 +59,7 @@ namespace ZLJ.Application.Common.OU
             }
 
             q = q.OrderBy(c => c.Code);
-            var list = await q.ToListAsync();
+            var list = await q.ToListAsync(CancellationTokenProvider.Token);
             var dtos = new List<OuDto>();
             foreach (var item in list)
             {

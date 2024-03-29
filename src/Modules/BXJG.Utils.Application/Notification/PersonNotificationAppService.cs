@@ -35,7 +35,7 @@ namespace BXJG.Utils.Application.Notification
     /// 此功能是所有类型的用户通用的
     /// </summary>
     [AbpAuthorize]
-    public abstract class PersonNotificationAppService<TUser> : ApplicationService where TUser : AbpUserBase
+    public abstract class PersonNotificationAppService<TUser> : BXJGUtilsBaseAppService where TUser : AbpUserBase
     {
         public Lazy<IRepository<TUser, long>> userRepository { get; set; }
         protected IRepository<TUser, long> UserRepository => userRepository.Value;

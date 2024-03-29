@@ -11,10 +11,11 @@ using Abp.Runtime.Session;
 using Abp.UI;
 using ZLJ.Core.Authorization.Roles;
 using ZLJ.Core.MultiTenancy;
+using Abp.Threading;
 
 namespace ZLJ.Core.Authorization.Users
 {
-    public class UserRegistrationManager : DomainService
+    public class UserRegistrationManager : BXJGBaseInfoDomainServiceBase
     {
         public IAbpSession AbpSession { get; set; }
 
@@ -57,7 +58,7 @@ namespace ZLJ.Core.Authorization.Users
 
             user.SetNormalizedNames();
            
-            foreach (var defaultRole in await _roleManager.Roles.Where(r => r.IsDefault).ToListAsync())
+            foreach (var defaultRole in await _roleManager.Roles.Where(r => r.IsDefault).ToListAsync(CancellationTokenProvider.Token))
             {
                 user.Roles.Add(new UserRole(tenant.Id, user.Id, defaultRole.Id));
             }

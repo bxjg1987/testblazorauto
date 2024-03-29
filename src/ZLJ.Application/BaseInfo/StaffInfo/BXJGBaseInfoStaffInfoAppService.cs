@@ -157,7 +157,7 @@ namespace ZLJ.Application.Admin.BaseInfo.StaffInfo
                     };
 
             //var sql = q.ToQueryString();
-            var list = await q.ToListAsync();
+            var list = await q.ToListAsync(base.CancellationTokenProvider.Token);
             var sdf = list.GroupBy(c => c.Staff);
             var df = new List<IGrouping<StaffInfoEntity, QueryTemp>>();
             foreach (var item in ids)
@@ -251,7 +251,7 @@ namespace ZLJ.Application.Admin.BaseInfo.StaffInfo
                           join ouRole in organizationUnitRoleRepository.GetAll().AsNoTrackingWithIdentityResolution() on role.Id equals ouRole.RoleId into ouRoles
                           from ouRole in ouRoles.DefaultIfEmpty()
                           select ouRole.OrganizationUnitId;
-                var glid = await sdf.ToListAsync();
+                var glid = await sdf.ToListAsync(CancellationTokenProvider.Token);
                 var dcld = ouIds.Except(glid);
                 await userManager.SetOrganizationUnitsAsync(staff.Id, dcld.ToArray());
             }
@@ -324,7 +324,7 @@ namespace ZLJ.Application.Admin.BaseInfo.StaffInfo
 
 
             q2 = q2.PageBy(input);
-            var list = await q2.ToListAsync();
+            var list = await q2.ToListAsync(CancellationTokenProvider.Token);
             var roleAndOus = await GetRoleAndOusAsync(list); 
             var dtos = new List<StaffInfoDto>();
             foreach (var item in roleAndOus)

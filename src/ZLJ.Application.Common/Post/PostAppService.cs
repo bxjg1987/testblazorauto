@@ -46,7 +46,7 @@ namespace ZLJ.Application.Common.Post
 
             if (input.OuCodes.Count == 0 && input.OuIds.Length > 0)
             {
-                input.OuCodes = await ouRepository.Value.Where(c => input.OuIds.Contains(c.Id)).Select(c => c.Code).ToListAsync();
+                input.OuCodes = await ouRepository.Value.Where(c => input.OuIds.Contains(c.Id)).Select(c => c.Code).ToListAsync(CancellationTokenProvider.Token);
             }
 
             var q = from post in repository.Value
@@ -70,7 +70,7 @@ namespace ZLJ.Application.Common.Post
                      from ou in ous.DefaultIfEmpty()
                      select new { post, ou };
 
-            var list = await q2.ToListAsync();
+            var list = await q2.ToListAsync(CancellationTokenProvider.Token);
             var group = list.GroupBy(c => c.post, c => c.ou);
             var dtos = new List<PostDto>();
             foreach (var post in group)

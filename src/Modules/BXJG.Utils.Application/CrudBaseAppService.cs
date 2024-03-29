@@ -6,6 +6,7 @@ using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
 using Abp.Notifications;
 using Abp.Runtime.Session;
+using Abp.Threading;
 using Abp.UI;
 using BXJG.Common;
 using BXJG.Common.Dto;
@@ -67,6 +68,8 @@ namespace BXJG.Utils.Application
         /// 注：IocManager是全局单例，解析实现IDisposeable的服务时比较危险，此时应使用ServiceProvider
         /// </summary>
         public IServiceProvider ServiceProvider { get; set; }
+
+        public virtual ICancellationTokenProvider CancellationTokenProvider { get; set; } = NullCancellationTokenProvider.Instance;
 
         //Zhongjie仅用于界面，业务逻辑层任然使用abp的事件总线（它不是为界面设计的，默认也没提供多个实例），在ui提供abpk事件处理器 来连接到zhongjie实例
         //public Zhongjie Zhongjie { get; set; }

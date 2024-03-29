@@ -37,7 +37,7 @@ namespace ZLJ.Application.Common.Customer
             //base.Logger.Debug($"测试在应用服务上的[UnitOfWork(false)]是否有效：{base.CurrentUnitOfWork.Options.IsTransactional}");
             //base.Logger.Debug($"测试在blazor中，多次请求，当前uow是否是同一个实例：{base.CurrentUnitOfWork.GetHashCode()}");
          
-            var list = await q.ToListAsync();
+            var list = await q.ToListAsync(CancellationTokenProvider.Token);
             return base.ObjectMapper.Map<List<OuDto>>(list);
         }
         //public virtual async Task<OuDto> GetAsync(EntityDto<long> input)

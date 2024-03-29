@@ -12,7 +12,7 @@ namespace ZLJ.Core
     /// <summary>
     /// 领域服务基类
     /// </summary>
-    public class BXJGBaseInfoDomainServiceBase : DomainService
+    public class BXJGBaseInfoDomainServiceBase : BXJG.Utils.BXJGBaseDomainService
     {
         //参考 https://github.com/aspnetboilerplate/aspnetboilerplate/blob/c2c2e4fee2a680e5e2baa196defa774e4d3d68f2/src/Abp/Domain/Repositories/AbpRepositoryBase.cs
         //运行时将属性注入一个基于HttpContext的实现，意思是请求中断时会直接取消整个请求中所有的异步，前提是这些异步操作都传入了CancellationToken

@@ -20,6 +20,7 @@ using Abp.Authorization.Users;
 using ZLJ.Core.BaseInfo.Post;
 using BXJG.Utils.Localization;
 using Microsoft.AspNetCore.Mvc;
+using Abp.Threading;
 
 namespace ZLJ.Application.Common.StaffInfo
 {
@@ -30,7 +31,7 @@ namespace ZLJ.Application.Common.StaffInfo
     /// </summary>
     [UnitOfWork(false)]
     [AbpAuthorize]
-    public class StaffInfoAppService : ApplicationService
+    public class StaffInfoAppService : CommonBaseAppService
     {
         private readonly Lazy<IQueryable<OrganizationUnitEntity>> ouQuery;
         private readonly Lazy<IQueryable<OrganizationUnitRole>> ouRoleQuery;
@@ -92,7 +93,7 @@ namespace ZLJ.Application.Common.StaffInfo
             r.TotalCount = await q2.CountAsync();
 
             q2 = q2.PageBy(input);
-            var list = await q2.ToListAsync();
+            var list = await q2.ToListAsync(CancellationTokenProvider.Token);
             var roleAndOus = await GetRoleAndOusAsync(list);
             var dtos = new List<Dto>();
             foreach (var item in roleAndOus)
@@ -181,7 +182,7 @@ namespace ZLJ.Application.Common.StaffInfo
                     };
 
             //var sql = q.ToQueryString();
-            var list = await q.ToListAsync();
+            var list = await q.ToListAsync(CancellationTokenProvider.Token);
             var sdf = list.GroupBy(c => c.Staff);
             var df = new List<IGrouping<StaffInfoEntity, QueryTemp>>();
             foreach (var item in ids)
