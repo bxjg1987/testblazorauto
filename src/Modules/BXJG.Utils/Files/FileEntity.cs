@@ -49,6 +49,13 @@ namespace BXJG.Utils.Files
         /// 缩略图相对路径
         /// </summary>
         public string? RelativePathThumbnail { get; set; }
+        /// <summary>
+        /// 通用的文件权限，统一文件访问接口判断此属性，
+        /// 具体业务独立的文件访问接口葫芦此属性
+        /// 由于这是通用权限，所以定义在这里而不是附件实体上
+        /// </summary>
+        public FilePermission Permission { get; set; } = FilePermission.Further;
+
         ///// <summary>
         ///// 文件状态
         ///// </summary>

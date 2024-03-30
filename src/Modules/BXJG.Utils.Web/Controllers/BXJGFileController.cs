@@ -9,9 +9,11 @@ using Abp.Authorization;
 using BXJG.Utils.Application.Share.Files;
 using BXJG.Utils.Files;
 using BXJG.Utils.Share;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -33,15 +35,16 @@ namespace BXJG.Utils.Web.Controllers
     /// </summary>
     [Route("api/[controller]/[action]")]
     [ApiController]
-    [AbpAuthorize]
     public class BXJGFileController : AbpController
     {
-        private readonly FileManager tempFileManager;
+        private readonly Lazy<FileManager> tempFileManager;
+        private readonly Lazy<FileDownloader> fileDownloader;
 
-        public BXJGFileController(FileManager tempFileManager)
+        public BXJGFileController(Lazy<FileManager> tempFileManager, Lazy<FileDownloader> fileDownloader)
         {
             base.LocalizationSourceName = BXJGUtilsConsts.LocalizationSourceName;
             this.tempFileManager = tempFileManager;
+            this.fileDownloader = fileDownloader;
         }
 
         //图片均生成缩略图，考虑到pc和移动端，目前自动生成两种尺寸的缩略图
@@ -53,13 +56,14 @@ namespace BXJG.Utils.Web.Controllers
         /// <param name="file"></param>
         /// <returns></returns>
         [HttpPost]
+        [AbpAuthorize]
         public async Task<FileDto> UploadAsync(IFormFile file)
         {
             // var rts = new List<FileUploadResult>();
             //var fs = file.Select(c => new FileInput(c.FileName, c.OpenReadStream()));
             using var fs = file.OpenReadStream();
 
-            var r = await tempFileManager.UploadToTemp(fs);
+            var r = await tempFileManager.Value.UploadToTemp(fs);
 
             return new FileDto { Name = file.FileName, Path = r };
             //   return ObjectMapper.Map<List<FileDto>>(r);
@@ -70,6 +74,47 @@ namespace BXJG.Utils.Web.Controllers
             //    FileUrl = c.FileUrl,
             //    ThumUrl = c.ThumUrl
             //}).ToList();
+        }
+
+        //此逻辑比较简单，下载文件必须要controller，若把controller看成是应用服务平级的话
+        //如此理解，文件下载的权限判断逻辑也没必要再封装个应用服务了
+
+        /// <summary>
+        /// 获取文件
+        /// </summary>
+        /// <param name="id">文件id</param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<PhysicalFileResult> Download(Guid id)
+        {
+            var r = this.fileDownloader.Value.GetAbsolutePath(id);
+
+            if (r.Permission == Share.Files.FilePermission.Further)
+                throw new AbpAuthorizationException("请使用具体业务独立的文件访问接口");
+
+            if (r.Permission == Share.Files.FilePermission.Authenticated && !base.AbpSession.UserId.HasValue)
+                throw new AuthenticationFailureException("请登录");
+
+            return PhysicalFile(r.RelativePath, r.ResponseContentType, r.RealFullName);
+        }
+
+        /// <summary>
+        /// 获取文件缩略图
+        /// </summary>
+        /// <param name="id">文件id</param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<PhysicalFileResult> DownloadThum(Guid id)
+        {
+            var r = this.fileDownloader.Value.GetAbsolutePath(id);
+
+            if (r.Permission == Share.Files.FilePermission.Further)
+                throw new AbpAuthorizationException("请使用具体业务独立的文件访问接口");
+
+            if (r.Permission == Share.Files.FilePermission.Authenticated && !base.AbpSession.UserId.HasValue)
+                throw new AuthenticationFailureException("请登录");
+
+            return PhysicalFile(r.RelativePathThumbnail, "image/jpeg", r.RealFullName);
         }
     }
 }

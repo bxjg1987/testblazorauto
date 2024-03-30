@@ -35,6 +35,22 @@ namespace BXJG.Utils.Extensions
         }
 
         /// <summary>
+        /// 从附件中获取文件，忽略propertyName
+        /// </summary>
+        /// <param name="repository"></param>
+        /// <param name="entityType">实体类型</param>
+        /// <param name="entityId">实体id</param>
+        /// <param name="track"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>文件列表</returns>
+        public static async Task<List<FileEntity>> GetFilesByAttachmentWithoutProperty(this IRepository<AttachmentEntity, Guid> repository, string entityType, string entityId, bool track = false, CancellationToken cancellationToken = default)
+        {
+            IQueryable<AttachmentEntity> q = repository.GetAll().WhereAttachment(entityType, track: track).Where(x => x.EntityId == entityId);
+            return await q.OrderBy(x => x.OrderIndex).Select(x => x.File).ToListAsync(cancellationToken);
+        }
+
+
+        /// <summary>
         /// 从附件中获取文件
         /// </summary>
         /// <param name="repository"></param>
@@ -53,6 +69,25 @@ namespace BXJG.Utils.Extensions
                                            .ToDictionary(z => z.Key,
                                                          z => z.OrderBy(v => v.OrderIndex).Select(g => g.File).ToList()));
         }
+        /// <summary>
+        /// 从附件中获取文件，忽略propertyName
+        /// </summary>
+        /// <param name="repository"></param>
+        /// <param name="entityType">实体类型</param>
+        /// <param name="entityIds">实体id</param>
+        /// <param name="track"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns> key实体id；value：文件列表</returns>
+        public static async Task< Dictionary<string, List<FileEntity>>> GetFilesByAttachmentWithoutProperty(this IRepository<AttachmentEntity, Guid> repository, string entityType, IEnumerable<string> entityIds, bool track = false, CancellationToken cancellationToken = default)
+        {
+            IQueryable<AttachmentEntity> q = repository.GetAll().WhereAttachment(entityType, track: track, entityIds: entityIds.ToArray());
+            var list = await q.ToArrayAsync(cancellationToken);
+            return list.GroupBy(x => x.EntityId).ToDictionary(x => x.Key,  z => z.OrderBy(v => v.OrderIndex).Select(g => g.File).ToList());
+        }
+
+
+
+
 
         /// <summary>
         /// 从附件中获取文件
@@ -64,7 +99,7 @@ namespace BXJG.Utils.Extensions
         /// <param name="track"></param>
         /// <param name="cancellationToken"></param>
         /// <returns>文件列表</returns>
-        public static async Task<List<FileEntity>> GetFilesByAttachment(this IRepository<AttachmentEntity, Guid> repository, string entityType, string entityId, string propertyName, bool track = false, CancellationToken cancellationToken = default)
+        public static async Task<List<FileEntity>> GetFilesByAttachment(this IRepository<AttachmentEntity, Guid> repository, string entityType, string entityId, string propertyName=default, bool track = false, CancellationToken cancellationToken = default)
         {
             IQueryable<AttachmentEntity> q = repository.GetAll().WhereAttachment(entityType, propertyName, track).Where(x => x.EntityId == entityId).OrderBy(x => x.OrderIndex);
             var list = await q.ToArrayAsync(cancellationToken);
@@ -77,7 +112,6 @@ namespace BXJG.Utils.Extensions
         /// 从附件中获取文件
         /// </summary>
         /// <param name="repository"></param>
-        /// <param name="entityType">实体类型</param>
         /// <param name="entityId">实体id</param>
         /// <param name="track"></param>
         /// <param name="cancellationToken"></param>
@@ -86,12 +120,23 @@ namespace BXJG.Utils.Extensions
         {
             return repository.GetFilesByAttachment(typeof(TEntity).FullName, entityId, track, cancellationToken);
         }
+        /// <summary>
+        /// 从附件中获取文件，忽略propertyName
+        /// </summary>
+        /// <param name="repository"></param>
+        /// <param name="entityId">实体id</param>
+        /// <param name="track"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>文件列表</returns>
+        public static Task<List<FileEntity>> GetFilesByAttachmentWithoutProperty<TEntity>(this IRepository<AttachmentEntity, Guid> repository, string entityId, bool track = false, CancellationToken cancellationToken = default)
+        {
+            return repository.GetFilesByAttachmentWithoutProperty(typeof(TEntity).FullName, entityId, track, cancellationToken);
+        }
 
         /// <summary>
         /// 从附件中获取文件
         /// </summary>
         /// <param name="repository"></param>
-        /// <param name="entityType">实体类型</param>
         /// <param name="entityIds">实体id</param>
         /// <param name="track"></param>
         /// <param name="cancellationToken"></param>
@@ -102,16 +147,29 @@ namespace BXJG.Utils.Extensions
         }
 
         /// <summary>
+        /// 从附件中获取文件，忽略propertyName
+        /// </summary>
+        /// <param name="repository"></param>
+        /// <param name="entityIds">实体id</param>
+        /// <param name="track"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns> key实体id；value：文件列表</returns>
+        public static  Task<Dictionary<string, List<FileEntity>>> GetFilesByAttachmentWithoutProperty<TEntity>(this IRepository<AttachmentEntity, Guid> repository, IEnumerable<string> entityIds, bool track = false, CancellationToken cancellationToken = default)
+        {
+            return repository.GetFilesByAttachmentWithoutProperty(typeof(TEntity).FullName, entityIds, track, cancellationToken);
+        }
+
+
+        /// <summary>
         /// 从附件中获取文件
         /// </summary>
         /// <param name="repository"></param>
-        /// <param name="entityType">实体类型</param>
         /// <param name="entityId">实体id</param>
         /// <param name="propertyName">实体id</param>
         /// <param name="track"></param>
         /// <param name="cancellationToken"></param>
         /// <returns>文件列表</returns>
-        public static Task<List<FileEntity>> GetFilesByAttachment<TEntity>(this IRepository<AttachmentEntity, Guid> repository, string entityId, string propertyName, bool track = false, CancellationToken cancellationToken = default)
+        public static Task<List<FileEntity>> GetFilesByAttachment<TEntity>(this IRepository<AttachmentEntity, Guid> repository, string entityId, string propertyName=default, bool track = false, CancellationToken cancellationToken = default)
         {
             return repository.GetFilesByAttachment(typeof(TEntity).FullName, entityId, propertyName, track, cancellationToken);
         }

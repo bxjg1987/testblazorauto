@@ -23,5 +23,10 @@ namespace BXJG.Utils.Share.Files
         /// 文件真实名称
         /// </summary>
         public string? FileName { get; set; }
+        /// <summary>
+        /// 前端忽略此参数
+        /// 具体应用将对此字段赋值
+        /// </summary>
+        public FilePermission Permission { get; set; } = FilePermission.Further;
     }
 }

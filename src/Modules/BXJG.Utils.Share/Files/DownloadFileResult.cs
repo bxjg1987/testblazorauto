@@ -14,14 +14,22 @@ namespace BXJG.Utils.Share.Files
         /// <summary>
         /// 物理路径
         /// </summary>
-        public string Path { get; set; }
+        public string RelativePath { get; set; }
+        /// <summary>
+        /// 缩略图的物理路径(如果有)
+        /// </summary>
+        public string? RelativePathThumbnail {  get; set; }
         /// <summary>
         /// 上传时真实的文件名
         /// </summary>
-        public string Name { get; set; }
+        public string RealFullName { get; set; }
         /// <summary>
         /// 响应时的content-type
         /// </summary>
-        public string ContentType { get; set; }
+        public string ResponseContentType { get; set; }
+        /// <summary>
+        /// 访问权限
+        /// </summary>
+        public FilePermission Permission { get; set; }
     }
 }
