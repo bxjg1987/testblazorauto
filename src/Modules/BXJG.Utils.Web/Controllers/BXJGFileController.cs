@@ -31,7 +31,7 @@ namespace BXJG.Utils.Web.Controllers
     /// 上传、下载、删除等
     /// 目前仅考虑操作权限，不考虑数据权限
     /// </summary>
-    [Route("api/[controller]]/[action]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     [AbpAuthorize]
     public class BXJGFileController : AbpController
@@ -53,12 +53,16 @@ namespace BXJG.Utils.Web.Controllers
         /// <param name="file"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<List<FileDto>> UploadAsync(IFormFileCollection file)
+        public async Task<FileDto> UploadAsync(IFormFile file)
         {
             // var rts = new List<FileUploadResult>();
-            var fs = file.Select(c => new FileInput(c.FileName, c.OpenReadStream()));
-            var r = await tempFileManager.UploadAsync( fs.ToArray());
-            return ObjectMapper.Map<List<FileDto>>(r);
+            //var fs = file.Select(c => new FileInput(c.FileName, c.OpenReadStream()));
+            using var fs = file.OpenReadStream();
+
+            var r = await tempFileManager.UploadToTemp(fs);
+
+            return new FileDto { Name = file.FileName, Path = r };
+            //   return ObjectMapper.Map<List<FileDto>>(r);
             //return r.Select(c => new FileDto
             //{
             //    FilePath = c.FileRelativePath,

@@ -52,8 +52,6 @@ namespace BXJG.Utils.Files
         /// <param name="entityType">实体类型</param>
         public AttachmentManager(string entityType)
         {
-            this.FileManager = FileManager;
-            this.Repository = Repository;
             this.entityType = entityType;
         }
         /// <summary>
@@ -165,7 +163,7 @@ namespace BXJG.Utils.Files
         //}
     }
     /// <summary>
-    /// 一个简单的附件管理器
+    /// 通用泛型附件管理器
     /// </summary>
     /// <typeparam name="TEntity">附件所属实体类型</typeparam>
     public class AttachmentManager<TEntity> : AttachmentManager

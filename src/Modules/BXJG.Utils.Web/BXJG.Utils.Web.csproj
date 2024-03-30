@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-	  <VersionPrefix>1.3.10</VersionPrefix>
+	  <VersionPrefix>1.3.11</VersionPrefix>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	  <LangVersion>latest</LangVersion>
   </PropertyGroup>
@@ -17,7 +17,6 @@
 
   <ItemGroup>
     <Compile Remove="Authorization\AuthorizationExtensionts.cs" />
-    <Compile Remove="Controllers\BXJGFileController.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,9 +30,5 @@
   <ItemGroup>
     <ProjectReference Include="..\..\libs\BXJG.Common.Web\BXJG.Common.Web.csproj" />
     <ProjectReference Include="..\BXJG.Utils.Application\BXJG.Utils.Application.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\" />
   </ItemGroup>
 </Project>

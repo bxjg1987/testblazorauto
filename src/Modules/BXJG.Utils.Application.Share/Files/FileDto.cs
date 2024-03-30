@@ -9,17 +9,7 @@ namespace BXJG.Utils.Application.Share.Files
     /// </summary>
     public class FileDto
     {
-        [Obsolete]
-        public string FilePath { get; set; }
-        [Obsolete]
-        public string ThumPath { get; set; }
-        /// <summary>
-        /// 可访问的文件绝对url
-        /// </summary>
-        public string FileUrl { get; set; }
-        /// <summary>
-        /// 可访问的缩略图url
-        /// </summary>
-        public string ThumUrl { get; set; }
+        public string Path { get; set; }
+        public string Name { get; set; }
     }
 }

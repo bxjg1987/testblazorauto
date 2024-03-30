@@ -21,7 +21,7 @@ namespace BXJG.Utils.EFCore.EFMaps
 
             builder.HasIndex(c => new { c.EntityType, c.EntityId, c.PropertyName });
 
-            builder.OwnsOne(x => x.File).HasKey(x => x.Id);
+            builder.HasOne(x => x.File).WithMany().HasForeignKey(x=>x.Id);
 
             //builder.HasOne(x => x.File).WithMany().HasForeignKey(x => x.Id);
             //builder.Property(c => c.RelativeFileUrl).HasColumnType($"varchar({Consts.EntityFileFileUrlMaxLength})");

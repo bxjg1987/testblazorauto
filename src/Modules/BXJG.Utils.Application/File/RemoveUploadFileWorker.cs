@@ -15,6 +15,10 @@ using System.Text;
 
 namespace BXJG.Utils.Application.File
 {
+    /// <summary>
+    /// 后台定时任务作为用例入口，应该定义在应用层
+    /// 具体的应用模块中注册此定时任务
+    /// </summary>
     public class RemoveUploadFileWorker : PeriodicBackgroundWorkerBase, ITransientDependency
     {
         ///// <summary>
@@ -43,7 +47,7 @@ namespace BXJG.Utils.Application.File
             foreach (var item in files)
             {
                 var file = new FileInfo(item);
-                if ((Clock.Now - file.CreationTime).TotalMinutes > 30)
+                if ((Clock.Now - file.CreationTime).TotalMinutes > 30) //这个分钟数可以搞到settings系统中
                 {
                     try
                     {

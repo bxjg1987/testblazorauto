@@ -13,6 +13,8 @@ using BXJG.Common.Web;
 using BXJG.Utils.Application;
 using BXJG.Utils.Web.Authorization;
 using BXJG.Common.Contracts;
+using Microsoft.AspNetCore.Mvc.ApplicationParts;
+using Abp.AspNetCore;
 
 namespace BXJG.Utils.Web
 {
@@ -45,19 +47,19 @@ namespace BXJG.Utils.Web
 
         public override void PostInitialize()
         {
-
+            IocManager.Resolve<ApplicationPartManager>().AddApplicationPartsIfNotAddedBefore(Assembly.GetExecutingAssembly());
             //
             // var sdf = context.RequestServices.GetService<IEnumerable<IAuthorizationPolicyProvider>>();
 
             //var sdf2 = context.RequestServices.GetService<IAuthorizationPolicyProvider>();
-           // var xx = IocManager.Resolve<IAuthorizationPolicyProvider>();
+            // var xx = IocManager.Resolve<IAuthorizationPolicyProvider>();
             //var  yyy=  IocManager.Resolve<IEnumerable<IAuthorizationPolicyProvider>>();
 
-          
+
             // asp.net core 默认的是 Transient生命周期的
-           // IocManager.Register<IAuthorizationPolicyProvider, AbpAuthorizationPolicyProvider>(DependencyLifeStyle.Transient);
+            // IocManager.Register<IAuthorizationPolicyProvider, AbpAuthorizationPolicyProvider>(DependencyLifeStyle.Transient);
             // base.PostInitialize();
-           // Configuration.ReplaceService<IAuthorizationPolicyProvider, AbpAuthorizationPolicyProvider>(DependencyLifeStyle.Singleton);
+            // Configuration.ReplaceService<IAuthorizationPolicyProvider, AbpAuthorizationPolicyProvider>(DependencyLifeStyle.Singleton);
         }
     }
 }
