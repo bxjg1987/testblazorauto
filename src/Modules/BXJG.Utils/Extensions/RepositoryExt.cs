@@ -72,6 +72,52 @@ namespace BXJG.Utils.Extensions
         }
 
 
+
+        /// <summary>
+        /// 从附件中获取文件
+        /// </summary>
+        /// <param name="repository"></param>
+        /// <param name="entityType">实体类型</param>
+        /// <param name="entityId">实体id</param>
+        /// <param name="track"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>key属性名，value文件列表</returns>
+        public static Task<Dictionary<string, List<FileEntity>>> GetFilesByAttachment<TEntity>(this IRepository<AttachmentEntity, Guid> repository, string entityId, bool track = false, CancellationToken cancellationToken = default)
+        {
+            return repository.GetFilesByAttachment(typeof(TEntity).FullName, entityId, track, cancellationToken);
+        }
+
+        /// <summary>
+        /// 从附件中获取文件
+        /// </summary>
+        /// <param name="repository"></param>
+        /// <param name="entityType">实体类型</param>
+        /// <param name="entityIds">实体id</param>
+        /// <param name="track"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns> key实体id；value：属性名和文件列表</returns>
+        public static Task<Dictionary<string, Dictionary<string, List<FileEntity>>>> GetFilesByAttachment<TEntity>(this IRepository<AttachmentEntity, Guid> repository, IEnumerable<string> entityIds, bool track = false, CancellationToken cancellationToken = default)
+        {
+            return repository.GetFilesByAttachment(typeof(TEntity).FullName, entityIds, track, cancellationToken);
+        }
+
+        /// <summary>
+        /// 从附件中获取文件
+        /// </summary>
+        /// <param name="repository"></param>
+        /// <param name="entityType">实体类型</param>
+        /// <param name="entityId">实体id</param>
+        /// <param name="propertyName">实体id</param>
+        /// <param name="track"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>文件列表</returns>
+        public static Task<List<FileEntity>> GetFilesByAttachment<TEntity>(this IRepository<AttachmentEntity, Guid> repository, string entityId, string propertyName, bool track = false, CancellationToken cancellationToken = default)
+        {
+            return repository.GetFilesByAttachment(typeof(TEntity).FullName, entityId, propertyName, track, cancellationToken);
+        }
+
+
+
         #endregion}
     }
 }
