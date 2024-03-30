@@ -21,6 +21,7 @@ using System.Linq.Expressions;
 using Abp.Linq.Expressions;
 using Abp.BackgroundJobs;
 using Microsoft.Extensions.Logging;
+using BXJG.Utils.Extensions;
 
 namespace BXJG.Utils.Files
 {
@@ -67,9 +68,7 @@ namespace BXJG.Utils.Files
             var id = entityId.ToString();
 
             var oldEntities = await Repository.GetAll()
-                                              .Include(x => x.File)
-                                              .Where(c => c.EntityType == entityType && c.EntityId == id)
-                                              .WhereIf(propertyName.IsNotNullOrWhiteSpaceBXJG(), x => x.PropertyName == propertyName)
+                                              .WhereAttachment(entityType, propertyName, true, entityId.ToString())
                                               .ToArrayAsync(CancellationTokenProvider.Token);
 
             if (files == default)
@@ -78,8 +77,6 @@ namespace BXJG.Utils.Files
             var needDeletes = oldEntities.Where(x => !files.Any(d => d.FileId == x.Id)).ToImmutableArray();
             foreach (var item in needDeletes)
             {
-                
-
                 await Repository.DeleteAsync(item);
                 await FileManager.Remove(item.File);
             }

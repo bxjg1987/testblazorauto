@@ -10,10 +10,12 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Abp.Domain.Repositories
+namespace BXJG.Utils.Extensions
 {
-    public static class FileRepositoryExt
+    public static class RepositoryExt
     {
+        #region 附件
+
         //这里只定义常用场景需要的查询，更多场景不要定义扩展，而是直接在需要时自己查询
 
         /// <summary>
@@ -68,5 +70,8 @@ namespace Abp.Domain.Repositories
             var list = await q.ToArrayAsync(cancellationToken);
             return list.Select(x => x.File).ToList();
         }
+
+
+        #endregion}
     }
 }

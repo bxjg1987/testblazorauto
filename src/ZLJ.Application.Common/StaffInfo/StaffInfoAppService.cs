@@ -90,7 +90,7 @@ namespace ZLJ.Application.Common.StaffInfo
             
             q = q.OrderBy("Staff." + input.Sorting);
 
-            r.TotalCount = await q2.CountAsync();
+            r.TotalCount = await q2.CountAsync(CancellationTokenProvider.Token);
 
             q2 = q2.PageBy(input);
             var list = await q2.ToListAsync(CancellationTokenProvider.Token);
@@ -112,7 +112,7 @@ namespace ZLJ.Application.Common.StaffInfo
         {
             var q = GetFullQuery();
             q = ApplyCondition(q, input);
-            return await q.GroupBy(c => c.Staff.Id).CountAsync();
+            return await q.GroupBy(c => c.Staff.Id).CountAsync(CancellationTokenProvider.Token);
         }
 
         private IQueryable<QueryTemp> GetFullQuery()

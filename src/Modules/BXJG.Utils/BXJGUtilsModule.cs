@@ -42,6 +42,10 @@ namespace BXJG.Utils
                 new EnumLocalizationDefine(typeof(Gender), "gender"),
                 new EnumLocalizationDefine(typeof(Gender), "bool"),
             });
+
+            Configuration.Modules.AbpAutoMapper().Configurators
+                .Add(cfg => cfg.AddMaps(Assembly.GetExecutingAssembly()));
+
             BXJGUtilsLocalizationConfigurer.Configure(Configuration.Localization);
             Configuration.Settings.Providers.Add<BXJGUtilsSettingProvider>();
             //查看abp源码 uow拦截器调用manager.begin，内部从ioc获取uow对象efuow 然后设置到asynclocal上的
@@ -85,6 +89,9 @@ namespace BXJG.Utils
             //IocManager.Register<IClock, AbpClock>();
             IocManager.RegService(services => services.AddBXJGCommon());
             IocManager.Register(typeof(DynamicPropertyManager<>), DependencyLifeStyle.Singleton);
+
+            //通用附件管理器
+            IocManager.Register(typeof(AttachmentManager<>), DependencyLifeStyle.Transient);
 
             //IocManager.Register(typeof(AttachmentManager<>), DependencyLifeStyle.Transient);
             //调试模式时默认实现获取的路径是 ..\bin\debug\wwwroot

@@ -26,7 +26,7 @@ using ZLJ.Application.Share.Authorization.Permissions;
 
 namespace ZLJ.Application.Admin.Users
 {
-    public class UserAppService : AsyncCrudAppService<User, UserDto, long, PagedUserResultRequestDto, CreateUserDto, EditUserDto>//, IUserAppService
+    public class UserAppService : AdminCrudBaseAppService<User, UserDto, long, PagedUserResultRequestDto, CreateUserDto, EditUserDto>//, IUserAppService
     {
         private readonly UserManager _userManager;
         private readonly RoleManager _roleManager;
@@ -196,7 +196,7 @@ namespace ZLJ.Application.Admin.Users
 
         protected override async Task<User> GetEntityByIdAsync(long id)
         {
-            var user = await Repository.GetAllIncluding(x => x.Roles).FirstOrDefaultAsync(x => x.Id == id);
+            var user = await Repository.GetAllIncluding(x => x.Roles).FirstOrDefaultAsync(x => x.Id == id, CancellationTokenProvider.Token);
 
             if (user == null)
             {

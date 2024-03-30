@@ -26,6 +26,7 @@ using Abp.Localization;
 using Abp.Auditing;
 using BXJG.Utils.Application.Share.Notification;
 using BXJG.Utils.Share;
+using Abp.Threading;
 
 namespace BXJG.Utils.Application.Notification
 {
@@ -164,7 +165,7 @@ namespace BXJG.Utils.Application.Notification
         public virtual async Task<int> GetTotalAsync(GetTotalInput input)
         {
             var query = GetQuery(input);
-            return await query.CountAsync();
+            return await query.CountAsync(CancellationTokenProvider.Token);
         }
 
         /// <summary>
@@ -195,10 +196,10 @@ namespace BXJG.Utils.Application.Notification
             //UserNotificationInfo
             var r = new PagedResultDto<MessageDto>();
             var query = GetQuery(input);
-            r.TotalCount = await query.CountAsync();
+            r.TotalCount = await query.CountAsync(CancellationTokenProvider.Token);
             query = query.OrderBy(input.Sorting).PageBy(input);
 
-            var items = await query.ToListAsync();
+            var items = await query.ToListAsync(CancellationTokenProvider.Token);
             r.Items = ObjectMapper.Map<List<MessageDto>>(items);
             return r;
         }

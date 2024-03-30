@@ -8,6 +8,7 @@ using Abp.Domain.Uow;
 using Abp.Extensions;
 using Abp.Linq;
 using Abp.Runtime.Session;
+using Abp.Threading;
 using Abp.Timing;
 using Abp.UI;
 using BXJG.Utils.Share;
@@ -33,7 +34,7 @@ namespace BXJG.Utils.GeneralTree
     /// 通用树形领域服务
     /// </summary>
     /// <typeparam name="TEntity">通用树形实体类型</typeparam>
-    public class GeneralTreeManager<TEntity> : DomainService
+    public class GeneralTreeManager<TEntity> : BXJG.Utils.BXJGBaseDomainService
         where TEntity : Entity<long>, IGeneralTree<TEntity>// GeneralTreeEntity<TEntity>
     {
         public IRepository<TEntity, long> Repository { get; set; }

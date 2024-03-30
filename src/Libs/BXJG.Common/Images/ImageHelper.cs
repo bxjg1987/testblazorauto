@@ -44,7 +44,7 @@ namespace BXJG.Common
                 {
                     using var image = SKImage.FromBitmap(resized);
                     using var output = File.OpenWrite(thuPath);
-                    image.Encode(SKEncodedImageFormat.Png, quality).SaveTo(output);
+                    image.Encode(SKEncodedImageFormat.Jpeg, quality).SaveTo(output);
                 }
             }
         }

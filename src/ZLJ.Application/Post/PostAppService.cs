@@ -166,7 +166,7 @@ namespace ZLJ.Application.Admin.Post
                  from ou in tem2.DefaultIfEmpty()
                  select new { role, ou };
             //input.Sorting.Replace("DisplayName");
-            var ct = await q2.CountAsync();
+            var ct = await q2.CountAsync(CancellationTokenProvider.Token);
 
             
 

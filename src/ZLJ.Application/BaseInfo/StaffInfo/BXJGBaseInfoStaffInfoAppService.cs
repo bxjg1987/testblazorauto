@@ -312,7 +312,7 @@ namespace ZLJ.Application.Admin.BaseInfo.StaffInfo
                                   .WhereIf(!input.OuCode.IsNullOrWhiteSpace(), c => c.Ou.Code.StartsWith(input.OuCode))
                                   .WhereIf(input.PostId.HasValue, c => c.Post.Id == input.PostId.Value)
                                   .WhereIf(!input.AreaCode.IsNullOrWhiteSpace(), c => c.Staff.Area.Code.StartsWith(input.OuCode));
-            r.TotalCount = await q.GroupBy(c => c.Staff.Id).CountAsync();
+            r.TotalCount = await q.GroupBy(c => c.Staff.Id).CountAsync(CancellationTokenProvider.Token);
             q = q.OrderBy("Staff." + input.Sorting);
 
             var q2 = q.GroupBy(c => c.Staff.Id).Select(c => c.Key);
@@ -320,7 +320,7 @@ namespace ZLJ.Application.Admin.BaseInfo.StaffInfo
 
             // q = q.OrderBy( input.Sorting);
 
-            r.TotalCount = await q2.CountAsync();
+            r.TotalCount = await q2.CountAsync(CancellationTokenProvider.Token);
 
 
             q2 = q2.PageBy(input);

@@ -18,7 +18,6 @@ using Abp.Threading;
 //using System.Drawing;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
-using Microsoft.Extensions.Configuration;
 using Abp.Extensions;
 using System.Text.RegularExpressions;
 using BXJG.Common.Extensions;
@@ -31,14 +30,16 @@ using Abp.Timing;
 using Abp.Runtime.Session;
 using Abp.BackgroundJobs;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 namespace BXJG.Utils.Files
 {
+
     /// <summary>
     /// 基于服务器本地文件存储的文件管理领域服务
     /// mvc或web api层的controller接收上传的文件，并通过此类进行文件的验证和保存
     /// 开始将文件存储在临时目录中，确认后移动到正式目录
     /// </summary>
-    public class FileManager : BXJGBaseDomainService, IShouldInitialize
+    public class FileManager : FileManagerBase//, IShouldInitialize
     {
         //api服务器根和上传目录是不允许修改的，因此不使用abp的settings系统
 
@@ -47,14 +48,7 @@ namespace BXJG.Utils.Files
         ///// 获取后端服务器根
         ///// </summary>
         //protected string _serverRootUrl;
-        /// <summary>
-        /// 获取安全的上传目录，一般是非应用程序目录 可读写 不可执行
-        /// </summary>
-        protected string _uploadDir;
-        /// <summary>
-        /// 安全上传时的临时目录
-        /// </summary>
-        protected string _tempDir;
+    
         /// <summary>
         /// abp提供的异步取消
         /// </summary>
@@ -68,7 +62,7 @@ namespace BXJG.Utils.Files
         public IGuidGenerator GuidGenerator { get; set; }
         public IRepository<FileEntity, Guid> Repository { get; set; }
 
-        public IConfiguration Configuration { get; set; }
+       // public IConfiguration Configuration { get; set; }
 
         public IAbpSession AbpSession { get; set; }
         public IBackgroundJobManager BackgroundJobManager { get; set; }
@@ -76,29 +70,29 @@ namespace BXJG.Utils.Files
 
         #endregion
 
-        //去掉构造函数，便于子类重写
-        public void Initialize()
-        {
-            // _serverRootUrl = Configuration["App:ServerRootAddress"];
-            //_regex = new Regex($@"<img.+?src=['""]{_serverRootUrl}(\S+)['""]", RegexOptions.Multiline | RegexOptions.IgnoreCase);
-            //_settingManager = settingManager;
-            //base.LocalizationSourceName = 
-            //_webRootDir = env.WebRoot; // d:\app\wwwroot
-            //未考虑并发冲突，也基本不需要
-            _uploadDir = Configuration["Upload:SaveDir"]; // d:\app\wwwroot\upload 
-            //Directory.CreateDirectory是递归的，这里的处理省了
-            if (!Directory.Exists(_uploadDir))
-                Directory.CreateDirectory(_uploadDir);
-            _tempDir = Path.Combine(_uploadDir, BXJGUtilsConsts.UploadTemp); // d:\app\wwwroot\upload\temp
-            if (!Directory.Exists(_tempDir))
-                Directory.CreateDirectory(_tempDir);
-        }
+        ////去掉构造函数，便于子类重写
+        //public virtual void Initialize()
+        //{
+        //    // _serverRootUrl = Configuration["App:ServerRootAddress"];
+        //    //_regex = new Regex($@"<img.+?src=['""]{_serverRootUrl}(\S+)['""]", RegexOptions.Multiline | RegexOptions.IgnoreCase);
+        //    //_settingManager = settingManager;
+        //    //base.LocalizationSourceName = 
+        //    //_webRootDir = env.WebRoot; // d:\app\wwwroot
+        //    //未考虑并发冲突，也基本不需要
+        //    _uploadDir = Configuration["Upload:SaveDir"]; // d:\app\wwwroot\upload 
+        //    //Directory.CreateDirectory是递归的，这里的处理省了
+        //    if (!Directory.Exists(_uploadDir))
+        //        Directory.CreateDirectory(_uploadDir);
+        //    _tempDir = Path.Combine(_uploadDir, BXJGUtilsConsts.UploadTemp); // d:\app\wwwroot\upload\temp
+        //    if (!Directory.Exists(_tempDir))
+        //        Directory.CreateDirectory(_tempDir);
+        //}
         /// <summary>
         /// 验证并将文件存储到temp目录
         /// </summary>
-        /// <param name="stream"></param>
-        /// <returns></returns>
-        public virtual async Task<string> Upload2Temp(Stream stream)
+        /// <param name="stream">可重复读的文件流</param>
+        /// <returns>临时文件的相对路径</returns>
+        public virtual async Task<string> UploadToTemp(Stream stream)
         {
             var ts = await SettingManager.GetSettingValueAsync(BXJGUtilsConsts.SettingKeyUploadType); //设置中允许的后缀名 pdf,jpg...
             var aryts = ts.Split(','); //设置中允许的后缀名 ["pdf","jpg"...]
@@ -111,6 +105,7 @@ namespace BXJG.Utils.Files
             //if (!aryts.Contains(hzm, StringComparer.OrdinalIgnoreCase)) //类型判断，这种方式只能一定成都起到限制作用，因为前端上传的文件后缀可能被恶意更改
             //    throw new UserFriendlyException($"不允许上传此类型的文件，仅允许{ts}");
             var hzm2 = "." + MimeGuesser.GuessExtension(stream);
+            stream.Position = 0;
             if (!aryts.Contains(hzm2, StringComparer.OrdinalIgnoreCase))
                 throw new UserFriendlyException($"不允许上传此类型的文件，仅允许{ts}");
             if (stream.Length > sz * 1024) //大小限制判断    
@@ -138,33 +133,37 @@ namespace BXJG.Utils.Files
             }
             #endregion
 
-            return Absolute2RelativePath(absolutePath);
+            return AbsoluteToRelativePath(absolutePath);
             //  return absolutePath;
         }
-
-        public virtual async Task<FileEntity> Upload(string fileName, string fileRelativePath)
+        /// <summary>
+        /// 将文件存储到正式目录并做数据库记录
+        /// </summary>
+        /// <param name="fileName">真实的文件名称</param>
+        /// <param name="tempFileRelativePath">临时文件的相对路径</param>
+        /// <returns></returns>
+        public virtual async Task<FileEntity> Upload(string fileName, string tempFileRelativePath)
         {
-            var file = await AddFileRecord(fileName, fileRelativePath);
+            var file = await AddFileRecord(fileName, tempFileRelativePath);
             await CurrentUnitOfWork.SaveChangesAsync(); //数据库操作成功时才移动文件
-            Move(fileRelativePath, file);
+            Move(tempFileRelativePath, file);
             return file;
         }
 
         /// <summary>
         /// 生成文件的数据库记录
         /// </summary>
-        /// <param name="fileName"></param>
-        /// <param name="tempFileRelativePath"></param>
+        /// <param name="fileName">真实的文件名称</param>
+        /// <param name="tempFileRelativePath">临时文件的相对路径</param>
         /// <returns></returns>
         protected virtual async Task<FileEntity> AddFileRecord(string fileName, string tempFileRelativePath)
         {
             /*
              * dbcontext是一个请求一个实例，所以在业务系统中先开事务，然后执行此逻辑，最后提交事务
              */
-            // ur.TempPath = ur.TempPath.AESDecryptUtf8String();
 
             //临时文件的绝对路径
-            var jdlj = Relative2AbsolutePath(tempFileRelativePath);
+            var jdlj = RelativeToAbsolutePath(tempFileRelativePath);
 
             #region 存储数据
             var file = new FileEntity
@@ -185,15 +184,16 @@ namespace BXJG.Utils.Files
             file.RelativePath = Path.Combine(nyr, file.Id.ToString()) + Path.GetExtension(tempFileRelativePath);
             if (file.ResponseContentType.StartsWith("image/"))
             {
-                file.RelativePathThumbnail = Path.Combine(nyr, Path.GetFileNameWithoutExtension(file.RelativePath) + ".jpg");
+                file.RelativePathThumbnail = Path.Combine(nyr, Path.GetFileNameWithoutExtension(file.RelativePath) + "_thum.jpeg");
             }
 
             if (AbpSession.TenantId.HasValue)
             {
-                file.RelativePath = Path.Combine(AbpSession.TenantId.Value.ToString(), file.RelativePath);
+                var tid = AbpSession.TenantId.Value.ToString();
+                file.RelativePath = Path.Combine(tid, file.RelativePath);
                 if (file.ResponseContentType.StartsWith("image/"))
                 {
-                    file.RelativePathThumbnail = Path.Combine(AbpSession.TenantId.Value.ToString(), file.RelativePathThumbnail);
+                    file.RelativePathThumbnail = Path.Combine(tid, file.RelativePathThumbnail);
                 }
             }
 
@@ -225,7 +225,7 @@ namespace BXJG.Utils.Files
 
         protected virtual void Move(string tempRelativePath, FileEntity file, int w = 180)
         {
-            var des = Relative2AbsolutePath(file.RelativePath);                     //目标文件绝对路径
+            var des = RelativeToAbsolutePath(file.RelativePath);                     //目标文件绝对路径
             var dir = Path.GetDirectoryName(des);
             if (!Directory.Exists(dir))
             {
@@ -233,11 +233,11 @@ namespace BXJG.Utils.Files
             }
             //可能移动文件成功，数据库混滚，导致下次提交时临时文件中找不到，所以这里复制过去，且不删除临时文件
             //这样短时间内重新提交也没问题，时间久了，定时任务会删除临时文件的
-            File.Copy(Relative2AbsolutePath(tempRelativePath), des);
+            File.Copy(RelativeToAbsolutePath(tempRelativePath), des);
             if (file.RelativePathThumbnail.IsNotNullOrWhiteSpaceBXJG())
             {
                 //file.RelativePathThumbnail = Path.Combine(TimingProvider.Get().ToString("yyyyMMdd"), Path.GetFileNameWithoutExtension(file.RelativePath)) + ".jpg";
-                ImageHelper.MakeThumb(des, Relative2AbsolutePath(file.RelativePathThumbnail));
+                ImageHelper.MakeThumb(des, RelativeToAbsolutePath(file.RelativePathThumbnail));
                 //Helper.MakeThumb(des, Relative2Absolute(file.RelativePathThumbnail), w);
             }
         }
@@ -257,6 +257,10 @@ namespace BXJG.Utils.Files
             await DeleteEffortless(file.RelativePath, file.RelativePathThumbnail);
         }
 
+        //通常提供单独的文件访问控制器接口，它需要获取文件流和content-type
+        //管理时的查询通常是通过附件仓储扩展方法做查询，或直接访问仓储做查询
+
+  
 
         /// <summary>
         /// 尽力而为的删除物理文件
@@ -271,7 +275,7 @@ namespace BXJG.Utils.Files
 
                 try
                 {
-                    var p = Relative2AbsolutePath(item);
+                    var p = RelativeToAbsolutePath(item);
                     //BackgroundJob.Enqueue(() => File.Delete(p));
                     await BackgroundJobManager.EnqueueAsync<DeleteFileBackgroundJob, string>(p);
                 }
@@ -354,31 +358,7 @@ namespace BXJG.Utils.Files
         //    return path;
         //}
 
-        /// <summary>
-        /// 绝对路径转相对路径
-        /// d:\upload\20201022\a.jpg -> 20201022\a.jpg  
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public string Absolute2RelativePath(string path)
-        {
-            if (path.StartsWith(_uploadDir))
-                return path.Substring(_uploadDir.Length + 1);
-            return path;
-        }
-
-        /// <summary>
-        /// 相对路径转绝对路径
-        /// upload\20201022\a.jpg -> d:\\upload\20201022\a.jpg
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public string Relative2AbsolutePath(string path)
-        {
-            if (!path.StartsWith(_uploadDir))
-                return Path.Combine(_uploadDir, path);
-            return path;
-        }
+  
 
         ///// <summary>
         ///// 临时目录转换为正式目录

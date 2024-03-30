@@ -18,7 +18,7 @@ namespace BXJG.Utils.Files
     /// 使用冗余数据方式关联单个文件，避免join查询
     /// 它与附件权限是弱关系
     /// </summary>
-    public class AttachmentEntity : Entity<Guid>, IMayHaveTenant/*, IExtendableObject*/,IOrderIndex
+    public class AttachmentEntity : Entity<Guid>, IMayHaveTenant/*, IExtendableObject*/, IOrderIndex
     {
         /// <summary>
         /// 关联实体类型，可以是任意唯一字符串，通常是实体类型.FullTypeName
