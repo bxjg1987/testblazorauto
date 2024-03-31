@@ -25,7 +25,8 @@ namespace ZLJ.Web.Host.Startup
         {
             if (bool.Parse(configuration["Authentication:JwtBearer:IsEnabled"]))
             {
-                services.AddAuthentication(options => {
+                services.AddAuthentication(options =>
+                {
                     options.DefaultAuthenticateScheme = "JwtBearer";
                     options.DefaultChallengeScheme = "JwtBearer";
                 }).AddJwtBearer("JwtBearer", options =>
@@ -65,24 +66,9 @@ namespace ZLJ.Web.Host.Startup
          * SignalR can not send authorization header. So, we are getting it from query string as an encrypted text. */
         private static Task QueryStringTokenResolver(MessageReceivedContext context)
         {
-            if (context.HttpContext.Request.Path.HasValue && context.HttpContext.Request.Path.Value.StartsWith("/bxjgfile/"))
-            {
-                var at = context.HttpContext.Request.Query["at"].FirstOrDefault();
+            var tmpPath = context.HttpContext.Request.Path;
 
-                if (at == null)
-                {
-                    // Cookie value does not matches to querystring value
-                    return Task.CompletedTask;
-                }
-
-                context.Token = at;// SimpleStringCipher.Instance.Decrypt(at);
-                return Task.CompletedTask;
-            }
-
-
-
-            if (!context.HttpContext.Request.Path.HasValue ||
-                !context.HttpContext.Request.Path.Value.StartsWith("/signalr"))
+            if (!tmpPath.HasValue)
             {
                 // We are just looking for signalr clients
                 return Task.CompletedTask;
@@ -95,8 +81,11 @@ namespace ZLJ.Web.Host.Startup
                 return Task.CompletedTask;
             }
 
-            // Set auth token from cookie
-            context.Token = SimpleStringCipher.Instance.Decrypt(qsAuthToken);
+            if (tmpPath.Value.StartsWith("/signalr"))
+                context.Token = SimpleStringCipher.Instance.Decrypt(qsAuthToken);        // Set auth token from cookie
+            else if (tmpPath.Value.Contains("/bxjgfile/"))
+                context.Token = SimpleStringCipher.Instance.Decrypt(qsAuthToken, AdminConsts.DefaultPassPhrase);
+
             return Task.CompletedTask;
         }
     }

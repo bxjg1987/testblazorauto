@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Abp.Hangfire;
 using ZLJ.Application.Share.Authorization.Permissions;
 using ZLJ.Core.Configuration;
+using BXJG.Common.Http;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseCastleWindsor(IocManager.Instance.IocContainer);
@@ -73,6 +75,8 @@ builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
 
 builder.Services.AddScoped<AuthenticationStateProvider, PersistingRevalidatingAuthenticationStateProvider>();
+builder.Services.AddScoped<IAccessTokenProvider>(x=>x.GetRequiredService<AuthenticationStateProvider>() as PersistingRevalidatingAuthenticationStateProvider);
+
 
 builder.Services.AddZLJBlazorServer().AddAdminBlazor();
 

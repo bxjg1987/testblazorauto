@@ -1,4 +1,5 @@
 using Abp.Runtime.Security;
+using BXJG.Common.Http;
 using BXJG.Common.RCL.Auth;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -20,7 +21,7 @@ namespace ZLJ.Web.HostBlazor.Auth
     // This is a server-side AuthenticationStateProvider that revalidates the security stamp for the connected user
     // every 30 minutes an interactive circuit is connected. It also uses PersistentComponentState to flow the
     // authentication state to the client which is then fixed for the lifetime of the WebAssembly application.
-    internal sealed class PersistingRevalidatingAuthenticationStateProvider : RevalidatingServerAuthenticationStateProvider
+    internal sealed class PersistingRevalidatingAuthenticationStateProvider : RevalidatingServerAuthenticationStateProvider, IAccessTokenProvider
     {
         private readonly IServiceScopeFactory scopeFactory;
         private readonly PersistentComponentState state;
@@ -97,15 +98,15 @@ namespace ZLJ.Web.HostBlazor.Auth
                 var userId = principal.FindFirst(options.ClaimsIdentity.UserIdClaimType)?.Value;
                 //var email = principal.FindFirst(options.ClaimsIdentity.EmailClaimType)?.Value;
 
-                var accessToken = CreateAccessToken(CreateJwtClaims(principal.Identity as ClaimsIdentity));
+                //var accessToken = CreateAccessToken(CreateJwtClaims(principal.Identity as ClaimsIdentity));
 
                 if (userId != null /*&& email != null*/)
                 {
                     state.PersistAsJson(nameof(UserInfo), new UserInfo
                     {
                         Id = long.Parse(userId),
-                        AccessToken = accessToken,
-
+                        AccessToken = GetAccessToken(),
+                        EncryptedAccessToken = GetEncryptedAccessToken(),
                         //UserId = userId,
                         //Email = email,
                     });
@@ -155,6 +156,43 @@ namespace ZLJ.Web.HostBlazor.Auth
         private string GetEncryptedAccessToken(string accessToken)
         {
             return SimpleStringCipher.Instance.Encrypt(accessToken, AdminConsts.DefaultPassPhrase);
+        }
+
+        //当前对象是在server模式运行的，且是scope生命周期的
+        string accessToken = string.Empty;
+        string encryptedAccessToken = string.Empty;
+        public string GetAccessToken()
+        {
+            sdfsdf();
+            return accessToken;
+        }
+
+        public string GetEncryptedAccessToken()
+        {
+            sdfsdf();
+            return encryptedAccessToken;
+        }
+
+        void sdfsdf()
+        {
+            if (accessToken.IsNotNullOrWhiteSpaceBXJG())
+            {
+                return;
+            }
+            lock (this)
+            {
+                if (accessToken.IsNotNullOrWhiteSpaceBXJG())
+                {
+                    return;
+                }
+                if (authenticationStateTask != default)
+                {
+                    var authenticationState = AsyncHelper.RunSync(() => authenticationStateTask);
+                    var principal = authenticationState.User;
+                    accessToken = CreateAccessToken(CreateJwtClaims(principal.Identity as ClaimsIdentity));
+                    encryptedAccessToken = GetEncryptedAccessToken(accessToken);
+                }
+            }
         }
         #endregion
     }

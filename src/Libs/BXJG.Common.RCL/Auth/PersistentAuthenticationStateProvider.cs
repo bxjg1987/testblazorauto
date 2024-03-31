@@ -32,7 +32,12 @@ namespace BXJG.Common.RCL.Auth
             }
 
             //Console.WriteLine($"PersistentAuthenticationStateProvider构造函数执行了：{JsonSerializer.Serialize(userInfo)}");
+
+            //好像不太有必要存储到claims中
             accessToken = userInfo.AccessToken;
+            encryptedAccessToken = userInfo.EncryptedAccessToken;
+
+
             Claim[] claims = [new Claim("AccessToken", userInfo.AccessToken),
               //  new Claim("TenantId", userInfo.TenantId.HasValue? userInfo.TenantId.Value.ToString():""),
                 new Claim(ClaimTypes.NameIdentifier, userInfo.Id.ToString())];
@@ -42,11 +47,14 @@ namespace BXJG.Common.RCL.Auth
                     authenticationType: nameof(PersistentAuthenticationStateProvider)))));
         }
         string accessToken = string.Empty;
+        string encryptedAccessToken = string.Empty;
         public string GetAccessToken()
         {
             return accessToken;
         }
-
+        public string GetEncryptedAccessToken() {
+            return encryptedAccessToken;
+        }
         public override Task<AuthenticationState> GetAuthenticationStateAsync() => authenticationStateTask;
     }
 }

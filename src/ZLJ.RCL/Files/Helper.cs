@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace ZLJ.RCL.Files
 {
@@ -25,8 +26,9 @@ namespace ZLJ.RCL.Files
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public string BuildDownloadUrl(Guid id) {
-            return Configuration["App:ServerRootAddress"].TrimEnd('/') + "/api/bxjgfile/Download/" + id+"?at="+accessTokenProvider.GetAccessToken();
+        public string BuildDownloadUrl(Guid id)
+        {
+            return Configuration["App:ServerRootAddress"].TrimEnd('/') + "/api/bxjgfile/Download/" + id + "?enc_auth_token=" + HttpUtility.UrlEncode(accessTokenProvider.GetEncryptedAccessToken());
         }
         /// <summary>
         /// 生成文件的缩略图url
@@ -35,7 +37,7 @@ namespace ZLJ.RCL.Files
         /// <returns></returns>
         public string BuildDownloadUrlThum(Guid id)
         {
-            return Configuration["App:ServerRootAddress"].TrimEnd('/') + "/api/bxjgfile/DownloadThum/" + id + "?at=" + accessTokenProvider.GetAccessToken();
+            return Configuration["App:ServerRootAddress"].TrimEnd('/') + "/api/bxjgfile/DownloadThum/" + id + "?enc_auth_token=" + HttpUtility.UrlEncode(accessTokenProvider.GetEncryptedAccessToken());
         }
     }
 }
