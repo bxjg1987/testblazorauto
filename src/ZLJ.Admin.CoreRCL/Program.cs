@@ -22,7 +22,7 @@ builder.Services.AddAutoMapper(typeof(Program),typeof(ZLJ.RCL.AppContainer));
 
 builder.Services.AddAdminApiClientProxy(hc =>
 {
-    hc.BaseAddress = new Uri(builder.Configuration["ApiUrlRoot"].TrimEnd('/') + "/");
+    hc.BaseAddress = new Uri(builder.Configuration["App:ServerRootAddress"].TrimEnd('/') + "/");
 });
 
 var host = builder.Build();

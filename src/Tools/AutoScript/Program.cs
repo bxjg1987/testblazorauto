@@ -52,7 +52,8 @@ var topTasks = new List<(string, Action)>
     new("重新发布：BXJG.Utils", FabuXindeBXJGUtils),
     new("重新发布：BXJG.Utils.Share", FabuXindeBXJGUtilsShare),
     new("重新发布：BXJG.Utils.Application", FabuXindeBXJGUtilsApplication),
-    new("重新发布：BXJG.Utils.Application.Share", FabuXindeBXJGUtilsApplicationShare)
+    new("重新发布：BXJG.Utils.Application.Share", FabuXindeBXJGUtilsApplicationShare),
+    new("重新发布：BXJG.Utils.Web", FabuXindeBXJGUtilsWeb)
 };
 #endregion
 

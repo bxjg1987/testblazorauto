@@ -24,7 +24,10 @@ namespace BXJG.Utils.Extensions
         /// <returns>key属性名，value文件列表</returns>
         public static IQueryable<AttachmentEntity> WhereAttachment(this IQueryable<AttachmentEntity> q, string entityType, string propertyName = default, bool track = false, params string[] entityIds)
         {
-            q = q.Include(x => x.File);
+            q = q.Include(x => x.File)
+                 .Where(x => x.EntityType == entityType)
+                 .WhereIf(propertyName.IsNotNullOrWhiteSpaceBXJG(), x => x.PropertyName == propertyName);
+
             if (!track)
                 q = q.AsNoTrackingWithIdentityResolution();
 
@@ -33,10 +36,20 @@ namespace BXJG.Utils.Extensions
                 var id = entityIds[0];
                 q = q.Where(x => x.EntityId == id);
             }
+            else
+                q = q.Where(x=>entityIds.Contains(x.EntityId));
 
-            return q.Where(x => x.EntityType == entityType)
-                    .WhereIf(propertyName.IsNotNullOrWhiteSpaceBXJG(), x => x.PropertyName == propertyName)
-                    .WhereIf(entityType.Length > 1, x => entityType.Contains(x.EntityId));
+            return q;
+        }
+        /// <summary>
+        /// 应用附件查询条件
+        /// </summary>
+        /// <param name="q"></param>
+        /// <param name="entityIds">实体id列表</param>
+        /// <returns>key属性名，value文件列表</returns>
+        public static IQueryable<AttachmentEntity> WhereAttachment<TEntity>(this IQueryable<AttachmentEntity> q, string propertyName = default, bool track = false, params string[] entityIds)
+        {
+            return q.WhereAttachment( typeof(TEntity).FullName, propertyName, track, entityIds);
         }
         #endregion
     }

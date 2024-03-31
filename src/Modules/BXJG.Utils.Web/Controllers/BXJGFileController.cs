@@ -85,6 +85,7 @@ namespace BXJG.Utils.Web.Controllers
         /// <param name="id">文件id</param>
         /// <returns></returns>
         [HttpGet]
+        [Route("{id}")]
         public async Task<PhysicalFileResult> Download(Guid id)
         {
             var r = this.fileDownloader.Value.GetAbsolutePath(id);
@@ -104,6 +105,7 @@ namespace BXJG.Utils.Web.Controllers
         /// <param name="id">文件id</param>
         /// <returns></returns>
         [HttpGet]
+        [Route("{id}")]
         public async Task<PhysicalFileResult> DownloadThum(Guid id)
         {
             var r = this.fileDownloader.Value.GetAbsolutePath(id);

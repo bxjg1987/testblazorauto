@@ -29,7 +29,7 @@ namespace BXJG.Utils.Extensions
         /// <returns>key属性名，value文件列表</returns>
         public static async Task<Dictionary<string, List<FileEntity>>> GetFilesByAttachment(this IRepository<AttachmentEntity, Guid> repository, string entityType, string entityId, bool track = false, CancellationToken cancellationToken = default)
         {
-            IQueryable<AttachmentEntity> q = repository.GetAll().WhereAttachment(entityType, track: track).Where(x => x.EntityId == entityId);
+            IQueryable<AttachmentEntity> q = repository.GetAll().WhereAttachment(entityType,default,track, entityId);
             var list = await q.ToArrayAsync(cancellationToken);
             return list.GroupBy(x => x.PropertyName).ToDictionary(x => x.Key, x => x.OrderBy(c => c.OrderIndex).Select(c => c.File).ToList());
         }
@@ -45,7 +45,7 @@ namespace BXJG.Utils.Extensions
         /// <returns>文件列表</returns>
         public static async Task<List<FileEntity>> GetFilesByAttachmentWithoutProperty(this IRepository<AttachmentEntity, Guid> repository, string entityType, string entityId, bool track = false, CancellationToken cancellationToken = default)
         {
-            IQueryable<AttachmentEntity> q = repository.GetAll().WhereAttachment(entityType, track: track).Where(x => x.EntityId == entityId);
+            IQueryable<AttachmentEntity> q = repository.GetAll().WhereAttachment(entityType, default,track,entityId);
             return await q.OrderBy(x => x.OrderIndex).Select(x => x.File).ToListAsync(cancellationToken);
         }
 
@@ -61,7 +61,7 @@ namespace BXJG.Utils.Extensions
         /// <returns> key实体id；value：属性名和文件列表</returns>
         public static async Task<Dictionary<string, Dictionary<string, List<FileEntity>>>> GetFilesByAttachment(this IRepository<AttachmentEntity, Guid> repository, string entityType, IEnumerable<string> entityIds, bool track = false, CancellationToken cancellationToken = default)
         {
-            IQueryable<AttachmentEntity> q = repository.GetAll().WhereAttachment(entityType, track: track, entityIds: entityIds.ToArray());
+            IQueryable<AttachmentEntity> q = repository.GetAll().WhereAttachment(entityType, default, track,  entityIds.ToArray());
             var list = await q.ToArrayAsync(cancellationToken);
             return list.GroupBy(x => x.EntityId)
                        .ToDictionary(x => x.Key,
@@ -80,7 +80,7 @@ namespace BXJG.Utils.Extensions
         /// <returns> key实体id；value：文件列表</returns>
         public static async Task< Dictionary<string, List<FileEntity>>> GetFilesByAttachmentWithoutProperty(this IRepository<AttachmentEntity, Guid> repository, string entityType, IEnumerable<string> entityIds, bool track = false, CancellationToken cancellationToken = default)
         {
-            IQueryable<AttachmentEntity> q = repository.GetAll().WhereAttachment(entityType, track: track, entityIds: entityIds.ToArray());
+            IQueryable<AttachmentEntity> q = repository.GetAll().WhereAttachment(entityType,default, track,  entityIds.ToArray());
             var list = await q.ToArrayAsync(cancellationToken);
             return list.GroupBy(x => x.EntityId).ToDictionary(x => x.Key,  z => z.OrderBy(v => v.OrderIndex).Select(g => g.File).ToList());
         }
@@ -101,7 +101,7 @@ namespace BXJG.Utils.Extensions
         /// <returns>文件列表</returns>
         public static async Task<List<FileEntity>> GetFilesByAttachment(this IRepository<AttachmentEntity, Guid> repository, string entityType, string entityId, string propertyName=default, bool track = false, CancellationToken cancellationToken = default)
         {
-            IQueryable<AttachmentEntity> q = repository.GetAll().WhereAttachment(entityType, propertyName, track).Where(x => x.EntityId == entityId).OrderBy(x => x.OrderIndex);
+            IQueryable<AttachmentEntity> q = repository.GetAll().WhereAttachment(entityType, propertyName, track, entityId).OrderBy(x => x.OrderIndex);
             var list = await q.ToArrayAsync(cancellationToken);
             return list.Select(x => x.File).ToList();
         }
