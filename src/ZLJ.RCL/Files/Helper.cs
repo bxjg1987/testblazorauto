@@ -10,7 +10,8 @@ using System.Web;
 
 namespace ZLJ.RCL.Files
 {
-    public class Helper : ITransientDependency
+    //由于是前后端共用的，即便是在后端，也不能使用abp的依赖注入特征
+    public class Helper //: ITransientDependency
     {
         IConfiguration Configuration;
         IAccessTokenProvider  accessTokenProvider;
