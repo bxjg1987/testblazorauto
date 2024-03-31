@@ -26,47 +26,47 @@ namespace BXJG.Common.RCL.Auth
      * 或者cookie保持原来的，blazor客户端保持刷新token的方式，在首次登陆拿到的token和刷新token通过状态切换的方式传递到blazor客户端
      */
 
-    public class AccessTokenProvider : IAccessTokenProvider//, IDisposable
-    {
-        ILogger logger;
-        AuthenticationStateProvider authenticationStateProvider;
+    //public class AccessTokenProvider : IAccessTokenProvider//, IDisposable
+    //{
+    //    ILogger logger;
+    //    AuthenticationStateProvider authenticationStateProvider;
 
-        public AccessTokenProvider(ILogger<AccessTokenProvider> logger, AuthenticationStateProvider authenticationStateProvider)
-        {
-            this.logger = logger;
-            this.authenticationStateProvider = authenticationStateProvider;
-        }
+    //    public AccessTokenProvider(ILogger<AccessTokenProvider> logger, AuthenticationStateProvider authenticationStateProvider)
+    //    {
+    //        this.logger = logger;
+    //        this.authenticationStateProvider = authenticationStateProvider;
+    //    }
 
-        public string GetAccessToken()
-        {
-            var str = authenticationStateProvider.GetAuthenticationStateAsync().ConfigureAwait(false).GetAwaiter().GetResult().User.FindFirst(c => c.Type == "AccessToken")?.Value;
-            //Console.WriteLine("请求前获取accessToken:" + str);
-            return str;
-        }
-        //public void Update(string a, string b, int c)
-        //{
-        //    logger.LogDebug($"accessToken被设置了:{a}");
-        //    accessToken = a;
-        //    refreshToken = b;
-        //    expiration = c;
-        //}
-        //CancellationTokenSource cts = new CancellationTokenSource();
+    //    public string GetAccessToken()
+    //    {
+    //        var str = authenticationStateProvider.GetAuthenticationStateAsync().ConfigureAwait(false).GetAwaiter().GetResult().User.FindFirst(c => c.Type == "AccessToken")?.Value;
+    //        //Console.WriteLine("请求前获取accessToken:" + str);
+    //        return str;
+    //    }
+    //    //public void Update(string a, string b, int c)
+    //    //{
+    //    //    logger.LogDebug($"accessToken被设置了:{a}");
+    //    //    accessToken = a;
+    //    //    refreshToken = b;
+    //    //    expiration = c;
+    //    //}
+    //    //CancellationTokenSource cts = new CancellationTokenSource();
 
-        //public AccessTokenProvider()
-        //{
-        //    Task.Run(async () =>
-        //    {
-        //        while (!cts.IsCancellationRequested)
-        //        {
-        //            await Task.Delay(1);
-        //        }
-        //    });
-        //}
+    //    //public AccessTokenProvider()
+    //    //{
+    //    //    Task.Run(async () =>
+    //    //    {
+    //    //        while (!cts.IsCancellationRequested)
+    //    //        {
+    //    //            await Task.Delay(1);
+    //    //        }
+    //    //    });
+    //    //}
 
-        //public void Dispose()
-        //{
-        //    cts?.Cancel();
-        //}
+    //    //public void Dispose()
+    //    //{
+    //    //    cts?.Cancel();
+    //    //}
 
-    }
+    //}
 }

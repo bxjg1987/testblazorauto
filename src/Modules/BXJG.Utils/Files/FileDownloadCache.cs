@@ -14,11 +14,12 @@ using System.Threading.Tasks;
 namespace BXJG.Utils.Files
 {
 
-    public class FileDownloadCache : MayHaveTenantEntityCache<FileEntity, DownloadFileResult, Guid>, IDownloadFileCache, ITransientDependency
+    public class DownloadFileCache : MayHaveTenantEntityCache<FileEntity, DownloadFileResult, Guid>, IDownloadFileCache, ITransientDependency
     {
-        public FileDownloadCache(ICacheManager cacheManager, IUnitOfWorkManager unitOfWorkManager, IRepository<FileEntity, Guid> repository)
-            : base(cacheManager, unitOfWorkManager, repository)
+        public DownloadFileCache(ICacheManager cacheManager, IUnitOfWorkManager unitOfWorkManager, IRepository<FileEntity, Guid> repository, string cacheName = null) : base(cacheManager, unitOfWorkManager, repository, cacheName)
         {
         }
+
+      
     }
 }

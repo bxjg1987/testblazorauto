@@ -14,6 +14,7 @@ namespace BXJG.Common.Http
     public interface IAccessTokenProvider
     {
         string GetAccessToken();
+        string GetEncryptedAccessToken();
     }
     /// <summary>
     /// 为http请求设置accesstoken的http header

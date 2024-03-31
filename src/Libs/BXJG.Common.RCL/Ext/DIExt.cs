@@ -34,9 +34,13 @@ namespace Microsoft.Extensions.DependencyInjection
                     //.AddSingleton<IAccessTokenProvider>(s => s.GetRequiredService<AccessTokenProvider>());
             services.TryAddSingleton<IZhongjieProvider, ZhongjieProvider>();
             services.TryAddTransient<IAuthorizationPolicyProvider, PermissionNameAuthorizationPolicyProvider>();
+
+
             services.TryAddSingleton<AuthenticationStateProvider, PersistentAuthenticationStateProvider>();
-            services.TryAddSingleton<AccessTokenProvider>();
-            services.TryAddSingleton<IAccessTokenProvider>(s => s.GetRequiredService<AccessTokenProvider>());
+            //services.TryAddSingleton<AccessTokenProvider>();
+            services.TryAddSingleton<IAccessTokenProvider>(s => s.GetRequiredService<AuthenticationStateProvider>() as PersistentAuthenticationStateProvider);
+
+
             return services;
         }
         static IServiceCollection AddCommonRCL(this IServiceCollection services)

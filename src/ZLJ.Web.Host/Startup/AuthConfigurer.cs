@@ -65,6 +65,22 @@ namespace ZLJ.Web.Host.Startup
          * SignalR can not send authorization header. So, we are getting it from query string as an encrypted text. */
         private static Task QueryStringTokenResolver(MessageReceivedContext context)
         {
+            if (context.HttpContext.Request.Path.HasValue && context.HttpContext.Request.Path.Value.StartsWith("/bxjgfile/"))
+            {
+                var at = context.HttpContext.Request.Query["at"].FirstOrDefault();
+
+                if (at == null)
+                {
+                    // Cookie value does not matches to querystring value
+                    return Task.CompletedTask;
+                }
+
+                context.Token = at;// SimpleStringCipher.Instance.Decrypt(at);
+                return Task.CompletedTask;
+            }
+
+
+
             if (!context.HttpContext.Request.Path.HasValue ||
                 !context.HttpContext.Request.Path.Value.StartsWith("/signalr"))
             {

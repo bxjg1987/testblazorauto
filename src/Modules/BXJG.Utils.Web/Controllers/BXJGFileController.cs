@@ -88,7 +88,7 @@ namespace BXJG.Utils.Web.Controllers
         [Route("{id}")]
         public async Task<PhysicalFileResult> Download(Guid id)
         {
-            var r = this.fileDownloader.Value.GetAbsolutePath(id);
+            var r = await this.fileDownloader.Value.GetAbsolutePath(id);
 
             if (r.Permission == Share.Files.FilePermission.Further)
                 throw new AbpAuthorizationException("请使用具体业务独立的文件访问接口");
@@ -108,7 +108,7 @@ namespace BXJG.Utils.Web.Controllers
         [Route("{id}")]
         public async Task<PhysicalFileResult> DownloadThum(Guid id)
         {
-            var r = this.fileDownloader.Value.GetAbsolutePath(id);
+            var r = await this.fileDownloader.Value.GetAbsolutePath(id);
 
             if (r.Permission == Share.Files.FilePermission.Further)
                 throw new AbpAuthorizationException("请使用具体业务独立的文件访问接口");

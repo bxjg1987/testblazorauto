@@ -1,3 +1,4 @@
+using BXJG.Common.Http;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Security.Claims;
@@ -13,7 +14,7 @@ namespace BXJG.Common.RCL.Auth
     // This only provides a user name and email for display purposes. It does not actually include any tokens
     // that authenticate to the server when making subsequent requests. That works separately using a
     // cookie that will be included on HttpClient requests to the server.
-    public class PersistentAuthenticationStateProvider : AuthenticationStateProvider
+    public class PersistentAuthenticationStateProvider : AuthenticationStateProvider, IAccessTokenProvider
     {
         // private readonly AccessTokenProvider _tokenProvider;
 
@@ -31,7 +32,7 @@ namespace BXJG.Common.RCL.Auth
             }
 
             //Console.WriteLine($"PersistentAuthenticationStateProvider构造函数执行了：{JsonSerializer.Serialize(userInfo)}");
-
+            accessToken = userInfo.AccessToken;
             Claim[] claims = [new Claim("AccessToken", userInfo.AccessToken),
               //  new Claim("TenantId", userInfo.TenantId.HasValue? userInfo.TenantId.Value.ToString():""),
                 new Claim(ClaimTypes.NameIdentifier, userInfo.Id.ToString())];
@@ -39,6 +40,11 @@ namespace BXJG.Common.RCL.Auth
             authenticationStateTask = Task.FromResult(
                 new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(claims,
                     authenticationType: nameof(PersistentAuthenticationStateProvider)))));
+        }
+        string accessToken = string.Empty;
+        public string GetAccessToken()
+        {
+            return accessToken;
         }
 
         public override Task<AuthenticationState> GetAuthenticationStateAsync() => authenticationStateTask;
