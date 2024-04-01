@@ -13,7 +13,7 @@ using System.Reflection;
 using Abp.Domain.Entities;
 using System.Collections.Generic;
 using AutoMapper;
-using BXJG.Common.Dto;
+
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Abp.Domain.Uow;

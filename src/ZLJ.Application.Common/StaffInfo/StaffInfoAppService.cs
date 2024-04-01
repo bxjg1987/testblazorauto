@@ -21,6 +21,7 @@ using ZLJ.Core.BaseInfo.Post;
 using BXJG.Utils.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Abp.Threading;
+using BXJG.Common.Contracts;
 
 namespace ZLJ.Application.Common.StaffInfo
 {

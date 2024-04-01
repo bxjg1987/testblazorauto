@@ -1,5 +1,5 @@
 ﻿using Abp.Application.Services.Dto;
-using BXJG.Common.Dto;
+using BXJG.Common.Contracts;
 using BXJG.Utils.Application.Share;
 using System;
 using System.Collections.Generic;

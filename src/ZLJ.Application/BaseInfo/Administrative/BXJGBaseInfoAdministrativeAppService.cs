@@ -8,11 +8,11 @@ using Abp.Authorization;
 using ZLJ.Application.Admin.BaseInfo.Administrative.Dto;
 using ZLJ.Application.Admin.BaseInfo;
 using Abp.Application.Services.Dto;
-using BXJG.Common.Dto;
 using ZLJ.Core.BaseInfo.Administrative;
 using ZLJ.Application.Admin.Authorization.Permissions;
 using BXJG.Utils.Application.Share.GeneralTree;
 using ZLJ.Application.Share.Authorization.Permissions;
+using BXJG.Common.Contracts;
 
 namespace ZLJ.Application.Admin.BaseInfo.Administrative
 {

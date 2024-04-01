@@ -8,8 +8,8 @@ using ZLJ.Application.Share.Auditing.Dto;
 using ZLJ.Application.Share.Auditing;
 using ZLJ.Application.Share.Post;
 using ZLJ.Application.Common.ClientProxy;
-using BXJG.Common.Dto;
 using BXJG.Utils.Application.Share;
+using BXJG.Common.Contracts;
 
 namespace ZLJ.Admin.ClientProxy
 {

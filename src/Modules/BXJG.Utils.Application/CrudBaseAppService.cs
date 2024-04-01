@@ -9,7 +9,7 @@ using Abp.Runtime.Session;
 using Abp.Threading;
 using Abp.UI;
 using BXJG.Common;
-using BXJG.Common.Dto;
+using BXJG.Common.Contracts;
 using BXJG.Utils.Application.Share;
 
 

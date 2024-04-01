@@ -5,7 +5,7 @@ using Abp.Domain.Repositories;
 using Abp.Extensions;
 using Abp.Linq.Extensions;
 using Abp.Organizations;
-using BXJG.Common.Dto;
+
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

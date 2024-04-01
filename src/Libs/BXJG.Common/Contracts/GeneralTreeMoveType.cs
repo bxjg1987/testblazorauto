@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Utils.Share.GeneralTree
+namespace BXJG.Common.Contracts
 {
     /// <summary>
     /// 移动节点的类型

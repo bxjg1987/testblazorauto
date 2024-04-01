@@ -4,7 +4,7 @@ using Abp.Application.Services.Dto;
 using Abp.Domain.Repositories;
 using Abp.Linq.Extensions;
 using Abp.UI;
-using BXJG.Common.Dto;
+using BXJG.Common.Contracts;
 using BXJG.Utils.Application.Share.Auth;
 using BXJG.Utils.Application.Share.GeneralTree;
 using BXJG.Utils.GeneralTree;

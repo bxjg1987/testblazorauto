@@ -8,7 +8,6 @@ using Abp.Extensions;
 using Abp.Runtime.Session;
 using Abp.Application.Services.Dto;
 using Abp.Authorization;
-using BXJG.Common.Dto;
 using Abp.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Abp.Linq;
@@ -27,6 +26,7 @@ using Abp.Auditing;
 using BXJG.Utils.Application.Share.Notification;
 using BXJG.Utils.Share;
 using Abp.Threading;
+using BXJG.Common.Contracts;
 
 namespace BXJG.Utils.Application.Notification
 {

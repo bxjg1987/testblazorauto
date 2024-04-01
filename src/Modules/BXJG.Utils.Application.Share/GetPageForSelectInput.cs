@@ -1,5 +1,5 @@
 ﻿using Abp.Application.Services.Dto;
-using BXJG.Common.Dto;
+using BXJG.Common.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +10,7 @@ namespace BXJG.Utils.Application.Share
 {
     /// <summary>
     /// 将信息作为下拉框数据选择时查询的输入模型
-    /// 非分页版本参考<see cref="BXJG.Common.Dto.GetForSelectInput"/>
+    /// 非分页版本参考<see cref="Common.Contracts.GetForSelectInput"/>
     /// </summary>
     public class GetPageForSelectInput : GetForSelectInput, IPagedAndSortedResultRequest
     {

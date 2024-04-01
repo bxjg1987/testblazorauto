@@ -62,8 +62,7 @@ namespace BXJG.Common.Contracts
     /// <summary>
     /// 树
     /// </summary>
-    public interface IGeneralTree<TChild> : IHaveParentId<long>
-        where TChild : IGeneralTree<TChild>
+    public interface IGeneralTree<TChild> : IHaveParentId<long> where TChild : IGeneralTree<TChild>
     {
         ///// <summary>
         ///// 主键、唯一id

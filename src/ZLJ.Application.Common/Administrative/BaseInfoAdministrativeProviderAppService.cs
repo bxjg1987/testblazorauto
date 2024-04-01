@@ -5,13 +5,13 @@ using ZLJ.Core.BaseInfo.Administrative;
 using System;
 using Abp.Application.Services.Dto;
 using System.Collections.Generic;
-using BXJG.Common.Dto;
 using BXJG.Utils.Enums;
 using ZLJ.Application.Common.Administrative;
 using BXJG.Utils.Application.Share.GeneralTree;
 using BXJG.Utils.Application.GeneralTree;
 using BXJG.Utils.Application.Enums;
 using ZLJ.Core;
+using BXJG.Common.Contracts;
 
 namespace ZLJ.Application.Common.AdministrativeCommon
 {

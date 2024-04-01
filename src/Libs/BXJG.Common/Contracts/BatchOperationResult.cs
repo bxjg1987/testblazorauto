@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BXJG.Common.Dto
+namespace BXJG.Common.Contracts
 {
     public static class BatchOperationErrorMessageExt
     {

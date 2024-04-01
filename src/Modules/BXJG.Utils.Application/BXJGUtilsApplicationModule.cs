@@ -11,7 +11,7 @@ using BXJG.Utils.DynamicProperty;
 using System.Reflection;
 using Abp.AutoMapper;
 using Abp.Domain.Entities;
-using BXJG.Common.Dto;
+
 using BXJG.Utils.Concurrency;
 using System.Linq;
 using Abp.Application.Services;

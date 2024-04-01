@@ -4,7 +4,6 @@ global using System.Linq;
 global using System.Text;
 global using System.Threading.Tasks;
 global using BXJG.Common;
-global using BXJG.Common.Dto;
 global using BXJG.Common.Extensions;
 
 global using BXJG.Utils.Concurrency;

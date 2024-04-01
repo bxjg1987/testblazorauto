@@ -12,8 +12,8 @@ using Abp.Threading;
 using Abp.Timing;
 using Abp.UI;
 using BXJG.Common.Contracts;
+using BXJG.Utils.Extensions;
 using BXJG.Utils.Share;
-using BXJG.Utils.Share.GeneralTree;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,15 +41,7 @@ namespace BXJG.Utils.GeneralTree
         public IRepository<TEntity, long> Repository { get; set; }
 
         //由于Utils模块是通用模块，所以需要这个来做异步操作，我们的主项目中直接引用ef的，所以不需要
-        public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }
-
         public IAbpSession AbpSession { get; set; }
-
-        public GeneralTreeManager()
-        {
-            base.LocalizationSourceName = BXJGUtilsConsts.LocalizationSourceName;
-            this.AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
-        }
 
         //用属性注入，这样子类不用重写烦人的构造函数
         //public GeneralTreeManager(IRepository<TEntity, long> repository) : this()
@@ -75,12 +67,12 @@ namespace BXJG.Utils.GeneralTree
                 //  var parentCodeQuery = repository.GetAll().Where(c => c.Id == entity.ParentId.Value).Select(c => c.Code);
                 var parentCode = parent.Code;// await AsyncQueryableExecuter.FirstOrDefaultAsync(parentCodeQuery);
                 var childrenCount = await Repository.CountAsync(c => c.ParentId == entity.ParentId);
-                entity.Code = GeneralTreeExtensions.BuildCode(parentCode, childrenCount);
+                entity.Code = TreeExtensions.BuildCode(parentCode, childrenCount, BXJG.Utils.Share.BXJGUtilsConsts.CodeUnitLength);
             }
             else
             {
                 var childrenCount = await Repository.CountAsync(c => c.ParentId == null);
-                entity.Code = GeneralTreeExtensions.BuildCode("", childrenCount);
+                entity.Code = TreeExtensions.BuildCode("", childrenCount, BXJG.Utils.Share.BXJGUtilsConsts.CodeUnitLength);
             }
 
 
@@ -387,18 +379,18 @@ namespace BXJG.Utils.GeneralTree
                     idx = souteceIndex;
                 else
                     idx = targetIndex;
-                GeneralTreeExtensions.ResetCode(sourceParentCode, targetBrotherList, idx);
+                TreeExtensions.ResetCode(sourceParentCode, targetBrotherList, idx);
             }
             else
             {
                 var taregetCode = targetParent == null ? "" : targetParent.Code;
                 if (taregetCode.StartsWith(sourceParentCode))
                 {
-                    GeneralTreeExtensions.ResetCode(sourceParentCode, sourceBrotherList, 0);
+                    TreeExtensions.ResetCode(sourceParentCode, sourceBrotherList, 0);
                 }
                 else
                 {
-                    GeneralTreeExtensions.ResetCode(taregetCode, targetBrotherList, 0);
+                    TreeExtensions.ResetCode(taregetCode, targetBrotherList, 0);
                 }
             }
             //GeneralTreeExtensions.ResetCode(sourceParentCode, sourceBrotherList, souteceIndex);

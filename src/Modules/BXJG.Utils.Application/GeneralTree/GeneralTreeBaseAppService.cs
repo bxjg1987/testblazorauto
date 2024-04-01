@@ -24,7 +24,6 @@ using System.Threading.Tasks;
 using Abp.Extensions;
 using Abp.Linq.Extensions;
 using Abp.Domain.Uow;
-using BXJG.Common.Dto;
 using Abp.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 

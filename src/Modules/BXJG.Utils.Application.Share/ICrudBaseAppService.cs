@@ -1,11 +1,11 @@
 ﻿using Abp.Application.Services.Dto;
 using Abp.Application.Services;
-using BXJG.Common.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BXJG.Common.Contracts;
 
 namespace BXJG.Utils.Application.Share
 {

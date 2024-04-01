@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Abp.Application.Services;
 using Abp.Application.Services.Dto;
-using BXJG.Common.Dto;
+
 using BXJG.Utils;
 
 using BXJG.Utils.Application.Share;

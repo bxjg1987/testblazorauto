@@ -1,7 +1,7 @@
 ﻿using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using Abp.Domain.Uow;
-using BXJG.Common.Dto;
+using BXJG.Common.Contracts;
 using BXJG.Utils.Application.Share.GeneralTree;
 using System;
 using System.Collections.Generic;

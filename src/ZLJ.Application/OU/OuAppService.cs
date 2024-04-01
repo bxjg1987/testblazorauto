@@ -6,7 +6,7 @@ using Abp.Extensions;
 using Abp.Linq.Extensions;
 using Abp.Organizations;
 using Abp.Threading;
-using BXJG.Common.Dto;
+using BXJG.Common.Contracts;
 using BXJG.Utils.Application.Share.GeneralTree;
 using Microsoft.EntityFrameworkCore;
 using System;

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
-using BXJG.Common.Dto;
+
 
 namespace BXJG.Utils.Application.Share.Enums
 {

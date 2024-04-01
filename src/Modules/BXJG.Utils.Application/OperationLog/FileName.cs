@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 using Abp.Extensions;
 using System.Linq.Dynamic.Core;
 using System.ComponentModel.DataAnnotations;
-using BXJG.Common.Dto;
+
 
 namespace BXJG.Utils.Application.OperationLog
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace BXJG.Common.Dto
+namespace BXJG.Common.Contracts
 {
     #region 批量操作
     /// <summary>
@@ -147,7 +147,7 @@ namespace BXJG.Common.Dto
     /// 批量状态调整
     /// </summary>
     /// <typeparam name="TState"></typeparam>
-    public class BatchChangeStateInputInt<TState> : BatchChangeStateInput<int,TState>
+    public class BatchChangeStateInputInt<TState> : BatchChangeStateInput<int, TState>
     {
     }
     /// <summary>
@@ -177,7 +177,7 @@ namespace BXJG.Common.Dto
     /// 批量开关
     /// </summary>
     /// <typeparam name="TKey">id类型</typeparam>
-    public class BatchSwitchInput<TKey> : BatchChangeStateInput<TKey,bool>
+    public class BatchSwitchInput<TKey> : BatchChangeStateInput<TKey, bool>
     {
     }
     /// <summary>

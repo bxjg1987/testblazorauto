@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Common.Dto
+namespace BXJG.Common.Contracts
 {
     /*
      * 主要针对获取下拉框需要的数据时 所提供的输入参数

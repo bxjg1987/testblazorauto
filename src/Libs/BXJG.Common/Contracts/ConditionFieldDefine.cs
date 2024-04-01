@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BXJG.Common.Dynamics;
 
-namespace BXJG.Common.Dto
+namespace BXJG.Common.Contracts
 {
     //直接用c#的集合接口
     //public interface IDynamicCondition { 

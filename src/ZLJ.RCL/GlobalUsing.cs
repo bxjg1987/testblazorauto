@@ -8,7 +8,6 @@ global using System.Security.Claims;
 global using System.Text;
 global using System.Threading.Tasks;
 global using AntDesign;
-global using BXJG.Common.Dto;
 global using Abp.Application.Services.Dto;
 global using BXJG.Utils.Application.Share;
 global using Abp.UI;

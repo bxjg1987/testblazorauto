@@ -1,4 +1,4 @@
-﻿using BXJG.Common.Dto;
+﻿using BXJG.Common.Contracts;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

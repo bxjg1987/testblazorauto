@@ -1,4 +1,5 @@
 ﻿using Abp.Localization.Sources;
+using BXJG.Common.Contracts;
 using BXJG.Utils.Application.Share.GeneralTree;
 
 

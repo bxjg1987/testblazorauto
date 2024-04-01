@@ -2,7 +2,7 @@
 
   <PropertyGroup>
 	  <TargetFramework>netstandard2.1</TargetFramework>
-	  <VersionPrefix>1.3.22</VersionPrefix>
+	  <VersionPrefix>1.3.23</VersionPrefix>
     <!--<Version></Version>-->
     <!--<GeneratePackageOnBuild>true</GeneratePackageOnBuild>-->
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
@@ -41,6 +41,7 @@
 		<SupportedPlatform Include="browser" />
 	</ItemGroup>
   <ItemGroup>
+    <Folder Include="Dto\" />
     <Folder Include="Validation\" />
   </ItemGroup>
  <!--<ItemGroup Condition="'$(TargetFramework)' == 'net8'">

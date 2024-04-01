@@ -9,6 +9,7 @@ using ZLJ.Core.BaseInfo;
 using ZLJ.Application.Admin.Authorization.Permissions;
 using ZLJ.Application.Share.Authorization.Permissions;
 using ZLJ.Application.Common.Share.OU;
+using BXJG.Common.Contracts;
 
 namespace ZLJ.Application.Admin.BaseInfo.StaffInfo
 {

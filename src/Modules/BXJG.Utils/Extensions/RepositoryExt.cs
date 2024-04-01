@@ -1,4 +1,7 @@
-﻿using Abp.Domain.Repositories;
+﻿using Abp.Domain.Entities;
+using Abp.Domain.Repositories;
+using Abp.Extensions;
+using BXJG.Common.Contracts;
 using BXJG.Utils.Files;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -29,7 +32,7 @@ namespace BXJG.Utils.Extensions
         /// <returns>key属性名，value文件列表</returns>
         public static async Task<Dictionary<string, List<FileEntity>>> GetFilesByAttachment(this IRepository<AttachmentEntity, Guid> repository, string entityType, string entityId, bool track = false, CancellationToken cancellationToken = default)
         {
-            IQueryable<AttachmentEntity> q = repository.GetAll().WhereAttachment(entityType,default,track, entityId);
+            IQueryable<AttachmentEntity> q = repository.GetAll().WhereAttachment(entityType, default, track, entityId);
             var list = await q.ToArrayAsync(cancellationToken);
             return list.GroupBy(x => x.PropertyName).ToDictionary(x => x.Key, x => x.OrderBy(c => c.OrderIndex).Select(c => c.File).ToList());
         }
@@ -45,7 +48,7 @@ namespace BXJG.Utils.Extensions
         /// <returns>文件列表</returns>
         public static async Task<List<FileEntity>> GetFilesByAttachmentWithoutProperty(this IRepository<AttachmentEntity, Guid> repository, string entityType, string entityId, bool track = false, CancellationToken cancellationToken = default)
         {
-            IQueryable<AttachmentEntity> q = repository.GetAll().WhereAttachment(entityType, default,track,entityId);
+            IQueryable<AttachmentEntity> q = repository.GetAll().WhereAttachment(entityType, default, track, entityId);
             return await q.OrderBy(x => x.OrderIndex).Select(x => x.File).ToListAsync(cancellationToken);
         }
 
@@ -61,7 +64,7 @@ namespace BXJG.Utils.Extensions
         /// <returns> key实体id；value：属性名和文件列表</returns>
         public static async Task<Dictionary<string, Dictionary<string, List<FileEntity>>>> GetFilesByAttachment(this IRepository<AttachmentEntity, Guid> repository, string entityType, IEnumerable<string> entityIds, bool track = false, CancellationToken cancellationToken = default)
         {
-            IQueryable<AttachmentEntity> q = repository.GetAll().WhereAttachment(entityType, default, track,  entityIds.ToArray());
+            IQueryable<AttachmentEntity> q = repository.GetAll().WhereAttachment(entityType, default, track, entityIds.ToArray());
             var list = await q.ToArrayAsync(cancellationToken);
             return list.GroupBy(x => x.EntityId)
                        .ToDictionary(x => x.Key,
@@ -78,11 +81,11 @@ namespace BXJG.Utils.Extensions
         /// <param name="track"></param>
         /// <param name="cancellationToken"></param>
         /// <returns> key实体id；value：文件列表</returns>
-        public static async Task< Dictionary<string, List<FileEntity>>> GetFilesByAttachmentWithoutProperty(this IRepository<AttachmentEntity, Guid> repository, string entityType, IEnumerable<string> entityIds, bool track = false, CancellationToken cancellationToken = default)
+        public static async Task<Dictionary<string, List<FileEntity>>> GetFilesByAttachmentWithoutProperty(this IRepository<AttachmentEntity, Guid> repository, string entityType, IEnumerable<string> entityIds, bool track = false, CancellationToken cancellationToken = default)
         {
-            IQueryable<AttachmentEntity> q = repository.GetAll().WhereAttachment(entityType,default, track,  entityIds.ToArray());
+            IQueryable<AttachmentEntity> q = repository.GetAll().WhereAttachment(entityType, default, track, entityIds.ToArray());
             var list = await q.ToArrayAsync(cancellationToken);
-            return list.GroupBy(x => x.EntityId).ToDictionary(x => x.Key,  z => z.OrderBy(v => v.OrderIndex).Select(g => g.File).ToList());
+            return list.GroupBy(x => x.EntityId).ToDictionary(x => x.Key, z => z.OrderBy(v => v.OrderIndex).Select(g => g.File).ToList());
         }
 
 
@@ -99,7 +102,7 @@ namespace BXJG.Utils.Extensions
         /// <param name="track"></param>
         /// <param name="cancellationToken"></param>
         /// <returns>文件列表</returns>
-        public static async Task<List<FileEntity>> GetFilesByAttachment(this IRepository<AttachmentEntity, Guid> repository, string entityType, string entityId, string propertyName=default, bool track = false, CancellationToken cancellationToken = default)
+        public static async Task<List<FileEntity>> GetFilesByAttachment(this IRepository<AttachmentEntity, Guid> repository, string entityType, string entityId, string propertyName = default, bool track = false, CancellationToken cancellationToken = default)
         {
             IQueryable<AttachmentEntity> q = repository.GetAll().WhereAttachment(entityType, propertyName, track, entityId).OrderBy(x => x.OrderIndex);
             var list = await q.ToArrayAsync(cancellationToken);
@@ -154,7 +157,7 @@ namespace BXJG.Utils.Extensions
         /// <param name="track"></param>
         /// <param name="cancellationToken"></param>
         /// <returns> key实体id；value：文件列表</returns>
-        public static  Task<Dictionary<string, List<FileEntity>>> GetFilesByAttachmentWithoutProperty<TEntity>(this IRepository<AttachmentEntity, Guid> repository, IEnumerable<string> entityIds, bool track = false, CancellationToken cancellationToken = default)
+        public static Task<Dictionary<string, List<FileEntity>>> GetFilesByAttachmentWithoutProperty<TEntity>(this IRepository<AttachmentEntity, Guid> repository, IEnumerable<string> entityIds, bool track = false, CancellationToken cancellationToken = default)
         {
             return repository.GetFilesByAttachmentWithoutProperty(typeof(TEntity).FullName, entityIds, track, cancellationToken);
         }
@@ -169,13 +172,71 @@ namespace BXJG.Utils.Extensions
         /// <param name="track"></param>
         /// <param name="cancellationToken"></param>
         /// <returns>文件列表</returns>
-        public static Task<List<FileEntity>> GetFilesByAttachment<TEntity>(this IRepository<AttachmentEntity, Guid> repository, string entityId, string propertyName=default, bool track = false, CancellationToken cancellationToken = default)
+        public static Task<List<FileEntity>> GetFilesByAttachment<TEntity>(this IRepository<AttachmentEntity, Guid> repository, string entityId, string propertyName = default, bool track = false, CancellationToken cancellationToken = default)
         {
             return repository.GetFilesByAttachment(typeof(TEntity).FullName, entityId, propertyName, track, cancellationToken);
         }
 
 
 
-        #endregion}
+        #endregion
+
+        #region 树
+        /// <summary>
+        /// 根据code获取所有后代节点，并以平铺结构的集合返回
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="repository"></param>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        public static async Task<List<TEntity>> GetFlattenOffspringAsync<TEntity>(this IRepository<TEntity, long> repository, string code = null) where TEntity : Entity<long>, IGeneralTree<TEntity>
+        {
+            var query = repository.GetAll();
+            if (!code.IsNullOrWhiteSpace())
+                query = query.Where(c => c.Code.StartsWith(code));
+            query = query.OrderBy(c => c.Code);
+            return await query.ToListAsync();// AsyncQueryableExecuter.ToListAsync(query);
+        }
+
+        //public static string GetParentCode(this string code)
+        //{
+        //    if (code.Length == Share.BXJGUtilsConsts.CodeUnitLength)
+        //    {
+        //        return string.Empty;
+        //    }
+        //    else
+        //    {
+        //        return code.Substring(0, code.Length - Share.BXJGUtilsConsts.CodeUnitLength).TrimEnd('.');
+        //    }
+        //}
+
+        /// <summary>
+        /// 获取指定节点的兄弟节点、父节点(可能为空)
+        /// 均包含其后代节点
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns>Item1父节点，Item2兄弟节点</returns>
+        public static async Task<Tuple<TEntity, List<TEntity>>> GetBrotherWithOffspringAsync<TEntity>(this IRepository<TEntity, long> repository, TEntity entity) where TEntity : Entity<long>, IGeneralTree<TEntity>
+        {
+            var parentCode = entity.Code.GetParentCode();
+
+            TEntity parent = null;
+            List<TEntity> children;
+
+            if (!Abp.Extensions.StringExtensions.IsNullOrWhiteSpace(parentCode))
+            {
+                children = await repository.GetFlattenOffspringAsync<TEntity>(parentCode);
+                parent = children[0];
+            }
+            else
+            {
+                //本来也可以用上面的StartsWith，但是直接getAll性能更好
+                children = await repository.GetFlattenOffspringAsync();
+            }
+            children = children.Where(c => c.ParentId.Equals(entity.ParentId)).ToList();
+            return new Tuple<TEntity, List<TEntity>>(parent, children);
+        }
+
+        #endregion
     }
 }

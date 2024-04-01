@@ -8,7 +8,7 @@ using Abp.Domain.Repositories;
 using Abp.Linq.Extensions;
 using Abp.UI;
 using ZLJ.Application.Admin.BaseInfo.AssociatedCompany.Dto;
-using BXJG.Common.Dto;
+
 using Microsoft.EntityFrameworkCore;
 using ZLJ.Core.BaseInfo.AssociatedCompany;
 //using ZLJ.Application.Admin.WorkOrder.RentOrderItem.Admin;
