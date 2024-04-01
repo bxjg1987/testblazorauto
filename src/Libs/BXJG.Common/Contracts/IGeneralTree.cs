@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Utils.Share.GeneralTree
+namespace BXJG.Common.Contracts
 {
     /*
      * 通用树模块的核心逻辑目前并不依赖此接口，而是依赖的抽象类
@@ -25,10 +25,10 @@ namespace BXJG.Utils.Share.GeneralTree
         /// <summary>
         /// 
         /// </summary>
-        public object? ParentId { get; set; }
+        public object ParentId { get; set; }
     }
     /// <summary>
-    /// 
+    /// 通常新增dto实现此接口，因为它仅仅需要提供父节点
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public interface IHaveParentId<T> : IHaveParentId  /*, IEntity<T>, IEntityDto<T>*/ where T : struct
@@ -38,7 +38,14 @@ namespace BXJG.Utils.Share.GeneralTree
         /// </summary>
         public new T Id
         {
-            get { return (T)(this as IHaveParentId).Id; }
+            get
+            {
+                var obj = (this as IHaveParentId).Id;
+                if (obj == default)
+                    return default;
+                return (T)obj;
+
+            }
             set { (this as IHaveParentId).Id = value; }
         }
         /// <summary>
@@ -46,6 +53,7 @@ namespace BXJG.Utils.Share.GeneralTree
         /// </summary>
         public new T? ParentId
         {
+
             get { return (T?)(this as IHaveParentId).ParentId; }
             set { (this as IHaveParentId).ParentId = value; }
         }
@@ -85,7 +93,7 @@ namespace BXJG.Utils.Share.GeneralTree
         /// <summary>
         /// 子集
         /// </summary>
-        public IList<TChild> Children { get; set; }
+        public List<TChild> Children { get; set; }
         /// <summary>
         /// 子节点数量
         /// 有些时候可能不会加载子节点，仅仅想获取子节点的数量

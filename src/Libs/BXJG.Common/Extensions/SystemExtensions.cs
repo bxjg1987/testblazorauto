@@ -1,8 +1,8 @@
-//using hyjiacan.py4n;
-#if NET8_0_OR_GREATER
-using Microsoft.AspNetCore.WebUtilities;
-#endif
-using Microsoft.AspNetCore.Http.Extensions;
+////using hyjiacan.py4n;
+//#if NET8_0_OR_GREATER
+//using Microsoft.AspNetCore.WebUtilities;
+//#endif
+//using Microsoft.AspNetCore.Http.Extensions;
 using System;
 using System.Buffers;
 using System.Collections.Concurrent;
@@ -23,64 +23,83 @@ namespace System
 {
     public static class SystemExtensions
     {
-//        private const int Second = 1;
-//        private const int Minute = 60 * Second;
-//        private const int Hour = 60 * Minute;
-//        private const int Day = 24 * Hour;
-//        private const int Month = 30 * Day;
-//        public static string ToFriendlyDisplay(this DateTime dateTime)
-//        {
-//#if NET8_0_OR_GREATER
-//            var ts = TimeProvider.System.GetLocalNow().Date - dateTime;
-//#else
-//            var ts = DateTime.Now - dateTime;
-//#endif
+        //        private const int Second = 1;
+        //        private const int Minute = 60 * Second;
+        //        private const int Hour = 60 * Minute;
+        //        private const int Day = 24 * Hour;
+        //        private const int Month = 30 * Day;
+        //        public static string ToFriendlyDisplay(this DateTime dateTime)
+        //        {
+        //#if NET8_0_OR_GREATER
+        //            var ts = TimeProvider.System.GetLocalNow().Date - dateTime;
+        //#else
+        //            var ts = DateTime.Now - dateTime;
+        //#endif
 
 
-//            var delta = ts.TotalSeconds;
-//            if (delta < 0)
-//            {
-//                return "现在";
-//            }
-//            if (delta < 1 * Minute)
-//            {
-//                return ts.Seconds == 1 ? "1秒钟前" : ts.Seconds + "秒之前";
-//            }
-//            if (delta < 2 * Minute)
-//            {
-//                return "1分钟之前";
-//            }
-//            if (delta < 45 * Minute)
-//            {
-//                return ts.Minutes + "分钟";
-//            }
-//            if (delta < 90 * Minute)
-//            {
-//                return "1小时前";
-//            }
-//            if (delta < 24 * Hour)
-//            {
-//                return ts.Hours + "小时前";
-//            }
-//            if (delta < 48 * Hour)
-//            {
-//                return "昨天";
-//            }
-//            if (delta < 30 * Day)
-//            {
-//                return ts.Days + "天前";
-//            }
-//            if (delta < 12 * Month)
-//            {
-//                var months = Convert.ToInt32(Math.Floor((double)ts.Days / 30));
-//                return months <= 1 ? "个月之前" : months + "个月之前";
-//            }
-//            else
-//            {
-//                var years = Convert.ToInt32(Math.Floor((double)ts.Days / 365));
-//                return years <= 1 ? "年之前" : years + "年之前";
-//            }
-//        }
+        //            var delta = ts.TotalSeconds;
+        //            if (delta < 0)
+        //            {
+        //                return "现在";
+        //            }
+        //            if (delta < 1 * Minute)
+        //            {
+        //                return ts.Seconds == 1 ? "1秒钟前" : ts.Seconds + "秒之前";
+        //            }
+        //            if (delta < 2 * Minute)
+        //            {
+        //                return "1分钟之前";
+        //            }
+        //            if (delta < 45 * Minute)
+        //            {
+        //                return ts.Minutes + "分钟";
+        //            }
+        //            if (delta < 90 * Minute)
+        //            {
+        //                return "1小时前";
+        //            }
+        //            if (delta < 24 * Hour)
+        //            {
+        //                return ts.Hours + "小时前";
+        //            }
+        //            if (delta < 48 * Hour)
+        //            {
+        //                return "昨天";
+        //            }
+        //            if (delta < 30 * Day)
+        //            {
+        //                return ts.Days + "天前";
+        //            }
+        //            if (delta < 12 * Month)
+        //            {
+        //                var months = Convert.ToInt32(Math.Floor((double)ts.Days / 30));
+        //                return months <= 1 ? "个月之前" : months + "个月之前";
+        //            }
+        //            else
+        //            {
+        //                var years = Convert.ToInt32(Math.Floor((double)ts.Days / 365));
+        //                return years <= 1 ? "年之前" : years + "年之前";
+        //            }
+        //        }
+
+        /// <summary>
+        /// 获取枚举的描述信息
+        /// </summary>
+        public static string GetDescription(this Enum em)
+        {
+            Type type = em.GetType();
+            FieldInfo fd = type.GetField(em.ToString());
+            if (fd == null)
+                return string.Empty;
+            object[] attrs = fd.GetCustomAttributes(typeof(DescriptionAttribute), false);
+            string name = string.Empty;
+            foreach (DescriptionAttribute attr in attrs)
+            {
+                name = attr.Description;
+            }
+            return name;
+        }
+
         /// <summary>
         /// 获取类型默认值
         /// </summary>
@@ -368,17 +387,32 @@ namespace System
                 //})
                 .ToDictionary(prop => prop.Name, prop => prop.GetValue(queryParams, null).ToString());
             //任何项目都可能向后端发起http请求，所以在common库中引入Microsfot.AspNetCore包可以接受
-#if NET8_0_OR_GREATER
-            return QueryHelpers.AddQueryString(url, dictionary);
-#else
-            var qb = new QueryBuilder();
-            foreach (var item in dictionary)
+            // System.Web.HttpUtility
+            //var qb = new QueryBuilder();
+            //foreach (var item in dictionary)
+            //{
+            //    qb.Add(item.Key,item.Value);
+            //}
+            //return $"{url}{qb.ToQueryString().Value}";
+
+
+            var uriBuilder = new UriBuilder(url);
+            var query = System.Web.HttpUtility.ParseQueryString(uriBuilder.Query); // 如果不可用，则需要自己解析查询字符串  
+
+            foreach (var kvp in dictionary)
             {
-                qb.Add(item.Key,item.Value);
+                query[kvp.Key] = kvp.Value;
             }
-            return $"{url}{qb.ToQueryString().Value}";
-#endif
+
+            uriBuilder.Query = query.ToString();
+            return uriBuilder.Uri.AbsoluteUri;
+
+
         }
+
+
+
+
         public static bool IsNullOrWhiteSpaceBXJG(this string str)
         {
             return string.IsNullOrWhiteSpace(str);

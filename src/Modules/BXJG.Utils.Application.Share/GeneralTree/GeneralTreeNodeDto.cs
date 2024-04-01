@@ -1,6 +1,6 @@
 ﻿using Abp.Application.Services.Dto;
 using Abp.Extensions;
-using BXJG.Utils.Share.GeneralTree;
+using BXJG.Common.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +27,7 @@ namespace BXJG.Utils.Application.Share.GeneralTree
         /// </summary>
         public int ChildrenCount { get; set; }
         //public dynamic attributes { get; set; }
-        public IList<T> Children { get; set; }
+        public List<T> Children { get; set; }
 
         /// <summary>
         /// 父节点

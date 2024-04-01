@@ -2,7 +2,6 @@
 using Abp.ObjectMapping;
 using BXJG.Common.Contracts;
 using BXJG.Utils.Application.Share.GeneralTree;
-using BXJG.Utils.Share.GeneralTree;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Extensions.DependencyInjection;

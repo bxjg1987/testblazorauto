@@ -8,7 +8,6 @@ using BXJG.Common.Contracts;
 using BXJG.Utils;
 using BXJG.Utils.Application.Share;
 using BXJG.Utils.Application.Share.GeneralTree;
-using BXJG.Utils.Share.GeneralTree;
 using Castle.MicroKernel.Registration;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;

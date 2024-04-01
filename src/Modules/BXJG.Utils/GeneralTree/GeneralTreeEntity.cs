@@ -1,6 +1,6 @@
 ﻿using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
-using BXJG.Utils.Share.GeneralTree;
+using BXJG.Common.Contracts;
 using Castle.MicroKernel.Registration;
 using System;
 using System.Collections.Generic;
@@ -44,7 +44,7 @@ namespace BXJG.Utils.GeneralTree
 
         public virtual int? TenantId { get; set; }
 
-        public virtual IList<TEntity> Children { get; set; }
+        public virtual List<TEntity> Children { get; set; }
         /// <summary>
         /// 子节点数量
         /// </summary>

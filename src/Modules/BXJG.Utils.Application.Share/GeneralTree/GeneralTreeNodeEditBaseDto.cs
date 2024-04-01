@@ -5,7 +5,7 @@
  * 说明：略...
  */
 using Abp.Application.Services.Dto;
-using BXJG.Utils.Share.GeneralTree;
+using BXJG.Common.Contracts;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

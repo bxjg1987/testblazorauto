@@ -2,7 +2,7 @@
 using Abp.Domain.Repositories;
 using Abp.Extensions;
 using Abp.Linq;
-using BXJG.Utils.Share.GeneralTree;
+using BXJG.Common.Contracts;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -122,7 +122,7 @@ namespace BXJG.Utils.GeneralTree
         /// <param name="repository"></param>
         /// <param name="code"></param>
         /// <returns></returns>
-        public static async Task<IList<TEntity>> GetFlattenOffspringAsync<TEntity>(this IRepository<TEntity, long> repository, string code = null) where TEntity : Entity<long>, IGeneralTree<TEntity>
+        public static async Task<List<TEntity>> GetFlattenOffspringAsync<TEntity>(this IRepository<TEntity, long> repository, string code = null) where TEntity : Entity<long>, IGeneralTree<TEntity>
         {
             var query = repository.GetAll();
             if (!code.IsNullOrWhiteSpace())
@@ -149,12 +149,12 @@ namespace BXJG.Utils.GeneralTree
         /// </summary>
         /// <param name="entity"></param>
         /// <returns>Item1父节点，Item2兄弟节点</returns>
-        public static async Task<Tuple<TEntity, IList<TEntity>>> GetBrotherWithOffspringAsync<TEntity>(this IRepository<TEntity, long> repository, TEntity entity) where TEntity : Entity<long>, IGeneralTree<TEntity>
+        public static async Task<Tuple<TEntity, List<TEntity>>> GetBrotherWithOffspringAsync<TEntity>(this IRepository<TEntity, long> repository, TEntity entity) where TEntity : Entity<long>, IGeneralTree<TEntity>
         {
             var parentCode = entity.Code.GetParentCode();
 
             TEntity parent = null;
-            IList<TEntity> children;
+            List<TEntity> children;
 
             if (!Abp.Extensions.StringExtensions.IsNullOrWhiteSpace(parentCode))
             {
@@ -167,7 +167,7 @@ namespace BXJG.Utils.GeneralTree
                 children = await repository.GetFlattenOffspringAsync();
             }
             children = children.Where(c => c.ParentId.Equals(entity.ParentId)).ToList();
-            return new Tuple<TEntity, IList<TEntity>>(parent, children);
+            return new Tuple<TEntity, List<TEntity>>(parent, children);
         }
     }
 }

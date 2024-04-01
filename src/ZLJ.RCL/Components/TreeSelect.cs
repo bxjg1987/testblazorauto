@@ -1,6 +1,6 @@
 ﻿using AntDesign;
+using BXJG.Common.Contracts;
 using BXJG.Utils.Application.Share.GeneralTree;
-using BXJG.Utils.Share.GeneralTree;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;

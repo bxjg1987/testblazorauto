@@ -1,6 +1,5 @@
 ﻿using Abp.Application.Services.Dto;
 using BXJG.Common.Contracts;
-using BXJG.Utils.Share.GeneralTree;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -49,7 +48,7 @@ namespace BXJG.Utils.Application.Share.GeneralTree
         /// <summary>
         /// 子集
         /// </summary>
-        public IList<TChild> Children { get; set; }
+        public List<TChild> Children { get; set; }
         /// <summary>
         /// 配合easyui，state：节点状态，'open' 或 'closed'，默认：'open'。如果为'closed'的时候，将不自动展开该节点。
         /// </summary>

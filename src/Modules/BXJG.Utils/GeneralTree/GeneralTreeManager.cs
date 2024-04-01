@@ -11,6 +11,7 @@ using Abp.Runtime.Session;
 using Abp.Threading;
 using Abp.Timing;
 using Abp.UI;
+using BXJG.Common.Contracts;
 using BXJG.Utils.Share;
 using BXJG.Utils.Share.GeneralTree;
 using System;
@@ -229,7 +230,7 @@ namespace BXJG.Utils.GeneralTree
                 parentIds.AddIfNotContains(source.ParentId.Value);
 
             TEntity targetParent = null;//真正的目标父节点
-            IList<TEntity> targetChildren = null;//真正的目标父节点的子节点
+            List<TEntity> targetChildren = null;//真正的目标父节点的子节点
             int targetIndex = 0;//真正的目标索引
 
             //if (target == null)
@@ -326,13 +327,13 @@ namespace BXJG.Utils.GeneralTree
         /// <param name="targetBrotherList">目标节点的子节点集合，对应0001.00001、00001.00002</param>
         /// <param name="targetIndex">移动后所处目标的目标位置的索引，对应1</param>
         /// <returns></returns>
-        async Task<TEntity> MoveAsync(TEntity source, TEntity targetParent, IList<TEntity> targetBrotherList, int targetIndex)
+        async Task<TEntity> MoveAsync(TEntity source, TEntity targetParent, List<TEntity> targetBrotherList, int targetIndex)
         {
             //如果调用方让节点移动到原来的位置，这种情况暂时没处理
 
             var sourceParentCode = source.Code.GetParentCode();//源节点的父节点code
 
-            IList<TEntity> sourceBrotherList; //源节点所在的列表
+            List<TEntity> sourceBrotherList; //源节点所在的列表
             bool betweenBrother = false;//是否本身就是在同级节点下移动
 
             //1、准备源节点的兄弟节点列表 顶层兄弟节点之间移动 或 在某个指定节点下的兄弟节点之间移动
