@@ -7,6 +7,9 @@ https://github.com/castleproject/Windsor/issues/313
 named注册
 使用windsor api 手动解析
 
+# 热重载问题
+rougamo目前的版本不支持，可以通过 #if !DEBUG的方式在调试时不使用rougamo的拦截器
+
 # Aop
 ABP框架本身使用了动态代理的AOP方式，参考：https://aspnetboilerplate.com/Pages/Documents/Articles/Aspect-Oriented-Programming-using-Interceptors/index.html
 相对于静态植入来说，它的性能更低。

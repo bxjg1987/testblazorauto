@@ -19,7 +19,7 @@ using Abp.Dependency;
 using Castle.MicroKernel.Lifestyle.Scoped;
 using Castle.Windsor.MsDependencyInjection;
 using Abp.Domain.Uow;
-
+using Abp.Reflection.Extensions;
 
 using BXJG.Utils.Application.Share;
 using Abp.Threading;
@@ -187,6 +187,11 @@ namespace BXJG.Utils.Application
         protected virtual IQueryable<TEntity> CreateFilteredQuery(TGetAllInput input)
         {
             var q = BuildQuery();
+            //获取列表时不希望未启用的项显示，但获取单个时不限制，因为可能希望找到这个数据，所以条件放这里
+            if (typeof(TEntity).IsImplementInterface<IPassivable>())
+            {
+                q = q.Where("IsActive == @0", true);
+            }
             if (input is IHaveFilter p)
             {
                 q = q.ApplyDynamicCondtion(p.Filter);

@@ -523,5 +523,24 @@ namespace System
         {
             return Nullable.GetUnderlyingType(type) != null;
         }
+        /// <summary>
+        /// 判断当前类型是否直接或间接实现了某个接口
+        /// </summary>
+        /// <typeparam name="TInterface"></typeparam>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static bool IsImplementInterface<TInterface>(this Type type) {
+          return  type.GetInterfaces().Any(x => x.Equals(typeof(TInterface)));
+        }
+        ///// <summary>
+        ///// 判断当前类型是否直接或间接实现了某个接口
+        ///// </summary>
+        ///// <typeparam name="TInterface"></typeparam>
+        ///// <param name="type"></param>
+        ///// <returns></returns>
+        //public static bool IsImplementInterface<TInterface>(this object obj)
+        //{
+        //    return type.GetInterfaces().Any(x => x.Equals(typeof(TInterface)));
+        //}
     }
 }
