@@ -339,7 +339,9 @@ namespace ZLJ.RCL.Components
         /// 条件变化时回调
         /// </summary>
         /// <returns></returns>
+#if !DEBUG
         [AbpExceptionInterceptor]
+#endif
         protected virtual async Task BtnSearchClick()
         {
             //Console.WriteLine(DateTime.Now.ToString("fff"));
@@ -378,7 +380,9 @@ namespace ZLJ.RCL.Components
         /// </summary>
         /// <param name="condition"></param>
         /// <returns></returns>
-        [AbpExceptionInterceptor]//首次由ant触发调用，因此需要加这个
+#if !DEBUG
+        [AbpExceptionInterceptor]
+#endif
         protected virtual async Task OnQuery(QueryModel condition)
         {
             /*
@@ -436,7 +440,9 @@ namespace ZLJ.RCL.Components
         /// 若有更多条件，子类应重写此方法清空条件，并执行base.ReLoad()
         /// </summary>
         /// <returns></returns>
+#if !DEBUG
         [AbpExceptionInterceptor]
+#endif
         protected virtual async Task BtnReLoadClick()
         {
             table.ResetData();
@@ -457,7 +463,9 @@ namespace ZLJ.RCL.Components
         /// 绑定到刷新按钮的点击事件
         /// 条件分页都不变，重新加载当前数据
         /// </summary>
+#if !DEBUG
         [AbpExceptionInterceptor]
+#endif
         protected virtual async Task BtnRefreshClick()
         {
             //if (GetAllInput is IHaveKeywords cd4)
@@ -525,7 +533,9 @@ namespace ZLJ.RCL.Components
         /// 批量删除
         /// </summary>
         /// <returns></returns>
+#if !DEBUG
         [AbpExceptionInterceptor]
+#endif
         protected virtual async Task BtnDeleteClick()
         {
             await Delete();
@@ -561,7 +571,9 @@ namespace ZLJ.RCL.Components
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
+#if !DEBUG
         [AbpExceptionInterceptor]
+#endif
         protected virtual async Task BtnDeleteItemClick(TEntityDto item)
         {
             await DeleteItem(item);

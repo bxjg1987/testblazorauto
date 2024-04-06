@@ -16,7 +16,9 @@ namespace ZLJ.Admin.CoreRCL.Post
         // string currOu;
 
         protected override string FuncName => "角色岗位";
+#if !DEBUG
         [AbpExceptionInterceptor]
+#endif
         protected override async Task OnInitializedAsync()
         {
             if ((await base.AppService.GetAllAsync(new PagedAndSortedResultRequest<PagedPostResultRequestDto> { SkipCount = 0, MaxResultCount = 1, Sorting = "role.Id", Filter = new PagedPostResultRequestDto() })).TotalCount >= 500)
@@ -28,7 +30,9 @@ namespace ZLJ.Admin.CoreRCL.Post
 
         }
 
+#if !DEBUG
         [AbpExceptionInterceptor]
+#endif
         protected async Task AddRandomData()
         {
             for (int i = 0; i < 500; i++)
@@ -129,7 +133,9 @@ namespace ZLJ.Admin.CoreRCL.Post
         /// 点击关闭新增弹窗时执行
         /// </summary>
         /// <returns></returns>
+#if !DEBUG
         [AbpExceptionInterceptor]
+#endif
         private async Task CloseDialog()
         {
             await CloseCreateDialogCore();

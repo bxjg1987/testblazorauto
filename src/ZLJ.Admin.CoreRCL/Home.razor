@@ -51,23 +51,14 @@ blazor auto模式允许在同一个静态渲染模式的页面中，同时存在
 <br />
 受保护的页面 则是用来演示身份验证和授权的。
 
-<br />
-<br />
-当前页面为静态渲染模式，下面演示同一个页面中，同时加载多种渲染模式的组件：
-<table border="1" style="width:90%">
-    <tr>
-        <td>静态渲染模式</td>
-        <td>server渲染模式</td>
-    
-        <td>auto渲染模式</td>
-    </tr>
-    <tr>
-        <td><ZLJ.Admin.CoreRCL.Share.Counter></ZLJ.Admin.CoreRCL.Share.Counter></td>
-        <td>
-            <ZLJ.Admin.CoreRCL.Share.Counter @rendermode="InteractiveServer"></ZLJ.Admin.CoreRCL.Share.Counter>
-  
-        </td>
-     
-        <td><ZLJ.Admin.CoreRCL.Share.Counter @rendermode="InteractiveAuto"></ZLJ.Admin.CoreRCL.Share.Counter></td>
-    </tr>
-</table>
+@code{
+    [Inject]
+    public AuthenticationStateProvider sdfsdf{get;set;}
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var sd11dsf = await sdfsdf.GetAuthenticationStateAsync();
+       // sd11dsf.User.Identity.IsAuthenticated
+    }
+}

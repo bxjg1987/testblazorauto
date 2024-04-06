@@ -30,8 +30,10 @@ namespace ZLJ.Admin.CoreRCL.Systemlog
             appService = ScopedServices.GetRequiredService<IAuditLogAppService>();
             // throw new UserFriendlyException("xxxxxxxxxxxxx");
         }
-      
+
+#if !DEBUG
         [AbpExceptionInterceptor]
+#endif
         async Task OnChange(QueryModel<AuditLogListDto> queryModel)
         {
             //await Task.Delay(2000);

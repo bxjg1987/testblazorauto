@@ -95,7 +95,9 @@ namespace ZLJ.RCL.Components
         /// 初始化时回调，默认根据id从应用服务接口获取单个数据，然后判断并进入编辑模式
         /// </summary>
         /// <returns></returns>
+#if !DEBUG
         [AbpExceptionInterceptor]
+#endif
         protected override async Task OnInitializedAsync()
         {
             //Abp.ObjectMapping.
@@ -198,7 +200,9 @@ namespace ZLJ.RCL.Components
         /// 点击刷新按钮时回调
         /// </summary>
         /// <returns></returns>
+#if !DEBUG
         [AbpExceptionInterceptor]
+#endif
         protected virtual async Task BtnRefreshClick()
         {
             await Refresh();
@@ -249,7 +253,9 @@ namespace ZLJ.RCL.Components
         /// 重置
         /// </summary>
         /// <returns></returns>
+#if !DEBUG
         [AbpExceptionInterceptor]
+#endif
         protected virtual async Task BtnResetClick()
         {
             await ResetCore();
@@ -356,7 +362,9 @@ namespace ZLJ.RCL.Components
         /// 进入编辑模式时执行
         /// </summary>
         /// <returns></returns>
+#if !DEBUG
         [AbpExceptionInterceptor]
+#endif
         protected virtual async Task BtnBeginEditClick()
         {
             await BeginEditCore();
@@ -421,7 +429,9 @@ namespace ZLJ.RCL.Components
         /// 保存的核心逻辑
         /// </summary>
         /// <returns></returns>
+#if !DEBUG
         [AbpExceptionInterceptor]
+#endif
         protected virtual async Task OnFinish(EditContext editContext)
         {
             await Update();
@@ -497,7 +507,9 @@ namespace ZLJ.RCL.Components
         /// 点击删除确认按钮时执行
         /// </summary>
         /// <returns></returns>
+#if !DEBUG
         [AbpExceptionInterceptor]
+#endif
         protected virtual async Task BtnOkDeleteClick()
         {
             await Delete();

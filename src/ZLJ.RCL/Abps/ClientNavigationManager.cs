@@ -1,6 +1,8 @@
 ﻿using Abp;
 using Abp.Application.Navigation;
 using Abp.Web.Models;
+using AntDesign;
+using Microsoft.Extensions.Logging;
 using System.Collections.Immutable;
 using System.Net.Http.Json;
 
@@ -10,14 +12,33 @@ namespace ZLJ.RCL.Abps
     {
         AppContainer _appContainer;
 
-        public ClientNavigationManager(AppContainer appContainer)
+       ILogger<ClientNavigationManager> logger;
+        public ClientNavigationManager(AppContainer appContainer, ILogger<ClientNavigationManager> logger)
         {
             _appContainer = appContainer;
+            this.logger = logger;
         }
 
-        public Task<UserMenu> GetMenuAsync(string menuName, UserIdentifier user)
+        public async Task<UserMenu> GetMenuAsync(string menuName, UserIdentifier user)
         {
-          return Task.FromResult(  _appContainer.AbpUserConfiguration.Nav.Menus[menuName]);
+            //Console.WriteLine("正在从api下载菜单");
+            //Console.WriteLine( _appContainer.GetHashCode());
+            //await Task.Delay(1);
+            //Console.WriteLine(_appContainer.AbpUserConfiguration == default);
+
+            //   var sdfsdf = _appContainer.GetHashCode();
+            //   logger.LogDebug($"菜单初始化{_appContainer.AbpUserConfiguration == default}");
+            //if (_appContainer.AbpUserConfiguration == default)
+            //{
+            //    return new UserMenu
+            //    {
+            //        DisplayName = "木有找到菜单",
+            //        Name = "x",
+            //        Items = new List<UserMenuItem>()
+            //    }; 
+            //}
+            await _appContainer.T2;
+            return  _appContainer.AbpUserConfiguration.Nav.Menus[menuName];
         }
 
         public async Task<IReadOnlyList<UserMenu>> GetMenusAsync(UserIdentifier user)

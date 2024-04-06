@@ -95,7 +95,9 @@ namespace ZLJ.RCL.Components
         [Inject]
         public IServiceProvider ServiceProvider { get; set; }
 
+#if !DEBUG
         [AbpExceptionInterceptor]
+#endif
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();

@@ -35,6 +35,10 @@
 @code {
     [Parameter(CaptureUnmatchedValues = true)]
     public IDictionary<string, object>? AdditionalAttributes { get; set; }
+
+    [Inject]
+    public AuthenticationStateProvider AuthState { get; set; }
+
     bool isAuthed => loginInformations.User != default && loginInformations.User.Id > 0;
     GetCurrentLoginInformationsOutput loginInformations = new GetCurrentLoginInformationsOutput();
     protected override async Task OnInitializedAsync()
@@ -42,10 +46,10 @@
         await base.OnInitializedAsync();
         //isAuthed = (await authState.GetAuthenticationStateAsync()).User.Identity.IsAuthenticated;
 
-        //  if (isAuthed)
-        //  {
-        loginInformations = await ScopedServices.GetRequiredService<ISessionAppService>().GetCurrentLoginInformations();
-        // }
+       var dl = await AuthState.GetAuthenticationStateAsync();
+        if (dl.User.Identity.IsAuthenticated)
+            loginInformations = await ScopedServices.GetRequiredService<ISessionAppService>().GetCurrentLoginInformations();
+       
     }
     void UserCenterClick()
     {

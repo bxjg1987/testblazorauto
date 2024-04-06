@@ -17,6 +17,7 @@ using ZLJ.Application.Share.Authorization.Permissions;
 using ZLJ.Core.Configuration;
 using BXJG.Common.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Components.Routing;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseCastleWindsor(IocManager.Instance.IocContainer);
@@ -139,5 +140,7 @@ app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(ZLJ.Admin.CoreRCL.Share.Routes).Assembly);
+
+//var sdfsfd = app.Services.GetRequiredService<IRoutingStateProvider>();
 
 app.Run();

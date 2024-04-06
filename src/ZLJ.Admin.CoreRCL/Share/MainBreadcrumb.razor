@@ -1,5 +1,6 @@
 ﻿@inject IUserNavigationManager unm
-@inject IRoutingStateProvider rsp
+@* @inject IRoutingStateProvider rsp *@
+@inject NavigationManager sf;
 @inject IAbpSession abpSession
 <div>
     <Breadcrumb @attributes=AdditionalAttributes>
@@ -26,7 +27,8 @@
         menu.Items.RecursionDown((p, m) =>
         {
             //若后续发现rsp.RouteData.Template不行的话，考虑改用NavigationManager获取当前url匹配试试
-            if (m.Url.IsNotNullOrWhiteSpaceBXJG()&&  m.Url.Equals(rsp.RouteData.Template, StringComparison.OrdinalIgnoreCase))
+            //https://github.com/dotnet/aspnetcore/issues/51518 rsp无法在客户端注入
+            if (m.Url.IsNotNullOrWhiteSpaceBXJG() && m.Url.Equals(sf.BaseUri, StringComparison.OrdinalIgnoreCase))
             {
                 curr = m;
                 return false;

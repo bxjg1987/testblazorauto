@@ -15,7 +15,9 @@ namespace ZLJ.Admin.CoreRCL.DataDictionary
         // string currOu;
 
         protected override string FuncName => "数据字典";
+#if !DEBUG
         [AbpExceptionInterceptor]
+#endif
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
@@ -97,7 +99,9 @@ namespace ZLJ.Admin.CoreRCL.DataDictionary
         /// 点击关闭新增弹窗时执行
         /// </summary>
         /// <returns></returns>
+#if !DEBUG
         [AbpExceptionInterceptor]
+#endif
         private async Task CloseDialog()
         {
             await CloseCreateDialogCore();

@@ -10,12 +10,14 @@ namespace ZLJ.RCL
     {
         public static readonly AppContainer App = new AppContainer();
 
+        public Task T1, T2;
+
         public AbpUserConfigurationDto AbpUserConfiguration { get; set; }
 
-        public Task< GetCurrentLoginInformationsOutput> CurrentLoginInformations { get; set; }
+        public GetCurrentLoginInformationsOutput CurrentLoginInformations { get; set; }
 
-        public  IServiceProvider Services { get; set; }
-       // public UserInfo UserInfo { get; set; }
+        public IServiceProvider Services { get; set; }
+        // public UserInfo UserInfo { get; set; }
 
     }
 }

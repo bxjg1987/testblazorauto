@@ -66,7 +66,9 @@ namespace ZLJ.RCL.Components
         /// 重置按钮点击时回调，由于事件无法使用ValueTask，所以这里用了Task
         /// </summary>
         /// <returns></returns>
+#if !DEBUG
         [AbpExceptionInterceptor]
+#endif
         public virtual async Task BtnResetClick()
         {
             await Reset();
@@ -105,7 +107,9 @@ namespace ZLJ.RCL.Components
         /// 初始化时，初始化新增模型
         /// </summary>
         /// <returns></returns>
+#if !DEBUG
         [AbpExceptionInterceptor]
+#endif
         protected override async Task OnInitializedAsync()
         {
             await Reset();
@@ -123,7 +127,9 @@ namespace ZLJ.RCL.Components
             //没有权限的按钮直接隐藏，况且应用服务还会判断权限兜底的，因此这里无需判断权限
             frm.Submit();
         }
+#if !DEBUG
         [AbpExceptionInterceptor]
+#endif
         protected virtual async Task OnFinish(EditContext editContext)
         {
             await Save();

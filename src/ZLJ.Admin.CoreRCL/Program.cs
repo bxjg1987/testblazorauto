@@ -12,8 +12,9 @@ using ZLJ.RCL;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
-//builder.Services.AddLogging(lb => { 
-//    lb.AddBrowserConsole(); 
+//builder.Services.AddLogging(lb =>
+//{
+//    lb.AddBrowserConsole();
 //});
 builder.Services.AddAdminBlazor().AddZLJBlazorClient()
                 .AddAuthorizationCore();

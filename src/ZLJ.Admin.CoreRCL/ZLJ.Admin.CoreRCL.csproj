@@ -25,6 +25,7 @@
 		<Content Remove="Share\MainLayout.razor" />
 		<Content Remove="Share\MainMenuToggleButton.razor" />
 		<Content Remove="Share\NullLayout.razor" />
+		<Content Remove="Share\RenderModeHelper.razor" />
 		<Content Remove="Share\RightContent.razor" />
 		<Content Remove="MainLayout.razor" />
 		<Content Remove="wwwroot\css\site.css" />

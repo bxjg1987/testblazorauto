@@ -25,12 +25,21 @@
     </NotFound>
 </Router>
 
-@if (Xianshi)
+
+
+@if (Xianshi != null)
 {
-    <AntContainer @rendermode="InteractiveWebAssembly" />
+    @if (Xianshi == true)
+    {
+        <AntContainer @rendermode="InteractiveWebAssembly" />
+    }
+    <AntContainer @rendermode="InteractiveServer" />
+}else
+{
+    <AntContainer /> 
 }
-<AntContainer @rendermode="InteractiveServer" />
+
 @code {
     [CascadingParameter(Name ="dqms")]
-    public bool Xianshi { get; set; }
+    public bool? Xianshi { get; set; }
 }

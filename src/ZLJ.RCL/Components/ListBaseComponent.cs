@@ -398,7 +398,9 @@ namespace ZLJ.RCL.Components
         /// 条件变化时回调
         /// </summary>
         /// <returns></returns>
+#if !DEBUG
         [AbpExceptionInterceptor]
+#endif
         protected virtual async Task BtnSearchClick()
         {
             //  Console.WriteLine(DateTime.Now.ToString("fff"));
@@ -427,7 +429,9 @@ namespace ZLJ.RCL.Components
         /// <summary>
         /// 条件分页都不变，重新加载当前数据
         /// </summary>
+#if !DEBUG
         [AbpExceptionInterceptor]
+#endif
         protected virtual async Task BtnRefreshClick()
         {
             //if (GetAllInput is IHaveKeywords cd4)
@@ -452,7 +456,9 @@ namespace ZLJ.RCL.Components
 
 
 
+#if !DEBUG
         [AbpExceptionInterceptor]
+#endif
         protected virtual async Task OnQuery(QueryModel condition)
         {
             /*
@@ -510,7 +516,9 @@ namespace ZLJ.RCL.Components
         /// 若有更多条件，子类应重写此方法清空条件，并执行base.ReLoad()
         /// </summary>
         /// <returns></returns>
+#if !DEBUG
         [AbpExceptionInterceptor]
+#endif
         protected virtual async Task BtnReLoadClick()
         {
             table.ResetData();
@@ -577,7 +585,9 @@ namespace ZLJ.RCL.Components
         /// 批量删除
         /// </summary>
         /// <returns></returns>
+#if !DEBUG
         [AbpExceptionInterceptor]
+#endif
         protected virtual async Task BtnDeleteClick()
         {
             await Delete();
@@ -611,7 +621,9 @@ namespace ZLJ.RCL.Components
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
+#if !DEBUG
         [AbpExceptionInterceptor]
+#endif
         protected virtual async Task BtnDeleteItemClick(TEntityDto item)
         {
             //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限

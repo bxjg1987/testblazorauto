@@ -39,8 +39,9 @@ namespace BXJG.Common.RCL.Auth
 
 
             Claim[] claims = [new Claim("AccessToken", userInfo.AccessToken),
+                new Claim("EncryptedAccessToken",userInfo.EncryptedAccessToken),
               //  new Claim("TenantId", userInfo.TenantId.HasValue? userInfo.TenantId.Value.ToString():""),
-                new Claim(ClaimTypes.NameIdentifier, userInfo.Id.ToString())];
+                new Claim("UserId", userInfo.Id.ToString())];
 
             authenticationStateTask = Task.FromResult(
                 new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(claims,
@@ -52,7 +53,8 @@ namespace BXJG.Common.RCL.Auth
         {
             return accessToken;
         }
-        public string GetEncryptedAccessToken() {
+        public string GetEncryptedAccessToken() 
+        {
             return encryptedAccessToken;
         }
         public override Task<AuthenticationState> GetAuthenticationStateAsync() => authenticationStateTask;

@@ -16,8 +16,9 @@ namespace ZLJ.RCL.Abps
             this.appContainer = appContainer;
         }
 
-        public Task<GetCurrentLoginInformationsOutput> GetCurrentLoginInformations()
+        public async Task<GetCurrentLoginInformationsOutput> GetCurrentLoginInformations()
         {
+            await appContainer.T1;
             return appContainer.CurrentLoginInformations;
         }
     }

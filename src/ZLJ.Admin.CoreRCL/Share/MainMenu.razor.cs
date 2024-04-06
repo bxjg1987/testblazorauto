@@ -47,7 +47,7 @@ namespace ZLJ.Admin.CoreRCL.Share
         public IconService iconService { get; set; }
         Task OnPersisting()
         {
-            //Console.WriteLine(  "菜单持久化执行了"+System.Text.Json.JsonSerializer.Serialize(menu));
+            Console.WriteLine(  "菜单持久化执行了"+System.Text.Json.JsonSerializer.Serialize(menu));
             state.PersistAsJson("main", menu);
             return Task.CompletedTask;
         }
@@ -70,6 +70,7 @@ namespace ZLJ.Admin.CoreRCL.Share
 
             if (!state.TryTakeFromJson("main", out menu))
             {
+                await Console.Out.WriteLineAsync(   "没有从缓存中获取到菜单");
                 menu = new UserMenu() { Items = new List<UserMenuItem>() };//这里初始化下，否则界面渲染为空估计要报错
                 if (abpSession.UserId.HasValue)
                 {

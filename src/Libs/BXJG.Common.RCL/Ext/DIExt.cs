@@ -33,7 +33,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     //.AddSingleton<AccessTokenProvider>()
                     //.AddSingleton<IAccessTokenProvider>(s => s.GetRequiredService<AccessTokenProvider>());
             services.TryAddSingleton<IZhongjieProvider, ZhongjieProvider>();
-            services.TryAddTransient<IAuthorizationPolicyProvider, PermissionNameAuthorizationPolicyProvider>();
+            services.AddTransient<IAuthorizationPolicyProvider, PermissionNameAuthorizationPolicyProvider>();
 
 
             services.TryAddSingleton<AuthenticationStateProvider, PersistentAuthenticationStateProvider>();

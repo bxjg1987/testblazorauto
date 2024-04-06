@@ -16,7 +16,7 @@
                 }
             </div>
             @* 菜单需要交互式 *@
-            <MainMenu @rendermode="InteractiveAuto" Collapsed=MainMenuCollapsed />
+            <MainMenu Collapsed=MainMenuCollapsed />
 
         </Sider>
         <Layout Style=@($"background-color:#e5e9ef; margin-left:{left}px;transition-property: margin-left")>
@@ -40,7 +40,7 @@
                         <MainBreadcrumb style="padding-left:1rem;" />
                     </Flex>
                     @* 右边 *@
-                    <HeaderRight @rendermode="InteractiveAuto" />
+                    <HeaderRight  />
                 </Flex>
             </Header>
             <Content Style="padding:24px; padding-top:9vh;   ">
