@@ -30,7 +30,7 @@ namespace ZLJ.Application.Common.ClientProxy.Extensions
                 act = hc => { };
 
             services.AddTransient<AbpWraperDelegatHandler>();
-            var b = services.AddAccessTokenHandler().AddHttpClient(Consts.ZLJ_ADMIN_HTTP_CLIENT_NAME, act).AddHttpMessageHandler<AbpWraperDelegatHandler>().AddHttpMessageHandler<AccessTokenHandler>();
+            var b = services.AddHttpClient(Consts.ZLJ_ADMIN_HTTP_CLIENT_NAME, act).AddHttpMessageHandler<AbpWraperDelegatHandler>().AddHttpMessageHandler<AccessTokenHandler>();
 
 
             services.AddTransient<AbpUserConfigurationService>();

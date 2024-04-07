@@ -15,19 +15,19 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddBXJGCommon(this IServiceCollection services)
         {
-            return services.AddAccessTokenHandler();
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="services"></param>
-        /// <returns></returns>
-        public static IServiceCollection AddAccessTokenHandler(this IServiceCollection services)
-        {
             services.TryAddSingleton<IClock, LocalClock>();
             services.TryAddSingleton(Zhongjie.Instance);
             services.TryAddTransient<AccessTokenHandler>();
             return services;
         }
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        ///// <param name="services"></param>
+        ///// <returns></returns>
+        //public static IServiceCollection AddAccessTokenHandler(this IServiceCollection services)
+        //{
+           
+        //}
     }
 }

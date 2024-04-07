@@ -23,37 +23,33 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="services"></param>
         /// <param name="permissionNamesProvider"></param>
         /// <returns></returns>
-        public static IServiceCollection AddCommonRCLClient(this IServiceCollection services, Func<IServiceProvider, IEnumerable<string>> permissionNamesProvider)
+        public static IServiceCollection AddCommonRCL(this IServiceCollection services, Func<IServiceProvider, IEnumerable<string>> permissionNamesProvider)
         {
-            services.AddCommonRCL()
+            services.AddBXJGCommon()
                     //.AddSingleton<IZhongjieProvider, ZhongjieProvider>()
                     //.AddTransient<IAuthorizationPolicyProvider, PermissionNameAuthorizationPolicyProvider>()
-                    .AddKeyedSingleton<Func<IEnumerable<string>>>(OperationAuthorizationRequirement.GrantedPermissionNamesProvider, (s, o) => () => permissionNamesProvider(s));
+                    .AddKeyedSingleton<Func<IEnumerable<string>>>(OperationAuthorizationRequirement.GrantedPermissionNamesProvider, (s, o) => () => permissionNamesProvider(s))
+                    .AddTransient<IAuthorizationPolicyProvider, PermissionNameAuthorizationPolicyProvider>();
                     //.AddSingleton<AuthenticationStateProvider, PersistentAuthenticationStateProvider>()
                     //.AddSingleton<AccessTokenProvider>()
                     //.AddSingleton<IAccessTokenProvider>(s => s.GetRequiredService<AccessTokenProvider>());
             services.TryAddSingleton<IZhongjieProvider, ZhongjieProvider>();
-            services.AddTransient<IAuthorizationPolicyProvider, PermissionNameAuthorizationPolicyProvider>();
-
-
             services.TryAddSingleton<AuthenticationStateProvider, PersistentAuthenticationStateProvider>();
             //services.TryAddSingleton<AccessTokenProvider>();
             services.TryAddSingleton<IAccessTokenProvider>(s => s.GetRequiredService<AuthenticationStateProvider>() as PersistentAuthenticationStateProvider);
-
-
             return services;
         }
-        static IServiceCollection AddCommonRCL(this IServiceCollection services)
-        {
-            //可能被重复调用，注册时要注意
-            return services.AddBXJGCommon();
-        }
-        //引用服务端的包，客户端启动时会报错
-        public static IServiceCollection AddCommonRCLServer(this IServiceCollection services)
-        {
-            services.AddCommonRCL();
-            return services;
-        }
+        //static IServiceCollection AddCommonRCL(this IServiceCollection services)
+        //{
+        //    //可能被重复调用，注册时要注意
+        //    return services.AddBXJGCommon();
+        //}
+        ////引用服务端的包，客户端启动时会报错
+        //public static IServiceCollection AddCommonRCLServer(this IServiceCollection services)
+        //{
+        //    services.AddCommonRCL();
+        //    return services;
+        //}
         //public static IServiceCollection AddCommonRCLPermissionProvider(this IServiceCollection services, Func<IServiceProvider, Func<IEnumerable<string>>> permissionNamesProvider)
         //{
         //    services.AddTransient<IAuthorizationPolicyProvider, PermissionNameAuthorizationPolicyProvider>();

@@ -16,8 +16,7 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 //{
 //    lb.AddBrowserConsole();
 //});
-builder.Services.AddAdminBlazor().AddZLJBlazorClient()
-                .AddAuthorizationCore();
+builder.Services.AddAdminBlazor() .AddAuthorizationCore();
 
 builder.Services.AddAutoMapper(typeof(Program),typeof(ZLJ.RCL.AppContainer));
 

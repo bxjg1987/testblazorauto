@@ -22,12 +22,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>
-        public static IServiceCollection AddZLJBlazorClient(this IServiceCollection services)
+        public static IServiceCollection AddZLJRCL(this IServiceCollection services)
         {
-            services.AddZLJBlazor()
-                    //.AddZLJBlazorClient()
-                    .AddSingleton(AppContainer.App)
-                    .AddCommonRCLClient(s =>
+            services.AddCommonRCL(s =>
                     {
                         var fw = s.GetRequiredService<AppContainer>();
                         if (fw.AbpUserConfiguration != null && fw.AbpUserConfiguration.Auth != default)
@@ -35,8 +32,14 @@ namespace Microsoft.Extensions.DependencyInjection
                             //Console.WriteLine(JsonConvert.SerializeObject(fw.AbpUserConfiguration.Auth));
                             return fw.AbpUserConfiguration.Auth.GrantedPermissions.Keys;
                         }
-                        return new string[0];
-                    });
+                        return [];
+                    })
+                    .AddAntDesign()
+                    .AddCascadingAuthenticationState()
+                    .AddTransient<ZLJ.RCL.Files.Helper>()
+                    //.AddZLJBlazorClient()
+                    .AddSingleton(AppContainer.App)
+                    ;
             services.TryAddTransient<IAbpSession, ClientAbpSession>();
             //services.TryAddSingleton<IPermissionChecker, ClientPermissionChecker>();
             services.TryAddTransient<ISettingManager, ClientSettingManager>();
@@ -49,28 +52,28 @@ namespace Microsoft.Extensions.DependencyInjection
             //services.TryAddSingleton<ILocalizationManager, NullLocalizationManager>();
             return services;
         }
-        /// <summary>
-        /// 本项目，所有应用，前后端都要注册的
-        /// </summary>
-        /// <param name="services"></param>
-        /// <returns></returns>
-        static IServiceCollection AddZLJBlazor(this IServiceCollection services)
-        {
-            services.AddAntDesign()
-                    .AddCascadingAuthenticationState()
-                    .AddTransient<ZLJ.RCL.Files.Helper>();
-            return services;
-        }
-        /// <summary>
-        /// 本项目，所有应用，后端都要注册的
-        /// </summary>
-        /// <param name="services"></param>
-        /// <returns></returns>
-        public static IServiceCollection AddZLJBlazorServer(this IServiceCollection services)
-        {
-            services.AddZLJBlazor()
-                    .AddCommonRCLServer();
-            return services;
-        }
+        ///// <summary>
+        ///// 本项目，所有应用，前后端都要注册的
+        ///// </summary>
+        ///// <param name="services"></param>
+        ///// <returns></returns>
+        //static IServiceCollection AddZLJBlazor(this IServiceCollection services)
+        //{
+        //    services.AddAntDesign()
+        //            .AddCascadingAuthenticationState()
+        //            .AddTransient<ZLJ.RCL.Files.Helper>();
+        //    return services;
+        //}
+        ///// <summary>
+        ///// 本项目，所有应用，后端都要注册的
+        ///// </summary>
+        ///// <param name="services"></param>
+        ///// <returns></returns>
+        //public static IServiceCollection AddZLJBlazorServer(this IServiceCollection services)
+        //{
+        //    services.AddZLJBlazor()
+        //            .AddCommonRCLServer();
+        //    return services;
+        //}
     }
 }

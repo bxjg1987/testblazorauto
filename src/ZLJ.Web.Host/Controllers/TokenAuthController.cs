@@ -148,7 +148,8 @@ namespace ZLJ.Controllers
             var loginResult = await GetLoginResultAsync(
                 model.UserNameOrEmailAddress,
                 model.Password,
-                GetTenancyNameOrNull()
+                model.TenancyName
+               // GetTenancyNameOrNull()
             );
 
             var accessToken = CreateAccessToken(CreateJwtClaims(loginResult.Identity));

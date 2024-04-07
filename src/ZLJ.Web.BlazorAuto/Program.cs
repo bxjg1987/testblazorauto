@@ -34,7 +34,7 @@ builder.Services.AddScoped<AuthenticationStateProvider, PersistingRevalidatingAu
 builder.Services.AddScoped<IAccessTokenProvider>(x => x.GetRequiredService<AuthenticationStateProvider>() as PersistingRevalidatingAuthenticationStateProvider);
 
 
-builder.Services.AddZLJBlazorClient().AddCommonRCLServer().AddAdminBlazor();
+builder.Services.AddAdminBlazor();
 builder.Services.AddAutoMapper(typeof(Program), typeof(ZLJ.RCL.AppContainer));
 
 builder.Services.AddAdminApiClientProxy(hc =>

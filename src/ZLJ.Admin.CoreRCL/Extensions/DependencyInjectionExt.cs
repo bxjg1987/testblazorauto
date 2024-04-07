@@ -15,11 +15,10 @@ namespace Microsoft.Extensions.DependencyInjection
         /// 后台管理应用，服务端和客户端共同需要注册的服务
         /// </summary>
         /// <param name="services"></param>
-        /// <param name="_appConfiguration"></param>
         /// <returns></returns>
         public static IServiceCollection AddAdminBlazor(this IServiceCollection services)
         {
-            return services;
+            return services.AddZLJRCL();
         }
     }
 }
