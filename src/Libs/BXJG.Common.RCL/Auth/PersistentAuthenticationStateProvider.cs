@@ -1,6 +1,9 @@
 using BXJG.Common.Http;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using System.Runtime.InteropServices;
 using System.Security.Claims;
 using System.Text.Json;
 
@@ -22,16 +25,19 @@ namespace BXJG.Common.RCL.Auth
             Task.FromResult(new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity())));
 
         private readonly Task<AuthenticationState> authenticationStateTask = defaultUnauthenticatedTask;
-
-        public PersistentAuthenticationStateProvider(PersistentComponentState state)
+        private readonly ILogger logger;
+        // private readonly ienv
+        public PersistentAuthenticationStateProvider(PersistentComponentState state, ILogger<PersistentAuthenticationStateProvider> _logger)
         {
+            this.logger = _logger;
             if (!state.TryTakeFromJson<UserInfo>(nameof(UserInfo), out var userInfo) || userInfo is null)
             {
-                //Console.WriteLine($"PersistentAuthenticationStateProvider构造函数跳过了");
+                // if(OperatingSystem.IsBrowser())
+                //  Console.WriteLine($"PersistentAuthenticationStateProvider构造函数跳过了");
+                //logger.LogDebug($"PersistentAuthenticationStateProvider构造函数跳过了");
                 return;
             }
-
-            //Console.WriteLine($"PersistentAuthenticationStateProvider构造函数执行了：{JsonSerializer.Serialize(userInfo)}");
+            logger.LogDebug($"PersistentAuthenticationStateProvider构造函数执行了：{JsonSerializer.Serialize(userInfo)}");
 
             //好像不太有必要存储到claims中
             accessToken = userInfo.AccessToken;
@@ -43,9 +49,8 @@ namespace BXJG.Common.RCL.Auth
               //  new Claim("TenantId", userInfo.TenantId.HasValue? userInfo.TenantId.Value.ToString():""),
                 new Claim("UserId", userInfo.Id.ToString())];
 
-            authenticationStateTask = Task.FromResult(
-                new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(claims,
-                    authenticationType: nameof(PersistentAuthenticationStateProvider)))));
+            authenticationStateTask = Task.FromResult(new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(claims, authenticationType: nameof(PersistentAuthenticationStateProvider)))));
+         
         }
         string accessToken = string.Empty;
         string encryptedAccessToken = string.Empty;
@@ -57,6 +62,7 @@ namespace BXJG.Common.RCL.Auth
         {
             return encryptedAccessToken;
         }
-        public override Task<AuthenticationState> GetAuthenticationStateAsync() => authenticationStateTask;
+        public override Task<AuthenticationState> GetAuthenticationStateAsync()=>   authenticationStateTask;
+      
     }
 }

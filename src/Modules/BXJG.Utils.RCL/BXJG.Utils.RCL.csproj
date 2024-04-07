@@ -24,10 +24,7 @@
   <ItemGroup>
     <Compile Remove="CircuitStateHandler.cs" />
     <Compile Remove="CrudBaseComponent.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="Components\AbpBaseComponent.cs" />
+    <Compile Remove="TrackingCircuitHandler.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,6 +38,7 @@
 
   <ItemGroup>
     <Folder Include="Areas\MyFeature\Pages\" />
+    <Folder Include="Components\" />
     <Folder Include="Event\" />
   </ItemGroup>
 

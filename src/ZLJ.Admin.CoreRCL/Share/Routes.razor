@@ -4,42 +4,32 @@
 @* @inject AppContainer appContainer
 @inject AbpUserConfigurationService abpUserCfgService *@
 
-<Router AppAssembly="@typeof(Routes).Assembly">
-    <Found Context="routeData">
-        @* <CascadingValue Value="routeData"> *@
-        <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof( ZLJ.Admin.CoreRCL.Share.StaticLayout)">
-            <NotAuthorized>
-                <RedirectToLogin />
-            </NotAuthorized>
-        </AuthorizeRouteView>
+@* <CascadingAuthenticationState> *@
+    <Router AppAssembly="@typeof(Routes).Assembly">
+        <Found Context="routeData">
+            <CascadingValue Value="routeData">
+                <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof( ZLJ.Admin.CoreRCL.Share.StaticLayout)">
+                    <NotAuthorized>
+                        <RedirectToLogin />
+                    </NotAuthorized>
+                </AuthorizeRouteView>
+            </CascadingValue>
+            <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+        </Found>
+        <NotFound>
+            <PageTitle>未找到页面</PageTitle>
+            <LayoutView Layout="@typeof(ZLJ.Admin.CoreRCL.Share.StaticLayout)">
+                <p role="alert">抱歉！没有找到页面，请联系系统管理员。</p>
+            </LayoutView>
+        </NotFound>
+    </Router>
+@* </CascadingAuthenticationState>*@
 
-        @* </CascadingValue> *@
+    <AntContainer />
 
-        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
-    </Found>
-    <NotFound>
-        <PageTitle>未找到页面</PageTitle>
-        <LayoutView Layout="@typeof(ZLJ.Admin.CoreRCL.Share.StaticLayout)">
-            <p role="alert">抱歉！没有找到页面，请联系系统管理员。</p>
-        </LayoutView>
-    </NotFound>
-</Router>
-
-
-
-@if (Xianshi != null)
-{
-    @if (Xianshi == true)
-    {
-        <AntContainer @rendermode="InteractiveWebAssembly" />
-    }
-    <AntContainer @rendermode="InteractiveServer" />
-}else
-{
-    <AntContainer /> 
-}
-
-@code {
-    [CascadingParameter(Name ="dqms")]
+@* @code {
+    [CascadingParameter(Name = "dqms")]
     public bool? Xianshi { get; set; }
-}
+    //public AuthorizeRouteView sdf{ get; set; }
+    //public AuthorizeReuseTabsRouteView sdf { get; set; }
+} *@

@@ -1,6 +1,7 @@
 using Abp.Runtime.Session;
 //using Blazor.Extensions.Logging;
 using BXJG.Common.Http;
+using BXJG.Common.RCL.Loggers;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
@@ -12,11 +13,14 @@ using ZLJ.RCL;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
-//builder.Services.AddLogging(lb =>
-//{
-//    lb.AddBrowserConsole();
-//});
-builder.Services.AddAdminBlazor() .AddAuthorizationCore();
+builder.Services.AddLogging(lb =>
+{
+    //lb.AddBrowserConsole();
+    lb.AddProvider(new BrowserConsoleLoggerProvider()).SetMinimumLevel(LogLevel.Debug);
+});
+//builder.Logging.AddProvider(new BrowserConsoleLoggerProvider());
+
+builder.Services.AddAdminBlazor().AddCommonRCLClient().AddAuthorizationCore();
 
 builder.Services.AddAutoMapper(typeof(Program),typeof(ZLJ.RCL.AppContainer));
 

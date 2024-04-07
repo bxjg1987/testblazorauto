@@ -24,15 +24,15 @@ namespace BXJG.Utils.RCL
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
-            IocManager.RegService(services =>
-            {
-                // services.AddBXJGCommonRCL();
-                //services.AddScoped<CircuitStateHandler>();
-                //  services.AddScoped<CircuitHandler>(c=>c.GetRequiredService<CircuitStateHandler>());
-                services.AddScoped<TrackingCircuitHandler>();
-                services.AddScoped<CircuitHandler>(x => x.GetRequiredService<TrackingCircuitHandler>());
-                services.AddScoped<IZhongjieProvider>(x => x.GetRequiredService<TrackingCircuitHandler>());
-            });
+            //IocManager.RegService(services =>
+            //{
+            //    // services.AddBXJGCommonRCL();
+            //    //services.AddScoped<CircuitStateHandler>();
+            //    //  services.AddScoped<CircuitHandler>(c=>c.GetRequiredService<CircuitStateHandler>());
+            //    services.AddScoped<TrackingCircuitHandler>();
+            //    services.AddScoped<CircuitHandler>(x => x.GetRequiredService<TrackingCircuitHandler>());
+            //    services.AddScoped<IZhongjieProvider>(x => x.GetRequiredService<TrackingCircuitHandler>());
+            //});
         }
     }
 }

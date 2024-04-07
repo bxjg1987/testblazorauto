@@ -6,7 +6,7 @@
 
 @attribute [Authorize("Administrator")]
 @inject AuthenticationStateProvider authSP
-@* @attribute [ReuseTabsPage(Title = "测试")] *@
+@attribute [ReuseTabsPage(Title = "测试")]
 @implements IDisposable
 @inherits BaseComponent
 <PageTitle>测试1111111</PageTitle>
@@ -63,7 +63,9 @@ F12查看浏览器日志，以确定它是否在浏览器种执行
     {
         await sdfsdf.GetCurrent().Chufa("aaa");
     }
+    #if !DEBUG
     [AbpExceptionInterceptor]
+    #endif
     async void qjyccs()
     {
         throw new UserFriendlyException("若看到此消息，说明全局异常拦截执行成功！");

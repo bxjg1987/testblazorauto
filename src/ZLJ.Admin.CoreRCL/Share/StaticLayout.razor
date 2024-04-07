@@ -20,7 +20,7 @@
 
         </Sider>
         <Layout Style=@($"background-color:#e5e9ef; margin-left:{left}px;transition-property: margin-left")>
-            <Header Style=@($"padding:0 2rem 0 0; color:#aaa; position: fixed;  width: calc(100% - {left}px); z-index:999; height:6.5vh;  ")>
+            <Header Style=@($"padding:0 2rem 0 0; color:#aaa; position: fixed; width: calc(100% - {left}px); z-index:999; height:6.5vh; ")>
                 <Flex Vertical=false Justify="space-between" Align="center" Style="height:100%;">
                     @* 左边 *@
                     <Flex Vertical=false Align="center">
@@ -40,12 +40,21 @@
                         <MainBreadcrumb style="padding-left:1rem;" />
                     </Flex>
                     @* 右边 *@
-                    <HeaderRight  />
+                    <HeaderRight />
                 </Flex>
             </Header>
             <Content Style="padding:24px; padding-top:9vh;   ">
                 @* 内页的模式由页面自己决定 *@
-                @Body
+                @* @Body *@
+
+                @if(auth)
+                {
+                    <ReuseTabs />
+                }
+                else
+                {
+                    @Body
+                }
             </Content>
             <Footer Style="text-align: center; padding:0.3rem 0; color:rgba(100,100,100,0.7); height:3.5vh; position:fixed; z-index:999; width:100%; bottom:0;">
                 Copyright ©1900-2024 变形精怪, All Rights Reserved | Power by <a href="https://dotnet.microsoft.com/zh-cn/apps/aspnet" target="_blank">asp.net 8.x</a> / <a href="https://aspnetboilerplate.com" target="_blank">abp 9.x</a> / <a href="https://antblazor.com" target="_blank">antblazor 0.17.x</a> / <a href="https://gitee.com/bxjg1987_admin/abp" target="_blank">源码</a>
@@ -58,6 +67,10 @@
     // public int mmc { get; set; }
 
     // bool collapsed => mmc > 0;
+    bool auth = false;
+
+    [Inject]
+    public AuthenticationStateProvider AuthStateProvider { get; set; }
 
     [CascadingParameter(Name = "mmc")]
     public bool MainMenuCollapsed { get; set; }
@@ -83,5 +96,12 @@
                 url += 1;
             return url;
         }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        var zt = await AuthStateProvider.GetAuthenticationStateAsync();
+        auth = zt != null && zt.User != default&& zt.User.Identity.IsAuthenticated;
     }
 }

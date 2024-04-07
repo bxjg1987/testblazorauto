@@ -15,17 +15,17 @@ namespace ZLJ.Application.Common.ClientProxy.Http
     /// </summary>
     public class AbpWraperDelegatHandler : DelegatingHandler
     {
-        protected override HttpResponseMessage Send(HttpRequestMessage request, CancellationToken cancellationToken)
-        {
-            var jg = base.Send(request, cancellationToken);
+        //protected override HttpResponseMessage Send(HttpRequestMessage request, CancellationToken cancellationToken)
+        //{
+        //    var jg = base.Send(request, cancellationToken);
 
-            var xxx = jg.Content.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult();
-            var r = JsonConvert.DeserializeObject<AjaxResponse>(xxx,BaseAppServiceClient.settings);
+        //    var xxx = jg.Content.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+        //    var r = JsonConvert.DeserializeObject<AjaxResponse>(xxx,BaseAppServiceClient.settings);
 
-            //  var r = jg.Content.ReadFromJsonAsync<AjaxResponse>(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-            cl(jg, r);
-            return jg;
-        }
+        //    //  var r = jg.Content.ReadFromJsonAsync<AjaxResponse>(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+        //    cl(jg, r);
+        //    return jg;
+        //}
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {

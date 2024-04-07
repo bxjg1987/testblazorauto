@@ -38,8 +38,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     .AddCascadingAuthenticationState()
                     .AddTransient<ZLJ.RCL.Files.Helper>()
                     //.AddZLJBlazorClient()
-                    .AddSingleton(AppContainer.App)
-                    ;
+                    .AddSingleton(AppContainer.App);
             services.TryAddTransient<IAbpSession, ClientAbpSession>();
             //services.TryAddSingleton<IPermissionChecker, ClientPermissionChecker>();
             services.TryAddTransient<ISettingManager, ClientSettingManager>();

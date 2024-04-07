@@ -58,7 +58,7 @@ namespace ZLJ.Application.Common.ClientProxy
             // Console.WriteLine(  System.Text.Json.JsonSerializer.Serialize(input));
             // Console.WriteLine(  url);
 
-            var str = await CreateHttpClient().GetStringAsync(url, cancellationToken);
+            var str = await CreateHttpClient().GetStringAsync(url);
             return JsonConvert.DeserializeObject<T>(str,settings);
             //var x = CreateHttpClient().GetFromJsonAsync<T>(url, cancellationToken);
             //Console.WriteLine("返回对象");
@@ -78,7 +78,7 @@ namespace ZLJ.Application.Common.ClientProxy
             url = url.AddQueryString(qs);
 
             var r = await CreateHttpClient().PostAsJsonAsync(url,ps, cancellationToken);
-            var str = await r.Content.ReadAsStringAsync(cancellationToken);
+            var str = await r.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<T>(str, settings);
         }
         protected async Task Post(string url, object ps = default, object qs = default, CancellationToken cancellationToken = default)

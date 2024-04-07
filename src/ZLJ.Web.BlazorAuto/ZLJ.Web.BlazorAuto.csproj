@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\libs\BXJG.Common.Web\BXJG.Common.Web.csproj" />
     <ProjectReference Include="..\ZLJ.Admin.CoreRCL\ZLJ.Admin.CoreRCL.csproj" />
   </ItemGroup>
 	
