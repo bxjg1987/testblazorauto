@@ -15,6 +15,7 @@
     租户： <InputText @bind-Value="model.TenancyName" />
     登录名： <InputText @bind-Value="model.UserNameOrEmailAddress" />
     密码： <InputText @bind-Value="model.Password" type="password" />
+    记住我：<InputCheckbox @bind-Value="model.RememberClient" />
     <button type="submit">登录</button>
 </EditForm>
 
@@ -49,7 +50,6 @@
                                                                                                           new Claim(nameof(r.EncryptedAccessToken),r.EncryptedAccessToken),
                                                                                                           new Claim(nameof(r.UserId),r.UserId.ToString()),
                                                                                                           new Claim(nameof(r.ExpireInSeconds),r.ExpireInSeconds.ToString())], CookieAuthenticationDefaults.AuthenticationScheme)),
-
                                            new AuthenticationProperties{IsPersistent = model.RememberClient,
                                                                         //cookie过期是单独指cookie，这里的是指
                                                                         ExpiresUtc = TimeProvider.System.GetUtcNow().AddSeconds(r.ExpireInSeconds)});

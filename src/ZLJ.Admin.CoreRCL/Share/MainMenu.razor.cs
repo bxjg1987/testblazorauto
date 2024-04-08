@@ -41,7 +41,7 @@ namespace ZLJ.Admin.CoreRCL.Share
         [Parameter]
         public bool Collapsed { get; set; }
         //antblazor菜单有问题，所以单独定义这个字段，在首次渲染后将其赋值为Collapsed
-        bool collapsed;
+       // bool collapsed;
 
         [Inject]
         public IconService iconService { get; set; }
@@ -84,7 +84,7 @@ namespace ZLJ.Admin.CoreRCL.Share
             if (firstRender)
             {
                 await iconService.CreateFromIconfontCN("https://at.alicdn.com/t/font_2735473_hi62ezq5579.js");
-                collapsed = Collapsed;
+             //   collapsed = Collapsed;
                 StateHasChanged();
             }
         }

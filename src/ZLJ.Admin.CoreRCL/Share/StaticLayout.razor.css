@@ -7,4 +7,31 @@
         color: #95c1eb;
     }
 
+::deep .caidan-kaiguan {
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: color 0.3s;
+    color: #69a0d4;
+}
 
+::deep .zlj-main-head {
+padding-left:0;
+
+}
+/*主区域样式*/
+::deep .zlj-main-body-box .ant-tabs-content-holder, ::deep zlj-main-body-box-no-auth {
+    padding: 1rem;
+}
+
+::deep .zlj-main-body-box .ant-tabs-nav {
+    margin-bottom: 0;
+    background-color: #001529;
+}
+
+::deep .zlj-main-tab-head-item.ant-tabs-tab {
+    background-color: #dfdfdf;
+}
+
+::deep .zlj-main-tab-head-item.ant-tabs-tab-active {
+    background-color: white;
+}

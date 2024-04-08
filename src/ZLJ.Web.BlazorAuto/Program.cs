@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication;
 using ZLJ.Web.BlazorAuto.Components;
 using ZLJ.RCL;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +23,12 @@ builder.Services.AddAuthentication(/*CookieAuthenticationDefaults.Authentication
     //不加这个，在调用HttpContext.SiginAsync会报错，参考：https://learn.microsoft.com/zh-cn/dotnet/core/compatibility/aspnetcore#identity-signinasync-throws-exception-for-unauthenticated-identity
     opt.RequireAuthenticatedSignIn = false;
     //opt.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-}).AddCookie();
+}).AddCookie(x => {
+    //登录时，根据accessToken的过期时间去设置
+    //x.SlidingExpiration = true;
+    //x.Cookie.Expiration = TimeSpan.FromDays(1);
+    x.Cookie.HttpOnly = true;
+});
 builder.Services.AddAuthorization();
 
 // Add services to the container.

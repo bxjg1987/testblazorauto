@@ -1,7 +1,7 @@
 ﻿@using BXJG.Utils.Application.Share.GeneralTree
 @using ZLJ.Application.Share.Post
 @page "/data-dictionary"
-
+@attribute [ReuseTabsPage(Title = "数据字典")]
 @attribute [Authorize(PermissionNames.AdministratorBaseInfoPost)]
 @inherits TreeListBaseComponent<IDataDictionaryAppService, DataDictionaryDto, DataDictionaryEditDto, DataDictionaryEditDto,DataDictionaryGetTreeInput>
 

@@ -3,8 +3,7 @@
 @inject NavigationManager Navigation
 <div style="height:100vh">
     <Layout>
-        <Sider Style="overflow: auto;height: 100vh;position: fixed;left: 0; " Collapsible=false Collapsed=MainMenuCollapsed DefaultCollapsed=false>
-
+        <Sider @bind-Collapsed=@MainMenuCollapsed NoTrigger Collapsible >
             <div class="logo" style="height:29px; margin:15px;">
                 <img src="bxjglogo.png" style="width:37px; height:30px; float:left;" />
 
@@ -17,43 +16,35 @@
             </div>
             @* 菜单需要交互式 *@
             <MainMenu Collapsed=MainMenuCollapsed />
-
         </Sider>
-        <Layout Style=@($"background-color:#e5e9ef; margin-left:{left}px;transition-property: margin-left")>
-            <Header Style=@($"padding:0 2rem 0 0; color:#aaa; position: fixed; width: calc(100% - {left}px); z-index:999; height:6.5vh; ")>
+        <Layout>
+            <Header Class="zlj-main-head">
                 <Flex Vertical=false Justify="space-between" Align="center" Style="height:100%;">
                     @* 左边 *@
                     <Flex Vertical=false Align="center">
                         @* <MainMenuToggleButton @rendermode="InteractiveAuto" /> *@
                         @if (MainMenuCollapsed)
                         {
-                            <NavLink href="@TogleSider">
-                                <Icon Type="menu-unfold" Theme="outline" />
-                            </NavLink>
+                            <Icon Type="menu-unfold" Theme="outline" Class="caidan-kaiguan"  OnClick="toggle" />
                         }
                         else
                         {
-                            <NavLink href="@TogleSider">
-                                <Icon Type="menu-fold" Theme="outline" />
-                            </NavLink>
+                            <Icon Type="menu-fold" Theme="outline" Class="caidan-kaiguan"  OnClick="toggle" />
                         }
-                        <MainBreadcrumb style="padding-left:1rem;" />
+                        @* <MainBreadcrumb style="padding-left:1rem;" /> *@
                     </Flex>
                     @* 右边 *@
                     <HeaderRight />
                 </Flex>
             </Header>
-            <Content Style="padding:24px; padding-top:9vh;   ">
-                @* 内页的模式由页面自己决定 *@
-                @* @Body *@
-
+            <Content>
                 @if(auth)
                 {
-                    <ReuseTabs />
+                    <ReuseTabs Class="zlj-main-body-box" TabPaneClass="zlj-main-tab-head-item" />
                 }
                 else
                 {
-                    @Body
+                    <div dlass="zlj-main-body-box-no-auth">@Body</div>
                 }
             </Content>
             <Footer Style="text-align: center; padding:0.3rem 0; color:rgba(100,100,100,0.7); height:3.5vh; position:fixed; z-index:999; width:100%; bottom:0;">
@@ -72,30 +63,14 @@
     [Inject]
     public AuthenticationStateProvider AuthStateProvider { get; set; }
 
-    [CascadingParameter(Name = "mmc")]
-    public bool MainMenuCollapsed { get; set; }
 
-    int left => MainMenuCollapsed ? 80 : 200;
+    bool MainMenuCollapsed;
+
     //string LayoutStyle => "background-color:#f3f6fb; margin-left:" + (MainMenuCollapsed ? 80 : 200) + "px;transition-property: margin-left";
 
-    string TogleSider
+    void toggle()
     {
-        get
-        {
-            var url = Navigation.Uri;
-            // Regex.
-            url = Regex.Replace(url, @"(\?|&)mmc=\d+", "");
-            if (url.Contains("?"))
-                url += "&";
-            else
-                url += "?";
-            url += "mmc=";
-            if (MainMenuCollapsed == false)
-                url += 0;
-            else
-                url += 1;
-            return url;
-        }
+        MainMenuCollapsed = !MainMenuCollapsed;
     }
 
     protected override async Task OnInitializedAsync()

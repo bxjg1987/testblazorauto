@@ -14,10 +14,12 @@
                     </Menu>
                 </Overlay>
                 <ChildContent>
-                    <Avatar Size="small" Style="background-color:aqua; color:#000;">
+                    <Avatar Size="small" Style="background-color:aqua; color:#333;">
                         @loginInformations.User.Surname
                     </Avatar>
-                    @(loginInformations.User.Surname + loginInformations.User.Name)
+                    <span style=" color:#eee;">
+                        @(loginInformations.User.Surname + loginInformations.User.Name)
+                    </span>
                 </ChildContent>
             </Dropdown>
         </SpaceItem>

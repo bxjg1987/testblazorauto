@@ -1,4 +1,6 @@
 ﻿@page "/auditing"
+
+@attribute [ReuseTabsPage(Title = "审计日志")]
 @inherits BaseComponent
 @attribute [Authorize(PermissionNames.AdministratorBaseInfoPost)]
 @using ZLJ.Application.Share.Auditing
