@@ -19,9 +19,11 @@ padding-left:0;
 
 }
 /*主区域样式*/
-::deep .zlj-main-body-box .ant-tabs-content-holder, ::deep zlj-main-body-box-no-auth {
+::deep .zlj-main-body-box .ant-tabs-content-holder, .zlj-main-body-box-no-auth {
     padding: 1rem;
 }
+
+
 
 ::deep .zlj-main-body-box .ant-tabs-nav {
     margin-bottom: 0;
