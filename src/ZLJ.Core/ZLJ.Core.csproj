@@ -56,17 +56,17 @@
     <PackageReference Include="BXJG.Utils" Version="1.2.2" />-->
 		<!--<PackageReference Include="BXJG.WorkOrder.Core" Version="1.2.1" />-->
 		<PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="4.1.0" />
-		<PackageReference Include="DistributedLock.Core" Version="1.*" />
-		<PackageReference Include="Hangfire.Core" Version="1.8.11" />
+		<PackageReference Include="DistributedLock.Core" Version="1.0.6" />
+		<PackageReference Include="Hangfire.Core" Version="1.8.12" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.3" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="8.0.0" />
-		<PackageReference Include="SourceLink.Copy.PdbFiles" Version="2.*">
+		<PackageReference Include="SourceLink.Copy.PdbFiles" Version="2.8.3">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="DocumentFormat.OpenXml" Version="3.0.2" />
-		<PackageReference Include="OpenScraping" Version="1.*" />
-		<PackageReference Include="OpenXmlPowerTools-NetStandard" Version="4.*" />
+		<PackageReference Include="OpenScraping" Version="1.4.2" />
+		<PackageReference Include="OpenXmlPowerTools-NetStandard" Version="4.4.21" />
 		<PackageReference Include="SuperSocket.Client" Version="2.0.0-beta7" />
 		<PackageReference Include="Yitter.IdGenerator" Version="1.0.14" />
 	</ItemGroup>

@@ -49,6 +49,7 @@ var topTasks = new List<(string, Action)>
     new("退出", null),
     new("重新发布所有公共包", FabuSuoyouGonggongBao),
     new("重新发布：BXJG.Common", FabuXindeBXJGCommon),
+    new("重新发布：BXJG.Common.EFCore", FabuXindeBXJGCommonEFCore),
     new("重新发布：BXJG.Utils", FabuXindeBXJGUtils),
     new("重新发布：BXJG.Utils.Share", FabuXindeBXJGUtilsShare),
     new("重新发布：BXJG.Utils.Application", FabuXindeBXJGUtilsApplication),
@@ -203,7 +204,7 @@ void FabuNuget(string xmm)
     var bao = Directory.GetFiles(projDir, $"{xmm}.*.nupkg", SearchOption.AllDirectories).OrderBy(x=>File.GetCreationTime(x)).Last();
     Console.WriteLine($"正在将nuget包{bao}发布到私有包源...");
     yaoqiushurunugetkey();
-    cmdexecute($"dotnet nuget push -s http://222.178.145.148:19904/v3/index.json -k {nugetkey} {bao}");
+    cmdexecute($"dotnet nuget push -s http://222.178.145.148:19904/v3/index.json -k {nugetkey} {bao} --skip-duplicate");
     Console.WriteLine($"{xmm}已成功发送到私有包仓库！");
 }
 //执行cmd命令
