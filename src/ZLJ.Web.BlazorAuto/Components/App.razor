@@ -32,5 +32,19 @@
     @* <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.4.3/echarts.min.js"></script> *@
     <script src="/echarts.5.4.3.min.js"></script>
     <script src="/app.js"></script>
+    <script>
+        //https://github.com/dotnet/aspnetcore/pull/53291
+        //注意上面的blazor.web.js autostart="false"
+        //经过测试，下面的测试没什么卵用
+        // Blazor.start({
+        //     webAssembly: {
+        //         configureRuntime: (builder) => {
+        //             builder.withConfig({
+        //                 maxParallelDownloads: 1
+        //             });
+        //         },
+        //     },
+        // });
+    </script>
 </body>
 </html>

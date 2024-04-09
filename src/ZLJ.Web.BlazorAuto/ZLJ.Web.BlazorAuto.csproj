@@ -8,22 +8,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Auth\**" />
     <Compile Remove="Startup\**" />
-    <Content Remove="Auth\**" />
     <Content Remove="Startup\**" />
-    <EmbeddedResource Remove="Auth\**" />
     <EmbeddedResource Remove="Startup\**" />
-    <None Remove="Auth\**" />
     <None Remove="Startup\**" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Compile Include="Auth\PersistingRevalidatingAuthenticationStateProvider.cs" />
-  </ItemGroup>
+
 
   <ItemGroup>
-	  <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.3" />
+	  <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.4" />
   </ItemGroup>
 
   <ItemGroup>
