@@ -12,8 +12,8 @@ using ZLJ.EntityFrameworkCore;
 namespace ZLJ.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(ZLJDbContext))]
-    [Migration("20240330124618_xdf34")]
-    partial class xdf34
+    [Migration("20240409165334_x")]
+    partial class x
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1460,6 +1460,9 @@ namespace ZLJ.EntityFrameworkCore.Migrations
 
                     b.Property<long?>("LastModifierUserId")
                         .HasColumnType("bigint");
+
+                    b.Property<int>("Permission")
+                        .HasColumnType("int");
 
                     b.Property<string>("RealName")
                         .IsRequired()

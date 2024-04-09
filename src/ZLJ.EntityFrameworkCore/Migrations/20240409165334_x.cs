@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ZLJ.EntityFrameworkCore.Migrations
 {
     /// <inheritdoc />
-    public partial class init1 : Migration
+    public partial class x : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -379,21 +379,6 @@ namespace ZLJ.EntityFrameworkCore.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BXJGUtilsAttchmentPermissions",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    EntityType = table.Column<string>(type: "varchar(100)", nullable: false, comment: "关联实体类型，可以是任意唯一字符串，通常是实体类型.FullTypeName"),
-                    EntityId = table.Column<string>(type: "varchar(60)", nullable: true, comment: "关联实体id"),
-                    DownloadPermissionName = table.Column<string>(type: "varchar(100)", nullable: true, comment: "允许下载的权限名称"),
-                    DeletePermissionName = table.Column<string>(type: "varchar(100)", nullable: true, comment: "允许删除的权限名称")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BXJGUtilsAttchmentPermissions", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "BXJGUtilsDataDictionaries",
                 columns: table => new
                 {
@@ -437,6 +422,7 @@ namespace ZLJ.EntityFrameworkCore.Migrations
                     ResponseContentType = table.Column<string>(type: "varchar(50)", nullable: false, comment: "响应的文件类型，mime"),
                     RelativePath = table.Column<string>(type: "varchar(500)", nullable: false, comment: "相对于文件存储目录的 相对路径"),
                     RelativePathThumbnail = table.Column<string>(type: "varchar(500)", nullable: true, comment: "缩略图相对路径"),
+                    Permission = table.Column<int>(type: "int", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
                     LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -573,17 +559,15 @@ namespace ZLJ.EntityFrameworkCore.Migrations
                     EntityType = table.Column<string>(type: "varchar(100)", nullable: false, comment: "关联实体类型，可以是任意唯一字符串，通常是实体类型.FullTypeName"),
                     EntityId = table.Column<string>(type: "varchar(60)", nullable: false, comment: "关联实体id"),
                     PropertyName = table.Column<string>(type: "varchar(100)", nullable: true, comment: "属性名，可空 比如工单：字段A表示要处理的问题相关图片，字段B表示处理完成时拍摄的图片，它们都使用附件表，当通过此字段来表示关联的不同的属性"),
-                    FileId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     OrderIndex = table.Column<int>(type: "int", nullable: false),
-                    ExtensionData = table.Column<string>(type: "varchar(4000)", nullable: true),
                     TenantId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_BXJGUtilsAttachments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BXJGUtilsAttachments_BXJGUtilsFiles_FileId",
-                        column: x => x.FileId,
+                        name: "FK_BXJGUtilsAttachments_BXJGUtilsFiles_Id",
+                        column: x => x.Id,
                         principalTable: "BXJGUtilsFiles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -1428,11 +1412,6 @@ namespace ZLJ.EntityFrameworkCore.Migrations
                 columns: new[] { "EntityType", "EntityId", "PropertyName" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_BXJGUtilsAttachments_FileId",
-                table: "BXJGUtilsAttachments",
-                column: "FileId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_BXJGUtilsDataDictionaries_Code",
                 table: "BXJGUtilsDataDictionaries",
                 column: "Code",
@@ -1665,9 +1644,6 @@ namespace ZLJ.EntityFrameworkCore.Migrations
 
             migrationBuilder.DropTable(
                 name: "BXJGUtilsAttachments");
-
-            migrationBuilder.DropTable(
-                name: "BXJGUtilsAttchmentPermissions");
 
             migrationBuilder.DropTable(
                 name: "AbpDynamicEntityProperties");

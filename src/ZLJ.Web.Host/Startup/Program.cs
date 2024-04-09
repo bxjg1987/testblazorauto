@@ -13,14 +13,7 @@ namespace ZLJ.Web.Host.Startup
             CreateHostBuilder(args).Build().Run();
         }
         internal static IHostBuilder CreateHostBuilder(string[] args) =>
-          Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder(args).ConfigureHostConfiguration(x =>
-          {
-              x.AddCommon();
-              //var cfg1 = new ConfigurationManager();
-              //cfg1.ConfigWebCore();
-              //var sdfdf = cfg1["IotXuanxiangLujing"];
-              //x.ConfigWebCore();//.AddJsonFile(sdfdf);
-          })
+          Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder(args)
               .ConfigureWebHostDefaults(webBuilder =>
               {
                   //webBuilder.UseStaticWebAssets();

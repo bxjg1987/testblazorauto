@@ -40,28 +40,25 @@ namespace ZLJ.Core.Configuration
             {
                 builder.AddUserSecrets(typeof(AppConfigurations).GetAssembly());
             }
-            //迁移数据库时要报错
-            try
-            {
-                builder.AddCommon();
-            }
-            catch { }
+
+            //builder.AddJsonFile(builder.Build()[]);
+
 
             return builder.Build();
         }
 
-        /// <summary>
-        /// 将配置拆分到多个配置文件中，以便共享配置，此方法注册这些共享配置
-        /// </summary>
-        /// <param name="configurationBuilder"></param>
-        /// <returns></returns>
-        public static IConfigurationBuilder AddCommon(this IConfigurationBuilder configurationBuilder)
-        {
-            var cm = new ConfigurationManager();
-            cm.AddJsonFile(System.IO.Path.Combine(AppContext.BaseDirectory, "webcore.json"));
-            //cm.AddJsonFile(cm["IotXuanxiangLujing"]);
-            configurationBuilder.AddConfiguration(cm);
-            return configurationBuilder;
-        }
+        ///// <summary>
+        ///// 将配置拆分到多个配置文件中，以便共享配置，此方法注册这些共享配置
+        ///// </summary>
+        ///// <param name="configurationBuilder"></param>
+        ///// <returns></returns>
+        //public static IConfigurationBuilder AddCommon(this IConfigurationBuilder configurationBuilder)
+        //{
+        //    var cm = new ConfigurationManager();
+        //    cm.AddJsonFile(System.IO.Path.Combine(AppContext.BaseDirectory, "webcore.json"));
+        //    //cm.AddJsonFile(cm["IotXuanxiangLujing"]);
+        //    configurationBuilder.AddConfiguration(cm);
+        //    return configurationBuilder;
+        //}
     }
 }
