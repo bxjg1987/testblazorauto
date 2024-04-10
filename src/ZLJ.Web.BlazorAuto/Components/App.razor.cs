@@ -10,6 +10,6 @@ namespace ZLJ.Web.BlazorAuto.Components
         private HttpContext HttpContext { get; set; } = default!;
 
 
-        private IComponentRenderMode? RenderModeForPage => HttpContext.Request.Path.StartsWithSegments("/Account") ? null : RenderMode.InteractiveAuto;
+        private IComponentRenderMode? RenderModeForPage => HttpContext.Request.Path.StartsWithSegments("/Account") ? null : new InteractiveAutoRenderMode(false);
     }
 }
