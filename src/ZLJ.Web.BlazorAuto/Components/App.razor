@@ -19,6 +19,7 @@
 </head>
 
 <body>
+    @* <div id="loadingDiv" style="display:block;">Loading...</div> *@
     <app>
         <Routes @rendermode="RenderModeForPage" />
     </app>
@@ -46,6 +47,27 @@
         //         },
         //     },
         // });
+        // function hideLoadingDiv() {
+        //     setTimeout(function () {
+        //         console.log('xxxxxxxxxxxxxxxxxxx22222');
+        //         //console.log(document.getElementById('loadingDiv'));
+        //        // console.log(document.getElementById('thisApp'));
+
+        //         console.log(document.getElementById('loadingDiv').style.display);
+        //         //console.log(document.getElementById('thisApp').style.opacity);
+
+        //         document.getElementById('loadingDiv').style.display = 'none';
+
+        //      //   document.getElementById('thisApp').style.opacity = 1;
+
+
+        //     },1);
+        // }
     </script>
 </body>
 </html>
+@* @code{
+    protected override void OnInitialized(){
+    Console.WriteLine("xxxx===============================");
+    }
+} *@

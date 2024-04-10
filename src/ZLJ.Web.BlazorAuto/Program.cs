@@ -79,10 +79,10 @@ else
 
 app.UseStaticFiles();
 app.UseRouting();
-
-app.UseAntiforgery();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseAntiforgery();
+
 
 //×¢Ïú
 app.Map("/account/logout", async (HttpContext x) =>

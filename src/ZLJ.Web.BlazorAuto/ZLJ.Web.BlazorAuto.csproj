@@ -14,6 +14,14 @@
     <None Remove="Startup\**" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Remove="wwwroot\ZLJ.Web.BlazorAuto.lib.module.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\ZLJ.Web.BlazorAuto.lib.module.js" />
+  </ItemGroup>
+
 
 
   <ItemGroup>

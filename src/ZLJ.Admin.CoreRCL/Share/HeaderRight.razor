@@ -41,6 +41,9 @@
     [Inject]
     public AuthenticationStateProvider AuthState { get; set; }
 
+    [Inject]
+    public AppContainer AppContainer{ get; set; }
+
     bool isAuthed => loginInformations.User != default && loginInformations.User.Id > 0;
     GetCurrentLoginInformationsOutput loginInformations = new GetCurrentLoginInformationsOutput();
     protected override async Task OnInitializedAsync()
@@ -48,10 +51,12 @@
         await base.OnInitializedAsync();
         //isAuthed = (await authState.GetAuthenticationStateAsync()).User.Identity.IsAuthenticated;
 
-       var dl = await AuthState.GetAuthenticationStateAsync();
+        var dl = await AuthState.GetAuthenticationStateAsync();
         if (dl.User.Identity.IsAuthenticated)
-            loginInformations = await ScopedServices.GetRequiredService<ISessionAppService>().GetCurrentLoginInformations();
-       
+        {    
+            await AppContainer.T1;// ScopedServices.GetRequiredService<ISessionAppService>().GetCurrentLoginInformations();
+            loginInformations = AppContainer.CurrentLoginInformations;
+        }
     }
     void UserCenterClick()
     {

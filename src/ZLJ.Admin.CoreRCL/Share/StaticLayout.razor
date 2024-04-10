@@ -78,4 +78,15 @@
         var zt = await AuthStateProvider.GetAuthenticationStateAsync();
         auth = zt != null && zt.User != default&& zt.User.Identity.IsAuthenticated;
     }
+    // [Inject]
+    // public IJSRuntime JSRuntime { get; set; }
+
+    // protected override async Task OnAfterRenderAsync(bool firstRender)
+    // {
+    //     // if (firstRender)
+    //     //{
+    //     //Console.WriteLine("xxxxxxxxxxxxxxxxxxxxxxx");
+    //     await JSRuntime.InvokeVoidAsync("hideLoadingDiv");
+    //     //}
+    // }
 }

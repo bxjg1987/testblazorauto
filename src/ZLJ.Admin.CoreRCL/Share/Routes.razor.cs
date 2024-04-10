@@ -1,4 +1,5 @@
 ﻿using Abp.Threading;
+using Microsoft.JSInterop;
 using System.Net.Http;
 using ZLJ.Application.Common.ClientProxy;
 using ZLJ.RCL;
@@ -21,7 +22,7 @@ namespace ZLJ.Admin.CoreRCL.Share
             var r = await AuthenticationState.GetAuthenticationStateAsync();
             if (r.User.Identity.IsAuthenticated)
             {
-                appContainer.T1= sessionAppService.GetCurrentLoginInformations().ContinueWith(t =>
+                appContainer.T1 = sessionAppService.GetCurrentLoginInformations().ContinueWith(t =>
                 {
                     appContainer.CurrentLoginInformations = t.Result;
                 });
@@ -35,48 +36,59 @@ namespace ZLJ.Admin.CoreRCL.Share
 
 
         }
+        //[Inject]
+        //public IJSRuntime JSRuntime { get; set; }
 
-        //protected override async Task onin
+        //protected override async Task OnAfterRenderAsync(bool firstRender)
         //{
-        //    base.OnInitialized();
-        //    //     var ssd = HttpContext.User.Identity.IsAuthenticated;
-        //    // if (OperatingSystem.IsBrowser())
-        //    // {
-        //    //var abpUserCfgService = ScopedServices.GetRequiredService<AbpUserConfigurationService>();
-        //    //var sessionAppService = ScopedServices.GetRequiredService<SessionAppService>();
-        //    //var appContainer = ScopedServices.GetRequiredService<AppContainer>();
-        //    var t1 = abpUserCfgService.GetAll().ContinueWith(r =>
+        //    if (firstRender)
         //    {
-        //        appContainer.AbpUserConfiguration = r.Result;
-        //    });
-        //    var sdff =  
-
-        //    appContainer.CurrentLoginInformations = sessionAppService.GetCurrentLoginInformations();
-        //    // Microsoft.AspNetCore.Components.Web.RenderMode.InteractiveAuto
-        //    // }
-        //    // appContainer.AbpUserConfiguration = await abpUserCfgService.GetAll();
-        //    //  Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(appContainer));
+        //        //Console.WriteLine("xxxxxxxxxxxxxxxxxxxxxxx");
+        //        await JSRuntime.InvokeVoidAsync("hideLoadingDiv");
+        //    }
         //}
-
-        // protected override void o
-        // {
-        ////     var ssd = HttpContext.User.Identity.IsAuthenticated;
-        //     // if (OperatingSystem.IsBrowser())
-        //     // {
-        //     //var abpUserCfgService = ScopedServices.GetRequiredService<AbpUserConfigurationService>();
-        //     //var sessionAppService = ScopedServices.GetRequiredService<SessionAppService>();
-        //     //var appContainer = ScopedServices.GetRequiredService<AppContainer>();
-        //     var t1 = abpUserCfgService.GetAll().ContinueWith(r =>
-        //     {
-        //         appContainer.AbpUserConfiguration = r.Result;
-        //     });
-
-
-        //     appContainer.CurrentLoginInformations = sessionAppService.GetCurrentLoginInformations();
-        //     // Microsoft.AspNetCore.Components.Web.RenderMode.InteractiveAuto
-        //     // }
-        //     // appContainer.AbpUserConfiguration = await abpUserCfgService.GetAll();
-        //     //  Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(appContainer));
-        // }
     }
+    //protected override async Task onin
+    //{
+    //    base.OnInitialized();
+    //    //     var ssd = HttpContext.User.Identity.IsAuthenticated;
+    //    // if (OperatingSystem.IsBrowser())
+    //    // {
+    //    //var abpUserCfgService = ScopedServices.GetRequiredService<AbpUserConfigurationService>();
+    //    //var sessionAppService = ScopedServices.GetRequiredService<SessionAppService>();
+    //    //var appContainer = ScopedServices.GetRequiredService<AppContainer>();
+    //    var t1 = abpUserCfgService.GetAll().ContinueWith(r =>
+    //    {
+    //        appContainer.AbpUserConfiguration = r.Result;
+    //    });
+    //    var sdff =  
+
+    //    appContainer.CurrentLoginInformations = sessionAppService.GetCurrentLoginInformations();
+    //    // Microsoft.AspNetCore.Components.Web.RenderMode.InteractiveAuto
+    //    // }
+    //    // appContainer.AbpUserConfiguration = await abpUserCfgService.GetAll();
+    //    //  Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(appContainer));
+    //}
+
+    // protected override void o
+    // {
+    ////     var ssd = HttpContext.User.Identity.IsAuthenticated;
+    //     // if (OperatingSystem.IsBrowser())
+    //     // {
+    //     //var abpUserCfgService = ScopedServices.GetRequiredService<AbpUserConfigurationService>();
+    //     //var sessionAppService = ScopedServices.GetRequiredService<SessionAppService>();
+    //     //var appContainer = ScopedServices.GetRequiredService<AppContainer>();
+    //     var t1 = abpUserCfgService.GetAll().ContinueWith(r =>
+    //     {
+    //         appContainer.AbpUserConfiguration = r.Result;
+    //     });
+
+
+    //     appContainer.CurrentLoginInformations = sessionAppService.GetCurrentLoginInformations();
+    //     // Microsoft.AspNetCore.Components.Web.RenderMode.InteractiveAuto
+    //     // }
+    //     // appContainer.AbpUserConfiguration = await abpUserCfgService.GetAll();
+    //     //  Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(appContainer));
+    // }
 }
+
