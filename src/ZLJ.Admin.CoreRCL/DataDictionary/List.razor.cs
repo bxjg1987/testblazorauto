@@ -71,7 +71,12 @@ namespace ZLJ.Admin.CoreRCL.DataDictionary
         {
             isCreateDialogVisible = false;
             if (isCreated)
-                await LoadListData();
+            {
+                //ant搞出了bug，必须重置下
+               
+                isCreated=false;
+                await LoadListData(); 
+            }
         }
         /*
          * 结合blazor8的section时，新增弹窗太简单，不用单独封装弹窗组件，也便于传参到新增表单中
@@ -113,6 +118,7 @@ namespace ZLJ.Admin.CoreRCL.DataDictionary
         /// <returns></returns>
         async Task OnAddEnd(SaveResult<DataDictionaryDto> sr)
         {
+            base.MicrosoftLogger.LogDebug($"新增事件触发了！！！");
             isCreated = true;
             if (sr.End)
             {

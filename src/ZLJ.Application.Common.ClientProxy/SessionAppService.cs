@@ -16,9 +16,10 @@ namespace ZLJ.Application.Common.ClientProxy
 
         }
 
-        public Task<GetCurrentLoginInformationsOutput> GetCurrentLoginInformations()
+        public async Task<GetCurrentLoginInformationsOutput> GetCurrentLoginInformations()
         {
-            return Post<GetCurrentLoginInformationsOutput>("api/services/common/Session/GetCurrentLoginInformations");
+            //await Task.Delay (7000);
+            return await Post<GetCurrentLoginInformationsOutput>("api/services/common/Session/GetCurrentLoginInformations");
             //   return await CreateHttpClient().GetFromJsonAsync<AbpUserConfigurationDto>("AbpUserConfiguration/getall");
         }
     }

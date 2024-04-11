@@ -3,7 +3,7 @@
 @inherits OwningComponentBase
 
 <Space @attributes=AdditionalAttributes Size="@("large")">
-    @if (isAuthed)
+    @if (loginInformations!=default)
     {
         <SpaceItem>
             <Dropdown>
@@ -38,25 +38,25 @@
     [Parameter(CaptureUnmatchedValues = true)]
     public IDictionary<string, object>? AdditionalAttributes { get; set; }
 
-    [Inject]
-    public AuthenticationStateProvider AuthState { get; set; }
+
 
     [Inject]
-    public AppContainer AppContainer{ get; set; }
+    public AppContainer AppContainer { get; set; }
 
-    bool isAuthed => loginInformations.User != default && loginInformations.User.Id > 0;
-    GetCurrentLoginInformationsOutput loginInformations = new GetCurrentLoginInformationsOutput();
+    //bool isAuthed => loginInformations.User != default && loginInformations.User.Id > 0;
+    GetCurrentLoginInformationsOutput loginInformations => AppContainer.CurrentLoginInformations;// new GetCurrentLoginInformationsOutput();
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         //isAuthed = (await authState.GetAuthenticationStateAsync()).User.Identity.IsAuthenticated;
 
-        var dl = await AuthState.GetAuthenticationStateAsync();
-        if (dl.User.Identity.IsAuthenticated)
-        {    
-            await AppContainer.T1;// ScopedServices.GetRequiredService<ISessionAppService>().GetCurrentLoginInformations();
-            loginInformations = AppContainer.CurrentLoginInformations;
-        }
+        if (AppContainer.T1!=default)
+       {     _ = AppContainer.T1.ContinueWith(tempTask =>
+            {
+                //loginInformations = AppContainer.CurrentLoginInformations;
+                InvokeAsync(StateHasChanged);
+            });
+       }
     }
     void UserCenterClick()
     {

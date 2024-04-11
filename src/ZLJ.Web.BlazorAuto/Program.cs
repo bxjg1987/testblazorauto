@@ -41,7 +41,7 @@ builder.Services.AddScoped<IAccessTokenProvider>(x => x.GetRequiredService<Authe
 
 
 builder.Services.AddAdminBlazor().AddBXJGCommonWeb();
-builder.Services.AddAutoMapper(typeof(Program), typeof(ZLJ.RCL.AppContainer));
+//builder.Services.AddAutoMapper(typeof(Program), typeof(ZLJ.RCL.AppContainer));
 
 builder.Services.AddAdminApiClientProxy(hc =>
 {

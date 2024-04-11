@@ -18,7 +18,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IServiceCollection AddAdminBlazor(this IServiceCollection services)
         {
-            return services.AddZLJRCL();
+            return services.AddZLJRCL().AddAutoMapper(typeof(DependencyInjectionExt));
         }
     }
 }

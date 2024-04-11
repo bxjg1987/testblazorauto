@@ -25,12 +25,10 @@
                 <DescriptionsItem Title="名称">
                     <Input @bind-Value="@context.DisplayName" />
                 </DescriptionsItem>
-                <DescriptionsItem Title="名称">
+                <DescriptionsItem Title="备注">
                     <Input @bind-Value="@context.Description" />
                 </DescriptionsItem>
             </Descriptions>
-
-
 
         </Form>
     }
@@ -38,10 +36,10 @@
     {
         <Descriptions Bordered Size="small">
             <DescriptionsItem Title="名称">
-                <Input @bind-Value="@dto.DisplayName" />
+                @dto.DisplayName
             </DescriptionsItem>
             <DescriptionsItem Title="名称">
-                <Input @bind-Value="@dto.Description" />
+                @dto.Description
             </DescriptionsItem>
         </Descriptions>
         @*    <GridRow>

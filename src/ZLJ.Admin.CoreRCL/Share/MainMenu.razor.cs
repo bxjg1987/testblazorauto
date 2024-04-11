@@ -11,12 +11,12 @@ namespace ZLJ.Admin.CoreRCL.Share
 
         IAbpSession abpSession => ScopedServices.GetRequiredService<IAbpSession>();
 
-        UserMenu menu;//= new UserMenu() { Items = new List<UserMenuItem>() };
+        UserMenu menu = new UserMenu() { Items = new List<UserMenuItem>() };
 
-        [Inject]
-        protected PersistentComponentState state { get; private set; }
+        //[Inject]
+        //protected PersistentComponentState state { get; private set; }
 
-        private PersistingComponentStateSubscription subscription;
+        //private PersistingComponentStateSubscription subscription;
         //[SupplyParameterFromQuery]
         //public int mmc { get; set; }
         ///// <summary>
@@ -32,25 +32,25 @@ namespace ZLJ.Admin.CoreRCL.Share
         {
             sj?.Dispose();
 
-            subscription.Dispose();
+            // subscription.Dispose();
         }
-       
+
         //静态传入auto，不能用级联，或者可以试试全局级联
         //https://learn.microsoft.com/zh-cn/aspnet/core/blazor/components/cascading-values-and-parameters?view=aspnetcore-8.0#cascading-valuesparameters-and-render-mode-boundaries
         //  [CascadingParameter(Name = "mmc")]
         [Parameter]
         public bool Collapsed { get; set; }
         //antblazor菜单有问题，所以单独定义这个字段，在首次渲染后将其赋值为Collapsed
-       // bool collapsed;
+        // bool collapsed;
 
         [Inject]
         public IconService iconService { get; set; }
-        Task OnPersisting()
-        {
-            Console.WriteLine(  "菜单持久化执行了"+System.Text.Json.JsonSerializer.Serialize(menu));
-            state.PersistAsJson("main", menu);
-            return Task.CompletedTask;
-        }
+        //Task OnPersisting()
+        //{
+        //    Console.WriteLine(  "菜单持久化执行了"+System.Text.Json.JsonSerializer.Serialize(menu));
+        //    state.PersistAsJson("main", menu);
+        //    return Task.CompletedTask;
+        //}
         [Inject]
         public IMessageService MessageService { get; set; }
         protected override async Task OnInitializedAsync()
@@ -66,17 +66,21 @@ namespace ZLJ.Admin.CoreRCL.Share
                     await MessageService.Warning("若看到此消息，说明基于事件总线的跨组件通信成功");
                 }, "aaa");
             }
-            subscription = state.RegisterOnPersisting(OnPersisting);
+            //  subscription = state.RegisterOnPersisting(OnPersisting);
 
-            if (!state.TryTakeFromJson("main", out menu))
+            //   if (!state.TryTakeFromJson("main", out menu))
+            //   {
+            //      await Console.Out.WriteLineAsync(   "没有从缓存中获取到菜单");
+            //     menu = new UserMenu() { Items = new List<UserMenuItem>() };//这里初始化下，否则界面渲染为空估计要报错
+            if (abpSession.UserId.HasValue)
             {
-                await Console.Out.WriteLineAsync(   "没有从缓存中获取到菜单");
-                menu = new UserMenu() { Items = new List<UserMenuItem>() };//这里初始化下，否则界面渲染为空估计要报错
-                if (abpSession.UserId.HasValue)
+                _ = UserNavigationManager.GetMenuAsync("MainMenu", new Abp.UserIdentifier(abpSession.TenantId, abpSession.UserId.Value)).ContinueWith(t =>
                 {
-                    menu = await UserNavigationManager.GetMenuAsync("MainMenu", new Abp.UserIdentifier(abpSession.TenantId, abpSession.UserId.Value));
-                }
+                    menu = t.Result;
+                    InvokeAsync(StateHasChanged);
+                });
             }
+            //  }
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -84,7 +88,7 @@ namespace ZLJ.Admin.CoreRCL.Share
             if (firstRender)
             {
                 await iconService.CreateFromIconfontCN("https://at.alicdn.com/t/font_2735473_hi62ezq5579.js");
-             //   collapsed = Collapsed;
+                //   collapsed = Collapsed;
                 StateHasChanged();
             }
         }

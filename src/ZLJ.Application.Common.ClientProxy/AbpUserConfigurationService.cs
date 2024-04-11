@@ -17,9 +17,10 @@ namespace ZLJ.Application.Common.ClientProxy
 
         }
 
-        public  Task<AbpUserConfigurationDto> GetAll()
+        public  async Task<AbpUserConfigurationDto> GetAll()
         {
-            return  Post<AbpUserConfigurationDto>("AbpUserConfiguration/getall");
+            //await Task.Delay(5000);
+            return await  Post<AbpUserConfigurationDto>("AbpUserConfiguration/getall");
          //   return await CreateHttpClient().GetFromJsonAsync<AbpUserConfigurationDto>("AbpUserConfiguration/getall");
         }
     }

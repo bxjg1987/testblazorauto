@@ -254,6 +254,10 @@ namespace ZLJ.RCL.Components
                 //    cddqq.Keywords = Keywords;// state.FilterDefinitions.MapToDynamicCondition().ToList();
                 //}
                 //await FillCondtion(cd);
+
+                Items.Clear();
+                StateHasChanged();
+
                 await LoadCore();
             }
             finally

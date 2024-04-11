@@ -30,7 +30,7 @@
 		<PackageReference Include="Abp.Web.Common" Version="9.1.3" />
 
 		<PackageReference Include="AntDesign" Version="0.18.3" />
-
+	  <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
 
 		<!--<PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.2" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.2" />-->

@@ -19,33 +19,40 @@
     UserMenuItem curr = new UserMenuItem();
     protected override async Task OnInitializedAsync()
     {
+        await base.OnInitializedAsync();
+
         if (!abpSession.UserId.HasValue)
             return;
 
-        var menu = await unm.GetMenuAsync("MainMenu", new Abp.UserIdentifier(abpSession.TenantId, abpSession.UserId.Value));
-
-        menu.Items.RecursionDown((p, m) =>
+        _ = unm.GetMenuAsync("MainMenu", new Abp.UserIdentifier(abpSession.TenantId, abpSession.UserId.Value)).ContinueWith(tempTask=>
         {
-            //若后续发现rsp.RouteData.Template不行的话，考虑改用NavigationManager获取当前url匹配试试
-            //https://github.com/dotnet/aspnetcore/issues/51518 rsp无法在客户端注入
-            if (m.Url.IsNotNullOrWhiteSpaceBXJG() && m.Url.Equals(sf.BaseUri, StringComparison.OrdinalIgnoreCase))
+            var menu = tempTask.Result;    
+            menu.Items.RecursionDown((p, m) =>
             {
-                curr = m;
-                return false;
-            }
-            return true;
-        });
-        if (curr == default)
-            return;
-        using (var t = menu.Items.RecursionWrapParent())
-        {
-            curr.RecursionUp(p =>
-            {
-                list.Insert(0, p);
+                //若后续发现rsp.RouteData.Template不行的话，考虑改用NavigationManager获取当前url匹配试试
+                //https://github.com/dotnet/aspnetcore/issues/51518 rsp无法在客户端注入
+                if (m.Url.IsNotNullOrWhiteSpaceBXJG() && m.Url.Equals(sf.BaseUri, StringComparison.OrdinalIgnoreCase))
+                {
+                    curr = m;
+                    return false;
+                }
                 return true;
             });
-        }
+            if (curr == default)
+                return;
+            using (var t = menu.Items.RecursionWrapParent())
+            {
+                curr.RecursionUp(p =>
+                {
+                    list.Insert(0, p);
+                    return true;
+                });
+            }
+            InvokeAsync(StateHasChanged);
+        });
 
-        base.OnInitialized();
+        
+
+       // base.OnInitialized();
     }
 }

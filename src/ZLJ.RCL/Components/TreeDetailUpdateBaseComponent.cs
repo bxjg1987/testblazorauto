@@ -33,7 +33,7 @@ namespace ZLJ.RCL.Components
                                                         TCreateInput,
                                                         TEditDto,
                                                         TGetAllInput> : BaseComponent
-        where TEntityDto : IGeneralTree<TEntityDto>, IExtendableObj
+        where TEntityDto : IGeneralTree<TEntityDto>, IExtendableObj,new()
         //where TGetAllInput : new()
         where TEditDto : IHaveParentId<long>,new()
         where TAppService : IGeneralTreeBaseAppService<TEntityDto, TCreateInput, TEditDto, TGetAllInput>
@@ -70,7 +70,7 @@ namespace ZLJ.RCL.Components
         /// <summary>
         /// 查询模型
         /// </summary>
-        protected TEntityDto? dto;
+        protected TEntityDto? dto=new TEntityDto();
         /// <summary>
         /// 当前编辑模型
         /// </summary>
@@ -105,10 +105,9 @@ namespace ZLJ.RCL.Components
             //dto = await AppService.GetAsync(new EntityDto<TPrimaryKey>(Id));
             if (isEdit)
             {
-                editDto = new TEditDto();
+               editDto = new TEditDto();
                 //editContext = new EditContext(editDto);
                 await ResetCore();
-
             }
             else
                 await RefreshCore();

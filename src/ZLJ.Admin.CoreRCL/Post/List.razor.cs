@@ -106,7 +106,10 @@ namespace ZLJ.Admin.CoreRCL.Post
         {
             isCreateDialogVisible = false;
             if (isCreated)
+            {
+                isCreated = false;
                 await BtnSearchClick();
+            }
         }
         /*
          * 结合blazor8的section时，新增弹窗太简单，不用单独封装弹窗组件，也便于传参到新增表单中

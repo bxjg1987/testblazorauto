@@ -48,6 +48,12 @@ namespace BXJG.Common.RCL.Loggers
         {
             if (_categoryName.StartsWith("Microsoft.AspNetCore"))
                 return false;
+            if (_categoryName.StartsWith("Microsoft.Extensions.Http"))
+                return false;
+            if (_categoryName.StartsWith("System.Net.Http.HttpClient") )
+                return false;
+
+
             // 根据需要调整日志级别  
             return true;
         }

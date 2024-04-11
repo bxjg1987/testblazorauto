@@ -281,7 +281,8 @@ namespace ZLJ.Application.Admin.Post
                     .Where(p => input.GrantedPermissions.Contains(p.Name))
                     .ToList();
 
-                await _roleManager.SetGrantedPermissionsAsync(role, grantedPermissions);
+                //暂时禁用，因为目前功能没做完，实际上这里是应该要放开的
+                //await _roleManager.SetGrantedPermissionsAsync(role, grantedPermissions);
             }
             role.SetNormalizedName();//如果不加 NormalizedName属性不会自动设置 会引起莫名其妙的异常
             //await CurrentUnitOfWork.SaveChangesAsync();

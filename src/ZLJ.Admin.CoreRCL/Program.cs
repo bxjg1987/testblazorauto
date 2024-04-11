@@ -22,7 +22,7 @@ builder.Services.AddLogging(lb =>
 
 builder.Services.AddAdminBlazor().AddCommonRCLClient().AddAuthorizationCore();
 
-builder.Services.AddAutoMapper(typeof(Program),typeof(ZLJ.RCL.AppContainer));
+
 
 builder.Services.AddAdminApiClientProxy(hc =>
 {

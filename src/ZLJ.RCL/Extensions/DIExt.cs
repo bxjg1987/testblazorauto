@@ -46,7 +46,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddTransient<IFeatureChecker, ClientFeatureChecker>();
             services.TryAddTransient<ISessionAppService, SessionAppService>();
             services.TryAddSingleton<IObjectMapper, AutoMapperObjectMapper>();
-           
+            services.AddAutoMapper( typeof(AppContainer));
             //不好实现，所以不要使用多语言
             //services.TryAddSingleton<ILocalizationManager, NullLocalizationManager>();
             return services;
