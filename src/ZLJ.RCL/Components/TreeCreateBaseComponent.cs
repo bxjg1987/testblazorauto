@@ -165,7 +165,7 @@ namespace ZLJ.RCL.Components
             //木有权限时保存按钮不可点击
             //验证不过时此方法不应该被调用
             var r = await AppService.CreateAsync(createDto);
-           _= ShowSuccessMessage(msg: "新增成功！");//没必要等待
+           await ShowSuccessMessage(msg: "新增成功！");//没必要等待
             if (saveAndContinue)
             {
                 await Reset();

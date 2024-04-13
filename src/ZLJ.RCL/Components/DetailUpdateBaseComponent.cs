@@ -458,7 +458,7 @@ namespace ZLJ.RCL.Components
         protected virtual async Task UpdateCore()
         {
             dto = await AppService.UpdateAsync(editDto!);
-            _ = base.MessageService.Success("修改成功！");
+            await base.MessageService.Success("修改成功！");
             await AfterUpdated();
         }
         /// <summary>
@@ -539,7 +539,7 @@ namespace ZLJ.RCL.Components
         {
 
             await AppService.DeleteAsync(new EntityDto<TPrimaryKey>(Id));
-            _ = MessageService.Success($"删除成功！");
+            await MessageService.Success($"删除成功！");
             await AfterDelete();
 
         }

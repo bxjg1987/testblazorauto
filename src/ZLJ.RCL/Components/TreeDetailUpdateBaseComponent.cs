@@ -455,7 +455,7 @@ namespace ZLJ.RCL.Components
         {
 
             dto = await AppService.UpdateAsync(editDto!);
-            _ = base.MessageService.Success("修改成功！");
+            await base.MessageService.Success("修改成功！");
             await AfterUpdated();
 
         }
@@ -542,12 +542,12 @@ namespace ZLJ.RCL.Components
             //BatchDeleteMessage(temp);
             if (r.Ids.Any())
             {
-                _ = ShowSuccessMessage(msg: "删除成功！");
+                await ShowSuccessMessage(msg: "删除成功！");
                 await AfterDelete();
             }
             else
             {
-                _ = ShowFailMessage(title: "删除失败！", r.ErrorMessage.FirstOrDefault()?.Message);
+                await ShowFailMessage(title: "删除失败！", r.ErrorMessage.FirstOrDefault()?.Message);
             }
 
 
