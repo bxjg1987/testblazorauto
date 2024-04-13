@@ -620,9 +620,9 @@ namespace ZLJ.RCL.Components
         protected virtual async Task DeleteCore()
         {
             var r = await AppService.BatchDeleteAsync(new BatchOperationInput<TPrimaryKey> { Ids = SelectedItems.Select(x => x.Id).ToArray() });
-            _ = BatchOperationMessage(r);//这里木有必要await
+            await BatchOperationMessage(r);//这里木有必要await
                                          //BatchDeleteMessage(temp);
-            await Task.Delay(200); //Task.Yield(); //切换线程，让消息框的显示更丝滑
+            
             if (r.Ids.Any())
                 await LoadListData();
         }
@@ -659,7 +659,7 @@ namespace ZLJ.RCL.Components
         {
 
             await AppService.DeleteAsync(new EntityDto<TPrimaryKey>(item.Id));
-            _ = ShowSuccessMessage("删除提示", "删除成功！");//这里木有必要await
+            await ShowSuccessMessage("删除提示", "删除成功！");//这里木有必要await
                                                     //若上面异常，下面不会执行
                                                     //_ = InvokeAsync(dataGrid.ReloadServerData);
                                                     // await LoadListData();

@@ -563,9 +563,9 @@ namespace ZLJ.RCL.Components
             //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限
 
             var r = await AppService.DeleteAsync(new BatchOperationInputLong { Ids = SelectedItems.Select(x => x.Id).ToArray() });
-            _ = BatchOperationMessage(r);//这里木有必要await
+            await BatchOperationMessage(r);//这里木有必要await
                                          //BatchDeleteMessage(temp);
-            await Task.Delay(200); //Task.Yield(); //切换线程，让消息框的显示更丝滑
+           
             if (r.Ids.Any())
                 await LoadListData();
             //_ = InvokeAsync(dataGrid.ReloadServerData); //内部会StateChange
@@ -607,12 +607,12 @@ namespace ZLJ.RCL.Components
             //BatchDeleteMessage(temp);
             if (r.Ids.Any())
             {
-                _ = ShowSuccessMessage(msg: "删除成功！");
+                await ShowSuccessMessage(msg: "删除成功！");
                 await LoadListData();
             }
             else
             {
-                _ = ShowFailMessage(title: "删除失败！", r.ErrorMessage.FirstOrDefault()?.Message);
+                await ShowFailMessage(title: "删除失败！", r.ErrorMessage.FirstOrDefault()?.Message);
             }
 
         }
