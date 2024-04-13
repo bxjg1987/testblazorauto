@@ -1,5 +1,6 @@
 ﻿using Abp;
 using Abp.Configuration;
+using BXJG.Utils.RCL;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -7,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZLJ.RCL.Abps
+namespace BXJG.Utils.RCL.Abps
 {
     /// <summary>
     /// 前端实现，仅支持读取，写入blazorserver组件
@@ -50,7 +51,8 @@ namespace ZLJ.RCL.Abps
         {
             throw new NotImplementedException();
         }
-        class SV : ISettingValue {
+        class SV : ISettingValue
+        {
             public string Name { get; set; }
             public string Value { get; set; }
         }
@@ -61,7 +63,7 @@ namespace ZLJ.RCL.Abps
             //{ 
 
             //}
-           return  _appContainer.AbpUserConfiguration.Setting.Values.Select(x=>new SV { Name=x.Key, Value=x.Value }).ToImmutableList();
+            return _appContainer.AbpUserConfiguration.Setting.Values.Select(x => new SV { Name = x.Key, Value = x.Value }).ToImmutableList();
         }
 
         public IReadOnlyList<ISettingValue> GetAllSettingValues(SettingScopes scopes)
@@ -71,7 +73,7 @@ namespace ZLJ.RCL.Abps
 
         public Task<IReadOnlyList<ISettingValue>> GetAllSettingValuesAsync()
         {
-            return Task.FromResult( GetAllSettingValues());
+            return Task.FromResult(GetAllSettingValues());
         }
 
         public Task<IReadOnlyList<ISettingValue>> GetAllSettingValuesAsync(SettingScopes scopes)

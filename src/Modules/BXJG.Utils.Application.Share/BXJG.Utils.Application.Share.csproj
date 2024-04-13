@@ -18,4 +18,8 @@
     <ProjectReference Include="..\BXJG.Utils.Share\BXJG.Utils.Share.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Session\" />
+  </ItemGroup>
+
 </Project>

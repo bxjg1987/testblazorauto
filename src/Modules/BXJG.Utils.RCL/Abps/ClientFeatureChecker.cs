@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Features;
+using BXJG.Utils.RCL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace ZLJ.RCL.Abps
+namespace BXJG.Utils.RCL.Abps
 {
     /*
      * 设计思路同setting，客户端只读取，设置部分有blazor server页面完成，保存是刷新页面以便客户端拿到新的值

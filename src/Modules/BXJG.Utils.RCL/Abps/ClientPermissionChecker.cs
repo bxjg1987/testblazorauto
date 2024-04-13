@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZLJ.RCL.Abps
+namespace BXJG.Utils.RCL.Abps
 {
     //注意：服务端刚好是反的，是IAuthorizationService内部调用IPermissionChecker
     //目的是为了组件中统一使用IPermissionChekcer，并确保blazor授权标签、路由、组件等能正常工作。

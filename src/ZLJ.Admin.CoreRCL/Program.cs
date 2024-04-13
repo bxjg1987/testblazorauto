@@ -2,13 +2,13 @@ using Abp.Runtime.Session;
 //using Blazor.Extensions.Logging;
 using BXJG.Common.Http;
 using BXJG.Common.RCL.Loggers;
+using BXJG.Utils.RCL;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System.Text.Json;
 using ZLJ.Admin.ClientProxy;
 using ZLJ.Admin.CoreRCL.Auth;
-using ZLJ.RCL;
 
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);

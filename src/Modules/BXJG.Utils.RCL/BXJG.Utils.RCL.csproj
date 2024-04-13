@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Razor">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -11,35 +11,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Components\**" />
-    <Compile Remove="Notification\**" />
-    <Content Remove="Components\**" />
-    <Content Remove="Notification\**" />
-    <EmbeddedResource Remove="Components\**" />
-    <EmbeddedResource Remove="Notification\**" />
-    <None Remove="Components\**" />
-    <None Remove="Notification\**" />
+    <PackageReference Include="Abp.Web.Common" Version="9.1.3" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Compile Remove="CircuitStateHandler.cs" />
-    <Compile Remove="CrudBaseComponent.cs" />
-    <Compile Remove="TrackingCircuitHandler.cs" />
-  </ItemGroup>
 
-  <ItemGroup>
+
+  <!--<ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-  </ItemGroup>
+  </ItemGroup>-->
 
   <ItemGroup>
     <ProjectReference Include="..\..\Libs\BXJG.Common.RCL\BXJG.Common.RCL.csproj" />
-    <ProjectReference Include="..\BXJG.Utils.Web\BXJG.Utils.Web.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Areas\MyFeature\Pages\" />
-    <Folder Include="Components\" />
-    <Folder Include="Event\" />
+    <ProjectReference Include="..\BXJG.Utils.Application.Share\BXJG.Utils.Application.Share.csproj" />
   </ItemGroup>
 
 

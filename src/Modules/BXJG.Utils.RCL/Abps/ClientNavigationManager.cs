@@ -1,18 +1,18 @@
 ﻿using Abp;
 using Abp.Application.Navigation;
 using Abp.Web.Models;
-using AntDesign;
+using BXJG.Utils.RCL;
 using Microsoft.Extensions.Logging;
 using System.Collections.Immutable;
 using System.Net.Http.Json;
 
-namespace ZLJ.RCL.Abps
+namespace BXJG.Utils.RCL.Abps
 {
     public class ClientNavigationManager : /*BaseAppServiceClient,*/ IUserNavigationManager
     {
         AppContainer _appContainer;
 
-       ILogger<ClientNavigationManager> logger;
+        ILogger<ClientNavigationManager> logger;
         public ClientNavigationManager(AppContainer appContainer, ILogger<ClientNavigationManager> logger)
         {
             _appContainer = appContainer;
@@ -38,12 +38,12 @@ namespace ZLJ.RCL.Abps
             //    }; 
             //}
             await _appContainer.T2;
-            return  _appContainer.AbpUserConfiguration.Nav.Menus[menuName];
+            return _appContainer.AbpUserConfiguration.Nav.Menus[menuName];
         }
 
         public async Task<IReadOnlyList<UserMenu>> GetMenusAsync(UserIdentifier user)
         {
-            return  _appContainer.AbpUserConfiguration.Nav.Menus.Select(x=>x.Value).ToImmutableList();
+            return _appContainer.AbpUserConfiguration.Nav.Menus.Select(x => x.Value).ToImmutableList();
         }
 
         //public UserNavigationManager(IHttpClientFactory httpClientFactory) : base(httpClientFactory)

@@ -29,7 +29,17 @@
 	  <None Remove="SettingManager\**" />
 	</ItemGroup>
 	<ItemGroup>
+	  <Compile Remove="Session\ApplicationInfoDto.cs" />
+	  <Compile Remove="Session\GetCurrentLoginInformationsOutput.cs" />
+	  <Compile Remove="Session\ISessionAppService.cs" />
+	  <Compile Remove="Session\TenantLoginInfoDto.cs" />
+	  <Compile Remove="Session\UserLoginInfoDto.cs" />
+	</ItemGroup>
+	<ItemGroup>
 	  <ProjectReference Include="..\ZLJ.Core.Share\ZLJ.Core.Share.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Session\" />
 	</ItemGroup>
 	
 	

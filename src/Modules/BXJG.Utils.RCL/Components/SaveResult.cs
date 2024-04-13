@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZLJ.RCL.Components
+namespace BXJG.Utils.RCL.Components
 {
     /// <summary>
     /// 新增返回对象

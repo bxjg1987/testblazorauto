@@ -1,8 +1,8 @@
 ﻿using Abp.Threading;
+using BXJG.Utils.RCL;
 using Microsoft.JSInterop;
 using System.Net.Http;
 using ZLJ.Application.Common.ClientProxy;
-using ZLJ.RCL;
 
 namespace ZLJ.Admin.CoreRCL.Share
 {

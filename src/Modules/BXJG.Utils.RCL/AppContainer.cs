@@ -1,7 +1,7 @@
 ﻿using Abp.Web.Models.AbpUserConfiguration;
 using ZLJ.Application.Common.Share.Session;
 
-namespace ZLJ.RCL
+namespace BXJG.Utils.RCL
 {
     /// <summary>
     /// 应用全局状态容器

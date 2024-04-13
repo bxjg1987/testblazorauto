@@ -10,8 +10,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Collections.Immutable;
+using BXJG.Utils.RCL;
 
-namespace ZLJ.RCL.Abp
+namespace BXJG.Utils.RCL.Abps
 {
     public class LocalizationSource : ILocalizationSource
     {
@@ -20,14 +21,14 @@ namespace ZLJ.RCL.Abp
         public LocalizationSource(string name)
         {
             _appContainer = AppContainer.App;
-          
+
         }
 
         public string Name { get; set; }
 
         public IReadOnlyList<LocalizedString> GetAllStrings(bool includeDefaults = true)
         {
-             return GetAllStrings(CultureInfo.CurrentUICulture, includeDefaults);
+            return GetAllStrings(CultureInfo.CurrentUICulture, includeDefaults);
         }
 
         public IReadOnlyList<LocalizedString> GetAllStrings(CultureInfo culture, bool includeDefaults = true)
@@ -92,7 +93,7 @@ namespace ZLJ.RCL.Abp
 
         public void Initialize(ILocalizationConfiguration configuration, IIocResolver iocResolver)
         {
-     
+
             //throw new NotImplementedException();
         }
     }

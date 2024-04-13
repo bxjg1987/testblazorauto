@@ -1,27 +1,16 @@
 ﻿using Abp.Application.Services.Dto;
-using Abp.UI;
-using BXJG.Common;
-using BXJG.Utils;
 using BXJG.Utils.Application.Share;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Extensions.DependencyInjection;
-using Rougamo;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace BXJG.Utils.Components
+namespace BXJG.Utils.RCL.Components
 {
-    /*
-     * 由于abp的crud接口和抽象类把crud搞一起了，不想动它，所以这里的应用服务中包含TGetAllInput、TUpdateInput
-     * 很多ui都提供了自己的表单验证方式，有些还不支持微软默认的表单验证逻辑，但通常都支持基于Attribute验证方式，所以抽象类中不定义验证相关的东东
-     */
+
+   
+
 
     /// <summary>
-    /// 通用新增页组件
+    /// 基于BootstrapBlazor和abp的通用新增页组件
     /// 查看详情和修改数据的抽象组件是单独定义的（因为要切换查看和编辑模式，所以定义在同一个组件中的），
     /// 查看详情和修改组件是对以后的数据进行查看和处理，而新增组件它是对数据从无到有的创建，因此分开定义的。
     /// </summary>
@@ -31,21 +20,25 @@ namespace BXJG.Utils.Components
     /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
     /// <typeparam name="TCreateInput">新增时的输入类型</typeparam>
     /// <typeparam name="TUpdateInput">修改时的输入类型</typeparam>
-    public abstract class AbpCreateBaseComponent<TAppService,
+    public abstract class CreateBaseComponent<TAppService,
                                                  TEntityDto,
                                                  TPrimaryKey,
                                                  TGetAllInput,
                                                  TCreateInput,
-                                                 TUpdateInput> : AbpBaseComponent
+                                                 TUpdateInput> : BaseComponent
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TCreateInput : new()
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
     {
         /// <summary>
+        /// 请使用AppService
+        /// </summary>
+        TAppService appService;
+        /// <summary>
         /// 获取主服务
         /// </summary>
-        protected virtual TAppService AppService => ScopedServices.GetRequiredService<TAppService>();
+        protected virtual TAppService AppService => appService ??= ScopedServices.GetRequiredService<TAppService>();
         /// <summary>
         /// 此功能的名称
         /// </summary>
@@ -53,26 +46,41 @@ namespace BXJG.Utils.Components
         /// <summary>
         /// 新增时的模型
         /// </summary>
-        public TCreateInput? CreateDto { get; protected set; }
+        protected TCreateInput createDto = new TCreateInput();
         /// <summary>
         /// 正在执行重置
         /// </summary>
-        public bool IsReseting { get; protected set; }
+        protected bool isReseting;
         /// <summary>
         /// 重置按钮点击时回调，由于事件无法使用ValueTask，所以这里用了Task
         /// </summary>
         /// <returns></returns>
-        public virtual async Task Reset()
+#if !DEBUG
+        [AbpExceptionInterceptor]
+#endif
+        public virtual async Task BtnResetClick()
         {
-            IsReseting = true;
+            await Reset();
+        }
+        /// <summary>
+        /// 带loading处理的reset
+        /// </summary>
+        /// <returns></returns>
+        protected virtual async Task Reset()
+        {
+            if (isReseting)
+                return;
+
+            isReseting = true;
             try
             {
                 await ResetCore();
             }
             finally
             {
-                IsReseting = false;
+                isReseting = false;
             }
+            //StateHasChanged();
         }
         /// <summary>
         /// 重置的核心逻辑
@@ -80,89 +88,91 @@ namespace BXJG.Utils.Components
         /// <returns></returns>
         protected virtual ValueTask ResetCore()
         {
-            CreateDto = new TCreateInput();
+            createDto = new TCreateInput();
             return ValueTask.CompletedTask;
         }
         /// <summary>
         /// 初始化时，初始化新增模型
         /// </summary>
         /// <returns></returns>
+#if !DEBUG
+        [AbpExceptionInterceptor]
+#endif
         protected override async Task OnInitializedAsync()
         {
-            await CheckPermission();
             await Reset();
         }
         /// <summary>
-        /// 新增权限判断
-        /// </summary>
-        /// <returns></returns>
-        protected abstract Task CheckPermission();
-        /// <summary>
         /// 保存后是否继续新增
         /// </summary>
-        public bool SaveAndContinue { get;  set; }
+        public bool saveAndContinue;
         /// <summary>
         /// 正在保存...
         /// </summary>
-        public bool IsSaving { get; protected set; }
-        /// <summary>
-        /// 新增返回对象
-        /// </summary>
-        public class SaveResult
+        protected bool isSaving;
+        //protected virtual async Task BtnSaveClick()
+        //{
+        //    //没有权限的按钮直接隐藏，况且应用服务还会判断权限兜底的，因此这里无需判断权限
+        //    frm.Submit();
+        //}
+#if !DEBUG
+        [AbpExceptionInterceptor]
+#endif
+        protected virtual async Task OnFinish(EditContext editContext)
         {
-            /// <summary>
-            /// 新增后返回的dto对象
-            /// </summary>
-            public TEntityDto Dto { get; set; }
-            /// <summary>
-            /// 新增是否结束了，
-            /// 若没有勾选“保存并继续”，则新增后表示新增结束
-            /// 验证不过也会返回false
-            /// </summary>
-            public bool End { get; set; }
+            await Save();
         }
+
+        //protected bool isAdded;
         /// <summary>
         /// 核心的保存逻辑
         /// </summary>
         /// <returns>新增任务是否结束</returns>
-        public virtual async Task<SaveResult> Save()
+        protected virtual async Task Save()
         {
             //木有权限时保存按钮不可点击
             //验证不过时此方法不应该被调用
-            IsSaving = true;
+            if (isSaving) return;
+            isSaving = true;
             try
             {
-                return await SaveCore();
+                await SaveCore();
             }
             finally
             {
-                IsSaving = false;
+                isSaving = false;
             }
         }
+        /// <summary>
+        /// 新增成功，且不再继续新增时触发
+        /// </summary>
+        [Parameter]
+        public EventCallback<SaveResult<TEntityDto>> OnAddEnd { get; set; }
         /// <summary>
         /// 保存的核心逻辑
         /// </summary>
         /// <returns>新增任务是否结束</returns>
-        protected virtual async Task<SaveResult> SaveCore()
+        protected virtual async Task SaveCore()
         {
-            var yz = await Validate();
-            if (!yz)
-                return new SaveResult();
+           
             //木有权限时保存按钮不可点击
             //验证不过时此方法不应该被调用
-            var r = await AppService.CreateAsync(CreateDto);
-            ShowSuccessMessage(msg: "新增成功！");//没必要等待
-            if (SaveAndContinue)
+            var r = await AppService.CreateAsync(createDto);
+           await ShowSuccessMessage(msg: "新增成功！");//没必要等待
+            if (saveAndContinue)
             {
                 await Reset();
-                return new SaveResult { Dto = r };
+                await OnAddEnd.InvokeAsync(new SaveResult<TEntityDto> { Dto = r });
             }
-            return new SaveResult { Dto = r, End = true };
+            else
+                await OnAddEnd.InvokeAsync(new SaveResult<TEntityDto> { Dto = r, End = true });
         }
-        /// <summary>
-        /// 表单验证的核心逻辑
-        /// </summary>
-        /// <returns>true验证成功；false验证失败</returns>
-        protected abstract ValueTask<bool> Validate();
+      
+        ///// <summary>
+        ///// 对表单的引用
+        ///// </summary>
+        //protected Form<TCreateInput> frm;
+
+
     }
 }

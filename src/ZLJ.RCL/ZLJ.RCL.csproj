@@ -8,8 +8,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Abps\LocalizationSource.cs" />
+    <Compile Remove="Abps\**" />
+    <Content Remove="Abps\**" />
+    <EmbeddedResource Remove="Abps\**" />
+    <None Remove="Abps\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="AppContainer.cs" />
     <Compile Remove="Components\AbpCreateDialog.razor.cs" />
+    <Compile Remove="Components\SaveResult.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,9 +49,11 @@
 
 	<ItemGroup Condition="'$(SolutionName)' != 'ZLJWithModules'">
 		<PackageReference Include="BXJG.Common.RCL" Version="1.3.7" />
+		<PackageReference Include="BXJG.Utils.RCL" Version="*" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(SolutionName)' == 'ZLJWithModules'">
 		<ProjectReference Include="..\Libs\BXJG.Common.RCL\BXJG.Common.RCL.csproj" />
+		<ProjectReference Include="..\Modules\BXJG.Utils.RCL\BXJG.Utils.RCL.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\ZLJ.Application.Common.Share\ZLJ.Application.Common.Share.csproj" />

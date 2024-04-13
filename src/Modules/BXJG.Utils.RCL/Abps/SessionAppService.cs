@@ -1,11 +1,12 @@
-﻿using System;
+﻿using BXJG.Utils.RCL;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ZLJ.Application.Common.Share.Session;
 
-namespace ZLJ.RCL.Abps
+namespace BXJG.Utils.RCL.Abps
 {
     public class SessionAppService : ISessionAppService
     {

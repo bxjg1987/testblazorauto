@@ -4,9 +4,9 @@ using BXJG.Common.Http;
 using ZLJ.Web.BlazorAuto.Auth;
 using Microsoft.AspNetCore.Authentication;
 using ZLJ.Web.BlazorAuto.Components;
-using ZLJ.RCL;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Options;
+using BXJG.Utils.RCL;
 
 var builder = WebApplication.CreateBuilder(args);
 
