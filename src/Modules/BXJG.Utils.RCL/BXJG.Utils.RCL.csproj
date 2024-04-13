@@ -11,6 +11,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Components\TreeSelect.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Abp.Web.Common" Version="9.1.3" />
   </ItemGroup>
 

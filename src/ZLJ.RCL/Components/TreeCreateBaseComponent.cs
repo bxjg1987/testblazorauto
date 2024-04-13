@@ -34,155 +34,38 @@ namespace ZLJ.RCL.Components
                                                   TEntityDto,
                                                   TCreateInput,
                                                   TEditDto,
-                                                  TGetAllInput> : BaseComponent
+                                                  TGetAllInput> : BXJG.Utils.RCL.Components.TreeCreateBaseComponent<TAppService,
+                                                  TEntityDto,
+                                                  TCreateInput,
+                                                  TEditDto,
+                                                  TGetAllInput>
         where TAppService : IGeneralTreeBaseAppService<TEntityDto, TCreateInput, TEditDto, TGetAllInput>
         where TCreateInput : IHaveParentId<long>, new()
     {
-        /// <summary>
-        /// 请使用AppService
-        /// </summary>
-        TAppService appService;
-        /// <summary>
-        /// 获取主服务
-        /// </summary>
-        protected virtual TAppService AppService => appService ??= ScopedServices.GetRequiredService<TAppService>();
-        /// <summary>
-        /// 此功能的名称
-        /// </summary>
-        public abstract string FuncName { get; }// => $"请重写{nameof(FuncName)}属性";
-        /// <summary>
-        /// 父级id
-        /// </summary>
-        [Parameter]
-        public long? ParentId { get; set; }
-        /// <summary>
-        /// 新增时的模型
-        /// </summary>
-        protected TCreateInput createDto = new TCreateInput();
-        /// <summary>
-        /// 正在执行重置
-        /// </summary>
-        protected bool isReseting;
-        /// <summary>
-        /// 重置按钮点击时回调，由于事件无法使用ValueTask，所以这里用了Task
-        /// </summary>
-        /// <returns></returns>
-#if !DEBUG
-        [AbpExceptionInterceptor]
-#endif
-        public virtual async Task BtnResetClick()
-        {
-            await Reset();
-        }
-        /// <summary>
-        /// 带loading处理的reset
-        /// </summary>
-        /// <returns></returns>
-        protected virtual async Task Reset()
-        {
-            if (isReseting)
-                return;
-
-            isReseting = true;
-            try
-            {
-                await ResetCore();
-            }
-            finally
-            {
-                isReseting = false;
-            }
-            //StateHasChanged();
-        }
-        /// <summary>
-        /// 重置的核心逻辑
-        /// </summary>
-        /// <returns></returns>
-        protected virtual ValueTask ResetCore()
-        {
-            createDto = new TCreateInput();
-            createDto.ParentId = ParentId;
-            return ValueTask.CompletedTask;
-        }
-        /// <summary>
-        /// 初始化时，初始化新增模型
-        /// </summary>
-        /// <returns></returns>
-#if !DEBUG
-        [AbpExceptionInterceptor]
-#endif
-        protected override async Task OnInitializedAsync()
-        {
-            await Reset();
-        }
-        /// <summary>
-        /// 保存后是否继续新增
-        /// </summary>
-        protected bool saveAndContinue;
-        /// <summary>
-        /// 正在保存...
-        /// </summary>
-        protected bool isSaving;
+       
         protected virtual async Task BtnSaveClick()
         {
             //没有权限的按钮直接隐藏，况且应用服务还会判断权限兜底的，因此这里无需判断权限
             frm.Submit();
         }
-#if !DEBUG
-        [AbpExceptionInterceptor]
-#endif
-        protected virtual async Task OnFinish(EditContext editContext)
-        {
-            await Save();
-        }
-        /// <summary>
-        /// 核心的保存逻辑
-        /// </summary>
-        /// <returns>新增任务是否结束</returns>
-        protected virtual async Task Save()
-        {
-            //木有权限时保存按钮不可点击
-            //验证不过时此方法不应该被调用
-            if(isSaving) return;
-            isSaving = true;
-            try
-            {
-                await SaveCore();
-            }
-            finally
-            {
-                isSaving = false;
-            }
-        }
-        /// <summary>
-        /// 保存的核心逻辑
-        /// </summary>
-        /// <returns>新增任务是否结束</returns>
-        protected virtual async Task SaveCore()
-        {
-            //var yz = await Validate();
-            //if (!yz)
-            //    return;
-            //木有权限时保存按钮不可点击
-            //验证不过时此方法不应该被调用
-            var r = await AppService.CreateAsync(createDto);
-           await ShowSuccessMessage(msg: "新增成功！");//没必要等待
-            if (saveAndContinue)
-            {
-                await Reset();
-                await OnAddEnd.InvokeAsync(new SaveResult<TEntityDto> { Dto = r });
-            }
-            else
-                await OnAddEnd.InvokeAsync(new SaveResult<TEntityDto> { Dto = r, End = true });
-        }
-        /// <summary>
-        /// 新增成功，且不再继续新增时触发
-        /// </summary>
-        [Parameter]
-        public EventCallback<SaveResult<TEntityDto>> OnAddEnd { get; set; }
         /// <summary>
         /// 对表单的引用
         /// </summary>
         protected Form<TCreateInput> frm;
+        //await消息显示时，好像会等到消息因此时才结束，没严格测试
+        //不过测试发现消息异步显示，并等待200毫秒，消息提示更丝滑
+        //
+        [Inject]
+        public IMessageService MessageService { get; set; }
+        protected override async ValueTask ShowFailMessage(string title = "操作提示", string msg = "操作失败！")
+        {
+            _ = MessageService.Error(msg);
+            await Task.Delay(200);
+        }
+        protected override async ValueTask ShowSuccessMessage(string title = "操作提示", string msg = "操作成功！")
+        {
+            _ = MessageService.Success(msg);
+            await Task.Delay(200);
+        }
     }
 }
