@@ -38,7 +38,7 @@
                  <Search Placeholder="请输入关键字..." @bind-Value="@Keywords" OnChange=BtnSearchClick AllowClear="true" ClassicSearchIcon="true" Disabled=IsLoading />
              </div>
              <Tooltip Title="清空条件">
-                 <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Clear" OnClick="BtnReLoadClick" Disabled=IsLoading></Button>
+                 <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Clear" OnClick="BtnClearFilterClick" Disabled=IsLoading></Button>
              </Tooltip>
              <Tooltip Title="刷新">
                  <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Reload" OnClick="BtnRefreshClick" Disabled=IsLoading></Button>

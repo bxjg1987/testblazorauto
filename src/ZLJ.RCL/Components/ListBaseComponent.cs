@@ -28,9 +28,16 @@ namespace ZLJ.RCL.Components
     /*
      * 之前我们实现过动态条件，参考BXJG.MudBlazor中的实现
      * 动态条件对于用户来讲有点复杂，所以我们暂时不考虑
+     * 
+     * 由于abp的crud接口和抽象类把crud搞一起了，不想动它，所以这里的应用服务中包含TCreateInput、TUpdateInput
+     * 
+     * 虽然当前项目直接依赖antblazor，且此当前抽象列表组件也依赖它
+     * 但我们实现逻辑是尽量考虑标准的抽象列表组件，因此在组件中直接包含PageSize、PageIndex等属性，
+     * 而不是完全依赖antblazor的套路
+     * 这样，将来我们需要抽象一个标准的列表组件时，这里的大部分代码是可以复制到抽象中的。
+     * 
+     * 它仅仅定义列表相关功能，并不包含新增、修改等弹窗相关内容，那个交给子类去实现，因为有列表不一定需要弹窗
      */
-
-    //由于abp的crud接口和抽象类把crud搞一起了，不想动它，所以这里的应用服务中包含TCreateInput、TUpdateInput
 
     /// <summary>
     /// 抽象的，基于ant table的列表页抽象组件
@@ -159,6 +166,7 @@ namespace ZLJ.RCL.Components
 
         /// <summary>
         /// 获取每页行数，若不做分页请返回0
+        /// 它本质上是对GetAllInput的读写，由于GetAllInput是或不是分页条件，所以内部做了特殊处理（由于dto是应用层的，所以在这里而不是dto上定义此逻辑）
         /// </summary>
         protected virtual int PageSize
         {
@@ -189,6 +197,7 @@ namespace ZLJ.RCL.Components
 
         /// <summary>
         /// 排序规则，格式："field1 aes,field2 desc"
+        /// 它本质上是对GetAllInput的读写，由于GetAllInput是或不是分页条件，所以内部做了特殊处理（由于dto是应用层的，所以在这里而不是dto上定义此逻辑）
         /// </summary>
         public virtual string Sorting
         {
@@ -215,7 +224,7 @@ namespace ZLJ.RCL.Components
                 //  sd222.Sorting = string.Join(",", ls);
                 sd222.Sorting = value;
 
-                if (sd222==default|| sd222.Sorting.IsNullOrWhiteSpaceBXJG())
+                if (sd222 == default || sd222.Sorting.IsNullOrWhiteSpaceBXJG())
                     sd222.Sorting = "Id";
             }
         }
@@ -232,6 +241,7 @@ namespace ZLJ.RCL.Components
         protected virtual int TotalCount { get; set; }
         /// <summary>
         /// 当前是第几页
+        /// 它本质上是对GetAllInput的读写，由于GetAllInput是或不是分页条件，所以内部做了特殊处理（由于dto是应用层的，所以在这里而不是dto上定义此逻辑）
         /// </summary>
         protected virtual int PageIndex
         {
@@ -241,7 +251,7 @@ namespace ZLJ.RCL.Components
                 //  if (GetAllInput is IPagedResultRequest dx)
                 return (GetAllInput as IPagedResultRequest).SkipCount / PageSize + 1;
 
-                //若是纯条件，就木有必要
+                //若是纯条件，也就是不分页，就木有必要
 
                 //if (pageIndex <= 0)
                 //    pageIndex = 1;
@@ -352,10 +362,10 @@ namespace ZLJ.RCL.Components
             Items = dtos.Items.ToList();
             TotalCount = dtos.TotalCount;
 
-            if (SelectedItems != default && SelectedItems is ICollection<TEntityDto> list)
-                list.Clear();
+            if (SelectedItems != default&& SelectedItems is ICollection<TEntityDto> tempList)
+                tempList.Clear();
             else
-                SelectedItems = new List<TEntityDto>();
+                SelectedItems=new List<TEntityDto>();
         }
 
         /// <summary>
@@ -519,7 +529,7 @@ namespace ZLJ.RCL.Components
 #if !DEBUG
         [AbpExceptionInterceptor]
 #endif
-        protected virtual async Task BtnReLoadClick()
+        protected virtual async Task BtnClearFilterClick()
         {
             table.ResetData();
             //PageIndex = 1;
@@ -528,6 +538,7 @@ namespace ZLJ.RCL.Components
             //StateHasChanged();
             //await OnQuery(table.GetQueryModel());
             await LoadListData();
+
             //  await base.Reset();
             // table.ResetData();
             //table.ReloadData(); 远程加载时，根本不会执行这里
@@ -608,13 +619,12 @@ namespace ZLJ.RCL.Components
         }
         protected virtual async Task DeleteCore()
         {
-          
-                var r = await AppService.BatchDeleteAsync(new BatchOperationInput<TPrimaryKey> { Ids = SelectedItems.Select(x => x.Id).ToArray() });
-                _ = BatchOperationMessage(r, "批量删除");//这里木有必要await
-                //BatchDeleteMessage(temp);
-                if (r.Ids.Any())
-                    await LoadListData();
-          
+            var r = await AppService.BatchDeleteAsync(new BatchOperationInput<TPrimaryKey> { Ids = SelectedItems.Select(x => x.Id).ToArray() });
+            _ = BatchOperationMessage(r);//这里木有必要await
+                                         //BatchDeleteMessage(temp);
+            await Task.Delay(200); //Task.Yield(); //切换线程，让消息框的显示更丝滑
+            if (r.Ids.Any())
+                await LoadListData();
         }
         /// <summary>
         /// 删除单个项

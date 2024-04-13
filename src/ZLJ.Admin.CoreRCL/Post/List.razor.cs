@@ -53,14 +53,14 @@ namespace ZLJ.Admin.CoreRCL.Post
         }
 
         //[AbpExceptionInterceptor]
-        protected override async Task BtnReLoadClick()
+        protected override async Task BtnClearFilterClick()
         {
             GetAllInput.Filter.IsStatic = default;
             GetAllInput.Filter.Permission = default;
             GetAllInput.Filter.OuCode = default;
             if (ou != default)
                 ou.Value = default;
-            await base.BtnReLoadClick();
+            await base.BtnClearFilterClick();
         }
         TreeSelectOu ou;
         //protected override Task OnQuery(QueryModel condition)

@@ -283,8 +283,8 @@ namespace ZLJ.RCL.Components
             Items = dtos;
             TotalCount = dtos.Count;
 
-            if (SelectedItems != default && SelectedItems is ICollection<TEntityDto> list)
-                list.Clear();
+            if (SelectedItems != default && SelectedItems is ICollection<TEntityDto> tempList)
+                tempList.Clear();
             else
                 SelectedItems = new List<TEntityDto>();
         }
@@ -447,7 +447,7 @@ namespace ZLJ.RCL.Components
 #if !DEBUG
         [AbpExceptionInterceptor]
 #endif
-        protected virtual async Task BtnReLoadClick()
+        protected virtual async Task BtnClearFilterClick()
         {
             table.ResetData();
             //PageIndex = 1;
@@ -563,8 +563,9 @@ namespace ZLJ.RCL.Components
             //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限
 
             var r = await AppService.DeleteAsync(new BatchOperationInputLong { Ids = SelectedItems.Select(x => x.Id).ToArray() });
-            _ = BatchOperationMessage(r, "批量删除");//这里木有必要await
-                                                 //BatchDeleteMessage(temp);
+            _ = BatchOperationMessage(r);//这里木有必要await
+                                         //BatchDeleteMessage(temp);
+            await Task.Delay(200); //Task.Yield(); //切换线程，让消息框的显示更丝滑
             if (r.Ids.Any())
                 await LoadListData();
             //_ = InvokeAsync(dataGrid.ReloadServerData); //内部会StateChange

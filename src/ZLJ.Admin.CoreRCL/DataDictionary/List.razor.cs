@@ -31,7 +31,7 @@ namespace ZLJ.Admin.CoreRCL.DataDictionary
         //}
 
         //[AbpExceptionInterceptor]
-        protected override async Task BtnReLoadClick()
+        protected override async Task BtnClearFilterClick()
         {
             //GetAllInput.Filter.IsStatic = default;
             //GetAllInput.Filter.Permission = default;
@@ -39,7 +39,7 @@ namespace ZLJ.Admin.CoreRCL.DataDictionary
             //GetAllInput.IsOnlyLoadChild = false;
             GetAllInput.IsSysDefine = default;
          
-            await base.BtnReLoadClick();
+            await base.BtnClearFilterClick();
         }
         
       
