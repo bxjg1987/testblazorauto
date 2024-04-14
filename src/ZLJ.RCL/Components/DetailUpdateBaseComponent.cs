@@ -48,15 +48,15 @@ namespace ZLJ.RCL.Components
 #endif
         protected virtual async Task OnFinish(EditContext editContext)
         {
-            await Update();
+            await Save();
         }
 
 #if !DEBUG
         [AbpExceptionInterceptor]
 #endif
-        protected override async Task BtnOkDeleteClick()
+        protected override async Task BtnDeleteClick()
         {
-            await base.BtnOkDeleteClick();
+            await base.BtnDeleteClick();
         }
 #if !DEBUG
         [AbpExceptionInterceptor]

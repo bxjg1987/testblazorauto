@@ -143,10 +143,10 @@ namespace BXJG.Utils.RCL.Components
                 if (output.Ids.Count == 0)
                     ShowFailMessage(msg: $"批量{funName}全部失败！");
                 else
-                     ShowFailMessage(msg: $"批量{funName}部分失败！成功数量：{output.Ids.Count}；失败数量：{output.ErrorMessage.Count}");
+                    ShowFailMessage(msg: $"批量{funName}部分失败！成功数量：{output.Ids.Count}；失败数量：{output.ErrorMessage.Count}");
             }
             else
-                 ShowSuccessMessage(msg: $"批量{funName}全部成功！");
+                ShowSuccessMessage(msg: $"批量{funName}全部成功！");
         }
         #region 列表
         /// <summary>
@@ -194,7 +194,6 @@ namespace BXJG.Utils.RCL.Components
                 }
             }
         }
-
         /// <summary>
         /// 排序规则，格式："field1 aes,field2 desc"
         /// 它本质上是对GetAllInput的读写，由于GetAllInput是或不是分页条件，所以内部做了特殊处理（由于dto是应用层的，所以在这里而不是dto上定义此逻辑）
@@ -228,13 +227,11 @@ namespace BXJG.Utils.RCL.Components
                     sd222.Sorting = "Id";
             }
         }
-
         /// <summary>
         /// 当前列表数据
         /// 通常是当前页的数据
         /// </summary>
         protected virtual List<TEntityDto> Items { get; set; } = new List<TEntityDto>();
-
         /// <summary>
         /// 当前条件下的总数据数量
         /// </summary>
@@ -266,7 +263,6 @@ namespace BXJG.Utils.RCL.Components
                 }
             }
         }
-
         /// <summary>
         /// 父类仅仅需要读，至于是否可写由子类自己决定
         /// </summary>
@@ -275,20 +271,6 @@ namespace BXJG.Utils.RCL.Components
         /// 父类仅仅需要读，至于是否可写由子类自己决定
         /// </summary>
         protected virtual bool IsLoading { get; set; }
-
-        ///// <summary>
-        ///// 刷新列表
-        ///// </summary>
-        ///// <returns></returns>
-        //protected virtual async Task Refresh()
-        //{
-        //    await LoadListData();
-        //    if (SelectedItems != default && SelectedItems is ICollection<TEntityDto> list)
-        //        list.Clear();
-        //    else
-        //        SelectedItems = new List<TEntityDto>() ;
-        //}
-
         /// <summary>
         /// 异步加载列表数据
         /// </summary>
@@ -316,7 +298,7 @@ namespace BXJG.Utils.RCL.Components
                 SelectedItems = new List<TEntityDto>();
 
 
-           
+
 
             StateHasChanged();
 
@@ -389,7 +371,6 @@ namespace BXJG.Utils.RCL.Components
             TotalCount = dtos.TotalCount;
 
         }
-
         /// <summary>
         /// 获取列表时，为其中的每项添加额外的数据
         /// </summary>
@@ -430,9 +411,6 @@ namespace BXJG.Utils.RCL.Components
         /// 条件变化时回调
         /// </summary>
         /// <returns></returns>
-
-
-
         protected virtual void BtnSearchClick()
         {
             //  Console.WriteLine(DateTime.Now.ToString("fff"));
@@ -461,9 +439,6 @@ namespace BXJG.Utils.RCL.Components
         /// <summary>
         /// 条件分页都不变，重新加载当前数据
         /// </summary>
-
-
-
         protected virtual void BtnRefreshClick()
         {
             //if (GetAllInput is IHaveKeywords cd4)
@@ -481,16 +456,11 @@ namespace BXJG.Utils.RCL.Components
             LoadListData();
             //table.ReloadData();
         }
-
-
         /// <summary>
         /// 清空所有条件并重新加载
         /// 若有更多条件，子类应重写此方法清空条件，并执行base.ReLoad()
         /// </summary>
         /// <returns></returns>
-
-
-
         protected virtual void BtnClearFilterClick()
         {
             PageIndex = 1;
@@ -527,77 +497,40 @@ namespace BXJG.Utils.RCL.Components
         /// </summary>
         protected virtual bool ShouldDisableDelete => IsLoading || isDeleting || SelectedItems == default || !SelectedItems.Any();
         /// <summary>
-        /// 是否批量删除的确认框
-        /// </summary>
-        protected bool isShowDeleteConfirm = false;
-        /// <summary>
         /// 是否正在执行批量删除操作
         /// </summary>
         protected bool isDeleting = false;
         /// <summary>
-        /// 显示批量删除的确认框
-        /// </summary>
-        protected virtual void ShowDeleteConfirm()
-        {
-            HideDeleteConfirm();
-            isShowDeleteConfirm = true;
-        }
-        /// <summary>
-        /// 隐藏批量删除的确认框
-        /// </summary>
-        protected virtual void HideDeleteConfirm()
-        {
-            isShowDeleteConfirm = false;
-            foreach (var dto in Items)
-            {
-                dto.ExtensionData.IsShowDeleteConfirmation = false;
-            }
-        }
-        /// <summary>
         /// 批量删除
         /// </summary>
         /// <returns></returns>
-
-
-
-        protected virtual void BtnDeleteClick()
+        protected virtual async Task BtnDeleteClick()
         {
-            Delete();
+           await Delete();
         }
-        protected virtual void Delete()
+        /// <summary>
+        /// 批量删除的核心逻辑
+        /// </summary>
+        /// <returns></returns>
+        protected virtual async Task Delete()
         {
             //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限
-            HideDeleteConfirm();
+            if (isDeleting) return;
             isDeleting = true;
-            StateHasChanged();
 
-            InvokeAsync(async () =>
+
+            try
             {
-                try
-                {
-                    var r = await DeleteCore();
-
-                    isDeleting = false;
-                     BatchOperationMessage(r);//await表示显示因此后才结束，所以这里不要等待
-                    StateHasChanged();//上面多个状态变更后，一次性刷新，所以不要在ShowSuccessMessage去等待
-                    await Task.Delay(200);//这里等下，免得表格加载和消息显示打架
-                    if (r.Ids.Any())
-                         LoadListData();
-                }
-                catch (UserFriendlyException ex)
-                {
-                    ShowFailMessage(ex.Message);
-                }
-                catch (Exception ex)
-                {
-                    ShowFailMessage("内部异常！");
-                }
-                finally
-                {
-                    isDeleting = false;
-                    StateHasChanged();
-                }
-            });
+                var r = await DeleteCore();
+                isDeleting = false;
+                BatchOperationMessage(r);//await表示显示因此后才结束，所以这里不要等待
+                if (r.Ids.Any())
+                    LoadListData();
+            }
+            finally
+            {
+                isDeleting = false;
+            }
         }
         /// <summary>
         /// 批量删除已选择的项的核心逻辑
@@ -614,72 +547,50 @@ namespace BXJG.Utils.RCL.Components
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        protected virtual void BtnDeleteItemClick(TEntityDto item)
+        protected virtual async Task BtnDeleteItemClick(TEntityDto item)
         {
             //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限
             // var curr = dataGrid.Items.Single(c => c.Id!.Equals(input.Id));
-            DeleteItem(item);
+            await DeleteItem(item);
         }
-
         /// <summary>
         /// 删除界面逻辑，通常不需要重写，多个地方需要删除单个项目时通常调用这里
         /// </summary>
         /// <param name="item"></param>
-        protected virtual void DeleteItem(TEntityDto item)
+        protected virtual async Task DeleteItem(TEntityDto item)
         {
             //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限
             // var curr = dataGrid.Items.Single(c => c.Id!.Equals(input.Id));
-            HideDeleteConfirm();
+            if (item.ExtensionData.IsDeleting)
+                return;
             item.ExtensionData.IsDeleting = true;
-            StateHasChanged();
 
             //异步来，便于删除确认框快速隐藏
-            InvokeAsync(async () =>
+
+            try
             {
-                try
-                {
-                    await DeleteItemCore(item);
-                    item.ExtensionData.IsDeleting = false;
+                await DeleteItemCore(item);
+                item.ExtensionData.IsDeleting = false;
 
-                    //全局异常去提示
-                    //ShowSuccessMessage("删除提示", "删除成功！");//await表示显示因此后才结束，所以这里不要等待
+                //全局异常去提示
+                ShowSuccessMessage("删除提示", "删除成功！");
 
-                    StateHasChanged();//上面多个状态变更后，一次性刷新，所以不要在ShowSuccessMessage去等待
-
-                    await Task.Delay(200);//这里等下，免得表格加载和消息显示打架
-                    LoadListData();
-                }
-                catch (UserFriendlyException ex)
-                {
-                    ShowFailMessage(ex.Message);
-                }
-                catch (Exception ex)
-                {
-                    ShowFailMessage("内部异常！");
-                }
-                finally
-                {
-                    item.ExtensionData.IsDeleting = false;
-                    StateHasChanged();
-                }
-            });
+                LoadListData();
+            }
+            finally
+            {
+                item.ExtensionData.IsDeleting = false;
+            }
         }
+        /// <summary>
+        /// 删除单条数据的核心逻辑
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         protected virtual async Task DeleteItemCore(TEntityDto item)
         {
             await AppService.DeleteAsync(new EntityDto<TPrimaryKey>(item.Id));
         }
-        /// <summary>
-        /// 显示删除明细的确认框
-        /// </summary>
-        /// <param name="dto"></param>
-        protected virtual void ShowDeleteConfirm(TEntityDto dto)
-        {
-            HideDeleteConfirm();
-            dto.ExtensionData.IsShowDeleteConfirmation = true;
-        }
         #endregion
-
-
-
     }
 }

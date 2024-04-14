@@ -33,9 +33,9 @@ namespace BXJG.Utils.RCL.Components
                                                         TCreateInput,
                                                         TEditDto,
                                                         TGetAllInput> : BaseComponent
-        where TEntityDto : IGeneralTree<TEntityDto>, IExtendableObj,new()
+        where TEntityDto : IGeneralTree<TEntityDto>, IExtendableObj, new()
         //where TGetAllInput : new()
-        where TEditDto : IHaveParentId<long>,new()
+        where TEditDto : IHaveParentId<long>, new()
         where TAppService : IGeneralTreeBaseAppService<TEntityDto, TCreateInput, TEditDto, TGetAllInput>
     {
         #region 字段和属性
@@ -70,7 +70,7 @@ namespace BXJG.Utils.RCL.Components
         /// <summary>
         /// 查询模型
         /// </summary>
-        protected TEntityDto? dto=new TEntityDto();
+        protected TEntityDto? dto = new TEntityDto();
         /// <summary>
         /// 当前编辑模型
         /// </summary>
@@ -84,7 +84,7 @@ namespace BXJG.Utils.RCL.Components
         ///// 验证消息存储器
         ///// </summary>
         //protected ValidationMessageStore? validationMessageStore;
-     
+
         #endregion
 
         #region 生命周期
@@ -93,7 +93,7 @@ namespace BXJG.Utils.RCL.Components
         /// </summary>
         /// <returns></returns>
 
-        
+
 
         protected override async Task OnInitializedAsync()
         {
@@ -102,7 +102,7 @@ namespace BXJG.Utils.RCL.Components
             //dto = await AppService.GetAsync(new EntityDto<TPrimaryKey>(Id));
             if (isEdit)
             {
-               editDto = new TEditDto();
+                editDto = new TEditDto();
                 //editContext = new EditContext(editDto);
                 await ResetCore();
             }
@@ -189,7 +189,7 @@ namespace BXJG.Utils.RCL.Components
         /// </summary>
         /// <returns></returns>
 
-        
+
 
         protected virtual async Task BtnRefreshClick()
         {
@@ -243,9 +243,6 @@ namespace BXJG.Utils.RCL.Components
         /// 重置
         /// </summary>
         /// <returns></returns>
-
-        
-
         protected virtual async Task BtnResetClick()
         {
             await ResetCore();
@@ -267,7 +264,6 @@ namespace BXJG.Utils.RCL.Components
             {
                 //dto = await AppService.GetAsync(new EntityDto<TPrimaryKey>(Id));
                 await DtoMapToEditDto();
-
             }
             finally
             {
@@ -340,9 +336,6 @@ namespace BXJG.Utils.RCL.Components
         /// 进入编辑模式时执行
         /// </summary>
         /// <returns></returns>
-
-        
-
         protected virtual async Task BtnBeginEditClick()
         {
             await BeginEditCore();
@@ -381,8 +374,6 @@ namespace BXJG.Utils.RCL.Components
 
             editInited = true;
         }
-
-
         /// <summary>
         /// 首次进入编辑模式时初始化表单，如：初始化加载下拉框数据
         /// </summary>
@@ -394,7 +385,6 @@ namespace BXJG.Utils.RCL.Components
             //vms = new ValidationMessageStore(editContext);
             return ValueTask.CompletedTask;
         }
-
         /// <summary>
         /// 是否禁用保存按钮
         /// </summary>
@@ -409,20 +399,21 @@ namespace BXJG.Utils.RCL.Components
         /// 是否正在保存
         /// </summary>
         protected bool isUpdating = false;
-      
+        //绑定到Finish
+        ///// <summary>
+        ///// 保存的核心ui逻辑
+        ///// </summary>
+        ///// <returns></returns>
+        ///// <summary>
+        //protected virtual async Task BtnUpdateClick()
+        //{
+        //    await Update();
+        //}
         /// <summary>
         /// 保存的核心逻辑
         /// </summary>
         /// <returns></returns>
-
-        
-
-      
-        /// <summary>
-        /// 删除的核心逻辑
-        /// </summary>
-        /// <returns></returns>
-        protected virtual async Task Update()
+        protected virtual async Task Save()
         {
             if (isUpdating)
                 return;
@@ -430,27 +421,19 @@ namespace BXJG.Utils.RCL.Components
             isUpdating = true;
             try
             {
-                await UpdateCore();
+                await SaveCore();
+                isUpdating = false;
+                _ = OnUpdated.InvokeAsync(dto);
+                ShowSuccessMessage("修改成功！");
             }
             finally
             {
                 isUpdating = false;
             }
         }
-        protected virtual async Task UpdateCore()
+        protected virtual async Task SaveCore()
         {
-
             dto = await AppService.UpdateAsync(editDto!);
-           ShowSuccessMessage("修改成功！");
-             AfterUpdated();
-
-        }
-        /// <summary>
-        /// 保存后回调
-        /// </summary>
-        protected virtual void AfterUpdated()
-        {
-             OnUpdated.InvokeAsync(dto);
         }
         /// <summary>
         /// 保存后触发的事件
@@ -465,36 +448,14 @@ namespace BXJG.Utils.RCL.Components
         /// </summary>
         protected virtual bool IsShowDelete => deleteIsGranted;
         /// <summary>
-        /// 是否显示删除确认
-        /// </summary>
-        protected bool isShowDeleteConfirm = false;
-        /// <summary>
         /// 是否正在删除
         /// </summary>
         protected bool isDeleting = false;
         /// <summary>
-        /// 点击删除按钮时执行，默认弹出确认框
-        /// 通常绑定到删除按钮，它将显示删除确认，而不是真正删除
-        /// </summary>
-        protected virtual void BtnDeleteClick()
-        {
-            isShowDeleteConfirm = true;
-        }
-        /// <summary>
-        /// 点击删除确认框的取消按钮时执行
-        /// </summary>
-        protected virtual void BtnCancelDelete()
-        {
-            isShowDeleteConfirm = false;
-        }
-        /// <summary>
         /// 点击删除确认按钮时执行
         /// </summary>
         /// <returns></returns>
-
-        
-
-        protected virtual async Task BtnOkDeleteClick()
+        protected virtual async Task BtnDeleteClick()
         {
             await Delete();
         }
@@ -505,51 +466,35 @@ namespace BXJG.Utils.RCL.Components
         protected virtual async Task Delete()
         {
             //没有权限的按钮直接隐藏，况且应用服务还会判断权限兜底的，因此这里无需判断权限
-            isShowDeleteConfirm = false;
             if (isDeleting)
                 return;
             isDeleting = true;
-            StateHasChanged();
             try
             {
-
-                await DeleteCore();
+                var r = await DeleteCore();
+                isDeleting = false;
+                _ = OnDeleted.InvokeAsync(dto);
+                if (r.Ids.Any())
+                {
+                    ShowSuccessMessage(msg: "删除成功！");
+                }
+                else
+                {
+                    ShowFailMessage(title: "删除失败！", r.ErrorMessage.FirstOrDefault()?.Message);
+                }
             }
             finally
             {
                 isDeleting = false;
             }
         }
-        protected virtual async Task DeleteCore()
-        {
-
-            var r = await AppService.DeleteAsync(new() { Ids = new[] {Id } });
-
-            // _ = BatchOperationMessage(r);//这里木有必要await
-            //BatchDeleteMessage(temp);
-            if (r.Ids.Any())
-            {
-             ShowSuccessMessage(msg: "删除成功！");
-                AfterDelete();
-            }
-            else
-            {
-                ShowFailMessage(title: "删除失败！", r.ErrorMessage.FirstOrDefault()?.Message);
-            }
-
-
-            //await AppService.DeleteAsync(new BatchOperationInputLong { Ids = new[] { Id} });
-            //_ = MessageService.Success($"删除成功！");
-            //await AfterDelete();
-
-        }
         /// <summary>
-        /// 删除之后之后回调
+        /// 删除的核心逻辑
         /// </summary>
         /// <returns></returns>
-        protected virtual void AfterDelete()
+        protected virtual async Task<BatchOperationOutputLong> DeleteCore()
         {
-             OnDeleted.InvokeAsync(dto);
+            return await AppService.DeleteAsync(new() { Ids = new[] { Id } });
         }
         /// <summary>
         /// 删除后触发的事件

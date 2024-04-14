@@ -58,8 +58,8 @@
 <SectionContent SectionName=@(FuncName + "-detail-update-btns")>
     @if (IsShowDelete)
     {
-        <Popconfirm Title="确定删除此项吗?" OnConfirm=BtnOkDeleteClick>
-            <Button OnClick="BtnDeleteClick" Loading=isDeleting Danger=true>删除</Button>
+        <Popconfirm Title="确定删除此项吗?" OnConfirm=BtnDeleteClick>
+            <Button  Loading=isDeleting Danger=true>删除</Button>
         </Popconfirm>
     }
     <ButtonGroup>

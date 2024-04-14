@@ -69,16 +69,16 @@ namespace ZLJ.RCL.Components
 #if !DEBUG
         [AbpExceptionInterceptor]
 #endif
-        protected override void BtnDeleteClick()
+        protected override async Task BtnDeleteClick()
         {
-            base.BtnDeleteClick();
+           await base.BtnDeleteClick();
         }
 #if !DEBUG
         [AbpExceptionInterceptor]
 #endif
-        protected override void BtnDeleteItemClick(TEntityDto item)
+        protected override async Task BtnDeleteItemClick(TEntityDto item)
         {
-            base.BtnDeleteItemClick(item);
+          await  base.BtnDeleteItemClick(item);
         }
 #if !DEBUG
         [AbpExceptionInterceptor]

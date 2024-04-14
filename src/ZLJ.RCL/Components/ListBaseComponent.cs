@@ -17,6 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -107,9 +108,9 @@ namespace ZLJ.RCL.Components
 #if !DEBUG
         [AbpExceptionInterceptor]
 #endif
-        protected override void BtnDeleteClick()
+        protected override async Task BtnDeleteClick()
         {
-            base.BtnDeleteClick();
+          await  base.BtnDeleteClick();
         }
 
 
@@ -117,9 +118,9 @@ namespace ZLJ.RCL.Components
 #if !DEBUG
         [AbpExceptionInterceptor]
 #endif
-        protected override void BtnDeleteItemClick(TEntityDto item)
+        protected override  async Task BtnDeleteItemClick(TEntityDto item)
         {
-            base.BtnDeleteItemClick(item);
+          await  base.BtnDeleteItemClick(item);
         }
 
         /// <summary>

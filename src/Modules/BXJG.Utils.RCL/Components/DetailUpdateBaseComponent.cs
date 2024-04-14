@@ -19,7 +19,7 @@ namespace BXJG.Utils.RCL.Components
      */
 
     /// <summary>
-    /// 基于antblazor和abp的通用详情页组件，它包含查看详情页和修改，以及二者之间的切换
+    /// 包含查看详情页和修改，以及二者之间的切换
     /// 新增抽象组件是单独定义的，因为它是对数据从无到有的创建，而详情组件是对以后的数据进行查看和处理
     /// </summary>
     /// <typeparam name="TAppService">应用服务类型</typeparam>
@@ -85,7 +85,7 @@ namespace BXJG.Utils.RCL.Components
         ///// 验证消息存储器
         ///// </summary>
         //protected ValidationMessageStore? validationMessageStore;
-      
+
         #endregion
 
         #region 生命周期
@@ -93,9 +93,6 @@ namespace BXJG.Utils.RCL.Components
         /// 初始化时回调，默认根据id从应用服务接口获取单个数据，然后判断并进入编辑模式
         /// </summary>
         /// <returns></returns>
-
-        
-
         protected override async Task OnInitializedAsync()
         {
             //Abp.ObjectMapping.
@@ -119,7 +116,6 @@ namespace BXJG.Utils.RCL.Components
         #endregion
 
         #region 权限
-
         [Inject]
         public AuthenticationStateProvider AuthStateProvider { get; set; }
         /// <summary>
@@ -198,9 +194,6 @@ namespace BXJG.Utils.RCL.Components
         /// 点击刷新按钮时回调
         /// </summary>
         /// <returns></returns>
-
-        
-
         protected virtual async Task BtnRefreshClick()
         {
             await Refresh();
@@ -251,9 +244,6 @@ namespace BXJG.Utils.RCL.Components
         /// 重置
         /// </summary>
         /// <returns></returns>
-
-        
-
         protected virtual async Task BtnResetClick()
         {
             await ResetCore();
@@ -361,7 +351,7 @@ namespace BXJG.Utils.RCL.Components
         /// </summary>
         /// <returns></returns>
 
-        
+
 
         protected virtual async Task BtnBeginEditClick()
         {
@@ -413,21 +403,20 @@ namespace BXJG.Utils.RCL.Components
             //vms = new ValidationMessageStore(editContext);
             return ValueTask.CompletedTask;
         }
-
        
-        /// <summary>
-        /// 保存的核心逻辑
-        /// </summary>
-        /// <returns></returns>
-
-        
-
-        
+        //绑定到Finish
+        ///// <summary>
+        ///// 绑定到保存按钮的事件上
+        ///// </summary>
+        ///// <returns></returns>
+        //protected virtual async Task BtnUpdateClick() {
+        //    await Update();
+        //}
         /// <summary>
         /// 删除的核心逻辑
         /// </summary>
         /// <returns></returns>
-        protected virtual async Task Update()
+        protected virtual async Task Save()
         {
             if (isUpdating)
                 return;
@@ -435,25 +424,20 @@ namespace BXJG.Utils.RCL.Components
             isUpdating = true;
             try
             {
-                await UpdateCore();
+                await SaveCore();
+                isUpdating = false;
+                _ = OnUpdated.InvokeAsync(dto);
+                ShowSuccessMessage("修改成功！");
             }
             finally
             {
                 isUpdating = false;
             }
         }
-        protected virtual async Task UpdateCore()
+        protected virtual async Task SaveCore()
         {
             dto = await AppService.UpdateAsync(editDto!);
-           ShowSuccessMessage("修改成功！");
-             AfterUpdated();
-        }
-        /// <summary>
-        /// 保存后回调
-        /// </summary>
-        protected virtual void AfterUpdated()
-        {
-            _ = OnUpdated.InvokeAsync(dto);
+          
         }
         /// <summary>
         /// 保存后触发的事件
@@ -468,10 +452,6 @@ namespace BXJG.Utils.RCL.Components
         /// </summary>
         protected virtual bool IsShowDelete => deleteIsGranted;
         /// <summary>
-        /// 是否显示删除确认
-        /// </summary>
-        protected bool isShowDeleteConfirm = false;
-        /// <summary>
         /// 是否正在删除
         /// </summary>
         protected bool isDeleting = false;
@@ -479,65 +459,39 @@ namespace BXJG.Utils.RCL.Components
         /// 点击删除按钮时执行，默认弹出确认框
         /// 通常绑定到删除按钮，它将显示删除确认，而不是真正删除
         /// </summary>
-        protected virtual void BtnDeleteClick()
-        {
-            isShowDeleteConfirm = true;
-        }
-        /// <summary>
-        /// 点击删除确认框的取消按钮时执行
-        /// </summary>
-        protected virtual void BtnCancelDelete()
-        {
-            isShowDeleteConfirm = false;
-        }
-        /// <summary>
-        /// 点击删除确认按钮时执行
-        /// </summary>
-        /// <returns></returns>
-
-        
-
-        protected virtual async Task BtnOkDeleteClick()
+        protected virtual async Task BtnDeleteClick()
         {
             await Delete();
         }
         /// <summary>
-        /// 删除的核心逻辑
+        /// 删除的UI核心逻辑
         /// </summary>
         /// <returns></returns>
         protected virtual async Task Delete()
         {
             //没有权限的按钮直接隐藏，况且应用服务还会判断权限兜底的，因此这里无需判断权限
-            isShowDeleteConfirm = false;
             if (isDeleting)
                 return;
             isDeleting = true;
-            StateHasChanged();
             try
             {
-
                 await DeleteCore();
+                isDeleting = false;
+                ShowSuccessMessage("删除成功！");
+                _ = OnDeleted.InvokeAsync(dto);
             }
             finally
             {
                 isDeleting = false;
             }
         }
-        protected virtual async Task DeleteCore()
-        {
-
-            await AppService.DeleteAsync(new EntityDto<TPrimaryKey>(Id));
-           ShowSuccessMessage("删除成功！");
-          AfterDelete();
-
-        }
         /// <summary>
-        /// 删除之后之后回调
+        /// 删除的核心逻辑
         /// </summary>
         /// <returns></returns>
-        protected virtual void AfterDelete()
+        protected virtual async Task DeleteCore()
         {
-            _ = OnDeleted.InvokeAsync(dto);
+            await AppService.DeleteAsync(new EntityDto<TPrimaryKey>(Id));
         }
         /// <summary>
         /// 删除后触发的事件

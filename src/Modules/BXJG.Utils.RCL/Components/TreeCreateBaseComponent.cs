@@ -65,9 +65,6 @@ namespace BXJG.Utils.RCL.Components
         /// 重置按钮点击时回调，由于事件无法使用ValueTask，所以这里用了Task
         /// </summary>
         /// <returns></returns>
-
-        
-
         public virtual async Task BtnResetClick()
         {
             await Reset();
@@ -106,9 +103,6 @@ namespace BXJG.Utils.RCL.Components
         /// 初始化时，初始化新增模型
         /// </summary>
         /// <returns></returns>
-
-        
-
         protected override async Task OnInitializedAsync()
         {
             await Reset();
@@ -121,11 +115,6 @@ namespace BXJG.Utils.RCL.Components
         /// 正在保存...
         /// </summary>
         protected bool isSaving;
-        
-
-        
-
-       
         /// <summary>
         /// 核心的保存逻辑
         /// </summary>
@@ -134,11 +123,20 @@ namespace BXJG.Utils.RCL.Components
         {
             //木有权限时保存按钮不可点击
             //验证不过时此方法不应该被调用
-            if(isSaving) return;
+            if (isSaving) return;
             isSaving = true;
             try
             {
-                await SaveCore();
+                var r = await SaveCore();
+                isSaving = false;
+                ShowSuccessMessage(msg: "新增成功！");//没必要等待
+                if (saveAndContinue)
+                {
+                    _ = OnAddEnd.InvokeAsync(new SaveResult<TEntityDto> { Dto = r });
+                    await Reset();
+                }
+                else
+                    _ = OnAddEnd.InvokeAsync(new SaveResult<TEntityDto> { Dto = r, End = true });
             }
             finally
             {
@@ -149,28 +147,15 @@ namespace BXJG.Utils.RCL.Components
         /// 保存的核心逻辑
         /// </summary>
         /// <returns>新增任务是否结束</returns>
-        protected virtual async Task SaveCore()
+        protected virtual async Task<TEntityDto> SaveCore()
         {
-            //var yz = await Validate();
-            //if (!yz)
-            //    return;
-            //木有权限时保存按钮不可点击
-            //验证不过时此方法不应该被调用
-            var r = await AppService.CreateAsync(createDto);
-         ShowSuccessMessage(msg: "新增成功！");//没必要等待
-            if (saveAndContinue)
-            {
-                await Reset();
-                _ = OnAddEnd.InvokeAsync(new SaveResult<TEntityDto> { Dto = r });
-            }
-            else
-                _= OnAddEnd.InvokeAsync(new SaveResult<TEntityDto> { Dto = r, End = true });
+            return await AppService.CreateAsync(createDto);
         }
         /// <summary>
         /// 新增成功，且不再继续新增时触发
         /// </summary>
         [Parameter]
         public EventCallback<SaveResult<TEntityDto>> OnAddEnd { get; set; }
-      
+
     }
 }

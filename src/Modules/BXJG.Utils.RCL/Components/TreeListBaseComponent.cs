@@ -427,69 +427,32 @@ namespace BXJG.Utils.RCL.Components
         /// </summary>
         protected bool isDeleting = false;
         /// <summary>
-        /// 显示批量删除的确认框
-        /// </summary>
-        protected virtual void ShowDeleteConfirm()
-        {
-            HideDeleteConfirm();
-            isShowDeleteConfirm = true;
-        }
-        /// <summary>
-        /// 隐藏批量删除的确认框
-        /// </summary>
-        protected virtual void HideDeleteConfirm()
-        {
-            isShowDeleteConfirm = false;
-            foreach (var dto in Items)
-            {
-                dto.ExtensionData.IsShowDeleteConfirmation = false;
-            }
-        }
-        /// <summary>
         /// 批量删除
         /// </summary>
         /// <returns></returns>
-
-
-
-        protected virtual void BtnDeleteClick()
+        protected virtual async Task BtnDeleteClick()
         {
-            Delete();
+          await  Delete();
         }
-        protected virtual void Delete()
+        protected virtual async Task Delete()
         {
             //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限
-            HideDeleteConfirm();
+            if (isDeleting) return;
             isDeleting = true;
-            StateHasChanged();
-
-            InvokeAsync(async () =>
-            {
+          
                 try
                 {
                     var r = await DeleteCore();
 
                     isDeleting = false;
-                    BatchOperationMessage(r);//await表示显示因此后才结束，所以这里不要等待
-                    StateHasChanged();//上面多个状态变更后，一次性刷新，所以不要在ShowSuccessMessage去等待
-                    await Task.Delay(200);//这里等下，免得表格加载和消息显示打架
+                    BatchOperationMessage(r);
                     if (r.Ids.Any())
                         LoadListData();
-                }
-                catch (UserFriendlyException ex)
-                {
-                    ShowFailMessage(ex.Message);
-                }
-                catch (Exception ex)
-                {
-                    ShowFailMessage("内部异常！");
                 }
                 finally
                 {
                     isDeleting = false;
-                    StateHasChanged();
                 }
-            });
         }
         protected virtual Task<BatchOperationOutputLong> DeleteCore()
         {
@@ -504,66 +467,37 @@ namespace BXJG.Utils.RCL.Components
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-
-
-
-        protected virtual void BtnDeleteItemClick(TEntityDto item)
+        protected virtual async Task BtnDeleteItemClick(TEntityDto item)
         {
-            DeleteItem(item);
+          await  DeleteItem(item);
         }
-        protected virtual void DeleteItem(TEntityDto item)
+        protected virtual async Task DeleteItem(TEntityDto item)
         {
             //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限
             // var curr = dataGrid.Items.Single(c => c.Id!.Equals(input.Id));
-            HideDeleteConfirm();
+            if (item.ExtensionData.IsDeleting) return;
             item.ExtensionData.IsDeleting = true;
-            StateHasChanged();
-            //异步来，便于删除确认框快速隐藏
-            InvokeAsync(async () =>
-            {
+           
                 try
                 {
                     await DeleteItemCore(item);
                     item.ExtensionData.IsDeleting = false;
 
                     //Core靠全局异常去提示
-                    //ShowSuccessMessage("删除提示", "删除成功！");//await表示显示因此后才结束，所以这里不要等待
+                    ShowSuccessMessage("删除提示", "删除成功！");
 
-                    StateHasChanged();//上面多个状态变更后，一次性刷新，所以不要在ShowSuccessMessage去等待
-
-                    await Task.Delay(200);//这里等下，免得表格加载和消息显示打架
                     LoadListData();
-                }
-                catch (UserFriendlyException ex)
-                {
-                    ShowFailMessage(ex.Message);
-                }
-                catch (Exception ex) {
-                    ShowFailMessage("内部异常！");
                 }
                 finally
                 {
                     item.ExtensionData.IsDeleting = false;
-                    StateHasChanged();
                 }
-            });
         }
-
-
         protected virtual async Task DeleteItemCore(TEntityDto item)
         {
             var r = await AppService.DeleteAsync(new() { Ids = new[] { item.Id } });
             if (r.Ids.Count != 1)
                 throw new Abp.UI.UserFriendlyException(r.ErrorMessage.First().Message);
-        }
-        /// <summary>
-        /// 显示删除明细的确认框
-        /// </summary>
-        /// <param name="dto"></param>
-        protected virtual void ShowDeleteConfirm(TEntityDto dto)
-        {
-            HideDeleteConfirm();
-            dto.ExtensionData.IsShowDeleteConfirmation = true;
         }
         #endregion
 
