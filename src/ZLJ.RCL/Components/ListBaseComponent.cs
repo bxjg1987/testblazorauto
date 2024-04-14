@@ -64,13 +64,73 @@ namespace ZLJ.RCL.Components
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
     {
-      
+
+        //它不是用例，但因为列表是异步的，这里是核心，所以就把异常加这里吧
+#if !DEBUG
+        [AbpExceptionInterceptor]
+#endif
+        protected override async Task LoadCore()
+        {
+            await base.LoadCore();
+        }
+
+        //各按钮的异常处理还是加上
+
+#if !DEBUG
+        [AbpExceptionInterceptor]
+#endif
+        protected override void BtnRefreshClick()
+        {
+            base.BtnRefreshClick();
+        }
+
+#if !DEBUG
+        [AbpExceptionInterceptor]
+#endif
+        protected override void BtnClearFilterClick()
+        {
+            base.BtnClearFilterClick();
+        }
+
+#if !DEBUG
+        [AbpExceptionInterceptor]
+#endif
+        protected override void BtnSearchClick()
+        {
+            base.BtnSearchClick();
+        }
+
+        //删除也是异步的，加上异常
+
+
+
+#if !DEBUG
+        [AbpExceptionInterceptor]
+#endif
+        protected override void BtnDeleteClick()
+        {
+            base.BtnDeleteClick();
+        }
+
+
+
+#if !DEBUG
+        [AbpExceptionInterceptor]
+#endif
+        protected override void BtnDeleteItemClick(TEntityDto item)
+        {
+            base.BtnDeleteItemClick(item);
+        }
+
         /// <summary>
         /// 对ant表格的引用
         /// </summary>
         protected Table<TEntityDto> table;
 
-        protected virtual async Task OnQuery(QueryModel condition)
+#if !DEBUG
+        [AbpExceptionInterceptor]
+#endif
+        protected virtual void OnQuery(QueryModel condition)
         {
             /*
              * 目前只考虑高级搜索方式，不考虑动态条件
@@ -141,5 +201,54 @@ namespace ZLJ.RCL.Components
             Thread.Sleep(200);
         }
 
+
+
+        #region 生命周期方法增加统一异常处理拦截器
+        /*
+         * 肉夹馍的aop有基于规则的匹配方式，但有点复杂，
+         * 还是决定使用硬编码方式配置，比较稳妥。即 哪里需要就在哪里加 [AbpExceptionInterceptor]
+         * 
+         * 父类加了，子类再加这个特征的话会重复，会比较浪费。但是父类不加，如果子类没重写并加拦截器，会导致拦截器无法执行。
+         * 所以还是决定在抽象中添加，子类可以重写时不调用父类，自己单独加 [AbpExceptionInterceptor]
+         * 最坏的情况是子类重写，且必须调用父类方法时，确实比较浪费，层次不深的话也无所谓了。
+         */
+#if !DEBUG
+        [AbpExceptionInterceptor]
+        public override async Task SetParametersAsync(ParameterView parameters)
+        {
+            await base.SetParametersAsync(parameters);
+        }
+        [AbpExceptionInterceptor]
+        protected override void OnParametersSet()
+        {
+            base.OnParametersSet();
+        }
+        [AbpExceptionInterceptor]
+        protected override async Task OnParametersSetAsync()
+        {
+            await base.OnParametersSetAsync();
+        }
+        [AbpExceptionInterceptor]
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+        }
+        [AbpExceptionInterceptor]
+        protected override async Task OnInitializedAsync()
+        {
+            await base.OnInitializedAsync();
+        }
+        [AbpExceptionInterceptor]
+        protected override void OnAfterRender(bool firstRender)
+        {
+            base.OnAfterRender(firstRender);
+        }
+        [AbpExceptionInterceptor]
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            await base.OnAfterRenderAsync(firstRender);
+        }
+#endif
+        #endregion
     }
 }

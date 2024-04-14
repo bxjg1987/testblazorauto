@@ -2,6 +2,7 @@ using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using Abp.Authorization;
 using Abp.Domain.Entities;
+using Abp.UI;
 using BXJG.Common.Contracts;
 using BXJG.Utils;
 using BXJG.Utils.Application.Share.Dtos;
@@ -124,11 +125,11 @@ namespace BXJG.Utils.RCL.Components
         /// </summary>
         /// <param name="output">批量操作结果</param>
         /// <param name="funName">操作名</param>
-        protected virtual  void BatchOperationMessage(BatchOperationOutputLong output, string funName = "删除")
+        protected virtual void BatchOperationMessage(BatchOperationOutputLong output, string funName = "删除")
         {
             if (output.ErrorMessage.Any())
             {
-                if (output.Ids.Count == output.ErrorMessage.Count)
+                if (output.Ids.Count == 0)
                     ShowFailMessage(msg: $"批量{funName}全部失败！");
                 else
                     ShowFailMessage(msg: $"批量{funName}部分失败！成功数量：{output.Ids.Count}；失败数量：{output.ErrorMessage.Count}");
@@ -258,10 +259,11 @@ namespace BXJG.Utils.RCL.Components
             Items = dtos;
             TotalCount = dtos.Count;
 
-         
+
         }
 
-        async ValueTask Map(IList<TEntityDto> dtos) {
+        async ValueTask Map(IList<TEntityDto> dtos)
+        {
             foreach (var dto in dtos)
             {
                 dynamic dd = new ExpandoObject();
@@ -271,7 +273,7 @@ namespace BXJG.Utils.RCL.Components
                 dto.ExtensionData = dd;
 
                 if (dto.Children != default && dto.Children.Any())
-                   await Map(dto.Children);
+                    await Map(dto.Children);
             }
         }
 
@@ -316,7 +318,7 @@ namespace BXJG.Utils.RCL.Components
         /// </summary>
         /// <returns></returns>
 
-        
+
 
         protected virtual void BtnSearchClick()
         {
@@ -338,7 +340,7 @@ namespace BXJG.Utils.RCL.Components
             //PageSize = 20;
             //Keywords = string.Empty;
             //await OnQuery(table.GetQueryModel());
-             LoadListData();
+            LoadListData();
             // Keywords = keywords;
             // await LoadListData();
             //table.ReloadData();
@@ -347,7 +349,7 @@ namespace BXJG.Utils.RCL.Components
         /// 获取指定节点的子节点的委托，ant table组件实现树时需要此委托
         /// </summary>
         protected virtual Func<TEntityDto, IEnumerable<TEntityDto>> GetTreeChildren { get; } = x => x.Children;
-       
+
 
         /// <summary>
         /// 清空所有条件并重新加载
@@ -355,17 +357,17 @@ namespace BXJG.Utils.RCL.Components
         /// </summary>
         /// <returns></returns>
 
-        
+
 
         protected virtual void BtnClearFilterClick()
         {
-           // table.ResetData();
+            // table.ResetData();
             //PageIndex = 1;
-           // PageSize = 20;
+            // PageSize = 20;
             Keywords = string.Empty;
             //StateHasChanged();
             //await OnQuery(table.GetQueryModel());
-             LoadListData();
+            LoadListData();
             //  await base.Reset();
             // table.ResetData();
             //table.ReloadData(); 远程加载时，根本不会执行这里
@@ -378,7 +380,7 @@ namespace BXJG.Utils.RCL.Components
         /// 条件分页都不变，重新加载当前数据
         /// </summary>
 
-        
+
 
         protected virtual void BtnRefreshClick()
         {
@@ -394,7 +396,7 @@ namespace BXJG.Utils.RCL.Components
             //table.ReloadData(PageIndex);
             // Keywords = keywords;
             //table.cac
-             LoadListData();
+            LoadListData();
             //table.ReloadData();
         }
         ///// <summary>
@@ -448,13 +450,13 @@ namespace BXJG.Utils.RCL.Components
         /// </summary>
         /// <returns></returns>
 
-        
+
 
         protected virtual void BtnDeleteClick()
         {
-             Delete();
+            Delete();
         }
-        protected virtual  void Delete()
+        protected virtual void Delete()
         {
             //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限
             HideDeleteConfirm();
@@ -474,6 +476,14 @@ namespace BXJG.Utils.RCL.Components
                     if (r.Ids.Any())
                         LoadListData();
                 }
+                catch (UserFriendlyException ex)
+                {
+                    ShowFailMessage(ex.Message);
+                }
+                catch (Exception ex)
+                {
+                    ShowFailMessage("内部异常！");
+                }
                 finally
                 {
                     isDeleting = false;
@@ -481,12 +491,12 @@ namespace BXJG.Utils.RCL.Components
                 }
             });
         }
-        protected virtual  Task<BatchOperationOutputLong> DeleteCore()
+        protected virtual Task<BatchOperationOutputLong> DeleteCore()
         {
             //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限
 
-           return AppService.DeleteAsync(new BatchOperationInputLong { Ids = SelectedItems.Select(x => x.Id).ToArray() });
-      
+            return AppService.DeleteAsync(new BatchOperationInputLong { Ids = SelectedItems.Select(x => x.Id).ToArray() });
+
 
         }
         /// <summary>
@@ -495,11 +505,11 @@ namespace BXJG.Utils.RCL.Components
         /// <param name="item"></param>
         /// <returns></returns>
 
-        
+
 
         protected virtual void BtnDeleteItemClick(TEntityDto item)
         {
-             DeleteItem(item);
+            DeleteItem(item);
         }
         protected virtual void DeleteItem(TEntityDto item)
         {
@@ -515,12 +525,21 @@ namespace BXJG.Utils.RCL.Components
                 {
                     await DeleteItemCore(item);
                     item.ExtensionData.IsDeleting = false;
-                    ShowSuccessMessage("删除提示", "删除成功！");//await表示显示因此后才结束，所以这里不要等待
+
+                    //Core靠全局异常去提示
+                    //ShowSuccessMessage("删除提示", "删除成功！");//await表示显示因此后才结束，所以这里不要等待
 
                     StateHasChanged();//上面多个状态变更后，一次性刷新，所以不要在ShowSuccessMessage去等待
 
                     await Task.Delay(200);//这里等下，免得表格加载和消息显示打架
                     LoadListData();
+                }
+                catch (UserFriendlyException ex)
+                {
+                    ShowFailMessage(ex.Message);
+                }
+                catch (Exception ex) {
+                    ShowFailMessage("内部异常！");
                 }
                 finally
                 {
@@ -529,16 +548,13 @@ namespace BXJG.Utils.RCL.Components
                 }
             });
         }
-        protected virtual  async Task DeleteItemCore(TEntityDto item)
-        {
 
-    var r= await AppService.DeleteAsync(new() { Ids = new[] { item.Id } });
+
+        protected virtual async Task DeleteItemCore(TEntityDto item)
+        {
+            var r = await AppService.DeleteAsync(new() { Ids = new[] { item.Id } });
             if (r.Ids.Count != 1)
                 throw new Abp.UI.UserFriendlyException(r.ErrorMessage.First().Message);
-            // _ = BatchOperationMessage(r);//这里木有必要await
-            //BatchDeleteMessage(temp);
-         
-
         }
         /// <summary>
         /// 显示删除明细的确认框

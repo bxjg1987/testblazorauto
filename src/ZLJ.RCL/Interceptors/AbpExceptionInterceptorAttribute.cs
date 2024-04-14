@@ -2,6 +2,7 @@
 using Abp.UI;
 using AntDesign;
 using Castle.Core.Logging;
+using Microsoft.Extensions.Logging;
 using Rougamo;
 using Rougamo.Context;
 using System;
@@ -28,7 +29,7 @@ namespace ZLJ.RCL.Interceptors
     /// </summary>
     public class AbpExceptionInterceptorAttribute : MoAttribute
     {
-        public override AccessFlags Flags => AccessFlags.Method| AccessFlags.Instance;
+        public override AccessFlags Flags =>  AccessFlags.Method| AccessFlags.Instance | AccessFlags.Public| AccessFlags.NonPublic| AccessFlags.InstancePublic| AccessFlags.InstanceNonPublic;
 
         /*
          * 省略访问修饰符标识拦截所有方法
@@ -64,8 +65,8 @@ namespace ZLJ.RCL.Interceptors
 
         public override void OnException(MethodContext context)
         {
-       
-         
+
+            Console.WriteLine("全局异常拦截器执行了...");
 
             var temp = context.Target.GetType().GetProperty("MessageService", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public).GetValue(context.Target);
             var snackbar = temp as IMessageService;
@@ -83,10 +84,10 @@ namespace ZLJ.RCL.Interceptors
                     using var services = IocManager.Instance.CreateScope();
                     //context.Datas.Add(scopedServicesKey, services);
 
-                    var loggerFactory = services.Resolve<ILoggerFactory>();
-                    var logger = loggerFactory.Create(context.TargetType.FullName);
+                    var loggerFactory = services.Resolve<Microsoft.Extensions.Logging.ILoggerFactory>();
+                    var logger = loggerFactory.CreateLogger(context.TargetType.FullName);
                     //  var logger = context.Datas[loggerKey] as ILogger;
-                    logger.Error(@"{context.TargetType.FullName }.{context.Method.Name}" + context.Exception.StackTrace);
+                    logger.LogError(@"{context.TargetType.FullName }.{context.Method.Name}" + context.Exception.StackTrace);
                 }
                 else
                 {

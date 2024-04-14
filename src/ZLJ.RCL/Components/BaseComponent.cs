@@ -42,42 +42,51 @@ namespace ZLJ.RCL.Components
 
 
         #region 生命周期方法增加统一异常处理拦截器
-        //肉夹馍不会拦截子类，但往往子类才是主要逻辑，才是出错的地方，所以父类加这个意义不大
-        //[AbpExceptionInterceptor]
-        //public override async Task SetParametersAsync(ParameterView parameters)
-        //{
-        //   await base.SetParametersAsync(parameters);
-        //}
-        //[AbpExceptionInterceptor]
-        //protected override void OnParametersSet()
-        //{
-        //    base.OnParametersSet();
-        //}
-        //[AbpExceptionInterceptor]
-        //protected override async Task OnParametersSetAsync()
-        //{
-        //    await base.OnParametersSetAsync();
-        //}
-        //[AbpExceptionInterceptor]
-        //protected override void OnInitialized()
-        //{
-        //    base.OnInitialized();
-        //}
-        //[AbpExceptionInterceptor]
-        //protected override async Task OnInitializedAsync()
-        //{
-        //    await base.OnInitializedAsync();
-        //}
-        //[AbpExceptionInterceptor]
-        //protected override void OnAfterRender(bool firstRender)
-        //{
-        //    base.OnAfterRender(firstRender);
-        //}
-        //[AbpExceptionInterceptor]
-        //protected override Task OnAfterRenderAsync(bool firstRender)
-        //{
-        //    return base.OnAfterRenderAsync(firstRender);
-        //}
+        /*
+         * 肉夹馍的aop有基于规则的匹配方式，但有点复杂，
+         * 还是决定使用硬编码方式配置，比较稳妥。即 哪里需要就在哪里加 [AbpExceptionInterceptor]
+         * 
+         * 父类加了，子类再加这个特征的话会重复，会比较浪费。但是父类不加，如果子类没重写并加拦截器，会导致拦截器无法执行。
+         * 所以还是决定在抽象中添加，子类可以重写时不调用父类，自己单独加 [AbpExceptionInterceptor]
+         * 最坏的情况是子类重写，且必须调用父类方法时，确实比较浪费，层次不深的话也无所谓了。
+         */
+#if !DEBUG
+        [AbpExceptionInterceptor]
+        public override async Task SetParametersAsync(ParameterView parameters)
+        {
+            await base.SetParametersAsync(parameters);
+        }
+        [AbpExceptionInterceptor]
+        protected override void OnParametersSet()
+        {
+            base.OnParametersSet();
+        }
+        [AbpExceptionInterceptor]
+        protected override async Task OnParametersSetAsync()
+        {
+            await base.OnParametersSetAsync();
+        }
+        [AbpExceptionInterceptor]
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+        }
+        [AbpExceptionInterceptor]
+        protected override async Task OnInitializedAsync()
+        {
+            await base.OnInitializedAsync();
+        }
+        [AbpExceptionInterceptor]
+        protected override void OnAfterRender(bool firstRender)
+        {
+            base.OnAfterRender(firstRender);
+        }
+        [AbpExceptionInterceptor]
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            await base.OnAfterRenderAsync(firstRender);
+        }
+#endif
         #endregion
     }
 }

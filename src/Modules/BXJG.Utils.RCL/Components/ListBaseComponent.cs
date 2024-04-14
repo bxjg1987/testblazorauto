@@ -3,6 +3,7 @@ using Abp.Application.Services.Dto;
 using Abp.Authorization;
 using Abp.Domain.Entities;
 using Abp.Extensions;
+using Abp.UI;
 using BXJG.Common.Contracts;
 using BXJG.Utils;
 using BXJG.Utils.Application.Share;
@@ -139,8 +140,8 @@ namespace BXJG.Utils.RCL.Components
         {
             if (output.ErrorMessage.Any())
             {
-                if (output.Ids.Count == output.ErrorMessage.Count)
-                     ShowFailMessage(msg: $"批量{funName}全部失败！");
+                if (output.Ids.Count == 0)
+                    ShowFailMessage(msg: $"批量{funName}全部失败！");
                 else
                      ShowFailMessage(msg: $"批量{funName}部分失败！成功数量：{output.Ids.Count}；失败数量：{output.ErrorMessage.Count}");
             }
@@ -583,6 +584,14 @@ namespace BXJG.Utils.RCL.Components
                     if (r.Ids.Any())
                          LoadListData();
                 }
+                catch (UserFriendlyException ex)
+                {
+                    ShowFailMessage(ex.Message);
+                }
+                catch (Exception ex)
+                {
+                    ShowFailMessage("内部异常！");
+                }
                 finally
                 {
                     isDeleting = false;
@@ -631,12 +640,22 @@ namespace BXJG.Utils.RCL.Components
                 {
                     await DeleteItemCore(item);
                     item.ExtensionData.IsDeleting = false;
-                    ShowSuccessMessage("删除提示", "删除成功！");//await表示显示因此后才结束，所以这里不要等待
+
+                    //全局异常去提示
+                    //ShowSuccessMessage("删除提示", "删除成功！");//await表示显示因此后才结束，所以这里不要等待
 
                     StateHasChanged();//上面多个状态变更后，一次性刷新，所以不要在ShowSuccessMessage去等待
 
                     await Task.Delay(200);//这里等下，免得表格加载和消息显示打架
                     LoadListData();
+                }
+                catch (UserFriendlyException ex)
+                {
+                    ShowFailMessage(ex.Message);
+                }
+                catch (Exception ex)
+                {
+                    ShowFailMessage("内部异常！");
                 }
                 finally
                 {
