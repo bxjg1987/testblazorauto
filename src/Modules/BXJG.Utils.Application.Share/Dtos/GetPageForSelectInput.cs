@@ -6,11 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Utils.Application.Share
+namespace BXJG.Utils.Application.Share.Dtos
 {
     /// <summary>
     /// 将信息作为下拉框数据选择时查询的输入模型
-    /// 非分页版本参考<see cref="Common.Contracts.GetForSelectInput"/>
+    /// 非分页版本参考<see cref="GetForSelectInput"/>
     /// </summary>
     public class GetPageForSelectInput : GetForSelectInput, IPagedAndSortedResultRequest
     {

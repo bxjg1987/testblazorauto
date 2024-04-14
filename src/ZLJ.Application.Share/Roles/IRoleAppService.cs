@@ -6,6 +6,7 @@ using Abp.Application.Services.Dto;
 using BXJG.Utils;
 
 using BXJG.Utils.Application.Share;
+using BXJG.Utils.Application.Share.Dtos;
 
 namespace ZLJ.Application.Share.Roles
 {

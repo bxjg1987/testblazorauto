@@ -6,6 +6,7 @@ using Abp.Extensions;
 using BXJG.Common.Contracts;
 using BXJG.Utils;
 using BXJG.Utils.Application.Share;
+using BXJG.Utils.Application.Share.Dtos;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;

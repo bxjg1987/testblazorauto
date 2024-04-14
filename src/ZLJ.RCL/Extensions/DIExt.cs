@@ -7,11 +7,12 @@ using Abp.Runtime.Session;
 using BXJG.Common.Http;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using ZLJ.Application.Common.Share.Session;
 using Abp.ObjectMapping;
 using Abp.AutoMapper;
 using BXJG.Utils.RCL;
 using BXJG.Utils.RCL.Abps;
+using BXJG.Utils.RCL.Helpers;
+using BXJG.Utils.Application.Share.Session;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -24,32 +25,10 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IServiceCollection AddZLJRCL(this IServiceCollection services)
         {
-            services.AddCommonRCL(s =>
-                    {
-                        var fw = s.GetRequiredService<AppContainer>();
-                        if (fw.AbpUserConfiguration != null && fw.AbpUserConfiguration.Auth != default)
-                        {
-                            //Console.WriteLine(JsonConvert.SerializeObject(fw.AbpUserConfiguration.Auth));
-                            return fw.AbpUserConfiguration.Auth.GrantedPermissions.Keys;
-                        }
-                        return [];
-                    })
-                    .AddAntDesign()
-                    .AddCascadingAuthenticationState()
-                    .AddTransient<ZLJ.RCL.Files.Helper>()
-                    //.AddZLJBlazorClient()
-                    .AddSingleton(AppContainer.App);
-            services.TryAddTransient<IAbpSession, ClientAbpSession>();
-            //services.TryAddSingleton<IPermissionChecker, ClientPermissionChecker>();
-            services.TryAddTransient<ISettingManager, ClientSettingManager>();
-            services.TryAddTransient<IUserNavigationManager, ClientNavigationManager>();
-            services.TryAddTransient<IFeatureChecker, ClientFeatureChecker>();
-            services.TryAddTransient<ISessionAppService, SessionAppService>();
-            services.TryAddSingleton<IObjectMapper, AutoMapperObjectMapper>();
-            services.AddAutoMapper( typeof(AppContainer));
+            
             //不好实现，所以不要使用多语言
             //services.TryAddSingleton<ILocalizationManager, NullLocalizationManager>();
-            return services;
+            return services.AddAntDesign().UseBXJGUtilsRCL();
         }
         ///// <summary>
         ///// 本项目，所有应用，前后端都要注册的

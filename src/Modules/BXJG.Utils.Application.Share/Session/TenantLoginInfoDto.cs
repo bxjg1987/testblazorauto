@@ -1,9 +1,9 @@
 ﻿using Abp.Application.Services.Dto;
 
 
-namespace ZLJ.Application.Common.Share.Session
+namespace BXJG.Utils.Application.Share.Session
 {
-   // [AutoMapFrom(typeof(Tenant))]
+    // [AutoMapFrom(typeof(Tenant))]
     public class TenantLoginInfoDto : EntityDto
     {
         public string TenancyName { get; set; }

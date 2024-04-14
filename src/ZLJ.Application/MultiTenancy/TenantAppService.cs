@@ -16,8 +16,8 @@ using ZLJ.Core.Editions;
 using Microsoft.AspNetCore.Identity;
 using ZLJ.Core.MultiTenancy;
 using ZLJ.Application.Share.MultiTenancy;
-using BXJG.Utils.Application.Share;
 using ZLJ.Application.Share.Authorization.Permissions;
+using BXJG.Utils.Application.Share.Dtos;
 
 namespace ZLJ.Application.Admin.MultiTenancy
 {

@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Abp.Auditing;
 using Abp.Runtime.Session;
-using ZLJ.Application.Common.Share.Session;
+using BXJG.Utils.Application.Share.Session;
 
 namespace ZLJ.Application.Common.Sessions
 {

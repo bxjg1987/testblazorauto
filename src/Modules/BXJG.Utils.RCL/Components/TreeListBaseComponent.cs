@@ -4,7 +4,7 @@ using Abp.Authorization;
 using Abp.Domain.Entities;
 using BXJG.Common.Contracts;
 using BXJG.Utils;
-using BXJG.Utils.Application.Share;
+using BXJG.Utils.Application.Share.Dtos;
 using BXJG.Utils.Application.Share.GeneralTree;
 using Castle.MicroKernel.Registration;
 using Microsoft.AspNetCore.Components;

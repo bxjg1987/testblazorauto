@@ -1,10 +1,10 @@
-﻿using BXJG.Utils.RCL;
+﻿using BXJG.Utils.Application.Share.Session;
+using BXJG.Utils.RCL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ZLJ.Application.Common.Share.Session;
 
 namespace BXJG.Utils.RCL.Abps
 {

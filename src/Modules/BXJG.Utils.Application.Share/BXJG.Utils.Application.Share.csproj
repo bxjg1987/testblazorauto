@@ -10,6 +10,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DisplayNameValue.cs" />
+    <Compile Remove="Dtos\IHaveFilter.cs" />
+    <Compile Remove="Dtos\Input.cs" />
+    <Compile Remove="Files\AttachmentDto.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Abp" Version="9.1.3" />
   </ItemGroup>
 

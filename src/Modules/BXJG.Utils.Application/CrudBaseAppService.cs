@@ -11,8 +11,7 @@ using Abp.UI;
 using BXJG.Common;
 using BXJG.Common.Contracts;
 using BXJG.Utils.Application.Share;
-
-
+using BXJG.Utils.Application.Share.Dtos;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

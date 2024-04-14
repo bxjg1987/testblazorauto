@@ -1,4 +1,4 @@
-﻿namespace ZLJ.Application.Common.Share.Session
+﻿namespace BXJG.Utils.Application.Share.Session
 {
     public class GetCurrentLoginInformationsOutput
     {

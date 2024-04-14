@@ -1,11 +1,11 @@
 ﻿using Abp.Application.Services;
 using Abp.Web.Models.AbpUserConfiguration;
+using BXJG.Utils.Application.Share.Session;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ZLJ.Application.Common.Share.Session;
 
 namespace ZLJ.Application.Common.ClientProxy
 {

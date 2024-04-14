@@ -1,7 +1,7 @@
 ﻿using Abp.Application.Services.Dto;
 
 
-namespace ZLJ.Application.Common.Share.Session
+namespace BXJG.Utils.Application.Share.Session
 {
 
     public class UserLoginInfoDto : EntityDto<long>

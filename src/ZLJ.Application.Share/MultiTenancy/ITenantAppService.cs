@@ -1,5 +1,5 @@
 ﻿using Abp.Application.Services;
-using BXJG.Utils.Application.Share;
+using BXJG.Utils.Application.Share.Dtos;
 
 namespace ZLJ.Application.Share.MultiTenancy
 {

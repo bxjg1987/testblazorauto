@@ -23,6 +23,7 @@ using Abp.Reflection.Extensions;
 
 using BXJG.Utils.Application.Share;
 using Abp.Threading;
+using BXJG.Utils.Application.Share.Dtos;
 
 namespace BXJG.Utils.Application
 {

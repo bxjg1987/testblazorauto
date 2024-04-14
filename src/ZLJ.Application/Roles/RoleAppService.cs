@@ -21,10 +21,10 @@ using Abp.Domain.Uow;
 using ZLJ.Core.Authorization.Roles;
 using ZLJ.Core.Authorization.Users;
 using ZLJ.Application.Admin.Authorization.Permissions;
-using BXJG.Utils.Application.Share;
 using ZLJ.Application.Share.Authorization.Permissions;
 using ZLJ.Application.Share.Roles;
 using ZLJ.Application.Common.Share.OU;
+using BXJG.Utils.Application.Share.Dtos;
 
 namespace ZLJ.Application.Admin.Roles
 {

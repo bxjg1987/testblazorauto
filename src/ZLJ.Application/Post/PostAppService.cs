@@ -4,7 +4,7 @@
 using Abp.IdentityFramework;
 using Abp.Organizations;
 using Abp.Zero.Configuration;
-using BXJG.Utils.Application.Share;
+using BXJG.Utils.Application.Share.Dtos;
 using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 using ZLJ.Application.Admin.Authorization.Permissions;

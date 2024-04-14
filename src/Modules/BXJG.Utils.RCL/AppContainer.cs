@@ -1,5 +1,5 @@
 ﻿using Abp.Web.Models.AbpUserConfiguration;
-using ZLJ.Application.Common.Share.Session;
+using BXJG.Utils.Application.Share.Session;
 
 namespace BXJG.Utils.RCL
 {

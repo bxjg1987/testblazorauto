@@ -1,7 +1,4 @@
-﻿
-
-
-using BXJG.Utils.Application.Share;
+﻿using BXJG.Utils.Application.Share.Dtos;
 using ZLJ.Application.Common.Share;
 
 namespace ZLJ.Application.Share.Post

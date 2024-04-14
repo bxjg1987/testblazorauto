@@ -7,7 +7,7 @@ using Abp.Application.Services;
 using Abp.Auditing;
 using Abp.Runtime.Session;
 
-namespace ZLJ.Application.Common.Share.Session
+namespace BXJG.Utils.Application.Share.Session
 {
     /// <summary>
     /// 登陆时获取全局应用程序信息和当前登陆用户信息

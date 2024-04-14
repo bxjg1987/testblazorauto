@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Common.Contracts
+namespace BXJG.Common.Contracts;
+
+public interface IHaveKeywords
 {
-    public interface IHaveKeywords
-    {
-        string Keywords { get; set; }
-    }
+    string Keywords { get; set; }
 }

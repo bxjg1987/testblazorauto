@@ -6,12 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Utils.Application.Share
+namespace BXJG.Utils.Application.Share.Dtos
 {
-    public interface IHaveFilter
-    {
-        object Filter { get; set; }
-    }
     /// <summary>
     /// 获取排序并分页的列表时的输入模型
     /// </summary>
@@ -22,7 +18,7 @@ namespace BXJG.Utils.Application.Share
 
         public virtual TFilter Filter { get; set; } = new TFilter();
         object IHaveFilter.Filter { get => Filter; set => Filter = value as TFilter; }
-      
+
         [Range(1, int.MaxValue)]
         public override int MaxResultCount { get; set; } = 20;
         // object IHaveFilter.Filter => this.Filter;

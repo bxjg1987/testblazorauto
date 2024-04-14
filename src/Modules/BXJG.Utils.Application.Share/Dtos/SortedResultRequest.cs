@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Utils.Application.Share
+namespace BXJG.Utils.Application.Share.Dtos
 {
     /// <summary>
     /// 获取排序列表时的输入模型

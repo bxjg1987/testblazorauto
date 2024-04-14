@@ -8,15 +8,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace ZLJ.RCL.Files
+namespace BXJG.Utils.RCL.Helpers
 {
     //由于是前后端共用的，即便是在后端，也不能使用abp的依赖注入特征
-    public class Helper //: ITransientDependency
+    public class FileHelper //: ITransientDependency
     {
         IConfiguration Configuration;
-        IAccessTokenProvider  accessTokenProvider;
+        IAccessTokenProvider accessTokenProvider;
 
-        public Helper(IConfiguration configuration, IAccessTokenProvider accessTokenProvider)
+        public FileHelper(IConfiguration configuration, IAccessTokenProvider accessTokenProvider)
         {
             Configuration = configuration;
             this.accessTokenProvider = accessTokenProvider;

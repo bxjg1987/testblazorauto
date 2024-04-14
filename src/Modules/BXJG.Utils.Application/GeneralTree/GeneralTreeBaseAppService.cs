@@ -30,9 +30,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Components.Forms;
 using BXJG.Common;
 using BXJG.Utils.Application.Share.GeneralTree;
-using BXJG.Utils.Application.Share;
 using BXJG.Utils.GeneralTree;
 using BXJG.Common.Contracts;
+using BXJG.Utils.Application.Share.Dtos;
 
 namespace BXJG.Utils.Application.GeneralTree
 {
