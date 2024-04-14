@@ -70,11 +70,6 @@ namespace ZLJ.RCL.Components
         /// </summary>
         protected Table<TEntityDto> table;
 
-
-
-#if !DEBUG
-        [AbpExceptionInterceptor]
-#endif
         protected virtual async Task OnQuery(QueryModel condition)
         {
             /*

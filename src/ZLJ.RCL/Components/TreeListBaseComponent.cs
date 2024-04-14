@@ -64,15 +64,12 @@ namespace ZLJ.RCL.Components
         /// 对ant表格的引用
         /// </summary>
         protected Table<TEntityDto> table;
-      
+       
         /// <summary>
         /// 将ant table条件转换为TGetAllInput后加载数据
         /// </summary>
         /// <param name="condition"></param>
         /// <returns></returns>
-#if !DEBUG
-        [AbpExceptionInterceptor]
-#endif
         protected virtual async Task OnQuery(QueryModel condition)
         {
             /*

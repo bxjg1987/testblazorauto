@@ -92,9 +92,9 @@ namespace BXJG.Utils.RCL.Components
         /// 初始化时回调，默认根据id从应用服务接口获取单个数据，然后判断并进入编辑模式
         /// </summary>
         /// <returns></returns>
-#if !DEBUG
-        [AbpExceptionInterceptor]
-#endif
+
+        
+
         protected override async Task OnInitializedAsync()
         {
             //Abp.ObjectMapping.
@@ -188,9 +188,9 @@ namespace BXJG.Utils.RCL.Components
         /// 点击刷新按钮时回调
         /// </summary>
         /// <returns></returns>
-#if !DEBUG
-        [AbpExceptionInterceptor]
-#endif
+
+        
+
         protected virtual async Task BtnRefreshClick()
         {
             await Refresh();
@@ -243,9 +243,9 @@ namespace BXJG.Utils.RCL.Components
         /// 重置
         /// </summary>
         /// <returns></returns>
-#if !DEBUG
-        [AbpExceptionInterceptor]
-#endif
+
+        
+
         protected virtual async Task BtnResetClick()
         {
             await ResetCore();
@@ -340,9 +340,9 @@ namespace BXJG.Utils.RCL.Components
         /// 进入编辑模式时执行
         /// </summary>
         /// <returns></returns>
-#if !DEBUG
-        [AbpExceptionInterceptor]
-#endif
+
+        
+
         protected virtual async Task BtnBeginEditClick()
         {
             await BeginEditCore();
@@ -414,13 +414,10 @@ namespace BXJG.Utils.RCL.Components
         /// 保存的核心逻辑
         /// </summary>
         /// <returns></returns>
-#if !DEBUG
-        [AbpExceptionInterceptor]
-#endif
-        protected virtual async Task OnFinish(EditContext editContext)
-        {
-            await Update();
-        }
+
+        
+
+      
         /// <summary>
         /// 删除的核心逻辑
         /// </summary>
@@ -494,9 +491,9 @@ namespace BXJG.Utils.RCL.Components
         /// 点击删除确认按钮时执行
         /// </summary>
         /// <returns></returns>
-#if !DEBUG
-        [AbpExceptionInterceptor]
-#endif
+
+        
+
         protected virtual async Task BtnOkDeleteClick()
         {
             await Delete();
@@ -512,6 +509,7 @@ namespace BXJG.Utils.RCL.Components
             if (isDeleting)
                 return;
             isDeleting = true;
+            StateHasChanged();
             try
             {
 

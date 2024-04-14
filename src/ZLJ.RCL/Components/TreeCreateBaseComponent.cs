@@ -42,7 +42,10 @@ namespace ZLJ.RCL.Components
         where TAppService : IGeneralTreeBaseAppService<TEntityDto, TCreateInput, TEditDto, TGetAllInput>
         where TCreateInput : IHaveParentId<long>, new()
     {
-       
+        protected virtual async Task OnFinish(EditContext editContext)
+        {
+            await Save();
+        }
         protected virtual async Task BtnSaveClick()
         {
             //没有权限的按钮直接隐藏，况且应用服务还会判断权限兜底的，因此这里无需判断权限

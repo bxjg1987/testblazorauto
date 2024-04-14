@@ -65,9 +65,9 @@ namespace BXJG.Utils.RCL.Components
         /// 重置按钮点击时回调，由于事件无法使用ValueTask，所以这里用了Task
         /// </summary>
         /// <returns></returns>
-#if !DEBUG
-        [AbpExceptionInterceptor]
-#endif
+
+        
+
         public virtual async Task BtnResetClick()
         {
             await Reset();
@@ -106,9 +106,9 @@ namespace BXJG.Utils.RCL.Components
         /// 初始化时，初始化新增模型
         /// </summary>
         /// <returns></returns>
-#if !DEBUG
-        [AbpExceptionInterceptor]
-#endif
+
+        
+
         protected override async Task OnInitializedAsync()
         {
             await Reset();
@@ -122,13 +122,10 @@ namespace BXJG.Utils.RCL.Components
         /// </summary>
         protected bool isSaving;
         
-#if !DEBUG
-        [AbpExceptionInterceptor]
-#endif
-        protected virtual async Task OnFinish(EditContext editContext)
-        {
-            await Save();
-        }
+
+        
+
+       
         /// <summary>
         /// 核心的保存逻辑
         /// </summary>

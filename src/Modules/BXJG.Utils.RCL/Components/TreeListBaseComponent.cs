@@ -339,9 +339,9 @@ namespace BXJG.Utils.RCL.Components
         /// 条件变化时回调
         /// </summary>
         /// <returns></returns>
-#if !DEBUG
-        [AbpExceptionInterceptor]
-#endif
+
+        
+
         protected virtual async Task BtnSearchClick()
         {
             //Console.WriteLine(DateTime.Now.ToString("fff"));
@@ -378,9 +378,9 @@ namespace BXJG.Utils.RCL.Components
         /// 若有更多条件，子类应重写此方法清空条件，并执行base.ReLoad()
         /// </summary>
         /// <returns></returns>
-#if !DEBUG
-        [AbpExceptionInterceptor]
-#endif
+
+        
+
         protected virtual async Task BtnClearFilterClick()
         {
            // table.ResetData();
@@ -401,9 +401,9 @@ namespace BXJG.Utils.RCL.Components
         /// 绑定到刷新按钮的点击事件
         /// 条件分页都不变，重新加载当前数据
         /// </summary>
-#if !DEBUG
-        [AbpExceptionInterceptor]
-#endif
+
+        
+
         protected virtual async Task BtnRefreshClick()
         {
             //if (GetAllInput is IHaveKeywords cd4)
@@ -471,9 +471,9 @@ namespace BXJG.Utils.RCL.Components
         /// 批量删除
         /// </summary>
         /// <returns></returns>
-#if !DEBUG
-        [AbpExceptionInterceptor]
-#endif
+
+        
+
         protected virtual async Task BtnDeleteClick()
         {
             await Delete();
@@ -483,6 +483,7 @@ namespace BXJG.Utils.RCL.Components
             //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限
             HideDeleteConfirm();
             isDeleting = true;
+            StateHasChanged();
             try
             {
                 await DeleteCore();
@@ -510,9 +511,9 @@ namespace BXJG.Utils.RCL.Components
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-#if !DEBUG
-        [AbpExceptionInterceptor]
-#endif
+
+        
+
         protected virtual async Task BtnDeleteItemClick(TEntityDto item)
         {
             await DeleteItem(item);
@@ -523,6 +524,7 @@ namespace BXJG.Utils.RCL.Components
             // var curr = dataGrid.Items.Single(c => c.Id!.Equals(input.Id));
             HideDeleteConfirm();
             item.ExtensionData.IsDeleting = true;
+            StateHasChanged();
             try
             {
                 await DeleteItemCore(item);

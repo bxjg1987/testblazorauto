@@ -9,7 +9,6 @@ using BXJG.Common.Extensions;
 using ZLJ.Application.Common.ClientProxy;
 using Abp.Application.Navigation;
 using Microsoft.Extensions.DependencyInjection;
-using ZLJ.Application.Common.ClientProxy.Http;
 using Abp.Configuration;
 using ZLJ.Application.Common.Share.OU;
 using BXJG.Utils.Application.Share.GeneralTree;
@@ -29,8 +28,8 @@ namespace ZLJ.Application.Common.ClientProxy.Extensions
             if (act == default)
                 act = hc => { };
 
-            services.AddTransient<AbpWraperDelegatHandler>();
-            var b = services.AddHttpClient(Consts.ZLJ_ADMIN_HTTP_CLIENT_NAME, act).AddHttpMessageHandler<AbpWraperDelegatHandler>().AddHttpMessageHandler<AccessTokenHandler>();
+            //services.AddTransient<AbpWraperDelegatHandler>();
+            var b = services.AddHttpClient(Consts.ZLJ_ADMIN_HTTP_CLIENT_NAME, act).AddBXJGUtilsMessageHandler();
 
 
             services.AddTransient<AbpUserConfigurationService>();

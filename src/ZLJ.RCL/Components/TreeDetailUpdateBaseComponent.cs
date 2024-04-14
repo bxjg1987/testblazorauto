@@ -42,7 +42,10 @@ namespace ZLJ.RCL.Components
         where TEditDto : IHaveParentId<long>,new()
         where TAppService : IGeneralTreeBaseAppService<TEntityDto, TCreateInput, TEditDto, TGetAllInput>
     {
-       
+        protected virtual async Task OnFinish(EditContext editContext)
+        {
+            await Update();
+        }
         /// <summary>
         /// 表单引用
         /// </summary>
@@ -57,6 +60,7 @@ namespace ZLJ.RCL.Components
             //没有权限的按钮直接隐藏，况且应用服务还会判断权限兜底的，因此这里无需判断权限
             frm.Submit();
         }
+       
         //await消息显示时，好像会等到消息因此时才结束，没严格测试
         //不过测试发现消息异步显示，并等待200毫秒，消息提示更丝滑
         //

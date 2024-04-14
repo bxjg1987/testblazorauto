@@ -21,7 +21,7 @@
             {
                 <Popconfirm Title="确定删除已选择的项吗?"
                             OnConfirm="BtnDeleteClick">
-                    <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Clear" Danger="true" Disabled="@ShouldDisableDelete">删除</Button>
+                    <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Clear" Loading=isDeleting Danger="true" Disabled="@ShouldDisableDelete">删除</Button>
                 </Popconfirm>
             }
             <Button OnClick="AddRandomData" Disabled=sj>新增一堆随机数据</Button>
@@ -87,7 +87,7 @@
                 {
                     <Popconfirm Title="确定删除此项吗?"
                                 OnConfirm="()=>BtnDeleteItemClick(context)">
-                        <Button Size="@ButtonSize.Small" Danger="true">删除</Button>
+                        <Button Size="@ButtonSize.Small" Danger="true" Loading=@context.ExtensionData.IsDeleting>删除</Button>
                     </Popconfirm>
                 }
             </ButtonGroup>

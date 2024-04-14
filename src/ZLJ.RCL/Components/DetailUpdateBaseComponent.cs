@@ -43,7 +43,10 @@ namespace ZLJ.RCL.Components
         where TUpdateInput : IEntityDto<TPrimaryKey>, new()
         where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
     {
-       
+        protected virtual async Task OnFinish(EditContext editContext)
+        {
+            await Update();
+        }
         /// <summary>
         /// 表单引用
         /// </summary>
@@ -66,7 +69,7 @@ namespace ZLJ.RCL.Components
         //await消息显示时，好像会等到消息因此时才结束，没严格测试
         //不过测试发现消息异步显示，并等待200毫秒，消息提示更丝滑
         //
-
+       
         protected override async ValueTask ShowFailMessage(string title = "操作提示", string msg = "操作失败！")
         {
             _ = MessageService.Error(msg);
