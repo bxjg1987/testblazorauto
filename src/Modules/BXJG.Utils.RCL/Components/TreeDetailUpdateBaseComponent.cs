@@ -423,8 +423,14 @@ namespace BXJG.Utils.RCL.Components
             {
                 await SaveCore();
                 isUpdating = false;
-                _ = OnUpdated.InvokeAsync(dto);
-                ShowSuccessMessage("修改成功！");
+                //后续逻辑都是辅助性的，因此放到异步中，加快主操作速度
+                _ = InvokeAsync(async () => {
+
+                  await  ShowSuccessMessage("修改成功！");
+                    await OnUpdated.InvokeAsync(dto);
+                });
+
+
             }
             finally
             {
@@ -473,15 +479,22 @@ namespace BXJG.Utils.RCL.Components
             {
                 var r = await DeleteCore();
                 isDeleting = false;
-                _ = OnDeleted.InvokeAsync(dto);
-                if (r.Ids.Any())
-                {
-                    ShowSuccessMessage(msg: "删除成功！");
-                }
-                else
-                {
-                    ShowFailMessage(title: "删除失败！", r.ErrorMessage.FirstOrDefault()?.Message);
-                }
+
+                //后续逻辑都是辅助性的，因此放到异步中，加快主操作速度
+                _ = InvokeAsync(async () => {
+                    if (r.Ids.Any())
+                    {
+                      await  ShowSuccessMessage(msg: "删除成功！");
+                    }
+                    else
+                    {
+                        ShowFailMessage(title: "删除失败！", r.ErrorMessage.FirstOrDefault()?.Message);
+                    }
+                    await OnDeleted.InvokeAsync(dto);
+                });
+
+
+               
             }
             finally
             {

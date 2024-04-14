@@ -403,7 +403,7 @@ namespace BXJG.Utils.RCL.Components
             //vms = new ValidationMessageStore(editContext);
             return ValueTask.CompletedTask;
         }
-       
+
         //绑定到Finish
         ///// <summary>
         ///// 绑定到保存按钮的事件上
@@ -426,8 +426,14 @@ namespace BXJG.Utils.RCL.Components
             {
                 await SaveCore();
                 isUpdating = false;
-                _ = OnUpdated.InvokeAsync(dto);
-                ShowSuccessMessage("修改成功！");
+                //后续逻辑都是辅助性的，因此放到异步中，加快主操作速度
+                _ = InvokeAsync(async () => {
+                   await ShowSuccessMessage("修改成功！");
+                    await OnUpdated.InvokeAsync(dto);
+                });
+
+
+             
             }
             finally
             {
@@ -437,7 +443,7 @@ namespace BXJG.Utils.RCL.Components
         protected virtual async Task SaveCore()
         {
             dto = await AppService.UpdateAsync(editDto!);
-          
+
         }
         /// <summary>
         /// 保存后触发的事件
@@ -477,8 +483,14 @@ namespace BXJG.Utils.RCL.Components
             {
                 await DeleteCore();
                 isDeleting = false;
-                ShowSuccessMessage("删除成功！");
-                _ = OnDeleted.InvokeAsync(dto);
+
+                //后续逻辑都是辅助性的，因此放到异步中，加快主操作速度
+                _ = InvokeAsync(async () => {
+
+                  await  ShowSuccessMessage("删除成功！");
+                    await OnDeleted.InvokeAsync(dto);
+                });
+
             }
             finally
             {

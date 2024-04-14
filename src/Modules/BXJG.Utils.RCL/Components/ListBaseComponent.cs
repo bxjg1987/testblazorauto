@@ -136,17 +136,17 @@ namespace BXJG.Utils.RCL.Components
         /// </summary>
         /// <param name="output">批量操作结果</param>
         /// <param name="funName">操作名</param>
-        protected virtual void BatchOperationMessage(BatchOperationOutput<TPrimaryKey> output, string funName = "删除")
+        protected virtual async Task BatchOperationMessage(BatchOperationOutput<TPrimaryKey> output, string funName = "删除")
         {
             if (output.ErrorMessage.Any())
             {
                 if (output.Ids.Count == 0)
-                    ShowFailMessage(msg: $"批量{funName}全部失败！");
+                 await   ShowFailMessage(msg: $"批量{funName}全部失败！");
                 else
-                    ShowFailMessage(msg: $"批量{funName}部分失败！成功数量：{output.Ids.Count}；失败数量：{output.ErrorMessage.Count}");
+                 await   ShowFailMessage(msg: $"批量{funName}部分失败！成功数量：{output.Ids.Count}；失败数量：{output.ErrorMessage.Count}");
             }
             else
-                ShowSuccessMessage(msg: $"批量{funName}全部成功！");
+              await  ShowSuccessMessage(msg: $"批量{funName}全部成功！");
         }
         #region 列表
         /// <summary>
@@ -506,7 +506,7 @@ namespace BXJG.Utils.RCL.Components
         /// <returns></returns>
         protected virtual async Task BtnDeleteClick()
         {
-           await Delete();
+            await Delete();
         }
         /// <summary>
         /// 批量删除的核心逻辑
@@ -523,9 +523,17 @@ namespace BXJG.Utils.RCL.Components
             {
                 var r = await DeleteCore();
                 isDeleting = false;
-                BatchOperationMessage(r);//await表示显示因此后才结束，所以这里不要等待
-                if (r.Ids.Any())
-                    LoadListData();
+
+
+                //后续逻辑都是辅助性的，因此放到异步中，加快主操作速度
+                _ = InvokeAsync(async () => {
+                  await   BatchOperationMessage(r);//await表示显示因此后才结束，所以这里不要等待
+                    if (r.Ids.Any())
+                        LoadListData();
+                });
+
+
+               
             }
             finally
             {
@@ -572,10 +580,12 @@ namespace BXJG.Utils.RCL.Components
                 await DeleteItemCore(item);
                 item.ExtensionData.IsDeleting = false;
 
-                //全局异常去提示
-                ShowSuccessMessage("删除提示", "删除成功！");
+                //后续逻辑都是辅助性的，因此放到异步中，加快主操作速度
+                _ = InvokeAsync(async() => {
+                  await  ShowSuccessMessage("删除提示", "删除成功！");
+                    LoadListData();
+                });
 
-                LoadListData();
             }
             finally
             {

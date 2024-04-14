@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
+using NUglify.Html;
 using Rougamo;
 using System;
 using System.Collections.Generic;
@@ -188,20 +189,23 @@ namespace ZLJ.RCL.Components
         [Inject]
         public IMessageService MessageService { get; set; }
 
-        protected override void ShowFailMessage(string title = "操作提示", string msg = "操作失败！")
+        /*
+         * MessageService内部估计会异步刷新ui
+         * await它的话，要显示显示隐藏后才结束
+         * 同步方法中，多次调用StateChange貌似没有
+         */
+
+        protected override async Task ShowFailMessage(string title = "操作提示", string msg = "操作失败！")
         {
-            MessageService.Error(msg);
-            StateHasChanged();
-            Thread.Sleep(200);
+            _ = MessageService.Error(msg);//它是阻塞到显示完成因此元素后，所以不能等待它
+            await Task.Delay(800);//碰到这个，开始刷新
+        }
+        protected override async Task ShowSuccessMessage(string title = "操作提示", string msg = "操作成功！")
+        {
+            _ = MessageService.Success(msg);//它是阻塞到显示完成因此元素后，所以不能等待它
+            await Task.Delay(800);//碰到这个，开始刷新
 
         }
-        protected override void ShowSuccessMessage(string title = "操作提示", string msg = "操作成功！")
-        {
-            MessageService.Success(msg);
-            StateHasChanged();
-            Thread.Sleep(200);
-        }
-
 
 
         #region 生命周期方法增加统一异常处理拦截器

@@ -11,7 +11,7 @@
     <Form @ref="frm" ValidateOnChange="true" Model="createDto" LabelColSpan="4" WrapperColSpan="20" OnFinish="OnFinish">
 
         <Descriptions Bordered Size="small">
-            <DescriptionsItem Title="名称">
+            <DescriptionsItem Title="名称" >
                 <Input @bind-Value="@context.DisplayName" />
             </DescriptionsItem>
             <DescriptionsItem Title="备注">

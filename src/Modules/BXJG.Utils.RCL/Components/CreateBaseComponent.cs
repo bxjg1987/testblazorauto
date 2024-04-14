@@ -124,14 +124,17 @@ namespace BXJG.Utils.RCL.Components
             {
                 var r = await SaveCore();
                 isSaving = false;
-                ShowSuccessMessage(msg: "新增成功！");//没必要等待
-                if (saveAndContinue)
-                {
-                    _ = OnAddEnd.InvokeAsync(new SaveResult<TEntityDto> { Dto = r });
-                    await Reset();
-                }
-                else
-                    _ = OnAddEnd.InvokeAsync(new SaveResult<TEntityDto> { Dto = r, End = true });
+                //后续逻辑都是辅助性的，因此放到异步中，加快主操作速度
+                _ = InvokeAsync(async () => {
+                  await  ShowSuccessMessage(msg: "新增成功！");//没必要等待
+                    if (saveAndContinue)
+                    {
+                        await Reset();
+                        await OnAddEnd.InvokeAsync(new SaveResult<TEntityDto> { Dto = r });
+                    }
+                    else
+                        await OnAddEnd.InvokeAsync(new SaveResult<TEntityDto> { Dto = r, End = true });
+                });
             }
             finally
             {

@@ -125,17 +125,17 @@ namespace BXJG.Utils.RCL.Components
         /// </summary>
         /// <param name="output">批量操作结果</param>
         /// <param name="funName">操作名</param>
-        protected virtual void BatchOperationMessage(BatchOperationOutputLong output, string funName = "删除")
+        protected virtual async Task BatchOperationMessage(BatchOperationOutputLong output, string funName = "删除")
         {
             if (output.ErrorMessage.Any())
             {
                 if (output.Ids.Count == 0)
-                    ShowFailMessage(msg: $"批量{funName}全部失败！");
+                  await  ShowFailMessage(msg: $"批量{funName}全部失败！");
                 else
-                    ShowFailMessage(msg: $"批量{funName}部分失败！成功数量：{output.Ids.Count}；失败数量：{output.ErrorMessage.Count}");
+                  await  ShowFailMessage(msg: $"批量{funName}部分失败！成功数量：{output.Ids.Count}；失败数量：{output.ErrorMessage.Count}");
             }
             else
-                ShowSuccessMessage(msg: $"批量{funName}全部成功！");
+              await  ShowSuccessMessage(msg: $"批量{funName}全部成功！");
         }
         #region 列表
         /// <summary>
@@ -432,27 +432,35 @@ namespace BXJG.Utils.RCL.Components
         /// <returns></returns>
         protected virtual async Task BtnDeleteClick()
         {
-          await  Delete();
+            await Delete();
         }
         protected virtual async Task Delete()
         {
             //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限
             if (isDeleting) return;
             isDeleting = true;
-          
-                try
-                {
-                    var r = await DeleteCore();
 
-                    isDeleting = false;
-                    BatchOperationMessage(r);
+            try
+            {
+                var r = await DeleteCore();
+
+                isDeleting = false;
+
+
+
+                //后续逻辑都是辅助性的，因此放到异步中，加快主操作速度
+                _ = InvokeAsync(async () => {
+                     BatchOperationMessage(r);
                     if (r.Ids.Any())
                         LoadListData();
-                }
-                finally
-                {
-                    isDeleting = false;
-                }
+                });
+
+              
+            }
+            finally
+            {
+                isDeleting = false;
+            }
         }
         protected virtual Task<BatchOperationOutputLong> DeleteCore()
         {
@@ -469,7 +477,7 @@ namespace BXJG.Utils.RCL.Components
         /// <returns></returns>
         protected virtual async Task BtnDeleteItemClick(TEntityDto item)
         {
-          await  DeleteItem(item);
+            await DeleteItem(item);
         }
         protected virtual async Task DeleteItem(TEntityDto item)
         {
@@ -477,21 +485,31 @@ namespace BXJG.Utils.RCL.Components
             // var curr = dataGrid.Items.Single(c => c.Id!.Equals(input.Id));
             if (item.ExtensionData.IsDeleting) return;
             item.ExtensionData.IsDeleting = true;
-           
-                try
-                {
-                    await DeleteItemCore(item);
-                    item.ExtensionData.IsDeleting = false;
 
+            try
+            {
+                await DeleteItemCore(item);
+                item.ExtensionData.IsDeleting = false;
+
+                //后续逻辑都是辅助性的，因此放到异步中，加快主操作速度
+                _ = InvokeAsync(async () => {
                     //Core靠全局异常去提示
-                    ShowSuccessMessage("删除提示", "删除成功！");
+                await    ShowSuccessMessage("删除提示", "删除成功！");
 
                     LoadListData();
-                }
-                finally
-                {
-                    item.ExtensionData.IsDeleting = false;
-                }
+                });
+
+
+               
+
+
+
+
+            }
+            finally
+            {
+                item.ExtensionData.IsDeleting = false;
+            }
         }
         protected virtual async Task DeleteItemCore(TEntityDto item)
         {

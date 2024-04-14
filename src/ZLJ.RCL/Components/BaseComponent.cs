@@ -26,18 +26,15 @@ namespace ZLJ.RCL.Components
         //
 
 
-        protected override void ShowFailMessage(string title = "操作提示", string msg = "操作失败！")
+        protected override async Task ShowFailMessage(string title = "操作提示", string msg = "操作失败！")
         {
-            MessageService.Error(msg);
-            StateHasChanged();
-            Thread.Sleep(200);
-
+            _ = MessageService.Error(msg);//它是阻塞到显示完成因此元素后，所以不能等待它
+            await Task.Delay(800);
         }
-        protected override void ShowSuccessMessage(string title = "操作提示", string msg = "操作成功！")
+        protected override async Task ShowSuccessMessage(string title = "操作提示", string msg = "操作成功！")
         {
-            MessageService.Success(msg);
-            StateHasChanged();
-            Thread.Sleep(200);
+            _ = MessageService.Success(msg);//它是阻塞到显示完成因此元素后，所以不能等待它
+            await Task.Delay(800);
         }
 
 
