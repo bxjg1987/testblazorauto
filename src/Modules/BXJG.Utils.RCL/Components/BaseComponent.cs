@@ -51,12 +51,12 @@ namespace BXJG.Utils.RCL.Components
         //不过测试发现消息异步显示，并等待200毫秒，消息提示更丝滑
         //
 
-        //protected override async ValueTask ShowFailMessage(string title = "操作提示", string msg = "操作失败！")
+        //protected override void ShowFailMessage(string title = "操作提示", string msg = "操作失败！")
         //{
         //    _= MessageService.Error(msg);
         //    await Task.Delay(200);
         //}
-        //protected override async ValueTask ShowSuccessMessage(string title = "操作提示", string msg = "操作成功！")
+        //protected override void ShowSuccessMessage(string title = "操作提示", string msg = "操作成功！")
         //{
         //    _ = MessageService.Error(msg);
         //    await Task.Delay(200);

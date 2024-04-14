@@ -11,7 +11,7 @@ namespace ZLJ.Application.Common.Notification
 {
     public class RemoveOldNoticesBackgroundWorker : RemoveOldNotification<User>
     {
-        public RemoveOldNoticesBackgroundWorker(AbpTimer timer) : base(timer)
+        public RemoveOldNoticesBackgroundWorker(AbpAsyncTimer timer) : base(timer)
         {
         }
     }

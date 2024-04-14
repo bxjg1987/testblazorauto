@@ -66,13 +66,12 @@ namespace ZLJ.RCL.Components
 
         protected override async ValueTask ShowFailMessage(string title = "操作提示", string msg = "操作失败！")
         {
-            _ = MessageService.Error(msg);
-            await Task.Delay(200);
+            await MessageService.Error(msg);
+
         }
         protected override async ValueTask ShowSuccessMessage(string title = "操作提示", string msg = "操作成功！")
         {
-            _ = MessageService.Success(msg);
-            await Task.Delay(200);
+            await MessageService.Success(msg);
         }
     }
 }

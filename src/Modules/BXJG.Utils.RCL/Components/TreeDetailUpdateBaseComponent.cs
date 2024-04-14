@@ -441,7 +441,7 @@ namespace BXJG.Utils.RCL.Components
         {
 
             dto = await AppService.UpdateAsync(editDto!);
-            await ShowSuccessMessage("修改成功！");
+           await ShowSuccessMessage("修改成功！");
             await AfterUpdated();
 
         }
@@ -529,12 +529,12 @@ namespace BXJG.Utils.RCL.Components
             //BatchDeleteMessage(temp);
             if (r.Ids.Any())
             {
-                await ShowSuccessMessage(msg: "删除成功！");
+             await   ShowSuccessMessage(msg: "删除成功！");
                 await AfterDelete();
             }
             else
             {
-                await ShowFailMessage(title: "删除失败！", r.ErrorMessage.FirstOrDefault()?.Message);
+               await ShowFailMessage(title: "删除失败！", r.ErrorMessage.FirstOrDefault()?.Message);
             }
 
 

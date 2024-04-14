@@ -20,23 +20,23 @@ namespace ZLJ.RCL.Components
         /// </summary>
         [Inject]
         public IMessageService MessageService { get; set; }
-      
+
         //await消息显示时，好像会等到消息因此时才结束，没严格测试
         //不过测试发现消息异步显示，并等待200毫秒，消息提示更丝滑
         //
 
+
         protected override async ValueTask ShowFailMessage(string title = "操作提示", string msg = "操作失败！")
         {
-            _= MessageService.Error(msg);
-            await Task.Delay(200);
+            await MessageService.Error(msg);
+
         }
         protected override async ValueTask ShowSuccessMessage(string title = "操作提示", string msg = "操作成功！")
         {
-            _ = MessageService.Success(msg);
-            await Task.Delay(200);
+            await MessageService.Success(msg);
         }
-     
-        
+
+
         #region 生命周期方法增加统一异常处理拦截器
         //肉夹馍不会拦截子类，但往往子类才是主要逻辑，才是出错的地方，所以父类加这个意义不大
         //[AbpExceptionInterceptor]

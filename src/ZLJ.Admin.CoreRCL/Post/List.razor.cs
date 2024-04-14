@@ -48,21 +48,21 @@ namespace ZLJ.Admin.CoreRCL.Post
                 });
             }
         }
-        protected override Task LoadListData()
+        protected override void LoadListData()
         {
             GetAllInput.Sorting = $"role.{GetAllInput.Sorting.Replace("role.", "")}";//目前值考虑单列排序
-            return base.LoadListData();
+             base.LoadListData();
         }
 
         //[AbpExceptionInterceptor]
-        protected override async Task BtnClearFilterClick()
+        protected override  void BtnClearFilterClick()
         {
             GetAllInput.Filter.IsStatic = default;
             GetAllInput.Filter.Permission = default;
             GetAllInput.Filter.OuCode = default;
             if (ou != default)
                 ou.Value = default;
-            await base.BtnClearFilterClick();
+             base.BtnClearFilterClick();
         }
         TreeSelectOu ou;
         //protected override Task OnQuery(QueryModel condition)
@@ -72,14 +72,14 @@ namespace ZLJ.Admin.CoreRCL.Post
         //    return base.OnQuery(condition);
         //}
 
-        async Task OnOuChanged(string ou)
+         void OnOuChanged(string ou)
         {
             //OnSelectedItemChanged 会触发两次
             //ValueChanged 选择时只会触发一次，但清空时又会触发两次
 
             // Console.WriteLine(   System.Text.Json.JsonSerializer.Serialize(ou));
             GetAllInput.Filter.OuCode = ou;// ou.IsNullOrWhiteSpaceBXJG() ? string.Empty : ou.Split(',')[1];
-            await base.BtnSearchClick();
+             base.BtnSearchClick();
         }
         // AbpCreateDialog<IPostAppService, PostDto, int, PagedAndSortedResultRequest<PagedPostResultRequestDto>, CreatePostDto, PostEditDto, Create> dalRef;
         Dictionary<string, object> OnRow(RowData<PostDto> row)
@@ -104,13 +104,13 @@ namespace ZLJ.Admin.CoreRCL.Post
         /// 关闭新增弹窗的核心逻辑
         /// </summary>
         /// <returns></returns>
-        async Task CloseCreateDialogCore()
+         void CloseCreateDialogCore()
         {
             isCreateDialogVisible = false;
             if (isCreated)
             {
                 isCreated = false;
-                await BtnSearchClick();
+                 BtnSearchClick();
             }
         }
         /*
@@ -141,21 +141,21 @@ namespace ZLJ.Admin.CoreRCL.Post
 #if !DEBUG
         [AbpExceptionInterceptor]
 #endif
-        private async Task CloseDialog()
+        private  void CloseDialog()
         {
-            await CloseCreateDialogCore();
+             CloseCreateDialogCore();
         }
         /// <summary>
         /// 新增后回调
         /// </summary>
         /// <param name="sr"></param>
         /// <returns></returns>
-        async Task OnAddEnd(SaveResult<PostDto> sr)
+         void OnAddEnd(SaveResult<PostDto> sr)
         {
             isCreated = true;
             if (sr.End)
             {
-                await CloseCreateDialogCore();
+                 CloseCreateDialogCore();
             }
         }
 
@@ -186,7 +186,7 @@ namespace ZLJ.Admin.CoreRCL.Post
         {
             isShowDetailUpdate = false;
 
-            await LoadListData();
+             LoadListData();
 
         }
 

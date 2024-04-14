@@ -124,17 +124,17 @@ namespace BXJG.Utils.RCL.Components
         /// </summary>
         /// <param name="output">批量操作结果</param>
         /// <param name="funName">操作名</param>
-        protected virtual async ValueTask BatchOperationMessage(BatchOperationOutputLong output, string funName = "删除")
+        protected virtual  async ValueTask BatchOperationMessage(BatchOperationOutputLong output, string funName = "删除")
         {
             if (output.ErrorMessage.Any())
             {
                 if (output.Ids.Count == output.ErrorMessage.Count)
-                    await ShowFailMessage(msg: $"批量{funName}全部失败！");
+                  await  ShowFailMessage(msg: $"批量{funName}全部失败！");
                 else
-                    await ShowFailMessage(msg: $"批量{funName}部分失败！成功数量：{output.Ids.Count}；失败数量：{output.ErrorMessage.Count}");
+                 await   ShowFailMessage(msg: $"批量{funName}部分失败！成功数量：{output.Ids.Count}；失败数量：{output.ErrorMessage.Count}");
             }
             else
-                await ShowSuccessMessage(msg: $"批量{funName}全部成功！");
+              await  ShowSuccessMessage(msg: $"批量{funName}全部成功！");
         }
         #region 列表
         /// <summary>
@@ -212,54 +212,32 @@ namespace BXJG.Utils.RCL.Components
         /// 加载列表数据
         /// </summary>
         /// <returns></returns>
-        protected virtual async Task LoadListData()
+        protected virtual void LoadListData()
         {
             if (IsLoading)
                 return;
 
             IsLoading = true;
-            try
+            Items.Clear();
+
+            if (SelectedItems != default && SelectedItems is ICollection<TEntityDto> tempList)
+                tempList.Clear();
+            else
+                SelectedItems = new List<TEntityDto>();
+
+            StateHasChanged();
+            InvokeAsync(async () =>
             {
-                //var cd = GetAllInput;
-                //if (cd is IDynamicCondition cdd)
-                //{
-                //    cdd.Conditions = new List<ConditionFieldDefine>();// await BuildDynamicCondition();// state.FilterDefinitions.MapToDynamicCondition().ToList();
-                //    await FillDynamicConditions(cdd.Conditions as List<ConditionFieldDefine>);
-                //}
-                //else if (cd is IHaveFilter cddq && cddq.Filter is IDynamicCondition cddqq)
-                //{
-                //    cddqq.Conditions = new List<ConditionFieldDefine>();// await BuildDynamicCondition();//state.FilterDefinitions.MapToDynamicCondition().ToList();
-                //    await FillDynamicConditions(cddqq.Conditions as List<ConditionFieldDefine>);
-                //}
-                //if (cd is IPagedAndSortedResultRequest cd2)
-                //{
-                //    cd2.MaxResultCount = PageSize; //state.PageSize;
-                //    cd2.SkipCount = (PageIndex - 1) * PageSize;
-                //}
-                //if (cd is ISortedResultRequest cd3)
-                //{
-                //    cd3.Sorting = Sorting;// state.SortDefinitions.ToLinqDynamicCore();
-                //}
-
-                //if (cd is IHaveKeywords cd4)
-                //{
-                //    cd4.Keywords = Keywords;
-                //}
-                //else if (cd is IHaveFilter cddq && cddq.Filter is IHaveKeywords cddqq)
-                //{
-                //    cddqq.Keywords = Keywords;// state.FilterDefinitions.MapToDynamicCondition().ToList();
-                //}
-                //await FillCondtion(cd);
-
-                Items.Clear();
-                StateHasChanged();
-
-                await LoadCore();
-            }
-            finally
-            {
-                IsLoading = false;
-            }
+                try
+                {
+                    await LoadCore();
+                }
+                finally
+                {
+                    IsLoading = false;
+                    StateHasChanged();
+                }
+            });
         }
 
         /// <summary>
@@ -268,6 +246,7 @@ namespace BXJG.Utils.RCL.Components
         /// <returns></returns>
         protected virtual async Task LoadCore()
         {
+
             var dtos = await AppService.GetAllAsync(GetAllInput);
 
             //_ = InvokeAsync(StateHasChanged);//让多选影响顶部按钮得以执行 包一层是因为需要加载完才执行
@@ -279,10 +258,7 @@ namespace BXJG.Utils.RCL.Components
             Items = dtos;
             TotalCount = dtos.Count;
 
-            if (SelectedItems != default && SelectedItems is ICollection<TEntityDto> tempList)
-                tempList.Clear();
-            else
-                SelectedItems = new List<TEntityDto>();
+         
         }
 
         async ValueTask Map(IList<TEntityDto> dtos) {
@@ -342,7 +318,7 @@ namespace BXJG.Utils.RCL.Components
 
         
 
-        protected virtual async Task BtnSearchClick()
+        protected virtual void BtnSearchClick()
         {
             //Console.WriteLine(DateTime.Now.ToString("fff"));
             //await Task.Delay(1);
@@ -362,7 +338,7 @@ namespace BXJG.Utils.RCL.Components
             //PageSize = 20;
             //Keywords = string.Empty;
             //await OnQuery(table.GetQueryModel());
-            await LoadListData();
+             LoadListData();
             // Keywords = keywords;
             // await LoadListData();
             //table.ReloadData();
@@ -381,7 +357,7 @@ namespace BXJG.Utils.RCL.Components
 
         
 
-        protected virtual async Task BtnClearFilterClick()
+        protected virtual void BtnClearFilterClick()
         {
            // table.ResetData();
             //PageIndex = 1;
@@ -389,7 +365,7 @@ namespace BXJG.Utils.RCL.Components
             Keywords = string.Empty;
             //StateHasChanged();
             //await OnQuery(table.GetQueryModel());
-            await LoadListData();
+             LoadListData();
             //  await base.Reset();
             // table.ResetData();
             //table.ReloadData(); 远程加载时，根本不会执行这里
@@ -404,7 +380,7 @@ namespace BXJG.Utils.RCL.Components
 
         
 
-        protected virtual async Task BtnRefreshClick()
+        protected virtual void BtnRefreshClick()
         {
             //if (GetAllInput is IHaveKeywords cd4)
             //{
@@ -418,7 +394,7 @@ namespace BXJG.Utils.RCL.Components
             //table.ReloadData(PageIndex);
             // Keywords = keywords;
             //table.cac
-            await LoadListData();
+             LoadListData();
             //table.ReloadData();
         }
         ///// <summary>
@@ -474,36 +450,43 @@ namespace BXJG.Utils.RCL.Components
 
         
 
-        protected virtual async Task BtnDeleteClick()
+        protected virtual void BtnDeleteClick()
         {
-            await Delete();
+             Delete();
         }
-        protected virtual async Task Delete()
+        protected virtual  void Delete()
         {
             //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限
             HideDeleteConfirm();
             isDeleting = true;
             StateHasChanged();
-            try
+
+            InvokeAsync(async () =>
             {
-                await DeleteCore();
-            }
-            finally
-            {
-                isDeleting = false;
-            }
+                try
+                {
+                    var r = await DeleteCore();
+
+                    isDeleting = false;
+                    _ = BatchOperationMessage(r);//await表示显示因此后才结束，所以这里不要等待
+                    StateHasChanged();//上面多个状态变更后，一次性刷新，所以不要在ShowSuccessMessage去等待
+                    await Task.Delay(200);//这里等下，免得表格加载和消息显示打架
+                    if (r.Ids.Any())
+                        LoadListData();
+                }
+                finally
+                {
+                    isDeleting = false;
+                    StateHasChanged();
+                }
+            });
         }
-        protected virtual async Task DeleteCore()
+        protected virtual  Task<BatchOperationOutputLong> DeleteCore()
         {
             //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限
 
-            var r = await AppService.DeleteAsync(new BatchOperationInputLong { Ids = SelectedItems.Select(x => x.Id).ToArray() });
-            await BatchOperationMessage(r);//这里木有必要await
-                                         //BatchDeleteMessage(temp);
-           
-            if (r.Ids.Any())
-                await LoadListData();
-            //_ = InvokeAsync(dataGrid.ReloadServerData); //内部会StateChange
+           return AppService.DeleteAsync(new BatchOperationInputLong { Ids = SelectedItems.Select(x => x.Id).ToArray() });
+      
 
         }
         /// <summary>
@@ -514,42 +497,47 @@ namespace BXJG.Utils.RCL.Components
 
         
 
-        protected virtual async Task BtnDeleteItemClick(TEntityDto item)
+        protected virtual void BtnDeleteItemClick(TEntityDto item)
         {
-            await DeleteItem(item);
+             DeleteItem(item);
         }
-        protected virtual async Task DeleteItem(TEntityDto item)
+        protected virtual void DeleteItem(TEntityDto item)
         {
             //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限
             // var curr = dataGrid.Items.Single(c => c.Id!.Equals(input.Id));
             HideDeleteConfirm();
             item.ExtensionData.IsDeleting = true;
             StateHasChanged();
-            try
+            //异步来，便于删除确认框快速隐藏
+            InvokeAsync(async () =>
             {
-                await DeleteItemCore(item);
-            }
-            finally
-            {
-                item.ExtensionData.IsDeleting = false;
-            }
+                try
+                {
+                    await DeleteItemCore(item);
+                    item.ExtensionData.IsDeleting = false;
+                    _ = ShowSuccessMessage("删除提示", "删除成功！");//await表示显示因此后才结束，所以这里不要等待
+
+                    StateHasChanged();//上面多个状态变更后，一次性刷新，所以不要在ShowSuccessMessage去等待
+
+                    await Task.Delay(200);//这里等下，免得表格加载和消息显示打架
+                    LoadListData();
+                }
+                finally
+                {
+                    item.ExtensionData.IsDeleting = false;
+                    StateHasChanged();
+                }
+            });
         }
-        protected virtual async Task DeleteItemCore(TEntityDto item)
+        protected virtual  async Task DeleteItemCore(TEntityDto item)
         {
 
-            var r = await AppService.DeleteAsync(new() { Ids = new[] { item.Id } });
-
+    var r= await AppService.DeleteAsync(new() { Ids = new[] { item.Id } });
+            if (r.Ids.Count != 1)
+                throw new Abp.UI.UserFriendlyException(r.ErrorMessage.First().Message);
             // _ = BatchOperationMessage(r);//这里木有必要await
             //BatchDeleteMessage(temp);
-            if (r.Ids.Any())
-            {
-                await ShowSuccessMessage(msg: "删除成功！");
-                await LoadListData();
-            }
-            else
-            {
-                await ShowFailMessage(title: "删除失败！", r.ErrorMessage.FirstOrDefault()?.Message);
-            }
+         
 
         }
         /// <summary>

@@ -445,7 +445,7 @@ namespace BXJG.Utils.RCL.Components
         protected virtual async Task UpdateCore()
         {
             dto = await AppService.UpdateAsync(editDto!);
-            await ShowSuccessMessage("修改成功！");
+           await ShowSuccessMessage("修改成功！");
             await AfterUpdated();
         }
         /// <summary>
@@ -527,7 +527,7 @@ namespace BXJG.Utils.RCL.Components
         {
 
             await AppService.DeleteAsync(new EntityDto<TPrimaryKey>(Id));
-            await ShowSuccessMessage("删除成功！");
+           await ShowSuccessMessage("删除成功！");
             await AfterDelete();
 
         }

@@ -22,7 +22,7 @@ namespace BXJG.Utils.Application.Notification
     /// 需要调用方提供子类，给出TUser类型
     /// </summary>
     /// <typeparam name="TUser"></typeparam>
-    public abstract class RemoveOldNotification<TUser> : PeriodicBackgroundWorkerBase, ISingletonDependency
+    public abstract class RemoveOldNotification<TUser> : AsyncPeriodicBackgroundWorkerBase, ISingletonDependency
         where TUser : AbpUserBase
     {
         public IUserNotificationManager UserNotificationManager { get; set; }
@@ -30,14 +30,15 @@ namespace BXJG.Utils.Application.Notification
         public IRepository<TUser, long> UserRepository { get; set; }
 
 
-        public RemoveOldNotification(AbpTimer timer) : base(timer)
+        public RemoveOldNotification(AbpAsyncTimer timer) : base(timer)
         {
             Timer.Period = 1000 * 60 * 60 * 24;//24小时，时间短点，要确保服务器连续开机1天才会执行一次？也许首次运行程序也会执行一次
         }
+      
         const int pageSize = 50;
         //[DisableAuditing]
         //[UnitOfWork]
-        protected override async void DoWork()
+        protected override async Task DoWorkAsync()
         {
             base.Logger.Info("开始删除过期通知");
             var pageIndex = 1;

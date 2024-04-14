@@ -34,6 +34,8 @@ namespace BXJG.Utils.RCL.Components
      * 这样，将来我们需要抽象一个标准的列表组件时，这里的大部分代码是可以复制到抽象中的。
      * 
      * 它仅仅定义列表相关功能，并不包含新增、修改等弹窗相关内容，那个交给子类去实现，因为有列表不一定需要弹窗
+     * 
+     * 异步操作要界面流畅，请查看删除明细的注释
      */
 
     /// <summary>
@@ -287,10 +289,10 @@ namespace BXJG.Utils.RCL.Components
         //}
 
         /// <summary>
-        /// 加载列表数据
+        /// 异步加载列表数据
         /// </summary>
         /// <returns></returns>
-        protected virtual async Task LoadListData()
+        protected virtual void LoadListData()
         {
             /*
              * 某些操作比如删除时，删除后提示，然后加载数据
@@ -306,14 +308,30 @@ namespace BXJG.Utils.RCL.Components
 
             IsLoading = true;
 
-            try
+
+            if (SelectedItems != default && SelectedItems is ICollection<TEntityDto> tempList)
+                tempList.Clear();
+            else
+                SelectedItems = new List<TEntityDto>();
+
+
+           
+
+            StateHasChanged();
+
+            InvokeAsync(async () =>
             {
-                await LoadCore();
-            }
-            finally
-            {
-                IsLoading = false;
-            }
+                try
+                {
+                    await LoadCore();
+                }
+                finally
+                {
+                    IsLoading = false;
+                    StateHasChanged();
+                }
+            });
+
         }
         /// <summary>
         /// 根据条件TGetAllInput加载数据的核心方法
@@ -369,10 +387,6 @@ namespace BXJG.Utils.RCL.Components
             Items = dtos.Items.ToList();
             TotalCount = dtos.TotalCount;
 
-            if (SelectedItems != default&& SelectedItems is ICollection<TEntityDto> tempList)
-                tempList.Clear();
-            else
-                SelectedItems=new List<TEntityDto>();
         }
 
         /// <summary>
@@ -416,9 +430,9 @@ namespace BXJG.Utils.RCL.Components
         /// </summary>
         /// <returns></returns>
 
-        
 
-        protected virtual async Task BtnSearchClick()
+
+        protected virtual void BtnSearchClick()
         {
             //  Console.WriteLine(DateTime.Now.ToString("fff"));
             //await Task.Delay(1);
@@ -438,7 +452,7 @@ namespace BXJG.Utils.RCL.Components
             //Keywords = string.Empty;
             // await OnQuery(table.GetQueryModel());
             PageIndex = 1;
-            await LoadListData();
+            LoadListData();
             // Keywords = keywords;
             // await LoadListData();
             //table.ReloadData();
@@ -447,9 +461,9 @@ namespace BXJG.Utils.RCL.Components
         /// 条件分页都不变，重新加载当前数据
         /// </summary>
 
-        
 
-        protected virtual async Task BtnRefreshClick()
+
+        protected virtual void BtnRefreshClick()
         {
             //if (GetAllInput is IHaveKeywords cd4)
             //{
@@ -463,10 +477,10 @@ namespace BXJG.Utils.RCL.Components
             //table.ReloadData(PageIndex);
             // Keywords = keywords;
             //table.cac
-            await LoadListData();
+            LoadListData();
             //table.ReloadData();
         }
-      
+
 
         /// <summary>
         /// 清空所有条件并重新加载
@@ -474,16 +488,16 @@ namespace BXJG.Utils.RCL.Components
         /// </summary>
         /// <returns></returns>
 
-        
 
-        protected virtual async Task BtnClearFilterClick()
+
+        protected virtual void BtnClearFilterClick()
         {
             PageIndex = 1;
             PageSize = 20;
             Keywords = string.Empty;
             //StateHasChanged();
             //await OnQuery(table.GetQueryModel());
-            await LoadListData();
+            LoadListData();
 
             //  await base.Reset();
             // table.ResetData();
@@ -543,75 +557,97 @@ namespace BXJG.Utils.RCL.Components
         /// </summary>
         /// <returns></returns>
 
-        
 
-        protected virtual async Task BtnDeleteClick()
+
+        protected virtual void BtnDeleteClick()
         {
-            await Delete();
+            Delete();
         }
-        protected virtual async Task Delete()
+        protected virtual void Delete()
         {
             //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限
             HideDeleteConfirm();
             isDeleting = true;
-            try
+            StateHasChanged();
+
+            InvokeAsync(async () =>
             {
-                await DeleteCore();
-            }
-            finally
-            {
-                isDeleting = false;
-            }
+                try
+                {
+                    var r = await DeleteCore();
+
+                    isDeleting = false;
+                    _ =  BatchOperationMessage(r);//await表示显示因此后才结束，所以这里不要等待
+                    StateHasChanged();//上面多个状态变更后，一次性刷新，所以不要在ShowSuccessMessage去等待
+                    await Task.Delay(200);//这里等下，免得表格加载和消息显示打架
+                    if (r.Ids.Any())
+                         LoadListData();
+                }
+                finally
+                {
+                    isDeleting = false;
+                    StateHasChanged();
+                }
+            });
         }
-        protected virtual async Task DeleteCore()
+        /// <summary>
+        /// 批量删除已选择的项的核心逻辑
+        /// </summary>
+        /// <returns></returns>
+        public virtual Task<BatchOperationOutput<TPrimaryKey>> DeleteCore()
         {
-            var r = await AppService.BatchDeleteAsync(new BatchOperationInput<TPrimaryKey> { Ids = SelectedItems.Select(x => x.Id).ToArray() });
-            await BatchOperationMessage(r);//这里木有必要await
-                                         //BatchDeleteMessage(temp);
-            
-            if (r.Ids.Any())
-                await LoadListData();
+            return AppService.BatchDeleteAsync(new BatchOperationInput<TPrimaryKey> { Ids = SelectedItems.Select(x => x.Id).ToArray() });
         }
         /// <summary>
         /// 删除单个项
+        /// 这里是同步的，确认框可以很快隐藏掉
+        /// 这里可以去实施aop拦截器
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-
-        
-
-        protected virtual async Task BtnDeleteItemClick(TEntityDto item)
+        protected virtual void BtnDeleteItemClick(TEntityDto item)
         {
             //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限
             // var curr = dataGrid.Items.Single(c => c.Id!.Equals(input.Id));
-            await DeleteItem(item);
+            DeleteItem(item);
         }
-        protected virtual async Task DeleteItem(TEntityDto item)
+
+        /// <summary>
+        /// 删除界面逻辑，通常不需要重写，多个地方需要删除单个项目时通常调用这里
+        /// </summary>
+        /// <param name="item"></param>
+        protected virtual void DeleteItem(TEntityDto item)
         {
             //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限
             // var curr = dataGrid.Items.Single(c => c.Id!.Equals(input.Id));
             HideDeleteConfirm();
             item.ExtensionData.IsDeleting = true;
             StateHasChanged();
-            try
+
+            //异步来，便于删除确认框快速隐藏
+            InvokeAsync(async () =>
             {
-                await DeleteItemCore(item);
-            }
-            finally
-            {
-                item.ExtensionData.IsDeleting = false;
-            }
+                try
+                {
+                    await DeleteItemCore(item);
+                    item.ExtensionData.IsDeleting = false;
+                    _ = ShowSuccessMessage("删除提示", "删除成功！");//await表示显示因此后才结束，所以这里不要等待
+
+                    StateHasChanged();//上面多个状态变更后，一次性刷新，所以不要在ShowSuccessMessage去等待
+
+                    await Task.Delay(200);//这里等下，免得表格加载和消息显示打架
+                    LoadListData();
+                }
+                finally
+                {
+                    item.ExtensionData.IsDeleting = false;
+                    StateHasChanged();
+                }
+            });
         }
         protected virtual async Task DeleteItemCore(TEntityDto item)
         {
-
             await AppService.DeleteAsync(new EntityDto<TPrimaryKey>(item.Id));
-            await ShowSuccessMessage("删除提示", "删除成功！");//这里木有必要await
-                                                    //若上面异常，下面不会执行
-                                                    //_ = InvokeAsync(dataGrid.ReloadServerData);
-                                                    // await LoadListData();
-            await LoadListData();
-
         }
         /// <summary>
         /// 显示删除明细的确认框
