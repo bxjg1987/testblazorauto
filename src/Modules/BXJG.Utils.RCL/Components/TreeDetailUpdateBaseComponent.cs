@@ -441,16 +441,16 @@ namespace BXJG.Utils.RCL.Components
         {
 
             dto = await AppService.UpdateAsync(editDto!);
-           await ShowSuccessMessage("修改成功！");
-            await AfterUpdated();
+           ShowSuccessMessage("修改成功！");
+             AfterUpdated();
 
         }
         /// <summary>
         /// 保存后回调
         /// </summary>
-        protected virtual async ValueTask AfterUpdated()
+        protected virtual void AfterUpdated()
         {
-            await OnUpdated.InvokeAsync(dto);
+             OnUpdated.InvokeAsync(dto);
         }
         /// <summary>
         /// 保存后触发的事件
@@ -529,12 +529,12 @@ namespace BXJG.Utils.RCL.Components
             //BatchDeleteMessage(temp);
             if (r.Ids.Any())
             {
-             await   ShowSuccessMessage(msg: "删除成功！");
-                await AfterDelete();
+             ShowSuccessMessage(msg: "删除成功！");
+                AfterDelete();
             }
             else
             {
-               await ShowFailMessage(title: "删除失败！", r.ErrorMessage.FirstOrDefault()?.Message);
+                ShowFailMessage(title: "删除失败！", r.ErrorMessage.FirstOrDefault()?.Message);
             }
 
 
@@ -547,9 +547,9 @@ namespace BXJG.Utils.RCL.Components
         /// 删除之后之后回调
         /// </summary>
         /// <returns></returns>
-        protected virtual async ValueTask AfterDelete()
+        protected virtual void AfterDelete()
         {
-            await OnDeleted.InvokeAsync(dto);
+             OnDeleted.InvokeAsync(dto);
         }
         /// <summary>
         /// 删除后触发的事件

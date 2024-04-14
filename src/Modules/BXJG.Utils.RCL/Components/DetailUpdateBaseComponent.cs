@@ -445,15 +445,15 @@ namespace BXJG.Utils.RCL.Components
         protected virtual async Task UpdateCore()
         {
             dto = await AppService.UpdateAsync(editDto!);
-           await ShowSuccessMessage("修改成功！");
-            await AfterUpdated();
+           ShowSuccessMessage("修改成功！");
+             AfterUpdated();
         }
         /// <summary>
         /// 保存后回调
         /// </summary>
-        protected virtual async ValueTask AfterUpdated()
+        protected virtual void AfterUpdated()
         {
-            await OnUpdated.InvokeAsync(dto);
+            _ = OnUpdated.InvokeAsync(dto);
         }
         /// <summary>
         /// 保存后触发的事件
@@ -527,17 +527,17 @@ namespace BXJG.Utils.RCL.Components
         {
 
             await AppService.DeleteAsync(new EntityDto<TPrimaryKey>(Id));
-           await ShowSuccessMessage("删除成功！");
-            await AfterDelete();
+           ShowSuccessMessage("删除成功！");
+          AfterDelete();
 
         }
         /// <summary>
         /// 删除之后之后回调
         /// </summary>
         /// <returns></returns>
-        protected virtual async ValueTask AfterDelete()
+        protected virtual void AfterDelete()
         {
-            await OnDeleted.InvokeAsync(dto);
+            _ = OnDeleted.InvokeAsync(dto);
         }
         /// <summary>
         /// 删除后触发的事件

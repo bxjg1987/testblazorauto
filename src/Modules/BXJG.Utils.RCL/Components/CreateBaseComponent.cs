@@ -152,14 +152,14 @@ namespace BXJG.Utils.RCL.Components
             //木有权限时保存按钮不可点击
             //验证不过时此方法不应该被调用
             var r = await AppService.CreateAsync(createDto);
-           await ShowSuccessMessage(msg: "新增成功！");//没必要等待
+            ShowSuccessMessage(msg: "新增成功！");//没必要等待
             if (saveAndContinue)
             {
                 await Reset();
-                await OnAddEnd.InvokeAsync(new SaveResult<TEntityDto> { Dto = r });
+                _ = OnAddEnd.InvokeAsync(new SaveResult<TEntityDto> { Dto = r });
             }
             else
-                await OnAddEnd.InvokeAsync(new SaveResult<TEntityDto> { Dto = r, End = true });
+                _ = OnAddEnd.InvokeAsync(new SaveResult<TEntityDto> { Dto = r, End = true });
         }
       
         ///// <summary>

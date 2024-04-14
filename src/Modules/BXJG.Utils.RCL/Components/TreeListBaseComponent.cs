@@ -124,17 +124,17 @@ namespace BXJG.Utils.RCL.Components
         /// </summary>
         /// <param name="output">批量操作结果</param>
         /// <param name="funName">操作名</param>
-        protected virtual  async ValueTask BatchOperationMessage(BatchOperationOutputLong output, string funName = "删除")
+        protected virtual  void BatchOperationMessage(BatchOperationOutputLong output, string funName = "删除")
         {
             if (output.ErrorMessage.Any())
             {
                 if (output.Ids.Count == output.ErrorMessage.Count)
-                  await  ShowFailMessage(msg: $"批量{funName}全部失败！");
+                    ShowFailMessage(msg: $"批量{funName}全部失败！");
                 else
-                 await   ShowFailMessage(msg: $"批量{funName}部分失败！成功数量：{output.Ids.Count}；失败数量：{output.ErrorMessage.Count}");
+                    ShowFailMessage(msg: $"批量{funName}部分失败！成功数量：{output.Ids.Count}；失败数量：{output.ErrorMessage.Count}");
             }
             else
-              await  ShowSuccessMessage(msg: $"批量{funName}全部成功！");
+                ShowSuccessMessage(msg: $"批量{funName}全部成功！");
         }
         #region 列表
         /// <summary>
@@ -468,7 +468,7 @@ namespace BXJG.Utils.RCL.Components
                     var r = await DeleteCore();
 
                     isDeleting = false;
-                    _ = BatchOperationMessage(r);//await表示显示因此后才结束，所以这里不要等待
+                    BatchOperationMessage(r);//await表示显示因此后才结束，所以这里不要等待
                     StateHasChanged();//上面多个状态变更后，一次性刷新，所以不要在ShowSuccessMessage去等待
                     await Task.Delay(200);//这里等下，免得表格加载和消息显示打架
                     if (r.Ids.Any())
@@ -515,7 +515,7 @@ namespace BXJG.Utils.RCL.Components
                 {
                     await DeleteItemCore(item);
                     item.ExtensionData.IsDeleting = false;
-                    _ = ShowSuccessMessage("删除提示", "删除成功！");//await表示显示因此后才结束，所以这里不要等待
+                    ShowSuccessMessage("删除提示", "删除成功！");//await表示显示因此后才结束，所以这里不要等待
 
                     StateHasChanged();//上面多个状态变更后，一次性刷新，所以不要在ShowSuccessMessage去等待
 
