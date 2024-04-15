@@ -54,6 +54,7 @@ var topTasks = new List<(string, Action)>
     new("重新发布：BXJG.Utils.Share", FabuXindeBXJGUtilsShare),
     new("重新发布：BXJG.Utils.Application", FabuXindeBXJGUtilsApplication),
     new("重新发布：BXJG.Utils.Application.Share", FabuXindeBXJGUtilsApplicationShare),
+    new("重新发布：BXJG.Utils.Application.ClientProxy", FabuXindeBXJGUtilsApplicationClientProxy),
     new("重新发布：BXJG.Utils.Web", FabuXindeBXJGUtilsWeb),
     new("重新发布：BXJG.Utils.RCL", FabuXindeBXJGUtilsRCL)
 };
@@ -88,6 +89,7 @@ void FabuSuoyouGonggongBao()
     FabuXindeBXJGUtils();
     FabuXindeBXJGUtilsEFCore();
     FabuXindeBXJGUtilsApplicationShare();
+    FabuXindeBXJGUtilsApplicationClientProxy();
     FabuXindeBXJGUtilsApplication();
     FabuXindeBXJGUtilsRCL();
     FabuXindeBXJGUtilsWeb();
@@ -121,6 +123,10 @@ void FabuXindeBXJGUtilsApplicationShare()
 {
     DabaoNuget("BXJG.Utils.Application.Share");
     FabuNuget("BXJG.Utils.Application.Share");
+}
+void FabuXindeBXJGUtilsApplicationClientProxy() {
+    DabaoNuget("BXJG.Utils.Application.ClientProxy");
+    FabuNuget("BXJG.Utils.Application.ClientProxy");
 }
 //打包BXJG.Utils.Application项目
 void FabuXindeBXJGUtilsApplication()
