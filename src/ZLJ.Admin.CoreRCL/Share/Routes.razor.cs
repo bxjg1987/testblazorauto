@@ -36,17 +36,13 @@ namespace ZLJ.Admin.CoreRCL.Share
 
 
         }
-        //[Inject]
-        //public IJSRuntime JSRuntime { get; set; }
+        [Inject]
+        public IJSRuntime JSRuntime { get; set; }
 
-        //protected override async Task OnAfterRenderAsync(bool firstRender)
-        //{
-        //    if (firstRender)
-        //    {
-        //        //Console.WriteLine("xxxxxxxxxxxxxxxxxxxxxxx");
-        //        await JSRuntime.InvokeVoidAsync("hideLoadingDiv");
-        //    }
-        //}
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("hideLoadingDiv");
+        }
     }
     //protected override async Task onin
     //{

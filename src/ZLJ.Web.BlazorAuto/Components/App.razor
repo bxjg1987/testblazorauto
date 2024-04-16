@@ -1,4 +1,5 @@
-﻿@using ZLJ.Admin.CoreRCL.Share
+﻿@using AntDesign
+@using ZLJ.Admin.CoreRCL.Share
 <!DOCTYPE html>
 <html lang="zh-cn">
 
@@ -19,7 +20,24 @@
 </head>
 
 <body>
-    @* <div id="loadingDiv" style="display:block;">Loading...</div> *@
+
+    @if (this.RenderModeForPage != null)
+    {
+        <div id="loadingDiv" style="display:none; position:absolute;z-index:9999; width:100%; height:100%; background-color:#eee; text-align:center; padding-top:30vh ">
+            <Spin Tip="加载中，请稍后..." Size="large" />
+        </div>
+    }
+    <script>
+        document.getElementById('loadingDiv').style.display = 'block';
+        function hideLoadingDiv() {
+            //removeClass(document.getElementById('loadingDiv'), 'show-loading');
+            document.getElementById('loadingDiv').style.display = 'none';
+        }
+    </script>
+
+
+
+
     <app>
         <Routes @rendermode="RenderModeForPage" />
     </app>
@@ -47,27 +65,6 @@
         //         },
         //     },
         // });
-        // function hideLoadingDiv() {
-        //     setTimeout(function () {
-        //         console.log('xxxxxxxxxxxxxxxxxxx22222');
-        //         //console.log(document.getElementById('loadingDiv'));
-        //        // console.log(document.getElementById('thisApp'));
-
-        //         console.log(document.getElementById('loadingDiv').style.display);
-        //         //console.log(document.getElementById('thisApp').style.opacity);
-
-        //         document.getElementById('loadingDiv').style.display = 'none';
-
-        //      //   document.getElementById('thisApp').style.opacity = 1;
-
-
-        //     },1);
-        // }
     </script>
 </body>
 </html>
-@* @code{
-    protected override void OnInitialized(){
-    Console.WriteLine("xxxx===============================");
-    }
-} *@

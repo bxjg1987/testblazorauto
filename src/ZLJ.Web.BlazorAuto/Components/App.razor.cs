@@ -9,7 +9,21 @@ namespace ZLJ.Web.BlazorAuto.Components
         [CascadingParameter]
         private HttpContext HttpContext { get; set; } = default!;
 
+       // bool isAjax => HttpContext.Request.IsAjaxRequestBXJG();
 
-        private IComponentRenderMode? RenderModeForPage => HttpContext.Request.Path.StartsWithSegments("/Account") ? null : new InteractiveAutoRenderMode(false);
+        private IComponentRenderMode? RenderModeForPage {
+            get {
+
+                if (HttpContext.Request.Path.StartsWithSegments("/Account"))
+                    return default;
+                if (HttpContext.Request.Path.StartsWithSegments("/404"))
+                    return default;
+
+                if (HttpContext.Request.Path.StartsWithSegments("/error"))
+                    return default;
+                
+                return new InteractiveAutoRenderMode(false);
+            }
+        } 
     }
 }
