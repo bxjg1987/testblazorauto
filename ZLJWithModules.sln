@@ -68,6 +68,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{31830F03-1
 		docs\文件和附件.md = docs\文件和附件.md
 		docs\本地化.md = docs\本地化.md
 		docs\本框架.md = docs\本框架.md
+		docs\标准组件的抽象与服用.md = docs\标准组件的抽象与服用.md
 		docs\菜单.md = docs\菜单.md
 		docs\集成mysql.md = docs\集成mysql.md
 		docs\领域服务.md = docs\领域服务.md
@@ -103,7 +104,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoScript", "src\Tools\Aut
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZLJ.Web.BlazorAuto", "src\ZLJ.Web.BlazorAuto\ZLJ.Web.BlazorAuto.csproj", "{9A3EB11B-6EA8-44C6-9A80-10B8E0C0E8C0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BXJG.Utils.Application.ClientProxy", "src\Modules\BXJG.Utils.Application.ClientProxy\BXJG.Utils.Application.ClientProxy.csproj", "{55D9DB14-3ED9-4E5E-B740-3FDBE7F2922F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Utils.Application.ClientProxy", "src\Modules\BXJG.Utils.Application.ClientProxy\BXJG.Utils.Application.ClientProxy.csproj", "{55D9DB14-3ED9-4E5E-B740-3FDBE7F2922F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
