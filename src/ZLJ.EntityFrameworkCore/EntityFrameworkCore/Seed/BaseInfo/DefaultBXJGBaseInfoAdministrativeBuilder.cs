@@ -9,7 +9,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ZLJ.Core.BaseInfo.Administrative;
+using ZLJ.Core.Administrative;
+using ZLJ.Core.Share.Enums;
+
 
 namespace ZLJ.EntityFrameworkCore.EntityFrameworkCore.Seed.BaseInfo
 {

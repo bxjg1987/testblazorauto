@@ -62,7 +62,7 @@ namespace BXJG.Utils.RCL.Components
         /// <summary>
         /// 此功能的名称
         /// </summary>
-        protected virtual string FuncName => $"请重写{nameof(FuncName)}属性";
+        protected abstract string FuncName { get; }
         /// <summary>
         /// id
         /// </summary>

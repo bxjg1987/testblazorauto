@@ -6,7 +6,7 @@ using ZLJ.Core.MultiTenancy;
 using ZLJ.Core.BaseInfo;
 using ZLJ.Core.BaseInfo.AssociatedCompany;
 using ZLJ.Core.BaseInfo.StaffInfo;
-using ZLJ.Core.BaseInfo.Administrative;
+
 using System.Reflection;
 //using ZLJ.WorkOrder.RentOrderItemWorkOrder;
 using ZLJ.EntityFrameworkCore.EntityFrameworkCore.EFMap.BaseInfo;
@@ -28,6 +28,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Abp.Domain.Uow;
+using ZLJ.Core.Administrative;
 
 namespace ZLJ.EntityFrameworkCore
 {

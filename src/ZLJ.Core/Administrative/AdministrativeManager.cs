@@ -4,13 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ZLJ.Core.BaseInfo.Administrative
+namespace ZLJ.Core.Administrative
 {
     /// <summary>
     /// 行政区领域服务
     /// </summary>
     public class AdministrativeManager : GeneralTreeManager<AdministrativeEntity>
     {
-       
+      
     }
 }

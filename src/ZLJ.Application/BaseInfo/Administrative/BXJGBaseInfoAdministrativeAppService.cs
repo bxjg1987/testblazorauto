@@ -5,24 +5,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Abp.Authorization;
-using ZLJ.Application.Admin.BaseInfo.Administrative.Dto;
-using ZLJ.Application.Admin.BaseInfo;
 using Abp.Application.Services.Dto;
-using ZLJ.Core.BaseInfo.Administrative;
+
 using ZLJ.Application.Admin.Authorization.Permissions;
 using BXJG.Utils.Application.Share.GeneralTree;
 using ZLJ.Application.Share.Authorization.Permissions;
+using ZLJ.Core.Administrative;
 using BXJG.Common.Contracts;
+using ZLJ.Application.Share.Administrative;
+using ZLJ.Application.Admin;
+using BXJG.Utils.Application.GeneralTree;
 
-namespace ZLJ.Application.Admin.BaseInfo.Administrative
+namespace ZLJ.Application.BaseInfo.Administrative
 {
     // [AbpAuthorize]
     public class BXJGBaseInfoAdministrativeAppService : AdminTreeCrudBaseAppService<AdministrativeEntity,
                                                                                     AdministrativeDto,
                                                                                     AdministrativeEditDto,
                                                                                     AdministrativeEditDto,
-                                                                                    GeneralTreeGetTreeInput,
-                                                                                    BatchOperationInputLong>//, IBXJGBaseInfoAdministrativeAppService
+                                                                                    GetAdministrativeInput>//, IBXJGBaseInfoAdministrativeAppService
     {
         //public BXJGBaseInfoAdministrativeAppService(
         //    IRepository<AdministrativeEntity, long> repository,
@@ -43,5 +44,7 @@ namespace ZLJ.Application.Admin.BaseInfo.Administrative
         //{
         //    return base.CreateAsync(input);
         //}
+
+       // DataDictionaryAppService
     }
 }

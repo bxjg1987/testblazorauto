@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ZLJ.Core.BaseInfo.Administrative;
+using ZLJ.Core.Share.Enums;
 
 namespace ZLJ.Application.Common.Administrative
 {

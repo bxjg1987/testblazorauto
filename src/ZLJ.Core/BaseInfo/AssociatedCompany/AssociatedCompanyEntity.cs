@@ -1,7 +1,7 @@
 using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
 using BXJG.Utils.GeneralTree;
-using ZLJ.Core.BaseInfo.Administrative;
+using ZLJ.Core.Administrative;
 using ZLJ.Core.Customer;
 
 namespace ZLJ.Core.BaseInfo.AssociatedCompany

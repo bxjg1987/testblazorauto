@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ZLJ.Application.Common.Administrative;
 using ZLJ.Core;
-using ZLJ.Core.BaseInfo.Administrative;
+
 
 namespace ZLJ.Application.Common
 {

@@ -5,7 +5,7 @@ using BXJG.Utils.BusinessUser;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using ZLJ.Core.Authorization.Users;
-using ZLJ.Core.BaseInfo.Administrative;
+
 using ZLJ.Core.BaseInfo.Post;
 using BXJG.Common.Extensions;
 using Abp.Timing;

@@ -71,7 +71,7 @@ namespace BXJG.Utils.Application.GeneralTree
         public virtual string allTextForForm { get; set; } = "请选择";
 
         //public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }//属性注入
-        public IRepository<TEntity, long> repository { get; set; }
+        public IRepository<TEntity, long> Repository { get; set; }
         /// <summary>
         /// 与当前请求关联的服务容器
         /// 通常你可以使用构造函数或属性注入，框架级别或特殊情况可以使用此对象。
@@ -79,18 +79,18 @@ namespace BXJG.Utils.Application.GeneralTree
         /// </summary>
         public IServiceProvider ServiceProvider { get; set; }
 
-        [Obsolete("子类继承时应使用无参的构造函数，当前构造函数是未简化子类实现以前的代码，已过时。")]
-        public GeneralTreeProviderBaseAppService(IRepository<TEntity, long> repository,
-                                                 string allTextForSearch = "不限",
-                                                 string allTextForForm = "请选择")//这里的字符串后期可以使用常量
-        {
-            //base.LocalizationSourceName = UtilsConsts.LocalizationSourceName;
-            this.repository = repository;
-            this.AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
-            //L内部调用的LocationSource是使用的属性注入，所以在构造函数中无法使用L()  此规则.net framework版本是这个规则，.net core版本未测试过
-            this.allTextForSearch = allTextForSearch;
-            this.allTextForForm = allTextForForm;
-        }
+        //[Obsolete("子类继承时应使用无参的构造函数，当前构造函数是未简化子类实现以前的代码，已过时。")]
+        //public GeneralTreeProviderBaseAppService(IRepository<TEntity, long> repository,
+        //                                         string allTextForSearch = "不限",
+        //                                         string allTextForForm = "请选择")//这里的字符串后期可以使用常量
+        //{
+        //    //base.LocalizationSourceName = UtilsConsts.LocalizationSourceName;
+        //    this.Repository = repository;
+        //    this.AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
+        //    //L内部调用的LocationSource是使用的属性注入，所以在构造函数中无法使用L()  此规则.net framework版本是这个规则，.net core版本未测试过
+        //    this.allTextForSearch = allTextForSearch;
+        //    this.allTextForForm = allTextForForm;
+        //}
 
         public GeneralTreeProviderBaseAppService()
         {
@@ -119,7 +119,7 @@ namespace BXJG.Utils.Application.GeneralTree
             string parentCode = "";
             if (input.Code.IsNullOrWhiteSpace() && input.ParentId.HasValue && input.ParentId.Value > 0)
             {
-                var top = await repository.GetAsync(input.ParentId.Value);
+                var top = await Repository.GetAsync(input.ParentId.Value);
                 parentCode = top.Code;
             }
             else
@@ -260,7 +260,7 @@ namespace BXJG.Utils.Application.GeneralTree
         /// <returns></returns>
         protected virtual IQueryable<TEntity> BuildQuery()
         {
-            return repository.GetAll().Include(c => c.Parent).AsNoTrackingWithIdentityResolution();
+            return Repository.GetAll().Include(c => c.Parent).AsNoTrackingWithIdentityResolution();
         }
 
         #region 获取树形下拉框数据时子类可以重写的方法
@@ -475,7 +475,7 @@ namespace BXJG.Utils.Application.GeneralTree
          * 顶级文本可能是 前端传过来的、上级节点文本、默认文本；除非根本不现实
          */
         //public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; } = NullAsyncQueryableExecuter.Instance;
-        public IRepository<TEntity, long> repository { get; set; }
+        public IRepository<TEntity, long> Repository { get; set; }
         public TManager generalTreeManager { get; set; }
         protected virtual string allTextForManager { get; set; } = "全部";//注意这里代表的是本地化文本的key
         /// <summary>
@@ -750,7 +750,7 @@ namespace BXJG.Utils.Application.GeneralTree
         /// <returns></returns>
         protected virtual IQueryable<TEntity> BuildQuery()
         {
-            return repository.GetAll().Include(c => c.Parent);
+            return Repository.GetAll().Include(c => c.Parent);
         }
 
         #region get
@@ -830,7 +830,7 @@ namespace BXJG.Utils.Application.GeneralTree
 
             if (input.ParentCode.IsNullOrWhiteSpace() && input.ParentId.HasValue && input.ParentId.Value > 0)
             {
-                var top = await repository.SingleAsync(c => c.Id == input.ParentId.Value);
+                var top = await Repository.SingleAsync(c => c.Id == input.ParentId.Value);
                 parentCode = top.Code;
             }
             else

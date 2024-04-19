@@ -3,8 +3,9 @@ using BXJG.Utils.Enums;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using ZLJ.Core.Share.Enums;
 
-namespace ZLJ.Core.BaseInfo.Administrative
+namespace ZLJ.Core.Administrative
 {
     /// <summary>
     /// 行政区域实体类
@@ -16,5 +17,5 @@ namespace ZLJ.Core.BaseInfo.Administrative
         /// </summary>
         public AdministrativeLevel Level { get; set; }
     }
-  
+
 }

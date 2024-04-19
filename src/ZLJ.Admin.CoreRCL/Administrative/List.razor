@@ -1,5 +1,122 @@
-﻿@page "/administrative"
-@attribute [ReuseTabsPage(Title = "省市区县")]
-@inherits BaseComponent
+﻿@page "/Administrative"
 
-<h3>省市区县</h3>
+@using ZLJ.Application.Share.Administrative
+
+@attribute [ReuseTabsPage(Title = "省市区")]
+@attribute [Authorize(PermissionNames.BXJGBaseInfoAdministrative)]
+@inherits TreeListBaseComponent<IBXJGBaseInfoAdministrativeAppService,AdministrativeDto, AdministrativeEditDto, AdministrativeEditDto,GetAdministrativeInput>
+
+<Flex Gap="small" Vertical Justify="space-between">
+     <Flex Justify="space-between">
+         @* 左侧 *@
+         <Flex Gap="small">
+             @if (createIsGranted)
+            {
+                <Button Type="@ButtonType.Primary" Icon="@IconType.Outline.Plus" OnClick="ShowCreateDialog">新增</Button>
+            }
+            @if (deleteIsGranted)
+            {
+                <Popconfirm Title="将删除已选择的项及其所有子项，确定删除吗?"
+                            OnConfirm="BtnDeleteClick">
+                    <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Clear" Danger="true" Loading=isDeleting Disabled="@ShouldDisableDelete">删除</Button>
+                </Popconfirm>
+            }
+        </Flex>
+        @* 右侧 *@
+        <Flex Gap="small">
+            @* <RadioGroup TValue="bool?" @bind-Value="@GetAllInput.IsSysDefine" OnChange="BtnSearchClick" Disabled=IsLoading>
+                <Radio TValue="bool?" RadioButton="true" Value="@(default(bool?))">全部</Radio>
+                <Radio TValue="bool?" RadioButton="true" Value="@(true)">预设</Radio>
+                <Radio TValue="bool?" RadioButton="true" Value="@(false)">非预设</Radio>
+            </RadioGroup> *@
+            @*Search组件有问题，设置宽度会错位 *@
+            <div style="width:15rem;">
+                <Search Placeholder="请输入关键字..." @bind-Value="@Keywords" OnChange=BtnSearchClick AllowClear="true" ClassicSearchIcon="true" Disabled=IsLoading />
+            </div>
+            <Tooltip Title="清空条件">
+                <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Clear" OnClick="BtnClearFilterClick" Disabled=IsLoading></Button>
+            </Tooltip>
+            <Tooltip Title="刷新">
+                <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Reload" OnClick="BtnRefreshClick" Disabled=IsLoading></Button>
+            </Tooltip>
+        </Flex>
+    </Flex>
+
+    <Table @ref="table"
+           TreeChildren=GetTreeChildren
+           TItem="AdministrativeDto"
+           Total="TotalCount"
+           @bind-SelectedRows="SelectedItems"
+           OnChange="OnQuery"
+           DataSource="Items"
+           Loading="IsLoading"
+           HidePagination=true
+           RowClassName="@(r=>r.RowIndex%2==0?"even":"odd")"
+           RemoteDataSource="true"
+           RowKey="x=>x.Id"
+           OnRow="OnRow"
+           Size="TableSize.Small"
+           Bordered="true"
+           ScrollY="71.5vh">
+        <Selection Key="@(context.Id.ToString())" />
+        <PropertyColumn Property="c=>c.DisplayName" Sortable="true" DefaultSortOrder="SortDirection.Ascending" ShowSorterTooltip="false" />
+       @*  <PropertyColumn Property="c=>c.IsSysDefine" Width="80">
+            <Switch @bind-Value="@context.IsSysDefine" Size="@InputSize.Small" Disabled="true"></Switch>
+        </PropertyColumn> *@
+        <ActionColumn Title="操作" Width="240">
+            <ButtonGroup Size="@ButtonSize.Small">
+                <Button Size="@ButtonSize.Small" Type="@ButtonType.Primary" OnClick="x=>OnDetail(context)">详情</Button>
+                @if (createIsGranted)
+                {
+                    <Button Size="@ButtonSize.Small" OnClick="x=>AddSub(context.Id)">添加子节点</Button>
+                }
+                @if (updateIsGranted)
+                {
+                    <Button Size="@ButtonSize.Small" OnClick="x=>OnEdit(context)">修改</Button>
+                }
+                @if (deleteIsGranted)
+                {
+                    <Popconfirm Title="将删除此项及其所有子项，确定删除吗?"
+                                OnConfirm="()=>BtnDeleteItemClick(context)">
+                        <Button Size="@ButtonSize.Small" Danger="true" Loading=@context.ExtensionData.IsDeleting>删除</Button>
+                    </Popconfirm>
+                }
+            </ButtonGroup>
+        </ActionColumn>
+    </Table>
+
+</Flex>
+
+@{
+    RenderFragment renderFragment =@<Template>
+        <SectionOutlet SectionName=@(FuncName+"-create-btns") />
+        <Button OnClick="CloseDialog">关闭</Button>
+    </Template>;
+}
+<Modal DestroyOnClose="true" Footer="renderFragment" @bind-Visible="isCreateDialogVisible" Draggable="true" Width=@("40vw")>
+    <TitleTemplate>
+        <Icon Type="plus" Theme="outline" />
+        新增@(FuncName)
+    </TitleTemplate>
+
+    <ChildContent>
+        <SectionOutlet SectionName="@(FuncName+"-create-body" )" />
+        <Create OnAddEnd="OnAddEnd" ParentId="parentId" />
+    </ChildContent>
+</Modal>
+
+@{
+    RenderFragment renderFragment1 =@<Template>
+        <SectionOutlet SectionName=@(FuncName+"-detail-update-btns") />
+        <Button OnClick="x=>isShowDetailUpdate=false">关闭</Button>
+    </Template>;
+}
+<Modal DestroyOnClose="true" Footer="renderFragment1" @bind-Visible="isShowDetailUpdate" Draggable="true" Width=@("40vw")>
+    <TitleTemplate>
+        <SectionOutlet SectionName=@(FuncName+ "-detail-update-title") />
+    </TitleTemplate>
+    <ChildContent>
+        <SectionOutlet SectionName=@(FuncName+ "-detail-update-body") />
+        <DetailUpdate Id=detailUpdateId IsEdit=isEdit OnDeleted=OnDetailUpdate OnUpdated=OnDetailUpdate />
+    </ChildContent>
+</Modal>

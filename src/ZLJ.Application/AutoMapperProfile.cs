@@ -4,8 +4,6 @@ using Abp.Application.Services.Dto;
 using ZLJ.Application.Admin.BaseInfo.AssociatedCompany;
 using ZLJ.Application.Admin.BaseInfo.AssociatedCompany.Dto;
 using ZLJ.Application.Admin.BaseInfo.StaffInfo;
-using ZLJ.Application.Admin.BaseInfo.Administrative.Dto;
-using ZLJ.Application.Admin.BaseInfo.Administrative;
 //using ZLJ.WorkOrder.RentOrderItemWorkOrder;
 using ZLJ.Core.Authorization.Roles;
 using ZLJ.Application.Admin.Roles.Dto;
@@ -17,7 +15,7 @@ using Newtonsoft.Json;
 //using ZLJ.Application.Admin.WorkOrder.Workload.WorkloadRecord.Dto;
 using ZLJ.Application.Common.Administrative;
 using ZLJ.Core.Authorization.Users;
-using ZLJ.Core.BaseInfo.Administrative;
+
 using ZLJ.Core.BaseInfo.AssociatedCompany;
 using ZLJ.Application.Common.Users;
 using Abp.Auditing;
@@ -27,6 +25,8 @@ using ZLJ.Application.Share.Post;
 using ZLJ.Core.BaseInfo.Post;
 using ZLJ.Core.MultiTenancy;
 using ZLJ.Application.Share.MultiTenancy;
+using ZLJ.Application.Share.Administrative;
+using ZLJ.Core.Administrative;
 
 namespace ZLJ.Application.Admin
 {

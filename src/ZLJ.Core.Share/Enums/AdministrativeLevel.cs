@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ZLJ.Core.BaseInfo.Administrative
+namespace ZLJ.Core.Share.Enums
 {
     /// <summary>
     /// 行政区级别

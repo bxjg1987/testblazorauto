@@ -13,9 +13,10 @@ using ZLJ.Core.Authorization.Roles;
 using ZLJ.Core.MultiTenancy;
 using ZLJ.Core.Configuration;
 using ZLJ.Core.Timing;
-using ZLJ.Core.BaseInfo.Administrative;
+
 using ZLJ.Core.Features;
 using ZLJ.Core.Web;
+using ZLJ.Core.Share.Enums;
 
 namespace ZLJ.Core
 {

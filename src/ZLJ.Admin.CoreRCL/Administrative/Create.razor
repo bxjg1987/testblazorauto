@@ -1,0 +1,30 @@
+﻿@using BXJG.Utils.Application.Share.GeneralTree
+@using Microsoft.AspNetCore.Components.Sections
+@using ZLJ.Application.Share.Administrative
+
+@inherits TreeCreateBaseComponent<IBXJGBaseInfoAdministrativeAppService,AdministrativeDto, AdministrativeEditDto, AdministrativeEditDto,GetAdministrativeInput>
+
+<SectionContent SectionName=@(FuncName + "-create-body")>
+    <Form @ref="frm" ValidateOnChange="true" Model="createDto" LabelColSpan="4" WrapperColSpan="20" OnFinish="OnFinish">
+
+
+
+        <Descriptions Bordered Size="small">
+            <DescriptionsItem Title="父级">
+                <AdministrativeTreeSelect @bind-Value="@context.ParentIdString" IsKeyId AllowClear Style="width:15rem;" />
+            </DescriptionsItem>
+            <DescriptionsItem Title="名称">
+                <Input @bind-Value="@context.DisplayName" />
+            </DescriptionsItem>
+        </Descriptions>
+
+
+
+    </Form>
+</SectionContent>
+
+<SectionContent SectionName=@(FuncName + "-create-btns")>
+    <Checkbox @bind-Checked=saveAndContinue>保存后继续新增</Checkbox>
+    <Button OnClick="BtnResetClick" Icon=@IconType.Outline.Redo>重置</Button>
+    <Button OnClick="BtnSaveClick" Type=@ButtonType.Primary Loading=isSaving Disabled=isSaving Icon=@IconType.Outline.Save>保存</Button>
+</SectionContent>

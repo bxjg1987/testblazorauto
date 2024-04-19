@@ -13,6 +13,7 @@ using Abp.Configuration;
 using ZLJ.Application.Common.Share.OU;
 using BXJG.Utils.Application.Share.GeneralTree;
 using ZLJ.Application.Common.Share.Auth;
+using ZLJ.Application.Common.Share.Administrative;
 
 namespace ZLJ.Application.Common.ClientProxy.Extensions
 {
@@ -34,6 +35,8 @@ namespace ZLJ.Application.Common.ClientProxy.Extensions
 
             services.AddTransient<AbpUserConfigurationService>();
             services.AddTransient<SessionAppService>();
+            services.AddTransient<IAdministrativeProviderAppService, AdministrativeProviderAppService>();
+
             services.AddTransient<IOuProviderAppService, OuProviderAppService>();
             services.AddTransient<IDataDictionaryProviderAppService, DataDictionaryProviderAppService>();
             services.AddTransient<ITokenAuthAppService, TokenAuthAppService>();

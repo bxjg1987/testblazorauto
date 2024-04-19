@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ZLJ.Admin.ClientProxy;
 using ZLJ.Application.Common.ClientProxy.Extensions;
+using ZLJ.Application.Share.Administrative;
 using ZLJ.Application.Share.Auditing;
 using ZLJ.Application.Share.MultiTenancy;
 using ZLJ.Application.Share.Post;
@@ -24,6 +25,8 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.AddTransient<IAuditLogAppService, AuditingAppService>()
                     .AddTransient<IPostAppService, PostAppService>()
+                    .AddTransient<IBXJGBaseInfoAdministrativeAppService, AdministrativeAppService>()
+
                     .AddTransient<IDataDictionaryAppService, DataDictionaryAppService>()
                     .AddTransient<ITenantAppService, TenantAppService>();
             return services.AddApiClientProxy(act);

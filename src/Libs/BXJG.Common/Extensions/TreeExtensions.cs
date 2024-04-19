@@ -380,7 +380,7 @@ namespace BXJG.Common.Contracts
                 cr = new CodeRules();
 
             if (code.Length == cr.Length)
-                return default;
+                return string.Empty;
 
             return code.Substring(0, code.Length - cr.Length - cr.Spacer.Length);
         }

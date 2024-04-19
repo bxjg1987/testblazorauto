@@ -68,6 +68,9 @@
 
 	</ItemGroup>
 	<ItemGroup>
+	  <None Include="Administrative\List.razor" />
+	</ItemGroup>
+	<ItemGroup>
 	  <ProjectReference Include="..\ZLJ.Admin.ClientProxy\ZLJ.Admin.ClientProxy.csproj" />
 	  <ProjectReference Include="..\ZLJ.RCL\ZLJ.RCL.csproj" />
 	</ItemGroup>

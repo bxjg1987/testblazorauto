@@ -11,11 +11,12 @@ using BXJG.Utils.Localization;
 using Abp.Extensions;
 using Abp.Dependency;
 using ZLJ.Application.Common.Administrative;
-using ZLJ.Core.BaseInfo.Administrative;
+
 using ZLJ.Application.Common.Share.OU;
 using ZLJ.Core.MultiTenancy;
 using ZLJ.Core.Authorization.Users;
 using BXJG.Utils.Application.Share.Session;
+using ZLJ.Core.Administrative;
 
 namespace ZLJ.Application.Common
 {
