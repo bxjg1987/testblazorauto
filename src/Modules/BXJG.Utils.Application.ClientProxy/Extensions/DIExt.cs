@@ -12,6 +12,7 @@ using Abp.Configuration;
 using BXJG.Utils.Application.Share.GeneralTree;
 using BXJG.Utils.Application.ClientProxy.Http;
 using System.Net.Http;
+using BXJG.Utils.Application.ClientProxy;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -22,10 +23,26 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>
-        public static IHttpClientBuilder AddBXJGUtilsMessageHandler(this IHttpClientBuilder services)
+        public static IServiceCollection AddBXJGUtilsMessageHandler(this IServiceCollection services, Action<HttpClient> act = default, Action<IHttpClientBuilder> act2 = default)
         {
-            services.Services.AddTransient<AbpWraperDelegatHandler>();
-            return  services.AddHttpMessageHandler<AbpWraperDelegatHandler>().AddHttpMessageHandler<AccessTokenHandler>();
+
+            IHttpClientBuilder b;
+
+            if (act != default)
+                b = services.AddHttpClient(BXJGBaseClient.HttpClientName, act);
+            else
+                b = services.AddHttpClient(BXJGBaseClient.HttpClientName);
+
+            services.AddTransient<AbpWraperDelegatHandler>();
+            b.AddHttpMessageHandler<AbpWraperDelegatHandler>().AddHttpMessageHandler<AccessTokenHandler>();
+
+            if (act2 != default)
+                act2(b);
+
+
+            return services;
+
+           
 
         }
        

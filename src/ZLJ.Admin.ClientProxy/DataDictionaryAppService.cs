@@ -14,10 +14,12 @@ using BXJG.Common.Contracts;
 
 namespace ZLJ.Admin.ClientProxy
 {
-    public class DataDictionaryAppService : BaseAppServiceClient,IDataDictionaryAppService
+    public class DataDictionaryAppService : IDataDictionaryAppService
     {
-        public DataDictionaryAppService(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
+        HttpClient _httpClient;
+        public DataDictionaryAppService(IHttpClientFactory httpClientFactory)
         {
+            _httpClient = httpClientFactory.CreateHttpClientUtils();
         }
 
      
@@ -25,37 +27,37 @@ namespace ZLJ.Admin.ClientProxy
       
         public async Task<DataDictionaryDto> CreateAsync(DataDictionaryEditDto input)
         {
-            return await Post<DataDictionaryDto>("api/services/bxjgutils/DataDictionary/Create", input);
+            return await _httpClient.Post<DataDictionaryDto>("DataDictionary/Create", input);
         }
 
     
 
         public async Task<BatchOperationOutputLong> DeleteAsync(BatchOperationInputLong input)
         {
-          return  await Post<BatchOperationOutputLong>("api/services/bxjgutils/DataDictionary/Delete", input);
+          return  await _httpClient.Post<BatchOperationOutputLong>("DataDictionary/Delete", input);
         }
 
        
 
         public async Task<List<DataDictionaryDto>> GetAllAsync(DataDictionaryGetTreeInput input)
         {
-            return await Post<List<DataDictionaryDto>>("api/services/bxjgutils/DataDictionary/getall", input);
+            return await _httpClient.Post<List<DataDictionaryDto>>("DataDictionary/getall", input);
         }
 
 
         public async Task<DataDictionaryDto> GetAsync(EntityDto<long> input)
         {
-            return await Post<DataDictionaryDto>("api/services/bxjgutils/DataDictionary/Get", input);
+            return await _httpClient.Post<DataDictionaryDto>("DataDictionary/Get", input);
         }
 
         public async Task<DataDictionaryDto> MoveAsync(GeneralTreeNodeMoveInput input)
         {
-            return await Post<DataDictionaryDto>("api/services/bxjgutils/DataDictionary/Move", input);
+            return await _httpClient.Post<DataDictionaryDto>("DataDictionary/Move", input);
         }
 
         public async Task<DataDictionaryDto> UpdateAsync(DataDictionaryEditDto input)
         {
-            return await Post<DataDictionaryDto>("api/services/bxjgutils/DataDictionary/Update", input);
+            return await _httpClient.Post<DataDictionaryDto>("DataDictionary/Update", input);
         }
     }
 }

@@ -8,10 +8,12 @@ using ZLJ.Application.Common.Share.Administrative;
 
 namespace ZLJ.Application.Common.ClientProxy
 {
-    public class AdministrativeProviderAppService : BaseAppServiceClient, IAdministrativeProviderAppService
+    public class AdministrativeProviderAppService :  IAdministrativeProviderAppService
     {
-        public AdministrativeProviderAppService(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
+        HttpClient httpClient;
+        public AdministrativeProviderAppService(IHttpClientFactory httpClientFactory) 
         {
+            httpClient = httpClientFactory.CreateHttpClientCommon();
         }
 
         public Task<IList<GeneralTreeComboboxDto>> GetNodesForSelectAsync(GeneralTreeGetForSelectInput input)
@@ -22,7 +24,7 @@ namespace ZLJ.Application.Common.ClientProxy
         public Task<IList<AdministrativeDto>> GetTreeForSelectAsync(GetListInput input)
         {
             ///api/services/common/BaseInfoAdministrativeProvider/GetTreeForSelect
-            return Post<IList<AdministrativeDto>>("api/services/common/BaseInfoAdministrativeProvider/GetTreeForSelect", input);
+            return httpClient.Post<IList<AdministrativeDto>>("BaseInfoAdministrativeProvider/GetTreeForSelect", input);
         }
     }
 }

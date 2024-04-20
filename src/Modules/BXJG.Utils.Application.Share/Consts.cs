@@ -29,6 +29,7 @@ namespace BXJG.Utils.Application.Share
 
             // 忽略空值
             //  NullValueHandling = NullValueHandling.Ignore
-        };
+    };
+            
     }
 }

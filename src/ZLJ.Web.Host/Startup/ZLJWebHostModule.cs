@@ -78,15 +78,11 @@ namespace ZLJ.Web.Host.Startup
             //);
 
             #region 动态webapi
-            Configuration.Modules.AbpAspNetCore()
-               .CreateControllersForAppServices(
-                   typeof(ZLJApplicationModule).GetAssembly(),useConventionalHttpVerbs:false
-               );
+            Configuration.Modules.AbpAspNetCore()   .CreateControllersForAppServices(    typeof(ZLJApplicationModule).GetAssembly(), moduleName: Application.Share.Consts.fw, useConventionalHttpVerbs:false  );
 
-            Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(
-                typeof(BXJGUtilsModule).Assembly, useConventionalHttpVerbs: false/*, moduleName: "utils", useConventionalHttpVerbs: true*/);
+            Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(   typeof(BXJGUtilsModule).Assembly, useConventionalHttpVerbs: false/*, moduleName: "utils", useConventionalHttpVerbs: true*/);
 
-            Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(BXJGUtilsApplicationModule).Assembly, moduleName: "bxjgutils", useConventionalHttpVerbs: false);
+            Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(BXJGUtilsApplicationModule).Assembly, moduleName: Application.Common.Share.Consts.fw_bxjg, useConventionalHttpVerbs: false);
             //Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(GeneralTreeModule).Assembly);
 
 
@@ -95,7 +91,7 @@ namespace ZLJ.Web.Host.Startup
             //    Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(BXJGWorkOrderEmployeeApplicationModule).Assembly, "bxjgemployeeworkorder");
             //Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(BXJG.WorkOrder.BXJGCommonApplicationModule).Assembly, "bxjgworkorder");
 
-            Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(CommonApplicationModule).Assembly, "common", useConventionalHttpVerbs: false);
+            Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(CommonApplicationModule).Assembly,ZLJ.Application.Common.Share.Consts.fw, useConventionalHttpVerbs: false);
             //Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(EmployeeApplicationModule).Assembly, "emp");
 
             #endregion

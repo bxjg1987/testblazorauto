@@ -10,10 +10,12 @@ using ZLJ.Application.Share.Auditing.Dto;
 
 namespace ZLJ.Admin.ClientProxy
 {
-    public class AuditingAppService : BaseAppServiceClient, IAuditLogAppService
+    public class AuditingAppService :  IAuditLogAppService
     {
-        public AuditingAppService(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
+        HttpClient _httpClient;
+        public AuditingAppService(IHttpClientFactory httpClientFactory) 
         {
+            _httpClient = httpClientFactory.CreateHttpClientAdmin();
         }
 
         public async Task<PagedResultDto<AuditLogListDto>> GetAuditLogs(GetAuditLogsInput input)
@@ -21,7 +23,7 @@ namespace ZLJ.Admin.ClientProxy
             if (input.MaxResultCount <= 0)
                 input.MaxResultCount = 20;
             //最好把这个方法变成post的，传参更简单，或把api整体配置为post
-            return await Post<PagedResultDto<AuditLogListDto>>("api/services/app/AuditLog/GetAuditLogs", input);
+            return await _httpClient.Post<PagedResultDto<AuditLogListDto>>("AuditLog/GetAuditLogs", input);
         }
     }
 }

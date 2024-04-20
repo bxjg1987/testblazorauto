@@ -9,87 +9,20 @@ using System.Text;
 using System.Threading.Tasks;
 using Abp.Dependency;
 using Abp.Json;
+using BXJG.Utils.Application.ClientProxy;
 
-namespace ZLJ.Application.Common.ClientProxy
+namespace System.Net.Http
 {
-    public class BaseAppServiceClient
+
+    public static class CommonClient
     {
-        //    /// <summary>
-        //    /// 配置需要跟后端api匹配
-        //    /// </summary>
-        //    public static readonly  JsonSerializerSettings settings = new JsonSerializerSettings
-        //    {
-        //        //// 设置时间格式
-        //        //DateFormatString = "yyyy-MM-dd HH:mm:ss",
-
-        //        // 忽略循环引用
-        //       // ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-
-        //        // 数据格式首字母小写
-        //         ContractResolver = new CamelCasePropertyNamesContractResolver(),
-        //        //ContractResolver = new AbpMvcContractResolver(IocManager.Instance)
-        //        //{
-        //        //    NamingStrategy = new CamelCaseNamingStrategy()
-        //        //}
-        //    // 数据格式按原样输出
-        //    // ContractResolver = new DefaultContractResolver(),
-
-        //    // 忽略空值
-        //    //  NullValueHandling = NullValueHandling.Ignore
-        //};
-        /// <summary>
-        /// 配置需要跟后端api匹配
-        /// </summary>
-        public static readonly JsonSerializerSettings settings = BXJG.Utils.Application.Share.Consts.settings;
-
-        IHttpClientFactory _httpClientFactory;
-
-        public BaseAppServiceClient(IHttpClientFactory httpClientFactory)
+        public static HttpClient CreateHttpClientUtils(this IHttpClientFactory _httpClientFactory)
         {
-            _httpClientFactory = httpClientFactory;
+            return _httpClientFactory.CreateHttpClient(ZLJ.Application.Common.Share.Consts.baseUrl_bxjg);
         }
-
-        protected HttpClient CreateHttpClient()
+        public static HttpClient CreateHttpClientCommon(this IHttpClientFactory _httpClientFactory)
         {
-            return _httpClientFactory.CreateClient(Consts.ZLJ_ADMIN_HTTP_CLIENT_NAME);
-        }
-
-        protected async Task<T> Get<T>(string url, object ps=default, CancellationToken cancellationToken=default) {
-            //
-            url = url.AddQueryString(ps);
-
-            // Console.WriteLine(  System.Text.Json.JsonSerializer.Serialize(input));
-            // Console.WriteLine(  url);
-
-            var str = await CreateHttpClient().GetStringAsync(url);
-            return JsonConvert.DeserializeObject<T>(str,settings);
-            //var x = CreateHttpClient().GetFromJsonAsync<T>(url, cancellationToken);
-            //Console.WriteLine("返回对象");
-            //try
-            //{
-            //    Console.WriteLine(x.GetValue<int>("totalCount"));
-            //}
-            //catch 
-            //{
-            //}
-           
-            //return x;
-        }
-
-        protected async Task<T> Post<T>(string url, object ps = default, object qs=default, CancellationToken cancellationToken = default)
-        {
-            url = url.AddQueryString(qs);
-
-            var r = await CreateHttpClient().PostAsJsonAsync(url,ps, cancellationToken);
-            var str = await r.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<T>(str, settings);
-        }
-        protected async Task Post(string url, object ps = default, object qs = default, CancellationToken cancellationToken = default)
-        {
-            url = url.AddQueryString(qs);
-
-           await CreateHttpClient().PostAsJsonAsync(url, ps, cancellationToken);
-           
+            return _httpClientFactory.CreateHttpClient( ZLJ.Application.Common.Share.Consts.baseUrl);
         }
     }
 }

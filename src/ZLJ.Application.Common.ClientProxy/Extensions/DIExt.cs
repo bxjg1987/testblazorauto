@@ -14,6 +14,7 @@ using ZLJ.Application.Common.Share.OU;
 using BXJG.Utils.Application.Share.GeneralTree;
 using ZLJ.Application.Common.Share.Auth;
 using ZLJ.Application.Common.Share.Administrative;
+using BXJG.Utils.Application.ClientProxy;
 
 namespace ZLJ.Application.Common.ClientProxy.Extensions
 {
@@ -24,14 +25,9 @@ namespace ZLJ.Application.Common.ClientProxy.Extensions
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>
-        public static IHttpClientBuilder AddApiClientProxy(this IServiceCollection services, Action<HttpClient> act = default)
+        public static IServiceCollection AddApiClientProxy(this IServiceCollection services, Action<HttpClient> act = default,Action<IHttpClientBuilder> act2=default)
         {
-            if (act == default)
-                act = hc => { };
-
-            //services.AddTransient<AbpWraperDelegatHandler>();
-            var b = services.AddHttpClient(Consts.ZLJ_ADMIN_HTTP_CLIENT_NAME, act).AddBXJGUtilsMessageHandler();
-
+            services.AddBXJGUtilsMessageHandler(act,act2);
 
             services.AddTransient<AbpUserConfigurationService>();
             services.AddTransient<SessionAppService>();
@@ -40,7 +36,7 @@ namespace ZLJ.Application.Common.ClientProxy.Extensions
             services.AddTransient<IOuProviderAppService, OuProviderAppService>();
             services.AddTransient<IDataDictionaryProviderAppService, DataDictionaryProviderAppService>();
             services.AddTransient<ITokenAuthAppService, TokenAuthAppService>();
-            return b;
+            return services;
         }
     }
 }

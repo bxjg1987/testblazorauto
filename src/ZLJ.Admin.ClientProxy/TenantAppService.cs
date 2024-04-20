@@ -11,35 +11,37 @@ using ZLJ.Application.Share.MultiTenancy;
 
 namespace ZLJ.Admin.ClientProxy
 {
-    public class TenantAppService : BaseAppServiceClient, ITenantAppService
+    public class TenantAppService :  ITenantAppService
     {
-        public TenantAppService(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
+        HttpClient httpClient;
+        public TenantAppService(IHttpClientFactory httpClientFactory)
         {
+            httpClient = httpClientFactory.CreateHttpClientAdmin();
         }
 
         public async Task<BatchOperationOutput<int>> BatchDeleteAsync(BatchOperationInput<int> input)
         {
-            return await Post<BatchOperationOutput<int>>("api/services/app/tenant/BatchDelete", input);
+            return await httpClient.Post<BatchOperationOutput<int>>("tenant/BatchDelete", input);
         }
 
         public async Task<TenantDto> CreateAsync(EditTenantDto input)
         {
-            return await Post<TenantDto>("api/services/app/tenant/Create", input);
+            return await httpClient.Post<TenantDto>("tenant/Create", input);
         }
 
         public async Task DeleteAsync(EntityDto<int> input)
         {
-            await Post("api/services/app/tenant/Delete", input);
+            await httpClient.Post("tenant/Delete", input);
         }
 
         public async Task<PagedResultDto<TenantDto>> GetAllAsync(PagedAndSortedResultRequest<Condition> input)
         {
-            return await Post<PagedResultDto<TenantDto>>("api/services/app/tenant/getall", input);
+            return await httpClient.Post<PagedResultDto<TenantDto>>("tenant/getall", input);
         }
 
         public async Task<TenantDto> GetAsync(EntityDto<int> input)
         {
-            return await Post<TenantDto>("api/services/app/tenant/Get", input);
+            return await httpClient.Post<TenantDto>("tenant/Get", input);
         }
 
         //public async Task<PagedResultDto<AuditLogListDto>> GetAuditLogs(GetAuditLogsInput input)
@@ -47,12 +49,12 @@ namespace ZLJ.Admin.ClientProxy
         //    if (input.MaxResultCount <= 0)
         //        input.MaxResultCount = 20;
         //    //最好把这个方法变成post的，传参更简单，或把api整体配置为post
-        //    return await Post<PagedResultDto<AuditLogListDto>>("api/services/app/AuditLog/GetAuditLogs", input);
+        //    return await Post<PagedResultDto<AuditLogListDto>>("AuditLog/GetAuditLogs", input);
         //}
 
         public async Task<TenantDto> UpdateAsync(EditTenantDto input)
         {
-            return await Post<TenantDto>("api/services/app/tenant/Update", input);
+            return await httpClient.Post<TenantDto>("tenant/Update", input);
         }
     }
 }

@@ -8,12 +8,13 @@ using ZLJ.Application.Common.Share.OU;
 
 namespace ZLJ.Application.Common.ClientProxy
 {
-    public class OuProviderAppService : BaseAppServiceClient,IOuProviderAppService
+    public class OuProviderAppService : IOuProviderAppService
     {
-        public OuProviderAppService(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
+        HttpClient httpClient;
+        public OuProviderAppService(IHttpClientFactory httpClientFactory)
         {
+            httpClient = httpClientFactory.CreateHttpClientCommon();
         }
-
         public Task<IList<GeneralTreeComboboxDto>> GetNodesForSelectAsync(GeneralTreeGetForSelectInput input)
         {
             throw new NotImplementedException();
@@ -21,7 +22,7 @@ namespace ZLJ.Application.Common.ClientProxy
 
         public Task<IList<OuDto>> GetTreeForSelectAsync(GetListInput input)
         {
-            return Post<IList<OuDto>>("api/services/common/OuProvider/GetTreeForSelect",input);
+            return httpClient.Post<IList<OuDto>>("OuProvider/GetTreeForSelect",input);
         }
 
         //public Task<GetCurrentLoginInformationsOutput> GetCurrentLoginInformations()

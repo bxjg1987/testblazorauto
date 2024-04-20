@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BXJG.Utils.Application.ClientProxy;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,15 +9,17 @@ using ZLJ.Application.Common.Share.Models.TokenAuth;
 
 namespace ZLJ.Application.Common.ClientProxy
 {
-    public class TokenAuthAppService : BaseAppServiceClient, ITokenAuthAppService
+    public class TokenAuthAppService : ITokenAuthAppService
     {
-        public TokenAuthAppService(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
+        HttpClient httpClient;
+        public TokenAuthAppService(IHttpClientFactory httpClientFactory) 
         {
+            httpClient = httpClientFactory.CreateHttpClient();
         }
 
         public  Task<AuthenticateResultModel> Authenticate(AuthenticateModel input)
         {
-            return Post<AuthenticateResultModel>("api/TokenAuth/Authenticate", input);
+            return httpClient.Post<AuthenticateResultModel>("api/TokenAuth/Authenticate", input);
         }
 
 

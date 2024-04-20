@@ -13,35 +13,37 @@ using BXJG.Utils.Application.Share.Dtos;
 
 namespace ZLJ.Admin.ClientProxy
 {
-    public class PostAppService: BaseAppServiceClient,IPostAppService
+    public class PostAppService: IPostAppService
     {
-        public PostAppService(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
+        HttpClient httpClient;
+        public PostAppService(IHttpClientFactory httpClientFactory) 
         {
+            httpClient = httpClientFactory.CreateHttpClientAdmin();
         }
 
         public async Task<BatchOperationOutput<int>> BatchDeleteAsync(BatchOperationInput<int> input)
         {
-            return await Post<BatchOperationOutput<int>>("api/services/app/post/BatchDelete", input);
+            return await httpClient.Post<BatchOperationOutput<int>>("post/BatchDelete", input);
         }
 
         public async Task<PostDto> CreateAsync(CreatePostDto input)
         {
-            return await Post<PostDto>("api/services/app/post/Create", input);
+            return await httpClient.Post<PostDto>("post/Create", input);
         }
 
         public async Task DeleteAsync(EntityDto<int> input)
         {
-             await Post("api/services/app/post/Delete", input);
+            await httpClient.Post("post/Delete", input);
         }
 
         public async Task<PagedResultDto<PostDto>> GetAllAsync(PagedAndSortedResultRequest<PagedPostResultRequestDto> input)
         {
-            return await Post<PagedResultDto<PostDto>>("api/services/app/post/getall", input);
+            return await httpClient.Post<PagedResultDto<PostDto>>("post/getall", input);
         }
 
         public async Task<PostDto> GetAsync(EntityDto<int> input)
         {
-            return await Post<PostDto>("api/services/app/post/Get", input);
+            return await httpClient.Post<PostDto>("post/Get", input);
         }
 
         //public async Task<PagedResultDto<AuditLogListDto>> GetAuditLogs(GetAuditLogsInput input)
@@ -49,12 +51,12 @@ namespace ZLJ.Admin.ClientProxy
         //    if (input.MaxResultCount <= 0)
         //        input.MaxResultCount = 20;
         //    //最好把这个方法变成post的，传参更简单，或把api整体配置为post
-        //    return await Post<PagedResultDto<AuditLogListDto>>("api/services/app/AuditLog/GetAuditLogs", input);
+        //    return await Post<PagedResultDto<AuditLogListDto>>("AuditLog/GetAuditLogs", input);
         //}
 
         public async Task<PostDto> UpdateAsync(PostEditDto input)
         {
-            return await Post<PostDto>("api/services/app/post/Update", input);
+            return await httpClient.Post<PostDto>("post/Update", input);
         }
     }
 }

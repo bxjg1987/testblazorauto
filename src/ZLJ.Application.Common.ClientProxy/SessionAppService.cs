@@ -9,17 +9,19 @@ using System.Threading.Tasks;
 
 namespace ZLJ.Application.Common.ClientProxy
 {
-    public class SessionAppService : BaseAppServiceClient//, IApplicationService
+    public class SessionAppService 
     {
-        public SessionAppService(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
+        HttpClient httpClient;
+        public SessionAppService(IHttpClientFactory httpClientFactory)
         {
-
+            httpClient = httpClientFactory.CreateHttpClientCommon();
+            Console.WriteLine( "qqqqqqqqq:"+ httpClient.BaseAddress);
         }
 
         public async Task<GetCurrentLoginInformationsOutput> GetCurrentLoginInformations()
         {
             //await Task.Delay (7000);
-            return await Post<GetCurrentLoginInformationsOutput>("api/services/common/Session/GetCurrentLoginInformations");
+            return await httpClient.Post<GetCurrentLoginInformationsOutput>("Session/GetCurrentLoginInformations");
             //   return await CreateHttpClient().GetFromJsonAsync<AbpUserConfigurationDto>("AbpUserConfiguration/getall");
         }
     }

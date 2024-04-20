@@ -8,10 +8,12 @@ using ZLJ.Application.Common.Share.OU;
 
 namespace ZLJ.Application.Common.ClientProxy
 {
-    public class DataDictionaryProviderAppService : BaseAppServiceClient,IDataDictionaryProviderAppService
+    public class DataDictionaryProviderAppService : IDataDictionaryProviderAppService
     {
-        public DataDictionaryProviderAppService(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
+        HttpClient httpClient;
+        public DataDictionaryProviderAppService(IHttpClientFactory httpClientFactory) 
         {
+            httpClient = httpClientFactory.CreateHttpClientUtils();
         }
 
         public Task<IList<GeneralTreeComboboxDto>> GetNodesForSelectAsync(GeneralTreeGetForSelectInput input)
@@ -21,7 +23,7 @@ namespace ZLJ.Application.Common.ClientProxy
 
         public Task<IList<DataDictionaryForSelectDto>> GetTreeForSelectAsync(GeneralTreeGetForSelectInput input)
         {
-            return Post<IList<DataDictionaryForSelectDto>>("api/services/bxjgutils/DataDictionaryProvider/GetTreeForSelect", input);
+            return httpClient.Post<IList<DataDictionaryForSelectDto>>("DataDictionaryProvider/GetTreeForSelect", input);
         }
 
         //public Task<IList<GeneralTreeNodeDto>> GetTreeForSelectAsync(GeneralTreeGetForSelectInput input)
