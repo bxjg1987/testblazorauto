@@ -405,11 +405,13 @@ namespace BXJG.Utils.RCL.Components
                 await SaveCore();
                 isUpdating = false;
                 //后续逻辑都是辅助性的，因此放到异步中，加快主操作速度
-                _ = InvokeAsync(async () => {
+                //_ = InvokeAsync(async () => {
 
                   await  ShowSuccessMessage("修改成功！");
-                    await OnUpdated.InvokeAsync(dto);
-                });
+                BtnCancelEditClick();
+                await Task.Yield();
+                await OnUpdated.InvokeAsync(dto);
+                //});
 
 
             }
