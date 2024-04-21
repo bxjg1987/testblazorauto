@@ -4,7 +4,7 @@
 
 @attribute [ReuseTabsPage(Title = "省市区")]
 @attribute [Authorize(PermissionNames.BXJGBaseInfoAdministrative)]
-@inherits TreeListBaseComponent<IBXJGBaseInfoAdministrativeAppService,AdministrativeDto, AdministrativeEditDto, AdministrativeEditDto,GetAdministrativeInput>
+@inherits TreeListBaseComponent<AdministrativeDto,GetAdministrativeInput>
 
 <Flex Gap="small" Vertical Justify="space-between">
      <Flex Justify="space-between">

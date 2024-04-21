@@ -7,6 +7,7 @@ namespace ZLJ.Admin.CoreRCL.DataDictionary
 {
     public partial class List
     {
+        protected override HttpClient HttpClient => httpClient ??= ScopedServices.GetRequiredService<IHttpClientFactory>().CreateHttpClientUtils();
         long? parentId;
         void AddSub(long pid) {
             

@@ -1,7 +1,7 @@
 ﻿@using BXJG.Utils.Application.Share.Dtos
 @using Microsoft.AspNetCore.Components.Sections
 @using ZLJ.Application.Share.Post
-@inherits DetailUpdateBaseComponent<IPostAppService, PostDto, int, PagedAndSortedResultRequest< PagedPostResultRequestDto>, CreatePostDto, PostEditDto>
+@inherits DetailUpdateBaseComponent< PostDto, int,  PostEditDto>
 <SectionContent SectionName=@(FuncName+"-detail-update-title")>
     <Icon Type=@detailUpdateIcon Theme=@IconThemeType.Outline />
     @(detailUpdateText)@(FuncName)

@@ -19,7 +19,7 @@ using BXJG.Utils.Application.GeneralTree;
 namespace ZLJ.Application.BaseInfo.Administrative
 {
     // [AbpAuthorize]
-    public class BXJGBaseInfoAdministrativeAppService : AdminTreeCrudBaseAppService<AdministrativeEntity,
+    public class AdministrativeAppService : AdminTreeCrudBaseAppService<AdministrativeEntity,
                                                                                     AdministrativeDto,
                                                                                     AdministrativeEditDto,
                                                                                     AdministrativeEditDto,

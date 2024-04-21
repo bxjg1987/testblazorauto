@@ -23,24 +23,14 @@ namespace ZLJ.RCL.Components
     /// 基于antblazor和abp的通用详情页组件，它包含查看详情页和修改，以及二者之间的切换
     /// 新增抽象组件是单独定义的，因为它是对数据从无到有的创建，而详情组件是对以后的数据进行查看和处理
     /// </summary>
-    /// <typeparam name="TAppService">应用服务类型</typeparam>
     /// <typeparam name="TEntityDto">列表项的数据类型</typeparam>
-    /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
-    /// <typeparam name="TCreateInput">新增时的输入类型</typeparam>
     /// <typeparam name="TEditDto">修改时的输入类型</typeparam>
-    public abstract class TreeDetailUpdateBaseComponent<TAppService,
-                                                        TEntityDto,
-                                                        TCreateInput,
-                                                        TEditDto,
-                                                        TGetAllInput> : BXJG.Utils.RCL.Components.TreeDetailUpdateBaseComponent<TAppService,
-                                                        TEntityDto,
-                                                        TCreateInput,
-                                                        TEditDto,
-                                                        TGetAllInput>
-        where TEntityDto : IGeneralTree<TEntityDto>, IExtendableObj,new()
+    public abstract class TreeDetailUpdateBaseComponent<TEntityDto,
+                                                        TEditDto> : BXJG.Utils.RCL.Components.TreeDetailUpdateBaseComponent<TEntityDto,
+                                                                                                                            TEditDto>
+        where TEntityDto :/* IGeneralTree<TEntityDto>, IExtendableObj,*/new()
         //where TGetAllInput : new()
-        where TEditDto : IHaveParentId<long>,new()
-        where TAppService : IGeneralTreeBaseAppService<TEntityDto, TCreateInput, TEditDto, TGetAllInput>
+        where TEditDto : /*IHaveParentId<long>,*/new()
     {
 #if !DEBUG
         [AbpExceptionInterceptor]

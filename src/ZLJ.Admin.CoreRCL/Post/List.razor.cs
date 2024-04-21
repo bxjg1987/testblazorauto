@@ -6,6 +6,7 @@ using AntDesign.TableModels;
 using BXJG.Utils.Application.Share.Dtos;
 using BXJG.Utils.RCL.Components;
 using Microsoft.AspNetCore.Components.Web;
+using System.Net.Http;
 using ZLJ.Application.Common.Share.OU;
 using ZLJ.Application.Share.Post;
 
@@ -13,6 +14,8 @@ namespace ZLJ.Admin.CoreRCL.Post
 {
     public partial class List
     {
+        protected override HttpClient HttpClient => httpClient ??= ScopedServices.GetRequiredService<IHttpClientFactory>().CreateHttpClientAdmin();
+
         bool sj;
 
         // string currOu;
@@ -23,7 +26,7 @@ namespace ZLJ.Admin.CoreRCL.Post
 #endif
         protected override async Task OnInitializedAsync()
         {
-            if ((await base.AppService.GetAllAsync(new PagedAndSortedResultRequest<PagedPostResultRequestDto> { SkipCount = 0, MaxResultCount = 1, Sorting = "role.Id", Filter = new PagedPostResultRequestDto() })).TotalCount >= 500)
+            if ((await HttpClient.GetAll<PostDto>(new PagedAndSortedResultRequest<PagedPostResultRequestDto> { SkipCount = 0, MaxResultCount = 1, Sorting = "role.Id", Filter = new PagedPostResultRequestDto() })).TotalCount >= 500)
             {
                 sj = true;
             }
@@ -39,7 +42,7 @@ namespace ZLJ.Admin.CoreRCL.Post
         {
             for (int i = 0; i < 500; i++)
             {
-                await base.AppService.CreateAsync(new CreatePostDto
+                await base.HttpClient.Create<PostDto>(new CreatePostDto
                 {
                     Description = "演示数据" + Random.Shared.Next(),
                     DisplayName = "测试名称" + Random.Shared.Next(),

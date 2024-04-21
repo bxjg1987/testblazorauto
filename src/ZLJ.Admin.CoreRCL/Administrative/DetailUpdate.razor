@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Components.Sections
 @using ZLJ.Application.Share.Administrative
 
-@inherits TreeDetailUpdateBaseComponent<IBXJGBaseInfoAdministrativeAppService,AdministrativeDto, AdministrativeEditDto, AdministrativeEditDto,GetAdministrativeInput>
+@inherits TreeDetailUpdateBaseComponent<AdministrativeDto, AdministrativeEditDto>
 <SectionContent SectionName=@(FuncName+"-detail-update-title")>
     <Icon Type=@detailUpdateIcon Theme=@IconThemeType.Outline />
     @(detailUpdateText)@(FuncName)

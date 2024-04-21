@@ -12,11 +12,8 @@ namespace ZLJ.RCL.Components
     /// <summary>
     /// 数据字典树形下拉框
     /// </summary>
-    public class TreeSelectDataDictionary : TreeSelect<GeneralTreeGetForSelectInput,
-                                                       DataDictionaryForSelectDto,
-                                                       GeneralTreeGetForSelectInput,
-                                                       GeneralTreeComboboxDto,
-                                                       IDataDictionaryProviderAppService>
+    public class TreeSelectDataDictionary : TreeSelectZlj<DataDictionaryForSelectDto>
     {
+        protected override HttpClient HttpClient => httpClient ??= HttpClientFactory.CreateHttpClientUtils();
     }
 }

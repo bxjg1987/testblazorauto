@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Components.Sections
 @using ZLJ.Application.Share.Administrative
 
-@inherits TreeCreateBaseComponent<IBXJGBaseInfoAdministrativeAppService,AdministrativeDto, AdministrativeEditDto, AdministrativeEditDto,GetAdministrativeInput>
+@inherits TreeCreateBaseComponent<AdministrativeDto,  AdministrativeEditDto>
 
 <SectionContent SectionName=@(FuncName + "-create-body")>
     <Form @ref="frm" ValidateOnChange="true" Model="createDto" LabelColSpan="4" WrapperColSpan="20" OnFinish="OnFinish">

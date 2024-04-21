@@ -3,6 +3,8 @@ namespace ZLJ.Admin.CoreRCL.DataDictionary
 {
     public partial class DetailUpdate
     {
+        protected override HttpClient HttpClient => httpClient ??= ScopedServices.GetRequiredService<IHttpClientFactory>().CreateHttpClientUtils();
+
         protected override string FuncName => "数据字典";
         /// <summary>
         /// 

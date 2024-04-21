@@ -1,7 +1,11 @@
-﻿namespace ZLJ.Admin.CoreRCL.Post
+﻿using System.Net.Http;
+
+namespace ZLJ.Admin.CoreRCL.Post
 {
     public partial class DetailUpdate
     {
+        protected override HttpClient HttpClient => httpClient ??= ScopedServices.GetRequiredService<IHttpClientFactory>().CreateHttpClientAdmin();
+
         protected override string FuncName => "角色岗位";
         /// <summary>
         /// 

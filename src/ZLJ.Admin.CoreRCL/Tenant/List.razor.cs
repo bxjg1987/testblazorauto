@@ -7,6 +7,8 @@ namespace ZLJ.Admin.CoreRCL.Tenant
 {
     public partial class List
     {
+        protected override HttpClient HttpClient => httpClient ??= ScopedServices.GetRequiredService<IHttpClientFactory>().CreateHttpClientAdmin();
+
         protected override string FuncName => "租户";
 #if !DEBUG
         [AbpExceptionInterceptor]

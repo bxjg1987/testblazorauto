@@ -8,6 +8,8 @@ namespace ZLJ.Admin.CoreRCL.Administrative;
 
 public partial class List
 {
+    protected override HttpClient HttpClient => httpClient ??= ScopedServices.GetRequiredService<IHttpClientFactory>().CreateHttpClientAdmin();
+
     long? parentId;
     void AddSub(long pid) {
         

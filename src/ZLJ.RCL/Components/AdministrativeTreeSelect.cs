@@ -8,8 +8,7 @@ using ZLJ.Application.Common.Share.Administrative;
 
 namespace ZLJ.RCL.Components
 {
-    public class AdministrativeTreeSelect : TreeSelect<GetListInput, AdministrativeDto, GeneralTreeGetForSelectInput, GeneralTreeComboboxDto,
-                                                       IAdministrativeProviderAppService>
+    public class AdministrativeTreeSelect : TreeSelectZlj<AdministrativeDto>
     {
         protected override Task OnInitializedAsync()
         {

@@ -7,7 +7,7 @@
 
 @* @attribute [ReuseTabsPageTitle("员工岗位权限")] *@
 @attribute [Authorize(PermissionNames.AdministratorBaseInfoPost)]
-@inherits ListBaseComponent<IPostAppService, PostDto, int, PagedAndSortedResultRequest< PagedPostResultRequestDto>, CreatePostDto, PostEditDto>
+@inherits ListBaseComponent< PostDto, int, PagedAndSortedResultRequest< PagedPostResultRequestDto>>
 
 <Flex Gap="small" Vertical Justify="space-between">
      <Flex Justify="space-between">

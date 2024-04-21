@@ -35,25 +35,15 @@ namespace ZLJ.RCL.Components
     /// <summary>
     /// 抽象的，基于MudBlazor treeView的列表页抽象组件
     /// </summary>
-    /// <typeparam name="TAppService">应用服务类型</typeparam>
     /// <typeparam name="TEntityDto">列表项的数据类型</typeparam>
-    /// <typeparam name="TCreateInput">新增时的输入类型</typeparam>
-    /// <typeparam name="TEditDto">修改时的输入类型</typeparam>
     /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
-    public abstract class TreeListBaseComponent<TAppService,
-                                                TEntityDto,
-                                                TCreateInput,
-                                                TEditDto,
-                                                TGetAllInput> : BXJG.Utils.RCL.Components.TreeListBaseComponent<TAppService,
-                                                TEntityDto,
-                                                TCreateInput,
-                                                TEditDto,
-                                                TGetAllInput>
+    public abstract class TreeListBaseComponent<TEntityDto,
+                                                TGetAllInput> : BXJG.Utils.RCL.Components.TreeListBaseComponent<TEntityDto,
+                                                                                                                TGetAllInput>
         //where TCreateInput : GeneralTreeNodeEditBaseDto //注意这里约束为TEditDto，这样强制要求继承编辑模型不合理
         where TEntityDto : IGeneralTree<TEntityDto>, IExtendableObj//, new()
         //where TEditDto : GeneralTreeNodeEditBaseDto//父类可以对输入做一定的处理
         where TGetAllInput : new()
-        where TAppService : IGeneralTreeBaseAppService<TEntityDto, TCreateInput, TEditDto, TGetAllInput>
     {
         //界面部分就不要用IPermissionChecker了，不过server模式时AuthorizationService内部会使用IPermissionChecker
         //请查看自定义授权策略提供器

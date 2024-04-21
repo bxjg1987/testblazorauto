@@ -1,7 +1,7 @@
 ﻿@using BXJG.Utils.Application.Share.GeneralTree
 @using Microsoft.AspNetCore.Components.Sections
 
-@inherits TreeDetailUpdateBaseComponent<IDataDictionaryAppService, DataDictionaryDto, DataDictionaryEditDto, DataDictionaryEditDto,DataDictionaryGetTreeInput>
+@inherits TreeDetailUpdateBaseComponent<DataDictionaryDto, DataDictionaryEditDto>
 <SectionContent SectionName=@(FuncName+"-detail-update-title")>
     <Icon Type=@detailUpdateIcon Theme=@IconThemeType.Outline />
     @(detailUpdateText)@(FuncName)

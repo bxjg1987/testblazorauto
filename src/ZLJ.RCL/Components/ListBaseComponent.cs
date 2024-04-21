@@ -44,27 +44,16 @@ namespace ZLJ.RCL.Components
     /// <summary>
     /// 抽象的，基于ant table的列表页抽象组件
     /// </summary>
-    /// <typeparam name="TAppService">应用服务类型</typeparam>
     /// <typeparam name="TEntityDto">列表项的数据类型</typeparam>
     /// <typeparam name="TPrimaryKey">唯一id类型</typeparam>
     /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
-    /// <typeparam name="TCreateInput">新增时的输入类型</typeparam>
-    /// <typeparam name="TUpdateInput">修改时的输入类型</typeparam>
-    public abstract class ListBaseComponent<TAppService,
-                                            TEntityDto,
+    public abstract class ListBaseComponent<TEntityDto,
                                             TPrimaryKey,
-                                            TGetAllInput,
-                                            TCreateInput,
-                                            TUpdateInput> : BXJG.Utils.RCL.Components.ListBaseComponent<TAppService,
-                                            TEntityDto,
-                                            TPrimaryKey,
-                                            TGetAllInput,
-                                            TCreateInput,
-                                            TUpdateInput>
+                                            TGetAllInput> : BXJG.Utils.RCL.Components.ListBaseComponent<TEntityDto,
+                                                                                                        TPrimaryKey,
+                                                                                                        TGetAllInput>
         where TEntityDto : IEntityDto<TPrimaryKey>, IExtendableObj//, new()
         where TGetAllInput : new()
-        where TUpdateInput : IEntityDto<TPrimaryKey>
-        where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
     {
 
         //它不是用例，但因为列表是异步的，这里是核心，所以就把异常加这里吧

@@ -18,13 +18,13 @@ using ZLJ.Core.Share.Enums;
 namespace ZLJ.Application.Common.AdministrativeCommon
 {
     [AbpAuthorize]
-    public class BaseInfoAdministrativeProviderAppService : GeneralTreeProviderBaseAppService<
+    public class AdministrativeProviderAppService : GeneralTreeProviderBaseAppService<
         AdministrativeEntity,GeneralTreeGetForSelectInput
         , AdministrativeTreeNodeDto,
         GeneralTreeGetForSelectInput,
         AdministrativeComboboxItemDto>
     {
-        public BaseInfoAdministrativeProviderAppService(IRepository<AdministrativeEntity, long> repository)
+        public AdministrativeProviderAppService(IRepository<AdministrativeEntity, long> repository)
          //  : base(repository)
         {
             base.LocalizationSourceName = ZLJ.Core.Share.ZLJConsts.LocalizationSourceName;

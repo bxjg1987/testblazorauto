@@ -1,7 +1,7 @@
 ﻿@using BXJG.Utils.Application.Share.GeneralTree
 @using Microsoft.AspNetCore.Components.Sections
 
-@inherits TreeCreateBaseComponent<IDataDictionaryAppService, DataDictionaryDto, DataDictionaryEditDto, DataDictionaryEditDto,DataDictionaryGetTreeInput>
+@inherits TreeCreateBaseComponent< DataDictionaryDto, DataDictionaryEditDto>
 
 <SectionContent SectionName=@(FuncName + "-create-body")>
     <Form @ref="frm" ValidateOnChange="true" Model="createDto" LabelColSpan="4" WrapperColSpan="20" OnFinish="OnFinish">

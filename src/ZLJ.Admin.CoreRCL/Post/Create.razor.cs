@@ -7,11 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ZLJ.Application.Common.Share.OU;
+using System.Net.Http;
 
 namespace ZLJ.Admin.CoreRCL.Post
 {
     public partial class Create
     {
+        protected override HttpClient HttpClient => httpClient ??= ScopedServices.GetRequiredService<IHttpClientFactory>().CreateHttpClientAdmin();
+
         //ZLJ.Application.Common.OU.IOuAppService ouProviderAppService;
 
         //protected IOuAppService OuProviderAppService => ScopedServices.GetRequiredService<IOuAppService>();

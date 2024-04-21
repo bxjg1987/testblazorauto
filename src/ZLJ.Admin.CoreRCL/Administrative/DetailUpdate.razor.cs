@@ -1,4 +1,6 @@
-﻿namespace ZLJ.Admin.CoreRCL.Administrative
+﻿using System.Net.Http;
+
+namespace ZLJ.Admin.CoreRCL.Administrative
 {
     public partial class DetailUpdate
     {
@@ -14,7 +16,7 @@
         //{
         //    return base.OnInitializedAsync();
         //}
-
+        protected override HttpClient HttpClient => httpClient ??= ScopedServices.GetRequiredService<IHttpClientFactory>().CreateHttpClientAdmin();
 
     }
 }

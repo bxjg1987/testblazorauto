@@ -37,16 +37,11 @@ namespace BXJG.Utils.RCL.Components
     /// <typeparam name="TCreateInput">新增时的输入类型</typeparam>
     /// <typeparam name="TEditDto">修改时的输入类型</typeparam>
     /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
-    public abstract class TreeListBaseComponent<TAppService,
-                                                TEntityDto,
-                                                TCreateInput,
-                                                TEditDto,
-                                                TGetAllInput> : BaseComponent
+    public abstract class TreeListBaseComponent<TEntityDto,  TGetAllInput> : BaseComponent
         //where TCreateInput : GeneralTreeNodeEditBaseDto //注意这里约束为TEditDto，这样强制要求继承编辑模型不合理
         where TEntityDto : IGeneralTree<TEntityDto>, IExtendableObj//, new()
         //where TEditDto : GeneralTreeNodeEditBaseDto//父类可以对输入做一定的处理
         where TGetAllInput : new()
-        where TAppService : IGeneralTreeBaseAppService<TEntityDto, TCreateInput, TEditDto, TGetAllInput>
     {
         //界面部分就不要用IPermissionChecker了，不过server模式时AuthorizationService内部会使用IPermissionChecker
         //请查看自定义授权策略提供器
@@ -61,14 +56,7 @@ namespace BXJG.Utils.RCL.Components
         /// </summary>
         protected virtual IAuthorizationService AuthorizationService => authorizationService ??= ScopedServices.GetRequiredService<IAuthorizationService>();
 
-        /// <summary>
-        /// 请调用AppService
-        /// </summary>
-        TAppService? appService;
-        /// <summary>
-        /// 获取主服务
-        /// </summary>
-        protected virtual TAppService AppService => appService ??= ScopedServices.GetRequiredService<TAppService>();
+     
         /// <summary>
         /// 此功能的名称
         /// </summary>
@@ -248,7 +236,7 @@ namespace BXJG.Utils.RCL.Components
         protected virtual async Task LoadCore()
         {
 
-            var dtos = await AppService.GetAllAsync(GetAllInput);
+            var dtos = await HttpClient.GetList<TEntityDto>(GetAllInput);
 
             //_ = InvokeAsync(StateHasChanged);//让多选影响顶部按钮得以执行 包一层是因为需要加载完才执行
             //dataGrid.SelectedItems.Clear();//翻页时，已选择的好像木有清空，这里手动来下
@@ -466,7 +454,7 @@ namespace BXJG.Utils.RCL.Components
         {
             //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限
 
-            return AppService.DeleteAsync(new BatchOperationInputLong { Ids = SelectedItems.Select(x => x.Id).ToArray() });
+            return HttpClient.DeleteBatchTree<TEntityDto>(new BatchOperationInputLong { Ids = SelectedItems.Select(x => x.Id).ToArray() });
 
 
         }
@@ -513,7 +501,7 @@ namespace BXJG.Utils.RCL.Components
         }
         protected virtual async Task DeleteItemCore(TEntityDto item)
         {
-            var r = await AppService.DeleteAsync(new() { Ids = new[] { item.Id } });
+            var r = await HttpClient.DeleteBatchTree<TEntityDto>(new{ Ids = new[] { item.Id } });
             if (r.Ids.Count != 1)
                 throw new Abp.UI.UserFriendlyException(r.ErrorMessage.First().Message);
         }

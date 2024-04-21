@@ -15,6 +15,7 @@ namespace ZLJ.RCL.Components
     /// </summary>
     public abstract class BaseComponent : BXJG.Utils.RCL.Components.BaseComponent
     {
+        protected override HttpClient HttpClient => httpClient ??= ScopedServices.GetRequiredService<IHttpClientFactory>().CreateHttpClientCommon();
         /// <summary>
         /// 界面消息服务
         /// </summary>

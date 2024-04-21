@@ -5,7 +5,7 @@
 @* 可能用弹窗或页面承载，所以核心组件不应该这样判断权限 *@
 @* @attribute [Authorize(PermissionNames.AdministratorBaseInfoPost)] *@
 
-@inherits CreateBaseComponent<IPostAppService, PostDto, int, PagedAndSortedResultRequest< PagedPostResultRequestDto>, CreatePostDto, PostEditDto>
+@inherits CreateBaseComponent< PostDto,CreatePostDto>
 
 <SectionContent SectionName=@(FuncName + "-create-body")>
     <Form @ref="frm" ValidateOnChange="true" Model="createDto" LabelColSpan="4" WrapperColSpan="20" OnFinish="OnFinish">

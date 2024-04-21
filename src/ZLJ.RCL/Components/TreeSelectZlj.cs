@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using ZLJ.RCL.Interceptors;
@@ -27,25 +28,18 @@ namespace ZLJ.RCL.Components
     /// 这是泛型的、通用的、统一树形的 下拉树选择框，它不限定是用在搜索（重在事件触发数据加载）还是表单（重在双向绑定）
     /// 推荐所有树形数据的选择都继承它
     /// </summary>
-    /// <typeparam name="TGetTreeForSelectInput"></typeparam>
     /// <typeparam name="TGetTreeForSelectOutput"></typeparam>
-    /// <typeparam name="TGetNodesForSelectInput"></typeparam>
-    /// <typeparam name="TGetNodesForSelectOutput"></typeparam>
-    /// <typeparam name="TAppService"></typeparam>
-    public class TreeSelect<TGetTreeForSelectInput,
-                            TGetTreeForSelectOutput,
-                            TGetNodesForSelectInput,
-                            TGetNodesForSelectOutput,
-                            TAppService> : TreeSelect<TGetTreeForSelectOutput>
+    public class TreeSelectZlj<TGetTreeForSelectOutput> : TreeSelect<TGetTreeForSelectOutput>
         where TGetTreeForSelectOutput : IGeneralTree<TGetTreeForSelectOutput>
-        where TGetTreeForSelectInput : GeneralTreeGetForSelectInput, new()
         //where TGetNodesForSelectOutput : ComboboxItemDto 由于我们规定了统一使用树，所以这个约束没有必要
-        //这里的接口应该换成application.common.share中的接口
-        where TAppService : IGeneralTreeProviderBaseAppService<TGetTreeForSelectInput,
-                                                               TGetTreeForSelectOutput,
-                                                               TGetNodesForSelectInput,
-                                                               TGetNodesForSelectOutput>
+      
     {
+        protected HttpClient httpClient;
+        [Inject]
+        public IHttpClientFactory HttpClientFactory { get; set; }
+
+
+        protected virtual HttpClient HttpClient => httpClient ??= HttpClientFactory.CreateHttpClientCommon();
         /// <summary>
         /// 只加载此节点下的后代节点
         /// 不用用code，因为code会变
@@ -92,8 +86,8 @@ namespace ZLJ.RCL.Components
         //    //StateHasChanged();
         //    // _ = ValueChanged.InvokeAsync(string.Empty);
         //}
-        [Inject]
-        public IServiceProvider ServiceProvider { get; set; }
+        //[Inject]
+        //public IServiceProvider ServiceProvider { get; set; }
 
 #if !DEBUG
         [AbpExceptionInterceptor]
@@ -121,12 +115,17 @@ namespace ZLJ.RCL.Components
 
             if (DataSource == null)
             {
-                await using var service = ServiceProvider.CreateAsyncScope();
-                var appService = service.ServiceProvider.GetRequiredService<TAppService>();
-                DataSource = await appService.GetTreeForSelectAsync(new TGetTreeForSelectInput { ParentId = ParentId });
+                //await using var service = ServiceProvider.CreateAsyncScope();
+                //var appService = service.ServiceProvider.GetRequiredService<TAppService>();
+                // DataSource = await appService.GetTreeForSelectAsync(new TGetTreeForSelectInput { ParentId = ParentId });
+                DataSource = await HttpClient.GetTreeForSelect<TGetTreeForSelectOutput>(new  {  ParentId });
             }
         }
+     
 
+
+
+        //protected abstract HttpClient CreateHttpClient();
         //[AbpExceptionInterceptor]
         //async Task Search(string str)
         //{

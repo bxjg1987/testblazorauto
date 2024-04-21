@@ -3,7 +3,7 @@
 @page "/data-dictionary"
 @attribute [ReuseTabsPage(Title = "数据字典")]
 @attribute [Authorize(PermissionNames.AdministratorBaseInfoPost)]
-@inherits TreeListBaseComponent<IDataDictionaryAppService, DataDictionaryDto, DataDictionaryEditDto, DataDictionaryEditDto,DataDictionaryGetTreeInput>
+@inherits TreeListBaseComponent< DataDictionaryDto,DataDictionaryGetTreeInput>
 
 <Flex Gap="small" Vertical Justify="space-between">
 

@@ -83,7 +83,7 @@ namespace System.Net.Http
         /// <param name="_httpClientFactory"></param>
         /// <param name="url">每个应用的api前缀，如：api/services/admin</param>
         /// <returns></returns>
-        public static HttpClient CreateBXJGUtils(this IHttpClientFactory _httpClientFactory, string url)
+        public static HttpClient CreateBXJGUtils(this IHttpClientFactory _httpClientFactory, string url=default)
         {
             var hc = _httpClientFactory.CreateClient(HttpClientName);
             if (url.IsNotNullOrWhiteSpaceBXJG())
@@ -247,9 +247,19 @@ namespace System.Net.Http
         {
             return client.Post(controller, "delete", data, default, cancellationToken);
         }
+        public static Task Delete<TDto>(this HttpClient client, object data, string controller = default, CancellationToken cancellationToken = default)
+        {
+            controller = controller.NewMethod<TDto>();
+            return client.Delete(data, controller, cancellationToken);
+        }
         public static Task<BatchOperationOutput<TKey>> DeleteBatch<TKey>(this HttpClient client, object data, string controller, CancellationToken cancellationToken = default)
         {
             return client.Post<BatchOperationOutput<TKey>>(controller, $"deleteBatch", data, default, cancellationToken);
+        }
+        public static Task<BatchOperationOutput<TKey>> DeleteBatch<TKey, TDto>(this HttpClient client, object data, string controller = default, CancellationToken cancellationToken = default)
+        {
+            controller = controller.NewMethod<TDto>();
+            return client.DeleteBatch<TKey>(data, controller, cancellationToken);
         }
         /// <summary>
         /// 获取单个数据
@@ -332,10 +342,24 @@ namespace System.Net.Http
         /// <param name="data"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public static Task<BatchOperationOutputLong> DeleteBatch(this HttpClient client, string controller, object data, CancellationToken cancellationToken = default)
+        public static Task<BatchOperationOutputLong> DeleteBatch(this HttpClient client, object data, string controller, CancellationToken cancellationToken = default)
         {
-            return client.Post<BatchOperationOutputLong>(controller, $"deleteBatch", data, default, cancellationToken);
+            return client.Post<BatchOperationOutputLong>(controller, $"delete", data, default, cancellationToken);
         }
+        /// <summary>
+        /// 树形数据只有批量删除
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="controller"></param>
+        /// <param name="data"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public static Task<BatchOperationOutputLong> DeleteBatchTree<TDto>(this HttpClient client, object data, string controller=default, CancellationToken cancellationToken = default)
+        {
+            controller = controller.NewMethod<TDto>();
+            return client.DeleteBatch(data, controller, cancellationToken);
+        }
+
         /// <summary>
         /// 获取不分页的列表
         /// </summary>
@@ -378,13 +402,22 @@ namespace System.Net.Http
         public static string NewMethod<TDto>(this string url)
         {
             if (url.IsNullOrWhiteSpace())
-                url = typeof(TDto).Name.TrimEnd("Dto".ToCharArray());
+            {
+
+                url = typeof(TDto).Name;
+                url = url.Substring(0,url.Length-3);
+            }
+
             return url;
         }
         public static string NewMethod2<TDto>(this string url)
         {
             if (url.IsNullOrWhiteSpace())
-                url = typeof(TDto).Name.TrimEnd("Dto".ToCharArray())+"Provider";
+            {
+                url = typeof(TDto).Name;
+                url = url.Substring(0, url.Length - 3);
+                url += "Provider";
+            }
             return url;
         }
     }

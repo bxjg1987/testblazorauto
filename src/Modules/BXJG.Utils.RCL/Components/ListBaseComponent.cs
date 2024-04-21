@@ -48,16 +48,11 @@ namespace BXJG.Utils.RCL.Components
     /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
     /// <typeparam name="TCreateInput">新增时的输入类型</typeparam>
     /// <typeparam name="TUpdateInput">修改时的输入类型</typeparam>
-    public abstract class ListBaseComponent<TAppService,
-                                            TEntityDto,
+    public abstract class ListBaseComponent<TEntityDto,
                                             TPrimaryKey,
-                                            TGetAllInput,
-                                            TCreateInput,
-                                            TUpdateInput> : BaseComponent
+                                            TGetAllInput> : BaseComponent
         where TEntityDto : IEntityDto<TPrimaryKey>, IExtendableObj//, new()
         where TGetAllInput : new()
-        where TUpdateInput : IEntityDto<TPrimaryKey>
-        where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
     {
         //界面部分就不要用IPermissionChecker了，不过server模式时AuthorizationService内部会使用IPermissionChecker
         //请查看自定义授权策略提供器
@@ -72,14 +67,6 @@ namespace BXJG.Utils.RCL.Components
         /// </summary>
         protected virtual IAuthorizationService AuthorizationService => authorizationService ??= ScopedServices.GetRequiredService<IAuthorizationService>();
 
-        /// <summary>
-        /// 请调用AppService
-        /// </summary>
-        TAppService appService;
-        /// <summary>
-        /// 获取主服务
-        /// </summary>
-        protected virtual TAppService AppService => appService ??= ScopedServices.GetRequiredService<TAppService>();
         /// <summary>
         /// 此功能的名称
         /// </summary>
@@ -352,7 +339,7 @@ namespace BXJG.Utils.RCL.Components
             //    cddqq.Keywords = Keywords;// state.FilterDefinitions.MapToDynamicCondition().ToList();
             //}
             //await FillCondtion(cd);
-            var dtos = await AppService.GetAllAsync(GetAllInput);
+            var dtos = await HttpClient.GetAll<TEntityDto>(GetAllInput);// AppService.GetAllAsync(GetAllInput);
 
             //_ = InvokeAsync(StateHasChanged);//让多选影响顶部按钮得以执行 包一层是因为需要加载完才执行
             //dataGrid.SelectedItems.Clear();//翻页时，已选择的好像木有清空，这里手动来下
@@ -546,7 +533,7 @@ namespace BXJG.Utils.RCL.Components
         /// <returns></returns>
         public virtual Task<BatchOperationOutput<TPrimaryKey>> DeleteCore()
         {
-            return AppService.BatchDeleteAsync(new BatchOperationInput<TPrimaryKey> { Ids = SelectedItems.Select(x => x.Id).ToArray() });
+            return HttpClient.DeleteBatch<TPrimaryKey, TEntityDto>(new BatchOperationInput<TPrimaryKey> { Ids = SelectedItems.Select(x => x.Id).ToArray() });//  AppService.BatchDeleteAsync(new BatchOperationInput<TPrimaryKey> { Ids = SelectedItems.Select(x => x.Id).ToArray() });
         }
         /// <summary>
         /// 删除单个项
@@ -599,7 +586,7 @@ namespace BXJG.Utils.RCL.Components
         /// <returns></returns>
         protected virtual async Task DeleteItemCore(TEntityDto item)
         {
-            await AppService.DeleteAsync(new EntityDto<TPrimaryKey>(item.Id));
+            await HttpClient.Delete<TEntityDto>(new EntityDto<TPrimaryKey>(item.Id));
         }
         #endregion
     }

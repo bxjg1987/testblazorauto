@@ -25,21 +25,11 @@ namespace ZLJ.RCL.Components
     /// 查看详情和修改数据的抽象组件是单独定义的（因为要切换查看和编辑模式，所以定义在同一个组件中的），
     /// 查看详情和修改组件是对以后的数据进行查看和处理，而新增组件它是对数据从无到有的创建，因此分开定义的。
     /// </summary>
-    /// <typeparam name="TAppService">应用服务类型</typeparam>
     /// <typeparam name="TEntityDto">列表项的数据类型</typeparam>
-    /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
     /// <typeparam name="TCreateInput">新增时的输入类型</typeparam>
-    /// <typeparam name="TEditDto">修改时的输入类型</typeparam>
-    public abstract class TreeCreateBaseComponent<TAppService,
-                                                  TEntityDto,
-                                                  TCreateInput,
-                                                  TEditDto,
-                                                  TGetAllInput> : BXJG.Utils.RCL.Components.TreeCreateBaseComponent<TAppService,
-                                                  TEntityDto,
-                                                  TCreateInput,
-                                                  TEditDto,
-                                                  TGetAllInput>
-        where TAppService : IGeneralTreeBaseAppService<TEntityDto, TCreateInput, TEditDto, TGetAllInput>
+    public abstract class TreeCreateBaseComponent<TEntityDto,
+                                                  TCreateInput> : BXJG.Utils.RCL.Components.TreeCreateBaseComponent<TEntityDto,
+                                                                                                                    TCreateInput>
         where TCreateInput : IHaveParentId<long>, new()
     {
 #if !DEBUG

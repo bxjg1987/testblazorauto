@@ -23,20 +23,12 @@ namespace BXJG.Utils.RCL.Components
     /// 基于antblazor和abp的通用详情页组件，它包含查看详情页和修改，以及二者之间的切换
     /// 新增抽象组件是单独定义的，因为它是对数据从无到有的创建，而详情组件是对以后的数据进行查看和处理
     /// </summary>
-    /// <typeparam name="TAppService">应用服务类型</typeparam>
     /// <typeparam name="TEntityDto">列表项的数据类型</typeparam>
-    /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
-    /// <typeparam name="TCreateInput">新增时的输入类型</typeparam>
     /// <typeparam name="TEditDto">修改时的输入类型</typeparam>
-    public abstract class TreeDetailUpdateBaseComponent<TAppService,
-                                                        TEntityDto,
-                                                        TCreateInput,
-                                                        TEditDto,
-                                                        TGetAllInput> : BaseComponent
-        where TEntityDto : IGeneralTree<TEntityDto>, IExtendableObj, new()
+    public abstract class TreeDetailUpdateBaseComponent<TEntityDto,  TEditDto> : BaseComponent
+        where TEntityDto : /*IGeneralTree<TEntityDto>,*/ new()  // 木用到就暂时不限制
         //where TGetAllInput : new()
-        where TEditDto : IHaveParentId<long>, new()
-        where TAppService : IGeneralTreeBaseAppService<TEntityDto, TCreateInput, TEditDto, TGetAllInput>
+        where TEditDto :/* IHaveParentId<long>,*/ new()
     {
         #region 字段和属性
 
@@ -50,14 +42,6 @@ namespace BXJG.Utils.RCL.Components
         /// 对象映射接口
         /// </summary>
         protected virtual IObjectMapper ObjectMapper => objectMapper ??= ScopedServices.GetRequiredService<IObjectMapper>();
-        /// <summary>
-        /// 缓存当前主服务对象
-        /// </summary>
-        TAppService? appService;
-        /// <summary>
-        /// 获取主服务
-        /// </summary>
-        protected virtual TAppService AppService => appService ??= ScopedServices.GetRequiredService<TAppService>();
         /// <summary>
         /// 此功能的名称
         /// </summary>
@@ -92,9 +76,6 @@ namespace BXJG.Utils.RCL.Components
         /// 初始化时回调，默认根据id从应用服务接口获取单个数据，然后判断并进入编辑模式
         /// </summary>
         /// <returns></returns>
-
-
-
         protected override async Task OnInitializedAsync()
         {
             //Abp.ObjectMapping.
@@ -217,7 +198,7 @@ namespace BXJG.Utils.RCL.Components
         protected virtual async Task RefreshCore()
         {
 
-            dto = await AppService.GetAsync(new EntityDto<long>(Id));
+            dto = await HttpClient.Get<TEntityDto>(new EntityDto<long>(Id));
 
         }
         #endregion
@@ -439,7 +420,7 @@ namespace BXJG.Utils.RCL.Components
         }
         protected virtual async Task SaveCore()
         {
-            dto = await AppService.UpdateAsync(editDto!);
+            dto = await HttpClient.Update<TEntityDto>(editDto!);
         }
         /// <summary>
         /// 保存后触发的事件
@@ -507,7 +488,7 @@ namespace BXJG.Utils.RCL.Components
         /// <returns></returns>
         protected virtual async Task<BatchOperationOutputLong> DeleteCore()
         {
-            return await AppService.DeleteAsync(new() { Ids = new[] { Id } });
+            return await HttpClient.DeleteBatchTree<TEntityDto>(new { Ids = new[] { Id } });// AppService.DeleteAsync(new() { Ids = new[] { Id } });
         }
         /// <summary>
         /// 删除后触发的事件

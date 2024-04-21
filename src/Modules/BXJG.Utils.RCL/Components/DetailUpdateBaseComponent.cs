@@ -22,22 +22,14 @@ namespace BXJG.Utils.RCL.Components
     /// 包含查看详情页和修改，以及二者之间的切换
     /// 新增抽象组件是单独定义的，因为它是对数据从无到有的创建，而详情组件是对以后的数据进行查看和处理
     /// </summary>
-    /// <typeparam name="TAppService">应用服务类型</typeparam>
     /// <typeparam name="TEntityDto">列表项的数据类型</typeparam>
     /// <typeparam name="TPrimaryKey">唯一id类型</typeparam>
-    /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
-    /// <typeparam name="TCreateInput">新增时的输入类型</typeparam>
     /// <typeparam name="TUpdateInput">修改时的输入类型</typeparam>
-    public abstract class DetailUpdateBaseComponent<TAppService,
-                                                    TEntityDto,
-                                                    TPrimaryKey,
-                                                    TGetAllInput,
-                                                    TCreateInput,
+    public abstract class DetailUpdateBaseComponent<TEntityDto,
+                                                    TPrimaryKey, //保留key，避免装箱/拆箱
                                                     TUpdateInput> : BaseComponent
-        where TEntityDto : IEntityDto<TPrimaryKey>, new()
-        //where TGetAllInput : new()
-        where TUpdateInput : IEntityDto<TPrimaryKey>, new()
-        where TAppService : ICrudBaseAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
+        where TEntityDto :  new()
+        where TUpdateInput : new()
     {
         #region 字段和属性
 
@@ -51,14 +43,7 @@ namespace BXJG.Utils.RCL.Components
         /// 对象映射接口
         /// </summary>
         protected virtual IObjectMapper ObjectMapper => objectMapper ??= ScopedServices.GetRequiredService<IObjectMapper>();
-        /// <summary>
-        /// 缓存当前主服务对象
-        /// </summary>
-        TAppService? appService;
-        /// <summary>
-        /// 获取主服务
-        /// </summary>
-        protected virtual TAppService AppService => appService ??= ScopedServices.GetRequiredService<TAppService>();
+       
         /// <summary>
         /// 此功能的名称
         /// </summary>
@@ -219,7 +204,7 @@ namespace BXJG.Utils.RCL.Components
         /// <returns></returns>
         protected virtual async Task RefreshCore()
         {
-            dto = await AppService.GetAsync(new EntityDto<TPrimaryKey>(Id));
+            dto = await HttpClient.Get<TEntityDto>(new EntityDto<TPrimaryKey>(Id));//  AppService.GetAsync(new EntityDto<TPrimaryKey>(Id));
         }
         #endregion
 
@@ -442,7 +427,7 @@ namespace BXJG.Utils.RCL.Components
         }
         protected virtual async Task SaveCore()
         {
-            dto = await AppService.UpdateAsync(editDto!);
+            dto = await HttpClient.Update<TEntityDto>(editDto);   //AppService.UpdateAsync(editDto!);
 
         }
         /// <summary>
@@ -503,7 +488,7 @@ namespace BXJG.Utils.RCL.Components
         /// <returns></returns>
         protected virtual async Task DeleteCore()
         {
-            await AppService.DeleteAsync(new EntityDto<TPrimaryKey>(Id));
+            await HttpClient.Delete<TEntityDto>(new EntityDto<TPrimaryKey>(Id));// AppService.DeleteAsync(new EntityDto<TPrimaryKey>(Id));
         }
         /// <summary>
         /// 删除后触发的事件

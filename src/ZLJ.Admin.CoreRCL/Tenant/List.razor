@@ -7,7 +7,7 @@
 
 @* @attribute [ReuseTabsPageTitle("员工岗位权限")] *@
 @attribute [Authorize(PermissionNames.AdminTenant)]
-@inherits ListBaseComponent<ITenantAppService, TenantDto, int, PagedAndSortedResultRequest<Condition>, EditTenantDto, EditTenantDto>
+@inherits ListBaseComponent<TenantDto, int, PagedAndSortedResultRequest<Condition>>
 
 <Flex Gap="small" Vertical Justify="space-between">
      <Flex Justify="space-between">
