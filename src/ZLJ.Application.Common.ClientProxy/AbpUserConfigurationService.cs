@@ -16,7 +16,7 @@ namespace ZLJ.Application.Common.ClientProxy
         HttpClient _httpClient;
         public AbpUserConfigurationService(IHttpClientFactory httpClientFactory) //: base(httpClientFactory)
         {
-            _httpClient = httpClientFactory.CreateHttpClient();
+            _httpClient = httpClientFactory.CreateClient();
         }
 
         public  async Task<AbpUserConfigurationDto> GetAll()

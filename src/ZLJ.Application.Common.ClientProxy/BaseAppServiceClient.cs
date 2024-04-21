@@ -18,11 +18,11 @@ namespace System.Net.Http
     {
         public static HttpClient CreateHttpClientUtils(this IHttpClientFactory _httpClientFactory)
         {
-            return _httpClientFactory.CreateHttpClient(ZLJ.Application.Common.Share.Consts.baseUrl_bxjg);
+            return _httpClientFactory.CreateBXJGUtils(ZLJ.Application.Common.Share.Consts.baseUrl_bxjg);
         }
         public static HttpClient CreateHttpClientCommon(this IHttpClientFactory _httpClientFactory)
         {
-            return _httpClientFactory.CreateHttpClient( ZLJ.Application.Common.Share.Consts.baseUrl);
+            return _httpClientFactory.CreateBXJGUtils( ZLJ.Application.Common.Share.Consts.baseUrl);
         }
     }
 }

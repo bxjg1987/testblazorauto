@@ -10,7 +10,7 @@ namespace System.Net.Http
     {
         public static HttpClient CreateHttpClientAdmin(this IHttpClientFactory _httpClientFactory)
         {
-            return _httpClientFactory.CreateHttpClient(  ZLJ.Application.Share.Consts.baseUrl);
+            return _httpClientFactory.CreateBXJGUtils(  ZLJ.Application.Share.Consts.baseUrl);
         }
     }
 }

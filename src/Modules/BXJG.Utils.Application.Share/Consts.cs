@@ -7,8 +7,10 @@ using System.Text;
 namespace BXJG.Utils.Application.Share
 {
     public class Consts
-    {   /// <summary>
+    {
+        /// <summary>
         /// 配置需要跟后端api匹配
+        /// 整个项目通用的json设置，一直升级过来的，一直使用的是json.net，前后端统一
         /// </summary>
         public static readonly JsonSerializerSettings settings = new JsonSerializerSettings
         {

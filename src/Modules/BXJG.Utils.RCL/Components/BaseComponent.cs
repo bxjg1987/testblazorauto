@@ -15,6 +15,13 @@ namespace BXJG.Utils.RCL.Components
     /// </summary>
     public abstract class BaseComponent : BXJG.Common.RCL.CommonBaseComponent
     {
+        private HttpClient httpClient;
+
+        /// <summary>
+        /// 与后端交互，它提供了常用扩展方法
+        /// </summary>
+        protected virtual HttpClient HttpClient => httpClient ??= ScopedServices.GetRequiredService<IHttpClientFactory>().CreateClient();
+
         //[Inject]
         public ICancellationTokenProvider CancellationTokenProvider => ScopedServices.GetService<ICancellationTokenProvider>() ?? NullCancellationTokenProvider.Instance;
         /// <summary>

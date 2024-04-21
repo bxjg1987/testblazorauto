@@ -29,9 +29,9 @@ namespace Microsoft.Extensions.DependencyInjection
             IHttpClientBuilder b;
 
             if (act != default)
-                b = services.AddHttpClient(BXJGBaseClient.HttpClientName, act);
+                b = services.AddHttpClient(BXJGHttpClientExt.HttpClientName, act);
             else
-                b = services.AddHttpClient(BXJGBaseClient.HttpClientName);
+                b = services.AddHttpClient(BXJGHttpClientExt.HttpClientName);
 
             services.AddTransient<AbpWraperDelegatHandler>();
             b.AddHttpMessageHandler<AbpWraperDelegatHandler>().AddHttpMessageHandler<AccessTokenHandler>();

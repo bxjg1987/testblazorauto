@@ -14,7 +14,7 @@ namespace ZLJ.Application.Common.ClientProxy
         HttpClient httpClient;
         public TokenAuthAppService(IHttpClientFactory httpClientFactory) 
         {
-            httpClient = httpClientFactory.CreateHttpClient();
+            httpClient = httpClientFactory.CreateClient();
         }
 
         public  Task<AuthenticateResultModel> Authenticate(AuthenticateModel input)
