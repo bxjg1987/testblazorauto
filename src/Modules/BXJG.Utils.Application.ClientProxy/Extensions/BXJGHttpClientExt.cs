@@ -17,28 +17,8 @@ using System.Net.Http.Json;
 
 namespace System.Net.Http
 {
-    /*
-     * 客户端代理方式有两种
-     * 1、使用单个代理类，定义所有接口
-     * 2、按后端接口一一对应
-     * 
-     * 为了配合抽象组件，我们还是决定分开定义
-     * 
-     * 由于代理服务是分开定义，所以使用命名的httpclient更合理
-     * 这样每个单独的代理服务都使用同一个httpclient
-     * 另外也可以对httpclient进行扩展方法定义
-     * 
-     * 在utils app client proxy中定义最抽象的服务代理
-     * Common中的不同服务都继承于它
-     * 由于comon和admin用一样的httpclient名称，所以在utils定义，在admin应用启动阶段赋值
-     * 因为不考虑同一进程承载多个应用的场景
-     * 
-     * 用扩展的形式对admin进行crud扩展，对common进行provider扩展，这样可以避免深层次的继承
-     */
-
     /// <summary>
-    /// 为了配合抽象组件，每个客户端代理类对应后端一个接口类，这些代理服务使用统一的一个httpclient（因为仅考虑一个进程托管一个应用）与后端交互
-    /// 此类提供通用扩展HttpClient方法
+    /// 结合abp和本框架对httpclient进行扩展
     /// </summary>
     public static class BXJGHttpClientExt
     {
@@ -72,13 +52,13 @@ namespace System.Net.Http
 
         /// <summary>
         /// 反正不考虑一个进程挂多个应用，就一个客户端好了，写死就ok了
+        /// 通常整个进程使用这个名称来配置和创建客户端，而不同应用有却别的地方，比如api基础地址，由对应的工厂方法去配置
         /// </summary>
 
         public static string HttpClientName = "BXJGUtilsClient";
 
         /// <summary>
-        /// 创建一个httpclient实例，用于整个进程与后端交互
-        /// 它仅提供通用方法，建议定义单独的代理服务，内部使用这里创建的对象
+        /// 创建一个httpclient实例，用于单个应用，所有应用的基础地址在启动时配置，这里的url指基础地址后，不同应用不同的部分
         /// </summary>
         /// <param name="_httpClientFactory"></param>
         /// <param name="url">每个应用的api前缀，如：api/services/admin</param>
@@ -90,6 +70,12 @@ namespace System.Net.Http
                 hc.BaseAddress = new Uri(hc.BaseAddress, url);//请包装hc.BaseAddress要以/结尾
             return hc;
         }
+
+        /// <summary>
+        /// 通常为每个应用提供一个IHttpClientFactory的扩展方法，这里指定抽象组件中默认使用的哪一个
+        /// 这样允许具体应用将自己的委托指定到这里，以改变抽象组件中默认的创建逻辑
+        /// </summary>
+        public static Func<IHttpClientFactory, HttpClient> DefaultFctory = f => f.CreateBXJGUtils();
 
         //也可以考虑实现自定义的IHttpClientFactory，不过扩展方法的方式更轻
 

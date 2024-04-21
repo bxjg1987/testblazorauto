@@ -34,12 +34,12 @@ namespace ZLJ.RCL.Components
         //where TGetNodesForSelectOutput : ComboboxItemDto 由于我们规定了统一使用树，所以这个约束没有必要
       
     {
-        protected HttpClient httpClient;
+    //    protected HttpClient httpClient;
         [Inject]
         public IHttpClientFactory HttpClientFactory { get; set; }
 
-
-        protected virtual HttpClient HttpClient => httpClient ??= HttpClientFactory.CreateHttpClientCommon();
+        //没必要缓存httpclient，因为基本只调用一次
+        protected virtual HttpClient HttpClient =>  HttpClientFactory.CreateHttpClientCommon();
         /// <summary>
         /// 只加载此节点下的后代节点
         /// 不用用code，因为code会变
