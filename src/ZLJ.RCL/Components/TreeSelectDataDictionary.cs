@@ -14,6 +14,6 @@ namespace ZLJ.RCL.Components
     /// </summary>
     public class TreeSelectDataDictionary : TreeSelectZlj<DataDictionaryForSelectDto>
     {
-        protected virtual HttpClient HttpClient => HttpClientFactory.CreateHttpClientUtils();
+        protected override HttpClient HttpClient => HttpClientFactory.CreateHttpClientUtils();
     }
 }
