@@ -110,7 +110,7 @@ namespace ZLJ.Application.Admin.MultiTenancy
         {
             // Manually mapped since TenantDto contains non-editable properties too.
             entity.Name = updateInput.Name;
-            entity.TenancyName = updateInput.TenancyName;
+            //entity.TenancyName = updateInput.TenancyName;
             entity.IsActive = updateInput.IsActive;
         }
 

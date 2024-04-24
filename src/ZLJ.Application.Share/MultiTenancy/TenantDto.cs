@@ -14,7 +14,7 @@ namespace ZLJ.Application.Share.MultiTenancy
         // [StringLength(ZLJConsts.MaxTenancyNameLength)]
         //[RegularExpression(ZLJConsts.TenancyNameRegex)]
         [DisplayName("唯一名")] public string TenancyName { get; set; }
-
+        //public string AdminEmailAddress { get; set; }
         //   [Required]
         // [StringLength(ZLJConsts.MaxNameLength)]
         [DisplayName("显示名")] public string Name { get; set; }

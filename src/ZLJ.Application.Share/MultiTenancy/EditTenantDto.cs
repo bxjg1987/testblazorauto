@@ -10,7 +10,7 @@ namespace ZLJ.Application.Share.MultiTenancy
     {
         [Required]
         [StringLength(ZLJConsts.MaxTenancyNameLength)]
-       [RegularExpression(ZLJConsts.TenancyNameRegex)]
+        [RegularExpression(ZLJConsts.TenancyNameRegex)]
         [DisplayName("租户唯一名")]
         public string TenancyName { get; set; }
 
@@ -20,7 +20,7 @@ namespace ZLJ.Application.Share.MultiTenancy
         public string Name { get; set; }
 
         [Required]
-       [StringLength(ZLJConsts.MaxEmailAddressLength)]
+        [StringLength(ZLJConsts.MaxEmailAddressLength)]
         [DisplayName("管理员邮箱")] public string AdminEmailAddress { get; set; }
 
        [StringLength(ZLJConsts.MaxConnectionStringLength)]

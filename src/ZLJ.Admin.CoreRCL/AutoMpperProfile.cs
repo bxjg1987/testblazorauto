@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BXJG.Utils.Application.Share.GeneralTree;
 using ZLJ.Application.Share.Administrative;
+using ZLJ.Application.Share.MultiTenancy;
 using ZLJ.Application.Share.Post;
 
 namespace ZLJ.Admin.CoreRCL
@@ -16,7 +17,7 @@ namespace ZLJ.Admin.CoreRCL
             CreateMap<PostDto, PostEditDto>();
             CreateMap<DataDictionaryDto, DataDictionaryEditDto>();
             CreateMap<AdministrativeDto, AdministrativeEditDto>();
-
+            CreateMap<TenantDto, EditTenantDto>();
         }
     }
 }

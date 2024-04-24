@@ -39,14 +39,13 @@ namespace ZLJ.EntityFrameworkCore.Seed
 
             // Default tenant seed (in host database).
             new DefaultTenantBuilder(context).Create();
+            new TenantRoleAndUserBuilder(context, 1).Create();
 
 
+            //abp开源框架只有上面的代码，下面是我们自己加的
             new DefaultOrganizationUnit(context, 1).Create();
-
-
             //new DefaultDataDictionaryBuilder(context, 1).Create();
             // new DefaultAdministrativeBuilder(context, 1).Create();
-
             //初始化基础信息模块中的数据
             //new DefaultBXJGBaseInfoBuilder(context, 1).Create();
             new DefaultBXJGBaseInfoDataDictionaryBuilder(context, 1).Create();
@@ -54,8 +53,6 @@ namespace ZLJ.EntityFrameworkCore.Seed
             new DefaultBXJGBaseInfoAssociatedCompanyBuilder(context, 1).Create();
             //new DefaultPostBuilder(context, 1).Create();
 
-
-            new TenantRoleAndUserBuilder(context, 1).Create();
             //new DefaultBXJGBaseInfoStaffInfoBuilder(context, 1).Create();
             if (InserTestData.Value)
             {
@@ -68,7 +65,6 @@ namespace ZLJ.EntityFrameworkCore.Seed
             // new DefaultBuilder<Tenant, Role, User, ZLJDbContext>(context, 1).Create();
             //cms演示数据
             //  new DefaultBXJGCMSBuilder<Tenant, Role, User, ZLJDbContext, GeneralTreeEntity>(context, 1).Create();
-
             //  new WorkOrderBuilder(context, 1).Create();
         }
 

@@ -1,0 +1,80 @@
+﻿@using BXJG.Utils.Application.Share.Dtos
+@using Microsoft.AspNetCore.Components.Sections
+@using ZLJ.Application.Share.MultiTenancy
+@inherits DetailUpdateBaseComponent<TenantDto,int,EditTenantDto>
+<SectionContent SectionName=@(Master.GetHashCode()+"-detail-update-title")>
+    <Icon Type=@detailUpdateIcon Theme=@IconThemeType.Outline />
+    @(detailUpdateText)@(FuncName)
+</SectionContent>
+<SectionContent SectionName=@(Master.GetHashCode() + "-detail-update-body")>
+
+    @if (isEdit)
+    {
+        <Form @ref="frm" ValidateOnChange="true" Model="editDto" LabelColSpan="4" WrapperColSpan="20" OnFinish="OnFinish">
+            <FormItem>
+                <Input @bind-Value="@context.Name" />
+            </FormItem>
+            <FormItem>
+                <Input @bind-Value="@context.TenancyName" Disabled />
+            </FormItem>
+            <FormItem>
+                <Input @bind-Value="@context.AdminEmailAddress" Disabled />
+            </FormItem>
+            <FormItem>
+                <Input @bind-Value="@context.ConnectionString" Disabled />
+            </FormItem>
+            <FormItem>
+                <Switch @bind-Value="@context.IsActive" />
+            </FormItem>
+        </Form>
+    }
+    else
+    {
+        <Descriptions Bordered Size="small">
+            <DescriptionsItem Title="显示名称">
+                @dto.Name
+            </DescriptionsItem>
+            <DescriptionsItem Title="唯一名称">
+                @dto.TenancyName
+            </DescriptionsItem>
+           
+            <DescriptionsItem Title="是否启用">
+                <Switch Value="@dto.IsActive" Disabled />
+            </DescriptionsItem>
+        </Descriptions>
+        @*    <GridRow>
+    <GridCol Span="4">显示名</GridCol>
+    <GridCol Span="20">@dto?.DisplayName</GridCol>
+    </GridRow>
+    <GridRow>
+    <GridCol Span="4">备注</GridCol>
+    <GridCol Span="20">@dto?.Description</GridCol>
+    </GridRow> *@
+    }
+
+
+</SectionContent>
+<SectionContent SectionName=@(Master.GetHashCode() + "-detail-update-btns")>
+    @if (IsShowDelete)
+    {
+        <Popconfirm Title="确定删除此项吗?" OnConfirm=BtnDeleteClick>
+            <Button  Loading=isDeleting Danger=true>删除</Button>
+        </Popconfirm>
+    }
+    <ButtonGroup>
+        @if (IsShowRefresh)
+        {
+            <Button OnClick="BtnRefreshClick" Loading=isRefreshing Disabled=IsRefreshDisabled>刷新</Button>
+        }
+        @if (IsShowBeginEdit)
+        {
+            <Button OnClick="BtnBeginEditClick" Loading=isFormIniting Type="@ButtonType.Primary">修改</Button>
+        }
+        else if (IsShowUpdate)
+        {
+            <Button OnClick="BtnResetClick" Loading=isReseting Disabled=IsUpdateDisabled Icon="@IconType.Outline.Redo">重置</Button>
+            <Button OnClick="BtnCancelEditClick" Disabled=IsUpdateDisabled Icon="@IconType.Outline.Rollback">放弃修改</Button>
+            <Button OnClick="BtnUpdateClick" Type="@ButtonType.Primary" Loading="@isUpdating" Disabled="@IsUpdateDisabled" Icon="@IconType.Outline.Save">保存</Button>
+        }
+    </ButtonGroup>
+</SectionContent>
