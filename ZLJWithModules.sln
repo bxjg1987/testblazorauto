@@ -54,6 +54,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{31830F03-1
 		docs\session.md = docs\session.md
 		docs\ZLJ.Web.Core说明.md = docs\ZLJ.Web.Core说明.md
 		docs\事件.md = docs\事件.md
+		docs\代码生成器.md = docs\代码生成器.md
 		docs\以前的文档.zip = docs\以前的文档.zip
 		docs\依赖注入和AOP.md = docs\依赖注入和AOP.md
 		docs\公司部门岗位角色用户.md = docs\公司部门岗位角色用户.md
@@ -106,6 +107,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZLJ.Web.BlazorAuto", "src\ZLJ.Web.BlazorAuto\ZLJ.Web.BlazorAuto.csproj", "{9A3EB11B-6EA8-44C6-9A80-10B8E0C0E8C0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Utils.Application.ClientProxy", "src\Modules\BXJG.Utils.Application.ClientProxy\BXJG.Utils.Application.ClientProxy.csproj", "{55D9DB14-3ED9-4E5E-B740-3FDBE7F2922F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGenerator.Core.Share", "src\Tools\CodeGenerator.Core.Share\CodeGenerator.Core.Share.csproj", "{E9E3CC25-8CD4-4FFC-932D-A67D12480F23}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGenerator.Core", "src\Tools\CodeGenerator.Core\CodeGenerator.Core.csproj", "{D860825E-E962-4FF8-9BFB-F3DC79C9393E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -237,6 +242,14 @@ Global
 		{55D9DB14-3ED9-4E5E-B740-3FDBE7F2922F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55D9DB14-3ED9-4E5E-B740-3FDBE7F2922F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{55D9DB14-3ED9-4E5E-B740-3FDBE7F2922F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9E3CC25-8CD4-4FFC-932D-A67D12480F23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9E3CC25-8CD4-4FFC-932D-A67D12480F23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9E3CC25-8CD4-4FFC-932D-A67D12480F23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9E3CC25-8CD4-4FFC-932D-A67D12480F23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D860825E-E962-4FF8-9BFB-F3DC79C9393E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D860825E-E962-4FF8-9BFB-F3DC79C9393E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D860825E-E962-4FF8-9BFB-F3DC79C9393E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D860825E-E962-4FF8-9BFB-F3DC79C9393E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -279,6 +292,8 @@ Global
 		{1FD27743-2174-4BE8-8B9F-202A554AC64E} = {44B336DD-E758-45E6-9E35-E777DE3AA52B}
 		{9A3EB11B-6EA8-44C6-9A80-10B8E0C0E8C0} = {13B83AF8-1FE7-45AB-B2BB-9D892C958891}
 		{55D9DB14-3ED9-4E5E-B740-3FDBE7F2922F} = {D42FF479-F331-48F6-AAA2-45B9FD451892}
+		{E9E3CC25-8CD4-4FFC-932D-A67D12480F23} = {44B336DD-E758-45E6-9E35-E777DE3AA52B}
+		{D860825E-E962-4FF8-9BFB-F3DC79C9393E} = {44B336DD-E758-45E6-9E35-E777DE3AA52B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F45DD46C-6040-4FCC-87E0-648786C36933}
