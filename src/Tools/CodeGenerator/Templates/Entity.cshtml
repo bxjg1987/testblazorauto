@@ -1,0 +1,11 @@
+@using CodeGenerator
+@using RazorLight
+
+@inherits TemplatePage<ExecuteContext>
+@{
+    DisableEncoding = true;
+}
+
+<html>
+    Hello @Model.Model.Name
+</html>
