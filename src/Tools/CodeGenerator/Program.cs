@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using RazorLight;
+using System.Text.RegularExpressions;
 
 //HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
 //builder.Services.Configure<List<ProjectDefine>>(builder.Configuration.GetSection("Projects"));
@@ -32,7 +33,7 @@ var engine = new RazorLightEngineBuilder()
     .UseMemoryCachingProvider()
     .Build();
 
-List<Action<ExecuteContext>> actions = new List<Action<ExecuteContext>> { Entity };
+List<Action<ExecuteContext>> actions = new List<Action<ExecuteContext>> { Entity, CoreShareConst };
 
 
 //var model = new { Name = "John Doe" };
@@ -154,5 +155,29 @@ void Entity(ExecuteContext ctx)
 
 
     Console.WriteLine("生成实体类完成");
+}
+void CoreShareConst(ExecuteContext ctx)
+{  
+    Console.WriteLine("正在生成CoreConst...");
+    var file = Path.Combine(ctx.SrcDir, ctx.CoreShareProjectName, ctx.CoreShareConstName + ".cs");
+
+    var old = File.ReadAllText(file);
+
+    old = Regex.Replace(old, @$"#region {ctx.Model.DisplayName}MaxLength.*?#endregion", string.Empty, RegexOptions.Singleline);
+
+
+    var str = engine.CompileRenderAsync("CoreShareConsts", ctx).Result;
+
+
+    //File.Replace(file, ctx.CodeGeneratorReplace, str);
+    str += Environment.NewLine;
+    str += $"\t\t{ExecuteContext.CodeGeneratorReplace}";
+
+    str = old.Replace(ExecuteContext.CodeGeneratorReplace, str);
+
+    File.WriteAllText(file, str);
+
+
+    Console.WriteLine("生成CoreConst完成");
 }
 #endregion

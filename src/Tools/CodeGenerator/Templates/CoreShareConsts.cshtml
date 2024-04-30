@@ -4,10 +4,11 @@
 @{
     DisableEncoding = true;//禁止html编码，因为我们是做代码生成器
 }
+#region @(Model.Model.DisplayName)MaxLength
 @foreach (var field in Model.Model.Fields)
 {
-    if (field.Length>0)
-    {
+if (field.Length>0){
         @:public const int @(Model.Model.Name)@(field.Name)MaxLength = @(field.Length);
-    }
 }
+}
+        #endregion
