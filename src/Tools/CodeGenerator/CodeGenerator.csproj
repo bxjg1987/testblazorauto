@@ -20,16 +20,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Projects\bxjg.json">
+    <None Update="Projects\ZLJ.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\CoreShareConsts.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Templates\Entity.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Templates\" />
   </ItemGroup>
 
 </Project>

@@ -54,7 +54,7 @@
         #endregion
 
 
-        //--codegenerator.BaseInfo==
+        //--codegenerator==
 
         #endregion
 

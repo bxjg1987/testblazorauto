@@ -1,11 +1,27 @@
 @using CodeGenerator
 @using RazorLight
-
 @inherits TemplatePage<ExecuteContext>
 @{
-    DisableEncoding = true;
+    DisableEncoding = true;//禁止html编码，因为我们是做代码生成器
 }
+using Abp.Domain.Entities;
+using Abp.Domain.Entities.Auditing;
+using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
-<html>
-    Hello @Model.Model.Name
-</html>
+namespace @Model.Model.CoreNamespace
+{
+    /// <summary>
+    /// @Model.DisplayName
+    ///</summary>
+    public class @Model.Model.EntityName : FullAuditedEntity<@Model.Model.PrimaryField.CSharpType>
+    {
+@foreach (var field in Model.Model.NormalFields)
+{
+        @:/// <summary>
+        @:/// @field.DisplayName
+        @:///</summary>
+        @:public @field.CSharpType @field.Name { get; set; }
+}
+    }
+}

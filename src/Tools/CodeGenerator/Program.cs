@@ -18,14 +18,14 @@ InitProject();
 
 var configuration = builder.Build();
 
-services.Configure<ProjectDefine>(configuration);
+services.Configure<ExecuteContext>(configuration);
 
 IServiceProvider serviceProvider = services.BuildServiceProvider();
 
-var ctx = new ExecuteContext { Services = serviceProvider };
 
-ctx.Project = serviceProvider.GetService<IOptionsMonitor<ProjectDefine>>().CurrentValue;
-
+var ctx = serviceProvider.GetService<IOptionsMonitor<ExecuteContext>>().CurrentValue;
+ctx.Services = serviceProvider;
+ctx.Models.ForEach(x=>x.ExecuteContext=ctx);
 
 var engine = new RazorLightEngineBuilder()
     .UseFileSystemProject(Path.Combine(Directory.GetCurrentDirectory(), "Templates"))
@@ -37,8 +37,8 @@ List<Action<ExecuteContext>> actions = new List<Action<ExecuteContext>> { Entity
 
 //var model = new { Name = "John Doe" };
 //string result = await engine.CompileRenderAsync("Subfolder/View.cshtml", model);
-string q = "";
-while (q.ToLower() != "q")
+string q = "c";
+while (q.ToLower() == "c")
 {
 
     //xuanzexiangm(ctx);
@@ -60,7 +60,7 @@ while (q.ToLower() != "q")
     }
 
 
-    Console.WriteLine("按q退出，按任意键继续...");
+    Console.WriteLine("按c键继续，按任意键退出...");
     q = Console.ReadLine();
 
 }
@@ -99,23 +99,26 @@ void InitProject()
     {
         Console.WriteLine($"{i}\t\t{projfiles[i]}");
     }
-    var projIndex = int.Parse(Console.ReadLine());
+    var sdf = Console.ReadLine();
+    if (string.IsNullOrWhiteSpace(sdf))
+        sdf = "0";
+    var projIndex = int.Parse(sdf);
     builder.AddJsonFile(projfiles[projIndex]);
 }
 void SelectModel(ExecuteContext ctx)
 {
     Console.WriteLine("请选择模型：");
-    for (int i = 0; i < ctx.Project.Models.Count; i++)
+    for (int i = 0; i < ctx.Models.Count; i++)
     {
-        var item = ctx.Project.Models[i];
+        var item = ctx.Models[i];
         Console.WriteLine($"{i}\t\t{item.DisplayName}");
     }
     var projectStr = Console.ReadLine();
 
     if (string.IsNullOrWhiteSpace(projectStr))
-        ctx.Model = ctx.Project.Models.Last();
+        ctx.Model = ctx.Models.Last();
     else
-        ctx.Model = ctx.Project.Models[int.Parse(projectStr)];
+        ctx.Model = ctx.Models[int.Parse(projectStr)];
 }
 //void xuanzemoban(ExecuteContext ctx)
 //{
@@ -143,7 +146,13 @@ void Entity(ExecuteContext ctx)
 {
     Console.WriteLine("正在生成实体类...");
     var str = engine.CompileRenderAsync("Entity", ctx).Result;
-    Console.WriteLine(str);
+
+    var file = Path.Combine(ctx.SrcDir,ctx.CoreProjectName,ctx.Model.Name,ctx.Model.EntityName+".cs");
+    Directory.CreateDirectory( Path.GetDirectoryName( file));
+    
+    File.WriteAllText(file, str );  
+
+
     Console.WriteLine("生成实体类完成");
 }
 #endregion

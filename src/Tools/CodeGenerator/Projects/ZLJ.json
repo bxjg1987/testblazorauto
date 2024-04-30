@@ -1,8 +1,7 @@
 {
-  "Name": "bxjg",
+  "Name": "ZLJ",
   "DisplayName": "变形精怪",
-  "IsDefault": true,
-  "ProjectFilePath": "",
+  "SrcDir": "D:\\abp\\src",
   //"Templates": [
   //  {
   //    "Name": "Entity",
@@ -28,9 +27,20 @@
         {
           "Name": "Id",
           "DisplayName": "编号",
+          "CSharpType": "long",
+          "IsPrimary": true,
           "Default": null,
           "Nullable": false,
           "Length": 64
+        },
+        {
+          "Name": "Name",
+          "DisplayName": "名称",
+          "CSharpType": "string",
+          "IsPrimary": false,
+          "Default": null,
+          "Nullable": false,
+          "Length": 100
         }
       ]
     }
