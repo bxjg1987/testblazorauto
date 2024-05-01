@@ -11,6 +11,8 @@ namespace CodeGenerator
     /// </summary>
     public class FieldDefine
     {
+        public ModelDefine Model {  get; set; }
+
         /// <summary>
         /// 是否是主键
         /// </summary>
@@ -19,6 +21,10 @@ namespace CodeGenerator
         /// 字段名，如：Id
         /// </summary>
         public string Name { get; set; }
+        /// <summary>
+        /// 不设置的化，由ef自己根据数据类型去判断
+        /// </summary>
+        public bool? IsRequired { get; set; }
         /// <summary>
         /// 字段显示名，如：编号
         /// </summary>
@@ -31,5 +37,17 @@ namespace CodeGenerator
         /// 字段长度
         /// </summary>
         public int Length { get; set; }
+        /// <summary>
+        /// 是否使用unicode编码
+        /// </summary>
+        public bool IsUnicode { get; set; }
+        /// <summary>
+        /// 字段MaxLength常量名，如：NameMaxLength
+        /// </summary>
+        public string MaxLength => $"{Name}MaxLength";
+        /// <summary>
+        /// 字段MaxLength常量全名，如：TestConsts.NameMaxLength
+        /// </summary>
+        public string CoreShareConstsMaxLength => $"{Model.CoreShareConst}.{MaxLength}";
     }
 }

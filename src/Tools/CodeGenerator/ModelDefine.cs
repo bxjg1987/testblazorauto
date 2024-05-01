@@ -40,12 +40,16 @@ namespace CodeGenerator
         /// </summary>
         public FieldDefine PrimaryField => Fields.First(x => x.IsPrimary);
         /// <summary>
-        /// 非主键字段
+        /// 普通非主键字段
         /// </summary>
         public IEnumerable<FieldDefine> NormalFields => Fields.Where(x => !x.IsPrimary);
-        ///// <summary>
-        ///// 模型Core层的命名空间，如：ZLJ.Core.Share
-        ///// </summary>
-        //public string CoreShareNamespace => $"{ExecuteContext.CoreProjectName}.{Name}";
+        /// <summary>
+        /// 模型Core.Share层的命名空间，如：ZLJ.Core.Share.Test
+        /// </summary>
+        public string CoreShareNamespace => $"{ExecuteContext.CoreShareProjectName}.{Name}";
+        /// <summary>
+        /// Core.Share中的常量名，如：TestShareConsts
+        /// </summary>
+        public string CoreShareConst => $"{Name}ShareConsts";
     }
 }

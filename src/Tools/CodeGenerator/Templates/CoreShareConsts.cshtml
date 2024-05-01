@@ -2,13 +2,23 @@
 @using RazorLight
 @inherits TemplatePage<ExecuteContext>
 @{
-    DisableEncoding = true;//禁止html编码，因为我们是做代码生成器
+    DisableEncoding = true;//绂佹html缂栫爜锛屽洜涓烘垜浠槸鍋氫唬鐮佺敓鎴愬櫒
 }
-#region @(Model.Model.DisplayName)MaxLength
+namespace @Model.Model.CoreShareNamespace
+{
+    /// <summary>
+    /// @(Model.Model.DisplayName)Core share 甯搁噺
+    ///</summary>
+    public class @Model.Model.CoreShareConst
+    {
 @foreach (var field in Model.Model.Fields)
 {
 if (field.Length>0){
-        @:public const int @(Model.Model.Name)@(field.Name)MaxLength = @(field.Length);
+        @:/// <summary>
+        @:/// @(field.DisplayName) 闀垮害
+        @:///</summary>
+        @:public const int @(field.MaxLength) = @(field.Length);
 }
 }
-        #endregion
+    }
+}

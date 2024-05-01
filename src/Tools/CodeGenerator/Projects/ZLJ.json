@@ -30,8 +30,9 @@
           "CSharpType": "long",
           "IsPrimary": true,
           "Default": null,
-          "Nullable": false,
-          "Length": 64
+          "IsRequired": true,
+          "Length": 0,
+          "IsUnicode": false
         },
         {
           "Name": "Name",
@@ -39,8 +40,9 @@
           "CSharpType": "string",
           "IsPrimary": false,
           "Default": null,
-          "Nullable": false,
-          "Length": 100
+          "IsRequired": false,
+          "Length": 100,
+          "IsUnicode": true
         }
       ]
     }

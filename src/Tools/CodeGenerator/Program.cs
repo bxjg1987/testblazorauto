@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using RazorLight;
 using System.Text.RegularExpressions;
+using System.Text;
 
 //HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
 //builder.Services.Configure<List<ProjectDefine>>(builder.Configuration.GetSection("Projects"));
@@ -26,14 +27,17 @@ IServiceProvider serviceProvider = services.BuildServiceProvider();
 
 var ctx = serviceProvider.GetService<IOptionsMonitor<ExecuteContext>>().CurrentValue;
 ctx.Services = serviceProvider;
-ctx.Models.ForEach(x=>x.ExecuteContext=ctx);
+ctx.Models.ForEach(x => { 
+    x.ExecuteContext = ctx;
+    x.Fields.ForEach(y => y.Model = x);
+});
 
 var engine = new RazorLightEngineBuilder()
     .UseFileSystemProject(Path.Combine(Directory.GetCurrentDirectory(), "Templates"))
     .UseMemoryCachingProvider()
     .Build();
 
-List<Action<ExecuteContext>> actions = new List<Action<ExecuteContext>> { Entity, CoreShareConst };
+List<Action<ExecuteContext>> actions = new List<Action<ExecuteContext>> { Entity, CoreShareConst , EFMap };
 
 
 //var model = new { Name = "John Doe" };
@@ -142,42 +146,73 @@ void SelectModel(ExecuteContext ctx)
 
 //下面是步骤
 
-#region 处理实体
+
 void Entity(ExecuteContext ctx)
 {
     Console.WriteLine("正在生成实体类...");
     var str = engine.CompileRenderAsync("Entity", ctx).Result;
 
-    var file = Path.Combine(ctx.SrcDir,ctx.CoreProjectName,ctx.Model.Name,ctx.Model.EntityName+".cs");
-    Directory.CreateDirectory( Path.GetDirectoryName( file));
-    
-    File.WriteAllText(file, str );  
+    var file = Path.Combine(ctx.SrcDir, ctx.CoreProjectName, ctx.Model.Name, ctx.Model.EntityName + ".cs");
+    Directory.CreateDirectory(Path.GetDirectoryName(file));
+
+    File.WriteAllText(file, str);
 
 
     Console.WriteLine("生成实体类完成");
 }
 void CoreShareConst(ExecuteContext ctx)
-{  
+{
     Console.WriteLine("正在生成CoreConst...");
-    var file = Path.Combine(ctx.SrcDir, ctx.CoreShareProjectName, ctx.CoreShareConstName + ".cs");
-
-    var old = File.ReadAllText(file);
-
-    old = Regex.Replace(old, @$"#region {ctx.Model.DisplayName}MaxLength.*?#endregion", string.Empty, RegexOptions.Singleline);
-
 
     var str = engine.CompileRenderAsync("CoreShareConsts", ctx).Result;
+    var file = Path.Combine(ctx.SrcDir, ctx.CoreShareProjectName, ctx.Model.Name, ctx.Model.CoreShareConst + ".cs");
+    Directory.CreateDirectory(Path.GetDirectoryName(file));
 
 
-    //File.Replace(file, ctx.CodeGeneratorReplace, str);
-    str += Environment.NewLine;
-    str += $"\t\t{ExecuteContext.CodeGeneratorReplace}";
+    //var old = File.ReadAllText(file);
 
-    str = old.Replace(ExecuteContext.CodeGeneratorReplace, str);
+    //old = Regex.Replace(old, @$"#region {ctx.Model.DisplayName}MaxLength.*?#endregion", string.Empty, RegexOptions.Singleline);
+
+
+
+
+    ////File.Replace(file, ctx.CodeGeneratorReplace, str);
+    //str += Environment.NewLine;
+    //str += $"\t\t{ExecuteContext.CodeGeneratorReplace}";
+
+    //str = old.Replace(ExecuteContext.CodeGeneratorReplace, str);
 
     File.WriteAllText(file, str);
 
 
     Console.WriteLine("生成CoreConst完成");
 }
-#endregion
+void EFMap(ExecuteContext ctx)
+{
+    Console.WriteLine("正在生成ef映射...");
+
+    var str = engine.CompileRenderAsync("EFMap", ctx).Result;
+    var file = Path.Combine(ctx.SrcDir, ctx.EFCoreProjectName, "EntityFrameworkCore", "EFMap", ctx.Model.Name + "EFMap.cs");
+    Directory.CreateDirectory(Path.GetDirectoryName(file));
+
+
+    //var old = File.ReadAllText(file);
+
+    //old = Regex.Replace(old, @$"#region {ctx.Model.DisplayName}MaxLength.*?#endregion", string.Empty, RegexOptions.Singleline);
+
+
+
+
+    ////File.Replace(file, ctx.CodeGeneratorReplace, str);
+    //str += Environment.NewLine;
+    //str += $"\t\t{ExecuteContext.CodeGeneratorReplace}";
+
+    //str = old.Replace(ExecuteContext.CodeGeneratorReplace, str);
+
+    File.WriteAllText(file, str);
+
+
+    Console.WriteLine("生成ef映射完成");
+}
+
+
