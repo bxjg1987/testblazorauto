@@ -1,0 +1,15 @@
+@using CodeGenerator
+@using RazorLight
+@inherits TemplatePage<ExecuteContext>
+@{
+    DisableEncoding = true;//禁止html编码，因为我们是做代码生成器
+}
+using Microsoft.EntityFrameworkCore;
+using @(Model.Model.CoreNamespace);
+namespace ZLJ.EntityFrameworkCore
+{
+    public partial class @(Model.Name)DbContext
+    {
+         public DbSet<@(Model.Model.EntityName)> @(Model.Model.Name) { get; set; }
+    }
+}

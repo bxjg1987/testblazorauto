@@ -37,7 +37,7 @@ var engine = new RazorLightEngineBuilder()
     .UseMemoryCachingProvider()
     .Build();
 
-List<Action<ExecuteContext>> actions = new List<Action<ExecuteContext>> { Entity, CoreShareConst , EFMap };
+List<Action<ExecuteContext>> actions = new List<Action<ExecuteContext>> { Entity, CoreShareConst , EFMap, EFDbContext };
 
 
 //var model = new { Name = "John Doe" };
@@ -192,7 +192,8 @@ void EFMap(ExecuteContext ctx)
     Console.WriteLine("正在生成ef映射...");
 
     var str = engine.CompileRenderAsync("EFMap", ctx).Result;
-    var file = Path.Combine(ctx.SrcDir, ctx.EFCoreProjectName, "EntityFrameworkCore", "EFMap", ctx.Model.Name + "EFMap.cs");
+    //用这个路径，方便后续添加dbcontext、seed等
+    var file = Path.Combine(ctx.SrcDir, ctx.EFCoreProjectName,  ctx.Model.Name , "EFMap.cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
 
@@ -215,4 +216,31 @@ void EFMap(ExecuteContext ctx)
     Console.WriteLine("生成ef映射完成");
 }
 
+void EFDbContext(ExecuteContext ctx)
+{
+    Console.WriteLine("正在生成efDbContext映射...");
 
+    var str = engine.CompileRenderAsync("DbContext", ctx).Result;
+    //用这个路径，方便后续添加dbcontext、seed等
+    var file = Path.Combine(ctx.SrcDir, ctx.EFCoreProjectName, ctx.Model.Name, "DbContext.cs");
+    Directory.CreateDirectory(Path.GetDirectoryName(file));
+
+
+    //var old = File.ReadAllText(file);
+
+    //old = Regex.Replace(old, @$"#region {ctx.Model.DisplayName}MaxLength.*?#endregion", string.Empty, RegexOptions.Singleline);
+
+
+
+
+    ////File.Replace(file, ctx.CodeGeneratorReplace, str);
+    //str += Environment.NewLine;
+    //str += $"\t\t{ExecuteContext.CodeGeneratorReplace}";
+
+    //str = old.Replace(ExecuteContext.CodeGeneratorReplace, str);
+
+    File.WriteAllText(file, str);
+
+
+    Console.WriteLine("生成efDbContext映射完成");
+}
