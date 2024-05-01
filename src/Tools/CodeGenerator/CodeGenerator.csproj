@@ -19,6 +19,16 @@
     <PackageReference Include="RazorLight" Version="2.3.1" />
   </ItemGroup>
 
+	
+	
+	<ItemGroup Condition="'$(SolutionName)' != 'ZLJWithModules'">
+		<!--虽然ef引用utils引用common，但有时候需要单独更新common或utils，所以这里还是要单独引用-->
+		<PackageReference Include="BXJG.Common" Version="*" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(SolutionName)' == 'ZLJWithModules'">
+		<ProjectReference Include="..\..\libs\BXJG.Common\BXJG.Common.csproj" />
+	</ItemGroup>
+
   <ItemGroup>
     <None Update="Projects\ZLJ.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -27,6 +37,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Templates\DbContext.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\ProviderCondition.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\ProviderDto.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Templates\EFMap.cshtml">

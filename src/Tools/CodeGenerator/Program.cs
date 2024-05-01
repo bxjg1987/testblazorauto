@@ -37,7 +37,7 @@ var engine = new RazorLightEngineBuilder()
     .UseMemoryCachingProvider()
     .Build();
 
-List<Action<ExecuteContext>> actions = new List<Action<ExecuteContext>> { Entity, CoreShareConst , EFMap, EFDbContext };
+List<Action<ExecuteContext>> actions = new List<Action<ExecuteContext>> { Entity, CoreShareConst , EFMap, EFDbContext , ProviderDto, ProviderCondition };
 
 
 //var model = new { Name = "John Doe" };
@@ -215,7 +215,6 @@ void EFMap(ExecuteContext ctx)
 
     Console.WriteLine("生成ef映射完成");
 }
-
 void EFDbContext(ExecuteContext ctx)
 {
     Console.WriteLine("正在生成efDbContext映射...");
@@ -243,4 +242,30 @@ void EFDbContext(ExecuteContext ctx)
 
 
     Console.WriteLine("生成efDbContext映射完成");
+}
+void ProviderDto(ExecuteContext ctx)
+{
+    Console.WriteLine("正在生成ProviderDto...");
+    var str = engine.CompileRenderAsync("ProviderDto", ctx).Result;
+
+    var file = Path.Combine(ctx.SrcDir, ctx.ApplicationCommonShareProjectName, ctx.Model.Name, ctx.Model.ProviderDto + ".cs");
+    Directory.CreateDirectory(Path.GetDirectoryName(file));
+
+    File.WriteAllText(file, str);
+
+
+    Console.WriteLine("生成ProviderDto完成");
+}
+void ProviderCondition(ExecuteContext ctx)
+{
+    Console.WriteLine("正在生成ProviderCondition...");
+    var str = engine.CompileRenderAsync("ProviderCondition", ctx).Result;
+
+    var file = Path.Combine(ctx.SrcDir, ctx.ApplicationCommonShareProjectName, ctx.Model.Name, ctx.Model.ProviderCondition + ".cs");
+    Directory.CreateDirectory(Path.GetDirectoryName(file));
+
+    File.WriteAllText(file, str);
+
+
+    Console.WriteLine("生成ProviderCondition完成");
 }

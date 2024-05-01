@@ -532,6 +532,36 @@ namespace System
         public static bool IsImplementInterface<TInterface>(this Type type) {
           return  type.GetInterfaces().Any(x => x.Equals(typeof(TInterface)));
         }
+        /// <summary>
+        /// 判断指定类型是否是数值类型
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static bool IsNumericType(this Type type)
+        {
+            if (type == null)
+                return false;
+
+            switch (Type.GetTypeCode(type))
+            {
+                case TypeCode.Byte:
+                case TypeCode.SByte:
+                case TypeCode.UInt16:
+                case TypeCode.UInt32:
+                case TypeCode.UInt64:
+                case TypeCode.Int16:
+                case TypeCode.Int32:
+                case TypeCode.Int64:
+                case TypeCode.Single:
+                case TypeCode.Double:
+                case TypeCode.Decimal:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+
         ///// <summary>
         ///// 判断当前类型是否直接或间接实现了某个接口
         ///// </summary>

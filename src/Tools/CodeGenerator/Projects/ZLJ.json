@@ -25,24 +25,30 @@
       "DisplayName": "测试1",
       "Fields": [
         {
-          "Name": "Id",
-          "DisplayName": "编号",
-          "CSharpType": "long",
-          "IsPrimary": true,
-          "Default": null,
-          "IsRequired": true,
-          "Length": 0,
-          "IsUnicode": false
+          "Name": "Id", //字段名
+          "DisplayName": "编号", //显示名称
+          "CSharpType": "long", //c#类型的字符串形式
+          "IsPrimary": true, //是否是主键
+          "DefaultValue": null, //默认值
+          "IsRequired": true, //是否是必填字段
+          "Length": 0, //字段长度
+          "IsUnicode": false, //是否是Unicode编码
+          "IsSort": false, //是否参与排序
+          "IsCondition": false, //是否作为条件
+          "IsConditionRange": true //是否作为范围条件,IsCondition为true时有效
         },
         {
           "Name": "Name",
           "DisplayName": "名称",
           "CSharpType": "string",
           "IsPrimary": false,
-          "Default": null,
+          "DefaultValue": null,
           "IsRequired": false,
           "Length": 100,
-          "IsUnicode": true
+          "IsUnicode": true,
+          "IsSort": true,
+          "IsCondition": true,
+          "IsConditionRange": true
         }
       ]
     }

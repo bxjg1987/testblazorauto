@@ -57,5 +57,10 @@ namespace CodeGenerator
         /// 代码生成器占位符
         /// </summary>
         public const string CodeGeneratorReplace = "//--codegenerator==";
+        /// <summary>
+        /// ApplicationCommon项目名称，如：ZLJ.Application.Common.Share
+        /// </summary>
+        public string ApplicationCommonShareProjectName => $"{Name}.Application.Common.Share";
+       
     }
 }

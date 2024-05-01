@@ -22,6 +22,10 @@ namespace CodeGenerator
         /// </summary>
         public string Name { get; set; }
         /// <summary>
+        /// 默认值
+        /// </summary>
+        public string DefaultValue { get; set; }
+        /// <summary>
         /// 不设置的化，由ef自己根据数据类型去判断
         /// </summary>
         public bool? IsRequired { get; set; }
@@ -49,5 +53,25 @@ namespace CodeGenerator
         /// 字段MaxLength常量全名，如：TestConsts.NameMaxLength
         /// </summary>
         public string CoreShareConstsMaxLength => $"{Model.CoreShareConst}.{MaxLength}";
+        /// <summary>
+        /// 是否参与排序
+        /// </summary>
+        public bool IsSort { get; set; }
+        /// <summary>
+        /// 是否作为搜索时的条件
+        /// </summary>
+        public bool IsCondition { get; set; }
+        /// <summary>
+        /// 是否作为范围条件，IsCondition为true时有效
+        /// </summary>
+        public bool IsConditionRange { get; set; }
+        /// <summary>
+        /// 作为范围条件时的字段名称，如：AgeMin
+        /// </summary>
+        public string ConditionRangeMin => $"{Name}Min";
+        /// <summary>
+        /// 作为范围条件时的字段名称，如：AgeMax
+        /// </summary>
+        public string ConditionRangeMax => $"{Name}Max";
     }
 }

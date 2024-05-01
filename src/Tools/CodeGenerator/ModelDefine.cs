@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace CodeGenerator
 {
@@ -51,5 +52,26 @@ namespace CodeGenerator
         /// Core.Share中的常量名，如：TestShareConsts
         /// </summary>
         public string CoreShareConst => $"{Name}ShareConsts";
+        /// <summary>
+        /// 模型Application.Common.Shar层的命名空间，如：ZLJ.Application.Common.Share.Test
+        /// </summary>
+        public string ApplicationCommonShareNamespace => $"{ExecuteContext.ApplicationCommonShareProjectName}.{Name}";
+        /// <summary>
+        /// ProviderDto名称，如：TestProviderDto
+        /// </summary>
+        public string ProviderDto => $"{Name}ProviderDto";
+        /// <summary>
+        /// 获取供选择数据列表时的条件类名称，如：TestProviderCondition
+        /// </summary>
+        public string ProviderCondition => $"{Name}ProviderCondition";
+        /// <summary>
+        /// 字符串类型的字段
+        /// </summary>
+        public IEnumerable<FieldDefine> StringFields => Fields.Where(x => x.CSharpType=="string");
+        /// <summary>
+        /// 条件字段
+        /// </summary>
+        public IEnumerable<FieldDefine> ConditionFields => Fields.Where(x => x.IsCondition);
+
     }
 }
