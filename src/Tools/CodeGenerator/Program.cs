@@ -37,7 +37,7 @@ var engine = new RazorLightEngineBuilder()
     .UseMemoryCachingProvider()
     .Build();
 
-List<Action<ExecuteContext>> actions = new List<Action<ExecuteContext>> { Entity, CoreShareConst , EFMap, EFDbContext , ProviderDto, ProviderCondition };
+List<Action<ExecuteContext>> actions = new List<Action<ExecuteContext>> { Entity, CoreShareConst , EFMap, EFDbContext , ProviderDto, ProviderCondition, ProviderAppService };
 
 
 //var model = new { Name = "John Doe" };
@@ -268,4 +268,17 @@ void ProviderCondition(ExecuteContext ctx)
 
 
     Console.WriteLine("生成ProviderCondition完成");
+}
+void ProviderAppService(ExecuteContext ctx)
+{
+    Console.WriteLine("正在生成ProviderAppService...");
+    var str = engine.CompileRenderAsync("ProviderAppService", ctx).Result;
+
+    var file = Path.Combine(ctx.SrcDir, ctx.ApplicationCommonProjectName, ctx.Model.Name, ctx.Model.ProviderAppService + ".cs");
+    Directory.CreateDirectory(Path.GetDirectoryName(file));
+
+    File.WriteAllText(file, str);
+
+
+    Console.WriteLine("生成ProviderAppService完成");
 }

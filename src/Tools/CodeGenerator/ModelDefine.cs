@@ -57,6 +57,10 @@ namespace CodeGenerator
         /// </summary>
         public string ApplicationCommonShareNamespace => $"{ExecuteContext.ApplicationCommonShareProjectName}.{Name}";
         /// <summary>
+        /// 模型Application.Common层的命名空间，如：ZLJ.Application.Common.Test
+        /// </summary>
+        public string ApplicationCommonNamespace => $"{ExecuteContext.ApplicationCommonProjectName}.{Name}";
+        /// <summary>
         /// ProviderDto名称，如：TestProviderDto
         /// </summary>
         public string ProviderDto => $"{Name}ProviderDto";
@@ -64,6 +68,10 @@ namespace CodeGenerator
         /// 获取供选择数据列表时的条件类名称，如：TestProviderCondition
         /// </summary>
         public string ProviderCondition => $"{Name}ProviderCondition";
+        /// <summary>
+        /// 获取供选择数据列表的类名称，如：TestProviderAppService
+        /// </summary>
+        public string ProviderAppService => $"{Name}ProviderAppService";
         /// <summary>
         /// 字符串类型的字段
         /// </summary>

@@ -1,0 +1,20 @@
+@using CodeGenerator
+@using RazorLight
+@using BXJG.Common;
+@using BXJG.Common.Extensions;
+@inherits TemplatePage<ExecuteContext>
+@{
+    DisableEncoding = true;//禁止html编码，因为我们是做代码生成器
+}
+using BXJG.Utils.Application.Share.Dtos;
+using @(Model.Model.CoreNamespace);
+using @(Model.Model.ApplicationCommonShareNamespace);
+namespace @(Model.Model.ApplicationCommonNamespace)
+{
+    /// <summary>
+    /// 获取 @(Model.Model.DisplayName) 以供选择
+    ///</summary>
+    public class @(Model.Model.ProviderAppService) : CommonProviderBaseAppService<@(Model.Model.EntityName),PagedAndSortedResultRequest<@(Model.Model.ProviderCondition)>,@(Model.Model.ProviderDto),@(Model.Model.PrimaryField.CSharpType)>
+    {
+    }
+}

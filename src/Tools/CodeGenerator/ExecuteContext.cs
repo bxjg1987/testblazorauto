@@ -58,9 +58,12 @@ namespace CodeGenerator
         /// </summary>
         public const string CodeGeneratorReplace = "//--codegenerator==";
         /// <summary>
-        /// ApplicationCommon项目名称，如：ZLJ.Application.Common.Share
+        /// ApplicationCommonShare项目名称，如：ZLJ.Application.Common.Share
         /// </summary>
         public string ApplicationCommonShareProjectName => $"{Name}.Application.Common.Share";
-       
+        /// <summary>
+        /// ApplicationCommon项目名称，如：ZLJ.Application.Common
+        /// </summary>
+        public string ApplicationCommonProjectName => $"{Name}.Application.Common";
     }
 }
