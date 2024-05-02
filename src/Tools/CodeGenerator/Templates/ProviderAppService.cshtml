@@ -16,5 +16,39 @@ namespace @(Model.Model.ApplicationCommonNamespace)
     ///</summary>
     public class @(Model.Model.ProviderAppService) : CommonProviderBaseAppService<@(Model.Model.EntityName),PagedAndSortedResultRequest<@(Model.Model.ProviderCondition)>,@(Model.Model.ProviderDto),@(Model.Model.PrimaryField.CSharpType)>
     {
+        protected override IQueryable<@(Model.Model.EntityName)> CreateFilteredQuery(PagedAndSortedResultRequest<@(Model.Model.ProviderCondition)> input)
+        {
+            var query = base.CreateFilteredQuery(input);
+
+@if(Model.Model.ConditionStringFields.Any())
+{
+    var idx = 0;
+            @:query = query.WhereIf(input.Filter.Keywords.IsNotNullOrWhiteSpaceBXJG(), x => 
+@foreach (var field in Model.Model.ConditionStringFields)
+{
+            if (idx>0)
+            {
+                @:|| x.@(field.Name).Contains(input.Filter.Keywords)
+            }else{
+                @:x.@(field.Name).Contains(input.Filter.Keywords)
+            }
+    idx++; 
+}
+            @:);
+}
+
+@foreach (var field in Model.Model.ConditionRangeFields)
+{
+            @:query = query.WhereIf(input.Filter.@(field.ConditionRangeMin).HasValue,x=> x.@(field.Name) >= input.Filter.@(field.ConditionRangeMin).Value );
+            @:query = query.WhereIf(input.Filter.@(field.ConditionRangeMax).HasValue,x=> x.@(field.Name) < input.Filter.@(field.ConditionRangeMax).Value );
+}
+
+@foreach (var field in Model.Model.NormalConditionFields)
+{
+            @:query = query.WhereIf(input.Filter.@(field.Name).HasValue,x=> x.@(field.Name) == input.Filter.@(field.Name).Value );
+}
+
+            return query;
+        }
     }
 }

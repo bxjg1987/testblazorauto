@@ -48,7 +48,46 @@
           "IsUnicode": true,
           "IsSort": true,
           "IsCondition": true,
+          "IsConditionRange": false
+        },
+        {
+          "Name": "Age",
+          "DisplayName": "年龄",
+          "CSharpType": "int",
+          "IsPrimary": false,
+          "DefaultValue": null,
+          "IsRequired": false,
+          "Length": 0,
+          "IsUnicode": false,
+          "IsSort": true,
+          "IsCondition": true,
           "IsConditionRange": true
+        },
+        {
+          "Name": "StringField1",
+          "DisplayName": "字符串字段1",
+          "CSharpType": "string",
+          "IsPrimary": false,
+          "DefaultValue": null,
+          "IsRequired": true,
+          "Length": 60,
+          "IsUnicode": false,
+          "IsSort": true,
+          "IsCondition": true,
+          "IsConditionRange": false
+        },
+        {
+          "Name": "Status",
+          "DisplayName": "状态",
+          "CSharpType": "int",
+          "IsPrimary": false,
+          "DefaultValue": 3,
+          "IsRequired": false,
+          "Length": 0,
+          "IsUnicode": false,
+          "IsSort": true,
+          "IsCondition": true,
+          "IsConditionRange": false
         }
       ]
     }

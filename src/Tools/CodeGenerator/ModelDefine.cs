@@ -75,11 +75,22 @@ namespace CodeGenerator
         /// <summary>
         /// 字符串类型的字段
         /// </summary>
-        public IEnumerable<FieldDefine> StringFields => Fields.Where(x => x.CSharpType=="string");
+        public IEnumerable<FieldDefine> StringFields => Fields.Where(x => x.CSharpType == "string");
+        /// <summary>
+        /// 字符串类型的条件字段
+        /// </summary>
+        public IEnumerable<FieldDefine> ConditionStringFields => StringFields.Where(x => x.IsCondition);
         /// <summary>
         /// 条件字段
         /// </summary>
         public IEnumerable<FieldDefine> ConditionFields => Fields.Where(x => x.IsCondition);
-
+        /// <summary>
+        /// 范围条件字段
+        /// </summary>
+        public IEnumerable<FieldDefine> ConditionRangeFields => ConditionFields.Where(x => x.IsConditionRange);
+        /// <summary>
+        /// 除了字符串、范围外的其它条件字段
+        /// </summary>
+        public IEnumerable<FieldDefine> NormalConditionFields => NormalFields.Where(x => x.IsCondition&& !x.IsConditionRange&& x.CSharpType!="string");
     }
 }
