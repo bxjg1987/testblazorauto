@@ -22,7 +22,6 @@ namespace BXJG.Utils.Application.AutoMapper
             #endregion
 
             #region 附件Attachment
-            //CreateMap<AttachmentEntity, AttachmentDto>().ForMember(c => c.ExtensionData, c => c.MapFrom(en => Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string,object>>( en.ExtensionData)));
             //CreateMap<AttachmentEntity, AttachmentDto>().MapExtensionData();
             //CreateMap<AttachmentEntity, AttachmentDto>();//扩展属性已在BXJG.Utils模块中统一配置了映射
 

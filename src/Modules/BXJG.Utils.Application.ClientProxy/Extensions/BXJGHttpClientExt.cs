@@ -12,8 +12,8 @@ using Abp.Application.Services.Dto;
 using NUglify.JavaScript.Syntax;
 using Abp.Domain.Repositories;
 using Abp.Linq;
-using Newtonsoft.Json;
 using System.Net.Http.Json;
+using BXJG.Utils.Application.Share;
 
 namespace System.Net.Http
 {
@@ -22,6 +22,7 @@ namespace System.Net.Http
     /// </summary>
     public static class BXJGHttpClientExt
     {
+
         //    /// <summary>
         //    /// 配置需要跟后端api匹配
         //    /// </summary>
@@ -80,7 +81,7 @@ namespace System.Net.Http
         //也可以考虑实现自定义的IHttpClientFactory，不过扩展方法的方式更轻
 
 
-        static JsonSerializerSettings settings => BXJG.Utils.Application.Share.Consts.settings;
+        //static JsonSerializerSettings settings => BXJG.Utils.Application.Share.Consts.settings;
 
 
         #region 基本的post、get
@@ -102,7 +103,7 @@ namespace System.Net.Http
             // Console.WriteLine(  url);
 
             var str = await hc.GetStringAsync(url);
-            return JsonConvert.DeserializeObject<T>(str, settings);
+            return System.Text.Json.JsonSerializer.Deserialize<T>(str,Consts.JsonSerializerOptions);
             //var x = CreateHttpClient().GetFromJsonAsync<T>(url, cancellationToken);
             //Console.WriteLine("返回对象");
             //try
@@ -162,7 +163,8 @@ namespace System.Net.Http
             await Console.Out.WriteLineAsync(url);
             var r = await hc.PostAsJsonAsync(url, ps, cancellationToken);
             var str = await r.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<T>(str, settings);
+            T xxx =  System.Text.Json.JsonSerializer.Deserialize<T>(str, Consts.JsonSerializerOptions);
+            return xxx;
         }
         /// <summary>
         /// 发送一个post请求，不返回数据

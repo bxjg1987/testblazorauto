@@ -1,7 +1,6 @@
 using System.Linq;
 using AutoMapper;
 using Abp.Authorization;
-using Newtonsoft.Json;
 using BXJG.Utils.Localization;
 using BXJG.Utils.Application.Share.GeneralTree;
 using BXJG.Utils.GeneralTree;

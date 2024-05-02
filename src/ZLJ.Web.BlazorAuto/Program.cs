@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Options;
 using BXJG.Utils.RCL;
 
+//JsonSerializerOptions.Default.PropertyNameCaseInsensitive = true;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 //var _appConfiguration = builder.Configuration;

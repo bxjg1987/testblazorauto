@@ -5,11 +5,11 @@
  * 说明：略...
  */
 using Abp.Application.Services.Dto;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace BXJG.Utils.Application.Share.GeneralTree
@@ -47,7 +47,7 @@ namespace BXJG.Utils.Application.Share.GeneralTree
                 if (string.IsNullOrWhiteSpace(value))
                     ExtData = null;
                 else
-                    ExtData = JsonConvert.DeserializeObject<dynamic>(value);
+                    ExtData = System.Text.Json.JsonSerializer.Deserialize<dynamic>(value);
             }
         }
         /// <summary>

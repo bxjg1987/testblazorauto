@@ -13,6 +13,8 @@ using BXJG.Utils.Application.Share.GeneralTree;
 using BXJG.Utils.Application.ClientProxy.Http;
 using System.Net.Http;
 using BXJG.Utils.Application.ClientProxy;
+using System.Net.Http.Json;
+using System.Text.Json;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -39,6 +41,10 @@ namespace Microsoft.Extensions.DependencyInjection
             if (act2 != default)
                 act2(b);
 
+
+            //services.ConfigureHttpClientDefaults(c=>c.json)
+
+         
 
             return services;
 

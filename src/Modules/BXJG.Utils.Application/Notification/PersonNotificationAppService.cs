@@ -17,7 +17,6 @@ using System.Linq.Dynamic.Core;
 using System.Collections.ObjectModel;
 using Abp.Application.Services;
 using Abp.Json;
-using Newtonsoft.Json;
 using Abp.UI;
 using Abp.Domain.Entities;
 using Abp.Authorization.Users;

@@ -33,7 +33,6 @@ namespace BXJG.Utils.Application.Share.GeneralTree
         /// 父节点
         /// </summary>
         [System.Text.Json.Serialization.JsonIgnore]
-        [Newtonsoft.Json.JsonIgnore]
         public T Parent { get; set; }
 
 
@@ -47,7 +46,6 @@ namespace BXJG.Utils.Application.Share.GeneralTree
 
         private string extensionData;
         [System.Text.Json.Serialization.JsonIgnore]
-        [Newtonsoft.Json.JsonIgnore]
         public string ExtensionData
         {
             get
@@ -60,7 +58,7 @@ namespace BXJG.Utils.Application.Share.GeneralTree
                 if (string.IsNullOrWhiteSpace(value))
                     ExtData = null;
                 else
-                    ExtData = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(value);
+                    ExtData = System.Text.Json.JsonSerializer.Deserialize<dynamic>(value);
             }
         }
         /// <summary>

@@ -34,7 +34,7 @@ namespace BXJG.Utils.Application.ClientProxy.Http
         {
             var jg = await base.SendAsync(request, cancellationToken);
             var xxx = await jg.Content.ReadAsStringAsync();
-            var r = JsonConvert.DeserializeObject<AjaxResponse>(xxx, Consts.settings);
+            var r =System.Text.Json.JsonSerializer.Deserialize <AjaxResponse>(xxx, Consts.JsonSerializerOptions);
             cl(jg, r);
             return jg;
         }
@@ -44,7 +44,7 @@ namespace BXJG.Utils.Application.ClientProxy.Http
             if (!r.Success)
                 throw new UserFriendlyException(r.Error.Code, r.Error.Message, r.Error.Details);
 
-            var json = JsonConvert.SerializeObject(r.Result, Consts.settings);
+            string json = System.Text.Json.JsonSerializer.Serialize(r.Result, Consts.JsonSerializerOptions);
             //  Console.WriteLine(  json);
             jg.Content = new StringContent(json);
         }

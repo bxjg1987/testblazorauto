@@ -1,6 +1,5 @@
 ﻿using Abp.Application.Services.Dto;
 using BXJG.Common.Contracts;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -27,7 +26,6 @@ namespace BXJG.Utils.Application.Share.GeneralTree
         /// 父节点
         /// </summary>
         [System.Text.Json.Serialization.JsonIgnore]
-        [Newtonsoft.Json.JsonIgnore]
         public TChild Parent { get; set; }
         ///// <summary>
         ///// 父级组织单位id
@@ -83,7 +81,6 @@ namespace BXJG.Utils.Application.Share.GeneralTree
         //因此AutoMapper映射原始的ExtensionData，在属性内部设置ExtData
         //ExtensionData本身就不需要序列化到前端了
 
-        //[Newtonsoft.Json.JsonIgnore]//目前默认使用的并非.net 3.x的json序列化
         //public string ExtensionData
         //{
         //    get

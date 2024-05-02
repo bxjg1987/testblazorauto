@@ -7,7 +7,6 @@ using ZLJ.Core.Identity;
 using Abp.AspNetCore.SignalR.Hubs;
 using Abp.Json;
 using Microsoft.OpenApi.Models;
-using Newtonsoft.Json.Serialization;
 using Hangfire;
 using Hangfire.SqlServer;
 using Abp.Hangfire;
@@ -56,8 +55,18 @@ namespace ZLJ.Web.Host.Startup
             //services.AddLettuceEncrypt();
             //MVC
             var mvcBuilder = services.AddControllersWithViews(
-                 options => { options.Filters.Add(new AbpAutoValidateAntiforgeryTokenAttribute()); }
+                 options =>
+                 {
+                     options.Filters.Add(new AbpAutoValidateAntiforgeryTokenAttribute());
+
+                 }
             )
+            //https://learn.microsoft.com/zh-cn/dotnet/standard/serialization/system-text-json/configure-options?pivots=dotnet-8-0#web-defaults-for-jsonserializeroptions
+            //.AddJsonOptions(options =>
+            //{
+            //    options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+            //})
+            ;
             //    .AddNewtonsoftJson(options =>
             //{
             //    //options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
@@ -66,7 +75,7 @@ namespace ZLJ.Web.Host.Startup
             //        NamingStrategy = new CamelCaseNamingStrategy()
             //    };
             //})
-                ;
+
             //services.AddControllers();
 
 
@@ -99,7 +108,7 @@ namespace ZLJ.Web.Host.Startup
             //services.AddRazorComponents().AddInteractiveServerComponents();
 
             //等同于在根组件外面加了个CascadingAuthenticationState
-           // services.AddCascadingAuthenticationState();
+            // services.AddCascadingAuthenticationState();
 
             //services.AddSingleton<TrackingCircuitHandler>();
 
@@ -257,7 +266,7 @@ namespace ZLJ.Web.Host.Startup
 
 
             //#endregion
-         
+
             #region abp
             //老的
             //Configure Abp and Dependency Injection
@@ -326,7 +335,7 @@ namespace ZLJ.Web.Host.Startup
 
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
-           
+
             app.Use((ctx, next) =>
             {
                 ctx.Request.Headers["Accept-Language"] = ctx.Request.Headers["Accept-Language"].ToString()
@@ -406,7 +415,7 @@ namespace ZLJ.Web.Host.Startup
             //    Authorization = new[] { new AbpHangfireAuthorizationFilter(PermissionNames.HangFireDashboard) }
             //    //Authorization = new[] { new aaa(PermissionNames.HangFireDashboard) }
             //});
-           
+
 
             app.UseAuthorization();
 
@@ -428,10 +437,10 @@ namespace ZLJ.Web.Host.Startup
             //    c.HttpContext.Response.Redirect(opt.LoginPath);
             //    return Task.CompletedTask;
             //};
-           
+
             app.UseEndpoints(endpoints =>
             {
-               // endpoints.MapRazorComponents<Shared.App>().AddInteractiveServerRenderMode();
+                // endpoints.MapRazorComponents<Shared.App>().AddInteractiveServerRenderMode();
 
                 endpoints.MapHub<AbpCommonHub>("/signalr");
                 //endpoints.MapHangfireDashboardWithAuthorizationPolicy(PermissionNames.HangFireDashboard);
