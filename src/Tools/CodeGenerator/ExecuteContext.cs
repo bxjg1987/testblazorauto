@@ -65,5 +65,15 @@ namespace CodeGenerator
         /// ApplicationCommon项目名称，如：ZLJ.Application.Common
         /// </summary>
         public string ApplicationCommonProjectName => $"{Name}.Application.Common";
+
+
+        /// <summary>
+        /// ApplicationShare项目名称，如：ZLJ.Application.Share
+        /// </summary>
+        public string ApplicationShareProjectName => $"{Name}.Application.Share";
+        /// <summary>
+        /// Application项目名称，如：ZLJ.Application
+        /// </summary>
+        public string ApplicationProjectName => $"{Name}.Application";
     }
 }

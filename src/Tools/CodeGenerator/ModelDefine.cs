@@ -52,18 +52,36 @@ namespace CodeGenerator
         /// Core.Share中的常量名，如：TestShareConsts
         /// </summary>
         public string CoreShareConst => $"{Name}ShareConsts";
+
+
         /// <summary>
-        /// 模型Application.Common.Shar层的命名空间，如：ZLJ.Application.Common.Share.Test
+        /// Application.Common.Shar层的命名空间，如：ZLJ.Application.Common.Share.Test
         /// </summary>
         public string ApplicationCommonShareNamespace => $"{ExecuteContext.ApplicationCommonShareProjectName}.{Name}";
         /// <summary>
-        /// 模型Application.Common层的命名空间，如：ZLJ.Application.Common.Test
+        /// Application.Common层的命名空间，如：ZLJ.Application.Common.Test
         /// </summary>
         public string ApplicationCommonNamespace => $"{ExecuteContext.ApplicationCommonProjectName}.{Name}";
+
+
+        /// <summary>
+        /// Application.Shar层的命名空间，如：ZLJ.Application.Share.Test
+        /// </summary>
+        public string ApplicationShareNamespace => $"{ExecuteContext.ApplicationShareProjectName}.{Name}";
+        /// <summary>
+        /// Application层的命名空间，如：ZLJ.Application.Test
+        /// </summary>
+        public string ApplicationNamespace => $"{ExecuteContext.ApplicationProjectName}.{Name}";
+
+
         /// <summary>
         /// ProviderDto名称，如：TestProviderDto
         /// </summary>
-        public string ProviderDto => $"{Name}ProviderDto";
+        public string ProviderDtoName => $"{Name}ProviderDto";
+        /// <summary>
+        /// 各应用中的Dto名称，如：TestDto
+        /// </summary>
+        public string DtoName => $"{Name}Dto";
         /// <summary>
         /// 获取供选择数据列表时的条件类名称，如：TestProviderCondition
         /// </summary>
@@ -72,6 +90,12 @@ namespace CodeGenerator
         /// 获取供选择数据列表的类名称，如：TestProviderAppService
         /// </summary>
         public string ProviderAppService => $"{Name}ProviderAppService";
+        ///// <summary>
+        ///// 对象映射类和文件名
+        ///// 各应用可以通用，因为命名空间和目录不同，且用户代码中几乎不需要访问它
+        ///// </summary>
+        //public static readonly string ObjMapName = "AutoMapperProfile";// $"{Name}ObjMapProfile";
+
         /// <summary>
         /// 字符串类型的字段
         /// </summary>

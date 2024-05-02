@@ -14,7 +14,7 @@ namespace @(Model.Model.ApplicationCommonNamespace)
     /// <summary>
     /// 获取 @(Model.Model.DisplayName) 以供选择
     ///</summary>
-    public class @(Model.Model.ProviderAppService) : CommonProviderBaseAppService<@(Model.Model.EntityName),PagedAndSortedResultRequest<@(Model.Model.ProviderCondition)>,@(Model.Model.ProviderDto),@(Model.Model.PrimaryField.CSharpType)>
+    public class @(Model.Model.ProviderAppService) : CommonProviderBaseAppService<@(Model.Model.EntityName),PagedAndSortedResultRequest<@(Model.Model.ProviderCondition)>,@(Model.Model.ProviderDtoName),@(Model.Model.PrimaryField.CSharpType)>
     {
         protected override IQueryable<@(Model.Model.EntityName)> CreateFilteredQuery(PagedAndSortedResultRequest<@(Model.Model.ProviderCondition)> input)
         {

@@ -28,7 +28,7 @@ namespace CodeGenerator
         /// <summary>
         /// 不设置的化，由ef自己根据数据类型去判断
         /// </summary>
-        public bool? IsRequired { get; set; }
+        public bool IsRequired { get; set; }
         /// <summary>
         /// 字段显示名，如：编号
         /// </summary>

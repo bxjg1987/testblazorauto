@@ -1,0 +1,36 @@
+@using CodeGenerator
+@using RazorLight
+@using BXJG.Common;
+@using BXJG.Common.Extensions;
+@inherits TemplatePage<ExecuteContext>
+@{
+    DisableEncoding = true;//禁止html编码，因为我们是做代码生成器
+}
+using Abp.Application.Services.Dto;
+using System.ComponentModel;
+using BXJG.Common.Contracts;
+
+namespace @(Model.Model.ApplicationShareNamespace)
+{
+    /// <summary>
+    /// 各应用获取 @(Model.Model.DisplayName) 的数据模型
+    ///</summary>
+    public class @(Model.Model.DtoName) : @(Model.Model.PrimaryField.CSharpType=="int"?"FullAuditedEntityDto":$"FullAuditedEntityDto<{Model.Model.PrimaryField.CSharpType}>"), IExtendableObj
+    {
+@foreach (var field in Model.Model.NormalFields)
+{
+    <text>
+        /// <summary>
+        /// @(field.DisplayName)
+        ///</summary>
+        [DisplayName("@(field.DisplayName)")]
+        public @(field.CSharpType)@(field.IsRequired?"":"?") @field.Name { get; set; }
+    </text>
+}       
+        
+        /// <summary>
+        /// 扩展字段，通常仅用于UI
+        ///</summary>
+        public dynamic ExtensionData { get; set; }
+    }
+}

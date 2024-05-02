@@ -2,23 +2,6 @@
   "Name": "ZLJ",
   "DisplayName": "变形精怪",
   "SrcDir": "D:\\abp\\src",
-  //"Templates": [
-  //  {
-  //    "Name": "Entity",
-  //    "DisplayName": "实体类",
-  //    "FileName": "Entity.cshtml"
-  //  },
-  //  {
-  //    "Name": "EFMap",
-  //    "DisplayName": "EF映射",
-  //    "FileName": "EFMap.cshtml"
-  //  },
-  //  {
-  //    "Name": "EFSeed",
-  //    "DisplayName": "EF种子数据",
-  //    "FileName": "EFSeed.cshtml"
-  //  }
-  //],
   "Models": [
     {
       "Name": "Test",
@@ -82,7 +65,7 @@
           "CSharpType": "int",
           "IsPrimary": false,
           "DefaultValue": 3,
-          "IsRequired": false,
+          "IsRequired": true,
           "Length": 0,
           "IsUnicode": false,
           "IsSort": true,

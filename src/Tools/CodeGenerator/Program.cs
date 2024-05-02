@@ -27,7 +27,8 @@ IServiceProvider serviceProvider = services.BuildServiceProvider();
 
 var ctx = serviceProvider.GetService<IOptionsMonitor<ExecuteContext>>().CurrentValue;
 ctx.Services = serviceProvider;
-ctx.Models.ForEach(x => { 
+ctx.Models.ForEach(x =>
+{
     x.ExecuteContext = ctx;
     x.Fields.ForEach(y => y.Model = x);
 });
@@ -37,7 +38,18 @@ var engine = new RazorLightEngineBuilder()
     .UseMemoryCachingProvider()
     .Build();
 
-List<Action<ExecuteContext>> actions = new List<Action<ExecuteContext>> { Entity, CoreShareConst , EFMap, EFDbContext , ProviderDto, ProviderCondition, ProviderAppService };
+List<Action<ExecuteContext>> actions = new List<Action<ExecuteContext>> 
+{
+    Entity, 
+    CoreShareConst ,
+    EFMap, 
+    EFDbContext ,
+    ProviderDto,
+    ProviderCondition,
+    ProviderAppService,
+    ProviderObjMap,
+    Dto
+};
 
 
 //var model = new { Name = "John Doe" };
@@ -193,7 +205,7 @@ void EFMap(ExecuteContext ctx)
 
     var str = engine.CompileRenderAsync("EFMap", ctx).Result;
     //用这个路径，方便后续添加dbcontext、seed等
-    var file = Path.Combine(ctx.SrcDir, ctx.EFCoreProjectName,  ctx.Model.Name , "EFMap.cs");
+    var file = Path.Combine(ctx.SrcDir, ctx.EFCoreProjectName, ctx.Model.Name, "EFMap.cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
 
@@ -248,7 +260,7 @@ void ProviderDto(ExecuteContext ctx)
     Console.WriteLine("正在生成ProviderDto...");
     var str = engine.CompileRenderAsync("ProviderDto", ctx).Result;
 
-    var file = Path.Combine(ctx.SrcDir, ctx.ApplicationCommonShareProjectName, ctx.Model.Name, ctx.Model.ProviderDto + ".cs");
+    var file = Path.Combine(ctx.SrcDir, ctx.ApplicationCommonShareProjectName, ctx.Model.Name, ctx.Model.ProviderDtoName + ".cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
     File.WriteAllText(file, str);
@@ -281,4 +293,31 @@ void ProviderAppService(ExecuteContext ctx)
 
 
     Console.WriteLine("生成ProviderAppService完成");
+}
+void ProviderObjMap(ExecuteContext ctx)
+{
+    Console.WriteLine("正在生成provider的automapper...");
+    var str = engine.CompileRenderAsync("ProviderObjMap", ctx).Result;
+
+    var file = Path.Combine(ctx.SrcDir, ctx.ApplicationCommonProjectName, ctx.Model.Name, "AutoMapperProfile.cs");
+    Directory.CreateDirectory(Path.GetDirectoryName(file));
+
+    File.WriteAllText(file, str);
+
+
+    Console.WriteLine("生成provider的automapper完成");
+}
+
+void Dto(ExecuteContext ctx)
+{
+    Console.WriteLine("正在生成Dto...");
+    var str = engine.CompileRenderAsync("Dto", ctx).Result;
+
+    var file = Path.Combine(ctx.SrcDir, ctx.ApplicationShareProjectName, ctx.Model.Name, ctx.Model.DtoName + ".cs");
+    Directory.CreateDirectory(Path.GetDirectoryName(file));
+
+    File.WriteAllText(file, str);
+
+
+    Console.WriteLine("生成Dto完成");
 }

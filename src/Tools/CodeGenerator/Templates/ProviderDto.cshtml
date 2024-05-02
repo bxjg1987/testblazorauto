@@ -7,20 +7,24 @@
     DisableEncoding = true;//禁止html编码，因为我们是做代码生成器
 }
 using Abp.Application.Services.Dto;
+using System.ComponentModel;
 
 namespace @(Model.Model.ApplicationCommonShareNamespace)
 {
     /// <summary>
     /// 获取 @(Model.Model.DisplayName) 以供选择的数据模型
     ///</summary>
-    public class @(Model.Model.ProviderDto) : @(Model.Model.PrimaryField.CSharpType=="int"?"EntityDto":$"EntityDto<{Model.Model.PrimaryField.CSharpType}>")
+    public class @(Model.Model.ProviderDtoName) : @(Model.Model.PrimaryField.CSharpType=="int"?"EntityDto":$"EntityDto<{Model.Model.PrimaryField.CSharpType}>")
     {
 @foreach (var field in Model.Model.NormalFields)
 {
-        @:/// <summary>
-        @:/// @(field.DisplayName)
-        @:///</summary>
-        @:public @field.CSharpType @field.Name { get; set; }
+    <text>
+        /// <summary>
+        /// @(field.DisplayName)
+        ///</summary>
+        [DisplayName("@(field.DisplayName)")]
+        public @(field.CSharpType)? @field.Name { get; set; }
+    </text>
 }
     }
 }
