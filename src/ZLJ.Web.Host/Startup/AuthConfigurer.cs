@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using ZLJ.Application.Common;
 using Azure.Core;
 using Microsoft.Net.Http.Headers;
+using ZLJ.Core;
 //using ZLJ.Core.Authentication.WeChatMiniProgram;
 
 namespace ZLJ.Web.Host.Startup
@@ -84,7 +85,7 @@ namespace ZLJ.Web.Host.Startup
             if (tmpPath.Value.StartsWith("/signalr"))
                 context.Token = SimpleStringCipher.Instance.Decrypt(qsAuthToken);        // Set auth token from cookie
             else if (tmpPath.Value.Contains("/bxjgfile/"))
-                context.Token = SimpleStringCipher.Instance.Decrypt(qsAuthToken, AdminConsts.DefaultPassPhrase);
+                context.Token = SimpleStringCipher.Instance.Decrypt(qsAuthToken, ZLJConsts.DefaultPassPhrase);
 
             return Task.CompletedTask;
         }

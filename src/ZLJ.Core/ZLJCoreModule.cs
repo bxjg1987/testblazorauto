@@ -17,13 +17,13 @@ using ZLJ.Core.Timing;
 using ZLJ.Core.Features;
 using ZLJ.Core.Web;
 using ZLJ.Core.Share.Enums;
+using Abp.Runtime.Security;
 
 namespace ZLJ.Core
 {
     [DependsOn(
         typeof(AbpZeroCoreModule),
-        typeof(BXJGUtilsModule),
-        typeof(Abp.AutoMapper.AbpAutoMapperModule)//,
+        typeof(BXJGUtilsModule)
        // typeof(BXJG.WorkOrder.CoreModule)
         )]
     public class ZLJCoreModule : AbpModule
@@ -48,7 +48,7 @@ namespace ZLJ.Core
             Configuration.Modules.AbpAutoMapper().Configurators
              .Add(cfg => cfg.AddMaps(Assembly.GetExecutingAssembly()));
 
-            //Configuration.Auditing.IsEnabledForAnonymousUsers = true;
+            Configuration.Auditing.IsEnabledForAnonymousUsers = true;
 
             //IocManager.Register<EquipmentControlCenterConfig>();
             // Declare entity types
@@ -68,6 +68,9 @@ namespace ZLJ.Core
             Configuration.Settings.Providers.Add<AppSettingProvider>();
             Configuration.Localization.Languages.Add(new LanguageInfo("en", "English", "famfamfam-flags gb", true));
             Configuration.Localization.Languages.Add(new LanguageInfo("zh-Hans", "简体中文", "famfamfam-flags cn",true));
+
+            Configuration.Settings.SettingEncryptionConfiguration.DefaultPassPhrase = ZLJConsts.DefaultPassPhrase;
+            SimpleStringCipher.DefaultPassPhrase = ZLJConsts.DefaultPassPhrase;
 
             ////注册通知定义提供器
             //Configuration.Notifications.Providers.Add<MyAppNotificationProvider>();

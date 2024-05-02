@@ -1,6 +1,5 @@
 ﻿using Abp.Application.Features;
 using Abp.Application.Navigation;
-using Abp.AutoMapper;
 using Abp.Configuration;
 using Abp.ObjectMapping;
 using Abp.Runtime.Session;
@@ -31,18 +30,17 @@ namespace Microsoft.Extensions.DependencyInjection
                 }
                 return [];
             })
-
-                     .AddCascadingAuthenticationState()
-                     .AddTransient<FileHelper>()
-                     //.AddZLJBlazorClient()
-                     .AddSingleton(AppContainer.App);
+            .AddCascadingAuthenticationState()
+            .AddTransient<FileHelper>()
+            //.AddZLJBlazorClient()
+            .AddSingleton(AppContainer.App);
             services.TryAddTransient<IAbpSession, ClientAbpSession>();
             //services.TryAddSingleton<IPermissionChecker, ClientPermissionChecker>();
             services.TryAddTransient<ISettingManager, ClientSettingManager>();
             services.TryAddTransient<IUserNavigationManager, ClientNavigationManager>();
             services.TryAddTransient<IFeatureChecker, ClientFeatureChecker>();
             services.TryAddTransient<ISessionAppService, SessionAppService>();
-            services.TryAddSingleton<IObjectMapper, AutoMapperObjectMapper>();
+            //services.TryAddSingleton<IObjectMapper, AutoMapperObjectMapper>();
             services.AddAutoMapper(typeof(AppContainer));
 
             //不好实现，所以不要使用多语言

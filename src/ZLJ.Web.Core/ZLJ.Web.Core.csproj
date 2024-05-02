@@ -69,7 +69,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Abp.Castle.Log4Net" Version="9.1.3" />
+		<PackageReference Include="Abp.Castle.Log4Net" Version="9.2.2" />
 		<!--<PackageReference Include="DistributedLock.SqlServer" Version="1.*" />
 		<PackageReference Include="DistributedLock.MySql" Version="1.*" />-->
 		<!--<PackageReference Include="DotNetCore.CAP.Dashboard" Version="7.2.0" />
@@ -81,7 +81,7 @@
 		</PackageReference>
 			
 		<PackageReference Include="HangFire.Core" Version="1.8.12" />
-		<PackageReference Include="Abp.HangFire.AspNetCore" Version="9.1.3" />
+		<PackageReference Include="Abp.HangFire.AspNetCore" Version="9.2.2" />
 		<!--<PackageReference Include="BXJG.Common.Web" Version="*" />
 		<PackageReference Include="BXJG.Utils.RCL" Version="*" />-->
 		<PackageReference Include="DistributedLock.SqlServer" Version="1.0.4" />
@@ -89,8 +89,8 @@
 		<!--<PackageReference Include="BXJG.Utils.Web" Version="1.2.1" />-->
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.4" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-		<PackageReference Include="Abp.AspNetCore" Version="9.1.3" />
-		<PackageReference Include="Abp.AspNetCore.SignalR" Version="9.1.3" />
+		<PackageReference Include="Abp.AspNetCore" Version="9.2.2" />
+		<PackageReference Include="Abp.AspNetCore.SignalR" Version="9.2.2" />
 	</ItemGroup>
 	<ItemGroup>
 		<Folder Include="Authentication\WeChatMiniProgram\" />

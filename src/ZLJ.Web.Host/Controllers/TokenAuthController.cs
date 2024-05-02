@@ -23,6 +23,7 @@ using ZLJ.Application.Common.Share.Models.TokenAuth;
 using ZLJ.Web.Core.Models.TokenAuth;
 using ZLJ.Web.Core.Authentication.External;
 using ZLJ.Web.Core.Authentication.JwtBearer;
+using ZLJ.Core;
 
 namespace ZLJ.Controllers
 {
@@ -321,7 +322,7 @@ namespace ZLJ.Controllers
 
         private string GetEncryptedAccessToken(string accessToken)
         {
-            return SimpleStringCipher.Instance.Encrypt(accessToken, AdminConsts.DefaultPassPhrase);
+            return SimpleStringCipher.Instance.Encrypt(accessToken, ZLJConsts.DefaultPassPhrase);
         }
     }
 }

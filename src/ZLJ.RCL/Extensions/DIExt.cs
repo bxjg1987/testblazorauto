@@ -8,7 +8,6 @@ using BXJG.Common.Http;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Abp.ObjectMapping;
-using Abp.AutoMapper;
 using BXJG.Utils.RCL;
 using BXJG.Utils.RCL.Abps;
 using BXJG.Utils.RCL.Helpers;

@@ -38,18 +38,12 @@ namespace ZLJ.Web.Host.Startup
         private readonly IWebHostEnvironment _env;
         private readonly IConfigurationRoot _appConfiguration;
 
-        //从web.core移动过来的
-        ZLJEntityFrameworkModule abpProjectNameEntityFrameworkModule;
-        private readonly IHttpContextAccessor httpContextAccessor;
 
-        public ZLJWebHostModule(IWebHostEnvironment env, ZLJEntityFrameworkModule abpProjectNameEntityFrameworkModule, IHttpContextAccessor httpContextAccessor)
+        public ZLJWebHostModule(IWebHostEnvironment env)
         {
             _env = env;
             _appConfiguration = env.GetAppConfiguration();
 
-            //从web.core移动过来的
-            this.abpProjectNameEntityFrameworkModule = abpProjectNameEntityFrameworkModule;
-            this.httpContextAccessor = httpContextAccessor;
         }
         public override void PreInitialize()
         {
@@ -131,12 +125,6 @@ namespace ZLJ.Web.Host.Startup
             workManager.Add(IocManager.Resolve<RemoveUploadFileWorker>());
         }
 
-        #region 从web.core移动过来的
        
-
-
-        #endregion
-
-
     }
 }

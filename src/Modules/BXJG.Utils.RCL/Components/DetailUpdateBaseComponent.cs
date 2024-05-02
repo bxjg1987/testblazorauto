@@ -1,6 +1,7 @@
 ﻿
 using Abp.Application.Services.Dto;
 using Abp.ObjectMapping;
+using AutoMapper;
 using BXJG.Utils.Application.Share;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
@@ -38,11 +39,11 @@ namespace BXJG.Utils.RCL.Components
         /// <summary>
         /// 请调用ObjectMapper
         /// </summary>
-        IObjectMapper objectMapper;
+        IMapper objectMapper;
         /// <summary>
         /// 对象映射接口
         /// </summary>
-        protected virtual IObjectMapper ObjectMapper => objectMapper ??= ScopedServices.GetRequiredService<IObjectMapper>();
+        protected virtual IMapper ObjectMapper => objectMapper ??= ScopedServices.GetRequiredService<IMapper>();
        
         /// <summary>
         /// 此功能的名称

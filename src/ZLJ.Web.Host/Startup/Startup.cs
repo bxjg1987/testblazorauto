@@ -48,29 +48,7 @@ namespace ZLJ.Web.Host.Startup
         {
             this.webHostEnvironment = env;
             _appConfiguration = env.GetAppConfiguration();
-            // BlazorServerLoggerExt.Add(LogLevel.Error, env.EnvironmentName,"环境测试");
         }
-
-        //public class sdfdsf : AbpMvcContractResolver
-        //{
-        //    public sdfdsf(IIocResolver iocResolver) : base(iocResolver)
-        //    {
-
-        //    }
-        //    protected override void ModifyProperty(MemberInfo member, JsonProperty property)
-        //    {
-        //        if (property.PropertyType != typeof(DateTime) && property.PropertyType != typeof(DateTime?))
-        //        {
-        //            return;
-        //        }
-
-        //        property.Converter = new AbpDateTimeConverter()
-        //        {
-        //            Culture = new System.Globalization.CultureInfo("en-US"),
-        //            DateTimeFormat = "yyyy-MM-dd HH:mm:ss"
-        //        };
-        //    }
-        //}
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -79,14 +57,16 @@ namespace ZLJ.Web.Host.Startup
             //MVC
             var mvcBuilder = services.AddControllersWithViews(
                  options => { options.Filters.Add(new AbpAutoValidateAntiforgeryTokenAttribute()); }
-            ).AddNewtonsoftJson(options =>
-            {
-                //options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
-                options.SerializerSettings.ContractResolver = new AbpMvcContractResolver()
-                {
-                    NamingStrategy = new CamelCaseNamingStrategy()
-                };
-            });
+            )
+            //    .AddNewtonsoftJson(options =>
+            //{
+            //    //options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
+            //    options.SerializerSettings.ContractResolver = new AbpMvcContractResolver()
+            //    {
+            //        NamingStrategy = new CamelCaseNamingStrategy()
+            //    };
+            //})
+                ;
             //services.AddControllers();
 
 
@@ -126,28 +106,6 @@ namespace ZLJ.Web.Host.Startup
             //services.AddSingleton<CircuitHandler, TrackingCircuitHandler>(p => p.GetRequiredService<TrackingCircuitHandler>());
             //services.AddBootstrapBlazor();
             services.AddSignalR(); //启用blazor时，已经包含这个
-
-            #region Mudblazor
-            //各app可以提供自己的配置
-            //services.AddMudServices(config =>
-            //{
-            //    config.SnackbarConfiguration.PositionClass = MudBlazor.Defaults.Classes.Position.TopCenter;
-            //    config.SnackbarConfiguration.VisibleStateDuration = 4000; //显示多久才开始小时
-            //    config.SnackbarConfiguration.ShowTransitionDuration = 200;
-            //    config.SnackbarConfiguration.HideTransitionDuration = 200;
-            //});
-            #endregion
-
-            #region bootstrapblazor
-            //services.AddBootstrapBlazor();
-            //// 增加 Table Excel 导出服务
-            //services.AddBootstrapBlazorTableExcelExport();
-            #endregion
-
-            #region antblaor
-            //services.AddAntDesign();
-            //services.Configure<ProSettings>(_appConfiguration.GetSection("ProSettings"));
-            #endregion
 
             // Configure CORS for angular2 UI
             services.AddCors(
