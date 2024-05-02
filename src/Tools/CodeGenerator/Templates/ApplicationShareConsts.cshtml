@@ -1,0 +1,16 @@
+@using CodeGenerator
+@using RazorLight
+@inherits TemplatePage<ExecuteContext>
+@{
+    DisableEncoding = true;//禁止html编码，因为我们是做代码生成器
+}
+namespace @Model.Model.ApplicationShareNamespace
+{
+    /// <summary>
+    /// @(Model.Model.DisplayName)Core share 常量
+    ///</summary>
+    public class @Consts.PermissionNames
+    {
+        public const string Create = @(field.Length);
+    }
+}

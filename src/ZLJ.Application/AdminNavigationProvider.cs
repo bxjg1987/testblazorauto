@@ -29,7 +29,8 @@ namespace ZLJ.Application.Admin
             var menu = context.Manager.MainMenu; //new MenuDefinition("adminBlazor", PermissionNames.Administrator.GetLocalizableString());
             //context.Manager.Menus.Add("adminBlazor", menu);
 
-            //{codegenerator}
+            //--codegenerator==
+
             menu.AddItem(new MenuItemDefinition("adminBlazor_home",
                                                 "后台管理首页".GetAdminLocalizableString(),
                                                 url: "/",

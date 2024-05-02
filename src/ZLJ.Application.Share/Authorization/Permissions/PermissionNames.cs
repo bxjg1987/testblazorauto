@@ -5,7 +5,7 @@
 
         public const string Administrator = "Administrator";
 
-        //{codegenerator}
+        //--codegenerator==
 
 
         #region 基础信息

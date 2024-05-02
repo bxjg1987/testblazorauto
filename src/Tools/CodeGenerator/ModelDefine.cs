@@ -116,5 +116,44 @@ namespace CodeGenerator
         /// 除了字符串、范围外的其它条件字段
         /// </summary>
         public IEnumerable<FieldDefine> NormalConditionFields => NormalFields.Where(x => x.IsCondition&& !x.IsConditionRange&& x.CSharpType!="string");
+
+        #region 权限
+        /// <summary>
+        /// 权限名的常量类名，如：TestPermissionNames
+        /// </summary>
+        public string PermissionNames => $"{Name}PermissionNames";
+        /// <summary>
+        /// 查看和管理权限名称，如：Test
+        /// </summary>
+        public string PermissionName => $"{Name}";
+        /// <summary>
+        /// 新增权限名称，如：TestCreate
+        /// </summary>
+        public string CreatePermissionName => $"{Name}Create";
+        /// <summary>
+        /// 修改权限名称，如：TestUpdate
+        /// </summary>
+        public string UpdatePermissionName => $"{Name}Update";
+        /// <summary>
+        /// 删除权限名称，如：TestDelete
+        /// </summary>
+        public string DeletePermissionName => $"{Name}Delete";
+        /// <summary>
+        /// 查看和管理的常量全名，如：TestPermissionNames.Test
+        /// </summary>
+        public string PermissionNameConst => $"{PermissionNames}.{PermissionName}";
+        /// <summary>
+        /// 新增常量全名，如：TestPermissionNames.TestCreate
+        /// </summary>
+        public string CreatePermissionNameConst => $"{PermissionNames}.{CreatePermissionName}";
+        /// <summary>
+        /// 修改常量全名，如：TestPermissionNames.TestUpdate
+        /// </summary>
+        public string UpdatePermissionNameConst => $"{PermissionNames}.{UpdatePermissionName}";
+        /// <summary>
+        /// 删除常量全名，如：TestPermissionNames.TestDelete
+        /// </summary>
+        public string DeletePermissionNameConst => $"{PermissionNames}.{DeletePermissionName}";
+        #endregion
     }
 }

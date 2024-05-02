@@ -8,6 +8,6 @@ namespace CodeGenerator
 {
     public class Consts
     {
-       
+        //public const string PermissionNames = "PermissionNames";
     }
 }
