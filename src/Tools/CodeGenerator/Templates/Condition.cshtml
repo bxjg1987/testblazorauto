@@ -1,0 +1,41 @@
+@using CodeGenerator
+@using RazorLight
+@using BXJG.Common;
+@using BXJG.Common.Extensions;
+@inherits TemplatePage<ExecuteContext>
+@{
+    DisableEncoding = true;//禁止html编码，因为我们是做代码生成器
+}
+using BXJG.Common.Contracts;
+@if (Model.Model.IsTree)
+{
+@:using BXJG.Utils.Application.Share.GeneralTree;
+}
+namespace @(Model.Model.ApplicationShareNamespace)
+{
+    /// <summary>
+    /// 获取 @(Model.Model.DisplayName) 的条件
+    ///</summary>
+    public class @(Model.Model.ConditionName)@(Model.Model.IsTree?" : GeneralTreeGetTreeInput":"")@( Model.Model.ConditionStringFields.Any()?$"{(Model.Model.IsTree?',':':')} IHaveKeywords":"")
+    {@if(Model.Model.ConditionStringFields.Any()){<text>
+        /// <summary>
+        /// 模糊搜索的关键字
+        ///</summary>
+        public string? Keywords { get; set; }</text>}
+@foreach (var field in Model.Model.ConditionRangeFields){<text>
+        /// <summary>
+        /// @(field.DisplayName) 最小值
+        ///</summary>
+        public @(field.CSharpType)? @field.ConditionRangeMin { get; set; }
+        /// <summary>
+        /// @(field.DisplayName) 最大值
+        ///</summary>
+        public @(field.CSharpType)? @field.ConditionRangeMax { get; set; }</text>}
+@foreach (var field in Model.Model.NormalConditionFields){<text>
+        /// <summary>
+        /// @(field.DisplayName)
+        ///</summary>
+        public @(field.CSharpType)? @field.Name { get; set; }
+</text>}
+    }
+}

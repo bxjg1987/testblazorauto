@@ -134,6 +134,15 @@ namespace CodeGenerator
         /// 各应用中的Dto名称，如：TestDto
         /// </summary>
         public string DtoName => $"{Name}Dto";
+        /// <summary>
+        /// 各应用中的EditDto名称，如：TestEditDto
+        /// </summary>
+        public string EditDtoName => $"{Name}EditDto";
+        /// <summary>
+        /// 具体应用中crud管理时获取数据的条件类名，如：TestCondition
+        /// 此条件对象可以用于获取或统计数据
+        /// </summary>
+        public string ConditionName => $"{Name}Condition";
         #region 权限
         /// <summary>
         /// 查看和管理权限名称，如：TestGet

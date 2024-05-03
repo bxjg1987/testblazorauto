@@ -6,7 +6,7 @@
     {
       "Name": "Test",
       "DisplayName": "测试1",
-      "IsTree": false,
+      "IsTree": true,
       "ParentPermissionName": null,
       "ParentMenuName": null,
       "Fields": [

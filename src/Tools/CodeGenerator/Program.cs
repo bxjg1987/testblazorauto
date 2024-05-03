@@ -48,8 +48,10 @@ List<Action<ExecuteContext>> actions = new List<Action<ExecuteContext>>
     ProviderCondition,
     ProviderAppService,
     ProviderObjMap,
+    ApplicationShareConst,
+    Condition,
     Dto,
-    ApplicationShareConst
+    EditDto
 };
 
 
@@ -331,6 +333,19 @@ void ApplicationShareConst(ExecuteContext ctx)
 
     Console.WriteLine("生成admin应用中，应用服务共享层的常量完成");
 }
+void Condition(ExecuteContext ctx)
+{
+    Console.WriteLine("正在生成应用共享层中的条件类...");
+    var str = engine.CompileRenderAsync("Condition", ctx).Result;
+
+    var file = Path.Combine(ctx.SrcDir, ctx.ApplicationShareProjectName, ctx.Model.Name, ctx.Model.ConditionName + ".cs");
+    Directory.CreateDirectory(Path.GetDirectoryName(file));
+
+    File.WriteAllText(file, str);
+
+
+    Console.WriteLine("生成应用共享层中的条件类完成");
+}
 void Dto(ExecuteContext ctx)
 {
     Console.WriteLine("正在生成Dto...");
@@ -343,4 +358,17 @@ void Dto(ExecuteContext ctx)
 
 
     Console.WriteLine("生成Dto完成");
+}
+void EditDto(ExecuteContext ctx)
+{
+    Console.WriteLine("正在生成EditDto...");
+    var str = engine.CompileRenderAsync("EditDto", ctx).Result;
+
+    var file = Path.Combine(ctx.SrcDir, ctx.ApplicationShareProjectName, ctx.Model.Name, ctx.Model.EditDtoName + ".cs");
+    Directory.CreateDirectory(Path.GetDirectoryName(file));
+
+    File.WriteAllText(file, str);
+
+
+    Console.WriteLine("生成EditDto完成");
 }

@@ -1,0 +1,30 @@
+@using CodeGenerator
+@using RazorLight
+@using BXJG.Common;
+@using BXJG.Common.Extensions;
+@inherits TemplatePage<ExecuteContext>
+@{
+    DisableEncoding = true;//禁止html编码，因为我们是做代码生成器
+}
+using Abp.Application.Services.Dto;
+using System.ComponentModel;
+using BXJG.Common.Contracts;
+@if(Model.Model.IsTree)
+{
+@:using BXJG.Utils.Application.Share.GeneralTree;    
+}
+
+namespace @(Model.Model.ApplicationShareNamespace)
+{
+    /// <summary>
+    /// 各应用编辑 @(Model.Model.DisplayName) 的数据模型
+    ///</summary>
+    public class @(Model.Model.EditDtoName) : @(Model.Model.IsTree ? $"GeneralTreeNodeEditBaseDto" : (Model.Model.PrimaryField.CSharpType == "int" ? "EntityDto" : $"EntityDto<{Model.Model.PrimaryField.CSharpType}>"))
+    {@foreach (var field in Model.Model.NormalFields){<text>
+        /// <summary>
+        /// @(field.DisplayName)
+        ///</summary>
+        [DisplayName("@(field.DisplayName)")]
+        public @(field.CSharpType)@(field.IsRequired?"":"?") @field.Name { get; set; }</text>}
+    }
+}
