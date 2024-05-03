@@ -7,35 +7,44 @@ using System.Text;
 
 namespace BXJG.Common.Contracts
 {
-    public class ChangeStateInput
+    public  class ChangeStateInput
     {
         [Required]
-        public object Id { get; set; }
+        public virtual object Id { get; set; }
         [Required]
-        public object State { get; set; }
+        public virtual object State { get; set; }
     }
 
-    public class ChangeStateInput<TId, TState>
+    public class ChangeStateInput<TId, TState> : ChangeStateInput
     {
+        TId _id;
         public new TId Id
         {
             get
             {
-                return (TId)(this as ChangeStateInput).Id;
+                //拆箱
+                //return (TId)(this as ChangeStateInput).Id;
+                return _id;
             }
             set
             {
+                _id = value;
+                //装箱
                 (this as ChangeStateInput).Id = value;
             }
         }
-        public TState State
+
+        TState _state;
+        public new TState State
         {
             get
             {
-                return (TState)(this as ChangeStateInput).State;
+                return _state;
+                //return (TState)(this as ChangeStateInput).State;
             }
             set
             {
+                _state = value;
                 (this as ChangeStateInput).State = value;
             }
         }

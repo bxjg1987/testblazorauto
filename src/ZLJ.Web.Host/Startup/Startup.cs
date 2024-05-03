@@ -64,7 +64,9 @@ namespace ZLJ.Web.Host.Startup
             //https://learn.microsoft.com/zh-cn/dotnet/standard/serialization/system-text-json/configure-options?pivots=dotnet-8-0#web-defaults-for-jsonserializeroptions
             //.AddJsonOptions(options =>
             //{
-            //    options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+                //options.JsonSerializerOptions.PropertyNamingPolicy =  JsonNamingPolicy.CamelCase;
+                //options.JsonSerializerOptions.NumberHandling = System.Text.Json.Serialization.JsonNumberHandling.AllowReadingFromString ;
+                //options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
             //})
             ;
             //    .AddNewtonsoftJson(options =>

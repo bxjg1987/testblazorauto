@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace BXJG.Common.Contracts
@@ -38,21 +39,35 @@ namespace BXJG.Common.Contracts
         //    return new BatchOperationErrorMessage(id, "服务器内部异常");
         //}
     }
+
+    //在子类BatchOperationOutput<TKey>.Ids 添加后，在父类可以访问
+    //反过来不行
+
     /// <summary>
     /// 批量操作输出模型
     /// </summary>
-    /// <typeparam name="TKey"></typeparam>
     public class BatchOperationOutputBase
     {
         /// <summary>
         /// 操作成功的id集合
         /// </summary>
-        public IList<object> Ids { get; } = new List<object>();
+        public virtual IList<object> Ids
+        {
+            get
+            {
+                return GetIds();
+            }
+            set {
+                _ids = value;
+            }
+        }
         /// <summary>
         /// 操作失败的id和原因<br />
         /// 理想的需要如下形式，但abp中 后端和前端都没有针对此方式做适配，因此也可以在错误时封装为UserFriendlyException
         /// </summary>
-        public IList<BatchOperationErrorMessage> ErrorMessage { get; } = new List<BatchOperationErrorMessage>();
+        public virtual IList<BatchOperationErrorMessage> ErrorMessage { get; } = new List<BatchOperationErrorMessage>();
+        IList<object> _ids = new List<object>();
+        protected virtual IList<object> GetIds() => _ids;
     }
 
     /// <summary>
@@ -64,7 +79,11 @@ namespace BXJG.Common.Contracts
         /// <summary>
         /// 操作成功的id集合
         /// </summary>
-        public new IList<TKey> Ids { get; } = new List<TKey>();
+        public new IList<TKey> Ids { get; set; } = new List<TKey>();
+        protected override IList<object> GetIds()
+        {
+            return Ids.Cast<object>().ToList();
+        }
         ///// <summary>
         ///// 操作失败的id和原因<br />
         ///// 理想的需要如下形式，但abp中 后端和前端都没有针对此方式做适配，因此也可以在错误时封装为UserFriendlyException

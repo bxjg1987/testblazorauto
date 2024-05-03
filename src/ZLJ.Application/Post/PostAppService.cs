@@ -362,24 +362,24 @@ namespace ZLJ.Application.Admin.Post
         }
 
 
-        [AbpAuthorize(PermissionNames.AdministratorBaseInfoPostDelete)]
-        public async Task<IEnumerable<int>> DeleteBatchAsync(params int[] input)
-        {
-            var list = new List<int>();
-            foreach (var item in input)
-            {
-                var role = await _roleManager.GetRoleByIdAsync(item);
-                if (role.IsStatic)
-                {
-                    continue;
-                    //throw new UserFriendlyException("CannotDeleteAStaticRole");
-                }
-                var rt = await _roleManager.DeleteAsync(role);
-                if (rt.Succeeded)
-                    list.Add(role.Id);
-            }
-            return list;
-        }
+        //[AbpAuthorize(PermissionNames.AdministratorBaseInfoPostDelete)]
+        //public async Task<IEnumerable<int>> DeleteBatchAsync(params int[] input)
+        //{
+        //    var list = new List<int>();
+        //    foreach (var item in input)
+        //    {
+        //        var role = await _roleManager.GetRoleByIdAsync(item);
+        //        if (role.IsStatic)
+        //        {
+        //            continue;
+        //            //throw new UserFriendlyException("CannotDeleteAStaticRole");
+        //        }
+        //        var rt = await _roleManager.DeleteAsync(role);
+        //        if (rt.Succeeded)
+        //            list.Add(role.Id);
+        //    }
+        //    return list;
+        //}
         [UnitOfWork(false)]
         [AbpAuthorize(PermissionNames.AdministratorBaseInfoPostUpdate)]
         public async Task<GetPostForEditOutput> GetPostForEdit(EntityDto input)

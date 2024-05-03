@@ -242,7 +242,7 @@ namespace System.Net.Http
         }
         public static Task<BatchOperationOutput<TKey>> DeleteBatch<TKey>(this HttpClient client, object data, string controller, CancellationToken cancellationToken = default)
         {
-            return client.Post<BatchOperationOutput<TKey>>(controller, $"deleteBatch", data, default, cancellationToken);
+            return client.Post<BatchOperationOutput<TKey>>(controller, $"batchdelete", data, default, cancellationToken);
         }
         public static Task<BatchOperationOutput<TKey>> DeleteBatch<TKey, TDto>(this HttpClient client, object data, string controller = default, CancellationToken cancellationToken = default)
         {

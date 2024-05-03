@@ -36,26 +36,27 @@ namespace BXJG.Common.Contracts
         /// <summary>
         /// 
         /// </summary>
-        public new T Id
-        {
-            get
-            {
-                var obj = (this as IHaveParentId).Id;
-                if (obj == default)
-                    return default;
-                return (T)obj;
+        public new T Id{ get; set; }
 
+        object IHaveParentId.Id
+        {
+            get { 
+                return Id;
             }
-            set { (this as IHaveParentId).Id = value; }
+            set { Id = (T)value; }
         }
+
         /// <summary>
         /// 
         /// </summary>
-        public new T? ParentId
+        public new T? ParentId { get; set; }
+        object IHaveParentId.ParentId
         {
-
-            get { return (T?)(this as IHaveParentId).ParentId; }
-            set { (this as IHaveParentId).ParentId = value; }
+            get
+            {
+                return ParentId;
+            }
+            set { ParentId = (T?)value; }
         }
     }
 
