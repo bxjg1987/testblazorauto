@@ -37,7 +37,7 @@
     <None Update="Projects\ZLJ.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Templates\ApplicationShareConsts.cshtml">
+    <None Update="Templates\ApplicationShareConst.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Templates\CoreShareConsts.cshtml">

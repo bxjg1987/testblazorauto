@@ -48,7 +48,8 @@ List<Action<ExecuteContext>> actions = new List<Action<ExecuteContext>>
     ProviderCondition,
     ProviderAppService,
     ProviderObjMap,
-    Dto
+    Dto,
+    ApplicationShareConst
 };
 
 
@@ -317,7 +318,19 @@ void ProviderObjMap(ExecuteContext ctx)
 
     Console.WriteLine("生成provider的automapper完成");
 }
+void ApplicationShareConst(ExecuteContext ctx)
+{
+    Console.WriteLine("正在生成admin应用中，应用服务共享层的常量...");
+    var str = engine.CompileRenderAsync("ApplicationShareConst", ctx).Result;
 
+    var file = Path.Combine(ctx.SrcDir, ctx.ApplicationShareProjectName, ctx.Model.Name, ctx.Model.ApplicationShareConstName + ".cs");
+    Directory.CreateDirectory(Path.GetDirectoryName(file));
+
+    File.WriteAllText(file, str);
+
+
+    Console.WriteLine("生成admin应用中，应用服务共享层的常量完成");
+}
 void Dto(ExecuteContext ctx)
 {
     Console.WriteLine("正在生成Dto...");

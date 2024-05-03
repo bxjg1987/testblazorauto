@@ -9,13 +9,17 @@
 using Abp.Application.Services.Dto;
 using System.ComponentModel;
 using BXJG.Common.Contracts;
+@if(Model.Model.IsTree)
+{
+@:using BXJG.Utils.Application.Share.GeneralTree;    
+}
 
 namespace @(Model.Model.ApplicationShareNamespace)
 {
     /// <summary>
     /// 各应用获取 @(Model.Model.DisplayName) 的数据模型
     ///</summary>
-    public class @(Model.Model.DtoName) : @(Model.Model.PrimaryField.CSharpType=="int"?"FullAuditedEntityDto":$"FullAuditedEntityDto<{Model.Model.PrimaryField.CSharpType}>"), IExtendableObj
+    public class @(Model.Model.DtoName) : @(Model.Model.IsTree ? $"GeneralTreeNodeForSelectDto<{Model.Model.DtoName}>" : (Model.Model.PrimaryField.CSharpType == "int" ? "EntityDto" : $"EntityDto<{Model.Model.PrimaryField.CSharpType}>")), IExtendableObj
     {
 @foreach (var field in Model.Model.NormalFields)
 {

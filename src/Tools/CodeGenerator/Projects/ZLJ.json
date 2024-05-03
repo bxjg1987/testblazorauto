@@ -6,7 +6,9 @@
     {
       "Name": "Test",
       "DisplayName": "测试1",
-      "IsTree": true,
+      "IsTree": false,
+      "ParentPermissionName": null,
+      "ParentMenuName": null,
       "Fields": [
         {
           "Name": "Id", //字段名

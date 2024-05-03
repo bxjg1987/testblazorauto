@@ -1,0 +1,33 @@
+@using CodeGenerator
+@using RazorLight
+@inherits TemplatePage<ExecuteContext>
+@{
+    DisableEncoding = true;//禁止html编码，因为我们是做代码生成器
+}
+namespace @Model.Model.ApplicationShareNamespace
+{
+    /// <summary>
+    /// @(Model.Model.DisplayName) 应用共享层 常量
+    ///</summary>
+    public class @Model.Model.ApplicationShareConstName
+    {
+        #region 权限名称
+        /// <summary>
+        /// 获取权限名称
+        ///</summary>
+        public const string @nameof(Model.Model.PermissionNameGet) = "@(Model.Model.PermissionNameGet)";
+        /// <summary>
+        /// 新增权限名称
+        ///</summary>
+        public const string @nameof(Model.Model.PermissionNameCreate) = "@(Model.Model.PermissionNameCreate)";
+        /// <summary>
+        /// 修改权限名称
+        ///</summary>
+        public const string @nameof(Model.Model.PermissionNameUpdate) = "@(Model.Model.PermissionNameUpdate)";
+        /// <summary>
+        /// 删除权限名称
+        ///</summary>
+        public const string @nameof(Model.Model.PermissionNameDelete) = "@(Model.Model.PermissionNameDelete)";
+        #endregion
+    }
+}
