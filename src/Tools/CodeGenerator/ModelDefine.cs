@@ -29,6 +29,10 @@ namespace CodeGenerator
         /// </summary>
         public List<FieldDefine> Fields { get; set; }
         /// <summary>
+        /// 是否是树形结构的数据
+        /// </summary>
+        public bool IsTree { get; set; }
+        /// <summary>
         /// 实体类名称，如：TestEntity
         /// </summary>
         public string EntityName => $"{Name}Entity";
@@ -51,7 +55,7 @@ namespace CodeGenerator
         /// <summary>
         /// Core.Share中的常量名，如：TestShareConsts
         /// </summary>
-        public string CoreShareConst => $"{Name}ShareConsts";
+        public string CoreShareConstName => $"{Name}ShareConsts";
 
 
         /// <summary>

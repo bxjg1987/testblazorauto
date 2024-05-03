@@ -18,7 +18,7 @@ using ZLJ.Core.Share.Enums;
 namespace ZLJ.Application.Common.AdministrativeCommon
 {
     [AbpAuthorize]
-    public class AdministrativeProviderAppService : GeneralTreeProviderBaseAppService<
+    public class AdministrativeProviderAppService : CommonTreeProviderBaseAppService<
         AdministrativeEntity,GeneralTreeGetForSelectInput
         , AdministrativeTreeNodeDto,
         GeneralTreeGetForSelectInput,

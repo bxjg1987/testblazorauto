@@ -11,18 +11,22 @@ using @(Model.Model.CoreShareNamespace);
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ZLJ.EntityFrameworkCore.EntityFrameworkCore.EFMap
+namespace @(Model.EFCoreProjectName).@(Model.Model.Name)
 {
     /// <summary>
     /// @(Model.Model.DisplayName) ef映射
     ///</summary>
-    public class @(Model.Model.Name)EFMap : IEntityTypeConfiguration<@(Model.Model.EntityName)>
+    public class EFMap : IEntityTypeConfiguration<@(Model.Model.EntityName)>
     {
         public void Configure(EntityTypeBuilder<@(Model.Model.EntityName)> builder)
         {
             //表名称
-            builder.ToTable("@(Model.Name)_@(Model.Model.Name)").HasComment("@(Model.Model.DisplayName)");
+            builder.ToTable("@(Model.Name)_@(Model.Model.Name)",t=>t.HasComment("@(Model.Model.DisplayName)"));
 
+@if(Model.Model.IsTree)
+{
+            @:builder.MapGeneralTree();
+}
 @foreach (var field in Model.Model.NormalFields)
 {
             @:/// <summary>
@@ -37,7 +41,7 @@ if(field.CSharpType=="string"){
             @:@(field.Name).IsUnicode(@(field.IsUnicode.ToString().ToLower()));
 }
             @:@(field.Name).IsRequired(@(field.IsRequired.ToString().ToLower()));
-        }
+}
         }
     }
 }

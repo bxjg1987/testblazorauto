@@ -38,11 +38,11 @@ var engine = new RazorLightEngineBuilder()
     .UseMemoryCachingProvider()
     .Build();
 
-List<Action<ExecuteContext>> actions = new List<Action<ExecuteContext>> 
+List<Action<ExecuteContext>> actions = new List<Action<ExecuteContext>>
 {
-    Entity, 
+    Entity,
     CoreShareConst ,
-    EFMap, 
+    EFMap,
     EFDbContext ,
     ProviderDto,
     ProviderCondition,
@@ -177,7 +177,7 @@ void CoreShareConst(ExecuteContext ctx)
     Console.WriteLine("正在生成CoreConst...");
 
     var str = engine.CompileRenderAsync("CoreShareConsts", ctx).Result;
-    var file = Path.Combine(ctx.SrcDir, ctx.CoreShareProjectName, ctx.Model.Name, ctx.Model.CoreShareConst + ".cs");
+    var file = Path.Combine(ctx.SrcDir, ctx.CoreShareProjectName, ctx.Model.Name, ctx.Model.CoreShareConstName + ".cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
 
@@ -231,26 +231,36 @@ void EFDbContext(ExecuteContext ctx)
 {
     Console.WriteLine("正在生成efDbContext映射...");
 
-    var str = engine.CompileRenderAsync("DbContext", ctx).Result;
-    //用这个路径，方便后续添加dbcontext、seed等
-    var file = Path.Combine(ctx.SrcDir, ctx.EFCoreProjectName, ctx.Model.Name, "DbContext.cs");
-    Directory.CreateDirectory(Path.GetDirectoryName(file));
+    //var str = engine.CompileRenderAsync("DbContext", ctx).Result;
+    ////用这个路径，方便后续添加dbcontext、seed等
+    //var file = Path.Combine(ctx.SrcDir, ctx.EFCoreProjectName, ctx.Model.Name, "DbContext.cs");
+    //Directory.CreateDirectory(Path.GetDirectoryName(file));
+
+    var file = Path.Combine(ctx.SrcDir, ctx.EFCoreProjectName, "EntityFrameworkCore", ctx.Name + "DbContext.cs");
+    var old = File.ReadAllText(file);
+
+    //old = Regex.Replace(old, @$"#region {ctx.Model.DisplayName}dbset.*?#endregion", string.Empty, RegexOptions.Singleline);
 
 
-    //var old = File.ReadAllText(file);
 
-    //old = Regex.Replace(old, @$"#region {ctx.Model.DisplayName}MaxLength.*?#endregion", string.Empty, RegexOptions.Singleline);
+    var str = $"public DbSet<{ctx.Model.EntityName}> {ctx.Model.Name} {{ get;set; }}";
+    if (!old.Contains(str))
+    {
+        ////File.Replace(file, ctx.CodeGeneratorReplace, str);
+        str += Environment.NewLine;
+        str += $"\t\t{ExecuteContext.CodeGeneratorReplace}";
 
+        old = old.Replace(ExecuteContext.CodeGeneratorReplace, str);
+    }
 
+    str = $"using {ctx.Model.CoreNamespace};";
+    if (!old.Contains(str))
+    {
+        str += Environment.NewLine;
+        old = str + old;
+    }
 
-
-    ////File.Replace(file, ctx.CodeGeneratorReplace, str);
-    //str += Environment.NewLine;
-    //str += $"\t\t{ExecuteContext.CodeGeneratorReplace}";
-
-    //str = old.Replace(ExecuteContext.CodeGeneratorReplace, str);
-
-    File.WriteAllText(file, str);
+    File.WriteAllText(file, old);
 
 
     Console.WriteLine("生成efDbContext映射完成");

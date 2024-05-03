@@ -6,31 +6,66 @@
 @{
     DisableEncoding = true;//禁止html编码，因为我们是做代码生成器
 }
-using BXJG.Utils.Application.Share.Dtos;
+
 using @(Model.Model.CoreNamespace);
 using @(Model.Model.ApplicationCommonShareNamespace);
+using Abp.Authorization;
+using BXJG.Utils.Application.Share.GeneralTree;
+using BXJG.Utils.Application.Share.Dtos;
 namespace @(Model.Model.ApplicationCommonNamespace)
 {
     /// <summary>
     /// 获取 @(Model.Model.DisplayName) 以供选择
     ///</summary>
-    public class @(Model.Model.ProviderAppService) : CommonProviderBaseAppService<@(Model.Model.EntityName),PagedAndSortedResultRequest<@(Model.Model.ProviderCondition)>,@(Model.Model.ProviderDtoName),@(Model.Model.PrimaryField.CSharpType)>
+    [AbpAuthorize]
+    public class @(Model.Model.ProviderAppService) : 
+@if(Model.Model.IsTree)
+{
+    <text>
+    CommonTreeProviderBaseAppService<@(Model.Model.EntityName), 
+                                     @(Model.Model.ProviderCondition),
+                                     @(Model.Model.ProviderDtoName),
+                                     GeneralTreeGetForSelectInput,
+                                     GeneralTreeComboboxDto>
+    </text>
+}
+else
+{
+    @:CommonProviderBaseAppService<@(Model.Model.EntityName),PagedAndSortedResultRequest<@(Model.Model.ProviderCondition)>,@(Model.Model.ProviderDtoName),@(Model.Model.PrimaryField.CSharpType)>
+}
     {
-        protected override IQueryable<@(Model.Model.EntityName)> CreateFilteredQuery(PagedAndSortedResultRequest<@(Model.Model.ProviderCondition)> input)
+@if(Model.Model.IsTree)
+{
+        @:protected override IQueryable<@(Model.Model.EntityName)> ComboTreeFilter(@(Model.Model.ProviderCondition) condition, string parentCode)
+}else
+{
+        @:protected override IQueryable<@(Model.Model.EntityName)> CreateFilteredQuery(PagedAndSortedResultRequest<@(Model.Model.ProviderCondition)> input)
+}       
         {
+    @if (Model.Model.IsTree)
+    {
+        <text>
+            var query = base.ComboTreeFilter(condition, parentCode);
+        </text>
+    }
+    else
+    {  <text>
             var query = base.CreateFilteredQuery(input);
+            var condition = input.Filter;
+    </text>
+}
 
 @if(Model.Model.ConditionStringFields.Any())
 {
     var idx = 0;
-            @:query = query.WhereIf(input.Filter.Keywords.IsNotNullOrWhiteSpaceBXJG(), x => 
+            @:query = query.WhereIf(condition.Keywords.IsNotNullOrWhiteSpaceBXJG(), x => 
 @foreach (var field in Model.Model.ConditionStringFields)
 {
             if (idx>0)
             {
-                @:|| x.@(field.Name).Contains(input.Filter.Keywords)
+                @:|| x.@(field.Name).Contains(condition.Keywords)
             }else{
-                @:x.@(field.Name).Contains(input.Filter.Keywords)
+                @:x.@(field.Name).Contains(condition.Keywords)
             }
     idx++; 
 }
@@ -39,13 +74,13 @@ namespace @(Model.Model.ApplicationCommonNamespace)
 
 @foreach (var field in Model.Model.ConditionRangeFields)
 {
-            @:query = query.WhereIf(input.Filter.@(field.ConditionRangeMin).HasValue,x=> x.@(field.Name) >= input.Filter.@(field.ConditionRangeMin).Value );
-            @:query = query.WhereIf(input.Filter.@(field.ConditionRangeMax).HasValue,x=> x.@(field.Name) < input.Filter.@(field.ConditionRangeMax).Value );
+            @:query = query.WhereIf(condition.@(field.ConditionRangeMin).HasValue,x=> x.@(field.Name) >= condition.@(field.ConditionRangeMin).Value );
+            @:query = query.WhereIf(condition.@(field.ConditionRangeMax).HasValue,x=> x.@(field.Name) < condition.@(field.ConditionRangeMax).Value );
 }
 
 @foreach (var field in Model.Model.NormalConditionFields)
 {
-            @:query = query.WhereIf(input.Filter.@(field.Name).HasValue,x=> x.@(field.Name) == input.Filter.@(field.Name).Value );
+            @:query = query.WhereIf(condition.@(field.Name).HasValue,x=> x.@(field.Name) == condition.@(field.Name).Value );
 }
 
             return query;

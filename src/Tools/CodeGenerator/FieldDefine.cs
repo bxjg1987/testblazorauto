@@ -52,7 +52,7 @@ namespace CodeGenerator
         /// <summary>
         /// 字段MaxLength常量全名，如：TestConsts.NameMaxLength
         /// </summary>
-        public string CoreShareConstsMaxLength => $"{Model.CoreShareConst}.{MaxLength}";
+        public string CoreShareConstsMaxLength => $"{Model.CoreShareConstName}.{MaxLength}";
         /// <summary>
         /// 是否参与排序
         /// </summary>

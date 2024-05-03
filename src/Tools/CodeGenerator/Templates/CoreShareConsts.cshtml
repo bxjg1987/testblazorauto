@@ -11,15 +11,17 @@ namespace @Model.Model.CoreShareNamespace
     /// <summary>
     /// @(Model.Model.DisplayName)Core share 常量
     ///</summary>
-    public class @Model.Model.CoreShareConst
+    public class @Model.Model.CoreShareConstName
     {
 @foreach (var field in Model.Model.Fields)
 {
 if (field.Length>0){
-        @:/// <summary>
-        @:/// @(field.DisplayName) 长度
-        @:///</summary>
-        @:public const int @(field.MaxLength) = @(field.Length);
+        <text>
+        /// <summary>
+        /// @(field.DisplayName) 长度
+        ///</summary>
+        public const int @(field.MaxLength) = @(field.Length);
+        </text>
 }
 }
     }

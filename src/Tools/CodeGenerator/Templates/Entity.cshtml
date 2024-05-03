@@ -10,13 +10,17 @@ using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
+@if (Model.Model.IsTree)
+{
+@:using BXJG.Utils.GeneralTree;    
+}
 
 namespace @Model.Model.CoreNamespace
 {
     /// <summary>
     /// @Model.Model.DisplayName
     ///</summary>
-    public class @Model.Model.EntityName : FullAuditedEntity<@Model.Model.PrimaryField.CSharpType>
+    public class @Model.Model.EntityName : @(Model.Model.IsTree?$"GeneralTreeEntity<{Model.Model.EntityName}>":( Model.Model.PrimaryField.CSharpType=="int"?"FullAuditedEntity": $"FullAuditedEntity<{Model.Model.PrimaryField.CSharpType}>" ))
     {
 @foreach (var field in Model.Model.NormalFields)
 {
