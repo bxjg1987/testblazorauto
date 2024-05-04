@@ -16,12 +16,15 @@ using BXJG.Common.Contracts;
 
 namespace @(Model.Model.ApplicationShareNamespace)
 {
+    //修改模型字段最少、新增模型次之、查询模型最多，这样后续字段调整时只需要修改编辑模型即可；查询模型一定时包含新增和修改的字段的，所以用这种继承也没毛病
+
     /// <summary>
     /// 各应用获取 @(Model.Model.DisplayName) 的数据模型
     ///</summary>
-    public class @(Model.Model.DtoName) : @(Model.Model.IsTree ? $"GeneralTreeNodeForSelectDto<{Model.Model.DtoName}>" : (Model.Model.PrimaryField.CSharpType == "int" ? "EntityDto" : $"EntityDto<{Model.Model.PrimaryField.CSharpType}>")), IExtendableObj
+    @* public class @(Model.Model.DtoName) : @(Model.Model.IsTree ? $"GeneralTreeNodeForSelectDto<{Model.Model.DtoName}>" : (Model.Model.PrimaryField.CSharpType == "int" ? "EntityDto" : $"EntityDto<{Model.Model.PrimaryField.CSharpType}>")), IExtendableObj *@
+    public class @(Model.Model.DtoName) : @(Model.Model.CreateDtoName), IExtendableObj
     {
-@foreach (var field in Model.Model.NormalFields)
+@* @foreach (var field in Model.Model.NormalFields)
 {
     <text>
         /// <summary>
@@ -30,8 +33,7 @@ namespace @(Model.Model.ApplicationShareNamespace)
         [DisplayName("@(field.DisplayName)")]
         public @(field.CSharpType)@(field.IsRequired?"":"?") @field.Name { get; set; }
     </text>
-}       
-        
+}    *@    
         /// <summary>
         /// 扩展字段，通常仅用于UI
         ///</summary>

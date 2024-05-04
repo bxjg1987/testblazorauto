@@ -51,7 +51,8 @@ List<Action<ExecuteContext>> actions = new List<Action<ExecuteContext>>
     ApplicationShareConst,
     Condition,
     Dto,
-    EditDto
+    EditDto,
+    CreateDto
 };
 
 
@@ -371,4 +372,17 @@ void EditDto(ExecuteContext ctx)
 
 
     Console.WriteLine("生成EditDto完成");
+}
+void CreateDto(ExecuteContext ctx)
+{
+    Console.WriteLine("正在生成CreateDto...");
+    var str = engine.CompileRenderAsync("CreateDto", ctx).Result;
+
+    var file = Path.Combine(ctx.SrcDir, ctx.ApplicationShareProjectName, ctx.Model.Name, ctx.Model.CreateDtoName + ".cs");
+    Directory.CreateDirectory(Path.GetDirectoryName(file));
+
+    File.WriteAllText(file, str);
+
+
+    Console.WriteLine("生成CreateDto完成");
 }
