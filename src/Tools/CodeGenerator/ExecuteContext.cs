@@ -28,6 +28,18 @@ namespace CodeGenerator
         /// ioc容器
         /// </summary>
         public IServiceProvider Services { get; set; }
+        /// <summary>
+        /// 新增按钮图标
+        /// </summary>
+        public string BtnIconCreate { get; set; }
+        /// <summary>
+        /// 修改按钮图标
+        /// </summary>
+        public string BtnIconUpdate { get; set; } 
+        /// <summary>
+        /// 删除按钮图标
+        /// </summary>
+        public string BtnIconDelete { get; set; }
         #endregion
         #region 模型
         //public bool IsDefault { get; set; }

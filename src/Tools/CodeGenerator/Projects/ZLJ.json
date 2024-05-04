@@ -2,12 +2,16 @@
   "Name": "ZLJ",
   "DisplayName": "变形精怪",
   "SrcDir": "D:\\abp\\src",
+  "BtnIconCreate": "plush",
+  "BtnIconUpdate": "add",
+  "BtnIconDelete": "clear",
   "Models": [
     {
       "Name": "Test",
       "DisplayName": "测试1",
+      "Icon": "test",
       "IsTree": true,
-      "ParentPermissionName": null,
+      "ParentPermissionName": "admin",
       "ParentMenuName": null,
       "Fields": [
         {

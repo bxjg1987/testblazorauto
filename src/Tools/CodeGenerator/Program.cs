@@ -52,7 +52,8 @@ List<Action<ExecuteContext>> actions = new List<Action<ExecuteContext>>
     Condition,
     Dto,
     EditDto,
-    CreateDto
+    CreateDto,
+    PermissionProvider
 };
 
 
@@ -397,3 +398,19 @@ void CreateDto(ExecuteContext ctx)
 
     Console.WriteLine("生成CreateDto完成");
 }
+
+#region Application
+void PermissionProvider(ExecuteContext ctx)
+{
+    Console.WriteLine("正在生成PermissionProvider...");
+    var str = engine.CompileRenderAsync("PermissionProvider", ctx).Result;
+
+    var file = Path.Combine(ctx.SrcDir, ctx.ApplicationProjectName, ctx.Model.Name, "PermissionProvider.cs");
+    Directory.CreateDirectory(Path.GetDirectoryName(file));
+
+    File.WriteAllText(file, str);
+
+
+    Console.WriteLine("生成PermissionProvider完成");
+}
+#endregion

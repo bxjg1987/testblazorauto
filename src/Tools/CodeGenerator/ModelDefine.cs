@@ -23,6 +23,10 @@ namespace CodeGenerator
         /// </summary>
         public string Name { get; set; }
         /// <summary>
+        /// 图标
+        /// </summary>
+        public string Icon { get; set; }
+        /// <summary>
         /// 显示名，如：测试
         /// </summary>
         public string DisplayName { get; set; }
