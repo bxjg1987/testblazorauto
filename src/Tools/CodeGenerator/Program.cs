@@ -231,7 +231,8 @@ void EFMap(ExecuteContext ctx)
 
     Console.WriteLine("生成ef映射完成");
 }
-void EFDbContext(ExecuteContext ctx)
+//替换主类字符串的方式
+void EFDbContextBak(ExecuteContext ctx)
 {
     Console.WriteLine("正在生成efDbContext映射...");
 
@@ -267,6 +268,16 @@ void EFDbContext(ExecuteContext ctx)
     File.WriteAllText(file, old);
 
 
+    Console.WriteLine("生成efDbContext映射完成");
+}
+//部分类的方式，编译时部分类反正会合并，木有性能问题，各模型的文件都放在自己的文件夹中方便管理
+void EFDbContext(ExecuteContext ctx)
+{
+    Console.WriteLine("正在生成DbContext...");
+    var str = engine.CompileRenderAsync("DbContext", ctx).Result;
+    var file = Path.Combine(ctx.SrcDir, ctx.EFCoreProjectName, ctx.Model.Name, ctx.Name + "DbContext.cs");
+    Directory.CreateDirectory(Path.GetDirectoryName(file));
+    File.WriteAllText(file, str);
     Console.WriteLine("生成efDbContext映射完成");
 }
 void ProviderDto(ExecuteContext ctx)

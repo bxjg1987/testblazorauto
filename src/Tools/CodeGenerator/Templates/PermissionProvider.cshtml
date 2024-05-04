@@ -1,13 +1,17 @@
-﻿using Abp.Localization;
+@using CodeGenerator
+@using RazorLight
+@using BXJG.Common;
+@using BXJG.Common.Extensions;
+@inherits TemplatePage<ExecuteContext>
+@{
+    DisableEncoding = true;//禁止html编码，因为我们是做代码生成器
+}
+using Abp.Localization;
 using Abp.MultiTenancy;
-using BXJG.Utils.GeneralTree;
-//using BXJG.WorkOrder;
 using BXJG.Utils.Localization;
 using ZLJ.Core.Localization;
 using System.Collections.Generic;
-using ZLJ.Application.Share.Authorization.Permissions;
-using BXJG.Utils.Application.GeneralTree;
-using BXJG.Utils.Helpers;
+using @(Model.Model.ApplicationShareNamespace)
 
 namespace ZLJ.Application.Admin.Authorization.Permissions
 {
