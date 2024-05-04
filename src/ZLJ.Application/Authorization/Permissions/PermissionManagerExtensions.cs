@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using Abp.Authorization;
 using Abp.Runtime.Validation;
 
-namespace ZLJ.Application.Admin.Authorization.Permissions
+namespace ZLJ.Application.Authorization.Permissions
 {
     public static class PermissionManagerExtensions
     {

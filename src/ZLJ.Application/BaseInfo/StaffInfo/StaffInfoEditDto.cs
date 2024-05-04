@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations;
 using ZLJ.Application.Common.Users;
 using ZLJ.Core;
 
-namespace ZLJ.Application.Admin.BaseInfo.StaffInfo
+namespace ZLJ.Application.BaseInfo.StaffInfo
 {
     public class StaffInfoEditDto : EditUserDto// EntityDto<long>
     {

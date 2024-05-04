@@ -4,13 +4,13 @@ using Abp.Localization;
 using ZLJ.Core.Authorization;
 using ZLJ.Core.Localization;
 using BXJG.Utils.GeneralTree;
-using ZLJ.Application.Admin.Authorization.Permissions;
+using ZLJ.Application.Authorization.Permissions;
 using BXJG.Utils;
 using BXJG.Utils.Localization;
 using DocumentFormat.OpenXml.Drawing;
 using ZLJ.Application.Share.Authorization.Permissions;
 
-namespace ZLJ.Application.Admin
+namespace ZLJ.Application
 {
     /*
      * 这个需要在host和blazorhost间共享，属于ui部分的东东，放这里其实不太合适

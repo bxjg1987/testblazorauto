@@ -19,7 +19,7 @@ using ZLJ.Application.Share.MultiTenancy;
 using ZLJ.Application.Share.Authorization.Permissions;
 using BXJG.Utils.Application.Share.Dtos;
 
-namespace ZLJ.Application.Admin.MultiTenancy
+namespace ZLJ.Application.MultiTenancy
 {
     //[AbpAuthorize(PermissionNames.Pages_Tenants)]
     public class TenantAppService : AdminCrudBaseAppService<Tenant, TenantDto, int, PagedAndSortedResultRequest< Condition>, EditTenantDto, EditTenantDto>, ITenantAppService

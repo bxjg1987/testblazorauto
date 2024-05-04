@@ -2,7 +2,7 @@
 using Abp.Dependency;
 using Abp.Modules;
 using System.Reflection;
-using ZLJ.Application.Admin.BaseInfo.StaffInfo;
+using ZLJ.Application.BaseInfo.StaffInfo;
 using Abp.Configuration.Startup;
 
 using Abp.Threading.BackgroundWorkers;
@@ -16,10 +16,10 @@ using Abp.Runtime.Session;
 
 using Abp.Localization.Dictionaries.Xml;
 using Abp.Localization.Dictionaries;
-using ZLJ.Application.Admin.Authorization.Permissions;
+using ZLJ.Application.Authorization.Permissions;
 using ZLJ.Application.Common;
 
-namespace ZLJ.Application.Admin
+namespace ZLJ.Application
 {
     [DependsOn(typeof(CommonApplicationModule))]
     public class ZLJApplicationModule : AbpModule

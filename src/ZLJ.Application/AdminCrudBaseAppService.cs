@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 using ZLJ.Core.Authorization.Users;
 using ZLJ.Core.MultiTenancy;
 
-namespace ZLJ.Application.Admin
+namespace ZLJ.Application
 {
     /// <summary>
     /// 后台管理 扁平化数据的crud应用服务基类，继承它以简化扁平化数据crud应用服务的开发

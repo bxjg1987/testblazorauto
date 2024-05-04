@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 using Abp.Authorization;
 using Abp.Application.Services.Dto;
 
-using ZLJ.Application.Admin.Authorization.Permissions;
+using ZLJ.Application.Authorization.Permissions;
 using BXJG.Utils.Application.Share.GeneralTree;
 using ZLJ.Application.Share.Authorization.Permissions;
 using ZLJ.Core.Administrative;
 using BXJG.Common.Contracts;
 using ZLJ.Application.Share.Administrative;
-using ZLJ.Application.Admin;
+using ZLJ.Application;
 using BXJG.Utils.Application.GeneralTree;
 
 namespace ZLJ.Application.BaseInfo.Administrative

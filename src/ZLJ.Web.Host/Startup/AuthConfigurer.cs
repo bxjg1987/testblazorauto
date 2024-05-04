@@ -9,7 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using Abp.Runtime.Security;
 //using BXJG.WeChat.MiniProgram;
 using Microsoft.AspNetCore.Authentication;
-using ZLJ.Application.Admin;
+using ZLJ.Application;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using ZLJ.Application.Common;

@@ -20,7 +20,7 @@ global using Abp.Linq.Extensions;
 global using Abp.Timing;
 global using BXJG.Utils.GeneralTree;
 //global using BXJG.WorkOrder.WorkOrderCategory;
-global using ZLJ.Application.Admin.Authorization.Permissions;
+global using ZLJ.Application.Authorization.Permissions;
 global using System.Linq.Dynamic.Core;
 global using Abp.Domain.Entities;
 global using Abp.UI;

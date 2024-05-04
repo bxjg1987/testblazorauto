@@ -13,18 +13,18 @@ using Abp.Linq.Extensions;
 using Abp.Localization;
 using Abp.Runtime.Session;
 using Abp.UI;
-using ZLJ.Application.Admin.Authorization.Accounts;
+using ZLJ.Application.Authorization.Accounts;
 using ZLJ.Core.Authorization.Roles;
 using ZLJ.Core.Authorization.Users;
-using ZLJ.Application.Admin.Roles.Dto;
+using ZLJ.Application.Roles.Dto;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ZLJ.Application.Common.Users;
-using ZLJ.Application.Admin.Authorization.Permissions;
+using ZLJ.Application.Authorization.Permissions;
 using ZLJ.Application.Share.Roles;
 using ZLJ.Application.Share.Authorization.Permissions;
 
-namespace ZLJ.Application.Admin.Users
+namespace ZLJ.Application.Users
 {
     public class UserAppService : AdminCrudBaseAppService<User, UserDto, long, PagedUserResultRequestDto, CreateUserDto, EditUserDto>//, IUserAppService
     {

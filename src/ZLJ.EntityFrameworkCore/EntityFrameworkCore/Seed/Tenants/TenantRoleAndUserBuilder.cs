@@ -10,7 +10,7 @@ using ZLJ.Core.Authorization;
 using ZLJ.Core.Authorization.Roles;
 using ZLJ.Core.Authorization.Users;
 using ZLJ.Core.Customer;
-using ZLJ.Application.Admin.Authorization.Permissions;
+using ZLJ.Application.Authorization.Permissions;
 using ZLJ.Application.Common.Authorization;
 using ZLJ.Core.BaseInfo.StaffInfo;
 using System.Collections.Generic;

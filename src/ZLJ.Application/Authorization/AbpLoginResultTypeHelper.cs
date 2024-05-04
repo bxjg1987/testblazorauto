@@ -4,7 +4,7 @@ using Abp.Authorization;
 using Abp.Dependency;
 using Abp.UI;
 
-namespace ZLJ.Application.Admin.Authorization
+namespace ZLJ.Application.Authorization
 {
     public class AbpLoginResultTypeHelper : AbpServiceBase, ITransientDependency
     {

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using ZLJ.Core.Share;
 using ZLJ.Core.Localization;
 
-namespace ZLJ.Application.Admin.OU
+namespace ZLJ.Application.OU
 {
     public class OUDto: GeneralTreeNodeBaseDto<OUDto>
     {  /// <summary>

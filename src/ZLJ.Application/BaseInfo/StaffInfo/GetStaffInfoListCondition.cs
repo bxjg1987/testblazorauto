@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZLJ.Application.Admin.BaseInfo.StaffInfo
+namespace ZLJ.Application.BaseInfo.StaffInfo
 {
     /// <summary>
     /// 管理员工时，获取员工的列表的条件

@@ -5,7 +5,7 @@ using Abp.Authorization.Roles;
 using ZLJ.Core.Authorization.Roles;
 using ZLJ.Application.Share.Roles;
 
-namespace ZLJ.Application.Admin.Roles.Dto
+namespace ZLJ.Application.Roles.Dto
 {
     public class RoleMapProfile : Profile
     {

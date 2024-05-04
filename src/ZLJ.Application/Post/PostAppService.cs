@@ -7,9 +7,9 @@ using Abp.Zero.Configuration;
 using BXJG.Utils.Application.Share.Dtos;
 using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
-using ZLJ.Application.Admin.Authorization.Permissions;
-using ZLJ.Application.Admin.Roles;
-using ZLJ.Application.Admin.Roles.Dto;
+using ZLJ.Application.Authorization.Permissions;
+using ZLJ.Application.Roles;
+using ZLJ.Application.Roles.Dto;
 using ZLJ.Application.Common.OU;
 using ZLJ.Application.Common.Share.OU;
 using ZLJ.Application.Share.Authorization.Permissions;
@@ -19,7 +19,7 @@ using ZLJ.Core.Authorization.Roles;
 using ZLJ.Core.Authorization.Users;
 using ZLJ.Core.BaseInfo.Post;
 
-namespace ZLJ.Application.Admin.Post
+namespace ZLJ.Application.Post
 {
 
     [AbpAuthorize(PermissionNames.AdministratorBaseInfoPost)]

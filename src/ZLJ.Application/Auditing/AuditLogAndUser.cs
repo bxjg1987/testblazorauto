@@ -1,7 +1,7 @@
 using Abp.Auditing;
 using ZLJ.Core.Authorization.Users;
 
-namespace ZLJ.Application.Admin.Auditing
+namespace ZLJ.Application.Auditing
 {
     /// <summary>
     /// A helper class to store an <see cref="AuditLog"/> and a <see cref="User"/> object.

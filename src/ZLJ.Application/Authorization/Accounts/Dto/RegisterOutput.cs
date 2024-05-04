@@ -1,4 +1,4 @@
-﻿namespace ZLJ.Application.Admin.Authorization.Accounts.Dto
+﻿namespace ZLJ.Application.Authorization.Accounts.Dto
 {
     public class RegisterOutput
     {

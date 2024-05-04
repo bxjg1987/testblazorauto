@@ -1,17 +1,17 @@
 using AutoMapper;
 using BXJG.Utils.GeneralTree;
 using Abp.Application.Services.Dto;
-using ZLJ.Application.Admin.BaseInfo.AssociatedCompany;
-using ZLJ.Application.Admin.BaseInfo.AssociatedCompany.Dto;
-using ZLJ.Application.Admin.BaseInfo.StaffInfo;
+using ZLJ.Application.BaseInfo.AssociatedCompany;
+using ZLJ.Application.BaseInfo.AssociatedCompany.Dto;
+using ZLJ.Application.BaseInfo.StaffInfo;
 //using ZLJ.WorkOrder.RentOrderItemWorkOrder;
 using ZLJ.Core.Authorization.Roles;
-using ZLJ.Application.Admin.Roles.Dto;
+using ZLJ.Application.Roles.Dto;
 //using ZLJ.Rent.Redeliveries;
 //using ZLJ.Rent.Redeliveries.Dto;
-//using ZLJ.Application.Admin.WorkOrder.Workload.Dto;
+//using ZLJ.Application.WorkOrder.Workload.Dto;
 //using ZLJ.WorkOrder.Workload;
-//using ZLJ.Application.Admin.WorkOrder.Workload.WorkloadRecord.Dto;
+//using ZLJ.Application.WorkOrder.Workload.WorkloadRecord.Dto;
 using ZLJ.Application.Common.Administrative;
 using ZLJ.Core.Authorization.Users;
 
@@ -27,7 +27,7 @@ using ZLJ.Application.Share.MultiTenancy;
 using ZLJ.Application.Share.Administrative;
 using ZLJ.Core.Administrative;
 
-namespace ZLJ.Application.Admin
+namespace ZLJ.Application
 {
     /// <summary>
     /// 统一的automapper映射文件

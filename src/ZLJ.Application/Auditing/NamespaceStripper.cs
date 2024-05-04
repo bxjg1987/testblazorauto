@@ -2,7 +2,7 @@
 using Abp.Extensions;
 using System.Linq;
 
-namespace ZLJ.Application.Admin.Auditing
+namespace ZLJ.Application.Auditing
 {
     public class NamespaceStripper : INamespaceStripper, ITransientDependency
     {

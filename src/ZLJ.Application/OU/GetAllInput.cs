@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZLJ.Application.Admin.OU
+namespace ZLJ.Application.OU
 {
     public class GetAllInput : GeneralTreeGetTreeInput
     {

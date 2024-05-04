@@ -3,7 +3,7 @@ using BXJG.Common.Contracts;
 using BXJG.Utils.Application.Share.GeneralTree;
 
 
-namespace ZLJ.Application.Admin
+namespace ZLJ.Application
 {
     /// <summary>
     /// 后台管理 树形结构的数据 抽象应用服务 

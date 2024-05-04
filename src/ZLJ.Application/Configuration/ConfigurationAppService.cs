@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
 using Abp.Authorization;
 using Abp.Runtime.Session;
-using ZLJ.Application.Admin.Configuration.Dto;
+using ZLJ.Application.Configuration.Dto;
 using ZLJ.Core.Configuration;
 
-namespace ZLJ.Application.Admin.Configuration
+namespace ZLJ.Application.Configuration
 {
     [AbpAuthorize]
     public class ConfigurationAppService : AdminBaseAppService, IConfigurationAppService

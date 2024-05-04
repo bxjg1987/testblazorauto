@@ -47,8 +47,8 @@ global using Microsoft.AspNetCore.Components.Rendering;
 global using Microsoft.AspNetCore.Components;
 global using System.Security.Claims;
 global using Microsoft.AspNetCore.Components.Authorization;
-global using ZLJ.Application.Admin;
-global using ZLJ.Application.Admin.Authorization.Permissions;
+global using ZLJ.Application;
+global using ZLJ.Application.Authorization.Permissions;
 global using Abp.Localization.Sources;
 
 //global using AntDesign;

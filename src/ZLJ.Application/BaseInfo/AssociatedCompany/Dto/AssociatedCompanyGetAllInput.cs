@@ -2,7 +2,7 @@
 using Abp.Extensions;
 using Abp.Runtime.Validation;
 
-namespace ZLJ.Application.Admin.BaseInfo.AssociatedCompany.Dto
+namespace ZLJ.Application.BaseInfo.AssociatedCompany.Dto
 {
     /// <summary>
     /// 列表分页查询

@@ -1,10 +1,10 @@
 using System.Threading.Tasks;
 using Abp.Configuration;
 using Abp.Zero.Configuration;
-using ZLJ.Application.Admin.Authorization.Accounts.Dto;
+using ZLJ.Application.Authorization.Accounts.Dto;
 using ZLJ.Core.Authorization.Users;
 
-namespace ZLJ.Application.Admin.Authorization.Accounts
+namespace ZLJ.Application.Authorization.Accounts
 {
     public class AccountAppService : AdminBaseAppService, IAccountAppService
     {

@@ -12,7 +12,7 @@ using BXJG.Utils.Application.Share.GeneralTree;
 using BXJG.Utils.GeneralTree;
 using ZLJ.Application.Share.Authorization.Permissions;
 
-namespace ZLJ.Application.Admin.Authorization.Permissions
+namespace ZLJ.Application.Authorization.Permissions
 {
     public class PermissionAppService : AdminBaseAppService, IPermissionAppService
     {

@@ -30,7 +30,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.DataProtection;
 using BXJG.Utils;
 
-using ZLJ.Application.Admin;
+using ZLJ.Application;
 using ZLJ.EntityFrameworkCore;
 using BXJG.Common;
 using Abp.Configuration.Startup;

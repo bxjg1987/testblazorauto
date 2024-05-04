@@ -1,4 +1,4 @@
-namespace ZLJ.Application.Admin.Configuration.Ui
+namespace ZLJ.Application.Configuration.Ui
 {
     public class UiThemeInfo
     {

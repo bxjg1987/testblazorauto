@@ -1,6 +1,6 @@
 ﻿using Abp.Application.Services.Dto;
 
-namespace ZLJ.Application.Admin.BaseInfo.Dto.MachineFitting
+namespace ZLJ.Application.BaseInfo.Dto.MachineFitting
 {
     public class MachineFittingEditDTO : EntityDto<long>
     {

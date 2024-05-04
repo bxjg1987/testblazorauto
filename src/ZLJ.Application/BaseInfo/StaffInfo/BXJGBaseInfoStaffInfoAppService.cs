@@ -6,12 +6,12 @@ using Abp.Authorization.Users;
 using ZLJ.Application.Common.StaffInfo;
 using ZLJ.Core.BaseInfo.Post;
 using ZLJ.Core.BaseInfo;
-using ZLJ.Application.Admin.Authorization.Permissions;
+using ZLJ.Application.Authorization.Permissions;
 using ZLJ.Application.Share.Authorization.Permissions;
 using ZLJ.Application.Common.Share.OU;
 using BXJG.Common.Contracts;
 
-namespace ZLJ.Application.Admin.BaseInfo.StaffInfo
+namespace ZLJ.Application.BaseInfo.StaffInfo
 {
     /*
      * 目前是笛卡尔查询，性能低，考虑分次查询

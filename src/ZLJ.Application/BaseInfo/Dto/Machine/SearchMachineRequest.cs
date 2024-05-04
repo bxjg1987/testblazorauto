@@ -2,7 +2,7 @@
 using Abp.Extensions;
 using Abp.Runtime.Validation;
 
-namespace ZLJ.Application.Admin.BaseInfo.Dto.Machine
+namespace ZLJ.Application.BaseInfo.Dto.Machine
 {
     public class SearchMachineRequest : PagedAndSortedResultRequestDto, IShouldNormalize
     {

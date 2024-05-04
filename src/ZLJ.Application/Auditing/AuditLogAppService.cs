@@ -13,12 +13,12 @@ using ZLJ.Core.Authorization.Users;
 using System;
 using Abp.Linq;
 using Microsoft.EntityFrameworkCore;
-using ZLJ.Application.Admin.Authorization.Permissions;
+using ZLJ.Application.Authorization.Permissions;
 using ZLJ.Application.Share.Auditing;
 using ZLJ.Application.Share.Auditing.Dto;
 using ZLJ.Application.Share.Authorization.Permissions;
 
-namespace ZLJ.Application.Admin.Auditing
+namespace ZLJ.Application.Auditing
 {
     [Abp.Domain.Uow.UnitOfWork(false)]
     [DisableAuditing]//禁用它的审计日志功能

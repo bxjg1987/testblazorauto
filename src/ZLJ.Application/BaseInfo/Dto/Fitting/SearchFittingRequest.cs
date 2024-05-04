@@ -2,7 +2,7 @@
 using Abp.Extensions;
 using Abp.Runtime.Validation;
 
-namespace ZLJ.Application.Admin.BaseInfo.Dto.Fitting
+namespace ZLJ.Application.BaseInfo.Dto.Fitting
 {
     public class SearchFittingRequest : PagedAndSortedResultRequestDto, IShouldNormalize
     {

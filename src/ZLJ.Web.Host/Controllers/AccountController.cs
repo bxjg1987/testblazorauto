@@ -1,7 +1,7 @@
 ﻿using Abp.Authorization.Users;
 using Abp.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ZLJ.Application.Admin.Authorization;
+using ZLJ.Application.Authorization;
 using ZLJ.Core.Authorization.Users;
 using ZLJ.Core.Authorization;
 using ZLJ.Controllers;

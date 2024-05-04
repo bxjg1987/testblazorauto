@@ -14,12 +14,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ZLJ.Application.Admin.Authorization.Permissions;
-using ZLJ.Application.Admin.BaseInfo;
+using ZLJ.Application.Authorization.Permissions;
+using ZLJ.Application.BaseInfo;
 using ZLJ.Application.Share.Authorization.Permissions;
 using ZLJ.Core.BaseInfo;
 
-namespace ZLJ.Application.Admin.OU
+namespace ZLJ.Application.OU
 {
     [AbpAuthorize(PermissionNames.AdministratorBaseInfoOrganizationUnit)]
     public class OuAppService : AdminBaseAppService//<OrganizationUnit, OUDto, long, GetAllInput, OUEditDto>

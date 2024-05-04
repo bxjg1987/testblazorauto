@@ -2,7 +2,7 @@
 using BXJG.Common.Extensions;
 using System.ComponentModel.DataAnnotations;
 
-namespace ZLJ.Application.Admin.BaseInfo.AssociatedCompany.Dto
+namespace ZLJ.Application.BaseInfo.AssociatedCompany.Dto
 {
     /// <summary>
     /// 

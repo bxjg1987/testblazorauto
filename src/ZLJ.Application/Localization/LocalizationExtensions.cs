@@ -1,7 +1,7 @@
 ﻿using Abp.Localization;
 using BXJG.Utils.Localization;
 using System;
-using ZLJ.Application.Admin;
+using ZLJ.Application;
 
 namespace System
 {

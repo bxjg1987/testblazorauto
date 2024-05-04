@@ -6,12 +6,12 @@ using Abp.IdentityFramework;
 using Abp.Runtime.Session;
 using ZLJ.Core.MultiTenancy;
 using Abp.Linq;
-using ZLJ.Application.Admin.BaseInfo.StaffInfo;
+using ZLJ.Application.BaseInfo.StaffInfo;
 using ZLJ.Core.Authorization.Users;
 using Abp.Localization.Sources;
 using BXJG.Utils;
 
-namespace ZLJ.Application.Admin
+namespace ZLJ.Application
 {
     /// <summary>
     /// Derive your application services from this class.

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ZLJ.Application.Admin.Configuration.Ui
+namespace ZLJ.Application.Configuration.Ui
 {
     public static class UiThemes
     {

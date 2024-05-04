@@ -1,24 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <VersionPrefix>1.0.0.0</VersionPrefix>
     <TargetFramework>net8.0</TargetFramework>
-    <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
-    <AssemblyName>ZLJ.Application</AssemblyName>
-    <PackageId>ZLJ.Application</PackageId>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <!--<AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>-->
+    <!--<AssemblyName>ZLJ.Application</AssemblyName>-->
+    <!--<PackageId>ZLJ.Application</PackageId>-->
+    <!--<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>-->
+	  <LangVersion>latest</LangVersion>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <NoWarn>$(NoWarn);1701;1702;1591;1587</NoWarn>
-    <RootNamespace>$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+    <!--<NoWarn>$(NoWarn);1701;1702;1591;1587</NoWarn>-->
+    <!--<RootNamespace>$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>-->
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <LangVersion>default</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <LangVersion>default</LangVersion>
-  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="Auditing\Dto\**" />
     <Compile Remove="Auditing\Exporting\**" />

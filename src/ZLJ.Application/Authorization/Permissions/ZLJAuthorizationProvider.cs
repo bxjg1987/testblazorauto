@@ -9,7 +9,7 @@ using ZLJ.Application.Share.Authorization.Permissions;
 using BXJG.Utils.Application.GeneralTree;
 using BXJG.Utils.Helpers;
 
-namespace ZLJ.Application.Admin.Authorization.Permissions
+namespace ZLJ.Application.Authorization.Permissions
 {
     public partial class ZLJAuthorizationProvider : AuthorizationProvider
     {

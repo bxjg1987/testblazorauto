@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using ZLJ.Core.Authorization.Roles;
 using ZLJ.Core.Authorization.Users;
-using ZLJ.Application.Admin.Authorization.Permissions;
+using ZLJ.Application.Authorization.Permissions;
 
 namespace ZLJ.EntityFrameworkCore.Seed.Host
 {
