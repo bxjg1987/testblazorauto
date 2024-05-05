@@ -13,38 +13,40 @@ using ZLJ.Core.Localization;
 using System.Collections.Generic;
 using @(Model.Model.ApplicationShareNamespace);
 
-namespace @(Model.Name).Application
+namespace @(Model.App.ApplicationProjectName)
 {
     @* 命名空间和类名必须固定 *@
-    public partial class @(Model.Name)AuthorizationProvider 
+    public partial class @(Model.App.Name)NavigationProvider
     {
         @* 必须以CodeGenerator打头，因为主程序反射调用的 *@
-        public void CodeGenerator@(Model.Model.Name)(IPermissionDefinitionContext context)
-        {@if(Model.Model.ParentPermissionName.IsNotNullOrWhiteSpaceBXJG()){<text>
-            var parent = context.GetPermissionOrNull("@(Model.Model.ParentPermissionName)");
-            var permission = parent.CreateChildPermission(@(Model.Model.PermissionNameGetConst),
-                                                          L(@(Model.Model.PermissionNameGetConst)),
-                                                          multiTenancySides: MultiTenancySides.Tenant, 
-                                                          properties: new Dictionary<string, object> { { "icon", "@(Model.Model.Icon)" } });
-</text>}else{<text>
-            var permission = context.CreatePermission(@(Model.Model.PermissionNameGetConst),
-                                                      L(@(Model.Model.PermissionNameGetConst)),
-                                                      multiTenancySides: MultiTenancySides.Tenant, 
-                                                      properties: new Dictionary<string, object> { { "icon", "@(Model.Model.Icon)" } });
-</text>}
+        public void CodeGenerator@(Model.Model.Name)(INavigationProviderContext context)
+        {
+            object parentMenu = default;
+            const string currMenuName = "@(Model.Model.ParentMenuName)";
+            foreach (var item in context.Manager.Menus)
+            {
+                if (item.Key.Equals(currMenuName, StringComparison.OrdinalIgnoreCase))
+                    parentMenu = item.Value;
+                else
+                    parentMenu = item.Value.RecursionFindDown(currMenuName);
+            }
+            if (parentMenu == default)
+                parentMenu = context.Manager.MainMenu;
 
-            permission.CreateChildPermission(@(Model.Model.PermissionNameCreateConst),
-                                             "新增".UtilsLI(),
-                                             multiTenancySides: MultiTenancySides.Tenant, 
-                                             properties: new Dictionary<string, object> { { "btn", true }, { "icon", "@(Model.BtnIconCreate)" } });
-            permission.CreateChildPermission(@(Model.Model.PermissionNameUpdateConst),
-                                             "修改".UtilsLI(),
-                                             multiTenancySides: MultiTenancySides.Tenant, 
-                                             properties: new Dictionary<string, object> { { "btn", true }, { "icon", "@(Model.BtnIconUpdate)" } });
-            permission.CreateChildPermission(@(Model.Model.PermissionNameDeleteConst),
-                                             "删除".UtilsLI(),
-                                             multiTenancySides: MultiTenancySides.Tenant, 
-                                             properties: new Dictionary<string, object> { { "btn", true }, { "icon", "@(Model.BtnIconDelete)" } });
+            var menuItem = new MenuItemDefinition(@(Model.Model.PermissionNameGetConst),
+                                                  @(Model.Model.PermissionNameGetConst).Get@(Model.App.Name)LocalizableString(),
+                                                  icon: "@(Model.Model.Icon)",
+                                                  url: "/@(Model.App.Name)/@(Model.Model.Name)",
+                                                  permissionDependency: new SimplePermissionDependency(@(Model.Model.PermissionNameGetConst)));
+
+            if (parentMenu is MenuDefinition m0)
+            {
+                m0.AddItem(menuItem);
+            }
+            else
+            {
+                (parentMenu as MenuItemDefinition).AddItem(menuItem);
+            }
         }
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using RazorLight;
 using System.Text.RegularExpressions;
 using System.Text;
+using System.Collections.Immutable;
 
 //HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
 //builder.Services.Configure<List<ProjectDefine>>(builder.Configuration.GetSection("Projects"));
@@ -61,7 +62,8 @@ List<Action<ExecuteContext>> actions2 = new List<Action<ExecuteContext>>
     Dto,
     EditDto,
     CreateDto,
-    PermissionProvider
+    PermissionProvider,
+    NavigationProvider
 };
 
 //var model = new { Name = "John Doe" };
@@ -73,21 +75,28 @@ while (q.ToLower() == "c")
     //xuanzexiangm(ctx);
     SelectModel(ctx);
     //  xuanzemoban(ctx);
+    Console.WriteLine("是否生成核心部分？y生成，其它任意键跳过");
+    var schx = Console.ReadLine().Trim().ToLower() == "y";
+    var apps = SelectApps(ctx);
 
-    Console.WriteLine("环境初始化完成，开始生成...");
+    //Console.WriteLine("环境初始化完成，开始生成...");
 
     //根据模板多线程执行，各模板生成的后续处理都在自己的流程中进行
     //另一种思路是，子任务总体按线性执行，这样看起来步骤清晰，进度明确，还可以与用户交互。
 
     //由于这里只是实现简单的代码生成，所以不太有需要有多快。
     //一个模板，一个子任务，某些子任务可能没有模板
-    for (int i = 0; i < actions.Count; i++)
+
+    if (schx)
     {
-        Console.WriteLine($"核心步骤进度：{i + 1}/{actions.Count}");
-        actions[i].Invoke(ctx);
+        for (int i = 0; i < actions.Count; i++)
+        {
+            Console.WriteLine($"核心步骤进度：{i + 1}/{actions.Count}");
+            actions[i].Invoke(ctx);
+        }
     }
 
-    foreach (var item in ctx.Apps)
+    foreach (var item in apps)
     {
         ctx.App = item;
         for (int i = 0; i < actions2.Count; i++)
@@ -97,7 +106,7 @@ while (q.ToLower() == "c")
         }
     }
 
-    Console.WriteLine("按c键继续，按任意键退出...");
+    Console.WriteLine("是否继续？按y键继续，按任意键退出...");
     q = Console.ReadLine();
 
 }
@@ -154,6 +163,23 @@ void SelectModel(ExecuteContext ctx)
     else
         ctx.Model = ctx.Models[int.Parse(projectStr)];
 }
+IEnumerable<AppDefine> SelectApps(ExecuteContext ctx)
+{
+    Console.WriteLine("请选择应，y或空字符表示全部，n不选择，数字加逗号分割为多选：");
+    for (int i = 0; i < ctx.Apps.Length; i++)
+    {
+        var item = ctx.Models[i];
+        Console.WriteLine($"{i}\t\t{item.DisplayName}");
+    }
+    var projectStr = Console.ReadLine()?.Trim().ToLower();
+    if (projectStr == "n")
+        return [];
+    if (string.IsNullOrWhiteSpace(projectStr)|| projectStr=="y")
+        return ctx.Apps.ToImmutableList();
+    else
+       return projectStr.Replace("，","").Split(',').Select(x => ctx.Apps[ int.Parse(x.Trim())]);
+}
+
 //void xuanzemoban(ExecuteContext ctx)
 //{
 //    Console.WriteLine("请选择模板：");
@@ -424,5 +450,18 @@ void PermissionProvider(ExecuteContext ctx)
 
 
     Console.WriteLine("生成PermissionProvider完成");
+}
+void NavigationProvider(ExecuteContext ctx)
+{
+    Console.WriteLine("正在生成NavigationProvider...");
+    var str = engine.CompileRenderAsync("NavigationProvider", ctx).Result;
+
+    var file = Path.Combine(ctx.SrcDir, ctx.App.ApplicationProjectName, ctx.Model.Name, "NavigationProvider.cs");
+    Directory.CreateDirectory(Path.GetDirectoryName(file));
+
+    File.WriteAllText(file, str);
+
+
+    Console.WriteLine("生成NavigationProvider完成");
 }
 #endregion
