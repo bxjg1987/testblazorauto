@@ -9,20 +9,14 @@ using BXJG.Utils;
 using BXJG.Utils.Localization;
 using DocumentFormat.OpenXml.Drawing;
 using ZLJ.Application.Share.Authorization.Permissions;
+using BXJG.Utils.Helpers;
 
 namespace ZLJ.Application
 {
-    /*
-     * 这个需要在host和blazorhost间共享，属于ui部分的东东，放这里其实不太合适
-     * 后期如果发现host和blazorhost之间需要共享更多东东时再单独建个类
-     * 
-     * 放blazor客户端更不合适，因为它一来依赖abp，况且客户端是调用webapi拿有权访问的菜单的
-     */
-
     /// <summary>
     /// This class defines menus for the application.
     /// </summary>
-    public class AdminNavigationProvider : NavigationProvider
+    public partial class ZLJNavigationProvider : NavigationProvider
     {
         public override void SetNavigation(INavigationProviderContext context)
         {
@@ -163,6 +157,8 @@ namespace ZLJ.Application
                                                         permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorSystemConfig)));
 
             #endregion
+
+            CodeGeneratorHelper.CodeGenerator(this, context);
         }
     }
 }

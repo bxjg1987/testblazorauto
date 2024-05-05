@@ -1,0 +1,50 @@
+@using CodeGenerator
+@using RazorLight
+@using BXJG.Common;
+@using BXJG.Common.Extensions;
+@inherits TemplatePage<ExecuteContext>
+@{
+    DisableEncoding = true;//禁止html编码，因为我们是做代码生成器
+}
+using Abp.Localization;
+using Abp.MultiTenancy;
+using BXJG.Utils.Localization;
+using ZLJ.Core.Localization;
+using System.Collections.Generic;
+using @(Model.Model.ApplicationShareNamespace);
+
+namespace @(Model.Name).Application
+{
+    @* 命名空间和类名必须固定 *@
+    public partial class @(Model.Name)AuthorizationProvider 
+    {
+        @* 必须以CodeGenerator打头，因为主程序反射调用的 *@
+        public void CodeGenerator@(Model.Model.Name)(IPermissionDefinitionContext context)
+        {@if(Model.Model.ParentPermissionName.IsNotNullOrWhiteSpaceBXJG()){<text>
+            var parent = context.GetPermissionOrNull("@(Model.Model.ParentPermissionName)");
+            var permission = parent.CreateChildPermission(@(Model.Model.PermissionNameGetConst),
+                                                          L(@(Model.Model.PermissionNameGetConst)),
+                                                          multiTenancySides: MultiTenancySides.Tenant, 
+                                                          properties: new Dictionary<string, object> { { "icon", "@(Model.Model.Icon)" } });
+</text>}else{<text>
+            var permission = context.CreatePermission(@(Model.Model.PermissionNameGetConst),
+                                                      L(@(Model.Model.PermissionNameGetConst)),
+                                                      multiTenancySides: MultiTenancySides.Tenant, 
+                                                      properties: new Dictionary<string, object> { { "icon", "@(Model.Model.Icon)" } });
+</text>}
+
+            permission.CreateChildPermission(@(Model.Model.PermissionNameCreateConst),
+                                             "新增".UtilsLI(),
+                                             multiTenancySides: MultiTenancySides.Tenant, 
+                                             properties: new Dictionary<string, object> { { "btn", true }, { "icon", "@(Model.BtnIconCreate)" } });
+            permission.CreateChildPermission(@(Model.Model.PermissionNameUpdateConst),
+                                             "修改".UtilsLI(),
+                                             multiTenancySides: MultiTenancySides.Tenant, 
+                                             properties: new Dictionary<string, object> { { "btn", true }, { "icon", "@(Model.BtnIconUpdate)" } });
+            permission.CreateChildPermission(@(Model.Model.PermissionNameDeleteConst),
+                                             "删除".UtilsLI(),
+                                             multiTenancySides: MultiTenancySides.Tenant, 
+                                             properties: new Dictionary<string, object> { { "btn", true }, { "icon", "@(Model.BtnIconDelete)" } });
+        }
+    }
+}
