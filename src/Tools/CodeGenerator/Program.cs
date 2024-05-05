@@ -63,7 +63,8 @@ List<Action<ExecuteContext>> actions2 = new List<Action<ExecuteContext>>
     EditDto,
     CreateDto,
     PermissionProvider,
-    NavigationProvider
+    NavigationProvider,
+   ObjMap
 };
 
 //var model = new { Name = "John Doe" };
@@ -437,7 +438,7 @@ void CreateDto(ExecuteContext ctx)
     Console.WriteLine("生成CreateDto完成");
 }
 
-#region Application
+
 void PermissionProvider(ExecuteContext ctx)
 {
     Console.WriteLine("正在生成PermissionProvider...");
@@ -464,4 +465,16 @@ void NavigationProvider(ExecuteContext ctx)
 
     Console.WriteLine("生成NavigationProvider完成");
 }
-#endregion
+void ObjMap(ExecuteContext ctx)
+{
+    Console.WriteLine("正在生成ObjMap...");
+    var str = engine.CompileRenderAsync("ObjMap", ctx).Result;
+
+    var file = Path.Combine(ctx.SrcDir, ctx.App.ApplicationProjectName, ctx.Model.Name, "AutoMapperProfile.cs");
+    Directory.CreateDirectory(Path.GetDirectoryName(file));
+
+    File.WriteAllText(file, str);
+
+
+    Console.WriteLine("生成ObjMap完成");
+}

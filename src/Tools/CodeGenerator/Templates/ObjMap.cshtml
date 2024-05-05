@@ -7,21 +7,18 @@
     DisableEncoding = true;//禁止html编码，因为我们是做代码生成器
 }
 using AutoMapper;
-using @(Model.Model.ApplicationCommonShareNamespace);
+using @(Model.Model.ApplicationShareNamespace);
 using @(Model.Model.CoreNamespace);
 
-namespace @(Model.Model.ApplicationCommonNamespace)
+namespace @(Model.Model.ApplicationNamespace)
 {
     public class AutoMapperProfile : Profile
     {
         public AutoMapperProfile()
         {
-            var cfg = CreateMap<@(Model.Model.EntityName), @(Model.Model.ProviderDtoName)>();
-    @if (Model.Model.IsTree)
-    {
-            @:cfg..EntityToComboTree();
-    }
-            return cfg;
+            CreateMap<@(Model.Model.EntityName), @(Model.Model.DtoName)>();
+            CreateMap<@(Model.Model.EditDtoName), @(Model.Model.EntityName)>();
+            CreateMap<@(Model.Model.CreateDtoName), @(Model.Model.EntityName)>();
         }
     }
 }
