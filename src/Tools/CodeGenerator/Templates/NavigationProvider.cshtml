@@ -6,12 +6,8 @@
 @{
     DisableEncoding = true;//禁止html编码，因为我们是做代码生成器
 }
-using Abp.Localization;
-using Abp.MultiTenancy;
-using BXJG.Utils.Localization;
-using ZLJ.Core.Localization;
-using System.Collections.Generic;
 using @(Model.Model.ApplicationShareNamespace);
+using Abp.Application.Navigation;
 
 namespace @(Model.App.ApplicationProjectName)
 {
@@ -36,7 +32,7 @@ namespace @(Model.App.ApplicationProjectName)
             var menuItem = new MenuItemDefinition(@(Model.Model.PermissionNameGetConst),
                                                   @(Model.Model.PermissionNameGetConst).Get@(Model.App.Name)LocalizableString(),
                                                   icon: "@(Model.Model.Icon)",
-                                                  url: "/@(Model.App.Name)/@(Model.Model.Name)",
+                                                  url: "/@(Model.Model.Name)",
                                                   permissionDependency: new SimplePermissionDependency(@(Model.Model.PermissionNameGetConst)));
 
             if (parentMenu is MenuDefinition m0)

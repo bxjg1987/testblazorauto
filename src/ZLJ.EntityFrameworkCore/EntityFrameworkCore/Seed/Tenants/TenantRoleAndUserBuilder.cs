@@ -74,7 +74,7 @@ namespace ZLJ.EntityFrameworkCore.Seed.Tenants
             //获取所有权限定义中，没有授权给管理员角色的项
             var permissions = PermissionFinder
                 //abp默认是不引用application层的，由于我们的权限定义从core移动到application层了，所以这里直接引用，注意efcore层的模块不会依赖application层的模块，仅仅是为了这里能访问权限定义
-                .GetAllPermissions(new ZLJAuthorizationProvider())
+                .GetAllPermissions(new AdminAuthorizationProvider())
                 .Where(p => p.MultiTenancySides.HasFlag(MultiTenancySides.Tenant) &&
                             !grantedPermissions.Contains(p.Name))
                 .ToList();

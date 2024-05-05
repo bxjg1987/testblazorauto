@@ -27,7 +27,7 @@ namespace ZLJ.Application
         public override void PreInitialize()
         {
             Configuration.Navigation.Providers.Add<ZLJNavigationProvider>();
-            Configuration.Authorization.Providers.Add<ZLJAuthorizationProvider>();
+            Configuration.Authorization.Providers.Add<AdminAuthorizationProvider>();
             //注册automapper映射
             Configuration.Modules.AbpAutoMapper().Configurators
                 .Add(cfg => cfg.AddMaps(Assembly.GetExecutingAssembly()));

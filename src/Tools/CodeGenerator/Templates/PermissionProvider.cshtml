@@ -13,10 +13,10 @@ using ZLJ.Core.Localization;
 using System.Collections.Generic;
 using @(Model.Model.ApplicationShareNamespace);
 
-namespace @(Model.Name).Application.Authorization.Permissions
+namespace @(Model.App.ApplicationProjectName).Authorization.Permissions
 {
     @* 命名空间和类名必须固定 *@
-    public partial class @(Model.Name)AuthorizationProvider 
+    public partial class @(Model.App.Name)AuthorizationProvider 
     {
         @* 必须以CodeGenerator打头，因为主程序反射调用的 *@
         public void CodeGenerator@(Model.Model.Name)(IPermissionDefinitionContext context)

@@ -11,7 +11,7 @@ using BXJG.Utils.Helpers;
 
 namespace ZLJ.Application.Authorization.Permissions
 {
-    public partial class ZLJAuthorizationProvider : AuthorizationProvider
+    public partial class AdminAuthorizationProvider : AuthorizationProvider
     {
         //GeneralTreeModuleConfig cfg;
 

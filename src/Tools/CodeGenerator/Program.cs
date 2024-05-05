@@ -165,10 +165,10 @@ void SelectModel(ExecuteContext ctx)
 }
 IEnumerable<AppDefine> SelectApps(ExecuteContext ctx)
 {
-    Console.WriteLine("请选择应，y或空字符表示全部，n不选择，数字加逗号分割为多选：");
+    Console.WriteLine("请选择应用，y或空字符表示全部，n不选择，数字加逗号分割为多选：");
     for (int i = 0; i < ctx.Apps.Length; i++)
     {
-        var item = ctx.Models[i];
+        var item = ctx.Apps[i];
         Console.WriteLine($"{i}\t\t{item.DisplayName}");
     }
     var projectStr = Console.ReadLine()?.Trim().ToLower();
