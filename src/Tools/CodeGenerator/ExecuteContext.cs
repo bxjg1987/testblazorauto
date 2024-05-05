@@ -90,17 +90,27 @@ namespace CodeGenerator
         /// <summary>
         /// 代码生成器占位符
         /// </summary>
+        [Obsolete("貌似用不上了，参考权限和菜单提供器，结合部分方法，由主项目主动来调用代码生成器")]
         public const string CodeGeneratorReplace = "//--codegenerator==";
 
         #region application
         /// <summary>
-        /// ApplicationShare项目名称，如：ZLJ.Application.Share
+        /// 应用
         /// </summary>
-        public string ApplicationShareProjectName => $"{Name}.Application.Share";
+        public AppDefine[] Apps { get; set; }
         /// <summary>
-        /// Application项目名称，如：ZLJ.Application
+        /// 当前应用
         /// </summary>
-        public string ApplicationProjectName => $"{Name}.Application";
+        public AppDefine App { get; set; }
+        ///// <summary>
+        ///// ApplicationShare项目名称，如：ZLJ.Application.Share
+        ///// </summary>
+        //[Obsolete("请访问App")]
+        //public string ApplicationShareProjectName => $"{Name}.Application.Share";
+        ///// <summary>
+        ///// Application项目名称，如：ZLJ.Application
+        ///// </summary>
+        //public string ApplicationProjectName => $"{Name}.Application";
         #endregion
     }
 }

@@ -32,6 +32,10 @@ ctx.Models.ForEach(x =>
     x.ExecuteContext = ctx;
     x.Fields.ForEach(y => y.Model = x);
 });
+foreach (var item in ctx.Apps)
+{
+    item.ExecuteContext = ctx;
+}
 
 var engine = new RazorLightEngineBuilder()
     .UseFileSystemProject(Path.Combine(Directory.GetCurrentDirectory(), "Templates"))
@@ -47,7 +51,11 @@ List<Action<ExecuteContext>> actions = new List<Action<ExecuteContext>>
     ProviderDto,
     ProviderCondition,
     ProviderAppService,
-    ProviderObjMap,
+    ProviderObjMap
+
+};
+List<Action<ExecuteContext>> actions2 = new List<Action<ExecuteContext>>
+{
     ApplicationShareConst,
     Condition,
     Dto,
@@ -55,7 +63,6 @@ List<Action<ExecuteContext>> actions = new List<Action<ExecuteContext>>
     CreateDto,
     PermissionProvider
 };
-
 
 //var model = new { Name = "John Doe" };
 //string result = await engine.CompileRenderAsync("Subfolder/View.cshtml", model);
@@ -74,21 +81,26 @@ while (q.ToLower() == "c")
 
     //由于这里只是实现简单的代码生成，所以不太有需要有多快。
     //一个模板，一个子任务，某些子任务可能没有模板
-
     for (int i = 0; i < actions.Count; i++)
     {
-        Console.WriteLine($"步骤进度：{i + 1}/{actions.Count}");
+        Console.WriteLine($"核心步骤进度：{i + 1}/{actions.Count}");
         actions[i].Invoke(ctx);
     }
 
+    foreach (var item in ctx.Apps)
+    {
+        ctx.App = item;
+        for (int i = 0; i < actions2.Count; i++)
+        {
+            Console.WriteLine($"应用步骤进度：{i + 1}/{actions2.Count}");
+            actions2[i].Invoke(ctx);
+        }
+    }
 
     Console.WriteLine("按c键继续，按任意键退出...");
     q = Console.ReadLine();
 
 }
-
-
-
 
 
 #region 初始化
@@ -338,7 +350,7 @@ void ApplicationShareConst(ExecuteContext ctx)
     Console.WriteLine("正在生成admin应用中，应用服务共享层的常量...");
     var str = engine.CompileRenderAsync("ApplicationShareConst", ctx).Result;
 
-    var file = Path.Combine(ctx.SrcDir, ctx.ApplicationShareProjectName, ctx.Model.Name, ctx.Model.ApplicationShareConstName + ".cs");
+    var file = Path.Combine(ctx.SrcDir, ctx.App.ApplicationShareProjectName, ctx.Model.Name, ctx.Model.ApplicationShareConstName + ".cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
     File.WriteAllText(file, str);
@@ -351,7 +363,7 @@ void Condition(ExecuteContext ctx)
     Console.WriteLine("正在生成应用共享层中的条件类...");
     var str = engine.CompileRenderAsync("Condition", ctx).Result;
 
-    var file = Path.Combine(ctx.SrcDir, ctx.ApplicationShareProjectName, ctx.Model.Name, ctx.Model.ConditionName + ".cs");
+    var file = Path.Combine(ctx.SrcDir, ctx.App.ApplicationShareProjectName, ctx.Model.Name, ctx.Model.ConditionName + ".cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
     File.WriteAllText(file, str);
@@ -364,7 +376,7 @@ void Dto(ExecuteContext ctx)
     Console.WriteLine("正在生成Dto...");
     var str = engine.CompileRenderAsync("Dto", ctx).Result;
 
-    var file = Path.Combine(ctx.SrcDir, ctx.ApplicationShareProjectName, ctx.Model.Name, ctx.Model.DtoName + ".cs");
+    var file = Path.Combine(ctx.SrcDir, ctx.App.ApplicationShareProjectName, ctx.Model.Name, ctx.Model.DtoName + ".cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
     File.WriteAllText(file, str);
@@ -377,7 +389,7 @@ void EditDto(ExecuteContext ctx)
     Console.WriteLine("正在生成EditDto...");
     var str = engine.CompileRenderAsync("EditDto", ctx).Result;
 
-    var file = Path.Combine(ctx.SrcDir, ctx.ApplicationShareProjectName, ctx.Model.Name, ctx.Model.EditDtoName + ".cs");
+    var file = Path.Combine(ctx.SrcDir, ctx.App.ApplicationShareProjectName, ctx.Model.Name, ctx.Model.EditDtoName + ".cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
     File.WriteAllText(file, str);
@@ -390,7 +402,7 @@ void CreateDto(ExecuteContext ctx)
     Console.WriteLine("正在生成CreateDto...");
     var str = engine.CompileRenderAsync("CreateDto", ctx).Result;
 
-    var file = Path.Combine(ctx.SrcDir, ctx.ApplicationShareProjectName, ctx.Model.Name, ctx.Model.CreateDtoName + ".cs");
+    var file = Path.Combine(ctx.SrcDir, ctx.App.ApplicationShareProjectName, ctx.Model.Name, ctx.Model.CreateDtoName + ".cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
     File.WriteAllText(file, str);
@@ -405,7 +417,7 @@ void PermissionProvider(ExecuteContext ctx)
     Console.WriteLine("正在生成PermissionProvider...");
     var str = engine.CompileRenderAsync("PermissionProvider", ctx).Result;
 
-    var file = Path.Combine(ctx.SrcDir, ctx.ApplicationProjectName, ctx.Model.Name, "PermissionProvider.cs");
+    var file = Path.Combine(ctx.SrcDir, ctx.App.ApplicationProjectName, ctx.Model.Name, "PermissionProvider.cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
     File.WriteAllText(file, str);

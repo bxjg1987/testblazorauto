@@ -129,7 +129,7 @@ namespace CodeGenerator
         /// <summary>
         /// Application.Shar层的命名空间，如：ZLJ.Application.Share.Test
         /// </summary>
-        public string ApplicationShareNamespace => $"{ExecuteContext.ApplicationShareProjectName}.{Name}";
+        public string ApplicationShareNamespace => $"{ExecuteContext.App.ApplicationShareProjectName}.{Name}";
         /// <summary>
         /// ApplicationShare常量类名，如：TestApplicationShareConsts
         /// </summary>
@@ -190,7 +190,7 @@ namespace CodeGenerator
         /// <summary>
         /// Application层的命名空间，如：ZLJ.Application.Test
         /// </summary>
-        public string ApplicationNamespace => $"{ExecuteContext.ApplicationProjectName}.{Name}";
+        public string ApplicationNamespace => $"{ExecuteContext.App.ApplicationProjectName}.{Name}";
         #endregion
     }
 }

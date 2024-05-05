@@ -5,6 +5,19 @@
   "BtnIconCreate": "plush",
   "BtnIconUpdate": "add",
   "BtnIconDelete": "clear",
+  "Apps": [
+    {
+      "Name": "Admin",
+      "DisplayName": "后台管理",
+      //下面的项目名称若是设置了就以设置的为准，否则按规则自动生成
+      "ClientProxyProjectName": "ZLJ.Admin.ClientProxy",
+      "BlazorClientProjectName": "ZLJ.Admin.CoreRCL",
+      "ApplicationProjectName": "ZLJ.Application",
+      "ApplicationShareProjectName": "ZLJ.Application.Share",
+      "BlazorHostProjectName": "ZLJ.Web.BlazorAuto",
+      "ApiHostProjectName": "ZLJ.Web.Host"
+    }
+  ],
   "Models": [
     {
       "Name": "Test",
