@@ -29,17 +29,14 @@ namespace ZLJ.RCL.Components
     /// 推荐所有树形数据的选择都继承它
     /// </summary>
     /// <typeparam name="TGetTreeForSelectOutput"></typeparam>
-    public class TreeSelectZlj<TGetTreeForSelectOutput> : TreeSelect<TGetTreeForSelectOutput>
-        where TGetTreeForSelectOutput : IGeneralTree<TGetTreeForSelectOutput>
+    public class TreeSelectZlj<TGetTreeForSelectOutput> : TreeSelect<TGetTreeForSelectOutput> where TGetTreeForSelectOutput : IGeneralTree<TGetTreeForSelectOutput>
         //where TGetNodesForSelectOutput : ComboboxItemDto 由于我们规定了统一使用树，所以这个约束没有必要
-      
     {
-    //    protected HttpClient httpClient;
         [Inject]
         public IHttpClientFactory HttpClientFactory { get; set; }
 
-        //没必要缓存httpclient，因为基本只调用一次
-        protected virtual HttpClient HttpClient =>  HttpClientFactory.CreateHttpClientCommon();
+        protected virtual HttpClient HttpClient => HttpClientFactory.CreateHttpClientCommon();
+
         /// <summary>
         /// 只加载此节点下的后代节点
         /// 不用用code，因为code会变
@@ -51,6 +48,42 @@ namespace ZLJ.RCL.Components
         /// </summary>
         [Parameter]
         public virtual bool IsKeyId { get; set; }
+
+
+        [Parameter]
+        public long TreeId { get; set; }
+
+        [Parameter]
+        public EventCallback<long> TreeIdChanged { get; set; }
+
+
+        [Parameter]
+        public long? TreeIdNullable { get; set; }
+
+        [Parameter]
+        public EventCallback<long?> TreeIdNullableChanged { get; set; }
+
+        protected override void OnCurrentValueChange(string value)
+        {
+            base.OnCurrentValueChange(value);
+            //this.InvokeValuesChanged
+            //_ InvokeAsync(async()=>{
+            //   await TreeIdNullableChanged.InvokeAsync(1);
+            //});
+
+            long? z = default;
+            if (value.IsNullOrWhiteSpaceBXJG() || value == "0")
+                z = default;
+            else
+                z = long.Parse(value);
+
+            InvokeAsync(async () =>
+            {
+                await TreeIdNullableChanged.InvokeAsync(z);
+                await TreeIdChanged.InvokeAsync(z.HasValue ? z.Value : default);
+                StateHasChanged();
+            });
+        }
 
         //protected virtual ValueTask SetDefault(IReadOnlyDictionary<string, object> dic) => ValueTask.CompletedTask;
         //protected override void OnValueChange(string value)
@@ -105,7 +138,7 @@ namespace ZLJ.RCL.Components
             if (KeyExpression == default)
             {
                 if (IsKeyId)
-                    KeyExpression = node => node.DataItem.Id.ToString();
+                    KeyExpression = node => node.DataItem.Id == 0 ? default : node.DataItem.Id.ToString();
                 else
                     KeyExpression = node => node.DataItem.Code;
             }
@@ -118,12 +151,9 @@ namespace ZLJ.RCL.Components
                 //await using var service = ServiceProvider.CreateAsyncScope();
                 //var appService = service.ServiceProvider.GetRequiredService<TAppService>();
                 // DataSource = await appService.GetTreeForSelectAsync(new TGetTreeForSelectInput { ParentId = ParentId });
-                DataSource = await HttpClient.GetTreeForSelect<TGetTreeForSelectOutput>(new  {  ParentId });
+                DataSource = await HttpClient.GetTreeForSelect<TGetTreeForSelectOutput>(new { ParentId });
             }
         }
-     
-
-
 
         //protected abstract HttpClient CreateHttpClient();
         //[AbpExceptionInterceptor]
