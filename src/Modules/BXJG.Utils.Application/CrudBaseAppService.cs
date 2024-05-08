@@ -78,7 +78,7 @@ namespace BXJG.Utils.Application
             TEntity entity = MapToEntity(input);
             await Repository.InsertAsync(entity).ConfigureAwait(continueOnCapturedContext: false);
             await base.CurrentUnitOfWork.SaveChangesAsync().ConfigureAwait(continueOnCapturedContext: false);
-            entity = await AsyncQueryableExecuter.FirstOrDefaultAsync(GetEntityByIdInclude(input.Id, false));//.SingleAsync(c => c.Id.Equals(id));
+            entity = await AsyncQueryableExecuter.FirstOrDefaultAsync(GetEntityByIdInclude(entity.Id, false));//.SingleAsync(c => c.Id.Equals(id));
             return base.MapToEntityDto(entity);
         }
         public override async Task<TEntityDto> UpdateAsync(TUpdateInput input)
@@ -87,7 +87,7 @@ namespace BXJG.Utils.Application
             TEntity entity = await GetEntityByIdAsync(input.Id).ConfigureAwait(continueOnCapturedContext: false);
             MapToEntity(input, entity);
             await base.CurrentUnitOfWork.SaveChangesAsync().ConfigureAwait(continueOnCapturedContext: false);
-             entity = await AsyncQueryableExecuter.FirstOrDefaultAsync(GetEntityByIdInclude(input.Id, false));//.SingleAsync(c => c.Id.Equals(id));
+             entity = await AsyncQueryableExecuter.FirstOrDefaultAsync(GetEntityByIdInclude(entity.Id, false));//.SingleAsync(c => c.Id.Equals(id));
             return base.MapToEntityDto(entity);
         }
         public override async Task DeleteAsync(TDeleteInput input)
