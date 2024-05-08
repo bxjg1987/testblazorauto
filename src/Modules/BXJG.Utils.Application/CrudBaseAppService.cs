@@ -64,7 +64,7 @@ namespace BXJG.Utils.Application
         /// <summary>
         /// 与当前请求关联的服务容器
         /// 通常你可以使用构造函数或属性注入，框架级别或特殊情况可以使用此对象。
-        /// 注：IocManager是全局单例，解析实现IDisposeable的服务时比较危险，此时应使用ServiceProvider
+        /// 注：IocManager是全局单例，解析实现IDisposeable的服务时比较危险，此时应使用ServiceProvider，保险起见使用时最好再创建个scop
         /// </summary>
         public IServiceProvider ServiceProvider { get; set; }
 
@@ -72,18 +72,28 @@ namespace BXJG.Utils.Application
 
         //Zhongjie仅用于界面，业务逻辑层任然使用abp的事件总线（它不是为界面设计的，默认也没提供多个实例），在ui提供abpk事件处理器 来连接到zhongjie实例
         //public Zhongjie Zhongjie { get; set; }
-        public override Task<TEntityDto> CreateAsync(TCreateInput input)
+        public override async Task<TEntityDto> CreateAsync(TCreateInput input)
         {
-            return base.CreateAsync(input);
+            CheckCreatePermission();
+            TEntity entity = MapToEntity(input);
+            await Repository.InsertAsync(entity).ConfigureAwait(continueOnCapturedContext: false);
+            await base.CurrentUnitOfWork.SaveChangesAsync().ConfigureAwait(continueOnCapturedContext: false);
+            entity = await AsyncQueryableExecuter.FirstOrDefaultAsync(GetEntityByIdInclude(input.Id, false));//.SingleAsync(c => c.Id.Equals(id));
+            return base.MapToEntityDto(entity);
         }
-        public override Task<TEntityDto> UpdateAsync(TUpdateInput input)
+        public override async Task<TEntityDto> UpdateAsync(TUpdateInput input)
         {
-            return base.UpdateAsync(input);
+            CheckUpdatePermission();
+            TEntity entity = await GetEntityByIdAsync(input.Id).ConfigureAwait(continueOnCapturedContext: false);
+            MapToEntity(input, entity);
+            await base.CurrentUnitOfWork.SaveChangesAsync().ConfigureAwait(continueOnCapturedContext: false);
+             entity = await AsyncQueryableExecuter.FirstOrDefaultAsync(GetEntityByIdInclude(input.Id, false));//.SingleAsync(c => c.Id.Equals(id));
+            return base.MapToEntityDto(entity);
         }
         public override async Task DeleteAsync(TDeleteInput input)
         {
             CheckDeletePermission();
-            var entity =await Repository.GetAsync(input.Id);
+            var entity = await GetEntityByIdAsync(input.Id);
             await BatchDeleteItemAsync(entity);
         }
 
@@ -178,10 +188,14 @@ namespace BXJG.Utils.Application
         {
             await Repository.DeleteAsync(entity);
         }
-
+        /// <summary>
+        /// 获取列表，且不跟踪实体
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         protected override IQueryable<TEntity> CreateFilteredQuery(TGetAllInput input)
         {
-            var q = BuildQuery().AsNoTrackingWithIdentityResolution();
+            var q = BuildQuery(false);
             if (input is IHaveFilter p)
             {
                 q = q.ApplyDynamicCondtion(p.Filter);
@@ -203,10 +217,14 @@ namespace BXJG.Utils.Application
         [UnitOfWork(false)]
         public override async Task<TEntityDto> GetAsync(TGetInput input)
         {
-            var entity = await AsyncQueryableExecuter.FirstOrDefaultAsync(GetEntityByIdInclude(input.Id).AsNoTrackingWithIdentityResolution());//.SingleAsync(c => c.Id.Equals(id));
+            var entity = await AsyncQueryableExecuter.FirstOrDefaultAsync(GetEntityByIdInclude(input.Id,false));//.SingleAsync(c => c.Id.Equals(id));
             return base.MapToEntityDto(entity);
         }
-
+        /// <summary>
+        /// 根据id获取实体，且跟踪实体
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         protected override async Task<TEntity> GetEntityByIdAsync(TPrimaryKey id)
         {
             //return base.GetEntityByIdAsync(id);
@@ -217,16 +235,21 @@ namespace BXJG.Utils.Application
         /// 执行GetEntityByIdAsync将回调此方法，可重写此方法来包含导航属性，默认不包含任何导航属性。
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="q"></param>
+        /// <param name="include">是否跟踪实体</param>
         /// <returns></returns>
-        protected virtual IQueryable<TEntity> GetEntityByIdInclude(TPrimaryKey id) => BuildQuery().Where(c => c.Id.Equals(id));
+        protected virtual IQueryable<TEntity> GetEntityByIdInclude(TPrimaryKey id, bool include = true) => BuildQuery(include).Where(c => c.Id.Equals(id));
 
         /// <summary>
         /// 获取单个和列表时都会回调，你可以重写以Include更多导航属性
         /// </summary>
-        /// <param name="q"></param>
+        /// <param name="include">是否跟踪实体</param>
         /// <returns></returns>
-        protected virtual IQueryable<TEntity> BuildQuery() => Repository.GetAll();
+        protected virtual IQueryable<TEntity> BuildQuery(bool include =true) {
+            var q = Repository.GetAll();
+            if (!include)
+                return q.AsNoTrackingWithIdentityResolution();
+            return q;
+        } 
     }
 
     /// <summary>
