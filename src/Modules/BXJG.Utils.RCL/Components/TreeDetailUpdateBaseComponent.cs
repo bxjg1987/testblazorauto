@@ -461,19 +461,14 @@ namespace BXJG.Utils.RCL.Components
             isDeleting = true;
             try
             {
-                var r = await DeleteCore();
+                await DeleteCore();
                 isDeleting = false;
 
                 //后续逻辑都是辅助性的，因此放到异步中，加快主操作速度
                 _ = InvokeAsync(async () => {
-                    if (r.Ids.Any())
-                    {
+                   
                       await  ShowSuccessMessage(msg: "删除成功！");
-                    }
-                    else
-                    {
-                        ShowFailMessage(title: "删除失败！", r.ErrorMessage.FirstOrDefault()?.Message);
-                    }
+                  
                     await OnDeleted.InvokeAsync(dto);
                 });
 
@@ -489,9 +484,9 @@ namespace BXJG.Utils.RCL.Components
         /// 删除的核心逻辑
         /// </summary>
         /// <returns></returns>
-        protected virtual async Task<BatchOperationOutputLong> DeleteCore()
+        protected virtual  Task DeleteCore()
         {
-            return await HttpClient.DeleteBatchTree<TEntityDto>(new { Ids = new[] { Id } });// AppService.DeleteAsync(new() { Ids = new[] { Id } });
+             return HttpClient.Delete<TEntityDto>( new{ Id } );// AppService.DeleteAsync(new() { Ids = new[] { Id } });
         }
         /// <summary>
         /// 删除后触发的事件

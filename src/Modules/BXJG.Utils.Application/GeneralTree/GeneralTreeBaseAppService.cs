@@ -154,7 +154,7 @@ namespace BXJG.Utils.Application.GeneralTree
             else
             {
                 parentDto = null;
-                dtoList = dtoList.Where(c =>!c.ParentId.HasValue).ToList();
+                dtoList = dtoList.Where(c => !c.ParentId.HasValue).ToList();
             }
 
 
@@ -273,7 +273,7 @@ namespace BXJG.Utils.Application.GeneralTree
         protected virtual IQueryable<TEntity> ComboTreeFilter(TGetTreeForSelectInput input, string parentCode)
         {
             var q = BuildQuery().WhereIf(!input.IsOnlyLoadChild, c => c.Code.StartsWith(parentCode))
-                                .WhereIf(input.IsOnlyLoadChild&&parentCode.IsNotNullOrWhiteSpaceBXJG(), c => c.Parent.Code==parentCode || c.Code == parentCode)
+                                .WhereIf(input.IsOnlyLoadChild && parentCode.IsNotNullOrWhiteSpaceBXJG(), c => c.Parent.Code == parentCode || c.Code == parentCode)
                                 .WhereIf(input.IsOnlyLoadChild && parentCode.IsNullOrWhiteSpaceBXJG(), c => !c.ParentId.HasValue);
 
 
@@ -441,31 +441,22 @@ namespace BXJG.Utils.Application.GeneralTree
     /// <typeparam name="TMoveInput"></typeparam>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TManager"></typeparam>
-    [UnitOfWork]
+    [UnitOfWork]//在blazor server中，加这个更保险
     public class GeneralTreeBaseAppService<TEntity,
                                            TDto,
                                            TCreateInput,
                                            TEditDto,
                                            TGetAllInput,
-                                           TDeleteInput,
-                                           TGetInput,
-                                           TMoveInput,
                                            TManager> : BXJGUtilsBaseAppService, IGeneralTreeBaseAppService<TDto,
-                                                                                                      TCreateInput,
-                                                                                                      TEditDto,
-                                                                                                      TGetAllInput,
-                                                                                                      TDeleteInput,
-                                                                                                      TGetInput,
-                                                                                                      TMoveInput>
+                                                                                                           TCreateInput,
+                                                                                                           TEditDto,
+                                                                                                           TGetAllInput>
         where TCreateInput : GeneralTreeNodeEditBaseDto //注意这里约束为TEditDto，这样强制要求继承编辑模型不合理
-        where TDeleteInput : BatchOperationInputLong
-        where TGetInput : EntityDto<long>
         where TEntity : Entity<long>, IGeneralTree<TEntity>// GeneralTreeEntity<TEntity>
         where TDto : GeneralTreeNodeBaseDto<TDto>, new()
         where TEditDto : GeneralTreeNodeEditBaseDto//父类可以对输入做一定的处理
         where TManager : GeneralTreeManager<TEntity>
         where TGetAllInput : GeneralTreeGetTreeInput
-        where TMoveInput : GeneralTreeNodeMoveInput
     {
         //Zhongjie仅用于界面，业务逻辑层任然使用abp的事件总线（它不是为界面设计的，默认也没提供多个实例），在ui提供abpk事件处理器 来连接到zhongjie实例
         //public Zhongjie Zhongjie { get; set; }
@@ -474,53 +465,38 @@ namespace BXJG.Utils.Application.GeneralTree
          * 顶级文本可能是 前端传过来的、上级节点文本、默认文本；除非根本不现实
          */
         //public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; } = NullAsyncQueryableExecuter.Instance;
+        /// <summary>
+        /// 仓储
+        /// </summary>
         public IRepository<TEntity, long> Repository { get; set; }
-        public TManager generalTreeManager { get; set; }
-        protected virtual string allTextForManager { get; set; } = "全部";//注意这里代表的是本地化文本的key
+        /// <summary>
+        /// 领域服务
+        /// </summary>
+        public TManager GeneralTreeManager { get; set; }
         /// <summary>
         /// 与当前请求关联的服务容器
         /// 通常你可以使用构造函数或属性注入，框架级别或特殊情况可以使用此对象。
         /// 注：IocManager是全局单例，解析实现IDisposeable的服务时比较危险，此时应使用ServiceProvider
+        /// 保险起见，使用时创建个范围
         /// </summary>
         public IServiceProvider ServiceProvider { get; set; }
         //protected string createPermissionName, updatePermissionName, deletePermissionName, getPermissionName;
-        protected virtual string CreatePermissionName { get;  }
-        protected virtual string UpdatePermissionName { get;  }
-        protected virtual string DeletePermissionName { get; }
-        protected virtual string GetPermissionName { get; }
-
-        //[Obsolete("子类继承时应使用无参的构造函数，当前构造函数是未简化子类实现以前的代码，已过时。")]
-        //public GeneralTreeBaseAppService(IRepository<TEntity, long> ownRepository,
-        //                                 TManager manager,
-        //                                 string createPermissionName = null,
-        //                                 string updatePermissionName = null,
-        //                                 string deletePermissionName = null,
-        //                                 string getPermissionName = null,
-        //                                 string allTextForManager = "全部")
-        //{
-        //    //L内部调用的LocationSource是使用的属性注入，所以在构造函数中无法使用L()  此规则.net framework版本是这个规则，.net core版本未测试过
-        //    this.allTextForManager = allTextForManager;
-        //    this.repository = ownRepository;
-
-        //    this.generalTreeManager = manager;
-
-        //    this.CreatePermissionName = createPermissionName;
-        //    this.UpdatePermissionName = updatePermissionName;
-        //    this.DeletePermissionName = deletePermissionName;
-        //    this.GetPermissionName = getPermissionName;
-        //}
-
-        //public GeneralTreeBaseAppService()
-        //{
-        //    AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
-        //}
-
         /// <summary>
-        /// 新增和修改都会执行的逻辑，若需要传递额外参数，请使用当前Uow.Items
+        /// 新增权限名称，通常需要重写
         /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
-        protected virtual ValueTask MapToEntityAsync(TEntity entity) => ValueTask.CompletedTask;
+        protected virtual string CreatePermissionName { get; }
+        /// <summary>
+        /// 修改权限名称，通常需要重写
+        /// </summary>
+        protected virtual string UpdatePermissionName { get; }
+        /// <summary>
+        /// 删除权限名称，通常需要重写
+        /// </summary>
+        protected virtual string DeletePermissionName { get; }
+        /// <summary>
+        /// 获取权限名称，通常需要重写
+        /// </summary>
+        protected virtual string GetPermissionName { get; }
 
         #region create
         /// <summary>
@@ -532,14 +508,28 @@ namespace BXJG.Utils.Application.GeneralTree
         {
             await CheckCreatePermissionAsync();
 
-            if (input.ParentId.HasValue && input.ParentId <= 0)
-                input.ParentId = null;
 
             // var ctx = new Dictionary<string, object> { { "input", input } };
-            var m = CreateMap(input);// ObjectMapper.Map<TEntity>(input);
+            var m = MapToEntity(input);// ObjectMapper.Map<TEntity>(input);
 
+
+
+            //await BeforeCreateAsync(input, m);
+            await MapToEntity(m);
+            await GeneralTreeManager.CreateAsync(m);
+            m = await GetEntityByIdAsync(m.Id, false);
+            return EntityToDto(m);
+        }
+        /// <summary>
+        /// 新增时的映射，默认使用automapper映射
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        protected virtual TEntity MapToEntity(TCreateInput input)
+        {
+            var entity = ObjectMapper.Map<TEntity>(input);
             //扩展属性的处理后期放到Manager中去处理
-            if (input.ExtData != null && m is IExtendableObject kk)
+            if (input.ExtData != null && entity is IExtendableObject kk)
             {
                 foreach (var item in input.ExtData)
                 {
@@ -547,32 +537,7 @@ namespace BXJG.Utils.Application.GeneralTree
                     kk.SetData(item.Key, item.Value);
                 }
             }
-
-            await BeforeCreateAsync(input, m);
-            await MapToEntityAsync(m);
-            await generalTreeManager.CreateAsync(m);
-            return GetEntityToDto(m);
-        }
-        /// <summary>
-        /// 新增时的映射，默认使用automapper映射
-        /// </summary>
-        /// <param name="input"></param>
-        /// <param name="context">不要再使用此参数，请直接使用uow.Items</param>
-        /// <returns></returns>
-        protected virtual TEntity CreateMap(TCreateInput input)
-        {
-            return ObjectMapper.Map<TEntity>(input);
-        }
-        /// <summary>
-        /// 新增前回调，默认啥也没干
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="input"></param>
-        /// <param name="context">不要再使用此参数，请直接使用uow.Items</param>
-        /// <returns></returns>
-        protected virtual ValueTask BeforeCreateAsync(TCreateInput input, TEntity entity)
-        {
-            return ValueTask.CompletedTask;
+            return entity;
         }
         #endregion
 
@@ -582,22 +547,12 @@ namespace BXJG.Utils.Application.GeneralTree
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public virtual async Task<TDto> MoveAsync(TMoveInput input)
+        public virtual async Task<TDto> MoveAsync(GeneralTreeNodeMoveInput input)
         {
             //移动关于追加 之后 之前 的处理逻辑本应该定义在领域服务中
             await CheckUpdatePermissionAsync();
-            await BeforeMoveAsync(input);
-            var m = await generalTreeManager.MoveAsync(input.Id, input.TargetId, input.MoveType);
-            return ObjectMapper.Map<TDto>(m);// m.MapTo<TDto>();
-        }
-        /// <summary>
-        /// 移动节点前回调，默认啥也没干
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        protected virtual ValueTask BeforeMoveAsync(TMoveInput input)
-        {
-            return ValueTask.CompletedTask;
+            var m = await GeneralTreeManager.MoveAsync(input.Id, input.TargetId, input.MoveType);
+            return EntityToDto(m);
         }
         #endregion
 
@@ -613,26 +568,17 @@ namespace BXJG.Utils.Application.GeneralTree
 
             await CheckUpdatePermissionAsync();
 
-            if (input.ParentId == 0)
-                input.ParentId = null;
+
 
             //  var ctx = new Dictionary<string, object> { { "input", input } };
             var m = await GetEntityByIdAsync(input.Id);
 
-           UpdateMapAsync(input, m);
-            //扩展属性的处理后期放到Manager中去处理
-            if (input.ExtData != null&& m is IExtendableObject kk)
-            {
-                foreach (var item in input.ExtData)
-                {
-                    kk.RemoveData(item.Key);
-                    kk.SetData(item.Key, item.Value);
-                }
-            }
-            await BeforeUpdateAsync(input, m);
-            await MapToEntityAsync(m);
-            await generalTreeManager.UpdateAsync(m);
-            return GetEntityToDto(m);
+            MapToEntity(input, m);
+
+            await MapToEntity(m);
+            await GeneralTreeManager.UpdateAsync(m);
+            m = await GetEntityByIdAsync(m.Id, false);
+            return EntityToDto(m);
         }
         ///// <summary>
         ///// 修改时的查询，默认根据id查询
@@ -653,104 +599,51 @@ namespace BXJG.Utils.Application.GeneralTree
         /// <param name="input"></param>
         /// <param name="context">不要再使用此参数，请直接使用uow.Items</param>
         /// <returns></returns>
-        protected virtual void UpdateMapAsync(TEditDto input, TEntity entity)
+        protected virtual void MapToEntity(TEditDto input, TEntity entity)
         {
             ObjectMapper.Map(input, entity);
-        }
-        /// <summary>
-        /// 修改前回调，默认啥也没干
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="input"></param>
-        /// <param name="context"><see cref="UpdateAsync"/>的多个步骤间共享数据，默认存在input的key</param>
-        /// <returns></returns>
-        protected virtual ValueTask BeforeUpdateAsync(TEditDto input, TEntity entity)
-        {
-            return ValueTask.CompletedTask;
-        }
-        #endregion
-       
 
-        /// <summary>
-        /// 批量处理
-        /// </summary>
-        /// <param name="input"></param>
-        /// <param name="func"></param>
-        /// <returns></returns>
-        protected virtual async Task<BatchOperationOutputLong> BatchHandleAsync(TDeleteInput input, Func<TEntity, ValueTask> func)
-        {
-            var r = new BatchOperationOutputLong();
-            foreach (var id in input.Ids)
+            //扩展属性的处理后期放到Manager中去处理
+            if (input.ExtData != null && entity is IExtendableObject kk)
             {
-                try
+                foreach (var item in input.ExtData)
                 {
-                    using var uow = UnitOfWorkManager.Begin(System.Transactions.TransactionScopeOption.RequiresNew);
-                    var entity = await GetEntityByIdAsync(id);
-                    await func(entity);
-                    await uow.CompleteAsync();
-                    r.Ids.Add(id);
-                }
-                catch (UserFriendlyException ex)
-                {
-                    r.ErrorMessage.Add(new BatchOperationErrorMessage(id, ex.Message));
-                }
-                catch (Exception ex)
-                {
-                    r.ErrorMessage.Add(id.Message500());
-                    Logger.Warn($"部分操作失败！{id}", ex);
+                    kk.RemoveData(item.Key);
+                    kk.SetData(item.Key, item.Value);
                 }
             }
-            return r;
         }
 
+        #endregion
 
         #region delete
-
+        [UnitOfWork(IsDisabled = true)]
+        public async Task<BatchOperationOutputLong> DeleteBatchAsync(BatchOperationInputLong input)
+        {
+            await CheckDeletePermissionAsync();
+            return await BatchHandleAsync(input.Ids, DeleteCore);
+        }
         /// <summary>
         /// 删除树形结构的数据
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        [UnitOfWork(IsDisabled = true)]
-        public virtual async Task<BatchOperationOutputLong> DeleteAsync(TDeleteInput input)
+        public virtual async Task DeleteAsync(EntityDto<long> input)
         {
             await CheckDeletePermissionAsync();
-            ///  await this.generalTreeManager.DeleteAsync(BeforeDeleteAsync, input.Ids);
-            return await BatchHandleAsync(input, BeforeDeleteAsync);
+            var entity = await GetEntityByIdAsync(input.Id);
+            await DeleteCore(entity);
         }
         /// <summary>
-        /// 删除前回调，默认当前及其后代节点都删除
+        /// 批量或单个删除的核心逻辑，默认当前及其后代节点都删除
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        protected virtual async ValueTask BeforeDeleteAsync(TEntity entity)
+        protected virtual Task DeleteCore(TEntity entity)
         {
-       await     generalTreeManager.DeleteAsync(entity);
-           // await repository.DeleteAsync(c => c.Code.StartsWith(entity.Code));
-
-            //这里后台节点 还需要重置code，以后来改，或者在Manager中去实现，这里再调用Manager中的Delete
+            return GeneralTreeManager.DeleteAsync(entity);
         }
         #endregion
-
-        /// <summary>
-        /// 获取列表和获取指定id的信息都将回调此方法，默认啥也没干
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="dto"></param>
-        /// <param name="context"></param>
-        /// <returns></returns>
-        protected virtual void EntityToDto(TEntity entity, TDto dto)
-        { }
-
-        /// <summary>
-        /// 所有查询都会调用，以获取查询对象。
-        /// 可以重写以应用所有查询都需要的Include
-        /// </summary>
-        /// <returns></returns>
-        protected virtual IQueryable<TEntity> BuildQuery()
-        {
-            return Repository.GetAll().Include(c => c.Parent);
-        }
 
         #region get
         /// <summary>
@@ -759,56 +652,11 @@ namespace BXJG.Utils.Application.GeneralTree
         /// <param name="input"></param>
         /// <returns></returns>
         [UnitOfWork(false)]
-        public virtual async Task<TDto> GetAsync(TGetInput input)
+        public virtual async Task<TDto> GetAsync(EntityDto<long> input)
         {
             await CheckGetPermissionAsync();
-            // var ctx = new Dictionary<string, object> { { "input", input } };
-            var entity = await AsyncQueryableExecuter.FirstOrDefaultAsync(GetEntityByIdInclude(input.Id).AsNoTrackingWithIdentityResolution());//.SingleAsync();
-
-            var n = GetEntityToDto(entity);
-            //if (!string.IsNullOrWhiteSpace(entity.ExtensionData))
-            //    n.ExtData = JsonConvert.DeserializeObject<dynamic>(entity.ExtensionData);
-            return n;
-        }
-        /// <summary>
-        /// 增、删、改、获取单个时都会调用，用来根据id获取实体
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        protected virtual Task<TEntity> GetEntityByIdAsync(long id)
-        {
-            return GetEntityByIdInclude(id).SingleAsync();
-        }
-        /// <summary>
-        /// 根据id获取实体时回调，你可以重写使用Include包含导航属性，默认不处理
-        /// </summary>
-        /// <param name="q"></param>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        protected virtual IQueryable<TEntity> GetEntityByIdInclude(long id) => BuildQuery().Where(c => c.Id == id);
-
-        ///// <summary>
-        ///// 根据id获取单个实体时将调用此方法获取IQueryable，默认已加入id比对条件
-        ///// </summary>
-        ///// <param name="input"></param>
-        ///// <param name="context"><see cref="GetAsync"/>的多个步骤间共享数据，默认存在input的key</param>
-        ///// <returns></returns>
-        //protected virtual ValueTask<IQueryable<TEntity>> GetQueryAsync(TGetInput input, IDictionary<string, object> context = default)
-        //{
-        //    var query = repository.GetAll().Where(c => c.Id == input.Id);
-        //    return ValueTask.FromResult(query);
-        //}
-        /// <summary>
-        /// 根据id获取单个实体时的映射，默认使用automapper
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="context">不要再使用此参数，请直接使用uow.Items</param>
-        /// <returns></returns>
-        protected virtual TDto GetEntityToDto(TEntity entity)
-        {
-            var dto = ObjectMapper.Map<TDto>(entity);
-            EntityToDto(entity, dto);
-            return dto;
+            var entity = await GetEntityByIdAsync(input.Id, false);
+            return EntityToDto(entity);
         }
         #endregion
 
@@ -837,17 +685,28 @@ namespace BXJG.Utils.Application.GeneralTree
 
             // var ctx = new Dictionary<string, object> { { "input", input } };
             //查询
-            var query = GetAllFiltered(input, parentCode);//.Where(c => c.Code.StartsWith(parentCode));
-            query = GetAllSorting(query, input); //方便子类排序
+
+            var query = BuildQuery(false);
+            query = GetAllInclude(query);
+            query = GetAllFilter(query, input, parentCode);//.Where(c => c.Code.StartsWith(parentCode));
+            query = GetAllSort(query, input); //方便子类排序
             var list = await AsyncQueryableExecuter.ToListAsync(query);//.ToListAsync();
-            if(!input.ParentId.HasValue)
+            if (!input.ParentId.HasValue)
                 input.ParentId = list.OrderBy(c => c.Code.Length).FirstOrDefault()?.ParentId;
             //建立dto以及处理父子关系
             //TEntity parent = list.SingleOrDefault(c => c.Id == input.ParentId);
             //if (parent != null)
             //    list.Remove(parent);
+            var list1 = new List<TDto>();
+            foreach (var item in list)
+            {
+                //var entity = entities.Single(c => c.Id == item.Id);
+                list1.Add(EntityToDto(item));
+            }
+            //  return dtos;
 
-            var list1 = GetAllEntityToDto(list);// ObjectMapper.Map<IList<TDto>>(list);//使用映射的好处是子类扩展多个属性时都可以使用映射，避免大量属性赋值的代码
+
+            // var list1 = GetAllEntityToDto(list);// ObjectMapper.Map<IList<TDto>>(list);//使用映射的好处是子类扩展多个属性时都可以使用映射，避免大量属性赋值的代码
 
 
             //这里应该加个开关，因为子类可能并不需要遍历
@@ -875,25 +734,27 @@ namespace BXJG.Utils.Application.GeneralTree
             return list1.Where(c => c.ParentId == input.ParentId).ToList();
 
         }
-        ///// <summary>
-        ///// 获取列表时回调，你可以重写以Include更多导航属性
-        ///// </summary>
-        ///// <param name="q"></param>
-        ///// <returns></returns>
-        //protected virtual IQueryable<TEntity> GetAllInclude(IQueryable<TEntity> q) => q;
-
         /// <summary>
-        /// 获取所有数据的查询，默认已加入parentCode条件
+        /// 获取列表时的include操作
         /// </summary>
+        /// <param name="q"></param>
+        /// <returns></returns>
+        protected virtual IQueryable<TEntity> GetAllInclude(IQueryable<TEntity> q)
+        {
+            return q;//BuildQuery已经include父节点了
+        }
+        /// <summary>
+        /// 获取所有数据的查询
+        /// </summary>
+        /// <param name="q"></param>
         /// <param name="input">输入参数</param>
         /// <param name="parentCode">父节点code</param>
-        /// <param name="context">不要再使用此参数，请直接使用uow.Items</param>
         /// <returns></returns>
-        protected virtual IQueryable<TEntity> GetAllFiltered(TGetAllInput input, string parentCode)
+        protected virtual IQueryable<TEntity> GetAllFilter(IQueryable<TEntity> q, TGetAllInput input, string parentCode)
         {
-            var q = BuildQuery().AsNoTrackingWithIdentityResolution().WhereIf(!input.IsOnlyLoadChild, c => c.Code.StartsWith(parentCode))
-                                                                      .WhereIf(input.IsOnlyLoadChild && parentCode.IsNotNullOrWhiteSpaceBXJG(), c => c.Parent.Code==parentCode|| c.Code==parentCode)
-                                .WhereIf(input.IsOnlyLoadChild && parentCode.IsNullOrWhiteSpaceBXJG(), c => !c.ParentId.HasValue);
+            q = q.WhereIf(!input.IsOnlyLoadChild, c => c.Code.StartsWith(parentCode))
+                 .WhereIf(input.IsOnlyLoadChild && parentCode.IsNotNullOrWhiteSpaceBXJG(), c => c.Parent.Code == parentCode || c.Code == parentCode)
+                 .WhereIf(input.IsOnlyLoadChild && parentCode.IsNullOrWhiteSpaceBXJG(), c => !c.ParentId.HasValue);
             if (input is IHaveFilter p)
                 q = q.ApplyDynamicCondtion(p.Filter);
             return q;
@@ -901,49 +762,54 @@ namespace BXJG.Utils.Application.GeneralTree
         /// <summary>
         /// 获取所有数据的排序
         /// </summary>
-        /// <param name="input">输入参数</param>
         /// <param name="query">查询</param>
-        /// <param name="context">不要再使用此参数，请直接使用uow.Items</param>
+        /// <param name="input">输入参数</param>
         /// <returns></returns>
-        protected virtual IQueryable<TEntity> GetAllSorting(IQueryable<TEntity> query, TGetAllInput input)
+        protected virtual IQueryable<TEntity> GetAllSort(IQueryable<TEntity> query, TGetAllInput input)
         {
             return query.OrderBy(c => c.Code);
         }
-        /// <summary>
-        /// 获取所有数据的实体到dto的映射
-        /// </summary>
-        /// <param name="entities">实体列表</param>
-        /// <param name="context">不要再使用此参数，请直接使用uow.Items</param>
-        /// <returns></returns>
-        protected virtual List<TDto> GetAllEntityToDto(IEnumerable<TEntity> entities)
-        {
-            var dtos = ObjectMapper.Map<List<TDto>>(entities);
-            foreach (var item in dtos)
-            {
-                var entity = entities.Single(c => c.Id == item.Id);
-                EntityToDto(entity, item);
-            }
-            return dtos;
-        }
         #endregion
 
+        #region 辅助
         #region 权限判断
+        /// <summary>
+        /// 检查新增权限，若失败则抛出异常
+        /// </summary>
+        /// <returns></returns>
         protected virtual Task CheckCreatePermissionAsync()
         {
             return CheckPermissionAsync(CreatePermissionName);
         }
+        /// <summary>
+        /// 检查修改权限，若失败则抛出异常
+        /// </summary>
+        /// <returns></returns>
         protected virtual Task CheckUpdatePermissionAsync()
         {
             return CheckPermissionAsync(UpdatePermissionName);
         }
+        /// <summary>
+        /// 检查删除权限，若失败则抛出异常
+        /// </summary>
+        /// <returns></returns>
         protected virtual Task CheckDeletePermissionAsync()
         {
             return CheckPermissionAsync(DeletePermissionName);
         }
+        /// <summary>
+        /// 检查查询权限，若失败则抛出异常
+        /// </summary>
+        /// <returns></returns>
         protected virtual Task CheckGetPermissionAsync()
         {
             return CheckPermissionAsync(GetPermissionName);
         }
+        /// <summary>
+        /// 检查指定权限，若失败则抛出异常
+        /// </summary>
+        /// <param name="permissionName"></param>
+        /// <returns></returns>
         protected virtual async Task CheckPermissionAsync(string permissionName)
         {
             //if (string.IsNullOrWhiteSpace(permissionName))
@@ -959,8 +825,83 @@ namespace BXJG.Utils.Application.GeneralTree
             }
         }
         #endregion
+        /// <summary>
+        /// 新增和修改都会执行的逻辑，若需要传递额外参数，请使用当前Uow.Items
+        /// 根据需要选择重写
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        protected virtual ValueTask MapToEntity(TEntity entity)
+        {
+            if (entity.ParentId == 0)
+                entity.ParentId = null;
+            return ValueTask.CompletedTask;
+        }
+        /// <summary>
+        /// 实体转换为dto，默认使用ObjectMapper映射
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        protected virtual TDto EntityToDto(TEntity entity)
+        {
+            return ObjectMapper.Map<TDto>(entity);
+        }
+        /// <summary>
+        /// 所有查询都会调用，可以重写以应用所有查询都需要的Include
+        /// </summary>
+        /// <param name="track">是否跟踪实体</param>
+        /// <returns></returns>
+        protected virtual IQueryable<TEntity> BuildQuery(bool track = true)
+        {
+            IQueryable<TEntity> q = Repository.GetAll().Include(c => c.Parent);
+            if (!track)
+                q = q.AsNoTrackingWithIdentityResolution();
+            return q;
+        }
+        /// <summary>
+        /// 批量处理
+        /// </summary>
+        /// <param name="ids">目标id集合</param>
+        /// <param name="func">每个实体的具体操作</param>
+        /// <param name="funcName">单个操作的名称</param>
+        /// <returns></returns>
+        protected virtual async Task<BatchOperationOutputLong> BatchHandleAsync(IEnumerable<long> ids, Func<TEntity, Task> func, string funcName = "删除")
+        {
+            var r = new BatchOperationOutputLong();
+            foreach (var id in ids)
+            {
+                try
+                {
+                    using var uow = UnitOfWorkManager.Begin(System.Transactions.TransactionScopeOption.RequiresNew);
+                    var entity = await GetEntityByIdAsync(id);//这里每次查询性能更低，但是代码更清晰简洁
+                    await func(entity);
+                    await uow.CompleteAsync();
+                    r.Ids.Add(id);
+                }
+                catch (UserFriendlyException ex)
+                {
+                    r.ErrorMessage.Add(new BatchOperationErrorMessage(id, ex.Message));
+                }
+                catch (Exception ex)
+                {
+                    r.ErrorMessage.Add(id.Message500());
+                    Logger.Warn($"部分{funcName}失败！{id}", ex);
+                }
+            }
+            return r;
+        }
+        /// <summary>
+        /// 增、删、改、获取单个时都会调用，用来根据id获取实体
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="track">是否跟踪实体</param>
+        /// <returns></returns>
+        protected virtual Task<TEntity> GetEntityByIdAsync(long id, bool track = true)
+        {
+            return AsyncQueryableExecuter.FirstOrDefaultAsync(BuildQuery(track).Where(c => c.Id == id));
+        }
+        #endregion
     }
-
 
     /// <summary>
     /// 通用的树形结构的数据的crud抽象服务（完整）
@@ -977,68 +918,16 @@ namespace BXJG.Utils.Application.GeneralTree
                                            TDto,
                                            TCreateInput,
                                            TEditDto,
-                                           TGetAllInput,
-                                           TDeleteInput,
-                                           TGetInput,
-                                           TMoveInput> : GeneralTreeBaseAppService<TEntity,
+                                           TGetAllInput> : GeneralTreeBaseAppService<TEntity,
                                                                                    TDto,
                                                                                    TCreateInput,
                                                                                    TEditDto,
                                                                                    TGetAllInput,
-                                                                                   TDeleteInput,
-                                                                                   TGetInput,
-                                                                                   TMoveInput,
                                                                                    GeneralTreeManager<TEntity>>, IGeneralTreeBaseAppService<TDto,
                                                                                                                                             TCreateInput,
                                                                                                                                             TEditDto,
-                                                                                                                                            TGetAllInput,
-                                                                                                                                            TDeleteInput,
-                                                                                                                                            TGetInput,
-                                                                                                                                            TMoveInput>
+                                                                                                                                            TGetAllInput>
         where TCreateInput : GeneralTreeNodeEditBaseDto //注意这里约束为TEditDto，这样强制要求继承编辑模型不合理
-        where TDeleteInput : BatchOperationInputLong
-        where TGetInput : EntityDto<long>
-        where TEntity : GeneralTreeEntity<TEntity>
-        where TDto : GeneralTreeNodeBaseDto<TDto>, new()
-        where TEditDto : GeneralTreeNodeEditBaseDto//父类可以对输入做一定的处理
-        where TGetAllInput : GeneralTreeGetTreeInput
-        where TMoveInput : GeneralTreeNodeMoveInput
-    {
-
-    }
-
-    /// <summary>
-    /// 通用的树形结构的数据的crud抽象服务（完整）
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <typeparam name="TDto"></typeparam>
-    /// <typeparam name="TCreateInput"></typeparam>
-    /// <typeparam name="TDeleteInput"></typeparam>
-    /// <typeparam name="TEditDto"></typeparam>
-    /// <typeparam name="TGetAllInput"></typeparam>
-    /// <typeparam name="TGetInput"></typeparam>
-    public class GeneralTreeBaseAppService<TEntity,
-                                           TDto,
-                                           TCreateInput,
-                                           TEditDto,
-                                           TGetAllInput,
-                                           TDeleteInput,
-                                           TGetInput> : GeneralTreeBaseAppService<TEntity,
-                                                                                  TDto,
-                                                                                  TCreateInput,
-                                                                                  TEditDto,
-                                                                                  TGetAllInput,
-                                                                                  TDeleteInput,
-                                                                                  TGetInput,
-                                                                                  GeneralTreeNodeMoveInput>, IGeneralTreeBaseAppService<TDto,
-                                                                                                                                        TCreateInput,
-                                                                                                                                        TEditDto,
-                                                                                                                                        TGetAllInput,
-                                                                                                                                        TDeleteInput,
-                                                                                                                                        TGetInput>
-        where TCreateInput : GeneralTreeNodeEditBaseDto //注意这里约束为TEditDto，这样强制要求继承编辑模型不合理
-        where TDeleteInput : BatchOperationInputLong
-        where TGetInput : EntityDto<long>
         where TEntity : GeneralTreeEntity<TEntity>
         where TDto : GeneralTreeNodeBaseDto<TDto>, new()
         where TEditDto : GeneralTreeNodeEditBaseDto//父类可以对输入做一定的处理
@@ -1047,71 +936,6 @@ namespace BXJG.Utils.Application.GeneralTree
 
     }
 
-    /// <summary>
-    /// 通用的树形结构的数据的crud抽象服务（完整）
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <typeparam name="TDto"></typeparam>
-    /// <typeparam name="TCreateInput"></typeparam>
-    /// <typeparam name="TDeleteInput"></typeparam>
-    /// <typeparam name="TEditDto"></typeparam>
-    /// <typeparam name="TGetAllInput"></typeparam>
-    public class GeneralTreeBaseAppService<TEntity,
-                                           TDto,
-                                           TCreateInput,
-                                           TEditDto,
-                                           TGetAllInput,
-                                           TDeleteInput> : GeneralTreeBaseAppService<TEntity,
-                                                                                     TDto,
-                                                                                     TCreateInput,
-                                                                                     TEditDto,
-                                                                                     TGetAllInput,
-                                                                                     TDeleteInput,
-                                                                                     EntityDto<long>>, IGeneralTreeBaseAppService<TDto,
-                                                                                                                                  TCreateInput,
-                                                                                                                                  TEditDto,
-                                                                                                                                  TGetAllInput,
-                                                                                                                                  TDeleteInput>
-        where TCreateInput : GeneralTreeNodeEditBaseDto //注意这里约束为TEditDto，这样强制要求继承编辑模型不合理
-        where TDeleteInput : BatchOperationInputLong
-        where TEntity : GeneralTreeEntity<TEntity>
-        where TDto : GeneralTreeNodeBaseDto<TDto>, new()
-        where TEditDto : GeneralTreeNodeEditBaseDto//父类可以对输入做一定的处理
-        where TGetAllInput : GeneralTreeGetTreeInput
-    {
-
-    }
-
-    /// <summary>
-    /// 通用的树形结构的数据的crud抽象服务（完整）
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <typeparam name="TDto"></typeparam>
-    /// <typeparam name="TCreateInput"></typeparam>
-    /// <typeparam name="TGetAllInput"></typeparam>
-    /// <typeparam name="TEditDto"></typeparam>
-    public class GeneralTreeBaseAppService<TEntity,
-                                           TDto,
-                                           TCreateInput,
-                                           TEditDto,
-                                           TGetAllInput> : GeneralTreeBaseAppService<TEntity,
-                                                                                     TDto,
-                                                                                     TCreateInput,
-                                                                                     TEditDto,
-                                                                                     TGetAllInput,
-                                                                                     BatchOperationInputLong/* GeneralTreeGetTreeInput*/>, IGeneralTreeBaseAppService<TDto,
-                                                                                                                                          TCreateInput,
-                                                                                                                                          TEditDto,
-                                                                                                                                          TGetAllInput>
-        where TCreateInput : GeneralTreeNodeEditBaseDto //注意这里约束为TEditDto，这样强制要求继承编辑模型不合理
-     //   where TDeleteInput : BatchOperationInputLong
-            where TGetAllInput : GeneralTreeGetTreeInput
-        where TEntity : GeneralTreeEntity<TEntity>
-        where TDto : GeneralTreeNodeBaseDto<TDto>, new()
-        where TEditDto : GeneralTreeNodeEditBaseDto//父类可以对输入做一定的处理
-    {
-
-    }
 
     /// <summary>
     /// 通用的树形结构的数据的crud抽象服务（完整）

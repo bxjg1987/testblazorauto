@@ -113,7 +113,7 @@ namespace BXJG.Utils.RCL.Components
         /// </summary>
         /// <param name="output">批量操作结果</param>
         /// <param name="funName">操作名</param>
-        protected virtual async Task BatchOperationMessage(BatchOperationOutputLong output, string funName = "删除")
+        protected virtual async Task BatchOperationMessage(BatchOperationOutputBase output, string funName = "删除")
         {
             if (output.ErrorMessage.Any())
             {
@@ -450,11 +450,11 @@ namespace BXJG.Utils.RCL.Components
                 isDeleting = false;
             }
         }
-        protected virtual Task<BatchOperationOutputLong> DeleteCore()
+        protected virtual Task<BatchOperationOutput<long>> DeleteCore()
         {
             //不要再判断权限了，因为没有权限的，按钮不会显示，且应用服务本身还会验证权限
 
-            return HttpClient.DeleteBatchTree<TEntityDto>(new BatchOperationInputLong { Ids = SelectedItems.Select(x => x.Id).ToArray() });
+            return HttpClient.DeleteBatch<long,TEntityDto>(new BatchOperationInputLong { Ids = SelectedItems.Select(x => x.Id).ToArray() });
 
 
         }
@@ -501,9 +501,7 @@ namespace BXJG.Utils.RCL.Components
         }
         protected virtual async Task DeleteItemCore(TEntityDto item)
         {
-            var r = await HttpClient.DeleteBatchTree<TEntityDto>(new{ Ids = new[] { item.Id } });
-            if (r.Ids.Count != 1)
-                throw new Abp.UI.UserFriendlyException(r.ErrorMessage.First().Message);
+            await HttpClient.Delete<TEntityDto>(new{   item.Id });
         }
         #endregion
 

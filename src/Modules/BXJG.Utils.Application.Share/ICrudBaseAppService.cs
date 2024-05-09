@@ -44,7 +44,7 @@ namespace BXJG.Utils.Application.Share
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task<BatchOperationOutput<TPrimaryKey>> BatchDeleteAsync(BatchOperationInput<TPrimaryKey> input);
+        Task<BatchOperationOutput<TPrimaryKey>> DeleteBatchAsync(BatchOperationInput<TPrimaryKey> input);
 
         // 其它批量操作不应该在基础抽象接口中定义。
     }

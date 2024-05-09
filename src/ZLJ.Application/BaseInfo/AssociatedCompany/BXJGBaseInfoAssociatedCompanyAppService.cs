@@ -121,7 +121,7 @@ namespace ZLJ.Application.BaseInfo.AssociatedCompany
             //  return await base.UpdateAsync(input);
         }
 
-        protected override async ValueTask BatchDeleteItemAsync(AssociatedCompanyEntity u)
+        protected override async Task DeleteCore(AssociatedCompanyEntity u)
         {
             if (u.CategoryId != 17)
             {
@@ -136,7 +136,7 @@ namespace ZLJ.Application.BaseInfo.AssociatedCompany
                 }
             }
           //  await Repository.DeleteAsync(u);
-            await base.BatchDeleteItemAsync(u);
+            await base.DeleteCore(u);
         }
         ///// <summary>
         ///// 批量删除

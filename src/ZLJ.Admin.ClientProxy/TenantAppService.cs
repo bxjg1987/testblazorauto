@@ -19,7 +19,7 @@ namespace ZLJ.Admin.ClientProxy
             httpClient = httpClientFactory.CreateHttpClientAdmin();
         }
 
-        public async Task<BatchOperationOutput<int>> BatchDeleteAsync(BatchOperationInput<int> input)
+        public async Task<BatchOperationOutput<int>> DeleteBatchAsync(BatchOperationInput<int> input)
         {
             return await httpClient.Post<BatchOperationOutput<int>>("tenant/BatchDelete", input);
         }

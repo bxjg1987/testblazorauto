@@ -23,6 +23,7 @@ using ZLJ.Application.Common.Users;
 using ZLJ.Application.Authorization.Permissions;
 using ZLJ.Application.Share.Roles;
 using ZLJ.Application.Share.Authorization.Permissions;
+using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace ZLJ.Application.Users
 {
@@ -101,10 +102,10 @@ namespace ZLJ.Application.Users
 
             MapToEntity(input, user);
             user.Surname = user.Name;
-          
+
             CheckErrors(await _userManager.UpdateAsync(user));
 
-           
+
             if (input.RoleNames != null)
             {
                 CheckErrors(await _userManager.SetRolesAsync(user, input.RoleNames));
@@ -117,25 +118,33 @@ namespace ZLJ.Application.Users
             var user = await _userManager.GetUserByIdAsync(input.Id);
             await _userManager.DeleteAsync(user);
         }
-        public async Task<IEnumerable<long>> DeleteBatchAsync(IList<long> input)
+
+        //public async Task<IEnumerable<long>> DeleteBatchAsync(IList<long> input)
+        //{
+        //    CheckDeletePermission();
+
+        //    if (AbpSession.UserId.HasValue && input.Contains(AbpSession.UserId.Value))
+        //        input.Remove(AbpSession.UserId.Value);
+
+        //    input.Remove(1);
+
+        //    var list = new List<long>();
+        //    foreach (var item in input)
+        //    {
+        //        var user = await _userManager.GetUserByIdAsync(item);
+        //        var r = await _userManager.DeleteAsync(user);
+        //        if (r.Succeeded)
+        //            list.Add(item);
+        //    }
+        //    return list;
+        //}
+        protected override async Task DeleteCore(User entity)
         {
-            CheckDeletePermission();
-
-            if (AbpSession.UserId.HasValue && input.Contains(AbpSession.UserId.Value))
-                input.Remove(AbpSession.UserId.Value);
-
-            input.Remove(1);
-
-            var list = new List<long>();
-            foreach (var item in input)
-            {
-                var user = await _userManager.GetUserByIdAsync(item);
-                var r = await _userManager.DeleteAsync(user);
-                if (r.Succeeded)
-                    list.Add(item);
-            }
-            return list;
+            if (AbpSession.UserId.HasValue && AbpSession.UserId.Value == entity.Id)
+                throw new UserFriendlyException("不允许删除自己");
+            await _userManager.DeleteAsync(entity);
         }
+
         public async Task<ListResultDto<RoleDto>> GetRoles()
         {
             var roles = await _roleRepository.GetAllListAsync();
@@ -167,7 +176,7 @@ namespace ZLJ.Application.Users
             return user;
         }
 
-      
+
         protected override void MapToEntity(EditUserDto input, User user)
         {
             ObjectMapper.Map(input, user);

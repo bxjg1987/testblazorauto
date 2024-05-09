@@ -35,7 +35,7 @@
 
 		<PackageReference Include="Abp.Web.Common" Version="9.2.2" />
 
-		<PackageReference Include="AntDesign" Version="0.18.3" />
+		<PackageReference Include="AntDesign" Version="0.19.0" />
 
 		<!--<PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.2" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.2" />-->

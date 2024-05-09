@@ -65,7 +65,7 @@ namespace BXJG.Common.Contracts
         /// 操作失败的id和原因<br />
         /// 理想的需要如下形式，但abp中 后端和前端都没有针对此方式做适配，因此也可以在错误时封装为UserFriendlyException
         /// </summary>
-        public virtual IList<BatchOperationErrorMessage> ErrorMessage { get; } = new List<BatchOperationErrorMessage>();
+        public virtual IList<BatchOperationErrorMessage> ErrorMessage { get; set; } = new List<BatchOperationErrorMessage>();
         IList<object> _ids = new List<object>();
         protected virtual IList<object> GetIds() => _ids;
     }

@@ -23,13 +23,15 @@ namespace ZLJ.RCL.Components
      * selectTree查看文档时要同时结合select的文档
      */
 
+    //有时候需要绑定long? 有时候需要绑定long 索性用string作为value，然后提供两个外挂属性绑定
+
     /// <summary>
     /// 参考开发随记中的设计思路
     /// 这是泛型的、通用的、统一树形的 下拉树选择框，它不限定是用在搜索（重在事件触发数据加载）还是表单（重在双向绑定）
     /// 推荐所有树形数据的选择都继承它
     /// </summary>
     /// <typeparam name="TGetTreeForSelectOutput"></typeparam>
-    public class TreeSelectZlj<TGetTreeForSelectOutput> : TreeSelect<TGetTreeForSelectOutput> where TGetTreeForSelectOutput : IGeneralTree<TGetTreeForSelectOutput>
+    public class TreeSelectZlj<TGetTreeForSelectOutput> : TreeSelect<string,TGetTreeForSelectOutput> where TGetTreeForSelectOutput : IGeneralTree<TGetTreeForSelectOutput>
         //where TGetNodesForSelectOutput : ComboboxItemDto 由于我们规定了统一使用树，所以这个约束没有必要
     {
         [Inject]

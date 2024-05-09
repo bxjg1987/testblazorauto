@@ -29,12 +29,15 @@ namespace ZLJ.Admin.ClientProxy
 
 
 
-        public async Task<BatchOperationOutputLong> DeleteAsync(BatchOperationInputLong input)
+        public async Task DeleteAsync(EntityDto<long> input)
         {
-            return await _httpClient.Post<BatchOperationOutputLong>("bxjgbaseinfoAdministrative/Delete", input);
+             await _httpClient.Post<BatchOperationOutputLong>("bxjgbaseinfoAdministrative/Delete", input);
         }
 
-
+        public async Task<BatchOperationOutputLong> DeleteBatchAsync(BatchOperationInputLong input)
+        {
+            return await _httpClient.Post<BatchOperationOutputLong>("bxjgbaseinfoAdministrative/DeleteBatch", input);
+        }
 
         public async Task<List<AdministrativeDto>> GetAllAsync(GetAdministrativeInput input)
         {

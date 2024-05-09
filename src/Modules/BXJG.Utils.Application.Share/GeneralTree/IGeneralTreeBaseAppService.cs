@@ -87,22 +87,12 @@ namespace BXJG.Utils.Application.Share.GeneralTree
     /// <typeparam name="TDto">管理页面显示的Dto类型</typeparam>
     /// <typeparam name="TCreateInput">新增模型</typeparam>
     /// <typeparam name="TEditDto">编辑模型</typeparam>
-    /// <typeparam name="TDeleteInput">删除时的输入模型</typeparam>
     /// <typeparam name="TGetAllInput">管理页面获取所有树形数据时的输入模型</typeparam>
-    /// <typeparam name="TGetInput">获取单个信息的输入模型</typeparam>
-    /// <typeparam name="TMoveInput">移动节点时的输入模型</typeparam>
     public interface IGeneralTreeBaseAppService<TDto,
                                                 in TCreateInput,
                                                 in TEditDto,
-                                                in TGetAllInput,
-                                                in TDeleteInput,
-                                                in TGetInput,
-                                                in TMoveInput> : IApplicationService
+                                                in TGetAllInput> : IApplicationService
     {
-        /*
-         * 返回列表都是IList abp官网的一般是IReadOnlyList，为了方便调用方进一步做处理 我们这里返回IList
-         */
-
         /// <summary>
         /// 创建树形结构数据的节点
         /// </summary>
@@ -120,13 +110,19 @@ namespace BXJG.Utils.Application.Share.GeneralTree
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task<BatchOperationOutputLong> DeleteAsync(TDeleteInput input);
+        Task DeleteAsync(EntityDto<long> input);
+        /// <summary>
+        /// 批量删除节点
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        Task<BatchOperationOutputLong> DeleteBatchAsync(BatchOperationInputLong input);
         /// <summary>
         /// 移动节点，服务端将自动重新生成所有兄弟节点的code
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task<TDto> MoveAsync(TMoveInput input);
+        Task<TDto> MoveAsync(GeneralTreeNodeMoveInput input);
         /// <summary>
         /// 获取所有数据，通常由展示的列表页面调用
         /// </summary>
@@ -138,70 +134,8 @@ namespace BXJG.Utils.Application.Share.GeneralTree
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task<TDto> GetAsync(TGetInput input);
+        Task<TDto> GetAsync(EntityDto<long> input);
     }
-
-
-    /// <summary>
-    /// 通用树形结构服务接口，其它树形接口应该继承此接口以获得树形结构数据的通用功能
-    /// </summary>
-    /// <typeparam name="TDto">管理页面显示的Dto类型</typeparam>
-    /// <typeparam name="TCreateInput">新增模型</typeparam>
-    /// <typeparam name="TEditDto">编辑模型</typeparam>
-    /// <typeparam name="TDeleteInput">删除时的输入模型</typeparam>
-    /// <typeparam name="TGetAllInput">管理页面获取所有树形数据时的输入模型</typeparam>
-    /// <typeparam name="TGetInput">获取单个信息的输入模型</typeparam>
-    public interface IGeneralTreeBaseAppService<TDto,
-                                                in TCreateInput,
-                                                in TEditDto,
-                                                in TGetAllInput,
-                                                in TDeleteInput,
-                                                in TGetInput> : IGeneralTreeBaseAppService<TDto,
-                                                                                           TCreateInput,
-                                                                                           TEditDto,
-                                                                                           TGetAllInput,
-                                                                                           TDeleteInput,
-                                                                                           TGetInput,
-                                                                                           GeneralTreeNodeMoveInput>
-    { }
-
-    /// <summary>
-    /// 通用树形结构服务接口，其它树形接口应该继承此接口以获得树形结构数据的通用功能
-    /// </summary>
-    /// <typeparam name="TDto">管理页面显示的Dto类型</typeparam>
-    /// <typeparam name="TCreateInput">新增模型</typeparam>
-    /// <typeparam name="TEditDto">编辑模型</typeparam>
-    /// <typeparam name="TDeleteInput">删除时的输入模型</typeparam>
-    /// <typeparam name="TGetAllInput">管理页面获取所有树形数据时的输入模型</typeparam>
-    public interface IGeneralTreeBaseAppService<TDto,
-                                                in TCreateInput,
-                                                in TEditDto,
-                                                in TGetAllInput,
-                                                in TDeleteInput> : IGeneralTreeBaseAppService<TDto,
-                                                                                              TCreateInput,
-                                                                                              TEditDto,
-                                                                                              TGetAllInput,
-                                                                                              TDeleteInput,
-                                                                                              EntityDto<long>>
-    { }
-
-
-    /// <summary>
-    /// 通用树形结构服务接口，其它树形接口应该继承此接口以获得树形结构数据的通用功能
-    /// </summary>
-    /// <typeparam name="TDto">管理页面显示的Dto类型</typeparam>
-    /// <typeparam name="TCreateInput">新增模型</typeparam>
-    /// <typeparam name="TEditDto">编辑模型</typeparam>
-    /// <typeparam name="TGetAllInput">删除时的输入模型</typeparam>
-    public interface IGeneralTreeBaseAppService<TDto,
-                                                in TCreateInput,
-                                                in TEditDto,
-                                                in TGetAllInput> : IGeneralTreeBaseAppService<TDto,
-                                                                                              TCreateInput,
-                                                                                              TEditDto,
-                                                                                              TGetAllInput,
-                                                                                              BatchOperationInputLong>
-    { }
     /// <summary>
     /// 通用树形结构服务接口，其它树形接口应该继承此接口以获得树形结构数据的通用功能
     /// </summary>

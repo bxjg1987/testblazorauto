@@ -76,25 +76,28 @@ namespace BXJG.Utils.Application
         {
             CheckCreatePermission();
             TEntity entity = MapToEntity(input);
-            await Repository.InsertAsync(entity).ConfigureAwait(continueOnCapturedContext: false);
-            await base.CurrentUnitOfWork.SaveChangesAsync().ConfigureAwait(continueOnCapturedContext: false);
-            entity = await AsyncQueryableExecuter.FirstOrDefaultAsync(GetEntityByIdInclude(entity.Id, false));//.SingleAsync(c => c.Id.Equals(id));
-            return base.MapToEntityDto(entity);
+            await MapToEntity(entity);
+            await Repository.InsertAsync(entity);
+            await CurrentUnitOfWork.SaveChangesAsync();
+            //重新查一次，以便获取关联数据
+            entity = await GetEntityByIdAsync(entity.Id, false);//.SingleAsync(c => c.Id.Equals(id));
+            return MapToEntityDto(entity);
         }
         public override async Task<TEntityDto> UpdateAsync(TUpdateInput input)
         {
             CheckUpdatePermission();
-            TEntity entity = await GetEntityByIdAsync(input.Id).ConfigureAwait(continueOnCapturedContext: false);
+            TEntity entity = await GetEntityByIdAsync(input.Id);
             MapToEntity(input, entity);
-            await base.CurrentUnitOfWork.SaveChangesAsync().ConfigureAwait(continueOnCapturedContext: false);
-             entity = await AsyncQueryableExecuter.FirstOrDefaultAsync(GetEntityByIdInclude(entity.Id, false));//.SingleAsync(c => c.Id.Equals(id));
-            return base.MapToEntityDto(entity);
+            await MapToEntity(entity);
+            await CurrentUnitOfWork.SaveChangesAsync();
+            entity = await GetEntityByIdAsync(entity.Id, false); //.SingleAsync(c => c.Id.Equals(id));
+            return MapToEntityDto(entity);
         }
         public override async Task DeleteAsync(TDeleteInput input)
         {
             CheckDeletePermission();
             var entity = await GetEntityByIdAsync(input.Id);
-            await BatchDeleteItemAsync(entity);
+            await DeleteCore(entity);
         }
 
         protected CrudBaseAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
@@ -116,7 +119,7 @@ namespace BXJG.Utils.Application
             var r = base.MapToEntity(createInput);
             if (r is IEntity<Guid> et)
                 et.Id = SequentialGuidGenerator.Instance.Create();
-            MapToEntity(r);
+
             return r;
         }
         /// <summary>
@@ -127,25 +130,26 @@ namespace BXJG.Utils.Application
         protected override void MapToEntity(TUpdateInput updateInput, TEntity entity)
         {
             base.MapToEntity(updateInput, entity);
-            MapToEntity(entity);
+
         }
         /// <summary>
         /// 新增和修改都会执行的逻辑，若需要传递额外参数，请使用当前Uow.Items
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        protected virtual void MapToEntity(TEntity entity) { }
+        protected virtual ValueTask MapToEntity(TEntity entity) => ValueTask.CompletedTask;
 
         /// <summary>
         /// 批量处理
         /// </summary>
-        /// <param name="input">前端传入的参数</param>
+        /// <param name="ids">前端传入的参数</param>
         /// <param name="func">处理其中每一个时回调</param>
+        /// <param name="funcName">处理其中每一个时回调</param>
         /// <returns></returns>
-        protected virtual async Task<BatchOperationOutput<TPrimaryKey>> BatchHandleAsync(BatchOperationInput<TPrimaryKey> input, Func<TEntity, ValueTask> func)
+        protected virtual async Task<BatchOperationOutput<TPrimaryKey>> BatchHandleAsync(IEnumerable<TPrimaryKey> ids, Func<TEntity, Task> func, string funcName = "删除")
         {
             var r = new BatchOperationOutput<TPrimaryKey>();
-            foreach (var id in input.Ids)
+            foreach (var id in ids)
             {
                 try
                 {
@@ -162,7 +166,7 @@ namespace BXJG.Utils.Application
                 catch (Exception ex)
                 {
                     r.ErrorMessage.Add(id.Message500());
-                    Logger.Warn($"部分操作失败！{id}", ex);
+                    Logger.Warn($"部分{funcName}失败！{id}", ex);
                 }
             }
             return r;
@@ -174,17 +178,17 @@ namespace BXJG.Utils.Application
         /// <param name="input"></param>
         /// <returns></returns>
         [UnitOfWork(IsDisabled = true)]
-        public virtual async Task<BatchOperationOutput<TPrimaryKey>> BatchDeleteAsync(BatchOperationInput<TPrimaryKey> input)
+        public virtual async Task<BatchOperationOutput<TPrimaryKey>> DeleteBatchAsync(BatchOperationInput<TPrimaryKey> input)
         {
             CheckDeletePermission();
-            return await BatchHandleAsync(input, BatchDeleteItemAsync);
+            return await BatchHandleAsync(input.Ids, DeleteCore);
         }
         /// <summary>
         /// 批量删除过程中，删除每个实体时回调
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        protected virtual async ValueTask BatchDeleteItemAsync(TEntity entity)
+        protected virtual async Task DeleteCore(TEntity entity)
         {
             await Repository.DeleteAsync(entity);
         }
@@ -203,12 +207,11 @@ namespace BXJG.Utils.Application
             return q;
         }
 
-        ///// <summary>
-        ///// 获取列表时回调，你可以重写以Include更多导航属性
-        ///// </summary>
-        ///// <param name="q"></param>
-        ///// <returns></returns>
-        //protected virtual IQueryable<TEntity> GetAllInclude(IQueryable<TEntity> q) => GetInclude(q);
+        /// <summary>
+        /// 重写以关闭工作单元
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         [UnitOfWork(false)]
         public override Task<PagedResultDto<TEntityDto>> GetAllAsync(TGetAllInput input)
         {
@@ -217,8 +220,8 @@ namespace BXJG.Utils.Application
         [UnitOfWork(false)]
         public override async Task<TEntityDto> GetAsync(TGetInput input)
         {
-            var entity = await AsyncQueryableExecuter.FirstOrDefaultAsync(GetEntityByIdInclude(input.Id,false));//.SingleAsync(c => c.Id.Equals(id));
-            return base.MapToEntityDto(entity);
+            var entity = await GetEntityByIdAsync(input.Id, false);//.SingleAsync(c => c.Id.Equals(id));
+            return MapToEntityDto(entity);
         }
         /// <summary>
         /// 根据id获取实体，且跟踪实体
@@ -228,28 +231,34 @@ namespace BXJG.Utils.Application
         protected override async Task<TEntity> GetEntityByIdAsync(TPrimaryKey id)
         {
             //return base.GetEntityByIdAsync(id);
-            return await AsyncQueryableExecuter.FirstOrDefaultAsync(GetEntityByIdInclude(id));//.SingleAsync(c => c.Id.Equals(id));
+            return await GetEntityByIdAsync(id, true);//.SingleAsync(c => c.Id.Equals(id));
         }
 
         /// <summary>
-        /// 执行GetEntityByIdAsync将回调此方法，可重写此方法来包含导航属性，默认不包含任何导航属性。
+        /// crud中都需要获取单个数据，有时候还需要跟踪实体，通常重写它在查询单个实体是Include更多导航属性
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="include">是否跟踪实体</param>
+        /// <param name="track"></param>
         /// <returns></returns>
-        protected virtual IQueryable<TEntity> GetEntityByIdInclude(TPrimaryKey id, bool include = true) => BuildQuery(include).Where(c => c.Id.Equals(id));
+        protected async Task<TEntity> GetEntityByIdAsync(TPrimaryKey id, bool track)
+        {
+            //return base.GetEntityByIdAsync(id);
+            return await AsyncQueryableExecuter.FirstOrDefaultAsync(BuildQuery(track).Where(c => c.Id.Equals(id)));//.SingleAsync(c => c.Id.Equals(id));
+        }
+
 
         /// <summary>
         /// 获取单个和列表时都会回调，你可以重写以Include更多导航属性
         /// </summary>
-        /// <param name="include">是否跟踪实体</param>
+        /// <param name="track">是否跟踪实体</param>
         /// <returns></returns>
-        protected virtual IQueryable<TEntity> BuildQuery(bool include =true) {
+        protected virtual IQueryable<TEntity> BuildQuery(bool track = true)
+        {
             var q = Repository.GetAll();
-            if (!include)
+            if (!track)
                 return q.AsNoTrackingWithIdentityResolution();
             return q;
-        } 
+        }
     }
 
     /// <summary>

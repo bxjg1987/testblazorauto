@@ -38,6 +38,7 @@ namespace ZLJ.Application.Roles
         IRepository<OrganizationUnit, long> ouRepository;
         OrganizationUnitManager unitManager;
 
+        protected override string DeletePermissionName => PermissionNames.AdministratorSystemRoleDelete;
         public RoleAppService(IRepository<Role> repository, RoleManager roleManager, UserManager userManager,
             IRoleManagementConfig roleManagementConfig, IRepository<OrganizationUnitRole, long> ouRoleRepository, IRepository<OrganizationUnit, long> ouRepository, OrganizationUnitManager unitManager)
             : base(repository)
@@ -308,24 +309,28 @@ namespace ZLJ.Application.Roles
             };
         }
 
-        [AbpAuthorize(PermissionNames.AdministratorSystemRoleDelete)]
-        public async Task<IEnumerable<int>> DeleteBatchAsync(params int[] input)
+        protected override async Task DeleteCore(Role entity)
         {
-            var list = new List<int>();
-            foreach (var item in input)
-            {
-                var role = await _roleManager.GetRoleByIdAsync(item);
-                if (role.IsStatic)
-                {
-                    continue;
-                    //throw new UserFriendlyException("CannotDeleteAStaticRole");
-                }
-                var rt = await _roleManager.DeleteAsync(role);
-                if (rt.Succeeded)
-                    list.Add(role.Id);
-            }
-            return list;
+            await _roleManager.DeleteAsync(entity);
         }
+        //[AbpAuthorize(PermissionNames.AdministratorSystemRoleDelete)]
+        //public async Task<IEnumerable<int>> DeleteBatchAsync(params int[] input)
+        //{
+        //    var list = new List<int>();
+        //    foreach (var item in input)
+        //    {
+        //        var role = await _roleManager.GetRoleByIdAsync(item);
+        //        if (role.IsStatic)
+        //        {
+        //            continue;
+        //            //throw new UserFriendlyException("CannotDeleteAStaticRole");
+        //        }
+        //        var rt = await _roleManager.DeleteAsync(role);
+        //        if (rt.Succeeded)
+        //            list.Add(role.Id);
+        //    }
+        //    return list;
+        //}
 
 
         //[Obsolete("应该单独定义应用服务，而不是在后台管理角色的服务中提供此方法")]

@@ -65,6 +65,4 @@ namespace BXJG.Utils.Application.Share.GeneralTree
         }
         //public dynamic ExtData { get; set; }
     }
-
-
 }

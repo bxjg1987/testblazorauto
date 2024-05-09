@@ -240,15 +240,30 @@ namespace System.Net.Http
             controller = controller.NewMethod<TDto>();
             return client.Delete(data, controller, cancellationToken);
         }
+
         public static Task<BatchOperationOutput<TKey>> DeleteBatch<TKey>(this HttpClient client, object data, string controller, CancellationToken cancellationToken = default)
         {
-            return client.Post<BatchOperationOutput<TKey>>(controller, $"batchdelete", data, default, cancellationToken);
+            return client.Post<BatchOperationOutput<TKey>>(controller, $"DeleteBatch", data, default, cancellationToken);
         }
+     
         public static Task<BatchOperationOutput<TKey>> DeleteBatch<TKey, TDto>(this HttpClient client, object data, string controller = default, CancellationToken cancellationToken = default)
         {
             controller = controller.NewMethod<TDto>();
             return client.DeleteBatch<TKey>(data, controller, cancellationToken);
         }
+
+        //public static Task<BatchOperationOutput<TKey>> DeleteBatchTree<TKey>(this HttpClient client, object data, string controller, CancellationToken cancellationToken = default)
+        //{
+        //    return client.Post<BatchOperationOutput<TKey>>(controller, $"DeleteBatchTree", data, default, cancellationToken);
+        //}
+
+        //public static Task<BatchOperationOutput<TKey>> DeleteBatchTree<TKey, TDto>(this HttpClient client, object data, string controller = default, CancellationToken cancellationToken = default)
+        //{
+        //    controller = controller.NewMethod<TDto>();
+        //    return client.DeleteBatchTree<TKey>(data, controller, cancellationToken);
+        //}
+
+
         /// <summary>
         /// 获取单个数据
         /// </summary>
@@ -322,31 +337,51 @@ namespace System.Net.Http
             controller = controller.NewMethod<TDto>();
             return client.Post<TDto>(controller, "move", data, default, cancellationToken);
         }
-        /// <summary>
-        /// 树形数据只有批量删除
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="controller"></param>
-        /// <param name="data"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public static Task<BatchOperationOutputLong> DeleteBatch(this HttpClient client, object data, string controller, CancellationToken cancellationToken = default)
-        {
-            return client.Post<BatchOperationOutputLong>(controller, $"delete", data, default, cancellationToken);
-        }
-        /// <summary>
-        /// 树形数据只有批量删除
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="controller"></param>
-        /// <param name="data"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public static Task<BatchOperationOutputLong> DeleteBatchTree<TDto>(this HttpClient client, object data, string controller=default, CancellationToken cancellationToken = default)
-        {
-            controller = controller.NewMethod<TDto>();
-            return client.DeleteBatch(data, controller, cancellationToken);
-        }
+
+       
+        ///// <summary>
+        ///// 树形数据只有批量删除
+        ///// </summary>
+        ///// <param name="client"></param>
+        ///// <param name="controller"></param>
+        ///// <param name="data"></param>
+        ///// <param name="cancellationToken"></param>
+        ///// <returns></returns>
+        //public static Task DeleteTree<TDto>(this HttpClient client, object data, string controller = default, CancellationToken cancellationToken = default)
+        //{
+        //    controller = controller.NewMethod<TDto>();
+        //    return client.Delete(data, controller, cancellationToken);
+        //}
+
+
+
+
+
+        ///// <summary>
+        ///// 树形数据只有批量删除
+        ///// </summary>
+        ///// <param name="client"></param>
+        ///// <param name="controller"></param>
+        ///// <param name="data"></param>
+        ///// <param name="cancellationToken"></param>
+        ///// <returns></returns>
+        //public static Task<BatchOperationOutputLong> DeleteBatch(this HttpClient client, object data, string controller, CancellationToken cancellationToken = default)
+        //{
+        //    return client.Post<BatchOperationOutputLong>(controller, $"deletebatch", data, default, cancellationToken);
+        //}
+        ///// <summary>
+        ///// 树形数据只有批量删除
+        ///// </summary>
+        ///// <param name="client"></param>
+        ///// <param name="controller"></param>
+        ///// <param name="data"></param>
+        ///// <param name="cancellationToken"></param>
+        ///// <returns></returns>
+        //public static Task<BatchOperationOutputLong> DeleteBatchTree<TDto>(this HttpClient client, object data, string controller=default, CancellationToken cancellationToken = default)
+        //{
+        //    controller = controller.NewMethod<TDto>();
+        //    return client.DeleteBatch(data, controller, cancellationToken);
+        //}
 
         /// <summary>
         /// 获取不分页的列表
