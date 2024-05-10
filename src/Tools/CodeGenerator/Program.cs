@@ -64,7 +64,8 @@ List<Action<ExecuteContext>> actions2 = new List<Action<ExecuteContext>>
     CreateDto,
     PermissionProvider,
     NavigationProvider,
-   ObjMap
+    ObjMap,
+    AppService
 };
 
 //var model = new { Name = "John Doe" };
@@ -477,4 +478,17 @@ void ObjMap(ExecuteContext ctx)
 
 
     Console.WriteLine("生成ObjMap完成");
+}
+void AppService(ExecuteContext ctx)
+{
+    Console.WriteLine("正在生成AppService...");
+    var str = engine.CompileRenderAsync("AppService", ctx).Result;
+
+    var file = Path.Combine(ctx.SrcDir, ctx.App.ApplicationProjectName, ctx.Model.Name, ctx.Model.ApplicationServiceName+ ".cs");
+    Directory.CreateDirectory(Path.GetDirectoryName(file));
+
+    File.WriteAllText(file, str);
+
+
+    Console.WriteLine("生成AppService完成");
 }

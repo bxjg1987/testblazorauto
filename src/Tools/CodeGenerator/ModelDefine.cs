@@ -191,6 +191,10 @@ namespace CodeGenerator
         /// Application层的命名空间，如：ZLJ.Application.Test
         /// </summary>
         public string ApplicationNamespace => $"{ExecuteContext.App.ApplicationProjectName}.{Name}";
+        /// <summary>
+        /// 某应用的应用服务
+        /// </summary>
+        public string ApplicationServiceName => $"{Name}AppService";
         #endregion
     }
 }

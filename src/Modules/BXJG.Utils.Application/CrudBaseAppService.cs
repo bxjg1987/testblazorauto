@@ -240,7 +240,7 @@ namespace BXJG.Utils.Application
         /// <param name="id"></param>
         /// <param name="track"></param>
         /// <returns></returns>
-        protected async Task<TEntity> GetEntityByIdAsync(TPrimaryKey id, bool track)
+        protected virtual async Task<TEntity> GetEntityByIdAsync(TPrimaryKey id, bool track)
         {
             //return base.GetEntityByIdAsync(id);
             return await AsyncQueryableExecuter.FirstOrDefaultAsync(BuildQuery(track).Where(c => c.Id.Equals(id)));//.SingleAsync(c => c.Id.Equals(id));

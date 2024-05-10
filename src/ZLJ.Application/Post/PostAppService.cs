@@ -21,7 +21,6 @@ using ZLJ.Core.BaseInfo.Post;
 
 namespace ZLJ.Application.Post
 {
-
     [AbpAuthorize(PermissionNames.AdministratorBaseInfoPost)]
     public class PostAppService : AdminCrudBaseAppService<PostEntity, PostDto, int, PagedAndSortedResultRequest<PagedPostResultRequestDto>, CreatePostDto, PostEditDto>, IPostAppService
     {
