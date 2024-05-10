@@ -8,6 +8,7 @@
 }
 using @(Model.Model.CoreNamespace);
 using @(Model.Model.ApplicationCommonShareNamespace);
+using @(Model.Model.ApplicationShareNamespace);
 using Abp.Authorization;
 using BXJG.Utils.Application.Share.Dtos;
 
@@ -19,10 +20,14 @@ namespace @(Model.Model.ApplicationNamespace)
     [AbpAuthorize(@(Model.Model.PermissionNameGetConst))]
     public class @(Model.Model.ApplicationServiceName) : @(Model.App.Name)CrudBaseAppService<@(Model.Model.EntityName), @(Model.Model.DtoName), @(Model.Model.PrimaryField.CSharpType), PagedAndSortedResultRequest<@(Model.Model.ConditionName)>, @(Model.Model.CreateDtoName), @(Model.Model.EditDtoName)>
     {
+        protected @(Model.Model.ApplicationServiceName)(IRepository<@(Model.Model.EntityName), @(Model.Model.PrimaryField.CSharpType)> repository) : base(repository)
+        {
+        }
+
         //提供权限名称
-        protected override string DeletePermissionName => @(Model.Model.PermissionNameGetConst);
-        protected override string DeletePermissionName => @(Model.Model.PermissionNameCreateConst);
-        protected override string DeletePermissionName => @(Model.Model.PermissionNameUpdateConst);
+        protected override string GetPermissionName => @(Model.Model.PermissionNameGetConst);
+        protected override string CreatePermissionName => @(Model.Model.PermissionNameCreateConst);
+        protected override string UpdatePermissionName => @(Model.Model.PermissionNameUpdateConst);
         protected override string DeletePermissionName => @(Model.Model.PermissionNameDeleteConst);
         
         //protected override async ValueTask MapToEntity(@(Model.Model.EntityName) entity)
