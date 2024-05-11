@@ -687,7 +687,7 @@ namespace BXJG.Utils.Application.GeneralTree
             //查询
 
             var query = BuildQuery(false);
-            query = GetAllInclude(query);
+            //query = GetAllInclude(query);
             query = GetAllFilter(query, input, parentCode);//.Where(c => c.Code.StartsWith(parentCode));
             query = GetAllSort(query, input); //方便子类排序
             var list = await AsyncQueryableExecuter.ToListAsync(query);//.ToListAsync();
@@ -734,15 +734,15 @@ namespace BXJG.Utils.Application.GeneralTree
             return list1.Where(c => c.ParentId == input.ParentId).ToList();
 
         }
-        /// <summary>
-        /// 获取列表时的include操作
-        /// </summary>
-        /// <param name="q"></param>
-        /// <returns></returns>
-        protected virtual IQueryable<TEntity> GetAllInclude(IQueryable<TEntity> q)
-        {
-            return q;//BuildQuery已经include父节点了
-        }
+        ///// <summary>
+        ///// 获取列表时的include操作
+        ///// </summary>
+        ///// <param name="q"></param>
+        ///// <returns></returns>
+        //protected virtual IQueryable<TEntity> GetAllInclude(IQueryable<TEntity> q)
+        //{
+        //    return q;//BuildQuery已经include父节点了
+        //}
         /// <summary>
         /// 获取所有数据的查询
         /// </summary>
@@ -767,6 +767,8 @@ namespace BXJG.Utils.Application.GeneralTree
         /// <returns></returns>
         protected virtual IQueryable<TEntity> GetAllSort(IQueryable<TEntity> query, TGetAllInput input)
         {
+            if (input is ISortedResultRequest a&& a.Sorting.IsNotNullOrWhiteSpaceBXJG())
+                    return query.OrderBy(c => a.Sorting);
             return query.OrderBy(c => c.Code);
         }
         #endregion

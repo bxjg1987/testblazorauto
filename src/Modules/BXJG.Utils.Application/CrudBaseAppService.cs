@@ -231,7 +231,7 @@ namespace BXJG.Utils.Application
         protected override async Task<TEntity> GetEntityByIdAsync(TPrimaryKey id)
         {
             //return base.GetEntityByIdAsync(id);
-            return await GetEntityByIdAsync(id, true);//.SingleAsync(c => c.Id.Equals(id));
+            return await GetEntityByIdAsync(id);//.SingleAsync(c => c.Id.Equals(id));
         }
 
         /// <summary>
@@ -240,7 +240,7 @@ namespace BXJG.Utils.Application
         /// <param name="id"></param>
         /// <param name="track"></param>
         /// <returns></returns>
-        protected virtual async Task<TEntity> GetEntityByIdAsync(TPrimaryKey id, bool track)
+        protected virtual async Task<TEntity> GetEntityByIdAsync(TPrimaryKey id, bool track = true)
         {
             //return base.GetEntityByIdAsync(id);
             return await AsyncQueryableExecuter.FirstOrDefaultAsync(BuildQuery(track).Where(c => c.Id.Equals(id)));//.SingleAsync(c => c.Id.Equals(id));

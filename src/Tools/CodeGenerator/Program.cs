@@ -68,6 +68,11 @@ List<Action<ExecuteContext>> actions2 = new List<Action<ExecuteContext>>
     AppService
 };
 
+if (ctx.Model.IsTree)
+    actions2.Add(AppServiceTree);
+else
+    actions2.Add(AppService);
+
 //var model = new { Name = "John Doe" };
 //string result = await engine.CompileRenderAsync("Subfolder/View.cshtml", model);
 string q = "c";
@@ -491,4 +496,16 @@ void AppService(ExecuteContext ctx)
 
 
     Console.WriteLine("生成AppService完成");
+}
+void AppServiceTree(ExecuteContext ctx) {
+    Console.WriteLine("正在生成AppServiceTree...");
+    var str = engine.CompileRenderAsync("AppServiceTree", ctx).Result;
+
+    var file = Path.Combine(ctx.SrcDir, ctx.App.ApplicationProjectName, ctx.Model.Name, ctx.Model.ApplicationServiceName + ".cs");
+    Directory.CreateDirectory(Path.GetDirectoryName(file));
+
+    File.WriteAllText(file, str);
+
+
+    Console.WriteLine("生成AppServiceTree完成");
 }

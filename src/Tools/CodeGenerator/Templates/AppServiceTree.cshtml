@@ -18,17 +18,12 @@ namespace @(Model.Model.ApplicationNamespace)
     /// @(Model.Model.DisplayName) 应用服务
     ///</summary>
     [AbpAuthorize(@(Model.Model.PermissionNameGetConst))]
-    public class @(Model.Model.ApplicationServiceName) : @(Model.App.Name)CrudBaseAppService<@(Model.Model.EntityName), 
-                                                                                             @(Model.Model.DtoName), 
-                                                                                             @(Model.Model.PrimaryField.CSharpType), 
-                                                                                             PagedAndSortedResultRequest<@(Model.Model.ConditionName)>, 
-                                                                                             @(Model.Model.CreateDtoName), 
-                                                                                             @(Model.Model.EditDtoName)>
+    public class @(Model.Model.ApplicationServiceName) : AdminTreeCrudBaseAppService<@(Model.Model.EntityName),
+                                                                                     @(Model.Model.DtoName),
+                                                                                     @(Model.Model.CreateDtoName),
+                                                                                     @(Model.Model.EditDtoName),
+                                                                                     @(Model.Model.ConditionName)>
     {
-        protected @(Model.Model.ApplicationServiceName)(IRepository<@(Model.Model.EntityName), @(Model.Model.PrimaryField.CSharpType)> repository) : base(repository)
-        {
-        }
-
         //提供权限名称
         protected override string GetPermissionName => @(Model.Model.PermissionNameGetConst);
         protected override string CreatePermissionName => @(Model.Model.PermissionNameCreateConst);
@@ -47,15 +42,15 @@ namespace @(Model.Model.ApplicationNamespace)
         //      删除的核心逻辑，通常在这里
         //}
 
-        //protected override async Task<@(Model.Model.EntityName)> GetEntityByIdAsync(@(Model.Model.PrimaryField.CSharpType) id, bool track = true)
+        //protected override async Task<@(Model.Model.EntityName)> GetEntityByIdAsync(long id, bool track = true)
         //{
-        //    return await base.GetEntityByIdAsync(id,track);
+        //    return await base.GetEntityByIdAsync(id, track);
         //    crud都会调用，获取单个实体，通常在这里Include更多导航属性，另外参考BuildQuery方法
         //}
 
-        //protected override IQueryable<@(Model.Model.EntityName)> CreateFilteredQuery(PagedAndSortedResultRequest<@(Model.Model.ConditionName)> input)
+        //protected override IQueryable<@(Model.Model.EntityName)> GetAllFilter(IQueryable<@(Model.Model.EntityName)> q, @(Model.Model.ConditionName) input, string parentCode)
         //{
-        //    return base.CreateFilteredQuery(input);
+        //    return base.GetAllFilter(q, input, parentCode);
         //    获取分页数据时调用，通常在这里Include更多导航属性，另外参考BuildQuery方法
         //}
 
