@@ -2,6 +2,7 @@
 using BXJG.Utils.Localization;
 using System;
 using ZLJ.Application;
+using ZLJ.Application.Share;
 
 namespace System
 {

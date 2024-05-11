@@ -18,6 +18,7 @@ using Abp.Localization.Dictionaries.Xml;
 using Abp.Localization.Dictionaries;
 using ZLJ.Application.Authorization.Permissions;
 using ZLJ.Application.Common;
+using ZLJ.Application.Share;
 
 namespace ZLJ.Application
 {
