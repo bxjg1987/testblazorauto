@@ -18,11 +18,7 @@ namespace @(Model.Model.ApplicationNamespace)
     /// @(Model.Model.DisplayName) 应用服务
     ///</summary>
     [AbpAuthorize(@(Model.Model.PermissionNameGetConst))]
-    public class @(Model.Model.ApplicationServiceName) : AdminTreeCrudBaseAppService<@(Model.Model.EntityName),
-                                                                                     @(Model.Model.DtoName),
-                                                                                     @(Model.Model.CreateDtoName),
-                                                                                     @(Model.Model.EditDtoName),
-                                                                                     @(Model.Model.ConditionName)>
+    public class @(Model.Model.ApplicationServiceName) : AdminTreeCrudBaseAppService<@(Model.Model.EntityName), @(Model.Model.DtoName), @(Model.Model.CreateDtoName), @(Model.Model.EditDtoName), @(Model.Model.ConditionName)>
     {
         //提供权限名称
         protected override string GetPermissionName => @(Model.Model.PermissionNameGetConst);

@@ -72,7 +72,7 @@ namespace ZLJ.Web.Host.Startup
             //);
 
             #region 动态webapi
-            Configuration.Modules.AbpAspNetCore()   .CreateControllersForAppServices(    typeof(ZLJApplicationModule).GetAssembly(), moduleName: Application.Share.Consts.fw, useConventionalHttpVerbs:false  );
+            Configuration.Modules.AbpAspNetCore()   .CreateControllersForAppServices(    typeof(ZLJApplicationModule).GetAssembly(), moduleName: Application.Share.AdminConsts.fw, useConventionalHttpVerbs:false  );
 
             Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(   typeof(BXJGUtilsModule).Assembly, useConventionalHttpVerbs: false/*, moduleName: "utils", useConventionalHttpVerbs: true*/);
 

@@ -55,23 +55,6 @@ List<Action<ExecuteContext>> actions = new List<Action<ExecuteContext>>
     ProviderObjMap
 
 };
-List<Action<ExecuteContext>> actions2 = new List<Action<ExecuteContext>>
-{
-    ApplicationShareConst,
-    Condition,
-    Dto,
-    EditDto,
-    CreateDto,
-    PermissionProvider,
-    NavigationProvider,
-    ObjMap,
-    AppService
-};
-
-if (ctx.Model.IsTree)
-    actions2.Add(AppServiceTree);
-else
-    actions2.Add(AppService);
 
 //var model = new { Name = "John Doe" };
 //string result = await engine.CompileRenderAsync("Subfolder/View.cshtml", model);
@@ -81,6 +64,23 @@ while (q.ToLower() == "c")
 
     //xuanzexiangm(ctx);
     SelectModel(ctx);
+    List<Action<ExecuteContext>> actions2 = new List<Action<ExecuteContext>>
+    {
+        ApplicationShareConst,
+        Condition,
+        Dto,
+        EditDto,
+        CreateDto,
+        PermissionProvider,
+        NavigationProvider,
+        ObjMap
+    };
+
+    if (ctx.Model.IsTree)
+        actions2.Add(AppServiceTree);
+    else
+        actions2.Add(AppService);
+
     //  xuanzemoban(ctx);
     Console.WriteLine("是否生成核心部分？y生成，其它任意键跳过");
     var schx = Console.ReadLine().Trim().ToLower() == "y";
@@ -181,10 +181,10 @@ IEnumerable<AppDefine> SelectApps(ExecuteContext ctx)
     var projectStr = Console.ReadLine()?.Trim().ToLower();
     if (projectStr == "n")
         return [];
-    if (string.IsNullOrWhiteSpace(projectStr)|| projectStr=="y")
+    if (string.IsNullOrWhiteSpace(projectStr) || projectStr == "y")
         return ctx.Apps.ToImmutableList();
     else
-       return projectStr.Replace("，","").Split(',').Select(x => ctx.Apps[ int.Parse(x.Trim())]);
+        return projectStr.Replace("，", "").Split(',').Select(x => ctx.Apps[int.Parse(x.Trim())]);
 }
 
 //void xuanzemoban(ExecuteContext ctx)
@@ -489,7 +489,7 @@ void AppService(ExecuteContext ctx)
     Console.WriteLine("正在生成AppService...");
     var str = engine.CompileRenderAsync("AppService", ctx).Result;
 
-    var file = Path.Combine(ctx.SrcDir, ctx.App.ApplicationProjectName, ctx.Model.Name, ctx.Model.ApplicationServiceName+ ".cs");
+    var file = Path.Combine(ctx.SrcDir, ctx.App.ApplicationProjectName, ctx.Model.Name, ctx.Model.ApplicationServiceName + ".cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
     File.WriteAllText(file, str);
@@ -497,7 +497,8 @@ void AppService(ExecuteContext ctx)
 
     Console.WriteLine("生成AppService完成");
 }
-void AppServiceTree(ExecuteContext ctx) {
+void AppServiceTree(ExecuteContext ctx)
+{
     Console.WriteLine("正在生成AppServiceTree...");
     var str = engine.CompileRenderAsync("AppServiceTree", ctx).Result;
 

@@ -137,7 +137,6 @@ namespace ZLJ.Application.Common
         {
             get
             {
-
                 if (utilsLocalizationSource == null || utilsLocalizationSource.Name != BXJGUtilsConsts.LocalizationSourceName)
                 {
                     utilsLocalizationSource = LocalizationManager.GetSource(BXJGUtilsConsts.LocalizationSourceName);

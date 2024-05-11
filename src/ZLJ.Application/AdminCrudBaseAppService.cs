@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using ZLJ.Application.Share;
 using ZLJ.Core.Authorization.Users;
 using ZLJ.Core.MultiTenancy;
 

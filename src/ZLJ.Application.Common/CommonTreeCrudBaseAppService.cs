@@ -13,10 +13,7 @@ namespace ZLJ.Application.Common
     /// <typeparam name="TDto"></typeparam>
     /// <typeparam name="TCreateInput"></typeparam>
     /// <typeparam name="TEditDto"></typeparam>
-    /// <typeparam name="TDeleteInput"></typeparam>
     /// <typeparam name="TGetAllInput"></typeparam>
-    /// <typeparam name="TGetInput"></typeparam>
-    /// <typeparam name="TMoveInput"></typeparam>
     /// <typeparam name="TManager"></typeparam>
     public class CommonTreeCrudBaseAppService<TEntity,
                                               TDto,
@@ -72,7 +69,6 @@ namespace ZLJ.Application.Common
         {
             get
             {
-
                 if (utilsLocalizationSource == null || utilsLocalizationSource.Name != BXJGUtilsConsts.LocalizationSourceName)
                 {
                     utilsLocalizationSource = LocalizationManager.GetSource(BXJGUtilsConsts.LocalizationSourceName);
