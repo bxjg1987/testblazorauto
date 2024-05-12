@@ -522,7 +522,7 @@ void PageList(ExecuteContext ctx)
     Console.WriteLine("正在生成PageList...");
     var str = engine.CompileRenderAsync("PageList", ctx).Result;
 
-    var file = Path.Combine(ctx.SrcDir, ctx.App.ApplicationProjectName, ctx.Model.Name, "List.razor");
+    var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "List.razor");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
     File.WriteAllText(file, str);
@@ -535,7 +535,7 @@ void PageListCs(ExecuteContext ctx)
     Console.WriteLine("正在生成PageListCs...");
     var str = engine.CompileRenderAsync("PageListCs", ctx).Result;
 
-    var file = Path.Combine(ctx.SrcDir, ctx.App.ApplicationProjectName, ctx.Model.Name, "List.razor.cs");
+    var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "List.razor.cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
     File.WriteAllText(file, str);

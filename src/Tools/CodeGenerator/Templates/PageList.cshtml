@@ -6,7 +6,7 @@
 @{
     DisableEncoding = true;//禁止html编码，因为我们是做代码生成器
 }
-@@page "/@(Model.Model.Name)"
+@("@page") "/@(Model.Model.Name)"
 
 @@using @(Model.Model.ApplicationShareNamespace)
 
@@ -74,7 +74,7 @@
         </Column>
 
 @foreach (var field in Model.Model.NormalFields){
-        <PropertyColumn Property="c=>c.@(field.Name)" @(field.IsSort?"Sortable":"") ShowSorterTooltip="false" @(field.Width.IsNullOrWhiteSpaceBXJG()?"":@$"Width=""{field.Width}""") @(field.FixedLeft==true?@"Fixed=""left""":(field.FixedLeft==false?@"Fixed=""right""":"")) @(field.Position==true?"":(field.FixedLeft==false?@"ColumnAlign.Right":"ColumnAlign.Center"))/>        
+        <PropertyColumn Property="c=>c.@(field.Name)" @(field.IsSort?"Sortable":"") ShowSorterTooltip="false" @(field.Width.IsNullOrWhiteSpaceBXJG()?"":@$"Width=""{field.Width}""") @(field.FixedLeft==true?@"Fixed=""left""":(field.FixedLeft==false?@"Fixed=""right""":"")) @(field.Position==true?"":(field.FixedLeft==false?@"Align=ColumnAlign.Right":"Align=ColumnAlign.Center"))/>        
 }
         <ActionColumn Title="操作" Width="160" Fixed="right">
             <ButtonGroup Size="@@ButtonSize.Small">
@@ -128,7 +128,7 @@
        @@bind-Visible=isShowDetailUpdate
        Draggable
        Title="详情"
-       Width="50vw"
+       Width=@@("50vw")
        Maximizable=false
        AfterClose=OnAfterCloseDialog
        Footer="renderFragment1"
