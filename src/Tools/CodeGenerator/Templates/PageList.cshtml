@@ -1,0 +1,141 @@
+@using CodeGenerator
+@using RazorLight
+@using BXJG.Common;
+@using BXJG.Common.Extensions;
+@inherits TemplatePage<ExecuteContext>
+@{
+    DisableEncoding = true;//禁止html编码，因为我们是做代码生成器
+}
+@@page "/@(Model.Model.Name)"
+
+@@using @(Model.Model.ApplicationShareNamespace)
+
+@@attribute [ReuseTabsPage(Title = "@(Model.Model.DisplayName)")]
+@@attribute [Authorize(@(Model.Model.PermissionNameGetConst))]
+
+@@inherits @(Model.Name).RCL.Components.ListBaseComponent<@(Model.Model.DtoName), @(Model.Model.PrimaryFieldCSharpType), PagedAndSortedResultRequest<@(Model.Model.ConditionName)>>
+
+<Flex Gap="small" Vertical Justify="space-between">
+    @@* 顶部工具栏 *@@
+    <Flex Justify="space-between">
+       
+        @@* 左侧 *@@
+        <Flex Gap="small">
+            @@if (createIsGranted)
+            {
+                <Button Type="@@ButtonType.Primary" Icon="@@IconType.Outline.Plus" OnClick="BtnAddClick">新增</Button>
+            }
+            @@if (deleteIsGranted)
+            {
+                @* 由于多选除了删除可能做其它操作，可能失误，所以虽然这里删除是两个步骤，依然加个确认比较靠谱 *@
+                <Popconfirm Title="确定删除已选择的项吗?" OnConfirm="BtnDeleteClick">
+                    <Button Type="@@ButtonType.Default" Icon="@@IconType.Outline.Clear" Danger Disabled="@@ShouldDisableDelete" Loading=isDeleting>删除</Button>
+                </Popconfirm>
+            }
+        </Flex>
+
+        @@* 右侧 *@@
+        <Flex Gap="small">
+            <div style="width:14.5rem;">
+                <Search Placeholder="名称/联系人/电话/地址等..." @@bind-Value="@@Keywords" OnChange=BtnSearchClick AllowClear Disabled=IsLoading />
+            </div>
+            <Tooltip Title="清空条件">
+                <Button Type="@@ButtonType.Default" Icon="@@IconType.Outline.Clear" OnClick="BtnClearFilterClick" Disabled=IsLoading></Button>
+            </Tooltip>
+            <Tooltip Title="刷新">
+                <Button Type="@@ButtonType.Default" Icon="@@IconType.Outline.Reload" OnClick="BtnRefreshClick" Disabled=IsLoading></Button>
+            </Tooltip>
+        </Flex>
+
+    </Flex>
+
+    @@* 表格 *@@
+    <Table @@ref="table"
+           TItem="@(Model.Model.DtoName)"
+           Total="TotalCount"
+           @@bind-SelectedRows="SelectedItems"
+           OnChange="OnQuery"
+           DataSource="Items"
+           PageIndex="PageIndex"
+           PageSize="PageSize"
+           Loading="IsLoading"
+           RowClassName="@@(r=>r.RowIndex%2==0?"even":"odd")"
+           RemoteDataSource="true"
+           RowKey="x=>x.Id"
+           OnRow="OnRow"
+           Size="TableSize.Small"
+           Bordered="true"
+           ScrollY="71.5vh"
+           ScrollX="1000px">
+
+        <Selection Key="@@context.Id.ToString()" Width="50" Fixed="left" />
+        <Column TData=@(Model.Model.DtoName) Title="行号" Width="60" Fixed="left">
+            @@(PageSize * (PageIndex - 1) + Items.IndexOf(context) + 1)
+        </Column>
+
+@foreach (var field in Model.Model.NormalFields){
+        <PropertyColumn Property="c=>c.@(field.Name)" @(field.IsSort?"Sortable":"") ShowSorterTooltip="false" @(field.Width.IsNullOrWhiteSpaceBXJG()?"":@$"Width=""{field.Width}""") @(field.FixedLeft==true?@"Fixed=""left""":(field.FixedLeft==false?@"Fixed=""right""":"")) @(field.Position==true?"":(field.FixedLeft==false?@"ColumnAlign.Right":"ColumnAlign.Center"))/>        
+}
+        <ActionColumn Title="操作" Width="160" Fixed="right">
+            <ButtonGroup Size="@@ButtonSize.Small">
+                <Button Type="@@ButtonType.Primary" OnClick="x=>BtnDetailClick(context)">详情</Button><br />
+                @@if (updateIsGranted)
+                {
+                    <Button OnClick="x=>BtnEditClick(context)">修改</Button>
+                }
+                @@if (deleteIsGranted)
+                {
+                    <Popconfirm Title="确定删除此项吗?"
+                                OnConfirm="()=>BtnDeleteItemClick(context)">
+                        <Button Danger="true">删除</Button>
+                    </Popconfirm>
+                }
+            </ButtonGroup>
+        </ActionColumn>
+    </Table>
+</Flex>
+
+@@*新增弹窗*@@
+@@{
+    RenderFragment renderFragment = @@<Template>
+        <SectionOutlet SectionName=@@($"{this.GetHashCode()}-create-btns") />
+        <Button OnClick="CloseCreateDialog">关闭</Button>
+    </Template>;
+}
+<Modal DestroyOnClose 
+       Footer="renderFragment" 
+       @@bind-Visible=isCreateDialogVisible 
+       Draggable 
+       Class="frm-dal" 
+       AfterClose=OnAfterCloseDialog>
+    <TitleTemplate>
+        <Icon Type="plus" Theme="outline" />新增@@(FuncName)
+    </TitleTemplate>
+    <ChildContent>
+        <SectionOutlet SectionName=@@($"{this.GetHashCode()}-create-body") />
+        <Create OnAddEnd="OnAddEnd" Master=@@(this.GetHashCode()) />
+    </ChildContent>
+</Modal>
+
+@@*修改和详情弹窗*@@
+@@{
+    RenderFragment renderFragment1 = @@<Template>
+        <SectionOutlet SectionName=@@($"{this.GetHashCode()}-detail-update-btns") />
+        <Button OnClick="CloseUpdateOrDetail">关闭</Button>
+    </Template>;
+}
+<Modal DestroyOnClose
+       @@bind-Visible=isShowDetailUpdate
+       Draggable
+       Title="详情"
+       Width="50vw"
+       Maximizable=false
+       AfterClose=OnAfterCloseDialog
+       Footer="renderFragment1"
+       DefaultMaximized=false
+       MaxBodyHeight="86vh">
+    <ChildContent>
+        <SectionOutlet SectionName=@@($"{this.GetHashCode()}-detail-update-body") />
+        <DetailUpdate Id=detailUpdateId IsEdit=isEdit OnDeleted=OnDetailUpdate OnUpdated=OnDetailUpdate Master=@@(this.GetHashCode()) />
+    </ChildContent>
+</Modal>

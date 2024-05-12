@@ -77,9 +77,16 @@ while (q.ToLower() == "c")
     };
 
     if (ctx.Model.IsTree)
+    {
         actions2.Add(AppServiceTree);
+        //actions2.Add(AppServiceTree);
+    }
     else
+    {
         actions2.Add(AppService);
+        actions2.Add(PageList);
+        actions2.Add(PageListCs);
+    }
 
     //  xuanzemoban(ctx);
     Console.WriteLine("是否生成核心部分？y生成，其它任意键跳过");
@@ -509,4 +516,30 @@ void AppServiceTree(ExecuteContext ctx)
 
 
     Console.WriteLine("生成AppServiceTree完成");
+}
+void PageList(ExecuteContext ctx)
+{
+    Console.WriteLine("正在生成PageList...");
+    var str = engine.CompileRenderAsync("PageList", ctx).Result;
+
+    var file = Path.Combine(ctx.SrcDir, ctx.App.ApplicationProjectName, ctx.Model.Name, "List.razor");
+    Directory.CreateDirectory(Path.GetDirectoryName(file));
+
+    File.WriteAllText(file, str);
+
+
+    Console.WriteLine("生成PageList完成");
+}
+void PageListCs(ExecuteContext ctx)
+{
+    Console.WriteLine("正在生成PageListCs...");
+    var str = engine.CompileRenderAsync("PageListCs", ctx).Result;
+
+    var file = Path.Combine(ctx.SrcDir, ctx.App.ApplicationProjectName, ctx.Model.Name, "List.razor.cs");
+    Directory.CreateDirectory(Path.GetDirectoryName(file));
+
+    File.WriteAllText(file, str);
+
+
+    Console.WriteLine("生成PageListCs完成");
 }

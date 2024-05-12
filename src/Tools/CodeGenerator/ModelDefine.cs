@@ -54,6 +54,10 @@ namespace CodeGenerator
         /// </summary>
         public FieldDefine PrimaryField => Fields.First(x => x.IsPrimary);
         /// <summary>
+        /// 主键的c#类型
+        /// </summary>
+        public string PrimaryFieldCSharpType => PrimaryField.CSharpType;
+        /// <summary>
         /// 普通非主键字段
         /// </summary>
         public IEnumerable<FieldDefine> NormalFields => Fields.Where(x => !x.IsPrimary);
@@ -77,6 +81,18 @@ namespace CodeGenerator
         /// 除了字符串、范围外的其它条件字段
         /// </summary>
         public IEnumerable<FieldDefine> NormalConditionFields => NormalFields.Where(x => x.IsCondition&& !x.IsConditionRange&& x.CSharpType!="string");
+        ///// <summary>
+        ///// 在列表中显示的，冻结在左侧的字段列表
+        ///// </summary>
+        //public List<FieldDefine> FieldsFixedLeft => NormalFields.Where(x => x.FixedLeft == true).ToList();
+        ///// <summary>
+        ///// 在列表中显示的，冻结在右侧的字段列表
+        ///// </summary>
+        //public List<FieldDefine> FieldsFixedRight => NormalFields.Where(x => x.FixedLeft == false).ToList();
+        ///// <summary>
+        ///// 在列表中显示的，不冻结的字段列表
+        ///// </summary>
+        //public List<FieldDefine> FieldsFixedNo => NormalFields.Where(x => x.FixedLeft == default).ToList();
         #endregion
 
         #region CoreShare
@@ -195,6 +211,13 @@ namespace CodeGenerator
         /// 某应用的应用服务
         /// </summary>
         public string ApplicationServiceName => $"{Name}AppService";
+        #endregion
+
+        #region UI
+        /// <summary>
+        /// 某应用，某模块，blazor客户端中的顶级命名空间，如：ZLJ.Admin.CoreRCL.Test
+        /// </summary>
+        public string BlazorClientNamespace => $"{ExecuteContext.App.BlazorClientProjectName}.{Name}";
         #endregion
     }
 }

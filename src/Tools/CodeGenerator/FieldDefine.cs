@@ -34,6 +34,19 @@ namespace CodeGenerator
         /// </summary>
         public string DisplayName { get; set; }
         /// <summary>
+        /// 界面上显示的宽度
+        /// 不同ui库要的单位不同
+        /// </summary>
+        public string Width { get; set; } = "150";
+        /// <summary>
+        /// 在列表中显示时是否固定 true固定在左侧；false固定在右侧；null不固定
+        /// </summary>
+        public bool? FixedLeft { get; set; }
+        /// <summary>
+        /// 在列表中显示的位置，true左 false右 null中
+        /// </summary>
+        public bool? Position {  get; set; }
+        /// <summary>
         /// c#类型名称，对应Type.Name
         /// </summary>
         public string CSharpType { get; set; }

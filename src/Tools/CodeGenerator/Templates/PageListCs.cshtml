@@ -1,0 +1,184 @@
+@using CodeGenerator
+@using RazorLight
+@using BXJG.Common;
+@using BXJG.Common.Extensions;
+@inherits TemplatePage<ExecuteContext>
+@{
+    DisableEncoding = true;//禁止html编码，因为我们是做代码生成器
+}
+using AntDesign.TableModels;
+using Microsoft.AspNetCore.Components.Web;
+using @(Model.Model.ApplicationShareNamespace);
+
+namespace @(Model.Model.BlazorClientNamespace)
+{
+    /// <summary>
+    /// @(Model.Model.DisplayName)列表页逻辑
+    /// </summary>
+    public partial class List
+    {
+        /// <summary>
+        /// 当前功能显示名称
+        /// </summary>
+        protected override string FuncName => "@(Model.Model.DisplayName)";
+        /// <summary>
+        /// 组件初始化
+        /// </summary>
+#if !DEBUG
+        [AbpExceptionInterceptor]
+#endif
+        protected override async Task OnInitializedAsync()
+        {
+            await base.OnInitializedAsync();
+            //通过另外的重装可以实现更多权限状态初始化
+            await base.InitPermission(@(Model.Model.PermissionNameCreateConst),
+                                      @(Model.Model.PermissionNameUpdateConst),
+                                      @(Model.Model.PermissionNameDeleteConst);
+        }
+
+        #region 查询列表
+        /// <summary>
+        /// 表格中每行的额外属性
+        /// </summary>
+        Dictionary<string, object> OnRow(RowData<@(Model.Model.DtoName)> row)
+        {
+            Action<MouseEventArgs> OnDblClick = args =>
+            {
+                if (updateIsGranted)
+                    BtnEditClick(row.DataItem.Data);
+                else
+                    BtnDetailClick(row.DataItem.Data);
+
+                StateHasChanged();//经过测试，必须加
+            };
+            return new Dictionary<string, object>
+            {
+                { "ondblclick", OnDblClick },
+            };
+        }
+        /// <summary>
+        /// 点击清空条件按钮时回调，绑定到清空条件按钮
+        /// </summary>
+        protected override void BtnClearFilterClick()
+        {
+            //重置条件
+            base.BtnClearFilterClick();
+        }
+        #endregion
+
+        /// <summary>
+        /// 是否需要刷新列表页面
+        /// </summary>
+        bool isNeedReload;
+
+        #region 新增
+        /*
+         * 结合blazor8的section时，新增弹窗太简单，不用单独封装弹窗组件，也便于传参到新增表单中
+         * 也不要放抽象组件中，因为抽象组件是多个应用共享的，它们可能不用弹窗
+         */
+
+        /// <summary>
+        /// 新增弹窗是否显示
+        /// </summary>
+        bool isCreateDialogVisible;
+        /// <summary>
+        /// 显示弹窗，通常绑定到顶部新增按钮的点击事件上
+        /// </summary>
+        public void BtnAddClick()
+        {
+            isCreateDialogVisible = true;
+            //  var r = await dalRef.Show();
+            //   if (r)
+            //       await Reset();
+        }
+        /// <summary>
+        /// 点击关闭新增弹窗时执行，通常绑定到底部关闭按钮的点击事件上
+        /// </summary>
+        /// <returns></returns>
+        private void CloseCreateDialog()
+        {
+            isCreateDialogVisible = false;
+        }
+        /// <summary>
+        /// 新增后回调
+        /// 存在继续新增和结束新增的情况
+        /// </summary>
+        /// <param name="sr"></param>
+        /// <returns></returns>
+        void OnAddEnd(BXJG.Utils.RCL.Components.SaveResult<@(Model.Model.DtoName)> sr)
+        {
+            isNeedReload = true;
+            if (sr.End)
+            {
+                CloseCreateDialog();
+            }
+        }
+        #endregion
+
+        #region 详情和修改
+        /// <summary>
+        /// 是否显示详情和修改弹窗
+        /// </summary>
+        bool isShowDetailUpdate;
+        /// <summary>
+        /// 当前详情弹窗是否是修改模式
+        /// false查看模式 true修改模式
+        /// </summary>
+        bool isEdit;
+        /// <summary>
+        /// 当前详情或修改的实体的id
+        /// </summary>
+        @(Model.Model.PrimaryFieldCSharpType) detailUpdateId;
+        /// <summary>
+        /// 修改完成的事件
+        /// </summary>
+        /// <param name="sr"></param>
+        /// <returns></returns>
+        void OnDetailUpdate(@(Model.Model.DtoName) sr)
+        {
+            isShowDetailUpdate = false;
+            isNeedReload = true;
+            //await LoadListData();
+        }
+        /// <summary>
+        /// 点击修改时
+        /// </summary>
+        /// <param name="sr"></param>
+        void BtnEditClick(@(Model.Model.DtoName) sr)
+        {
+            isEdit = true;
+            ShowUpdateOrDetail(sr.Id);
+        }
+        /// <summary>
+        /// 点击详情时
+        /// </summary>
+        /// <param name="sr"></param>
+        void BtnDetailClick(@(Model.Model.DtoName) sr)
+        {
+            isEdit = false;
+            ShowUpdateOrDetail(sr.Id);
+        }
+        void ShowUpdateOrDetail(@(Model.Model.PrimaryFieldCSharpType) id){
+            detailUpdateId = id;
+            isShowDetailUpdate = true;
+        }
+        void CloseUpdateOrDetail() {
+            isShowDetailUpdate = false;
+        }
+        #endregion
+
+        /// <summary>
+        /// 新增或修改完成时需要执行，并且直接点击x关闭时也需要执行，所以通常将它绑定到弹窗的同名事件上
+        /// </summary>
+        Task OnAfterCloseDialog()
+        {
+            if (isNeedReload)
+            {
+                isNeedReload = false;
+                LoadListData();
+                //StateHasChanged();
+            }
+            return Task.CompletedTask;
+        }
+    }
+}

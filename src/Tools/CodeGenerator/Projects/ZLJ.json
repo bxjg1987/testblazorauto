@@ -38,7 +38,10 @@
           "IsUnicode": false, //是否是Unicode编码
           "IsSort": false, //是否参与排序
           "IsCondition": false, //是否作为条件
-          "IsConditionRange": true //是否作为范围条件,IsCondition为true时有效
+          "IsConditionRange": true, //是否作为范围条件,IsCondition为true时有效
+          "Width": null, //界面中显示的宽度，字符串如：20rem;100px;
+          "FixedLeft": null, //在列表中显示时冻结，true冻结在左侧；false冻结在右侧；null不冻结
+          "Position": null //在列表中显示的位置，true左 false右 null中
         },
         {
           "Name": "Name",
