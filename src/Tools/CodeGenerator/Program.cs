@@ -36,16 +36,17 @@ foreach (var item in ms)
     var b2 = new ConfigurationBuilder().AddJsonFile(item).Build();
     var m = new ModelDefine();
     b2.Bind(m);
+    m.ExecuteContext = ctx;
+    m.Fields.ForEach(y => y.Model = m);
     ctx.Models.Add(m);
     //var sdfsdf = b2.
 }
 
 ctx.Services = serviceProvider;
-ctx.Models.ForEach(x =>
-{
-    x.ExecuteContext = ctx;
-    x.Fields.ForEach(y => y.Model = x);
-});
+//ctx.Models.ForEach(x =>
+//{
+
+//});
 foreach (var item in ctx.Apps)
 {
     item.ExecuteContext = ctx;
