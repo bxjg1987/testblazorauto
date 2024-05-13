@@ -1,0 +1,78 @@
+{
+  "Name": "TestSimple",
+  "DisplayName": "测试1",
+  "Icon": "test",
+  "IsTree": false,
+  "ParentPermissionName": "admin",
+  "ParentMenuName": null,
+  "Fields": [
+    {
+      "Name": "Id", //字段名
+      "DisplayName": "编号", //显示名称
+      "CSharpType": "long", //c#类型的字符串形式
+      "IsPrimary": true, //是否是主键
+      "DefaultValue": null, //默认值
+      "IsRequired": true, //是否是必填字段
+      "Length": 0, //字段长度
+      "IsUnicode": false, //是否是Unicode编码
+      "IsSort": false, //是否参与排序
+      "IsCondition": false, //是否作为条件
+      "IsConditionRange": true, //是否作为范围条件,IsCondition为true时有效
+      "Width": null, //界面中显示的宽度，字符串如：20rem;100px;
+      "FixedLeft": null, //在列表中显示时冻结，true冻结在左侧；false冻结在右侧；null不冻结
+      "Position": null //在列表中显示的位置，true左 false右 null中
+    },
+    {
+      "Name": "Name",
+      "DisplayName": "名称",
+      "CSharpType": "string",
+      "IsPrimary": false,
+      "DefaultValue": null,
+      "IsRequired": false,
+      "Length": 100,
+      "IsUnicode": true,
+      "IsSort": true,
+      "IsCondition": true,
+      "IsConditionRange": false
+    },
+    {
+      "Name": "Age",
+      "DisplayName": "年龄",
+      "CSharpType": "int",
+      "IsPrimary": false,
+      "DefaultValue": null,
+      "IsRequired": false,
+      "Length": 0,
+      "IsUnicode": false,
+      "IsSort": true,
+      "IsCondition": true,
+      "IsConditionRange": true
+    },
+    {
+      "Name": "StringField1",
+      "DisplayName": "字符串字段1",
+      "CSharpType": "string",
+      "IsPrimary": false,
+      "DefaultValue": null,
+      "IsRequired": true,
+      "Length": 60,
+      "IsUnicode": false,
+      "IsSort": true,
+      "IsCondition": true,
+      "IsConditionRange": false
+    },
+    {
+      "Name": "Status",
+      "DisplayName": "状态",
+      "CSharpType": "int",
+      "IsPrimary": false,
+      "DefaultValue": 3,
+      "IsRequired": true,
+      "Length": 0,
+      "IsUnicode": false,
+      "IsSort": true,
+      "IsCondition": true,
+      "IsConditionRange": false
+    }
+  ]
+}

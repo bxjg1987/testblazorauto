@@ -21,12 +21,25 @@ InitProject();
 
 var configuration = builder.Build();
 
+
+
 services.Configure<ExecuteContext>(configuration);
 
 IServiceProvider serviceProvider = services.BuildServiceProvider();
 
 
 var ctx = serviceProvider.GetService<IOptionsMonitor<ExecuteContext>>().CurrentValue;
+ctx.Models = new List<ModelDefine>();
+var ms = Directory.GetFiles( Path.Combine("projects", ctx.Name));
+foreach (var item in ms)
+{
+    var b2 = new ConfigurationBuilder().AddJsonFile(item).Build();
+    var m = new ModelDefine();
+    b2.Bind(m);
+    ctx.Models.Add(m);
+    //var sdfsdf = b2.
+}
+
 ctx.Services = serviceProvider;
 ctx.Models.ForEach(x =>
 {
@@ -162,7 +175,9 @@ void InitProject()
     if (string.IsNullOrWhiteSpace(sdf))
         sdf = "0";
     var projIndex = int.Parse(sdf);
+
     builder.AddJsonFile(projfiles[projIndex]);
+    
 }
 void SelectModel(ExecuteContext ctx)
 {
