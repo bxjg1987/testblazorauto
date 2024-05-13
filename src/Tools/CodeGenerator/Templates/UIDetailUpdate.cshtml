@@ -1,0 +1,89 @@
+@using CodeGenerator
+@using RazorLight
+@using BXJG.Common;
+@using BXJG.Common.Extensions;
+@inherits TemplatePage<ExecuteContext>
+@{
+    DisableEncoding = true;//禁止html编码，因为我们是做代码生成器
+}
+@("@using") @Model.Model.ApplicationShareNamespace
+@("@using") BXJG.Utils.Application.Share.Dtos
+@("@using") Microsoft.AspNetCore.Components.Sections
+
+@@inherits DetailUpdateBaseComponent<@Model.Model.DtoName, @Model.Model.PrimaryFieldCSharpType, @Model.Model.EditDtoName>
+
+<SectionContent SectionName=@@($"{Master}-detail-update-title")>
+    <Icon Type=@@detailUpdateIcon Theme=@@IconThemeType.Outline />
+    @@(detailUpdateText)@@(FuncName)
+</SectionContent>
+<SectionContent SectionName=@@($"{Master}-detail-update-body")>
+
+    @@if (isEdit)
+    {
+        <Form @@ref="frm" ValidateOnChange="true" Model="editDto" LabelColSpan="5" WrapperColSpan="19" OnFinish="OnFinish">
+@foreach(var field in Model.Model.NormalFields)
+{
+    if(field.CSharpType== "bool"){
+            <FormItem Label="@field.DisplayName">
+                <Switch @@bind-Checked=context.@field.Name />
+            </FormItem>
+    }
+    else{    
+            <FormItem>
+                <Input @@bind-Value=context.@field.Name AllowClear />
+            </FormItem>      
+    }
+}
+        </Form>
+    }
+    else
+    {
+        <Descriptions Bordered Size="small">
+            <DescriptionsItem Title="名称">
+                @@dto.Name
+            </DescriptionsItem>
+            <DescriptionsItem Title="联系人">
+                @@dto.LinkMan
+            </DescriptionsItem>
+            <DescriptionsItem Title="联系人电话">
+                @@dto.LinkPhone
+            </DescriptionsItem>
+            <DescriptionsItem Title="所属地区">
+                @@dto.AreaDisplayName
+            </DescriptionsItem>
+            <DescriptionsItem Title="地址">
+                @@dto.Address
+            </DescriptionsItem>
+            <DescriptionsItem Title="等级">
+                @@dto.LevelDisplayName
+            </DescriptionsItem>
+            <DescriptionsItem Title="是否启用">
+                <Switch Checked=dto.IsActive Disabled />
+            </DescriptionsItem>
+        </Descriptions>
+    }
+</SectionContent>
+<SectionContent SectionName=@@($"{Master}-detail-update-btns")>
+    @@if (IsShowDelete)
+    {
+        <Popconfirm Title="确定删除此项吗?" OnConfirm=BtnDeleteClick>
+            <Button Loading=isDeleting Danger=true>删除</Button>
+        </Popconfirm>
+    }
+    <ButtonGroup>
+        @@if (IsShowRefresh)
+        {
+            <Button OnClick="BtnRefreshClick" Loading=isRefreshing Disabled=IsRefreshDisabled>刷新</Button>
+        }
+        @@if (IsShowBeginEdit)
+        {
+            <Button OnClick="BtnBeginEditClick" Loading=isFormIniting Type="@@ButtonType.Primary">修改</Button>
+        }
+        else if (IsShowUpdate)
+        {
+            <Button OnClick="BtnResetClick" Loading=isReseting Disabled=IsUpdateDisabled Icon="@@IconType.Outline.Redo">重置</Button>
+            <Button OnClick="BtnCancelEditClick" Disabled=IsUpdateDisabled Icon="@@IconType.Outline.Rollback">放弃修改</Button>
+            <Button OnClick="BtnUpdateClick" Type="@@ButtonType.Primary" Loading="@@isUpdating" Disabled="@@IsUpdateDisabled" Icon="@@IconType.Outline.Save">保存</Button>
+        }
+    </ButtonGroup>
+</SectionContent>

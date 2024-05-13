@@ -102,6 +102,8 @@ while (q.ToLower() == "c")
         actions2.Add(UIListCs);
         actions2.Add(UICreate);
         actions2.Add(UICreateCs);
+        actions2.Add(UIDetailUpdate);
+        actions2.Add(UIDetailUpdateCs);
     }
 
     //  xuanzemoban(ctx);
@@ -579,11 +581,39 @@ void UICreateCs(ExecuteContext ctx)
     Console.WriteLine("正在生成UICreateCs...");
     var str = engine.CompileRenderAsync("UICreateCs", ctx).Result;
 
-    var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "List.razor.cs");
+    var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "Create.razor.cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
     File.WriteAllText(file, str);
 
 
     Console.WriteLine("生成UICreateCs完成");
+}
+
+
+void UIDetailUpdate(ExecuteContext ctx)
+{
+    Console.WriteLine("正在生成UIDetailUpdate...");
+    var str = engine.CompileRenderAsync("UIDetailUpdate", ctx).Result;
+
+    var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "DetailUpdate.razor");
+    Directory.CreateDirectory(Path.GetDirectoryName(file));
+
+    File.WriteAllText(file, str);
+
+
+    Console.WriteLine("生成UIDetailUpdate完成");
+}
+void UIDetailUpdateCs(ExecuteContext ctx)
+{
+    Console.WriteLine("正在生成DetailUpdateCs...");
+    var str = engine.CompileRenderAsync("DetailUpdateCs", ctx).Result;
+
+    var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "DetailUpdate.razor.cs");
+    Directory.CreateDirectory(Path.GetDirectoryName(file));
+
+    File.WriteAllText(file, str);
+
+
+    Console.WriteLine("生成DetailUpdateCs完成");
 }
