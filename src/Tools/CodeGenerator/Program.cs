@@ -84,8 +84,10 @@ while (q.ToLower() == "c")
     else
     {
         actions2.Add(AppService);
-        actions2.Add(PageList);
-        actions2.Add(PageListCs);
+        actions2.Add(UIList);
+        actions2.Add(UIListCs);
+        actions2.Add(UICreate);
+        actions2.Add(UICreateCs);
     }
 
     //  xuanzemoban(ctx);
@@ -517,10 +519,10 @@ void AppServiceTree(ExecuteContext ctx)
 
     Console.WriteLine("生成AppServiceTree完成");
 }
-void PageList(ExecuteContext ctx)
+void UIList(ExecuteContext ctx)
 {
-    Console.WriteLine("正在生成PageList...");
-    var str = engine.CompileRenderAsync("PageList", ctx).Result;
+    Console.WriteLine("正在生成UIList...");
+    var str = engine.CompileRenderAsync("UIList", ctx).Result;
 
     var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "List.razor");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
@@ -528,12 +530,12 @@ void PageList(ExecuteContext ctx)
     File.WriteAllText(file, str);
 
 
-    Console.WriteLine("生成PageList完成");
+    Console.WriteLine("生成UIList完成");
 }
-void PageListCs(ExecuteContext ctx)
+void UIListCs(ExecuteContext ctx)
 {
-    Console.WriteLine("正在生成PageListCs...");
-    var str = engine.CompileRenderAsync("PageListCs", ctx).Result;
+    Console.WriteLine("正在生成UIListCs...");
+    var str = engine.CompileRenderAsync("UIListCs", ctx).Result;
 
     var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "List.razor.cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
@@ -541,5 +543,31 @@ void PageListCs(ExecuteContext ctx)
     File.WriteAllText(file, str);
 
 
-    Console.WriteLine("生成PageListCs完成");
+    Console.WriteLine("生成UIListCs完成");
+}
+void UICreate(ExecuteContext ctx)
+{
+    Console.WriteLine("正在生成UICreate...");
+    var str = engine.CompileRenderAsync("UICreate", ctx).Result;
+
+    var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "Create.razor");
+    Directory.CreateDirectory(Path.GetDirectoryName(file));
+
+    File.WriteAllText(file, str);
+
+
+    Console.WriteLine("生成UICreate完成");
+}
+void UICreateCs(ExecuteContext ctx)
+{
+    Console.WriteLine("正在生成UICreateCs...");
+    var str = engine.CompileRenderAsync("UICreateCs", ctx).Result;
+
+    var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "List.razor.cs");
+    Directory.CreateDirectory(Path.GetDirectoryName(file));
+
+    File.WriteAllText(file, str);
+
+
+    Console.WriteLine("生成UICreateCs完成");
 }
