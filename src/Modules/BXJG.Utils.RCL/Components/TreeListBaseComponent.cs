@@ -55,7 +55,6 @@ namespace BXJG.Utils.RCL.Components
         /// 授权检查服务
         /// </summary>
         protected virtual IAuthorizationService AuthorizationService => authorizationService ??= ScopedServices.GetRequiredService<IAuthorizationService>();
-
      
         /// <summary>
         /// 此功能的名称
@@ -117,10 +116,14 @@ namespace BXJG.Utils.RCL.Components
         {
             if (output.ErrorMessage.Any())
             {
+                string errMsg = string.Empty;
+                foreach (var item in output.ErrorMessage)
+                    errMsg += item.Message + Environment.NewLine;
+
                 if (output.Ids.Count == 0)
-                  await  ShowFailMessage(msg: $"批量{funName}全部失败！");
+                    await ShowFailMessage(msg: $"批量{funName}全部失败！" + errMsg);
                 else
-                  await  ShowFailMessage(msg: $"批量{funName}部分失败！成功数量：{output.Ids.Count}；失败数量：{output.ErrorMessage.Count}");
+                    await ShowFailMessage(msg: $"批量{funName}部分失败！成功数量：{output.Ids.Count}；{errMsg}");
             }
             else
               await  ShowSuccessMessage(msg: $"批量{funName}全部成功！");
@@ -207,7 +210,7 @@ namespace BXJG.Utils.RCL.Components
                 return;
 
             IsLoading = true;
-            Items.Clear();
+            //Items.Clear();
 
             if (SelectedItems != default && SelectedItems is ICollection<TEntityDto> tempList)
                 tempList.Clear();

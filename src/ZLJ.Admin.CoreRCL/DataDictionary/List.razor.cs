@@ -8,15 +8,19 @@ namespace ZLJ.Admin.CoreRCL.DataDictionary
     public partial class List
     {
         protected override HttpClient HttpClient => httpClient ??= ScopedServices.GetRequiredService<IHttpClientFactory>().CreateHttpClientUtils();
-        long? parentId;
-        void AddSub(long pid) {
-            
-            ShowCreateDialog();
-            parentId = pid;
-        }
-        // string currOu;
 
+        /// <summary>
+        /// 当前功能名称
+        /// </summary>
         protected override string FuncName => "数据字典";
+        /// <summary>
+        /// 当前父节点
+        /// </summary>
+        long? parentId;
+        /// <summary>
+        /// 生命周期 初始化
+        /// </summary>
+        /// <returns></returns>
 #if !DEBUG
         [AbpExceptionInterceptor]
 #endif
@@ -24,15 +28,10 @@ namespace ZLJ.Admin.CoreRCL.DataDictionary
         {
             await base.OnInitializedAsync();
             await base.InitPermission(PermissionNames.AdministratorBaseInfoPostCreate, PermissionNames.AdministratorBaseInfoPostUpdate, PermissionNames.AdministratorBaseInfoPostDelete);
-
         }
-        
-        //protected override Task LoadListData()
-        //{
-        //    return base.LoadListData();
-        //}
-
-        //[AbpExceptionInterceptor]
+        /// <summary>
+        /// 点击清空条件时执行
+        /// </summary>
         protected override void BtnClearFilterClick()
         {
             //GetAllInput.Filter.IsStatic = default;
@@ -40,18 +39,19 @@ namespace ZLJ.Admin.CoreRCL.DataDictionary
             //GetAllInput.Filter.OuCode = default;
             //GetAllInput.IsOnlyLoadChild = false;
             GetAllInput.IsSysDefine = default;
-         
-             base.BtnClearFilterClick();
-        }
-        
-      
 
-        // AbpCreateDialog<IPostAppService, PostDto, int, PagedAndSortedResultRequest<PagedPostResultRequestDto>, CreatePostDto, PostEditDto, Create> dalRef;
-        Dictionary<string, object> OnRow(RowData<DataDictionaryDto> row)
+            base.BtnClearFilterClick();
+        }
+        /// <summary>
+        /// 绑定到明细行上的属性
+        /// </summary>
+        /// <param name="row"></param>
+        /// <returns></returns>
+        Dictionary<string, object> Row(RowData<DataDictionaryDto> row)
         {
             Action<MouseEventArgs> OnDblClick = args =>
             {
-                OnDetail(row.DataItem.Data);
+                BtnItemDetailClick(row.DataItem.Data);
                 StateHasChanged();
             };
             return new Dictionary<string, object>
@@ -59,121 +59,129 @@ namespace ZLJ.Admin.CoreRCL.DataDictionary
                 { "ondblclick", OnDblClick },
             };
         }
-
-        #region 新增
+        
         /// <summary>
-        /// 是否需要刷新列表页面
+        /// 是否需要重新加载列表
         /// </summary>
-        bool isCreated;
+        bool isNeedReload;
         /// <summary>
-        /// 关闭新增弹窗的核心逻辑
+        /// 新增或修改完成时需要执行，并且直接点击x关闭时也需要执行，所以通常将它绑定到弹窗的同名事件上
         /// </summary>
         /// <returns></returns>
-       void CloseCreateDialogCore()
+        Task AfterCloseDialog()
         {
-            isCreateDialogVisible = false;
-            if (isCreated)
+            if (isNeedReload)
             {
-                //ant搞出了bug，必须重置下
-               
-                isCreated=false;
-                 LoadListData(); 
+                isNeedReload = false;
+                LoadListData();
+                //StateHasChanged();
             }
+            return Task.CompletedTask;
         }
+        #region 新增
         /*
          * 结合blazor8的section时，新增弹窗太简单，不用单独封装弹窗组件，也便于传参到新增表单中
          * 也不要放抽象组件中，因为抽象组件是多个应用共享的，它们可能不用弹窗
          */
-
         /// <summary>
         /// 新增弹窗是否显示
         /// </summary>
-        bool isCreateDialogVisible;
-        // Guid addToolId = Guid.NewGuid(),addBodyId=Guid.NewGuid();
-        //[AbpExceptionInterceptor]
+        bool isShowCreateDialog;
         /// <summary>
         /// 显示弹窗
         /// </summary>
-        public void ShowCreateDialog()
+        public void BtnCreateClick()
         {
-            isCreateDialogVisible = true;
             parentId = default;
+            isShowCreateDialog = true;
             //  var r = await dalRef.Show();
             //   if (r)
             //       await Reset();
         }
         /// <summary>
-        /// 点击关闭新增弹窗时执行
+        /// 点击明细中的，添加子节点时执行
         /// </summary>
-        /// <returns></returns>
-#if !DEBUG
-        [AbpExceptionInterceptor]
-#endif
-        private void CloseDialog()
+        /// <param name="pid"></param>
+        void BtnAddSubClick(long pid)
         {
-             CloseCreateDialogCore();
+            BtnCreateClick();
+            parentId = pid;
+        }
+        void BtnCloseCreateClick()
+        {
+            isShowCreateDialog = false;
         }
         /// <summary>
         /// 新增后回调
         /// </summary>
         /// <param name="sr"></param>
         /// <returns></returns>
-      void OnAddEnd(SaveResult<DataDictionaryDto> sr)
+        void AddEnd(SaveResult<DataDictionaryDto> sr)
         {
-            base.MicrosoftLogger.LogDebug($"新增事件触发了！！！");
-            isCreated = true;
-            if (sr.End)
-            {
-                 CloseCreateDialogCore();
-            }
+            isNeedReload = true;
+            isShowCreateDialog = !sr.End;
         }
-
         #endregion
 
         #region 详情和修改
         /// <summary>
         /// 是否显示详情和修改弹窗
         /// </summary>
-        bool isShowDetailUpdate;
+        bool isShowDetailUpdateDialog;
         /// <summary>
         /// 当前详情弹窗是否是修改模式
         /// false查看模式 true修改模式
         /// </summary>
         bool isEdit;
-
         /// <summary>
         /// 当前详情或修改的实体的id
         /// </summary>
         long detailUpdateId = 0;
-
         /// <summary>
-        /// 新增后回调
+        /// 点击明细中的修改按钮
         /// </summary>
         /// <param name="sr"></param>
-        /// <returns></returns>
-      void OnDetailUpdate(DataDictionaryDto sr)
-        {
-            isShowDetailUpdate = false;
-
-             LoadListData();
-
-        }
-
-        void OnEdit(DataDictionaryDto sr)
+        void BtnItemEditClick(DataDictionaryDto sr)
         {
             isEdit = true;
             detailUpdateId = sr.Id;
-            isShowDetailUpdate = true;
+            isShowDetailUpdateDialog = true;
         }
-
-        void OnDetail(DataDictionaryDto sr)
+        /// <summary>
+        /// 点击明细中的详情事件
+        /// </summary>
+        /// <param name="sr"></param>
+        void BtnItemDetailClick(DataDictionaryDto sr)
         {
             isEdit = false;
             detailUpdateId = sr.Id;
-            isShowDetailUpdate = true;
+            isShowDetailUpdateDialog = true;
         }
-
-
+        /// <summary>
+        /// 当详情页执行删除后回调
+        /// </summary>
+        /// <param name="dto"></param>
+        void DetailDeleted(DataDictionaryDto dto)
+        {
+            isNeedReload = true;
+            isShowDetailUpdateDialog = false;//关闭后自动触发表单的AfterClose事件刷新数据
+        }
+        /// <summary>
+        /// 详情中修改保存后执行
+        /// </summary>
+        /// <param name="sr"></param>
+        /// <returns></returns>
+        void DetailUpdated(DataDictionaryDto sr)
+        {
+            isNeedReload = true;
+            isShowDetailUpdateDialog = false;//关闭后自动触发表单的AfterClose事件刷新数据
+        }
+        /// <summary>
+        /// 点击关闭修改详情弹窗事件
+        /// </summary>
+        void BtnDetailUpdateCloseClick() {
+            isShowDetailUpdateDialog = false;
+        }
         #endregion
     }
 }

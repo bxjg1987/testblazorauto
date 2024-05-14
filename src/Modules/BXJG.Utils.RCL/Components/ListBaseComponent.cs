@@ -123,17 +123,21 @@ namespace BXJG.Utils.RCL.Components
         /// </summary>
         /// <param name="output">批量操作结果</param>
         /// <param name="funName">操作名</param>
-        protected virtual async Task BatchOperationMessage(BatchOperationOutput<TPrimaryKey> output, string funName = "删除")
+        protected virtual async Task BatchOperationMessage(BatchOperationOutputBase output, string funName = "删除")
         {
             if (output.ErrorMessage.Any())
             {
+                string errMsg = string.Empty;
+                foreach (var item in output.ErrorMessage)
+                    errMsg += item.Message+ Environment.NewLine;
+
                 if (output.Ids.Count == 0)
-                 await   ShowFailMessage(msg: $"批量{funName}全部失败！");
+                    await ShowFailMessage(msg: $"批量{funName}全部失败！"+ errMsg);
                 else
-                 await   ShowFailMessage(msg: $"批量{funName}部分失败！成功数量：{output.Ids.Count}；失败数量：{output.ErrorMessage.Count}");
+                    await ShowFailMessage(msg: $"批量{funName}部分失败！成功数量：{output.Ids.Count}；{errMsg}");
             }
             else
-              await  ShowSuccessMessage(msg: $"批量{funName}全部成功！");
+                await ShowSuccessMessage(msg: $"批量{funName}全部成功！");
         }
         #region 列表
         /// <summary>
@@ -513,14 +517,15 @@ namespace BXJG.Utils.RCL.Components
 
 
                 //后续逻辑都是辅助性的，因此放到异步中，加快主操作速度
-                _ = InvokeAsync(async () => {
-                  await   BatchOperationMessage(r);//await表示显示因此后才结束，所以这里不要等待
+                _ = InvokeAsync(async () =>
+                {
+                    await BatchOperationMessage(r);//await表示显示因此后才结束，所以这里不要等待
                     if (r.Ids.Any())
                         LoadListData();
                 });
 
 
-               
+
             }
             finally
             {
@@ -568,8 +573,9 @@ namespace BXJG.Utils.RCL.Components
                 item.ExtensionData.IsDeleting = false;
 
                 //后续逻辑都是辅助性的，因此放到异步中，加快主操作速度
-                _ = InvokeAsync(async() => {
-                  await  ShowSuccessMessage("删除提示", "删除成功！");
+                _ = InvokeAsync(async () =>
+                {
+                    await ShowSuccessMessage("删除提示", "删除成功！");
                     LoadListData();
                 });
 
