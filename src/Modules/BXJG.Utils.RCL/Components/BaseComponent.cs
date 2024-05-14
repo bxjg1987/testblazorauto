@@ -17,10 +17,13 @@ namespace BXJG.Utils.RCL.Components
     {
         protected HttpClient httpClient;
 
+        [Inject]
+        protected IHttpClientFactory HttpClientFactory { get; set; }
+
         /// <summary>
         /// 与后端交互，它提供了常用扩展方法
         /// </summary>
-        protected virtual HttpClient HttpClient => httpClient ??=BXJGHttpClientExt.DefaultFctory(ScopedServices.GetRequiredService<IHttpClientFactory>());
+        protected virtual HttpClient HttpClient => httpClient ??=BXJGHttpClientExt.DefaultFctory(HttpClientFactory);
 
         //[Inject]
         public ICancellationTokenProvider CancellationTokenProvider => ScopedServices.GetService<ICancellationTokenProvider>() ?? NullCancellationTokenProvider.Instance;
