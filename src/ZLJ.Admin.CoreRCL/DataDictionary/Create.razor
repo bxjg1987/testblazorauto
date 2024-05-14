@@ -3,14 +3,14 @@
 
 @inherits TreeCreateBaseComponent< DataDictionaryDto, DataDictionaryEditDto>
 
-<SectionContent SectionName=@(FuncName + "-create-body")>
+<SectionContent SectionName=@($"{Master}-create-body")>
     <Form @ref="frm" ValidateOnChange="true" Model="createDto" LabelColSpan="4" WrapperColSpan="20" OnFinish="OnFinish">
       
 
 
         <Descriptions Bordered Size="small">
             <DescriptionsItem Title="父级">
-                <TreeSelectDataDictionary @bind-Value="@context.ParentIdString" IsKeyId AllowClear Style="width:15rem;" />
+                <TreeSelectDataDictionary @bind-TreeIdNullable="context.ParentId" IsKeyId AllowClear Style="width:15rem;" />
             </DescriptionsItem>
             <DescriptionsItem Title="名称">
                 <Input @bind-Value="@context.DisplayName" />
@@ -22,7 +22,7 @@
     </Form>
 </SectionContent>
 
-<SectionContent SectionName=@(FuncName + "-create-btns")>
+<SectionContent SectionName=@($"{Master}-create-btns")>
     <Checkbox @bind-Checked=saveAndContinue>保存后继续新增</Checkbox>
     <Button OnClick="BtnResetClick" Icon=@IconType.Outline.Redo>重置</Button>
     <Button OnClick="BtnSaveClick" Type=@ButtonType.Primary Loading=isSaving Disabled=isSaving Icon=@IconType.Outline.Save>保存</Button>

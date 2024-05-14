@@ -2,11 +2,11 @@
 @using Microsoft.AspNetCore.Components.Sections
 
 @inherits TreeDetailUpdateBaseComponent<DataDictionaryDto, DataDictionaryEditDto>
-<SectionContent SectionName=@(FuncName+"-detail-update-title")>
+<SectionContent SectionName=@($"{Master}-detail-update-title")>
     <Icon Type=@detailUpdateIcon Theme=@IconThemeType.Outline />
     @(detailUpdateText)@(FuncName)
 </SectionContent>
-<SectionContent SectionName=@(FuncName + "-detail-update-body")>
+<SectionContent SectionName=@($"{Master}-detail-update-body")>
 
     @if (isEdit)
     {
@@ -14,7 +14,7 @@
 
             <Descriptions Bordered Size="small">
                 <DescriptionsItem Title="父级">
-                    <TreeSelectDataDictionary @bind-Value="@context.ParentIdString" IsKeyId AllowClear Style="width:15rem;" />
+                    <TreeSelectDataDictionary @bind-TreeIdNullable="context.ParentId" IsKeyId AllowClear Style="width:15rem;" />
                 </DescriptionsItem>
                 <DescriptionsItem Title="名称">
                     <Input @bind-Value="@context.DisplayName" />
@@ -35,7 +35,7 @@
         </Descriptions>
     }
 </SectionContent>
-<SectionContent SectionName=@(FuncName + "-detail-update-btns")>
+<SectionContent SectionName=@($"{Master}-detail-update-btns")>
     @if (IsShowDelete)
     {
         <Popconfirm Title="确定删除此项吗?" OnConfirm=@BtnDeleteClick>
