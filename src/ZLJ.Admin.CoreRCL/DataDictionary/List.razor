@@ -2,8 +2,8 @@
 @using ZLJ.Application.Share.Post
 @page "/data-dictionary"
 @attribute [ReuseTabsPage(Title = "数据字典")]
-@attribute [Authorize(PermissionNames.AdministratorBaseInfoPost)]
-@inherits TreeListBaseComponent< DataDictionaryDto,DataDictionaryGetTreeInput>
+@attribute [Authorize(BXJG.Utils.Application.Share.Auth.PermissionNames.GeneralTreeMenuName)]
+@inherits TreeListBaseComponent<DataDictionaryDto, DataDictionaryGetTreeInput>
 
 <Flex Gap="small" Vertical Justify="space-between">
 

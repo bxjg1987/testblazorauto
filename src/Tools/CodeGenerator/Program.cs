@@ -93,7 +93,8 @@ while (q.ToLower() == "c")
     if (ctx.Model.IsTree)
     {
         actions2.Add(AppServiceTree);
-        //actions2.Add(AppServiceTree);
+        actions2.Add(UIListTree);
+        actions2.Add(UIListTreeCs);
     }
     else
     {
@@ -616,4 +617,32 @@ void UIDetailUpdateCs(ExecuteContext ctx)
 
 
     Console.WriteLine("生成DetailUpdateCs完成");
+}
+
+
+void UIListTree(ExecuteContext ctx)
+{
+    Console.WriteLine("正在生成UIListTree...");
+    var str = engine.CompileRenderAsync("UIListTree", ctx).Result;
+
+    var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "List.razor");
+    Directory.CreateDirectory(Path.GetDirectoryName(file));
+
+    File.WriteAllText(file, str);
+
+
+    Console.WriteLine("生成UIListTree完成");
+}
+void UIListTreeCs(ExecuteContext ctx)
+{
+    Console.WriteLine("正在生成UIListTreeCs...");
+    var str = engine.CompileRenderAsync("UIListTreeCs", ctx).Result;
+
+    var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "List.razor.cs");
+    Directory.CreateDirectory(Path.GetDirectoryName(file));
+
+    File.WriteAllText(file, str);
+
+
+    Console.WriteLine("生成UIListTreeCs完成");
 }

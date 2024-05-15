@@ -25,7 +25,6 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace BXJG.Utils.RCL.Components
 {
     /*
-     * 之前我们实现过动态条件，参考BXJG.MudBlazor中的实现
      * 动态条件对于用户来讲有点复杂，所以我们暂时不考虑
      */
 
@@ -43,10 +42,6 @@ namespace BXJG.Utils.RCL.Components
         //where TEditDto : GeneralTreeNodeEditBaseDto//父类可以对输入做一定的处理
         where TGetAllInput : new()
     {
-        //界面部分就不要用IPermissionChecker了，不过server模式时AuthorizationService内部会使用IPermissionChecker
-        //请查看自定义授权策略提供器
-        //客户端部分是直接在前端内存中比对的，有区别于server模式的，自定义的授权策略提供器
-
         /// <summary>
         /// 请使用AuthorizationService
         /// </summary>
@@ -308,9 +303,6 @@ namespace BXJG.Utils.RCL.Components
         /// 条件变化时回调
         /// </summary>
         /// <returns></returns>
-
-
-
         protected virtual void BtnSearchClick()
         {
             //Console.WriteLine(DateTime.Now.ToString("fff"));
@@ -355,7 +347,10 @@ namespace BXJG.Utils.RCL.Components
             // table.ResetData();
             //PageIndex = 1;
             // PageSize = 20;
-            Keywords = string.Empty;
+            if (GetAllInput is IReset reset)
+                reset.Reset();
+            else
+                Keywords = string.Empty;
             //StateHasChanged();
             //await OnQuery(table.GetQueryModel());
             LoadListData();

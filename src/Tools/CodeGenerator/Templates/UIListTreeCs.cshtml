@@ -1,18 +1,24 @@
-﻿using AntDesign.TableModels;
+@using CodeGenerator
+@using RazorLight
+@using BXJG.Common;
+@using BXJG.Common.Extensions;
+@inherits TemplatePage<ExecuteContext>
+@{
+    DisableEncoding = true;//禁止html编码，因为我们是做代码生成器
+}
+using AntDesign.TableModels;
 using BXJG.Utils.Application.Share.GeneralTree;
 using BXJG.Utils.RCL.Components;
 using Microsoft.AspNetCore.Components.Web;
 
-namespace ZLJ.Admin.CoreRCL.DataDictionary
+namespace @(Model.Model.BlazorClientNamespace)
 {
     public partial class List
     {
-        protected override HttpClient HttpClient => httpClient ??= HttpClientFactory.CreateHttpClientUtils();
-
         /// <summary>
-        /// 当前功能名称
+        /// 当前功能显示名称
         /// </summary>
-        protected override string FuncName => "数据字典";
+        protected override string FuncName => "@(Model.Model.DisplayName)";
         /// <summary>
         /// 当前父节点
         /// </summary>
@@ -27,7 +33,10 @@ namespace ZLJ.Admin.CoreRCL.DataDictionary
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
-            await base.InitPermission(PermissionNames.AdministratorBaseInfoPostCreate, PermissionNames.AdministratorBaseInfoPostUpdate, PermissionNames.AdministratorBaseInfoPostDelete);
+            //通过另外的重装可以实现更多权限状态初始化
+            await base.InitPermission(@(Model.Model.PermissionNameCreateConst),
+                                      @(Model.Model.PermissionNameUpdateConst),
+                                      @(Model.Model.PermissionNameDeleteConst));
         }
         //让条件实现IReset接口去实现
         ///// <summary>
@@ -44,7 +53,7 @@ namespace ZLJ.Admin.CoreRCL.DataDictionary
         /// </summary>
         /// <param name="row"></param>
         /// <returns></returns>
-        Dictionary<string, object> Row(RowData<DataDictionaryDto> row)
+        Dictionary<string, object> Row(RowData<@Model.Model.DtoName> row)
         {
             Action<MouseEventArgs> OnDblClick = args =>
             {
@@ -117,7 +126,7 @@ namespace ZLJ.Admin.CoreRCL.DataDictionary
         /// </summary>
         /// <param name="sr"></param>
         /// <returns></returns>
-        void AddEnd(SaveResult<DataDictionaryDto> sr)
+        void AddEnd(SaveResult<@Model.Model.DtoName> sr)
         {
             isNeedReload = true;
             isShowCreateDialog = !sr.End;
@@ -142,7 +151,7 @@ namespace ZLJ.Admin.CoreRCL.DataDictionary
         /// 点击明细中的修改按钮
         /// </summary>
         /// <param name="sr"></param>
-        void BtnItemEditClick(DataDictionaryDto sr)
+        void BtnItemEditClick(@Model.Model.DtoName sr)
         {
             isEdit = true;
             detailUpdateId = sr.Id;
@@ -152,7 +161,7 @@ namespace ZLJ.Admin.CoreRCL.DataDictionary
         /// 点击明细中的详情事件
         /// </summary>
         /// <param name="sr"></param>
-        void BtnItemDetailClick(DataDictionaryDto sr)
+        void BtnItemDetailClick(@Model.Model.DtoName sr)
         {
             isEdit = false;
             detailUpdateId = sr.Id;
@@ -162,7 +171,7 @@ namespace ZLJ.Admin.CoreRCL.DataDictionary
         /// 当详情页执行删除后回调
         /// </summary>
         /// <param name="dto"></param>
-        void DetailDeleted(DataDictionaryDto dto)
+        void DetailDeleted(@Model.Model.DtoName dto)
         {
             isNeedReload = true;
             isShowDetailUpdateDialog = false;
@@ -172,7 +181,7 @@ namespace ZLJ.Admin.CoreRCL.DataDictionary
         /// </summary>
         /// <param name="sr"></param>
         /// <returns></returns>
-        void DetailUpdated(DataDictionaryDto sr)
+        void DetailUpdated(@Model.Model.DtoName sr)
         {
             isNeedReload = true;
             isShowDetailUpdateDialog = false;

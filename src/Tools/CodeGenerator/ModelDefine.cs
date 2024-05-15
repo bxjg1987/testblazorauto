@@ -185,19 +185,20 @@ namespace CodeGenerator
         /// </summary>
         public string PermissionNameDelete => $"{Name}Delete";
         /// <summary>
-        /// 查看和管理的常量全名，如：TestApplicationShareConsts.TestGet
+        /// cud的父权限常量名，如：xxxPermissionNames.xxxGet
+        /// 同时也作为查看权限的常量名称
         /// </summary>
         public string PermissionNameGetConst => $"{ApplicationShareConstName}.{nameof(PermissionNameGet)}";
         /// <summary>
-        /// 新增常量全名，如：TestApplicationShareConsts.TestCreate
+        /// 新增权限的常量名
         /// </summary>
         public string PermissionNameCreateConst => $"{ApplicationShareConstName}.{nameof(PermissionNameCreate)}";
         /// <summary>
-        /// 修改常量全名，如：TestApplicationShareConsts.TestUpdate
+        /// 修改权限的常量名
         /// </summary>
         public string PermissionNameUpdateConst => $"{ApplicationShareConstName}.{nameof(PermissionNameUpdate)}";
         /// <summary>
-        /// 删除常量全名，如：TestApplicationShareConsts.TestDelete
+        /// 删除权限的常量名
         /// </summary>
         public string PermissionNameDeleteConst => $"{ApplicationShareConstName}.{nameof(PermissionNameDelete)}";
         #endregion

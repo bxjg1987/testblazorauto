@@ -10,7 +10,7 @@ namespace BXJG.Utils.Application.Share.GeneralTree
     /// <summary>
     /// 树形数据的管理页面查询时的请求模型
     /// </summary>
-    public class GeneralTreeGetTreeInput // 与ForSelectInput不同，后者只针对选择，且有Search和Form模式
+    public class GeneralTreeGetTreeInput:IReset // 与ForSelectInput不同，后者只针对选择，且有Search和Form模式
     {
         //不要使用Nullable<TId>类型，因为某些情况此参数可能不允许为null
         //若数据很多 可能需要么次加载一个节点的数据，所以ParentId字段是必要的
@@ -36,6 +36,14 @@ namespace BXJG.Utils.Application.Share.GeneralTree
         /// 是否仅仅加载子节点，true只加载子节点，false加载所有后台节点
         /// </summary>
         public bool IsOnlyLoadChild { get; set; } = false;
+
+        public virtual void Reset() {
+            ParentCode = default;
+            ParentId = default;
+            IsOnlyLoadChild = false;
+            if (this is IHaveKeywords t)
+                t.Keywords = default;
+        }
 
         //由于关键字是or查询，若要让子类和父类的关键字条件在一个or链中，会让父类变得复杂，因此决定不在父类中定义关键字
         ///// <summary>
