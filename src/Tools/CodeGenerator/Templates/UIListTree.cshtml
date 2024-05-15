@@ -64,7 +64,7 @@
 @foreach (var field in Model.Model.NormalFields){
     @if(field.CSharpType=="bool"){
         <PropertyColumn Property="c=>c.@(field.Name)" ShowSorterTooltip="false" Width="5rem" @(field.FixedLeft==true?@"Fixed=""left""":(field.FixedLeft==false?@"Fixed=""right""":"")) Align=ColumnAlign.Center>
-            <Switch @bind-Value="@context.IsSysDefine" Size="@InputSize.Small" Disabled="true"></Switch>
+            <Switch @@bind-Value="@@context.IsSysDefine" Size="@@InputSize.Small" Disabled="true"></Switch>
         </PropertyColumn>
     }else{
         <PropertyColumn Property="c=>c.@(field.Name)" @(field.IsSort?"Sortable":"") ShowSorterTooltip="false" @(field.Width.IsNullOrWhiteSpaceBXJG()?"":@$"Width=""{field.Width}""") @(field.FixedLeft==true?@"Fixed=""left""":(field.FixedLeft==false?@"Fixed=""right""":"")) @(field.Position==true?"":(field.FixedLeft==false?@"Align=ColumnAlign.Right":"Align=ColumnAlign.Center"))/>        
@@ -72,7 +72,7 @@
 }
         <ActionColumn Title="操作" Width="240">
             <ButtonGroup Size="@@ButtonSize.Small">
-                <Button Size="@@ButtonSize.Small" Type="@@ButtonType.Primary" OnClick="x=>OnItemBtnDetailClick(context)">详情</Button>
+                    <Button Size="@@ButtonSize.Small" Type="@@ButtonType.Primary" OnClick="x=>BtnItemDetailClick(context)">详情</Button>
                 @@if (createIsGranted)
                 {
                     <Button Size="@@ButtonSize.Small" OnClick="x=>BtnAddSubClick(context.Id)">添加子节点</Button>
@@ -83,8 +83,7 @@
                 }
                 @@if (deleteIsGranted)
                 {
-                    <Popconfirm Title="将删除此项及其所有子项，确定删除吗?"
-                                OnConfirm="()=>BtnDeleteItemClick(context)">
+                    <Popconfirm Title="将删除此项及其所有子项，确定删除吗?" OnConfirm="()=>BtnDeleteItemClick(context)">
                         <Button Size="@@ButtonSize.Small" Danger="true" Loading=@@context.ExtensionData.IsDeleting>删除</Button>
                     </Popconfirm>
                 }
@@ -100,7 +99,7 @@
         <Button OnClick="BtnCloseCreateClick">关闭</Button>
     </Template>;
 }
-<Modal DestroyOnClose="true" Footer="renderFragment" @@bind-Visible="isCreateDialogVisible" Draggable="true" Width=@@("40vw")>
+    <Modal DestroyOnClose="true" Footer="renderFragment" @@bind-Visible="isShowCreateDialog" Draggable="true" Width=@@("40vw")>
     <TitleTemplate>
         <Icon Type="plus" Theme="outline" />
         新增@@(FuncName)
@@ -117,7 +116,7 @@
         <Button OnClick="BtnDetailUpdateCloseClick">关闭</Button>
     </Template>;
 }
-<Modal DestroyOnClose="true" Footer="renderFragment1" @@bind-Visible="isShowDetailUpdate" Draggable="true" Width=@@("40vw")>
+<Modal DestroyOnClose="true" Footer="renderFragment1" @@bind-Visible="isShowDetailUpdateDialog" Draggable="true" Width=@@("40vw")>
     <TitleTemplate>
         <SectionOutlet SectionName=@@($"{GetHashCode()}-detail-update-title") />
     </TitleTemplate>
