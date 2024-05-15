@@ -14,7 +14,6 @@ using ZLJ.RCL.Interceptors;
 namespace ZLJ.RCL.Components
 {
     /*
-     * 由于抽象应用服务限制，这里必须提供这些泛型
      * 使用继承，这样所有调用方可以继续使用TreeSelect原生的属性，若包一层会失去这样的能力。
      * 由于我们的树是抽象的，对应提供此抽象下拉树组件，各具体树形数据最好提供对应的子类组件。
      * 有时候可能仅需要选择某个节点下的子节点集合，而不是树形的，为了统一，统一使用树控件。
@@ -23,7 +22,7 @@ namespace ZLJ.RCL.Components
      * selectTree查看文档时要同时结合select的文档
      */
 
-    //有时候需要绑定long? 有时候需要绑定long 索性用string作为value，然后提供两个外挂属性绑定
+    //有时候需要绑定long? 有时候需要绑定long 有时候需要绑定code，索性用string作为value，然后提供两个外挂属性绑定
 
     /// <summary>
     /// 参考开发随记中的设计思路
@@ -31,7 +30,7 @@ namespace ZLJ.RCL.Components
     /// 推荐所有树形数据的选择都继承它
     /// </summary>
     /// <typeparam name="TGetTreeForSelectOutput"></typeparam>
-    public class TreeSelectZlj<TGetTreeForSelectOutput> : TreeSelect<string,TGetTreeForSelectOutput> where TGetTreeForSelectOutput : IGeneralTree<TGetTreeForSelectOutput>
+    public class TreeSelectZlj<TGetTreeForSelectOutput> : TreeSelect<string, TGetTreeForSelectOutput> where TGetTreeForSelectOutput : IGeneralTree<TGetTreeForSelectOutput>
         //where TGetNodesForSelectOutput : ComboboxItemDto 由于我们规定了统一使用树，所以这个约束没有必要
     {
         [Inject]
@@ -53,14 +52,42 @@ namespace ZLJ.RCL.Components
 
 
         [Parameter]
-        public long TreeId { get; set; }
+        public long TreeId
+        {
+            get
+            {
+                if (Value.IsNullOrWhiteSpaceBXJG())
+                    return default;
+                return long.Parse(Value);
+            }
+            set
+            {
+                if (value == 0)
+                    Value = string.Empty;
+                Value = value.ToString();
+            }
+        }
 
         [Parameter]
         public EventCallback<long> TreeIdChanged { get; set; }
 
 
         [Parameter]
-        public long? TreeIdNullable { get; set; }
+        public long? TreeIdNullable
+        {
+            get
+            {
+                if (Value.IsNullOrWhiteSpaceBXJG() || Value == "0")
+                    return default;
+                return long.Parse(Value);
+            }
+            set
+            {
+                if (value == 0 || value == null)
+                    Value = string.Empty;
+                Value = value.ToString();
+            }
+        }
 
         [Parameter]
         public EventCallback<long?> TreeIdNullableChanged { get; set; }
@@ -139,10 +166,19 @@ namespace ZLJ.RCL.Components
 
             if (KeyExpression == default)
             {
+                //if (IsKeyId)
+                //    KeyExpression = node => node.DataItem.Id == 0 ? default : node.DataItem.Id.ToString();
+                //else
+                //    KeyExpression = node => node.DataItem.Code;
+                KeyExpression = node => node.DataItem.Id.ToString();
+            }
+
+            if (ItemValue == default)
+            {
                 if (IsKeyId)
-                    KeyExpression = node => node.DataItem.Id == 0 ? default : node.DataItem.Id.ToString();
+                    ItemValue = x => x.Id.ToString();
                 else
-                    KeyExpression = node => node.DataItem.Code;
+                    ItemValue = x => x.Code;
             }
 
             if (IsLeafExpression == default)

@@ -172,7 +172,20 @@ namespace BXJG.Utils.GeneralTree
 
             //    if (act != null)
             //      await act(item);
+
+            
+
+            var xdjd = await Repository.GetBrotherWithOffspringAsync(item);
+            var parent = xdjd.Item1;
+            var brothers = xdjd.Item2;
+
             await Repository.DeleteAsync(c => c.Code.StartsWith(item.Code));
+
+            var temp = brothers.Single(x => x.Id == item.Id);
+            var k = brothers.IndexOf(temp);
+            brothers.RemoveAt(k);
+
+            TreeExtensions.ResetCode(parent?.Code, brothers, k);
 
             //}
             await CurrentUnitOfWork.SaveChangesAsync();
@@ -374,7 +387,7 @@ namespace BXJG.Utils.GeneralTree
             //6、重置相关节点code
             if (betweenBrother)
             {
-                var idx = 0;
+                int idx;
                 if (targetIndex > souteceIndex)
                     idx = souteceIndex;
                 else

@@ -10,7 +10,7 @@
 
         <Descriptions Bordered Size="small">
             <DescriptionsItem Title="父级">
-                <TreeSelectDataDictionary @bind-TreeIdNullable="context.ParentId" IsKeyId AllowClear Style="width:15rem;" />
+                <TreeSelectDataDictionary @bind-TreeIdNullable="context.ParentId" IsKeyId AllowClear Style="width:15rem;" Placeholder="请选择父级" />
             </DescriptionsItem>
             <DescriptionsItem Title="名称">
                 <Input @bind-Value="@context.DisplayName" />
