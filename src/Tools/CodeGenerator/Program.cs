@@ -93,8 +93,12 @@ while (q.ToLower() == "c")
     if (ctx.Model.IsTree)
     {
         actions2.Add(AppServiceTree);
-        actions2.Add(UIListTree);
-        actions2.Add(UIListTreeCs);
+        actions2.Add(UITreeList);
+        actions2.Add(UITreeListCs);
+        actions2.Add(UITreeCreate);
+        actions2.Add(UITreeCreateCs);
+        actions2.Add(UITreeDetailUpdate);
+        actions2.Add(UITreeDetailUpdateCs);
     }
     else
     {
@@ -608,7 +612,7 @@ void UIDetailUpdate(ExecuteContext ctx)
 void UIDetailUpdateCs(ExecuteContext ctx)
 {
     Console.WriteLine("正在生成DetailUpdateCs...");
-    var str = engine.CompileRenderAsync("DetailUpdateCs", ctx).Result;
+    var str = engine.CompileRenderAsync("UIDetailUpdateCs", ctx).Result;
 
     var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "DetailUpdate.razor.cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
@@ -620,10 +624,10 @@ void UIDetailUpdateCs(ExecuteContext ctx)
 }
 
 
-void UIListTree(ExecuteContext ctx)
+void UITreeList(ExecuteContext ctx)
 {
-    Console.WriteLine("正在生成UIListTree...");
-    var str = engine.CompileRenderAsync("UIListTree", ctx).Result;
+    Console.WriteLine("正在生成UITreeList...");
+    var str = engine.CompileRenderAsync("UITreeList", ctx).Result;
 
     var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "List.razor");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
@@ -631,12 +635,12 @@ void UIListTree(ExecuteContext ctx)
     File.WriteAllText(file, str);
 
 
-    Console.WriteLine("生成UIListTree完成");
+    Console.WriteLine("生成UITreeList完成");
 }
-void UIListTreeCs(ExecuteContext ctx)
+void UITreeListCs(ExecuteContext ctx)
 {
-    Console.WriteLine("正在生成UIListTreeCs...");
-    var str = engine.CompileRenderAsync("UIListTreeCs", ctx).Result;
+    Console.WriteLine("正在生成UITreeListCs...");
+    var str = engine.CompileRenderAsync("UITreeListCs", ctx).Result;
 
     var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "List.razor.cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
@@ -644,5 +648,59 @@ void UIListTreeCs(ExecuteContext ctx)
     File.WriteAllText(file, str);
 
 
-    Console.WriteLine("生成UIListTreeCs完成");
+    Console.WriteLine("生成UITreeListCs完成");
+}
+void UITreeCreate(ExecuteContext ctx)
+{
+    Console.WriteLine("正在生成TreeCreate...");
+    var str = engine.CompileRenderAsync("UITreeCreate", ctx).Result;
+
+    var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "Create.razor");
+    Directory.CreateDirectory(Path.GetDirectoryName(file));
+
+    File.WriteAllText(file, str);
+
+
+    Console.WriteLine("生成TreeCreate完成");
+}
+void UITreeCreateCs(ExecuteContext ctx)
+{
+    Console.WriteLine("正在生成TreeCreateCs...");
+    var str = engine.CompileRenderAsync("UITreeCreateCs", ctx).Result;
+
+    var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "Create.razor.cs");
+    Directory.CreateDirectory(Path.GetDirectoryName(file));
+
+    File.WriteAllText(file, str);
+
+
+    Console.WriteLine("生成TreeCreateCs完成");
+}
+
+
+void UITreeDetailUpdate(ExecuteContext ctx)
+{
+    Console.WriteLine("正在生成TreeDetailUpdate...");
+    var str = engine.CompileRenderAsync("UITreeDetailUpdate", ctx).Result;
+
+    var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "DetailUpdate.razor");
+    Directory.CreateDirectory(Path.GetDirectoryName(file));
+
+    File.WriteAllText(file, str);
+
+
+    Console.WriteLine("生成TreeDetailUpdate完成");
+}
+void UITreeDetailUpdateCs(ExecuteContext ctx)
+{
+    Console.WriteLine("正在生成TreeDetailUpdateCs...");
+    var str = engine.CompileRenderAsync("UITreeDetailUpdateCs", ctx).Result;
+
+    var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "DetailUpdate.razor.cs");
+    Directory.CreateDirectory(Path.GetDirectoryName(file));
+
+    File.WriteAllText(file, str);
+
+
+    Console.WriteLine("生成TreeDetailUpdateCs完成");
 }

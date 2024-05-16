@@ -1,4 +1,6 @@
 ﻿
+using BXJG.Utils.Application.Share.Auth;
+
 namespace ZLJ.Admin.CoreRCL.DataDictionary
 {
     public partial class DetailUpdate
@@ -15,9 +17,14 @@ namespace ZLJ.Admin.CoreRCL.DataDictionary
 
         string detailUpdateIcon => isEdit ? IconType.Outline.Edit : IconType.Outline.File;
 
-        //protected override Task OnInitializedAsync()
-        //{
-        //    return base.OnInitializedAsync();
-        //}
+#if !DEBUG
+        [AbpExceptionInterceptor]
+#endif
+        protected override async Task OnInitializedAsync()
+        {
+            await base.OnInitializedAsync();
+            await base.InitPermission(PermissionNames.GeneralTreeUpdatePermissionName,
+                                      PermissionNames.GeneralTreeDeletePermissionName);
+        }
     }
 }

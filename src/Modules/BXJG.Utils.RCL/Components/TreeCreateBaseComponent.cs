@@ -81,7 +81,10 @@ namespace BXJG.Utils.RCL.Components
         /// <returns></returns>
         protected virtual ValueTask ResetCore()
         {
-            createDto = new TCreateInput();
+            if (createDto != null && createDto is IReset t)
+                t.Reset();
+            else
+                createDto = new TCreateInput();
             createDto.ParentId = ParentId;
             return ValueTask.CompletedTask;
         }
@@ -96,7 +99,7 @@ namespace BXJG.Utils.RCL.Components
         /// <summary>
         /// 保存后是否继续新增
         /// </summary>
-        protected bool saveAndContinue;
+        protected bool isSaveAndContinue;
         /// <summary>
         /// 正在保存...
         /// </summary>
@@ -117,8 +120,8 @@ namespace BXJG.Utils.RCL.Components
                 isSaving = false;
                 //后续逻辑都是辅助性的，因此放到异步中，加快主操作速度
                 _ = InvokeAsync(async () => {
-                  await  ShowSuccessMessage(msg: "新增成功！");//没必要等待
-                    if (saveAndContinue)
+                  await ShowSuccessMessage(msg: "新增成功！");//没必要等待
+                    if (isSaveAndContinue)
                     {
                         await Reset();
                         await OnAddEnd.InvokeAsync(new SaveResult<TEntityDto> { Dto = r });
@@ -127,9 +130,6 @@ namespace BXJG.Utils.RCL.Components
                     else
                         await OnAddEnd.InvokeAsync(new SaveResult<TEntityDto> { Dto = r, End = true });
                 });
-
-
-                
             }
             finally
             {
@@ -149,6 +149,5 @@ namespace BXJG.Utils.RCL.Components
         /// </summary>
         [Parameter]
         public EventCallback<SaveResult<TEntityDto>> OnAddEnd { get; set; }
-
     }
 }

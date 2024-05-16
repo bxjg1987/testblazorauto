@@ -6,10 +6,11 @@
 @{
     DisableEncoding = true;//禁止html编码，因为我们是做代码生成器
 }
+using @(Model.Model.ApplicationShareNamespace);
 
 namespace @(Model.Model.BlazorClientNamespace)
 {
-    public partial class DetailUpdate
+    public partial class Create
     {
         [Parameter]
         public object Master {  get; set; }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Force.DeepCloner;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -9,6 +10,9 @@ namespace BXJG.Common.Contracts
     /// </summary>
     public interface IReset
     {
-        void Reset();
+        void Reset()
+        {
+            Activator.CreateInstance(GetType()).DeepCloneTo(this);
+        }
     }
 }

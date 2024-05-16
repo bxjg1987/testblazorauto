@@ -7,8 +7,10 @@
     DisableEncoding = true;//禁止html编码，因为我们是做代码生成器
 }
 @("@using") @Model.Model.ApplicationShareNamespace
+@using BXJG.Utils.Application.Share.GeneralTree
+@@using Microsoft.AspNetCore.Components.Sections
 
-@@inherits ZLJ.RCL.Components.CreateBaseComponent<@Model.Model.DtoName, @Model.Model.CreateDtoName>
+@@inherits TreeCreateBaseComponent<@Model.Model.DtoName, @Model.Model.CreateDtoName>
 
 <SectionContent SectionName=@@($"{Master}-create-body")>
     <Form @@ref="frm" ValidateOnChange="true" Model="createDto" LabelColSpan="5" WrapperColSpan="19" OnFinish="OnFinish">
@@ -22,14 +24,14 @@
     else{    
         <FormItem>
             <Input @@bind-Value=context.@field.Name AllowClear />
-        </FormItem>      
+        </FormItem>
     }
 }
     </Form>
 </SectionContent>
 
 <SectionContent SectionName=@@($"{Master}-create-btns")>
-    <Checkbox @@bind-Checked=saveAndContinue>保存后继续新增</Checkbox>
+    <Checkbox @@bind-Checked=isSaveAndContinue>保存后继续新增</Checkbox>
     <Button OnClick="BtnResetClick" Icon=@@IconType.Outline.Redo>重置</Button>
     <Button OnClick="BtnSaveClick" Type=@@ButtonType.Primary Loading=isSaving Disabled=isSaving Icon=@@IconType.Outline.Save>保存</Button>
 </SectionContent>

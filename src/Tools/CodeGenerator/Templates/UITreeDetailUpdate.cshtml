@@ -10,7 +10,7 @@
 @("@using") BXJG.Utils.Application.Share.Dtos
 @("@using") Microsoft.AspNetCore.Components.Sections
 
-@@inherits DetailUpdateBaseComponent<@Model.Model.DtoName, @Model.Model.PrimaryFieldCSharpType, @Model.Model.EditDtoName>
+@@inherits TreeDetailUpdateBaseComponent<@Model.Model.DtoName, @Model.Model.EditDtoName>
 
 <SectionContent SectionName=@@($"{Master}-detail-update-title")>
     <Icon Type=@@detailUpdateIcon Theme=@@IconThemeType.Outline />
@@ -20,7 +20,7 @@
 
     @@if (isEdit)
     {
-        <Form @@ref="frm" ValidateOnChange="true" Model="editDto" LabelColSpan="5" WrapperColSpan="19" OnFinish="OnFinish">
+        <Form @@ref="frm" ValidateOnChange="true" Model="editDto" LabelColSpan="4" WrapperColSpan="20" OnFinish="OnFinish">
 @foreach(var field in Model.Model.NormalFields)
 {
     if(field.CSharpType== "bool"){
@@ -59,8 +59,8 @@
 <SectionContent SectionName=@@($"{Master}-detail-update-btns")>
     @@if (IsShowDelete)
     {
-        <Popconfirm Title="确定删除此项吗?" OnConfirm=BtnDeleteClick>
-            <Button Loading=isDeleting Danger=true>删除</Button>
+        <Popconfirm Title="确定删除此项吗?" OnConfirm=@@BtnDeleteClick>
+            <Button  Loading=isDeleting Danger=true>删除</Button>
         </Popconfirm>
     }
     <ButtonGroup>
