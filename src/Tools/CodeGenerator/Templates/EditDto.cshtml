@@ -24,7 +24,7 @@ namespace @(Model.Model.ApplicationShareNamespace)
         /// <summary>
         /// @(field.DisplayName)
         ///</summary>
-        [DisplayName("@(field.DisplayName)")]
+        [Display(Name="@(field.DisplayName)")]
         public @(field.CSharpType)@(field.IsRequired?"":"?") @field.Name { get; set; }</text>}
     }
 }

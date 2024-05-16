@@ -99,7 +99,8 @@
         <Button OnClick="BtnCloseCreateClick">关闭</Button>
     </Template>;
 }
-    <Modal DestroyOnClose="true" Footer="renderFragment" @@bind-Visible="isShowCreateDialog" Draggable="true" Width=@@("40vw")>
+    <Modal DestroyOnClose="true" Footer="renderFragment" @@bind-Visible="isShowCreateDialog" Draggable="true" Width=@@("40vw") 
+       Class="frm-dal" >
     <TitleTemplate>
         <Icon Type="plus" Theme="outline" />
         新增@@(FuncName)
@@ -116,7 +117,8 @@
         <Button OnClick="BtnDetailUpdateCloseClick">关闭</Button>
     </Template>;
 }
-<Modal DestroyOnClose="true" Footer="renderFragment1" @@bind-Visible="isShowDetailUpdateDialog" Draggable="true" Width=@@("40vw")>
+<Modal DestroyOnClose="true" Footer="renderFragment1" @@bind-Visible="isShowDetailUpdateDialog" Draggable="true" Width=@@("40vw")
+       Class="frm-dal" >
     <TitleTemplate>
         <SectionOutlet SectionName=@@($"{GetHashCode()}-detail-update-title") />
     </TitleTemplate>

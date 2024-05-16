@@ -1,5 +1,4 @@
 ﻿
-using BXJG.Utils.Application.Share.Auth;
 
 namespace ZLJ.Admin.CoreRCL.DataDictionary
 {
@@ -23,8 +22,8 @@ namespace ZLJ.Admin.CoreRCL.DataDictionary
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
-            await base.InitPermission(PermissionNames.GeneralTreeUpdatePermissionName,
-                                      PermissionNames.GeneralTreeDeletePermissionName);
+            await base.InitPermission(BXJG.Utils.Application.Share.Auth.PermissionNames.GeneralTreeUpdatePermissionName,
+                                      BXJG.Utils.Application.Share.Auth.PermissionNames.GeneralTreeDeletePermissionName);
         }
     }
 }

@@ -43,6 +43,9 @@ namespace BXJG.Utils.RCL.Components
         /// 新增时的模型
         /// </summary>
         protected TCreateInput createDto = new TCreateInput();
+
+        protected virtual bool IsBusy => isSaving || isReseting;
+
         /// <summary>
         /// 正在执行重置
         /// </summary>
@@ -125,7 +128,6 @@ namespace BXJG.Utils.RCL.Components
                     {
                         await Reset();
                         await OnAddEnd.InvokeAsync(new SaveResult<TEntityDto> { Dto = r });
-                    
                     }
                     else
                         await OnAddEnd.InvokeAsync(new SaveResult<TEntityDto> { Dto = r, End = true });

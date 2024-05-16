@@ -13,17 +13,17 @@
 @@inherits TreeCreateBaseComponent<@Model.Model.DtoName, @Model.Model.CreateDtoName>
 
 <SectionContent SectionName=@@($"{Master}-create-body")>
-    <Form @@ref="frm" ValidateOnChange="true" Model="createDto" LabelColSpan="5" WrapperColSpan="19" OnFinish="OnFinish">
+    <Form @@ref="frm" ValidateOnChange="true" Model="createDto" LabelColSpan="5" WrapperColSpan="19" OnFinish="OnFinish" Loading="IsBusy">
 @foreach(var field in Model.Model.NormalFields)
 {
     if(field.CSharpType== "bool"){
         <FormItem Label="@field.DisplayName">
-            <Switch @@bind-Checked=context.@field.Name />
+            <Switch @@bind-Checked="context.@field.Name" />
         </FormItem>
     }
     else{    
         <FormItem>
-            <Input @@bind-Value=context.@field.Name AllowClear />
+            <Input @@bind-Value="context.@field.Name AllowClear" />
         </FormItem>
     }
 }
@@ -31,7 +31,7 @@
 </SectionContent>
 
 <SectionContent SectionName=@@($"{Master}-create-btns")>
-    <Checkbox @@bind-Checked=isSaveAndContinue>保存后继续新增</Checkbox>
-    <Button OnClick="BtnResetClick" Icon=@@IconType.Outline.Redo>重置</Button>
-    <Button OnClick="BtnSaveClick" Type=@@ButtonType.Primary Loading=isSaving Disabled=isSaving Icon=@@IconType.Outline.Save>保存</Button>
+    <Checkbox @@bind-Checked="isSaveAndContinue">保存后继续新增</Checkbox>
+    <Button OnClick="BtnResetClick" Icon="@@IconType.Outline.Redo" Loading=isReseting Disabled=IsBusy>重置</Button>
+    <Button OnClick="BtnSaveClick" Icon="@@IconType.Outline.Save" Loading="isSaving" Disabled="IsBusy" Type="@@ButtonType.Primary" >保存</Button>
 </SectionContent>

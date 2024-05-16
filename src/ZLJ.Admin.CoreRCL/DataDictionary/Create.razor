@@ -1,29 +1,18 @@
-﻿@using BXJG.Utils.Application.Share.GeneralTree
-@using Microsoft.AspNetCore.Components.Sections
-
-@inherits TreeCreateBaseComponent< DataDictionaryDto, DataDictionaryEditDto>
+﻿@inherits TreeCreateBaseComponent<DataDictionaryDto, DataDictionaryEditDto>
 
 <SectionContent SectionName=@($"{Master}-create-body")>
-    <Form @ref="frm" ValidateOnChange="true" Model="createDto" LabelColSpan="5" WrapperColSpan="19" OnFinish="OnFinish">
-      
-
-
-        <Descriptions Bordered Size="small">
-            <DescriptionsItem Title="父级">
-                <TreeSelectDataDictionary @bind-TreeIdNullable="context.ParentId" IsKeyId AllowClear Style="width:15rem;" Placeholder="请选择父级" />
-            </DescriptionsItem>
-            <DescriptionsItem Title="名称">
-                <Input @bind-Value="@context.DisplayName" />
-            </DescriptionsItem>
-        </Descriptions>
-
-
-
+    <Form @ref="frm" ValidateOnChange="true" Model="createDto" LabelColSpan="5" WrapperColSpan="19" OnFinish="OnFinish" Loading=IsBusy>
+        <FormItem Label="上级">
+            <TreeSelectDataDictionary @bind-TreeIdNullable="context.ParentId" IsKeyId AllowClear Style="width:15rem;" Placeholder="请选择父级" />
+        </FormItem>
+        <FormItem>
+            <Input @bind-Value="@context.DisplayName" />
+        </FormItem>
     </Form>
 </SectionContent>
 
 <SectionContent SectionName=@($"{Master}-create-btns")>
     <Checkbox @bind-Checked=isSaveAndContinue>保存后继续新增</Checkbox>
-    <Button OnClick="BtnResetClick" Icon=@IconType.Outline.Redo>重置</Button>
-    <Button OnClick="BtnSaveClick" Type=@ButtonType.Primary Loading=isSaving Disabled=isSaving Icon=@IconType.Outline.Save>保存</Button>
+    <Button OnClick="BtnResetClick" Icon=@IconType.Outline.Redo Loading=isReseting Disabled=IsBusy>重置</Button>
+    <Button OnClick="BtnSaveClick" Type=@ButtonType.Primary Loading=isSaving Disabled=IsBusy Icon=@IconType.Outline.Save>保存</Button>
 </SectionContent>

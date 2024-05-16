@@ -33,15 +33,14 @@ namespace BXJG.Utils.Application.Share.GeneralTree
         //public long? ParentId { get; set; }
 
         long? parentId;
+        [Display(Name = "父节点", Description = "aaaaa")]
         public long? ParentId { get => parentId; set => parentId = value; }
         object IHaveParentId.Id { get => Id; set => Id = Convert.ToInt64(value); }
         object IHaveParentId.ParentId { get => ParentId; set => ParentId = value == null ? null : Convert.ToInt64(value); }
-
-
         /// <summary>
         /// 显示名称
         /// </summary>
-        //[Display( Name ="名称", Description ="aaaaa" )] //这些标签对mudblazor无效，但其它blazor ui库也许有用 还有本地化等问题
+        [Display( Name ="名称", Description ="aaaaa" )] //这些标签对mudblazor无效，但其它blazor ui库也许有用 还有本地化等问题
         //[DisplayName("bbbbb")] //感觉过时了
         [Required(ErrorMessage = "请输入名称")]
         //[StringLength(GeneralTreeEntity.MaxDisplayNameLength)]
@@ -58,6 +57,7 @@ namespace BXJG.Utils.Application.Share.GeneralTree
         /// <summary>
         /// 某些UI框架(如antblazor)，下拉框只能绑定string，所以这里提供个多余的属性
         /// </summary>
+        [Obsolete]
         public string? ParentIdString
         {
             get => ParentId.HasValue ? ParentId.ToString() : default;

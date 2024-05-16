@@ -90,3 +90,6 @@ ol {
 .hide-loading {
     display:none;
 }*/
+.frm-dal .ant-modal-body {
+    background-color: #efefef;
+}
