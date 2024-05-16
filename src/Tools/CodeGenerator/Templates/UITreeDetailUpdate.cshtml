@@ -40,18 +40,14 @@
     {
 @foreach(var field in Model.Model.NormalFields)
 { 
-    <GridRow>
-        <GridCol Span="5">@field.DisplayName</GridCol>     
-            <GridCol Span="19">
-
-    if(field.CSharpType== "bool"){
-                <Switch @@bind-Checked=context.@field.Name />
-       
+        <GridRow>
+            <GridCol Span="5">@field.DisplayName</GridCol>     
+    @if(field.CSharpType== "bool"){
+            <GridCol Span="19"><Switch Checked=dto.@field.Name Disabled /></GridCol>
     }
     else{    
-                <Input @@bind-Value=context.@field.Name AllowClear />
+            <GridCol Span="19">@($"@dto.{field.Name}")</GridCol>  
     }
-            </GridCol>
        </GridRow>
 }
     }
