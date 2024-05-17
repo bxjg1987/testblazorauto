@@ -51,6 +51,10 @@ namespace CodeGenerator
         /// </summary>
         public string CSharpType { get; set; }
         /// <summary>
+        /// 如果可空，则返回CSharpType? 否则返回CSharpType
+        /// </summary>
+        public string CSharpTypeNullable => CSharpType + (IsRequired ? "" : "?");
+        /// <summary>
         /// 字段长度
         /// </summary>
         public int Length { get; set; }

@@ -64,7 +64,7 @@
 @foreach (var field in Model.Model.NormalFields){
     @if(field.CSharpType=="bool"){
         <PropertyColumn Property="c=>c.@(field.Name)" ShowSorterTooltip="false" Width="5rem" @(field.FixedLeft==true?@"Fixed=""left""":(field.FixedLeft==false?@"Fixed=""right""":"")) Align=ColumnAlign.Center>
-            <Switch @@bind-Value="@@context.IsSysDefine" Size="@@InputSize.Small" Disabled="true"></Switch>
+            <Switch @@bind-Value="@@context.@(field.Name)" Size="@@InputSize.Small" Disabled="true"></Switch>
         </PropertyColumn>
     }else{
         <PropertyColumn Property="c=>c.@(field.Name)" @(field.IsSort?"Sortable":"") ShowSorterTooltip="false" @(field.Width.IsNullOrWhiteSpaceBXJG()?"":@$"Width=""{field.Width}""") @(field.FixedLeft==true?@"Fixed=""left""":(field.FixedLeft==false?@"Fixed=""right""":"")) @(field.Position==true?"":(field.FixedLeft==false?@"Align=ColumnAlign.Right":"Align=ColumnAlign.Center"))/>        

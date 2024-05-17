@@ -34,10 +34,21 @@
                                     @:Precision="@field.NumberPrecision"
                                 }
                                 @if(field.NumberMax.HasValue){
-                                    @:Max="@field.NumberMax"
+                                    @:Max="@(field.NumberMax)M"
                                 }
                                 @if(field.NumberMin.HasValue){
-                                    @:Max="@field.NumberMin"
+                                    @:Min="@(field.NumberMin)M"
+                                }/>
+        </FormItem>
+    }
+    else if(field.CSharpType == "int" || field.CSharpType=="long" || field.CSharpType=="byte"|| field.CSharpType=="short"){
+        <FormItem>
+            <AntDesign.InputNumber @@bind-Value="context.@field.Name"
+                                @if(field.NumberMax.HasValue){
+                                    @:Max="@(field.NumberMax)"
+                                }
+                                @if(field.NumberMin.HasValue){
+                                    @:Min="@(field.NumberMin)"
                                 }/>
         </FormItem>
     }
