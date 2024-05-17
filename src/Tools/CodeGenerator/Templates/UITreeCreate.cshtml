@@ -21,7 +21,7 @@
             <Switch @@bind-Checked="context.@field.Name" />
         </FormItem>
     }
-    else if(field.CSharpType == "decimal" || field.CSharpType=="float" || field.CSharpType=="double"){
+    else if(field.CSharpTypeIsFraction){
         <FormItem>
             <AntDesign.InputNumber @@bind-Value="context.@field.Name"
                                 @if(field.NumberPrecision.HasValue){
@@ -35,7 +35,7 @@
                                 }/>
         </FormItem>
     }
-    else if(field.CSharpType == "int" || field.CSharpType=="long" || field.CSharpType=="byte"|| field.CSharpType=="short"){
+    else if(field.CSharpTypeIsInteger){
         <FormItem>
             <AntDesign.InputNumber @@bind-Value="context.@field.Name"
                                 @if(field.NumberMax.HasValue){
@@ -44,6 +44,11 @@
                                 @if(field.NumberMin.HasValue){
                                     @:Min="@(field.NumberMin)"
                                 }/>
+        </FormItem>
+    }
+    else if(field.CSharpTypeIsDateTime){
+        <FormItem>
+            <AntDesign.DatePicker @@bind-Value="context.@field.Name" />
         </FormItem>
     }
     else{    

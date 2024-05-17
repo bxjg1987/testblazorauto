@@ -480,13 +480,16 @@ namespace BXJG.Utils.RCL.Components
         //    await Refresh();
         //}
         #endregion
-
+        /// <summary>
+        /// 是否正在加载、删除...
+        /// </summary>
+        protected virtual bool IsBusy => IsLoading || isDeleting;
         #region 删除
         //没权限时不显示的，所以不加入这个判断
         /// <summary>
         /// 是否禁用批量删除按钮，出现任意情况，则为true：正在加载数据；正在删除数据；没有选择数据；
         /// </summary>
-        protected virtual bool ShouldDisableDelete => IsLoading || isDeleting || SelectedItems == default || !SelectedItems.Any();
+        protected virtual bool ShouldDisableDelete => IsBusy || SelectedItems == default || !SelectedItems.Any();
         /// <summary>
         /// 是否正在执行批量删除操作
         /// </summary>

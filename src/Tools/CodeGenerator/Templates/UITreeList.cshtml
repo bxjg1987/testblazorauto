@@ -7,11 +7,13 @@
     DisableEncoding = true;//禁止html编码，因为我们是做代码生成器
 }
 @("@page") "/@(Model.Model.Name)"
+
 @@using BXJG.Utils.Application.Share.GeneralTree
 @@using @(Model.Model.ApplicationShareNamespace);
 
 @@attribute [ReuseTabsPage(Title = "@Model.Model.DisplayName")]
 @@attribute [Authorize(@Model.Model.PermissionNameGetConst)]
+
 @@inherits TreeListBaseComponent<@Model.Model.DtoName, @Model.Model.ConditionName>
 
 <Flex Gap="small" Vertical Justify="space-between">
@@ -20,40 +22,64 @@
          <Flex Gap="small">
             @@if (createIsGranted)
             {
-                <Button Type="@@ButtonType.Primary" Icon="@@IconType.Outline.Plus" OnClick="BtnCreateClick">新增</Button>
+                <Button Type="@@ButtonType.Primary" Icon="@@IconType.Outline.Plus" OnClick="BtnCreateClick" Disabled="IsBusy">新增</Button>
             }
             @@if(deleteIsGranted)
             {
                 <Popconfirm Title="将删除已经的项及其所有子项，确定删除吗?"
                             OnConfirm="BtnDeleteClick">
-                    <Button Type="@@ButtonType.Default" Icon="@@IconType.Outline.Clear" Danger Loading=isDeleting Disabled=ShouldDisableDelete>删除</Button>
+                    <Button Type="@@ButtonType.Default" Icon="@@IconType.Outline.Clear" Danger Loading="isDeleting" Disabled="ShouldDisableDelete">删除</Button>
                 </Popconfirm>
             }
         </Flex>
         @@* 右侧 *@@
         <Flex Gap="small">
+@foreach (var field in Model.Model.ConditionRangeFields)
+{
+    if(field.CSharpTypeIsDateTime){
+            <RangePicker TValue="DateTime?[]" @@bind-Value="GetAllInput.@field.Name" PlaceHolder=@@(new string[] { "@(field.DisplayName)开始时间", "@(field.DisplayName)结束时间" }) />
+    }
+    else if(field.CSharpTypeIsInteger){
+            <AntDesign.InputNumber @@bind-Value="GetAllInput.@field.ConditionRangeMin" PlaceHolder="@(field.DisplayName)最小值" />
+            <AntDesign.InputNumber @@bind-Value="GetAllInput.@field.ConditionRangeMax" PlaceHolder="@(field.DisplayName)最大值" />
+    }
+    else if(field.CSharpTypeIsFraction){
+            <AntDesign.InputNumber @@bind-Value="GetAllInput.@field.ConditionRangeMin" 
+                                    PlaceHolder="@(field.DisplayName)最小值" 
+                                @if(field.NumberPrecision.HasValue){
+                                    @:Precision="@field.NumberPrecision"
+                                } />
+            <AntDesign.InputNumber @@bind-Value="GetAllInput.@field.ConditionRangeMax" 
+                                    PlaceHolder="@(field.DisplayName)最大值"
+                                @if(field.NumberPrecision.HasValue){
+                                    @:Precision="@field.NumberPrecision"
+                                } />
+    }else{
+            <Input @bind-Value="GetAllInput.@field.Name" PlaceHolder="@(field.DisplayName)" />
+    }
+}
             <div style="width:15rem;">
-                <Search Placeholder="请输入关键字..." @@bind-Value=Keywords OnChange=BtnSearchClick AllowClear ClassicSearchIcon Disabled=IsLoading />
+                <Search Placeholder="@(string.Join("/", Model.Model.ConditionStringFields.Select(x=>x.DisplayName)))等关键字..." @@bind-Value=Keywords OnChange=BtnSearchClick AllowClear ClassicSearchIcon Disabled="IsBusy" />
             </div>
             <Tooltip Title="清空条件">
-                <Button Type="@@ButtonType.Default" Icon="@@IconType.Outline.Clear" OnClick="BtnClearFilterClick" Disabled=IsLoading></Button>
+                <Button Type="@@ButtonType.Default" Icon="@@IconType.Outline.Clear" OnClick="BtnClearFilterClick" Disabled="IsBusy"></Button>
             </Tooltip>
             <Tooltip Title="刷新">
-                <Button Type="@@ButtonType.Default" Icon="@@IconType.Outline.Reload" OnClick="BtnRefreshClick" Disabled=IsLoading></Button>
+                <Button Type="@@ButtonType.Default" Icon="@@IconType.Outline.Reload" OnClick="BtnRefreshClick" Disabled="IsBusy"></Button>
             </Tooltip>
         </Flex>
     </Flex>
 
     @@* 不能定义key，不然无法刷新子节点 *@@
     <Table @@ref="table"
-           TreeChildren=GetTreeChildren
+           TreeChildren="GetTreeChildren"
            TItem="@Model.Model.DtoName"
            Total="TotalCount"
            @@bind-SelectedRows="SelectedItems"
            OnChange="OnQuery"
            DataSource="Items"
            Loading="IsLoading"
-           HidePagination=true
+           HidePagination="true"
            RowClassName="@@(r=>r.RowIndex%2==0?"even":"odd")"
            RemoteDataSource="true"
            OnRow="Row"

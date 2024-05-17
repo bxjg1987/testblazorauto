@@ -23,27 +23,51 @@
         <Flex Gap="small">
             @@if (createIsGranted)
             {
-                <Button Type="@@ButtonType.Primary" Icon="@@IconType.Outline.Plus" OnClick="BtnAddClick">新增</Button>
+                <Button Type="@@ButtonType.Primary" Icon="@@IconType.Outline.Plus" OnClick="BtnAddClick" Disabled="IsBusy">新增</Button>
             }
             @@if (deleteIsGranted)
             {
                 @* 由于多选除了删除可能做其它操作，可能失误，所以虽然这里删除是两个步骤，依然加个确认比较靠谱 *@
                 <Popconfirm Title="确定删除已选择的项吗?" OnConfirm="BtnDeleteClick">
-                    <Button Type="@@ButtonType.Default" Icon="@@IconType.Outline.Clear" Danger Disabled="@@ShouldDisableDelete" Loading=isDeleting>删除</Button>
+                    <Button Type="@@ButtonType.Default" Icon="@@IconType.Outline.Clear" Danger Disabled="@@ShouldDisableDelete" Loading="isDeleting">删除</Button>
                 </Popconfirm>
             }
         </Flex>
 
         @@* 右侧 *@@
         <Flex Gap="small">
+@foreach (var field in Model.Model.ConditionRangeFields)
+{
+    if(field.CSharpTypeIsDateTime){
+            <RangePicker TValue="DateTime?[]" @@bind-Value="GetAllInput.@field.Name" PlaceHolder=@@(new string[] { "@(field.DisplayName)开始时间", "@(field.DisplayName)结束时间" }) />
+    }
+    else if(field.CSharpTypeIsInteger){
+            <AntDesign.InputNumber @@bind-Value="GetAllInput.@field.ConditionRangeMin" PlaceHolder="@(field.DisplayName)最小值" />
+            <AntDesign.InputNumber @@bind-Value="GetAllInput.@field.ConditionRangeMax" PlaceHolder="@(field.DisplayName)最大值" />
+    }
+    else if(field.CSharpTypeIsFraction){
+            <AntDesign.InputNumber @@bind-Value="GetAllInput.@field.ConditionRangeMin" 
+                                    PlaceHolder="@(field.DisplayName)最小值" 
+                                @if(field.NumberPrecision.HasValue){
+                                    @:Precision="@field.NumberPrecision"
+                                } />
+            <AntDesign.InputNumber @@bind-Value="GetAllInput.@field.ConditionRangeMax" 
+                                    PlaceHolder="@(field.DisplayName)最大值"
+                                @if(field.NumberPrecision.HasValue){
+                                    @:Precision="@field.NumberPrecision"
+                                } />
+    }else{
+            <Input @bind-Value="GetAllInput.@field.Name" PlaceHolder="@(field.DisplayName)" />
+    }
+}
             <div style="width:14.5rem;">
-                <Search Placeholder="名称/联系人/电话/地址等..." @@bind-Value="@@Keywords" OnChange=BtnSearchClick AllowClear Disabled=IsLoading />
+                <Search Placeholder="名称/联系人/电话/地址等..." @@bind-Value="@@Keywords" OnChange=BtnSearchClick AllowClear Disabled="IsBusy" />
             </div>
             <Tooltip Title="清空条件">
-                <Button Type="@@ButtonType.Default" Icon="@@IconType.Outline.Clear" OnClick="BtnClearFilterClick" Disabled=IsLoading></Button>
+                <Button Type="@@ButtonType.Default" Icon="@@IconType.Outline.Clear" OnClick="BtnClearFilterClick" Disabled="IsBusy"></Button>
             </Tooltip>
             <Tooltip Title="刷新">
-                <Button Type="@@ButtonType.Default" Icon="@@IconType.Outline.Reload" OnClick="BtnRefreshClick" Disabled=IsLoading></Button>
+                <Button Type="@@ButtonType.Default" Icon="@@IconType.Outline.Reload" OnClick="BtnRefreshClick" Disabled="IsBusy"></Button>
             </Tooltip>
         </Flex>
 

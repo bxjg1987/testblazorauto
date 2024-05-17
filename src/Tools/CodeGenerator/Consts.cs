@@ -9,5 +9,6 @@ namespace CodeGenerator
     public class Consts
     {
         //public const string PermissionNames = "PermissionNames";
+      //  public const string CSharpTypeSimpleInt = "int";
     }
 }

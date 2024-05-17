@@ -11,7 +11,7 @@ namespace CodeGenerator
     /// </summary>
     public class FieldDefine
     {
-        public ModelDefine Model {  get; set; }
+        public ModelDefine Model { get; set; }
 
         /// <summary>
         /// 是否是主键
@@ -45,7 +45,7 @@ namespace CodeGenerator
         /// <summary>
         /// 在列表中显示的位置，true左 false右 null中
         /// </summary>
-        public bool? Position {  get; set; }
+        public bool? Position { get; set; }
         /// <summary>
         /// c#类型名称，对应Type.Name
         /// </summary>
@@ -54,6 +54,34 @@ namespace CodeGenerator
         /// 如果可空，则返回CSharpType? 否则返回CSharpType
         /// </summary>
         public string CSharpTypeNullable => CSharpType + (IsRequired ? "" : "?");
+        /// <summary>
+        /// 是否是整数
+        /// </summary>
+        public bool CSharpTypeIsInteger => new[] {
+            "byte" ,
+            "sbyte",
+            "short" ,
+            "ushort" ,
+            "int",
+            "uint",
+            "long",
+            "ulong"}.Contains(CSharpType, StringComparer.OrdinalIgnoreCase);
+
+        /// <summary>
+        /// 是否是小数
+        /// </summary>
+        public bool CSharpTypeIsFraction => new[] {typeof(int).Name,
+            "float" ,
+            "double" ,
+            "decimal"}.Contains(CSharpType, StringComparer.OrdinalIgnoreCase);
+
+        /// <summary>
+        /// 是否是时间类型
+        /// </summary>
+        public bool CSharpTypeIsDateTime => new[] {typeof(int).Name,
+            typeof(DateTime).Name ,
+            typeof(DateTimeOffset).Name }.Contains(CSharpType, StringComparer.OrdinalIgnoreCase);
+
         /// <summary>
         /// 字段长度
         /// </summary>

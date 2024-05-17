@@ -123,6 +123,12 @@ namespace BXJG.Utils.RCL.Components
             else
               await  ShowSuccessMessage(msg: $"批量{funName}全部成功！");
         }
+
+        /// <summary>
+        /// 是否正在加载、删除...
+        /// </summary>
+        protected virtual bool IsBusy => IsLoading || isDeleting;
+
         #region 列表
         /// <summary>
         /// 搜索条件
@@ -403,7 +409,7 @@ namespace BXJG.Utils.RCL.Components
         /// <summary>
         /// 是否禁用批量删除按钮，出现任意情况，则为true：正在加载数据；正在删除数据；没有选择数据；
         /// </summary>
-        protected virtual bool ShouldDisableDelete => IsLoading || isDeleting || SelectedItems == default || !SelectedItems.Any();
+        protected virtual bool ShouldDisableDelete => IsBusy || SelectedItems == default || !SelectedItems.Any();
         /// <summary>
         /// 是否批量删除的确认框
         /// </summary>
