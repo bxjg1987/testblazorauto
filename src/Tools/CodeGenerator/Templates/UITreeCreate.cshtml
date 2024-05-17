@@ -16,14 +16,28 @@
     <Form @@ref="frm" ValidateOnChange="true" Model="createDto" LabelColSpan="5" WrapperColSpan="19" OnFinish="OnFinish" Loading="IsBusy">
 @foreach(var field in Model.Model.NormalFields)
 {
-    if(field.CSharpType== "bool"){
+    if(field.CSharpType == "bool"){
         <FormItem Label="@field.DisplayName">
             <Switch @@bind-Checked="context.@field.Name" />
         </FormItem>
     }
+    else if(field.CSharpType == "decimal" || field.CSharpType=="float" || field.CSharpType=="double"){
+        <FormItem Label="@field.DisplayName">
+            <AntDesign.InputNumber @@bind-Value="context.@field.Name" 
+                                @if(field.NumberPrecision.HasValue){
+                                    @:Precision="@field.NumberPrecision"
+                                }
+                                @if(field.NumberMax.HasValue){
+                                    @:Max="@field.NumberMax"
+                                }
+                                @if(field.NumberMin.HasValue){
+                                    @:Max="@field.NumberMin"
+                                }/>
+        </FormItem>
+    }
     else{    
         <FormItem>
-            <Input @@bind-Value="context.@field.Name AllowClear" />
+            <Input @@bind-Value="context.@field.Name" AllowClear />
         </FormItem>
     }
 }

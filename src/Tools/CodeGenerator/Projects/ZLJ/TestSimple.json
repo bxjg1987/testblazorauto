@@ -20,7 +20,11 @@
       "IsConditionRange": true, //是否作为范围条件,IsCondition为true时有效
       "Width": null, //界面中显示的宽度，字符串如：20rem;100px;
       "FixedLeft": null, //在列表中显示时冻结，true冻结在左侧；false冻结在右侧；null不冻结
-      "Position": null //在列表中显示的位置，true左 false右 null中
+      "Position": null, //在列表中显示的位置，true左 false右 null中
+      "NumberMax": null, //最大数值，类型为数字时有效，若为空则不管最大值
+      "NumberMin": null, //最小数值，类型为数字时有效，若为空则不管设置最小值
+      "NumberStep": null, //步进数值，类型为数字时有效，若为空则不管步进
+      "NumberPrecision": null //若是小数，则指定它的精度，若为空，则保持字段类型默认的精度
     },
     {
       "Name": "Name",
@@ -33,7 +37,11 @@
       "IsUnicode": true,
       "IsSort": true,
       "IsCondition": true,
-      "IsConditionRange": false
+      "IsConditionRange": false,
+      "NumberMax": null, //最大数值，类型为数字时有效，若为空则不管最大值
+      "NumberMin": null, //最小数值，类型为数字时有效，若为空则不管设置最小值
+      "NumberStep": null, //步进数值，类型为数字时有效，若为空则不管步进
+      "NumberPrecision": null //若是小数，则指定它的精度，若为空，则保持字段类型默认的精度
     },
     {
       "Name": "Age",
@@ -46,7 +54,11 @@
       "IsUnicode": false,
       "IsSort": true,
       "IsCondition": true,
-      "IsConditionRange": true
+      "IsConditionRange": true,
+      "NumberMax": null,
+      "NumberMin": null,
+      "NumberStep": null,
+      "NumberPrecision": null
     },
     {
       "Name": "StringField1",
@@ -59,7 +71,11 @@
       "IsUnicode": false,
       "IsSort": true,
       "IsCondition": true,
-      "IsConditionRange": false
+      "IsConditionRange": false,
+      "NumberMax": null,
+      "NumberMin": null,
+      "NumberStep": null,
+      "NumberPrecision": null
     },
     {
       "Name": "Status",
@@ -72,7 +88,45 @@
       "IsUnicode": false,
       "IsSort": true,
       "IsCondition": true,
-      "IsConditionRange": false
+      "IsConditionRange": false,
+      "NumberMax": 66,
+      "NumberMin": null,
+      "NumberStep": 3,
+      "NumberPrecision": null
+    },
+    {
+      "Name": "F2",
+      "DisplayName": "测试3",
+      "CSharpType": "decimal",
+      "IsPrimary": false,
+      "DefaultValue": 3.31,
+      "IsRequired": false,
+      "Length": 0,
+      "IsUnicode": false,
+      "IsSort": true,
+      "IsCondition": false,
+      "IsConditionRange": false,
+      "NumberMax": 0.66,
+      "NumberMin": 0.2,
+      "NumberStep": 0.1,
+      "NumberPrecision": 3
+    },
+    {
+      "Name": "F3",
+      "DisplayName": "测试4",
+      "CSharpType": "bool",
+      "IsPrimary": false,
+      "DefaultValue": false,
+      "IsRequired": true,
+      "Length": 0,
+      "IsUnicode": false,
+      "IsSort": false,
+      "IsCondition": true,
+      "IsConditionRange": false,
+      "NumberMax": null,
+      "NumberMin": null,
+      "NumberStep": null,
+      "NumberPrecision": null
     }
   ]
 }

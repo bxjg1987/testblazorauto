@@ -63,6 +63,22 @@ namespace CodeGenerator
         /// </summary>
         public string MaxLength => $"{Name}MaxLength";
         /// <summary>
+        /// 最大数值，类型为数字时有效，若为空则不管最大值
+        /// </summary>
+        public decimal? NumberMax { get; set; }
+        /// <summary>
+        /// 最小数值，类型为数字时有效，若为空则不管设置最小值
+        /// </summary>
+        public decimal? NumberMin { get; set; }
+        /// <summary>
+        /// 步进数值，类型为数字时有效，若为空则不管步进
+        /// </summary>
+        public decimal? NumberStep { get; set; }
+        /// <summary>
+        /// 若是小数，则指定它的精度，若为空，则保持字段类型默认的精度
+        /// </summary>
+        public int? NumberPrecision { get; set; }
+        /// <summary>
         /// 字段MaxLength常量全名，如：TestConsts.NameMaxLength
         /// </summary>
         public string CoreShareConstsMaxLength => $"{Model.CoreShareConstName}.{MaxLength}";
