@@ -143,7 +143,13 @@ namespace BXJG.Utils.RCL.Components
             //    getIsGranted = await PermissionChecker.IsGrantedAsync(getPermissionName);
         }
         #endregion
-
+        /// <summary>
+        /// 弹窗是否繁忙中，如：正在初始化、正在删除、正在提交等...
+        /// </summary>
+        protected virtual bool IsBusy => isFormIniting ||
+                                         isReseting ||
+                                         isDeleting ||
+                                         isUpdating;
         #region 刷新
 
         /*
@@ -155,13 +161,10 @@ namespace BXJG.Utils.RCL.Components
         /// 是否显示刷新按钮
         /// </summary>
         protected virtual bool IsShowRefresh => !isEdit;
-        /// <summary>
-        /// 刷新按钮是否禁用
-        /// </summary>
-        protected virtual bool IsRefreshDisabled => isFormIniting ||
-                                                    isReseting ||
-                                                    isDeleting ||
-                                                    isUpdating;
+        ///// <summary>
+        ///// 刷新按钮是否禁用，直接用IsBusy吧，子类有特殊逻辑的话自己去实现好了
+        ///// </summary>
+        //protected virtual bool IsRefreshDisabled => IsBusy;
         /// <summary>
         /// 是否正在加载
         /// </summary>
@@ -170,9 +173,6 @@ namespace BXJG.Utils.RCL.Components
         /// 点击刷新按钮时回调
         /// </summary>
         /// <returns></returns>
-
-
-
         protected virtual async Task BtnRefreshClick()
         {
             await Refresh();
@@ -198,9 +198,7 @@ namespace BXJG.Utils.RCL.Components
         /// <returns></returns>
         protected virtual async Task RefreshCore()
         {
-
             dto = await HttpClient.Get<TEntityDto>(new EntityDto<long>(Id));
-
         }
         #endregion
 
@@ -214,7 +212,7 @@ namespace BXJG.Utils.RCL.Components
         /// </summary>
         protected bool isReseting = false;
         ///// <summary>
-        ///// 是否禁用重置按钮
+        ///// 是否禁用重置按钮，直接用IsBusy吧
         ///// </summary>
         //protected virtual bool IsResetDisabled => isDeleting ||
         //                                          isRefreshing ||
@@ -367,16 +365,17 @@ namespace BXJG.Utils.RCL.Components
             //vms = new ValidationMessageStore(editContext);
             return ValueTask.CompletedTask;
         }
-        /// <summary>
-        /// 是否禁用保存按钮
-        /// </summary>
-        protected virtual bool IsUpdateDisabled => isDeleting ||
-                                                   isRefreshing ||
-                                                   isFormIniting ||
-                                                   isReseting ||
-                                                   isUpdating ||
-                                                   //frm == default || 复杂编辑页面的按钮可能在body而不是footer里，所以不能判断这个
-                                                   editDto == null;
+
+        ///// <summary>
+        ///// 是否禁用保存按钮，直接用IsBusy吧，子类有特殊逻辑的话自己去实现好了
+        ///// </summary>
+        //protected virtual bool IsUpdateDisabled => isDeleting ||
+        //                                           isRefreshing ||
+        //                                           isFormIniting ||
+        //                                           isReseting ||
+        //                                           isUpdating ||
+        //                                           //frm == default || 复杂编辑页面的按钮可能在body而不是footer里，所以不能判断这个
+        //                                           editDto == null;
         /// <summary>
         /// 是否正在保存
         /// </summary>

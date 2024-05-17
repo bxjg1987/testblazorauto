@@ -17,7 +17,6 @@
     @@(detailUpdateText)@@(FuncName)
 </SectionContent>
 <SectionContent SectionName=@@($"{Master}-detail-update-body")>
-
     @@if (isEdit)
     {
         <Form @@ref="frm" ValidateOnChange="true" Model="editDto" LabelColSpan="4" WrapperColSpan="20" OnFinish="OnFinish">
@@ -70,9 +69,9 @@
         }
         else if (IsShowUpdate)
         {
-            <Button OnClick="BtnResetClick" Loading=isReseting Disabled=IsUpdateDisabled Icon="@@IconType.Outline.Redo">重置</Button>
-            <Button OnClick="BtnCancelEditClick" Disabled=IsUpdateDisabled Icon="@@IconType.Outline.Rollback">放弃修改</Button>
-            <Button OnClick="BtnUpdateClick" Type="@@ButtonType.Primary" Loading="@@isUpdating" Disabled="@@IsUpdateDisabled" Icon="@@IconType.Outline.Save">保存</Button>
+            <Button OnClick="BtnResetClick" Loading=isReseting Disabled="@@IsBusy" Icon="@@IconType.Outline.Redo">重置</Button>
+            <Button OnClick="BtnCancelEditClick" Disabled="@@IsBusy" Icon="@@IconType.Outline.Rollback">放弃修改</Button>
+            <Button OnClick="BtnUpdateClick" Type="@@ButtonType.Primary" Loading="@@isUpdating" Disabled="@@IsBusy" Icon="@@IconType.Outline.Save">保存</Button>
         }
     </ButtonGroup>
 </SectionContent>
