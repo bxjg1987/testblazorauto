@@ -43,12 +43,12 @@
     }
     else if(field.CSharpTypeIsDateTime){
         <FormItem>
-            <AntDesign.DatePicker @@bind-Value="context.@field.Name" />
+            <AntDesign.DatePicker @@bind-Value="context.@field.Name"  AllowClear="true"/>
         </FormItem>
     }
     else{    
         <FormItem>
-            <Input @@bind-Value="context.@field.Name" AllowClear />
+            <Input @@bind-Value="context.@field.Name"  AllowClear="true" />
         </FormItem>
     }
 }
@@ -61,7 +61,7 @@
         <GridRow>
             <GridCol Span="5">@field.DisplayName</GridCol>     
     @if(field.CSharpType== "bool"){
-            <GridCol Span="19"><Switch Checked=dto.@field.Name Disabled /></GridCol>
+            <GridCol Span="19"><Switch Checked=dto.@field.Name Disabled="true" /></GridCol>
     }
     else{    
             <GridCol Span="19">@@dto.@field.Name</GridCol>  

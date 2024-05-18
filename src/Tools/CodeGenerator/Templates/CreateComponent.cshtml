@@ -43,7 +43,7 @@
 </SectionContent>
 
 <SectionContent SectionName=@($"{Master}-create-btns")>
-    <Checkbox @bind-Checked=saveAndContinue>保存后继续新增</Checkbox>
+    <Checkbox @bind-Checked=isSaveAndContinue>保存后继续新增</Checkbox>
     <Button OnClick="BtnResetClick" Icon=@IconType.Outline.Redo>重置</Button>
     <Button OnClick="BtnSaveClick" Type=@ButtonType.Primary Loading=isSaving Disabled=isSaving Icon=@IconType.Outline.Save>保存</Button>
 </SectionContent>

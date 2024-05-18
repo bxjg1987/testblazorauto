@@ -44,12 +44,12 @@
     }
     else if(field.CSharpTypeIsDateTime){
         <FormItem>
-            <AntDesign.DatePicker @@bind-Value="context.@field.Name" />
+            <AntDesign.DatePicker @@bind-Value="context.@field.Name" AllowClear="true"/>
         </FormItem>
     }
     else{    
         <FormItem>
-            <Input @@bind-Value="context.@field.Name" AllowClear />
+            <Input @@bind-Value="context.@field.Name" AllowClear="true" />
         </FormItem>
     }
 }
@@ -62,7 +62,7 @@
         <GridRow>
             <GridCol Span="5">@field.DisplayName</GridCol>     
     @if(field.CSharpType== "bool"){
-            <GridCol Span="19"><Switch Checked=dto.@field.Name Disabled /></GridCol>
+            <GridCol Span="19"><Switch Checked=dto.@field.Name Disabled="true" /></GridCol>
     }
     else{    
             <GridCol Span="19">@@dto.@field.Name</GridCol>  
@@ -74,22 +74,22 @@
 <SectionContent SectionName=@@($"{Master}-detail-update-btns")>
     @@if (IsShowDelete)
     {
-        <Popconfirm Title="确定删除此项吗?" OnConfirm=BtnDeleteClick>
-            <Button Loading=isDeleting Danger=true>删除</Button>
+        <Popconfirm Title="确定删除此项吗?" OnConfirm="BtnDeleteClick">
+            <Button Loading=isDeleting Danger="true" Disabled="IsBusy">删除</Button>
         </Popconfirm>
     }
     <ButtonGroup>
         @@if (IsShowRefresh)
         {
-            <Button OnClick="BtnRefreshClick" Loading=isRefreshing Disabled="IsBusy">刷新</Button>
+            <Button OnClick="BtnRefreshClick" Loading="isRefreshing" Disabled="IsBusy">刷新</Button>
         }
         @@if (IsShowBeginEdit)
         {
-            <Button OnClick="BtnBeginEditClick" Loading=isFormIniting Type="@@ButtonType.Primary">修改</Button>
+            <Button OnClick="BtnBeginEditClick" Loading="isFormIniting" Type="@@ButtonType.Primary" Disabled="IsBusy">修改</Button>
         }
         else if (IsShowUpdate)
         {
-            <Button OnClick="BtnResetClick" Loading=isReseting Disabled="IsBusy" Icon="@@IconType.Outline.Redo">重置</Button>
+            <Button OnClick="BtnResetClick" Loading="isReseting" Disabled="IsBusy" Icon="@@IconType.Outline.Redo">重置</Button>
             <Button OnClick="BtnCancelEditClick" Disabled="IsBusy" Icon="@@IconType.Outline.Rollback">放弃修改</Button>
             <Button OnClick="BtnUpdateClick" Type="@@ButtonType.Primary" Loading="isUpdating" Disabled="IsBusy" Icon="@@IconType.Outline.Save">保存</Button>
         }

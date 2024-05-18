@@ -83,7 +83,7 @@ namespace BXJG.Utils.RCL.Components
         /// <summary>
         /// 保存后是否继续新增
         /// </summary>
-        public bool saveAndContinue;
+        public bool isSaveAndContinue;
         /// <summary>
         /// 正在保存...
         /// </summary>
@@ -117,7 +117,7 @@ namespace BXJG.Utils.RCL.Components
                 _ = InvokeAsync(async () =>
                 {
                     await ShowSuccessMessage(msg: "新增成功！");//没必要等待
-                    if (saveAndContinue)
+                    if (isSaveAndContinue)
                     {
                         await Reset();
                         await OnAddEnd.InvokeAsync(new SaveResult<TEntityDto> { Dto = r });

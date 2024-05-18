@@ -37,12 +37,12 @@
     }
     else if(field.CSharpTypeIsDateTime){
         <FormItem>
-            <AntDesign.DatePicker @@bind-Value="context.@field.Name" />
+            <AntDesign.DatePicker @@bind-Value="context.@field.Name"  AllowClear="true"/>
         </FormItem>
     }
     else{    
         <FormItem>
-            <Input @@bind-Value="context.@field.Name" AllowClear />
+            <Input @@bind-Value="context.@field.Name"  AllowClear="true" />
         </FormItem>
     }
 }
