@@ -9,7 +9,13 @@ namespace CodeGenerator
     public class AppDefine
     {
         public ExecuteContext ExecuteContext;
+        /// <summary>
+        /// 应用名称，如：Admin
+        /// </summary>
         public string Name { get; set; }
+        /// <summary>
+        /// 应用显示名，如：后台管理 客户服务平台 等
+        /// </summary>
         public string DisplayName { get; set; }
 
         string clientProxyProjectName, blazorClientProjectName, applicationProjectName, applicationShareProjectName, blazorHostProjectName, apiHostProjectName;

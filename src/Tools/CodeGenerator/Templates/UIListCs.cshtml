@@ -77,14 +77,14 @@ namespace @(Model.Model.BlazorClientNamespace)
                 { "ondblclick", OnDblClick },
             };
         }
-        /// <summary>
+        @* /// <summary>
         /// 点击清空条件按钮时回调，绑定到清空条件按钮
         /// </summary>
         protected override void BtnClearFilterClick()
         {
             //重置条件
             base.BtnClearFilterClick();
-        }
+        } *@
         #endregion
 
         /// <summary>
@@ -200,7 +200,7 @@ namespace @(Model.Model.BlazorClientNamespace)
         /// <summary>
         /// 新增或修改完成时需要执行，并且直接点击x关闭时也需要执行，所以通常将它绑定到弹窗的同名事件上
         /// </summary>
-        Task OnAfterCloseDialog()
+        Task AfterCloseDialog()
         {
             if (isNeedReload)
             {

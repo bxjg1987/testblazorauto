@@ -42,8 +42,6 @@
     else if(field.CSharpTypeIsNumber){
             <AntDesign.InputNumber @@bind-Value="GetAllInput.@field.ConditionRangeMin" PlaceHolder="最小@(field.DisplayName)" @(field.NumberPrecision.HasValue?@$"Precision=""{field.NumberPrecision}""":"") />
             <AntDesign.InputNumber @@bind-Value="GetAllInput.@field.ConditionRangeMax" PlaceHolder="最大@(field.DisplayName)" @(field.NumberPrecision.HasValue?@$"Precision=""{field.NumberPrecision}""":"") />
-    }else{
-            <Input @@bind-Value="GetAllInput.@field.Name" PlaceHolder="@(field.DisplayName)" />
     }
 }
 @foreach (var field in Model.Model.ConditionNormalFields)
@@ -119,8 +117,13 @@
         <Button OnClick="BtnCloseCreateClick">关闭</Button>
     </Template>;
 }
-    <Modal DestroyOnClose="true" Footer="renderFragment" @@bind-Visible="isShowCreateDialog" Draggable="true" Width=@@("40vw") 
-       Class="frm-dal" >
+    <Modal DestroyOnClose="true" 
+           Footer="renderFragment" 
+           @@bind-Visible="isShowCreateDialog" 
+           Draggable="true" 
+           Width=@@("40vw")
+           AfterClose="AfterCloseDialog"
+           Class="frm-dal" >
     <TitleTemplate>
         <Icon Type="plus" Theme="outline" />
         新增@@(FuncName)
@@ -137,8 +140,13 @@
         <Button OnClick="BtnDetailUpdateCloseClick">关闭</Button>
     </Template>;
 }
-<Modal DestroyOnClose="true" Footer="renderFragment1" @@bind-Visible="isShowDetailUpdateDialog" Draggable="true" Width=@@("40vw")
-       Class="frm-dal" >
+<Modal DestroyOnClose="true" 
+       Footer="renderFragment1" 
+       @@bind-Visible="isShowDetailUpdateDialog" 
+       Draggable="true" 
+       Width=@@("40vw")
+       Class="frm-dal"
+       AfterClose="AfterCloseDialog">
     <TitleTemplate>
         <SectionOutlet SectionName=@@($"{GetHashCode()}-detail-update-title") />
     </TitleTemplate>

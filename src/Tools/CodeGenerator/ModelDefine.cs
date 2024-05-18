@@ -171,19 +171,19 @@ namespace CodeGenerator
         /// <summary>
         /// 查看和管理权限名称，如：TestGet
         /// </summary>
-        public string PermissionNameGet => $"{Name}Get";
+        public string PermissionNameGet => $"{ExecuteContext.App.Name}.{Name}.Get";
         /// <summary>
         /// 新增权限名称，如：TestCreate
         /// </summary>
-        public string PermissionNameCreate => $"{Name}Create";
+        public string PermissionNameCreate => $"{ExecuteContext.App.Name}.{Name}.Create";
         /// <summary>
         /// 修改权限名称，如：TestUpdate
         /// </summary>
-        public string PermissionNameUpdate => $"{Name}Update";
+        public string PermissionNameUpdate => $"{ExecuteContext.App.Name}.{Name}.Update";
         /// <summary>
         /// 删除权限名称，如：TestDelete
         /// </summary>
-        public string PermissionNameDelete => $"{Name}Delete";
+        public string PermissionNameDelete => $"{ExecuteContext.App.Name}.{Name}.Delete";
         /// <summary>
         /// cud的父权限常量名，如：xxxPermissionNames.xxxGet
         /// 同时也作为查看权限的常量名称
