@@ -20,7 +20,7 @@
 
     @@if (isEdit)
     {
-        <Form @@ref="frm" ValidateOnChange="true" Model="editDto" LabelColSpan="5" WrapperColSpan="19" OnFinish="OnFinish">
+        <Form @@ref="frm" ValidateOnChange="true" Model="editDto" LabelColSpan="4" WrapperColSpan="20" OnFinish="OnFinish" Loading="IsBusy">
 @foreach(var field in Model.Model.NormalFields)
 {
     if(field.CSharpType == "bool"){
@@ -28,28 +28,17 @@
             <Switch @@bind-Checked="context.@field.Name" />
         </FormItem>
     }
-    else if(field.CSharpTypeIsFraction){
+    else if(field.CSharpTypeIsNumber){
         <FormItem>
             <AntDesign.InputNumber @@bind-Value="context.@field.Name"
                                 @if(field.NumberPrecision.HasValue){
                                     @:Precision="@field.NumberPrecision"
                                 }
                                 @if(field.NumberMax.HasValue){
-                                    @:Max="@(field.NumberMax)M"
+                                    @:Max="@(field.NumberMax)@(field.NumberSymbol)"
                                 }
                                 @if(field.NumberMin.HasValue){
-                                    @:Min="@(field.NumberMin)M"
-                                }/>
-        </FormItem>
-    }
-    else if(field.CSharpTypeIsInteger){
-        <FormItem>
-            <AntDesign.InputNumber @@bind-Value="context.@field.Name"
-                                @if(field.NumberMax.HasValue){
-                                    @:Max="@(field.NumberMax)"
-                                }
-                                @if(field.NumberMin.HasValue){
-                                    @:Min="@(field.NumberMin)"
+                                    @:Min="@(field.NumberMin)@(field.NumberSymbol)"
                                 }/>
         </FormItem>
     }
@@ -72,13 +61,12 @@
 { 
         <GridRow>
             <GridCol Span="5">@field.DisplayName</GridCol>     
-            <GridCol Span="19">
     @if(field.CSharpType== "bool"){
-                <Switch @@bind-Checked="dto.@field.Name" />
-    }else{<text>
-                @@dto.@field.Name
-    </text>}
-            </GridCol>
+            <GridCol Span="19"><Switch Checked=dto.@field.Name Disabled /></GridCol>
+    }
+    else{    
+            <GridCol Span="19">@@dto.@field.Name</GridCol>  
+    }
        </GridRow>
 }
     }

@@ -7,8 +7,8 @@
     DisableEncoding = true;//禁止html编码，因为我们是做代码生成器
 }
 @("@using") @Model.Model.ApplicationShareNamespace
-@("@using") BXJG.Utils.Application.Share.Dtos
-@("@using") Microsoft.AspNetCore.Components.Sections
+@@using BXJG.Utils.Application.Share.Dtos
+@@using Microsoft.AspNetCore.Components.Sections
 
 @@inherits TreeDetailUpdateBaseComponent<@Model.Model.DtoName, @Model.Model.EditDtoName>
 
@@ -19,7 +19,7 @@
 <SectionContent SectionName=@@($"{Master}-detail-update-body")>
     @@if (isEdit)
     {
-        <Form @@ref="frm" ValidateOnChange="true" Model="editDto" LabelColSpan="4" WrapperColSpan="20" OnFinish="OnFinish">
+        <Form @@ref="frm" ValidateOnChange="true" Model="editDto" LabelColSpan="4" WrapperColSpan="20" OnFinish="OnFinish" Loading="IsBusy">
 @foreach(var field in Model.Model.NormalFields)
 {
     if(field.CSharpType == "bool"){
@@ -27,28 +27,17 @@
             <Switch @@bind-Checked="context.@field.Name" />
         </FormItem>
     }
-    else if(field.CSharpTypeIsFraction){
+    else if(field.CSharpTypeIsNumber){
         <FormItem>
             <AntDesign.InputNumber @@bind-Value="context.@field.Name"
                                 @if(field.NumberPrecision.HasValue){
                                     @:Precision="@field.NumberPrecision"
                                 }
                                 @if(field.NumberMax.HasValue){
-                                    @:Max="@(field.NumberMax)M"
+                                    @:Max="@(field.NumberMax)@(field.NumberSymbol)"
                                 }
                                 @if(field.NumberMin.HasValue){
-                                    @:Min="@(field.NumberMin)M"
-                                }/>
-        </FormItem>
-    }
-    else if(field.CSharpTypeIsInteger){
-        <FormItem>
-            <AntDesign.InputNumber @@bind-Value="context.@field.Name"
-                                @if(field.NumberMax.HasValue){
-                                    @:Max="@(field.NumberMax)"
-                                }
-                                @if(field.NumberMin.HasValue){
-                                    @:Min="@(field.NumberMin)"
+                                    @:Min="@(field.NumberMin)@(field.NumberSymbol)"
                                 }/>
         </FormItem>
     }
@@ -75,7 +64,7 @@
             <GridCol Span="19"><Switch Checked=dto.@field.Name Disabled /></GridCol>
     }
     else{    
-            <GridCol Span="19">@($"@dto.{field.Name}")</GridCol>  
+            <GridCol Span="19">@@dto.@field.Name</GridCol>  
     }
        </GridRow>
 }
@@ -84,24 +73,24 @@
 <SectionContent SectionName=@@($"{Master}-detail-update-btns")>
     @@if (IsShowDelete)
     {
-        <Popconfirm Title="确定删除此项吗?" OnConfirm=@@BtnDeleteClick>
-            <Button  Loading=isDeleting Danger=true>删除</Button>
+        <Popconfirm Title="确定删除此项吗?" OnConfirm="BtnDeleteClick" Disabled="IsBusy">
+            <Button Loading="isDeleting" Danger="true" Disabled="IsBusy">删除</Button>
         </Popconfirm>
     }
     <ButtonGroup>
         @@if (IsShowRefresh)
         {
-            <Button OnClick="BtnRefreshClick" Loading=isRefreshing Disabled="IsBusy">刷新</Button>
+            <Button OnClick="BtnRefreshClick" Loading="isRefreshing" Disabled="IsBusy">刷新</Button>
         }
         @@if (IsShowBeginEdit)
         {
-            <Button OnClick="BtnBeginEditClick" Loading=isFormIniting Type="@@ButtonType.Primary">修改</Button>
+            <Button OnClick="BtnBeginEditClick" Loading="isFormIniting" Type="@@ButtonType.Primary">修改</Button>
         }
         else if (IsShowUpdate)
         {
-            <Button OnClick="BtnResetClick" Loading=isReseting Disabled="@@IsBusy" Icon="@@IconType.Outline.Redo">重置</Button>
-            <Button OnClick="BtnCancelEditClick" Disabled="@@IsBusy" Icon="@@IconType.Outline.Rollback">放弃修改</Button>
-            <Button OnClick="BtnUpdateClick" Type="@@ButtonType.Primary" Loading="@@isUpdating" Disabled="@@IsBusy" Icon="@@IconType.Outline.Save">保存</Button>
+            <Button OnClick="BtnResetClick" Loading="isReseting" Disabled="IsBusy" Icon="@@IconType.Outline.Redo">重置</Button>
+            <Button OnClick="BtnCancelEditClick" Disabled="IsBusy" Icon="@@IconType.Outline.Rollback">放弃修改</Button>
+            <Button OnClick="BtnUpdateClick" Type="@@ButtonType.Primary" Loading="isUpdating" Disabled="IsBusy" Icon="@@IconType.Outline.Save">保存</Button>
         }
     </ButtonGroup>
 </SectionContent>

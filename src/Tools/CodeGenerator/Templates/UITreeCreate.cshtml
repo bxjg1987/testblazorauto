@@ -21,28 +21,17 @@
             <Switch @@bind-Checked="context.@field.Name" />
         </FormItem>
     }
-    else if(field.CSharpTypeIsFraction){
+    else if(field.CSharpTypeIsNumber){
         <FormItem>
             <AntDesign.InputNumber @@bind-Value="context.@field.Name"
                                 @if(field.NumberPrecision.HasValue){
                                     @:Precision="@field.NumberPrecision"
                                 }
                                 @if(field.NumberMax.HasValue){
-                                    @:Max="@(field.NumberMax)M"
+                                    @:Max="@(field.NumberMax)@(field.NumberSymbol)"
                                 }
                                 @if(field.NumberMin.HasValue){
-                                    @:Min="@(field.NumberMin)M"
-                                }/>
-        </FormItem>
-    }
-    else if(field.CSharpTypeIsInteger){
-        <FormItem>
-            <AntDesign.InputNumber @@bind-Value="context.@field.Name"
-                                @if(field.NumberMax.HasValue){
-                                    @:Max="@(field.NumberMax)"
-                                }
-                                @if(field.NumberMin.HasValue){
-                                    @:Min="@(field.NumberMin)"
+                                    @:Min="@(field.NumberMin)@(field.NumberSymbol)"
                                 }/>
         </FormItem>
     }
@@ -62,6 +51,6 @@
 
 <SectionContent SectionName=@@($"{Master}-create-btns")>
     <Checkbox @@bind-Checked="isSaveAndContinue">保存后继续新增</Checkbox>
-    <Button OnClick="BtnResetClick" Icon="@@IconType.Outline.Redo" Loading=isReseting Disabled=IsBusy>重置</Button>
+    <Button OnClick="BtnResetClick" Icon="@@IconType.Outline.Redo" Loading="isReseting" Disabled="IsBusy">重置</Button>
     <Button OnClick="BtnSaveClick" Icon="@@IconType.Outline.Save" Loading="isSaving" Disabled="IsBusy" Type="@@ButtonType.Primary" >保存</Button>
 </SectionContent>

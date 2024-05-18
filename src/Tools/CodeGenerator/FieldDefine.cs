@@ -100,6 +100,26 @@ namespace CodeGenerator
         /// </summary>
         public string MaxLength => $"{Name}MaxLength";
         /// <summary>
+        /// 数字符号，如：decimal 返回m
+        /// </summary>
+        public string NumberSymbol
+        {
+            get
+            {
+                switch (CSharpType)
+                {
+                    case "double":
+                        return "d";
+                    case "decimal":
+                        return "m";
+                    case "float":
+                        return "f";
+                       
+                }
+                return string.Empty;
+            }
+        }
+        /// <summary>
         /// 最大数值，类型为数字时有效，若为空则不管最大值
         /// </summary>
         public decimal? NumberMax { get; set; }
