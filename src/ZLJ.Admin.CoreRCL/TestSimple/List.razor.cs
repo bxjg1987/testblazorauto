@@ -1,26 +1,18 @@
-@using CodeGenerator
-@using RazorLight
-@using BXJG.Common;
-@using BXJG.Common.Extensions;
-@inherits TemplatePage<ExecuteContext>
-@{
-    DisableEncoding = true;//禁止html编码，因为我们是做代码生成器
-}
 using AntDesign.TableModels;
 using Microsoft.AspNetCore.Components.Web;
-using @(Model.Model.ApplicationShareNamespace);
+using ZLJ.Application.Share.TestSimple;
 
-namespace @(Model.Model.BlazorClientNamespace)
+namespace ZLJ.Admin.CoreRCL.TestSimple
 {
     /// <summary>
-    /// @(Model.Model.DisplayName)列表页逻辑
+    /// 测试1列表页逻辑
     /// </summary>
     public partial class List
     {
         /// <summary>
         /// 当前功能显示名称
         /// </summary>
-        protected override string FuncName => "@(Model.Model.DisplayName)";
+        protected override string FuncName => "测试1";
         /// <summary>
         /// 组件初始化
         /// </summary>
@@ -31,37 +23,32 @@ namespace @(Model.Model.BlazorClientNamespace)
         {
             await base.OnInitializedAsync();
             //通过另外的重装可以实现更多权限状态初始化
-            await base.InitPermission(@(Model.Model.PermissionNameCreateConst),
-                                      @(Model.Model.PermissionNameUpdateConst),
-                                      @(Model.Model.PermissionNameDeleteConst));
+            await base.InitPermission(TestSimpleApplicationShareConsts.PermissionNameCreate,
+                                      TestSimpleApplicationShareConsts.PermissionNameUpdate,
+                                      TestSimpleApplicationShareConsts.PermissionNameDelete);
         }
 
         #region 查询列表
-@foreach (var field in Model.Model.ConditionRangeFields)
-{
-    if (field.CSharpTypeIsDateTime)
-    {<text>
+
         /// <summary>
-        /// @(field.DisplayName)范围条件，适配antblazor的时间控件的范围
+        /// 出生日期范围条件，适配antblazor的时间控件的范围
         /// </summary>
-        public @(field.CSharpType)?[] @(field.ConditionRangeName)
+        public DateTime?[] BirthdayRange
         {
             get{
-                return [ GetAllInput.Filter.@field.ConditionRangeMin, GetAllInput.Filter.@field.ConditionRangeMax ];
+                return [ GetAllInput.Filter.BirthdayMin, GetAllInput.Filter.BirthdayMax ];
             }
             set{
                 if(value.Length>=2)
-                    GetAllInput.Filter.@field.ConditionRangeMax = value[1];
+                    GetAllInput.Filter.BirthdayMax = value[1];
                 if(value.Length>=1)
-                    GetAllInput.Filter.@field.ConditionRangeMin = value[0];
+                    GetAllInput.Filter.BirthdayMin = value[0];
             }
         }
-        </text>}
-}
-        /// <summary>
+                /// <summary>
         /// 表格中每行的额外属性
         /// </summary>
-        Dictionary<string, object> OnRow(RowData<@(Model.Model.DtoName)> row)
+        Dictionary<string, object> OnRow(RowData<TestSimpleDto> row)
         {
             Action<MouseEventArgs> OnDblClick = args =>
             {
@@ -126,7 +113,7 @@ namespace @(Model.Model.BlazorClientNamespace)
         /// </summary>
         /// <param name="sr"></param>
         /// <returns></returns>
-        void OnAddEnd(BXJG.Utils.RCL.Components.SaveResult<@(Model.Model.DtoName)> sr)
+        void OnAddEnd(BXJG.Utils.RCL.Components.SaveResult<TestSimpleDto> sr)
         {
             isNeedReload = true;
             if (sr.End)
@@ -149,13 +136,13 @@ namespace @(Model.Model.BlazorClientNamespace)
         /// <summary>
         /// 当前详情或修改的实体的id
         /// </summary>
-        @(Model.Model.PrimaryFieldCSharpType) detailUpdateId;
+        long detailUpdateId;
         /// <summary>
         /// 修改完成的事件
         /// </summary>
         /// <param name="sr"></param>
         /// <returns></returns>
-        void DetailUpdated(@(Model.Model.DtoName) sr)
+        void DetailUpdated(TestSimpleDto sr)
         {
             isShowDetailUpdate = false;
             isNeedReload = true;
@@ -174,7 +161,7 @@ namespace @(Model.Model.BlazorClientNamespace)
         /// 点击修改时
         /// </summary>
         /// <param name="sr"></param>
-        void BtnItemEditClick(@(Model.Model.DtoName) sr)
+        void BtnItemEditClick(TestSimpleDto sr)
         {
             isEdit = true;
             ShowUpdateOrDetail(sr.Id);
@@ -183,12 +170,12 @@ namespace @(Model.Model.BlazorClientNamespace)
         /// 点击详情时
         /// </summary>
         /// <param name="sr"></param>
-        void BtnItemDetailClick(@(Model.Model.DtoName) sr)
+        void BtnItemDetailClick(TestSimpleDto sr)
         {
             isEdit = false;
             ShowUpdateOrDetail(sr.Id);
         }
-        void ShowUpdateOrDetail(@(Model.Model.PrimaryFieldCSharpType) id){
+        void ShowUpdateOrDetail(long id){
             detailUpdateId = id;
             isShowDetailUpdate = true;
         }

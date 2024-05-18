@@ -108,7 +108,7 @@
                 @@if (deleteIsGranted)
                 {
                     <Popconfirm Title="确定删除此项吗?"
-                                OnConfirm="()=>BtnItemDeleteClick(context)">
+                                OnConfirm="()=>BtnDeleteItemClick(context)">
                         <Button Danger="true">删除</Button>
                     </Popconfirm>
                 }
@@ -124,12 +124,12 @@
         <Button OnClick="CloseCreateDialog">关闭</Button>
     </Template>;
 }
-<Modal DestroyOnClose 
+<Modal DestroyOnClose="true" 
        Footer="renderFragment" 
-       @@bind-Visible=isCreateDialogVisible 
-       Draggable 
+       @@bind-Visible="isCreateDialogVisible" 
+       Draggable="true"
        Class="frm-dal" 
-       AfterClose=OnAfterCloseDialog>
+       AfterClose="OnAfterCloseDialog">
     <TitleTemplate>
         <Icon Type="plus" Theme="outline" />新增@@(FuncName)
     </TitleTemplate>
@@ -147,18 +147,18 @@
     </Template>;
 }
 <Modal DestroyOnClose
-       @@bind-Visible=isShowDetailUpdate
-       Draggable
+       @@bind-Visible="isShowDetailUpdate"
+       Draggable="true"
        Title="详情"
-       Width=@@("50vw")
+       Width="@@("50vw")"
        Class="frm-dal"
-       Maximizable=false
-       AfterClose=OnAfterCloseDialog
+       Maximizable="false"
+       AfterClose="OnAfterCloseDialog"
        Footer="renderFragment1"
-       DefaultMaximized=false
+       DefaultMaximized="false"
        MaxBodyHeight="86vh">
     <ChildContent>
         <SectionOutlet SectionName=@@($"{this.GetHashCode()}-detail-update-body") />
-        <DetailUpdate Id=detailUpdateId IsEdit=isEdit OnDeleted=OnDetailUpdate OnUpdated=OnDetailUpdate Master=@@(this.GetHashCode()) />
+        <DetailUpdate Id="detailUpdateId" IsEdit="isEdit" OnDeleted="DetailDeleted" OnUpdated="DetailUpdated" Master="@@(this.GetHashCode())" />
     </ChildContent>
 </Modal>

@@ -16,10 +16,10 @@ namespace @(Model.Model.BlazorClientNamespace)
         public object Master { get; set; }
         public override string FuncName => "@Model.Model.DisplayName";
 
-        protected override ValueTask ResetCore()
-        {
-            createDto.Reset();
-            return ValueTask.CompletedTask;
-        }
+        //protected override ValueTask ResetCore()
+        //{
+        //    createDto.Reset();
+        //    return ValueTask.CompletedTask;
+        //}
     }
 }

@@ -29,7 +29,7 @@ namespace BXJG.Utils.RCL.Components
     public abstract class DetailUpdateBaseComponent<TEntityDto,
                                                     TPrimaryKey, //保留key，避免装箱/拆箱
                                                     TUpdateInput> : BaseComponent
-        where TEntityDto :  new()
+        where TEntityDto : new()
         where TUpdateInput : new()
     {
         #region 字段和属性
@@ -44,7 +44,7 @@ namespace BXJG.Utils.RCL.Components
         /// 对象映射接口
         /// </summary>
         protected virtual IMapper ObjectMapper => objectMapper ??= ScopedServices.GetRequiredService<IMapper>();
-       
+
         /// <summary>
         /// 此功能的名称
         /// </summary>
@@ -152,7 +152,14 @@ namespace BXJG.Utils.RCL.Components
             }
         }
         #endregion
-
+        /// <summary>
+        /// 当前组件是否繁忙，如：正在刷新、正在提交等...
+        /// </summary>
+        public virtual bool IsBusy => isFormIniting ||
+                                      isReseting ||
+                                      isDeleting ||
+                                      isUpdating ||
+                                      isRefreshing;
         #region 刷新
 
         /*
@@ -164,14 +171,14 @@ namespace BXJG.Utils.RCL.Components
         /// 是否显示刷新按钮
         /// </summary>
         protected virtual bool IsShowRefresh => !isEdit;
-        /// <summary>
-        /// 刷新按钮是否禁用
-        /// </summary>
-        protected virtual bool IsRefreshDisabled => isFormIniting ||
-                                                    isReseting ||
-                                                    isDeleting ||
-                                                    isUpdating ||
-                                                    isRefreshing;
+        ///// <summary>
+        ///// 刷新按钮是否禁用
+        ///// </summary>
+        //protected virtual bool IsRefreshDisabled => isFormIniting ||
+        //                                            isReseting ||
+        //                                            isDeleting ||
+        //                                            isUpdating ||
+        //                                            isRefreshing;
         /// <summary>
         /// 是否正在加载
         /// </summary>
@@ -277,16 +284,12 @@ namespace BXJG.Utils.RCL.Components
         /// 是否显示进入编辑模式的按钮
         /// </summary>
         protected virtual bool IsShowBeginEdit => !isEdit && updateIsGranted;
-        /// <summary>
-        /// 是否禁用保存按钮
-        /// </summary>
-        protected virtual bool IsUpdateDisabled => isDeleting ||
-                                                   isRefreshing ||
-                                                   isFormIniting ||
-                                                   isReseting ||
-                                                   isUpdating ||
-                                                   //frm == default ||
-                                                   editDto == null;
+        ///// <summary>
+        ///// 是否禁用保存按钮
+        ///// </summary>
+        //protected virtual bool IsUpdateDisabled => IsBusy||
+        //                                           //frm == default ||
+        //                                           editDto == null;
         /// <summary>
         /// 是否正在保存
         /// </summary>
@@ -414,14 +417,14 @@ namespace BXJG.Utils.RCL.Components
                 isUpdating = false;
                 //后续逻辑都是辅助性的，因此放到异步中，加快主操作速度
                 //_ = InvokeAsync(async () => {
-                   await ShowSuccessMessage("修改成功！");
+                await ShowSuccessMessage("修改成功！");
                 BtnCancelEditClick();
                 await Task.Yield();
                 await OnUpdated.InvokeAsync(dto);
                 //});
 
 
-             
+
             }
             finally
             {
@@ -472,9 +475,10 @@ namespace BXJG.Utils.RCL.Components
                 isDeleting = false;
 
                 //后续逻辑都是辅助性的，因此放到异步中，加快主操作速度
-                _ = InvokeAsync(async () => {
+                _ = InvokeAsync(async () =>
+                {
 
-                  await  ShowSuccessMessage("删除成功！");
+                    await ShowSuccessMessage("删除成功！");
                     await OnDeleted.InvokeAsync(dto);
                 });
 

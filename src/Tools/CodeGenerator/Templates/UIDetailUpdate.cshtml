@@ -70,17 +70,14 @@
     {
 @foreach(var field in Model.Model.NormalFields)
 { 
-    <GridRow>
-        <GridCol Span="5">@field.DisplayName</GridCol>     
+        <GridRow>
+            <GridCol Span="5">@field.DisplayName</GridCol>     
             <GridCol Span="19">
-
-    if(field.CSharpType== "bool"){
-                <Switch @@bind-Checked=context.@field.Name />
-       
-    }
-    else{    
-                <Input @@bind-Value=context.@field.Name AllowClear />
-    }
+    @if(field.CSharpType== "bool"){
+                <Switch @@bind-Checked="dto.@field.Name" />
+    }else{<text>
+                @@dto.@field.Name
+    </text>}
             </GridCol>
        </GridRow>
 }
@@ -104,9 +101,9 @@
         }
         else if (IsShowUpdate)
         {
-            <Button OnClick="BtnResetClick" Loading=isReseting Disabled=IsUpdateDisabled Icon="@@IconType.Outline.Redo">重置</Button>
-            <Button OnClick="BtnCancelEditClick" Disabled=IsUpdateDisabled Icon="@@IconType.Outline.Rollback">放弃修改</Button>
-            <Button OnClick="BtnUpdateClick" Type="@@ButtonType.Primary" Loading="@@isUpdating" Disabled="@@IsUpdateDisabled" Icon="@@IconType.Outline.Save">保存</Button>
+            <Button OnClick="BtnResetClick" Loading=isReseting Disabled="IsBusy" Icon="@@IconType.Outline.Redo">重置</Button>
+            <Button OnClick="BtnCancelEditClick" Disabled="IsBusy" Icon="@@IconType.Outline.Rollback">放弃修改</Button>
+            <Button OnClick="BtnUpdateClick" Type="@@ButtonType.Primary" Loading="isUpdating" Disabled="IsBusy" Icon="@@IconType.Outline.Save">保存</Button>
         }
     </ButtonGroup>
 </SectionContent>

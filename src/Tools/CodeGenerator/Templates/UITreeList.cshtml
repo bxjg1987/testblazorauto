@@ -103,7 +103,7 @@
                 }
                 @@if (deleteIsGranted)
                 {
-                    <Popconfirm Title="将删除此项及其所有子项，确定删除吗?" OnConfirm="()=>BtnItemDeleteClick(context)">
+                    <Popconfirm Title="将删除此项及其所有子项，确定删除吗?" OnConfirm="()=>BtnDeleteItemClick(context)">
                         <Button Size="@@ButtonSize.Small" Danger="true" Loading="@@context.ExtensionData.IsDeleting">删除</Button>
                     </Popconfirm>
                 }

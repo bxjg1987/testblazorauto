@@ -355,7 +355,7 @@ namespace BXJG.Utils.RCL.Components
             // PageSize = 20;
             if (GetAllInput is IReset reset)
                 reset.Reset();
-            else
+      
                 Keywords = string.Empty;
             //StateHasChanged();
             //await OnQuery(table.GetQueryModel());

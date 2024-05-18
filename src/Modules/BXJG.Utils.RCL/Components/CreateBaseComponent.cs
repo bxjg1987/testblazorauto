@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Services.Dto;
+using BXJG.Common.Contracts;
 using BXJG.Utils.Application.Share;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,6 +37,11 @@ namespace BXJG.Utils.RCL.Components
             await Reset();
         }
         /// <summary>
+        /// 是否正在提交或重置
+        /// </summary>
+        protected virtual bool IsBusy => isReseting || isSaving;
+
+        /// <summary>
         /// 带loading处理的reset
         /// </summary>
         /// <returns></returns>
@@ -60,7 +66,10 @@ namespace BXJG.Utils.RCL.Components
         /// <returns></returns>
         protected virtual ValueTask ResetCore()
         {
-            createDto = new TCreateInput();
+            if (createDto!=null&&createDto is IReset t)
+                t.Reset();
+            else
+                createDto = new TCreateInput();
             return ValueTask.CompletedTask;
         }
         /// <summary>

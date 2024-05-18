@@ -1,0 +1,121 @@
+@using ZLJ.Application.Share.TestSimple
+@using BXJG.Utils.Application.Share.Dtos
+@using Microsoft.AspNetCore.Components.Sections
+
+@inherits DetailUpdateBaseComponent<TestSimpleDto, long, TestSimpleEditDto>
+
+<SectionContent SectionName=@($"{Master}-detail-update-title")>
+    <Icon Type=@detailUpdateIcon Theme=@IconThemeType.Outline />
+    @(detailUpdateText)@(FuncName)
+</SectionContent>
+<SectionContent SectionName=@($"{Master}-detail-update-body")>
+
+    @if (isEdit)
+    {
+        <Form @ref="frm" ValidateOnChange="true" Model="editDto" LabelColSpan="5" WrapperColSpan="19" OnFinish="OnFinish">
+        <FormItem>
+            <Input @bind-Value="context.Name" AllowClear />
+        </FormItem>
+        <FormItem>
+            <AntDesign.InputNumber @bind-Value="context.Age"
+/>
+        </FormItem>
+        <FormItem>
+            <AntDesign.DatePicker @bind-Value="context.Birthday" />
+        </FormItem>
+        <FormItem>
+            <Input @bind-Value="context.StringField1" AllowClear />
+        </FormItem>
+        <FormItem>
+            <AntDesign.InputNumber @bind-Value="context.Status"
+                                    Max="66"
+/>
+        </FormItem>
+        <FormItem>
+            <AntDesign.InputNumber @bind-Value="context.F2"
+                                    Precision="3"
+                                    Max="0.66M"
+                                    Min="0.2M"
+/>
+        </FormItem>
+        <FormItem Label="测试4">
+            <Switch @bind-Checked="context.F3" />
+        </FormItem>
+        </Form>
+    }
+    else
+    {
+    <GridRow>
+        <GridCol Span="5">名称</GridCol>     
+            <GridCol Span="19">
+
+                @dto.Name
+                </GridCol>
+       </GridRow>
+    <GridRow>
+        <GridCol Span="5">年龄</GridCol>     
+            <GridCol Span="19">
+
+                @dto.Age
+                </GridCol>
+       </GridRow>
+    <GridRow>
+        <GridCol Span="5">出生日期</GridCol>     
+            <GridCol Span="19">
+
+                @dto.Birthday
+                </GridCol>
+       </GridRow>
+    <GridRow>
+        <GridCol Span="5">字符串字段1</GridCol>     
+            <GridCol Span="19">
+
+                @dto.StringField1
+                </GridCol>
+       </GridRow>
+    <GridRow>
+        <GridCol Span="5">状态</GridCol>     
+            <GridCol Span="19">
+
+                @dto.Status
+                </GridCol>
+       </GridRow>
+    <GridRow>
+        <GridCol Span="5">测试3</GridCol>     
+            <GridCol Span="19">
+
+                @dto.F2
+                </GridCol>
+       </GridRow>
+    <GridRow>
+        <GridCol Span="5">测试4</GridCol>     
+            <GridCol Span="19">
+                <Switch @bind-Checked="dto.F3" />
+            </GridCol>
+       </GridRow>
+    }
+</SectionContent>
+<SectionContent SectionName=@($"{Master}-detail-update-btns")>
+    @if (IsShowDelete)
+    {
+        <Popconfirm Title="确定删除此项吗?" OnConfirm=BtnDeleteClick>
+            <Button Loading=isDeleting Danger=true>删除</Button>
+        </Popconfirm>
+    }
+    <ButtonGroup>
+        @if (IsShowRefresh)
+        {
+            <Button OnClick="BtnRefreshClick" Loading=isRefreshing Disabled="IsBusy">刷新</Button>
+        }
+        @if (IsShowBeginEdit)
+        {
+            <Button OnClick="BtnBeginEditClick" Loading=isFormIniting Type="@ButtonType.Primary">修改</Button>
+        }
+        else if (IsShowUpdate)
+        {
+            <Button OnClick="BtnResetClick" Loading=isReseting Disabled="IsBusy" Icon="@IconType.Outline.Redo">重置</Button>
+            <Button OnClick="BtnCancelEditClick" Disabled="IsBusy" Icon="@IconType.Outline.Rollback">放弃修改</Button>
+            <Button OnClick="BtnUpdateClick" Type="@ButtonType.Primary" Loading="isUpdating" Disabled="IsBusy" Icon="@IconType.Outline.Save">保存</Button>
+        }
+    </ButtonGroup>
+</SectionContent>

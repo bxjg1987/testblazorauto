@@ -454,9 +454,18 @@ namespace BXJG.Utils.RCL.Components
         /// <returns></returns>
         protected virtual void BtnClearFilterClick()
         {
+            if (GetAllInput is IReset t)
+                t.Reset();
+
+            if (GetAllInput is IHaveFilter p && p.Filter is IReset qq)
+                qq.Reset();
+
             PageIndex = 1;
             PageSize = 20;
             Keywords = string.Empty;
+
+
+
             //StateHasChanged();
             //await OnQuery(table.GetQueryModel());
             LoadListData();
