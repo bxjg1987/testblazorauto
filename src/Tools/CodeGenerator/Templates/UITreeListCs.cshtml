@@ -14,6 +14,9 @@ using @(Model.Model.ApplicationShareNamespace);
 
 namespace @(Model.Model.BlazorClientNamespace)
 {
+    /// <summary>
+    /// @(Model.App.DisplayName)应用 @(Model.Model.DisplayName)列表 逻辑
+    /// </summary>
     public partial class List
     {
         /// <summary>
@@ -39,6 +42,28 @@ namespace @(Model.Model.BlazorClientNamespace)
                                       @(Model.Model.PermissionNameUpdateConst),
                                       @(Model.Model.PermissionNameDeleteConst));
         }
+@foreach (var field in Model.Model.ConditionRangeFields)
+{
+    if (field.CSharpTypeIsDateTime)
+    {<text>
+        /// <summary>
+        /// @(field.DisplayName)范围条件，适配antblazor的时间控件的范围
+        /// </summary>
+        public @(field.CSharpType)?[] @(field.ConditionRangeName)
+        {
+            get{
+                return [ GetAllInput.@field.ConditionRangeMin, GetAllInput.@field.ConditionRangeMax ];
+            }
+            set{
+                if(value.Length>=2)
+                    GetAllInput.@field.ConditionRangeMax = value[1];
+                if(value.Length>=1)
+                    GetAllInput.@field.ConditionRangeMin = value[0];
+            }
+        }
+        </text>}
+}
+
         //让条件实现IReset接口去实现
         ///// <summary>
         ///// 点击清空条件时执行
@@ -49,6 +74,7 @@ namespace @(Model.Model.BlazorClientNamespace)
         //    GetAllInput.IsSysDefine = default;
         //    base.BtnClearFilterClick();
         //}
+
         /// <summary>
         /// 绑定到明细行上的属性
         /// </summary>
@@ -70,11 +96,13 @@ namespace @(Model.Model.BlazorClientNamespace)
                 { "ondblclick", OnDblClick },
             };
         }
+
         /// <summary>
         /// 是否需要重新加载列表
         /// 各自弹窗改变实体后都会将这个属性设置为true，弹窗关闭时根据此状态决定是否重新加载列表数据
         /// </summary>
         bool isNeedReload;
+
         /// <summary>
         /// 新增或修改完成时需要执行，并且直接点击x关闭时也需要执行，所以通常将它绑定到弹窗的同名事件上
         /// </summary>
@@ -98,6 +126,7 @@ namespace @(Model.Model.BlazorClientNamespace)
         /// 新增弹窗是否显示
         /// </summary>
         bool isShowCreateDialog;
+
         /// <summary>
         /// 显示弹窗
         /// </summary>
@@ -109,6 +138,7 @@ namespace @(Model.Model.BlazorClientNamespace)
             //   if (r)
             //       await Reset();
         }
+
         /// <summary>
         /// 点击明细中的，添加子节点时执行
         /// </summary>
@@ -122,6 +152,7 @@ namespace @(Model.Model.BlazorClientNamespace)
         {
             isShowCreateDialog = false;
         }
+
         /// <summary>
         /// 新增后回调
         /// </summary>

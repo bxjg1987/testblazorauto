@@ -76,6 +76,11 @@ namespace CodeGenerator
             "decimal"}.Contains(CSharpType, StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
+        /// 是否是数字
+        /// </summary>
+        public bool CSharpTypeIsNumber => CSharpTypeIsFraction || CSharpTypeIsInteger;
+
+        /// <summary>
         /// 是否是时间类型
         /// </summary>
         public bool CSharpTypeIsDateTime => new[] {typeof(int).Name,
@@ -134,5 +139,9 @@ namespace CodeGenerator
         /// 作为范围条件时的字段名称，如：AgeMax
         /// </summary>
         public string ConditionRangeMax => $"{Name}Max";
+        /// <summary>
+        /// AgeRange
+        /// </summary>
+        public string ConditionRangeName => $"{Name}Range";
     }
 }

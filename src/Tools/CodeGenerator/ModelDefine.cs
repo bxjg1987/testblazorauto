@@ -80,7 +80,7 @@ namespace CodeGenerator
         /// <summary>
         /// 除了字符串、范围外的其它条件字段
         /// </summary>
-        public IEnumerable<FieldDefine> NormalConditionFields => NormalFields.Where(x => x.IsCondition&& !x.IsConditionRange&& x.CSharpType!="string");
+        public IEnumerable<FieldDefine> ConditionNormalFields => NormalFields.Where(x => x.IsCondition&& !x.IsConditionRange&& x.CSharpType!="string");
         ///// <summary>
         ///// 在列表中显示的，冻结在左侧的字段列表
         ///// </summary>

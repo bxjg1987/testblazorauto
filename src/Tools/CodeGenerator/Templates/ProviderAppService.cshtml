@@ -78,7 +78,7 @@ else
             @:query = query.WhereIf(condition.@(field.ConditionRangeMax).HasValue,x=> x.@(field.Name) < condition.@(field.ConditionRangeMax).Value );
 }
 
-@foreach (var field in Model.Model.NormalConditionFields)
+@foreach (var field in Model.Model.ConditionNormalFields)
 {
             @:query = query.WhereIf(condition.@(field.Name).HasValue,x=> x.@(field.Name) == condition.@(field.Name).Value );
 }

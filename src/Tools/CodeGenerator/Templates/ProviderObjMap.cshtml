@@ -19,7 +19,7 @@ namespace @(Model.Model.ApplicationCommonNamespace)
             var cfg = CreateMap<@(Model.Model.EntityName), @(Model.Model.ProviderDtoName)>();
     @if (Model.Model.IsTree)
     {
-            @:cfg..EntityToComboTree();
+            @:cfg.EntityToComboTree();
     }
         }
     }

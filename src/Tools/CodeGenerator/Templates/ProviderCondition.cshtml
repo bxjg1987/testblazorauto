@@ -39,7 +39,7 @@ namespace @(Model.Model.ApplicationCommonShareNamespace)
         public @(field.CSharpType)? @field.ConditionRangeMax { get; set; }
     </text>
 }
-@foreach (var field in Model.Model.NormalConditionFields)
+@foreach (var field in Model.Model.ConditionNormalFields)
 { <text>
         /// <summary>
         /// @(field.DisplayName)

@@ -37,6 +37,27 @@ namespace @(Model.Model.BlazorClientNamespace)
         }
 
         #region 查询列表
+@foreach (var field in Model.Model.ConditionRangeFields)
+{
+    if (field.CSharpTypeIsDateTime)
+    {<text>
+        /// <summary>
+        /// @(field.DisplayName)范围条件，适配antblazor的时间控件的范围
+        /// </summary>
+        public @(field.CSharpType)?[] @(field.ConditionRangeName)
+        {
+            get{
+                return [ GetAllInput.Filter.@field.ConditionRangeMin, GetAllInput.@field.ConditionRangeMax ];
+            }
+            set{
+                if(value.Length>=2)
+                    GetAllInput.Filter.@field.ConditionRangeMax = value[1];
+                if(value.Length>=1)
+                    GetAllInput.Filter.@field.ConditionRangeMin = value[0];
+            }
+        }
+        </text>}
+}
         /// <summary>
         /// 表格中每行的额外属性
         /// </summary>
@@ -84,7 +105,7 @@ namespace @(Model.Model.BlazorClientNamespace)
         /// <summary>
         /// 显示弹窗，通常绑定到顶部新增按钮的点击事件上
         /// </summary>
-        public void BtnAddClick()
+        public void BtnCreateClick()
         {
             isCreateDialogVisible = true;
             //  var r = await dalRef.Show();
@@ -144,7 +165,7 @@ namespace @(Model.Model.BlazorClientNamespace)
         /// 点击修改时
         /// </summary>
         /// <param name="sr"></param>
-        void BtnEditClick(@(Model.Model.DtoName) sr)
+        void BtnItemEditClick(@(Model.Model.DtoName) sr)
         {
             isEdit = true;
             ShowUpdateOrDetail(sr.Id);
@@ -153,7 +174,7 @@ namespace @(Model.Model.BlazorClientNamespace)
         /// 点击详情时
         /// </summary>
         /// <param name="sr"></param>
-        void BtnDetailClick(@(Model.Model.DtoName) sr)
+        void BtnItemDetailClick(@(Model.Model.DtoName) sr)
         {
             isEdit = false;
             ShowUpdateOrDetail(sr.Id);

@@ -31,7 +31,7 @@ namespace @(Model.Model.ApplicationShareNamespace)
         /// @(field.DisplayName) 最大值
         ///</summary>
         public @(field.CSharpType)? @field.ConditionRangeMax { get; set; }</text>}
-@foreach (var field in Model.Model.NormalConditionFields){<text>
+@foreach (var field in Model.Model.ConditionNormalFields){<text>
         /// <summary>
         /// @(field.DisplayName)
         ///</summary>

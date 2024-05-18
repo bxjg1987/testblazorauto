@@ -37,29 +37,21 @@
 @foreach (var field in Model.Model.ConditionRangeFields)
 {
     if(field.CSharpTypeIsDateTime){
-            <RangePicker TValue="DateTime?[]" @@bind-Value="GetAllInput.@field.Name" PlaceHolder=@@(new string[] { "@(field.DisplayName)开始时间", "@(field.DisplayName)结束时间" }) />
+            <RangePicker TValue="@(field.CSharpType)?[]" @@bind-Value="@field.ConditionRangeName" Placeholder=@@(new string[] { "开始@(field.DisplayName)", "结束@(field.DisplayName)" }) />
     }
-    else if(field.CSharpTypeIsInteger){
-            <AntDesign.InputNumber @@bind-Value="GetAllInput.@field.ConditionRangeMin" PlaceHolder="@(field.DisplayName)最小值" />
-            <AntDesign.InputNumber @@bind-Value="GetAllInput.@field.ConditionRangeMax" PlaceHolder="@(field.DisplayName)最大值" />
-    }
-    else if(field.CSharpTypeIsFraction){
-            <AntDesign.InputNumber @@bind-Value="GetAllInput.@field.ConditionRangeMin" 
-                                    PlaceHolder="@(field.DisplayName)最小值" 
-                                @if(field.NumberPrecision.HasValue){
-                                    @:Precision="@field.NumberPrecision"
-                                } />
-            <AntDesign.InputNumber @@bind-Value="GetAllInput.@field.ConditionRangeMax" 
-                                    PlaceHolder="@(field.DisplayName)最大值"
-                                @if(field.NumberPrecision.HasValue){
-                                    @:Precision="@field.NumberPrecision"
-                                } />
+    else if(field.CSharpTypeIsNumber){
+            <AntDesign.InputNumber @@bind-Value="GetAllInput.@field.ConditionRangeMin" PlaceHolder="最小@(field.DisplayName)" @(field.NumberPrecision.HasValue?@$"Precision=""{field.NumberPrecision}""":"") />
+            <AntDesign.InputNumber @@bind-Value="GetAllInput.@field.ConditionRangeMax" PlaceHolder="最大@(field.DisplayName)" @(field.NumberPrecision.HasValue?@$"Precision=""{field.NumberPrecision}""":"") />
     }else{
-            <Input @bind-Value="GetAllInput.@field.Name" PlaceHolder="@(field.DisplayName)" />
+            <Input @@bind-Value="GetAllInput.@field.Name" PlaceHolder="@(field.DisplayName)" />
     }
 }
+@foreach (var field in Model.Model.ConditionNormalFields)
+{
+            <Input @@bind-Value="GetAllInput.@field.Name" PlaceHolder="@(field.DisplayName)" />
+}
             <div style="width:15rem;">
-                <Search Placeholder="@(string.Join("/", Model.Model.ConditionStringFields.Select(x=>x.DisplayName)))等关键字..." @@bind-Value=Keywords OnChange=BtnSearchClick AllowClear ClassicSearchIcon Disabled="IsBusy" />
+                <Search Placeholder="@(string.Join("/", Model.Model.ConditionStringFields.Select(x=>x.DisplayName)))等关键字..." @@bind-Value="Keywords" OnChange="BtnSearchClick" AllowClear="true" ClassicSearchIcon="true" Disabled="IsBusy" />
             </div>
             <Tooltip Title="清空条件">
                 <Button Type="@@ButtonType.Default" Icon="@@IconType.Outline.Clear" OnClick="BtnClearFilterClick" Disabled="IsBusy"></Button>
@@ -87,15 +79,17 @@
            Bordered="true"
            ScrollY="76vh">
         <Selection Key="@@(context.Id.ToString())" />
+
 @foreach (var field in Model.Model.NormalFields){
     @if(field.CSharpType=="bool"){
-        <PropertyColumn Property="c=>c.@(field.Name)" ShowSorterTooltip="false" Width="5rem" @(field.FixedLeft==true?@"Fixed=""left""":(field.FixedLeft==false?@"Fixed=""right""":"")) Align=ColumnAlign.Center>
+        <PropertyColumn Property="c=>c.@(field.Name)" ShowSorterTooltip="false"  @(field.IsSort?"Sortable":"") Width="5rem" @(field.FixedLeft==true?@"Fixed=""left""":(field.FixedLeft==false?@"Fixed=""right""":"")) Align="@@ColumnAlign.Center">
             <Switch @@bind-Value="@@context.@(field.Name)" Size="@@InputSize.Small" Disabled="true"></Switch>
         </PropertyColumn>
     }else{
-        <PropertyColumn Property="c=>c.@(field.Name)" @(field.IsSort?"Sortable":"") ShowSorterTooltip="false" @(field.Width.IsNullOrWhiteSpaceBXJG()?"":@$"Width=""{field.Width}""") @(field.FixedLeft==true?@"Fixed=""left""":(field.FixedLeft==false?@"Fixed=""right""":"")) @(field.Position==true?"":(field.FixedLeft==false?@"Align=ColumnAlign.Right":"Align=ColumnAlign.Center"))/>        
+        <PropertyColumn Property="c=>c.@(field.Name)" @(field.IsSort?@"Sortable=""true""":"") ShowSorterTooltip="false" @(field.Width.IsNullOrWhiteSpaceBXJG()?"":@$"Width=""{field.Width}""") @(field.FixedLeft==true?@"Fixed=""left""":(field.FixedLeft==false?@"Fixed=""right""":"")) @(field.Position==true?"":(field.FixedLeft==false?@"Align=ColumnAlign.Right":@"Align=""@ColumnAlign.Center"""))/>        
     }
 }
+
         <ActionColumn Title="操作" Width="240">
             <ButtonGroup Size="@@ButtonSize.Small">
                     <Button Size="@@ButtonSize.Small" Type="@@ButtonType.Primary" OnClick="x=>BtnItemDetailClick(context)">详情</Button>
@@ -109,8 +103,8 @@
                 }
                 @@if (deleteIsGranted)
                 {
-                    <Popconfirm Title="将删除此项及其所有子项，确定删除吗?" OnConfirm="()=>BtnDeleteItemClick(context)">
-                        <Button Size="@@ButtonSize.Small" Danger="true" Loading=@@context.ExtensionData.IsDeleting>删除</Button>
+                    <Popconfirm Title="将删除此项及其所有子项，确定删除吗?" OnConfirm="()=>BtnItemDeleteClick(context)">
+                        <Button Size="@@ButtonSize.Small" Danger="true" Loading="@@context.ExtensionData.IsDeleting">删除</Button>
                     </Popconfirm>
                 }
             </ButtonGroup>
