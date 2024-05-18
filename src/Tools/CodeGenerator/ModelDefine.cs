@@ -116,6 +116,10 @@ namespace CodeGenerator
         public string CoreNamespace => $"{ExecuteContext.CoreProjectName}.{Name}";
         #endregion
 
+        #region ef
+        public string EFNamespace => $"{ExecuteContext.EFCoreProjectName}.{Name}";//@(Model.EFCoreProjectName).@(Model.Model.Name)
+        #endregion
+
         #region ApplicationCommonShare
         /// <summary>
         /// Application.Common.Shar层的命名空间，如：ZLJ.Application.Common.Share.Test

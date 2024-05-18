@@ -13,16 +13,13 @@ namespace @Model.Model.CoreShareNamespace
     ///</summary>
     public class @Model.Model.CoreShareConstName
     {
-@foreach (var field in Model.Model.Fields)
-{
-if (field.Length>0){
-        <text>
+@foreach (var field in Model.Model.StringFields){
+    if (field.Length>0){<text>
         /// <summary>
         /// @(field.DisplayName) 长度
         ///</summary>
         public const int @(field.MaxLength) = @(field.Length);
-        </text>
-}
+    </text>}
 }
     }
 }

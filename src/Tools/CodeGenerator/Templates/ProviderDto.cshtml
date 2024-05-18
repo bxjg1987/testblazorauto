@@ -12,6 +12,7 @@ using System.ComponentModel;
 {
 @:using BXJG.Utils.Application.Share.GeneralTree;    
 }
+
 namespace @(Model.Model.ApplicationCommonShareNamespace)
 {
     /// <summary>
@@ -19,15 +20,12 @@ namespace @(Model.Model.ApplicationCommonShareNamespace)
     ///</summary>
     public class @(Model.Model.ProviderDtoName) : @(Model.Model.IsTree ? $"GeneralTreeNodeForSelectDto<{Model.Model.ProviderDtoName}>" : (Model.Model.PrimaryField.CSharpType == "int" ? "EntityDto" : $"EntityDto<{Model.Model.PrimaryField.CSharpType}>"))
     {
-@foreach (var field in Model.Model.NormalFields)
-{
-    <text>
+@foreach (var field in Model.Model.NormalFields){<text>
         /// <summary>
         /// @(field.DisplayName)
         ///</summary>
         [DisplayName("@(field.DisplayName)")]
-        public @(field.CSharpType)? @field.Name { get; set; }
-    </text>
-}
+        public @field.CSharpTypeNullable @field.Name { get; set; }
+</text>}
     }
 }

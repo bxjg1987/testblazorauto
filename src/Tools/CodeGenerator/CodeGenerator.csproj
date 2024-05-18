@@ -48,10 +48,7 @@
     <None Update="Templates\CreateDto.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Templates\DbContext.cshtml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Templates\CreateComponent.cshtml">
+    <None Update="Templates\EFDbContext.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Templates\UITreeDetailUpdate.cshtml">

@@ -11,7 +11,7 @@ using @(Model.Model.CoreShareNamespace);
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace @(Model.EFCoreProjectName).@(Model.Model.Name)
+namespace @(Model.Model.EFNamespace)
 {
     /// <summary>
     /// @(Model.Model.DisplayName) ef映射
@@ -34,12 +34,12 @@ namespace @(Model.EFCoreProjectName).@(Model.Model.Name)
             @:///</summary>
             @:var @(field.Name) = builder.Property(x => x.@(field.Name));
             @:@(field.Name).HasComment("@(Model.Model.DisplayName)");
-if(field.Length>0){
+    if(field.Length>0){
             @:@(field.Name).HasMaxLength(@(field.CoreShareConstsMaxLength));
-}
-if(field.CSharpType=="string"){
+    }
+    if(field.CSharpType=="string"){
             @:@(field.Name).IsUnicode(@(field.IsUnicode.ToString().ToLower()));
-}
+    }
             @:@(field.Name).IsRequired(@(field.IsRequired.ToString().ToLower()));
 }
         }

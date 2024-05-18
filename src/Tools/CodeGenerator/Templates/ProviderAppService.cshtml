@@ -19,26 +19,22 @@ namespace @(Model.Model.ApplicationCommonNamespace)
     ///</summary>
     [AbpAuthorize]
     public class @(Model.Model.ProviderAppService) : 
-@if(Model.Model.IsTree)
-{
-    <text>
-    CommonTreeProviderBaseAppService<@(Model.Model.EntityName), 
-                                     @(Model.Model.ProviderCondition),
-                                     @(Model.Model.ProviderDtoName),
-                                     GeneralTreeGetForSelectInput,
-                                     GeneralTreeComboboxDto>
-    </text>
-}
+@if(Model.Model.IsTree){<text>
+                                                     CommonTreeProviderBaseAppService<@(Model.Model.EntityName), 
+                                                                                      @(Model.Model.ProviderCondition),
+                                                                                      @(Model.Model.ProviderDtoName),
+                                                                                      GeneralTreeGetForSelectInput,
+                                                                                      GeneralTreeComboboxDto>
+</text>}
 else
 {
-    @:CommonProviderBaseAppService<@(Model.Model.EntityName),PagedAndSortedResultRequest<@(Model.Model.ProviderCondition)>,@(Model.Model.ProviderDtoName),@(Model.Model.PrimaryField.CSharpType)>
+                                                    @:CommonProviderBaseAppService<@(Model.Model.EntityName),PagedAndSortedResultRequest<@(Model.Model.ProviderCondition)>,@(Model.Model.ProviderDtoName),@(Model.Model.PrimaryField.CSharpType)>
 }
     {
 @if(Model.Model.IsTree)
 {
         @:protected override IQueryable<@(Model.Model.EntityName)> ComboTreeFilter(@(Model.Model.ProviderCondition) condition, string parentCode)
-}else
-{
+}else{
         @:protected override IQueryable<@(Model.Model.EntityName)> CreateFilteredQuery(PagedAndSortedResultRequest<@(Model.Model.ProviderCondition)> input)
 }       
         {

@@ -11,24 +11,21 @@ using BXJG.Common.Contracts;
 {
 @:using BXJG.Utils.Application.Share.GeneralTree;
 }
+
 namespace @(Model.Model.ApplicationCommonShareNamespace)
 {
     /// <summary>
     /// 获取 @(Model.Model.DisplayName) 以供选择的条件
     ///</summary>
-    public class @(Model.Model.ProviderCondition)@(Model.Model.IsTree?":GeneralTreeGetForSelectInput":"")@( Model.Model.ConditionStringFields.Any()?$"{(Model.Model.IsTree?',':':')} IHaveKeywords":"")
+    public class @(Model.Model.ProviderCondition)@(Model.Model.IsTree?" : GeneralTreeGetForSelectInput":"")@( Model.Model.ConditionStringFields.Any()?$"{(Model.Model.IsTree?',':':')} IHaveKeywords":"")
     {
-@if(Model.Model.ConditionStringFields.Any())
-{
-    <text>
+@if(Model.Model.ConditionStringFields.Any()){<text>
         /// <summary>
         /// 模糊搜索的关键字
         ///</summary>
         public string? Keywords { get; set; }
-        </text>
-}
-@foreach (var field in Model.Model.ConditionRangeFields)
-{ <text>
+</text>}
+@foreach (var field in Model.Model.ConditionRangeFields){<text>
         /// <summary>
         /// @(field.DisplayName) 最小值
         ///</summary>
@@ -37,15 +34,12 @@ namespace @(Model.Model.ApplicationCommonShareNamespace)
         /// @(field.DisplayName) 最大值
         ///</summary>
         public @(field.CSharpType)? @field.ConditionRangeMax { get; set; }
-    </text>
-}
-@foreach (var field in Model.Model.ConditionNormalFields)
-{ <text>
+</text>}
+@foreach (var field in Model.Model.ConditionNormalFields){<text>
         /// <summary>
         /// @(field.DisplayName)
         ///</summary>
         public @(field.CSharpType)? @field.Name { get; set; }
-    </text>
-}
+</text>}
     }
 }
