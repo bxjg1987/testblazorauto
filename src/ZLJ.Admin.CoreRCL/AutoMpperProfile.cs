@@ -3,6 +3,7 @@ using BXJG.Utils.Application.Share.GeneralTree;
 using ZLJ.Application.Share.Administrative;
 using ZLJ.Application.Share.MultiTenancy;
 using ZLJ.Application.Share.Post;
+using ZLJ.Application.Share.TestSimple;
 
 namespace ZLJ.Admin.CoreRCL
 {
@@ -18,6 +19,7 @@ namespace ZLJ.Admin.CoreRCL
             CreateMap<DataDictionaryDto, DataDictionaryEditDto>();
             CreateMap<AdministrativeDto, AdministrativeEditDto>();
             CreateMap<TenantDto, EditTenantDto>();
+            CreateMap<TestSimpleDto, TestSimpleEditDto>();
         }
     }
 }

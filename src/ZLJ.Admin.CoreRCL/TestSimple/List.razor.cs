@@ -5,14 +5,14 @@ using ZLJ.Application.Share.TestSimple;
 namespace ZLJ.Admin.CoreRCL.TestSimple
 {
     /// <summary>
-    /// 测试1列表页逻辑
+    /// 普通数据测试列表页逻辑
     /// </summary>
     public partial class List
     {
         /// <summary>
         /// 当前功能显示名称
         /// </summary>
-        protected override string FuncName => "测试1";
+        protected override string FuncName => "普通数据测试";
         /// <summary>
         /// 组件初始化
         /// </summary>
@@ -63,14 +63,6 @@ namespace ZLJ.Admin.CoreRCL.TestSimple
             {
                 { "ondblclick", OnDblClick },
             };
-        }
-        /// <summary>
-        /// 点击清空条件按钮时回调，绑定到清空条件按钮
-        /// </summary>
-        protected override void BtnClearFilterClick()
-        {
-            //重置条件
-            base.BtnClearFilterClick();
         }
         #endregion
 
@@ -187,7 +179,7 @@ namespace ZLJ.Admin.CoreRCL.TestSimple
         /// <summary>
         /// 新增或修改完成时需要执行，并且直接点击x关闭时也需要执行，所以通常将它绑定到弹窗的同名事件上
         /// </summary>
-        Task OnAfterCloseDialog()
+        Task AfterCloseDialog()
         {
             if (isNeedReload)
             {

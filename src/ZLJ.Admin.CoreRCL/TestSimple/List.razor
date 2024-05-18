@@ -2,7 +2,7 @@
 
 @using ZLJ.Application.Share.TestSimple
 
-@attribute [ReuseTabsPage(Title = "测试1")]
+@attribute [ReuseTabsPage(Title = "普通数据测试")]
 @attribute [Authorize(TestSimpleApplicationShareConsts.PermissionNameGet)]
 
 @inherits ListBaseComponent<TestSimpleDto, long, PagedAndSortedResultRequest<TestSimpleCondition>>
@@ -10,7 +10,6 @@
 <Flex Gap="small" Vertical Justify="space-between">
     @* 顶部工具栏 *@
     <Flex Justify="space-between">
-       
         @* 左侧 *@
         <Flex Gap="small">
             @if (createIsGranted)
@@ -20,11 +19,10 @@
             @if (deleteIsGranted)
             {
                 <Popconfirm Title="确定删除已选择的项吗?" OnConfirm="BtnDeleteClick">
-                    <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Clear" Danger Disabled="@ShouldDisableDelete" Loading="isDeleting">删除</Button>
+                    <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Clear" Danger Disabled="ShouldDisableDelete" Loading="isDeleting">删除</Button>
                 </Popconfirm>
             }
         </Flex>
-
         @* 右侧 *@
         <Flex Gap="small">
             <AntDesign.InputNumber @bind-Value="GetAllInput.Filter.AgeMin" PlaceHolder="最小年龄"  />
@@ -35,7 +33,7 @@
             <Input @bind-Value="GetAllInput.Filter.Status" PlaceHolder="状态" />
             <Input @bind-Value="GetAllInput.Filter.F3" PlaceHolder="测试4" />
             <div style="width:14.5rem;">
-                <Search Placeholder="名称/字符串字段1等关键字..." @bind-Value="@Keywords" OnChange="BtnSearchClick" AllowClear="true" Disabled="IsBusy" />
+                <Search Placeholder="名称/字符串字段1等关键字..." @bind-Value="Keywords" OnChange="BtnSearchClick" AllowClear="true" Disabled="IsBusy" />
             </div>
             <Tooltip Title="清空条件">
                 <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Clear" OnClick="BtnClearFilterClick" Disabled="IsBusy"></Button>
@@ -74,7 +72,7 @@
         <PropertyColumn Property="c=>c.Name" Sortable="true" ShowSorterTooltip="false" Width="150"  Align="@ColumnAlign.Center"/>        
         <PropertyColumn Property="c=>c.Age" Sortable="true" ShowSorterTooltip="false" Width="150"  Align="@ColumnAlign.Center"/>        
         <PropertyColumn Property="c=>c.Birthday" Sortable="true" ShowSorterTooltip="false" Width="150"  Align="@ColumnAlign.Center"/>        
-        <PropertyColumn Property="c=>c.StringField1" Sortable="true" ShowSorterTooltip="false" Width="150"  Align="@ColumnAlign.Center"/>        
+        <PropertyColumn Property="c=>c.StringField1"  ShowSorterTooltip="false" Width="150"  Align="@ColumnAlign.Center"/>        
         <PropertyColumn Property="c=>c.Status" Sortable="true" ShowSorterTooltip="false" Width="150"  Align="@ColumnAlign.Center"/>        
         <PropertyColumn Property="c=>c.F2" Sortable="true" ShowSorterTooltip="false" Width="150"  Align="@ColumnAlign.Center"/>        
         <PropertyColumn Property="c=>c.F3" ShowSorterTooltip="false"   Width="5rem"  Align="@ColumnAlign.Center">
@@ -111,7 +109,7 @@
        @bind-Visible="isCreateDialogVisible" 
        Draggable="true"
        Class="frm-dal" 
-       AfterClose="OnAfterCloseDialog">
+       AfterClose="AfterCloseDialog">
     <TitleTemplate>
         <Icon Type="plus" Theme="outline" />新增@(FuncName)
     </TitleTemplate>
@@ -135,12 +133,12 @@
        Width="@("50vw")"
        Class="frm-dal"
        Maximizable="false"
-       AfterClose="OnAfterCloseDialog"
+       AfterClose="AfterCloseDialog"
        Footer="renderFragment1"
        DefaultMaximized="false"
        MaxBodyHeight="86vh">
     <ChildContent>
         <SectionOutlet SectionName=@($"{this.GetHashCode()}-detail-update-body") />
-        <DetailUpdate Id="detailUpdateId" IsEdit="isEdit" OnDeleted="DetailDeleted" OnUpdated="DetailUpdated" Master="@(this.GetHashCode())" />
+        <DetailUpdate Id="detailUpdateId" IsEdit="isEdit" OnDeleted="DetailDeleted" OnUpdated="DetailUpdated" Master="GetHashCode()" />
     </ChildContent>
 </Modal>

@@ -1,0 +1,22 @@
+@using CodeGenerator
+@using RazorLight
+@using BXJG.Common;
+@using BXJG.Common.Extensions;
+@inherits TemplatePage<ExecuteContext>
+@{
+    DisableEncoding = true;//禁止html编码，因为我们是做代码生成器
+}
+using AutoMapper;
+using @(Model.Model.ApplicationShareNamespace);
+using @(Model.Model.CoreNamespace);
+
+namespace @(Model.Model.BlazorClientNamespace)
+{
+    public class AutoMapperProfile : Profile
+    {
+        public AutoMapperProfile()
+        {
+            CreateMap<@(Model.Model.EditDtoName), @(Model.Model.DtoName)>();
+        }
+    }
+}

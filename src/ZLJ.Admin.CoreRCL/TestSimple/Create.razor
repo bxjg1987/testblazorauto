@@ -3,19 +3,21 @@
 @inherits ZLJ.RCL.Components.CreateBaseComponent<TestSimpleDto, TestSimpleCreateDto>
 
 <SectionContent SectionName=@($"{Master}-create-body")>
-    <Form @ref="frm" ValidateOnChange="true" Model="createDto" LabelColSpan="5" WrapperColSpan="19" OnFinish="OnFinish">
+    <Form @ref="frm" ValidateOnChange="true" Model="createDto" LabelColSpan="5" WrapperColSpan="19" OnFinish="OnFinish" Loading="IsBusy">
         <FormItem>
-            <Input @bind-Value="context.Name" AllowClear />
+            <Input @bind-Value="context.Name"  AllowClear="true" />
         </FormItem>
         <FormItem>
             <AntDesign.InputNumber @bind-Value="context.Age"
+                                    Max="44"
+                                    Min="11"
 />
         </FormItem>
         <FormItem>
-            <AntDesign.DatePicker @bind-Value="context.Birthday" />
+            <AntDesign.DatePicker @bind-Value="context.Birthday"  AllowClear="true"/>
         </FormItem>
         <FormItem>
-            <Input @bind-Value="context.StringField1" AllowClear />
+            <Input @bind-Value="context.StringField1"  AllowClear="true" />
         </FormItem>
         <FormItem>
             <AntDesign.InputNumber @bind-Value="context.Status"
@@ -25,8 +27,8 @@
         <FormItem>
             <AntDesign.InputNumber @bind-Value="context.F2"
                                     Precision="3"
-                                    Max="0.66M"
-                                    Min="0.2M"
+                                    Max="0.66m"
+                                    Min="0.2m"
 />
         </FormItem>
         <FormItem Label="测试4">
@@ -36,7 +38,7 @@
 </SectionContent>
 
 <SectionContent SectionName=@($"{Master}-create-btns")>
-    <Checkbox @bind-Checked=saveAndContinue>保存后继续新增</Checkbox>
-    <Button OnClick="BtnResetClick" Icon=@IconType.Outline.Redo>重置</Button>
-    <Button OnClick="BtnSaveClick" Type=@ButtonType.Primary Loading=isSaving Disabled=isSaving Icon=@IconType.Outline.Save>保存</Button>
+    <Checkbox @bind-Checked="isSaveAndContinue">保存后继续新增</Checkbox>
+    <Button OnClick="BtnResetClick" Icon="@IconType.Outline.Redo" Loading="isReseting" Disabled="IsBusy">重置</Button>
+    <Button OnClick="BtnSaveClick" Type="@ButtonType.Primary" Loading="isSaving" Disabled="IsBusy" Icon="@IconType.Outline.Save">保存</Button>
 </SectionContent>

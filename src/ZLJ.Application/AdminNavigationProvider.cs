@@ -16,7 +16,7 @@ namespace ZLJ.Application
     /// <summary>
     /// This class defines menus for the application.
     /// </summary>
-    public partial class ZLJNavigationProvider : NavigationProvider
+    public partial class AdminNavigationProvider : NavigationProvider
     {
         public override void SetNavigation(INavigationProviderContext context)
         {

@@ -8,7 +8,7 @@ namespace ZLJ.Admin.CoreRCL.TestSimple
         [Parameter]
         public object Master {  get; set; }
 
-        protected override string FuncName => "测试1";
+        protected override string FuncName => "普通数据测试";
         /// <summary>
         /// 
         /// </summary>

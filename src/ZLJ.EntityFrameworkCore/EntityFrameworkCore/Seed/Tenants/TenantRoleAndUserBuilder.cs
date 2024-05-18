@@ -157,39 +157,39 @@ namespace ZLJ.EntityFrameworkCore.Seed.Tenants
                 _context.SaveChanges();
             }
 
-            var cust = _context.BXJGBaseInfoAssociatedCompany.IgnoreQueryFilters().First(u => u.TenantId == _tenantId);
-            //管理员可以不设置部门
-            //var custDept = _context.CustomerOUEntities.IgnoreQueryFilters().First(u => u.TenantId == _tenantId&& cust.Id==u.CustomerId);
-            //客户
-            var sdff = _context.CustomerStaffInfos.IgnoreQueryFilters().FirstOrDefault(u => u.TenantId == _tenantId && u.UserName == "libai");
-            if (sdff == null)
-            {
-                sdff = new CustomerStaffInfoEntity
-                {
-                    TenantId = _tenantId,
-                    UserName = "libai",
-                    Name = "白",
-                    Surname = "李",
-                    EmailAddress = "admin@defaul98ttenant.com",
-                    Roles = new List<UserRole>()
-                };
+            //var cust = _context.BXJGBaseInfoAssociatedCompany.IgnoreQueryFilters().First(u => u.TenantId == _tenantId);
+            ////管理员可以不设置部门
+            ////var custDept = _context.CustomerOUEntities.IgnoreQueryFilters().First(u => u.TenantId == _tenantId&& cust.Id==u.CustomerId);
+            ////客户
+            //var sdff = _context.CustomerStaffInfos.IgnoreQueryFilters().FirstOrDefault(u => u.TenantId == _tenantId && u.UserName == "libai");
+            //if (sdff == null)
+            //{
+            //    sdff = new CustomerStaffInfoEntity
+            //    {
+            //        TenantId = _tenantId,
+            //        UserName = "libai",
+            //        Name = "白",
+            //        Surname = "李",
+            //        EmailAddress = "admin@defaul98ttenant.com",
+            //        Roles = new List<UserRole>()
+            //    };
 
-                sdff.SetNormalizedNames();
+            //    sdff.SetNormalizedNames();
 
-                sdff.Password = new PasswordHasher<CustomerStaffInfoEntity>(new OptionsWrapper<PasswordHasherOptions>(new PasswordHasherOptions())).HashPassword(sdff, "123qwe");
-                sdff.IsActive = true;
-                sdff.PhoneNumber = "13333333321";
-                sdff.CustomerId = cust.Id;
+            //    sdff.Password = new PasswordHasher<CustomerStaffInfoEntity>(new OptionsWrapper<PasswordHasherOptions>(new PasswordHasherOptions())).HashPassword(sdff, "123qwe");
+            //    sdff.IsActive = true;
+            //    sdff.PhoneNumber = "13333333321";
+            //    sdff.CustomerId = cust.Id;
 
-                _context.Users.Add(sdff);
-                _context.SaveChanges();
+            //    _context.Users.Add(sdff);
+            //    _context.SaveChanges();
 
-                // Assign Admin role to admin user
-                _context.UserRoles.Add(new UserRole(_tenantId, sdff.Id, custAdmin.Id));
-                ////部门设置 管理员可以不设置部门
-                //_context.UserOrganizationUnits.Add(new UserOrganizationUnit(_tenantId, custAdmin.Id, custDept.Id));
-                _context.SaveChanges();
-            }
+            //    // Assign Admin role to admin user
+            //    _context.UserRoles.Add(new UserRole(_tenantId, sdff.Id, custAdmin.Id));
+            //    ////部门设置 管理员可以不设置部门
+            //    //_context.UserOrganizationUnits.Add(new UserOrganizationUnit(_tenantId, custAdmin.Id, custDept.Id));
+            //    _context.SaveChanges();
+            //}
             #endregion
         }
     }
