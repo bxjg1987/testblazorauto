@@ -37,11 +37,11 @@ namespace BXJG.Utils.Application.Share.GeneralTree
         /// code可能会变，所以不要硬编码时用code
         /// </summary>
         //[Obsolete("code可能会变，所以不要硬编码时用code")]
-        public string? Code { get; set; }
+        public string? ParentCode { get; set; }
         public long? ParentId { get; set; }
         /// <summary>
         /// 是否仅仅加载子节点，true只加载子节点，false加载所有后台节点
         /// </summary>
-        public bool IsOnlyLoadChild { get; set; } = false;
+        public bool IsOnlyLoadChild { get; set; }
     }
 }

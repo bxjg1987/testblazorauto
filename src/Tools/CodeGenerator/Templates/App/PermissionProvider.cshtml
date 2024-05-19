@@ -20,13 +20,15 @@ namespace @(Model.App.ApplicationProjectName).Authorization.Permissions
     {
         @* 必须以CodeGenerator打头，因为主程序反射调用的 *@
         public void CodeGenerator@(Model.Model.Name)(IPermissionDefinitionContext context)
-        {@if(Model.Model.ParentPermissionName.IsNotNullOrWhiteSpaceBXJG()){<text>
+        {
+@if(Model.Model.ParentPermissionName.IsNotNullOrWhiteSpaceBXJG()){<text>
             var parent = context.GetPermissionOrNull("@(Model.Model.ParentPermissionName)");
             var permission = parent.CreateChildPermission(@(Model.Model.PermissionNameGetConst),
                                                           L(@(Model.Model.PermissionNameGetConst)),
                                                           multiTenancySides: MultiTenancySides.Tenant, 
                                                           properties: new Dictionary<string, object> { { "icon", "@(Model.Model.Icon)" } });
-</text>}else{<text>
+</text>}
+else{<text>
             var permission = context.CreatePermission(@(Model.Model.PermissionNameGetConst),
                                                       L(@(Model.Model.PermissionNameGetConst)),
                                                       multiTenancySides: MultiTenancySides.Tenant, 

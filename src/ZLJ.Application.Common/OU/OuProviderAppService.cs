@@ -37,8 +37,8 @@ namespace ZLJ.Application.Common.OU
      
         public async Task<IList<OuDto>> GetTreeForSelectAsync(GetListInput input)
         {
-            if (input.Code.IsNullOrWhiteSpace() && input.ParentId.HasValue && input.ParentId.Value > 0)
-                input.Code = await repository.GetAll().Where(c => c.Id == input.ParentId).Select(c => c.Code).SingleAsync();
+            if (input.ParentCode.IsNullOrWhiteSpace() && input.ParentId.HasValue && input.ParentId.Value > 0)
+                input.ParentCode = await repository.GetAll().Where(c => c.Id == input.ParentId).Select(c => c.Code).SingleAsync();
 
             var q = repository.GetAll();
 
@@ -50,12 +50,12 @@ namespace ZLJ.Application.Common.OU
 
             if (input.IsOnlyLoadChild)
             {
-                q = q.WhereIf(input.Code.IsNotNullOrWhiteSpaceBXJG(), c => c.Parent.Code == input.Code)
-                     .WhereIf(input.Code.IsNullOrWhiteSpaceBXJG(), c => !c.ParentId.HasValue);
+                q = q.WhereIf(input.ParentCode.IsNotNullOrWhiteSpaceBXJG(), c => c.Parent.Code == input.ParentCode)
+                     .WhereIf(input.ParentCode.IsNullOrWhiteSpaceBXJG(), c => !c.ParentId.HasValue);
             }
             else
             {
-                q = q.Include(c => c.Children).WhereIf(input.Code.IsNotNullOrWhiteSpaceBXJG(), c => c.Code != input.Code && c.Code.StartsWith(input.Code));
+                q = q.Include(c => c.Children).WhereIf(input.ParentCode.IsNotNullOrWhiteSpaceBXJG(), c => c.Code != input.ParentCode && c.Code.StartsWith(input.ParentCode));
             }
 
             q = q.OrderBy(c => c.Code);
@@ -84,9 +84,9 @@ namespace ZLJ.Application.Common.OU
                     c.Children = dtos.Where(d => d.ParentId == c.Id).ToList();
                     c.ChildrenCount = c.Children.Count;
                 });
-                if (input.Code.IsNullOrEmpty())
+                if (input.ParentCode.IsNullOrEmpty())
                     return dtos.Where(c => !c.ParentId.HasValue).ToList();
-                return dtos.Where(c => c.Parent.Code == input.Code).ToList();
+                return dtos.Where(c => c.Parent.Code == input.ParentCode).ToList();
             }
             else
             {

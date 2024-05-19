@@ -123,14 +123,17 @@ namespace CodeGenerator
         /// 最大数值，类型为数字时有效，若为空则不管最大值
         /// </summary>
         public decimal? NumberMax { get; set; }
+        public string NumberMaxSymbol => NumberMax.HasValue ? NumberMax + NumberSymbol:default;
         /// <summary>
         /// 最小数值，类型为数字时有效，若为空则不管设置最小值
         /// </summary>
         public decimal? NumberMin { get; set; }
+        public string NumberMinSymbol => NumberMin.HasValue ? NumberMin + NumberSymbol : default;
         /// <summary>
         /// 步进数值，类型为数字时有效，若为空则不管步进
         /// </summary>
         public decimal? NumberStep { get; set; }
+        public string NumberStepSymbol => NumberStep.HasValue ? NumberStep + NumberSymbol : default;
         /// <summary>
         /// 若是小数，则指定它的精度，若为空，则保持字段类型默认的精度
         /// </summary>

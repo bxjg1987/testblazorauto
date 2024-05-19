@@ -116,13 +116,13 @@ namespace BXJG.Utils.Application.GeneralTree
 
             //得到实体扁平集合
             string parentCode = "";
-            if (input.Code.IsNullOrWhiteSpace() && input.ParentId.HasValue && input.ParentId.Value > 0)
+            if (input.ParentCode.IsNullOrWhiteSpace() && input.ParentId.HasValue && input.ParentId.Value > 0)
             {
                 var top = await Repository.GetAsync(input.ParentId.Value);
                 parentCode = top.Code;
             }
             else
-                parentCode = input.Code ?? "";
+                parentCode = input.ParentCode ?? "";
 
             var query = this.ComboTreeFilter(input, parentCode);
             query = this.ComboTreeSort(query, input);
@@ -434,11 +434,8 @@ namespace BXJG.Utils.Application.GeneralTree
     /// </summary>
     /// <typeparam name="TDto"></typeparam>
     /// <typeparam name="TCreateInput"></typeparam>
-    /// <typeparam name="TDeleteInput"></typeparam>
     /// <typeparam name="TEditDto"></typeparam>
     /// <typeparam name="TGetAllInput"></typeparam>
-    /// <typeparam name="TGetInput"></typeparam>
-    /// <typeparam name="TMoveInput"></typeparam>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TManager"></typeparam>
     [UnitOfWork]//在blazor server中，加这个更保险

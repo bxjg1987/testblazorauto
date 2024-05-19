@@ -62,15 +62,15 @@
            Bordered="true"
            ScrollY="76vh">
         <Selection Key="@(context.Id.ToString())"  Fixed="left"/>
-        @*表格树起码在antblazor0.19前不支持 Fixed="left" *@
+        @*表格树起码在antblazor0.19前不支持 Fixed="left" 另外树不支持排序 *@
         <PropertyColumn Property="c=>c.DisplayName" ShowSorterTooltip="false" Sortable="true" Width="12rem"/>
-        <PropertyColumn Property="c=>c.Name" Sortable="true" ShowSorterTooltip="false" Width="150" Align="@ColumnAlign.Center"/>        
-        <PropertyColumn Property="c=>c.Age" Sortable="true" ShowSorterTooltip="false" Width="150" Align="@ColumnAlign.Center"/>        
-        <PropertyColumn Property="c=>c.Birthday" Sortable="true" ShowSorterTooltip="false" Width="150" Align="@ColumnAlign.Center"/>        
-        <PropertyColumn Property="c=>c.StringField1" Sortable="true" ShowSorterTooltip="false" Width="150" Align="@ColumnAlign.Center"/>        
-        <PropertyColumn Property="c=>c.Status" Sortable="true" ShowSorterTooltip="false" Width="150" Align="@ColumnAlign.Center"/>        
-        <PropertyColumn Property="c=>c.F2" Sortable="true" ShowSorterTooltip="false" Width="150" Align="@ColumnAlign.Center"/>        
-        <PropertyColumn Property="c=>c.F3" ShowSorterTooltip="false"  Width="5rem" Align="@ColumnAlign.Center">
+        <PropertyColumn Property="c=>c.Name" ShowSorterTooltip="false" Width="150" Align="@ColumnAlign.Center"/>        
+        <PropertyColumn Property="c=>c.Age" ShowSorterTooltip="false" Width="150" Align="@ColumnAlign.Center"/>        
+        <PropertyColumn Property="c=>c.Birthday" ShowSorterTooltip="false" Width="150" Align="@ColumnAlign.Center"/>        
+        <PropertyColumn Property="c=>c.StringField1" ShowSorterTooltip="false" Width="150" Align="@ColumnAlign.Center"/>        
+        <PropertyColumn Property="c=>c.Status" ShowSorterTooltip="false" Width="150" Align="@ColumnAlign.Center"/>        
+        <PropertyColumn Property="c=>c.F2" ShowSorterTooltip="false" Width="150" Align="@ColumnAlign.Center"/>        
+        <PropertyColumn Property="c=>c.F3" ShowSorterTooltip="false" Width="5rem" Align="@ColumnAlign.Center">
             <Switch @bind-Value="@context.F3" Size="@InputSize.Small" Disabled="true"></Switch>
         </PropertyColumn>
 

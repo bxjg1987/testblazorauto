@@ -31,10 +31,10 @@
                                     @:Precision="@field.NumberPrecision"
                                 }
                                 @if(field.NumberMax.HasValue){
-                                    @:Max="@(field.NumberMax)@(field.NumberSymbol)"
+                                    @:Max="@(field.NumberMaxSymbol)"
                                 }
                                 @if(field.NumberMin.HasValue){
-                                    @:Min="@(field.NumberMin)@(field.NumberSymbol)"
+                                    @:Min="@(field.NumberMinSymbol)"
                                 }/>
         </FormItem>
     }

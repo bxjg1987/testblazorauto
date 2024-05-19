@@ -11,6 +11,7 @@ namespace ZLJ.Application.Authorization.Permissions
     {
         public void CodeGeneratorTestSimple(IPermissionDefinitionContext context)
         {
+
             var parent = context.GetPermissionOrNull("Administrator");
             var permission = parent.CreateChildPermission(TestSimpleApplicationShareConsts.PermissionNameGet,
                                                           L(TestSimpleApplicationShareConsts.PermissionNameGet),

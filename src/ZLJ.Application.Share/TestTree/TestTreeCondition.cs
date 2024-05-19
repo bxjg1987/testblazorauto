@@ -4,13 +4,16 @@ namespace ZLJ.Application.Share.TestTree
 {
     /// <summary>
     /// 获取 测试树 的条件
+    /// 这里没有继承Common，主要是树结构数据的条件设计的限制，另外Common和这里的条件确实是不同的应用场景，所以目前决定分开定义。
     ///</summary>
     public class TestTreeCondition : GeneralTreeGetTreeInput, IHaveKeywords
     {
+
         /// <summary>
         /// 模糊搜索的关键字
         ///</summary>
         public string? Keywords { get; set; }
+
         /// <summary>
         /// 年龄 最小值
         ///</summary>

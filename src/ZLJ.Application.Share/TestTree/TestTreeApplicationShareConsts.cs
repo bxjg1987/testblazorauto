@@ -7,7 +7,7 @@ namespace ZLJ.Application.Share.TestTree
     {
         #region 权限名称
         /// <summary>
-        /// 获取权限名称
+        /// 获取权限名称，也作为此功能的父权限名
         ///</summary>
         public const string PermissionNameGet = "Admin.TestTree.Get";
         /// <summary>
