@@ -25,13 +25,13 @@
         </Flex>
         @* 右侧 *@
         <Flex Gap="small">
-            <AntDesign.InputNumber @bind-Value="GetAllInput.Filter.AgeMin" PlaceHolder="最小年龄"  />
-            <AntDesign.InputNumber @bind-Value="GetAllInput.Filter.AgeMax" PlaceHolder="最大年龄"  />
-            <RangePicker TValue="DateTime?[]" @bind-Value="BirthdayRange" Placeholder=@(new string[] { "开始出生日期", "结束出生日期" }) />
-            <AntDesign.InputNumber @bind-Value="GetAllInput.Filter.F2Min" PlaceHolder="最小测试3" Precision="3" />
-            <AntDesign.InputNumber @bind-Value="GetAllInput.Filter.F2Max" PlaceHolder="最大测试3" Precision="3" />
-            <Input @bind-Value="GetAllInput.Filter.Status" PlaceHolder="状态" />
-            <Input @bind-Value="GetAllInput.Filter.F3" PlaceHolder="测试4" />
+            <AntDesign.InputNumber @bind-Value="GetAllInput.Filter.AgeMin" PlaceHolder="最小年龄"  Width="150"/>
+            <AntDesign.InputNumber @bind-Value="GetAllInput.Filter.AgeMax" PlaceHolder="最大年龄"  Width="150"/>
+            <RangePicker TValue="DateTime?[]" @bind-Value="BirthdayRange" Placeholder=@(new string[] { "开始出生日期", "结束出生日期" }) Width="150"/>
+            <AntDesign.InputNumber @bind-Value="GetAllInput.Filter.F2Min" PlaceHolder="最小测试3" Precision="3" Width="150"/>
+            <AntDesign.InputNumber @bind-Value="GetAllInput.Filter.F2Max" PlaceHolder="最大测试3" Precision="3" Width="150"/>
+            <Input @bind-Value="GetAllInput.Filter.Status" PlaceHolder="状态" Width="150"/>
+            <Input @bind-Value="GetAllInput.Filter.F3" PlaceHolder="测试4" Width="150"/>
             <div style="width:14.5rem;">
                 <Search Placeholder="名称/字符串字段1等关键字..." @bind-Value="Keywords" OnChange="BtnSearchClick" AllowClear="true" Disabled="IsBusy" />
             </div>

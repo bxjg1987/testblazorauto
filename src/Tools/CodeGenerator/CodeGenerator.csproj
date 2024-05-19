@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <None Remove="Templates\UITreeObjMap.cshtml" />
+    <None Remove="Templates\UI\Tree\UITreeObjMap.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -43,97 +44,97 @@
     <None Update="Projects\ZLJ\TestSimple.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Templates\ApplicationShareConst.cshtml">
+    <None Update="Templates\App\Consts.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Templates\AppServiceTree.cshtml">
+    <None Update="Templates\App\AppServiceTree.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Templates\CoreShareConsts.cshtml">
+    <None Update="Templates\Core\Consts.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Templates\CreateDto.cshtml">
+    <None Update="Templates\App\CreateDto.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Templates\EFDbContext.cshtml">
+    <None Update="Templates\EF\EFDbContext.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Templates\UIObjMap.cshtml">
+    <None Update="Templates\UI\ObjMap.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Templates\UITreeDetailUpdate.cshtml">
+    <None Update="Templates\UI\Tree\DetailUpdate.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Templates\UITreeDetailUpdateCs.cshtml">
+    <None Update="Templates\UI\Tree\DetailUpdateCs.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Templates\UITreeCreate.cshtml">
+    <None Update="Templates\UI\Tree\Create.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Templates\UITreeCreateCs.cshtml">
+    <None Update="Templates\UI\Tree\CreateCs.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Templates\UIDetailUpdate.cshtml">
+    <None Update="Templates\UI\Simple\DetailUpdate.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Templates\UIDetailUpdateCs.cshtml">
+    <None Update="Templates\UI\Simple\DetailUpdateCs.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Templates\UICreateCs.cshtml">
+    <None Update="Templates\UI\Simple\CreateCs.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Templates\UICreate.cshtml">
+    <None Update="Templates\UI\Simple\Create.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Templates\UITreeList.cshtml">
+    <None Update="Templates\UI\Tree\List.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Templates\UITreeListCs.cshtml">
+    <None Update="Templates\UI\Tree\ListCs.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Templates\UIListCs.cshtml">
+    <None Update="Templates\UI\Simple\ListCs.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Templates\UIList.cshtml">
+    <None Update="Templates\UI\Simple\List.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Templates\NavigationProvider.cshtml">
+    <None Update="Templates\App\NavigationProvider.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Templates\PermissionProvider.cshtml">
+    <None Update="Templates\App\PermissionProvider.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Templates\EditDto.cshtml">
+    <None Update="Templates\App\EditDto.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Templates\AppService.cshtml">
+    <None Update="Templates\App\AppService.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Templates\ProviderAppService.cshtml">
+    <None Update="Templates\AppCommon\AppService.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Templates\Condition.cshtml">
+    <None Update="Templates\App\Condition.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Templates\ProviderCondition.cshtml">
+    <None Update="Templates\AppCommon\Condition.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Templates\Dto.cshtml">
+    <None Update="Templates\App\Dto.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Templates\ObjMap.cshtml">
+    <None Update="Templates\App\ObjMap.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Templates\ProviderObjMap.cshtml">
+    <None Update="Templates\AppCommon\ObjMap.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Templates\ProviderDto.cshtml">
+    <None Update="Templates\AppCommon\Dto.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Templates\EFMap.cshtml">
+    <None Update="Templates\EF\EFMap.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Templates\Entity.cshtml">
+    <None Update="Templates\Core\Entity.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

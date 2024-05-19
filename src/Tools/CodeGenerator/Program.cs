@@ -59,35 +59,35 @@ var engine = new RazorLightEngineBuilder()
 
 List<Action<ExecuteContext>> actions = new List<Action<ExecuteContext>>
 {
-    Entity,
-    CoreShareConst ,
+    CoreEntity,
+    CoreConsts ,
     EFMap,
     EFDbContext ,
-    ProviderDto,
-    ProviderCondition,
-    ProviderAppService,
-    ProviderObjMap
+    AppCommomDto,
+    AppCommomCondition,
+    AppCommomAppService,
+    AppCommomObjMap
 
 };
 
 //var model = new { Name = "John Doe" };
 //string result = await engine.CompileRenderAsync("Subfolder/View.cshtml", model);
-string q = "c";
-while (q.ToLower() == "c")
+string q = "y";
+while (q.ToLower() == "y")
 {
 
     //xuanzexiangm(ctx);
     SelectModel(ctx);
     List<Action<ExecuteContext>> actions2 = new List<Action<ExecuteContext>>
     {
-        ApplicationShareConst,
-        Condition,
-        Dto,
-        EditDto,
-        CreateDto,
-        PermissionProvider,
-        NavigationProvider,
-        ObjMap,
+        AppConsts,
+        AppCondition,
+        AppDto,
+        AppEditDto,
+        AppCreateDto,
+        AppPermissionProvider,
+        AppNavigationProvider,
+        AppObjMap,
         UIObjMap
     };
 
@@ -244,12 +244,12 @@ IEnumerable<AppDefine> SelectApps(ExecuteContext ctx)
 //下面是步骤
 
 
-void Entity(ExecuteContext ctx)
+void CoreEntity(ExecuteContext ctx)
 {
     Console.WriteLine("正在生成实体类...");
-    var str = engine.CompileRenderAsync("Entity", ctx).Result;
+    var str = engine.CompileRenderAsync("core/Entity", ctx).Result;
 
-    var file = Path.Combine(ctx.SrcDir, ctx.CoreProjectName, ctx.Model.Name, ctx.Model.EntityName + ".cs");
+    var file = Path.Combine(ctx.SrcDir, ctx.CoreProjectName, ctx.Model.Name,  ctx.Model.EntityName + ".cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
     File.WriteAllText(file, str);
@@ -257,11 +257,11 @@ void Entity(ExecuteContext ctx)
 
     Console.WriteLine("生成实体类完成");
 }
-void CoreShareConst(ExecuteContext ctx)
+void CoreConsts(ExecuteContext ctx)
 {
-    Console.WriteLine("正在生成CoreConst...");
+    Console.WriteLine("正在生成Const...");
 
-    var str = engine.CompileRenderAsync("CoreShareConsts", ctx).Result;
+    var str = engine.CompileRenderAsync("core/Consts", ctx).Result;
     var file = Path.Combine(ctx.SrcDir, ctx.CoreShareProjectName, ctx.Model.Name, ctx.Model.CoreShareConstName + ".cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
@@ -282,15 +282,15 @@ void CoreShareConst(ExecuteContext ctx)
     File.WriteAllText(file, str);
 
 
-    Console.WriteLine("生成CoreConst完成");
+    Console.WriteLine("生成Consts完成");
 }
 void EFMap(ExecuteContext ctx)
 {
     Console.WriteLine("正在生成ef映射...");
 
-    var str = engine.CompileRenderAsync("EFMap", ctx).Result;
+    var str = engine.CompileRenderAsync("ef/EFMap", ctx).Result;
     //用这个路径，方便后续添加dbcontext、seed等
-    var file = Path.Combine(ctx.SrcDir, ctx.EFCoreProjectName, ctx.Model.Name, "EFMap.cs");
+    var file = Path.Combine(ctx.SrcDir, ctx.EFCoreProjectName, ctx.Model.Name,"EFMap.cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
 
@@ -355,16 +355,16 @@ void EFMap(ExecuteContext ctx)
 void EFDbContext(ExecuteContext ctx)
 {
     Console.WriteLine("正在生成DbContext...");
-    var str = engine.CompileRenderAsync("EFDbContext", ctx).Result;
-    var file = Path.Combine(ctx.SrcDir, ctx.EFCoreProjectName, ctx.Model.Name, ctx.Name + "DbContext.cs");
+    var str = engine.CompileRenderAsync("ef/EFDbContext", ctx).Result;
+    var file = Path.Combine(ctx.SrcDir, ctx.EFCoreProjectName, ctx.Model.Name,  ctx.Name + "DbContext.cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
     File.WriteAllText(file, str);
     Console.WriteLine("生成efDbContext映射完成");
 }
-void ProviderDto(ExecuteContext ctx)
+void AppCommomDto(ExecuteContext ctx)
 {
-    Console.WriteLine("正在生成ProviderDto...");
-    var str = engine.CompileRenderAsync("ProviderDto", ctx).Result;
+    Console.WriteLine("正在生成CommomShareDto...");
+    var str = engine.CompileRenderAsync("appcommon/Dto", ctx).Result;
 
     var file = Path.Combine(ctx.SrcDir, ctx.ApplicationCommonShareProjectName, ctx.Model.Name, ctx.Model.ProviderDtoName + ".cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
@@ -372,12 +372,12 @@ void ProviderDto(ExecuteContext ctx)
     File.WriteAllText(file, str);
 
 
-    Console.WriteLine("生成ProviderDto完成");
+    Console.WriteLine("生成CommomShareDto完成");
 }
-void ProviderCondition(ExecuteContext ctx)
+void AppCommomCondition(ExecuteContext ctx)
 {
-    Console.WriteLine("正在生成ProviderCondition...");
-    var str = engine.CompileRenderAsync("ProviderCondition", ctx).Result;
+    Console.WriteLine("正在生成AppCommomCondition...");
+    var str = engine.CompileRenderAsync("appcommon/Condition", ctx).Result;
 
     var file = Path.Combine(ctx.SrcDir, ctx.ApplicationCommonShareProjectName, ctx.Model.Name, ctx.Model.ProviderCondition + ".cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
@@ -385,40 +385,40 @@ void ProviderCondition(ExecuteContext ctx)
     File.WriteAllText(file, str);
 
 
-    Console.WriteLine("生成ProviderCondition完成");
+    Console.WriteLine("生成AppCommomCondition完成");
 }
-void ProviderAppService(ExecuteContext ctx)
+void AppCommomAppService(ExecuteContext ctx)
 {
-    Console.WriteLine("正在生成ProviderAppService...");
-    var str = engine.CompileRenderAsync("ProviderAppService", ctx).Result;
+    Console.WriteLine("正在生成AppCommomAppService...");
+    var str = engine.CompileRenderAsync("appcommon/AppService", ctx).Result;
 
-    var file = Path.Combine(ctx.SrcDir, ctx.ApplicationCommonProjectName, ctx.Model.Name, ctx.Model.ProviderAppService + ".cs");
+    var file = Path.Combine(ctx.SrcDir, ctx.ApplicationCommonProjectName, ctx.Model.Name,  ctx.Model.ProviderAppService + ".cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
     File.WriteAllText(file, str);
 
 
-    Console.WriteLine("生成ProviderAppService完成");
+    Console.WriteLine("生成AppCommomAppService完成");
 }
-void ProviderObjMap(ExecuteContext ctx)
+void AppCommomObjMap(ExecuteContext ctx)
 {
-    Console.WriteLine("正在生成provider的automapper...");
-    var str = engine.CompileRenderAsync("ProviderObjMap", ctx).Result;
+    Console.WriteLine("正在生成AppCommomObjMap...");
+    var str = engine.CompileRenderAsync("AppCommon/ObjMap", ctx).Result;
 
-    var file = Path.Combine(ctx.SrcDir, ctx.ApplicationCommonProjectName, ctx.Model.Name, "AutoMapperProfile.cs");
+    var file = Path.Combine(ctx.SrcDir, ctx.ApplicationCommonProjectName, ctx.Model.Name,  "AutoMapperProfile.cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
     File.WriteAllText(file, str);
 
 
-    Console.WriteLine("生成provider的automapper完成");
+    Console.WriteLine("生成AppCommomObjMap完成");
 }
-void ApplicationShareConst(ExecuteContext ctx)
+void AppConsts(ExecuteContext ctx)
 {
     Console.WriteLine("正在生成admin应用中，应用服务共享层的常量...");
-    var str = engine.CompileRenderAsync("ApplicationShareConst", ctx).Result;
+    var str = engine.CompileRenderAsync("app/Consts", ctx).Result;
 
-    var file = Path.Combine(ctx.SrcDir, ctx.App.ApplicationShareProjectName, ctx.Model.Name, ctx.Model.ApplicationShareConstName + ".cs");
+    var file = Path.Combine(ctx.SrcDir, ctx.App.ApplicationShareProjectName, ctx.Model.Name,  ctx.Model.ApplicationShareConstName + ".cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
     File.WriteAllText(file, str);
@@ -426,10 +426,10 @@ void ApplicationShareConst(ExecuteContext ctx)
 
     Console.WriteLine("生成admin应用中，应用服务共享层的常量完成");
 }
-void Condition(ExecuteContext ctx)
+void AppCondition(ExecuteContext ctx)
 {
     Console.WriteLine("正在生成应用共享层中的条件类...");
-    var str = engine.CompileRenderAsync("Condition", ctx).Result;
+    var str = engine.CompileRenderAsync("app/Condition", ctx).Result;
 
     var file = Path.Combine(ctx.SrcDir, ctx.App.ApplicationShareProjectName, ctx.Model.Name, ctx.Model.ConditionName + ".cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
@@ -439,10 +439,10 @@ void Condition(ExecuteContext ctx)
 
     Console.WriteLine("生成应用共享层中的条件类完成");
 }
-void Dto(ExecuteContext ctx)
+void AppDto(ExecuteContext ctx)
 {
-    Console.WriteLine("正在生成Dto...");
-    var str = engine.CompileRenderAsync("Dto", ctx).Result;
+    Console.WriteLine("正在生成AppDto...");
+    var str = engine.CompileRenderAsync("app/Dto", ctx).Result;
 
     var file = Path.Combine(ctx.SrcDir, ctx.App.ApplicationShareProjectName, ctx.Model.Name, ctx.Model.DtoName + ".cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
@@ -450,12 +450,12 @@ void Dto(ExecuteContext ctx)
     File.WriteAllText(file, str);
 
 
-    Console.WriteLine("生成Dto完成");
+    Console.WriteLine("生成AppDto完成");
 }
-void EditDto(ExecuteContext ctx)
+void AppEditDto(ExecuteContext ctx)
 {
-    Console.WriteLine("正在生成EditDto...");
-    var str = engine.CompileRenderAsync("EditDto", ctx).Result;
+    Console.WriteLine("正在生成AppEditDto...");
+    var str = engine.CompileRenderAsync("app/EditDto", ctx).Result;
 
     var file = Path.Combine(ctx.SrcDir, ctx.App.ApplicationShareProjectName, ctx.Model.Name, ctx.Model.EditDtoName + ".cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
@@ -463,12 +463,12 @@ void EditDto(ExecuteContext ctx)
     File.WriteAllText(file, str);
 
 
-    Console.WriteLine("生成EditDto完成");
+    Console.WriteLine("生成AppEditDto完成");
 }
-void CreateDto(ExecuteContext ctx)
+void AppCreateDto(ExecuteContext ctx)
 {
-    Console.WriteLine("正在生成CreateDto...");
-    var str = engine.CompileRenderAsync("CreateDto", ctx).Result;
+    Console.WriteLine("正在生成AppCreateDto...");
+    var str = engine.CompileRenderAsync("app/CreateDto", ctx).Result;
 
     var file = Path.Combine(ctx.SrcDir, ctx.App.ApplicationShareProjectName, ctx.Model.Name, ctx.Model.CreateDtoName + ".cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
@@ -476,14 +476,14 @@ void CreateDto(ExecuteContext ctx)
     File.WriteAllText(file, str);
 
 
-    Console.WriteLine("生成CreateDto完成");
+    Console.WriteLine("生成AppCreateDto完成");
 }
 
 
-void PermissionProvider(ExecuteContext ctx)
+void AppPermissionProvider(ExecuteContext ctx)
 {
-    Console.WriteLine("正在生成PermissionProvider...");
-    var str = engine.CompileRenderAsync("PermissionProvider", ctx).Result;
+    Console.WriteLine("正在生成AppPermissionProvider...");
+    var str = engine.CompileRenderAsync("app/PermissionProvider", ctx).Result;
 
     var file = Path.Combine(ctx.SrcDir, ctx.App.ApplicationProjectName, ctx.Model.Name, "PermissionProvider.cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
@@ -491,12 +491,12 @@ void PermissionProvider(ExecuteContext ctx)
     File.WriteAllText(file, str);
 
 
-    Console.WriteLine("生成PermissionProvider完成");
+    Console.WriteLine("生成AppPermissionProvider完成");
 }
-void NavigationProvider(ExecuteContext ctx)
+void AppNavigationProvider(ExecuteContext ctx)
 {
-    Console.WriteLine("正在生成NavigationProvider...");
-    var str = engine.CompileRenderAsync("NavigationProvider", ctx).Result;
+    Console.WriteLine("正在生成AppNavigationProvider...");
+    var str = engine.CompileRenderAsync("app/NavigationProvider", ctx).Result;
 
     var file = Path.Combine(ctx.SrcDir, ctx.App.ApplicationProjectName, ctx.Model.Name, "NavigationProvider.cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
@@ -504,12 +504,12 @@ void NavigationProvider(ExecuteContext ctx)
     File.WriteAllText(file, str);
 
 
-    Console.WriteLine("生成NavigationProvider完成");
+    Console.WriteLine("生成AppNavigationProvider完成");
 }
-void ObjMap(ExecuteContext ctx)
+void AppObjMap(ExecuteContext ctx)
 {
-    Console.WriteLine("正在生成ObjMap...");
-    var str = engine.CompileRenderAsync("ObjMap", ctx).Result;
+    Console.WriteLine("正在生成AppObjMap...");
+    var str = engine.CompileRenderAsync("app/ObjMap", ctx).Result;
 
     var file = Path.Combine(ctx.SrcDir, ctx.App.ApplicationProjectName, ctx.Model.Name, "AutoMapperProfile.cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
@@ -517,12 +517,12 @@ void ObjMap(ExecuteContext ctx)
     File.WriteAllText(file, str);
 
 
-    Console.WriteLine("生成ObjMap完成");
+    Console.WriteLine("生成AppObjMap完成");
 }
 void AppService(ExecuteContext ctx)
 {
     Console.WriteLine("正在生成AppService...");
-    var str = engine.CompileRenderAsync("AppService", ctx).Result;
+    var str = engine.CompileRenderAsync("app/AppService", ctx).Result;
 
     var file = Path.Combine(ctx.SrcDir, ctx.App.ApplicationProjectName, ctx.Model.Name, ctx.Model.ApplicationServiceName + ".cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
@@ -535,7 +535,7 @@ void AppService(ExecuteContext ctx)
 void AppServiceTree(ExecuteContext ctx)
 {
     Console.WriteLine("正在生成AppServiceTree...");
-    var str = engine.CompileRenderAsync("AppServiceTree", ctx).Result;
+    var str = engine.CompileRenderAsync("app/AppServiceTree", ctx).Result;
 
     var file = Path.Combine(ctx.SrcDir, ctx.App.ApplicationProjectName, ctx.Model.Name, ctx.Model.ApplicationServiceName + ".cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
@@ -548,7 +548,7 @@ void AppServiceTree(ExecuteContext ctx)
 void UIObjMap(ExecuteContext ctx)
 {
     Console.WriteLine("正在生成UIObjMap...");
-    var str = engine.CompileRenderAsync("UIObjMap", ctx).Result;
+    var str = engine.CompileRenderAsync("UI/ObjMap", ctx).Result;
 
     var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "ObjMap.cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
@@ -561,7 +561,7 @@ void UIObjMap(ExecuteContext ctx)
 void UIList(ExecuteContext ctx)
 {
     Console.WriteLine("正在生成UIList...");
-    var str = engine.CompileRenderAsync("UIList", ctx).Result;
+    var str = engine.CompileRenderAsync("UI/simple/List", ctx).Result;
 
     var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "List.razor");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
@@ -574,7 +574,7 @@ void UIList(ExecuteContext ctx)
 void UIListCs(ExecuteContext ctx)
 {
     Console.WriteLine("正在生成UIListCs...");
-    var str = engine.CompileRenderAsync("UIListCs", ctx).Result;
+    var str = engine.CompileRenderAsync("UI/simple/ListCs", ctx).Result;
 
     var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "List.razor.cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
@@ -587,7 +587,7 @@ void UIListCs(ExecuteContext ctx)
 void UICreate(ExecuteContext ctx)
 {
     Console.WriteLine("正在生成UICreate...");
-    var str = engine.CompileRenderAsync("UICreate", ctx).Result;
+    var str = engine.CompileRenderAsync("ui/simple/Create", ctx).Result;
 
     var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "Create.razor");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
@@ -600,7 +600,7 @@ void UICreate(ExecuteContext ctx)
 void UICreateCs(ExecuteContext ctx)
 {
     Console.WriteLine("正在生成UICreateCs...");
-    var str = engine.CompileRenderAsync("UICreateCs", ctx).Result;
+    var str = engine.CompileRenderAsync("ui/simple/CreateCs", ctx).Result;
 
     var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "Create.razor.cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
@@ -615,7 +615,7 @@ void UICreateCs(ExecuteContext ctx)
 void UIDetailUpdate(ExecuteContext ctx)
 {
     Console.WriteLine("正在生成UIDetailUpdate...");
-    var str = engine.CompileRenderAsync("UIDetailUpdate", ctx).Result;
+    var str = engine.CompileRenderAsync("ui/simple/DetailUpdate", ctx).Result;
 
     var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "DetailUpdate.razor");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
@@ -628,7 +628,7 @@ void UIDetailUpdate(ExecuteContext ctx)
 void UIDetailUpdateCs(ExecuteContext ctx)
 {
     Console.WriteLine("正在生成DetailUpdateCs...");
-    var str = engine.CompileRenderAsync("UIDetailUpdateCs", ctx).Result;
+    var str = engine.CompileRenderAsync("ui/simple/DetailUpdateCs", ctx).Result;
 
     var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "DetailUpdate.razor.cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
@@ -638,24 +638,24 @@ void UIDetailUpdateCs(ExecuteContext ctx)
 
     Console.WriteLine("生成DetailUpdateCs完成");
 }
-void UITreeObjMap(ExecuteContext ctx)
-{
-    Console.WriteLine("正在生成UITreeObjMap...");
-    var str = engine.CompileRenderAsync("UITreeObjMap", ctx).Result;
+//void UITreeObjMap(ExecuteContext ctx)
+//{
+//    Console.WriteLine("正在生成UITreeObjMap...");
+//    var str = engine.CompileRenderAsync("UITreeObjMap", ctx).Result;
 
-    var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "ObjMap.cs");
-    Directory.CreateDirectory(Path.GetDirectoryName(file));
+//    var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "ObjMap.cs");
+//    Directory.CreateDirectory(Path.GetDirectoryName(file));
 
-    File.WriteAllText(file, str);
+//    File.WriteAllText(file, str);
 
 
-    Console.WriteLine("生成UITreeObjMap完成");
-}
+//    Console.WriteLine("生成UITreeObjMap完成");
+//}
 
 void UITreeList(ExecuteContext ctx)
 {
     Console.WriteLine("正在生成UITreeList...");
-    var str = engine.CompileRenderAsync("UITreeList", ctx).Result;
+    var str = engine.CompileRenderAsync("ui/tree/List", ctx).Result;
 
     var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "List.razor");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
@@ -668,7 +668,7 @@ void UITreeList(ExecuteContext ctx)
 void UITreeListCs(ExecuteContext ctx)
 {
     Console.WriteLine("正在生成UITreeListCs...");
-    var str = engine.CompileRenderAsync("UITreeListCs", ctx).Result;
+    var str = engine.CompileRenderAsync("ui/tree/ListCs", ctx).Result;
 
     var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "List.razor.cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
@@ -684,7 +684,7 @@ void UITreeListCs(ExecuteContext ctx)
 void UITreeCreate(ExecuteContext ctx)
 {
     Console.WriteLine("正在生成TreeCreate...");
-    var str = engine.CompileRenderAsync("UITreeCreate", ctx).Result;
+    var str = engine.CompileRenderAsync("ui/tree/Create", ctx).Result;
 
     var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "Create.razor");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
@@ -697,7 +697,7 @@ void UITreeCreate(ExecuteContext ctx)
 void UITreeCreateCs(ExecuteContext ctx)
 {
     Console.WriteLine("正在生成TreeCreateCs...");
-    var str = engine.CompileRenderAsync("UITreeCreateCs", ctx).Result;
+    var str = engine.CompileRenderAsync("ui/tree/CreateCs", ctx).Result;
 
     var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "Create.razor.cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
@@ -712,7 +712,7 @@ void UITreeCreateCs(ExecuteContext ctx)
 void UITreeDetailUpdate(ExecuteContext ctx)
 {
     Console.WriteLine("正在生成TreeDetailUpdate...");
-    var str = engine.CompileRenderAsync("UITreeDetailUpdate", ctx).Result;
+    var str = engine.CompileRenderAsync("ui/tree/DetailUpdate", ctx).Result;
 
     var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "DetailUpdate.razor");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
@@ -725,7 +725,7 @@ void UITreeDetailUpdate(ExecuteContext ctx)
 void UITreeDetailUpdateCs(ExecuteContext ctx)
 {
     Console.WriteLine("正在生成TreeDetailUpdateCs...");
-    var str = engine.CompileRenderAsync("UITreeDetailUpdateCs", ctx).Result;
+    var str = engine.CompileRenderAsync("ui/tree/DetailUpdateCs", ctx).Result;
 
     var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "DetailUpdate.razor.cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
