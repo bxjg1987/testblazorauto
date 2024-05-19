@@ -20,6 +20,9 @@
     @@if (isEdit)
     {
         <Form @@ref="frm" ValidateOnChange="true" Model="editDto" LabelColSpan="4" WrapperColSpan="20" OnFinish="OnFinish" Loading="IsBusy">
+            <FormItem>
+                <Input @@bind-Value="context.DisplayName" AllowClear="true" />
+            </FormItem>
 @foreach(var field in Model.Model.NormalFields)
 {
     if(field.CSharpType == "bool"){
@@ -56,6 +59,10 @@
     }
     else
     {
+        <GridRow>
+            <GridCol Span="5">名称</GridCol>   
+            <GridCol Span="19">@@dto.DisplayName</GridCol>
+        </GridRow>
 @foreach(var field in Model.Model.NormalFields)
 { 
         <GridRow>

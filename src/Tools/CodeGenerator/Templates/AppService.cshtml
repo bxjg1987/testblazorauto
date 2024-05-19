@@ -25,7 +25,7 @@ namespace @(Model.Model.ApplicationNamespace)
                                                                                              @(Model.Model.CreateDtoName), 
                                                                                              @(Model.Model.EditDtoName)>
     {
-        protected @(Model.Model.ApplicationServiceName)(IRepository<@(Model.Model.EntityName), @(Model.Model.PrimaryField.CSharpType)> repository) : base(repository)
+        public @(Model.Model.ApplicationServiceName)(IRepository<@(Model.Model.EntityName), @(Model.Model.PrimaryField.CSharpType)> repository) : base(repository)
         {
         }
 

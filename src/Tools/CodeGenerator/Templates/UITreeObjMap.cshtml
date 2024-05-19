@@ -8,14 +8,15 @@
 }
 using AutoMapper;
 using @(Model.Model.ApplicationShareNamespace);
+using @(Model.Model.CoreNamespace);
 
 namespace @(Model.Model.BlazorClientNamespace)
 {
-    public class AutoMapperProfile : AutoMapper.Profile
+    public class AutoMapperProfile : Profile
     {
         public AutoMapperProfile()
         {
-            CreateMap<@(Model.Model.DtoName), @(Model.Model.EditDtoName)>();
+            CreateMap<@(Model.Model.EditDtoName), @(Model.Model.DtoName)>();
         }
     }
 }

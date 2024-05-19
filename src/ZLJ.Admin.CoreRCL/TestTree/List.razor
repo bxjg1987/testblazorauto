@@ -1,0 +1,142 @@
+@page "/TestTree"
+
+@using BXJG.Utils.Application.Share.GeneralTree
+@using ZLJ.Application.Share.TestTree;
+
+@attribute [ReuseTabsPage(Title = "测试树")]
+@attribute [Authorize(TestTreeApplicationShareConsts.PermissionNameGet)]
+
+@inherits TreeListBaseComponent<TestTreeDto, TestTreeCondition>
+
+<Flex Gap="small" Vertical Justify="space-between">
+     <Flex Justify="space-between">
+         @* 左侧 *@
+         <Flex Gap="small">
+            @if (createIsGranted)
+            {
+                <Button Type="@ButtonType.Primary" Icon="@IconType.Outline.Plus" OnClick="BtnCreateClick" Disabled="IsBusy">新增</Button>
+            }
+            @if(deleteIsGranted)
+            {
+                <Popconfirm Title="将删除已经的项及其所有子项，确定删除吗?"
+                            OnConfirm="BtnDeleteClick">
+                    <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Clear" Danger Loading="isDeleting" Disabled="ShouldDisableDelete">删除</Button>
+                </Popconfirm>
+            }
+        </Flex>
+        @* 右侧 *@
+        <Flex Gap="small">
+            <AntDesign.InputNumber @bind-Value="GetAllInput.AgeMin" PlaceHolder="最小年龄"  />
+            <AntDesign.InputNumber @bind-Value="GetAllInput.AgeMax" PlaceHolder="最大年龄"  />
+            <RangePicker TValue="DateTime?[]" @bind-Value="BirthdayRange" Placeholder=@(new string[] { "开始出生日期", "结束出生日期" }) />
+            <AntDesign.InputNumber @bind-Value="GetAllInput.F2Min" PlaceHolder="最小测试3" Precision="3" Style="width:5rem;" />
+            <AntDesign.InputNumber @bind-Value="GetAllInput.F2Max" PlaceHolder="最大测试3" Precision="3" Style="width:7rem;" />
+            <Input @bind-Value="GetAllInput.Status" PlaceHolder="状态" Style="width:5rem;" />
+            <Input @bind-Value="GetAllInput.F3" PlaceHolder="测试4" Style="width:4rem;" />
+            <div style="width:15rem;">
+                <Search Placeholder="名称/字符串字段1等关键字..." @bind-Value="Keywords" OnChange="BtnSearchClick" AllowClear="true" ClassicSearchIcon="true" Disabled="IsBusy" />
+            </div>
+            <Tooltip Title="清空条件">
+                <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Clear" OnClick="BtnClearFilterClick" Disabled="IsBusy"></Button>
+            </Tooltip>
+            <Tooltip Title="刷新">
+                <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Reload" OnClick="BtnRefreshClick" Disabled="IsBusy"></Button>
+            </Tooltip>
+        </Flex>
+    </Flex>
+
+    @* 不能定义key，不然无法刷新子节点 *@
+    <Table @ref="table"
+           TreeChildren="GetTreeChildren"
+           TItem="TestTreeDto"
+           Total="TotalCount"
+           @bind-SelectedRows="SelectedItems"
+           OnChange="OnQuery"
+           DataSource="Items"
+           Loading="IsLoading"
+           HidePagination="true"
+           RowClassName="@(r=>r.RowIndex%2==0?"even":"odd")"
+           RemoteDataSource="true"
+           OnRow="Row"
+           Size="TableSize.Small"
+           Bordered="true"
+           ScrollY="76vh">
+        <Selection Key="@(context.Id.ToString())" Fixed="left"/>
+        <PropertyColumn Property="c=>c.DisplayName" ShowSorterTooltip="false" Sortable="true" Width="12rem"  />
+        <PropertyColumn Property="c=>c.Name" Sortable="true" ShowSorterTooltip="false" Width="150"  Align="@ColumnAlign.Center"/>        
+        <PropertyColumn Property="c=>c.Age" Sortable="true" ShowSorterTooltip="false" Width="150"  Align="@ColumnAlign.Center"/>        
+        <PropertyColumn Property="c=>c.Birthday" Sortable="true" ShowSorterTooltip="false" Width="150"  Align="@ColumnAlign.Center"/>        
+        <PropertyColumn Property="c=>c.StringField1" Sortable="true" ShowSorterTooltip="false" Width="150"  Align="@ColumnAlign.Center"/>        
+        <PropertyColumn Property="c=>c.Status" Sortable="true" ShowSorterTooltip="false" Width="150"  Align="@ColumnAlign.Center"/>        
+        <PropertyColumn Property="c=>c.F2" Sortable="true" ShowSorterTooltip="false" Width="150"  Align="@ColumnAlign.Center"/>        
+        <PropertyColumn Property="c=>c.F3" ShowSorterTooltip="false"  Width="5rem"  Align="@ColumnAlign.Center">
+            <Switch @bind-Value="@context.F3" Size="@InputSize.Small" Disabled="true"></Switch>
+        </PropertyColumn>
+
+        <ActionColumn Title="操作" Width="240" Fixed="right">
+            <ButtonGroup Size="@ButtonSize.Small">
+                    <Button Size="@ButtonSize.Small" Type="@ButtonType.Primary" OnClick="x=>BtnItemDetailClick(context)">详情</Button>
+                @if (createIsGranted)
+                {
+                    <Button Size="@ButtonSize.Small" OnClick="x=>BtnAddSubClick(context.Id)">添加子节点</Button>
+                }
+                @if (updateIsGranted)
+                {
+                    <Button Size="@ButtonSize.Small" OnClick="x=>BtnItemEditClick(context)">修改</Button>
+                }
+                @if (deleteIsGranted)
+                {
+                    <Popconfirm Title="将删除此项及其所有子项，确定删除吗?" OnConfirm="()=>BtnDeleteItemClick(context)">
+                        <Button Size="@ButtonSize.Small" Danger="true" Loading="@context.ExtensionData.IsDeleting">删除</Button>
+                    </Popconfirm>
+                }
+            </ButtonGroup>
+        </ActionColumn>
+    </Table>
+
+</Flex>
+
+@{
+    RenderFragment renderFragment =@<Template>
+        <SectionOutlet SectionName=@($"{GetHashCode()}-create-btns") />
+        <Button OnClick="BtnCloseCreateClick">关闭</Button>
+    </Template>;
+}
+    <Modal DestroyOnClose="true" 
+           Footer="renderFragment" 
+           @bind-Visible="isShowCreateDialog" 
+           Draggable="true" 
+           Width=@("40vw")
+           AfterClose="AfterCloseDialog"
+           Class="frm-dal" >
+    <TitleTemplate>
+        <Icon Type="plus" Theme="outline" />
+        新增@(FuncName)
+    </TitleTemplate>
+    <ChildContent>
+        <SectionOutlet SectionName="@($"{GetHashCode()}-create-body" )" />
+        <Create OnAddEnd="AddEnd" ParentId="parentId"  Master="GetHashCode()"/>
+    </ChildContent>
+</Modal>
+
+@{
+    RenderFragment renderFragment1 =@<Template>
+        <SectionOutlet SectionName=@($"{GetHashCode()}-detail-update-btns") />
+        <Button OnClick="BtnDetailUpdateCloseClick">关闭</Button>
+    </Template>;
+}
+<Modal DestroyOnClose="true" 
+       Footer="renderFragment1" 
+       @bind-Visible="isShowDetailUpdateDialog" 
+       Draggable="true" 
+       Width=@("40vw")
+       Class="frm-dal"
+       AfterClose="AfterCloseDialog">
+    <TitleTemplate>
+        <SectionOutlet SectionName=@($"{GetHashCode()}-detail-update-title") />
+    </TitleTemplate>
+    <ChildContent>
+        <SectionOutlet SectionName=@($"{GetHashCode()}-detail-update-body") />
+        <DetailUpdate Id="detailUpdateId" IsEdit="isEdit" OnDeleted="DetailDeleted" OnUpdated="DetailUpdated" Master="GetHashCode()"/>
+    </ChildContent>
+</Modal>

@@ -37,16 +37,16 @@
 @foreach (var field in Model.Model.ConditionRangeFields)
 {
     if(field.CSharpTypeIsDateTime){
-            <RangePicker TValue="@(field.CSharpType)?[]" @@bind-Value="@field.ConditionRangeName" Placeholder=@@(new string[] { "开始@(field.DisplayName)", "结束@(field.DisplayName)" }) />
+            <RangePicker TValue="@(field.CSharpType)?[]" @@bind-Value="@field.ConditionRangeName" Placeholder=@@(new string[] { "开始@(field.DisplayName)", "结束@(field.DisplayName)" }) @(field.Width.IsNotNullOrWhiteSpaceBXJG()?$@"Width=""{field.Width}""":"")/>
     }
     else if(field.CSharpTypeIsNumber){
-            <AntDesign.InputNumber @@bind-Value="GetAllInput.Filter.@field.ConditionRangeMin" PlaceHolder="最小@(field.DisplayName)" @(field.NumberPrecision.HasValue?@$"Precision=""{field.NumberPrecision}""":"") />
-            <AntDesign.InputNumber @@bind-Value="GetAllInput.Filter.@field.ConditionRangeMax" PlaceHolder="最大@(field.DisplayName)" @(field.NumberPrecision.HasValue?@$"Precision=""{field.NumberPrecision}""":"") />
+            <AntDesign.InputNumber @@bind-Value="GetAllInput.Filter.@field.ConditionRangeMin" PlaceHolder="最小@(field.DisplayName)" @(field.NumberPrecision.HasValue?@$"Precision=""{field.NumberPrecision}""":"") @(field.Width.IsNotNullOrWhiteSpaceBXJG()?$@"Width=""{field.Width}""":"")/>
+            <AntDesign.InputNumber @@bind-Value="GetAllInput.Filter.@field.ConditionRangeMax" PlaceHolder="最大@(field.DisplayName)" @(field.NumberPrecision.HasValue?@$"Precision=""{field.NumberPrecision}""":"") @(field.Width.IsNotNullOrWhiteSpaceBXJG()?$@"Width=""{field.Width}""":"")/>
     }
 }
 @foreach (var field in Model.Model.ConditionNormalFields)
 {
-            <Input @@bind-Value="GetAllInput.Filter.@field.Name" PlaceHolder="@(field.DisplayName)" />
+            <Input @@bind-Value="GetAllInput.Filter.@field.Name" PlaceHolder="@(field.DisplayName)" @(field.Width.IsNotNullOrWhiteSpaceBXJG()?$@"Width=""{field.Width}""":"")/>
 }
             <div style="width:14.5rem;">
                 <Search Placeholder="@(string.Join("/", Model.Model.ConditionStringFields.Select(x=>x.DisplayName)))等关键字..." @@bind-Value="Keywords" OnChange="BtnSearchClick" AllowClear="true" Disabled="IsBusy" />

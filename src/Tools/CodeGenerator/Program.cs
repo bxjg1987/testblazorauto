@@ -87,12 +87,14 @@ while (q.ToLower() == "c")
         CreateDto,
         PermissionProvider,
         NavigationProvider,
-        ObjMap
+        ObjMap,
+        UIObjMap
     };
 
     if (ctx.Model.IsTree)
     {
         actions2.Add(AppServiceTree);
+        //actions2.Add(UITreeObjMap);
         actions2.Add(UITreeList);
         actions2.Add(UITreeListCs);
         actions2.Add(UITreeCreate);
@@ -103,6 +105,7 @@ while (q.ToLower() == "c")
     else
     {
         actions2.Add(AppService);
+        //actions2.Add(UIObjMap);
         actions2.Add(UIList);
         actions2.Add(UIListCs);
         actions2.Add(UICreate);
@@ -542,6 +545,19 @@ void AppServiceTree(ExecuteContext ctx)
 
     Console.WriteLine("生成AppServiceTree完成");
 }
+void UIObjMap(ExecuteContext ctx)
+{
+    Console.WriteLine("正在生成UIObjMap...");
+    var str = engine.CompileRenderAsync("UIObjMap", ctx).Result;
+
+    var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "ObjMap.cs");
+    Directory.CreateDirectory(Path.GetDirectoryName(file));
+
+    File.WriteAllText(file, str);
+
+
+    Console.WriteLine("生成UIObjMap完成");
+}
 void UIList(ExecuteContext ctx)
 {
     Console.WriteLine("正在生成UIList...");
@@ -622,7 +638,19 @@ void UIDetailUpdateCs(ExecuteContext ctx)
 
     Console.WriteLine("生成DetailUpdateCs完成");
 }
+void UITreeObjMap(ExecuteContext ctx)
+{
+    Console.WriteLine("正在生成UITreeObjMap...");
+    var str = engine.CompileRenderAsync("UITreeObjMap", ctx).Result;
 
+    var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "ObjMap.cs");
+    Directory.CreateDirectory(Path.GetDirectoryName(file));
+
+    File.WriteAllText(file, str);
+
+
+    Console.WriteLine("生成UITreeObjMap完成");
+}
 
 void UITreeList(ExecuteContext ctx)
 {
@@ -650,6 +678,9 @@ void UITreeListCs(ExecuteContext ctx)
 
     Console.WriteLine("生成UITreeListCs完成");
 }
+
+
+
 void UITreeCreate(ExecuteContext ctx)
 {
     Console.WriteLine("正在生成TreeCreate...");
