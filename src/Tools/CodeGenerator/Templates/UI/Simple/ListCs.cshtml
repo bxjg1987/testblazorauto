@@ -165,7 +165,7 @@ namespace @(Model.Model.BlazorClientNamespace)
         /// 当详情页执行删除后回调
         /// </summary>
         /// <param name="dto"></param>
-        void DetailDeleted(TestSimpleDto dto)
+        void DetailDeleted(@(Model.Model.DtoName) dto)
         {
             isNeedReload = true;
             isShowDetailUpdate = false;

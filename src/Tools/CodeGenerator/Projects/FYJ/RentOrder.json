@@ -51,7 +51,7 @@
       "IsPrimary": false,
       "DefaultValue": null,
       "IsRequired": true,
-      "Length": 100,
+      "Length": 0,
       "IsUnicode": false,
       "IsSort": true,
       "IsCondition": true,
@@ -147,7 +147,7 @@
       "NumberPrecision": null
     },
     {
-      "Name": "StateChangedTime ",
+      "Name": "StateChangedTime",
       "DisplayName": "状态变更时间",
       "CSharpType": "DateTimeOffset",
       "IsPrimary": false,
