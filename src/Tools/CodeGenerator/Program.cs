@@ -7,12 +7,30 @@ using RazorLight;
 using System.Text.RegularExpressions;
 using System.Text;
 using System.Collections.Immutable;
+using Microsoft.Data.SqlClient;
+using Dapper;
+using System.Data;
 
 //HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
 //builder.Services.Configure<List<ProjectDefine>>(builder.Configuration.GetSection("Projects"));
 //builder.Services.AddHostedService<MainService>();
 //IHost host = builder.Build();
 //host.Run();
+
+/*
+ * 整体流程
+ * 先通过json配置项目和模型
+ * 启动
+ * 用户做各种设置
+ * 生成
+ * 查看结果
+ * 
+ * 注意倾向于在一开始设定好所有配置，后续直接跑生成任务
+ * 
+ * 此外ExecuteContext及其属性主要传递数据到模板中，也为后续步骤提供数据，总体来说是传递数据的作用
+ * 所以不要在它们内部定义过多逻辑
+ * 
+ */
 
 var services = new ServiceCollection();
 
@@ -29,8 +47,11 @@ IServiceProvider serviceProvider = services.BuildServiceProvider();
 
 
 var ctx = serviceProvider.GetService<IOptionsMonitor<ExecuteContext>>().CurrentValue;
+
+
+
 ctx.Models = new List<ModelDefine>();
-var ms = Directory.GetFiles( Path.Combine("projects",mxwjj));
+var ms = Directory.GetFiles(Path.Combine("projects", mxwjj));
 foreach (var item in ms)
 {
     var b2 = new ConfigurationBuilder().AddJsonFile(item).Build();
@@ -80,6 +101,7 @@ while (q.ToLower() == "y")
     SelectModel(ctx);
     List<Action<ExecuteContext>> actions2 = new List<Action<ExecuteContext>>
     {
+        SelectConnectionString,
         AppConsts,
         AppCondition,
         AppDto,
@@ -87,8 +109,10 @@ while (q.ToLower() == "y")
         AppCreateDto,
         AppPermissionProvider,
         AppNavigationProvider,
+        AppLocal,
         AppObjMap,
-        UIObjMap
+        UIObjMap,
+        SetPermission
     };
 
     if (ctx.Model.IsTree)
@@ -139,11 +163,15 @@ while (q.ToLower() == "y")
     foreach (var item in apps)
     {
         ctx.App = item;
+
         for (int i = 0; i < actions2.Count; i++)
         {
             Console.WriteLine($"应用步骤进度：{i + 1}/{actions2.Count}");
             actions2[i].Invoke(ctx);
         }
+
+
+
     }
 
     Console.WriteLine("是否继续？按y键继续，按任意键退出...");
@@ -249,7 +277,7 @@ void CoreEntity(ExecuteContext ctx)
     Console.WriteLine("正在生成实体类...");
     var str = engine.CompileRenderAsync("core/Entity", ctx).Result;
 
-    var file = Path.Combine(ctx.SrcDir, ctx.CoreProjectName, ctx.Model.Name,  ctx.Model.EntityName + ".cs");
+    var file = Path.Combine(ctx.SrcDir, ctx.CoreProjectName, ctx.Model.Name, ctx.Model.EntityName + ".cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
     File.WriteAllText(file, str);
@@ -290,7 +318,7 @@ void EFMap(ExecuteContext ctx)
 
     var str = engine.CompileRenderAsync("ef/EFMap", ctx).Result;
     //用这个路径，方便后续添加dbcontext、seed等
-    var file = Path.Combine(ctx.SrcDir, ctx.EFCoreProjectName, ctx.Model.Name,"EFMap.cs");
+    var file = Path.Combine(ctx.SrcDir, ctx.EFCoreProjectName, ctx.Model.Name, "EFMap.cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
 
@@ -356,7 +384,7 @@ void EFDbContext(ExecuteContext ctx)
 {
     Console.WriteLine("正在生成DbContext...");
     var str = engine.CompileRenderAsync("ef/EFDbContext", ctx).Result;
-    var file = Path.Combine(ctx.SrcDir, ctx.EFCoreProjectName, ctx.Model.Name,  ctx.Name + "DbContext.cs");
+    var file = Path.Combine(ctx.SrcDir, ctx.EFCoreProjectName, ctx.Model.Name, ctx.Name + "DbContext.cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
     File.WriteAllText(file, str);
     Console.WriteLine("生成efDbContext映射完成");
@@ -392,7 +420,7 @@ void AppCommomAppService(ExecuteContext ctx)
     Console.WriteLine("正在生成AppCommomAppService...");
     var str = engine.CompileRenderAsync("appcommon/AppService", ctx).Result;
 
-    var file = Path.Combine(ctx.SrcDir, ctx.ApplicationCommonProjectName, ctx.Model.Name,  ctx.Model.ProviderAppService + ".cs");
+    var file = Path.Combine(ctx.SrcDir, ctx.ApplicationCommonProjectName, ctx.Model.Name, ctx.Model.ProviderAppService + ".cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
     File.WriteAllText(file, str);
@@ -405,7 +433,7 @@ void AppCommomObjMap(ExecuteContext ctx)
     Console.WriteLine("正在生成AppCommomObjMap...");
     var str = engine.CompileRenderAsync("AppCommon/ObjMap", ctx).Result;
 
-    var file = Path.Combine(ctx.SrcDir, ctx.ApplicationCommonProjectName, ctx.Model.Name,  "AutoMapperProfile.cs");
+    var file = Path.Combine(ctx.SrcDir, ctx.ApplicationCommonProjectName, ctx.Model.Name, "AutoMapperProfile.cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
     File.WriteAllText(file, str);
@@ -418,7 +446,7 @@ void AppConsts(ExecuteContext ctx)
     Console.WriteLine("正在生成admin应用中，应用服务共享层的常量...");
     var str = engine.CompileRenderAsync("app/Consts", ctx).Result;
 
-    var file = Path.Combine(ctx.SrcDir, ctx.App.ApplicationShareProjectName, ctx.Model.Name,  ctx.Model.ApplicationShareConstName + ".cs");
+    var file = Path.Combine(ctx.SrcDir, ctx.App.ApplicationShareProjectName, ctx.Model.Name, ctx.Model.ApplicationShareConstName + ".cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
     File.WriteAllText(file, str);
@@ -505,6 +533,31 @@ void AppNavigationProvider(ExecuteContext ctx)
 
 
     Console.WriteLine("生成AppNavigationProvider完成");
+}
+void AppLocal(ExecuteContext ctx)
+{
+    Console.WriteLine("正在处理应用层本地化...");
+
+    //目标文本
+    var mbwb = $"<text name=\"{ctx.Model.PermissionNameGet}\" value=\"{ctx.Model.DisplayName}\" />{Environment.NewLine}<!--codegenerator-->";
+    var file = Path.Combine(ctx.SrcDir, ctx.App.ApplicationProjectName, "Localization", "SourceFiles", $"{ctx.App.Name}-zh-Hans.xml");
+    var str = File.ReadAllText(file);
+    if (!str.Contains(mbwb))
+    {
+        str = str.Replace("<!--codegenerator-->", mbwb);
+        File.WriteAllText(file, str);
+    }
+
+    mbwb = $"<text name=\"{ctx.Model.PermissionNameGet}\" value=\"{ctx.Model.Name}\" />{Environment.NewLine}<!--codegenerator-->";
+    file = Path.Combine(ctx.SrcDir, ctx.App.ApplicationProjectName, "Localization", "SourceFiles", $"{ctx.App.Name}-en.xml");
+    str = File.ReadAllText(file);
+    if (!str.Contains(mbwb))
+    {
+        str = str.Replace("<!--codegenerator-->", mbwb);
+        File.WriteAllText(file, str);
+    }
+
+    Console.WriteLine("处理应用层本地化完成");
 }
 void AppObjMap(ExecuteContext ctx)
 {
@@ -734,4 +787,87 @@ void UITreeDetailUpdateCs(ExecuteContext ctx)
 
 
     Console.WriteLine("生成TreeDetailUpdateCs完成");
+}
+
+void SelectConnectionString(ExecuteContext ctx)
+{
+    //var strConn = "";
+    var jsons = Directory.GetFiles(Path.Combine(ctx.SrcDir, ctx.App.ApiHostProjectName)).Where(x => x.Contains(".json"));
+    var list = new List<string>();
+    foreach (var item in jsons)
+    {
+        var cb = new ConfigurationBuilder();
+        cb.AddJsonFile(item);
+        var cf = cb.Build();
+        // 或者如果你想获取某个部分的所有配置
+        var section = cf.GetSection("ConnectionStrings");
+        if (section == default)
+            continue;
+
+        foreach (var subKey in section.GetChildren())
+        {
+            if (list.Contains(subKey.Value))
+                continue;
+            list.Add(subKey.Value);
+        }
+    }
+
+    Console.WriteLine("请选择连接字符串：");
+    for (int i = 0; i < list.Count; i++)
+    {
+        Console.WriteLine($"{i}\t{list[i]}");
+    }
+
+    int idx = 0;
+    var input = Console.ReadLine();
+    if (input.IsNotNullOrWhiteSpaceBXJG())
+        idx = int.Parse(input);
+    ctx.App.ConnectionString = list[idx];
+}
+void SetPermission(ExecuteContext ctx)
+{
+    Console.WriteLine("正在为租户管理员授权...");
+    using var conn = new Microsoft.Data.SqlClient.SqlConnection(ctx.App.ConnectionString);
+    SetTenantPermission(conn, ctx.Model.PermissionNameGet, ctx.Model.MultiTenantMode);
+    SetTenantPermission(conn, ctx.Model.PermissionNameCreate, ctx.Model.MultiTenantMode);
+    SetTenantPermission(conn, ctx.Model.PermissionNameUpdate, ctx.Model.MultiTenantMode);
+    SetTenantPermission(conn, ctx.Model.PermissionNameDelete, ctx.Model.MultiTenantMode);
+    Console.WriteLine("为租户管理员授权已完成");
+
+}
+void SetTenantPermission(IDbConnection conn, string permissionName, MultiTenantMode multiTenantMode)
+{
+    var r = conn.ExecuteScalar<int>("select count(name) from AbpPermissions where name=@name", new { name = permissionName });
+    if (r < 1)
+    {
+        var sql = "insert into AbpPermissions(tenantId,name,isGranted,discriminator,roleId,creationTime) values(@tenantId,@name,@isGranted,@discriminator,@roleId,@creationTime)";
+
+        if (multiTenantMode == MultiTenantMode.Must || multiTenantMode == MultiTenantMode.Have)
+        {
+            conn.Execute(sql,
+                    new
+                    {
+                        tenantId = 1,
+                        name = permissionName,
+                        isGranted = true,
+                        discriminator = "RolePermissionSetting",
+                        roleId = 2,
+                        creationTime = DateTime.Now
+                    });
+        }
+        if (multiTenantMode == MultiTenantMode.No || multiTenantMode == MultiTenantMode.Have)
+        {
+            conn.Execute(sql,
+                    new
+                    {
+                        tenantId = (long?)null,
+                        name = permissionName,
+                        isGranted = true,
+                        discriminator = "RolePermissionSetting",
+                        roleId = 1,
+                        creationTime = DateTime.Now
+                    });
+        }
+
+    }
 }

@@ -49,6 +49,10 @@ namespace CodeGenerator
             get { return apiHostProjectName.IsNotNullOrWhiteSpaceBXJG() ? apiHostProjectName : $"{ExecuteContext.Name}.{Name}.ApiHost"; }
             set { apiHostProjectName = value; }
         }
-
+        /// <summary>
+        /// 当前应用关联的数据库连接字符串
+        /// 目前仅考虑sqlserver
+        /// </summary>
+        internal string ConnectionString { get; set; }
     }
 }
