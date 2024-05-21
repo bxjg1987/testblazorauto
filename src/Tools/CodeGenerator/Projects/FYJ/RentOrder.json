@@ -1,11 +1,11 @@
 {
-  "Name": "TestTree",
-  "DisplayName": "测试树",
-  "Icon": "testtree",
-  "IsTree": true,
+  "Name": "RentOrder",
+  "DisplayName": "租赁单",
+  "Icon": "carry-out",
+  "IsTree": false,
   "ParentPermissionName": "Administrator",
   "ParentMenuName": null,
-  "MultiTenantMode": 2, //多租户模式 1Must 2Have 4不开启
+  "MultiTenantMode": 1, //多租户模式 1Must 2Have 4不开启
   "Fields": [
     {
       "Name": "Id", //字段名
@@ -18,7 +18,7 @@
       "IsUnicode": false, //是否是Unicode编码
       "IsSort": false, //是否参与排序
       "IsCondition": false, //是否作为条件
-      "IsConditionRange": true, //是否作为范围条件,IsCondition为true时有效
+      "IsConditionRange": false, //是否作为范围条件,IsCondition为true时有效
       "Width": null, //界面中显示的宽度，字符串如：20rem;100px;
       "FixedLeft": null, //在列表中显示时冻结，true冻结在左侧；false冻结在右侧；null不冻结
       "Position": null, //在列表中显示的位置，true左 false右 null中
@@ -28,14 +28,14 @@
       "NumberPrecision": null //若是小数，则指定它的精度，若为空，则保持字段类型默认的精度
     },
     {
-      "Name": "Name",
-      "DisplayName": "名称",
-      "CSharpType": "string",
+      "Name": "AssociatedCompanyId",
+      "DisplayName": "客户",
+      "CSharpType": "long",
       "IsPrimary": false,
       "DefaultValue": null,
-      "IsRequired": false,
-      "Length": 100,
-      "IsUnicode": true,
+      "IsRequired": true,
+      "Length": 0,
+      "IsUnicode": false,
       "IsSort": true,
       "IsCondition": true,
       "IsConditionRange": false,
@@ -45,47 +45,47 @@
       "NumberPrecision": null //若是小数，则指定它的精度，若为空，则保持字段类型默认的精度
     },
     {
-      "Name": "Age",
-      "DisplayName": "年龄",
+      "Name": "SettleCycle",
+      "DisplayName": "结算周期(月)",
       "CSharpType": "int",
       "IsPrimary": false,
       "DefaultValue": null,
-      "IsRequired": false,
-      "Length": 0,
+      "IsRequired": true,
+      "Length": 100,
       "IsUnicode": false,
       "IsSort": true,
       "IsCondition": true,
       "IsConditionRange": true,
-      "NumberMax": null,
-      "NumberMin": null,
-      "NumberStep": null,
-      "NumberPrecision": null
+      "NumberMax": null, //最大数值，类型为数字时有效，若为空则不管最大值
+      "NumberMin": 1, //最小数值，类型为数字时有效，若为空则不管设置最小值
+      "NumberStep": 1, //步进数值，类型为数字时有效，若为空则不管步进
+      "NumberPrecision": null //若是小数，则指定它的精度，若为空，则保持字段类型默认的精度
     },
     {
-      "Name": "Birthday",
-      "DisplayName": "出生日期",
-      "CSharpType": "DateTime",
+      "Name": "DepositAmounct",
+      "DisplayName": "押金(元)",
+      "CSharpType": "decimal",
       "IsPrimary": false,
-      "DefaultValue": "1980-1-1",
-      "IsRequired": false,
+      "DefaultValue": 0,
+      "IsRequired": true,
       "Length": 0,
       "IsUnicode": false,
       "IsSort": true,
       "IsCondition": true,
       "IsConditionRange": true,
       "NumberMax": null,
-      "NumberMin": null,
-      "NumberStep": null,
-      "NumberPrecision": null
+      "NumberMin": 0,
+      "NumberStep": 100,
+      "NumberPrecision": 2
     },
     {
-      "Name": "StringField1",
-      "DisplayName": "字符串字段1",
+      "Name": "AlgorithmName",
+      "DisplayName": "套餐类型",
       "CSharpType": "string",
       "IsPrimary": false,
       "DefaultValue": null,
       "IsRequired": true,
-      "Length": 60,
+      "Length": 100,
       "IsUnicode": false,
       "IsSort": true,
       "IsCondition": true,
@@ -96,50 +96,84 @@
       "NumberPrecision": null
     },
     {
-      "Name": "Status",
+      "Name": "AlgorithmParams",
+      "DisplayName": "套餐配置",
+      "CSharpType": "string",
+      "IsPrimary": false,
+      "DefaultValue": null,
+      "IsRequired": false,
+      "Length": 1000,
+      "IsUnicode": true,
+      "IsSort": false,
+      "IsCondition": false,
+      "IsConditionRange": false,
+      "NumberMax": null,
+      "NumberMin": null,
+      "NumberStep": null,
+      "NumberPrecision": null
+    },
+    {
+      "Name": "OrderState",
       "DisplayName": "状态",
       "CSharpType": "int",
       "IsPrimary": false,
-      "DefaultValue": 3,
+      "DefaultValue": 0,
       "IsRequired": true,
       "Length": 0,
       "IsUnicode": false,
       "IsSort": true,
       "IsCondition": true,
       "IsConditionRange": false,
-      "NumberMax": 66,
+      "NumberMax": null,
       "NumberMin": null,
-      "NumberStep": 3,
+      "NumberStep": null,
       "NumberPrecision": null
     },
     {
-      "Name": "F2",
-      "DisplayName": "测试3",
-      "CSharpType": "decimal",
+      "Name": "StateChangedReason",
+      "DisplayName": "状态变更备注",
+      "CSharpType": "string",
       "IsPrimary": false,
-      "DefaultValue": 3.31,
+      "DefaultValue": null,
       "IsRequired": false,
+      "Length": 500,
+      "IsUnicode": true,
+      "IsSort": false,
+      "IsCondition": true,
+      "IsConditionRange": false,
+      "NumberMax": null,
+      "NumberMin": null,
+      "NumberStep": null,
+      "NumberPrecision": null
+    },
+    {
+      "Name": "StateChangedTime ",
+      "DisplayName": "状态变更时间",
+      "CSharpType": "DateTimeOffset",
+      "IsPrimary": false,
+      "DefaultValue": null,
+      "IsRequired": true,
       "Length": 0,
       "IsUnicode": false,
       "IsSort": true,
       "IsCondition": true,
       "IsConditionRange": true,
-      "NumberMax": 0.66,
-      "NumberMin": 0.2,
-      "NumberStep": 0.1,
-      "NumberPrecision": 3
+      "NumberMax": null,
+      "NumberMin": null,
+      "NumberStep": null,
+      "NumberPrecision": null
     },
     {
-      "Name": "F3",
-      "DisplayName": "测试4",
-      "CSharpType": "bool",
+      "Name": "StateChangedUserId",
+      "DisplayName": "状态变更人",
+      "CSharpType": "long",
       "IsPrimary": false,
-      "DefaultValue": false,
+      "DefaultValue": null,
       "IsRequired": true,
       "Length": 0,
       "IsUnicode": false,
       "IsSort": false,
-      "IsCondition": true,
+      "IsCondition": false,
       "IsConditionRange": false,
       "NumberMax": null,
       "NumberMin": null,

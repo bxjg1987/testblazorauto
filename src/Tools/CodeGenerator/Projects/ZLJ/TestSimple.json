@@ -5,6 +5,7 @@
   "IsTree": false,
   "ParentPermissionName": "Administrator",
   "ParentMenuName": null,
+  "MultiTenantMode": 4, //多租户模式 1Must 2Have 4不开启
   "Fields": [
     {
       "Name": "Id", //字段名

@@ -7,6 +7,9 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace CodeGenerator
 {
+    public enum MultiTenantMode { 
+        Must=1<<0,Have=1<<1,No=1<<2
+    }
     /// <summary>
     /// 模型
     /// </summary>
@@ -16,6 +19,10 @@ namespace CodeGenerator
         /// 上下文
         /// </summary>
         public ExecuteContext ExecuteContext { get; set; }
+        /// <summary>
+        /// 多租户模式
+        /// </summary>
+        public MultiTenantMode MultiTenantMode { get; set; }
 
         #region 基本信息
         /// <summary>

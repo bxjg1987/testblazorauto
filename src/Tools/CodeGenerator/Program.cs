@@ -17,7 +17,7 @@ using System.Collections.Immutable;
 var services = new ServiceCollection();
 
 IConfigurationBuilder builder = new ConfigurationBuilder();
-InitProject();
+var mxwjj = InitProject();//返回模型文件夹
 
 var configuration = builder.Build();
 
@@ -30,7 +30,7 @@ IServiceProvider serviceProvider = services.BuildServiceProvider();
 
 var ctx = serviceProvider.GetService<IOptionsMonitor<ExecuteContext>>().CurrentValue;
 ctx.Models = new List<ModelDefine>();
-var ms = Directory.GetFiles( Path.Combine("projects", ctx.Name));
+var ms = Directory.GetFiles( Path.Combine("projects",mxwjj));
 foreach (var item in ms)
 {
     var b2 = new ConfigurationBuilder().AddJsonFile(item).Build();
@@ -173,7 +173,7 @@ while (q.ToLower() == "y")
 //        ctx.Project = projects[int.Parse(projectStr)];
 //}
 
-void InitProject()
+string InitProject()
 {
     Console.WriteLine("请选择项目：");
 
@@ -188,7 +188,7 @@ void InitProject()
     var projIndex = int.Parse(sdf);
 
     builder.AddJsonFile(projfiles[projIndex]);
-    
+    return Path.GetFileNameWithoutExtension(projfiles[projIndex]);
 }
 void SelectModel(ExecuteContext ctx)
 {
