@@ -11,13 +11,13 @@ using BXJG.Common.Contracts;
 {
 @:using BXJG.Utils.Application.Share.GeneralTree;
 }
-
+using @Model.Model.CoreShareNamespace;
 namespace @(Model.Model.ApplicationCommonShareNamespace)
 {
     /// <summary>
     /// 获取 @(Model.Model.DisplayName) 以供选择的条件
     ///</summary>
-    public class @(Model.Model.ProviderCondition)@(Model.Model.IsTree?" : GeneralTreeGetForSelectInput":"")@( Model.Model.ConditionStringFields.Any()?$"{(Model.Model.IsTree?',':':')} IHaveKeywords":"")
+    public partial class @(Model.Model.ProviderCondition)@(Model.Model.IsTree?" : GeneralTreeGetForSelectInput":"")@( Model.Model.ConditionStringFields.Any()?$"{(Model.Model.IsTree?',':':')} IHaveKeywords":"")
     {
 @if(Model.Model.ConditionStringFields.Any()){<text>
         /// <summary>

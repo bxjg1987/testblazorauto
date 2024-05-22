@@ -113,9 +113,9 @@
       "NumberPrecision": null
     },
     {
-      "Name": "OrderState",
+      "Name": "State",
       "DisplayName": "状态",
-      "CSharpType": "int",
+      "CSharpType": "RentOrderState",
       "IsPrimary": false,
       "DefaultValue": 0,
       "IsRequired": true,

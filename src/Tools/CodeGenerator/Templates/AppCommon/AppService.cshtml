@@ -8,6 +8,7 @@
 }
 
 using @(Model.Model.CoreNamespace);
+using @Model.Model.CoreShareNamespace;
 using @(Model.Model.ApplicationCommonShareNamespace);
 using Abp.Authorization;
 using BXJG.Utils.Application.Share.GeneralTree;
@@ -18,7 +19,7 @@ namespace @(Model.Model.ApplicationCommonNamespace)
     /// 获取 @(Model.Model.DisplayName) 以供选择
     ///</summary>
     [AbpAuthorize]
-    public class @(Model.Model.ProviderAppService) : 
+    public partial class @(Model.Model.ProviderAppService) :
 @if(Model.Model.IsTree){<text>
                                                      CommonTreeProviderBaseAppService<@(Model.Model.EntityName), 
                                                                                       @(Model.Model.ProviderCondition),

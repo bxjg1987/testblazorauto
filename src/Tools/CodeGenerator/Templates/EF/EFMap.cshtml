@@ -16,7 +16,7 @@ namespace @(Model.Model.EFNamespace)
     /// <summary>
     /// @(Model.Model.DisplayName) ef映射
     ///</summary>
-    public class EFMap : IEntityTypeConfiguration<@(Model.Model.EntityName)>
+    public partial class EFMap : IEntityTypeConfiguration<@(Model.Model.EntityName)>
     {
         public void Configure(EntityTypeBuilder<@(Model.Model.EntityName)> builder)
         {

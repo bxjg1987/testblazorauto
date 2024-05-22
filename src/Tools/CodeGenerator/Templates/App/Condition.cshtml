@@ -7,6 +7,7 @@
     DisableEncoding = true;//禁止html编码，因为我们是做代码生成器
 }
 using BXJG.Common.Contracts;
+using @Model.Model.CoreShareNamespace;
 @if (Model.Model.IsTree)
 {
 @:using BXJG.Utils.Application.Share.GeneralTree;
@@ -17,7 +18,7 @@ namespace @(Model.Model.ApplicationShareNamespace)
     /// 获取 @(Model.Model.DisplayName) 的条件
     /// 这里没有继承Common，主要是树结构数据的条件设计的限制，另外Common和这里的条件确实是不同的应用场景，所以目前决定分开定义。
     ///</summary>
-    public class @(Model.Model.ConditionName)@(Model.Model.IsTree?" : GeneralTreeGetTreeInput":"")@( Model.Model.ConditionStringFields.Any()?$"{(Model.Model.IsTree?',':':')} IHaveKeywords":"")
+    public partial class @(Model.Model.ConditionName)@(Model.Model.IsTree?" : GeneralTreeGetTreeInput":"")@( Model.Model.ConditionStringFields.Any()?$"{(Model.Model.IsTree?',':':')} IHaveKeywords":"")
     {
 @if(Model.Model.ConditionStringFields.Any()){<text>
         /// <summary>

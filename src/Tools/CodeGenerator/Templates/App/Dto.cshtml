@@ -14,6 +14,7 @@ using System.ComponentModel.DataAnnotations;
 {
 @:using BXJG.Utils.Application.Share.GeneralTree;    
 }
+using @Model.Model.CoreShareNamespace;
 
 namespace @(Model.Model.ApplicationShareNamespace)
 {
@@ -22,7 +23,7 @@ namespace @(Model.Model.ApplicationShareNamespace)
     /// <summary>
     /// 各应用获取 @(Model.Model.DisplayName) 的数据模型
     ///</summary>
-    public class @(Model.Model.DtoName) : @(Model.Model.IsTree ? $"GeneralTreeNodeBaseDto<{Model.Model.DtoName}>" : (Model.Model.PrimaryField.CSharpType == "int" ? "FullAuditedEntityDto" : $"FullAuditedEntityDto<{Model.Model.PrimaryField.CSharpType}>")), IExtendableObj
+    public partial class @(Model.Model.DtoName) : @(Model.Model.IsTree ? $"GeneralTreeNodeBaseDto<{Model.Model.DtoName}>" : (Model.Model.PrimaryField.CSharpType == "int" ? "FullAuditedEntityDto" : $"FullAuditedEntityDto<{Model.Model.PrimaryField.CSharpType}>")), IExtendableObj
     {
 @foreach (var field in Model.Model.NormalFields)
 {<text>

@@ -14,13 +14,14 @@ using System.ComponentModel.DataAnnotations;
 {
 @:using BXJG.Utils.Application.Share.GeneralTree;    
 }
+using @Model.Model.CoreShareNamespace;
 
 namespace @(Model.Model.ApplicationShareNamespace)
 {
     /// <summary>
     /// 各应用编辑 @(Model.Model.DisplayName) 的数据模型
     ///</summary>
-    public class @(Model.Model.EditDtoName) : @(Model.Model.IsTree ? $"GeneralTreeNodeEditBaseDto" : (Model.Model.PrimaryField.CSharpType == "int" ? "EntityDto" : $"EntityDto<{Model.Model.PrimaryField.CSharpType}>"))
+    public partial class @(Model.Model.EditDtoName) : @(Model.Model.IsTree ? $"GeneralTreeNodeEditBaseDto" : (Model.Model.PrimaryField.CSharpType == "int" ? "EntityDto" : $"EntityDto<{Model.Model.PrimaryField.CSharpType}>"))
     {
 @foreach (var field in Model.Model.NormalFields){<text>
         /// <summary>
