@@ -316,7 +316,7 @@ namespace System.Net.Http
         public static Task<PagedResultDto<TDto>> GetAllProvider<TDto>(this HttpClient client, object data, string controller = default, CancellationToken cancellationToken = default)
         {
             controller = controller.NewMethod2<TDto>();
-            return client.Post<PagedResultDto<TDto>>(controller, "get", data, default, cancellationToken);
+            return client.Post<PagedResultDto<TDto>>(controller, "getall", data, default, cancellationToken);
         }
         #endregion
 
