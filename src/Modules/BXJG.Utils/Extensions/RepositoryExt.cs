@@ -1,14 +1,17 @@
 ﻿using Abp.Domain.Entities;
 using Abp.Domain.Repositories;
 using Abp.Extensions;
+using Abp.UI;
 using BXJG.Common.Contracts;
 using BXJG.Utils.Files;
+using BXJG.Utils.Localization;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -237,6 +240,40 @@ namespace BXJG.Utils.Extensions
             return new Tuple<TEntity, List<TEntity>>(parent, children);
         }
 
+        #endregion
+
+        #region 杂项
+        /// <summary>
+        /// 判断指定条件的数据是否已存在
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="q"></param>
+        /// <param name="w"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public static Task<bool> IsExists<TEntity>(this IRepository<TEntity> q, Expression<Func<TEntity, bool>> w, CancellationToken cancellationToken = default) where TEntity:class,IEntity
+        {
+            return q.GetAll().AnyAsync(w, cancellationToken);
+        }
+        /// <summary>
+        /// 若指定条件的数据已存在，则抛出异常
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="q"></param>
+        /// <param name="w"></param>
+        /// <param name="msg"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        /// <exception cref="UserFriendlyException"></exception>
+        public static async Task IsExistsThrow<TEntity>(this IRepository<TEntity> q, Expression<Func<TEntity, bool>> w, string msg = default, CancellationToken cancellationToken=default) where TEntity : class, IEntity
+        {
+            if (await q.GetAll().AnyAsync(w, cancellationToken))
+            {
+                if (msg.IsNullOrWhiteSpace())
+                    msg = BXJGUtilsLocalizationExt.UtilsL("数据已存在！");
+                throw new UserFriendlyException(msg);
+            }
+        }
         #endregion
     }
 }
