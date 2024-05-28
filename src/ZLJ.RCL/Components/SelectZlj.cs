@@ -5,7 +5,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using ZLJ.Application.Common.Share.Kehu;
 
 namespace ZLJ.RCL.Components
 {
