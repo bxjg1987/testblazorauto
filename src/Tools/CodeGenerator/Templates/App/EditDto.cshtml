@@ -35,7 +35,7 @@ namespace @(Model.Model.ApplicationShareNamespace)
         @:[Range(typeof(@field.CSharpType), "@field.NumberMin", "@field.NumberMax")]
     }
     @if(field.Length>0){
-        @:[StringLength(@field.Length)]
+        @:[StringLength(@field.CoreShareConstsMaxLength)]
     }
         public @(field.CSharpTypeNullable) @field.Name { get; set; }
 </text>}
