@@ -58,14 +58,7 @@ namespace BXJG.Utils.RCL.Components
         //请查看自定义授权策略提供器
         //客户端部分是直接在前端内存中比对的，有区别于server模式的，自定义的授权策略提供器
 
-        /// <summary>
-        /// 请使用AuthorizationService
-        /// </summary>
-        IAuthorizationService authorizationService;
-        /// <summary>
-        /// 授权检查服务
-        /// </summary>
-        protected virtual IAuthorizationService AuthorizationService => authorizationService ??= ScopedServices.GetRequiredService<IAuthorizationService>();
+      
 
         /// <summary>
         /// 此功能的名称
@@ -83,11 +76,7 @@ namespace BXJG.Utils.RCL.Components
         /// 是否有删除权限
         /// </summary>
         protected bool deleteIsGranted = true;
-        /// <summary>
-        /// 身份验证状态，server、wasm的实现不同
-        /// </summary>
-        [Inject]
-        public AuthenticationStateProvider AuthStateProvider { get; set; }
+   
         /// <summary>
         /// 初始化权限状态
         /// 我们只需要最终是否有某个状态，不需要保留原本的权限字符串，所以使用方法定义，而非虚属性

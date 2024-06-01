@@ -14,7 +14,21 @@ namespace BXJG.Utils.RCL.Components
     /// 不跨项目、跨应用 共享
     /// </summary>
     public abstract class BaseComponent : BXJG.Common.RCL.CommonBaseComponent
-    {
+    {     
+        /// <summary>
+           /// 身份验证状态，server、wasm的实现不同
+           /// </summary>
+        [Inject]
+        public AuthenticationStateProvider AuthStateProvider { get; set; }
+        /// <summary>
+        /// 请使用AuthorizationService
+        /// </summary>
+        IAuthorizationService authorizationService;
+        /// <summary>
+        /// 授权检查服务
+        /// </summary>
+        protected virtual IAuthorizationService AuthorizationService => authorizationService ??= ScopedServices.GetRequiredService<IAuthorizationService>();
+
         protected HttpClient httpClient;
 
         [Inject]

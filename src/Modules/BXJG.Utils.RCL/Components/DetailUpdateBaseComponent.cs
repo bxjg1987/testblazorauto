@@ -102,16 +102,8 @@ namespace BXJG.Utils.RCL.Components
         #endregion
 
         #region 权限
-        [Inject]
-        public AuthenticationStateProvider AuthStateProvider { get; set; }
-        /// <summary>
-        /// 请使用AuthorizationService
-        /// </summary>
-        IAuthorizationService authorizationService;
-        /// <summary>
-        /// 授权检查服务
-        /// </summary>
-        protected virtual IAuthorizationService AuthorizationService => authorizationService ??= ScopedServices.GetRequiredService<IAuthorizationService>();
+    
+      
         ///// <summary>
         ///// 是否有查看权限
         ///// </summary>
