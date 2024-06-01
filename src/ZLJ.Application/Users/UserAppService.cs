@@ -195,9 +195,9 @@ namespace ZLJ.Application.Users
             return userDto;
         }
 
-        protected override IQueryable<User> CreateFilteredQuery(PagedUserResultRequestDto input)
+        protected override async Task<IQueryable<User>> CreateFilteredQuery(PagedUserResultRequestDto input)
         {
-            return Repository.GetAllIncluding(x => x.Roles).AsNoTrackingWithIdentityResolution()
+            return (await Repository.GetAllIncludingAsync(x => x.Roles)).AsNoTrackingWithIdentityResolution()
                 .WhereIf(input.RoleId.HasValue, c => c.Roles.Any(d => d.RoleId == input.RoleId.Value))
                 .WhereIf(!input.Keyword.IsNullOrWhiteSpace(), x => x.UserName.Contains(input.Keyword) || x.Name.Contains(input.Keyword) || x.EmailAddress.Contains(input.Keyword))
                 .WhereIf(input.IsActive.HasValue, x => x.IsActive == input.IsActive);

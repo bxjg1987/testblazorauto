@@ -87,12 +87,12 @@ namespace ZLJ.Application.OU
             string code = "";
             if (input.ParentId.HasValue && input.ParentId.Value > 0)
             {
-                code = await repository.GetAll().Where(c => c.Id == input.ParentId).Select(c => c.Code).SingleAsync();
+                code = await (await repository.GetAllAsync()).Where(c => c.Id == input.ParentId).Select(c => c.Code).SingleAsync();
             }
             else
                 code = input.ParentCode;
 
-            var q = repository.GetAll()
+            var q = (await repository.GetAllAsync())
                               .OfType<OrganizationUnitEntity>()
                               .AsNoTrackingWithIdentityResolution()
                               .Include(c => c.Children)
@@ -114,7 +114,7 @@ namespace ZLJ.Application.OU
         [UnitOfWork(false)]
         public async Task<OUDto> GetAsync(EntityDto<long> input)
         {
-            var entity = await repository.GetAll()
+            var entity = await (await repository.GetAllAsync())
                               //.OfType<OrganizationUnitEntity>()
                               .AsNoTrackingWithIdentityResolution()
                               .Include(c => c.Children).SingleAsync(c=>c.Id==input.Id);

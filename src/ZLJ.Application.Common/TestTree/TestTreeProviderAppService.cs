@@ -18,10 +18,10 @@ namespace ZLJ.Application.Common.TestTree
                                                                                       GeneralTreeGetForSelectInput,
                                                                                       GeneralTreeComboboxDto>
     {
-        protected override IQueryable<TestTreeEntity> ComboTreeFilter(TestTreeProviderCondition condition, string parentCode)
+        protected override async Task< IQueryable<TestTreeEntity>> ComboTreeFilter(TestTreeProviderCondition condition, string parentCode)
         {
 
-            var query = base.ComboTreeFilter(condition, parentCode);
+            var query =await base.ComboTreeFilter(condition, parentCode);
         
             query = query.WhereIf(condition.Keywords.IsNotNullOrWhiteSpaceBXJG(), x => 
                 x.Name.Contains(condition.Keywords)

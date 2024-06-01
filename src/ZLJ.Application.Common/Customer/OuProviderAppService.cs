@@ -31,7 +31,7 @@ namespace ZLJ.Application.Common.Customer
         }
         public virtual async Task<List<OuDto>> GetForSelectAsync(OuGetAllInput input)
         {
-            var q = repository.GetAll().AsNoTrackingWithIdentityResolution()
+            var q = (await repository.GetAllAsync()).AsNoTrackingWithIdentityResolution()
                                 //ef全局过滤器不支持继承的实体，手动来吧
                                 .Where(c => c.CustomerId == input.CustomerId && c.IsActive).OrderBy(c => c.DisplayName);
             //base.Logger.Debug($"测试在应用服务上的[UnitOfWork(false)]是否有效：{base.CurrentUnitOfWork.Options.IsTransactional}");

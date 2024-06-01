@@ -197,9 +197,9 @@ namespace BXJG.Utils.Application
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        protected override IQueryable<TEntity> CreateFilteredQuery(TGetAllInput input)
+        protected virtual new async Task< IQueryable<TEntity>> CreateFilteredQuery(TGetAllInput input)
         {
-            var q = BuildQuery(false);
+            var q = await BuildQuery(false);
             if (input is IHaveFilter p)
             {
                 q = q.ApplyDynamicCondtion(p.Filter);
@@ -213,9 +213,17 @@ namespace BXJG.Utils.Application
         /// <param name="input"></param>
         /// <returns></returns>
         [UnitOfWork(false)]
-        public override Task<PagedResultDto<TEntityDto>> GetAllAsync(TGetAllInput input)
+        public override async Task<PagedResultDto<TEntityDto>> GetAllAsync(TGetAllInput input)
         {
-            return base.GetAllAsync(input);
+            //return base.GetAllAsync(input);
+            //从父类复制来的，为了把CreateFilteredQuery变成异步的
+            CheckGetAllPermission();
+            IQueryable<TEntity> query =await CreateFilteredQuery(input);
+            int totalCount = await AsyncQueryableExecuter.CountAsync(query);
+            query = ApplySorting(query, input);
+            query = ApplyPaging(query, input);
+            return new PagedResultDto<TEntityDto>(totalCount, (await AsyncQueryableExecuter.ToListAsync(query)).Select(MapToEntityDto).ToList());
+
         }
         [UnitOfWork(false)]
         public override async Task<TEntityDto> GetAsync(TGetInput input)
@@ -243,7 +251,7 @@ namespace BXJG.Utils.Application
         protected virtual async Task<TEntity> GetEntityByIdAsync(TPrimaryKey id, bool track = true)
         {
             //return base.GetEntityByIdAsync(id);
-            return await AsyncQueryableExecuter.FirstOrDefaultAsync(BuildQuery(track).Where(c => c.Id.Equals(id)));//.SingleAsync(c => c.Id.Equals(id));
+            return await AsyncQueryableExecuter.FirstOrDefaultAsync((await BuildQuery(track)).Where(c => c.Id.Equals(id)));//.SingleAsync(c => c.Id.Equals(id));
         }
 
 
@@ -252,9 +260,9 @@ namespace BXJG.Utils.Application
         /// </summary>
         /// <param name="track">是否跟踪实体</param>
         /// <returns></returns>
-        protected virtual IQueryable<TEntity> BuildQuery(bool track = true)
+        protected virtual async Task< IQueryable<TEntity>> BuildQuery(bool track = true)
         {
-            var q = Repository.GetAll();
+            var q = await Repository.GetAllAsync();
             if (!track)
                 return q.AsNoTrackingWithIdentityResolution();
             return q;

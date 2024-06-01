@@ -96,7 +96,7 @@ namespace BXJG.Utils.Application
         {
             await CheckGetAllPermission();
 
-            var query = CreateFilteredQuery(input);
+            var query =await CreateFilteredQuery(input);
 
             var totalCount = await AsyncQueryableExecuter.CountAsync(query);
 
@@ -185,9 +185,9 @@ namespace BXJG.Utils.Application
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        protected virtual IQueryable<TEntity> CreateFilteredQuery(TGetAllInput input)
+        protected virtual async Task< IQueryable<TEntity>> CreateFilteredQuery(TGetAllInput input)
         {
-            var q = BuildQuery();
+            var q =await BuildQuery();
             //获取列表时不希望未启用的项显示，但获取单个时不限制，因为可能希望找到这个数据，所以条件放这里
             if (typeof(TEntity).IsImplementInterface<IPassivable>())
             {
@@ -216,9 +216,9 @@ namespace BXJG.Utils.Application
         /// 通常重写它来应用Include
         /// </summary>
         /// <returns></returns>
-        protected virtual IQueryable<TEntity> BuildQuery()
+        protected virtual async Task< IQueryable<TEntity>> BuildQuery()
         {
-            return Repository.GetAll().AsNoTrackingWithIdentityResolution();
+            return (await Repository.GetAllAsync()).AsNoTrackingWithIdentityResolution();
         }
 
         /// <summary>
@@ -226,15 +226,15 @@ namespace BXJG.Utils.Application
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        protected virtual IQueryable<TEntity> GetById(TKey id)
+        protected virtual async Task< IQueryable<TEntity>> GetById(TKey id)
         {
-            return BuildQuery().Where(c => c.Id.Equals(id));
+            return (await BuildQuery()).Where(c => c.Id.Equals(id));
         }
 
         public virtual async Task<TEntityDto> Get(EntityDto<TKey> input)
         {
             await CheckGetAllPermission();
-            var query = GetById(input.Id);
+            var query = await GetById(input.Id);
             var enitity = await AsyncQueryableExecuter.FirstOrDefaultAsync(query);
             return MapToEntityDto(enitity);
         }

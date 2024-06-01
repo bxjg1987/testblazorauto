@@ -126,7 +126,7 @@ namespace ZLJ.Application.BaseInfo.AssociatedCompany
             if (u.CategoryId != 17)
             {
                 //新增的客户，没有添加其它信息时删除管理员，若存在其它的，则外键会约束
-                var statffs = userRepository.GetAll().Where(c => c.CustomerId == u.Id);
+                var statffs = (await userRepository.GetAllAsync()).Where(c => c.CustomerId == u.Id);
                 foreach (var custStaff in statffs)
                 {
                     if (await userManager.IsInRoleAsync(custStaff, CustomerRole.CustomerAdminRole))
@@ -194,7 +194,7 @@ namespace ZLJ.Application.BaseInfo.AssociatedCompany
             if (u.CategoryId != 17)
             {
                 //新增的客户，没有添加其它信息时删除管理员，若存在其它的，则外键会约束
-                var statffs = userRepository.GetAll().Where(c => c.CustomerId == input.Id);
+                var statffs = (await userRepository.GetAllAsync()).Where(c => c.CustomerId == input.Id);
                 foreach (var custStaff in statffs)
                 {
                     if (await userManager.IsInRoleAsync(custStaff, CustomerRole.CustomerAdminRole))
@@ -209,9 +209,9 @@ namespace ZLJ.Application.BaseInfo.AssociatedCompany
         /// <summary>
         /// CreateFilteredQuery
         /// </summary>
-        protected override IQueryable<AssociatedCompanyEntity> CreateFilteredQuery(AssociatedCompanyGetAllInput input)
+        protected override async Task< IQueryable<AssociatedCompanyEntity>> CreateFilteredQuery(AssociatedCompanyGetAllInput input)
         {
-            return base.CreateFilteredQuery(input)
+            return (await base.CreateFilteredQuery(input))
                 .Include(c => c.Area)
                 .Include(x => x.Level)
                 .Include(c => c.Admin)
@@ -226,9 +226,9 @@ namespace ZLJ.Application.BaseInfo.AssociatedCompany
                                                                     c.Pinyin.Contains(input.Keywords));
         }
 
-        protected override Task<AssociatedCompanyEntity> GetEntityByIdAsync(long id)
+        protected override async Task<AssociatedCompanyEntity> GetEntityByIdAsync(long id)
         {
-            return Repository.GetAll().Include(c => c.Area)
+            return await (await Repository.GetAllAsync()).Include(c => c.Area)
                 .Include(x => x.Level)
                 .Include(c => c.Admin)
                 .Include(x => x.Category).Where(c => c.Id == id).SingleAsync();

@@ -99,9 +99,9 @@ namespace ZLJ.Application.MultiTenancy
             return MapToEntityDto(tenant);
         }
 
-        protected override IQueryable<Tenant> CreateFilteredQuery(PagedAndSortedResultRequest<Condition> input)
+        protected override async Task< IQueryable<Tenant>> CreateFilteredQuery(PagedAndSortedResultRequest<Condition> input)
         {
-            return Repository.GetAll()
+            return ( await Repository.GetAllAsync())
                 .WhereIf(!input.Filter.Keywords.IsNullOrWhiteSpace(), x => x.TenancyName.Contains(input.Filter.Keywords) || x.Name.Contains(input.Filter.Keywords))
                 .WhereIf(input.Filter.IsActive.HasValue, x => x.IsActive == input.Filter.IsActive);
         }

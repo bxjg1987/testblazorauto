@@ -63,9 +63,10 @@ ol {
     margin-left: 0.5rem;
 }
 
-.ant-table-row.even, .ant-table-row.even td.ant-table-column-sort {
+.ant-table-row.even, .ant-table-row.even td.ant-table-column-sort, .ant-table-row.even .ant-table-cell-fix-left, .ant-table-row.even .ant-table-cell-fix-right {
     background-color: #f3f3f8;
 }
+
 .ant-table-row.odd td.ant-table-column-sort {
     background-color:white;
 }

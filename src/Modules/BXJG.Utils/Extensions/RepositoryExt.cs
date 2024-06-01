@@ -35,7 +35,7 @@ namespace BXJG.Utils.Extensions
         /// <returns>key属性名，value文件列表</returns>
         public static async Task<Dictionary<string, List<FileEntity>>> GetFilesByAttachment(this IRepository<AttachmentEntity, Guid> repository, string entityType, string entityId, bool track = false, CancellationToken cancellationToken = default)
         {
-            IQueryable<AttachmentEntity> q = repository.GetAll().WhereAttachment(entityType, default, track, entityId);
+            IQueryable<AttachmentEntity> q = (await repository.GetAllAsync()).WhereAttachment(entityType, default, track, entityId);
             var list = await q.ToArrayAsync(cancellationToken);
             return list.GroupBy(x => x.PropertyName).ToDictionary(x => x.Key, x => x.OrderBy(c => c.OrderIndex).Select(c => c.File).ToList());
         }
@@ -51,7 +51,7 @@ namespace BXJG.Utils.Extensions
         /// <returns>文件列表</returns>
         public static async Task<List<FileEntity>> GetFilesByAttachmentWithoutProperty(this IRepository<AttachmentEntity, Guid> repository, string entityType, string entityId, bool track = false, CancellationToken cancellationToken = default)
         {
-            IQueryable<AttachmentEntity> q = repository.GetAll().WhereAttachment(entityType, default, track, entityId);
+            IQueryable<AttachmentEntity> q = (await repository.GetAllAsync()).WhereAttachment(entityType, default, track, entityId);
             return await q.OrderBy(x => x.OrderIndex).Select(x => x.File).ToListAsync(cancellationToken);
         }
 
@@ -67,7 +67,7 @@ namespace BXJG.Utils.Extensions
         /// <returns> key实体id；value：属性名和文件列表</returns>
         public static async Task<Dictionary<string, Dictionary<string, List<FileEntity>>>> GetFilesByAttachment(this IRepository<AttachmentEntity, Guid> repository, string entityType, IEnumerable<string> entityIds, bool track = false, CancellationToken cancellationToken = default)
         {
-            IQueryable<AttachmentEntity> q = repository.GetAll().WhereAttachment(entityType, default, track, entityIds.ToArray());
+            IQueryable<AttachmentEntity> q = (await repository.GetAllAsync()).WhereAttachment(entityType, default, track, entityIds.ToArray());
             var list = await q.ToArrayAsync(cancellationToken);
             return list.GroupBy(x => x.EntityId)
                        .ToDictionary(x => x.Key,
@@ -86,7 +86,7 @@ namespace BXJG.Utils.Extensions
         /// <returns> key实体id；value：文件列表</returns>
         public static async Task<Dictionary<string, List<FileEntity>>> GetFilesByAttachmentWithoutProperty(this IRepository<AttachmentEntity, Guid> repository, string entityType, IEnumerable<string> entityIds, bool track = false, CancellationToken cancellationToken = default)
         {
-            IQueryable<AttachmentEntity> q = repository.GetAll().WhereAttachment(entityType, default, track, entityIds.ToArray());
+            IQueryable<AttachmentEntity> q = (await repository.GetAllAsync()).WhereAttachment(entityType, default, track, entityIds.ToArray());
             var list = await q.ToArrayAsync(cancellationToken);
             return list.GroupBy(x => x.EntityId).ToDictionary(x => x.Key, z => z.OrderBy(v => v.OrderIndex).Select(g => g.File).ToList());
         }
@@ -107,7 +107,7 @@ namespace BXJG.Utils.Extensions
         /// <returns>文件列表</returns>
         public static async Task<List<FileEntity>> GetFilesByAttachment(this IRepository<AttachmentEntity, Guid> repository, string entityType, string entityId, string propertyName = default, bool track = false, CancellationToken cancellationToken = default)
         {
-            IQueryable<AttachmentEntity> q = repository.GetAll().WhereAttachment(entityType, propertyName, track, entityId).OrderBy(x => x.OrderIndex);
+            IQueryable<AttachmentEntity> q = (await repository.GetAllAsync()).WhereAttachment(entityType, propertyName, track, entityId).OrderBy(x => x.OrderIndex);
             var list = await q.ToArrayAsync(cancellationToken);
             return list.Select(x => x.File).ToList();
         }
@@ -194,7 +194,7 @@ namespace BXJG.Utils.Extensions
         /// <returns></returns>
         public static async Task<List<TEntity>> GetFlattenOffspringAsync<TEntity>(this IRepository<TEntity, long> repository, string code = null) where TEntity : Entity<long>, IGeneralTree<TEntity>
         {
-            var query = repository.GetAll();
+            var query = (await repository.GetAllAsync());
             if (!code.IsNullOrWhiteSpace())
                 query = query.Where(c => c.Code.StartsWith(code));
             query = query.OrderBy(c => c.Code);
@@ -251,9 +251,9 @@ namespace BXJG.Utils.Extensions
         /// <param name="w"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public static Task<bool> IsExists<TEntity>(this IRepository<TEntity> q, Expression<Func<TEntity, bool>> w, CancellationToken cancellationToken = default) where TEntity:class,IEntity
+        public static async Task<bool> IsExists<TEntity>(this IRepository<TEntity> q, Expression<Func<TEntity, bool>> w, CancellationToken cancellationToken = default) where TEntity:class,IEntity
         {
-            return q.GetAll().AnyAsync(w, cancellationToken);
+            return await (await q.GetAllAsync()).AnyAsync(w, cancellationToken);
         }
         /// <summary>
         /// 若指定条件的数据已存在，则抛出异常
@@ -267,7 +267,7 @@ namespace BXJG.Utils.Extensions
         /// <exception cref="UserFriendlyException"></exception>
         public static async Task IsExistsThrow<TEntity>(this IRepository<TEntity> q, Expression<Func<TEntity, bool>> w, string msg = default, CancellationToken cancellationToken=default) where TEntity : class, IEntity
         {
-            if (await q.GetAll().AnyAsync(w, cancellationToken))
+            if (await (await q.GetAllAsync()).AnyAsync(w, cancellationToken))
             {
                 if (msg.IsNullOrWhiteSpace())
                     msg = BXJGUtilsLocalizationExt.UtilsL("数据已存在！");

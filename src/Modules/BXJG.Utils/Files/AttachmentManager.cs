@@ -65,7 +65,7 @@ namespace BXJG.Utils.Files
         {
             var id = entityId.ToString();
 
-            var oldEntities = await Repository.GetAll()
+            var oldEntities = await (await Repository.GetAllAsync())
                                               .WhereAttachment(entityType, propertyName, true, entityId.ToString())
                                               .ToArrayAsync(CancellationTokenProvider.Token);
 

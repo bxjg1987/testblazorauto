@@ -46,7 +46,7 @@ namespace BXJG.Utils.Application.Notification
             {
                 Thread.Sleep(1);
                 using var uow = base.UnitOfWorkManager.Begin();
-                var users = await UserRepository.GetAll().AsNoTrackingWithIdentityResolution()
+                var users = await (await UserRepository.GetAllAsync()).AsNoTrackingWithIdentityResolution()
                                                 .Select(c => new { c.TenantId, c.FullName, c.Id })
                                                 .Skip((pageIndex - 1) * pageSize)
                                                 .Take(pageSize)

@@ -13,10 +13,10 @@ namespace ZLJ.Application.Common.TestSimple
     public class TestSimpleProviderAppService : 
                                                     CommonProviderBaseAppService<TestSimpleEntity,PagedAndSortedResultRequest<TestSimpleProviderCondition>,TestSimpleProviderDto,long>
     {
-        protected override IQueryable<TestSimpleEntity> CreateFilteredQuery(PagedAndSortedResultRequest<TestSimpleProviderCondition> input)
+        protected override async Task< IQueryable<TestSimpleEntity>> CreateFilteredQuery(PagedAndSortedResultRequest<TestSimpleProviderCondition> input)
         {
 
-            var query = base.CreateFilteredQuery(input);
+            var query = await base.CreateFilteredQuery(input);
             var condition = input.Filter;
     
             query = query.WhereIf(condition.Keywords.IsNotNullOrWhiteSpaceBXJG(), x => 

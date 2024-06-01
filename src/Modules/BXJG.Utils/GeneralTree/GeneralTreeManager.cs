@@ -63,7 +63,7 @@ namespace BXJG.Utils.GeneralTree
             TEntity parent = null;
             if (entity.ParentId.HasValue)
             {
-                parent = await AsyncQueryableExecuter.FirstOrDefaultAsync(Repository.GetAll().Where(c => c.Id == entity.ParentId.Value));
+                parent = await AsyncQueryableExecuter.FirstOrDefaultAsync((await Repository.GetAllAsync()).Where(c => c.Id == entity.ParentId.Value));
                 //  var parentCodeQuery = repository.GetAll().Where(c => c.Id == entity.ParentId.Value).Select(c => c.Code);
                 var parentCode = parent.Code;// await AsyncQueryableExecuter.FirstOrDefaultAsync(parentCodeQuery);
                 var childrenCount = await Repository.CountAsync(c => c.ParentId == entity.ParentId);
@@ -108,7 +108,7 @@ namespace BXJG.Utils.GeneralTree
         /// <returns></returns>
         public virtual async Task UpdateChildrenCount(TEntity entity)
         {
-            entity.ChildrenCount = await AsyncQueryableExecuter.CountAsync(Repository.GetAll().Where(c => c.ParentId == entity.Id));
+            entity.ChildrenCount = await AsyncQueryableExecuter.CountAsync((await Repository.GetAllAsync()).Where(c => c.ParentId == entity.Id));
         }
         /// <summary>
         /// 修改节点，内部会自动处理节点移动的问题
@@ -125,7 +125,7 @@ namespace BXJG.Utils.GeneralTree
 
             long? newParentId = entity.ParentId;
 
-            var oldIdQuery = Repository.GetAll().Where(c => c.Id == entity.Id).Select(c => c.ParentId);
+            var oldIdQuery = (await Repository.GetAllAsync()).Where(c => c.Id == entity.Id).Select(c => c.ParentId);
             var oldId = await AsyncQueryableExecuter.FirstOrDefaultAsync(oldIdQuery);
             var needMove = oldId != entity.ParentId;
             //entity.Code = old.Code;
@@ -146,7 +146,7 @@ namespace BXJG.Utils.GeneralTree
                     await MoveAsync(entity, await Repository.GetAsync(newParentId.Value), GeneralTreeMoveType.Append);
                 else
                 {
-                    var ds = await AsyncQueryableExecuter.FirstOrDefaultAsync(Repository.GetAll().Where(c => c.ParentId == null).OrderByDescending(c => c.Code));
+                    var ds = await AsyncQueryableExecuter.FirstOrDefaultAsync((await Repository.GetAllAsync()).Where(c => c.ParentId == null).OrderByDescending(c => c.Code));
                     await MoveAsync(entity, ds, GeneralTreeMoveType.After);
                 }
             }
@@ -286,7 +286,7 @@ namespace BXJG.Utils.GeneralTree
             await CurrentUnitOfWork.SaveChangesAsync();
             if (parentIds.Any())
             {
-                var parents = await AsyncQueryableExecuter.ToListAsync(Repository.GetAll().Where(c => parentIds.Contains(c.Id)));
+                var parents = await AsyncQueryableExecuter.ToListAsync((await Repository.GetAllAsync()).Where(c => parentIds.Contains(c.Id)));
                 foreach (var item in parents)
                 {
                     await UpdateChildrenCount(item);
@@ -298,9 +298,9 @@ namespace BXJG.Utils.GeneralTree
         }
 
 
-        public Task<string> GetCodeAsync(long id)
+        public async Task<string> GetCodeAsync(long id)
         {
-            return AsyncQueryableExecuter.FirstOrDefaultAsync(Repository.GetAll().Where(c => c.Id == id).Select(c => c.Code));
+            return await AsyncQueryableExecuter.FirstOrDefaultAsync((await Repository.GetAllAsync()).Where(c => c.Id == id).Select(c => c.Code));
         }
         //public string GetCode(long id)
         //{

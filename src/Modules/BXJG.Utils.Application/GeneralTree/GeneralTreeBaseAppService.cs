@@ -124,7 +124,7 @@ namespace BXJG.Utils.Application.GeneralTree
             else
                 parentCode = input.ParentCode ?? "";
 
-            var query = this.ComboTreeFilter(input, parentCode);
+            var query =await this.ComboTreeFilter(input, parentCode);
             query = this.ComboTreeSort(query, input);
 
 
@@ -206,9 +206,9 @@ namespace BXJG.Utils.Application.GeneralTree
             //    var top = await ownRepository.GetAsync(input.ParentId.Value);
             //    parentCode = top.Code;
             //}
-            var query = ComboboxFilter(input, input.ParentId);
+            var query =await ComboboxFilter(input, input.ParentId);
 
-            query = ComboboxSort(input, query);
+            query = ComboboxSort(input,  query);
             //GetNodesForSelectProjection允许子类直接投影，这种情况可能不太灵活，因为子类可能不方便做ef投影，所以将来可能考虑完全获取实体，在内存中来做这个转换
 
             var list = await AsyncQueryableExecuter.ToListAsync(query);
@@ -257,9 +257,9 @@ namespace BXJG.Utils.Application.GeneralTree
         /// 可以重写以应用所有查询都需要的Include
         /// </summary>
         /// <returns></returns>
-        protected virtual IQueryable<TEntity> BuildQuery()
+        protected virtual async Task< IQueryable<TEntity>> BuildQuery()
         {
-            return Repository.GetAll().Include(c => c.Parent).AsNoTrackingWithIdentityResolution();
+            return (await Repository.GetAllAsync()).Include(c => c.Parent).AsNoTrackingWithIdentityResolution();
         }
 
         #region 获取树形下拉框数据时子类可以重写的方法
@@ -270,9 +270,9 @@ namespace BXJG.Utils.Application.GeneralTree
         /// <param name="parentCode"></param>
         /// <param name="context"><see cref="GetTreeForSelectAsync"/>的多个步骤间共享数据，默认存在input的key</param>
         /// <returns></returns>
-        protected virtual IQueryable<TEntity> ComboTreeFilter(TGetTreeForSelectInput input, string parentCode)
+        protected virtual async Task< IQueryable<TEntity>> ComboTreeFilter(TGetTreeForSelectInput input, string parentCode)
         {
-            var q = BuildQuery().WhereIf(!input.IsOnlyLoadChild, c => c.Code.StartsWith(parentCode))
+            var q = (await BuildQuery()).WhereIf(!input.IsOnlyLoadChild, c => c.Code.StartsWith(parentCode))
                                 .WhereIf(input.IsOnlyLoadChild && parentCode.IsNotNullOrWhiteSpaceBXJG(), c => c.Parent.Code == parentCode || c.Code == parentCode)
                                 .WhereIf(input.IsOnlyLoadChild && parentCode.IsNullOrWhiteSpaceBXJG(), c => !c.ParentId.HasValue);
 
@@ -286,7 +286,6 @@ namespace BXJG.Utils.Application.GeneralTree
         /// </summary>
         /// <param name="query"></param>
         /// <param name="input"></param>
-        /// <param name="context"><see cref="GetTreeForSelectAsync"/>的多个步骤间共享数据，默认存在input的key</param>
         /// <returns></returns>
         protected virtual IQueryable<TEntity> ComboTreeSort(IQueryable<TEntity> query, TGetTreeForSelectInput input)
         {
@@ -309,11 +308,10 @@ namespace BXJG.Utils.Application.GeneralTree
         /// </summary>
         /// <param name="input"></param>
         /// <param name="parentId"></param>
-        /// <param name="context"><see cref="GetNodesForSelectAsync"/>的多个步骤间共享数据，默认存在input的key</param>
         /// <returns></returns>
-        protected virtual IQueryable<TEntity> ComboboxFilter(TGetNodesForSelectInput input, long? parentId)
+        protected virtual async Task< IQueryable<TEntity>> ComboboxFilter(TGetNodesForSelectInput input, long? parentId)
         {
-            var q = BuildQuery().Where(c => c.ParentId == parentId);
+            var q = (await BuildQuery()).Where(c => c.ParentId == parentId);
             if (input is IHaveFilter p)
                 q = q.ApplyDynamicCondtion(p.Filter);
             return q;
@@ -683,7 +681,7 @@ namespace BXJG.Utils.Application.GeneralTree
             // var ctx = new Dictionary<string, object> { { "input", input } };
             //查询
 
-            var query = BuildQuery(false);
+            var query =await BuildQuery(false);
             //query = GetAllInclude(query);
             query = GetAllFilter(query, input, parentCode);//.Where(c => c.Code.StartsWith(parentCode));
             query = GetAllSort(query, input); //方便子类排序
@@ -850,9 +848,9 @@ namespace BXJG.Utils.Application.GeneralTree
         /// </summary>
         /// <param name="track">是否跟踪实体</param>
         /// <returns></returns>
-        protected virtual IQueryable<TEntity> BuildQuery(bool track = true)
+        protected virtual async Task< IQueryable<TEntity>> BuildQuery(bool track = true)
         {
-            IQueryable<TEntity> q = Repository.GetAll().Include(c => c.Parent);
+            IQueryable<TEntity> q =  (await Repository.GetAllAsync()).Include(c => c.Parent);
             if (!track)
                 q = q.AsNoTrackingWithIdentityResolution();
             return q;
@@ -895,9 +893,9 @@ namespace BXJG.Utils.Application.GeneralTree
         /// <param name="id"></param>
         /// <param name="track">是否跟踪实体</param>
         /// <returns></returns>
-        protected virtual Task<TEntity> GetEntityByIdAsync(long id, bool track = true)
+        protected virtual async Task<TEntity> GetEntityByIdAsync(long id, bool track = true)
         {
-            return AsyncQueryableExecuter.FirstOrDefaultAsync(BuildQuery(track).Where(c => c.Id == id));
+            return await AsyncQueryableExecuter.FirstOrDefaultAsync( (await BuildQuery(track)).Where(c => c.Id == id));
         }
         #endregion
     }

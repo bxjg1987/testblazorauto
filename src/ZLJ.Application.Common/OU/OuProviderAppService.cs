@@ -38,9 +38,9 @@ namespace ZLJ.Application.Common.OU
         public async Task<IList<OuDto>> GetTreeForSelectAsync(GetListInput input)
         {
             if (input.ParentCode.IsNullOrWhiteSpace() && input.ParentId.HasValue && input.ParentId.Value > 0)
-                input.ParentCode = await repository.GetAll().Where(c => c.Id == input.ParentId).Select(c => c.Code).SingleAsync();
+                input.ParentCode = await (await repository.GetAllAsync()).Where(c => c.Id == input.ParentId).Select(c => c.Code).SingleAsync();
 
-            var q = repository.GetAll();
+            var q = await repository.GetAllAsync();
 
             if (input.WhatType == 0)
                 q = q.OfType<OrganizationUnitEntity>();
