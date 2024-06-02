@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
+using NUglify.Html;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -225,7 +226,7 @@ namespace BXJG.Utils.RCL.Components
         /// <returns></returns>
         protected virtual async Task LoadCore()
         {
-
+            await Task.Yield();//某些ui，如antblazor的下拉框 选择事件触发时，绑定的属性还没更新，所以这里让出下线程
             var dtos = await HttpClient.GetList<TEntityDto>(GetAllInput);
 
             //_ = InvokeAsync(StateHasChanged);//让多选影响顶部按钮得以执行 包一层是因为需要加载完才执行
@@ -341,8 +342,9 @@ namespace BXJG.Utils.RCL.Components
             // PageSize = 20;
             if (GetAllInput is IReset reset)
                 reset.Reset();
-      
-                Keywords = string.Empty;
+      else
+                GetAllInput = new TGetAllInput();
+            Keywords = string.Empty;
             //StateHasChanged();
             //await OnQuery(table.GetQueryModel());
             LoadListData();

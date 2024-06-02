@@ -332,6 +332,7 @@ namespace BXJG.Utils.RCL.Components
             //    cddqq.Keywords = Keywords;// state.FilterDefinitions.MapToDynamicCondition().ToList();
             //}
             //await FillCondtion(cd);
+            await Task.Yield();//某些ui，如antblazor的下拉框 选择事件触发时，绑定的属性还没更新，所以这里让出下线程
             var dtos = await HttpClient.GetAll<TEntityDto>(GetAllInput);// AppService.GetAllAsync(GetAllInput);
 
             //_ = InvokeAsync(StateHasChanged);//让多选影响顶部按钮得以执行 包一层是因为需要加载完才执行
