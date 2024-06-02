@@ -59,22 +59,32 @@ ol {
         min-height: 100vh;
     }
 }
+
 .ant-dropdown-menu-item .ant-menu-title-content {
     margin-left: 0.5rem;
 }
 
-.ant-table-row.even, .ant-table-row.even td.ant-table-column-sort, .ant-table-row.even .ant-table-cell-fix-left, .ant-table-row.even .ant-table-cell-fix-right {
-    background-color: #f3f3f8;
+
+.ant-table-row.even > td,
+.ant-table-expanded-row.even > td {
+    background-color: #f0f1ff !important;
+    border-bottom: 1px solid #dfdfdf !important;
+    border-top1: 1px solid #dfdfdf !important;
+    border-left: 1px solid #dfdfdf !important;
 }
 
+
+
+
 .ant-table-row.odd td.ant-table-column-sort {
-    background-color:white;
+    background-color: white;
 }
+
 /*.ant-modal-body {
     background-color:#f7f7f7;
 }*/
 .ant-descriptions-bordered .ant-descriptions-item-label {
-    background-color: #f8f8f8;
+    background-color: #f7f7f7;
 }
 
 .ant-descriptions-bordered .ant-descriptions-row {
@@ -85,12 +95,101 @@ ol {
     text-align: end;
 }
 
-/*.show-loading {
-    display:block;
+
+.full-width {
+    width: 100%;
 }
-.hide-loading {
-    display:none;
+
+table.danbiankuang {
+    border-collapse: collapse;
+}
+
+    table.danbiankuang td, table.danbiankuang th {
+        border: 1px solid #ddd; /* 设置单边框样式 */
+    }
+
+table.jiange-xiao td, table.jiange-xiao th {
+    padding: 3px;
+}
+
+table.jiange-zhong td, table.jiange-zhong th {
+    padding: 7px;
+}
+
+table.jiange-da td, table.jiange-da th {
+    padding: 12px;
+}
+
+table.jianjie th {
+    font-weight: normal;
+    background-color: #f8f8f8;
+}
+
+
+.yl .tou {
+    color: black;
+    font-weight: bold;
+}
+/*.yl .tou span:nth-child(2){
+    font-weight:bold;
 }*/
+
+.yl td {
+    padding: 0 0.5rem;
+}
+
+.yl .tou .cs {
+   /* -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    background-image: linear-gradient(to right, red, green, blue);*/
+   color:blue;
+}
+
+.yl td span:nth-child(1) {
+    float: left;
+}
+
+.yl .ti td span:nth-child(1) {
+    font-size: 0.7rem;
+    line-height: 1.6rem;
+    color: #888;
+    /* writing-mode: vertical-rl;
+    text-orientation: upright;
+     letter-spacing: 18px;  设置间距 */
+}
+
+.yl td span:nth-child(2) {
+    float: right;
+}
+
+.yl .ti td span:nth-child(2) {
+    text-align: right;
+    line-height: 1.6rem;
+}
+
+.yl .zong {
+    text-align: center;
+}
+
+    .yl .zong span {
+        display: block;
+    }
+
+.yl td.zong span:nth-child(1) {
+    float: none;
+    margin-top: -17px;
+}
+
+.yl td.zong span:nth-child(2) {
+    float: none;
+    font-size: 1.4rem;
+}
+
+
 .frm-dal .ant-modal-body {
     background-color: #efefef;
 }
+    .frm-dal .ant-modal-body .ant-collapse-borderless {
+        background-color: transparent;
+    }

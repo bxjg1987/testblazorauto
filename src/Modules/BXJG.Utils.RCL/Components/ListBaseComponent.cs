@@ -445,9 +445,10 @@ namespace BXJG.Utils.RCL.Components
         {
             if (GetAllInput is IReset t)
                 t.Reset();
-
-            if (GetAllInput is IHaveFilter p && p.Filter is IReset qq)
+            else if (GetAllInput is IHaveFilter p && p.Filter is IReset qq)
                 qq.Reset();
+            else
+                GetAllInput = new TGetAllInput();
 
             PageIndex = 1;
             PageSize = 20;
