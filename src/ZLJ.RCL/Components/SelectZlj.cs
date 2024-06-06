@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using ZLJ.Application.Common.Share.Kehu;
 
 namespace ZLJ.RCL.Components
 {
@@ -60,9 +61,13 @@ namespace ZLJ.RCL.Components
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
-            var r = await HttpClient.GetAllProvider<TItem>(new PagedAndSortedResultRequest<object> { MaxResultCount = MaxCount, Filter = new { Keywords = string.Empty } });
-            DataSource = r.Items;
-            if (r.TotalCount >= MaxCount)
+            if (DataSource == null || !DataSource.Any())
+            {
+                var r = await HttpClient.GetAllProvider<TItem>(new PagedAndSortedResultRequest<object> { MaxResultCount = MaxCount, Filter = new { Keywords = string.Empty } });
+                DataSource = r.Items;
+            }
+
+            if (DataSource.Count() >= MaxCount)
                 if (EnableSearch && OnSearch == null)
                     OnSearch = async a => Search(a);
         }

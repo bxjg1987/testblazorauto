@@ -1,0 +1,35 @@
+﻿@typeparam TSelectDto
+@inherits BaseComponent
+
+<CascadingValue Value="Items">
+    @ChildContent
+        </CascadingValue>
+
+@code {
+
+     /*
+     * 有个组件A，里面包含一个表格B， 表格中每行都有个下拉框组件C1、C2、C3...
+     * 若初始化时，每个组件初始化时，各自去后端获取数据，太浪费了。
+     * 通常在A初始化时，获取一次，然后把数据源给它所有C，但这样A中需要些代码
+     * 将来的D\E\F..组件也需要使用这样的表格时，都要去写，麻烦
+     * 
+     * 这里提供一个组件，泛型的，统一从后端获取下拉框数据，
+     * 将来DEF只要在页面中的表格外，使用此组件包裹下，就行了，DEF不需要去写加载数据的逻辑
+     * 
+     * 这个场景目前考虑不是很多，所以暂时不实现。
+     */
+
+    IEnumerable<TSelectDto> Items = new List<TSelectDto>();
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        var r = await base.HttpClient.GetAllProvider<TSelectDto>(new { });
+        Items = r.Items;
+        //级联内部的组件应该会重新渲染，在set...事件中去处理
+        //base.HttpClient.GetTreeForSelect
+    }
+}

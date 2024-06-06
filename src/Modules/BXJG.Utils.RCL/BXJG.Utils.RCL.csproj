@@ -15,6 +15,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Components\CascadingValueProvider.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
   </ItemGroup>
 
@@ -28,6 +32,18 @@
     <ProjectReference Include="..\..\Libs\BXJG.Common.RCL\BXJG.Common.RCL.csproj" />
     <ProjectReference Include="..\BXJG.Utils.Application.ClientProxy\BXJG.Utils.Application.ClientProxy.csproj" />
     <ProjectReference Include="..\BXJG.Utils.Application.Share\BXJG.Utils.Application.Share.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Components\CascadingValueProvider.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Components\CascadingValueProvider.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Components\CascadingValueProvider.razor" />
   </ItemGroup>
 
 
