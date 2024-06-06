@@ -49,8 +49,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZLJ.Web.Host", "src\ZLJ.Web
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{31830F03-183C-4530-A73A-C165A1F5A739}"
 	ProjectSection(SolutionItems) = preProject
-		docs\blazorserver中的统一异常处理.md = docs\blazorserver中的统一异常处理.md
-		docs\blazorServer的集成.md = docs\blazorServer的集成.md
 		docs\session.md = docs\session.md
 		docs\ZLJ.Web.Core说明.md = docs\ZLJ.Web.Core说明.md
 		docs\事件.md = docs\事件.md
@@ -77,6 +75,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{31830F03-1
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{044A19F6-90C2-458D-B3B1-4EB0428E9981}"
+	ProjectSection(SolutionItems) = preProject
+		docs\UI\blazorserver中的统一异常处理.md = docs\UI\blazorserver中的统一异常处理.md
+		docs\UI\blazorServer的集成.md = docs\UI\blazorServer的集成.md
+		docs\UI\与mudblazor的集成.md = docs\UI\与mudblazor的集成.md
+		docs\UI\前端全局状态.md = docs\UI\前端全局状态.md
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZLJ.Application.Share", "src\ZLJ.Application.Share\ZLJ.Application.Share.csproj", "{B266155E-EF9E-4FFD-A6F3-A727F1FD1076}"
 EndProject
@@ -108,7 +112,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZLJ.Web.BlazorAuto", "src\Z
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Utils.Application.ClientProxy", "src\Modules\BXJG.Utils.Application.ClientProxy\BXJG.Utils.Application.ClientProxy.csproj", "{55D9DB14-3ED9-4E5E-B740-3FDBE7F2922F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGenerator", "src\Tools\CodeGenerator\CodeGenerator.csproj", "{B50E2096-3B96-4530-9B88-ADD9EB84306B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeGenerator", "src\Tools\CodeGenerator\CodeGenerator.csproj", "{B50E2096-3B96-4530-9B88-ADD9EB84306B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
