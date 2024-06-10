@@ -1,10 +1,12 @@
-﻿using Abp.Linq.Extensions;
+﻿using Abp.Domain.Repositories;
+using Abp.Linq.Extensions;
 using BXJG.Utils.Files;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace BXJG.Utils.Extensions
@@ -50,6 +52,24 @@ namespace BXJG.Utils.Extensions
         public static IQueryable<AttachmentEntity> WhereAttachment<TEntity>(this IQueryable<AttachmentEntity> q, string propertyName = default, bool track = false, params string[] entityIds)
         {
             return q.WhereAttachment( typeof(TEntity).FullName, propertyName, track, entityIds);
+        }
+        #endregion
+
+        #region abp仓储的默认实现目前的删除是查询出来之后再删除，数据量大时有问题，已经提交了issue，这里是临时解决方式
+        /// <summary>
+        /// abp仓储的默认实现目前的删除是查询出来之后再删除，数据量大时有问题，已经提交了issue，这里是临时解决方式
+        /// </summary>
+        public static Func<object, CancellationToken, Task<int>> xx;
+        /// <summary>
+        /// abp仓储的默认实现目前的删除是查询出来之后再删除，数据量大时有问题，已经提交了issue，这里是临时解决方式
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="q"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public static Task<int> BatchDelete<T>(this IQueryable<T> q, CancellationToken cancellationToken = default)
+        {
+            return xx(q, cancellationToken);
         }
         #endregion
     }

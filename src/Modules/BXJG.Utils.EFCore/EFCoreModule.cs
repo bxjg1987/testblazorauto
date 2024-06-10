@@ -15,12 +15,13 @@ using Castle.Core;
 //using BXJG.Utils.EFCore.CAP;
 using Abp.Application.Services;
 using Abp.EntityFrameworkCore.Linq;
+using Abp.EntityFrameworkCore;
 using Abp.Linq;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Abp.Threading;
-
+using Abp.Domain.Repositories;
 namespace BXJG.Utils.EFCore
 {
     [DependsOn(typeof(BXJGUtilsModule))]
@@ -37,6 +38,15 @@ namespace BXJG.Utils.EFCore
             //        handler.ComponentModel.Interceptors.Add(new InterceptorReference(typeof(AbpAsyncDeterminationInterceptor<AbpCapTranInterceptor>)));
             //    }
             //};
+
+            //abp仓储的默认实现目前的删除是查询出来之后再删除，数据量大时有问题，已经提交了issue，这里是临时解决方式
+            BXJG.Utils.Extensions.LinqExt.xx = (x,ct) => {
+                //  x.GetType().GetMethods
+                // Abp.Reflection.Extensions.TypeExtensions.
+                //  RelationalQueryableExtensions.ExecuteDelete()
+
+                return typeof(RelationalQueryableExtensions).GetMethod("ExecuteDeleteAsync", BindingFlags.Static | BindingFlags.Public).Invoke(null,[ x,ct]) as Task<int>;
+            };
         }
         public override void Initialize()
         {

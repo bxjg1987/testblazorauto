@@ -3,6 +3,7 @@ using Abp.Domain.Repositories;
 using Abp.Extensions;
 using Abp.UI;
 using BXJG.Common.Contracts;
+using BXJG.Utils.Extensions;
 using BXJG.Utils.Files;
 using BXJG.Utils.Localization;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +17,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace BXJG.Utils.Extensions
+namespace Abp.Domain.Repositories
 {
     public static class RepositoryExt
     {
@@ -267,13 +268,81 @@ namespace BXJG.Utils.Extensions
         /// <exception cref="UserFriendlyException"></exception>
         public static async Task IsExistsThrow<TEntity>(this IRepository<TEntity> q, Expression<Func<TEntity, bool>> w, string msg = default, CancellationToken cancellationToken=default) where TEntity : class, IEntity
         {
-            if (await (await q.GetAllAsync()).AnyAsync(w, cancellationToken))
+            if (await q.IsExists(w, cancellationToken))
             {
                 if (msg.IsNullOrWhiteSpace())
                     msg = BXJGUtilsLocalizationExt.UtilsL("数据已存在！");
                 throw new UserFriendlyException(msg);
             }
         }
+        /// <summary>
+        /// 判断指定条件的数据是否已存在
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <typeparam name="TKey"></typeparam>
+        /// <param name="q"></param>
+        /// <param name="w"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public static async Task<bool> IsExists<TEntity,TKey>(this IRepository<TEntity,TKey> q, Expression<Func<TEntity, bool>> w, CancellationToken cancellationToken = default) where TEntity : class, IEntity<TKey>
+        {
+            return await (await q.GetAllAsync()).AnyAsync(w, cancellationToken);
+        }
+        /// <summary>
+        /// 若指定条件的数据已存在，则抛出异常
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <typeparam name="TKey"></typeparam>
+        /// <param name="q"></param>
+        /// <param name="w"></param>
+        /// <param name="msg"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        /// <exception cref="UserFriendlyException"></exception>
+        public static async Task IsExistsThrow<TEntity, TKey>(this IRepository<TEntity,TKey> q, Expression<Func<TEntity, bool>> w, string msg = default, CancellationToken cancellationToken = default) where TEntity : class, IEntity<TKey>
+        {
+            if (await q.IsExists(w, cancellationToken))
+            {
+                if (msg.IsNullOrWhiteSpace())
+                    msg = BXJGUtilsLocalizationExt.UtilsL("数据已存在！");
+                throw new UserFriendlyException(msg);
+            }
+        }
+
+
+
+
+
+        #region abp仓储的默认实现目前的删除是查询出来之后再删除，数据量大时有问题，已经提交了issue，这里是临时解决方式
+        /// <summary>
+        /// abp仓储的默认实现目前的删除是查询出来之后再删除，数据量大时有问题，已经提交了issue，这里是临时解决方式
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="q"></param>
+        /// <param name="where"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public static  Task<int> BatchDelete<T>(this IRepository<T> q, Expression< Func<T,bool>> where, CancellationToken cancellationToken = default) where T:class,IEntity
+        {
+          return q.BatchDelete(where,cancellationToken);
+        }
+        /// <summary>
+        /// abp仓储的默认实现目前的删除是查询出来之后再删除，数据量大时有问题，已经提交了issue，这里是临时解决方式
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TKey"></typeparam>
+        /// <param name="q"></param>
+        /// <param name="where"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public static async Task<int> BatchDelete<T,TKey>(this IRepository<T, TKey> q, Expression<Func<T, bool>> where, CancellationToken cancellationToken = default) where T : class, IEntity<TKey>
+        {
+            var x = await q.GetAllAsync();
+            return await x.BatchDelete(cancellationToken);
+        }
+
+        #endregion
+
         #endregion
     }
 }
