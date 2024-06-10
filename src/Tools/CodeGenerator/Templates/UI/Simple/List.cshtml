@@ -153,6 +153,9 @@
        Footer="renderFragment1"
        DefaultMaximized="false"
        MaxBodyHeight="86vh">
+    <TitleTemplate>
+        <SectionOutlet SectionName=@@($"{this.GetHashCode()}-detail-update-title") />
+    </TitleTemplate>
     <ChildContent>
         <SectionOutlet SectionName=@@($"{this.GetHashCode()}-detail-update-body") />
         <DetailUpdate Id="detailUpdateId" IsEdit="isEdit" OnDeleted="DetailDeleted" OnUpdated="DetailUpdated" Master="GetHashCode()" />
