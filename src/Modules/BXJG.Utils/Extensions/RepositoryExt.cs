@@ -338,7 +338,7 @@ namespace Abp.Domain.Repositories
         public static async Task<int> BatchDelete<T,TKey>(this IRepository<T, TKey> q, Expression<Func<T, bool>> where, CancellationToken cancellationToken = default) where T : class, IEntity<TKey>
         {
             var x = await q.GetAllAsync();
-            return await x.BatchDelete(cancellationToken);
+            return await x.Where(where).BatchDelete(cancellationToken);
         }
 
         #endregion

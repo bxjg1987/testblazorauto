@@ -45,7 +45,10 @@ namespace BXJG.Utils.EFCore
                 // Abp.Reflection.Extensions.TypeExtensions.
                 //  RelationalQueryableExtensions.ExecuteDelete()
 
-                return typeof(RelationalQueryableExtensions).GetMethod("ExecuteDeleteAsync", BindingFlags.Static | BindingFlags.Public).Invoke(null,[ x,ct]) as Task<int>;
+                //method = method.MakeGenericMethod(typeof(SomeClass));
+                //var result = method.Invoke(service, null);
+                
+                return typeof(RelationalQueryableExtensions).GetMethod("ExecuteDeleteAsync", BindingFlags.Static | BindingFlags.Public).MakeGenericMethod(x.GetType().GetGenericArguments()[0]).Invoke(null,[ x,ct]) as Task<int>;
             };
         }
         public override void Initialize()
