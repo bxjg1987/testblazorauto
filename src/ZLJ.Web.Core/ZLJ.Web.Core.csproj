@@ -73,13 +73,13 @@
 		<PackageReference Include="DistributedLock.MySql" Version="1.*" />-->
 		<!--<PackageReference Include="DotNetCore.CAP.Dashboard" Version="7.2.0" />
 		<PackageReference Include="DotNetCore.CAP.SqlServer" Version="7.2.0" />-->
-		<PackageReference Include="Hangfire.SqlServer" Version="1.8.12" />
+		<PackageReference Include="Hangfire.SqlServer" Version="1.8.14" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.6">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 			
-		<PackageReference Include="HangFire.Core" Version="1.8.12" />
+		<PackageReference Include="HangFire.Core" Version="1.8.14" />
 		<PackageReference Include="Abp.HangFire.AspNetCore" Version="9.2.2" />
 		<!--<PackageReference Include="BXJG.Common.Web" Version="*" />
 		<PackageReference Include="BXJG.Utils.RCL" Version="*" />-->
