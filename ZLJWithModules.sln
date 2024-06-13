@@ -80,6 +80,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{044A19F6-90C2-
 		docs\UI\blazorServer的集成.md = docs\UI\blazorServer的集成.md
 		docs\UI\与mudblazor的集成.md = docs\UI\与mudblazor的集成.md
 		docs\UI\前端全局状态.md = docs\UI\前端全局状态.md
+		docs\UI\前端组件化.md = docs\UI\前端组件化.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZLJ.Application.Share", "src\ZLJ.Application.Share\ZLJ.Application.Share.csproj", "{B266155E-EF9E-4FFD-A6F3-A727F1FD1076}"
