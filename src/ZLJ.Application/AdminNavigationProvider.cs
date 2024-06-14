@@ -35,7 +35,7 @@ namespace ZLJ.Application
             var multiTenancy = new MenuItemDefinition(PermissionNames.AdminMultiTenancy,
                                                       PermissionNames.AdminMultiTenancy.GetAdminLocalizableString(),
                                                       icon: "appstore",
-                                                      permissionDependency: new SimplePermissionDependency(PermissionNames.AdminMultiTenancy));
+                                                      permissionDependency: new SimplePermissionDependency(PermissionNames.AdminMultiTenancy),order:1);
             menu.AddItem(multiTenancy);
 
             multiTenancy.AddItem(new MenuItemDefinition(PermissionNames.AdminTenant,
@@ -52,7 +52,7 @@ namespace ZLJ.Application
             var menuBaseInfo = new MenuItemDefinition(PermissionNames.AdministratorBaseInfo,
                                                       PermissionNames.AdministratorBaseInfo.GetAdminLocalizableString(),
                                                       icon: "appstore",
-                                                      permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorBaseInfo));
+                                                      permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorBaseInfo),order:int.MaxValue);
             menu.AddItem(menuBaseInfo);
 
             menuBaseInfo.AddItem(new MenuItemDefinition("通知中心",

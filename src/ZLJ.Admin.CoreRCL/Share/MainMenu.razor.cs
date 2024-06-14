@@ -77,6 +77,12 @@ namespace ZLJ.Admin.CoreRCL.Share
                 _ = UserNavigationManager.GetMenuAsync("MainMenu", new Abp.UserIdentifier(abpSession.TenantId, abpSession.UserId.Value)).ContinueWith(t =>
                 {
                     menu = t.Result;
+                    //if (menu != null)
+                    //{ 
+                     
+                    //    //menu.
+                    //    menu.Items = menu.Items.OrderBy(c=>c.Order).ToList();
+                    //}
                     InvokeAsync(StateHasChanged);
                 });
             }

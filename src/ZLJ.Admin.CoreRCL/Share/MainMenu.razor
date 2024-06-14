@@ -1,14 +1,11 @@
 ﻿@inherits BXJG.Common.RCL.CommonBaseComponent
 @implements IDisposable
 <div>
-    <Menu Theme=MenuTheme.Dark Mode=MenuMode.Inline InlineCollapsed=Collapsed>
-        @foreach (var item in menu.Items)
+    <Menu Theme=MenuTheme.Dark Mode=MenuMode.Inline InlineCollapsed=Collapsed Selectable=false>
+        @foreach (var item in menu.Items.OrderBy(x=>x.Order))
         {
             <MainMenuItem MenuItem="item" />
         }
-        <MenuItem Key="test" Icon="dashboard">
-            <MenuLink Href="/test">受保护的资源</MenuLink>
-        </MenuItem>
     </Menu>
 </div>
 
