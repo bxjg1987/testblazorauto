@@ -2,7 +2,7 @@
 @implements IDisposable
 <div>
     <Menu Theme=MenuTheme.Dark Mode=MenuMode.Inline InlineCollapsed=Collapsed Selectable=false>
-        @foreach (var item in menu.Items.OrderBy(x=>x.Order))
+        @foreach (var item in menu.Items)
         {
             <MainMenuItem MenuItem="item" />
         }

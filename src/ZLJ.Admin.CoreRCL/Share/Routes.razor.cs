@@ -1,4 +1,5 @@
-﻿using Abp.Threading;
+﻿using Abp.Application.Navigation;
+using Abp.Threading;
 using BXJG.Utils.RCL;
 using Microsoft.JSInterop;
 using System.Net.Http;
@@ -32,6 +33,18 @@ namespace ZLJ.Admin.CoreRCL.Share
             appContainer.T2 = abpUserCfgService.GetAll().ContinueWith(t =>
             {
                 appContainer.AbpUserConfiguration = t.Result;
+
+                appContainer.AbpUserConfiguration.Nav.Menus.ForEach(x => {
+          
+                    x.Value.Items.RecursionDown((a, b) => {
+                        b.Items = b.Items.OrderBy(m=>m.Order    ).ToList();
+
+
+                        return true;
+                    });
+
+                    x.Value.Items = x.Value.Items.OrderBy(  c=>c.Order).ToList();
+                });
             });
 
 
