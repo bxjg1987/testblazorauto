@@ -26,6 +26,10 @@ using ZLJ.Core.MultiTenancy;
 using ZLJ.Application.Share.MultiTenancy;
 using ZLJ.Application.Share.Administrative;
 using ZLJ.Core.Administrative;
+using ZLJ.Application.Share.OU;
+using ZLJ.Core.BaseInfo;
+using BXJG.Utils.Application.Share.GeneralTree;
+using ZLJ.Application.Common.Share.OU;
 
 namespace ZLJ.Application
 {
@@ -42,8 +46,17 @@ namespace ZLJ.Application
             CreateMap<AuditLog, AuditLogListDto>();
 
             #region 组织单位
-            //CreateMap<OUEditDto,Abp.Organizations.OrganizationUnit >().ForMember(c=>c.)
 
+            //CreateMap<DataDictionaryEntity, DataDictionaryDto>();//.IncludeBase(typeof(GeneralTreeEntity<>), typeof(GeneralTreeGetTreeNodeBaseDto<>));
+            //CreateMap<DataDictionaryDto, DataDictionaryEditDto>();
+            //CreateMap<DataDictionaryEditDto, DataDictionaryEntity>();
+            //CreateMap<DataDictionaryEntity, DataDictionaryForSelectDto>().EntityToComboTree();//.IncludeBase(typeof(GeneralTreeEntity<>), typeof(GeneralTreeNodeDto<>));
+            //CreateMap<DataDictionaryEntity, GeneralTreeComboboxDto>().EntityToCombobox();
+
+
+            //CreateMap<OUEditDto,Abp.Organizations.OrganizationUnit >().ForMember(c=>c.)
+            CreateMap<OrganizationUnitEntity, OuDto>();
+            CreateMap<OUEditDto, OrganizationUnitEntity>();
             #endregion
 
             #region 省市区县

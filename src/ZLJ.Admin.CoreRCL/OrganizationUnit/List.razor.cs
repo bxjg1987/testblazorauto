@@ -1,18 +1,14 @@
 ﻿using AntDesign.TableModels;
-using BXJG.Utils.Application.Share.GeneralTree;
 using BXJG.Utils.RCL.Components;
 using Microsoft.AspNetCore.Components.Web;
+using ZLJ.Application.Share.OU;
 
-namespace ZLJ.Admin.CoreRCL.DataDictionary
+namespace ZLJ.Admin.CoreRCL.OrganizationUnit
 {
     public partial class List
     {
-        protected override HttpClient HttpClient => httpClient ??= HttpClientFactory.CreateHttpClientUtils();
+        protected override string FuncName => "公司部门";
 
-        /// <summary>
-        /// 当前功能名称
-        /// </summary>
-        protected override string FuncName => "数据字典";
         /// <summary>
         /// 当前父节点
         /// </summary>
@@ -27,32 +23,23 @@ namespace ZLJ.Admin.CoreRCL.DataDictionary
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
-            await base.InitPermission(BXJG.Utils.Application.Share.Auth.PermissionNames.GeneralTreeCreatePermissionName,
-                                      BXJG.Utils.Application.Share.Auth.PermissionNames.GeneralTreeUpdatePermissionName, BXJG.Utils.Application.Share.Auth.PermissionNames.GeneralTreeDeletePermissionName);
+            await base.InitPermission(PermissionNames.AdministratorBaseInfoOrganizationUnitAdd, 
+                                      PermissionNames.AdministratorBaseInfoOrganizationUnitUpdate,
+                                      PermissionNames.AdministratorBaseInfoOrganizationUnitDelete);
         }
-        //让条件实现IReset接口去实现
-        ///// <summary>
-        ///// 点击清空条件时执行
-        ///// </summary>
-        //protected override void BtnClearFilterClick()
-        //{
-        //    //若条件对象有更多属性，应该在这里清空
-        //    GetAllInput.IsSysDefine = default;
-        //    base.BtnClearFilterClick();
-        //}
         /// <summary>
         /// 绑定到明细行上的属性
         /// </summary>
         /// <param name="row"></param>
         /// <returns></returns>
-        Dictionary<string, object> Row(RowData<DataDictionaryDto> row)
+        Dictionary<string, object> Row(RowData<OUDto> row)
         {
             Action<MouseEventArgs> OnDblClick = args =>
             {
                 //if (updateIsGranted)
                 //    BtnItemEditClick(row.DataItem.Data);
                 //else
-                    BtnItemDetailClick(row.DataItem.Data);
+                BtnItemDetailClick(row.DataItem.Data);
 
                 StateHasChanged();//经过测试，必须加这个
             };
@@ -118,7 +105,7 @@ namespace ZLJ.Admin.CoreRCL.DataDictionary
         /// </summary>
         /// <param name="sr"></param>
         /// <returns></returns>
-        void AddEnd(SaveResult<DataDictionaryDto> sr)
+        void AddEnd(SaveResult<ZLJ.Application.Share.OU.OUDto> sr)
         {
             isNeedReload = true;
             isShowCreateDialog = !sr.End;
@@ -143,7 +130,7 @@ namespace ZLJ.Admin.CoreRCL.DataDictionary
         /// 点击明细中的修改按钮
         /// </summary>
         /// <param name="sr"></param>
-        void BtnItemEditClick(DataDictionaryDto sr)
+        void BtnItemEditClick(OUDto sr)
         {
             isEdit = true;
             detailUpdateId = sr.Id;
@@ -153,7 +140,7 @@ namespace ZLJ.Admin.CoreRCL.DataDictionary
         /// 点击明细中的详情事件
         /// </summary>
         /// <param name="sr"></param>
-        void BtnItemDetailClick(DataDictionaryDto sr)
+        void BtnItemDetailClick(OUDto sr)
         {
             isEdit = false;
             detailUpdateId = sr.Id;
@@ -163,7 +150,7 @@ namespace ZLJ.Admin.CoreRCL.DataDictionary
         /// 当详情页执行删除后回调
         /// </summary>
         /// <param name="dto"></param>
-        void DetailDeleted(DataDictionaryDto dto)
+        void DetailDeleted(OUDto dto)
         {
             isNeedReload = true;
             isShowDetailUpdateDialog = false;
@@ -173,7 +160,7 @@ namespace ZLJ.Admin.CoreRCL.DataDictionary
         /// </summary>
         /// <param name="sr"></param>
         /// <returns></returns>
-        void DetailUpdated(DataDictionaryDto sr)
+        void DetailUpdated(OUDto sr)
         {
             isNeedReload = true;
             isShowDetailUpdateDialog = false;

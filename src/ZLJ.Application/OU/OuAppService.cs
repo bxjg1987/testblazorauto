@@ -16,7 +16,9 @@ using System.Text;
 using System.Threading.Tasks;
 using ZLJ.Application.Authorization.Permissions;
 using ZLJ.Application.BaseInfo;
+using ZLJ.Application.Share;
 using ZLJ.Application.Share.Authorization.Permissions;
+using ZLJ.Application.Share.OU;
 using ZLJ.Core.BaseInfo;
 
 namespace ZLJ.Application.OU
@@ -28,7 +30,7 @@ namespace ZLJ.Application.OU
         IRepository<OrganizationUnit, long> repository;
         public OuAppService(IRepository<OrganizationUnit, long> repository, OrganizationUnitManager organizationUnitManager)// : base(repository)
         {
-            LocalizationSourceName = ZLJ.Core.Share.ZLJConsts.LocalizationSourceName;
+            LocalizationSourceName = AdminConsts.Admin;
             this.repository = repository;
             this.organizationUnitManager = organizationUnitManager;
         }
@@ -50,8 +52,13 @@ namespace ZLJ.Application.OU
             var ou = await repository.GetAsync(input.Id);
             ou.ParentId = input.ParentId;
             ou.DisplayName = input.DisplayName;
+
+            var ou2 = ou as OrganizationUnitEntity;
+            ou2.OUType = input.OUType;
+       
             //await organizationUnitManager.CreateAsync(ou);
-            await CurrentUnitOfWork.SaveChangesAsync();
+          //  await CurrentUnitOfWork.SaveChangesAsync();
+          await  organizationUnitManager.UpdateAsync(ou);
             return await Map2Dto(ou);
         }
         [AbpAuthorize(PermissionNames.AdministratorBaseInfoOrganizationUnitUpdate)]
@@ -69,7 +76,12 @@ namespace ZLJ.Application.OU
                 try
                 {
                     var sw = UnitOfWorkManager.Begin(System.Transactions.TransactionScopeOption.RequiresNew);
-                    await repository.DeleteAsync(item);
+                    var entity = await (await repository.GetAllAsync()).Include(x=>x.Children).Include(x=>x.Parent).Where(x => x.Id == item).SingleAsync( CancellationTokenProvider.Token);
+                    await repository.DeleteAsync(entity);
+
+                    if (entity.Parent != null)
+                        await UpdateChildrenCount(entity.Parent);
+
                     await sw.CompleteAsync();
                     r.Ids.Add(item);
                 }
@@ -84,10 +96,10 @@ namespace ZLJ.Application.OU
         [UnitOfWork(false)]
         public async Task<IList<OUDto>> GetAllAsync(GetAllInput input)
         {
-            string code = "";
+            string code = string.Empty;
             if (input.ParentId.HasValue && input.ParentId.Value > 0)
             {
-                code = await (await repository.GetAllAsync()).Where(c => c.Id == input.ParentId).Select(c => c.Code).SingleAsync();
+                code = await (await repository.GetAllAsync()).Where(c => c.Id == input.ParentId).Select(c => c.Code).SingleAsync(CancellationTokenProvider.Token);
             }
             else
                 code = input.ParentCode;
@@ -95,10 +107,12 @@ namespace ZLJ.Application.OU
             var q = (await repository.GetAllAsync())
                               .OfType<OrganizationUnitEntity>()
                               .AsNoTrackingWithIdentityResolution()
-                              .Include(c => c.Children)
+                              .Include(c => c.Children).Include(c => c.Parent)
                               .WhereIf(!code.IsNullOrWhiteSpace(), c => c.Code.StartsWith(code));
             q = q.OrderBy(c => c.Code);
             var list = await q.ToListAsync(CancellationTokenProvider.Token);
+            if (!input.ParentId.HasValue)
+                input.ParentId = list.OrderBy(c => c.Code.Length).FirstOrDefault()?.ParentId;
             var dtos = new List<OUDto>();
             foreach (var item in list)
             {
@@ -107,8 +121,9 @@ namespace ZLJ.Application.OU
             }
             dtos.ForEach(c => c.Children = dtos.Where(d => d.ParentId == c.Id).ToList());
 
+         
 
-            return dtos;
+            return dtos.Where(x=>x.ParentId== input.ParentId).ToList();
         }
 
         [UnitOfWork(false)]
@@ -116,7 +131,7 @@ namespace ZLJ.Application.OU
         {
             var entity = await (await repository.GetAllAsync())
                               //.OfType<OrganizationUnitEntity>()
-                              .AsNoTrackingWithIdentityResolution()
+                              .AsNoTrackingWithIdentityResolution().Include(c=>c.Parent)
                               .Include(c => c.Children).SingleAsync(c=>c.Id==input.Id);
             return await Map2Dto(entity);
         }
@@ -130,7 +145,20 @@ namespace ZLJ.Application.OU
             dto.Id = entity.Id;
             dto.ParentId = entity.ParentId;
             dto.OUType = item.OUType;
+            dto.ParentDisplayName = entity.Parent?.DisplayName;
+            dto.ChildrenCount = item.ChildrenCount;
+           
             return new ValueTask<OUDto>(dto);
+        }
+
+        /// <summary>
+        /// 更新节点的子节点数量
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+          async Task UpdateChildrenCount(OrganizationUnit entity)
+        {
+           ( entity as OrganizationUnitEntity).ChildrenCount = await AsyncQueryableExecuter.CountAsync((await repository.GetAllAsync()).Where(c => c.ParentId == entity.Id));
         }
     }
 }
