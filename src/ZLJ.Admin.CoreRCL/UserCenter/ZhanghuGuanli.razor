@@ -1,0 +1,38 @@
+﻿@page "/uc-zhgl"
+@attribute [ReuseTabsPage(Title = "账户管理")]
+
+
+
+@inherits ZLJ.RCL.Components.BaseComponent
+@inject NavigationManager nav;
+
+<Form Model="@model"
+      OnFinish="OnFinish"
+      LabelColSpan="8"
+      WrapperColSpan="16">
+    <FormItem>
+        <InputPassword @bind-Value="@context.CurrentPassword" oncut="return false" onpaste="return false" oncopy="return false" />
+    </FormItem>
+    <FormItem>
+        <InputPassword @bind-Value="@context.NewPassword" oncut="return false" onpaste="return false" oncopy="return false"  />
+    </FormItem>
+    <FormItem>
+        <InputPassword @bind-Value="@context.NewPassword1" oncut="return false" onpaste="return false" oncopy="return false" />
+    </FormItem>
+    <FormItem WrapperColOffset="8" WrapperColSpan="16">
+        <Button Type="@ButtonType.Primary" HtmlType="submit">
+            保存
+        </Button>
+    </FormItem>
+</Form>
+
+@code {
+    ZLJ.Application.Common.Share.UserCenter.ChangePasswordDto model = new Application.Common.Share.UserCenter.ChangePasswordDto();
+    private async Task OnFinish(EditContext editContext)
+    {
+        await base.HttpClientFactory.CreateHttpClientCommon().Post("account", "ChangePassword", model);
+        await base.ShowSuccessMessage(msg:"修改成功！3秒后将自动注销，请重新登录。");
+        await Task.Delay(3000);
+        nav.NavigateTo("/account/logout",true);
+    }
+}

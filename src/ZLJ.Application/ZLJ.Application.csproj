@@ -56,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="AdminConsts.cs" />
+    <Compile Remove="Authorization\Accounts\IAccountAppService.cs" />
     <Compile Remove="BaseInfo\Administrative\IBXJGBaseInfoAdministrativeAppService.cs" />
     <Compile Remove="BaseInfo\AssociatedCompany\BXJGBaseInfoAssociatedCompanyQueryAppService.cs" />
     <Compile Remove="BaseInfo\AssociatedCompany\Dto\AssociatedCompanyGetForSelectOutputDto.cs" />

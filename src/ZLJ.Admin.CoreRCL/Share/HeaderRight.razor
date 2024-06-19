@@ -11,17 +11,22 @@
             <Dropdown>
                 <Overlay>
                     <Menu>
-                        <MenuItem Icon="user" @key="1" OnClick="UserCenterClick" Style="padding-left:0.5rem;">个人中心</MenuItem>
-                        <MenuItem Icon="logout" @key="2" OnClick="LogoutClick" Style="padding-left:0.5rem;">注销</MenuItem>
+                        <MenuItem Icon="user" @key="1" OnClick=@(()=>UserCenterClick("/uc-jbxx")) Style="padding-left:0.5rem;">基本信息</MenuItem>
+                        <MenuItem Icon="idcard" @key="2" OnClick=@(()=>UserCenterClick("/uc-zhgl")) Style="padding-left:0.5rem;">账户管理</MenuItem>
+                        <MenuItem Icon="setting" @key="3" OnClick=@(()=>UserCenterClick("/uc-gxsz")) Style="padding-left:0.5rem;">个性设置</MenuItem>
+                        <MenuItem Icon="history" @key="4" OnClick=@(()=>UserCenterClick("/uc-wdrz")) Style="padding-left:0.5rem;">我的日志</MenuItem>
+                        <MenuItem Icon="logout" @key="5" OnClick="LogoutClick" Style="padding-left:0.5rem;">注销</MenuItem>
                     </Menu>
                 </Overlay>
                 <ChildContent>
-                    <Avatar Size="small" Style="background-color:aqua; color:#333;">
+                    @if(loginInformations.User!=default)
+                   { <Avatar Size="small" Style="background-color:aqua; color:#333;">
                         @loginInformations.User.Surname
                     </Avatar>
                     <span style=" color:#eee;">
                         @(loginInformations.User.Surname + loginInformations.User.Name)
                     </span>
+                   }
                 </ChildContent>
             </Dropdown>
         </SpaceItem>
@@ -60,9 +65,9 @@
             });
        }
     }
-    void UserCenterClick()
+    void UserCenterClick(string url)
     {
-        nav.NavigateTo("/user-center");
+        nav.NavigateTo(url);
     }
 
     void LogoutClick(MouseEventArgs e)

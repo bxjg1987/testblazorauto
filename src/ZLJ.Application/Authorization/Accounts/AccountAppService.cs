@@ -6,7 +6,7 @@ using ZLJ.Core.Authorization.Users;
 
 namespace ZLJ.Application.Authorization.Accounts
 {
-    public class AccountAppService : AdminBaseAppService, IAccountAppService
+    public class AccountAppService : AdminBaseAppService//, IAccountAppService
     {
         // from: http://regexlib.com/REDetails.aspx?regexp_id=1923
         public const string PasswordRegex = "(?=^.{8,}$)(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\\s)[0-9a-zA-Z!@#$%^&*()]*$";
