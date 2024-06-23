@@ -18,7 +18,7 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         /// <summary>
         /// 注册Common.RCL
-        /// assembly或auto模式才调用
+        /// assembly或auto模式调用
         /// </summary>
         /// <param name="services"></param>
         /// <param name="permissionNamesProvider"></param>

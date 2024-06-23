@@ -1,5 +1,6 @@
 ﻿using Abp.Web.Models.AbpUserConfiguration;
 using BXJG.Utils.Application.Share.Session;
+using Microsoft.AspNetCore.SignalR.Client;
 
 namespace BXJG.Utils.RCL
 {
@@ -18,6 +19,9 @@ namespace BXJG.Utils.RCL
 
         public IServiceProvider Services { get; set; }
         // public UserInfo UserInfo { get; set; }
-
+        /// <summary>
+        /// 当前公共的全局的signalR连接
+        /// </summary>
+        public HubConnection CommonHubConnection { get; internal set; }
     }
 }

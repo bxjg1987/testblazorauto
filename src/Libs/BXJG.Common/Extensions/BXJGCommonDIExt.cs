@@ -13,6 +13,11 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class BXJGCommonDIExt
     {
+        /// <summary>
+        /// 注册公共服务，也适用于blazor web auto的客户端和服务端
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
         public static IServiceCollection AddBXJGCommon(this IServiceCollection services)
         {
             services.TryAddSingleton<IClock, LocalClock>();
