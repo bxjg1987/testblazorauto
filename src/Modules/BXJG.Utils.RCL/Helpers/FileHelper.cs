@@ -29,7 +29,7 @@ namespace BXJG.Utils.RCL.Helpers
         /// <returns></returns>
         public string BuildDownloadUrl(Guid id)
         {
-            return Configuration["App:ServerRootAddress"].TrimEnd('/') + "/api/bxjgfile/Download/" + id + "?enc_auth_token=" + HttpUtility.UrlEncode(accessTokenProvider.GetEncryptedAccessToken());
+            return Configuration["App:ServerRootAddress"].TrimEnd('/') + "/api/bxjgfile/Download/" + id + "?access_token=" + HttpUtility.UrlEncode(accessTokenProvider.GetEncryptedAccessToken());
         }
         /// <summary>
         /// 生成文件的缩略图url
@@ -38,7 +38,7 @@ namespace BXJG.Utils.RCL.Helpers
         /// <returns></returns>
         public string BuildDownloadUrlThum(Guid id)
         {
-            return Configuration["App:ServerRootAddress"].TrimEnd('/') + "/api/bxjgfile/DownloadThum/" + id + "?enc_auth_token=" + HttpUtility.UrlEncode(accessTokenProvider.GetEncryptedAccessToken());
+            return Configuration["App:ServerRootAddress"].TrimEnd('/') + "/api/bxjgfile/DownloadThum/" + id + "?access_token=" + HttpUtility.UrlEncode(accessTokenProvider.GetEncryptedAccessToken());
         }
     }
 }

@@ -7,7 +7,11 @@ using BXJG.Utils.Application.Share.Session;
 using BXJG.Utils.RCL;
 using BXJG.Utils.RCL.Abps;
 using BXJG.Utils.RCL.Helpers;
+using BXJG.Utils.RCL.SignalR;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using NUglify.Html;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,11 +45,13 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddTransient<IFeatureChecker, ClientFeatureChecker>();
             services.TryAddTransient<ISessionAppService, SessionAppService>();
             //services.TryAddSingleton<IObjectMapper, AutoMapperObjectMapper>();
+            services.TryAddScoped<CommonConnection>();
             services.AddAutoMapper(typeof(AppContainer));
-
             //不好实现，所以不要使用多语言
             //services.TryAddSingleton<ILocalizationManager, NullLocalizationManager>();
             return services;
         }
     }
+
+
 }

@@ -16,6 +16,7 @@ using ZLJ.Application.Common;
 using Azure.Core;
 using Microsoft.Net.Http.Headers;
 using ZLJ.Core;
+using log4net.Core;
 //using ZLJ.Core.Authentication.WeChatMiniProgram;
 
 namespace ZLJ.Web.Host.Startup
@@ -67,6 +68,8 @@ namespace ZLJ.Web.Host.Startup
          * SignalR can not send authorization header. So, we are getting it from query string as an encrypted text. */
         private static Task QueryStringTokenResolver(MessageReceivedContext context)
         {
+
+            var logger = context.HttpContext.RequestServices.GetRequiredService<ILoggerFactory>().CreateLogger(nameof(AuthConfigurer));
             var tmpPath = context.HttpContext.Request.Path;
 
             if (!tmpPath.HasValue)
@@ -75,15 +78,26 @@ namespace ZLJ.Web.Host.Startup
                 return Task.CompletedTask;
             }
 
-            var qsAuthToken = context.HttpContext.Request.Query["enc_auth_token"].FirstOrDefault();
+            var qsAuthToken = context.HttpContext.Request.Query["access_token"].FirstOrDefault();
+            //blazor前端以server模式运行时，token在头部
+            if (qsAuthToken.IsNullOrWhiteSpaceBXJG() && context.HttpContext.Request.Headers.TryGetValue("Authorization", out var sdfsdf))
+                qsAuthToken = sdfsdf.ToString().Replace("Bearer","").TrimStart();
+       
+          // context.HttpContext.Request.Headers.Authorization.FirstOrDefault()
+
             if (qsAuthToken == null)
             {
                 // Cookie value does not matches to querystring value
                 return Task.CompletedTask;
             }
 
+
+
             if (tmpPath.Value.StartsWith("/signalr"))
+            {
                 context.Token = SimpleStringCipher.Instance.Decrypt(qsAuthToken);        // Set auth token from cookie
+                logger.LogDebug($"signalr连接的assesstoken为：{context.Token}");
+            }
             else if (tmpPath.Value.Contains("/bxjgfile/"))
                 context.Token = SimpleStringCipher.Instance.Decrypt(qsAuthToken, ZLJConsts.DefaultPassPhrase);
 

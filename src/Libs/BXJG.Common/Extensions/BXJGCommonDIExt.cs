@@ -16,7 +16,8 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddBXJGCommon(this IServiceCollection services)
         {
             services.TryAddSingleton<IClock, LocalClock>();
-            services.TryAddSingleton(Zhongjie.Instance);
+            //services.TryAddSingleton(Zhongjie.Instance);
+            services.TryAddScoped<Zhongjie>();//客户端模式中是单例，server模式中是scope
             services.TryAddTransient<AccessTokenHandler>();
             return services;
         }

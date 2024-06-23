@@ -26,8 +26,8 @@ namespace ZLJ.Admin.CoreRCL.Share
         //MenuMode MenuMode => collapsed ? AntDesign.MenuMode.Inline : AntDesign.MenuMode.Vertical;
         IDisposable sj;
 
-        [Inject]
-        IZhongjieProvider sdfsdf { get; set; }
+        //[Inject]
+        //IZhongjieProvider sdfsdf { get; set; }
         public void Dispose()
         {
             sj?.Dispose();
@@ -51,21 +51,21 @@ namespace ZLJ.Admin.CoreRCL.Share
         //    state.PersistAsJson("main", menu);
         //    return Task.CompletedTask;
         //}
-        [Inject]
-        public IMessageService MessageService { get; set; }
+        //[Inject]
+        //public IMessageService MessageService { get; set; }
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
-            var zhongjie = sdfsdf.GetCurrent();
-            //注意预渲染
-            if (zhongjie != default)
-            {
-                //Console.WriteLine("客户端事件：totalmainmenu注册了");
-                sj = zhongjie.Zhuce(async () =>
-                {
-                    await MessageService.Warning("若看到此消息，说明基于事件总线的跨组件通信成功");
-                }, "aaa");
-            }
+            //var zhongjie = sdfsdf.GetCurrent();
+            ////注意预渲染
+            //if (zhongjie != default)
+            //{
+            //    //Console.WriteLine("客户端事件：totalmainmenu注册了");
+            //    sj = zhongjie.Zhuce(async () =>
+            //    {
+            //        await MessageService.Warning("若看到此消息，说明基于事件总线的跨组件通信成功");
+            //    }, "aaa");
+            //}
             //  subscription = state.RegisterOnPersisting(OnPersisting);
 
             //   if (!state.TryTakeFromJson("main", out menu))

@@ -8,6 +8,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Utils", "src\modules\BXJG.Utils\BXJG.Utils.csproj", "{AF224A98-5C8A-4EDA-8341-B704B46D4B3E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{04E5EC1B-C5AD-473B-A833-DC9C2CB4627E}"
+	ProjectSection(SolutionItems) = preProject
+		NewFile.md = NewFile.md
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.WeChat", "src\libs\BXJG.Wechat\BXJG.WeChat.csproj", "{0135FD4A-1407-48DB-8825-572338DD9902}"
 EndProject
@@ -59,6 +62,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{31830F03-1
 		docs\动态条件.md = docs\动态条件.md
 		docs\多租户.md = docs\多租户.md
 		docs\如何切换新的UI组件库.md = docs\如何切换新的UI组件库.md
+		docs\实时.md = docs\实时.md
 		docs\客户端代理.md = docs\客户端代理.md
 		docs\对象映射.md = docs\对象映射.md
 		docs\应用服务.md = docs\应用服务.md
@@ -114,6 +118,11 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Utils.Application.ClientProxy", "src\Modules\BXJG.Utils.Application.ClientProxy\BXJG.Utils.Application.ClientProxy.csproj", "{55D9DB14-3ED9-4E5E-B740-3FDBE7F2922F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeGenerator", "src\Tools\CodeGenerator\CodeGenerator.csproj", "{B50E2096-3B96-4530-9B88-ADD9EB84306B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{8BEB5724-EC87-4563-94CB-60D4D1615E0D}"
+	ProjectSection(SolutionItems) = preProject
+		docs\images\image.png = docs\images\image.png
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -292,6 +301,7 @@ Global
 		{9A3EB11B-6EA8-44C6-9A80-10B8E0C0E8C0} = {13B83AF8-1FE7-45AB-B2BB-9D892C958891}
 		{55D9DB14-3ED9-4E5E-B740-3FDBE7F2922F} = {D42FF479-F331-48F6-AAA2-45B9FD451892}
 		{B50E2096-3B96-4530-9B88-ADD9EB84306B} = {44B336DD-E758-45E6-9E35-E777DE3AA52B}
+		{8BEB5724-EC87-4563-94CB-60D4D1615E0D} = {31830F03-183C-4530-A73A-C165A1F5A739}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F45DD46C-6040-4FCC-87E0-648786C36933}

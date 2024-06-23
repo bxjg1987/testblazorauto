@@ -3,6 +3,7 @@ using Abp.Runtime.Session;
 using BXJG.Common.Http;
 using BXJG.Common.RCL.Loggers;
 using BXJG.Utils.RCL;
+using BXJG.Utils.RCL.SignalR;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using System.Text.Json;
@@ -21,6 +22,7 @@ builder.Services.AddLogging(lb =>
 //builder.Logging.AddProvider(new BrowserConsoleLoggerProvider());
 
 builder.Services.AddAdminBlazor().AddCommonRCLClient().AddAuthorizationCore();
+
 
 
 

@@ -443,7 +443,6 @@ namespace ZLJ.Web.Host.Startup
             app.UseEndpoints(endpoints =>
             {
                 // endpoints.MapRazorComponents<Shared.App>().AddInteractiveServerRenderMode();
-
                 endpoints.MapHub<AbpCommonHub>("/signalr");
                 //endpoints.MapHangfireDashboardWithAuthorizationPolicy(PermissionNames.HangFireDashboard);
                 endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");

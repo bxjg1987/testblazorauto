@@ -278,9 +278,10 @@ namespace BXJG.Common.Events
         {
             if (eventName.IsNullOrWhiteSpaceBXJG())
                 eventName = canshu.GetType().FullName;
-
+            logger.LogDebug($"正在触发事件{eventName} ");
             if (weituos.TryGetValue(eventName, out var dic))
             {
+                logger.LogDebug($"委托数{dic.Count}");
                 await Task.WhenAll(dic.Select(c =>
                 {
                     c.Value.LastExecuteTime = DateTime.Now; //有线程冲突也无所谓
@@ -426,6 +427,7 @@ namespace BXJG.Common.Events
      * 这里定义一个接口，若你发现可以在你的场景中用，就用，否则自己去定义
      */
 
+    [Obsolete("默认的注册方式是scope，blazor server模式是scope，客户端模式是单例，因此可以直接注入zhongie")]
     public interface IZhongjieProvider
     {
         Zhongjie GetCurrent();

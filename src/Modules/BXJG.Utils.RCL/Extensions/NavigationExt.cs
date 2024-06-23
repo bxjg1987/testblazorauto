@@ -12,7 +12,7 @@ namespace Abp.Application.Navigation
      * 考虑到非blazor项目也需要，因此定义在此项目中
      */
 
-    public static class FileName
+    public static class NavigationExt
     {
         /// <summary>
         /// 递归向下
