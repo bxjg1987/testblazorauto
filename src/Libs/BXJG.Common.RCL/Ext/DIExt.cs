@@ -29,7 +29,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     //.AddSingleton<IZhongjieProvider, ZhongjieProvider>()
                     //.AddTransient<IAuthorizationPolicyProvider, PermissionNameAuthorizationPolicyProvider>()
                     .AddKeyedSingleton<Func<IEnumerable<string>>>(OperationAuthorizationRequirement.GrantedPermissionNamesProvider, (s, o) => () => permissionNamesProvider(s))
-                    .AddTransient<IAuthorizationPolicyProvider, PermissionNameAuthorizationPolicyProvider>();
+                    .TryAddTransient<IAuthorizationPolicyProvider, PermissionNameAuthorizationPolicyProvider>();
                     //.AddSingleton<AuthenticationStateProvider, PersistentAuthenticationStateProvider>()
                     //.AddSingleton<AccessTokenProvider>()
                     //.AddSingleton<IAccessTokenProvider>(s => s.GetRequiredService<AccessTokenProvider>());
@@ -43,15 +43,15 @@ namespace Microsoft.Extensions.DependencyInjection
 
         /// <summary>
         /// 注册Common.RCL
-        /// assembly或auto模式才调用
+        /// 注册blazor客户端部分的服务
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>
         public static IServiceCollection AddCommonRCLClient(this IServiceCollection services)
         {
-            services.AddSingleton<IZhongjieProvider, ZhongjieProvider>();
-            services.AddSingleton<AuthenticationStateProvider, PersistentAuthenticationStateProvider>();
-            services.AddSingleton<IAccessTokenProvider>(s => s.GetRequiredService<AuthenticationStateProvider>() as PersistentAuthenticationStateProvider);
+            services.TryAddSingleton<IZhongjieProvider, ZhongjieProvider>();
+            services.TryAddSingleton<AuthenticationStateProvider, PersistentAuthenticationStateProvider>();
+            services.TryAddSingleton<IAccessTokenProvider>(s => s.GetRequiredService<AuthenticationStateProvider>() as PersistentAuthenticationStateProvider);
             return services;
         }
 

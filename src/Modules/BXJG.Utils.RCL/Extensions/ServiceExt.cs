@@ -22,6 +22,11 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceExt
     {
+        /// <summary>
+        /// blazor server和wasm都要注册的服务
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
         public static IServiceCollection UseBXJGUtilsRCL(this IServiceCollection services)
         {
             services.AddCommonRCL(s =>
@@ -35,7 +40,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 return [];
             })
             .AddCascadingAuthenticationState()
-            .AddTransient<FileHelper>()
+            //.AddTransient<FileHelper>()
             //.AddZLJBlazorClient()
             .AddSingleton(AppContainer.App);
             services.TryAddTransient<IAbpSession, ClientAbpSession>();
@@ -47,6 +52,9 @@ namespace Microsoft.Extensions.DependencyInjection
             //services.TryAddSingleton<IObjectMapper, AutoMapperObjectMapper>();
             services.TryAddScoped<CommonConnection>();
             services.AddAutoMapper(typeof(AppContainer));
+
+            services.TryAddTransient<FileHelper>();
+
             //不好实现，所以不要使用多语言
             //services.TryAddSingleton<ILocalizationManager, NullLocalizationManager>();
             return services;

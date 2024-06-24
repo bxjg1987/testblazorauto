@@ -12,6 +12,7 @@ namespace BXJG.Common.Contracts
     /// 根据情况可以考虑提供一个获取网络上的准确时间获取对象
     /// 默认还是本地时间，LocalClock
     /// </summary>
+    [Obsolete("请使用.net8自带的TimeProvider")]
     public interface IClock
     {
         ValueTask<DateTime> GetNowAsync();
@@ -22,6 +23,7 @@ namespace BXJG.Common.Contracts
     /// <summary>
     /// 本地时钟
     /// </summary>
+    [Obsolete("请使用.net8自带的TimeProvider")]
     public class LocalClock : IClock
     {
         //public static readonly LocalClock Instance = new LocalClock();

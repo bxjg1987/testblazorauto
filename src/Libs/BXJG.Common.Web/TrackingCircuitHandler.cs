@@ -1,6 +1,7 @@
 ﻿using BXJG.Common.Events;
 using Microsoft.AspNetCore.Components.Server.Circuits;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ using ILoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
 
 namespace BXJG.Common.Web
 {
+    [Obsolete("默认的注册方式是scope，blazor server模式是scope，客户端模式是单例，因此可以直接注入zhongie")]
     public class TrackingCircuitHandler : CircuitHandler, IZhongjieProvider
     {
         static readonly Dictionary<Circuit, Zhongjie> zhongjies = new();
