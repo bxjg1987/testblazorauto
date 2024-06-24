@@ -12,9 +12,14 @@ namespace BXJG.Utils.RCL
         public static readonly AppContainer App = new AppContainer();
 
         public Task T1, T2;
-
+        /// <summary>
+        /// 没登陆时，仅加载一部分数据
+        /// 登录后，加载完整数据
+        /// </summary>
         public AbpUserConfigurationDto AbpUserConfiguration { get; set; }
-
+        /// <summary>
+        /// 仅登录后才有数据
+        /// </summary>
         public GetCurrentLoginInformationsOutput CurrentLoginInformations { get; set; }
 
         public IServiceProvider Services { get; set; }

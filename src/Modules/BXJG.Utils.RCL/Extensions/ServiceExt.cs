@@ -39,10 +39,11 @@ namespace Microsoft.Extensions.DependencyInjection
                 }
                 return [];
             })
-            .AddCascadingAuthenticationState()
+            .AddCascadingAuthenticationState();
             //.AddTransient<FileHelper>()
             //.AddZLJBlazorClient()
-            .AddSingleton(AppContainer.App);
+            //.AddScoped(AppContainer.App);
+            services.TryAddTransient<AppContainer>();
             services.TryAddTransient<IAbpSession, ClientAbpSession>();
             //services.TryAddSingleton<IPermissionChecker, ClientPermissionChecker>();
             services.TryAddTransient<ISettingManager, ClientSettingManager>();

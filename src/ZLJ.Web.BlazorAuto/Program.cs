@@ -56,7 +56,7 @@ builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
-app.Services.GetRequiredService<AppContainer>().Services = app.Services;
+//app.Services.GetRequiredService<AppContainer>().Services = app.Services;
 
 app.UseStatusCodePages(async statusCodeContext =>
 {

@@ -32,7 +32,7 @@ builder.Services.AddAdminApiClientProxy(hc =>
 });
 
 var host = builder.Build();
-host.Services.GetRequiredService<AppContainer>().Services = host.Services;
+//host.Services.GetRequiredService<AppContainer>().Services = host.Services;
 //var a = host.Services.GetRequiredService<AbpUserConfigurationService>();
 //var b = host.Services.GetRequiredService<AppContainer>();
 ////这里调用接口会导致PersistentAuthenticationStateProvider构造函数理解执行，由于是单例，后续永远无法获取accesstoken

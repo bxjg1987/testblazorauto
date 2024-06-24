@@ -8,9 +8,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Utils", "src\modules\BXJG.Utils\BXJG.Utils.csproj", "{AF224A98-5C8A-4EDA-8341-B704B46D4B3E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{04E5EC1B-C5AD-473B-A833-DC9C2CB4627E}"
-	ProjectSection(SolutionItems) = preProject
-		NewFile.md = NewFile.md
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.WeChat", "src\libs\BXJG.Wechat\BXJG.WeChat.csproj", "{0135FD4A-1407-48DB-8825-572338DD9902}"
 EndProject
