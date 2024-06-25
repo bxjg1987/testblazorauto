@@ -7,6 +7,7 @@ using ZLJ.Web.BlazorAuto.Components;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Options;
 using BXJG.Utils.RCL;
+using NUglify.Html;
 
 //JsonSerializerOptions.Default.PropertyNameCaseInsensitive = true;
 
@@ -32,8 +33,17 @@ builder.Services.AddAuthentication(/*CookieAuthenticationDefaults.Authentication
     //x.Cookie.Expiration = TimeSpan.FromDays(1);
     x.Cookie.HttpOnly = true;
 });
-builder.Services.AddAuthorization();
-
+builder.Services.AddAuthorization(opt => {
+    opt.AddPolicy("Administrator", ab => {
+        ab.RequireAssertion(c => 
+        {
+           // var sdfsdf = c.Resource.GetType();
+            return Task.FromResult(true);
+        });
+    
+    });
+});
+//builder.Services.AddSingleton<IAuthorizationHandler, sdfd>();
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()

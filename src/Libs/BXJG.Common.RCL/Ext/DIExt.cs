@@ -25,11 +25,11 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IServiceCollection AddCommonRCL(this IServiceCollection services, Func<IServiceProvider, IEnumerable<string>> permissionNamesProvider)
         {
-            services.AddBXJGCommon()
+            services.AddBXJGCommon();
+                    //.AddScoped<IAuthorizationPolicyProvider, PermissionNameAuthorizationPolicyProvider>()
                     //.AddSingleton<IZhongjieProvider, ZhongjieProvider>()
                     //.AddTransient<IAuthorizationPolicyProvider, PermissionNameAuthorizationPolicyProvider>()
-                    .AddKeyedSingleton<Func<IEnumerable<string>>>(OperationAuthorizationRequirement.GrantedPermissionNamesProvider, (s, o) => () => permissionNamesProvider(s))
-                    .TryAddTransient<IAuthorizationPolicyProvider, PermissionNameAuthorizationPolicyProvider>();
+                   // .TryAddKeyedScoped<Func<IEnumerable<string>>>(OperationAuthorizationRequirement.GrantedPermissionNamesProvider, (s, o) => () => permissionNamesProvider(s));
                     //.AddSingleton<AuthenticationStateProvider, PersistentAuthenticationStateProvider>()
                     //.AddSingleton<AccessTokenProvider>()
                     //.AddSingleton<IAccessTokenProvider>(s => s.GetRequiredService<AccessTokenProvider>());
@@ -50,7 +50,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddCommonRCLClient(this IServiceCollection services)
         {
             services.TryAddSingleton<IZhongjieProvider, ZhongjieProvider>();
-            services.TryAddSingleton<AuthenticationStateProvider, PersistentAuthenticationStateProvider>();
+            services.AddSingleton<AuthenticationStateProvider, PersistentAuthenticationStateProvider>();
             services.TryAddSingleton<IAccessTokenProvider>(s => s.GetRequiredService<AuthenticationStateProvider>() as PersistentAuthenticationStateProvider);
             return services;
         }

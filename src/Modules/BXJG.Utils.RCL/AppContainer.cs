@@ -9,7 +9,7 @@ namespace BXJG.Utils.RCL
     /// </summary>
     public class AppContainer
     {
-        public static readonly AppContainer App = new AppContainer();
+        //public static readonly AppContainer App = new AppContainer();
 
         public Task T1, T2;
         /// <summary>
@@ -22,11 +22,11 @@ namespace BXJG.Utils.RCL
         /// </summary>
         public GetCurrentLoginInformationsOutput CurrentLoginInformations { get; set; }
 
-        public IServiceProvider Services { get; set; }
-        // public UserInfo UserInfo { get; set; }
-        /// <summary>
-        /// 当前公共的全局的signalR连接
-        /// </summary>
-        public HubConnection CommonHubConnection { get; internal set; }
+        //public IServiceProvider Services { get; set; }
+        //// public UserInfo UserInfo { get; set; }
+        ///// <summary>
+        ///// 当前公共的全局的signalR连接
+        ///// </summary>
+        //public HubConnection CommonHubConnection { get; internal set; }
     }
 }

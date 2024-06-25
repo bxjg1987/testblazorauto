@@ -17,8 +17,8 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddBXJGCommonWeb(this IServiceCollection services)
         {
-            services.TryAddScoped<TrackingCircuitHandler>();
-            services.TryAddScoped<CircuitHandler>(x => x.GetRequiredService<TrackingCircuitHandler>());
+            services.AddScoped<TrackingCircuitHandler>();
+            services.AddScoped<CircuitHandler>(x => x.GetRequiredService<TrackingCircuitHandler>());
             services.TryAddScoped<IZhongjieProvider>(x => x.GetRequiredService<TrackingCircuitHandler>());
             return services.AddBXJGCommon().AddSingleton<IEnv, AspNetEnv>();
         }

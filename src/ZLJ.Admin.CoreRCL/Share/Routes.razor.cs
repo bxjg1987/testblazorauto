@@ -44,19 +44,19 @@ namespace ZLJ.Admin.CoreRCL.Share
             {
                 appContainer.AbpUserConfiguration = t.Result;
 
-                appContainer.AbpUserConfiguration.Nav.Menus.ForEach(x =>
-                {
+                //appContainer.AbpUserConfiguration.Nav.Menus.ForEach(x =>
+                //{
 
-                    x.Value.Items.RecursionDown((a, b) =>
-                    {
-                        b.Items = b.Items.OrderBy(m => m.Order).ToList();
+                //    x.Value.Items.RecursionDown((a, b) =>
+                //    {
+                //        b.Items = b.Items.OrderBy(m => m.Order).ToList();
 
 
-                        return true;
-                    });
+                //        return true;
+                //    });
 
-                    x.Value.Items = x.Value.Items.OrderBy(c => c.Order).ToList();
-                });
+                //    x.Value.Items = x.Value.Items.OrderBy(c => c.Order).ToList();
+                //});
             });
             this.Logger.LogDebug($"路由中的init执行，准备连接后端signalR...");
             await Connection.ExecuteAsync();

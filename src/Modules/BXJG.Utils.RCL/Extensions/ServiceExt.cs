@@ -43,7 +43,7 @@ namespace Microsoft.Extensions.DependencyInjection
             //.AddTransient<FileHelper>()
             //.AddZLJBlazorClient()
             //.AddScoped(AppContainer.App);
-            services.TryAddTransient<AppContainer>();
+            services.TryAddScoped<AppContainer>();
             services.TryAddTransient<IAbpSession, ClientAbpSession>();
             //services.TryAddSingleton<IPermissionChecker, ClientPermissionChecker>();
             services.TryAddTransient<ISettingManager, ClientSettingManager>();

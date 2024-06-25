@@ -8,6 +8,7 @@
 		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
 	<ItemGroup>
+		<Compile Remove="Auth\OperationAuthorizationRequirement.cs" />
 		<Compile Remove="BlazorServerLog.cs" />
 		<Compile Remove="CircuitStateContainer.cs" />
 		<Compile Remove="ServiceCollectionExtensions.cs" />
