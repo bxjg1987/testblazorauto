@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Authorization.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
@@ -11,19 +12,21 @@ namespace BXJG.Common.RCL.Auth
 {
     //blazor客户端 基于功能的权限处理器，同时也是权限一句，有自定义policprovider创建
 
-    public class OperationAuthorizationRequirement : AuthorizationHandler<OperationAuthorizationRequirement>, IAuthorizationRequirement
+    public class OperationAuthorizationRequirement1 : AuthorizationHandler<OperationAuthorizationRequirement>//, IAuthorizationRequirement
     {
         public const string GrantedPermissionNamesProvider = "GrantedPermissionNamesProvider";
 
-        string[] PermissionNames;// { get; set; } //= new string[0];
-        public bool RequiredAll { get; set; } = false;
+      
 
-        public Func<IEnumerable<string>> serviceProvider;
+        //string[] PermissionNames;// { get; set; } //= new string[0];
+        //public bool RequiredAll { get; set; } = false;
 
-        public OperationAuthorizationRequirement(Func<IEnumerable<string>> serviceProvider, params string[] permissionNames)
+        public Func<   IEnumerable<string>   > serviceProvider;
+
+        public OperationAuthorizationRequirement1([FromKeyedServices(OperationAuthorizationRequirement1.GrantedPermissionNamesProvider)] Func<ValueTask< IEnumerable<string>> > serviceProvider/*, params string[] permissionNames*/)
         {
             this.serviceProvider = serviceProvider;
-            PermissionNames = permissionNames;
+         //   PermissionNames = permissionNames;
         }
 
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, OperationAuthorizationRequirement requirement)
@@ -48,7 +51,7 @@ namespace BXJG.Common.RCL.Auth
         Func<IEnumerable<string>> permissionNameProvider;
 
         public PermissionNameAuthorizationPolicyProvider(IOptions<AuthorizationOptions> options,
-                                             [FromKeyedServices(OperationAuthorizationRequirement.GrantedPermissionNamesProvider)] Func<IEnumerable<string>> permissionNameProvider) : base(options)
+                                             [FromKeyedServices(OperationAuthorizationRequirement1.GrantedPermissionNamesProvider)] Func<IEnumerable<string>> permissionNameProvider) : base(options)
         {
             this.permissionNameProvider = permissionNameProvider;
         }
@@ -78,7 +81,7 @@ namespace BXJG.Common.RCL.Auth
                     all = bool.Parse(ary[1]);
                 }
                 var policy = new AuthorizationPolicyBuilder();
-                policy.AddRequirements(new OperationAuthorizationRequirement(permissionNameProvider, names) { RequiredAll = all });
+                policy.AddRequirements(new OperationAuthorizationRequirement1(permissionNameProvider, names) { RequiredAll = all });
                 return policy.Build();
 
                 //return new AuthorizationPolicy(new IAuthorizationRequirement[] { new OperationAuthorizationRequirement(permissionNameProvider, names) { RequiredAll = all } }, new string[0]);
@@ -89,7 +92,7 @@ namespace BXJG.Common.RCL.Auth
                 if (names1.Contains(policyName))
                 {
                     var policy = new AuthorizationPolicyBuilder();
-                    policy.AddRequirements(new OperationAuthorizationRequirement(permissionNameProvider, policyName));
+                    policy.AddRequirements(new OperationAuthorizationRequirement1(permissionNameProvider, policyName));
                     return policy.Build();
                 }
                 //return new AuthorizationPolicy(new IAuthorizationRequirement[] { new OperationAuthorizationRequirement(permissionNameProvider, policyName) }, new string[0]);

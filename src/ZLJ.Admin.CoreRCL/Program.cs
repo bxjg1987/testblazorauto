@@ -22,20 +22,21 @@ builder.Services.AddLogging(lb =>
 });
 //builder.Logging.AddProvider(new BrowserConsoleLoggerProvider());
 
-//硬编码所有权限
-//获取从接口获取，所有权限的字符串并不需要登录
-//然后与登录后的 已授权的比较，若未登录，则直接判断授权失败，否则比较即可。
-var allPermissions = new string[] { "Administrator" };
-builder.Services.AddAdminBlazor().AddCommonRCLClient().AddAuthorizationCore(opt => {
-    opt.AddPolicy("Administrator", ab => {
-        ab.RequireAssertion(c =>
-        {
-            // var sdfsdf = c.Resource.GetType();
-            return Task.FromResult(true);
-        });
+builder.Services.AddAdminBlazor().AddCommonRCLClient().AddAuthorizationCore();
+////硬编码所有权限
+////获取从接口获取，所有权限的字符串并不需要登录
+////然后与登录后的 已授权的比较，若未登录，则直接判断授权失败，否则比较即可。
+//var allPermissions = new string[] { "Administrator" };
+//builder.Services.AddAdminBlazor().AddCommonRCLClient().AddAuthorizationCore(opt => {
+//    opt.AddPolicy("Administrator", ab => {
+//        ab.RequireAssertion(c =>
+//        {
+//            // var sdfsdf = c.Resource.GetType();
+//            return Task.FromResult(true);
+//        });
 
-    });
-});
+//    });
+//});
 
 
 builder.Services.AddAdminApiClientProxy(hc =>

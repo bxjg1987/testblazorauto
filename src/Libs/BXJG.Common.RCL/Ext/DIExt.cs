@@ -25,11 +25,13 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IServiceCollection AddCommonRCL(this IServiceCollection services, Func<IServiceProvider, IEnumerable<string>> permissionNamesProvider)
         {
+            // Microsoft.AspNetCore.Authorization.Infrastructure.OperationAuthorizationRequirement
+            //  operareq
             services.AddBXJGCommon();
                     //.AddScoped<IAuthorizationPolicyProvider, PermissionNameAuthorizationPolicyProvider>()
                     //.AddSingleton<IZhongjieProvider, ZhongjieProvider>()
-                    //.AddTransient<IAuthorizationPolicyProvider, PermissionNameAuthorizationPolicyProvider>()
-                   // .TryAddKeyedScoped<Func<IEnumerable<string>>>(OperationAuthorizationRequirement.GrantedPermissionNamesProvider, (s, o) => () => permissionNamesProvider(s));
+                    //.AddScoped<IAuthorizationPolicyProvider, PermissionNameAuthorizationPolicyProvider>()
+                    //.TryAddKeyedScoped<Func<IEnumerable<string>>>(OperationAuthorizationRequirement1.GrantedPermissionNamesProvider, (s, o) => () => permissionNamesProvider(s));
                     //.AddSingleton<AuthenticationStateProvider, PersistentAuthenticationStateProvider>()
                     //.AddSingleton<AccessTokenProvider>()
                     //.AddSingleton<IAccessTokenProvider>(s => s.GetRequiredService<AccessTokenProvider>());
