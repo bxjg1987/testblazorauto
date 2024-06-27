@@ -11,7 +11,7 @@ using Abp.Configuration.Startup;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using BXJG.Common.Web;
 using BXJG.Utils.Application;
-using BXJG.Utils.Web.Authorization;
+
 using BXJG.Common.Contracts;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Abp.AspNetCore;
@@ -35,9 +35,9 @@ namespace BXJG.Utils.Web
                 //本来想在这里将权限作为授权策略（它很轻量）注册，后来缓存AbpAuthorizationPolicyProvider的方式，运行时创建策略了
                 services.AddSingleton<IEnv, AspNetEnv>();//.AddBXJGCommonWeb(); //core已经注册内部的服务了
                 //使用iocmanager替换无效
-                services.Replace(new ServiceDescriptor(typeof(IAuthorizationPolicyProvider),typeof(AbpAuthorizationPolicyProvider), ServiceLifetime.Singleton));
+              //  services.Replace(new ServiceDescriptor(typeof(IAuthorizationPolicyProvider),typeof(AbpAuthorizationPolicyProvider), ServiceLifetime.Singleton));
             });
-            IocManager.Register<IAuthorizationHandler, AbpAuthorizationHandler>();
+          //  IocManager.Register<IAuthorizationHandler, AbpAuthorizationHandler>();
             //var services = new ServiceCollection();
             //services.AddBXJGCommonWeb();
             //IocManager.IocContainer.AddServices(services);

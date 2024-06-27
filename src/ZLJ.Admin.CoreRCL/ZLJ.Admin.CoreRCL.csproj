@@ -22,6 +22,7 @@
 
 
 	<ItemGroup>
+		<Content Remove="Share\MainBreadcrumb.razor" />
 		<Content Remove="Share\MainLayout.razor" />
 		<Content Remove="Share\MainMenuToggleButton.razor" />
 		<Content Remove="Share\NullLayout.razor" />
@@ -33,6 +34,7 @@
 
 
 	<ItemGroup>
+		<None Remove="Share\MainBreadcrumb.razor.css" />
 		<None Remove="Share\MainLayout.razor.css" />
 		<None Remove="MainLayout.razor.css" />
 	</ItemGroup>

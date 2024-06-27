@@ -10,13 +10,12 @@
  
 
   <ItemGroup>
+    <Compile Remove="Authorization\**" />
     <Compile Remove="GeneralTree\**" />
+    <EmbeddedResource Remove="Authorization\**" />
     <EmbeddedResource Remove="GeneralTree\**" />
+    <None Remove="Authorization\**" />
     <None Remove="GeneralTree\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="Authorization\AuthorizationExtensionts.cs" />
   </ItemGroup>
 
   <ItemGroup>

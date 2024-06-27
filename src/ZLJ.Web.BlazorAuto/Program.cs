@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Options;
 using BXJG.Utils.RCL;
 using NUglify.Html;
+using AntDesign;
+using ZLJ.Application.Common.ClientProxy;
 
 //JsonSerializerOptions.Default.PropertyNameCaseInsensitive = true;
 
@@ -92,8 +94,49 @@ else
 }
 
 app.UseStaticFiles();
+
+
+
 app.UseRouting();
 app.UseAuthentication();
+
+app.Use(async (context, next) =>
+{
+    var appContainer = context.RequestServices.GetRequiredService<AppContainer>();
+    Console.WriteLine("cccccccccc" + appContainer.GetHashCode());
+    var sessionAppService = context.RequestServices.GetRequiredService<SessionAppService>();
+    if (context.User.Identity!=default&&  context.User.Identity.IsAuthenticated)
+    {
+        appContainer.T1 = sessionAppService.GetCurrentLoginInformations().ContinueWith(t =>
+        {
+            appContainer.CurrentLoginInformations = t.Result;
+        });
+    }
+    var abpUserCfgService = context.RequestServices.GetRequiredService<AbpUserConfigurationService>();
+    appContainer.T2 = abpUserCfgService.GetAll().ContinueWith(t =>
+    {
+        appContainer.AbpUserConfiguration = t.Result;
+
+        //appContainer.AbpUserConfiguration.Nav.Menus.ForEach(x =>
+        //{
+
+        //    x.Value.Items.RecursionDown((a, b) =>
+        //    {
+        //        b.Items = b.Items.OrderBy(m => m.Order).ToList();
+
+
+        //        return true;
+        //    });
+
+        //    x.Value.Items = x.Value.Items.OrderBy(c => c.Order).ToList();
+        //});
+    });
+
+    // Do work that can write to the Response.
+    await next.Invoke();
+    // Do logging or other work that doesn't write to the Response.
+});
+
 app.UseAuthorization();
 app.UseAntiforgery();
 

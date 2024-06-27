@@ -23,15 +23,16 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="services"></param>
         /// <param name="permissionNamesProvider"></param>
         /// <returns></returns>
-        public static IServiceCollection AddCommonRCL(this IServiceCollection services, Func<IServiceProvider, IEnumerable<string>> permissionNamesProvider)
+        public static IServiceCollection AddCommonRCL(this IServiceCollection services, Func<IServiceProvider, ValueTask< IEnumerable<string>>> permissionNamesProvider)
         {
             // Microsoft.AspNetCore.Authorization.Infrastructure.OperationAuthorizationRequirement
             //  operareq
-            services.AddBXJGCommon();
-                    //.AddScoped<IAuthorizationPolicyProvider, PermissionNameAuthorizationPolicyProvider>()
+            services.AddBXJGCommon()
+                    .AddTransient<IAuthorizationPolicyProvider, PermissionNameAuthorizationPolicyProvider>()
+                    .AddScoped<IAuthorizationHandler, OperationAuthorizationRequirement1>()
                     //.AddSingleton<IZhongjieProvider, ZhongjieProvider>()
                     //.AddScoped<IAuthorizationPolicyProvider, PermissionNameAuthorizationPolicyProvider>()
-                    //.TryAddKeyedScoped<Func<IEnumerable<string>>>(OperationAuthorizationRequirement1.GrantedPermissionNamesProvider, (s, o) => () => permissionNamesProvider(s));
+                    .TryAddKeyedScoped<Func<ValueTask< IEnumerable<string>>>>(OperationAuthorizationRequirement1.GrantedPermissionNamesProvider, (s, o) => () => permissionNamesProvider(s));
                     //.AddSingleton<AuthenticationStateProvider, PersistentAuthenticationStateProvider>()
                     //.AddSingleton<AccessTokenProvider>()
                     //.AddSingleton<IAccessTokenProvider>(s => s.GetRequiredService<AccessTokenProvider>());

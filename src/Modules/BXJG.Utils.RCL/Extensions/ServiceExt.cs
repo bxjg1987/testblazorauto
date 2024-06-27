@@ -29,21 +29,22 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IServiceCollection UseBXJGUtilsRCL(this IServiceCollection services)
         {
-            services.AddCommonRCL(s =>
+            services.AddCommonRCL(async s =>
             {
                 var fw = s.GetRequiredService<AppContainer>();
-                if (fw.AbpUserConfiguration != null && fw.AbpUserConfiguration.Auth != default)
-                {
+                await fw.T2;
+               // if (fw.AbpUserConfiguration != null && fw.AbpUserConfiguration.Auth != default)
+               // {
                     //Console.WriteLine(JsonConvert.SerializeObject(fw.AbpUserConfiguration.Auth));
                     return fw.AbpUserConfiguration.Auth.GrantedPermissions.Keys;
-                }
-                return [];
+              //  }
+              //  return [];
             })
             .AddCascadingAuthenticationState();
             //.AddTransient<FileHelper>()
             //.AddZLJBlazorClient()
             //.AddScoped(AppContainer.App);
-            services.TryAddScoped<AppContainer>();
+            services.AddScoped<AppContainer>();
             services.TryAddTransient<IAbpSession, ClientAbpSession>();
             //services.TryAddSingleton<IPermissionChecker, ClientPermissionChecker>();
             services.TryAddTransient<ISettingManager, ClientSettingManager>();

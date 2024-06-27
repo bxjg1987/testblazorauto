@@ -1,12 +1,14 @@
 ﻿@inherits BXJG.Common.RCL.CommonBaseComponent
 @implements IDisposable
 <div>
-    <Menu Theme=MenuTheme.Dark Mode=MenuMode.Inline InlineCollapsed=Collapsed Selectable=false>
+    @if(menu!=default)
+  {  <Menu Theme=MenuTheme.Dark Mode=MenuMode.Inline InlineCollapsed=Collapsed Selectable=false>
         @foreach (var item in menu.Items)
         {
             <MainMenuItem MenuItem="item" />
         }
     </Menu>
+  }
 </div>
 
 @* 折叠主菜单需要同时折叠布局中的Slide colosep和主菜单的Coseple属性

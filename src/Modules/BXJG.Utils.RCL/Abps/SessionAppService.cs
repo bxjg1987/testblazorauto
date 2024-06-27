@@ -19,8 +19,12 @@ namespace BXJG.Utils.RCL.Abps
 
         public async Task<GetCurrentLoginInformationsOutput> GetCurrentLoginInformations()
         {
-            await appContainer.T1;
-            return appContainer.CurrentLoginInformations;
+            if (appContainer.T1 != default)
+            {
+                await appContainer.T1;
+                return appContainer.CurrentLoginInformations;
+            }
+            return default;
         }
     }
 }

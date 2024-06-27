@@ -37,6 +37,8 @@ namespace BXJG.Utils.RCL.Abps
             //        Items = new List<UserMenuItem>()
             //    }; 
             //}
+            Console.WriteLine("aaaaaaaa"+_appContainer.GetHashCode());
+            if (_appContainer.T2 == default) return null;
             await _appContainer.T2;
             return _appContainer.AbpUserConfiguration.Nav.Menus[menuName];
         }

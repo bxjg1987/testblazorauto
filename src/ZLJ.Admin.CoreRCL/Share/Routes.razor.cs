@@ -29,7 +29,7 @@ namespace ZLJ.Admin.CoreRCL.Share
         public ILogger<Routes> Logger { get; set; }
         protected override async Task OnInitializedAsync()
         {
-            //await base.OnInitializedAsync();
+            Console.WriteLine("bbbbbbbbbbbbbbbbbb"+appContainer.GetHashCode());
             var r = await AuthenticationState.GetAuthenticationStateAsync();
             if (r.User.Identity.IsAuthenticated)
             {
