@@ -32,6 +32,9 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddCommonRCL(async s =>
             {
                 var fw = s.GetRequiredService<AppContainer>();
+                if (fw.T2 == default)
+                    return [];
+
                 await fw.T2;
                // if (fw.AbpUserConfiguration != null && fw.AbpUserConfiguration.Auth != default)
                // {

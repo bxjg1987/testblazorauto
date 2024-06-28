@@ -2,16 +2,21 @@
 using Abp.Runtime.Session;
 using AntDesign;
 using BXJG.Common.Events;
+using BXJG.Utils.RCL;
 
 namespace ZLJ.Admin.CoreRCL.Share
 {
     public partial class MainMenu
     {
-        IUserNavigationManager UserNavigationManager => ScopedServices.GetRequiredService<IUserNavigationManager>();
+        [Inject]
+        public IUserNavigationManager UserNavigationManager { get; set; }// => ScopedServices.GetRequiredService<IUserNavigationManager>();
 
         IAbpSession abpSession => ScopedServices.GetRequiredService<IAbpSession>();
 
         UserMenu menu = new UserMenu() { Items = new List<UserMenuItem>() };
+
+        [Inject]
+        public AppContainer AppContainer { get; set; }
 
         //[Inject]
         //protected PersistentComponentState state { get; private set; }
@@ -55,6 +60,7 @@ namespace ZLJ.Admin.CoreRCL.Share
         //public IMessageService MessageService { get; set; }
         protected override async Task OnInitializedAsync()
         {
+            Console.WriteLine(  "owncoponent组件中inject的appcontainer："+ AppContainer.GetHashCode());
             await base.OnInitializedAsync();
             //var zhongjie = sdfsdf.GetCurrent();
             ////注意预渲染
@@ -76,10 +82,14 @@ namespace ZLJ.Admin.CoreRCL.Share
             {
                 _ = UserNavigationManager.GetMenuAsync("MainMenu", new Abp.UserIdentifier(abpSession.TenantId, abpSession.UserId.Value)).ContinueWith(t =>
                 {
+                    if (t==default)
+                    {
+                        return;
+                    }
+
                     menu = t.Result;
                     //if (menu != null)
                     //{ 
-                     
                     //    //menu.
                     //    menu.Items = menu.Items.OrderBy(c=>c.Order).ToList();
                     //}

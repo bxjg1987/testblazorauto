@@ -18,7 +18,7 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class DIExt
     {
         /// <summary>
-        /// 本项目，所有应用，前端要注册的
+        /// 本项目，所有应用，前后端要注册的
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>

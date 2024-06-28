@@ -56,7 +56,7 @@
     {
         await base.OnInitializedAsync();
         //isAuthed = (await authState.GetAuthenticationStateAsync()).User.Identity.IsAuthenticated;
-
+        await Task.Delay(5000);
         if (AppContainer.T1!=default)
        {     _ = AppContainer.T1.ContinueWith(tempTask =>
             {
