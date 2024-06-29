@@ -11,7 +11,7 @@ using NUglify.Html;
 using AntDesign;
 using ZLJ.Application.Common.ClientProxy;
 using Microsoft.Extensions.DependencyInjection;
-
+using Microsoft.AspNetCore.Http;
 //JsonSerializerOptions.Default.PropertyNameCaseInsensitive = true;
 
 
@@ -69,6 +69,14 @@ builder.Services.AddAdminApiClientProxy(hc =>
 
 builder.Services.AddHttpContextAccessor();
 
+//builder.Services.AddDistributedMemoryCache();
+
+//builder.Services.AddSession(options =>
+//{
+//    options.IdleTimeout = TimeSpan.FromMinutes(2);
+//    options.Cookie.HttpOnly = true;
+//    options.Cookie.IsEssential = true;
+//});
 
 var app = builder.Build();
 
@@ -103,6 +111,7 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 
+//app.UseSession();
 app.Use(async (context, next) =>
 {
     var appContainer = context.RequestServices.GetRequiredService<AppContainer>();
@@ -115,6 +124,9 @@ app.Use(async (context, next) =>
     //    appContainer.CurrentLoginInformations =await  sessionAppService.GetCurrentLoginInformations();
     //}
     var abpUserCfgService = context.RequestServices.GetRequiredService<AbpUserConfigurationService>();
+    //var session = context.RequestServices.GetRequiredService<ISession>();
+    //var hc =    session.GetString("myPermissions");
+
     appContainer.AbpUserConfiguration = new Abp.Web.Models.AbpUserConfiguration.AbpUserConfigurationDto { 
         Auth = await abpUserCfgService.GetPermissions()
     };

@@ -37,7 +37,7 @@ namespace BXJG.Common.RCL.Auth
                 //logger.LogDebug($"PersistentAuthenticationStateProvider构造函数跳过了");
                 return;
             }
-            logger.LogDebug($"PersistentAuthenticationStateProvider构造函数执行了：{JsonSerializer.Serialize(userInfo)}");
+           // logger.LogDebug($"PersistentAuthenticationStateProvider构造函数执行了：{JsonSerializer.Serialize(userInfo)}");
 
             //好像不太有必要存储到claims中
             accessToken = userInfo.AccessToken;

@@ -3,25 +3,12 @@
 	<texts>
 		<!--通用树相关-->
 		<text name="数据字典" value="数据字典" />
-		<text name="此节点不允许修改" value="此节点不允许修改" />
-		<text name="系统预设数据不允许删除" value="系统预设数据不允许删除" />
-		<text name="GeneralTreeMenu" value="数据字典" />
-		<text name="QuanjuPeizhi" value="全局配置" />
-		<text name="warning" value="操作确认" />
-		<text name="操作成功" value="操作成功！" />
-		<text name="操作失败" value="操作失败！" />
-		<text name="新增成功" value="新增成功！" />
-		<text name="新增失败" value="新增失败！" />
-		<text name="修改成功" value="修改成功！" />
-		<text name="修改失败" value="修改失败！" />
-		<text name="删除成功" value="删除成功！" />
-		<text name="删除失败" value="删除失败！" />
+		<text name="系统预设数据不允许删除！" value="系统预设数据不允许删除！" />
+		<text name="全局配置" value="全局配置" />
 		<text name="默认" value="默认" />
 		<text name="操作确认" value="确认[{0}]已选择的行吗?" />
-
-		<text name="不限" value="==不限==" />
-		
-		<text name="请选择" value="==请选择==" />
+		<text name="不限" value="不限" />
+		<text name="请选择" value="请选择" />
 		<text name="全部" value="全部" />
 		<text name="新增" value="新增" />
 		<text name="修改" value="修改" />
@@ -44,13 +31,12 @@
 		<text name="Department1">部门</text>
 		<text name="FormIsNotValidMessage" value="部分输入信息不符合要求,请检查并改正." />
 		<text name="TenantNameCanNotBeEmpty" value="租户名不能为空" />
+		<text name="刷新" value="刷新" />
 		<text name="CurrentTenant">当前租户</text>
-		<text name="Change">修改</text>
 		<text name="ChangeTenant">请输入租户名(如:default)</text>
 		<text name="NotSelected">未设置</text>
-		<!--	<text name="LeaveEmptyToSwitchToHost">这是一个SAAS(软件即服务)平台，不同客户使用同一套程序，但数据完全隔离。不同租户使用“租户名”来区分。若此处不输入则表示进入管理后台，将无法看到具体的业务数据，您可以输入“default” 进入默认租户后台</text>-->
 		<text name="InvalidUserNameOrPassword" value="用户名或密码无效" />
-		<text name="ThereIsNoTenantDefinedWithName" value="租户 {0}不存在" />
+		<text name="ThereIsNoTenantDefinedWithName{0}" value="租户 {0}不存在" />
 		<text name="TenantIsNotActive" value="租户 {0} 未激活." />
 		<text name="UserIsNotActiveAndCanNotLogin" value="用户 {0} 未激活,不能登录." />
 		<text name="UserEmailIsNotConfirmedAndCanNotLogin">你的邮箱地址未确认.不能登录</text>
@@ -60,8 +46,8 @@
 		<text name="UserNameOrEmail" value="用户名或邮箱地址" />
 		<text name="密码" value="密码" />
 		<text name="RememberMe" value="记住我" />
-		<text name="YouCanNotDeleteOwnAccount" value="不许自杀" />
-		<text name="YouCanNotDeleteAdmin" value="不许杀大Boss" />
+		<text name="YouCanNotDeleteOwnAccount" value="不许自杀！" />
+		<text name="YouCanNotDeleteAdmin" value="不许杀大Boss！" />
 		<text name="登录" value="登录" />
 		<text name="用户登录" value="用户登录" />
 		<text name="LoginFailed" value="登录失败!" />
@@ -71,8 +57,8 @@
 		<text name="Submit" value="提交" />
 		<text name="SubmitConfirm" value="提交确认" />
 		<text name="SubmitConfirmPropt" value="提交已选择的数据吗？" />
-		<!--<text name="BXJG.Common.AppliedAuditedStatus.Applied" value="已申请，待审核" />
-		<text name="BXJG.Common.AppliedAuditedStatus.Audited" value="已审核" />-->
+		<text name="BXJG.Common.AppliedAuditedStatus.Applied" value="已申请，待审核" />
+		<text name="BXJG.Common.AppliedAuditedStatus.Audited" value="已审核" />
 		<text name="撤销" value="撤销" />
 		<text name="作废" value="作废" />
 		<text name="提交" value="提交" />
@@ -81,13 +67,12 @@
 		<text name="完成" value="完成" />
 		<text name="分配" value="分配" />
 		<text name="确认" value="确认" />
-		<!--<text name="执行" value="执行" />-->
-		<text name="执行11" value="执行11" />
-		
-	<!--	<text name="CancelSubmit" value="撤销提交" />
+		<text name="执行" value="执行" />
+
+		<!--<text name="CancelSubmit" value="撤销提交" />
 		<text name="CancelSubmitConfirm" value="撤销提交确认" />
 		<text name="CancelSubmitConfirmPropt" value="撤销提交已选择的数据吗？" />-->
-		
+
 		<text name="AddSub" value="新增子级" />
 		<text name="Parent" value="上级" />
 		<text name="Edit" value="修改" />
@@ -97,26 +82,23 @@
 		<text name="DeleteConfirm" value="确定删除已选定的项？" />
 		<text name="DeleteConfirmPropt" value="删除确认" />
 		<text name="Delete" value="删除" />
-		<text name="InternalServerError" value="服务器内部错误" />
+		<text name="InternalServerError" value="服务器内部错误！" />
 		<text name="Unknown" value="未知" />
-		<!--<text name="BXJG.Utils.Enums.Gender.Woman" value="女" />
-		<text name="BXJG.Utils.Enums.Gender.Man" value="男" />-->
+		<text name="BXJG.Utils.Enums.Gender.Woman" value="女" />
+		<text name="BXJG.Utils.Enums.Gender.Man" value="男" />
 		<text name="BXJG.Common.Gender.Woman" value="女" />
 		<text name="BXJG.Common.Gender.Man" value="男" />
 		<text name="Keywords" value="关键字" />
-		
-		<!--<text name="AreYouSure" value="确定此操作吗？" />
-		<text name="Back" value="返回" />-->
-		<!--<text name="Prompt" value="提示" />-->
-		<!--<text name="aLoadFaile11d1" value="加载失11败请稍候重试。" />-->
-		
-		<!--<text name="Search" value="搜索" />
-		
+		<text name="Search" value="搜索" />
+		<text name="AreYouSure" value="确定此操作吗？" />
+		<text name="Back" value="返回" />
+		<text name="Prompt" value="提示" />
+		<text name="LoadFailed" value="加载失败！请稍候重试。" />
 		<text name="OperationTip" value="操作提示" />
-		<text name="请选择要操作的行" value="请选择要{0}的行" />
+		<text name="请选择要{0}的行" value="请选择要{0}的行" />
 		<text name="UnAuthorized" value="未授权" />
-		<text name="UnAuthenticated" value="身份验证失败" />
-		<text name="UnAuthenticatedDetail" value="登陆已过期稍重新登陆。" />
+		<text name="UnAuthenticated" value="身份验证失败！" />
+		<text name="UnAuthenticatedDetail" value="登陆已过期！稍重新登陆。" />
 		<text name="NameSurname" value="名 姓" />
 		<text name="用户名" value="用户名" />
 		<text name="记住我" value="记住用户名和密码" />
@@ -134,7 +116,7 @@
 		<text name="CanBeEmptyToLoginAsHost" value="留空以主租户登录." />
 		<text name="Register" value="注册" />
 		<text name="OrLoginWith" value="其他登录方式" />
-		<text name="WaitingForActivationMessage" value="你的帐户正在等待管理员激活." />-->
+		<text name="WaitingForActivationMessage" value="你的帐户正在等待管理员激活." />
 		<text name="TenantSelection" value="租户选择" />
 		<text name="TenantSelection_Detail" value="请选择其中一个租户." />
 		<text name="Logout" value="注销" />
@@ -145,8 +127,7 @@
 		<text name="IsActive" value="是否激活" />
 		<text name="FullName" value="姓名" />
 		<text name="CreateNewUser" value="创建新用户" />
-		<text name="Remove" value="删除" />
-		<text name="Create" value="新增" />
+		<text name="通知中心" value="通知中心" />
 		<text name="Yes" value="是" />
 		<text name="No" value="否" />
 		<text name="Ok" value="确定" />
@@ -159,46 +140,13 @@
 		<text name="Job" value="岗位设置" />
 		<text name="Employee" value="员工档案" />
 		<text name="Administrative" value="行政区域" />
-		<text name="DataDictionary" value="数据字典" />
-		<text name="PatientInfo" value="患者档案" />
-		<text name="VascularAccess" value="血管通路" />
-		<text name="Purchase" value="采购入库" />
-		<text name="PurchaseBack" value="采购退货" />
-		<text name="ReturnGoods" value="采购退货" />
-		<text name="PutInStorage" value="入库" />
-		<text name="Inventory" value="库存查询" />
-		<text name="Receive" value="领用登记" />
-		<text name="Maintain" value="维修登记" />
-		<text name="Scral" value="报废登记" />
-		<text name="StorageInventory" value="库存查询" />
 		<text name="Report" value="统计报表" />
 		<text name="Config" value="业务设置" />
 		<text name="System" value="系统管理" />
 		<text name="Log" value="日志" />
 		<text name="Settings" value="设置" />
-		<text name="Btype" value="往来单位" />
-		<text name="Equipment info" value="设备档案" />
-		<text name="EquipmentInfo" value="设备档案" />
 		<text name="EquipmentSettings" value="业务设置" />
-		<text name="Patient" value="患者管理" />
-		<text name="PatientPatientInfo" value="患者档案" />
-		<text name="PatientVascularAccessInfo" value="血管通路" />
-		<text name="PatientVascularAccessInfoOutcomeConcurrenceRecord" value="转发并归记录" />
-		<text name="PatientVascularAccessInfoChangeRecord" value="变更记录" />
-		<text name="CheckManager" value="检查管理" />
-		<text name="CheckManagerCheckItem" value="检查项明细" />
-		<text name="CheckManagerPatientCheckRecord" value="检查结果" />
-		<text name="PatientTumorInformation" value="肿瘤信息" />
-		<text name="PatientDialysisResume" value="透析履历" />
-		<text name="PatientCourseSection" value="病程小节" />
-		<text name="PatientPhysicalExamination" value="体格检查记录" />
-		<text name="StoreManagement" value="库存管理" />
-		<text name="StoreManagementDrugsBrowse" value="药品一览" />
-		<text name="StoreManagementInventoryList" value="仓库档案" />
-		<text name="StoreManagementConsumablesInformation" value="耗材基本信息" />
-		<text name="DoctorAdvice" value="医嘱管理" />
-		<text name="DoctorAdviceDialysisSolution" value="透析方案" />
-		<text name="StoreManagementStorageEntry" value="入库" />
 		<text name="Brand" value="品牌" />
+		<text name="权限不足！">数据权限不足！</text>
 	</texts>
 </localizationDictionary>

@@ -38,8 +38,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
                 return r;
 
-            })
-            .AddCascadingAuthenticationState();
+            });
             //.AddTransient<FileHelper>()
             //.AddZLJBlazorClient()
             //.AddScoped(AppContainer.App);

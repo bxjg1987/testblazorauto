@@ -50,7 +50,7 @@ namespace ZLJ.Application
             #region 基础资料
             //基础数据
             var menuBaseInfo = new MenuItemDefinition(PermissionNames.AdministratorBaseInfo,
-                                                      PermissionNames.AdministratorBaseInfo.GetAdminLocalizableString(),
+                                                     "BaseInfo".UtilsLI(),
                                                       icon: "appstore",
                                                       permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorBaseInfo),order:int.MaxValue);
             menu.AddItem(menuBaseInfo);
@@ -61,14 +61,14 @@ namespace ZLJ.Application
                                                         url: "/notification"));
             //数据字典
             menuBaseInfo.AddItem(new MenuItemDefinition(BXJG.Utils.Application.Share.Auth.PermissionNames.GeneralTreeMenuName,
-                                                        BXJG.Utils.Application.Share.Auth.PermissionNames.GeneralTreeMenuName.UtilsLI(),
+                                                        "数据字典".UtilsLI(),
                                                         icon: "table",
                                                         url: "/data-dictionary",
                                                         permissionDependency: new SimplePermissionDependency(BXJG.Utils.Application.Share.Auth.PermissionNames.GeneralTreeMenuName)));
 
             //组织机构
             menuBaseInfo.AddItem(new MenuItemDefinition(name: PermissionNames.AdministratorBaseInfoOrganizationUnit,
-              displayName: PermissionNames.AdministratorBaseInfoOrganizationUnit.GetAdminLocalizableString(),
+              displayName: "OrganizationUnit".UtilsLI(),
               // @Icons.Material.Outlined.AccountTree
               icon: "compass",
               url: $"/organization-unit",
@@ -77,14 +77,14 @@ namespace ZLJ.Application
 
             //岗位
             menuBaseInfo.AddItem(new MenuItemDefinition(PermissionNames.AdministratorBaseInfoPost,
-                                                        PermissionNames.AdministratorBaseInfoPost.GetAdminLocalizableString(),
+                                                        "Job".UtilsLI(),
                                                         icon: "team",
                                                         url: "/post",
                                                         permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorBaseInfoPost)));
 
             //员工档案
             menuBaseInfo.AddItem(new MenuItemDefinition(name: PermissionNames.BXJGBaseInfoStaffInfo,
-                                                        displayName: PermissionNames.BXJGBaseInfoStaffInfo.GetAdminLocalizableString(),
+                                                        displayName: "Employee".UtilsLI(),
                                                         icon: "user",
                                                         url: $"/employee",
                                                         //requiresAuthentication: true,
@@ -102,7 +102,7 @@ namespace ZLJ.Application
 
             //行政区域
             menuBaseInfo.AddItem(new MenuItemDefinition(name: PermissionNames.BXJGBaseInfoAdministrative,
-                displayName: PermissionNames.BXJGBaseInfoAdministrative.GetAdminLocalizableString(),
+                displayName: "Administrative".UtilsLI(),
                 icon: "flag",
                 url: $"/Administrative",
                 requiresAuthentication: true,
@@ -145,13 +145,13 @@ namespace ZLJ.Application
             //    permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorSystemUser)));
 
             menuBaseInfo.AddItem(new MenuItemDefinition("SystemLog",
-                                                        "Log".GetAdminLocalizableString(),
+                                                        "Log".UtilsLI(),
                                                         icon: "history",
                                                         url: "/auditing",
                                                         permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorSystemLog)));
 
             menuBaseInfo.AddItem(new MenuItemDefinition("SystemConfig",
-                                                        "Settings".GetAdminLocalizableString(),
+                                                        "Settings".UtilsLI(),
                                                         icon: "setting",
                                                         url: "/settings",
                                                         permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorSystemConfig)));

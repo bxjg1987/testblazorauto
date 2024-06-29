@@ -26,7 +26,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             // Microsoft.AspNetCore.Authorization.Infrastructure.OperationAuthorizationRequirement
             //  operareq
-            services.AddBXJGCommon()
+            services.AddBXJGCommon().AddCascadingAuthenticationState()
                     .AddTransient<IAuthorizationPolicyProvider, PermissionNameAuthorizationPolicyProvider>()
                     .AddScoped<IAuthorizationHandler, OperationAuthorizationRequirement1>()
                     //.AddSingleton<IZhongjieProvider, ZhongjieProvider>()
@@ -51,7 +51,6 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IServiceCollection AddCommonRCLClient(this IServiceCollection services)
         {
-          
             services.AddSingleton<AuthenticationStateProvider, PersistentAuthenticationStateProvider>();
             services.TryAddSingleton<IAccessTokenProvider>(s => s.GetRequiredService<AuthenticationStateProvider>() as PersistentAuthenticationStateProvider);
             return services;
