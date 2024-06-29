@@ -53,8 +53,5 @@ namespace BXJG.Utils.RCL
         //public HubConnection CommonHubConnection { get; internal set; }
     }
 
-    public class BendihuaTemp {
-        public string Key { get; set; }
-        public Dictionary<string,string> Items { get; set; }
-    }
+  
 }

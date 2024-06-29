@@ -75,7 +75,7 @@
     {
         MainMenuCollapsed = !MainMenuCollapsed;
     }
-    IDisposable appContainerInited;
+   // IDisposable appContainerInited;
     protected override void OnInitialized()
     {
         // appContainerInited = Zhongjie.Zhuce( async () =>
@@ -90,7 +90,7 @@
     }
     public void Dispose()
     {
-        appContainerInited?.Dispose();
+       // appContainerInited?.Dispose();
     }
 
     protected override async Task OnInitializedAsync()
@@ -99,8 +99,8 @@
         var zt = await AuthStateProvider.GetAuthenticationStateAsync();
         auth = zt != null && zt.User != default&& zt.User.Identity.IsAuthenticated;
 
-        await Task.Delay(5000);
-        InvokeAsync(StateHasChanged);
+      //  await Task.Delay(5000);
+      //  InvokeAsync(StateHasChanged);
        // StateHasChanged();
     }
     // [Inject]

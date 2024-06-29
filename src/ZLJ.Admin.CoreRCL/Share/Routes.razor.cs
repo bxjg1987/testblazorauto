@@ -95,7 +95,7 @@ namespace ZLJ.Admin.CoreRCL.Share
 
             ts.Add(AuthenticationState.GetAuthenticationStateAsync().ContinueWith(async t =>
             {
-                await Task.Delay(1000);
+                //await Task.Delay(1000);
                 var r = t.Result;
                 if (r.User?.Identity != default && r.User.Identity.IsAuthenticated)
                 {
@@ -121,14 +121,14 @@ namespace ZLJ.Admin.CoreRCL.Share
             ////await Console.Out.WriteLineAsync("路由中的初始化执行了，正在初始化appContainer"+ appContainer.GetHashCode());
             ts.Add(abpUserCfgService.GetAll().ContinueWith(async t =>
             {
-                await Task.Delay(3000);
+               // await Task.Delay(3000);
                 AppContainer.AbpUserConfiguration = t.Result;
             }).Unwrap());
             //记得Unwrap
-            await Task.WhenAll(ts);
-            //  await InvokeAsync(  StateHasChanged);//没用
-            // StateHasChanged();//没用
-            await Zhongjie.Chufa("appContainerInited");
+           await Task.WhenAll(ts);
+         //   await InvokeAsync(  StateHasChanged);//没用
+        //     StateHasChanged();//没用
+           await Zhongjie.Chufa("appContainerInited");
             // StateHasChanged();//测试了，这个没用
             // AppContainer.AbpUserConfiguration = await  abpUserCfgService.GetAll();
 

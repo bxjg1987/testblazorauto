@@ -6,7 +6,7 @@
 @implements IDisposable
 
 <Space @attributes=AdditionalAttributes Size="@("large")">
-    @if (loginInformations!=default)
+    @if (loginInformations != default)
     {
         <SpaceItem>
             <Dropdown>
@@ -20,14 +20,15 @@
                     </Menu>
                 </Overlay>
                 <ChildContent>
-                    @if(loginInformations.User!=default)
-                   { <Avatar Size="small" Style="background-color:aqua; color:#333;">
-                        @loginInformations.User.Surname
-                    </Avatar>
-                    <span style=" color:#eee;">
-                        @(loginInformations.User.Surname + loginInformations.User.Name)
-                    </span>
-                   }
+                    @if (loginInformations.User != default)
+                    {
+                        <Avatar Size="small" Style="background-color:aqua; color:#333;">
+                            @loginInformations.User.Surname
+                        </Avatar>
+                        <span style=" color:#eee;">
+                            @(loginInformations.User.Surname + loginInformations.User.Name)
+                        </span>
+                    }
                 </ChildContent>
             </Dropdown>
         </SpaceItem>
@@ -60,13 +61,14 @@
     GetCurrentLoginInformationsOutput loginInformations => AppContainer.CurrentLoginInformations;// new GetCurrentLoginInformationsOutput();
 
     protected override void OnInitialized()
-    { 
-      //   appContainerInited = Zhongjie.Zhuce( async () =>
-      // {
-      //     appContainerInited?.Dispose();
-      //     this.Logger.LogDebug("全局状态初始化处理事件执行！");
-      //    await InvokeAsync(StateHasChanged);
-      // },"appContainerInited");
+    {
+        appContainerInited = Zhongjie.Zhuce(async () =>
+      {
+          appContainerInited?.Dispose();
+          //this.Logger.LogDebug("全局状态初始化处理事件执行！");
+          StateHasChanged();
+          // await InvokeAsync(StateHasChanged);
+      }, "appContainerInited");
         base.OnInitialized();
     }
 
@@ -84,7 +86,7 @@
     {
         nav.NavigateTo("/account/logout", true);
     }
-    public  void Dispose()
+    public void Dispose()
     {
         appContainerInited?.Dispose();
     }
