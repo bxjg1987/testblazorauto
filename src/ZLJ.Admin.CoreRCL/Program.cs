@@ -54,6 +54,7 @@ var host = builder.Build();
 //    b.AbpUserConfiguration = d.Result;
 //Console.WriteLine(JsonSerializer.Serialize(b.AbpUserConfiguration));
 //});
+
 Console.WriteLine("客户端运行时已启动....");
 await host.RunAsync();
 

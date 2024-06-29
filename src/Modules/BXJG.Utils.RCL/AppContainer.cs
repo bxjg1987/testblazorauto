@@ -39,11 +39,11 @@ namespace BXJG.Utils.RCL
         /// 没登陆时，仅加载一部分数据
         /// 登录后，加载完整数据
         /// </summary>
-        public AbpUserConfigurationDto AbpUserConfiguration { get; set; }
+        public  Task< AbpUserConfigurationDto> AbpUserConfiguration { get; set; }
         /// <summary>
         /// 仅登录后才有数据
         /// </summary>
-        public GetCurrentLoginInformationsOutput CurrentLoginInformations { get; set; } 
+        public Task<GetCurrentLoginInformationsOutput> CurrentLoginInformations { get; set; } 
 
         //public IServiceProvider Services { get; set; }
         //// public UserInfo UserInfo { get; set; }

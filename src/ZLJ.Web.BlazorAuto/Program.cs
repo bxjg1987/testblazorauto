@@ -115,7 +115,7 @@ app.UseAuthentication();
 app.Use(async (context, next) =>
 {
     var appContainer = context.RequestServices.GetRequiredService<AppContainer>();
-  
+
     app.Logger.LogDebug("服务端全局状态初始化中间件执行。appcontainer对象：" + appContainer.GetHashCode());
     //if (appContainer.CurrentLoginInformations==default&& context.User.Identity != default && context.User.Identity.IsAuthenticated)
     //{
@@ -126,12 +126,18 @@ app.Use(async (context, next) =>
     var abpUserCfgService = context.RequestServices.GetRequiredService<AbpUserConfigurationService>();
     //var session = context.RequestServices.GetRequiredService<ISession>();
     //var hc =    session.GetString("myPermissions");
-
-    appContainer.AbpUserConfiguration = new Abp.Web.Models.AbpUserConfiguration.AbpUserConfigurationDto { 
-        Auth = await abpUserCfgService.GetPermissions()
-    };
+    appContainer.AbpUserConfiguration = abpUserCfgService.GetPermissions().ContinueWith(t =>
+    {
+        return new Abp.Web.Models.AbpUserConfiguration.AbpUserConfigurationDto
+        {
+            Auth = t.Result
+        };
+    });
+    //appContainer.AbpUserConfiguration = new Abp.Web.Models.AbpUserConfiguration.AbpUserConfigurationDto { 
+    //    Auth = await abpUserCfgService.GetPermissions()
+    //};
     //已server模式运行时，app将appcontainer传递给route时会报错，wasm模式时没有问题
-   // appContainer.AbpUserConfiguration.Localization.Values = default;
+    // appContainer.AbpUserConfiguration.Localization.Values = default;
     // Do work that can write to the Response.
     await next.Invoke();
     // Do logging or other work that doesn't write to the Response.

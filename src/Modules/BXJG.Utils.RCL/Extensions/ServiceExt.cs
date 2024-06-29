@@ -32,7 +32,7 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 var fw = s.GetRequiredService<AppContainer>();
 
-                var r = fw.AbpUserConfiguration?.Auth?.GrantedPermissions?.Keys;
+                var r =(await fw.AbpUserConfiguration)?.Auth?.GrantedPermissions?.Keys;
                 if (r == null)
                     return [];
 

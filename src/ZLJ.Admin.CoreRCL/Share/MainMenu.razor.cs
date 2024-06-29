@@ -7,10 +7,10 @@ using Microsoft.Extensions.Logging;
 
 namespace ZLJ.Admin.CoreRCL.Share
 {
-    public partial class MainMenu:IDisposable
+    public partial class MainMenu
     {
 
-        UserMenu menu => AppContainer.AbpUserConfiguration?.Nav?.Menus?["MainMenu"];
+        UserMenu menu;// => AppContainer.AbpUserConfiguration?.Nav?.Menus?["MainMenu"];
 
         [Inject]
         public AppContainer AppContainer { get; set; }
@@ -30,8 +30,7 @@ namespace ZLJ.Admin.CoreRCL.Share
         [Inject]
         public ILogger<MainMenu> Logger { get; set; }
 
-        [Inject]
-        public Zhongjie Zhongjie { get; set; }
+      
 
         //静态传入auto，不能用级联，或者可以试试全局级联
         //https://learn.microsoft.com/zh-cn/aspnet/core/blazor/components/cascading-values-and-parameters?view=aspnetcore-8.0#cascading-valuesparameters-and-render-mode-boundaries
@@ -43,17 +42,7 @@ namespace ZLJ.Admin.CoreRCL.Share
 
         [Inject]
         public IconService iconService { get; set; }
-        protected override void OnInitialized()
-        {
-            appContainerInited = Zhongjie.Zhuce(async () =>
-            {
-                appContainerInited?.Dispose();
-                //this.Logger.LogDebug("全局状态初始化处理事件执行！");
-                StateHasChanged();
-                // await InvokeAsync(StateHasChanged);
-            }, "appContainerInited");
-            base.OnInitialized();
-        }
+      
         //Task OnPersisting()
         //{
         //    Console.WriteLine(  "菜单持久化执行了"+System.Text.Json.JsonSerializer.Serialize(menu));
@@ -65,6 +54,7 @@ namespace ZLJ.Admin.CoreRCL.Share
         protected override async Task OnInitializedAsync()
         {
             Logger.LogDebug("appcontainer：" + AppContainer.GetHashCode());
+            menu = (await AppContainer.AbpUserConfiguration)?.Nav?.Menus?["MainMenu"];
          //   await Task.Delay(5000);
           //  menu = 
             await base.OnInitializedAsync();
@@ -86,11 +76,6 @@ namespace ZLJ.Admin.CoreRCL.Share
             //     menu = new UserMenu() { Items = new List<UserMenuItem>() };//这里初始化下，否则界面渲染为空估计要报错
           
             //  }
-        }
-        IDisposable appContainerInited;
-        public void Dispose()
-        {
-            appContainerInited?.Dispose();
         }
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {

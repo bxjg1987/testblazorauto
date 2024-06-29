@@ -3,7 +3,6 @@
 @using BXJG.Utils.RCL
 
 @inject NavigationManager nav
-@implements IDisposable
 
 <Space @attributes=AdditionalAttributes Size="@("large")">
     @if (loginInformations != default)
@@ -56,25 +55,14 @@
 
     [Inject]
     public AppContainer AppContainer { get; set; }
-    IDisposable appContainerInited;
     //bool isAuthed => loginInformations.User != default && loginInformations.User.Id > 0;
-    GetCurrentLoginInformationsOutput loginInformations => AppContainer.CurrentLoginInformations;// new GetCurrentLoginInformationsOutput();
+    GetCurrentLoginInformationsOutput loginInformations;// => AppContainer.CurrentLoginInformations;// new GetCurrentLoginInformationsOutput();
 
-    protected override void OnInitialized()
-    {
-        appContainerInited = Zhongjie.Zhuce(async () =>
-      {
-          appContainerInited?.Dispose();
-          //this.Logger.LogDebug("全局状态初始化处理事件执行！");
-          StateHasChanged();
-          // await InvokeAsync(StateHasChanged);
-      }, "appContainerInited");
-        base.OnInitialized();
-    }
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+        loginInformations = await AppContainer.CurrentLoginInformations;
 
     }
     void UserCenterClick(string url)
@@ -85,9 +73,5 @@
     void LogoutClick(MouseEventArgs e)
     {
         nav.NavigateTo("/account/logout", true);
-    }
-    public void Dispose()
-    {
-        appContainerInited?.Dispose();
     }
 }

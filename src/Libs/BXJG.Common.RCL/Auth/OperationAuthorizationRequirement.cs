@@ -14,19 +14,21 @@ namespace BXJG.Common.RCL.Auth
     {
         public const string GrantedPermissionNamesProvider = "GrantedPermissionNamesProvider";
 
-
+        private readonly ILogger logger;    
         public Func< ValueTask< IEnumerable<string>> > grantedPermissionNameProvoer;
 
-        public OperationAuthorizationRequirement1([FromKeyedServices(OperationAuthorizationRequirement1.GrantedPermissionNamesProvider)] Func<ValueTask<IEnumerable<string>>> serviceProvider/*, params string[] permissionNames*/)
+        public OperationAuthorizationRequirement1([FromKeyedServices(OperationAuthorizationRequirement1.GrantedPermissionNamesProvider)] Func<ValueTask<IEnumerable<string>>> serviceProvider/*, params string[] permissionNames*/, ILogger<OperationAuthorizationRequirement1> logger)
         {
             this.grantedPermissionNameProvoer = serviceProvider;
+            this.logger = logger;
         }
 
         protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, OperationAuthorizationRequirement requirement)
         {
+          //  logger.LogDebug($"开始验证权限，名称：{requirement.Name}");
             var names = await grantedPermissionNameProvoer.Invoke();
-
-            if( names.Contains(requirement.Name, StringComparer.OrdinalIgnoreCase))
+            //logger.LogDebug($"已授权的列表，名称：{string.Join("，", names)}");
+            if ( names.Contains(requirement.Name, StringComparer.OrdinalIgnoreCase))
                     context.Succeed(requirement);
             
         }

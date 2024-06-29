@@ -3,6 +3,7 @@ using Abp.Notifications;
 using Abp.Threading;
 using AntDesign;
 using BXJG.Common.Events;
+using BXJG.Utils.Application.Share.Session;
 using BXJG.Utils.RCL;
 using BXJG.Utils.RCL.SignalR;
 using Force.DeepCloner;
@@ -44,8 +45,10 @@ namespace ZLJ.Admin.CoreRCL.Share
         //        AppContainer.AbpUserConfiguration.Localization.Values.Add(item.Key, item.Items);
         //    }
         //}
-        protected override async Task OnInitializedAsync()
+
+        protected override void OnInitialized()
         {
+            base.OnInitialized();
 
             #region 全局消息
             this.Logger.LogDebug($"路由中的init执行，准备连接后端signalR...");
@@ -91,18 +94,16 @@ namespace ZLJ.Admin.CoreRCL.Share
             //   AppContainer.DeepCloneTo(App); 
             Logger.LogDebug("appcontainer：" + AppContainer.GetHashCode());
 
-            var ts = new List<Task>();
+            //var r = await AuthenticationState.GetAuthenticationStateAsync();
+            //if (r.User?.Identity != default && r.User.Identity.IsAuthenticated)
+            //    AppContainer.CurrentLoginInformations = sessionAppService.GetCurrentLoginInformations();
 
-            ts.Add(AuthenticationState.GetAuthenticationStateAsync().ContinueWith(async t =>
-            {
-                //await Task.Delay(1000);
+            AppContainer.CurrentLoginInformations = AuthenticationState.GetAuthenticationStateAsync().ContinueWith(async t => {
                 var r = t.Result;
                 if (r.User?.Identity != default && r.User.Identity.IsAuthenticated)
-                {
-                    AppContainer.CurrentLoginInformations = await sessionAppService.GetCurrentLoginInformations();
-                }
-            }).Unwrap());
-
+                    return await sessionAppService.GetCurrentLoginInformations();
+                return await Task.FromResult<GetCurrentLoginInformationsOutput>(null);
+            }).Unwrap();
             //var r = await AuthenticationState.GetAuthenticationStateAsync();
             //if (r.User?.Identity != default && r.User.Identity.IsAuthenticated)
             //{
@@ -117,18 +118,24 @@ namespace ZLJ.Admin.CoreRCL.Share
             //    //    appContainer.CurrentLoginInformations = t.Result;
             //    //});
             //}
+            AppContainer.AbpUserConfiguration = abpUserCfgService.GetAll();
 
-            ////await Console.Out.WriteLineAsync("路由中的初始化执行了，正在初始化appContainer"+ appContainer.GetHashCode());
-            ts.Add(abpUserCfgService.GetAll().ContinueWith(async t =>
-            {
-               // await Task.Delay(3000);
-                AppContainer.AbpUserConfiguration = t.Result;
-            }).Unwrap());
+        }
+        protected override async Task OnInitializedAsync()
+        {
+
+          
+           ////await Console.Out.WriteLineAsync("路由中的初始化执行了，正在初始化appContainer"+ appContainer.GetHashCode());
+           //ts.Add(abpUserCfgService.GetAll().ContinueWith(async t =>
+           // {
+           //    // await Task.Delay(3000);
+           //     AppContainer.AbpUserConfiguration = t.Result;
+           // }).Unwrap());
             //记得Unwrap
-           await Task.WhenAll(ts);
+          // await Task.WhenAll(ts);
          //   await InvokeAsync(  StateHasChanged);//没用
         //     StateHasChanged();//没用
-           await Zhongjie.Chufa("appContainerInited");
+      //     await Zhongjie.Chufa("appContainerInited");
             // StateHasChanged();//测试了，这个没用
             // AppContainer.AbpUserConfiguration = await  abpUserCfgService.GetAll();
 
