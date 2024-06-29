@@ -11,7 +11,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Abps\LocalizationSource.cs" />
+    <Compile Remove="Abps\**" />
+    <Content Remove="Abps\**" />
+    <EmbeddedResource Remove="Abps\**" />
+    <None Remove="Abps\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Components\TreeSelect.cs" />
   </ItemGroup>
 

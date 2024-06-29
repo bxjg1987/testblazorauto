@@ -2,10 +2,10 @@
 {
     public class GetCurrentLoginInformationsOutput
     {
-        public ApplicationInfoDto Application { get; set; }
+        public ApplicationInfoDto Application { get; set; }=new ApplicationInfoDto();
 
-        public UserLoginInfoDto User { get; set; }
+        public UserLoginInfoDto User { get; set; }=new UserLoginInfoDto();
 
-        public TenantLoginInfoDto Tenant { get; set; }
+        public TenantLoginInfoDto Tenant { get; set; }= new TenantLoginInfoDto();
     }
 }

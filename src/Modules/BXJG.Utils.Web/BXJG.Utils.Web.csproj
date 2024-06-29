@@ -10,11 +10,11 @@
  
 
   <ItemGroup>
-    <Compile Remove="Authorization\**" />
+    <Compile Remove="authorization\**" />
     <Compile Remove="GeneralTree\**" />
-    <EmbeddedResource Remove="Authorization\**" />
+    <EmbeddedResource Remove="authorization\**" />
     <EmbeddedResource Remove="GeneralTree\**" />
-    <None Remove="Authorization\**" />
+    <None Remove="authorization\**" />
     <None Remove="GeneralTree\**" />
   </ItemGroup>
 

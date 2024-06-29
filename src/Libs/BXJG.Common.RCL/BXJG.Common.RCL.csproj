@@ -8,6 +8,12 @@
 		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
 	<ItemGroup>
+	  <Compile Remove="Events\**" />
+	  <Content Remove="Events\**" />
+	  <EmbeddedResource Remove="Events\**" />
+	  <None Remove="Events\**" />
+	</ItemGroup>
+	<ItemGroup>
 		<Compile Remove="BlazorServerLog.cs" />
 		<Compile Remove="CircuitStateContainer.cs" />
 		<Compile Remove="ServiceCollectionExtensions.cs" />

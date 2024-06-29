@@ -1,4 +1,4 @@
-﻿using BXJG.Utils.Authorization;
+﻿using BXJG.Utils.Web.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using System;

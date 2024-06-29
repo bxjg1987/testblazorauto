@@ -5,7 +5,6 @@ using Abp.ObjectMapping;
 using Abp.Runtime.Session;
 using BXJG.Utils.Application.Share.Session;
 using BXJG.Utils.RCL;
-using BXJG.Utils.RCL.Abps;
 using BXJG.Utils.RCL.Helpers;
 using BXJG.Utils.RCL.SignalR;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -32,28 +31,20 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddCommonRCL(async s =>
             {
                 var fw = s.GetRequiredService<AppContainer>();
-                if (fw.T2 == default)
+
+                var r = fw.AbpUserConfiguration?.Auth?.GrantedPermissions?.Keys;
+                if (r == null)
                     return [];
 
-                await fw.T2;
-               // if (fw.AbpUserConfiguration != null && fw.AbpUserConfiguration.Auth != default)
-               // {
-                    //Console.WriteLine(JsonConvert.SerializeObject(fw.AbpUserConfiguration.Auth));
-                    return fw.AbpUserConfiguration.Auth.GrantedPermissions.Keys;
-              //  }
-              //  return [];
+                return r;
+
             })
             .AddCascadingAuthenticationState();
             //.AddTransient<FileHelper>()
             //.AddZLJBlazorClient()
             //.AddScoped(AppContainer.App);
             services.AddScoped<AppContainer>();
-            services.TryAddTransient<IAbpSession, ClientAbpSession>();
-            //services.TryAddSingleton<IPermissionChecker, ClientPermissionChecker>();
-            services.TryAddTransient<ISettingManager, ClientSettingManager>();
-            services.TryAddTransient<IUserNavigationManager, ClientNavigationManager>();
-            services.TryAddTransient<IFeatureChecker, ClientFeatureChecker>();
-            services.TryAddTransient<ISessionAppService, SessionAppService>();
+           
             //services.TryAddSingleton<IObjectMapper, AutoMapperObjectMapper>();
             services.TryAddScoped<CommonConnection>();
             services.AddAutoMapper(typeof(AppContainer));

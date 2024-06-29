@@ -181,7 +181,6 @@
 		<text name="CanBeEmptyToLoginAsHost" value="留空以主租户登录." />
 		<text name="Register" value="注册" />
 		<text name="OrLoginWith" value="其他登录方式" />
-		<text name="WaitingForActivationMessage" value="你的帐户正在等待管理员激活." />
 		<text name="TenantSelection" value="租户选择" />
 		<text name="TenantSelection_Detail" value="请选择其中一个租户." />
 		<text name="Logout" value="注销" />

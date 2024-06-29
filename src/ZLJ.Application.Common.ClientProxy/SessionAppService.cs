@@ -15,7 +15,7 @@ namespace ZLJ.Application.Common.ClientProxy
         public SessionAppService(IHttpClientFactory httpClientFactory)
         {
             httpClient = httpClientFactory.CreateHttpClientCommon();
-            Console.WriteLine( "qqqqqqqqq:"+ httpClient.BaseAddress);
+           // Console.WriteLine( "qqqqqqqqq:"+ httpClient.BaseAddress);
         }
 
         public async Task<GetCurrentLoginInformationsOutput> GetCurrentLoginInformations()

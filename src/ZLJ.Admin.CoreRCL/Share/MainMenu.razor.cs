@@ -3,17 +3,14 @@ using Abp.Runtime.Session;
 using AntDesign;
 using BXJG.Common.Events;
 using BXJG.Utils.RCL;
+using Microsoft.Extensions.Logging;
 
 namespace ZLJ.Admin.CoreRCL.Share
 {
     public partial class MainMenu
     {
-        [Inject]
-        public IUserNavigationManager UserNavigationManager { get; set; }// => ScopedServices.GetRequiredService<IUserNavigationManager>();
 
-        IAbpSession abpSession => ScopedServices.GetRequiredService<IAbpSession>();
-
-        UserMenu menu = new UserMenu() { Items = new List<UserMenuItem>() };
+        UserMenu menu => AppContainer.AbpUserConfiguration?.Nav?.Menus?["MainMenu"] ?? new UserMenu { Items = new List<UserMenuItem>() };
 
         [Inject]
         public AppContainer AppContainer { get; set; }
@@ -29,16 +26,10 @@ namespace ZLJ.Admin.CoreRCL.Share
         ///// </summary>
         //bool collapsed => mmc > 0;
         //MenuMode MenuMode => collapsed ? AntDesign.MenuMode.Inline : AntDesign.MenuMode.Vertical;
-        IDisposable sj;
 
-        //[Inject]
-        //IZhongjieProvider sdfsdf { get; set; }
-        public void Dispose()
-        {
-            sj?.Dispose();
+        [Inject]
+        public ILogger<MainMenu> Logger { get; set; }
 
-            // subscription.Dispose();
-        }
 
         //静态传入auto，不能用级联，或者可以试试全局级联
         //https://learn.microsoft.com/zh-cn/aspnet/core/blazor/components/cascading-values-and-parameters?view=aspnetcore-8.0#cascading-valuesparameters-and-render-mode-boundaries
@@ -60,7 +51,9 @@ namespace ZLJ.Admin.CoreRCL.Share
         //public IMessageService MessageService { get; set; }
         protected override async Task OnInitializedAsync()
         {
-            Console.WriteLine(  "owncoponent组件中inject的appcontainer："+ AppContainer.GetHashCode());
+            Logger.LogDebug("appcontainer：" + AppContainer.GetHashCode());
+         //   await Task.Delay(5000);
+          //  menu = 
             await base.OnInitializedAsync();
             //var zhongjie = sdfsdf.GetCurrent();
             ////注意预渲染
@@ -78,24 +71,7 @@ namespace ZLJ.Admin.CoreRCL.Share
             //   {
             //      await Console.Out.WriteLineAsync(   "没有从缓存中获取到菜单");
             //     menu = new UserMenu() { Items = new List<UserMenuItem>() };//这里初始化下，否则界面渲染为空估计要报错
-            if (abpSession.UserId.HasValue)
-            {
-                _ = UserNavigationManager.GetMenuAsync("MainMenu", new Abp.UserIdentifier(abpSession.TenantId, abpSession.UserId.Value)).ContinueWith(t =>
-                {
-                    if (t==default)
-                    {
-                        return;
-                    }
-
-                    menu = t.Result;
-                    //if (menu != null)
-                    //{ 
-                    //    //menu.
-                    //    menu.Items = menu.Items.OrderBy(c=>c.Order).ToList();
-                    //}
-                    InvokeAsync(StateHasChanged);
-                });
-            }
+          
             //  }
         }
 

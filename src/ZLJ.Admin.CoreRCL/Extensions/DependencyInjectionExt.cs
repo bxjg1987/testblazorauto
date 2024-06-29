@@ -1,4 +1,5 @@
 ﻿using BXJG.Common.Http;
+using BXJG.Utils.RCL;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IServiceCollection AddAdminBlazor(this IServiceCollection services)
         {
+         
             BXJGHttpClientExt.DefaultFctory = f => f.CreateHttpClientAdmin();
             return services.AddZLJRCL().AddAutoMapper(typeof(DependencyInjectionExt));
         }

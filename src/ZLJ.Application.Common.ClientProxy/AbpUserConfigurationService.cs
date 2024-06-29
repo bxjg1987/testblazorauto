@@ -25,5 +25,9 @@ namespace ZLJ.Application.Common.ClientProxy
             return await _httpClient.Post<AbpUserConfigurationDto>("AbpUserConfiguration/getall");
          //   return await CreateHttpClient().GetFromJsonAsync<AbpUserConfigurationDto>("AbpUserConfiguration/getall");
         }
+
+        public async Task<AbpUserAuthConfigDto> GetPermissions() {
+            return await _httpClient.Get<AbpUserAuthConfigDto>("api/AbpUserConfiguration/GetAllGrantedPermissions");
+        }
     }
 }

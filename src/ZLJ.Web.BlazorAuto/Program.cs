@@ -10,6 +10,7 @@ using BXJG.Utils.RCL;
 using NUglify.Html;
 using AntDesign;
 using ZLJ.Application.Common.ClientProxy;
+using Microsoft.Extensions.DependencyInjection;
 
 //JsonSerializerOptions.Default.PropertyNameCaseInsensitive = true;
 
@@ -25,11 +26,13 @@ var builder = WebApplication.CreateBuilder(args);
 //    opt.SlidingExpiration = true;
 //    opt.ExpireTimeSpan = TimeSpan.FromHours(5);
 //});
-builder.Services.AddAuthentication(/*CookieAuthenticationDefaults.AuthenticationScheme*/ opt => {
+builder.Services.AddAuthentication(/*CookieAuthenticationDefaults.AuthenticationScheme*/ opt =>
+{
     //不加这个，在调用HttpContext.SiginAsync会报错，参考：https://learn.microsoft.com/zh-cn/dotnet/core/compatibility/aspnetcore#identity-signinasync-throws-exception-for-unauthenticated-identity
     opt.RequireAuthenticatedSignIn = false;
     //opt.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-}).AddCookie(x => {
+}).AddCookie(x =>
+{
     //登录时，根据accessToken的过期时间去设置
     //x.SlidingExpiration = true;
     //x.Cookie.Expiration = TimeSpan.FromDays(1);
@@ -100,36 +103,27 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 
-//app.Use(async (context, next) =>
-//{
-//    var appContainer = context.RequestServices.GetRequiredService<AppContainer>();
-//    Console.WriteLine("http请求中的appcontainer：" + appContainer.GetHashCode());
-//    var sessionAppService = context.RequestServices.GetRequiredService<SessionAppService>();
-//    if (context.User.Identity!=default&&  context.User.Identity.IsAuthenticated)
-//    {
-//        appContainer.T1 = sessionAppService.GetCurrentLoginInformations().ContinueWith(t =>
-//        {
-//            appContainer.CurrentLoginInformations = t.Result;
-//        });
-//    }
-//    var abpUserCfgService = context.RequestServices.GetRequiredService<AbpUserConfigurationService>();
-//    appContainer.T2 = abpUserCfgService.GetAll().ContinueWith(t =>
-//    {
-//        appContainer.AbpUserConfiguration = t.Result;
-//        //appContainer.AbpUserConfiguration.Nav.Menus.ForEach(x =>
-//        //{
-//        //    x.Value.Items.RecursionDown((a, b) =>
-//        //    {
-//        //        b.Items = b.Items.OrderBy(m => m.Order).ToList();
-//        //        return true;
-//        //    });
-//        //    x.Value.Items = x.Value.Items.OrderBy(c => c.Order).ToList();
-//        //});
-//    });
-//    // Do work that can write to the Response.
-//    await next.Invoke();
-//    // Do logging or other work that doesn't write to the Response.
-//});
+app.Use(async (context, next) =>
+{
+    var appContainer = context.RequestServices.GetRequiredService<AppContainer>();
+  
+    app.Logger.LogDebug("服务端全局状态初始化中间件执行。appcontainer对象：" + appContainer.GetHashCode());
+    //if (appContainer.CurrentLoginInformations==default&& context.User.Identity != default && context.User.Identity.IsAuthenticated)
+    //{
+    //    var sessionAppService = context.RequestServices.GetRequiredService<SessionAppService>();
+
+    //    appContainer.CurrentLoginInformations =await  sessionAppService.GetCurrentLoginInformations();
+    //}
+    var abpUserCfgService = context.RequestServices.GetRequiredService<AbpUserConfigurationService>();
+    appContainer.AbpUserConfiguration = new Abp.Web.Models.AbpUserConfiguration.AbpUserConfigurationDto { 
+        Auth = await abpUserCfgService.GetPermissions()
+    };
+    //已server模式运行时，app将appcontainer传递给route时会报错，wasm模式时没有问题
+   // appContainer.AbpUserConfiguration.Localization.Values = default;
+    // Do work that can write to the Response.
+    await next.Invoke();
+    // Do logging or other work that doesn't write to the Response.
+});
 
 app.UseAuthorization();
 app.UseAntiforgery();

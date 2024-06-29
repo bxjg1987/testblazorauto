@@ -41,10 +41,10 @@ F12查看浏览器日志，以确定它是否在浏览器种执行
 
 
 @code {
-   // IDisposable sj;
+    // IDisposable sj;
     //  Zhongjie zhongjie;
     [Inject]
-    IZhongjieProvider sdfsdf { get; set; }
+    private Zhongjie sdfsdf{ get; }
     public void Dispose()
     {
        // sj?.Dispose();
@@ -61,7 +61,7 @@ F12查看浏览器日志，以确定它是否在浏览器种执行
     }
     async Task sjzxcs()
     {
-        await sdfsdf.GetCurrent().Chufa("aaa");
+        await sdfsdf.Chufa("aaa");
     }
 #if !DEBUG
     [AbpExceptionInterceptor]

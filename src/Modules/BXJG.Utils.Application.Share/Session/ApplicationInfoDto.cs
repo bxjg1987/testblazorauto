@@ -9,7 +9,7 @@ namespace BXJG.Utils.Application.Share.Session
 
         public DateTime ReleaseDate { get; set; }
 
-        public Dictionary<string, bool> Features { get; set; }
+        public Dictionary<string, bool> Features { get; set; }=new Dictionary<string, bool>();
 
         public string RunTimeVersion { get; set; }
 

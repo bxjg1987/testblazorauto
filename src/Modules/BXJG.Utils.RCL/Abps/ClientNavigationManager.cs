@@ -37,11 +37,8 @@ namespace BXJG.Utils.RCL.Abps
             //        Items = new List<UserMenuItem>()
             //    }; 
             //}
-            Console.WriteLine("usermanager："+_appContainer.GetHashCode());
-            await Task.Delay(5000);
-           // if (_appContainer.T2 == default) return null;
-            await _appContainer.T2;
-            return _appContainer.AbpUserConfiguration.Nav.Menus[menuName];
+  
+            return _appContainer.AbpUserConfiguration?.Nav?.Menus?[menuName];
         }
 
         public async Task<IReadOnlyList<UserMenu>> GetMenusAsync(UserIdentifier user)

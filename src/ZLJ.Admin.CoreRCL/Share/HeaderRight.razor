@@ -1,8 +1,9 @@
-﻿@using BXJG.Utils.Application.Share.Session
+﻿@using BXJG.Common.Events
+@using BXJG.Utils.Application.Share.Session
 @using BXJG.Utils.RCL
 
 @inject NavigationManager nav
-@inherits OwningComponentBase
+@implements IDisposable
 
 <Space @attributes=AdditionalAttributes Size="@("large")">
     @if (loginInformations!=default)
@@ -45,25 +46,34 @@
     [Parameter(CaptureUnmatchedValues = true)]
     public IDictionary<string, object>? AdditionalAttributes { get; set; }
 
+    [Inject]
+    public Zhongjie Zhongjie { get; set; }
 
+    bool MainMenuCollapsed;
+    [Inject]
+    public ILogger<StaticLayout> Logger { get; set; }
 
     [Inject]
     public AppContainer AppContainer { get; set; }
-
+    IDisposable appContainerInited;
     //bool isAuthed => loginInformations.User != default && loginInformations.User.Id > 0;
     GetCurrentLoginInformationsOutput loginInformations => AppContainer.CurrentLoginInformations;// new GetCurrentLoginInformationsOutput();
+
+    protected override void OnInitialized()
+    { 
+      //   appContainerInited = Zhongjie.Zhuce( async () =>
+      // {
+      //     appContainerInited?.Dispose();
+      //     this.Logger.LogDebug("全局状态初始化处理事件执行！");
+      //    await InvokeAsync(StateHasChanged);
+      // },"appContainerInited");
+        base.OnInitialized();
+    }
+
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        //isAuthed = (await authState.GetAuthenticationStateAsync()).User.Identity.IsAuthenticated;
-        await Task.Delay(5000);
-        if (AppContainer.T1!=default)
-       {     _ = AppContainer.T1.ContinueWith(tempTask =>
-            {
-                //loginInformations = AppContainer.CurrentLoginInformations;
-                InvokeAsync(StateHasChanged);
-            });
-       }
+
     }
     void UserCenterClick(string url)
     {
@@ -73,5 +83,9 @@
     void LogoutClick(MouseEventArgs e)
     {
         nav.NavigateTo("/account/logout", true);
+    }
+    public  void Dispose()
+    {
+        appContainerInited?.Dispose();
     }
 }

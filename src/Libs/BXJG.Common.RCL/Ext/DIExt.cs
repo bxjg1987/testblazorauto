@@ -1,7 +1,6 @@
 ﻿using BXJG.Common.Events;
 using BXJG.Common.Http;
 using BXJG.Common.RCL.Auth;
-using BXJG.Common.RCL.Events;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -52,7 +51,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IServiceCollection AddCommonRCLClient(this IServiceCollection services)
         {
-            services.TryAddSingleton<IZhongjieProvider, ZhongjieProvider>();
+          
             services.AddSingleton<AuthenticationStateProvider, PersistentAuthenticationStateProvider>();
             services.TryAddSingleton<IAccessTokenProvider>(s => s.GetRequiredService<AuthenticationStateProvider>() as PersistentAuthenticationStateProvider);
             return services;

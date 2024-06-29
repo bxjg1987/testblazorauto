@@ -1,9 +1,11 @@
 ﻿using Abp.Application.Navigation;
 using Abp.Notifications;
 using Abp.Threading;
+using AntDesign;
 using BXJG.Common.Events;
 using BXJG.Utils.RCL;
 using BXJG.Utils.RCL.SignalR;
+using Force.DeepCloner;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 using System.Net.Http;
@@ -21,45 +23,33 @@ namespace ZLJ.Admin.CoreRCL.Share
         public AbpUserConfigurationService abpUserCfgService { get; set; }
         [Inject]
         public SessionAppService sessionAppService { get; set; }
+
+
         [Inject]
-        public AppContainer appContainer { get; set; }
+        public AppContainer AppContainer { get; set; }
+
+
+
+
         [Inject]
         public AuthenticationStateProvider AuthenticationState { get; set; }
         [Inject]
         public ILogger<Routes> Logger { get; set; }
+        //public override async Task SetParametersAsync(ParameterView parameters)
+        //{
+        //    await base.SetParametersAsync(parameters);
+        //    AppContainer.AbpUserConfiguration.Localization.Values = new Dictionary<string, Dictionary<string, string>>();
+        //    foreach (var item in Bendihua)
+        //    {
+        //        AppContainer.AbpUserConfiguration.Localization.Values.Add(item.Key, item.Items);
+        //    }
+        //}
         protected override async Task OnInitializedAsync()
         {
-            Console.WriteLine("blazor路由中的appcontainer："+appContainer.GetHashCode());
-            var r = await AuthenticationState.GetAuthenticationStateAsync();
-            if (r.User.Identity.IsAuthenticated)
-            {
-                appContainer.T1 = sessionAppService.GetCurrentLoginInformations().ContinueWith(t =>
-                {
-                    appContainer.CurrentLoginInformations = t.Result;
-                });
-            }
 
-            //await Console.Out.WriteLineAsync("路由中的初始化执行了，正在初始化appContainer"+ appContainer.GetHashCode());
-            appContainer.T2 = abpUserCfgService.GetAll().ContinueWith(t =>
-            {
-                appContainer.AbpUserConfiguration = t.Result;
-
-                //appContainer.AbpUserConfiguration.Nav.Menus.ForEach(x =>
-                //{
-
-                //    x.Value.Items.RecursionDown((a, b) =>
-                //    {
-                //        b.Items = b.Items.OrderBy(m => m.Order).ToList();
-
-
-                //        return true;
-                //    });
-
-                //    x.Value.Items = x.Value.Items.OrderBy(c => c.Order).ToList();
-                //});
-            });
+            #region 全局消息
             this.Logger.LogDebug($"路由中的init执行，准备连接后端signalR...");
-            await Connection.ExecuteAsync();
+            //  await Connection.ExecuteAsync();
 
             this.Zhongjie.Zhuce<TenantNotification>(x =>
             {
@@ -69,7 +59,7 @@ namespace ZLJ.Admin.CoreRCL.Share
                 else if (x.Data is LocalizableMessageNotificationData b)
                     msg = b.Message.ToString();//这里需要前端做本地化处理
                 else
-                { 
+                {
                     //其它消息类型
                 }
 
@@ -94,6 +84,73 @@ namespace ZLJ.Admin.CoreRCL.Share
                 //其它类型的实时消息通知 这里继续判断处理
                 return ValueTask.CompletedTask;
             }, nameof(MessageNotificationData));
+            #endregion
+
+            //  Logger.LogDebug("blazor路由中的appcontainer："+AppContainer.GetHashCode());
+
+            //   AppContainer.DeepCloneTo(App); 
+            Logger.LogDebug("appcontainer：" + AppContainer.GetHashCode());
+
+            var ts = new List<Task>();
+
+            ts.Add(AuthenticationState.GetAuthenticationStateAsync().ContinueWith(async t =>
+            {
+                await Task.Delay(1000);
+                var r = t.Result;
+                if (r.User?.Identity != default && r.User.Identity.IsAuthenticated)
+                {
+                    AppContainer.CurrentLoginInformations = await sessionAppService.GetCurrentLoginInformations();
+                }
+            }).Unwrap());
+
+            //var r = await AuthenticationState.GetAuthenticationStateAsync();
+            //if (r.User?.Identity != default && r.User.Identity.IsAuthenticated)
+            //{
+            //    ts.Add(sessionAppService.GetCurrentLoginInformations().ContinueWith(t =>
+            //    {
+            //        AppContainer.CurrentLoginInformations = t.Result;
+            //    }));
+
+            //    // AppContainer.CurrentLoginInformations = await sessionAppService.GetCurrentLoginInformations();
+            //    //appContainer.T1 = sessionAppService.GetCurrentLoginInformations().ContinueWith(t =>
+            //    //{
+            //    //    appContainer.CurrentLoginInformations = t.Result;
+            //    //});
+            //}
+
+            ////await Console.Out.WriteLineAsync("路由中的初始化执行了，正在初始化appContainer"+ appContainer.GetHashCode());
+            ts.Add(abpUserCfgService.GetAll().ContinueWith(async t =>
+            {
+                await Task.Delay(3000);
+                AppContainer.AbpUserConfiguration = t.Result;
+            }).Unwrap());
+            //记得Unwrap
+            await Task.WhenAll(ts);
+            //  await InvokeAsync(  StateHasChanged);//没用
+            // StateHasChanged();//没用
+            await Zhongjie.Chufa("appContainerInited");
+            // StateHasChanged();//测试了，这个没用
+            // AppContainer.AbpUserConfiguration = await  abpUserCfgService.GetAll();
+
+
+
+            //     StateHasChanged();  
+            //await Task.Delay(5000);
+            //appContainer.AbpUserConfiguration.Nav.Menus.ForEach(x =>
+            //{
+
+            //    x.Value.Items.RecursionDown((a, b) =>
+            //    {
+            //        b.Items = b.Items.OrderBy(m => m.Order).ToList();
+
+
+            //        return true;
+            //    });
+
+            //    x.Value.Items = x.Value.Items.OrderBy(c => c.Order).ToList();
+            //});
+
+         
         }
         [Inject]
         public IMessageService MessageService { get; set; }

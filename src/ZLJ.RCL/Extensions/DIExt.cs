@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Abp.ObjectMapping;
 using BXJG.Utils.RCL;
-using BXJG.Utils.RCL.Abps;
 using BXJG.Utils.RCL.Helpers;
 using BXJG.Utils.Application.Share.Session;
 
@@ -24,10 +23,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IServiceCollection AddZLJRCL(this IServiceCollection services)
         {
-            
             //不好实现，所以不要使用多语言
             //services.TryAddSingleton<ILocalizationManager, NullLocalizationManager>();
-            return services.AddAntDesign().UseBXJGUtilsRCL();
+            return services.UseBXJGUtilsRCL().AddAntDesign();
         }
         ///// <summary>
         ///// 本项目，所有应用，前后端都要注册的
