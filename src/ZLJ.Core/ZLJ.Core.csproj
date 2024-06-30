@@ -56,7 +56,7 @@
     <PackageReference Include="BXJG.Utils" Version="1.2.2" />-->
 		<!--<PackageReference Include="BXJG.WorkOrder.Core" Version="1.2.1" />-->
 		<PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="4.1.0" />
-		<PackageReference Include="DistributedLock.Core" Version="1.0.6" />
+		<PackageReference Include="DistributedLock.Core" Version="1.0.7" />
 		<PackageReference Include="Hangfire.Core" Version="1.8.14" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.6" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="8.0.0" />

@@ -83,7 +83,7 @@
 		<PackageReference Include="Abp.HangFire.AspNetCore" Version="9.2.2" />
 		<!--<PackageReference Include="BXJG.Common.Web" Version="*" />
 		<PackageReference Include="BXJG.Utils.RCL" Version="*" />-->
-		<PackageReference Include="DistributedLock.SqlServer" Version="1.0.4" />
+		<PackageReference Include="DistributedLock.SqlServer" Version="1.0.5" />
 		<PackageReference Include="Magicodes.IE.Excel.AspNetCore" Version="2.7.5.1" />
 		<!--<PackageReference Include="BXJG.Utils.Web" Version="1.2.1" />-->
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.6" />

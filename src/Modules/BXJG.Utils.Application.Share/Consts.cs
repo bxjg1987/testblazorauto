@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BXJG.Utils.Application.Share.Session;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json;
@@ -8,6 +9,8 @@ namespace BXJG.Utils.Application.Share
     public class Consts
     {
         public static readonly JsonSerializerOptions JsonSerializerOptions =new  JsonSerializerOptions( JsonSerializerDefaults.Web);
+
+        public const string TongyongLianjie = "TongyongLianjie";
 
         ///// <summary>
         ///// 配置需要跟后端api匹配

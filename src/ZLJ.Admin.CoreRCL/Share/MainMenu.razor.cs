@@ -1,5 +1,6 @@
 ﻿using Abp.Application.Navigation;
 using Abp.Runtime.Session;
+using Abp.Web.Models.AbpUserConfiguration;
 using AntDesign;
 using BXJG.Common.Events;
 using BXJG.Utils.RCL;
@@ -13,7 +14,7 @@ namespace ZLJ.Admin.CoreRCL.Share
         UserMenu menu;// => AppContainer.AbpUserConfiguration?.Nav?.Menus?["MainMenu"];
 
         [Inject]
-        public AppContainer AppContainer { get; set; }
+        public Task<AbpUserConfigurationDto> AppContainer { get; set; }
 
         //[Inject]
         //protected PersistentComponentState state { get; private set; }
@@ -54,7 +55,7 @@ namespace ZLJ.Admin.CoreRCL.Share
         protected override async Task OnInitializedAsync()
         {
             Logger.LogDebug("appcontainer：" + AppContainer.GetHashCode());
-            menu = (await AppContainer.AbpUserConfiguration)?.Nav?.Menus?["MainMenu"];
+            menu = (await AppContainer)?.Nav?.Menus?["MainMenu"];
          //   await Task.Delay(5000);
           //  menu = 
             await base.OnInitializedAsync();

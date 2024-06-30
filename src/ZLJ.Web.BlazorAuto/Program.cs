@@ -69,14 +69,14 @@ builder.Services.AddAdminApiClientProxy(hc =>
 
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddDistributedMemoryCache();
+//builder.Services.AddDistributedMemoryCache();
 
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = TimeSpan.FromMinutes(2);//session 滑动过期时间
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;//对于应用来说是必须的，绕过用户同意
-});
+//builder.Services.AddSession(options =>
+//{
+//    options.IdleTimeout = TimeSpan.FromMinutes(2);//session 滑动过期时间
+//    options.Cookie.HttpOnly = true;
+//    options.Cookie.IsEssential = true;//对于应用来说是必须的，绕过用户同意
+//});
 
 var app = builder.Build();
 
@@ -111,70 +111,71 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 
-app.UseSession();
+//app.UseSession();
 //全局状态会初始化三次，blazor server一次，wasm一次，http请求一次。
 //实际代码中在http请求一次，也就是这里，blazor由于路由共享，在路由中初始化一次即可。
-app.Use(async (context, next) =>
-{
-    /*
-     * 目前的项目结构，这里的逻辑不太好封装，顶多搞到当前项目的单独类文件中
-     * http中这次的初始化，目前好像只有授权时是必须的，所以这里仅初始化授权
-     * 使用session延长全局状态的有效期，也不用太长，因为进入blazor后，基本不会再发啥http请求。
-     */
+//放容器中后，授权需要时才会去调用
+//app.Use(async (context, next) =>
+//{
+//    /*
+//     * 目前的项目结构，这里的逻辑不太好封装，顶多搞到当前项目的单独类文件中
+//     * http中这次的初始化，目前好像只有授权时是必须的，所以这里仅初始化授权
+//     * 使用session延长全局状态的有效期，也不用太长，因为进入blazor后，基本不会再发啥http请求。
+//     */
 
-    var appContainer = context.RequestServices.GetRequiredService<AppContainer>();
-    if (context.User?.Identity != default && context.User.Identity.IsAuthenticated)
-    {
-        const string k = "grantedPermissions";
+//    var appContainer = context.RequestServices.GetRequiredService<AppContainer>();
+//    if (context.User?.Identity != default && context.User.Identity.IsAuthenticated)
+//    {
+//        const string k = "grantedPermissions";
 
-        var r = context.Session.GetString(k);
-        //Dictionary<string, string> ps;
-        if (r.IsNotNullOrWhiteSpaceBXJG())
-        {
-            var ps = JsonSerializer.Deserialize<string[]>(r);
-            appContainer.AbpUserConfiguration = Task.FromResult(new Abp.Web.Models.AbpUserConfiguration.AbpUserConfigurationDto
-            {
-                Auth = new Abp.Web.Models.AbpUserConfiguration.AbpUserAuthConfigDto
-                {
-                    GrantedPermissions = ps.ToDictionary(x => x, x => true.ToString())
-                }
-            });
-        }
-        else
-        {
-            app.Logger.LogDebug("http请求时，从服务端拿全局状态中的权限字符串。appcontainer对象：" + appContainer.GetHashCode());
-            var abpUserCfgService = context.RequestServices.GetRequiredService<AbpUserConfigurationService>();
-            appContainer.AbpUserConfiguration = abpUserCfgService.GetPermissions().ContinueWith(t =>
-            {
-                var zfc = JsonSerializer.Serialize(t.Result.GrantedPermissions.Select(x => x.Key));
-                // app.Logger.LogDebug("已授权：" + zfc);
-                context.Session.SetString(k, zfc);
-                return new Abp.Web.Models.AbpUserConfiguration.AbpUserConfigurationDto
-                {
-                    Auth = new Abp.Web.Models.AbpUserConfiguration.AbpUserAuthConfigDto { GrantedPermissions = t.Result.GrantedPermissions }
-                };
-            });
-        }
-    }
-    else
-    {
-        appContainer.AbpUserConfiguration = Task.FromResult(new Abp.Web.Models.AbpUserConfiguration.AbpUserConfigurationDto
-        {
-            Auth = new Abp.Web.Models.AbpUserConfiguration.AbpUserAuthConfigDto
-            {
-                GrantedPermissions = new Dictionary<string, string>()
-            }
-        });
-    }
-    //appContainer.AbpUserConfiguration = new Abp.Web.Models.AbpUserConfiguration.AbpUserConfigurationDto { 
-    //    Auth = await abpUserCfgService.GetPermissions()
-    //};
-    //已server模式运行时，app将appcontainer传递给route时会报错，wasm模式时没有问题
-    // appContainer.AbpUserConfiguration.Localization.Values = default;
-    // Do work that can write to the Response.
-    await next.Invoke();
-    // Do logging or other work that doesn't write to the Response.
-});
+//        var r = context.Session.GetString(k);
+//        //Dictionary<string, string> ps;
+//        if (r.IsNotNullOrWhiteSpaceBXJG())
+//        {
+//            var ps = JsonSerializer.Deserialize<string[]>(r);
+//            appContainer.AbpUserConfiguration = Task.FromResult(new Abp.Web.Models.AbpUserConfiguration.AbpUserConfigurationDto
+//            {
+//                Auth = new Abp.Web.Models.AbpUserConfiguration.AbpUserAuthConfigDto
+//                {
+//                    GrantedPermissions = ps.ToDictionary(x => x, x => true.ToString())
+//                }
+//            });
+//        }
+//        else
+//        {
+//            app.Logger.LogDebug("http请求时，从服务端拿全局状态中的权限字符串。appcontainer对象：" + appContainer.GetHashCode());
+//            var abpUserCfgService = context.RequestServices.GetRequiredService<AbpUserConfigurationService>();
+//            appContainer.AbpUserConfiguration = abpUserCfgService.GetPermissions().ContinueWith(t =>
+//            {
+//                var zfc = JsonSerializer.Serialize(t.Result.GrantedPermissions.Select(x => x.Key));
+//                // app.Logger.LogDebug("已授权：" + zfc);
+//                context.Session.SetString(k, zfc);
+//                return new Abp.Web.Models.AbpUserConfiguration.AbpUserConfigurationDto
+//                {
+//                    Auth = new Abp.Web.Models.AbpUserConfiguration.AbpUserAuthConfigDto { GrantedPermissions = t.Result.GrantedPermissions }
+//                };
+//            });
+//        }
+//    }
+//    else
+//    {
+//        appContainer.AbpUserConfiguration = Task.FromResult(new Abp.Web.Models.AbpUserConfiguration.AbpUserConfigurationDto
+//        {
+//            Auth = new Abp.Web.Models.AbpUserConfiguration.AbpUserAuthConfigDto
+//            {
+//                GrantedPermissions = new Dictionary<string, string>()
+//            }
+//        });
+//    }
+//    //appContainer.AbpUserConfiguration = new Abp.Web.Models.AbpUserConfiguration.AbpUserConfigurationDto { 
+//    //    Auth = await abpUserCfgService.GetPermissions()
+//    //};
+//    //已server模式运行时，app将appcontainer传递给route时会报错，wasm模式时没有问题
+//    // appContainer.AbpUserConfiguration.Localization.Values = default;
+//    // Do work that can write to the Response.
+//    await next.Invoke();
+//    // Do logging or other work that doesn't write to the Response.
+//});
 
 app.UseAuthorization();
 app.UseAntiforgery();

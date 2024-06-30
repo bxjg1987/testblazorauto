@@ -16,50 +16,50 @@ using System.Threading.Tasks;
 
 namespace BXJG.Utils.RCL.SignalR
 {
-    //public static class CommonHubExt
-    //{
-    //    //public const string CommonSignalR = "CommonSignalR";
-    //    /// <summary>
-    //    /// 注册abp通知处理器
-    //    /// 当通知抵达时，通过zhongjie触发事件
-    //    /// </summary>
-    //    /// <param name="Connection"></param>
-    //    /// <param name="zhongjie"></param>
-    //    /// <param name="logger"></param>
-    //    /// <returns></returns>
-    //    public static HubConnection RegisterUserNotification(this HubConnection Connection, Zhongjie zhongjie, ILogger? logger = null)
-    //    {
-    //        if (logger == default)
-    //            logger = NullLogger.Instance;
-    //        Connection.On<Abp.Notifications.UserNotification>("getNotification", async msg =>
-    //        {
-    //            logger.LogDebug($"通知连接接受到消息{System.Text.Json.JsonSerializer.Serialize(msg)}，准备触发事件。");
-    //            //var str = System.Text.Json.JsonSerializer.Serialize(msg.Notification.Data.Properties);
-    //            string eventName = default;
-    //            if (msg.Notification.Data.Properties.Count == 1 && msg.Notification.Data.Properties.TryGetValue("Message", out var jg))
-    //            {
-    //                msg.Notification.Data = new MessageNotificationData(jg.ToString());
-    //                eventName = nameof(MessageNotificationData);
+    public static class CommonHubExt
+    {
+        //public const string CommonSignalR = "CommonSignalR";
+        /// <summary>
+        /// 注册abp通知处理器
+        /// 当通知抵达时，通过zhongjie触发事件
+        /// </summary>
+        /// <param name="Connection"></param>
+        /// <param name="zhongjie"></param>
+        /// <param name="logger"></param>
+        /// <returns></returns>
+        public static HubConnection RegisterUserNotification(this HubConnection Connection, Zhongjie zhongjie, ILogger? logger = null)
+        {
+            if (logger == default)
+                logger = NullLogger.Instance;
+            Connection.On<Abp.Notifications.UserNotification>("getNotification", async msg =>
+            {
+                logger.LogDebug($"通知连接接受到消息{System.Text.Json.JsonSerializer.Serialize(msg)}，准备触发事件。");
+                //var str = System.Text.Json.JsonSerializer.Serialize(msg.Notification.Data.Properties);
+                string eventName = default;
+                if (msg.Notification.Data.Properties.Count == 1 && msg.Notification.Data.Properties.TryGetValue("Message", out var jg))
+                {
+                    msg.Notification.Data = new MessageNotificationData(jg.ToString());
+                    eventName = nameof(MessageNotificationData);
 
-    //            }
-    //            else if (msg.Notification.Data.Properties.Count == 2 &&
-    //                     msg.Notification.Data.Properties.TryGetValue("SourceName", out var jg1) &&
-    //                     msg.Notification.Data.Properties.TryGetValue("Name", out var jg2))
-    //            {
-    //                msg.Notification.Data = new LocalizableMessageNotificationData(new Abp.Localization.LocalizableString(jg1.ToString(), jg2.ToString()));
-    //                eventName = nameof(LocalizableMessageNotificationData);
-    //            }
-    //            await zhongjie.Chufa(msg.Notification, eventName);
-    //        });
-    //        return Connection;
-    //    }
+                }
+                else if (msg.Notification.Data.Properties.Count == 2 &&
+                         msg.Notification.Data.Properties.TryGetValue("SourceName", out var jg1) &&
+                         msg.Notification.Data.Properties.TryGetValue("Name", out var jg2))
+                {
+                    msg.Notification.Data = new LocalizableMessageNotificationData(new Abp.Localization.LocalizableString(jg1.ToString(), jg2.ToString()));
+                    eventName = nameof(LocalizableMessageNotificationData);
+                }
+                await zhongjie.Chufa(msg.Notification, eventName);
+            });
+            return Connection;
+        }
 
-    //    //public static HttpConnectionOptions SetDefault(this HttpConnectionOptions opt, IAccessTokenProvider accessTokenProvider)
-    //    //{
-    //    //    opt.AccessTokenProvider = () => Task.FromResult(accessTokenProvider.GetEncryptedAccessToken());
-    //    //    return opt;
-    //    //}
-    //}
+        //public static HttpConnectionOptions SetDefault(this HttpConnectionOptions opt, IAccessTokenProvider accessTokenProvider)
+        //{
+        //    opt.AccessTokenProvider = () => Task.FromResult(accessTokenProvider.GetEncryptedAccessToken());
+        //    return opt;
+        //}
+    }
     /*
      * abp中通常有个全局的signalR
      * 通过这里的类去连接它
@@ -95,6 +95,7 @@ namespace BXJG.Utils.RCL.SignalR
                                                    {
                                                        x.AccessTokenProvider = () => Task.FromResult(accessTokenProvider.GetEncryptedAccessToken());
                                                    })
+               
                                                    .WithAutomaticReconnect()
                                                    .Build();
             Connection.On<Abp.Notifications.UserNotification>("getNotification", async msg =>

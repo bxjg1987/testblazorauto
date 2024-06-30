@@ -54,7 +54,7 @@
     public ILogger<StaticLayout> Logger { get; set; }
 
     [Inject]
-    public AppContainer AppContainer { get; set; }
+    public Task<GetCurrentLoginInformationsOutput> AppContainer { get; set; }
     //bool isAuthed => loginInformations.User != default && loginInformations.User.Id > 0;
     GetCurrentLoginInformationsOutput loginInformations;// => AppContainer.CurrentLoginInformations;// new GetCurrentLoginInformationsOutput();
 
@@ -62,7 +62,7 @@
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        loginInformations = await AppContainer.CurrentLoginInformations;
+        loginInformations = await AppContainer;
 
     }
     void UserCenterClick(string url)
