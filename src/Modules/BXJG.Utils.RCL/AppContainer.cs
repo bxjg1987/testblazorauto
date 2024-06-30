@@ -17,7 +17,7 @@ namespace BXJG.Utils.RCL
      * 
      * 注：http请求一个scope，blazorserver电路要给scope，组件inject时用的是电路scope，但owmbasecomponent是独立的scope
      * 
-     * 可以直接使用ioc作为全局状态容器，为了同时视频wasm和server模式，应注册为scope
+     * 可以直接使用ioc作为全局状态容器，为了同时适配wasm和server模式，应注册为scope
      * 当有多个这样的对象或后期增加时，每个对象都得去注册以便，还要考虑他们的初始化
      * 可能需要与后端多次交互。
      * 
@@ -31,7 +31,7 @@ namespace BXJG.Utils.RCL
     /// </summary>
     public class AppContainer
     {
-       // public Task Task { get; set; }
+        // public Task Task { get; set; }
         //public static readonly AppContainer App = new AppContainer();
 
         // public Task T1, T2;
@@ -39,12 +39,14 @@ namespace BXJG.Utils.RCL
         /// 没登陆时，仅加载一部分数据
         /// 登录后，加载完整数据
         /// </summary>
-        public  Task< AbpUserConfigurationDto> AbpUserConfiguration { get; set; }
+        public Task<AbpUserConfigurationDto> AbpUserConfiguration { get; set; }
         /// <summary>
         /// 仅登录后才有数据
         /// </summary>
-        public Task<GetCurrentLoginInformationsOutput> CurrentLoginInformations { get; set; } 
+        public Task<GetCurrentLoginInformationsOutput> CurrentLoginInformations { get; set; }
 
+
+        //public Lazy< Task<IEnumerable<string>> >
         //public IServiceProvider Services { get; set; }
         //// public UserInfo UserInfo { get; set; }
         ///// <summary>
@@ -53,5 +55,5 @@ namespace BXJG.Utils.RCL
         //public HubConnection CommonHubConnection { get; internal set; }
     }
 
-  
+
 }

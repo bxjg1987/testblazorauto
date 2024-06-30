@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <Compile Remove="Components\TreeSelect.cs" />
+    <Compile Remove="SignalR\CommonConnection.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,7 +40,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Libs\BXJG.Common.RCL\BXJG.Common.RCL.csproj" />
     <ProjectReference Include="..\BXJG.Utils.Application.ClientProxy\BXJG.Utils.Application.ClientProxy.csproj" />
-    <ProjectReference Include="..\BXJG.Utils.Application.Share\BXJG.Utils.Application.Share.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -52,6 +52,10 @@
 
   <ItemGroup>
     <None Include="Components\CascadingValueProvider.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="SignalR\" />
   </ItemGroup>
 
 

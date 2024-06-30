@@ -5,7 +5,6 @@ using AntDesign;
 using BXJG.Common.Events;
 using BXJG.Utils.Application.Share.Session;
 using BXJG.Utils.RCL;
-using BXJG.Utils.RCL.SignalR;
 using Force.DeepCloner;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
@@ -16,8 +15,8 @@ namespace ZLJ.Admin.CoreRCL.Share
 {
     public partial class Routes : IAsyncDisposable
     {
-        [Inject]
-        public CommonConnection Connection { get; set; }
+        //[Inject]
+        //public CommonConnection Connection { get; set; }
         [Inject]
         public Zhongjie Zhongjie { get; set; }
         [Inject]

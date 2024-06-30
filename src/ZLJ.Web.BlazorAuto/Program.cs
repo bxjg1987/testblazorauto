@@ -69,14 +69,14 @@ builder.Services.AddAdminApiClientProxy(hc =>
 
 builder.Services.AddHttpContextAccessor();
 
-//builder.Services.AddDistributedMemoryCache();
+builder.Services.AddDistributedMemoryCache();
 
-//builder.Services.AddSession(options =>
-//{
-//    options.IdleTimeout = TimeSpan.FromMinutes(2);
-//    options.Cookie.HttpOnly = true;
-//    options.Cookie.IsEssential = true;
-//});
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(2);//session 滑动过期时间
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;//对于应用来说是必须的，绕过用户同意
+});
 
 var app = builder.Build();
 
@@ -111,28 +111,61 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 
-//app.UseSession();
+app.UseSession();
+//全局状态会初始化三次，blazor server一次，wasm一次，http请求一次。
+//实际代码中在http请求一次，也就是这里，blazor由于路由共享，在路由中初始化一次即可。
 app.Use(async (context, next) =>
 {
+    /*
+     * 目前的项目结构，这里的逻辑不太好封装，顶多搞到当前项目的单独类文件中
+     * http中这次的初始化，目前好像只有授权时是必须的，所以这里仅初始化授权
+     * 使用session延长全局状态的有效期，也不用太长，因为进入blazor后，基本不会再发啥http请求。
+     */
+
     var appContainer = context.RequestServices.GetRequiredService<AppContainer>();
-
-    app.Logger.LogDebug("服务端全局状态初始化中间件执行。appcontainer对象：" + appContainer.GetHashCode());
-    //if (appContainer.CurrentLoginInformations==default&& context.User.Identity != default && context.User.Identity.IsAuthenticated)
-    //{
-    //    var sessionAppService = context.RequestServices.GetRequiredService<SessionAppService>();
-
-    //    appContainer.CurrentLoginInformations =await  sessionAppService.GetCurrentLoginInformations();
-    //}
-    var abpUserCfgService = context.RequestServices.GetRequiredService<AbpUserConfigurationService>();
-    //var session = context.RequestServices.GetRequiredService<ISession>();
-    //var hc =    session.GetString("myPermissions");
-    appContainer.AbpUserConfiguration = abpUserCfgService.GetPermissions().ContinueWith(t =>
+    if (context.User?.Identity != default && context.User.Identity.IsAuthenticated)
     {
-        return new Abp.Web.Models.AbpUserConfiguration.AbpUserConfigurationDto
+        const string k = "grantedPermissions";
+
+        var r = context.Session.GetString(k);
+        //Dictionary<string, string> ps;
+        if (r.IsNotNullOrWhiteSpaceBXJG())
         {
-            Auth = t.Result
-        };
-    });
+            var ps = JsonSerializer.Deserialize<string[]>(r);
+            appContainer.AbpUserConfiguration = Task.FromResult(new Abp.Web.Models.AbpUserConfiguration.AbpUserConfigurationDto
+            {
+                Auth = new Abp.Web.Models.AbpUserConfiguration.AbpUserAuthConfigDto
+                {
+                    GrantedPermissions = ps.ToDictionary(x => x, x => true.ToString())
+                }
+            });
+        }
+        else
+        {
+            app.Logger.LogDebug("http请求时，从服务端拿全局状态中的权限字符串。appcontainer对象：" + appContainer.GetHashCode());
+            var abpUserCfgService = context.RequestServices.GetRequiredService<AbpUserConfigurationService>();
+            appContainer.AbpUserConfiguration = abpUserCfgService.GetPermissions().ContinueWith(t =>
+            {
+                var zfc = JsonSerializer.Serialize(t.Result.GrantedPermissions.Select(x => x.Key));
+                // app.Logger.LogDebug("已授权：" + zfc);
+                context.Session.SetString(k, zfc);
+                return new Abp.Web.Models.AbpUserConfiguration.AbpUserConfigurationDto
+                {
+                    Auth = new Abp.Web.Models.AbpUserConfiguration.AbpUserAuthConfigDto { GrantedPermissions = t.Result.GrantedPermissions }
+                };
+            });
+        }
+    }
+    else
+    {
+        appContainer.AbpUserConfiguration = Task.FromResult(new Abp.Web.Models.AbpUserConfiguration.AbpUserConfigurationDto
+        {
+            Auth = new Abp.Web.Models.AbpUserConfiguration.AbpUserAuthConfigDto
+            {
+                GrantedPermissions = new Dictionary<string, string>()
+            }
+        });
+    }
     //appContainer.AbpUserConfiguration = new Abp.Web.Models.AbpUserConfiguration.AbpUserConfigurationDto { 
     //    Auth = await abpUserCfgService.GetPermissions()
     //};

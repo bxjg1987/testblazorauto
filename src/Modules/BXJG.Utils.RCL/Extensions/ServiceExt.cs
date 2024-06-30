@@ -6,7 +6,6 @@ using Abp.Runtime.Session;
 using BXJG.Utils.Application.Share.Session;
 using BXJG.Utils.RCL;
 using BXJG.Utils.RCL.Helpers;
-using BXJG.Utils.RCL.SignalR;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -45,7 +44,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<AppContainer>();
            
             //services.TryAddSingleton<IObjectMapper, AutoMapperObjectMapper>();
-            services.TryAddScoped<CommonConnection>();
+            //services.TryAddScoped<CommonConnection>();
             services.AddAutoMapper(typeof(AppContainer));
 
             services.TryAddTransient<FileHelper>();
