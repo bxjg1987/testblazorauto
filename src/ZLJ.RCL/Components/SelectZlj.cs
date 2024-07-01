@@ -15,7 +15,12 @@ namespace ZLJ.RCL.Components
     /// <typeparam name="TItemValue"></typeparam>
     /// <typeparam name="TItem"></typeparam>
     public class SelectZlj<TItemValue, TItem> : Select<TItemValue, TItem>
-    {
+    {  
+        /// <summary>
+        /// 专门给肉夹馍aop用的，你不该调用这个
+        /// </summary>
+        [Inject]
+        public IServiceProvider Services { get; set; }
         [Inject]
         public IHttpClientFactory HttpClientFactory { get; set; }
 

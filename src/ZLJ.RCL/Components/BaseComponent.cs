@@ -15,7 +15,7 @@ namespace ZLJ.RCL.Components
     /// </summary>
     public abstract class BaseComponent : BXJG.Utils.RCL.Components.BaseComponent
     {
-
+     
         ////别担心，抽象的curd provider都不会继承BaseComponent
         //protected override HttpClient HttpClient => httpClient ??= ScopedServices.GetRequiredService<IHttpClientFactory>().CreateHttpClientCommon();
         /// <summary>

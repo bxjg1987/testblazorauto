@@ -32,7 +32,12 @@ namespace ZLJ.RCL.Components
     /// <typeparam name="TGetTreeForSelectOutput"></typeparam>
     public class TreeSelectZlj<TGetTreeForSelectOutput> : TreeSelect<string, TGetTreeForSelectOutput> where TGetTreeForSelectOutput : IGeneralTree<TGetTreeForSelectOutput>
         //where TGetNodesForSelectOutput : ComboboxItemDto 由于我们规定了统一使用树，所以这个约束没有必要
-    {
+    {  
+        /// <summary>
+        /// 专门给肉夹馍aop用的，你不该调用这个
+        /// </summary>
+        [Inject]
+        public IServiceProvider Services { get; set; }
         [Inject]
         public IHttpClientFactory HttpClientFactory { get; set; }
 
