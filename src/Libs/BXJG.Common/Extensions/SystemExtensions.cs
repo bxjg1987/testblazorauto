@@ -357,15 +357,15 @@ namespace System
         /// <param name="value"></param>
         /// <returns></returns>
         public static string GetDisplayName(this Enum value)
-            {
-                Type enumType = value.GetType();
-                FieldInfo field = enumType.GetField(value.ToString());
+        {
+            Type enumType = value.GetType();
+            FieldInfo field = enumType.GetField(value.ToString());
 
-                DisplayAttribute attr = Attribute.GetCustomAttribute(field, typeof(DisplayAttribute)) as DisplayAttribute;
+            DisplayAttribute attr = Attribute.GetCustomAttribute(field, typeof(DisplayAttribute)) as DisplayAttribute;
 
-                return attr == null ? value.ToString() : attr.Name;
-            }
-      
+            return attr == null ? value.ToString() : attr.Name;
+        }
+
 
         /// <summary>
         /// 想url追加参数，若重复则保留多个同名参数,若参数为空，则原样返回url，不会报错
@@ -529,8 +529,12 @@ namespace System
         /// <typeparam name="TInterface"></typeparam>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static bool IsImplementInterface<TInterface>(this Type type) {
-          return  type.GetInterfaces().Any(x => x.Equals(typeof(TInterface)));
+        public static bool IsImplementInterface<TInterface>(this Type type)
+        {
+            var r = typeof(TInterface).IsAssignableFrom(type);
+            //var sdfsd = type.GetInterfaces();
+            //var r = sdfsd.Any(x => x.Equals(typeof(TInterface)));
+            return r;
         }
         /// <summary>
         /// 判断指定类型是否是数值类型

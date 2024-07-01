@@ -14,10 +14,15 @@ namespace BXJG.Utils.RCL.Components
     /// 不跨项目、跨应用 共享
     /// </summary>
     public abstract class BaseComponent : BXJG.Common.RCL.CommonBaseComponent
-    {     
+    {
         /// <summary>
-           /// 身份验证状态，server、wasm的实现不同
-           /// </summary>
+        /// 专门给肉夹馍aop用的，你不该调用这个
+        /// </summary>
+        [Inject]
+        public IServiceProvider Services { get; set; }
+        /// <summary>
+        /// 身份验证状态，server、wasm的实现不同
+        /// </summary>
         [Inject]
         public AuthenticationStateProvider AuthStateProvider { get; set; }
         ///// <summary>

@@ -24,6 +24,7 @@ using Abp.Reflection.Extensions;
 using BXJG.Utils.Application.Share;
 using Abp.Threading;
 using BXJG.Utils.Application.Share.Dtos;
+using Abp.Auditing;
 
 namespace BXJG.Utils.Application
 {
@@ -63,6 +64,7 @@ namespace BXJG.Utils.Application
     /// <typeparam name="TGetAllInput">查询时输入参数的类型</typeparam>
     /// <typeparam name="TEntityDto">可选数据的dto</typeparam>
     [UnitOfWork(false)]
+    [DisableAuditing]
     public abstract class ProviderBaseAppService<TEntity, TGetAllInput, TEntityDto, TKey> : BXJGUtilsBaseAppService, IProviderBaseAppService<TGetAllInput, TEntityDto, TKey>
         where TEntity : class, IEntity<TKey>
     {

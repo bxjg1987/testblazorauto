@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
 using Abp.AspNetCore.Mvc.Controllers;
+using Abp.Auditing;
 using Abp.Authorization;
 using BXJG.Utils.Application.Share.Files;
 using BXJG.Utils.Files;
@@ -106,6 +107,7 @@ namespace BXJG.Utils.Web.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("{id}")]
+        [DisableAuditing]
         public async Task<PhysicalFileResult> DownloadThum(Guid id)
         {
             var r = await this.fileDownloader.Value.GetAbsolutePath(id);

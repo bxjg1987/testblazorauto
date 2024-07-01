@@ -31,6 +31,8 @@ namespace ZLJ.Admin.CoreRCL.Share
 
         [Inject(Key =Consts.TongyongLianjie)]
         public HubConnection HubConnection { get; set; }
+        [Inject]
+        public IServiceProvider ServiceProvider { get; set; }
 
         //[Inject]
         //public AuthenticationStateProvider AuthenticationState { get; set; }
@@ -48,6 +50,10 @@ namespace ZLJ.Admin.CoreRCL.Share
 
         protected override void OnInitialized()
         {
+            //AbpExceptionInterceptor1.Services.Value = ServiceProvider;
+            //AbpExceptionInterceptorAttribute.ServicesInBrower = ServiceProvider;
+            Console.WriteLine($"全局路由中的ioc实例：{ServiceProvider.GetHashCode()}");
+       
             base.OnInitialized();
 
             #region 全局消息
@@ -167,6 +173,11 @@ namespace ZLJ.Admin.CoreRCL.Share
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             await JSRuntime.InvokeVoidAsync("hideLoadingDiv");
+
+            if (firstRender)
+            {
+          
+            }
         }
 
         public ValueTask DisposeAsync()

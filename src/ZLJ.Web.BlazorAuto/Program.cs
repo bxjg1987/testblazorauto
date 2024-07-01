@@ -12,6 +12,7 @@ using AntDesign;
 using ZLJ.Application.Common.ClientProxy;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Http;
+using ZLJ.RCL.Interceptors;
 //JsonSerializerOptions.Default.PropertyNameCaseInsensitive = true;
 
 
@@ -110,7 +111,12 @@ app.UseStaticFiles();
 
 app.UseRouting();
 app.UseAuthentication();
-
+app.Use(async (context, next) =>
+{
+   // AbpExceptionInterceptor1.Services.Value = context.RequestServices;
+    Console.WriteLine($"http请求中间件中的ioc实例：{context.RequestServices.GetHashCode()}");
+    await next.Invoke();
+});
 //app.UseSession();
 //全局状态会初始化三次，blazor server一次，wasm一次，http请求一次。
 //实际代码中在http请求一次，也就是这里，blazor由于路由共享，在路由中初始化一次即可。

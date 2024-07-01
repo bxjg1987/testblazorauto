@@ -1,5 +1,6 @@
 ﻿using Abp.AspNetCore.Mvc.Authorization;
 using Abp.AspNetCore.Mvc.Controllers;
+using Abp.Auditing;
 using Abp.Authorization;
 using Abp.Web.Configuration;
 using Abp.Web.Models.AbpUserConfiguration;
@@ -28,6 +29,7 @@ namespace BXJG.Utils.Web.Controllers
 
     [Route("api/[controller]/[action]")]
     [ApiController]
+    [DisableAuditing]
     public class AbpUserConfigurationController : AbpController
     {
         //private readonly AbpUserConfigurationBuilder _abpUserConfigurationBuilder;

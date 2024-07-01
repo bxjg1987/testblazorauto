@@ -32,6 +32,7 @@ using BXJG.Utils.Application.Share.GeneralTree;
 using BXJG.Utils.GeneralTree;
 using BXJG.Common.Contracts;
 using BXJG.Utils.Application.Share.Dtos;
+using Abp.Auditing;
 
 namespace BXJG.Utils.Application.GeneralTree
 {
@@ -50,6 +51,7 @@ namespace BXJG.Utils.Application.GeneralTree
     /// <typeparam name="TGetNodesForSelectOutput"></typeparam>
     /// <typeparam name="TEntity"></typeparam>
     [UnitOfWork(false)]
+    [DisableAuditing]
     public class GeneralTreeProviderBaseAppService<TEntity,
                                                    TGetTreeForSelectInput,
                                                    TGetTreeForSelectOutput,
