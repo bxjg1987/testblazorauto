@@ -39,10 +39,7 @@ namespace ZLJ.RCL.Interceptors
         //中间件设置是有效的
         //public static readonly AsyncLocal<IServiceProvider> Services = new AsyncLocal<IServiceProvider>();
 
-        /// <summary>
-        /// 浏览器中，测试Services不行
-        /// </summary>
-        IServiceProvider services;
+     
 
         //IServiceProvider services => OperatingSystem.IsBrowser()?ServicesInBrower: AbpExceptionInterceptor1. Services.Value;
 
@@ -60,20 +57,11 @@ namespace ZLJ.RCL.Interceptors
 
         //public override Feature Features => Feature.Observe;//加了这个就不灵了，不晓得为啥
         //ComponentBase
-        public override void OnEntry(MethodContext context)
-        {
-            var sddf = context.TargetType.GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public);
-            var mb = sddf.Where(x => x.PropertyType.IsImplementInterface<IServiceProvider>());
-
-            PropertyInfo tm;
-            if (mb.Count() > 1)
-                tm = mb.Where(x => x.Name.Equals("services", StringComparison.OrdinalIgnoreCase)).Single();
-            else
-                tm = mb.Single();
-         
-            services = tm.GetValue(context.Target) as IServiceProvider;
-            base.OnEntry(context);
-        }
+        //public override void OnEntry(MethodContext context)
+        //{
+        
+        //    base.OnEntry(context);
+        //}
 
         //const string scopedServicesKey = nameof(scopedServicesKey);// "scopedServices";
         //const string loggerKey = nameof(loggerKey);
@@ -97,8 +85,25 @@ namespace ZLJ.RCL.Interceptors
 
         public override void OnException(MethodContext context)
         {
+            #region MyRegion
+            var sddf = context.TargetType.GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public);
+            var mb = sddf.Where(x => x.PropertyType.IsImplementInterface<IServiceProvider>());
 
+            PropertyInfo tm;
+            if (mb.Count() > 1)
+                tm = mb.Where(x => x.Name.Equals("services", StringComparison.OrdinalIgnoreCase)).Single();
+            else
+                tm = mb.Single();
+
+            var services = tm.GetValue(context.Target) as IServiceProvider;
+            #endregion
             Console.WriteLine($"全局异常拦截器中的ioc实例：{services.GetHashCode()}");
+
+
+           
+
+
+
 
             Microsoft.Extensions.Logging.ILogger logger = services.GetRequiredService<Microsoft.Extensions.Logging.ILoggerFactory>().CreateLogger(context.TargetType);
 
