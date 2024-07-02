@@ -85,6 +85,7 @@ namespace ZLJ.RCL.Interceptors
 
         public override void OnException(MethodContext context)
         {
+            //经过测试，IServiceProvider不能从OwnComponentBase的ScopedService获取
             try
             {
                 #region MyRegion
