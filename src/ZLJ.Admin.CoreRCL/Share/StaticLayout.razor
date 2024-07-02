@@ -4,6 +4,9 @@
 @inject NavigationManager Navigation
 @implements IDisposable
 <div style="height:100vh">
+    <ErrorBoundary @ref="errorBoundary">
+        <ChildContent>
+            
     <Layout>
         <Sider @bind-Collapsed=@MainMenuCollapsed NoTrigger Collapsible >
             <div class="logo" style="height:29px; margin:15px;">
@@ -12,7 +15,7 @@
                 @if (!MainMenuCollapsed)
                 {
                     <h3 style="    color: #ddd;    float: left;    margin-left: 0.5rem;    line-height: 35px;    font-size: 1.2rem;">
-                        变形精怪
+                        变形精怪  <Button OnClick="fancuo">xxxx</Button>
                     </h3>
                 }
             </div>
@@ -53,14 +56,41 @@
             </Footer>
         </Layout>
     </Layout>
+
+
+        </ChildContent>
+        <ErrorContent>
+            <Flex Style="height:50vh;" Align="center" Justify="center" Vertical="true">
+      <div>
+           ┗|｀O′|┛ 嗷~~程序出错啦！若多次输出错，请联系系统管理员。 <br />
+                </div>
+                <pre>   @XianshiCuowu(context) </pre>
+
+
+           <Button Type="@ButtonType.Primary" OnClick="fanhui">返回</Button>
+            </Flex>
+        </ErrorContent>
+    </ErrorBoundary>
+
+
 </div>
 @code {
     // [SupplyParameterFromQuery]
     // public int mmc { get; set; }
 
+    string XianshiCuowu(Exception ex)
+    {
+#if DEBUG
+    return ex.GetBaseException().StackTrace + Environment.NewLine;
+#else
+        return  Environment.NewLine; 
+        #endif
+    
+    }
+
     // bool collapsed => mmc > 0;
     bool auth = false;
-
+    private ErrorBoundary? errorBoundary;
     [Inject]
     public AuthenticationStateProvider AuthStateProvider { get; set; }
     [Inject]
@@ -70,7 +100,15 @@
     [Inject]
     public ILogger<StaticLayout> Logger { get; set; }
     //string LayoutStyle => "background-color:#f3f6fb; margin-left:" + (MainMenuCollapsed ? 80 : 200) + "px;transition-property: margin-left";
+    void fanhui()
+    {
+        errorBoundary?.Recover();
+    }
+    void fancuo()
+    {
 
+        throw new Exception("xxxxxxxxxxxxxxx");
+    }
     void toggle()
     {
         MainMenuCollapsed = !MainMenuCollapsed;

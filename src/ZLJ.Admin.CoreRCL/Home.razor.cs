@@ -2,6 +2,9 @@
 {
     public partial class Home
     {
+
+       
+
         [AbpExceptionInterceptor]
         void TestException() { 
      

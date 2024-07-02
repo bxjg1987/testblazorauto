@@ -44,7 +44,7 @@ namespace ZLJ.RCL.Interceptors
         //IServiceProvider services => OperatingSystem.IsBrowser()?ServicesInBrower: AbpExceptionInterceptor1. Services.Value;
 
         public override AccessFlags Flags => AccessFlags.Method | AccessFlags.Instance | AccessFlags.Public | AccessFlags.NonPublic | AccessFlags.InstancePublic | AccessFlags.InstanceNonPublic;
-       // public override Feature Features => Feature.OnException | Feature.OnEntry;
+        public override Feature Features => Feature.ExceptionHandle; // ;//| Feature.OnEntry; Feature.OnException
 
         /*
          * 省略访问修饰符标识拦截所有方法
@@ -52,14 +52,14 @@ namespace ZLJ.RCL.Interceptors
          * 继承于Microsoft.AspNetCore.Components.ComponentBase的所有子类
          * 的所有方法
          */
-        
+
         //public override string? Pattern => "method(protected * BXJG.Utils.Components.AbpBaseComponent+.*(..))";
 
         //public override Feature Features => Feature.Observe;//加了这个就不灵了，不晓得为啥
         //ComponentBase
         //public override void OnEntry(MethodContext context)
         //{
-        
+
         //    base.OnEntry(context);
         //}
 
@@ -87,17 +87,21 @@ namespace ZLJ.RCL.Interceptors
         {
             #region MyRegion
             var sddf = context.TargetType.GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public);
-            var mb = sddf.Where(x => x.PropertyType.IsImplementInterface<IServiceProvider>());
+            var tm = sddf.Where(x => x.PropertyType.IsImplementInterface<IServiceProvider>() && x.Name.Equals("services",StringComparison.OrdinalIgnoreCase) ).Single();
+           //if (tm == default)
+           //     Console.WriteLine($"全局异常拦截失败！应用拦截器的组件中没有找到IServiceProvider类型的属性。");
 
-            PropertyInfo tm;
-            if (mb.Count() > 1)
-                tm = mb.Where(x => x.Name.Equals("services", StringComparison.OrdinalIgnoreCase)).Single();
-            else
-                tm = mb.Single();
+            //允许后端报错，导致程序崩溃，方便开发阶段处理问题，另外最好在兜底的错误边界中记录日志
+
+            //PropertyInfo tm;
+            //if (mb.Count() > 1)
+            //    tm = mb.Where(x => x.Name.Equals("services", StringComparison.OrdinalIgnoreCase)).Single();
+            //else
+            //    tm = mb.Single();
 
             var services = tm.GetValue(context.Target) as IServiceProvider;
             #endregion
-            Console.WriteLine($"全局异常拦截器中的ioc实例：{services.GetHashCode()}");
+            //Console.WriteLine($"全局异常拦截器中的ioc实例：{services.GetHashCode()}");
 
 
            
@@ -118,8 +122,11 @@ namespace ZLJ.RCL.Interceptors
             //BXJG.Common.Extensions.us
             if (context.Exception is UserFriendlyException)
             {
+                //context.TargetType.InvokeMember("InvokeAsync", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.InvokeMethod, null, context.Target,new[]{ () =>
+                //{
+                   
+                //} });
                 snackbar.Error(context.Exception.Message);
-                // await _message.Error("This is an error message");
             }
             else
             {
@@ -127,13 +134,15 @@ namespace ZLJ.RCL.Interceptors
 
                 logger.LogError($"{context.TargetType.FullName}.{context.Method.Name}" + context.Exception.StackTrace);
 
-                
+               
+                    if (env != default && !env.IsProduction())
+                        snackbar.Error($"全局异常拦截：{context.Exception.GetBaseException().StackTrace}");
+                    else
+                        //  (  context.Target as ComponentBase).tryinv
+                        snackbar.Error($"服务端发生未处理异常！请稍后重试，若多次失败，请联系系统管理员。");
+             
 
-                if (env != default && !env.IsProduction())
-                    snackbar.Error($"全局异常拦截：{context.Exception.StackTrace}");
-                else
-                    //  (  context.Target as ComponentBase).tryinv
-                    snackbar.Error($"服务端发生未处理异常！请稍后重试，若多次失败，请联系系统管理员。");
+              
 
                 //snackbar.Add($"服务端发生未处理异常！请稍后重试，若多次失败，请联系系统管理员。", Severity.Error);
             }

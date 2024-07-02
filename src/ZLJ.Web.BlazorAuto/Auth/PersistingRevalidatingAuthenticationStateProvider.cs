@@ -132,9 +132,12 @@ namespace ZLJ.Web.BlazorAuto.Auth
 
         public string GetAccessToken()
         {
-           // var r =  AsyncHelper.RunSync(()=> GetAuthenticationStateAsync());
-     
-         
+            // var r =  AsyncHelper.RunSync(()=> GetAuthenticationStateAsync());
+
+
+            if (authenticationStateTask != default && authenticationStateTask.IsCompletedSuccessfully)
+                return authenticationStateTask.Result.User.FindFirstValue(nameof(AuthenticateResultModel.AccessToken));
+
             //if (authenticationStateTask!=default &&authenticationStateTask.IsCompleted)
                 return httpContextAccessor.HttpContext.User.FindFirstValue(nameof(AuthenticateResultModel.AccessToken));
 
@@ -145,6 +148,9 @@ namespace ZLJ.Web.BlazorAuto.Auth
 
         public string GetEncryptedAccessToken()
         {
+            if (authenticationStateTask != default && authenticationStateTask.IsCompletedSuccessfully)
+                return authenticationStateTask.Result.User.FindFirstValue(nameof(AuthenticateResultModel.EncryptedAccessToken));
+
             return httpContextAccessor.HttpContext.User.FindFirstValue(nameof(AuthenticateResultModel.EncryptedAccessToken));
         }
     }
