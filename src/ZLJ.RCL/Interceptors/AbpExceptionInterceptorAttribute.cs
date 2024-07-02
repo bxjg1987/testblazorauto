@@ -39,7 +39,7 @@ namespace ZLJ.RCL.Interceptors
         //中间件设置是有效的
         //public static readonly AsyncLocal<IServiceProvider> Services = new AsyncLocal<IServiceProvider>();
 
-     
+
 
         //IServiceProvider services => OperatingSystem.IsBrowser()?ServicesInBrower: AbpExceptionInterceptor1. Services.Value;
 
@@ -85,68 +85,70 @@ namespace ZLJ.RCL.Interceptors
 
         public override void OnException(MethodContext context)
         {
-            #region MyRegion
-            var sddf = context.TargetType.GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public);
-            var tm = sddf.Where(x => x.PropertyType.IsImplementInterface<IServiceProvider>() && x.Name.Equals("services",StringComparison.OrdinalIgnoreCase) ).Single();
-           //if (tm == default)
-           //     Console.WriteLine($"全局异常拦截失败！应用拦截器的组件中没有找到IServiceProvider类型的属性。");
-
-            //允许后端报错，导致程序崩溃，方便开发阶段处理问题，另外最好在兜底的错误边界中记录日志
-
-            //PropertyInfo tm;
-            //if (mb.Count() > 1)
-            //    tm = mb.Where(x => x.Name.Equals("services", StringComparison.OrdinalIgnoreCase)).Single();
-            //else
-            //    tm = mb.Single();
-
-            var services = tm.GetValue(context.Target) as IServiceProvider;
-            #endregion
-            //Console.WriteLine($"全局异常拦截器中的ioc实例：{services.GetHashCode()}");
-
-
-           
-
-
-
-
-            Microsoft.Extensions.Logging.ILogger logger = services.GetRequiredService<Microsoft.Extensions.Logging.ILoggerFactory>().CreateLogger(context.TargetType);
-
-            var snackbar = services.GetRequiredService<IMessageService>();
-
-
-            logger.LogDebug("全局异常拦截器执行了...");
-
-            // var temp = context.Target.GetType().GetProperty("MessageService", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public).GetValue(context.Target);
-            // var snackbar = temp as IMessageService;
-            //Task t;
-            //BXJG.Common.Extensions.us
-            if (context.Exception is UserFriendlyException)
+            try
             {
-                //context.TargetType.InvokeMember("InvokeAsync", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.InvokeMethod, null, context.Target,new[]{ () =>
-                //{
-                   
-                //} });
-                snackbar.Error(context.Exception.Message);
-            }
-            else
-            {
-                var env = services.GetService<IHostEnvironment>();
+                #region MyRegion
+                var sddf = context.TargetType.GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public);
+                var tm = sddf.Where(x => x.PropertyType.IsImplementInterface<IServiceProvider>() && x.Name.Equals("services", StringComparison.OrdinalIgnoreCase)).Single();
+                //if (tm == default)
+                //     Console.WriteLine($"全局异常拦截失败！应用拦截器的组件中没有找到IServiceProvider类型的属性。");
 
-                logger.LogError($"{context.TargetType.FullName}.{context.Method.Name}" + context.Exception.StackTrace);
+                //允许后端报错，导致程序崩溃，方便开发阶段处理问题，另外最好在兜底的错误边界中记录日志
 
-               
+                //PropertyInfo tm;
+                //if (mb.Count() > 1)
+                //    tm = mb.Where(x => x.Name.Equals("services", StringComparison.OrdinalIgnoreCase)).Single();
+                //else
+                //    tm = mb.Single();
+
+                var services = tm.GetValue(context.Target) as IServiceProvider;
+                #endregion
+                //Console.WriteLine($"全局异常拦截器中的ioc实例：{services.GetHashCode()}");
+
+                Microsoft.Extensions.Logging.ILogger logger = services.GetRequiredService<Microsoft.Extensions.Logging.ILoggerFactory>().CreateLogger(context.TargetType);
+
+                var snackbar = services.GetRequiredService<IMessageService>();
+
+
+                logger.LogDebug("全局异常拦截器执行了...");
+
+                // var temp = context.Target.GetType().GetProperty("MessageService", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public).GetValue(context.Target);
+                // var snackbar = temp as IMessageService;
+                //Task t;
+                //BXJG.Common.Extensions.us
+                if (context.Exception is UserFriendlyException)
+                {
+                    //context.TargetType.InvokeMember("InvokeAsync", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.InvokeMethod, null, context.Target,new[]{ () =>
+                    //{
+
+                    //} });
+                    snackbar.Error(context.Exception.Message);
+                }
+                else
+                {
+                    var env = services.GetService<IHostEnvironment>();
+
+                    logger.LogError($"{context.TargetType.FullName}.{context.Method.Name}" + context.Exception.StackTrace);
+
+
                     if (env != default && !env.IsProduction())
                         snackbar.Error($"全局异常拦截：{context.Exception.GetBaseException().StackTrace}");
                     else
                         //  (  context.Target as ComponentBase).tryinv
                         snackbar.Error($"服务端发生未处理异常！请稍后重试，若多次失败，请联系系统管理员。");
-             
 
-              
 
-                //snackbar.Add($"服务端发生未处理异常！请稍后重试，若多次失败，请联系系统管理员。", Severity.Error);
+
+
+                    //snackbar.Add($"服务端发生未处理异常！请稍后重试，若多次失败，请联系系统管理员。", Severity.Error);
+                }
             }
-
+            catch (Exception ex)
+            {
+                //用户关闭页面时，获取服务会报错，导致程序崩溃，虽然页面布局有错误边界，程序还是会死掉。 防止程序崩溃，还是加个try
+                Console.WriteLine("全局异常拦截器崩溃！");
+                Console.WriteLine(ex.StackTrace);
+            }
             //if (context.ReturnValue is Task xx)
             //{
             //    xx.ContinueWith(async cccc => await t);
