@@ -9,7 +9,7 @@ using Abp.Extensions;
 using BXJG.Common.Contracts;
 using BXJG.Common.Sundries;
 using Abp.Application.Services.Dto;
-using NUglify.JavaScript.Syntax;
+
 using Abp.Domain.Repositories;
 using Abp.Linq;
 using System.Net.Http.Json;

@@ -4,8 +4,9 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-  	<LangVersion>default</LangVersion>
-  	<UserSecretsId>6d643415-eafd-4b3f-994e-7ebd7f72d234</UserSecretsId>
+
+	  <!--<PublishTrimmed>false</PublishTrimmed>-->
+	  <!--<JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>-->
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,11 +27,11 @@
 
 
   <ItemGroup>
+	  <PackageReference Include="BXJG.Common.Web" Version="*" />
 	  <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.6" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\libs\BXJG.Common.Web\BXJG.Common.Web.csproj" />
     <ProjectReference Include="..\ZLJ.Admin.CoreRCL\ZLJ.Admin.CoreRCL.csproj" />
   </ItemGroup>
 	

@@ -1,8 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<VersionPrefix>1.0.0.0</VersionPrefix>
 		<TargetFramework>net8.0</TargetFramework>
-		<AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
 		<AssemblyName>ZLJ.Web.Core</AssemblyName>
 		<PackageId>ZLJ.Web.Core</PackageId>
 		<GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
@@ -14,8 +12,7 @@
 		<GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
 		<GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
 		<OpenApiGenerateDocuments>false</OpenApiGenerateDocuments>
-		<RootNamespace>$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
-		<LangVersion>7.2</LangVersion>
+		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<LangVersion>default</LangVersion>
@@ -53,8 +50,8 @@
 
 	<ItemGroup Condition="'$(SolutionName)' != 'ZLJWithModules'">
 
-		<PackageReference Include="BXJG.Common.Web" Version="1.3.7" />
-		<PackageReference Include="BXJG.Utils.Web" Version="1.3.7" />
+		<PackageReference Include="BXJG.Common.Web" Version="*" />
+		<PackageReference Include="BXJG.Utils.Web" Version="*" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(SolutionName)' == 'ZLJWithModules'">
 		<ProjectReference Include="..\modules\BXJG.Utils.Web\BXJG.Utils.Web.csproj" />
