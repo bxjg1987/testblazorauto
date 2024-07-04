@@ -90,7 +90,7 @@ namespace ZLJ.RCL.Interceptors
             {
                 #region MyRegion
                 var sddf = context.TargetType.GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public);
-                var tm = sddf.Where(x => x.PropertyType.IsImplementInterface<IServiceProvider>() && x.Name.Equals("services", StringComparison.OrdinalIgnoreCase)).Single();
+                var tm = sddf.Where(x => x.PropertyType.IsImplementInterface<IServiceProvider>() && !x.Name.Equals("ScopedServices", StringComparison.OrdinalIgnoreCase)).Single();
                 //if (tm == default)
                 //     Console.WriteLine($"全局异常拦截失败！应用拦截器的组件中没有找到IServiceProvider类型的属性。");
 

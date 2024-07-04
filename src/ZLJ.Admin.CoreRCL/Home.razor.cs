@@ -6,8 +6,9 @@
        
 
         [AbpExceptionInterceptor]
-        void TestException() { 
-     
+        void TestException() {
+
+            Console.WriteLine(  "xx测试热重载！");
             throw new Exception("未处理异常！");
         }
     }

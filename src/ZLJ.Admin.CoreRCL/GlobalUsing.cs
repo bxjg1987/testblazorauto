@@ -24,3 +24,6 @@ global using Abp.Localization;
 global using Abp.Runtime.Session;
 global using Abp.UI;
 global using BXJG.Utils.Application.Share.GeneralTree;
+#if DEBUG
+[assembly: Rougamo.IgnoreMo]
+#endif

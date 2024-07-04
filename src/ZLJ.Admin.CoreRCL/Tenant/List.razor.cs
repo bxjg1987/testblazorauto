@@ -10,9 +10,7 @@ namespace ZLJ.Admin.CoreRCL.Tenant
         protected override HttpClient HttpClient => httpClient ??= ScopedServices.GetRequiredService<IHttpClientFactory>().CreateHttpClientAdmin();
 
         protected override string FuncName => "租户";
-#if !DEBUG
         [AbpExceptionInterceptor]
-#endif
         protected override async Task OnInitializedAsync()
         {
             //if ((await base.AppService.GetAllAsync(new PagedAndSortedResultRequest<PagedPostResultRequestDto> { SkipCount = 0, MaxResultCount = 1, Sorting = "role.Id", Filter = new PagedPostResultRequestDto() })).TotalCount >= 500)
@@ -112,9 +110,7 @@ namespace ZLJ.Admin.CoreRCL.Tenant
         /// 点击关闭新增弹窗时执行
         /// </summary>
         /// <returns></returns>
-#if !DEBUG
         [AbpExceptionInterceptor]
-#endif
         private void CloseDialog()
         {
              CloseCreateDialogCore();

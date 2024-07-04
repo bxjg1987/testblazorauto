@@ -16,9 +16,7 @@ namespace ZLJ.Admin.CoreRCL.TestSimple
         /// <summary>
         /// 组件初始化
         /// </summary>
-#if !DEBUG
         [AbpExceptionInterceptor]
-#endif
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();

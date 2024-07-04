@@ -19,9 +19,7 @@ public partial class List
     // string currOu;
 
     protected override string FuncName => "省市区";
-#if !DEBUG
     [AbpExceptionInterceptor]
-#endif
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
@@ -108,9 +106,7 @@ public partial class List
     /// 点击关闭新增弹窗时执行
     /// </summary>
     /// <returns></returns>
-#if !DEBUG
     [AbpExceptionInterceptor]
-#endif
     private void CloseDialog()
     {
          CloseCreateDialogCore();

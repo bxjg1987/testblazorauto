@@ -16,9 +16,7 @@ namespace ZLJ.Admin.CoreRCL.TestSimple
 
         string detailUpdateIcon => isEdit ? IconType.Outline.Edit : IconType.Outline.File;
 
-#if !DEBUG
         [AbpExceptionInterceptor]
-#endif
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();

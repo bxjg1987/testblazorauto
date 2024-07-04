@@ -33,31 +33,23 @@ namespace ZLJ.RCL.Components
         //where TGetAllInput : new()
         where TUpdateInput : new()
     {
-#if !DEBUG
         [AbpExceptionInterceptor]
-#endif
         protected virtual async Task OnFinish(EditContext editContext)
         {
             await Save();
         }
 
-#if !DEBUG
         [AbpExceptionInterceptor]
-#endif
         protected override async Task BtnDeleteClick()
         {
             await base.BtnDeleteClick();
         }
-#if !DEBUG
         [AbpExceptionInterceptor]
-#endif
         protected override async Task BtnRefreshClick()
         {
             await base.BtnRefreshClick();
         }
-#if !DEBUG
         [AbpExceptionInterceptor]
-#endif
         protected override async Task BtnResetClick()
         {
             await base.BtnResetClick();
@@ -108,7 +100,6 @@ namespace ZLJ.RCL.Components
          * 所以还是决定在抽象中添加，子类可以重写时不调用父类，自己单独加 [AbpExceptionInterceptor]
          * 最坏的情况是子类重写，且必须调用父类方法时，确实比较浪费，层次不深的话也无所谓了。
          */
-#if !DEBUG
         [AbpExceptionInterceptor]
         public override async Task SetParametersAsync(ParameterView parameters)
         {
@@ -144,7 +135,6 @@ namespace ZLJ.RCL.Components
         {
             await base.OnAfterRenderAsync(firstRender);
         }
-#endif
         #endregion
     }
 }

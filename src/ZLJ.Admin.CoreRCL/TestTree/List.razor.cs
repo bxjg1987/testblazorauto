@@ -23,9 +23,7 @@ namespace ZLJ.Admin.CoreRCL.TestTree
         /// 生命周期 初始化
         /// </summary>
         /// <returns></returns>
-#if !DEBUG
         [AbpExceptionInterceptor]
-#endif
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();

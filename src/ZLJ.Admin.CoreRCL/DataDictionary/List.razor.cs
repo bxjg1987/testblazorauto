@@ -21,9 +21,7 @@ namespace ZLJ.Admin.CoreRCL.DataDictionary
         /// 生命周期 初始化
         /// </summary>
         /// <returns></returns>
-#if !DEBUG
         [AbpExceptionInterceptor]
-#endif
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
