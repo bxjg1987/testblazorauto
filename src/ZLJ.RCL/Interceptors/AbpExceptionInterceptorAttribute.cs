@@ -112,7 +112,7 @@ namespace ZLJ.RCL.Interceptors
 
 
                 logger.LogDebug("全局异常拦截器执行了...");
-
+                var ex = context.Exception.GetBaseException();
                 // var temp = context.Target.GetType().GetProperty("MessageService", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public).GetValue(context.Target);
                 // var snackbar = temp as IMessageService;
                 //Task t;
@@ -123,23 +123,20 @@ namespace ZLJ.RCL.Interceptors
                     //{
 
                     //} });
-                    snackbar.Error(context.Exception.Message);
+                    snackbar.Error(ex.Message);
                 }
                 else
                 {
                     var env = services.GetService<IHostEnvironment>();
 
-                    logger.LogError($"{context.TargetType.FullName}.{context.Method.Name}" + context.Exception.StackTrace);
+                    logger.LogError($"{ex.Message}{Environment.NewLine}{context.Exception.StackTrace}"  );
 
 
                     if (env != default && !env.IsProduction())
-                        snackbar.Error($"全局异常拦截：{context.Exception.GetBaseException().StackTrace}");
+                        snackbar.Error($"全局异常拦截：{ex.Message}{Environment.NewLine}{context.Exception.StackTrace}");
                     else
                         //  (  context.Target as ComponentBase).tryinv
-                        snackbar.Error($"服务端发生未处理异常！请稍后重试，若多次失败，请联系系统管理员。");
-
-
-
+                        snackbar.Error($"服务端发生未处理异常！请稍后重试，若多次失败，请联系系统管理员。{ex.Message}");
 
                     //snackbar.Add($"服务端发生未处理异常！请稍后重试，若多次失败，请联系系统管理员。", Severity.Error);
                 }
@@ -148,6 +145,7 @@ namespace ZLJ.RCL.Interceptors
             {
                 //用户关闭页面时，获取服务会报错，导致程序崩溃，虽然页面布局有错误边界，程序还是会死掉。 防止程序崩溃，还是加个try
                 Console.WriteLine("全局异常拦截器崩溃！");
+                Console.WriteLine(ex.Message + DateTime.Now.ToString());
                 Console.WriteLine(ex.StackTrace);
             }
             //if (context.ReturnValue is Task xx)
