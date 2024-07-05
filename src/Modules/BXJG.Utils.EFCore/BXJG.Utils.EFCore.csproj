@@ -11,8 +11,11 @@
 
   <ItemGroup>
     <Compile Remove="CAP\**" />
+    <Compile Remove="Config\**" />
     <EmbeddedResource Remove="CAP\**" />
+    <EmbeddedResource Remove="Config\**" />
     <None Remove="CAP\**" />
+    <None Remove="Config\**" />
   </ItemGroup>
 
 

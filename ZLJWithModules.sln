@@ -71,6 +71,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{31830F03-1
 		docs\本框架.md = docs\本框架.md
 		docs\标准组件的抽象与服用.md = docs\标准组件的抽象与服用.md
 		docs\菜单.md = docs\菜单.md
+		docs\设置.md = docs\设置.md
 		docs\集成mysql.md = docs\集成mysql.md
 		docs\领域服务.md = docs\领域服务.md
 	EndProjectSection
