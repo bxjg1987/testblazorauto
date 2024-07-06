@@ -9,12 +9,12 @@ namespace ZLJ.EntityFrameworkCore
         //https://learn.microsoft.com/zh-cn/ef/core/what-is-new/ef-core-8.0/breaking-changes#mitigations
         public static void Configure(DbContextOptionsBuilder<ZLJDbContext> builder, string connectionString)
         {
-            builder.UseSqlServer(connectionString, o => o.UseCompatibilityLevel(110));
+            builder.UseSqlServer(connectionString);
         }
 
         public static void Configure(DbContextOptionsBuilder<ZLJDbContext> builder, DbConnection connection)
         {
-            builder.UseSqlServer(connection, o => o.UseCompatibilityLevel(110));
+            builder.UseSqlServer(connection);
         }
 
         //public static void Configure(DbContextOptionsBuilder<ZLJDbContext> builder, string connectionString)

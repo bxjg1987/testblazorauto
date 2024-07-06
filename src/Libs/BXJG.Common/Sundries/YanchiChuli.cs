@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using SkiaSharp;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -29,54 +31,59 @@ namespace BXJG.Common
      */
 
     /// <summary>
-    /// 延迟处理
+    /// 延迟处理，覆盖执行，后执行的生效，但不完全保证。
+    /// 通常用于延迟重新加载数据的场景
     /// </summary>
-    public class YanchiChuli
-    {/// <summary>
-     /// 需要延迟处理的任务
-     /// 耗费资源的处理才需要做这种处理，所以它一定是异步
-     /// 注意，其内部不应该抛出异常。
-     /// </summary>
-        Func<Task> job;// { get; set; }
+    public class YanchiChuli : IDisposable
+    {
+        /// <summary>
+        /// 需要延迟处理的任务
+        /// 耗费资源的处理才需要做这种处理，所以它一定是异步
+        /// 注意，其内部不应该抛出异常。
+        /// </summary>
+        Func<CancellationToken, Task> job;// { get; set; }
         /// <summary>
         /// 延迟任务执行后触发
         /// </summary>
-        public event Func<YanchiChuli, Task, ValueTask> OnExecuted;
+        public event Func<YanchiChuli, Task, CancellationToken, ValueTask> OnExecuted;
         /// <summary>
         /// 延迟执行报错时触发
         /// </summary>
-        public event Func<YanchiChuli, Exception, Task, ValueTask> OnError;
+        public event Func<YanchiChuli, Task, CancellationToken, Exception, ValueTask> OnError;
         /// <summary>
         /// 延迟多久，单位毫秒
         /// </summary>
-        int delay;//{ get; set; } = 2000;
+        public int Delay { get; private set; }
+        
         ///// <summary>
         ///// 最后执行时间
         ///// </summary>
         //public DateTime lastExecuteTime { get; private set; } = DateTime.MinValue;
 
-        private readonly object locker = new object();
+        // private readonly object locker = new object();
 
-        private bool executing = false;
+        public bool Executing => cts != default && !cts.IsCancellationRequested;
 
-        ILogger logger { get; set; } = NullLogger.Instance;
+        ILogger logger = SimpleLogger.Instance;
 
-        public YanchiChuli(Func<Task> job, int delay = 2000, ILogger logger = default)
+        public YanchiChuli(Func<CancellationToken, Task> job, int delay = 5000, ILoggerFactory loggerFactory = null)
         {
             this.job = job;
-            this.delay = delay;
-            if (logger == default)
-                this.logger = NullLogger.Instance;
-            else
-                this.logger = logger;
+            this.Delay = delay;
+            if (loggerFactory != default)
+                logger = loggerFactory.CreateLogger<YanchiChuli>();
         }
-        // //超时执行，或 执行时长大于   延迟  都可能造成并发调用
-        //private Task Execute()
-        //{
-        //  //  lastExecuteTime = DateTime.Now;
-        //    return Job();
-        //}
 
+        CancellationTokenSource cts;// = new CancellationTokenSource();
+        public void Dispose()
+        {
+            logger.LogDebug($"延迟覆盖执行器{GetHashCode()}释放了");
+            try
+            {
+                cts?.Cancel();
+            }
+            catch { }
+        }
         /// <summary>
         /// 请求执行
         /// </summary>
@@ -85,54 +92,64 @@ namespace BXJG.Common
         /// <returns>每次请求的唯一id</returns>
         public void Request()
         {
-            if (executing)
-                return;
-
-            lock (locker)
+            //由于后执行的要覆盖先执行的，所以请求时直接覆盖
+            try
             {
-                if (executing)
-                    return;
+                cts?.Cancel();
+            }
+            catch { }
+            cts = new CancellationTokenSource();
 
-                executing = true;
-
-                Task.Run(async () =>
+            Task.Run(async () =>
+            {
+                var tempcts = cts;// CancellationTokenSource.CreateLinkedTokenSource(cts.Token);//闭包，确保对老对象有引用
+                int lssc = 0;//已等待的毫秒数
+                while (true)
                 {
-                    Thread.Sleep(delay);
-                    var t = job();
+                    //经过测试，这里等1毫秒有问题，起码本地测试是有问题的
+                    await Task.Delay(10);
+                    lssc += 10;
+                    //若后执行覆盖了当前执行，则放弃执行
+                    if (tempcts.IsCancellationRequested)
+                    {
+                        logger.LogDebug($"延时覆盖{GetHashCode()} tempcts{tempcts.GetHashCode()} 任务放弃了！");
+                        try
+                        {
+                            tempcts.Dispose();//早点释放也无所谓
+                        }
+                        catch { }
+                        return;
+                    }
+
+                    if (lssc >= Delay)
+                        break;
+                }
+
+                //若这里又来个新请求，顶部的 cts?.Cancel();会生效
+                logger.LogDebug($"延时覆盖执行器{GetHashCode()} tempcts{tempcts.GetHashCode()} 任务开始执行...");
+                var t = job(tempcts.Token);
+                try
+                {
+                    await t;
+                    if (OnExecuted != default)
+                        await OnExecuted(this, t, tempcts.Token);
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, $"延迟覆盖执行器{this.GetHashCode()}，执行目标任务时发生未处理异常！");
+                    if (OnError != default)
+                        await OnError(this, t, tempcts.Token, ex);
+                }
+                finally
+                {
+                    //若之前或新请求导致释放了，这里再释放会抛出异常
                     try
                     {
-                        await t;
-                        if (OnExecuted != default)
-                            await OnExecuted(this, t);
+                        tempcts.Dispose();
                     }
-                    catch (Exception ex)
-                    {
-                        if (OnError != default)
-                            await OnError(this, ex, t);
-                    }
-                    finally
-                    {
-                        executing = false;
-                    }
-                });
-            }
+                    catch { }
+                }
+            });
         }
-
-        ///// <summary>
-        ///// 延时覆盖执行器
-        ///// </summary>
-        ///// <param name="job"></param>
-        ///// <param name="yanchi"></param>
-        ///// <param name="chaoshi"></param>
-        ///// <param name="logger"></param>
-        ///// <returns></returns>
-        //public static DelayCoverExecutor Create(Func<Task> job, int yanchi = 2000, int chaoshi = 4000, ILogger logger = default)
-        //{
-        //    if (logger == default)
-        //    {
-        //        logger = NullLogger.Instance;
-        //    }
-        //    return new DelayCoverExecutor { job = job, Delay = yanchi, Timeout = chaoshi, Logger = logger };
-        //}
     }
 }

@@ -20,7 +20,11 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IServiceCollection AddAdminBlazor(this IServiceCollection services)
         {
-         
+            var sdfsfd = SimpleLogger.Instance;
+            sdfsfd.LogDebug("hulalalall");
+
+
+
             BXJGHttpClientExt.DefaultFctory = f => f.CreateHttpClientAdmin();
             return services.AddZLJRCL().AddAutoMapper(typeof(DependencyInjectionExt));
         }

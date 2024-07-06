@@ -81,5 +81,9 @@ namespace BXJG.Utils.Share
         public const int AttachmentPermissionNameMaxLength = 100;
         #endregion
 
+        /// <summary>
+        /// 通过isettingmanager修改配置时，应触发此事件，以便通知配置提供程序刷新
+        /// </summary>
+        public const string OnAbpApplicationSettingsChanged = "OnAbpApplicationSettingsChanged";
     }
 }

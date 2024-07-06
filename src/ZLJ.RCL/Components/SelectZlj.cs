@@ -97,6 +97,22 @@ namespace ZLJ.RCL.Components
             }
             StateHasChanged();//经过测试，这里必须调用
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            try
+            {
+                cts?.Cancel();
+            }
+            catch { }
+            try
+            {
+                cts?.Dispose();
+            }
+            catch { }
+
+            base.Dispose(disposing);
+        }
     }
 
     public class SelectZljLong<TItem> : SelectZlj<long, TItem>

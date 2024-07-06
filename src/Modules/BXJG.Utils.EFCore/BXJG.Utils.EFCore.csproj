@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-	  <VersionPrefix>1.3.44</VersionPrefix>
+	  <VersionPrefix>1.3.47</VersionPrefix>
 	  <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
@@ -11,17 +11,25 @@
 
   <ItemGroup>
     <Compile Remove="CAP\**" />
-    <Compile Remove="Config\**" />
+    <Compile Remove="Settings\**" />
     <EmbeddedResource Remove="CAP\**" />
-    <EmbeddedResource Remove="Config\**" />
+    <EmbeddedResource Remove="Settings\**" />
     <None Remove="CAP\**" />
-    <None Remove="Config\**" />
+    <None Remove="Settings\**" />
   </ItemGroup>
 
 
 
   <ItemGroup>
     <Compile Remove="EFMaps\AttachmentPermissionMap.cs" />
+  </ItemGroup>
+
+
+
+  <ItemGroup>
+    <Compile Include="Settings\AbpSettingsConfigurationProvider.cs" />
+    <Compile Include="Settings\AbpSettingsConfigurationSource.cs" />
+    <Compile Include="Settings\ConfigurationManagerExtensions.cs" />
   </ItemGroup>
 
   <ItemGroup>

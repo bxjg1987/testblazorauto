@@ -41,12 +41,13 @@ namespace ZLJ.Web.Host.Startup
         private const string _defaultCorsPolicyName = "localhost";
         private const string _apiVersion = "v1";
 
-        private readonly IConfigurationRoot _appConfiguration;
+        private readonly IConfiguration _appConfiguration;
         private readonly IWebHostEnvironment webHostEnvironment;
-        public Startup(IWebHostEnvironment env)
+        public Startup(IWebHostEnvironment env, IConfiguration _appConfiguration)
         {
             this.webHostEnvironment = env;
-            _appConfiguration = env.GetAppConfiguration();
+        //    _appConfiguration = env.GetAppConfiguration();
+        this._appConfiguration = _appConfiguration;
         }
 
         public void ConfigureServices(IServiceCollection services)

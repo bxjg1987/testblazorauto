@@ -4,6 +4,8 @@ using Microsoft.Extensions.Configuration;
 using System.IO;
 using Abp.AspNetCore.Dependency;
 using ZLJ.Core.Configuration;
+using ZLJ.Core.Web;
+using ZLJ.EntityFrameworkCore;
 namespace ZLJ.Web.Host.Startup
 {
     public class Program
@@ -16,11 +18,24 @@ namespace ZLJ.Web.Host.Startup
           Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder(args)
               .ConfigureWebHostDefaults(webBuilder =>
               {
+                  webBuilder.ConfigureAppConfiguration(webConfiguration =>
+                  {
+                      //var cfg = new ConfigurationManager();
+                      var _appConfiguration = AppConfigurations.Get(WebContentDirectoryFinder.CalculateContentRootFolder());
+                      string defaultConnectionString = _appConfiguration.GetConnectionString(ZLJ.Core.ZLJConsts.ConnectionStringName)!;
+                      var efbuilder = new DbContextOptionsBuilder<ZLJDbContext>();
+                      ZLJDbContextConfigurer.Configure(efbuilder, defaultConnectionString);
+
+                      //LoggerFactory.Create(x=>x.AddSimpleConsole());
+                     
+                      webConfiguration.AddAbpSettingsConfiguration(() => new ZLJDbContext(efbuilder.Options));
+
+                  });
                   //webBuilder.UseStaticWebAssets();
                   webBuilder.UseStartup<Startup>();
               })
               .UseCastleWindsor(IocManager.Instance.IocContainer);
-      
+
 
         //public static void Main(string[] args)
         //{

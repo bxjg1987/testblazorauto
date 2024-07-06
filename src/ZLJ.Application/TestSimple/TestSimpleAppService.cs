@@ -4,6 +4,7 @@ using ZLJ.Application.Share.TestSimple;
 using Abp.Authorization;
 using BXJG.Utils.Application.Share.Dtos;
 using Abp.Notifications;
+using Microsoft.Extensions.Configuration;
 
 namespace ZLJ.Application.TestSimple
 {
@@ -18,8 +19,10 @@ namespace ZLJ.Application.TestSimple
                                                                                              TestSimpleCreateDto, 
                                                                                              TestSimpleEditDto>
     {
-        public TestSimpleAppService(IRepository<TestSimpleEntity, long> repository) : base(repository)
+        IConfiguration configuration;
+        public TestSimpleAppService(IRepository<TestSimpleEntity, long> repository, IConfiguration configuration) : base(repository)
         {
+            this.configuration = configuration;
         }
 
         //提供权限名称
@@ -35,6 +38,16 @@ namespace ZLJ.Application.TestSimple
                                                     new MessageNotificationData(DateTime.Now.ToLongTimeString()),
                                                     userIds:[new UserIdentifier(AbpSession.TenantId, AbpSession.UserId.Value)]);
             return await base.GetAllAsync(input);
+        }
+
+        public override async Task<TestSimpleDto> UpdateAsync(TestSimpleEditDto input)
+        {
+          await  base.SettingManager.ChangeSettingForApplicationAsync("Abp.Net.Mail.DefaultFromDisplayName", DateTime.Now.ToLongTimeString());
+
+            var sdfsdf = configuration["Abp.Net.Mail.DefaultFromDisplayName"];
+            await Task.Delay(7000);
+            base.Logger.Info("测试abp setting修改时，新的配置："+ sdfsdf);
+            return await base.UpdateAsync(input);
         }
 
         //protected override async ValueTask MapToEntity(TestSimpleEntity entity)

@@ -37,23 +37,36 @@ namespace BXJG.Common.Events
 
         internal protected readonly ILogger logger;
 
-        public Zhongjie(ILoggerFactory logger)
+        public Zhongjie(ILogger<Zhongjie> logger)
         {
-            this.logger = logger.CreateLogger(GetType());
+            this.logger = logger;//.CreateLogger(GetType());
         }
         public Zhongjie()
         {
-            logger = NullLogger.Instance;
+            logger = SimpleLogger.Instance;
         }
+
+        //上次记录报警日志的时间
+        DateTime bjsj = DateTime.Now.AddYears(-100);
 
         internal protected void LogDebug()
         {
-            int k = 0;
-            foreach (var item in weituos)
+            int k = weituos.Sum(x => x.Value.Count);
+            var msg = $"事件总线{GetHashCode()}，事件类型数量：{weituos.Count}，总委托数：{k}";
+            if (k >= 10 * 10000)
             {
-                k += item.Value.Count;
+                //生产环境中，这里可能产生大量日志k，所以处理下
+                if ((DateTime.Now - bjsj).TotalSeconds >= 59)
+                {
+                    //报警时可以进一步打印 委托的最后时间，观察事件处理委托多久没被调用了
+                    logger.LogWarning(msg + string.Join(',', weituos.Keys));
+                    bjsj = DateTime.Now;
+                }
             }
-            logger.LogDebug($"事件类型数量：{weituos.Count}，总委托数：{k}");
+            else
+            {
+                logger.LogDebug(msg);
+            }
         }
 
         #region 注册
@@ -69,7 +82,7 @@ namespace BXJG.Common.Events
             if (eventName.IsNullOrWhiteSpaceBXJG())
                 eventName = typeof(T).FullName;
 
-            //  var t = typeof(T);
+            //var t = typeof(T);
 
             //weituos.TryAdd(eventName, new ConcurrentDictionary<Delegate, Weituo>());
 
@@ -83,6 +96,7 @@ namespace BXJG.Common.Events
             logger.LogDebug($"注册事件：{eventName}");
 
             LogDebug();
+
             // TryAdd(typeof(T), oo => weituo(oo as T));
             return new ZhongjieZhuxiaoqi(this, eventName, weituo);
         }
@@ -223,7 +237,6 @@ namespace BXJG.Common.Events
         /// <summary>
         /// 批量注销指定事件
         /// </summary>
-        /// <param name="zhongjie"></param>
         /// <param name="weituo"></param>
         /// <param name="eventName"></param>
         /// <param name="level">如：租户id 2，部门id 3，则表示注销这个范围内的所有事件处理程序</param>
@@ -236,7 +249,6 @@ namespace BXJG.Common.Events
         /// 注销事件处理程序
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="zhongjie"></param>
         /// <param name="weituo"></param>
         /// <param name="level">如：租户id 2，部门id 3，则表示注销这个范围内的所有事件处理程序</param>
         public virtual void Zhuxiao<T>(Delegate weituo, params string[] level)
@@ -247,7 +259,6 @@ namespace BXJG.Common.Events
         /// <summary>
         /// 批量注销事件
         /// </summary>
-        /// <param name="zhongjie"></param>
         /// <param name="eventName">事件名称</param>
         /// <param name="level">如：租户id 2，部门id 3，则表示注销这个范围内的所有事件处理程序</param>
         public virtual void Zhuxiao(string eventName, params string[] level)
@@ -282,6 +293,8 @@ namespace BXJG.Common.Events
             if (weituos.TryGetValue(eventName, out var dic))
             {
                 logger.LogDebug($"委托数{dic.Count}");
+
+                //https://github.com/dotnet/runtime/issues/23625
                 await Task.WhenAll(dic.Select(c =>
                 {
                     c.Value.LastExecuteTime = DateTime.Now; //有线程冲突也无所谓
@@ -359,7 +372,7 @@ namespace BXJG.Common.Events
         #endregion
 
         #region 辅助
-        private string BuildEventName(string eventName, params string[] level)
+        static string BuildEventName(string eventName, params string[] level)
         {
             if (level.Any())
                 eventName += "_" + string.Join('_', level);
@@ -418,6 +431,4 @@ namespace BXJG.Common.Events
         /// </summary>
         public static readonly AsyncLocal<Zhongjie> Current = new AsyncLocal<Zhongjie>();
     }
-
-  
 }
