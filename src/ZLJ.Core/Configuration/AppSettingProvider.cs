@@ -10,11 +10,17 @@ using ZLJ.Core.Localization;
 
 namespace ZLJ.Core.Configuration
 {
+    //有些领域服务需要，所以就定义在这里吧
+    //其实定义在ZLJ.Application.Common中也可以，不过配置key的常量必须在ZLJ.Core.Share
+
     public class AppSettingProvider : SettingProvider
     {
         public override IEnumerable<SettingDefinition> GetSettingDefinitions(SettingDefinitionProviderContext context)
         {
             var sys = new SettingDefinitionGroup(BXJGUtilsConsts.SettingKeyUploadGroup, "文件上传设置".UtilsLI());
+          //  var shangchuang = new SettingDefinitionGroup(ZLJ.Core.Share.ZLJConsts.CfgKeyUpload, "文件上传设置".UtilsLI());
+
+
 
             var sys2 = new SettingDefinitionGroup(
                    ZLJ.Core.Share.ZLJConsts.DataDictionaryMigrationValueSettingGroupKey,
@@ -50,6 +56,15 @@ namespace ZLJ.Core.Configuration
                     sys2,
                     scopes: SettingScopes.Tenant,
                     isVisibleToClients: true),
+
+                 new SettingDefinition(
+                    ZLJ.Core.Share.ZLJConsts.CfgKeyUpload,
+                    "D:\\bxjg_upload_files\\",
+                    "存储路径".GetLocalizableString(),
+                    sys,
+                    scopes: SettingScopes.Application,
+                    isVisibleToClients: true),
+
                 //new SettingDefinition(
                 //    BXJGUtilsConsts.SettingKeyUploadType,
                 //    BXJGUtilsConsts.DefaultUploadTypes + ",docx",
@@ -59,6 +74,9 @@ namespace ZLJ.Core.Configuration
                 //    isVisibleToClients: false),
                 new SettingDefinition(AppSettingNames.UiTheme, "red", scopes: SettingScopes.Application | SettingScopes.Tenant | SettingScopes.User, isVisibleToClients: true)
             };
+
+           
+
             return list;
            // return list.Union(GetTenantSettings());
         }

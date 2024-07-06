@@ -95,5 +95,8 @@
         //     Max length of the Abp.MultiTenancy.AbpTenantBase.Name property.
         public const int MaxNameLength = 128;
         #endregion
+
+        public const string CfgKeyUpload = "Upload:SaveDir";
+
     }
 }
