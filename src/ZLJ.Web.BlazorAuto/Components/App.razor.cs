@@ -10,15 +10,15 @@ namespace ZLJ.Web.BlazorAuto.Components
     {
         [CascadingParameter]
         private HttpContext HttpContext { get; set; } = default!;
-       
+
         // bool isAjax => HttpContext.Request.IsAjaxRequestBXJG();
 
-  
 
-      //  AppContainer app=new AppContainer();
+
+        //  AppContainer app=new AppContainer();
         [Inject]
         public ILogger<App> Logger { get; set; }
-     
+
         //protected override void OnInitialized()
         //{
         //    // app = Test;
@@ -50,9 +50,10 @@ namespace ZLJ.Web.BlazorAuto.Components
         //    this.Logger.LogDebug($"服务端最外层的app组件执行了,appcontainer：{Test.GetHashCode()}");
         //    base.OnInitialized();
         //}
-        private IComponentRenderMode? RenderModeForPage 
+        private IComponentRenderMode? RenderModeForPage
         {
-            get {
+            get
+            {
 
                 if (HttpContext.Request.Path.StartsWithSegments("/Account"))
                     return default;
@@ -62,10 +63,10 @@ namespace ZLJ.Web.BlazorAuto.Components
                 if (HttpContext.Request.Path.StartsWithSegments("/error"))
                     return default;
 
-               return new InteractiveAutoRenderMode(false);
-              // return new InteractiveServerRenderMode(false);
+                // return new InteractiveAutoRenderMode(false);
+                return new InteractiveServerRenderMode(false);
                 // return new InteractiveWebAssemblyRenderMode(false);
             }
-        } 
+        }
     }
 }
