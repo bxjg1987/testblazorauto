@@ -64,7 +64,7 @@ namespace ZLJ.Web.BlazorAuto.Components
                     return default;
 
                 // return new InteractiveAutoRenderMode(false);
-                return new InteractiveServerRenderMode(false);
+               return new InteractiveServerRenderMode(false);
                 // return new InteractiveWebAssemblyRenderMode(false);
             }
         }

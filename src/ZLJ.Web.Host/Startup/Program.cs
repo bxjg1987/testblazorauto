@@ -21,7 +21,8 @@ namespace ZLJ.Web.Host.Startup
                   webBuilder.ConfigureAppConfiguration(webConfiguration =>
                   {
                       //var cfg = new ConfigurationManager();
-                      var _appConfiguration = AppConfigurations.Get(WebContentDirectoryFinder.CalculateContentRootFolder());
+                      //typeof(Program).GetAssembly().GetDirectoryPathOrNull() 这个是从ZLJ.Migration参考
+                      var _appConfiguration = AppConfigurations.Get(typeof(Program).GetAssembly().GetDirectoryPathOrNull());
                       string defaultConnectionString = _appConfiguration.GetConnectionString(ZLJ.Core.ZLJConsts.ConnectionStringName)!;
                       var efbuilder = new DbContextOptionsBuilder<ZLJDbContext>();
                       ZLJDbContextConfigurer.Configure(efbuilder, defaultConnectionString);
