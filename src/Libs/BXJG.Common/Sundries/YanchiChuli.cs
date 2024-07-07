@@ -39,22 +39,33 @@ namespace BXJG.Common
         /// <summary>
         /// 需要延迟处理的任务
         /// 耗费资源的处理才需要做这种处理，所以它一定是异步
-        /// 注意，其内部不应该抛出异常。
+        /// object：请求执行时（调用request时）可以指定一个参数传递进去
+        /// CancellationToken：有请求覆盖时，之前的任务可以通过这个标记取消
+        /// Task：处理程序返回对象，延迟覆盖执行器不关心这个，所以就Task就行了
         /// </summary>
-        Func<CancellationToken, Task> job;// { get; set; }
+        Func<object, CancellationToken, Task> job;// { get; set; }
         /// <summary>
         /// 延迟任务执行后触发
+        /// YanchiChuli：当前对象本身
+        /// Task：job的返回任务对象
+        /// CancellationToken：有请求覆盖时，之前的任务可以通过这个标记取消
+        /// ValueTask：事件处理程序的返回值
         /// </summary>
         public event Func<YanchiChuli, Task, CancellationToken, ValueTask> OnExecuted;
         /// <summary>
         /// 延迟执行报错时触发
+        /// YanchiChuli：当前对象本身
+        /// Task：job的返回任务对象
+        /// CancellationToken：有请求覆盖时，之前的任务可以通过这个标记取消
+        /// Exception：错误对象
+        /// ValueTask：事件处理程序的返回值
         /// </summary>
         public event Func<YanchiChuli, Task, CancellationToken, Exception, ValueTask> OnError;
         /// <summary>
         /// 延迟多久，单位毫秒
         /// </summary>
         public int Delay { get; private set; }
-        
+
         ///// <summary>
         ///// 最后执行时间
         ///// </summary>
@@ -66,7 +77,7 @@ namespace BXJG.Common
 
         ILogger logger = SimpleLogger.Instance;
 
-        public YanchiChuli(Func<CancellationToken, Task> job, int delay = 5000, ILoggerFactory loggerFactory = null)
+        public YanchiChuli(Func<object, CancellationToken, Task> job, int delay = 5000, ILoggerFactory loggerFactory = null)
         {
             this.job = job;
             this.Delay = delay;
@@ -90,7 +101,7 @@ namespace BXJG.Common
         /// <param name="yanchi"></param>
         /// <param name="chaoshi"></param>
         /// <returns>每次请求的唯一id</returns>
-        public void Request()
+        public void Request(object state = default)
         {
             //由于后执行的要覆盖先执行的，所以请求时直接覆盖
             try
@@ -127,7 +138,7 @@ namespace BXJG.Common
 
                 //若这里又来个新请求，顶部的 cts?.Cancel();会生效
                 logger.LogDebug($"延时覆盖执行器{GetHashCode()} tempcts{tempcts.GetHashCode()} 任务开始执行...");
-                var t = job(tempcts.Token);
+                var t = job(state, tempcts.Token);
                 try
                 {
                     await t;

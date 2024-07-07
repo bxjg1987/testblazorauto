@@ -34,7 +34,7 @@ namespace BXJG.Utils.EFCore.Settings
             if (loggerFactory != default)
                 logger = loggerFactory.CreateLogger<AbpSettingsConfigurationProvider>();
 
-            yanchiChuli = new YanchiChuli(ct =>
+            yanchiChuli = new YanchiChuli((state,cts) =>
             {
                 Load();
                 OnReload();//通知iconfiguration，当前配置提供器已刷新

@@ -25,6 +25,13 @@ using Microsoft.Extensions.DependencyInjection;
 using BXJG.Common.Contracts;
 using BXJG.Utils.Settings;
 using BXJG.Utils.Extensions;
+using BXJG.Common;
+using BXJG.Utils.Share;
+using Castle.MicroKernel.Registration;
+using Castle.MicroKernel;
+using Castle.MicroKernel.Resolvers;
+using Abp.RealTime;
+using Microsoft.AspNetCore.SignalR;
 
 namespace BXJG.Utils
 {
@@ -86,9 +93,34 @@ namespace BXJG.Utils
 
 
             IocManager.RegisterAssemblyByConvention(typeof(BXJGUtilsModule).GetAssembly());
+            //Lazy<TService>注入
+            IocManager.IocContainer.Register(
+               Castle.MicroKernel.Registration.Component.For<ILazyComponentLoader>().ImplementedBy<LazyOfTComponentLoader>()
+            );
             //IocManager.Register<IClock, AbpClock>();
-            IocManager.RegService(services => services.AddBXJGCommon());
+            IocManager.RegService(services =>
+            {
+                services.AddBXJGCommon();
+            });
             IocManager.Register(typeof(DynamicPropertyManager<>), DependencyLifeStyle.Singleton);
+
+           
+            // ISubDependencyResolver
+            // Castle.MicroKernel.resolver
+            // ScopedIocResolver
+            // IocResolverExtensions
+            // IIocResolver sdf;
+            // sdf.Resolve()
+            // IocManager.IocContainer.Resolve()
+            // IDependencyResolver sdf;
+            // Castle.Windsor.MsDependencyInjection.WindsorServiceScopeFactory
+            // sdf.Resolve()
+            // IIocResolver sdf;
+            // IDependencyResolver
+            // iresolver
+            // Abp.Dependency.ScopedIocResolver sdf;
+            // sdf.ResolveAsDisposable
+            // sdf.
 
             //通用附件管理器
             IocManager.Register(typeof(AttachmentManager<>), DependencyLifeStyle.Transient);
@@ -136,7 +168,7 @@ namespace BXJG.Utils
             //{
 
             //Task.Yield();
-          
+
             //}
             // catch
             // {

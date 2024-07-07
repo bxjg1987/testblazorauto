@@ -141,10 +141,7 @@ namespace ZLJ.Web.Core
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(typeof(ZLJWebCoreModule).GetAssembly());
-            //Lazy<TService>注入
-            IocManager.IocContainer.Register(
-               Castle.MicroKernel.Registration.Component.For<ILazyComponentLoader>().ImplementedBy<LazyOfTComponentLoader>()
-            );
+         
 
 
             //使用sqlserver作为分布式锁https://github.com/madelson/DistributedLock

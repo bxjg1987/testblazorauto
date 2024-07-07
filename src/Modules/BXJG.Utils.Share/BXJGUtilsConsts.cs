@@ -22,7 +22,7 @@ namespace BXJG.Utils.Share
 
         static BXJGUtilsConsts()
         {
-          //  UploadTemp = @$"upload{Path.DirectorySeparatorChar}temp";
+            //  UploadTemp = @$"upload{Path.DirectorySeparatorChar}temp";
             UploadTempUrl = @$"upload/temp";
         }
         public const string UploadDir = "upload";
@@ -30,7 +30,7 @@ namespace BXJG.Utils.Share
         /// <summary>
         /// upload\temp
         /// </summary>
-        public const string UploadTemp= "temp";
+        public const string UploadTemp = "temp";
         public static readonly string UploadTempUrl;
 
         #region 全局配置
@@ -85,5 +85,22 @@ namespace BXJG.Utils.Share
         /// 通过isettingmanager修改配置时，应触发此事件，以便通知配置提供程序刷新
         /// </summary>
         public const string OnAbpApplicationSettingsChanged = "OnAbpApplicationSettingsChanged";
+
+        /// <summary>
+        /// 前端获取AbpUserConfigurationDto作为全局状态
+        /// 里面任何一个状态变化时，都触发此事件
+        /// 事件处理程序中，通过全局的延迟覆盖执行器推送信号到所有在线用户
+        /// 在线用户得到信号后，发起查询，而后更新本地缓存的状态。
+        /// 这个对应整个应用级别的配置更新
+        /// </summary>
+        public const string OnApplicationStateChanged = "OnApplicationStateChanged";
+        /// <summary>
+        /// 租户级别的状态更新
+        /// </summary>
+        public const string OnTenantStateChanged = "OnTenantStateChanged";
+        /// <summary>
+        /// 用户级别的状态更新
+        /// </summary>
+        public const string OnUserStateChanged = "OnUserStateChanged";
     }
 }
