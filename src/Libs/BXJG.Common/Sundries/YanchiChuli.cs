@@ -65,13 +65,23 @@ namespace BXJG.Common
         /// 延迟多久，单位毫秒
         /// </summary>
         public int Delay { get; private set; }
+        /// <summary>
+        /// 若大于0，则表示最多等这么久，超时后job立即强制执行
+        /// 小于等于0时，则忽略此逻辑
+        /// 默认为Delay*5
+        /// </summary>
+        public int Timeout { get; set; }
+        /// <summary>
+        /// 最后一次真正执行的时间点
+        /// </summary>
+        DateTime lastExecuteTime = DateTime.MinValue;
 
         ///// <summary>
         ///// 最后执行时间
         ///// </summary>
-        //public DateTime lastExecuteTime { get; private set; } = DateTime.MinValue;
+        //public DateTime lastExecuteTime { get; private set; } =
 
-        // private readonly object locker = new object();
+        private readonly object locker = new object();
 
         public bool Executing => cts != default && !cts.IsCancellationRequested;
 
@@ -83,6 +93,7 @@ namespace BXJG.Common
             this.Delay = delay;
             if (loggerFactory != default)
                 logger = loggerFactory.CreateLogger<YanchiChuli>();
+            Timeout = delay * 5;
         }
 
         CancellationTokenSource cts;// = new CancellationTokenSource();
@@ -104,52 +115,78 @@ namespace BXJG.Common
         public void Request(object state = default)
         {
             //由于后执行的要覆盖先执行的，所以请求时直接覆盖
-            try
+            CancellationTokenSource tempcts;
+            //lock确保后续任务闭包引用正确的tempcts，不会产生无法释放的CancellationTokenSource
+            lock (locker)
             {
-                cts?.Cancel();
-            }
-            catch { }
-            cts = new CancellationTokenSource();
-
-            Task.Run(async () =>
-            {
-                var tempcts = cts;// CancellationTokenSource.CreateLinkedTokenSource(cts.Token);//闭包，确保对老对象有引用
-                int lssc = 0;//已等待的毫秒数
-                while (true)
-                {
-                    //经过测试，这里等1毫秒有问题，起码本地测试是有问题的
-                    await Task.Delay(10);
-                    lssc += 10;
-                    //若后执行覆盖了当前执行，则放弃执行
-                    if (tempcts.IsCancellationRequested)
-                    {
-                        logger.LogDebug($"延时覆盖{GetHashCode()} tempcts{tempcts.GetHashCode()} 任务放弃了！");
-                        try
-                        {
-                            tempcts.Dispose();//早点释放也无所谓
-                        }
-                        catch { }
-                        return;
-                    }
-
-                    if (lssc >= Delay)
-                        break;
-                }
-
-                //若这里又来个新请求，顶部的 cts?.Cancel();会生效
-                logger.LogDebug($"延时覆盖执行器{GetHashCode()} tempcts{tempcts.GetHashCode()} 任务开始执行...");
-                var t = job(state, tempcts.Token);
                 try
                 {
-                    await t;
-                    if (OnExecuted != default)
-                        await OnExecuted(this, t, tempcts.Token);
+                    cts?.Cancel();
+                }
+                catch { }
+                tempcts = cts = new CancellationTokenSource();
+            }
+            Task.Run(async () =>
+            {
+                try
+                {
+                    int lssc = 0;//已等待的毫秒数
+                    while (true)
+                    {
+                        //经过测试，这里等1毫秒有问题，起码本地测试是有问题的
+                        await Task.Delay(10);
+                        lssc += 10;
+
+                        if (Timeout > 0 && (DateTime.Now - lastExecuteTime).TotalMilliseconds >= Timeout)
+                        {
+                            logger.LogDebug($"延时覆盖{GetHashCode()} tempcts{tempcts.GetHashCode()} 超时了{Timeout}，立即强制执行！");
+                            //有序下面会new，这里需要手动释放，不能依赖外层的finally兜底
+                            try
+                            {
+                                tempcts.Dispose();
+                            }
+                            catch { }
+                            //new个新的，防止下个请求取消它，后续的finally会释放它
+                            tempcts = new CancellationTokenSource();
+                            break;
+                        }
+
+                        //若后执行覆盖了当前执行，则放弃执行，此逻辑一定放在timeout逻辑后面
+                        if (tempcts.IsCancellationRequested)
+                        {
+                            logger.LogDebug($"延时覆盖{GetHashCode()} tempcts{tempcts.GetHashCode()} 任务放弃了！");
+                            //有外层的finally兜底
+                            //try
+                            //{
+                            //    tempcts.Dispose();//早点释放也无所谓
+                            //}
+                            //catch { }
+                            return;
+                        }
+
+                        if (lssc >= Delay)
+                            break;
+                    }
+                    //若这里又来个新请求，顶部的 cts?.Cancel();会生效
+                    logger.LogDebug($"延时覆盖执行器{GetHashCode()} tempcts{tempcts.GetHashCode()} 任务开始执行...");
+                    lastExecuteTime = DateTime.Now;
+                    var t = job(state, tempcts.Token);
+                    try
+                    {
+                        await t;
+                        if (OnExecuted != default)
+                            await OnExecuted(this, t, tempcts.Token);
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.LogError(ex, $"延迟覆盖执行器{this.GetHashCode()}，执行目标任务时发生未处理异常！");
+                        if (OnError != default)
+                            await OnError(this, t, tempcts.Token, ex);
+                    }
                 }
                 catch (Exception ex)
                 {
-                    logger.LogError(ex, $"延迟覆盖执行器{this.GetHashCode()}，执行目标任务时发生未处理异常！");
-                    if (OnError != default)
-                        await OnError(this, t, tempcts.Token, ex);
+                    logger.LogError(ex, $"延时覆盖执行器{GetHashCode()} tempcts{tempcts.GetHashCode()} 执行内部错误...");
                 }
                 finally
                 {
