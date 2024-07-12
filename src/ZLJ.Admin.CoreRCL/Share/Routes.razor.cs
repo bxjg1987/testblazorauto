@@ -50,6 +50,9 @@ namespace ZLJ.Admin.CoreRCL.Share
 
         protected override void OnInitialized()
         {
+            //可以考虑在bxjg.utils.rcl中定义一个组件，在路由中引用
+            //这样可以把必须在ui中做的公共的初始化逻辑放到bxjg.utils.rcl中
+
             //AbpExceptionInterceptor1.Services.Value = ServiceProvider;
             //AbpExceptionInterceptorAttribute.ServicesInBrower = ServiceProvider;
             Console.WriteLine($"全局路由中的ioc实例：{ServiceProvider.GetHashCode()}");

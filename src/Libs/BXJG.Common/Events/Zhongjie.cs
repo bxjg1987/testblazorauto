@@ -33,7 +33,7 @@ namespace BXJG.Common.Events
     {
         //private readonly ConcurrentBag<Weituo> weituos = new ConcurrentBag<Weituo>();//不好做删除
         //核心存储事件和对应的处理程序（委托）
-        internal protected readonly ConcurrentDictionary<string, ConcurrentDictionary<Delegate, Weituo>> weituos = new ConcurrentDictionary<string, ConcurrentDictionary<Delegate, Weituo>>();
+        internal protected readonly ConcurrentDictionary<string, ConcurrentDictionary<Delegate, Weituo>> weituos = new ConcurrentDictionary<string, ConcurrentDictionary<Delegate, Weituo>>(StringComparer.OrdinalIgnoreCase);
 
         internal protected readonly ILogger logger;
 

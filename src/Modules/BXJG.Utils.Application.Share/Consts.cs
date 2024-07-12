@@ -36,6 +36,11 @@ namespace BXJG.Utils.Application.Share
         //    // 忽略空值
         //    //  NullValueHandling = NullValueHandling.Ignore
         //};
-
+        #region 公共前端事件
+        /// <summary>
+        /// 触发此事件，前端重新调用getall接口，以刷新前端缓存的前进配置
+        /// </summary>
+        public const string ETGetAll = "ETGetAll";
+        #endregion
     }
 }

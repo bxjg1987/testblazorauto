@@ -40,7 +40,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="services"></param>
         /// <param name="cfg">通用signalR配置，通常只需要withurl配置地址即可</param>
         /// <returns></returns>
-        public static IServiceCollection UseBXJGUtilsRCL(this IServiceCollection services, Action<IServiceProvider,HubConnectionBuilder> cfg = default)
+        public static IServiceCollection UseBXJGUtilsRCL(this IServiceCollection services, Action<IServiceProvider, HubConnectionBuilder> cfg = default)
         {
             //   BXJGUtilsRCLConfiguration peizhi = new BXJGUtilsRCLConfiguration(services);
             // peizhi.HubConnectionBuilder.WithAutomaticReconnect();
@@ -59,13 +59,23 @@ namespace Microsoft.Extensions.DependencyInjection
 
                     var hcb = new HubConnectionBuilder();
                     //观察withurl源码中发现token配置是通过选项来的， 或者这里用postconfiguration
-                    hcb.Services.Configure<HttpConnectionOptions>(x=>x.AccessTokenProvider=()=> Task.FromResult( s.GetRequiredService<IAccessTokenProvider>().GetEncryptedAccessToken()) );
+                    hcb.Services.Configure<HttpConnectionOptions>(x => x.AccessTokenProvider = () => Task.FromResult(s.GetRequiredService<IAccessTokenProvider>().GetEncryptedAccessToken()));
                     hcb.WithAutomaticReconnect();
-                    cfg.Invoke(s,hcb);//后调用，便于外部覆盖
+                    cfg.Invoke(s, hcb);//后调用，便于外部覆盖
 
                     var conn = hcb.Build();
                     var logger = s.GetRequiredService<ILoggerFactory>().CreateLogger(Consts.TongyongLianjie);
                     var zhongjie = s.GetRequiredService<Zhongjie>();
+                    //文心一言说on返回的对象需要我们自己释放，通义千问和copilot说不需要，连接释放时会自动释放
+                    //貌似copilot的回答更可信，保险起见应该去官方文档反馈
+                    //看on的源码，好像确实不需要释放，返回idispose的意图是让我们可以随时主动注销事件
+                    //参考hubconnection的设计，跟我们的zhongjie其实挺像，所以它本身也算是个事件总线
+                    //这里还有必要再触发我们的zhongjie吗？
+                    //这里既然scope注入了hubconnection，跟zhongjie使用方式就一样了，感觉不太有必要。
+                    //下面的逻辑完全可以已hubconnection的扩展方法形式提供。
+                    //但通过我们的zhongjie再转发一次也有好处，就是前端统不用关心signalR，无论是界面的事件总线
+                    //还是后端推送事件过来的事件，都看成是前端事件，zhongjie提供统一的api
+                    //而同时作为后端通信和ui事件总线，hubconnection并不方便
                     conn.On<Abp.Notifications.UserNotification>("getNotification", async msg =>
                     {
                         logger.LogDebug($"通知连接接受到消息{System.Text.Json.JsonSerializer.Serialize(msg)}，准备触发事件。");
@@ -87,29 +97,17 @@ namespace Microsoft.Extensions.DependencyInjection
                         await zhongjie.Chufa(msg.Notification, eventName);
                     });
 
-                    //某些推送仅仅是向前端发个信号，前端收到信号后，主动去找服务器做些事
-                    //比如：全局状态，收到信号后，集合 延迟覆盖 重新去服务端拿数据后，更新本地缓存的状态
-                    //当然这种推送不仅仅是应用在这个场景，这里定义一个通用的方式，及仅仅是获取信号，没有参数，内部直接触发同名事件
-
-                    //每个事件的处理都不一样，所以这东西是死的，不能是动态的，
-
-                    //这感觉是打通了后端api中abp事件 与前端事件。
-                    //比如 后端 实体变更事件，可以对应前端 一个实体状态变更事件。太复杂了，还是特事特办
-
-                    //状态变更事件是应用程序级别的，不需要用户订阅
-                    //通知会持久化，且用户少是直接推送，多了是任务推送
-                    //全局状态变更是不需要持久化，仅推送给所有在线用户
-
-                    //后端推送应该用延迟覆盖，因为短时间内多个线程，可能同时在改变多个状态，都做推送太浪费。
-                    //conn.On("", async () =>
-                    //{
-
-                    //});
+                    conn.On(BXJG.Utils.Application.Share.Consts.ETGetAll, async () =>
+                    {
+                         await zhongjie.Chufa(BXJG.Utils.Application.Share.Consts.ETGetAll);
+                    });
+                    // IServiceProvider
+                    //conn.Closed
 
                     return conn;
                 });
             }
-            
+
             #endregion
 
             services.AddCommonRCL(async s =>
