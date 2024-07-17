@@ -1,4 +1,4 @@
-﻿using BXJG.Utils.Web.Events;
+﻿using BXJG.Utils.Events;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ZLJ.Controllers;

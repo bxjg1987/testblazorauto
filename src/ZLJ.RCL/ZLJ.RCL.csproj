@@ -36,13 +36,13 @@
 
 		<!--<PackageReference Include="Abp.Web.Common" Version="9.2.2" />-->
 
-		<PackageReference Include="AntDesign" Version="0.19.4" />
+		<PackageReference Include="AntDesign" Version="0.19.5.1" />
 
 		<!--<PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.2" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.2" />-->
 		<!--当前项目定义了拦截器，就算当前项目引用的其它项目已经引用rougamo，这里也必须引用，
 	IncludeAssets="all" PrivateAssets="contentfiles;analyzers"是确保拦截器使用方不用引用rougamo的包-->
-	  <PackageReference Include="Rougamo.Fody" Version="3.0.2" PrivateAssets="contentfiles;analyzers" />
+	  <PackageReference Include="Rougamo.Fody" Version="3.1.0" PrivateAssets="contentfiles;analyzers" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(SolutionName)' != 'ZLJWithModules'">
