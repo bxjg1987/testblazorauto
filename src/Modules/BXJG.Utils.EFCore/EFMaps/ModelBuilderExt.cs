@@ -31,7 +31,7 @@ namespace Microsoft.EntityFrameworkCore
         public static EntityTypeBuilder<T> MapGeneralTree<T>(this EntityTypeBuilder<T> entityTypeBuilder)
             where T : GeneralTreeEntity<T>
         {
-            entityTypeBuilder.HasIndex(c => c.Code).IsUnique();
+            entityTypeBuilder.HasIndex(c => c.Code);//.IsUnique();//多租户时，唯一索引有问题
 
             return entityTypeBuilder;
         }
