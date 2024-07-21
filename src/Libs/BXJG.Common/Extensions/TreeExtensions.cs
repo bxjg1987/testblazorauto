@@ -113,37 +113,46 @@ namespace BXJG.Common.Contracts
         /// </summary>
         /// <param name="tree"></param>
         /// <param name="act">true停止递归 false继续</param>
-        public static void RecursiveUp<TTreeNode>(this TTreeNode tree, Func<TTreeNode, bool> act)
-            where TTreeNode : IGeneralTree<TTreeNode>
-
+        public static void RecursiveUp<TTreeNode>(this TTreeNode tree, Func<TTreeNode, bool> act) where TTreeNode : IGeneralTree<TTreeNode>
         {
-            var r = act(tree);
-            if (r)
-                return;
+            //var r = act(tree);
+            //if (r)
+            //    return;
 
-            var p = tree.Parent;
-            if (p != null)
-                p.RecursiveUp(act);
+            //var p = tree.Parent;
+            //if (p != null)
+            //    p.RecursiveUp(act);
+
+            var p1 = tree;
+            while (p1 != null)
+            {
+                var rr = act(p1);
+                if (rr)
+                    return;
+                p1 = p1.Parent;
+            }
         }
         /// <summary>
         /// 递归向下
         /// </summary>
         /// <param name="tree"></param>
         /// <param name="act">true停止递归 false继续</param>
-        /// <param name="isReturn">true停止递归 false继续</param>
-        public static void RecursiveDown<TTreeNode>(this IList<TTreeNode> tree, Func<TTreeNode, bool> act, ref bool isReturn)
+        public static bool RecursiveDown<TTreeNode>(this IList<TTreeNode> tree, Func<TTreeNode, bool> act)
               where TTreeNode : IGeneralTree<TTreeNode>
         {
             foreach (var node in tree)
             {
+                var isReturn = act(node);
                 if (isReturn)
-                    return;
-
-                isReturn = act(node);
-
+                    return isReturn;
                 if (node.Children != default && node.Children.Count > 0)
-                    node.Children.RecursiveDown(act, ref isReturn);
+                {
+                    isReturn = node.Children.RecursiveDown(act);
+                    if (isReturn)
+                        return isReturn;
+                }
             }
+            return false;
         }
         ///// <summary>
         ///// 递归向下
@@ -197,10 +206,25 @@ namespace BXJG.Common.Contracts
             }
             return default;
         }
-
-
-
-
+        ///// <summary>
+        ///// 扁平化
+        ///// </summary>
+        ///// <typeparam name="TTreeNode"></typeparam>
+        ///// <param name="node"></param>
+        ///// <returns></returns>
+        //public static List<TTreeNode> Flatten<TTreeNode>(this TTreeNode node) where TTreeNode : IGeneralTree<TTreeNode>
+        //{
+        //    var list = new List<TTreeNode>
+        //    {
+        //        node
+        //    };
+        //    node.Children.RecursiveDown(x =>
+        //    {
+        //        list.Add(x);
+        //        return false;
+        //    });
+        //    return list;
+        //}
         #endregion
 
         #region 重置code
