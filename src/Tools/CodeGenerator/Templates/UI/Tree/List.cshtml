@@ -73,6 +73,7 @@
            RowClassName="@@(r=>r.RowIndex%2==0?"even":"odd")"
            RemoteDataSource="true"
            OnRow="Row"
+           RowKey="x=>x.Id+ '_'+ x.ChildrenCount"
            Size="TableSize.Small"
            Bordered="true"
            ScrollY="76vh">
