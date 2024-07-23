@@ -77,41 +77,41 @@ namespace ZLJ.EntityFrameworkCore
         /// </summary>
         public DbSet<CustomerRole> CustomerPosts { get; set; }
 
-        protected long? CurrentCustomerId => GetCurrentCustomerIdOrNull();
-        protected long? GetCurrentCustomerIdOrNull()
-        {
-            var ddd = CurrentUnitOfWorkProvider?.Current?.Filters?.SingleOrDefault(c => c.FilterName == "MayHaveCustomer")?.FilterParameters;// ["customerId"];
+        //protected long? CurrentCustomerId => GetCurrentCustomerIdOrNull();
+        //protected long? GetCurrentCustomerIdOrNull()
+        //{
+        //    var ddd = CurrentUnitOfWorkProvider?.Current?.Filters?.SingleOrDefault(c => c.FilterName == "MayHaveCustomer")?.FilterParameters;// ["customerId"];
 
-            if (ddd != default)
-            {
-                if (ddd.TryGetValue("CustomerId", out var rr))
-                {
-                    return Convert.ToInt64(rr);
-                }
-            }
-            var userOuClaim = PrincipalAccessor.Principal?.Claims.FirstOrDefault(c => c.Type == "customerId");
-            if (string.IsNullOrEmpty(userOuClaim?.Value))
-            {
-                return null;
-            }
+        //    if (ddd != default)
+        //    {
+        //        if (ddd.TryGetValue("CustomerId", out var rr))
+        //        {
+        //            return Convert.ToInt64(rr);
+        //        }
+        //    }
+        //    var userOuClaim = PrincipalAccessor.Principal?.Claims.FirstOrDefault(c => c.Type == "customerId");
+        //    if (string.IsNullOrEmpty(userOuClaim?.Value))
+        //    {
+        //        return null;
+        //    }
 
-            return long.Parse(userOuClaim.Value);
-        }
-        protected bool IsCustomerFilterEnabled => CurrentUnitOfWorkProvider?.Current?.IsFilterEnabled("MayHaveCustomer") == true;
+        //    return long.Parse(userOuClaim.Value);
+        //}
+        //protected bool IsCustomerFilterEnabled => CurrentUnitOfWorkProvider?.Current?.IsFilterEnabled("MayHaveCustomer") == true;
 
 
-        protected override bool ShouldFilterEntity<TEntity>(IMutableEntityType entityType)
-        {
-            //若实体父类不是抽象类，则当前方法不会被调用，F12查看base.ShouldFilterEntity
-            //这个规则没有测试，是猜测的，因为User本身也是继承的，但它的全局数据过滤器可以用
+        //protected override bool ShouldFilterEntity<TEntity>(IMutableEntityType entityType)
+        //{
+        //    //若实体父类不是抽象类，则当前方法不会被调用，F12查看base.ShouldFilterEntity
+        //    //这个规则没有测试，是猜测的，因为User本身也是继承的，但它的全局数据过滤器可以用
 
-            if (typeof(IMustHaveCustomer).IsAssignableFrom(typeof(TEntity)))
-            {
-                return true;
-            }
+        //    if (typeof(IMustHaveCustomer).IsAssignableFrom(typeof(TEntity)))
+        //    {
+        //        return true;
+        //    }
 
-            return base.ShouldFilterEntity<TEntity>(entityType);
-        }
+        //    return base.ShouldFilterEntity<TEntity>(entityType);
+        //}
         //protected override Expression<Func<TEntity, bool>> CreateFilterExpression<TEntity>()
         //{
         //    //这些代码都是启动时执行的，并不是每次查询执行
