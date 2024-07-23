@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<!--ef貌似不支持stand版本-->
 		<TargetFrameworks>net6;net7;net8</TargetFrameworks>
-		<VersionPrefix>1.3.45</VersionPrefix>
+		<VersionPrefix>1.3.46</VersionPrefix>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>

@@ -2,7 +2,7 @@
 
   <PropertyGroup>
 	  <TargetFramework>netstandard2.1</TargetFramework>
-	  <VersionPrefix>1.3.60</VersionPrefix>
+	  <VersionPrefix>1.3.61</VersionPrefix>
     <!--<Version></Version>-->
     <!--<GeneratePackageOnBuild>true</GeneratePackageOnBuild>-->
     <GenerateDocumentationFile>True</GenerateDocumentationFile>

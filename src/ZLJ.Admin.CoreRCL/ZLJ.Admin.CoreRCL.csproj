@@ -9,7 +9,9 @@
 		<StaticWebAssetProjectMode>Default</StaticWebAssetProjectMode>
 	</PropertyGroup>
 
-
+	<PropertyGroup>
+		<RunAOTCompilation>true</RunAOTCompilation>
+	</PropertyGroup>
 	<ItemGroup>
 		<Compile Remove="AdminListBaseComponent.cs" />
 		<Compile Remove="Auth\AccessTokenProvider.cs" />

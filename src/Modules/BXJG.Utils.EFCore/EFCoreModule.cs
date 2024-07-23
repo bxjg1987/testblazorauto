@@ -54,8 +54,8 @@ namespace BXJG.Utils.EFCore
         public override void Initialize()
         {
             
-
-         base.Configuration.ReplaceService< IAsyncQueryableExecuter ,sdfsdf >(DependencyLifeStyle.Transient);
+            //貌似abp9.3解决了
+       //  base.Configuration.ReplaceService< IAsyncQueryableExecuter ,sdfsdf >(DependencyLifeStyle.Transient);
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
             // 应用层去注册
             //IocManager.Register(typeof(AbpAsyncDeterminationInterceptor<AbpCapTranInterceptor>), DependencyLifeStyle.Transient);
@@ -66,30 +66,30 @@ namespace BXJG.Utils.EFCore
             Configuration.ReplaceService<IEntityHistoryHelper, BXJGEntityHistoryHelper>(DependencyLifeStyle.Transient);
         }
     }
-    /// <summary>
-    /// https://github.com/aspnetboilerplate/aspnetboilerplate/issues/6920
-    /// </summary>
-    public class sdfsdf : EfCoreAsyncQueryableExecuter,ISingletonDependency
-    {
-        public ICancellationTokenProvider CancellationTokenProvider { get; set; }=NullCancellationTokenProvider.Instance;
-        public Task<int> CountAsync<T>(IQueryable<T> queryable)
-        {
-            return queryable.CountAsync(CancellationTokenProvider.Token);
-        }
+    ///// <summary>
+    ///// https://github.com/aspnetboilerplate/aspnetboilerplate/issues/6920
+    ///// </summary>
+    //public class sdfsdf : EfCoreAsyncQueryableExecuter,ISingletonDependency
+    //{
+    //    public ICancellationTokenProvider CancellationTokenProvider { get; set; }=NullCancellationTokenProvider.Instance;
+    //    public Task<int> CountAsync<T>(IQueryable<T> queryable)
+    //    {
+    //        return queryable.CountAsync(CancellationTokenProvider.Token);
+    //    }
 
-        public Task<List<T>> ToListAsync<T>(IQueryable<T> queryable)
-        {
-            return queryable.ToListAsync(CancellationTokenProvider.Token);
-        }
+    //    public Task<List<T>> ToListAsync<T>(IQueryable<T> queryable)
+    //    {
+    //        return queryable.ToListAsync(CancellationTokenProvider.Token);
+    //    }
 
-        public Task<T> FirstOrDefaultAsync<T>(IQueryable<T> queryable)
-        {
-            return queryable.FirstOrDefaultAsync(CancellationTokenProvider.Token);
-        }
+    //    public Task<T> FirstOrDefaultAsync<T>(IQueryable<T> queryable)
+    //    {
+    //        return queryable.FirstOrDefaultAsync(CancellationTokenProvider.Token);
+    //    }
 
-        public Task<bool> AnyAsync<T>(IQueryable<T> queryable)
-        {
-            return queryable.AnyAsync(CancellationTokenProvider.Token);
-        }
-    }
+    //    public Task<bool> AnyAsync<T>(IQueryable<T> queryable)
+    //    {
+    //        return queryable.AnyAsync(CancellationTokenProvider.Token);
+    //    }
+    //}
 }

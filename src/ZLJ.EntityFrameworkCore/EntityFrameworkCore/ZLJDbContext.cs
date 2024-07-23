@@ -112,28 +112,28 @@ namespace ZLJ.EntityFrameworkCore
 
             return base.ShouldFilterEntity<TEntity>(entityType);
         }
-        protected override Expression<Func<TEntity, bool>> CreateFilterExpression<TEntity>()
-        {
-            //这些代码都是启动时执行的，并不是每次查询执行
-            var expression = base.CreateFilterExpression<TEntity>();
-            if (typeof(IMustHaveCustomer).IsAssignableFrom(typeof(TEntity)))
-            {
-                Expression<Func<TEntity, bool>> mayHaveOUFilter = e => ((IMustHaveCustomer)e).CustomerId == CurrentCustomerId || (((IMustHaveCustomer)e).CustomerId == CurrentCustomerId) == IsCustomerFilterEnabled;
-                expression = expression == null ? mayHaveOUFilter : CombineExpressions(expression, mayHaveOUFilter);
-            }
-            return expression;
+        //protected override Expression<Func<TEntity, bool>> CreateFilterExpression<TEntity>()
+        //{
+        //    //这些代码都是启动时执行的，并不是每次查询执行
+        //    var expression = base.CreateFilterExpression<TEntity>();
+        //    if (typeof(IMustHaveCustomer).IsAssignableFrom(typeof(TEntity)))
+        //    {
+        //        Expression<Func<TEntity, bool>> mayHaveOUFilter = e => ((IMustHaveCustomer)e).CustomerId == CurrentCustomerId || (((IMustHaveCustomer)e).CustomerId == CurrentCustomerId) == IsCustomerFilterEnabled;
+        //        expression = expression == null ? mayHaveOUFilter : CombineExpressions(expression, mayHaveOUFilter);
+        //    }
+        //    return expression;
 
-            //var expression = base.CreateFilterExpression<TEntity>();
+        //    //var expression = base.CreateFilterExpression<TEntity>();
 
-            //if (IsCustomerFilterEnabled && typeof(IMustHaveCustomer).IsAssignableFrom(typeof(TEntity)))
-            //{
-            //    var tt = typeof(TEntity);
-            //    Expression<Func<TEntity, bool>> mayHaveOUFilter = e => ((IMustHaveCustomer)e).CustomerId == CurrentCustomerId;
-            //    expression = expression == null ? mayHaveOUFilter : CombineExpressions(expression, mayHaveOUFilter);
-            //}
+        //    //if (IsCustomerFilterEnabled && typeof(IMustHaveCustomer).IsAssignableFrom(typeof(TEntity)))
+        //    //{
+        //    //    var tt = typeof(TEntity);
+        //    //    Expression<Func<TEntity, bool>> mayHaveOUFilter = e => ((IMustHaveCustomer)e).CustomerId == CurrentCustomerId;
+        //    //    expression = expression == null ? mayHaveOUFilter : CombineExpressions(expression, mayHaveOUFilter);
+        //    //}
 
-            //return expression;
-        }
+        //    //return expression;
+        //}
 
 
         #endregion
