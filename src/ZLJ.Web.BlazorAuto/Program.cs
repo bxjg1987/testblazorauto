@@ -27,18 +27,19 @@ var builder = WebApplication.CreateBuilder(args);
 //    opt.SlidingExpiration = true;
 //    opt.ExpireTimeSpan = TimeSpan.FromHours(5);
 //});
-builder.Services.AddAuthentication(/*CookieAuthenticationDefaults.AuthenticationScheme*/ opt =>
-{
-    //不加这个，在调用HttpContext.SiginAsync会报错，参考：https://learn.microsoft.com/zh-cn/dotnet/core/compatibility/aspnetcore#identity-signinasync-throws-exception-for-unauthenticated-identity
-    opt.RequireAuthenticatedSignIn = false;
-    //opt.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-}).AddCookie(x =>
-{
-    //登录时，根据accessToken的过期时间去设置
-    //x.SlidingExpiration = true;
-    //x.Cookie.Expiration = TimeSpan.FromDays(1);
-    x.Cookie.HttpOnly = true;
-});
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
+//builder.Services.AddAuthentication(/*CookieAuthenticationDefaults.AuthenticationScheme*/ opt =>
+//{
+//    //不加这个，在调用HttpContext.SiginAsync会报错，参考：https://learn.microsoft.com/zh-cn/dotnet/core/compatibility/aspnetcore#identity-signinasync-throws-exception-for-unauthenticated-identity
+//    opt.RequireAuthenticatedSignIn = false;
+//    //opt.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+//}).AddCookie(x =>
+//{
+//    //登录时，根据accessToken的过期时间去设置
+//    //x.SlidingExpiration = true;
+//    //x.Cookie.Expiration = TimeSpan.FromDays(1);
+//    x.Cookie.HttpOnly = true;
+//});
 builder.Services.AddAuthorization();
 //builder.Services.AddAuthorization(opt => {
 //    opt.AddPolicy("Administrator", ab => {
