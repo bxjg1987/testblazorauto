@@ -14,11 +14,11 @@ using ZLJ.Admin.CoreRCL.Auth;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
-builder.Services.AddLogging(lb =>
-{
-    //lb.AddBrowserConsole();
-    lb.AddProvider(new BrowserConsoleLoggerProvider()).SetMinimumLevel(LogLevel.Debug);
-});
+//builder.Services.AddLogging(lb =>
+//{
+//    //lb.AddBrowserConsole();
+//    lb.AddProvider(new BrowserConsoleLoggerProvider()).SetMinimumLevel(LogLevel.Debug);
+//});
 //builder.Logging.AddProvider(new BrowserConsoleLoggerProvider());
 
 builder.Services.AddAdminBlazor().AddCommonRCLClient().AddAuthorizationCore();
@@ -44,6 +44,9 @@ builder.Services.AddAdminApiClientProxy(hc =>
 });
 
 var host = builder.Build();
+var l= host.Services.GetRequiredService<ILoggerFactory>().CreateLogger("ccccccc");
+l.LogDebug("ccccccccccccccccccc");
+l.LogWarning("bbbbbbbbbbbbbbbb");
 //host.Services.GetRequiredService<AppContainer>().Services = host.Services;
 //var a = host.Services.GetRequiredService<AbpUserConfigurationService>();
 //var b = host.Services.GetRequiredService<AppContainer>();
