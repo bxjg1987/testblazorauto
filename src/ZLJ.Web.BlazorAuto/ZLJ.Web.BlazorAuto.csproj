@@ -34,6 +34,12 @@
   <ItemGroup>
     <ProjectReference Include="..\ZLJ.Admin.CoreRCL\ZLJ.Admin.CoreRCL.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\login1\fonts\fontawesome-webfont.svg" />
+    <None Include="wwwroot\login1\fonts\fontawesome-webfont.woff2" />
+    <None Include="wwwroot\login1\images\image.svg" />
+  </ItemGroup>
 	
 
 </Project>

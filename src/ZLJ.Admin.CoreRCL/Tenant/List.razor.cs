@@ -18,7 +18,7 @@ namespace ZLJ.Admin.CoreRCL.Tenant
             //    sj = true;
             //}
             await base.OnInitializedAsync();
-            await base.InitPermission(PermissionNames.AdministratorBaseInfoPostCreate, PermissionNames.AdministratorBaseInfoPostUpdate, PermissionNames.AdministratorBaseInfoPostDelete);
+            await base.InitPermission(PermissionNames.AdminTenantCreate, PermissionNames.AdminTenantUpdate, PermissionNames.AdminTenantDelete);
 
         }
 

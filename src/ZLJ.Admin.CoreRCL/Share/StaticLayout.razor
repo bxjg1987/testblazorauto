@@ -3,6 +3,14 @@
 @inherits LayoutComponentBase
 @inject NavigationManager Navigation
 @implements IDisposable
+
+<HeadContent>
+    <link rel="stylesheet" href="ZLJ.Web.BlazorAuto.styles.css" />
+    <link href="/app.css" rel="stylesheet" />
+</HeadContent>
+
+
+
 <div style="height:100vh">
     <ErrorBoundary @ref="errorBoundary">
         <ChildContent>

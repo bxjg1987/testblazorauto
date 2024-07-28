@@ -10,14 +10,96 @@
 
 <PageTitle>登录</PageTitle>
 
+<HeadContent>
+    <!-- CSS Stylesheet -->
+    <link rel="stylesheet" href="/login1/css/style.css" type="text/css" media="all" />
 
-<EditForm Model="model" method="post" OnValidSubmit="LoginUser" FormName="login">
+    <!-- fontawesome v5-->
+    <script src="/login1/ziti.js" crossorigin="anonymous"></script>
+
+</HeadContent>
+
+<div class="signinform" style="grid-template-rows:none;">
+    @* <h1>Play Sign In Form</h1> *@
+    <!-- container -->
+    <div class="container">
+        <!-- main content -->
+        <div class="w3l-form-info">
+            <div class="w3l_form">
+                <div class="left_grid_info">
+                    <img src="/login1/images/image.svg" alt="" />
+                </div>
+            </div>
+            <div class="w3_info">
+                <h2>欢迎回来！请登录。</h2>
+
+                <EditForm Model="model" method="post" OnValidSubmit="LoginUser" FormName="login">
+                    @* <form action="#" method="post"> *@
+                    <div class="input-group">
+                        <span><i class="fas fa-users" aria-hidden="true"></i></span>
+                        @* <input type="email" placeholder="Email or Username" required=""> *@
+                        <InputText @bind-Value="model.TenancyName" placeholder="租户" type="text" />
+                    </div>
+                    <div class="input-group">
+                        <span><i class="fas fa-user" aria-hidden="true"></i></span>
+                        @* <input type="email" placeholder="Email or Username" required=""> *@
+                        <InputText @bind-Value="model.UserNameOrEmailAddress" placeholder="账号" required="" type="text" />
+                    </div>
+                    <div class="input-group">
+                        <span><i class="fas fa-key" aria-hidden="true"></i></span>
+                        @* <input type="Password" placeholder="Password" required=""> *@
+                        <InputText @bind-Value="model.Password" placeholder="密码" required="" type="Password" />
+                    </div>
+                    <div class="form-row bottom">
+                        <div class="form-check">
+                            @* <input type="checkbox" id="remenber" name="remenber" value="remenber"> *@
+                            <InputCheckbox @bind-Value="model.RememberClient" type="checkbox" id="remenber" />
+                            <label for="remenber"> 记住我?</label>
+                        </div>
+                        <a href="#url" class="forgot">密码忘记了?</a>
+                    </div>
+                    <button class="btn btn-primary btn-block" type="submit">登 录</button>
+                    @* </form> *@
+                </EditForm>
+
+                <div style="color:red; text-align:center; margin-top:0.7rem;">@msg</div>
+
+                <p class="continue"><span>或者使用下面的方式登录</span></p>
+                <div class="social-login">
+                    <a href="#facebook">
+                        <div class="facebook">
+                            <span class="fab fa-facebook" aria-hidden="true"></span> Facebook
+
+                        </div>
+                    </a>
+                    <a href="#google">
+                        <div class="google">
+                            <span class="fab fa-google-plus-g" aria-hidden="true"></span> Google
+                        </div>
+                    </a>
+                </div>
+                <p class="account">没有账号? <a href="#signup">请联系管理员</a></p>
+            </div>
+        </div>
+        <!-- //main content -->
+    </div>
+    <!-- //container -->
+    <!-- footer -->
+    <div class="footer">
+        <p>
+            &copy; 1987 变形精怪. All Rights Reserved | Design by <a href="https://gitee.com/bxjg1987_admin/abp" target="blank">源码</a>
+        </p>
+    </div>
+    <!-- footer -->
+</div>
+
+@* <EditForm Model="model" method="post" OnValidSubmit="LoginUser" FormName="login">
     租户： <InputText @bind-Value="model.TenancyName" />
     登录名： <InputText @bind-Value="model.UserNameOrEmailAddress" />
     密码： <InputText @bind-Value="model.Password" type="password" />
     记住我：<InputCheckbox @bind-Value="model.RememberClient" />
     <button type="submit">登录</button>
-</EditForm>
+</EditForm> *@
 
 @code {
 
@@ -40,47 +122,58 @@
 
     [CascadingParameter]
     private HttpContext HttpContext { get; set; } = default!;
-
+    string msg = "";
     public async Task LoginUser()
     {
-        var r = await TokenAuthAppService.Authenticate(model);
+        try
+        {
+            var r = await TokenAuthAppService.Authenticate(model);
 
-        //巨坑，new ClaimsIdentity时必须指定身份验证类型，否则HttpContext.User.Identity.IsAuthenticated一直是false
-        await this.HttpContext.SignInAsync(new System.Security.Claims.ClaimsPrincipal(new ClaimsIdentity([new Claim(nameof(r.AccessToken),r.AccessToken),
-                                                                                                          new Claim(nameof(r.EncryptedAccessToken),r.EncryptedAccessToken),
-                                                                                                          new Claim(nameof(r.UserId),r.UserId.ToString()),
-                                                                                                          new Claim(nameof(r.ExpireInSeconds),r.ExpireInSeconds.ToString())], CookieAuthenticationDefaults.AuthenticationScheme)),
-                                           new AuthenticationProperties{IsPersistent = model.RememberClient,
-                                                                        //cookie过期是单独指cookie，这里的是指
-                                                                        ExpiresUtc = TimeProvider.System.GetUtcNow().AddSeconds(r.ExpireInSeconds)});
-        // await AuthorizationService.SignInAsync(this.HttpContext,
-        //                                        default,
-        //                                        new System.Security.Claims.ClaimsPrincipal(new ClaimsIdentity([new Claim(nameof(r.AccessToken),r.AccessToken),
-        //                                                                                                       new Claim(nameof(r.EncryptedAccessToken),r.EncryptedAccessToken),
-        //                                                                                                       new Claim(nameof(r.UserId),r.UserId.ToString()),
-        //                                                                                                       new Claim(nameof(r.ExpireInSeconds),r.ExpireInSeconds.ToString())])),
-        //                                        new AuthenticationProperties
-        //                                            {
-        //                                                IsPersistent = model.RememberClient,
-        //                                                //cookie过期是单独指cookie，这里的是指
-        //                                                ExpiresUtc = TimeProvider.System.GetUtcNow().AddSeconds(r.ExpireInSeconds)
-        //                                            });
+            //巨坑，new ClaimsIdentity时必须指定身份验证类型，否则HttpContext.User.Identity.IsAuthenticated一直是false
+            await this.HttpContext.SignInAsync(new System.Security.Claims.ClaimsPrincipal(new ClaimsIdentity([new Claim(nameof(r.AccessToken),r.AccessToken),
+                                                                                      new Claim(nameof(r.EncryptedAccessToken),r.EncryptedAccessToken),
+                                                                                      new Claim(nameof(r.UserId),r.UserId.ToString()),
+                                                                                      new Claim(nameof(r.ExpireInSeconds),r.ExpireInSeconds.ToString())], CookieAuthenticationDefaults.AuthenticationScheme)),
+                                               new AuthenticationProperties
+                                                   {
+                                                       IsPersistent = model.RememberClient,
+                                                       //cookie过期是单独指cookie，这里的是指
+                                                       ExpiresUtc = TimeProvider.System.GetUtcNow().AddSeconds(r.ExpireInSeconds)
+                                                   });
+            // await AuthorizationService.SignInAsync(this.HttpContext,
+            //                                        default,
+            //                                        new System.Security.Claims.ClaimsPrincipal(new ClaimsIdentity([new Claim(nameof(r.AccessToken),r.AccessToken),
+            //                                                                                                       new Claim(nameof(r.EncryptedAccessToken),r.EncryptedAccessToken),
+            //                                                                                                       new Claim(nameof(r.UserId),r.UserId.ToString()),
+            //                                                                                                       new Claim(nameof(r.ExpireInSeconds),r.ExpireInSeconds.ToString())])),
+            //                                        new AuthenticationProperties
+            //                                            {
+            //                                                IsPersistent = model.RememberClient,
+            //                                                //cookie过期是单独指cookie，这里的是指
+            //                                                ExpiresUtc = TimeProvider.System.GetUtcNow().AddSeconds(r.ExpireInSeconds)
+            //                                            });
 
-        // //var zh =
-        // var loginResult = await GetLoginResultAsync(
-        //     model.UserNameOrEmailAddress,
-        //     model.Password,
-        //     model.TenancyName //先粗暴点就这么写吧，后期参考zero登陆租户原理调整
-        //                       //GetTenancyNameOrNull()
-        // );
-        // //await base.HttpContext.SignInAsync("Identity.Application",
-        // //                                   new System.Security.Claims.ClaimsPrincipal(loginResult.Identity), new AuthenticationProperties
-        // //                                   {
-        // //                                       IsPersistent = model.RememberClient
-        // //                                   });
-        // await signInManager1.SignInAsync(loginResult.Identity, true  );
-        // // return Redirect(returnUrl);
-        nav.NavigateTo(ReturnUrl, true);
+            // //var zh =
+            // var loginResult = await GetLoginResultAsync(
+            //     model.UserNameOrEmailAddress,
+            //     model.Password,
+            //     model.TenancyName //先粗暴点就这么写吧，后期参考zero登陆租户原理调整
+            //                       //GetTenancyNameOrNull()
+            // );
+            // //await base.HttpContext.SignInAsync("Identity.Application",
+            // //                                   new System.Security.Claims.ClaimsPrincipal(loginResult.Identity), new AuthenticationProperties
+            // //                                   {
+            // //                                       IsPersistent = model.RememberClient
+            // //                                   });
+            // await signInManager1.SignInAsync(loginResult.Identity, true  );
+            // // return Redirect(returnUrl);
+            nav.NavigateTo(ReturnUrl, true);
+        }
+        catch (Exception)
+        {
+            msg = "账号或密码错误";
+        }
+
     }
     // private async Task<AbpLoginResult<Tenant, User>> GetLoginResultAsync(string usernameOrEmailAddress, string password, string tenancyName)
     // {

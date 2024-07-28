@@ -10,29 +10,32 @@
     @* 新版本已经内嵌了 *@
     @* <link href="_content/AntDesign/css/ant-design-blazor.css" rel="stylesheet" /> *@
     @* <link href="_content/AntDesign.ProLayout/css/ant-design-pro-layout-blazor.css" rel="stylesheet" /> *@
-    <link rel="stylesheet" href="ZLJ.Web.BlazorAuto.styles.css" />
+
 
     @* 下面这个引用不了，也没必要 *@
     @* <link href="_content/ZLJ.Admin.CoreRCL/css/site.css" rel="stylesheet"> *@
 
-    <link href="/app.css" rel="stylesheet" />
+
     <HeadOutlet @rendermode="RenderModeForPage" />
 </head>
 
-<body>
+<body style="background: #ddd url('/light-poly.png') repeat;">
 
     @if (this.RenderModeForPage != null)
     {
-        <div id="loadingDiv" style="display:none; position:absolute;z-index:9999; width:100%; height:100%; background-color:#eee; text-align:center; padding-top:30vh ">
+        <div id="loadingDiv" style="display:none; position:absolute;z-index:9999; width:100%; height:100%; text-align:center; padding-top:30vh ">
             <Spin Tip="加载中，请稍后..." Size="large" />
         </div>
     }
     <script>
-        document.getElementById('loadingDiv').style.display = 'block';
+        try { document.getElementById('loadingDiv').style.display = 'block'; } catch { }
         function hideLoadingDiv() {
             //removeClass(document.getElementById('loadingDiv'), 'show-loading');
-            document.getElementById('loadingDiv').style.display = 'none';
+            try {
+                document.getElementById('loadingDiv').style.display = 'none';
+            } catch { }
         }
+
     </script>
 
 
@@ -41,7 +44,6 @@
     <app>
         <Routes @rendermode="RenderModeForPage" />
     </app>
-
     @* 图表库，cdn经常访问不了 *@
     @* <script type="text/javascript" src="@("https://unpkg.com/@antv/g2plot@2.4.17/dist/g2plot.min.js")"></script> *@
     @* <script type="text/javascript" src="g2plot.min.js"></script> *@
@@ -50,7 +52,7 @@
     @* <script src="_content/AntDesign.Charts/ant-design-charts-blazor.js"></script> *@
     <script src="_framework/blazor.web.js" autostart="false"></script>
     @* <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.4.3/echarts.min.js"></script> *@
-    <script type ="module">
+    <script type="module">
         import { BrotliDecode } from '/decode.min.js';
         Blazor.start({
             webAssembly: {
@@ -86,7 +88,6 @@
         //     },
         // });
     </script>
-    <script src="/app.js"></script>
-    <script src="/echarts.5.4.3.min.js"></script>
+
 </body>
 </html>
