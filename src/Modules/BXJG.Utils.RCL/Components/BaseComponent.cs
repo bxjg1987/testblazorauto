@@ -3,7 +3,9 @@ using Abp.Application.Features;
 using Abp.Configuration;
 using Abp.Runtime.Session;
 using Abp.Threading;
+using Abp.Web.Models.AbpUserConfiguration;
 using BXJG.Common.Events;
+using BXJG.Utils.Application.Share.Session;
 using Microsoft.Extensions.DependencyInjection;
 
 
@@ -15,6 +17,12 @@ namespace BXJG.Utils.RCL.Components
     /// </summary>
     public abstract class BaseComponent : BXJG.Common.RCL.CommonBaseComponent
     {
+        [Inject]
+        public Task<GetCurrentLoginInformationsOutput> CurrentLoginInformations { get; set; }
+        //await消息显示时，好像会等到消息因此时才结束，没严格测试
+        //不过测试发现消息异步显示，并等待200毫秒，消息提示更丝滑
+        //
+        [Inject] public Task<AbpUserConfigurationDto> AbpUserConfiguration { get; set; }
         /// <summary>
         /// 专门给肉夹馍aop用的，你不该调用这个
         /// </summary>
