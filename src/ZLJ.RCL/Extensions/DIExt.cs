@@ -16,6 +16,7 @@ using Abp.Web.Models.AbpUserConfiguration;
 using Microsoft.AspNetCore.SignalR.Client;
 using System.Runtime.Intrinsics.X86;
 using Microsoft.Extensions.Configuration;
+using System.Globalization;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -29,9 +30,6 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IServiceCollection AddZLJRCL(this IServiceCollection services, Action<IServiceProvider, HubConnectionBuilder> cfg = default)
         {
-
-
-
             services.TryAddScoped( s =>
             {
                 var AuthenticationState = s.GetRequiredService<AuthenticationStateProvider>();
