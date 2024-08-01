@@ -97,14 +97,19 @@ namespace BXJG.Common
         }
 
         CancellationTokenSource cts;// = new CancellationTokenSource();
+        bool isDisposed = false;
         public void Dispose()
         {
             logger.LogDebug($"延迟覆盖执行器{GetHashCode()}释放了");
-            try
+            lock (locker)
             {
-                cts?.Cancel();
+                try
+                {
+                    cts?.Cancel();
+                }
+                catch { }
+                isDisposed = true;
             }
-            catch { }
         }
         /// <summary>
         /// 请求执行
@@ -119,6 +124,8 @@ namespace BXJG.Common
             //lock确保后续任务闭包引用正确的tempcts，不会产生无法释放的CancellationTokenSource
             lock (locker)
             {
+                if (isDisposed)
+                    return;
                 try
                 {
                     cts?.Cancel();
@@ -126,13 +133,16 @@ namespace BXJG.Common
                 catch { }
                 tempcts = cts = new CancellationTokenSource();
             }
-            Task.Run(async () =>
+            Task.Factory.StartNew(async () =>
             {
                 try
                 {
                     int lssc = 0;//已等待的毫秒数
                     while (true)
                     {
+                        if (isDisposed)
+                            return;
+
                         //经过测试，这里等1毫秒有问题，起码本地测试是有问题的
                         await Task.Delay(10);
                         lssc += 10;
@@ -140,7 +150,7 @@ namespace BXJG.Common
                         if (Timeout > 0 && (DateTime.Now - lastExecuteTime).TotalMilliseconds >= Timeout)
                         {
                             logger.LogDebug($"延时覆盖{GetHashCode()} tempcts{tempcts.GetHashCode()} 超时了{Timeout}，立即强制执行！");
-                            //有序下面会new，这里需要手动释放，不能依赖外层的finally兜底
+                            //下面会new，这里需要手动释放，不能依赖外层的finally兜底
                             try
                             {
                                 tempcts.Dispose();
@@ -197,7 +207,7 @@ namespace BXJG.Common
                     }
                     catch { }
                 }
-            });
+            }, TaskCreationOptions.LongRunning);
         }
     }
 }
