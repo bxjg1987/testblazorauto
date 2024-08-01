@@ -3,6 +3,7 @@ using Abp.Authorization.Users;
 using Abp.Dependency;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
+using Abp.MultiTenancy;
 using Abp.Notifications;
 using Abp.Threading.BackgroundWorkers;
 using Abp.Threading.Timers;
@@ -22,13 +23,15 @@ namespace BXJG.Utils.Application.Notification
     /// 需要调用方提供子类，给出TUser类型
     /// </summary>
     /// <typeparam name="TUser"></typeparam>
-    public abstract class RemoveOldNotification<TUser> : AsyncPeriodicBackgroundWorkerBase, ISingletonDependency
+    public abstract class RemoveOldNotification<TUser, TTenantManager,TTenant> : AsyncPeriodicBackgroundWorkerBase, ISingletonDependency
         where TUser : AbpUserBase
+        where TTenant:AbpTenant<TUser>
+        where TTenantManager: AbpTenantManager<TTenant,TUser>
     {
         public IUserNotificationManager UserNotificationManager { get; set; }
 
         public IRepository<TUser, long> UserRepository { get; set; }
-
+        public TTenantManager TenantManager { get; set; }
 
         public RemoveOldNotification(AbpAsyncTimer timer) : base(timer)
         {
@@ -41,37 +44,47 @@ namespace BXJG.Utils.Application.Notification
         protected override async Task DoWorkAsync()
         {
             base.Logger.Info("开始删除过期通知");
-            var pageIndex = 1;
-            while (true)
+            int[] zhids;
+
+            using (var uow1 = UnitOfWorkManager.Begin())
             {
-                Thread.Sleep(1);
-                using var uow = base.UnitOfWorkManager.Begin();
-                var users = await (await UserRepository.GetAllAsync()).AsNoTrackingWithIdentityResolution()
-                                                .Select(c => new { c.TenantId, c.FullName, c.Id })
-                                                .Skip((pageIndex - 1) * pageSize)
-                                                .Take(pageSize)
-                                                .ToArrayAsync();
-                if (!users.Any())
-                    break;
-
-                pageIndex++;
-
-                foreach (var user in users)
+                zhids = await TenantManager.Tenants.Where(x => x.IsActive).Select(x => x.Id).ToArrayAsync();
+            }
+            foreach (var zh in zhids)
+            {
+                var pageIndex = 1;
+                while (true)
                 {
-                    try
+                    Thread.Sleep(1);
+                    using var uow = base.UnitOfWorkManager.Begin(); 
+                    using var fw = CurrentUnitOfWork.SetTenantId(zh);
+                    var users = await (await UserRepository.GetAllAsync()).AsNoTrackingWithIdentityResolution()
+                                                    .Select(c => new { c.TenantId, c.FullName, c.Id })
+                                                    .Skip((pageIndex - 1) * pageSize)
+                                                    .Take(pageSize)
+                                                    .ToArrayAsync();
+                    if (!users.Any())
+                        break;
+
+                    pageIndex++;
+
+                    foreach (var user in users)
                     {
-                        //删除50年前到半年前的，已读的通知
-                        await UserNotificationManager.DeleteAllUserNotificationsAsync(new Abp.UserIdentifier(user.TenantId, user.Id),
-                                                                                      UserNotificationState.Read,
-                                                                                      DateTime.Now.AddYears(-50),
-                                                                                      DateTime.Now.AddMonths(-3));
+                        try
+                        {
+                            //删除50年前到半年前的，已读的通知
+                            await UserNotificationManager.DeleteAllUserNotificationsAsync(new Abp.UserIdentifier(user.TenantId, user.Id),
+                                                                                          UserNotificationState.Read,
+                                                                                          DateTime.Now.AddYears(-50),
+                                                                                          DateTime.Now.AddMonths(-3));
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.Debug($"删除用户{user.FullName}({user.Id})的过期已读消息失败！", ex);
+                        }
                     }
-                    catch (Exception ex)
-                    {
-                        Logger.Debug($"删除用户{user.FullName}({user.Id})的过期已读消息失败！", ex);
-                    }
+                    await uow.CompleteAsync();
                 }
-                await uow.CompleteAsync();
             }
             base.Logger.Info("删除过期通知完成");
         }
