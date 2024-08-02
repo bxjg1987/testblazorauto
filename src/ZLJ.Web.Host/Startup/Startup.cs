@@ -225,7 +225,7 @@ namespace ZLJ.Web.Host.Startup
             string hangfireConnectionString = defaultConnectionString;// _appConfiguration.GetConnectionString("HangfireSqlServer")!;
 
             services.AddHangfire(configuration => configuration
-                    .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                    .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
                     .UseSimpleAssemblyNameTypeSerializer()
                     .UseRecommendedSerializerSettings()
                     //.UseDashboardMetric( ),

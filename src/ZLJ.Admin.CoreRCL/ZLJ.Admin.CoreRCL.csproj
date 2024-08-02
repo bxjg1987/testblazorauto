@@ -75,6 +75,7 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <None Include="Administrative\List.razor" />
+	  <None Include="HangfirePage\HangfirePage.razor" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\ZLJ.Admin.ClientProxy\ZLJ.Admin.ClientProxy.csproj" />

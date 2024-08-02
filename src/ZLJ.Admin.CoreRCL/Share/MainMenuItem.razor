@@ -4,7 +4,7 @@
     {
         <SubMenu Key="@MenuItem.Name">
             <TitleTemplate>
-                <Icon Type="@(MenuItem.Icon)" Theme="outline"></Icon>
+                <Icon Type="@(MenuItem.Icon)" Theme="outline" Style="font-size:1.1rem;"></Icon>
                 <span style="margin-left:6px">@MenuItem.DisplayName</span>
             </TitleTemplate>
             <ChildContent>
@@ -17,8 +17,14 @@
     }
     else
     {
-        <MenuItem Key="@MenuItem.Name" Icon="@(MenuItem.Icon)">
-            <MenuLink Href="@MenuItem.Url">@MenuItem.DisplayName</MenuLink>
+        <MenuItem Key="@MenuItem.Name" >
+          
+            <IconTemplate>
+                <Icon Type="@(MenuItem.Icon)" Theme="outline" Style="font-size:1.1rem;"></Icon>
+            </IconTemplate>
+            <ChildContent>
+                <MenuLink Href="@MenuItem.Url">@MenuItem.DisplayName</MenuLink>
+            </ChildContent>
         </MenuItem>
     }
 }

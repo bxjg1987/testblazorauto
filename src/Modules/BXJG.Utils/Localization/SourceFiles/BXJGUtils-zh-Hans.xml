@@ -53,6 +53,7 @@
 		<text name="LoginFailed" value="登录失败!" />
 		<text name="GetUsersKeywordsInputPrompt" value="姓名/登录名/邮箱/手机号 等..." />
 		<text name="Add" value="新增" />
+		<text name="作业" value="作业"/>
 		<text name="AddRoot" value="新增顶级" />
 		<text name="Submit" value="提交" />
 		<text name="SubmitConfirm" value="提交确认" />

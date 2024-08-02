@@ -1,0 +1,4 @@
+﻿@page "/hangfire-page"
+@attribute [ReuseTabsPage(Title = "作业")]
+@attribute [Authorize(PermissionNames.HangFireDashboard)]
+<iframe src="/hangfire" style="width:100%; height:85vh; overflow:auto; border:none;"></iframe>

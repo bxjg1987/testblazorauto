@@ -13,6 +13,8 @@ using ZLJ.Application.Common.ClientProxy;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Http;
 using ZLJ.RCL.Interceptors;
+using Hangfire;
+using Hangfire.SqlServer;
 //JsonSerializerOptions.Default.PropertyNameCaseInsensitive = true;
 
 
@@ -79,7 +81,12 @@ builder.Services.AddHttpContextAccessor();
 //    options.Cookie.HttpOnly = true;
 //    options.Cookie.IsEssential = true;//对于应用来说是必须的，绕过用户同意
 //});
-
+// Add Hangfire services.
+builder.Services.AddHangfire(configuration => configuration
+    .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+    .UseSimpleAssemblyNameTypeSerializer()
+    .UseRecommendedSerializerSettings()
+    .UseSqlServerStorage(builder.Configuration.GetConnectionString("Default")));
 var app = builder.Build();
 
 //app.Services.GetRequiredService<AppContainer>().Services = app.Services;
@@ -187,7 +194,14 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseAntiforgery();
 
+app.MapHangfireDashboardWithAuthorizationPolicy(PermissionNames.HangFireDashboard, options: new DashboardOptions
+{
+    DashboardTitle = "",
+    DarkModeEnabled = false,
+    AppPath = null,
+    DisplayStorageConnectionString = false,
 
+});
 //注销
 app.Map("/account/logout", async (HttpContext x) =>
 {
