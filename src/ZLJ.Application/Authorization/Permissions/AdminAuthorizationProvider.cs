@@ -141,7 +141,7 @@ namespace ZLJ.Application.Authorization.Permissions
 
             permissionBaseInfo.CreateChildPermission(PermissionNames.AdministratorSystemLog, L("Log"));
             permissionBaseInfo.CreateChildPermission(PermissionNames.AdministratorSystemConfig, L("Settings"));
-            permissionBaseInfo.CreateChildPermission(PermissionNames.HangFireDashboard, L("HangFireDashboard"));
+            permissionBaseInfo.CreateChildPermission(PermissionNames.HangFireDashboard, L("HangFireDashboard"), multiTenancySides: MultiTenancySides.Host);
             //sys.CreateChildPermission(PermissionNames.AdministratorSystemSetting, L("Settings"));
             #endregion
 
