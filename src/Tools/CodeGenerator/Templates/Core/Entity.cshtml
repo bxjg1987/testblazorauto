@@ -21,7 +21,7 @@ namespace @Model.Model.CoreNamespace
     /// <summary>
     /// @Model.Model.DisplayName
     ///</summary>
-    public partial class @Model.Model.EntityName : @(Model.Model.IsTree?$"GeneralTreeEntity<{Model.Model.EntityName}>":( Model.Model.PrimaryField.CSharpType=="int"?"FullAuditedEntity": $"FullAuditedEntity<{Model.Model.PrimaryField.CSharpType}>" )) @(Model.Model.MultiTenantMode== MultiTenantMode.No?"":(Model.Model.MultiTenantMode== MultiTenantMode.Must?", IMustHaveTenant":", IMayHaveTenant")),IExtendableObject
+    public partial class @Model.Model.EntityName : @(Model.Model.IsTree?$"GeneralTreeEntity<{Model.Model.EntityName}>":( Model.Model.PrimaryField.CSharpType=="int"?"FullAuditedEntity": $"FullAuditedEntity<{Model.Model.PrimaryField.CSharpType}>" )) @(Model.Model.MultiTenantMode== MultiTenantMode.No?"":(Model.Model.MultiTenantMode== MultiTenantMode.Must?", IMustHaveTenant":", IMayHaveTenant"))
     {
 @if(Model.Model.MultiTenantMode!= MultiTenantMode.No)
 {
@@ -35,7 +35,5 @@ namespace @Model.Model.CoreNamespace
         @:///</summary>
         @:public @field.CSharpTypeNullable @field.Name { get; set; }
 }
-
-        public string? ExtensionData { get; set; }
     }
 }
