@@ -150,7 +150,7 @@ namespace ZLJ.Application
                                                         url: "/auditing",
                                                         permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorSystemLog)));
 
-            menuBaseInfo.AddItem(new MenuItemDefinition("Job",
+            menu.AddItem(new MenuItemDefinition("Job",
                                                         "作业".UtilsLI(),
                                                         icon: "field-time",
                                                         url: "/hangfire-page",
