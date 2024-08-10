@@ -12,6 +12,3 @@ global using AntDesign;
 global using Abp.Application.Services.Dto;
 global using BXJG.Utils.Application.Share;
 global using Abp.UI;
-#if DEBUG
-[assembly: Rougamo.IgnoreMo]
-#endif

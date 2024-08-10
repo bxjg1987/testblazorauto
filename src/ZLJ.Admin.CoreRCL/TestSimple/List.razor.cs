@@ -84,6 +84,7 @@ namespace ZLJ.Admin.CoreRCL.TestSimple
         /// </summary>
         public void BtnCreateClick()
         {
+            //table.SetFieldOrPropertyValue("_shouldRender", false);
             isCreateDialogVisible = true;
             //  var r = await dalRef.Show();
             //   if (r)

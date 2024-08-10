@@ -6,15 +6,23 @@ using System.Threading.Tasks;
 using System.Reflection;
 using System.ComponentModel;
 using System.Globalization;
+using System.Threading;
+using System.IO;
 
 namespace System
 {
     public static class ObjectExtensions
     {
-        public static void SetValue(this object obj, string propertyName, object value, BindingFlags flag = BindingFlags.Public | BindingFlags.IgnoreCase | BindingFlags.Instance)
+        public static void SetFieldOrPropertyValue(this object obj, string propertyName, object value, BindingFlags flag = BindingFlags.NonPublic| BindingFlags.Public| BindingFlags.IgnoreCase | BindingFlags.Instance)
         {
             var t = obj.GetType();
             var prop = t.GetProperty(propertyName, flag);
+            var field = t.GetField(propertyName, flag);
+            Type fieldOrPropertyType;
+            if (prop != default)
+                fieldOrPropertyType = prop.PropertyType;
+            else
+                fieldOrPropertyType = field.FieldType;
 
             //if (prop.PropertyType.IsGenericType && prop.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
             //{
@@ -28,18 +36,21 @@ namespace System
             //    prop.SetValue(obj, value, null);
             //}
             object convertedValue = value;
-            if (value != null && value.GetType() != prop.PropertyType)
+            if (value != null && value.GetType() != fieldOrPropertyType)
             {
                 //PropertyDescriptor ss;
                 // ss.Converter.string
-                Type propertyType = Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType;
+                Type propertyType = Nullable.GetUnderlyingType(fieldOrPropertyType) ?? fieldOrPropertyType;
 
                 var converter = TypeDescriptor.GetConverter(propertyType);
-                convertedValue = converter.ConvertFromInvariantString(value.ToString());
+                convertedValue = converter.ConvertFrom(value); //converter.ConvertFromInvariantString(value.ToString());
                 //  converter.ConvertFromString()
                 // convertedValue =  Convert.ChangeType(value, propertyType);
             }
-            prop.SetValue(obj, convertedValue, null);
+            if (prop != default)
+                prop.SetValue(obj, convertedValue, null);
+            else
+                field.SetValue(obj, convertedValue);
             //  prop.SetValue(obj, Convert.ChangeType( value,prop.PropertyType) ,null);
         }
 
@@ -49,11 +60,14 @@ namespace System
         /// <param name="obj"></param>
         /// <param name="propertyName"></param>
         /// <returns></returns>
-        public static object GetPropertyValue(this object obj, string propertyName, BindingFlags flag = BindingFlags.Public | BindingFlags.IgnoreCase | BindingFlags.Instance)
+        public static object GetFieldOrPropertyValue(this object obj, string propertyName, BindingFlags flag = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.IgnoreCase | BindingFlags.Instance)
         {
             var t = obj.GetType();
             var p = t.GetProperty(propertyName, flag);
-            return p.GetValue(obj, null);
+            if (p != default)
+                return p.GetValue(obj, null);
+            else
+                return t.GetField(propertyName, flag).GetValue(obj);
         }
         /// <summary>
         /// 反射获取对象属性值并转换为指定类型
@@ -62,9 +76,9 @@ namespace System
         /// <param name="obj"></param>
         /// <param name="propertyName"></param>
         /// <returns></returns>
-        public static T GetValue<T>(this object obj, string propertyName, BindingFlags flag = BindingFlags.Public | BindingFlags.IgnoreCase | BindingFlags.Instance)
+        public static T GetFieldOrPropertyValue<T>(this object obj, string propertyName, BindingFlags flag = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.IgnoreCase | BindingFlags.Instance)
         {
-            var value = obj.GetPropertyValue(propertyName, flag);
+            var value = obj.GetFieldOrPropertyValue(propertyName, flag);
             return (T)Convert.ChangeType(value, typeof(T));
         }
         /// <summary>
@@ -75,7 +89,7 @@ namespace System
         /// <returns></returns>
         public static string GetValueString(this object obj, string propertyName)
         {
-            return obj.GetValue<string>(propertyName);
+            return obj.GetFieldOrPropertyValue<string>(propertyName);
         }
         /// <summary>
         /// 尝试做减法运算
@@ -125,5 +139,38 @@ namespace System
             }
             return dic;
         }
+
+
+        #region 临时改变对象状态
+        //如果使用深拷贝，则范围内可以修改任意状态，但目标对象若是个非常复杂的对象，而范围内只修改极少的数据时，太浪费了。
+        private class sdsdf : IDisposable
+        {
+            Dictionary<string, object> dic = new Dictionary<string, object>();
+            object ysz;
+            public sdsdf(object obj, params string[] ms)
+            {
+                ysz = obj;
+                foreach (var item in ms)
+                {
+                    dic.Add(item, obj.GetFieldOrPropertyValue(item));
+                }
+            }
+
+            public void Dispose()
+            {
+                foreach (var item in dic)
+                {
+                    ysz.SetFieldOrPropertyValue(item.Key, item.Value);
+                }
+                dic.Clear();//多此一举
+            }
+        }
+
+        public static IDisposable LinshiShezhi(this object obj, params string[] ms)
+        {
+            return new sdsdf(obj, ms);
+        }
+        #endregion
+
     }
 }

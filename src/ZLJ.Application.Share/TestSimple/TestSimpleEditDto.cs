@@ -24,13 +24,13 @@ namespace ZLJ.Application.Share.TestSimple
         ///</summary>
         [Display(Name="年龄")]
         [Range(typeof(int), "11", "44")]
-        public int? Age { get; set; }
+        [Required] public int? Age { get; set; }
 
         /// <summary>
         /// 出生日期
         ///</summary>
         [Display(Name="出生日期")]
-        public DateTime? Birthday { get; set; }
+        [Required] public DateTime? Birthday { get; set; }
 
         /// <summary>
         /// 字符串字段1

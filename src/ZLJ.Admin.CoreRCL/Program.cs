@@ -9,7 +9,9 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Text.Json;
 using ZLJ.Admin.ClientProxy;
 using ZLJ.Admin.CoreRCL.Auth;
-
+#if DEBUG
+[assembly: Rougamo.IgnoreMo]
+#endif
 
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);

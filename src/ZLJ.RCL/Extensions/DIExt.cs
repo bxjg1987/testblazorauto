@@ -17,7 +17,9 @@ using Microsoft.AspNetCore.SignalR.Client;
 using System.Runtime.Intrinsics.X86;
 using Microsoft.Extensions.Configuration;
 using System.Globalization;
-
+#if DEBUG
+[assembly: Rougamo.IgnoreMo]
+#endif
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class DIExt

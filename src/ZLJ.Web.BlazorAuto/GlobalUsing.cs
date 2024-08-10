@@ -42,6 +42,3 @@ global using ZLJ.Admin.CoreRCL;
 
 //global using AntDesign;
 //global using AntDesign.ProLayout;
-#if DEBUG
-[assembly: Rougamo.IgnoreMo]
-#endif

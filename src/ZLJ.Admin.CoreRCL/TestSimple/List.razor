@@ -1,5 +1,6 @@
 @page "/TestSimple"
 
+@using System.Reflection
 @using ZLJ.Application.Share.TestSimple
 
 @attribute [ReuseTabsPage(Title = "普通数据测试")]
@@ -22,6 +23,12 @@
                     <Button Type="@ButtonType.Default" Icon="@IconType.Outline.Clear" Danger Disabled="ShouldDisableDelete" Loading="isDeleting">删除</Button>
                 </Popconfirm>
             }
+            @* @if (table != default)
+            {
+                var f = typeof(Table<TestSimpleDto>).GetField("_shouldRender", BindingFlags.Instance | BindingFlags.NonPublic);
+                var sdfsd = f.GetValue(table);
+                @:@sdfsd
+            } *@
         </Flex>
         @* 右侧 *@
         <Flex Gap="small">
