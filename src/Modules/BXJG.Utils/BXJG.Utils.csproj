@@ -66,8 +66,8 @@
     <PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="4.1.0" />
     <PackageReference Include="DistributedLock.Core" Version="1.0.7" />
     <!--<PackageReference Include="Hangfire.Core" Version="1.8.11" />-->
-    <PackageReference Include="Masuit.Tools.Core" Version="2024.4.5" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.7" />
+    <PackageReference Include="Masuit.Tools.Core" Version="2024.5.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
     <!--<PackageReference Include="DotNetCore.CAP" Version="7.2.0" />-->
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
