@@ -111,7 +111,7 @@ namespace System
         /// <returns></returns>
         public static DateTimeOffset MonthStart(this DateTimeOffset dt)
         {
-            return dt.AddDays(1 - dt.Day); //本月月初
+            return new DateTimeOffset(dt.Year, dt.Month, 1, dt.Hour, dt.Minute, dt.Second, dt.Millisecond, dt.Offset);
         }
 
         //Abp.Extensions.DateTimeExtensions有时间相关的扩展方法
@@ -123,7 +123,7 @@ namespace System
         /// <returns></returns>
         public static DateTime MonthStart(this DateTime dt)
         {
-            return dt.Date.AddDays(1 - dt.Day);
+            return new DateTime(dt.Year, dt.Month, 1, dt.Hour, dt.Minute, dt.Second, dt.Millisecond);
         }
         /// <summary>
         /// 月末
@@ -133,6 +133,25 @@ namespace System
         public static DateTime MonthEnd(this DateTime startMonth)
         {
             return startMonth.MonthStart().AddMonths(1).AddDays(-1).AddMilliseconds(-1);  //本月月末
+        }
+        /// <summary>
+        /// 月末
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns></returns>
+        public static DateTimeOffset MonthEnd(this DateTimeOffset dt)
+        {
+            // 获取该月的第一天
+            DateTimeOffset monthStart = dt.MonthStart();
+
+            // 将日期增加一个月并减少一天
+            DateTimeOffset monthEnd = monthStart.AddMonths(1).AddDays(-1);
+
+            // 设置时间为当天的 23:59:59.999
+            monthEnd = monthEnd.Date.AddMilliseconds(-1);
+
+            // 返回月末的时间
+            return monthEnd;
         }
         public static DateTime EffaceMonth(this DateTime dt)
         {
@@ -261,7 +280,7 @@ namespace System
             int lastWeekDiff = (7 - lastWeekDay);
 
             //本周最后一天  
-            return nowTime.Date.AddDays(lastWeekDiff+1).AddMilliseconds(-1);
+            return nowTime.Date.AddDays(lastWeekDiff + 1).AddMilliseconds(-1);
         }
     }
 
