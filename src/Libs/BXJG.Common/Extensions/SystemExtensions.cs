@@ -18,6 +18,7 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Cryptography;
 
 namespace System
 {
@@ -576,5 +577,117 @@ namespace System
         //{
         //    return type.GetInterfaces().Any(x => x.Equals(typeof(TInterface)));
         //}
+
+        #region aes加解密
+        public static byte[] AesEncrypt(this byte[] data, string key, int keyLength = 256, CipherMode mode = CipherMode.CBC, PaddingMode padding = PaddingMode.PKCS7, byte[] iv = null)
+        {
+            using (Aes aes = Aes.Create())
+            {
+                aes.Key = AesGetKey(key, keyLength / 8);
+                aes.Mode = mode;
+                aes.Padding = padding;
+
+                if (aes.Mode != CipherMode.ECB)
+                {
+                    aes.IV = iv ?? AesGenerateIV(aes.BlockSize / 8);
+                }
+
+                using (ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV))
+                {
+                    byte[] encryptedData = AesPerformCryptography(data, encryptor);
+                    if (aes.Mode != CipherMode.ECB)
+                    {
+                        byte[] result = new byte[aes.IV.Length + encryptedData.Length];
+                        Buffer.BlockCopy(aes.IV, 0, result, 0, aes.IV.Length);
+                        Buffer.BlockCopy(encryptedData, 0, result, aes.IV.Length, encryptedData.Length);
+                        return result;
+                    }
+                    return encryptedData;
+                }
+            }
+        }
+
+        public static byte[] AesDecrypt(this byte[] data, string key, int keyLength = 256, CipherMode mode = CipherMode.CBC, PaddingMode padding = PaddingMode.PKCS7, byte[] iv = null)
+        {
+            using (Aes aes = Aes.Create())
+            {
+                aes.Key = AesGetKey(key, keyLength / 8);
+                aes.Mode = mode;
+                aes.Padding = padding;
+
+                byte[] actualData = data;
+
+                if (aes.Mode != CipherMode.ECB)
+                {
+                    if (iv == null)
+                    {
+                        iv = new byte[aes.BlockSize / 8];
+                        Buffer.BlockCopy(data, 0, iv, 0, iv.Length);
+                        actualData = new byte[data.Length - iv.Length];
+                        Buffer.BlockCopy(data, iv.Length, actualData, 0, actualData.Length);
+                    }
+                    aes.IV = iv;
+                }
+
+                using (ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV))
+                {
+                    return AesPerformCryptography(actualData, decryptor);
+                }
+            }
+        }
+
+        private static byte[] AesGetKey(string key, int length)
+        {
+            byte[] keyBytes = Encoding.UTF8.GetBytes(key);
+            if (keyBytes.Length < length)
+            {
+                Array.Resize(ref keyBytes, length);
+            }
+            else if (keyBytes.Length > length)
+            {
+                Array.Resize(ref keyBytes, length);
+            }
+            return keyBytes;
+        }
+
+        private static byte[] AesGenerateIV(int length)
+        {
+            byte[] iv = new byte[length];
+            using (RandomNumberGenerator rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(iv);
+            }
+            return iv;
+        }
+
+        private static byte[] AesPerformCryptography(byte[] data, ICryptoTransform cryptoTransform)
+        {
+            using (System.IO.MemoryStream ms = new System.IO.MemoryStream())
+            {
+                using (CryptoStream cs = new CryptoStream(ms, cryptoTransform, CryptoStreamMode.Write))
+                {
+                    cs.Write(data, 0, data.Length);
+                    cs.FlushFinalBlock();
+                    return ms.ToArray();
+                }
+            }
+        }
+
+        public static string AesEncrypt(this string plainText, string key, int keyLength = 256, CipherMode mode = CipherMode.CBC, PaddingMode padding = PaddingMode.PKCS7, byte[] iv = null)
+        {
+            byte[] plainBytes = Encoding.UTF8.GetBytes(plainText);
+            byte[] encryptedBytes = plainBytes.AesEncrypt(key, keyLength, mode, padding, iv);
+            return Convert.ToBase64String(encryptedBytes);
+        }
+
+        public static string AesDecrypt(this string encryptedText, string key, int keyLength = 256, CipherMode mode = CipherMode.CBC, PaddingMode padding = PaddingMode.PKCS7, byte[] iv = null)
+        {
+            byte[] encryptedBytes = Convert.FromBase64String(encryptedText);
+            byte[] decryptedBytes = encryptedBytes.AesDecrypt(key, keyLength, mode, padding, iv);
+            return Encoding.UTF8.GetString(decryptedBytes);
+        }
+
+
+        #endregion
     }
-}
+    }

@@ -62,8 +62,11 @@ namespace ZLJ.Web.BlazorAuto.Components
 
                 if (HttpContext.Request.Path.StartsWithSegments("/error"))
                     return default;
+                if (HttpContext.Request.Path.StartsWithSegments("/test"))
+                    return new InteractiveServerRenderMode(false);
 
-               return new InteractiveAutoRenderMode(false);
+
+                return new InteractiveAutoRenderMode(false);
             // return new InteractiveServerRenderMode(false);
                 // return new InteractiveWebAssemblyRenderMode(false);
             }
