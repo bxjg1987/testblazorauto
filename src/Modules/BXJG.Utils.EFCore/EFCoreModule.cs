@@ -59,12 +59,13 @@ namespace BXJG.Utils.EFCore
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
             // 应用层去注册
             //IocManager.Register(typeof(AbpAsyncDeterminationInterceptor<AbpCapTranInterceptor>), DependencyLifeStyle.Transient);
-        }
-
-        public override void PostInitialize()
-        {
             Configuration.ReplaceService<IEntityHistoryHelper, BXJGEntityHistoryHelper>(DependencyLifeStyle.Transient);
         }
+
+        //public override void PostInitialize()
+        //{
+        //    Configuration.ReplaceService<IEntityHistoryHelper, BXJGEntityHistoryHelper>(DependencyLifeStyle.Transient);
+        //}
     }
     ///// <summary>
     ///// https://github.com/aspnetboilerplate/aspnetboilerplate/issues/6920

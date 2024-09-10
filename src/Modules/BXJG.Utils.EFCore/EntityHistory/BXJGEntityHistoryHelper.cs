@@ -11,6 +11,10 @@ using System.Threading.Tasks;
 
 namespace BXJG.Utils.EFCore.EntityHistory
 {
+    /// <summary>
+    /// abp实例提示记录的核心逻辑在EntityHistoryHelper中
+    /// 此类替换并扩展它
+    /// </summary>
     public class BXJGEntityHistoryHelper : EntityHistoryHelper
     {
         public BXJGEntityHistoryHelper(IEntityHistoryConfiguration configuration, IUnitOfWorkManager unitOfWorkManager) : base(configuration, unitOfWorkManager)
@@ -20,9 +24,10 @@ namespace BXJG.Utils.EFCore.EntityHistory
         protected override bool? ShouldSaveEntityHistory(EntityEntry entityEntry)
         {
             var r = base.ShouldSaveEntityHistory(entityEntry);
+
             if (r.HasValue && r.Value)
             {
-                if (base.UnitOfWorkManager.Current.Items.TryGetValue(BXJGUtilsConsts.ExcludeEntities, out var pp))
+                if (UnitOfWorkManager.Current.Items.TryGetValue(BXJGUtilsConsts.ExcludeEntities, out var pp))
                 {
                     var p = pp as Dictionary<Type, HashSet<string>>;
                     if (p.TryGetValue(entityEntry.Entity.GetType(), out var jh))
@@ -32,6 +37,7 @@ namespace BXJG.Utils.EFCore.EntityHistory
                     }
                 }
             }
+
             return r;
         }
     }
