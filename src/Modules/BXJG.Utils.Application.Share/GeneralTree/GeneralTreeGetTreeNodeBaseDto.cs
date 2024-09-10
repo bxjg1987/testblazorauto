@@ -3,6 +3,7 @@ using BXJG.Common.Contracts;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -75,7 +76,17 @@ namespace BXJG.Utils.Application.Share.GeneralTree
         //public int OrderIndex { get; set; }
 
         private string extensionData;
-
+        /// <summary>
+        /// 节点标识，不同租户下同类型的节点，此字段一样
+        /// 如：品牌  表示品牌节点，不同租户下此字段值一样
+        /// 使用场景：在数据字典功能中，前端下拉框绑定时可以通过此字段绑定指定节点类型
+        /// 不能用DisplayName，因为它可能变
+        /// 不能用id，因为相同数据库中的不同租户id不同
+        /// 不能用code，因为节点移动后，code也会变
+        /// 用不到此字段时，请忽略。此字段通常不允许修改
+        /// </summary>
+        [DisplayName("节点名称")]
+        public string? Name { get; set; }
         //对ExtData的赋值本来可以直接在AutoMapper映射中来做
         //但是模块中使用了泛型，加上实现子类可能有更多泛型，AutoMapper好像支持不太好
         //因此AutoMapper映射原始的ExtensionData，在属性内部设置ExtData

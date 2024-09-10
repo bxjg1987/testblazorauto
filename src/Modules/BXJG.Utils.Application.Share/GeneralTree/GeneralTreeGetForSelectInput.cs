@@ -34,14 +34,23 @@ namespace BXJG.Utils.Application.Share.GeneralTree
         //通用树模块目前还未使用此字段，但应该添加此字段，它比ParentId会少一次查询
 
         /// <summary>
-        /// code可能会变，所以不要硬编码时用code
+        /// code可能会变，所以不要硬编码时用code 清使用 <see cref="ParentName"/>
         /// </summary>
         //[Obsolete("code可能会变，所以不要硬编码时用code")]
         public string? ParentCode { get; set; }
+        /// <summary>
+        /// 尽量使用清使用 <see cref="ParentName"/>
+        /// 因为同数据库下的多个租户，硬编码使用parentId行不通
+        /// </summary>
         public long? ParentId { get; set; }
         /// <summary>
         /// 是否仅仅加载子节点，true只加载子节点，false加载所有后台节点
         /// </summary>
         public bool IsOnlyLoadChild { get; set; }
+        /// <summary>
+        /// 父节点的名称
+        /// 同数据库下的多个租户中，相同节点的name是一样的，所以在前端硬编码场景非常合适
+        /// </summary>
+        public string? ParentName { get; set; }
     }
 }

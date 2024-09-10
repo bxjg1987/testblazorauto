@@ -30,16 +30,16 @@ namespace ZLJ.EntityFrameworkCore.EntityFrameworkCore.Seed.BaseInfo
 
         public void Create()
         {
-            var items = new List<Tuple<string, List<string>, string>>
+            var items = new List<Tuple<string, List<string>, string,string>>
             {
                 new("设备品牌", new List<string> {"夏普", "施乐", "爱普生", "理光",},
-                    ZLJ.Core.Share.ZLJConsts.DataDictionaryMigrationValuePrinterBrand),
+                    ZLJ.Core.Share.ZLJConsts.DataDictionaryMigrationValuePrinterBrand,"pinpai"),
                 new("客户类别", new List<string> { "供应商及客户","供应商", "客户",  },
-                    ZLJ.Core.Share.ZLJConsts.DataDictionaryMigrationValueCustomerCategory),
+                    ZLJ.Core.Share.ZLJConsts.DataDictionaryMigrationValueCustomerCategory,"kehuLeibie"),
                 new("客户级别", new List<string> {"A级", "B级", "C级",},
-                    ZLJ.Core.Share.ZLJConsts.DataDictionaryMigrationValueCustomerLevel),
+                    ZLJ.Core.Share.ZLJConsts.DataDictionaryMigrationValueCustomerLevel,"kehuJibie"),
                 new("岗位", new List<string> {"维修人员", "售后", "库管",},
-                    ZLJ.Core.Share.ZLJConsts.DataDictionaryMigrationValuePost),
+                    ZLJ.Core.Share.ZLJConsts.DataDictionaryMigrationValuePost,"gangwei"),
             };
 
             foreach (var itemConfig in items)
@@ -63,7 +63,7 @@ namespace ZLJ.EntityFrameworkCore.EntityFrameworkCore.Seed.BaseInfo
                     DisplayName = itemConfig.Item1,
                     TenantId = _tenantId,
                     Children = new List<DataDictionaryEntity>(),
-                    IsSysDefine = true,
+                    IsSysDefine = true, Name= itemConfig.Item4,
                 };
                 if (!itemConfig.Item2.IsNullOrEmpty())
                 {
@@ -82,11 +82,11 @@ namespace ZLJ.EntityFrameworkCore.EntityFrameworkCore.Seed.BaseInfo
                 _set.Add(item);
                 _context.SaveChanges();
 
-                if (!itemConfig.Item3.IsNullOrWhiteSpace())
-                {
-                    _context.Settings.Add(new Setting(_tenantId, null, itemConfig.Item3, item.Id.ToString()));
-                    _context.SaveChanges();
-                }
+                //if (!itemConfig.Item3.IsNullOrWhiteSpace())
+                //{
+                //    _context.Settings.Add(new Setting(_tenantId, null, itemConfig.Item3, item.Id.ToString()));
+                //    _context.SaveChanges();
+                //}
             }
 
         }

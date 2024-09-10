@@ -48,12 +48,12 @@ namespace ZLJ.RCL.Components
         /// 不用用code，因为code会变
         /// </summary>
         [Parameter]
-        public virtual long? ParentId { get; set; }
+        public virtual string? ParentName { get; set; }
         /// <summary>
         /// true绑定id，false绑定code
         /// </summary>
         [Parameter]
-        public virtual bool IsKeyId { get; set; }
+        public virtual bool IsKeyId { get; set; }=true;
 
 
         [Parameter]
@@ -194,7 +194,7 @@ namespace ZLJ.RCL.Components
                 //await using var service = ServiceProvider.CreateAsyncScope();
                 //var appService = service.ServiceProvider.GetRequiredService<TAppService>();
                 // DataSource = await appService.GetTreeForSelectAsync(new TGetTreeForSelectInput { ParentId = ParentId });
-                DataSource = await HttpClient.GetTreeForSelect<TGetTreeForSelectOutput>(new { ParentId });
+                DataSource = await HttpClient.GetTreeForSelect<TGetTreeForSelectOutput>(new { ParentName });
             }
         }
 
