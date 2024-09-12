@@ -5,7 +5,7 @@
 	  <!--<TargetFramework>net8.0</TargetFramework>-->
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-	  <VersionPrefix>1.3.59</VersionPrefix>
+	  <VersionPrefix>1.3.60</VersionPrefix>
 	  <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Abp" Version="9.4.0" />
+    <PackageReference Include="Abp" Version="9.4.1" />
   </ItemGroup>
 
   <ItemGroup>
