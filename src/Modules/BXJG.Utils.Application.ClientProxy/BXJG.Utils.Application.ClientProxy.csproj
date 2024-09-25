@@ -11,7 +11,7 @@
     <Compile Remove="CRUDClient.cs" />
   </ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Abp.Web.Common" Version="9.4.1" />
+		<PackageReference Include="Abp.Web.Common" Version="9.4.2" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
 		<PackageReference Include="System.Net.Http.Json" Version="8.0.0" />
 	</ItemGroup>

@@ -46,8 +46,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Abp.AutoMapper" Version="9.4.1" />
-		<PackageReference Include="Abp.ZeroCore" Version="9.4.1" />
+		<PackageReference Include="Abp.AutoMapper" Version="9.4.2" />
+		<PackageReference Include="Abp.ZeroCore" Version="9.4.2" />
 		<!--<PackageReference Include="BXJG.Utils" Version="*" />-->
 		<!--<PackageReference Include="BXJG.Common" Version="1.2.1" />
     <PackageReference Include="BXJG.Utils" Version="1.2.2" />-->
