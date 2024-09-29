@@ -4,7 +4,9 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-
+	  <!--企业服务器gc模式-->
+	  <!--<ServerGarbageCollection>true</ServerGarbageCollection>-->
+	  <GarbageCollectionAdaptationMode>true</GarbageCollectionAdaptationMode>
 	  <!--<PublishTrimmed>false</PublishTrimmed>-->
 	  <!--<JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>-->
   </PropertyGroup>
