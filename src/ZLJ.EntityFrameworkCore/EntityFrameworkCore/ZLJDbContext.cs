@@ -30,6 +30,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Abp.Domain.Uow;
 using ZLJ.Core.Administrative;
 using Abp;
+using System.Threading.Tasks;
 
 namespace ZLJ.EntityFrameworkCore
 {
@@ -156,7 +157,17 @@ namespace ZLJ.EntityFrameworkCore
                 }
             }
         }
-
+        //注销事件好像不是太有必要
+        public override void Dispose()
+        {
+            ChangeTracker.Tracked -= ChangeTracker_Tracked;
+            base.Dispose();
+        }
+        public override ValueTask DisposeAsync()
+        {
+            ChangeTracker.Tracked -= ChangeTracker_Tracked;
+            return base.DisposeAsync();
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
