@@ -160,12 +160,22 @@ namespace ZLJ.EntityFrameworkCore
         //注销事件好像不是太有必要
         public override void Dispose()
         {
-            ChangeTracker.Tracked -= ChangeTracker_Tracked;
+            //  if (ChangeTracker != null)
+            try
+            {
+                ChangeTracker.Tracked -= ChangeTracker_Tracked;
+            }
+            catch { }
             base.Dispose();
         }
         public override ValueTask DisposeAsync()
         {
-            ChangeTracker.Tracked -= ChangeTracker_Tracked;
+
+            try
+            {
+                ChangeTracker.Tracked -= ChangeTracker_Tracked;
+            }
+            catch { }
             return base.DisposeAsync();
         }
 
