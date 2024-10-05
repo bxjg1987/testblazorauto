@@ -29,6 +29,7 @@ using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Abp.Domain.Uow;
 using ZLJ.Core.Administrative;
+using Abp;
 
 namespace ZLJ.EntityFrameworkCore
 {
@@ -140,6 +141,20 @@ namespace ZLJ.EntityFrameworkCore
         public ZLJDbContext(DbContextOptions<ZLJDbContext> options)
             : base(options)
         {
+            ChangeTracker.Tracked += ChangeTracker_Tracked;
+        }
+
+        private void ChangeTracker_Tracked(object sender, EntityTrackedEventArgs e)
+        {
+            if (e.FromQuery)
+            {
+                if (e.Entry.Entity is IShouldInitialize entity)
+                {
+                    //Debug.WriteLine($"实体跟着事件执行初始化：{this.GetType().FullName} {Id}");
+                    //Logger.Debug($"实体跟着事件执行初始化：{e.Entry.Entity.GetType().FullName}");
+                    entity.Initialize();
+                }
+            }
         }
 
 
