@@ -36,6 +36,6 @@ namespace @(Model.Model.ApplicationShareNamespace)
         /// <summary>
         /// 扩展字段，通常仅用于UI
         ///</summary>
-        public dynamic ExtensionData { get; set; }
+        public dynamic ExtensionData { get; set; } = new ExpandoObject();
     }
 }
