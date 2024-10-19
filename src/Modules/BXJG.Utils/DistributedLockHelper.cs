@@ -30,10 +30,13 @@ public class DistributedLockHelper : ITransientDependency
     private readonly IUnitOfWorkManager uow;
     private readonly IDistributedLockProvider dlocker;
 
-    public DistributedLockHelper(IUnitOfWorkManager uow, IDistributedLockProvider dlocker)
+    private readonly Lazy<IAbpSession> abpSession;
+
+    public DistributedLockHelper(IUnitOfWorkManager uow, IDistributedLockProvider dlocker, Lazy<IAbpSession> abpSession)
     {
         this.uow = uow;
         this.dlocker = dlocker;
+        this.abpSession = abpSession;
     }
 
     public async Task AcquireLockAsync(string key, TimeSpan? timeout=default, CancellationToken cts = default) {
@@ -45,5 +48,24 @@ public class DistributedLockHelper : ITransientDependency
             lockobj.Dispose();
             //AsyncHelper.RunSync(async ()=>await lockobj.DisposeAsync());
         };
+    }
+    public Task AcquireLockTenantAsync(string key, TimeSpan? timeout = default, CancellationToken cts = default)
+    {
+        return AcquireLockAsync($"{key}_{abpSession.Value.TenantId}");
+    }
+    public async Task TryAcquireLockAsync(string key, TimeSpan timeout = default, CancellationToken cts = default)
+    {
+
+        var lockobj = await dlocker.TryAcquireLockAsync(key, timeout, cts);
+        //事务结束后再释放锁才合理
+        uow.Current.Disposed += (obj, arg) =>
+        {
+            lockobj.Dispose();
+            //AsyncHelper.RunSync(async ()=>await lockobj.DisposeAsync());
+        };
+    }
+    public Task TryAcquireLockTenantAsync(string key, TimeSpan timeout = default, CancellationToken cts = default)
+    {
+        return TryAcquireLockAsync($"{key}_{abpSession.Value.TenantId}");
     }
 }
