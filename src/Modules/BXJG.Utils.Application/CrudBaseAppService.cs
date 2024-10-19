@@ -67,7 +67,13 @@ namespace BXJG.Utils.Application
         /// 注：IocManager是全局单例，解析实现IDisposeable的服务时比较危险，此时应使用ServiceProvider，保险起见使用时最好再创建个scop
         /// </summary>
         public IServiceProvider ServiceProvider { get; set; }
-
+        /// <summary>
+        /// 分布式锁帮助器
+        /// 通常在应用服务方法的中间部分用，少数情况在领域服务方法中也可以
+        /// uow释放后会自动释放锁
+        /// 应用服务抽象类提供了包装方法，它内部调用这个类
+        /// </summary>
+        public DistributedLockHelper DistributedLockHelper { get; set; }
         public virtual ICancellationTokenProvider CancellationTokenProvider { get; set; } = NullCancellationTokenProvider.Instance;
 
         //Zhongjie仅用于界面，业务逻辑层任然使用abp的事件总线（它不是为界面设计的，默认也没提供多个实例），在ui提供abpk事件处理器 来连接到zhongjie实例
