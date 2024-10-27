@@ -31,6 +31,9 @@ using Abp.Domain.Uow;
 using ZLJ.Core.Administrative;
 using Abp;
 using System.Threading.Tasks;
+using Abp.Dependency;
+using Masuit.Tools.Reflection;
+using Castle.MicroKernel.Lifestyle.Scoped;
 
 namespace ZLJ.EntityFrameworkCore
 {
@@ -64,7 +67,7 @@ namespace ZLJ.EntityFrameworkCore
         //后期考虑实现动态DbSet简化实体注册
 
         public IPrincipalAccessor PrincipalAccessor { get; set; }
-
+        public IScopedIocResolver ScopedIocResolver { get; set; }
         #region Customer
         /// <summary>
         /// 客户的部门
@@ -154,6 +157,33 @@ namespace ZLJ.EntityFrameworkCore
                     //Debug.WriteLine($"实体跟着事件执行初始化：{this.GetType().FullName} {Id}");
                     //Logger.Debug($"实体跟着事件执行初始化：{e.Entry.Entity.GetType().FullName}");
                     entity.Initialize();
+                }
+                /*
+                 * 实体类或聚合根中在此项目中允许写一部分逻辑
+                 * 这部分逻辑仅处理当前实体或聚合根的状态，但处理过程可能依赖某些服务,
+                 * 由于实体或聚合根无法注入服务（所以需要反模式，在实体或聚合根内部通过ioc获取），所以在跟踪实体时自动注入，未跟踪的实体由用户自己的代码注入。
+                 * 这属于框架级别的东东，所以可用这样写些奇奇怪怪的东西
+                 * 安全起见，使用IScopedIocResolver
+                 * 实体上的属性 通常 使用 
+                 * [NotMapped]
+                 * public IScopedIocResolver Ioc { get; set; }
+                 */
+                var pinfo = e.Entry.Entity.GetType().GetProperty("Ioc", BindingFlags.IgnoreCase | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public);
+                if (pinfo != default)
+                {
+                    //Debug.WriteLine($"实体跟着事件执行初始化：{this.GetType().FullName} {Id}");
+                    // Logger.Debug($"实体跟着事件执行初始化：{e.Entry.Entity.GetType().FullName}");
+                    // entity1.IocManager = this.IocManager; //.Initialize();
+                    //  IIocManagerAccessor
+                    //  IContainerAccessor
+                    //   IScopeAccessor
+                    // IScopeAccessor
+                    // IServiceProviderExAccessor
+                    // iaccessor
+                    //base.service
+                   //IIocManagerAccessor
+                    //e.Entry.Entity.SetFieldOrPropertyValue("")
+                    e.Entry.Entity.SetField(pinfo.Name, ScopedIocResolver);
                 }
             }
         }
