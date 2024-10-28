@@ -33,6 +33,7 @@ using Microsoft.AspNetCore.Authentication;
 using ZLJ.Application.Share.Authorization.Permissions;
 using BXJG.Utils.Application;
 using ZLJ.Web.Core.Configuration;
+using BXJG.Utils.Web;
 
 namespace ZLJ.Web.Host.Startup
 {
@@ -349,7 +350,8 @@ namespace ZLJ.Web.Host.Startup
                 return next();
             });
 
-            app.UseStaticDI();
+            //app.UseStaticDI();
+            //app.UseStaticAbpDI();
 
             app.UseAbp(options => { options.UseAbpRequestLocalization = false; }); // Initializes ABP framework.
 
