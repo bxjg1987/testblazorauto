@@ -1,3 +1,38 @@
+# 静态访问ioc容器
+某些框架级别的功能可能需要这种能力。
+某些特殊的场景，尤其是静态方法中也需要这种能力。
+
+另外也考虑实体类承担更多与自己状态相关的功能，这些功能偶尔也需要使用ioc，
+但实体类不便于注入。
+
+## 手动给目标对象设置ioc
+一种方式是从ef查询对象时，给实体的ioc属性赋值。
+其它地方由调用方手动给ioc属性赋值。
+
+## 框架级别设置AsyncLocal的ioc
+另一种方式是直接提供静态方式访问ioc，配合AsyncLocal来实现，
+这个在不同的承载项目中有所区别，
+这个库提供了这种能力：https://github.com/inversionhourglass/DependencyInjection.StaticAccessor
+但担心看不懂它的代码，还是决定自己实现。
+另外它好些自定义了ServiceProviderFactory，abp本身用了windsor，担心有冲突。
+相比第一种方式，这个方式貌似更通用。
+
+调用接口要一致，统一从一个静态属性获取。
+
+在后端api承载时，最简单的方式是自定义中间件，设置静态ioc即可。
+
+在blazor app的  server模式时，请求时scope范围是跟request一致的，在server模式启动后，外部范围是scope与signalR一致，但控件时间处理中又是单独的scope。
+这种情况request阶段与上面的api承载一致，  
+signalR电路连接成功时设置静态，电路断开时设置静态ioc。
+事件回调是另一个线程，它需要从owncomponnet中去拿ioc范围对象，此时最好借助肉夹馍去拦截方法 并设置自己的ioc为静态。
+
+在blazor app的client模式时，无所谓全局单例那容器，然后创建一个scope即可。
+
+**特殊场景在后端，所以先实现后端的，毕竟实现起来也简单**
+
+## 全局ioc
+另一种粗暴的方式，从静态始终拿顶层ioc， 所有调用方必须createscope，这样局限性比较大。
+
 一个接口多个实现参考：
 https://github.com/castleproject/Windsor/blob/master/docs/registering-components-one-by-one.md#register-more-components-for-the-same-service
 https://github.com/castleproject/Windsor/blob/master/docs/registering-components-one-by-one.md#supplying-the-component-for-a-dependency-to-use-service-override

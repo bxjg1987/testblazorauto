@@ -87,6 +87,7 @@ builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
+app.UseStaticDI();
 //app.Services.GetRequiredService<AppContainer>().Services = app.Services;
 
 app.UseStatusCodePages(async statusCodeContext =>
@@ -112,6 +113,8 @@ else
 }
 
 app.UseStaticFiles();
+
+
 
 
 

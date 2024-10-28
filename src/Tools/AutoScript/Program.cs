@@ -49,6 +49,7 @@ var topTasks = new List<(string, Action)>
     new("退出", null),
     new("重新发布所有公共包", FabuSuoyouGonggongBao),
     new("重新发布：BXJG.Common", FabuXindeBXJGCommon),
+    new("重新发布：BXJG.Common.Web", FabuXindeBXJGCommonWeb),
     new("重新发布：BXJG.Common.RCL", FabuXindeBXJGCommonRCL),
     new("重新发布：BXJG.Common.EFCore", FabuXindeBXJGCommonEFCore),
     new("重新发布：BXJG.Utils", FabuXindeBXJGUtils),
