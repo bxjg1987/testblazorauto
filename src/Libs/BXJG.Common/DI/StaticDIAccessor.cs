@@ -13,6 +13,8 @@ namespace BXJG.Common.DI
     /// </summary>
     public class StaticDIAccessor
     {
-        public static readonly AsyncLocal<IServiceProvider> ServiceProvider = new AsyncLocal<IServiceProvider>();
+        public static readonly AsyncLocal<IServiceProvider> _serviceProvider = new AsyncLocal<IServiceProvider>();
+
+        public static IServiceProvider ServiceProvider => _serviceProvider.Value;
     }
 }

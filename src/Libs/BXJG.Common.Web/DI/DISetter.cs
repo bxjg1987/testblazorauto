@@ -12,9 +12,9 @@ namespace BXJG.Common.Web.DI
     {
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
-            StaticDIAccessor.ServiceProvider.Value = context.RequestServices;
+            StaticDIAccessor._serviceProvider.Value = context.RequestServices;
             await next(context);
-            StaticDIAccessor.ServiceProvider.Value = default;//asynclocal基于线程，请求线程结束了，这里有点多余 好像。
+            StaticDIAccessor._serviceProvider.Value = default;//asynclocal基于线程，请求线程结束了，这里有点多余 好像。
         }
     }
 }
