@@ -32,6 +32,7 @@ using Castle.MicroKernel;
 using Castle.MicroKernel.Resolvers;
 using Abp.RealTime;
 using Microsoft.AspNetCore.SignalR;
+using BXJG.Utils.DI;
 
 namespace BXJG.Utils
 {
@@ -43,6 +44,8 @@ namespace BXJG.Utils
     {
         public override void PreInitialize()
         {
+            MeasureDurationInterceptorRegistrar.Initialize(IocManager);
+
             IocManager.Register<BXJGUtilsModuleConfig>();
             //Configuration.Modules.BXJGUtils().AddEnum(typeof(Gender), "gender", UtilsConsts.LocalizationSourceName);
             Configuration.Modules.BXJGUtils().EnumLocalizationProviders.Add(() => new[] {
@@ -90,7 +93,7 @@ namespace BXJG.Utils
             //注册非abp依赖的公共库Common中的服务
             //base.IocManager.RegisterIfNot<IClock, LocalClock>(DependencyLifeStyle.Singleton);
             //base.IocManager.RegisterIfNot<IEnv,BXJG.Common.DefaultWebEnv>(DependencyLifeStyle.Singleton);
-
+            IocManager.Register(typeof(AbpAsyncDeterminationInterceptor<StaticDIAccessInterceptor>), DependencyLifeStyle.Transient);
 
             IocManager.RegisterAssemblyByConvention(typeof(BXJGUtilsModule).GetAssembly());
             //Lazy<TService>注入

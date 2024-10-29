@@ -351,7 +351,7 @@ namespace ZLJ.Web.Host.Startup
             });
 
             //app.UseStaticDI();
-            //app.UseStaticAbpDI();
+            app.UseStaticAbpDI();
 
             app.UseAbp(options => { options.UseAbpRequestLocalization = false; }); // Initializes ABP framework.
 
