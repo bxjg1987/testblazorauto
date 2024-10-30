@@ -17,7 +17,7 @@ namespace BXJG.Utils.Web
     {
         public static IApplicationBuilder UseStaticAbpDI(this IApplicationBuilder appBuilder)
         {
-            return appBuilder.UseMiddleware<AbpDIMiddleware>();  
+            return appBuilder.UseMiddleware<AbpDIMiddleware>();
         }
     }
 
@@ -34,11 +34,23 @@ namespace BXJG.Utils.Web
         // 这里只是个兜底，应用层使用了拦截器再次设置
         public async Task InvokeAsync(HttpContext httpContext)
         {
-            AbpDIStaticAccessor._resolver.Value = httpContext.RequestServices.GetRequiredService<IScopedIocResolver>();
-            //Console.WriteLine("");
-            //httpContext.RequestServices.GetRequiredService<ILogger>().Debug($"请求中间件查看当前IocResolver：{AbpDIStaticAccessor._resolver.Value.GetHashCode()}");
-            await _next(httpContext);
-            AbpDIStaticAccessor._resolver.Value = default;//asynclocal基于线程，请求线程结束了，这里有点多余 好像。
+            //AbpKernelModule IocManager.Register<IScopedIocResolver, ScopedIocResolver>(DependencyLifeStyle.Transient);
+            //所以是安全的
+            var old = AbpDIStaticAccessor._resolver.Value;
+            using (var temp = httpContext.RequestServices.GetRequiredService<IScopedIocResolver>())
+            {
+                AbpDIStaticAccessor._resolver.Value = temp;
+                //Console.WriteLine("");
+                //httpContext.RequestServices.GetRequiredService<ILogger>().Debug($"请求中间件查看当前IocResolver：{AbpDIStaticAccessor._resolver.Value.GetHashCode()}");
+                try
+                {
+                    await _next(httpContext);
+                }
+                finally
+                {
+                    AbpDIStaticAccessor._resolver.Value = old;//asynclocal基于线程，请求线程结束了，这里有点多余 好像。
+                }
+            }
         }
     }
 }
