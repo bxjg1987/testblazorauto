@@ -82,15 +82,15 @@
         <PropertyColumn Property="c=>c.DisplayName" ShowSorterTooltip="false" Sortable="true" Width="12rem"/>
 @foreach (var field in Model.Model.NormalFields){
     @if(field.CSharpType=="bool"){
-        <PropertyColumn Property="c=>c.@(field.Name)" ShowSorterTooltip="false" Width="5rem" Align="@@ColumnAlign.Center">
+        <PropertyColumn Property="c=>c.@(field.Name)" ShowSorterTooltip="false" Width="5rem" Align="ColumnAlign.Center">
             <Switch @@bind-Value="@@context.@(field.Name)" Size="@@InputSize.Small" Disabled="true"></Switch>
         </PropertyColumn>
     }else{
-        <PropertyColumn Property="c=>c.@(field.Name)" ShowSorterTooltip="false" @(field.Width.IsNullOrWhiteSpaceBXJG()?"":@$"Width=""{field.Width}""") @(field.Position==true?"":(field.FixedLeft==false?@"Align=ColumnAlign.Right":@"Align=""@ColumnAlign.Center"""))/>        
+        <PropertyColumn Property="c=>c.@(field.Name)" ShowSorterTooltip="false" @(field.Width.IsNullOrWhiteSpaceBXJG()?"":@$"Width=""{field.Width}""") @(field.Position==true?"":(field.FixedLeft==false?@"Align=ColumnAlign.Right":@"Align=""ColumnAlign.Center"""))/>        
     }
 }
 
-        <ActionColumn Title="操作" Width="240" Fixed="right" Align="@@ColumnAlign.Center">
+        <ActionColumn Title="操作" Width="240" Fixed="right" Align="ColumnAlign.Center">
             <ButtonGroup Size="@@ButtonSize.Small">
                     <Button Size="@@ButtonSize.Small" Type="@@ButtonType.Primary" OnClick="x=>BtnItemDetailClick(context)">详情</Button>
                 @@if (createIsGranted)

@@ -31,10 +31,21 @@
   <ItemGroup>
 	  <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.10" />
 	  <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
+	  
   </ItemGroup>
 
+
+	<ItemGroup Condition="'$(SolutionName)' != 'ZLJWithModules'">
+		<PackageReference Include="BXJG.Common.Web" Version="*" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(SolutionName)' == 'ZLJWithModules'">
+		<ProjectReference Include="..\libs\BXJG.Common.Web\BXJG.Common.Web.csproj" />
+	</ItemGroup>
+	
+	
+	
   <ItemGroup>
-    <ProjectReference Include="..\libs\BXJG.Common.Web\BXJG.Common.Web.csproj" />
+
     <ProjectReference Include="..\ZLJ.Admin.CoreRCL\ZLJ.Admin.CoreRCL.csproj" />
   </ItemGroup>
 
