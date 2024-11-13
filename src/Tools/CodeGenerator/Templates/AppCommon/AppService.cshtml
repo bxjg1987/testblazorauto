@@ -34,9 +34,9 @@ else
     {
 @if(Model.Model.IsTree)
 {
-        @:protected override IQueryable<@(Model.Model.EntityName)> ComboTreeFilter(@(Model.Model.ProviderCondition) condition, string parentCode)
+        @:protected override async Task<IQueryable<@(Model.Model.EntityName)>> ComboTreeFilter(@(Model.Model.ProviderCondition) condition, string parentCode)
 }else{
-        @:protected override IQueryable<@(Model.Model.EntityName)> CreateFilteredQuery(PagedAndSortedResultRequest<@(Model.Model.ProviderCondition)> input)
+        @:protected override async Task<IQueryable<@(Model.Model.EntityName)>> CreateFilteredQuery(PagedAndSortedResultRequest<@(Model.Model.ProviderCondition)> input)
 }       
         {
     @if (Model.Model.IsTree)

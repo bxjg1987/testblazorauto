@@ -3,8 +3,8 @@
   "DisplayName": "产品",
   "Icon": "container",
   "IsTree": false,
-  "ParentPermissionName": "Customer",
-  "ParentMenuName": "Customer",
+  "ParentPermissionName": "Administrator",
+  "ParentMenuName": null,
   "MultiTenantMode": 1, //多租户模式 1Must 2Have 4不开启
   "Fields": [
     {

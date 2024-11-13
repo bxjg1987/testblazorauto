@@ -25,7 +25,11 @@ namespace @(Model.Model.ApplicationCommonShareNamespace)
         ///</summary>
         public string? Keywords { get; set; }
 </text>}
-@foreach (var field in Model.Model.ConditionRangeFields){<text>
+@foreach (var field in Model.Model.ConditionRangeFields){
+if (field.Name == "IsActive")
+{
+    continue;
+}<text>
         /// <summary>
         /// @(field.DisplayName) 最小值
         ///</summary>
