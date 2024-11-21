@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>net9.0</TargetFramework>
 		<AssemblyName>ZLJ.Core</AssemblyName>
 		<PackageId>ZLJ.Core</PackageId>
 		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
@@ -46,8 +46,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Abp.AutoMapper" Version="9.4.2" />
-		<PackageReference Include="Abp.ZeroCore" Version="9.4.2" />
+		<PackageReference Include="Abp.AutoMapper" Version="10.0.0" />
+		<PackageReference Include="Abp.ZeroCore" Version="10.0.0" />
 		<!--<PackageReference Include="BXJG.Utils" Version="*" />-->
 		<!--<PackageReference Include="BXJG.Common" Version="1.2.1" />
     <PackageReference Include="BXJG.Utils" Version="1.2.2" />-->
@@ -55,8 +55,8 @@
 		<PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="4.1.0" />
 		<PackageReference Include="DistributedLock.Core" Version="1.0.7" />
 		<PackageReference Include="Hangfire.Core" Version="1.8.15" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="8.0.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.0" />
 		<PackageReference Include="SourceLink.Copy.PdbFiles" Version="2.8.3">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
