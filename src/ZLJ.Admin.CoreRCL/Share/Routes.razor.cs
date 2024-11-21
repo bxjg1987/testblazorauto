@@ -55,7 +55,7 @@ namespace ZLJ.Admin.CoreRCL.Share
 
             //AbpExceptionInterceptor1.Services.Value = ServiceProvider;
             //AbpExceptionInterceptorAttribute.ServicesInBrower = ServiceProvider;
-            Console.WriteLine($"全局路由中的ioc实例：{ServiceProvider.GetHashCode()}");
+            //Console.WriteLine($"全局路由中的ioc实例：{ServiceProvider.GetHashCode()}");
        
             base.OnInitialized();
 

@@ -144,9 +144,9 @@ namespace ZLJ.RCL.Interceptors
             catch (Exception ex)
             {
                 //用户关闭页面时，获取服务会报错，导致程序崩溃，虽然页面布局有错误边界，程序还是会死掉。 防止程序崩溃，还是加个try
-                Console.WriteLine("全局异常拦截器崩溃！");
-                Console.WriteLine(ex.Message + DateTime.Now.ToString());
-                Console.WriteLine(ex.StackTrace);
+                //Console.WriteLine("全局异常拦截器崩溃！");
+                //Console.WriteLine(ex.Message + DateTime.Now.ToString());
+                //Console.WriteLine(ex.StackTrace);
             }
             //if (context.ReturnValue is Task xx)
             //{

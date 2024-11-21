@@ -159,8 +159,8 @@ namespace System.Net.Http
         public static async Task<T> Post<T>(this HttpClient hc, string url, object ps = default, object qs = default, CancellationToken cancellationToken = default)
         {
             url = url.AddQueryString(qs);
-            await Console.Out.WriteLineAsync("url");
-            await Console.Out.WriteLineAsync(url);
+            //await Console.Out.WriteLineAsync("url");
+            //await Console.Out.WriteLineAsync(url);
             var r = await hc.PostAsJsonAsync(url, ps, cancellationToken);
             var str = await r.Content.ReadAsStringAsync();
             T xxx =  System.Text.Json.JsonSerializer.Deserialize<T>(str, Consts.JsonSerializerOptions);

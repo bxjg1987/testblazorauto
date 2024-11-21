@@ -33,11 +33,11 @@ namespace Microsoft.Extensions.Logging
             // OperatingSystem.IsBrower .net5+用这个
             if (Helpers.IsBrower())
             {
-                Console.WriteLine($"SimpleLogger静态构造函数执行，当前环境为：浏览器");
+                //Console.WriteLine($"SimpleLogger静态构造函数执行，当前环境为：浏览器");
             }
             else
             {
-                Console.WriteLine($"SimpleLogger静态构造函数执行，当前环境为：服务器");
+                //Console.WriteLine($"SimpleLogger静态构造函数执行，当前环境为：服务器");
                 dir = Path.Combine(AppContext.BaseDirectory, "logs");
                 if (!Directory.Exists(dir))
                     Directory.CreateDirectory(dir);
@@ -90,10 +90,10 @@ namespace Microsoft.Extensions.Logging
                 if (logLevel == LogLevel.Error)
                     Console.ForegroundColor = ConsoleColor.Red;
             }
-            Console.WriteLine(msg);
+            //Console.WriteLine(msg);
             if (!Helpers.IsBrower())
             {
-                Console.ResetColor();
+                //Console.ResetColor();
             }
         }
 

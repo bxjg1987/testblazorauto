@@ -47,8 +47,8 @@ builder.Services.AddAdminApiClientProxy(hc =>
 
 var host = builder.Build();
 var l= host.Services.GetRequiredService<ILoggerFactory>().CreateLogger("ccccccc");
-l.LogDebug("ccccccccccccccccccc");
-l.LogWarning("bbbbbbbbbbbbbbbb");
+//l.LogDebug("ccccccccccccccccccc");
+l.LogWarning("测试客户端日志记录ok");
 //host.Services.GetRequiredService<AppContainer>().Services = host.Services;
 //var a = host.Services.GetRequiredService<AbpUserConfigurationService>();
 //var b = host.Services.GetRequiredService<AppContainer>();
@@ -59,7 +59,7 @@ l.LogWarning("bbbbbbbbbbbbbbbb");
 //Console.WriteLine(JsonSerializer.Serialize(b.AbpUserConfiguration));
 //});
 
-Console.WriteLine("客户端运行时已启动....");
+//Console.WriteLine("客户端运行时已启动....");
 await host.RunAsync();
 
 //await builder.Build().RunAsync();

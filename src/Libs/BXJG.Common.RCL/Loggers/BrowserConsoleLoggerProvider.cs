@@ -74,7 +74,7 @@ namespace BXJG.Common.RCL.Loggers
             }
 
             // 输出到浏览器控制台  
-            Console.WriteLine(finalMessage);
+            //Console.WriteLine(finalMessage);
         }
     }
 }
