@@ -359,3 +359,5 @@ App_Data/Logs/
 *.1
 /src/ZLJ.Web.Host/wx
 /src/ZLJ.RCL/Components/AbpCreateBaseComponent.cs
+/src/ZLJ.Web.BlazorAuto/appsettings.json
+/src/ZLJ.Admin.CoreRCL/wwwroot/appsettings.json
