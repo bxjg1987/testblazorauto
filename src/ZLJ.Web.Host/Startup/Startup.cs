@@ -358,6 +358,10 @@ namespace ZLJ.Web.Host.Startup
             app.UseCors(_defaultCorsPolicyName); // Enable CORS!
 
             app.UseStaticFiles();
+            //app.MapStaticAssets(app.end);
+            //app.UseEndpoints(endpoints => {
+            //    endpoints.MapStaticAssets();
+            //});
 
             app.UseRouting();
 
@@ -446,11 +450,13 @@ namespace ZLJ.Web.Host.Startup
 
             app.UseEndpoints(endpoints =>
             {
+                //endpoints.MapStaticAssets();
                 // endpoints.MapRazorComponents<Shared.App>().AddInteractiveServerRenderMode();
                 endpoints.MapHub<AbpCommonHub>("/signalr");
                 //endpoints.MapHangfireDashboardWithAuthorizationPolicy(PermissionNames.HangFireDashboard);
                 endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapControllerRoute("defaultWithArea", "{area}/{controller=Home}/{action=Index}/{id?}");
+            
                 //endpoints.MapHangfireDashboard(PermissionNames.HangFireDashboard, "/hangfire", new DashboardOptions
                 //{
                 //    Authorization = new[] { new AbpHangfireAuthorizationFilter(PermissionNames.HangFireDashboard) }

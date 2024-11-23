@@ -11,8 +11,7 @@
 
     @* 下面这个引用不了，也没必要 *@
     @* <link href="_content/ZLJ.Admin.CoreRCL/css/site.css" rel="stylesheet"> *@
-
-
+    <ImportMap />
     <HeadOutlet @rendermode="RenderModeForPage" />
 </head>
 
@@ -48,31 +47,31 @@
     @* <script src="_content/AntDesign/js/ant-design-blazor.js"></script> *@
     @* <script src="_content/AntDesign.Charts/ant-design-charts-blazor.js"></script> *@
     <script antblazor-js></script>
-    <script src="_framework/blazor.web.js" autostart="false"></script>
+    <script src="_framework/blazor.web.js"></script>
     @* <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.4.3/echarts.min.js"></script> *@
     <script type="module">
-        import { BrotliDecode } from '/decode.min.js';
-        Blazor.start({
-            webAssembly: {
-                loadBootResource: function (type, name, defaultUri, integrity) {
-                    if (type !== 'dotnetjs' && location.hostname !== 'localhost' && type !== 'configuration' && type !== 'manifest') {
-                        return (async function () {
-                            const response = await fetch(defaultUri + '.br', { cache: 'no-cache' });
-                            if (!response.ok) {
-                                throw new Error(response.statusText);
-                            }
-                            const originalResponseBuffer = await response.arrayBuffer();
-                            const originalResponseArray = new Int8Array(originalResponseBuffer);
-                            const decompressedResponseArray = BrotliDecode(originalResponseArray);
-                            const contentType = type ===
-                                'dotnetwasm' ? 'application/wasm' : 'application/octet-stream';
-                            return new Response(decompressedResponseArray,
-                                { headers: { 'content-type': contentType } });
-                        })();
-                    }
-                }
-            }
-        });
+        // import { BrotliDecode } from '/decode.min.js';
+        // Blazor.start({
+        //     webAssembly: {
+        //         loadBootResource: function (type, name, defaultUri, integrity) {
+        //             if (type !== 'dotnetjs' && location.hostname !== 'localhost' && type !== 'configuration' && type !== 'manifest') {
+        //                 return (async function () {
+        //                     const response = await fetch(defaultUri + '.br', { cache: 'no-cache' });
+        //                     if (!response.ok) {
+        //                         throw new Error(response.statusText);
+        //                     }
+        //                     const originalResponseBuffer = await response.arrayBuffer();
+        //                     const originalResponseArray = new Int8Array(originalResponseBuffer);
+        //                     const decompressedResponseArray = BrotliDecode(originalResponseArray);
+        //                     const contentType = type ===
+        //                         'dotnetwasm' ? 'application/wasm' : 'application/octet-stream';
+        //                     return new Response(decompressedResponseArray,
+        //                         { headers: { 'content-type': contentType } });
+        //                 })();
+        //             }
+        //         }
+        //     }
+        // });
         //https://github.com/dotnet/aspnetcore/pull/53291
         //注意上面的blazor.web.js autostart="false"
         //经过测试，下面的测试没什么卵用
