@@ -42,12 +42,12 @@ else
     @if (Model.Model.IsTree)
     {
         <text>
-            var query = base.ComboTreeFilter(condition, parentCode);
+            var query = await base.ComboTreeFilter(condition, parentCode);
         </text>
     }
     else
     {  <text>
-            var query = base.CreateFilteredQuery(input);
+            var query = await base.CreateFilteredQuery(input);
             var condition = input.Filter;
     </text>
 }

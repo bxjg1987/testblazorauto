@@ -132,7 +132,7 @@
     </TitleTemplate>
     <ChildContent>
         <SectionOutlet SectionName="@@($"{GetHashCode()}-create-body" )" />
-        <Create OnAddEnd="AddEnd" ParentId="parentId"  Master="GetHashCode()"/>
+        <@(Model.Model.BlazorClientNamespace).Create OnAddEnd="AddEnd" ParentId="parentId"  Master="GetHashCode()"/>
     </ChildContent>
 </Modal>
 
@@ -154,6 +154,6 @@
     </TitleTemplate>
     <ChildContent>
         <SectionOutlet SectionName=@@($"{GetHashCode()}-detail-update-body") />
-        <DetailUpdate Id="detailUpdateId" IsEdit="isEdit" OnDeleted="DetailDeleted" OnUpdated="DetailUpdated" Master="GetHashCode()"/>
+        <@(Model.Model.BlazorClientNamespace).DetailUpdate Id="detailUpdateId" IsEdit="isEdit" OnDeleted="DetailDeleted" OnUpdated="DetailUpdated" Master="GetHashCode()"/>
     </ChildContent>
 </Modal>
