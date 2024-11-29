@@ -11,7 +11,7 @@ namespace ZLJ.Application.TestSimple
     /// <summary>
     /// 后台管理 普通数据测试 应用服务
     ///</summary>
-    //[AbpAuthorize(TestSimpleApplicationShareConsts.PermissionNameGet)]
+    //[AbpAuthorize]
     public class TestSimpleAppService : AdminCrudBaseAppService<TestSimpleEntity, 
                                                                                              TestSimpleDto, 
                                                                                              long, 
@@ -32,10 +32,11 @@ namespace ZLJ.Application.TestSimple
         protected override string UpdatePermissionName => TestSimpleApplicationShareConsts.PermissionNameUpdate;
         protected override string DeletePermissionName => TestSimpleApplicationShareConsts.PermissionNameDelete;
         public INotificationPublisher notificationPublisher { get; set; }
-
+        [AbpAuthorize]
         public override async Task<PagedResultDto<TestSimpleDto>> GetAllAsync(PagedAndSortedResultRequest<TestSimpleCondition> input)
         {
-           await notificationPublisher.PublishAsync("xvsdf", 
+            //未登录时，不会响应401，而是因为notificationPublisher注入失败，最终提示空引用
+            await notificationPublisher.PublishAsync("xvsdf", 
                                                     new MessageNotificationData(DateTime.Now.ToLongTimeString()),
                                                     userIds:[new UserIdentifier(AbpSession.TenantId, AbpSession.UserId.Value)]);
             return await base.GetAllAsync(input);
