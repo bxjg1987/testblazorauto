@@ -74,7 +74,7 @@ namespace BXJG.Utils.Application
         /// 应用服务抽象类提供了包装方法，它内部调用这个类
         /// </summary>
         public DistributedLockHelper DistributedLockHelper { get; set; }
-        public virtual ICancellationTokenProvider CancellationTokenProvider { get; set; } = NullCancellationTokenProvider.Instance;
+        public ICancellationTokenProvider CancellationTokenProvider { get; set; } = NullCancellationTokenProvider.Instance;
 
         //Zhongjie仅用于界面，业务逻辑层任然使用abp的事件总线（它不是为界面设计的，默认也没提供多个实例），在ui提供abpk事件处理器 来连接到zhongjie实例
         //public Zhongjie Zhongjie { get; set; }
