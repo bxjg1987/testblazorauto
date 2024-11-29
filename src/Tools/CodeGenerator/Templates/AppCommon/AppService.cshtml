@@ -18,7 +18,7 @@ namespace @(Model.Model.ApplicationCommonNamespace)
     /// <summary>
     /// 获取 @(Model.Model.DisplayName) 以供选择
     ///</summary>
-    //[AbpAuthorize] 千万不要加这里，否则 返回401 403不正常
+    [AbpAuthorize] //经过测试，这样 返回401 403正常的
     public partial class @(Model.Model.ProviderAppService) :
 @if(Model.Model.IsTree){<text>
                                                      CommonTreeProviderBaseAppService<@(Model.Model.EntityName), 

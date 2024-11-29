@@ -11,7 +11,7 @@ namespace ZLJ.Application.TestSimple
     /// <summary>
     /// 后台管理 普通数据测试 应用服务
     ///</summary>
-    [AbpAuthorize(TestSimpleApplicationShareConsts.PermissionNameGet)]
+    //[AbpAuthorize(TestSimpleApplicationShareConsts.PermissionNameGet)]
     public class TestSimpleAppService : AdminCrudBaseAppService<TestSimpleEntity, 
                                                                                              TestSimpleDto, 
                                                                                              long, 
@@ -27,6 +27,7 @@ namespace ZLJ.Application.TestSimple
 
         //提供权限名称
         protected override string GetPermissionName => TestSimpleApplicationShareConsts.PermissionNameGet;
+        protected override string GetAllPermissionName => TestSimpleApplicationShareConsts.PermissionNameGet;
         protected override string CreatePermissionName => TestSimpleApplicationShareConsts.PermissionNameCreate;
         protected override string UpdatePermissionName => TestSimpleApplicationShareConsts.PermissionNameUpdate;
         protected override string DeletePermissionName => TestSimpleApplicationShareConsts.PermissionNameDelete;
