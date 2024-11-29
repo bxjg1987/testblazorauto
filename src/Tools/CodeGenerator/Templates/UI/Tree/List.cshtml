@@ -77,7 +77,7 @@
            Size="TableSize.Small"
            Bordered="true"
            ScrollY="76vh">
-        <Selection Key="@@(context.Id.ToString())"  Fixed="left"/>
+        <Selection Fixed="left"/>
         @@*表格树起码在antblazor0.19前不支持 Fixed="left" 另外树不支持排序 *@@
         <PropertyColumn Property="c=>c.DisplayName" ShowSorterTooltip="false" Sortable="true" Width="12rem"/>
 @foreach (var field in Model.Model.NormalFields){

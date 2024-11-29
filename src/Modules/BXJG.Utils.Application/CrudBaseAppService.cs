@@ -234,6 +234,8 @@ namespace BXJG.Utils.Application
         [UnitOfWork(false)]
         public override async Task<TEntityDto> GetAsync(TGetInput input)
         {
+            CheckGetPermission();
+            
             var entity = await GetEntityByIdAsync(input.Id, false);//.SingleAsync(c => c.Id.Equals(id));
             return MapToEntityDto(entity);
         }
