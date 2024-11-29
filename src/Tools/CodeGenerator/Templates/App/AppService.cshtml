@@ -32,10 +32,11 @@ namespace @(Model.Model.ApplicationNamespace)
 
         //提供权限名称
         protected override string GetPermissionName => @(Model.Model.PermissionNameGetConst);
+        protected override string GetAllPermissionName => @(Model.Model.PermissionNameGetConst);
+
         protected override string CreatePermissionName => @(Model.Model.PermissionNameCreateConst);
         protected override string UpdatePermissionName => @(Model.Model.PermissionNameUpdateConst);
         protected override string DeletePermissionName => @(Model.Model.PermissionNameDeleteConst);
-        
         //protected override async ValueTask MapToEntity(@(Model.Model.EntityName) entity)
         //{
         //     await base.MapToEntity(input);
