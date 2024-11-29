@@ -18,7 +18,7 @@ namespace @(Model.Model.ApplicationNamespace)
     /// <summary>
     /// @(Model.App.DisplayName) @(Model.Model.DisplayName) 应用服务
     ///</summary>
-    [AbpAuthorize(@(Model.Model.PermissionNameGetConst))]
+    //[AbpAuthorize(@(Model.Model.PermissionNameGetConst))] 千万不要这里加，授权判断，否则身份验证失败和权限失败无法正常返回
     public partial class @(Model.Model.ApplicationServiceName) : @(Model.App.Name)CrudBaseAppService<@(Model.Model.EntityName), 
                                                                                                      @(Model.Model.DtoName), 
                                                                                                      @(Model.Model.PrimaryField.CSharpType), 

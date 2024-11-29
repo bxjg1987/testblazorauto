@@ -15,7 +15,7 @@ namespace ZLJ.Application.Common
     /// <typeparam name="TEditDto"></typeparam>
     /// <typeparam name="TGetAllInput"></typeparam>
     /// <typeparam name="TManager"></typeparam>
-    public class CommonTreeCrudBaseAppService<TEntity,
+    public abstract class CommonTreeCrudBaseAppService<TEntity,
                                               TDto,
                                               TCreateInput,
                                               TEditDto,
@@ -87,7 +87,7 @@ namespace ZLJ.Application.Common
     /// <typeparam name="TCreateInput"></typeparam>
     /// <typeparam name="TEditDto"></typeparam>
     /// <typeparam name="TGetAllInput"></typeparam>
-    public class CommonTreeCrudBaseAppService<TEntity,
+    public abstract class CommonTreeCrudBaseAppService<TEntity,
                                               TDto,
                                               TCreateInput,
                                               TEditDto,
@@ -113,7 +113,7 @@ namespace ZLJ.Application.Common
     /// <typeparam name="TDto">列表和详情的显示模型</typeparam>
     /// <typeparam name="TCreateInput">新增模型</typeparam>
     /// <typeparam name="TEditDto">修改模型</typeparam>
-    public class CommonTreeCrudBaseAppService<TEntity,
+    public abstract class CommonTreeCrudBaseAppService<TEntity,
                                               TDto,
                                               TCreateInput,
                                               TEditDto> : CommonTreeCrudBaseAppService<TEntity,
@@ -135,7 +135,7 @@ namespace ZLJ.Application.Common
     /// <typeparam name="TEntity">实体</typeparam>
     /// <typeparam name="TDto">列表和详情的显示模型</typeparam>
     /// <typeparam name="TCreateInput">新增或修改的模型</typeparam>
-    public class CommonTreeCrudBaseAppService<TEntity,
+    public abstract class CommonTreeCrudBaseAppService<TEntity,
                                               TDto,
                                               TCreateInput> : CommonTreeCrudBaseAppService<TEntity,
                                                                                            TDto,

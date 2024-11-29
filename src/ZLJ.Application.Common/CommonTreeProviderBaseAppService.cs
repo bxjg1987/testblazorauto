@@ -21,7 +21,7 @@ namespace ZLJ.Application.Common
     /// <typeparam name="TGetNodesForSelectInput"></typeparam>
     /// <typeparam name="TGetNodesForSelectOutput"></typeparam>
     /// <typeparam name="TEntity"></typeparam>
-    public class CommonTreeProviderBaseAppService<TEntity,
+    public abstract class CommonTreeProviderBaseAppService<TEntity,
                                                            TGetTreeForSelectInput,
                                                            TGetTreeForSelectOutput,
                                                            TGetNodesForSelectInput,
@@ -90,7 +90,7 @@ namespace ZLJ.Application.Common
     /// <typeparam name="TGetTreeForSelectInput"></typeparam>
     /// <typeparam name="TGetTreeForSelectOutput"></typeparam>
     /// <typeparam name="TGetNodesForSelectInput"></typeparam>
-    public class CommonTreeProviderBaseAppService<TEntity,
+    public abstract class CommonTreeProviderBaseAppService<TEntity,
                                                            TGetTreeForSelectInput,
                                                            TGetTreeForSelectOutput,
                                                            TGetNodesForSelectInput> : CommonTreeProviderBaseAppService<TEntity,

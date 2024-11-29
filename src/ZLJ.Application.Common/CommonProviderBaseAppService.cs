@@ -13,7 +13,7 @@ namespace ZLJ.Application.Common
     /// <typeparam name="TKey">主键类型</typeparam>
     /// <typeparam name="TGetAllInput">查询时输入参数的类型</typeparam>
     /// <typeparam name="TEntityDto">可选数据的dto</typeparam>
-    public class CommonProviderBaseAppService<TEntity,
+    public abstract class CommonProviderBaseAppService<TEntity,
                                               TGetAllInput,
                                               TEntityDto,
                                               TKey> : ProviderBaseAppService<TEntity,

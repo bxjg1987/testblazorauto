@@ -34,7 +34,7 @@ namespace BXJG.Utils.Application
     /// <typeparam name="TGetInput"></typeparam>
     /// <typeparam name="TDeleteInput"></typeparam>
     [UnitOfWork]//在blazor server中，加这个更保险
-    public class CrudBaseAppService<TEntity,
+    public abstract class CrudBaseAppService<TEntity,
                                     TEntityDto,
                                     TPrimaryKey,
                                     TGetAllInput,
@@ -287,7 +287,7 @@ namespace BXJG.Utils.Application
     /// <typeparam name="TCreateInput"></typeparam>
     /// <typeparam name="TUpdateInput"></typeparam>
     /// <typeparam name="TGetInput"></typeparam>
-    public class CrudBaseAppService<TEntity,
+    public abstract class CrudBaseAppService<TEntity,
                                     TEntityDto,
                                     TPrimaryKey,
                                     TGetAllInput,
@@ -325,7 +325,7 @@ namespace BXJG.Utils.Application
     /// <typeparam name="TGetAllInput"></typeparam>
     /// <typeparam name="TCreateInput"></typeparam>
     /// <typeparam name="TUpdateInput"></typeparam>
-    public class CrudBaseAppService<TEntity,
+    public abstract class CrudBaseAppService<TEntity,
                                     TEntityDto,
                                     TPrimaryKey,
                                     TGetAllInput,
@@ -357,7 +357,7 @@ namespace BXJG.Utils.Application
     /// <typeparam name="TPrimaryKey"></typeparam>
     /// <typeparam name="TGetAllInput"></typeparam>
     /// <typeparam name="TCreateInput"></typeparam>
-    public class CrudBaseAppService<TEntity,
+    public abstract class CrudBaseAppService<TEntity,
                                     TEntityDto,
                                     TPrimaryKey,
                                     TGetAllInput,
@@ -385,7 +385,7 @@ namespace BXJG.Utils.Application
     /// <typeparam name="TEntityDto"></typeparam>
     /// <typeparam name="TPrimaryKey"></typeparam>
     /// <typeparam name="TGetAllInput"></typeparam>
-    public class CrudBaseAppService<TEntity,
+    public abstract class CrudBaseAppService<TEntity,
                                     TEntityDto,
                                     TPrimaryKey,
                                     TGetAllInput> : CrudBaseAppService<TEntity,
@@ -408,7 +408,7 @@ namespace BXJG.Utils.Application
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TEntityDto"></typeparam>
     /// <typeparam name="TPrimaryKey"></typeparam>
-    public class CrudBaseAppService<TEntity,
+    public abstract class CrudBaseAppService<TEntity,
                                     TEntityDto,
                                     TPrimaryKey> : CrudBaseAppService<TEntity,
                                                                       TEntityDto,
@@ -427,7 +427,7 @@ namespace BXJG.Utils.Application
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TEntityDto"></typeparam>
-    public class CrudBaseAppService<TEntity,
+    public abstract class CrudBaseAppService<TEntity,
                                     TEntityDto> : CrudBaseAppService<TEntity,
                                                                      TEntityDto,
                                                                      int>, ICrudBaseAppService<TEntityDto>

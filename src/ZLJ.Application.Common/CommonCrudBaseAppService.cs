@@ -21,7 +21,7 @@ namespace ZLJ.Application.Common
     /// <typeparam name="TUpdateInput">修改时输入参数的类型</typeparam>
     /// <typeparam name="TGetInput">获取单个数据时输入参数的类型</typeparam>
     /// <typeparam name="TDeleteInput">删除单个数据时输入参数的类型</typeparam>
-    public class CommonCrudBaseAppService<TEntity,
+    public abstract class CommonCrudBaseAppService<TEntity,
                                           TEntityDto,
                                           TPrimaryKey,
                                           TGetAllInput,
@@ -161,7 +161,7 @@ namespace ZLJ.Application.Common
     /// <typeparam name="TCreateInput">新增时输入参数的类型</typeparam>
     /// <typeparam name="TUpdateInput">修改时输入参数的类型</typeparam>
     /// <typeparam name="TGetInput">获取单个数据时输入参数的类型</typeparam>
-    public class CommonCrudBaseAppService<TEntity,
+    public abstract class CommonCrudBaseAppService<TEntity,
                                           TEntityDto,
                                           TPrimaryKey,
                                           TGetAllInput,
@@ -198,7 +198,7 @@ namespace ZLJ.Application.Common
     /// <typeparam name="TGetAllInput">获取分页列表数据时的输入类型</typeparam>
     /// <typeparam name="TCreateInput">新增时输入参数的类型</typeparam>
     /// <typeparam name="TUpdateInput">修改时输入参数的类型</typeparam>
-    public class CommonCrudBaseAppService<TEntity,
+    public abstract class CommonCrudBaseAppService<TEntity,
                                           TEntityDto,
                                           TPrimaryKey,
                                           TGetAllInput,
@@ -230,7 +230,7 @@ namespace ZLJ.Application.Common
     /// <typeparam name="TPrimaryKey">主键类型</typeparam>
     /// <typeparam name="TGetAllInput">获取分页列表数据时的输入类型</typeparam>
     /// <typeparam name="TCreateInput">新增时输入参数的类型</typeparam>
-    public class CommonCrudBaseAppService<TEntity,
+    public abstract class CommonCrudBaseAppService<TEntity,
                                           TEntityDto,
                                           TPrimaryKey,
                                           TGetAllInput,
@@ -258,7 +258,7 @@ namespace ZLJ.Application.Common
     /// <typeparam name="TEntityDto">详情对象类型</typeparam>
     /// <typeparam name="TPrimaryKey">主键类型</typeparam>
     /// <typeparam name="TGetAllInput">获取分页列表数据时的输入类型</typeparam>
-    public class CommonCrudBaseAppService<TEntity,
+    public abstract class CommonCrudBaseAppService<TEntity,
                                           TEntityDto,
                                           TPrimaryKey,
                                           TGetAllInput> : CommonCrudBaseAppService<TEntity,
@@ -281,7 +281,7 @@ namespace ZLJ.Application.Common
     /// <typeparam name="TEntity">实体类型</typeparam>
     /// <typeparam name="TEntityDto">详情对象类型</typeparam>
     /// <typeparam name="TPrimaryKey">主键类型</typeparam>
-    public class CommonCrudBaseAppService<TEntity,
+    public abstract class CommonCrudBaseAppService<TEntity,
                                           TEntityDto,
                                           TPrimaryKey> : CommonCrudBaseAppService<TEntity,
                                                                                   TEntityDto,
@@ -300,7 +300,7 @@ namespace ZLJ.Application.Common
     /// </summary>
     /// <typeparam name="TEntity">实体类型</typeparam>
     /// <typeparam name="TEntityDto">详情对象类型</typeparam>
-    public class CommonCrudBaseAppService<TEntity,
+    public abstract class CommonCrudBaseAppService<TEntity,
                                           TEntityDto> : CommonCrudBaseAppService<TEntity,
                                                                                  TEntityDto,
                                                                                  int>, ICrudBaseAppService<TEntityDto>
