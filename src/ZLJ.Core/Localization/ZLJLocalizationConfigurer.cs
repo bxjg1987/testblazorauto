@@ -13,7 +13,7 @@ namespace ZLJ.Core.Localization
                 new DictionaryBasedLocalizationSource(ZLJ.Core.Share.ZLJConsts.LocalizationSourceName,
                     new XmlEmbeddedFileLocalizationDictionaryProvider(
                         typeof(ZLJLocalizationConfigurer).GetAssembly(),
-                        "ZLJ.Localization.SourceFiles"
+                        "ZLJ.Core.Localization.SourceFiles"
                     )
                 )
             );
