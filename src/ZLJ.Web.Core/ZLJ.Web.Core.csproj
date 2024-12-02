@@ -66,17 +66,19 @@
 
 	<ItemGroup>
 		<PackageReference Include="Abp.Castle.Log4Net" Version="10.0.0" />
+		<PackageReference Include="Hangfire.AspNetCore" Version="1.8.16" />
 		<!--<PackageReference Include="DistributedLock.SqlServer" Version="1.*" />
 		<PackageReference Include="DistributedLock.MySql" Version="1.*" />-->
 		<!--<PackageReference Include="DotNetCore.CAP.Dashboard" Version="7.2.0" />
 		<PackageReference Include="DotNetCore.CAP.SqlServer" Version="7.2.0" />-->
-		<PackageReference Include="Hangfire.SqlServer" Version="1.8.15" />
+		<PackageReference Include="Hangfire.SqlServer" Version="1.8.16" />
+		<PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 			
-		<PackageReference Include="HangFire.Core" Version="1.8.15" />
+		<PackageReference Include="HangFire.Core" Version="1.8.16" />
 		<PackageReference Include="Abp.HangFire.AspNetCore" Version="10.0.0" />
 		<!--<PackageReference Include="BXJG.Common.Web" Version="*" />
 		<PackageReference Include="BXJG.Utils.RCL" Version="*" />-->
@@ -84,7 +86,7 @@
 		<PackageReference Include="Magicodes.IE.Excel.AspNetCore" Version="2.7.5.2" />
 		<!--<PackageReference Include="BXJG.Utils.Web" Version="1.2.1" />-->
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.0" />
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="7.0.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="7.1.0" />
 		<PackageReference Include="Abp.AspNetCore" Version="10.0.0" />
 		<PackageReference Include="Abp.AspNetCore.SignalR" Version="10.0.0" />
 	</ItemGroup>

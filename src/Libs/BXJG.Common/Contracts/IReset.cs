@@ -1,4 +1,4 @@
-﻿using Force.DeepCloner;
+﻿using DeepCopy;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,7 +12,8 @@ namespace BXJG.Common.Contracts
     {
         void Reset()
         {
-            Activator.CreateInstance(GetType()).DeepCloneTo(this);
+            ObjectCloner.CopyTo(Activator.CreateInstance(GetType()), this);
+            //ObjectCloner.Clone( Activator.CreateInstance(GetType()).Clone();
         }
     }
 }
