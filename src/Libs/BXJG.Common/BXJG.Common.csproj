@@ -2,7 +2,7 @@
 
   <PropertyGroup>
 	  <TargetFramework>netstandard2.1</TargetFramework>
-	  <VersionPrefix>1.3.92</VersionPrefix>
+	  <VersionPrefix>1.3.93</VersionPrefix>
     <!--<Version></Version>-->
     <!--<GeneratePackageOnBuild>true</GeneratePackageOnBuild>-->
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
@@ -28,7 +28,6 @@
   <ItemGroup>
     <!--<PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="8.0.1" />-->
     <!--<PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="2.2.0" />-->
-    <PackageReference Include="DeepCopy.Expression" Version="1.4.2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0" />

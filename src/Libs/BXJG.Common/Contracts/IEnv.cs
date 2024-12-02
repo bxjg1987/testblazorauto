@@ -31,6 +31,9 @@ namespace BXJG.Common.Contracts
         /// </summary>
         string SecureDirectory { get; }
     }
+    /// <summary>
+    /// 
+    /// </summary>
     public class NullEnv : IEnv
     {
         public string WebRoot => "wwwroot";

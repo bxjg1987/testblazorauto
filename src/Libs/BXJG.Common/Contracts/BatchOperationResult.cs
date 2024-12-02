@@ -7,6 +7,9 @@ namespace BXJG.Common.Contracts
 {
     public static class BatchOperationErrorMessageExt
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public static BatchOperationErrorMessage Message500(this object id)
         {
             return new BatchOperationErrorMessage(id, "服务器内部异常");
@@ -18,16 +21,31 @@ namespace BXJG.Common.Contracts
     /// </summary>
     public class BatchOperationErrorMessage
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public BatchOperationErrorMessage(object id, string message = default, string code = default)
         {
             Id = id;
             Message = message;
             Code = code;
         }
+        /// <summary>
+        /// 
+        /// </summary>
 
         public object Id { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
         public string Code { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
         public string Message { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
 
         public override string ToString()
         {

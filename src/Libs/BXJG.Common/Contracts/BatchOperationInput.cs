@@ -50,6 +50,11 @@ namespace BXJG.Common.Contracts
     public class BatchOperationConcurrencyInput<TKey>
         : BatchOperationInput<KeyValuePair<TKey, string>>
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public string this[TKey key]
         {
             get => Ids.Single(c => c.Key.Equals(key)).Value;
