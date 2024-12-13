@@ -152,7 +152,7 @@ namespace BXJG.Utils.Application
         /// <param name="func">处理其中每一个时回调</param>
         /// <param name="funcName">处理其中每一个时回调</param>
         /// <returns></returns>
-        protected virtual async Task<BatchOperationOutput<TPrimaryKey>> BatchHandleAsync(IEnumerable<TPrimaryKey> ids, Func<TEntity, Task> func, string funcName = "删除")
+        protected virtual async Task<BatchOperationOutput<TPrimaryKey>> BatchHandleAsync(IEnumerable<TPrimaryKey> ids, Func<TEntity, ValueTask> func, string funcName = "删除")
         {
             var r = new BatchOperationOutput<TPrimaryKey>();
             foreach (var id in ids)
@@ -194,7 +194,7 @@ namespace BXJG.Utils.Application
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        protected virtual async Task DeleteCore(TEntity entity)
+        protected virtual async ValueTask DeleteCore(TEntity entity)
         {
             await Repository.DeleteAsync(entity);
         }

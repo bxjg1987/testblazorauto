@@ -651,7 +651,7 @@ namespace BXJG.Utils.Application.GeneralTree
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        protected virtual Task DeleteCore(TEntity entity)
+        protected virtual ValueTask DeleteCore(TEntity entity)
         {
             return GeneralTreeManager.DeleteAsync(entity);
         }
@@ -879,7 +879,7 @@ namespace BXJG.Utils.Application.GeneralTree
         /// <param name="func">每个实体的具体操作</param>
         /// <param name="funcName">单个操作的名称</param>
         /// <returns></returns>
-        protected virtual async Task<BatchOperationOutputLong> BatchHandleAsync(IEnumerable<long> ids, Func<TEntity, Task> func, string funcName = "删除")
+        protected virtual async Task<BatchOperationOutputLong> BatchHandleAsync(IEnumerable<long> ids, Func<TEntity, ValueTask> func, string funcName = "删除")
         {
             var r = new BatchOperationOutputLong();
             foreach (var id in ids)
