@@ -187,14 +187,14 @@ namespace BXJG.Utils.Application
         public virtual async Task<BatchOperationOutput<TPrimaryKey>> DeleteBatchAsync(BatchOperationInput<TPrimaryKey> input)
         {
             CheckDeletePermission();
-            return await BatchHandleAsync(input.Ids, DeleteCore);
+            return await BatchHandleAsync(input.Ids,async x=>await DeleteCore(x));
         }
         /// <summary>
         /// 批量删除过程中，删除每个实体时回调
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        protected virtual async ValueTask DeleteCore(TEntity entity)
+        protected virtual async Task DeleteCore(TEntity entity)
         {
             await Repository.DeleteAsync(entity);
         }

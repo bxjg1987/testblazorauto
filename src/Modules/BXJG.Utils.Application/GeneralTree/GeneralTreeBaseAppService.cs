@@ -633,7 +633,7 @@ namespace BXJG.Utils.Application.GeneralTree
         public async Task<BatchOperationOutputLong> DeleteBatchAsync(BatchOperationInputLong input)
         {
             await CheckDeletePermissionAsync();
-            return await BatchHandleAsync(input.Ids, DeleteCore);
+            return await BatchHandleAsync(input.Ids,async x=> await DeleteCore(x));
         }
         /// <summary>
         /// 删除树形结构的数据
@@ -651,9 +651,9 @@ namespace BXJG.Utils.Application.GeneralTree
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        protected virtual ValueTask DeleteCore(TEntity entity)
+        protected virtual async Task DeleteCore(TEntity entity)
         {
-            return GeneralTreeManager.DeleteAsync(entity);
+             await GeneralTreeManager.DeleteAsync(entity);
         }
         #endregion
 
