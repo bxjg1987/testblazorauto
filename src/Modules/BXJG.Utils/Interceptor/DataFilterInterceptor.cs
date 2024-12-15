@@ -71,7 +71,7 @@ namespace BXJG.Utils.Interceptor
             if (sddf22 != default)
                 sddf2 = UnitOfWorkManager.Current.DisableFilter(sddf22.FilterNames);
 
-            var proceedInfo = invocation.CaptureProceedInfo();
+            //var proceedInfo = invocation.CaptureProceedInfo();
             using (sddf)
             {
                 using (sddf2)

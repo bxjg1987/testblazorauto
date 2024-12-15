@@ -30,7 +30,7 @@ namespace BXJG.Utils.Application
     {
         public override void PreInitialize()
         {
-            StaticDIAccessInterceptor.Initialize(IocManager);
+            //StaticDIAccessInterceptor.Initialize(IocManager);
             //Adding authorization providers
             //Configuration.Authorization.Providers.Add<BXJGShopAuthorizationProvider>();
 
@@ -81,7 +81,7 @@ namespace BXJG.Utils.Application
         {
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
 
-            IocManager.Register(typeof(AbpAsyncDeterminationInterceptor<StaticDIAccessInterceptor>), DependencyLifeStyle.Transient);
+            //IocManager.Register(typeof(AbpAsyncDeterminationInterceptor<StaticDIAccessInterceptor>), DependencyLifeStyle.Transient);
 
             //IocManager.Register(typeof(AbpAsyncDeterminationInterceptor<AbpCapSubscriptInterceptor>), DependencyLifeStyle.Transient);
             //IocManager.Register(typeof(GeneralTreeManager<>), DependencyLifeStyle.Transient);
