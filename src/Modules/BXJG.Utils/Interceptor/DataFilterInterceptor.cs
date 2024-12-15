@@ -1,0 +1,147 @@
+﻿using Abp.Application.Services;
+using Abp.Dependency;
+using Abp.Domain.Uow;
+using BXJG.Common;
+using BXJG.Utils.DI;
+using Castle.Core;
+using Castle.DynamicProxy;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BXJG.Utils.Interceptor
+{
+    /// <summary>
+    /// 启用数据过滤器
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
+    public class EnableDataFilterAttribute : Attribute
+    {
+        /// <summary>
+        /// 过滤器名称列表
+        /// </summary>
+        public string[] FilterNames { get; set; }
+        /// <summary>
+        /// 过滤器名称列表
+        /// </summary>
+        /// <param name="filters"></param>
+        public EnableDataFilterAttribute(params string[] filters)
+        {
+            this.FilterNames = filters;
+        }
+    }
+    /// <summary>
+    /// 禁用数据过滤器
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
+    public class DisableDataFilterAttribute : Attribute
+    {
+        /// <summary>
+        /// 过滤器名称列表
+        /// </summary>
+        public string[] FilterNames { get; set; }
+        /// <summary>
+        /// 过滤器名称列表
+        /// </summary>
+        /// <param name="filters"></param>
+        public DisableDataFilterAttribute(params string[] filters)
+        {
+            this.FilterNames = filters;
+        }
+    }
+    /// <summary>
+    /// 用来启用禁用abp全局数据拦截器的拦截器
+    /// </summary>
+    public class DataFilterInterceptor : AbpInterceptorBase, ITransientDependency
+    {
+        public IUnitOfWorkManager UnitOfWorkManager { get; set; }
+        public override void InterceptSynchronous(IInvocation invocation)
+        {
+            IDisposable sddf = NoDisposable.Instance, sddf2 = NoDisposable.Instance;
+            //var sdfdf =  invocation.TargetType.GetCustomAttributes(true);
+            var sdfdf = invocation.TargetType.GetCustomAttribute<EnableDataFilterAttribute>();
+            if (sdfdf != default)
+                sddf = UnitOfWorkManager.Current.EnableFilter(sdfdf.FilterNames);
+
+            var sddf22 = invocation.TargetType.GetCustomAttribute<DisableDataFilterAttribute>();
+            if (sddf22 != default)
+                sddf2 = UnitOfWorkManager.Current.DisableFilter(sddf22.FilterNames);
+
+            var proceedInfo = invocation.CaptureProceedInfo();
+            using (sddf)
+            {
+                using (sddf2)
+                {
+                    invocation.Proceed();
+                }
+            }
+        }
+
+        protected override async Task InternalInterceptAsynchronous(IInvocation invocation)
+        {
+
+            IDisposable sddf = NoDisposable.Instance, sddf2 = NoDisposable.Instance;
+            //var sdfdf =  invocation.TargetType.GetCustomAttributes(true);
+            var sdfdf = invocation.TargetType.GetCustomAttribute<EnableDataFilterAttribute>();
+            if (sdfdf != default)
+                sddf = UnitOfWorkManager.Current.EnableFilter(sdfdf.FilterNames);
+
+            var sddf22 = invocation.TargetType.GetCustomAttribute<DisableDataFilterAttribute>();
+            if (sddf22 != default)
+                sddf2 = UnitOfWorkManager.Current.DisableFilter(sddf22.FilterNames);
+
+            var proceedInfo = invocation.CaptureProceedInfo();
+            using (sddf)
+            {
+                using (sddf2)
+                {
+                    proceedInfo.Invoke();
+                    //Logger.Debug($"abp拦截器查看当前IocResolver：{AbpDIStaticAccessor._resolver.Value?.GetHashCode()}");
+                    await (Task)invocation.ReturnValue;
+                }
+            }
+
+        }
+
+        protected override async Task<TResult> InternalInterceptAsynchronous<TResult>(IInvocation invocation)
+        {
+            IDisposable sddf = NoDisposable.Instance, sddf2 = NoDisposable.Instance;
+            //var sdfdf =  invocation.TargetType.GetCustomAttributes(true);
+            var sdfdf = invocation.TargetType.GetCustomAttribute<EnableDataFilterAttribute>();
+            if (sdfdf != default)
+                sddf = UnitOfWorkManager.Current.EnableFilter(sdfdf.FilterNames);
+
+            var sddf22 = invocation.TargetType.GetCustomAttribute<DisableDataFilterAttribute>();
+            if (sddf22 != default)
+                sddf2 = UnitOfWorkManager.Current.DisableFilter(sddf22.FilterNames);
+
+            var proceedInfo = invocation.CaptureProceedInfo();
+            using (sddf)
+            {
+                using (sddf2)
+                {
+                    proceedInfo.Invoke();
+                    //Logger.Debug($"abp拦截器查看当前IocResolver：{AbpDIStaticAccessor._resolver.Value?.GetHashCode()}");
+                    return await (Task<TResult>)invocation.ReturnValue;
+                }
+            }
+        }
+
+        public static void Initialize(IIocManager iocManager)
+        {
+            iocManager.IocContainer.Kernel.ComponentRegistered += (key, handler) =>
+            {
+                if (handler.ComponentModel.Implementation.IsDefined(typeof(EnableDataFilterAttribute), true) ||
+                    handler.ComponentModel.Implementation.IsDefined(typeof(DisableDataFilterAttribute), true) ||
+                    handler.ComponentModel.Implementation.GetMethods().Any(x => x.IsDefined(typeof(DisableDataFilterAttribute), true) || x.IsDefined(typeof(EnableDataFilterAttribute), true)))
+                {
+                    handler.ComponentModel.Interceptors.Add(new InterceptorReference(typeof(AbpAsyncDeterminationInterceptor<DataFilterInterceptor>)));
+                }
+            };
+        }
+    }
+}

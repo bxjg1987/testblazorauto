@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
-	  <VersionPrefix>1.3.73</VersionPrefix>
+	  <VersionPrefix>1.3.74</VersionPrefix>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>  <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
@@ -17,6 +17,7 @@
   <ItemGroup>
     <Compile Remove="AutoMapper\ExtensionDataSS.cs" />
     <Compile Remove="AutoMapper\IExtendableDto.cs" />
+    <Compile Remove="DI\AbpDIStaticAccessor.cs" />
     <Compile Remove="Enums\GetStructForCombboxInput.cs" />
     <Compile Remove="Extensions\ConditionFieldDefineExt.cs" />
     <Compile Remove="File\AttachmentEditDto.cs" />

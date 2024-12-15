@@ -1,4 +1,7 @@
-﻿using Abp.Dependency;
+﻿using Abp.Application.Services;
+using Abp.Dependency;
+using BXJG.Utils.DI;
+using Castle.Core;
 using Castle.DynamicProxy;
 using System;
 using System.Collections.Generic;
@@ -6,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Utils.DI
+namespace BXJG.Utils.Application
 {
     public class StaticDIAccessInterceptor : AbpInterceptorBase, ITransientDependency
     {
@@ -70,6 +73,18 @@ namespace BXJG.Utils.DI
                     AbpDIStaticAccessor._resolver.Value = old;
                 }
             }
+        }
+
+
+        public static void Initialize(IIocManager iocManager)
+        {
+            iocManager.IocContainer.Kernel.ComponentRegistered += (key, handler) =>
+            {
+                if (typeof(IApplicationService).IsAssignableFrom(handler.ComponentModel.Implementation))
+                {
+                    handler.ComponentModel.Interceptors.Add(new InterceptorReference(typeof(AbpAsyncDeterminationInterceptor<StaticDIAccessInterceptor>)));
+                }
+            };
         }
     }
 }
