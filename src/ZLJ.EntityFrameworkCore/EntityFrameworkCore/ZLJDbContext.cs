@@ -83,7 +83,7 @@ namespace ZLJ.EntityFrameworkCore
         /// </summary>
         public DbSet<CustomerRole> CustomerPosts { get; set; }
 
-        //protected long? CurrentCustomerId => GetCurrentCustomerIdOrNull();
+        protected long? CurrentCustomerId => PrincipalAccessor.GetValueByClaimType<long?>("customerId");// GetCurrentCustomerIdOrNull();
         //protected long? GetCurrentCustomerIdOrNull()
         //{
         //    var ddd = CurrentUnitOfWorkProvider?.Current?.Filters?.SingleOrDefault(c => c.FilterName == "MayHaveCustomer")?.FilterParameters;// ["customerId"];
@@ -103,43 +103,46 @@ namespace ZLJ.EntityFrameworkCore
 
         //    return long.Parse(userOuClaim.Value);
         //}
-        //protected bool IsCustomerFilterEnabled => CurrentUnitOfWorkProvider?.Current?.IsFilterEnabled("MayHaveCustomer") == true;
+        protected bool IsCustomerFilterEnabled => CurrentUnitOfWorkProvider?.Current?.IsFilterEnabled("MustHaveCustomer") == true;
 
 
-        //protected override bool ShouldFilterEntity<TEntity>(IMutableEntityType entityType)
-        //{
-        //    //若实体父类不是抽象类，则当前方法不会被调用，F12查看base.ShouldFilterEntity
-        //    //这个规则没有测试，是猜测的，因为User本身也是继承的，但它的全局数据过滤器可以用
+        protected override bool ShouldFilterEntity<TEntity>(IMutableEntityType entityType)
+        {
+            //若实体父类不是抽象类，则当前方法不会被调用，F12查看base.ShouldFilterEntity
+            //这个规则没有测试，是猜测的，因为User本身也是继承的，但它的全局数据过滤器可以用
 
-        //    if (typeof(IMustHaveCustomer).IsAssignableFrom(typeof(TEntity)))
-        //    {
-        //        return true;
-        //    }
+            if (typeof(IMustHaveCustomer).IsAssignableFrom(typeof(TEntity)))
+            {
+                return true;
+            }
 
-        //    return base.ShouldFilterEntity<TEntity>(entityType);
-        //}
-        //protected override Expression<Func<TEntity, bool>> CreateFilterExpression<TEntity>()
-        //{
-        //    //这些代码都是启动时执行的，并不是每次查询执行
-        //    var expression = base.CreateFilterExpression<TEntity>();
-        //    if (typeof(IMustHaveCustomer).IsAssignableFrom(typeof(TEntity)))
-        //    {
-        //        Expression<Func<TEntity, bool>> mayHaveOUFilter = e => ((IMustHaveCustomer)e).CustomerId == CurrentCustomerId || (((IMustHaveCustomer)e).CustomerId == CurrentCustomerId) == IsCustomerFilterEnabled;
-        //        expression = expression == null ? mayHaveOUFilter : CombineExpressions(expression, mayHaveOUFilter);
-        //    }
-        //    return expression;
+            return base.ShouldFilterEntity<TEntity>(entityType);
+        }
+        
+        protected override Expression<Func<TEntity, bool>> CreateFilterExpression<TEntity>(ModelBuilder modelBuilder)
+        {
+            //这些代码都是启动时执行的，并不是每次查询执行
+            var expression = base.CreateFilterExpression<TEntity>(modelBuilder);
 
-        //    //var expression = base.CreateFilterExpression<TEntity>();
+            if (typeof(IMustHaveCustomer).IsAssignableFrom(typeof(TEntity)))
+            {
+                Expression<Func<TEntity, bool>> mayHaveOUFilter = e => ((IMustHaveCustomer)e).CustomerId == CurrentCustomerId  == IsCustomerFilterEnabled;
+                expression = expression == null ? mayHaveOUFilter : CombineExpressions(expression, mayHaveOUFilter);
+            }
 
-        //    //if (IsCustomerFilterEnabled && typeof(IMustHaveCustomer).IsAssignableFrom(typeof(TEntity)))
-        //    //{
-        //    //    var tt = typeof(TEntity);
-        //    //    Expression<Func<TEntity, bool>> mayHaveOUFilter = e => ((IMustHaveCustomer)e).CustomerId == CurrentCustomerId;
-        //    //    expression = expression == null ? mayHaveOUFilter : CombineExpressions(expression, mayHaveOUFilter);
-        //    //}
+            return expression;
 
-        //    //return expression;
-        //}
+            //var expression = base.CreateFilterExpression<TEntity>();
+
+            //if (IsCustomerFilterEnabled && typeof(IMustHaveCustomer).IsAssignableFrom(typeof(TEntity)))
+            //{
+            //    var tt = typeof(TEntity);
+            //    Expression<Func<TEntity, bool>> mayHaveOUFilter = e => ((IMustHaveCustomer)e).CustomerId == CurrentCustomerId;
+            //    expression = expression == null ? mayHaveOUFilter : CombineExpressions(expression, mayHaveOUFilter);
+            //}
+
+            //return expression;
+        }
 
 
         #endregion
@@ -274,11 +277,10 @@ namespace ZLJ.EntityFrameworkCore
          * 
          * 关于类似设备信息，客户想删除某些不用的，免得看着烦，就使用IPassxx接口，用启用禁用的方式来实现，基础类信息都应该提供这个功能
          */
-
-        //去雄注释，所有软删除将变成硬删除
-        protected override void CancelDeletionForSoftDelete(EntityEntry entry)
-        {
-            //base.CancelDeletionForSoftDelete(entry);
-        }
+        ////去雄注释，所有软删除将变成硬删除
+        //protected override void CancelDeletionForSoftDelete(EntityEntry entry)
+        //{
+        //    //base.CancelDeletionForSoftDelete(entry);
+        //}
     }
 }

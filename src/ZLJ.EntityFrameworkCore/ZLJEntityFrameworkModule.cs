@@ -44,7 +44,7 @@ namespace ZLJ.EntityFrameworkCore
                 });
             }
 
-            Configuration.UnitOfWork.RegisterFilter("MayHaveCustomer", true);
+            Configuration.UnitOfWork.RegisterFilter("MustHaveCustomer", true);
 
           //  IocManager.IocContainer.Kernel.ComponentModelCreated += Kernel_ComponentModelCreated;
            // IocManager.IocContainer.Kernel.ComponentCreated += Kernel_ComponentCreated;

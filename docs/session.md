@@ -1,3 +1,49 @@
+# 2024 12 15更新
+现在多应用是在application级别分开的，入口host层是统一的，将来需要也可以分开，原本的appKey意义不大了 
+常见的系统有后端管理端，1个或多个其它用户端，
+
+如：学校系统中有系统管理端、学校管理端、家长端和学校端。
+每个端对应一个应用层，它们可以使用统一的host层，也可以单独定义自己的host层。  
+**所有端的用户都是单独定义的，但它们都继承User类。  
+没有使用早期的各用户通过关联关系关联到User表**
+
+>>uow与session是不同的概念
+>>session是多次请求往返中共享数据的概念。
+>>uow是单次请求的范围 
+>>所以在uow上存储扩展的用户字段不合理。
+>>需要在seesion上扩展才合理。
+
+
+## 如何提供扩展的用户字段
+在应用层面，应该提供对当前用户额外的常用字段提供访问。
+比如用户：家长，他关联的学生id集合应该存储在session中。 
+再比如用户学生：他的所属专业、关联的院区 等常用字段可以存储在session中
+
+数据库全局过滤部分，也需要获取这些额外字段，比如 客户A下面的多个用户，因为有个客户id字段，全局过滤实现，客户下面的用户仅能访问所属客户下的数据。
+但这个是在ef层提供的。所以我们被迫需要在core层提供各种用户额外session字段的访问
+
+# 扩展abpsesstion
+原本abp的iabpsesstion继续使用。但需要提供各自扩展字段的访问。
+
+扩展字段定义在哪一层？
+core层manager中，或者底层获取session的用户和租户id就够了，因为core层是所有应用共享的。不应该将具体的用户扩展属性定义在core层中。
+所以扩展字段的访问应提供在各自的应用层中。
+
+但考虑到 数据过滤也要用，所以被迫定义在core层中。不过由于逻辑简单，最终当以在Utils中，而具体的项目可以不定义了。
+
+然后  
+按abp文档方式扩展方式IAbpSession就失去意义了，为了保持他的意义，对IAbpSession提供扩展方法，内部判断具体的实现类（将来的每一个其它实现类都应该被判断到），进行返回
+
+Utils的应用层没必要再提供扩展了，因为太简单了。
+
+## 全局数据过滤
+参考：https://aspnetboilerplate.com/Pages/Documents/Articles%5CHow-To%5Cadd-custom-data-filter-ef-core  
+
+
+
+
+# 2024 12 15之前的说明
+
 abp的session请参考官方文档
 标准文档：https://aspnetboilerplate.com/Pages/Documents/Abp-Session
 扩展文档：https://aspnetboilerplate.com/Pages/Documents/Articles%5CHow-To%5Cadd-custom-session-field-aspnet-core

@@ -1,7 +1,6 @@
 using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
 using BXJG.Utils.GeneralTree;
-using BXJG.Utils.BusinessUser;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using ZLJ.Core.Authorization.Users;
