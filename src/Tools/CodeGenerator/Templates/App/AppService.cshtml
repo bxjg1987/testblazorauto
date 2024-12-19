@@ -54,11 +54,39 @@ namespace @(Model.Model.ApplicationNamespace)
         //    crud都会调用，获取单个实体，通常在这里Include更多导航属性，另外参考BuildQuery方法
         //}
 
-        //protected override IQueryable<@(Model.Model.EntityName)> CreateFilteredQuery(PagedAndSortedResultRequest<@(Model.Model.ConditionName)> input)
-        //{
-        //    return base.CreateFilteredQuery(input);
-        //    获取分页数据时调用，通常在这里Include更多导航属性，另外参考BuildQuery方法
-        //}
+        protected override async Task<IQueryable<@(Model.Model.EntityName)>> CreateFilteredQuery(PagedAndSortedResultRequest<@(Model.Model.ConditionName)> input)
+        {
+            var q = await base.CreateFilteredQuery(input);
+            var condition = input.Filter;
+            
+@if(Model.Model.ConditionStringFields.Any())
+{
+    var idx = 0;
+            @:query = query.WhereIf(condition.Keywords.IsNotNullOrWhiteSpaceBXJG(), x => 
+@foreach (var field in Model.Model.ConditionStringFields)
+{
+            if (idx>0)
+            {
+                @:|| x.@(field.Name).Contains(condition.Keywords)
+            }else{
+                @:x.@(field.Name).Contains(condition.Keywords)
+            }
+    idx++; 
+}
+            @:);
+}
+
+@foreach (var field in Model.Model.ConditionRangeFields)
+{
+            @:query = query.WhereIf(condition.@(field.ConditionRangeMin).HasValue,x=> x.@(field.Name) >= condition.@(field.ConditionRangeMin).Value );
+            @:query = query.WhereIf(condition.@(field.ConditionRangeMax).HasValue,x=> x.@(field.Name) < condition.@(field.ConditionRangeMax).Value );
+}
+
+@foreach (var field in Model.Model.ConditionNormalFields)
+{
+            @:query = query.WhereIf(condition.@(field.Name).HasValue,x=> x.@(field.Name) == condition.@(field.Name).Value );
+}
+        }
 
         //protected override IQueryable<@(Model.Model.EntityName)> BuildQuery(bool track = true)
         //{
