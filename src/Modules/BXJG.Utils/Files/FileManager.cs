@@ -16,8 +16,6 @@ using Abp.UI;
 using HeyRed.Mime;
 using Abp.Threading;
 //using System.Drawing;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Processing;
 using Abp.Extensions;
 using System.Text.RegularExpressions;
 using BXJG.Common.Extensions;
