@@ -16,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
@@ -63,7 +64,7 @@ namespace BXJG.Utils.Application
     {
         /// <summary>
         /// 与当前请求关联的服务容器
-        /// 通常你可以使用构造函数或属性注入，框架级别或特殊情况可以使用此对象。
+        /// 通常你可以使用构造函数或属性注入，框架级别或特殊情况可以使用此对象。反正是能不用就别用
         /// 注：IocManager是全局单例，解析实现IDisposeable的服务时比较危险，此时应使用ServiceProvider，保险起见使用时最好再创建个scop
         /// </summary>
         public IServiceProvider ServiceProvider { get; set; }
@@ -71,16 +72,42 @@ namespace BXJG.Utils.Application
         /// 分布式锁帮助器
         /// 通常在应用服务方法的中间部分用，少数情况在领域服务方法中也可以
         /// uow释放后会自动释放锁
-        /// 应用服务抽象类提供了包装方法，它内部调用这个类
         /// </summary>
         public DistributedLockHelper DistributedLockHelper { get; set; }
         public ICancellationTokenProvider CancellationTokenProvider { get; set; } = NullCancellationTokenProvider.Instance;
+        /// <summary>
+        /// 新增时的重复检查，返回null则不检查
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        protected virtual Expression<Func<TEntity, bool>> GetCreateIsExistsChenker(TCreateInput input) => null;
+        /// <summary>
+        /// 修改时的重复检查，返回null则不检查
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        protected virtual Expression<Func<TEntity, bool>> GetUpdateIsExistsChenker(TUpdateInput input)
+        {
+            // return x => !x.Id.Equals(input.Id); 需要返回null，以避免默认加锁
+            return null;
+        }
 
         //Zhongjie仅用于界面，业务逻辑层任然使用abp的事件总线（它不是为界面设计的，默认也没提供多个实例），在ui提供abpk事件处理器 来连接到zhongjie实例
         //public Zhongjie Zhongjie { get; set; }
         public override async Task<TEntityDto> CreateAsync(TCreateInput input)
         {
+            //新增权限检查
             CheckCreatePermission();
+
+            var cfjc = GetCreateIsExistsChenker(input);
+            if (cfjc != null)
+            {
+                //加锁注意是为了防止重复提交，数据库唯一约束局限性太大，比如软删除冲突，另外在代码层面做了，数据库见表也省得到处去建唯一索引
+                await DistributedLockHelper.AcquireLockTenantAsync(typeof(TEntity).FullName, TimeSpan.FromMinutes(1), CancellationTokenProvider.Token);
+                //要完美的话，前端还应该先判断，后端是最后的保障
+                await Repository.IsExistsThrow(cfjc);
+            }
+
             TEntity entity = MapToEntity(input);
             await MapToEntity(entity);
             await Repository.InsertAsync(entity);
@@ -92,6 +119,15 @@ namespace BXJG.Utils.Application
         public override async Task<TEntityDto> UpdateAsync(TUpdateInput input)
         {
             CheckUpdatePermission();
+            var cfjc = GetUpdateIsExistsChenker(input);
+            if (cfjc != null)
+            {
+                //加锁注意是为了防止重复提交，数据库唯一约束局限性太大，比如软删除冲突，另外在代码层面做了，数据库见表也省得到处去建唯一索引
+                await DistributedLockHelper.AcquireLockTenantAsync(typeof(TEntity).FullName, TimeSpan.FromMinutes(1), CancellationTokenProvider.Token);
+                //要完美的话，前端还应该先判断，后端是最后的保障
+                await Repository.IsExistsThrow(cfjc);
+            }
+
             TEntity entity = await GetEntityByIdAsync(input.Id);
             MapToEntity(input, entity);
             await MapToEntity(entity);
@@ -187,7 +223,7 @@ namespace BXJG.Utils.Application
         public virtual async Task<BatchOperationOutput<TPrimaryKey>> DeleteBatchAsync(BatchOperationInput<TPrimaryKey> input)
         {
             CheckDeletePermission();
-            return await BatchHandleAsync(input.Ids,async x=>await DeleteCore(x));
+            return await BatchHandleAsync(input.Ids, async x => await DeleteCore(x));
         }
         /// <summary>
         /// 批量删除过程中，删除每个实体时回调
@@ -203,7 +239,7 @@ namespace BXJG.Utils.Application
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        protected virtual new async Task< IQueryable<TEntity>> CreateFilteredQuery(TGetAllInput input)
+        protected virtual new async Task<IQueryable<TEntity>> CreateFilteredQuery(TGetAllInput input)
         {
             var q = await BuildQuery(false);
             if (input is IHaveFilter p)
@@ -224,7 +260,7 @@ namespace BXJG.Utils.Application
             //return base.GetAllAsync(input);
             //从父类复制来的，为了把CreateFilteredQuery变成异步的
             CheckGetAllPermission();
-            IQueryable<TEntity> query =await CreateFilteredQuery(input);
+            IQueryable<TEntity> query = await CreateFilteredQuery(input);
             int totalCount = await AsyncQueryableExecuter.CountAsync(query);
             query = ApplySorting(query, input);
             query = ApplyPaging(query, input);
@@ -235,7 +271,7 @@ namespace BXJG.Utils.Application
         public override async Task<TEntityDto> GetAsync(TGetInput input)
         {
             CheckGetPermission();
-            
+
             var entity = await GetEntityByIdAsync(input.Id, false);//.SingleAsync(c => c.Id.Equals(id));
             return MapToEntityDto(entity);
         }
@@ -268,7 +304,7 @@ namespace BXJG.Utils.Application
         /// </summary>
         /// <param name="track">是否跟踪实体</param>
         /// <returns></returns>
-        protected virtual async Task< IQueryable<TEntity>> BuildQuery(bool track = true)
+        protected virtual async Task<IQueryable<TEntity>> BuildQuery(bool track = true)
         {
             var q = await Repository.GetAllAsync();
             if (!track)

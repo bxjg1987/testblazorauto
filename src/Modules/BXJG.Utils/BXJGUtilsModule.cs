@@ -74,19 +74,19 @@ namespace BXJG.Utils
 
         private static void Uow_Disposed(object sender, EventArgs e)
         {
-            //参考ActiveUnitOfWorkExtensions
-            var uow = sender as IActiveUnitOfWork;
-            if (uow.Items.TryGetValue(ActiveUnitOfWorkExtensions.__disposeableObject, out var t))
-            {
-                foreach (var item in (t as HashSet<object>))
-                {
-                    if (item is IAsyncDisposable d)
-                        AsyncHelper.RunSync(() => d.DisposeAsync().AsTask());
+            ////参考ActiveUnitOfWorkExtensions
+            //var uow = sender as IActiveUnitOfWork;
+            //if (uow.Items.TryGetValue(ActiveUnitOfWorkExtensions.__disposeableObject, out var t))
+            //{
+            //    foreach (var item in (t as HashSet<object>))
+            //    {
+            //        if (item is IAsyncDisposable d)
+            //            AsyncHelper.RunSync(() => d.DisposeAsync().AsTask());
 
-                    if (item is IDisposable ee)
-                        ee.Dispose();
-                }
-            }
+            //        if (item is IDisposable ee)
+            //            ee.Dispose();
+            //    }
+            //}
         }
 
         public override void Initialize()

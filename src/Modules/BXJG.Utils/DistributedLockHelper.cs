@@ -1,6 +1,7 @@
 using Abp.Dependency;
 using Abp.Domain.Uow;
 using Abp.Runtime.Session;
+using Abp.Threading;
 using Medallion.Threading;
 using System;
 using System.Threading;
@@ -47,11 +48,12 @@ public class DistributedLockHelper : ITransientDependency
         {
             lockobj.Dispose();
             //AsyncHelper.RunSync(async ()=>await lockobj.DisposeAsync());
+            //AsyncHelper.
         };
     }
     public Task AcquireLockTenantAsync(string key, TimeSpan? timeout = default, CancellationToken cts = default)
     {
-        return AcquireLockAsync($"{key}_{abpSession.Value.TenantId}");
+        return AcquireLockAsync($"{key}_{abpSession.Value.TenantId}",timeout,cts);
     }
     public async Task TryAcquireLockAsync(string key, TimeSpan timeout = default, CancellationToken cts = default)
     {
@@ -66,6 +68,6 @@ public class DistributedLockHelper : ITransientDependency
     }
     public Task TryAcquireLockTenantAsync(string key, TimeSpan timeout = default, CancellationToken cts = default)
     {
-        return TryAcquireLockAsync($"{key}_{abpSession.Value.TenantId}");
+        return TryAcquireLockAsync($"{key}_{abpSession.Value.TenantId}",timeout,cts);
     }
 }

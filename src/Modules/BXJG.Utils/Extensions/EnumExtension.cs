@@ -11,8 +11,6 @@ namespace BXJG.Utils.Extensions
     /// </summary>
     public static class EnumExtension
     {
-       
-
         /// <summary>
         /// 获取枚举的颜色描述信息
         /// </summary>

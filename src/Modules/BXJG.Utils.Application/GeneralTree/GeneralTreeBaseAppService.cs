@@ -33,6 +33,7 @@ using BXJG.Utils.GeneralTree;
 using BXJG.Common.Contracts;
 using BXJG.Utils.Application.Share.Dtos;
 using Abp.Auditing;
+using System.Linq.Expressions;
 
 namespace BXJG.Utils.Application.GeneralTree
 {
@@ -486,8 +487,30 @@ namespace BXJG.Utils.Application.GeneralTree
         /// </summary>
         public TManager GeneralTreeManager { get; set; }
         /// <summary>
+        /// 分布式锁帮助器
+        /// 通常在应用服务方法的中间部分用，少数情况在领域服务方法中也可以
+        /// uow释放后会自动释放锁
+        /// </summary>
+        public DistributedLockHelper DistributedLockHelper { get; set; }
+        /// <summary>
+        /// 新增时的重复检查，返回null则不检查
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        protected virtual Expression<Func<TEntity, bool>> GetCreateIsExistsChenker(TCreateInput input) => null;
+        /// <summary>
+        /// 修改时的重复检查，返回null则不检查
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        protected virtual Expression<Func<TEntity, bool>> GetUpdateIsExistsChenker(TEditDto input)
+        {
+            // return x => !x.Id.Equals(input.Id); 需要返回null，以避免默认加锁
+            return null;
+        }
+        /// <summary>
         /// 与当前请求关联的服务容器
-        /// 通常你可以使用构造函数或属性注入，框架级别或特殊情况可以使用此对象。
+        /// 通常你可以使用构造函数或属性注入，框架级别或特殊情况可以使用此对象。能不用就不用
         /// 注：IocManager是全局单例，解析实现IDisposeable的服务时比较危险，此时应使用ServiceProvider
         /// 保险起见，使用时创建个范围
         /// </summary>
@@ -519,7 +542,14 @@ namespace BXJG.Utils.Application.GeneralTree
         public virtual async Task<TDto> CreateAsync(TCreateInput input)
         {
             await CheckCreatePermissionAsync();
-
+            var cfjc = GetCreateIsExistsChenker(input);
+            if (cfjc != null)
+            {
+                //加锁注意是为了防止重复提交，数据库唯一约束局限性太大，比如软删除冲突，另外在代码层面做了，数据库见表也省得到处去建唯一索引
+                await DistributedLockHelper.AcquireLockTenantAsync(typeof(TEntity).FullName, TimeSpan.FromMinutes(1), CancellationTokenProvider.Token);
+                //要完美的话，前端还应该先判断，后端是最后的保障
+                await Repository.IsExistsThrow(cfjc);
+            }
 
             // var ctx = new Dictionary<string, object> { { "input", input } };
             var m = MapToEntity(input);// ObjectMapper.Map<TEntity>(input);
@@ -580,7 +610,15 @@ namespace BXJG.Utils.Application.GeneralTree
 
             await CheckUpdatePermissionAsync();
 
-
+            var cfjc = GetUpdateIsExistsChenker(input);
+            if (cfjc != null)
+            {
+                //加锁注意是为了防止重复提交，数据库唯一约束局限性太大，比如软删除冲突，另外在代码层面做了，数据库见表也省得到处去建唯一索引
+                await DistributedLockHelper.AcquireLockTenantAsync(typeof(TEntity).FullName, TimeSpan.FromMinutes(1), CancellationTokenProvider.Token);
+                //cfjc.And(c => c.Id != input.Id);
+                //要完美的话，前端还应该先判断，后端是最后的保障
+                await Repository.IsExistsThrow(cfjc);
+            }
 
             //  var ctx = new Dictionary<string, object> { { "input", input } };
             var m = await GetEntityByIdAsync(input.Id);
