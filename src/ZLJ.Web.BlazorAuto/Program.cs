@@ -61,6 +61,10 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
 
+builder.Services.AddAdminApiClientProxy(hc =>
+{
+    hc.BaseAddress = new Uri(builder.Configuration["App:ServerRootAddress"].TrimEnd('/') + "/");
+});
 builder.Services.AddScoped<AuthenticationStateProvider, PersistingRevalidatingAuthenticationStateProvider>();
 builder.Services.AddScoped<IAccessTokenProvider>(x => x.GetRequiredService<AuthenticationStateProvider>() as PersistingRevalidatingAuthenticationStateProvider);
 
@@ -68,10 +72,6 @@ builder.Services.AddScoped<IAccessTokenProvider>(x => x.GetRequiredService<Authe
 builder.Services.AddAdminBlazor().AddBXJGCommonWeb();
 //builder.Services.AddAutoMapper(typeof(Program), typeof(ZLJ.RCL.AppContainer));
 
-builder.Services.AddAdminApiClientProxy(hc =>
-{
-    hc.BaseAddress = new Uri(builder.Configuration["App:ServerRootAddress"].TrimEnd('/') + "/");
-});
 
 builder.Services.AddHttpContextAccessor();
 

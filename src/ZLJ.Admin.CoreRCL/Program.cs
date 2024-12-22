@@ -23,6 +23,11 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 //});
 //builder.Logging.AddProvider(new BrowserConsoleLoggerProvider());
 
+builder.Services.AddAdminApiClientProxy(hc =>
+{
+    hc.BaseAddress = new Uri(builder.Configuration["App:ServerRootAddress"].TrimEnd('/') + "/");
+});
+
 builder.Services.AddAdminBlazor().AddCommonRCLClient().AddAuthorizationCore();
 ////硬编码所有权限
 ////获取从接口获取，所有权限的字符串并不需要登录
@@ -40,10 +45,6 @@ builder.Services.AddAdminBlazor().AddCommonRCLClient().AddAuthorizationCore();
 //});
 
 
-builder.Services.AddAdminApiClientProxy(hc =>
-{
-    hc.BaseAddress = new Uri(builder.Configuration["App:ServerRootAddress"].TrimEnd('/') + "/");
-});
 
 var host = builder.Build();
 var l= host.Services.GetRequiredService<ILoggerFactory>().CreateLogger("ccccccc");

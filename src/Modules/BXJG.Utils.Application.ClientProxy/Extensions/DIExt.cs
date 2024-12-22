@@ -36,6 +36,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 b = services.AddHttpClient(BXJGHttpClientExt.HttpClientName);
 
             services.AddTransient<AbpWraperDelegatHandler>();
+            services.AddTransient<IErrorCallback,NullErrorCallback>();
             b.AddHttpMessageHandler<AbpWraperDelegatHandler>().AddHttpMessageHandler<AccessTokenHandler>();
 
             if (act2 != default)

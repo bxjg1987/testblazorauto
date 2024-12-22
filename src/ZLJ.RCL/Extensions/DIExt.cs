@@ -17,6 +17,8 @@ using Microsoft.AspNetCore.SignalR.Client;
 using System.Runtime.Intrinsics.X86;
 using Microsoft.Extensions.Configuration;
 using System.Globalization;
+using BXJG.Utils.Application.ClientProxy.Http;
+using ZLJ.RCL.Exceptions;
 #if DEBUG
 [assembly: Rougamo.IgnoreMo]
 #endif
@@ -49,7 +51,6 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.TryAddScoped( s => s.GetRequiredService<AbpUserConfigurationService>().GetAll());
 
-
             if (cfg == default)
             {
                 cfg = (s, b) =>
@@ -61,7 +62,7 @@ namespace Microsoft.Extensions.DependencyInjection
             }
             //不好实现，所以不要使用多语言
             //services.TryAddSingleton<ILocalizationManager, NullLocalizationManager>();
-            return services.UseBXJGUtilsRCL(cfg).AddAntDesign();
+            return services.UseBXJGUtilsRCL(cfg).AddAntDesign().Replace(ServiceDescriptor.Transient < IErrorCallback, ErrorCallback >()); ;
         }
         //public static Task<AbpUserConfigurationDto> AbpUserConfigurationDto(this ServiceProvider s)
         //{
