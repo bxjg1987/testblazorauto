@@ -31,9 +31,9 @@ public class DistributedLockHelper : ITransientDependency
     private readonly IUnitOfWorkManager uow;
     private readonly IDistributedLockProvider dlocker;
 
-    private readonly Lazy<IAbpSession> abpSession;
+    private readonly IAbpSession abpSession;
 
-    public DistributedLockHelper(IUnitOfWorkManager uow, IDistributedLockProvider dlocker, Lazy<IAbpSession> abpSession)
+    public DistributedLockHelper(IUnitOfWorkManager uow, IDistributedLockProvider dlocker, IAbpSession abpSession)
     {
         this.uow = uow;
         this.dlocker = dlocker;
@@ -53,7 +53,7 @@ public class DistributedLockHelper : ITransientDependency
     }
     public Task AcquireLockTenantAsync(string key, TimeSpan? timeout = default, CancellationToken cts = default)
     {
-        return AcquireLockAsync($"{key}_{abpSession.Value.TenantId}",timeout,cts);
+        return AcquireLockAsync($"{key}_{abpSession.TenantId}",timeout,cts);
     }
     public async Task TryAcquireLockAsync(string key, TimeSpan timeout = default, CancellationToken cts = default)
     {
@@ -68,6 +68,6 @@ public class DistributedLockHelper : ITransientDependency
     }
     public Task TryAcquireLockTenantAsync(string key, TimeSpan timeout = default, CancellationToken cts = default)
     {
-        return TryAcquireLockAsync($"{key}_{abpSession.Value.TenantId}",timeout,cts);
+        return TryAcquireLockAsync($"{key}_{abpSession.TenantId}",timeout,cts);
     }
 }

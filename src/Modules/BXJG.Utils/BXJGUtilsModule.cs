@@ -51,7 +51,7 @@ namespace BXJG.Utils
             //Configuration.Modules.BXJGUtils().AddEnum(typeof(Gender), "gender", UtilsConsts.LocalizationSourceName);
             Configuration.Modules.BXJGUtils().EnumLocalizationProviders.Add(() => new[] {
                 new EnumLocalizationDefine(typeof(Gender), "gender"),
-                new EnumLocalizationDefine(typeof(Gender), "bool"),
+                //new EnumLocalizationDefine(typeof(bool), "bool"),
             });
 
             Configuration.Modules.AbpAutoMapper().Configurators
@@ -105,6 +105,7 @@ namespace BXJG.Utils
             IocManager.RegService(services =>
             {
                 services.AddBXJGCommon();
+                //services.AddScoped<DistributedLockHelper>();
             });
             IocManager.Register(typeof(DynamicPropertyManager<>), DependencyLifeStyle.Singleton);
 
