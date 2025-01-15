@@ -184,6 +184,28 @@ namespace ZLJ.RCL.Components
          * 同步方法中，多次调用StateChange貌似没有
          */
 
+        public override string Sorting { get => base.Sorting;
+            set 
+            {
+                //var lspx = value.Replace(" Descing", " desc").Replace(" Ascing", " asc").Replace(" None", "");
+                var strSort = "";
+                if (value.IsNotNullOrWhiteSpaceBXJG())
+                {
+                    var sddsf = value.Split(',');
+                    foreach (var item in sddsf)
+                    {
+                        if (item.EndsWith(" Descing"))
+                            strSort += item.Replace(" Descing", " desc")+",";
+                        else if (item.EndsWith(" Ascing"))
+                            strSort += item.Replace(" Ascing", " asc") + ",";
+                        
+                    }
+                }
+
+                    strSort = strSort.TrimEnd(',');
+                base.Sorting = strSort;
+            } 
+        }
         protected override async Task ShowFailMessage(string title = "操作提示", string msg = "操作失败！")
         {
             _ = MessageService.Error(msg);//它是阻塞到显示完成因此元素后，所以不能等待它

@@ -80,6 +80,30 @@ namespace ZLJ.RCL.Components
             await base.LoadCore();
         }
 
+        public override string Sorting
+        {
+            get => base.Sorting;
+            set
+            {
+                //var lspx = value.Replace(" Descing", " desc").Replace(" Ascing", " asc").Replace(" None", "");
+                var strSort = "";
+                if (value.IsNotNullOrWhiteSpaceBXJG())
+                {
+                    var sddsf = value.Split(',');
+                    foreach (var item in sddsf)
+                    {
+                        if (item.EndsWith(" Descing"))
+                            strSort += item.Replace(" Descing", " desc") + ",";
+                        else if (item.EndsWith(" Ascing"))
+                            strSort += item.Replace(" Ascing", " asc") + ",";
+
+                    }
+                }
+
+                strSort = strSort.TrimEnd(',');
+                base.Sorting = strSort;
+            }
+        }
 
         /// <summary>
         /// 对ant表格的引用
