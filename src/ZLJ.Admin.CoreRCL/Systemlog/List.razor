@@ -5,9 +5,9 @@
 @attribute [Authorize(PermissionNames.AdministratorBaseInfoPost)]
 @using ZLJ.Application.Share.Auditing
 
-<Flex Gap="small" Vertical Justify="space-between">
+<Flex Gap="FlexGap.Small" Vertical Justify="FlexJustify.SpaceBetween">
 
-     <Flex Gap="small" Justify="flex-end">
+     <Flex Gap="FlexGap.Small" Justify="FlexJustify.FlexEnd">
          @*
         0.17.3.1 andblazor 的 ChangeOnClose 属性会导致DatePicker很卡，且清空按钮不正常
         清空时OnChang会触发两次，与ChangeOnClose无关

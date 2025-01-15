@@ -13,7 +13,7 @@
     {
         <Form @ref="frm" ValidateOnChange="true" Model="editDto" LabelColSpan="4" WrapperColSpan="20" OnFinish="OnFinish">
 
-            <Descriptions Bordered Size="small">
+            <Descriptions Bordered Size="DescriptionsSize.Small">
                 <DescriptionsItem Title="父级">
                     <AdministrativeTreeSelect @bind-Value="@context.ParentIdString" IsKeyId AllowClear Style="width:15rem;" />
                 </DescriptionsItem>
@@ -26,7 +26,7 @@
     }
     else
     {
-        <Descriptions Bordered Size="small">
+        <Descriptions Bordered Size="DescriptionsSize.Small">
             <DescriptionsItem Title="父级">
                 @dto.ParentDisplayName
             </DescriptionsItem>

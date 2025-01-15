@@ -8,10 +8,10 @@
 
 @inherits TreeListBaseComponent<TestTreeDto, TestTreeCondition>
 
-<Flex Gap="small" Vertical Justify="space-between">
-     <Flex Justify="space-between">
+<Flex Gap="FlexGap.Small" Vertical Justify="FlexJustify.SpaceBetween">
+     <Flex Justify="FlexJustify.SpaceBetween">
          @* 左侧 *@
-         <Flex Gap="small">
+         <Flex Gap="FlexGap.Small">
             @if (createIsGranted)
             {
                 <Button Type="@ButtonType.Primary" Icon="@IconType.Outline.Plus" OnClick="BtnCreateClick" Disabled="IsBusy">新增</Button>
@@ -25,7 +25,7 @@
             }
         </Flex>
         @* 右侧 *@
-        <Flex Gap="small">
+        <Flex Gap="FlexGap.Small">
             <AntDesign.InputNumber @bind-Value="GetAllInput.AgeMin" PlaceHolder="最小年龄"  Width="150"/>
             <AntDesign.InputNumber @bind-Value="GetAllInput.AgeMax" PlaceHolder="最大年龄"  Width="150"/>
             <RangePicker TValue="DateTime?[]" @bind-Value="BirthdayRange" Placeholder=@(new string[] { "开始出生日期", "结束出生日期" }) Width="150" />
@@ -61,8 +61,8 @@
            Size="TableSize.Small"
            Bordered="true"
            ScrollY="76vh">
-        <Selection Key="@(context.Id.ToString())"  Fixed="left"/>
-        @*表格树起码在antblazor0.19前不支持 Fixed="left" 另外树不支持排序 *@
+        <Selection Key="@(context.Id.ToString())"  Fixed="ColumnFixPlacement.Left"/>
+        @*表格树起码在antblazor0.19前不支持 Fixed="ColumnFixPlacement.Left" 另外树不支持排序 *@
         <PropertyColumn Property="c=>c.DisplayName" ShowSorterTooltip="false" Sortable="true" Width="12rem"/>
         <PropertyColumn Property="c=>c.Name" ShowSorterTooltip="false" Width="150" Align="@ColumnAlign.Center"/>        
         <PropertyColumn Property="c=>c.Age" ShowSorterTooltip="false" Width="150" Align="@ColumnAlign.Center"/>        
@@ -74,8 +74,8 @@
             <Switch @bind-Value="@context.F3" Size="@InputSize.Small" Disabled="true"></Switch>
         </PropertyColumn>
 
-        <ActionColumn Title="操作" Width="240" Fixed="right">
-            <ButtonGroup Size="@ButtonSize.Small">
+        <ActionColumn Title="操作" Width="240" Fixed="ColumnFixPlacement.Right">
+            <ButtonGroup Size="@ButtonGroupSize.Small">
                     <Button Size="@ButtonSize.Small" Type="@ButtonType.Primary" OnClick="x=>BtnItemDetailClick(context)">详情</Button>
                 @if (createIsGranted)
                 {
@@ -111,7 +111,7 @@
            AfterClose="AfterCloseDialog"
            Class="frm-dal" >
     <TitleTemplate>
-        <Icon Type="plus" Theme="outline" />
+        <Icon Type="plus" Theme="IconThemeType.Outline" />
         新增@(FuncName)
     </TitleTemplate>
     <ChildContent>

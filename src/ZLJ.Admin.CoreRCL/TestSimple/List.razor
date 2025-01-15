@@ -8,11 +8,11 @@
 
 @inherits ListBaseComponent<TestSimpleDto, long, PagedAndSortedResultRequest<TestSimpleCondition>>
 
-<Flex Gap="small" Vertical Justify="space-between">
+<Flex Gap="FlexGap.Small" Vertical Justify="FlexJustify.SpaceBetween">
     @* 顶部工具栏 *@
-    <Flex Justify="space-between">
+    <Flex Justify="FlexJustify.SpaceBetween">
         @* 左侧 *@
-        <Flex Gap="small">
+        <Flex Gap="FlexGap.Small">
             @if (createIsGranted)
             {
                 <Button Type="@ButtonType.Primary" Icon="@IconType.Outline.Plus" OnClick="BtnCreateClick" Disabled="IsBusy">新增</Button>
@@ -31,7 +31,7 @@
             } *@
         </Flex>
         @* 右侧 *@
-        <Flex Gap="small">
+        <Flex Gap="FlexGap.Small">
             <AntDesign.InputNumber @bind-Value="GetAllInput.Filter.AgeMin" PlaceHolder="最小年龄"  Width="150"/>
             <AntDesign.InputNumber @bind-Value="GetAllInput.Filter.AgeMax" PlaceHolder="最大年龄"  Width="150"/>
             <RangePicker TValue="DateTime?[]" @bind-Value="BirthdayRange" Placeholder=@(new string[] { "开始出生日期", "结束出生日期" }) Width="150"/>
@@ -71,8 +71,8 @@
            ScrollY="71.5vh"
            ScrollX="1000px">
 
-        <Selection Key="@context.Id.ToString()" Width="50" Fixed="left" />
-        <Column TData=TestSimpleDto Title="行号" Width="60" Fixed="left">
+        <Selection Key="@context.Id.ToString()" Width="50" Fixed="ColumnFixPlacement.Left" />
+        <Column TData=TestSimpleDto Title="行号" Width="60" Fixed="ColumnFixPlacement.Left">
             @(PageSize * (PageIndex - 1) + Items.IndexOf(context) + 1)
         </Column>
 
@@ -85,8 +85,8 @@
         <PropertyColumn Property="c=>c.F3" ShowSorterTooltip="false"   Width="5rem"  Align="@ColumnAlign.Center">
             <Switch @bind-Value="@context.F3" Size="@InputSize.Small" Disabled="true"></Switch>
         </PropertyColumn>
-        <ActionColumn Title="操作" Width="160" Fixed="right">
-            <ButtonGroup Size="@ButtonSize.Small">
+        <ActionColumn Title="操作" Width="160" Fixed="ColumnFixPlacement.Right">
+            <ButtonGroup Size="@ButtonGroupSize.Small">
                 <Button Type="@ButtonType.Primary" OnClick="x=>BtnItemDetailClick(context)">详情</Button><br />
                 @if (updateIsGranted)
                 {
@@ -118,7 +118,7 @@
        Class="frm-dal" 
        AfterClose="AfterCloseDialog">
     <TitleTemplate>
-        <Icon Type="plus" Theme="outline" />新增@(FuncName)
+        <Icon Type="plus" Theme="IconThemeType.Outline" />新增@(FuncName)
     </TitleTemplate>
     <ChildContent>
         <SectionOutlet SectionName=@($"{this.GetHashCode()}-create-body") />

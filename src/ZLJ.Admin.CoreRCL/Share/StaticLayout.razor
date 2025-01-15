@@ -32,16 +32,16 @@
         </Sider>
         <Layout>
             <Header Class="zlj-main-head">
-                <Flex Vertical=false Justify="space-between" Align="center" Style="height:100%;">
+                <Flex Vertical=false Justify="FlexJustify.SpaceBetween" Align="FlexAlign.Center" Style="height:100%;">
                     @* 左边 *@
-                    <Flex Vertical=false Align="center">
+                    <Flex Vertical=false Align="FlexAlign.Center">
                         @if (MainMenuCollapsed)
                         {
-                            <Icon Type="menu-unfold" Theme="outline" Class="caidan-kaiguan"  OnClick="toggle" />
+                            <Icon Type="menu-unfold" Theme="IconThemeType.Outline" Class="caidan-kaiguan"  OnClick="toggle" />
                         }
                         else
                         {
-                            <Icon Type="menu-fold" Theme="outline" Class="caidan-kaiguan"  OnClick="toggle" />
+                            <Icon Type="menu-fold" Theme="IconThemeType.Outline" Class="caidan-kaiguan"  OnClick="toggle" />
                         }
                         @* <MainBreadcrumb style="padding-left:1rem;" /> *@
                     </Flex>
@@ -68,7 +68,7 @@
 
         </ChildContent>
         <ErrorContent>
-            <Flex Style="height:50vh;" Align="center" Justify="center" Vertical="true">
+            <Flex Style="height:50vh;" Align="FlexAlign.Center" Justify="FlexJustify.Center" Vertical="true">
       <div>
            ┗|｀O′|┛ 嗷~~程序出错啦！若多次输出错，请联系系统管理员。 <br />
                 </div>

@@ -22,7 +22,7 @@
         <Input Value="@context.Id" Type="hidden" />
         </FormItem>
         *@
-            <Descriptions Bordered Size="small">
+            <Descriptions Bordered Size="DescriptionsSize.Small">
                 <DescriptionsItem Title="名称">
                     <Input @bind-Value="@context.DisplayName" />
                 </DescriptionsItem>
@@ -35,7 +35,7 @@
     }
     else
     {
-        <Descriptions Bordered Size="small">
+        <Descriptions Bordered Size="DescriptionsSize.Small">
             <DescriptionsItem Title="名称">
                 @dto.DisplayName
             </DescriptionsItem>

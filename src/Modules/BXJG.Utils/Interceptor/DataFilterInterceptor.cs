@@ -4,7 +4,9 @@ using Abp.Domain.Uow;
 using BXJG.Common;
 using BXJG.Utils.DI;
 using Castle.Core;
+using Castle.Core.Logging;
 using Castle.DynamicProxy;
+using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -59,17 +61,18 @@ namespace BXJG.Utils.Interceptor
     public class DataFilterInterceptor : AbpInterceptorBase, ITransientDependency
     {
         public IUnitOfWorkManager UnitOfWorkManager { get; set; }
+        public ILogger Logger { get; set; }
         public override void InterceptSynchronous(IInvocation invocation)
         {
             IDisposable sddf = NoDisposable.Instance, sddf2 = NoDisposable.Instance;
             //var sdfdf =  invocation.TargetType.GetCustomAttributes(true);
             var sdfdf = invocation.TargetType.GetCustomAttribute<EnableDataFilterAttribute>();
             if (sdfdf != default)
-                sddf = UnitOfWorkManager.Current.EnableFilter(sdfdf.FilterNames);
+                sddf = UnitOfWorkManager?.Current?.EnableFilter(sdfdf.FilterNames);
 
             var sddf22 = invocation.TargetType.GetCustomAttribute<DisableDataFilterAttribute>();
             if (sddf22 != default)
-                sddf2 = UnitOfWorkManager.Current.DisableFilter(sddf22.FilterNames);
+                sddf2 = UnitOfWorkManager?.Current?.DisableFilter(sddf22.FilterNames);
 
             //var proceedInfo = invocation.CaptureProceedInfo();
             using (sddf)
@@ -88,11 +91,11 @@ namespace BXJG.Utils.Interceptor
             //var sdfdf =  invocation.TargetType.GetCustomAttributes(true);
             var sdfdf = invocation.TargetType.GetCustomAttribute<EnableDataFilterAttribute>();
             if (sdfdf != default)
-                sddf = UnitOfWorkManager.Current.EnableFilter(sdfdf.FilterNames);
+                sddf = UnitOfWorkManager?.Current?.EnableFilter(sdfdf.FilterNames);
 
             var sddf22 = invocation.TargetType.GetCustomAttribute<DisableDataFilterAttribute>();
             if (sddf22 != default)
-                sddf2 = UnitOfWorkManager.Current.DisableFilter(sddf22.FilterNames);
+                sddf2 = UnitOfWorkManager?.Current?.DisableFilter(sddf22.FilterNames);
 
             var proceedInfo = invocation.CaptureProceedInfo();
             using (sddf)
@@ -112,21 +115,29 @@ namespace BXJG.Utils.Interceptor
             IDisposable sddf = NoDisposable.Instance, sddf2 = NoDisposable.Instance;
             //var sdfdf =  invocation.TargetType.GetCustomAttributes(true);
             var sdfdf = invocation.TargetType.GetCustomAttribute<EnableDataFilterAttribute>();
+            Logger.Debug($"拦截器{GetType().FullName} uowm：{UnitOfWorkManager == null} 当前uow：{UnitOfWorkManager.Current == null}");
             if (sdfdf != default)
-                sddf = UnitOfWorkManager.Current.EnableFilter(sdfdf.FilterNames);
-
+            {
+                //Logger.Debug($"abp拦截器查看当前IocResolver：{AbpDIStaticAccessor._resolver.Value?.GetHashCode()}");
+                Logger.Debug(  $"启用拦截器：{string.Join(',', sdfdf.FilterNames)}");
+                sddf = UnitOfWorkManager.Current?.EnableFilter(sdfdf.FilterNames);
+            }
             var sddf22 = invocation.TargetType.GetCustomAttribute<DisableDataFilterAttribute>();
             if (sddf22 != default)
-                sddf2 = UnitOfWorkManager.Current.DisableFilter(sddf22.FilterNames);
-
+            {
+                Logger.Debug($"禁用拦截器：{string.Join(',', sddf22.FilterNames)}");
+                sddf2 = UnitOfWorkManager.Current?.DisableFilter(sddf22.FilterNames);
+            }
             var proceedInfo = invocation.CaptureProceedInfo();
             using (sddf)
             {
                 using (sddf2)
                 {
                     proceedInfo.Invoke();
+                    var r = await (Task<TResult>)invocation.ReturnValue;
                     //Logger.Debug($"abp拦截器查看当前IocResolver：{AbpDIStaticAccessor._resolver.Value?.GetHashCode()}");
-                    return await (Task<TResult>)invocation.ReturnValue;
+                    Logger.Debug($"返回值：{r}");
+                    return r;// await (Task<TResult>)invocation.ReturnValue;
                 }
             }
         }

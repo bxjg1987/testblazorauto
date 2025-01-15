@@ -5,11 +5,11 @@
 @attribute [Authorize(BXJG.Utils.Application.Share.Auth.PermissionNames.GeneralTreeMenuName)]
 @inherits TreeListBaseComponent<DataDictionaryDto, DataDictionaryGetTreeInput>
 
-<Flex Gap="small" Vertical Justify="space-between">
+<Flex Gap="FlexGap.Small" Vertical Justify="FlexJustify.SpaceBetween">
 
-     <Flex Justify="space-between">
+     <Flex Justify="FlexJustify.SpaceBetween">
          @* 左侧 *@
-         <Flex Gap="small">
+         <Flex Gap="FlexGap.Small">
              @if (createIsGranted)
             {
                 <Button Type="@ButtonType.Primary" Icon="@IconType.Outline.Plus" OnClick="BtnCreateClick">新增</Button>
@@ -23,7 +23,7 @@
             }
         </Flex>
         @* 右侧 *@
-        <Flex Gap="small">
+        <Flex Gap="FlexGap.Small">
             <RadioGroup TValue="bool?" @bind-Value="@GetAllInput.IsSysDefine" OnChange="BtnSearchClick" Disabled=IsLoading>
                 <Radio TValue="bool?" RadioButton="true" Value="@(default(bool?))">全部</Radio>
                 <Radio TValue="bool?" RadioButton="true" Value="@(true)">预设</Radio>
@@ -64,7 +64,7 @@
             <Switch @bind-Value="@context.IsSysDefine" Size="@InputSize.Small" Disabled="true"></Switch>
         </PropertyColumn>
         <ActionColumn Title="操作" Width="240">
-            <ButtonGroup Size="@ButtonSize.Small">
+            <ButtonGroup Size="@ButtonGroupSize.Small">
                 <Button Size="@ButtonSize.Small" Type="@ButtonType.Primary" OnClick="x=>BtnItemDetailClick(context)">详情</Button>
                 @if (createIsGranted)
                 {
@@ -96,7 +96,7 @@
 <Modal DestroyOnClose="true" Footer="renderFragment" @bind-Visible="isShowCreateDialog" Draggable="true" Width=@("40vw") AfterClose="AfterCloseDialog"
        Class="frm-dal">
     <TitleTemplate>
-        <Icon Type="plus" Theme="outline" />
+        <Icon Type="plus" Theme="IconThemeType.Outline" />
         新增@(FuncName)
     </TitleTemplate>
 

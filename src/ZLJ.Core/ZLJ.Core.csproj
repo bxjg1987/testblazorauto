@@ -56,8 +56,8 @@
 		<PackageReference Include="DistributedLock.Core" Version="1.0.8" />
 		<PackageReference Include="Hangfire.Core" Version="1.8.17" />
 		<PackageReference Include="HtmlAgilityPack" Version="1.11.72" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.1" />
 		<PackageReference Include="SourceLink.Copy.PdbFiles" Version="2.8.3">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
