@@ -112,7 +112,7 @@ else
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
     app.UseHsts();
 }
-//app.UseAntiforgery();
+app.UseAntiforgery();
 //app.UseStaticFiles();
 app.MapStaticAssets();
 

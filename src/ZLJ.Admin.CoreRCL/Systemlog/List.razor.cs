@@ -47,9 +47,9 @@ namespace ZLJ.Admin.CoreRCL.Systemlog
             condition.MaxResultCount = queryModel.PageSize;
             // await Console.Out.WriteLineAsync(   System.Text.Json.JsonSerializer.Serialize(queryModel.SortModel));
             condition.Sorting = string.Empty;
-            foreach (var item in queryModel.SortModel.Where(c => c.Sort.IsNotNullOrWhiteSpaceBXJG()).OrderBy(c => c.Priority))
+            foreach (var item in queryModel.SortModel.Where(c => c.SortDirection!= SortDirection.None).OrderBy(c => c.Priority))
             {
-                condition.Sorting += $"{item.FieldName} {item.Sort.TrimEnd("end".ToArray())},";
+                condition.Sorting += $"{item.FieldName} {item.SortDirection.ToString().Replace("ending","")},";
             }
             if (condition.Sorting.IsNullOrWhiteSpaceBXJG())
                 condition.Sorting = "ExecutionTime desc";
