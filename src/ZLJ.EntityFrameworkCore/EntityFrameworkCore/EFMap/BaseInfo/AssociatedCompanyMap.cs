@@ -17,6 +17,18 @@ namespace ZLJ.EntityFrameworkCore.EntityFrameworkCore.EFMap.BaseInfo
             builder.Property(x => x.Address).HasMaxLength(ZLJ.Core.Share.ZLJConsts.AssociatedCompanyAddressMaxLength);
             builder.Property(x => x.Lng).HasColumnType($"decimal(32,24)");
             builder.Property(x => x.Lat).HasColumnType($"decimal(32,24)");
+
+            builder.HasOne(a => a.Admin)
+       .WithOne()
+       .HasForeignKey<AssociatedCompanyEntity>(a => a.AdminId)
+       .IsRequired(false)
+       .OnDelete(DeleteBehavior.ClientNoAction);  // 删除用户时置空AdminId
+
+            // 用户与客户关系配置
+            builder.HasMany(a => a.Staffs)
+                .WithOne(s => s.Customer)
+                .HasForeignKey(s => s.CustomerId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

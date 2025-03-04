@@ -85,6 +85,24 @@ builder.Services.AddHttpContextAccessor();
 //});
 // Add Hangfire services.
 
+// 从 Kestrel 配置中读取 HTTPS 端口
+var httpsEndpoint = builder.Configuration.GetSection("Kestrel:Endpoints:MyHttpsEndpoint");
+if (httpsEndpoint.Exists())
+{
+    var url = httpsEndpoint["Url"];
+    if (!string.IsNullOrEmpty(url))
+    {
+        var uri = new Uri(url);
+        var httpsPort = uri.Port;
+
+        // 配置 HTTPS 重定向选项
+        builder.Services.Configure<Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionOptions>(options =>
+        {
+            options.HttpsPort = httpsPort;
+        });
+    }
+}
+
 var app = builder.Build();
 
 app.UseStaticDI();
@@ -111,7 +129,9 @@ else
 {
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
     app.UseHsts();
+    app.UseHttpsRedirection();
 }
+
 app.UseAntiforgery();
 //app.UseStaticFiles();
 app.MapStaticAssets();

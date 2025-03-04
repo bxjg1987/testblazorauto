@@ -123,6 +123,7 @@ namespace ZLJ.Application.BaseInfo.AssociatedCompany
 
         protected override async Task DeleteCore(AssociatedCompanyEntity u)
         {
+        
             if (u.CategoryId != 17)
             {
                 //新增的客户，没有添加其它信息时删除管理员，若存在其它的，则外键会约束
@@ -135,6 +136,11 @@ namespace ZLJ.Application.BaseInfo.AssociatedCompany
                     }
                 }
             }
+
+            u.AdminId = default;
+            u.Admin = default;
+            await base.CurrentUnitOfWork.SaveChangesAsync();
+
           //  await Repository.DeleteAsync(u);
             await base.DeleteCore(u);
         }

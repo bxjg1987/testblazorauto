@@ -21,7 +21,7 @@ namespace ZLJ.EntityFrameworkCore.EntityFrameworkCore.EFMap.Customer
             //builder.Property(x => x.CurrentAddress).HasColumnType($"nvarchar({ZLJ.Core.Share.ZLJConsts.StaffInfoCurrentAddressMaxLength})");
             // builder.Ignore(c => c.Birthday);
             //builder.Property(x => x.PhoneNumber).HasMaxLength(11);
-            builder.HasOne(c => c.Customer).WithMany().OnDelete(DeleteBehavior.NoAction);
+            //builder.HasOne(c => c.Customer).WithMany().OnDelete(DeleteBehavior.NoAction);
             //modelBuilder.Entity<Blog>()
             //.Property(b => b.Url)
             //.HasColumnName("Url");
