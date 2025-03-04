@@ -46,18 +46,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Abp.AutoMapper" Version="10.0.0" />
-		<PackageReference Include="Abp.ZeroCore" Version="10.0.0" />
+		<PackageReference Include="Abp.AutoMapper" Version="10.1.0" />
+		<PackageReference Include="Abp.ZeroCore" Version="10.1.0" />
 		<!--<PackageReference Include="BXJG.Utils" Version="*" />-->
 		<!--<PackageReference Include="BXJG.Common" Version="1.2.1" />
     <PackageReference Include="BXJG.Utils" Version="1.2.2" />-->
 		<!--<PackageReference Include="BXJG.WorkOrder.Core" Version="1.2.1" />-->
 		<PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="4.1.0" />
 		<PackageReference Include="DistributedLock.Core" Version="1.0.8" />
-		<PackageReference Include="Hangfire.Core" Version="1.8.17" />
-		<PackageReference Include="HtmlAgilityPack" Version="1.11.72" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.1" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.1" />
+		<PackageReference Include="Hangfire.Core" Version="1.8.18" />
+		<PackageReference Include="HtmlAgilityPack" Version="1.11.74" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.2" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.2" />
 		<PackageReference Include="SourceLink.Copy.PdbFiles" Version="2.8.3">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

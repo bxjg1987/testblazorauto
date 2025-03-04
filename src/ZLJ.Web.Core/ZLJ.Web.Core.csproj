@@ -65,30 +65,30 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Abp.Castle.Log4Net" Version="10.0.0" />
-		<PackageReference Include="Hangfire.AspNetCore" Version="1.8.17" />
+		<PackageReference Include="Abp.Castle.Log4Net" Version="10.1.0" />
+		<PackageReference Include="Hangfire.AspNetCore" Version="1.8.18" />
 		<!--<PackageReference Include="DistributedLock.SqlServer" Version="1.*" />
 		<PackageReference Include="DistributedLock.MySql" Version="1.*" />-->
 		<!--<PackageReference Include="DotNetCore.CAP.Dashboard" Version="7.2.0" />
 		<PackageReference Include="DotNetCore.CAP.SqlServer" Version="7.2.0" />-->
-		<PackageReference Include="Hangfire.SqlServer" Version="1.8.17" />
+		<PackageReference Include="Hangfire.SqlServer" Version="1.8.18" />
 		<PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.1" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.1">
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.2">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 			
-		<PackageReference Include="HangFire.Core" Version="1.8.17" />
-		<PackageReference Include="Abp.HangFire.AspNetCore" Version="10.0.0" />
+		<PackageReference Include="HangFire.Core" Version="1.8.18" />
+		<PackageReference Include="Abp.HangFire.AspNetCore" Version="10.1.0" />
 		<!--<PackageReference Include="BXJG.Common.Web" Version="*" />
 		<PackageReference Include="BXJG.Utils.RCL" Version="*" />-->
 		<PackageReference Include="DistributedLock.SqlServer" Version="1.0.6" />
 		<PackageReference Include="Magicodes.IE.Excel.AspNetCore" Version="2.7.5.2" />
 		<!--<PackageReference Include="BXJG.Utils.Web" Version="1.2.1" />-->
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.1" />
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
-		<PackageReference Include="Abp.AspNetCore" Version="10.0.0" />
-		<PackageReference Include="Abp.AspNetCore.SignalR" Version="10.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.2" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="7.3.1" />
+		<PackageReference Include="Abp.AspNetCore" Version="10.1.0" />
+		<PackageReference Include="Abp.AspNetCore.SignalR" Version="10.1.0" />
 	</ItemGroup>
 	<ItemGroup>
 		<Folder Include="Authentication\WeChatMiniProgram\" />

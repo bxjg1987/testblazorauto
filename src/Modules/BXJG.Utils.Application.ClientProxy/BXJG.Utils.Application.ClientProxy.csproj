@@ -3,7 +3,7 @@
   <PropertyGroup>
 	  <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
-	  <VersionPrefix>1.0.47</VersionPrefix>
+	  <VersionPrefix>1.0.48</VersionPrefix>
 	  <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
@@ -11,9 +11,9 @@
     <Compile Remove="CRUDClient.cs" />
   </ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Abp.Web.Common" Version="10.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Http" Version="9.0.1" />
-		<PackageReference Include="System.Net.Http.Json" Version="9.0.1" />
+		<PackageReference Include="Abp.Web.Common" Version="10.1.0" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="9.0.2" />
+		<PackageReference Include="System.Net.Http.Json" Version="9.0.2" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\BXJG.Utils.Application.Share\BXJG.Utils.Application.Share.csproj" />
