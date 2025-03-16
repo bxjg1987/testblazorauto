@@ -106,7 +106,7 @@ public class UserManager<Role, User> : AbpUserManager<Role, User>
     public override async Task<IdentityResult> UpdateAsync(User user)
     {
         var r = await base.UpdateAsync(user);
-        if (r.Succeeded && user.IsActive == false || user.IsDeleted)
+        if (r.Succeeded && (user.IsActive == false || user.IsDeleted))
             await UpdateSecurityStampAsync(user);
         return r;
     }
@@ -116,7 +116,8 @@ public class UserManager<Role, User> : AbpUserManager<Role, User>
         var r = await base.UpdateSecurityStampAsync(user);
 
         //清空下缓存
-        await CacheManager.GetSecureStampCache().RemoveAsync($"{base.AbpSession.TenantId}_{base.AbpSession.UserId}");
+        await CacheManager.GetSecureStampCache().RemoveAsync($"{user.TenantId}_{user.Id}");
+        base.Logger.LogWarning($"{user.UserName}更新了安全戳");
         //  cm.GetUserPermissionCache
         return r;
     }
