@@ -17,6 +17,7 @@ using Azure.Core;
 using Microsoft.Net.Http.Headers;
 using ZLJ.Core;
 using log4net.Core;
+using ZLJ.Core.Identity;
 //using ZLJ.Core.Authentication.WeChatMiniProgram;
 
 namespace ZLJ.Web.Host.Startup
@@ -58,10 +59,16 @@ namespace ZLJ.Web.Host.Startup
 
                     options.Events = new JwtBearerEvents
                     {
-                        OnMessageReceived = QueryStringTokenResolver
+                        OnMessageReceived = QueryStringTokenResolver,
+                        OnTokenValidated = async context =>
+                        {
+                            await context.ValidateSecurityStampAsync<SignInManager, ZLJ.Core.Authorization.Users.User>();
+                        }
                     };
                 });
             }
+
+            services.Configure<SecurityStampValidatorOptions>(opt=>opt.ValidationInterval= TimeSpan.FromMinutes(10));
         }
 
         /* This method is needed to authorize SignalR javascript client.
@@ -81,9 +88,9 @@ namespace ZLJ.Web.Host.Startup
             var qsAuthToken = context.HttpContext.Request.Query["access_token"].FirstOrDefault();
             //blazor前端以server模式运行时，token在头部
             if (qsAuthToken.IsNullOrWhiteSpaceBXJG() && context.HttpContext.Request.Headers.TryGetValue("Authorization", out var sdfsdf))
-                qsAuthToken = sdfsdf.ToString().Replace("Bearer","").TrimStart();
-       
-          // context.HttpContext.Request.Headers.Authorization.FirstOrDefault()
+                qsAuthToken = sdfsdf.ToString().Replace("Bearer", "").TrimStart();
+
+            // context.HttpContext.Request.Headers.Authorization.FirstOrDefault()
 
             if (qsAuthToken == null)
             {

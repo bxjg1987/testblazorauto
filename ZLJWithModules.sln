@@ -59,6 +59,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{31830F03-1
 		docs\动态条件.md = docs\动态条件.md
 		docs\多租户.md = docs\多租户.md
 		docs\如何切换新的UI组件库.md = docs\如何切换新的UI组件库.md
+		docs\安全.md = docs\安全.md
 		docs\实时.md = docs\实时.md
 		docs\实时统计.md = docs\实时统计.md
 		docs\客户端代理.md = docs\客户端代理.md
