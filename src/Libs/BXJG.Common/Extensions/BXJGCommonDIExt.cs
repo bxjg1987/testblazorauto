@@ -24,6 +24,7 @@ namespace Microsoft.Extensions.DependencyInjection
             //services.TryAddSingleton(Zhongjie.Instance);
             services.TryAddScoped<Zhongjie>();//客户端模式中是单例，server模式中是scope
             services.TryAddTransient<AccessTokenHandler>();
+            services.TryAddTransient<IAccessTokenProvider, NullAccessTokenProvider>();
             return services;
         }
         ///// <summary>

@@ -16,6 +16,20 @@ namespace BXJG.Common.Http
         string GetAccessToken();
         string GetEncryptedAccessToken();
     }
+
+    public class NullAccessTokenProvider: IAccessTokenProvider
+    {
+        public string GetAccessToken()
+        {
+            return null;
+        }
+
+        public string GetEncryptedAccessToken()
+        {
+            return null;
+        }
+    }
+
     /// <summary>
     /// 为http请求设置accesstoken的http header
     /// </summary>
