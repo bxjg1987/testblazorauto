@@ -17,8 +17,7 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddBXJGCommonWeb(this IServiceCollection services)
         {
-           
-             services.AddBXJGCommon().TryAddSingleton<IEnv, AspNetEnv>();
+             services.AddHttpContextAccessor().AddBXJGCommon().TryAddSingleton<IEnv, AspNetEnv>();
             return services;
         }
     }
