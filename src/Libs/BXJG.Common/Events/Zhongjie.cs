@@ -33,6 +33,7 @@ namespace BXJG.Common.Events
     {
         //private readonly ConcurrentBag<Weituo> weituos = new ConcurrentBag<Weituo>();//不好做删除
         //核心存储事件和对应的处理程序（委托）
+   
         internal protected readonly ConcurrentDictionary<string, ConcurrentDictionary<Delegate, Weituo>> weituos = new ConcurrentDictionary<string, ConcurrentDictionary<Delegate, Weituo>>(StringComparer.OrdinalIgnoreCase);
 
         internal protected readonly ILogger logger;
@@ -91,7 +92,7 @@ namespace BXJG.Common.Events
 
             //weituos[eventName].TryAdd(weituo, new Weituo { Func = oo => weituo((T)oo), AddTime = DateTime.Now });
             var sj = weituos.GetOrAdd(eventName, new ConcurrentDictionary<Delegate, Weituo>());
-            sj.TryAdd(weituo, new Weituo { Func = oo => weituo((T)oo), AddTime = DateTime.Now });
+            sj.TryAdd(weituo, new Weituo { Func = weituo, AddTime = DateTime.Now });
 
             logger.LogDebug($"注册事件：{eventName}");
 
@@ -112,7 +113,7 @@ namespace BXJG.Common.Events
             //weituos[eventName].TryAdd(weituo, new Weituo { Func = o => weituo(), AddTime = DateTime.Now });
 
             var sj = weituos.GetOrAdd(eventName, new ConcurrentDictionary<Delegate, Weituo>());
-            sj.TryAdd(weituo, new Weituo { Func = o => weituo(), AddTime = DateTime.Now });
+            sj.TryAdd(weituo, new Weituo { Func = weituo, AddTime = DateTime.Now });
 
 
             logger.LogDebug($"注册事件：{eventName}");
@@ -298,7 +299,8 @@ namespace BXJG.Common.Events
                 await Task.WhenAll(dic.Select(c =>
                 {
                     c.Value.LastExecuteTime = DateTime.Now; //有线程冲突也无所谓
-                    return c.Value.Func(canshu).AsTask();
+
+                    return ((ValueTask)c.Value.Func.DynamicInvoke(canshu)).AsTask();
                 }));
             }
         }
@@ -309,12 +311,19 @@ namespace BXJG.Common.Events
         /// <returns></returns>
         public virtual async Task Chufa(string eventName)
         {
-            await Chufa((object)null, eventName);
-            //if (TryGetValue(eventName, out var dic))
-            //{
-            //    //var func = dic.Select(c=>c.Value).ToImmutableHashSet();
-            //    await Task.WhenAll(dic.Select(c => c.Value(null).AsTask()));
-            //}
+            logger.LogDebug($"正在触发事件{eventName} ");
+            if (weituos.TryGetValue(eventName, out var dic))
+            {
+                logger.LogDebug($"委托数{dic.Count}");
+
+                //https://github.com/dotnet/runtime/issues/23625
+                await Task.WhenAll(dic.Select(c =>
+                {
+                    c.Value.LastExecuteTime = DateTime.Now; //有线程冲突也无所谓
+
+                    return ((ValueTask)c.Value.Func.DynamicInvoke()  ).AsTask();
+                }));
+            }
         }
         /// <summary>
         /// 批量触发符合条件的事件
@@ -357,17 +366,9 @@ namespace BXJG.Common.Events
         /// <returns></returns>
         public virtual Task Chufa(string eventName, params string[] level)
         {
-            //eventName = eventName.BuildEventName(level);
-            //var items = zhongjie.Where(c => c.Key.StartsWith(eventName));
-            //var ts = new List<Task>();
-            //foreach (var item in items)
-            //{
-            //    ts.Add(zhongjie.Chufa(item.Key));
-            //}
-            //await Task.WhenAll(ts);
-            // eventName = BuildEventName(eventName, level);
-            // await Chufa(c => c.Key.StartsWith(eventName));
-            return Chufa(null, eventName, level);
+          
+            eventName = BuildEventName(eventName, level);
+            return Chufa( eventName);
         }
         #endregion
 
@@ -390,7 +391,7 @@ namespace BXJG.Common.Events
             /// <summary>
             /// 转换后的委托
             /// </summary>
-            public Func<object, ValueTask> Func { get; set; }
+            public Delegate Func { get; set; }
             /// <summary>
             /// 注册时间
             /// </summary>

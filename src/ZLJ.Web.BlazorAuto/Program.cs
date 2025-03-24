@@ -105,7 +105,7 @@ if (httpsEndpoint.Exists())
 
 var app = builder.Build();
 
-app.UseStaticDI();
+app.UseBXJGWeb();
 //app.Services.GetRequiredService<AppContainer>().Services = app.Services;
 
 //app.UseStatusCodePages(async statusCodeContext =>

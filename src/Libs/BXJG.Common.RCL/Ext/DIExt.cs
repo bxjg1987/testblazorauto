@@ -22,20 +22,22 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="services"></param>
         /// <param name="permissionNamesProvider"></param>
         /// <returns></returns>
-        public static IServiceCollection AddCommonRCL(this IServiceCollection services, Func<IServiceProvider, ValueTask< IEnumerable<string>>> permissionNamesProvider)
+        public static IServiceCollection AddCommonRCL(this IServiceCollection services, Func<IServiceProvider, ValueTask<IEnumerable<string>>> permissionNamesProvider)
         {
             // Microsoft.AspNetCore.Authorization.Infrastructure.OperationAuthorizationRequirement
             //  operareq
-            services.AddBXJGCommon().AddCascadingAuthenticationState()
+            services.AddBXJGCommon()
+                    .AddCascadingAuthenticationState()
+                    .AddCascadingValue(x => x.GetRequiredService<Zhongjie>())
                     .AddTransient<IAuthorizationPolicyProvider, PermissionNameAuthorizationPolicyProvider>()
                     .AddScoped<IAuthorizationHandler, OperationAuthorizationRequirement1>()
                     //.AddSingleton<IZhongjieProvider, ZhongjieProvider>()
                     //.AddScoped<IAuthorizationPolicyProvider, PermissionNameAuthorizationPolicyProvider>()
-                    .TryAddKeyedScoped<Func<ValueTask< IEnumerable<string>>>>(OperationAuthorizationRequirement1.GrantedPermissionNamesProvider, (s, o) => () => permissionNamesProvider(s));
-                    //.AddSingleton<AuthenticationStateProvider, PersistentAuthenticationStateProvider>()
-                    //.AddSingleton<AccessTokenProvider>()
-                    //.AddSingleton<IAccessTokenProvider>(s => s.GetRequiredService<AccessTokenProvider>());
-         
+                    .TryAddKeyedScoped<Func<ValueTask<IEnumerable<string>>>>(OperationAuthorizationRequirement1.GrantedPermissionNamesProvider, (s, o) => () => permissionNamesProvider(s));
+            //.AddSingleton<AuthenticationStateProvider, PersistentAuthenticationStateProvider>()
+            //.AddSingleton<AccessTokenProvider>()
+            //.AddSingleton<IAccessTokenProvider>(s => s.GetRequiredService<AccessTokenProvider>());
+
             //services.TryAddSingleton<AuthenticationStateProvider, PersistentAuthenticationStateProvider>();
             ////services.TryAddSingleton<AccessTokenProvider>();
             //services.TryAddSingleton<IAccessTokenProvider>(s => s.GetRequiredService<AuthenticationStateProvider>() as PersistentAuthenticationStateProvider);

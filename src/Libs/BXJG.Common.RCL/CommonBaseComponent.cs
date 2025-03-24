@@ -27,6 +27,16 @@ namespace BXJG.Common.RCL
         [Inject]
         protected virtual Zhongjie Zhongjie { get; private set; }
 
+        //这个应该是全局设置一次就行了，一般在主项目的路由组件中去设置
+        //基于请求的那个，搞中间件去设置
+        //public override Task SetParametersAsync(ParameterView parameters)
+        //{
+        //    if(Zhongjie.Current.Value==default)
+        //        Zhongjie.Current.Value= Zhongjie; 
+
+        //    return base.SetParametersAsync(parameters);
+        //}
+
         //[CascadingParameter]
         //protected BlazorServerContext Context { get; set; }
 
