@@ -16,7 +16,7 @@ namespace Microsoft.AspNetCore.Builder
         public static IApplicationBuilder UseBXJGWeb(this IApplicationBuilder appBuilder)
         {
             return appBuilder.UseMiddleware<MyCustomMiddleware>();
-        }
+        } 
     }
 
     public class MyCustomMiddleware
