@@ -22,13 +22,18 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="services"></param>
         /// <param name="permissionNamesProvider"></param>
         /// <returns></returns>
-        public static IServiceCollection AddCommonRCL(this IServiceCollection services, Func<IServiceProvider, ValueTask<IEnumerable<string>>> permissionNamesProvider)
+        public static IServiceCollection AddBXJGCommonRCL(this IServiceCollection services, Func<IServiceProvider, ValueTask<IEnumerable<string>>> permissionNamesProvider = default)
         {
             // Microsoft.AspNetCore.Authorization.Infrastructure.OperationAuthorizationRequirement
             //  operareq
+
+
+            if (permissionNamesProvider == default)
+                permissionNamesProvider = s => ValueTask.FromResult(Enumerable.Empty<string>());
+
             services.AddBXJGCommon()
                     .AddCascadingAuthenticationState()
-                    .AddCascadingValue(x => x.GetRequiredService<Zhongjie>())
+                    //下面这俩应该是不能用try，因为我们确实需要替换asp.net core默认的
                     .AddTransient<IAuthorizationPolicyProvider, PermissionNameAuthorizationPolicyProvider>()
                     .AddScoped<IAuthorizationHandler, OperationAuthorizationRequirement1>()
                     //.AddSingleton<IZhongjieProvider, ZhongjieProvider>()
@@ -37,7 +42,7 @@ namespace Microsoft.Extensions.DependencyInjection
             //.AddSingleton<AuthenticationStateProvider, PersistentAuthenticationStateProvider>()
             //.AddSingleton<AccessTokenProvider>()
             //.AddSingleton<IAccessTokenProvider>(s => s.GetRequiredService<AccessTokenProvider>());
-
+            services.TryAddCascadingValue(x => x.GetRequiredService<Zhongjie>());
             //services.TryAddSingleton<AuthenticationStateProvider, PersistentAuthenticationStateProvider>();
             ////services.TryAddSingleton<AccessTokenProvider>();
             //services.TryAddSingleton<IAccessTokenProvider>(s => s.GetRequiredService<AuthenticationStateProvider>() as PersistentAuthenticationStateProvider);
@@ -45,16 +50,20 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
 
+        //这个库是客户端和服务端共享的，所以这个库没有提供服务端的AuthenticationStateProvider实现，因为服务端的实现好像会引用blazor server相关的东东
+        //没有在这里提供组合的注册，比如在AddBXJGCommonRCLClient种直接就注册AddBXJGCommonRCL，主要考虑有时候调用方需要分开处理，
+
         /// <summary>
         /// 注册Common.RCL
         /// 注册blazor客户端部分的服务
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>
-        public static IServiceCollection AddCommonRCLClient(this IServiceCollection services)
+        public static IServiceCollection AddBXJGCommonRCLClient(this IServiceCollection services)
         {
+            //这里不能用try，因为要替换common的默认实现
             services.AddSingleton<AuthenticationStateProvider, PersistentAuthenticationStateProvider>();
-            services.TryAddSingleton<IAccessTokenProvider>(s => s.GetRequiredService<AuthenticationStateProvider>() as PersistentAuthenticationStateProvider);
+            services.AddSingleton<IAccessTokenProvider>(s => s.GetRequiredService<AuthenticationStateProvider>() as PersistentAuthenticationStateProvider);
             return services;
         }
 

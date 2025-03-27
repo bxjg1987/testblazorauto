@@ -40,7 +40,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="services"></param>
         /// <param name="cfg">通用signalR配置，通常只需要withurl配置地址即可</param>
         /// <returns></returns>
-        public static IServiceCollection UseBXJGUtilsRCL(this IServiceCollection services, Action<IServiceProvider, HubConnectionBuilder> cfg = default)
+        public static IServiceCollection AddBXJGUtilsRCL(this IServiceCollection services, Action<IServiceProvider, HubConnectionBuilder> cfg = default)
         {
             //   BXJGUtilsRCLConfiguration peizhi = new BXJGUtilsRCLConfiguration(services);
             // peizhi.HubConnectionBuilder.WithAutomaticReconnect();
@@ -110,7 +110,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             #endregion
 
-            services.AddCommonRCL(async s =>
+            services.AddBXJGCommonRCL(async s =>
             {
                 var fw = s.GetRequiredService<Task<AbpUserConfigurationDto>>();
 

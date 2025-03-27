@@ -34,6 +34,7 @@ namespace BXJG.Utils.Web
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
             IocManager.RegService(services =>
             {
+                services.AddBXJGCommonWeb();
                 //services.AddAuthorization(c => { 
                 //    c.AddPolicy
                 //});
@@ -41,7 +42,7 @@ namespace BXJG.Utils.Web
                 //    opt.AddPolicy("", new IAuthorizationPolicyProvider (new IAuthorizationRequirement[] {   }));
                 //});
                 //本来想在这里将权限作为授权策略（它很轻量）注册，后来缓存AbpAuthorizationPolicyProvider的方式，运行时创建策略了
-                services.AddSingleton<IEnv, AspNetEnv>();//.AddBXJGCommonWeb(); //core已经注册内部的服务了
+                //services.AddSingleton<IEnv, AspNetEnv>();//.AddBXJGCommonWeb(); //core已经注册内部的服务了
                                                          //使用iocmanager替换无效
                                                          //  services.Replace(new ServiceDescriptor(typeof(IAuthorizationPolicyProvider),typeof(AbpAuthorizationPolicyProvider), ServiceLifetime.Singleton));
             });

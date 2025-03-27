@@ -65,11 +65,12 @@ builder.Services.AddAdminApiClientProxy(hc =>
 {
     hc.BaseAddress = new Uri(builder.Configuration["App:ServerRootAddress"].TrimEnd('/') + "/");
 });
+builder.Services.AddAdminBlazor().AddBXJGCommonWeb();
 builder.Services.AddScoped<AuthenticationStateProvider, PersistingRevalidatingAuthenticationStateProvider>();
 builder.Services.AddScoped<IAccessTokenProvider>(x => x.GetRequiredService<AuthenticationStateProvider>() as PersistingRevalidatingAuthenticationStateProvider);
 
 
-builder.Services.AddAdminBlazor().AddBXJGCommonWeb();
+
 //builder.Services.AddAutoMapper(typeof(Program), typeof(ZLJ.RCL.AppContainer));
 
 
@@ -105,7 +106,7 @@ if (httpsEndpoint.Exists())
 
 var app = builder.Build();
 
-app.UseBXJGWeb();
+app.UseBXJGCommonWeb();
 //app.Services.GetRequiredService<AppContainer>().Services = app.Services;
 
 //app.UseStatusCodePages(async statusCodeContext =>

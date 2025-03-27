@@ -62,7 +62,7 @@ namespace Microsoft.Extensions.DependencyInjection
             }
             //不好实现，所以不要使用多语言
             //services.TryAddSingleton<ILocalizationManager, NullLocalizationManager>();
-            return services.UseBXJGUtilsRCL(cfg).AddAntDesign().Replace(ServiceDescriptor.Transient < IErrorCallback, ErrorCallback >()); ;
+            return services.AddBXJGUtilsRCL(cfg).AddAntDesign().Replace(ServiceDescriptor.Transient < IErrorCallback, ErrorCallback >());
         }
         //public static Task<AbpUserConfigurationDto> AbpUserConfigurationDto(this ServiceProvider s)
         //{

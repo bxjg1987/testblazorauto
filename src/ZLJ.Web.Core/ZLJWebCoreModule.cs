@@ -165,23 +165,24 @@ namespace ZLJ.Web.Core
 
             //IocManager.RegService(services =>
             //{
-            //    services.Configure<AppOptions>( _appConfiguration  .GetSection("app"));
+                //services.add
+                //services.Configure<AppOptions>(_appConfiguration.GetSection("app"));
 
 
-            //    //services.PostConfigure<AppOptions>(opt =>
-            //    //{
-            //    //    if (opt.sbslzxpdsc == default)
-            //    //        opt.sbslzxpdsc = 960000;
+                //services.PostConfigure<AppOptions>(opt =>
+                //{
+                //    if (opt.sbslzxpdsc == default)
+                //        opt.sbslzxpdsc = 960000;
 
-            //    //    if (opt.sbslzxrwjgsc == default)
-            //    //        opt.sbslzxrwjgsc = 10000;
+                //    if (opt.sbslzxrwjgsc == default)
+                //        opt.sbslzxrwjgsc = 10000;
 
-            //    //    if (opt.cjjlblts == default)
-            //    //        opt.cjjlblts = 90;
+                //    if (opt.cjjlblts == default)
+                //        opt.cjjlblts = 90;
 
-            //    //    if (opt.idGeneratorWorkerId == default)
-            //    //        opt.idGeneratorWorkerId = 1;
-            //    //});
+                //    if (opt.idGeneratorWorkerId == default)
+                //        opt.idGeneratorWorkerId = 1;
+                //});
             //});
         }
 

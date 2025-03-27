@@ -136,7 +136,7 @@ namespace BXJG.Utils
             //发布到服务器后不存在这个问题，调试时需要在web.core模块PreInitialize中替换服务，注意经过测试一定要在PreInitialize中替换
             //IocManager.Register<IEnv, Utils.File.DefaultEnv>(Abp.Dependency.DependencyLifeStyle.Singleton);
 
-            IocManager.Register<IEnv, NullEnv>();
+           // IocManager.Register<IEnv, NullEnv>();
             IocManager.Register(typeof(GeneralTreeManager<>), DependencyLifeStyle.Transient);
 
             IocManager.Register(typeof(AbpAsyncDeterminationInterceptor<DataFilterInterceptor>), DependencyLifeStyle.Transient);

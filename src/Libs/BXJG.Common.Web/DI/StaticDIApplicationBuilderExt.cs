@@ -13,7 +13,7 @@ namespace Microsoft.AspNetCore.Builder
 {
     public static class StaticDIApplicationBuilderExt
     {
-        public static IApplicationBuilder UseBXJGWeb(this IApplicationBuilder appBuilder)
+        public static IApplicationBuilder UseBXJGCommonWeb(this IApplicationBuilder appBuilder)
         {
             return appBuilder.UseMiddleware<MyCustomMiddleware>();
         } 

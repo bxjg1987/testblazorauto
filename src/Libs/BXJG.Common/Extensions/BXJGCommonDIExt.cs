@@ -20,11 +20,15 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IServiceCollection AddBXJGCommon(this IServiceCollection services)
         {
+            services.TryAddSingleton<IEnv, NullEnv>();
             services.TryAddSingleton<IClock, LocalClock>();
             //services.TryAddSingleton(Zhongjie.Instance);
-            services.TryAddScoped<Zhongjie>();//客户端模式中是单例，server模式中是scope
+            services.TryAddScoped<Zhongjie>();//blazor 客户端模式中是单例，server模式中是scope
+            
             services.TryAddTransient<AccessTokenHandler>();
+            //只想使用common，不需要token处理
             services.TryAddTransient<IAccessTokenProvider, NullAccessTokenProvider>();
+
             return services;
         }
         ///// <summary>

@@ -11,13 +11,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Utils.Web
+namespace Microsoft.AspNetCore.Builder
 {
     public static class AppBuilderExtensions
     {
-        public static IApplicationBuilder UseStaticAbpDI(this IApplicationBuilder appBuilder)
+        public static IApplicationBuilder UseBXJGUtilsWeb(this IApplicationBuilder appBuilder)
         {
-            return appBuilder.UseMiddleware<AbpDIMiddleware>();
+            return appBuilder.UseBXJGCommonWeb().UseMiddleware<AbpDIMiddleware>();
         }
     }
 
