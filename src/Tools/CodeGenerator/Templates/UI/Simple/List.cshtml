@@ -15,11 +15,11 @@
 
 @@inherits ListBaseComponent<@(Model.Model.DtoName), @(Model.Model.PrimaryFieldCSharpType), PagedAndSortedResultRequest<@(Model.Model.ConditionName)>>
 
-<Flex Gap="small" Vertical Justify="space-between">
+    <Flex Gap="FlexGap.Small" Vertical Justify="space-between">
     @@* 顶部工具栏 *@@
-    <Flex Justify="space-between">
+        <Flex Gap="FlexGap.Small"  Justify="space-between">
         @@* 左侧 *@@
-        <Flex Gap="small">
+            <Flex Gap="FlexGap.Small">
             @@if (createIsGranted)
             {
                 <Button Type="@@ButtonType.Primary" Icon="@@IconType.Outline.Plus" OnClick="BtnCreateClick" Disabled="IsBusy">新增</Button>
@@ -33,7 +33,7 @@
             }
         </Flex>
         @@* 右侧 *@@
-        <Flex Gap="small">
+            <Flex Gap="FlexGap.Small">
 @foreach (var field in Model.Model.ConditionRangeFields)
 {
     if(field.CSharpTypeIsDateTime){

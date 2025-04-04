@@ -14,68 +14,68 @@
 <div style="height:100vh">
     <ErrorBoundary @ref="errorBoundary">
         <ChildContent>
-            
-    <Layout>
-        <Sider @bind-Collapsed=@MainMenuCollapsed NoTrigger Collapsible >
-            <div class="logo" style="height:29px; margin:15px;">
-                <img src="bxjglogo.png" style="width:37px; height:30px; float:left;" />
 
-                @if (!MainMenuCollapsed)
-                {
-                    <h3 style="    color: #ddd;    float: left;    margin-left: 0.5rem;    line-height: 35px;    font-size: 1.2rem;">
-                        变形精怪
-                    </h3>
-                }
-            </div>
-            @* 菜单需要交互式 *@
-            <MainMenu Collapsed=MainMenuCollapsed />
-        </Sider>
-        <Layout>
-            <Header Class="zlj-main-head">
-                <Flex Vertical=false Justify="FlexJustify.SpaceBetween" Align="FlexAlign.Center" Style="height:100%;">
-                    @* 左边 *@
-                    <Flex Vertical=false Align="FlexAlign.Center">
-                        @if (MainMenuCollapsed)
+            <Layout>
+                <Sider @bind-Collapsed=@MainMenuCollapsed NoTrigger Collapsible>
+                    <div class="logo" style="height:29px; margin:15px;">
+                        <img src="bxjglogo.png" style="width:37px; height:30px; float:left;" />
+
+                        @if (!MainMenuCollapsed)
                         {
-                            <Icon Type="menu-unfold" Theme="IconThemeType.Outline" Class="caidan-kaiguan"  OnClick="toggle" />
+                            <h3 style="    color: #ddd;    float: left;    margin-left: 0.5rem;    line-height: 35px;    font-size: 1.2rem;">
+                                变形精怪
+                            </h3>
+                        }
+                    </div>
+                    @* 菜单需要交互式 *@
+                    <MainMenu Collapsed=MainMenuCollapsed />
+                </Sider>
+                <Layout>
+                    <Header Class="zlj-main-head">
+                        <Flex Gap="FlexGap.Small" Vertical=false Justify="FlexJustify.SpaceBetween" Align="FlexAlign.Center" Style="height:100%;">
+                            @* 左边 *@
+                            <Flex Gap="FlexGap.Small" Vertical=false Align="FlexAlign.Center">
+                                @if (MainMenuCollapsed)
+                                {
+                                    <Icon Type="menu-unfold" Theme="IconThemeType.Outline" Class="caidan-kaiguan" OnClick="toggle" />
+                                }
+                                else
+                                {
+                                    <Icon Type="menu-fold" Theme="IconThemeType.Outline" Class="caidan-kaiguan" OnClick="toggle" />
+                                }
+                                @* <MainBreadcrumb style="padding-left:1rem;" /> *@
+                            </Flex>
+                            @* 右边 *@
+                            <HeaderRight />
+                        </Flex>
+                    </Header>
+                    <Content Style="padding-bottom:2.7vh;">
+                        @if (auth)
+                        {
+                            <ReuseTabs Class="zlj-main-body-box" TabPaneClass="zlj-main-tab-head-item" />
                         }
                         else
                         {
-                            <Icon Type="menu-fold" Theme="IconThemeType.Outline" Class="caidan-kaiguan"  OnClick="toggle" />
+                            <div class="zlj-main-body-box-no-auth">@Body</div>
                         }
-                        @* <MainBreadcrumb style="padding-left:1rem;" /> *@
-                    </Flex>
-                    @* 右边 *@
-                    <HeaderRight />
-                </Flex>
-            </Header>
-            <Content>
-                @if(auth)
-                {
-                    <ReuseTabs Class="zlj-main-body-box" TabPaneClass="zlj-main-tab-head-item" />
-                }
-                else
-                {
-                    <div class="zlj-main-body-box-no-auth">@Body</div>
-                }
-            </Content>
-            <Footer Style="text-align: center; padding:0.3rem 0; color:rgba(100,100,100,0.7); height:3.5vh; position:fixed; z-index:999; width:100%; bottom:0;">
-                Copyright ©1900-2024 变形精怪, All Rights Reserved | Power by <a href="https://dotnet.microsoft.com/zh-cn/apps/aspnet" target="_blank">asp.net 8.x</a> / <a href="https://aspnetboilerplate.com" target="_blank">abp 9.x</a> / <a href="https://antblazor.com" target="_blank">antblazor 0.17.x</a> / <a href="https://gitee.com/bxjg1987_admin/abp" target="_blank">源码</a>
-            </Footer>
-        </Layout>
-    </Layout>
+                    </Content>
+                    <Footer Style="text-align: center; padding:0.3rem 0; color:rgba(100,100,100,0.7); height:3.5vh; position:fixed; z-index:999; width:100%; bottom:0;">
+                        Copyright ©1900-2024 变形精怪, All Rights Reserved | Power by <a href="https://dotnet.microsoft.com/zh-cn/apps/aspnet" target="_blank">asp.net 8.x</a> / <a href="https://aspnetboilerplate.com" target="_blank">abp 9.x</a> / <a href="https://antblazor.com" target="_blank">antblazor 0.17.x</a> / <a href="https://gitee.com/bxjg1987_admin/abp" target="_blank">源码</a>
+                    </Footer>
+                </Layout>
+            </Layout>
 
 
         </ChildContent>
         <ErrorContent>
-            <Flex Style="height:50vh;" Align="FlexAlign.Center" Justify="FlexJustify.Center" Vertical="true">
-      <div>
-           ┗|｀O′|┛ 嗷~~程序出错啦！若多次输出错，请联系系统管理员。 <br />
+            <Flex Gap="FlexGap.Small" Style="height:50vh;" Align="FlexAlign.Center" Justify="FlexJustify.Center" Vertical="true">
+                <div>
+                    ┗|｀O′|┛ 嗷~~程序出错啦！若多次输出错，请联系系统管理员。 <br />
                 </div>
                 <pre>   @XianshiCuowu(context) </pre>
 
 
-           <Button Type="@ButtonType.Primary" OnClick="fanhui">返回</Button>
+                <Button Type="@ButtonType.Primary" OnClick="fanhui">返回</Button>
             </Flex>
         </ErrorContent>
     </ErrorBoundary>
@@ -91,9 +91,9 @@
 #if DEBUG
     return ex.GetBaseException().StackTrace + Environment.NewLine;
 #else
-        return  Environment.NewLine; 
-        #endif
-    
+        return Environment.NewLine;
+#endif
+
     }
 
     // bool collapsed => mmc > 0;
@@ -121,7 +121,7 @@
     {
         MainMenuCollapsed = !MainMenuCollapsed;
     }
-   // IDisposable appContainerInited;
+    // IDisposable appContainerInited;
     protected override void OnInitialized()
     {
         // appContainerInited = Zhongjie.Zhuce( async () =>
@@ -136,18 +136,18 @@
     }
     public void Dispose()
     {
-       // appContainerInited?.Dispose();
+        // appContainerInited?.Dispose();
     }
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         var zt = await AuthStateProvider.GetAuthenticationStateAsync();
-        auth = zt != null && zt.User != default&& zt.User.Identity.IsAuthenticated;
+        auth = zt != null && zt.User != default && zt.User.Identity.IsAuthenticated;
 
-      //  await Task.Delay(5000);
-      //  InvokeAsync(StateHasChanged);
-       // StateHasChanged();
+        //  await Task.Delay(5000);
+        //  InvokeAsync(StateHasChanged);
+        // StateHasChanged();
     }
     // [Inject]
     // public IJSRuntime JSRuntime { get; set; }
