@@ -16,8 +16,8 @@
 
 @@inherits TreeListBaseComponent<@Model.Model.DtoName, @Model.Model.ConditionName>
 
-<Flex Gap="FlexGap.Small" Vertical Justify="space-between">
-    <Flex Gap="FlexGap.Small" Justify="space-between">
+<Flex Gap="FlexGap.Small" Vertical Justify="FlexJustify.SpaceBetween">
+    <Flex Gap="FlexGap.Small" Justify="FlexJustify.SpaceBetween">
          @@* 左侧 *@@
         <Flex Gap="FlexGap.Small">
             @@if (createIsGranted)
@@ -77,8 +77,8 @@
            Size="TableSize.Small"
            Bordered="true"
            ScrollY="76vh">
-        <Selection Fixed="left"/>
-        @@*表格树起码在antblazor0.19前不支持 Fixed="left" 另外树不支持排序 *@@
+        <Selection Fixed="ColumnFixPlacement.Left"/>
+        @@*表格树起码在antblazor0.19前不支持 Fixed="ColumnFixPlacement.Left" 另外树不支持排序 *@@
         <PropertyColumn Property="c=>c.DisplayName" ShowSorterTooltip="false" Sortable="true" Width="12rem"/>
 @foreach (var field in Model.Model.NormalFields){
     @if(field.CSharpType=="bool"){
@@ -90,7 +90,7 @@
     }
 }
 
-        <ActionColumn Title="操作" Width="240" Fixed="right" Align="ColumnAlign.Center">
+        <ActionColumn Title="操作" Width="240" Fixed="ColumnFixPlacement.Right" Align="ColumnAlign.Center">
             <ButtonGroup Size="@@ButtonSize.Small">
                     <Button Size="@@ButtonSize.Small" Type="@@ButtonType.Primary" OnClick="x=>BtnItemDetailClick(context)">详情</Button>
                 @@if (createIsGranted)
@@ -127,7 +127,7 @@
            AfterClose="AfterCloseDialog"
            Class="frm-dal" >
     <TitleTemplate>
-        <Icon Type="plus" Theme="outline" />
+        <Icon Type="plus" Theme="IconThemeType.Outline" />
         新增@@(FuncName)
     </TitleTemplate>
     <ChildContent>

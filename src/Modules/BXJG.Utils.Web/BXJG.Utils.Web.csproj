@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
-	  <VersionPrefix>1.3.86</VersionPrefix>
+	  <VersionPrefix>1.3.87</VersionPrefix>
 	  <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
@@ -28,7 +28,7 @@
     <PackageReference Include="Abp.AspNetCore" Version="10.1.0" />
     <PackageReference Include="Abp.AspNetCore.SignalR" Version="10.1.0" />
     <PackageReference Include="AsyncKeyedLock" Version="7.1.4" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.4" />
   </ItemGroup>
 
   <ItemGroup>

@@ -56,7 +56,7 @@ namespace @(Model.Model.ApplicationNamespace)
 
         protected override async Task<IQueryable<@(Model.Model.EntityName)>> CreateFilteredQuery(PagedAndSortedResultRequest<@(Model.Model.ConditionName)> input)
         {
-            var q = await base.CreateFilteredQuery(input);
+            var query = await base.CreateFilteredQuery(input);
             var condition = input.Filter;
             
 @if(Model.Model.ConditionStringFields.Any())
@@ -74,6 +74,7 @@ namespace @(Model.Model.ApplicationNamespace)
     idx++; 
 }
             @:);
+            @:return query;
 }
 
 @foreach (var field in Model.Model.ConditionRangeFields)

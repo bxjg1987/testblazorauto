@@ -15,9 +15,9 @@
 
 @@inherits ListBaseComponent<@(Model.Model.DtoName), @(Model.Model.PrimaryFieldCSharpType), PagedAndSortedResultRequest<@(Model.Model.ConditionName)>>
 
-    <Flex Gap="FlexGap.Small" Vertical Justify="space-between">
+    <Flex Gap="FlexGap.Small" Vertical Justify="FlexJustify.SpaceBetween">
     @@* 顶部工具栏 *@@
-        <Flex Gap="FlexGap.Small"  Justify="space-between">
+        <Flex Gap="FlexGap.Small"  Justify="FlexJustify.SpaceBetween">
         @@* 左侧 *@@
             <Flex Gap="FlexGap.Small">
             @@if (createIsGranted)
@@ -80,8 +80,8 @@
            ScrollY="71.5vh"
            ScrollX="1000px">
 
-        <Selection Width="50" Fixed="left" />
-        <Column TData=@(Model.Model.DtoName) Title="行号" Width="60" Fixed="left">
+        <Selection Width="50" Fixed="ColumnFixPlacement.Left" />
+        <Column TData=@(Model.Model.DtoName) Title="行号" Width="60" Fixed="ColumnFixPlacement.Left">
             @@(PageSize * (PageIndex - 1) + Items.IndexOf(context) + 1)
         </Column>
 
@@ -91,11 +91,11 @@
             <Switch @@bind-Value="@@context.@(field.Name)" Size="@@InputSize.Small" Disabled="true"></Switch>
         </PropertyColumn>
     }else{
-        <PropertyColumn Property="c=>c.@(field.Name)" @(field.IsSort?@"Sortable=""true""":"") ShowSorterTooltip="false" @(field.Width.IsNullOrWhiteSpaceBXJG()?"":@$"Width=""{field.Width}""") @(field.FixedLeft==true?@"Fixed=""left""":(field.FixedLeft==false?@"Fixed=""right""":"")) @(field.Position==true?"":(field.FixedLeft==false?@"Align=ColumnAlign.Right":@"Align=""ColumnAlign.Center"""))/>        
+        <PropertyColumn Property="c=>c.@(field.Name)" @(field.IsSort?@"Sortable=""true""":"") ShowSorterTooltip="false" @(field.Width.IsNullOrWhiteSpaceBXJG()?"":@$"Width=""{field.Width}""") @(field.FixedLeft==true?@"Fixed=""ColumnFixPlacement.Left""":(field.FixedLeft==false?@"Fixed=""ColumnFixPlacement.Right""":"")) @(field.Position==true?"":(field.FixedLeft==false?@"Align=ColumnAlign.Right":@"Align=""ColumnAlign.Center"""))/>        
     }
 }
-        <ActionColumn Title="操作" Width="160" Fixed="right" Align="ColumnAlign.Center">
-            <ButtonGroup Size="@@ButtonSize.Small">
+        <ActionColumn Title="操作" Width="160" Fixed="ColumnFixPlacement.Right" Align="ColumnAlign.Center">
+            <ButtonGroup Size="@@ButtonGroupSize.Small">
                 <Button Size="@@ButtonSize.Small" Type="@@ButtonType.Primary" OnClick="x=>BtnItemDetailClick(context)">详情</Button><br />
                 @@if (updateIsGranted)
                 {
@@ -127,7 +127,7 @@
        Class="frm-dal" 
        AfterClose="AfterCloseDialog">
     <TitleTemplate>
-        <Icon Type="plus" Theme="outline" />新增@@(FuncName)
+        <Icon Type="plus" Theme="IconThemeType.Outline" />新增@@(FuncName)
     </TitleTemplate>
     <ChildContent>
         <SectionOutlet SectionName=@@($"{this.GetHashCode()}-create-body") />

@@ -827,11 +827,19 @@ void SelectConnectionString(ExecuteContext ctx)
 void SetPermission(ExecuteContext ctx)
 {
     Console.WriteLine("正在为租户管理员授权...");
-    using var conn = new Microsoft.Data.SqlClient.SqlConnection(ctx.App.ConnectionString);
-    SetTenantPermission(conn, ctx.Model.PermissionNameGet, ctx.Model.MultiTenantMode);
-    SetTenantPermission(conn, ctx.Model.PermissionNameCreate, ctx.Model.MultiTenantMode);
-    SetTenantPermission(conn, ctx.Model.PermissionNameUpdate, ctx.Model.MultiTenantMode);
-    SetTenantPermission(conn, ctx.Model.PermissionNameDelete, ctx.Model.MultiTenantMode);
+    //这里的判断不严谨
+    IDbConnection conn;
+    if (ctx.App.ConnectionString.Contains("root;"))
+        conn = new MySql.Data.MySqlClient.MySqlConnection(ctx.App.ConnectionString);
+    else
+        conn = new SqlConnection(ctx.App.ConnectionString);
+    using (conn)
+    {
+        SetTenantPermission(conn, ctx.Model.PermissionNameGet, ctx.Model.MultiTenantMode);
+        SetTenantPermission(conn, ctx.Model.PermissionNameCreate, ctx.Model.MultiTenantMode);
+        SetTenantPermission(conn, ctx.Model.PermissionNameUpdate, ctx.Model.MultiTenantMode);
+        SetTenantPermission(conn, ctx.Model.PermissionNameDelete, ctx.Model.MultiTenantMode);
+    }
     Console.WriteLine("为租户管理员授权已完成");
 
 }
