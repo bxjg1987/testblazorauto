@@ -34,6 +34,7 @@ namespace BXJG.Common
     /// 延迟处理，覆盖执行，后执行的生效，但不完全保证。
     /// 通常用于延迟重新加载数据的场景
     /// </summary>
+    [Obsolete("推荐使用https://github.com/Aldaviva/ThrottleDebounce 或者 https://github.com/dorssel/dotnet-debounce")]
     public class YanchiChuli : IDisposable
     {
         /// <summary>

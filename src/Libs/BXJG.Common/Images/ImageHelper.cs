@@ -16,8 +16,7 @@ namespace BXJG.Common
         /// <param name="thuPath">目标图片路径</param>
         /// <param name="maxDimension">最大尺寸</param>
         /// <param name="quality">生成缩略图后，写入png的质量，0-100(最高)</param>
-        /// <param name="filterQuality">生成缩略图质量</param>
-        public static void MakeThumb(string orgPath, string thuPath, int maxDimension=180, int quality=100, SKFilterQuality filterQuality= SKFilterQuality.Medium)
+        public static void MakeThumb(string orgPath, string thuPath, int maxDimension=180, int quality=100)
         {
            // const int maxDimension = 180; // 最大尺寸
            // const int quality = 100; // 质量为 100%
@@ -37,8 +36,9 @@ namespace BXJG.Common
                 height = maxDimension;
                 width = original.Width * maxDimension / original.Height;
             }
-
-            using (var resized = original.Resize(new SKImageInfo(width, height), filterQuality))
+  // original.Resize(new SKSize(2,3), SKFilterQuality.High)
+ // var opt = new SKSamplingOptions(SKFilterMode.)
+            using (var resized = original.Resize(new SKImageInfo(width, height), SKSamplingOptions.Default))
             {
                 if (resized != null)
                 {

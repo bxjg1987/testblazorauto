@@ -22,6 +22,7 @@ namespace Microsoft.Extensions.Logging
     /// 通常在不使用ioc的组件中使用
     /// 为了保持简单，使用条件编译，debug时记录debug及以上日志，在release时，记录warn及以上日志
     /// </summary>
+    [Obsolete("推荐使用三方包：NReco.Logging")]
     public class SimpleLogger : ILogger
     {
         public static readonly SimpleLogger Instance = new SimpleLogger();
