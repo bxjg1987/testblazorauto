@@ -75,7 +75,8 @@ namespace BXJG.Utils.Application
             }
         }
 
-
+        //这个是全局注册的，所有应用服务都会应用这个拦截器，比较浪费
+        //另外还有个中间件，按理说应该二选一，那个也比较浪费
         public static void Initialize(IIocManager iocManager)
         {
             iocManager.IocContainer.Kernel.ComponentRegistered += (key, handler) =>

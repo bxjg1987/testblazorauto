@@ -18,13 +18,13 @@ namespace BXJG.Utils.BusinessUser
      * 
      * 我们的文档：https://gitee.com/bxjg1987_admin/abp/wikis/多种用户类型?sort_id=3639713
      */
-   
+    [Obsolete("改为继承的方式了")]
     public interface IBusinessUserSession<TKey>
     {
         //没必要用task，因为业务用户id必须快速获取
         TKey BusinessUserId { get; }
     }
-
+    [Obsolete("改为继承的方式了")]
     public class BusinessUserClaimSession<TKey> : ClaimsAbpSession, IBusinessUserSession<TKey>
     {
         protected readonly string businessUserClaimType;
