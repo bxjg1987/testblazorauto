@@ -87,17 +87,20 @@ namespace BXJG.Common.Http
              */
 
 
-            foreach (var key in nxhh.Keys)
-            {
-                if (nxhh[key].IsNotNullOrWhiteSpaceBXJG())
-                    request.Headers.Add(key, nxhh[key]);
-            }
+
+            /////// 搞错了， api木有必要用粘性会话 signalR才需要，问ai
+
+            //foreach (var key in nxhh.Keys)
+            //{
+            //    if (nxhh[key].IsNotNullOrWhiteSpaceBXJG())
+            //        request.Headers.Add(key, nxhh[key]);
+            //}
             var r = await base.SendAsync(request, cancellationToken);
-            foreach (var item in r.Headers.Where(x => x.Key.StartsWith("ak-", StringComparison.OrdinalIgnoreCase)))
-            {
-                if (item.Value != default && item.Value.Any())
-                    nxhh.TryAdd(item.Key, item.Value.First());
-            }
+            //foreach (var item in r.Headers.Where(x => x.Key.StartsWith("ak-", StringComparison.OrdinalIgnoreCase)))
+            //{
+            //    if (item.Value != default && item.Value.Any())
+            //        nxhh.TryAdd(item.Key, item.Value.First());
+            //}
 
             return r;
         }
@@ -112,5 +115,5 @@ namespace BXJG.Common.Http
         }
     }
 
-    public class nxhhrq : ConcurrentDictionary<string, string> { }
+    //public class nxhhrq : ConcurrentDictionary<string, string> { }
 }

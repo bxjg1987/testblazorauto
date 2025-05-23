@@ -26,7 +26,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddScoped<Zhongjie>();//blazor 客户端模式中是单例，server模式中是scope
             
             services.TryAddTransient<AccessTokenHandler>();
-            services.TryAddScoped<nxhhrq>();
+           // services.TryAddScoped<nxhhrq>();
             //只想使用common，不需要token处理
             services.TryAddTransient<IAccessTokenProvider, NullAccessTokenProvider>();
 
