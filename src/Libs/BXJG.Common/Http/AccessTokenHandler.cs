@@ -41,10 +41,10 @@ namespace BXJG.Common.Http
         //这里去做 accessToken的滑动过期
 
         // public Func<string> AccessTokenProvider { get; set; }
-        public AccessTokenHandler(IAccessTokenProvider accessTokenProvider, nxhhrq nxhh)
+        public AccessTokenHandler(IAccessTokenProvider accessTokenProvider)
         {
             this.accessTokenProvider = accessTokenProvider;
-            this.nxhh = nxhh;
+           // this.nxhh = nxhh;
         }
         //protected override HttpResponseMessage Send(HttpRequestMessage request, CancellationToken cancellationToken)
         //{
@@ -53,11 +53,11 @@ namespace BXJG.Common.Http
         //}
         //dic
 
-        /// <summary>
-        /// 负载均衡场景中，粘性会话id的容器
-        /// key 粘性会话键的名称，value 粘性会话值
-        /// </summary>
-        nxhhrq nxhh ;
+        ///// <summary>
+        ///// 负载均衡场景中，粘性会话id的容器
+        ///// key 粘性会话键的名称，value 粘性会话值
+        ///// </summary>
+        //nxhhrq nxhh ;
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             sdfdsf(request);

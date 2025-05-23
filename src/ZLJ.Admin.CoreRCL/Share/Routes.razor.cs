@@ -132,6 +132,7 @@ namespace ZLJ.Admin.CoreRCL.Share
         }
         protected override async Task OnInitializedAsync()
         {
+            
             await HubConnection.StartAsync();
 
             ////await Console.Out.WriteLineAsync("路由中的初始化执行了，正在初始化appContainer"+ appContainer.GetHashCode());
