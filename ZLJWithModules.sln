@@ -128,6 +128,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{8BEB57
 		docs\images\image.png = docs\images\image.png
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "分布式", "分布式", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		docs\分布式\yarp.md = docs\分布式\yarp.md
+		docs\分布式\指南.md = docs\分布式\指南.md
+		docs\分布式\负载均衡.md = docs\分布式\负载均衡.md
+		docs\分布式\通知中心.md = docs\分布式\通知中心.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -306,6 +314,7 @@ Global
 		{55D9DB14-3ED9-4E5E-B740-3FDBE7F2922F} = {D42FF479-F331-48F6-AAA2-45B9FD451892}
 		{B50E2096-3B96-4530-9B88-ADD9EB84306B} = {44B336DD-E758-45E6-9E35-E777DE3AA52B}
 		{8BEB5724-EC87-4563-94CB-60D4D1615E0D} = {31830F03-183C-4530-A73A-C165A1F5A739}
+		{02EA681E-C7D8-13C7-8484-4AC65E1B71E8} = {31830F03-183C-4530-A73A-C165A1F5A739}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F45DD46C-6040-4FCC-87E0-648786C36933}
