@@ -3,21 +3,23 @@ using Abp.Application.Navigation;
 using Abp.Authorization;
 using Abp.Configuration;
 using Abp.Localization;
-using Abp.Runtime.Session;
-using BXJG.Common.Http;
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Abp.ObjectMapping;
+using Abp.Runtime.Session;
+using Abp.Web.Models.AbpUserConfiguration;
+using BXJG.Common.Http;
+using BXJG.Utils.Application.ClientProxy.Http;
+using BXJG.Utils.Application.Share.Session;
 using BXJG.Utils.RCL;
 using BXJG.Utils.RCL.Helpers;
-using BXJG.Utils.Application.Share.Session;
-using ZLJ.Application.Common.ClientProxy;
-using Abp.Web.Models.AbpUserConfiguration;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.SignalR.Client;
-using System.Runtime.Intrinsics.X86;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
 using System.Globalization;
-using BXJG.Utils.Application.ClientProxy.Http;
+using System.Runtime.Intrinsics.X86;
+using ZLJ.Application.Common.ClientProxy;
 using ZLJ.RCL.Exceptions;
 #if DEBUG
 [assembly: Rougamo.IgnoreMo]
@@ -56,7 +58,10 @@ namespace Microsoft.Extensions.DependencyInjection
                 cfg = (s, b) =>
                 {
                     var url = s.GetRequiredService<IConfiguration>()["App:ServerRootAddress"].TrimEnd('/')+ "/signalr";
-                    b.WithUrl(url);
+                    b.WithUrl(url, options => {
+                        options.Transports = HttpTransportType.WebSockets;
+                        options.SkipNegotiation = true;
+                    });
 
                 };
             }
