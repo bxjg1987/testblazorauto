@@ -3,7 +3,7 @@
   <PropertyGroup>
 	  <TargetFrameworks>net8;net9</TargetFrameworks>
     <Nullable>enable</Nullable>
-	  <VersionPrefix>1.0.55</VersionPrefix>
+	  <VersionPrefix>1.0.56</VersionPrefix>
 	  <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
@@ -12,7 +12,7 @@
   </ItemGroup>
 	
 	<ItemGroup Condition="'$(TargetFramework)' == 'net9'">
-		<PackageReference Include="Abp.Web.Common" Version="10.1.0" />
+		<PackageReference Include="Abp.Web.Common" Version="10.*" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework)' == 'net8'">
 		<PackageReference Include="Abp.Web.Common" Version="9.*" />
