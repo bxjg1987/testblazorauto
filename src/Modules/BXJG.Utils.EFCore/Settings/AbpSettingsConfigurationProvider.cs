@@ -1,84 +1,215 @@
-﻿using Abp.EntityFrameworkCore;
+﻿using Abp.Configuration;
+using Abp.Dependency;
+using Abp.EntityFrameworkCore;
+using Abp.Extensions;
 using Abp.Zero.EntityFrameworkCore;
 using BXJG.Common;
 using BXJG.Common.Events;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Primitives;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace BXJG.Utils.EFCore.Settings
 {
-    //反正内部要使用ef，可以考虑使用ef的事件来通知。
-    //经过测试，貌似它是单例的
+    /*
+     * 考虑到分布式场景，结合abp源码实现，改造下，直接从缓存获取即可
+     */
 
     /// <summary>
-    /// 通过ef查询abp的setting表中的应用程序配置作为.net配置系统的数据源
+    /// 直接获取abp settings 应用级别的配置
     /// </summary>
-    public class AbpSettingsConfigurationProvider : ConfigurationProvider, IDisposable
+    public class AbpSettingsConfigurationProvider : IConfigurationProvider//, IDisposable
     {
-        IDisposable d;  //注册全局事件，ISettingManager会来调用这里
-        Func<DbContext> dbContextFactory;
-        YanchiChuli yanchiChuli;//延时覆盖执行器，因为批量修改多个设置项，短时间会触发多次事件
-        ILogger logger = SimpleLogger.Instance;
-        public AbpSettingsConfigurationProvider(Func<DbContext> dbContextFactory, ILoggerFactory? loggerFactory = default)
+        private ConfigurationReloadToken _reloadToken = new ConfigurationReloadToken();
+
+        //Func<DbContext> dbContextFactory;
+        //ILoggerFactory sdf;
+        ILogger logger;
+        public AbpSettingsConfigurationProvider(Func<DbContext> dbContextFactory, ILoggerFactory sdf=default)
         {
-            this.dbContextFactory = dbContextFactory;
 
-            if (loggerFactory != default)
-                logger = loggerFactory.CreateLogger<AbpSettingsConfigurationProvider>();
+            this.logger = sdf?.CreateLogger(GetType())?? SimpleLogger.Instance;
 
-            yanchiChuli = new YanchiChuli((state,cts) =>
-            {
-                Load();
-                OnReload();//通知iconfiguration，当前配置提供器已刷新
-                return Task.CompletedTask;
-            },loggerFactory:loggerFactory);
-
-
-            //用我们自己的事件总线更轻量
-            //Abp.Events.Bus.EventBus.Default.Register()
-
-            //由于仅关注全局的应用程序级别的配置，所以这里使用全局事件总线，跟ISettingManager保持一致即可
-            d = Zhongjie.Instance.Zhuce(() =>
-            {
-                yanchiChuli.Request();
-                return ValueTask.CompletedTask;
-            }, Share.BXJGUtilsConsts.OnAbpApplicationSettingsChanged);
-        }
-
-        public void Dispose()
-        {
-            logger.LogInformation($"AbpSetting配置提供器{GetHashCode()}释放了");
-            try
-            {
-                d?.Dispose();
-            }
-            catch { }
-            try
-            {
-                yanchiChuli?.Dispose();
-            }
-            catch { }
-        }
-
-        public override void Load()
-        {
-            //logger.LogDebug($"AbpSetting配置提供器{GetHashCode()}开始加载abp settings 数据");
             using var db = dbContextFactory.Invoke();
             var list = db.Set<Abp.Configuration.Setting>().Where(x => !x.TenantId.HasValue && !x.UserId.HasValue).ToList();
-            Data = list.ToDictionary(x => x.Name, x => x.Value, StringComparer.OrdinalIgnoreCase);
-            //这个频率不会太高，记录日志是可以的
-            logger.LogInformation($"AbpSetting配置提供器{GetHashCode()}加载载abp settings 数据：{JsonSerializer.Serialize(Data)}");
-            //直接从数据库加载应用程序配置,
-            //反正提供器好像不容易使用依赖注入，所以这里直接new dbcontext即可，记得释放
-            //或者这里使用ef的事件实现
+            ls = list.ToDictionary(x => x.Name, x => x.Value, StringComparer.OrdinalIgnoreCase);
+            logger.LogDebug($"AbpSettingsConfigurationProvider构造函数执行了");
+           // this.sdf = sdf;
+            //Console.WriteLine($"AbpSettingsConfigurationProvider构造函数执行了");
         }
+
+        IDictionary<string, string?> ls;//= new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase);
+
+        DateTime lastT = DateTime.Now;
+        /// <summary>
+        /// Gets or sets the configuration key-value pairs for this provider.
+        /// </summary>
+        protected IDictionary<string, string?> Data
+        {
+            get
+            {
+                if ((DateTime.Now - lastT).TotalSeconds < 10)
+                    return ls;
+
+                if (IocManager.Instance == default)
+                    return ls;
+
+                ls.Clear();
+                IocManager.Instance.UsingScope(scope =>
+                {
+                    //efcorerep
+                    var sm = scope.Resolve<ISettingManager>();
+                    // sm.getall
+                    var ls1 = sm.GetAllSettingValues();//.ToDictionary(x => x.Name, x => x.Value,);
+
+                    foreach (var s in ls1)
+                    {
+                        ls.Add(s.Name, s.Value);
+                    }
+                });
+                logger.LogDebug($"AbpSettingsConfigurationProvider.Data被访问，数据量：{ls.Count}");
+                return ls;
+            }
+        }
+
+        /// <summary>
+        /// Attempts to find a value with the given key.
+        /// </summary>
+        /// <param name="key">The key to lookup.</param>
+        /// <param name="value">When this method returns, contains the value if one is found.</param>
+        /// <returns><see langword="true" /> if <paramref name="key" /> has a value; otherwise <see langword="false" />.</returns>
+        public virtual bool TryGet(string key, out string? value)
+        {
+            var lsz = string.Empty;
+            var cg = false;
+            try
+            {
+                IocManager.Instance.UsingScope(scope =>
+                {
+                    var sm = scope.Resolve<ISettingManager>();
+
+                    lsz = sm.GetSettingValue(key);
+                    cg = true;
+
+
+                });
+            }
+            catch
+            {
+                //if(data)
+                cg = Data.TryGetValue(key, out lsz);
+            }
+            value = lsz;
+            logger.LogDebug($"AbpSettingsConfigurationProvider.TryGet，key：{key} value：{lsz}");
+            return cg;
+        }
+
+        /// <summary>
+        /// Sets a value for a given key.
+        /// </summary>
+        /// <param name="key">The configuration key to set.</param>
+        /// <param name="value">The value to set.</param>
+        public virtual void Set(string key, string? value)
+            => ls[key] = value;
+
+
+
+        /// <summary>
+        /// Returns the list of keys that this provider has.
+        /// </summary>
+        /// <param name="earlierKeys">The earlier keys that other providers contain.</param>
+        /// <param name="parentPath">The path for the parent IConfiguration.</param>
+        /// <returns>The list of keys for this provider.</returns>
+        public virtual IEnumerable<string> GetChildKeys(
+            IEnumerable<string> earlierKeys,
+            string? parentPath)
+        {
+            var results = new List<string>();
+
+            if (parentPath is null)
+            {
+                foreach (KeyValuePair<string, string?> kv in Data)
+                {
+                    results.Add(Segment(kv.Key, 0));
+                }
+            }
+            else
+            {
+                Debug.Assert(ConfigurationPath.KeyDelimiter == ":");
+
+                foreach (KeyValuePair<string, string?> kv in Data)
+                {
+                    if (kv.Key.Length > parentPath.Length &&
+                        kv.Key.StartsWith(parentPath, StringComparison.OrdinalIgnoreCase) &&
+                        kv.Key[parentPath.Length] == ':')
+                    {
+                        results.Add(Segment(kv.Key, parentPath.Length + 1));
+                    }
+                }
+            }
+
+            results.AddRange(earlierKeys);
+
+            results.Sort(ConfigurationKeyComparer.Instance.Compare);
+
+            return results;
+        }
+
+        private static string Segment(string key, int prefixLength)
+        {
+            Debug.Assert(ConfigurationPath.KeyDelimiter == ":");
+            int indexOf = key.IndexOf(':', prefixLength);
+            return indexOf < 0 ? key.Substring(prefixLength) : key.Substring(prefixLength, indexOf - prefixLength);
+        }
+
+        /// <summary>
+        /// Returns a <see cref="IChangeToken"/> that can be used to listen when this provider is reloaded.
+        /// </summary>
+        /// <returns>The <see cref="IChangeToken"/>.</returns>
+        public IChangeToken GetReloadToken()
+        {
+            return _reloadToken;
+        }
+
+        /// <summary>
+        /// Triggers the reload change token and creates a new one.
+        /// </summary>
+        protected void OnReload()
+        {
+            ConfigurationReloadToken previousToken = Interlocked.Exchange(ref _reloadToken, new ConfigurationReloadToken());
+            previousToken.OnReload();
+        }
+
+        /// <summary>
+        /// Generates a string representing this provider name and relevant details.
+        /// </summary>
+        /// <returns>The configuration name.</returns>
+        public override string ToString() => GetType().Name;
+
+        public void Load()
+        {
+            logger.LogDebug($"AbpSettingsConfigurationProvider.Load被执行");
+            return;
+            ////GetReloadToken().
+            ////base.OnReload
+            //IocManager.Instance.UsingScope(scope =>
+            //{
+            //    var sm = scope.Resolve<ISettingManager>();
+            //    Data = sm.GetAllSettingValuesForApplication().ToDictionary(x => x.Name, x => x.Value);
+            //});
+        }
+
     }
 }

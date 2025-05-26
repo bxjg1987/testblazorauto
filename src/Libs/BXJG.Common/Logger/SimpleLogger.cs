@@ -39,7 +39,7 @@ namespace Microsoft.Extensions.Logging
             else
             {
                 //Console.WriteLine($"SimpleLogger静态构造函数执行，当前环境为：服务器");
-                dir = Path.Combine(AppContext.BaseDirectory, "logs");
+                dir = Path.Combine(AppContext.BaseDirectory, "logs_simple");
                 if (!Directory.Exists(dir))
                     Directory.CreateDirectory(dir);
             }
@@ -48,7 +48,7 @@ namespace Microsoft.Extensions.Logging
         public IDisposable BeginScope<TState>(TState state) where TState : notnull
         {
             //本就是简单日志记录，仅用于不适应ioc的组件，所以保持简单，不实现scope日志
-            return new D();
+            return BXJG.Common.NoDisposable.Instance;
         }
 
         public bool IsEnabled(LogLevel logLevel)
@@ -98,12 +98,12 @@ namespace Microsoft.Extensions.Logging
             }
         }
 
-        class D : IDisposable
-        {
-            public void Dispose()
-            {
-                //throw new NotImplementedException();
-            }
-        }
+        //class D : IDisposable
+        //{
+        //    public void Dispose()
+        //    {
+        //        //throw new NotImplementedException();
+        //    }
+        //}
     }
 }

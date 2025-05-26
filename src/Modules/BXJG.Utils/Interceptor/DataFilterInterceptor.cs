@@ -6,7 +6,6 @@ using BXJG.Utils.DI;
 using Castle.Core;
 using Castle.Core.Logging;
 using Castle.DynamicProxy;
-using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

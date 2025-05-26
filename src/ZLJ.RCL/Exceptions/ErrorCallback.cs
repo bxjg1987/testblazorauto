@@ -1,6 +1,5 @@
 ﻿using BXJG.Common.Contracts;
 using BXJG.Utils.Application.ClientProxy.Http;
-using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;

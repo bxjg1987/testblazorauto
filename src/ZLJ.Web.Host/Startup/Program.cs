@@ -6,6 +6,7 @@ using Abp.AspNetCore.Dependency;
 using ZLJ.Core.Configuration;
 using ZLJ.Core.Web;
 using ZLJ.EntityFrameworkCore;
+using Castle.LoggingFacility.MsLogging;
 namespace ZLJ.Web.Host.Startup
 {
     public class Program
@@ -27,8 +28,10 @@ namespace ZLJ.Web.Host.Startup
                       var efbuilder = new DbContextOptionsBuilder<ZLJDbContext>();
                       ZLJDbContextConfigurer.Configure(efbuilder, defaultConnectionString);
 
-                      //LoggerFactory.Create(x=>x.AddSimpleConsole());
-                     
+                // LoggerFactory.Create(x=>x.AddSimpleConsole());
+                //LoggerFactory.Create(x=>x.)
+            // CastleMsLoggerFactoryExtensions
+                // Castle.Core.Logging.factory
                       webConfiguration.AddAbpSettingsConfiguration(() => new ZLJDbContext(efbuilder.Options));
 
                   });

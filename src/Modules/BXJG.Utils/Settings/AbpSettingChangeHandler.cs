@@ -11,11 +11,13 @@ using System.Threading.Tasks;
 
 namespace BXJG.Utils.Settings
 {
-    public class AbpSettingChangeHandler : IAsyncEventHandler<EntityChangingEventData<Abp.Configuration.Setting>>, ITransientDependency
-    {
-        public async Task HandleEventAsync(EntityChangingEventData<Setting> eventData)
-        {
-            await Zhongjie.Instance.Chufa(Share.BXJGUtilsConsts.OnAbpApplicationSettingsChanged);
-        }
-    }
+    //public class AbpSettingChangeHandler : IAsyncEventHandler<EntityChangedEventData<Abp.Configuration.Setting>>, ITransientDependency
+    //{
+    //    public async Task HandleEventAsync(EntityChangedEventData<Setting> eventData)
+    //    {
+    //        //仅关注应用程序级别的配置
+    //        if(!eventData.Entity.TenantId.HasValue&& !eventData.Entity.UserId.HasValue)
+    //            await Zhongjie.Instance.Chufa(Share.BXJGUtilsConsts.OnAbpApplicationSettingsChanged);
+    //    }
+    //}
 }

@@ -109,14 +109,18 @@ namespace BXJG.Common
                     cts?.Cancel();
                 }
                 catch { }
+                try
+                {
+                    cts?.Dispose();
+                }
+                catch { }
                 isDisposed = true;
             }
         }
         /// <summary>
         /// 请求执行
         /// </summary>
-        /// <param name="yanchi"></param>
-        /// <param name="chaoshi"></param>
+        /// <param name="state"></param>
         /// <returns>每次请求的唯一id</returns>
         public void Request(object state = default)
         {
@@ -130,6 +134,11 @@ namespace BXJG.Common
                 try
                 {
                     cts?.Cancel();
+                }
+                catch { }
+                try
+                {
+                    cts?.Dispose();
                 }
                 catch { }
                 tempcts = cts = new CancellationTokenSource();
