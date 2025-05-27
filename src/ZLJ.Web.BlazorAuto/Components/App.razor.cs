@@ -1,4 +1,4 @@
-﻿using BXJG.Utils.RCL;
+using BXJG.Utils.RCL;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using ZLJ.Application.Common.ClientProxy;
@@ -9,6 +9,9 @@ namespace ZLJ.Web.BlazorAuto.Components
     {
         [CascadingParameter]
         private HttpContext HttpContext { get; set; } = default!;
+
+        [Inject]
+       public IConfiguration Cfg { get; set; }
 
         // bool isAjax => HttpContext.Request.IsAjaxRequestBXJG();
 
@@ -63,7 +66,6 @@ namespace ZLJ.Web.BlazorAuto.Components
                     return default;
                 if (HttpContext.Request.Path.StartsWithSegments("/test"))
                     return new InteractiveServerRenderMode(false);
-
 
                 return new InteractiveAutoRenderMode(false);
             // return new InteractiveServerRenderMode(false);

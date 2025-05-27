@@ -54,6 +54,18 @@ namespace BXJG.Utils.Share
         public const string SettingKeyUploadType = "BXJGUtilsFileUploadType";
         //public const string DefaultUploadTypes = "jpg,jpeg,gif,png,doc,docx,rar,xlsx,xls,pdf";
 
+        #region 验证码
+        public const string SettingKeyCaptchaGroup = "CaptchaOptions";
+        public const string CaptchaOptions = nameof(CaptchaOptions);
+        public const string CaptchaOptions_ImageOption = "CaptchaOptions:ImageOption";
+
+        public const string CaptchaOptions_IgnoreCase = "CaptchaOptions:IgnoreCase";
+        public const string CaptchaOptions_CaptchaType = "CaptchaOptions:CaptchaType";
+        public const string CaptchaOptions_ImageOption_FontFamily = "CaptchaOptions:ImageOption:FontFamily";
+        public const string CaptchaOptions_ImageOption_Animation = "CaptchaOptions:ImageOption:Animation";
+        //Actionj
+        #endregion
+
         #region 文件
         public const int FileNameMaxLength = 36;
         public const int FileRealNameMaxLength = 100;

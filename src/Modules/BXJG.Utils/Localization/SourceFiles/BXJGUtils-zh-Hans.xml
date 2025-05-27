@@ -19,12 +19,14 @@
 		<text name="HomePage" value="主页" />
 		<text name="About" value="关于我们" />
 		<text name="WellcomeMessage" value="欢迎使用本系统！" />
+		<text name="CaptchaOptions:ImageOption:Animation" value="动图" />
 		<text name="WeChat">微信</text>
 		<text name="WeChatIndex">说明</text>
 		<text name="Demo">演示</text>
 		<text name="Upload">上传</text>
 		<text name="Sheng">省/自治区/直辖市</text>
 		<text name="Shi">市/自治州/县/自治县</text>
+		<text name="CaptchaOptions:CaptchaType" value="验证类型" />
 		<text name="QuXian">乡/镇</text>
 		<text name="HeadOffice">总部</text>
 		<text name="Branch">分公司/办事处</text>
@@ -149,5 +151,9 @@
 		<text name="EquipmentSettings" value="业务设置" />
 		<text name="Brand" value="品牌" />
 		<text name="权限不足！">数据权限不足！</text>
+
+		<text name="CaptchaOptions" value="验证码" />
+		<text name="CaptchaOptions:ImageOption:FontFamily" value="字体" />
+		<text name="CaptchaOptions:IgnoreCase" value="忽略大小写"/>
 	</texts>
 </localizationDictionary>

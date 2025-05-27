@@ -15,5 +15,11 @@ namespace ZLJ.Application.Common.Share.Models.TokenAuth
         public string? TenancyName { get; set; }
 
         public bool RememberClient { get; set; }
+        [Required]
+        [StringLength(200)]
+        public string YzmKey { get; set; }
+        [Required]
+        [StringLength(20)]
+        public string YzmValue { get; set; }
     }
 }

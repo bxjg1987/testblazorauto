@@ -24,6 +24,7 @@ using ZLJ.Web.Core.Models.TokenAuth;
 using ZLJ.Web.Core.Authentication.External;
 using ZLJ.Web.Core.Authentication.JwtBearer;
 using ZLJ.Core;
+using Lazy.Captcha.Core;
 
 namespace ZLJ.Controllers
 {
@@ -38,7 +39,7 @@ namespace ZLJ.Controllers
         private readonly IExternalAuthConfiguration _externalAuthConfiguration;
         private readonly IExternalAuthManager _externalAuthManager;
         private readonly UserRegistrationManager _userRegistrationManager;
-
+        private readonly ICaptcha captcha;
         public TokenAuthController(
             LogInManager logInManager,
             ITenantCache tenantCache,
@@ -48,7 +49,8 @@ namespace ZLJ.Controllers
             IExternalAuthManager externalAuthManager,
             UserRegistrationManager userRegistrationManager,
             UserManager userManager
-            )
+,
+            ICaptcha captcha)
         {
             _logInManager = logInManager;
             _tenantCache = tenantCache;
@@ -58,6 +60,7 @@ namespace ZLJ.Controllers
             _externalAuthManager = externalAuthManager;
             _userRegistrationManager = userRegistrationManager;
             this.userManager = userManager;
+            this.captcha = captcha;
         }
 
 
@@ -146,6 +149,9 @@ namespace ZLJ.Controllers
         [HttpPost]
         public async Task<AuthenticateResultModel> Authenticate([FromBody] AuthenticateModel model)
         {
+            if (!captcha.Validate(model.YzmKey, model.YzmValue))
+                throw new UserFriendlyException("验证失败！验证码错误或失效。");
+
             var loginResult = await GetLoginResultAsync(
                 model.UserNameOrEmailAddress,
                 model.Password,

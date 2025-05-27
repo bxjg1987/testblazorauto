@@ -50,6 +50,24 @@
                         @* <input type="Password" placeholder="Password" required=""> *@
                         <InputText @bind-Value="model.Password" placeholder="密码" required="" type="Password" />
                     </div>
+                    <div class="input-group">
+
+
+                        <span><i class="fas fa-random" aria-hidden="true"></i></span>
+
+                        <InputText type="text" @bind-Value="model.YzmValue" placeholder="验证码" required="" id="yzmValueForJs" />
+                        <div style=" position:absolute; top:0; right:0;">
+                            <InputText type="hidden" @bind-Value="model.YzmKey" id="yzmKeyForJs" />
+
+
+                            @* <input type="Password" placeholder="Password" required=""> *@
+                            <img id="captchaImage" style="width:130px; height:50px; cursor:pointer; " />
+                        </div>
+                    </div>
+
+
+
+
                     <div class="form-row bottom">
                         <div class="form-check">
                             @* <input type="checkbox" id="remenber" name="remenber" value="remenber"> *@
@@ -105,28 +123,42 @@
 
     [SupplyParameterFromForm]
     public AuthenticateModel model { get; set; } = new AuthenticateModel
-        {
-            Password = "123qwe",
-            RememberClient = true,
-            TenancyName = "default",
-            UserNameOrEmailAddress = "admin"
-        };
+    {
+        Password = "123qwe",
+        RememberClient = true,
+        TenancyName = "default",
+        UserNameOrEmailAddress = "admin"
+    };
 
     [SupplyParameterFromQuery]
     public string ReturnUrl { get; set; }
     [Inject]
     public ITokenAuthAppService TokenAuthAppService { get; set; }
+    // [Inject]
+    // public IHttpClientFactory HttpClientFactory { get; set; }
 
     // [Inject]
     // public Microsoft.AspNetCore.Authentication.IAuthenticationService AuthorizationService { get; set; }
 
     [CascadingParameter]
     private HttpContext HttpContext { get; set; } = default!;
+
+    //public icap
+
+    [Inject]
+    public IConfiguration Cfg { get; set; }
     string msg = "";
     public async Task LoginUser()
     {
         try
         {
+            if (model.UserNameOrEmailAddress.IsNullOrEmpty())
+                throw new UserFriendlyException("请输入登录名");
+            if (model.Password.IsNullOrEmpty())
+                throw new UserFriendlyException("请输入密码");
+            if (model.YzmValue.IsNullOrEmpty())
+                throw new UserFriendlyException("请输入验证码");
+
             var r = await TokenAuthAppService.Authenticate(model);
 
             //巨坑，new ClaimsIdentity时必须指定身份验证类型，否则HttpContext.User.Identity.IsAuthenticated一直是false
@@ -135,11 +167,11 @@
                                                                                       new Claim(nameof(r.UserId),r.UserId.ToString()),
                                                                                       new Claim(nameof(r.ExpireInSeconds),r.ExpireInSeconds.ToString())], CookieAuthenticationDefaults.AuthenticationScheme)),
                                                new AuthenticationProperties
-                                                   {
-                                                       IsPersistent = model.RememberClient,
-                                                       //cookie过期是单独指cookie，这里的是指
-                                                       ExpiresUtc = TimeProvider.System.GetUtcNow().AddSeconds(r.ExpireInSeconds)
-                                                   });
+                                               {
+                                                   IsPersistent = model.RememberClient,
+                                                   //cookie过期是单独指cookie，这里的是指
+                                                   ExpiresUtc = TimeProvider.System.GetUtcNow().AddSeconds(r.ExpireInSeconds)
+                                               });
             // await AuthorizationService.SignInAsync(this.HttpContext,
             //                                        default,
             //                                        new System.Security.Claims.ClaimsPrincipal(new ClaimsIdentity([new Claim(nameof(r.AccessToken),r.AccessToken),
@@ -169,12 +201,30 @@
             // // return Redirect(returnUrl);
             nav.NavigateTo(ReturnUrl, true);
         }
+        catch (UserFriendlyException ex)
+        {
+            msg = ex.Message;
+        }
         catch (Exception)
         {
             msg = "账号或密码错误";
         }
 
     }
+    string yzmUrl;
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        // await CSHYZM();
+    }
+
+    // public async Task CSHYZM()
+    // {
+    //     model.YzmKey = Guid.NewGuid().ToString("n");
+    //     yzmUrl = $"{Cfg["App:ServerRootAddress"].TrimEnd('/')}/api/Captcha/Captcha?id={model.YzmKey}";
+    //     await InvokeAsync(StateHasChanged); //确保UI更新
+    // }
+
     // private async Task<AbpLoginResult<Tenant, User>> GetLoginResultAsync(string usernameOrEmailAddress, string password, string tenancyName)
     // {
     //     var loginResult = await _logInManager.LoginAsync(usernameOrEmailAddress, password, tenancyName);
@@ -188,3 +238,23 @@
     //     }
     // }
 }
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        var captchaImage = document.getElementById('captchaImage');
+        var yzmKeyInput = document.getElementById('yzmKeyForJs');
+        var yzmValueForJs =  document.getElementById('yzmValueForJs');
+
+            captchaImage.addEventListener('click', async function () {
+                // console.log('gggggg');
+                   // yzmKeyInput.focus();
+
+                yzmKeyInput.value = refreshCaptcha(captchaImage);
+                yzmValueForJs.value='';
+                yzmValueForJs.focus();
+                   //  captchaImage.focus();
+            });
+     captchaImage.click();captchaImage.focus();
+    });
+</script>

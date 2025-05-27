@@ -22,6 +22,8 @@ namespace BXJG.Utils.Settings
 
             //默认值 常量 不应该定义在 接口层
 
+            var yzm = new SettingDefinitionGroup(BXJGUtilsConsts.SettingKeyCaptchaGroup, BXJGUtilsConsts.SettingKeyCaptchaGroup.UtilsLI());
+
             return [
                 ////服务器根
                 //new SettingDefinition(BXJGUtilsConsts.FuwuqiGen,
@@ -51,7 +53,32 @@ namespace BXJG.Utils.Settings
                                       BXJGUtilsConsts.SettingKeyUploadSize.UtilsLI(),
                                       file,
                                       scopes: SettingScopes.Application | SettingScopes.Tenant,
-                                      isVisibleToClients:true)
+                                      isVisibleToClients:true),
+
+                new SettingDefinition(BXJGUtilsConsts.CaptchaOptions_ImageOption_FontFamily,
+                                      "Kaiti",
+                                      BXJGUtilsConsts.CaptchaOptions_ImageOption_FontFamily.UtilsLI(),
+                                      yzm,
+                                      scopes: SettingScopes.Application,
+                                      isVisibleToClients:false),
+                new SettingDefinition(BXJGUtilsConsts.CaptchaOptions_IgnoreCase,
+                                      "true",
+                                      BXJGUtilsConsts.CaptchaOptions_IgnoreCase.UtilsLI(),
+                                      yzm,
+                                      scopes: SettingScopes.Application,
+                                      isVisibleToClients:false),
+                new SettingDefinition(BXJGUtilsConsts.CaptchaOptions_CaptchaType,
+                                      "5",
+                                      BXJGUtilsConsts.CaptchaOptions_CaptchaType.UtilsLI(),
+                                      yzm,
+                                      scopes: SettingScopes.Application,
+                                      isVisibleToClients:false),
+                new SettingDefinition(BXJGUtilsConsts.CaptchaOptions_ImageOption_Animation,
+                                      "false",
+                                      BXJGUtilsConsts.CaptchaOptions_ImageOption_Animation.UtilsLI(),
+                                      yzm,
+                                      scopes: SettingScopes.Application,
+                                      isVisibleToClients:false)
             ];
         }
     }
