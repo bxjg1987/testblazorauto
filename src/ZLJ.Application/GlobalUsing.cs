@@ -39,3 +39,8 @@ global using Abp.Linq.Expressions;
 global using Abp.EntityHistory;
 global using ZLJ.Core.Authorization;
 global using System.Text.Json;
+global using BXJG.Utils.Application.Share.Dtos;
+global using ZLJ.Core.Share;
+global using ZLJ.Application.Share;
+global using BXJG.Common.Contracts;
+global using Abp.Auditing;
