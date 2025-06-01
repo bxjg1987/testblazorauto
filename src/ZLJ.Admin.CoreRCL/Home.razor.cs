@@ -1,8 +1,11 @@
-﻿namespace ZLJ.Admin.CoreRCL
+﻿using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+
+namespace ZLJ.Admin.CoreRCL
 {
     public partial class Home
     {
-
+        [Inject]
+        public IWebAssemblyHostEnvironment evn { get; set; }
         IDisposable getall;
         protected override void OnInitialized()
         {

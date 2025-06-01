@@ -16,7 +16,7 @@ namespace ZLJ.Application.BaseInfo.StaffInfo
         /// <summary>
         /// 性别
         /// </summary>
-        public Gender Gender { get; set; }
+        public BXJG.Common.Contracts.Gender Gender { get; set; }
         /// <summary>
         /// 生日
         /// </summary>
@@ -64,7 +64,7 @@ namespace ZLJ.Application.BaseInfo.StaffInfo
         /// <summary>
         /// 性别
         /// </summary>
-        public Gender Gender { get; set; }
+        public BXJG.Common.Contracts.Gender Gender { get; set; }
         /// <summary>
         /// 生日
         /// </summary>

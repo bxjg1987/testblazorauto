@@ -55,7 +55,9 @@
 
                         <span><i class="fas fa-random" aria-hidden="true"></i></span>
 
-                        <InputText type="text" @bind-Value="model.YzmValue" placeholder="验证码" required="" id="yzmValueForJs" />
+                        <InputText type="text" @bind-Value="model.YzmValue" placeholder="验证码" required="" id="yzmValueForJs" autocomplete="one-time-code"
+                                   autocapitalize="off"
+                                   autocorrect="off" />
                         <div style=" position:absolute; top:0; right:0;">
                             <InputText type="hidden" @bind-Value="model.YzmKey" id="yzmKeyForJs" />
 

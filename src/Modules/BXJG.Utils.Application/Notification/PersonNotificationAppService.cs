@@ -55,10 +55,10 @@ namespace BXJG.Utils.Application.Notification
         public Lazy<INotificationSubscriptionManager> notificationSubscriptionManager { get; set; }
         protected INotificationSubscriptionManager NotificationSubscriptionManager => notificationSubscriptionManager.Value;
 
-        public PersonNotificationAppService()
-        {
-            base.LocalizationSourceName = BXJGUtilsConsts.LocalizationSourceName;
-        }
+        //public PersonNotificationAppService()
+        //{
+        //base.LocalizationSourceName = BXJGUtilsConsts.LocalizationSourceName;
+        //}
 
         /// <summary>
         /// 获取当前用户可以订阅的通知定义列表
@@ -76,7 +76,6 @@ namespace BXJG.Utils.Application.Notification
         /// </summary>
         /// <param name="subscripts"></param>
         /// <returns></returns>
-
         [UnitOfWork(IsDisabled = true)]
         public virtual async Task<BatchOperationOutput<SubscriptNotifyItem>> Subscript(List<SubscriptNotifyItem> subscripts)
         {

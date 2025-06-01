@@ -1,18 +1,21 @@
-using Castle.Facilities.Logging;
-using ZLJ.Application.Share.Authorization.Permissions;
-using BXJG.Common.Http;
-using ZLJ.Web.BlazorAuto.Auth;
-using Microsoft.AspNetCore.Authentication;
-using ZLJ.Web.BlazorAuto.Components;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.Extensions.Options;
-using BXJG.Utils.RCL;
-using NUglify.Html;
 using AntDesign;
-using ZLJ.Application.Common.ClientProxy;
-using Microsoft.Extensions.DependencyInjection;
+using BXJG.Common.Http;
+using BXJG.Utils.RCL;
+using Castle.Facilities.Logging;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
+using NUglify.Html;
+using ZLJ.Application.Common.ClientProxy;
+using ZLJ.Application.Share.Authorization.Permissions;
 using ZLJ.RCL.Interceptors;
+using ZLJ.Web.BlazorAuto;
+using ZLJ.Web.BlazorAuto.Auth;
+using ZLJ.Web.BlazorAuto.Components;
 
 #if DEBUG
 [assembly: Rougamo.IgnoreMo]
@@ -21,7 +24,7 @@ using ZLJ.RCL.Interceptors;
 
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.TryAddScoped<IWebAssemblyHostEnvironment, ServerHostEnvironment>();
 //var _appConfiguration = builder.Configuration;
 //var webHostEnvironment = builder.Environment;
 

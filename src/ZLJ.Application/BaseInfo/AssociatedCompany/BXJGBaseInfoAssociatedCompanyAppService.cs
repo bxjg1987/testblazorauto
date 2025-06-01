@@ -68,7 +68,7 @@ namespace ZLJ.Application.BaseInfo.AssociatedCompany
                     Pinyin = TinyPinyin.PinyinHelper.GetPinyinInitials(input.Name),
                     PhoneNumber = input.LinkPhone,
                     Name = input.LinkMan,
-                    Gender = Gender.Man,
+                    Gender = BXJG.Common.Contracts.Gender.Man,
                     // FullName = input.LinkMan,
                     // NormalizedUserName = 
                     EmailAddress = Guid.NewGuid().ToString("n") + "@a.com",
