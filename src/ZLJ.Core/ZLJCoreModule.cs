@@ -18,6 +18,7 @@ using ZLJ.Core.Features;
 using ZLJ.Core.Web;
 using ZLJ.Core.Share.Enums;
 using Abp.Runtime.Security;
+using ZLJ.Notification;
 
 namespace ZLJ.Core
 {
@@ -72,8 +73,8 @@ namespace ZLJ.Core
             Configuration.Settings.SettingEncryptionConfiguration.DefaultPassPhrase = ZLJConsts.DefaultPassPhrase;
             SimpleStringCipher.DefaultPassPhrase = ZLJConsts.DefaultPassPhrase;
 
-            ////注册通知定义提供器
-            //Configuration.Notifications.Providers.Add<MyAppNotificationProvider>();
+            //注册通知定义提供器
+            Configuration.Notifications.Providers.Add<MyAppNotificationProvider>();
 
             ////替换服务必需是PreInitialize
             // Configuration.ReplaceService<IEmployeeSession, StaffClaimSession>(Abp.Dependency.DependencyLifeStyle.Singleton);

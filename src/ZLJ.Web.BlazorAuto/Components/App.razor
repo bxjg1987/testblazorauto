@@ -8,7 +8,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <base href="/" />
     <link antblazor-css>
-
+    <script>>
+        window.serverRootAddress = '@(Cfg?["App:ServerRootAddress"]?.TrimEnd('/') ?? string.Empty)';
+        window.environmentName = '@(Env?.EnvironmentName)';
+        window.isDevelopment = environmentName == 'Development';
+    </script>
     @* 下面这个引用不了，也没必要 *@
     @* <link href="_content/ZLJ.Admin.CoreRCL/css/site.css" rel="stylesheet"> *@
     <ImportMap />
@@ -84,10 +88,7 @@
         //         },
         //     },
         // });
-              window.serverRootAddress = '@(Cfg?["App:ServerRootAddress"]?.TrimEnd('/') ?? string.Empty)';
-         window.environmentName = '@(Env?.EnvironmentName)';
-
-        //`${serverRootAddress}/api/Captcha/Captcha`
+          
     </script>
     <script src="/app.js"></script>
 </body>

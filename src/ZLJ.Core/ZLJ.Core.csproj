@@ -33,7 +33,6 @@
 		<Compile Remove="Customer\PermissionNames.cs" />
 		<Compile Remove="Customer\PermissionProvider.cs" />
 		<Compile Remove="Localization\LocalizationExt.cs" />
-		<Compile Remove="Notification\NotificationProvider.cs" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(SolutionName)' != 'ZLJWithModules'">
