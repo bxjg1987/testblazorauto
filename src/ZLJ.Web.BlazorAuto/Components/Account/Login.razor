@@ -4,7 +4,8 @@
 @using Microsoft.AspNetCore.Authentication.Cookies
 @using ZLJ.Application.Common.Share.Auth
 @using ZLJ.Application.Common.Share.Models.TokenAuth
-@inject NavigationManager nav;
+@inject NavigationManager nav
+@inject IWebHostEnvironment Env
 
 @layout NullLayout
 
@@ -50,23 +51,26 @@
                         @* <input type="Password" placeholder="Password" required=""> *@
                         <InputText @bind-Value="model.Password" placeholder="密码" required="" type="Password" />
                     </div>
-                    <div class="input-group">
+
+                    @if (Env.IsProduction())
+                    {
+                        <div class="input-group">
 
 
-                        <span><i class="fas fa-random" aria-hidden="true"></i></span>
+                            <span><i class="fas fa-random" aria-hidden="true"></i></span>
 
-                        <InputText type="text" @bind-Value="model.YzmValue" placeholder="验证码" required="" id="yzmValueForJs" autocomplete="one-time-code"
-                                   autocapitalize="off"
-                                   autocorrect="off" />
-                        <div style=" position:absolute; top:0; right:0;">
-                            <InputText type="hidden" @bind-Value="model.YzmKey" id="yzmKeyForJs" />
+                            <InputText type="text" @bind-Value="model.YzmValue" placeholder="验证码" required="" id="yzmValueForJs" autocomplete="one-time-code"
+                                       autocapitalize="off"
+                                       autocorrect="off" />
+                            <div style=" position:absolute; top:0; right:0;">
+                                <InputText type="hidden" @bind-Value="model.YzmKey" id="yzmKeyForJs" />
 
 
-                            @* <input type="Password" placeholder="Password" required=""> *@
-                            <img id="captchaImage" style="width:130px; height:50px; cursor:pointer; " />
+                                @* <input type="Password" placeholder="Password" required=""> *@
+                                <img id="captchaImage" style="width:130px; height:50px; cursor:pointer; " />
+                            </div>
                         </div>
-                    </div>
-
+                    }
 
 
 
@@ -158,8 +162,9 @@
                 throw new UserFriendlyException("请输入登录名");
             if (model.Password.IsNullOrEmpty())
                 throw new UserFriendlyException("请输入密码");
-            if (model.YzmValue.IsNullOrEmpty())
+            if (model.YzmValue.IsNullOrEmpty() && Env.IsProduction())
                 throw new UserFriendlyException("请输入验证码");
+
 
             var r = await TokenAuthAppService.Authenticate(model);
 
@@ -242,21 +247,29 @@
 }
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
 
-        var captchaImage = document.getElementById('captchaImage');
-        var yzmKeyInput = document.getElementById('yzmKeyForJs');
-        var yzmValueForJs =  document.getElementById('yzmValueForJs');
+     @if (Env.IsProduction())
+    {
+                <text>
+                document.addEventListener('DOMContentLoaded', function () {
 
-            captchaImage.addEventListener('click', async function () {
-                // console.log('gggggg');
-                   // yzmKeyInput.focus();
+                 var captchaImage = document.getElementById('captchaImage');
+                 var yzmKeyInput = document.getElementById('yzmKeyForJs');
+                 var yzmValueForJs =  document.getElementById('yzmValueForJs');
 
-                yzmKeyInput.value = refreshCaptcha(captchaImage);
-                yzmValueForJs.value='';
-                yzmValueForJs.focus();
-                   //  captchaImage.focus();
-            });
-     captchaImage.click();captchaImage.focus();
-    });
+                     captchaImage.addEventListener('click', async function () {
+                         // console.log('gggggg');
+                            // yzmKeyInput.focus();
+
+                         yzmKeyInput.value = refreshCaptcha(captchaImage);
+                         yzmValueForJs.value='';
+                         yzmValueForJs.focus();
+                            //  captchaImage.focus();
+                     });
+              captchaImage.click();captchaImage.focus();
+                  );
+                   </text>
+     }
+
+    }
 </script>

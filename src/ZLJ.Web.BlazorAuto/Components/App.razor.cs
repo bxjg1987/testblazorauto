@@ -15,7 +15,7 @@ namespace ZLJ.Web.BlazorAuto.Components
 
         // bool isAjax => HttpContext.Request.IsAjaxRequestBXJG();
 
-
+        [Inject] public IWebHostEnvironment Env { get; set; }
 
         //  AppContainer app=new AppContainer();
         [Inject]

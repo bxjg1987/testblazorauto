@@ -1,3 +1,4 @@
+isDevelopment = environmentName == 'Development';
 
 //还是通过refresh_token方式实现吧
 ////accessToken

@@ -40,6 +40,9 @@ namespace ZLJ.Controllers
         private readonly IExternalAuthManager _externalAuthManager;
         private readonly UserRegistrationManager _userRegistrationManager;
         private readonly ICaptcha captcha;
+
+        private readonly IWebHostEnvironment env;
+
         public TokenAuthController(
             LogInManager logInManager,
             ITenantCache tenantCache,
@@ -50,7 +53,8 @@ namespace ZLJ.Controllers
             UserRegistrationManager userRegistrationManager,
             UserManager userManager
 ,
-            ICaptcha captcha)
+            ICaptcha captcha,
+            IWebHostEnvironment env)
         {
             _logInManager = logInManager;
             _tenantCache = tenantCache;
@@ -61,6 +65,7 @@ namespace ZLJ.Controllers
             _userRegistrationManager = userRegistrationManager;
             this.userManager = userManager;
             this.captcha = captcha;
+            this.env = env;
         }
 
 
@@ -149,7 +154,7 @@ namespace ZLJ.Controllers
         [HttpPost]
         public async Task<AuthenticateResultModel> Authenticate([FromBody] AuthenticateModel model)
         {
-            if (!captcha.Validate(model.YzmKey, model.YzmValue))
+            if (env.IsProduction() && !captcha.Validate(model.YzmKey, model.YzmValue))
                 throw new UserFriendlyException("验证失败！验证码错误或失效。");
 
             var loginResult = await GetLoginResultAsync(

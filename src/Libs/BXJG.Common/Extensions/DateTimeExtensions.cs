@@ -13,284 +13,354 @@ namespace System
         /// 获得年龄字符串：某个日期点到今天的年龄
         /// 默认返回：xx岁xx月xx天
         /// </summary>
-        /// <param name="p_FirstDateTime">第1个日期参数</param>
+        /// <param name="p_FirstDateTime">出生日期</param>
         public static string GetAgeString(this DateTime p_FirstDateTime)
         {
             return CalculateAgeString(p_FirstDateTime, DateTime.Now, null);
         }
+
         /// <summary>
         /// 获得年龄字符串：某个日期点到今天的年龄
         /// 默认返回：xx岁xx月xx天
         /// </summary>
-        /// <param name="p_FirstDateTime">第1个日期参数</param>
-        /// <param name="p_Format">返回字符串的格式，默认为：{0}岁{1}月{2}天</param>
+        /// <param name="p_FirstDateTime">出生日期</param>
+        /// <param name="p_ReturnFormat">返回字符串的格式，默认为：{0}岁{1}月{2}天</param>
         public static string GetAgeString(this DateTime p_FirstDateTime, string p_ReturnFormat)
         {
             return CalculateAgeString(p_FirstDateTime, DateTime.Now, p_ReturnFormat);
         }
+
         /// <summary>
         /// 获得年龄字符串：两个日期点之间的年龄
         /// 默认返回：xx岁xx月xx天
         /// </summary>
-        /// <param name="p_FirstDateTime">第1个日期参数</param>
-        /// <param name="p_SecondDateTime">第2个日期参数</param>
+        /// <param name="p_FirstDateTime">出生日期</param>
+        /// <param name="p_SecondDateTime">目标日期</param>
         public static string GetAgeString(this DateTime p_FirstDateTime, DateTime p_SecondDateTime)
         {
             return CalculateAgeString(p_FirstDateTime, p_SecondDateTime, null);
         }
+
         /// <summary>
         /// 获得年龄字符串：两个日期点之间的年龄
         /// 默认返回：xx岁xx月xx天
         /// </summary>
-        /// <param name="p_FirstDateTime">第1个日期参数</param>
-        /// <param name="p_SecondDateTime">第2个日期参数</param>
-        /// <param name="p_Format">返回字符串的格式，默认为：{0}岁{1}月{2}天</param>
+        /// <param name="p_FirstDateTime">出生日期</param>
+        /// <param name="p_SecondDateTime">目标日期</param>
+        /// <param name="p_ReturnFormat">返回字符串的格式，默认为：{0}岁{1}月{2}天</param>
         public static string GetAgeString(this DateTime p_FirstDateTime, DateTime p_SecondDateTime, string p_ReturnFormat)
         {
             return CalculateAgeString(p_FirstDateTime, p_SecondDateTime, p_ReturnFormat);
         }
+
         /// <summary>
         /// 计算年龄字符串
         /// 默认返回：xx岁xx月xx天
         /// </summary>
-        /// <param name="p_FirstDateTime">第1个日期参数</param>
-        /// <param name="p_SecondDateTime">第2个日期参数</param>
-        /// <param name="p_Format">返回字符串的格式，默认为：{0}岁{1}月{2}天</param>
+        /// <param name="p_FirstDateTime">出生日期</param>
+        /// <param name="p_SecondDateTime">目标日期</param>
+        /// <param name="p_ReturnFormat">返回字符串的格式，默认为：{0}岁{1}月{2}天</param>
         public static string CalculateAgeString(this DateTime p_FirstDateTime, DateTime p_SecondDateTime, string p_ReturnFormat)
         {
-            //判断返回字符串的格式。若为空，则给默认值：{0}岁{1}月{2}天
-            if (string.IsNullOrWhiteSpace(p_ReturnFormat)) p_ReturnFormat = "{0}岁{1}月{2}天";
-            var r = p_FirstDateTime.CalculateAge(p_SecondDateTime);
+            if (string.IsNullOrWhiteSpace(p_ReturnFormat))
+                p_ReturnFormat = "{0}岁{1}月{2}天";
+
+            var r = CalculateAge(p_FirstDateTime, p_SecondDateTime);
             return string.Format(p_ReturnFormat, r.years, r.months, r.days);
         }
 
+        /// <summary>
+        /// 计算两个日期之间的年龄（年/月/日）
+        /// </summary>
+        /// <param name="p_FirstDateTime">出生日期</param>
+        /// <param name="p_SecondDateTime">目标日期</param>
+        /// <returns>(years, months, days) 元组</returns>
         public static (int years, int months, int days) CalculateAge(this DateTime p_FirstDateTime, DateTime p_SecondDateTime)
         {
-            //判断时间段是否为正。若为负，调换两个时间点的位置。
-            if (DateTime.Compare(p_FirstDateTime, p_SecondDateTime) > 0)
+            // 确保出生日期早于目标日期
+            if (p_FirstDateTime > p_SecondDateTime)
             {
-                DateTime stmpDateTime = p_FirstDateTime;
-                p_FirstDateTime = p_SecondDateTime;
-                p_SecondDateTime = stmpDateTime;
+                // 交换日期并递归调用（确保结果为正数）
+                var result = CalculateAge(p_SecondDateTime, p_FirstDateTime);
+                return result;
             }
 
-            //判断返回字符串的格式。若为空，则给默认值：{0}岁{1}月{2}天
-            // if (string.IsNullOrEmpty(p_ReturnFormat)) p_ReturnFormat = "{0}岁{1}月{2}天";
+            // 计算年份差（基础值）
+            int years = p_SecondDateTime.Year - p_FirstDateTime.Year;
+            int months = 0;
+            int days = 0;
 
-            //定义：年、月、日
-            int year, month, day;
-
-            //计算：天
-            day = p_SecondDateTime.Day - p_FirstDateTime.Day;
-            if (day < 0)
+            // 检查月份和日是否需要调整
+            if (p_SecondDateTime.Month < p_FirstDateTime.Month ||
+                (p_SecondDateTime.Month == p_FirstDateTime.Month && p_SecondDateTime.Day < p_FirstDateTime.Day))
             {
-                day += DateTime.DaysInMonth(p_FirstDateTime.Year, p_FirstDateTime.Month);
-                p_FirstDateTime = p_FirstDateTime.AddMonths(1);
-            }
-            //计算：月
-            month = p_SecondDateTime.Month - p_FirstDateTime.Month;
-            if (month < 0)
-            {
-                month += 12;
-                p_FirstDateTime = p_FirstDateTime.AddYears(1);
-            }
-            //计算：年
-            year = p_SecondDateTime.Year - p_FirstDateTime.Year;
+                // 未满一整年，年份减1
+                years--;
 
-            //返回格式化后的结果
-            return (year, month, day);
-            //return string.Format(p_ReturnFormat, year, month, day);
+                // 计算临时月份差（借位计算）
+                months = p_SecondDateTime.Month + 12 - p_FirstDateTime.Month;
+            }
+            else
+            {
+                // 直接计算月份差
+                months = p_SecondDateTime.Month - p_FirstDateTime.Month;
+            }
+
+            // 计算天数差
+            if (p_SecondDateTime.Day < p_FirstDateTime.Day)
+            {
+                // 获取目标日期上一个月的天数
+                int daysInPreviousMonth = DateTime.DaysInMonth(
+                    p_SecondDateTime.Year,
+                    p_SecondDateTime.Month == 1 ? 12 : p_SecondDateTime.Month - 1
+                );
+
+                // 计算借位后的天数
+                days = p_SecondDateTime.Day + daysInPreviousMonth - p_FirstDateTime.Day;
+
+                // 月份借位后需减1
+                if (months == 0)
+                {
+                    months = 11;
+                    years--;  // 年份借位
+                }
+                else
+                {
+                    months--;
+                }
+            }
+            else
+            {
+                // 直接计算天数差
+                days = p_SecondDateTime.Day - p_FirstDateTime.Day;
+            }
+
+            return (years, months, days);
         }
-
         #endregion
 
         /// <summary>
-        /// 月初
+        /// 获取指定日期所在月的起始时间（00:00:00）
         /// </summary>
-        /// <param name="dt"></param>
-        /// <returns></returns>
+        /// <param name="dt">目标日期</param>
+        /// <returns>当月第一天的零点</returns>
         public static DateTimeOffset MonthStart(this DateTimeOffset dt)
         {
-            return new DateTimeOffset(dt.Year, dt.Month, 1, dt.Hour, dt.Minute, dt.Second, dt.Millisecond, dt.Offset);
+            return new DateTimeOffset(dt.Year, dt.Month, 1, 0, 0, 0, dt.Offset);
         }
 
-        //Abp.Extensions.DateTimeExtensions有时间相关的扩展方法
-
         /// <summary>
-        /// 月初
+        /// 获取指定日期所在月的起始时间（00:00:00）
         /// </summary>
-        /// <param name="dt"></param>
-        /// <returns></returns>
+        /// <param name="dt">目标日期</param>
+        /// <returns>当月第一天的零点</returns>
         public static DateTime MonthStart(this DateTime dt)
         {
-            return new DateTime(dt.Year, dt.Month, 1, dt.Hour, dt.Minute, dt.Second, dt.Millisecond);
+            return new DateTime(dt.Year, dt.Month, 1, 0, 0, 0, dt.Kind);
         }
+
         /// <summary>
-        /// 月末
+        /// 获取指定日期所在月的结束时间（23:59:59.999）
         /// </summary>
-        /// <param name="startMonth"></param>
-        /// <returns></returns>
-        public static DateTime MonthEnd(this DateTime startMonth)
+        public static DateTime MonthEnd(this DateTime dt)
         {
-            return startMonth.MonthStart().AddMonths(1).AddDays(-1).AddMilliseconds(-1);  //本月月末
+            int days = DateTime.DaysInMonth(dt.Year, dt.Month);
+            return new DateTime(dt.Year, dt.Month, days, 23, 59, 59, 999, dt.Kind);
         }
+
         /// <summary>
-        /// 月末
+        /// 获取指定日期所在月的结束时间（23:59:59.999）
         /// </summary>
-        /// <param name="date"></param>
-        /// <returns></returns>
         public static DateTimeOffset MonthEnd(this DateTimeOffset dt)
         {
-            // 获取该月的第一天
-            DateTimeOffset monthStart = dt.MonthStart();
-
-            // 将日期增加一个月并减少一天
-            DateTimeOffset monthEnd = monthStart.AddMonths(1).AddDays(-1);
-
-            // 设置时间为当天的 23:59:59.999
-            monthEnd = monthEnd.Date.AddMilliseconds(-1);
-
-            // 返回月末的时间
-            return monthEnd;
+            int days = DateTime.DaysInMonth(dt.Year, dt.Month);
+            return new DateTimeOffset(dt.Year, dt.Month, days, 23, 59, 59, 999, dt.Offset);
         }
+
+        /// <summary>
+        /// 清除月份以下的时间部分（保留到年）
+        /// </summary>
+        /// <param name="dt">目标日期</param>
+        /// <returns>年初时间（yyyy-01-01 00:00:00）</returns>
         public static DateTime EffaceMonth(this DateTime dt)
         {
-            return dt.AddMonths(-dt.Month);
+            return new DateTime(dt.Year, 1, 1, 0, 0, 0, dt.Kind);
         }
+
+        /// <summary>
+        /// 清除日期以下的时间部分（保留到月）
+        /// </summary>
+        /// <param name="dt">目标日期</param>
+        /// <returns>月初时间（yyyy-MM-01 00:00:00）</returns>
         public static DateTime EffaceDay(this DateTime dt)
         {
-            return dt.AddDays(-dt.Day);
+            return new DateTime(dt.Year, dt.Month, 1, 0, 0, 0, dt.Kind);
         }
+
+        /// <summary>
+        /// 清除小时以下的时间部分（保留到日）
+        /// </summary>
+        /// <param name="dt">目标日期</param>
+        /// <returns>当日零点（yyyy-MM-dd 00:00:00）</returns>
         public static DateTime EffaceHour(this DateTime dt)
         {
-            return dt.AddHours(-dt.Hour);
+            return new DateTime(dt.Year, dt.Month, dt.Day, 0, 0, 0, dt.Kind);
         }
+
+        /// <summary>
+        /// 清除分钟以下的时间部分（保留到小时）
+        /// </summary>
+        /// <param name="dt">目标日期</param>
+        /// <returns>当前小时起始时间（yyyy-MM-dd HH:00:00）</returns>
         public static DateTime EffaceMinute(this DateTime dt)
         {
-            return dt.AddMinutes(-dt.Minute);
+            return new DateTime(dt.Year, dt.Month, dt.Day, dt.Hour, 0, 0, dt.Kind);
         }
+
+        /// <summary>
+        /// 清除秒以下的时间部分（保留到分钟）
+        /// </summary>
+        /// <param name="dt">目标日期</param>
+        /// <returns>当前分钟起始时间（yyyy-MM-dd HH:mm:00）</returns>
         public static DateTime EffaceSecond(this DateTime dt)
         {
-            return dt.AddSeconds(-dt.Second);
+            return new DateTime(dt.Year, dt.Month, dt.Day, dt.Hour, dt.Minute, 0, dt.Kind);
         }
+
+        /// <summary>
+        /// 清除毫秒部分（保留到秒）
+        /// </summary>
+        /// <param name="dt">目标日期</param>
+        /// <returns>当前秒起始时间（yyyy-MM-dd HH:mm:ss.000）</returns>
         public static DateTime EffaceMillisecond(this DateTime dt)
         {
-            return dt.AddMilliseconds(-dt.Millisecond);
+            return new DateTime(dt.Year, dt.Month, dt.Day, dt.Hour, dt.Minute, dt.Second, dt.Kind);
         }
+
         /// <summary>
-        /// 抹去时间的后面部分
+        /// 根据指定精度清除时间部分
         /// </summary>
-        /// <param name="dt"></param>
-        /// <param name="type"></param>
-        /// <returns></returns>
+        /// <param name="dt">目标日期</param>
+        /// <param name="type">清除精度类型</param>
+        /// <returns>按精度清除后的时间</returns>
         public static DateTime Efface(this DateTime dt, DateTimeEffaceType type)
         {
-            if (type <= DateTimeEffaceType.Millisecond)
-                dt = dt.EffaceMillisecond();
-            if (type <= DateTimeEffaceType.Second)
-                dt = dt.EffaceSecond();
-            if (type <= DateTimeEffaceType.Minute)
-                dt = dt.EffaceMinute();
-            if (type <= DateTimeEffaceType.Hour)
-                dt = dt.EffaceHour();
-            if (type <= DateTimeEffaceType.Day)
-                dt = dt.EffaceDay();
-            if (type <= DateTimeEffaceType.Month)
-                dt = dt.EffaceMonth();
-            return dt;
+            return type switch
+            {
+                DateTimeEffaceType.Month => dt.EffaceMonth(),
+                DateTimeEffaceType.Day => dt.EffaceDay(),
+                DateTimeEffaceType.Hour => dt.EffaceHour(),
+                DateTimeEffaceType.Minute => dt.EffaceMinute(),
+                DateTimeEffaceType.Second => dt.EffaceSecond(),
+                DateTimeEffaceType.Millisecond => dt.EffaceMillisecond(),
+                _ => throw new ArgumentOutOfRangeException(nameof(type))
+            };
         }
 
+        // DateTimeOffset 版本的 Efface 方法（实现逻辑相同）
+        /// <summary>
+        /// 清除月份以下的时间部分（保留到年）
+        /// </summary>
         public static DateTimeOffset EffaceMonth(this DateTimeOffset dt)
         {
-            return dt.AddMonths(-dt.Month);
+            return new DateTimeOffset(dt.Year, 1, 1, 0, 0, 0, dt.Offset);
         }
+
+        /// <summary>
+        /// 清除日期以下的时间部分（保留到月）
+        /// </summary>
         public static DateTimeOffset EffaceDay(this DateTimeOffset dt)
         {
-            return dt.AddDays(-dt.Day);
+            return new DateTimeOffset(dt.Year, dt.Month, 1, 0, 0, 0, dt.Offset);
         }
+
+        /// <summary>
+        /// 清除小时以下的时间部分（保留到日）
+        /// </summary>
         public static DateTimeOffset EffaceHour(this DateTimeOffset dt)
         {
-            return dt.AddHours(-dt.Hour);
+            return new DateTimeOffset(dt.Year, dt.Month, dt.Day, 0, 0, 0, dt.Offset);
         }
+
+        /// <summary>
+        /// 清除分钟以下的时间部分（保留到小时）
+        /// </summary>
         public static DateTimeOffset EffaceMinute(this DateTimeOffset dt)
         {
-            return dt.AddMinutes(-dt.Minute);
+            return new DateTimeOffset(dt.Year, dt.Month, dt.Day, dt.Hour, 0, 0, dt.Offset);
         }
+
+        /// <summary>
+        /// 清除秒以下的时间部分（保留到分钟）
+        /// </summary>
         public static DateTimeOffset EffaceSecond(this DateTimeOffset dt)
         {
-            return dt.AddSeconds(-dt.Second);
+            return new DateTimeOffset(dt.Year, dt.Month, dt.Day, dt.Hour, dt.Minute, 0, dt.Offset);
         }
+
+        /// <summary>
+        /// 清除毫秒部分（保留到秒）
+        /// </summary>
         public static DateTimeOffset EffaceMillisecond(this DateTimeOffset dt)
         {
-            return dt.AddMilliseconds(-dt.Millisecond);
+            return new DateTimeOffset(dt.Year, dt.Month, dt.Day, dt.Hour, dt.Minute, dt.Second, dt.Offset);
         }
+
         /// <summary>
-        /// 抹去时间的后面部分
+        /// 根据指定精度清除时间部分
         /// </summary>
-        /// <param name="dt"></param>
-        /// <param name="type"></param>
-        /// <returns></returns>
         public static DateTimeOffset Efface(this DateTimeOffset dt, DateTimeEffaceType type)
         {
-            if (type <= DateTimeEffaceType.Millisecond)
-                dt = dt.EffaceMillisecond();
-            if (type <= DateTimeEffaceType.Second)
-                dt = dt.EffaceSecond();
-            if (type <= DateTimeEffaceType.Minute)
-                dt = dt.EffaceMinute();
-            if (type <= DateTimeEffaceType.Hour)
-                dt = dt.EffaceHour();
-            if (type <= DateTimeEffaceType.Day)
-                dt = dt.EffaceDay();
-            if (type <= DateTimeEffaceType.Month)
-                dt = dt.EffaceMonth();
-            return dt;
+            return type switch
+            {
+                DateTimeEffaceType.Month => dt.EffaceMonth(),
+                DateTimeEffaceType.Day => dt.EffaceDay(),
+                DateTimeEffaceType.Hour => dt.EffaceHour(),
+                DateTimeEffaceType.Minute => dt.EffaceMinute(),
+                DateTimeEffaceType.Second => dt.EffaceSecond(),
+                DateTimeEffaceType.Millisecond => dt.EffaceMillisecond(),
+                _ => throw new ArgumentOutOfRangeException(nameof(type))
+            };
         }
 
         /// <summary>
-        /// 本周一
+        /// 获取指定日期所在周的起始时间（周一 00:00:00）
         /// </summary>
-        /// <param name="nowTime"></param>
-        /// <returns></returns>
+        /// <param name="nowTime">目标日期</param>
+        /// <returns>本周一的零点</returns>
         public static DateTime WeekStart(this DateTime nowTime)
         {
-            //return dt.AddDays(1 - Convert.ToInt32(dt.DayOfWeek.ToString("d")));
-            #region 获取本周第一天
-            //星期一为第一天  
-            int weeknow = Convert.ToInt32(nowTime.DayOfWeek);
-
-            //因为是以星期一为第一天，所以要判断weeknow等于0时，要向前推6天。  
-            weeknow = (weeknow == 0 ? (7 - 1) : (weeknow - 1));
-            int daydiff = (-1) * weeknow;
-
-            //本周第一天  
-            return nowTime.Date.AddDays(daydiff);
-            #endregion
+            int delta = (7 + (nowTime.DayOfWeek - DayOfWeek.Monday)) % 7;
+            return nowTime.AddDays(-delta).Date;
         }
+
         /// <summary>
-        /// 本周最后一天
+        /// 获取指定日期所在周的结束时间（周日 23:59:59.999）
         /// </summary>
-        /// <param name="nowTime"></param>
-        /// <returns></returns>
+        /// <param name="nowTime">目标日期</param>
+        /// <returns>本周日的最后一毫秒</returns>
         public static DateTime WeekEnd(this DateTime nowTime)
         {
-            //星期天为最后一天  
-            int lastWeekDay = Convert.ToInt32(nowTime.DayOfWeek);
-            lastWeekDay = lastWeekDay == 0 ? (7 - lastWeekDay) : lastWeekDay;
-            int lastWeekDiff = (7 - lastWeekDay);
-
-            //本周最后一天  
-            return nowTime.Date.AddDays(lastWeekDiff + 1).AddMilliseconds(-1);
+            return nowTime.WeekStart().AddDays(7).AddMilliseconds(-1);
         }
     }
 
+    /// <summary>
+    /// 时间清除精度枚举
+    /// </summary>
     public enum DateTimeEffaceType
     {
+        /// <summary> 保留到年（yyyy-01-01 00:00:00） </summary>
         Month,
+        /// <summary> 保留到月（yyyy-MM-01 00:00:00） </summary>
         Day,
+        /// <summary> 保留到日（yyyy-MM-dd 00:00:00） </summary>
         Hour,
+        /// <summary> 保留到小时（yyyy-MM-dd HH:00:00） </summary>
         Minute,
+        /// <summary> 保留到分钟（yyyy-MM-dd HH:mm:00） </summary>
         Second,
+        /// <summary> 保留到秒（yyyy-MM-dd HH:mm:ss.000） </summary>
         Millisecond
     }
 }

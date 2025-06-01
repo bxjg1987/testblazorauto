@@ -85,6 +85,8 @@
         //     },
         // });
               window.serverRootAddress = '@(Cfg?["App:ServerRootAddress"]?.TrimEnd('/') ?? string.Empty)';
+         window.environmentName = '@(Env?.EnvironmentName)';
+
         //`${serverRootAddress}/api/Captcha/Captcha`
     </script>
     <script src="/app.js"></script>
