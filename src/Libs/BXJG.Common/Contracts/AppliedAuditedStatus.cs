@@ -5,28 +5,33 @@ using System.Text;
 
 namespace BXJG.Common.Contracts
 {
-    //常用枚举
+    /// <summary>
+    /// 性别
+    /// </summary>
     [Flags]
     public enum Gender
     {
         /// <summary>
-        /// 
+        /// 女
         /// </summary>
         Woman = 2,
         /// <summary>
-        /// 
+        /// 男
         /// </summary>
         Man = 1
     }
+    /// <summary>
+    /// 申请审核状态
+    /// </summary>
     [Flags]
     public enum AppliedAuditedStatus
     {
         /// <summary>
-        /// 
+        /// 已申请
         /// </summary>
         Applied = 1,
         /// <summary>
-        /// 
+        /// 已审核
         /// </summary>
         Audited = 2
     }

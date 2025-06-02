@@ -15,6 +15,7 @@ namespace ZLJ.Admin.CoreRCL.Share
 {
     public partial class Routes : IAsyncDisposable
     {
+        IDisposable qjxxsj;
         //[Inject]
         //public CommonConnection Connection { get; set; }
         [Inject]
@@ -59,42 +60,48 @@ namespace ZLJ.Admin.CoreRCL.Share
             base.OnInitialized();
 
             #region 全局消息
-            this.Logger.LogDebug($"路由中的init执行，准备连接后端signalR...");
-       
+           // this.Logger.LogDebug($"路由中的init执行，准备连接后端signalR...");
 
-            this.Zhongjie.Zhuce<TenantNotification>(x =>
+            qjxxsj = Zhongjie.Zhuce<TenantNotification>(x =>
             {
-                var msg = "";
-                if (x.Data is MessageNotificationData a)
-                    msg = a.Message;
-                else if (x.Data is LocalizableMessageNotificationData b)
-                    msg = b.Message.ToString();//这里需要前端做本地化处理
-                else
+                object msg = null, title = null;
+                //if (x.Data is MessageNotificationData a)
+                //    msg = a.Message;
+                //else if (x.Data is LocalizableMessageNotificationData b)
+                //    msg = b.Message.ToString();//这里需要前端做本地化处理
+                //else
+                //{
+                //    //其它消息类型
+                //}
+                x.Data.Properties.TryGetValue("Message", out  msg);
+                x.Data.Properties.TryGetValue("Title", out  title);
+
+                var nf = new NotificationConfig
                 {
-                    //其它消息类型
-                }
-
-
-
+                    Message = title?.ToString(),
+                    Description = msg?.ToString(),
+                    NotificationType = NotificationType.None
+                };
                 switch (x.Severity)
                 {
                     case NotificationSeverity.Info:
-                        MessageService.Info(msg);
+                        nf.NotificationType = NotificationType.Info;
                         break;
                     case NotificationSeverity.Success:
-                        MessageService.Success(msg);
+                        nf.NotificationType = NotificationType.Success;
                         break;
                     case NotificationSeverity.Warn:
-                        MessageService.Warning(msg);
+                        nf.NotificationType = NotificationType.Warning;
                         break;
                     case NotificationSeverity.Fatal:
                     case NotificationSeverity.Error:
-                        MessageService.Error(msg);
+                        nf.NotificationType = NotificationType.Error;
                         break;
                 }
+                this.MessageService.Open(nf);
                 //其它类型的实时消息通知 这里继续判断处理
                 return ValueTask.CompletedTask;
-            }, nameof(MessageNotificationData));
+            });
             #endregion
 
             //  Logger.LogDebug("blazor路由中的appcontainer："+AppContainer.GetHashCode());
@@ -130,6 +137,8 @@ namespace ZLJ.Admin.CoreRCL.Share
             //AppContainer.AbpUserConfiguration = abpUserCfgService.GetAll();
 
         }
+
+  
         protected override async Task OnInitializedAsync()
         {
             if (RendererInfo.IsInteractive)
@@ -170,7 +179,7 @@ namespace ZLJ.Admin.CoreRCL.Share
 
         }
         [Inject]
-        public IMessageService MessageService { get; set; }
+        public INotificationService MessageService { get; set; }
         [Inject]
         public IJSRuntime JSRuntime { get; set; }
         protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -185,7 +194,8 @@ namespace ZLJ.Admin.CoreRCL.Share
 
         public ValueTask DisposeAsync()
         {
-           // Zhongjie.Zhuxiao();
+            qjxxsj?.Dispose();
+            // Zhongjie.Zhuxiao();
             return ValueTask.CompletedTask;
         }
     }

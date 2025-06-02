@@ -78,28 +78,37 @@ namespace Microsoft.Extensions.DependencyInjection
                     //而同时作为后端通信和ui事件总线，hubconnection并不方便
                     conn.On<Abp.Notifications.UserNotification>("getNotification", async msg =>
                     {
-                        logger.LogDebug($"通知连接接受到消息{System.Text.Json.JsonSerializer.Serialize(msg)}，准备触发事件。");
+                        logger.LogDebug($"通知连接接受到消息{System.Text.Json.JsonSerializer.Serialize(msg)}，准备触发事件。{msg.Notification.Data.GetType().FullName}");
                         //var str = System.Text.Json.JsonSerializer.Serialize(msg.Notification.Data.Properties);
-                        string eventName = default;
-                        if (msg.Notification.Data.Properties.Count == 1 && msg.Notification.Data.Properties.TryGetValue("Message", out var jg))
+                        //string eventName = default;
+
+                        if (msg.Notification.Data.Type == typeof(MessageNotificationWithTitleData).FullName)
                         {
-                            msg.Notification.Data = new MessageNotificationData(jg.ToString());
-                            eventName = nameof(MessageNotificationData);
+                           // string jg = string.Empty,title=string.Empty;
+                           // if (msg.Notification.Data.Properties.TryGetValue("Message", out var sd))
+                           //     jg = sd.ToString();
+                            //if (msg.Notification.Data.Properties.TryGetValue("Title", out var sd1))
+                            //    title = sd1.ToString();
+                            msg.Notification.Data = new MessageNotificationWithTitleData(null) {  Properties=msg.Notification.Data.Properties };
+                            //eventName = nameof(MessageNotificationWithTitleData);
+                        }
+                        else if (msg.Notification.Data.Type == typeof(MessageNotificationData).FullName)
+                        {
+                            msg.Notification.Data = new MessageNotificationData (null){ Properties = msg.Notification.Data.Properties };
+                            //eventName = nameof(MessageNotificationData);
 
                         }
-                        else if (msg.Notification.Data.Properties.Count == 2 &&
-                                 msg.Notification.Data.Properties.TryGetValue("SourceName", out var jg1) &&
-                                 msg.Notification.Data.Properties.TryGetValue("Name", out var jg2))
+                        else if (msg.Notification.Data.Type == typeof(LocalizableMessageNotificationData).FullName)
                         {
-                            msg.Notification.Data = new LocalizableMessageNotificationData(new Abp.Localization.LocalizableString(jg1.ToString(), jg2.ToString()));
-                            eventName = nameof(LocalizableMessageNotificationData);
+                            msg.Notification.Data = new LocalizableMessageNotificationData(null) { Properties = msg.Notification.Data.Properties };
+                            //eventName = nameof(LocalizableMessageNotificationData);
                         }
-                        await zhongjie.Chufa(msg.Notification, eventName);
+                        await zhongjie.Chufa(msg.Notification);
                     });
 
                     conn.On(BXJG.Utils.Application.Share.Consts.ETGetAll, async () =>
                     {
-                         await zhongjie.Chufa(BXJG.Utils.Application.Share.Consts.ETGetAll);
+                        await zhongjie.Chufa(BXJG.Utils.Application.Share.Consts.ETGetAll);
                     });
                     // IServiceProvider
                     //conn.Closed

@@ -9,9 +9,12 @@ namespace BXJG.Common.Contracts
     /// <summary>
     /// 批量操作的输入模型
     /// </summary>
-    /// <typeparam name="TKey"></typeparam>
+    /// <typeparam name="TKey">主键/唯一标识的类型</typeparam>
     public class BatchOperationInput<TKey>
     {
+        /// <summary>
+        /// id数组
+        /// </summary>
         public TKey[] Ids { get; set; }
     }
 
