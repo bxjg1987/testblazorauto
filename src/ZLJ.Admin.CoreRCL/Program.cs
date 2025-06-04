@@ -1,7 +1,6 @@
 using Abp.Runtime.Session;
 //using Blazor.Extensions.Logging;
 using BXJG.Common.Http;
-using BXJG.Common.RCL.Loggers;
 using BXJG.Utils.RCL;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;

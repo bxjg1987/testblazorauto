@@ -16,7 +16,7 @@ namespace BXJG.Utils.Application.Share.Notification
         /// 通知类型，参考NotificationNameContains属性，配合使用
         /// 不提供此参数或为空则不限制此条件
         /// </summary>
-        public IEnumerable<string> NotificationNames { get; set; }
+        public IEnumerable<string>? NotificationNames { get; set; }
         /// <summary>
         /// true表示获取NotificationNames中指定的类型的通知
         /// false表示获取除NotificationNames中指定的类型之外的其它类型的通知
@@ -42,11 +42,11 @@ namespace BXJG.Utils.Application.Share.Notification
         /// <summary>
         /// 实体id
         /// </summary>
-        public string EntityId { get; set; }
+        public string? EntityId { get; set; }
         /// <summary>
         /// 只查询指定级别的通知，空则不限制
         /// </summary>
-        public IEnumerable<NotificationSeverity> NotificationSeverities { get; set; }
+        public IEnumerable<NotificationSeverity>? NotificationSeverities { get; set; }
         /// <summary>
         /// 关键字
         /// </summary>

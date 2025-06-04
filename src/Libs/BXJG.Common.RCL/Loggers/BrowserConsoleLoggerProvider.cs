@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Common.RCL.Loggers
+namespace BXJG.Common.RCL
 {
     public class BrowserConsoleLoggerProvider : ILoggerProvider
     {

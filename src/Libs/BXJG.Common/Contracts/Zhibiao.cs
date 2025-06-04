@@ -62,7 +62,10 @@ namespace BXJG.Common.Contracts
         /// 显示名称 如：黑白
         /// </summary>
         public string MingchengXianshi { get; set; }
-
+        /// <summary>
+        /// 维度分组
+        /// </summary>
+        public string? Fenzu  { get; set; }
     }
 
     public record ZhibiaoBaozhuang

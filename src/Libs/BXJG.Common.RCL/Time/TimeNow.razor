@@ -1,0 +1,42 @@
+﻿@namespace BXJG.Common.RCL
+@time
+
+@code {
+    /// <summary>
+    /// 时间前面的标签，默认：现在是：
+    /// </summary>
+    [Parameter]
+    public string Label { get; set; } = "现在是：";
+    /// <summary>
+    /// 现在时刻的格式，默认：ToLongTimeString
+    /// </summary>
+    [Parameter]
+    public string Format { get; set; }
+    /// <summary>
+    /// 绑定的属性
+    /// </summary>
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> Attributes { get; set; }
+    /// <summary>
+    /// 刷新间隔，默认：1000毫秒
+    /// </summary>
+    [Parameter]
+    public int Interval { get; set; } = 1000;
+
+    string time;
+
+    System.Threading.Timer timer;// = new System.Threading.Timer(sdfd,null, 0,1000);
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        timer = new System.Threading.Timer(sdfd, null, 0, 1000);
+    }
+    void sdfd(object state)
+    {
+        InvokeAsync(() =>
+        {
+            time = Label + (Format.IsNullOrWhiteSpaceBXJG() ? DateTimeOffset.Now.ToString("yyyy年MM月dd日 dddd HH:mm:ss") : DateTime.Now.ToString(Format));
+            StateHasChanged();
+        });
+    }
+}
