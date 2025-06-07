@@ -7,6 +7,7 @@ using BXJG.Utils.Application.Share;
 using BXJG.Utils.Application.Share.GeneralTree;
 using BXJG.Utils.RCL.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using ZLJ.RCL.Interceptors;
 
@@ -32,6 +33,8 @@ namespace ZLJ.RCL.Components
                                                                                                                     TCreateInput>
         where TCreateInput : IHaveParentId<long>, new()
     {
+        [Inject]
+        public IWebAssemblyHostEnvironment Environment { get; set; }
         [AbpExceptionInterceptor]
         protected virtual async Task OnFinish(EditContext editContext)
         {

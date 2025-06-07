@@ -4,6 +4,7 @@ using BXJG.Common.Contracts;
 using BXJG.Utils.Application.Share.GeneralTree;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using ZLJ.RCL.Interceptors;
 namespace ZLJ.RCL.Components
@@ -32,6 +33,8 @@ namespace ZLJ.RCL.Components
         //where TGetAllInput : new()
         where TEditDto : /*IHaveParentId<long>,*/new()
     {
+        [Inject]
+        public IWebAssemblyHostEnvironment Environment { get; set; }
         [AbpExceptionInterceptor]
         protected virtual async Task OnFinish(EditContext editContext)
         {

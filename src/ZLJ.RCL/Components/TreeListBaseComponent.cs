@@ -12,6 +12,7 @@ using Castle.MicroKernel.Registration;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Rougamo;
 using System;
@@ -45,6 +46,8 @@ namespace ZLJ.RCL.Components
         //where TEditDto : GeneralTreeNodeEditBaseDto//父类可以对输入做一定的处理
         where TGetAllInput : new()
     {
+        [Inject]
+        public IWebAssemblyHostEnvironment Environment { get; set; }
         //界面部分就不要用IPermissionChecker了，不过server模式时AuthorizationService内部会使用IPermissionChecker
         //请查看自定义授权策略提供器
         //客户端部分是直接在前端内存中比对的，有区别于server模式的，自定义的授权策略提供器

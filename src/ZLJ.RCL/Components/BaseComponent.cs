@@ -4,6 +4,7 @@ using Abp.Configuration;
 using Abp.Runtime.Session;
 using Abp.Threading;
 using BXJG.Common.Events;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using ZLJ.RCL.Interceptors;
 
@@ -15,7 +16,8 @@ namespace ZLJ.RCL.Components
     /// </summary>
     public abstract class BaseComponent : BXJG.Utils.RCL.Components.BaseComponent
     {
-     
+        [Inject]
+        public IWebAssemblyHostEnvironment Environment { get; set; }
         ////别担心，抽象的curd provider都不会继承BaseComponent
         //protected override HttpClient HttpClient => httpClient ??= ScopedServices.GetRequiredService<IHttpClientFactory>().CreateHttpClientCommon();
         /// <summary>

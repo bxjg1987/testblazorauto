@@ -2,6 +2,7 @@
 using Abp.ObjectMapping;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using ZLJ.RCL.Interceptors;
 namespace ZLJ.RCL.Components
@@ -33,6 +34,8 @@ namespace ZLJ.RCL.Components
         //where TGetAllInput : new()
         where TUpdateInput : new()
     {
+        [Inject]
+        public IWebAssemblyHostEnvironment Environment { get; set; }
         [AbpExceptionInterceptor]
         protected virtual async Task OnFinish(EditContext editContext)
         {

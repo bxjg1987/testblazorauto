@@ -11,6 +11,7 @@ using BXJG.Utils.Application.Share;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using NUglify.Html;
 using Rougamo;
@@ -55,6 +56,8 @@ namespace ZLJ.RCL.Components
         where TEntityDto : IEntityDto<TPrimaryKey>, IExtendableObj//, new()
         where TGetAllInput : new()
     {
+        [Inject]
+        public IWebAssemblyHostEnvironment Environment { get; set; }
 
         //它不是用例，但因为列表是异步的，这里是核心，所以就把异常加这里吧
 #if !DEBUG

@@ -38,6 +38,8 @@
 
 		<PackageReference Include="AntDesign" Version="1.4.0" />
 
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.5" />
+
 		<!--<PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.2" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.2" />-->
 		<!--当前项目定义了拦截器，就算当前项目引用的其它项目已经引用rougamo，这里也必须引用，
