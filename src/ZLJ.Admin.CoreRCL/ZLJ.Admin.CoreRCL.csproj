@@ -8,10 +8,10 @@
 		<NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
 		<StaticWebAssetProjectMode>Default</StaticWebAssetProjectMode>
 	</PropertyGroup>
-
-	<!--<PropertyGroup>
+	<PropertyGroup>
 		<RunAOTCompilation>true</RunAOTCompilation>
-	</PropertyGroup>-->
+		<WasmStripILAfterAOT>false</WasmStripILAfterAOT>
+	</PropertyGroup>
 	<ItemGroup>
 		<Compile Remove="AdminListBaseComponent.cs" />
 		<Compile Remove="Auth\AccessTokenProvider.cs" />
@@ -42,53 +42,30 @@
 	</ItemGroup>
 
 
-	
 
 	<ItemGroup>
-		<!--<PackageReference Include="Abp.Web.Common" Version="9.2.2" />-->
-	
+		<!--<PackageReference Include="Abp.Web.Common" Version="10.2.0" />-->
+		<!--<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />-->
 		<!--<PackageReference Include="AntDesign.ProLayout" Version="0.16.2" />-->
 		<!--<PackageReference Include="Blazor.Extensions.Logging" Version="2.0.4" />-->
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.5" />
 
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="9.0.5" />
-
+		<PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="9.0.5" />
 		<PackageReference Include="System.Private.Uri" Version="4.3.2" />
 
-	
-		<!--<PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.2" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.2" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />-->
+		<!--<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="9.0.5" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.5" />
+		<PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.5" />-->
 	</ItemGroup>
 
 	<ItemGroup>
 		<Folder Include="wwwroot\css\" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(SolutionName)' != 'ZLJWithModules'">
-		<PackageReference Include="BXJG.Common" Version="*" />
-		<PackageReference Include="BXJG.Common.RCL" Version="*" />
-	</ItemGroup>
-	<ItemGroup Condition="'$(SolutionName)' == 'ZLJWithModules'">
-		<!--<ProjectReference Include="..\libs\BXJG.Common\BXJG.Common.csproj" />-->
-		<ProjectReference Include="..\Libs\BXJG.Common.RCL\BXJG.Common.RCL.csproj" />
 
-	</ItemGroup>
-	<ItemGroup>
-	  <None Include="Administrative\List.razor" />
-	  <None Include="HangfirePage\HangfirePage.razor" />
-	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\ZLJ.Admin.ClientProxy\ZLJ.Admin.ClientProxy.csproj" />
 	  <ProjectReference Include="..\ZLJ.RCL\ZLJ.RCL.csproj" />
 	</ItemGroup>
-	<ItemGroup>
-	  <Content Update="Tenant\Create.razor">
-	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-	  </Content>
-	  <Content Update="wwwroot\ZLJ.Admin.CoreRCL.lib.module.js">
-	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-	  </Content>
-	</ItemGroup>
+
 </Project>
