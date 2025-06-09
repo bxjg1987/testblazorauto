@@ -1,8 +1,9 @@
 ﻿@using BXJG.Utils.Application.Share.Dtos
 @using Microsoft.AspNetCore.Components.Sections
+@using ZLJ.Admin.CoreRCL.Share
 @using ZLJ.Application.Share.Post
 @inherits DetailUpdateBaseComponent< PostDto, int,  PostEditDto>
-<SectionContent SectionName=@(FuncName+"-detail-update-title")>
+<SectionContent SectionName=@(FuncName + "-detail-update-title")>
     <Icon Type=@detailUpdateIcon Theme=@IconThemeType.Outline />
     @(detailUpdateText)@(FuncName)
 </SectionContent>
@@ -22,27 +23,32 @@
         <Input Value="@context.Id" Type="hidden" />
         </FormItem>
         *@
-            <Descriptions Bordered Size="DescriptionsSize.Small">
-                <DescriptionsItem Title="名称">
-                    <Input @bind-Value="@context.DisplayName" />
-                </DescriptionsItem>
-                <DescriptionsItem Title="备注">
-                    <Input @bind-Value="@context.Description" />
-                </DescriptionsItem>
-            </Descriptions>
-
+                <FormItem Label="名称">
+            <Input @bind-Value="@context.DisplayName" />
+        </FormItem>
+        <FormItem Label="备注">
+            <Input @bind-Value="@context.Description" />
+        </FormItem>
+        <FormItem Label="权限" Style="max-height:60vh; overflow-y:auto;">
+    <TreePermission DefaultExpandParent   @bind-CheckedKeys="@editDto.GrantedPermissions" />
+        </FormItem>
         </Form>
+
+    
+           
+       
     }
     else
     {
         <Descriptions Bordered Size="DescriptionsSize.Small">
             <DescriptionsItem Title="名称">
-                @dto.DisplayName
+                @dto?.DisplayName
             </DescriptionsItem>
             <DescriptionsItem Title="名称">
-                @dto.Description
+                @dto?.Description
             </DescriptionsItem>
         </Descriptions>
+         <TreePermission Disabled CheckOnClickNode="false" Selectable="false" Checkable DefaultCheckedKeys="@dto.GrantedPermissions" DefaultExpandParent  />
         @*    <GridRow>
     <GridCol Span="4">显示名</GridCol>
     <GridCol Span="20">@dto?.DisplayName</GridCol>
@@ -53,13 +59,24 @@
     </GridRow> *@
     }
 
+@*         @if (editDto != null)
+        {
+            <ul>
+                @foreach (var x in editDto.GrantedPermissions)
+                {
+                    <li>
+                        @x
+                    </li>
+                }
+            </ul>
+        } *@
 
 </SectionContent>
 <SectionContent SectionName=@(FuncName + "-detail-update-btns")>
     @if (IsShowDelete)
     {
         <Popconfirm Title="确定删除此项吗?" OnConfirm=BtnDeleteClick>
-            <Button  Loading=isDeleting Danger=true>删除</Button>
+            <Button Loading=isDeleting Danger=true>删除</Button>
         </Popconfirm>
     }
     <ButtonGroup>

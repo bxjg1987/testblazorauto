@@ -16,8 +16,8 @@ namespace ZLJ.Application.Share.Authorization.Permissions
         /// 获取系统所有权限定义(IPermissionManager没有提供异步的，暂时用个同步的吧，以后自己加一个异步的)
         /// </summary>
         /// <returns></returns>
-        IList<DataDictionaryForSelectDto> GetAllPermissions();
+        IList<FlatPermissionDto> GetAllPermissions();
 
-        Task<IReadOnlyList< UserMenu>> GetMenusAsync();
+        //Task<IReadOnlyList< UserMenu>> GetMenusAsync();
     }
 }

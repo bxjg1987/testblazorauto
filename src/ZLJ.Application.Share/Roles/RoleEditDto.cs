@@ -23,7 +23,7 @@ namespace ZLJ.Application.Share.Roles
       //  [StringLength(Role.MaxDescriptionLength)]
         public string? Description { get; set; }
         [DisplayName("拥有的权限")]
-        public List<string>? GrantedPermissions { get; set; }
+        public string[]? GrantedPermissions { get; set; }= Array.Empty<string>();
         //public bool IsStatic { get; set; }
     }
 }

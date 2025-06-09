@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Abp.Authorization.Roles;
@@ -11,6 +11,7 @@ using ZLJ.Core.Authorization.Users;
 using System.Threading.Tasks;
 using System.Linq;
 using BXJG.Utils.Extensions;
+using System.Collections.Immutable;
 
 namespace ZLJ.Core.Authorization.Roles
 {
@@ -47,11 +48,24 @@ namespace ZLJ.Core.Authorization.Roles
         //    return base.SetGrantedPermissionsAsync(roleId, permissions.Union(p).GroupBy(c => c.Name).SelectMany(c => c));
         //}
 
-        //ÉÏÃæµÄ·½·¨ÄÚ²¿»áµ÷ÓÃÏÂÃæµÄ·½·¨¡£
+        //ä¸Šé¢çš„æ–¹æ³•å†…éƒ¨ä¼šè°ƒç”¨ä¸‹é¢çš„æ–¹æ³•ã€‚
         public override Task SetGrantedPermissionsAsync(Role role, IEnumerable<Permission> permissions)
         {
             var p = permissions.SelectMany(c => c.GetDependencePermissions()).Distinct();
-            return base.SetGrantedPermissionsAsync(role, permissions.Union(p));
+            var list = permissions.Union(p).ToList();
+            //æˆ‘ä»¬çš„é¡¹ç›®ä¸­ï¼Œè¿˜éœ€è¦é€’å½’ä¸Šçº§æƒé™ä¹Ÿè¦æˆæƒ
+
+            var tmp = list.ToImmutableList();
+
+            foreach (var item in tmp)
+            {
+                item.RecursionUp(x => { 
+                    list.Add(x);
+                    return false;
+                });
+            }
+
+            return base.SetGrantedPermissionsAsync(role, list);
         }
     }
 }

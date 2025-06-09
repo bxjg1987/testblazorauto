@@ -1,13 +1,24 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <localizationDictionary culture="zh-Hans">
 	<texts>
 
 		<text name="后台管理首页" value="控制台" />
 		<text name="通知中心" value="通知中心" />
+
+		<text name="Admin.TestSimple.Get" value="测试简单获取" />
+		<text name="Admin.TestTree.Get" value="测试树获取" />
+		<text name="Administrator.BaseInfo.OrganizationUnit" value="组织单位" />
+		<text name="Administrator.BaseInfo.Post" value="岗位" />
+		<text name="Administrator.BaseInfo" value="基础信息" />
+		<text name="Administrator" value="后台管理" />
+		<text name="BXJGBaseInfoAdministrative" value="区域" />
+		<text name="BXJGBaseInfoAssociatedCompany" value="往来单位" />
+		<text name="BXJGBaseInfoStaffInfo" value="员工信息" />
 		
-	
-
-
+		<text name="Administrator.System.Log" value="日志" />
+		<text name="Administrator.System.Config" value="设置" />
+		<text name="Log" value="操作日志" />
+		<text name="Settings" value="设置" />
 		<!--codegenerator-->
 	</texts>
 </localizationDictionary>

@@ -65,7 +65,7 @@ namespace ZLJ.Application.Roles
             var role = await GetEntityByIdAsync(input.Id);
             await sdfsdf(role);
             var dto = MapToEntityDto(role);
-            dto.GrantedPermissions = (await _roleManager.GetGrantedPermissionsAsync(role)).Where(c => c.Children.Count == 0).Select(c => c.Name).ToList();
+            dto.GrantedPermissions = (await _roleManager.GetGrantedPermissionsAsync(role)).Where(c => c.Children.Count == 0).Select(c => c.Name).ToArray();
             return dto;
         }
 
@@ -124,7 +124,7 @@ namespace ZLJ.Application.Roles
             await sdfsdf(role);
             var dto = MapToEntityDto(role);
             // var dto = ObjectMapper.Map<RoleDto>(role);
-            dto.GrantedPermissions = (await _roleManager.GetGrantedPermissionsAsync(role)).Select(c => c.Name).ToList();
+            dto.GrantedPermissions = (await _roleManager.GetGrantedPermissionsAsync(role)).Select(c => c.Name).ToArray();
             return dto;
         }
 
@@ -208,7 +208,7 @@ namespace ZLJ.Application.Roles
                 ObjectMapper.Map(input, role);
                 //CheckErrors(await roleManager.UpdateAsync(role));
                 if (input.GrantedPermissions == null)
-                    input.GrantedPermissions = new List<string>();
+                    input.GrantedPermissions = Array.Empty<string>();
                 var grantedPermissions = PermissionManager
                     .GetAllPermissions()
                     .Where(p => input.GrantedPermissions.Contains(p.Name))
@@ -240,7 +240,7 @@ namespace ZLJ.Application.Roles
             var dto = MapToEntityDto(role);
 
             // var dto = ObjectMapper.Map<RoleDto>(role);
-            dto.GrantedPermissions = (await _roleManager.GetGrantedPermissionsAsync(role)).Select(c => c.Name).ToList();
+            dto.GrantedPermissions = (await _roleManager.GetGrantedPermissionsAsync(role)).Select(c => c.Name).ToArray();
             return dto;
         }
 

@@ -1,7 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <localizationDictionary culture="en">
   <texts>
-    <!--菜单-->
+
+	  <text name="Admin.TestSimple.Get" value="Test Simple Get" />
+	  <text name="Admin.TestTree.Get" value="Test Tree Get" />
+	  <text name="Administrator.BaseInfo.OrganizationUnit" value="Organization Unit" />
+	  <text name="Administrator.BaseInfo.Post" value="Post" />
+	  <text name="Administrator.BaseInfo" value="Base Info" />
+	  <text name="Administrator" value="Administrator" />
+	  <text name="BXJGBaseInfoAdministrative" value="Base Info Administrative" />
+	  <text name="BXJGBaseInfoAssociatedCompany" value="Base Info Associated Company" />
+	  <text name="BXJGBaseInfoStaffInfo" value="Base Info Staff Info" />
+	  <text name="GeneralTreeMenu" value="General Tree Menu" />
+	  <text name="Administrator.System.Log" value="Log" />
+	  <text name="Administrator.System.Config" value="Settings" />
+
+
+	  <!--菜单-->
 	  <text name="后台管理首页" value="Dashbord" />
 	  <text name="通知中心" value="Notice" />
 	  
@@ -35,7 +50,7 @@
     <text name="EmployeeAppgdkhsbwc" value="Completion" />
     <text name="EmployeeAppgdkhsbjj" value="Rejecte" />
 
-    <text name ="Administrator.BaseInfo" value="Baseinfo" />
+
 
     <text name="HomePage" value="Home page" />
     <text name="About" value="About" />

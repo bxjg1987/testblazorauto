@@ -81,6 +81,23 @@ namespace Abp.Authorization
         //    if(byld.Any())
         //   await  roleManager.SetGrantedPermissionsAsync(role, byld);
         //}
+
+        /// <summary>
+        /// 递归向上
+        /// </summary>
+        /// <param name="permission"></param>
+        /// <param name="del">返回false继续，true终止递归</param>
+        public static void RecursionUp(this Permission permission, Func<Permission, bool> del)
+        {
+            var p1 = permission;
+            while (p1 != null)
+            {
+                var rr = del(p1);
+                if (rr)
+                    return;
+                p1 = p1.Parent;
+            }
+        }
     }
 
     //在这里搞虽然是个理想的位置，但由于设置权限是批量的，这里搞性能太低，因为有大量遍历

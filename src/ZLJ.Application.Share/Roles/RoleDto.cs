@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -9,38 +9,38 @@ using ZLJ.Application.Common.Share.OU;
 namespace ZLJ.Application.Share.Roles
 {
     /// <summary>
-    /// ºóÌ¨¹ÜÀí½ÇÉ«Ê¹ÓÃµÄÏÔÊ¾Ä£ĞÍ
+    /// åå°ç®¡ç†è§’è‰²ä½¿ç”¨çš„æ˜¾ç¤ºæ¨¡å‹
     /// </summary>
     public class RoleDto : EntityDto<int>,IExtendableObj
     {
         public dynamic ExtensionData { get; set; }
         public IEnumerable<int> OuIds => Ous != null && Ous.Count > 0 ?  Ous.Select(c =>int.Parse( c.Id.ToString())) : new int[0];
         public string OusText => Ous != null && Ous.Count > 0 ? string.Join(',', Ous.Select(c => c.Text)) : "";
-        [DisplayName("ËùÊô²¿ÃÅ")]
+        [DisplayName("æ‰€å±éƒ¨é—¨")]
         public List<OuDto> Ous { get; set; }
         //[Required]
         //[StringLength(AbpRoleBase.MaxNameLength)]
-        [DisplayName("Î¨Ò»Ãû³Æ")]
+        [DisplayName("å”¯ä¸€åç§°")]
         public string Name { get; set; }
 
         //[Required]
         //[StringLength(AbpRoleBase.MaxDisplayNameLength)]
-        [DisplayName("ÏÔÊ¾Ãû³Æ")]
+        [DisplayName("æ˜¾ç¤ºåç§°")]
         public string DisplayName { get; set; }
 
         //public string NormalizedName { get; set; }
 
         // [StringLength(Role.MaxDescriptionLength)]
-        [DisplayName("±¸×¢")]
+        [DisplayName("å¤‡æ³¨")]
         public string Description { get; set; }
-        [DisplayName("ÏµÍ³Ô¤Éè")]
+        [DisplayName("ç³»ç»Ÿé¢„è®¾")]
         public bool IsStatic { get; set; }
-        [DisplayName("ÓµÓĞµÄÈ¨ÏŞÁĞ±í")]
-        public List<string> GrantedPermissions { get; set; }
+        [DisplayName("æ‹¥æœ‰çš„æƒé™åˆ—è¡¨")]
+        public string[]? GrantedPermissions { get; set; } = Array.Empty<string>();
     }
 
     /// <summary>
-    /// ²»Í¬ÀàĞÍÓÃ»§¹ØÁªµ½ÓÃ»§¼°Æä½ÇÉ«Ê±µÄ½ÇÉ«ĞÅÏ¢
+    /// ä¸åŒç±»å‹ç”¨æˆ·å…³è”åˆ°ç”¨æˆ·åŠå…¶è§’è‰²æ—¶çš„è§’è‰²ä¿¡æ¯
     /// </summary>
     public class RoleRelationDto
     {
@@ -49,19 +49,19 @@ namespace ZLJ.Application.Share.Roles
         /// </summary>
         public int Id { get; set; }
         /// <summary>
-        /// ½ÇÉ«Ãû
+        /// è§’è‰²å
         /// </summary>
         public string Name { get; set; }
         /// <summary>
-        /// ÏÔÊ¾Ãû
+        /// æ˜¾ç¤ºå
         /// </summary>
         public string DisplayName { get; set; }
         /// <summary>
-        /// ½ÇÉ«±¸×¢
+        /// è§’è‰²å¤‡æ³¨
         /// </summary>
         public string Description { get; set; }
         /// <summary>
-        /// ÊÇ·ñÊÇ¾²Ì¬½ÇÉ«
+        /// æ˜¯å¦æ˜¯é™æ€è§’è‰²
         /// </summary>
         public bool IsStatic { get; set; }
     }

@@ -61,7 +61,7 @@ namespace ZLJ.Application.Post
             var role = await GetEntityByIdAsync(input.Id) as PostEntity;
             await sdfsdf(role);
             var dto = MapToEntityDto(role);
-            dto.GrantedPermissions = (await _roleManager.GetGrantedPermissionsAsync(role)).Where(c => c.Children.Count == 0).Select(c => c.Name).ToList();
+            dto.GrantedPermissions = (await _roleManager.GetGrantedPermissionsAsync(role)).Where(c => c.Children.Count == 0).Select(c => c.Name).ToArray();
             return dto;
         }
 
@@ -108,7 +108,7 @@ namespace ZLJ.Application.Post
 
             //input.nam
             var role = ObjectMapper.Map<PostEntity>(input);
-            role.Name = TinyPinyin.PinyinHelper.GetPinyin(input.DisplayName, "")+ BXJG.Common.RandomHelper.GetRandomString(6);//多音字咋搞？
+            role.Name = TinyPinyin.PinyinHelper.GetPinyin(input.DisplayName, "") + BXJG.Common.RandomHelper.GetRandomString(6);//多音字咋搞？
             role.SetNormalizedName();
 
             CheckErrors(await _roleManager.CreateAsync(role));
@@ -132,6 +132,8 @@ namespace ZLJ.Application.Post
                 .Where(p => input.GrantedPermissions.Contains(p.Name))
                 .ToList();
 
+
+
                 await _roleManager.SetGrantedPermissionsAsync(role, grantedPermissions);
             }
 
@@ -139,7 +141,7 @@ namespace ZLJ.Application.Post
             await sdfsdf(role);
             var dto = MapToEntityDto(role);
             // var dto = ObjectMapper.Map<RoleDto>(role);
-            dto.GrantedPermissions = (await _roleManager.GetGrantedPermissionsAsync(role)).Select(c => c.Name).ToList();
+            dto.GrantedPermissions = (await _roleManager.GetGrantedPermissionsAsync(role)).Select(c => c.Name).ToArray();
             return dto;
         }
 
@@ -155,8 +157,8 @@ namespace ZLJ.Application.Post
                      select new { role, ou };
 
             q2 = q2.WhereIf(input.Filter.OuCode.IsNotNullOrWhiteSpaceBXJG(), c => c.ou.Code.StartsWith(input.Filter.OuCode))
-                   .WhereIf(input.Filter.IsStatic.HasValue,c=>c.role.IsStatic==input.Filter.IsStatic.Value)
-                   .WhereIf(input.Filter.Keywords.IsNotNullOrWhiteSpaceBXJG(), c => c.role.Name.Contains(input.Filter.Keywords)|| c.role.DisplayName.Contains(input.Filter.Keywords));
+                   .WhereIf(input.Filter.IsStatic.HasValue, c => c.role.IsStatic == input.Filter.IsStatic.Value)
+                   .WhereIf(input.Filter.Keywords.IsNotNullOrWhiteSpaceBXJG(), c => c.role.Name.Contains(input.Filter.Keywords) || c.role.DisplayName.Contains(input.Filter.Keywords));
 
             q2 = from role in q2.Select(c => c.role).Distinct()
                  join ouRole in ouRoleRepository.GetAll().AsNoTrackingWithIdentityResolution() on role.Id equals ouRole.RoleId into tem1
@@ -167,11 +169,11 @@ namespace ZLJ.Application.Post
             //input.Sorting.Replace("DisplayName");
             var ct = await q2.CountAsync(CancellationTokenProvider.Token);
 
-            
+
 
             q2 = q2.OrderBy(input.Sorting).PageBy(input);
 
-          //q2 = q2.OrderBy(c => c.role.DisplayName).PageBy(input);
+            //q2 = q2.OrderBy(c => c.role.DisplayName).PageBy(input);
 
             var list = await q2.ToListAsync(CancellationTokenProvider.Token);
 
@@ -255,33 +257,44 @@ namespace ZLJ.Application.Post
             //var oldRoleNames = role.Permissions.Select(c => c.Name).ToList();
 
             //暂时去掉不允许修改超级管理员权限问题
-            if (false)
+            if (role.IsStatic || role.Name == StaticRoleNames.Tenants.Admin)
             {
                 //不判断，前端直接禁用控件
                 //  if (input.Permissions.SequenceEqual(oldRoleNames))
                 //if (input.Permissions.Count != oldRoleNames.Count||!input.Permissions.All(oldRoleNames.Contains))
                 //       throw new UserFriendlyException("不允许修改静态角色的权限");
 
-                //if (input.Name != role.Name)
-                //    throw new UserFriendlyException("静态角色的标识名不允许修改");
+                //if (input.name != role.Name)
+                //     throw new UserFriendlyException("静态角色的标识名不允许修改");
                 //role.Id = input.Id;
                 role.Description = input.Description;
                 role.DisplayName = input.DisplayName;
                 //CheckErrors(await roleManager.UpdateAsync(role));
+
+                if (role.Name == StaticRoleNames.Tenants.Admin)
+                {
+                    var ps = PermissionManager.GetAllPermissions();
+                    await _roleManager.SetGrantedPermissionsAsync(role, ps);
+                }
             }
             else
             {
                 ObjectMapper.Map(input, role);
                 //CheckErrors(await roleManager.UpdateAsync(role));
                 if (input.GrantedPermissions == null)
-                    input.GrantedPermissions = new List<string>();
+                    input.GrantedPermissions = Array.Empty<string>();
                 var grantedPermissions = PermissionManager
                     .GetAllPermissions()
                     .Where(p => input.GrantedPermissions.Contains(p.Name))
                     .ToList();
 
+
+                //grantedPermissions.First().
+
+
+
                 //暂时禁用，因为目前功能没做完，实际上这里是应该要放开的
-                //await _roleManager.SetGrantedPermissionsAsync(role, grantedPermissions);
+                await _roleManager.SetGrantedPermissionsAsync(role, grantedPermissions);
             }
             role.SetNormalizedName();//如果不加 NormalizedName属性不会自动设置 会引起莫名其妙的异常
             //await CurrentUnitOfWork.SaveChangesAsync();
@@ -307,7 +320,7 @@ namespace ZLJ.Application.Post
             var dto = MapToEntityDto(role);
 
             // var dto = ObjectMapper.Map<RoleDto>(role);
-            dto.GrantedPermissions = (await _roleManager.GetGrantedPermissionsAsync(role)).Select(c => c.Name).ToList();
+            dto.GrantedPermissions = (await _roleManager.GetGrantedPermissionsAsync(role)).Select(c => c.Name).ToArray();
             return dto;
         }
 
