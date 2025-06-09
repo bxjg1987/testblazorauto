@@ -361,3 +361,4 @@ App_Data/Logs/
 /src/ZLJ.RCL/Components/AbpCreateBaseComponent.cs
 /src/ZLJ.Web.BlazorAuto/appsettings.json
 /src/ZLJ.Admin.CoreRCL/wwwroot/appsettings.json
+/src/ZLJ.Application/Authorization/Permissions/PermissionAppService.cs
