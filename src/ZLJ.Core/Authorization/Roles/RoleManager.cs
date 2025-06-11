@@ -61,7 +61,7 @@ namespace ZLJ.Core.Authorization.Roles
             {
                 item.RecursionUp(x => { 
                     list.Add(x);
-                    return false;
+                    return true;
                 });
             }
 

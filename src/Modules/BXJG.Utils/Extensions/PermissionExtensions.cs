@@ -86,17 +86,53 @@ namespace Abp.Authorization
         /// 递归向上
         /// </summary>
         /// <param name="permission"></param>
-        /// <param name="del">返回false继续，true终止递归</param>
-        public static void RecursionUp(this Permission permission, Func<Permission, bool> del)
+        /// <param name="del">true继续 false终止</param>
+        /// <returns>true递归完成 递归中途终止</returns>
+        public static bool RecursionUp(this Permission permission, Func<Permission, bool> del)
         {
+            //var r = del(permission);
+            //if (r == false)
+            //    return false;
+            //if (permission.Parent != null)
+            //{ 
+            //     r = permission.Parent.RecursionUp(del);
+            //    if (r == false)
+            //        return false;
+            //}
+            //return true;
+
             var p1 = permission;
             while (p1 != null)
             {
                 var rr = del(p1);
-                if (rr)
-                    return;
+                if (!rr)
+                    return false;
                 p1 = p1.Parent;
             }
+            return true;
+        }
+        /// <summary>
+        /// 递归向下
+        /// </summary>
+        /// <param name="permission"></param>
+        /// <param name="del">true继续 false终止</param>
+        /// <returns>true递归完成 递归中途终止</returns>
+        public static bool RecursionDown(this Permission permission, Func<Permission, bool> del)
+        {
+            var r = del(permission);
+            if (!r)
+                return false;
+
+            if (permission.Children != null)
+            {
+                foreach (var item in permission.Children)
+                {
+                    r = item.RecursionDown(del);
+                    if (!r)
+                        return false;
+                }
+            }
+            return true;
         }
     }
 

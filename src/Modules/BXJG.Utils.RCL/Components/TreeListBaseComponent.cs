@@ -1,4 +1,4 @@
-using Abp.Application.Services;
+﻿using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using Abp.Authorization;
 using Abp.Domain.Entities;
@@ -103,12 +103,12 @@ namespace BXJG.Utils.RCL.Components
                     errMsg += item.Message + Environment.NewLine;
 
                 if (output.Ids.Count == 0)
-                    await ShowFailMessage(msg: $"批量{funName}全部失败！" + errMsg);
+                    await ShowFailMessage(msg: $"{funName}全部失败！" + errMsg);
                 else
-                    await ShowFailMessage(msg: $"批量{funName}部分失败！成功数量：{output.Ids.Count}；{errMsg}");
+                    await ShowFailMessage(msg: $"{funName}部分失败！成功数量：{output.Ids.Count}；{errMsg}");
             }
             else
-              await  ShowSuccessMessage(msg: $"批量{funName}全部成功！");
+              await  ShowSuccessMessage(msg: $"{funName}全部成功！");
         }
 
         /// <summary>
