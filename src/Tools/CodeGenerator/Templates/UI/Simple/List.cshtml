@@ -1,4 +1,4 @@
-@using CodeGenerator
+﻿@using CodeGenerator
 @using RazorLight
 @using BXJG.Common;
 @using BXJG.Common.Extensions;
@@ -96,16 +96,16 @@
 }
         <ActionColumn Title="操作" Width="160" Fixed="ColumnFixPlacement.Right" Align="ColumnAlign.Center">
             <ButtonGroup Size="@@ButtonGroupSize.Small">
-                <Button Size="@@ButtonSize.Small" Type="@@ButtonType.Primary" OnClick="x=>BtnItemDetailClick(context)">详情</Button><br />
+                <Button OnClickStopPropagation="true" Size="@@ButtonSize.Small" Type="@@ButtonType.Primary" OnClick="x=>BtnItemDetailClick(context)">详情</Button><br />
                 @@if (updateIsGranted)
                 {
-                    <Button Size="@@ButtonSize.Small" OnClick="x=>BtnItemEditClick(context)">修改</Button>
+                    <Button OnClickStopPropagation="true" Size="@@ButtonSize.Small" OnClick="x=>BtnItemEditClick(context)">修改</Button>
                 }
                 @@if (deleteIsGranted)
                 {
                     <Popconfirm Title="确定删除此项吗?"
                                 OnConfirm="()=>BtnDeleteItemClick(context)">
-                        <Button Size="@@ButtonSize.Small" Danger="true">删除</Button>
+                        <Button OnClickStopPropagation="true" Size="@@ButtonSize.Small" Danger="true">删除</Button>
                     </Popconfirm>
                 }
             </ButtonGroup>

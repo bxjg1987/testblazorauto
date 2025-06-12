@@ -98,17 +98,18 @@ namespace BXJG.Utils.RCL.Components
         {
             if (output.ErrorMessage.Any())
             {
-                string errMsg = string.Empty;
-                foreach (var item in output.ErrorMessage)
-                    errMsg += item.Message + Environment.NewLine;
+                //http请求拦截器全部失败时会抛出异常；部分失败时直接提示，然后返回数据；全部成功时仅返回数据，所以不需要再调用这里了
+                //string errMsg = string.Empty;
+                //foreach (var item in output.ErrorMessage)
+                //    errMsg += item.Message + Environment.NewLine;
 
-                if (output.Ids.Count == 0)
-                    await ShowFailMessage(msg: $"{funName}全部失败！" + errMsg);
-                else
-                    await ShowFailMessage(msg: $"{funName}部分失败！成功数量：{output.Ids.Count}；{errMsg}");
+                //if (output.Ids.Count == 0)
+                //    await ShowFailMessage(msg: $"{funName}失败！" + errMsg);
+                //else
+                //    await ShowFailMessage(msg: $"{funName}部分失败！成功数量：{output.Ids.Count}；{errMsg}");
             }
             else
-              await  ShowSuccessMessage(msg: $"{funName}全部成功！");
+                await  ShowSuccessMessage(msg: $"{funName}成功！");
         }
 
         /// <summary>

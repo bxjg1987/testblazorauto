@@ -70,11 +70,11 @@ namespace BXJG.Utils.Application.ClientProxy.Http
                 //这样保证调用方使用统一的全局异常处理
                 if (plcz.Ids == null || !plcz.Ids.Any())
                 {
-                    logger.LogDebug("全部失败" + System.Text.Json.JsonSerializer.Serialize(plcz)+str);
+                    logger.LogDebug("失败" + System.Text.Json.JsonSerializer.Serialize(plcz)+str);
 
                     //这里抛出异常，免得调用方每次都要判断，由于后台接口通常返回成功，所以这里的r.Error为空
                     string message = string.Join("\n", plcz.ErrorMessage.Select(p => p.Message));
-                    throw new UserFriendlyException(500, "批量操作全部失败", message);
+                    throw new UserFriendlyException(500, "操作失败", message);
                 }
                 if (plcz.ErrorMessage != default && plcz.ErrorMessage.Any())
                 {
