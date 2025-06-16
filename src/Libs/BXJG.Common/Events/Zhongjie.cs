@@ -1,4 +1,4 @@
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Concurrent;
@@ -33,7 +33,7 @@ namespace BXJG.Common.Events
     {
         //private readonly ConcurrentBag<Weituo> weituos = new ConcurrentBag<Weituo>();//不好做删除
         //核心存储事件和对应的处理程序（委托）
-   
+
         internal protected readonly ConcurrentDictionary<string, ConcurrentDictionary<Delegate, Weituo>> weituos = new ConcurrentDictionary<string, ConcurrentDictionary<Delegate, Weituo>>(StringComparer.OrdinalIgnoreCase);
 
         internal protected readonly ILogger logger;
@@ -92,7 +92,7 @@ namespace BXJG.Common.Events
 
             //weituos[eventName].TryAdd(weituo, new Weituo { Func = oo => weituo((T)oo), AddTime = DateTime.Now });
             var sj = weituos.GetOrAdd(eventName, new ConcurrentDictionary<Delegate, Weituo>());
-            sj.TryAdd(weituo, new Weituo { Func = weituo, AddTime = DateTime.Now });
+            sj.TryAdd(weituo, new Weituo { Func = weituo, AddTime = DateTime.Now, IsParameterless =false });
 
             logger.LogDebug($"注册事件：{eventName}");
 
@@ -113,7 +113,7 @@ namespace BXJG.Common.Events
             //weituos[eventName].TryAdd(weituo, new Weituo { Func = o => weituo(), AddTime = DateTime.Now });
 
             var sj = weituos.GetOrAdd(eventName, new ConcurrentDictionary<Delegate, Weituo>());
-            sj.TryAdd(weituo, new Weituo { Func = weituo, AddTime = DateTime.Now });
+            sj.TryAdd(weituo, new Weituo { Func = weituo, AddTime = DateTime.Now, IsParameterless = true });
 
 
             logger.LogDebug($"注册事件：{eventName}");
@@ -296,12 +296,13 @@ namespace BXJG.Common.Events
                 logger.LogDebug($"委托数{dic.Count}");
 
                 //https://github.com/dotnet/runtime/issues/23625
-                await Task.WhenAll(dic.Select(c =>
+                var tasks = new List<Task>(dic.Count);
+                foreach (var kv in dic)
                 {
-                    c.Value.LastExecuteTime = DateTime.Now; //有线程冲突也无所谓
-
-                    return ((ValueTask)c.Value.Func.DynamicInvoke(canshu)).AsTask();
-                }));
+                    tasks.Add(kv.Value.InvokeAsync(canshu).AsTask());
+                }
+                await Task.WhenAll(tasks);
+                //await Task.WhenAll(dic.Select(c => c.Value.InvokeAsync(canshu).AsTask()));
             }
         }
         /// <summary>
@@ -317,12 +318,13 @@ namespace BXJG.Common.Events
                 logger.LogDebug($"委托数{dic.Count}");
 
                 //https://github.com/dotnet/runtime/issues/23625
-                await Task.WhenAll(dic.Select(c =>
+                var tasks = new List<Task>(dic.Count);
+                foreach (var kv in dic)
                 {
-                    c.Value.LastExecuteTime = DateTime.Now; //有线程冲突也无所谓
-
-                    return ((ValueTask)c.Value.Func.DynamicInvoke()  ).AsTask();
-                }));
+                    tasks.Add(kv.Value.InvokeAsync().AsTask());
+                }
+                await Task.WhenAll(tasks);
+                //await Task.WhenAll(dic.Select(c => c.Value.InvokeAsync().AsTask()));
             }
         }
         /// <summary>
@@ -366,9 +368,9 @@ namespace BXJG.Common.Events
         /// <returns></returns>
         public virtual Task Chufa(string eventName, params string[] level)
         {
-          
+
             eventName = BuildEventName(eventName, level);
-            return Chufa( eventName);
+            return Chufa(eventName);
         }
         #endregion
 
@@ -400,6 +402,18 @@ namespace BXJG.Common.Events
             /// 最后执行时间
             /// </summary>
             public DateTime LastExecuteTime { get; set; } = DateTime.MinValue;
+
+            // 增加委托类型标记
+            public bool IsParameterless { get; set; }
+
+            // 优化后的调用方法
+            public ValueTask InvokeAsync(object arg = null)
+            {
+                LastExecuteTime = DateTime.Now;
+                return IsParameterless
+                    ? ((Func<ValueTask>)Func)()
+                    : ((Func<object, ValueTask>)Func)(arg);
+            }
         }
 
         internal class ZhongjieZhuxiaoqi : IDisposable

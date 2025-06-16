@@ -1,4 +1,4 @@
-@using CodeGenerator
+﻿@using CodeGenerator
 @using RazorLight
 @using BXJG.Common;
 @using BXJG.Common.Extensions;
@@ -24,16 +24,17 @@ namespace @(Model.Model.ApplicationShareNamespace)
     /// <summary>
     /// 各应用获取 @(Model.Model.DisplayName) 的数据模型
     ///</summary>
-    public partial class @(Model.Model.DtoName) : @(Model.Model.IsTree ? $"GeneralTreeNodeBaseDto<{Model.Model.DtoName}>" : (Model.Model.PrimaryField.CSharpType == "int" ? "FullAuditedEntityDto" : $"FullAuditedEntityDto<{Model.Model.PrimaryField.CSharpType}>")), IExtendableObj
+    public partial class @(Model.Model.DtoName) : @(Model.Model.IsTree ? $"GeneralTreeNodeBaseDto<{Model.Model.DtoName}>" : Model.Model.EditDtoName), IExtendableObj
     {
-@foreach (var field in Model.Model.NormalFields)
+@if(Model.Model.IsTree)
+{@foreach (var field in Model.Model.NormalFields)
 {<text>
         /// <summary>
         /// @(field.DisplayName)
         ///</summary>
         [Display(Name="@(field.DisplayName)")]
         public @(field.CSharpType)@(field.IsRequired?"":"?") @field.Name { get; set; }
-</text>}       
+</text>}}
         /// <summary>
         /// 扩展字段，通常仅用于UI
         ///</summary>

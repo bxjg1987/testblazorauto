@@ -15,6 +15,7 @@ namespace BXJG.Common
         /// </summary>
         /// <param name="length"></param>
         /// <returns></returns>
+        [Obsolete("This method is obsolete. Consider using more secure random generation methods if needed.")]
         public static string RandomBase64(int length = 6)
         {
             var bs = new byte[length];
@@ -32,6 +33,7 @@ namespace BXJG.Common
         /// <param name="str"></param>
         /// <param name="length"></param>
         /// <returns></returns>
+        [Obsolete("This method is obsolete. Consider using more secure random generation methods if needed.")]
         public static string Random255(string str, byte length = 6)
         {
             var bs = new byte[length];
@@ -51,6 +53,7 @@ namespace BXJG.Common
         /// </summary>
         /// <param name="length"></param>
         /// <returns></returns>
+        [Obsolete("This method is obsolete. Consider using more secure random generation methods if needed.")]
         public static string RandomNumber(byte length = 6)
         {
             //也许有更好的实现方式
@@ -102,6 +105,69 @@ namespace BXJG.Common
             using (var md5 = MD5.Create())
             {
                 jmh = md5.ComputeHash(bs);
+            }
+            StringBuilder sb1 = new StringBuilder();
+            for (int i = 0; i < jmh.Length; i++)
+            {
+                sb1.Append(jmh[i].ToString("X2"));
+            }
+            return sb1.ToString();
+        }
+
+        /// <summary>
+        /// Computes the SHA256 hash for the given stream.
+        /// </summary>
+        /// <param name="stream">The stream to compute the hash for.</param>
+        /// <returns>The SHA256 hash as a hexadecimal string.</returns>
+        public static string GetSHA256(this Stream stream)
+        {
+            byte[] retVal = null;
+
+            using (var sha256 = SHA256.Create())
+            {
+                retVal = sha256.ComputeHash(stream);
+            }
+
+            if (retVal == null || retVal.Length == 0)
+                throw new Exception("Failed to compute SHA256 hash.");
+
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < retVal.Length; i++)
+            {
+                sb.Append(retVal[i].ToString("X2"));
+            }
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Computes the SHA256 hash for the file at the specified path.
+        /// </summary>
+        /// <param name="fileName">The path to the file.</param>
+        /// <returns>The SHA256 hash as a hexadecimal string.</returns>
+        public static string GetSHA256ByFilePath(this string fileName)
+        {
+            using (FileStream file = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+            {
+                return file.GetSHA256();
+            }
+        }
+
+        /// <summary>
+        /// Computes the SHA256 hash for the specified string.
+        /// The string is encoded using UTF8 by default.
+        /// The hash is returned as an uppercase hexadecimal string.
+        /// </summary>
+        /// <param name="str">The string to hash.</param>
+        /// <param name="encoding">The encoding to use. Defaults to UTF8.</param>
+        /// <returns>The SHA256 hash as an uppercase hexadecimal string.</returns>
+        public static string GetSHA256String(this string str, Encoding encoding = null)
+        {
+            encoding = encoding ?? Encoding.UTF8;
+            var bs = encoding.GetBytes(str);
+            byte[] jmh;
+            using (var sha256 = SHA256.Create())
+            {
+                jmh = sha256.ComputeHash(bs);
             }
             StringBuilder sb1 = new StringBuilder();
             for (int i = 0; i < jmh.Length; i++)

@@ -20,7 +20,7 @@ padding-left:0;
 }
 /*主区域样式*/
 ::deep .zlj-main-body-box .ant-tabs-content-holder, .zlj-main-body-box-no-auth {
-    padding: 1rem;
+    padding: 1rem 1rem 0 1rem;
 }
 
 
