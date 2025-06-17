@@ -14,7 +14,7 @@ namespace BXJG.Utils.Share
         public const int MaxDepth = 16;
         public const int CodeUnitLength = 5;
         public const int MaxCodeLength = 95;
-
+        public const string EntityIsNotActive = "实体已禁用";
         /// <summary>
         /// 通用的扩展数据长度
         /// </summary>

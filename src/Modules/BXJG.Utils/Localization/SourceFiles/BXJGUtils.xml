@@ -14,6 +14,7 @@
 		<text name="修改失败！" value="修改失败！" />
 		<text name="删除成功！" value="删除成功！" />
 		<text name="删除失败！" value="删除失败！" />
+		<text name="实体已禁用"  value="{0}（{1}） is disabled!"/>
 		<text name="GeneralTreeMenu" value="Data dictionary" />
 		<text name="CaptchaOptions" value="Captcha" />
 		<text name="CaptchaOptions:ImageOption:FontFamily" value="Font Family" />

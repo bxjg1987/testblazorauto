@@ -16,6 +16,7 @@
 		<text name="查询" value="查询" />
 		<text name="GeneralTreeMenu" value="数据字典" />
 		<text name="文件管理">文件管理</text>
+		<text name="实体已禁用"  value="{0}（{1}）已禁用！"/>
 		<text name="Nationwide" value="全国" />
 		<text name="HomePage" value="主页" />
 		<text name="About" value="关于我们" />

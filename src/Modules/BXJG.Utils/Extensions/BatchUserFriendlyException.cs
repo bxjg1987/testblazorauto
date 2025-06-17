@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Utils.Extensions
+namespace Abp.UI
 {
     /// <summary>
     /// 批量操作友好异常
