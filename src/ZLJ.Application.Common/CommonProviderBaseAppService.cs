@@ -50,7 +50,7 @@ namespace ZLJ.Application.Common
 
                 if (zljLocalizationSource == null || zljLocalizationSource.Name != ZLJ.Core.Share.ZLJConsts.LocalizationSourceName)
                 {
-                    zljLocalizationSource = LocalizationManager.GetSource(ZLJ.Core.Share.ZLJConsts.LocalizationSourceName);
+                    zljLocalizationSource = ZLJ.Core.Localization.LocalizationExtensions.GetZLJCoreLocalizationSource();
                 }
 
                 return zljLocalizationSource;

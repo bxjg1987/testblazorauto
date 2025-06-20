@@ -1,4 +1,4 @@
-using ZLJ.Core.BaseInfo.AssociatedCompany;
+ï»¿using ZLJ.Core.BaseInfo.AssociatedCompany;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -17,14 +17,15 @@ namespace ZLJ.EntityFrameworkCore.EntityFrameworkCore.EFMap.BaseInfo
             builder.Property(x => x.Address).HasMaxLength(ZLJ.Core.Share.ZLJConsts.AssociatedCompanyAddressMaxLength);
             builder.Property(x => x.Lng).HasColumnType($"decimal(32,24)");
             builder.Property(x => x.Lat).HasColumnType($"decimal(32,24)");
-
+            builder.Navigation(x => x.Level).AutoInclude();
+            builder.Navigation(x => x.Area).AutoInclude();
             builder.HasOne(a => a.Admin)
        .WithOne()
        .HasForeignKey<AssociatedCompanyEntity>(a => a.AdminId)
        .IsRequired(false)
-       .OnDelete(DeleteBehavior.ClientNoAction);  // É¾³ýÓÃ»§Ê±ÖÃ¿ÕAdminId
+       .OnDelete(DeleteBehavior.ClientNoAction);  // åˆ é™¤ç”¨æˆ·æ—¶ç½®ç©ºAdminId
 
-            // ÓÃ»§Óë¿Í»§¹ØÏµÅäÖÃ
+            // ç”¨æˆ·ä¸Žå®¢æˆ·å…³ç³»é…ç½®
             builder.HasMany(a => a.Staffs)
                 .WithOne(s => s.Customer)
                 .HasForeignKey(s => s.CustomerId)
