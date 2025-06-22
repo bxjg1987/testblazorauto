@@ -27,18 +27,18 @@
     string str1 = "";
     string mima = "";
     int mycd = 256;
-    System.Security.Cryptography.CipherMode cipherMode = CipherMode.CBC;
+    System.Security.Cryptography.CipherMode cipherMode = CipherMode.ECB;
     PaddingMode paddingMode = PaddingMode.PKCS7;
 
     void Jiami()
     {
         // str1 = str1.AesEncrypt()
-        str1 = str1.AesEncrypt(mima);
+        str1 = str1.AesEncrypt(mima,mode: cipherMode);
     }
 
     void Jiemi()
     {
-        str1 = str1.AesDecrypt(mima);
+        str1 = str1.AesDecrypt(mima, mode: cipherMode);
 
     }
 
