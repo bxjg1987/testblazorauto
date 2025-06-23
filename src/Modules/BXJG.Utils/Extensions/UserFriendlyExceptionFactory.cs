@@ -25,16 +25,28 @@ namespace Abp.UI
         /// <exception cref="UserFriendlyException"></exception>
         public static void Throw(string nameOrMsg, ILocalizationSource? localizationSource = default, params object[] args)
         {
+            throw GetException(nameOrMsg, localizationSource, args);
+        }
+        /// <summary>
+        /// 抛出一个UserFriendlyException。
+        /// 可选地使用本地化源，此时name为本地化键
+        /// </summary>
+        /// <param name="nameOrMsg"></param>
+        /// <param name="localizationSource"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        public static UserFriendlyException GetException(string nameOrMsg, ILocalizationSource? localizationSource = default, params object[] args)
+        {
             //if(name.IsNullOrWhiteSpaceBXJG())
             //    throw new UserFriendlyException("异常信息不能为空");
 
             if (localizationSource != null)
-                throw new UserFriendlyException(localizationSource.GetString(nameOrMsg, args));
+                return new UserFriendlyException(localizationSource.GetString(nameOrMsg, args));
 
             if (args != null && args.Any())
-                throw new UserFriendlyException(string.Format(nameOrMsg, args));
+                return new UserFriendlyException(string.Format(nameOrMsg, args));
 
-            throw new UserFriendlyException(nameOrMsg);
+            return new UserFriendlyException(nameOrMsg);
         }
     }
 }
