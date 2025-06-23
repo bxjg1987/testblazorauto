@@ -3,8 +3,6 @@
 //每个任务一个委托，然后统一执行，这样做是便于排序步骤
 
 using AutoScript;
-//using Masuit.Tools;
-//using Masuit.Tools.Win32;
 using System;
 using System.Data.Common;
 using System.Diagnostics;
