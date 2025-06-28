@@ -130,11 +130,13 @@ namespace ZLJ.Application.Authorization.Permissions
             //    multiTenancySides: MultiTenancySides.Host);
 
             //var roleM = permissionBaseInfo.CreateChildPermission(PermissionNames.AdministratorSystemRole, L("Role"));
-            //roleM.CreateChildPermission(PermissionNames.AdministratorSystemRoleAdd, L("Add"), properties: new Dictionary<string, object> { { "btn", true } });
-            //roleM.CreateChildPermission(PermissionNames.AdministratorSystemRoleUpdate, L("Update"), properties: new Dictionary<string, object> { { "btn", true } });
-            //roleM.CreateChildPermission(PermissionNames.AdministratorSystemRoleDelete, L("Delete"), properties: new Dictionary<string, object> { { "btn", true } });
+            //roleM.CreateChildPermission(PermissionNames.AdministratorSystemRoleGet, "查询".UtilsLI());
+            //roleM.CreateChildPermission(PermissionNames.AdministratorSystemRoleAdd, "新增".UtilsLI(), properties: new Dictionary<string, object> { { "btn", true } });
+            //roleM.CreateChildPermission(PermissionNames.AdministratorSystemRoleUpdate, "修改".UtilsLI(), properties: new Dictionary<string, object> { { "btn", true } });
+            //roleM.CreateChildPermission(PermissionNames.AdministratorSystemRoleDelete, "删除".UtilsLI(), properties: new Dictionary<string, object> { { "btn", true } });
 
             //var userM = permissionBaseInfo.CreateChildPermission(PermissionNames.AdministratorSystemUser, L("User"));
+            //userM.CreateChildPermission(PermissionNames.AdministratorSystemUserGet, L("查询"));
             //userM.CreateChildPermission(PermissionNames.AdministratorSystemUserAdd, L("Add"), properties: new Dictionary<string, object> { { "btn", true } });
             //userM.CreateChildPermission(PermissionNames.AdministratorSystemUserUpdate, L("Update"), properties: new Dictionary<string, object> { { "btn", true } });
             //userM.CreateChildPermission(PermissionNames.AdministratorSystemUserDelete, L("Delete"), properties: new Dictionary<string, object> { { "btn", true } });

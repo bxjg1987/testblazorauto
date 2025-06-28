@@ -45,7 +45,7 @@ namespace BXJG.Utils.Files
         /// 关联的实体类型，也就表明当前附件管理器是专用于管理此类型实体的
         /// </summary>
         protected readonly string entityType;
-        // public IGuidGenerator GuidGenerator { get; set; }
+      public IGuidGenerator GuidGenerator { get; set; }
         /// <summary>
         /// 实例化附件管理器
         /// </summary>
@@ -72,11 +72,11 @@ namespace BXJG.Utils.Files
             if (files == default)
                 files = new List<SetAttachmentFile>();
 
-            var needDeletes = oldEntities.Where(x => !files.Any(d => d.FileId == x.Id)).ToImmutableArray();
+            var needDeletes = oldEntities.Where(x => !files.Any(d => d.FileId == x.FileId)).ToImmutableArray();
             foreach (var item in needDeletes)
             {
                 await Repository.DeleteAsync(item);
-                await FileManager.Remove(item.File);
+                //await FileManager.Remove(item.File);
             }
 
             var newEntities = new List<FileEntity>();
@@ -91,9 +91,10 @@ namespace BXJG.Utils.Files
                     {
                         EntityId = id,
                         EntityType = entityType,
-                        Id = f.Id,
+                        Id = GuidGenerator.Create(),// f.Id,
                         File = f,
-                        OrderIndex = i,
+                        FileId=f.Id,
+                        OrderIndex = i, 
                         PropertyName = propertyName
                     };
                     await Repository.InsertAsync(entity);

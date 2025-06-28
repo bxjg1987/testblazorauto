@@ -83,16 +83,7 @@ namespace BXJG.Utils.Application
         {
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
 
-            IocManager.RegService(services => {
-
-                //   ConfigurationBuilder cb = new ConfigurationBuilder();
-             //  var sdfsdf =  IocManager.Resolve<IConfigurationBuilder>();
-                var cfg = IocManager.Resolve<IConfiguration>();
-                //var sddf1 = xxx["CaptchaOptions"];
-               // var sddf = xxx["CaptchaOptions:IgnoreCase"];
-                //cb.sett
-                services.AddCaptcha( cfg);
-            });
+       
             //IocManager.Register(typeof(AbpAsyncDeterminationInterceptor<StaticDIAccessInterceptor>), DependencyLifeStyle.Transient);
 
             //IocManager.Register(typeof(AbpAsyncDeterminationInterceptor<AbpCapSubscriptInterceptor>), DependencyLifeStyle.Transient);
@@ -102,12 +93,21 @@ namespace BXJG.Utils.Application
             //注册附件应用服务，它不实现abp的应用服务，所以不会生成动态webApi
             //IocManager.Register(typeof(AttachmentAppService<>), DependencyLifeStyle.Transient);
         }
-       
-        //public override void PostInitialize()
-        //{
-        //    base.PostInitialize();
 
-          
-        //}
+        public override void PostInitialize()
+        {
+            base.PostInitialize();
+
+            IocManager.RegService(services => {
+
+                //   ConfigurationBuilder cb = new ConfigurationBuilder();
+                //  var sdfsdf =  IocManager.Resolve<IConfigurationBuilder>();
+                var cfg = IocManager.Resolve<IConfiguration>();
+                //var sddf1 = xxx["CaptchaOptions"];
+                // var sddf = xxx["CaptchaOptions:IgnoreCase"];
+                //cb.sett
+                services.AddCaptcha(cfg);
+            });
+        }
     }
 }

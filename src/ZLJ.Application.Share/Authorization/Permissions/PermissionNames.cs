@@ -92,11 +92,13 @@
   
 
         public const string AdministratorSystemRole = "Administrator.System.Role";
+        public const string AdministratorSystemRoleGet = "Administrator.System.Role.Get";
         public const string AdministratorSystemRoleAdd = "Administrator.System.Role.Add";
         public const string AdministratorSystemRoleUpdate = "Administrator.System.Role.Update";
         public const string AdministratorSystemRoleDelete = "Administrator.System.Role.Delete";
 
         public const string AdministratorSystemUser = "Administrator.System.User";
+        public const string AdministratorSystemUserGet = "Administrator.System.User.Get";
         public const string AdministratorSystemUserAdd = "Administrator.System.User.Add";
         public const string AdministratorSystemUserUpdate = "Administrator.System.User.Update";
         public const string AdministratorSystemUserDelete = "Administrator.System.User.Delete";

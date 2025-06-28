@@ -33,10 +33,11 @@ namespace BXJG.Utils.Files
         /// 比如工单：字段A表示要处理的问题相关图片，字段B表示处理完成时拍摄的图片，它们都使用附件表，当通过此字段来表示关联的不同的属性
         /// </summary>
         public string? PropertyName { get; set; }
-        ///// <summary>
-        ///// 关联的文件id，直接用文件id
-        ///// </summary>
-        //public Guid FileId { get; set; }
+        /// <summary>
+        /// 关联的文件id
+        /// 之前是直接用id和文件id对应，但是这样就导致即便文件是同一个，也必须新增一条文件记录，反直觉的设计，现在还是改回来。
+        /// </summary>
+        public Guid FileId { get; set; }
         /// <summary>
         /// 关联的文件实体
         /// </summary>

@@ -134,6 +134,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "分布式", "分布式", "{
 		docs\分布式\指南.md = docs\分布式\指南.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{4D4E9908-66AB-4319-A3AE-F57C2D05909F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZLJ.Tests", "test\ZLJ.Tests\ZLJ.Tests.csproj", "{7C4AFBF1-7D5E-1B4C-30CA-AE8D545B0E09}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -268,6 +272,10 @@ Global
 		{B50E2096-3B96-4530-9B88-ADD9EB84306B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B50E2096-3B96-4530-9B88-ADD9EB84306B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B50E2096-3B96-4530-9B88-ADD9EB84306B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C4AFBF1-7D5E-1B4C-30CA-AE8D545B0E09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C4AFBF1-7D5E-1B4C-30CA-AE8D545B0E09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C4AFBF1-7D5E-1B4C-30CA-AE8D545B0E09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C4AFBF1-7D5E-1B4C-30CA-AE8D545B0E09}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -313,6 +321,7 @@ Global
 		{B50E2096-3B96-4530-9B88-ADD9EB84306B} = {44B336DD-E758-45E6-9E35-E777DE3AA52B}
 		{8BEB5724-EC87-4563-94CB-60D4D1615E0D} = {31830F03-183C-4530-A73A-C165A1F5A739}
 		{02EA681E-C7D8-13C7-8484-4AC65E1B71E8} = {31830F03-183C-4530-A73A-C165A1F5A739}
+		{7C4AFBF1-7D5E-1B4C-30CA-AE8D545B0E09} = {4D4E9908-66AB-4319-A3AE-F57C2D05909F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F45DD46C-6040-4FCC-87E0-648786C36933}

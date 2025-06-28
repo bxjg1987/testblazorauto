@@ -16,6 +16,7 @@ namespace BXJG.Utils.EFCore.EFMaps
         public void Configure(EntityTypeBuilder<FileEntity> builder)
         {
             builder.ToTable("BXJGUtilsFiles");
+            builder.Property(c => c.Id).ValueGeneratedNever();
             builder.Property(c => c.ExtensionData).HasColumnType($"varchar({BXJGUtilsConsts.ExtDataMaxLength})").HasComment("扩展数据");
             builder.Property(c => c.RealName).IsRequired().HasMaxLength(BXJGUtilsConsts.FileRealNameMaxLength).HasComment("真实的文件名 c#高级编程");
             builder.Property(c => c.Ext).HasColumnType($"varchar({BXJGUtilsConsts.FileExtMaxLength})").HasComment("文件扩展名，如：.jpg"); ;
