@@ -29,7 +29,7 @@ namespace ZLJ.Core
         )]
     public class ZLJCoreModule : AbpModule
     {
-        private IConfiguration cfg;
+        //private IConfiguration cfg;
         //public ZLJCoreModule(IHostEnvironment env)
         //{
         //    cfg = env.GetAppConfiguration();
@@ -37,13 +37,13 @@ namespace ZLJ.Core
 
         public override void PreInitialize()
         { 
-            //多租户开关
-            Configuration.MultiTenancy.IsEnabled = ZLJ.Core.Share.ZLJConsts.MultiTenancyEnabled;
-            try
-            {
-                cfg = IocManager.Resolve<IConfiguration>();//注意 迁移时为空，迁移时不会依赖webcoreModule，所以那里没问题
-            }
-            catch { cfg = AppConfigurations.Get(WebContentDirectoryFinder.CalculateContentRootFolder()); }
+            ////多租户开关
+            //Configuration.MultiTenancy.IsEnabled = ZLJ.Core.Share.ZLJConsts.MultiTenancyEnabled;
+            //try
+            //{
+            //    cfg = IocManager.Resolve<IConfiguration>();//注意 迁移时为空，迁移时不会依赖webcoreModule，所以那里没问题
+            //}
+            //catch { cfg = AppConfigurations.Get(WebContentDirectoryFinder.CalculateContentRootFolder()); }
             Configuration.Features.Providers.Add<ZLJFeatureProvider>();
 
             Configuration.Modules.AbpAutoMapper().Configurators

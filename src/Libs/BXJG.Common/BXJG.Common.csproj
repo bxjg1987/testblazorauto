@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<!--<TargetFramework>netstandard2.1</TargetFramework>-->
 		<TargetFrameworks>netstandard2.1;net8;net9</TargetFrameworks>
-		<VersionPrefix>1.3.131</VersionPrefix>
+		<VersionPrefix>1.3.135</VersionPrefix>
 		<!--<Version></Version>-->
 		<!--<GeneratePackageOnBuild>true</GeneratePackageOnBuild>-->
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
@@ -26,34 +26,13 @@
 		<Compile Remove="Validation\IValidator.cs" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'net9'">
-		<!--<PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="8.0.1" />-->
-		<!--<PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="2.2.0" />-->
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.5" />
-		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.5" />
-		<PackageReference Include="Microsoft.Extensions.Http" Version="9.0.5" />
-		<PackageReference Include="System.Net.Http.Json" Version="9.0.5" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.5" />
 
-	</ItemGroup>
-	<!--<ItemGroup Condition="'$(TargetFramework)' == 'net8' or '$(TargetFramework)' == 'netstandard2.1'">-->
-	<ItemGroup Condition="'$(TargetFramework)' == 'net8' or '$(TargetFramework)' == 'netstandard2.1'">
-		<!--<PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="8.0.1" />-->
-		<!--<PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="2.2.0" />-->
+	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.6" />
 		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.6" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="9.0.6" />
 		<PackageReference Include="System.Net.Http.Json" Version="9.0.6" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.6" />
-
-	</ItemGroup>
-	<!--<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.1'">
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.4" />
-		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.4" />
-		<PackageReference Include="Microsoft.Extensions.Http" Version="9.0.4" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.4" />
-	</ItemGroup>-->
-	<ItemGroup>
 		<PackageReference Include="SkiaSharp" Version="3.119.0" />
 		<PackageReference Include="System.Linq.Dynamic.Core" Version="1.6.6" />
 		<!--<PackageReference Include="System.Net.Http.Json" Version="9.0.4" />-->

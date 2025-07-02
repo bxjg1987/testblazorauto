@@ -7,6 +7,7 @@ using ZLJ.Core.Configuration;
 using ZLJ.Core.Web;
 using ZLJ.EntityFrameworkCore;
 using Castle.LoggingFacility.MsLogging;
+using ZLJ.Web.Core.Configuration;
 namespace ZLJ.Web.Host.Startup
 {
     public class Program
@@ -19,11 +20,11 @@ namespace ZLJ.Web.Host.Startup
           Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder(args)
               .ConfigureWebHostDefaults(webBuilder =>
               {
-                  webBuilder.ConfigureAppConfiguration(webConfiguration =>
+                  webBuilder.ConfigureAppConfiguration((ctx,webConfiguration) =>
                   {
                       //var cfg = new ConfigurationManager();
                       //typeof(Program).GetAssembly().GetDirectoryPathOrNull() 这个是从ZLJ.Migration参考
-                      var _appConfiguration = AppConfigurations.Get(typeof(Program).GetAssembly().GetDirectoryPathOrNull());
+                      var _appConfiguration = ctx.HostingEnvironment.GetAppConfiguration();// AppConfigurations.Get(typeof(Program).GetAssembly().GetDirectoryPathOrNull());
                       string defaultConnectionString = _appConfiguration.GetConnectionString(ZLJ.Core.ZLJConsts.ConnectionStringName)!;
                       var efbuilder = new DbContextOptionsBuilder<ZLJDbContext>();
                       ZLJDbContextConfigurer.Configure(efbuilder, defaultConnectionString);

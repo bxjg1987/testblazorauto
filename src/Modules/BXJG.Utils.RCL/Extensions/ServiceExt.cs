@@ -142,7 +142,9 @@ namespace Microsoft.Extensions.DependencyInjection
 
             //services.TryAddSingleton<IObjectMapper, AutoMapperObjectMapper>();
             //services.TryAddScoped<CommonConnection>();
-            services.AddAutoMapper(typeof(BXJG.Utils.RCL._Imports));
+            //services.AddAutoMapper(typeof(BXJG.Utils.RCL._Imports));
+
+            services.AddAutoMapper(cfg => cfg.AddMaps(typeof(BXJG.Utils.RCL._Imports)));
 
             services.TryAddTransient<FileHelper>();
 
