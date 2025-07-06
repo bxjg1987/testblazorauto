@@ -472,7 +472,7 @@ namespace BXJG.Utils.RCL.Components
 
                     await ShowSuccessMessage("删除成功！");
                     await OnDeleted.InvokeAsync(dto);
-                });
+                }).ConfigureAwait(false);
 
             }
             finally

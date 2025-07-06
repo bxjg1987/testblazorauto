@@ -458,7 +458,7 @@ namespace BXJG.Utils.RCL.Components
                       await  ShowSuccessMessage(msg: "删除成功！");
                   
                     await OnDeleted.InvokeAsync(dto);
-                });
+                }).ConfigureAwait(false);
 
 
                

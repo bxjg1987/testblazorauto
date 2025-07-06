@@ -209,7 +209,7 @@ namespace ZLJ.RCL.Components
 
             cts = new CancellationTokenSource();
             Loading = true;
-            _ = InvokeAsync(StateHasChanged);
+            _ = InvokeAsync(StateHasChanged).ConfigureAwait(false);
             try
             {
                 var r = await HttpClient.GetAllProvider<TItem>(new { Filter = new { Keywords = value }, MaxResultCount = value.IsNullOrWhiteSpaceBXJG() ? MaxCount : int.MaxValue }, cancellationToken: cts.Token);
@@ -233,7 +233,7 @@ namespace ZLJ.RCL.Components
             {
                 Loading = false;
             }
-            _ = InvokeAsync(StateHasChanged);//经过测试，这里必须调用
+            _ = InvokeAsync(StateHasChanged).ConfigureAwait(false);//经过测试，这里必须调用
         }
     }
 

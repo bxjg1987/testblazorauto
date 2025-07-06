@@ -124,7 +124,7 @@ namespace BXJG.Utils.RCL.Components
                     }
                     else
                         await OnAddEnd.InvokeAsync(new SaveResult<TEntityDto> { Dto = r, End = true });
-                });
+                }).ConfigureAwait(false);
             }
             finally
             {

@@ -431,10 +431,10 @@ namespace BXJG.Utils.RCL.Components
 
                 //后续逻辑都是辅助性的，因此放到异步中，加快主操作速度
                 _ = InvokeAsync(async () => {
-                     BatchOperationMessage(r);
+                    _= BatchOperationMessage(r).ConfigureAwait(false);
                     if (r.Ids.Any())
                         LoadListData();
-                });
+                }).ConfigureAwait(false);
 
               
             }
@@ -478,7 +478,7 @@ namespace BXJG.Utils.RCL.Components
                 await    ShowSuccessMessage("删除提示", "删除成功！");
 
                     LoadListData();
-                });
+                }).ConfigureAwait(false);
 
 
                

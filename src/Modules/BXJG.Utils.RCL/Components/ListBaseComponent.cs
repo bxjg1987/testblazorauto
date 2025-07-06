@@ -529,7 +529,7 @@ namespace BXJG.Utils.RCL.Components
                     
                     if (r.Ids.Any())
                         LoadListData();
-                });
+                }).ConfigureAwait(false);
 
 
 
@@ -584,7 +584,7 @@ namespace BXJG.Utils.RCL.Components
                 {
                     await ShowSuccessMessage("删除提示", "删除成功！");
                     LoadListData();
-                });
+                }).ConfigureAwait(false);
 
             }
             finally
