@@ -26,6 +26,8 @@ namespace ZLJ.RCL.Components
                                                                                                             TCreateInput>
         where TCreateInput : new()
     {
+        [Parameter]
+        public virtual object Master { get; set; }
         [Inject]
         public IWebAssemblyHostEnvironment Environment { get; set; }
         [AbpExceptionInterceptor]
@@ -85,6 +87,10 @@ namespace ZLJ.RCL.Components
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
+            if (Master == null)
+            {
+                Master = this.GetHashCode();
+            }
         }
         [AbpExceptionInterceptor]
         protected override async Task OnParametersSetAsync()

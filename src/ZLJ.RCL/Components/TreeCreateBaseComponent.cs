@@ -68,7 +68,8 @@ namespace ZLJ.RCL.Components
             MessageService.Success(msg);//它是阻塞到显示完成因此元素后，所以不能等待它
             await Task.Delay(300);//碰到这个，开始刷新
         }
-
+        [Parameter]
+        public virtual object Master { get; set; }
         #region 生命周期方法增加统一异常处理拦截器
         /*
          * 肉夹馍的aop有基于规则的匹配方式，但有点复杂，
@@ -87,6 +88,10 @@ namespace ZLJ.RCL.Components
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
+            if (Master == null)
+            {
+                Master = this.GetHashCode();
+            }
         }
         [AbpExceptionInterceptor]
         protected override async Task OnParametersSetAsync()

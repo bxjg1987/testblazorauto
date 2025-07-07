@@ -1,4 +1,4 @@
-@using CodeGenerator
+﻿@using CodeGenerator
 @using RazorLight
 @using BXJG.Common;
 @using BXJG.Common.Extensions;
@@ -13,8 +13,8 @@ namespace @(Model.Model.BlazorClientNamespace)
 {
     public partial class Create
     {
-        [Parameter]
-        public object Master { get; set; }
+        //[Parameter]
+        //public object Master { get; set; }
         public override string FuncName => "@Model.Model.DisplayName";
 
         //protected override ValueTask ResetCore()
