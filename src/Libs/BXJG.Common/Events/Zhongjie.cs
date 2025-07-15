@@ -92,7 +92,8 @@ namespace BXJG.Common.Events
 
             //weituos[eventName].TryAdd(weituo, new Weituo { Func = oo => weituo((T)oo), AddTime = DateTime.Now });
             var sj = weituos.GetOrAdd(eventName, new ConcurrentDictionary<Delegate, Weituo>());
-            sj.TryAdd(weituo, new Weituo { Func = weituo, AddTime = DateTime.Now, IsParameterless =false });
+            //触发时有参的用的object，所以这里的委托要形成包装
+            sj.TryAdd(weituo, new Weituo { Func = (object arg)=> weituo((T)arg ), AddTime = DateTime.Now, IsParameterless =false });
 
             logger.LogDebug($"注册事件：{eventName}");
 
