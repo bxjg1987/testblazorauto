@@ -1,4 +1,4 @@
-@using CodeGenerator
+﻿@using CodeGenerator
 @using RazorLight
 @using BXJG.Common;
 @using BXJG.Common.Extensions;
@@ -13,8 +13,8 @@ namespace @(Model.Model.BlazorClientNamespace)
 {
     public partial class DetailUpdate
     {
-        [Parameter]
-        public object Master {  get; set; }
+        //[Parameter]
+        //public object Master {  get; set; }
 
         protected override string FuncName => "@Model.Model.DisplayName";
         /// <summary>

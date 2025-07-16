@@ -103,10 +103,12 @@
                 }
                 @@if (deleteIsGranted)
                 {
-                    <Popconfirm Title="确定删除此项吗?"
-                                OnConfirm="()=>BtnDeleteItemClick(context)">
-                        <Button  Size="@@ButtonSize.Small" Danger="true">删除</Button>
-                    </Popconfirm>
+                    <div @@onclick:stopPropagation ="true">
+                        <Popconfirm Title="确定删除此项吗?"
+                                    OnConfirm="()=>BtnDeleteItemClick(context)">
+                            <Button  Size="@@ButtonSize.Small" Danger="true">删除</Button>
+                        </Popconfirm>
+                    </div>
                 }
             </ButtonGroup>
         </ActionColumn>

@@ -1,4 +1,4 @@
-using ZLJ.Application.Share.TestTree;
+﻿using ZLJ.Application.Share.TestTree;
 
 namespace ZLJ.Admin.CoreRCL.TestTree
 {
@@ -7,11 +7,11 @@ namespace ZLJ.Admin.CoreRCL.TestTree
     /// </summary>
     public partial class Create
     {
-        /// <summary>
-        /// 用于实现Section布局
-        /// </summary>
-        [Parameter]
-        public object Master { get; set; }
+        ///// <summary>
+        ///// 用于实现Section布局
+        ///// </summary>
+        //[Parameter]
+        //public object Master { get; set; }
         /// <summary>
         /// 此功能的名称
         /// </summary>

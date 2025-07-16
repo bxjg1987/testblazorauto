@@ -48,9 +48,9 @@
 		<!--<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />-->
 		<!--<PackageReference Include="AntDesign.ProLayout" Version="0.16.2" />-->
 		<!--<PackageReference Include="Blazor.Extensions.Logging" Version="2.0.4" />-->
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.6" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.7" />
 
-		<PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="9.0.6" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="9.0.7" />
 		<PackageReference Include="System.Private.Uri" Version="4.3.2" />
 
 		<!--<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="9.0.5" />

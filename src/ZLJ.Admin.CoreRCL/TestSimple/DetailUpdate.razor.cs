@@ -1,12 +1,12 @@
-
+﻿
 using ZLJ.Application.Share.TestSimple;
 
 namespace ZLJ.Admin.CoreRCL.TestSimple
 {
     public partial class DetailUpdate
     {
-        [Parameter]
-        public object Master {  get; set; }
+        //[Parameter]
+        //public object Master {  get; set; }
 
         protected override string FuncName => "普通数据测试";
         /// <summary>

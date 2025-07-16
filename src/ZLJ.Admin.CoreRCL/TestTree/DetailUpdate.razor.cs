@@ -1,11 +1,11 @@
-using ZLJ.Application.Share.TestTree;
+﻿using ZLJ.Application.Share.TestTree;
 
 namespace ZLJ.Admin.CoreRCL.TestTree
 {
     public partial class DetailUpdate
     {
-        [Parameter]
-        public object Master {  get; set; }
+        //[Parameter]
+        //public object Master {  get; set; }
 
         protected override string FuncName => "测试树";
         /// <summary>
