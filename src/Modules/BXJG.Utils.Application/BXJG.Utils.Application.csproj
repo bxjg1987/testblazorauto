@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
-	  <VersionPrefix>1.3.94</VersionPrefix>
+	  <VersionPrefix>1.3.95</VersionPrefix>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>  <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
@@ -29,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Lazy.Captcha.Core" Version="2.1.0" />
+    <PackageReference Include="Lazy.Captcha.Core" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.7" />
   </ItemGroup>
 

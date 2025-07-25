@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Rougamo;
 using Rougamo.Context;
+using Rougamo.Metadatas;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +34,8 @@ namespace ZLJ.RCL.Interceptors
     /// <summary>
     /// 基于abp和bootstrapblazor的全局异常处理拦截器
     /// </summary>
+    //[Pointcut(AccessFlags.Method | AccessFlags.Instance | AccessFlags.Public | AccessFlags.NonPublic | AccessFlags.InstancePublic | AccessFlags.InstanceNonPublic)]
+    //[Advice(Feature.ExceptionHandle)]
     public class AbpExceptionInterceptorAttribute : MoAttribute
     {
         //经过测试，始终无法从路由中设置这个值
@@ -43,8 +46,8 @@ namespace ZLJ.RCL.Interceptors
 
         //IServiceProvider services => OperatingSystem.IsBrowser()?ServicesInBrower: AbpExceptionInterceptor1. Services.Value;
 
-        public override AccessFlags Flags => AccessFlags.Method | AccessFlags.Instance | AccessFlags.Public | AccessFlags.NonPublic | AccessFlags.InstancePublic | AccessFlags.InstanceNonPublic;
-        public override Feature Features => Feature.ExceptionHandle; // ;//| Feature.OnEntry; Feature.OnException
+        //public override AccessFlags Flags => AccessFlags.Method | AccessFlags.Instance | AccessFlags.Public | AccessFlags.NonPublic | AccessFlags.InstancePublic | AccessFlags.InstanceNonPublic;
+        //public override Feature Features => Feature.ExceptionHandle; // ;//| Feature.OnEntry; Feature.OnException
 
         /*
          * 省略访问修饰符标识拦截所有方法
@@ -158,8 +161,8 @@ namespace ZLJ.RCL.Interceptors
             //}
 
             // 处理异常并将返回值设置为newReturnValue，如果方法无返回值(void)，直接传入null即可
-
-            context.HandledException(this, context.RealReturnType.GetDefaultValue());
+      
+            context.HandledException(this, context.ReturnType.GetDefaultValue());
         }
 
         //public override void OnExit(MethodContext context)

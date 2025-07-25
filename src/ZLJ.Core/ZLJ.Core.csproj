@@ -54,7 +54,7 @@
 		<PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="4.1.0" />
 		<PackageReference Include="DistributedLock.Core" Version="1.0.8" />
 		<PackageReference Include="Hangfire.Core" Version="1.8.20" />
-		<PackageReference Include="HtmlAgilityPack" Version="1.12.1" />
+		<PackageReference Include="HtmlAgilityPack" Version="1.12.2" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.7" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.7" />
 		<PackageReference Include="SourceLink.Copy.PdbFiles" Version="2.8.3">
