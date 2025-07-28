@@ -33,6 +33,7 @@ using ZLJ.Application.Share.Authorization.Permissions;
 using BXJG.Utils.Application;
 using ZLJ.Web.Core.Configuration;
 using BXJG.Utils.Web;
+using BXJG.WeChat.Web.MiniProgram;
 
 namespace ZLJ.Web.Host.Startup
 {
@@ -338,7 +339,7 @@ namespace ZLJ.Web.Host.Startup
 
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
-
+            app.UseWeChatMiniProgram();
             app.Use((ctx, next) =>
             {
                 ctx.Request.Headers["Accept-Language"] = ctx.Request.Headers["Accept-Language"].ToString()

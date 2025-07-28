@@ -56,7 +56,10 @@ var topTasks = new List<(string, Action)>
     new("重新发布：BXJG.Utils.Application.Share", FabuXindeBXJGUtilsApplicationShare),
     new("重新发布：BXJG.Utils.Application.ClientProxy", FabuXindeBXJGUtilsApplicationClientProxy),
     new("重新发布：BXJG.Utils.Web", FabuXindeBXJGUtilsWeb),
-    new("重新发布：BXJG.Utils.RCL", FabuXindeBXJGUtilsRCL)
+    new("重新发布：BXJG.Utils.RCL", FabuXindeBXJGUtilsRCL),
+    new("重新发布：BXJG.WeChat", FabuWeChat),
+    new("重新发布：BXJG.WeChat.Web", FabuWeChatWeb),
+    new("重新发布：BXJG.WeChat.Abp", FabuWeChatBXJG)
 };
 #endregion
 
@@ -232,4 +235,21 @@ void yaoqiushurunugetkey()
         Console.WriteLine("请输入nuget上传需要的key：");
         nugetkey = Console.ReadLine();
     }
+}
+
+
+void FabuWeChat()
+{
+    DabaoNuget("BXJG.WeChat");
+    FabuNuget("BXJG.WeChat");
+}
+void FabuWeChatWeb()
+{
+    DabaoNuget("BXJG.WeChat.Web");
+    FabuNuget("BXJG.WeChat.Web");
+}
+void FabuWeChatBXJG()
+{
+    DabaoNuget("BXJG.WeChat.Abp");
+    FabuNuget("BXJG.WeChat.Abp");
 }

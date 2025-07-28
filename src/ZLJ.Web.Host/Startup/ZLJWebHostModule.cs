@@ -1,38 +1,39 @@
-﻿using Abp.Modules;
-using ZLJ.Core.Configuration;
+﻿using Abp.AspNetCore;
+using Abp.AspNetCore.Configuration;
+using Abp.AspNetCore.SignalR;
 using Abp.Hangfire;
+using Abp.Hangfire.Configuration;
+using Abp.Modules;
+using Abp.Runtime.Session;
 using Abp.Threading.BackgroundWorkers;
+using Abp.Zero.Configuration;
 //using ZLJ.Application.WorkOrder.Workload;
 using BXJG.Utils;
-using ZLJ.EntityFrameworkCore;
-using Abp.AspNetCore.SignalR;
-using Abp.AspNetCore;
-using ZLJ.Application;
-//using ZLJ.App.Employee;
-using Medallion.Threading.SqlServer;
-using Medallion.Threading;
-using Yitter.IdGenerator;
-using Microsoft.IdentityModel.Tokens;
-
-using Abp.AspNetCore.Configuration;
+using BXJG.Utils.Application;
+using BXJG.Utils.Application.File;
+using BXJG.WeChat.Abp;
 //using BXJG.WorkOrder.EmployeeApplication;
 //using BXJG.WorkOrder;
 using Castle.MicroKernel.Resolvers;
+using Medallion.Threading;
+//using ZLJ.App.Employee;
+using Medallion.Threading.SqlServer;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
-using Abp.Runtime.Session;
-using Abp.Zero.Configuration;
-using BXJG.Utils.Application;
-using ZLJ.Web.Core;
-using ZLJ.Web.Core.Configuration;
-using ZLJ.Web.Core.Authentication.JwtBearer;
-using Abp.Hangfire.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using Yitter.IdGenerator;
+using ZLJ.Application;
 using ZLJ.Application.Common.Notification;
-using BXJG.Utils.Application.File;
+using ZLJ.Core.Configuration;
+using ZLJ.EntityFrameworkCore;
+using ZLJ.Web.Core;
+using ZLJ.Web.Core.Authentication.JwtBearer;
+using ZLJ.Web.Core.Configuration;
 
 namespace ZLJ.Web.Host.Startup
 {
     [DependsOn(typeof(AbpAspNetCoreSignalRModule),
-               typeof(ZLJWebCoreModule))]
+               typeof(ZLJWebCoreModule),
+        typeof(BXJGWeChatModule))]
     public class ZLJWebHostModule : AbpModule
     {
         private readonly IWebHostEnvironment _env;
