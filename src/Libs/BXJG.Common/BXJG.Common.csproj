@@ -34,7 +34,7 @@
 		<PackageReference Include="System.Net.Http.Json" Version="9.0.7" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.7" />
 		<PackageReference Include="SkiaSharp" Version="3.119.0" />
-		<PackageReference Include="System.Linq.Dynamic.Core" Version="1.6.6" />
+		<PackageReference Include="System.Linq.Dynamic.Core" Version="1.6.7" />
 		<!--<PackageReference Include="System.Net.Http.Json" Version="9.0.4" />-->
 		<PackageReference Include="TinyPinyin.Net" Version="1.0.2" />
 		<!--<PackageReference Include="Rougamo.Fody" Version="2.3.0" IncludeAssets="all" PrivateAssets="contentfiles;analyzers" />-->
