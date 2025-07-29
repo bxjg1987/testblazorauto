@@ -1,34 +1,40 @@
-﻿using Abp.Modules;
-using System;
-using Abp.Reflection.Extensions;
-using Abp.Dependency;
-using System.Reflection;
-using Microsoft.Extensions.DependencyInjection;
-//using Castle.Windsor.MsDependencyInjection;
-using Microsoft.AspNetCore.Authorization;
-using System.Collections.Generic;
+﻿using Abp.AspNetCore;
+using Abp.AspNetCore.SignalR.Hubs;
 using Abp.Configuration.Startup;
-using Microsoft.Extensions.DependencyInjection.Extensions;
+using Abp.Dependency;
+using Abp.Domain.Uow;
+using Abp.Modules;
+using Abp.Notifications;
+using Abp.RealTime;
+using Abp.Reflection.Extensions;
+using Abp.Runtime.Session;
+using BXJG.Common;
+using BXJG.Common.Contracts;
 using BXJG.Common.Web;
 using BXJG.Utils.Application;
-
-using BXJG.Common.Contracts;
-using Microsoft.AspNetCore.Mvc.ApplicationParts;
-using Abp.AspNetCore;
-using BXJG.Common;
 using BXJG.Utils.Share;
+using BXJG.Utils.Web.SessionExt;
 using Castle.MicroKernel.Registration;
-using Abp.RealTime;
+//using Castle.Windsor.MsDependencyInjection;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.AspNetCore.SignalR;
-using Abp.AspNetCore.SignalR.Hubs;
-using Abp.Domain.Uow;
-using Abp.Notifications;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace BXJG.Utils.Web
 {
     [DependsOn(typeof(BXJGUtilsApplicationModule))]
     public class BXJGUtilsWebModule : AbpModule
     {
+        public override void PreInitialize()
+        {
+            base.PreInitialize();
+            Configuration.ReplaceService<IAbpSession, AbpSessionWithHttpContext>();
+        }
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
@@ -121,11 +127,15 @@ namespace BXJG.Utils.Web
             //    //await hc.Clients.All.SendAsync(BXJGUtilsConsts.OnTenantStateChanged, cts);
             //}, 10000)).Named(BXJGUtilsConsts.OnUserStateChanged));
             #endregion
+
+          
+
         }
 
         public override void PostInitialize()
         {
             IocManager.Resolve<ApplicationPartManager>().AddApplicationPartsIfNotAddedBefore(Assembly.GetExecutingAssembly());
+            
             //
             // var sdf = context.RequestServices.GetService<IEnumerable<IAuthorizationPolicyProvider>>();
 

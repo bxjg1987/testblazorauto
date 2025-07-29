@@ -241,6 +241,8 @@ namespace BXJG.Utils.EFCore.Settings
     /// 这里自定义.net的配置提供程序，从abp setting获取配置
     /// 仅关注abp应用程序级别的setting，租户、用户的配置太多，不好、也不合适、也不方便失效 作为.net的配置。
     /// 
+    /// 可以考虑增加租户隔离，实现思路是在业务方法开始时设置AsyncLocal租户id，在AbpSettingsConfigurationProvider使用
+    /// 
     /// 在分布式环境中，A服务器更新了缓存，B服务器无法知晓，所以这里粗暴地使用轮询方式
     /// </summary>
     public class AbpSettingsConfigurationProvider : ConfigurationProvider
