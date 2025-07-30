@@ -1,4 +1,4 @@
-@using CodeGenerator
+﻿@using CodeGenerator
 @using RazorLight
 @using BXJG.Common;
 @using BXJG.Common.Extensions;
@@ -34,12 +34,16 @@ namespace @(Model.Model.EFNamespace)
             @:///</summary>
             @:var @(field.Name) = builder.Property(x => x.@(field.Name));
             @:@(field.Name).HasComment("@(field.DisplayName)");
-    if(field.Length>0){
+    if(field.Length>0&&field.CSharpType=="string"){
             @:@(field.Name).HasMaxLength(@(field.CoreShareConstsMaxLength));
     }
     if(field.CSharpType=="string"){
             @:@(field.Name).IsUnicode(@(field.IsUnicode.ToString().ToLower()));
     }
+    if(field.CSharpType=="decimal"){
+            @:@(field.Name).HasPrecision(@(field.Length),@(field.NumberPrecision));
+    }
+
             @:@(field.Name).IsRequired(@(field.IsRequired.ToString().ToLower()));
 }
         }

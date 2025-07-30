@@ -13,7 +13,6 @@ using BXJG.Common.Contracts;
 using BXJG.Common.Web;
 using BXJG.Utils.Application;
 using BXJG.Utils.Share;
-using BXJG.Utils.Web.SessionExt;
 using Castle.MicroKernel.Registration;
 //using Castle.Windsor.MsDependencyInjection;
 using Microsoft.AspNetCore.Authorization;

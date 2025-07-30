@@ -1,0 +1,262 @@
+﻿{
+  "Name": "Shop",
+  "DisplayName": "店铺",
+  "Icon": "shop",
+  "IsTree": false,
+  "ParentPermissionName": "Administrator",
+  "ParentMenuName": null,
+  "MultiTenantMode": 1, //多租户模式 1Must 2Have 4不开启
+  "Fields": [
+    {
+      "Name": "Id", //字段名
+      "DisplayName": "编号", //显示名称
+      "CSharpType": "long", //c#类型的字符串形式
+      "IsPrimary": true, //是否是主键
+      "DefaultValue": null, //默认值
+      "IsRequired": true, //是否是必填字段
+      "Length": 0, //字段长度
+      "IsUnicode": false, //是否是Unicode编码
+      "IsSort": false, //是否参与排序
+      "IsCondition": false, //是否作为条件
+      "IsConditionRange": false, //是否作为范围条件,IsCondition为true时有效
+      "Width": null, //界面中显示的宽度，字符串如：20rem;100px;
+      "FixedLeft": null, //在列表中显示时冻结，true冻结在左侧；false冻结在右侧；null不冻结
+      "Position": null, //在列表中显示的位置，true左 false右 null中
+      "NumberMax": null, //最大数值，类型为数字时有效，若为空则不管最大值
+      "NumberMin": null, //最小数值，类型为数字时有效，若为空则不管设置最小值
+      "NumberStep": null, //步进数值，类型为数字时有效，若为空则不管步进
+      "NumberPrecision": null //若是小数，则指定它的精度，若为空，则保持字段类型默认的精度
+    },
+    {
+      "Name": "Name",
+      "DisplayName": "名称",
+      "CSharpType": "string",
+      "IsPrimary": false,
+      "DefaultValue": null,
+      "IsRequired": true,
+      "Length": 200,
+      "IsUnicode": true,
+      "IsSort": true,
+      "IsCondition": true,
+      "IsConditionRange": false,
+      "Width": 300, //界面中显示的宽度，字符串如：20rem;100px;
+      "FixedLeft": true, //在列表中显示时冻结，true冻结在左侧；false冻结在右侧；null不冻结
+      "NumberMax": null, //最大数值，类型为数字时有效，若为空则不管最大值
+      "NumberMin": null, //最小数值，类型为数字时有效，若为空则不管设置最小值
+      "NumberStep": null, //步进数值，类型为数字时有效，若为空则不管步进
+      "NumberPrecision": null //若是小数，则指定它的精度，若为空，则保持字段类型默认的精度
+    },
+    {
+      "Name": "Phone",
+      "DisplayName": "电话",
+      "CSharpType": "string",
+      "IsPrimary": false,
+      "DefaultValue": null,
+      "IsRequired": true,
+      "Length": 200,
+      "IsUnicode": false,
+      "IsSort": false,
+      "IsCondition": true,
+      "IsConditionRange": false,
+      "Width": 120, //界面中显示的宽度，字符串如：20rem;100px;
+      "FixedLeft": true, //在列表中显示时冻结，true冻结在左侧；false冻结在右侧；null不冻结
+      "NumberMax": null, //最大数值，类型为数字时有效，若为空则不管最大值
+      "NumberMin": null, //最小数值，类型为数字时有效，若为空则不管设置最小值
+      "NumberStep": null, //步进数值，类型为数字时有效，若为空则不管步进
+      "NumberPrecision": null //若是小数，则指定它的精度，若为空，则保持字段类型默认的精度
+    },
+    {
+      "Name": "Address",
+      "DisplayName": "地址",
+      "CSharpType": "string",
+      "IsPrimary": false,
+      "DefaultValue": null,
+      "IsRequired": true,
+      "Length": 400,
+      "IsUnicode": true,
+      "IsSort": false,
+      "IsCondition": true,
+      "IsConditionRange": false,
+      "Width": 350, //界面中显示的宽度，字符串如：20rem;100px;
+      "FixedLeft": null, //在列表中显示时冻结，true冻结在左侧；false冻结在右侧；null不冻结
+      "NumberMax": null, //最大数值，类型为数字时有效，若为空则不管最大值
+      "NumberMin": null, //最小数值，类型为数字时有效，若为空则不管设置最小值
+      "NumberStep": null, //步进数值，类型为数字时有效，若为空则不管步进
+      "NumberPrecision": null //若是小数，则指定它的精度，若为空，则保持字段类型默认的精度
+    },
+    {
+      "Name": "ShopLongitude",
+      "DisplayName": "餐厅经度",
+      "CSharpType": "decimal",
+      "IsPrimary": false,
+      "DefaultValue": 0,
+      "IsRequired": false,
+      "Length": 0,
+      "IsUnicode": false,
+      "IsSort": false,
+      "IsCondition": false,
+      "IsConditionRange": false,
+      "NumberMax": null,
+      "NumberMin": null,
+      "NumberStep": null,
+      "NumberPrecision": 8
+    },
+    {
+      "Name": "ShopLatitude",
+      "DisplayName": "餐厅纬度",
+      "CSharpType": "decimal",
+      "IsPrimary": false,
+      "DefaultValue": 0,
+      "IsRequired": false,
+      "Length": 0,
+      "IsUnicode": false,
+      "IsSort": false,
+      "IsCondition": false,
+      "IsConditionRange": false,
+      "NumberMax": null,
+      "NumberMin": null,
+      "NumberStep": null,
+      "NumberPrecision": 8
+    },
+    {
+      "Name": "ParkingLotAddress",
+      "DisplayName": "停车场地址",
+      "CSharpType": "string",
+      "IsPrimary": false,
+      "DefaultValue": null,
+      "IsRequired": false,
+      "Length": 400,
+      "IsUnicode": true,
+      "IsSort": false,
+      "IsCondition": true,
+      "IsConditionRange": false,
+      "Width": 350, //界面中显示的宽度，字符串如：20rem;100px;
+      "FixedLeft": null, //在列表中显示时冻结，true冻结在左侧；false冻结在右侧；null不冻结
+      "NumberMax": null, //最大数值，类型为数字时有效，若为空则不管最大值
+      "NumberMin": null, //最小数值，类型为数字时有效，若为空则不管设置最小值
+      "NumberStep": null, //步进数值，类型为数字时有效，若为空则不管步进
+      "NumberPrecision": null //若是小数，则指定它的精度，若为空，则保持字段类型默认的精度
+    },
+    {
+      "Name": "ParkingLotLongitude",
+      "DisplayName": "停车场经度",
+      "CSharpType": "decimal",
+      "IsPrimary": false,
+      "DefaultValue": 0,
+      "IsRequired": false,
+      "Length": 0,
+      "IsUnicode": false,
+      "IsSort": false,
+      "IsCondition": false,
+      "IsConditionRange": false,
+      "NumberMax": null,
+      "NumberMin": null,
+      "NumberStep": null,
+      "NumberPrecision": 8
+    },
+    {
+      "Name": "ParkingLotLatitude",
+      "DisplayName": "停车场纬度",
+      "CSharpType": "decimal",
+      "IsPrimary": false,
+      "DefaultValue": 0,
+      "IsRequired": false,
+      "Length": 0,
+      "IsUnicode": false,
+      "IsSort": false,
+      "IsCondition": false,
+      "IsConditionRange": false,
+      "NumberMax": null,
+      "NumberMin": null,
+      "NumberStep": null,
+      "NumberPrecision": 8
+    },
+    {
+      "Name": "PerCapitaConsumption",
+      "DisplayName": "人均消费",
+      "CSharpType": "decimal",
+      "IsPrimary": false,
+      "DefaultValue": null,
+      "IsRequired": false,
+      "Length": 0,
+      "IsUnicode": false,
+      "IsSort": true,
+      "IsCondition": true,
+      "IsConditionRange": true,
+      "NumberMax": null,
+      "NumberMin": null,
+      "NumberStep": 1,
+      "NumberPrecision": 2
+    },
+    {
+      "Name": "BusinessStart",
+      "DisplayName": "营业开始时间",
+      "CSharpType": "DateTimeOffset",
+      "IsPrimary": false,
+      "DefaultValue": "2025-01-01 08:00:00",
+      "IsRequired": false,
+      "Length": 0,
+      "IsUnicode": false,
+      "IsSort": false,
+      "IsCondition": false,
+      "IsConditionRange": false,
+      "NumberMax": null,
+      "NumberMin": null,
+      "NumberStep": null,
+      "NumberPrecision": null
+    },
+    {
+      "Name": "BusinessEnd",
+      "DisplayName": "营业结束时间",
+      "CSharpType": "DateTimeOffset",
+      "IsPrimary": false,
+      "DefaultValue": "2025-01-01 24:00:00",
+      "IsRequired": false,
+      "Length": 0,
+      "IsUnicode": false,
+      "IsSort": false,
+      "IsCondition": false,
+      "IsConditionRange": false,
+      "NumberMax": null,
+      "NumberMin": null,
+      "NumberStep": null,
+      "NumberPrecision": null
+    },
+    {
+      "Name": "BusinessPhilosophy",
+      "DisplayName": "餐厅理念",
+      "CSharpType": "string",
+      "IsPrimary": false,
+      "DefaultValue": "我们以'品质引领，用心服务'为宗旨，致力于提供超越期待的美食体验，不断创新并践行环保责任，打造受人尊敬的餐饮品牌。",
+      "IsRequired": false,
+      "Length": 3000,
+      "IsUnicode": true,
+      "IsSort": false,
+      "IsCondition": true,
+      "IsConditionRange": false,
+      "Width": 300, //界面中显示的宽度，字符串如：20rem;100px;
+      "FixedLeft": null, //在列表中显示时冻结，true冻结在左侧；false冻结在右侧；null不冻结
+      "NumberMax": null, //最大数值，类型为数字时有效，若为空则不管最大值
+      "NumberMin": null, //最小数值，类型为数字时有效，若为空则不管设置最小值
+      "NumberStep": null, //步进数值，类型为数字时有效，若为空则不管步进
+      "NumberPrecision": null //若是小数，则指定它的精度，若为空，则保持字段类型默认的精度
+    },
+    {
+      "Name": "IsActive",
+      "DisplayName": "启用",
+      "CSharpType": "bool",
+      "IsPrimary": false,
+      "DefaultValue": true,
+      "IsRequired": true,
+      "Length": 0,
+      "IsUnicode": false,
+      "IsSort": true,
+      "IsCondition": true,
+      "IsConditionRange": false,
+      "NumberMax": null,
+      "NumberMin": null,
+      "NumberStep": null,
+      "NumberPrecision": null
+    }
+  ]
+}

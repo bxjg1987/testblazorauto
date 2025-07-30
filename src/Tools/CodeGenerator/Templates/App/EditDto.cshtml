@@ -1,4 +1,4 @@
-@using CodeGenerator
+﻿@using CodeGenerator
 @using RazorLight
 @using BXJG.Common;
 @using BXJG.Common.Extensions;
@@ -37,7 +37,7 @@ namespace @(Model.Model.ApplicationShareNamespace)
     @if(field.Length>0){
         @:[StringLength(@field.CoreShareConstsMaxLength)]
     }
-        public @(field.CSharpTypeNullable) @field.Name { get; set; }
+        public @(field.CSharpTypeNullable) @field.Name { get; set; } @(field.DefaultValue.IsNotNullOrWhiteSpaceBXJG()?$" = { field.DefaultValue };":string.Empty)
 </text>}
     }
 }

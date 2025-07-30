@@ -248,8 +248,13 @@ namespace ZLJ.EntityFrameworkCore
 
             foreach (var property in decimalProps)
             {
-                property.SetPrecision(18);
-                property.SetScale(2);
+                // 检查是否已经设置了精度和小数位数
+                // 如果没有设置，则应用默认值(18,2)
+                if (property.GetPrecision() == null && property.GetScale() == null)
+                {
+                    property.SetPrecision(18);
+                    property.SetScale(2);
+                }
             }
         }
 
