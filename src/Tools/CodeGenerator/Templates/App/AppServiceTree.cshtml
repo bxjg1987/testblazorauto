@@ -1,4 +1,4 @@
-@using CodeGenerator
+﻿@using CodeGenerator
 @using RazorLight
 @using BXJG.Common;
 @using BXJG.Common.Extensions;
@@ -51,14 +51,14 @@ namespace @(Model.Model.ApplicationNamespace)
 @if(Model.Model.ConditionStringFields.Any())
 {
     var idx = 0;
-            @:query = query.WhereIf(condition.Keywords.IsNotNullOrWhiteSpaceBXJG(), x => 
+            @:q = q.WhereIf(input.Keywords.IsNotNullOrWhiteSpaceBXJG(), x => 
 @foreach (var field in Model.Model.ConditionStringFields)
 {
             if (idx>0)
             {
-                @:|| x.@(field.Name).Contains(condition.Keywords)
+                @:|| x.@(field.Name).Contains(input.Keywords)
             }else{
-                @:x.@(field.Name).Contains(condition.Keywords)
+                @:x.@(field.Name).Contains(input.Keywords)
             }
     idx++; 
 }
@@ -67,13 +67,13 @@ namespace @(Model.Model.ApplicationNamespace)
 
 @foreach (var field in Model.Model.ConditionRangeFields)
 {
-            @:query = query.WhereIf(condition.@(field.ConditionRangeMin).HasValue,x=> x.@(field.Name) >= condition.@(field.ConditionRangeMin).Value );
-            @:query = query.WhereIf(condition.@(field.ConditionRangeMax).HasValue,x=> x.@(field.Name) < condition.@(field.ConditionRangeMax).Value );
+            @:q = q.WhereIf(input.@(field.ConditionRangeMin).HasValue,x=> x.@(field.Name) >= input.@(field.ConditionRangeMin).Value );
+            @:q = q.WhereIf(input.@(field.ConditionRangeMax).HasValue,x=> x.@(field.Name) < input.@(field.ConditionRangeMax).Value );
 }
 
 @foreach (var field in Model.Model.ConditionNormalFields)
 {
-            @:query = query.WhereIf(condition.@(field.Name).HasValue,x=> x.@(field.Name) == condition.@(field.Name).Value );
+            @:q = q.WhereIf(input.@(field.Name).HasValue,x=> x.@(field.Name) == input.@(field.Name).Value );
 }
             return q;
         }

@@ -10,7 +10,7 @@
     {
       "Name": "Id", //字段名
       "DisplayName": "编号", //显示名称
-      "CSharpType": "long", //c#类型的字符串形式
+      "CSharpType": "Guid", //c#类型的字符串形式
       "IsPrimary": true, //是否是主键
       "DefaultValue": null, //默认值
       "IsRequired": true, //是否是必填字段

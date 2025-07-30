@@ -1,4 +1,4 @@
-@using CodeGenerator
+﻿@using CodeGenerator
 @using RazorLight
 @using BXJG.Common;
 @using BXJG.Common.Extensions;
@@ -33,7 +33,7 @@ namespace @Model.Model.CoreNamespace
         @:/// <summary>
         @:/// @field.DisplayName
         @:///</summary>
-        @:public @field.CSharpTypeNullable @field.Name { get; set; }
+        @:public @field.CSharpTypeNullable @field.Name { get; set; }@(field.DefaultValue.IsNotNullOrWhiteSpaceBXJG()?$" = { field.DefaultValue?.ToLower() };":string.Empty)
 }
         public void Initialize() { }
     }

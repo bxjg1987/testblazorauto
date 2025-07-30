@@ -41,6 +41,9 @@
     <None Update="Projects\DCHB\Shop.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Projects\DCHB\TableArea.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Projects\FYJ.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
