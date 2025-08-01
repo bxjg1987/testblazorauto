@@ -1,39 +1,40 @@
-﻿using Abp.Modules;
-using Abp.Reflection.Extensions;
-using Abp.Timing;
-using Abp;
-using BXJG.Utils.Localization;
-using BXJG.Utils.Enums;
-using Abp.Threading.BackgroundWorkers;
-using BXJG.Utils.Files;
-using Abp.Dependency;
-using BXJG.Utils.DynamicProperty;
+﻿using Abp;
 using Abp.AutoMapper;
-using System.Reflection;
+using Abp.Configuration.Startup;
+using Abp.Dependency;
 using Abp.Domain.Entities;
-using System.Collections.Generic;
-using AutoMapper;
-
-using System.Linq;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Abp.Domain.Uow;
-using System;
-using Abp.Threading;
-using System.Threading.Tasks;
-using BXJG.Utils.GeneralTree;
-using Microsoft.Extensions.DependencyInjection;
-using BXJG.Common.Contracts;
-using BXJG.Utils.Settings;
-using BXJG.Utils.Extensions;
-using BXJG.Common;
-using BXJG.Utils.Share;
-using Castle.MicroKernel.Registration;
-using Castle.MicroKernel;
-using Castle.MicroKernel.Resolvers;
+using Abp.Modules;
 using Abp.RealTime;
-using Microsoft.AspNetCore.SignalR;
+using Abp.Reflection.Extensions;
+using Abp.Runtime.Session;
+using Abp.Threading;
+using Abp.Threading.BackgroundWorkers;
+using Abp.Timing;
+using AutoMapper;
+using BXJG.Common;
+using BXJG.Common.Contracts;
 using BXJG.Utils.DI;
+using BXJG.Utils.DynamicProperty;
+using BXJG.Utils.Enums;
+using BXJG.Utils.Extensions;
+using BXJG.Utils.Files;
+using BXJG.Utils.GeneralTree;
 using BXJG.Utils.Interceptor;
+using BXJG.Utils.Localization;
+using BXJG.Utils.Settings;
+using BXJG.Utils.Share;
+using Castle.MicroKernel;
+using Castle.MicroKernel.Registration;
+using Castle.MicroKernel.Resolvers;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 
 namespace BXJG.Utils
 {
@@ -45,7 +46,7 @@ namespace BXJG.Utils
     {
         public override void PreInitialize()
         {
-
+            Configuration.ReplaceService<IAbpSession, AbpSessionWithHttpContext>();
             DataFilterInterceptor.Initialize(IocManager);
             IocManager.Register<BXJGUtilsModuleConfig>();
             //Configuration.Modules.BXJGUtils().AddEnum(typeof(Gender), "gender", UtilsConsts.LocalizationSourceName);

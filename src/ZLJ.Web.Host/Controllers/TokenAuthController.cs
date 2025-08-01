@@ -25,6 +25,7 @@ using ZLJ.Web.Core.Authentication.External;
 using ZLJ.Web.Core.Authentication.JwtBearer;
 using ZLJ.Core;
 using Lazy.Captcha.Core;
+using ZLJ.Core.Share;
 
 namespace ZLJ.Controllers
 {

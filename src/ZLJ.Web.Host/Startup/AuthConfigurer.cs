@@ -18,6 +18,7 @@ using Microsoft.Net.Http.Headers;
 using ZLJ.Core;
 using log4net.Core;
 using ZLJ.Core.Identity;
+using ZLJ.Core.Share;
 //using ZLJ.Core.Authentication.WeChatMiniProgram;
 
 namespace ZLJ.Web.Host.Startup

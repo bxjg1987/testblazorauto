@@ -19,6 +19,7 @@ using ZLJ.Core.Web;
 using ZLJ.Core.Share.Enums;
 using Abp.Runtime.Security;
 using ZLJ.Notification;
+using ZLJ.Core.Share;
 
 namespace ZLJ.Core
 {

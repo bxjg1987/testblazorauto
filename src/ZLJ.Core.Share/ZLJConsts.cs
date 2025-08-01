@@ -3,7 +3,12 @@
     public class ZLJConsts
     {
         public const string LocalizationSourceName = "ZLJ";
-
+        public const string ConnectionStringName = "Default";
+        public const string DefaultPassPhrase = "gsKxGZ112HLL3MI5";
+        #region 员工
+        public const string StaffId = "staffId";
+        public const string StaffRoleName = "staff";
+        #endregion
         //public const string ConnectionStringName = "Default";
 
         public const bool MultiTenancyEnabled = true;

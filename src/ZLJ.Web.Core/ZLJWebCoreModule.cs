@@ -86,7 +86,7 @@ namespace ZLJ.Web.Core
             abpProjectNameEntityFrameworkModule.SkipDbSeed=true;
 
             Configuration.DefaultNameOrConnectionString = _appConfiguration.GetConnectionString(
-                ZLJ.Core.ZLJConsts.ConnectionStringName
+                ZLJ.Core.Share.ZLJConsts.ConnectionStringName
             );
 
             // Use database for language management

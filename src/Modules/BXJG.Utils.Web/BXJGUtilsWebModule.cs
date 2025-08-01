@@ -32,7 +32,7 @@ namespace BXJG.Utils.Web
         public override void PreInitialize()
         {
             base.PreInitialize();
-            Configuration.ReplaceService<IAbpSession, AbpSessionWithHttpContext>();
+  
         }
         public override void Initialize()
         {

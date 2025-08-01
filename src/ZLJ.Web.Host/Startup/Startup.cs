@@ -53,7 +53,7 @@ namespace ZLJ.Web.Host.Startup
 
         public void ConfigureServices(IServiceCollection services)
         {
-            string defaultConnectionString = _appConfiguration.GetConnectionString(ZLJ.Core.ZLJConsts.ConnectionStringName)!;
+            string defaultConnectionString = _appConfiguration.GetConnectionString(ZLJ.Core.Share.ZLJConsts.ConnectionStringName)!;
             //services.AddLettuceEncrypt();
             //MVC
             var mvcBuilder = services.AddControllersWithViews(

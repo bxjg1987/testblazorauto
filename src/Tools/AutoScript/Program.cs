@@ -96,6 +96,10 @@ void FabuSuoyouGonggongBao()
     FabuXindeBXJGUtilsApplication();
     FabuXindeBXJGUtilsRCL();
     FabuXindeBXJGUtilsWeb();
+
+    FabuWeChat();
+    FabuWeChatWeb();
+    FabuWeChatBXJG();
 }
 //打包BXJG.Utils.Web
 void FabuXindeBXJGUtilsWeb()

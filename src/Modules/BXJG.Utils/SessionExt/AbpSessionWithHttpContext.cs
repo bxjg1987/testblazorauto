@@ -13,12 +13,12 @@ namespace Abp.Runtime.Session
 {
     public class AbpSessionWithHttpContext : ClaimsAbpSession
     {
-        protected internal readonly IHttpContextAccessor httpContextAccessor;
+        protected internal readonly BXJG.Common.Session.ISession httpContextAccessor;
         public AbpSessionWithHttpContext(IPrincipalAccessor principalAccessor,
             IMultiTenancyConfig multiTenancy,
             ITenantResolver tenantResolver,
             IAmbientScopeProvider<SessionOverride> sessionOverrideScopeProvider,
-            IHttpContextAccessor httpContextAccessor) : base(principalAccessor, multiTenancy, tenantResolver, sessionOverrideScopeProvider)
+            BXJG.Common.Session.ISession httpContextAccessor) : base(principalAccessor, multiTenancy, tenantResolver, sessionOverrideScopeProvider)
         {
             this.httpContextAccessor = httpContextAccessor;
         }

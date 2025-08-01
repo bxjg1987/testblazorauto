@@ -16,7 +16,7 @@ namespace ZLJ.EntityFrameworkCore
             var builder = new DbContextOptionsBuilder<ZLJDbContext>();
             var configuration = AppConfigurations.Get(WebContentDirectoryFinder.CalculateContentRootFolder());
 
-            ZLJDbContextConfigurer.Configure(builder, configuration.GetConnectionString(ZLJ.Core.ZLJConsts.ConnectionStringName));
+            ZLJDbContextConfigurer.Configure(builder, configuration.GetConnectionString(ZLJ.Core.Share.ZLJConsts.ConnectionStringName));
 
             return new ZLJDbContext(builder.Options);
         }

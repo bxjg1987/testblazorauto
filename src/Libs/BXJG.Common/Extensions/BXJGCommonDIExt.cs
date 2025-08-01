@@ -1,6 +1,7 @@
 ﻿using BXJG.Common.Contracts;
 using BXJG.Common.Events;
 using BXJG.Common.Http;
+using BXJG.Common.Session;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
@@ -29,6 +30,8 @@ namespace Microsoft.Extensions.DependencyInjection
            // services.TryAddScoped<nxhhrq>();
             //只想使用common，不需要token处理
             services.TryAddTransient<IAccessTokenProvider, NullAccessTokenProvider>();
+
+            services.AddScoped<ISession, Session>();
 
             return services;
         }

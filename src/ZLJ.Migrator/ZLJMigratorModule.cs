@@ -1,4 +1,4 @@
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Castle.MicroKernel.Registration;
 using Abp.Events.Bus;
 using Abp.Modules;
@@ -26,7 +26,7 @@ namespace ZLJ.Migrator
         public override void PreInitialize()
         {
             Configuration.DefaultNameOrConnectionString = _appConfiguration.GetConnectionString(
-                ZLJ.Core.ZLJConsts.ConnectionStringName
+                ZLJ.Core.Share.ZLJConsts.ConnectionStringName
             );
 
             Configuration.BackgroundJobs.IsJobExecutionEnabled = false;

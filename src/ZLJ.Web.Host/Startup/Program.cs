@@ -25,7 +25,7 @@ namespace ZLJ.Web.Host.Startup
                       //var cfg = new ConfigurationManager();
                       //typeof(Program).GetAssembly().GetDirectoryPathOrNull() 这个是从ZLJ.Migration参考
                       var _appConfiguration = ctx.HostingEnvironment.GetAppConfiguration();// AppConfigurations.Get(typeof(Program).GetAssembly().GetDirectoryPathOrNull());
-                      string defaultConnectionString = _appConfiguration.GetConnectionString(ZLJ.Core.ZLJConsts.ConnectionStringName)!;
+                      string defaultConnectionString = _appConfiguration.GetConnectionString(ZLJ.Core.Share.ZLJConsts.ConnectionStringName)!;
                       var efbuilder = new DbContextOptionsBuilder<ZLJDbContext>();
                       ZLJDbContextConfigurer.Configure(efbuilder, defaultConnectionString);
 

@@ -34,6 +34,10 @@ namespace CodeGenerator
         /// </summary>
         public string DisplayName { get; set; }
         /// <summary>
+        /// 字段说明，可用于ui字段说明或水印
+        /// </summary>
+        public string Description { get; set; }
+        /// <summary>
         /// 界面上显示的宽度
         /// 不同ui库要的单位不同
         /// </summary>

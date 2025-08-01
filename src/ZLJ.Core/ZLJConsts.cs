@@ -4,7 +4,6 @@
     {
         //public const string LocalizationSourceName = "ZLJ";
 
-        public const string ConnectionStringName = "Default";
 
         //public const bool MultiTenancyEnabled = true;
         //public const int ExtensionDataMaxLength = 4000;
@@ -15,7 +14,7 @@
         /// <summary>
         /// Default pass phrase for SimpleStringCipher decrypt/encrypt operations
         /// </summary>
-        public const string DefaultPassPhrase = "gsKxGZ112HLL3MI5";
+
 
         //#region 基础资料
 
@@ -60,11 +59,7 @@
         ////--codegenerator.BaseInfo==
 
         //#endregion
-
-        #region 员工
-        public const string StaffId = "staffId";
-        public const string StaffRoleName = "staff";
-        #endregion
+        
        // #endregion
 
 
