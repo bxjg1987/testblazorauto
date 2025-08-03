@@ -20,7 +20,7 @@ namespace BXJG.WeChat.MiniProgram
             {
                 c.BaseAddress = new Uri(Const.HttpClientBaseAddress);
             });
-            services.AddTransient<MiniProgramApiService>();
+            //services.AddTransient<MiniProgramApiService>();
             return services;
         }
         //目前没有服务需要注册

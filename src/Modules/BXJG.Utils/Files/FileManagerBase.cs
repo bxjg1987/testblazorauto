@@ -50,7 +50,7 @@ namespace BXJG.Utils.Files
         public string AbsoluteToRelativePath(string path)
         {
             if (path.StartsWith(_uploadDir))
-                return path.Substring(_uploadDir.Length + 1);
+                return path.Substring(_uploadDir.Length);
             return path;
         }
 
