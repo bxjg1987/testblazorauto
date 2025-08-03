@@ -363,7 +363,7 @@ namespace ZLJ.Web.Host.Startup
             //});
 
             app.UseRouting();
-            app.UseRateLimiter();
+
             //app.Use(async (HttpContext a, Func<Task> b) =>
             //{
             //    //  var sdfsdf = app.ApplicationServices.GetRequiredService<IAuthorizationMiddlewareResultHandler>();
@@ -392,7 +392,7 @@ namespace ZLJ.Web.Host.Startup
             //若存在IAuthenticationRequestHandler，则执行它并放弃其它的身份验证
             //否则使用默认身份验证方案
             app.UseAuthentication();
-
+            app.UseRateLimiter();
             ////身份验证会走默认的jwt身份验证方案，它使httpcontext.user不为空，但里面没有claim，所以这里需要替换下
             ////参考：https://github.com/dotnet/aspnetcore/blob/b034a7da67b5f81161e82b19b3ade458139f9c2b/src/Security/Authentication/Core/src/AuthAppBuilderExtensions.cs
             ////https://github.com/dotnet/aspnetcore/blob/c85baf8db0c72ae8e68643029d514b2e737c9fae/src/Security/Authentication/Core/src/AuthenticationMiddleware.cs

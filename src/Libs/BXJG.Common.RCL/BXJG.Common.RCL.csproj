@@ -3,7 +3,7 @@
 		<TargetFramework>net9</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<VersionPrefix>1.3.79</VersionPrefix>
+		<VersionPrefix>1.3.80</VersionPrefix>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
