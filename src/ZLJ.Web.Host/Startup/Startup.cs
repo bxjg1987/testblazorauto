@@ -363,7 +363,7 @@ namespace ZLJ.Web.Host.Startup
             //});
 
             app.UseRouting();
-
+            app.UseRateLimiter();
             //app.Use(async (HttpContext a, Func<Task> b) =>
             //{
             //    //  var sdfsdf = app.ApplicationServices.GetRequiredService<IAuthorizationMiddlewareResultHandler>();

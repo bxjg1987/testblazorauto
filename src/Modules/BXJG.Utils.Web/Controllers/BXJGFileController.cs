@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Abp.Application.Services.Dto;
+﻿using Abp.Application.Services.Dto;
 using Abp.AspNetCore.Mvc.Controllers;
 using Abp.Auditing;
 using Abp.Authorization;
@@ -16,9 +11,15 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BXJG.Utils.Web.Controllers
 {
@@ -57,7 +58,7 @@ namespace BXJG.Utils.Web.Controllers
         /// <param name="file"></param>
         /// <returns></returns>
         [HttpPost]
-        [AbpAuthorize]
+        [EnableRateLimiting("upload_file")]
         public async Task<FileDto> UploadAsync(IFormFile file)
         {
             // var rts = new List<FileUploadResult>();
@@ -67,7 +68,7 @@ namespace BXJG.Utils.Web.Controllers
             var r = await tempFileManager.Value.UploadToTemp(fs);
 
             return new FileDto { Name = file.FileName, Path = r };
-            //   return ObjectMapper.Map<List<FileDto>>(r);
+            //return ObjectMapper.Map<List<FileDto>>(r);
             //return r.Select(c => new FileDto
             //{
             //    FilePath = c.FileRelativePath,

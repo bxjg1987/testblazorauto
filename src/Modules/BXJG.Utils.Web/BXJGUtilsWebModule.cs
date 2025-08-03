@@ -16,13 +16,18 @@ using BXJG.Utils.Share;
 using Castle.MicroKernel.Registration;
 //using Castle.Windsor.MsDependencyInjection;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Reflection;
+using System.Threading.RateLimiting;
 
 namespace BXJG.Utils.Web
 {
@@ -40,6 +45,35 @@ namespace BXJG.Utils.Web
             IocManager.RegService(services =>
             {
                 services.AddBXJGCommonWeb();
+
+                //匿名上传文件的限流
+                services.AddRateLimiter(options =>
+                {
+                   
+                    options.AddPolicy<string>("upload_file", ctx => {
+
+                        var session = ctx.RequestServices.GetRequiredService<IAbpSession>();
+
+
+                        return RateLimitPartition.GetFixedWindowLimiter(
+                            partitionKey: ctx.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+                           
+                            factory: partition => new FixedWindowRateLimiterOptions
+                            {
+                                //AutoReplenishment = true,//默认为true
+                                //这里的50也可以考虑放setting中
+                                PermitLimit =session.UserId.HasValue?int.MaxValue: 50,//50个请求
+                                //QueueLimit = 0,//禁用排队机制
+                                Window = TimeSpan.FromMinutes(1) //1分钟内
+                            });
+                    });
+
+                 
+                });
+
+
+
+
                 //services.AddAuthorization(c => { 
                 //    c.AddPolicy
                 //});
@@ -48,8 +82,8 @@ namespace BXJG.Utils.Web
                 //});
                 //本来想在这里将权限作为授权策略（它很轻量）注册，后来缓存AbpAuthorizationPolicyProvider的方式，运行时创建策略了
                 //services.AddSingleton<IEnv, AspNetEnv>();//.AddBXJGCommonWeb(); //core已经注册内部的服务了
-                                                         //使用iocmanager替换无效
-                                                         //  services.Replace(new ServiceDescriptor(typeof(IAuthorizationPolicyProvider),typeof(AbpAuthorizationPolicyProvider), ServiceLifetime.Singleton));
+                //使用iocmanager替换无效
+                //  services.Replace(new ServiceDescriptor(typeof(IAuthorizationPolicyProvider),typeof(AbpAuthorizationPolicyProvider), ServiceLifetime.Singleton));
             });
             //  IocManager.Register<IAuthorizationHandler, AbpAuthorizationHandler>();
             //var services = new ServiceCollection();
