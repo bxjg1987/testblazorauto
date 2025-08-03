@@ -47,14 +47,25 @@
 	  <PackageReference Include="Rougamo.Fody" Version="5.0.1" PrivateAssets="contentfiles;analyzers" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(SolutionName)' != 'ZLJWithModules'">
+
+
+	<!-- 如果 $(SolutionName) 不包含 WithModules -->
+	<ItemGroup Condition="!$(SolutionName.Contains('WithModules'))">
 		<PackageReference Include="BXJG.Common.RCL" Version="*" />
 		<PackageReference Include="BXJG.Utils.RCL" Version="*" />
 		<PackageReference Include="BXJG.Utils.Application.ClientProxy" Version="*" />
 	</ItemGroup>
-	<ItemGroup Condition="'$(SolutionName)' == 'ZLJWithModules'">
-		<ProjectReference Include="..\Modules\BXJG.Utils.RCL\BXJG.Utils.RCL.csproj" />
+
+	<!-- 如果 $(SolutionName) 包含 WithModules -->
+	<ItemGroup Condition="$(SolutionName.Contains('WithModules'))">
+		<ProjectReference Include="d:\abp\src\Modules\BXJG.Utils.Application.ClientProxy\BXJG.Utils.Application.ClientProxy.csproj" />
+		<ProjectReference Include="d:\abp\src\Modules\BXJG.Utils.RCL\BXJG.Utils.RCL.csproj" />
+		<ProjectReference Include="d:\abp\src\Libs\BXJG.Common.RCL\BXJG.Common.RCL.csproj" />
 	</ItemGroup>
+	
+	
+	
+	
 	<ItemGroup>
 	
 	  <ProjectReference Include="..\ZLJ.Application.Common.ClientProxy\ZLJ.Application.Common.ClientProxy.csproj" />

@@ -26,16 +26,21 @@
 		<Compile Remove="EntityFrameworkCore\Seed\WorkOrderBuilder.cs" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(SolutionName)' != 'ZLJWithModules'">
-		<!--虽然ef引用utils引用common，但有时候需要单独更新common或utils，所以这里还是要单独引用，不过core层引进引用了-->
-		<!--<PackageReference Include="BXJG.Utils" Version="*" />
-		<PackageReference Include="BXJG.Common" Version="*" />-->
+	
+
+	<!-- 如果 $(SolutionName) 不包含 WithModules -->
+	<ItemGroup Condition="!$(SolutionName.Contains('WithModules'))">
 		<PackageReference Include="BXJG.Common.EFCore" Version="*" />
 		<PackageReference Include="BXJG.Utils.EFCore" Version="*" />
 	</ItemGroup>
-	<ItemGroup Condition="'$(SolutionName)' == 'ZLJWithModules'">
-		<ProjectReference Include="..\Modules\BXJG.Utils.EFCore\BXJG.Utils.EFCore.csproj" />
+
+	<!-- 如果 $(SolutionName) 包含 WithModules -->
+	<ItemGroup Condition="$(SolutionName.Contains('WithModules'))">
+		<ProjectReference Include="d:\abp\src\Modules\BXJG.Utils.EFCore\BXJG.Utils.EFCore.csproj" />
+		<ProjectReference Include="d:\abp\src\Libs\BXJG.Common.EFCore\BXJG.Common.EFCore.csproj" />
 	</ItemGroup>
+	
+	
 	
 	
 	<ItemGroup>

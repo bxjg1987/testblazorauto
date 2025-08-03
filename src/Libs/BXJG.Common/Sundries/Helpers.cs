@@ -30,5 +30,70 @@ namespace BXJG.Common.Sundries
         {
             return RuntimeInformation.IsOSPlatform(OSPlatformBrower);
         }
+
+
+
+        /// <summary>
+        /// 为URL添加单个查询参数
+        /// </summary>
+        /// <param name="url">原始URL</param>
+        /// <param name="key">参数名</param>
+        /// <param name="value">参数值</param>
+        /// <returns>添加参数后的URL</returns>
+        public static string AddQueryString(string url, string key, string value)
+        {
+            if (string.IsNullOrEmpty(url) || string.IsNullOrEmpty(key))
+                return url;
+
+            // 检查是否已经有查询字符串
+            var separator = url.Contains('?') ? "&" : "?";
+
+            // 对键值进行URL编码
+            var encodedKey = Uri.EscapeDataString(key);
+            var encodedValue = value != null ? Uri.EscapeDataString(value) : string.Empty;
+
+            return $"{url}{separator}{encodedKey}={encodedValue}";
+        }
+
+        /// <summary>
+        /// 为URL添加多个查询参数
+        /// </summary>
+        /// <param name="url">原始URL</param>
+        /// <param name="parameters">参数字典</param>
+        /// <returns>添加参数后的URL</returns>
+        public static string AddQueryString(string url, IDictionary<string, string> parameters)
+        {
+            if (parameters == null || parameters.Count == 0)
+                return url;
+
+            var result = url;
+            foreach (var param in parameters)
+            {
+                result = AddQueryString(result, param.Key, param.Value);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// 为URL添加多个查询参数（可变参数形式）
+        /// </summary>
+        /// <param name="url">原始URL</param>
+        /// <param name="parameters">参数键值对</param>
+        /// <returns>添加参数后的URL</returns>
+        public static string AddQueryString(string url, params KeyValuePair<string,string>[] parameters)
+        {
+            if (parameters == null || parameters.Length == 0)
+                return url;
+
+            var result = url;
+            foreach (var (key, value) in parameters)
+            {
+                result = AddQueryString(result, key, value);
+            }
+
+            return result;
+        }
+
     }
 }

@@ -128,14 +128,22 @@
 		</None>
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(SolutionName)' != 'ZLJWithModules'">
+
+
+	<!-- 如果 $(SolutionName) 不包含 WithModules -->
+	<ItemGroup Condition="!$(SolutionName.Contains('WithModules'))">
 		<PackageReference Include="BXJG.WeChat.Web" Version="*" />
 		<PackageReference Include="BXJG.WeChat.Abp" Version="*" />
 	</ItemGroup>
-	<ItemGroup Condition="'$(SolutionName)' == 'ZLJWithModules'">
-		<ProjectReference Include="..\Libs\BXJG.WeChat.Web\BXJG.WeChat.Web.csproj" />
-		<ProjectReference Include="..\Modules\BXJG.WeChat.Abp\BXJG.WeChat.Abp.csproj" />
+
+	<!-- 如果 $(SolutionName) 包含 WithModules -->
+	<ItemGroup Condition="$(SolutionName.Contains('WithModules'))">
+		<ProjectReference Include="d:\abp\src\Modules\BXJG.WeChat.Abp\BXJG.WeChat.Abp.csproj" />
+		<ProjectReference Include="d:\abp\src\Libs\BXJG.WeChat.Web\BXJG.WeChat.Web.csproj" />
 	</ItemGroup>
+
+
+
 	<ItemGroup>
 		<!--<ProjectReference Include="..\..\..\abp\src\Libs\BXJG.Common.Web\BXJG.Common.Web.csproj" />
 		<ProjectReference Include="..\..\..\abp\src\Modules\BXJG.Utils.Web\BXJG.Utils.Web.csproj" />-->

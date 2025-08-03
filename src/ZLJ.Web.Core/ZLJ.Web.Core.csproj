@@ -48,16 +48,19 @@
 		<Compile Remove="ZLJWMSNavigationProvider.cs" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(SolutionName)' != 'ZLJWithModules'">
+	
 
+	<!-- 如果 $(SolutionName) 不包含 WithModules -->
+	<ItemGroup Condition="!$(SolutionName.Contains('WithModules'))">
 		<PackageReference Include="BXJG.Common.Web" Version="*" />
 		<PackageReference Include="BXJG.Utils.Web" Version="*" />
 	</ItemGroup>
-	<ItemGroup Condition="'$(SolutionName)' == 'ZLJWithModules'">
-		<ProjectReference Include="..\modules\BXJG.Utils.Web\BXJG.Utils.Web.csproj" />
+
+	<!-- 如果 $(SolutionName) 包含 WithModules -->
+	<ItemGroup Condition="$(SolutionName.Contains('WithModules'))">
+		<ProjectReference Include="d:\abp\src\Modules\BXJG.Utils.Web\BXJG.Utils.Web.csproj" />
+		<ProjectReference Include="d:\abp\src\Libs\BXJG.Common.Web\BXJG.Common.Web.csproj" />
 	</ItemGroup>
-
-
 
 
 	<ItemGroup>

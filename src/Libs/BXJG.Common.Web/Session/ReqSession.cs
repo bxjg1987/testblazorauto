@@ -20,7 +20,7 @@ namespace BXJG.Common.Web.Session
         public object Get(string key)
         {
             var r = httpContextAccessor.HttpContext.Request.GetFromQueryStringOrHeaderOrCookie(key);
-            if (r.IsNullOrWhiteSpaceBXJG())
+            if (r.IsNullOrWhiteSpaceBXJG()&& httpContextAccessor.HttpContext.Session != null)
                 r = httpContextAccessor.HttpContext.Session?.GetString(key);
             return r;
         }

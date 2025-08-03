@@ -5,33 +5,33 @@ VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{D42FF479-F331-48F6-AAA2-45B9FD451892}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Utils", "src\modules\BXJG.Utils\BXJG.Utils.csproj", "{AF224A98-5C8A-4EDA-8341-B704B46D4B3E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Utils", "d:\abp\src\modules\BXJG.Utils\BXJG.Utils.csproj", "{AF224A98-5C8A-4EDA-8341-B704B46D4B3E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{04E5EC1B-C5AD-473B-A833-DC9C2CB4627E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.WeChat", "src\libs\BXJG.Wechat\BXJG.WeChat.csproj", "{0135FD4A-1407-48DB-8825-572338DD9902}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.WeChat", "d:\abp\src\libs\BXJG.Wechat\BXJG.WeChat.csproj", "{0135FD4A-1407-48DB-8825-572338DD9902}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Common", "src\libs\BXJG.Common\BXJG.Common.csproj", "{79F31531-CFFC-4D6C-B409-5DD4EB830283}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Common", "d:\abp\src\libs\BXJG.Common\BXJG.Common.csproj", "{79F31531-CFFC-4D6C-B409-5DD4EB830283}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libs", "Libs", "{40F12CA4-F153-4F4E-AB26-E044EF0D0F7E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.WeChat.Abp", "src\Modules\BXJG.WeChat.Abp\BXJG.WeChat.Abp.csproj", "{8F980AC0-C0DA-45E6-88BC-4235AA6AC9C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.WeChat.Abp", "d:\abp\src\Modules\BXJG.WeChat.Abp\BXJG.WeChat.Abp.csproj", "{8F980AC0-C0DA-45E6-88BC-4235AA6AC9C1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Common.Web", "src\libs\BXJG.Common.Web\BXJG.Common.Web.csproj", "{FAC74AD9-FB47-4429-A697-56CA6513E8B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Common.Web", "d:\abp\src\libs\BXJG.Common.Web\BXJG.Common.Web.csproj", "{FAC74AD9-FB47-4429-A697-56CA6513E8B1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Utils.Web", "src\modules\BXJG.Utils.Web\BXJG.Utils.Web.csproj", "{B4D49ADD-F501-4AD6-81F3-EA4AAE6EF131}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Utils.Web", "d:\abp\src\modules\BXJG.Utils.Web\BXJG.Utils.Web.csproj", "{B4D49ADD-F501-4AD6-81F3-EA4AAE6EF131}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.WeChat.Web", "src\libs\BXJG.WeChat.Web\BXJG.WeChat.Web.csproj", "{C9671324-D11F-40A9-839C-C20AF2E16F31}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.WeChat.Web", "d:\abp\src\libs\BXJG.WeChat.Web\BXJG.WeChat.Web.csproj", "{C9671324-D11F-40A9-839C-C20AF2E16F31}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Utils.Application", "src\Modules\BXJG.Utils.Application\BXJG.Utils.Application.csproj", "{439F1981-7D51-41A4-9CC6-CC2538D6CA3C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Utils.Application", "d:\abp\src\Modules\BXJG.Utils.Application\BXJG.Utils.Application.csproj", "{439F1981-7D51-41A4-9CC6-CC2538D6CA3C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Utils.EFCore", "src\modules\BXJG.Utils.EFCore\BXJG.Utils.EFCore.csproj", "{1F1D6713-C18D-4449-83EC-BE1E0ACDE65C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Utils.EFCore", "d:\abp\src\modules\BXJG.Utils.EFCore\BXJG.Utils.EFCore.csproj", "{1F1D6713-C18D-4449-83EC-BE1E0ACDE65C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Common.EFCore", "src\Libs\BXJG.Common.EFCore\BXJG.Common.EFCore.csproj", "{0C173217-4172-4456-878A-EEC51DBE9665}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Common.EFCore", "d:\abp\src\Libs\BXJG.Common.EFCore\BXJG.Common.EFCore.csproj", "{0C173217-4172-4456-878A-EEC51DBE9665}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Utils.RCL", "src\Modules\BXJG.Utils.RCL\BXJG.Utils.RCL.csproj", "{C8A34E86-E367-492C-A498-426A0C4E412B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Utils.RCL", "d:\abp\src\Modules\BXJG.Utils.RCL\BXJG.Utils.RCL.csproj", "{C8A34E86-E367-492C-A498-426A0C4E412B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Common.RCL", "src\Libs\BXJG.Common.RCL\BXJG.Common.RCL.csproj", "{91B2730C-1C30-4251-98A7-5CF28C86F0FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Common.RCL", "d:\abp\src\Libs\BXJG.Common.RCL\BXJG.Common.RCL.csproj", "{91B2730C-1C30-4251-98A7-5CF28C86F0FF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZLJ.Application", "src\ZLJ.Application\ZLJ.Application.csproj", "{61823472-ABD6-4482-9105-955DD4EF447F}"
 EndProject
@@ -107,9 +107,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZLJ.Admin.CoreRCL", "src\ZL
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZLJ.Admin.ClientProxy", "src\ZLJ.Admin.ClientProxy\ZLJ.Admin.ClientProxy.csproj", "{FAECA5E3-8F86-4D07-95F8-D83BE503F84C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Utils.Application.Share", "src\Modules\BXJG.Utils.Application.Share\BXJG.Utils.Application.Share.csproj", "{E9F6E2B0-E4F4-47ED-8A2A-1456136D88F9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Utils.Application.Share", "d:\abp\src\Modules\BXJG.Utils.Application.Share\BXJG.Utils.Application.Share.csproj", "{E9F6E2B0-E4F4-47ED-8A2A-1456136D88F9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Utils.Share", "src\Modules\BXJG.Utils.Share\BXJG.Utils.Share.csproj", "{9E256A2F-6F76-469C-8387-7C5A35274B55}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Utils.Share", "d:\abp\src\Modules\BXJG.Utils.Share\BXJG.Utils.Share.csproj", "{9E256A2F-6F76-469C-8387-7C5A35274B55}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZLJ.Core.Share", "src\ZLJ.Core.Share\ZLJ.Core.Share.csproj", "{8D8D1FAD-A35D-4793-A325-30EBE380FE06}"
 EndProject
@@ -121,9 +121,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoScript", "src\Tools\Aut
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZLJ.Web.BlazorAuto", "src\ZLJ.Web.BlazorAuto\ZLJ.Web.BlazorAuto.csproj", "{9A3EB11B-6EA8-44C6-9A80-10B8E0C0E8C0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Utils.Application.ClientProxy", "src\Modules\BXJG.Utils.Application.ClientProxy\BXJG.Utils.Application.ClientProxy.csproj", "{55D9DB14-3ED9-4E5E-B740-3FDBE7F2922F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BXJG.Utils.Application.ClientProxy", "d:\abp\src\Modules\BXJG.Utils.Application.ClientProxy\BXJG.Utils.Application.ClientProxy.csproj", "{55D9DB14-3ED9-4E5E-B740-3FDBE7F2922F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeGenerator", "src\Tools\CodeGenerator\CodeGenerator.csproj", "{B50E2096-3B96-4530-9B88-ADD9EB84306B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeGenerator", "d:\abp\src\Tools\CodeGenerator\CodeGenerator.csproj", "{B50E2096-3B96-4530-9B88-ADD9EB84306B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{8BEB5724-EC87-4563-94CB-60D4D1615E0D}"
 	ProjectSection(SolutionItems) = preProject

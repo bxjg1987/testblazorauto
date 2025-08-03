@@ -3,16 +3,9 @@
 	<PropertyGroup>
 		<TargetFramework>net9.0</TargetFramework>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
-	
+		<LangVersion>latest</LangVersion>	
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-		<LangVersion>default</LangVersion>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<LangVersion>default</LangVersion>
-	</PropertyGroup>
 	<!--<ItemGroup Condition="'$(SolutionName)' != 'ZLJWithModules'">
 		<PackageReference Include="BXJG.WorkOrder.CommonApplication" Version="*" />
 		<PackageReference Include="BXJG.Utils.Application" Version="*" />
@@ -53,20 +46,16 @@
 	<ItemGroup Condition="'$(SolutionName)' == 'ZLJWithModules'">
 		<ProjectReference Include="..\..\..\..\abp\src\Modules\BXJG.Utils.Application\BXJG.Utils.Application.csproj" />
 	</ItemGroup>-->
-	<ItemGroup Condition="'$(SolutionName)' != 'ZLJWithModules'">
 
-		
-		<!--虽然ef引用utils引用common，但有时候需要单独更新common或utils，所以这里还是要单独引用
-		   不过core已经引用了这俩包-->
-		<!--<PackageReference Include="BXJG.Utils" Version="*" />
-		<PackageReference Include="BXJG.Common" Version="*" />-->
-		
+	<!-- 如果 $(SolutionName) 不包含 WithModules -->
+	<ItemGroup Condition="!$(SolutionName.Contains('WithModules'))">
 		<PackageReference Include="BXJG.Utils.Application" Version="*" />
 	</ItemGroup>
-	<ItemGroup Condition="'$(SolutionName)' == 'ZLJWithModules'">
-		<ProjectReference Include="..\Modules\BXJG.Utils.Application\BXJG.Utils.Application.csproj" />
+
+	<!-- 如果 $(SolutionName) 包含 WithModules -->
+	<ItemGroup Condition="$(SolutionName.Contains('WithModules'))">
+		<ProjectReference Include="d:\abp\src\Modules\BXJG.Utils.Application\BXJG.Utils.Application.csproj" />
 	</ItemGroup>
-	
 	<ItemGroup>
 		<!--<PackageReference Include="BXJG.Utils.Application" Version="*" />-->
 		<!--<PackageReference Include="DotNetCore.CAP" Version="7.2.0" />-->

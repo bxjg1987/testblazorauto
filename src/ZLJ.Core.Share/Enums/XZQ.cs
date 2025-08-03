@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ZLJ.Core.Share
 {
-    
+    [Obsolete("AdministrativeLevel")]
     [Flags]
     public enum XZQ
     {

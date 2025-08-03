@@ -10,16 +10,17 @@ namespace BXJG.WeChat.MiniProgram
 {
     public static class Extensions
     {
-        public static HttpClient CreateClientMiniProgram(this IHttpClientFactory httpClientFactory)
-        {
-            return httpClientFactory.CreateClient(Const.HttpClientName);
-        }
+        //public static HttpClient CreateClientMiniProgram(this IHttpClientFactory httpClientFactory)
+        //{
+        //    return httpClientFactory.CreateClient(Const.HttpClientName);
+        //}
         public static IServiceCollection AddWXMiniProgramHttpClient(this IServiceCollection services)
         {
-            services.AddHttpClient(Const.HttpClientName, c =>
+            services.AddHttpClient<MiniProgramApiService>( c =>
             {
                 c.BaseAddress = new Uri(Const.HttpClientBaseAddress);
             });
+            services.AddTransient<MiniProgramApiService>();
             return services;
         }
         //目前没有服务需要注册

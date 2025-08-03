@@ -22,12 +22,14 @@ namespace BXJG.WeChat.Web.MiniProgram
         private readonly Option option;
         private readonly RequestDelegate next;
         private readonly IHttpClientFactory httpClientFactory;
+        private readonly MiniProgramApiService miniProgramApiService;
 
-        public LoginMiddleware(RequestDelegate next, IOptionsMonitor<Option> option, IHttpClientFactory httpClientFactory)
+        public LoginMiddleware(RequestDelegate next, IOptionsMonitor<Option> option, IHttpClientFactory httpClientFactory, MiniProgramApiService miniProgramApiService)
         {
             this.next = next;
             this.httpClientFactory = httpClientFactory;
             this.option = option.CurrentValue;
+            this.miniProgramApiService = miniProgramApiService;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -48,15 +50,7 @@ namespace BXJG.WeChat.Web.MiniProgram
                 var str =await sr.ReadToEndAsync();
                 input = System.Text.Json.JsonSerializer.Deserialize<Input>(str);
             }
-            var requestUrl = QueryHelpers.AddQueryString(Const.OpenIdEndpoint, new Dictionary<string, string>
-            {
-                { "appid", option.AppId },
-                { "secret", option.AppSecret },
-                { "js_code",input.code },
-                { "grant_type", "authorization_code" },
-            });
-            var response = await httpClientFactory.CreateClientMiniProgram().GetStringAsync(requestUrl);
-            var token = System.Text.Json.JsonSerializer.Deserialize<LoginResult>(response);
+            var token = await miniProgramApiService.Code2Session(input.code,context.RequestAborted);
             var handler = context.RequestServices.GetService<ILoginHandler>();
             await handler.LoginAsync(new LoginContext { Context = context, Option = option, Token = token });
         }
