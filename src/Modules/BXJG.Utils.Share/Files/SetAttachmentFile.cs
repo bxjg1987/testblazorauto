@@ -12,7 +12,7 @@ namespace BXJG.Utils.Share.Files
     public class SetAttachmentFile
     {
         /// <summary>
-        /// 文件id（附件id与文件id相同）
+        /// 文件id
         /// </summary>
         public Guid? FileId { get; set; }
         /// <summary>
