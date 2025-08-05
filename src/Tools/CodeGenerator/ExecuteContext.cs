@@ -29,6 +29,10 @@ namespace CodeGenerator
         /// </summary>
         public IServiceProvider Services { get; set; }
         /// <summary>
+        /// 查看按钮图标
+        /// </summary>
+        public string BtnIconGet { get; set; }
+        /// <summary>
         /// 新增按钮图标
         /// </summary>
         public string BtnIconCreate { get; set; }

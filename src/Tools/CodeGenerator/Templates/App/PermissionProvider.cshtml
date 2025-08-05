@@ -1,4 +1,4 @@
-@using CodeGenerator
+﻿@using CodeGenerator
 @using RazorLight
 @using BXJG.Common;
 @using BXJG.Common.Extensions;
@@ -23,18 +23,21 @@ namespace @(Model.App.ApplicationProjectName).Authorization.Permissions
         {
 @if(Model.Model.ParentPermissionName.IsNotNullOrWhiteSpaceBXJG()){<text>
             var parent = context.GetPermissionOrNull("@(Model.Model.ParentPermissionName)");
-            var permission = parent.CreateChildPermission(@(Model.Model.PermissionNameGetConst),
-                                                          L(@(Model.Model.PermissionNameGetConst)),
+            var permission = parent.CreateChildPermission(@(Model.Model.PermissionNameConst),
+                                                          L(@(Model.Model.PermissionNameConst)),
                                                           multiTenancySides: MultiTenancySides.Tenant, 
                                                           properties: new Dictionary<string, object> { { "icon", "@(Model.Model.Icon)" } });
 </text>}
 else{<text>
-            var permission = context.CreatePermission(@(Model.Model.PermissionNameGetConst),
-                                                      L(@(Model.Model.PermissionNameGetConst)),
+            var permission = context.CreatePermission(@(Model.Model.PermissionNameConst),
+                                                      L(@(Model.Model.PermissionNameConst)),
                                                       multiTenancySides: MultiTenancySides.Tenant, 
                                                       properties: new Dictionary<string, object> { { "icon", "@(Model.Model.Icon)" } });
 </text>}
-
+            permission.CreateChildPermission(@(Model.Model.PermissionNameGetConst),
+                                             "查看".UtilsLI(),
+                                             multiTenancySides: MultiTenancySides.Tenant, 
+                                             properties: new Dictionary<string, object> { { "btn", false }, { "icon", "@(Model.BtnIconGet)" } });
             permission.CreateChildPermission(@(Model.Model.PermissionNameCreateConst),
                                              "新增".UtilsLI(),
                                              multiTenancySides: MultiTenancySides.Tenant, 

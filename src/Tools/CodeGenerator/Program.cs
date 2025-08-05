@@ -280,7 +280,7 @@ void CoreEntity(ExecuteContext ctx)
     var file = Path.Combine(ctx.SrcDir, ctx.CoreProjectName, ctx.Model.Name, ctx.Model.EntityName + ".cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
-    File.WriteAllText(file, str);
+    File.WriteAllText(file, str, Encoding.UTF8);
 
 
     Console.WriteLine("生成实体类完成");
@@ -307,7 +307,7 @@ void CoreConsts(ExecuteContext ctx)
 
     //str = old.Replace(ExecuteContext.CodeGeneratorReplace, str);
 
-    File.WriteAllText(file, str);
+    File.WriteAllText(file, str, Encoding.UTF8);
 
 
     Console.WriteLine("生成Consts完成");
@@ -335,7 +335,7 @@ void EFMap(ExecuteContext ctx)
 
     //str = old.Replace(ExecuteContext.CodeGeneratorReplace, str);
 
-    File.WriteAllText(file, str);
+    File.WriteAllText(file, str, Encoding.UTF8);
 
 
     Console.WriteLine("生成ef映射完成");
@@ -374,7 +374,7 @@ void EFMap(ExecuteContext ctx)
 //        old = str + old;
 //    }
 
-//    File.WriteAllText(file, old);
+//    File.WriteAllText(file, old,Encoding.UTF8);
 
 
 //    Console.WriteLine("生成efDbContext映射完成");
@@ -386,7 +386,7 @@ void EFDbContext(ExecuteContext ctx)
     var str = engine.CompileRenderAsync("ef/EFDbContext", ctx).Result;
     var file = Path.Combine(ctx.SrcDir, ctx.EFCoreProjectName, ctx.Model.Name, ctx.Name + "DbContext.cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
-    File.WriteAllText(file, str);
+    File.WriteAllText(file, str, Encoding.UTF8);
     Console.WriteLine("生成efDbContext映射完成");
 }
 void AppCommomDto(ExecuteContext ctx)
@@ -397,7 +397,7 @@ void AppCommomDto(ExecuteContext ctx)
     var file = Path.Combine(ctx.SrcDir, ctx.ApplicationCommonShareProjectName, ctx.Model.Name, ctx.Model.ProviderDtoName + ".cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
-    File.WriteAllText(file, str);
+    File.WriteAllText(file, str, Encoding.UTF8);
 
 
     Console.WriteLine("生成CommomShareDto完成");
@@ -410,7 +410,7 @@ void AppCommomCondition(ExecuteContext ctx)
     var file = Path.Combine(ctx.SrcDir, ctx.ApplicationCommonShareProjectName, ctx.Model.Name, ctx.Model.ProviderCondition + ".cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
-    File.WriteAllText(file, str);
+    File.WriteAllText(file, str, Encoding.UTF8);
 
 
     Console.WriteLine("生成AppCommomCondition完成");
@@ -423,7 +423,7 @@ void AppCommomAppService(ExecuteContext ctx)
     var file = Path.Combine(ctx.SrcDir, ctx.ApplicationCommonProjectName, ctx.Model.Name, ctx.Model.ProviderAppService + ".cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
-    File.WriteAllText(file, str);
+    File.WriteAllText(file, str, Encoding.UTF8);
 
 
     Console.WriteLine("生成AppCommomAppService完成");
@@ -436,7 +436,7 @@ void AppCommomObjMap(ExecuteContext ctx)
     var file = Path.Combine(ctx.SrcDir, ctx.ApplicationCommonProjectName, ctx.Model.Name, "AutoMapperProfile.cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
-    File.WriteAllText(file, str);
+    File.WriteAllText(file, str, Encoding.UTF8);
 
 
     Console.WriteLine("生成AppCommomObjMap完成");
@@ -449,7 +449,7 @@ void AppConsts(ExecuteContext ctx)
     var file = Path.Combine(ctx.SrcDir, ctx.App.ApplicationShareProjectName, ctx.Model.Name, ctx.Model.ApplicationShareConstName + ".cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
-    File.WriteAllText(file, str);
+    File.WriteAllText(file, str, Encoding.UTF8);
 
 
     Console.WriteLine("生成admin应用中，应用服务共享层的常量完成");
@@ -462,7 +462,7 @@ void AppCondition(ExecuteContext ctx)
     var file = Path.Combine(ctx.SrcDir, ctx.App.ApplicationShareProjectName, ctx.Model.Name, ctx.Model.ConditionName + ".cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
-    File.WriteAllText(file, str);
+    File.WriteAllText(file, str, Encoding.UTF8);
 
 
     Console.WriteLine("生成应用共享层中的条件类完成");
@@ -475,7 +475,7 @@ void AppDto(ExecuteContext ctx)
     var file = Path.Combine(ctx.SrcDir, ctx.App.ApplicationShareProjectName, ctx.Model.Name, ctx.Model.DtoName + ".cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
-    File.WriteAllText(file, str);
+    File.WriteAllText(file, str, Encoding.UTF8);
 
 
     Console.WriteLine("生成AppDto完成");
@@ -488,7 +488,7 @@ void AppEditDto(ExecuteContext ctx)
     var file = Path.Combine(ctx.SrcDir, ctx.App.ApplicationShareProjectName, ctx.Model.Name, ctx.Model.EditDtoName + ".cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
-    File.WriteAllText(file, str);
+    File.WriteAllText(file, str, Encoding.UTF8);
 
 
     Console.WriteLine("生成AppEditDto完成");
@@ -501,7 +501,7 @@ void AppCreateDto(ExecuteContext ctx)
     var file = Path.Combine(ctx.SrcDir, ctx.App.ApplicationShareProjectName, ctx.Model.Name, ctx.Model.CreateDtoName + ".cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
-    File.WriteAllText(file, str);
+    File.WriteAllText(file, str, Encoding.UTF8);
 
 
     Console.WriteLine("生成AppCreateDto完成");
@@ -516,7 +516,7 @@ void AppPermissionProvider(ExecuteContext ctx)
     var file = Path.Combine(ctx.SrcDir, ctx.App.ApplicationProjectName, ctx.Model.Name, "PermissionProvider.cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
-    File.WriteAllText(file, str);
+    File.WriteAllText(file, str, Encoding.UTF8);
 
 
     Console.WriteLine("生成AppPermissionProvider完成");
@@ -529,7 +529,7 @@ void AppNavigationProvider(ExecuteContext ctx)
     var file = Path.Combine(ctx.SrcDir, ctx.App.ApplicationProjectName, ctx.Model.Name, "NavigationProvider.cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
-    File.WriteAllText(file, str);
+    File.WriteAllText(file, str, Encoding.UTF8);
 
 
     Console.WriteLine("生成AppNavigationProvider完成");
@@ -539,22 +539,22 @@ void AppLocal(ExecuteContext ctx)
     Console.WriteLine("正在处理应用层本地化...");
 
     //目标文本
-    var mbwb = $"<text name=\"{ctx.Model.PermissionNameGet}\" value=\"{ctx.Model.DisplayName}\" />{Environment.NewLine}<!--codegenerator-->";
+    var mbwb = $"<text name=\"{ctx.Model.PermissionName}\" value=\"{ctx.Model.DisplayName}\" />{Environment.NewLine}<!--codegenerator-->";
     var file = Path.Combine(ctx.SrcDir, ctx.App.ApplicationProjectName, "Localization", "SourceFiles", $"{ctx.App.Name}-zh-Hans.xml");
     var str = File.ReadAllText(file);
     if (!str.Contains(mbwb))
     {
         str = str.Replace("<!--codegenerator-->", mbwb);
-        File.WriteAllText(file, str);
+        File.WriteAllText(file, str, Encoding.UTF8);
     }
 
-    mbwb = $"<text name=\"{ctx.Model.PermissionNameGet}\" value=\"{ctx.Model.Name}\" />{Environment.NewLine}<!--codegenerator-->";
+    mbwb = $"<text name=\"{ctx.Model.PermissionName}\" value=\"{ctx.Model.Name}\" />{Environment.NewLine}<!--codegenerator-->";
     file = Path.Combine(ctx.SrcDir, ctx.App.ApplicationProjectName, "Localization", "SourceFiles", $"{ctx.App.Name}-en.xml");
     str = File.ReadAllText(file);
     if (!str.Contains(mbwb))
     {
         str = str.Replace("<!--codegenerator-->", mbwb);
-        File.WriteAllText(file, str);
+        File.WriteAllText(file, str, Encoding.UTF8);
     }
 
     Console.WriteLine("处理应用层本地化完成");
@@ -567,7 +567,7 @@ void AppObjMap(ExecuteContext ctx)
     var file = Path.Combine(ctx.SrcDir, ctx.App.ApplicationProjectName, ctx.Model.Name, "AutoMapperProfile.cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
-    File.WriteAllText(file, str);
+    File.WriteAllText(file, str, Encoding.UTF8);
 
 
     Console.WriteLine("生成AppObjMap完成");
@@ -580,7 +580,7 @@ void AppService(ExecuteContext ctx)
     var file = Path.Combine(ctx.SrcDir, ctx.App.ApplicationProjectName, ctx.Model.Name, ctx.Model.ApplicationServiceName + ".cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
-    File.WriteAllText(file, str);
+    File.WriteAllText(file, str, Encoding.UTF8);
 
 
     Console.WriteLine("生成AppService完成");
@@ -593,7 +593,7 @@ void AppServiceTree(ExecuteContext ctx)
     var file = Path.Combine(ctx.SrcDir, ctx.App.ApplicationProjectName, ctx.Model.Name, ctx.Model.ApplicationServiceName + ".cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
-    File.WriteAllText(file, str);
+    File.WriteAllText(file, str, Encoding.UTF8);
 
 
     Console.WriteLine("生成AppServiceTree完成");
@@ -606,7 +606,7 @@ void UIObjMap(ExecuteContext ctx)
     var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "ObjMap.cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
-    File.WriteAllText(file, str);
+    File.WriteAllText(file, str, Encoding.UTF8);
 
 
     Console.WriteLine("生成UIObjMap完成");
@@ -619,7 +619,7 @@ void UIList(ExecuteContext ctx)
     var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "List.razor");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
-    File.WriteAllText(file, str);
+    File.WriteAllText(file, str,Encoding.UTF8);
 
 
     Console.WriteLine("生成UIList完成");
@@ -632,7 +632,7 @@ void UIListCs(ExecuteContext ctx)
     var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "List.razor.cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
-    File.WriteAllText(file, str);
+    File.WriteAllText(file, str, Encoding.UTF8);
 
 
     Console.WriteLine("生成UIListCs完成");
@@ -645,7 +645,7 @@ void UICreate(ExecuteContext ctx)
     var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "Create.razor");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
-    File.WriteAllText(file, str);
+    File.WriteAllText(file, str, Encoding.UTF8);
 
 
     Console.WriteLine("生成UICreate完成");
@@ -658,7 +658,7 @@ void UICreateCs(ExecuteContext ctx)
     var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "Create.razor.cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
-    File.WriteAllText(file, str);
+    File.WriteAllText(file, str, Encoding.UTF8);
 
 
     Console.WriteLine("生成UICreateCs完成");
@@ -673,7 +673,7 @@ void UIDetailUpdate(ExecuteContext ctx)
     var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "DetailUpdate.razor");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
-    File.WriteAllText(file, str);
+    File.WriteAllText(file, str, Encoding.UTF8);
 
 
     Console.WriteLine("生成UIDetailUpdate完成");
@@ -686,7 +686,7 @@ void UIDetailUpdateCs(ExecuteContext ctx)
     var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "DetailUpdate.razor.cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
-    File.WriteAllText(file, str);
+    File.WriteAllText(file, str, Encoding.UTF8);
 
 
     Console.WriteLine("生成DetailUpdateCs完成");
@@ -699,7 +699,7 @@ void UIDetailUpdateCs(ExecuteContext ctx)
 //    var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "ObjMap.cs");
 //    Directory.CreateDirectory(Path.GetDirectoryName(file));
 
-//    File.WriteAllText(file, str);
+//    File.WriteAllText(file, str,Encoding.UTF8);
 
 
 //    Console.WriteLine("生成UITreeObjMap完成");
@@ -713,7 +713,7 @@ void UITreeList(ExecuteContext ctx)
     var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "List.razor");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
-    File.WriteAllText(file, str);
+    File.WriteAllText(file, str, Encoding.UTF8);
 
 
     Console.WriteLine("生成UITreeList完成");
@@ -726,7 +726,7 @@ void UITreeListCs(ExecuteContext ctx)
     var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "List.razor.cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
-    File.WriteAllText(file, str);
+    File.WriteAllText(file, str, Encoding.UTF8);
 
 
     Console.WriteLine("生成UITreeListCs完成");
@@ -742,7 +742,7 @@ void UITreeCreate(ExecuteContext ctx)
     var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "Create.razor");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
-    File.WriteAllText(file, str);
+    File.WriteAllText(file, str, Encoding.UTF8);
 
 
     Console.WriteLine("生成TreeCreate完成");
@@ -755,7 +755,7 @@ void UITreeCreateCs(ExecuteContext ctx)
     var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "Create.razor.cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
-    File.WriteAllText(file, str);
+    File.WriteAllText(file, str, Encoding.UTF8);
 
 
     Console.WriteLine("生成TreeCreateCs完成");
@@ -770,7 +770,7 @@ void UITreeDetailUpdate(ExecuteContext ctx)
     var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "DetailUpdate.razor");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
-    File.WriteAllText(file, str);
+    File.WriteAllText(file, str, Encoding.UTF8);
 
 
     Console.WriteLine("生成TreeDetailUpdate完成");
@@ -783,7 +783,7 @@ void UITreeDetailUpdateCs(ExecuteContext ctx)
     var file = Path.Combine(ctx.SrcDir, ctx.App.BlazorClientProjectName, ctx.Model.Name, "DetailUpdate.razor.cs");
     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
-    File.WriteAllText(file, str);
+    File.WriteAllText(file, str, Encoding.UTF8);
 
 
     Console.WriteLine("生成TreeDetailUpdateCs完成");

@@ -180,7 +180,11 @@ namespace CodeGenerator
         public string ConditionName => $"{Name}Condition";
         #region 权限
         /// <summary>
-        /// 查看和管理权限名称，如：TestGet
+        /// 管理权限名称，如：Test
+        /// </summary>
+        public string PermissionName => $"{ExecuteContext.App.Name}.{Name}";
+        /// <summary>
+        /// 查看权限名称，如：TestGet
         /// </summary>
         public string PermissionNameGet => $"{ExecuteContext.App.Name}.{Name}.Get";
         /// <summary>
@@ -196,8 +200,11 @@ namespace CodeGenerator
         /// </summary>
         public string PermissionNameDelete => $"{ExecuteContext.App.Name}.{Name}.Delete";
         /// <summary>
-        /// cud的父权限常量名，如：xxxPermissionNames.xxxGet
-        /// 同时也作为查看权限的常量名称
+        /// cud的父权限常量名，如：xxxPermissionNames.xxx
+        /// </summary>
+        public string PermissionNameConst => $"{ApplicationShareConstName}.{nameof(PermissionName)}";
+        /// <summary>
+        /// 查看权限的常量名称，如：xxxPermissionNames.xxxGet
         /// </summary>
         public string PermissionNameGetConst => $"{ApplicationShareConstName}.{nameof(PermissionNameGet)}";
         /// <summary>

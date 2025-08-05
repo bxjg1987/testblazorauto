@@ -26,6 +26,27 @@ namespace CodeGenerator
         /// </summary>
         public string DefaultValue { get; set; }
         /// <summary>
+        /// 程序和的默认值
+        /// </summary>
+        public string DefaultValueProgram
+        {
+            get {
+
+                if (DefaultValue.IsNullOrWhiteSpaceBXJG())
+                    return string.Empty;
+
+                if (CSharpType == "string")
+                    return $"\"{DefaultValue}\"";
+
+                if (CSharpType == "bool")
+                    return DefaultValue.ToLower();
+
+                    return $"{CSharpType}.Parse(\"{DefaultValue}\")"; 
+            }
+        }
+
+
+        /// <summary>
         /// 不设置的化，由ef自己根据数据类型去判断
         /// </summary>
         public bool IsRequired { get; set; }

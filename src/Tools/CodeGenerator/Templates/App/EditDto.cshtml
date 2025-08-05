@@ -37,7 +37,7 @@ namespace @(Model.Model.ApplicationShareNamespace)
     @if(field.Length>0){
         @:[StringLength(@field.CoreShareConstsMaxLength)]
     }
-        public @(field.CSharpTypeNullable) @field.Name { get; set; } @(field.DefaultValue.IsNotNullOrWhiteSpaceBXJG()?$" = { field.DefaultValue?.ToLower() };":string.Empty)
+        public @(field.CSharpTypeNullable) @field.Name { get; set; } @(field.DefaultValue.IsNotNullOrWhiteSpaceBXJG()?$" = { field.DefaultValueProgram };":string.Empty)
 </text>}
     }
 }

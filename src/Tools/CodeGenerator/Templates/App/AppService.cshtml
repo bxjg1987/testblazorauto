@@ -1,4 +1,4 @@
-@using CodeGenerator
+﻿@using CodeGenerator
 @using RazorLight
 @using BXJG.Common;
 @using BXJG.Common.Extensions;
@@ -18,7 +18,6 @@ namespace @(Model.Model.ApplicationNamespace)
     /// <summary>
     /// @(Model.App.DisplayName) @(Model.Model.DisplayName) 应用服务
     ///</summary>
-    [AbpAuthorize(@(Model.Model.PermissionNameGetConst))]
     public partial class @(Model.Model.ApplicationServiceName) : @(Model.App.Name)CrudBaseAppService<@(Model.Model.EntityName), 
                                                                                                      @(Model.Model.DtoName), 
                                                                                                      @(Model.Model.PrimaryField.CSharpType), 
@@ -74,7 +73,6 @@ namespace @(Model.Model.ApplicationNamespace)
     idx++; 
 }
             @:);
-            @:return query;
 }
 
 @foreach (var field in Model.Model.ConditionRangeFields)
@@ -87,6 +85,7 @@ namespace @(Model.Model.ApplicationNamespace)
 {
             @:query = query.WhereIf(condition.@(field.Name).HasValue,x=> x.@(field.Name) == condition.@(field.Name).Value );
 }
+            return query;
         }
 
         //protected override IQueryable<@(Model.Model.EntityName)> BuildQuery(bool track = true)

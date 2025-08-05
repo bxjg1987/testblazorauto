@@ -1,4 +1,4 @@
-@using CodeGenerator
+﻿@using CodeGenerator
 @using RazorLight
 @using BXJG.Common;
 @using BXJG.Common.Extensions;
@@ -29,8 +29,8 @@ namespace @(Model.App.ApplicationProjectName)
             if (parentMenu == default)
                 parentMenu = context.Manager.MainMenu;
 
-            var menuItem = new MenuItemDefinition(@(Model.Model.PermissionNameGetConst),
-                                                  @(Model.Model.PermissionNameGetConst).Get@(Model.App.Name)LocalizableString(),
+            var menuItem = new MenuItemDefinition(@(Model.Model.PermissionNameConst),
+                                                  @(Model.Model.PermissionNameConst).Get@(Model.App.Name)LocalizableString(),
                                                   icon: "@(Model.Model.Icon)",
                                                   url: "/@(Model.Model.Name)",
                                                   permissionDependency: new SimplePermissionDependency(@(Model.Model.PermissionNameGetConst)));

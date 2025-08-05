@@ -18,7 +18,6 @@ namespace @(Model.Model.ApplicationNamespace)
     /// <summary>
     /// @(Model.Model.DisplayName) 应用服务
     ///</summary>
-    [AbpAuthorize(@(Model.Model.PermissionNameGetConst))]
     public partial class @(Model.Model.ApplicationServiceName) : AdminTreeCrudBaseAppService<@(Model.Model.EntityName), @(Model.Model.DtoName), @(Model.Model.CreateDtoName), @(Model.Model.EditDtoName), @(Model.Model.ConditionName)>
     {
         //提供权限名称
