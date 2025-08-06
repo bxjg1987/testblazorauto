@@ -15,5 +15,9 @@ namespace BXJG.WeChat
         /// 微信模块根配置节点名，appsettings中微信的配置节点名称
         /// </summary>
         public const string RootConfigKey = "bxjgWeChat";
+
+
+        public const string LoginProviderDisplayName = "微信小程序";
+        public const string LoginProvider = "wxmp";
     }
 }
