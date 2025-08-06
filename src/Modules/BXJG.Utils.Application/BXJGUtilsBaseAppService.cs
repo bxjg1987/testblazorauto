@@ -1,10 +1,11 @@
-﻿using System;
-using System.Threading.Tasks;
-using Abp.Application.Services;
+﻿using Abp.Application.Services;
 using Abp.Linq;
 using Abp.Runtime.Session;
 using Abp.Threading;
 using BXJG.Utils.Share;
+using Microsoft.Extensions.Hosting;
+using System;
+using System.Threading.Tasks;
 
 namespace BXJG.Utils.Application
 {
@@ -15,6 +16,7 @@ namespace BXJG.Utils.Application
     {
         //public TenantManager TenantManager { get; set; }
 
+        public IHostEnvironment HostEnvironment { get; set; }
         //public UserManager UserManager { get; set; }
         public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; } = NullAsyncQueryableExecuter.Instance;
 

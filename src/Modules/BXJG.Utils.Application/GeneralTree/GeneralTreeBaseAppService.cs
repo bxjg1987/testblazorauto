@@ -1,4 +1,4 @@
-/*
+﻿/*
  * 作者：变形精怪 手机/微信17723896676 QQ/邮箱453008453
  * 创建时间：2018-10-10 22:49:57
  *
@@ -80,7 +80,7 @@ namespace BXJG.Utils.Application.GeneralTree
         /// 注：IocManager是全局单例，解析实现IDisposeable的服务时比较危险，此时应使用ServiceProvider
         /// </summary>
         public IServiceProvider ServiceProvider { get; set; }
-
+        
         //[Obsolete("子类继承时应使用无参的构造函数，当前构造函数是未简化子类实现以前的代码，已过时。")]
         //public GeneralTreeProviderBaseAppService(IRepository<TEntity, long> repository,
         //                                         string allTextForSearch = "不限",

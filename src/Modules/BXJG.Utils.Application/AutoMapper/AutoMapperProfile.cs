@@ -1,4 +1,4 @@
-using Abp.Notifications;
+ï»¿using Abp.Notifications;
 using AutoMapper;
 using BXJG.Utils.Application.Share.Files;
 using BXJG.Utils.Application.Share.Notification;
@@ -17,13 +17,13 @@ namespace BXJG.Utils.Application.AutoMapper
 
             CreateMap<temp, MessageDto>();
 
-            #region ÎÄ¼ş
-            CreateMap<FileResult, FileDto>();
-            #endregion
+            //#region æ–‡ä»¶
+            //CreateMap<FileResult, FileDto>();
+            //#endregion
 
-            #region ¸½¼şAttachment
+            #region é™„ä»¶Attachment
             //CreateMap<AttachmentEntity, AttachmentDto>().MapExtensionData();
-            //CreateMap<AttachmentEntity, AttachmentDto>();//À©Õ¹ÊôĞÔÒÑÔÚBXJG.UtilsÄ£¿éÖĞÍ³Ò»ÅäÖÃÁËÓ³Éä
+            //CreateMap<AttachmentEntity, AttachmentDto>();//æ‰©å±•å±æ€§å·²åœ¨BXJG.Utilsæ¨¡å—ä¸­ç»Ÿä¸€é…ç½®äº†æ˜ å°„
 
             //CreateMap(typeof(AttachmentEntity), typeof(AttachmentDto)).ForMember("", e => e.ConvertUsing);
             //CreateMap<AttachmentEditDto, AttachmentEntity>().ForMember(c => c.ExtensionData, opt => opt.Ignore.());

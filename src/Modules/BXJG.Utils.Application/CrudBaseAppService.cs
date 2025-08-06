@@ -1,4 +1,4 @@
-using Abp;
+﻿using Abp;
 using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using Abp.Domain.Entities;
@@ -13,6 +13,7 @@ using BXJG.Common.Contracts;
 using BXJG.Utils.Application.Share;
 using BXJG.Utils.Application.Share.Dtos;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,6 +63,8 @@ namespace BXJG.Utils.Application
         where TGetInput : IEntityDto<TPrimaryKey>
         where TDeleteInput : IEntityDto<TPrimaryKey>
     {
+
+        public IHostEnvironment HostEnvironment { get; set; }
         /// <summary>
         /// 与当前请求关联的服务容器
         /// 通常你可以使用构造函数或属性注入，框架级别或特殊情况可以使用此对象。反正是能不用就别用

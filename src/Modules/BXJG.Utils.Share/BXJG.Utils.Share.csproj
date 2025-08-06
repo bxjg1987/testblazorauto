@@ -10,6 +10,7 @@
 
 	<ItemGroup>
 		<Compile Remove="Concurrency\MapperExtension.cs" />
+		<Compile Remove="Files\FileResult.cs" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net8'">

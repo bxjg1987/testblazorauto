@@ -33,7 +33,7 @@ namespace @Model.Model.CoreNamespace
         @:/// <summary>
         @:/// @field.DisplayName
         @:///</summary>
-        @:public @field.CSharpTypeNullable @field.Name { get; set; }@(field.DefaultValue.IsNotNullOrWhiteSpaceBXJG()?$" = { field.DefaultValueProgram };":string.Empty)
+        @:public @field.CSharpTypeNullable @field.Name { get; set; }@* @(field.DefaultValue.IsNotNullOrWhiteSpaceBXJG()?$" = { field.DefaultValueProgram };":string.Empty) *@
 }
         public void Initialize() { }
     }
