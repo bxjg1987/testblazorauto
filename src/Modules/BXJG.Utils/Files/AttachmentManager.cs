@@ -45,7 +45,7 @@ namespace BXJG.Utils.Files
         /// 关联的实体类型，也就表明当前附件管理器是专用于管理此类型实体的
         /// </summary>
         protected readonly string entityType;
-      public IGuidGenerator GuidGenerator { get; set; }
+        public IGuidGenerator GuidGenerator { get; set; }
         /// <summary>
         /// 实例化附件管理器
         /// </summary>
@@ -93,8 +93,9 @@ namespace BXJG.Utils.Files
                         EntityType = entityType,
                         Id = GuidGenerator.Create(),// f.Id,
                         File = f,
-                        FileId=f.Id,
-                        OrderIndex = i, 
+                        FileId = f.Id,
+                        OrderIndex = i,
+                        TenantId = f.TenantId,//不晓得为啥非要在这里设置下，估计应该用IMustHaveTenant接口
                         PropertyName = propertyName
                     };
                     await Repository.InsertAsync(entity);

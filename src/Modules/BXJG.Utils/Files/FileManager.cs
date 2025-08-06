@@ -46,7 +46,7 @@ namespace BXJG.Utils.Files
         ///// 获取后端服务器根
         ///// </summary>
         //protected string _serverRootUrl;
-    
+
         /// <summary>
         /// abp提供的异步取消
         /// </summary>
@@ -60,7 +60,7 @@ namespace BXJG.Utils.Files
         public IGuidGenerator GuidGenerator { get; set; }
         public IRepository<FileEntity, Guid> Repository { get; set; }
 
-       // public IConfiguration Configuration { get; set; }
+        // public IConfiguration Configuration { get; set; }
 
         public IAbpSession AbpSession { get; set; }
         public IBackgroundJobManager BackgroundJobManager { get; set; }
@@ -193,6 +193,8 @@ namespace BXJG.Utils.Files
                 {
                     file.RelativePathThumbnail = Path.Combine(tid, file.RelativePathThumbnail);
                 }
+                //不晓得为啥，这里不设置就不行，估计应该用IMustHaveTenant接口
+                file.TenantId = AbpSession?.TenantId;
             }
 
             //if (permissions != default)
@@ -258,7 +260,7 @@ namespace BXJG.Utils.Files
         //通常提供单独的文件访问控制器接口，它需要获取文件流和content-type
         //管理时的查询通常是通过附件仓储扩展方法做查询，或直接访问仓储做查询
 
-  
+
 
         /// <summary>
         /// 尽力而为的删除物理文件
@@ -356,7 +358,7 @@ namespace BXJG.Utils.Files
         //    return path;
         //}
 
-  
+
 
         ///// <summary>
         ///// 临时目录转换为正式目录

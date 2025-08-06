@@ -1,4 +1,4 @@
-using Abp;
+﻿using Abp;
 using Abp.Collections.Extensions;
 using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
@@ -76,7 +76,7 @@ namespace BXJG.Utils.GeneralTree
             }
 
 
-            //不晓得为啥abp不自动设置这些值，手动来吧
+            //不晓得为啥abp不自动设置这些值，手动来吧，估计应该用IMustHaveTenant
             if (entity is IMayHaveTenant mayt)
                 mayt.TenantId = AbpSession.TenantId;
 
