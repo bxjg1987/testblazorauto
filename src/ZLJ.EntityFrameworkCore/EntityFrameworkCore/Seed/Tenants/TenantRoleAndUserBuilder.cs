@@ -6,6 +6,7 @@ using Abp.Authorization;
 using Abp.Authorization.Roles;
 using Abp.Authorization.Users;
 using Abp.MultiTenancy;
+using Abp.Zero.Configuration;
 using ZLJ.Core.Authorization;
 using ZLJ.Core.Authorization.Roles;
 using ZLJ.Core.Authorization.Users;
@@ -23,11 +24,12 @@ namespace ZLJ.EntityFrameworkCore.Seed.Tenants
     {
         private readonly ZLJDbContext _context;
         private readonly int _tenantId;
-
-        public TenantRoleAndUserBuilder(ZLJDbContext context, int tenantId)
+        List<StaticRoleDefinition> staticRoleDefinitions;
+        public TenantRoleAndUserBuilder(ZLJDbContext context, int tenantId, List<StaticRoleDefinition> staticRoleDefinitions = default)
         {
             _context = context;
             _tenantId = tenantId;
+            this.staticRoleDefinitions = staticRoleDefinitions;
         }
 
         public void Create()
@@ -43,7 +45,27 @@ namespace ZLJ.EntityFrameworkCore.Seed.Tenants
             var adminRole = _context.Roles.IgnoreQueryFilters().FirstOrDefault(r => r.TenantId == _tenantId && r.Name == StaticRoleNames.Tenants.Admin);
             if (adminRole == null)
             {
-                adminRole = _context.Roles.Add(new PostEntity(_tenantId, StaticRoleNames.Tenants.Admin, StaticRoleNames.Tenants.Admin) { IsStatic = true }).Entity;
+                if (staticRoleDefinitions != default)
+                {
+                    foreach (var item in staticRoleDefinitions)
+                    {
+                        var dy = new PostEntity
+                        {
+                            TenantId = _tenantId,
+                            Name = item.RoleName,
+                            DisplayName = item.RoleDisplayName,
+                            IsStatic = true
+                        };
+                        dy.SetNormalizedName();
+                        _context.Roles.Add(dy);
+                        if (dy.Name == StaticRoleNames.Tenants.Admin)
+                            adminRole = dy;
+                    }
+                }
+                else
+                {
+                    adminRole = _context.Roles.Add(new PostEntity(_tenantId, StaticRoleNames.Tenants.Admin, StaticRoleNames.Tenants.Admin) { IsStatic = true }).Entity;
+                }
                 _context.SaveChanges();
             }
             //var wxry = _context.Roles.IgnoreQueryFilters().FirstOrDefault(r => r.TenantId == _tenantId && r.Name == "wxry");
@@ -53,12 +75,7 @@ namespace ZLJ.EntityFrameworkCore.Seed.Tenants
             //    _context.SaveChanges();
             //}
 
-            var custAdmin = _context.Roles.IgnoreQueryFilters().FirstOrDefault(r => r.TenantId == _tenantId && r.Name == CustomerRole.CustomerAdminRole);
-            if (custAdmin == null)
-            {
-                custAdmin = _context.Roles.Add(new CustomerRole(_tenantId, CustomerRole.CustomerAdminRole, "客户管理员") { IsStatic = true }).Entity;
-                _context.SaveChanges();
-            }
+
 
             #endregion
 

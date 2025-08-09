@@ -1,17 +1,18 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
-using Abp.Authorization.Roles;
+﻿using Abp.Authorization.Roles;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
 using Abp.Organizations;
 using Abp.Runtime.Caching;
 using Abp.Zero.Configuration;
-using ZLJ.Core.Authorization.Users;
-using System.Threading.Tasks;
-using System.Linq;
 using BXJG.Utils.Extensions;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
+using System.Threading.Tasks;
+using ZLJ.Core.Authorization.Users;
+using ZLJ.Core.BaseInfo.Post;
 
 namespace ZLJ.Core.Authorization.Roles
 {
@@ -66,6 +67,18 @@ namespace ZLJ.Core.Authorization.Roles
             }
 
             return base.SetGrantedPermissionsAsync(role, list);
+        }
+
+        protected override Role MapStaticRoleDefinitionToRole(int tenantId, StaticRoleDefinition staticRoleDefinition)
+        {
+            //return base.MapStaticRoleDefinitionToRole(tenantId, staticRoleDefinition);
+            return new PostEntity
+            {
+                TenantId = tenantId,
+                Name = staticRoleDefinition.RoleName,
+                DisplayName = staticRoleDefinition.RoleDisplayName,
+                IsStatic = true
+            };
         }
     }
 }
