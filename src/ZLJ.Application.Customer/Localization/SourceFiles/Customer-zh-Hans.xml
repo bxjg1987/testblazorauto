@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<localizationDictionary culture="zh-Hans">
+	<texts>
+
+		<text name="后台管理首页" value="控制台" />
+		<text name="通知中心" value="通知中心" />
+		
+	
+
+
+		<!--codegenerator-->
+	</texts>
+</localizationDictionary>

@@ -1,0 +1,156 @@
+﻿using Abp.Application.Navigation;
+using Abp.Authorization;
+using Abp.Localization;
+using ZLJ.Core.Authorization;
+using ZLJ.Core.Localization;
+using BXJG.Utils.GeneralTree;
+using BXJG.Utils;
+using BXJG.Utils.Localization;
+using DocumentFormat.OpenXml.Drawing;
+using BXJG.Utils.Helpers;
+using ZLJ.Application.Customer.Share;
+
+namespace ZLJ.Application.Customer
+{
+    /// <summary>
+    /// This class defines menus for the application.
+    /// </summary>
+    public partial class CustomerNavigationProvider : NavigationProvider
+    {
+        public override void SetNavigation(INavigationProviderContext context)
+        {
+            var menu = new MenuDefinition(CustomerConsts.Customer, CustomerConsts.Customer.GetCustomerLocalizableString());// context.Manager.MainMenu; //new MenuDefinition("adminBlazor", PermissionNames.Administrator.GetLocalizableString());
+            context.Manager.Menus.Add(CustomerConsts.Customer, menu);
+          
+            //--codegenerator==
+
+            menu.AddItem(new MenuItemDefinition("cust_home",
+                                                "首页".GetCustomerLocalizableString(),
+                                                url: "/",
+                                                icon: "dashboard",
+                                                permissionDependency: new SimplePermissionDependency(PermissionNames.Customer)));
+
+           
+
+            #region 基础资料
+            ////基础数据
+            //var menuBaseInfo = new MenuItemDefinition(PermissionNames.AdministratorBaseInfo,
+            //                                         "BaseInfo".UtilsLI(),
+            //                                          icon: "appstore",
+            //                                          permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorBaseInfo),order:int.MaxValue);
+            //menu.AddItem(menuBaseInfo);
+
+            ////menuBaseInfo.AddItem(new MenuItemDefinition("通知中心",
+            ////                                            "通知中心".GetCustomerLocalizableString(),
+            ////                                            icon: "notification",
+            ////                                            url: "/notification"));
+            ////数据字典
+            //menuBaseInfo.AddItem(new MenuItemDefinition(BXJG.Utils.Application.Share.Auth.PermissionNames.GeneralTreeMenuName,
+            //                                            "数据字典".UtilsLI(),
+            //                                            icon: "table",
+            //                                            url: "/data-dictionary",
+            //                                            permissionDependency: new SimplePermissionDependency(BXJG.Utils.Application.Share.Auth.PermissionNames.GeneralTreeMenuName)));
+
+            ////组织机构
+            //menuBaseInfo.AddItem(new MenuItemDefinition(name: PermissionNames.AdministratorBaseInfoOrganizationUnit,
+            //  displayName: "OrganizationUnit".UtilsLI(),
+            //  // @Icons.Material.Outlined.AccountTree
+            //  icon: "compass",
+            //  url: $"/organization-unit",
+            //  requiresAuthentication: true,
+            //  permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorBaseInfoOrganizationUnit)));
+
+            ////岗位
+            //menuBaseInfo.AddItem(new MenuItemDefinition(PermissionNames.AdministratorBaseInfoPost,
+            //                                            "Job".UtilsLI(),
+            //                                            icon: "team",
+            //                                            url: "/post",
+            //                                            permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorBaseInfoPost)));
+
+            ////员工档案
+            //menuBaseInfo.AddItem(new MenuItemDefinition(name: PermissionNames.BXJGBaseInfoStaffInfo,
+            //                                            displayName: "Employee".UtilsLI(),
+            //                                            icon: "user",
+            //                                            url: $"/employee",
+            //                                            //requiresAuthentication: true,
+            //                                            permissionDependency: new SimplePermissionDependency(PermissionNames.BXJGBaseInfoStaffInfo)));
+
+            ////来往单位
+            //menuBaseInfo.AddItem(new MenuItemDefinition(name: PermissionNames.BXJGBaseInfoAssociatedCompany,
+            //    displayName: PermissionNames.BXJGBaseInfoAssociatedCompany.GetCustomerLocalizableString(),
+            //    icon: "bank",
+            //    url: $"/related-company",
+            //    requiresAuthentication: true,
+            //    permissionDependency: new SimplePermissionDependency(PermissionNames.BXJGBaseInfoAssociatedCompany)));
+
+
+
+            ////行政区域
+            //menuBaseInfo.AddItem(new MenuItemDefinition(name: PermissionNames.BXJGBaseInfoAdministrative,
+            //    displayName: "Administrative".UtilsLI(),
+            //    icon: "flag",
+            //    url: $"/Administrative",
+            //    requiresAuthentication: true,
+            //    permissionDependency: new SimplePermissionDependency(PermissionNames.BXJGBaseInfoAdministrative)));
+
+            //直接使用用户
+            ////员工档案
+            //menuBaseInfo.AddItem(new MenuItemDefinition(name: PermissionNames.BXJGBaseInfoStaffInfo,
+            //    displayName: PermissionNames.BXJGBaseInfoStaffInfo.GetLocalizableString(),
+            //    icon: "user",
+            //    url: $"/bxjgbaseinfo/staffInfo/index.html",
+            //    requiresAuthentication: true,
+            //    permissionDependency: new SimplePermissionDependency(PermissionNames.BXJGBaseInfoStaffInfo)));
+
+
+            //--codegenerator.BaseInfo==
+
+
+            //var xtsz = new MenuItemDefinition("System",
+            //    L("System"),
+            //    icon: "config",
+            //    permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorSystem));
+            //context.Manager.MainMenu.AddItem(xtsz);
+
+            //menuBaseInfo.AddItem(new MenuItemDefinition("AdminTenant",
+            //    L("Tenant"),
+            //    icon: "filter",
+            //    url: "/system/tenant/index.html",
+            //    permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorSystemTenant)));
+
+            //menu.AddItem(new MenuItemDefinition("AdminRole",
+            //   "Role".GetCustomerLocalizableString(),
+            //    icon: Icons.Material.Outlined.Group,
+            //    url: "/role",
+            //    permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorSystemRole)));
+            //menuBaseInfo.AddItem(new MenuItemDefinition("AdminUser",
+            //    L("User"),
+            //    icon: "user",
+            //    url: "/system/user/index.html",
+            //    permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorSystemUser)));
+
+            //menuBaseInfo.AddItem(new MenuItemDefinition("SystemLog",
+            //                                            "Log".UtilsLI(),
+            //                                            icon: "history",
+            //                                            url: "/auditing",
+            //                                            permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorSystemLog)));
+
+            //menu.AddItem(new MenuItemDefinition("Job",
+            //                                            "作业".UtilsLI(),
+            //                                            icon: "field-time",
+            //                                            url: "/hangfire-page",
+            //                                            permissionDependency: new SimplePermissionDependency(PermissionNames.HangFireDashboard)));
+
+            //menuBaseInfo.AddItem(new MenuItemDefinition("SystemConfig",
+            //                                            "Settings".UtilsLI(),
+            //                                            icon: "setting",
+            //                                            url: "/settings",
+            //                                            permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorSystemConfig)));
+
+            
+            #endregion
+
+            CodeGeneratorHelper.CodeGenerator(this, context);
+        }
+    }
+}

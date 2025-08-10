@@ -76,7 +76,7 @@
 		<PackageReference Include="DotNetCore.CAP.SqlServer" Version="7.2.0" />-->
 		<PackageReference Include="Hangfire.SqlServer" Version="1.8.20" />
 		<PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.7">
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.8">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
@@ -88,7 +88,7 @@
 		<PackageReference Include="DistributedLock.SqlServer" Version="1.0.6" />
 		<PackageReference Include="Magicodes.IE.Excel.AspNetCore" Version="2.7.6" />
 		<!--<PackageReference Include="BXJG.Utils.Web" Version="1.2.1" />-->
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.7" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.8" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.3" />
 		<PackageReference Include="Abp.AspNetCore" Version="10.2.0" />
 		<PackageReference Include="Abp.AspNetCore.SignalR" Version="10.2.0" />
@@ -100,6 +100,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\ZLJ.Application.Common\ZLJ.Application.Common.csproj" />
+		<ProjectReference Include="..\ZLJ.Application.Customer\ZLJ.Application.Customer.csproj" />
 		<ProjectReference Include="..\ZLJ.EntityFrameworkCore\ZLJ.EntityFrameworkCore.csproj" />
 	</ItemGroup>
 

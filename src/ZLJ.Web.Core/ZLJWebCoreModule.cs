@@ -1,43 +1,42 @@
-﻿using System;
-using System.Text;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using Abp.AspNetCore;
+﻿using Abp.AspNetCore;
 using Abp.AspNetCore.Configuration;
 using Abp.AspNetCore.SignalR;
+using Abp.Configuration.Startup;
+using Abp.Hangfire;
+using Abp.Hangfire.Configuration;
+using Abp.Json;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
 using Abp.Zero.Configuration;
-
-using ZLJ.Core.Configuration;
-using Microsoft.AspNetCore.Mvc.ApplicationParts;
+using BXJG.Common;
+using BXJG.Utils;
 using BXJG.Utils;
 using BXJG.Utils.GeneralTree;
-using Abp.Hangfire;
-using Abp.Hangfire.Configuration;
-using System.ComponentModel;
-using Castle.MicroKernel.Resolvers;
+using BXJG.Utils.Web;
 using Castle.MicroKernel.Registration;
-using Abp.Json;
-using Microsoft.Extensions.DependencyInjection.Extensions;
+using Castle.MicroKernel.Resolvers;
 using Medallion.Threading;
 using Medallion.Threading.SqlServer;
-using Yitter.IdGenerator;
-using Microsoft.Extensions.Options;
-using System.Reflection;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.DataProtection;
-using BXJG.Utils;
-
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.ApplicationParts;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System;
+using System.ComponentModel;
+using System.Reflection;
+using System.Text;
+using Yitter.IdGenerator;
 using ZLJ.Application;
-using ZLJ.EntityFrameworkCore;
-using BXJG.Common;
-using Abp.Configuration.Startup;
-using BXJG.Utils.Web;
 using ZLJ.Application.Common;
-using ZLJ.Web.Core.Configuration;
+using ZLJ.Application.Customer;
+using ZLJ.Core.Configuration;
+using ZLJ.EntityFrameworkCore;
 using ZLJ.Web.Core.Authentication.JwtBearer;
+using ZLJ.Web.Core.Configuration;
 
 namespace ZLJ.Web.Core
 {
@@ -57,6 +56,7 @@ namespace ZLJ.Web.Core
         typeof(AbpHangfireAspNetCoreModule),
         typeof(BXJGUtilsWebModule),
         typeof(ZLJApplicationModule),
+        typeof(CustomerModule),
         typeof(ZLJEntityFrameworkModule),
         typeof(AbpAspNetCoreModule),
         //typeof(AbpAspNetCoreSignalRModule),

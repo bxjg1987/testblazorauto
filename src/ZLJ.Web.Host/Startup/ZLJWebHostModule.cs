@@ -23,6 +23,7 @@ using Microsoft.IdentityModel.Tokens;
 using Yitter.IdGenerator;
 using ZLJ.Application;
 using ZLJ.Application.Common.Notification;
+using ZLJ.Application.Customer;
 using ZLJ.Core.Configuration;
 using ZLJ.EntityFrameworkCore;
 using ZLJ.Web.Core;
@@ -73,7 +74,9 @@ namespace ZLJ.Web.Host.Startup
             //);
 
             #region 动态webapi
+
             Configuration.Modules.AbpAspNetCore()   .CreateControllersForAppServices(    typeof(ZLJApplicationModule).GetAssembly(), moduleName: Application.Share.AdminConsts.fw, useConventionalHttpVerbs:false  );
+            Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(typeof(CustomerModule).GetAssembly(), moduleName: ZLJ.Application.Customer.Share.CustomerConsts.Customer, useConventionalHttpVerbs: false);
 
             Configuration.Modules.AbpAspNetCore().CreateControllersForAppServices(   typeof(BXJGUtilsModule).Assembly, useConventionalHttpVerbs: false/*, moduleName: "utils", useConventionalHttpVerbs: true*/);
 

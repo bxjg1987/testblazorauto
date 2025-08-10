@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+	  <LangVersion>latest</LangVersion>
+	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Localization\SourceFiles\Customer-en.xml" />
+    <None Remove="Localization\SourceFiles\Customer-zh-Hans.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Localization\SourceFiles\Customer-en.xml" />
+    <EmbeddedResource Include="Localization\SourceFiles\Customer-zh-Hans.xml" />
+  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\ZLJ.Application.Common\ZLJ.Application.Common.csproj" />
+		<ProjectReference Include="..\ZLJ.Application.Customer.Share\ZLJ.Application.Customer.Share.csproj" />
+	</ItemGroup>
+</Project>
