@@ -38,6 +38,9 @@
 	</ItemGroup>
 
   <ItemGroup>
+    <None Update="Projects\DCHB\AdvanceOrder.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Projects\DCHB\DiningLocation.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
