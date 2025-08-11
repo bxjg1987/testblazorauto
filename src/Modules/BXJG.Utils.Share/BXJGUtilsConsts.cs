@@ -82,6 +82,12 @@ namespace BXJG.Utils.Share
         public const int EntityFilePropertyNameMaxLength = 100;
         public const int EntityFileExtMaxLength = 4000;
         #endregion
+        //public const int ExtFieldldMaxLength = 200;
+        //public const int ExtField2dMaxLength = 400;
+        #region Tag
+        public const int TagNameMaxLength = 100;
+        public const int TagDisplayNameMaxLength = 100;
+        #endregion
 
         #region 附件
         public const int AttachmentEntityTypeMaxLength = 100;

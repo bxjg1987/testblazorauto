@@ -50,6 +50,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{31830F03-183C-4530-A73A-C165A1F5A739}"
 	ProjectSection(SolutionItems) = preProject
 		docs\session.md = docs\session.md
+		docs\tag.md = docs\tag.md
 		docs\ZLJ.Web.Core说明.md = docs\ZLJ.Web.Core说明.md
 		docs\事件.md = docs\事件.md
 		docs\代码生成器.md = docs\代码生成器.md
