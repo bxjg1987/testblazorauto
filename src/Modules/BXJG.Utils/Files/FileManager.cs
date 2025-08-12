@@ -173,7 +173,7 @@ namespace BXJG.Utils.Files
                 //Status = FileStatus.Moving,
                 RealName = fileName,
                 ResponseContentType = MimeGuesser.GuessMimeType(jdlj), //ur.ContentType,
-
+                Size =  new FileInfo(jdlj).Length,
                 //RelativePath = Path.Combine( Clock.Now.ToString("yyyyMMdd"), Path.GetFileName(ur.TempPath)),
                 //ThumbnailRelativePath = Path.Combine(TimingProvider.Get().ToString("yyyyMMdd"), Path.GetFileName(ur.TempPath).Replace(".", "_thum.")),
 

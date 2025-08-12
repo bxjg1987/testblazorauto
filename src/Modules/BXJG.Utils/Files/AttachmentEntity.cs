@@ -29,10 +29,14 @@ namespace BXJG.Utils.Files
         /// </summary>
         public string EntityId { get; set; }
         /// <summary>
-        /// 属性名，可空
+        /// 属性名，可空，强烈建议始终提供，因为开始可能不需要特别指定属性，但后期可能加字段
         /// 比如工单：字段A表示要处理的问题相关图片，字段B表示处理完成时拍摄的图片，它们都使用附件表，当通过此字段来表示关联的不同的属性
         /// </summary>
         public string? PropertyName { get; set; }
+        /// <summary>
+        /// 属性显示名，在存储时若为空则复制PropertyName
+        /// </summary>
+        public string? PropertyDisplayName { get; set; }
         /// <summary>
         /// 关联的文件id
         /// 之前是直接用id和文件id对应，但是这样就导致即便文件是同一个，也必须新增一条文件记录，反直觉的设计，现在还是改回来。

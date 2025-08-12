@@ -12,7 +12,6 @@
     <Compile Remove="DisplayNameValue.cs" />
     <Compile Remove="Dtos\IHaveFilter.cs" />
     <Compile Remove="Dtos\Input.cs" />
-    <Compile Remove="Files\AttachmentDto.cs" />
   </ItemGroup>
 
 

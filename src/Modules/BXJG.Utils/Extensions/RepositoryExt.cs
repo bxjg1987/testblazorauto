@@ -24,37 +24,43 @@ namespace Abp.Domain.Repositories
         #region 附件
 
         //这里只定义常用场景需要的查询，更多场景不要定义扩展，而是直接在需要时自己查询
+        //尽量别用这些扩展方法，封装得太深了不好
 
         /// <summary>
-        /// 从附件中获取文件
+        /// 获取单个实体的一个或多个属性的附件列表
         /// </summary>
         /// <param name="repository"></param>
-        /// <param name="entityType">实体类型</param>
         /// <param name="entityId">实体id</param>
+        /// <param name="entityType">实体类型，若实体id是全局唯一的，比如guid，则此参数可省略</param>
         /// <param name="track"></param>
         /// <param name="cancellationToken"></param>
         /// <returns>key属性名，value文件列表</returns>
-        public static async Task<Dictionary<string, List<FileEntity>>> GetFilesByAttachment(this IRepository<AttachmentEntity, Guid> repository, string entityType, string entityId, bool track = false, CancellationToken cancellationToken = default)
+        public static async Task<Dictionary<string, List<FileEntity>>> GetFilesByAttachment(this IRepository<AttachmentEntity, Guid> repository,
+                                                                                            string entityId,
+                                                                                            string? entityType = default,
+                                                                                            bool track = false,
+                                                                                            CancellationToken cancellationToken = default)
         {
             IQueryable<AttachmentEntity> q = (await repository.GetAllAsync()).WhereAttachment(entityType, default, track, entityId);
             var list = await q.ToArrayAsync(cancellationToken);
             return list.GroupBy(x => x.PropertyName).ToDictionary(x => x.Key, x => x.OrderBy(c => c.OrderIndex).Select(c => c.File).ToList());
         }
 
-        /// <summary>
-        /// 从附件中获取文件，忽略propertyName
-        /// </summary>
-        /// <param name="repository"></param>
-        /// <param name="entityType">实体类型</param>
-        /// <param name="entityId">实体id</param>
-        /// <param name="track"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns>文件列表</returns>
-        public static async Task<List<FileEntity>> GetFilesByAttachmentWithoutProperty(this IRepository<AttachmentEntity, Guid> repository, string entityType, string entityId, bool track = false, CancellationToken cancellationToken = default)
-        {
-            IQueryable<AttachmentEntity> q = (await repository.GetAllAsync()).WhereAttachment(entityType, default, track, entityId);
-            return await q.OrderBy(x => x.OrderIndex).Select(x => x.File).ToListAsync(cancellationToken);
-        }
+        //这种少用，最好始终给实体附件设置属性名称，不然查询是否忽略属性名这里逻辑麻烦
+        ///// <summary>
+        ///// 从附件中获取文件，忽略propertyName
+        ///// </summary>
+        ///// <param name="repository"></param>
+        ///// <param name="entityType">实体类型</param>
+        ///// <param name="entityId">实体id</param>
+        ///// <param name="track"></param>
+        ///// <param name="cancellationToken"></param>
+        ///// <returns>文件列表</returns>
+        //public static async Task<List<FileEntity>> GetFilesByAttachmentWithoutProperty(this IRepository<AttachmentEntity, Guid> repository, string entityType, string entityId, bool track = false, CancellationToken cancellationToken = default)
+        //{
+        //    IQueryable<AttachmentEntity> q = (await repository.GetAllAsync()).WhereAttachment(entityType, default, track, entityId).Where(x=>x.PropertyName==string.Empty);
+        //    return await q.OrderBy(x => x.OrderIndex).Select(x => x.File).ToListAsync(cancellationToken);
+        //}
 
 
         /// <summary>
@@ -66,7 +72,7 @@ namespace Abp.Domain.Repositories
         /// <param name="track"></param>
         /// <param name="cancellationToken"></param>
         /// <returns> key实体id；value：属性名和文件列表</returns>
-        public static async Task<Dictionary<string, Dictionary<string, List<FileEntity>>>> GetFilesByAttachment(this IRepository<AttachmentEntity, Guid> repository, string entityType, IEnumerable<string> entityIds, bool track = false, CancellationToken cancellationToken = default)
+        public static async Task<Dictionary<string, Dictionary<string, List<FileEntity>>>> GetFilesByAttachment(this IRepository<AttachmentEntity, Guid> repository, IEnumerable<string> entityIds, string? entityType=default, bool track = false, CancellationToken cancellationToken = default)
         {
             IQueryable<AttachmentEntity> q = (await repository.GetAllAsync()).WhereAttachment(entityType, default, track, entityIds.ToArray());
             var list = await q.ToArrayAsync(cancellationToken);
@@ -76,21 +82,21 @@ namespace Abp.Domain.Repositories
                                            .ToDictionary(z => z.Key,
                                                          z => z.OrderBy(v => v.OrderIndex).Select(g => g.File).ToList()));
         }
-        /// <summary>
-        /// 从附件中获取文件，忽略propertyName
-        /// </summary>
-        /// <param name="repository"></param>
-        /// <param name="entityType">实体类型</param>
-        /// <param name="entityIds">实体id</param>
-        /// <param name="track"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns> key实体id；value：文件列表</returns>
-        public static async Task<Dictionary<string, List<FileEntity>>> GetFilesByAttachmentWithoutProperty(this IRepository<AttachmentEntity, Guid> repository, string entityType, IEnumerable<string> entityIds, bool track = false, CancellationToken cancellationToken = default)
-        {
-            IQueryable<AttachmentEntity> q = (await repository.GetAllAsync()).WhereAttachment(entityType, default, track, entityIds.ToArray());
-            var list = await q.ToArrayAsync(cancellationToken);
-            return list.GroupBy(x => x.EntityId).ToDictionary(x => x.Key, z => z.OrderBy(v => v.OrderIndex).Select(g => g.File).ToList());
-        }
+        ///// <summary>
+        ///// 从附件中获取文件，忽略propertyName
+        ///// </summary>
+        ///// <param name="repository"></param>
+        ///// <param name="entityType">实体类型</param>
+        ///// <param name="entityIds">实体id</param>
+        ///// <param name="track"></param>
+        ///// <param name="cancellationToken"></param>
+        ///// <returns> key实体id；value：文件列表</returns>
+        //public static async Task<Dictionary<string, List<FileEntity>>> GetFilesByAttachmentWithoutProperty(this IRepository<AttachmentEntity, Guid> repository, string entityType, IEnumerable<string> entityIds, bool track = false, CancellationToken cancellationToken = default)
+        //{
+        //    IQueryable<AttachmentEntity> q = (await repository.GetAllAsync()).WhereAttachment(entityType, default, track, entityIds.ToArray());
+        //    var list = await q.ToArrayAsync(cancellationToken);
+        //    return list.GroupBy(x => x.EntityId).ToDictionary(x => x.Key, z => z.OrderBy(v => v.OrderIndex).Select(g => g.File).ToList());
+        //}
 
 
 
@@ -106,7 +112,7 @@ namespace Abp.Domain.Repositories
         /// <param name="track"></param>
         /// <param name="cancellationToken"></param>
         /// <returns>文件列表</returns>
-        public static async Task<List<FileEntity>> GetFilesByAttachment(this IRepository<AttachmentEntity, Guid> repository, string entityType, string entityId, string propertyName = default, bool track = false, CancellationToken cancellationToken = default)
+        public static async Task<List<FileEntity>> GetFilesByAttachment(this IRepository<AttachmentEntity, Guid> repository, string entityId, string? entityType=default, string propertyName = default, bool track = false, CancellationToken cancellationToken = default)
         {
             IQueryable<AttachmentEntity> q = (await repository.GetAllAsync()).WhereAttachment(entityType, propertyName, track, entityId).OrderBy(x => x.OrderIndex);
             var list = await q.ToArrayAsync(cancellationToken);
@@ -125,20 +131,20 @@ namespace Abp.Domain.Repositories
         /// <returns>key属性名，value文件列表</returns>
         public static Task<Dictionary<string, List<FileEntity>>> GetFilesByAttachment<TEntity>(this IRepository<AttachmentEntity, Guid> repository, string entityId, bool track = false, CancellationToken cancellationToken = default)
         {
-            return repository.GetFilesByAttachment(typeof(TEntity).FullName, entityId, track, cancellationToken);
+            return repository.GetFilesByAttachment( entityId,typeof(TEntity).FullName, track, cancellationToken);
         }
-        /// <summary>
-        /// 从附件中获取文件，忽略propertyName
-        /// </summary>
-        /// <param name="repository"></param>
-        /// <param name="entityId">实体id</param>
-        /// <param name="track"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns>文件列表</returns>
-        public static Task<List<FileEntity>> GetFilesByAttachmentWithoutProperty<TEntity>(this IRepository<AttachmentEntity, Guid> repository, string entityId, bool track = false, CancellationToken cancellationToken = default)
-        {
-            return repository.GetFilesByAttachmentWithoutProperty(typeof(TEntity).FullName, entityId, track, cancellationToken);
-        }
+        ///// <summary>
+        ///// 从附件中获取文件，忽略propertyName
+        ///// </summary>
+        ///// <param name="repository"></param>
+        ///// <param name="entityId">实体id</param>
+        ///// <param name="track"></param>
+        ///// <param name="cancellationToken"></param>
+        ///// <returns>文件列表</returns>
+        //public static Task<List<FileEntity>> GetFilesByAttachmentWithoutProperty<TEntity>(this IRepository<AttachmentEntity, Guid> repository, string entityId, bool track = false, CancellationToken cancellationToken = default)
+        //{
+        //    return repository.GetFilesByAttachmentWithoutProperty(typeof(TEntity).FullName, entityId, track, cancellationToken);
+        //}
 
         /// <summary>
         /// 从附件中获取文件
@@ -150,21 +156,21 @@ namespace Abp.Domain.Repositories
         /// <returns> key实体id；value：属性名和文件列表</returns>
         public static Task<Dictionary<string, Dictionary<string, List<FileEntity>>>> GetFilesByAttachment<TEntity>(this IRepository<AttachmentEntity, Guid> repository, IEnumerable<string> entityIds, bool track = false, CancellationToken cancellationToken = default)
         {
-            return repository.GetFilesByAttachment(typeof(TEntity).FullName, entityIds, track, cancellationToken);
+            return repository.GetFilesByAttachment(entityIds, typeof(TEntity).FullName, track, cancellationToken);
         }
 
-        /// <summary>
-        /// 从附件中获取文件，忽略propertyName
-        /// </summary>
-        /// <param name="repository"></param>
-        /// <param name="entityIds">实体id</param>
-        /// <param name="track"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns> key实体id；value：文件列表</returns>
-        public static Task<Dictionary<string, List<FileEntity>>> GetFilesByAttachmentWithoutProperty<TEntity>(this IRepository<AttachmentEntity, Guid> repository, IEnumerable<string> entityIds, bool track = false, CancellationToken cancellationToken = default)
-        {
-            return repository.GetFilesByAttachmentWithoutProperty(typeof(TEntity).FullName, entityIds, track, cancellationToken);
-        }
+        ///// <summary>
+        ///// 从附件中获取文件，忽略propertyName
+        ///// </summary>
+        ///// <param name="repository"></param>
+        ///// <param name="entityIds">实体id</param>
+        ///// <param name="track"></param>
+        ///// <param name="cancellationToken"></param>
+        ///// <returns> key实体id；value：文件列表</returns>
+        //public static Task<Dictionary<string, List<FileEntity>>> GetFilesByAttachmentWithoutProperty<TEntity>(this IRepository<AttachmentEntity, Guid> repository, IEnumerable<string> entityIds, bool track = false, CancellationToken cancellationToken = default)
+        //{
+        //    return repository.GetFilesByAttachmentWithoutProperty(typeof(TEntity).FullName, entityIds, track, cancellationToken);
+        //}
 
 
         /// <summary>
@@ -178,7 +184,7 @@ namespace Abp.Domain.Repositories
         /// <returns>文件列表</returns>
         public static Task<List<FileEntity>> GetFilesByAttachment<TEntity>(this IRepository<AttachmentEntity, Guid> repository, string entityId, string propertyName = default, bool track = false, CancellationToken cancellationToken = default)
         {
-            return repository.GetFilesByAttachment(typeof(TEntity).FullName, entityId, propertyName, track, cancellationToken);
+            return repository.GetFilesByAttachment( entityId, typeof(TEntity).FullName, propertyName, track, cancellationToken);
         }
 
 
@@ -252,7 +258,7 @@ namespace Abp.Domain.Repositories
         /// <param name="w"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public static async Task<bool> IsExists<TEntity>(this IRepository<TEntity> q, Expression<Func<TEntity, bool>> w, CancellationToken cancellationToken = default) where TEntity:class,IEntity
+        public static async Task<bool> IsExists<TEntity>(this IRepository<TEntity> q, Expression<Func<TEntity, bool>> w, CancellationToken cancellationToken = default) where TEntity : class, IEntity
         {
             return await (await q.GetAllAsync()).AnyAsync(w, cancellationToken);
         }
@@ -266,7 +272,7 @@ namespace Abp.Domain.Repositories
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <exception cref="UserFriendlyException"></exception>
-        public static async Task IsExistsThrow<TEntity>(this IRepository<TEntity> q, Expression<Func<TEntity, bool>> w, string msg = default, CancellationToken cancellationToken=default) where TEntity : class, IEntity
+        public static async Task IsExistsThrow<TEntity>(this IRepository<TEntity> q, Expression<Func<TEntity, bool>> w, string msg = default, CancellationToken cancellationToken = default) where TEntity : class, IEntity
         {
             if (await q.IsExists(w, cancellationToken))
             {
@@ -284,7 +290,7 @@ namespace Abp.Domain.Repositories
         /// <param name="w"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public static async Task<bool> IsExists<TEntity,TKey>(this IRepository<TEntity,TKey> q, Expression<Func<TEntity, bool>> w, CancellationToken cancellationToken = default) where TEntity : class, IEntity<TKey>
+        public static async Task<bool> IsExists<TEntity, TKey>(this IRepository<TEntity, TKey> q, Expression<Func<TEntity, bool>> w, CancellationToken cancellationToken = default) where TEntity : class, IEntity<TKey>
         {
             return await (await q.GetAllAsync()).AnyAsync(w, cancellationToken);
         }
@@ -299,7 +305,7 @@ namespace Abp.Domain.Repositories
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <exception cref="UserFriendlyException"></exception>
-        public static async Task IsExistsThrow<TEntity, TKey>(this IRepository<TEntity,TKey> q, Expression<Func<TEntity, bool>> w, string msg = default, CancellationToken cancellationToken = default) where TEntity : class, IEntity<TKey>
+        public static async Task IsExistsThrow<TEntity, TKey>(this IRepository<TEntity, TKey> q, Expression<Func<TEntity, bool>> w, string msg = default, CancellationToken cancellationToken = default) where TEntity : class, IEntity<TKey>
         {
             if (await q.IsExists(w, cancellationToken))
             {
@@ -322,9 +328,9 @@ namespace Abp.Domain.Repositories
         /// <param name="where"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public static  Task<int> BatchDelete<T>(this IRepository<T> q, Expression< Func<T,bool>> where, CancellationToken cancellationToken = default) where T:class,IEntity
+        public static Task<int> BatchDelete<T>(this IRepository<T> q, Expression<Func<T, bool>> where, CancellationToken cancellationToken = default) where T : class, IEntity
         {
-          return q.BatchDelete(where,cancellationToken);
+            return q.BatchDelete(where, cancellationToken);
         }
         /// <summary>
         /// abp仓储的默认实现目前的删除是查询出来之后再删除，数据量大时有问题，已经提交了issue，这里是临时解决方式
@@ -335,7 +341,7 @@ namespace Abp.Domain.Repositories
         /// <param name="where"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public static async Task<int> BatchDelete<T,TKey>(this IRepository<T, TKey> q, Expression<Func<T, bool>> where, CancellationToken cancellationToken = default) where T : class, IEntity<TKey>
+        public static async Task<int> BatchDelete<T, TKey>(this IRepository<T, TKey> q, Expression<Func<T, bool>> where, CancellationToken cancellationToken = default) where T : class, IEntity<TKey>
         {
             var x = await q.GetAllAsync();
             return await x.Where(where).BatchDelete(cancellationToken);

@@ -13,6 +13,12 @@ using System.Threading.Tasks;
 
 namespace BXJG.Utils.Application.Tag
 {
+
+
+    /*
+     * 这个应该用controller，性能更好
+     */
+
     public class TagProviderAppService : BXJGUtilsBaseAppService
     {
         public BXJGUtilsModuleConfig BXJGUtilsModuleConfig { get; set; }
@@ -25,6 +31,7 @@ namespace BXJG.Utils.Application.Tag
         /// <param name="input"></param>
         /// <returns></returns>
         /// <exception cref="AbpAuthorizationException"></exception>
+        [Obsolete("这里要去掉，用contoller，不要输入参数模型，直接httpget，尤其是考虑查询实体id是guid，无需使用实体类型参数的情况")]
         public async Task<List<TagDto>> GetSelectableList(GetSelectableInput input)
         {
             //var q = await Repository.GetAllReadonlyAsync();

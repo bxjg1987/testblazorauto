@@ -16,10 +16,6 @@ namespace BXJG.Utils.Files
     public class FileEntity : FullAuditedEntity<Guid>, IExtendableObject, IMayHaveTenant
     {
         /// <summary>
-        /// 扩展数据
-        /// </summary>
-        public string? ExtensionData { get; set; }
-        /// <summary>
         /// 租户id
         /// </summary>
         public int? TenantId { get; set; }
@@ -40,6 +36,10 @@ namespace BXJG.Utils.Files
         /// </summary>
         public string ResponseContentType { get; set; }
         /// <summary>
+        /// 大小字节
+        /// </summary>
+        public long Size { get; set; } = 0;
+        /// <summary>
         /// 相对于文件存储目录的 相对路径
         /// 别用web根，因为文件下载需要权限
         /// 别用内容根，因为文件存储在任何目录更灵活
@@ -55,7 +55,10 @@ namespace BXJG.Utils.Files
         /// 由于这是通用权限，所以定义在这里而不是附件实体上
         /// </summary>
         public FilePermission Permission { get; set; } = FilePermission.Further;
-
+        /// <summary>
+        /// 扩展数据
+        /// </summary>
+        public string? ExtensionData { get; set; }
         ///// <summary>
         ///// 文件状态
         ///// </summary>

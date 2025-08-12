@@ -14,16 +14,21 @@ namespace BXJG.Utils.EFCore.EFMaps
     {
         public void Configure(EntityTypeBuilder<AttachmentEntity> builder)
         {
-            builder.ToTable("BXJGUtilsAttachments");
+            builder.ToTable("BXJGUtilsAttachments", x => x.HasComment("通用的实体附件"));
             builder.Property(c => c.Id).ValueGeneratedNever();
-            builder.Property(c => c.EntityType).IsRequired().HasColumnType($"varchar({BXJGUtilsConsts.EntityFileEntityTypeMaxLength})").HasComment("关联实体类型，可以是任意唯一字符串，通常是实体类型.FullTypeName");
-            builder.Property(c => c.EntityId).IsRequired().HasColumnType($"varchar({BXJGUtilsConsts.EntityFileEntityIdMaxLength})").HasComment("关联实体id");
-            builder.Property(c => c.PropertyName).HasColumnType($"varchar({BXJGUtilsConsts.EntityFilePropertyNameMaxLength})").HasComment("属性名，可空 比如工单：字段A表示要处理的问题相关图片，字段B表示处理完成时拍摄的图片，它们都使用附件表，当通过此字段来表示关联的不同的属性"); ;
+            builder.Property(c => c.EntityType).IsRequired().IsUnicode(false).HasMaxLength(BXJGUtilsConsts.EntityFileEntityTypeMaxLength).HasComment("关联实体类型，可以是任意唯一字符串，通常是实体类型.FullTypeName");
+            builder.Property(c => c.EntityId).IsRequired().IsUnicode(false).HasMaxLength(BXJGUtilsConsts.EntityFileEntityIdMaxLength).HasComment("关联实体id");
+            builder.Property(c => c.PropertyName).IsUnicode(false).HasMaxLength(BXJGUtilsConsts.EntityFilePropertyNameMaxLength).HasComment("属性名，可空 比如工单：字段A表示要处理的问题相关图片，字段B表示处理完成时拍摄的图片，它们都使用附件表，当通过此字段来表示关联的不同的属性"); ;
+            builder.Property(c => c.PropertyDisplayName).IsUnicode(true).HasMaxLength(BXJGUtilsConsts.MaxDisplayNameLength).HasComment("属性显示名，在存储时若为空则复制PropertyName"); ;
 
-            builder.HasIndex(c => new { c.EntityType, c.EntityId, c.PropertyName });
+            //查询时，由于实体id多数是guid，根本就不需要实体类型这个参数，所以联合索引不合理
+            //builder.HasIndex(c => new { c.EntityType, c.EntityId, c.PropertyName });
+            builder.HasIndex(c => c.EntityType);
+            builder.HasIndex(c => c.EntityId);
+            builder.HasIndex(c => c.PropertyName);
 
             builder.HasOne(x => x.File).WithMany().HasForeignKey(x => x.FileId);
-
+            builder.HasIndex(c => c.OrderIndex);
             //builder.HasOne(x => x.File).WithMany().HasForeignKey(x => x.Id);
             //builder.Property(c => c.RelativeFileUrl).HasColumnType($"varchar({Consts.EntityFileFileUrlMaxLength})");
             //builder.Ignore(c => c.RelativeThumUrl);

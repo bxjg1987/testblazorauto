@@ -73,6 +73,7 @@
 		<text name="分配" value="分配" />
 		<text name="确认" value="确认" />
 		<text name="执行" value="执行" />
+		<text name="me" value="我的" />
 
 		<!--<text name="CancelSubmit" value="撤销提交" />
 		<text name="CancelSubmitConfirm" value="撤销提交确认" />

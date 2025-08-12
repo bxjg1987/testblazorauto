@@ -32,6 +32,10 @@ namespace BXJG.Utils.Tag
         /// </summary>
         public string? PropertyName { get; set; }
         /// <summary>
+        /// 属性显示名，在存储时若为空则复制PropertyName
+        /// </summary>
+        public string? PropertyDisplayName { get; set; }
+        /// <summary>
         /// 标签名称、同一个实体的同一个属性下必须唯一
         /// </summary>
         public string TagName { get; set; }

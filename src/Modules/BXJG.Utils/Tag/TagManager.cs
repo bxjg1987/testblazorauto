@@ -34,7 +34,7 @@ namespace BXJG.Utils.Tag
         /// <param name="tags">标签列表，顺序不是很重要，顺序以传入顺序为准，不以OrderIndex属性为准，</param>
         /// <param name="propertyName">可选的属性名</param>
         /// <returns></returns>
-        public async Task<List<TagEntity>> Set(object entityId, IList<TagDto> tags = default, string propertyName = default)
+        public async Task<List<TagEntity>> Set(object entityId, IList<TagDto> tags = default, string propertyName = default,string proertyDisplayName = default)
         {
             var id = entityId.ToString();
 
@@ -70,6 +70,7 @@ namespace BXJG.Utils.Tag
                         OrderIndex = i,
                         TenantId = AbpSession.TenantId,//不晓得为啥非要在这里设置下，估计应该用IMustHaveTenant接口
                         PropertyName = propertyName,
+                        PropertyDisplayName= proertyDisplayName ?? tag.TagName,
                         //ExtField1 = tag.ExtField1,
                         //ExtField2 = tag.ExtField2,
                         //扩展json字段用abp提供的方式

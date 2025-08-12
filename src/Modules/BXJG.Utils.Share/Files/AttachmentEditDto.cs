@@ -10,6 +10,7 @@ namespace BXJG.Utils.Share.Files
     /// <summary>
     /// 附件编辑模型
     /// </summary>
+    [Obsolete("看样子好像是没用了，如果后续发现有用就去掉这个标签")]
     public class AttachmentEditDto
     {
         /// <summary>

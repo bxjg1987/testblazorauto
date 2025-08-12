@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using BXJG.Utils.Application.Share.Files;
 using BXJG.Utils.Files;
 using BXJG.Utils.Share.Files;
@@ -10,7 +10,8 @@ namespace BXJG.Utils.Application.File
     {
         public AutoMapperProfile()
         {
-          
+            CreateMap<FileEntity, FileDto>().ForMember(x => x.ExtensionData, x => x.Ignore());
+            CreateMap<AttachmentEntity, AttachmentDto>();
         }
     }
 }

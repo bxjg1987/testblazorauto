@@ -23,7 +23,6 @@
     <Compile Remove="Extensions\ConditionFieldDefineExt.cs" />
     <Compile Remove="File\AttachmentEditDto.cs" />
     <Compile Remove="File\AttachmentService.cs" />
-    <Compile Remove="File\AutoMapperProfile.cs" />
     <Compile Remove="File\FileInput.cs" />
     <Compile Remove="Notification\EventRealTimeNotifier.cs" />
   </ItemGroup>

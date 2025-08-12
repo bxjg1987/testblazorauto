@@ -22,13 +22,14 @@ namespace BXJG.Utils.Extensions
         /// 应用附件查询条件
         /// </summary>
         /// <param name="q"></param>
-        /// <param name="entityType">实体类型</param>
+        /// <param name="entityType">实体类型，若实体id是全局唯一的，比如guid，则此参数可省略</param>
+        /// <param name="propertyName">属性名称，若不提供则忽略此条件，若你想获取属性为空的，你需要后续继续where加条件</param>
         /// <param name="entityIds">实体id列表</param>
         /// <returns>key属性名，value文件列表</returns>
-        public static IQueryable<AttachmentEntity> WhereAttachment(this IQueryable<AttachmentEntity> q, string entityType, string propertyName = default, bool track = false, params string[] entityIds)
+        public static IQueryable<AttachmentEntity> WhereAttachment(this IQueryable<AttachmentEntity> q, string? entityType=default, string? propertyName = default, bool track = false, params string[] entityIds)
         {
             q = q.Include(x => x.File)
-                 .Where(x => x.EntityType == entityType)
+                 .WhereIf(entityType.IsNotNullOrWhiteSpaceBXJG(), x => x.EntityType == entityType)
                  .WhereIf(propertyName.IsNotNullOrWhiteSpaceBXJG(), x => x.PropertyName == propertyName);
 
             if (!track)
@@ -45,9 +46,10 @@ namespace BXJG.Utils.Extensions
             return q;
         }
         /// <summary>
-        /// 应用附件查询条件
+        /// 应用附件查询条件，泛型版
         /// </summary>
         /// <param name="q"></param>
+        /// <param name="propertyName">属性名称，若不提供则忽略此条件，若你想获取属性为空的，你需要后续继续where加条件</param>
         /// <param name="entityIds">实体id列表</param>
         /// <returns>key属性名，value文件列表</returns>
         public static IQueryable<AttachmentEntity> WhereAttachment<TEntity>(this IQueryable<AttachmentEntity> q, string propertyName = default, bool track = false, params string[] entityIds)
@@ -61,12 +63,12 @@ namespace BXJG.Utils.Extensions
         /// 应用Tag查询条件
         /// </summary>
         /// <param name="q"></param>
-        /// <param name="entityType">实体类型</param>
-        /// <param name="propertyName">可选的属性名，随意命名的，跟物理字段无关</param>
+        /// <param name="entityType">实体类型，若实体id是全局唯一的，比如guid，则此参数可省略</param>
+        /// <param name="propertyName">属性名称，若不提供则忽略此条件，若你想获取属性为空的，你需要后续继续where加条件</param>
         /// <returns></returns>
-        public static IQueryable<TagEntity> Where(this IQueryable<TagEntity> q, string entityType, string propertyName = default, bool track = false)
+        public static IQueryable<TagEntity> Where(this IQueryable<TagEntity> q, string? entityType = default, string propertyName = default, bool track = false)
         {
-            q = q.Where(x => x.EntityType == entityType)
+            q = q.WhereIf(entityType.IsNotNullOrWhiteSpaceBXJG(), x => x.EntityType == entityType)
                  .WhereIf(propertyName.IsNotNullOrWhiteSpaceBXJG(), x => x.PropertyName == propertyName);
 
             if (!track)
@@ -80,10 +82,10 @@ namespace BXJG.Utils.Extensions
         /// </summary>
         /// <param name="q"></param>
         /// <param name="entityType">实体类型</param>
-        /// <param name="propertyName">可选的属性名，随意命名的，跟物理字段无关</param>
+        /// <param name="propertyName">属性名称，若不提供则忽略此条件，若你想获取属性为空的，你需要后续继续where加条件</param>
         /// <param name="entityIds">实体id列表</param>
         /// <returns></returns>
-        public static IQueryable<TagEntity> Where(this IQueryable<TagEntity> q, string entityType, string propertyName = default, bool track = false, params string[] entityIds)
+        public static IQueryable<TagEntity> Where(this IQueryable<TagEntity> q, string? entityType=default, string propertyName = default, bool track = false, params string[] entityIds)
         {
             q = q.Where(entityType,propertyName,track);
 
@@ -101,6 +103,7 @@ namespace BXJG.Utils.Extensions
         /// 应用Tag查询条件
         /// </summary>
         /// <param name="q"></param>
+        /// <param name="propertyName">属性名称，若不提供则忽略此条件，若你想获取属性为空的，你需要后续继续where加条件</param>
         /// <param name="entityIds">实体id列表</param>
         /// <returns></returns>
         public static IQueryable<TagEntity> Where<TEntity>(this IQueryable<TagEntity> q, string propertyName = default, bool track = false, params string[] entityIds)
@@ -111,6 +114,7 @@ namespace BXJG.Utils.Extensions
         /// 应用Tag查询条件
         /// </summary>
         /// <param name="q"></param>
+        /// <param name="propertyName">属性名称，若不提供则忽略此条件，若你想获取属性为空的，你需要后续继续where加条件</param>
         /// <returns></returns>
         public static IQueryable<TagEntity> Where<TEntity>(this IQueryable<TagEntity> q, string propertyName = default, bool track = false)
         {

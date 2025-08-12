@@ -61,7 +61,7 @@ namespace BXJG.Utils.Files
         /// <param name="files">包含新老文件的列表，注意顺序，若是纯删除则保持空</param>
         /// <param name="propertyName">关联的属性名</param>
         /// <returns>没必要返回附件，直接返回文件吧</returns>
-        public async Task<List<FileEntity>> SetAttachments(object entityId, IList<SetAttachmentFile> files = default, string propertyName = default)
+        public async Task<List<FileEntity>> SetAttachments(object entityId, IList<SetAttachmentFile> files = default, string? propertyName = default, string? propertyDisplayName = default)
         {
             var id = entityId.ToString();
 
@@ -96,7 +96,8 @@ namespace BXJG.Utils.Files
                         FileId = f.Id,
                         OrderIndex = i,
                         TenantId = f.TenantId,//不晓得为啥非要在这里设置下，估计应该用IMustHaveTenant接口
-                        PropertyName = propertyName
+                        PropertyName = propertyName,
+                        PropertyDisplayName= propertyDisplayName?? propertyName,
                     };
                     await Repository.InsertAsync(entity);
                 }

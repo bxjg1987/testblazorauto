@@ -5,6 +5,7 @@ using System.Text;
 
 namespace BXJG.Utils.Share.Files
 {
+    [Obsolete("看样子好像是没用了，如果后续发现有用就去掉这个标签")]
     public class FileInput
     {
         public FileInput(string fileName, Stream stream, string ct)
