@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
 	  <!--<TargetFramework>netstandard2.1</TargetFramework>-->
@@ -48,6 +48,7 @@
     <Compile Remove="GeneralTree\GeneralTreePermissionExt.cs" />
     <Compile Remove="IHaveIoc.cs" />
     <Compile Remove="RandomHelper.cs" />
+    <Compile Remove="Tag\ExtOther.cs" />
     <Compile Remove="WechatDecrypt.cs" />
   </ItemGroup>
 
