@@ -4,6 +4,7 @@ using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
 using Abp.Linq.Extensions;
 using Abp.Threading;
+using BXJG.Utils.Auth;
 using BXJG.Utils.Enums;
 using BXJG.Utils.Extensions;
 using BXJG.Utils.Share.Tag;
@@ -74,43 +75,36 @@ namespace BXJG.Utils
         /// </para>
         /// 
         /// </summary>
-        public IDictionary<string, (IPermissionDependency permissionDependency,
-                                    bool loadFromDb,
-                                    ICollection<Func<SelectableTagContext,
-                                                     ValueTask<List<TagDto>>>> providers)> SelectableTagProviders = new Dictionary<string, (IPermissionDependency permissionDependency, bool loadFromDb, ICollection<Func<SelectableTagContext, ValueTask<List<TagDto>>>>)>();
+        public IDictionary<string, claassss> SelectableTagProviders = new Dictionary<string, claassss>();
 
-        /// <summary>
-        /// 大部分的实体类型+属性对应的tag数据类型都希望 预设可选tag列表 + 数据库已增加的自定义tag
-        /// 之后按热度排序
-        /// 应在SelectableTagProviders为同一个tag数据类型（实体类型+属性）配置两个委托，预设的可选列表 和 此方法获取的数据库的数据
-        /// 
-        /// 若某个特殊方法不需要数据库的，就别加这个委托
-        /// 
-        /// 此外目前没考虑缓存问题
-        /// </summary>
-        /// <param name="ctx"></param>
-        /// <returns></returns>
-        public static async ValueTask<List<TagDto>> GetSelectableList(SelectableTagContext ctx)
+        public void AddSelectableTagProvider(string entityType,
+                                             Func<SelectableTagContext, ValueTask<List<TagDto>>> provider,
+                                             string? propertyName = default,
+                                             IPermissionDependency? permissionDependency = default,
+                                             bool loadFromDb = true)
         {
-            var rep = ctx.ScopedIocResolver.Resolve<IRepository<TagEntity, Guid>>();
-            var ct = ctx.ScopedIocResolver.Resolve<ICancellationTokenProvider>();
-            var q = await rep.GetAllReadonlyAsync();
-            q = q.Where(x => x.EntityType == ctx.EntityType)
-                 .WhereIf(ctx.PropertyName.IsNotNullOrWhiteSpaceBXJG(), x => x.PropertyName == ctx.PropertyName);
-
-            //重复次数越高的标签热度越高，越应该被选择
-            return await q.GroupBy(x => new { x.TagName, x.TagDisplayName })
-                          .Select(x => new
-                          {
-                              x.Key.TagName,
-                              x.Key.TagDisplayName,
-                              OrderIndex = x.Count()
-                          })
-                          .OrderByDescending(d => d.OrderIndex)
-                          .Take(ctx.Top)
-                          .Select(x => new TagDto(x.TagName, x.TagDisplayName, x.OrderIndex))
-                          .ToListAsync(ct.Token);
+            var key = entityType + (propertyName.IsNotNullOrWhiteSpaceBXJG() ? "." + propertyName : "");
+            if (!SelectableTagProviders.TryGetValue(key, out var lb))
+            {
+                lb = new claassss(permissionDependency ?? AnonymousPermissionDependency.Instance, loadFromDb, new List<Func<SelectableTagContext, ValueTask<List<TagDto>>>>());
+                SelectableTagProviders.Add(key, lb);
+            }
+            
+            lb.providers.Add(provider);
         }
+
+        public void AddSelectableTagProvider<TEntity>(Func<SelectableTagContext, ValueTask<List<TagDto>>> provider,
+                                                     string? propertyName = default,
+                                                     IPermissionDependency? permissionDependency = default,
+                                                     bool loadFromDb = true)
+        {
+            AddSelectableTagProvider(typeof(TEntity).FullName, provider, propertyName, permissionDependency, loadFromDb);
+        }
+
+        public record class claassss(IPermissionDependency permissionDependency,
+                                    bool loadFromDb,
+                                    ICollection<Func<SelectableTagContext, ValueTask<List<TagDto>>>> providers);
+
 
         public BXJGUtilsModuleConfig()
         {

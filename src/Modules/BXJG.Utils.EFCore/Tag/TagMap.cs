@@ -15,7 +15,7 @@ namespace BXJG.Utils.EFCore.Tag
     {
         public void Configure(EntityTypeBuilder<TagEntity> builder)
         {
-            builder.ToTable("BXJGTag");
+            builder.ToTable("BXJGTag",tb=>tb.HasComment("通用实体标签"));
             builder.Property(c => c.Id).ValueGeneratedNever();
             builder.Property(c => c.EntityType).IsRequired().IsUnicode(false).HasMaxLength(BXJGUtilsConsts.AttachmentEntityTypeMaxLength).HasComment("关联实体类型，可以是任意唯一字符串，通常是实体类型.FullTypeName");
             builder.Property(c => c.EntityId).IsRequired().IsUnicode(false).HasMaxLength(BXJGUtilsConsts.AttachmentEntityIdMaxLength).HasComment("关联实体id");

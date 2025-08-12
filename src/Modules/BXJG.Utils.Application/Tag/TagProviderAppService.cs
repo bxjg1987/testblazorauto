@@ -28,7 +28,7 @@ namespace BXJG.Utils.Application.Tag
         public async Task<List<TagDto>> GetSelectableList(GetSelectableInput input)
         {
             //var q = await Repository.GetAllReadonlyAsync();
-            var key = input.EntityType + (input.PropertyName.IsNotNullOrWhiteSpaceBXJG() ? "_" + input.PropertyName : "");
+            var key = input.EntityType + (input.PropertyName.IsNotNullOrWhiteSpaceBXJG() ? "." + input.PropertyName : "");
 
 
             var list = new List<TagDto>();
@@ -47,7 +47,7 @@ namespace BXJG.Utils.Application.Tag
             //若前端提交时指定了，或定义数据源时指定了，需要冲tag表后去数据源
             if (input.LoadFromDb == true || providers.loadFromDb)
             {
-                list.AddRange(await BXJGUtilsModuleConfig.GetSelectableList(ctx));
+                list.AddRange(await TagManager.GetSelectableList(ctx));
             }
 
             return list.OrderByDescending(x => x.OrderIndex)

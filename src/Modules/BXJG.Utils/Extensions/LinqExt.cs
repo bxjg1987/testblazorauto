@@ -63,15 +63,29 @@ namespace BXJG.Utils.Extensions
         /// <param name="q"></param>
         /// <param name="entityType">实体类型</param>
         /// <param name="propertyName">可选的属性名，随意命名的，跟物理字段无关</param>
-        /// <param name="entityIds">实体id列表</param>
         /// <returns></returns>
-        public static IQueryable<TagEntity> Where(this IQueryable<TagEntity> q, string entityType, string propertyName = default, bool track = false, params string[] entityIds)
+        public static IQueryable<TagEntity> Where(this IQueryable<TagEntity> q, string entityType, string propertyName = default, bool track = false)
         {
             q = q.Where(x => x.EntityType == entityType)
                  .WhereIf(propertyName.IsNotNullOrWhiteSpaceBXJG(), x => x.PropertyName == propertyName);
 
             if (!track)
                 q = q.AsNoTrackingWithIdentityResolution();
+
+
+            return q;
+        }
+        /// <summary>
+        /// 应用Tag查询条件
+        /// </summary>
+        /// <param name="q"></param>
+        /// <param name="entityType">实体类型</param>
+        /// <param name="propertyName">可选的属性名，随意命名的，跟物理字段无关</param>
+        /// <param name="entityIds">实体id列表</param>
+        /// <returns></returns>
+        public static IQueryable<TagEntity> Where(this IQueryable<TagEntity> q, string entityType, string propertyName = default, bool track = false, params string[] entityIds)
+        {
+            q = q.Where(entityType,propertyName,track);
 
             if (entityIds.Length == 1)
             {
@@ -92,6 +106,15 @@ namespace BXJG.Utils.Extensions
         public static IQueryable<TagEntity> Where<TEntity>(this IQueryable<TagEntity> q, string propertyName = default, bool track = false, params string[] entityIds)
         {
             return q.Where(typeof(TEntity).FullName, propertyName, track, entityIds);
+        }
+        /// <summary>
+        /// 应用Tag查询条件
+        /// </summary>
+        /// <param name="q"></param>
+        /// <returns></returns>
+        public static IQueryable<TagEntity> Where<TEntity>(this IQueryable<TagEntity> q, string propertyName = default, bool track = false)
+        {
+            return q.Where(typeof(TEntity).FullName, propertyName, track);
         }
         #endregion
 
