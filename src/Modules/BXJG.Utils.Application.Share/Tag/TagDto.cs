@@ -1,5 +1,4 @@
-﻿using Abp.Domain.Entities;
-using Abp.Domain.Entities.Auditing;
+﻿using Abp.Application.Services.Dto;
 using BXJG.Common.Contracts;
 using System;
 using System.Collections.Generic;
@@ -7,17 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Utils.Tag
+namespace BXJG.Utils.Application.Share.Tag
 {
-    /// <summary>
-    /// 实体标签
-    /// </summary>
-    public class TagEntity : FullAuditedEntity<Guid>, IMayHaveTenant, IExtendableObject, IOrderIndex
+    public class TagDto : FullAuditedEntityDto<Guid>, IExtendableObj
     {
-        /// <summary>
-        /// 租户id
-        /// </summary>
-        public int? TenantId { get; set; }
         /// <summary>
         /// 关联实体类型，可以是任意唯一字符串，通常是实体类型.FullTypeName
         /// </summary>
@@ -27,9 +19,10 @@ namespace BXJG.Utils.Tag
         /// </summary>
         public string EntityId { get; set; }
         /// <summary>
-        /// 属性名
+        /// 属性名，可空
+        /// 属性名，可空 比如工单：字段A表示要处理的问题相关tag，字段B表示处理完成时拍摄的tag，它们都使用tag表，当通过此字段来表示关联的不同的属性
         /// </summary>
-        public string PropertyName { get; set; }
+        public string? PropertyName { get; set; }
         /// <summary>
         /// 属性显示名，在存储时若为空则复制PropertyName
         /// </summary>
@@ -47,17 +40,6 @@ namespace BXJG.Utils.Tag
         /// 注意TagDto中的排序是为了可选tag列表用的，这里的排序是实体已经设置多个tag时的排序，这里的排序其实没多大意义
         /// </summary>
         public int OrderIndex { get; set; }
-        /// <summary>
-        /// json格式的扩展数据，配合abp的扩展管理器
-        /// </summary>
-        public string? ExtensionData { get; set; }
-        ///// <summary>
-        ///// 普通的扩展字段1
-        ///// </summary>
-        //public string? ExtField1 { get; set; }
-        //// <summary>
-        ///// 普通的扩展字段2
-        ///// </summary>
-        //public string? ExtField2 { get; set; }
+        public dynamic ExtensionData { get; set; }
     }
 }

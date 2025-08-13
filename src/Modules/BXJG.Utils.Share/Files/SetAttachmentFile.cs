@@ -8,6 +8,7 @@ namespace BXJG.Utils.Share.Files
 {
     /// <summary>
     /// 设置附件的模型
+    /// 具体业务的附件和实体存储需要事务性，所以建议在具体业务的新增修改dto中使用此类型作为附件列表模型
     /// </summary>
     public class SetAttachmentFile
     {
@@ -23,10 +24,10 @@ namespace BXJG.Utils.Share.Files
         /// 文件真实名称
         /// </summary>
         public string? FileName { get; set; }
-        /// <summary>
-        /// 前端忽略此参数
-        /// 具体应用将对此字段赋值
-        /// </summary>
-        public FilePermission Permission { get; set; } = FilePermission.Further;
+        ///// <summary>
+        ///// 前端忽略此参数
+        ///// 具体应用将对此字段赋值
+        ///// </summary>
+        //public FilePermission Permission { get; set; } = FilePermission.Further;
     }
 }

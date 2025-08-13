@@ -140,9 +140,9 @@ namespace BXJG.Utils.Files
         /// <param name="fileName">真实的文件名称</param>
         /// <param name="tempFileRelativePath">临时文件的相对路径</param>
         /// <returns></returns>
-        public virtual async Task<FileEntity> Upload(string fileName, string tempFileRelativePath)
+        public virtual async Task<FileEntity> Upload(string fileName, string tempFileRelativePath, FilePermission filePermission)
         {
-            var file = await AddFileRecord(fileName, tempFileRelativePath);
+            var file = await AddFileRecord(fileName, tempFileRelativePath,filePermission);
             await CurrentUnitOfWork.SaveChangesAsync(); //数据库操作成功时才移动文件
             Move(tempFileRelativePath, file);
             return file;
@@ -154,7 +154,7 @@ namespace BXJG.Utils.Files
         /// <param name="fileName">真实的文件名称</param>
         /// <param name="tempFileRelativePath">临时文件的相对路径</param>
         /// <returns></returns>
-        protected virtual async Task<FileEntity> AddFileRecord(string fileName, string tempFileRelativePath)
+        protected virtual async Task<FileEntity> AddFileRecord(string fileName, string tempFileRelativePath, FilePermission filePermission)
         {
             /*
              * dbcontext是一个请求一个实例，所以在业务系统中先开事务，然后执行此逻辑，最后提交事务
@@ -173,7 +173,8 @@ namespace BXJG.Utils.Files
                 //Status = FileStatus.Moving,
                 RealName = fileName,
                 ResponseContentType = MimeGuesser.GuessMimeType(jdlj), //ur.ContentType,
-                Size =  new FileInfo(jdlj).Length,
+                Size =  new FileInfo(jdlj).Length, 
+                Permission = filePermission
                 //RelativePath = Path.Combine( Clock.Now.ToString("yyyyMMdd"), Path.GetFileName(ur.TempPath)),
                 //ThumbnailRelativePath = Path.Combine(TimingProvider.Get().ToString("yyyyMMdd"), Path.GetFileName(ur.TempPath).Replace(".", "_thum.")),
 

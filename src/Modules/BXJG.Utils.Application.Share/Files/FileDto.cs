@@ -12,7 +12,6 @@ namespace BXJG.Utils.Application.Share.Files
     /// <summary>
     /// 通用文件dto
     /// 目前考虑是后续的独立文件管理模块使用的dto
-    /// 其它地方需要引用文件本应该定义一个更简单的dto，但简单起见都用这个吧
     /// </summary>
     public class FileDto : FullAuditedEntityDto<Guid>, IExtendableObj
     {

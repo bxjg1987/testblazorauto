@@ -78,32 +78,49 @@ namespace BXJG.Utils
         public IDictionary<string, claassss> SelectableTagProviders = new Dictionary<string, claassss>();
 
         public void AddSelectableTagProvider(string entityType,
-                                             Func<SelectableTagContext, ValueTask<List<TagDto>>> provider,
-                                             string? propertyName = default,
+                                             Func<SelectableTagContext, ValueTask<List<SelectableTagDto>>> provider,
+                                             string? propertyName = default, string? propertyDisplayName = default,
                                              IPermissionDependency? permissionDependency = default,
                                              bool loadFromDb = true)
         {
-            var key = entityType + (propertyName.IsNotNullOrWhiteSpaceBXJG() ? "." + propertyName : "");
+            //防止冲突，无论如何都加个点
+            var key = entityType + "."+(propertyName.IsNotNullOrWhiteSpaceBXJG() ?  propertyName :string.Empty);
             if (!SelectableTagProviders.TryGetValue(key, out var lb))
             {
-                lb = new claassss(permissionDependency ?? AnonymousPermissionDependency.Instance, loadFromDb, new List<Func<SelectableTagContext, ValueTask<List<TagDto>>>>());
+                lb = new claassss(entityType,  propertyName,
+                    new List<Func<SelectableTagContext, ValueTask<List<SelectableTagDto>>>>(),
+                    permissionDependency ?? AnonymousPermissionDependency.Instance,
+                   propertyDisplayName??propertyName,
+                    loadFromDb);
                 SelectableTagProviders.Add(key, lb);
             }
-            
-            lb.providers.Add(provider);
+
+            lb.Providers.Add(provider);
         }
 
-        public void AddSelectableTagProvider<TEntity>(Func<SelectableTagContext, ValueTask<List<TagDto>>> provider,
-                                                     string? propertyName = default,
+        public void AddSelectableTagProvider<TEntity>(Func<SelectableTagContext, ValueTask<List<SelectableTagDto>>> provider,
+                                                     string? propertyName = default, string? propertyDisplayName = default,
                                                      IPermissionDependency? permissionDependency = default,
                                                      bool loadFromDb = true)
         {
-            AddSelectableTagProvider(typeof(TEntity).FullName, provider, propertyName, permissionDependency, loadFromDb);
+            AddSelectableTagProvider(typeof(TEntity).FullName, provider, propertyName, propertyDisplayName, permissionDependency, loadFromDb);
         }
-
-        public record class claassss(IPermissionDependency permissionDependency,
-                                    bool loadFromDb,
-                                    ICollection<Func<SelectableTagContext, ValueTask<List<TagDto>>>> providers);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="EntityType"></param>
+        /// <param name="Providers"></param>
+        /// <param name="PermissionDependency"></param>
+        /// <param name="PropertyName"></param>
+        /// <param name="PropertyDisplayName"></param>
+        /// <param name="LoadFromDb"></param>
+        public record class claassss(
+            string EntityType,
+                                    string? PropertyName ,
+                                    ICollection<Func<SelectableTagContext, ValueTask<List<SelectableTagDto>>>> Providers,
+            IPermissionDependency PermissionDependency,
+                                    string? PropertyDisplayName = default,
+                                    bool LoadFromDb = true);
 
 
         public BXJGUtilsModuleConfig()

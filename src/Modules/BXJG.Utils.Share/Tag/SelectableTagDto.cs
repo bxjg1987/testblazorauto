@@ -10,23 +10,23 @@ namespace BXJG.Utils.Share.Tag
     /// <summary>
     /// tag数据传输对象
     /// </summary>
-    /// <param name="TagName">同一个标签类型的唯一名称</param>
-    /// <param name="TagDisplayName">显示名称</param>
-    /// <param name="OrderIndex">排序索引</param>
-    public class TagDto
+    public class SelectableTagDto
     {
         public string TagName { get; set; }
         public string TagDisplayName { get; set; }
+        /// <summary>
+        /// 数字越大，优先级越高
+        /// </summary>
         [JsonIgnore]
         public int OrderIndex { get; set; }
 
-        public TagDto(string TagName, string TagDisplayName, int OrderIndex = 0) //: this(TagName, TagName, OrderIndex)
+        public SelectableTagDto(string TagName, string TagDisplayName, int OrderIndex = 0) //: this(TagName, TagName, OrderIndex)
         {
             this.TagName = TagName;
             this.TagDisplayName = TagDisplayName;
             this.OrderIndex = OrderIndex;
         }
-        public TagDto(string TagName, int OrderIndex = 0) : this(TagName, TagName, OrderIndex)
+        public SelectableTagDto(string TagName, int OrderIndex = 0) : this(TagName, TagName, OrderIndex)
         {
 
         }

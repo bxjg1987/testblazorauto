@@ -1,4 +1,6 @@
 ﻿using Abp.AspNetCore.Mvc.Controllers;
+using Abp.Auditing;
+using Abp.Domain.Uow;
 using Lazy.Captcha.Core;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -23,8 +25,14 @@ namespace BXJG.Utils.Web.Controllers
         {
             _captcha = captcha;
         }
-
+        /// <summary>
+        /// 获取验证码
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
+        [DisableAuditing]
+        [UnitOfWork(IsDisabled =true)]
         public FileResult Captcha(string id)
         {
             var info = _captcha.Generate(id);

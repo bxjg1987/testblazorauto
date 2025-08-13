@@ -188,6 +188,10 @@ namespace BXJG.Common.Dynamics
         public string Name { get; set; }
         public string DisplayName { get; set; }
 
+
+        public string PropertyName { get=>Name; set=>Name=value; }
+        public string PropertyDisplayName { get=>DisplayName; set=>DisplayName=value; }
+
         public override bool Equals(object obj)
         {
             return obj is DisplayNameDto dto &&
@@ -203,11 +207,22 @@ namespace BXJG.Common.Dynamics
     /// <summary>
     /// 关联显示时使用
     /// </summary>
-    public class DynamicPropertyDto
+    public class DynamicPropertyDto: DynamicPropertyDto<object>
     {
-        public string Name { get; set; }
-        public string DisplayName { get; set; }
-        public object Value { get; set; }
+        //public string Name { get; set; }
+        //public string DisplayName { get; set; }
+        //public object Value { get; set; }
+
+        
+    }
+    /// <summary>
+    /// 关联显示时使用
+    /// </summary>
+    public class DynamicPropertyDto<T> : DisplayNameDto
+    {
+        //public string Name { get; set; }
+        //public string DisplayName { get; set; }
+        public T Value { get; set; }
 
         public override bool Equals(object obj)
         {

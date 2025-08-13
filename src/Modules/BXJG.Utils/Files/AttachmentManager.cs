@@ -61,7 +61,7 @@ namespace BXJG.Utils.Files
         /// <param name="files">包含新老文件的列表，注意顺序，若是纯删除则保持空</param>
         /// <param name="propertyName">关联的属性名</param>
         /// <returns>没必要返回附件，直接返回文件吧</returns>
-        public async Task<List<FileEntity>> SetAttachments(object entityId, IList<SetAttachmentFile> files = default, string? propertyName = default, string? propertyDisplayName = default)
+        public async Task<List<FileEntity>> SetAttachments(object entityId, string propertyName, string propertyDisplayName=default, IList<SetAttachmentFile> files = default ,FilePermission filePermission= FilePermission.Authenticated)
         {
             var id = entityId.ToString();
 
@@ -86,7 +86,7 @@ namespace BXJG.Utils.Files
                 var entity = oldEntities.SingleOrDefault(x => x.Id == file.FileId);
                 if (entity == default)
                 {
-                    var f = await FileManager.Upload(file.FileName, file.TempPath);
+                    var f = await FileManager.Upload(file.FileName, file.TempPath,filePermission);
                     entity = new AttachmentEntity
                     {
                         EntityId = id,

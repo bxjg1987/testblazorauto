@@ -9,6 +9,7 @@
 		<OutputType>Exe</OutputType>
 		<PackageId>ZLJ.Web.Host</PackageId>
 		<UserSecretsId>5312EF2F-ABD6-4EFC-AAF2-2E81C34E8FB1</UserSecretsId>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<!--<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
 		<GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>-->
 		<!--<UserSecretsId>bd70b512-f3cf-47e1-8224-da97d4e57dda</UserSecretsId>-->

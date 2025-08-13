@@ -32,13 +32,13 @@ namespace BXJG.Utils.Application.Tag
         /// <returns></returns>
         /// <exception cref="AbpAuthorizationException"></exception>
         [Obsolete("这里要去掉，用contoller，不要输入参数模型，直接httpget，尤其是考虑查询实体id是guid，无需使用实体类型参数的情况")]
-        public async Task<List<TagDto>> GetSelectableList(GetSelectableInput input)
+        public async Task<List<SelectableTagDto>> GetSelectableList(GetSelectableInput input)
         {
             //var q = await Repository.GetAllReadonlyAsync();
             var key = input.EntityType + (input.PropertyName.IsNotNullOrWhiteSpaceBXJG() ? "." + input.PropertyName : "");
 
 
-            var list = new List<TagDto>();
+            var list = new List<SelectableTagDto>();
             if (!BXJGUtilsModuleConfig.SelectableTagProviders.TryGetValue(key, out var providers))
                 return list;
 

@@ -28,6 +28,10 @@ namespace BXJG.Utils.Application.Share.Files
         /// 比如工单：字段A表示要处理的问题相关图片，字段B表示处理完成时拍摄的图片，它们都使用附件表，当通过此字段来表示关联的不同的属性
         /// </summary>
         public string? PropertyName { get; set; }
+        /// <summary>
+        /// 属性显示名，在存储时若为空则复制PropertyName
+        /// </summary>
+        public string? PropertyDisplayName { get; set; }
         ///// <summary>
         ///// 文件url，可访问路径
         ///// 例：http://xxx.xxx/upload/xxx.xx
@@ -51,5 +55,11 @@ namespace BXJG.Utils.Application.Share.Files
         /// </summary>
         public Guid FileId { get; set; }
         public FileDto File { get; set; }
+
+        /// <summary>
+        /// 默认情况附件表是文件与实体的多对多关系表。
+        /// 某些场景附件是多个文件的容器
+        /// </summary>
+        public List<FileDto> Files { get; set; }
     }
 }

@@ -1,39 +1,40 @@
-﻿using Castle.Facilities.Logging;
-using Abp.AspNetCore;
+﻿using Abp.AspNetCore;
 using Abp.AspNetCore.Mvc.Antiforgery;
-using Abp.Castle.Logging.Log4Net;
-using ZLJ.Core.Configuration;
-using ZLJ.Core.Identity;
 using Abp.AspNetCore.SignalR.Hubs;
+using Abp.Castle.Logging.Log4Net;
+using Abp.Hangfire;
 using Abp.Json;
-using Microsoft.OpenApi.Models;
+using BXJG.Utils.Application;
+using BXJG.Utils.Web;
+using BXJG.WeChat.Web.MiniProgram;
+using Castle.Facilities.Logging;
 using Hangfire;
 using Hangfire.SqlServer;
-using Abp.Hangfire;
-//using BXJG.WorkOrder.EmployeeApplication;
-//using ZLJ.App.Employee;
-using ZLJ.Application;
-using ZLJ.EntityFrameworkCore;
+using Medallion.Threading;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+//using AntDesign.ProLayout;
+//using ZLJ.Web.Host.Shared;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 //using Orleans.Configuration;
 //using Orleans.Hosting;
 
 using Microsoft.AspNetCore.Components.Server.Circuits;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Microsoft.Net.Http.Headers;
+using Microsoft.OpenApi.Models;
+//using BXJG.WorkOrder.EmployeeApplication;
+//using ZLJ.App.Employee;
+using ZLJ.Application;
 //using Savorboard.CAP.InMemoryMessageQueue;
 using ZLJ.Application.Authorization.Permissions;
-using Medallion.Threading;
-//using AntDesign.ProLayout;
-//using ZLJ.Web.Host.Shared;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.Net.Http.Headers;
-using Microsoft.Extensions.Options;
-using Microsoft.AspNetCore.Authentication;
+using ZLJ.Application.Customer;
 using ZLJ.Application.Share.Authorization.Permissions;
-using BXJG.Utils.Application;
+using ZLJ.Core.Configuration;
+using ZLJ.Core.Identity;
+using ZLJ.EntityFrameworkCore;
 using ZLJ.Web.Core.Configuration;
-using BXJG.Utils.Web;
-using BXJG.WeChat.Web.MiniProgram;
 
 namespace ZLJ.Web.Host.Startup
 {
@@ -170,19 +171,28 @@ namespace ZLJ.Web.Host.Startup
                     //解决不同命名空间中，同名模型导致冲突的问题
                     options.CustomSchemaIds(type => type.ToString());
 
-                    //options.IncludeXmlComments(AppContext.BaseDirectory + typeof(GeneralTreeModule).Assembly.GetName().Name + ".XML");
+                    options.IncludeXmlComments(AppContext.BaseDirectory + typeof(CommonConst).Assembly.GetName().Name + ".XML");
 
-                    //options.IncludeXmlComments(AppContext.BaseDirectory + typeof(BXJGUtilsModule).Assembly.GetName().Name + ".XML");
-                    //options.IncludeXmlComments(AppContext.BaseDirectory + typeof(BXJGUtilsApplicationModule).Assembly.GetName().Name + ".XML");
+                    options.IncludeXmlComments(AppContext.BaseDirectory + typeof(BXJG.Utils.Share.BXJGUtilsConsts).Assembly.GetName().Name + ".XML");
+                    options.IncludeXmlComments(AppContext.BaseDirectory + typeof(BXJGUtilsModule).Assembly.GetName().Name + ".XML");
 
-                    //options.IncludeXmlComments(AppContext.BaseDirectory + typeof(BXJG.WorkOrder.ApplicationModule).Assembly.GetName().Name + ".XML");
-                    //options.IncludeXmlComments(AppContext.BaseDirectory + typeof(BXJG.WorkOrder.BXJGCommonApplicationModule).Assembly.GetName().Name + ".XML");
-                    //options.IncludeXmlComments(AppContext.BaseDirectory + typeof(BXJGWorkOrderEmployeeApplicationModule).Assembly.GetName().Name + ".XML");
-
-
-                    options.IncludeXmlComments(AppContext.BaseDirectory + typeof(ZLJApplicationModule).Assembly.GetName().Name + ".XML");
-                    options.IncludeXmlComments(AppContext.BaseDirectory + typeof(CommonApplicationModule).Assembly.GetName().Name + ".XML");
+                    options.IncludeXmlComments(AppContext.BaseDirectory + typeof(BXJG.Utils.Application.Share.Consts).Assembly.GetName().Name + ".XML");
                     options.IncludeXmlComments(AppContext.BaseDirectory + typeof(BXJGUtilsApplicationModule).Assembly.GetName().Name + ".XML");
+                    options.IncludeXmlComments(AppContext.BaseDirectory + typeof(BXJGUtilsWebModule).Assembly.GetName().Name + ".XML");
+
+                    options.IncludeXmlComments(AppContext.BaseDirectory + typeof(ZLJ.Core.Share.ZLJConsts).Assembly.GetName().Name + ".XML");
+
+                    options.IncludeXmlComments(AppContext.BaseDirectory + typeof(ZLJ.Application.Common.Share.Consts).Assembly.GetName().Name + ".XML");
+                    options.IncludeXmlComments(AppContext.BaseDirectory + typeof(CommonApplicationModule).Assembly.GetName().Name + ".XML");
+
+
+                    options.IncludeXmlComments(AppContext.BaseDirectory + typeof(ZLJ.Application.Share.AdminConsts).Assembly.GetName().Name + ".XML");
+                    options.IncludeXmlComments(AppContext.BaseDirectory + typeof(ZLJApplicationModule).Assembly.GetName().Name + ".XML");
+
+                    options.IncludeXmlComments(AppContext.BaseDirectory + typeof(ZLJ.Application.Customer.Share.CustomerConsts).Assembly.GetName().Name + ".XML");
+                    options.IncludeXmlComments(AppContext.BaseDirectory + typeof(CustomerModule).Assembly.GetName().Name + ".XML");
+
+                    options.IncludeXmlComments(AppContext.BaseDirectory + typeof(Startup).Assembly.GetName().Name + ".XML");
 
                     // options.IncludeXmlComments(AppContext.BaseDirectory + typeof(EmployeeApplicationModule).Assembly.GetName().Name + ".XML");
                     //options.IncludeXmlComments(AppContext.BaseDirectory + typeof(WebCustomerModule).Assembly.GetName().Name + ".XML");

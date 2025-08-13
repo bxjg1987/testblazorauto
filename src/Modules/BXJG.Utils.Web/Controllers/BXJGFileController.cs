@@ -2,29 +2,21 @@
 using Abp.AspNetCore.Mvc.Controllers;
 using Abp.Auditing;
 using Abp.Authorization;
-using Abp.AutoMapper;
 using Abp.Domain.Repositories;
+using Abp.Domain.Uow;
 using BXJG.Utils.Application.Share.Files;
 using BXJG.Utils.Extensions;
 using BXJG.Utils.Files;
 using BXJG.Utils.Share;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace BXJG.Utils.Web.Controllers
@@ -47,14 +39,14 @@ namespace BXJG.Utils.Web.Controllers
     [ApiController]
     public class BXJGFileController : AbpController
     {
-        private readonly Lazy<FileManager> tempFileManager;
+        private readonly Lazy<FileManager> fileManager;
         private readonly Lazy<FileDownloader> fileDownloader;
         private readonly Lazy<IRepository<AttachmentEntity, Guid>> attachmentRepository;
 
         public BXJGFileController(Lazy<FileManager> tempFileManager, Lazy<FileDownloader> fileDownloader, Lazy<IRepository<AttachmentEntity, Guid>> attachmentRepository)
         {
             base.LocalizationSourceName = BXJGUtilsConsts.LocalizationSourceName;
-            this.tempFileManager = tempFileManager;
+            this.fileManager = tempFileManager;
             this.fileDownloader = fileDownloader;
             this.attachmentRepository = attachmentRepository;
         }
@@ -75,7 +67,7 @@ namespace BXJG.Utils.Web.Controllers
             //var fs = file.Select(c => new FileInput(c.FileName, c.OpenReadStream()));
             using var fs = file.OpenReadStream();
 
-            var r = await tempFileManager.Value.UploadToTemp(fs);
+            var r = await fileManager.Value.UploadToTemp(fs);
 
             return new UploadTempFileDto { Name = file.FileName, Path = r };
             //return ObjectMapper.Map<List<FileDto>>(r);
@@ -98,6 +90,7 @@ namespace BXJG.Utils.Web.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("{id}")]
+        [UnitOfWork(false)]
         public async Task<PhysicalFileResult> Download(Guid id)
         {
             var r = await this.fileDownloader.Value.GetAbsolutePath(id);
@@ -119,6 +112,7 @@ namespace BXJG.Utils.Web.Controllers
         [HttpGet]
         [Route("{id}")]
         [DisableAuditing]
+        [UnitOfWork(false)]
         public async Task<PhysicalFileResult> DownloadThum(Guid id)
         {
             var r = await this.fileDownloader.Value.GetAbsolutePath(id);
@@ -156,19 +150,14 @@ namespace BXJG.Utils.Web.Controllers
         /// <param name="entityId">实体id</param>
         /// <returns></returns>
         [HttpGet]//必须加，否则swagger报错
-        public async Task<List<FileDto>> GetAttachmentFiles([Required] string entityId, string? entityType = default, string? propertyName = default)
+        [UnitOfWork(false)]
+        public async Task<List<FileDto>> GetFiles([Required] string entityId, string? entityType = default, string? propertyName = default)
         {
-            var list = await (await attachmentRepository.Value.GetAllAsync()).WhereAttachment(entityType, propertyName, false, entityId)
+            var list = await (await attachmentRepository.Value.GetAllAsync()).WhereAttachment(entityType, propertyName, entityIds: entityId)
                                                                              .Where(x => x.File.Permission == Share.Files.FilePermission.Anonymous || (AbpSession.UserId.HasValue && x.File.Permission == Share.Files.FilePermission.Authenticated))
                                                                              .OrderBy(x => x.OrderIndex)
                                                                              .Select(x => x.File)
                                                                              .ToArrayAsync(HttpContext.RequestAborted);
-
-
-
-            //var q = await attachmentRepository.Value.GetFilesByAttachment(entityId,entityType,propertyName, false,HttpContext.RequestAborted);
-            //var list = await q.WhereAttachment(entityType, propertyName, false, entityId).Include(x => x.File).OrderBy(x => x.OrderIndex).Select(d => d.File).ToListAsync(base.HttpContext.RequestAborted);
-
             //foreach (var r in list)
             //{
             //    if (r.Permission == Share.Files.FilePermission.Further)
@@ -185,14 +174,29 @@ namespace BXJG.Utils.Web.Controllers
         /// <param name="entityId"></param>
         /// <param name="entityType"></param>
         /// <returns>key属性名；value附件列表</returns>
-        [HttpGet]
-        public async Task<Dictionary<string, List<FileDto>>> GetAttachmentFiles([Required] string entityId, string? entityType = default)
+        [HttpGet]//必须加，否则swagger报错
+        [UnitOfWork(false)]
+        public async Task<List<AttachmentDto>> GetAttachments([Required] string entityId, string? entityType = default)
         {
-            IQueryable<AttachmentEntity> q = (await attachmentRepository.Value.GetAllAsync()).WhereAttachment(entityType, default, false, entityId);
-            var list = await q.ToArrayAsync(HttpContext.RequestAborted);
-            return list.GroupBy(x => x.PropertyName).ToDictionary(x => x.Key, x => x.OrderBy(c => c.OrderIndex).Select(c => ObjectMapper.Map<FileDto>(c.File)).ToList());
-        }
+            var list = await (await attachmentRepository.Value.GetAllAsync()).WhereAttachment(entityType, entityIds: entityId)
+                                                                             .Where(x => x.File.Permission == Share.Files.FilePermission.Anonymous || (AbpSession.UserId.HasValue && x.File.Permission == Share.Files.FilePermission.Authenticated))
+                                                                             //.OrderBy(x => x.OrderIndex)
+                                                                             .ToArrayAsync(HttpContext.RequestAborted);
+            var dtos = new List<AttachmentDto>();
+            foreach (var item in list.GroupBy(c => c.PropertyName))
+            {
+                var files = item.OrderBy(x => x.OrderIndex).Select(x => x.File).ToList();
 
+                var attachment = list.First(d => d.PropertyName == item.Key);
+                attachment.File = default;
+
+                var attdto = ObjectMapper.Map<AttachmentDto>(attachment);
+                var fileDtos = ObjectMapper.Map<List<FileDto>>(files);
+                attdto.Files = fileDtos;
+
+            }
+            return dtos;
+        }
 
         ///// <summary>
         ///// 通用的，获取匿名和登录用户的附件列表

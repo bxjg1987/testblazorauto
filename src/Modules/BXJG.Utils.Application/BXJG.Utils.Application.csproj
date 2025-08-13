@@ -25,6 +25,7 @@
     <Compile Remove="File\AttachmentService.cs" />
     <Compile Remove="File\FileInput.cs" />
     <Compile Remove="Notification\EventRealTimeNotifier.cs" />
+    <Compile Remove="Tag\TagProviderAppService.cs" />
   </ItemGroup>
 
   <ItemGroup>

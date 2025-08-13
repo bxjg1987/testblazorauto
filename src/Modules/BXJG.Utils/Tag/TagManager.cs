@@ -1,5 +1,6 @@
 ﻿using Abp;
 using Abp.Domain.Repositories;
+using Abp.Extensions;
 using Abp.Linq.Extensions;
 using Abp.Runtime.Session;
 using Abp.Threading;
@@ -22,6 +23,8 @@ namespace BXJG.Utils.Tag
         public IGuidGenerator GuidGenerator { get; set; }
         public IAbpSession AbpSession { get; set; }
 
+        public BXJGUtilsModuleConfig BXJGUtilsModuleConfig { get; set; }
+
         protected readonly string entityType;
         public TagManager(string entityType)
         {
@@ -33,8 +36,9 @@ namespace BXJG.Utils.Tag
         /// <param name="entityId">实体id</param>
         /// <param name="tags">标签列表，顺序不是很重要，顺序以传入顺序为准，不以OrderIndex属性为准，</param>
         /// <param name="propertyName">可选的属性名</param>
+        /// <param name="proertyDisplayName">可选的属性名</param>
         /// <returns></returns>
-        public async Task<List<TagEntity>> Set(object entityId, IList<TagDto> tags = default, string propertyName = default,string proertyDisplayName = default)
+        public async Task<List<TagEntity>> Set(object entityId, string propertyName  , IList<SelectableTagDto> tags = default, string proertyDisplayName=default)
         {
             var id = entityId.ToString();
 
@@ -43,7 +47,7 @@ namespace BXJG.Utils.Tag
                                               .ToArrayAsync(CancellationTokenProvider.Token);
 
             if (tags == default)
-                tags = new List<TagDto>();
+                tags = new List<SelectableTagDto>();
 
             var needDeletes = oldEntities.Where(x => !tags.Any(d => d.TagName == x.TagName)).ToImmutableArray();
             foreach (var item in needDeletes)
@@ -59,6 +63,12 @@ namespace BXJG.Utils.Tag
                 var entity = oldEntities.SingleOrDefault(x => x.TagName == tag.TagName);
                 if (entity == default)
                 {
+                    if (proertyDisplayName.IsNullOrEmpty()) {
+                        var key = entityType + "." + (propertyName.IsNotNullOrWhiteSpaceBXJG() ? propertyName : string.Empty);
+                        if (BXJGUtilsModuleConfig.SelectableTagProviders.TryGetValue(key, out var provider))
+                            proertyDisplayName = provider.PropertyDisplayName;
+                    }
+
                     //var f = await FileManager.Upload(file.FileName, file.TempPath);
                     entity = new TagEntity
                     {
@@ -70,7 +80,7 @@ namespace BXJG.Utils.Tag
                         OrderIndex = i,
                         TenantId = AbpSession.TenantId,//不晓得为啥非要在这里设置下，估计应该用IMustHaveTenant接口
                         PropertyName = propertyName,
-                        PropertyDisplayName= proertyDisplayName ?? tag.TagName,
+                        PropertyDisplayName= proertyDisplayName ??     tag.TagName,
                         //ExtField1 = tag.ExtField1,
                         //ExtField2 = tag.ExtField2,
                         //扩展json字段用abp提供的方式
@@ -98,7 +108,7 @@ namespace BXJG.Utils.Tag
         /// </summary>
         /// <param name="ctx"></param>
         /// <returns></returns>
-        public static async ValueTask<List<TagDto>> GetSelectableList(SelectableTagContext ctx)
+        public static async ValueTask<List<SelectableTagDto>> GetSelectableList(SelectableTagContext ctx)
         {
             var rep = ctx.ScopedIocResolver.Resolve<IRepository<TagEntity, Guid>>();
             var ct = ctx.ScopedIocResolver.Resolve<ICancellationTokenProvider>();
@@ -115,7 +125,7 @@ namespace BXJG.Utils.Tag
                           })
                           .OrderByDescending(d => d.OrderIndex)
                           .Take(ctx.Top)
-                          .Select(x => new TagDto(x.TagName, x.TagDisplayName, x.OrderIndex))
+                          .Select(x => new SelectableTagDto(x.TagName, x.TagDisplayName, x.OrderIndex))
                           .ToListAsync(ct.Token);
         }
     }

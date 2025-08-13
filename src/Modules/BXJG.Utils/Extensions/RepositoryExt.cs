@@ -35,6 +35,7 @@ namespace Abp.Domain.Repositories
         /// <param name="track"></param>
         /// <param name="cancellationToken"></param>
         /// <returns>key属性名，value文件列表</returns>
+        [Obsolete("尽管有用，但是封装层次太多了不好，建议直接用IQueryable<AttachmentEntity>的扩展方法")]
         public static async Task<Dictionary<string, List<FileEntity>>> GetFilesByAttachment(this IRepository<AttachmentEntity, Guid> repository,
                                                                                             string entityId,
                                                                                             string? entityType = default,
@@ -72,6 +73,8 @@ namespace Abp.Domain.Repositories
         /// <param name="track"></param>
         /// <param name="cancellationToken"></param>
         /// <returns> key实体id；value：属性名和文件列表</returns>
+
+        [Obsolete("尽管有用，但是封装层次太多了不好，建议直接用IQueryable<AttachmentEntity>的扩展方法")]
         public static async Task<Dictionary<string, Dictionary<string, List<FileEntity>>>> GetFilesByAttachment(this IRepository<AttachmentEntity, Guid> repository, IEnumerable<string> entityIds, string? entityType=default, bool track = false, CancellationToken cancellationToken = default)
         {
             IQueryable<AttachmentEntity> q = (await repository.GetAllAsync()).WhereAttachment(entityType, default, track, entityIds.ToArray());
@@ -112,6 +115,8 @@ namespace Abp.Domain.Repositories
         /// <param name="track"></param>
         /// <param name="cancellationToken"></param>
         /// <returns>文件列表</returns>
+
+        [Obsolete("尽管有用，但是封装层次太多了不好，建议直接用IQueryable<AttachmentEntity>的扩展方法")]
         public static async Task<List<FileEntity>> GetFilesByAttachment(this IRepository<AttachmentEntity, Guid> repository, string entityId, string? entityType=default, string propertyName = default, bool track = false, CancellationToken cancellationToken = default)
         {
             IQueryable<AttachmentEntity> q = (await repository.GetAllAsync()).WhereAttachment(entityType, propertyName, track, entityId).OrderBy(x => x.OrderIndex);
@@ -129,6 +134,8 @@ namespace Abp.Domain.Repositories
         /// <param name="track"></param>
         /// <param name="cancellationToken"></param>
         /// <returns>key属性名，value文件列表</returns>
+
+        [Obsolete("尽管有用，但是封装层次太多了不好，建议直接用IQueryable<AttachmentEntity>的扩展方法")]
         public static Task<Dictionary<string, List<FileEntity>>> GetFilesByAttachment<TEntity>(this IRepository<AttachmentEntity, Guid> repository, string entityId, bool track = false, CancellationToken cancellationToken = default)
         {
             return repository.GetFilesByAttachment( entityId,typeof(TEntity).FullName, track, cancellationToken);
@@ -154,6 +161,8 @@ namespace Abp.Domain.Repositories
         /// <param name="track"></param>
         /// <param name="cancellationToken"></param>
         /// <returns> key实体id；value：属性名和文件列表</returns>
+
+        [Obsolete("尽管有用，但是封装层次太多了不好，建议直接用IQueryable<AttachmentEntity>的扩展方法")]
         public static Task<Dictionary<string, Dictionary<string, List<FileEntity>>>> GetFilesByAttachment<TEntity>(this IRepository<AttachmentEntity, Guid> repository, IEnumerable<string> entityIds, bool track = false, CancellationToken cancellationToken = default)
         {
             return repository.GetFilesByAttachment(entityIds, typeof(TEntity).FullName, track, cancellationToken);
@@ -182,6 +191,8 @@ namespace Abp.Domain.Repositories
         /// <param name="track"></param>
         /// <param name="cancellationToken"></param>
         /// <returns>文件列表</returns>
+
+        [Obsolete("尽管有用，但是封装层次太多了不好，建议直接用IQueryable<AttachmentEntity>的扩展方法")]
         public static Task<List<FileEntity>> GetFilesByAttachment<TEntity>(this IRepository<AttachmentEntity, Guid> repository, string entityId, string propertyName = default, bool track = false, CancellationToken cancellationToken = default)
         {
             return repository.GetFilesByAttachment( entityId, typeof(TEntity).FullName, propertyName, track, cancellationToken);
