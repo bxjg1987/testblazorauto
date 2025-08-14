@@ -83,7 +83,7 @@ namespace BXJG.Utils.Files
             for (int i = 0; i < files.Count; i++)
             {
                 var file = files[i];
-                var entity = oldEntities.SingleOrDefault(x => x.Id == file.FileId);
+                var entity = oldEntities.SingleOrDefault(x => x.FileId == file.FileId);
                 if (entity == default)
                 {
                     var f = await FileManager.Upload(file.FileName, file.TempPath,filePermission);

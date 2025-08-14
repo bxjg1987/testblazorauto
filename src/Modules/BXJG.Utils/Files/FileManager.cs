@@ -183,7 +183,7 @@ namespace BXJG.Utils.Files
             file.RelativePath = Path.Combine(nyr, file.Id.ToString()) + Path.GetExtension(tempFileRelativePath);
             if (file.ResponseContentType.StartsWith("image/"))
             {
-                file.RelativePathThumbnail = Path.Combine(nyr, Path.GetFileNameWithoutExtension(file.RelativePath) + "_thum.jpeg");
+                file.RelativePathThumbnail = Path.Combine(nyr, Path.GetFileNameWithoutExtension(file.RelativePath) + "_thum" + Path.GetExtension(file.RelativePath));
             }
 
             if (AbpSession.TenantId.HasValue)

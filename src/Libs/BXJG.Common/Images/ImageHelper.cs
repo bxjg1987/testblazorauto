@@ -16,14 +16,12 @@ namespace BXJG.Common
         /// <param name="thuPath">目标图片路径</param>
         /// <param name="maxDimension">最大尺寸</param>
         /// <param name="quality">生成缩略图后，写入png的质量，0-100(最高)</param>
-        public static void MakeThumb(string orgPath, string thuPath, int maxDimension=180, int quality=100)
+        public static void MakeThumb(string orgPath, string thuPath, int maxDimension = 180, int quality = 100)
         {
-           // const int maxDimension = 180; // 最大尺寸
-           // const int quality = 100; // 质量为 100%
+            //using var input = File.OpenRead(orgPath);
+            //using var inputStream = new SKManagedStream(input);
+            using var original = SKBitmap.Decode(orgPath);
 
-            using var input = File.OpenRead(orgPath);
-            using var inputStream = new SKManagedStream(input);
-            using var original = SKBitmap.Decode(inputStream);
 
             int width, height;
             if (original.Width > original.Height)
@@ -36,15 +34,20 @@ namespace BXJG.Common
                 height = maxDimension;
                 width = original.Width * maxDimension / original.Height;
             }
-  // original.Resize(new SKSize(2,3), SKFilterQuality.High)
- // var opt = new SKSamplingOptions(SKFilterMode.)
+
             using (var resized = original.Resize(new SKImageInfo(width, height), SKSamplingOptions.Default))
             {
                 if (resized != null)
                 {
                     using var image = SKImage.FromBitmap(resized);
                     using var output = File.OpenWrite(thuPath);
-                    image.Encode(SKEncodedImageFormat.Jpeg, quality).SaveTo(output);
+                    // 使用源图片格式生成缩略图
+                    SKEncodedImageFormat originalFormat = SKEncodedImageFormat.Png;
+                    using (var codec = SKCodec.Create(orgPath))
+                    {
+                        originalFormat = codec.EncodedFormat; // 获取源图片格式
+                    }
+                    image.Encode(originalFormat, quality).SaveTo(output);
                 }
             }
         }
