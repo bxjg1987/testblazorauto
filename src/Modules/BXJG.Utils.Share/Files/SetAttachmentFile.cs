@@ -8,7 +8,7 @@ namespace BXJG.Utils.Share.Files
 {
     /// <summary>
     /// 设置附件的模型
-    /// 具体业务的附件和实体存储需要事务性，所以建议在具体业务的新增修改dto中使用此类型作为附件列表模型
+    /// 修改时，若此图片未变动则保持FileId不变，否则若是上传了新图片，请设置TempPath和FileName
     /// </summary>
     public class SetAttachmentFile
     {

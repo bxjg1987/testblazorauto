@@ -88,6 +88,8 @@ namespace ZLJ.Web.Host.Startup
 
             var qsAuthToken = context.HttpContext.Request.Query["access_token"].FirstOrDefault();
             //blazor前端以server模式运行时，token在头部
+            //注意这里是未加密的
+            //signalr 文件下载是加密的
             if (qsAuthToken.IsNullOrWhiteSpaceBXJG() && context.HttpContext.Request.Headers.TryGetValue("Authorization", out var sdfsdf))
                 qsAuthToken = sdfsdf.ToString().Replace("Bearer", "").TrimStart();
 
@@ -101,13 +103,13 @@ namespace ZLJ.Web.Host.Startup
 
 
 
-            if (tmpPath.Value.StartsWith("/signalr"))
+            if (tmpPath.Value.StartsWith("/signalr", StringComparison.OrdinalIgnoreCase))
             {
                 context.Token = SimpleStringCipher.Instance.Decrypt(qsAuthToken);        // Set auth token from cookie
                 logger.LogDebug($"signalr连接的assesstoken为：{context.Token}");
             }
-            else if (tmpPath.Value.Contains("/bxjgfile/"))
-                context.Token = SimpleStringCipher.Instance.Decrypt(qsAuthToken, ZLJConsts.DefaultPassPhrase);
+            else if (tmpPath.Value.Contains("/BXJGFile/Download", StringComparison.OrdinalIgnoreCase))
+                context.Token = SimpleStringCipher.Instance.Decrypt(qsAuthToken, ZLJ.Core.Share.ZLJConsts.DefaultPassPhrase);
 
             return Task.CompletedTask;
         }
