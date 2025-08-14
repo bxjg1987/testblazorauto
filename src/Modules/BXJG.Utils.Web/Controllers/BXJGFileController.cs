@@ -193,7 +193,7 @@ namespace BXJG.Utils.Web.Controllers
                 var attdto = ObjectMapper.Map<AttachmentDto>(attachment);
                 var fileDtos = ObjectMapper.Map<List<FileDto>>(files);
                 attdto.Files = fileDtos;
-
+                dtos.Add(attdto);
             }
             return dtos;
         }
