@@ -125,7 +125,7 @@ namespace BXJG.Utils.Tag
                           })
                           .OrderByDescending(d => d.OrderIndex)
                           .Take(ctx.Top)
-                          .Select(x => new SelectableTagDto(x.TagName, x.TagDisplayName, x.OrderIndex))
+                          .Select(x => new SelectableTagDto(x.TagName, x.TagDisplayName, x.OrderIndex,true))
                           .ToListAsync(ct.Token);
         }
     }

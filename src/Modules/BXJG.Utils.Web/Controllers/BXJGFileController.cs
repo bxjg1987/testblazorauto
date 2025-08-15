@@ -115,7 +115,6 @@ namespace BXJG.Utils.Web.Controllers
         [UnitOfWork(false)]
         public async Task<PhysicalFileResult> DownloadThum(Guid id)
         {
-            var sdfsdf = base.AbpSession.UserId;
             var r = await this.fileDownloader.Value.GetAbsolutePath(id);
 
             if (r.Permission == Share.Files.FilePermission.Further)

@@ -1,5 +1,6 @@
 ﻿using Abp.Application.Services.Dto;
 using BXJG.Common.Contracts;
+using BXJG.Utils.Share.Tag;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,5 +42,23 @@ namespace BXJG.Utils.Application.Share.Tag
         /// </summary>
         public int OrderIndex { get; set; }
         public dynamic ExtensionData { get; set; }
+        /// <summary>
+        /// 是否已选择
+        /// </summary>
+        public bool IsSelected { get; set; }
+
+        public static TagDto Map(string entityId, string entityType, string propertyName, SelectableTagDto x, string propertyDisplayName=default)
+        {
+            return new TagDto
+            {
+                EntityId = entityId, 
+                TagName = x.TagName,
+                TagDisplayName = x.TagDisplayName,
+                PropertyName = propertyName,
+                EntityType = entityType,
+                OrderIndex = x.OrderIndex, 
+                //PropertyDisplayName = x.PropertyDisplayName
+            };
+        }
     }
 }

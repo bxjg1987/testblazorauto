@@ -49,7 +49,7 @@ namespace BXJG.Utils.Web.Controllers
         [HttpGet]
         [DisableAuditing]
         [UnitOfWork(false)]
-        public async Task<List<SelectableTagDto>> GetSelectable([Required] string entityType, string? propertyName = default, int top = 20, bool loadFromDb = true)
+        public async Task<List<SelectableTagDto>> GetPropertySelectable([Required] string entityType, string? propertyName = default, int top = 20, bool loadFromDb = true)
         {
             //必须先加个点，与模块模块配置中设置的tag可选源方式一致，且加个点避免冲突
             var key = $"{entityType}.{propertyName ?? string.Empty}";
@@ -104,7 +104,7 @@ namespace BXJG.Utils.Web.Controllers
         [HttpGet]
         [DisableAuditing]
         [UnitOfWork(false)]
-        public async Task<List<DynamicPropertyDto<List<SelectableTagDto>>>> GetSelectableProperty([Required] string entityType, int top = 20, bool loadFromDb = true)
+        public async Task<List<DynamicPropertyDto<List<SelectableTagDto>>>> GetSelectable([Required] string entityType, int top = 20, bool loadFromDb = true)
         {
             //var q = await Repository.GetAllReadonlyAsync();
             //var key = entityType + (propertyName.IsNotNullOrWhiteSpaceBXJG() ? "." + propertyName : "");
@@ -157,9 +157,9 @@ namespace BXJG.Utils.Web.Controllers
         }
         #endregion
 
-        #region 获取指定实体的tag列表
+        #region 获取指定实体的已选择了的tag列表
         /// <summary>
-        /// 获取指定实体的单个属性的tag列表
+        /// 获取指定实体的单个属性的已选择了的tag列表
         /// </summary>
         /// <param name="entityId">实体id</param>
         /// <param name="entityType">实体类型，若实体id是全局唯一类型，如：guid，则类型可以省略，但提供了的话，性能更好</param>
@@ -185,7 +185,7 @@ namespace BXJG.Utils.Web.Controllers
             return await GetEntityTags(kx.Key.EntityType, kx.Key.PropertyName, kx.Key.PropertyDisplayName, kx);
         }
         /// <summary>
-        /// 获取指定实体的多个属性的tag列表
+        /// 获取指定实体的多个属性的已选择了的tag列表
         /// </summary>
         /// <param name="entityId">实体id</param>
         /// <param name="entityType">实体类型，若实体id是全局唯一类型，如：guid，则类型可以省略，但提供了的话，性能更好</param>
@@ -231,7 +231,106 @@ namespace BXJG.Utils.Web.Controllers
                 if (!await provider.PermissionDependency.IsSatisfiedAsync(PermissionDependencyContext))
                     throw new AbpAuthorizationException();
             }
-            return ObjectMapper.Map<List<TagDto>>(tags);
+            var r = ObjectMapper.Map<List<TagDto>>(tags);
+            r.ForEach(x => x.IsSelected = true);
+            return r;
+        }
+        #endregion
+
+
+        #region 获取指定实体的可选和已选的tag列表
+        /// <summary>
+        /// 获取指定实体的单个属性的可选和已选的tag列表
+        /// </summary>
+        /// <param name="entityId">实体id</param>
+        /// <param name="entityType">实体类型，若实体id是全局唯一类型，如：guid，则类型可以省略，但提供了的话，性能更好</param>
+        /// <param name="propertyName">属性名，若此类型的实体只有一个属性使用tag，则此属性可省略</param>
+        /// <param name="top">最多获取热度最高的前多数个</param>
+        /// <param name="loadFromDb">实体tag中存在的自定义，且热度高的tag也可以作为可选tag吗？</param>
+        /// <returns></returns>
+        [HttpGet]
+        [UnitOfWork(false)]
+        public async Task<List<TagDto>> GetPropertyAllTags([Required] string entityId, string? entityType = default, string? propertyName = default, int top = 20, bool loadFromDb = true)
+        {
+            //已选
+            var yx = await GetPropertyTags(entityId, entityType, propertyName);
+
+            if (entityType.IsNullOrWhiteSpaceBXJG())
+            {
+                if (yx.Any() && yx.GroupBy(d => d.EntityType).Count() == 1)
+                    entityType = yx.First().EntityType;
+                else
+                    throw new UserFriendlyException(L("EntityTypeIsNull"));
+            }
+
+            if (propertyName.IsNullOrWhiteSpaceBXJG() && yx.Any())
+                propertyName = yx.First().PropertyName;
+
+            //可选
+            var kx = await GetPropertySelectable(entityType, propertyName, top, loadFromDb);
+            foreach (var x in kx)
+            {
+                if (!yx.Any(d => d.TagName == x.TagName))
+                    yx.Add(TagDto.Map(entityId, entityType, propertyName, x));
+            }
+            return yx;
+        }
+        /// <summary>
+        /// 获取指定实体的多个属性的可选和已选的tag列表
+        /// </summary>
+        /// <param name="entityId">实体id</param>
+        /// <param name="entityType">实体类型，若实体id是全局唯一类型，如：guid，则类型可以省略，但提供了的话，性能更好</param>
+        /// <param name="top">最多获取热度最高的前多数个</param>
+        /// <param name="loadFromDb">实体tag中存在的自定义，且热度高的tag也可以作为可选tag吗？</param>
+        /// <returns></returns>
+        [HttpGet]
+        [UnitOfWork(false)]
+        public async Task<List<DynamicPropertyDto<List<TagDto>>>> GetAllTags([Required] string entityId, string? entityType = default, int top = 20, bool loadFromDb = true)
+        {
+            //获取当前实体已关联的多个tag属性及其每个属性关联的多个tag
+            var yxs = await GetTags(entityId, entityType);
+            //若调用方未提供entityType，则尝试从yxs获取entityType
+            if (entityType.IsNullOrWhiteSpaceBXJG())
+            {
+                var f = yxs.FirstOrDefault();
+                if (f != default)
+                {
+                    // 若entityId不是全局唯一的
+                    if (f.Value != default && f.Value.Any() && yxs.SelectMany(d => d.Value).GroupBy(d => d.EntityType).Count() == 1)
+                        entityType = f.Value.First().EntityType;
+                }
+            }
+            if (entityType.IsNullOrWhiteSpaceBXJG())
+                throw new UserFriendlyException("请提供entityType参数");
+
+            var kxs = await GetSelectable(entityType, top, loadFromDb);
+
+            foreach (var kxProperty in kxs)
+            {
+                var yxProperty = yxs.SingleOrDefault(d => d.PropertyName == kxProperty.PropertyName);
+                if (yxProperty != null)
+                {
+                    var yxTags = yxProperty.Value;
+                    foreach (var kxTag in kxProperty.Value)
+                    {
+                        if (!yxTags.Any(yxTag => kxTag.TagName == yxTag.TagName))
+                        {
+                            yxTags.Add(TagDto.Map(entityId, entityType, kxProperty.PropertyName, kxTag, kxProperty.PropertyDisplayName));
+                        }
+                    }
+                }
+                else
+                {
+                    yxs.Add(new DynamicPropertyDto<List<TagDto>>
+                    {
+                        PropertyName = kxProperty.PropertyName,
+                        PropertyDisplayName = kxProperty.PropertyDisplayName,
+                        OrderIndex = kxProperty.OrderIndex,
+                        Value = kxProperty.Value.Select(d => TagDto.Map(entityId, entityType, kxProperty.PropertyName, d, kxProperty.PropertyDisplayName)).ToList()
+                    });
+                }
+            }
+            return yxs;
         }
         #endregion
     }

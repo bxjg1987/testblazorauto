@@ -1,4 +1,5 @@
-﻿using BXJG.Common.Extensions;
+﻿using BXJG.Common.Contracts;
+using BXJG.Common.Extensions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -19,8 +20,12 @@ namespace BXJG.Common.Dynamics
      * 后期可以考虑根据反射实体上的Attribute生成元数据
      */
 
-    public abstract class PropertyMetadataManager<TProperty> : IReadOnlyDictionary<string, TProperty>, IReadOnlyList<TProperty>
-        where TProperty : BXJGDynamicPropertyWithoutInput
+    /// <summary>
+    /// 动态属性元数据（内存）容器
+    /// 也可以作为动态属性元素据管理器
+    /// </summary>
+    /// <typeparam name="TProperty">动态属性定义</typeparam>
+    public class PropertyMetadataManager<TProperty> : IReadOnlyDictionary<string, TProperty>, IReadOnlyList<TProperty> where TProperty : BXJGDynamicPropertyWithoutInput
     {
         Dictionary<string, TProperty> dic = new Dictionary<string, TProperty>();
         List<TProperty> list;
@@ -183,7 +188,7 @@ namespace BXJG.Common.Dynamics
         //   public IReadOnlyDictionary<string, object> AdditionalData { get; set; }
     }
 
-    public class DisplayNameDto
+    public class DisplayNameDto:IOrderIndex
     {
         public string Name { get; set; }
         public string DisplayName { get; set; }
@@ -191,7 +196,7 @@ namespace BXJG.Common.Dynamics
 
         public string PropertyName { get=>Name; set=>Name=value; }
         public string PropertyDisplayName { get=>DisplayName; set=>DisplayName=value; }
-
+        public int OrderIndex { get; set; }
         public override bool Equals(object obj)
         {
             return obj is DisplayNameDto dto &&
@@ -204,17 +209,6 @@ namespace BXJG.Common.Dynamics
         }
     }
 
-    /// <summary>
-    /// 关联显示时使用
-    /// </summary>
-    public class DynamicPropertyDto: DynamicPropertyDto<object>
-    {
-        //public string Name { get; set; }
-        //public string DisplayName { get; set; }
-        //public object Value { get; set; }
-
-        
-    }
     /// <summary>
     /// 关联显示时使用
     /// </summary>
@@ -235,6 +229,17 @@ namespace BXJG.Common.Dynamics
         {
             return HashCode.Combine(Name);
         }
+    }
+    /// <summary>
+    /// 关联显示时使用
+    /// </summary>
+    public class DynamicPropertyDto: DynamicPropertyDto<object>
+    {
+        //public string Name { get; set; }
+        //public string DisplayName { get; set; }
+        //public object Value { get; set; }
+
+        
     }
     public class DynamicPropertyEditDto
     {

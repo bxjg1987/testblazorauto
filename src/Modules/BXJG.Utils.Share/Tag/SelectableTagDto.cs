@@ -17,16 +17,20 @@ namespace BXJG.Utils.Share.Tag
         /// <summary>
         /// 数字越大，优先级越高
         /// </summary>
-        [JsonIgnore]
+        //[JsonIgnore]
         public int OrderIndex { get; set; }
-
-        public SelectableTagDto(string TagName, string TagDisplayName, int OrderIndex = 0) //: this(TagName, TagName, OrderIndex)
+        /// <summary>
+        /// 是否已选择
+        /// </summary>
+        public bool IsSelected { get; set; }
+        public SelectableTagDto(string tagName, string tagDisplayName, int orderIndex = 0,bool isSelected=false) //: this(TagName, TagName, OrderIndex)
         {
-            this.TagName = TagName;
-            this.TagDisplayName = TagDisplayName;
-            this.OrderIndex = OrderIndex;
+            this.TagName = tagName;
+            this.TagDisplayName = tagDisplayName;
+            this.OrderIndex = orderIndex;
+            this.IsSelected = isSelected;
         }
-        public SelectableTagDto(string TagName, int OrderIndex = 0) : this(TagName, TagName, OrderIndex)
+        public SelectableTagDto(string tagName, int orderIndex = 0, bool isSelected = false) : this(tagName, tagName, orderIndex, isSelected)
         {
 
         }
