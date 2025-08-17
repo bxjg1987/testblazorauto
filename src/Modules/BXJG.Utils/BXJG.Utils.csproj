@@ -1,101 +1,101 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-	  <!--<TargetFramework>netstandard2.1</TargetFramework>-->
-    <TargetFramework>net9.0</TargetFramework>
-	  <VersionPrefix>1.3.143</VersionPrefix>
-	  <!--  <Version>1.2.28</Version>
+	<PropertyGroup>
+		<!--<TargetFramework>netstandard2.1</TargetFramework>-->
+		<TargetFramework>net9.0</TargetFramework>
+		<VersionPrefix>1.3.144</VersionPrefix>
+		<!--  <Version>1.2.28</Version>
    <TargetFramework>netstandard2.1</TargetFramework>-->
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-	  <LangVersion>latest</LangVersion>
-  </PropertyGroup>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<LangVersion>latest</LangVersion>
+	</PropertyGroup>
 
 
 
-  <ItemGroup>
-    <Compile Remove="AutoMapper\**" />
-    <Compile Remove="BusinessUser\**" />
-    <Compile Remove="DI\**" />
-    <Compile Remove="Interceptor\**" />
-    <EmbeddedResource Remove="AutoMapper\**" />
-    <EmbeddedResource Remove="BusinessUser\**" />
-    <EmbeddedResource Remove="DI\**" />
-    <EmbeddedResource Remove="Interceptor\**" />
-    <None Remove="AutoMapper\**" />
-    <None Remove="BusinessUser\**" />
-    <None Remove="DI\**" />
-    <None Remove="Interceptor\**" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="AutoMapper\**" />
+		<Compile Remove="BusinessUser\**" />
+		<Compile Remove="DI\**" />
+		<Compile Remove="Interceptor\**" />
+		<EmbeddedResource Remove="AutoMapper\**" />
+		<EmbeddedResource Remove="BusinessUser\**" />
+		<EmbeddedResource Remove="DI\**" />
+		<EmbeddedResource Remove="Interceptor\**" />
+		<None Remove="AutoMapper\**" />
+		<None Remove="BusinessUser\**" />
+		<None Remove="DI\**" />
+		<None Remove="Interceptor\**" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Compile Remove="Entities\ExtensibleFullAuditedAggregateRoot.cs" />
-    <Compile Remove="Enums\BXJGUtilsEnumAppService.cs" />
-    <Compile Remove="Enums\GetEnumForCombboxInput.cs" />
-    <Compile Remove="Enums\GetStructForCombboxInput.cs" />
-    <Compile Remove="Enums\IBXJGUtilsEnumAppService.cs" />
-    <Compile Remove="Extensions\AbpSettingsExt.cs" />
-    <Compile Remove="Extensions\ActiveUnitOfWorkExtensions.cs" />
-    <Compile Remove="Extensions\ColorAttribute.cs" />
-    <Compile Remove="Extensions\CommonExtensions.cs" />
-    <Compile Remove="Extensions\DateTimeExt.cs" />
-    <Compile Remove="Extensions\dfdfg.cs" />
-    <Compile Remove="Extensions\HashHelper.cs" />
-    <Compile Remove="Extensions\StringExtension.cs" />
-    <Compile Remove="Files\AttachmentPermissionChecker.cs" />
-    <Compile Remove="Files\AttachmentPermissionEntity.cs" />
-    <Compile Remove="Files\FileDto.cs" />
-    <Compile Remove="GeneralTree\GeneralTreeExtensions.cs" />
-    <Compile Remove="GeneralTree\GeneralTreePermissionExt.cs" />
-    <Compile Remove="IHaveIoc.cs" />
-    <Compile Remove="RandomHelper.cs" />
-    <Compile Remove="Tag\ExtOther.cs" />
-    <Compile Remove="WechatDecrypt.cs" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="Entities\ExtensibleFullAuditedAggregateRoot.cs" />
+		<Compile Remove="Enums\BXJGUtilsEnumAppService.cs" />
+		<Compile Remove="Enums\GetEnumForCombboxInput.cs" />
+		<Compile Remove="Enums\GetStructForCombboxInput.cs" />
+		<Compile Remove="Enums\IBXJGUtilsEnumAppService.cs" />
+		<Compile Remove="Extensions\AbpSettingsExt.cs" />
+		<Compile Remove="Extensions\ActiveUnitOfWorkExtensions.cs" />
+		<Compile Remove="Extensions\ColorAttribute.cs" />
+		<Compile Remove="Extensions\CommonExtensions.cs" />
+		<Compile Remove="Extensions\DateTimeExt.cs" />
+		<Compile Remove="Extensions\dfdfg.cs" />
+		<Compile Remove="Extensions\HashHelper.cs" />
+		<Compile Remove="Extensions\StringExtension.cs" />
+		<Compile Remove="Files\AttachmentPermissionChecker.cs" />
+		<Compile Remove="Files\AttachmentPermissionEntity.cs" />
+		<Compile Remove="Files\FileDto.cs" />
+		<Compile Remove="GeneralTree\GeneralTreeExtensions.cs" />
+		<Compile Remove="GeneralTree\GeneralTreePermissionExt.cs" />
+		<Compile Remove="IHaveIoc.cs" />
+		<Compile Remove="RandomHelper.cs" />
+		<Compile Remove="Tag\ExtOther.cs" />
+		<Compile Remove="WechatDecrypt.cs" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Remove="BXJG.Utils.xml" />
-    <None Remove="Localization\SourceFiles\BXJGUtils-zh-Hans.xml" />
-    <None Remove="Localization\SourceFiles\BXJGUtils.xml" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Remove="BXJG.Utils.xml" />
+		<None Remove="Localization\SourceFiles\BXJGUtils-zh-Hans.xml" />
+		<None Remove="Localization\SourceFiles\BXJGUtils.xml" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Compile Include="AutoMapper\AutoMapperProfile.cs" />
-    <Compile Include="BusinessUser\BusinessUserSession.cs" />
-    <Compile Include="DI\AbpDIStaticAccessor.cs" />
-    <Compile Include="Interceptor\DataFilterInterceptor.cs" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Include="AutoMapper\AutoMapperProfile.cs" />
+		<Compile Include="BusinessUser\BusinessUserSession.cs" />
+		<Compile Include="DI\AbpDIStaticAccessor.cs" />
+		<Compile Include="Interceptor\DataFilterInterceptor.cs" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Include="Localization\SourceFiles\BXJGUtils-zh-Hans.xml" />
-    <EmbeddedResource Include="Localization\SourceFiles\BXJGUtils.xml" />
-  </ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Include="Localization\SourceFiles\BXJGUtils-zh-Hans.xml" />
+		<EmbeddedResource Include="Localization\SourceFiles\BXJGUtils.xml" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Abp.AutoMapper" Version="10.2.0" />
-    <PackageReference Include="Abp.Zero.Common" Version="10.2.0" />
-    <PackageReference Include="Abp.ZeroCore" Version="10.2.0" />
-    <PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="4.1.0" />
-    <PackageReference Include="DistributedLock.Core" Version="1.0.8" />
-    <!--<PackageReference Include="Hangfire.Core" Version="1.8.11" />-->
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.8" />
-    <!--<PackageReference Include="DotNetCore.CAP" Version="7.2.0" />-->
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.8" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.8" />
-    <PackageReference Include="Mime" Version="3.8.0" />
-    <!--<PackageReference Include="MimeTypesMap" Version="1.*" />
+	<ItemGroup>
+		<PackageReference Include="Abp.AutoMapper" Version="10.*" />
+		<PackageReference Include="Abp.Zero.Common" Version="10.*" />
+		<PackageReference Include="Abp.ZeroCore" Version="10.*" />
+		<PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="4.1.0" />
+		<PackageReference Include="DistributedLock.Core" Version="1.0.8" />
+		<!--<PackageReference Include="Hangfire.Core" Version="1.8.11" />-->
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.8" />
+		<!--<PackageReference Include="DotNetCore.CAP" Version="7.2.0" />-->
+		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.8" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.8" />
+		<PackageReference Include="Mime" Version="3.8.0" />
+		<!--<PackageReference Include="MimeTypesMap" Version="1.*" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.3" />
     <PackageReference Include="System.Drawing.Common" Version="8.0.3" />
-	  <PackageReference Include="TinyPinyin.Net" Version="1.*" />-->
+	<PackageReference Include="TinyPinyin.Net" Version="1.*" />-->
 
-  </ItemGroup>
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\libs\BXJG.Common\BXJG.Common.csproj" />
-    <ProjectReference Include="..\BXJG.Utils.Share\BXJG.Utils.Share.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\libs\BXJG.Common\BXJG.Common.csproj" />
+		<ProjectReference Include="..\BXJG.Utils.Share\BXJG.Utils.Share.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Entities\" />
-  </ItemGroup>
+	<ItemGroup>
+		<Folder Include="Entities\" />
+	</ItemGroup>
 
 </Project>
