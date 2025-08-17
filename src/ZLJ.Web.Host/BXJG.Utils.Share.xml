@@ -1,0 +1,186 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>BXJG.Utils.Share</name>
+    </assembly>
+    <members>
+        <member name="F:BXJG.Utils.Share.BXJGUtilsConsts.ExtDataMaxLength">
+            <summary>
+            通用的扩展数据长度
+            </summary>
+        </member>
+        <member name="F:BXJG.Utils.Share.BXJGUtilsConsts.UploadTemp">
+            <summary>
+            upload\temp
+            </summary>
+        </member>
+        <member name="F:BXJG.Utils.Share.BXJGUtilsConsts.QuanjuPeizhi">
+            <summary>
+            全局配置
+            </summary>
+        </member>
+        <member name="F:BXJG.Utils.Share.BXJGUtilsConsts.FuwuqiGen">
+            <summary>
+            服务器跟url
+            </summary>
+        </member>
+        <member name="F:BXJG.Utils.Share.BXJGUtilsConsts.Shangchuangen">
+            <summary>
+            上传根目录
+            </summary>
+        </member>
+        <member name="F:BXJG.Utils.Share.BXJGUtilsConsts.OnAbpApplicationSettingsChanged">
+            <summary>
+            通过isettingmanager修改配置时，应触发此事件，以便通知配置提供程序刷新
+            </summary>
+        </member>
+        <member name="F:BXJG.Utils.Share.BXJGUtilsConsts.OnApplicationStateChanged">
+            <summary>
+            前端获取AbpUserConfigurationDto作为全局状态
+            里面任何一个状态变化时，都触发此事件
+            事件处理程序中，通过全局的延迟覆盖执行器推送信号到所有在线用户
+            在线用户得到信号后，发起查询，而后更新本地缓存的状态。
+            这个对应整个应用级别的配置更新
+            </summary>
+        </member>
+        <member name="F:BXJG.Utils.Share.BXJGUtilsConsts.OnTenantStateChanged">
+            <summary>
+            租户级别的状态更新
+            </summary>
+        </member>
+        <member name="F:BXJG.Utils.Share.BXJGUtilsConsts.OnUserStateChanged">
+            <summary>
+            用户级别的状态更新
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.Share.Files.AttachmentEditDto">
+            <summary>
+            附件编辑模型
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Share.Files.AttachmentEditDto.AbsoluteFileUrl">
+            <summary>
+            文件绝对url
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Share.Files.AttachmentEditDto.ExtensionData">
+            <summary>
+            附件扩展属性
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Share.Files.AttachmentEditDto.OrderIndex">
+            <summary>
+            排序索引，若赋值则按此顺序，否则按提交顺序
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.Share.Files.DownloadFileResult">
+            <summary>
+            下载文件时的返回模型
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Share.Files.DownloadFileResult.RelativePath">
+            <summary>
+            物理路径
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Share.Files.DownloadFileResult.RelativePathThumbnail">
+            <summary>
+            缩略图的物理路径(如果有)
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Share.Files.DownloadFileResult.RealFullName">
+            <summary>
+            上传时真实的文件名
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Share.Files.DownloadFileResult.ResponseContentType">
+            <summary>
+            响应时的content-type
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Share.Files.DownloadFileResult.Permission">
+            <summary>
+            访问权限
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.Share.Files.FilePermission">
+            <summary>
+            文件访问权限
+            目前的文件上传、删除都是依赖附件的，这里的权限仅仅是说明通用文件权限，也就是通用文件下载接口需要判断的
+            将来可能做单独的文件管理接口，那时的权限还是按功能权限来做。
+            某些附件需要更严格的权限控制，此时具体业务应该提供单独的文件访问接口，通常是根据具体业务的功能权限来判断
+            </summary>
+        </member>
+        <member name="F:BXJG.Utils.Share.Files.FilePermission.Anonymous">
+            <summary>
+            匿名用户可访问
+            </summary>
+        </member>
+        <member name="F:BXJG.Utils.Share.Files.FilePermission.Authenticated">
+            <summary>
+            登录的用户才能访问
+            </summary>
+        </member>
+        <member name="F:BXJG.Utils.Share.Files.FilePermission.Further">
+            <summary>
+            具体业务自己的文件访问接口自己去判断权限，不依赖此字段
+            </summary>
+        </member>
+        <member name="F:BXJG.Utils.Share.Files.FileStatus.Moving">
+            <summary>
+            正在移动
+            </summary>
+        </member>
+        <member name="F:BXJG.Utils.Share.Files.FileStatus.Moved">
+            <summary>
+            移动完成
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.Share.Files.IDownloadFileCache">
+            <summary>
+            下载文件的缓存，参看abp官方文档的租户实体缓存
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.Share.Files.SetAttachmentFile">
+            <summary>
+            设置附件的模型
+            修改时，若此图片未变动则保持FileId不变，否则若是上传了新图片，请设置TempPath和FileName
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Share.Files.SetAttachmentFile.FileId">
+            <summary>
+            文件id
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Share.Files.SetAttachmentFile.TempPath">
+            <summary>
+            临时目录的相对路径
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Share.Files.SetAttachmentFile.FileName">
+            <summary>
+            文件真实名称
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.Share.Tag.SelectableTagDto">
+            <summary>
+            tag数据传输对象
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Share.Tag.SelectableTagDto.OrderIndex">
+            <summary>
+            数字越大，优先级越高
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Share.Tag.SelectableTagDto.IsSelected">
+            <summary>
+            是否已选择
+            </summary>
+        </member>
+        <member name="T:Abp.Notifications.MessageNotificationWithTitleData">
+            <summary>
+            带标题的消息通知数据
+            </summary>
+        </member>
+    </members>
+</doc>

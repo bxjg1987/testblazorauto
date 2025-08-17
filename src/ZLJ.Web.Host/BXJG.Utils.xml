@@ -1,0 +1,1266 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>BXJG.Utils</name>
+    </assembly>
+    <members>
+        <member name="P:BXJG.Utils.BXJGUtilsModuleConfig.EnumLocalizationProviders">
+            <summary>
+            通过它注册本地化枚举定义
+            </summary>
+        </member>
+        <member name="F:BXJG.Utils.BXJGUtilsModuleConfig.SelectableTagProviders">
+            <summary>
+            <para>可选tag数据提供器</para>
+            最外层：key是实体类型全面 + 可选的属性名；
+            input.EntityType + (input.PropertyName.IsNotNullOrWhiteSpaceBXJG() ? "_" + input.PropertyName : "");
+            <para>
+            value是这种类型数据的权限依赖permissionDependency（AnonymousPermissionDependency.Instance AuthenticatePermissionDependency.Instance new SimplePermissionDependency）
+             </para>
+            <para>和多个数据提供来源，每个委托对应一个，多个来源的数据后者覆盖前者，合并
+            </para>
+            
+            <para>委托中的第1个string是实体类型全名</para>
+            <para>委托中的第2个string?是可选的属性名</para>
+            <para>到后期，tab中相同类型的tag都会越来越多，所以需要数量限制，这个由前端和默认值控制，委托中的int就是这个含义</para>
+            
+            
+            <para>
+            具体的委托实现可以从字典、配置、内存、或任意地方来
+            tag表去重这种方式可以不单独提供，因为应用服务默认会做这个查询。
+            </para><para>
+            应用服务统一向前端提供数据，它的数据来源就是这里
+            你也可以完全忽略对应的应用服务和这里的配置，而是自己实现可选tag列表</para>
+            
+            <para>
+            为啥一个数据类型，需要多个委托？
+            因为这是公共模块，它可能被同一个项目的多个模块引用，不同模块可能对相同的数据类型提供多个委托
+            类似abp菜单、权限提供器，只不过它们使用了接口，而我们是使用委托，避免定义接口了
+            </para>
+            
+            <para>
+            是否需要从tags数据表中获取，最好是用提供器的方式，根据不同数据类型取决定，这样更灵活，
+            但这个委托可以进一步封装
+            </para>
+            
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.BXJGUtilsModuleConfig.claassss">
+            <summary>
+            
+            </summary>
+            <param name="EntityType"></param>
+            <param name="Providers"></param>
+            <param name="PermissionDependency"></param>
+            <param name="PropertyName"></param>
+            <param name="PropertyDisplayName"></param>
+            <param name="LoadFromDb"></param>
+        </member>
+        <member name="M:BXJG.Utils.BXJGUtilsModuleConfig.claassss.#ctor(System.String,System.String,System.Collections.Generic.ICollection{System.Func{BXJG.Utils.Tag.SelectableTagContext,System.Threading.Tasks.ValueTask{System.Collections.Generic.List{BXJG.Utils.Share.Tag.SelectableTagDto}}}},Abp.Authorization.IPermissionDependency,System.String,System.Boolean)">
+            <summary>
+            
+            </summary>
+            <param name="EntityType"></param>
+            <param name="Providers"></param>
+            <param name="PermissionDependency"></param>
+            <param name="PropertyName"></param>
+            <param name="PropertyDisplayName"></param>
+            <param name="LoadFromDb"></param>
+        </member>
+        <member name="P:BXJG.Utils.BXJGUtilsModuleConfig.claassss.EntityType">
+            <summary></summary>
+        </member>
+        <member name="P:BXJG.Utils.BXJGUtilsModuleConfig.claassss.PropertyName">
+            <summary></summary>
+        </member>
+        <member name="P:BXJG.Utils.BXJGUtilsModuleConfig.claassss.Providers">
+            <summary></summary>
+        </member>
+        <member name="P:BXJG.Utils.BXJGUtilsModuleConfig.claassss.PermissionDependency">
+            <summary></summary>
+        </member>
+        <member name="P:BXJG.Utils.BXJGUtilsModuleConfig.claassss.PropertyDisplayName">
+            <summary></summary>
+        </member>
+        <member name="P:BXJG.Utils.BXJGUtilsModuleConfig.claassss.LoadFromDb">
+            <summary></summary>
+        </member>
+        <member name="T:BXJG.Utils.DistributedLockHelper">
+            <summary>
+            分布式锁帮助器
+            通常在应用服务方法的中间部分用，少数情况在领域服务方法中也可以
+            uow释放后会自动释放锁
+            应用服务抽象类提供了包装方法，它内部调用这个类
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.DynamicProperty.DynamicPropertyManager`1">
+            <summary>
+            设计时考虑商品的sku动态属性设计场景<br/>
+            在模块<see cref="M:BXJG.Utils.BXJGUtilsModule.Initialize"/>中注册到ioc
+            </summary>
+            <typeparam name="TEntity">只是用来获取字符串</typeparam>
+        </member>
+        <member name="T:BXJG.Utils.DynamicProperty.DynamicPropertyEditModel">
+            <summary>
+            动态属性编辑模型
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.DynamicProperty.DynamicPropertyEditModel.PropertyName">
+            <summary>
+            动态属性名，如：Color
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.DynamicProperty.DynamicPropertyEditModel.DisplayName">
+            <summary>
+            动态属性显示名，如：颜色
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.DynamicProperty.DynamicPropertyEditModel.InputType">
+            <summary>
+            输入类型，可选值：COMBOBOX、CHECKBOX、SINGLE_LINE_INPUT
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.DynamicProperty.DynamicPropertyEditModel.PropertyValues">
+            <summary>
+            当输入类型为COMBOBOX的可选值列表，多个用英文逗号分隔，如：绿色,黄色
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.DynamicProperty.DynamicPropertyModel">
+            <summary>
+            动态属性查询模型
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.DynamicProperty.DynamicPropertyModel.Id">
+            <summary>
+            动态属性id
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.DynamicProperty.DynamicPropertyModel.PropertyName">
+            <summary>
+            动态属性名，如：Color
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.DynamicProperty.DynamicPropertyModel.DisplayName">
+            <summary>
+            动态属性显示名，如：颜色
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.DynamicProperty.DynamicPropertyModel.InputType">
+            <summary>
+            输入类型，可选值：COMBOBOX、CHECKBOX、SINGLE_LINE_INPUT
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.DynamicProperty.DynamicPropertyModel.DynamicPropertyValues">
+            <summary>
+            当输入类型为COMBOBOX的可选值列表
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.Enums.EnumLocalizationContainer">
+            <summary>
+            枚举作为下拉框数据定义的容器
+            本地化枚举列表的应用场景比较少，因此单独定义个容器，而不是直接使用<see cref="T:BXJG.Utils.BXJGUtilsModuleConfig"/>作为容器
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.Enums.EnumLocalizationDefine">
+            <summary>
+            枚举作为下拉框时的描述对象
+            </summary>
+        </member>
+        <member name="M:BXJG.Utils.Enums.EnumLocalizationDefine.#ctor(System.Type,System.String,System.String,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            
+            </summary>
+            <param name="name">枚举短名称，比如bool 对应是System.Bool 更容易的调用</param>
+            <param name="type">枚举类型对象</param>
+            <param name="locationSourceName">此枚举使用那个本地化源</param>
+            <param name="permissions">哪些权限可以获取此枚举列表</param>
+        </member>
+        <member name="P:BXJG.Utils.Enums.EnumLocalizationDefine.Name">
+            <summary>
+            枚举短名称
+            比如bool 对应是System.Bool 更容易的调用
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Enums.EnumLocalizationDefine.Type">
+            <summary>
+            枚举类型对象
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Enums.EnumLocalizationDefine.LocationSourceName">
+            <summary>
+            此枚举使用那个本地化源
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Enums.EnumLocalizationDefine.Permissions">
+            <summary>
+            哪些权限可以获取此枚举列表
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.Enums.EnumConfigItem`1">
+            <summary>
+            枚举作为下拉框时的描述对象
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.Events.UIEventTrigger">
+            <summary>
+            前端事件触发器
+            后端通过此触发器触发前端事件
+            </summary>
+        </member>
+        <member name="M:BXJG.Utils.Events.UIEventTrigger.Trigger(System.String,System.Object,System.Int32,System.Nullable{System.Int64})">
+            <summary>
+            触发一个前端事件
+            </summary>
+            <param name="scope">范围，0应用程序 1租户 2用户</param>
+            <param name="scopeId">scope为0时忽略，为1时表示租户id，为2时表示用户id，不为0时，若为空则自动去当前租户或用户id</param>
+            <param name="eventName">事件名称</param>
+            <param name="param">事件参数，可空</param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Events.UIEventTrigger.Trigger``1(System.Object,System.Int32,System.Nullable{System.Int64})">
+            <summary>
+            触发一个前端事件
+            </summary>
+            <typeparam name="T">参数类型，其类型的FullName作为事件名称</typeparam>
+            <param name="scope">范围，0应用程序 1租户 2用户</param>
+            <param name="scopeId">scope为0时忽略，为1时表示租户id，为2时表示用户id，不为0时，若为空则自动去当前租户或用户id</param>
+            <param name="param">事件参数，可空</param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Events.UIEventTrigger.TriggerApplication(System.String,System.Object)">
+            <summary>
+            触发一个应用程序级别的前端事件
+            </summary>
+            <param name="eventName"></param>
+            <param name="param"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Events.UIEventTrigger.TriggerApplication``1(System.Object)">
+            <summary>
+            触发一个应用程序级别的前端事件
+            </summary>
+            <typeparam name="T">参数类型，其类型的FullName作为事件名称</typeparam>
+            <param name="param">参数对象</param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Events.UIEventTrigger.TriggerTenant(System.String,System.Object,System.Nullable{System.Int32})">
+            <summary>
+            触发一个租户级别的前端事件
+            </summary>
+            <param name="eventName">事件名称</param>
+            <param name="param"></param>
+            <param name="tenantId">若为空则取当前租户</param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Events.UIEventTrigger.TriggerTenant``1(System.Object,System.Nullable{System.Int32})">
+            <summary>
+            触发一个租户级别的前端事件
+            </summary>
+            <typeparam name="T">参数类型，其类型的FullName作为事件名称</typeparam>
+            <param name="param"></param>
+            <param name="tenantId">若为空则取当前租户</param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Events.UIEventTrigger.TriggerUser(System.String,System.Object,System.Nullable{System.Int64})">
+            <summary>
+            触发一个用户级别的前端事件
+            </summary>
+            <param name="eventName">事件名称</param>
+            <param name="param"></param>
+            <param name="tenantId">若为空则取当前用户</param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Events.UIEventTrigger.TriggerUser``1(System.Object,System.Nullable{System.Int64})">
+            <summary>
+            触发一个用户级别的前端事件
+            </summary>
+            <typeparam name="T">参数类型，其类型的FullName作为事件名称</typeparam>
+            <param name="param"></param>
+            <param name="tenantId">若为空则取当前用户</param>
+            <returns></returns>
+        </member>
+        <member name="T:BXJG.Utils.Extensions.EnumExtension">
+            <summary>
+            枚举扩展类
+            </summary>
+        </member>
+        <member name="M:BXJG.Utils.Extensions.EnumExtension.GetColor(System.Enum)">
+            <summary>
+            获取枚举的颜色描述信息
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.Extensions.LinqExt">
+            <summary>
+            整个utils core层 对linq相关扩展
+            </summary>
+        </member>
+        <member name="M:BXJG.Utils.Extensions.LinqExt.WhereAttachment(System.Linq.IQueryable{BXJG.Utils.Files.AttachmentEntity},System.String,System.String,System.Boolean,System.String[])">
+            <summary>
+            应用附件查询条件
+            </summary>
+            <param name="q"></param>
+            <param name="entityType">实体类型，若实体id是全局唯一的，比如guid，则此参数可省略</param>
+            <param name="propertyName">属性名称，若不提供则忽略此条件，若你想获取属性为空的，你需要后续继续where加条件</param>
+            <param name="entityIds">实体id列表</param>
+            <returns>key属性名，value文件列表</returns>
+        </member>
+        <member name="M:BXJG.Utils.Extensions.LinqExt.WhereAttachment``1(System.Linq.IQueryable{BXJG.Utils.Files.AttachmentEntity},System.String,System.Boolean,System.String[])">
+            <summary>
+            应用附件查询条件，泛型版
+            </summary>
+            <param name="q"></param>
+            <param name="propertyName">属性名称，若不提供则忽略此条件，若你想获取属性为空的，你需要后续继续where加条件</param>
+            <param name="entityIds">实体id列表</param>
+            <returns>key属性名，value文件列表</returns>
+        </member>
+        <member name="M:BXJG.Utils.Extensions.LinqExt.Where(System.Linq.IQueryable{BXJG.Utils.Tag.TagEntity},System.String,System.String,System.Boolean)">
+            <summary>
+            应用Tag查询条件
+            </summary>
+            <param name="q"></param>
+            <param name="entityType">实体类型，若实体id是全局唯一的，比如guid，则此参数可省略</param>
+            <param name="propertyName">属性名称，若不提供则忽略此条件，若你想获取属性为空的，你需要后续继续where加条件</param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Extensions.LinqExt.Where(System.Linq.IQueryable{BXJG.Utils.Tag.TagEntity},System.String,System.String,System.Boolean,System.String[])">
+            <summary>
+            应用Tag查询条件
+            </summary>
+            <param name="q"></param>
+            <param name="entityType">实体类型</param>
+            <param name="propertyName">属性名称，若不提供则忽略此条件，若你想获取属性为空的，你需要后续继续where加条件</param>
+            <param name="entityIds">实体id列表</param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Extensions.LinqExt.Where``1(System.Linq.IQueryable{BXJG.Utils.Tag.TagEntity},System.String,System.Boolean,System.String[])">
+            <summary>
+            应用Tag查询条件
+            </summary>
+            <param name="q"></param>
+            <param name="propertyName">属性名称，若不提供则忽略此条件，若你想获取属性为空的，你需要后续继续where加条件</param>
+            <param name="entityIds">实体id列表</param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Extensions.LinqExt.Where``1(System.Linq.IQueryable{BXJG.Utils.Tag.TagEntity},System.String,System.Boolean)">
+            <summary>
+            应用Tag查询条件
+            </summary>
+            <param name="q"></param>
+            <param name="propertyName">属性名称，若不提供则忽略此条件，若你想获取属性为空的，你需要后续继续where加条件</param>
+            <returns></returns>
+        </member>
+        <member name="F:BXJG.Utils.Extensions.LinqExt.xx">
+            <summary>
+            abp仓储的默认实现目前的删除是查询出来之后再删除，数据量大时有问题，已经提交了issue，这里是临时解决方式
+            </summary>
+        </member>
+        <member name="M:BXJG.Utils.Extensions.LinqExt.BatchDelete``1(System.Linq.IQueryable{``0},System.Threading.CancellationToken)">
+            <summary>
+            abp仓储的默认实现目前的删除是查询出来之后再删除，数据量大时有问题，已经提交了issue，这里是临时解决方式
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="q"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="T:BXJG.Utils.Files.AttachmentEntity">
+            <summary>
+            通用的附件实体
+            任何实体都可以通过它来实现附件、图片功能，它与实体之间是弱引用关系
+            使用冗余数据方式关联单个文件，避免join查询
+            它与附件权限是弱关系
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Files.AttachmentEntity.EntityType">
+            <summary>
+            关联实体类型，可以是任意唯一字符串，通常是实体类型.FullTypeName
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Files.AttachmentEntity.EntityId">
+            <summary>
+            关联实体id
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Files.AttachmentEntity.PropertyName">
+            <summary>
+            属性名，可空，强烈建议始终提供，因为开始可能不需要特别指定属性，但后期可能加字段
+            比如工单：字段A表示要处理的问题相关图片，字段B表示处理完成时拍摄的图片，它们都使用附件表，当通过此字段来表示关联的不同的属性
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Files.AttachmentEntity.PropertyDisplayName">
+            <summary>
+            属性显示名，在存储时若为空则复制PropertyName
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Files.AttachmentEntity.FileId">
+            <summary>
+            关联的文件id
+            之前是直接用id和文件id对应，但是这样就导致即便文件是同一个，也必须新增一条文件记录，反直觉的设计，现在还是改回来。
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Files.AttachmentEntity.File">
+            <summary>
+            关联的文件实体
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Files.AttachmentEntity.OrderIndex">
+            <summary>
+            顺序索引
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Files.AttachmentEntity.TenantId">
+            <summary>
+            租户id
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.Files.AttachmentManager">
+            <summary>
+            附件管理器
+            每个实体类型对应一个附件管理器
+            它与实体建立弱引用(EntityType,EntityId和可选的属性名)关系，将所有实体的附件统一存储到一张表中
+            它内部使用FileManager进行文件管理
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Files.AttachmentManager.FileManager">
+            <summary>
+            文件管理器
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Files.AttachmentManager.Repository">
+            <summary>
+            附件仓储
+            </summary>
+        </member>
+        <member name="F:BXJG.Utils.Files.AttachmentManager.entityType">
+            <summary>
+            关联的实体类型，也就表明当前附件管理器是专用于管理此类型实体的
+            </summary>
+        </member>
+        <member name="M:BXJG.Utils.Files.AttachmentManager.#ctor(System.String)">
+            <summary>
+            实例化附件管理器
+            </summary>
+            <param name="entityType">实体类型</param>
+        </member>
+        <member name="M:BXJG.Utils.Files.AttachmentManager.SetAttachments(System.Object,System.String,System.String,System.Collections.Generic.IList{BXJG.Utils.Share.Files.SetAttachmentFile},BXJG.Utils.Share.Files.FilePermission)">
+            <summary>
+            设置附件，删除和新增关联的文件
+            </summary>
+            <param name="entityId">实体id</param>
+            <param name="files">包含新老文件的列表，注意顺序，若是纯删除则保持空</param>
+            <param name="propertyName">关联的属性名</param>
+            <returns>没必要返回附件，直接返回文件吧</returns>
+        </member>
+        <member name="T:BXJG.Utils.Files.AttachmentManager`1">
+            <summary>
+            通用泛型附件管理器
+            </summary>
+            <typeparam name="TEntity">附件所属实体类型</typeparam>
+        </member>
+        <member name="T:BXJG.Utils.Files.FileDownloader">
+            <summary>
+            下载器
+            </summary>
+        </member>
+        <member name="M:BXJG.Utils.Files.FileDownloader.GetAbsolutePath(System.Guid)">
+            <summary>
+            获取指定文件的绝对路径
+            </summary>
+            <param name="id">文件id</param>
+            <returns>文件的物理路径和content-type</returns>
+        </member>
+        <member name="T:BXJG.Utils.Files.FileEntity">
+            <summary>
+            文件实体
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Files.FileEntity.TenantId">
+            <summary>
+            租户id
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Files.FileEntity.RealName">
+            <summary>
+            真实的文件名 c#高级编程
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Files.FileEntity.Ext">
+            <summary>
+            .jpg
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Files.FileEntity.RealFullName">
+            <summary>
+            c#高级编程.jpg
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Files.FileEntity.ResponseContentType">
+            <summary>
+            响应的文件类型，mime
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Files.FileEntity.Size">
+            <summary>
+            大小字节
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Files.FileEntity.RelativePath">
+            <summary>
+            相对于文件存储目录的 相对路径
+            别用web根，因为文件下载需要权限
+            别用内容根，因为文件存储在任何目录更灵活
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Files.FileEntity.RelativePathThumbnail">
+            <summary>
+            缩略图相对路径
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Files.FileEntity.Permission">
+            <summary>
+            通用的文件权限，统一文件访问接口判断此属性，
+            具体业务独立的文件访问接口忽略此属性
+            由于这是通用权限，所以定义在这里而不是附件实体上
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Files.FileEntity.ExtensionData">
+            <summary>
+            扩展数据
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.Files.FileManager">
+            <summary>
+            基于服务器本地文件存储的文件管理领域服务
+            mvc或web api层的controller接收上传的文件，并通过此类进行文件的验证和保存
+            开始将文件存储在临时目录中，确认后移动到正式目录
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Files.FileManager.GuidGenerator">
+            <summary>
+            abp提供的异步取消
+            </summary>
+        </member>
+        <member name="M:BXJG.Utils.Files.FileManager.UploadToTemp(System.IO.Stream)">
+            <summary>
+            验证并将文件存储到temp目录
+            </summary>
+            <param name="stream">可重复读的文件流</param>
+            <returns>临时文件的相对路径</returns>
+        </member>
+        <member name="M:BXJG.Utils.Files.FileManager.Upload(System.String,System.String,BXJG.Utils.Share.Files.FilePermission)">
+            <summary>
+            将文件存储到正式目录并做数据库记录
+            </summary>
+            <param name="fileName">真实的文件名称</param>
+            <param name="tempFileRelativePath">临时文件的相对路径</param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Files.FileManager.AddFileRecord(System.String,System.String,BXJG.Utils.Share.Files.FilePermission)">
+            <summary>
+            生成文件的数据库记录
+            </summary>
+            <param name="fileName">真实的文件名称</param>
+            <param name="tempFileRelativePath">临时文件的相对路径</param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Files.FileManager.Remove(BXJG.Utils.Files.FileEntity)">
+            <summary>
+            删除文件
+            </summary>
+            <param name="file"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Files.FileManager.DeleteEffortless(System.String[])">
+            <summary>
+            尽力而为的删除物理文件
+            </summary>
+            <param name="pathRelative">相对路径</param>
+        </member>
+        <member name="T:BXJG.Utils.Files.FileManagerBase">
+            <summary>
+            文件下载器和管理器的抽象类
+            </summary>
+        </member>
+        <member name="F:BXJG.Utils.Files.FileManagerBase._uploadDir">
+            <summary>
+            获取安全的上传目录，一般是非应用程序目录 可读写 不可执行
+            </summary>
+        </member>
+        <member name="F:BXJG.Utils.Files.FileManagerBase._tempDir">
+            <summary>
+            安全上传时的临时目录
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Files.FileManagerBase.Configuration">
+            <summary>
+            配置（上传目录相关配置是死的，所以没有用abp的settings系统）
+            </summary>
+        </member>
+        <member name="M:BXJG.Utils.Files.FileManagerBase.AbsoluteToRelativePath(System.String)">
+            <summary>
+            绝对路径转相对路径
+            d:\upload\20201022\a.jpg -> 20201022\a.jpg  
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Files.FileManagerBase.RelativeToAbsolutePath(System.String)">
+            <summary>
+            相对路径转绝对路径
+            upload\20201022\a.jpg -> d:\\upload\20201022\a.jpg
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="T:BXJG.Utils.GeneralTree.DataDictionaryManager">
+            <summary>
+            通用字典领域服务
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.GeneralTree.GeneralTreeEntity`1.ChildrenCount">
+            <summary>
+            子节点数量
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.GeneralTree.GeneralTreeEntity`1.Name">
+            <summary>
+            节点标识，不同租户下同类型的节点，此字段一样
+            如：品牌  表示品牌节点，不同租户下此字段值一样
+            使用场景：在数据字典功能中，前端下拉框绑定时可以通过此字段绑定指定节点类型
+            不能用DisplayName，因为它可能变
+            不能用id，因为相同数据库中的不同租户id不同
+            不能用code，因为节点移动后，code也会变
+            用不到此字段时，请忽略。此字段通常不允许修改
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.GeneralTree.GeneralTreeManager`1">
+            <summary>
+            通用树形领域服务
+            </summary>
+            <typeparam name="TEntity">通用树形实体类型</typeparam>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.GeneralTreeManager`1.CreateAsync(`0)">
+            <summary>
+            往数据库中插入节点
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.GeneralTreeManager`1.UpdateChildrenCount(`0)">
+            <summary>
+            更新节点的子节点数量
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.GeneralTreeManager`1.UpdateAsync(`0)">
+            <summary>
+            修改节点，内部会自动处理节点移动的问题
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.GeneralTreeManager`1.DeleteAsync(`0)">
+            <summary>
+            删除节点及其后代节点
+            目前不会处理相邻节点的code问题，因为不影响查询和排序
+            </summary>
+            <param name="item"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.GeneralTreeManager`1.MoveAsync(System.Int64,System.Nullable{System.Int64},BXJG.Common.Contracts.GeneralTreeMoveType)">
+            <summary>
+            移动节点
+            </summary>
+            <param name="sourceId"></param>
+            <param name="targetId"></param>
+            <param name="moveType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.GeneralTree.GeneralTreeManager`1.MoveAsync(`0,`0,System.Collections.Generic.List{`0},System.Int32)">
+            <summary>
+            移动节点
+            </summary>
+            <param name="source">源节点，对应00002.00002</param>
+            <param name="targetParent">目标位置的父节点，对应00001</param>
+            <param name="targetBrotherList">目标节点的子节点集合，对应0001.00001、00001.00002</param>
+            <param name="targetIndex">移动后所处目标的目标位置的索引，对应1</param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Helpers.CodeGeneratorHelper.CodeGenerator(System.Object,System.Object[])">
+            <summary>
+            反射执行以CodeGenerator打头的方法
+            </summary>
+            <param name="obj"></param>
+            <param name="ps"></param>
+        </member>
+        <member name="M:BXJG.Utils.Localization.BXJGUtilsLocalizationExt.GetEnum(Abp.Localization.Sources.ILocalizationSource,System.Enum)">
+            <summary>
+            获取指定枚举值对应的本地化文本
+            如：Gender.Man  则获取 “男”
+            </summary>
+            <param name="localizationSource"></param>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Localization.BXJGUtilsLocalizationExt.GetEnum``1(Abp.Localization.Sources.ILocalizationSource,``0)">
+            <summary>
+            获取指定枚举值对应的本地化文本
+            如：Gender.Man  则获取 “男”
+            </summary>
+            <typeparam name="T">枚举类型</typeparam>
+            <param name="localizationSource"></param>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Localization.BXJGUtilsLocalizationExt.GetEnum(Abp.Localization.ILocalizationManager,System.String,System.Enum)">
+            <summary>
+            获取指定枚举值对应的本地化文本
+            如：Gender.Man  则获取 “男”
+            </summary>
+            <param name="localizationManager"></param>
+            <param name="sourceName"></param>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Localization.BXJGUtilsLocalizationExt.GetEnum``1(Abp.Localization.ILocalizationManager,System.String,``0)">
+            <summary>
+            获取指定枚举值对应的本地化文本
+            如：Gender.Man  则获取 “男”
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="localizationManager"></param>
+            <param name="sourceName">本地化资源名</param>
+            <param name="obj">枚举值</param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Localization.BXJGUtilsLocalizationExt.GetForType(Abp.Localization.Sources.ILocalizationSource,System.Type)">
+            <summary>
+            为指定类型本身获取本地化字符串
+            如：.GetForType(typeof(Gender))  返回"性别"
+            </summary>
+            <param name="localizationSource"></param>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Localization.BXJGUtilsLocalizationExt.GetForType``1(Abp.Localization.Sources.ILocalizationSource)">
+            <summary>
+            为指定类型本身获取本地化字符串
+            如：.GetForType(typeof(Gender))  返回"性别"
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="localizationSource"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Localization.BXJGUtilsLocalizationExt.GetForType(Abp.Localization.ILocalizationManager,System.String,System.Type)">
+            <summary>
+            为指定类型本身获取本地化字符串
+            如：.GetForType(typeof(Gender))  返回"性别"
+            </summary>
+            <param name="localizationManager"></param>
+            <param name="sourceName"></param>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Localization.BXJGUtilsLocalizationExt.GetForType``1(Abp.Localization.ILocalizationManager,System.String)">
+            <summary>
+            为指定类型本身获取本地化字符串
+            如：.GetForType(typeof(Gender))  返回"性别"
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="localizationManager"></param>
+            <param name="sourceName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Localization.BXJGUtilsLocalizationExt.GetForTypeOrNull(Abp.Localization.Sources.ILocalizationSource,System.Type)">
+            <summary>
+            为指定类型本身获取本地化字符串
+            如：.GetForType(typeof(Gender))  返回"性别"
+            </summary>
+            <param name="localizationSource"></param>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Localization.BXJGUtilsLocalizationExt.GetForTypeOrNull``1(Abp.Localization.Sources.ILocalizationSource)">
+            <summary>
+            为指定类型本身获取本地化字符串
+            如：.GetForType(typeof(Gender))  返回"性别"
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="localizationSource"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Localization.BXJGUtilsLocalizationExt.GetForTypeOrNull(Abp.Localization.ILocalizationManager,System.String,System.Type)">
+            <summary>
+            为指定类型本身获取本地化字符串
+            如：.GetForType(typeof(Gender))  返回"性别"
+            </summary>
+            <param name="localizationManager"></param>
+            <param name="sourceName"></param>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Localization.BXJGUtilsLocalizationExt.GetForTypeOrNull``1(Abp.Localization.ILocalizationManager,System.String)">
+            <summary>
+            为指定类型本身获取本地化字符串
+            如：.GetForType(typeof(Gender))  返回"性别"
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="localizationManager"></param>
+            <param name="sourceName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Localization.BXJGUtilsLocalizationExt.UtilsL(System.String,System.Object[])">
+            <summary>
+            获取Utils模块中的指定键的本地化字符串
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Localization.BXJGUtilsLocalizationExt.UtilsLI(System.String)">
+            <summary>
+            获取Utils模块中的指定键的本地化ILocalizableString
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Localization.BXJGUtilsLocalizationExt.BXJGUtilsL(Abp.Localization.ILocalizationManager,System.String,System.Object[])">
+            <summary>
+            获取通用模块中的本地化字符串
+            </summary>
+            <param name="localizationManager"></param>
+            <param name="name"></param>
+            <param name="args">注意不要传递数组</param>
+            <returns></returns>
+        </member>
+        <member name="T:BXJG.Utils.Settings.BXJGUtilsSettingProvider">
+            <summary>
+            这里只是通用设置，各模块可以有自己的设置
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.Tag.SelectableTagContext">
+            <summary>
+            
+            </summary>
+            <param name="EntityType"></param>
+            <param name="PropertyName"></param>
+            <param name="Top"></param>
+            <param name="ScopedIocResolver"></param>
+        </member>
+        <member name="M:BXJG.Utils.Tag.SelectableTagContext.#ctor(Abp.Dependency.IScopedIocResolver,System.String,System.String,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="EntityType"></param>
+            <param name="PropertyName"></param>
+            <param name="Top"></param>
+            <param name="ScopedIocResolver"></param>
+        </member>
+        <member name="P:BXJG.Utils.Tag.SelectableTagContext.ScopedIocResolver">
+            <summary></summary>
+        </member>
+        <member name="P:BXJG.Utils.Tag.SelectableTagContext.EntityType">
+            <summary></summary>
+        </member>
+        <member name="P:BXJG.Utils.Tag.SelectableTagContext.PropertyName">
+            <summary></summary>
+        </member>
+        <member name="P:BXJG.Utils.Tag.SelectableTagContext.Top">
+            <summary></summary>
+        </member>
+        <member name="T:BXJG.Utils.Tag.TagEntity">
+            <summary>
+            实体标签
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Tag.TagEntity.TenantId">
+            <summary>
+            租户id
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Tag.TagEntity.EntityType">
+            <summary>
+            关联实体类型，可以是任意唯一字符串，通常是实体类型.FullTypeName
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Tag.TagEntity.EntityId">
+            <summary>
+            关联实体id
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Tag.TagEntity.PropertyName">
+            <summary>
+            属性名
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Tag.TagEntity.PropertyDisplayName">
+            <summary>
+            属性显示名，在存储时若为空则复制PropertyName
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Tag.TagEntity.TagName">
+            <summary>
+            标签名称、同一个实体的同一个属性下必须唯一
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Tag.TagEntity.TagDisplayName">
+            <summary>
+            标签显示名
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Tag.TagEntity.OrderIndex">
+            <summary>
+            顺序索引
+            注意TagDto中的排序是为了可选tag列表用的，这里的排序是实体已经设置多个tag时的排序，这里的排序其实没多大意义
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Tag.TagEntity.ExtensionData">
+            <summary>
+            json格式的扩展数据，配合abp的扩展管理器
+            </summary>
+        </member>
+        <member name="M:BXJG.Utils.Tag.TagManager.Set(System.Object,System.String,System.Collections.Generic.IList{BXJG.Utils.Share.Tag.SelectableTagDto},System.String)">
+            <summary>
+            为实体（或它的某个假字段）设置标签
+            </summary>
+            <param name="entityId">实体id</param>
+            <param name="tags">标签列表，顺序不是很重要，顺序以传入顺序为准，不以OrderIndex属性为准，</param>
+            <param name="propertyName">可选的属性名</param>
+            <param name="proertyDisplayName">可选的属性名</param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Tag.TagManager.GetSelectableList(BXJG.Utils.Tag.SelectableTagContext)">
+            <summary>
+            大部分的实体类型+属性对应的tag数据类型都希望 预设可选tag列表 + 数据库已增加的自定义tag
+            之后按热度排序
+            应在SelectableTagProviders为同一个tag数据类型（实体类型+属性）配置两个委托，预设的可选列表 和 此方法获取的数据库的数据
+            
+            若某个特殊方法不需要数据库的，就别加这个委托
+            
+            此外目前没考虑缓存问题
+            </summary>
+            <param name="ctx"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.User.UserManager`2.ProhibitPermissionAsync(`1,Abp.Authorization.Permission)">
+            <summary>
+            拒绝权限
+            若未授权，不处理，否则将授权状态设置为false，表示禁止使用此权限
+            </summary>
+            <param name="user"></param>
+            <param name="permission"></param>
+            <returns></returns>
+        </member>
+        <member name="T:BXJG.Utils.DI.AbpDIStaticAccessor">
+            <summary>
+            提供访问当前范围的ioc容器的点
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.DI.AbpDIStaticAccessor.IocResolver">
+            <summary>
+            获取当前范围的ioc容器解析器
+            </summary>
+        </member>
+        <member name="T:BXJG.Utils.Interceptor.EnableDataFilterAttribute">
+            <summary>
+            启用数据过滤器
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Interceptor.EnableDataFilterAttribute.FilterNames">
+            <summary>
+            过滤器名称列表
+            </summary>
+        </member>
+        <member name="M:BXJG.Utils.Interceptor.EnableDataFilterAttribute.#ctor(System.String[])">
+            <summary>
+            过滤器名称列表
+            </summary>
+            <param name="filters"></param>
+        </member>
+        <member name="T:BXJG.Utils.Interceptor.DisableDataFilterAttribute">
+            <summary>
+            禁用数据过滤器
+            </summary>
+        </member>
+        <member name="P:BXJG.Utils.Interceptor.DisableDataFilterAttribute.FilterNames">
+            <summary>
+            过滤器名称列表
+            </summary>
+        </member>
+        <member name="M:BXJG.Utils.Interceptor.DisableDataFilterAttribute.#ctor(System.String[])">
+            <summary>
+            过滤器名称列表
+            </summary>
+            <param name="filters"></param>
+        </member>
+        <member name="T:BXJG.Utils.Interceptor.DataFilterInterceptor">
+            <summary>
+            用来启用禁用abp全局数据拦截器的拦截器
+            </summary>
+        </member>
+        <member name="M:Abp.Domain.Entities.AbpEntityExt.Check(Abp.Domain.Entities.IPassivable,System.String,System.Object,Abp.Localization.Sources.ILocalizationSource)">
+            <summary>
+            检查实体是否启用，如果未启用则抛出异常。
+            </summary>
+            <param name="passivable"></param>
+            <param name="entityTypeName"></param>
+            <param name="id"></param>
+        </member>
+        <member name="M:Abp.Domain.Repositories.RepositoryExt.GetFilesByAttachment(Abp.Domain.Repositories.IRepository{BXJG.Utils.Files.AttachmentEntity,System.Guid},System.String,System.String,System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            获取单个实体的一个或多个属性的附件列表
+            </summary>
+            <param name="repository"></param>
+            <param name="entityId">实体id</param>
+            <param name="entityType">实体类型，若实体id是全局唯一的，比如guid，则此参数可省略</param>
+            <param name="track"></param>
+            <param name="cancellationToken"></param>
+            <returns>key属性名，value文件列表</returns>
+        </member>
+        <member name="M:Abp.Domain.Repositories.RepositoryExt.GetFilesByAttachment(Abp.Domain.Repositories.IRepository{BXJG.Utils.Files.AttachmentEntity,System.Guid},System.Collections.Generic.IEnumerable{System.String},System.String,System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            从附件中获取文件
+            </summary>
+            <param name="repository"></param>
+            <param name="entityType">实体类型</param>
+            <param name="entityIds">实体id</param>
+            <param name="track"></param>
+            <param name="cancellationToken"></param>
+            <returns> key实体id；value：属性名和文件列表</returns>
+        </member>
+        <member name="M:Abp.Domain.Repositories.RepositoryExt.GetFilesByAttachment(Abp.Domain.Repositories.IRepository{BXJG.Utils.Files.AttachmentEntity,System.Guid},System.String,System.String,System.String,System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            从附件中获取文件
+            </summary>
+            <param name="repository"></param>
+            <param name="entityType">实体类型</param>
+            <param name="entityId">实体id</param>
+            <param name="propertyName">实体id</param>
+            <param name="track"></param>
+            <param name="cancellationToken"></param>
+            <returns>文件列表</returns>
+        </member>
+        <member name="M:Abp.Domain.Repositories.RepositoryExt.GetFilesByAttachment``1(Abp.Domain.Repositories.IRepository{BXJG.Utils.Files.AttachmentEntity,System.Guid},System.String,System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            从附件中获取文件
+            </summary>
+            <param name="repository"></param>
+            <param name="entityId">实体id</param>
+            <param name="track"></param>
+            <param name="cancellationToken"></param>
+            <returns>key属性名，value文件列表</returns>
+        </member>
+        <member name="M:Abp.Domain.Repositories.RepositoryExt.GetFilesByAttachment``1(Abp.Domain.Repositories.IRepository{BXJG.Utils.Files.AttachmentEntity,System.Guid},System.Collections.Generic.IEnumerable{System.String},System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            从附件中获取文件
+            </summary>
+            <param name="repository"></param>
+            <param name="entityIds">实体id</param>
+            <param name="track"></param>
+            <param name="cancellationToken"></param>
+            <returns> key实体id；value：属性名和文件列表</returns>
+        </member>
+        <member name="M:Abp.Domain.Repositories.RepositoryExt.GetFilesByAttachment``1(Abp.Domain.Repositories.IRepository{BXJG.Utils.Files.AttachmentEntity,System.Guid},System.String,System.String,System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            从附件中获取文件
+            </summary>
+            <param name="repository"></param>
+            <param name="entityId">实体id</param>
+            <param name="propertyName">实体id</param>
+            <param name="track"></param>
+            <param name="cancellationToken"></param>
+            <returns>文件列表</returns>
+        </member>
+        <member name="M:Abp.Domain.Repositories.RepositoryExt.GetFlattenOffspringAsync``1(Abp.Domain.Repositories.IRepository{``0,System.Int64},System.String)">
+            <summary>
+            根据code获取所有后代节点，并以平铺结构的集合返回
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <param name="repository"></param>
+            <param name="code"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Abp.Domain.Repositories.RepositoryExt.GetBrotherWithOffspringAsync``1(Abp.Domain.Repositories.IRepository{``0,System.Int64},``0)">
+            <summary>
+            获取指定节点的兄弟节点、父节点(可能为空)
+            均包含其后代节点
+            </summary>
+            <param name="entity"></param>
+            <returns>Item1父节点，Item2兄弟节点</returns>
+        </member>
+        <member name="M:Abp.Domain.Repositories.RepositoryExt.IsExists``1(Abp.Domain.Repositories.IRepository{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Threading.CancellationToken)">
+            <summary>
+            判断指定条件的数据是否已存在
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <param name="q"></param>
+            <param name="w"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Abp.Domain.Repositories.RepositoryExt.IsExistsThrow``1(Abp.Domain.Repositories.IRepository{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.String,System.Threading.CancellationToken)">
+            <summary>
+            若指定条件的数据已存在，则抛出异常
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <param name="q"></param>
+            <param name="w"></param>
+            <param name="msg"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+            <exception cref="T:Abp.UI.UserFriendlyException"></exception>
+        </member>
+        <member name="M:Abp.Domain.Repositories.RepositoryExt.IsExists``2(Abp.Domain.Repositories.IRepository{``0,``1},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Threading.CancellationToken)">
+            <summary>
+            判断指定条件的数据是否已存在
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TKey"></typeparam>
+            <param name="q"></param>
+            <param name="w"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Abp.Domain.Repositories.RepositoryExt.IsExistsThrow``2(Abp.Domain.Repositories.IRepository{``0,``1},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.String,System.Threading.CancellationToken)">
+            <summary>
+            若指定条件的数据已存在，则抛出异常
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TKey"></typeparam>
+            <param name="q"></param>
+            <param name="w"></param>
+            <param name="msg"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+            <exception cref="T:Abp.UI.UserFriendlyException"></exception>
+        </member>
+        <member name="M:Abp.Domain.Repositories.RepositoryExt.BatchDelete``1(Abp.Domain.Repositories.IRepository{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Threading.CancellationToken)">
+            <summary>
+            abp仓储的默认实现目前的删除是查询出来之后再删除，数据量大时有问题，已经提交了issue，这里是临时解决方式
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="q"></param>
+            <param name="where"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Abp.Domain.Repositories.RepositoryExt.BatchDelete``2(Abp.Domain.Repositories.IRepository{``0,``1},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Threading.CancellationToken)">
+            <summary>
+            abp仓储的默认实现目前的删除是查询出来之后再删除，数据量大时有问题，已经提交了issue，这里是临时解决方式
+            </summary>
+            <typeparam name="T"></typeparam>
+            <typeparam name="TKey"></typeparam>
+            <param name="q"></param>
+            <param name="where"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Abp.UI.BatchUserFriendlyException">
+            <summary>
+            批量操作友好异常
+            </summary>
+        </member>
+        <member name="T:Abp.UI.UserFriendlyExceptionFactory">
+            <summary>
+            抛出一个abp的用户友好异常，可以使用也可以不使用本地化源
+            </summary>
+        </member>
+        <member name="M:Abp.UI.UserFriendlyExceptionFactory.Throw(System.String,Abp.Localization.Sources.ILocalizationSource,System.Object[])">
+            <summary>
+            抛出一个UserFriendlyException。
+            可选地使用本地化源，此时name为本地化键
+            </summary>
+            <param name="nameOrMsg"></param>
+            <param name="localizationSource"></param>
+            <param name="args"></param>
+            <returns></returns>
+            <exception cref="T:Abp.UI.UserFriendlyException"></exception>
+        </member>
+        <member name="M:Abp.UI.UserFriendlyExceptionFactory.GetException(System.String,Abp.Localization.Sources.ILocalizationSource,System.Object[])">
+            <summary>
+            抛出一个UserFriendlyException。
+            可选地使用本地化源，此时name为本地化键
+            </summary>
+            <param name="nameOrMsg"></param>
+            <param name="localizationSource"></param>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Abp.Runtime.Session.SessionExt.GetValueByClaimType``1(Abp.Runtime.Session.IPrincipalAccessor,System.String)">
+            <summary>
+            获取指定claimType的值
+            通常用来提供不同应用用户的额外属性。
+            记得在UserClaimsPrincipalFactory 设置值 
+            不同应用的Application通常可以提供进一步简化的扩展方法。
+            通常全局数据过滤中提供针对特定范围的数据过滤。
+            </summary>
+            <typeparam name="TKey"></typeparam>
+            <param name="principalAccessor"></param>
+            <param name="claimType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Abp.Runtime.Session.AbpSessionExt.GetAppKey(Abp.Runtime.Session.IAbpSession)">
+            <summary>
+            获取当前应用appKey
+            目前的实现是从请求头、querystring或cookie中获取appKey对应的值
+            </summary>
+            <param name="abpSession"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Abp.Runtime.Session.AbpSessionExt.GetString(Abp.Runtime.Session.IAbpSession,System.String)">
+            <summary>
+            获取当前应用appKey
+            目前的实现是从请求头、querystring或cookie中获取appKey对应的值
+            </summary>
+            <param name="abpSession"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Abp.Authorization.PermissionExtensions.DependencePermissions(Abp.Authorization.Permission,System.String[])">
+            <summary>
+            我依赖哪些权限
+            </summary>
+            <param name="permission"></param>
+            <param name="permissions"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Abp.Authorization.PermissionExtensions.GetDependencePermissions(Abp.Authorization.Permission)">
+            <summary>
+            我依赖哪些权限
+            </summary>
+            <param name="permission"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Abp.Authorization.PermissionExtensions.GetDependentedPermissions(Abp.Authorization.Permission)">
+            <summary>
+            哪些权限依赖我
+            </summary>
+            <param name="permission"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Abp.Authorization.PermissionExtensions.RecursionUp(Abp.Authorization.Permission,System.Func{Abp.Authorization.Permission,System.Boolean})">
+            <summary>
+            递归向上
+            </summary>
+            <param name="permission"></param>
+            <param name="del">true继续 false终止</param>
+            <returns>true递归完成 递归中途终止</returns>
+        </member>
+        <member name="M:Abp.Authorization.PermissionExtensions.RecursionDown(Abp.Authorization.Permission,System.Func{Abp.Authorization.Permission,System.Boolean})">
+            <summary>
+            递归向下
+            </summary>
+            <param name="permission"></param>
+            <param name="del">true继续 false终止</param>
+            <returns>true递归完成 递归中途终止</returns>
+        </member>
+        <member name="M:Abp.Application.Navigation.NavExt.RecursionFindDown(Abp.Application.Navigation.IHasMenuItemDefinitions,System.String,System.StringComparison)">
+            <summary>
+            递归向下查找
+            </summary>
+            <param name="item"></param>
+            <param name="name"></param>
+            <param name="dxx"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

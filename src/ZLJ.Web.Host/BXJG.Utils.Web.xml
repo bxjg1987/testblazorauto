@@ -1,0 +1,147 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>BXJG.Utils.Web</name>
+    </assembly>
+    <members>
+        <member name="M:Microsoft.AspNetCore.Authentication.JwtBearer.TokenValidatedContextExt.ValidateSecurityStampAsync``2(Microsoft.AspNetCore.Authentication.JwtBearer.TokenValidatedContext)">
+            <summary>
+            验证安全戳
+            </summary>
+            <typeparam name="TSigninMna"></typeparam>
+            <typeparam name="TUser"></typeparam>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
+        <member name="T:BXJG.Utils.Web.Controllers.BXJGFileController">
+            <summary>
+            通用的文件/附件管理接口
+            上传、下载、删除等
+            目前仅考虑操作权限，不考虑数据权限
+            </summary>
+        </member>
+        <member name="M:BXJG.Utils.Web.Controllers.BXJGFileController.UploadAsync(Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            上传一个或多个文件，仅存储到临时目录
+            </summary>
+            <param name="file"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Web.Controllers.BXJGFileController.Download(System.Guid)">
+            <summary>
+            获取文件
+            </summary>
+            <param name="id">文件id</param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Web.Controllers.BXJGFileController.DownloadThum(System.Guid)">
+            <summary>
+            获取文件缩略图
+            </summary>
+            <param name="id">文件id</param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Web.Controllers.BXJGFileController.GetFiles(System.String,System.String,System.String)">
+            <summary>
+            通用的，获取匿名和登录用户的附件关联的文件列表，
+            仅获取指定实体id的数据的单个属性的附件列表
+            
+            <para>
+            需要严格权限控制的，最好在具体实体对应的应用服务查询中去处理
+            不过在最终下载时还会验证权限的，所以这里直接允许获取也无所谓
+            </para>
+            
+            <para>应用场景：后台管理或前台希望获取某个实体的某个属性下的附件文件列表</para>
+            
+            <para>
+            若确定文件id是整个系统全局唯一的，如：guid，则实体类型可省略，属性名必须给 
+            因为后期可能加属性，所以建议总是提供属性名。
+            总的来说尽可能提供全更好
+            </para>
+            
+            </summary>
+            <param name="entityType">实体类的完整名称</param>
+            <param name="propertyName">可选的属性名</param>
+            <param name="entityId">实体id</param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Web.Controllers.BXJGFileController.GetAttachments(System.String,System.String)">
+            <summary>
+            获取一个实体对象的多个属性的附件列表
+            </summary>
+            <param name="entityId"></param>
+            <param name="entityType"></param>
+            <returns>key属性名；value附件列表</returns>
+        </member>
+        <member name="T:BXJG.Utils.Web.Controllers.CaptchaController">
+            <summary>
+            通用的验证码接口
+            </summary>
+        </member>
+        <member name="M:BXJG.Utils.Web.Controllers.CaptchaController.Captcha(System.String)">
+            <summary>
+            获取验证码
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Web.Controllers.TagController.GetPropertySelectable(System.String,System.String,System.Int32,System.Boolean)">
+            <summary>
+            获取指定实体的单个属性的可选的tag，按热度排序
+            </summary>
+            <param name="entityType"></param>
+            <param name="propertyName">若此实体只有一个属性有tag，则可空</param>
+            <param name="top">最多获取热度最高的前多数个</param>
+            <param name="loadFromDb">实体tag中存在的自定义，且热度高的tag也可以作为可选tag吗？</param>
+            <returns></returns>
+            <exception cref="T:Abp.Authorization.AbpAuthorizationException"></exception>
+        </member>
+        <member name="M:BXJG.Utils.Web.Controllers.TagController.GetSelectable(System.String,System.Int32,System.Boolean)">
+            <summary>
+            一次性获取指定类型实体的多个属性的可选tag列表，按热度排序
+            </summary>
+            <param name="entityType"></param>
+            <param name="top"></param>
+            <param name="loadFromDb"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Web.Controllers.TagController.GetPropertyTags(System.String,System.String,System.String)">
+            <summary>
+            获取指定实体的单个属性的已选择了的tag列表
+            </summary>
+            <param name="entityId">实体id</param>
+            <param name="entityType">实体类型，若实体id是全局唯一类型，如：guid，则类型可以省略，但提供了的话，性能更好</param>
+            <param name="propertyName">属性名，若此类型的实体只有一个属性使用tag，则此属性可省略</param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Web.Controllers.TagController.GetTags(System.String,System.String)">
+            <summary>
+            获取指定实体的多个属性的已选择了的tag列表
+            </summary>
+            <param name="entityId">实体id</param>
+            <param name="entityType">实体类型，若实体id是全局唯一类型，如：guid，则类型可以省略，但提供了的话，性能更好</param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Web.Controllers.TagController.GetPropertyAllTags(System.String,System.String,System.String,System.Int32,System.Boolean)">
+            <summary>
+            获取指定实体的单个属性的可选和已选的tag列表
+            </summary>
+            <param name="entityId">实体id</param>
+            <param name="entityType">实体类型，若实体id是全局唯一类型，如：guid，则类型可以省略，但提供了的话，性能更好</param>
+            <param name="propertyName">属性名，若此类型的实体只有一个属性使用tag，则此属性可省略</param>
+            <param name="top">最多获取热度最高的前多数个</param>
+            <param name="loadFromDb">实体tag中存在的自定义，且热度高的tag也可以作为可选tag吗？</param>
+            <returns></returns>
+        </member>
+        <member name="M:BXJG.Utils.Web.Controllers.TagController.GetAllTags(System.String,System.String,System.Int32,System.Boolean)">
+            <summary>
+            获取指定实体的多个属性的可选和已选的tag列表
+            </summary>
+            <param name="entityId">实体id</param>
+            <param name="entityType">实体类型，若实体id是全局唯一类型，如：guid，则类型可以省略，但提供了的话，性能更好</param>
+            <param name="top">最多获取热度最高的前多数个</param>
+            <param name="loadFromDb">实体tag中存在的自定义，且热度高的tag也可以作为可选tag吗？</param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

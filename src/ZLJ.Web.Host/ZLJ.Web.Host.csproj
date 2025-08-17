@@ -111,10 +111,16 @@
 		<None Update="BXJG.Utils.Application.xml">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-		<None Update="BXJG.WorkOrder.Application.xml">
+		<None Update="BXJG.Utils.Share.xml">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-		<None Update="BXJG.WorkOrder.EmployeeApplication.xml">
+		<None Update="BXJG.Utils.Application.Share.xml">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="BXJG.Utils.xml">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="BXJG.Utils.Web.xml">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Dockerfile">
