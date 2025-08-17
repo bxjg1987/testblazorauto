@@ -61,15 +61,15 @@
 	
 	
 	<ItemGroup>
-		<PackageReference Include="Abp.AutoMapper" Version="10.2.0" />
-		<PackageReference Include="Abp.ZeroCore" Version="10.2.0" />
+		<PackageReference Include="Abp.AutoMapper" Version="10.3.0" />
+		<PackageReference Include="Abp.ZeroCore" Version="10.3.0" />
 		<!--<PackageReference Include="BXJG.Utils" Version="*" />-->
 		<!--<PackageReference Include="BXJG.Common" Version="1.2.1" />
     <PackageReference Include="BXJG.Utils" Version="1.2.2" />-->
 		<!--<PackageReference Include="BXJG.WorkOrder.Core" Version="1.2.1" />-->
 		<PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="4.1.0" />
 		<PackageReference Include="DistributedLock.Core" Version="1.0.8" />
-		<PackageReference Include="Hangfire.Core" Version="1.8.20" />
+		<PackageReference Include="Hangfire.Core" Version="1.8.21" />
 		<PackageReference Include="HtmlAgilityPack" Version="1.12.2" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.8" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.8" />
