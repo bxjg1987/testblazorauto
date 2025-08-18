@@ -32,7 +32,11 @@ namespace @(Model.Model.ApplicationShareNamespace)
         @:[Required]
     }
     @if(field.CSharpTypeIsNumber && field.NumberMin.HasValue&& field.NumberMin.HasValue){
-        @:[Range(typeof(@field.CSharpType), "@field.NumberMin", "@field.NumberMax")]
+        //若出现空字符串，最终生成的结果会报错，获取最终MaxValue MinValue也麻烦，索性不处理了
+        if(field.NumberMax!=default && field.NumberMin!=default)
+        { 
+            @:[Range(typeof(@field.CSharpType), "@field.NumberMin", "@field.NumberMax")]
+        }
     }
     @if(field.Length>0){
         @:[StringLength(@field.CoreShareConstsMaxLength)]
