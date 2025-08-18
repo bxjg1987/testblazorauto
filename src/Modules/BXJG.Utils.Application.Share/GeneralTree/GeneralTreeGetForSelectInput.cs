@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -44,9 +45,9 @@ namespace BXJG.Utils.Application.Share.GeneralTree
         /// </summary>
         public long? ParentId { get; set; }
         /// <summary>
-        /// 是否仅仅加载子节点，true只加载子节点，false加载所有后台节点
+        /// 是否仅仅加载子节点，true只加载子节点，false加载所有后代节点
         /// </summary>
-        public bool IsOnlyLoadChild { get; set; }
+        public bool IsOnlyLoadChild { get; set; } = true;
         /// <summary>
         /// 父节点的名称
         /// 同数据库下的多个租户中，相同节点的name是一样的，所以在前端硬编码场景非常合适
