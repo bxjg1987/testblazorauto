@@ -1,4 +1,4 @@
-@using CodeGenerator
+﻿@using CodeGenerator
 @using RazorLight
 @using BXJG.Common;
 @using BXJG.Common.Extensions;
@@ -18,9 +18,9 @@ namespace @(Model.Model.ApplicationShareNamespace)
     /// 获取 @(Model.Model.DisplayName) 的条件
     /// 这里没有继承Common，主要是树结构数据的条件设计的限制，另外Common和这里的条件确实是不同的应用场景，所以目前决定分开定义。
     ///</summary>
-    public partial class @(Model.Model.ConditionName)@(Model.Model.IsTree?" : GeneralTreeGetTreeInput":"")@( Model.Model.ConditionStringFields.Any()?$"{(Model.Model.IsTree?',':':')} IHaveKeywords":"")
+    public partial class @(Model.Model.ConditionName) : @(Model.Model.ProviderCondition)
     {
-@if(Model.Model.ConditionStringFields.Any()){<text>
+@* @if(Model.Model.ConditionStringFields.Any()){<text>
         /// <summary>
         /// 模糊搜索的关键字
         ///</summary>
@@ -40,6 +40,6 @@ namespace @(Model.Model.ApplicationShareNamespace)
         /// @(field.DisplayName)
         ///</summary>
         public @(field.CSharpType)? @field.Name { get; set; }
-</text>}
+</text>} *@
     }
 }
