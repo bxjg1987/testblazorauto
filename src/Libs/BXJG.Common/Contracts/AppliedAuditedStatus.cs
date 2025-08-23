@@ -14,10 +14,12 @@ namespace BXJG.Common.Contracts
         /// <summary>
         /// 女
         /// </summary>
+       [Description("女")]
         Woman = 2,
         /// <summary>
         /// 男
         /// </summary>
+       [Description("男")]
         Man = 1
     }
     /// <summary>
