@@ -75,7 +75,7 @@ namespace Abp.Domain.Repositories
         /// <returns> key实体id；value：属性名和文件列表</returns>
 
         [Obsolete("尽管有用，但是封装层次太多了不好，建议直接用IQueryable<AttachmentEntity>的扩展方法")]
-        public static async Task<Dictionary<string, Dictionary<string, List<FileEntity>>>> GetFilesByAttachment(this IRepository<AttachmentEntity, Guid> repository, IEnumerable<string> entityIds, string? entityType=default, bool track = false, CancellationToken cancellationToken = default)
+        public static async Task<Dictionary<string, Dictionary<string, List<FileEntity>>>> GetFilesByAttachment(this IRepository<AttachmentEntity, Guid> repository, IEnumerable<string> entityIds, string? entityType = default, bool track = false, CancellationToken cancellationToken = default)
         {
             IQueryable<AttachmentEntity> q = (await repository.GetAllAsync()).WhereAttachment(entityType, default, track, entityIds.ToArray());
             var list = await q.ToArrayAsync(cancellationToken);
@@ -117,7 +117,7 @@ namespace Abp.Domain.Repositories
         /// <returns>文件列表</returns>
 
         [Obsolete("尽管有用，但是封装层次太多了不好，建议直接用IQueryable<AttachmentEntity>的扩展方法")]
-        public static async Task<List<FileEntity>> GetFilesByAttachment(this IRepository<AttachmentEntity, Guid> repository, string entityId, string? entityType=default, string propertyName = default, bool track = false, CancellationToken cancellationToken = default)
+        public static async Task<List<FileEntity>> GetFilesByAttachment(this IRepository<AttachmentEntity, Guid> repository, string entityId, string? entityType = default, string propertyName = default, bool track = false, CancellationToken cancellationToken = default)
         {
             IQueryable<AttachmentEntity> q = (await repository.GetAllAsync()).WhereAttachment(entityType, propertyName, track, entityId).OrderBy(x => x.OrderIndex);
             var list = await q.ToArrayAsync(cancellationToken);
@@ -138,7 +138,7 @@ namespace Abp.Domain.Repositories
         [Obsolete("尽管有用，但是封装层次太多了不好，建议直接用IQueryable<AttachmentEntity>的扩展方法")]
         public static Task<Dictionary<string, List<FileEntity>>> GetFilesByAttachment<TEntity>(this IRepository<AttachmentEntity, Guid> repository, string entityId, bool track = false, CancellationToken cancellationToken = default)
         {
-            return repository.GetFilesByAttachment( entityId,typeof(TEntity).FullName, track, cancellationToken);
+            return repository.GetFilesByAttachment(entityId, typeof(TEntity).FullName, track, cancellationToken);
         }
         ///// <summary>
         ///// 从附件中获取文件，忽略propertyName
@@ -195,7 +195,7 @@ namespace Abp.Domain.Repositories
         [Obsolete("尽管有用，但是封装层次太多了不好，建议直接用IQueryable<AttachmentEntity>的扩展方法")]
         public static Task<List<FileEntity>> GetFilesByAttachment<TEntity>(this IRepository<AttachmentEntity, Guid> repository, string entityId, string propertyName = default, bool track = false, CancellationToken cancellationToken = default)
         {
-            return repository.GetFilesByAttachment( entityId, typeof(TEntity).FullName, propertyName, track, cancellationToken);
+            return repository.GetFilesByAttachment(entityId, typeof(TEntity).FullName, propertyName, track, cancellationToken);
         }
 
 
@@ -271,7 +271,7 @@ namespace Abp.Domain.Repositories
         /// <returns></returns>
         public static async Task<bool> IsExists<TEntity>(this IRepository<TEntity> q, Expression<Func<TEntity, bool>> w, CancellationToken cancellationToken = default) where TEntity : class, IEntity
         {
-            return await (await q.GetAllAsync()).AnyAsync(w, cancellationToken);
+            return await (await q.GetAllReadonlyAsync()).AnyAsync(w, cancellationToken);
         }
         /// <summary>
         /// 若指定条件的数据已存在，则抛出异常
@@ -303,32 +303,59 @@ namespace Abp.Domain.Repositories
         /// <returns></returns>
         public static async Task<bool> IsExists<TEntity, TKey>(this IRepository<TEntity, TKey> q, Expression<Func<TEntity, bool>> w, CancellationToken cancellationToken = default) where TEntity : class, IEntity<TKey>
         {
-            return await (await q.GetAllAsync()).AnyAsync(w, cancellationToken);
+            return await (await q.GetAllReadonlyAsync()).AnyAsync(w, cancellationToken);
         }
         /// <summary>
         /// 若指定条件的数据已存在，则抛出异常
         /// </summary>
-        /// <typeparam name="TEntity"></typeparam>
-        /// <typeparam name="TKey"></typeparam>
-        /// <param name="q"></param>
-        /// <param name="w"></param>
-        /// <param name="msg"></param>
+        /// <typeparam name="TEntity">实体类型</typeparam>
+        /// <typeparam name="TKey">实体主键类型</typeparam>
+        /// <param name="repository">仓储实例</param>
+        /// <param name="where"></param>
+        /// <param name="displayNameProperty"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <exception cref="UserFriendlyException"></exception>
-        public static async Task IsExistsThrow<TEntity, TKey>(this IRepository<TEntity, TKey> q, Expression<Func<TEntity, bool>> w, string msg = default, CancellationToken cancellationToken = default) where TEntity : class, IEntity<TKey>
+        public static async Task IsExistsThrow<TEntity, TKey>(this IRepository<TEntity, TKey> repository,
+                                                              Expression<Func<TEntity, bool>> where,
+                                                              Expression<Func<TEntity, string>> displayNameProperty,
+                                                              CancellationToken cancellationToken = default) where TEntity : class, IEntity<TKey>
         {
-            if (await q.IsExists(w, cancellationToken))
-            {
-                if (msg.IsNullOrWhiteSpace())
-                    msg = BXJGUtilsLocalizationExt.UtilsL("数据已存在！");
-                throw new UserFriendlyException(msg);
-            }
+            var cx = await repository.GetAllReadonlyAsync();
+            var list = await cx.Where(where).Select(displayNameProperty).Distinct().ToArrayAsync(cancellationToken);
+            if (list.Length == 0)
+                return;
+
+            var ss = "存在重复项！" + string.Join(",", list);
+            UserFriendlyExceptionFactory.Throw(ss);
+
+            //if (await q.IsExists(w, cancellationToken))
+            //{
+            //    if (msg.IsNullOrWhiteSpace())
+            //        msg = BXJGUtilsLocalizationExt.UtilsL("数据已存在！");
+            //    throw new UserFriendlyException(msg);
+            //}
         }
-
-
-
-
+        /// <summary>
+        /// 获取重复项
+        /// </summary>
+        /// <typeparam name="TEntity">实体类型</typeparam>
+        /// <typeparam name="TKey">实体主键类型</typeparam>
+        /// <param name="repository">仓储实例</param>
+        /// <param name="where">条件</param>
+        /// <param name="displayNameProperty">重复项的显示名</param>
+        /// <param name="cancellationToken">异步取消token</param>
+        /// <returns></returns>
+        /// <exception cref="UserFriendlyException"></exception>
+        public static async Task<List<IdName<TKey>>> GetExists<TEntity, TKey>(this IRepository<TEntity, TKey> repository,
+                                                                              Expression<Func<TEntity, bool>> where,
+                                                                              Func<TEntity, string> displayNameProperty,
+                                                                              CancellationToken cancellationToken = default) where TEntity : class, IEntity<TKey>
+        {
+            var cx = await repository.GetAllReadonlyAsync();
+            var list = await cx.Where(where).ToArrayAsync(cancellationToken);
+            return list.Select(x => new IdName<TKey>(x.Id, displayNameProperty.Invoke(x))).ToList();
+        }
 
         #region abp仓储的默认实现目前的删除是查询出来之后再删除，数据量大时有问题，已经提交了issue，这里是临时解决方式
         /// <summary>

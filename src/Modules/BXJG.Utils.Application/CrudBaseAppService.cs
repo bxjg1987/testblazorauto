@@ -4,6 +4,7 @@ using Abp.Application.Services.Dto;
 using Abp.Domain.Entities;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
+using Abp.Linq.Expressions;
 using Abp.Notifications;
 using Abp.Runtime.Session;
 using Abp.Threading;
@@ -79,21 +80,17 @@ namespace BXJG.Utils.Application
         public DistributedLockHelper DistributedLockHelper { get; set; }
         public ICancellationTokenProvider CancellationTokenProvider { get; set; } = NullCancellationTokenProvider.Instance;
         /// <summary>
-        /// 新增时的重复检查，返回null则不检查
+        /// 新增时的重复检查，返回null则不检查，默认情况下引用<see cref="GetUpdateIsExistsChenker(TUpdateInput)"/>
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        protected virtual Expression<Func<TEntity, bool>> GetCreateIsExistsChenker(TCreateInput input) => null;
+        protected virtual ValueTask<ExistsExpression<TEntity>> GetCreateIsExistsChenker(TCreateInput input) => (input is TUpdateInput a) ? GetUpdateIsExistsChenker(a) : ValueTask.FromResult<ExistsExpression<TEntity>>(null);
         /// <summary>
         /// 修改时的重复检查，返回null则不检查
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        protected virtual Expression<Func<TEntity, bool>> GetUpdateIsExistsChenker(TUpdateInput input)
-        {
-            // return x => !x.Id.Equals(input.Id); 需要返回null，以避免默认加锁
-            return null;
-        }
+        protected virtual ValueTask<ExistsExpression<TEntity>> GetUpdateIsExistsChenker(TUpdateInput input) => ValueTask.FromResult<ExistsExpression<TEntity>>(null);
 
         //Zhongjie仅用于界面，业务逻辑层任然使用abp的事件总线（它不是为界面设计的，默认也没提供多个实例），在ui提供abpk事件处理器 来连接到zhongjie实例
         //public Zhongjie Zhongjie { get; set; }
@@ -102,13 +99,13 @@ namespace BXJG.Utils.Application
             //新增权限检查
             CheckCreatePermission();
 
-            var cfjc = GetCreateIsExistsChenker(input);
+            var cfjc = await GetCreateIsExistsChenker(input);
             if (cfjc != null)
             {
                 //加锁注意是为了防止重复提交，数据库唯一约束局限性太大，比如软删除冲突，另外在代码层面做了，数据库见表也省得到处去建唯一索引
                 await DistributedLockHelper.AcquireLockTenantAsync(typeof(TEntity).FullName, TimeSpan.FromMinutes(1), CancellationTokenProvider.Token);
                 //要完美的话，前端还应该先判断，后端是最后的保障
-                await Repository.IsExistsThrow(cfjc);
+                await Repository.IsExistsThrow(cfjc.Where,cfjc.DisplayNameProperty);
             }
 
             TEntity entity = MapToEntity(input);
@@ -122,13 +119,13 @@ namespace BXJG.Utils.Application
         public override async Task<TEntityDto> UpdateAsync(TUpdateInput input)
         {
             CheckUpdatePermission();
-            var cfjc = GetUpdateIsExistsChenker(input);
+            var cfjc = await GetUpdateIsExistsChenker(input);
             if (cfjc != null)
             {
                 //加锁注意是为了防止重复提交，数据库唯一约束局限性太大，比如软删除冲突，另外在代码层面做了，数据库见表也省得到处去建唯一索引
                 await DistributedLockHelper.AcquireLockTenantAsync(typeof(TEntity).FullName, TimeSpan.FromMinutes(1), CancellationTokenProvider.Token);
                 //要完美的话，前端还应该先判断，后端是最后的保障
-                await Repository.IsExistsThrow(cfjc);
+                await Repository.IsExistsThrow(cfjc.Where.And(x=>!x.Id.Equals(input.Id)) , cfjc.DisplayNameProperty);
             }
 
             TEntity entity = await GetEntityByIdAsync(input.Id);
