@@ -24,6 +24,10 @@ namespace BXJG.Utils.Share.Files
         /// </summary>
         public string RealFullName { get; set; }
         /// <summary>
+        /// 真实的文件名 c#高级编程
+        /// </summary>
+        public string RealName { get; set; }
+        /// <summary>
         /// 响应时的content-type
         /// </summary>
         public string ResponseContentType { get; set; }

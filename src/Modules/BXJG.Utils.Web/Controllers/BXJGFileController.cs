@@ -101,7 +101,11 @@ namespace BXJG.Utils.Web.Controllers
             if (r.Permission == Share.Files.FilePermission.Authenticated && !base.AbpSession.UserId.HasValue)
                 throw new AuthenticationFailureException("请登录");
 
-            return PhysicalFile(r.RelativePath, r.ResponseContentType, r.RealFullName);
+            //若提供了 r.RealName就会在响应中增加Content-Disposition 设置为 attachment 这会导致浏览器直接洗下载该文件
+            if (r.RelativePathThumbnail.IsNotNullOrWhiteSpaceBXJG())
+                return PhysicalFile(r.RelativePath, r.ResponseContentType);
+            else
+                return PhysicalFile(r.RelativePath, r.ResponseContentType, r.RealName);
         }
 
         /// <summary>
@@ -123,7 +127,8 @@ namespace BXJG.Utils.Web.Controllers
             if (r.Permission == Share.Files.FilePermission.Authenticated && !base.AbpSession.UserId.HasValue)
                 throw new AuthenticationFailureException("请登录");
 
-            return PhysicalFile(r.RelativePathThumbnail, "image/jpeg", r.RealFullName);
+            //若提供了 r.RealName就会在响应中增加Content-Disposition 设置为 attachment 这会导致浏览器直接洗下载该文件
+            return PhysicalFile(r.RelativePathThumbnail, r.ResponseContentType/*, r.RealName*/);
         }
 
 

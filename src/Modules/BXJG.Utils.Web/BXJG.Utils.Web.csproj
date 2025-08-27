@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
-	  <VersionPrefix>1.3.109</VersionPrefix>
+	  <VersionPrefix>1.3.110</VersionPrefix>
 	  <LangVersion>latest</LangVersion>
 	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
