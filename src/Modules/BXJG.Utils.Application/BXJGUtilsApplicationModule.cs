@@ -1,28 +1,29 @@
-﻿using Abp.Modules;
-using Abp.Reflection.Extensions;
-using Abp.Timing;
-using Abp;
-using BXJG.Utils.Localization;
-using BXJG.Utils.Enums;
-using Abp.Threading.BackgroundWorkers;
-using BXJG.Common;
-using Abp.Dependency;
-using BXJG.Utils.DynamicProperty;
-using System.Reflection;
-using Abp.AutoMapper;
-using Abp.Domain.Entities;
-
-using BXJG.Utils.Concurrency;
-using System.Linq;
+﻿using Abp;
 using Abp.Application.Services;
-using Castle.Core;
+using Abp.AutoMapper;
+using Abp.Configuration.Startup;
+using Abp.Dependency;
+using Abp.Domain.Entities;
+using Abp.Modules;
+using Abp.Reflection.Extensions;
+using Abp.Threading.BackgroundWorkers;
+using Abp.Timing;
+using BXJG.Common;
+using BXJG.Utils.Application.Feedback;
+using BXJG.Utils.Application.File;
+using BXJG.Utils.Concurrency;
+using BXJG.Utils.DynamicProperty;
+using BXJG.Utils.Enums;
+using BXJG.Utils.Feedback;
 //using BXJG.Utils.CAP;
 //using DotNetCore.CAP;
 using BXJG.Utils.GeneralTree;
-using Abp.Configuration.Startup;
-using BXJG.Utils.Application.File;
-using Microsoft.Extensions.DependencyInjection;
+using BXJG.Utils.Localization;
+using Castle.Core;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using System.Linq;
+using System.Reflection;
 
 namespace BXJG.Utils.Application
 {
@@ -82,8 +83,9 @@ namespace BXJG.Utils.Application
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
+            IocManager.Register(typeof(FeedbackFrontAppService<,,>), DependencyLifeStyle.Transient);
+            IocManager.Register(typeof(FeedbackAdminAppService<,,>), DependencyLifeStyle.Transient);
 
-       
             //IocManager.Register(typeof(AbpAsyncDeterminationInterceptor<StaticDIAccessInterceptor>), DependencyLifeStyle.Transient);
 
             //IocManager.Register(typeof(AbpAsyncDeterminationInterceptor<AbpCapSubscriptInterceptor>), DependencyLifeStyle.Transient);

@@ -9,6 +9,7 @@ using ZLJ.Application.Share.Authorization.Permissions;
 using BXJG.Utils.Application.GeneralTree;
 using BXJG.Utils.Helpers;
 using ZLJ.Application.Share;
+using BXJG.Utils.Application.Feedback;
 
 namespace ZLJ.Application.Authorization.Permissions
 {
@@ -169,6 +170,8 @@ namespace ZLJ.Application.Authorization.Permissions
             #endregion
             //特征 版本...后续添加
             #endregion
+
+            admin.AddFreedback();
 
             //#endregion
             //           var cust = context.CreatePermission(PermissionNames.Customer,

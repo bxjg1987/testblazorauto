@@ -39,5 +39,15 @@ namespace @(Model.Model.ApplicationShareNamespace)
         /// 扩展字段，通常仅用于UI
         ///</summary>
         public dynamic ExtensionData { get; set; } = new ExpandoObject();
+
+        #region FullAuditedEntityDto
+        public bool IsDeleted { get; set; }
+        public long? DeleterUserId { get; set; }
+        public DateTime? DeletionTime { get; set; }
+        public DateTime? LastModificationTime { get; set; }
+        public long? LastModifierUserId { get; set; }
+        public DateTime CreationTime { get; set; }
+        public long? CreatorUserId { get; set; }
+        #endregion
     }
 }

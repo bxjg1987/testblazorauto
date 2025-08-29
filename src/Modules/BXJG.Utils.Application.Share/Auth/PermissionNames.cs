@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BXJG.Utils.Application.Share.Auth
 {
-    public class PermissionNames
+    public partial class PermissionNames
     {
         #region 通用树的菜单和权限
         public const string GeneralTreeMenuName = "GeneralTreeMenu";

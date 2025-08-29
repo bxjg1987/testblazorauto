@@ -37,7 +37,7 @@ using BXJG.Utils;
 
 namespace ZLJ.EntityFrameworkCore
 {
-    public partial class ZLJDbContext : AbpZeroDbContext<Tenant, Role, User, ZLJDbContext>
+    public partial class ZLJDbContext : BXJGUtilsDbContext<Tenant, Role, User, ZLJDbContext>
     {
         /* Define a DbSet for each entity of the application */
 

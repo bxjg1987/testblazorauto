@@ -18,6 +18,7 @@ using BXJG.Utils.DI;
 using BXJG.Utils.DynamicProperty;
 using BXJG.Utils.Enums;
 using BXJG.Utils.Extensions;
+using BXJG.Utils.Feedback;
 using BXJG.Utils.Files;
 using BXJG.Utils.GeneralTree;
 using BXJG.Utils.Interceptor;
@@ -110,8 +111,8 @@ namespace BXJG.Utils
                 //services.AddScoped<DistributedLockHelper>();
             });
             IocManager.Register(typeof(DynamicPropertyManager<>), DependencyLifeStyle.Singleton);
+            IocManager.Register(typeof(FeedbackManager<,>), DependencyLifeStyle.Transient);
 
-           
             // ISubDependencyResolver
             // Castle.MicroKernel.resolver
             // ScopedIocResolver

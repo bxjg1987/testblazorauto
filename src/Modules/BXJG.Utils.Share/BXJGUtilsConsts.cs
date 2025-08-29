@@ -20,6 +20,8 @@ namespace BXJG.Utils.Share
         /// </summary>
         public const int ExtDataMaxLength = 4000;
 
+     
+
         static BXJGUtilsConsts()
         {
             //  UploadTemp = @$"upload{Path.DirectorySeparatorChar}temp";
