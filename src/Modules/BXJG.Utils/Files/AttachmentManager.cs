@@ -86,6 +86,7 @@ namespace BXJG.Utils.Files
                 var entity = oldEntities.SingleOrDefault(x => x.FileId == file.FileId);
                 if (entity == default)
                 {
+                    Logger.Warn(""+System.Text.Json.JsonSerializer.Serialize(file));
                     var f = await FileManager.Upload(file.FileName, file.TempPath,filePermission);
                     entity = new AttachmentEntity
                     {
