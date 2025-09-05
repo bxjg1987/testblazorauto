@@ -3,6 +3,7 @@ using Abp.Authorization.Users;
 using Abp.MultiTenancy;
 using Abp.Zero.EntityFrameworkCore;
 using BXJG.Utils.Feedback;
+using BXJG.Utils.Tag;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,7 @@ namespace BXJG.Utils.EFCore
    where TTenant : AbpTenant<TUser> where TRole : AbpRole<TUser> where TUser : AbpUser<TUser> where TSelf : AbpZeroDbContext<TTenant, TRole, TUser, TSelf>
     {
         public virtual DbSet<FeedbackEntity> Feedbacks { get; set; }
+        public virtual DbSet<TagEntity> Tags { get; set; }
         protected BXJGUtilsDbContext(DbContextOptions<TSelf> options) : base(options)
         {
         }
