@@ -11,9 +11,5 @@ namespace BXJG.Common.Contracts
     public interface IReset
     {
         void Reset();
-        //{
-        //    ObjectCloner.CopyTo(Activator.CreateInstance(GetType()), this);
-        //    //ObjectCloner.Clone( Activator.CreateInstance(GetType()).Clone();
-        //}
     }
 }

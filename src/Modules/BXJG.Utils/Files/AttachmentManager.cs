@@ -10,7 +10,6 @@ using Abp.Linq.Extensions;
 using Abp.Linq;
 using Abp.Domain.Entities;
 using System.Linq.Dynamic.Core;
-using BXJG.Common.Extensions;
 using System.IO;
 using BXJG.Utils.Share;
 using BXJG.Utils.Share.Files;

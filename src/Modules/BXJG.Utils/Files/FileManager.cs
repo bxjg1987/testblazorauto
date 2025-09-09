@@ -18,7 +18,6 @@ using Abp.Threading;
 //using System.Drawing;
 using Abp.Extensions;
 using System.Text.RegularExpressions;
-using BXJG.Common.Extensions;
 using BXJG.Utils.Share.Files;
 using BXJG.Utils.Share;
 using Abp;

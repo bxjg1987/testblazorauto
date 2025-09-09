@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -10,21 +11,68 @@ namespace BXJG.Common.Dynamics
     /// <summary>
     /// 常用数据比较符
     /// </summary>
+    [Flags]
     public enum CompareType
     {
+        /// <summary>
+        /// 大于
+        /// </summary>
+        [Description("大于")]
         Dayu = 1 << 0,
+        /// <summary>
+        /// 等于
+        /// </summary>
+         [Description("等于")]
         Dengyu = 1 << 1,
+         /// <summary>
+        /// 小于
+        /// </summary>
+        [Description("小于")]
         Xiaoyu = 1 << 2,
+        /// <summary>
+        /// 大于等于
+        /// </summary>
+       [Description("大于等于")]
         DayuDengyu = 1 << 3,
+        /// <summary>
+        /// 小于等于
+        /// </summary>
+       [Description("小于等于")]
         XiaoyuDengyu = 1 << 4,
+         /// <summary>
+        /// 不等于
+        /// </summary>
+       [Description("不等于")]
         BuDengyu = 1 << 5,
-
+        /// <summary>
+        /// 包含
+        /// </summary>
+        [Description("包含")]
         Baohan = 1 << 6,
+        /// <summary>
+        /// 不包含
+        /// </summary>
+        [Description("不包含")]
         BuBaohan = 1 << 7,
+     /// <summary>
+     /// 开头
+     /// </summary>
+       [Description("开头")]
         StartWith = 1 << 8,
+       /// <summary>
+       /// 结尾
+       /// </summary>
+       [Description("结尾")]
         EndWith = 1 << 9,
-
+        /// <summary>
+        /// 空
+        /// </summary>
+         [Description("空")]
         Kong = 1 << 10,
+        /// <summary>
+        /// 非空
+        /// </summary>
+        [Description("非空")]
         Feikong = 1 << 11
     }
     /// <summary>

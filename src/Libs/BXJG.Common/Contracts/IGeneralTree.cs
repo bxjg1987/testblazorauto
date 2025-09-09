@@ -19,11 +19,11 @@ namespace BXJG.Common.Contracts
     public interface IHaveParentId
     {
         /// <summary>
-        /// 
+        /// 唯一id
         /// </summary>
         public object Id { get; set; }
         /// <summary>
-        /// 
+        /// 父节点id
         /// </summary>
         public object ParentId { get; set; }
     }

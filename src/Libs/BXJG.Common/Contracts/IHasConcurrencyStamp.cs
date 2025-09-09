@@ -10,9 +10,4 @@ namespace BXJG.Common.Contracts
     {
         public string ConcurrencyStamp { get; set; }
     }
-    //public class ConcurrencyException : Exception { 
-
-    //}
-    //这个扩展可以考虑 automapper也调用下
-
 }

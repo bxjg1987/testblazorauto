@@ -20,12 +20,18 @@ namespace BXJG.Common.Contracts
         /// 男
         /// </summary>
        [Description("男")]
-        Man = 1
+        Man = 1,
+        /// <summary>
+        /// 未知
+        /// </summary>
+        [Description("未知")]
+        Unknown = 0
     }
     /// <summary>
     /// 申请审核状态
     /// </summary>
     [Flags]
+    [Obsolete]
     public enum AppliedAuditedStatus
     {
         /// <summary>

@@ -112,7 +112,7 @@ namespace BXJG.Utils.RCL.Components
         /// </summary>
         /// <param name="output">批量操作结果</param>
         /// <param name="funName">操作名</param>
-        protected virtual async Task BatchOperationMessage(BatchOperationOutputBase output, string funName = "删除")
+        protected virtual async Task BatchOperationMessage(BatchOperationOutput output, string funName = "删除")
         {
             if (output.ErrorMessage.Any())
             {

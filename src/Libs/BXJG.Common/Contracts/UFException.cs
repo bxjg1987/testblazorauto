@@ -6,7 +6,7 @@ using System.Text;
 namespace BXJG.Common.Contracts
 {
     /// <summary>
-    /// 用户友好的移除
+    /// 用户友好的异常
     /// </summary>
     public class UFException : Exception
     {

@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace BXJG.Common.RCL.Auth
 {
+    /// <summary>
+    /// 基于操作码（权限名）的授权依据
+    /// </summary>
     public class OperationAuthorizationRequirement1 : AuthorizationHandler<OperationAuthorizationRequirement>//, IAuthorizationRequirement
     {
         public const string GrantedPermissionNamesProvider = "GrantedPermissionNamesProvider";
@@ -33,7 +36,9 @@ namespace BXJG.Common.RCL.Auth
             
         }
     }
-
+    /// <summary>
+    /// 基于权限码的授权策略提供程序
+    /// </summary>
     public class PermissionNameAuthorizationPolicyProvider : DefaultAuthorizationPolicyProvider
     {
         public PermissionNameAuthorizationPolicyProvider(IOptions<AuthorizationOptions> options) : base(options)

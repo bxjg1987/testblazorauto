@@ -61,7 +61,7 @@ namespace BXJG.Utils.Web.Controllers
         /// <returns></returns>
         [HttpPost]
         [EnableRateLimiting("upload_file")]
-        public async Task<UploadTempFileDto> UploadAsync(IFormFile file)
+        public virtual async Task<UploadTempFileDto> UploadAsync(IFormFile file)
         {
             // var rts = new List<FileUploadResult>();
             //var fs = file.Select(c => new FileInput(c.FileName, c.OpenReadStream()));
@@ -91,15 +91,22 @@ namespace BXJG.Utils.Web.Controllers
         [HttpGet]
         [Route("{id}")]
         [UnitOfWork(false)]
-        public async Task<PhysicalFileResult> Download(Guid id)
+        public virtual async Task<PhysicalFileResult> Download(Guid id)
         {
+            CurrentUnitOfWork.DisableTenantFilter();
             var r = await this.fileDownloader.Value.GetAbsolutePath(id);
 
             if (r.Permission == Share.Files.FilePermission.Further)
                 throw new AbpAuthorizationException("请使用具体业务独立的文件访问接口");
 
-            if (r.Permission == Share.Files.FilePermission.Authenticated && !base.AbpSession.UserId.HasValue)
-                throw new AuthenticationFailureException("请登录");
+            if (r.Permission == Share.Files.FilePermission.Authenticated)
+            {
+                if (!base.AbpSession.UserId.HasValue)
+                    throw new AuthenticationFailureException("请登录！");
+
+                if (r.TenantId != AbpSession.TenantId)
+                    throw new AuthenticationFailureException("非法请求！");
+            }
 
             //若提供了 r.RealName就会在响应中增加Content-Disposition 设置为 attachment 这会导致浏览器直接洗下载该文件
             if (r.RelativePathThumbnail.IsNotNullOrWhiteSpaceBXJG())
@@ -117,16 +124,21 @@ namespace BXJG.Utils.Web.Controllers
         [Route("{id}")]
         [DisableAuditing]
         [UnitOfWork(false)]
-        public async Task<PhysicalFileResult> DownloadThum(Guid id)
+        public virtual async Task<PhysicalFileResult> DownloadThum(Guid id)
         {
+            CurrentUnitOfWork.DisableTenantFilter();
             var r = await this.fileDownloader.Value.GetAbsolutePath(id);
 
             if (r.Permission == Share.Files.FilePermission.Further)
                 throw new AbpAuthorizationException("请使用具体业务独立的文件访问接口");
 
-            if (r.Permission == Share.Files.FilePermission.Authenticated && !base.AbpSession.UserId.HasValue)
-                throw new AuthenticationFailureException("请登录");
-
+            if (r.Permission == Share.Files.FilePermission.Authenticated)
+            {
+                if (!base.AbpSession.UserId.HasValue)
+                    throw new AuthenticationFailureException("请登录！");
+                if (r.TenantId != AbpSession.TenantId)
+                    throw new AuthenticationFailureException("非法请求！");
+            }
             //若提供了 r.RealName就会在响应中增加Content-Disposition 设置为 attachment 这会导致浏览器直接洗下载该文件
             return PhysicalFile(r.RelativePathThumbnail, r.ResponseContentType/*, r.RealName*/);
         }
@@ -156,7 +168,7 @@ namespace BXJG.Utils.Web.Controllers
         /// <returns></returns>
         [HttpGet]//必须加，否则swagger报错
         [UnitOfWork(false)]
-        public async Task<List<FileDto>> GetFiles([Required] string entityId, string? entityType = default, string? propertyName = default)
+        public virtual async Task<List<FileDto>> GetFiles([Required] string entityId, string? entityType = default, string? propertyName = default)
         {
             var list = await (await attachmentRepository.Value.GetAllAsync()).WhereAttachment(entityType, propertyName, entityIds: entityId)
                                                                              .Where(x => x.File.Permission == Share.Files.FilePermission.Anonymous || (AbpSession.UserId.HasValue && x.File.Permission == Share.Files.FilePermission.Authenticated))
@@ -181,7 +193,7 @@ namespace BXJG.Utils.Web.Controllers
         /// <returns>key属性名；value附件列表</returns>
         [HttpGet]//必须加，否则swagger报错
         [UnitOfWork(false)]
-        public async Task<List<AttachmentDto>> GetAttachments([Required] string entityId, string? entityType = default)
+        public virtual async Task<List<AttachmentDto>> GetAttachments([Required] string entityId, string? entityType = default)
         {
             var list = await (await attachmentRepository.Value.GetAllAsync()).WhereAttachment(entityType, entityIds: entityId)
                                                                              .Where(x => x.File.Permission == Share.Files.FilePermission.Anonymous || (AbpSession.UserId.HasValue && x.File.Permission == Share.Files.FilePermission.Authenticated))

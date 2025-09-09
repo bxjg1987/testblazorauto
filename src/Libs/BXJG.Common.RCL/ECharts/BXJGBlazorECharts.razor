@@ -2,6 +2,9 @@
 @implements IAsyncDisposable
 @inject IJSRuntime JS
 @inherits OwningComponentBase
+
+@* 不用使用这个组件，而是使用开源组件，请去github上搜索 blazor echarts *@
+
 <div @ref="container" @attributes="InputAttributes"></div>
 @code {
     private IJSObjectReference? module;

@@ -63,7 +63,7 @@ namespace BXJG.Utils.Application.ClientProxy.Http
                 //logger.LogDebug("批量操作返回数据，开始解析错误信息"+str + errorCallback.GetType().FullName);
                 //try
                 //{
-                var plcz = System.Text.Json.JsonSerializer.Deserialize<BatchOperationOutputBase>(System.Text.Json.JsonSerializer.Serialize(r.Result, Consts.JsonSerializerOptions), Consts.JsonSerializerOptions);
+                var plcz = System.Text.Json.JsonSerializer.Deserialize<BatchOperationOutput>(System.Text.Json.JsonSerializer.Serialize(r.Result, Consts.JsonSerializerOptions), Consts.JsonSerializerOptions);
 
                 //logger.LogDebug("plcz"+ (plcz==null));
 

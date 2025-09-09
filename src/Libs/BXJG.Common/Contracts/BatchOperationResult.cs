@@ -22,7 +22,7 @@ namespace BXJG.Common.Contracts
     public class BatchOperationErrorMessage
     {
         /// <summary>
-        /// 
+        /// 实例化批量操作错误消息
         /// </summary>
         public BatchOperationErrorMessage(object id, string message = default, string code = default)
         {
@@ -31,22 +31,20 @@ namespace BXJG.Common.Contracts
             Code = code;
         }
         /// <summary>
-        /// 
+        /// 产生错误的数据的id
         /// </summary>
-
         public object Id { get; set; }
         /// <summary>
-        /// 
+        /// 错误编码
         /// </summary>
         public string Code { get; set; }
         /// <summary>
-        /// 
+        /// 错误消息
         /// </summary>
         public string Message { get; set; }
         /// <summary>
         /// 
         /// </summary>
-
         public override string ToString()
         {
             return $" {Message} （Id：{Id} 代码：{Code}）";
@@ -58,13 +56,22 @@ namespace BXJG.Common.Contracts
         //}
     }
 
-    //在子类BatchOperationOutput<TKey>.Ids 添加后，在父类可以访问
-    //反过来不行
+
+    /*
+     * 某些场景中，调用方根本不关心Ids中元素的类型，用BatchOperationOutput更简单。
+     * 所以BatchOperationOutput不能是抽象的，必须是直接可用的。
+     * 
+     * 某些场景调用方又希望指定ids中元素的类型，方便后续使用时有强类型提示，所以使用BatchOperationOutput<TKey>更方便。
+     * 
+     * 还有些场景希望BatchOperationOutput<TKey>可以顶替BatchOperationOutput，所以它们必须有继承关系，此时最终使用的是子类的ids属性。
+     * 
+     * 由于ids是读多写少，所以BatchOperationOutput<TKey>中应该存储一份强类型的ids，避免反复装箱/拆箱。
+     */
 
     /// <summary>
     /// 批量操作输出模型
     /// </summary>
-    public class BatchOperationOutputBase
+    public class BatchOperationOutput
     {
         /// <summary>
         /// 操作成功的id集合
@@ -92,7 +99,7 @@ namespace BXJG.Common.Contracts
     /// 批量操作输出模型
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
-    public class BatchOperationOutput<TKey> : BatchOperationOutputBase
+    public class BatchOperationOutput<TKey> : BatchOperationOutput
     {
         /// <summary>
         /// 操作成功的id集合

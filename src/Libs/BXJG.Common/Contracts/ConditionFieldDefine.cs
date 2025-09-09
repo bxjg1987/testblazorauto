@@ -7,10 +7,6 @@ using BXJG.Common.Dynamics;
 
 namespace BXJG.Common.Contracts
 {
-    //直接用c#的集合接口
-    //public interface IDynamicCondition { 
-    //    List<ConditionFieldDefine> ConditionFields { get; set; }
-    //}
     /// <summary>
     /// 动态条件字段定义
     /// </summary>

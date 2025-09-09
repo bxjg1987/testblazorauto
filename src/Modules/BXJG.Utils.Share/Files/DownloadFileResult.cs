@@ -35,5 +35,9 @@ namespace BXJG.Utils.Share.Files
         /// 访问权限
         /// </summary>
         public FilePermission Permission { get; set; }
+        /// <summary>
+        /// 租户id
+        /// </summary>
+        public int? TenantId { get; set; }
     }
 }

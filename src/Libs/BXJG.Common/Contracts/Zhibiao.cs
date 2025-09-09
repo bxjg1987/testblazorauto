@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 
 namespace BXJG.Common.Contracts
@@ -99,11 +100,34 @@ namespace BXJG.Common.Contracts
     [Flags]
     public enum ZhibiaoTishiJibie
     {
+        /// <summary>
+        /// 默认
+        /// </summary>
+        [Description("默认")]
         Moren = 0,
+        /// <summary>
+        /// 首页
+        /// </summary>
+        [Description("首页")]
         Home = 1 << 0,
+        /// <summary>
+        /// 橙色
+        [Description("橙色")]
         Cheng = 1 << 1,
+        /// <summary>
+        /// 黄色
+        /// </summary>
+        [Description("黄色")]
         Huang = 1 << 2,
+        /// <summary>
+        /// 蓝色
+        /// </summary>
+        [Description("蓝色")]
         Lan = 1 << 3,
+        /// <summary>
+        /// 绿色
+        /// </summary>
+        [Description("绿色")]
         Lv = 1 << 4,
 
     }

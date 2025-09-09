@@ -15,6 +15,9 @@ namespace BXJG.Common
 
         public ValueTask DisposeAsync()
         {
+#if NET8_0_OR_GREATER
+            return ValueTask.CompletedTask;
+#endif
             return new ValueTask();
         }
     }
