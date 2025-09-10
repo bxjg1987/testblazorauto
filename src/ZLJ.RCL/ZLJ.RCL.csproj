@@ -58,9 +58,9 @@
 
 	<!-- 如果 $(SolutionName) 包含 WithModules -->
 	<ItemGroup Condition="$(SolutionName.Contains('WithModules'))">
-		<ProjectReference Include="d:\abp\src\Modules\BXJG.Utils.Application.ClientProxy\BXJG.Utils.Application.ClientProxy.csproj" />
-		<ProjectReference Include="d:\abp\src\Modules\BXJG.Utils.RCL\BXJG.Utils.RCL.csproj" />
-		<ProjectReference Include="d:\abp\src\Libs\BXJG.Common.RCL\BXJG.Common.RCL.csproj" />
+		<ProjectReference Include="..\Modules\BXJG.Utils.Application.ClientProxy\BXJG.Utils.Application.ClientProxy.csproj" />
+		<ProjectReference Include="..\Modules\BXJG.Utils.RCL\BXJG.Utils.RCL.csproj" />
+		<ProjectReference Include="..\Libs\BXJG.Common.RCL\BXJG.Common.RCL.csproj" />
 	</ItemGroup>
 	
 	

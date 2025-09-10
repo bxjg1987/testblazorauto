@@ -5,7 +5,6 @@ global using System.Text;
 global using System.Threading.Tasks;
 global using BXJG.Common;
 
-global using BXJG.Common.Extensions;
 global using ZLJ.Application.Common;
 global using Abp.Application.Services.Dto;
 global using Abp.Domain.Repositories;

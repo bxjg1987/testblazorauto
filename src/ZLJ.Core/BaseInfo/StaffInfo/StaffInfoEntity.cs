@@ -1,4 +1,4 @@
-using Abp.Domain.Entities;
+﻿using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
 using BXJG.Utils.GeneralTree;
 using System;
@@ -6,7 +6,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using ZLJ.Core.Authorization.Users;
 
 using ZLJ.Core.BaseInfo.Post;
-using BXJG.Common.Extensions;
 using Abp.Timing;
 using BXJG.Common.Contracts;
 using ZLJ.Core.Administrative;

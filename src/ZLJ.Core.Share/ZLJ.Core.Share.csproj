@@ -24,8 +24,8 @@
 	
 	<!-- 如果 $(SolutionName) 包含 WithModules -->
 	<ItemGroup Condition="$(SolutionName.Contains('WithModules'))">
-		<ProjectReference Include="d:\abp\src\Modules\BXJG.Utils.Share\BXJG.Utils.Share.csproj" />
-		<ProjectReference Include="d:\abp\src\Libs\BXJG.Common\BXJG.Common.csproj" />
+		<ProjectReference Include="..\Modules\BXJG.Utils.Share\BXJG.Utils.Share.csproj" />
+		<ProjectReference Include="..\Libs\BXJG.Common\BXJG.Common.csproj" />
 	</ItemGroup>
 
 </Project>

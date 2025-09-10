@@ -1,5 +1,4 @@
 ﻿using Abp.Application.Services.Dto;
-using BXJG.Common.Extensions;
 using System.ComponentModel.DataAnnotations;
 
 namespace ZLJ.Application.BaseInfo.AssociatedCompany.Dto

@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BXJG.Common.Extensions;
 using ZLJ.Application.Common.ClientProxy;
 using Abp.Application.Navigation;
 using Microsoft.Extensions.DependencyInjection;

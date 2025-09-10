@@ -14,7 +14,6 @@ using Abp.Zero.Configuration;
 using System;
 using BXJG.Utils.GeneralTree;
 
-using BXJG.Common.Extensions;
 using Abp.Organizations;
 using ZLJ.Application.Common.OU;
 using Abp.Domain.Uow;
