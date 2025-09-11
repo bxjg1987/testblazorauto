@@ -1,0 +1,12 @@
+# .gitattributes 文件内容示例
+# 忽略名为 'docs' 的整个文件夹
+docs/ export-ignore
+
+# 忽略名为 'tests' 的整个文件夹
+# tests/ export-ignore
+
+# 忽略所有 .log 文件
+# *.log export-ignore
+
+# 忽略特定的配置文件
+# config/local.example.php export-ignore
