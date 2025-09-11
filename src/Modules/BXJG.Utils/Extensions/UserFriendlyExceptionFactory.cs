@@ -28,10 +28,10 @@ namespace Abp.UI
             throw GetException(nameOrMsg, localizationSource, args);
         }
         /// <summary>
-        /// 抛出一个UserFriendlyException。
+        /// 返回一个UserFriendlyException。
         /// 可选地使用本地化源，此时name为本地化键
         /// </summary>
-        /// <param name="nameOrMsg"></param>
+        /// <param name="nameOrMsg">本地化键或具体的消息</param>
         /// <param name="localizationSource"></param>
         /// <param name="args"></param>
         /// <returns></returns>
