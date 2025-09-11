@@ -1,4 +1,4 @@
-{
+﻿{
   "Name": "RentOrder",
   "DisplayName": "租赁单",
   "Icon": "carry-out",
@@ -62,7 +62,7 @@
       "NumberPrecision": null //若是小数，则指定它的精度，若为空，则保持字段类型默认的精度
     },
     {
-      "Name": "DepositAmounct",
+      "Name": "DepositAmount",
       "DisplayName": "押金(元)",
       "CSharpType": "decimal",
       "IsPrimary": false,

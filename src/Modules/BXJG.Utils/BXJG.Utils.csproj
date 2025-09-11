@@ -77,10 +77,10 @@
 		<PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="4.1.0" />
 		<PackageReference Include="DistributedLock.Core" Version="1.0.8" />
 		<!--<PackageReference Include="Hangfire.Core" Version="1.8.11" />-->
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.8" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.9" />
 		<!--<PackageReference Include="DotNetCore.CAP" Version="7.2.0" />-->
-		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.8" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.8" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.9" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.9" />
 		<PackageReference Include="Mime" Version="3.8.0" />
 		<!--<PackageReference Include="MimeTypesMap" Version="1.*" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.3" />
