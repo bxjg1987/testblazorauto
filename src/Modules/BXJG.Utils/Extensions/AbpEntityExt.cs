@@ -18,8 +18,8 @@ namespace Abp.Domain.Entities
         /// 检查实体是否启用，如果未启用则抛出异常。
         /// </summary>
         /// <param name="passivable"></param>
-        /// <param name="entityTypeName"></param>
-        /// <param name="id"></param>
+        /// <param name="entityTypeName">业务名称</param>
+        /// <param name="id">唯一id</param>
         public static void Check(this IPassivable passivable, string entityTypeName, object? id = default, ILocalizationSource? ls = default)
         {
             if (passivable.IsActive == false)
