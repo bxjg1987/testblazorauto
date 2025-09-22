@@ -35,8 +35,7 @@ namespace BXJG.Utils.Application.Feedback
         [Obsolete]
         public override Task<FeedbackDto> CreateAsync(FeedbackEditDto input)
         {
-            UserFriendlyExceptionFactory.Throw("不能创建留言");
-            return null;
+            throw UserFriendlyExceptionFactory.GetException("不能创建留言");
         }
     }
     public class FeedbackAdminAppService<TRole, TUser> : FeedbackAdminAppService<FeedbackManager<TRole, TUser>, TRole, TUser>

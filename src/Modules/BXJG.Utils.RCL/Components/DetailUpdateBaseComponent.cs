@@ -146,6 +146,7 @@ namespace BXJG.Utils.RCL.Components
         #endregion
         /// <summary>
         /// 当前组件是否繁忙，如：正在刷新、正在提交等...
+        /// 这里没用定义submiting，因为弹窗中可能有各种各样的提交，取决于具体业务
         /// </summary>
         public virtual bool IsBusy => isFormIniting ||
                                       isReseting ||

@@ -10,6 +10,7 @@
 @("@using") BXJG.Utils.Application.Share.Dtos
 @("@using") Microsoft.AspNetCore.Components.Sections
 
+@@attribute [Authorize(@(Model.Model.PermissionNameGetConst))]
 @@inherits DetailUpdateBaseComponent<@Model.Model.DtoName, @Model.Model.PrimaryFieldCSharpType, @Model.Model.EditDtoName>
 
 <SectionContent SectionName=@@($"{Master}-detail-update-title")>
