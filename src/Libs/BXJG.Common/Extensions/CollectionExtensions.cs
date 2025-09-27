@@ -22,12 +22,28 @@ namespace System.Collections.Generic
             if (dic.Count != dic2.Count)
                 return false;
 
-            return  dic.All(c =>
+            return dic.All(c =>
             {
                 if (dic2.TryGetValue(c.Key, out var p))
                     return p.Equals(c.Value);
                 return false;
             });
+        }
+        /// <summary>
+        /// 移除并返回所有满足条件的元素
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="collection"></param>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> RemoveAll<T>(this ICollection<T> collection, Func<T, bool> where)
+        {
+            var ary = collection.Where(c => where(c)).ToList();
+            foreach (var item in ary)
+            {
+                collection.Remove(item);
+            }
+            return ary;
         }
     }
 }
