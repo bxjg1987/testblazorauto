@@ -28,6 +28,8 @@ namespace BXJG.Utils.Application.AutoMapper
             //CreateMap(typeof(AttachmentEntity), typeof(AttachmentDto)).ForMember("", e => e.ConvertUsing);
             //CreateMap<AttachmentEditDto, AttachmentEntity>().ForMember(c => c.ExtensionData, opt => opt.Ignore.());
             #endregion
+
+        
         }
     }
 }

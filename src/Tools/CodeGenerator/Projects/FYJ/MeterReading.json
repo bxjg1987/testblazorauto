@@ -47,6 +47,24 @@
       "NumberPrecision": null
     },
     {
+      "Name": "RentOrderGroupId",
+      "DisplayName": "合同号",
+      "Description": "合同组号", //字段说明、水印
+      "CSharpType": "string",
+      "IsPrimary": false,
+      "DefaultValue": null,
+      "IsRequired": true,
+      "Length": 64,
+      "IsUnicode": false,
+      "IsSort": true,
+      "IsCondition": true,
+      "IsConditionRange": false,
+      "NumberMax": null,
+      "NumberMin": null,
+      "NumberStep": null,
+      "NumberPrecision": null
+    },
+    {
       "Name": "BusinessTime",
       "DisplayName": "抄表时间",
       "Description": "新增时间是记录的添加时间，这里的时间指抄表业务时间", //字段说明、水印
@@ -68,40 +86,107 @@
       "Name": "BusinessUserId",
       "DisplayName": "抄表人",
       "Description": "新增时间是记录的添加时间，这里的时间指抄表业务时间", //字段说明、水印
-      "CSharpType": "DateTimeOffset",
+      "CSharpType": "long",
       "IsPrimary": false,
       "DefaultValue": null,
-      "IsRequired": true,
+      "IsRequired": false,
       "Length": 0,
       "IsUnicode": false,
-      "IsSort": true,
+      "IsSort": false,
       "IsCondition": true,
-      "IsConditionRange": true,
+      "IsConditionRange": false,
       "NumberMax": null,
       "NumberMin": null,
       "NumberStep": null,
       "NumberPrecision": null
     },
     {
-      "Name": "SettleCycle",
-      "DisplayName": "结算周期(月)",
-      "CSharpType": "int",
-      "IsPrimary": false,
-      "DefaultValue": null,
-      "IsRequired": true,
-      "Length": 0,
-      "IsUnicode": false,
-      "IsSort": true,
-      "IsCondition": true,
-      "IsConditionRange": true,
+      "Name": "PreviousId", //字段名
+      "DisplayName": "上次抄表单", //显示名称,
+      "Description": "上次抄表单id", //字段说明、水印
+      "CSharpType": "string", //c#类型的字符串形式
+      "IsPrimary": false, //是否是主键
+      "DefaultValue": null, //默认值
+      "IsRequired": false, //是否是必填字段
+      "Length": 64, //字段长度
+      "IsUnicode": false, //是否是Unicode编码
+      "IsSort": false, //是否参与排序
+      "IsCondition": false, //是否作为条件
+      "IsConditionRange": false, //是否作为范围条件,IsCondition为true时有效
+      "Width": null, //界面中显示的宽度，字符串如：20rem;100px;
+      "FixedLeft": null, //在列表中显示时冻结，true冻结在左侧；false冻结在右侧；null不冻结
+      "Position": null, //在列表中显示的位置，true左 false右 null中
       "NumberMax": null, //最大数值，类型为数字时有效，若为空则不管最大值
-      "NumberMin": 1, //最小数值，类型为数字时有效，若为空则不管设置最小值
-      "NumberStep": 1, //步进数值，类型为数字时有效，若为空则不管步进
+      "NumberMin": null, //最小数值，类型为数字时有效，若为空则不管设置最小值
+      "NumberStep": null, //步进数值，类型为数字时有效，若为空则不管步进
       "NumberPrecision": null //若是小数，则指定它的精度，若为空，则保持字段类型默认的精度
     },
     {
-      "Name": "DepositAmount",
-      "DisplayName": "押金(元)",
+      "Name": "BlackAndWhiteUse", //字段名
+      "DisplayName": "黑白印量", //显示名称,
+      "Description": "本次抄表的黑白印量合计", //字段说明、水印
+      "CSharpType": "int", //c#类型的字符串形式
+      "IsPrimary": false, //是否是主键
+      "DefaultValue": 0, //默认值
+      "IsRequired": true, //是否是必填字段
+      "Length": 0, //字段长度
+      "IsUnicode": false, //是否是Unicode编码
+      "IsSort": true, //是否参与排序
+      "IsCondition": true, //是否作为条件
+      "IsConditionRange": true, //是否作为范围条件,IsCondition为true时有效
+      "Width": null, //界面中显示的宽度，字符串如：20rem;100px;
+      "FixedLeft": null, //在列表中显示时冻结，true冻结在左侧；false冻结在右侧；null不冻结
+      "Position": null, //在列表中显示的位置，true左 false右 null中
+      "NumberMax": null, //最大数值，类型为数字时有效，若为空则不管最大值
+      "NumberMin": null, //最小数值，类型为数字时有效，若为空则不管设置最小值
+      "NumberStep": null, //步进数值，类型为数字时有效，若为空则不管步进
+      "NumberPrecision": null //若是小数，则指定它的精度，若为空，则保持字段类型默认的精度
+    },
+    {
+      "Name": "TrueColorUse", //字段名
+      "DisplayName": "彩色印量", //显示名称,
+      "Description": "本次抄表的彩色印量合计", //字段说明、水印
+      "CSharpType": "int", //c#类型的字符串形式
+      "IsPrimary": false, //是否是主键
+      "DefaultValue": 0, //默认值
+      "IsRequired": true, //是否是必填字段
+      "Length": 0, //字段长度
+      "IsUnicode": false, //是否是Unicode编码
+      "IsSort": true, //是否参与排序
+      "IsCondition": true, //是否作为条件
+      "IsConditionRange": true, //是否作为范围条件,IsCondition为true时有效
+      "Width": null, //界面中显示的宽度，字符串如：20rem;100px;
+      "FixedLeft": null, //在列表中显示时冻结，true冻结在左侧；false冻结在右侧；null不冻结
+      "Position": null, //在列表中显示的位置，true左 false右 null中
+      "NumberMax": null, //最大数值，类型为数字时有效，若为空则不管最大值
+      "NumberMin": null, //最小数值，类型为数字时有效，若为空则不管设置最小值
+      "NumberStep": null, //步进数值，类型为数字时有效，若为空则不管步进
+      "NumberPrecision": null //若是小数，则指定它的精度，若为空，则保持字段类型默认的精度
+    },
+    {
+      "Name": "Use", //字段名
+      "DisplayName": "合计印量", //显示名称,
+      "Description": "本次抄表的合计印量", //字段说明、水印
+      "CSharpType": "int", //c#类型的字符串形式
+      "IsPrimary": false, //是否是主键
+      "DefaultValue": 0, //默认值
+      "IsRequired": true, //是否是必填字段
+      "Length": 0, //字段长度
+      "IsUnicode": false, //是否是Unicode编码
+      "IsSort": true, //是否参与排序
+      "IsCondition": true, //是否作为条件
+      "IsConditionRange": true, //是否作为范围条件,IsCondition为true时有效
+      "Width": null, //界面中显示的宽度，字符串如：20rem;100px;
+      "FixedLeft": null, //在列表中显示时冻结，true冻结在左侧；false冻结在右侧；null不冻结
+      "Position": null, //在列表中显示的位置，true左 false右 null中
+      "NumberMax": null, //最大数值，类型为数字时有效，若为空则不管最大值
+      "NumberMin": null, //最小数值，类型为数字时有效，若为空则不管设置最小值
+      "NumberStep": null, //步进数值，类型为数字时有效，若为空则不管步进
+      "NumberPrecision": null //若是小数，则指定它的精度，若为空，则保持字段类型默认的精度
+    },
+    {
+      "Name": "Amount",
+      "DisplayName": "金额(元)",
       "CSharpType": "decimal",
       "IsPrimary": false,
       "DefaultValue": 0,
@@ -111,44 +196,13 @@
       "IsSort": true,
       "IsCondition": true,
       "IsConditionRange": true,
+      "Width": null, //界面中显示的宽度，字符串如：20rem;100px;
+      "FixedLeft": null, //在列表中显示时冻结，true冻结在左侧；false冻结在右侧；null不冻结
+      "Position": null, //在列表中显示的位置，true左 false右 null中
       "NumberMax": null,
-      "NumberMin": 0,
-      "NumberStep": 100,
+      "NumberMin": null,
+      "NumberStep": null,
       "NumberPrecision": 2
-    },
-    {
-      "Name": "AlgorithmName",
-      "DisplayName": "套餐类型",
-      "CSharpType": "string",
-      "IsPrimary": false,
-      "DefaultValue": null,
-      "IsRequired": true,
-      "Length": 100,
-      "IsUnicode": false,
-      "IsSort": true,
-      "IsCondition": true,
-      "IsConditionRange": false,
-      "NumberMax": null,
-      "NumberMin": null,
-      "NumberStep": null,
-      "NumberPrecision": null
-    },
-    {
-      "Name": "AlgorithmParams",
-      "DisplayName": "套餐配置",
-      "CSharpType": "string",
-      "IsPrimary": false,
-      "DefaultValue": null,
-      "IsRequired": false,
-      "Length": 1000,
-      "IsUnicode": true,
-      "IsSort": false,
-      "IsCondition": false,
-      "IsConditionRange": false,
-      "NumberMax": null,
-      "NumberMin": null,
-      "NumberStep": null,
-      "NumberPrecision": null
     },
     {
       "Name": "State",
