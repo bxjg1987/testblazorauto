@@ -43,6 +43,9 @@ namespace @(Model.Model.EFNamespace)
     if(field.CSharpType=="decimal"){
             @:@(field.Name).HasPrecision(@(field.Length),@(field.NumberPrecision));
     }
+    if(field.IsIndex){
+            @:@(field.Name).HasIndex(x=>@(field.Name));
+    }
 
             @:@(field.Name).IsRequired(@(field.IsRequired.ToString().ToLower()));
 }

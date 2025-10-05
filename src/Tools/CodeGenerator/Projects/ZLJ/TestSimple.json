@@ -41,6 +41,9 @@
       "IsSort": true,
       "IsCondition": true,
       "IsConditionRange": false,
+      "Width": "150", //界面中显示的宽度，字符串如：20rem;100px;
+      "FixedLeft": true, //在列表中显示时冻结，true冻结在左侧；false冻结在右侧；null不冻结
+      "Position": null, //在列表中显示的位置，true左 false右 null中
       "NumberMax": null, //最大数值，类型为数字时有效，若为空则不管最大值
       "NumberMin": null, //最小数值，类型为数字时有效，若为空则不管设置最小值
       "NumberStep": null, //步进数值，类型为数字时有效，若为空则不管步进
@@ -52,6 +55,7 @@
       "Description": "年龄", //字段说明、水印
       "CSharpType": "int",
       "IsPrimary": false,
+      "IsIndex": false,
       "DefaultValue": 20,
       "IsRequired": false,
       "Length": 0,
@@ -59,6 +63,9 @@
       "IsSort": true,
       "IsCondition": true,
       "IsConditionRange": true,
+      "Width": null, //界面中显示的宽度，字符串如：20rem;100px;
+      "FixedLeft": null, //在列表中显示时冻结，true冻结在左侧；false冻结在右侧；null不冻结
+      "Position": null, //在列表中显示的位置，true左 false右 null中
       "NumberMax": 44,
       "NumberMin": 11,
       "NumberStep": 2,
@@ -77,6 +84,9 @@
       "IsSort": true,
       "IsCondition": true,
       "IsConditionRange": true,
+      "Width": null, //界面中显示的宽度，字符串如：20rem;100px;
+      "FixedLeft": null, //在列表中显示时冻结，true冻结在左侧；false冻结在右侧；null不冻结
+      "Position": null, //在列表中显示的位置，true左 false右 null中
       "NumberMax": null,
       "NumberMin": null,
       "NumberStep": null,
@@ -95,6 +105,9 @@
       "IsSort": false,
       "IsCondition": true,
       "IsConditionRange": false,
+      "Width": null, //界面中显示的宽度，字符串如：20rem;100px;
+      "FixedLeft": null, //在列表中显示时冻结，true冻结在左侧；false冻结在右侧；null不冻结
+      "Position": null, //在列表中显示的位置，true左 false右 null中
       "NumberMax": null,
       "NumberMin": null,
       "NumberStep": null,
@@ -113,6 +126,9 @@
       "IsSort": true,
       "IsCondition": true,
       "IsConditionRange": false,
+      "Width": null, //界面中显示的宽度，字符串如：20rem;100px;
+      "FixedLeft": null, //在列表中显示时冻结，true冻结在左侧；false冻结在右侧；null不冻结
+      "Position": null, //在列表中显示的位置，true左 false右 null中
       "NumberMax": null,
       "NumberMin": null,
       "NumberStep": null,
@@ -131,6 +147,9 @@
       "IsSort": true,
       "IsCondition": true,
       "IsConditionRange": true,
+      "Width": null, //界面中显示的宽度，字符串如：20rem;100px;
+      "FixedLeft": null, //在列表中显示时冻结，true冻结在左侧；false冻结在右侧；null不冻结
+      "Position": null, //在列表中显示的位置，true左 false右 null中
       "NumberMax": null,
       "NumberMin": null,
       "NumberStep": null,
@@ -149,6 +168,9 @@
       "IsSort": false,
       "IsCondition": true,
       "IsConditionRange": false,
+      "Width": null, //界面中显示的宽度，字符串如：20rem;100px;
+      "FixedLeft": null, //在列表中显示时冻结，true冻结在左侧；false冻结在右侧；null不冻结
+      "Position": null, //在列表中显示的位置，true左 false右 null中
       "NumberMax": null,
       "NumberMin": null,
       "NumberStep": null,
@@ -167,6 +189,9 @@
       "IsSort": false,
       "IsCondition": false,
       "IsConditionRange": false,
+      "Width": null, //界面中显示的宽度，字符串如：20rem;100px;
+      "FixedLeft": null, //在列表中显示时冻结，true冻结在左侧；false冻结在右侧；null不冻结
+      "Position": null, //在列表中显示的位置，true左 false右 null中
       "NumberMax": null,
       "NumberMin": null,
       "NumberStep": null,
@@ -185,6 +210,9 @@
       "IsSort": true,
       "IsCondition": true,
       "IsConditionRange": true,
+      "Width": null, //界面中显示的宽度，字符串如：20rem;100px;
+      "FixedLeft": null, //在列表中显示时冻结，true冻结在左侧；false冻结在右侧；null不冻结
+      "Position": null, //在列表中显示的位置，true左 false右 null中
       "NumberMax": 0.66,
       "NumberMin": 0.2,
       "NumberStep": 0.1,
@@ -203,6 +231,9 @@
       "IsSort": false,
       "IsCondition": true,
       "IsConditionRange": false,
+      "Width": null, //界面中显示的宽度，字符串如：20rem;100px;
+      "FixedLeft": null, //在列表中显示时冻结，true冻结在左侧；false冻结在右侧；null不冻结
+      "Position": null, //在列表中显示的位置，true左 false右 null中
       "NumberMax": null,
       "NumberMin": null,
       "NumberStep": null,

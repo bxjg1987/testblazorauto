@@ -18,6 +18,10 @@ namespace CodeGenerator
         /// </summary>
         public bool IsPrimary { get; set; }
         /// <summary>
+        /// 是否索引
+        /// </summary>
+        public bool IsIndex { get; set; }
+        /// <summary>
         /// 字段名，如：Id
         /// </summary>
         public string Name { get; set; }
