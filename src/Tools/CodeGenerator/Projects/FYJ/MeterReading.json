@@ -346,6 +346,27 @@
       "NumberMin": null,
       "NumberStep": null,
       "NumberPrecision": null
+    },
+    {
+      "Name": "Remark",
+      "DisplayName": "备注",
+      "Description": "备注", //字段说明、水印
+      "CSharpType": "string",
+      "IsPrimary": false,
+      "DefaultValue": null,
+      "IsRequired": false,
+      "Length": 2000,
+      "IsUnicode": true,
+      "IsSort": false,
+      "IsCondition": true,
+      "IsConditionRange": false,
+      "Width": null, //界面中显示的宽度，字符串如：20rem;100px;
+      "FixedLeft": null, //在列表中显示时冻结，true冻结在左侧；false冻结在右侧；null不冻结
+      "Position": true, //在列表中显示的位置，true左 false右 null中
+      "NumberMax": null,
+      "NumberMin": null,
+      "NumberStep": null,
+      "NumberPrecision": null
     }
   ]
 }
