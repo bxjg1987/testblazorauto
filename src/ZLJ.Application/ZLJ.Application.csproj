@@ -58,10 +58,6 @@
     <Compile Remove="AdminConsts.cs" />
     <Compile Remove="Authorization\Accounts\IAccountAppService.cs" />
     <Compile Remove="BaseInfo\Administrative\IBXJGBaseInfoAdministrativeAppService.cs" />
-    <Compile Remove="BaseInfo\AssociatedCompany\BXJGBaseInfoAssociatedCompanyQueryAppService.cs" />
-    <Compile Remove="BaseInfo\AssociatedCompany\Dto\AssociatedCompanyGetForSelectOutputDto.cs" />
-    <Compile Remove="BaseInfo\AssociatedCompany\IBXJGBaseInfoAssociatedCompanyAppService.cs" />
-    <Compile Remove="BaseInfo\AssociatedCompany\IBXJGBaseInfoAssociatedCompanyQueryAppService.cs" />
     <Compile Remove="BaseInfo\StaffInfo\IBXJGBaseInfoStaffInfoAppService.cs" />
     <Compile Remove="Dto\ComboboxDto.cs" />
     <Compile Remove="Dto\GetForSelectInput.cs" />

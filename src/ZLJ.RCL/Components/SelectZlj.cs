@@ -1,11 +1,14 @@
-﻿using BXJG.Utils.Application.Share.Dtos;
+﻿using BXJG.Common.Contracts;
+using BXJG.Utils.Application.Share.Dtos;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using ZLJ.Application.Common.Share.Kehu;
 using ZLJ.RCL.Interceptors;
 
 namespace ZLJ.RCL.Components
@@ -16,7 +19,7 @@ namespace ZLJ.RCL.Components
     /// </summary>
     /// <typeparam name="TItemValue"></typeparam>
     /// <typeparam name="TItem"></typeparam>
-    public class SelectZlj<TItemValue, TItem> : Select<TItemValue, TItem>
+    public class SelectZlj<TItemValue, TItem> : Select<TItemValue, TItem> //where TItem : EntityDto< IEntityDto<ob>>
     {
         [Inject]
         public IHttpClientFactory HttpClientFactory { get; set; }
@@ -120,7 +123,11 @@ namespace ZLJ.RCL.Components
 
         }
 
-
+        //protected override void OnParametersSet()
+        //{
+        //    base.OnParametersSet();
+        //    this.Search(default);
+        //}
 
         [Inject]
         public ILoggerFactory LoggerFactory { get; set; }
@@ -176,7 +183,7 @@ namespace ZLJ.RCL.Components
 
         //    public 
         [AbpExceptionInterceptor]
-        void Search(string val)
+        public void Search(string val)
         {
             Task.Run(async () =>
             {
@@ -212,7 +219,13 @@ namespace ZLJ.RCL.Components
             _ = InvokeAsync(StateHasChanged).ConfigureAwait(false);
             try
             {
-                var r = await HttpClient.GetAllProvider<TItem>(new { Filter = new { Keywords = value }, MaxResultCount = value.IsNullOrWhiteSpaceBXJG() ? MaxCount : int.MaxValue }, cancellationToken: cts.Token);
+                dynamic tj = GetCondition();
+                try
+                {
+                    tj.Keywords = value;
+                }
+                catch { }
+                var r = await HttpClient.GetAllProvider<TItem>(new { Filter = tj, MaxResultCount = value.IsNullOrWhiteSpaceBXJG() ? MaxCount : int.MaxValue }, cancellationToken: cts.Token);
 
                 //this.selected
 
@@ -225,8 +238,21 @@ namespace ZLJ.RCL.Components
                 // }
                 // catch { }
 
-
                 DataSource = r.Items;
+                if (Value != null && !Value.Equals(default) && !r.Items.Any(d => d.GetFieldOrPropertyValue("Id").Equals(Value)))
+                {
+                    if (!Value.Equals(curr?.GetFieldOrPropertyValue("Id")))
+                    {
+                        var r1 = await HttpClient.GetProvider<TItem>(new { Id = Value }, cancellationToken: cts.Token);
+                        curr = r1;
+                    }
+                    // 直接在原列表上添加，避免不必要的复制
+                    if (curr != null)
+                    {
+                        DataSource = r.Items.Concat([curr]);
+                    }
+                }
+
                 await OnParametersSetAsync();//经过测试，必须调用它，列表才会显示新的数据
             }
             finally
@@ -235,21 +261,39 @@ namespace ZLJ.RCL.Components
             }
             _ = InvokeAsync(StateHasChanged).ConfigureAwait(false);//经过测试，这里必须调用
         }
+        TItem curr;
+
+        protected virtual dynamic GetCondition()
+        {
+            return new ExpandoObject();
+        }
+    }
+    public class SelectZlj<TItemValue, TItem, TCondtion> : SelectZlj<TItemValue, TItem>
+    {
+
+        [Parameter]
+        public TCondtion Condtion { get; set; }
+        protected override dynamic GetCondition()
+        {
+            return Condtion;
+        }
     }
 
-    public class SelectZljLong<TItem> : SelectZlj<long, TItem>
+    //下面的有点过度封装了
+
+    public class SelectZljLong<TItem> : SelectZlj<long, TItem> //where TItem : EntityDto<long>
     {
     }
-    public class SelectZljLongNull<TItem> : SelectZlj<long?, TItem>
+    public class SelectZljLongNull<TItem> : SelectZlj<long?, TItem> //where TItem : EntityDto<long?>
     {
     }
-    public class SelectZljGuid<TItem> : SelectZlj<Guid, TItem>
+    public class SelectZljGuid<TItem> : SelectZlj<Guid, TItem> //where TItem : EntityDto<Guid>
     {
     }
-    public class SelectZljGuidNull<TItem> : SelectZlj<Guid?, TItem>
+    public class SelectZljGuidNull<TItem> : SelectZlj<Guid?, TItem> //where TItem : EntityDto<Guid?>
     {
     }
-    public class SelectZljString<TItem> : SelectZlj<string, TItem>
+    public class SelectZljString<TItem> : SelectZlj<string, TItem> //where TItem : EntityDto<string>
     {
     }
 

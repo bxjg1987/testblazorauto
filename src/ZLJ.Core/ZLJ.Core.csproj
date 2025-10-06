@@ -27,6 +27,7 @@
 		<None Remove="WorkOrder\**" />
 	</ItemGroup>
 	<ItemGroup>
+		<Compile Remove="AssociatedCompany\AssociatedCompanyManager.cs" />
 		<Compile Remove="Authorization\PermissionNames.cs" />
 		<Compile Remove="Authorization\ZLJAuthorizationProvider.cs" />
 		<Compile Remove="Authorization\ZLJWMSAuthorizationProvider.cs" />
@@ -70,9 +71,9 @@
 		<PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="4.1.0" />
 		<PackageReference Include="DistributedLock.Core" Version="1.0.8" />
 		<PackageReference Include="Hangfire.Core" Version="1.8.21" />
-		<PackageReference Include="HtmlAgilityPack" Version="1.12.2" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.8" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.8" />
+		<PackageReference Include="HtmlAgilityPack" Version="1.12.4" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.9" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.9" />
 		<PackageReference Include="SourceLink.Copy.PdbFiles" Version="2.8.3">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

@@ -4,12 +4,12 @@ using Abp.MultiTenancy;
 using Abp.Zero.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using ZLJ.Core.BaseInfo.AssociatedCompany;
 using BXJG.Utils.GeneralTree;
 using ZLJ.Core.Customer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using ZLJ.Core.Authorization.Users;
+using ZLJ.Core.AssociatedCompany;
 
 namespace ZLJ.EntityFrameworkCore.EntityFrameworkCore.Seed.BaseInfo
 {
@@ -50,7 +50,7 @@ namespace ZLJ.EntityFrameworkCore.EntityFrameworkCore.Seed.BaseInfo
                 TaxNo = "SH202202389867386",
                 Address = "重庆市万州区太白路94号禾森商厦第五层（商场1）、（商场2）",
                 Level = levels.FirstOrDefault(x => x.DisplayName == "A级"),
-                Category = categorys.FirstOrDefault(x => x.DisplayName == "供应商及客户"),
+                //Category = categorys.FirstOrDefault(x => x.DisplayName == "供应商及客户"),
             });
             _items.Add(new AssociatedCompanyEntity
             {
@@ -61,7 +61,7 @@ namespace ZLJ.EntityFrameworkCore.EntityFrameworkCore.Seed.BaseInfo
                 TaxNo = "SH202215281046652",
                 Address = "重庆市渝北区玉峰山镇石桐三路15号",
                 Level = levels.FirstOrDefault(x => x.DisplayName == "A级"),
-                Category = categorys.FirstOrDefault(x => x.DisplayName == "供应商及客户"),
+                //Category = categorys.FirstOrDefault(x => x.DisplayName == "供应商及客户"),
             });
             _items.Add(new AssociatedCompanyEntity
             {
@@ -72,7 +72,7 @@ namespace ZLJ.EntityFrameworkCore.EntityFrameworkCore.Seed.BaseInfo
                 TaxNo = "SH202217709096671",
                 Address = "重庆市渝中区邹容路131号 7-11#",
                 Level = levels.FirstOrDefault(x => x.DisplayName == "B级"),
-                Category = categorys.FirstOrDefault(x => x.DisplayName == "供应商"),
+                //Category = categorys.FirstOrDefault(x => x.DisplayName == "供应商"),
             });
 
             var zhkh = new AssociatedCompanyEntity
@@ -84,7 +84,7 @@ namespace ZLJ.EntityFrameworkCore.EntityFrameworkCore.Seed.BaseInfo
                 TaxNo = "SH202215803695026",
                 Address = "渝北区中渝都会首站3栋19-8",
                 Level = levels.FirstOrDefault(x => x.DisplayName == "C级"),
-                Category = categorys.FirstOrDefault(x => x.DisplayName == "客户"),
+                //Category = categorys.FirstOrDefault(x => x.DisplayName == "客户"),
                 
             };
             _items.Add(zhkh);

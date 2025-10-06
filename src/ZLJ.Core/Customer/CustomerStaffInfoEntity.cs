@@ -7,9 +7,9 @@ using ZLJ.Core.Authorization.Users;
 
 using ZLJ.Core.BaseInfo.Post;
 using Abp.Timing;
-using ZLJ.Core.BaseInfo.AssociatedCompany;
 using BXJG.Utils.Localization;
 using BXJG.Common.Contracts;
+using ZLJ.Core.AssociatedCompany;
 
 namespace ZLJ.Core.Customer
 {

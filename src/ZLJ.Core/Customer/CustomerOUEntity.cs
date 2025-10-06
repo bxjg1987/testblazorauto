@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ZLJ.Core.BaseInfo.AssociatedCompany;
+using ZLJ.Core.AssociatedCompany;
 
 namespace ZLJ.Core.Customer
 {

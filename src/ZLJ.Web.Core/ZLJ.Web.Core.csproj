@@ -76,7 +76,7 @@
 		<PackageReference Include="DotNetCore.CAP.SqlServer" Version="7.2.0" />-->
 		<PackageReference Include="Hangfire.SqlServer" Version="1.8.21" />
 		<PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.1" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.8">
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.9">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
@@ -88,8 +88,8 @@
 		<PackageReference Include="DistributedLock.SqlServer" Version="1.0.6" />
 		<PackageReference Include="Magicodes.IE.Excel.AspNetCore" Version="2.7.6" />
 		<!--<PackageReference Include="BXJG.Utils.Web" Version="1.2.1" />-->
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.8" />
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.4" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.9" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
 		<PackageReference Include="Abp.AspNetCore" Version="10.3.0" />
 		<PackageReference Include="Abp.AspNetCore.SignalR" Version="10.3.0" />
 	</ItemGroup>

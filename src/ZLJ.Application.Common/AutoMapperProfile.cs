@@ -1,22 +1,22 @@
-using AutoMapper;
-using ZLJ.Core.BaseInfo.AssociatedCompany;
+锘縰sing Abp.Dependency;
+using Abp.Extensions;
 using Abp.Organizations;
+using AutoMapper;
+using BXJG.Utils.Application.Share.Session;
+using BXJG.Utils.Localization;
+using ZLJ.Application.Common.Administrative;
 using ZLJ.Application.Common.OU;
-using ZLJ.Core.BaseInfo;
-using ZLJ.Core.BaseInfo.Post;
 using ZLJ.Application.Common.Post;
 using ZLJ.Application.Common.Role;
-using ZLJ.Core.BaseInfo.StaffInfo;
-using BXJG.Utils.Localization;
-using Abp.Extensions;
-using Abp.Dependency;
-using ZLJ.Application.Common.Administrative;
-
+using ZLJ.Application.Common.Share.Kehu;
 using ZLJ.Application.Common.Share.OU;
-using ZLJ.Core.MultiTenancy;
-using ZLJ.Core.Authorization.Users;
-using BXJG.Utils.Application.Share.Session;
 using ZLJ.Core.Administrative;
+using ZLJ.Core.AssociatedCompany;
+using ZLJ.Core.Authorization.Users;
+using ZLJ.Core.BaseInfo;
+using ZLJ.Core.BaseInfo.Post;
+using ZLJ.Core.BaseInfo.StaffInfo;
+using ZLJ.Core.MultiTenancy;
 
 namespace ZLJ.Application.Common
 {
@@ -25,16 +25,16 @@ namespace ZLJ.Application.Common
         public AutoMapperProfile()
         {
 
-            //角色
+            //瑙掕壊
             CreateMap<ZLJ.Core.Authorization.Roles.Role, RoleDto>();
-            //岗位
+            //宀椾綅
             CreateMap<PostEntity, PostDto>().IncludeBase<ZLJ.Core.Authorization.Roles.Role, RoleDto>();
-            //员工
+            //鍛樺伐
             CreateMap<StaffInfoEntity, ZLJ.Application.Common.StaffInfo.Dto>();//.ForMember(c=>c.GenderText,c=>c.MapFrom(d=>d.Gender.ToLocalizationString()));
-
-            CreateMap<AssociatedCompanyEntity, ZLJ.Application.Common.AssociatedCompany.Dto>()
-                .ForMember(x => x.Value, o => o.MapFrom(m => m.Id.ToString()))
-                .ForMember(x => x.DisplayText, o => o.MapFrom(m => m.Name));
+            CreateMap<AssociatedCompanyEntity, KehuDto>();
+            //CreateMap <AssociatedCompanyEntity, ZLJ.Application.Common.AssociatedCompany.>()
+            //    .ForMember(x => x.Value, o => o.MapFrom(m => m.Id.ToString()))
+            //    .ForMember(x => x.DisplayText, o => o.MapFrom(m => m.Name));
 
 
             CreateMap<OrganizationUnit, OuDto>().ForMember(c => c.IconCls, c => c.MapFrom(c => "ou"))

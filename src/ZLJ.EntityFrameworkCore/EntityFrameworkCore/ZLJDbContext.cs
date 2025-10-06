@@ -4,7 +4,7 @@ using ZLJ.Core.Authorization.Roles;
 using ZLJ.Core.Authorization.Users;
 using ZLJ.Core.MultiTenancy;
 using ZLJ.Core.BaseInfo;
-using ZLJ.Core.BaseInfo.AssociatedCompany;
+using ZLJ.Core.AssociatedCompany;
 using ZLJ.Core.BaseInfo.StaffInfo;
 
 using System.Reflection;

@@ -1,8 +1,7 @@
-using AutoMapper;
+﻿using AutoMapper;
 using BXJG.Utils.GeneralTree;
 using Abp.Application.Services.Dto;
-using ZLJ.Application.BaseInfo.AssociatedCompany;
-using ZLJ.Application.BaseInfo.AssociatedCompany.Dto;
+using ZLJ.Application.Share.AssociatedCompany;
 using ZLJ.Application.BaseInfo.StaffInfo;
 //using ZLJ.WorkOrder.RentOrderItemWorkOrder;
 using ZLJ.Core.Authorization.Roles;
@@ -15,7 +14,6 @@ using ZLJ.Application.Roles.Dto;
 using ZLJ.Application.Common.Administrative;
 using ZLJ.Core.Authorization.Users;
 
-using ZLJ.Core.BaseInfo.AssociatedCompany;
 using ZLJ.Application.Common.Users;
 using Abp.Auditing;
 using ZLJ.Application.Share.Auditing;
@@ -30,6 +28,7 @@ using ZLJ.Application.Share.OU;
 using ZLJ.Core.BaseInfo;
 using BXJG.Utils.Application.Share.GeneralTree;
 using ZLJ.Application.Common.Share.OU;
+using ZLJ.Core.AssociatedCompany;
 
 namespace ZLJ.Application
 {

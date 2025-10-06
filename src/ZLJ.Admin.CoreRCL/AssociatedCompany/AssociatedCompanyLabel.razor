@@ -1,0 +1,65 @@
+﻿@inherits BaseComponent
+
+
+@if (HasPermission.HasValue && HasPermission.Value)
+    {
+        <a @onclick="ShowDetail" style="cursor: pointer; color: #1890ff;">@name [@level] </a>
+    }
+    else
+    {
+        <span>@name [@level]</span>
+    }
+【<a href="/MeterReading/@id">抄表</a>】
+
+@code {
+    /// <summary>
+    /// 往来单位ID
+    /// </summary>
+    [Parameter]
+    public long Id { get; set; }
+
+    /// <summary>
+    /// 往来单位名称
+    /// </summary>
+    [Parameter]
+    public string Name { get; set; }
+    [Parameter]
+    public string Level{ get; set;}
+    [Parameter]
+    public ZLJ.Application.Common.Share.Kehu.KehuDto Dto{ get; set; }
+    /// <summary>
+    /// 是否有往来单位获取权限
+    /// </summary>
+    [Parameter]
+    public bool? HasPermission { get; set; }
+
+    private string name=> Dto?.Name??Name;
+    private string level=> Dto?.LevelDisplayName??Level;
+    public long id=> Dto?.Id??Id;
+
+    /// <summary>
+    /// 组件初始化
+    /// </summary>
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        if (!HasPermission.HasValue)
+        {
+            var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+            // 检查是否有获取权限
+            HasPermission = (await AuthorizationService.AuthorizeAsync(authState.User, ZLJ.Application.Share.Authorization.Permissions.PermissionNames.BXJGBaseInfoAssociatedCompany)).Succeeded;
+        }
+    }
+    [Inject]
+    public ModalService ModalService { get; set; }
+    /// <summary>
+    /// 点击名称显示详情弹窗
+    /// </summary>
+    private void ShowDetail()
+    {
+        if (id > 0)
+        {
+            ModalService.ShowAssociatedCompanyDetailUpdateModal(id);
+        }
+    }
+}

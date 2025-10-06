@@ -439,7 +439,12 @@ namespace System.Net.Http
             {
                 url = typeof(TDto).Name;
                 url = url.Substring(0, url.Length - 3);
-                url += "Provider";
+                //如果url不是provider结尾，则加上
+                if (!url.EndsWith("Provider"))
+                {
+                    url += "Provider";
+                }
+                //url += "Provider";
             }
             return url;
         }
