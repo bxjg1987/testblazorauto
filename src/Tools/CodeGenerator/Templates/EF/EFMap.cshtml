@@ -21,7 +21,10 @@ namespace @(Model.Model.EFNamespace)
         {
             //表名称
             builder.ToTable("@(Model.Name)_@(Model.Model.Name)",t=>t.HasComment("@(Model.Model.DisplayName)"));
-
+@if(Model.Model.PrimaryField.CSharpType=="Guid")
+{                  
+            @:builder.Property(x => x.Id).ValueGeneratedNever();
+}
 @if(Model.Model.IsTree)
 {
             @:builder.MapGeneralTree();
