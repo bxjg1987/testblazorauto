@@ -161,7 +161,7 @@ namespace System.Net.Http
             url = url.AddQueryString(qs);
             //await Console.Out.WriteLineAsync("url");
             //await Console.Out.WriteLineAsync(url);
-            var r = await hc.PostAsJsonAsync(url, ps, cancellationToken);
+            var r = await hc.PostAsJsonAsync(url, ps, Consts.JsonSerializerOptions, cancellationToken);
             var str = await r.Content.ReadAsStringAsync();
             T xxx =  System.Text.Json.JsonSerializer.Deserialize<T>(str, Consts.JsonSerializerOptions);
             return xxx;

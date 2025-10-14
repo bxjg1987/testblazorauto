@@ -8,7 +8,7 @@ namespace BXJG.Utils.Application.Share
 {
     public class Consts
     {
-        public static readonly JsonSerializerOptions JsonSerializerOptions =new  JsonSerializerOptions( JsonSerializerDefaults.Web);
+        public static  JsonSerializerOptions JsonSerializerOptions =new  JsonSerializerOptions( JsonSerializerDefaults.Web);
 
         public const string TongyongLianjie = "TongyongLianjie";
 
