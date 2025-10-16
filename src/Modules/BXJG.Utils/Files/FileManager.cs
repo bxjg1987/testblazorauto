@@ -138,10 +138,12 @@ namespace BXJG.Utils.Files
         /// </summary>
         /// <param name="fileName">真实的文件名称</param>
         /// <param name="tempFileRelativePath">临时文件的相对路径</param>
+        /// <param name="filePermission"></param>
+        /// <param name="permissionNames">当Permission为PermissionNames时，此字段存储哪些权限可以访问此文件，多个权限用英文逗号分割</param>
         /// <returns></returns>
-        public virtual async Task<FileEntity> Upload(string fileName, string tempFileRelativePath, FilePermission filePermission)
+        public virtual async Task<FileEntity> Upload(string fileName, string tempFileRelativePath, FilePermission filePermission, string? permissionNames = null)
         {
-            var file = await AddFileRecord(fileName, tempFileRelativePath,filePermission);
+            var file = await AddFileRecord(fileName, tempFileRelativePath,filePermission,permissionNames);
             await CurrentUnitOfWork.SaveChangesAsync(); //数据库操作成功时才移动文件
             Move(tempFileRelativePath, file);
             return file;
@@ -152,8 +154,10 @@ namespace BXJG.Utils.Files
         /// </summary>
         /// <param name="fileName">真实的文件名称</param>
         /// <param name="tempFileRelativePath">临时文件的相对路径</param>
+        /// <param name="filePermission">权限控制类型</param>
+        /// <param name="permissionNames">当Permission为PermissionNames时，此字段存储哪些权限可以访问此文件，多个权限用英文逗号分割</param>
         /// <returns></returns>
-        protected virtual async Task<FileEntity> AddFileRecord(string fileName, string tempFileRelativePath, FilePermission filePermission)
+        protected virtual async Task<FileEntity> AddFileRecord(string fileName, string tempFileRelativePath, FilePermission filePermission,string? permissionNames = null)
         {
             /*
              * dbcontext是一个请求一个实例，所以在业务系统中先开事务，然后执行此逻辑，最后提交事务
@@ -173,7 +177,8 @@ namespace BXJG.Utils.Files
                 RealName = fileName,
                 ResponseContentType = MimeGuesser.GuessMimeType(jdlj), //ur.ContentType,
                 Size =  new FileInfo(jdlj).Length, 
-                Permission = filePermission
+                Permission = filePermission,
+                PermissionNames=permissionNames,
                 //RelativePath = Path.Combine( Clock.Now.ToString("yyyyMMdd"), Path.GetFileName(ur.TempPath)),
                 //ThumbnailRelativePath = Path.Combine(TimingProvider.Get().ToString("yyyyMMdd"), Path.GetFileName(ur.TempPath).Replace(".", "_thum.")),
 

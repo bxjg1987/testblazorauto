@@ -58,9 +58,27 @@ namespace BXJG.Utils.Files
         /// </summary>
         /// <param name="entityId">实体id</param>
         /// <param name="files">包含新老文件的列表，注意顺序，若是纯删除则保持空</param>
+        /// <param name="filePermission"></param>
+        /// <param name="permissionNames">当Permission为PermissionNames时，此字段存储哪些权限可以访问此文件，多个权限用英文逗号分割</param>
         /// <param name="propertyName">关联的属性名</param>
+        /// <param name="propertyDisplayName"></param>
         /// <returns>没必要返回附件，直接返回文件吧</returns>
-        public async Task<List<FileEntity>> SetAttachments(object entityId, string propertyName, string propertyDisplayName=default, IList<SetAttachmentFile> files = default ,FilePermission filePermission= FilePermission.Authenticated)
+        public async Task<List<FileEntity>> SetAttachments(object entityId, string propertyName, string propertyDisplayName = default, IList<SetAttachmentFile> files = default, FilePermission filePermission = FilePermission.Authenticated, string? permissionNames = default)
+        {
+            var r = await SetAttachments2(entityId, propertyName, propertyDisplayName, files, filePermission, permissionNames);
+            return r.Select(x => x.File).ToList();
+        }
+        /// <summary>
+        /// 设置附件，删除和新增关联的文件 返回附件
+        /// </summary>
+        /// <param name="entityId">实体id</param>
+        /// <param name="files">包含新老文件的列表，注意顺序，若是纯删除则保持空</param>
+        /// <param name="filePermission"></param>
+        /// <param name="permissionNames">当Permission为PermissionNames时，此字段存储哪些权限可以访问此文件，多个权限用英文逗号分割</param>
+        /// <param name="propertyName">关联的属性名</param>
+        /// <param name="propertyDisplayName"></param>
+        /// <returns>返回附件</returns>
+        public async Task<List<AttachmentEntity>> SetAttachments2(object entityId, string propertyName, string propertyDisplayName = default, IList<SetAttachmentFile> files = default, FilePermission filePermission = FilePermission.Authenticated, string? permissionNames = default)
         {
             var id = entityId.ToString();
 
@@ -78,37 +96,94 @@ namespace BXJG.Utils.Files
                 //await FileManager.Remove(item.File);
             }
 
-            var newEntities = new List<FileEntity>();
+            var newEntities = new List<AttachmentEntity>();
             for (int i = 0; i < files.Count; i++)
             {
                 var file = files[i];
                 var entity = oldEntities.SingleOrDefault(x => x.FileId == file.FileId);
                 if (entity == default)
                 {
-                    Logger.Warn(""+System.Text.Json.JsonSerializer.Serialize(file));
-                    var f = await FileManager.Upload(file.FileName, file.TempPath,filePermission);
-                    entity = new AttachmentEntity
-                    {
-                        EntityId = id,
-                        EntityType = entityType,
-                        Id = GuidGenerator.Create(),// f.Id,
-                        File = f,
-                        FileId = f.Id,
-                        OrderIndex = i,
-                        TenantId = f.TenantId,//不晓得为啥非要在这里设置下，估计应该用IMustHaveTenant接口
-                        PropertyName = propertyName,
-                        PropertyDisplayName= propertyDisplayName?? propertyName,
-                    };
-                    await Repository.InsertAsync(entity);
+                    //Logger.Warn("" + System.Text.Json.JsonSerializer.Serialize(file));
+                    //var f = await FileManager.Upload(file.FileName, file.TempPath, filePermission, permissionNames);
+                    //entity = new AttachmentEntity
+                    //{
+                    //    EntityId = id,
+                    //    EntityType = entityType,
+                    //    Id = GuidGenerator.Create(),// f.Id,
+                    //    File = f,
+                    //    FileId = f.Id,
+                    //    OrderIndex = i,
+                    //    TenantId = f.TenantId,//不晓得为啥非要在这里设置下，估计应该用IMustHaveTenant接口
+                    //    PropertyName = propertyName,
+                    //    PropertyDisplayName = propertyDisplayName ?? propertyName,
+                    //};
+                    //await Repository.InsertAsync(entity);
+                    entity = await AddAttachment(entityId, propertyName, propertyDisplayName, file, filePermission, permissionNames);
                 }
                 else
                 {
                     entity.OrderIndex = i;
                 }
-                newEntities.Add(entity.File);
+                newEntities.Add(entity);
             }
 
             return newEntities;
+        }
+        /// <summary>
+        /// 直接批量添加附件
+        /// </summary>
+        /// <param name="entityId">实体id</param>
+        /// <param name="files">包含新老文件的列表，注意顺序，若是纯删除则保持空</param>
+        /// <param name="filePermission"></param>
+        /// <param name="permissionNames">当Permission为PermissionNames时，此字段存储哪些权限可以访问此文件，多个权限用英文逗号分割</param>
+        /// <param name="propertyName">关联的属性名</param>
+        /// <param name="propertyDisplayName"></param>
+        /// <returns></returns>
+        public async Task<List<AttachmentEntity>> AddAttachments(object entityId, string propertyName, string propertyDisplayName = default, IList<SetAttachmentFile> files = default, FilePermission filePermission = FilePermission.Authenticated, string? permissionNames = default)
+        {
+            var id = entityId.ToString();
+
+
+            var newEntities = new List<AttachmentEntity>();
+            for (int i = 0; i < files.Count; i++)
+            {
+                var file = files[i];
+
+                Logger.Warn("" + System.Text.Json.JsonSerializer.Serialize(file));
+                var f = await FileManager.Upload(file.FileName, file.TempPath, filePermission, permissionNames);
+                var entity = new AttachmentEntity
+                {
+                    EntityId = id,
+                    EntityType = entityType,
+                    Id = GuidGenerator.Create(),// f.Id,
+                    File = f,
+                    FileId = f.Id,
+                    OrderIndex = i,
+                    TenantId = f.TenantId,//不晓得为啥非要在这里设置下，估计应该用IMustHaveTenant接口
+                    PropertyName = propertyName,
+                    PropertyDisplayName = propertyDisplayName ?? propertyName,
+                };
+                await Repository.InsertAsync(entity);
+
+                newEntities.Add(entity);
+            }
+
+            return newEntities;
+        }
+        /// <summary>
+        /// 直接添加单个附件
+        /// </summary>
+        /// <param name="entityId">实体id</param>
+        /// <param name="file">包含新老文件的列表，注意顺序，若是纯删除则保持空</param>
+        /// <param name="filePermission"></param>
+        /// <param name="permissionNames">当Permission为PermissionNames时，此字段存储哪些权限可以访问此文件，多个权限用英文逗号分割</param>
+        /// <param name="propertyName">关联的属性名</param>
+        /// <param name="propertyDisplayName"></param>
+        /// <returns></returns>
+        public async Task<AttachmentEntity> AddAttachment(object entityId, string propertyName, string propertyDisplayName = default, SetAttachmentFile file = default, FilePermission filePermission = FilePermission.Authenticated, string? permissionNames = default)
+        {
+            var r = await AddAttachments(entityId, propertyName, propertyDisplayName, new List<SetAttachmentFile>() { file }, filePermission, permissionNames);
+            return r.First();
         }
 
         //获取以仓储扩展方法提供

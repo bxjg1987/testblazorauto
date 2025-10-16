@@ -41,7 +41,7 @@ namespace BXJG.Utils.Settings
                 //                      isVisibleToClients:true),
                 //允许的文件类型
                 new SettingDefinition(BXJGUtilsConsts.SettingKeyUploadType,
-                                      ".jpg,.jpeg,.gif,.png,.doc,.docx,.rar,.xlsx,.xls,.pdf",
+                                      ".txt,.jpg,.jpeg,.gif,.png,.doc,.docx,.rar,.xlsx,.xls,.pdf",
                                       BXJGUtilsConsts.SettingKeyUploadType.UtilsLI(),
                                       file,
                                       scopes: SettingScopes.Application ,

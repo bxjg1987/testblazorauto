@@ -27,5 +27,14 @@ namespace BXJG.Utils.Share.Files
         /// 具体业务自己的文件访问接口自己去判断权限，不依赖此字段
         /// </summary>
         Further = 1 << 2,
+        /// <summary>
+        /// 自己只能访问自己的文件
+        /// </summary>
+        Owner = 1 << 3,
+        /// <summary>
+        /// 指定权限字符串
+        /// 文件中单独用一个字典存储权限字符串，通过此字符串决定访问权限
+        /// </summary>
+        PermissionNames = 1 << 4,
     }
 }

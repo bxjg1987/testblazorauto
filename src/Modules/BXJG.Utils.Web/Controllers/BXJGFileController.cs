@@ -4,6 +4,7 @@ using Abp.Auditing;
 using Abp.Authorization;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
+using Abp.Runtime.Session;
 using BXJG.Utils.Application.Share.Files;
 using BXJG.Utils.Extensions;
 using BXJG.Utils.Files;
@@ -96,23 +97,38 @@ namespace BXJG.Utils.Web.Controllers
             CurrentUnitOfWork.DisableTenantFilter();
             var r = await this.fileDownloader.Value.GetAbsolutePath(id);
 
-            if (r.Permission == Share.Files.FilePermission.Further)
-                throw new AbpAuthorizationException("请使用具体业务独立的文件访问接口");
+            await CheckPermission(r);
 
-            if (r.Permission == Share.Files.FilePermission.Authenticated)
-            {
-                if (!base.AbpSession.UserId.HasValue)
-                    throw new AuthenticationFailureException("请登录！");
-
-                if (r.TenantId != AbpSession.TenantId)
-                    throw new AuthenticationFailureException("非法请求！");
-            }
 
             //若提供了 r.RealName就会在响应中增加Content-Disposition 设置为 attachment 这会导致浏览器直接洗下载该文件
             if (r.RelativePathThumbnail.IsNotNullOrWhiteSpaceBXJG())
                 return PhysicalFile(r.RelativePath, r.ResponseContentType);
             else
                 return PhysicalFile(r.RelativePath, r.ResponseContentType, r.RealName);
+        }
+
+        private async Task CheckPermission(Share.Files.DownloadFileResult r)
+        {
+            if (r.Permission == Share.Files.FilePermission.Further)
+                throw new AbpAuthorizationException("请使用具体业务独立的文件访问接口");
+
+            else if (r.Permission == Share.Files.FilePermission.Authenticated)
+            {
+                if (!AbpSession.UserId.HasValue)
+                    throw new AuthenticationFailureException("请登录！");
+
+                //if (r.TenantId != AbpSession.TenantId)
+                //    throw new AuthenticationFailureException("非法请求！");
+            }
+            else if (r.Permission == Share.Files.FilePermission.Owner && r.CreatorUserId != base.AbpSession.UserId)
+                throw new AuthenticationFailureException("非法请求！");
+            else if (r.Permission == Share.Files.FilePermission.PermissionNames)
+                await PermissionChecker.AuthorizeAsync(r.PermissionNames.Split(','));
+            else if ((Share.Files.FilePermission.Owner | Share.Files.FilePermission.PermissionNames).HasFlag(r.Permission))
+            {
+                if (!(r.CreatorUserId == AbpSession.UserId || await PermissionChecker.IsGrantedAsync(AbpSession.ToUserIdentifier(), false, r.PermissionNames.Split(','))))
+                    throw new AuthenticationFailureException("非法请求！");
+            }
         }
 
         /// <summary>
@@ -129,16 +145,7 @@ namespace BXJG.Utils.Web.Controllers
             CurrentUnitOfWork.DisableTenantFilter();
             var r = await this.fileDownloader.Value.GetAbsolutePath(id);
 
-            if (r.Permission == Share.Files.FilePermission.Further)
-                throw new AbpAuthorizationException("请使用具体业务独立的文件访问接口");
-
-            if (r.Permission == Share.Files.FilePermission.Authenticated)
-            {
-                if (!base.AbpSession.UserId.HasValue)
-                    throw new AuthenticationFailureException("请登录！");
-                if (r.TenantId != AbpSession.TenantId)
-                    throw new AuthenticationFailureException("非法请求！");
-            }
+            await CheckPermission(r);
             //若提供了 r.RealName就会在响应中增加Content-Disposition 设置为 attachment 这会导致浏览器直接洗下载该文件
             return PhysicalFile(r.RelativePathThumbnail, r.ResponseContentType/*, r.RealName*/);
         }

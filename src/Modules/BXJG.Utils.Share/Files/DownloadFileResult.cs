@@ -36,6 +36,19 @@ namespace BXJG.Utils.Share.Files
         /// </summary>
         public FilePermission Permission { get; set; }
         /// <summary>
+        /// 若Permission为指定权限字符串时，PermissionNames为指定权限字符串
+        /// </summary>
+        public string? PermissionNames { get; set; }
+        //
+        // 摘要:
+        //     Creation time of this entity.
+        public virtual DateTime CreationTime { get; set; }
+
+        //
+        // 摘要:
+        //     Creator of this entity.
+        public virtual long? CreatorUserId { get; set; }
+        /// <summary>
         /// 租户id
         /// </summary>
         public int? TenantId { get; set; }

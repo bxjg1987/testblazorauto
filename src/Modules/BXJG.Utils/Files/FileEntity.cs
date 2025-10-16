@@ -3,6 +3,7 @@ using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
 using BXJG.Utils.Share;
 using BXJG.Utils.Share.Files;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -55,6 +56,13 @@ namespace BXJG.Utils.Files
         /// 由于这是通用权限，所以定义在这里而不是附件实体上
         /// </summary>
         public FilePermission Permission { get; set; } = FilePermission.Further;
+        /// <summary>
+        /// 若Permission为指定权限字符串时，PermissionNames为指定权限字符串
+        /// </summary>
+        [MaxLength(1000)]
+        [Unicode(false)]
+        [Comment("当Permission为PermissionNames时，此字段存储哪些权限可以访问此文件，多个权限用英文逗号分割")]
+        public string? PermissionNames { get; set; }
         /// <summary>
         /// 扩展数据
         /// </summary>
