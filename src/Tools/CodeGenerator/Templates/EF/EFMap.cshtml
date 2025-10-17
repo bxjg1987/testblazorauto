@@ -35,7 +35,7 @@ namespace @(Model.Model.EFNamespace)
             @:/// @(field.DisplayName)
             @:///</summary>
             @:var @(field.Name) = builder.Property(x => x.@(field.Name));
-            @:@(field.Name).HasComment("@(field.DisplayName)");
+            @:@(field.Name).HasComment("@(field.Description?? field.DisplayName)");
     if(field.Length>0&&field.CSharpType=="string"){
             @:@(field.Name).HasMaxLength(@(field.CoreShareConstsMaxLength));
     }
