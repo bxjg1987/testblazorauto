@@ -24,6 +24,17 @@ namespace ZLJ.Core
         public IEventBus EventBus { get; set; } = NullEventBus.Instance;
         public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; } = NullAsyncQueryableExecuter.Instance;
 
+
+        public Lazy<IRepository<StaffInfoEntity, long>> StaffRepository { get; set; }
+        /// <summary>
+        /// 获取当前员工（用户）
+        /// </summary>
+        /// <returns></returns>
+        public async Task<StaffInfoEntity> GetCurrentStaffInfoUser()
+        {
+            return await (await StaffRepository.Value.GetAllReadonlyAsync()).FirstAsync(x => x.Id == AbpSession.UserId, CancellationTokenProvider.Token);
+        }
+
         public BXJGBaseInfoDomainServiceBase()
         {
             base.LocalizationSourceName = ZLJ.Core.Share.ZLJConsts.LocalizationSourceName;
