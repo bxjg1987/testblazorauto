@@ -3,9 +3,11 @@ using Abp.Events.Bus;
 using Abp.Linq;
 using Abp.Runtime.Session;
 using Abp.Threading;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using ZLJ.Core.BaseInfo.StaffInfo;
 
 namespace ZLJ.Core
 {

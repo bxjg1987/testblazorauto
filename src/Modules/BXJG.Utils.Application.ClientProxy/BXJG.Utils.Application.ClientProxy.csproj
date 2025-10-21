@@ -3,7 +3,7 @@
   <PropertyGroup>
 	  <TargetFrameworks>net8;net9</TargetFrameworks>
     <Nullable>enable</Nullable>
-	  <VersionPrefix>1.0.75</VersionPrefix>
+	  <VersionPrefix>1.0.76</VersionPrefix>
 	  <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
@@ -19,7 +19,7 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Extensions.Http" Version="9.0.9" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="9.0.10" />
 	</ItemGroup>
 	
 	<ItemGroup>

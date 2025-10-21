@@ -6,11 +6,11 @@ namespace ZLJ.Admin.CoreRCL.DataDictionary
     /// </summary>
     public partial class Create
     {
-        /// <summary>
-        /// 用于实现Section布局
-        /// </summary>
-        [Parameter]
-        public object Master {  get; set; }
+        ///// <summary>
+        ///// 用于实现Section布局
+        ///// </summary>
+        //[Parameter]
+        //public object Master {  get; set; }
         protected override HttpClient HttpClient => httpClient ??= ScopedServices.GetRequiredService<IHttpClientFactory>().CreateHttpClientUtils();
         /// <summary>
         /// 此功能的名称

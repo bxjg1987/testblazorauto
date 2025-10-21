@@ -38,13 +38,13 @@
 
 		<PackageReference Include="AntDesign" Version="1.4.3" />
 
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.9" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.10" />
 
 		<!--<PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.2" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.2" />-->
 		<!--当前项目定义了拦截器，就算当前项目引用的其它项目已经引用rougamo，这里也必须引用，
 	IncludeAssets="all" PrivateAssets="contentfiles;analyzers"是确保拦截器使用方不用引用rougamo的包-->
-	  <PackageReference Include="Rougamo.Fody" Version="5.0.1" PrivateAssets="contentfiles;analyzers" />
+	  <PackageReference Include="Rougamo.Fody" Version="5.0.2" PrivateAssets="contentfiles;analyzers" />
 	</ItemGroup>
 
 
