@@ -102,8 +102,8 @@ namespace BXJG.Utils.RCL.Components
         #endregion
 
         #region 权限
-    
-      
+
+
         ///// <summary>
         ///// 是否有查看权限
         ///// </summary>
@@ -205,7 +205,10 @@ namespace BXJG.Utils.RCL.Components
         /// <returns></returns>
         protected virtual async Task RefreshCore()
         {
-            dto = await HttpClient.Get<TEntityDto>(new EntityDto<TPrimaryKey>(Id));//  AppService.GetAsync(new EntityDto<TPrimaryKey>(Id));
+            //if (!EqualityComparer<TPrimaryKey>.Default.Equals(Id, default))
+            //{
+                dto = await HttpClient.Get<TEntityDto>(new EntityDto<TPrimaryKey>(Id));//  AppService.GetAsync(new EntityDto<TPrimaryKey>(Id));
+            //}
         }
         #endregion
 

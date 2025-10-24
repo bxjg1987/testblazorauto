@@ -193,3 +193,13 @@ table.jianjie th {
     .frm-dal .ant-modal-body .ant-collapse-borderless {
         background-color: transparent;
     }
+
+.frm-field-readonly {
+    background-color: #e3e3e3;
+    padding: .34rem .75rem;
+    min-height: 32px;
+    display: block;
+}
+.ant-collapse-content-box .frm-field-readonly {
+    background-color: #eee;
+}

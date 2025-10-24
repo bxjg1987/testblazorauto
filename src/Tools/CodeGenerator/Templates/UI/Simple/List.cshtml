@@ -93,23 +93,23 @@
         <PropertyColumn Property="c=>c.@(field.Name)" @(field.IsSort?@"Sortable=""true""":"") ShowSorterTooltip="false" @(field.Width.IsNullOrWhiteSpaceBXJG()?"":@$"Width=""{field.Width}""") @(field.FixedLeft==true?@"Fixed=""ColumnFixPlacement.Left""":(field.FixedLeft==false?@"Fixed=""ColumnFixPlacement.Right""":"")) @(field.Position==true?"":(field.FixedLeft==false?@"Align=ColumnAlign.Right":@"Align=""ColumnAlign.Center"""))/>        
     }
 }
-        <ActionColumn Title="操作" Width="160" Fixed="ColumnFixPlacement.Right" Align="ColumnAlign.Center">
-            <ButtonGroup Size="@@ButtonGroupSize.Small">
-                <Button OnClickStopPropagation="true" Size="@@ButtonSize.Small" Type="@@ButtonType.Primary" OnClick="x=>BtnItemDetailClick(context)">详情</Button><br />
+            <ActionColumn Title="操作" Width="160" Fixed="ColumnFixPlacement.Right" Align="ColumnAlign.Center">
+                <div @@onclick:stopPropagation="true">
+                <ButtonGroup Size="@@ButtonGroupSize.Small">
+                <Button Size="@@ButtonSize.Small" Type="@@ButtonType.Primary" OnClick="x=>BtnItemDetailClick(context)">详情</Button><br />
                 @@if (updateIsGranted)
                 {
-                    <Button OnClickStopPropagation="true" Size="@@ButtonSize.Small" OnClick="x=>BtnItemEditClick(context)">修改</Button>
+                    <Button Size="@@ButtonSize.Small" OnClick="x=>BtnItemEditClick(context)">修改</Button>
                 }
                 @@if (deleteIsGranted)
                 {
-                    <div @@onclick:stopPropagation ="true">
                         <Popconfirm Title="确定删除此项吗?"
                                     OnConfirm="()=>BtnDeleteItemClick(context)">
                             <Button  Size="@@ButtonSize.Small" Danger="true">删除</Button>
                         </Popconfirm>
-                    </div>
                 }
             </ButtonGroup>
+                    </div>
         </ActionColumn>
     </Table>
 </Flex>

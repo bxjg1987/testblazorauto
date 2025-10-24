@@ -64,15 +64,16 @@
         </GridRow>
 @foreach(var field in Model.Model.NormalFields)
 { 
-        <GridRow>
-            <GridCol Span="5">@field.DisplayName</GridCol>     
+        <FormItem Label="@@field.DisplayName">
+            <span class="frm-field-readonly">    
     @if(field.CSharpType== "bool"){
-            <GridCol Span="19"><Switch Checked=dto.@field.Name Disabled="true" /></GridCol>
+            <Switch Checked=dto.@field.Name Disabled="true" />
     }
     else{    
-            <GridCol Span="19">@@dto.@field.Name</GridCol>  
+            @:@@dto.@field.Name  
     }
-       </GridRow>
+            </span>
+        </FormItem>
 }
     }
 </SectionContent>

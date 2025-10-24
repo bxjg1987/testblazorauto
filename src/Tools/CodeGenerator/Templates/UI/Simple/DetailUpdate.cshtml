@@ -18,7 +18,7 @@
 </SectionContent>
 <SectionContent SectionName=@@($"{Master}-detail-update-body")>
 
-    @@if (isEdit)
+    @@if (IsShowUpdate)
     {
         <Form @@ref="frm" ValidateOnChange="true" Model="editDto" LabelColSpan="4" WrapperColSpan="20" OnFinish="OnFinish" Loading="IsBusy">
 @foreach(var field in Model.Model.NormalFields)
@@ -58,16 +58,17 @@
     else
     {
 @foreach(var field in Model.Model.NormalFields)
-{ 
-        <GridRow>
-            <GridCol Span="5">@field.DisplayName</GridCol>     
+    {
+        <FormItem Label="@@field.DisplayName">
+            <span class="frm-field-readonly">    
     @if(field.CSharpType== "bool"){
-            <GridCol Span="19"><Switch Checked=dto.@field.Name Disabled="true" /></GridCol>
+            <Switch Checked=dto.@field.Name Disabled="true" />
     }
     else{    
-            <GridCol Span="19">@@dto.@field.Name</GridCol>  
+            @:@@dto.@field.Name  
     }
-       </GridRow>
+            </span>
+        </FormItem>
 }
     }
 </SectionContent>
