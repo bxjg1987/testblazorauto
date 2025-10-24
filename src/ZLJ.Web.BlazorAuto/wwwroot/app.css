@@ -105,7 +105,7 @@ table.danbiankuang {
 }
 
     table.danbiankuang td, table.danbiankuang th {
-        border: 1px solid #ddd; /* ÉèÖÃµ¥±ß¿òÑùÊ½ */
+        border: 1px solid #ddd; /* ï¿½ï¿½ï¿½Ãµï¿½ï¿½ß¿ï¿½ï¿½ï¿½Ê½ */
     }
 
 table.jiange-xiao td, table.jiange-xiao th {
@@ -156,7 +156,7 @@ table.jianjie th {
     color: #888;
     /* writing-mode: vertical-rl;
     text-orientation: upright;
-     letter-spacing: 18px;  ÉèÖÃ¼ä¾à */
+     letter-spacing: 18px;  ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ */
 }
 
 .yl td span:nth-child(2) {
@@ -198,7 +198,8 @@ table.jianjie th {
     background-color: #e3e3e3;
     padding: .34rem .75rem;
     min-height: 32px;
-    display: block;
+       display:block;
+    min-height:32px;
 }
 .ant-collapse-content-box .frm-field-readonly {
     background-color: #eee;
