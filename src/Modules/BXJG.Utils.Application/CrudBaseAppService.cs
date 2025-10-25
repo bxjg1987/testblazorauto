@@ -108,7 +108,7 @@ namespace BXJG.Utils.Application
                 await Repository.IsExistsThrow(cfjc.Where,cfjc.DisplayNameProperty);
             }
 
-            TEntity entity = MapToEntity(input);
+            TEntity entity = await MapToEntityAsync(input);
             await MapToEntity(entity);
             await Repository.InsertAsync(entity);
             await CurrentUnitOfWork.SaveChangesAsync();
@@ -129,8 +129,9 @@ namespace BXJG.Utils.Application
             }
 
             TEntity entity = await GetEntityByIdAsync(input.Id);
-            MapToEntity(input, entity);
+            await MapToEntityAsync(input, entity);
             await MapToEntity(entity);
+          
             await CurrentUnitOfWork.SaveChangesAsync();
             entity = await GetEntityByIdAsync(entity.Id, false); //.SingleAsync(c => c.Id.Equals(id));
             return MapToEntityDto(entity);
@@ -164,6 +165,8 @@ namespace BXJG.Utils.Application
 
             return r;
         }
+        protected virtual Task<TEntity> MapToEntityAsync(TCreateInput input) => Task.FromResult( MapToEntity(input));
+     
         /// <summary>
         /// 修改时dto映射到实体
         /// </summary>
@@ -172,8 +175,8 @@ namespace BXJG.Utils.Application
         protected override void MapToEntity(TUpdateInput updateInput, TEntity entity)
         {
             base.MapToEntity(updateInput, entity);
-
         }
+        protected virtual async Task MapToEntityAsync(TUpdateInput input, TEntity entity) => MapToEntity(input, entity);
         /// <summary>
         /// 新增和修改都会执行的逻辑，若需要传递额外参数，请使用当前Uow.Items
         /// </summary>
