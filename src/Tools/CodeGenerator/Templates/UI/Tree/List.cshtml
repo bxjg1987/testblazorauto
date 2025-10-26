@@ -91,21 +91,23 @@
 
         <ActionColumn Title="操作" Width="240" Fixed="ColumnFixPlacement.Right" Align="ColumnAlign.Center">
             <span @@onclick:stopPropagation="true">
-            <ButtonGroup Size="@@ButtonGroupSize.Small">
+                <ButtonGroup Size="@@ButtonGroupSize.Small">
+                    @@if (deleteIsGranted)
+                    {
+                    <Popconfirm Title="将删除此项及其所有子项，确定删除吗?" OnConfirm="()=>BtnDeleteItemClick(context)">
+                        <Button Size="@@ButtonSize.Small" Danger="true" Loading="@@context.ExtensionData.IsDeleting">删除</Button>
+                    </Popconfirm>
+                    }
                     <Button  OnClickStopPropagation="true" Size="@@ButtonSize.Small" Type="@@ButtonType.Primary" OnClick="x=>BtnItemDetailClick(context)">详情</Button>
-                @@if (createIsGranted)
+
+                   
+                    @@if (createIsGranted)
                 {
                     <Button OnClickStopPropagation="true"  Size="@@ButtonSize.Small" OnClick="x=>BtnAddSubClick(context.Id)">添加子节点</Button>
                 }
                 @@if (updateIsGranted)
                 {
                     <Button OnClickStopPropagation="true"  Size="@@ButtonSize.Small" OnClick="x=>BtnItemEditClick(context)">修改</Button>
-                }
-                @@if (deleteIsGranted)
-                {
-                        <Popconfirm Title="将删除此项及其所有子项，确定删除吗?" OnConfirm="()=>BtnDeleteItemClick(context)">
-                            <Button  Size="@@ButtonSize.Small" Danger="true" Loading="@@context.ExtensionData.IsDeleting">删除</Button>
-                        </Popconfirm>
                 }
                 </ButtonGroup>
             </span>
