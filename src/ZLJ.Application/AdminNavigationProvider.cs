@@ -160,7 +160,7 @@ namespace ZLJ.Application
                                                         "Settings".UtilsLI(),
                                                         icon: "setting",
                                                         url: "/settings",
-                                                        permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorSystemConfig)));
+                                                        permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorSystemConfigGet)));
 
             #endregion
 

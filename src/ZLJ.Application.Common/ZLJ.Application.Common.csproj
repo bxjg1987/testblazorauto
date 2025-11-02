@@ -27,6 +27,7 @@
 		<Compile Remove="App.cs" />
 		<Compile Remove="NotifyEventHandler.cs" />
 		<Compile Remove="Sessions\ZLJAppSession.cs" />
+		<Compile Remove="Settings\AutoMapperProfile.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -67,5 +68,9 @@
 	<ItemGroup>
 		<ProjectReference Include="..\ZLJ.Application.Common.Share\ZLJ.Application.Common.Share.csproj" />
 		<ProjectReference Include="..\ZLJ.Core\ZLJ.Core.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Settings\" />
 	</ItemGroup>
 </Project>

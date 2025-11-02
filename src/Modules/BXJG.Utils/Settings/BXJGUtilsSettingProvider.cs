@@ -45,7 +45,27 @@ namespace BXJG.Utils.Settings
                                       BXJGUtilsConsts.SettingKeyUploadType.UtilsLI(),
                                       file,
                                       scopes: SettingScopes.Application ,
-                                      isVisibleToClients:true),
+                                      isVisibleToClients:true,
+                                           customData: new
+                                           {
+                                               csharpType = "string",//typeof(c#类型).Name //inputType="checkbox",//text,select 等等
+                                               isRequired = false,//此配置是否必填
+                                               formatter = string.Empty,
+                                               min = 0,//最小值
+                                               max = 0,//最大值
+                                               placeholder = "留空则仅允许常见文件类型",//占位符
+                                                                         //在前端管理设置定义时会序列化为Dictionary<string,string>，所以这里只能使用字符串作为可选值，前端再反序列化一次
+                                                                         //key的类型与csharpType对应
+                                                                         //配合默认值
+                                                                         //若多选，则用 a,b,c方式存储
+                                                                         //selectValues = System.Text.Json.JsonSerializer.Serialize(new Dictionary<string, string>{
+                                                                         //    { "a","aaa"},
+                                                                         //    { "b","bbb"},
+                                                                         //    { "c","ccc"},
+                                                                         //}),
+                                                                         //是否可以多选
+                                                                         //isMultiSelect = false,
+                                           }),
 
                 //单个文件允许的大小(mb)
                 new SettingDefinition(BXJGUtilsConsts.SettingKeyUploadSize,
@@ -53,7 +73,27 @@ namespace BXJG.Utils.Settings
                                       BXJGUtilsConsts.SettingKeyUploadSize.UtilsLI(),
                                       file,
                                       scopes: SettingScopes.Application | SettingScopes.Tenant,
-                                      isVisibleToClients:true),
+                                      isVisibleToClients:true,
+                                           customData: new
+                                           {
+                                               csharpType = "int",//typeof(c#类型).Name //inputType="checkbox",//text,select 等等
+                                               isRequired = true,//此配置是否必填
+                                               formatter = string.Empty,
+                                               min = 0,//最小值
+                                               max = 0,//最大值
+                                               placeholder = "单位mb",//占位符
+                                                                         //在前端管理设置定义时会序列化为Dictionary<string,string>，所以这里只能使用字符串作为可选值，前端再反序列化一次
+                                                                         //key的类型与csharpType对应
+                                                                         //配合默认值
+                                                                         //若多选，则用 a,b,c方式存储
+                                                                         //selectValues = System.Text.Json.JsonSerializer.Serialize(new Dictionary<string, string>{
+                                                                         //    { "a","aaa"},
+                                                                         //    { "b","bbb"},
+                                                                         //    { "c","ccc"},
+                                                                         //}),
+                                                                         //是否可以多选
+                                                                         //isMultiSelect = false,
+                                           }),
 
                 new SettingDefinition(BXJGUtilsConsts.CaptchaOptions_ImageOption_FontFamily,
                                       "Kaiti",
@@ -66,19 +106,79 @@ namespace BXJG.Utils.Settings
                                       BXJGUtilsConsts.CaptchaOptions_IgnoreCase.UtilsLI(),
                                       yzm,
                                       scopes: SettingScopes.Application,
-                                      isVisibleToClients:false),
+                                      isVisibleToClients:false,
+                                           customData: new
+                                           {
+                                               csharpType = "bool",//typeof(c#类型).Name //inputType="checkbox",//text,select 等等
+                                               isRequired = true,//此配置是否必填
+                                               formatter = string.Empty,
+                                               min = 0,//最小值
+                                               max = 0,//最大值
+                                               placeholder = "忽略大小写",//占位符
+                                                                         //在前端管理设置定义时会序列化为Dictionary<string,string>，所以这里只能使用字符串作为可选值，前端再反序列化一次
+                                                                         //key的类型与csharpType对应
+                                                                         //配合默认值
+                                                                         //若多选，则用 a,b,c方式存储
+                                                                         //selectValues = System.Text.Json.JsonSerializer.Serialize(new Dictionary<string, string>{
+                                                                         //    { "a","aaa"},
+                                                                         //    { "b","bbb"},
+                                                                         //    { "c","ccc"},
+                                                                         //}),
+                                                                         //是否可以多选
+                                                                         //isMultiSelect = false,
+                                           }),
                 new SettingDefinition(BXJGUtilsConsts.CaptchaOptions_CaptchaType,
                                       "5",
                                       BXJGUtilsConsts.CaptchaOptions_CaptchaType.UtilsLI(),
                                       yzm,
                                       scopes: SettingScopes.Application,
-                                      isVisibleToClients:false),
+                                      isVisibleToClients:false,
+                                           customData: new
+                                           {
+                                               csharpType = "int",//typeof(c#类型).Name //inputType="checkbox",//text,select 等等
+                                               isRequired = true,//此配置是否必填
+                                               formatter = string.Empty,
+                                               min = 0,//最小值
+                                               max = 0,//最大值
+                                               placeholder = "",//占位符
+                                                                         //在前端管理设置定义时会序列化为Dictionary<string,string>，所以这里只能使用字符串作为可选值，前端再反序列化一次
+                                                                         //key的类型与csharpType对应
+                                                                         //配合默认值
+                                                                         //若多选，则用 a,b,c方式存储
+                                                                         //selectValues = System.Text.Json.JsonSerializer.Serialize(new Dictionary<string, string>{
+                                                                         //    { "a","aaa"},
+                                                                         //    { "b","bbb"},
+                                                                         //    { "c","ccc"},
+                                                                         //}),
+                                                                         //是否可以多选
+                                                                         //isMultiSelect = false,
+                                           }),
                 new SettingDefinition(BXJGUtilsConsts.CaptchaOptions_ImageOption_Animation,
                                       "false",
                                       BXJGUtilsConsts.CaptchaOptions_ImageOption_Animation.UtilsLI(),
                                       yzm,
                                       scopes: SettingScopes.Application,
-                                      isVisibleToClients:false)
+                                      isVisibleToClients:false,
+                                           customData: new
+                                           {
+                                               csharpType = "bool",//typeof(c#类型).Name //inputType="checkbox",//text,select 等等
+                                               isRequired = true,//此配置是否必填
+                                               formatter = string.Empty,
+                                               min = 0,//最小值
+                                               max = 0,//最大值
+                                               placeholder = "",//占位符
+                                                                         //在前端管理设置定义时会序列化为Dictionary<string,string>，所以这里只能使用字符串作为可选值，前端再反序列化一次
+                                                                         //key的类型与csharpType对应
+                                                                         //配合默认值
+                                                                         //若多选，则用 a,b,c方式存储
+                                                                         //selectValues = System.Text.Json.JsonSerializer.Serialize(new Dictionary<string, string>{
+                                                                         //    { "a","aaa"},
+                                                                         //    { "b","bbb"},
+                                                                         //    { "c","ccc"},
+                                                                         //}),
+                                                                         //是否可以多选
+                                                                         //isMultiSelect = false,
+                                           })
             ];
         }
     }

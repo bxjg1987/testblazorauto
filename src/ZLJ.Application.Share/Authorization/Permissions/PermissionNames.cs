@@ -104,7 +104,19 @@
         public const string AdministratorSystemUserDelete = "Administrator.System.User.Delete";
 
         public const string AdministratorSystemLog = "Administrator.System.Log";
+
+        /// <summary>
+        /// 系统设置权限组（不是实际权限）
+        /// </summary>
         public const string AdministratorSystemConfig = "Administrator.System.Config";
+        /// <summary>
+        /// 获取系统设置的权限
+        /// </summary>
+        public const string AdministratorSystemConfigGet = "Administrator.System.Config.Get";
+        /// <summary>
+        /// 修改系统设置的权限
+        /// </summary>
+        public const string AdministratorSystemConfigUpdate = "Administrator.System.Config.Update";
 
 
         public const string AdministratorDemo = "Administrator.Demo";

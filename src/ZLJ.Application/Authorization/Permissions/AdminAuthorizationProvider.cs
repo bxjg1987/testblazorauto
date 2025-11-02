@@ -143,7 +143,13 @@ namespace ZLJ.Application.Authorization.Permissions
             //userM.CreateChildPermission(PermissionNames.AdministratorSystemUserDelete, L("Delete"), properties: new Dictionary<string, object> { { "btn", true } });
 
             permissionBaseInfo.CreateChildPermission(PermissionNames.AdministratorSystemLog, L("Log"));
-            permissionBaseInfo.CreateChildPermission(PermissionNames.AdministratorSystemConfig, L("Settings"));
+
+
+            var settings = permissionBaseInfo.CreateChildPermission(PermissionNames.AdministratorSystemConfig, L("Settings"));
+            //settings.CreateChildPermission(BXJG.Utils.Application.Share.Settings.Changliang.PermissionNameGet, "查看".UtilsLI());
+            //settings.CreateChildPermission(BXJG.Utils.Application.Share.Settings.Changliang.PermissionNameUpdate, "修改".UtilsLI());
+            settings.AddSettingPermissions();
+
             permissionBaseInfo.CreateChildPermission(PermissionNames.HangFireDashboard, L("HangFireDashboard"), multiTenancySides: MultiTenancySides.Host);
             //sys.CreateChildPermission(PermissionNames.AdministratorSystemSetting, L("Settings"));
             #endregion
@@ -184,7 +190,7 @@ namespace ZLJ.Application.Authorization.Permissions
              * 又不希望代码生成器那边通过替换此文件的字符串的方式，不优雅，也容易出错
              * 反向思维，稍微魔改下AuthorizationProvider，去间接调用代码生成器中的代码
              */
-            CodeGeneratorHelper.CodeGenerator(this,context);
+            CodeGeneratorHelper.CodeGenerator(this, context);
         }
 
         private static ILocalizableString L(string name)

@@ -31,8 +31,20 @@
 	  <EmbeddedResource Remove="SettingManager\**" />
 	  <None Remove="SettingManager\**" />
 	</ItemGroup>
+	
+	
+	
+	
+	<ItemGroup>
+	  <Compile Remove="Settings\SettingDefinitionGroupDto.cs" />
+	  <Compile Remove="Settings\SettingDto.cs" />
+	  <Compile Remove="Settings\SettingEditDto.cs" />
+	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\ZLJ.Core.Share\ZLJ.Core.Share.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Settings\" />
 	</ItemGroup>
 	
 	

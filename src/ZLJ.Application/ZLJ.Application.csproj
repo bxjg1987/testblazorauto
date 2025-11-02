@@ -71,6 +71,7 @@
     <Compile Remove="EventHandlers\Companysf.cs" />
     <Compile Remove="Sessions\ISessionAppService.cs" />
     <Compile Remove="Sessions\SessionAppService.cs" />
+    <Compile Remove="Settings\SettingsAppService.cs" />
     <Compile Remove="Users\IUserAppService.cs" />
     <Compile Remove="ZLJNavigationProvider.cs" />
   </ItemGroup>
@@ -91,6 +92,7 @@
   <ItemGroup>
     <Folder Include="EventHandlers\" />
     <Folder Include="Sessions\" />
+    <Folder Include="Settings\" />
   </ItemGroup>
 
 </Project>
