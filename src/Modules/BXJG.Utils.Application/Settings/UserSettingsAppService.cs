@@ -103,7 +103,7 @@ namespace BXJG.Utils.Application.Settings
                     await SettingManager.ChangeSettingForUserAsync(AbpSession.ToUserIdentifier(), item.Name, item.Value);
                 }
                 else
-                    throw new ApplicationException("非法操作");
+                    throw new Exception("非法操作");
             }
         }
     }
