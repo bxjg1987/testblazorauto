@@ -17,17 +17,29 @@ namespace System.Collections.Generic
         /// <param name="dic"></param>
         /// <param name="dic2"></param>
         /// <returns></returns>
-        public static bool Xiangdeng<TKey, TValue>(this IDictionary<TKey, TValue> dic, IDictionary<TKey, TValue> dic2)
+        public static bool Xiangdeng<TKey, TValue>(
+     this IDictionary<TKey, TValue> dic1,
+     IDictionary<TKey, TValue> dic2,
+     IEqualityComparer<TValue> valueComparer = null)
         {
-            if (dic.Count != dic2.Count)
+            if (dic1 == null || dic2 == null)
+                return dic1 == dic2;
+
+            if (dic1.Count != dic2.Count)
                 return false;
 
-            return dic.All(c =>
+            var comparer = valueComparer ?? EqualityComparer<TValue>.Default;
+
+            foreach (var kvp in dic1)
             {
-                if (dic2.TryGetValue(c.Key, out var p))
-                    return p.Equals(c.Value);
-                return false;
-            });
+                if (!dic2.TryGetValue(kvp.Key, out var value))
+                    return false;
+
+                if (!comparer.Equals(kvp.Value, value))
+                    return false;
+            }
+
+            return true;
         }
         /// <summary>
         /// 移除并返回所有满足条件的元素
