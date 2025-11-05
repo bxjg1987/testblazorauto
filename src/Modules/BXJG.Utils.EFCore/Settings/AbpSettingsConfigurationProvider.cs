@@ -250,7 +250,7 @@ namespace BXJG.Utils.EFCore.Settings
         ILogger logger;
         Func<DbContext> dbContextFactory;
         System.Threading.Timer reloadTimer;//
-        const int interval = 1000 * 30;
+        const int interval = 1000 * 360;
         public AbpSettingsConfigurationProvider(Func<DbContext> dbContextFactory, ILoggerFactory sdf = default)
         {
             reloadTimer = new Timer(jc,null, interval, interval);
@@ -268,9 +268,10 @@ namespace BXJG.Utils.EFCore.Settings
             catch (Exception ex)
             {
                 logger.LogError(ex, "abp settings 配置监控异常");
-                throw;
+                //throw;
             }
         }
+      
         public override void Load()
         {
             // 开始的时候iocmanager还没初始化好，所以try下
