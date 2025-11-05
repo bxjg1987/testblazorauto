@@ -250,7 +250,7 @@ namespace BXJG.Utils.EFCore.Settings
         ILogger logger;
         Func<DbContext> dbContextFactory;
         System.Threading.Timer reloadTimer;//
-        const int interval = 1000 * 360;
+         int interval = 1000 * Random.Shared.Next(30,120)*5;//setting默认使用缓存，群集共享redis时，可以错开
         public AbpSettingsConfigurationProvider(Func<DbContext> dbContextFactory, ILoggerFactory sdf = default)
         {
             reloadTimer = new Timer(jc,null, interval, interval);
@@ -280,7 +280,7 @@ namespace BXJG.Utils.EFCore.Settings
             {
                 IocManager.Instance.UsingScope(scope =>
                 {
-                    Data = scope.Resolve<ISettingManager>().GetAllSettingValuesForApplication().ToDictionary(x => x.Name, x => x.Value, StringComparer.OrdinalIgnoreCase);
+                    Data = scope.Resolve<ISettingManager>().GetAllSettingValues(SettingScopes.Application| SettingScopes.Tenant).ToDictionary(x => x.Name, x => x.Value, StringComparer.OrdinalIgnoreCase);
                 });
                 logger.LogDebug($"AbpSettingsConfigurationProvider从ISettingManager获取配置，数据{ string.Join(',', Data.Keys) }");
             }
