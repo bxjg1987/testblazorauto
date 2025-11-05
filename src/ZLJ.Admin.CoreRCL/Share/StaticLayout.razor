@@ -5,7 +5,8 @@
 @implements IDisposable
 
 <HeadContent>
-    <link rel="stylesheet" href="@Assets["ZLJ.Web.BlazorAuto.styles.css"]" />
+
+    <link antblazor-css>
     <link href="@Assets["app.css"]" rel="stylesheet" />
 </HeadContent>
 
@@ -82,6 +83,51 @@
 
 
 </div>
+
+
+<SectionContent SectionName="bottom-scripts">
+    <script antblazor-js></script>
+    <script src="/echarts.5.4.3.min.js"></script>
+    <script type="module" src="_content/Blazor.ECharts/core.js"></script>
+    <script>
+        // import { BrotliDecode } from '/decode.min.js';
+        // Blazor.start({
+        //     webAssembly: {
+        //         loadBootResource: function (type, name, defaultUri, integrity) {
+        //             if (type !== 'dotnetjs' && location.hostname !== 'localhost' && type !== 'configuration' && type !== 'manifest') {
+        //                 return (async function () {
+        //                     const response = await fetch(defaultUri + '.br', { cache: 'no-cache' });
+        //                     if (!response.ok) {
+        //                         throw new Error(response.statusText);
+        //                     }
+        //                     const originalResponseBuffer = await response.arrayBuffer();
+        //                     const originalResponseArray = new Int8Array(originalResponseBuffer);
+        //                     const decompressedResponseArray = BrotliDecode(originalResponseArray);
+        //                     const contentType = type ===
+        //                         'dotnetwasm' ? 'application/wasm' : 'application/octet-stream';
+        //                     return new Response(decompressedResponseArray,
+        //                         { headers: { 'content-type': contentType } });
+        //                 })();
+        //             }
+        //         }
+        //     }
+        // });
+        //https://github.com/dotnet/aspnetcore/pull/53291
+        //注意上面的blazor.web.js autostart="false"
+        //经过测试，下面的测试没什么卵用
+        // Blazor.start({
+        //     webAssembly: {
+        //         configureRuntime: (builder) => {
+        //             builder.withConfig({
+        //                 maxParallelDownloads: 1
+        //             });
+        //         },
+        //     },
+        // });
+    </script>
+    <script src="/app.js"></script>
+</SectionContent>
+
 @code {
     // [SupplyParameterFromQuery]
     // public int mmc { get; set; }

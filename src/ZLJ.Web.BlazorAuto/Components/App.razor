@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <base href="/" />
-    <link antblazor-css>
+    <link rel="stylesheet" href="@Assets["ZLJ.Web.BlazorAuto.styles.css"]" />
     <script>
         window.serverRootAddress = '@(Cfg?["App:ServerRootAddress"]?.TrimEnd('/') ?? string.Empty)';
         window.environmentName = '@(Env?.EnvironmentName)';
@@ -50,46 +50,9 @@
     @* 新版本已经内嵌了 *@
     @* <script src="_content/AntDesign/js/ant-design-blazor.js"></script> *@
     @* <script src="_content/AntDesign.Charts/ant-design-charts-blazor.js"></script> *@
-    <script antblazor-js></script>
+   
     <script src="_framework/blazor.web.js"></script>
-    @* <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.4.3/echarts.min.js"></script> *@
-    <script>
-        // import { BrotliDecode } from '/decode.min.js';
-        // Blazor.start({
-        //     webAssembly: {
-        //         loadBootResource: function (type, name, defaultUri, integrity) {
-        //             if (type !== 'dotnetjs' && location.hostname !== 'localhost' && type !== 'configuration' && type !== 'manifest') {
-        //                 return (async function () {
-        //                     const response = await fetch(defaultUri + '.br', { cache: 'no-cache' });
-        //                     if (!response.ok) {
-        //                         throw new Error(response.statusText);
-        //                     }
-        //                     const originalResponseBuffer = await response.arrayBuffer();
-        //                     const originalResponseArray = new Int8Array(originalResponseBuffer);
-        //                     const decompressedResponseArray = BrotliDecode(originalResponseArray);
-        //                     const contentType = type ===
-        //                         'dotnetwasm' ? 'application/wasm' : 'application/octet-stream';
-        //                     return new Response(decompressedResponseArray,
-        //                         { headers: { 'content-type': contentType } });
-        //                 })();
-        //             }
-        //         }
-        //     }
-        // });
-        //https://github.com/dotnet/aspnetcore/pull/53291
-        //注意上面的blazor.web.js autostart="false"
-        //经过测试，下面的测试没什么卵用
-        // Blazor.start({
-        //     webAssembly: {
-        //         configureRuntime: (builder) => {
-        //             builder.withConfig({
-        //                 maxParallelDownloads: 1
-        //             });
-        //         },
-        //     },
-        // });
-          
-    </script>
-    <script src="/app.js"></script>
+  
+    <Microsoft.AspNetCore.Components.Sections.SectionOutlet SectionName="bottom-scripts" />
 </body>
 </html>
