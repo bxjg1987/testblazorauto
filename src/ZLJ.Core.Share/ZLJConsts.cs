@@ -23,11 +23,11 @@
 
         public const string DataDictionaryMigrationValueSettingGroupKey = "DataDictionaryMigrationValueSettingGroup";
 
-        public const string DataDictionaryMigrationValuePrinterBrand = "DataDictionaryMigrationValuePrinterBrand";
+        public const string DataDictionaryMigrationValuePrinterBrand = "pingpai";
 
-        public const string DataDictionaryMigrationValueCustomerLevel = "DataDictionaryMigrationValueCustomerLevel";
-        public const string DataDictionaryMigrationValueCustomerCategory = "DataDictionaryMigrationValueCustomerCategory";
-        public const string DataDictionaryMigrationValuePost = "DataDictionaryMigrationValuePost";
+        public const string DataDictionaryMigrationValueCustomerLevel = "kehuJibie";
+        public const string DataDictionaryMigrationValueCustomerCategory = "kehuLeibie";
+        public const string DataDictionaryMigrationValuePost = "gangwei";
 
         public const string SharpHttpClientName = "SharpHttpClient";
 

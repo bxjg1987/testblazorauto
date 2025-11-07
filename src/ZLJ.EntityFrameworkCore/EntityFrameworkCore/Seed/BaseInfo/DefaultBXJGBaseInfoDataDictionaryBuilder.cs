@@ -30,16 +30,16 @@ namespace ZLJ.EntityFrameworkCore.EntityFrameworkCore.Seed.BaseInfo
 
         public void Create()
         {
-            var items = new List<Tuple<string, List<string>, string,string>>
+            var items = new List<Tuple<string, List<string>, string>>
             {
                 new("设备品牌", new List<string> {"夏普", "施乐", "爱普生", "理光",},
-                    ZLJ.Core.Share.ZLJConsts.DataDictionaryMigrationValuePrinterBrand,"pinpai"),
+                    ZLJ.Core.Share.ZLJConsts.DataDictionaryMigrationValuePrinterBrand),
                 new("客户类别", new List<string> { "供应商及客户","供应商", "客户",  },
-                    ZLJ.Core.Share.ZLJConsts.DataDictionaryMigrationValueCustomerCategory,"kehuLeibie"),
+                    ZLJ.Core.Share.ZLJConsts.DataDictionaryMigrationValueCustomerCategory),
                 new("客户级别", new List<string> {"A级", "B级", "C级",},
-                    ZLJ.Core.Share.ZLJConsts.DataDictionaryMigrationValueCustomerLevel,"kehuJibie"),
+                    ZLJ.Core.Share.ZLJConsts.DataDictionaryMigrationValueCustomerLevel),
                 new("岗位", new List<string> {"维修人员", "售后", "库管",},
-                    ZLJ.Core.Share.ZLJConsts.DataDictionaryMigrationValuePost,"gangwei"),
+                    ZLJ.Core.Share.ZLJConsts.DataDictionaryMigrationValuePost),
             };
 
             foreach (var itemConfig in items)
@@ -63,7 +63,7 @@ namespace ZLJ.EntityFrameworkCore.EntityFrameworkCore.Seed.BaseInfo
                     DisplayName = itemConfig.Item1,
                     TenantId = _tenantId,
                     Children = new List<DataDictionaryEntity>(),
-                    IsSysDefine = true, Name= itemConfig.Item4,
+                    IsSysDefine = true, Name= itemConfig.Item3,
                 };
                 if (!itemConfig.Item2.IsNullOrEmpty())
                 {
