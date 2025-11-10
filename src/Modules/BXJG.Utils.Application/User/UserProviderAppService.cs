@@ -10,9 +10,12 @@ using System.Threading.Tasks;
 
 namespace BXJG.Utils.Application.User
 {
-    [AbpAuthorize]
+    //[AbpAuthorize]
+
+    // 虽然啥都没写，不过将来可扩展
+
     public class UserProviderAppService<TUser,TCondition,TDto> : ProviderBaseAppService<TUser, PagedAndSortedResultRequest<TCondition>, TDto, long>
-    where TUser : class, IEntity<long> 
+        where TUser : class, IEntity<long> 
         where TCondition : class, new()
     {
     }

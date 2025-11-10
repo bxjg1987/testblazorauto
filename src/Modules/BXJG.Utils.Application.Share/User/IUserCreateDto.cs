@@ -1,5 +1,4 @@
-﻿using BXJG.Common.Contracts;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace BXJG.Utils.Application.Share.User
 {
-    public class GetAllCondition:IHaveKeywords
+    public interface IUserCreateDto:IUserEditDto
     {
-        public string? Keywords { get; set; }
     }
 }
