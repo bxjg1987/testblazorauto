@@ -14,6 +14,7 @@
 		<text name="修改" value="修改" />
 		<text name="删除" value="删除" />
 		<text name="查询" value="查询" />
+		<text name="查看" value="查看" />
 		<text name="GeneralTreeMenu" value="数据字典" />
 		<text name="文件管理">文件管理</text>
 		<text name="实体已禁用"  value="{0}（{1}）已禁用！"/>
