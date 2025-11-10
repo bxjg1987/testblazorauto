@@ -16,7 +16,7 @@ namespace BXJG.Utils.Settings
     {
         public override IEnumerable<SettingDefinition> GetSettingDefinitions(SettingDefinitionProviderContext context)
         {
-            var sys = new SettingDefinitionGroup(BXJGUtilsConsts.QuanjuPeizhi, BXJGUtilsConsts.QuanjuPeizhi.UtilsLI());
+            //var sys = new SettingDefinitionGroup(BXJGUtilsConsts.QuanjuPeizhi, BXJGUtilsConsts.QuanjuPeizhi.UtilsLI());
 
             var file = new SettingDefinitionGroup(BXJGUtilsConsts.SettingKeyUploadGroup, BXJGUtilsConsts.SettingKeyUploadGroup.UtilsLI());
 
@@ -72,7 +72,7 @@ namespace BXJG.Utils.Settings
                                       (1024*50).ToString(),
                                       BXJGUtilsConsts.SettingKeyUploadSize.UtilsLI(),
                                       file,
-                                      scopes: SettingScopes.Application | SettingScopes.Tenant,
+                                      scopes: SettingScopes.Application ,
                                       isVisibleToClients:true,
                                            customData: new
                                            {

@@ -204,3 +204,6 @@ table.jianjie th {
 .ant-collapse-content-box .frm-field-readonly {
     background-color: #eee;
 }
+.ant-form-horizontal .ant-form-item-label .frm-item-label-box {
+    padding: .4rem;
+}

@@ -9,7 +9,7 @@
 
 
 <Flex Gap="FlexGap.Middle">
-    <Card Style="height:85vh;min-width:12rem;">
+    <Card Style="height:85vh;min-width:17rem;">
         <Tree TItem="SettingDefinitionGroupDto" @ref="tree" 
               DataSource="DataSource" DefaultSelectedKey="@defaultSelectedKey"
               ChildrenExpression="x=>x.DataItem.Children"
@@ -25,8 +25,8 @@
 
     <div style="display:block;width:100%; max-height:84vh; overflow:auto;">
         <Form Model="@this" Style="width:70%; margin:0 auto;"
-              LabelColSpan="4" OnFinish="Save" Loading=@isLoading
-              WrapperColSpan="20">
+              LabelColSpan="6" OnFinish="Save" Loading=@isLoading
+              WrapperColSpan="18">
             @foreach (var item in this.CurrItems)
             {
                 string csharpType = "string";
@@ -43,7 +43,25 @@
                // item.CustomData.TryGetValue("defaultValue", out var defaultValue);
 
 
-                <FormItem Label="@item.DisplayName" Required=@isRequired>
+                <FormItem Required=@isRequired>
+                    <LabelTemplate>
+                        <div class="frm-item-label-box">
+                            @if (item.Description.IsNotNullOrWhiteSpaceBXJG())
+                            {
+                                <Tooltip>
+                                    <TitleTemplate>
+                                        @item.Description
+                                    </TitleTemplate>
+                                    <ChildContent>
+
+                                        <Icon Style="" Type="@IconType.Outline.QuestionCircle" Width="1.1rem" Height="1.1rem" />
+
+                                    </ChildContent>
+                                </Tooltip>
+                            }
+                            @item.DisplayName：
+                        </div>
+                    </LabelTemplate>   <ChildContent>
                     @if (csharpType == "int")
                     {
                         var mrz = item.DefaultValue.IsNullOrWhiteSpaceBXJG() ? default : int.Parse(item.DefaultValue);
@@ -82,12 +100,13 @@
                         }
                
 
-                    }
+                        }
+                    </ChildContent>
                 </FormItem>
             }
 
 
-            <FormItem WrapperColOffset="4" WrapperColSpan="20">
+            <FormItem WrapperColOffset="6" WrapperColSpan="18">
                 <Button Type="ButtonType.Primary" HtmlType="submit" Loading=@isBusy Icon="@IconType.Outline.Save">
                     保持
                 </Button>

@@ -206,7 +206,9 @@
             // //                                   });
             // await signInManager1.SignInAsync(loginResult.Identity, true  );
             // // return Redirect(returnUrl);
-            nav.NavigateTo(ReturnUrl, true);
+            //nav.NavigateTo(ReturnUrl, true);
+            var targetUrl = ReturnUrl ?? "/main"; 
+            HttpContext.Response.Redirect(targetUrl);
         }
         catch (UserFriendlyException ex)
         {
