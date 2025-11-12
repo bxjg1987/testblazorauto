@@ -49,25 +49,25 @@ namespace ZLJ.Core.Authorization.Roles
         //    return base.SetGrantedPermissionsAsync(roleId, permissions.Union(p).GroupBy(c => c.Name).SelectMany(c => c));
         //}
 
-        //上面的方法内部会调用下面的方法。
-        public override Task SetGrantedPermissionsAsync(Role role, IEnumerable<Permission> permissions)
-        {
-            var p = permissions.SelectMany(c => c.GetDependencePermissions()).Distinct();
-            var list = permissions.Union(p).ToList();
-            //我们的项目中，还需要递归上级权限也要授权
+        ////上面的方法内部会调用下面的方法。
+        //public override Task SetGrantedPermissionsAsync(Role role, IEnumerable<Permission> permissions)
+        //{
+        //    var p = permissions.SelectMany(c => c.GetDependencePermissions()).Distinct();
+        //    var list = permissions.Union(p).ToList();
+        //    //我们的项目中，还需要递归上级权限也要授权
 
-            var tmp = list.ToImmutableList();
+        //    //var tmp = list.ToImmutableList();
 
-            foreach (var item in tmp)
-            {
-                item.RecursionUp(x => { 
-                    list.Add(x);
-                    return true;
-                });
-            }
+        //    //foreach (var item in tmp)
+        //    //{
+        //    //    item.RecursionUp(x => { 
+        //    //        list.Add(x);
+        //    //        return true;
+        //    //    });
+        //    //}
 
-            return base.SetGrantedPermissionsAsync(role, list);
-        }
+        //    return base.SetGrantedPermissionsAsync(role, list);
+        //}
 
         protected override Role MapStaticRoleDefinitionToRole(int tenantId, StaticRoleDefinition staticRoleDefinition)
         {

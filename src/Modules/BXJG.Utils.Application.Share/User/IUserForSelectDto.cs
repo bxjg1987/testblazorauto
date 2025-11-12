@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Abp.Application.Services.Dto;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,14 +17,16 @@ namespace BXJG.Utils.Application.Share.User
     /// <summary>
     /// 下拉框可选的用户dto模型
     /// </summary>
-    public interface IUserForSelectDto
+    public interface IUserForSelectDto : IEntityDto<long>
     {
-         string EmailAddress { get; set; }
+        //当前项目的抽象部分貌似不需要访问这些属性，所以顶部定义都无所谓
 
-         string PhoneNumber { get; set; }
-         string FullName { get; set; }
+         //string EmailAddress { get; set; }
+
+         //string PhoneNumber { get; set; }
+         //string Name { get; set; }
 
 
-         string[] RoleNames { get; set; }
+         //string[] RoleNames { get; set; }
     }
 }

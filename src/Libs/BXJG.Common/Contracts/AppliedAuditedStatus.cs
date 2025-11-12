@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace BXJG.Common.Contracts
@@ -15,16 +16,19 @@ namespace BXJG.Common.Contracts
         /// 女
         /// </summary>
        [Description("女")]
+        [Display(Name ="女")]
         Woman = 2,
         /// <summary>
         /// 男
         /// </summary>
        [Description("男")]
+        [Display(Name ="男")]
         Man = 1,
         /// <summary>
         /// 未知
         /// </summary>
         [Description("未知")]
+       [Display(Name ="未知")]
         Unknown = 0
     }
     /// <summary>

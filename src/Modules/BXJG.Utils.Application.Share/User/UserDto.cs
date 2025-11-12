@@ -14,6 +14,16 @@ namespace BXJG.Utils.Application.Share.User
     /// </summary>
     public class UserDto : UserSelectDto, IUserDto, IExtendableObj
     {
+        //public string? Password { get; set; }
+        ///// <summary>
+        ///// 分配到的角色
+        ///// </summary>
+        //public string[] RoleNames { get; set; }
+        ///// <summary>
+        ///// 所属组织机构
+        ///// </summary>
+        //public List<long> OrganizationUnits { get; set; }
+
         /// <summary>
         /// 登陆吗
         /// </summary>

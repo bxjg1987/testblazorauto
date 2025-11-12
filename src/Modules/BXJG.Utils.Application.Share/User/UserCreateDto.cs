@@ -5,12 +5,15 @@ using Abp.Runtime.Validation;
 
 namespace BXJG.Utils.Application.Share.User
 {
-    public class UserCreateDto : UserEditDto,IUserCreateDto, IShouldNormalize
+    public class UserCreateDto : UserEditDto, IUserCreateDto, IShouldNormalize
     {
-
-        //[Required(ErrorMessage = "请输入登录名")]
-        //[StringLength(256)]
-        //public string UserName { get; set; }
+        /// <summary>
+        /// 登录名
+        /// </summary>
+        [Required(ErrorMessage = "请输入登录名")]
+        [StringLength(256)]
+        [Display(Name = "登录名")]
+        public string UserName { get; set; }
 
 
         //[Required(ErrorMessage ="请输入姓名")]

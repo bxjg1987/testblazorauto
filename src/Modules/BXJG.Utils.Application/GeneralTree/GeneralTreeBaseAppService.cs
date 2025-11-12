@@ -554,10 +554,30 @@ namespace BXJG.Utils.Application.GeneralTree
 
             //await BeforeCreateAsync(input, m);
             await MapToEntity(m);
-            await GeneralTreeManager.CreateAsync(m);
-            m = await GetEntityByIdAsync(m.Id, false);
-            return EntityToDto(m);
+            //await GeneralTreeManager.CreateAsync(m);
+            await CreateCore(m, input);
+
+            //m = await GetEntityByIdAsync(m.Id, false);
+            //return EntityToDto(m);
+            return await CreateAfter(m);
         }
+        /// <summary>
+        /// 若你希望使用自己的manager插入，请重写此方法
+        /// 通用树本身就是使用manager插入的，所以它不需要这样的设计
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        protected virtual Task CreateCore(TEntity entity, TCreateInput input)
+        {
+            return GeneralTreeManager.CreateAsync(entity);
+        }
+        protected virtual Task<TDto> CreateAfter(TEntity entity)
+        {
+            return GetDtoById(entity);
+        }
+
+
+
         /// <summary>
         /// 新增时的映射，默认使用automapper映射
         /// </summary>
@@ -623,8 +643,13 @@ namespace BXJG.Utils.Application.GeneralTree
 
             await MapToEntity(m);
             await GeneralTreeManager.UpdateAsync(m);
-            m = await GetEntityByIdAsync(m.Id, false);
-            return EntityToDto(m);
+            //m = await GetEntityByIdAsync(m.Id, false);
+            //return EntityToDto(m);
+            return await UpdateAfter(m);
+        }
+        protected virtual Task<TDto> UpdateAfter(TEntity entity)
+        {
+            return GetDtoById(entity);
         }
         ///// <summary>
         ///// 修改时的查询，默认根据id查询
@@ -701,8 +726,9 @@ namespace BXJG.Utils.Application.GeneralTree
         public virtual async Task<TDto> GetAsync(EntityDto<long> input)
         {
             await CheckGetPermissionAsync();
-            var entity = await GetEntityByIdAsync(input.Id, false);
-            return EntityToDto(entity);
+            //var entity = await GetEntityByIdAsync(input.Id, false);
+            //return EntityToDto(entity);
+          return await  GetDtoById(default, input.Id);
         }
         #endregion
 
@@ -947,6 +973,12 @@ namespace BXJG.Utils.Application.GeneralTree
         protected virtual async Task<TEntity> GetEntityByIdAsync(long id, bool track = true)
         {
             return await AsyncQueryableExecuter.FirstOrDefaultAsync((await BuildQuery(track)).Where(c => c.Id == id));
+        }
+        protected virtual async Task<TDto> GetDtoById(TEntity entity, long? id = default)
+        {
+
+            var entity1 = await GetEntityByIdAsync(id ?? entity.Id, false);//.SingleAsync(c => c.Id.Equals(id));
+            return EntityToDto(entity1);
         }
         #endregion
     }

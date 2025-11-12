@@ -3,7 +3,9 @@ using Abp.Authorization.Users;
 using Abp.Domain.Uow;
 using Abp.IdentityFramework;
 using BXJG.Utils.Application.Share.User;
+using BXJG.Utils.Role;
 using BXJG.Utils.User;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,13 +19,24 @@ namespace BXJG.Utils.Application.User
     /// </summary>
     /// <typeparam name="TRole"></typeparam>
     /// <typeparam name="TUser"></typeparam>
+    /// <typeparam name="TUserManager"></typeparam>
+    /// <typeparam name="TRoleManager"></typeparam>
     /// <typeparam name="TInput"></typeparam>
     /// <typeparam name="TOutput"></typeparam>
-    public class UserRegisterAppService<TRole, TUser,TUserManager, TInput, TOutput> : BXJGUtilsBaseAppService, IUserRegisterAppService<TInput, TOutput>
-   where TRole : AbpRole<TUser>, new() where TUser : AbpUser<TUser>
-        where TUserManager: UserManager<TRole, TUser>
+    public class UserRegisterAppService<TRole, 
+                                        TUser, 
+                                        TUserManager,
+                                        TRoleManager,
+                                        TInput, 
+                                        TOutput> : BXJGUtilsBaseAppService, IUserRegisterAppService<TInput, TOutput>
+        where TRole : AbpRole<TUser>, new() 
+        where TUser : AbpUser<TUser>
+        where TUserManager : BXJGUtilsUserManager<TRole, TUser>
+        where TRoleManager : BXJGUtilsRoleManager<TRole, TUser>
     {
-        protected TUserManager UserManager { get; set; }
+        public TRoleManager RoleManager { get; set; }
+        public IPasswordHasher<TUser> PasswordHasher { get; set; }
+        public TUserManager UserManager { get; set; }
         public virtual async Task<TOutput> RegisterAsync(TInput input)
         {
             //前置检查

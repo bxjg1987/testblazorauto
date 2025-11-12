@@ -15,7 +15,7 @@ using BXJG.Utils.Extensions;
 
 namespace ZLJ.Core.Authorization.Users
 {
-    public class UserManager : BXJG.Utils.User.UserManager<Role, User>
+    public class UserManager : BXJG.Utils.User.BXJGUtilsUserManager<Role, User>
     {
         public UserManager(
             RoleManager roleManager,

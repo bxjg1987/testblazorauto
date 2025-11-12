@@ -19,11 +19,11 @@ using Microsoft.AspNetCore.Components.Routing;
 
 namespace BXJG.Utils.User;
 
-public class UserManager<Role, User> : AbpUserManager<Role, User>
+public class BXJGUtilsUserManager<Role, User> : AbpUserManager<Role, User>
    where Role : AbpRole<User>, new()
    where User : AbpUser<User>
 {
-    protected UserManager(AbpRoleManager<Role, User> roleManager,
+    protected BXJGUtilsUserManager(AbpRoleManager<Role, User> roleManager,
                           AbpUserStore<Role, User> userStore,
                           IOptions<IdentityOptions> optionsAccessor,
                           IPasswordHasher<User> passwordHasher,
@@ -117,7 +117,7 @@ public class UserManager<Role, User> : AbpUserManager<Role, User>
 
         //清空下缓存
         await CacheManager.GetSecureStampCache().RemoveAsync($"{user.TenantId}_{user.Id}");
-        base.Logger.LogWarning($"{user.UserName}更新了安全戳");
+        //base.Logger.LogWarning($"{user.UserName}更新了安全戳");
         //  cm.GetUserPermissionCache
         return r;
     }

@@ -15,6 +15,11 @@ namespace BXJG.Utils.Application.Share.User
     public class UserSelectDto : EntityDto<long>, IUserForSelectDto
     {
         /// <summary>
+        /// 姓名
+        /// </summary>
+        [Display(Name = "姓名")]
+        public string Name { get; set; }
+        /// <summary>
         /// 邮箱地址
         /// </summary>
         [Display(Name = "邮箱地址")]
@@ -24,11 +29,6 @@ namespace BXJG.Utils.Application.Share.User
         /// </summary>
         [Display(Name = "手机号码")]
         public string PhoneNumber { get; set; }
-        /// <summary>
-        /// 姓名
-        /// </summary>
-        [Display(Name = "姓名")]
-        public string FullName { get; set; }
         /// <summary>
         /// 角色
         /// </summary>

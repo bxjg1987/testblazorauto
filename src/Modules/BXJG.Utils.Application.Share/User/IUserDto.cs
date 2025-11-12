@@ -7,7 +7,10 @@ using System.Threading.Tasks;
 
 namespace BXJG.Utils.Application.Share.User
 {
-    public interface IUserDto:IUserForSelectDto,IUserEditDto//,IFullAudited<FullAuditedEntity<long>>
+    /// <summary>
+    /// 用户信息
+    /// </summary>
+    public interface IUserDto : IUserForSelectDto/*, IUserEditDto*///,IFullAudited<FullAuditedEntity<long>>
     {
     }
 }

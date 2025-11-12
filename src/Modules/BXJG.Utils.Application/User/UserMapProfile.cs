@@ -7,7 +7,7 @@ using BXJG.Utils.GeneralTree;
 using Abp.Authorization.Users;
 using BXJG.Utils.Application.Share.User;
 
-namespace BXJG.Utils.Application.GeneralTree
+namespace BXJG.Utils.Application.User
 {
     public class UserMapProfile : Profile
     {

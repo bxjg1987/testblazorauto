@@ -110,12 +110,39 @@ namespace BXJG.Utils.Application
 
             TEntity entity = await MapToEntityAsync(input);
             await MapToEntity(entity);
+            //await Repository.InsertAsync(entity);
+            await CreateCore(entity,input);
+            //重新查一次，以便获取关联数据
+            //entity = await GetEntityByIdAsync(entity.Id, false);//.SingleAsync(c => c.Id.Equals(id));
+            //return MapToEntityDto(entity);
+            return await CreateAfter(entity);
+        }
+        /// <summary>
+        /// 若你希望使用自己的manager插入，请重写此方法
+        /// 通用树本身就是使用manager插入的，所以它不需要这样的设计
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        protected virtual async Task CreateCore(TEntity entity, TCreateInput input) {
             await Repository.InsertAsync(entity);
             await CurrentUnitOfWork.SaveChangesAsync();
-            //重新查一次，以便获取关联数据
-            entity = await GetEntityByIdAsync(entity.Id, false);//.SingleAsync(c => c.Id.Equals(id));
-            return MapToEntityDto(entity);
         }
+
+        protected virtual  Task<TEntityDto> CreateAfter(TEntity entity) {
+            return GetDtoById(entity);
+        }
+
+        protected virtual async Task< TEntityDto> GetDtoById(TEntity entity, TPrimaryKey id=default) {
+            
+           var entity1 = await GetEntityByIdAsync(entity==null? id:entity.Id, false);//.SingleAsync(c => c.Id.Equals(id));
+            return MapToEntityDto(entity1);
+        }
+        protected virtual Task<TEntityDto> UpdateAfter(TEntity entity)
+        {
+            return GetDtoById(entity);
+        }
+
+        //public virtual ValueTask CreateAfter(TEntity entity, ) => ValueTask.CompletedTask;
         public override async Task<TEntityDto> UpdateAsync(TUpdateInput input)
         {
             CheckUpdatePermission();
@@ -132,9 +159,11 @@ namespace BXJG.Utils.Application
             await MapToEntityAsync(input, entity);
             await MapToEntity(entity);
           
+          
             await CurrentUnitOfWork.SaveChangesAsync();
-            entity = await GetEntityByIdAsync(entity.Id, false); //.SingleAsync(c => c.Id.Equals(id));
-            return MapToEntityDto(entity);
+            //entity = await GetEntityByIdAsync(entity.Id, false); //.SingleAsync(c => c.Id.Equals(id));
+            //return MapToEntityDto(entity);
+            return await UpdateAfter(entity);
         }
         public override async Task DeleteAsync(TDeleteInput input)
         {
@@ -165,7 +194,7 @@ namespace BXJG.Utils.Application
 
             return r;
         }
-        protected virtual Task<TEntity> MapToEntityAsync(TCreateInput input) => Task.FromResult( MapToEntity(input));
+        protected virtual ValueTask<TEntity> MapToEntityAsync(TCreateInput input) => ValueTask.FromResult( MapToEntity(input));
      
         /// <summary>
         /// 修改时dto映射到实体
@@ -275,8 +304,9 @@ namespace BXJG.Utils.Application
         {
             CheckGetPermission();
 
-            var entity = await GetEntityByIdAsync(input.Id, false);//.SingleAsync(c => c.Id.Equals(id));
-            return MapToEntityDto(entity);
+            //var entity = await GetEntityByIdAsync(input.Id, false);//.SingleAsync(c => c.Id.Equals(id));
+            //return MapToEntityDto(entity);
+            return await GetDtoById(default,input.Id);
         }
         /// <summary>
         /// 根据id获取实体，且跟踪实体
