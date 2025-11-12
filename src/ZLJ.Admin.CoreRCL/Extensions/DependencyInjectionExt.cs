@@ -23,7 +23,7 @@ namespace Microsoft.Extensions.DependencyInjection
             var sdfsfd = SimpleLogger.Instance;
             sdfsfd.LogDebug("hulalalall");
 
-
+            services.AddECharts();
 
             BXJGHttpClientExt.DefaultFctory = f => f.CreateHttpClientAdmin();
             return services.AddZLJRCL().AddAutoMapper(x=>x.AddMaps(typeof(DependencyInjectionExt)));

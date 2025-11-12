@@ -2,7 +2,7 @@
 
 
 	<PropertyGroup>
-		<TargetFrameworks>net9;net10.0</TargetFrameworks>
+		<TargetFramework>net10.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
@@ -10,7 +10,7 @@
 	</PropertyGroup>
 	<PropertyGroup>
 		<RunAOTCompilation>true</RunAOTCompilation>
-		<WasmStripILAfterAOT>false</WasmStripILAfterAOT>
+		<WasmStripILAfterAOT>true</WasmStripILAfterAOT>
 	</PropertyGroup>
 	<ItemGroup>
 		<Compile Remove="AdminListBaseComponent.cs" />

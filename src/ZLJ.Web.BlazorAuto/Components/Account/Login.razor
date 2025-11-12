@@ -124,7 +124,11 @@
     记住我：<InputCheckbox @bind-Value="model.RememberClient" />
     <button type="submit">登录</button>
 </EditForm> *@
-
+<SectionContent SectionName="bottom-scripts">
+    @* <script antblazor-js></script> *@
+    <script src="/echarts.5.4.3.min.js"></script>
+    <script src="/app.js"></script>
+</SectionContent>
 @code {
 
     [SupplyParameterFromForm]
