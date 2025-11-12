@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	  <TargetFrameworks>net8;net9</TargetFrameworks>
+	  <TargetFrameworks>net8;net9;net10.0</TargetFrameworks>
     <Nullable>enable</Nullable>
 	  <VersionPrefix>1.0.76</VersionPrefix>
 	  <LangVersion>latest</LangVersion>
@@ -11,7 +11,7 @@
     <Compile Remove="CRUDClient.cs" />
   </ItemGroup>
 	
-	<ItemGroup Condition="'$(TargetFramework)' == 'net9'">
+	<ItemGroup Condition="'$(TargetFramework)' != 'net8'">
 		<PackageReference Include="Abp.Web.Common" Version="10.*" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework)' == 'net8'">
@@ -19,7 +19,7 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Extensions.Http" Version="9.0.10" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="10.0.0" />
 	</ItemGroup>
 	
 	<ItemGroup>

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+	  <TargetFrameworks>net9;net10.0</TargetFrameworks>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
 	  <GenerateDocumentationFile>True</GenerateDocumentationFile>
@@ -38,7 +38,7 @@
 
 		<PackageReference Include="AntDesign" Version="1.5.0" />
 
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.10" />
+	
 
 		<!--<PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.2" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.2" />-->
@@ -47,7 +47,12 @@
 	  <PackageReference Include="Rougamo.Fody" Version="5.0.2" PrivateAssets="contentfiles;analyzers" />
 	</ItemGroup>
 
-
+	<ItemGroup Condition="'$(TargetFramework)' != 'net9'">
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.*" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net9'">
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.10" />
+	</ItemGroup>
 
 	<!-- 如果 $(SolutionName) 不包含 WithModules -->
 	<ItemGroup Condition="!$(SolutionName.Contains('WithModules'))">

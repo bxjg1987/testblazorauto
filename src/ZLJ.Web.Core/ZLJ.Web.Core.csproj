@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>net9.0</TargetFramework>
+		<TargetFrameworks>net9;net10.0</TargetFrameworks>
 		<AssemblyName>ZLJ.Web.Core</AssemblyName>
 		<PackageId>ZLJ.Web.Core</PackageId>
 		<GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
@@ -76,10 +76,10 @@
 		<PackageReference Include="DotNetCore.CAP.SqlServer" Version="7.2.0" />-->
 		<PackageReference Include="Hangfire.SqlServer" Version="1.8.22" />
 		<PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.2" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.10">
+		<!--<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.10">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
+		</PackageReference>-->
 			
 		<PackageReference Include="HangFire.Core" Version="1.8.22" />
 		<PackageReference Include="Abp.HangFire.AspNetCore" Version="10.3.0" />
@@ -88,11 +88,20 @@
 		<PackageReference Include="DistributedLock.SqlServer" Version="1.0.6" />
 		<PackageReference Include="Magicodes.IE.Excel.AspNetCore" Version="2.7.6" />
 		<!--<PackageReference Include="BXJG.Utils.Web" Version="1.2.1" />-->
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.10" />
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
+		<!--<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.10" />-->
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="10.0.0" />
 		<PackageReference Include="Abp.AspNetCore" Version="10.3.0" />
 		<PackageReference Include="Abp.AspNetCore.SignalR" Version="10.3.0" />
 	</ItemGroup>
+
+	<!--<ItemGroup Condition="'$(TargetFramework)' != 'net9'">
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.*" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net9'">
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.10" />
+	</ItemGroup>-->
+	
+	
 	<ItemGroup>
 		<Folder Include="Authentication\WeChatMiniProgram\" />
 	</ItemGroup>
