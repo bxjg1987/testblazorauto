@@ -12,6 +12,7 @@ namespace BXJG.Utils.Application.Share.User
     /// </summary>
     /// <typeparam name="TInput"></typeparam>
     /// <typeparam name="TOutput"></typeparam>
+    [RemoteService(IsEnabled = false, IsMetadataEnabled = false)]
     public interface IUserRegisterAppService<TInput, TOutput> : IApplicationService
     {
         /// <summary>

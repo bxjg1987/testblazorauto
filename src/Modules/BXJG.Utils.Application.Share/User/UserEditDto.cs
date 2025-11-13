@@ -74,11 +74,11 @@ namespace BXJG.Utils.Application.Share.User
         /// <summary>
         /// 分配到的角色
         /// </summary>
-        public string[] RoleNames { get; set; }
+        public string[] RoleNames { get; set; }= Array.Empty<string>();
         /// <summary>
         /// 所属组织机构
         /// </summary>
-        public List<long> OrganizationUnits { get; set; }
+        public List<long> OrganizationUnits { get; set; } = [];
 
         public void Normalize()
         {

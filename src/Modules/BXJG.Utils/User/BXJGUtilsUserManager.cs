@@ -19,6 +19,14 @@ using Microsoft.AspNetCore.Components.Routing;
 
 namespace BXJG.Utils.User;
 
+/*
+ * 参考utils抽象.md中的文档，这里本应该用组合而非继承
+ * 但由于abp官方模板中，模板项目中的用户管理器是继承abp的usermanager，所以这里保持一直的思路
+ * 让具体项目的usermanager继承这里的
+ * 
+ * 而utils中的其它领域服务、应用服务遵循组合的思路
+ */
+
 public class BXJGUtilsUserManager<Role, User> : AbpUserManager<Role, User>
    where Role : AbpRole<User>, new()
    where User : AbpUser<User>

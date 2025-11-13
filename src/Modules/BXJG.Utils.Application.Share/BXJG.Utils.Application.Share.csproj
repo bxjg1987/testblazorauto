@@ -14,6 +14,7 @@
 		<Compile Remove="Dtos\IHaveFilter.cs" />
 		<Compile Remove="Dtos\Input.cs" />
 		<Compile Remove="Tag\GetSelectableInput.cs" />
+		<Compile Remove="User\IUserRegisterAppService.cs" />
 	</ItemGroup>
 
 

@@ -1,4 +1,5 @@
-﻿using Abp.Application.Services.Dto;
+﻿using Abp.Application.Services;
+using Abp.Application.Services.Dto;
 using Abp.Authorization.Roles;
 using Abp.Authorization.Users;
 using Abp.Domain.Entities;
@@ -25,6 +26,7 @@ namespace BXJG.Utils.Application.User
     /// <summary>
     /// 后台管理 用户 接口
     /// </summary>
+    //[RemoteService(IsEnabled =false, IsMetadataEnabled =false)]
     public class UserAppService<TUser,
                                 TRole,
                                 TUserManager,
@@ -56,11 +58,12 @@ namespace BXJG.Utils.Application.User
         public UserAppService(IRepository<TUser, long> repository) : base(repository)
         {
         }
-
+        
+     public virtual Func<TUser, TCreateInput,Task> SetPwdFunc { get=>field??SetPwd; set; }
         protected override async Task CreateCore( TUser user, TCreateInput input)
         {
             //return base.InsertCore(entity);
-        
+
             //参考zero的实现
 
             //if (AbpSession.TenantId.HasValue)
@@ -69,7 +72,7 @@ namespace BXJG.Utils.Application.User
             //    await _userPolicy.CheckMaxUserCountAsync(AbpSession.GetTenantId());
             //}
 
-           // var user = MapToEntity(input);//  ObjectMapper.Map<TUser>(input.User); //Passwords is not mapped (see mapping configuration)
+            // var user = MapToEntity(input);//  ObjectMapper.Map<TUser>(input.User); //Passwords is not mapped (see mapping configuration)
             user.TenantId = AbpSession.TenantId;
 
             //设置随机密码，下次登录必须更改
@@ -82,34 +85,22 @@ namespace BXJG.Utils.Application.User
             //}
             //else if (!input.User.Password.IsNullOrEmpty())
             //{
-                await UserManager.InitializeOptionsAsync(AbpSession.TenantId);
-                foreach (var validator in _passwordValidators)
-                {
-                    CheckErrors(await validator.ValidateAsync(UserManager, user, input.Password));
-                }
-
-                user.Password = PasswordHasher.HashPassword(user, input.Password);
+            await SetPwdFunc(user, input);
             //}
 
             //user.ShouldChangePasswordOnNextLogin = input.User.ShouldChangePasswordOnNextLogin;
 
             //Assign roles
-            user.Roles = new Collection<UserRole>();
-            foreach (var roleName in input.RoleNames)
-            {
-                var role = await RoleManager.GetRoleByNameAsync(roleName);
-                user.Roles.Add(new UserRole(AbpSession.TenantId, user.Id, role.Id));
-            }
+            await SetRolesFunc(user, input);
+            //user.SetNormalizedNames();
+            user.Surname = user.Name;
+            await CreateSaveFunc(user);
 
-            CheckErrors(await UserManager.CreateAsync(user));
-            await CurrentUnitOfWork.SaveChangesAsync(); //To get new user's Id.
+            await SetOUFunc(user, input);
 
-            //Notifications
-            await _notificationSubscriptionManager.SubscribeToAllAvailableNotificationsAsync(user.ToUserIdentifier());
+            await CreateNoticeFunc(user);
             //await _appNotifier.WelcomeToTheApplicationAsync(user);
 
-            //Organization Units
-            await UserManager.SetOrganizationUnitsAsync(user, input.OrganizationUnits.ToArray());
 
             //user = await GetEntityByIdAsync(user.Id,false);
             //return MapToEntityDto(user);
@@ -124,8 +115,53 @@ namespace BXJG.Utils.Application.User
             //        input.User.Password
             //    );
             //}
-           // base.CreateAsync(user);
+            // base.CreateAsync(user);
         }
+
+        public virtual async Task CreateNotice(TUser user)
+        {
+            //Notifications
+            await _notificationSubscriptionManager.SubscribeToAllAvailableNotificationsAsync(user.ToUserIdentifier());
+        }
+        public virtual Func<TUser, Task> CreateNoticeFunc { get=>field??CreateNotice; set; }
+
+        public virtual async Task SetOU(TUser user, TCreateInput input)
+        {
+            //Organization Units
+            await UserManager.SetOrganizationUnitsAsync(user, input.OrganizationUnits.ToArray());
+        }
+        public virtual Func<TUser, TCreateInput, Task> SetOUFunc { get=>field??SetOU; set; }
+
+        public virtual async Task CreateSave(TUser user)
+        {
+            CheckErrors(await UserManager.CreateAsync(user));
+            await CurrentUnitOfWork.SaveChangesAsync(); //To get new user's Id.
+        }
+        public virtual Func<TUser, Task> CreateSaveFunc { get=>field??CreateSave; set; }
+
+        public virtual async Task SetRoles(TUser user, TCreateInput input)
+        {
+            user.Roles = new Collection<UserRole>();
+            foreach (var roleName in input.RoleNames)
+            {
+                var role = await RoleManager.GetRoleByNameAsync(roleName);
+                user.Roles.Add(new UserRole(AbpSession.TenantId, user.Id, role.Id));
+            }
+        }
+        public virtual Func<TUser, TCreateInput, Task> SetRolesFunc { get=>field??SetRoles; set; }
+         
+
+        public virtual async Task SetPwd(TUser user, TCreateInput input)
+        {
+            await UserManager.InitializeOptionsAsync(AbpSession.TenantId);
+            foreach (var validator in _passwordValidators)
+            {
+                CheckErrors(await validator.ValidateAsync(UserManager, user, input.Password));
+            }
+
+            user.Password = PasswordHasher.HashPassword(user, input.Password);
+        }
+      
 
         //public override Task<TDto> UpdateAsync(TEditInput input)
         //{
@@ -178,7 +214,11 @@ namespace BXJG.Utils.Application.User
         }
 
 
-
+        protected override ValueTask MapToEntity(TUser entity)
+        {
+            entity.Surname??= entity.Name;
+            return base.MapToEntity(entity);
+        }
 
 
         protected override async Task DeleteCore(TUser entity)

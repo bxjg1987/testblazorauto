@@ -11,6 +11,10 @@ using Abp.Timing;
 using BXJG.Common;
 using BXJG.Utils.Application.Feedback;
 using BXJG.Utils.Application.File;
+using BXJG.Utils.Application.GeneralTree;
+using BXJG.Utils.Application.Share;
+using BXJG.Utils.Application.Share.GeneralTree;
+using BXJG.Utils.Application.User;
 using BXJG.Utils.Concurrency;
 using BXJG.Utils.DynamicProperty;
 using BXJG.Utils.Enums;
@@ -85,6 +89,9 @@ namespace BXJG.Utils.Application
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
             IocManager.Register(typeof(FeedbackFrontAppService<,,>), DependencyLifeStyle.Transient);
             IocManager.Register(typeof(FeedbackAdminAppService<,,>), DependencyLifeStyle.Transient);
+            IocManager.Register(typeof(UserAppService<,,,,,,,>), DependencyLifeStyle.Transient);
+            IocManager.Register(typeof(CrudBaseAppService<,,,,,,,>),typeof(ICrudBaseAppService<,,,,,,>), DependencyLifeStyle.Transient);
+            IocManager.Register(typeof(GeneralTreeBaseAppService<,,,,,>),typeof(IGeneralTreeBaseAppService<,,,>), DependencyLifeStyle.Transient);
 
             //IocManager.Register(typeof(AbpAsyncDeterminationInterceptor<StaticDIAccessInterceptor>), DependencyLifeStyle.Transient);
 

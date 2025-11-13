@@ -92,30 +92,59 @@ namespace BXJG.Utils.Application
         /// <returns></returns>
         protected virtual ValueTask<ExistsExpression<TEntity>> GetUpdateIsExistsChenker(TUpdateInput input) => ValueTask.FromResult<ExistsExpression<TEntity>>(null);
 
-        //Zhongjie仅用于界面，业务逻辑层任然使用abp的事件总线（它不是为界面设计的，默认也没提供多个实例），在ui提供abpk事件处理器 来连接到zhongjie实例
-        //public Zhongjie Zhongjie { get; set; }
-        public override async Task<TEntityDto> CreateAsync(TCreateInput input)
-        {
-            //新增权限检查
-            CheckCreatePermission();
+        public virtual Action CheckCreatePermissionAct { get => field ?? CheckCreatePermission; set; }
+        //public virtual Func<>
 
-            var cfjc = await GetCreateIsExistsChenker(input);
+        public virtual Func<TCreateInput, ValueTask> CheckCreateRepeateFunc { get => field ?? CheckCreateRepeate; set; }
+        public virtual async ValueTask CheckCreateRepeate(TCreateInput createInput)
+        {
+            var cfjc = await GetCreateIsExistsChenker(createInput);
             if (cfjc != null)
             {
                 //加锁注意是为了防止重复提交，数据库唯一约束局限性太大，比如软删除冲突，另外在代码层面做了，数据库见表也省得到处去建唯一索引
                 await DistributedLockHelper.AcquireLockTenantAsync(typeof(TEntity).FullName, TimeSpan.FromMinutes(1), CancellationTokenProvider.Token);
                 //要完美的话，前端还应该先判断，后端是最后的保障
-                await Repository.IsExistsThrow(cfjc.Where,cfjc.DisplayNameProperty);
+                await Repository.IsExistsThrow(cfjc.Where, cfjc.DisplayNameProperty);
             }
+        }
 
-            TEntity entity = await MapToEntityAsync(input);
-            await MapToEntity(entity);
+
+        public virtual Func<TCreateInput,ValueTask<TEntity>> MapCreateToEntityFunc { get => field ?? MapToEntityAsync; set; }
+        public virtual Func<TEntity,ValueTask> MapToEntityFunc { get => field ?? MapToEntity; set; }
+        public virtual Func<TEntity,TCreateInput,Task> CreateCoreFunc { get => field ?? CreateCore; set; }
+        public virtual Func<TEntity,Task<TEntityDto>> CreateAfterFunc { get => field ?? CreateAfter; set; }
+        //Zhongjie仅用于界面，业务逻辑层任然使用abp的事件总线（它不是为界面设计的，默认也没提供多个实例），在ui提供abpk事件处理器 来连接到zhongjie实例
+        //public Zhongjie Zhongjie { get; set; }
+        public override async Task<TEntityDto> CreateAsync(TCreateInput input)
+        {
+            //新增权限检查
+            CheckCreatePermissionAct?.Invoke(); //CheckCreatePermission();
+            if (CheckCreateRepeateFunc != null)
+                await CheckCreateRepeateFunc(input);
+            //var cfjc = await GetCreateIsExistsChenker(input);
+            //if (cfjc != null)
+            //{
+            //    //加锁注意是为了防止重复提交，数据库唯一约束局限性太大，比如软删除冲突，另外在代码层面做了，数据库见表也省得到处去建唯一索引
+            //    await DistributedLockHelper.AcquireLockTenantAsync(typeof(TEntity).FullName, TimeSpan.FromMinutes(1), CancellationTokenProvider.Token);
+            //    //要完美的话，前端还应该先判断，后端是最后的保障
+            //    await Repository.IsExistsThrow(cfjc.Where,cfjc.DisplayNameProperty);
+            //}
+
+            //这里无需空判断，因为MapCreateToEntity是必须的
+            var entity = await MapCreateToEntityFunc(input);
+
+            if (MapToEntityFunc != null)
+                await MapToEntityFunc(entity);
+
+            //await MapToEntity(entity);
             //await Repository.InsertAsync(entity);
-            await CreateCore(entity,input);
+            //await CreateCore(entity, input);
+            await CreateCoreFunc(entity, input);
             //重新查一次，以便获取关联数据
             //entity = await GetEntityByIdAsync(entity.Id, false);//.SingleAsync(c => c.Id.Equals(id));
             //return MapToEntityDto(entity);
-            return await CreateAfter(entity);
+            //return await CreateAfter(entity);
+            return await CreateAfterFunc(entity);
         }
         /// <summary>
         /// 若你希望使用自己的manager插入，请重写此方法
@@ -123,18 +152,21 @@ namespace BXJG.Utils.Application
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        protected virtual async Task CreateCore(TEntity entity, TCreateInput input) {
+        protected virtual async Task CreateCore(TEntity entity, TCreateInput input)
+        {
             await Repository.InsertAsync(entity);
             await CurrentUnitOfWork.SaveChangesAsync();
         }
 
-        protected virtual  Task<TEntityDto> CreateAfter(TEntity entity) {
+        protected virtual Task<TEntityDto> CreateAfter(TEntity entity)
+        {
             return GetDtoById(entity);
         }
 
-        protected virtual async Task< TEntityDto> GetDtoById(TEntity entity, TPrimaryKey id=default) {
-            
-           var entity1 = await GetEntityByIdAsync(entity==null? id:entity.Id, false);//.SingleAsync(c => c.Id.Equals(id));
+        protected virtual async Task<TEntityDto> GetDtoById(TEntity entity, TPrimaryKey id = default)
+        {
+
+            var entity1 = await GetEntityByIdAsync(entity == null ? id : entity.Id, false);//.SingleAsync(c => c.Id.Equals(id));
             return MapToEntityDto(entity1);
         }
         protected virtual Task<TEntityDto> UpdateAfter(TEntity entity)
@@ -152,14 +184,14 @@ namespace BXJG.Utils.Application
                 //加锁注意是为了防止重复提交，数据库唯一约束局限性太大，比如软删除冲突，另外在代码层面做了，数据库见表也省得到处去建唯一索引
                 await DistributedLockHelper.AcquireLockTenantAsync(typeof(TEntity).FullName, TimeSpan.FromMinutes(1), CancellationTokenProvider.Token);
                 //要完美的话，前端还应该先判断，后端是最后的保障
-                await Repository.IsExistsThrow(cfjc.Where.And(x=>!x.Id.Equals(input.Id)) , cfjc.DisplayNameProperty);
+                await Repository.IsExistsThrow(cfjc.Where.And(x => !x.Id.Equals(input.Id)), cfjc.DisplayNameProperty);
             }
 
             TEntity entity = await GetEntityByIdAsync(input.Id);
             await MapToEntityAsync(input, entity);
             await MapToEntity(entity);
-          
-          
+
+
             await CurrentUnitOfWork.SaveChangesAsync();
             //entity = await GetEntityByIdAsync(entity.Id, false); //.SingleAsync(c => c.Id.Equals(id));
             //return MapToEntityDto(entity);
@@ -194,8 +226,8 @@ namespace BXJG.Utils.Application
 
             return r;
         }
-        protected virtual ValueTask<TEntity> MapToEntityAsync(TCreateInput input) => ValueTask.FromResult( MapToEntity(input));
-     
+        protected virtual ValueTask<TEntity> MapToEntityAsync(TCreateInput input) => ValueTask.FromResult(MapToEntity(input));
+
         /// <summary>
         /// 修改时dto映射到实体
         /// </summary>
@@ -306,7 +338,7 @@ namespace BXJG.Utils.Application
 
             //var entity = await GetEntityByIdAsync(input.Id, false);//.SingleAsync(c => c.Id.Equals(id));
             //return MapToEntityDto(entity);
-            return await GetDtoById(default,input.Id);
+            return await GetDtoById(default, input.Id);
         }
         /// <summary>
         /// 根据id获取实体，且跟踪实体
