@@ -132,12 +132,12 @@ namespace BXJG.Utils.Application.User
         }
         public virtual Func<TUser, TCreateInput, Task> SetOUFunc { get=>field??SetOU; set; }
 
-        public virtual async Task CreateSave(TUser user)
+        public virtual async Task CreateSave1(TUser user)
         {
             CheckErrors(await UserManager.CreateAsync(user));
             await CurrentUnitOfWork.SaveChangesAsync(); //To get new user's Id.
         }
-        public virtual Func<TUser, Task> CreateSaveFunc { get=>field??CreateSave; set; }
+        public virtual Func<TUser, Task> CreateSaveFunc { get=>field??CreateSave1; set; }
 
         public virtual async Task SetRoles(TUser user, TCreateInput input)
         {

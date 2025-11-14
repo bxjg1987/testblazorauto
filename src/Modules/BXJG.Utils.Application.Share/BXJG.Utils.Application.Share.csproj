@@ -13,7 +13,12 @@
 		<Compile Remove="DisplayNameValue.cs" />
 		<Compile Remove="Dtos\IHaveFilter.cs" />
 		<Compile Remove="Dtos\Input.cs" />
+		<Compile Remove="ICrudBaseCombinatorialAppService.cs" />
 		<Compile Remove="Tag\GetSelectableInput.cs" />
+		<Compile Remove="User\IUserCreateDto.cs" />
+		<Compile Remove="User\IUserDto.cs" />
+		<Compile Remove="User\IUserEditDto.cs" />
+		<Compile Remove="User\IUserForSelectDto.cs" />
 		<Compile Remove="User\IUserRegisterAppService.cs" />
 	</ItemGroup>
 

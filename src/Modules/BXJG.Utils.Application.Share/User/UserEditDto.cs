@@ -6,11 +6,15 @@ using Abp.Runtime.Validation;
 namespace BXJG.Utils.Application.Share.User
 {
     //[AutoMapTo(typeof(User))]
-    public class UserEditDto : EntityDto<long>, IUserEditDto, IShouldNormalize
+    public class UserEditDto : EntityDto<long>//, IUserEditDto, IShouldNormalize
     {
-        //[Required]
-        //[StringLength(AbpUserBase.MaxUserNameLength)]
-        //public string UserName { get; set; }
+        ///// <summary>
+        ///// 登陆名
+        ///// </summary>
+        ////[Required]
+        //[StringLength(64)]
+        // [Display(Name = "登陆名")]
+        //public string? UserName { get; set; }
 
         /// <summary>
         /// 姓名
@@ -18,7 +22,7 @@ namespace BXJG.Utils.Application.Share.User
         [Required]
         [StringLength(256)]
         [Display(Name = "姓名")]
-        public string Name { get; set; }
+        public  string Name { get; set; }
 
         //[Required]
         //[StringLength(AbpUserBase.MaxSurnameLength)]
@@ -31,7 +35,7 @@ namespace BXJG.Utils.Application.Share.User
         //[Phone]
         [StringLength(64)]
         [Display(Name = "手机号")]
-        public string PhoneNumber { get; set; }
+        public  string PhoneNumber { get; set; }
         /// <summary>
         /// 邮箱地址
         /// </summary>
@@ -80,12 +84,12 @@ namespace BXJG.Utils.Application.Share.User
         /// </summary>
         public List<long> OrganizationUnits { get; set; } = [];
 
-        public void Normalize()
-        {
-            if (RoleNames == null)
-            {
-                RoleNames = Array.Empty<string>();
-            }
-        }
+        //public void Normalize()
+        //{
+        //    if (RoleNames == null)
+        //    {
+        //        RoleNames = Array.Empty<string>();
+        //    }
+        //}
     }
 }

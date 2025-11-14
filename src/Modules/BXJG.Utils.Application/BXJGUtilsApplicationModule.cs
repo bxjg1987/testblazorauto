@@ -89,7 +89,7 @@ namespace BXJG.Utils.Application
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
             IocManager.Register(typeof(FeedbackFrontAppService<,,>), DependencyLifeStyle.Transient);
             IocManager.Register(typeof(FeedbackAdminAppService<,,>), DependencyLifeStyle.Transient);
-            IocManager.Register(typeof(UserAppService<,,,,,,,>), DependencyLifeStyle.Transient);
+            //IocManager.Register(typeof(UserAppService<,,,,,,,>), DependencyLifeStyle.Transient);
             IocManager.Register(typeof(CrudBaseAppService<,,,,,,,>),typeof(ICrudBaseAppService<,,,,,,>), DependencyLifeStyle.Transient);
             IocManager.Register(typeof(GeneralTreeBaseAppService<,,,,,>),typeof(IGeneralTreeBaseAppService<,,,>), DependencyLifeStyle.Transient);
 

@@ -27,6 +27,7 @@
     <Compile Remove="ICrudBaseAppService.cs" />
     <Compile Remove="Notification\EventRealTimeNotifier.cs" />
     <Compile Remove="Tag\TagProviderAppService.cs" />
+    <Compile Remove="User\UserAppService.cs" />
     <Compile Remove="User\UserProviderAppService.cs" />
     <Compile Remove="User\UserRegisterAppService.cs" />
   </ItemGroup>

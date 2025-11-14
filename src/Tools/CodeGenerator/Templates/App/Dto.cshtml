@@ -23,7 +23,7 @@ namespace @(Model.Model.ApplicationShareNamespace)
     /// <summary>
     /// 各应用获取 @(Model.Model.DisplayName) 的数据模型
     ///</summary>
-    public partial class @(Model.Model.DtoName) : @(Model.Model.IsTree ? $"GeneralTreeNodeBaseDto<{Model.Model.DtoName}>" : Model.Model.EditDtoName), IExtendableObj
+    public partial class @(Model.Model.DtoName) : @(Model.Model.IsTree ? $"GeneralTreeNodeBaseDto<{Model.Model.DtoName}>" : Model.Model.CreateDtoName), IExtendableObj
     {
 @if(Model.Model.IsTree)
 {@foreach (var field in Model.Model.NormalFields)

@@ -5,59 +5,90 @@ using Abp.Runtime.Validation;
 
 namespace BXJG.Utils.Application.Share.User
 {
-    public class UserCreateDto : UserEditDto, IUserCreateDto, IShouldNormalize
+    public class UserCreateDto //:  IUserCreateDto//, IShouldNormalize
     {
         /// <summary>
         /// 登录名
         /// </summary>
-        [Required(ErrorMessage = "请输入登录名")]
+        //[Required(ErrorMessage = "请输入登录名")]
         [StringLength(256)]
         [Display(Name = "登录名")]
-        public string UserName { get; set; }
+        public string? UserName { get; set; }
 
-
-        //[Required(ErrorMessage ="请输入姓名")]
+        ///// <summary>
+        ///// 登陆名
+        ///// </summary>
+        ////[Required]
         //[StringLength(64)]
+        // [Display(Name = "登陆名")]
+        //public string? UserName { get; set; }
+
+        ///// <summary>
+        ///// 姓名
+        ///// </summary>
+        //[Required]
+        //[StringLength(256)]
+        //[Display(Name = "姓名")]
         //public string Name { get; set; }
 
         ////[Required]
         ////[StringLength(AbpUserBase.MaxSurnameLength)]
         ////public string Surname { get; set; }
 
+        ///// <summary>
+        ///// 手机号
+        ///// </summary>
         //[Required]
         ////[Phone]
-        //[StringLength(32)]
+        //[StringLength(64)]
+        //[Display(Name = "手机号")]
         //public string PhoneNumber { get; set; }
-
-        //[Required(AllowEmptyStrings = true)]
+        ///// <summary>
+        ///// 邮箱地址
+        ///// </summary>
+        //[Display(Name = "邮箱地址")]
+        ////[Required(AllowEmptyStrings = true)]
         ////[EmailAddress]
-        //[StringLength(256)]
-        //public string EmailAddress { get; set; }
-
-        /*
-         * 目前不考虑禁用，因为txdl未实现禁用，若这里禁用了会导致txdl删除用户
-         * 而启用后，txdl会新增一个用户，业务系统用户还是原来的，但txdl那边的用户是新增的
-         * txdl那边用户新采集的数量可能很少，因为是新用户，由于用户同步使用业务系统的用户id，上传的数据会跟业务系统对应上
-         * 最终导致业务系统中用户采集量出现负数
-         * 
-         * 2023-1-1调整
-         * txdl需要实现客户员工的禁用功能
-         */
+        //[StringLength(32)]
+        //public string? EmailAddress { get; set; }
+        ///// <summary>
+        ///// 是否启用
+        ///// </summary>
+        //[Display(Name = "是否启用")]
         //public bool IsActive { get; set; }
-
-        //public string[] RoleNames { get; set; }
-
-        //[Required(ErrorMessage = "请设置密码")]
+        ///// <summary>
+        ///// 是否修改密码
+        ///// </summary>
+        //[Display(Name = "修改密码")]
+        //public bool ChangePassword { get; set; }
+        ///// <summary>
+        ///// 密码
+        ///// 新增时必填
+        ///// </summary>
         //[StringLength(32)]
         //[DisableAuditing]
-        //public string Password { get; set; }
-
-        //public void Normalize()
-        //{
-        //    if (RoleNames == null)
-        //    {
-        //        RoleNames = new string[0];
-        //    }
-        //}
+        //[Display(Name = "密码")]
+        //public string? Password { get; set; } = "123qwe";
+        /////// <summary>
+        /////// 密码确认
+        /////// </summary>
+        ////[StringLength(32)]
+        ////[DisableAuditing]
+        ////[Display(Name = "密码确认")]
+        ////[Compare(nameof(Password))]
+        ////public string? ConfirmPassword { get; set; }
+        ///// <summary>
+        ///// 多次登录失败锁定
+        ///// </summary>
+        //[Display(Name = "登录锁定")]
+        //public bool IsLockoutEnabled { get; set; } = true;
+        ///// <summary>
+        ///// 分配到的角色
+        ///// </summary>
+        //public string[] RoleNames { get; set; } = Array.Empty<string>();
+        ///// <summary>
+        ///// 所属组织机构
+        ///// </summary>
+        //public List<long> OrganizationUnits { get; set; } = [];
     }
 }

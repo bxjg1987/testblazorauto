@@ -10,7 +10,7 @@ namespace BXJG.Utils.Application.Share.User
     /// <summary>
     /// 用户创建Dto
     /// </summary>
-    public interface IUserCreateDto : IUserEditDto
+    public interface IUserCreateDto //: IUserEditDto
     {
         ///// <summary>
         ///// 登录名

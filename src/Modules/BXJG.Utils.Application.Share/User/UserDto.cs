@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Services.Dto;
+using Abp.Auditing;
 using BXJG.Common.Contracts;
 using System;
 using System.Collections.Generic;
@@ -12,38 +13,24 @@ namespace BXJG.Utils.Application.Share.User
     /// <summary>
     /// 用户后台管理端的用户查询模型
     /// </summary>
-    public class UserDto : UserSelectDto, IUserDto, IExtendableObj
+    public class UserDto : UserSelectDto, IExtendableObj
     {
-        //public string? Password { get; set; }
-        ///// <summary>
-        ///// 分配到的角色
-        ///// </summary>
-        //public string[] RoleNames { get; set; }
-        ///// <summary>
-        ///// 所属组织机构
-        ///// </summary>
-        //public List<long> OrganizationUnits { get; set; }
-
         /// <summary>
-        /// 登陆吗
+        /// 登陆名
         /// </summary>
-        [Display(Name = "登录名")]
-        public string UserName { get; set; }
-        ///// <summary>
-        ///// 名称
-        ///// </summary>
-        // [Display(Name = "名称")]
-        //public string Name { get; set; }
-        ///// <summary>
-        ///// 姓
-        ///// </summary>
-        // [Display(Name = "姓氏")]
-        //public string Surname { get; set; }
+        [StringLength(64)]
+        [Display(Name = "登陆名")]
+        public string? UserName { get; set; }
         /// <summary>
         /// 是否启用
         /// </summary>
         [Display(Name = "是否启用")]
         public bool IsActive { get; set; }
+        /// <summary>
+        /// 多次登录失败锁定
+        /// </summary>
+        [Display(Name = "登录锁定")]
+        public bool IsLockoutEnabled { get; set; }
         /// <summary>
         /// 最后登录时间
         /// </summary>
@@ -54,8 +41,6 @@ namespace BXJG.Utils.Application.Share.User
         /// </summary>
         [Display(Name = "创建时间")]
         public DateTime CreationTime { get; set; }
-
-        //public string[] RoleNames { get; set; }
 
         public dynamic ExtensionData { get; set; }
     }
