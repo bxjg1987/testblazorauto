@@ -38,32 +38,37 @@ namespace BXJG.Utils.Application
     /// <typeparam name="TDeleteInput"></typeparam>
     [UnitOfWork]//在blazor server中，加这个更保险
     public abstract class CrudBaseAppService<TEntity,
-                                    TEntityDto,
-                                    TPrimaryKey,
-                                    TGetAllInput,
-                                    TCreateInput,
-                                    TUpdateInput,
-                                    TGetInput,
-                                    TDeleteInput> : AsyncCrudAppService<TEntity,
-                                                                        TEntityDto,
-                                                                        TPrimaryKey,
-                                                                        TGetAllInput,
-                                                                        TCreateInput,
-                                                                        TUpdateInput,
-                                                                        TGetInput,
-                                                                        TDeleteInput>, ICrudBaseAppService<TEntityDto,
-                                                                                                           TPrimaryKey,
-                                                                                                           TGetAllInput,
-                                                                                                           TCreateInput,
-                                                                                                           TUpdateInput,
-                                                                                                           TGetInput,
-                                                                                                           TDeleteInput>
+                                             TEntityDto,
+                                             TPrimaryKey,
+                                             TGetAllInput,
+                                             TCreateInput,
+                                             TUpdateInput,
+                                             TGetInput,
+                                             TDeleteInput> : AsyncCrudAppService<TEntity,
+                                                                                 TEntityDto,
+                                                                                 TPrimaryKey,
+                                                                                 TGetAllInput,
+                                                                                 TCreateInput,
+                                                                                 TUpdateInput,
+                                                                                 TGetInput,
+                                                                                 TDeleteInput>, ICrudBaseAppService<TEntityDto,
+                                                                                                                    TPrimaryKey,
+                                                                                                                    TGetAllInput,
+                                                                                                                    TCreateInput,
+                                                                                                                    TUpdateInput,
+                                                                                                                    TGetInput,
+                                                                                                                    TDeleteInput>
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TGetInput : IEntityDto<TPrimaryKey>
         where TDeleteInput : IEntityDto<TPrimaryKey>
     {
+        public virtual new string CreatePermissionName { get => base.CreatePermissionName; set => base.CreatePermissionName = value; }
+        public virtual new string UpdatePermissionName { get => base.UpdatePermissionName; set => base.UpdatePermissionName = value; }
+        public virtual new string DeletePermissionName { get => base.DeletePermissionName; set => base.DeletePermissionName = value; }
+        public virtual new string GetAllPermissionName { get => base.GetAllPermissionName; set => base.GetAllPermissionName = value; }
+        public virtual new string GetPermissionName { get => base.GetPermissionName; set => base.GetPermissionName = value; }
 
         public IHostEnvironment HostEnvironment { get; set; }
         /// <summary>
@@ -109,10 +114,10 @@ namespace BXJG.Utils.Application
         }
 
 
-        public virtual Func<TCreateInput,ValueTask<TEntity>> MapCreateToEntityFunc { get => field ?? MapToEntityAsync; set; }
-        public virtual Func<TEntity,ValueTask> MapToEntityFunc { get => field ?? MapToEntity; set; }
-        public virtual Func<TEntity,TCreateInput,Task> CreateCoreFunc { get => field ?? CreateCore; set; }
-        public virtual Func<TEntity,Task<TEntityDto>> CreateAfterFunc { get => field ?? CreateAfter; set; }
+        public virtual Func<TCreateInput, ValueTask<TEntity>> MapToEntityCreateFunc { get => field ?? MapToEntityAsync; set; }
+        public virtual Func<TEntity, ValueTask> MapToEntityFunc { get => field ?? MapToEntity; set; }
+        public virtual Func<TEntity, TCreateInput, Task> CreateSaveFunc { get => field ?? CreateSave; set; }
+        public virtual Func<TEntity, Task<TEntityDto>> CreateAfterFunc { get => field ?? CreateAfter; set; }
         //Zhongjie仅用于界面，业务逻辑层任然使用abp的事件总线（它不是为界面设计的，默认也没提供多个实例），在ui提供abpk事件处理器 来连接到zhongjie实例
         //public Zhongjie Zhongjie { get; set; }
         public override async Task<TEntityDto> CreateAsync(TCreateInput input)
@@ -131,7 +136,7 @@ namespace BXJG.Utils.Application
             //}
 
             //这里无需空判断，因为MapCreateToEntity是必须的
-            var entity = await MapCreateToEntityFunc(input);
+            var entity = await MapToEntityCreateFunc(input);
 
             if (MapToEntityFunc != null)
                 await MapToEntityFunc(entity);
@@ -139,20 +144,23 @@ namespace BXJG.Utils.Application
             //await MapToEntity(entity);
             //await Repository.InsertAsync(entity);
             //await CreateCore(entity, input);
-            await CreateCoreFunc(entity, input);
+            await CreateSaveFunc(entity, input);
             //重新查一次，以便获取关联数据
             //entity = await GetEntityByIdAsync(entity.Id, false);//.SingleAsync(c => c.Id.Equals(id));
             //return MapToEntityDto(entity);
             //return await CreateAfter(entity);
             return await CreateAfterFunc(entity);
         }
+        
+
+
         /// <summary>
         /// 若你希望使用自己的manager插入，请重写此方法
         /// 通用树本身就是使用manager插入的，所以它不需要这样的设计
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        protected virtual async Task CreateCore(TEntity entity, TCreateInput input)
+        protected virtual async Task CreateSave(TEntity entity, TCreateInput input)
         {
             await Repository.InsertAsync(entity);
             await CurrentUnitOfWork.SaveChangesAsync();
@@ -165,7 +173,6 @@ namespace BXJG.Utils.Application
 
         protected virtual async Task<TEntityDto> GetDtoById(TEntity entity, TPrimaryKey id = default)
         {
-
             var entity1 = await GetEntityByIdAsync(entity == null ? id : entity.Id, false);//.SingleAsync(c => c.Id.Equals(id));
             return MapToEntityDto(entity1);
         }

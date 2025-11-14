@@ -44,7 +44,7 @@ public class BXJGUtilsUserManager<Role, User> : AbpUserManager<Role, User>
                           IPermissionManager permissionManager,
                           IUnitOfWorkManager unitOfWorkManager,
                           ICacheManager cacheManager,
-                          IRepository<OrganizationUnit, long> organizationUnitRepository,
+                          IRepository<Abp.Organizations. OrganizationUnit, long> organizationUnitRepository,
                           IRepository<UserOrganizationUnit, long> userOrganizationUnitRepository,
                           IOrganizationUnitSettings organizationUnitSettings,
                           ISettingManager settingManager,

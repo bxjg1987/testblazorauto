@@ -14,7 +14,7 @@
 		<Compile Remove="Files\FileResult.cs" />
 	</ItemGroup>
 
-	<ItemGroup >
+	<ItemGroup>
 		<PackageReference Include="Abp" Version="10.*" />
 	</ItemGroup>
 

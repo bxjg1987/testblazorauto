@@ -20,7 +20,7 @@ namespace BXJG.Utils.Role
         where TRole : AbpRole<TUser>, new()
         where TUser : AbpUser<TUser>
     {
-        public BXJGUtilsRoleManager(AbpRoleStore<TRole, TUser> store, IEnumerable<IRoleValidator<TRole>> roleValidators, ILookupNormalizer keyNormalizer, IdentityErrorDescriber errors, ILogger<AbpRoleManager<TRole, TUser>> logger, IPermissionManager permissionManager, ICacheManager cacheManager, IUnitOfWorkManager unitOfWorkManager, IRoleManagementConfig roleManagementConfig, IRepository<OrganizationUnit, long> organizationUnitRepository, IRepository<OrganizationUnitRole, long> organizationUnitRoleRepository) : base(store, roleValidators, keyNormalizer, errors, logger, permissionManager, cacheManager, unitOfWorkManager, roleManagementConfig, organizationUnitRepository, organizationUnitRoleRepository)
+        public BXJGUtilsRoleManager(AbpRoleStore<TRole, TUser> store, IEnumerable<IRoleValidator<TRole>> roleValidators, ILookupNormalizer keyNormalizer, IdentityErrorDescriber errors, ILogger<AbpRoleManager<TRole, TUser>> logger, IPermissionManager permissionManager, ICacheManager cacheManager, IUnitOfWorkManager unitOfWorkManager, IRoleManagementConfig roleManagementConfig, IRepository<Abp.Organizations. OrganizationUnit, long> organizationUnitRepository, IRepository<OrganizationUnitRole, long> organizationUnitRoleRepository) : base(store, roleValidators, keyNormalizer, errors, logger, permissionManager, cacheManager, unitOfWorkManager, roleManagementConfig, organizationUnitRepository, organizationUnitRoleRepository)
         {
         }
         public override Task SetGrantedPermissionsAsync(TRole role, IEnumerable<Permission> permissions)

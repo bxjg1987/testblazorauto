@@ -5,6 +5,7 @@ using Abp.Dependency;
 using Abp.Domain.Entities;
 using Abp.Domain.Uow;
 using Abp.Modules;
+using Abp.Organizations;
 using Abp.RealTime;
 using Abp.Reflection.Extensions;
 using Abp.Runtime.Session;
@@ -23,6 +24,7 @@ using BXJG.Utils.Files;
 using BXJG.Utils.GeneralTree;
 using BXJG.Utils.Interceptor;
 using BXJG.Utils.Localization;
+using BXJG.Utils.OrganizationUnit;
 using BXJG.Utils.Settings;
 using BXJG.Utils.Share;
 using BXJG.Utils.Tag;
@@ -64,6 +66,8 @@ namespace BXJG.Utils
             Configuration.Settings.Providers.Add<BXJGUtilsSettingProvider>();
             //查看abp源码 uow拦截器调用manager.begin，内部从ioc获取uow对象efuow 然后设置到asynclocal上的
             IocManager.IocContainer.Kernel.ComponentCreated += Kernel_ComponentCreated;
+
+            Configuration.ReplaceService<IOrganizationUnitManager, BXJGOrganizationUnitManager>(DependencyLifeStyle.Transient);
         }
 
         private void Kernel_ComponentCreated(Castle.Core.ComponentModel model, object instance)
@@ -144,7 +148,8 @@ namespace BXJG.Utils
             IocManager.Register(typeof(GeneralTreeManager<>), DependencyLifeStyle.Transient);
 
             IocManager.Register(typeof(AbpAsyncDeterminationInterceptor<DataFilterInterceptor>), DependencyLifeStyle.Transient);
-
+            //IocManager.ser
+            //IocManager.IocContainer.rep
         }
 
         public override void PostInitialize()

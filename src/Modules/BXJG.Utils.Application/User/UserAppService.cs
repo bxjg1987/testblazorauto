@@ -26,7 +26,7 @@ namespace BXJG.Utils.Application.User
     /// <summary>
     /// 后台管理 用户 接口
     /// </summary>
-    //[RemoteService(IsEnabled =false, IsMetadataEnabled =false)]
+    //[RemoteService(IsEnabled =false, IsMetadataEnabled =false)]//泛型的，本来就不暴露
     public class UserAppService<TUser,
                                 TRole,
                                 TUserManager,
@@ -60,7 +60,7 @@ namespace BXJG.Utils.Application.User
         }
         
      public virtual Func<TUser, TCreateInput,Task> SetPwdFunc { get=>field??SetPwd; set; }
-        protected override async Task CreateCore( TUser user, TCreateInput input)
+        protected override async Task CreateSave( TUser user, TCreateInput input)
         {
             //return base.InsertCore(entity);
 
