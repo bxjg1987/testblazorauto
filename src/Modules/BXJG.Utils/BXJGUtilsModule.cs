@@ -24,7 +24,7 @@ using BXJG.Utils.Files;
 using BXJG.Utils.GeneralTree;
 using BXJG.Utils.Interceptor;
 using BXJG.Utils.Localization;
-using BXJG.Utils.OrganizationUnit;
+using BXJG.Utils.OU;
 using BXJG.Utils.Settings;
 using BXJG.Utils.Share;
 using BXJG.Utils.Tag;

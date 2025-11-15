@@ -6,11 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Utils.OrganizationUnit
+namespace BXJG.Utils.OU
 {
     public class BXJGOrganizationUnitManager : OrganizationUnitManager
     {
-        public BXJGOrganizationUnitManager(IRepository<Abp.Organizations.OrganizationUnit, long> organizationUnitRepository) : base(organizationUnitRepository)
+        public BXJGOrganizationUnitManager(IRepository<OrganizationUnit, long> organizationUnitRepository) : base(organizationUnitRepository)
         {
         }
     }
