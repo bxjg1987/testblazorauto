@@ -48,7 +48,7 @@ namespace BXJG.Utils.Application.Share.User
         /// 是否启用
         /// </summary>
         [Display(Name = "是否启用")]
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = true;
         /// <summary>
         /// 是否修改密码
         /// </summary>
@@ -78,6 +78,7 @@ namespace BXJG.Utils.Application.Share.User
         /// <summary>
         /// 分配到的角色
         /// </summary>
+        [Display(Name = "角色")]
         public string[] RoleNames { get; set; }= Array.Empty<string>();
         /// <summary>
         /// 所属组织机构

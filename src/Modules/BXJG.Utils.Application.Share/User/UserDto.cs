@@ -1,6 +1,7 @@
 ﻿using Abp.Application.Services.Dto;
 using Abp.Auditing;
 using BXJG.Common.Contracts;
+using BXJG.Utils.Application.Share.Roles;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -41,6 +42,16 @@ namespace BXJG.Utils.Application.Share.User
         /// </summary>
         [Display(Name = "创建时间")]
         public DateTime CreationTime { get; set; }
+        /// <summary>
+        /// 角色
+        /// </summary>
+        [Display(Name = "角色")]
+        public IEnumerable<RoleSelectDto>? Roles { get; set; }
+        /// <summary>
+        /// 角色
+        /// </summary>
+        [Display(Name = "角色")]
+        public string? RoleText => Roles==null?string.Empty: string.Join(',',Roles.Select(x => x.DisplayText));
 
         public dynamic ExtensionData { get; set; }
     }
