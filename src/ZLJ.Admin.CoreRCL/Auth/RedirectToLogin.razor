@@ -1,8 +1,11 @@
 ﻿@inject NavigationManager NavigationManager
 
 @code {
+    [Parameter] public string? ReturnUrl { get; set; }
+
     protected override void OnInitialized()
     {
-        NavigationManager.NavigateTo($"Account/Login?returnUrl={Uri.EscapeDataString(NavigationManager.Uri)}", forceLoad: true);
+        var url = ReturnUrl ?? Uri.EscapeDataString(NavigationManager.Uri);
+        NavigationManager.NavigateTo($"Account/Login?returnUrl={url}", forceLoad: true);
     }
 }
