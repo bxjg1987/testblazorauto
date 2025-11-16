@@ -1,4 +1,7 @@
-﻿using AntDesign;
+﻿using Abp.Extensions;
+using Abp.Reflection.Extensions;
+using AntDesign;
+using AutoMapper.Internal;
 using BXJG.Common.Contracts;
 using BXJG.Utils.Application.Share.GeneralTree;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,6 +10,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Http;
+using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using ZLJ.RCL.Interceptors;
@@ -32,29 +37,31 @@ namespace ZLJ.RCL.Components
     /// <typeparam name="TGetTreeForSelectOutput"></typeparam>
     public class TreeSelectZlj<TGetTreeForSelectOutput> : TreeSelect<string, TGetTreeForSelectOutput> where TGetTreeForSelectOutput : IGeneralTree<TGetTreeForSelectOutput>
         //where TGetNodesForSelectOutput : ComboboxItemDto 由于我们规定了统一使用树，所以这个约束没有必要
-    {  
+    {
+        [Inject]
+        public IHttpClientFactory HttpClientFactory { get; set; }
+
+        protected virtual HttpClient HttpClient => HttpClientFactory.CreateHttpClientCommon();
         /// <summary>
         /// 专门给肉夹馍aop用的，你不该调用这个
         /// </summary>
         [Inject]
         public IServiceProvider Services { get; set; }
-        [Inject]
-        public IHttpClientFactory HttpClientFactory { get; set; }
-
-        protected virtual HttpClient HttpClient => HttpClientFactory.CreateHttpClientCommon();
-
         /// <summary>
         /// 只加载此节点下的后代节点
         /// 不用用code，因为code会变
         /// </summary>
         [Parameter]
         public virtual string? ParentName { get; set; }
+        string parentName;
         /// <summary>
         /// true绑定id，false绑定code
         /// </summary>
         [Parameter]
-        public virtual bool IsKeyId { get; set; }=true;
+        public virtual bool IsKeyId { get; set; } = true;
 
+        // 用于防止循环调用的标志位
+        private bool _updatingValueFromPropertySetter = false;
 
         [Parameter]
         public long TreeId
@@ -63,13 +70,32 @@ namespace ZLJ.RCL.Components
             {
                 if (Value.IsNullOrWhiteSpaceBXJG())
                     return default;
-                return long.Parse(Value);
+                if (long.TryParse(Value, out long result))
+                    return result;
+                return default;
             }
             set
             {
-                if (value == 0)
-                    Value = string.Empty;
-                Value = value.ToString();
+                // 防止循环调用
+                if (_updatingValueFromPropertySetter)
+                    return;
+
+                //if (Value.IsNullOrEmpty() && value == 0)
+                //    return;
+
+                string newValue = value == 0 ? string.Empty : value.ToString();
+                if (Value != newValue)
+                {
+                    _updatingValueFromPropertySetter = true;
+                    try
+                    {
+                        CurrentValue = newValue;
+                    }
+                    finally
+                    {
+                        _updatingValueFromPropertySetter = false;
+                    }
+                }
             }
         }
 
@@ -84,38 +110,67 @@ namespace ZLJ.RCL.Components
             {
                 if (Value.IsNullOrWhiteSpaceBXJG() || Value == "0")
                     return default;
-                return long.Parse(Value);
+                if (long.TryParse(Value, out long result))
+                    return result;
+                return default;
             }
             set
             {
-                if (value == 0 || value == null)
-                    Value = string.Empty;
-                Value = value.ToString();
+                // 防止循环调用
+                if (_updatingValueFromPropertySetter)
+                    return;
+
+                //if (Value.IsNullOrEmpty() && (!value.HasValue || value == 0))
+                //    return;
+
+                string newValue = (value == 0 || value == null) ? string.Empty : value.ToString();
+                if (Value != newValue)
+                {
+                    _updatingValueFromPropertySetter = true;
+                    try
+                    {
+                        CurrentValue = newValue;
+                    }
+                    finally
+                    {
+                        _updatingValueFromPropertySetter = false;
+                    }
+                }
             }
         }
 
         [Parameter]
         public EventCallback<long?> TreeIdNullableChanged { get; set; }
 
+        //  override onvalu
         protected override void OnCurrentValueChange(string value)
         {
+            //if (value.IsNullOrWhiteSpace() && Value.IsNullOrWhiteSpace())
+            //    return;
+
+
+            var sdfsdf = this.Value;
+            var sdsss = this.CurrentValue;
+            var sss = this.CurrentValueAsString;
+
+
+            //if (Value == value)
+            //    return;
+
+            // 防止在属性setter中触发的OnCurrentValueChange再次触发事件回调
+            if (_updatingValueFromPropertySetter)
+                return;
+
             base.OnCurrentValueChange(value);
-            //this.InvokeValuesChanged
-            //_ InvokeAsync(async()=>{
-            //   await TreeIdNullableChanged.InvokeAsync(1);
-            //});
 
             long? z = default;
-            if (value.IsNullOrWhiteSpaceBXJG() || value == "0")
-                z = default;
-            else
-                z = long.Parse(value);
+            if (!value.IsNullOrWhiteSpaceBXJG() && value != "0" && long.TryParse(value, out long parsedValue))
+                z = parsedValue;
 
-            InvokeAsync(async () =>
+            _ = InvokeAsync(async () =>
             {
                 await TreeIdNullableChanged.InvokeAsync(z);
                 await TreeIdChanged.InvokeAsync(z.HasValue ? z.Value : default);
-                StateHasChanged();
             });
         }
 
@@ -156,9 +211,12 @@ namespace ZLJ.RCL.Components
         //[Inject]
         //public IServiceProvider ServiceProvider { get; set; }
 
+
+
         [AbpExceptionInterceptor]
         protected override async Task OnInitializedAsync()
         {
+
             await base.OnInitializedAsync();
 
             if (TitleExpression == default)
@@ -191,13 +249,93 @@ namespace ZLJ.RCL.Components
 
             if (DataSource == null)
             {
+                await LoadDataSource();
                 //await using var service = ServiceProvider.CreateAsyncScope();
                 //var appService = service.ServiceProvider.GetRequiredService<TAppService>();
                 // DataSource = await appService.GetTreeForSelectAsync(new TGetTreeForSelectInput { ParentId = ParentId });
-                DataSource = await HttpClient.GetTreeForSelect<TGetTreeForSelectOutput>(new { ParentName });
+                //DataSource = await HttpClient.GetTreeForSelect<TGetTreeForSelectOutput>(new { ParentName });
             }
         }
 
+
+        protected override async Task OnParametersSetAsync()
+        {
+            await base.OnParametersSetAsync();
+            if (ParentName != parentName)
+            {
+                await LoadDataSource();
+            }
+        }
+
+        //public override async Task SetParametersAsync(ParameterView parameters)
+        //{
+
+        //    await LoadDataSource();
+        //    //base.ForceUpdateValueString
+        //}
+
+        protected virtual async Task LoadDataSource()
+        {
+            DataSource = await HttpClient.GetTreeForSelect<TGetTreeForSelectOutput>(new { ParentName });
+            parentName = ParentName;
+            //_ = InvokeAsync(async () =>
+            //{
+            //if (Value.IsNotNullOrWhiteSpaceBXJG() || Values != null)
+            //{
+            DropdownStyle = "display:none;";
+            await OpenAsync();
+            //Open = true;
+            //StateHasChanged();
+            //await Task.Delay(3000);
+            // Open = false;
+            //StateHasChanged();
+            DropdownStyle = string.Empty;
+            await _dropDown.Close();
+            //}
+            //});
+            //StateHasChanged();
+            //await FocusAsync();
+            //await InvokeAsync(async () =>
+            //{
+            //    //反射调用父类的UpdateValueAndSelection
+            //    var methodInfo = typeof(TreeSelect<string, TGetTreeForSelectOutput>)
+            //           .GetMethod("UpdateValueAndSelection",
+            //                      BindingFlags.NonPublic | BindingFlags.Instance);
+            //    methodInfo.Invoke(this, null);
+            //    StateHasChanged();
+            //    await Task.Delay(2000);
+            //    StateHasChanged();
+            //});
+
+
+            //  var old = Value;
+            //await   base.OnFirstAfterRenderAsync();
+            //  StateHasChanged();
+            //  await base.OnFirstAfterRenderAsync();
+            //  CurrentValue = old;
+            //  await base.OnFirstAfterRenderAsync();
+            //  StateHasChanged();
+            //await base.OnFirstAfterRenderAsync();
+
+            //ForceUpdateValueString(Value);
+            //CurrentValue = Value;
+            //_ = InvokeAsync(async () =>
+            // {
+            //  await Task.Delay(2000);
+            //var sf = Value;
+            //Value = "4";
+
+            //    var sfsfd = base.Nodes;
+            //  base.ExpandAll();
+            //      await OnFirstAfterRenderAsync();
+            //   var sdfsd = Value;
+            //  CurrentValue=string.Empty;
+
+            //  await Task.Delay(1000);
+            //  CurrentValue = sdfsd;
+
+            // });
+        }
         //protected abstract HttpClient CreateHttpClient();
         //[AbpExceptionInterceptor]
         //async Task Search(string str)
