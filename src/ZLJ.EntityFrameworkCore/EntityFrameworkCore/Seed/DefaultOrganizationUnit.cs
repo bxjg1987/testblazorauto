@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZLJ.Core.BaseInfo;
+using ZLJ.Core.OU;
 using ZLJ.Core.Share;
 
 namespace ZLJ.EntityFrameworkCore.Seed

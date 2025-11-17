@@ -1,4 +1,5 @@
 ﻿using Abp.Organizations;
+using BXJG.Utils.OU;
 using Microsoft.AspNetCore.Mvc.TagHelpers.Cache;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ZLJ.Core.Customer
 {
-    public class CustomerOUManager : OrganizationUnitManager
+    public class CustomerOUManager : BXJGOrganizationUnitManager
     {
         public CustomerOUManager(IRepository<OrganizationUnit, long> organizationUnitRepository) : base(organizationUnitRepository)
         {

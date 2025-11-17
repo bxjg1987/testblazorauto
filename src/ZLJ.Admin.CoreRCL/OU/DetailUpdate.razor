@@ -1,0 +1,81 @@
+﻿
+
+@using BXJG.Utils.Application.Share.GeneralTree
+@using Microsoft.AspNetCore.Components.Sections
+@using ZLJ.Application.Share.OU
+
+
+@inherits TreeDetailUpdateBaseComponent<OUDto, OUEditDto>
+<SectionContent SectionName=@($"{Master}-detail-update-title")>
+    <Icon Type=@detailUpdateIcon Theme=@IconThemeType.Outline />
+    @(detailUpdateText)@(FuncName)
+</SectionContent>
+<SectionContent SectionName=@($"{Master}-detail-update-body")>
+   
+        <Form @ref="frm" ValidateOnChange="true" Model="editDto" LabelColSpan="4" WrapperColSpan="20" OnFinish="OnFinish">
+
+            <FormItem Label="上级">
+                @if (IsShowUpdate)
+                {
+                    <TreeSelectOu @bind-TreeIdNullable="context.ParentId" IsKeyId AllowClear Style="width:15rem;" Placeholder="请选择父级" />
+                }
+                else
+                {
+                    <span class="frm-field-readonly">
+                        @dto.ParentDisplayName
+                    </span>
+                }
+            </FormItem>
+            <FormItem Label="部门名称">
+       
+            @if (IsShowUpdate)
+            {
+                <Input @bind-Value="@context.DisplayName" />
+            }
+            else
+            {
+                <span class="frm-field-readonly">
+                    @dto.DisplayName
+                </span>
+            }
+            </FormItem>
+        <FormItem Label="单位类型">
+            @if (IsShowUpdate)
+            {
+                <EnumRadioGroup ButtonStyle="RadioButtonStyle.Outline" @bind-Value="@context.OUType" />
+            }
+            else
+            {
+                <span class="frm-field-readonly">
+                    @dto.OuTypeText
+                </span>
+            }
+            
+            </FormItem>
+        </Form>
+   
+</SectionContent>
+<SectionContent SectionName=@($"{Master}-detail-update-btns")>
+    @if (IsShowDelete)
+    {
+        <Popconfirm Title="确定删除此项吗?" OnConfirm=@BtnDeleteClick>
+            <Button  Loading=isDeleting Danger=true>删除</Button>
+        </Popconfirm>
+    }
+    <ButtonGroup>
+        @if (IsShowRefresh)
+        {
+            <Button OnClick="BtnRefreshClick" Loading=isRefreshing Disabled=IsBusy>刷新</Button>
+        }
+        @if (IsShowBeginEdit)
+        {
+            <Button OnClick="BtnBeginEditClick" Loading=isFormIniting Type="@ButtonType.Primary">修改</Button>
+        }
+        else if (IsShowUpdate)
+        {
+            <Button OnClick="BtnResetClick" Loading=isReseting Disabled=IsBusy Icon="@IconType.Outline.Redo">重置</Button>
+            <Button OnClick="BtnCancelEditClick" Disabled=IsBusy Icon="@IconType.Outline.Rollback">放弃修改</Button>
+            <Button OnClick="BtnUpdateClick" Type="@ButtonType.Primary" Loading="@isUpdating" Disabled="IsBusy" Icon="@IconType.Outline.Save">保存</Button>
+        }
+    </ButtonGroup>
+</SectionContent>

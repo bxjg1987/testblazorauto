@@ -1,4 +1,5 @@
 ﻿using BXJG.Utils.Application.Share.GeneralTree;
+using BXJG.Utils.Application.Share.OU;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +12,8 @@ namespace ZLJ.RCL.Components
     /// <summary>
     /// 部门选择下拉框
     /// </summary>
-    public class TreeSelectOu : TreeSelectZlj<OuDto>
+    public class TreeSelectOu : TreeSelectZlj<OUSelectDto>
     {
-
         protected override Task OnInitializedAsync()
         {
             if (Placeholder.IsNullOrWhiteSpaceBXJG())

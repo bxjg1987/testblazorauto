@@ -22,20 +22,20 @@
     /// 往来单位名称
     /// </summary>
     [Parameter]
-    public string Name { get; set; }
+    public string? Name { get; set; }
     [Parameter]
-    public string Level{ get; set;}
+    public string? Level{ get; set;}
     [Parameter]
-    public ZLJ.Application.Common.Share.Kehu.KehuDto Dto{ get; set; }
+    public ZLJ.Application.Common.Share.Kehu.KehuDto? Dto{ get; set; }
     /// <summary>
     /// 是否有往来单位获取权限
     /// </summary>
     [Parameter]
     public bool? HasPermission { get; set; }
 
-    private string name=> Dto?.Name??Name;
-    private string level=> Dto?.LevelDisplayName??Level;
-    public long id=> Dto?.Id??Id;
+    private string name=> Name??Dto?.Name;
+    private string level=>  Level??Dto?.LevelDisplayName;
+    public long id => Id==default? (Dto!=default? Dto.Id:default):Id;
 
     /// <summary>
     /// 组件初始化

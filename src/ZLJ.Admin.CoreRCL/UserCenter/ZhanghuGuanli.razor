@@ -31,7 +31,7 @@
     private async Task OnFinish(EditContext editContext)
     {
         await base.HttpClientFactory.CreateHttpClientCommon().Post("account", "ChangePassword", model);
-        await base.ShowSuccessMessage(msg:"修改成功！3秒后将自动注销，请重新登录。");
+        await base.ShowSuccessMessage(msg: "修改成功！3秒后将自动注销，请重新登录。");
         await Task.Delay(3000);
         nav.NavigateTo("/account/logout",true);
     }

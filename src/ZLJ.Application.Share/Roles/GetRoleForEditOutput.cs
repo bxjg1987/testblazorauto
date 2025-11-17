@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ZLJ.Application.Common.Share.Roles;
 
 namespace ZLJ.Application.Share.Roles
 {

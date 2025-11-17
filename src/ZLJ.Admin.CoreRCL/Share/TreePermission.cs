@@ -17,7 +17,7 @@ namespace ZLJ.Admin.CoreRCL.Share
         [Inject]
         public IHttpClientFactory HttpClientFactory { get; set; }
         protected virtual HttpClient HttpClient => HttpClientFactory.CreateHttpClientAdmin();
-
+      
         public override async Task SetParametersAsync(ParameterView parameters)
         {
             var dic = parameters.ToDictionary();

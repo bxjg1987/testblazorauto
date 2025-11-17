@@ -28,6 +28,21 @@
 		<Compile Remove="NotifyEventHandler.cs" />
 		<Compile Remove="Sessions\ZLJAppSession.cs" />
 		<Compile Remove="Settings\AutoMapperProfile.cs" />
+		<Compile Remove="OU\OUMapExt.cs" />
+		<Compile Remove="Post\GetListInput.cs" />
+		<Compile Remove="Post\PostAppService.cs" />
+		<Compile Remove="Post\PostDto.cs" />
+		<Compile Remove="Sessions\ZLJAppSession.cs" />
+		<Compile Remove="StaffInfo\Dto.cs" />
+		<Compile Remove="StaffInfo\GetListInput.cs" />
+		<Compile Remove="StaffInfo\GetTotalInput.cs" />
+		<Compile Remove="StaffInfo\StaffInfoAppService.cs" />
+		<Compile Remove="Users\ChangePasswordDto.cs" />
+		<Compile Remove="Users\ChangeUserLanguageDto.cs" />
+		<Compile Remove="Users\CreateUserDto.cs" />
+		<Compile Remove="Users\PagedUserResultRequestDto.cs" />
+		<Compile Remove="Users\ResetPasswordDto.cs" />
+		<Compile Remove="Users\UserDto.cs" />
 	</ItemGroup>
 
 	<ItemGroup>

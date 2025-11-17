@@ -27,7 +27,7 @@ namespace ZLJ.Application
 
             menu.AddItem(new MenuItemDefinition("adminBlazor_home",
                                                 "后台管理首页".GetAdminLocalizableString(),
-                                                url: "/",
+                                                url: "/main",
                                                 icon: "dashboard",
                                                 permissionDependency: new SimplePermissionDependency(PermissionNames.Administrator)));
 
@@ -73,7 +73,7 @@ namespace ZLJ.Application
               icon: "compass",
               url: $"/organization-unit",
               requiresAuthentication: true,
-              permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorBaseInfoOrganizationUnit)));
+              permissionDependency: new SimplePermissionDependency(PermissionNames.AdministratorBaseInfoOrganizationUnitGet)));
 
             //岗位
             menuBaseInfo.AddItem(new MenuItemDefinition(PermissionNames.AdministratorBaseInfoPost,

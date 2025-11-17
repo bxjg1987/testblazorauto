@@ -8,58 +8,100 @@
 </SectionContent>
 <SectionContent SectionName=@($"{Master}-detail-update-body")>
 
-    @if (isEdit)
-    {
-        <Form @ref="frm" ValidateOnChange="true" Model="editDto" LabelColSpan="5" WrapperColSpan="19" OnFinish="OnFinish">
-            <FormItem>
+   
+        <Form @ref="frm" ValidateOnChange="true" Model="editDto" LabelColSpan="3" WrapperColSpan="21" OnFinish="OnFinish">
+        <FormItem Label="名称">
+            @if (IsShowUpdate)
+            {
                 <Input @bind-Value="@context.Name" AllowClear />
+            }
+            else
+            {
+                <span class="frm-field-readonly">
+                    @dto.Name
+                </span>
+            }
+            
             </FormItem>
-            <FormItem>
+        <FormItem Label="联系人">
+            @if (IsShowUpdate)
+            {
                 <Input @bind-Value="@context.LinkMan" AllowClear />
+            }
+            else
+            {
+                <span class="frm-field-readonly">
+                    @dto.LinkMan
+                </span>
+            }
+ 
             </FormItem>
-            <FormItem>
+        <FormItem Label="联系电话">
+            @if (IsShowUpdate)
+            {
                 <Input @bind-Value="@context.LinkPhone" AllowClear />
+            }
+            else
+            {
+                <span class="frm-field-readonly">
+                    @dto.LinkPhone
+                </span>
+            }
             </FormItem>
-            <FormItem Label="所属地区">
+        <FormItem Label="所属地区">
+            @if (IsShowUpdate)
+            {
                 <AdministrativeTreeSelect @bind-TreeIdNullable=context.AreaId IsKeyId AllowClear />
+            }
+            else
+            {
+                <span class="frm-field-readonly">
+                    @dto.AreaDisplayName
+                </span>
+            }
+              
             </FormItem>
-            <FormItem>
+        <FormItem Label="地址">
+            @if (IsShowUpdate)
+            {
                 <Input @bind-Value="@context.Address" AllowClear />
+            }
+            else
+            {
+                <span class="frm-field-readonly">
+                    @dto.Address
+                </span>
+            }
+
             </FormItem>
-            <FormItem Label="等级">
+        <FormItem Label="等级">
+            @if (IsShowUpdate)
+            {
                 <TreeSelectDataDictionary @bind-TreeIdNullable=context.LevelId IsKeyId AllowClear ParentName="kehuJibie" />
+            }
+            else
+            {
+                <span class="frm-field-readonly">
+                    @dto.LevelDisplayName
+                </span>
+            }
+
+        
             </FormItem>
-            <FormItem Label="是否启用">
+        <FormItem Label="是否启用">
+            @if (IsShowUpdate)
+            {
                 <Switch @bind-Checked=context.IsActive />
+            }
+            else
+            {
+                <span class="frm-field-readonly">
+                    <Switch @bind-Checked=dto.IsActive Disabled />
+                </span>
+            }
             </FormItem>
         </Form>
-    }
-    else
-    {
-        <Descriptions Bordered Size="DescriptionsSize.Small">
-            <DescriptionsItem Title="名称">
-                @dto.Name
-            </DescriptionsItem>
-            <DescriptionsItem Title="联系人">
-                @dto.LinkMan
-            </DescriptionsItem>
-            <DescriptionsItem Title="联系人电话">
-                @dto.LinkPhone
-            </DescriptionsItem>
-            <DescriptionsItem Title="所属地区">
-                @dto.AreaDisplayName
-            </DescriptionsItem>
-            <DescriptionsItem Title="地址">
-                @dto.Address
-            </DescriptionsItem>
-            <DescriptionsItem Title="等级">
-                @dto.LevelDisplayName
-            </DescriptionsItem>
-            <DescriptionsItem Title="是否启用">
-                <Switch Checked=dto.IsActive Disabled />
-            </DescriptionsItem>
-        </Descriptions>
-    }
+   
 </SectionContent>
 <SectionContent SectionName=@($"{Master}-detail-update-btns")>
     @if (IsShowDelete)

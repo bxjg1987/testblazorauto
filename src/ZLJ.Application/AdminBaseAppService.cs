@@ -6,7 +6,6 @@ using Abp.IdentityFramework;
 using Abp.Runtime.Session;
 using ZLJ.Core.MultiTenancy;
 using Abp.Linq;
-using ZLJ.Application.BaseInfo.StaffInfo;
 using ZLJ.Core.Authorization.Users;
 using Abp.Localization.Sources;
 using BXJG.Utils;

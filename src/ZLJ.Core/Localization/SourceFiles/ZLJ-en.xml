@@ -21,6 +21,10 @@
     <text name="Settings" value="Settings" />
     <text name="HangFireDashboard" value="HangFireDashboard" />
 
+	  <text name="ZLJ.Core.Share.OUType.HeadOffice" value="HeadOffice" />
+	  <text name="ZLJ.Core.Share.OUType.Branch" value="Branch" />
+	  <text name="ZLJ.Core.Share.OUType.Department" value="Department" />
+	  
 	  <text name="设备中心" value="设备中心" />
     <text name="详情" value="Detail" />
     <text name="EmployeeApp" value="Employee APP" />

@@ -8,6 +8,7 @@ using BXJG.Utils.RCL.Components;
 using Microsoft.AspNetCore.Components.Web;
 using System.Net.Http;
 using ZLJ.Application.Common.Share.OU;
+using ZLJ.Application.Common.Share.Roles;
 using ZLJ.Application.Share.Post;
 
 namespace ZLJ.Admin.CoreRCL.Post
@@ -38,11 +39,15 @@ namespace ZLJ.Admin.CoreRCL.Post
         {
             for (int i = 0; i < 500; i++)
             {
-                await base.HttpClient.Create<PostDto>(new CreatePostDto
+                await base.HttpClient.Create<PostDto>(new PostCreateDto
                 {
                     Description = "演示数据" + Random.Shared.Next(),
                     DisplayName = "测试名称" + Random.Shared.Next(),
-                    Name = "test" + Random.Shared.Next(),
+                    Dto =new RoleCreateDto
+                    {
+                        Name = "test" + Random.Shared.Next(),  
+                    }
+                    
                     // GrantedPermissions = new List<string> { }
                 });
             }

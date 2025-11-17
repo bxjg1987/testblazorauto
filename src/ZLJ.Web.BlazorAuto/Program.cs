@@ -225,7 +225,8 @@ app.Map("/account/logout", async (HttpContext x) =>
 {
     await x.SignOutAsync();
     //await x.RequestServices.GetRequiredService<IAuthenticationService>().SignOutAsync(x, default, default);
-    x.Response.Redirect("/");
+    //x.Response.Redirect("/");
+    x.Response.Redirect("/main");
 });
 
 app.MapRazorComponents<App>()

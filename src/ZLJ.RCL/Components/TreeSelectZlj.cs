@@ -283,14 +283,18 @@ namespace ZLJ.RCL.Components
             //if (Value.IsNotNullOrWhiteSpaceBXJG() || Values != null)
             //{
             DropdownStyle = "display:none;";
-            await OpenAsync();
-            //Open = true;
-            //StateHasChanged();
-            //await Task.Delay(3000);
-            // Open = false;
-            //StateHasChanged();
-            DropdownStyle = string.Empty;
-            await _dropDown.Close();
+            if (RendererInfo.IsInteractive)
+            {
+                await OpenAsync();
+                //Open = true;
+                //StateHasChanged();
+                //await Task.Delay(3000);
+                // Open = false;
+                //StateHasChanged();
+                DropdownStyle = string.Empty;
+                await _dropDown.Close();
+            }
+
             //}
             //});
             //StateHasChanged();

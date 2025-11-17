@@ -10,7 +10,7 @@ namespace ZLJ.Application.Common.Share.OU
     /// <summary>
     /// 获取公司和部门下拉树的输入模型
     /// </summary>
-    public class GetListInput:GeneralTreeGetForSelectInput
+    public class GetListInput:BXJG.Utils.Application.Share.OU.GetListInput
     {
         /// <summary>
         /// 0获取我们自己公司的部门

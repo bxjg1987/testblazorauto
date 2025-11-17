@@ -1,14 +1,16 @@
 ﻿using BXJG.Utils.Application.Share.GeneralTree;
+using BXJG.Utils.Application.Share.OU;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ZLJ.Application.Common.Share.OU;
+using GetListInput = ZLJ.Application.Common.Share.OU.GetListInput;
 
 namespace ZLJ.Application.Common.ClientProxy
 {
-    public class OuProviderAppService : IOuProviderAppService
+    public class OuProviderAppService : IOUSelectProviderAppService
     {
         HttpClient httpClient;
         public OuProviderAppService(IHttpClientFactory httpClientFactory)
@@ -20,9 +22,9 @@ namespace ZLJ.Application.Common.ClientProxy
             throw new NotImplementedException();
         }
 
-        public Task<IList<OuDto>> GetTreeForSelectAsync(GetListInput input)
+        public Task<IList<OUSelectDto>> GetTreeForSelectAsync(GetListInput input)
         {
-            return httpClient.Post<IList<OuDto>>("OuProvider/GetTreeForSelect",input);
+            return httpClient.Post<IList<OUSelectDto>>("OuProvider/GetTreeForSelect", input);
         }
 
         //public Task<GetCurrentLoginInformationsOutput> GetCurrentLoginInformations()

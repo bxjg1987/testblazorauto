@@ -9,7 +9,6 @@ using ZLJ.Application.Share.Authorization.Permissions;
 using BXJG.Utils.Application.GeneralTree;
 using BXJG.Utils.Helpers;
 using ZLJ.Application.Share;
-using BXJG.Utils.Application.Feedback;
 
 namespace ZLJ.Application.Authorization.Permissions
 {
@@ -21,21 +20,23 @@ namespace ZLJ.Application.Authorization.Permissions
         //{
         //    this.cfg = cfg;
         //}
+
         public override void SetPermissions(IPermissionDefinitionContext context)
         {
+
             #region 被依赖的权限
             //context.CreatePermission(PermissionNames.CommonGetRentOrderDetail);
             #endregion
 
-            #region 后端
+
             var admin = context.CreatePermission(PermissionNames.Administrator, L("Administrator"));
 
+          
 
+            //var gongdan = admin.CreateChildPermission(PermissionNames.Gongdan,
+            //PermissionNames.Gongdan.GetLocalizableString(),
+            //multiTenancySides: Abp.MultiTenancy.MultiTenancySides.Tenant);
 
-
-
-
-            #endregion
 
             #region 基础信息
 
@@ -44,9 +45,13 @@ namespace ZLJ.Application.Authorization.Permissions
                 multiTenancySides: MultiTenancySides.Tenant);
 
             #region 公司和部门
+
             var ou = permissionBaseInfo.CreateChildPermission(PermissionNames.AdministratorBaseInfoOrganizationUnit,
                L(PermissionNames.AdministratorBaseInfoOrganizationUnit),
                multiTenancySides: MultiTenancySides.Tenant);
+            ou.CreateChildPermission(PermissionNames.AdministratorBaseInfoOrganizationUnitGet,
+                "查询".UtilsLI(),
+                multiTenancySides: MultiTenancySides.Tenant, properties: new Dictionary<string, object> { { "btn", true } });
             ou.CreateChildPermission(PermissionNames.AdministratorBaseInfoOrganizationUnitAdd,
                 "新增".UtilsLI(),
                 multiTenancySides: MultiTenancySides.Tenant, properties: new Dictionary<string, object> { { "btn", true } });
@@ -56,6 +61,7 @@ namespace ZLJ.Application.Authorization.Permissions
             ou.CreateChildPermission(PermissionNames.AdministratorBaseInfoOrganizationUnitDelete,
                 "删除".UtilsLI(),
                 multiTenancySides: MultiTenancySides.Tenant, properties: new Dictionary<string, object> { { "btn", true } });
+
             #endregion
 
 
@@ -78,6 +84,9 @@ namespace ZLJ.Application.Authorization.Permissions
             var staffInfo = permissionBaseInfo.CreateChildPermission(PermissionNames.BXJGBaseInfoStaffInfo,
                 L(PermissionNames.BXJGBaseInfoStaffInfo),
                 multiTenancySides: MultiTenancySides.Tenant);
+            staffInfo.CreateChildPermission(PermissionNames.BXJGBaseInfoStaffInfoGet,
+                "查询".UtilsLI(),
+                multiTenancySides: MultiTenancySides.Tenant, properties: new Dictionary<string, object> { { "btn", true } });
             staffInfo.CreateChildPermission(PermissionNames.BXJGBaseInfoStaffInfoCreate,
                 "新增".UtilsLI(),
                 multiTenancySides: MultiTenancySides.Tenant, properties: new Dictionary<string, object> { { "btn", true } });
@@ -131,25 +140,21 @@ namespace ZLJ.Application.Authorization.Permissions
             //    multiTenancySides: MultiTenancySides.Host);
 
             //var roleM = permissionBaseInfo.CreateChildPermission(PermissionNames.AdministratorSystemRole, L("Role"));
-            //roleM.CreateChildPermission(PermissionNames.AdministratorSystemRoleGet, "查询".UtilsLI());
-            //roleM.CreateChildPermission(PermissionNames.AdministratorSystemRoleAdd, "新增".UtilsLI(), properties: new Dictionary<string, object> { { "btn", true } });
-            //roleM.CreateChildPermission(PermissionNames.AdministratorSystemRoleUpdate, "修改".UtilsLI(), properties: new Dictionary<string, object> { { "btn", true } });
-            //roleM.CreateChildPermission(PermissionNames.AdministratorSystemRoleDelete, "删除".UtilsLI(), properties: new Dictionary<string, object> { { "btn", true } });
+            //roleM.CreateChildPermission(PermissionNames.AdministratorSystemRoleAdd, L("Add"), properties: new Dictionary<string, object> { { "btn", true } });
+            //roleM.CreateChildPermission(PermissionNames.AdministratorSystemRoleUpdate, L("Update"), properties: new Dictionary<string, object> { { "btn", true } });
+            //roleM.CreateChildPermission(PermissionNames.AdministratorSystemRoleDelete, L("Delete"), properties: new Dictionary<string, object> { { "btn", true } });
 
             //var userM = permissionBaseInfo.CreateChildPermission(PermissionNames.AdministratorSystemUser, L("User"));
-            //userM.CreateChildPermission(PermissionNames.AdministratorSystemUserGet, L("查询"));
             //userM.CreateChildPermission(PermissionNames.AdministratorSystemUserAdd, L("Add"), properties: new Dictionary<string, object> { { "btn", true } });
             //userM.CreateChildPermission(PermissionNames.AdministratorSystemUserUpdate, L("Update"), properties: new Dictionary<string, object> { { "btn", true } });
             //userM.CreateChildPermission(PermissionNames.AdministratorSystemUserDelete, L("Delete"), properties: new Dictionary<string, object> { { "btn", true } });
 
             permissionBaseInfo.CreateChildPermission(PermissionNames.AdministratorSystemLog, L("Log"));
 
-
             var settings = permissionBaseInfo.CreateChildPermission(PermissionNames.AdministratorSystemConfig, L("Settings"));
             //settings.CreateChildPermission(BXJG.Utils.Application.Share.Settings.Changliang.PermissionNameGet, "查看".UtilsLI());
             //settings.CreateChildPermission(BXJG.Utils.Application.Share.Settings.Changliang.PermissionNameUpdate, "修改".UtilsLI());
             settings.AddSettingPermissions();
-
             permissionBaseInfo.CreateChildPermission(PermissionNames.HangFireDashboard, L("HangFireDashboard"), multiTenancySides: MultiTenancySides.Host);
             //sys.CreateChildPermission(PermissionNames.AdministratorSystemSetting, L("Settings"));
             #endregion
@@ -176,21 +181,16 @@ namespace ZLJ.Application.Authorization.Permissions
             #endregion
             //特征 版本...后续添加
             #endregion
-
-            admin.AddFreedback();
-
             //#endregion
-            //           var cust = context.CreatePermission(PermissionNames.Customer,
+
+
+
+
+            //var cust = context.CreatePermission(PermissionNames.Customer,
             //PermissionNames.Customer.GetLocalizableString(),
             //multiTenancySides: Abp.MultiTenancy.MultiTenancySides.Tenant);
-
-            /*
-             * 权限需要在项目中注册，ef生成种子数据时也需要访问当前类
-             * 同时希望代码生成时，将权限注册放置各自功能的文件夹中
-             * 又不希望代码生成器那边通过替换此文件的字符串的方式，不优雅，也容易出错
-             * 反向思维，稍微魔改下AuthorizationProvider，去间接调用代码生成器中的代码
-             */
             CodeGeneratorHelper.CodeGenerator(this, context);
+
         }
 
         private static ILocalizableString L(string name)

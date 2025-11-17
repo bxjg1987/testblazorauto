@@ -7,7 +7,7 @@
 
 <Flex Gap="FlexGap.Middle">
     <Card Style="height:85vh;min-width:12rem;">
-        <Tree TItem="SettingDefinitionGroupDto" @ref="tree"
+        <Tree TItem="SettingDefinitionGroupDto" @ref="tree" 
               DataSource="DataSource" DefaultSelectedKey="@defaultSelectedKey"
               ChildrenExpression="x=>x.DataItem.Children"
               IsLeafExpression="x=>x.DataItem.Children==null||x.DataItem.Children.Count==0"

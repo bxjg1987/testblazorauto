@@ -17,6 +17,7 @@
         #region 公司和部门
 
         public const string AdministratorBaseInfoOrganizationUnit = "Administrator.BaseInfo.OrganizationUnit";
+        public const string AdministratorBaseInfoOrganizationUnitGet = "Administrator.BaseInfo.OrganizationUnit.Get";
         public const string AdministratorBaseInfoOrganizationUnitAdd = "Administrator.BaseInfo.OrganizationUnit.Add";
         public const string AdministratorBaseInfoOrganizationUnitUpdate = "Administrator.BaseInfo.OrganizationUnit.Update";
         public const string AdministratorBaseInfoOrganizationUnitDelete = "Administrator.BaseInfo.OrganizationUnit.Delete";
@@ -37,6 +38,7 @@
         #region 员工档案
 
         public const string BXJGBaseInfoStaffInfo = "BXJGBaseInfoStaffInfo";
+        public const string BXJGBaseInfoStaffInfoGet= "BXJGBaseInfoStaffInfoGet";
         public const string BXJGBaseInfoStaffInfoCreate = "BXJGBaseInfoStaffInfoCreate";
         public const string BXJGBaseInfoStaffInfoUpdate = "BXJGBaseInfoStaffInfoUpdate";
         public const string BXJGBaseInfoStaffInfoDelete = "BXJGBaseInfoStaffInfoDelete";

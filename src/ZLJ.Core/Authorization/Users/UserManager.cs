@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Abp.Authorization;
 using Abp.Authorization.Users;
 using Abp.Configuration;
 using Abp.Domain.Repositories;
@@ -11,7 +12,8 @@ using Abp.Organizations;
 using Abp.Runtime.Caching;
 using ZLJ.Core.Authorization.Roles;
 using System.Linq;
-using BXJG.Utils.Extensions;
+using Abp.Collections.Extensions;
+using TinyPinyin;
 
 namespace ZLJ.Core.Authorization.Users
 {
@@ -55,6 +57,33 @@ namespace ZLJ.Core.Authorization.Users
                 settingManager, userLoginRepository)
         {
         }
+
+        //public override Task<IdentityResult> CreateAsync(User user, string password)
+        //{
+        //    return base.CreateAsync(user, password);
+        //}
+
+        public override Task<IdentityResult> CreateAsync(User user)
+        {
+            user.Pinyin = PinyinHelper.GetPinyinInitials(user.Name);
+
+            if (user.EmailAddress.IsNullOrWhiteSpaceBXJG())
+                user.EmailAddress = Guid.NewGuid().ToString("n") + "@zlj.com";
+
+            if (!user.IsEnableAccount)
+            {
+                if (user.UserName.IsNullOrWhiteSpaceBXJG())
+                    user.UserName = Guid.NewGuid().ToString("n");
+
+                if (user.Password.IsNullOrWhiteSpaceBXJG())
+                    user.Password = "1A2b_csdfdsf";
+
+                user.IsLockoutEnabled = true;
+                user.LockoutEndDateUtc = DateTime.MaxValue;
+            }
+            return base.CreateAsync(user);
+        }
+
         //public IUnitOfWorkManager unitOfWorkManager { get; set; }
         // public override Task<User> FindByIdAsync(string userId)
         // {
@@ -69,7 +98,6 @@ namespace ZLJ.Core.Authorization.Users
         //     }
 
         // }
-       
         ///// <summary>
         ///// 拒绝权限
         ///// 若未授权，不处理，否则将授权状态设置为false，表示禁止使用此权限

@@ -11,25 +11,27 @@ using ZLJ.Application.Authorization.Permissions;
 using ZLJ.Application.Roles;
 using ZLJ.Application.Roles.Dto;
 using ZLJ.Application.Common.OU;
-using ZLJ.Application.Common.Share.OU;
 using ZLJ.Application.Share.Authorization.Permissions;
 using ZLJ.Application.Share.Post;
 using ZLJ.Application.Share.Roles;
 using ZLJ.Core.Authorization.Roles;
 using ZLJ.Core.Authorization.Users;
+
+using BXJG.Utils.Application.Share.OU;
+using ZLJ.Application.Common.Share.OU;
 using ZLJ.Core.BaseInfo.Post;
 
 namespace ZLJ.Application.Post
 {
     [AbpAuthorize(PermissionNames.AdministratorBaseInfoPost)]
-    public class PostAppService : AdminCrudBaseAppService<PostEntity, PostDto, int, PagedAndSortedResultRequest<PagedPostResultRequestDto>, CreatePostDto, PostEditDto>//, IPostAppService
+    public class PostAppService : AdminCrudBaseAppService<PostEntity, PostDto, int, PagedAndSortedResultRequest<PagedPostResultRequestDto>, PostCreateDto, PostEditDto>//, IPostAppService
     {
         private readonly RoleManager _roleManager;
         private readonly UserManager _userManager;
         readonly IRoleManagementConfig roleManagementConfig;
         IRepository<OrganizationUnitRole, long> ouRoleRepository;
         IRepository<OrganizationUnit, long> ouRepository;
-        OrganizationUnitManager unitManager;
+        IOrganizationUnitManager unitManager;
 
         public PostAppService(IRepository<PostEntity> repository,
                               RoleManager roleManager,
@@ -37,7 +39,7 @@ namespace ZLJ.Application.Post
                               IRoleManagementConfig roleManagementConfig,
                               IRepository<OrganizationUnitRole, long> ouRoleRepository,
                               IRepository<OrganizationUnit, long> ouRepository,
-                              OrganizationUnitManager unitManager)
+                              IOrganizationUnitManager unitManager)
             : base(repository)
         {
             _roleManager = roleManager;
@@ -71,7 +73,7 @@ namespace ZLJ.Application.Post
             if (CurrentUnitOfWork.Items.TryGetValue("ous", out var ousTemp))
             {
                 var ous = ousTemp as IDictionary<int, IEnumerable<OrganizationUnit>>;
-                dto.Ous = ObjectMapper.Map<List<OuDto>>(ous[role.Id].Where(c => c != default));
+                dto.Dto.Ous = ObjectMapper.Map<List<OUSelectDto>>(ous[role.Id].Where(c => c != default));
             }
 
             //    var ous = CurrentUnitOfWork.Items["ous"] as IDictionary<int, IEnumerable<OrganizationUnit>>;
@@ -96,7 +98,7 @@ namespace ZLJ.Application.Post
         }
 
         //[UnitOfWork]
-        public override async Task<PostDto> CreateAsync(CreatePostDto input)
+        public override async Task<PostDto> CreateAsync(PostCreateDto input)
         {
             CheckCreatePermission();
 
@@ -104,11 +106,11 @@ namespace ZLJ.Application.Post
             //而角色是可以多对多的
 
             if (input.OuIds != default && input.OuIds.Length > 1)
-                throw new ApplicationException("岗位只能与一个公司或部门关联");
+                throw new Exception("岗位只能与一个公司或部门关联");
 
             //input.nam
             var role = ObjectMapper.Map<PostEntity>(input);
-            role.Name = TinyPinyin.PinyinHelper.GetPinyin(input.DisplayName, "") + BXJG.Common.RandomHelper.GetRandomString(6);//多音字咋搞？
+            role.Name = TinyPinyin.PinyinHelper.GetPinyin(input.DisplayName, "")+ BXJG.Common.RandomHelper.GetRandomString(6);//多音字咋搞？
             role.SetNormalizedName();
 
             CheckErrors(await _roleManager.CreateAsync(role));
@@ -131,8 +133,6 @@ namespace ZLJ.Application.Post
                 .GetAllPermissions()
                 .Where(p => input.GrantedPermissions.Contains(p.Name))
                 .ToList();
-
-
 
                 await _roleManager.SetGrantedPermissionsAsync(role, grantedPermissions);
             }
@@ -157,8 +157,8 @@ namespace ZLJ.Application.Post
                      select new { role, ou };
 
             q2 = q2.WhereIf(input.Filter.OuCode.IsNotNullOrWhiteSpaceBXJG(), c => c.ou.Code.StartsWith(input.Filter.OuCode))
-                   .WhereIf(input.Filter.IsStatic.HasValue, c => c.role.IsStatic == input.Filter.IsStatic.Value)
-                   .WhereIf(input.Filter.Keywords.IsNotNullOrWhiteSpaceBXJG(), c => c.role.Name.Contains(input.Filter.Keywords) || c.role.DisplayName.Contains(input.Filter.Keywords));
+                   .WhereIf(input.Filter.IsStatic.HasValue,c=>c.role.IsStatic==input.Filter.IsStatic.Value)
+                   .WhereIf(input.Filter.Keywords.IsNotNullOrWhiteSpaceBXJG(), c => c.role.Name.Contains(input.Filter.Keywords)|| c.role.DisplayName.Contains(input.Filter.Keywords));
 
             q2 = from role in q2.Select(c => c.role).Distinct()
                  join ouRole in ouRoleRepository.GetAll().AsNoTrackingWithIdentityResolution() on role.Id equals ouRole.RoleId into tem1
@@ -169,11 +169,11 @@ namespace ZLJ.Application.Post
             //input.Sorting.Replace("DisplayName");
             var ct = await q2.CountAsync(CancellationTokenProvider.Token);
 
-
+            
 
             q2 = q2.OrderBy(input.Sorting).PageBy(input);
 
-            //q2 = q2.OrderBy(c => c.role.DisplayName).PageBy(input);
+          //q2 = q2.OrderBy(c => c.role.DisplayName).PageBy(input);
 
             var list = await q2.ToListAsync(CancellationTokenProvider.Token);
 

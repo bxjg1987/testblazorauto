@@ -17,7 +17,7 @@ namespace ZLJ.EntityFrameworkCore.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.10")
+                .HasAnnotation("ProductVersion", "10.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -2082,6 +2082,9 @@ namespace ZLJ.EntityFrameworkCore.Migrations
                     b.Property<bool>("IsEmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsEnableAccount")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsLockoutEnabled")
                         .HasColumnType("bit");
 
@@ -2130,6 +2133,10 @@ namespace ZLJ.EntityFrameworkCore.Migrations
 
                     b.Property<string>("Pinyin")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remark")
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
 
                     b.Property<string>("SecurityStamp")
                         .HasMaxLength(128)
@@ -2453,7 +2460,24 @@ namespace ZLJ.EntityFrameworkCore.Migrations
                     b.HasDiscriminator().HasValue("UserPermissionSetting");
                 });
 
-            modelBuilder.Entity("ZLJ.Core.BaseInfo.OrganizationUnitEntity", b =>
+            modelBuilder.Entity("ZLJ.Core.Customer.CustomerOUEntity", b =>
+                {
+                    b.HasBaseType("Abp.Organizations.OrganizationUnit");
+
+                    b.Property<long>("CustomerId")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("AbpOrganizationUnits");
+
+                    b.HasDiscriminator().HasValue("CustomerOUEntity");
+                });
+
+            modelBuilder.Entity("ZLJ.Core.OU.OrganizationUnitEntity", b =>
                 {
                     b.HasBaseType("Abp.Organizations.OrganizationUnit");
 
@@ -2473,23 +2497,6 @@ namespace ZLJ.EntityFrameworkCore.Migrations
                     b.ToTable("AbpOrganizationUnits");
 
                     b.HasDiscriminator().HasValue("OrganizationUnitEntity");
-                });
-
-            modelBuilder.Entity("ZLJ.Core.Customer.CustomerOUEntity", b =>
-                {
-                    b.HasBaseType("Abp.Organizations.OrganizationUnit");
-
-                    b.Property<long>("CustomerId")
-                        .HasColumnType("bigint");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.HasIndex("CustomerId");
-
-                    b.ToTable("AbpOrganizationUnits");
-
-                    b.HasDiscriminator().HasValue("CustomerOUEntity");
                 });
 
             modelBuilder.Entity("ZLJ.Core.BaseInfo.Post.PostEntity", b =>

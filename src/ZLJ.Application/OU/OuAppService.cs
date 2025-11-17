@@ -8,6 +8,7 @@ using Abp.Organizations;
 using Abp.Threading;
 using BXJG.Common.Contracts;
 using BXJG.Utils.Application.Share.GeneralTree;
+using BXJG.Utils.OU;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -19,28 +20,30 @@ using ZLJ.Application.BaseInfo;
 using ZLJ.Application.Share;
 using ZLJ.Application.Share.Authorization.Permissions;
 using ZLJ.Application.Share.OU;
-using ZLJ.Core.BaseInfo;
+using ZLJ.Core.Localization;
+using ZLJ.Core.OU;
 
 namespace ZLJ.Application.OU
 {
-    [AbpAuthorize(PermissionNames.AdministratorBaseInfoOrganizationUnit)]
+    [AbpAuthorize(PermissionNames.AdministratorBaseInfoOrganizationUnitGet)]
     public class OuAppService : AdminBaseAppService//<OrganizationUnit, OUDto, long, GetAllInput, OUEditDto>
     {
-        OrganizationUnitManager organizationUnitManager;
+        BXJGOrganizationUnitManager organizationUnitManager;
         IRepository<OrganizationUnit, long> repository;
-        public OuAppService(IRepository<OrganizationUnit, long> repository, OrganizationUnitManager organizationUnitManager)// : base(repository)
+        public OuAppService(IRepository<OrganizationUnit, long> repository, BXJGOrganizationUnitManager organizationUnitManager)// : base(repository)
         {
-            LocalizationSourceName = AdminConsts.Admin;
+            //LocalizationSourceName = AdminConsts.Admin;
             this.repository = repository;
             this.organizationUnitManager = organizationUnitManager;
         }
         [AbpAuthorize(PermissionNames.AdministratorBaseInfoOrganizationUnitAdd)]
-        public async Task<OUDto> CreateAsync(OUEditDto input)
+        public async Task<OUDto> CreateAsync(OUCreateDto input)
         {
             var ou = new OrganizationUnitEntity();
             ou.ParentId = input.ParentId;
             ou.DisplayName = input.DisplayName;
             ou.OUType = input.OUType;
+            ou.TenantId = AbpSession.TenantId;
             await organizationUnitManager.CreateAsync(ou);
             await CurrentUnitOfWork.SaveChangesAsync();
             return await Map2Dto(ou);
@@ -55,20 +58,20 @@ namespace ZLJ.Application.OU
 
             var ou2 = ou as OrganizationUnitEntity;
             ou2.OUType = input.OUType;
-       
+
             //await organizationUnitManager.CreateAsync(ou);
-          //  await CurrentUnitOfWork.SaveChangesAsync();
-          await  organizationUnitManager.UpdateAsync(ou);
+            //  await CurrentUnitOfWork.SaveChangesAsync();
+            await organizationUnitManager.UpdateAsync(ou);
             return await Map2Dto(ou);
         }
         [AbpAuthorize(PermissionNames.AdministratorBaseInfoOrganizationUnitUpdate)]
         public async Task MoveAsync(GeneralTreeNodeMoveInput input)
         {
-            await this.organizationUnitManager.MoveAsync(input.Id, input.TargetId);
+            await organizationUnitManager.MoveAsync(input.Id, input.TargetId);
         }
 
         [AbpAuthorize(PermissionNames.AdministratorBaseInfoOrganizationUnitDelete)]
-        public async Task<BatchOperationOutputLong> DeleteAsync(BatchOperationInputLong input)
+        public async Task<BatchOperationOutputLong> DeleteBatchAsync(BatchOperationInputLong input)
         {
             var r = new BatchOperationOutputLong();
             foreach (var item in input.Ids)
@@ -76,12 +79,7 @@ namespace ZLJ.Application.OU
                 try
                 {
                     var sw = UnitOfWorkManager.Begin(System.Transactions.TransactionScopeOption.RequiresNew);
-                    var entity = await (await repository.GetAllAsync()).Include(x=>x.Children).Include(x=>x.Parent).Where(x => x.Id == item).SingleAsync( CancellationTokenProvider.Token);
-                    await repository.DeleteAsync(entity);
-
-                    if (entity.Parent != null)
-                        await UpdateChildrenCount(entity.Parent);
-
+                    await DeleteCore(item);
                     await sw.CompleteAsync();
                     r.Ids.Add(item);
                 }
@@ -92,6 +90,27 @@ namespace ZLJ.Application.OU
             }
             return r;
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [AbpAuthorize(PermissionNames.AdministratorBaseInfoOrganizationUnitDelete)]
+        public async Task DeleteAsync(EntityDto<long> input)
+        {
+            await DeleteCore(input.Id);
+        }
+        private async Task DeleteCore(long item)
+        {
+            var entity = await (await repository.GetAllAsync()).Include(x => x.Children).Include(x => x.Parent).Where(x => x.Id == item).FirstAsync(CancellationTokenProvider.Token);
+            //await repository.DeleteAsync(entity);
+            await organizationUnitManager.DeleteAsync(item);
+            //await CurrentUnitOfWork.SaveChangesAsync();
+            //if (entity.Parent != null)
+            //    await UpdateChildrenCount(entity.Parent);
+
+        }
+
 
         [UnitOfWork(false)]
         public async Task<IList<OUDto>> GetAllAsync(GetAllInput input)
@@ -121,9 +140,9 @@ namespace ZLJ.Application.OU
             }
             dtos.ForEach(c => c.Children = dtos.Where(d => d.ParentId == c.Id).ToList());
 
-         
 
-            return dtos.Where(x=>x.ParentId== input.ParentId).ToList();
+
+            return dtos.Where(x => x.ParentId == input.ParentId).ToList();
         }
 
         [UnitOfWork(false)]
@@ -131,8 +150,8 @@ namespace ZLJ.Application.OU
         {
             var entity = await (await repository.GetAllAsync())
                               //.OfType<OrganizationUnitEntity>()
-                              .AsNoTrackingWithIdentityResolution().Include(c=>c.Parent)
-                              .Include(c => c.Children).SingleAsync(c=>c.Id==input.Id);
+                              .AsNoTrackingWithIdentityResolution().Include(c => c.Parent)
+                              .Include(c => c.Children).SingleAsync(c => c.Id == input.Id);
             return await Map2Dto(entity);
         }
 
@@ -145,9 +164,10 @@ namespace ZLJ.Application.OU
             dto.Id = entity.Id;
             dto.ParentId = entity.ParentId;
             dto.OUType = item.OUType;
+            dto.OuTypeText = item.OUType.Enum(); //base.L() item.OUTypeText;
             dto.ParentDisplayName = entity.Parent?.DisplayName;
             dto.ChildrenCount = item.ChildrenCount;
-           
+
             return new ValueTask<OUDto>(dto);
         }
 
@@ -156,9 +176,9 @@ namespace ZLJ.Application.OU
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-          async Task UpdateChildrenCount(OrganizationUnit entity)
+        async Task UpdateChildrenCount(OrganizationUnit entity)
         {
-           ( entity as OrganizationUnitEntity).ChildrenCount = await AsyncQueryableExecuter.CountAsync((await repository.GetAllAsync()).Where(c => c.ParentId == entity.Id));
+            (entity as OrganizationUnitEntity).ChildrenCount = await AsyncQueryableExecuter.CountAsync((await repository.GetAllReadonlyAsync()).Where(c => c.ParentId == entity.Id));
         }
     }
 }

@@ -1,0 +1,144 @@
+﻿@using ZLJ.Application.Share.StaffInfo
+@using ZLJ.RCL.Components.Post
+@inherits ZLJ.RCL.Components.CreateBaseComponent<StaffInfoDto, StaffInfoCreateDto>
+
+<SectionContent SectionName=@($"{Master}-create-body")>
+    <Form @ref="frm" ValidateOnChange="true" Model="createDto" LabelColSpan="6" WrapperColSpan="18" OnFinish="OnFinish" Loading="IsBusy">
+        <GridRow>
+            <GridCol Span="8">
+                <FormItem>
+                    <Input @bind-Value="context.Name" AllowClear="true" />
+                </FormItem>
+            </GridCol>
+            <GridCol Span="8">
+                <FormItem>
+                    <EnumRadioGroup @bind-Value="context.Gender" ButtonStyle="RadioButtonStyle.Outline" />
+                </FormItem>
+            </GridCol>
+
+
+            <GridCol Span="8">
+                <FormItem>
+                    <Checkbox @bind-Value="context.IsActive" />
+                </FormItem>
+            </GridCol>
+
+        </GridRow>
+        <GridRow>
+            <GridCol Span="8">
+                <FormItem>
+                    <Input @bind-Value="context.IdNumber" AllowClear="true" />
+                </FormItem>
+            </GridCol>
+            <GridCol Span="8">
+                <FormItem>
+                    <DatePicker @bind-Value="context.Birthday" />
+                </FormItem>
+            </GridCol>
+            <GridCol Span="8">
+                <FormItem>
+                    <Input @bind-Value="context.EmailAddress" AllowClear="true" />
+                </FormItem>
+            </GridCol>
+
+        </GridRow>
+        <GridRow>
+            <GridCol Span="8">
+                <FormItem>
+                    <Input @bind-Value="context.PhoneNumber" AllowClear="true" />
+                </FormItem>
+            </GridCol>
+              <GridCol Span="8">   <FormItem Label="所属地区">
+                <AdministrativeTreeSelect @bind-TreeIdNullable=context.AreaId IsKeyId AllowClear />
+            </FormItem>
+            </GridCol>
+            <GridCol Span="8">
+                <FormItem>
+                @* <FormItem LabelColSpan="3" WrapperColSpan="21"> *@
+                    <Input @bind-Value="context.CurrentAddress" AllowClear="true" />
+                </FormItem>
+            </GridCol>
+        </GridRow>
+        <GridRow>
+            <GridCol Span="8">
+                <FormItem>
+                    <DatePicker @bind-Value="context.InDate" AllowClear="true" />
+                </FormItem>
+            </GridCol>
+            <GridCol Span="8">
+                <FormItem>
+                    <DatePicker @bind-Value="context.OutDate" AllowClear="true" />
+                </FormItem>
+            </GridCol>
+        </GridRow>
+        <GridRow>
+
+        </GridRow>
+        <GridRow>
+            <GridCol Span="24">
+                <FormItem LabelColSpan="2" WrapperColSpan="22">
+                    <Checkbox @bind-Value="context.IsEnableAccount" />
+                </FormItem>
+            </GridCol>
+        </GridRow>
+        @if (context.IsEnableAccount)
+        {
+            <GridRow>
+                <GridCol Span="8">
+                    <FormItem>
+                        <Input @bind-Value="context.BaseDto.UserName" AllowClear="true" />
+                    </FormItem>
+                </GridCol>
+                <GridCol Span="8">
+                    <FormItem>
+                        <InputPassword @bind-Value="context.Password" AllowClear="true" />
+                    </FormItem>
+                </GridCol>
+                <GridCol Span="8">
+                    <FormItem>
+                        <LabelTemplate>
+                            <div class="frm-item-label-box">
+                                <Tooltip>
+                                    <TitleTemplate>多次登录失败后是否锁定？</TitleTemplate>
+                                    <ChildContent>
+
+                                        <Icon Style="" Type="@IconType.Outline.QuestionCircle" Width="1.1rem" Height="1.1rem" />
+
+                                    </ChildContent>
+                                </Tooltip>
+                                登录锁定
+                            </div>
+                        </LabelTemplate>
+                        <ChildContent>
+                            <Checkbox @bind-Value="context.IsLockoutEnabled" />
+                        </ChildContent>
+                    </FormItem>
+                </GridCol>
+            </GridRow>
+        }
+        
+
+        <GridRow>
+            <GridCol Span="24">
+                <FormItem Label="角色" LabelColSpan="2" WrapperColSpan="22">
+                    <PostSelect @bind-Names="context.RoleNames" />
+                </FormItem>
+            </GridCol>
+        </GridRow>
+       
+        
+        <GridRow>
+            <GridCol Span="24">
+                <FormItem LabelColSpan="2" WrapperColSpan="22">
+                    <Input @bind-Value="context.Remark" AllowClear="true" />
+                </FormItem>
+            </GridCol>
+        </GridRow>
+    </Form>
+</SectionContent>
+
+<SectionContent SectionName=@($"{Master}-create-btns")>
+    <Checkbox @bind-Value="isSaveAndContinue">保存后继续新增</Checkbox>
+    <Button OnClick="BtnResetClick" Icon="@IconType.Outline.Redo" Loading="isReseting" Disabled="IsBusy">重置</Button>
+    <Button OnClick="BtnSaveClick" Type="@ButtonType.Primary" Loading="isSaving" Disabled="IsBusy" Icon="@IconType.Outline.Save">保存</Button>
+</SectionContent>

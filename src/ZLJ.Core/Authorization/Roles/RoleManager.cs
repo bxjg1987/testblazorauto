@@ -1,10 +1,11 @@
-﻿using Abp.Authorization.Roles;
+﻿using Abp.Authorization;
+using Abp.Authorization.Roles;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
 using Abp.Organizations;
 using Abp.Runtime.Caching;
 using Abp.Zero.Configuration;
-using BXJG.Utils.Extensions;
+using BXJG.Utils.Role;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
@@ -14,9 +15,10 @@ using System.Threading.Tasks;
 using ZLJ.Core.Authorization.Users;
 using ZLJ.Core.BaseInfo.Post;
 
+
 namespace ZLJ.Core.Authorization.Roles
 {
-    public class RoleManager : AbpRoleManager<Role, User>
+    public class RoleManager : BXJGUtilsRoleManager<Role, User>
     {
         public RoleManager(
             RoleStore store,
@@ -49,7 +51,7 @@ namespace ZLJ.Core.Authorization.Roles
         //    return base.SetGrantedPermissionsAsync(roleId, permissions.Union(p).GroupBy(c => c.Name).SelectMany(c => c));
         //}
 
-        ////上面的方法内部会调用下面的方法。
+        //上面的方法内部会调用下面的方法。
         //public override Task SetGrantedPermissionsAsync(Role role, IEnumerable<Permission> permissions)
         //{
         //    var p = permissions.SelectMany(c => c.GetDependencePermissions()).Distinct();
@@ -60,7 +62,7 @@ namespace ZLJ.Core.Authorization.Roles
 
         //    //foreach (var item in tmp)
         //    //{
-        //    //    item.RecursionUp(x => { 
+        //    //    item.RecursionUp(x => {
         //    //        list.Add(x);
         //    //        return true;
         //    //    });
@@ -68,7 +70,6 @@ namespace ZLJ.Core.Authorization.Roles
 
         //    return base.SetGrantedPermissionsAsync(role, list);
         //}
-
         protected override Role MapStaticRoleDefinitionToRole(int tenantId, StaticRoleDefinition staticRoleDefinition)
         {
             //return base.MapStaticRoleDefinitionToRole(tenantId, staticRoleDefinition);

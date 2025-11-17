@@ -35,6 +35,7 @@ using Abp.Dependency;
 using Castle.MicroKernel.Lifestyle.Scoped;
 using BXJG.Utils;
 using BXJG.Utils.EFCore;
+using ZLJ.Core.OU;
 
 namespace ZLJ.EntityFrameworkCore
 {

@@ -1,14 +1,10 @@
-﻿using Abp.Application.Services.Dto;
-using BXJG.Utils.Application.Share.GeneralTree;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ZLJ.Application.Share.OU
 {
-    public class GetAllInput : GeneralTreeGetTreeInput
+    public class GetAllInput:ZLJ.Application.Common.Share.OU.GetListInput
     {
     }
 }

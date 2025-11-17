@@ -8,7 +8,7 @@
 
 @inherits ZLJ.RCL.Components.ListBaseComponent<AssociatedCompanyDto, long, PagedAndSortedResultRequest<AssociatedCompanyCondition>>
 
-
+<PageTitle>客户档案</PageTitle>
 <Flex Gap="FlexGap.Small" Vertical Justify="FlexJustify.SpaceBetween">
     <Flex Gap="FlexGap.Small" Justify="FlexJustify.SpaceBetween">
         @* 左侧 *@
@@ -103,7 +103,7 @@
            Size="TableSize.Small"
            Bordered="true"
            ScrollY="71.5vh"
-           ScrollX="1850px">
+           ScrollX="1550px">
 
         <Selection Key="@context.Id.ToString()" Width="50" Fixed="ColumnFixPlacement.Left" />
         <Column TData=AssociatedCompanyDto Title="行号" Width="60" Fixed="ColumnFixPlacement.Left">
@@ -150,7 +150,10 @@
         <Button OnClick="CloseCreateDialog">关闭</Button>
     </Template>;
 }
-<Modal DestroyOnClose="true" Footer="renderFragment" @bind-Visible="isCreateDialogVisible" Draggable="true" Class="frm-dal" AfterClose="OnAfterCloseDialog">
+<Modal DestroyOnClose="true"   Footer="renderFragment" @bind-Visible="isCreateDialogVisible" 
+Draggable="true" Class="frm-dal" 
+        Width=@("40vw")
+AfterClose="OnAfterCloseDialog">
     <TitleTemplate>
         <Icon Type="plus" Theme="IconThemeType.Outline" />
         新增@(FuncName)
@@ -172,12 +175,11 @@
        @bind-Visible="isShowDetailUpdate"
        Draggable="true"
        Title="设备详情"
-       Width=@("60vw")
+       Width=@("40vw") Class="frm-dal"
        Maximizable
        AfterClose="OnAfterCloseDialog"
        Footer="renderFragment1"
-       DefaultMaximized=false
-       MaxBodyHeight=@("86vh")>
+       DefaultMaximized=false>
     @*<TitleTemplate>
     <SectionOutlet SectionName=@(FuncName + "-detail-update-title") />
     </TitleTemplate> *@

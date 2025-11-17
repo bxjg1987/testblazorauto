@@ -25,8 +25,7 @@ namespace ZLJ.Admin.CoreRCL.DataDictionary
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
-            await base.InitPermission(BXJG.Utils.Application.Share.Auth.PermissionNames.GeneralTreeCreatePermissionName,
-                                      BXJG.Utils.Application.Share.Auth.PermissionNames.GeneralTreeUpdatePermissionName, BXJG.Utils.Application.Share.Auth.PermissionNames.GeneralTreeDeletePermissionName);
+            await base.InitPermission(PermissionNames.AdministratorBaseInfoPostCreate, PermissionNames.AdministratorBaseInfoPostUpdate, PermissionNames.AdministratorBaseInfoPostDelete);
         }
         //让条件实现IReset接口去实现
         ///// <summary>

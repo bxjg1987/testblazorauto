@@ -29,6 +29,7 @@
         public const string DataDictionaryMigrationValueCustomerCategory = "kehuLeibie";
         public const string DataDictionaryMigrationValuePost = "gangwei";
 
+
         public const string SharpHttpClientName = "SharpHttpClient";
 
         public const string RicohHttpClientName = "RicohHttpClient";

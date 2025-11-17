@@ -1,0 +1,114 @@
+﻿@page "/regtenant"
+@rendermode RenderMode.InteractiveServer
+@* @attribute [RenderModeAttribute(  )] *@
+@* @preserveRenderMode false *@
+@* @rendermode @(new InteractiveServerRenderMode(false)) *@
+@using AntDesign
+@using BXJG.Common.RCL
+@using Microsoft.AspNetCore.Components.Sections
+@layout PublicLayout
+@inherits ZLJ.RCL.Components.BaseComponent
+
+<PageTitle>客户注册</PageTitle>
+
+
+<section class="features-section" id="features" style=" background-color:#f3f7ff;">
+
+
+    @if (resultStatus == ResultStatus.Success)
+    {
+        <div class="container" style="min-height:70vh; ">
+
+            <Result Status="ResultStatus.Success">
+                <TitleTemplate>
+                    恭喜您，注册成功！
+                </TitleTemplate>
+                @*<SubTitleTemplate>副标题</SubTitleTemplate> *@
+                <ChildContent>
+                    <Descriptions Title="注册结果（请牢记此内容，若忘记密码请联系客服：17723896676）" Bordered>
+                        <DescriptionsItem Title="商家代码">
+                            @jg.TenancyName
+                            @* <a target="_blank" data-enhance-nav="false" href="https://sd.fsdf.com/main">https://sd.fsdf.com/main</a> *@
+                        </DescriptionsItem>
+                        <DescriptionsItem Title="登录账号">@jg.UserName</DescriptionsItem>
+
+                        <DescriptionsItem Title="密码">
+                            <Space>
+                                @if (showPassword)
+                                {
+                                    @jg.Password
+                                }
+                                else
+                                {
+                                    @pwd
+                                }
+                                <Button Icon="@(showPassword ? "eye-invisible" : "eye")" 
+                                        Type="ButtonType.Text" 
+                                        Size="ButtonSize.Small"
+                                        OnClick="TogglePasswordVisibility" Style="margin-left:1rem;" />
+                            </Space>
+                        </DescriptionsItem>
+                        @* <DescriptionsItem Span=24 Title="提示">请牢记此内容，若忘记密码请联系客服：17723896676</DescriptionsItem> *@
+                    </Descriptions>
+                </ChildContent>
+                <Extra>
+                    <Button OnClick="jrgld" Type="ButtonType.Primary" Size="ButtonSize.Large">前往管理端</Button>
+                    @* <Button Size="ButtonSize.Large">返回首页</Button> *@
+                    <a href="/" class="nav-link" data-enhance-nav="false">返回首页</a>
+                </Extra>
+            </Result>
+        </div>
+    }
+    else
+    {
+        <div class="container" style="min-height:70vh; width:40vw;">
+
+            <h2 class="section-title">客户注册</h2>
+
+            <Form Model="@model" Loading="@isSubmiting"
+                  OnFinish="OnFinish" Layout="FormLayout.Vertical" Size="FormSize.Large">
+                <input type="text" name="fakeusernameremembered" style="display:none">
+                <input type="password" name="fakepasswordremembered" style="display:none">
+
+
+                <FormItem Label="贵公司名称">
+                    <Input @bind-Value="@context.Name" AutoComplete="false" AllowClear Placeholder="请输入贵公司名称" />
+                </FormItem>
+                <FormItem Label="管理员账号">
+                    <Input @bind-Value="@context.AdminUserName" autocomplete="false" AllowClear Placeholder="请输入管理员账号" />
+                </FormItem>
+                <FormItem Label="管理员密码">
+                    <InputPassword @bind-Value="@context.AdminPassword" autocomplete="false" AllowClear Placeholder="请输入管理员密码" />
+                </FormItem>
+                <FormItem Label="管理员密码确认">
+                    <InputPassword @bind-Value="@context.AdminPassword2" autocomplete="false" AllowClear Placeholder="请再次输入管理员密码" />
+                </FormItem>
+                <FormItem Label="验证码" Required>
+                    <InputGroup Compact>
+                        <FormItem NoStyle>
+                            <Input @ref="yzm" @bind-Value="@context.YzmValue" AllowClear Placeholder="请输入验证码" Style="width: 160px" />
+                        </FormItem>
+                        <FormItem>
+                            <img style="width:140px; height:100%; margin-left:15px; margin-top:-7px; border:1px solid #ccc;" src="@yzmUrl" @onclick="YzmClick" />
+                        </FormItem>
+                    </InputGroup>
+
+
+                    <Input Value="@context.YzmKey" Type="InputType.Hidden" />
+                </FormItem>
+
+                <div Style="color:red; text-align:center; padding-bottom:.5rem; ">
+                    @msg
+                </div>
+                <FormItem>
+                    <Button Block Type="ButtonType.Primary" HtmlType="submit">提交 </Button>
+                </FormItem>
+                
+            </Form>
+           
+
+        </div>
+
+    }
+
+</section>

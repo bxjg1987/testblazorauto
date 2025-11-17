@@ -32,7 +32,8 @@ namespace ZLJ.Application.Common.ClientProxy.Extensions
             services.AddTransient<SessionAppService>();
             services.AddTransient<IAdministrativeProviderAppService, AdministrativeProviderAppService>();
 
-            services.AddTransient<IOuProviderAppService, OuProviderAppService>();
+            services.AddTransient<IOUSelectProviderAppService, OuProviderAppService>();
+
             services.AddTransient<IDataDictionaryProviderAppService, DataDictionaryProviderAppService>();
             services.AddTransient<ITokenAuthAppService, TokenAuthAppService>();
             return services;

@@ -130,7 +130,11 @@
     <script src="/app.js"></script>
 </SectionContent>
 @code {
+    [SupplyParameterFromQuery]
+    public string? TenantName { get; set; } = "default";
 
+    [SupplyParameterFromQuery]
+    public string? UserName { get; set; } = "admin";
     [SupplyParameterFromForm]
     public AuthenticateModel model { get; set; } = new AuthenticateModel
     {
@@ -144,6 +148,15 @@
     public string ReturnUrl { get; set; }
     [Inject]
     public ITokenAuthAppService TokenAuthAppService { get; set; }
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        if (model.TenancyName.IsNullOrWhiteSpaceBXJG())
+            model.TenancyName = TenantName;
+        if (model.UserNameOrEmailAddress.IsNullOrWhiteSpaceBXJG())
+            model.UserNameOrEmailAddress = UserName;
+        // model.Password = Password;
+    }
     // [Inject]
     // public IHttpClientFactory HttpClientFactory { get; set; }
 

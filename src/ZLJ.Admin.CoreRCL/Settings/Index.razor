@@ -4,13 +4,14 @@
 @using BXJG.Utils.Application.Share.Settings
 
 @attribute [ReuseTabsPage(Title = "设置中心")]
-@attribute [Authorize(PermissionNames.AdministratorSystemConfigGet)]
+@attribute [Authorize(BXJG.Utils.Application.Share.Settings.Changliang.PermissionNameGet)]
 @inherits SettingManagerComponent
 
 
+<PageTitle>设置</PageTitle>
 <Flex Gap="FlexGap.Middle">
-    <Card Style="height:85vh;min-width:17rem;">
-        <Tree TItem="SettingDefinitionGroupDto" @ref="tree" 
+    <Card Style="height:85vh;min-width:17rem; ">
+        <Tree TItem="SettingDefinitionGroupDto" @ref="tree"
               DataSource="DataSource" DefaultSelectedKey="@defaultSelectedKey"
               ChildrenExpression="x=>x.DataItem.Children"
               IsLeafExpression="x=>x.DataItem.Children==null||x.DataItem.Children.Count==0"
@@ -40,7 +41,7 @@
                     isRequired = isRequired1.Equals("True", StringComparison.OrdinalIgnoreCase);
                 }
                 //默认值
-               // item.CustomData.TryGetValue("defaultValue", out var defaultValue);
+                // item.CustomData.TryGetValue("defaultValue", out var defaultValue);
 
 
                 <FormItem Required=@isRequired>
@@ -61,44 +62,45 @@
                             }
                             @item.DisplayName：
                         </div>
-                    </LabelTemplate>   <ChildContent>
-                    @if (csharpType == "int")
-                    {
-                        var mrz = item.DefaultValue.IsNullOrWhiteSpaceBXJG() ? default : int.Parse(item.DefaultValue);
-
-                        if (item.CustomData.TryGetValue("selectValues", out var selectValues))
+                    </LabelTemplate>
+                    <ChildContent>
+                        @if (csharpType == "int")
                         {
-                            //若可选数量少，可以用Radio组件
-                            var kx = System.Text.Json.JsonSerializer.Deserialize<Dictionary<int, string>>(selectValues);
+                            var mrz = item.DefaultValue.IsNullOrWhiteSpaceBXJG() ? default : int.Parse(item.DefaultValue);
 
-                            <Select ItemLabel="x => x.Value" Value="@(int.Parse(item.Value))" ValueChanged="x => item.Value = x.ToString()" ItemValue="x => x.Key" DefaultValue="@mrz" DataSource="kx" TItem="KeyValuePair<int,string>" TItemValue="int" />
+                            if (item.CustomData.TryGetValue("selectValues", out var selectValues))
+                            {
+                                //若可选数量少，可以用Radio组件
+                                var kx = System.Text.Json.JsonSerializer.Deserialize<Dictionary<int, string>>(selectValues);
+
+                                <Select ItemLabel="x => x.Value" Value="@(int.Parse(item.Value))" ValueChanged="x => item.Value = x.ToString()" ItemValue="x => x.Key" DefaultValue="@mrz" DataSource="kx" TItem="KeyValuePair<int,string>" TItemValue="int" />
+                            }
+                            else
+                            {
+                                <AntDesign.InputNumber TValue="int" Value="@(int.Parse(item.Value))" ValueChanged="x => item.Value = x.ToString()" />
+                            }
+                        }
+                        else if (csharpType == "bool")
+                        {
+                            //var mrz = item.DefaultValue.IsNullOrWhiteSpaceBXJG() ? default : item.DefaultValue.Equals("true", StringComparison.OrdinalIgnoreCase);
+                            <Switch Checked="@(item.Value.Equals("true", StringComparison.OrdinalIgnoreCase))" CheckedChanged="x => item.Value = x.ToString()" />
                         }
                         else
                         {
-                            <AntDesign.InputNumber TValue="int" Value="@(int.Parse(item.Value))" ValueChanged="x => item.Value = x.ToString()" />
-                        }
-                    }
-                    else if (csharpType == "bool")
-                    {
-                        //var mrz = item.DefaultValue.IsNullOrWhiteSpaceBXJG() ? default : item.DefaultValue.Equals("true", StringComparison.OrdinalIgnoreCase);
-                        <Switch  Checked="@(item.Value.Equals("true", StringComparison.OrdinalIgnoreCase))" CheckedChanged="x => item.Value = x.ToString()" />
-                    }
-                    else
-                    {
-                        var mrz = item.DefaultValue;//.IsNullOrWhiteSpaceBXJG() ? default : int.Parse(item.DefaultValue);
+                            var mrz = item.DefaultValue;//.IsNullOrWhiteSpaceBXJG() ? default : int.Parse(item.DefaultValue);
 
-                        if (item.CustomData.TryGetValue("selectValues", out var selectValues))
-                        {
-                            //若可选数量少，可以用Radio组件
-                            var kx = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, string>>(selectValues);
+                            if (item.CustomData.TryGetValue("selectValues", out var selectValues))
+                            {
+                                //若可选数量少，可以用Radio组件
+                                var kx = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, string>>(selectValues);
 
-                            <Select ItemLabel="x => x.Value" Value="@item.Value" ValueChanged="x => item.Value = x" ItemValue="x => x.Key" DefaultValue="@mrz" DataSource="kx" TItem="KeyValuePair<string,string>" TItemValue="string" />
-                        }
-                        else
-                        {
-                            <Input DefaultValue="@mrz" @bind-Value="@item.Value" />
-                        }
-               
+                                <Select ItemLabel="x => x.Value" Value="@item.Value" ValueChanged="x => item.Value = x" ItemValue="x => x.Key" DefaultValue="@mrz" DataSource="kx" TItem="KeyValuePair<string,string>" TItemValue="string" />
+                            }
+                            else
+                            {
+                                <Input DefaultValue="@mrz" @bind-Value="@item.Value" />
+                            }
+
 
                         }
                     </ChildContent>

@@ -66,6 +66,12 @@ namespace ZLJ.Web.BlazorAuto.Components
                     return default;
                 if (HttpContext.Request.Path.StartsWithSegments("/test"))
                     return new InteractiveServerRenderMode(false);
+                if (HttpContext.Request.Path.Equals("/"))
+                    return default;
+                if (HttpContext.Request.Path.StartsWithSegments("/static"))
+                    return default;
+                if (HttpContext.Request.Path.StartsWithSegments("/regtenant"))
+                    return default;// 不晓得为啥，必须去页面指定server渲染模式  return new InteractiveServerRenderMode(false);
 
                 return new InteractiveAutoRenderMode();//必须开启预渲染，否则客户端部分的组件引用js或执行js代码无效
             // return new InteractiveServerRenderMode(false);

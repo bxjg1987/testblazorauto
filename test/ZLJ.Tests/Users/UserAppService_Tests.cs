@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Xunit;
 using ZLJ.Application.Common.StaffInfo;
 using ZLJ.Application.Common.Users;
-using ZLJ.Application.Users;
+using ZLJ.Application.StaffInfo;
 
 namespace ZLJ.Tests.Users;
 

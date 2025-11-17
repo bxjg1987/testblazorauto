@@ -1,6 +1,7 @@
 ﻿using Abp.Authorization;
 using Abp.IdentityFramework;
 using Abp.Runtime.Session;
+using BXJG.Utils.Application.Share.User;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,6 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using ZLJ.Application.Common.Users;
 using ZLJ.Core.Authorization;
 using ZLJ.Core.Authorization.Users;
 
@@ -31,10 +31,10 @@ namespace ZLJ.Application.Common.UserCenter
             _userManager = userManager;
             _logInManager = logInManager;
             _passwordHasher = passwordHasher;
-          
+
         }
 
-        public async Task ChangePassword(ChangePasswordDto input)
+        public async Task ChangePassword(UserChangePasswordDto input)
         {
             //if (_abpSession.UserId == null)
             //{
@@ -55,20 +55,20 @@ namespace ZLJ.Application.Common.UserCenter
                 sdfsd.CheckErrors(base.LocalizationManager);
             }
             else
-                IdentityResult.Failed(new IdentityError {  Description="旧密码错误！"}).CheckErrors(LocalizationManager);
-         
+                IdentityResult.Failed(new IdentityError { Description = "旧密码错误！" }).CheckErrors(LocalizationManager);
+
             //  var loginAsync = await _logInManager.LoginAsync(user.UserName, input.CurrentPassword,  shouldLockout: false);
-          //  if (loginAsync.Result != AbpLoginResultType.Success)
-          //  {
-          //      throw new UserFriendlyException("Your 'Existing Password' did not match the one on record.  Please try again or contact an administrator for assistance in resetting your password.");
-          //  }
-          //  //if (!new Regex(PasswordRegex).IsMatch(input.NewPassword))
-          //  //{
-          //  //    throw new UserFriendlyException("Passwords must be at least 8 characters, contain a lowercase, uppercase, and number.");
-          //  //}
-          //  user.Password = _passwordHasher.HashPassword(user, input.NewPassword);
-          //await  CurrentUnitOfWork.SaveChangesAsync();
-          //  return true;
+            //  if (loginAsync.Result != AbpLoginResultType.Success)
+            //  {
+            //      throw new UserFriendlyException("Your 'Existing Password' did not match the one on record.  Please try again or contact an administrator for assistance in resetting your password.");
+            //  }
+            //  //if (!new Regex(PasswordRegex).IsMatch(input.NewPassword))
+            //  //{
+            //  //    throw new UserFriendlyException("Passwords must be at least 8 characters, contain a lowercase, uppercase, and number.");
+            //  //}
+            //  user.Password = _passwordHasher.HashPassword(user, input.NewPassword);
+            //await  CurrentUnitOfWork.SaveChangesAsync();
+            //  return true;
         }
 
     }

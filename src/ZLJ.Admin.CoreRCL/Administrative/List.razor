@@ -6,6 +6,7 @@
 @attribute [Authorize(PermissionNames.BXJGBaseInfoAdministrative)]
 @inherits TreeListBaseComponent<AdministrativeDto,GetAdministrativeInput>
 
+<PageTitle>省市区</PageTitle>
 <Flex Gap="FlexGap.Small" Vertical Justify="FlexJustify.SpaceBetween">
     <Flex Gap="FlexGap.Small" Justify="FlexJustify.SpaceBetween">
          @* 左侧 *@
@@ -43,7 +44,7 @@
     </Flex>
 
     <Table @ref="table"
-           TreeChildren="GetTreeChildren"
+           TreeChildren=GetTreeChildren
            TItem="AdministrativeDto"
            Total="TotalCount"
            @bind-SelectedRows="SelectedItems"
@@ -53,7 +54,7 @@
            HidePagination=true
            RowClassName="@(r=>r.RowIndex%2==0?"even":"odd")"
            RemoteDataSource="true"
-           
+          
            OnRow="OnRow"
            Size="TableSize.Small"
            Bordered="true"

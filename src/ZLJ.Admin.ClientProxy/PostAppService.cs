@@ -13,10 +13,10 @@ using BXJG.Utils.Application.Share.Dtos;
 
 namespace ZLJ.Admin.ClientProxy
 {
-    public class PostAppService: IPostAppService
+    public class PostAppService : IPostAppService
     {
         HttpClient httpClient;
-        public PostAppService(IHttpClientFactory httpClientFactory) 
+        public PostAppService(IHttpClientFactory httpClientFactory)
         {
             httpClient = httpClientFactory.CreateHttpClientAdmin();
         }
@@ -26,7 +26,7 @@ namespace ZLJ.Admin.ClientProxy
             return await httpClient.Post<BatchOperationOutput<int>>("post/BatchDelete", input);
         }
 
-        public async Task<PostDto> CreateAsync(CreatePostDto input)
+        public async Task<PostDto> CreateAsync(PostCreateDto input)
         {
             return await httpClient.Post<PostDto>("post/Create", input);
         }

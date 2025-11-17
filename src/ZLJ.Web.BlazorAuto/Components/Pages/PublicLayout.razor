@@ -1,0 +1,69 @@
+﻿@inherits LayoutComponentBase
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link href="/css/public.css" rel="stylesheet" />
+</head>
+<body style="padding:0;  margin:0; width:100%;height:100%;">
+    <div class="landing-page">
+        <!-- 顶部固定导航 -->
+        <nav class="top-nav">
+            <div class="nav-container">
+                <div class="nav-logo" style="cursor: pointer;">
+                    <i class="fas fa-print" style="color: #f0f5fa; margin-right: 8px; font-size: 24px;"></i>
+                    <a class="logo-text" href="/#" data-enhance-nav="false">xxx管理系统</a>
+                </div>
+                <div class="nav-menu">
+                    <a href="/#" class="nav-link" data-enhance-nav="false">首页</a>
+                    <a href="#features" class="nav-link" data-enhance-nav="false">核心功能</a>
+                    <a href="#pricing" class="nav-link" data-enhance-nav="false">价格方案</a>
+                    <a href="/#" class="nav-link" data-enhance-nav="false">使用说明</a>
+                </div>
+                <div class="nav-contact">
+                    <span class="contact-phone">📞 手机号：17723896676</span>
+                    <span class="contact-wechat">微信同号</span>
+                </div>
+            </div>
+        </nav>
+
+        @Body
+
+        <!-- 页脚 -->
+        <footer class="footer">
+            <div class="container">
+                <p style="margin-bottom:0;">&copy; @DateTime.Now.Year xxx管理系统</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- 回到顶部按钮 -->
+    <button id="backToTop" class="back-to-top" onclick="scrollToTop()" title="回到顶部">
+        <span class="back-to-top-icon">↑</span>
+    </button>
+
+    <script>
+        // 显示/隐藏回到顶部按钮
+        window.onscroll = function() {
+            var backToTopBtn = document.getElementById("backToTop");
+            if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+                backToTopBtn.style.display = "block";
+            } else {
+                backToTopBtn.style.display = "none";
+            }
+        };
+
+        // 回到顶部功能
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+    </script>
+
+</body>
+</html>

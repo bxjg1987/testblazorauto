@@ -58,7 +58,6 @@
     <Compile Remove="AdminConsts.cs" />
     <Compile Remove="Authorization\Accounts\IAccountAppService.cs" />
     <Compile Remove="BaseInfo\Administrative\IBXJGBaseInfoAdministrativeAppService.cs" />
-    <Compile Remove="BaseInfo\StaffInfo\IBXJGBaseInfoStaffInfoAppService.cs" />
     <Compile Remove="Dto\ComboboxDto.cs" />
     <Compile Remove="Dto\GetForSelectInput.cs" />
     <Compile Remove="Dto\GetPageDataInput.cs" />
@@ -73,7 +72,13 @@
     <Compile Remove="Sessions\SessionAppService.cs" />
     <Compile Remove="Settings\SettingsAppService.cs" />
     <Compile Remove="Users\IUserAppService.cs" />
+    <Compile Remove="Users\UserAppService.cs" />
     <Compile Remove="ZLJNavigationProvider.cs" />
+	  <Compile Remove="OU\GetAllInput.cs" />
+	  <Compile Remove="OU\OUDto.cs" />
+	  <Compile Remove="OU\OUEditDto.cs" />
+	  <Compile Remove="Roles\RoleAppService.cs" />
+
   </ItemGroup>
   <ItemGroup>
     <None Remove="Localization\SourceFiles\Admin-en.xml" />
@@ -93,6 +98,7 @@
     <Folder Include="EventHandlers\" />
     <Folder Include="Sessions\" />
     <Folder Include="Settings\" />
+    <Folder Include="Users\" />
   </ItemGroup>
 
 </Project>

@@ -2,7 +2,6 @@
 using Abp.Dependency;
 using Abp.Modules;
 using System.Reflection;
-using ZLJ.Application.BaseInfo.StaffInfo;
 using Abp.Configuration.Startup;
 
 using Abp.Threading.BackgroundWorkers;

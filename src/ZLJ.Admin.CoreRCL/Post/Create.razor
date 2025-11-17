@@ -6,35 +6,51 @@
 @* 可能用弹窗或页面承载，所以核心组件不应该这样判断权限 *@
 @* @attribute [Authorize(PermissionNames.AdministratorBaseInfoPost)] *@
 
-@inherits CreateBaseComponent< PostDto,CreatePostDto>
+@inherits CreateBaseComponent< PostDto,PostCreateDto>
 
 <SectionContent SectionName=@(FuncName + "-create-body")>
-    <Form @ref="frm" ValidateOnChange="true" Model="createDto" LabelColSpan="4" WrapperColSpan="20" OnFinish="OnFinish">
-        <FormItem Label="名称">
-            <Input @bind-Value="@context.DisplayName" />
-        </FormItem>
-        <FormItem Label="备注">
-            <Input @bind-Value="@context.Description" />
-        </FormItem>
-        <FormItem Label="权限" Style="max-height:60vh; overflow-y:auto;">
-            <TreePermission DefaultExpandParent @bind-CheckedKeys="createDto.GrantedPermissions" />
-        </FormItem>
+    <Form @ref="frm" ValidateOnChange="true" Model="createDto" LabelColSpan="3" WrapperColSpan="21" OnFinish="OnFinish">
+        <Row Gutter="0">
+            <Col Span="24">
+            <FormItem Label="名称">
+                <Input @bind-Value="@context.DisplayName" AllowClear />
+            </FormItem>
+            </Col>
+        </Row>
+        <Row Gutter="0">
+            <Col Span="8">
+            <FormItem LabelColSpan="9" WrapperColSpan="15">
+                <Checkbox @bind-Value="@context.IsDefault" />
+            </FormItem>
+            </Col>
+            <Col Span="8">
+            <FormItem LabelColSpan="9" WrapperColSpan="15">
+                <Checkbox @bind-Value="@context.IsStatic" />
+            </FormItem>
+            </Col>
+            <Col Span="8">
+            <FormItem LabelColSpan="9" WrapperColSpan="15">
+                <Checkbox @bind-Value="@context.IsAttention" />
+            </FormItem>
+            </Col>
+        </Row>
+       
+
+        <Row Gutter="0">
+            <Col Span="24">
+            <FormItem Label="备注">
+                <Input @bind-Value="@context.Description" AllowClear />
+            </FormItem>
+            </Col>
+        </Row>
+        <Row Gutter="0">
+            <Col Span="24">
+            <FormItem Label="权限" >
+                <TreePermission Style="height:50vh; overflow-y:auto;" DefaultExpandParent @bind-CheckedKeys="createDto.GrantedPermissions" />
+            </FormItem>
+            </Col>
+        </Row>
     </Form>
-
-   
-
-@*     @if (createDto != null)
-    {
-        <ul>
-            @foreach (var x in createDto.GrantedPermissions)
-            {
-                <li>
-                    @x
-                </li>
-            }
-        </ul>
-    } *@
-
 </SectionContent>
 
 <SectionContent SectionName=@(FuncName + "-create-btns")>

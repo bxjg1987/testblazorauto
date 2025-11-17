@@ -9,67 +9,101 @@
 </SectionContent>
 <SectionContent SectionName=@(FuncName + "-detail-update-body")>
 
-    @if (isEdit)
-    {
-        <Form @ref="frm" ValidateOnChange="true" Model="editDto" LabelColSpan="4" WrapperColSpan="20" OnFinish="OnFinish">
 
-            @*    <FormItem Label="显示名">
-        <Input @bind-Value="@context.DisplayName" />
-        </FormItem>
-        <FormItem Label="备注">
-        <Input @bind-Value="@context.Description" />
-        </FormItem>
-        <FormItem NoStyle=true>
-        <Input Value="@context.Id" Type="hidden" />
-        </FormItem>
-        *@
-                <FormItem Label="名称">
-            <Input @bind-Value="@context.DisplayName" />
-        </FormItem>
-        <FormItem Label="备注">
-            <Input @bind-Value="@context.Description" />
-        </FormItem>
-        <FormItem Label="权限" Style="max-height:60vh; overflow-y:auto;">
-    <TreePermission DefaultExpandParent   @bind-CheckedKeys="@editDto.GrantedPermissions" />
-        </FormItem>
-        </Form>
+    <Form @ref="frm" ValidateOnChange="true" Model="editDto" LabelColSpan="3" WrapperColSpan="21" OnFinish="OnFinish">
 
-    
-           
-       
-    }
-    else
-    {
-        <Descriptions Bordered Size="DescriptionsSize.Small">
-            <DescriptionsItem Title="名称">
-                @dto?.DisplayName
-            </DescriptionsItem>
-            <DescriptionsItem Title="名称">
-                @dto?.Description
-            </DescriptionsItem>
-        </Descriptions>
-         <TreePermission Disabled CheckOnClickNode="false" Selectable="false" Checkable DefaultCheckedKeys="@dto.GrantedPermissions" DefaultExpandParent  />
-        @*    <GridRow>
-    <GridCol Span="4">显示名</GridCol>
-    <GridCol Span="20">@dto?.DisplayName</GridCol>
-    </GridRow>
-    <GridRow>
-    <GridCol Span="4">备注</GridCol>
-    <GridCol Span="20">@dto?.Description</GridCol>
-    </GridRow> *@
-    }
-
-@*         @if (editDto != null)
-        {
-            <ul>
-                @foreach (var x in editDto.GrantedPermissions)
+        <Row Gutter="0">
+            <Col Span="24">
+            <FormItem Label="名称">
+                @if (IsShowUpdate)
                 {
-                    <li>
-                        @x
-                    </li>
+                    <Input @bind-Value="@context.DisplayName" AllowClear />
                 }
-            </ul>
-        } *@
+                else
+                {
+                    <span class="frm-field-readonly">
+                        @dto.DisplayName
+                    </span>
+                }
+            </FormItem>
+            </Col>
+        </Row>
+        <Row Gutter="0">
+            <Col Span="8">
+            <FormItem LabelColSpan="9" WrapperColSpan="15">
+                @if (IsShowUpdate)
+                {
+                    <Checkbox @bind-Value="@context.IsDefault" />
+                }
+                else
+                {
+                    <Checkbox @bind-Value="@dto.IsDefault" Disabled />
+                }
+            </FormItem>
+            </Col>
+            <Col Span="8">
+            <FormItem LabelColSpan="9" WrapperColSpan="15">
+                @if (IsShowUpdate)
+                {
+                    <Checkbox @bind-Value="@context.IsStatic" />
+                }
+                else
+                {
+                    <Checkbox @bind-Value="@dto.IsStatic" Disabled />
+                }
+            </FormItem>
+            </Col>
+            <Col Span="8">
+            <FormItem LabelColSpan="9" WrapperColSpan="15">
+                @if (IsShowUpdate)
+                {
+                    <Checkbox @bind-Value="@context.IsAttention" />
+                }
+                else
+                {
+                    <Checkbox @bind-Value="@dto.IsAttention" Disabled />
+                }
+            </FormItem>
+            </Col>
+        </Row>
+        <Row Gutter="0">
+            <Col Span="24">
+            <FormItem Label="备注">
+                @if (IsShowUpdate)
+                {
+                    <Input @bind-Value="@context.Description" AllowClear />
+                }
+                else
+                {
+                    <span class="frm-field-readonly">
+                        @dto.DisplayName
+                    </span>
+                }
+            </FormItem>   </Col>
+        </Row>
+        <Row Gutter="0">
+            <Col Span="24">
+            <FormItem Label="权限">
+
+
+                @if (IsShowUpdate)
+                {
+                    <TreePermission KeyExpression="x => x.DataItem.Name" Style="height:50vh; overflow-y:auto;" DefaultExpandParent @bind-CheckedKeys="@editDto.GrantedPermissions" />
+                }
+                else
+                {
+                    <TreePermission KeyExpression="x=>x.DataItem.Name" Disabled  DisabledExpression="x=>true"  Style="height:50vh; overflow-y:auto;" DefaultExpandParent @bind-CheckedKeys="@dto.GrantedPermissions" />
+                }
+
+
+
+            </FormItem>
+            </Col>
+        </Row>
+
+    </Form>
+
+
 
 </SectionContent>
 <SectionContent SectionName=@(FuncName + "-detail-update-btns")>

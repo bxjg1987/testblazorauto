@@ -12,7 +12,16 @@
     <Compile Remove="Authorization\Permissions\GetAllPermissionInput.cs" />
   </ItemGroup>
 
-
+	<ItemGroup>
+		<Compile Remove="Roles\CreateRoleDto.cs" />
+		<Compile Remove="Roles\GetRolesInput.cs" />
+		<Compile Remove="Roles\IRoleAppService.cs" />
+		<Compile Remove="Roles\PagedRoleResultRequestDto.cs" />
+		<Compile Remove="Roles\RoleDto.cs" />
+		<Compile Remove="Roles\RoleEditDto.cs" />
+		<Compile Remove="Roles\RoleListDto.cs" />
+		<Compile Remove="Roles\RoleSelectDto.cs" />
+	</ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ZLJ.Application.Common.Share\ZLJ.Application.Common.Share.csproj" />

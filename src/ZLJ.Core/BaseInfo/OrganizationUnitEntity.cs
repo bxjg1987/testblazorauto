@@ -5,16 +5,14 @@ using BXJG.Utils.GeneralTree;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ZLJ.Core.Localization;
 using ZLJ.Core.Share;
 
-namespace ZLJ.Core.BaseInfo
+namespace ZLJ.Core.OU
 {
     public class OrganizationUnitEntity : OrganizationUnit, IGeneralTree<OrganizationUnitEntity>
     {
@@ -25,7 +23,7 @@ namespace ZLJ.Core.BaseInfo
         /// </summary>
         public OUType OUType { get; set; }
         [NotMapped]
-        public string OUTypeText => OUType.Enum();
+        public string OUTypeText { get; set; }
         [ConcurrencyCheck]
         public int ChildrenCount { get; set; }
         OrganizationUnitEntity IGeneralTree<OrganizationUnitEntity>.Parent

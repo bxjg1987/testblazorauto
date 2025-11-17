@@ -32,7 +32,7 @@ namespace ZLJ.EntityFrameworkCore.EntityFrameworkCore.Seed.BaseInfo
         {
             var items = new List<Tuple<string, List<string>, string>>
             {
-                new("设备品牌", new List<string> {"夏普", "施乐", "爱普生", "理光",},
+                new("设备品牌", new List<string> {"夏普", "施乐", "爱普生", "理光","京瓷"},
                     ZLJ.Core.Share.ZLJConsts.DataDictionaryMigrationValuePrinterBrand),
                 new("客户类别", new List<string> { "供应商及客户","供应商", "客户",  },
                     ZLJ.Core.Share.ZLJConsts.DataDictionaryMigrationValueCustomerCategory),
@@ -60,11 +60,13 @@ namespace ZLJ.EntityFrameworkCore.EntityFrameworkCore.Seed.BaseInfo
                 var item = new DataDictionaryEntity
                 {
                     Code = currentCode,
+                    Name = itemConfig.Item3,
                     DisplayName = itemConfig.Item1,
                     TenantId = _tenantId,
                     Children = new List<DataDictionaryEntity>(),
-                    IsSysDefine = true, Name= itemConfig.Item3,
+                    IsSysDefine = true,
                 };
+                _set.Add(item); _context.SaveChanges();
                 if (!itemConfig.Item2.IsNullOrEmpty())
                 {
                     for (var i = 0; i < itemConfig.Item2.Count; i++)
@@ -79,7 +81,7 @@ namespace ZLJ.EntityFrameworkCore.EntityFrameworkCore.Seed.BaseInfo
                     }
                 }
 
-                _set.Add(item);
+
                 _context.SaveChanges();
 
                 //if (!itemConfig.Item3.IsNullOrWhiteSpace())

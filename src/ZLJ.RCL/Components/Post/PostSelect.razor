@@ -1,0 +1,50 @@
+﻿@using ZLJ.Application.Common.Share.Post
+@inherits BaseComponent
+
+<CheckboxGroup Options="@data" @bind-Value="@Names" TValue="string" T OnChange="OnChange2" />
+
+@code {
+
+    [Parameter]
+    public string[] Names { get; set; }
+
+    [Parameter]
+    public EventCallback<string[]> NamesChanged { get; set; }
+
+    [CascadingParameter]
+    [Parameter]
+    public IEnumerable<PostForSelectDto> Posts { get; set; } = new List<PostForSelectDto>();
+
+
+    CheckboxOption<string>[] data = Array.Empty<CheckboxOption<string>>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        if (Posts != null && Posts.Any())
+        {
+        }
+        else
+        {
+            await InitDataSource();
+        }
+        data = Posts.Select(x => new CheckboxOption<string> { Checked = x.IsSelected, Label = x.DisplayText, Value = x.Name }).ToArray();
+        Posts = null;
+    }
+
+    async Task OnChange2(string[] checkedValues)
+    {
+
+        await NamesChanged.InvokeAsync(checkedValues);
+        ///Console.WriteLine($"2 checked = {JsonSerializer.Serialize(checkedValues)}");
+    }
+    /// <summary>
+    /// 与后端交互，它提供了常用扩展方法
+    /// </summary>
+    protected virtual HttpClient HttpClient => httpClient ??= HttpClientFactory.CreateHttpClientCommon();
+    async Task InitDataSource()
+    {
+        var r = await HttpClient.Post<PagedResultDto<PostForSelectDto>>("PostProvider", "getall", new { }, null);
+        Posts = r.Items;
+    }
+}
