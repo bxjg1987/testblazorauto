@@ -18,6 +18,12 @@ namespace BXJG.Utils.Application.Roles
             CreateMap<AbpRoleBase, RoleSelectDto>().ForMember(x=>x.DisplayText,x=>x.MapFrom(d=>d.DisplayName))
                                                    .ForMember(x => x.Value, x => x.MapFrom(d => d.Name))
                                                    .ForMember(x => x.IsSelected, x => x.MapFrom(d => d.IsDefault));
+            
+            CreateMap<AbpRoleBase, RoleDto>().IncludeBase<AbpRoleBase, RoleSelectDto>();
+
+            CreateMap<RoleCreateDto, AbpRoleBase>();
+
+            CreateMap<RoleEditDto, AbpRoleBase>();
         }
     }
 }

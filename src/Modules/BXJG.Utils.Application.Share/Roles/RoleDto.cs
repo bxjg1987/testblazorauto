@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BXJG.Common.Contracts;
-
-public interface IHaveKeywords
+namespace BXJG.Utils.Application.Share.Roles
 {
-    string? Keywords { get; set; }
+    public class RoleDto:RoleSelectDto
+    {
+    }
 }
