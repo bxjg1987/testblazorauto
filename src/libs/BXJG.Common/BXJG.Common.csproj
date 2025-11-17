@@ -28,14 +28,14 @@
 
 
 	<ItemGroup>
-		<PackageReference Include="FastCloner" Version="3.3.16" />
+		<PackageReference Include="FastCloner" Version="3.3.17" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="10.0.0" />
 		<PackageReference Include="System.Net.Http.Json" Version="10.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.0" />
 		<PackageReference Include="SkiaSharp" Version="3.119.1" />
-		<PackageReference Include="System.Linq.Dynamic.Core" Version="1.6.10" />
+		<PackageReference Include="System.Linq.Dynamic.Core" Version="1.7.0" />
 		<!--<PackageReference Include="System.Net.Http.Json" Version="9.0.4" />-->
 		<PackageReference Include="TinyPinyin.Net" Version="1.0.2" />
 		<!--<PackageReference Include="Rougamo.Fody" Version="2.3.0" IncludeAssets="all" PrivateAssets="contentfiles;analyzers" />-->
