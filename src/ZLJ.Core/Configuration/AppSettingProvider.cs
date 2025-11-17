@@ -17,13 +17,20 @@ namespace ZLJ.Core.Configuration
     {
         public override IEnumerable<SettingDefinition> GetSettingDefinitions(SettingDefinitionProviderContext context)
         {
-            var sys = new SettingDefinitionGroup(BXJGUtilsConsts.SettingKeyUploadGroup, "文件上传设置".UtilsLI());
+            var sys = new SettingDefinitionGroup("sys", "系统".UtilsLI());
+            var sys2 = new SettingDefinitionGroup(BXJGUtilsConsts.SettingKeyUploadGroup, "文件上传设置".UtilsLI());
             //  var shangchuang = new SettingDefinitionGroup(ZLJ.Core.Share.ZLJConsts.CfgKeyUpload, "文件上传设置".UtilsLI());
             var list = new[]
             {
+                new SettingDefinition(ZLJ.Core.Share.ZLJConsts.AppName,
+                "BXJGABP",
+                ZLJ.Core.Share.ZLJConsts.AppName.UtilsLI(),
+                group:sys,
+                scopes: SettingScopes.Application ,
+                isVisibleToClients: true),
                 new SettingDefinition(ZLJ.Core.Share.ZLJConsts.CfgKeyUpload,"D:\\bxjg_upload_files\\",
                                       "存储路径".GetLocalizableString(),
-                                      sys,
+                                      sys2,
                                       scopes: SettingScopes.Application,
                                       isVisibleToClients: false,
                                       isEncrypted:true,
@@ -56,7 +63,7 @@ namespace ZLJ.Core.Configuration
                 new SettingDefinition(AppSettingNames.UiTheme,
                                       "red",
                                       "风格".GetLocalizableString(),
-                                      sys,
+                                      sys2,
                                       scopes: SettingScopes.All,
                                       isVisibleToClients: true)
             };

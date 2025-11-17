@@ -23,6 +23,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using ZLJ.Core.Share;
 using ZLJ.RCL.Interceptors;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -51,6 +52,7 @@ namespace ZLJ.RCL.Components
         //界面部分就不要用IPermissionChecker了，不过server模式时AuthorizationService内部会使用IPermissionChecker
         //请查看自定义授权策略提供器
         //客户端部分是直接在前端内存中比对的，有区别于server模式的，自定义的授权策略提供器
+        protected string pageSuffix => $"-{currentLoginInformations?.Tenant.Name}-{abpUserConfiguration?.Setting.Values[ZLJConsts.AppName]}";
 
         [AbpExceptionInterceptor]
         protected override void BtnClearFilterClick()

@@ -23,6 +23,7 @@ using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using ZLJ.Core.Share;
 using ZLJ.RCL.Interceptors;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -56,6 +57,8 @@ namespace ZLJ.RCL.Components
         where TEntityDto : IEntityDto<TPrimaryKey>, IExtendableObj//, new()
         where TGetAllInput : new()
     {
+        protected string pageSuffix => $"-{currentLoginInformations?.Tenant.Name}-{abpUserConfiguration?.Setting.Values[ZLJConsts.AppName]}";
+
         [Inject]
         public IWebAssemblyHostEnvironment Environment { get; set; }
 

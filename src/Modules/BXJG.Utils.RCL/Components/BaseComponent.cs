@@ -19,10 +19,12 @@ namespace BXJG.Utils.RCL.Components
     {
         [Inject]
         public Task<GetCurrentLoginInformationsOutput> CurrentLoginInformations { get; set; }
+        protected GetCurrentLoginInformationsOutput currentLoginInformations { get; private set; }
         //await消息显示时，好像会等到消息因此时才结束，没严格测试
         //不过测试发现消息异步显示，并等待200毫秒，消息提示更丝滑
         //
         [Inject] public Task<AbpUserConfigurationDto> AbpUserConfiguration { get; set; }
+        protected AbpUserConfigurationDto abpUserConfiguration{ get; private set; }
         /// <summary>
         /// 专门给肉夹馍aop用的，你不该调用这个
         /// </summary>
@@ -55,6 +57,12 @@ namespace BXJG.Utils.RCL.Components
         //[Inject]
         public ICancellationTokenProvider CancellationTokenProvider => ScopedServices.GetService<ICancellationTokenProvider>() ?? NullCancellationTokenProvider.Instance;
 
+        protected override async Task OnInitializedAsync()
+        {
+            await base.OnInitializedAsync();
+            currentLoginInformations = await CurrentLoginInformations;
+            abpUserConfiguration = await AbpUserConfiguration;
+        }
   
 
         //await消息显示时，好像会等到消息因此时才结束，没严格测试

@@ -17,7 +17,7 @@
 
         public const int CustomerStaffPwdMaxLenght = 20;
         public const int StatusChangedReason = 1000;
-
+        public const string AppName = "AppName";
 
         #region 基础资料
 

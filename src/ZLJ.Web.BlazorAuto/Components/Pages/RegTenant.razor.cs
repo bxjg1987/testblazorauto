@@ -6,6 +6,7 @@ namespace ZLJ.Web.BlazorAuto.Components.Pages
 {
     public partial class RegTenant
     {
+        Dictionary<string,object> pwdAttr = new Dictionary<string, object>() { { "autocomplete", "new-password" } };
         [Inject]
         public NavigationManager NavigationManager { get; set; }
         ResultStatus resultStatus = ResultStatus.Info;

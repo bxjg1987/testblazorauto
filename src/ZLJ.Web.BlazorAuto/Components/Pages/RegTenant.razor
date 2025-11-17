@@ -65,23 +65,23 @@
 
             <h2 class="section-title">客户注册</h2>
 
-            <Form Model="@model" Loading="@isSubmiting"
+            <Form Autocomplete="off" Model="@model" Loading="@isSubmiting"
                   OnFinish="OnFinish" Layout="FormLayout.Vertical" Size="FormSize.Large">
                 <input type="text" name="fakeusernameremembered" style="display:none">
                 <input type="password" name="fakepasswordremembered" style="display:none">
 
 
                 <FormItem Label="贵公司名称">
-                    <Input @bind-Value="@context.Name" AutoComplete="false" AllowClear Placeholder="请输入贵公司名称" />
+                    <Input @bind-Value="@context.Name" AdditionalAttributes="pwdAttr" AllowClear Placeholder="请输入贵公司名称" />
                 </FormItem>
                 <FormItem Label="管理员账号">
-                    <Input @bind-Value="@context.AdminUserName" autocomplete="false" AllowClear Placeholder="请输入管理员账号" />
+                    <Input @bind-Value="@context.AdminUserName" AdditionalAttributes="pwdAttr" AllowClear Placeholder="请输入管理员账号" />
                 </FormItem>
                 <FormItem Label="管理员密码">
-                    <InputPassword @bind-Value="@context.AdminPassword" autocomplete="false" AllowClear Placeholder="请输入管理员密码" />
+                    <InputPassword @bind-Value="@context.AdminPassword" AdditionalAttributes="pwdAttr" AllowClear Placeholder="请输入管理员密码" />
                 </FormItem>
                 <FormItem Label="管理员密码确认">
-                    <InputPassword @bind-Value="@context.AdminPassword2" autocomplete="false" AllowClear Placeholder="请再次输入管理员密码" />
+                    <InputPassword @bind-Value="@context.AdminPassword2" AdditionalAttributes="pwdAttr" AllowClear Placeholder="请再次输入管理员密码" />
                 </FormItem>
                 <FormItem Label="验证码" Required>
                     <InputGroup Compact>

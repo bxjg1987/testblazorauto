@@ -1,0 +1,8 @@
+﻿@using ZLJ.Core.Share
+@inherits BaseComponent
+<PageTitle>@pageSuffix</PageTitle>
+
+@code {
+    protected string pageSuffix => $"{currentLoginInformations?.Tenant.Name}-{abpUserConfiguration?.Setting.Values[ZLJConsts.AppName]}";
+
+}

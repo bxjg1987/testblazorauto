@@ -8,7 +8,6 @@
 @* @attribute [ReuseTabsPageTitle("员工岗位权限")] *@
 @attribute [Authorize(PermissionNames.AdministratorBaseInfoPost)]
 @inherits ListBaseComponent< PostDto, int, PagedAndSortedResultRequest< PagedPostResultRequestDto>>
-<PageTitle>角色岗位</PageTitle>
 <Flex Gap="FlexGap.Small" Vertical Justify="FlexJustify.SpaceBetween">
     <Flex Gap="FlexGap.Small" Justify="FlexJustify.SpaceBetween">
          @* 左侧 *@
