@@ -1,7 +1,7 @@
 ﻿@using ZLJ.Application.Common.Share.Post
 @inherits BaseComponent
 
-<CheckboxGroup Options="@data" @bind-Value="@Names" TValue="string" T OnChange="OnChange2" />
+<CheckboxGroup Options="@data" @bind-Value="@Names" TValue="string"  OnChange="OnChange2" />
 
 @code {
 
@@ -34,8 +34,8 @@
 
     async Task OnChange2(string[] checkedValues)
     {
-
-        await NamesChanged.InvokeAsync(checkedValues);
+        if(NamesChanged.HasDelegate)
+            await NamesChanged.InvokeAsync(checkedValues);
         ///Console.WriteLine($"2 checked = {JsonSerializer.Serialize(checkedValues)}");
     }
     /// <summary>
@@ -46,5 +46,7 @@
     {
         var r = await HttpClient.Post<PagedResultDto<PostForSelectDto>>("PostProvider", "getall", new { }, null);
         Posts = r.Items;
+     await NamesChanged.InvokeAsync(Posts.Where(d=>d.IsSelected).Select(data=>data.Name).ToArray());
+
     }
 }

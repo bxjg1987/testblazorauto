@@ -76,14 +76,15 @@ namespace BXJG.Utils.Application.Share.User
         [Display(Name = "登录锁定")]
         public  bool IsLockoutEnabled { get; set; } = true;
         /// <summary>
-        /// 分配到的角色
+        /// 岗位角色
         /// </summary>
-        [Display(Name = "角色")]
+        [Display(Name = "岗位角色")]
         public string[] RoleNames { get; set; }= Array.Empty<string>();
         /// <summary>
         /// 所属组织机构
         /// </summary>
-        public List<long> OrganizationUnits { get; set; } = [];
+        [Display(Name = "部门")]
+        public IEnumerable<long> OrganizationUnits { get; set; } = [];
 
         //public void Normalize()
         //{

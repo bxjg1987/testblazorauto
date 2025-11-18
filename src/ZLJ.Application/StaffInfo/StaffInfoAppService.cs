@@ -20,8 +20,6 @@ using ZLJ.Core.Authorization.Users;
 using ZLJ.Core.BaseInfo.Post;
 using ZLJ.Core.OU;
 
-
-
 namespace ZLJ.Application.StaffInfo
 {
     /*
@@ -276,18 +274,17 @@ namespace ZLJ.Application.StaffInfo
             var q2 = q.GroupBy(c => c.Staff.Id).Select(c => c.Key);
             // q = q.OrderBy( input.Sorting);
 
-            r.TotalCount = await q2.CountAsync();
+            //r.TotalCount = await q2.CountAsync();
 
             q2 = q2.PageBy(input);
-            var list = await q2.ToListAsync();
+            var list = await q2.ToListAsync(CancellationTokenProvider.Token);
             var roleAndOus = await GetRoleAndOusAsync(list);
             var dtos = new List<StaffInfoDto>();
 
             foreach (var item in roleAndOus)
             {
-                var qt = roleAndOus.First();
-                CurrentUnitOfWork.Items["tmpPost"] = qt.Select(c => c.Post).Where(c => c != default);
-                CurrentUnitOfWork.Items["tmpOu"] = qt.Select(c => c.Ou).Where(c => c != default);
+                CurrentUnitOfWork.Items["tmpPost"] = item.Select(c => c.Post).Where(c => c != default);
+                CurrentUnitOfWork.Items["tmpOu"] = item.Select(c => c.Ou).Where(c => c != default);
                 // var roleAndOu = roleAndOus[item.Key];
                 dtos.Add(MapToEntityDto(item.Key));
             }

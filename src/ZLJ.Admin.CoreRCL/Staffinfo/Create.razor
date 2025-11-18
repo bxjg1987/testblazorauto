@@ -61,6 +61,11 @@
         </GridRow>
         <GridRow>
             <GridCol Span="8">
+                <FormItem Label="部门">
+                    <TreeSelectOu Multiple TreeCheckable @bind-TreeIds="context.OrganizationUnits" AllowClear="true" />
+                </FormItem>
+            </GridCol>
+            <GridCol Span="8">
                 <FormItem>
                     <DatePicker @bind-Value="context.InDate" AllowClear="true" />
                 </FormItem>
@@ -71,8 +76,14 @@
                 </FormItem>
             </GridCol>
         </GridRow>
-        <GridRow>
 
+        <GridRow>
+            <GridCol Span="24">
+                <FormItem Label="岗位角色" LabelColSpan="2" WrapperColSpan="22">
+                    <PostSelect @bind-Names="context.RoleNames" />
+                </FormItem>
+
+            </GridCol>
         </GridRow>
         <GridRow>
             <GridCol Span="24">
@@ -118,13 +129,6 @@
         }
         
 
-        <GridRow>
-            <GridCol Span="24">
-                <FormItem Label="角色" LabelColSpan="2" WrapperColSpan="22">
-                    <PostSelect @bind-Names="context.RoleNames" />
-                </FormItem>
-            </GridCol>
-        </GridRow>
        
         
         <GridRow>

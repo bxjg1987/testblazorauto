@@ -5,6 +5,9 @@
 		<text name="ZLJ.Core.Share.OUType.HeadOffice" value="总部" />
 		<text name="ZLJ.Core.Share.OUType.Branch" value="分公司" />
 		<text name="ZLJ.Core.Share.OUType.Department" value="部门" />
+
+		<text name="Administrator.BaseInfo.Post" value="岗位角色" />
+
 		<!--codegenerator-->
 	</texts>
 </localizationDictionary>

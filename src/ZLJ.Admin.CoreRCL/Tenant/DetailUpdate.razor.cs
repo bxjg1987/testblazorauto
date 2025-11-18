@@ -6,7 +6,7 @@ namespace ZLJ.Admin.CoreRCL.Tenant
     {
         [Parameter]
         public object Master { get; set; } = new object();
-        protected override string FuncName => "角色岗位";
+        protected override string FuncName => "租户";
         /// <summary>
         /// 
         /// </summary>

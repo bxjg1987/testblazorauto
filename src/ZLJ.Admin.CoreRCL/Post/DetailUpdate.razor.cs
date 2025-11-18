@@ -6,7 +6,7 @@ namespace ZLJ.Admin.CoreRCL.Post
     {
         protected override HttpClient HttpClient => httpClient ??= ScopedServices.GetRequiredService<IHttpClientFactory>().CreateHttpClientAdmin();
 
-        protected override string FuncName => "角色岗位";
+        protected override string FuncName => "岗位角色";
         /// <summary>
         /// 
         /// </summary>

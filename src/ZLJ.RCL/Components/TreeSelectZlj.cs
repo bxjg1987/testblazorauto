@@ -168,11 +168,62 @@ namespace ZLJ.RCL.Components
                 z = parsedValue;
 
             _ = InvokeAsync(async () =>
-            {
-                await TreeIdNullableChanged.InvokeAsync(z);
-                await TreeIdChanged.InvokeAsync(z.HasValue ? z.Value : default);
-            });
+              {
+                  await TreeIdNullableChanged.InvokeAsync(z);
+                  await TreeIdChanged.InvokeAsync(z.HasValue ? z.Value : default);
+
+                  //await TreeIdsChanged.InvokeAsync(TreeIds);
+              });
         }
+
+
+        [Parameter]
+        public IEnumerable<long> TreeIds
+        {
+            get
+            {
+                if (Values == null || !Value.Any())
+                    return default;
+
+                return Values.Select(x => long.Parse(x));
+            }
+            set
+            {
+                //OnValuesChangeAsync
+                // 防止循环调用
+                if (_updatingValueFromPropertySetter)
+                    return;
+
+                if (value == null && Values == null)
+                    return;
+
+                var newValue = value == null || !value.Any() ? Enumerable.Empty<string>() : value.Select(x => x.ToString());
+                if (Values==null&&value!=null||    newValue.Count() != Values.Count() || newValue.Any(x => !Values.Contains(x)))
+                {
+                    _updatingValueFromPropertySetter = true;
+                    try
+                    {
+                        Values = newValue;
+                    }
+                    finally
+                    {
+                        _updatingValueFromPropertySetter = false;
+                    }
+                }
+                
+            }
+        }
+        //OnParametersSetAsync中触发
+        [Parameter]
+        public EventCallback<IEnumerable<long>> TreeIdsChanged { get; set; }
+
+        //public override IEnumerable<string> Values { get => base.Values; set { 
+        //        base.Values = value;
+        //    }
+
+        //}
+
+
 
         //protected virtual ValueTask SetDefault(IReadOnlyDictionary<string, object> dic) => ValueTask.CompletedTask;
         //protected override void OnValueChange(string value)
@@ -265,6 +316,22 @@ namespace ZLJ.RCL.Components
             {
                 await LoadDataSource();
             }
+            // 订阅基类的 ValuesChanged 事件
+            if (!ValuesChanged.HasDelegate&& TreeIdsChanged.HasDelegate)
+            {
+                //var originalCallback = ValuesChanged;
+                ValuesChanged = EventCallback.Factory.Create<IEnumerable<string>>(this, async values =>
+                {
+                    // 先执行原始回调
+                    //await originalCallback.InvokeAsync(values);
+
+                    // 再执行自定义逻辑
+                    await TreeIdsChanged.InvokeAsync(values == null ? null : values.Select(x => long.Parse(x)));
+
+                    // 这里可以添加你的自定义逻辑
+                    //Console.WriteLine($"Values changed: {string.Join(", ", values ?? Enumerable.Empty<TItemValue>())}");
+                });
+            }
         }
 
         //public override async Task SetParametersAsync(ParameterView parameters)
@@ -278,6 +345,7 @@ namespace ZLJ.RCL.Components
         {
             DataSource = await HttpClient.GetTreeForSelect<TGetTreeForSelectOutput>(new { ParentName });
             parentName = ParentName;
+           
             //_ = InvokeAsync(async () =>
             //{
             //if (Value.IsNotNullOrWhiteSpaceBXJG() || Values != null)
@@ -294,7 +362,6 @@ namespace ZLJ.RCL.Components
                 DropdownStyle = string.Empty;
                 await _dropDown.Close();
             }
-
             //}
             //});
             //StateHasChanged();

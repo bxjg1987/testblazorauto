@@ -24,7 +24,7 @@ namespace BXJG.Utils.Application.Share.User
         /// </summary>
         public string? Keyword { get; set; }
         /// <summary>
-        /// 角色岗位id
+        /// 岗位角色id
         /// </summary>
         public int? PostId { get; set; }
     }

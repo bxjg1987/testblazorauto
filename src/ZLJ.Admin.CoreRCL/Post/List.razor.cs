@@ -21,7 +21,7 @@ namespace ZLJ.Admin.CoreRCL.Post
 
         // string currOu;
 
-        protected override string FuncName => "角色岗位";
+        protected override string FuncName => "岗位角色";
         [AbpExceptionInterceptor]
         protected override async Task OnInitializedAsync()
         {

@@ -15,7 +15,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Abp" Version="10.*" />
+		<PackageReference Include="Abp.Zero.Common" Version="10.*" />
 	</ItemGroup>
 
 

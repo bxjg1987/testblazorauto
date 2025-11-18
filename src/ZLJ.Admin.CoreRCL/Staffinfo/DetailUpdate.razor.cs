@@ -10,7 +10,7 @@ namespace ZLJ.Admin.CoreRCL.Staffinfo
         //[Parameter]
         //public object Master {  get; set; }
 
-        protected override string FuncName => "合同套餐";
+        protected override string FuncName => "员工";
         /// <summary>
         /// 
         /// </summary>

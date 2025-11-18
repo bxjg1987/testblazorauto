@@ -6,9 +6,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
 	  <!--企业服务器gc模式-->
 	  <!--<ServerGarbageCollection>true</ServerGarbageCollection>-->
-	  <GarbageCollectionAdaptationMode>true</GarbageCollectionAdaptationMode>
-	  <!--<PublishTrimmed>false</PublishTrimmed>-->
-	  <!--<JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>-->
+	  <!--.net8需要配置的Datas-->
+	  <!--<GarbageCollectionAdaptationMode>true</GarbageCollectionAdaptationMode>-->
+	  <BlazorDisableThrowNavigationException>true</BlazorDisableThrowNavigationException>
   </PropertyGroup>
 
   <ItemGroup>

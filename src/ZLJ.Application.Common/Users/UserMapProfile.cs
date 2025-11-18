@@ -30,13 +30,15 @@ namespace ZLJ.Application.Common.Users
 
 
             this.CreateUserEditMap<User>();
-            CreateMap<ZLJ.Application.Common.Share.User.UserEditDto, User>().IncludeBaseEditUser();
+            CreateMap<ZLJ.Application.Common.Share.User.UserEditDto, User>().IncludeBaseEditUser()
+                                                                            .ForMember(x => x.OrganizationUnits, x => x.Ignore())
+                                                                            .ForMember(x => x.Roles, x => x.Ignore());
 
             this.CreateUserCreateMap<User>();
             CreateMap<ZLJ.Application.Common.Share.User.UserCreateDto, User>().IncludeBaseCreateUser();
 
             this.CreateUserSelectMap<User>();
-            CreateMap<User, ZLJ.Application.Common.Share.User.UserSelectDto>().IncludeBaseSelectUser();
+            CreateMap< User, ZLJ.Application.Common.Share.User.UserSelectDto>().IncludeBaseSelectUser();
 
             this.CreateUserMap<User>();
             CreateMap<User, ZLJ.Application.Common.Share.User.UserDto>().IncludeBaseUser();
@@ -47,8 +49,8 @@ namespace ZLJ.Application.Common.Users
 
             //这个最好别用了
             CreateMap<User, UserDto>().IncludeBaseUser();//.IncludeBase<AbpUserBase, UserDto>();
-                                                         //CreateMap<User, ZLJ.Application.Common.Share.User.UserDto>().IncludeBase<AbpUserBase, UserDto>();
-
+            //CreateMap<User, ZLJ.Application.Common.Share.User.UserDto>().IncludeBase<AbpUserBase, UserDto>();
+           
             //这个最好别用了
             CreateMap<StaffInfoEntity, ZLJ.Application.Common.Share.User.UserDto>().IncludeBase<User, ZLJ.Application.Common.Share.User.UserDto>();
 

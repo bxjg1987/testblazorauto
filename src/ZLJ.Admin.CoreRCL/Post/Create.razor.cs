@@ -19,7 +19,7 @@ namespace ZLJ.Admin.CoreRCL.Post
 
         //protected IOuAppService OuProviderAppService => ScopedServices.GetRequiredService<IOuAppService>();
 
-        public override string FuncName => "角色岗位";
+        public override string FuncName => "岗位角色";
 
       
 

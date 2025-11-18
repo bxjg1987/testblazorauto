@@ -43,8 +43,14 @@
             </Col>
             <Col Span="8">
             <FormItem LabelColSpan="9" WrapperColSpan="15">
-              
+              @*   @if (IsShowUpdate)
+                {
+                    <Checkbox @bind-Value="@context.IsStatic" />
+                }
+                else
+                { *@
                     <Checkbox @bind-Value="@dto.IsStatic" Disabled />
+                @* } *@
             </FormItem>
             </Col>
             <Col Span="8">

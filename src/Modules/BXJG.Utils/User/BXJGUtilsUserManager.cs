@@ -27,20 +27,20 @@ namespace BXJG.Utils.User;
  * 而utils中的其它领域服务、应用服务遵循组合的思路
  */
 
-public class BXJGUtilsUserManager<Role, User> : AbpUserManager<Role, User>
-   where Role : AbpRole<User>, new()
-   where User : AbpUser<User>
+public class BXJGUtilsUserManager<TRole, TUser> : AbpUserManager<TRole, TUser>//, IBXJGUtilsUserManager<TRole,TUser>
+   where TRole : AbpRole<TUser>, new()
+   where TUser : AbpUser<TUser>
 {
-    protected BXJGUtilsUserManager(AbpRoleManager<Role, User> roleManager,
-                          AbpUserStore<Role, User> userStore,
+    protected BXJGUtilsUserManager(AbpRoleManager<TRole, TUser> roleManager,
+                          AbpUserStore<TRole, TUser> userStore,
                           IOptions<IdentityOptions> optionsAccessor,
-                          IPasswordHasher<User> passwordHasher,
-                          IEnumerable<IUserValidator<User>> userValidators,
-                          IEnumerable<IPasswordValidator<User>> passwordValidators, 
+                          IPasswordHasher<TUser> passwordHasher,
+                          IEnumerable<IUserValidator<TUser>> userValidators,
+                          IEnumerable<IPasswordValidator<TUser>> passwordValidators, 
                           ILookupNormalizer keyNormalizer,
                           IdentityErrorDescriber errors, 
                           IServiceProvider services,
-                          ILogger<UserManager<User>> logger, 
+                          ILogger<UserManager<TUser>> logger, 
                           IPermissionManager permissionManager,
                           IUnitOfWorkManager unitOfWorkManager,
                           ICacheManager cacheManager,
@@ -75,7 +75,7 @@ public class BXJGUtilsUserManager<Role, User> : AbpUserManager<Role, User>
     /// <param name="user"></param>
     /// <param name="permission"></param>
     /// <returns></returns>
-    public override async Task ProhibitPermissionAsync(User user, Permission permission)
+    public override async Task ProhibitPermissionAsync(TUser user, Permission permission)
     {
         var ps = permission.GetDependencePermissions();//我依赖的权限
         foreach (var item in ps)
@@ -98,20 +98,20 @@ public class BXJGUtilsUserManager<Role, User> : AbpUserManager<Role, User>
 
         await base.ProhibitPermissionAsync(user, permission);
     }
-    public override async Task GrantPermissionAsync(User user, Permission permission)
+    public override async Task GrantPermissionAsync(TUser user, Permission permission)
     {
         var list = new List<Permission> { permission };
         list.AddRange(permission.GetDependencePermissions());
         await SetGrantedPermissionsAsync(user, list);
     }
-    public override Task SetGrantedPermissionsAsync(User user, IEnumerable<Permission> permissions)
+    public override Task SetGrantedPermissionsAsync(TUser user, IEnumerable<Permission> permissions)
     {
         var p = permissions.SelectMany(c => c.GetDependencePermissions()).Distinct();
         return base.SetGrantedPermissionsAsync(user, permissions.Union(p));
     }
 
 
-    public override async Task<IdentityResult> UpdateAsync(User user)
+    public override async Task<IdentityResult> UpdateAsync(TUser user)
     {
         var r = await base.UpdateAsync(user);
         if (r.Succeeded && (user.IsActive == false || user.IsDeleted))
@@ -119,7 +119,7 @@ public class BXJGUtilsUserManager<Role, User> : AbpUserManager<Role, User>
         return r;
     }
     public ICacheManager CacheManager { get; set; }
-    public override async Task<IdentityResult> UpdateSecurityStampAsync(User user)
+    public override async Task<IdentityResult> UpdateSecurityStampAsync(TUser user)
     {
         var r = await base.UpdateSecurityStampAsync(user);
 

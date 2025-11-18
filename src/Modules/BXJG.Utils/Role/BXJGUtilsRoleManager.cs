@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,15 +30,16 @@ namespace BXJG.Utils.Role
             var list = permissions.Union(p).ToList();
             //我们的项目中，还需要递归上级权限也要授权
 
-            //var tmp = list.ToImmutableList();
+            var tmp = list.ToImmutableList();
 
-            //foreach (var item in tmp)
-            //{
-            //    item.RecursionUp(x => { 
-            //        list.Add(x);
-            //        return true;
-            //    });
-            //}
+            foreach (var item in tmp)
+            {
+                item.RecursionUp(x =>
+                {
+                    list.Add(x);
+                    return true;
+                });
+            }
 
             return base.SetGrantedPermissionsAsync(role, list);
         }

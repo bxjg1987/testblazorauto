@@ -7,6 +7,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
 		<StaticWebAssetProjectMode>Default</StaticWebAssetProjectMode>
+		<BlazorDisableThrowNavigationException>true</BlazorDisableThrowNavigationException>
 	</PropertyGroup>
 	<PropertyGroup>
 		<RunAOTCompilation>true</RunAOTCompilation>
@@ -57,9 +58,9 @@
 		<PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.5" />-->
 	</ItemGroup>
 
-	<ItemGroup>
+	<!--<ItemGroup>
 		<Folder Include="wwwroot\css\" />
-	</ItemGroup>
+	</ItemGroup>-->
 
 
 	<ItemGroup>

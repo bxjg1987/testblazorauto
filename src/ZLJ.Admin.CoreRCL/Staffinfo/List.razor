@@ -59,7 +59,7 @@
            Size="TableSize.Small"
            Bordered="true" AutoHeight
            ScrollY="71.5vh"
-           ScrollX="1900px">
+           ScrollX="2400px">
 
         <Selection Width="50" Fixed="ColumnFixPlacement.Left" />
         <Column TData=StaffInfoDto Title="行号" Width="60" Fixed="ColumnFixPlacement.Left">
@@ -68,9 +68,14 @@
 
         <PropertyColumn Property="c => c.Name" Sortable="true" ShowSorterTooltip="false" Width="110" Fixed="ColumnFixPlacement.Left" Align="ColumnAlign.Center" />
         <PropertyColumn Property="c => c.GenderText" Sortable="true" ShowSorterTooltip="false" Width="100" Align="ColumnAlign.Center" />
-        <PropertyColumn Property="c => c.Birthday" Sortable="true" ShowSorterTooltip="false" Width="140" Align="ColumnAlign.Center" Format="d" />
         <PropertyColumn Property="c => c.PhoneNumber" Sortable="true" ShowSorterTooltip="false" Width="140" Align="ColumnAlign.Center" />
-        <PropertyColumn Property="c => c.IdNumber" Sortable="true" ShowSorterTooltip="false" Width="200" Align="ColumnAlign.Center" />
+
+            <PropertyColumn Property="c => c.Birthday" Sortable="true" ShowSorterTooltip="false" Width="140" Align="ColumnAlign.Center" Format="d" />
+       
+        <PropertyColumn Property="c => c.OusText" Align="ColumnAlign.Center" />
+        <PropertyColumn Property="c => c.PostsText" Align="ColumnAlign.Center" />
+                
+                <PropertyColumn Property="c => c.IdNumber" Sortable="true" ShowSorterTooltip="false" Width="200" Align="ColumnAlign.Center" />
         <PropertyColumn Property="c => c.CurrentAddress" Sortable="true" ShowSorterTooltip="false" Width="300" />
         <PropertyColumn Property="c => c.InDate" Sortable="true" ShowSorterTooltip="false" Width="150" Align="ColumnAlign.Center" Format="d" />
         <PropertyColumn Property="c => c.OutDate" Sortable="true" ShowSorterTooltip="false" Width="150" Align="ColumnAlign.Center" Format="d" />
