@@ -49,6 +49,7 @@
 		<Compile Remove="IHaveIoc.cs" />
 		<Compile Remove="RandomHelper.cs" />
 		<Compile Remove="Tag\ExtOther.cs" />
+		<Compile Remove="User\IBXJGUtilsUserManager.cs" />
 		<Compile Remove="User\UserRegistrationManager.cs" />
 		<Compile Remove="WechatDecrypt.cs" />
 	</ItemGroup>
