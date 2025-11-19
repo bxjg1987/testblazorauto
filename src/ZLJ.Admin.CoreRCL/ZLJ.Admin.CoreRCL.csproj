@@ -43,6 +43,16 @@
 	</ItemGroup>
 
 
+	<!--release发布时排除部分文件，以免错误覆盖服务器上的-->
+	<ItemGroup Condition="'$(Configuration)' == 'Release'">
+		<Content Remove="wwwroot\appsettings*.json*" />
+	</ItemGroup>
+	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
+		<SatelliteResourceLanguages>xx</SatelliteResourceLanguages>
+	</PropertyGroup>
+
+
+
 
 	<ItemGroup>
 		<!--<PackageReference Include="Abp.Web.Common" Version="10.2.0" />-->

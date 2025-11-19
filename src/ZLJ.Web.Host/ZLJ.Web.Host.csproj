@@ -20,6 +20,29 @@
 	</PropertyGroup>
 
 
+
+	<!--release发布时排除部分文件，以免错误覆盖服务器上的-->
+	<ItemGroup Condition="'$(Configuration)' == 'Release'">
+		<!--<Content Remove="appsettings.json" />
+		<Content Remove="log4net.config" />
+		<None Remove="appsettings.json" />
+		<None Remove="log4net.config" />
+		<Content Remove="appSettings.Development.json" />-->
+		<Content Remove="wwwroot\**" />
+
+		<Content Update="appsettings*.json" CopyToPublishDirectory="Never" />
+		<Content Update="log4net.config" CopyToPublishDirectory="Never" />
+	</ItemGroup>
+	<PropertyGroup Condition="'$(Configuration)' == 'Release' ">
+		<SatelliteResourceLanguages>xx</SatelliteResourceLanguages>
+
+		<IsWebConfigTransformDisabled>true</IsWebConfigTransformDisabled>
+		<IsTransformWebConfigDisabled>true</IsTransformWebConfigDisabled>
+	</PropertyGroup>
+
+
+
+
 	<!--新增的razor组件会因为codegenerate导致无法在将类生产到当前项目，从而导致无法注册blazor路由，下面的设置是暂时性的
 		参考：https://github.com/dotnet/aspnetcore/issues/36535# 
 	<PropertyGroup>
