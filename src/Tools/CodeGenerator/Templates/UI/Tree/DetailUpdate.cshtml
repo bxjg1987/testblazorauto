@@ -16,7 +16,7 @@
     @@(detailUpdateText)@@(FuncName)
 </SectionContent>
 <SectionContent SectionName=@@($"{Master}-detail-update-body")>
-    @@if (IsShowUpdate)
+    @@if (isEdit)
     {
         <Form @@ref="frm" ValidateOnChange="true" Model="editDto" LabelColSpan="4" WrapperColSpan="20" OnFinish="OnFinish" Loading="IsBusy">
             <FormItem>

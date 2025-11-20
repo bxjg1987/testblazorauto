@@ -1,19 +1,19 @@
-﻿using System;
+﻿using Abp.Application.Services.Dto;
+using Abp.Domain.Repositories;
+using Abp.Extensions;
+using Abp.Linq;
+using BXJG.Common.Cache;
+using BXJG.Common.Contracts;
+using BXJG.Common.Sundries;
+using BXJG.Utils.Application.Share;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using System.Threading;
-using Abp.Extensions;
-using BXJG.Common.Contracts;
-using BXJG.Common.Sundries;
-using Abp.Application.Services.Dto;
-
-using Abp.Domain.Repositories;
-using Abp.Linq;
 using System.Net.Http.Json;
-using BXJG.Utils.Application.Share;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace System.Net.Http
 {
@@ -315,8 +315,10 @@ namespace System.Net.Http
         /// <returns>分页数据</returns>
         public static Task<PagedResultDto<TDto>> GetAllProvider<TDto>(this HttpClient client, object data, string controller = default, CancellationToken cancellationToken = default)
         {
-            controller = controller.NewMethod2<TDto>();
-            return client.Post<PagedResultDto<TDto>>(controller, "getall", data, default, cancellationToken);
+            //return ImprovedMemoryCacheHelper.GetOrSetAsync("_select" + typeof(TDto).FullName , () => {
+                controller = controller.NewMethod2<TDto>();
+                return client.Post<PagedResultDto<TDto>>(controller, "getall", data, default, cancellationToken);
+           // }, 5);
         }
         #endregion
 
@@ -407,8 +409,13 @@ namespace System.Net.Http
         /// <returns></returns>
         public static Task<List<TDto>> GetTreeForSelect<TDto>(this HttpClient client, object data, string controller = default, CancellationToken cancellationToken = default)
         {
-            controller = controller.NewMethod2<TDto>();
-            return client.Post<List<TDto>>(controller, "GetTreeForSelect", data, default, cancellationToken);
+
+            //return ImprovedMemoryCacheHelper.GetOrSetAsync("_select" + typeof(TDto).FullName, () => {
+                controller = controller.NewMethod2<TDto>();
+                return client.Post<List<TDto>>(controller, "GetTreeForSelect", data, default, cancellationToken);
+            //}, 5);
+
+         
         }
         /// <summary>
         /// 获取扁平化的下拉框数据
