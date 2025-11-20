@@ -71,6 +71,34 @@ namespace System
                 return t.GetField(propertyName, flag).GetValue(obj);
         }
         /// <summary>
+        /// 递归获取指定字段
+        /// 默认的GetField好像不会递归父类
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="fieldName"></param>
+        /// <returns></returns>
+        public static FieldInfo GetPrivateField(this Type type, string fieldName)
+        {
+            while (type != null)
+            {
+                var field = type.GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance);
+                if (field != null) return field;
+                type = type.BaseType;
+            }
+            return null;
+
+        }
+
+        public static object? GetFieldValue(this object obj, string fieldName)
+        {
+            var type = obj.GetType();
+            var p = type.GetPrivateField(fieldName); 
+            if(p!=null)
+                return p.GetValue(obj);
+            return null;
+        }
+
+        /// <summary>
         /// 反射获取对象属性值并转换为指定类型
         /// </summary>
         /// <typeparam name="T"></typeparam>

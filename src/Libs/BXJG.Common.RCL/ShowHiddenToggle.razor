@@ -1,0 +1,44 @@
+@* 切换模式 *@
+@if (HiddenContent is not null)
+{
+    @if (UseStyleOnly)
+    {
+        <div style="display:@(IsVisible ? "block" : "none")" @attributes="ShowAttribute">
+            @ChildContent
+        </div>
+        <div style="display:@(IsVisible ? "none" : "block")" @attributes="HiddenAttribute">
+            @HiddenContent
+        </div>
+    }
+    else
+    {
+        @((IsVisible ? ChildContent : HiddenContent)!)
+    }
+}
+@* 默认模式 *@
+else
+{
+    @if (UseStyleOnly)
+    {
+        <div style="display:@(IsVisible ? "block" : "none")" @attributes="ShowAttribute">
+            @ChildContent
+        </div>
+    }
+    else if (IsVisible)
+    {
+        @ChildContent
+    }
+}
+
+@code {
+    [Parameter] public bool IsVisible { get; set; }
+    [Parameter] public bool UseStyleOnly { get; set; } = true;
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public RenderFragment? HiddenContent { get; set; }
+   
+    [Parameter]
+    public IDictionary<string,object> ShowAttribute { get; set; }
+    [Parameter]
+    public IDictionary<string,object> HiddenAttribute { get; set; }
+}

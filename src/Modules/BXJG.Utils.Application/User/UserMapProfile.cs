@@ -26,7 +26,7 @@ namespace BXJG.Utils.Application.User
 
             CreateMap<AbpUserBase, UserEditDto>();
             CreateMap<AbpUserBase, UserCreateDto>()/*.IncludeBase<AbpUserBase, UserEditDto>()*/;
-            CreateMap<AbpUserBase, UserDto>().IncludeBase<AbpUserBase, UserSelectDto>();//.IncludeBase(typeof(GeneralTreeEntity<>), typeof(GeneralTreeGetTreeNodeBaseDto<>));
+            CreateMap<AbpUserBase, UserDto>();//.IncludeBase(typeof(GeneralTreeEntity<>), typeof(GeneralTreeGetTreeNodeBaseDto<>));
         }
     }
 }

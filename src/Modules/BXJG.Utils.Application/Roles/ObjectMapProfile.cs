@@ -19,7 +19,7 @@ namespace BXJG.Utils.Application.Roles
                                                    .ForMember(x => x.Value, x => x.MapFrom(d => d.Name))
                                                    .ForMember(x => x.IsSelected, x => x.MapFrom(d => d.IsDefault));
             
-            CreateMap<AbpRoleBase, RoleDto>().IncludeBase<AbpRoleBase, RoleSelectDto>();
+            CreateMap<AbpRoleBase, RoleDto>();
 
             CreateMap<RoleCreateDto, AbpRoleBase>();
 

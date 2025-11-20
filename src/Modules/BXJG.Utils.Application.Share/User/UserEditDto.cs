@@ -84,7 +84,7 @@ namespace BXJG.Utils.Application.Share.User
         /// 所属组织机构
         /// </summary>
         [Display(Name = "部门")]
-        public IEnumerable<long> OrganizationUnits { get; set; } = [];
+        public IEnumerable<long> OrganizationUnitIds { get; set; } = [];
 
         //public void Normalize()
         //{
