@@ -26,7 +26,7 @@ namespace BXJG.Common.Cache
             /// <summary>
             /// 判断缓存项是否过期
             /// </summary>
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            //[MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool IsExpired()
             {
                 var now = DateTime.UtcNow;
