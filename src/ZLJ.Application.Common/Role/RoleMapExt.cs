@@ -14,15 +14,15 @@ namespace AutoMapper
 {
     public static class RoleMapCommonExt
     {
-        public static IMappingExpression<TRole, TDto> IncludeBaseRoleSelectCommon<TRole, TDto>(this IMappingExpression<TRole, TDto> mapper)
+        public static IMappingExpression<TRole, TDto> IncludeBaseRoleSelectCommon< TRole,TDto>(this IMappingExpression<TRole, TDto> mapper)
         {
             return mapper.IncludeBase<Role, ZLJ.Application.Common.Share.Roles.RoleForSelectDto>();
         }
         public static IMappingExpression<TRole, TDto> IncludeBaseRoleCommon<TRole, TDto>(this IMappingExpression<TRole, TDto> mapper)
         {
-            return mapper.IncludeBase<Role, ZLJ.Application.Common.Share.Roles.RoleDto>();
+            return mapper.IncludeBase<Role,ZLJ.Application.Common.Share.Roles. RoleDto>();
         }
-        public static IMappingExpression<TDto, TRole> IncludeBaseRoleCreateCommon<TDto, TRole>(this IMappingExpression<TDto, TRole> mapper)
+        public static IMappingExpression< TDto, TRole> IncludeBaseRoleCreateCommon<TDto, TRole>(this IMappingExpression<TDto, TRole> mapper)
         {
             return mapper.IncludeBase<ZLJ.Application.Common.Share.Roles.RoleCreateDto, Role>();
         }

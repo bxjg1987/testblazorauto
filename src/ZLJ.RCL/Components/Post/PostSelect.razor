@@ -13,7 +13,7 @@
 
     [CascadingParameter]
     [Parameter]
-    public IEnumerable<PostForSelectDto> Posts { get; set; } = new List<PostForSelectDto>();
+    public IEnumerable<PostProviderDto> Posts { get; set; } = new List<PostProviderDto>();
 
 
     CheckboxOption<string>[] data = Array.Empty<CheckboxOption<string>>();
@@ -44,7 +44,7 @@
     protected virtual HttpClient HttpClient => httpClient ??= HttpClientFactory.CreateHttpClientCommon();
     async Task InitDataSource()
     {
-        var r = await HttpClient.Post<PagedResultDto<PostForSelectDto>>("PostProvider", "getall", new { }, null);
+        var r = await HttpClient.Post<PagedResultDto<PostProviderDto>>("PostProvider", "getall", new { }, null);
         Posts = r.Items;
      await NamesChanged.InvokeAsync(Posts.Where(d=>d.IsSelected).Select(data=>data.Name).ToArray());
 

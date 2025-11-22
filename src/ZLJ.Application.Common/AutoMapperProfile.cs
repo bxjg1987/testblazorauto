@@ -42,7 +42,7 @@ namespace ZLJ.Application.Common
 
             #region 岗位
             //岗位
-            CreateMap<PostEntity, PostForSelectDto>().IncludeBase<ZLJ.Core.Authorization.Roles.Role, RoleForSelectDto>();
+            CreateMap<PostEntity, PostProviderDto>().IncludeBase<ZLJ.Core.Authorization.Roles.Role, RoleForSelectDto>();
 
             //岗位
             //CreateMap<PostEntity, PostDto>().IncludeBase<ZLJ.Core.Authorization.Roles.Role, RoleDto>();
@@ -69,7 +69,7 @@ namespace ZLJ.Application.Common
             CreateMap<Tenant, TenantLoginInfoDto>();
             CreateMap<User, UserLoginInfoDto>();
 
-         
+
         }
     }
 }

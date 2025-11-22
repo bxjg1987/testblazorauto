@@ -8,6 +8,7 @@
 
 @inherits ZLJ.RCL.Components.ListBaseComponent<AssociatedCompanyDto, long, PagedAndSortedResultRequest<AssociatedCompanyCondition>>
 
+@* <PageTitle>@pageSuffix</PageTitle> *@
 <Flex Gap="FlexGap.Small" Vertical Justify="FlexJustify.SpaceBetween">
     <Flex Gap="FlexGap.Small" Justify="FlexJustify.SpaceBetween">
         @* 左侧 *@
@@ -173,8 +174,9 @@ AfterClose="OnAfterCloseDialog">
 <Modal DestroyOnClose="true"
        @bind-Visible="isShowDetailUpdate"
        Draggable="true"
-       Title="设备详情"
-       Width=@("40vw") Class="frm-dal"
+       Title="客户详情"
+       Width=@("40vw") 
+       Class="frm-dal"
        Maximizable
        AfterClose="OnAfterCloseDialog"
        Footer="renderFragment1"

@@ -28,31 +28,31 @@ namespace ZLJ.Application.Share.StaffInfo
         /// </summary>
         [Display(Name = "所属区域")]
         public string? AreaDisplayName { get; set; }
-        /// <summary>
-        /// 所属公司和部门
-        /// </summary>
-        [Display(Name = "所属公司")]
-        public List<OUSelectDto>? Ous { get; set; }
-        /// <summary>
-        /// 所属公司和部门
-        /// </summary>
-        [Display(Name = "所属公司")]
-        public string OusText => Ous != default ? string.Join(',', Ous.Select(c => c?.Text)) : "";
-        /// <summary>
-        /// 所属公司Id
-        /// </summary>
-        [Display(Name = "所属公司")]
-        public IEnumerable<long> OuIds => Ous?.Select(c => c.Id);
-        /// <summary>
-        /// 所属岗位
-        /// </summary>
-        [Display(Name = "所属岗位")]
-        public List<PostForSelectDto> Posts { get; set; }
-        /// <summary>
-        /// 所属岗位
-        /// </summary>
-        [Display(Name = "所属岗位")]
-        public string PostsText => Posts != default ? string.Join(',', Posts.Select(c => c.DisplayName)) : string.Empty;
+        ///// <summary>
+        ///// 所属公司和部门
+        ///// </summary>
+        //[Display(Name = "所属公司")]
+        //public List<OUSelectDto>? Ous { get; set; }
+        ///// <summary>
+        ///// 所属公司和部门
+        ///// </summary>
+        //[Display(Name = "所属公司")]
+        //public string OusText => Ous != default ? string.Join(',', Ous.Select(c => c?.Text)) : "";
+        ///// <summary>
+        ///// 所属公司Id
+        ///// </summary>
+        //[Display(Name = "所属公司")]
+        //public IEnumerable<long> OuIds => Ous?.Select(c => c.Id);
+        ///// <summary>
+        ///// 所属岗位
+        ///// </summary>
+        //[Display(Name = "所属岗位")]
+        //public List<PostForSelectDto> Posts { get; set; }
+        ///// <summary>
+        ///// 所属岗位
+        ///// </summary>
+        //[Display(Name = "所属岗位")]
+        //public string PostsText => Posts != default ? string.Join(',', Posts.Select(c => c.DisplayName)) : string.Empty;
         ///// <summary>
         ///// 所属岗位
         ///// </summary>

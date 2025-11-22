@@ -15,7 +15,7 @@
         <Form @ref="frm" ValidateOnChange="true" Model="editDto" LabelColSpan="4" WrapperColSpan="20" OnFinish="OnFinish">
 
             <FormItem Label="上级">
-                @if (IsShowUpdate)
+            @if (isEdit)
                 {
                     <TreeSelectOu @bind-TreeIdNullable="context.ParentId" IsKeyId AllowClear Style="width:15rem;" Placeholder="请选择父级" />
                 }
@@ -28,7 +28,7 @@
             </FormItem>
             <FormItem Label="部门名称">
        
-            @if (IsShowUpdate)
+            @if (isEdit)
             {
                 <Input @bind-Value="@context.DisplayName" />
             }
@@ -40,7 +40,7 @@
             }
             </FormItem>
         <FormItem Label="单位类型">
-            @if (IsShowUpdate)
+            @if (isEdit)
             {
                 <EnumRadioGroup ButtonStyle="RadioButtonStyle.Outline" @bind-Value="@context.OUType" />
             }

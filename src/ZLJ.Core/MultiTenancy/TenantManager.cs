@@ -158,9 +158,9 @@ namespace ZLJ.Core.MultiTenancy
 
 
 
-      
+
         public ILogger Logger { get; set; }
-      
+
         protected virtual void CheckErrors(IdentityResult identityResult)
         {
             identityResult.CheckErrors(LocalizationManager);

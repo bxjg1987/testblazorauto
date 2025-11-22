@@ -58,14 +58,10 @@ namespace ZLJ.RCL.Components
         where TGetAllInput : new()
     {
         protected string pageSuffix => $"-{currentLoginInformations?.Tenant.Name}-{abpUserConfiguration?.Setting.Values[ZLJConsts.AppName]}";
-
         [Inject]
         public IWebAssemblyHostEnvironment Environment { get; set; }
-
         //它不是用例，但因为列表是异步的，这里是核心，所以就把异常加这里吧
-#if !DEBUG
         [AbpExceptionInterceptor]
-#endif
         protected override async Task LoadCore()
         {
             await base.LoadCore();
@@ -73,25 +69,19 @@ namespace ZLJ.RCL.Components
 
         //各按钮的异常处理还是加上
 
-#if !DEBUG
         [AbpExceptionInterceptor]
-#endif
         protected override void BtnRefreshClick()
         {
             base.BtnRefreshClick();
         }
 
-#if !DEBUG
         [AbpExceptionInterceptor]
-#endif
         protected override void BtnClearFilterClick()
         {
             base.BtnClearFilterClick();
         }
 
-#if !DEBUG
         [AbpExceptionInterceptor]
-#endif
         protected override void BtnSearchClick()
         {
             base.BtnSearchClick();
@@ -101,9 +91,7 @@ namespace ZLJ.RCL.Components
 
 
 
-#if !DEBUG
         [AbpExceptionInterceptor]
-#endif
         protected override async Task BtnDeleteClick()
         {
           await  base.BtnDeleteClick();
@@ -111,9 +99,7 @@ namespace ZLJ.RCL.Components
 
 
 
-#if !DEBUG
         [AbpExceptionInterceptor]
-#endif
         protected override  async Task BtnDeleteItemClick(TEntityDto item)
         {
           await  base.BtnDeleteItemClick(item);
@@ -123,10 +109,31 @@ namespace ZLJ.RCL.Components
         /// 对ant表格的引用
         /// </summary>
         protected Table<TEntityDto> table;
+        public override string Sorting
+        {
+            get => base.Sorting;
+            set
+            {
+                //var lspx = value.Replace(" Descing", " desc").Replace(" Ascing", " asc").Replace(" None", "");
+                var strSort = "";
+                if (value.IsNotNullOrWhiteSpaceBXJG())
+                {
+                    var sddsf = value.Split(',');
+                    foreach (var item in sddsf)
+                    {
+                        if (item.EndsWith(" Descing"))
+                            strSort += item.Replace(" Descing", " desc") + ",";
+                        else if (item.EndsWith(" Ascing"))
+                            strSort += item.Replace(" Ascing", " asc") + ",";
 
-#if !DEBUG
+                    }
+                }
+
+                strSort = strSort.TrimEnd(',');
+                base.Sorting = strSort;
+            }
+        }
         [AbpExceptionInterceptor]
-#endif
         protected virtual void OnQuery(QueryModel condition)
         {
             /*
@@ -190,31 +197,9 @@ namespace ZLJ.RCL.Components
          * 同步方法中，多次调用StateChange貌似没有
          */
 
-        public override string Sorting { get => base.Sorting;
-            set 
-            {
-                //var lspx = value.Replace(" Descing", " desc").Replace(" Ascing", " asc").Replace(" None", "");
-                var strSort = "";
-                if (value.IsNotNullOrWhiteSpaceBXJG())
-                {
-                    var sddsf = value.Split(',');
-                    foreach (var item in sddsf)
-                    {
-                        if (item.EndsWith(" Descing"))
-                            strSort += item.Replace(" Descing", " desc")+",";
-                        else if (item.EndsWith(" Ascing"))
-                            strSort += item.Replace(" Ascing", " asc") + ",";
-                        
-                    }
-                }
-
-                    strSort = strSort.TrimEnd(',');
-                base.Sorting = strSort;
-            } 
-        }
         protected override async Task ShowFailMessage(string title = "操作提示", string msg = "操作失败！")
         {
-            MessageService.Error(msg);//它是阻塞到显示完成因此元素后，所以不能等待它
+             MessageService.Error(msg);//它是阻塞到显示完成因此元素后，所以不能等待它
             await Task.Delay(300);//碰到这个，开始刷新
         }
         protected override async Task ShowSuccessMessage(string title = "操作提示", string msg = "操作成功！")

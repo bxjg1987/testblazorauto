@@ -22,7 +22,18 @@
 		<Compile Remove="Share\RightContent.razor.cs" />
 		<Compile Remove="MainLayout.razor.cs" />
 	</ItemGroup>
+	
+	<!--这个一定要保留，否则wasm模式时启动报错，发布后手动删除这些文件即可
+	已经在服务端部分配置为生成后自动删除
+	<ItemGroup Condition="'$(Configuration)' == 'Release'">
+		<Content Remove="wwwroot\appsettings*.json*" />
+	</ItemGroup>-->
 
+
+	<!--排除多语言-->
+	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
+		<SatelliteResourceLanguages>xx</SatelliteResourceLanguages>
+	</PropertyGroup>
 
 	<ItemGroup>
 		<Content Remove="Share\MainBreadcrumb.razor" />

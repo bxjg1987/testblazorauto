@@ -15,7 +15,6 @@ using System.Threading.Tasks;
 using ZLJ.Core.Authorization.Users;
 using ZLJ.Core.BaseInfo.Post;
 
-
 namespace ZLJ.Core.Authorization.Roles
 {
     public class RoleManager : BXJGUtilsRoleManager<Role, User>

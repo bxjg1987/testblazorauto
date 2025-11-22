@@ -19,13 +19,13 @@ namespace BXJG.Utils.Application.OU
     {
         public ObjectMapProfile()
         {
+            
 
-
-
+       
             this.CreateMapSelectOu<OUSelectDto>();
 
             CreateMap<OrganizationUnitEntity, ZLJ.Application.Common.Share.OU.OUSelectDto>().IncludeBaseSelectOu();
-
+         
         }
     }
 }

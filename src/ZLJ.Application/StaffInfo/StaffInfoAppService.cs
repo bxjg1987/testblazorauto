@@ -119,7 +119,7 @@ namespace ZLJ.Application.StaffInfo
 
 
             //Organization Units
-            await UserManager.SetOrganizationUnitsAsync(user, input.OrganizationUnits.ToArray());
+            await UserManager.SetOrganizationUnitsAsync(user, input.OrganizationUnitIds.ToArray());
 
 
             //Notifications
@@ -181,7 +181,8 @@ namespace ZLJ.Application.StaffInfo
             var qt = (await GetRoleAndOusAsync(new[] { entity == null ? id : entity.Id })).First();
             CurrentUnitOfWork.Items["tmpPost"] = qt.Select(c => c.Post).Where(c => c != default);
             CurrentUnitOfWork.Items["tmpOu"] = qt.Select(c => c.Ou).Where(c => c != default);
-            return await base.GetDtoById(entity, id);
+            //return await base.GetDtoById(entity, id);
+            return MapToEntityDto(qt.Key);
         }
 
         private IQueryable<QueryTemp> GetFullQuery()
@@ -299,9 +300,11 @@ namespace ZLJ.Application.StaffInfo
 
 
             var dto = ObjectMapper.Map<StaffInfoDto>(entity);
-            dto.Posts = ObjectMapper.Map<List<Common.Share.Post.PostForSelectDto>>(posts.Where(c => c != default).DistinctBy(c => c.Id));
-            dto.RoleNames = dto.Posts.Where(c => c != default).DistinctBy(c => c.Id).Select(c => c.Name).ToArray();
-            dto.Ous = ObjectMapper.Map<List<OUSelectDto>>(ous.Where(c => c != default).DistinctBy(c => c.Id));
+            //dto.BaseDto = ObjectMapper.Map<UserDto>(entity);//映射配置已经做了
+            dto.BaseDto.Roles = ObjectMapper.Map<List<Common.Share.Post.PostProviderDto>>(posts.Where(c => c != default).DistinctBy(c => c.Id));
+            dto.RoleNames = dto.BaseDto.Roles.Where(c => c != default).DistinctBy(c => c.Id).Select(c => c.Value).ToArray();
+            dto.BaseDto.Ous = ObjectMapper.Map<List<OUSelectDto>>(ous.Where(c => c != default).DistinctBy(c => c.Id));
+            dto.OrganizationUnitIds = dto.BaseDto.Ous.Select(x => Convert.ToInt64(x.Id)).ToList();
             return dto;
         }
 
@@ -322,5 +325,63 @@ namespace ZLJ.Application.StaffInfo
         //    };
         //}
 
+
+        protected override async Task MapToEntityAsync(StaffInfoEditDto input, User user)
+        {
+            var oldPwd = user.Password;
+
+
+            await base.MapToEntityAsync(input, user);
+
+            user.TenantId = AbpSession.TenantId;
+
+            if (input.IsEnableAccount)
+            {
+                if (input.ChangePassword)
+                {
+                    await UserManager.InitializeOptionsAsync(AbpSession.TenantId);
+                    foreach (var validator in _passwordValidators)
+                    {
+                        CheckErrors(await validator.ValidateAsync(UserManager, user, input.Password));
+                    }
+
+                    user.Password = PasswordHasher.HashPassword(user, input.Password);
+                    //await UserManager.ChangePasswordAsync(user, input.Password);
+                }
+                else
+                {
+                    user.Password = oldPwd;
+                }
+            }
+            else
+            {
+                user.Password = oldPwd;
+            }
+
+            user.Roles = new Collection<UserRole>();
+            //user.Roles.Clear();
+            foreach (var roleName in input.RoleNames)
+            {
+                var role = await RoleManager.GetRoleByNameAsync(roleName);
+                user.Roles.Add(new UserRole(AbpSession.TenantId, user.Id, role.Id));
+            }
+
+            user.Surname = user.Name;
+
+            CheckErrors(await UserManager.UpdateAsync(user));
+            await CurrentUnitOfWork.SaveChangesAsync(); //To get new user's Id.
+
+
+            //Organization Units
+            await UserManager.SetOrganizationUnitsAsync(user, input.OrganizationUnitIds.ToArray());
+
+
+            //Notifications
+            //await _notificationSubscriptionManager.SubscribeToAllAvailableNotificationsAsync(user.ToUserIdentifier());
+        }
+        //public override Task<StaffInfoDto> UpdateAsync(StaffInfoEditDto input)
+        //{
+        //    return base.UpdateAsync(input);
+        //}
     }
 }

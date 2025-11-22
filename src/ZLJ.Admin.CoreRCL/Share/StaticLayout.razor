@@ -1,22 +1,32 @@
 ﻿@using System.Text.RegularExpressions
-@using BXJG.Common.Events
 @inherits LayoutComponentBase
 @inject NavigationManager Navigation
-@implements IDisposable
 
 <HeadContent>
-
-    <link antblazor-css>
+    <link antblazor-css> 
+    @* 新版本已经内嵌了 *@
+    @* <link href="_content/AntDesign/css/ant-design-blazor.css" rel="stylesheet" /> *@
+    @* <link href="_content/AntDesign.ProLayout/css/ant-design-pro-layout-blazor.css" rel="stylesheet" /> *@
+  
     <link href="@Assets["app.css"]" rel="stylesheet" />
+
+
+    @* 下面这个引用不了，也没必要 *@
+    @* <link href="_content/ZLJ.Admin.CoreRCL/css/site.css" rel="stylesheet"> *@
+
+    @* <link href="/app.css" rel="stylesheet" /> *@
 </HeadContent>
 
-   <MyPageTitle  />
-
+            <MyPageTitle  />
 <div style="height:100vh">
     <ErrorBoundary @ref="errorBoundary">
         <ChildContent>
 
             <Layout>
+
+
+
+
                 <Sider @bind-Collapsed=@MainMenuCollapsed NoTrigger Collapsible>
                     <div class="logo" style="height:29px; margin:15px;">
                         <img src="bxjglogo.png" style="width:37px; height:30px; float:left;" />
@@ -24,7 +34,7 @@
                         @if (!MainMenuCollapsed)
                         {
                             <h3 style="    color: #ddd;    float: left;    margin-left: 0.5rem;    line-height: 35px;    font-size: 1.2rem;">
-                                变形精怪
+                                小管印
                             </h3>
                         }
                     </div>
@@ -61,12 +71,10 @@
                         }
                     </Content>
                     <Footer Style="text-align: center; padding:0.3rem 0; color:rgba(100,100,100,0.7); height:3.5vh; position:fixed; z-index:999; width:100%; bottom:0;">
-                        Copyright ©1900-2024 变形精怪, All Rights Reserved | Power by <a href="https://dotnet.microsoft.com/zh-cn/apps/aspnet" target="_blank">asp.net @System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription</a> / <a href="https://aspnetboilerplate.com" target="_blank">abp @typeof(Abp.AbpBootstrapper).Assembly.GetName().Version</a> / <a href="https://antblazor.com" target="_blank">antblazor @typeof(AntDesign.AntComponentBase).Assembly.GetName().Version</a> / <a href="https://gitee.com/bxjg1987_admin/abp" target="_blank">源码</a>
+                        Copyright ©1900-2025 变形精怪, All Rights Reserved | 技术支持：17723896676 
                     </Footer>
                 </Layout>
             </Layout>
-
-
         </ChildContent>
         <ErrorContent>
             <Flex Gap="FlexGap.Small" Style="height:50vh;" Align="FlexAlign.Center" Justify="FlexJustify.Center" Vertical="true">
@@ -81,56 +89,33 @@
         </ErrorContent>
     </ErrorBoundary>
 
-
 </div>
-
 
 <SectionContent SectionName="bottom-scripts">
     <script antblazor-js></script>
     <script src="/echarts.5.4.3.min.js"></script>
     <script type="module" src="_content/Blazor.ECharts/core.js"></script>
     <script>
-        // import { BrotliDecode } from '/decode.min.js';
-        // Blazor.start({
-        //     webAssembly: {
-        //         loadBootResource: function (type, name, defaultUri, integrity) {
-        //             if (type !== 'dotnetjs' && location.hostname !== 'localhost' && type !== 'configuration' && type !== 'manifest') {
-        //                 return (async function () {
-        //                     const response = await fetch(defaultUri + '.br', { cache: 'no-cache' });
-        //                     if (!response.ok) {
-        //                         throw new Error(response.statusText);
-        //                     }
-        //                     const originalResponseBuffer = await response.arrayBuffer();
-        //                     const originalResponseArray = new Int8Array(originalResponseBuffer);
-        //                     const decompressedResponseArray = BrotliDecode(originalResponseArray);
-        //                     const contentType = type ===
-        //                         'dotnetwasm' ? 'application/wasm' : 'application/octet-stream';
-        //                     return new Response(decompressedResponseArray,
-        //                         { headers: { 'content-type': contentType } });
-        //                 })();
-        //             }
-        //         }
-        //     }
-        // });
-        //https://github.com/dotnet/aspnetcore/pull/53291
-        //注意上面的blazor.web.js autostart="false"
-        //经过测试，下面的测试没什么卵用
-        // Blazor.start({
-        //     webAssembly: {
-        //         configureRuntime: (builder) => {
-        //             builder.withConfig({
-        //                 maxParallelDownloads: 1
-        //             });
-        //         },
-        //     },
-        // });
+        //.net10 bug https://github.com/dotnet/aspnetcore/issues/64009#issuecomment-3534259401
+        (function() {
+            const originalFetch = window.fetch;
+            window.fetch = function(resource, options = {}) {
+                // Check if the resource is a .wasm file
+                const url = typeof resource === 'string' ? resource : resource.url;
+                if (url && url.toLowerCase().endsWith('.wasm')) {
+                    // Force cache mode for .wasm files
+                    options = {
+                        ...options,
+                        cache: 'force-cache'
+                    };
+                }
+                return originalFetch.call(this, resource, options);
+            };
+        })();
     </script>
+    @* <script src="/app.js"></script> *@
 </SectionContent>
-
 @code {
-    // [SupplyParameterFromQuery]
-    // public int mmc { get; set; }
-
     string XianshiCuowu(Exception ex)
     {
 #if DEBUG
@@ -140,48 +125,28 @@
 #endif
 
     }
-
-    // bool collapsed => mmc > 0;
-    bool auth = false;
     private ErrorBoundary? errorBoundary;
-    [Inject]
-    public AuthenticationStateProvider AuthStateProvider { get; set; }
-    [Inject]
-    public Zhongjie Zhongjie { get; set; }
-
-    bool MainMenuCollapsed;
-    [Inject]
-    public ILogger<StaticLayout> Logger { get; set; }
-    //string LayoutStyle => "background-color:#f3f6fb; margin-left:" + (MainMenuCollapsed ? 80 : 200) + "px;transition-property: margin-left";
     void fanhui()
     {
         errorBoundary?.Recover();
     }
-    void fancuo()
-    {
+    // [SupplyParameterFromQuery]
+    // public int mmc { get; set; }
 
-        throw new Exception("xxxxxxxxxxxxxxx");
-    }
+    // bool collapsed => mmc > 0;
+    bool auth = false;
+
+    [Inject]
+    public AuthenticationStateProvider AuthStateProvider { get; set; }
+
+
+    bool MainMenuCollapsed;
+
+    //string LayoutStyle => "background-color:#f3f6fb; margin-left:" + (MainMenuCollapsed ? 80 : 200) + "px;transition-property: margin-left";
+
     void toggle()
     {
         MainMenuCollapsed = !MainMenuCollapsed;
-    }
-    // IDisposable appContainerInited;
-    protected override void OnInitialized()
-    {
-        // appContainerInited = Zhongjie.Zhuce( async () =>
-        // {
-        //     appContainerInited?.Dispose();
-        //     this.Logger.LogDebug("全局状态初始化处理事件执行！");
-        //     StateHasChanged();
-        //     await InvokeAsync(StateHasChanged);
-
-        // },"appContainerInited");
-        base.OnInitialized();
-    }
-    public void Dispose()
-    {
-        // appContainerInited?.Dispose();
     }
 
     protected override async Task OnInitializedAsync()
@@ -189,10 +154,6 @@
         await base.OnInitializedAsync();
         var zt = await AuthStateProvider.GetAuthenticationStateAsync();
         auth = zt != null && zt.User != default && zt.User.Identity.IsAuthenticated;
-
-        //  await Task.Delay(5000);
-        //  InvokeAsync(StateHasChanged);
-        // StateHasChanged();
     }
     // [Inject]
     // public IJSRuntime JSRuntime { get; set; }

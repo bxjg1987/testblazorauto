@@ -15,7 +15,7 @@
         <Row Gutter="0">
             <Col Span="24">
             <FormItem Label="名称">
-                @if (IsShowUpdate)
+                @if (isEdit)
                 {
                     <Input @bind-Value="@context.DisplayName" AllowClear />
                 }
@@ -31,7 +31,7 @@
         <Row Gutter="0">
             <Col Span="8">
             <FormItem LabelColSpan="9" WrapperColSpan="15">
-                @if (IsShowUpdate)
+                @if (isEdit)
                 {
                     <Checkbox @bind-Value="@context.IsDefault" />
                 }
@@ -43,7 +43,7 @@
             </Col>
             <Col Span="8">
             <FormItem LabelColSpan="9" WrapperColSpan="15">
-              @*   @if (IsShowUpdate)
+              @*   @if (isEdit)
                 {
                     <Checkbox @bind-Value="@context.IsStatic" />
                 }
@@ -55,7 +55,7 @@
             </Col>
             <Col Span="8">
             <FormItem LabelColSpan="9" WrapperColSpan="15">
-                @if (IsShowUpdate)
+                @if (isEdit)
                 {
                     <Checkbox @bind-Value="@context.IsAttention" />
                 }
@@ -69,7 +69,7 @@
         <Row Gutter="0">
             <Col Span="24">
             <FormItem Label="备注">
-                @if (IsShowUpdate)
+                @if (isEdit)
                 {
                     <Input @bind-Value="@context.Description" AllowClear />
                 }
@@ -86,7 +86,7 @@
             <FormItem Label="权限">
 
 
-                @if (IsShowUpdate)
+                @if (isEdit)
                 {
                     <TreePermission KeyExpression="x => x.DataItem.Name" Style="height:50vh; overflow-y:auto;" DefaultExpandParent @bind-CheckedKeys="@editDto.GrantedPermissions" />
                 }

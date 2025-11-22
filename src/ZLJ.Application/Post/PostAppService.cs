@@ -110,7 +110,7 @@ namespace ZLJ.Application.Post
 
             //input.nam
             var role = ObjectMapper.Map<PostEntity>(input);
-            role.Name = TinyPinyin.PinyinHelper.GetPinyin(input.DisplayName, "")+ BXJG.Common.RandomHelper.GetRandomString(6);//多音字咋搞？
+            role.Name = TinyPinyin.PinyinHelper.GetPinyin(input.DisplayName, "") + BXJG.Common.RandomHelper.GetRandomString(6);//多音字咋搞？
             role.SetNormalizedName();
 
             CheckErrors(await _roleManager.CreateAsync(role));
@@ -157,8 +157,8 @@ namespace ZLJ.Application.Post
                      select new { role, ou };
 
             q2 = q2.WhereIf(input.Filter.OuCode.IsNotNullOrWhiteSpaceBXJG(), c => c.ou.Code.StartsWith(input.Filter.OuCode))
-                   .WhereIf(input.Filter.IsStatic.HasValue,c=>c.role.IsStatic==input.Filter.IsStatic.Value)
-                   .WhereIf(input.Filter.Keywords.IsNotNullOrWhiteSpaceBXJG(), c => c.role.Name.Contains(input.Filter.Keywords)|| c.role.DisplayName.Contains(input.Filter.Keywords));
+                   .WhereIf(input.Filter.IsStatic.HasValue, c => c.role.IsStatic == input.Filter.IsStatic.Value)
+                   .WhereIf(input.Filter.Keywords.IsNotNullOrWhiteSpaceBXJG(), c => c.role.Name.Contains(input.Filter.Keywords) || c.role.DisplayName.Contains(input.Filter.Keywords));
 
             q2 = from role in q2.Select(c => c.role).Distinct()
                  join ouRole in ouRoleRepository.GetAll().AsNoTrackingWithIdentityResolution() on role.Id equals ouRole.RoleId into tem1
@@ -169,11 +169,11 @@ namespace ZLJ.Application.Post
             //input.Sorting.Replace("DisplayName");
             var ct = await q2.CountAsync(CancellationTokenProvider.Token);
 
-            
+
 
             q2 = q2.OrderBy(input.Sorting).PageBy(input);
 
-          //q2 = q2.OrderBy(c => c.role.DisplayName).PageBy(input);
+            //q2 = q2.OrderBy(c => c.role.DisplayName).PageBy(input);
 
             var list = await q2.ToListAsync(CancellationTokenProvider.Token);
 

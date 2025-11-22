@@ -15,7 +15,6 @@ namespace ZLJ.Admin.CoreRCL.Share
 {
     public partial class Routes : IAsyncDisposable
     {
-        IDisposable qjxxsj;
         //[Inject]
         //public CommonConnection Connection { get; set; }
         [Inject]
@@ -29,10 +28,8 @@ namespace ZLJ.Admin.CoreRCL.Share
         //[Inject]
         //public AppContainer AppContainer { get; set; }
 
-        [Inject(Key =Consts.TongyongLianjie)]
+        [Inject(Key = Consts.TongyongLianjie)]
         public HubConnection HubConnection { get; set; }
-        [Inject]
-        public IServiceProvider ServiceProvider { get; set; }
 
         //[Inject]
         //public AuthenticationStateProvider AuthenticationState { get; set; }
@@ -47,20 +44,13 @@ namespace ZLJ.Admin.CoreRCL.Share
         //        AppContainer.AbpUserConfiguration.Localization.Values.Add(item.Key, item.Items);
         //    }
         //}
-
+        IDisposable qjxxsj;
         protected override void OnInitialized()
         {
-            //可以考虑在bxjg.utils.rcl中定义一个组件，在路由中引用
-            //这样可以把必须在ui中做的公共的初始化逻辑放到bxjg.utils.rcl中
-
-            //AbpExceptionInterceptor1.Services.Value = ServiceProvider;
-            //AbpExceptionInterceptorAttribute.ServicesInBrower = ServiceProvider;
-            //Console.WriteLine($"全局路由中的ioc实例：{ServiceProvider.GetHashCode()}");
-       
             base.OnInitialized();
 
             #region 全局消息
-           // this.Logger.LogDebug($"路由中的init执行，准备连接后端signalR...");
+            // this.Logger.LogDebug($"路由中的init执行，准备连接后端signalR...");
 
             qjxxsj = Zhongjie.Zhuce<TenantNotification>(x =>
             {
@@ -73,8 +63,8 @@ namespace ZLJ.Admin.CoreRCL.Share
                 //{
                 //    //其它消息类型
                 //}
-                x.Data.Properties.TryGetValue("Message", out  msg);
-                x.Data.Properties.TryGetValue("Title", out  title);
+                x.Data.Properties.TryGetValue("Message", out msg);
+                x.Data.Properties.TryGetValue("Title", out title);
 
                 var nf = new NotificationConfig
                 {
@@ -107,7 +97,7 @@ namespace ZLJ.Admin.CoreRCL.Share
             //  Logger.LogDebug("blazor路由中的appcontainer："+AppContainer.GetHashCode());
 
             //   AppContainer.DeepCloneTo(App); 
-           // Logger.LogDebug("appcontainer：" + AppContainer.GetHashCode());
+            // Logger.LogDebug("appcontainer：" + AppContainer.GetHashCode());
 
             //var r = await AuthenticationState.GetAuthenticationStateAsync();
             //if (r.User?.Identity != default && r.User.Identity.IsAuthenticated)
@@ -137,10 +127,10 @@ namespace ZLJ.Admin.CoreRCL.Share
             //AppContainer.AbpUserConfiguration = abpUserCfgService.GetAll();
 
         }
-
-  
         protected override async Task OnInitializedAsync()
         {
+            //Logger.LogWarning($"连接前，id：{HubConnection?.ConnectionId}");
+            //Console.WriteLine($"连接前2，id：{HubConnection?.ConnectionId}");
             if (RendererInfo.IsInteractive)
                 await HubConnection.StartAsync();
 
@@ -185,17 +175,12 @@ namespace ZLJ.Admin.CoreRCL.Share
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             await JSRuntime.InvokeVoidAsync("hideLoadingDiv");
-
-            if (firstRender)
-            {
-          
-            }
         }
 
         public ValueTask DisposeAsync()
         {
-            qjxxsj?.Dispose();
             // Zhongjie.Zhuxiao();
+            qjxxsj?.Dispose();
             return ValueTask.CompletedTask;
         }
     }

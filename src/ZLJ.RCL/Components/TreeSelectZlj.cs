@@ -61,41 +61,47 @@ namespace ZLJ.RCL.Components
         public virtual bool IsKeyId { get; set; } = true;
 
         // 用于防止循环调用的标志位
-        private bool _updatingValueFromPropertySetter = false;
+        //private bool _updatingValueFromPropertySetter = false;
+
+        long? treeId;
 
         [Parameter]
         public long TreeId
         {
             get
             {
-                if (Value.IsNullOrWhiteSpaceBXJG())
-                    return default;
-                if (long.TryParse(Value, out long result))
-                    return result;
-                return default;
+                //if (Value.IsNullOrWhiteSpaceBXJG())
+                //    return default;
+                //if (long.TryParse(Value, out long result))
+                //    return result;
+                //return default;
+                return (long)treeId;
             }
             set
             {
                 // 防止循环调用
-                if (_updatingValueFromPropertySetter)
+                //if (_updatingValueFromPropertySetter)
+                //    return;
+
+                if (value == treeId)
                     return;
+
 
                 //if (Value.IsNullOrEmpty() && value == 0)
                 //    return;
 
-                string newValue = value == 0 ? string.Empty : value.ToString();
-                if (Value != newValue)
-                {
-                    _updatingValueFromPropertySetter = true;
-                    try
-                    {
-                        CurrentValue = newValue;
-                    }
-                    finally
-                    {
-                        _updatingValueFromPropertySetter = false;
-                    }
-                }
+                // string newValue = value == 0 ? string.Empty : value.ToString();
+
+                //_updatingValueFromPropertySetter = true;
+                //try
+                //{
+                treeId = value;
+                CurrentValue = value == 0 ? string.Empty : value.ToString();//newValue
+                //}
+                //finally
+                //{
+                //    _updatingValueFromPropertySetter = false;
+                //}
             }
         }
 
@@ -108,34 +114,36 @@ namespace ZLJ.RCL.Components
         {
             get
             {
-                if (Value.IsNullOrWhiteSpaceBXJG() || Value == "0")
-                    return default;
-                if (long.TryParse(Value, out long result))
-                    return result;
-                return default;
+                return treeId;
+                //if (Value.IsNullOrWhiteSpaceBXJG() || Value == "0")
+                //    return default;
+                //if (long.TryParse(Value, out long result))
+                //    return result;
+                //return default;
             }
             set
             {
                 // 防止循环调用
-                if (_updatingValueFromPropertySetter)
-                    return;
+                //if (_updatingValueFromPropertySetter)
+                //    return;
 
+                if (value == treeId)
+                    return;
                 //if (Value.IsNullOrEmpty() && (!value.HasValue || value == 0))
                 //    return;
 
-                string newValue = (value == 0 || value == null) ? string.Empty : value.ToString();
-                if (Value != newValue)
-                {
-                    _updatingValueFromPropertySetter = true;
-                    try
-                    {
-                        CurrentValue = newValue;
-                    }
-                    finally
-                    {
-                        _updatingValueFromPropertySetter = false;
-                    }
-                }
+                //string newValue = (value == 0 || value == null) ? string.Empty : value.ToString();
+
+                //_updatingValueFromPropertySetter = true;
+                //try
+                //{
+                treeId = value;
+                CurrentValue = (value == 0 || value == null) ? string.Empty : value.ToString(); // newValue;
+                //}
+                //finally
+                //{
+                //    _updatingValueFromPropertySetter = false;
+                //}
             }
         }
 
@@ -149,68 +157,72 @@ namespace ZLJ.RCL.Components
             //    return;
 
 
-            var sdfsdf = this.Value;
-            var sdsss = this.CurrentValue;
-            var sss = this.CurrentValueAsString;
+            //var sdfsdf = this.Value;
+            //var sdsss = this.CurrentValue;
+            // var sss = this.CurrentValueAsString;
 
 
             //if (Value == value)
             //    return;
 
             // 防止在属性setter中触发的OnCurrentValueChange再次触发事件回调
-            if (_updatingValueFromPropertySetter)
-                return;
+            //if (_updatingValueFromPropertySetter)
+            //    return;
 
             base.OnCurrentValueChange(value);
 
-            long? z = default;
-            if (!value.IsNullOrWhiteSpaceBXJG() && value != "0" && long.TryParse(value, out long parsedValue))
-                z = parsedValue;
+            //long? z = default;
+            //if (!value.IsNullOrWhiteSpaceBXJG() && value != "0" && long.TryParse(value, out long parsedValue))
+            //    z = parsedValue;
 
             _ = InvokeAsync(async () =>
               {
-                  await TreeIdNullableChanged.InvokeAsync(z);
-                  await TreeIdChanged.InvokeAsync(z.HasValue ? z.Value : default);
-
-                  //await TreeIdsChanged.InvokeAsync(TreeIds);
+                  if (TreeIdNullableChanged.HasDelegate)
+                      await TreeIdNullableChanged.InvokeAsync(value.IsNullOrEmpty() || value == "0" ? null : long.Parse(value));
+                  if (TreeIdChanged.HasDelegate)
+                      await TreeIdChanged.InvokeAsync(value.IsNullOrEmpty() || value == "0" ? default : long.Parse(value));
               });
         }
 
-
+        IEnumerable<long> treeIds = Enumerable.Empty<long>();
         [Parameter]
         public IEnumerable<long> TreeIds
         {
             get
             {
-                if (Values == null || !Value.Any())
-                    return default;
+                return treeIds;
+                //if (Values == null || !Value.Any())
+                //    return default;
 
-                return Values.Select(x => long.Parse(x));
+                //return Values.Select(x => long.Parse(x));
             }
             set
             {
                 //OnValuesChangeAsync
                 // 防止循环调用
-                if (_updatingValueFromPropertySetter)
+                //if (_updatingValueFromPropertySetter)
+                //    return;
+
+                if (value == null && treeIds == null)
                     return;
 
-                if (value == null && Values == null)
+                if (value.SequenceEqual(treeIds))
                     return;
 
-                var newValue = value == null || !value.Any() ? Enumerable.Empty<string>() : value.Select(x => x.ToString());
-                if (Values==null&&value!=null||    newValue.Count() != Values.Count() || newValue.Any(x => !Values.Contains(x)))
-                {
-                    _updatingValueFromPropertySetter = true;
-                    try
-                    {
-                        Values = newValue;
-                    }
-                    finally
-                    {
-                        _updatingValueFromPropertySetter = false;
-                    }
-                }
-                
+                //var newValue = value == null || !value.Any() ? Enumerable.Empty<string>() : value.Select(x => x.ToString());
+                //if (Values == null && value != null || newValue.Count() != Values.Count() || newValue.Any(x => !Values.Contains(x)))
+                //{
+                //_updatingValueFromPropertySetter = true;
+                //try
+                //{
+                    treeIds = value;
+                    Values = value == null || !value.Any() ? Enumerable.Empty<string>() : value.Select(x => x.ToString()); //newValue;
+                //}
+                //finally
+                //{
+                //    _updatingValueFromPropertySetter = false;
+                //}
+                //}
             }
         }
         //OnParametersSetAsync中触发
@@ -312,12 +324,8 @@ namespace ZLJ.RCL.Components
         protected override async Task OnParametersSetAsync()
         {
             await base.OnParametersSetAsync();
-            if (ParentName != parentName)
-            {
-                await LoadDataSource();
-            }
             // 订阅基类的 ValuesChanged 事件
-            if (!ValuesChanged.HasDelegate&& TreeIdsChanged.HasDelegate)
+            if (!ValuesChanged.HasDelegate && TreeIdsChanged.HasDelegate)
             {
                 //var originalCallback = ValuesChanged;
                 ValuesChanged = EventCallback.Factory.Create<IEnumerable<string>>(this, async values =>
@@ -332,6 +340,11 @@ namespace ZLJ.RCL.Components
                     //Console.WriteLine($"Values changed: {string.Join(", ", values ?? Enumerable.Empty<TItemValue>())}");
                 });
             }
+            //init加载就行了
+            //if (ParentName != parentName)
+            //{
+            //    await LoadDataSource();
+            //}
         }
 
         //public override async Task SetParametersAsync(ParameterView parameters)
@@ -345,23 +358,110 @@ namespace ZLJ.RCL.Components
         {
             DataSource = await HttpClient.GetTreeForSelect<TGetTreeForSelectOutput>(new { ParentName });
             parentName = ParentName;
-           
+
+            //DefaultValues = treeIds.Select(x=>x.ToString()); //DataSource.Select(d=>d.)
+
+            //base.Value = treeId?.ToString();
+            ////StateHasChanged();
+            // base.Values = treeIds?.Select(x => x.ToString());
+            //StateHasChanged();
+            //return;
+            //this.Values=
             //_ = InvokeAsync(async () =>
             //{
             //if (Value.IsNotNullOrWhiteSpaceBXJG() || Values != null)
             //{
-            DropdownStyle = "display:none;";
-            if (RendererInfo.IsInteractive)
-            {
+            //if (RendererInfo.IsInteractive)
+
+            //反射获取当前对象字段_cachedValues的值
+
+            //await OpenAsync();
+            //StateHasChanged();
+            //if (RendererInfo.IsInteractive)
+            //{
+//异步加载数据以后，开合下下拉框，否则后续的反射执行将无效
+                const string sdfsf = "display:none;";
+                DropdownStyle += sdfsf;
                 await OpenAsync();
                 //Open = true;
                 //StateHasChanged();
-                //await Task.Delay(3000);
+                //await Task.Delay(5000);
                 // Open = false;
                 //StateHasChanged();
-                DropdownStyle = string.Empty;
+                DropdownStyle = DropdownStyle.Replace(sdfsf, string.Empty);
                 await _dropDown.Close();
-            }
+           // }
+
+
+           
+                 //   await Task.Delay(1);
+
+                    //var valuesField = GetType().GetPrivateField("_cachedValues");
+                    //var valueField = GetType().GetPrivateField("_cachedValue");
+
+                    //valuesField.SetValue(this, Enumerable.Empty<string>());
+                    //valueField.SetValue(this, string.Empty);
+                    //StateHasChanged();
+
+                    //// var values = this.GetFieldValue("_cachedValues");// GetType().GetField("_cachedValues", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(this);
+                    //// Abp.Reflection.Extensions.MemberInfoExtensions.fi
+                    //// var value = this.GetFieldValue("_cachedValue");//.GetField("_cachedValue", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(this);
+
+                    //base.Value = treeId?.ToString();
+                    ////StateHasChanged();
+                    //base.Values = treeIds?.Select(x => x.ToString());
+                    //StateHasChanged();
+                    //return;
+
+
+
+                    //   await Task.Delay(1000);
+                    //反射调用父类的UpdateValueAndSelection
+                    //OnFirstAfterRenderAsync
+                    if (Multiple)
+                    {
+                        //var _tree = this.GetFieldValue("_tree"); //GetType().GetPrivateField("_tree").GetValue(this);
+                        //var treeNodes = _tree.GetFieldValue("_allNodes");
+                        //var _cachedValues = this.GetFieldValue("_cachedValues") as long[];
+                        //UpdateValuesSelection
+                        //反射时必须用父类类型，否则获取不到
+                        var methodInfo = typeof(TreeSelect<string, TGetTreeForSelectOutput>).GetMethod("UpdateValuesSelection",
+                                           BindingFlags.NonPublic | BindingFlags.Instance);
+                        //Console.WriteLine($"反射执行UpdateValuesSelection：{methodInfo == null} treeNodes：{treeNodes==null} _cachedValues：{_cachedValues?.Any()}");
+                        methodInfo.Invoke(this, null);
+                        StateHasChanged();
+                    }
+                    //else
+                    //{
+                    //经过测试，单选时，开合下拉框即可
+                        //if (RendererInfo.IsInteractive)
+                        //{
+                            //const string sdfsf = "display:none;";
+                            //DropdownStyle += sdfsf;
+                            //await OpenAsync();
+                            ////Open = true;
+                            ////StateHasChanged();
+                            ////await Task.Delay(5000);
+                            //// Open = false;
+                            ////StateHasChanged();
+                            //DropdownStyle = DropdownStyle.Replace(sdfsf, string.Empty);
+                            //await _dropDown.Close();
+                        //}
+                        //else
+                        //{
+                        //    var methodInfo = typeof(TreeSelect<string, TGetTreeForSelectOutput>).GetMethod("UpdateValueAndSelection",
+                        //                  BindingFlags.NonPublic | BindingFlags.Instance);
+                        //   //Console.WriteLine("反射执行UpdateValueAndSelection：" + methodInfo == null);
+                        //    methodInfo.Invoke(this, null);
+                        //    StateHasChanged();
+                        //}
+                    //}
+
+                    //    StateHasChanged();
+                    // await Task.Delay(2000);
+                    //StateHasChanged();
+                  
+
             //}
             //});
             //StateHasChanged();

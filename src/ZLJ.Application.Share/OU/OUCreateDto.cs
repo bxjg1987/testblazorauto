@@ -10,7 +10,7 @@ namespace ZLJ.Application.Share.OU
 {
     public class OUCreateDto: BXJG.Utils.Application.Share.OU.OUCreateDto
     {
-      public OUType OUType { get; set; } = OUType.Department;
+        public OUType OUType { get; set; } = OUType.Department;
         // public OUEditDto Dto { get; set; }
         //public BXJG.Utils.Application.Share.OU.OUCreateDto Dto { get; set; }
     }

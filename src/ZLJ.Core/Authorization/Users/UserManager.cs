@@ -14,10 +14,14 @@ using ZLJ.Core.Authorization.Roles;
 using System.Linq;
 using Abp.Collections.Extensions;
 using TinyPinyin;
+//using ZLJ.Core.Share.Authorization.Users;
 
 namespace ZLJ.Core.Authorization.Users
 {
-    public class UserManager : BXJG.Utils.User.BXJGUtilsUserManager<Role, User>
+    //public interface IUserManager : IUserManager<Role, User>,IAbpUserManager<Role, User>
+    //{
+    //}
+    public class UserManager : BXJG.Utils.User.BXJGUtilsUserManager<Role, User>//, IUserManager
     {
         public UserManager(
             RoleManager roleManager,
@@ -62,27 +66,58 @@ namespace ZLJ.Core.Authorization.Users
         //{
         //    return base.CreateAsync(user, password);
         //}
-
         public override Task<IdentityResult> CreateAsync(User user)
         {
             user.Pinyin = PinyinHelper.GetPinyinInitials(user.Name);
 
-            if (user.EmailAddress.IsNullOrWhiteSpaceBXJG())
-                user.EmailAddress = Guid.NewGuid().ToString("n") + "@zlj.com";
 
             if (!user.IsEnableAccount)
             {
-                if (user.UserName.IsNullOrWhiteSpaceBXJG())
-                    user.UserName = Guid.NewGuid().ToString("n");
+                //if (user.UserName.IsNullOrWhiteSpaceBXJG())
+                    user.UserName = PinyinHelper.GetPinyin(user.Name) + Abp.RandomHelper.GetRandom(0,10000);// ; Guid.NewGuid().ToString("n");
 
-                if (user.Password.IsNullOrWhiteSpaceBXJG())
-                    user.Password = "1A2b_csdfdsf";
+                //if (user.Password.IsNullOrWhiteSpaceBXJG())
+                    user.Password = "A2_c"+BXJG.Common.RandomHelper.GetRandomString();
 
                 user.IsLockoutEnabled = true;
                 user.LockoutEndDateUtc = DateTime.MaxValue;
             }
+            if (user.EmailAddress.IsNullOrWhiteSpaceBXJG())
+                user.EmailAddress = user.UserName + "@a.cn";
+
             return base.CreateAsync(user);
         }
+
+        //public override Task<IdentityResult> UpdateAsync(User user)
+        //{
+        //    if (user.IsEnableAccount)
+        //    { 
+        //        if(user.chan)
+        //    }
+
+        //    return base.UpdateAsync(user);
+        //}
+
+        //protected override Task<IdentityResult> UpdateUserAsync(User user)
+        //{
+        //    if (!user.IsEnableAccount)
+        //    {
+        //        if (user.UserName.IsNullOrWhiteSpaceBXJG())
+        //            user.UserName = PinyinHelper.GetPinyin(user.Name) + Abp.RandomHelper.GetRandom(0, 10000);// ; Guid.NewGuid().ToString("n");
+
+        //        if (user.Password.IsNullOrWhiteSpaceBXJG())
+        //            user.Password = "A2_c" + BXJG.Common.RandomHelper.GetRandomString();
+
+        //        user.IsLockoutEnabled = true;
+        //        user.LockoutEndDateUtc = DateTime.MaxValue;
+        //    }
+        //    return base.UpdateUserAsync(user);
+        //}
+        //protected override Task<IdentityResult> UpdateUserAsync(User user)
+        //{
+        //    return base.UpdateUserAsync(user);
+        //}
+
 
         //public IUnitOfWorkManager unitOfWorkManager { get; set; }
         // public override Task<User> FindByIdAsync(string userId)

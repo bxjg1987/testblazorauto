@@ -1,4 +1,5 @@
-﻿@using ZLJ.Application.Share.StaffInfo
+﻿@using ZLJ.Application.Common.Share.OU
+@using ZLJ.Application.Share.StaffInfo
 @using ZLJ.RCL.Components.Post
 @inherits ZLJ.RCL.Components.CreateBaseComponent<StaffInfoDto, StaffInfoCreateDto>
 
@@ -27,6 +28,11 @@
         <GridRow>
             <GridCol Span="8">
                 <FormItem>
+                    <Input @bind-Value="context.PhoneNumber" AllowClear="true" />
+                </FormItem>
+            </GridCol>
+            <GridCol Span="8">
+                <FormItem>
                     <Input @bind-Value="context.IdNumber" AllowClear="true" />
                 </FormItem>
             </GridCol>
@@ -35,17 +41,12 @@
                     <DatePicker @bind-Value="context.Birthday" />
                 </FormItem>
             </GridCol>
-            <GridCol Span="8">
-                <FormItem>
-                    <Input @bind-Value="context.EmailAddress" AllowClear="true" />
-                </FormItem>
-            </GridCol>
 
         </GridRow>
         <GridRow>
             <GridCol Span="8">
                 <FormItem>
-                    <Input @bind-Value="context.PhoneNumber" AllowClear="true" />
+                    <Input @bind-Value="context.EmailAddress" AllowClear="true" />
                 </FormItem>
             </GridCol>
               <GridCol Span="8">   <FormItem Label="所属地区">
@@ -60,11 +61,7 @@
             </GridCol>
         </GridRow>
         <GridRow>
-            <GridCol Span="8">
-                <FormItem Label="部门">
-                    <TreeSelectOu Multiple TreeCheckable @bind-TreeIds="context.OrganizationUnits" AllowClear="true" />
-                </FormItem>
-            </GridCol>
+            
             <GridCol Span="8">
                 <FormItem>
                     <DatePicker @bind-Value="context.InDate" AllowClear="true" />
@@ -79,10 +76,19 @@
 
         <GridRow>
             <GridCol Span="24">
-                <FormItem Label="岗位角色" LabelColSpan="2" WrapperColSpan="22">
-                    <PostSelect @bind-Names="context.RoleNames" />
-                </FormItem>
+                <FormItem Label="部门" LabelColSpan="2" WrapperColSpan="22">
 
+                    <TreeSelectOu Multiple @bind-TreeIds="context.OrganizationUnitIds" AllowClear="true" />
+
+                </FormItem>
+            </GridCol>
+        </GridRow>
+        <GridRow>
+            <GridCol Span="24">
+                <FormItem Label="岗位角色" LabelColSpan="2" WrapperColSpan="22">
+                    <CheckGroupPost @bind-Value="context.RoleNames" SelectDefaultIfEmpty />
+                  @*   <CheckGroupPost2 @bind-Names="context.RoleNames" SelectDefaultIfEmpty /> *@
+                </FormItem>
             </GridCol>
         </GridRow>
         <GridRow>

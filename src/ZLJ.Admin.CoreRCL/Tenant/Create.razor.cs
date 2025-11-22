@@ -2,8 +2,8 @@
 {
     public partial class Create
     {
-        [Parameter]
-        public object Master { get; set; } = new object();
+        //[Parameter]
+        //public object Master { get; set; } = new object();
 
         //protected override HttpClient HttpClient => httpClient ??= ScopedServices.GetRequiredService<IHttpClientFactory>().CreateHttpClientAdmin();
 

@@ -34,7 +34,7 @@ namespace ZLJ.Application.Common.OU
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-
+     
         public async Task<IList<OUSelectDto>> GetTreeForSelectAsync(GetListInput input)
         {
             if (input.ParentCode.IsNullOrWhiteSpace() && input.ParentId.HasValue && input.ParentId.Value > 0)

@@ -23,7 +23,6 @@ namespace ZLJ.Admin.CoreRCL
             CreateMap<TenantDto, EditTenantDto>();
             CreateMap<TestSimpleDto, TestSimpleEditDto>();
 
-
             CreateMap<AssociatedCompanyDto, AssociatedCompanyEditDto>();
 
             CreateMap<OUDto, OUEditDto>();

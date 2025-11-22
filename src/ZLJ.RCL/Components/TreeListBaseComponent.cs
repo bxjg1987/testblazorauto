@@ -47,12 +47,13 @@ namespace ZLJ.RCL.Components
         //where TEditDto : GeneralTreeNodeEditBaseDto//父类可以对输入做一定的处理
         where TGetAllInput : new()
     {
+        protected string pageSuffix => $"-{currentLoginInformations?.Tenant.Name}-{abpUserConfiguration?.Setting.Values[ZLJConsts.AppName]}";
+
         [Inject]
         public IWebAssemblyHostEnvironment Environment { get; set; }
         //界面部分就不要用IPermissionChecker了，不过server模式时AuthorizationService内部会使用IPermissionChecker
         //请查看自定义授权策略提供器
         //客户端部分是直接在前端内存中比对的，有区别于server模式的，自定义的授权策略提供器
-        protected string pageSuffix => $"-{currentLoginInformations?.Tenant.Name}-{abpUserConfiguration?.Setting.Values[ZLJConsts.AppName]}";
 
         [AbpExceptionInterceptor]
         protected override void BtnClearFilterClick()
@@ -85,30 +86,6 @@ namespace ZLJ.RCL.Components
             await base.LoadCore();
         }
 
-        public override string Sorting
-        {
-            get => base.Sorting;
-            set
-            {
-                //var lspx = value.Replace(" Descing", " desc").Replace(" Ascing", " asc").Replace(" None", "");
-                var strSort = "";
-                if (value.IsNotNullOrWhiteSpaceBXJG())
-                {
-                    var sddsf = value.Split(',');
-                    foreach (var item in sddsf)
-                    {
-                        if (item.EndsWith(" Descing"))
-                            strSort += item.Replace(" Descing", " desc") + ",";
-                        else if (item.EndsWith(" Ascing"))
-                            strSort += item.Replace(" Ascing", " asc") + ",";
-
-                    }
-                }
-
-                strSort = strSort.TrimEnd(',');
-                base.Sorting = strSort;
-            }
-        }
 
         /// <summary>
         /// 对ant表格的引用
@@ -180,12 +157,12 @@ namespace ZLJ.RCL.Components
 
         protected override async Task ShowFailMessage(string title = "操作提示", string msg = "操作失败！")
         {
-            MessageService.Error(msg);//它是阻塞到显示完成因此元素后，所以不能等待它
+             MessageService.Error(msg);//它是阻塞到显示完成因此元素后，所以不能等待它
             await Task.Delay(300);//碰到这个，开始刷新
         }
         protected override async Task ShowSuccessMessage(string title = "操作提示", string msg = "操作成功！")
         {
-            MessageService.Success(msg);//它是阻塞到显示完成因此元素后，所以不能等待它
+             MessageService.Success(msg);//它是阻塞到显示完成因此元素后，所以不能等待它
             await Task.Delay(300);//碰到这个，开始刷新
         }
 

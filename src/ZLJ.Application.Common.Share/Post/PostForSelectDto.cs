@@ -9,7 +9,7 @@ namespace ZLJ.Application.Common.Share.Post
     /// <summary>
     /// 下来选择的岗位数据模型
     /// </summary>
-    public class PostForSelectDto : RoleForSelectDto
+    public class PostProviderDto : RoleForSelectDto
     {
 
        

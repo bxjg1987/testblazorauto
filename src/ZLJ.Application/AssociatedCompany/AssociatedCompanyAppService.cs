@@ -32,7 +32,7 @@ namespace ZLJ.Application.AssociatedCompany
     public class AssociatedCompanyAppService : AdminCrudBaseAppService<AssociatedCompanyEntity,
                                                                        AssociatedCompanyDto,
                                                                        long,
-                                                                      PagedAndSortedResultRequest<AssociatedCompanyCondition>,
+                                                                      PagedAndSortedResultRequest<  AssociatedCompanyCondition>,
                                                                        AssociatedCompanyEditDto>
     {
 
@@ -49,29 +49,29 @@ namespace ZLJ.Application.AssociatedCompany
         protected override string GetPermissionName => PermissionNames.BXJGBaseInfoAssociatedCompany;
         protected override string GetAllPermissionName => PermissionNames.BXJGBaseInfoAssociatedCompany;
 
-        public INotificationPublisher Notification { get; set; }
+        public INotificationPublisher  Notification { get; set; }
 
         public override async Task<AssociatedCompanyDto> CreateAsync(AssociatedCompanyEditDto input)
         {
-            await Repository.IsExistsThrow(x => x.Name == input.Name, x => x.Name, CancellationTokenProvider.Token);
+            await Repository.IsExistsThrow(x => x.Name == input.Name,x=>x.Name,CancellationTokenProvider.Token);
             return await base.CreateAsync(input);
         }
 
         public override async Task<AssociatedCompanyDto> UpdateAsync(AssociatedCompanyEditDto input)
         {
-            //await  Notification.PublishAsync("通知名称",
-            //      new MessageNotificationData( "测试通知"+DateTime.Now.ToLongDateString()), 
-            //      userIds: [new UserIdentifier(base.AbpSession.TenantId, base.AbpSession.UserId.Value)]);
+          //await  Notification.PublishAsync("通知名称",
+          //      new MessageNotificationData( "测试通知"+DateTime.Now.ToLongDateString()), 
+          //      userIds: [new UserIdentifier(base.AbpSession.TenantId, base.AbpSession.UserId.Value)]);
 
-            await Repository.IsExistsThrow(x => x.Name == input.Name && x.Id != input.Id, x => x.Name, CancellationTokenProvider.Token);
+            await Repository.IsExistsThrow(x => x.Name == input.Name&& x.Id!=input.Id, x => x.Name, CancellationTokenProvider.Token);
 
             return await base.UpdateAsync(input);
         }
 
         protected override async ValueTask MapToEntity(AssociatedCompanyEntity entity)
         {
-            // /最好是前端判断，后端兜底
-            await base.MapToEntity(entity);
+           // /最好是前端判断，后端兜底
+            await  base.MapToEntity(entity);
             entity.Pinyin = TinyPinyin.PinyinHelper.GetPinyinInitials(entity.Name);
             entity.AddressPinyin = entity.Address.IsNotNullOrWhiteSpaceBXJG() ? TinyPinyin.PinyinHelper.GetPinyinInitials(entity.Address) : default;
             entity.LinkManPinyin = entity.LinkMan.IsNotNullOrWhiteSpaceBXJG() ? TinyPinyin.PinyinHelper.GetPinyinInitials(entity.LinkMan) : default;
@@ -214,9 +214,9 @@ namespace ZLJ.Application.AssociatedCompany
         //        .Where(c => c.Id == id).SingleAsync();
         //}
         //override app
-        protected override async Task<IQueryable<AssociatedCompanyEntity>> BuildQuery(bool track = true)
+        protected override async Task<IQueryable<AssociatedCompanyEntity>> BuildQuery(bool track=true)
         {
-            return (await base.BuildQuery(track)).Include(x => x.Area).Include(x => x.Level);
+            return (await base.BuildQuery(track)).Include(x=>x.Area).Include(x=>x.Level);
         }
 
         protected override IQueryable<AssociatedCompanyEntity> ApplySorting(IQueryable<AssociatedCompanyEntity> query, PagedAndSortedResultRequest<AssociatedCompanyCondition> input)

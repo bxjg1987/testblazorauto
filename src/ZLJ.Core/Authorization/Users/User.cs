@@ -1,15 +1,14 @@
-﻿using Abp.Authorization.Users;
-using Abp.Extensions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Abp.Authorization.Users;
+using Abp.Extensions;
 using ZLJ.Core.BaseInfo.StaffInfo;
-
 
 namespace ZLJ.Core.Authorization.Users
 {
     public class User : AbpUser<User>
-    {
+    {   
         /// <summary>
         /// 是否关联登录
         /// </summary>
@@ -37,7 +36,7 @@ namespace ZLJ.Core.Authorization.Users
                 UserName = AdminUserName,
                 Name = AdminUserName,
                 Surname = AdminUserName,
-                EmailAddress = emailAddress,
+                EmailAddress = emailAddress, 
                 Roles = new List<UserRole>()
             };
 

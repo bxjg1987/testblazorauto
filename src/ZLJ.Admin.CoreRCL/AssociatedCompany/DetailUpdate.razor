@@ -11,7 +11,7 @@
    
         <Form @ref="frm" ValidateOnChange="true" Model="editDto" LabelColSpan="3" WrapperColSpan="21" OnFinish="OnFinish">
         <FormItem Label="名称">
-            @if (IsShowUpdate)
+            @if (isEdit)
             {
                 <Input @bind-Value="@context.Name" AllowClear />
             }
@@ -24,7 +24,7 @@
             
             </FormItem>
         <FormItem Label="联系人">
-            @if (IsShowUpdate)
+            @if (isEdit)
             {
                 <Input @bind-Value="@context.LinkMan" AllowClear />
             }
@@ -37,7 +37,7 @@
  
             </FormItem>
         <FormItem Label="联系电话">
-            @if (IsShowUpdate)
+            @if (isEdit)
             {
                 <Input @bind-Value="@context.LinkPhone" AllowClear />
             }
@@ -49,7 +49,7 @@
             }
             </FormItem>
         <FormItem Label="所属地区">
-            @if (IsShowUpdate)
+            @if (isEdit)
             {
                 <AdministrativeTreeSelect @bind-TreeIdNullable=context.AreaId IsKeyId AllowClear />
             }
@@ -62,7 +62,7 @@
               
             </FormItem>
         <FormItem Label="地址">
-            @if (IsShowUpdate)
+            @if (isEdit)
             {
                 <Input @bind-Value="@context.Address" AllowClear />
             }
@@ -75,7 +75,7 @@
 
             </FormItem>
         <FormItem Label="等级">
-            @if (IsShowUpdate)
+            @if (isEdit)
             {
                 <TreeSelectDataDictionary @bind-TreeIdNullable=context.LevelId IsKeyId AllowClear ParentName="kehuJibie" />
             }
@@ -89,7 +89,7 @@
         
             </FormItem>
         <FormItem Label="是否启用">
-            @if (IsShowUpdate)
+            @if (isEdit)
             {
                 <Switch @bind-Checked=context.IsActive />
             }

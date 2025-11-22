@@ -34,7 +34,7 @@ namespace ZLJ.Application.StaffInfo
     /// <summary>
     /// 统一的automapper映射文件
     /// </summary>
-    public  class AutoMapperProfile : Profile
+    public class AutoMapperProfile : Profile
     {
         /// <summary>
         /// 
@@ -59,7 +59,7 @@ namespace ZLJ.Application.StaffInfo
             //    .ForMember(c => c.Surname, c => c.MapFrom(d => d.Name))
             //    .ForMember(c => c.FullName, c => c.MapFrom(d => d.Name));
 
-            CreateMap<StaffInfoEntity, StaffInfoDto>().ForMember(x => x.Password, x=>x.MapFrom(d=>string.Empty))/*.IncludeBase<User, ZLJ.Application.Common.Share.User.UserDto>()*/;
+            CreateMap<StaffInfoEntity, StaffInfoDto>().ForMember(x => x.Password, x => x.MapFrom(d => string.Empty))/*.IncludeBase<User, ZLJ.Application.Common.Share.User.UserDto>()*/;
 
 
             //.ForMember(c => c.UserName, c => c.MapFrom(d => d.User.UserName))
@@ -70,5 +70,5 @@ namespace ZLJ.Application.StaffInfo
             #endregion
         }
     }
-   
+
 }

@@ -26,13 +26,16 @@
     <_ContentIncludedByDefault Remove="wwwroot\ZLJ.Web.BlazorAuto.lib.module.js" />
   </ItemGroup>-->
 
-	<!-- 发布后删除服务端配置文件 经过测试，这个可以用
+
+	<!-- 发布后删除服务端配置文件 经过测试，这个可以用-->
 	<Target Name="RemoveServerAppSettings" AfterTargets="Publish" Condition="'$(Configuration)' == 'Release'">
 		<ItemGroup>
-			<FilesToDelete Include="$(PublishDir)appsettings.json" />
-			<FilesToDelete Include="$(PublishDir)appsettings.Development.json" />
-			<FilesToDelete Include="$(PublishDir)appsettings.Production.json" />
+			<!--服务端的直接在下面排除了-->
+			<!--<FilesToDelete Include="$(PublishDir)appsettings.json" />
+		<FilesToDelete Include="$(PublishDir)appsettings.Development.json" />
+		<FilesToDelete Include="$(PublishDir)appsettings.Production.json" />-->
 
+			<!--客户端部分的必须生成后，手动或自动删除-->
 			<FilesToDelete Include="$(PublishDir)wwwroot\appsettings.json" />
 			<FilesToDelete Include="$(PublishDir)wwwroot\appsettings.Development.json" />
 			<FilesToDelete Include="$(PublishDir)wwwroot\appsettings.Production.json" />
@@ -46,7 +49,7 @@
 			<FilesToDelete Include="$(PublishDir)wwwroot\appsettings.Production.json.gz" />
 		</ItemGroup>
 		<Delete Files="@(FilesToDelete)" />
-	</Target> -->
+	</Target>
 	<!-- 在 Release 模式下排除所有 appsettings 文件 -->
 	<ItemGroup Condition="'$(Configuration)' == 'Release' and '$(PublishDir)' != ''">
 		<Content Remove="appsettings*.json" />
@@ -60,8 +63,6 @@
 		<IsWebConfigTransformDisabled>true</IsWebConfigTransformDisabled>
 		<IsTransformWebConfigDisabled>true</IsTransformWebConfigDisabled>
 	</PropertyGroup>
-
-
 
 
 

@@ -9,7 +9,7 @@ using ZLJ.Core.Authorization.Roles;
 
 namespace ZLJ.Application.Common.Role
 {
-    public class RoleProviderAppService : CommonProviderBaseAppService<ZLJ.Core.Authorization.Roles.Role, PagedAndSortedResultRequest<RoleProviderCondition>, RoleForSelectDto, int>
+    public class RoleProviderAppService : CommonProviderBaseAppService<ZLJ.Core.Authorization.Roles.Role,PagedAndSortedResultRequest<RoleProviderCondition>,RoleForSelectDto,int>
     {
     }
 }

@@ -14,7 +14,7 @@ namespace ZLJ.Application.Common.Post
         public ObjectMapProfile()
         {
             //CreateMap<ZLJ.Core.Authorization.Roles.Role, RoleDto>().IncludeBaseRole();
-            CreateMap<PostEntity, PostForSelectDto>().IncludeBaseRoleSelectCommon();
+            CreateMap<PostEntity, PostProviderDto>().IncludeBaseRoleSelectCommon();
             //CreateMap<ZLJ.Core.Authorization.Roles.Role, RoleEditDto>().IncludeBaseRoleEdit();
             //CreateMap<ZLJ.Core.Authorization.Roles.Role, RoleCreateDto>().IncludeBaseRoleCreate();
         }

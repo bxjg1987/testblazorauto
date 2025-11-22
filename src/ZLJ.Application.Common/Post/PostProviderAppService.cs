@@ -11,7 +11,7 @@ using ZLJ.Core.BaseInfo.Post;
 
 namespace ZLJ.Application.Common.Role
 {
-    public class PostProviderAppService : CommonProviderBaseAppService<PostEntity, PagedAndSortedResultRequest<PostCondition>, PostForSelectDto, int>
+    public class PostProviderAppService : CommonProviderBaseAppService<PostEntity,PagedAndSortedResultRequest<PostCondition>,PostProviderDto,int>
     {
     }
 }

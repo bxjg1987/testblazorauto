@@ -38,7 +38,7 @@ namespace ZLJ.Application.Common.Users
             CreateMap<ZLJ.Application.Common.Share.User.UserCreateDto, User>().IncludeBaseCreateUser();
 
             this.CreateUserSelectMap<User>();
-            CreateMap< User, ZLJ.Application.Common.Share.User.UserSelectDto>().IncludeBaseSelectUser();
+            CreateMap< User, ZLJ.Application.Common.Share.User.UserProviderDto>().IncludeBaseSelectUser();
 
             this.CreateUserMap<User>();
             CreateMap<User, ZLJ.Application.Common.Share.User.UserDto>().IncludeBaseUser();
@@ -54,7 +54,7 @@ namespace ZLJ.Application.Common.Users
             //这个最好别用了
             CreateMap<StaffInfoEntity, ZLJ.Application.Common.Share.User.UserDto>().IncludeBase<User, ZLJ.Application.Common.Share.User.UserDto>();
 
-            CreateMap<StaffInfoEntity, ZLJ.Application.Common.Share.User.UserSelectDto>().IncludeBase<User, ZLJ.Application.Common.Share.User.UserSelectDto>();
+            CreateMap<StaffInfoEntity, ZLJ.Application.Common.Share.User.UserProviderDto>().IncludeBase<User, ZLJ.Application.Common.Share.User.UserProviderDto>();
         }
     }
 }

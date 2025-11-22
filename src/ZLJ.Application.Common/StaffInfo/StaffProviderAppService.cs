@@ -1,4 +1,4 @@
-﻿using BXJG.Utils.Application.Share.Dtos;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +10,7 @@ namespace ZLJ.Application.Common.Users
 {
     public class StaffProviderAppService : CommonProviderBaseAppService<User,
                                                                         PagedAndSortedResultRequest<ZLJ.Application.Common.Share.User.GetAllCondition>,
-                                                                        ZLJ.Application.Common.Share.User.UserSelectDto,
+                                                                        ZLJ.Application.Common.Share.User.UserProviderDto,
                                                                         long>
     {
     }

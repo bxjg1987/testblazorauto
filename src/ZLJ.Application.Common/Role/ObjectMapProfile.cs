@@ -13,8 +13,8 @@ namespace ZLJ.Application.Common.Role
         {
             CreateMap<ZLJ.Core.Authorization.Roles.Role, RoleDto>().IncludeBaseRole();
             CreateMap<ZLJ.Core.Authorization.Roles.Role, RoleForSelectDto>().IncludeBaseRoleSelect();
-            CreateMap<RoleEditDto, ZLJ.Core.Authorization.Roles.Role>().IncludeBaseRoleEdit();
-            CreateMap<RoleCreateDto, ZLJ.Core.Authorization.Roles.Role>().IncludeBaseRoleCreate();
+            CreateMap<RoleEditDto, ZLJ.Core.Authorization.Roles.Role >().IncludeBaseRoleEdit();
+            CreateMap<RoleCreateDto, ZLJ.Core.Authorization.Roles.Role >().IncludeBaseRoleCreate();
         }
     }
 }

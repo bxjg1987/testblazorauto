@@ -4,8 +4,8 @@ namespace ZLJ.Admin.CoreRCL.Tenant
 {
     public partial class DetailUpdate
     {
-        [Parameter]
-        public object Master { get; set; } = new object();
+        //[Parameter]
+        //public object Master { get; set; } = new object();
         protected override string FuncName => "租户";
         /// <summary>
         /// 
