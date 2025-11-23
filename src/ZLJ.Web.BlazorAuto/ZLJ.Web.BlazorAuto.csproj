@@ -1,24 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-	  <!--企业服务器gc模式-->
-	  <!--<ServerGarbageCollection>true</ServerGarbageCollection>-->
-	  <!--.net8需要配置的Datas-->
-	  <!--<GarbageCollectionAdaptationMode>true</GarbageCollectionAdaptationMode>-->
-	  <BlazorDisableThrowNavigationException>true</BlazorDisableThrowNavigationException>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<!--企业服务器gc模式-->
+		<!--<ServerGarbageCollection>true</ServerGarbageCollection>-->
+		<!--.net8需要配置的Datas-->
+		<!--<GarbageCollectionAdaptationMode>true</GarbageCollectionAdaptationMode>-->
+		<BlazorDisableThrowNavigationException>true</BlazorDisableThrowNavigationException>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Startup\**" />
-    <Content Remove="Startup\**" />
-    <EmbeddedResource Remove="Startup\**" />
-    <None Remove="Startup\**" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="Startup\**" />
+		<Content Remove="Startup\**" />
+		<EmbeddedResource Remove="Startup\**" />
+		<None Remove="Startup\**" />
+	</ItemGroup>
 
-  <!--<ItemGroup>
+	<!--<ItemGroup>
     <Content Remove="wwwroot\ZLJ.Web.BlazorAuto.lib.module.js" />
   </ItemGroup>
 
@@ -27,51 +27,12 @@
   </ItemGroup>-->
 
 
-	<!-- 发布后删除服务端配置文件 经过测试，这个可以用-->
-	<Target Name="RemoveServerAppSettings" AfterTargets="Publish" Condition="'$(Configuration)' == 'Release'">
-		<ItemGroup>
-			<!--服务端的直接在下面排除了-->
-			<!--<FilesToDelete Include="$(PublishDir)appsettings.json" />
-		<FilesToDelete Include="$(PublishDir)appsettings.Development.json" />
-		<FilesToDelete Include="$(PublishDir)appsettings.Production.json" />-->
-
-			<!--客户端部分的必须生成后，手动或自动删除-->
-			<FilesToDelete Include="$(PublishDir)wwwroot\appsettings.json" />
-			<FilesToDelete Include="$(PublishDir)wwwroot\appsettings.Development.json" />
-			<FilesToDelete Include="$(PublishDir)wwwroot\appsettings.Production.json" />
-
-			<FilesToDelete Include="$(PublishDir)wwwroot\appsettings.json.br" />
-			<FilesToDelete Include="$(PublishDir)wwwroot\appsettings.Development.json.br" />
-			<FilesToDelete Include="$(PublishDir)wwwroot\appsettings.Production.json.br" />
-
-			<FilesToDelete Include="$(PublishDir)wwwroot\appsettings.json.gz" />
-			<FilesToDelete Include="$(PublishDir)wwwroot\appsettings.Development.json.gz" />
-			<FilesToDelete Include="$(PublishDir)wwwroot\appsettings.Production.json.gz" />
-		</ItemGroup>
-		<Delete Files="@(FilesToDelete)" />
-	</Target>
-	<!-- 在 Release 模式下排除所有 appsettings 文件 -->
-	<ItemGroup Condition="'$(Configuration)' == 'Release' and '$(PublishDir)' != ''">
-		<Content Remove="appsettings*.json" />
-		<!--<None Remove="appsettings*.json" />-->
-		<!--<Content Remove="web.config" />-->
-		<Content Remove="log4net.config" />
-	</ItemGroup>
-	<PropertyGroup Condition="'$(Configuration)' == 'Release' ">
-		<SatelliteResourceLanguages>xx</SatelliteResourceLanguages>
-
-		<IsWebConfigTransformDisabled>true</IsWebConfigTransformDisabled>
-		<IsTransformWebConfigDisabled>true</IsTransformWebConfigDisabled>
-	</PropertyGroup>
-
-
-
 
 	<ItemGroup>
-	  <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="10.*" />
-	  <!--<PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.2" />-->
-	  
-  </ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="10.*" />
+		<!--<PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.2" />-->
+
+	</ItemGroup>
 
 
 	<!-- 如果 $(SolutionName) 不包含 WithModules -->
@@ -83,17 +44,17 @@
 	<ItemGroup Condition="$(SolutionName.Contains('WithModules'))">
 		<ProjectReference Include="..\Libs\BXJG.Common.Web\BXJG.Common.Web.csproj" />
 	</ItemGroup>
-	
-  <ItemGroup>
 
-    <ProjectReference Include="..\ZLJ.Admin.CoreRCL\ZLJ.Admin.CoreRCL.csproj" />
-  </ItemGroup>
+	<ItemGroup>
 
-  <ItemGroup>
-    <None Include="wwwroot\login1\fonts\fontawesome-webfont.svg" />
-    <None Include="wwwroot\login1\fonts\fontawesome-webfont.woff2" />
-    <None Include="wwwroot\login1\images\image.svg" />
-  </ItemGroup>
-	
+		<ProjectReference Include="..\ZLJ.Admin.CoreRCL\ZLJ.Admin.CoreRCL.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="wwwroot\login1\fonts\fontawesome-webfont.svg" />
+		<None Include="wwwroot\login1\fonts\fontawesome-webfont.woff2" />
+		<None Include="wwwroot\login1\images\image.svg" />
+	</ItemGroup>
+
 
 </Project>

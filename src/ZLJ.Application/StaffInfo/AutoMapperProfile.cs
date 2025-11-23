@@ -59,8 +59,8 @@ namespace ZLJ.Application.StaffInfo
             //    .ForMember(c => c.Surname, c => c.MapFrom(d => d.Name))
             //    .ForMember(c => c.FullName, c => c.MapFrom(d => d.Name));
 
-            CreateMap<StaffInfoEntity, StaffInfoDto>().ForMember(x => x.Password, x => x.MapFrom(d => string.Empty))/*.IncludeBase<User, ZLJ.Application.Common.Share.User.UserDto>()*/;
-
+            CreateMap<StaffInfoEntity, StaffInfoDto>().ForMember(x => x.Password, x => x.MapFrom(d => string.Empty))/*.IncludeBase<User, ZLJ.Application.Common.Share.User.UserDto>()*/
+                .ForMember(x => x.BaseDto, x => x.MapFrom(d => d));
 
             //.ForMember(c => c.UserName, c => c.MapFrom(d => d.User.UserName))
             //.ForMember(c => c.EmailAddress, c => c.MapFrom(d => d.User.EmailAddress))

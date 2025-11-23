@@ -22,18 +22,7 @@
 		<Compile Remove="Share\RightContent.razor.cs" />
 		<Compile Remove="MainLayout.razor.cs" />
 	</ItemGroup>
-	
-	<!--这个一定要保留，否则wasm模式时启动报错，发布后手动删除这些文件即可
-	已经在服务端部分配置为生成后自动删除
-	<ItemGroup Condition="'$(Configuration)' == 'Release'">
-		<Content Remove="wwwroot\appsettings*.json*" />
-	</ItemGroup>-->
 
-
-	<!--排除多语言-->
-	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
-		<SatelliteResourceLanguages>xx</SatelliteResourceLanguages>
-	</PropertyGroup>
 
 	<ItemGroup>
 		<Content Remove="Share\MainBreadcrumb.razor" />
@@ -52,16 +41,6 @@
 		<None Remove="Share\MainLayout.razor.css" />
 		<None Remove="MainLayout.razor.css" />
 	</ItemGroup>
-
-
-	<!--release发布时排除部分文件，以免错误覆盖服务器上的-->
-	<ItemGroup Condition="'$(Configuration)' == 'Release'">
-		<Content Remove="wwwroot\appsettings*.json*" />
-	</ItemGroup>
-	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
-		<SatelliteResourceLanguages>xx</SatelliteResourceLanguages>
-	</PropertyGroup>
-
 
 
 
@@ -85,8 +64,8 @@
 
 
 	<ItemGroup>
-	  <ProjectReference Include="..\ZLJ.Admin.ClientProxy\ZLJ.Admin.ClientProxy.csproj" />
-	  <ProjectReference Include="..\ZLJ.RCL\ZLJ.RCL.csproj" />
+		<ProjectReference Include="..\ZLJ.Admin.ClientProxy\ZLJ.Admin.ClientProxy.csproj" />
+		<ProjectReference Include="..\ZLJ.RCL\ZLJ.RCL.csproj" />
 	</ItemGroup>
 
 </Project>

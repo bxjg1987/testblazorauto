@@ -151,8 +151,27 @@
     protected override void OnInitialized()
     {
         base.OnInitialized();
+
+
         if (model.TenancyName.IsNullOrWhiteSpaceBXJG())
-            model.TenancyName = TenantName;
+        {
+            // 如果URL参数中的TenantName存在，优先使用它；否则尝试从cookie中读取
+            if (!TenantName.IsNullOrWhiteSpaceBXJG())
+            {
+                model.TenancyName = TenantName;
+            }
+            else if (HttpContext.Request.Cookies.TryGetValue("TenantName", out var savedTenantName))
+            {
+                model.TenancyName = savedTenantName;
+            }
+            else// if(model.TenancyName.IsNullOrWhiteSpaceBXJG())
+            {
+                model.TenancyName = "default";
+            }
+        }
+
+
+
         if (model.UserNameOrEmailAddress.IsNullOrWhiteSpaceBXJG())
             model.UserNameOrEmailAddress = UserName;
         // model.Password = Password;
@@ -224,6 +243,12 @@
             // await signInManager1.SignInAsync(loginResult.Identity, true  );
             // // return Redirect(returnUrl);
             //nav.NavigateTo(ReturnUrl, true);
+            HttpContext.Response.Cookies.Append("TenantName", model.TenancyName, new CookieOptions
+            {
+                Expires = DateTimeOffset.Now.AddYears(10), // cookie有效期10年，接近永久有效
+                HttpOnly = true, // 防止XSS攻击
+                SameSite = SameSiteMode.Strict // 防止CSRF攻击
+            });
             var targetUrl = ReturnUrl ?? "/main"; 
             HttpContext.Response.Redirect(targetUrl);
         }
