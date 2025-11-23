@@ -65,10 +65,11 @@ namespace ZLJ.RCL.Components.Post
             {
 
                 Options = posts.Select(x => new CheckboxOption<string> { Checked = SelectDefaultIfEmpty && x.IsSelected, Label = x.DisplayText, Value = x.Name }).ToArray();
-
-                //Names = posts?.Where(d => d.IsSelected).Select(data => data.Name).ToArray();
-                //NamesChanged.InvokeAsync(Names);
-
+                if (SelectDefaultIfEmpty)
+                {
+                    Value = posts?.Where(d => d.IsSelected).Select(data => data.Name).ToArray();
+                    ValueChanged.InvokeAsync(Value);
+                }
             }
             else
             {

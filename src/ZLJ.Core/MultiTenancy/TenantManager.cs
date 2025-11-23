@@ -111,7 +111,8 @@ namespace ZLJ.Core.MultiTenancy
                     //adminUser.ShouldChangePasswordOnNextLogin = shouldChangePasswordOnNextLogin;
                     adminUser.IsActive = true;
                     adminUser.UserName = adminName ?? User.AdminUserName;
-
+                    adminUser.IsEnableAccount = true;
+                    adminUser.IsLockoutEnabled = true;
                     //if (adminPassword.IsNullOrEmpty())
                     //{
                     //    adminPassword = await _userManager.CreateRandomPassword();
