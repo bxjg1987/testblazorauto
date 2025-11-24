@@ -31,7 +31,7 @@
   <ItemGroup>
     <PackageReference Include="Abp.AspNetCore" Version="10.*" />
     <PackageReference Include="Abp.AspNetCore.SignalR" Version="10.*" />
-    <PackageReference Include="AsyncKeyedLock" Version="7.1.7" />
+    <PackageReference Include="AsyncKeyedLock" Version="7.1.8" />
   
   </ItemGroup>
 
