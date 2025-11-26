@@ -95,7 +95,7 @@
     <script antblazor-js></script>
     <script src="/echarts.5.4.3.min.js"></script>
     <script type="module" src="_content/Blazor.ECharts/core.js"></script>
-    <script>
+    @* <script>
         //.net10 bug https://github.com/dotnet/aspnetcore/issues/64009#issuecomment-3534259401
         (function() {
             const originalFetch = window.fetch;
@@ -112,7 +112,7 @@
                 return originalFetch.call(this, resource, options);
             };
         })();
-    </script>
+    </script> *@
     @* <script src="/app.js"></script> *@
 </SectionContent>
 @code {
