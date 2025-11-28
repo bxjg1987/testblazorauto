@@ -152,24 +152,25 @@
     {
         base.OnInitialized();
 
-
-        if (model.TenancyName.IsNullOrWhiteSpaceBXJG())
+        if (HttpContext.Request.Method.Equals(HttpMethods.Get, StringComparison.OrdinalIgnoreCase))
         {
-            // 如果URL参数中的TenantName存在，优先使用它；否则尝试从cookie中读取
-            if (!TenantName.IsNullOrWhiteSpaceBXJG())
+            if (model.TenancyName.IsNullOrWhiteSpaceBXJG())
             {
-                model.TenancyName = TenantName;
-            }
-            else if (HttpContext.Request.Cookies.TryGetValue("TenantName", out var savedTenantName))
-            {
-                model.TenancyName = savedTenantName;
-            }
-            else// if(model.TenancyName.IsNullOrWhiteSpaceBXJG())
-            {
-                model.TenancyName = "default";
+                // 如果URL参数中的TenantName存在，优先使用它；否则尝试从cookie中读取
+                if (!TenantName.IsNullOrWhiteSpaceBXJG())
+                {
+                    model.TenancyName = TenantName;
+                }
+                else if (HttpContext.Request.Cookies.TryGetValue("TenantName", out var savedTenantName))
+                {
+                    model.TenancyName = savedTenantName;
+                }
+                else// if(model.TenancyName.IsNullOrWhiteSpaceBXJG())
+                {
+                   model.TenancyName = "default";
+                }
             }
         }
-
 
 
         if (model.UserNameOrEmailAddress.IsNullOrWhiteSpaceBXJG())
