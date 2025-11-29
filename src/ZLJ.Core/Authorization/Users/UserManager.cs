@@ -98,25 +98,35 @@ namespace ZLJ.Core.Authorization.Users
         //    return base.UpdateAsync(user);
         //}
 
-        //protected override Task<IdentityResult> UpdateUserAsync(User user)
-        //{
-        //    if (!user.IsEnableAccount)
-        //    {
-        //        if (user.UserName.IsNullOrWhiteSpaceBXJG())
-        //            user.UserName = PinyinHelper.GetPinyin(user.Name) + Abp.RandomHelper.GetRandom(0, 10000);// ; Guid.NewGuid().ToString("n");
+        public override async Task<IdentityResult> UpdateAsync(User user)
+        {
+            //return base.UpdateAsync(user);
+            //}
+            //protected override async Task<IdentityResult> UpdateUserAsync(User user)
+            //{
+            if (!user.IsEnableAccount)
+            {
+                //if (user.UserName.IsNullOrWhiteSpaceBXJG())
+                //    user.UserName = PinyinHelper.GetPinyin(user.Name) + Abp.RandomHelper.GetRandom(0, 10000);// ; Guid.NewGuid().ToString("n");
 
-        //        if (user.Password.IsNullOrWhiteSpaceBXJG())
-        //            user.Password = "A2_c" + BXJG.Common.RandomHelper.GetRandomString();
+                //if (user.Password.IsNullOrWhiteSpaceBXJG())
+                //    user.Password = "A2_c" + BXJG.Common.RandomHelper.GetRandomString();
 
-        //        user.IsLockoutEnabled = true;
-        //        user.LockoutEndDateUtc = DateTime.MaxValue;
-        //    }
-        //    return base.UpdateUserAsync(user);
-        //}
-        //protected override Task<IdentityResult> UpdateUserAsync(User user)
-        //{
-        //    return base.UpdateUserAsync(user);
-        //}
+                //下面的方法会调用UpdateUserAsync(User user)，所以不要重写UpdateUserAsync(User user) 以免死循环
+                await SetLockoutEnabledAsync(user, true);
+                await SetLockoutEndDateAsync(user, new DateTimeOffset(Clock.Now).UtcDateTime.AddYears(300));
+                // user.IsLockoutEnabled = true;
+                // user.LockoutEndDateUtc = DateTime.MaxValue;
+            }
+            else if (await IsLockedOutAsync(user))
+            {
+                await ResetAccessFailedCountAsync(user);
+                //await SetLockoutEnabledAsync(user, false);
+                await SetLockoutEndDateAsync(user, null);
+            }
+            return await base.UpdateAsync(user);
+            //   return await base.UpdateUserAsync(user);
+        }
 
 
         //public IUnitOfWorkManager unitOfWorkManager { get; set; }

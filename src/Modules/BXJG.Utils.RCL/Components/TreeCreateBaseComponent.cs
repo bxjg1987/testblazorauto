@@ -84,11 +84,12 @@ namespace BXJG.Utils.RCL.Components
         /// <returns></returns>
         protected virtual ValueTask ResetCore()
         {
+            var pid = createDto?.ParentId ?? ParentId;
             if (createDto != null && createDto is IReset t)
                 t.Reset();
             else
                 createDto = new TCreateInput();
-            createDto.ParentId = ParentId;
+            createDto.ParentId = pid;
             return ValueTask.CompletedTask;
         }
         /// <summary>
@@ -120,10 +121,11 @@ namespace BXJG.Utils.RCL.Components
             try
             {
                 var r = await SaveCore();
-                isSaving = false;
+                //isSaving = false;
+                    _= ShowSuccessMessage(msg: "新增成功！");//没必要等待
+
                 //后续逻辑都是辅助性的，因此放到异步中，加快主操作速度
-                _ = InvokeAsync(async () => {
-                  await ShowSuccessMessage(msg: "新增成功！");//没必要等待
+                //_ = InvokeAsync(async () => {
                     if (isSaveAndContinue)
                     {
                         await Reset();
@@ -131,7 +133,8 @@ namespace BXJG.Utils.RCL.Components
                     }
                     else
                         await OnAddEnd.InvokeAsync(new SaveResult<TEntityDto> { Dto = r, End = true });
-                }).ConfigureAwait(false);
+                //    StateHasChanged();
+                //}).ConfigureAwait(false);
             }
             finally
             {

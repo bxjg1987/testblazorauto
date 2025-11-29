@@ -269,12 +269,31 @@ namespace ZLJ.Application.Post
                 //role.Id = input.Id;
                 role.Description = input.Description;
                 role.DisplayName = input.DisplayName;
+                role.IsDefault = input.IsDefault;
+                role.IsAttention = input.IsAttention;
                 //CheckErrors(await roleManager.UpdateAsync(role));
 
                 if (role.Name == StaticRoleNames.Tenants.Admin)
                 {
                     var ps = PermissionManager.GetAllPermissions();
                     await _roleManager.SetGrantedPermissionsAsync(role, ps);
+                }
+                else
+                {
+                    if (input.GrantedPermissions == null)
+                        input.GrantedPermissions = Array.Empty<string>();
+                    var grantedPermissions = PermissionManager
+                        .GetAllPermissions()
+                        .Where(p => input.GrantedPermissions.Contains(p.Name))
+                        .ToList();
+
+
+                    //grantedPermissions.First().
+
+
+
+                    //暂时禁用，因为目前功能没做完，实际上这里是应该要放开的
+                    await _roleManager.SetGrantedPermissionsAsync(role, grantedPermissions);
                 }
             }
             else
@@ -296,6 +315,7 @@ namespace ZLJ.Application.Post
                 //暂时禁用，因为目前功能没做完，实际上这里是应该要放开的
                 await _roleManager.SetGrantedPermissionsAsync(role, grantedPermissions);
             }
+
             role.SetNormalizedName();//如果不加 NormalizedName属性不会自动设置 会引起莫名其妙的异常
             //await CurrentUnitOfWork.SaveChangesAsync();
 

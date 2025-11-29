@@ -52,16 +52,28 @@ namespace ZLJ.Application.OU
         [AbpAuthorize(PermissionNames.AdministratorBaseInfoOrganizationUnitUpdate)]
         public async Task<OUDto> UpdateAsync(OUEditDto input)
         {
-            var ou = await repository.GetAsync(input.Id);
-            ou.ParentId = input.ParentId;
+            var ou = await (await repository.GetAllAsync()).OfType<OrganizationUnitEntity>().Include(x => x.Parent).FirstAsync(x => x.Id == input.Id, CancellationTokenProvider.Token);
+            //ou.ParentId = input.ParentId;
             ou.DisplayName = input.DisplayName;
 
-            var ou2 = ou as OrganizationUnitEntity;
-            ou2.OUType = input.OUType;
+            //var ou2 = ou as OrganizationUnitEntity;
+            ou.OUType = input.OUType;
+
 
             //await organizationUnitManager.CreateAsync(ou);
-            //  await CurrentUnitOfWork.SaveChangesAsync();
+            // 
             await organizationUnitManager.UpdateAsync(ou);
+            await CurrentUnitOfWork.SaveChangesAsync();
+            if (input.ParentId == 0)
+                input.ParentId = default;
+            if (input.ParentId != ou.ParentId)
+            {
+                await organizationUnitManager.MoveAsync(ou.Id, input.ParentId);
+                await UpdateChildrenCount(ou.Parent);
+            }
+
+
+
             return await Map2Dto(ou);
         }
         [AbpAuthorize(PermissionNames.AdministratorBaseInfoOrganizationUnitUpdate)]

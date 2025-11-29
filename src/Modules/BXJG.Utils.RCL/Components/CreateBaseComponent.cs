@@ -108,15 +108,17 @@ namespace BXJG.Utils.RCL.Components
             //木有权限时保存按钮不可点击
             //验证不过时此方法不应该被调用
             if (isSaving) return;
-            isSaving = true;
+            //isSaving = true;
             try
             {
                 var r = await SaveCore();
-                isSaving = false;
+                //isSaving = false;
+                _ = ShowSuccessMessage(msg: "新增成功！");//没必要等待
+                
                 //后续逻辑都是辅助性的，因此放到异步中，加快主操作速度
-                _ = InvokeAsync(async () =>
-                {
-                    await ShowSuccessMessage(msg: "新增成功！");//没必要等待
+                //_ = InvokeAsync(async () =>
+                //{
+                    //_= ShowSuccessMessage(msg: "新增成功！");//没必要等待
                     if (isSaveAndContinue)
                     {
                         await Reset();
@@ -124,7 +126,7 @@ namespace BXJG.Utils.RCL.Components
                     }
                     else
                         await OnAddEnd.InvokeAsync(new SaveResult<TEntityDto> { Dto = r, End = true });
-                }).ConfigureAwait(false);
+                //}).ConfigureAwait(false);
             }
             finally
             {
