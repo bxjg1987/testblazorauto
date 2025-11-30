@@ -270,7 +270,7 @@ namespace ZLJ.Application.Post
                 role.Description = input.Description;
                 role.DisplayName = input.DisplayName;
                 role.IsDefault = input.IsDefault;
-                role.IsAttention = input.IsAttention;
+                //role.IsAttention = input.IsAttention;
                 //CheckErrors(await roleManager.UpdateAsync(role));
 
                 if (role.Name == StaticRoleNames.Tenants.Admin)

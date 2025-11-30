@@ -325,7 +325,6 @@ namespace ZLJ.Application.StaffInfo
         //    };
         //}
 
-
         protected override async Task MapToEntityAsync(StaffInfoEditDto input, User user)
         {
             var oldPwd = user.Password;
@@ -358,19 +357,16 @@ namespace ZLJ.Application.StaffInfo
                 user.Password = oldPwd;
             }
 
-            user.Roles = new Collection<UserRole>();
-            //user.Roles.Clear();
-            foreach (var roleName in input.RoleNames)
-            {
-                var role = await RoleManager.GetRoleByNameAsync(roleName);
-                user.Roles.Add(new UserRole(AbpSession.TenantId, user.Id, role.Id));
-            }
-
             user.Surname = user.Name;
 
             CheckErrors(await UserManager.UpdateAsync(user));
             await CurrentUnitOfWork.SaveChangesAsync(); //To get new user's Id.
 
+            //Roles
+            if (input.RoleNames != null)
+            {
+                CheckErrors(await UserManager.SetRolesAsync(user, input.RoleNames));
+            }
 
             //Organization Units
             await UserManager.SetOrganizationUnitsAsync(user, input.OrganizationUnitIds.ToArray());
