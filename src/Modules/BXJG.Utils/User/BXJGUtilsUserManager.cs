@@ -153,14 +153,14 @@ public class BXJGUtilsUserManager<TRole, TUser> : AbpUserManager<TRole, TUser>//
         }
         return await base.DeleteAsync(user);
     }
-
+    
     /// <summary>
     /// 设置用户角色前检查，超级管理员必须至少拥有Admin角色
     /// </summary>
     /// <param name="user">要设置角色的用户</param>
     /// <param name="roleNames">角色名称列表</param>
     /// <returns>设置结果</returns>
-    public override async Task<IdentityResult> SetRolesAsync(TUser user, IEnumerable<string> roleNames)
+    public override async Task<IdentityResult> SetRolesAsync(TUser user, string[] roleNames)
     {
         if (user.UserName == SuperAdminUserName)
         {
@@ -173,17 +173,5 @@ public class BXJGUtilsUserManager<TRole, TUser> : AbpUserManager<TRole, TUser>//
         return await base.SetRolesAsync(user, roleNames);
     }
 
-    /// <summary>
-    /// 更新用户前检查，保护超级管理员的关键属性
-    /// </summary>
-    /// <param name="user">要更新的用户</param>
-    /// <returns>更新结果</returns>
-    public override async Task<IdentityResult> UpdateAsync(TUser user)
-    {
-        // 保留现有逻辑
-        var r = await base.UpdateAsync(user);
-        if (r.Succeeded && (user.IsActive == false || user.IsDeleted))
-            await UpdateSecurityStampAsync(user);
-        return r;
-    }
+   
 }
