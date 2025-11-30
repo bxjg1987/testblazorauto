@@ -31,6 +31,16 @@ public class BXJGUtilsUserManager<TRole, TUser> : AbpUserManager<TRole, TUser>//
    where TRole : AbpRole<TUser>, new()
    where TUser : AbpUser<TUser>
 {
+    /// <summary>
+    /// 超级管理员登录名，默认是admin，允许子类重写
+    /// </summary>
+    protected virtual string SuperAdminUserName => "admin";
+
+    /// <summary>
+    /// 超级管理员角色名，默认是Admin，允许子类重写
+    /// </summary>
+    protected virtual string SuperAdminRoleName => "Admin";
+
     protected BXJGUtilsUserManager(AbpRoleManager<TRole, TUser> roleManager,
                           AbpUserStore<TRole, TUser> userStore,
                           IOptions<IdentityOptions> optionsAccessor,
@@ -127,6 +137,53 @@ public class BXJGUtilsUserManager<TRole, TUser> : AbpUserManager<TRole, TUser>//
         await CacheManager.GetSecureStampCache().RemoveAsync($"{user.TenantId}_{user.Id}");
         //base.Logger.LogWarning($"{user.UserName}更新了安全戳");
         //  cm.GetUserPermissionCache
+        return r;
+    }
+
+    /// <summary>
+    /// 删除用户前检查是否为超级管理员，超级管理员不允许删除
+    /// </summary>
+    /// <param name="user">要删除的用户</param>
+    /// <returns>删除结果</returns>
+    public override async Task<IdentityResult> DeleteAsync(TUser user)
+    {
+        if (user.UserName == SuperAdminUserName)
+        {
+            return IdentityResult.Failed(new IdentityError { Description = "不允许删除超级管理员" });
+        }
+        return await base.DeleteAsync(user);
+    }
+
+    /// <summary>
+    /// 设置用户角色前检查，超级管理员必须至少拥有Admin角色
+    /// </summary>
+    /// <param name="user">要设置角色的用户</param>
+    /// <param name="roleNames">角色名称列表</param>
+    /// <returns>设置结果</returns>
+    public override async Task<IdentityResult> SetRolesAsync(TUser user, IEnumerable<string> roleNames)
+    {
+        if (user.UserName == SuperAdminUserName)
+        {
+            var roleNameList = roleNames.ToList();
+            if (!roleNameList.Contains(SuperAdminRoleName))
+            {
+                return IdentityResult.Failed(new IdentityError { Description = "超级管理员必须至少拥有Admin角色" });
+            }
+        }
+        return await base.SetRolesAsync(user, roleNames);
+    }
+
+    /// <summary>
+    /// 更新用户前检查，保护超级管理员的关键属性
+    /// </summary>
+    /// <param name="user">要更新的用户</param>
+    /// <returns>更新结果</returns>
+    public override async Task<IdentityResult> UpdateAsync(TUser user)
+    {
+        // 保留现有逻辑
+        var r = await base.UpdateAsync(user);
+        if (r.Succeeded && (user.IsActive == false || user.IsDeleted))
+            await UpdateSecurityStampAsync(user);
         return r;
     }
 }
