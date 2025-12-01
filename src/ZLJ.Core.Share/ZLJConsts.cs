@@ -23,7 +23,7 @@
 
         public const string DataDictionaryMigrationValueSettingGroupKey = "DataDictionaryMigrationValueSettingGroup";
 
-        public const string DataDictionaryMigrationValuePrinterBrand = "pingpai";
+        public const string DataDictionaryMigrationValuePrinterBrand = "pinpai";
 
         public const string DataDictionaryMigrationValueCustomerLevel = "kehuJibie";
         public const string DataDictionaryMigrationValueCustomerCategory = "kehuLeibie";

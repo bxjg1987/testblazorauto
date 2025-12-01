@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>BXJG.Inventory</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Localization\SourceFiles\BXJGInventory-zh-Hans.xml" />
+    <EmbeddedResource Include="Localization\SourceFiles\BXJGInventory.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\PSIMasterData\BXJG.PSI.MasterData.Core\BXJG.PSI.MasterData.Core.csproj" />
+    <ProjectReference Include="..\BXJG.Inventory.Core.Share\BXJG.Inventory.Core.Share.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -36,7 +36,7 @@
 
 	<!-- 如果 $(SolutionName) 包含 WithModules -->
 	<ItemGroup Condition="$(SolutionName.Contains('WithModules'))">
-		<ProjectReference Include="..\Modules\BXJG.Utils.EFCore\BXJG.Utils.EFCore.csproj" />
+		<ProjectReference Include="..\Modules\utils\BXJG.Utils.EFCore\BXJG.Utils.EFCore.csproj" />
 		<ProjectReference Include="..\Libs\BXJG.Common.EFCore\BXJG.Common.EFCore.csproj" />
 	</ItemGroup>
 	

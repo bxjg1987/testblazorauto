@@ -69,7 +69,7 @@
 
 	<!-- 如果 $(SolutionName) 包含 WithModules -->
 	<ItemGroup Condition="$(SolutionName.Contains('WithModules'))">
-		<ProjectReference Include="..\Modules\BXJG.Utils.Application\BXJG.Utils.Application.csproj" />
+		<ProjectReference Include="..\Modules\utils\BXJG.Utils.Application\BXJG.Utils.Application.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<!--<PackageReference Include="BXJG.Utils.Application" Version="*" />-->

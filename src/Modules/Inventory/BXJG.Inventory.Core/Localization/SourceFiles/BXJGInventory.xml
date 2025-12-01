@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<localizationDictionary culture="en">
+  <texts>
+    <text name="Menu:Inventory" value="Inventory" />
+    <text name="Inventory" value="Inventory" />
+    <text name="Inventory:Warehouse" value="Warehouse" />
+    <text name="Inventory:Product" value="Product" />
+    <text name="Inventory:Stock" value="Stock" />
+    <text name="Inventory:StockIn" value="Stock In" />
+    <text name="Inventory:StockOut" value="Stock Out" />
+  </texts>
+</localizationDictionary>

@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>BXJG.Inventory</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\PSIMasterData\BXJG.PSI.MasterData.Application.Share\BXJG.PSI.MasterData.Application.Share.csproj" />
+    <ProjectReference Include="..\BXJG.Inventory.Core.Share\BXJG.Inventory.Core.Share.csproj" />
+  </ItemGroup>
+
+</Project>

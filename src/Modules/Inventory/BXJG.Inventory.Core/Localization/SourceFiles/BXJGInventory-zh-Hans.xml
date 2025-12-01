@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<localizationDictionary culture="zh-Hans">
+  <texts>
+    <text name="Menu:Inventory" value="库存管理" />
+    <text name="Inventory" value="库存管理" />
+    <text name="Inventory:Warehouse" value="仓库" />
+    <text name="Inventory:Product" value="产品" />
+    <text name="Inventory:Stock" value="库存" />
+    <text name="Inventory:StockIn" value="入库" />
+    <text name="Inventory:StockOut" value="出库" />
+  </texts>
+</localizationDictionary>

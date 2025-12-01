@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>BXJG.PSI.MasterData</RootNamespace>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\BXJG.PSI.MasterData.Core.Share\BXJG.PSI.MasterData.Core.Share.csproj" />
+		<ProjectReference Include="..\..\Utils\BXJG.Utils.Application.Share\BXJG.Utils.Application.Share.csproj" />
+	</ItemGroup>
+
+</Project>

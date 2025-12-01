@@ -168,7 +168,7 @@
 
 	<!-- 如果 $(SolutionName) 包含 WithModules -->
 	<ItemGroup Condition="$(SolutionName.Contains('WithModules'))">
-		<ProjectReference Include="..\Modules\BXJG.WeChat.Abp\BXJG.WeChat.Abp.csproj" />
+		<ProjectReference Include="..\Modules\utils\BXJG.WeChat.Abp\BXJG.WeChat.Abp.csproj" />
 		<ProjectReference Include="..\Libs\BXJG.WeChat.Web\BXJG.WeChat.Web.csproj" />
 	</ItemGroup>
 
