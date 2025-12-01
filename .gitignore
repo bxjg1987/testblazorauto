@@ -364,3 +364,4 @@ App_Data/Logs/
 /src/ZLJ.Application/Authorization/Permissions/PermissionAppService.cs
 /src/Tools/CodeGenerator/Projects/FYJ/RentalPlan.json
 /.trae/documents
+/abp.code-workspace
