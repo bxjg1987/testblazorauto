@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.3.11222.16 d18.3
+VisualStudioVersion = 18.3.11222.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{D42FF479-F331-48F6-AAA2-45B9FD451892}"
 EndProject
@@ -162,6 +162,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "进销存", "进销存", "{
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BXJG.PSI.EF", "src\Modules\BXJG.PSI.EF\BXJG.PSI.EF.csproj", "{7668DB57-D8BA-4F1C-A151-68DDB8E9150E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PSIMaster", "PSIMaster", "{33CBA872-C2E0-48DA-ABF0-1163CD9B0F36}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -377,6 +379,7 @@ Global
 		{4F7A8986-CC0C-4C4C-ACF3-071B16BFF168} = {95E6E206-50B5-4C98-B89E-068378F4CB87}
 		{7C08FCBA-CCE5-4FBC-AF3E-FA139463613E} = {31830F03-183C-4530-A73A-C165A1F5A739}
 		{7668DB57-D8BA-4F1C-A151-68DDB8E9150E} = {95E6E206-50B5-4C98-B89E-068378F4CB87}
+		{33CBA872-C2E0-48DA-ABF0-1163CD9B0F36} = {D42FF479-F331-48F6-AAA2-45B9FD451892}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F45DD46C-6040-4FCC-87E0-648786C36933}

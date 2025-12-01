@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../aspnet-zero-core-12.0.1"
+		}
+	],
+	"settings": {}
+}
