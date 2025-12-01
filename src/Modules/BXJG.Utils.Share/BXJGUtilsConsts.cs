@@ -20,8 +20,11 @@ namespace BXJG.Utils.Share
         /// </summary>
         public const int ExtDataMaxLength = 4000;
 
-     
-
+     public const int AddressMaxLength = 500;
+        public const int PersionNameMaxLength = 100;
+        public const int AreaNameMaxLength = 200;
+        public const int PhoneMaxLength = 200;
+        public const int RemarkMaxLength = 2000;
         static BXJGUtilsConsts()
         {
             //  UploadTemp = @$"upload{Path.DirectorySeparatorChar}temp";
