@@ -21,7 +21,7 @@ namespace BXJG.Inventory
         
         public override void Initialize()
         {
-            IocManager.RegisterAssemblyByConvention(typeof(InventoryApplicationModule).GetAssembly());
+            IocManager.RegisterAssemblyByConvention(typeof(InventoryApplicationModule).Assembly);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>net10.0</TargetFramework>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -33,13 +33,15 @@
 		<PackageReference Include="BXJG.Common.EFCore" Version="*" />
 		<PackageReference Include="BXJG.Utils.EFCore" Version="*" />
 		<PackageReference Include="BXJG.PSI.MasterData.EF" Version="*" />
+		<PackageReference Include="BXJG.Inventory.EF" Version="*" />
 	</ItemGroup>
 
 	<!-- 如果 $(SolutionName) 包含 WithModules -->
 	<ItemGroup Condition="$(SolutionName.Contains('WithModules'))">
-		<ProjectReference Include="..\Modules\utils\BXJG.Utils.EFCore\BXJG.Utils.EFCore.csproj" />
+		<ProjectReference Include="..\Modules\Utils\BXJG.Utils.EFCore\BXJG.Utils.EFCore.csproj" />
 		<ProjectReference Include="..\Libs\BXJG.Common.EFCore\BXJG.Common.EFCore.csproj" />
 		<ProjectReference Include="..\Modules\PSIMasterData\BXJG.PSI.MasterData.EF\BXJG.PSI.MasterData.EF.csproj" />
+		<ProjectReference Include="..\Modules\Inventory\BXJG.Inventory.EF\BXJG.Inventory.EF.csproj" />
 	</ItemGroup>
 	
 	

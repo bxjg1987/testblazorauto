@@ -1,7 +1,8 @@
-﻿using Abp.EntityFrameworkCore.Configuration;
+using Abp.EntityFrameworkCore.Configuration;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
 using Abp.Zero.EntityFrameworkCore;
+using BXJG.Inventory;
 using BXJG.PSI.MasterData;
 using BXJG.Utils;
 using BXJG.Utils.EFCore;
@@ -21,6 +22,7 @@ namespace ZLJ.EntityFrameworkCore
         typeof(ZLJCoreModule),
         typeof(EFCoreModule),
         typeof(PSIMasterDataEFModule),
+        typeof(InventoryEFModule),
         typeof(AbpZeroCoreEntityFrameworkCoreModule))]
     public class ZLJEntityFrameworkModule : AbpModule
     {

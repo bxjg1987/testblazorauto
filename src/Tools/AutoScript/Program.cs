@@ -1,4 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
+// See https://aka.ms/new-console-template for more information
 
 //每个任务一个委托，然后统一执行，这样做是便于排序步骤
 
@@ -59,7 +59,21 @@ var topTasks = new List<(string, Action)>
     new("重新发布：BXJG.Utils.RCL", FabuXindeBXJGUtilsRCL),
     new("重新发布：BXJG.WeChat", FabuWeChat),
     new("重新发布：BXJG.WeChat.Web", FabuWeChatWeb),
-    new("重新发布：BXJG.WeChat.Abp", FabuWeChatBXJG)
+    new("重新发布：BXJG.WeChat.Abp", FabuWeChatBXJG),
+    // PSI MasterData模块
+    new("重新发布：BXJG.PSI.MasterData.Core.Share", FabuXindeBXJGPSIMasterDataCoreShare),
+    new("重新发布：BXJG.PSI.MasterData.Core", FabuXindeBXJGPSIMasterDataCore),
+    new("重新发布：BXJG.PSI.MasterData.Application.Share", FabuXindeBXJGPSIMasterDataApplicationShare),
+    new("重新发布：BXJG.PSI.MasterData.Application", FabuXindeBXJGPSIMasterDataApplication),
+    new("重新发布：BXJG.PSI.MasterData.Application.ClientProxy", FabuXindeBXJGPSIMasterDataApplicationClientProxy),
+    new("重新发布：BXJG.PSI.MasterData.EF", FabuXindeBXJGPSIMasterDataEF),
+    // Inventory模块
+    new("重新发布：BXJG.Inventory.Core.Share", FabuXindeBXJGInventoryCoreShare),
+    new("重新发布：BXJG.Inventory.Core", FabuXindeBXJGInventoryCore),
+    new("重新发布：BXJG.Inventory.Application.Share", FabuXindeBXJGInventoryApplicationShare),
+    new("重新发布：BXJG.Inventory.Application", FabuXindeBXJGInventoryApplication),
+    new("重新发布：BXJG.Inventory.Application.ClientProxy", FabuXindeBXJGInventoryApplicationClientProxy),
+    new("重新发布：BXJG.Inventory.EF", FabuXindeBXJGInventoryEF)
 };
 #endregion
 
@@ -257,3 +271,79 @@ void FabuWeChatBXJG()
     DabaoNuget("BXJG.WeChat.Abp");
     FabuNuget("BXJG.WeChat.Abp");
 }
+
+#region PSI MasterData模块发布方法
+void FabuXindeBXJGPSIMasterDataCoreShare()
+{
+    DabaoNuget("BXJG.PSI.MasterData.Core.Share");
+    FabuNuget("BXJG.PSI.MasterData.Core.Share");
+}
+
+void FabuXindeBXJGPSIMasterDataCore()
+{
+    DabaoNuget("BXJG.PSI.MasterData.Core");
+    FabuNuget("BXJG.PSI.MasterData.Core");
+}
+
+void FabuXindeBXJGPSIMasterDataApplicationShare()
+{
+    DabaoNuget("BXJG.PSI.MasterData.Application.Share");
+    FabuNuget("BXJG.PSI.MasterData.Application.Share");
+}
+
+void FabuXindeBXJGPSIMasterDataApplication()
+{
+    DabaoNuget("BXJG.PSI.MasterData.Application");
+    FabuNuget("BXJG.PSI.MasterData.Application");
+}
+
+void FabuXindeBXJGPSIMasterDataApplicationClientProxy()
+{
+    DabaoNuget("BXJG.PSI.MasterData.Application.ClientProxy");
+    FabuNuget("BXJG.PSI.MasterData.Application.ClientProxy");
+}
+
+void FabuXindeBXJGPSIMasterDataEF()
+{
+    DabaoNuget("BXJG.PSI.MasterData.EF");
+    FabuNuget("BXJG.PSI.MasterData.EF");
+}
+#endregion
+
+#region Inventory模块发布方法
+void FabuXindeBXJGInventoryCoreShare()
+{
+    DabaoNuget("BXJG.Inventory.Core.Share");
+    FabuNuget("BXJG.Inventory.Core.Share");
+}
+
+void FabuXindeBXJGInventoryCore()
+{
+    DabaoNuget("BXJG.Inventory.Core");
+    FabuNuget("BXJG.Inventory.Core");
+}
+
+void FabuXindeBXJGInventoryApplicationShare()
+{
+    DabaoNuget("BXJG.Inventory.Application.Share");
+    FabuNuget("BXJG.Inventory.Application.Share");
+}
+
+void FabuXindeBXJGInventoryApplication()
+{
+    DabaoNuget("BXJG.Inventory.Application");
+    FabuNuget("BXJG.Inventory.Application");
+}
+
+void FabuXindeBXJGInventoryApplicationClientProxy()
+{
+    DabaoNuget("BXJG.Inventory.Application.ClientProxy");
+    FabuNuget("BXJG.Inventory.Application.ClientProxy");
+}
+
+void FabuXindeBXJGInventoryEF()
+{
+    DabaoNuget("BXJG.Inventory.EF");
+    FabuNuget("BXJG.Inventory.EF");
+}
+#endregion
