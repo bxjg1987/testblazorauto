@@ -33,7 +33,7 @@ namespace BXJG.PSI.MasterData.EFMaps
                 .IsUnicode(false)
                 .HasComment("商品名称拼音简码");
             
-            builder.Property(c => c.SpecModel)
+            builder.Property(c => c.Model)
                 .HasMaxLength(BXJGPSIMasterDataCoreConsts.ProductSpecMaxLength)
                 .HasComment("商品规格型号");
             
@@ -41,7 +41,7 @@ namespace BXJG.PSI.MasterData.EFMaps
                 .HasComment("是否是虚拟产品");
             
             builder.Property(c => c.CategoryId)
-                .IsRequired()
+                //.IsRequired()
                 .HasComment("商品类别id");
             
             builder.HasOne(p => p.Category)

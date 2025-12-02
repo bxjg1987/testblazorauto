@@ -33,17 +33,29 @@ namespace BXJG.PSI.MasterData.Product
         /// </summary>
         public virtual string? Pinyin { get; set; }
         /// <summary>
+        /// 品牌Id
+        /// </summary>
+        public virtual long? BrandId { get; set; }
+        /// <summary>
+        /// 品牌导航属性
+        /// </summary>
+        public virtual DataDictionaryEntity Brand { get; set; }
+        ///// <summary>
+        ///// 品牌名称
+        ///// </summary>
+        //public virtual string? BrandName { get; set; }
+        /// <summary>
         /// 商品规格型号
         /// </summary>
-        public virtual string? SpecModel { get; set; }
+        public virtual string? Model { get; set; }
         /// <summary>
         /// 是否是虚拟产品
         /// </summary>
-        public virtual bool IsVirtual { get; set; }
+        public virtual bool IsVirtual { get; set; } = false;
         /// <summary>
         /// 商品类别id
         /// </summary>
-        public long CategoryId { get; set; }
+        public virtual long? CategoryId { get; set; }
         /// <summary>
         /// 商品类别
         /// </summary>
