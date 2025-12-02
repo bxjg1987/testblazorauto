@@ -13,4 +13,8 @@
 		<ProjectReference Include="..\..\Utils\BXJG.Utils.Application.Share\BXJG.Utils.Application.Share.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="AssociatedCompany\" />
+	</ItemGroup>
+
 </Project>
