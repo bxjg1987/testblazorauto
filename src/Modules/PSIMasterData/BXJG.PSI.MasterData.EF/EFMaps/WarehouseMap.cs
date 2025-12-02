@@ -87,6 +87,10 @@ namespace BXJG.PSI.MasterData.EFMaps
             builder.Property(c => c.OrganizationUnitId)
                 .HasComment("所属组织机构id");
             
+            builder.Property(c => c.Remark)
+                .HasMaxLength(BXJGUtilsConsts.RemarkMaxLength)
+                .HasComment("备注");
+            
             builder.HasOne(x => x.OrganizationUnit)
                 .WithMany()
                 .HasForeignKey(x => x.OrganizationUnitId);

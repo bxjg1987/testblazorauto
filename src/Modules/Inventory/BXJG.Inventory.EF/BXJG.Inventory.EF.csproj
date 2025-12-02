@@ -12,4 +12,8 @@
     <ProjectReference Include="..\BXJG.Inventory.Core\BXJG.Inventory.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="EFMaps\" />
+  </ItemGroup>
+
 </Project>

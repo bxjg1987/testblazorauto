@@ -34,3 +34,4 @@ global using Abp.Localization;
 global using System.ComponentModel.DataAnnotations;
 global using BXJG.Utils;
 global using BXJG.Utils.Application.Share.Dtos;
+global using BXJG.PSI.MasterData;//.Application

@@ -27,3 +27,4 @@ global using Abp.Modules;
 global using Abp.Reflection.Extensions;
 global using Abp.Zero;
 global using BXJG.Utils;
+global using BXJG.PSI.MasterData;

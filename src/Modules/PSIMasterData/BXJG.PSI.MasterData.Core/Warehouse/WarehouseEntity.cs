@@ -43,7 +43,7 @@ namespace BXJG.PSI.MasterData.Warehouse
         /// <summary>
         /// 所属省市区县id
         /// </summary>
-        public long? AreaId { get; set; }
+        public virtual long? AreaId { get; set; }
         /// <summary>
         /// 省市区县名称
         /// </summary>
@@ -68,7 +68,6 @@ namespace BXJG.PSI.MasterData.Warehouse
         /// 仓库类型
         /// </summary>
         public virtual long WarehouseType { get; set; }
-
         /// <summary>
         /// 负责人id
         /// </summary>

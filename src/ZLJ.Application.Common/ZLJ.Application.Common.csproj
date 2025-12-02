@@ -65,11 +65,13 @@
 	<!-- 如果 $(SolutionName) 不包含 WithModules -->
 	<ItemGroup Condition="!$(SolutionName.Contains('WithModules'))">
 		<PackageReference Include="BXJG.Utils.Application" Version="*" />
+		<PackageReference Include="BXJG.PSI.MasterData.Application" Version="*" />
 	</ItemGroup>
 
 	<!-- 如果 $(SolutionName) 包含 WithModules -->
 	<ItemGroup Condition="$(SolutionName.Contains('WithModules'))">
 		<ProjectReference Include="..\Modules\utils\BXJG.Utils.Application\BXJG.Utils.Application.csproj" />
+		<ProjectReference Include="..\Modules\PSIMasterData\BXJG.PSI.MasterData.Application\BXJG.PSI.MasterData.Application.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<!--<PackageReference Include="BXJG.Utils.Application" Version="*" />-->

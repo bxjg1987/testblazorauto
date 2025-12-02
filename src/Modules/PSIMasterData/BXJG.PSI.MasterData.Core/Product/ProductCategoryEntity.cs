@@ -11,11 +11,6 @@ namespace BXJG.PSI.MasterData.Product
     public class ProductCategoryEntity : GeneralTreeEntity<ProductCategoryEntity>
     {
         /// <summary>
-        /// 产品分类名称
-        /// </summary>
-        public override string DisplayName { get; set; }
-        
-        /// <summary>
         /// 该分类下的产品列表
         /// </summary>
         public virtual ICollection<ProductEntity> Products { get; set; }

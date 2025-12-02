@@ -45,6 +45,7 @@
 		<PackageReference Include="BXJG.Utils" Version="*" />
 		<PackageReference Include="BXJG.Common" Version="*" />
 		<PackageReference Include="BXJG.WeChat" Version="*" />
+		<PackageReference Include="BXJG.PSI.MasterData.Core" Version="*" />
 	</ItemGroup>
 
 	<!-- 如果 $(SolutionName) 包含 WithModules -->
@@ -52,6 +53,8 @@
 		<ProjectReference Include="..\Modules\utils\BXJG.Utils\BXJG.Utils.csproj" />
 		<ProjectReference Include="..\Libs\BXJG.Common\BXJG.Common.csproj" />
 		<ProjectReference Include="..\Libs\BXJG.WeChat\BXJG.WeChat.csproj" />
+	  <ProjectReference Include="..\Modules\PSIMasterData\BXJG.PSI.MasterData.Core\BXJG.PSI.MasterData.Core.csproj" />
+	
 	</ItemGroup>
 	
 	

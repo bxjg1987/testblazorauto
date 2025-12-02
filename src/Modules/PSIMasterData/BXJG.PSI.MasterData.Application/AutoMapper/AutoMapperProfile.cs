@@ -1,6 +1,6 @@
 using AutoMapper;
 
-namespace BXJG.PSI.MasterData.Application.AutoMapper
+namespace BXJG.PSI.MasterData.AutoMapper
 {
     public class AutoMapperProfile : Profile
     {
