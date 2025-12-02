@@ -8,12 +8,12 @@ namespace BXJG.PSI.MasterData.AssociatedCompany
     /// <summary>
     /// 往来单位实体
     /// </summary>
-    public class AssociatedCompanyEntity : FullAuditedEntity<Guid>, IMustHaveTenant, IExtendableObject, IPassivable
+    public class BXJGAssociatedCompanyEntity : FullAuditedEntity<long>, IMustHaveTenant, IExtendableObject, IPassivable
     {
         /// <summary>
         /// 唯一id，主键
         /// </summary>
-        public override Guid Id { get; set; }
+        public override long Id { get; set; }
         /// <summary>
         /// 租户id
         /// </summary>
@@ -29,7 +29,7 @@ namespace BXJG.PSI.MasterData.AssociatedCompany
         /// <summary>
         /// 拼音简码
         /// </summary>
-        public virtual string Pinyin { get; set; }
+        public virtual string? Pinyin { get; set; }
         /// <summary>
         /// 是否启用
         /// </summary>

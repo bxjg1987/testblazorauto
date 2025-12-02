@@ -9,7 +9,7 @@ namespace BXJG.PSI.MasterData.EFMaps
     {
         public void Configure(EntityTypeBuilder<ProductEntity> builder)
         {
-            builder.ToTable("psi_Product", x => x.HasComment("商品档案实体"));
+            builder.ToTable("ShebeiXinxi", x => x.HasComment("商品档案实体"));
             
             builder.Property(c => c.Id)
                 .HasMaxLength(BXJGUtilsConsts.StringIdMaxLength)
@@ -30,6 +30,7 @@ namespace BXJG.PSI.MasterData.EFMaps
             
             builder.Property(c => c.Pinyin)
                 .HasMaxLength(BXJGPSIMasterDataCoreConsts.ProductNameMaxLength)
+                .IsUnicode(false)
                 .HasComment("商品名称拼音简码");
             
             builder.Property(c => c.SpecModel)

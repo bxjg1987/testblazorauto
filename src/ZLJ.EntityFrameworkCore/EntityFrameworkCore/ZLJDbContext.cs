@@ -116,7 +116,7 @@ namespace ZLJ.EntityFrameworkCore
             {
                 return true;
             }
-
+            //Console.WriteLine(  $"xx"+entityType.BaseType + " ---" +entityType.ClrType.FullName);
             return base.ShouldFilterEntity<TEntity>(entityType);
         }
         
@@ -233,9 +233,9 @@ namespace ZLJ.EntityFrameworkCore
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder .ApplyConfigurationBXJGUtils();//这个必须在最前面，因为需要反射。另外设计时dbcntext工厂ZLJDbContextFactory必须硬编码引用业务模块，否则反射出错
             base.OnModelCreating(modelBuilder);//这个必须加，否则报错
-            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly())
-                        .ApplyConfigurationBXJGUtils();
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             //.ApplyConfigurationBXJGWorkOrder();
 
             //   modelBuilder.ConfigProtect(base.AbpSession.ser)

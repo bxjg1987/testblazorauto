@@ -29,6 +29,7 @@ namespace BXJG.PSI.MasterData.EFMaps
             
             builder.Property(c => c.Pinyin)
                 .HasMaxLength(BXJGUtilsConsts.MaxCodeLength)
+                .IsUnicode(false)
                 .HasComment("拼音简码");
             
             builder.Property(c => c.IsVirtual)
@@ -50,6 +51,7 @@ namespace BXJG.PSI.MasterData.EFMaps
             
             builder.Property(c => c.AddressPinyin)
                 .HasMaxLength(BXJGUtilsConsts.MaxCodeLength)
+                .IsUnicode(false)
                 .HasComment("地址拼音简码");
             
             builder.Property(c => c.SquareMeasure)

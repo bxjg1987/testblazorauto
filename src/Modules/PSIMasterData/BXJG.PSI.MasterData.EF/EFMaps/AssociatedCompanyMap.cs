@@ -5,14 +5,15 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BXJG.PSI.MasterData.EFMaps
 {
-    public class AssociatedCompanyMap : IEntityTypeConfiguration<AssociatedCompanyEntity>
+    public class AssociatedCompanyMap : IEntityTypeConfiguration<BXJGAssociatedCompanyEntity>
     {
-        public void Configure(EntityTypeBuilder<AssociatedCompanyEntity> builder)
+        public void Configure(EntityTypeBuilder<BXJGAssociatedCompanyEntity> builder)
         {
-            builder.ToTable("psi_AssociatedCompany", x => x.HasComment("往来单位实体"));
-            
+            //builder.Metadata.SetDiscriminatorValue("BXJGAssociatedCompany");
+            //builder.ToTable("psi_AssociatedCompany", x => x.HasComment("往来单位实体"));
+            builder.ToTable("KehuXinxi",x => x.HasComment("往来单位实体"));
             builder.Property(c => c.Id)
-                .ValueGeneratedNever()
+                //.ValueGeneratedNever()
                 .HasComment("唯一id，主键");
             
             builder.Property(c => c.TenantId)
@@ -28,8 +29,9 @@ namespace BXJG.PSI.MasterData.EFMaps
                 .HasComment("公司名称");
             
             builder.Property(c => c.Pinyin)
-                .IsRequired()
+                //.IsRequired()
                 .HasMaxLength(BXJGPSIMasterDataCoreConsts.AssociatedCompanyPinyinMaxLength)
+                .IsUnicode(false)
                 .HasComment("拼音简码");
             
             builder.Property(c => c.IsActive)
@@ -38,6 +40,7 @@ namespace BXJG.PSI.MasterData.EFMaps
             
             builder.Property(c => c.TaxNo)
                 .HasMaxLength(BXJGPSIMasterDataCoreConsts.AssociatedCompanyTaxNoMaxLength)
+                .IsUnicode(false)
                 .HasComment("税号");
             
             builder.Property(c => c.LinkMan)
@@ -46,10 +49,12 @@ namespace BXJG.PSI.MasterData.EFMaps
             
             builder.Property(c => c.LinkManPinyin)
                 .HasMaxLength(BXJGUtilsConsts.PersionNameMaxLength)
+                .IsUnicode(false)
                 .HasComment("联系人拼音");
             
             builder.Property(c => c.LinkPhone)
                 .HasMaxLength(BXJGUtilsConsts.PhoneMaxLength)
+                .IsUnicode(false)
                 .HasComment("联系电话");
             
             builder.Property(c => c.Address)
@@ -58,6 +63,7 @@ namespace BXJG.PSI.MasterData.EFMaps
             
             builder.Property(c => c.AddressPinyin)
                 .HasMaxLength(BXJGUtilsConsts.AddressMaxLength)
+                .IsUnicode(false)
                 .HasComment("地址拼音");
             
             builder.Property(c => c.Lng)
