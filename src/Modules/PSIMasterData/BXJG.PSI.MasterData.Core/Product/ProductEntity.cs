@@ -40,10 +40,12 @@ namespace BXJG.PSI.MasterData.Product
         /// 品牌导航属性
         /// </summary>
         public virtual DataDictionaryEntity Brand { get; set; }
+       
         ///// <summary>
         ///// 品牌名称
         ///// </summary>
         //public virtual string? BrandName { get; set; }
+        
         /// <summary>
         /// 商品规格型号
         /// </summary>
