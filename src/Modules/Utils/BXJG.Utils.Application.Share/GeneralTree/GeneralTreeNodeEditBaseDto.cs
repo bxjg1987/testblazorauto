@@ -5,6 +5,7 @@
  * 说明：略...
  */
 using Abp.Application.Services.Dto;
+using Abp.Domain.Entities;
 using BXJG.Common.Contracts;
 using System;
 using System.Collections.Generic;
@@ -20,8 +21,14 @@ namespace BXJG.Utils.Application.Share.GeneralTree
     /// <summary>
     /// 树形结构抽象编辑模型
     /// </summary>
-    public class GeneralTreeNodeEditBaseDto : EntityDto<long>, IHaveParentId<long>
+    public class GeneralTreeNodeEditBaseDto : EntityDto<long>, IHaveParentId<long>,IPassivable
     {
+
+        /// <summary>
+        /// 是否启用
+        /// </summary>
+        [Display(Name = "是否启用")] 
+        public bool IsActive { get; set; } = true;
         /// <summary>
         /// Id
         /// </summary>

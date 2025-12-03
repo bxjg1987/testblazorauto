@@ -34,6 +34,7 @@ using BXJG.Common.Contracts;
 using BXJG.Utils.Application.Share.Dtos;
 using Abp.Auditing;
 using System.Linq.Expressions;
+using System.Linq.Dynamic.Core;
 
 namespace BXJG.Utils.Application.GeneralTree
 {
@@ -294,9 +295,13 @@ namespace BXJG.Utils.Application.GeneralTree
                                 .WhereIf(input.IsOnlyLoadChild && parentCode.IsNotNullOrWhiteSpaceBXJG(), c => c.Parent.Code == parentCode || c.Code == parentCode)
                                 .WhereIf(input.IsOnlyLoadChild && parentCode.IsNullOrWhiteSpaceBXJG(), c => !c.ParentId.HasValue);
 
+            if (input.IsActive.HasValue)
+                q = q.Where("IsActive == @0", input.IsActive.Value);
 
             if (input is IHaveFilter p)
                 q = q.ApplyDynamicCondtion(p.Filter);
+
+
             return q;
         }
         /// <summary>
@@ -330,6 +335,10 @@ namespace BXJG.Utils.Application.GeneralTree
         protected virtual async Task<IQueryable<TEntity>> ComboboxFilter(TGetNodesForSelectInput input, long? parentId)
         {
             var q = (await BuildQuery()).Where(c => c.ParentId == parentId);
+
+            if (input.IsActive.HasValue)
+                q = q.Where("IsActive == @0", input.IsActive.Value);
+
             if (input is IHaveFilter p)
                 q = q.ApplyDynamicCondtion(p.Filter);
             return q;
@@ -827,6 +836,10 @@ namespace BXJG.Utils.Application.GeneralTree
             q = q.WhereIf(!input.IsOnlyLoadChild, c => c.Code.StartsWith(parentCode))
                  .WhereIf(input.IsOnlyLoadChild && parentCode.IsNotNullOrWhiteSpaceBXJG(), c => c.Parent.Code == parentCode || c.Code == parentCode)
                  .WhereIf(input.IsOnlyLoadChild && parentCode.IsNullOrWhiteSpaceBXJG(), c => !c.ParentId.HasValue);
+
+            if (input.IsActive.HasValue)
+                q = q.Where("IsActive == @0", input.IsActive.Value);
+
             if (input is IHaveFilter p)
                 q = q.ApplyDynamicCondtion(p.Filter);
             return q;

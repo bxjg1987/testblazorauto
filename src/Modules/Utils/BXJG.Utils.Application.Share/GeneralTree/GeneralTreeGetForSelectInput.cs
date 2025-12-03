@@ -15,6 +15,10 @@ namespace BXJG.Utils.Application.Share.GeneralTree
     public class GeneralTreeGetForSelectInput //: GetForSelectInput
     {
         /// <summary>
+        /// 是否启用
+        /// </summary>
+        public bool? IsActive { get; set; } = true;
+        /// <summary>
         /// 0直接返回查找到的后代节点，
         /// 
         /// 大于0的都会尝试增加父节点的返回

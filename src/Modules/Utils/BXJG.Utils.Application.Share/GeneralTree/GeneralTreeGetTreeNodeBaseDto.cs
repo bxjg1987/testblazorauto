@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Services.Dto;
+using Abp.Domain.Entities;
 using BXJG.Common.Contracts;
 using System;
 using System.Collections.Generic;
@@ -15,9 +16,14 @@ namespace BXJG.Utils.Application.Share.GeneralTree
     /// 树形数据管理的列表页使用的dto基类，它不是抽象的，可以直接使用
     /// </summary>
     /// <typeparam name="TChild"></typeparam>
-    public class GeneralTreeNodeBaseDto<TChild> : AuditedEntityDto<long>, IExtendableObj, IGeneralTree<TChild>
+    public class GeneralTreeNodeBaseDto<TChild> : AuditedEntityDto<long>, IExtendableObj, IGeneralTree<TChild>,IPassivable
         where TChild : GeneralTreeNodeBaseDto<TChild>
     {
+        /// <summary>
+        /// 是否启用
+        /// </summary>
+        [Display(Name="是否启用")]
+        public bool IsActive { get; set; } = true;
         long? parentId;
         public long? ParentId { get => parentId; set => parentId = value; }
         object IHaveParentId.Id { get => Id; set => Id = Convert.ToInt64(value); }

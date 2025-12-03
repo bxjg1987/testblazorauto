@@ -58,13 +58,12 @@
     }
     else
     {
-        <GridRow>
-            <GridCol Span="5">名称</GridCol>   
-            <GridCol Span="19">@@dto.DisplayName</GridCol>
-        </GridRow>
+        <FormItem Label="@field.DisplayName">
+            @@dto.DisplayName
+        </FormItem>
 @foreach(var field in Model.Model.NormalFields)
 { 
-        <FormItem Label="@@field.DisplayName">
+        <FormItem Label="@field.DisplayName">
             <span class="frm-field-readonly">    
     @if(field.CSharpType== "bool"){
             <Switch Checked=dto.@field.Name Disabled="true" />

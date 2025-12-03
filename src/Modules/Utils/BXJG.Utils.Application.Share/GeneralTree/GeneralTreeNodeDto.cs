@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Services.Dto;
+using Abp.Domain.Entities;
 using Abp.Extensions;
 using BXJG.Common.Contracts;
 using System;
@@ -13,9 +14,13 @@ namespace BXJG.Utils.Application.Share.GeneralTree
     /// <summary>
     /// 获取树形下拉框数据的模型
     /// </summary>
-    public class GeneralTreeNodeForSelectDto<T> : EntityDto<long>, IGeneralTree<T>
+    public class GeneralTreeNodeForSelectDto<T> : EntityDto<long>, IGeneralTree<T>,IPassivable
         where T : GeneralTreeNodeForSelectDto<T>
     {
+        /// <summary>
+        /// 是否启用
+        /// </summary>
+        public bool IsActive { get; set; } = true;
         //public string Id { get; set; }//用id是为了适配easyui的tree  combotree共用此模型
         [Obsolete]
         public string Text { get; set; }

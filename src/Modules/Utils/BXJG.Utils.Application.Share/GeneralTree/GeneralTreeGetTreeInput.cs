@@ -12,6 +12,10 @@ namespace BXJG.Utils.Application.Share.GeneralTree
     /// </summary>
     public class GeneralTreeGetTreeInput:IReset // 与ForSelectInput不同，后者只针对选择，且有Search和Form模式
     {
+        /// <summary>
+        /// 是否启用
+        /// </summary>
+        public bool? IsActive { get; set; }
         //不要使用Nullable<TId>类型，因为某些情况此参数可能不允许为null
         //若数据很多 可能需要么次加载一个节点的数据，所以ParentId字段是必要的
         /// <summary>

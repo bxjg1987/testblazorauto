@@ -70,13 +70,13 @@
            RowClassName="@@(r=>r.RowIndex%2==0?"even":"odd")"
            RemoteDataSource="true"
            OnRow="Row"
-           
+           RowKey="x=>x.Id"
            Size="TableSize.Small"
            Bordered="true"
            ScrollY="76vh">
-        <Selection Fixed="ColumnFixPlacement.Left"/>
+        <Selection />
         @@*表格树起码在antblazor0.19前不支持 Fixed="ColumnFixPlacement.Left" 另外树不支持排序 *@@
-        <PropertyColumn Property="c=>c.DisplayName" ShowSorterTooltip="false" Sortable="true" Width="12rem"/>
+        <PropertyColumn Property="c=>c.DisplayName" ShowSorterTooltip="false" Sortable="true" />
 @foreach (var field in Model.Model.NormalFields){
     @if(field.CSharpType=="bool"){
         <PropertyColumn Property="c=>c.@(field.Name)" ShowSorterTooltip="false" Width="6rem" Align="ColumnAlign.Center">
@@ -86,7 +86,9 @@
         <PropertyColumn Property="c=>c.@(field.Name)" ShowSorterTooltip="false" @(field.Width.IsNullOrWhiteSpaceBXJG()?"":@$"Width=""{field.Width}""") @(field.Position==true?"":(field.FixedLeft==false?@"Align=ColumnAlign.Right":@"Align=""ColumnAlign.Center"""))/>        
     }
 }
-
+        <PropertyColumn Property="c=>c.IsActive" ShowSorterTooltip="false"  Sortable Width="6rem"  Align="ColumnAlign.Center">
+            <Switch @bind-Value="@context.IsActive" Size="@InputSize.Small" Disabled></Switch>
+        </PropertyColumn>
         <ActionColumn Title="操作" Width="240" Fixed="ColumnFixPlacement.Right" Align="ColumnAlign.Center">
             <span @@onclick:stopPropagation="true">
                 <ButtonGroup Size="@@ButtonGroupSize.Small">

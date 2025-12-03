@@ -14,11 +14,17 @@ using System.Threading.Tasks;
 
 namespace BXJG.Utils.GeneralTree
 {
-    public abstract class GeneralTreeEntity<TEntity> : FullAuditedEntity<long>, IExtendableObject, IMayHaveTenant, IGeneralTree<TEntity>
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    public abstract class GeneralTreeEntity<TEntity> : FullAuditedEntity<long>, IExtendableObject, IMayHaveTenant, IGeneralTree<TEntity>,IPassivable
         where TEntity : GeneralTreeEntity<TEntity>
     {
-       
-
+        /// <summary>
+        /// 是否启用
+        /// </summary>
+        public bool IsActive { get; set; } = true;
         public GeneralTreeEntity() { }
         public GeneralTreeEntity(int? tenantId, string displayName, long? parentId = null)
         {
