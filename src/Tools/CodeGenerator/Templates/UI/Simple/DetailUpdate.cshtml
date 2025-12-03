@@ -17,10 +17,10 @@
     @@(detailUpdateText)@@(FuncName)
 </SectionContent>
 <SectionContent SectionName=@@($"{Master}-detail-update-body")>
+        <Form @@ref="frm" ValidateOnChange="true" Model="editDto" LabelColSpan="4" WrapperColSpan="20" OnFinish="OnFinish" Loading="IsBusy">
 
     @@if (isEdit)
     {
-        <Form @@ref="frm" ValidateOnChange="true" Model="editDto" LabelColSpan="4" WrapperColSpan="20" OnFinish="OnFinish" Loading="IsBusy">
 @foreach(var field in Model.Model.NormalFields)
 {
     if(field.CSharpType == "bool"){
@@ -53,13 +53,13 @@
         </FormItem>
     }
 }
-        </Form>
+     
     }
     else
     {
 @foreach(var field in Model.Model.NormalFields)
     {
-        <FormItem Label="@@field.DisplayName">
+        <FormItem Label="@field.DisplayName">
             <span class="frm-field-readonly">    
     @if(field.CSharpType== "bool"){
             <Switch Checked=dto.@field.Name Disabled="true" />
@@ -69,7 +69,7 @@
     }
             </span>
         </FormItem>
-}
+}   </Form>
     }
 </SectionContent>
 <SectionContent SectionName=@@($"{Master}-detail-update-btns")>
