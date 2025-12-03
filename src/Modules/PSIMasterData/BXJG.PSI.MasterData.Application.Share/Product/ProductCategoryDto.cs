@@ -4,7 +4,7 @@ using System;
 namespace BXJG.PSI.MasterData.Application.Share.Product
 {
     /// <summary>
-    /// 产品分类DTO
+    /// 商品分类DTO
     /// </summary>
     public class ProductCategoryDto : GeneralTreeNodeBaseDto<ProductCategoryDto>
     {

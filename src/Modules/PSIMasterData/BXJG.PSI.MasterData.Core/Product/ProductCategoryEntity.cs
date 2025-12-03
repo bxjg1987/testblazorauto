@@ -6,7 +6,7 @@ using System.Text;
 namespace BXJG.PSI.MasterData.Product
 {
     /// <summary>
-    /// 产品分类实体
+    /// 商品分类实体
     /// </summary>
     public class ProductCategoryEntity : GeneralTreeEntity<ProductCategoryEntity>
     {

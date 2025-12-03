@@ -9,7 +9,7 @@ namespace BXJG.PSI.MasterData.EFMaps
     {
         public void Configure(EntityTypeBuilder<ProductCategoryEntity> builder)
         {
-            builder.ToTable("psi_ProductCategory", x => x.HasComment("产品分类实体"));
+            builder.ToTable("psi_ProductCategory", x => x.HasComment("商品分类实体"));
             
             // 使用扩展方法配置通用树形结构
             builder.MapGeneralTree();

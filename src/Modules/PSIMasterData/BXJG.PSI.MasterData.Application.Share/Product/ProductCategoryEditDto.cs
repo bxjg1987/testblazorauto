@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 namespace BXJG.PSI.MasterData.Application.Share.Product
 {
     /// <summary>
-    /// 产品分类编辑DTO
+    /// 商品分类编辑DTO
     /// </summary>
     public class ProductCategoryEditDto : GeneralTreeNodeEditBaseDto
     {

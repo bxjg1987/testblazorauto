@@ -3,7 +3,7 @@ using BXJG.Utils.Application.Share.GeneralTree;
 namespace BXJG.PSI.MasterData.Application.Share.Product
 {
     /// <summary>
-    /// 产品分类选择DTO
+    /// 商品分类选择DTO
     /// </summary>
     public class ProductCategorySelectDto : GeneralTreeNodeForSelectDto<ProductCategorySelectDto>
     {

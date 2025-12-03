@@ -10,29 +10,29 @@ namespace BXJG.PSI.MasterData
         /// </summary>
         public const string PSIMasterData = "PSI.MasterData";
 
-        #region 产品分类
+        #region 商品分类
         /// <summary>
-        /// 产品分类管理权限
+        /// 商品分类管理权限
         /// </summary>
         public const string PSIMasterDataProductCategory = "PSI.MasterData.ProductCategory";
         
         /// <summary>
-        /// 产品分类查询权限
+        /// 商品分类查询权限
         /// </summary>
         public const string PSIMasterDataProductCategoryGet = "PSI.MasterData.ProductCategory.Get";
         
         /// <summary>
-        /// 产品分类创建权限
+        /// 商品分类创建权限
         /// </summary>
         public const string PSIMasterDataProductCategoryCreate = "PSI.MasterData.ProductCategory.Create";
         
         /// <summary>
-        /// 产品分类更新权限
+        /// 商品分类更新权限
         /// </summary>
         public const string PSIMasterDataProductCategoryUpdate = "PSI.MasterData.ProductCategory.Update";
         
         /// <summary>
-        /// 产品分类删除权限
+        /// 商品分类删除权限
         /// </summary>
         public const string PSIMasterDataProductCategoryDelete = "PSI.MasterData.ProductCategory.Delete";
         #endregion
