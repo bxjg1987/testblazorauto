@@ -47,9 +47,7 @@
 {
             <Input @@bind-Value="GetAllInput.Filter.@field.Name" PlaceHolder="@(field.DisplayName)" @(field.Width.IsNotNullOrWhiteSpaceBXJG()?$@"Width=""{field.Width}""":"")/>
 }
-            <div style="width:14.5rem;">
-                <Search Placeholder="@(string.Join("/", Model.Model.ConditionStringFields.Select(x=>x.DisplayName)))等关键字..." @@bind-Value="Keywords" OnChange="BtnSearchClick" AllowClear="true" Disabled="IsBusy" />
-            </div>
+            <Search Style="width:17.5rem;" Placeholder="@(string.Join("/", Model.Model.ConditionStringFields.Select(x=>x.DisplayName)))等关键字..." @@bind-Value="Keywords" OnChange="BtnSearchClick" AllowClear="true" Disabled="IsBusy" />
             <Tooltip Title="清空条件">
                 <Button Type="@@ButtonType.Default" Icon="@@IconType.Outline.Clear" OnClick="BtnClearFilterClick" Disabled="IsBusy"></Button>
             </Tooltip>
@@ -86,7 +84,7 @@
 
 @foreach (var field in Model.Model.NormalFields){
     @if(field.CSharpType=="bool"){
-        <PropertyColumn Property="c=>c.@(field.Name)" ShowSorterTooltip="false"  @(field.IsSort?"Sortable":"") Width="5rem" @(field.FixedLeft==true?@"Fixed=""left""":(field.FixedLeft==false?@"Fixed=""right""":"")) Align="ColumnAlign.Center">
+        <PropertyColumn Property="c=>c.@(field.Name)" ShowSorterTooltip="false"  @(field.IsSort?"Sortable":"") Width="6rem" @(field.FixedLeft==true?@"Fixed=""left""":(field.FixedLeft==false?@"Fixed=""right""":"")) Align="ColumnAlign.Center">
             <Switch @@bind-Value="@@context.@(field.Name)" Size="@@InputSize.Small" Disabled="true"></Switch>
         </PropertyColumn>
     }else{

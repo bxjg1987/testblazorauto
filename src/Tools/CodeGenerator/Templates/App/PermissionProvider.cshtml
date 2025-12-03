@@ -21,7 +21,16 @@ namespace @(Model.App.ApplicationProjectName).Authorization.Permissions
         public void CodeGenerator@(Model.Model.Name)(IPermissionDefinitionContext context)
         {
 @if(Model.Model.ParentPermissionName.IsNotNullOrWhiteSpaceBXJG()){<text>
-            var parent = context.GetPermissionOrNull("@(Model.Model.ParentPermissionName)");
+            Permission parent=null;
+            context.GetPermissionOrNull("Administrator").RecursionDown(x => {
+                if (x.Name.Equals("@(Model.Model.ParentPermissionName)", StringComparison.OrdinalIgnoreCase))
+                {
+                    parent = x;
+                    return false;
+                }
+                return true;
+            });
+            //var parent = context.GetPermissionOrNull("@(Model.Model.ParentPermissionName)");
             var permission = parent.CreateChildPermission(@(Model.Model.PermissionNameConst),
                                                           L(@(Model.Model.PermissionNameConst)),
                                                           multiTenancySides: MultiTenancySides.Tenant, 

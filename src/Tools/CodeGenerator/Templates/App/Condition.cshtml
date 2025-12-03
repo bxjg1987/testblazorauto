@@ -5,6 +5,7 @@
 @{
     DisableEncoding = true;//禁止html编码，因为我们是做代码生成器
 }
+using @(Model.Model.ApplicationCommonShareNamespace);
 using BXJG.Common.Contracts;
 using @Model.Model.CoreShareNamespace;
 @if (Model.Model.IsTree)
