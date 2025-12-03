@@ -59,6 +59,9 @@
     <None Update="Projects\FYJ\EquipmentInfo.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Projects\FYJ\ProductCategory.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Projects\FYJ\RentalPlan.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

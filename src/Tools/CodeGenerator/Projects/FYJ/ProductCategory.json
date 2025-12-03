@@ -1,0 +1,32 @@
+{
+  "Name": "ProductCategory", // 实体名称，用于代码生成
+  "DisplayName": "产品分类", // 显示名称，用于UI界面
+  "Icon": "apartment", // 图标名称，用于菜单和列表
+  "IsTree": true, // 是否为树状结构
+  "ParentPermissionName": "Administrator.BaseInfo", // 父权限名称
+  "ParentMenuName": "Administrator.BaseInfo", // 父菜单名称
+  "MultiTenantMode": 2, // 多租户模式 1Must 2Have 4不开启
+  "Fields": [
+    {
+      "Name": "Id", // 字段名称
+      "DisplayName": "编号", // 显示名称
+      "Description": "唯一标识，主键", // 字段描述
+      "CSharpType": "long", // C#类型
+      "IsPrimary": true, // 是否为主键
+      "DefaultValue": null, // 默认值
+      "IsRequired": true, // 是否必填
+      "Length": 0, // 字段长度
+      "IsUnicode": false, // 是否为Unicode
+      "IsSort": true, // 是否可排序
+      "IsCondition": true, // 是否可作为条件查询
+      "IsConditionRange": true, // 是否可作为范围条件查询
+      "Width": null, // 显示宽度
+      "FixedLeft": true, // 是否左冻结
+      "Position": null, // 显示位置
+      "NumberMax": null, // 最大值
+      "NumberMin": null, // 最小值
+      "NumberStep": null, // 步进值
+      "NumberPrecision": null // 精度
+    }
+  ]
+}
