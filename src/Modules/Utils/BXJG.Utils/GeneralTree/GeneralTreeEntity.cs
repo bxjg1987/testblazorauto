@@ -86,7 +86,7 @@ namespace BXJG.Utils.GeneralTree
         /// </summary>
         [MaxLength(100)]
         [Unicode(false)]
-        [Comment("如：pingpai  表示品牌节点，不同租户下此字段值一样。使用场景：在数据字典功能中，前端下拉框绑定时可以通过此字段绑定指定节点类型")]
+        [Comment("如：pinpai  表示品牌节点，不同租户下此字段值一样。使用场景：在数据字典功能中，前端下拉框绑定时可以通过此字段绑定指定节点类型")]
         public string? Name { get; set; }
     }
 

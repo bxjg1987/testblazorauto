@@ -176,12 +176,12 @@ namespace ZLJ.RCL.Components
             //    z = parsedValue;
 
             _ = InvokeAsync(async () =>
-              {
-                  if (TreeIdNullableChanged.HasDelegate)
-                      await TreeIdNullableChanged.InvokeAsync(value.IsNullOrEmpty() || value == "0" ? null : long.Parse(value));
-                  if (TreeIdChanged.HasDelegate)
-                      await TreeIdChanged.InvokeAsync(value.IsNullOrEmpty() || value == "0" ? default : long.Parse(value));
-              });
+            {
+                if (TreeIdNullableChanged.HasDelegate)
+                    await TreeIdNullableChanged.InvokeAsync(value.IsNullOrEmpty() || value == "0" ? null : long.Parse(value));
+                if (TreeIdChanged.HasDelegate)
+                    await TreeIdChanged.InvokeAsync(value.IsNullOrEmpty() || value == "0" ? default : long.Parse(value));
+            });
         }
 
         IEnumerable<long> treeIds = Enumerable.Empty<long>();
@@ -215,8 +215,8 @@ namespace ZLJ.RCL.Components
                 //_updatingValueFromPropertySetter = true;
                 //try
                 //{
-                    treeIds = value;
-                    Values = value == null || !value.Any() ? Enumerable.Empty<string>() : value.Select(x => x.ToString()); //newValue;
+                treeIds = value;
+                Values = value == null || !value.Any() ? Enumerable.Empty<string>() : value.Select(x => x.ToString()); //newValue;
                 //}
                 //finally
                 //{
@@ -353,7 +353,11 @@ namespace ZLJ.RCL.Components
         //    await LoadDataSource();
         //    //base.ForceUpdateValueString
         //}
-
+        /// <summary>
+        /// dfgdg
+        /// </summary>
+        [Parameter]
+        public EventCallback OnAsyncLoaded { get; set; }
         protected virtual async Task LoadDataSource()
         {
             DataSource = await HttpClient.GetTreeForSelect<TGetTreeForSelectOutput>(new { ParentName });
@@ -379,88 +383,98 @@ namespace ZLJ.RCL.Components
             //StateHasChanged();
             //if (RendererInfo.IsInteractive)
             //{
-//异步加载数据以后，开合下下拉框，否则后续的反射执行将无效
-                const string sdfsf = "display:none;";
-                DropdownStyle += sdfsf;
-                await OpenAsync();
-                //Open = true;
-                //StateHasChanged();
-                //await Task.Delay(5000);
-                // Open = false;
-                //StateHasChanged();
-                DropdownStyle = DropdownStyle.Replace(sdfsf, string.Empty);
-                await _dropDown.Close();
-           // }
-
-
-           
-                 //   await Task.Delay(1);
-
-                    //var valuesField = GetType().GetPrivateField("_cachedValues");
-                    //var valueField = GetType().GetPrivateField("_cachedValue");
-
-                    //valuesField.SetValue(this, Enumerable.Empty<string>());
-                    //valueField.SetValue(this, string.Empty);
-                    //StateHasChanged();
-
-                    //// var values = this.GetFieldValue("_cachedValues");// GetType().GetField("_cachedValues", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(this);
-                    //// Abp.Reflection.Extensions.MemberInfoExtensions.fi
-                    //// var value = this.GetFieldValue("_cachedValue");//.GetField("_cachedValue", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(this);
-
-                    //base.Value = treeId?.ToString();
-                    ////StateHasChanged();
-                    //base.Values = treeIds?.Select(x => x.ToString());
-                    //StateHasChanged();
-                    //return;
+            //异步加载数据以后，开合下下拉框，否则后续的反射执行将无效
+            const string sdfsf = "display:none;";
+            DropdownStyle += sdfsf;
+            await OpenAsync();
+            //Open = true;
+            //StateHasChanged();
+            //await Task.Delay(5000);
+            // Open = false;
+            //StateHasChanged();
+            DropdownStyle = DropdownStyle.Replace(sdfsf, string.Empty);
+            await _dropDown.Close();
+            // }
 
 
 
-                    //   await Task.Delay(1000);
-                    //反射调用父类的UpdateValueAndSelection
-                    //OnFirstAfterRenderAsync
-                    if (Multiple)
-                    {
-                        //var _tree = this.GetFieldValue("_tree"); //GetType().GetPrivateField("_tree").GetValue(this);
-                        //var treeNodes = _tree.GetFieldValue("_allNodes");
-                        //var _cachedValues = this.GetFieldValue("_cachedValues") as long[];
-                        //UpdateValuesSelection
-                        //反射时必须用父类类型，否则获取不到
-                        var methodInfo = typeof(TreeSelect<string, TGetTreeForSelectOutput>).GetMethod("UpdateValuesSelection",
-                                           BindingFlags.NonPublic | BindingFlags.Instance);
-                        //Console.WriteLine($"反射执行UpdateValuesSelection：{methodInfo == null} treeNodes：{treeNodes==null} _cachedValues：{_cachedValues?.Any()}");
-                        methodInfo.Invoke(this, null);
-                        StateHasChanged();
-                    }
-                    //else
-                    //{
-                    //经过测试，单选时，开合下拉框即可
-                        //if (RendererInfo.IsInteractive)
-                        //{
-                            //const string sdfsf = "display:none;";
-                            //DropdownStyle += sdfsf;
-                            //await OpenAsync();
-                            ////Open = true;
-                            ////StateHasChanged();
-                            ////await Task.Delay(5000);
-                            //// Open = false;
-                            ////StateHasChanged();
-                            //DropdownStyle = DropdownStyle.Replace(sdfsf, string.Empty);
-                            //await _dropDown.Close();
-                        //}
-                        //else
-                        //{
-                        //    var methodInfo = typeof(TreeSelect<string, TGetTreeForSelectOutput>).GetMethod("UpdateValueAndSelection",
-                        //                  BindingFlags.NonPublic | BindingFlags.Instance);
-                        //   //Console.WriteLine("反射执行UpdateValueAndSelection：" + methodInfo == null);
-                        //    methodInfo.Invoke(this, null);
-                        //    StateHasChanged();
-                        //}
-                    //}
+            //   await Task.Delay(1);
 
-                    //    StateHasChanged();
-                    // await Task.Delay(2000);
-                    //StateHasChanged();
-                  
+            //var valuesField = GetType().GetPrivateField("_cachedValues");
+            //var valueField = GetType().GetPrivateField("_cachedValue");
+
+            //valuesField.SetValue(this, Enumerable.Empty<string>());
+            //valueField.SetValue(this, string.Empty);
+            //StateHasChanged();
+
+            //// var values = this.GetFieldValue("_cachedValues");// GetType().GetField("_cachedValues", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(this);
+            //// Abp.Reflection.Extensions.MemberInfoExtensions.fi
+            //// var value = this.GetFieldValue("_cachedValue");//.GetField("_cachedValue", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(this);
+
+            //base.Value = treeId?.ToString();
+            ////StateHasChanged();
+            //base.Values = treeIds?.Select(x => x.ToString());
+            //StateHasChanged();
+            //return;
+
+
+
+            //   await Task.Delay(1000);
+            //反射调用父类的UpdateValueAndSelection
+            //OnFirstAfterRenderAsync
+            if (Multiple)
+            {
+                //var _tree = this.GetFieldValue("_tree"); //GetType().GetPrivateField("_tree").GetValue(this);
+                //var treeNodes = _tree.GetFieldValue("_allNodes");
+                //var _cachedValues = this.GetFieldValue("_cachedValues") as long[];
+                //UpdateValuesSelection
+                //反射时必须用父类类型，否则获取不到
+                var methodInfo = typeof(TreeSelect<string, TGetTreeForSelectOutput>).GetMethod("UpdateValuesSelection",
+                                   BindingFlags.NonPublic | BindingFlags.Instance);
+                //Console.WriteLine($"反射执行UpdateValuesSelection：{methodInfo == null} treeNodes：{treeNodes==null} _cachedValues：{_cachedValues?.Any()}");
+                methodInfo.Invoke(this, null);
+                if (OnAsyncLoaded.HasDelegate)
+                {
+                    await OnAsyncLoaded.InvokeAsync();
+                }
+                StateHasChanged();
+            }
+            else if (OnAsyncLoaded.HasDelegate)
+            {
+                await OnAsyncLoaded.InvokeAsync();
+                StateHasChanged();
+            }
+
+            //else
+            //{
+            //经过测试，单选时，开合下拉框即可
+            //if (RendererInfo.IsInteractive)
+            //{
+            //const string sdfsf = "display:none;";
+            //DropdownStyle += sdfsf;
+            //await OpenAsync();
+            ////Open = true;
+            ////StateHasChanged();
+            ////await Task.Delay(5000);
+            //// Open = false;
+            ////StateHasChanged();
+            //DropdownStyle = DropdownStyle.Replace(sdfsf, string.Empty);
+            //await _dropDown.Close();
+            //}
+            //else
+            //{
+            //    var methodInfo = typeof(TreeSelect<string, TGetTreeForSelectOutput>).GetMethod("UpdateValueAndSelection",
+            //                  BindingFlags.NonPublic | BindingFlags.Instance);
+            //   //Console.WriteLine("反射执行UpdateValueAndSelection：" + methodInfo == null);
+            //    methodInfo.Invoke(this, null);
+            //    StateHasChanged();
+            //}
+            //}
+
+            //    StateHasChanged();
+            // await Task.Delay(2000);
+            //StateHasChanged();
+
 
             //}
             //});

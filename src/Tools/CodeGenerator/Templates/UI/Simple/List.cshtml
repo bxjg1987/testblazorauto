@@ -75,7 +75,6 @@
            Size="TableSize.Small" 
            AutoHeight
            Bordered="true"
-           ScrollY="71.5vh"
            ScrollX="1000px">
 
         <Selection Width="50" Fixed="ColumnFixPlacement.Left" />
@@ -124,6 +123,7 @@
        Footer="renderFragment" 
        @@bind-Visible="isCreateDialogVisible" 
        Draggable="true"
+       Width="@@("40vw")"
        Class="frm-dal" 
        AfterClose="AfterCloseDialog">
     <TitleTemplate>
@@ -146,7 +146,7 @@
        @@bind-Visible="isShowDetailUpdate"
        Draggable="true"
        Title="详情"
-       Width="@@("50vw")"
+       Width="@@("40vw")"
        Class="frm-dal"
        Maximizable="false"
        AfterClose="AfterCloseDialog"
