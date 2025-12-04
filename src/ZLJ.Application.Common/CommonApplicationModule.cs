@@ -24,7 +24,6 @@ namespace ZLJ.Application.Common
     [DependsOn(
         typeof(ZLJCoreModule),
         typeof(BXJGUtilsApplicationModule),
-        typeof(PSIMasterDataApplicationModule),
         typeof(AbpAutoMapperModule))]
     public class CommonApplicationModule : AbpModule
     {

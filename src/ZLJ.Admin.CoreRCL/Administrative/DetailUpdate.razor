@@ -3,38 +3,39 @@
 @using ZLJ.Application.Share.Administrative
 
 @inherits TreeDetailUpdateBaseComponent<AdministrativeDto, AdministrativeEditDto>
-<SectionContent SectionName=@(FuncName+"-detail-update-title")>
+<SectionContent SectionName=@(FuncName + "-detail-update-title")>
     <Icon Type=@detailUpdateIcon Theme=@IconThemeType.Outline />
     @(detailUpdateText)@(FuncName)
 </SectionContent>
 <SectionContent SectionName=@(FuncName + "-detail-update-body")>
+    <Form @ref="frm" ValidateOnChange="true" Model="editDto" LabelColSpan="4" WrapperColSpan="20" OnFinish="OnFinish">
 
-    @if (isEdit)
-    {
-        <Form @ref="frm" ValidateOnChange="true" Model="editDto" LabelColSpan="4" WrapperColSpan="20" OnFinish="OnFinish">
+        @if (isEdit)
+        {
 
-            <Descriptions Bordered Size="DescriptionsSize.Small">
-                <DescriptionsItem Title="父级">
-                    <AdministrativeTreeSelect @bind-Value="@context.ParentIdString" IsKeyId AllowClear Style="width:15rem;" />
-                </DescriptionsItem>
-                <DescriptionsItem Title="名称">
-                    <Input @bind-Value="@context.DisplayName" />
-                </DescriptionsItem>
-            </Descriptions>
+            <FormItem Label="上级">
+                <AdministrativeTreeSelect @bind-Value="@context.ParentIdString" IsKeyId AllowClear Style="width:15rem;" />
+            </FormItem>
+            <FormItem>   <Input @bind-Value="@context.DisplayName" /> </FormItem>
+            <FormItem Label="是否启用">
+                <Switch @bind-Checked="context.IsActive" />
+            </FormItem>
+        }
+        else
+        {
 
-        </Form>
-    }
-    else
-    {
-        <Descriptions Bordered Size="DescriptionsSize.Small">
-            <DescriptionsItem Title="父级">
+            <FormItem Label="上级">
                 @dto.ParentDisplayName
-            </DescriptionsItem>
-            <DescriptionsItem Title="名称">
+            </FormItem>
+            <FormItem Label="名称">
                 @dto.DisplayName
-            </DescriptionsItem>
-        </Descriptions>
-    }
+            </FormItem>
+            <FormItem Label="是否启用">
+                <Switch Checked="dto.IsActive" Disabled />
+            </FormItem>
+        }
+    </Form>
+
 </SectionContent>
 <SectionContent SectionName=@(FuncName + "-detail-update-btns")>
     @if (IsShowDelete)

@@ -1,0 +1,60 @@
+@inherits BaseComponent
+
+@if (HasPermission.HasValue && HasPermission.Value)
+{
+    <a @onclick:stopPropagation="true" @onclick="ShowDetail" style="cursor: pointer; color: #1890ff;">
+        @DisplayName
+    </a>
+}
+else
+{
+    <span>@DisplayName</span>
+}
+
+@code {
+    /// <summary>
+    /// 员工ID
+    /// </summary>
+    [Parameter]
+    public long Id { get; set; }
+
+    /// <summary>
+    /// 员工名称
+    /// </summary>
+    [Parameter]
+    public string? DisplayName { get; set; }
+    
+    /// <summary>
+    /// 是否有员工档案获取权限
+    /// </summary>
+    [Parameter]
+    public bool? HasPermission { get; set; }
+
+    /// <summary>
+    /// 组件初始化
+    /// </summary>
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        if (!HasPermission.HasValue)
+        {
+            var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+            // 检查是否有获取员工档案的权限
+            HasPermission = (await AuthorizationService.AuthorizeAsync(authState.User, ZLJ.Application.Share.Authorization.Permissions.PermissionNames.BXJGBaseInfoStaffInfoGet)).Succeeded;
+        }
+    }
+    
+    [Inject]
+    public ModalService ModalService { get; set; }
+    
+    /// <summary>
+    /// 点击名称显示详情弹窗
+    /// </summary>
+    private void ShowDetail()
+    {
+        if (Id > 0)
+        {
+            ModalService.ShowStaffInfoDetailUpdateModal(Id);
+        }
+    }
+}

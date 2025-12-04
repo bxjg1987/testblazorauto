@@ -7,16 +7,13 @@
 <SectionContent SectionName=@(FuncName + "-create-body")>
     <Form @ref="frm" ValidateOnChange="true" Model="createDto" LabelColSpan="4" WrapperColSpan="20" OnFinish="OnFinish">
 
-
-
-        <Descriptions Bordered Size="DescriptionsSize.Small">
-            <DescriptionsItem Title="父级">
-                <AdministrativeTreeSelect @bind-Value="@context.ParentIdString" IsKeyId AllowClear Style="width:15rem;" />
-            </DescriptionsItem>
-            <DescriptionsItem Title="名称">
-                <Input @bind-Value="@context.DisplayName" />
-            </DescriptionsItem>
-        </Descriptions>
+        <FormItem Label="上级">
+            <AdministrativeTreeSelect @bind-Value="@context.ParentIdString" IsKeyId AllowClear Style="width:15rem;" />
+        </FormItem>
+        <FormItem>   <Input @bind-Value="@context.DisplayName" /> </FormItem>
+       <FormItem Label="是否启用">
+            <Switch @bind-Checked="context.IsActive"  />
+       </FormItem>
 
 
 
@@ -26,5 +23,5 @@
 <SectionContent SectionName=@(FuncName + "-create-btns")>
     <Checkbox @bind-Checked=isSaveAndContinue>保存后继续新增</Checkbox>
     <Button OnClick="BtnResetClick" Icon=@IconType.Outline.Redo>重置</Button>
-    <Button OnClick="BtnSaveClick" Type=@ButtonType.Primary Loading=isSaving Disabled=isSaving Icon=@IconType.Outline.Save>保存</Button>
+    <Button OnClick="BtnSaveClick" Type=@ButtonType.Primary Loading=isSaving Disabled=IsBusy Icon=@IconType.Outline.Save>保存</Button>
 </SectionContent>

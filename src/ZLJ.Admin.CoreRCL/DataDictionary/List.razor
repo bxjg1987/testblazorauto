@@ -54,13 +54,17 @@
            RowClassName="@(r=>r.RowIndex%2==0?"even":"odd")"
            RemoteDataSource="true"
            OnRow="Row"
-           Size="TableSize.Small"
+           Size="TableSize.Small" 
+           RowKey ="x=>x.Id"
            Bordered="true"
            ScrollY="76vh">
-        <Selection Key="@(context.Id.ToString())" />
+        <Selection  />
         <PropertyColumn Property="c=>c.DisplayName" Sortable="true" DefaultSortOrder="SortDirection.Ascending" ShowSorterTooltip="false" />
-        <PropertyColumn Property="c=>c.IsSysDefine" Width="80">
+        <PropertyColumn Property="c => c.IsSysDefine" Width="80" Align="ColumnAlign.Center">
             <Switch @bind-Value="@context.IsSysDefine" Size="@InputSize.Small" Disabled="true"></Switch>
+        </PropertyColumn>
+        <PropertyColumn Property="c => c.IsActive" Width="80" Align="ColumnAlign.Center">
+            <Switch @bind-Value="@context.IsActive" Size="@InputSize.Small" Disabled="true"></Switch>
         </PropertyColumn>
         <ActionColumn Title="操作" Width="240">
             <ButtonGroup Size="@ButtonGroupSize.Small">

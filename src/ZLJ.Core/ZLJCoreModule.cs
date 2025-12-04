@@ -25,8 +25,7 @@ namespace ZLJ.Core
 {
     [DependsOn(
         typeof(AbpZeroCoreModule),
-        typeof(BXJGUtilsModule),
-        typeof(PSIMasterDataCoreModule)
+        typeof(BXJGUtilsModule)
        // typeof(BXJG.WorkOrder.CoreModule)
         )]
     public class ZLJCoreModule : AbpModule

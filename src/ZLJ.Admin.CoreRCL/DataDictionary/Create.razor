@@ -7,6 +7,8 @@
         </FormItem>
         <FormItem>
             <Input @bind-Value="@context.DisplayName" />
+        </FormItem>    <FormItem Label="是否启用">
+            <Switch @bind-Checked="context.IsActive" />
         </FormItem>
     </Form>
 </SectionContent>

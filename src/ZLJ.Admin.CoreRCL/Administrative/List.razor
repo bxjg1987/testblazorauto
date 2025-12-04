@@ -53,16 +53,16 @@
            HidePagination=true
            RowClassName="@(r=>r.RowIndex%2==0?"even":"odd")"
            RemoteDataSource="true"
-          
+           RowKey="x=>x.Id"
            OnRow="OnRow"
            Size="TableSize.Small"
            Bordered="true"
            ScrollY="71.5vh">
         <Selection Key="@(context.Id.ToString())" />
         <PropertyColumn Property="c=>c.DisplayName" Sortable="true" DefaultSortOrder="SortDirection.Ascending" ShowSorterTooltip="false" />
-       @*  <PropertyColumn Property="c=>c.IsSysDefine" Width="80">
-            <Switch @bind-Value="@context.IsSysDefine" Size="@InputSize.Small" Disabled="true"></Switch>
-        </PropertyColumn> *@
+        <PropertyColumn Property="c => c.IsActive" Width="80" Align="ColumnAlign.Center">
+            <Switch @bind-Value="@context.IsActive" Size="@InputSize.Small" Disabled="true"></Switch>
+        </PropertyColumn>
         <ActionColumn Title="操作" Width="240">
             <ButtonGroup Size="@ButtonGroupSize.Small">
                 <Button Size="@ButtonSize.Small" Type="@ButtonType.Primary" OnClick="x=>OnDetail(context)">详情</Button>

@@ -71,7 +71,6 @@
 	<!-- 如果 $(SolutionName) 包含 WithModules -->
 	<ItemGroup Condition="$(SolutionName.Contains('WithModules'))">
 		<ProjectReference Include="..\Modules\utils\BXJG.Utils.Application\BXJG.Utils.Application.csproj" />
-		<ProjectReference Include="..\Modules\PSIMasterData\BXJG.PSI.MasterData.Application\BXJG.PSI.MasterData.Application.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<!--<PackageReference Include="BXJG.Utils.Application" Version="*" />-->

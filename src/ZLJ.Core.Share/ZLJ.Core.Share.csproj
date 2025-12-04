@@ -27,7 +27,6 @@
 	<ItemGroup Condition="$(SolutionName.Contains('WithModules'))">
 		<ProjectReference Include="..\Libs\BXJG.Common\BXJG.Common.csproj" />
 		<ProjectReference Include="..\Modules\utils\BXJG.Utils.Share\BXJG.Utils.Share.csproj" />
-		<ProjectReference Include="..\Modules\PSIMasterData\BXJG.PSI.MasterData.Core.Share\BXJG.PSI.MasterData.Core.Share.csproj" />
 
 	</ItemGroup>
 

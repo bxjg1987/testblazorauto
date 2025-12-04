@@ -1,6 +1,5 @@
 ﻿using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
-using BXJG.PSI.MasterData.AssociatedCompany;
 using BXJG.Utils.GeneralTree;
 using DocumentFormat.OpenXml.Drawing.Charts;
 using System.ComponentModel.DataAnnotations;
@@ -12,83 +11,84 @@ namespace ZLJ.Core.AssociatedCompany
     /// <summary>
     /// 来往单位
     /// </summary>
-    public class AssociatedCompanyEntity : BXJGAssociatedCompanyEntity// FullAuditedEntity<long>, IMustHaveTenant, IPassivable
+    public class AssociatedCompanyEntity : FullAuditedEntity<long>, IMustHaveTenant, IPassivable
     {
-        //public int TenantId { get; set; }
+        public int TenantId { get; set; }
 
-        ///// <summary>
-        ///// 公司名称
-        ///// </summary>
-        //public string Name { get; set; }
-        ///// <summary>
-        ///// 拼音简码
-        ///// </summary>
-        //public string Pinyin { get; set; }
-        ///// <summary>
-        ///// 是否启用
-        ///// </summary>
-        //public bool IsActive { get; set; } = true;
+        /// <summary>
+        /// 公司名称
+        /// </summary>
+        public string Name { get; set; }
+        /// <summary>
+        /// 拼音简码
+        /// </summary>
+        public string Pinyin { get; set; }
+        /// <summary>
+        /// 是否启用
+        /// </summary>
+        public bool IsActive { get; set; } = true;
 
-        
-        public void JianchaIsActive() {
-        
+
+        public void JianchaIsActive()
+        {
+
             //if (!IsActive)
             //    throw new UserFriendlyException($"操作失败！关联的客户【{Name}】未启用");
-          this.Check("客户", Name);
+            this.Check("客户", Name);
         }
-        ///// <summary>
-        ///// 税号
-        ///// </summary>
-        //public string? TaxNo { get; set; }
-        ///// <summary>
-        ///// 联系人
-        ///// </summary>
-        //public string? LinkMan { get; set; }
-        ///// <summary>
-        ///// 联系人拼音
-        ///// </summary>
-        //[StringLength(ZLJ.Core.Share.ZLJConsts.AssociatedCompanyLinkManMaxLength)]
-        //public string? LinkManPinyin { get; set; }
-        ///// <summary>
-        ///// 联系电话
-        ///// </summary>
-        //public string? LinkPhone { get; set; }
-        ///// <summary>
-        ///// 详细地址
-        ///// </summary>
-        //public string? Address { get; set; }
-        ///// <summary>
-        ///// 地址拼音
-        ///// </summary>
-        //[StringLength(ZLJ.Core.Share.ZLJConsts.AssociatedCompanyAddressMaxLength)]
-        //public string? AddressPinyin { get; set; }
+        /// <summary>
+        /// 税号
+        /// </summary>
+        public string? TaxNo { get; set; }
+        /// <summary>
+        /// 联系人
+        /// </summary>
+        public string? LinkMan { get; set; }
+        /// <summary>
+        /// 联系人拼音
+        /// </summary>
+        [StringLength(ZLJ.Core.Share.ZLJConsts.AssociatedCompanyLinkManMaxLength)]
+        public string? LinkManPinyin { get; set; }
+        /// <summary>
+        /// 联系电话
+        /// </summary>
+        public string? LinkPhone { get; set; }
+        /// <summary>
+        /// 详细地址
+        /// </summary>
+        public string? Address { get; set; }
+        /// <summary>
+        /// 地址拼音
+        /// </summary>
+        [StringLength(ZLJ.Core.Share.ZLJConsts.AssociatedCompanyAddressMaxLength)]
+        public string? AddressPinyin { get; set; }
 
-        ///// <summary>
-        ///// 经度
-        ///// </summary>
-        //public decimal? Lng { get; set; }
-        ///// <summary>
-        ///// 纬度
-        ///// </summary>
-        //public decimal? Lat { get; set; }
-        ///// <summary>
-        ///// 所属区域
-        ///// </summary>
-        //public long? AreaId { get; set; }
+        /// <summary>
+        /// 经度
+        /// </summary>
+        public decimal? Lng { get; set; }
+        /// <summary>
+        /// 纬度
+        /// </summary>
+        public decimal? Lat { get; set; }
+        /// <summary>
+        /// 所属区域
+        /// </summary>
+        public long? AreaId { get; set; }
         /// <summary>
         /// 所属区域实体
         /// </summary>
         public virtual AdministrativeEntity Area { get; set; }
-        ///// <summary>
-        ///// 客户等级Id
-        ///// 不同客户等级可能需要不同的业务处理，这里用字典不太合适
-        ///// 暂时保持不变，如果将来用枚举，应使用原来的数据字典的id值作为枚举值
-        ///// </summary>
-        //public long? LevelId { get; set; }
-        ///// <summary>
-        ///// 客户等级实体
-        ///// </summary>
-        //public virtual DataDictionaryEntity Level { get; set; }
+        /// <summary>
+        /// 客户等级Id
+        /// 不同客户等级可能需要不同的业务处理，这里用字典不太合适
+        /// 暂时保持不变，如果将来用枚举，应使用原来的数据字典的id值作为枚举值
+        /// </summary>
+        public long? LevelId { get; set; }
+        /// <summary>
+        /// 客户等级实体
+        /// </summary>
+        public virtual DataDictionaryEntity Level { get; set; }
         ///// <summary>
         ///// 客户类别Id
         ///// 这里本来是区分供应商？客户?还是两者都是
