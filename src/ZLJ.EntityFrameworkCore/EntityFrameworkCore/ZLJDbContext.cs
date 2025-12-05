@@ -233,9 +233,11 @@ namespace ZLJ.EntityFrameworkCore
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder .ApplyConfigurationBXJGUtils();//这个必须在最前面，因为需要反射。另外设计时dbcntext工厂ZLJDbContextFactory必须硬编码引用业务模块，否则反射出错
+            //modelBuilder.ApplyConfigurationBXJGUtils();//这个必须在最前面，因为需要反射。另外设计时dbcntext工厂ZLJDbContextFactory必须硬编码引用业务模块，否则反射出错
             base.OnModelCreating(modelBuilder);//这个必须加，否则报错
+            modelBuilder.ApplyConfigurationBXJGUtils();
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            //
             //.ApplyConfigurationBXJGWorkOrder();
 
             //   modelBuilder.ConfigProtect(base.AbpSession.ser)
@@ -245,19 +247,24 @@ namespace ZLJ.EntityFrameworkCore
              * No store type was specified for the decimal property 'UnitPrice' on entity type 'OrderItemAddRecordEntity'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
              */
             var decimalProps = modelBuilder.Model.GetEntityTypes()
-                                                 .SelectMany(t => t.GetProperties())
-                                                 .Where(p => (System.Nullable.GetUnderlyingType(p.ClrType) ?? p.ClrType) == typeof(decimal));
+                                         .SelectMany(t => t.GetProperties())
+                                         .Where(p => (System.Nullable.GetUnderlyingType(p.ClrType) ?? p.ClrType) == typeof(decimal));
 
             foreach (var property in decimalProps)
             {
-                // 检查是否已经设置了精度和小数位数
-                // 如果没有设置，则应用默认值(18,2)
-                if (property.GetPrecision() == null && property.GetScale() == null)
+                // 检查精度：如果为null或0，则设置默认值18
+                var precision = property.GetPrecision();
+                if (!precision.HasValue || precision.Value == 0)
                 {
                     property.SetPrecision(18);
+                }
+                // 检查小数位数：如果为null，则设置默认值2
+                if (!property.GetScale().HasValue)
+                {
                     property.SetScale(2);
                 }
             }
+
         }
 
         /*

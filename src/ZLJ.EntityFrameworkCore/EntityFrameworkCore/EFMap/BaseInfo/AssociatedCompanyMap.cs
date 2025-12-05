@@ -18,8 +18,8 @@ namespace ZLJ.EntityFrameworkCore.EntityFrameworkCore.EFMap.BaseInfo
             builder.Property(x => x.LinkPhone).HasMaxLength(ZLJ.Core.Share.ZLJConsts.AssociatedCompanyLinkPhoneMaxLength);
             builder.Property(x => x.Address).HasMaxLength(ZLJ.Core.Share.ZLJConsts.AssociatedCompanyAddressMaxLength);
 
-            builder.Property(x => x.Lng).HasColumnType($"decimal(32,24)");
-            builder.Property(x => x.Lat).HasColumnType($"decimal(32,24)");
+            builder.Property(x => x.Lng).HasColumnType($"decimal(18,6)");
+            builder.Property(x => x.Lat).HasColumnType($"decimal(18,6)");
             builder.Navigation(x => x.Level).AutoInclude();
             builder.Navigation(x => x.Area).AutoInclude();
         }

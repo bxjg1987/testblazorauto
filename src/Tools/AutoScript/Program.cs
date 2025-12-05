@@ -59,21 +59,7 @@ var topTasks = new List<(string, Action)>
     new("重新发布：BXJG.Utils.RCL", FabuXindeBXJGUtilsRCL),
     new("重新发布：BXJG.WeChat", FabuWeChat),
     new("重新发布：BXJG.WeChat.Web", FabuWeChatWeb),
-    new("重新发布：BXJG.WeChat.Abp", FabuWeChatBXJG),
-    // PSI MasterData模块
-    new("重新发布：BXJG.PSI.MasterData.Core.Share", FabuXindeBXJGPSIMasterDataCoreShare),
-    new("重新发布：BXJG.PSI.MasterData.Core", FabuXindeBXJGPSIMasterDataCore),
-    new("重新发布：BXJG.PSI.MasterData.Application.Share", FabuXindeBXJGPSIMasterDataApplicationShare),
-    new("重新发布：BXJG.PSI.MasterData.Application", FabuXindeBXJGPSIMasterDataApplication),
-    new("重新发布：BXJG.PSI.MasterData.Application.ClientProxy", FabuXindeBXJGPSIMasterDataApplicationClientProxy),
-    new("重新发布：BXJG.PSI.MasterData.EF", FabuXindeBXJGPSIMasterDataEF),
-    // Inventory模块
-    new("重新发布：BXJG.Inventory.Core.Share", FabuXindeBXJGInventoryCoreShare),
-    new("重新发布：BXJG.Inventory.Core", FabuXindeBXJGInventoryCore),
-    new("重新发布：BXJG.Inventory.Application.Share", FabuXindeBXJGInventoryApplicationShare),
-    new("重新发布：BXJG.Inventory.Application", FabuXindeBXJGInventoryApplication),
-    new("重新发布：BXJG.Inventory.Application.ClientProxy", FabuXindeBXJGInventoryApplicationClientProxy),
-    new("重新发布：BXJG.Inventory.EF", FabuXindeBXJGInventoryEF)
+    new("重新发布：BXJG.WeChat.Abp", FabuWeChatBXJG)
 };
 #endregion
 
@@ -145,7 +131,8 @@ void FabuXindeBXJGUtilsApplicationShare()
     DabaoNuget("BXJG.Utils.Application.Share");
     FabuNuget("BXJG.Utils.Application.Share");
 }
-void FabuXindeBXJGUtilsApplicationClientProxy() {
+void FabuXindeBXJGUtilsApplicationClientProxy()
+{
     DabaoNuget("BXJG.Utils.Application.ClientProxy");
     FabuNuget("BXJG.Utils.Application.ClientProxy");
 }
@@ -229,7 +216,7 @@ void FabuNuget(string xmm)
     var xmwj = Directory.GetFiles(ymml, $"{xmm}.csproj", SearchOption.AllDirectories).Single();
     //项目目录
     var projDir = Path.GetDirectoryName(xmwj);
-    var bao = Directory.GetFiles(projDir, $"{xmm}.*.nupkg", SearchOption.AllDirectories).OrderBy(x=>File.GetCreationTime(x)).Last();
+    var bao = Directory.GetFiles(projDir, $"{xmm}.*.nupkg", SearchOption.AllDirectories).OrderBy(x => File.GetCreationTime(x)).Last();
     Console.WriteLine($"正在将nuget包{bao}发布到私有包源...");
     //yaoqiushurunugetkey();
     //cmdexecute($"dotnet nuget push -s http://222.178.145.148:19904/v3/index.json -k {nugetkey} {bao} --skip-duplicate");
@@ -248,7 +235,7 @@ void P_DataReceived(object sender, DataReceivedEventArgs e)
 }
 void yaoqiushurunugetkey()
 {
-    if (string.IsNullOrWhiteSpace( nugetkey))
+    if (string.IsNullOrWhiteSpace(nugetkey))
     {
         Console.WriteLine("请输入nuget上传需要的key：");
         nugetkey = Console.ReadLine();
@@ -271,79 +258,3 @@ void FabuWeChatBXJG()
     DabaoNuget("BXJG.WeChat.Abp");
     FabuNuget("BXJG.WeChat.Abp");
 }
-
-#region PSI MasterData模块发布方法
-void FabuXindeBXJGPSIMasterDataCoreShare()
-{
-    DabaoNuget("BXJG.PSI.MasterData.Core.Share");
-    FabuNuget("BXJG.PSI.MasterData.Core.Share");
-}
-
-void FabuXindeBXJGPSIMasterDataCore()
-{
-    DabaoNuget("BXJG.PSI.MasterData.Core");
-    FabuNuget("BXJG.PSI.MasterData.Core");
-}
-
-void FabuXindeBXJGPSIMasterDataApplicationShare()
-{
-    DabaoNuget("BXJG.PSI.MasterData.Application.Share");
-    FabuNuget("BXJG.PSI.MasterData.Application.Share");
-}
-
-void FabuXindeBXJGPSIMasterDataApplication()
-{
-    DabaoNuget("BXJG.PSI.MasterData.Application");
-    FabuNuget("BXJG.PSI.MasterData.Application");
-}
-
-void FabuXindeBXJGPSIMasterDataApplicationClientProxy()
-{
-    DabaoNuget("BXJG.PSI.MasterData.Application.ClientProxy");
-    FabuNuget("BXJG.PSI.MasterData.Application.ClientProxy");
-}
-
-void FabuXindeBXJGPSIMasterDataEF()
-{
-    DabaoNuget("BXJG.PSI.MasterData.EF");
-    FabuNuget("BXJG.PSI.MasterData.EF");
-}
-#endregion
-
-#region Inventory模块发布方法
-void FabuXindeBXJGInventoryCoreShare()
-{
-    DabaoNuget("BXJG.Inventory.Core.Share");
-    FabuNuget("BXJG.Inventory.Core.Share");
-}
-
-void FabuXindeBXJGInventoryCore()
-{
-    DabaoNuget("BXJG.Inventory.Core");
-    FabuNuget("BXJG.Inventory.Core");
-}
-
-void FabuXindeBXJGInventoryApplicationShare()
-{
-    DabaoNuget("BXJG.Inventory.Application.Share");
-    FabuNuget("BXJG.Inventory.Application.Share");
-}
-
-void FabuXindeBXJGInventoryApplication()
-{
-    DabaoNuget("BXJG.Inventory.Application");
-    FabuNuget("BXJG.Inventory.Application");
-}
-
-void FabuXindeBXJGInventoryApplicationClientProxy()
-{
-    DabaoNuget("BXJG.Inventory.Application.ClientProxy");
-    FabuNuget("BXJG.Inventory.Application.ClientProxy");
-}
-
-void FabuXindeBXJGInventoryEF()
-{
-    DabaoNuget("BXJG.Inventory.EF");
-    FabuNuget("BXJG.Inventory.EF");
-}
-#endregion
