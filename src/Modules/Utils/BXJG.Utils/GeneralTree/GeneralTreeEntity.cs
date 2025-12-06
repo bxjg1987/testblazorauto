@@ -1,6 +1,7 @@
 ﻿using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
 using BXJG.Common.Contracts;
+using BXJG.Utils.Share;
 using Castle.MicroKernel.Registration;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -18,23 +19,23 @@ namespace BXJG.Utils.GeneralTree
     /// 
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
-    public abstract class GeneralTreeEntity<TEntity> : FullAuditedEntity<long>, IExtendableObject, IMayHaveTenant, IGeneralTree<TEntity>,IPassivable
-        where TEntity : GeneralTreeEntity<TEntity>
+    public abstract class GeneralTreeNoTenantEntity<TEntity> : FullAuditedEntity<long>, IExtendableObject, IGeneralTree<TEntity>, IPassivable
+        where TEntity : GeneralTreeNoTenantEntity<TEntity>
     {
         /// <summary>
         /// 是否启用
         /// </summary>
         public bool IsActive { get; set; } = true;
-        public GeneralTreeEntity() { }
-        public GeneralTreeEntity(int? tenantId, string displayName, long? parentId = null)
+        public GeneralTreeNoTenantEntity() { }
+        public GeneralTreeNoTenantEntity(string displayName, long? parentId = null)
         {
-            this.TenantId = tenantId;
             this.DisplayName = displayName;
             this.ParentId = parentId;
         }
 
         [Required]
         [StringLength(BXJG.Utils.Share.BXJGUtilsConsts.MaxCodeLength)]
+        [Unicode(false)]
         public virtual string Code { get; set; }
 
         // public virtual long? ParentId { get; set; }
@@ -49,7 +50,6 @@ namespace BXJG.Utils.GeneralTree
         //[ForeignKey("ParentId")]
         public virtual TEntity Parent { get; set; }
 
-        public virtual int? TenantId { get; set; }
 
         public virtual List<TEntity> Children { get; set; }
         /// <summary>
@@ -59,13 +59,13 @@ namespace BXJG.Utils.GeneralTree
         public int ChildrenCount { get; set; }
 
         [Required]
-        [StringLength(Share.BXJGUtilsConsts. MaxDisplayNameLength)]
+        [StringLength(Share.BXJGUtilsConsts.MaxDisplayNameLength)]
         public virtual string DisplayName { get; set; }
 
         public string ExtensionData { get; set; }
         public long? ParentId { get => parentId; set => parentId = value; }
-        object IHaveParentId.Id { get => Id; set => Id =   Convert.ToInt64(value); }
-        object IHaveParentId.ParentId { get => ParentId; set => ParentId =  value == null ? null : Convert.ToInt64(value); }
+        object IHaveParentId.Id { get => Id; set => Id = Convert.ToInt64(value); }
+        object IHaveParentId.ParentId { get => ParentId; set => ParentId = value == null ? null : Convert.ToInt64(value); }
 
         public string GetParentCode()
         {
@@ -88,12 +88,33 @@ namespace BXJG.Utils.GeneralTree
         [Unicode(false)]
         [Comment("如：pinpai  表示品牌节点，不同租户下此字段值一样。使用场景：在数据字典功能中，前端下拉框绑定时可以通过此字段绑定指定节点类型")]
         public string? Name { get; set; }
+
+        /// <summary>
+        /// 备注
+        /// </summary>
+        [MaxLength(BXJGUtilsConsts.RemarkMaxLength)]
+        public string? Remark { get; set; }
+    }
+
+    public abstract class GeneralTreeEntity<TEntity> : GeneralTreeNoTenantEntity<TEntity>, IExtendableObject, IGeneralTree<TEntity>, IPassivable, IMustHaveTenant
+       where TEntity : GeneralTreeEntity<TEntity>
+    {
+        /// <summary>
+        /// 租户id
+        /// </summary>
+        public int TenantId { get; set; }
     }
 
     [Table("BXJGUtilsDataDictionaries")]
-    public class DataDictionaryEntity : GeneralTreeEntity<DataDictionaryEntity>
+    public class DataDictionaryEntity : GeneralTreeEntity<DataDictionaryEntity>, IMustHaveTenant
     {
+        /// <summary>
+        /// 是否是系统预定义的
+        /// </summary>
         public bool IsSysDefine { get; set; }
+        /// <summary>
+        /// 是否是树形的
+        /// </summary>
         public bool IsTree { get; set; }
     }
     ///// <summary>

@@ -3,6 +3,7 @@ using Abp.Authorization.Users;
 using Abp.MultiTenancy;
 using Abp.Zero.EntityFrameworkCore;
 using BXJG.Utils.Feedback;
+using BXJG.Utils.Metadata;
 using BXJG.Utils.Tag;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -18,8 +19,18 @@ namespace BXJG.Utils.EFCore
     public abstract class BXJGUtilsDbContext<TTenant, TRole, TUser, TSelf> : AbpZeroDbContext<TTenant, TRole, TUser, TSelf>
    where TTenant : AbpTenant<TUser> where TRole : AbpRole<TUser> where TUser : AbpUser<TUser> where TSelf : AbpZeroDbContext<TTenant, TRole, TUser, TSelf>
     {
+        /// <summary>
+        /// 留言反馈
+        /// </summary>
         public virtual DbSet<FeedbackEntity> Feedbacks { get; set; }
+        /// <summary>
+        /// 实体标签
+        /// </summary>
         public virtual DbSet<TagEntity> Tags { get; set; }
+        /// <summary>
+        /// 元数据
+        /// </summary>
+        public virtual DbSet<MetadataEntity> Metadatas { get; set; }
         protected BXJGUtilsDbContext(DbContextOptions<TSelf> options) : base(options)
         {
         }
