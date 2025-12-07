@@ -20,7 +20,7 @@ namespace BXJG.Utils.Share
         /// <summary>
         /// 字符串类型ID的最大长度
         /// </summary>
-        public const int StringIdMaxLength = 64;
+        public const int StringIdMaxLength = 40;
         public const string EntityIsNotActive = "实体已禁用";
         /// <summary>
         /// 通用的扩展数据长度
