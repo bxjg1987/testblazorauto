@@ -1,7 +1,6 @@
 ﻿using Abp.Extensions;
 using Abp.Reflection.Extensions;
 using AntDesign;
-using AutoMapper.Internal;
 using BXJG.Common.Contracts;
 using BXJG.Utils.Application.Share.GeneralTree;
 using Microsoft.Extensions.DependencyInjection;

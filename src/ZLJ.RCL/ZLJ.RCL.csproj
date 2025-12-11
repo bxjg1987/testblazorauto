@@ -36,7 +36,7 @@
 
 		<!--<PackageReference Include="Abp.Web.Common" Version="9.2.2" />-->
 
-		<PackageReference Include="AntDesign" Version="1.5.0" />
+		<!--<PackageReference Include="AntDesign" Version="1.5.0" />-->
 
 	  <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.*" />
 	  <PackageReference Include="Blazor.ECharts" Version="1.0.6" />
@@ -50,16 +50,16 @@
 
 	<!-- 如果 $(SolutionName) 不包含 WithModules -->
 	<ItemGroup Condition="!$(SolutionName.Contains('WithModules'))">
-		<PackageReference Include="BXJG.Common.RCL" Version="*" />
-		<PackageReference Include="BXJG.Utils.RCL" Version="*" />
+		<!--<PackageReference Include="BXJG.Common.RCL" Version="*" />-->
+		<PackageReference Include="BXJG.Utils.RCLAnt" Version="*" />
 		<PackageReference Include="BXJG.Utils.Application.ClientProxy" Version="*" />
 	</ItemGroup>
 
 	<!-- 如果 $(SolutionName) 包含 WithModules -->
 	<ItemGroup Condition="$(SolutionName.Contains('WithModules'))">
 		<ProjectReference Include="..\Modules\utils\BXJG.Utils.Application.ClientProxy\BXJG.Utils.Application.ClientProxy.csproj" />
-		<ProjectReference Include="..\Modules\utils\BXJG.Utils.RCL\BXJG.Utils.RCL.csproj" />
-		<ProjectReference Include="..\Libs\BXJG.Common.RCL\BXJG.Common.RCL.csproj" />
+		<ProjectReference Include="..\Modules\utils\BXJG.Utils.RCLAnt\BXJG.Utils.RCLAnt.csproj" />
+		<!--<ProjectReference Include="..\Libs\BXJG.Common.RCL\BXJG.Common.RCL.csproj" />-->
 	</ItemGroup>
 	
 	
