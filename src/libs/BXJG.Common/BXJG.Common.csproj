@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<!--<TargetFramework>netstandard2.1</TargetFramework>-->
@@ -28,7 +28,7 @@
 
 
 	<ItemGroup>
-		<PackageReference Include="FastCloner" Version="3.3.19" />
+		<PackageReference Include="FastCloner" Version="3.3.20" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.*" />
 		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.*" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.*" />
