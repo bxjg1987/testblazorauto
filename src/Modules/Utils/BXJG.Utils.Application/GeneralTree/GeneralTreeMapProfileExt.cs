@@ -50,7 +50,7 @@ namespace AutoMapper
         }
 
         public static IMappingExpression<TSource, TDestination> EntityToComboTree<TSource, TDestination>(this IMappingExpression<TSource, TDestination> config)
-            where TSource : GeneralTreeEntity<TSource>
+            where TSource : GeneralTreeNoTenantEntity<TSource>
             where TDestination : GeneralTreeNodeForSelectDto<TDestination>
         {
             return config.ForMember(c => c.Text, opt => opt.MapFrom(c => c.DisplayName));

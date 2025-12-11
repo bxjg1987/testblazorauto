@@ -1,9 +1,11 @@
-using System.Linq;
-using AutoMapper;
 using Abp.Authorization;
-using BXJG.Utils.Localization;
+using AutoMapper;
 using BXJG.Utils.Application.Share.GeneralTree;
+using BXJG.Utils.Application.Share.Metadata;
 using BXJG.Utils.GeneralTree;
+using BXJG.Utils.Localization;
+using BXJG.Utils.Metadata;
+using System.Linq;
 
 namespace BXJG.Utils.Application.GeneralTree
 {
@@ -32,7 +34,7 @@ namespace BXJG.Utils.Application.GeneralTree
             CreateMap<DataDictionaryEntity, DataDictionaryForSelectDto>().EntityToComboTree();//.IncludeBase(typeof(GeneralTreeEntity<>), typeof(GeneralTreeNodeDto<>));
 
             CreateMap<DataDictionaryEntity, GeneralTreeComboboxDto>().EntityToCombobox();
-
+            CreateMap<MetadataEntity, MetadataForSelectDto>().EntityToComboTree();
             //.ForMember(c => c.ExtData, opt => opt.MapFrom(c => JsonConvert.DeserializeObject<dynamic>(c.ExtensionData)))  在DTO的属性中做了处理
             // .ForMember(c => c.Children, opt => opt.Ignore())
             //.ForMember(c => c.IsTreeText, opt => opt.MapFrom(c => c.IsTree.ToString().UtilsL()))
