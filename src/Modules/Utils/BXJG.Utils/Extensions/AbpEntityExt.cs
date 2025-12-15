@@ -20,7 +20,7 @@ namespace Abp.Domain.Entities
         /// <param name="passivable"></param>
         /// <param name="entityTypeName">业务名称</param>
         /// <param name="id">唯一id</param>
-        public static void Check(this IPassivable passivable, string entityTypeName, object? id = default, ILocalizationSource? ls = default)
+        public static void Check(this IPassivable passivable, string entityTypeName=default, object? id = default, ILocalizationSource? ls = default)
         {
             if (passivable.IsActive == false)
             {
@@ -30,8 +30,8 @@ namespace Abp.Domain.Entities
                     id = (passivable as IEntityDto)?.Id;
                 if (ls == null)
                     ls = LocalizationHelper.Manager.GetSource(BXJGUtilsConsts.LocalizationSourceName);
-                else
-                    entityTypeName = ls.GetString(entityTypeName);
+         
+                    entityTypeName = ls.GetString(entityTypeName??passivable.GetType().FullName);
                 UserFriendlyExceptionFactory.Throw(BXJGUtilsConsts.EntityIsNotActive, ls, entityTypeName, id);
             }
         }
