@@ -136,9 +136,8 @@ else
     app.UseHttpsRedirection();
 }
 
-app.UseAntiforgery();
+//app.UseAntiforgery();
 //app.UseStaticFiles();
-app.MapStaticAssets();
 
 
 
@@ -218,6 +217,7 @@ app.UseAuthentication();
 //});
 
 app.UseAuthorization();
+app.MapStaticAssets().ShortCircuit();
 app.UseAntiforgery();
 
 //×¢Ïú

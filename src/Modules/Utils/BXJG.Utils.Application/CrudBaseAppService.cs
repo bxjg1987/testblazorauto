@@ -195,7 +195,7 @@ namespace BXJG.Utils.Application
         {
             var r = base.MapToEntity(createInput);
             if (r is IEntity<Guid> et)
-                et.Id = SequentialGuidGenerator.Instance.Create();
+                et.Id =  SequentialGuidGenerator.Instance.Create();
 
             return r;
         }

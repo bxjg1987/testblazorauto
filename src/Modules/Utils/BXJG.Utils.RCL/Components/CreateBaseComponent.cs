@@ -108,7 +108,7 @@ namespace BXJG.Utils.RCL.Components
             //木有权限时保存按钮不可点击
             //验证不过时此方法不应该被调用
             if (isSaving) return;
-            //isSaving = true;
+           isSaving = true;
             try
             {
                 var r = await SaveCore();
