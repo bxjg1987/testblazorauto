@@ -77,7 +77,7 @@
            Bordered="true"
            ScrollX="1000px">
 
-        <Selection Width="50" Fixed="ColumnFixPlacement.Left" />
+        <Selection Width="50" Fixed="ColumnFixPlacement.Left"  Align="ColumnAlign.Center" />
         <Column TData=@(Model.Model.DtoName) Title="行号" Width="60" Fixed="ColumnFixPlacement.Left">
             @@(PageSize * (PageIndex - 1) + Items.IndexOf(context) + 1)
         </Column>

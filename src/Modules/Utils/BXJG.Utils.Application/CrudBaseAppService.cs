@@ -324,6 +324,7 @@ namespace BXJG.Utils.Application
             int totalCount = await AsyncQueryableExecuter.CountAsync(query);
             query = ApplySorting(query, input);
             query = ApplyPaging(query, input);
+            var sql = query.ToQueryString();
             return new PagedResultDto<TEntityDto>(totalCount, (await AsyncQueryableExecuter.ToListAsync(query)).Select(MapToEntityDto).ToList());
 
         }
