@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using ZLJ.Application.Common.Share.Kehu;
@@ -25,23 +26,8 @@ namespace ZLJ.RCL.Components
         public IHttpClientFactory HttpClientFactory { get; set; }
 
         protected virtual HttpClient HttpClient => HttpClientFactory.CreateHttpClientCommon();
-        protected override void Dispose(bool disposing)
-        {
-            try
-            {
-                cts?.Cancel();
-            }
-            catch { }
-            try
-            {
-                cts?.Dispose();
-            }
-            catch { }
 
-            base.Dispose(disposing);
-        }
-        //  protected Task<PagedResultDto<TItem>> _oldTask;
-        //protected bool _loading;
+
 
         /// <summary>
         /// 专门给肉夹馍aop用的，你不该调用这个
@@ -60,65 +46,26 @@ namespace ZLJ.RCL.Components
         public override async Task SetParametersAsync(ParameterView parameters)
         {
             //  var dic = parameters.ToDictionary();
-            parameters.SetParameterProperties(this);
 
-            //  if (DataSource == null)
-            //      DataSource = new List<TItem >();
-
-            //无论是远程搜索，还是本地搜索，开启此属性后 才能输入
-
+            // 检查是否传入了DataSource参数，如果传入了就抛出异常
             if (parameters.TryGetValue<IEnumerable<TItem>>(nameof(DataSource), out var ds))
                 throw new Exception("请设置DataSourceInit，而不是DataSource");
 
-            if (!parameters.TryGetValue<bool>(nameof(EnableSearch), out var _))
+            // 设置默认值（仅当参数未提供时）
+            var hasEnableSearch = parameters.TryGetValue<bool>(nameof(EnableSearch), out var enableSearch);
+            var hasAutoClearSearchValue = parameters.TryGetValue<bool>(nameof(AutoClearSearchValue), out var autoClearSearchValue);
+            var hasEnableVirtualization = parameters.TryGetValue<bool>(nameof(EnableVirtualization), out var enableVirtualization);
+
+            // 调用父类方法，让父类处理参数设置
+            await base.SetParametersAsync(parameters);
+
+            // 仅当参数未提供时设置默认值
+            if (!hasEnableSearch)
                 EnableSearch = true;
-
-            if (!parameters.TryGetValue<bool>(nameof(AutoClearSearchValue), out var _))
+            if (!hasAutoClearSearchValue)
                 AutoClearSearchValue = false;
-
-            if (!parameters.TryGetValue<bool>(nameof(EnableVirtualization), out var _))
+            if (!hasEnableVirtualization)
                 EnableVirtualization = true;
-
-            //if (parameters.TryGetValue<IEnumerable<TItem>>(nameof(DataSourceInit), out var ds1))
-            //{
-            //    if (ds1 != DataSourceInit)
-            //    {
-            //        this.Logger.LogWarning("DataSourceInit变动了");
-            //        DataSource = ds1;
-
-            //        if (ds1.Count() >= MaxCount)
-            //        {
-            //            //if (!parameters.TryGetValue<bool>(nameof(EnableVirtualization), out var _))
-            //            //    EnableVirtualization = true;
-            //            if (EnableSearch && OnSearch == null)
-            //                OnSearch = Search;
-            //            await RemoteInit(parameters);
-            //        }
-            //        else
-            //        {
-            //            OnSearch = null;
-            //            await LocalInit(parameters);
-            //        }
-            //    }
-            //}
-            //else //if(DataSource==null)
-            //{
-            //    //if (DataSource == null)
-            //    //{
-            //    //    var r = await HttpClient.GetAllProvider<TItem>(new PagedAndSortedResultRequest<object> { MaxResultCount = MaxCount, Filter = new { Keywords = string.Empty } });
-            //    //    DataSource = r.Items;
-            //    //}
-
-
-            //    if (EnableSearch && OnSearch == null)
-            //        OnSearch = Search;
-
-            //    await RemoteInit(parameters);
-            //}
-            ////dic.TryAdd(nameof(DataSource), this.DataSource);
-
-            await base.SetParametersAsync(ParameterView.Empty);
-            // await base.SetParametersAsync(parameters);
 
 
         }
@@ -138,7 +85,7 @@ namespace ZLJ.RCL.Components
         /// 若数据量大于此值，则开启远程搜索，否则仅在本地搜索
         /// </summary>
         [Parameter]
-        public int MaxCount { get; set; } = 50;
+        public int MaxCount { get; set; } = 5;
         [AbpExceptionInterceptor]
         protected override void OnInitialized()
         {
@@ -164,7 +111,7 @@ namespace ZLJ.RCL.Components
             }
 
             if (EnableSearch && OnSearch == null && DataSource.Count() >= MaxCount)
-                OnSearch = Search;
+                OnSearch = Search;// Search;
 
             await base.OnInitializedAsync();
         }
@@ -178,24 +125,23 @@ namespace ZLJ.RCL.Components
         //}
 
 
-        CancellationTokenSource cts = new CancellationTokenSource();
 
 
         //    public 
-        [AbpExceptionInterceptor]
+        // [AbpExceptionInterceptor]
         public void Search(string val)
         {
-            Task.Run(async () =>
-            {
-                try
-                {
-                    await SearchCore(val);
-                }
-                catch (Exception ex)
-                {
-                    Logger.LogError(ex, "异步加载下拉框数据失败");
-                }
-            });
+            //  Task.Run(async () =>
+            // {
+            //    try
+            //  {
+            _ = SearchCore(val);
+            //  }
+            //   catch (Exception ex)
+            //  {
+            //       Logger.LogError(ex, "异步加载下拉框数据失败");
+            //   }
+            // });
         }
         protected virtual async Task SearchCore(string? value = default)
         {
@@ -203,63 +149,47 @@ namespace ZLJ.RCL.Components
             //if (Loading)
             //    return;
 
+            //Loading = true;
+            //await InvokeAsync(StateHasChanged);
+            //try
+            //{
+            dynamic tj = GetCondition();
             try
             {
-                cts?.Cancel();
+                tj.Keywords = value;
             }
             catch { }
-            try
-            {
-                cts?.Dispose();
-            }
-            catch { }
+            var r = await HttpClient.GetAllProvider<TItem>(new { Filter = tj, MaxResultCount = value.IsNullOrWhiteSpaceBXJG() ? MaxCount : int.MaxValue });
 
-            cts = new CancellationTokenSource();
-            Loading = true;
-            _ = InvokeAsync(StateHasChanged).ConfigureAwait(false);
-            try
+            DataSource = r.Items;
+            if (Value != null && !Value.Equals(default) && !r.Items.Any(d => d.GetFieldOrPropertyValue("Id").Equals(Value)))
             {
-                dynamic tj = GetCondition();
-                try
+                if (!Value.Equals(curr?.GetFieldOrPropertyValue("Id")))
                 {
-                    tj.Keywords = value;
+                    var r1 = await HttpClient.GetProvider<TItem>(new { Id = Value });
+                    curr = r1;
                 }
-                catch { }
-                var r = await HttpClient.GetAllProvider<TItem>(new { Filter = tj, MaxResultCount = value.IsNullOrWhiteSpaceBXJG() ? MaxCount : int.MaxValue }, cancellationToken: cts.Token);
-
-                //this.selected
-
-                // var list = r.Items.ToList();
-                //// base._s
-                // try
-                // {
-                //     var r1 = await HttpClient.GetProvider<TItem>(new { Id = this._selectedValues.FirstOrDefault() }, cancellationToken: cts.Token);
-                //     list.Add(r1);
-                // }
-                // catch { }
-
-                DataSource = r.Items;
-                if (Value != null && !Value.Equals(default) && !r.Items.Any(d => d.GetFieldOrPropertyValue("Id").Equals(Value)))
+                // 直接在原列表上添加，避免不必要的复制
+                if (curr != null)
                 {
-                    if (!Value.Equals(curr?.GetFieldOrPropertyValue("Id")))
-                    {
-                        var r1 = await HttpClient.GetProvider<TItem>(new { Id = Value }, cancellationToken: cts.Token);
-                        curr = r1;
-                    }
-                    // 直接在原列表上添加，避免不必要的复制
-                    if (curr != null)
-                    {
-                        DataSource = r.Items.Concat([curr]);
-                    }
+                    DataSource = r.Items.Concat([curr]);
                 }
-
-                await OnParametersSetAsync();//经过测试，必须调用它，列表才会显示新的数据
             }
-            finally
-            {
-                Loading = false;
-            }
-            _ = InvokeAsync(StateHasChanged).ConfigureAwait(false);//经过测试，这里必须调用
+            await OnParametersSetAsync();//经过测试，必须调用它，列表才会显示新的数据
+                                         //}
+                                         //finally
+                                         //{
+                                         //    Loading = false;
+                                         //}
+                                         // 统一在所有状态更新后调用，确保组件正确渲染
+                                         // await OnParametersSetAsync();//经过测试，必须调用它，列表才会显示新的数据
+                                         // 调用父类的SetClassMap方法重新计算CSS类，确保Loading状态正确更新
+                                         //await InvokeAsync(() => {
+                                         //    // 反射调用父类的SetClassMap方法
+                                         //    var method = typeof(Select<TItemValue, TItem>).GetMethod("SetClassMap", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                                         //    method?.Invoke(this, null);
+                                         //    StateHasChanged();
+                                         //});
         }
         TItem curr;
 
@@ -268,11 +198,11 @@ namespace ZLJ.RCL.Components
             return new ExpandoObject();
         }
     }
-    public class SelectZlj<TItemValue, TItem, TCondtion> : SelectZlj<TItemValue, TItem>
+    public class SelectZlj<TItemValue, TItem, TCondtion> : SelectZlj<TItemValue, TItem> where TCondtion : new()
     {
 
         [Parameter]
-        public TCondtion Condtion { get; set; }
+        public virtual TCondtion Condtion { get; set; } = new TCondtion();
         protected override dynamic GetCondition()
         {
             return Condtion;
