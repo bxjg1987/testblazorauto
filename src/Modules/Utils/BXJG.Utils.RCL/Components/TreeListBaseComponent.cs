@@ -201,9 +201,9 @@ namespace BXJG.Utils.RCL.Components
             IsLoading = true;
             //Items.Clear();
 
-            if (SelectedItems != default && SelectedItems is ICollection<TEntityDto> tempList)
-                tempList.Clear();
-            else
+            //if (SelectedItems != default && SelectedItems is ICollection<TEntityDto> tempList)
+            //    tempList.Clear();
+            //else
                 SelectedItems = new List<TEntityDto>();
 
             StateHasChanged();

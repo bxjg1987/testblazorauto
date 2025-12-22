@@ -273,15 +273,15 @@ namespace BXJG.Utils.RCL.Components
             IsLoading = true;
 
 
-            if (SelectedItems != default && SelectedItems is ICollection<TEntityDto> tempList)
-                tempList.Clear();
-            else
+            //if (SelectedItems != default && SelectedItems is ICollection<TEntityDto> tempList)
+           //     tempList.Clear();
+           // else
                 SelectedItems = new List<TEntityDto>();
 
 
+         
 
-
-            StateHasChanged();
+                StateHasChanged();
 
             InvokeAsync(async () =>
             {
