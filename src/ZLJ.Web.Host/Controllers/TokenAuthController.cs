@@ -1,34 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+﻿using Abp.Auditing;
 using Abp.Authorization;
 using Abp.Authorization.Users;
 using Abp.MultiTenancy;
 using Abp.Runtime.Security;
 using Abp.UI;
-
+using Lazy.Captcha.Core;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Threading.Tasks;
+using ZLJ.Application;
+using ZLJ.Application.Authorization;
+using ZLJ.Application.Common.Share.Models.TokenAuth;
+using ZLJ.Core;
 using ZLJ.Core.Authorization;
 using ZLJ.Core.Authorization.Users;
 using ZLJ.Core.MultiTenancy;
-using Microsoft.AspNetCore.Authentication;
-using System.Security.Cryptography;
-using ZLJ.Application.Authorization;
-using ZLJ.Application;
-using ZLJ.Application.Common.Share.Models.TokenAuth;
-using ZLJ.Web.Core.Models.TokenAuth;
+using ZLJ.Core.Share;
 using ZLJ.Web.Core.Authentication.External;
 using ZLJ.Web.Core.Authentication.JwtBearer;
-using ZLJ.Core;
-using Lazy.Captcha.Core;
-using ZLJ.Core.Share;
+using ZLJ.Web.Core.Models.TokenAuth;
 
 namespace ZLJ.Controllers
 {
+    [DisableAuditing]
     [Microsoft.AspNetCore.Mvc.Route("api/[controller]/[action]")]
     public class TokenAuthController : ZLJControllerBase
     {
