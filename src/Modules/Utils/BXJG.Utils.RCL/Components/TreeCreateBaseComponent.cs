@@ -1,9 +1,12 @@
 ﻿
 
 using Abp.Application.Services.Dto;
+using AutoMapper;
+using AutoMapper.Internal.Mappers;
 using BXJG.Common.Contracts;
 using BXJG.Utils.Application.Share;
 using BXJG.Utils.Application.Share.GeneralTree;
+using BXJG.Utils.Application.Share.OperationLog;
 using BXJG.Utils.RCL.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Extensions.DependencyInjection;
@@ -82,15 +85,25 @@ namespace BXJG.Utils.RCL.Components
         /// 重置的核心逻辑
         /// </summary>
         /// <returns></returns>
-        protected virtual ValueTask ResetCore()
+        protected virtual async Task ResetCore()
         {
             var pid = createDto?.ParentId ?? ParentId;
             if (createDto != null && createDto is IReset t)
                 t.Reset();
             else
-                createDto = new TCreateInput();
+            {
+                //由于老代码没有配置dto到新增模型的映射，所以这里加个try
+                try
+                {
+                    dto = await BuildNew();
+                    await DtoToCreate();
+                }
+                catch
+                {
+                    createDto = new TCreateInput();
+                }
+            }
             createDto.ParentId = pid;
-            return ValueTask.CompletedTask;
         }
         /// <summary>
         /// 初始化时，初始化新增模型
@@ -148,6 +161,32 @@ namespace BXJG.Utils.RCL.Components
         protected virtual async Task<TEntityDto> SaveCore()
         {
             return await HttpClient.Create<TEntityDto>(createDto);// AppService.CreateAsync(createDto);
+        }
+        /// <summary>
+        /// 新增前从后端获取一个带默认值的新模型
+        /// </summary>
+        /// <returns></returns>
+        protected virtual async Task<TEntityDto> BuildNew()
+        {
+            return await HttpClient.BuildNew<TEntityDto>();
+        }
+        protected TEntityDto dto;
+        /// <summary>
+        /// 请调用ObjectMapper
+        /// </summary>
+        IMapper objectMapper;
+        /// <summary>
+        /// 对象映射接口
+        /// </summary>
+        protected virtual IMapper ObjectMapper => objectMapper ??= ScopedServices.GetRequiredService<IMapper>();
+        /// <summary>
+        /// 新增前获取带默认值的新模型后映射到新增模型
+        /// </summary>
+        /// <returns></returns>
+        protected virtual ValueTask DtoToCreate()
+        {
+            createDto = ObjectMapper.Map<TCreateInput>(dto);
+            return ValueTask.CompletedTask;
         }
         /// <summary>
         /// 新增成功，且不再继续新增时触发

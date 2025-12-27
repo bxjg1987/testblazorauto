@@ -540,6 +540,21 @@ namespace BXJG.Utils.Application.GeneralTree
 
         #region create
         /// <summary>
+        /// 新增前调用，准备一个带默认值的新的对象
+        /// </summary>
+        /// <returns></returns>
+        public virtual ValueTask<TDto> BuildNew()
+        {
+            //反射创建TEntityDto
+            var dto = Activator.CreateInstance<TDto>();
+            if (dto is FullAuditedEntityDto<long> c)
+            {
+                c.CreationTime = DateTime.Now;
+                c.CreatorUserId = AbpSession.UserId;
+            }
+            return ValueTask.FromResult(dto);
+        }
+        /// <summary>
         /// 创建树形结构数据
         /// </summary>
         /// <param name="input"></param>

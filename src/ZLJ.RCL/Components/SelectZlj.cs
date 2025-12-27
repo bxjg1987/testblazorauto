@@ -162,7 +162,7 @@ namespace ZLJ.RCL.Components
             var r = await HttpClient.GetAllProvider<TItem>(new { Filter = tj, MaxResultCount = value.IsNullOrWhiteSpaceBXJG() ? MaxCount : int.MaxValue });
 
             DataSource = r.Items;
-            if (Value != null && !Value.Equals(default) && !r.Items.Any(d => d.GetFieldOrPropertyValue("Id").Equals(Value)))
+            if (Value != null && !Value.Equals(default) && !Value.Equals(Guid.Empty) && !r.Items.Any(d => d.GetFieldOrPropertyValue("Id").Equals(Value)))
             {
                 if (!Value.Equals(curr?.GetFieldOrPropertyValue("Id")))
                 {

@@ -221,6 +221,11 @@ namespace System.Net.Http
 
 
         #region 普通数据的crud
+        public static Task<TDto> BuildNew<TDto>(this HttpClient client, object data=null, string controller = default, CancellationToken cancellationToken = default)
+        {
+            controller = controller.NewMethod<TDto>();
+            return client.Post<TDto>(controller, "BuildNew", data, default, cancellationToken);
+        }
         public static Task<TDto> Create<TDto>(this HttpClient client, object data, string controller = default, CancellationToken cancellationToken = default)
         {
             controller = controller.NewMethod<TDto>();

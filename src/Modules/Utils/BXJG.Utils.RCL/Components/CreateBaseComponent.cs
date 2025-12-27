@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Services.Dto;
+using AutoMapper;
 using BXJG.Common.Contracts;
 using BXJG.Utils.Application.Share;
 using Microsoft.AspNetCore.Components.Forms;
@@ -61,16 +62,35 @@ namespace BXJG.Utils.RCL.Components
             }
         }
         /// <summary>
+        /// 请调用ObjectMapper
+        /// </summary>
+        IMapper objectMapper;
+        /// <summary>
+        /// 对象映射接口
+        /// </summary>
+        protected virtual IMapper ObjectMapper => objectMapper ??= ScopedServices.GetRequiredService<IMapper>();
+        protected TEntityDto dto;
+        /// <summary>
         /// 重置的核心逻辑
         /// </summary>
         /// <returns></returns>
-        protected virtual ValueTask ResetCore()
+        protected virtual async ValueTask ResetCore()
         {
-            if (createDto!=null&&createDto is IReset t)
+            if (createDto != null && createDto is IReset t)
                 t.Reset();
             else
-                createDto = new TCreateInput();
-            return ValueTask.CompletedTask;
+            {
+                //由于老代码没有配置dto到新增模型的映射，所以这里加个try
+                try
+                {
+                    dto = await BuildNew();
+                    await DtoToCreate();
+                }
+                catch {
+                    createDto = new TCreateInput();
+                }
+            }
+           
         }
         /// <summary>
         /// 初始化时，初始化新增模型
@@ -143,6 +163,23 @@ namespace BXJG.Utils.RCL.Components
             //验证不过时此方法不应该被调用
             return await HttpClient.Create<TEntityDto>(createDto); //AppService.CreateAsync(createDto);
         }
+
+        /// <summary>
+        /// 新增前从后端获取一个带默认值的新模型
+        /// </summary>
+        /// <returns></returns>
+        protected virtual async Task<TEntityDto> BuildNew() {
+            return await HttpClient.BuildNew<TEntityDto>(); 
+        }
+        /// <summary>
+        /// 新增前获取带默认值的新模型后映射到新增模型
+        /// </summary>
+        /// <returns></returns>
+        protected virtual ValueTask DtoToCreate() {
+            createDto = ObjectMapper.Map<TCreateInput>(dto);
+            return ValueTask.CompletedTask;
+        }
+
         /// <summary>
         /// 新增成功，且不再继续新增时触发
         /// </summary>

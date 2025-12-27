@@ -15,6 +15,7 @@ namespace @(Model.Model.BlazorClientNamespace)
         public AutoMapperProfile()
         {
             CreateMap<@(Model.Model.DtoName), @(Model.Model.EditDtoName)>();
+            CreateMap<@(Model.Model.DtoName), @(Model.Model.CreateDtoName)>();
         }
     }
 }

@@ -17,9 +17,10 @@ namespace BXJG.Utils.Share
         public const int MaxDepth = 16;
         public const int CodeUnitLength = 5;
         public const int MaxCodeLength = 95;
+        public const int BusinessTypeMaxLength = 50;
         /// <summary>
-        /// 字符串类型ID的最大长度
-        /// </summary>
+                                                     /// 字符串类型ID的最大长度
+                                                     /// </summary>
         public const int StringIdMaxLength = 40;
         public const string EntityIsNotActive = "实体已禁用";
         /// <summary>

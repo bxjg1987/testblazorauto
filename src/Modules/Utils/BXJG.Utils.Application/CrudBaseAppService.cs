@@ -51,7 +51,7 @@ namespace BXJG.Utils.Application
                                                                                  TCreateInput,
                                                                                  TUpdateInput,
                                                                                  TGetInput,
-                                                                                 TDeleteInput>, 
+                                                                                 TDeleteInput>,
                                                              ICrudBaseAppService<TEntityDto,
                                                                                  TPrimaryKey,
                                                                                  TGetAllInput,
@@ -100,6 +100,21 @@ namespace BXJG.Utils.Application
         #endregion
 
         #region 新增
+        /// <summary>
+        /// 新增前调用，准备一个带默认值的新的对象
+        /// </summary>
+        /// <returns></returns>
+        public virtual ValueTask<TEntityDto> BuildNew()
+        {
+            //反射创建TEntityDto
+            var dto = Activator.CreateInstance<TEntityDto>();
+            if (dto is FullAuditedEntityDto<TPrimaryKey> c)
+            {
+                c.CreationTime = DateTime.Now;
+                c.CreatorUserId = AbpSession.UserId;
+            }
+            return ValueTask.FromResult(dto);
+        }
         //public virtual Func<TCreateInput, ValueTask<TEntity>> MapToEntityCreateFunc { get => field ?? MapToEntityAsync; set; }
         //public virtual Func<TEntity, ValueTask> MapToEntityFunc { get => field ?? MapToEntity; set; }
         //public virtual Func<TEntity, TCreateInput, Task> CreateSaveFunc { get => field ?? CreateSave; set; }
@@ -195,7 +210,7 @@ namespace BXJG.Utils.Application
         {
             var r = base.MapToEntity(createInput);
             if (r is IEntity<Guid> et)
-                et.Id =  SequentialGuidGenerator.Instance.Create();
+                et.Id = SequentialGuidGenerator.Instance.Create();
 
             return r;
         }
@@ -259,7 +274,7 @@ namespace BXJG.Utils.Application
         #endregion
 
         #region 删除
-      
+
         public override async Task DeleteAsync(TDeleteInput input)
         {
             CheckDeletePermission();
