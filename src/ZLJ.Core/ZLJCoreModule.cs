@@ -38,8 +38,8 @@ namespace ZLJ.Core
 
         public override void PreInitialize()
         { 
-            ////多租户开关
-            //Configuration.MultiTenancy.IsEnabled = ZLJ.Core.Share.ZLJConsts.MultiTenancyEnabled;
+            //多租户开关
+            Configuration.MultiTenancy.IsEnabled = ZLJ.Core.Share.ZLJConsts.MultiTenancyEnabled;
             //try
             //{
             //    cfg = IocManager.Resolve<IConfiguration>();//注意 迁移时为空，迁移时不会依赖webcoreModule，所以那里没问题
@@ -61,8 +61,6 @@ namespace ZLJ.Core
            // Configuration.Modules.BXJGWorkOrder().EnableDefaultWorkOrder = false;
             ZLJLocalizationConfigurer.Configure(Configuration.Localization);
 
-            ////多租户开关
-            //Configuration.MultiTenancy.IsEnabled = ZLJ.Core.Share.ZLJConsts.MultiTenancyEnabled;
 
             // Configure roles
             AppRoleConfig.Configure(Configuration.Modules.Zero().RoleManagement);

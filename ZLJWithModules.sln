@@ -157,6 +157,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BXJG.WeChat.Abp", "src\Modu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BXJG.Utils.RCLAnt", "src\Modules\Utils\BXJG.Utils.RCLAnt\BXJG.Utils.RCLAnt.csproj", "{53457DDC-C40B-59AE-10E6-7F38FDA85C98}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BXJG.Common.Tests", "test\BXJG.Common.Tests\BXJG.Common.Tests.csproj", "{19F0FCBA-6BAF-41C1-865B-E2423D0A5741}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -307,6 +309,10 @@ Global
 		{53457DDC-C40B-59AE-10E6-7F38FDA85C98}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{53457DDC-C40B-59AE-10E6-7F38FDA85C98}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{53457DDC-C40B-59AE-10E6-7F38FDA85C98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19F0FCBA-6BAF-41C1-865B-E2423D0A5741}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19F0FCBA-6BAF-41C1-865B-E2423D0A5741}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19F0FCBA-6BAF-41C1-865B-E2423D0A5741}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19F0FCBA-6BAF-41C1-865B-E2423D0A5741}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -360,6 +366,7 @@ Global
 		{8F70EE5C-A9D8-419B-7D1A-04FA05B3577A} = {40235816-976B-45B5-A0C7-D55C99AAFA2C}
 		{B98B3209-E6E1-19F6-8E32-80D7A967B9C9} = {40235816-976B-45B5-A0C7-D55C99AAFA2C}
 		{53457DDC-C40B-59AE-10E6-7F38FDA85C98} = {40235816-976B-45B5-A0C7-D55C99AAFA2C}
+		{19F0FCBA-6BAF-41C1-865B-E2423D0A5741} = {4D4E9908-66AB-4319-A3AE-F57C2D05909F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F45DD46C-6040-4FCC-87E0-648786C36933}
