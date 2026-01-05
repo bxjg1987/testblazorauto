@@ -287,11 +287,10 @@ namespace BXJG.Utils.Application.GeneralTree
         /// </summary>
         /// <param name="input"></param>
         /// <param name="parentCode"></param>
-        /// <param name="context"><see cref="GetTreeForSelectAsync"/>的多个步骤间共享数据，默认存在input的key</param>
         /// <returns></returns>
         protected virtual async Task<IQueryable<TEntity>> ComboTreeFilter(TGetTreeForSelectInput input, string parentCode)
         {
-            var q = (await BuildQuery()).WhereIf(!input.IsOnlyLoadChild, c => c.Code.StartsWith(parentCode))
+            var q = (await BuildQuery()).WhereIf(!input.IsOnlyLoadChild&& parentCode.IsNotNullOrWhiteSpaceBXJG(), c => c.Code.StartsWith(parentCode))
                                 .WhereIf(input.IsOnlyLoadChild && parentCode.IsNotNullOrWhiteSpaceBXJG(), c => c.Parent.Code == parentCode || c.Code == parentCode)
                                 .WhereIf(input.IsOnlyLoadChild && parentCode.IsNullOrWhiteSpaceBXJG(), c => !c.ParentId.HasValue);
 
