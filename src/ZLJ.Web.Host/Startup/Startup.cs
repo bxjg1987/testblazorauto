@@ -2,6 +2,7 @@
 using Abp.AspNetCore.Mvc.Antiforgery;
 using Abp.AspNetCore.SignalR.Hubs;
 using Abp.Castle.Logging.Log4Net;
+using Abp.Configuration;
 using Abp.Hangfire;
 using Abp.Json;
 using BXJG.Utils.Application;
@@ -24,6 +25,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi;
+using System.Threading.RateLimiting;
+
 
 //using BXJG.WorkOrder.EmployeeApplication;
 //using ZLJ.App.Employee;
@@ -264,6 +267,28 @@ namespace ZLJ.Web.Host.Startup
 
 
 
+            #region 速率限制
+            //分布式环境中，应该在网关中区处理
+            services.AddRateLimiter(options =>
+            {
+                options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
+                {
+                    // 获取用户名（未登录用户统一归为 anonymous）
+                    var username = httpContext.User.Identity?.IsAuthenticated == true ? httpContext.User.Identity.Name ?? "unknown" : "anonymous";
+                    var sm = httpContext.RequestServices.GetRequiredService<ISettingManager>();
+                    //设置同步获取，有换成，但是如果是redis 估计还是有点慢
+                    //var sdfdf = sm.GetSettingValueForApplication<int>(ZLJ.Core.Share.ZLJConsts.TokenLimit);
+                    return RateLimitPartition.GetTokenBucketLimiter(username, _ => new TokenBucketRateLimiterOptions
+                    {
+                        TokenLimit = sm.GetSettingValueForApplication<int>(ZLJ.Core.Share.ZLJConsts.TokenLimit),// 50,  // 桶最多装 20 个令牌（突发请求上限）
+                        TokensPerPeriod = sm.GetSettingValueForApplication<int>(ZLJ.Core.Share.ZLJConsts.TokensPerPeriod),//7, // 每个周期补充 5 个令牌
+                        ReplenishmentPeriod = TimeSpan.FromSeconds(sm.GetSettingValueForApplication<int>(ZLJ.Core.Share.ZLJConsts.ReplenishmentPeriod)), // 每 10 秒补充一次
+                        QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                        QueueLimit = 10 // 超出后最多排队 2 个请求
+                    });
+                });
+            });
+            #endregion
             //#region CAP 依赖ef选项，所以放abp配置下面
 
 

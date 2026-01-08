@@ -20,7 +20,7 @@ namespace ZLJ.Core.Configuration
             var sys = new SettingDefinitionGroup("sys", "系统".UtilsLI());
             var sys2 = new SettingDefinitionGroup(BXJGUtilsConsts.SettingKeyUploadGroup, "文件上传设置".UtilsLI());
             //  var shangchuang = new SettingDefinitionGroup(ZLJ.Core.Share.ZLJConsts.CfgKeyUpload, "文件上传设置".UtilsLI());
-            var list = new[]
+            var list = new List<SettingDefinition>
             {
                 new SettingDefinition(ZLJ.Core.Share.ZLJConsts.AppName,
                 "BXJGABP",
@@ -67,6 +67,27 @@ namespace ZLJ.Core.Configuration
                                       scopes: SettingScopes.All,
                                       isVisibleToClients: true)
             };
+            #region 全局速率限制
+            var slxz = new SettingDefinitionGroup("lptslxz", "全局令牌桶速率限制".UtilsLI());
+            list.Add(new SettingDefinition(ZLJ.Core.Share.ZLJConsts.TokenLimit,
+                "120",
+                ZLJ.Core.Share.ZLJConsts.TokenLimit.UtilsLI(),
+                group: slxz,
+                scopes: SettingScopes.Application,
+                isVisibleToClients: false));
+            list.Add(new SettingDefinition(ZLJ.Core.Share.ZLJConsts.TokensPerPeriod,
+                "8",
+                ZLJ.Core.Share.ZLJConsts.TokensPerPeriod.UtilsLI(),
+                group: slxz,
+                scopes: SettingScopes.Application,
+                isVisibleToClients: false));
+            list.Add(new SettingDefinition(ZLJ.Core.Share.ZLJConsts.ReplenishmentPeriod,
+                "10",
+                ZLJ.Core.Share.ZLJConsts.ReplenishmentPeriod.UtilsLI(),
+                group: slxz,
+                scopes: SettingScopes.Application,
+                isVisibleToClients: false));
+            #endregion
 
             return list;
             // return list.Union(GetTenantSettings());

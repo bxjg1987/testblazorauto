@@ -70,6 +70,11 @@
         //#endregion
         #endregion
 
+        #region 速率限制
+        public const string TokenLimit = "TokenLimit";
+        public const string TokensPerPeriod = "TokensPerPeriod";
+        public const string ReplenishmentPeriod = "ReplenishmentPeriod";
+        #endregion
         #region 版本特征
         public const string Feature_1 = "Feature_1";
         #endregion
