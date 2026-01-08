@@ -28,7 +28,7 @@
 
 
 	<ItemGroup>
-		<PackageReference Include="FastCloner" Version="3.3.22" />
+		<PackageReference Include="FastCloner" Version="3.3.23" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.*" />
 		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.*" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.*" />
