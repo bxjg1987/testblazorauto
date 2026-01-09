@@ -148,12 +148,21 @@
     {
         MainMenuCollapsed = !MainMenuCollapsed;
     }
-
+    [Inject]
+    public ModalService messageService { get; set; }
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         var zt = await AuthStateProvider.GetAuthenticationStateAsync();
         auth = zt != null && zt.User != default && zt.User.Identity.IsAuthenticated;
+        if (RendererInfo.Name.Contains("server", StringComparison.OrdinalIgnoreCase))
+        {
+            _ = messageService.WarningAsync(new ConfirmOptions
+            {
+                Title = "温馨提示",
+                Content = "首次访问系统时，后台会做初始化处理，此时界面临时卡顿属于正常情况，约1分钟后刷新页面即可。"
+            });
+        }
     }
     // [Inject]
     // public IJSRuntime JSRuntime { get; set; }
