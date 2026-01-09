@@ -12,8 +12,15 @@
                     <h1 class="hero-title">xxxx</h1>
                     <p class="hero-subtitle">xxxxxx</p>
                     <div class="hero-buttons">
-                        <a href="/regtenant" class="btn-primary" data-enhance-nav="false">立即注册</a>
-                        <a href="/main" class="btn-secondary" data-enhance-nav="false">已有账号？立即使用</a>
+                @if (!IsAuthenticated)
+                {
+                    <a href="/regtenant" class="btn-primary" data-enhance-nav="false">立即注册</a>
+                    <a href="/main" class="btn-secondary" data-enhance-nav="false">已有账号？立即登录</a>
+                }
+                else
+                {
+                    <a href="/main" class="btn-primary" data-enhance-nav="false">进入后台管理端</a>
+                }
                     </div>
                 </div>
                 <div class="hero-image-content">

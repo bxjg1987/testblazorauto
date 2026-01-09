@@ -52,4 +52,7 @@ namespace BXJG.Common.Contracts
             _isIdCached = true;
         }
     }
+    public class IdNameLong : IdName<long> { }
+    public class IdNameInt : IdName<int> { }
+    public class IdNameGuid : IdName<Guid> { }
 }

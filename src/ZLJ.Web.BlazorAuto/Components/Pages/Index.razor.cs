@@ -4,6 +4,8 @@ namespace ZLJ.Web.BlazorAuto.Components.Pages
     
     public partial class Index
     {
+        public bool IsAuthenticated { get; set; }
+
         [Inject]
         public NavigationManager NavigationManager { get; set; }
         [Inject]
@@ -17,9 +19,11 @@ namespace ZLJ.Web.BlazorAuto.Components.Pages
         {
             await base.OnInitializedAsync();
             var state = await this.AuthenticationStateProvider.GetAuthenticationStateAsync();
-            if (state?.User?.Identity!=null  &&state.User.Identity.IsAuthenticated) {
-                NavigationManager.NavigateTo("/main",true);
-            }
+            //if (state?.User?.Identity!=null  &&state.User.Identity.IsAuthenticated) {
+            //    NavigationManager.NavigateTo("/main",true);
+            //}
+            IsAuthenticated = state?.User?.Identity != null && state.User.Identity.IsAuthenticated;
+
         }
     }
 }
