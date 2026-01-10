@@ -118,6 +118,7 @@ namespace Microsoft.EntityFrameworkCore
             where T : GeneralTreeEntity<T>
         {
             entityTypeBuilder.HasIndex(c => c.Code);//.IsUnique();//多租户时，唯一索引有问题
+            entityTypeBuilder.HasIndex(c => c.Name);
             //entityTypeBuilder.HasIndex(c => c.TenantId);
             return entityTypeBuilder;
         }
