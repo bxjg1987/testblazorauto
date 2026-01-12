@@ -1,18 +1,5 @@
-export function afterWebStarted(blazor) {
-    console.log("afterWebStartedafterWebStartedafterWebStartedafterWebStartedafterWebStarted");
-    //hideLoadingDiv();
-}
-
-export function beforeWebStart(options) {
-    console.log("beforeWebStartbeforeWebStartbeforeWebStartbeforeWebStartbeforeWebStart");
-}
-
-
-export function afterWebAssemblyStarted(blazor) {
-    console.log("afterWebAssemblyStartedafterWebAssemblyStartedafterWebAssemblyStartedafterWebAssemblyStartedafterWebAssemblyStarted");
-  //  hideLoadingDiv();
-}
-
-export function beforeWebAssemblyStart(options) {
-    console.log("beforeWebAssemblyStartbeforeWebAssemblyStartbeforeWebAssemblyStartbeforeWebAssemblyStartbeforeWebAssemblyStart");
+export function onRuntimeConfigLoaded(config) {
+    console.log("onRuntimeConfigLoadedxx");
+    //.net10 bug https://github.com/dotnet/aspnetcore/issues/64009#issuecomment-3534259401
+    config.disableNoCacheFetch = true;
 }

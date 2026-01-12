@@ -141,6 +141,7 @@ else
 
 
 
+app.MapStaticAssets();//.ShortCircuit();
 
 app.UseRouting();
 app.UseAuthentication();
@@ -217,7 +218,6 @@ app.UseAuthentication();
 //});
 
 app.UseAuthorization();
-app.MapStaticAssets().ShortCircuit();
 app.UseAntiforgery();
 
 //×¢Ïú
