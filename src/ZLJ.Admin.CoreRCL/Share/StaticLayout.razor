@@ -95,24 +95,7 @@
     <script antblazor-js></script>
     <script src="@Assets["echarts.5.4.3.min.js"]"></script>
     <script type="module" src="@Assets["_content/Blazor.ECharts/core.js"]"></script>
-    @* <script>
-        //.net10 bug https://github.com/dotnet/aspnetcore/issues/64009#issuecomment-3534259401
-        (function() {
-            const originalFetch = window.fetch;
-            window.fetch = function(resource, options = {}) {
-                // Check if the resource is a .wasm file
-                const url = typeof resource === 'string' ? resource : resource.url;
-                if (url && url.toLowerCase().endsWith('.wasm')) {
-                    // Force cache mode for .wasm files
-                    options = {
-                        ...options,
-                        cache: 'force-cache'
-                    };
-                }
-                return originalFetch.call(this, resource, options);
-            };
-        })();
-    </script> *@
+   
     @* <script src="/app.js"></script> *@
 </SectionContent>
 @code {

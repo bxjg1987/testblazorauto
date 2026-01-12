@@ -2,6 +2,7 @@
 using Abp.Dependency;
 using Abp.EntityFrameworkCore;
 using Abp.Extensions;
+using Abp.Runtime.Security;
 using Abp.Zero.EntityFrameworkCore;
 using BXJG.Common;
 using BXJG.Common.Events;
@@ -250,14 +251,15 @@ namespace BXJG.Utils.EFCore.Settings
         ILogger logger;
         Func<DbContext> dbContextFactory;
         System.Threading.Timer reloadTimer;//
-         int interval = 1000 * Random.Shared.Next(30,120)*5;//setting默认使用缓存，群集共享redis时，可以错开
+        int interval = 1000 * Random.Shared.Next(30, 120) * 5;//setting默认使用缓存，群集共享redis时，可以错开
         public AbpSettingsConfigurationProvider(Func<DbContext> dbContextFactory, ILoggerFactory sdf = default)
         {
-            reloadTimer = new Timer(jc,null, interval, interval);
+            reloadTimer = new Timer(jc, null, interval, interval);
             this.logger = sdf?.CreateLogger(GetType()) ?? SimpleLogger.Instance;
             this.dbContextFactory = dbContextFactory;
         }
-        private void jc(object? state) {
+        private void jc(object? state)
+        {
             //logger.LogDebug($"AbpSettingsConfigurationProvider监控任务开始执行，当前配置提供器：{GetHashCode()}");
             try
             {
@@ -271,7 +273,7 @@ namespace BXJG.Utils.EFCore.Settings
                 //throw;
             }
         }
-      
+
         public override void Load()
         {
             // 开始的时候iocmanager还没初始化好，所以try下
@@ -280,16 +282,36 @@ namespace BXJG.Utils.EFCore.Settings
             {
                 IocManager.Instance.UsingScope(scope =>
                 {
-                    Data = scope.Resolve<ISettingManager>().GetAllSettingValues(SettingScopes.Application| SettingScopes.Tenant).ToDictionary(x => x.Name, x => x.Value, StringComparer.OrdinalIgnoreCase);
+                    Data = scope.Resolve<ISettingManager>().GetAllSettingValuesForApplication().ToDictionary(x => x.Name, x => x.Value, StringComparer.OrdinalIgnoreCase);
                 });
-                logger.LogDebug($"AbpSettingsConfigurationProvider从ISettingManager获取配置，数据{ string.Join(',', Data.Keys) }");
+                logger.LogDebug($"AbpSettingsConfigurationProvider从ISettingManager获取配置，数据{string.Join(',', Data.Keys)}");
             }
             catch
             {
+                List<Setting> settings;
                 using (var db = dbContextFactory.Invoke())
                 {
-                    Data = db.Set<Abp.Configuration.Setting>().AsNoTracking().Where(x => !x.TenantId.HasValue && !x.UserId.HasValue).ToDictionary(x => x.Name, x => x.Value, StringComparer.OrdinalIgnoreCase);
+                    settings = db.Set<Abp.Configuration.Setting>().AsNoTracking().Where(x => !x.TenantId.HasValue && !x.UserId.HasValue).ToList();
                 }
+                Data = settings.ToDictionary(
+                     x => x.Name,
+                     x =>
+                     {
+                         // 尝试解密加密的设置值
+                         try
+                         {
+                             return SimpleStringCipher.Instance.Decrypt(x.Value);
+                         }
+                         catch
+                         {
+                             // 如果解密失败，返回原始值（可能是未加密的值）
+                             return x.Value;
+                         }
+                     },
+                     StringComparer.OrdinalIgnoreCase
+                );
+
+
                 logger.LogDebug($"AbpSettingsConfigurationProvider从dbcontext获取配置，数量{Data.Count}");
             }
         }

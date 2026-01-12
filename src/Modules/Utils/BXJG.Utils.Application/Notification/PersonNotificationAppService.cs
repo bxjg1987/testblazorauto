@@ -162,7 +162,7 @@ namespace BXJG.Utils.Application.Notification
         [DisableAuditing]
         public virtual async Task<int> GetTotalAsync(GetTotalInput input)
         {
-            var query = GetQuery(input);
+            var query = await GetQuery(input);
             return await query.CountAsync(CancellationTokenProvider.Token);
         }
 
@@ -175,7 +175,7 @@ namespace BXJG.Utils.Application.Notification
         [DisableAuditing]
         public virtual async Task<Dictionary<string, int>> GetUnReadTotalGroupBySubscript(params string[] names)
         {
-            var query = GetQuery(new GetTotalInput { NotificationNames = names, UserNotificationState = UserNotificationState.Unread })
+            var query =(await  GetQuery(new GetTotalInput { NotificationNames = names, UserNotificationState = UserNotificationState.Unread }))
                 .GroupBy(c => new SubscriptNotifyItem { NotifyName = c.TenantNotificationInfo.NotificationName,
                     EntityTypeName = c.TenantNotificationInfo.EntityTypeName, 
                     EntityId = c.TenantNotificationInfo.EntityId }).Select(c => new { c.Key, ct = c.Count() });
@@ -196,7 +196,7 @@ namespace BXJG.Utils.Application.Notification
             //r.Items = await userNotificationManager.GetUserNotificationsAsync(u, input.UserNotificationState, input.SkipCount, input.MaxResultCount, input.StartTime, input.EndTime);
             //UserNotificationInfo
             var r = new PagedResultDto<MessageDto>();
-            var query = GetQuery(input);
+            var query =await GetQuery(input);
             r.TotalCount = await query.CountAsync(CancellationTokenProvider.Token);
             query = query.OrderBy(input.Sorting).PageBy(input);
 
@@ -205,12 +205,15 @@ namespace BXJG.Utils.Application.Notification
             return r;
         }
 
-        protected virtual IQueryable<temp> GetQuery(GetTotalInput input)
+        protected virtual async Task<IQueryable<temp>> GetQuery(GetTotalInput input)
         {
-            var query = from c in UserNotificationRepository.GetAll().AsNoTrackingWithIdentityResolution()
-                        join d in TenantNotificationRepository.GetAll().AsNoTrackingWithIdentityResolution() on c.TenantNotificationId equals d.Id into temp
+            var unrQ = await UserNotificationRepository.GetAllAsync();
+            var zhtzQ = await TenantNotificationRepository.GetAllAsync();
+            var yhq = await UserRepository.GetAllAsync();
+            var query = from c in unrQ.AsNoTrackingWithIdentityResolution()
+                        join d in zhtzQ.AsNoTrackingWithIdentityResolution() on c.TenantNotificationId equals d.Id into temp
                         from e in temp.DefaultIfEmpty()
-                        join f in UserRepository.GetAll().AsNoTrackingWithIdentityResolution() on e.CreatorUserId equals f.Id into ut
+                        join f in yhq.AsNoTrackingWithIdentityResolution() on e.CreatorUserId equals f.Id into ut
                         from g in ut.DefaultIfEmpty()
                         where c.UserId == AbpSession.UserId
                         select new temp { TenantNotificationInfo = e, UserNotificationInfo = c, CreateUserName = g.FullName };
