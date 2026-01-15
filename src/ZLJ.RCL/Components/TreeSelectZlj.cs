@@ -1,9 +1,14 @@
 ﻿using Abp.Extensions;
 using Abp.Reflection.Extensions;
 using AntDesign;
+using AutoMapper.Internal;
 using BXJG.Common.Contracts;
 using BXJG.Utils.Application.Share.GeneralTree;
+using BXJG.Utils.Application.Share.Session;
+using Castle.Core.Logging;
+using Microsoft.Extensions.Caching.Hybrid;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,7 +67,7 @@ namespace ZLJ.RCL.Components
         // 用于防止循环调用的标志位
         //private bool _updatingValueFromPropertySetter = false;
 
-        long? treeId;
+        long? treeId = null;
 
         [Parameter]
         public long TreeId
@@ -74,7 +79,7 @@ namespace ZLJ.RCL.Components
                 //if (long.TryParse(Value, out long result))
                 //    return result;
                 //return default;
-                return (long)treeId;
+                return treeId ?? default;
             }
             set
             {
@@ -357,9 +362,30 @@ namespace ZLJ.RCL.Components
         /// </summary>
         [Parameter]
         public EventCallback OnAsyncLoaded { get; set; }
+
+        [Inject]
+        public Task<GetCurrentLoginInformationsOutput> CurrentLoginInformations { get; set; }
+        [Inject]
+        public HybridCache memoryCache { get; set; }
+
+        [Inject]
+        public ILogger<TGetTreeForSelectOutput> Logger { get; set; }
         protected virtual async Task LoadDataSource()
         {
-            DataSource = await HttpClient.GetTreeForSelect<TGetTreeForSelectOutput>(new { ParentName });
+
+            var jg = await CurrentLoginInformations;
+            //Logger.LogWarning($"缓存实例:{memoryCache.GetHashCode()}");
+            //加租户，方式server模式时数据混乱
+            var cakey = jg.Tenant.Id + "_" + typeof(TGetTreeForSelectOutput).FullName;
+            DataSource = await memoryCache.GetOrCreateAsync(cakey, async ct =>
+            {
+                return await HttpClient.GetTreeForSelect<TGetTreeForSelectOutput>(new { ParentName });
+            });
+
+            Logger.LogWarning("数量：" + DataSource?.Count());
+
+
+
             parentName = ParentName;
 
             //DefaultValues = treeIds.Select(x=>x.ToString()); //DataSource.Select(d=>d.)
@@ -385,14 +411,16 @@ namespace ZLJ.RCL.Components
             //异步加载数据以后，开合下下拉框，否则后续的反射执行将无效
             const string sdfsf = "display:none;";
             DropdownStyle += sdfsf;
-            await OpenAsync();
+            if (_dropDown != null)
+                await OpenAsync();
             //Open = true;
             //StateHasChanged();
             //await Task.Delay(5000);
             // Open = false;
             //StateHasChanged();
             DropdownStyle = DropdownStyle.Replace(sdfsf, string.Empty);
-            await _dropDown.Close();
+            if (_dropDown != null)
+                await _dropDown.Close();
             // }
 
 

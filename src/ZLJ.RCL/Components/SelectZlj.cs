@@ -1,5 +1,8 @@
 ﻿using BXJG.Common.Contracts;
 using BXJG.Utils.Application.Share.Dtos;
+using BXJG.Utils.Application.Share.Session;
+using Microsoft.Extensions.Caching.Hybrid;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -7,6 +10,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using ZLJ.Application.Common.Share.Kehu;
@@ -143,34 +147,83 @@ namespace ZLJ.RCL.Components
             //   }
             // });
         }
+        [Inject]
+        public Task<GetCurrentLoginInformationsOutput> CurrentLoginInformations { get; set; }
+        [Inject]
+        public HybridCache memoryCache { get; set; }
         protected virtual async Task SearchCore(string? value = default)
         {
-            //不要判断，肯定是希望输入后查询满足最新关键字的，而不是出现之前的查询
-            //if (Loading)
-            //    return;
+            /*
+             * 新增或编辑弹窗中，因为各种原因导致同一个选择框短时间内被多次渲染
+             * 或者在一个列表中存在下拉框时，首次显示这个列表时，也会加载好多次后端数据
+             * 这里加个短时间的缓存，
+             * 
+             * 树形下拉框也要加
+             */
+            var jg = await CurrentLoginInformations;
+            //Logger.LogWarning($"缓存实例:{memoryCache.GetHashCode()}");
+            //加租户，方式server模式时数据混乱
+            var cakey = jg.Tenant.Id + "_" + typeof(TItem).FullName + "_" + value;
 
-            //Loading = true;
-            //await InvokeAsync(StateHasChanged);
-            //try
+            DataSource = await memoryCache.GetOrCreateAsync(cakey, async ct =>
+            {
+                dynamic tj = GetCondition();
+                try
+                {
+                    tj.Keywords = value;
+                }
+                catch { }
+
+                try
+                {
+                    tj.Id = Value;
+                }
+                catch (Exception ex)
+                {
+                    this.Logger.LogWarning(ex.Message);
+                }
+                var r = await HttpClient.GetAllProvider<TItem>(new { Filter = tj, MaxResultCount = value.IsNullOrWhiteSpaceBXJG() ? MaxCount : int.MaxValue });
+                return r.Items;
+            });
+
+            //效果不好，首次打开新增窗口时，还是会多次请求后端api，不过缓存还是有效的。
+            //if (memoryCache.TryGetValue<List<TItem>>(cakey, out var sdf))
             //{
-            dynamic tj = GetCondition();
-            try
-            {
-                tj.Keywords = value;
-            }
-            catch { }
+            //    DataSource = sdf;
+            //    //Logger.LogWarning($"缓存{cakey} 成功");
+            //}
+            //else
+            //{
 
-            try
-            {
-                tj.Id = Value;
-            }
-            catch (Exception ex)
-            {
-                this.Logger.LogWarning(ex.Message);
-            }
-            var r = await HttpClient.GetAllProvider<TItem>(new { Filter = tj, MaxResultCount = value.IsNullOrWhiteSpaceBXJG() ? MaxCount : int.MaxValue });
+            //    //不要判断，肯定是希望输入后查询满足最新关键字的，而不是出现之前的查询
+            //    //if (Loading)
+            //    //    return;
 
-            DataSource = r.Items;
+            //    //Loading = true;
+            //    //await InvokeAsync(StateHasChanged);
+            //    //try
+            //    //{
+            //    dynamic tj = GetCondition();
+            //    try
+            //    {
+            //        tj.Keywords = value;
+            //    }
+            //    catch { }
+
+            //    try
+            //    {
+            //        tj.Id = Value;
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        this.Logger.LogWarning(ex.Message);
+            //    }
+            //    var r = await HttpClient.GetAllProvider<TItem>(new { Filter = tj, MaxResultCount = value.IsNullOrWhiteSpaceBXJG() ? MaxCount : int.MaxValue });
+
+            //    DataSource = r.Items;
+            //    memoryCache.Set(cakey, r.Items.ToList(), TimeSpan.FromSeconds(10));
+            //    //Logger.LogWarning($"缓存{cakey} 失败");
+            //}
 
             //if (Value != null && !Value.Equals(default) && !Value.Equals(Guid.Empty) && !r.Items.Any(d => d.GetFieldOrPropertyValue("Id").Equals(Value)))
             //{

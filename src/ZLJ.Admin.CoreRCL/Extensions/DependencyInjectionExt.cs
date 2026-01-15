@@ -23,6 +23,13 @@ namespace Microsoft.Extensions.DependencyInjection
             var sdfsfd = SimpleLogger.Instance;
             sdfsfd.LogDebug("hulalalall");
 
+            services.AddHybridCache(opt => {
+                opt.DefaultEntryOptions = new Caching.Hybrid.HybridCacheEntryOptions
+                {
+                    Flags = Caching.Hybrid.HybridCacheEntryFlags.DisableDistributedCache,
+                    LocalCacheExpiration = TimeSpan.FromSeconds(10)
+                };
+            });
             services.AddECharts();
 
             BXJGHttpClientExt.DefaultFctory = f => f.CreateHttpClientAdmin();
