@@ -12,6 +12,7 @@ namespace BXJG.Utils.Application.Share.User
     /// </summary>
     public class UserGetAllCondition : IHaveKeywords
     {
+        public long? Id { get; set; }
         public string? Keywords { get; set; }
         public string? OuCode { get; set; }
 

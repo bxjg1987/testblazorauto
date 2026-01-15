@@ -159,22 +159,32 @@ namespace ZLJ.RCL.Components
                 tj.Keywords = value;
             }
             catch { }
+
+            try
+            {
+                tj.Id = Value;
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogWarning(ex.Message);
+            }
             var r = await HttpClient.GetAllProvider<TItem>(new { Filter = tj, MaxResultCount = value.IsNullOrWhiteSpaceBXJG() ? MaxCount : int.MaxValue });
 
             DataSource = r.Items;
-            if (Value != null && !Value.Equals(default) && !Value.Equals(Guid.Empty) && !r.Items.Any(d => d.GetFieldOrPropertyValue("Id").Equals(Value)))
-            {
-                if (!Value.Equals(curr?.GetFieldOrPropertyValue("Id")))
-                {
-                    var r1 = await HttpClient.GetProvider<TItem>(new { Id = Value });
-                    curr = r1;
-                }
-                // 直接在原列表上添加，避免不必要的复制
-                if (curr != null)
-                {
-                    DataSource = r.Items.Concat([curr]);
-                }
-            }
+
+            //if (Value != null && !Value.Equals(default) && !Value.Equals(Guid.Empty) && !r.Items.Any(d => d.GetFieldOrPropertyValue("Id").Equals(Value)))
+            //{
+            //    if (!Value.Equals(curr?.GetFieldOrPropertyValue("Id")))
+            //    {
+            //        var r1 = await HttpClient.GetProvider<TItem>(new { Id = Value });
+            //        curr = r1;
+            //    }
+            //    // 直接在原列表上添加，避免不必要的复制
+            //    if (curr != null)
+            //    {
+            //        DataSource = r.Items.Concat([curr]);
+            //    }
+            //}
             await OnParametersSetAsync();//经过测试，必须调用它，列表才会显示新的数据
                                          //}
                                          //finally

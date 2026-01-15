@@ -7,7 +7,7 @@ namespace ZLJ.Application.Common.Share.TestSimple
     ///</summary>
     public class TestSimpleProviderCondition: IHaveKeywords
     {
-
+        public long? Id { get; set; }
         /// <summary>
         /// 模糊搜索的关键字
         ///</summary>

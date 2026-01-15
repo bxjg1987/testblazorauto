@@ -8,7 +8,11 @@ using System.Threading.Tasks;
 namespace ZLJ.Application.Common.Share.Kehu
 {
     public class Condition:IHaveKeywords
-    {
+    {   /// <summary>
+        /// 客户Id
+        /// </summary>
+        public long? Id { get; set; }
+
         /// <summary>
         /// 客户级别，对应数据字典
         /// 20A、21B、22C级...

@@ -95,7 +95,7 @@ namespace ZLJ.Web.BlazorAuto.Auth
             {
                 state.PersistAsJson(nameof(UserInfo), new UserInfo
                 {
-                    Id = long.Parse(principal.FindFirstValue(nameof(AuthenticateResultModel.UserId)  ) ),
+                    Id = long.Parse(principal.FindFirstValue(nameof(AuthenticateResultModel.UserId))),
                     AccessToken = GetAccessToken(),
                     EncryptedAccessToken = GetEncryptedAccessToken(),
                     //UserId = userId,
@@ -128,7 +128,7 @@ namespace ZLJ.Web.BlazorAuto.Auth
             base.Dispose(disposing);
         }
 
-       
+
 
         public string GetAccessToken()
         {
@@ -139,9 +139,9 @@ namespace ZLJ.Web.BlazorAuto.Auth
                 return authenticationStateTask.Result.User.FindFirstValue(nameof(AuthenticateResultModel.AccessToken));
 
             //if (authenticationStateTask!=default &&authenticationStateTask.IsCompleted)
-                return httpContextAccessor.HttpContext.User.FindFirstValue(nameof(AuthenticateResultModel.AccessToken));
+            return httpContextAccessor?.HttpContext?.User?.FindFirstValue(nameof(AuthenticateResultModel.AccessToken));
 
-          //  return default;
+            //  return default;
             //    sdfsdf();
             //return accessToken;
         }
@@ -151,7 +151,7 @@ namespace ZLJ.Web.BlazorAuto.Auth
             if (authenticationStateTask != default && authenticationStateTask.IsCompletedSuccessfully)
                 return authenticationStateTask.Result.User.FindFirstValue(nameof(AuthenticateResultModel.EncryptedAccessToken));
 
-            return httpContextAccessor.HttpContext.User.FindFirstValue(nameof(AuthenticateResultModel.EncryptedAccessToken));
+            return httpContextAccessor?.HttpContext?.User?.FindFirstValue(nameof(AuthenticateResultModel.EncryptedAccessToken));
         }
     }
 }
