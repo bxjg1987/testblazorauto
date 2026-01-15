@@ -18,6 +18,12 @@ namespace @(Model.Model.ApplicationCommonShareNamespace)
     ///</summary>
     public partial class @(Model.Model.ProviderCondition)@(Model.Model.IsTree?" : GeneralTreeGetForSelectInput":"")@( Model.Model.ConditionStringFields.Any()?$"{(Model.Model.IsTree?',':':')} IHaveKeywords":"")
     {
+@if(!Model.Model.IsTree){<text>
+        /// <summary>
+        /// 编辑时传入原始id，以便下拉数据总是返回它的老数据
+        ///</summary>
+        public @(Model.Model.PrimaryField.CSharpType)? Id { get; set; }
+</text>}
 @if(Model.Model.ConditionStringFields.Any()){<text>
         /// <summary>
         /// 模糊搜索的关键字

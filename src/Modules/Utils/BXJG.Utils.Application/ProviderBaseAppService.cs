@@ -19,6 +19,7 @@ using Castle.Windsor.MsDependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -104,10 +105,50 @@ namespace BXJG.Utils.Application
             var totalCount = await AsyncQueryableExecuter.CountAsync(query);
 
             query = ApplySorting(query, input);
-                        Logger.Warn("反射设置id成功" + conditionId);
+
+            List<TEntity> entities = new List<TEntity>();
+            #region 处理查询条件中包含Id的情况
+            TKey? conditionId;
+            object conditionObj;
+            if (input is IHaveFilter f)
+            {
+                conditionObj = f.Filter;
+            }
+            else
+            {
+                conditionObj = input;
+            }
+            try
+            {
+                conditionId = conditionObj.GetFieldOrPropertyValue<TKey?>("Id");
+             
+                if (!EqualityComparer<TKey?>.Default.Equals(conditionId, default(TKey?)))
+                {
+            
+                    var dx = await (await GetById( conditionId)).FirstOrDefaultAsync(CancellationTokenProvider.Token);
+                    if (dx != default)
+                    {
+                        entities.Add(dx);
+
+                        if (input is ILimitedResultRequest k)
+                            k.MaxResultCount--;
+
+                        if (totalCount == 0)
+                            totalCount = 1;
+                        //Logger.Warn("反射设置id成功" + conditionId);
+                    }
+                }
+               
+            }
+            catch(Exception ex) {
+               Logger.Warn("反射设置id失败", ex);
+            }
+            #endregion
+
+
             query = ApplyPaging(query, input);
 
-            var entities = await AsyncQueryableExecuter.ToListAsync(query);
+             entities.AddRange( await AsyncQueryableExecuter.ToListAsync(query));
 
             return new PagedResultDto<TEntityDto>(
                 totalCount,
