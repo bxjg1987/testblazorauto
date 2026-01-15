@@ -104,6 +104,7 @@ namespace BXJG.Utils.Application
             var totalCount = await AsyncQueryableExecuter.CountAsync(query);
 
             query = ApplySorting(query, input);
+                        Logger.Warn("反射设置id成功" + conditionId);
             query = ApplyPaging(query, input);
 
             var entities = await AsyncQueryableExecuter.ToListAsync(query);
