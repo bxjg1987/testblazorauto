@@ -19,7 +19,7 @@
       "IsUnicode": false, // 是否为Unicode
       "IsSort": true, // 是否可排序
       "IsCondition": true, // 是否可作为条件查询
-      "IsConditionRange": true, // 是否可作为范围条件查询
+      "IsConditionRange": false, // 是否可作为范围条件查询
       "Width": null, // 显示宽度
       "FixedLeft": true, // 是否左冻结
       "Position": null, // 显示位置
