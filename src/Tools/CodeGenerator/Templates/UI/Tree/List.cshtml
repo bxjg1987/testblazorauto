@@ -86,7 +86,7 @@
     }
 }
         <PropertyColumn Property="c=>c.IsActive" ShowSorterTooltip="false"  Sortable Width="6rem"  Align="ColumnAlign.Center">
-            <Switch @bind-Value="@context.IsActive" Size="@InputSize.Small" Disabled></Switch>
+            <Switch @@bind-Value="@@context.IsActive" Size="@@InputSize.Small" Disabled></Switch>
         </PropertyColumn>
         <ActionColumn Title="操作" Width="240" Fixed="ColumnFixPlacement.Right" Align="ColumnAlign.Center">
             <span @@onclick:stopPropagation="true">

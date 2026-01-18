@@ -58,7 +58,7 @@
     }
     else
     {
-        <FormItem Label="@field.DisplayName">
+        <FormItem Label="名称">
             @@dto.DisplayName
         </FormItem>
 @foreach(var field in Model.Model.NormalFields)
@@ -74,9 +74,9 @@
             </span>
         </FormItem>
 }
-        </Form>
 
     }
+        </Form>
 </SectionContent>
 <SectionContent SectionName=@@($"{Master}-detail-update-btns")>
     @@if (IsShowDelete)
