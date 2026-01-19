@@ -23,7 +23,7 @@ namespace Abp.UI
         /// <param name="args"></param>
         /// <returns></returns>
         /// <exception cref="UserFriendlyException"></exception>
-        public static void Throw(string nameOrMsg, ILocalizationSource? localizationSource = default, params object[] args)
+        public static void Throw(string nameOrMsg, ILocalizationSource? localizationSource = default, params IEnumerable<object> args)
         {
             throw GetException(nameOrMsg, localizationSource, args);
         }
@@ -35,7 +35,7 @@ namespace Abp.UI
         /// <param name="localizationSource"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        public static UserFriendlyException GetException(string nameOrMsg, ILocalizationSource? localizationSource = default, params object[] args)
+        public static UserFriendlyException GetException(string nameOrMsg, ILocalizationSource? localizationSource = default, params IEnumerable<object> args)
         {
             //if(name.IsNullOrWhiteSpaceBXJG())
             //    throw new UserFriendlyException("异常信息不能为空");
