@@ -119,6 +119,12 @@ namespace BXJG.Utils.GeneralTree
         {
             //正常修改、节点移动、节点数量计算
 
+            //校验：父节点不能是节点自身
+            if (entity.ParentId.HasValue && entity.ParentId.Value == entity.Id)
+            {
+                throw new UserFriendlyException("父节点不能是当前节点自身");
+            }
+
             //var o = await repository.GetAsync(entity.Id);
             //o.ExtensionData = entity.ExtensionData;
             //o.DisplayName = entity.DisplayName;
