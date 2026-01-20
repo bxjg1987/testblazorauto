@@ -27,16 +27,29 @@ namespace ZLJ.Core
         public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; } = NullAsyncQueryableExecuter.Instance;
 
 
-        public Lazy<IRepository<StaffInfoEntity, long>> StaffRepository { get; set; }
+        //public Lazy<IRepository<StaffInfoEntity, long>> StaffRepository { get; set; }
+        public Lazy<UserManager> UserManager { get; set; }
+
         /// <summary>
         /// 获取当前员工（用户）
         /// </summary>
         /// <returns></returns>
         public async Task<StaffInfoEntity> GetCurrentStaffInfoUser()
         {
-            return await (await StaffRepository.Value.GetAllReadonlyAsync()).FirstAsync(x => x.Id == AbpSession.UserId, CancellationTokenProvider.Token);
+            return await UserManager.Value.FindByIdAsync(AbpSession.UserId?.ToString()) as StaffInfoEntity; //这个应该是有缓存的
+            //return await (await StaffRepository.Value.GetAllReadonlyAsync()).FirstAsync(x => x.Id == AbpSession.UserId, CancellationTokenProvider.Token);
         }
 
+        /// <summary>
+        /// 获取当前用户名称
+        /// </summary>
+        /// <returns></returns>
+        public async Task<string?> GetCurrentUserName()
+        {
+            var r = await UserManager.Value.FindByIdAsync(AbpSession.UserId?.ToString()); //这个应该是有缓存的
+            return r?.Name;
+            //return await (await StaffRepository.Value.GetAllReadonlyAsync()).FirstAsync(x => x.Id == AbpSession.UserId, CancellationTokenProvider.Token);
+        }
         public BXJGBaseInfoDomainServiceBase()
         {
             base.LocalizationSourceName = ZLJ.Core.Share.ZLJConsts.LocalizationSourceName;
