@@ -167,7 +167,7 @@ namespace BXJG.Utils.Files
 
                 newEntities.Add(entity);
             }
-
+            await CurrentUnitOfWork.SaveChangesAsync();
             return newEntities;
         }
         /// <summary>
@@ -185,6 +185,30 @@ namespace BXJG.Utils.Files
             var r = await AddAttachments(entityId, propertyName, propertyDisplayName, new List<SetAttachmentFile>() { file }, filePermission, permissionNames);
             return r.First();
         }
+
+        // 删除行为微信，不要批量传递entityIds，不好控制它与后面的fileIds关系
+
+        /// <summary>
+        /// 批量删除附件
+        /// </summary>
+        /// <param name="entityId">实体id</param>
+        /// <param name="propertyName">可选的属性名，若为空则删除实体所有属性的所有附件</param>
+        /// <param name="fileIds">文件id列表</param>
+        /// <returns></returns>
+        public async Task<List<AttachmentEntity>> DeleteAttachments(object entityId, string? propertyName = default, params IEnumerable<Guid> fileIds)
+        {
+            var oldEntities = await (await Repository.GetAllAsync())
+                                              .WhereAttachment(entityType, propertyName, true, entityId.ToString())
+                                              .WhereIf(fileIds != null && fileIds.Any(), x => fileIds.Contains(x.FileId))
+                                              .ToListAsync(CancellationTokenProvider.Token);
+            foreach (var entity in oldEntities)
+            {
+                await Repository.DeleteAsync(entity);
+            }
+            return oldEntities;
+        }
+
+
 
         //获取以仓储扩展方法提供
 
