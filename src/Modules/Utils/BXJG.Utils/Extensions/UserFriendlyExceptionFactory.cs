@@ -41,10 +41,10 @@ namespace Abp.UI
             //    throw new UserFriendlyException("异常信息不能为空");
 
             if (localizationSource != null)
-                return new UserFriendlyException(localizationSource.GetString(nameOrMsg, args));
+                return new UserFriendlyException(localizationSource.GetString(nameOrMsg, args.ToArray()));
 
             if (args != null && args.Any())
-                return new UserFriendlyException(string.Format(nameOrMsg, args));
+                return new UserFriendlyException(string.Format(nameOrMsg, args.ToArray()));
 
             return new UserFriendlyException(nameOrMsg);
         }
