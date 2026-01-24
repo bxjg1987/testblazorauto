@@ -202,8 +202,12 @@ table.jianjie th {
     min-height:32px;
 }
 .ant-collapse-content-box .frm-field-readonly {
-    background-color: #eee;
+    background-color: #eaeaea;
 }
 .ant-form-horizontal .ant-form-item-label .frm-item-label-box {
     padding: .4rem;
+}
+
+.ant-collapse-content:has(form) {
+    background-color: #f5f5f5; /* 示例背景色 */
 }
