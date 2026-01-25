@@ -98,7 +98,7 @@ namespace ZLJ.RCL.Components
         /// 若数据量大于此值，则开启远程搜索，否则仅在本地搜索
         /// </summary>
         [Parameter]
-        public int MaxCount { get; set; } = 5;
+        public int MaxCount { get; set; } = 100;
         [AbpExceptionInterceptor]
         protected override void OnInitialized()
         {
