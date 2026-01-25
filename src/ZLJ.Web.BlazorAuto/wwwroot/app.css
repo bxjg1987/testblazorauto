@@ -208,6 +208,7 @@ table.jianjie th {
     padding: .4rem;
 }
 
-.ant-collapse-content:has(form) {
+
+.ant-collapse-content:has(form), form .ant-collapse-content {
     background-color: #f5f5f5; /* 示例背景色 */
 }

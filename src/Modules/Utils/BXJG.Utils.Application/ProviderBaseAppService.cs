@@ -129,6 +129,7 @@ namespace BXJG.Utils.Application
                     if (dx != default)
                     {
                         entities.Add(dx);
+                        query = query.Where(x => !x.Id.Equals( conditionId));
 
                         if (input is ILimitedResultRequest k)
                             k.MaxResultCount--;
