@@ -1,6 +1,7 @@
 ﻿using BXJG.Common.Contracts;
 using BXJG.Utils.Application.Share.Dtos;
 using BXJG.Utils.Application.Share.Session;
+using Castle.Components.DictionaryAdapter;
 using Microsoft.Extensions.Caching.Hybrid;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
@@ -38,30 +39,35 @@ namespace ZLJ.RCL.Components
         /// </summary>
         [Inject]
         public IServiceProvider Services { get; set; }
-        /// <summary>
-        /// 初始数据，若数量小于MaxCount，则仅本地搜索
-        /// 一般列表渲染时，仅保留一行处于编辑状态，能提高渲染性能，所以通常没必要设置这个初始值
-        /// 除非一个组件中初始时要渲染大量下拉框
-        /// </summary>
-        [Parameter]
-        public IEnumerable<TItem> DataSourceInit { get; set; }
-
+        ///// <summary>
+        ///// 初始数据，若数量小于MaxCount，则仅本地搜索
+        ///// 一般列表渲染时，仅保留一行处于编辑状态，能提高渲染性能，所以通常没必要设置这个初始值
+        ///// 除非一个组件中初始时要渲染大量下拉框，不过当前组件内部已有缓存，也没必要提供此属性
+        ///// </summary>
+        //[Parameter]
+        //public IEnumerable<TItem> DataSourceInit { get; set; }
 
         public override async Task SetParametersAsync(ParameterView parameters)
         {
             //  var dic = parameters.ToDictionary();
 
             // 检查是否传入了DataSource参数，如果传入了就抛出异常
-            if (parameters.TryGetValue<IEnumerable<TItem>>(nameof(DataSource), out var ds))
-                throw new Exception("请设置DataSourceInit，而不是DataSource");
+            //if (parameters.TryGetValue<IEnumerable<TItem>>(nameof(DataSource), out var ds))
+            //    throw new Exception("请设置DataSourceInit，而不是DataSource");
+            //parameters.TryGetValue
+            //var pdic = parameters.ToDictionary();
 
             // 设置默认值（仅当参数未提供时）
             var hasEnableSearch = parameters.TryGetValue<bool>(nameof(EnableSearch), out var enableSearch);
             var hasAutoClearSearchValue = parameters.TryGetValue<bool>(nameof(AutoClearSearchValue), out var autoClearSearchValue);
             var hasEnableVirtualization = parameters.TryGetValue<bool>(nameof(EnableVirtualization), out var enableVirtualization);
 
+            outds = parameters.TryGetValue<IEnumerable<TItem>>(nameof(DataSource), out var _);
+
             // 调用父类方法，让父类处理参数设置
             await base.SetParametersAsync(parameters);
+
+
 
             // 仅当参数未提供时设置默认值
             if (!hasEnableSearch)
@@ -71,8 +77,11 @@ namespace ZLJ.RCL.Components
             if (!hasEnableVirtualization)
                 EnableVirtualization = true;
 
-
         }
+        /// <summary>
+        /// 外部是否直接传入了datasource
+        /// </summary>
+        bool outds = false;
 
         //protected override void OnParametersSet()
         //{
@@ -94,31 +103,56 @@ namespace ZLJ.RCL.Components
         protected override void OnInitialized()
         {
             Logger = LoggerFactory.CreateLogger(GetType());
+            //DataSource = DataSourceInit;
+
+
+
             if (ValueName.IsNullOrWhiteSpaceBXJG())
                 ValueName = "Id";
 
             if (LabelName.IsNullOrWhiteSpaceBXJG())
                 LabelName = "Name";
-            DataSource = DataSourceInit;
-
             //上面的id和名称必须先设置，否则报错
 
             base.OnInitialized();
         }
-
         [AbpExceptionInterceptor]
         protected override async Task OnInitializedAsync()
         {
+            await base.OnInitializedAsync();
             if (DataSource == null || DataSource.Any() == false)
             {
                 await SearchCore();
             }
-
-            if (EnableSearch && OnSearch == null && DataSource.Count() >= MaxCount)
-                OnSearch = Search;// Search;
-
-            await base.OnInitializedAsync();
         }
+
+        [AbpExceptionInterceptor]
+        protected override void OnParametersSet()
+        {
+            base.OnParametersSet();
+
+
+
+            if (EnableSearch && OnSearch == null && (!outds /*|| DataSource.Count() >= MaxCount*/))
+                OnSearch = Search;// Search;
+        }
+
+        /// <summary>
+        /// 缓存clone的条件数据，以便对比条件是否有变化
+        /// </summary>
+        object _condtionCache = tmp;
+        [AbpExceptionInterceptor]
+        protected override async Task OnParametersSetAsync()
+        {
+            //await base.OnParametersSetAsync();
+
+            if (!_condtionCache.Equals(Condtion))
+            {
+                _condtionCache = (Condtion as object).DeepClone();
+                await SearchCore();
+            }
+        }
+
         //protected virtual ValueTask LocalInit(ParameterView parameters)
         //{
         //    return ValueTask.CompletedTask;
@@ -133,12 +167,20 @@ namespace ZLJ.RCL.Components
 
         //    public 
         // [AbpExceptionInterceptor]
+
+        /// <summary>
+        /// 允许组件使用方主动调用重新加载数据
+        /// </summary>
+        /// <param name="val"></param>
         public void Search(string val)
         {
             //  Task.Run(async () =>
             // {
             //    try
             //  {
+            //  var cakey = BuildCacheKey(val, Condtion);
+            //_=  memoryCache.RemoveAsync(cakey);
+
             _ = SearchCore(val);
             //  }
             //   catch (Exception ex)
@@ -151,6 +193,9 @@ namespace ZLJ.RCL.Components
         public Task<GetCurrentLoginInformationsOutput> CurrentLoginInformations { get; set; }
         [Inject]
         public HybridCache memoryCache { get; set; }
+
+
+
         protected virtual async Task SearchCore(string? value = default)
         {
             /*
@@ -161,13 +206,13 @@ namespace ZLJ.RCL.Components
              * 树形下拉框也要加
              */
             var jg = await CurrentLoginInformations;
+            var conditionHash = Condtion.GetHashCode();
+            string cakey = value + "_" + "_" + conditionHash + jg!.Tenant.Id + "_" + typeof(TItem).FullName;
             //Logger.LogWarning($"缓存实例:{memoryCache.GetHashCode()}");
             //加租户，方式server模式时数据混乱
-            var cakey = jg.Tenant.Id + "_" + typeof(TItem).FullName + "_" + value;
-
             DataSource = await memoryCache.GetOrCreateAsync(cakey, async ct =>
             {
-                dynamic tj = GetCondition();
+                dynamic tj = Condtion;
                 try
                 {
                     tj.Keywords = value;
@@ -238,38 +283,28 @@ namespace ZLJ.RCL.Components
             //        DataSource = r.Items.Concat([curr]);
             //    }
             //}
-            await OnParametersSetAsync();//经过测试，必须调用它，列表才会显示新的数据
-                                         //}
-                                         //finally
-                                         //{
-                                         //    Loading = false;
-                                         //}
-                                         // 统一在所有状态更新后调用，确保组件正确渲染
-                                         // await OnParametersSetAsync();//经过测试，必须调用它，列表才会显示新的数据
-                                         // 调用父类的SetClassMap方法重新计算CSS类，确保Loading状态正确更新
-                                         //await InvokeAsync(() => {
-                                         //    // 反射调用父类的SetClassMap方法
-                                         //    var method = typeof(Select<TItemValue, TItem>).GetMethod("SetClassMap", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-                                         //    method?.Invoke(this, null);
-                                         //    StateHasChanged();
-                                         //});
+            await base.OnParametersSetAsync();//经过测试，必须调用它，列表才会显示新的数据
+                                              //}
+                                              //finally
+                                              //{
+                                              //    Loading = false;
+                                              //}
+                                              // 统一在所有状态更新后调用，确保组件正确渲染
+                                              // await OnParametersSetAsync();//经过测试，必须调用它，列表才会显示新的数据
+                                              // 调用父类的SetClassMap方法重新计算CSS类，确保Loading状态正确更新
+                                              //await InvokeAsync(() => {
+                                              //    // 反射调用父类的SetClassMap方法
+                                              //    var method = typeof(Select<TItemValue, TItem>).GetMethod("SetClassMap", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                                              //    method?.Invoke(this, null);
+                                              //    StateHasChanged();
+                                              //});
         }
-        TItem curr;
 
-        protected virtual dynamic GetCondition()
-        {
-            return new ExpandoObject();
-        }
-    }
-    public class SelectZlj<TItemValue, TItem, TCondtion> : SelectZlj<TItemValue, TItem> where TCondtion : new()
-    {
-
+        protected static readonly dynamic tmp = new ExpandoObject();
+        // TItem curr;
         [Parameter]
-        public virtual TCondtion Condtion { get; set; } = new TCondtion();
-        protected override dynamic GetCondition()
-        {
-            return Condtion;
-        }
+        public virtual dynamic Condtion { get; set; } = tmp;
+
     }
 
     //下面的有点过度封装了
