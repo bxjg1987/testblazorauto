@@ -1,0 +1,85 @@
+@using BXJG.Utils.RCL.Helpers
+@using AntDesign
+@inject FileHelper FileHelper
+
+@if (FileIds != null && FileIds.Count > 0)
+{
+    @if (FileIds.Count == 1)
+    {
+        <Image Width="@Width"
+               Src="@FileHelper.BuildDownloadUrlThum(FileIds[0])"
+               PreviewSrc="@FileHelper.BuildDownloadUrl(FileIds[0])"
+               Preview="@Preview" />
+    }
+    else if (IsMultiple)
+    {
+       <ImagePreviewGroup @bind-PreviewVisible="previewVisible">
+            @foreach (var fileId in FileIds)
+            {
+                <Image Width="@Width"
+                       Src="@FileHelper.BuildDownloadUrlThum(fileId)"
+                       PreviewSrc="@FileHelper.BuildDownloadUrl(fileId)"
+                       Preview="@Preview" />
+            }
+        </ImagePreviewGroup>
+    }
+    else
+    {
+        <Image PreviewVisible="false"
+        Width="@Width"
+        Src="@FileHelper.BuildDownloadUrlThum(FileIds[0])"
+        Preview="@Preview"
+        OnClick="@OnImageClick" />
+        <div style="display:none;">
+            @if (shouldRenderPreviewImages)
+            {
+                <ImagePreviewGroup @bind-PreviewVisible="previewVisible">
+
+                    @foreach (var fileId in FileIds)
+                    {
+                        <Image Src="@FileHelper.BuildDownloadUrl(fileId)" />
+                    }
+                </ImagePreviewGroup>
+            }
+
+        </div>
+    }
+}
+
+@code {
+
+    /// <summary>
+    /// 多图模式
+    /// true使用多图模式 false使用相册模式
+    /// </summary>
+    [Parameter]
+    public bool IsMultiple { get; set; } = false;
+
+
+
+    [Parameter]
+    public List<Guid> FileIds { get; set; } = new();
+
+    [Parameter]
+    public string? Width { get; set; }
+
+    [Parameter]
+    public bool Preview { get; set; } = true;
+
+
+
+    private bool previewVisible;
+    private bool shouldRenderPreviewImages;
+
+    private async Task OnImageClick(MouseEventArgs args)
+    {
+
+        shouldRenderPreviewImages = true;
+
+
+
+        await Task.Delay(1);
+        previewVisible = true;
+
+    }
+}
