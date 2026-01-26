@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -17,6 +17,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BXJG.Utils.RCL\BXJG.Utils.RCL.csproj" />
+    <ProjectReference Include="..\BXJG.Utils.Application.Share\BXJG.Utils.Application.Share.csproj" />
+    <ProjectReference Include="..\..\..\Libs\BXJG.Common.RCL\BXJG.Common.RCL.csproj" />
   </ItemGroup>
 
 </Project>

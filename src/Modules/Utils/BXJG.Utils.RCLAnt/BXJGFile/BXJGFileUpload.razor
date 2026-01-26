@@ -1,0 +1,163 @@
+@using AntDesign
+@using BXJG.Utils.Share.Files
+@using BXJG.Utils.RCL.Helpers
+@using BXJG.Utils.RCLAnt.BXJGFile
+@using System.Text.Json
+@using Microsoft.Extensions.Configuration
+@using BXJG.Common.Http
+@using System.Threading
+
+@inject FileHelper FileHelper
+@inject IAccessTokenProvider AccessTokenProvider
+@inject IConfiguration Configuration
+@inject MessageService MessageService
+
+<Upload Action="@uploadAction"
+        Name="file"
+        ShowUploadList="true"
+        ShowDownloadIcon="true"
+        ShowPreviewIcon="true"
+        ShowRemoveIcon="true"
+        @bind-FileList="fileList"
+        ShowButton="fileList?.Count < MaxCount"
+        ListType="UploadListType.PictureCard"
+        BeforeAllUploadAsync="BeforeAllUploadAsync"
+        OnPreview="HandlePreview"
+        OnSingleCompleted="HandleSingleCompleted"
+        OnRemove="HandleRemove"
+        Multiple="@Multiple"
+        Headers="uploadHeaders">
+    <div>
+        <Icon Type="@IconType.Outline.Plus" />
+        <div Class="ant-upload-text">上传文件</div>
+    </div>
+</Upload>
+
+<BXJGImagePreview FileTempPaths="imageTempPaths" IsShow="false" @bind-PreviewVisible="previewVisible" />
+
+@code {
+    [Parameter]
+    public List<SetAttachmentFile> Images { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<List<SetAttachmentFile>> ImagesChanged { get; set; }
+
+    [Parameter]
+    public int MaxCount { get; set; } = 3;
+
+    [Parameter]
+    public bool Multiple { get; set; } = true;
+
+    /// <summary>
+    /// 选择文件后，所有文件上传前触发一次
+    /// </summary>
+    [Parameter]
+    public EventCallback<bool> OnUploadingChanged { get; set; }
+
+    private List<UploadFileItem> fileList = new();
+    private List<string> imageTempPaths =>Images==null?new(): Images.Where(x=>x.TempPath.IsNotNullOrWhiteSpaceBXJG()).Select(d => d.TempPath).ToList();
+    private bool previewVisible = false;
+    private Dictionary<string, string> uploadHeaders = new();
+    private string uploadAction = string.Empty;
+    private int uploadingFileCount = 0;
+
+    protected override void OnInitialized()
+    {
+        var token = AccessTokenProvider.GetAccessToken();
+        if (!string.IsNullOrWhiteSpace(token))
+        {
+            uploadHeaders["Authorization"] = $"Bearer {token}";
+        }
+
+        var serverRootAddress = Configuration["App:ServerRootAddress"]?.TrimEnd('/');
+        if (!string.IsNullOrWhiteSpace(serverRootAddress))
+        {
+            uploadAction = $"{serverRootAddress}/api/BXJGFile/Upload";
+        }
+    }
+
+    protected async Task<bool> BeforeAllUploadAsync(List<UploadFileItem> files)
+    {
+        var existingImageCount = fileList?.Count ?? 0;
+        var totalCount = existingImageCount + files.Count;
+
+        if (totalCount > MaxCount)
+        {
+            MessageService.Warning($"最多只能上传{MaxCount}个文件,当前已有{existingImageCount}个,还能上传{MaxCount - existingImageCount}个");
+            return false;
+        }
+
+        await OnUploadingChanged.InvokeAsync(true);
+        uploadingFileCount = files.Count;
+        return true;
+    }
+
+    protected async Task HandleSingleCompleted(UploadInfo fileinfo)
+    {
+        if (fileinfo.File.State == UploadState.Success && fileinfo.File.Response != null)
+        {
+            try
+            {
+                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                var response = JsonSerializer.Deserialize<UploadResponse>(fileinfo.File.Response.ToString(), options);
+                if (response != null && response.Success && response.Result != null)
+                {
+                    fileinfo.File.Url = fileinfo.File.ObjectURL;
+
+                    var attachmentFile = new SetAttachmentFile
+                    {
+                        FileName = response.Result.FileName,
+                        TempPath = response.Result.TempPath
+                    };
+
+                    // if (response.Result.TempPath != null)
+                    // {
+                    //     imageTempPaths.Add(response.Result.TempPath);
+                    // }
+
+                    Images ??= new List<SetAttachmentFile>();
+                    Images.Add(attachmentFile);
+                    await ImagesChanged.InvokeAsync(Images);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageService.Error($"添加文件失败: {ex.Message}");
+            }
+        }
+
+        Interlocked.Decrement(ref uploadingFileCount);
+
+        if (Interlocked.CompareExchange(ref uploadingFileCount, 0, 0) == 0)
+        {
+            await OnUploadingChanged.InvokeAsync(false);
+        }
+    }
+
+    async Task<bool> HandleRemove(UploadFileItem file)
+    {
+        if (Images != null)
+        {
+            var imageToRemove = Images.FirstOrDefault(img =>
+                img.FileName == file.FileName && img.TempPath != null);
+            if (imageToRemove != null)
+            {
+                Images.Remove(imageToRemove);
+
+                // if (imageToRemove.TempPath != null)
+                // {
+                //     imageTempPaths.Remove(imageToRemove.TempPath);
+                // }
+
+                await ImagesChanged.InvokeAsync(Images);
+            }
+        }
+
+        return true;
+    }
+
+    void HandlePreview(UploadFileItem file)
+    {
+        previewVisible = true;
+    }
+}
