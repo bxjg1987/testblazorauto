@@ -2,51 +2,106 @@
 @using AntDesign
 @inject FileHelper FileHelper
 
-@if (FileIds != null && FileIds.Count > 0)
-{
-    @if (FileIds.Count == 1)
+ @if (IsMultiple)
     {
-        <Image Width="@Width"
-               Src="@FileHelper.BuildDownloadUrlThum(FileIds[0])"
-               PreviewSrc="@FileHelper.BuildDownloadUrl(FileIds[0])"
-               Preview="@Preview" />
+        <div style=@(IsShow ? "" : "display: none;")>
+            <ImagePreviewGroup @bind-PreviewVisible="PreviewVisible">
+                @if(FileIds!=null)
+                { 
+                    foreach (var fileId in FileIds)
+                    {
+                        <Image Width="@Width"
+                        Src="@FileHelper.BuildDownloadUrlThum(fileId)"
+                        PreviewSrc="@FileHelper.BuildDownloadUrl(fileId)"
+                        Preview="@Preview" />
+                    }
+                }
+                @if(FileTempPaths!=null)
+                { 
+                    @foreach (var fileId in FileTempPaths)
+                    {
+                        <Image Width="@Width"
+                        Src="@FileHelper.BuildTempFileUrl(fileId)"
+                        Preview="@Preview" />
+                    }
+                }
+            </ImagePreviewGroup>
+        </div>
     }
-    else if (IsMultiple)
+    else if (IsShow)
     {
-       <ImagePreviewGroup @bind-PreviewVisible="previewVisible">
-            @foreach (var fileId in FileIds)
-            {
-                <Image Width="@Width"
-                       Src="@FileHelper.BuildDownloadUrlThum(fileId)"
-                       PreviewSrc="@FileHelper.BuildDownloadUrl(fileId)"
-                       Preview="@Preview" />
-            }
-        </ImagePreviewGroup>
-    }
-    else
-    {
-        <Image PreviewVisible="false"
-        Width="@Width"
-        Src="@FileHelper.BuildDownloadUrlThum(FileIds[0])"
-        Preview="@Preview"
-        OnClick="@OnImageClick" />
+        if (FileIds != null && FileIds.Any())
+        {
+            <Image PreviewVisible="false"
+            Width="@Width"
+            Src="@FileHelper.BuildDownloadUrlThum(FileIds[0])"
+            Preview="@Preview"
+            OnClick="@OnImageClick" />
+        }
+        else if (FileTempPaths!=null&& FileTempPaths.Any())
+        {
+            <Image PreviewVisible="false"
+            Width="@Width"
+            Src="@FileHelper.BuildTempFileUrl(FileTempPaths[0])"
+            Preview="@Preview"
+            OnClick="@OnImageClick" />
+        }
+
         <div style="display:none;">
             @if (shouldRenderPreviewImages)
             {
-                <ImagePreviewGroup @bind-PreviewVisible="previewVisible">
-
-                    @foreach (var fileId in FileIds)
+                <ImagePreviewGroup @bind-PreviewVisible="PreviewVisible">
+                    @if (FileIds != null && FileIds.Any())
                     {
-                        <Image Src="@FileHelper.BuildDownloadUrl(fileId)" />
+                                @foreach (var fileId in FileIds)
+                                {
+                                    <Image Src="@FileHelper.BuildDownloadUrlThum(fileId)"
+                                            PreviewSrc="@FileHelper.BuildDownloadUrl(fileId)" />
+                                }
+                    }
+                    @if (FileTempPaths!=null&& FileTempPaths.Any())
+                    {
+                                @foreach (var fileId in FileTempPaths)
+                                {
+                                    <Image Src="@FileHelper.BuildTempFileUrl(fileId)" />
+                                }
                     }
                 </ImagePreviewGroup>
             }
-
         </div>
     }
-}
+    else
+    {
+    <div style="display: none;">
+            <ImagePreviewGroup PreviewVisible="PreviewVisible" PreviewVisibleChanged="PreviewVisibleChanged">
+            @if (FileIds != null && FileIds.Any())
+            {
+                @foreach (var fileId in FileIds)
+                {
+                    <Image Width="@Width"
+                    Src="@FileHelper.BuildDownloadUrlThum(fileId)"
+                    PreviewSrc="@FileHelper.BuildDownloadUrl(fileId)"
+                    Preview="@Preview" />
+                }
+
+            }
+            @if (FileTempPaths!=null&& FileTempPaths.Any())
+            {
+                @foreach (var fileId in FileTempPaths)
+                {
+                    <Image Width="@Width"
+                    Src="@FileHelper.BuildTempFileUrl(fileId)"
+                    PreviewSrc="@FileHelper.BuildTempFileUrl(fileId)"
+                    Preview="@Preview" />
+                }
+            }
+        </ImagePreviewGroup>
+        </div>
+    }
 
 @code {
+
+  
 
     /// <summary>
     /// 多图模式
@@ -55,10 +110,19 @@
     [Parameter]
     public bool IsMultiple { get; set; } = false;
 
-
+    /// <summary>
+    /// 未进入预览时的图片是否显示
+    /// 参考 https://antblazor.com/zh-CN/components/image#components-image-demo-controlled-preview 
+    /// </summary>
+    [Parameter]
+    public bool IsShow { get; set; } = true;
 
     [Parameter]
     public List<Guid> FileIds { get; set; } = new();
+
+    [Parameter]
+    public List<string> FileTempPaths { get; set; } = new();
+
 
     [Parameter]
     public string? Width { get; set; }
@@ -67,8 +131,13 @@
     public bool Preview { get; set; } = true;
 
 
+    [Parameter]
+    public bool PreviewVisible { get; set; }
 
-    private bool previewVisible;
+    [Parameter]
+    public EventCallback<bool> PreviewVisibleChanged { get; set; }
+
+
     private bool shouldRenderPreviewImages;
 
     private async Task OnImageClick(MouseEventArgs args)
@@ -79,7 +148,7 @@
 
 
         await Task.Delay(1);
-        previewVisible = true;
+        PreviewVisible = true;
 
     }
 }

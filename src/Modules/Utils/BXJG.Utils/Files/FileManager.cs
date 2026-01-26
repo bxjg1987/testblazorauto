@@ -1,33 +1,34 @@
-﻿using Abp.Dependency;
-using Abp.Domain.Services;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.VisualBasic;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Threading;
-using BXJG.Common;
+using Abp;
+using Abp.BackgroundJobs;
 using Abp.Configuration;
-using Abp.Threading.Extensions;
-using System.Linq;
-using Abp.UI;
-using HeyRed.Mime;
-using Abp.Threading;
+using Abp.Dependency;
+using Abp.Domain.Repositories;
+using Abp.Domain.Services;
 //using System.Drawing;
 using Abp.Extensions;
-using System.Text.RegularExpressions;
-using BXJG.Utils.Share.Files;
-using BXJG.Utils.Share;
-using Abp;
-using Abp.Domain.Repositories;
-using Microsoft.EntityFrameworkCore.ValueGeneration;
-using Abp.Timing;
+using Abp.Runtime.Security;
 using Abp.Runtime.Session;
-using Abp.BackgroundJobs;
-using Microsoft.Extensions.Logging;
+using Abp.Threading;
+using Abp.Threading.Extensions;
+using Abp.Timing;
+using Abp.UI;
+using BXJG.Common;
+using BXJG.Utils.Share;
+using BXJG.Utils.Share.Files;
+using HeyRed.Mime;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ValueGeneration;
+using Microsoft.Extensions.Logging;
+using Microsoft.VisualBasic;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 namespace BXJG.Utils.Files
 {
 
@@ -130,8 +131,18 @@ namespace BXJG.Utils.Files
             }
             #endregion
 
-            return AbsoluteToRelativePath(absolutePath);
+            return SimpleStringCipher.Instance.Encrypt( AbsoluteToRelativePath(absolutePath));
             //  return absolutePath;
+        }
+        /// <summary>
+        /// 根据加密的临时文件路径获取临时文件的物理绝对路径
+        /// </summary>
+        /// <param name="encryptedTempPath">加密的临时文件相对路径</param>
+        /// <returns>临时文件的物理绝对路径</returns>
+        public virtual string GetTempFileAbsolutePath(string encryptedTempPath)
+        {
+            var decryptedRelativePath = SimpleStringCipher.Instance.Decrypt(encryptedTempPath);
+            return RelativeToAbsolutePath(decryptedRelativePath);
         }
         /// <summary>
         /// 将文件存储到正式目录并做数据库记录
@@ -143,7 +154,10 @@ namespace BXJG.Utils.Files
         /// <returns></returns>
         public virtual async Task<FileEntity> Upload(string fileName, string tempFileRelativePath, FilePermission filePermission, string? permissionNames = null)
         {
-            var file = await AddFileRecord(fileName, tempFileRelativePath,filePermission,permissionNames);
+           
+                tempFileRelativePath = SimpleStringCipher.Instance.Decrypt(tempFileRelativePath);
+         
+            var file = await AddFileRecord(fileName, tempFileRelativePath, filePermission,permissionNames);
             await CurrentUnitOfWork.SaveChangesAsync(); //数据库操作成功时才移动文件
             Move(tempFileRelativePath, file);
             return file;

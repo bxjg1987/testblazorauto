@@ -1,14 +1,16 @@
-﻿using Abp.Application.Services.Dto;
+using Abp.Application.Services.Dto;
 using Abp.AspNetCore.Mvc.Controllers;
 using Abp.Auditing;
 using Abp.Authorization;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
+using Abp.Runtime.Security;
 using Abp.Runtime.Session;
 using BXJG.Utils.Application.Share.Files;
 using BXJG.Utils.Extensions;
 using BXJG.Utils.Files;
 using BXJG.Utils.Share;
+using HeyRed.Mime;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace BXJG.Utils.Web.Controllers
@@ -69,8 +72,8 @@ namespace BXJG.Utils.Web.Controllers
             using var fs = file.OpenReadStream();
 
             var r = await fileManager.Value.UploadToTemp(fs);
-
-            return new UploadTempFileDto { Name = file.FileName, Path = r };
+            
+            return new UploadTempFileDto { Name = file.FileName, Path = Uri.EscapeDataString( r) };
             //return ObjectMapper.Map<List<FileDto>>(r);
             //return r.Select(c => new FileDto
             //{
@@ -79,6 +82,31 @@ namespace BXJG.Utils.Web.Controllers
             //    FileUrl = c.FileUrl,
             //    ThumUrl = c.ThumUrl
             //}).ToList();
+        }
+
+        /// <summary>
+        /// 通过加密的临时目录相对路径获取临时文件
+        /// </summary>
+        /// <param name="encryptedPath">加密的临时文件相对路径</param>
+        /// <returns>文件响应</returns>
+        [HttpGet]
+        [Route("{encryptedPath}")]
+        [UnitOfWork(false)]
+        public virtual IActionResult GetTempFile(string encryptedPath)
+        {
+            // 前端对路径进行了URL编码，这里需要先解码
+            var decodedPath = Uri.UnescapeDataString(encryptedPath);
+
+          
+            var absolutePath = fileManager.Value.GetTempFileAbsolutePath(decodedPath);
+            
+            if (!System.IO.File.Exists(absolutePath))
+            {
+                return NotFound();
+            }
+
+            var contentType = MimeGuesser.GuessMimeType(absolutePath);
+            return PhysicalFile(absolutePath, contentType);
         }
 
         //此逻辑比较简单，下载文件必须要controller，若把controller看成是应用服务平级的话

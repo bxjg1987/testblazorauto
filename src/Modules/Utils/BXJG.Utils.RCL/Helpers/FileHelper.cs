@@ -1,9 +1,10 @@
-﻿using Abp.Dependency;
+using Abp.Dependency;
 using BXJG.Common.Http;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -39,6 +40,15 @@ namespace BXJG.Utils.RCL.Helpers
         public string BuildDownloadUrlThum(Guid id)
         {
             return Configuration["App:ServerRootAddress"].TrimEnd('/') + "/api/bxjgfile/DownloadThum/" + id + "?access_token=" + HttpUtility.UrlEncode(accessTokenProvider.GetEncryptedAccessToken());
+        }
+        /// <summary>
+        /// 生成临时文件的访问URL
+        /// </summary>
+        /// <param name="encryptedPath">加密的临时文件相对路径</param>
+        /// <returns>临时文件的完整访问URL</returns>
+        public string BuildTempFileUrl(string encryptedPath)
+        {
+            return Configuration["App:ServerRootAddress"].TrimEnd('/') + "/api/BXJGFile/GetTempFile/" + encryptedPath+ "?access_token=" + WebUtility.UrlEncode(accessTokenProvider.GetEncryptedAccessToken());
         }
     }
 }
