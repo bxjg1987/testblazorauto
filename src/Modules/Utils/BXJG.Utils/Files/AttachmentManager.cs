@@ -164,7 +164,7 @@ namespace BXJG.Utils.Files
                     PropertyDisplayName = propertyDisplayName ?? propertyName,
                 };
                 await Repository.InsertAsync(entity);
-
+                file.FileId = f.Id;
                 newEntities.Add(entity);
             }
             await CurrentUnitOfWork.SaveChangesAsync();

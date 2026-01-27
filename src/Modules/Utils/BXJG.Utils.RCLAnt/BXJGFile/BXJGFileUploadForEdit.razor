@@ -1,0 +1,253 @@
+@using AntDesign
+@using BXJG.Utils.Share.Files
+@using BXJG.Utils.RCL.Helpers
+@using BXJG.Utils.RCLAnt.BXJGFile
+@using System.Text.Json
+@using Microsoft.Extensions.Configuration
+@using BXJG.Common.Http
+@using System.Threading
+@using BXJG.Common.Contracts
+@using BXJG.Utils.RCL.Components
+
+@inject FileHelper FileHelper
+@inject IAccessTokenProvider AccessTokenProvider
+@inject IConfiguration Configuration
+@inject MessageService MessageService
+
+@inherits BaseComponent
+
+<div style="display: flex; flex-wrap: wrap; gap: 8px;">
+    @if (Files!=null)
+    {
+        @foreach (var file in Files)
+        {
+            <div style="position: relative; width: 104px; height: 104px;">
+                <div style="width: 104px; height: 104px; border-radius: 4px; overflow: hidden; cursor: pointer;" @onclick="OpenFilePreview">
+                    @if (file.FileId != null)
+                    {
+                        <img src="@FileHelper.BuildDownloadUrlThum(file.FileId.Value)"
+                        style="width: 100%; height: 100%; object-fit: cover;"
+                             alt="@file.FileName" title="@file.FileName" />
+                    }
+                    else if (file.TempPath != null)
+                    {
+                        <img src="@FileHelper.BuildTempFileUrl(file.TempPath)"
+                        style="width: 100%; height: 100%; object-fit: cover;"
+                             alt="@file.FileName" title="@file.FileName" />
+                    }
+                </div>
+                @if (CanEdit)
+                {
+                    <div style="position: absolute; top: 4px; right: 4px; z-index: 10;" @onclick:stopPropagation="true">
+                        <Popconfirm Title="确定删除这个文件吗?" OnConfirm="@(() => HandleFileDelete(file))">
+                            <Button Type="ButtonType.Default"
+                            Danger="true"
+                            Size="ButtonSize.Small"
+                            Icon="@IconType.Outline.Clear">
+                            </Button>
+                        </Popconfirm>
+                    </div>
+                }
+            </div>
+        }
+    }
+
+    @if (CanEdit && CanUploadMoreFiles())
+    {
+        <div style="width: 104px; height: 104px;">
+            <Upload Action="@uploadAction"
+            Name="file"
+            ListType="UploadListType.PictureCard"
+            @bind-FileList="fileList"
+            ShowUploadList="false"
+            ShowPreviewIcon="false"
+            ShowRemoveIcon="false"
+            Disabled="false"
+            OnSingleCompleted="HandleFileUploadCompleted"
+            BeforeAllUploadAsync="BeforeAllUploadAsync"
+            Multiple="@Multiple"
+            Headers="uploadHeaders">
+                <div style="width: 104px; height: 104px; border: 1px dashed #d9d9d9; border-radius: 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer;">
+                    <Icon Type="@IconType.Outline.Plus" />
+                    <div Class="ant-upload-text" style="margin-top: 8px">上传</div>
+                </div>
+            </Upload>
+        </div>
+    }
+</div>
+
+@if (Files?.Any(x => x.FileId != null ) == true)
+{
+    var existingFileIds = Files.Where(x => x.FileId != null).Select(x => x.FileId!.Value).ToList();
+    var tempPaths = Files.Where(x => x.TempPath.IsNotNullOrWhiteSpaceBXJG()).Select(x => x.TempPath).ToList();
+    <BXJGImagePreview FileIds="existingFileIds" IsShow="false" @bind-PreviewVisible="previewVisible" />
+}
+
+@code {
+
+    [Parameter]
+    public required string EntityId { get; set; }
+
+    [Parameter]
+    public List<SetAttachmentFile> Files { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<List<SetAttachmentFile>> FilesChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<List<SetAttachmentFile>> OnFilesChanged { get; set; }
+    // await OnUpdated.InvokeAsync(dto);
+
+    [Parameter]
+    public required string AddFilesApiPath { get; set; }
+
+    [Parameter]
+    public required string RemoveFilesApiPath { get; set; }
+
+    [Parameter]
+    public int MaxCount { get; set; } = 3;
+
+    [Parameter]
+    public bool Multiple { get; set; } = true;
+
+    [Parameter]
+    public bool CanEdit { get; set; } = true;
+
+    [Parameter]
+    public EventCallback<bool> OnUploadingChanged { get; set; }
+
+    private List<UploadFileItem> fileList = new();
+    private bool previewVisible = false;
+    private Dictionary<string, string> uploadHeaders = new();
+    private string uploadAction = string.Empty;
+    private int uploadingFileCount = 0;
+    private List<SetAttachmentFile> pendingFiles = new();
+
+    protected override void OnInitialized()
+    {
+        var token = AccessTokenProvider.GetAccessToken();
+        if (!string.IsNullOrWhiteSpace(token))
+        {
+            uploadHeaders["Authorization"] = $"Bearer {token}";
+        }
+
+        var serverRootAddress = Configuration["App:ServerRootAddress"]?.TrimEnd('/');
+        if (!string.IsNullOrWhiteSpace(serverRootAddress))
+        {
+            uploadAction = $"{serverRootAddress}/api/BXJGFile/Upload";
+        }
+    }
+
+    protected async Task<bool> BeforeAllUploadAsync(List<UploadFileItem> files)
+    {
+        var existingFileCount = Files?.Count(x => x.FileId != null) ?? 0;
+        var totalCount = existingFileCount + files.Count;
+
+        if (totalCount > MaxCount)
+        {
+            MessageService.Warning($"最多只能上传{MaxCount}个文件，当前已有{existingFileCount}个，还能上传{MaxCount - existingFileCount}个");
+            return false;
+        }
+
+        await OnUploadingChanged.InvokeAsync(true);
+        uploadingFileCount = files.Count;
+        pendingFiles.Clear();
+        return true;
+    }
+
+    protected async Task HandleFileUploadCompleted(UploadInfo fileinfo)
+    {
+        if (fileinfo.File.State == UploadState.Success && fileinfo.File.Response != null)
+        {
+            try
+            {
+                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                var response = JsonSerializer.Deserialize<UploadResponse>(fileinfo.File.Response.ToString(), options);
+                if (response != null && response.Success && response.Result != null)
+                {
+                    var attachmentFile = new SetAttachmentFile
+                    {
+                        FileName = response.Result.FileName,
+                        TempPath = response.Result.TempPath
+                    };
+                    pendingFiles.Add(attachmentFile);
+
+                    Interlocked.Decrement(ref uploadingFileCount);
+
+                    if (Interlocked.CompareExchange(ref uploadingFileCount, 0, 0) == 0 && pendingFiles.Count > 0)
+                    {
+                        var httpClient = HttpClient;
+                        var result = await httpClient.Post<List<SetAttachmentFile>>(AddFilesApiPath, new
+                        {
+                            Id = EntityId,
+                            Images = pendingFiles
+                        });
+
+                        if (result != null)
+                        {
+                            foreach (var file in result)
+                            {
+                                Files.Add(file);
+                            }
+                        }
+                        pendingFiles.Clear();
+                        await FilesChanged.InvokeAsync(Files);
+                        if(OnFilesChanged.HasDelegate)
+                        await OnFilesChanged.InvokeAsync(Files);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageService.Error($"添加文件失败: {ex.Message}");
+                Interlocked.Decrement(ref uploadingFileCount);
+                pendingFiles.Clear();
+            }
+        }
+        else
+        {
+            Interlocked.Decrement(ref uploadingFileCount);
+        }
+
+        if (Interlocked.CompareExchange(ref uploadingFileCount, 0, 0) == 0)
+        {
+            await OnUploadingChanged.InvokeAsync(false);
+        }
+    }
+
+    protected async Task HandleFileDelete(SetAttachmentFile file)
+    {
+        if (file.FileId != null)
+        {
+            try
+            {
+                var httpClient = HttpClient;
+                await httpClient.Post(RemoveFilesApiPath, new
+                {
+                    Id = EntityId,
+                    FileIds = new Guid[] { file.FileId.Value }
+                });
+               
+                Files.Remove(file);
+                await FilesChanged.InvokeAsync(Files);
+                if (OnFilesChanged.HasDelegate)
+                    await OnFilesChanged.InvokeAsync(Files);
+            }
+            catch (Exception ex)
+            {
+                MessageService.Error($"删除文件失败: {ex.Message}");
+            }
+        }
+    }
+
+    protected bool CanUploadMoreFiles()
+    {
+        var existingFileCount = Files?.Count(x => x.FileId != null) ?? 0;
+        return existingFileCount < MaxCount;
+    }
+
+    protected void OpenFilePreview()
+    {
+        previewVisible = true;
+    }
+}
