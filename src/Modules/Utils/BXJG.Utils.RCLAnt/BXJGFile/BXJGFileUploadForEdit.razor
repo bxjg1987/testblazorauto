@@ -180,7 +180,7 @@
                         var result = await httpClient.Post<List<SetAttachmentFile>>(AddFilesApiPath, new
                         {
                             Id = EntityId,
-                            Images = pendingFiles
+                            Items = pendingFiles
                         });
 
                         if (result != null)
@@ -225,7 +225,7 @@
                 await httpClient.Post(RemoveFilesApiPath, new
                 {
                     Id = EntityId,
-                    FileIds = new Guid[] { file.FileId.Value }
+                    Items = new Guid[] { file.FileId.Value }
                 });
                
                 Files.Remove(file);

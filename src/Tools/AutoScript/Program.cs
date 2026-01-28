@@ -57,6 +57,7 @@ var topTasks = new List<(string, Action)>
     new("重新发布：BXJG.Utils.Application.ClientProxy", FabuXindeBXJGUtilsApplicationClientProxy),
     new("重新发布：BXJG.Utils.Web", FabuXindeBXJGUtilsWeb),
     new("重新发布：BXJG.Utils.RCL", FabuXindeBXJGUtilsRCL),
+    new("重新发布：BXJG.Utils.RCLAnt", FabuXindeBXJGUtilsRCLAnt),
     new("重新发布：BXJG.WeChat", FabuWeChat),
     new("重新发布：BXJG.WeChat.Web", FabuWeChatWeb),
     new("重新发布：BXJG.WeChat.Abp", FabuWeChatBXJG)
@@ -95,6 +96,7 @@ void FabuSuoyouGonggongBao()
     FabuXindeBXJGUtilsApplicationClientProxy();
     FabuXindeBXJGUtilsApplication();
     FabuXindeBXJGUtilsRCL();
+    FabuXindeBXJGUtilsRCLAnt();
     FabuXindeBXJGUtilsWeb();
 
     FabuWeChat();
@@ -118,6 +120,12 @@ void FabuXindeBXJGUtilsRCL()
 {
     DabaoNuget("BXJG.Utils.RCL");
     FabuNuget("BXJG.Utils.RCL");
+}
+//打包BXJG.Utils.RCLAnt项目
+void FabuXindeBXJGUtilsRCLAnt()
+{
+    DabaoNuget("BXJG.Utils.RCLAnt");
+    FabuNuget("BXJG.Utils.RCLAnt");
 }
 //打包BXJG.Utils.EFCore项目
 void FabuXindeBXJGUtilsEFCore()

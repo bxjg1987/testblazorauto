@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
-	  <VersionPrefix>1.3.115</VersionPrefix>
+	  <VersionPrefix>1.3.116</VersionPrefix>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
 	  <LangVersion>latest</LangVersion>
   </PropertyGroup>

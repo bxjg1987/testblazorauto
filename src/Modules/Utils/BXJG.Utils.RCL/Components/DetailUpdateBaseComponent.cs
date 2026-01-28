@@ -279,7 +279,7 @@ namespace BXJG.Utils.RCL.Components
         /// <summary>
         /// 是否显示进入编辑模式的按钮
         /// </summary>
-        protected virtual bool IsShowBeginEdit => !isEdit && updateIsGranted;
+        protected virtual bool IsShowBeginEdit => !isEdit && updateIsGranted&&dto!=null;
         ///// <summary>
         ///// 是否禁用保存按钮
         ///// </summary>
@@ -442,7 +442,7 @@ namespace BXJG.Utils.RCL.Components
         /// <summary>
         /// 是否显示进入编辑模式的按钮
         /// </summary>
-        protected virtual bool IsShowDelete => deleteIsGranted;
+        protected virtual bool IsShowDelete => deleteIsGranted && dto != null;
         /// <summary>
         /// 是否正在删除
         /// </summary>
