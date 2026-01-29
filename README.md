@@ -76,7 +76,7 @@ vs2026 .net10 sqlserver2012+
     1. BXJG.Utils.Application.Share 应用服务接口、dto和验证规则
     1. BXJG.Utils.EFCore 一些通用功能的ef相关定义在这里的，也包含一些对abp的ef相关的扩展
     1. BXJG.Utils.RCL 跟abp相关的blazor组件库，与具体ui三方库无关
-    1. BXJG.Utils.RCLAnt 此项目引用 BXJG.Utils.RCL并增加了antblazor的集成
+    1. BXJG.Utils.RCLAnt 此项目引用 BXJG.Utils.RCL并增加了antblazor的集成，它共同一些依赖antblazor的，但不依赖具体业务的公共组件
     1. BXJG.Utils.Share 领域层中一些常量、辅助方法等，以类似BXJG.Utils.Application.Share这种库引用它，而不直接引用BXJG.Utils
     1. BXJG.Utils.Web 一些通用功能，跟web相关的，以及对abpweb相关扩展。
     1. BXJG.WeChat.Abp 让我们的微信库与abp的继承
