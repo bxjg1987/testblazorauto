@@ -31,5 +31,15 @@ namespace BXJG.Utils.Metadata
         //[MaxLength(BXJGUtilsConsts.BusinessTypeMaxLength)]
         //[Unicode(false)]
         //public string? BusinessType { get; set; }
+
+
+        /// <summary>
+        /// 指定的实体类型才会做数据权限控制
+        /// </summary>
+        [MaxLength(BXJGUtilsConsts.EntityTypeMaxLength)]
+        [Unicode(false)]
+        [Required]
+        [Comment("指定的实体类型才会做数据权限控制")]
+        public string? EntityTypeFullName { get; set; }
     }
 }

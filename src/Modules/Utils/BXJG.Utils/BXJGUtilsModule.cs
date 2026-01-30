@@ -15,6 +15,7 @@ using Abp.Timing;
 using AutoMapper;
 using BXJG.Common;
 using BXJG.Common.Contracts;
+using BXJG.Utils.DataPermission;
 using BXJG.Utils.DI;
 using BXJG.Utils.DynamicProperty;
 using BXJG.Utils.Enums;
@@ -50,8 +51,9 @@ namespace BXJG.Utils
     {
         public override void PreInitialize()
         {
-            Configuration.ReplaceService<IAbpSession, AbpSessionWithHttpContext>();
+            Configuration.ReplaceService<IAbpSession, AbpSessionWithHttpContext>();  
             DataFilterInterceptor.Initialize(IocManager);
+            DataPermissionInterceptor.Initialize(IocManager);
             IocManager.Register<BXJGUtilsModuleConfig>();
             //Configuration.Modules.BXJGUtils().AddEnum(typeof(Gender), "gender", UtilsConsts.LocalizationSourceName);
             Configuration.Modules.BXJGUtils().EnumLocalizationProviders.Add(() => new[] {
@@ -68,6 +70,7 @@ namespace BXJG.Utils
             IocManager.IocContainer.Kernel.ComponentCreated += Kernel_ComponentCreated;
 
             Configuration.ReplaceService<IOrganizationUnitManager, BXJGOrganizationUnitManager>(DependencyLifeStyle.Transient);
+        
         }
 
         private void Kernel_ComponentCreated(Castle.Core.ComponentModel model, object instance)
@@ -146,7 +149,7 @@ namespace BXJG.Utils
 
             // IocManager.Register<IEnv, NullEnv>();
             IocManager.Register(typeof(GeneralTreeManager<>), DependencyLifeStyle.Transient);
-
+            IocManager.Register(typeof(AbpAsyncDeterminationInterceptor<DataPermissionInterceptor>), DependencyLifeStyle.Transient);
             IocManager.Register(typeof(AbpAsyncDeterminationInterceptor<DataFilterInterceptor>), DependencyLifeStyle.Transient);
             //IocManager.ser
             //IocManager.IocContainer.rep

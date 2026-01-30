@@ -22,6 +22,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Abp.Threading;
 using Abp.Domain.Repositories;
+using BXJG.Utils.Share.DataPermission;
 namespace BXJG.Utils.EFCore
 {
     [DependsOn(typeof(BXJGUtilsModule))]
@@ -38,6 +39,8 @@ namespace BXJG.Utils.EFCore
             //        handler.ComponentModel.Interceptors.Add(new InterceptorReference(typeof(AbpAsyncDeterminationInterceptor<AbpCapTranInterceptor>)));
             //    }
             //};
+
+            Configuration.UnitOfWork.RegisterFilter(DataPermissionConsts.DataPermission, false);
 
             //abp仓储的默认实现目前的删除是查询出来之后再删除，数据量大时有问题，已经提交了issue，这里是临时解决方式
             BXJG.Utils.Extensions.LinqExt.xx = (x,ct) => {

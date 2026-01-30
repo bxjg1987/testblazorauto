@@ -103,11 +103,11 @@ namespace BXJG.Utils.Share
         #endregion
 
         #region 附件
-        public const int AttachmentEntityTypeMaxLength = 100;
+        //public const int AttachmentEntityTypeMaxLength = 100;
         public const int AttachmentEntityIdMaxLength = 100;
         public const int AttachmentEntityPropertyNameMaxLength = 100;
         #endregion
-
+        public const int EntityTypeMaxLength = 100;
         #region 附件权限
         public const int AttachmentPermissionNameMaxLength = 100;
         #endregion

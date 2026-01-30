@@ -46,7 +46,8 @@ namespace Microsoft.EntityFrameworkCore
         //    }
 
         //    return modelBuilder;
-        //}. /// <summary>
+        //}. 
+        /// <summary>
         /// 注册utils中的ef映射
         /// </summary>
         /// <param name="modelBuilder"></param>
@@ -115,7 +116,7 @@ namespace Microsoft.EntityFrameworkCore
         /// <param name="entityTypeBuilder"></param>
         /// <returns></returns>
         public static EntityTypeBuilder<T> MapGeneralTree<T>(this EntityTypeBuilder<T> entityTypeBuilder)
-            where T : GeneralTreeEntity<T>
+            where T : GeneralTreeNoTenantEntity<T>
         {
             entityTypeBuilder.HasIndex(c => c.Code);//.IsUnique();//多租户时，唯一索引有问题
             entityTypeBuilder.HasIndex(c => c.Name);

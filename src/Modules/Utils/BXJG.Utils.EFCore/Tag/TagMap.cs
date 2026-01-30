@@ -17,7 +17,7 @@ namespace BXJG.Utils.EFCore.Tag
         {
             builder.ToTable("BXJGTag",tb=>tb.HasComment("通用实体标签"));
             builder.Property(c => c.Id).ValueGeneratedNever();
-            builder.Property(c => c.EntityType).IsRequired().IsUnicode(false).HasMaxLength(BXJGUtilsConsts.AttachmentEntityTypeMaxLength).HasComment("关联实体类型，可以是任意唯一字符串，通常是实体类型.FullTypeName");
+            builder.Property(c => c.EntityType).IsRequired().IsUnicode(false).HasMaxLength(BXJGUtilsConsts.EntityTypeMaxLength).HasComment("关联实体类型，可以是任意唯一字符串，通常是实体类型.FullTypeName");
             builder.Property(c => c.EntityId).IsRequired().IsUnicode(false).HasMaxLength(BXJGUtilsConsts.AttachmentEntityIdMaxLength).HasComment("关联实体id");
             builder.Property(c => c.PropertyName).IsRequired().IsUnicode(false).HasMaxLength(BXJGUtilsConsts.AttachmentEntityPropertyNameMaxLength).HasComment("属性名，可空 比如工单：字段A表示要处理的问题相关tag，字段B表示处理完成时拍摄的tag，它们都使用tag表，当通过此字段来表示关联的不同的属性"); ;
             builder.Property(c => c.PropertyDisplayName).IsUnicode(true).HasMaxLength(BXJGUtilsConsts.MaxDisplayNameLength).HasComment("属性显示名，在存储时若为空则复制PropertyName"); ;
