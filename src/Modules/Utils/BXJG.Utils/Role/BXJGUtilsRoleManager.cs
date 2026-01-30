@@ -1,4 +1,4 @@
-﻿using Abp.Authorization;
+using Abp.Authorization;
 using Abp.Authorization.Roles;
 using Abp.Authorization.Users;
 using Abp.Domain.Repositories;
@@ -41,7 +41,10 @@ namespace BXJG.Utils.Role
                 });
             }
 
-            return base.SetGrantedPermissionsAsync(role, list);
+            // 按权限名称去重，避免重复权限被插入数据库
+            var distinctList = list.GroupBy(c => c.Name).Select(g => g.First()).ToList();
+
+            return base.SetGrantedPermissionsAsync(role, distinctList);
         }
     }
 }
