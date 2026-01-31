@@ -58,8 +58,8 @@ public class DistributedLockHelper : ITransientDependency
         //事务结束后再释放锁才合理
         uow.Current.Disposed += (obj, arg) =>
         {
-            //lockobj.Dispose();
-            AsyncHelper.RunSync(async ()=>await lockobj.DisposeAsync());
+            lockobj.Dispose();
+            //AsyncHelper.RunSync(async ()=>await lockobj.DisposeAsync());
         };
     }
     public Task AcquireLockTenantAsync(string key, TimeSpan? timeout = default, CancellationToken ct = default)

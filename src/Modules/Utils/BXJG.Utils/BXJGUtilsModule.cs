@@ -27,6 +27,7 @@ using BXJG.Utils.Localization;
 using BXJG.Utils.OU;
 using BXJG.Utils.Settings;
 using BXJG.Utils.Share;
+using BXJG.Utils.Share.DataPermission;
 using BXJG.Utils.Tag;
 using Castle.MicroKernel;
 using Castle.MicroKernel.Registration;
@@ -50,6 +51,8 @@ namespace BXJG.Utils
     {
         public override void PreInitialize()
         {
+            Configuration.UnitOfWork.RegisterFilter(DataPermissionConsts.DataPermission, true);
+
             Configuration.ReplaceService<IAbpSession, AbpSessionWithHttpContext>();  
             DataFilterInterceptor.Initialize(IocManager);
             IocManager.Register<BXJGUtilsModuleConfig>();

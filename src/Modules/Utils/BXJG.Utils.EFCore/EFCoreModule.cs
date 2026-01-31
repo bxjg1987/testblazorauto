@@ -40,7 +40,6 @@ namespace BXJG.Utils.EFCore
             //    }
             //};
 
-            Configuration.UnitOfWork.RegisterFilter(DataPermissionConsts.DataPermission, false);
 
             //abp仓储的默认实现目前的删除是查询出来之后再删除，数据量大时有问题，已经提交了issue，这里是临时解决方式
             BXJG.Utils.Extensions.LinqExt.xx = (x,ct) => {

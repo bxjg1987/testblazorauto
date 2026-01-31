@@ -127,7 +127,7 @@ namespace BXJG.Utils.EFCore.DataPermission
             {
                 dtos.GrantType = result.First().GrantType;
             }
-            else if (result.Count > 1)
+            else if (result.Count >= 1)
             {
                 dtos.OrganizationUnits = new List<DataPermissionOrganizationUnitDto>();
                 // 将查询结果转换为DTO列表

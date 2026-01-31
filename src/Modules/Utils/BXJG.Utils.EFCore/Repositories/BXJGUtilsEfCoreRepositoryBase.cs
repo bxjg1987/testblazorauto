@@ -52,8 +52,7 @@ namespace BXJG.Utils.EFCore.Repositories
         /// </summary>
         public override IQueryable<TEntity> GetAll()
         {
-            var query = base.GetAll();
-            return ApplyDataPermissionFilter(query);
+            return base.GetAll().WhereDataPermission();
         }
 
         /// <summary>
@@ -61,8 +60,7 @@ namespace BXJG.Utils.EFCore.Repositories
         /// </summary>
         public override IQueryable<TEntity> GetAllReadonly()
         {
-            var query = base.GetAllReadonly();
-            return ApplyDataPermissionFilter(query);
+            return base.GetAllReadonly().WhereDataPermission();
         }
 
         /// <summary>
@@ -70,38 +68,47 @@ namespace BXJG.Utils.EFCore.Repositories
         /// </summary>
         public override IQueryable<TEntity> GetAllIncluding(params Expression<Func<TEntity, object>>[] propertySelectors)
         {
-            var query = base.GetAllIncluding(propertySelectors);
-            return ApplyDataPermissionFilter(query);
+            return base.GetAllIncluding(propertySelectors).WhereDataPermission();
         }
 
         /// <summary>
         /// 异步获取所有实体（应用数据权限过滤）
         /// </summary>
-        public override async Task<IQueryable<TEntity>> GetAllAsync()
+        public override Task<IQueryable<TEntity>> GetAllAsync()
         {
-            var query = await base.GetAllAsync();
-            return await ApplyDataPermissionFilterAsync(query);
+            return base.GetAllAsync().WhereDataPermission();
         }
 
         /// <summary>
         /// 异步获取所有实体（只读，应用数据权限过滤）
         /// </summary>
-        public override async Task<IQueryable<TEntity>> GetAllReadonlyAsync()
+        public override Task<IQueryable<TEntity>> GetAllReadonlyAsync()
         {
-            var query = await base.GetAllReadonlyAsync();
-            return await ApplyDataPermissionFilterAsync(query);
+            return base.GetAllReadonlyAsync().WhereDataPermission();
         }
 
         /// <summary>
         /// 异步获取所有实体（包含导航属性，应用数据权限过滤）
         /// </summary>
-        public override async Task<IQueryable<TEntity>> GetAllIncludingAsync(params Expression<Func<TEntity, object>>[] propertySelectors)
+        public override Task<IQueryable<TEntity>> GetAllIncludingAsync(params Expression<Func<TEntity, object>>[] propertySelectors)
         {
-            var query = await base.GetAllIncludingAsync(propertySelectors);
-            return await ApplyDataPermissionFilterAsync(query);
+            return base.GetAllIncludingAsync(propertySelectors).WhereDataPermission();
         }
 
+        /// <summary>
+        /// 获取所有实体（只读，包含导航属性，应用数据权限过滤）
+        /// </summary>
+        public override IQueryable<TEntity> GetAllReadonlyIncluding(params Expression<Func<TEntity, object>>[] propertySelectors)
+        {
+            return base.GetAllReadonlyIncluding(propertySelectors).WhereDataPermission();
+        }
 
-
-     }
+        /// <summary>
+        /// 异步获取所有实体（只读，包含导航属性，应用数据权限过滤）
+        /// </summary>
+        public override Task<IQueryable<TEntity>> GetAllReadonlyIncludingAsync(params Expression<Func<TEntity, object>>[] propertySelectors)
+        {
+            return base.GetAllReadonlyIncludingAsync(propertySelectors).WhereDataPermission();
+        }
+    }
 }

@@ -1,4 +1,4 @@
-﻿using Abp.Domain.Entities;
+using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
 using Abp.Linq.Expressions;
 using Abp.Organizations;
@@ -25,7 +25,7 @@ namespace System.Linq
         /// <param name="rules"></param>
         /// <returns></returns>
         public static IQueryable<TEntity> WherePermission<TEntity>(this IQueryable<TEntity> query, DataPermissionDto rules)
-            where TEntity : class, IEntity
+            where TEntity : class
         {
             if (rules.OrganizationUnits == null || !rules.OrganizationUnits.Any())
             {
