@@ -15,6 +15,7 @@
 	<ItemGroup>
 		<Compile Remove="AutoMapper\**" />
 		<Compile Remove="BusinessUser\**" />
+		<Compile Remove="DataPermission\DataPermissionInterceptor.cs" />
 		<Compile Remove="DI\**" />
 		<Compile Remove="Interceptor\**" />
 		<EmbeddedResource Remove="AutoMapper\**" />

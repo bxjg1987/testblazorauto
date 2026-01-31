@@ -11,6 +11,7 @@
 	
 	<ItemGroup>
 		<Compile Remove="Concurrency\MapperExtension.cs" />
+		<Compile Remove="DataPermission\DataPermissionAttribute.cs" />
 		<Compile Remove="Files\FileResult.cs" />
 	</ItemGroup>
 

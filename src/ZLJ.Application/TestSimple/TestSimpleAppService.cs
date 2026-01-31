@@ -5,7 +5,6 @@ using Abp.Authorization;
 using BXJG.Utils.Application.Share.Dtos;
 using Abp.Notifications;
 using Microsoft.Extensions.Configuration;
-using BXJG.Utils.Share.DataPermission;
 
 namespace ZLJ.Application.TestSimple
 {
@@ -13,7 +12,6 @@ namespace ZLJ.Application.TestSimple
     /// 后台管理 普通数据测试 应用服务
     ///</summary>
     //[AbpAuthorize]
-    [DataPermission]
     public class TestSimpleAppService : AdminCrudBaseAppService<TestSimpleEntity, 
                                                                                              TestSimpleDto, 
                                                                                              long, 

@@ -149,7 +149,7 @@ namespace BXJG.Utils.DataPermission
 
             var dtos = new Dictionary<string, DataPermissionDto>();
             var gp = result.GroupBy(x => x.EntityTypeFullName);
-            //原则是，拒绝优先，其它情况数据权限叠加
+            //原则是，拒绝优先
             foreach (var item in gp)
             {
                 var dto = new DataPermissionDto();
@@ -157,21 +157,41 @@ namespace BXJG.Utils.DataPermission
                 {
                     dto.GrantType = DataPermissionGrantType.Rejected;
                 }
-                else if (item.Any(x => x.GrantType == DataPermissionGrantType.All))
+                else if (item.Any(x => x.GrantType == DataPermissionGrantType.OnlyMe))
                 {
-                    dto.GrantType = DataPermissionGrantType.All;
+                    dto.GrantType = DataPermissionGrantType.OnlyMe;
                 }
-                else
+                else if (item.Any(x => x.GrantType == DataPermissionGrantType.OrganizationUnit))
                 {
-                    dto.OrganizationUnitIds = item.Where(x => x.GrantType == DataPermissionGrantType.OrganizationUnit && x.DataOrganizationUnit.HasValue).Select(x => x.DataOrganizationUnit.Value);
-
-                    var qt = item.Where(x => x.GrantType == DataPermissionGrantType.OrganizationUnitRecursive && x.DataOrganizationUnit.HasValue).Select(x => x.DataOrganizationUnit.Value);
+                    dto.GrantType = DataPermissionGrantType.OrganizationUnit;
+                    dto.OrganizationUnitIds = item.Where(x => x.GrantType == DataPermissionGrantType.OrganizationUnit && x.DataOrganizationUnit.HasValue).Select(x => x.DataOrganizationUnit.Value).Distinct();
+                }
+                else if (item.Any(x => x.GrantType == DataPermissionGrantType.OrganizationUnitRecursive))
+                {
+                    dto.GrantType = DataPermissionGrantType.OrganizationUnitRecursive;
+                    var qt = item.Where(x => x.GrantType == DataPermissionGrantType.OrganizationUnitRecursive && x.DataOrganizationUnit.HasValue).Select(x => x.DataOrganizationUnit.Value).Distinct();
                     if (qt.Any())
                     {
                         var ouq = await OrganizationUnitRepository.GetAllReadonlyAsync();
                         dto.OrganizationUnitCodes = await ouq.Where(x => qt.Contains(x.Id)).Select(x => x.Code).ToListAsync(CancellationTokenProvider.Token);
                     }
                 }
+                else// if (item.Any(x => x.GrantType == DataPermissionGrantType.All))
+                {
+                    dto.GrantType = DataPermissionGrantType.All;
+                }
+                //else
+                //{
+                //    dto.GrantType = DataPermissionGrantType.OrganizationUnit | DataPermissionGrantType.OrganizationUnitRecursive;
+                //    dto.OrganizationUnitIds = item.Where(x => x.GrantType == DataPermissionGrantType.OrganizationUnit && x.DataOrganizationUnit.HasValue).Select(x => x.DataOrganizationUnit.Value).Distinct();
+
+                //    var qt = item.Where(x => x.GrantType == DataPermissionGrantType.OrganizationUnitRecursive && x.DataOrganizationUnit.HasValue).Select(x => x.DataOrganizationUnit.Value).Distinct();
+                //    if (qt.Any())
+                //    {
+                //        var ouq = await OrganizationUnitRepository.GetAllReadonlyAsync();
+                //        dto.OrganizationUnitCodes = await ouq.Where(x => qt.Contains(x.Id)).Select(x => x.Code).ToListAsync(CancellationTokenProvider.Token);
+                //    }
+                //}
                 dtos.Add(item.Key, dto);
             }
 

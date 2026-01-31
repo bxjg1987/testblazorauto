@@ -15,7 +15,6 @@ using Abp.Timing;
 using AutoMapper;
 using BXJG.Common;
 using BXJG.Common.Contracts;
-using BXJG.Utils.DataPermission;
 using BXJG.Utils.DI;
 using BXJG.Utils.DynamicProperty;
 using BXJG.Utils.Enums;
@@ -53,7 +52,6 @@ namespace BXJG.Utils
         {
             Configuration.ReplaceService<IAbpSession, AbpSessionWithHttpContext>();  
             DataFilterInterceptor.Initialize(IocManager);
-            DataPermissionInterceptor.Initialize(IocManager);
             IocManager.Register<BXJGUtilsModuleConfig>();
             //Configuration.Modules.BXJGUtils().AddEnum(typeof(Gender), "gender", UtilsConsts.LocalizationSourceName);
             Configuration.Modules.BXJGUtils().EnumLocalizationProviders.Add(() => new[] {
@@ -149,7 +147,6 @@ namespace BXJG.Utils
 
             // IocManager.Register<IEnv, NullEnv>();
             IocManager.Register(typeof(GeneralTreeManager<>), DependencyLifeStyle.Transient);
-            IocManager.Register(typeof(AbpAsyncDeterminationInterceptor<DataPermissionInterceptor>), DependencyLifeStyle.Transient);
             IocManager.Register(typeof(AbpAsyncDeterminationInterceptor<DataFilterInterceptor>), DependencyLifeStyle.Transient);
             //IocManager.ser
             //IocManager.IocContainer.rep
