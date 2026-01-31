@@ -7,28 +7,25 @@ namespace BXJG.Utils.Share.DataPermission
 {
     public record class DataPermissionDto
     {
-        //#region 数据
-        ///// <summary>
-        ///// 指定的实体类型才会做数据权限控制
-        ///// </summary>
-        //public string EntityTypeFullName { get; set; }
-        /////// <summary>
-        /////// MetaData表元数据
-        /////// </summary>
-        ////public long MetaDataId { get; set; }
-        //#endregion
-
-        #region 授权
         /// <summary>
-        /// 属于此单位的数据
+        /// 针对指定实体类型的在各组织单位中数据的数据权限规则
         /// </summary>
-        public IEnumerable<long> OrganizationUnitIds { get; set; }
-
-        public IEnumerable<string> OrganizationUnitCodes { get; set; }
+        public ICollection<DataPermissionOrganizationUnitDto> OrganizationUnits { get; set; }
+        /// <summary>
+        /// 针对指定实体类型总的数据权限规则
+        /// </summary>
+        public DataPermissionGrantType GrantType { get; set; }
+    }
+    /// <summary>
+    /// 针对指定组织单位的数据权限规则
+    /// </summary>
+    public record class DataPermissionOrganizationUnitDto
+    {
+        public long? OrganizationUnitId { get; set; }
+        public string? OrganizationUnitCode { get; set; }
         /// <summary>
         /// 授权类型
         /// </summary>
         public DataPermissionGrantType GrantType { get; set; }
-        #endregion
     }
 }

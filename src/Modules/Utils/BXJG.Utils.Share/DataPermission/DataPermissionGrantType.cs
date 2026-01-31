@@ -13,6 +13,7 @@ namespace BXJG.Utils.Share.DataPermission
     {
         /// <summary>
         /// 允许查看全部数据
+        /// 针对组织单位是指 递归所有子集
         /// </summary>
         [Display(Name = "全部允许")]
         All =1<<0,
@@ -31,10 +32,10 @@ namespace BXJG.Utils.Share.DataPermission
         /// </summary>
         [Display(Name = "组织单位")]
         OrganizationUnit = 1 << 3,
-        /// <summary>
-        /// 组织单位（递归）
-        /// </summary>
-        [Display(Name = "组织单位（递归）")]
-        OrganizationUnitRecursive = 1 << 4,
+        ///// <summary>
+        ///// 组织单位（递归）
+        ///// </summary>
+        //[Display(Name = "组织单位（递归）")]
+        //OrganizationUnitRecursive = 1 << 4,
     }
 }
