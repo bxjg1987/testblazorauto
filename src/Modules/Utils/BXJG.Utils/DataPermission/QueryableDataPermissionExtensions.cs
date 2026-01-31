@@ -41,7 +41,7 @@ namespace BXJG.Utils.DataPermission
             var metadataProvider = AbpDIStaticAccessor.IocResolver?.Resolve<IMetaDataProvider>();
             if (metadataProvider != null)
             {
-                var metadata = metadataProvider.GetEnabledMetaDataByEntityType(DataPermissionConsts.DataPermission, entityTypeFullName);
+                var metadata = metadataProvider.GetMetaDataByEntityType(DataPermissionConsts.DataPermission, entityTypeFullName);
                 if (metadata == null)
                     return false;
             }
@@ -65,7 +65,7 @@ namespace BXJG.Utils.DataPermission
             var metadataProvider = AbpDIStaticAccessor.IocResolver?.Resolve<IMetaDataProvider>();
             if (metadataProvider != null)
             {
-                var metadata = await metadataProvider.GetEnabledMetaDataByEntityTypeAsync(DataPermissionConsts.DataPermission, entityTypeFullName);
+                var metadata = await metadataProvider.GetMetaDataByEntityTypeAsync(DataPermissionConsts.DataPermission, entityTypeFullName);
                 if (metadata == null)
                     return false;
             }

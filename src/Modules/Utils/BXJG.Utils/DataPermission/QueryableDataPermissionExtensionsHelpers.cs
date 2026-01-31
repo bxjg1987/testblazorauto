@@ -68,7 +68,7 @@ namespace System.Linq
                 if (onlyMeIds.Any())
                 {
                     var userId = AbpDIStaticAccessor.IocResolver.Resolve<IAbpSession>().UserId;
-                    predicate = predicate.Or(e => ((ICreationAudited)e).CreatorUserId == userId && ouIds.Contains(((IMayHaveOrganizationUnit)e).OrganizationUnitId.Value));
+                    predicate = predicate.Or(e => ((ICreationAudited)e).CreatorUserId == userId && onlyMeIds.Contains(((IMayHaveOrganizationUnit)e).OrganizationUnitId.Value));
                 }
             }
             else if (typeof(IMustHaveOrganizationUnit).IsAssignableFrom(entityType))
@@ -81,7 +81,7 @@ namespace System.Linq
                 if (onlyMeIds.Any())
                 {
                     var userId = AbpDIStaticAccessor.IocResolver.Resolve<IAbpSession>().UserId;
-                    predicate = predicate.Or(e => ((ICreationAudited)e).CreatorUserId == userId && ouIds.Contains(((IMustHaveOrganizationUnit)e).OrganizationUnitId));
+                    predicate = predicate.Or(e => ((ICreationAudited)e).CreatorUserId == userId && onlyMeIds.Contains(((IMustHaveOrganizationUnit)e).OrganizationUnitId));
                 }
             }
             //这些组织单位仅查看自己的数据

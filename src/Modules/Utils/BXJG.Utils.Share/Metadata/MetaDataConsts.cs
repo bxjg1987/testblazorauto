@@ -8,6 +8,6 @@ namespace BXJG.Utils.Share.Metadata
         /// <summary>
         /// 元数据缓存名称
         /// </summary>
-        public const string MetaDataCacheName = "MetaDataCache";
+        public const string MetaDataCacheName = "MDC";
     }
 }
