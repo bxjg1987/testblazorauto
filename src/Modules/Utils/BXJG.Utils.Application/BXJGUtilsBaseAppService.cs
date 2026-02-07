@@ -1,5 +1,6 @@
 ﻿using Abp.Application.Services;
 using Abp.Linq;
+using Abp.Runtime.Caching;
 using Abp.Runtime.Session;
 using Abp.Threading;
 using BXJG.Utils.Share;
@@ -15,6 +16,10 @@ namespace BXJG.Utils.Application
     public abstract class BXJGUtilsBaseAppService : ApplicationService
     {
         //public TenantManager TenantManager { get; set; }
+
+        public Lazy<ICacheManager> cacheManager { get; set; }
+
+        public ICacheManager CacheManager=> cacheManager.Value;
 
         public IHostEnvironment HostEnvironment { get; set; }
         //public UserManager UserManager { get; set; }
