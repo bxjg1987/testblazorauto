@@ -144,6 +144,7 @@ else
 app.MapStaticAssets();//.ShortCircuit();
 
 app.UseRouting();
+app.UseAntiforgery();
 app.UseAuthentication();
 //app.Use(async (context, next) =>
 //{
@@ -218,7 +219,6 @@ app.UseAuthentication();
 //});
 
 app.UseAuthorization();
-app.UseAntiforgery();
 
 //×¢Ïú
 app.Map("/account/logout", async (HttpContext x) =>
