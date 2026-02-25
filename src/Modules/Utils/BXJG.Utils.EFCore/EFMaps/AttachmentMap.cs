@@ -14,7 +14,7 @@ namespace BXJG.Utils.EFCore.EFMaps
     {
         public void Configure(EntityTypeBuilder<AttachmentEntity> builder)
         {
-            builder.ToTable("BXJGUtilsAttachments", x => x.HasComment("通用的实体附件"));
+            builder.ToTable("BXJGAttachments", x => x.HasComment("通用的实体附件"));
             builder.Property(c => c.Id).ValueGeneratedNever();
             builder.Property(c => c.EntityType).IsRequired().IsUnicode(false).HasMaxLength(BXJGUtilsConsts.EntityFileEntityTypeMaxLength).HasComment("关联实体类型，可以是任意唯一字符串，通常是实体类型.FullTypeName");
             builder.Property(c => c.EntityId).IsRequired().IsUnicode(false).HasMaxLength(BXJGUtilsConsts.EntityFileEntityIdMaxLength).HasComment("关联实体id");

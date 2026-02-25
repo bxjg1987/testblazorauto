@@ -105,7 +105,7 @@ namespace BXJG.Utils.GeneralTree
         public int TenantId { get; set; }
     }
 
-    [Table("BXJGUtilsDataDictionaries")]
+    [Table("BXJGDataDictionaries")]
     public class DataDictionaryEntity : GeneralTreeEntity<DataDictionaryEntity>, IMustHaveTenant
     {
         /// <summary>

@@ -14,7 +14,7 @@ namespace BXJG.Utils.Metadata
     /// <summary>
     /// 元数据
     /// </summary>
-    [Table("BXJGUtilsMetadata")]
+    [Table("BXJGMetadata")]
     public class MetadataEntity : GeneralTreeNoTenantEntity<MetadataEntity>
     {
         //默认都是系统预设的

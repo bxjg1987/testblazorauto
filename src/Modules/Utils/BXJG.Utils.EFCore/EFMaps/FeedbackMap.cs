@@ -15,7 +15,7 @@ namespace BXJG.Utils.EFCore.EFMaps
     {
          public void Configure(EntityTypeBuilder<FeedbackEntity> builder)
          {
-            builder.ToTable("BXJGUtilsFeedbacks", x => x.HasComment("通用的留言（将来可能关联tag、评论作为回复、图片等）"));
+            builder.ToTable("BXJGFeedbacks", x => x.HasComment("通用的留言（将来可能关联tag、评论作为回复、图片等）"));
             builder.Property(c => c.Id).ValueGeneratedNever();
             builder.Property(c => c.ExtensionData).IsUnicode().HasMaxLength(BXJGUtilsConsts.ExtDataMaxLength).HasComment("扩展数据");
             builder.Property(c => c.Title).IsUnicode().HasMaxLength(BXJGUtilsConsts.FeedbackTitleMaxLength).HasComment("标题");

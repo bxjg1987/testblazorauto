@@ -20,11 +20,14 @@ namespace BXJG.Utils.DataPermission
     [Index(nameof(UserOrganizationUnit))]
     [Index(nameof(EntityTypeFullName))]
     [Index(nameof(DataOrganizationUnit))]
-    [Index(nameof(GrantType))]
     [Comment("数据权限")]
-    [Table("BXJGUtilsDataPermission")]
+    [Table("BXJGDataPermission")]
     public class DataPermissionEntity : FullAuditedEntity<Guid>, IMayHaveTenant
     {
+        /// <summary>
+        /// 租户id
+        /// </summary>
+        [Comment("租户id")]
         public int? TenantId { get; set; }
 
         #region 用户范围
@@ -45,7 +48,7 @@ namespace BXJG.Utils.DataPermission
         public long? UserOrganizationUnit { get; set; }
         #endregion
 
-        #region 数据
+        #region 数据范围
         /// <summary>
         /// 指定的实体类型才会做数据权限控制
         /// </summary>
@@ -60,18 +63,19 @@ namespace BXJG.Utils.DataPermission
         [Comment("MetaData表元数据")]
         public long MetaDataId { get; set; }
         public virtual MetadataEntity Metadata { get; set; }
-        #endregion
-
-        #region 授权
         /// <summary>
         /// 属于此单位的数据
+        /// EntityTypeFullName指定数据类型是必须的，在它基础上进一步限定指定单位的数据进行权限控制
         /// </summary>
-        [Comment("属于此单位的数据")]
+        [Comment("属于此单位的数据 EntityTypeFullName指定数据类型是必须的，在它基础上进一步限定指定单位的数据进行权限控制")]
         public long? DataOrganizationUnit { get; set; }
+        #endregion
+
         /// <summary>
         /// 授权类型
+        /// 没有指定DataOrganizationUnit时：1全部允许 2拒绝 4仅自己
+        /// 否则 1指定部门及其后代部门全部数据都允许 2拒绝 4仅自己 8仅访问指定组织单位下的数据
         /// </summary>
         public DataPermissionGrantType GrantType { get; set; }
-        #endregion
     }
 }
