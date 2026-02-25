@@ -21,8 +21,7 @@
     "@dcloudio/uni-ui": "^1.5.11",
     "@uni-helper/uni-network": "^0.23.1",
     "pinia": "^2.1.7",
-    "vue": "^3.4.21",
-    "vue-i18n": "^9.10.2"
+    "vue": "^3.4.21"
   },
   "devDependencies": {
     "@dcloudio/types": "^3.4.8",

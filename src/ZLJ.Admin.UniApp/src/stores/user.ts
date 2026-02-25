@@ -52,10 +52,13 @@ export const useUserStore = defineStore('user', () => {
     uni.removeStorageSync('userInfo')
   }
   
-  const logout = () => {
+  const logout = (returnUrl?: string) => {
     clearUserData()
+    const loginUrl = returnUrl 
+      ? `/pages/login/index?returnUrl=${encodeURIComponent(returnUrl)}`
+      : '/pages/login/index'
     uni.reLaunch({
-      url: '/pages/login/index',
+      url: loginUrl,
     })
   }
   

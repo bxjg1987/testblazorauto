@@ -1,16 +1,16 @@
 <template>
   <view class="bottom-menu">
-    <view 
-      class="menu-item" 
-      :class="{ active: isActive(item) }"
-      v-for="(item, index) in menuItems" 
+    <view
+      class="menu-item"
+      :class="{ active: isMenuItemActive(item, currentPath) }"
+      v-for="(item, index) in menuItems"
       :key="index"
       @click="handleMenuClick(item)"
     >
-      <uni-icons 
-        :type="item.customData?.mobileIcon || 'home'" 
-        :size="24" 
-        :color="isActive(item) ? '#007AFF' : '#666'"
+      <uni-icons
+        :type="item.customData?.mobileIcon || 'home'"
+        :size="24"
+        :color="isMenuItemActive(item, currentPath) ? '#1890ff' : '#666'"
         class="menu-icon"
       />
       <view class="menu-text">{{ item.displayName }}</view>
@@ -21,7 +21,7 @@
 <script setup lang="ts">
 import { computed, ref, onMounted } from 'vue'
 import { useAppStore } from '@/stores/app'
-import { filterMainMenus } from '@/utils/menu'
+import { filterBottomMenus, normalizeMenuUrl, isMenuItemActive as checkMenuItemActive } from '@/utils/menu'
 import type { MenuItemDto } from '@/types/menu'
 
 const appStore = useAppStore()
@@ -35,31 +35,31 @@ onMounted(() => {
   }
 })
 
-const isActive = (item: MenuItemDto) => {
-  if (!item.url) return false
-  let url = item.url
-  
-  if (!url.startsWith('/pages/')) {
-    if (url.startsWith('/')) {
-      url = '/pages' + url
-    } else {
-      url = '/pages/' + url
-    }
-  }
-  
-  if (!url.endsWith('/index')) {
-    url = url + '/index'
-  }
-  
-  return currentPath.value === url
+const isMenuItemActive = (item: MenuItemDto, path: string): boolean => {
+  return checkMenuItemActive(item, path)
 }
 
 const menuItems = computed(() => {
   const menu = appStore.menu
-  const dynamicMenus = menu && Object.keys(menu).length > 0 ? filterMainMenus(menu) : []
-  
+
+  let homeMenu: MenuItemDto | null = null
+  if (menu && menu.MainMenu?.items) {
+    for (const item of menu.MainMenu.items) {
+      if (item.name === 'adminBlazor_home' || item.url === '/main') {
+        homeMenu = {
+          ...item,
+          displayName: '首页',
+          customData: { ...item.customData, mobileIcon: 'home' }
+        }
+        break
+      }
+    }
+  }
+
+  const dynamicMenus = menu && Object.keys(menu).length > 0 ? filterBottomMenus(menu) : []
+
   const fixedMenus: MenuItemDto[] = [
-    {
+    homeMenu || {
       displayName: '首页',
       url: '/pages/index/index',
       customData: { mobileIcon: 'home' }
@@ -71,50 +71,28 @@ const menuItems = computed(() => {
       customData: { mobileIcon: 'person' }
     }
   ]
-  
+
   return fixedMenus
 })
 
 const handleMenuClick = (item: MenuItemDto) => {
-  console.log('[BottomMenu] 点击菜单项:', item)
-  
-  if (item.url) {
-    let url = item.url
-    
-    console.log('[BottomMenu] 原始 URL:', url)
-    
-    if (!url.startsWith('/pages/')) {
-      if (url.startsWith('/')) {
-        url = '/pages' + url
-      } else {
-        url = '/pages/' + url
-      }
-    }
-    
-    if (!url.endsWith('/index')) {
-      url = url + '/index'
-    }
-    
-    console.log('[BottomMenu] 转换后 URL:', url)
-    
-    uni.redirectTo({
-      url: url,
-      animationType: 'fade',
-      animationDuration: 150,
-      success: () => {
-        console.log('[BottomMenu] 跳转成功')
-      },
-      fail: (err) => {
-        console.error('[BottomMenu] 跳转失败:', err)
-        uni.showToast({
-          title: '页面不存在',
-          icon: 'none'
-        })
-      }
-    })
-  } else {
-    console.log('[BottomMenu] 菜单项没有 URL')
+  if (!item.url) {
+    return
   }
+
+  const url = normalizeMenuUrl(item.url)
+
+  uni.redirectTo({
+    url,
+    animationType: 'fade',
+    animationDuration: 150,
+    fail: () => {
+      uni.showToast({
+        title: '页面不存在',
+        icon: 'none'
+      })
+    }
+  })
 }
 </script>
 
@@ -164,7 +142,7 @@ const handleMenuClick = (item: MenuItemDto) => {
 }
 
 .menu-item.active .menu-text {
-  color: #007AFF;
+  color: #1890ff;
   font-weight: 600;
 }
 </style>

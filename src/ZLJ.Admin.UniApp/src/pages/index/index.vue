@@ -6,20 +6,20 @@
           <uni-icons type="bars" size="24" color="#666" />
         </view>
       </view>
-      
+
       <view class="header">
         <view class="header-center">
-          <text class="title">ZLJ Admin</text>
+          <text class="title">小管印</text>
           <text class="subtitle">管理系统</text>
         </view>
       </view>
-      
+
       <view class="content">
         <view class="card">
           <text class="card-title">欢迎使用</text>
           <text class="card-desc">这是一个基于 UniApp + Vue3 + TypeScript 开发的多端应用</text>
         </view>
-        
+
         <view class="feature-list">
           <view class="feature-item" v-for="(item, index) in features" :key="index">
             <text class="feature-icon">{{ item.icon }}</text>
@@ -61,12 +61,9 @@ const handleOpenMenu = () => {
 
 onShow(() => {
   if (!userStore.isLoggedIn) {
-    console.log('用户未登录，跳转到登录页')
     uni.reLaunch({
       url: '/pages/login/index',
     })
-  } else {
-    console.log('用户已登录，停留在首页')
   }
 })
 </script>
@@ -112,7 +109,7 @@ onShow(() => {
   display: block;
   font-size: 56rpx;
   font-weight: bold;
-  color: #333;
+  color: #1890ff;
   margin-bottom: 16rpx;
 }
 

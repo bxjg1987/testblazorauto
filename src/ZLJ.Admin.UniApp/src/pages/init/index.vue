@@ -3,22 +3,22 @@
     <view class="init-content">
       <text class="init-title">系统初始化</text>
       <text class="init-desc">请配置后端 API 地址</text>
-      
+
       <view class="env-buttons">
         <button class="uni-button uni-button--default" size="mini" @click="setDevEnv">开发环境</button>
         <button class="uni-button uni-button--primary" size="mini" @click="setProdEnv">生产环境</button>
       </view>
-      
+
       <view class="init-form">
         <uni-forms>
           <uni-forms-item label="API 地址" required>
-            <uni-easyinput 
-              v-model="apiUrl" 
+            <uni-easyinput
+              v-model="apiUrl"
               placeholder="请输入后端 API 地址"
             />
           </uni-forms-item>
         </uni-forms>
-        
+
         <view class="button-group">
           <button class="uni-button uni-button--primary" @click="handleConnect" :disabled="connecting">
             {{ connecting ? '连接中...' : '连接' }}
@@ -52,11 +52,11 @@ const handleConnect = async () => {
     })
     return
   }
-  
+
   connecting.value = true
-  
-  const result = await appInitializationService.reinitialize(apiUrl.value.trim())
-  
+
+  await appInitializationService.reinitialize(apiUrl.value.trim())
+
   connecting.value = false
 }
 </script>
@@ -67,7 +67,7 @@ const handleConnect = async () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%);
 }
 
 .init-content {
@@ -136,7 +136,7 @@ const handleConnect = async () => {
 }
 
 .uni-button--primary {
-  background-color: #2979ff;
+  background-color: #1890ff;
   color: #ffffff;
 }
 

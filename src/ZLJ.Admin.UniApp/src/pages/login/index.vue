@@ -2,61 +2,61 @@
   <view class="container">
     <view class="login-box">
       <text class="title">用户登录</text>
-      
+
       <view class="form">
         <view class="form-item">
           <text class="label">租户</text>
-          <input 
-            class="input" 
-            v-model="form.tenancyName" 
+          <input
+            class="input"
+            v-model="form.tenancyName"
             placeholder="请输入租户"
             type="text"
           />
         </view>
-        
+
         <view class="form-item">
           <text class="label">用户名</text>
-          <input 
-            class="input" 
-            v-model="form.userNameOrEmailAddress" 
+          <input
+            class="input"
+            v-model="form.userNameOrEmailAddress"
             placeholder="请输入用户名"
             type="text"
           />
         </view>
-        
+
         <view class="form-item">
           <text class="label">密码</text>
-          <input 
-            class="input" 
-            v-model="form.password" 
+          <input
+            class="input"
+            v-model="form.password"
             placeholder="请输入密码"
             type="password"
           />
         </view>
-        
+
         <view class="form-item" v-if="showCaptcha">
           <text class="label">验证码</text>
           <view class="captcha-wrapper">
-            <input 
-              class="input captcha-input" 
-              v-model="form.yzmValue" 
+            <input
+              class="input captcha-input"
+              v-model="form.yzmValue"
               placeholder="请输入验证码"
               type="text"
             />
-            <image 
-              class="captcha-image" 
-              :src="captchaUrl" 
+            <image
+              class="captcha-image"
+              :src="captchaUrl"
               @click="refreshCaptcha"
               mode="aspectFit"
             />
           </view>
         </view>
       </view>
-      
+
       <button class="btn-login" @click="handleLogin" :disabled="loading">
         {{ loading ? '登录中...' : '登录' }}
       </button>
-      
+
       <view class="actions">
         <text class="link">忘记密码?</text>
         <text class="link">注册账号</text>
@@ -67,6 +67,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
+import { onLoad } from '@dcloudio/uni-app'
 import { useUserStore } from '@/stores/user'
 import { authenticate } from '@/api/auth'
 import { appInitializationService } from '@/services/app-initialization'
@@ -75,6 +76,7 @@ import { getCaptchaUrl } from '@/api/captcha'
 const userStore = useUserStore()
 const loading = ref(false)
 const showCaptcha = ref(true)
+const returnUrl = ref('')
 
 const form = ref({
   tenancyName: 'default',
@@ -83,6 +85,12 @@ const form = ref({
   rememberClient: true,
   yzmKey: '',
   yzmValue: '',
+})
+
+onLoad((options) => {
+  if (options.returnUrl) {
+    returnUrl.value = decodeURIComponent(options.returnUrl)
+  }
 })
 
 const captchaUrl = computed(() => {
@@ -117,7 +125,7 @@ const handleLogin = async () => {
     })
     return
   }
-  
+
   if (!form.value.password) {
     uni.showToast({
       title: '请输入密码',
@@ -125,7 +133,7 @@ const handleLogin = async () => {
     })
     return
   }
-  
+
   if (showCaptcha.value && !form.value.yzmValue) {
     uni.showToast({
       title: '请输入验证码',
@@ -133,28 +141,28 @@ const handleLogin = async () => {
     })
     return
   }
-  
+
   loading.value = true
-  
+
   try {
     const result = await authenticate(form.value)
-    
+
     userStore.setToken(result.accessToken)
-    
+
     await appInitializationService.initializeAfterLogin()
-    
+
     uni.showToast({
       title: '登录成功',
       icon: 'success',
     })
-    
+
     setTimeout(() => {
+      const targetUrl = returnUrl.value || '/pages/main/index'
       uni.reLaunch({
-        url: '/pages/index/index',
+        url: targetUrl,
       })
     }, 1000)
   } catch (error: any) {
-    console.error('登录失败:', error)
     refreshCaptcha()
   } finally {
     loading.value = false
@@ -234,7 +242,7 @@ const handleLogin = async () => {
 .btn-login {
   width: 100%;
   height: 96rpx;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%);
   color: #ffffff;
   font-size: 32rpx;
   font-weight: 600;
@@ -258,6 +266,6 @@ const handleLogin = async () => {
 
 .actions .link {
   font-size: 26rpx;
-  color: #667eea;
+  color: #1890ff;
 }
 </style>
