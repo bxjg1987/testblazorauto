@@ -173,6 +173,7 @@
 
         if (HttpContext.Request.Method.Equals(HttpMethods.Get, StringComparison.OrdinalIgnoreCase))
         {
+
             if (model.TenancyName.IsNullOrWhiteSpaceBXJG())
             {
                 // 如果URL参数中的TenantName存在，优先使用它；否则尝试从cookie中读取
@@ -186,7 +187,7 @@
                 }
                 else// if(model.TenancyName.IsNullOrWhiteSpaceBXJG())
                 {
-                   model.TenancyName = "default";
+                    model.TenancyName = "default";
                 }
             }
         }
@@ -286,6 +287,10 @@
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+        if (HttpContext.Request.Method.Equals(HttpMethods.Get, StringComparison.OrdinalIgnoreCase))
+        {
+           await HttpContext.SignOutAsync();
+        }
         // await CSHYZM();
     }
 
