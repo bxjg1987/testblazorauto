@@ -89,7 +89,7 @@
 		<PackageReference Include="Magicodes.IE.Excel.AspNetCore" Version="2.8.2" />
 		<!--<PackageReference Include="BXJG.Utils.Web" Version="1.2.1" />-->
 		<!--<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.10" />-->
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.4" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.5" />
 		<PackageReference Include="Abp.AspNetCore" Version="10.3.0" />
 		<PackageReference Include="Abp.AspNetCore.SignalR" Version="10.3.0" />
 	</ItemGroup>
