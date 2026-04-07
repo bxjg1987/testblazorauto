@@ -3,6 +3,7 @@
 //每个任务一个委托，然后统一执行，这样做是便于排序步骤
 
 using AutoScript;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Data.Common;
 using System.Diagnostics;
@@ -37,6 +38,19 @@ var ymml = Path.Combine(jjfaml, "src");
 Console.WriteLine($"src：{ymml}");
 
 var nugetkey = string.Empty;
+
+var configuration = new ConfigurationBuilder()
+    .SetBasePath(AppContext.BaseDirectory)
+    .AddJsonFile("appsettings.json", optional: true)
+    .AddEnvironmentVariables()
+    .Build();
+
+var nugetLocalPath = configuration["NuGet:LocalRepositoryPath"];
+if (string.IsNullOrWhiteSpace(nugetLocalPath))
+{
+    nugetLocalPath = @"c:\nugetpackages";
+}
+Console.WriteLine($"NuGet本地仓库路径：{nugetLocalPath}");
 #endregion
 
 #region 准备任务
@@ -220,15 +234,11 @@ void DabaoNuget(string xmm)
 //发布nuget到私有仓库
 void FabuNuget(string xmm)
 {
-    //项目文件
     var xmwj = Directory.GetFiles(ymml, $"{xmm}.csproj", SearchOption.AllDirectories).Single();
-    //项目目录
     var projDir = Path.GetDirectoryName(xmwj);
     var bao = Directory.GetFiles(projDir, $"{xmm}.*.nupkg", SearchOption.AllDirectories).OrderBy(x => File.GetCreationTime(x)).Last();
     Console.WriteLine($"正在将nuget包{bao}发布到私有包源...");
-    //yaoqiushurunugetkey();
-    //cmdexecute($"dotnet nuget push -s http://222.178.145.148:19904/v3/index.json -k {nugetkey} {bao} --skip-duplicate");
-    cmdexecute($"dotnet nuget push {bao} -s d:\\nugetpackages");
+    cmdexecute($"dotnet nuget push {bao} -s {nugetLocalPath}");
     Console.WriteLine($"{xmm}已成功发送到私有包仓库！");
 }
 //执行cmd命令

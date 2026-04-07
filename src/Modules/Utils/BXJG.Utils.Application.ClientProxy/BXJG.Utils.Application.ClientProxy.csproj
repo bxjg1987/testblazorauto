@@ -3,7 +3,7 @@
   <PropertyGroup>
 	  <TargetFrameworks>net10.0</TargetFrameworks>
     <Nullable>enable</Nullable>
-	  <VersionPrefix>1.0.92</VersionPrefix>
+	  <VersionPrefix>1.0.94</VersionPrefix>
 	  <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
