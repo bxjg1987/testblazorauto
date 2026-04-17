@@ -13,7 +13,6 @@ using ZLJ.Application;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using ZLJ.Application.Common;
-using Azure.Core;
 using Microsoft.Net.Http.Headers;
 using ZLJ.Core;
 using log4net.Core;
