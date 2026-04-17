@@ -1,0 +1,1 @@
+1. automapper相关nuget包永远不要更新
