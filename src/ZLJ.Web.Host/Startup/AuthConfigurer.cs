@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -105,7 +105,7 @@ namespace ZLJ.Web.Host.Startup
             if (tmpPath.Value.StartsWith("/signalr", StringComparison.OrdinalIgnoreCase))
             {
                 context.Token = SimpleStringCipher.Instance.Decrypt(qsAuthToken);        // Set auth token from cookie
-                logger.LogDebug($"signalr连接的assesstoken为：{context.Token}");
+                logger.LogDebug($"signalr连接的assesstoken为：{(context.Token != null && context.Token.Length > 8 ? context.Token[..8] + "..." : context.Token)}");
             }
             else if (tmpPath.Value.Contains("/BXJGFile/Download", StringComparison.OrdinalIgnoreCase))
                 context.Token = SimpleStringCipher.Instance.Decrypt(qsAuthToken, ZLJ.Core.Share.ZLJConsts.DefaultPassPhrase);

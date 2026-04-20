@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Options;
 using Org.BouncyCastle.Crypto.Engines;
 using Org.BouncyCastle.Crypto.Modes;
 using Org.BouncyCastle.Crypto.Parameters;
@@ -18,13 +18,17 @@ namespace BXJG.WeChat.Pay
 {
     /// <summary>
     /// 微信支付过程中涉及的签名、验签、加解密等<br/>
+    /// <br/>历史修复：
+    /// <br/>1. 验签方法原使用ImportRSAPublicKey导入证书，但平台证书是X.509格式，已改为X509Certificate2加载
+    /// <br/>2. AesGcmDecrypt解密结果原包含尾部空字节，已修复为正确截取实际长度
+    /// <br/>3. 选项字段原为Option快照类型，配置变更不生效，已改为IOptionsMonitor&lt;Option&gt;
     /// </summary>
     public class SecretHelper
     {
         /// <summary>
-        /// 微信支付模块选项对象
+        /// 微信支付模块选项监控器
         /// </summary>
-        Option option;
+        IOptionsMonitor<Option> option;
         /// <summary>
         /// 微信支付平台证书提供器
         /// </summary>
@@ -66,25 +70,26 @@ namespace BXJG.WeChat.Pay
             this.serviceProvider = serviceProvider;
             this.clock = clock;
             this.env = webEnvironment;
-            this.option = option.CurrentValue;
-            option.OnChange(opt => Init());
+            this.option = option;
+            option.OnChange(_ => Init());
             Init();
         }
 
         void Init()
         {
-            var path = Path.Combine(env.SecureDirectory, "wx", option.CertPath);
+            var opt = option.CurrentValue;
+            var path = Path.Combine(env.SecureDirectory, "wx", opt.CertPath);
             string str = File.ReadAllText(path);
 
 
             certData = Convert.FromBase64String(str.Replace("-----BEGIN CERTIFICATE-----", "").Replace("-----END CERTIFICATE-----", "").Trim());
-            using (var cert = new X509Certificate2(certData, option.Mchid))//这里的商户id作为秘钥的，好像并不需要
+            using (var cert = new X509Certificate2(certData, opt.Mchid))//这里的商户id作为秘钥的，好像并不需要
             {
                 serialNo = cert.SerialNumber;
             }
 
             //rsaCert = (RSACryptoServiceProvider)cert.PublicKey.Key;
-            path = Path.Combine(env.SecureDirectory, "wx", option.PrivateKeyPath);
+            path = Path.Combine(env.SecureDirectory, "wx", opt.PrivateKeyPath);
             str = File.ReadAllText(path);
 
             privateKeyRawData = Convert.FromBase64String(str.Replace("-----BEGIN PRIVATE KEY-----", "").Replace("-----END PRIVATE KEY-----", "").Trim());
@@ -101,7 +106,7 @@ namespace BXJG.WeChat.Pay
         {
             GcmBlockCipher gcmBlockCipher = new GcmBlockCipher(new AesEngine());
             AeadParameters aeadParameters = new AeadParameters(
-                new KeyParameter(Encoding.UTF8.GetBytes(option.ApiV3SecretKey)),
+                new KeyParameter(Encoding.UTF8.GetBytes(option.CurrentValue.ApiV3SecretKey)),
                 128,
                 Encoding.UTF8.GetBytes(nonce),
                 Encoding.UTF8.GetBytes(associatedData));
@@ -110,8 +115,8 @@ namespace BXJG.WeChat.Pay
             byte[] data = Convert.FromBase64String(ciphertext);
             byte[] plaintext = new byte[gcmBlockCipher.GetOutputSize(data.Length)];
             int length = gcmBlockCipher.ProcessBytes(data, 0, data.Length, plaintext, 0);
-            gcmBlockCipher.DoFinal(plaintext, length);
-            return Encoding.UTF8.GetString(plaintext);
+            int finalLength = gcmBlockCipher.DoFinal(plaintext, length);
+            return Encoding.UTF8.GetString(plaintext, 0, length + finalLength);
         }
         /// <summary>
         /// 验证微信支付服务端的签名<br />
@@ -134,17 +139,13 @@ namespace BXJG.WeChat.Pay
             wxptzs = wxptzs.Replace("-----BEGIN CERTIFICATE-----", "").Replace("-----END CERTIFICATE-----", "").Trim('\n');
             var rawData = Convert.FromBase64String(wxptzs);
 
-            using (var rsa = RSA.Create())
+            using (var cert = new X509Certificate2(rawData))
             {
-                rsa.ImportRSAPublicKey(rawData, out int k);
-                return rsa.VerifyData(data, data1, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+                using (var rsa = cert.GetRSAPublicKey())
+                {
+                    return rsa.VerifyData(data, data1, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+                }
             }
-
-            //using (var privateCert = new X509Certificate2(rawData))
-            //{
-            //    var rsaPrivateKey = (RSACryptoServiceProvider)privateCert.PublicKey.Key;
-            //    return rsaPrivateKey.VerifyData(data, data1, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
-            //}
         }
         /// <summary>
         /// 使用商户私钥对请求做签名
@@ -184,7 +185,8 @@ namespace BXJG.WeChat.Pay
                 signature = Convert.ToBase64String(rsa.SignData(data, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1));
             }
 
-            return "mchid=\"" + option.Mchid + "\",nonce_str=\"" + nonce + "\",timestamp=\"" + timestamp + "\",serial_no=\"" + serialNo + "\",signature=\"" + signature + "\"";
+            var opt = option.CurrentValue;
+            return "mchid=\"" + opt.Mchid + "\",nonce_str=\"" + nonce + "\",timestamp=\"" + timestamp + "\",serial_no=\"" + serialNo + "\",signature=\"" + signature + "\"";
         }
     }
 

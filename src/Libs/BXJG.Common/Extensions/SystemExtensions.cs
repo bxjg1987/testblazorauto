@@ -1,4 +1,4 @@
-﻿////using hyjiacan.py4n;
+////using hyjiacan.py4n;
 //#if NET8_0_OR_GREATER
 //using Microsoft.AspNetCore.WebUtilities;
 //#endif
@@ -263,6 +263,7 @@ namespace System
 
         /// <summary>
         /// 一个环（可以理解位首尾相连的数组，索引0规定为环的起始位），从里面取任意一段数据
+        /// 注意：历史版本存在无限递归bug，已修复——原来调用自身时误传了T类型的index而非int类型的idx
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="enumerate"></param>
@@ -273,7 +274,7 @@ namespace System
         public static T[] CaptureClipFromLoop<T>(this T[] list, T index, int count, bool right = true)
         {
             var idx = Array.IndexOf(list, index);
-            return list.CaptureClipFromLoop(index, count, right);
+            return list.CaptureClipFromLoop(idx, count, right);
         }
         /// <summary>
         /// 一个环（可以理解位首尾相连的数组，索引0规定为环的起始位），从里面取任意一段数据
@@ -476,14 +477,15 @@ namespace System
             return buffer;
         }
 
-        //ReadOnlySequence<byte>转十六禁止字符串
+        //ReadOnlySequence<byte>转十六进制字符串
+        //注意：历史版本存在无限循环bug，已修复——原来使用TryPeek不会推进读取位置，改为TryRead
         public static string ToHexString(this ReadOnlySequence<byte> bytes)
         {
             string hexString = string.Empty;
 
             StringBuilder strB = new StringBuilder();
             var rd = new SequenceReader<byte>(bytes);
-            while (rd.TryPeek(out var item))
+            while (rd.TryRead(out var item))
             {
                 strB.Append(item.ToString("X2"));
             }
@@ -579,6 +581,109 @@ namespace System
         //}
 
         #region aes加解密
+
+        /// <summary>
+        /// AES加密（安全版本，使用PBKDF2派生密钥，强制CBC模式）
+        /// </summary>
+        /// <param name="data">待加密数据</param>
+        /// <param name="key">密钥字符串</param>
+        /// <param name="keyLength">密钥长度，默认256位</param>
+        /// <param name="iv">初始化向量，为null时自动生成随机IV并拼接到密文前</param>
+        /// <returns>加密后的数据（CBC模式下IV拼接在密文前）</returns>
+        public static byte[] AesEncryptSafe(this byte[] data, string key, int keyLength = 256, byte[] iv = null)
+        {
+            using (Aes aes = Aes.Create())
+            {
+                aes.Key = AesDeriveKey(key, keyLength / 8);
+                aes.Mode = CipherMode.CBC;
+                aes.Padding = PaddingMode.PKCS7;
+                aes.IV = iv ?? AesGenerateIV(aes.BlockSize / 8);
+
+                using (ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV))
+                {
+                    byte[] encryptedData = AesPerformCryptography(data, encryptor);
+                    byte[] result = new byte[aes.IV.Length + encryptedData.Length];
+                    Buffer.BlockCopy(aes.IV, 0, result, 0, aes.IV.Length);
+                    Buffer.BlockCopy(encryptedData, 0, result, aes.IV.Length, encryptedData.Length);
+                    return result;
+                }
+            }
+        }
+
+        /// <summary>
+        /// AES解密（安全版本，使用PBKDF2派生密钥，强制CBC模式）
+        /// </summary>
+        /// <param name="data">待解密数据（CBC模式下IV应在密文前）</param>
+        /// <param name="key">密钥字符串</param>
+        /// <param name="keyLength">密钥长度，默认256位</param>
+        /// <param name="iv">初始化向量，为null时从密文前提取</param>
+        /// <returns>解密后的数据</returns>
+        public static byte[] AesDecryptSafe(this byte[] data, string key, int keyLength = 256, byte[] iv = null)
+        {
+            using (Aes aes = Aes.Create())
+            {
+                aes.Key = AesDeriveKey(key, keyLength / 8);
+                aes.Mode = CipherMode.CBC;
+                aes.Padding = PaddingMode.PKCS7;
+
+                if (iv == null)
+                {
+                    iv = new byte[aes.BlockSize / 8];
+                    Buffer.BlockCopy(data, 0, iv, 0, iv.Length);
+                    byte[] actualData = new byte[data.Length - iv.Length];
+                    Buffer.BlockCopy(data, iv.Length, actualData, 0, actualData.Length);
+                    aes.IV = iv;
+                    using (ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV))
+                    {
+                        return AesPerformCryptography(actualData, decryptor);
+                    }
+                }
+
+                aes.IV = iv;
+                using (ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV))
+                {
+                    return AesPerformCryptography(data, decryptor);
+                }
+            }
+        }
+
+        /// <summary>
+        /// AES加密字符串（安全版本，使用PBKDF2派生密钥，强制CBC模式）
+        /// </summary>
+        public static string AesEncryptSafe(this string plainText, string key, int keyLength = 256, byte[] iv = null)
+        {
+            byte[] plainBytes = Encoding.UTF8.GetBytes(plainText);
+            byte[] encryptedBytes = plainBytes.AesEncryptSafe(key, keyLength, iv);
+            return Convert.ToBase64String(encryptedBytes);
+        }
+
+        /// <summary>
+        /// AES解密字符串（安全版本，使用PBKDF2派生密钥，强制CBC模式）
+        /// </summary>
+        public static string AesDecryptSafe(this string encryptedText, string key, int keyLength = 256, byte[] iv = null)
+        {
+            byte[] encryptedBytes = Convert.FromBase64String(encryptedText);
+            byte[] decryptedBytes = encryptedBytes.AesDecryptSafe(key, keyLength, iv);
+            return Encoding.UTF8.GetString(decryptedBytes);
+        }
+
+        /// <summary>
+        /// 使用PBKDF2从密钥字符串派生指定长度的密钥字节，比零字节填充更安全
+        /// </summary>
+        private static byte[] AesDeriveKey(string key, int length)
+        {
+            byte[] salt = Encoding.UTF8.GetBytes("BXJG.AES.SALT");
+            using (var deriveBytes = new Rfc2898DeriveBytes(key, salt, 10000, HashAlgorithmName.SHA256))
+            {
+                return deriveBytes.GetBytes(length);
+            }
+        }
+
+        /// <summary>
+        /// AES加密。此方法已过时，密钥派生方式不安全（短密钥用零字节填充降低密钥熵）且支持ECB模式。
+        /// 请使用 AesEncryptSafe 替代。
+        /// </summary>
+        [Obsolete("此方法密钥派生方式不安全且支持ECB模式，请使用 AesEncryptSafe 替代")]
         public static byte[] AesEncrypt(this byte[] data, string key, int keyLength = 256, CipherMode mode = CipherMode.CBC, PaddingMode padding = PaddingMode.PKCS7, byte[] iv = null)
         {
             using (Aes aes = Aes.Create())
@@ -607,6 +712,11 @@ namespace System
             }
         }
 
+        /// <summary>
+        /// AES解密。此方法已过时，密钥派生方式不安全且支持ECB模式。
+        /// 请使用 AesDecryptSafe 替代。
+        /// </summary>
+        [Obsolete("此方法密钥派生方式不安全且支持ECB模式，请使用 AesDecryptSafe 替代")]
         public static byte[] AesDecrypt(this byte[] data, string key, int keyLength = 256, CipherMode mode = CipherMode.CBC, PaddingMode padding = PaddingMode.PKCS7, byte[] iv = null)
         {
             using (Aes aes = Aes.Create())
@@ -673,6 +783,10 @@ namespace System
             }
         }
 
+        /// <summary>
+        /// AES加密字符串。此方法已过时，请使用 AesEncryptSafe 替代。
+        /// </summary>
+        [Obsolete("此方法密钥派生方式不安全且支持ECB模式，请使用 AesEncryptSafe 替代")]
         public static string AesEncrypt(this string plainText, string key, int keyLength = 256, CipherMode mode = CipherMode.CBC, PaddingMode padding = PaddingMode.PKCS7, byte[] iv = null)
         {
             byte[] plainBytes = Encoding.UTF8.GetBytes(plainText);
@@ -680,6 +794,10 @@ namespace System
             return Convert.ToBase64String(encryptedBytes);
         }
 
+        /// <summary>
+        /// AES解密字符串。此方法已过时，请使用 AesDecryptSafe 替代。
+        /// </summary>
+        [Obsolete("此方法密钥派生方式不安全且支持ECB模式，请使用 AesDecryptSafe 替代")]
         public static string AesDecrypt(this string encryptedText, string key, int keyLength = 256, CipherMode mode = CipherMode.CBC, PaddingMode padding = PaddingMode.PKCS7, byte[] iv = null)
         {
             byte[] encryptedBytes = Convert.FromBase64String(encryptedText);
