@@ -1,0 +1,162 @@
+# .NET Build outputs
+bin/
+obj/
+**/bin/
+**/obj/
+
+# NuGet packages
+packages/
+**/packages/
+*.nupkg
+
+# .NET tool cache
+.nuget/
+**/.nuget/
+
+# IDE and editor files
+.vs/
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.rsuser
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio build process files
+*.ilk
+*.meta
+*.iobj
+*.pdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*_wpftmp.cs
+*.log
+*.tma
+
+# ClickOnce
+publish/
+
+# Web application build outputs
+wwwroot/
+**/wwwroot/
+
+# Node modules (for Blazor/UniApp projects)
+node_modules/
+**/node_modules/
+
+# npm/yarn lock files (avoid dependency conflicts in indexing)
+package-lock.json
+yarn.lock
+**/package-lock.json
+**/yarn.lock
+
+# Test results
+TestResults/
+**/TestResults/
+coverage/
+**/coverage/
+*.coverage
+*.coveragexml
+
+# NuGet output
+**/artifacts/
+
+# Generated documentation XML files (already compiled, no need to index)
+*.xml
+!**/*.Build.targets
+!**/*.Core.xml
+!**/*.Application.xml
+!**/*.Web.xml
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*~
+.DS_Store
+Thumbs.db
+
+# Database files
+*.mdf
+*.ldf
+*.sqlite
+*.db
+
+# Log files
+*.log
+**/*.log
+log4net.config
+
+# User-specific files
+*.user
+*.userprefs
+*.settings
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Docker
+.docker/
+
+# Unity
+[Aa][Rr][Mm]/
+
+# Build servers
+.blob父级/
+.toolz/
+Publish/
+
+# Local development certificates
+*.pfx
+*.pem
+
+# OS generated
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Compiled binary extensions
+*.dll
+*.exe
+*.pdb
+*.mdb
+*.com
+*.dll
+*.class
+*.jar
+*.war
+
+# ABP specific - module builds
+Modules/
+**/Modules/
+
+# UniApp specific
+unpackage/
+**/unpackage/
+dist/
+**/dist/

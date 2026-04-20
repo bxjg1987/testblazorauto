@@ -33,7 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Lazy.Captcha.Core" Version="2.2.2" />
+    <PackageReference Include="Lazy.Captcha.Core" Version="2.2.4" />
   </ItemGroup>
 
   <ItemGroup>
