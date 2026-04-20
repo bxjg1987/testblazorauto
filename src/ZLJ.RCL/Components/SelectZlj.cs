@@ -1,4 +1,4 @@
-﻿using BXJG.Common.Contracts;
+using BXJG.Common.Contracts;
 using BXJG.Utils.Application.Share.Dtos;
 using BXJG.Utils.Application.Share.Session;
 using Castle.Components.DictionaryAdapter;
@@ -217,7 +217,10 @@ namespace ZLJ.RCL.Components
                 {
                     tj.Keywords = value;
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    this.Logger.LogDebug(ex, "设置Keywords失败");
+                }
 
                 try
                 {
@@ -225,7 +228,7 @@ namespace ZLJ.RCL.Components
                 }
                 catch (Exception ex)
                 {
-                    this.Logger.LogWarning(ex.Message);
+                    this.Logger.LogWarning(ex, "设置Id失败");
                 }
                 var r = await HttpClient.GetAllProvider<TItem>(new { Filter = tj, MaxResultCount = value.IsNullOrWhiteSpaceBXJG() ? MaxCount : int.MaxValue });
                 return r.Items;

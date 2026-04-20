@@ -1,4 +1,4 @@
-﻿using BXJG.WeChat.Pay.Entities;
+using BXJG.WeChat.Pay.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -59,7 +59,12 @@ namespace BXJG.WeChat.Web.Pay
             //var json = await requestContent.ReadAsAsync<PayNotifyResult>(cancellationToken);
             var isSign = await secretHelper.VerifyAsync(ps, body, cancellationToken);
             if (!isSign)
-                throw new Exception("验签失败！");//这里需要测试，也许微信需要返回 {code :'ERROR',message:'验签失败'}
+            {
+                //TODO 微信支付v3官方文档要求：验签不通过时应返回5XX或4XX状态码，并附带 {"code":"FAIL","message":"验签失败"} 的JSON报文。
+                //当前throw导致返回500（属于5XX范围），微信会重发通知，不会造成业务错误，但应答格式不够规范。
+                //此外整个InvokeAsync缺少try-catch，业务处理异常也会返回500导致微信重发；且同步处理业务逻辑可能导致超时。
+                throw new Exception("验签失败！");
+            }
 
             //3、解密得到通知的数据
             var json = System.Text.Json.JsonSerializer.Deserialize<PayNotifyResult>(body);

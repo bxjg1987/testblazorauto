@@ -12,7 +12,7 @@ namespace ZLJ.EntityFrameworkCore.EntityFrameworkCore.EFMap.BaseInfo
             //builder.Property(x => x.Name).HasColumnType($"nvarchar({ZLJ.Core.Share.ZLJConsts.StaffInfoNameMaxLength})").IsRequired();
             //builder.Property(x => x.AgeString).HasMaxLength(ZLJ.Core.Share.ZLJConsts.StaffInfoAgeStringMaxLength);
             builder.Property(x => x.No).HasMaxLength(ZLJ.Core.Share.ZLJConsts.StaffInfoNoMaxLength);
-            builder.Property(x => x.IdNumber).HasColumnType("varchar").HasMaxLength(ZLJ.Core.Share.ZLJConsts.StaffInfoIdNumberMaxLength);
+            builder.Property(x => x.IdNumber).HasMaxLength(ZLJ.Core.Share.ZLJConsts.StaffInfoIdNumberMaxLength).IsUnicode(false);
             builder.HasIndex(g => g.No).IsUnique();
             builder.Property(x => x.CurrentAddress).HasColumnType($"nvarchar({ZLJ.Core.Share.ZLJConsts.StaffInfoCurrentAddressMaxLength})");
 

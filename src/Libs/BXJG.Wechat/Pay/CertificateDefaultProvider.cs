@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -19,6 +19,7 @@ namespace BXJG.WeChat.Pay
     /// <summary>
     /// 默认的微信支付平台证书提供器<br/>
     /// 参考文档：<see cref="" href="https://wechatpay-api.gitbook.io/wechatpay-api-v3/qian-ming-zhi-nan-1/wei-xin-zhi-fu-ping-tai-zheng-shu-geng-xin-zhi-yin" />
+    /// <br/>历史修复：原使用Select解密证书但Select延迟执行导致cert始终为null，已改为foreach强制执行
     /// </summary>
     public class CertificateDefaultProvider : ICertificateProvider
     {
@@ -74,7 +75,10 @@ namespace BXJG.WeChat.Pay
 
             var txt = File.ReadAllText(wxCertPath);
             wxCertificateResult = JsonSerializer.Deserialize<WXCertificateResult>(txt);
-            wxCertificateResult.data.Select(c => c.cert = secretHelper.AesGcmDecrypt(c.encrypt_certificate.associated_data, c.encrypt_certificate.nonce, c.encrypt_certificate.ciphertext));
+            foreach (var c in wxCertificateResult.data)
+            {
+                c.cert = secretHelper.AesGcmDecrypt(c.encrypt_certificate.associated_data, c.encrypt_certificate.nonce, c.encrypt_certificate.ciphertext);
+            }
 
             //定时任务检查微信支付平台证书
             var t = new Task(async () =>
@@ -124,7 +128,10 @@ namespace BXJG.WeChat.Pay
             var temp = await GetCertAsync(cancellationToken);
             var str = JsonSerializer.Serialize(temp);
             await File.WriteAllTextAsync(wxCertPath, str);
-            temp.data.Select(c => c.cert = secretHelper.AesGcmDecrypt(c.encrypt_certificate.associated_data, c.encrypt_certificate.nonce, c.encrypt_certificate.ciphertext));
+            foreach (var c in temp.data)
+            {
+                c.cert = secretHelper.AesGcmDecrypt(c.encrypt_certificate.associated_data, c.encrypt_certificate.nonce, c.encrypt_certificate.ciphertext);
+            }
             this.wxCertificateResult = temp;
         }
         //IWXcertificateProvider的不同实现类可能都需要此方法，可以、但暂时没有进行封装

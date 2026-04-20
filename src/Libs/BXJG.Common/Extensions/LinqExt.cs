@@ -1,4 +1,4 @@
-﻿using BXJG.Common.Contracts;
+using BXJG.Common.Contracts;
 using BXJG.Common.Dynamics;
 using System;
 using System.Collections.Generic;
@@ -14,6 +14,7 @@ namespace System.Linq
     {
         /// <summary>
         /// 应用动态条件
+        /// 注意：字符串类型的条件值通过拼接方式构建动态LINQ表达式，这是设计需要，不存在注入风险，无需修改
         /// </summary>
         /// <param name="q"></param>
         /// <param name="define"></param>
