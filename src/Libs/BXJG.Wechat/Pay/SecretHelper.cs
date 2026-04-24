@@ -12,7 +12,6 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using BXJG.Common.Contracts;
 namespace BXJG.WeChat.Pay
 {
@@ -30,15 +29,13 @@ namespace BXJG.WeChat.Pay
         /// </summary>
         IOptionsMonitor<Option> option;
         /// <summary>
+        /// 微信支付平台证书提供器（延迟解析，规避与CertificateDefaultProvider的循环依赖）
+        /// </summary>
+        Lazy<ICertificateProvider> wxCertificateProviderLazy;
+        /// <summary>
         /// 微信支付平台证书提供器
         /// </summary>
-        ICertificateProvider wxCertificateProvider
-        {
-            get
-            {
-                return serviceProvider.GetService<ICertificateProvider>();
-            }
-        }
+        ICertificateProvider wxCertificateProvider => wxCertificateProviderLazy.Value;
         /// <summary>
         /// 时钟
         /// </summary>
@@ -59,15 +56,13 @@ namespace BXJG.WeChat.Pay
         /// web环境
         /// </summary>
         IEnv env;
-        IServiceProvider serviceProvider;
 
         public SecretHelper(IOptionsMonitor<Option> option,
-                            //ICertificateProvider wxCertificateProvider,//这样注册ioc容器会报循环依赖，非单例注册也许不会爆，没测试过
-                            IServiceProvider serviceProvider,
+                            Lazy<ICertificateProvider> wxCertificateProvider,
                             IEnv webEnvironment,
                             IClock clock)
         {
-            this.serviceProvider = serviceProvider;
+            this.wxCertificateProviderLazy = wxCertificateProvider;
             this.clock = clock;
             this.env = webEnvironment;
             this.option = option;

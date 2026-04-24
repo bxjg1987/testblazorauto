@@ -1,4 +1,4 @@
-﻿
+
 export function init(container, option) {
     let thisECharts = echarts.init(container);
     if (option) {
@@ -27,8 +27,10 @@ export function setOption(container, option) {
         container.innerText = 'echarts尚未初始化完成，请稍后刷新重试。';
         return;
     }
-    echarts.getInstanceByDom(container).setOption(option);
-    //console.log('带回来了', container.echarts);
+    var instance = echarts.getInstanceByDom(container);
+    if (instance) {
+        instance.setOption(option);
+    }
 }
 
 export function dispose(container) {

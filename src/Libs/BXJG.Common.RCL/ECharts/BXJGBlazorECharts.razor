@@ -1,4 +1,4 @@
-﻿@namespace BXJG.Common.RCL
+@namespace BXJG.Common.RCL
 @implements IAsyncDisposable
 @inject IJSRuntime JS
 @inherits OwningComponentBase
@@ -63,8 +63,18 @@
         if (module is not null)
         {
             vt = default;
-            await module.InvokeVoidAsync("dispose", container); //这里组件已经不在了，dom没有了，调用会报错
-            await module.DisposeAsync();
+            try
+            {
+                await module.InvokeVoidAsync("dispose", container);
+            }
+            catch (JSDisconnectedException) { }
+            catch (ObjectDisposedException) { }
+            try
+            {
+                await module.DisposeAsync();
+            }
+            catch (JSDisconnectedException) { }
+            catch (ObjectDisposedException) { }
         }
     }
 }

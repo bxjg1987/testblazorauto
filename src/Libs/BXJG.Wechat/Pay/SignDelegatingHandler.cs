@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -33,7 +33,6 @@ namespace BXJG.WeChat.Pay
         SecretHelper secretHelper;
         public SignDelegatingHandler(SecretHelper secretHelper)
         {
-            InnerHandler = new HttpClientHandler();
             this.secretHelper = secretHelper;
         }
 

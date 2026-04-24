@@ -20,7 +20,6 @@
     <Compile Remove="BXJGUtilsUowExtensions.cs" />
     <Compile Remove="DI\AbpDIStaticAccessor.cs" />
     <Compile Remove="Enums\GetStructForCombboxInput.cs" />
-    <Compile Remove="Extensions\ConditionFieldDefineExt.cs" />
     <Compile Remove="File\AttachmentEditDto.cs" />
     <Compile Remove="File\AttachmentService.cs" />
     <Compile Remove="File\FileInput.cs" />

@@ -1,4 +1,4 @@
-﻿using BXJG.Common;
+using BXJG.Common;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -32,8 +32,11 @@ namespace BXJG.WeChat.Pay
         public static IServiceCollection AddWXPayCore(this IServiceCollection services)
         {
             return services.AddSingleton<SecretHelper>()
-                           .AddSingleton<ICertificateProvider, CertificateDefaultProvider>()
-                           .AddTransient<ServiceV3>();
+                           .AddSingleton<CertificateDefaultProvider>()
+                           .AddSingleton<ICertificateProvider>(sp => sp.GetRequiredService<CertificateDefaultProvider>())
+                           .AddTransient<ServiceV3>()
+                           .AddSingleton(sp => new Lazy<ICertificateProvider>(() => sp.GetRequiredService<ICertificateProvider>()))
+                           .AddHostedService<CertificateRefreshService>();
         }
         public static IServiceCollection AddWXPayHttpClient(this IServiceCollection services)
         {

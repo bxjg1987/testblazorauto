@@ -1,4 +1,5 @@
-﻿@namespace BXJG.Common.RCL
+@namespace BXJG.Common.RCL
+@implements IAsyncDisposable
 @time
 
 @code {
@@ -25,11 +26,11 @@
 
     string time;
 
-    System.Threading.Timer timer;// = new System.Threading.Timer(sdfd,null, 0,1000);
+    System.Threading.Timer timer;
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        timer = new System.Threading.Timer(sdfd, null, 0, 1000);
+        timer = new System.Threading.Timer(sdfd, null, 0, Interval);
     }
     void sdfd(object state)
     {
@@ -38,5 +39,14 @@
             time = Label + (Format.IsNullOrWhiteSpaceBXJG() ? DateTimeOffset.Now.ToString("yyyy年MM月dd日 dddd HH:mm:ss") : DateTime.Now.ToString(Format));
             StateHasChanged();
         });
+    }
+
+    /// <summary>
+    /// 释放Timer，防止组件销毁后回调仍在执行
+    /// </summary>
+    public ValueTask DisposeAsync()
+    {
+        timer?.Dispose();
+        return ValueTask.CompletedTask;
     }
 }

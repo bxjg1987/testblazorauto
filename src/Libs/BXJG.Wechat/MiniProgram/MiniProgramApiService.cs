@@ -1,4 +1,4 @@
-﻿using BXJG.Common.Sundries;
+using BXJG.Common.Sundries;
 using BXJG.WeChat.Pay;
 using Microsoft.Extensions.Options;
 using System;
