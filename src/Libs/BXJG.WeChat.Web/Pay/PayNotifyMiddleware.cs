@@ -22,7 +22,10 @@ namespace BXJG.WeChat.Web.Pay
     /// </summary>
     public class PayNotifyMiddleware
     {
-        private readonly Option option;
+        /// <summary>
+        /// 微信支付模块选项监控器
+        /// </summary>
+        private readonly IOptionsMonitor<Option> option;
         private readonly SecretHelper secretHelper;
         private readonly RequestDelegate next;
 
@@ -33,7 +36,7 @@ namespace BXJG.WeChat.Web.Pay
 
             this.next = next;
             this.secretHelper = secretHelper;
-            this.option = option.CurrentValue;
+            this.option = option;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -50,7 +53,7 @@ namespace BXJG.WeChat.Web.Pay
             var cancellationToken = context.RequestAborted;
 
             //2、验签，确定请求一定是微信服务器发送来的
-            var ps = request.Headers.ToDictionary(c => c.Key, c => c.Value[0]);
+            var ps = request.Headers.ToDictionary(c => c.Key, c => c.Value.FirstOrDefault() ?? string.Empty, StringComparer.OrdinalIgnoreCase);
             string body;
             using (var sr = new StreamReader(request.Body))
             {
@@ -74,7 +77,7 @@ namespace BXJG.WeChat.Web.Pay
 
             //4、回调
             //如果将来需要，这里可以换成可替换的工厂
-            await (context.RequestServices.GetService<IPayNotifyHandler>()).PrecessAsync(json2, cancellationToken);
+            await (context.RequestServices.GetRequiredService<IPayNotifyHandler>()).PrecessAsync(json2, cancellationToken);
 
             //5、响应
             await context.Response.WriteAsync(StateDto.SuccessJsonString/*, cancellationToken*/);//传入cancellationToken也许是多此一举，如果response够聪明的话，关联的context已经有cancelToken了

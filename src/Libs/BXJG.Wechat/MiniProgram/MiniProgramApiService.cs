@@ -13,13 +13,14 @@ namespace BXJG.WeChat.MiniProgram
 {
     public class MiniProgramApiService
     {
-        Option option;
-        //IHttpClientFactory httpClientFactory;
+        /// <summary>
+        /// 微信小程序模块选项监控器
+        /// </summary>
+        IOptionsMonitor<Option> option;
         HttpClient httpClient;
-        public MiniProgramApiService(IOptionsSnapshot<Option> opt,/* IHttpClientFactory httpClientFactory,*/ HttpClient httpClient)
+        public MiniProgramApiService(IOptionsMonitor<Option> opt, HttpClient httpClient)
         {
-            this.option = opt.Value;
-            //this.httpClientFactory = httpClientFactory;
+            this.option = opt;
             this.httpClient = httpClient;
         }
 
@@ -27,8 +28,8 @@ namespace BXJG.WeChat.MiniProgram
         {
             var requestUrl = Helpers.AddQueryString(Const.OpenIdEndpoint, new Dictionary<string, string>
             {
-                { "appid", option.AppId },
-                { "secret", option.AppSecret },
+                { "appid", option.CurrentValue.AppId },
+                { "secret", option.CurrentValue.AppSecret },
                 { "js_code",code },
                 { "grant_type", "authorization_code" },
             });

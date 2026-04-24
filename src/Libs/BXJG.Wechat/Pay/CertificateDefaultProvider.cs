@@ -19,18 +19,23 @@ namespace BXJG.WeChat.Pay
     /// <summary>
     /// 默认的微信支付平台证书提供器<br/>
     /// 参考文档：<see cref="" href="https://wechatpay-api.gitbook.io/wechatpay-api-v3/qian-ming-zhi-nan-1/wei-xin-zhi-fu-ping-tai-zheng-shu-geng-xin-zhi-yin" />
-    /// <br/>历史修复：原使用Select解密证书但Select延迟执行导致cert始终为null，已改为foreach强制执行
+    /// <br/>历史修复：
+    /// <br/>1. 原使用Select解密证书但Select延迟执行导致cert始终为null，已改为foreach强制执行
+    /// <br/>2. 原在构造函数中使用new Task启动后台任务，生命周期不受控且无法优雅停止，已拆分为CertificateRefreshService（BackgroundService）
+    /// <br/>3. wxCertificateResult字段添加volatile，确保后台线程更新后请求线程立即可见
+    /// <br/>4. GetAsync中Single()改为FirstOrDefault()，避免找不到证书时抛出不友好的InvalidOperationException
     /// </summary>
     public class CertificateDefaultProvider : ICertificateProvider
     {
         /// <summary>
         /// 微信平台证书获取接口返回的原始数据
+        /// 使用volatile确保后台线程更新后其他线程立即可见
         /// </summary>
-        private WXCertificateResult wxCertificateResult;
+        private volatile WXCertificateResult wxCertificateResult;
         /// <summary>
-        /// 微信支付模块选项对象
+        /// 微信支付模块选项监控器
         /// </summary>
-        private readonly Option wxPaymentOption;
+        private readonly IOptionsMonitor<Option> wxPaymentOption;
         /// <summary>
         /// 时钟 用于获取准确的当前时间
         /// </summary>
@@ -66,7 +71,7 @@ namespace BXJG.WeChat.Pay
                                           IClock clock,
                                           IEnv secureDirectory)
         {
-            this.wxPaymentOption = wxPaymentOption.CurrentValue;
+            this.wxPaymentOption = wxPaymentOption;
             this.httpClientFactory = wxClientFactory;
             this.clock = clock;
             this.logger = logger;
@@ -79,28 +84,6 @@ namespace BXJG.WeChat.Pay
             {
                 c.cert = secretHelper.AesGcmDecrypt(c.encrypt_certificate.associated_data, c.encrypt_certificate.nonce, c.encrypt_certificate.ciphertext);
             }
-
-            //定时任务检查微信支付平台证书
-            var t = new Task(async () =>
-            {
-                while (true)
-                {
-                    try
-                    {
-                        var xzs = wxCertificateResult.data.OrderBy(c => c.effective_time).First();//获取最新的证书
-                        var now = await clock.GetNowAsync();
-                        if (xzs.expire_time.AddDays(-9) <= now)
-                            await UpdateCertAsync();
-                    }
-                    catch (Exception ex)
-                    {
-                        logger.LogError(ex, "微信支付证书更新失败！");
-                        //记录日志、触发事件等
-                    }
-                    await Task.Delay(1000 * 60 * 60 * 23);
-                }
-            }, TaskCreationOptions.LongRunning);
-            t.Start();
         }
         /// <summary>
         /// 获取有效的微信支付平台证书
@@ -114,7 +97,7 @@ namespace BXJG.WeChat.Pay
             var now = await clock.GetNowAsync();
             //if (!wxCertificateResult.data.Any(c => c.serial_no == wechatPaySerial))
             //    await UpdateCertAsync(cancellationToken);
-            var zs = wxCertificateResult.data.Single(c => c.serial_no == wechatPaySerial);
+            var zs = wxCertificateResult.data.FirstOrDefault(c => c.serial_no == wechatPaySerial);
             if (zs == null)
                 throw new Exception("未找到证书" + wechatPaySerial + "！");
             if (zs.effective_time > now)
@@ -123,18 +106,28 @@ namespace BXJG.WeChat.Pay
                 throw new Exception("证书" + wechatPaySerial + "已过期！");
             return zs.cert;
         }
+        /// <summary>
+        /// 检查证书是否即将过期，若即将过期则更新
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        public async Task RefreshIfNeededAsync(CancellationToken cancellationToken = default)
+        {
+            var xzs = wxCertificateResult.data.OrderBy(c => c.effective_time).First();
+            var now = await clock.GetNowAsync();
+            if (xzs.expire_time.AddDays(-9) <= now)
+                await UpdateCertAsync(cancellationToken);
+        }
         private async Task UpdateCertAsync(CancellationToken cancellationToken = default)
         {
             var temp = await GetCertAsync(cancellationToken);
             var str = JsonSerializer.Serialize(temp);
-            await File.WriteAllTextAsync(wxCertPath, str);
+            await File.WriteAllTextAsync(wxCertPath, str, cancellationToken);
             foreach (var c in temp.data)
             {
                 c.cert = secretHelper.AesGcmDecrypt(c.encrypt_certificate.associated_data, c.encrypt_certificate.nonce, c.encrypt_certificate.ciphertext);
             }
             this.wxCertificateResult = temp;
         }
-        //IWXcertificateProvider的不同实现类可能都需要此方法，可以、但暂时没有进行封装
         /// <summary>
         /// 调用微信接口 获取 微信支付平台证书
         /// </summary>
@@ -142,10 +135,8 @@ namespace BXJG.WeChat.Pay
         /// <returns></returns>
         private async Task<WXCertificateResult> GetCertAsync(CancellationToken cancellationToken = default)
         {
-            //api路径基地址在httpClient中设置
-            //var apiUrl = "https://api.mch.weixin.qq.com/v3/certificates";
             var apiUrl = "certificates";
-            var response = await httpClientFactory.CreateClientPay().GetAsync(apiUrl);
+            var response = await httpClientFactory.CreateClientPay().GetAsync(apiUrl, cancellationToken);
             return await response.Content.ReadFromJsonAsync<WXCertificateResult>(cancellationToken);
         }
     }

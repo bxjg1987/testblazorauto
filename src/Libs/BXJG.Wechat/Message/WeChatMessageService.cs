@@ -1,4 +1,4 @@
-﻿using BXJG.WeChat.Common;
+using BXJG.WeChat.Common;
 using BXJG.WeChat.MiniProgram;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
@@ -17,7 +17,10 @@ namespace BXJG.WeChat.Message
 {
     public class WeChatMessageService
     {
-        private readonly MiniProgramAuthenticationOptions _authOptions;
+        /// <summary>
+        /// 微信小程序认证选项监控器
+        /// </summary>
+        private readonly IOptionsMonitor<MiniProgramAuthenticationOptions> _authOptions;
         private readonly IHttpClientFactory _clientFactory;
         private readonly AccessTokenProvider _accessTokenProvider;
 
@@ -30,7 +33,7 @@ namespace BXJG.WeChat.Message
             //IOptionsMonitor< WechatTemplateOptions> options
             )
         {
-            _authOptions = authOptions.CurrentValue;
+            _authOptions = authOptions;
             _clientFactory = clientFactory;
             _accessTokenProvider = accessTokenProvider;
             //_options = options.CurrentValue;
@@ -70,20 +73,20 @@ namespace BXJG.WeChat.Message
 
 
 
-            ///构建微信小程序发送订阅消息所需要的参数
+            ///构建微信小程序发送订阅消息所需要的参数，access_token作为URL查询参数传递（微信官方要求）
+            var url = QueryHelpers.AddQueryString(WeChatMessageConsts.WechatSendMessageUrl, "access_token", access_token);
             var context = new StringContent(System.Text.Json.JsonSerializer.Serialize(new
             {
-                access_token,
                 touser,
                 template_id,
                 miniprogram_state,
                 lang,
                 page,
                 data
-            }).Replace('[', '}').Replace(']', '}'), Encoding.UTF8, "application/json");
+            }), Encoding.UTF8, "application/json");
 
             ///调用微信发订阅消息接口
-            var response = await client.PostAsync(WeChatMessageConsts.WechatSendMessageUrl, context);
+            var response = await client.PostAsync(url, context);
 
             if (!response.IsSuccessStatusCode)
                 throw new HttpRequestException($"调用微信统一发送消息接口异常 ({response.StatusCode}).请检查.");

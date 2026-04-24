@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -18,9 +18,9 @@ namespace BXJG.WeChat.Pay
     public class ServiceV3
     {
         /// <summary>
-        /// 微信支付模块选项对象
+        /// 微信支付模块选项监控器
         /// </summary>
-        private readonly Option option;
+        private readonly IOptionsMonitor<Option> option;
         /// <summary>
         /// 用来访问的微信支付平台接口的httpClient，它通过消息处理器来实施签名和验签
         /// </summary>
@@ -36,7 +36,7 @@ namespace BXJG.WeChat.Pay
         private readonly IEnv env;
         public ServiceV3(IOptionsMonitor<Option> wxPaymentOption, IHttpClientFactory wxClientFactory, IClock clock, IEnv environment)
         {
-            this.option = wxPaymentOption.CurrentValue;
+            this.option = wxPaymentOption;
             this.wxClientFactory = wxClientFactory;
             this.clock = clock;
             this.env = environment;
@@ -57,7 +57,7 @@ namespace BXJG.WeChat.Pay
              */
 
             //微信支付模块内部赋值
-            input.mchid = option.Mchid;
+            input.mchid = option.CurrentValue.Mchid;
             if (input.time_expire == default)
                 input.time_expire = (await clock.GetNowAsync()).AddMinutes(5);//默认过期时间，可以考虑做成配置
             input.notify_url = env.RootUrl + Const.PayNotifyUrl;

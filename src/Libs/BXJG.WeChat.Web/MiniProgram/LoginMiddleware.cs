@@ -1,4 +1,4 @@
-﻿using BXJG.WeChat.Pay.Entities;
+using BXJG.WeChat.Pay.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -19,7 +19,10 @@ namespace BXJG.WeChat.Web.MiniProgram
 {
     public class LoginMiddleware
     {
-        private readonly Option option;
+        /// <summary>
+        /// 微信小程序模块选项监控器
+        /// </summary>
+        private readonly IOptionsMonitor<Option> option;
         private readonly RequestDelegate next;
         private readonly IHttpClientFactory httpClientFactory;
         private readonly MiniProgramApiService miniProgramApiService;
@@ -28,7 +31,7 @@ namespace BXJG.WeChat.Web.MiniProgram
         {
             this.next = next;
             this.httpClientFactory = httpClientFactory;
-            this.option = option.CurrentValue;
+            this.option = option;
             this.miniProgramApiService = miniProgramApiService;
         }
 
@@ -52,7 +55,7 @@ namespace BXJG.WeChat.Web.MiniProgram
             }
             var token = await miniProgramApiService.Code2Session(input.code,context.RequestAborted);
             var handler = context.RequestServices.GetService<ILoginHandler>();
-            await handler.LoginAsync(new LoginContext { Context = context, Option = option, Token = token });
+            await handler.LoginAsync(new LoginContext { Context = context, Option = option.CurrentValue, Token = token });
         }
     }
 }
