@@ -1,4 +1,4 @@
-﻿
+
 using Abp.Application.Services.Dto;
 using Abp.ObjectMapping;
 using AutoMapper;
@@ -225,13 +225,10 @@ namespace BXJG.Utils.RCL.Components
             if (isReseting)
                 return;
 
-            isReseting = true;
-
-            await RefreshCore();
-
             try
             {
-                //dto = await AppService.GetAsync(new EntityDto<TPrimaryKey>(Id));
+                isReseting = true;
+                await RefreshCore();
                 await DtoMapToEditDto();
             }
             finally

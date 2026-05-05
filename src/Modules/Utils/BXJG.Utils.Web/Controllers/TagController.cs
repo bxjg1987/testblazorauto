@@ -1,4 +1,4 @@
-﻿using Abp.AspNetCore.Mvc.Controllers;
+using Abp.AspNetCore.Mvc.Controllers;
 using Abp.Auditing;
 using Abp.Authorization;
 using Abp.Dependency;
@@ -210,13 +210,12 @@ namespace BXJG.Utils.Web.Controllers
             var dpList = new List<DynamicPropertyDto<List<TagDto>>>();
             foreach (var item in kxlist)
             {
-                var kx = kxlist.First();
-                List<TagDto> sdfsdf = await GetEntityTags(kx.Key.EntityType, kx.Key.PropertyName, kx.Key.PropertyDisplayName, kx);
+                List<TagDto> sdfsdf = await GetEntityTags(item.Key.EntityType, item.Key.PropertyName, item.Key.PropertyDisplayName, item);
 
                 dpList.Add(new DynamicPropertyDto<List<TagDto>>
                 {
-                    PropertyDisplayName = kx.Key.PropertyDisplayName,
-                    PropertyName = kx.Key.PropertyName,
+                    PropertyDisplayName = item.Key.PropertyDisplayName,
+                    PropertyName = item.Key.PropertyName,
                     Value = sdfsdf
                 });
             }

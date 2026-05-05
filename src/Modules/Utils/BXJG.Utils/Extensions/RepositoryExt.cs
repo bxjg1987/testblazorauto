@@ -1,4 +1,4 @@
-﻿using Abp.Domain.Entities;
+using Abp.Domain.Entities;
 using Abp.Domain.Repositories;
 using Abp.Extensions;
 using Abp.UI;
@@ -358,18 +358,6 @@ namespace Abp.Domain.Repositories
         }
 
         #region abp仓储的默认实现目前的删除是查询出来之后再删除，数据量大时有问题，已经提交了issue，这里是临时解决方式
-        /// <summary>
-        /// abp仓储的默认实现目前的删除是查询出来之后再删除，数据量大时有问题，已经提交了issue，这里是临时解决方式
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="q"></param>
-        /// <param name="where"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public static Task<int> BatchDelete<T>(this IRepository<T> q, Expression<Func<T, bool>> where, CancellationToken cancellationToken = default) where T : class, IEntity
-        {
-            return q.BatchDelete(where, cancellationToken);
-        }
         /// <summary>
         /// abp仓储的默认实现目前的删除是查询出来之后再删除，数据量大时有问题，已经提交了issue，这里是临时解决方式
         /// </summary>

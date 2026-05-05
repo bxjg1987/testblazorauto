@@ -1,4 +1,4 @@
-﻿using Abp;
+using Abp;
 using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using Abp.Domain.Entities;
@@ -359,8 +359,7 @@ namespace BXJG.Utils.Application
         /// <returns></returns>
         protected override async Task<TEntity> GetEntityByIdAsync(TPrimaryKey id)
         {
-            //return base.GetEntityByIdAsync(id);
-            return await GetEntityByIdAsync(id);//.SingleAsync(c => c.Id.Equals(id));
+            return await GetEntityByIdAsync(id, true);
         }
 
         /// <summary>
