@@ -1,4 +1,4 @@
-﻿using Abp.Domain.Services;
+using Abp.Domain.Services;
 using Abp.Domain.Uow;
 using Abp.DynamicEntityProperties;
 using Abp.Extensions;
@@ -109,14 +109,8 @@ namespace BXJG.Utils.DynamicProperty
             //var list = = new List<Abp.DynamicEntityProperties.DynamicEntityProperty>();
             foreach (var item in ls)
             {
-                //var t = new DynamicPropertyEditDto
-                //{
-                //    DisplayName = item.DynamicProperty.DisplayName,
-                //    InputType = item.DynamicProperty.InputType,
-                //    PropertyName = item.DynamicProperty.PropertyName.TrimStart(input.Id.ToString().ToArray())//abp默认的动态属性是全局唯一的，我们这里为了方便用户为每个类别建立自己的动态属性约束，加上id
-                //};
-                await valueManager.GetAllValuesOfDynamicPropertyAsync(item.DynamicPropertyId);
-                //m.DynamicProperty.Add(t);
+                var values = await valueManager.GetAllValuesOfDynamicPropertyAsync(item.DynamicPropertyId);
+                item.DynamicProperty.DynamicPropertyValues = values;
             }
             return ls;
         }

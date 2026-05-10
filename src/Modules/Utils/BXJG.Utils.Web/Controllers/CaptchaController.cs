@@ -1,4 +1,4 @@
-﻿using Abp.AspNetCore.Mvc.Controllers;
+using Abp.AspNetCore.Mvc.Controllers;
 using Abp.Auditing;
 using Abp.Domain.Uow;
 using Lazy.Captcha.Core;
@@ -39,6 +39,8 @@ namespace BXJG.Utils.Web.Controllers
             // 有多处验证码且过期时间不一样，可传第二个参数覆盖默认配置。
             //var info = _captcha.Generate(id,120);
             var stream = new MemoryStream(info.Bytes);
+            // MemoryStream不持有非托管资源，无需显式Dispose，GC会自动回收其底层byte[]
+            // 参见：https://github.com/dotnet/aspnetcore/issues/23271
             return File(stream, "image/gif");
         }
     }

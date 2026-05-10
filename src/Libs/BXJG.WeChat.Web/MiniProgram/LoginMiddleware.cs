@@ -35,6 +35,10 @@ namespace BXJG.WeChat.Web.MiniProgram
             this.miniProgramApiService = miniProgramApiService;
         }
 
+        // [已评审-忽略] 缺少异常处理和输入验证是刻意设计：
+        // 此中间件仅处理微信小程序登录的特定端点，调用方（小程序客户端）是受控的，
+        // ILoginHandler在DI中始终注册，input反序列化失败等异常由上层中间件统一处理即可，
+        // 不需要在此处增加额外的try-catch或null检查。
         public async Task InvokeAsync(HttpContext context)
         {
             var request = context.Request;

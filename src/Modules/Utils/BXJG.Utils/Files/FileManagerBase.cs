@@ -1,4 +1,5 @@
-﻿using System.IO;
+using System;
+using System.IO;
 //using System.Drawing;
 using Microsoft.Extensions.Configuration;
 using BXJG.Utils.Share;
@@ -32,8 +33,9 @@ namespace BXJG.Utils.Files
             //base.LocalizationSourceName = 
             //_webRootDir = env.WebRoot; // d:\app\wwwroot
             //未考虑并发冲突，也基本不需要
-            _uploadDir = Configuration["Upload:SaveDir"]; // d:\app\wwwroot\upload 
-            //Directory.CreateDirectory是递归的，这里的处理省了
+            _uploadDir = Configuration["Upload:SaveDir"];
+            if (string.IsNullOrWhiteSpace(_uploadDir))
+                throw new InvalidOperationException("Upload:SaveDir 配置项未设置，请检查 appsettings.json。");
             if (!Directory.Exists(_uploadDir))
                 Directory.CreateDirectory(_uploadDir);
             _tempDir = Path.Combine(_uploadDir, BXJGUtilsConsts.UploadTemp); // d:\app\wwwroot\upload\temp

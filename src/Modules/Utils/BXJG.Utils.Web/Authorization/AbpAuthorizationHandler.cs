@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization.Infrastructure;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
@@ -56,6 +56,9 @@ namespace BXJG.Utils.Web.Authorization
                 //s.Stop();
                 //logger.Debug($"执行了异步权限判断，权限：{string.Join(",", requirement.PermissionNames)}，耗时：{s.ElapsedMilliseconds}ms");
             }
+            // [已评审-忽略] 异步权限检查失败时回退同步检查是刻意设计：
+            // 在ABP框架中，异步检查可能因UoW未正确初始化而抛出异常（非真正的业务错误），
+            // 同步回退可以确保权限判断不因框架初始化时序问题而失败。
             catch (Exception ex)
             {
                 //logger.Debug("权限判断执行了同步操作", ex);

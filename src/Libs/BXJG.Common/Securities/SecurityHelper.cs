@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
@@ -15,7 +15,7 @@ namespace BXJG.Common
         /// </summary>
         /// <param name="length"></param>
         /// <returns></returns>
-        [Obsolete("This method is obsolete. Consider using more secure random generation methods if needed.")]
+        [Obsolete("此方法已过时，请使用 BXJG.Common.RandomHelper.GetRandomString 替代。")]
         public static string RandomBase64(int length = 6)
         {
             var bs = new byte[length];
@@ -33,7 +33,7 @@ namespace BXJG.Common
         /// <param name="str"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        [Obsolete("This method is obsolete. Consider using more secure random generation methods if needed.")]
+        [Obsolete("此方法已过时，请使用 BXJG.Common.RandomHelper.GetRandomString 替代。")]
         public static string Random255(string str, byte length = 6)
         {
             var bs = new byte[length];
@@ -41,9 +41,7 @@ namespace BXJG.Common
             char[] ary = new char[length];
             for (int i = 0; i < length; i++)
             {
-                var j = Convert.ToInt32(bs[i]);
-                var k = j % str.Length;
-                ary[i] = str[k];
+                ary[i] = str[bs[i] % str.Length];
             }
             return new string(ary);
         }
@@ -53,14 +51,11 @@ namespace BXJG.Common
         /// </summary>
         /// <param name="length"></param>
         /// <returns></returns>
-        [Obsolete("This method is obsolete. Consider using more secure random generation methods if needed.")]
+        [Obsolete("此方法已过时，请使用 BXJG.Common.RandomHelper.GetRandomString 替代。")]
         public static string RandomNumber(byte length = 6)
         {
-            //也许有更好的实现方式
             return Random255("0123456789", length);
         }
-
-
 
         public static string GetMD5(this Stream stream)
         {

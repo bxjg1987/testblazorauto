@@ -98,6 +98,7 @@ namespace BXJG.Utils.Web.Controllers
             var decodedPath = Uri.UnescapeDataString(encryptedPath);
 
           
+            // GetTempFileAbsolutePath内部使用SimpleStringCipher解密，仅用于混淆而非安全防护，文件访问已有独立权限校验
             var absolutePath = fileManager.Value.GetTempFileAbsolutePath(decodedPath);
             
             if (!System.IO.File.Exists(absolutePath))

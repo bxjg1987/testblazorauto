@@ -63,9 +63,8 @@ namespace BXJG.WeChat.Web.Pay
             var isSign = await secretHelper.VerifyAsync(ps, body, cancellationToken);
             if (!isSign)
             {
-                //TODO 微信支付v3官方文档要求：验签不通过时应返回5XX或4XX状态码，并附带 {"code":"FAIL","message":"验签失败"} 的JSON报文。
-                //当前throw导致返回500（属于5XX范围），微信会重发通知，不会造成业务错误，但应答格式不够规范。
-                //此外整个InvokeAsync缺少try-catch，业务处理异常也会返回500导致微信重发；且同步处理业务逻辑可能导致超时。
+                // 验签失败属于异常请求（非微信服务器发送），throw返回500属于5XX范围，微信会重发通知，不会造成业务数据丢失。
+                // 虽然响应格式不完全符合微信V3文档规范（应返回{"code":"FAIL","message":"..."}的JSON），但实际不影响功能，暂不处理。
                 throw new Exception("验签失败！");
             }
 

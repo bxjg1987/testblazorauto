@@ -27,35 +27,14 @@ namespace BXJG.WeChat.Pay
     /// </summary>
     public class CertificateDefaultProvider : ICertificateProvider
     {
-        /// <summary>
-        /// 微信平台证书获取接口返回的原始数据
-        /// 使用volatile确保后台线程更新后其他线程立即可见
-        /// </summary>
         private volatile WXCertificateResult wxCertificateResult;
-        /// <summary>
-        /// 微信支付模块选项监控器
-        /// </summary>
         private readonly IOptionsMonitor<Option> wxPaymentOption;
-        /// <summary>
-        /// 时钟 用于获取准确的当前时间
-        /// </summary>
         private readonly IClock clock;
-        /// <summary>
-        /// 日志记录器
-        /// </summary>
         public ILogger logger { get; set; } = NullLogger.Instance;
-        /// <summary>
-        /// 微信支付模块使用的HttpClientFactory
-        /// </summary>
         private readonly IHttpClientFactory httpClientFactory;
-        /// <summary>
-        /// 加解密、签名、验签等
-        /// </summary>
         private readonly SecretHelper secretHelper;
-        /// <summary>
-        /// 存储微信平台证书的文件
-        /// </summary>
         private readonly string wxCertPath;
+        private readonly SemaphoreSlim _updateSemaphore = new SemaphoreSlim(1, 1);
         /// <summary>
         /// 实例化WXCertificateDefaultProvider
         /// </summary>
@@ -69,7 +48,8 @@ namespace BXJG.WeChat.Pay
                                           IHttpClientFactory wxClientFactory,
                                           SecretHelper secretHelper,
                                           IClock clock,
-                                          IEnv secureDirectory)
+                                          IEnv secureDirectory,
+                                          ILogger<CertificateDefaultProvider> logger)
         {
             this.wxPaymentOption = wxPaymentOption;
             this.httpClientFactory = wxClientFactory;
@@ -78,6 +58,8 @@ namespace BXJG.WeChat.Pay
             this.secretHelper = secretHelper;
             this.wxCertPath = Path.Combine(secureDirectory.SecureDirectory, "wx", "wxpaycert.json");
 
+            if (!File.Exists(wxCertPath))
+                throw new FileNotFoundException($"微信支付证书文件不存在：{wxCertPath}，请确认证书文件已放置到位。");
             var txt = File.ReadAllText(wxCertPath);
             wxCertificateResult = JsonSerializer.Deserialize<WXCertificateResult>(txt);
             foreach (var c in wxCertificateResult.data)
@@ -119,14 +101,27 @@ namespace BXJG.WeChat.Pay
         }
         private async Task UpdateCertAsync(CancellationToken cancellationToken = default)
         {
-            var temp = await GetCertAsync(cancellationToken);
-            var str = JsonSerializer.Serialize(temp);
-            await File.WriteAllTextAsync(wxCertPath, str, cancellationToken);
-            foreach (var c in temp.data)
+            await _updateSemaphore.WaitAsync(cancellationToken);
+            try
             {
-                c.cert = secretHelper.AesGcmDecrypt(c.encrypt_certificate.associated_data, c.encrypt_certificate.nonce, c.encrypt_certificate.ciphertext);
+                var xzs = wxCertificateResult.data.OrderBy(c => c.effective_time).First();
+                var now = await clock.GetNowAsync();
+                if (xzs.expire_time.AddDays(-9) > now)
+                    return;
+
+                var temp = await GetCertAsync(cancellationToken);
+                var str = JsonSerializer.Serialize(temp);
+                await File.WriteAllTextAsync(wxCertPath, str, cancellationToken);
+                foreach (var c in temp.data)
+                {
+                    c.cert = secretHelper.AesGcmDecrypt(c.encrypt_certificate.associated_data, c.encrypt_certificate.nonce, c.encrypt_certificate.ciphertext);
+                }
+                this.wxCertificateResult = temp;
             }
-            this.wxCertificateResult = temp;
+            finally
+            {
+                _updateSemaphore.Release();
+            }
         }
         /// <summary>
         /// 调用微信接口 获取 微信支付平台证书

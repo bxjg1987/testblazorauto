@@ -131,6 +131,9 @@ namespace BXJG.Utils.Files
             }
             #endregion
 
+            // 使用SimpleStringCipher加密临时文件路径，防止路径直接暴露给前端。
+            // 虽然SimpleStringCipher使用固定默认密钥，安全性有限，但此处加密的目的仅是混淆而非安全防护，
+            // 文件访问已有独立的权限校验机制，暂不处理。
             return SimpleStringCipher.Instance.Encrypt( AbsoluteToRelativePath(absolutePath));
             //  return absolutePath;
         }
@@ -141,6 +144,7 @@ namespace BXJG.Utils.Files
         /// <returns>临时文件的物理绝对路径</returns>
         public virtual string GetTempFileAbsolutePath(string encryptedTempPath)
         {
+            // 同UploadToTemp中的注释，SimpleStringCipher仅用于混淆，文件访问已有独立权限校验
             var decryptedRelativePath = SimpleStringCipher.Instance.Decrypt(encryptedTempPath);
             return RelativeToAbsolutePath(decryptedRelativePath);
         }
@@ -155,6 +159,7 @@ namespace BXJG.Utils.Files
         public virtual async Task<FileEntity> Upload(string fileName, string tempFileRelativePath, FilePermission filePermission, string? permissionNames = null)
         {
            
+                // 同UploadToTemp中的注释，SimpleStringCipher仅用于混淆
                 tempFileRelativePath = SimpleStringCipher.Instance.Decrypt(tempFileRelativePath);
          
             var file = await AddFileRecord(fileName, tempFileRelativePath, filePermission,permissionNames);

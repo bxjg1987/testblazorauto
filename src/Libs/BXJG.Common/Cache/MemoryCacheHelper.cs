@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -10,6 +10,8 @@ namespace BXJG.Common.Cache
     /// 极简内存缓存工具类，支持绝对过期和滑动过期。
     /// 默认最大缓存容量为 10000 项，可通过 ConfigureMaxItems 调整。
     /// 适合 Blazor WebAssembly 或其它受限环境。
+    /// 注意：此类仅在前端（Blazor WASM）临时使用，运行在单线程环境中，不存在并发访问场景，
+    /// 因此 GetOrSetAsync 中的 Contains+AddOrUpdate 非原子操作不会造成实际问题。
     /// </summary>
     public static class MemoryCacheHelper
     {

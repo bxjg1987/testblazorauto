@@ -1,4 +1,4 @@
-﻿using Abp.Domain.Repositories;
+using Abp.Domain.Repositories;
 using Abp.Linq.Extensions;
 using BXJG.Utils.Files;
 using BXJG.Utils.Tag;
@@ -124,10 +124,12 @@ namespace BXJG.Utils.Extensions
 
 
         #region abp仓储的默认实现目前的删除是查询出来之后再删除，数据量大时有问题，已经提交了issue，这里是临时解决方式
-        /// <summary>
-        /// abp仓储的默认实现目前的删除是查询出来之后再删除，数据量大时有问题，已经提交了issue，这里是临时解决方式
-        /// </summary>
-        public static Func<object, CancellationToken, Task<int>> xx;
+        private static Func<object, CancellationToken, Task<int>> _batchDeleteImpl;
+        internal static Func<object, CancellationToken, Task<int>> BatchDeleteImpl
+        {
+            get => _batchDeleteImpl;
+            set => _batchDeleteImpl = value;
+        }
         /// <summary>
         /// abp仓储的默认实现目前的删除是查询出来之后再删除，数据量大时有问题，已经提交了issue，这里是临时解决方式
         /// </summary>
@@ -137,7 +139,9 @@ namespace BXJG.Utils.Extensions
         /// <returns></returns>
         public static Task<int> BatchDelete<T>(this IQueryable<T> q, CancellationToken cancellationToken = default)
         {
-            return xx(q, cancellationToken);
+            if (_batchDeleteImpl == null)
+                throw new InvalidOperationException("BatchDelete未初始化，请确保EFCoreModule已加载");
+            return _batchDeleteImpl(q, cancellationToken);
         }
         #endregion
     }

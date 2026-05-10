@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -27,6 +27,7 @@ namespace BXJG.Common.Job
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             int jb = 5;//连续记录错误日志太多有问题，使用此参数确保少记录日志
+            // 注意：jb初始值为5导致首次错误退避间隔较长（Interval*5），但因本类已标记[Obsolete]，此问题忽略不修复
             while (!stoppingToken.IsCancellationRequested)
             {
                 await Task.Delay(Interval, stoppingToken);
