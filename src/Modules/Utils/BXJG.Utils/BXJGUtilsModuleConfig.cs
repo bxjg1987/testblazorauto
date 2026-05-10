@@ -1,4 +1,4 @@
-﻿using Abp.Authorization;
+using Abp.Authorization;
 using Abp.Dependency;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
@@ -75,7 +75,7 @@ namespace BXJG.Utils
         /// </para>
         /// 
         /// </summary>
-        public IDictionary<string, claassss> SelectableTagProviders = new Dictionary<string, claassss>();
+        public IDictionary<string, SelectableTagProviderEntry> SelectableTagProviders = new Dictionary<string, SelectableTagProviderEntry>();
 
         public void AddSelectableTagProvider(string entityType,
                                              Func<SelectableTagContext, ValueTask<List<SelectableTagDto>>> provider,
@@ -87,7 +87,7 @@ namespace BXJG.Utils
             var key = entityType + "."+(propertyName.IsNotNullOrWhiteSpaceBXJG() ?  propertyName :string.Empty);
             if (!SelectableTagProviders.TryGetValue(key, out var lb))
             {
-                lb = new claassss(entityType,  propertyName,
+                lb = new SelectableTagProviderEntry(entityType,  propertyName,
                     new List<Func<SelectableTagContext, ValueTask<List<SelectableTagDto>>>>(),
                     permissionDependency ?? AnonymousPermissionDependency.Instance,
                    propertyDisplayName??propertyName,
@@ -114,7 +114,7 @@ namespace BXJG.Utils
         /// <param name="PropertyName"></param>
         /// <param name="PropertyDisplayName"></param>
         /// <param name="LoadFromDb"></param>
-        public record class claassss(
+        public record class SelectableTagProviderEntry(
             string EntityType,
                                     string? PropertyName ,
                                     ICollection<Func<SelectableTagContext, ValueTask<List<SelectableTagDto>>>> Providers,

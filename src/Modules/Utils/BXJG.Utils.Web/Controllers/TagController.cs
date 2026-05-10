@@ -135,7 +135,7 @@ namespace BXJG.Utils.Web.Controllers
 
 
         }
-        async Task<List<SelectableTagDto>> GetSelectable(BXJGUtilsModuleConfig.claassss provider, int top, bool loadFromDb)
+        async Task<List<SelectableTagDto>> GetSelectable(BXJGUtilsModuleConfig.SelectableTagProviderEntry provider, int top, bool loadFromDb)
         {
             var list = new List<SelectableTagDto>();
             var ctx = new SelectableTagContext(ScopedIocResolver, provider.EntityType, provider.PropertyName, top);
@@ -210,13 +210,13 @@ namespace BXJG.Utils.Web.Controllers
             var dpList = new List<DynamicPropertyDto<List<TagDto>>>();
             foreach (var item in kxlist)
             {
-                List<TagDto> sdfsdf = await GetEntityTags(item.Key.EntityType, item.Key.PropertyName, item.Key.PropertyDisplayName, item);
+                List<TagDto> propertyTags = await GetEntityTags(item.Key.EntityType, item.Key.PropertyName, item.Key.PropertyDisplayName, item);
 
                 dpList.Add(new DynamicPropertyDto<List<TagDto>>
                 {
                     PropertyDisplayName = item.Key.PropertyDisplayName,
                     PropertyName = item.Key.PropertyName,
-                    Value = sdfsdf
+                    Value = propertyTags
                 });
             }
             return dpList;

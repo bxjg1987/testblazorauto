@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
@@ -172,13 +172,13 @@ namespace System
 
         #region 临时改变对象状态
         //如果使用深拷贝，则范围内可以修改任意状态，但目标对象若是个非常复杂的对象，而范围内只修改极少的数据时，太浪费了。
-        private class sdsdf : IDisposable
+        private class PropertySnapshot : IDisposable
         {
             Dictionary<string, object> dic = new Dictionary<string, object>();
-            object ysz;
-            public sdsdf(object obj, params string[] ms)
+            object target;
+            public PropertySnapshot(object obj, params string[] ms)
             {
-                ysz = obj;
+                target = obj;
                 foreach (var item in ms)
                 {
                     dic.Add(item, obj.GetFieldOrPropertyValue(item));
@@ -189,15 +189,15 @@ namespace System
             {
                 foreach (var item in dic)
                 {
-                    ysz.SetFieldOrPropertyValue(item.Key, item.Value);
+                    target.SetFieldOrPropertyValue(item.Key, item.Value);
                 }
-                dic.Clear();//多此一举
+                dic.Clear();
             }
         }
 
-        public static IDisposable LinshiShezhi(this object obj, params string[] ms)
+        public static IDisposable TemporarilySet(this object obj, params string[] ms)
         {
-            return new sdsdf(obj, ms);
+            return new PropertySnapshot(obj, ms);
         }
         #endregion
 
