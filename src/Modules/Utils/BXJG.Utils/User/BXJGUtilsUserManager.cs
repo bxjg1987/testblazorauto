@@ -1,4 +1,4 @@
-﻿using Abp.Authorization.Users;
+using Abp.Authorization.Users;
 using Abp.Authorization;
 using Abp.Configuration;
 using Abp.Domain.Repositories;
@@ -85,6 +85,11 @@ public class BXJGUtilsUserManager<TRole, TUser> : AbpUserManager<TRole, TUser>//
     /// <param name="user"></param>
     /// <param name="permission"></param>
     /// <returns></returns>
+    /// <remarks>
+    /// TODO: 需核查逻辑 - 存在两个问题：
+    /// 1. if (flag == false) 判断应在 foreach (var item2 in ps2) 循环外部，当前在循环内部导致只要有一个依赖权限未被授权就禁止，而非遍历完所有依赖权限后再判断
+    /// 2. ps2 为空时内层 foreach 不执行，item 不会被禁止，需确认是否符合业务预期
+    /// </remarks>
     public override async Task ProhibitPermissionAsync(TUser user, Permission permission)
     {
         var ps = permission.GetDependencePermissions();//我依赖的权限
