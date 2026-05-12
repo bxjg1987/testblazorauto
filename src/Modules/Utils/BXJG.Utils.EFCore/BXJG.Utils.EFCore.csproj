@@ -33,7 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Abp.ZeroCore.EntityFrameworkCore" Version="10.*" />
+    <PackageReference Include="Abp.ZeroCore.EntityFrameworkCore" Version="10.4.0" />
     <!--<PackageReference Include="DotNetCore.CAP" Version="7.2.0" />-->
 
   </ItemGroup>

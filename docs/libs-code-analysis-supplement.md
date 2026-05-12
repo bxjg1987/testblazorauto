@@ -15,11 +15,11 @@
 
 ```csharp
 // SetFieldOrPropertyValue 中两处 field 可能为 null：
-// 第26行：field.FieldType
-// 第54行：field.SetValue(obj, convertedValue)
+// 第24行：field.FieldType
+// 第50行：field.SetValue(obj, convertedValue)
 
 // GetFieldOrPropertyValue 中一处：
-// 第72行：t.GetField(propertyName, flag).GetValue(obj)
+// 第62行：t.GetField(propertyName, flag).GetValue(obj)
 ```
 
 **建议处理**:
@@ -79,8 +79,10 @@ default:
 3. 仅影响字符串类型分支，数值类型已使用参数化查询（`@0`），不受注入影响
 4. 主要风险是数据暴露——攻击者可能看到本应被搜索条件过滤掉的数据
 
+**补充发现**: 源码中方法注释写着"字符串类型的条件值通过拼接方式构建动态LINQ表达式，这是设计需要，不存在注入风险，无需修改"，该注释与实际行为矛盾，具有误导性，可能导致开发者误认为安全而忽视此风险。
+
 **建议处理**:
-- 在方法注释中说明此注入风险，提醒调用方注意
+- 修正方法注释，将"不存在注入风险"改为客观描述，如"字符串类型条件值通过拼接构建表达式，存在注入风险（双引号可突破字符串边界），调用方应确保输入值已过滤"
 - 将来优化时可使用参数化方式替代字符串拼接，如 `q.Where($"{define.Name}.Contains(@0)", define.Value)`
 
 **相关文件**:
@@ -229,16 +231,177 @@ MsgContainer.TryAdd(msg1.GetHashCode(), msg1);
 
 ---
 
+### P1-18. AccessTokenProvider 成功获取 token 后立即退出循环，不会自动刷新
+
+**项目**: BXJG.Wechat
+**问题描述**: `AccessTokenProvider` 构造函数中的 `while(true)` 循环，在成功获取 token 后立即 `break` 退出：
+
+```csharp
+if (!string.IsNullOrWhiteSpace(accessToken) && (DateTimeOffset.Now - lastUpdate).TotalSeconds < 7200 - delay)
+    break;
+```
+
+这意味着 token 只会在构造时获取一次，之后不会再自动刷新。微信 access_token 有效期仅 7200 秒（2小时），过期后 `accessToken` 字段仍持有旧值，所有依赖它的功能（如 `WeChatMessageService.SendSubscriptMsgAsync`）都会因 token 过期而失败。
+
+虽然 `OnChange` 回调会重置 `lastUpdate`，但它不会重新启动后台循环——循环已经退出，无法再检查条件。
+
+**建议处理**:
+- 去掉 `break`，使循环持续运行定时刷新 token
+- 或将循环改为定时刷新模式，参考同项目中 `CertificateRefreshService` 使用 `BackgroundService` 的做法
+
+**相关文件**:
+- [AccessTokenProvider.cs](file:///d:/abp/src/Libs/BXJG.Wechat/Common/AccessTokenProvider.cs#L50-L51)
+
+---
+
+### P2-7. 枚举 miniprogram_state 和 lang 误用 [Flags] 特性
+
+**项目**: BXJG.Wechat
+**问题描述**: `Enums.cs` 中 `miniprogram_state` 和 `lang` 枚举都标记了 `[Flags]`，但它们都是互斥选项（开发版/体验版/正式版；zh_CN/en_US/zh_HK/zh_TW），不是位标志组合。`[Flags]` 的语义是允许按位组合（如 `developer | trial`），这在此场景下毫无意义，且会误导开发者或工具。
+
+```csharp
+[Flags]
+public enum miniprogram_state { developer, trial, formal }
+
+[Flags]
+public enum lang { zh_CN, en_US, zh_HK, zh_TW }
+```
+
+**建议处理**:
+- 移除两个枚举上的 `[Flags]` 特性
+
+**相关文件**:
+- [Enums.cs](file:///d:/abp/src/Libs/BXJG.Wechat/Common/Enums.cs#L12-L33)
+
+---
+
+### P2-8. CircuitStateContainer.GetByZhongjie 使用 Single() 在无匹配或多匹配时会抛异常
+
+**项目**: BXJG.Common.RCL
+**问题描述**: `GetByZhongjie` 方法使用了 `.Single()`：
+
+```csharp
+public BlazorServerContext GetByZhongjie(object obj)
+{
+    return GetByValue(obj, c => c.Zhongjie).Single();
+}
+```
+
+当找不到匹配项时抛出 `InvalidOperationException`，当有多个匹配项时也会抛异常。虽然注释中提到"CircuitStateContainer 不是线程安全的，foreach 有几率报错"，但 `Single()` 的问题与线程安全无关，纯粹是查询逻辑不够健壮。
+
+**建议处理**:
+- 将 `Single()` 替换为 `SingleOrDefault()`，并在返回 null 时由调用方做适当处理
+
+**相关文件**:
+- [CircuitStateContainer.cs](file:///d:/abp/src/Libs/BXJG.Common.RCL/CircuitStateContainer.cs#L97-L100)
+
+---
+
+### P2-9. LinqExt.ApplyDynamicCondtion 方法注释与实际行为矛盾
+
+**项目**: BXJG.Common
+**问题描述**: 方法注释写着"字符串类型的条件值通过拼接方式构建动态LINQ表达式，这是设计需要，不存在注入风险，无需修改"，但 P1-17 已证实注入风险确实存在（双引号可突破字符串边界）。该注释具有误导性，可能导致开发者误认为安全而忽视此风险。
+
+**建议处理**:
+- 将注释修正为客观描述，如"字符串类型条件值通过拼接构建表达式，存在注入风险（双引号可突破字符串边界），调用方应确保输入值已过滤"
+
+**相关文件**:
+- [LinqExt.cs](file:///d:/abp/src/Libs/BXJG.Common/Extensions/LinqExt.cs#L16-L17)
+
+---
+
+### P2-10. CompareType 枚举误用 [Flags] 特性
+
+**项目**: BXJG.Common
+**问题描述**: `CompareType` 枚举标记了 `[Flags]`，但它表示的是互斥的比较操作（大于/等于/小于等），不应按位组合。虽然枚举值使用了 `1 << n` 的位偏移定义方式，使 `[Flags]` 的组合在技术上是可行的，但在业务语义上一个条件只能选择一种比较操作（如不能同时"大于"和"包含"），`[Flags]` 会误导开发者认为可以组合使用。`CompareTypeMap.GetCompareTypes` 返回的也是单值列表，从未使用组合值。
+
+```csharp
+[Flags]
+public enum CompareType
+{
+    Dayu = 1 << 0,
+    Dengyu = 1 << 1,
+    Xiaoyu = 1 << 2,
+    // ...
+}
+```
+
+**建议处理**:
+- 移除 `[Flags]` 特性，保留 `1 << n` 的值定义以维持数值间隔
+- 或在注释中说明此枚举不应组合使用
+
+**相关文件**:
+- [CompareType.cs](file:///d:/abp/src/Libs/BXJG.Common/Dynamics/CompareType.cs#L8-L12)
+
+---
+
+### P2-11. MiniProgramApiService.Code2Session 反序列化结果未检查 null
+
+**项目**: BXJG.Wechat
+**问题描述**: `Code2Session` 方法直接返回 `JsonSerializer.Deserialize<LoginResult>(response)` 的结果，未检查反序列化是否返回 null。当微信 API 返回非预期 JSON（如错误响应）时，`Deserialize` 可能返回 null，调用方访问 `openid` 等属性将抛出 NullReferenceException。
+
+```csharp
+var response = await httpClient.GetStringAsync(requestUrl);
+return JsonSerializer.Deserialize<LoginResult>(response); // 可能返回 null
+```
+
+与 P2-4 类似，此问题实际影响有限：微信 API 返回错误时 `Deserialize` 通常会抛出 `JsonException`（因为 JSON 结构不匹配），而非静默返回 null。但仍建议添加防御性检查或注释。
+
+**建议处理**:
+- 添加 null 检查并在返回 null 时抛出有意义的异常
+- 或在代码注释中说明此行为
+
+**相关文件**:
+- [MiniProgramApiService.cs](file:///d:/abp/src/Libs/BXJG.Wechat/MiniProgram/MiniProgramApiService.cs#L30-L31)
+
+---
+
+### P2-12. AccessTokenProvider 构造函数中使用 Task.Run 启动后台循环，生命周期不受控
+
+**项目**: BXJG.Wechat
+**问题描述**: `AccessTokenProvider` 在构造函数中通过 `Task.Run` 启动了一个 `while(true)` 后台循环，但该 Task 没有被保存或管理。与同项目中 `CertificateRefreshService` 使用 `BackgroundService`（受 IHost 管理，支持优雅停止）的做法不同，`Task.Run` 创建的后台任务：
+1. 无法被优雅停止（无 CancellationToken）
+2. 应用关闭时可能被强制终止，导致 token 刷新请求被截断
+3. 异常无法被外部感知
+
+```csharp
+public AccessTokenProvider(IOptionsMonitor<MiniProgramAuthenticationOptions> options, ...)
+{
+    Task.Run(async () =>
+    {
+        while (true) { ... }
+    }); // Task 未被保存，无法管理
+}
+```
+
+此问题与 P1-18（循环 break 导致不刷新）关联，若修复 P1-18（去掉 break 使循环持续运行），则生命周期管理问题将变得更加重要。
+
+**建议处理**:
+- 参考 `CertificateRefreshService` 的做法，将 token 刷新逻辑重构为 `BackgroundService`
+- 或至少保存 Task 引用并支持 CancellationToken
+
+**相关文件**:
+- [AccessTokenProvider.cs](file:///d:/abp/src/Libs/BXJG.Wechat/Common/AccessTokenProvider.cs#L33-L55)
+
+---
+
 ## 三、补充问题汇总
 
 | 编号 | 级别 | 项目 | 简述 |
 |------|------|------|------|
 | P2-1 | 建议 | BXJG.Common | SetFieldOrPropertyValue 属性/字段不存在时异常信息不明确，将来添加注释即可 |
 | P2-2 | 建议 | BXJG.Common | ApplyDynamicCondtion 导航属性不存在时异常信息不明确，将来添加注释即可 |
-| P1-17 | 急需 | BXJG.Common | ApplyDynamicCondtion 字符串条件值 Dynamic LINQ 注入风险，影响有限，方法注释说明即可 |
+| P1-17 | 急需 | BXJG.Common | ApplyDynamicCondtion 字符串条件值 Dynamic LINQ 注入风险，影响有限，方法注释说明即可；**注意：源码注释"不存在注入风险"与实际矛盾，需修正注释** |
 | P2-3 | 建议 | BXJG.Common.Web | AspNetEnv.RootUrl 非 HTTP 上下文中 NullRef，当前不会触发，将来注释说明即可 |
 | P2-4 | 建议 | BXJG.Wechat | AccessTokenProvider 反序列化结果未检查 null，有 catch 保护，将来注释说明即可 |
 | P1-13 | 急需 | BXJG.Wechat | WeChatMessageService 枚举序列化为整数，微信 API 期望字符串，使用时需修复 |
 | P2-5 | 建议 | BXJG.Common.RCL | BlazorServerLoggerExt 用 GetHashCode 做字典键，当前碰撞概率极低，将来取消注释自增ID即可 |
 | P2-6 | 建议 | BXJG.Wechat | AccessTokenProvider 字段缺少线程安全保护，string 赋值原子性保证实际影响极小，将来注释说明即可 |
 | P1-16 | 急需 | BXJG.Wechat | SecretHelper.OnChange 回调中 Init() 异常可能导致对象不一致状态，需加 try-catch 保护 |
+| P1-18 | 急需 | BXJG.Wechat | AccessTokenProvider 成功获取 token 后退出循环不再刷新，token 过期后所有依赖功能将失败 |
+| P2-7 | 建议 | BXJG.Wechat | 枚举 miniprogram_state 和 lang 误用 [Flags] 特性，移除即可 |
+| P2-8 | 建议 | BXJG.Common.RCL | CircuitStateContainer.GetByZhongjie 使用 Single() 不够健壮，应改为 SingleOrDefault() |
+| P2-9 | 建议 | BXJG.Common | ApplyDynamicCondtion 方法注释"不存在注入风险"与实际矛盾，需修正注释 |
+| P2-10 | 建议 | BXJG.Common | CompareType 枚举误用 [Flags] 特性，比较操作不应组合使用 |
+| P2-11 | 建议 | BXJG.Wechat | MiniProgramApiService.Code2Session 反序列化结果未检查 null，影响有限 |
+| P2-12 | 建议 | BXJG.Wechat | AccessTokenProvider 构造函数中 Task.Run 后台循环生命周期不受控，与 P1-18 关联 |

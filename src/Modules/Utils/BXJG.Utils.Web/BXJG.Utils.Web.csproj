@@ -29,8 +29,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Abp.AspNetCore" Version="10.*" />
-    <PackageReference Include="Abp.AspNetCore.SignalR" Version="10.*" />
+    <PackageReference Include="Abp.AspNetCore" Version="10.4.0" />
+    <PackageReference Include="Abp.AspNetCore.SignalR" Version="10.4.0" />
     <PackageReference Include="AsyncKeyedLock" Version="8.0.2" />
   
 
