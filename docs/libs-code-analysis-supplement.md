@@ -119,6 +119,73 @@ public string RootUrl
 
 ---
 
+### P0-9. AccessTokenProvider 反序列化结果未检查 null，可能导致后台任务崩溃
+
+**项目**: BXJG.Wechat
+**问题描述**: 原文档 P0-1 提到了 `AccessTokenProvider` 后台任务无法停止和只刷新一次的问题，但遗漏了：当微信 API 返回非预期 JSON（如错误响应）时，`JsonSerializer.Deserialize<AccessTokenResult>(msg)` 可能返回 null，后续直接访问 `result.access_token` 将抛出 NullReferenceException。此外，即使 `result` 不为 null，微信 API 返回错误时 `access_token` 也可能为 null，代码未检查错误码（如 `errcode`）。
+
+```csharp
+var result = JsonSerializer.Deserialize<AccessTokenResult>(msg);
+this.accessToken = result.access_token;  // result 可能为 null → NullRef
+this.expire_in = result.expires_in;
+```
+
+此 bug 在后台 `Task.Run` 循环中，虽然被外层 `catch (Exception ex)` 捕获并记录日志，不会导致应用崩溃，但会导致本次 token 刷新失败，且错误日志中只显示"微信小程序刷新accessToken失败！"，无法区分是网络问题还是响应解析问题。
+
+**建议处理**:
+- 添加 `result` 的 null 检查，当反序列化失败时记录详细的错误信息
+- 检查微信 API 返回的 `errcode` 字段，当存在错误码时记录具体错误
+
+**相关文件**:
+- [AccessTokenProvider.cs](file:///d:/abp/src/Libs/BXJG.Wechat/Common/AccessTokenProvider.cs#L59-L61)
+
+---
+
+### P1-15. AccessTokenProvider 字段缺少线程安全保护
+
+**项目**: BXJG.Wechat
+**问题描述**: `accessToken` 和 `expire_in` 字段由 `Task.Run` 后台线程写入，由调用方线程（如 `WeChatMessageService`）读取，但没有任何同步机制（`volatile`、`lock`、`Interlocked` 等）。在某些内存模型下，读取线程可能看到过期的缓存值，无法观察到写入线程的更新。
+
+```csharp
+// 后台线程写入
+this.accessToken = result.access_token;
+this.expire_in = result.expires_in;
+
+// 调用方线程读取（如 WeChatMessageService.SendSubscriptMsgAsync）
+var access_token = this._accessTokenProvider.accessToken;
+```
+
+此外，`lastUpdate` 字段同样在后台线程和 `OnChange` 回调中写入，在 `while` 循环条件中读取，也存在可见性问题。
+
+**建议处理**:
+- 将 `accessToken` 标记为 `volatile`，或使用 `Interlocked.Exchange` / `Interlocked.CompareExchange` 进行读写
+- 或使用 `lock` 保护所有字段的读写
+
+**相关文件**:
+- [AccessTokenProvider.cs](file:///d:/abp/src/Libs/BXJG.Wechat/Common/AccessTokenProvider.cs#L21-L23)
+
+---
+
+### P1-16. SecretHelper.Init() 在 IOptionsMonitor.OnChange 回调中异常可能导致应用不稳定
+
+**项目**: BXJG.Wechat
+**问题描述**: 原文档 P1-5 提到了 `SecretHelper` 的 `OnChange` 回调中 `Init()` 线程不安全的问题，但未提及异常风险。`Init()` 方法执行文件 I/O（`File.ReadAllText`），如果文件不存在或被占用，会抛出异常。在 `IOptionsMonitor.OnChange` 回调中抛出异常，行为取决于 ASP.NET Core 的选项监控实现，可能导致：
+1. 后续配置变更不再触发回调（监控链断裂）
+2. 对象处于不一致状态（部分字段已更新，部分未更新）
+
+```csharp
+option.OnChange(_ => Init()); // Init() 中 File.ReadAllText 可能抛出异常
+```
+
+**建议处理**:
+- 在 `Init()` 中添加 try-catch，捕获文件 I/O 异常并记录日志，保持旧值不变
+- 或在 `OnChange` 回调中包裹 try-catch 保护
+
+**相关文件**:
+- [SecretHelper.cs](file:///d:/abp/src/Libs/BXJG.Wechat/Pay/SecretHelper.cs#L69)
+
+---
+
 ## 二、遗漏的急需优化问题（P1）
 
 ### P1-13. WeChatMessageService 枚举值序列化可能不符合微信 API 要求
@@ -176,5 +243,8 @@ MsgContainer.TryAdd(msg1.GetHashCode(), msg1);
 | P0-6 | 严重 | BXJG.Common | ApplyDynamicCondtion 导航属性不存在时 NullRef |
 | P0-7 | 严重 | BXJG.Common | ApplyDynamicCondtion 字符串条件值 Dynamic LINQ 注入风险 |
 | P0-8 | 严重 | BXJG.Common.Web | AspNetEnv.RootUrl 非 HTTP 上下文中 NullRef |
+| P0-9 | 严重 | BXJG.Wechat | AccessTokenProvider 反序列化结果未检查 null，token 刷新失败 |
 | P1-13 | 急需 | BXJG.Wechat | WeChatMessageService 枚举序列化为整数，微信 API 可能不认 |
 | P1-14 | 急需 | BXJG.Common.RCL | BlazorServerLoggerExt 用 GetHashCode 做字典键，碰撞丢日志 |
+| P1-15 | 急需 | BXJG.Wechat | AccessTokenProvider 字段缺少 volatile/线程安全保护 |
+| P1-16 | 急需 | BXJG.Wechat | SecretHelper.OnChange 回调中 Init() 异常可能导致应用不稳定 |

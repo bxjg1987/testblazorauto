@@ -26,7 +26,7 @@ using (var cs = new CryptoStream(ms, decrypt, CryptoStreamMode.Write))
 xBuff = decode2(ms.ToArray()); // 又手动去填充，双重去除！
 ```
 
-此外，`msg` 缓冲区分配了比实际数据更大的空间（`xXml.Length + 32 - xXml.Length % 32`），多余部分为零字节，写入 `CryptoStream` 时这些零字节也会被当作密文处理，导致解密结果不正确。
+此外，`msg` 缓冲区分配了比实际数据更大的空间（`xXml.Length + 32 - xXml.Length % 32`），但实际写入 `CryptoStream` 的是 `xXml`（第 44 行 `cs.Write(xXml, 0, xXml.Length)`），`msg` 从未被写入 `CryptoStream`，属于**死代码**。原分析中"零字节被当作密文处理"的说法是错误的，`msg` 的真正问题是浪费内存分配。
 
 **建议处理**:
 - 使用 `CryptoStreamMode.Read` 模式读取解密结果，让 .NET 自动处理填充
@@ -125,7 +125,7 @@ uow.Current.Disposed += (obj, arg) => // uow.Current 可能为 null
 ### P0-6. DataPermissionInterceptor.InterceptSynchronous 未应用数据权限过滤
 
 **项目**: BXJG.Utils
-**问题描述**: `DataPermissionInterceptor` 的 `InterceptSynchronous` 方法直接调用 `invocation.Proceed()`，完全跳过了数据权限过滤逻辑。而异步方法中会先调用 `LoadDataPermission()` 并启用过滤器。这意味着同步调用带有 `DataPermissionAttribute` 的方法时，数据权限过滤完全不生效。
+**问题描述**: `DataPermissionInterceptor` 的 `InterceptSynchronous` 方法直接调用 `invocation.Proceed()`，完全跳过了数据权限过滤逻辑。异步方法中会调用 `LoadDataPermission()` 并启用 `EnableFilter`，但需注意当前 `LoadDataPermission()` 实际上是空操作（仅 `await Task.CompletedTask`），真正的过滤启用是靠 `EnableFilter` 完成的。同步方法既未调用 `LoadDataPermission()` 也未启用 `EnableFilter`，意味着同步调用带有 `DataPermissionAttribute` 的方法时，数据权限过滤完全不生效。
 
 ```csharp
 public override void InterceptSynchronous(IInvocation invocation)
@@ -146,6 +146,8 @@ public override void InterceptSynchronous(IInvocation invocation)
 
 **项目**: BXJG.Utils
 **问题描述**: `ProhibitPermissionAsync` 方法中，`flag == false` 的判断和 `ProhibitPermissionAsync` 的递归调用被放在了 `foreach (var item2 in ps2)` 循环内部，导致每次遍历依赖权限时都会判断是否禁止，而不是在遍历完所有依赖权限后再判断。这会导致逻辑错误：只要有一个依赖权限未被授权，就会禁止当前权限，即使还有其他依赖权限已被授权。
+
+此外，当 `ps2`（依赖当前权限的权限列表）为**空**时，内层 `foreach` 根本不执行，`item` 永远不会被禁止。这可能是一个关联的逻辑缺陷——如果没有任何权限依赖当前权限，当前权限是否应该被禁止？
 
 ```csharp
 foreach (var item2 in ps2)
@@ -188,6 +190,110 @@ await Repository.InsertAsync(entity);
 
 **相关文件**:
 - [GeneralTreeManager.cs](file:///d:/abp/src/Modules/Utils/BXJG.Utils/GeneralTree/GeneralTreeManager.cs#L59-L101)
+
+---
+
+### P0-9. FileManager.UploadToTemp 文件大小比较单位错误
+
+**项目**: BXJG.Utils
+**问题描述**: `UploadToTemp` 方法中，从设置获取的文件大小限制 `sz` 注释标注单位为 MB，但比较时只乘了 1024（转为 KB），而 `stream.Length` 的单位是字节。这导致比较单位不一致：
+
+```csharp
+var sz = await SettingManager.GetSettingValueAsync<int>(BXJGUtilsConsts.SettingKeyUploadSize); // 设置注释为 MB
+if (stream.Length > sz * 1024) // sz * 1024 是 KB，stream.Length 是字节！
+    throw new UserFriendlyException($"上传的文件大小超过限制，最大为{sz}mb");
+```
+
+分析：
+- 如果 `sz` 单位是 MB：`sz * 1024` 得到的是 KB，而 `stream.Length` 是字节，比较单位不一致，**几乎任何文件都会被拒绝**
+- 如果 `sz` 单位是 KB：比较正确，但错误提示"最大为{sz}mb"严重误导用户（默认值 51200 显示为 51200mb ≈ 50GB）
+- 默认值 `(1024*50).ToString()` = "51200"，如果是 MB = 50GB 不合理，如果是 KB = 50MB 合理但提示文字错误
+
+**无论哪种解释，都存在 bug**：要么大小比较错误导致上传功能不可用，要么错误提示严重误导。
+
+**建议处理**:
+- 统一单位：如果 `sz` 单位是 MB，改为 `sz * 1024 * 1024`；如果是 KB，修正错误提示文字
+
+**相关文件**:
+- [FileManager.cs](file:///d:/abp/src/Modules/Utils/BXJG.Utils/Files/FileManager.cs#L99-L110)
+- [BXJGUtilsSettingProvider.cs](file:///d:/abp/src/Modules/Utils/BXJG.Utils/Settings/BXJGUtilsSettingProvider.cs#L71)
+
+---
+
+### P1-9. XMLHelper.XmlDeserializeAsync 同样存在 StreamReader 关闭底层流的问题
+
+**项目**: BXJG.Utils
+**问题描述**: P1-3 中已指出 `XmlSerialize` 的 `StreamWriter` 会关闭底层流，但 `XmlDeserializeAsync` 方法存在同样的问题。`using var st = new StreamReader(stream, encoding)` 在方法结束时 dispose，`StreamReader` 的默认行为也会关闭底层流。调用方在反序列化后可能还需要使用该流（如再次读取或定位）。
+
+```csharp
+public static Task<T> XmlDeserializeAsync<T>(this Stream stream, Encoding encoding = null, ...)
+{
+    encoding = encoding ?? Encoding.UTF8;
+    using var st = new StreamReader(stream, encoding); // dispose 时会关闭 stream
+    var sfd = new XmlSerializer(typeof(T));
+    return Task.FromResult(sfd.Deserialize(st) as T);
+}
+```
+
+**建议处理**:
+- 使用 `new StreamReader(stream, encoding, detectEncodingFromByteOrderMarks: true, bufferSize: 1024, leaveOpen: true)` 保持流打开
+
+**相关文件**:
+- [XMLHelper.cs](file:///d:/abp/src/Modules/Utils/BXJG.Utils/XML/XMLHelper.cs#L14-L31)
+
+---
+
+### P1-10. QueryableDataPermissionExtensionsHelpers 中 IocResolver.Resolve 不带 ? 直接调用，比 Extensions 更危险
+
+**项目**: BXJG.Utils
+**问题描述**: P1-7 中已指出 `QueryableDataPermissionExtensions` 使用 `IocResolver?.Resolve<T>()` 可能返回 null 的问题。但 `QueryableDataPermissionExtensionsHelpers` 中使用的是**不带 `?` 的直接调用**，如果 `IocResolver` 为 null，会直接抛出 NullReferenceException，比 `?.Resolve` 返回 null 后续再 NullRef 的情况更严重：
+
+```csharp
+// 第 38 行：不带 ? 直接调用
+var userId = AbpDIStaticAccessor.IocResolver.Resolve<IAbpSession>().UserId;
+// 同样的问题出现在第 84 行和第 110 行
+```
+
+如果 `AbpDIStaticAccessor.IocResolver` 为 null，这里会直接崩溃，且错误信息更难定位。
+
+**建议处理**:
+- 与 `QueryableDataPermissionExtensions` 保持一致，添加 null 检查
+- 或考虑统一重构为通过方法参数传入依赖
+
+**相关文件**:
+- [QueryableDataPermissionExtensionsHelpers.cs](file:///d:/abp/src/Modules/Utils/BXJG.Utils/DataPermission/QueryableDataPermissionExtensionsHelpers.cs#L38)
+
+---
+
+### P0-10. DataPermissionInterceptor 异步方法在 DisableDataPermissionAttribute 时缺少 return，导致方法被执行两次
+
+**项目**: BXJG.Utils
+**问题描述**: `InternalInterceptAsynchronous` 方法中，当检测到方法上有 `DisableDataPermissionAttribute` 时，先调用 `proceedInfo.Invoke()` 执行方法，然后 `await` 等待完成——但**缺少 `return` 语句**，导致代码继续向下执行，再次调用 `proceedInfo.Invoke()` 并启用数据权限过滤器。这意味着目标方法会被执行两次：第一次无过滤（符合 disable 预期），第二次带数据权限过滤（完全错误）。
+
+```csharp
+protected override async Task InternalInterceptAsynchronous(IInvocation invocation)
+{
+    var proceedInfo = invocation.CaptureProceedInfo();
+    if (invocation.Method.IsDefined(typeof(DisableDataPermissionAttribute), true))
+    {
+        proceedInfo.Invoke();
+        await (Task)invocation.ReturnValue;
+        // ← 缺少 return！继续往下执行！
+    }
+    await LoadDataPermission();
+    using var df = CurrentUnitOfWorkProvider.Current.EnableFilter(...);
+    proceedInfo.Invoke();  // 方法被第二次调用，且带数据权限过滤！
+    await (Task)invocation.ReturnValue;
+}
+```
+
+对比泛型版本 `InternalInterceptAsynchronous<TResult>` 在第 68 行正确地使用了 `return await (Task<TResult>)invocation.ReturnValue;`，此处为明显的复制粘贴遗漏。对于有副作用的业务方法（如创建订单、发送通知），重复执行将导致严重的数据问题。
+
+**建议处理**:
+- 在 `if` 块内添加 `return;`
+
+**相关文件**:
+- [DataPermissionInterceptor.cs](file:///d:/abp/src/Modules/Utils/BXJG.Utils/DataPermission/DataPermissionInterceptor.cs#L42-L57)
 
 ---
 
@@ -354,20 +460,37 @@ protected override void ExOnExit(MethodContext context)
 
 ---
 
+### P1-11. DataPermissionInterceptor 异步方法中 EnableFilter 的 CurrentUnitOfWorkProvider.Current 可能为 null
+
+**项目**: BXJG.Utils
+**问题描述**: `DataPermissionInterceptor` 的异步拦截方法中，直接调用 `CurrentUnitOfWorkProvider.Current.EnableFilter(DataPermissionConsts.DataPermission)`，未检查 `CurrentUnitOfWorkProvider.Current` 是否为 null。与 P0-5 同类问题——在某些上下文中（如后台任务、非 HTTP 请求），`CurrentUnitOfWorkProvider.Current` 可能为 null，导致 NullReferenceException。
+
+```csharp
+using var df = CurrentUnitOfWorkProvider.Current.EnableFilter(DataPermissionConsts.DataPermission);
+// CurrentUnitOfWorkProvider.Current 可能为 null → NullRef
+```
+
+**建议处理**:
+- 添加 null 检查，当 `CurrentUnitOfWorkProvider.Current` 为 null 时跳过过滤器启用
+
+**相关文件**:
+- [DataPermissionInterceptor.cs](file:///d:/abp/src/Modules/Utils/BXJG.Utils/DataPermission/DataPermissionInterceptor.cs#L54)
+
+---
+
 ## 三、建议改进的问题（P2 - 可择时修复）
 
 ### P2-1. RootExt.cs 和 dfdfg.cs 包含无意义的测试代码
 
 **项目**: BXJG.Utils
-**问题描述**: `RootExt.cs` 中定义了名为 `sdfsfsd` 的静态类和 `sdfsfdsdf` 方法，`dfdfg.cs` 中定义了 `dfdfg` 类和 `sss` 方法（方法体包含未完成的 `map.cr`），`sss.cs` 中定义了 `sss` 类。这些都是无意义的测试代码，不应出现在生产代码中。
+**问题描述**: `RootExt.cs` 中定义了名为 `sdfsfsd` 的静态类和 `sdfsfdsdf` 方法，`dfdfg.cs` 中定义了 `dfdfg` 类和 `sss` 方法（方法体包含未完成的 `map.cr`）。这些都是无意义的测试代码，不应出现在生产代码中。
 
 **建议处理**:
-- 删除这些文件或清理其中的测试代码
+- 删除这些文件
 
 **相关文件**:
 - [RootExt.cs](file:///d:/abp/src/Modules/Utils/BXJG.Utils/Extensions/RootExt.cs)
 - [dfdfg.cs](file:///d:/abp/src/Modules/Utils/BXJG.Utils/Extensions/dfdfg.cs)
-- [sss.cs](file:///d:/abp/src/Modules/Utils/BXJG.Utils/AutoMapper/sss.cs)
 
 ---
 
@@ -462,6 +585,19 @@ PropertyName = Regex.Replace(c.DynamicProperty.PropertyName, @"\d+", ""),
 
 ---
 
+### P2-7. AutoMapper/sss.cs 类名命名不规范
+
+**项目**: BXJG.Utils
+**问题描述**: `sss.cs` 中定义了 `sss` 类，实现了 `IMemberValueResolver<IExtendableObject, IExtendableDto, string, object>` 接口，功能是将 `ExtensionData` JSON 字符串反序列化为动态对象。该类有实际业务用途（AutoMapper 值解析器），但类名 `sss` 完全无意义，严重降低代码可读性。
+
+**建议处理**:
+- 将类重命名为 `ExtensionDataValueResolver` 或类似的有意义名称
+
+**相关文件**:
+- [sss.cs](file:///d:/abp/src/Modules/Utils/BXJG.Utils/AutoMapper/sss.cs)
+
+---
+
 ## 四、问题汇总
 
 | 编号 | 级别 | 项目 | 简述 |
@@ -474,6 +610,8 @@ PropertyName = Regex.Replace(c.DynamicProperty.PropertyName, @"\d+", ""),
 | P0-6 | 严重 | BXJG.Utils | DataPermissionInterceptor 同步拦截未应用数据权限过滤 |
 | P0-7 | 严重 | BXJG.Utils | BXJGUtilsUserManager.ProhibitPermissionAsync 逻辑错误，判断条件在循环内 |
 | P0-8 | 严重 | BXJG.Utils | GeneralTreeManager.CreateAsync 并发时 Code 重复，未捕获异常重试 |
+| P0-9 | 严重 | BXJG.Utils | FileManager.UploadToTemp 文件大小比较单位错误，上传功能可能不可用 |
+| P0-10 | 严重 | BXJG.Utils | DataPermissionInterceptor 异步方法缺少 return，方法被执行两次 |
 | P1-1 | 急需 | BXJG.Utils.RCL | CommonConnection 硬编码 SignalR 地址 localhost:21021 |
 | P1-2 | 急需 | BXJG.Utils | HashHelper.GetMD5 流位置未重置，哈希结果可能不正确 |
 | P1-3 | 急需 | BXJG.Utils | XMLHelper.XmlSerialize 的 StreamWriter 关闭了底层流 |
@@ -482,9 +620,13 @@ PropertyName = Regex.Replace(c.DynamicProperty.PropertyName, @"\d+", ""),
 | P1-6 | 急需 | BXJG.Utils | StaticDIAccessInterceptor using ScopedIocResolver 可能二次释放 |
 | P1-7 | 急需 | BXJG.Utils | QueryableDataPermissionExtensions 服务定位器反模式，null 时 NullRef |
 | P1-8 | 急需 | BXJG.Utils | AbpMoInterceptorAttribute 未释放 CreateScope 创建的 scoped 容器 |
-| P2-1 | 建议 | BXJG.Utils | RootExt.cs/dfdfg.cs/sss.cs 包含无意义测试代码 |
+| P1-9 | 急需 | BXJG.Utils | XMLHelper.XmlDeserializeAsync 的 StreamReader 关闭了底层流 |
+| P1-10 | 急需 | BXJG.Utils | QueryableDataPermissionExtensionsHelpers IocResolver.Resolve 不带?直接调用 |
+| P1-11 | 急需 | BXJG.Utils | DataPermissionInterceptor EnableFilter 的 Current 可能为 null |
+| P2-1 | 建议 | BXJG.Utils | RootExt.cs/dfdfg.cs 包含无意义测试代码 |
 | P2-2 | 建议 | BXJG.Utils | PermissionExtensions 常量 sdf 命名不规范 |
 | P2-3 | 建议 | BXJG.Utils | DateTimeExt.ToAge 字符串解析获取年龄，脆弱低效 |
 | P2-4 | 建议 | BXJG.Utils | HashHelper.GetMD5 抛出无信息的 Exception |
 | P2-5 | 建议 | BXJG.Utils | DataFilterInterceptor 仅检查类级特性，忽略方法级特性 |
 | P2-6 | 建议 | BXJG.Utils | DynamicPropertyManager 正则去数字逻辑脆弱 |
+| P2-7 | 建议 | BXJG.Utils | AutoMapper/sss.cs 类名 sss 命名不规范 |
