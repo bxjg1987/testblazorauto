@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +11,7 @@ namespace Microsoft.AspNetCore.Http
     {
      
         /// <summary>
-        /// 从cookie、请求头或querystring中获取值
+        /// 从请求头、querystring或cookie中获取值
         /// 关键字是：key（不区分大小写）
         /// </summary>
         /// <param name="request"></param>

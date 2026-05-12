@@ -122,6 +122,7 @@ namespace BXJG.WeChat.Pay
         /// <param name="body"></param>
         /// <param name="wechatpaySerial"></param>
         /// <param name="signature"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public async Task<bool> VerifyAsync(string timestamp, string nonce, string body, string wechatpaySerial, string signature, CancellationToken cancellationToken = default)
         {
@@ -149,6 +150,7 @@ namespace BXJG.WeChat.Pay
         /// <param name="method"></param>
         /// <param name="uri"></param>
         /// <param name="body"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public async Task<string> SignAsync(string method, string uri, string body = default(string), CancellationToken cancellationToken = default)
         {
@@ -196,6 +198,7 @@ namespace BXJG.WeChat.Pay
         /// </summary>
         /// <param name="wxSignValidator"></param>
         /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public static async Task<string> SignAsync(this SecretHelper wxSignValidator, HttpRequestMessage request, CancellationToken cancellationToken = default)
         {
@@ -220,9 +223,10 @@ namespace BXJG.WeChat.Pay
         /// 通常将Header转换为<see cref="IDictionary{string, string}"/><br />
         /// <seealso cref="" href="https://wechatpay-api.gitbook.io/wechatpay-api-v3/ren-zheng/qian-ming-he-zheng-shu#qing-qiu-qian-ming" />
         /// </summary>
-        /// <param name="wxCertificateProvider"></param>
+        /// <param name="wxSignValidator"></param>
         /// <param name="requestHeader"></param>
         /// <param name="body"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public static Task<bool> VerifyAsync(this SecretHelper wxSignValidator, IDictionary<string, string> requestHeader, string body, CancellationToken cancellationToken = default)
         {

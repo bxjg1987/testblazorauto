@@ -419,7 +419,7 @@ namespace BXJG.Utils.RCL.Components
 
         #region 删除
         /// <summary>
-        /// 是否显示进入编辑模式的按钮
+        /// 是否显示删除按钮
         /// </summary>
         protected virtual bool IsShowDelete => deleteIsGranted;
         /// <summary>

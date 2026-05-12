@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -169,9 +169,9 @@ namespace BXJG.Common.Dynamics
         /// 获取指定类型可以使用的比较符
         /// </summary>
         /// <param name="typeName">类型短名称，即：typeof(xxx).Name，内部自动忽略大小写</param>
-        /// <param name="nullabel">此类型是否可控</param>
+        /// <param name="nullable">此类型是否可空</param>
         /// <returns></returns>
-        public static IReadOnlyList<CompareType> GetCompareTypes(string typeName, bool nullabel = true)
+        public static IReadOnlyList<CompareType> GetCompareTypes(string typeName, bool nullable = true)
         {
 
             List<CompareType> hs;
@@ -188,14 +188,14 @@ namespace BXJG.Common.Dynamics
             else if (typeName == typeof(string).Name)
             {
                 hs = Items[typeof(string).Name].ToList();
-                nullabel = false;
+                nullable = false;
             }
             else
             {
                 hs = Items["val"].ToList();
             }
 
-            if (nullabel)
+            if (nullable)
             {
                 hs.Add(CompareType.Kong);
                 hs.Add(CompareType.Feikong);

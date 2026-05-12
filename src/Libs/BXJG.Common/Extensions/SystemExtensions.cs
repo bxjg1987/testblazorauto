@@ -266,7 +266,7 @@ namespace System
         /// 注意：历史版本存在无限递归bug，已修复——原来调用自身时误传了T类型的index而非int类型的idx
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="enumerate"></param>
+        /// <param name="list"></param>
         /// <param name="index"></param>
         /// <param name="count"></param>
         /// <param name="right"></param>
@@ -280,7 +280,7 @@ namespace System
         /// 一个环（可以理解位首尾相连的数组，索引0规定为环的起始位），从里面取任意一段数据
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="enumerate"></param>
+        /// <param name="list"></param>
         /// <param name="index"></param>
         /// <param name="count"></param>
         /// <param name="right"></param>
@@ -370,7 +370,7 @@ namespace System
 
 
         /// <summary>
-        /// 想url追加参数，若重复则保留多个同名参数,若参数为空，则原样返回url，不会报错
+        /// 向url追加参数，若重复则保留多个同名参数,若参数为空，则原样返回url，不会报错
         /// </summary>
         /// <param name="url"></param>
         /// <param name="queryParams"></param>

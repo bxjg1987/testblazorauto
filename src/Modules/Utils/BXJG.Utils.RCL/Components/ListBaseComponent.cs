@@ -1,4 +1,4 @@
-﻿using Abp.Application.Services;
+using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using Abp.Authorization;
 using Abp.Domain.Entities;
@@ -42,12 +42,9 @@ namespace BXJG.Utils.RCL.Components
     /// <summary>
     /// 抽象的，基于ant table的列表页抽象组件
     /// </summary>
-    /// <typeparam name="TAppService">应用服务类型</typeparam>
     /// <typeparam name="TEntityDto">列表项的数据类型</typeparam>
     /// <typeparam name="TPrimaryKey">唯一id类型</typeparam>
     /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
-    /// <typeparam name="TCreateInput">新增时的输入类型</typeparam>
-    /// <typeparam name="TUpdateInput">修改时的输入类型</typeparam>
     public abstract class ListBaseComponent<TEntityDto,
                                             TPrimaryKey,
                                             TGetAllInput> : BaseComponent
@@ -84,6 +81,7 @@ namespace BXJG.Utils.RCL.Components
         /// <param name="createPermissionName"></param>
         /// <param name="updatePermissionName"></param>
         /// <param name="deletePermissionName"></param>
+        /// <param name="others"></param>
         /// <returns></returns>
         protected virtual async Task InitPermission(string createPermissionName = default, string updatePermissionName = default,
             string deletePermissionName = default/*, string getPermissionName = default*/, IDictionary<string, bool> others = default)

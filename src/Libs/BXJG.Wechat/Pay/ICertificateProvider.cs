@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,6 +18,7 @@ namespace BXJG.WeChat.Pay
         /// 参考文档：<see cref="" href="https://wechatpay-api.gitbook.io/wechatpay-api-v3/qian-ming-zhi-nan-1/wei-xin-zhi-fu-ping-tai-zheng-shu-geng-xin-zhi-yin" />
         /// </summary>
         /// <param name="wechatpaySerial">证书序号</param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         ValueTask<string> GetAsync(string wechatpaySerial, CancellationToken cancellationToken = default);
     }

@@ -11,7 +11,7 @@ namespace BXJG.Common.Job
     /// <summary>
     /// 周期性任务
     /// </summary>
-    [Obsolete("推荐使用abp的workder或.net最新的PeriodicTimer")]
+    [Obsolete("推荐使用abp的worker或.net最新的PeriodicTimer")]
     public abstract class PeriodicBackgroundService : BackgroundService
     {
         protected virtual int Interval => 5000;

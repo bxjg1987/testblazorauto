@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +10,7 @@ namespace System.Collections.Generic
     {
         /// <summary>
         /// 判断两个集合是否有变化
-        /// 项使用Eq
+        /// 项使用GetHashCode和Equals进行比较
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="a"></param>

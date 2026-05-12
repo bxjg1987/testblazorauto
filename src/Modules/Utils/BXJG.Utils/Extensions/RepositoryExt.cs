@@ -111,7 +111,7 @@ namespace Abp.Domain.Repositories
         /// <param name="repository"></param>
         /// <param name="entityType">实体类型</param>
         /// <param name="entityId">实体id</param>
-        /// <param name="propertyName">实体id</param>
+        /// <param name="propertyName">属性名称</param>
         /// <param name="track"></param>
         /// <param name="cancellationToken"></param>
         /// <returns>文件列表</returns>
@@ -187,7 +187,7 @@ namespace Abp.Domain.Repositories
         /// </summary>
         /// <param name="repository"></param>
         /// <param name="entityId">实体id</param>
-        /// <param name="propertyName">实体id</param>
+        /// <param name="propertyName">属性名称</param>
         /// <param name="track"></param>
         /// <param name="cancellationToken"></param>
         /// <returns>文件列表</returns>

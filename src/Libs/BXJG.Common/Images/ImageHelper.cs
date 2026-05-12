@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using static System.Net.Mime.MediaTypeNames;
@@ -15,7 +15,7 @@ namespace BXJG.Common
         /// <param name="orgPath">源图片路径</param>
         /// <param name="thuPath">目标图片路径</param>
         /// <param name="maxDimension">最大尺寸</param>
-        /// <param name="quality">生成缩略图后，写入png的质量，0-100(最高)</param>
+        /// <param name="quality">生成缩略图后，写入图片的质量，0-100(最高)</param>
         public static void MakeThumb(string orgPath, string thuPath, int maxDimension = 180, int quality = 100)
         {
             //using var input = File.OpenRead(orgPath);

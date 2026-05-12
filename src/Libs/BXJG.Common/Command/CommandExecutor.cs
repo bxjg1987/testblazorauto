@@ -15,7 +15,7 @@ namespace BXJG.Common.Command
     public class CommandExecutor : ICommandExecutor
     {
         /// <summary>
-        /// 是否将标准错误合并到标准输出
+        /// 是否将标准错误合并到标准输出（注意：ExecuteStreamingAsync中此属性为true时标准错误将被丢弃而非合并）
         /// </summary>
         public bool RedirectStandardErrorToOutput { get; set; }
 

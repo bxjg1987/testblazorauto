@@ -1,4 +1,4 @@
-﻿using BXJG.Common.Contracts;
+using BXJG.Common.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +17,7 @@ namespace BXJG.Common.Contracts
         /// 字符串最后部分自增
         /// 00.01.01  ->  00.01.02
         /// </summary>
-        /// <param name="str">原始保护数字的字符串，如：00.01.01 </param>
+        /// <param name="str">原始包含数字的字符串，如：00.01.01 </param>
         /// <param name="jgf">间隔符，如：.</param>
         /// <returns></returns>
         public static string Increment(this string str, string jgf)
@@ -36,7 +36,7 @@ namespace BXJG.Common.Contracts
         /// 字符串最后部分自增
         /// 000101  ->  000102
         /// </summary>
-        /// <param name="str">原始保护数字的字符串，如：000101 </param>
+        /// <param name="str">原始包含数字的字符串，如：000101 </param>
         /// <param name="c">每层长度，如：2</param>
         /// <returns></returns>
         public static string Increment(this string str, int c)
@@ -413,7 +413,7 @@ namespace BXJG.Common.Contracts
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="sdf"></param>
-        /// <param name="setParent"></param>
+        /// <param name="setParent">是否设置Parent属性。默认false表示设置Parent，true表示不设置（逻辑与参数名暗示相反，请谨慎使用）</param>
         public static void Link<T>(this IEnumerable<T> sdf, bool setParent = false) where T : IGeneralTree<T>
         {
             foreach (var item in sdf)

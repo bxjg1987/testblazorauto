@@ -17,7 +17,7 @@ namespace BXJG.WeChat.Web.Pay
 {
     /// <summary>
     /// 微信支付结果通知owin中间件<br/>
-    /// 拦截请求 -> <see cref="WXSignValidator">验签</see>（判断请求是否确实来自微信支付服务器）-> <see cref="SecretHelper">解密</see> -> 回调你的<see cref="IPayNotifyHandler">处理器</see> -> 响应微信<br/>
+    /// 拦截请求 -> <see cref="SecretHelper">验签</see>（判断请求是否确实来自微信支付服务器）-> <see cref="SecretHelper">解密</see> -> 回调你的<see cref="IPayNotifyHandler">处理器</see> -> 响应微信<br/>
     /// 参考文档：<seealso cref="" href="https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/pay/transactions/chapter3_11.shtml#top" />
     /// </summary>
     public class PayNotifyMiddleware

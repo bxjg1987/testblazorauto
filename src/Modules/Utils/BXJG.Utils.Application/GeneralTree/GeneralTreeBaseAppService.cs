@@ -1,4 +1,4 @@
-﻿/*
+/*
  * 作者：变形精怪 手机/微信17723896676 QQ/邮箱453008453
  * 创建时间：2018-10-10 22:49:57
  *
@@ -317,7 +317,6 @@ namespace BXJG.Utils.Application.GeneralTree
         /// 实体转换为dto时调用，默认使用automapper
         /// </summary>
         /// <param name="entities"></param>
-        /// <param name="context"><see cref="GetTreeForSelectAsync"/>的多个步骤间共享数据，默认存在input的key</param>
         /// <returns></returns>
         protected virtual List<TGetTreeForSelectOutput> EntityToTreeDto(IEnumerable<TEntity> entities)
         {
@@ -501,7 +500,7 @@ namespace BXJG.Utils.Application.GeneralTree
         /// </summary>
         public DistributedLockHelper DistributedLockHelper { get; set; }
         /// <summary>
-        /// 新增时的重复检查，返回null则不检查，默认情况下引用<see cref="GetUpdateIsExistsChenker(TUpdateInput)"/>
+        /// 新增时的重复检查，返回null则不检查，默认情况下引用<see cref="GetUpdateIsExistsChenker(TEditDto)"/>
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
@@ -691,7 +690,6 @@ namespace BXJG.Utils.Application.GeneralTree
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="input"></param>
-        /// <param name="context">不要再使用此参数，请直接使用uow.Items</param>
         /// <returns></returns>
         protected virtual void MapToEntity(TEditDto input, TEntity entity)
         {

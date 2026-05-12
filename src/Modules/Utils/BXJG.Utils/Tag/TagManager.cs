@@ -1,4 +1,4 @@
-﻿using Abp;
+using Abp;
 using Abp.Domain.Repositories;
 using Abp.Extensions;
 using Abp.Linq.Extensions;
@@ -36,9 +36,9 @@ namespace BXJG.Utils.Tag
         /// <param name="entityId">实体id</param>
         /// <param name="tags">标签列表，顺序不是很重要，顺序以传入顺序为准，不以OrderIndex属性为准，</param>
         /// <param name="propertyName">可选的属性名</param>
-        /// <param name="proertyDisplayName">可选的属性名</param>
+        /// <param name="propertyDisplayName">可选的属性显示名称</param>
         /// <returns></returns>
-        public async Task<List<TagEntity>> Set(object entityId, string propertyName  , IList<SelectableTagDto> tags = default, string proertyDisplayName=default)
+        public async Task<List<TagEntity>> Set(object entityId, string propertyName  , IList<SelectableTagDto> tags = default, string propertyDisplayName=default)
         {
             var id = entityId.ToString();
 
@@ -63,10 +63,10 @@ namespace BXJG.Utils.Tag
                 var entity = oldEntities.SingleOrDefault(x => x.TagName == tag.TagName);
                 if (entity == default)
                 {
-                    if (proertyDisplayName.IsNullOrEmpty()) {
+                    if (propertyDisplayName.IsNullOrEmpty()) {
                         var key = entityType + "." + (propertyName.IsNotNullOrWhiteSpaceBXJG() ? propertyName : string.Empty);
                         if (BXJGUtilsModuleConfig.SelectableTagProviders.TryGetValue(key, out var provider))
-                            proertyDisplayName = provider.PropertyDisplayName;
+                            propertyDisplayName = provider.PropertyDisplayName;
                     }
 
                     //var f = await FileManager.Upload(file.FileName, file.TempPath);
@@ -80,7 +80,7 @@ namespace BXJG.Utils.Tag
                         OrderIndex = i,
                         TenantId = AbpSession.TenantId,//不晓得为啥非要在这里设置下，估计应该用IMustHaveTenant接口
                         PropertyName = propertyName,
-                        PropertyDisplayName= proertyDisplayName ??     tag.TagName,
+                        PropertyDisplayName= propertyDisplayName ??     tag.TagName,
                         //ExtField1 = tag.ExtField1,
                         //ExtField2 = tag.ExtField2,
                         //扩展json字段用abp提供的方式

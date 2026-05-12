@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +8,7 @@ namespace BXJG.WeChat.Pay.Entities
 {
     /// <summary>
     /// JSAPI/小程序下单API的输入模型
-    /// <seealso cref="ServiceV3.ReadyToPayAsync(ReadyToPayForJSAPIOrMiniProgramInput)" href="https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/pay/transactions/chapter3_2.shtml#top"/>
+    /// <seealso cref="ServiceV3.ReadyToPayForJSAPIOrMiniProgramAsync(ReadyToPayForJSAPIOrMiniProgramInput)" href="https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/pay/transactions/chapter3_2.shtml#top"/>
     /// </summary>
     public class ReadyToPayForJSAPIOrMiniProgramInput
     {

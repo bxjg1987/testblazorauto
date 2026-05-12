@@ -1,4 +1,4 @@
-﻿
+
 using Abp.Application.Services.Dto;
 using Abp.ObjectMapping;
 using AutoMapper;
@@ -124,6 +124,7 @@ namespace BXJG.Utils.RCL.Components
         /// </summary>
         /// <param name="updatePermissionName"></param>
         /// <param name="deletePermissionName"></param>
+        /// <param name="others"></param>
         /// <returns></returns>
         protected virtual async ValueTask InitPermission(string updatePermissionName = default, string deletePermissionName = default/*, string getPermissionName =default*/, IDictionary<string, bool> others = default)
         {
@@ -398,7 +399,7 @@ namespace BXJG.Utils.RCL.Components
         //    await Update();
         //}
         /// <summary>
-        /// 删除的核心逻辑
+        /// 保存的核心逻辑
         /// </summary>
         /// <returns></returns>
         protected virtual async Task Save()
@@ -440,7 +441,7 @@ namespace BXJG.Utils.RCL.Components
 
         #region 删除
         /// <summary>
-        /// 是否显示进入编辑模式的按钮
+        /// 是否显示删除按钮
         /// </summary>
         protected virtual bool IsShowDelete => deleteIsGranted && dto != null;
         /// <summary>

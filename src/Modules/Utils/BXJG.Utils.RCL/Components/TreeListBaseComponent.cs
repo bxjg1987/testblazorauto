@@ -1,4 +1,4 @@
-﻿using Abp.Application.Services;
+using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using Abp.Authorization;
 using Abp.Domain.Entities;
@@ -32,10 +32,7 @@ namespace BXJG.Utils.RCL.Components
     /// <summary>
     /// 抽象的，基于MudBlazor treeView的列表页抽象组件
     /// </summary>
-    /// <typeparam name="TAppService">应用服务类型</typeparam>
     /// <typeparam name="TEntityDto">列表项的数据类型</typeparam>
-    /// <typeparam name="TCreateInput">新增时的输入类型</typeparam>
-    /// <typeparam name="TEditDto">修改时的输入类型</typeparam>
     /// <typeparam name="TGetAllInput">获取列表时的输入参数类型</typeparam>
     public abstract class TreeListBaseComponent<TEntityDto,  TGetAllInput> : BaseComponent
         //where TCreateInput : GeneralTreeNodeEditBaseDto //注意这里约束为TEditDto，这样强制要求继承编辑模型不合理
@@ -66,6 +63,7 @@ namespace BXJG.Utils.RCL.Components
         /// <param name="createPermissionName"></param>
         /// <param name="updatePermissionName"></param>
         /// <param name="deletePermissionName"></param>
+        /// <param name="others"></param>
         /// <returns></returns>
         protected virtual async Task InitPermission(string createPermissionName = default, string updatePermissionName = default,
             string deletePermissionName = default/*, string getPermissionName = default*/, IDictionary<string, bool> others = default)

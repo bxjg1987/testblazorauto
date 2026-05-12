@@ -60,6 +60,7 @@ namespace System
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="propertyName"></param>
+        /// <param name="flag"></param>
         /// <returns></returns>
         public static object GetFieldOrPropertyValue(this object obj, string propertyName, BindingFlags flag = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.IgnoreCase | BindingFlags.Instance)
         {
@@ -104,6 +105,7 @@ namespace System
         /// <typeparam name="T"></typeparam>
         /// <param name="obj"></param>
         /// <param name="propertyName"></param>
+        /// <param name="flag"></param>
         /// <returns></returns>
         public static T GetFieldOrPropertyValue<T>(this object obj, string propertyName, BindingFlags flag = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.IgnoreCase | BindingFlags.Instance)
         {

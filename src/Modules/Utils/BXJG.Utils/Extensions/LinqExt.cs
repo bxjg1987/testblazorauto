@@ -25,7 +25,7 @@ namespace BXJG.Utils.Extensions
         /// <param name="entityType">实体类型，若实体id是全局唯一的，比如guid，则此参数可省略</param>
         /// <param name="propertyName">属性名称，若不提供则忽略此条件，若你想获取属性为空的，你需要后续继续where加条件</param>
         /// <param name="entityIds">实体id列表</param>
-        /// <returns>key属性名，value文件列表</returns>
+        /// <returns>附件查询结果</returns>
         public static IQueryable<AttachmentEntity> WhereAttachment(this IQueryable<AttachmentEntity> q, string? entityType=default, string? propertyName = default, bool track = false, params string[] entityIds)
         {
             q = q.Include(x => x.File)
@@ -51,7 +51,7 @@ namespace BXJG.Utils.Extensions
         /// <param name="q"></param>
         /// <param name="propertyName">属性名称，若不提供则忽略此条件，若你想获取属性为空的，你需要后续继续where加条件</param>
         /// <param name="entityIds">实体id列表</param>
-        /// <returns>key属性名，value文件列表</returns>
+        /// <returns>附件查询结果</returns>
         public static IQueryable<AttachmentEntity> WhereAttachment<TEntity>(this IQueryable<AttachmentEntity> q, string propertyName = default, bool track = false, params string[] entityIds)
         {
             return q.WhereAttachment( typeof(TEntity).FullName, propertyName, track, entityIds);
@@ -65,6 +65,7 @@ namespace BXJG.Utils.Extensions
         /// <param name="q"></param>
         /// <param name="entityType">实体类型，若实体id是全局唯一的，比如guid，则此参数可省略</param>
         /// <param name="propertyName">属性名称，若不提供则忽略此条件，若你想获取属性为空的，你需要后续继续where加条件</param>
+        /// <param name="track"></param>
         /// <returns></returns>
         public static IQueryable<TagEntity> Where(this IQueryable<TagEntity> q, string? entityType = default, string propertyName = default, bool track = false)
         {
@@ -83,6 +84,7 @@ namespace BXJG.Utils.Extensions
         /// <param name="q"></param>
         /// <param name="entityType">实体类型</param>
         /// <param name="propertyName">属性名称，若不提供则忽略此条件，若你想获取属性为空的，你需要后续继续where加条件</param>
+        /// <param name="track"></param>
         /// <param name="entityIds">实体id列表</param>
         /// <returns></returns>
         public static IQueryable<TagEntity> Where(this IQueryable<TagEntity> q, string? entityType=default, string propertyName = default, bool track = false, params string[] entityIds)
@@ -104,6 +106,7 @@ namespace BXJG.Utils.Extensions
         /// </summary>
         /// <param name="q"></param>
         /// <param name="propertyName">属性名称，若不提供则忽略此条件，若你想获取属性为空的，你需要后续继续where加条件</param>
+        /// <param name="track"></param>
         /// <param name="entityIds">实体id列表</param>
         /// <returns></returns>
         public static IQueryable<TagEntity> Where<TEntity>(this IQueryable<TagEntity> q, string propertyName = default, bool track = false, params string[] entityIds)
@@ -115,6 +118,7 @@ namespace BXJG.Utils.Extensions
         /// </summary>
         /// <param name="q"></param>
         /// <param name="propertyName">属性名称，若不提供则忽略此条件，若你想获取属性为空的，你需要后续继续where加条件</param>
+        /// <param name="track"></param>
         /// <returns></returns>
         public static IQueryable<TagEntity> Where<TEntity>(this IQueryable<TagEntity> q, string propertyName = default, bool track = false)
         {
@@ -125,7 +129,8 @@ namespace BXJG.Utils.Extensions
 
         #region abp仓储的默认实现目前的删除是查询出来之后再删除，数据量大时有问题，已经提交了issue，这里是临时解决方式
         private static Func<object, CancellationToken, Task<int>> _batchDeleteImpl;
-        internal static Func<object, CancellationToken, Task<int>> BatchDeleteImpl
+        [Obsolete]
+        public static Func<object, CancellationToken, Task<int>> BatchDeleteImpl
         {
             get => _batchDeleteImpl;
             set => _batchDeleteImpl = value;
@@ -137,6 +142,7 @@ namespace BXJG.Utils.Extensions
         /// <param name="q"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
+        [Obsolete]
         public static Task<int> BatchDelete<T>(this IQueryable<T> q, CancellationToken cancellationToken = default)
         {
             if (_batchDeleteImpl == null)

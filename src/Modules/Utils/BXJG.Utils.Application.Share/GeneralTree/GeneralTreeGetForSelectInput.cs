@@ -1,4 +1,4 @@
-﻿using Abp.Application.Services.Dto;
+using Abp.Application.Services.Dto;
 
 using System;
 using System.Collections.Generic;
@@ -39,12 +39,12 @@ namespace BXJG.Utils.Application.Share.GeneralTree
         //通用树模块目前还未使用此字段，但应该添加此字段，它比ParentId会少一次查询
 
         /// <summary>
-        /// code可能会变，所以不要硬编码时用code 清使用 <see cref="ParentName"/>
+        /// code可能会变，所以不要硬编码时用code 请使用 <see cref="ParentName"/>
         /// </summary>
         //[Obsolete("code可能会变，所以不要硬编码时用code")]
         public string? ParentCode { get; set; }
         /// <summary>
-        /// 尽量使用清使用 <see cref="ParentName"/>
+        /// 尽量使用请使用 <see cref="ParentName"/>
         /// 因为同数据库下的多个租户，硬编码使用parentId行不通
         /// </summary>
         public long? ParentId { get; set; }

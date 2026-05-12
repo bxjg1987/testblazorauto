@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,6 +25,7 @@ namespace BXJG.WeChat.Pay
         /// <seealso cref="" href="https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/pay/transactions/chapter3_11.shtml#top" />
         /// </summary>
         /// <param name="input"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         Task PrecessAsync(PayNotifySuccessResult input, CancellationToken cancellationToken = default);
     }

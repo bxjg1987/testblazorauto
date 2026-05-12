@@ -1,4 +1,4 @@
-﻿using Abp.Application.Services.Dto;
+using Abp.Application.Services.Dto;
 using Abp.Domain.Entities;
 using Abp.Localization;
 using Abp.Localization.Sources;
@@ -20,6 +20,7 @@ namespace Abp.Domain.Entities
         /// <param name="passivable"></param>
         /// <param name="entityTypeName">业务名称</param>
         /// <param name="id">唯一id</param>
+        /// <param name="ls"></param>
         public static void Check(this IPassivable passivable, string entityTypeName=default, object? id = default, ILocalizationSource? ls = default)
         {
             if (passivable.IsActive == false)

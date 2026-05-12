@@ -1,4 +1,4 @@
-﻿using Abp.Runtime.Session;
+using Abp.Runtime.Session;
 using BXJG.Common.Session;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -12,8 +12,8 @@ namespace Abp.Runtime.Session
     public static class AbpSessionExt
     {
         /// <summary>
-        /// 获取当前应用appKey
-        /// 目前的实现是从请求头、querystring或cookie中获取appKey对应的值
+        /// 根据key获取字符串值
+        /// 目前的实现是从请求头、querystring或cookie中获取key对应的值
         /// </summary>
         /// <param name="abpSession"></param>
         /// <returns></returns>

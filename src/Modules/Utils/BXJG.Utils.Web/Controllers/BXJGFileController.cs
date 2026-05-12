@@ -129,7 +129,7 @@ namespace BXJG.Utils.Web.Controllers
             await CheckPermission(r);
 
 
-            //若提供了 r.RealName就会在响应中增加Content-Disposition 设置为 attachment 这会导致浏览器直接洗下载该文件
+            //若提供了 r.RealName就会在响应中增加Content-Disposition 设置为 attachment 这会导致浏览器直接下载该文件
             if (r.RelativePathThumbnail.IsNotNullOrWhiteSpaceBXJG())
                 return PhysicalFile(r.RelativePath, r.ResponseContentType);
             else
@@ -175,7 +175,7 @@ namespace BXJG.Utils.Web.Controllers
             var r = await this.fileDownloader.Value.GetAbsolutePath(id);
 
             await CheckPermission(r);
-            //若提供了 r.RealName就会在响应中增加Content-Disposition 设置为 attachment 这会导致浏览器直接洗下载该文件
+            //若提供了 r.RealName就会在响应中增加Content-Disposition 设置为 attachment 这会导致浏览器直接下载该文件
             return PhysicalFile(r.RelativePathThumbnail, r.ResponseContentType/*, r.RealName*/);
         }
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -17,11 +17,11 @@ namespace BXJG.WeChat.Common
             /// </summary>
             developer,
             /// <summary>
-            /// 正式版
+            /// 体验版
             /// </summary>
             trial,
             /// <summary>
-            /// 体验版
+            /// 正式版
             /// </summary>
             formal
         }

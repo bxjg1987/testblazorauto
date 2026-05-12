@@ -1,4 +1,4 @@
-﻿using Abp.Domain.Repositories;
+using Abp.Domain.Repositories;
 using Abp.Domain.Services;
 using System;
 using System.Collections.Generic;
@@ -174,7 +174,7 @@ namespace BXJG.Utils.Files
         /// 直接添加单个附件
         /// </summary>
         /// <param name="entityId">实体id</param>
-        /// <param name="file">包含新老文件的列表，注意顺序，若是纯删除则保持空</param>
+        /// <param name="file">包含新老文件的对象，注意顺序，若是纯删除则保持空</param>
         /// <param name="filePermission"></param>
         /// <param name="permissionNames">当Permission为PermissionNames时，此字段存储哪些权限可以访问此文件，多个权限用英文逗号分割</param>
         /// <param name="propertyName">关联的属性名</param>
