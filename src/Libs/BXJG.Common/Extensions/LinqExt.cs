@@ -14,7 +14,7 @@ namespace System.Linq
     {
         /// <summary>
         /// 应用动态条件
-        /// 注意：字符串类型的条件值通过拼接方式构建动态LINQ表达式，这是设计需要，不存在注入风险，无需修改
+        /// 注意：字符串类型条件值通过参数化方式（@0）构建动态LINQ表达式，不存在注入风险
         /// </summary>
         /// <param name="q"></param>
         /// <param name="define"></param>
@@ -27,7 +27,10 @@ namespace System.Linq
             var pnames = define.Name.Split('.');
             for (int i = 0; i < pnames.Length; i++)
             {
-                t = t.GetProperty(pnames[i]).PropertyType;
+                var prop = t.GetProperty(pnames[i]);
+                if (prop == null)
+                    throw new ArgumentException($"类型 {t.Name} 上不存在导航属性 '{pnames[i]}'（完整路径：{define.Name}）");
+                t = prop.PropertyType;
             }
 
             //define.CompareType = Enum.Parse<CompareType>(define.CompareType.ToString());
@@ -49,15 +52,15 @@ namespace System.Linq
                 switch (define.CompareType)
                 {
                     case CompareType.Baohan:
-                        return q.Where($"{define.Name}.Contains(\"{define.Value}\")");
+                        return q.Where($"{define.Name}.Contains(@0)", define.Value);
                     case CompareType.BuBaohan:
-                        return q.Where($"!{define.Name}.Contains(\"{define.Value}\")");
+                        return q.Where($"!{define.Name}.Contains(@0)", define.Value);
                     case CompareType.StartWith:
-                        return q.Where($"{define.Name}.StartsWith(\"{define.Value}\")");
+                        return q.Where($"{define.Name}.StartsWith(@0)", define.Value);
                     case CompareType.EndWith:
-                        return q.Where($"{define.Name}.EndsWith(\"{define.Value}\")");
+                        return q.Where($"{define.Name}.EndsWith(@0)", define.Value);
                     default:
-                        return q.Where($"{define.Name}==\"{define.Value}\"");
+                        return q.Where($"{define.Name}==@0", define.Value);
                 }
             }
 

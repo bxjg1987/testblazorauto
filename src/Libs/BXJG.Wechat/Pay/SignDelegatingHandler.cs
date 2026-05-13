@@ -50,9 +50,12 @@ namespace BXJG.WeChat.Pay
             //发送请求
             var response = await base.SendAsync(request, cancellationToken);
 
-            //使用微信支付平台证书中的公钥解密
-            if (!(await secretHelper.VerifyAsync(response)))
-                throw new Exception("微信支付响应时，验证签名失败！");
+            //仅对成功响应验签，错误响应（4xx/5xx）不含签名头，验签会抛KeyNotFoundException
+            if (response.IsSuccessStatusCode)
+            {
+                if (!(await secretHelper.VerifyAsync(response)))
+                    throw new Exception("微信支付响应时，验证签名失败！");
+            }
             return response;
         }
     }

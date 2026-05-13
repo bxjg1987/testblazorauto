@@ -10,7 +10,7 @@ namespace System.Collections.Generic
     {
         /// <summary>
         /// 判断两个集合是否有变化
-        /// 项使用GetHashCode和Equals进行比较
+        /// 项使用Equals进行比较，顺序无关
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="a"></param>
@@ -24,17 +24,22 @@ namespace System.Collections.Generic
             if (a != null && b == null)
                 return true;
 
-            if (a.Count() != b.Count())
+            if (a == null && b == null)
+                return false;
+
+            var listA = a as IList<T> ?? a.ToList();
+            var listB = b as IList<T> ?? b.ToList();
+
+            if (listA.Count != listB.Count)
                 return true;
 
-            foreach (var item in a)
+            var remaining = listB.ToList();
+            foreach (var item in listA)
             {
-                var item2 = b.Single(c=>c.GetHashCode()==item.GetHashCode());
-                if (!item2.Equals(item))
+                if (!remaining.Remove(item))
                     return true;
             }
             return false;
-            //return a.Any(c => b.Any(d => !d.Equals(c)));
         }
 
         //public static Func<IEnumerable<T>, IEnumerable<T>, bool> CreateComparer<T>()

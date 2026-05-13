@@ -382,11 +382,7 @@ namespace System
 
             var dictionary = queryParams.GetType()
                 .GetProperties()
-                //.Where(c => {
-                //    if (c.GetValue(queryParams) == c.PropertyType.GetDefaultValue())
-                //        return false;
-                //    return true;
-                //})
+                .Where(prop => prop.GetValue(queryParams, null) != null)
                 .ToDictionary(prop => prop.Name, prop => prop.GetValue(queryParams, null).ToString());
             //任何项目都可能向后端发起http请求，所以在common库中引入Microsfot.AspNetCore包可以接受
             // System.Web.HttpUtility
