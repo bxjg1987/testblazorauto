@@ -1,4 +1,4 @@
-﻿
+
 
 using Abp.Authorization.Roles;
 using Abp.Authorization.Users;
@@ -47,7 +47,9 @@ namespace BXJG.Utils.Application.Feedback
 
         void Check(FeedbackEntity entity)
         {
-            if (AbpSession.UserId.HasValue && AbpSession.UserId.Value != entity.CreatorUserId)
+            if (!AbpSession.UserId.HasValue)
+                UserFriendlyExceptionFactory.Throw("匿名用户无法修改、删除留言");
+            else if (AbpSession.UserId.Value != entity.CreatorUserId)
                 UserFriendlyExceptionFactory.Throw("不能修改别人的留言");
         }
     }

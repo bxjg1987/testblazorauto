@@ -177,17 +177,17 @@ namespace BXJG.Common.Dynamics
             List<CompareType> hs;
             typeName = typeName.ToLower();
 
-            if (typeName == typeof(bool).Name)
+            if (typeName == "boolean")
             {
-                hs = Items[typeof(bool).Name].ToList();
+                hs = Items["bool"].ToList();
             }
             else if (typeName == "enum")
             {
                 hs = Items["bool"].ToList();
             }
-            else if (typeName == typeof(string).Name)
+            else if (typeName == "string")
             {
-                hs = Items[typeof(string).Name].ToList();
+                hs = Items["string"].ToList();
                 nullable = false;
             }
             else
