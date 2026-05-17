@@ -19,6 +19,8 @@ namespace System
             var t = obj.GetType();
             var prop = t.GetProperty(propertyName, flag);
             var field = t.GetField(propertyName, flag);
+            if (prop == null && field == null)
+                throw new ArgumentException($"类型 {t.Name} 上不存在属性或字段 '{propertyName}'");
             Type fieldOrPropertyType;
             if (prop != default)
                 fieldOrPropertyType = prop.PropertyType;
@@ -68,8 +70,10 @@ namespace System
             var p = t.GetProperty(propertyName, flag);
             if (p != default)
                 return p.GetValue(obj, null);
-            else
-                return t.GetField(propertyName, flag).GetValue(obj);
+            var f = t.GetField(propertyName, flag);
+            if (f == null)
+                throw new ArgumentException($"类型 {t.Name} 上不存在属性或字段 '{propertyName}'");
+            return f.GetValue(obj);
         }
         /// <summary>
         /// 递归获取指定字段
