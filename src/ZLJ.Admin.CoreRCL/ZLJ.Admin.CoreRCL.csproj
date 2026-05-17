@@ -42,22 +42,6 @@
 		<None Remove="MainLayout.razor.css" />
 	</ItemGroup>
 
-
-
-	<ItemGroup>
-		<!--<PackageReference Include="Abp.Web.Common" Version="10.2.0" />-->
-		<!--<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />-->
-		<!--<PackageReference Include="AntDesign.ProLayout" Version="0.16.2" />-->
-		<!--<PackageReference Include="Blazor.Extensions.Logging" Version="2.0.4" />-->
-		<!--<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.10" />-->
-
-		<PackageReference Include="System.Private.Uri" Version="4.3.2" />
-
-		<!--<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="9.0.5" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.5" />
-		<PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.5" />-->
-	</ItemGroup>
-
 	<!--<ItemGroup>
 		<Folder Include="wwwroot\css\" />
 	</ItemGroup>-->

@@ -1,4 +1,4 @@
-﻿using BXJG.Common.Http;
+using BXJG.Common.Http;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
 using System.Collections.Generic;

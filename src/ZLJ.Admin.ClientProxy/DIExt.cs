@@ -1,4 +1,4 @@
-﻿using BXJG.Common.Http;
+using BXJG.Common.Http;
 using BXJG.Utils.Application.ClientProxy;
 using BXJG.Utils.Application.Share.GeneralTree;
 using System;
