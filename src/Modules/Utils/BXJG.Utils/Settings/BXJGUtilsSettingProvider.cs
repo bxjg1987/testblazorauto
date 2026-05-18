@@ -1,4 +1,4 @@
-﻿using Abp.Configuration;
+using Abp.Configuration;
 using BXJG.Utils.Localization;
 using BXJG.Utils.Share;
 using BXJG.Utils.Share.Files;
@@ -67,7 +67,7 @@ namespace BXJG.Utils.Settings
                                                                          //isMultiSelect = false,
                                            }),
 
-                //单个文件允许的大小(mb)
+                //单个文件允许的大小(kb)
                 new SettingDefinition(BXJGUtilsConsts.SettingKeyUploadSize,
                                       (1024*50).ToString(),
                                       BXJGUtilsConsts.SettingKeyUploadSize.UtilsLI(),
@@ -76,12 +76,12 @@ namespace BXJG.Utils.Settings
                                       isVisibleToClients:true,
                                            customData: new
                                            {
-                                               csharpType = "int",//typeof(c#类型).Name //inputType="checkbox",//text,select 等等
-                                               isRequired = true,//此配置是否必填
+                                               csharpType = "int",
+                                               isRequired = true,
                                                formatter = string.Empty,
-                                               min = 0,//最小值
-                                               max = 0,//最大值
-                                               placeholder = "单位mb",//占位符
+                                               min = 0,
+                                               max = 0,
+                                               placeholder = "单位kb",//占位符
                                                                          //在前端管理设置定义时会序列化为Dictionary<string,string>，所以这里只能使用字符串作为可选值，前端再反序列化一次
                                                                          //key的类型与csharpType对应
                                                                          //配合默认值

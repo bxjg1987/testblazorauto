@@ -1,4 +1,4 @@
-﻿using BXJG.Common.DI;
+using BXJG.Common.DI;
 using BXJG.Common.Events;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -41,11 +41,15 @@ namespace Microsoft.AspNetCore.Builder
             if (StaticDIAccessor._serviceProvider.Value == null)
                 StaticDIAccessor._serviceProvider.Value = httpContext.RequestServices;
 
-            await _next(httpContext);
-
-
-            StaticDIAccessor._serviceProvider.Value = default;//asynclocal基于线程，请求线程结束了，这里有点多余 好像。
-            Zhongjie.Current.Value = null;
+            try
+            {
+                await _next(httpContext);
+            }
+            finally
+            {
+                StaticDIAccessor._serviceProvider.Value = default;
+                Zhongjie.Current.Value = null;
+            }
         }
     }
 }

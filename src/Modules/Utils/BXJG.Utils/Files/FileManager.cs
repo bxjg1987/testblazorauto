@@ -106,8 +106,8 @@ namespace BXJG.Utils.Files
             stream.Position = 0;
             if (!aryts.Contains(hzm2, StringComparer.OrdinalIgnoreCase))
                 throw new UserFriendlyException($"不允许上传此类型的文件，仅允许{ts}");
-            if (stream.Length > sz * 1024) //大小限制判断    
-                throw new UserFriendlyException($"上传的文件大小超过限制，最大为{sz}mb");
+            if (stream.Length > sz * 1024) //大小限制判断，sz的单位是kb
+                throw new UserFriendlyException($"上传的文件大小超过限制，最大为{sz / 1024.0:F1}MB");
             #endregion
 
             // var output = new FileResult(); //准备返回值

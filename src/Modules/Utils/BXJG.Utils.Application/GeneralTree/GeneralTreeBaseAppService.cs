@@ -865,7 +865,7 @@ namespace BXJG.Utils.Application.GeneralTree
         protected virtual IQueryable<TEntity> GetAllSort(IQueryable<TEntity> query, TGetAllInput input)
         {
             if (input is ISortedResultRequest a && a.Sorting.IsNotNullOrWhiteSpaceBXJG())
-                return query.OrderBy(c => a.Sorting);
+                return query.OrderBy(a.Sorting);
             return query.OrderBy(c => c.Code);
         }
         #endregion

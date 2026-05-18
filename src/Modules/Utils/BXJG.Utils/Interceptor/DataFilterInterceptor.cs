@@ -1,4 +1,4 @@
-﻿using Abp.Application.Services;
+using Abp.Application.Services;
 using Abp.Dependency;
 using Abp.Domain.Uow;
 using BXJG.Common;
@@ -64,16 +64,16 @@ namespace BXJG.Utils.Interceptor
         public override void InterceptSynchronous(IInvocation invocation)
         {
             IDisposable sddf = NoDisposable.Instance, sddf2 = NoDisposable.Instance;
-            //var sdfdf =  invocation.TargetType.GetCustomAttributes(true);
-            var sdfdf = invocation.TargetType.GetCustomAttribute<EnableDataFilterAttribute>();
+            var sdfdf = invocation.Method.GetCustomAttribute<EnableDataFilterAttribute>()
+                ?? invocation.TargetType.GetCustomAttribute<EnableDataFilterAttribute>();
             if (sdfdf != default)
                 sddf = UnitOfWorkManager?.Current?.EnableFilter(sdfdf.FilterNames);
 
-            var sddf22 = invocation.TargetType.GetCustomAttribute<DisableDataFilterAttribute>();
+            var sddf22 = invocation.Method.GetCustomAttribute<DisableDataFilterAttribute>()
+                ?? invocation.TargetType.GetCustomAttribute<DisableDataFilterAttribute>();
             if (sddf22 != default)
                 sddf2 = UnitOfWorkManager?.Current?.DisableFilter(sddf22.FilterNames);
 
-            //var proceedInfo = invocation.CaptureProceedInfo();
             using (sddf)
             {
                 using (sddf2)
@@ -87,12 +87,13 @@ namespace BXJG.Utils.Interceptor
         {
 
             IDisposable sddf = NoDisposable.Instance, sddf2 = NoDisposable.Instance;
-            //var sdfdf =  invocation.TargetType.GetCustomAttributes(true);
-            var sdfdf = invocation.TargetType.GetCustomAttribute<EnableDataFilterAttribute>();
+            var sdfdf = invocation.Method.GetCustomAttribute<EnableDataFilterAttribute>()
+                ?? invocation.TargetType.GetCustomAttribute<EnableDataFilterAttribute>();
             if (sdfdf != default)
                 sddf = UnitOfWorkManager?.Current?.EnableFilter(sdfdf.FilterNames);
 
-            var sddf22 = invocation.TargetType.GetCustomAttribute<DisableDataFilterAttribute>();
+            var sddf22 = invocation.Method.GetCustomAttribute<DisableDataFilterAttribute>()
+                ?? invocation.TargetType.GetCustomAttribute<DisableDataFilterAttribute>();
             if (sddf22 != default)
                 sddf2 = UnitOfWorkManager?.Current?.DisableFilter(sddf22.FilterNames);
 
@@ -102,7 +103,6 @@ namespace BXJG.Utils.Interceptor
                 using (sddf2)
                 {
                     proceedInfo.Invoke();
-                    //Logger.Debug($"abp拦截器查看当前IocResolver：{AbpDIStaticAccessor._resolver.Value?.GetHashCode()}");
                     await (Task)invocation.ReturnValue;
                 }
             }
@@ -112,16 +112,16 @@ namespace BXJG.Utils.Interceptor
         protected override async Task<TResult> InternalInterceptAsynchronous<TResult>(IInvocation invocation)
         {
             IDisposable sddf = NoDisposable.Instance, sddf2 = NoDisposable.Instance;
-            //var sdfdf =  invocation.TargetType.GetCustomAttributes(true);
-            var sdfdf = invocation.TargetType.GetCustomAttribute<EnableDataFilterAttribute>();
+            var sdfdf = invocation.Method.GetCustomAttribute<EnableDataFilterAttribute>()
+                ?? invocation.TargetType.GetCustomAttribute<EnableDataFilterAttribute>();
             Logger.Debug($"拦截器{GetType().FullName} uowm：{UnitOfWorkManager == null} 当前uow：{UnitOfWorkManager.Current == null}");
             if (sdfdf != default)
             {
-                //Logger.Debug($"abp拦截器查看当前IocResolver：{AbpDIStaticAccessor._resolver.Value?.GetHashCode()}");
-                Logger.Debug(  $"启用拦截器：{string.Join(',', sdfdf.FilterNames)}");
+                Logger.Debug($"启用拦截器：{string.Join(',', sdfdf.FilterNames)}");
                 sddf = UnitOfWorkManager.Current?.EnableFilter(sdfdf.FilterNames);
             }
-            var sddf22 = invocation.TargetType.GetCustomAttribute<DisableDataFilterAttribute>();
+            var sddf22 = invocation.Method.GetCustomAttribute<DisableDataFilterAttribute>()
+                ?? invocation.TargetType.GetCustomAttribute<DisableDataFilterAttribute>();
             if (sddf22 != default)
             {
                 Logger.Debug($"禁用拦截器：{string.Join(',', sddf22.FilterNames)}");
@@ -134,9 +134,8 @@ namespace BXJG.Utils.Interceptor
                 {
                     proceedInfo.Invoke();
                     var r = await (Task<TResult>)invocation.ReturnValue;
-                    //Logger.Debug($"abp拦截器查看当前IocResolver：{AbpDIStaticAccessor._resolver.Value?.GetHashCode()}");
                     Logger.Debug($"返回值：{r}");
-                    return r;// await (Task<TResult>)invocation.ReturnValue;
+                    return r;
                 }
             }
         }

@@ -86,28 +86,29 @@ public class BXJGUtilsUserManager<TRole, TUser> : AbpUserManager<TRole, TUser>//
     /// <param name="permission"></param>
     /// <returns></returns>
     /// <remarks>
-    /// TODO: 需核查逻辑 - 存在两个问题：
-    /// 1. if (flag == false) 判断应在 foreach (var item2 in ps2) 循环外部，当前在循环内部导致只要有一个依赖权限未被授权就禁止，而非遍历完所有依赖权限后再判断
-    /// 2. ps2 为空时内层 foreach 不执行，item 不会被禁止，需确认是否符合业务预期
+    /// 遍历依赖权限的"被依赖列表"时，跳过当前正在被禁止的权限本身，
+    /// 避免因该权限尚未被禁止导致 IsGrantedAsync 仍返回 true，从而无法正确清理孤立的依赖权限。
     /// </remarks>
     public override async Task ProhibitPermissionAsync(TUser user, Permission permission)
     {
-        var ps = permission.GetDependencePermissions();//我依赖的权限
+        var ps = permission.GetDependencePermissions();
         foreach (var item in ps)
         {
-            var ps2 = item.GetDependentedPermissions();//依赖我的权限
+            var ps2 = item.GetDependentedPermissions();
             bool flag = false;
             foreach (var item2 in ps2)
             {
+                if (item2.Name == permission.Name)
+                    continue;
                 if (await IsGrantedAsync(user.Id, item2))
                 {
                     flag = true;
                     break;
                 }
-                if (flag == false)
-                {
-                    await base.ProhibitPermissionAsync(user, item);
-                }
+            }
+            if (flag == false)
+            {
+                await base.ProhibitPermissionAsync(user, item);
             }
         }
 

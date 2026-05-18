@@ -9,10 +9,10 @@
 		<StaticWebAssetProjectMode>Default</StaticWebAssetProjectMode>
 		<BlazorDisableThrowNavigationException>true</BlazorDisableThrowNavigationException>
 	</PropertyGroup>
-	<PropertyGroup>
+	<!--<PropertyGroup>
 		<RunAOTCompilation>true</RunAOTCompilation>
 		<WasmStripILAfterAOT>true</WasmStripILAfterAOT>
-	</PropertyGroup>
+	</PropertyGroup>-->
 	<ItemGroup>
 		<Compile Remove="AdminListBaseComponent.cs" />
 		<Compile Remove="Auth\AccessTokenProvider.cs" />

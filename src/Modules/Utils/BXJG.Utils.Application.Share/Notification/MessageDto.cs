@@ -1,4 +1,4 @@
-﻿using Abp.Notifications;
+using Abp.Notifications;
 using Abp.Timing;
 using System;
 using System.Collections.Generic;
@@ -65,7 +65,7 @@ namespace BXJG.Utils.Application.Share.Notification
                     return $"{Convert.ToInt32(sss.TotalMinutes)}分钟前";
                 if (sss.TotalHours <= 24)
                     return $"{Convert.ToInt32(sss.TotalHours)}小时前";
-                if (sss.TotalDays <= 30)
+                if (sss.TotalDays <= 7)
                     return $"{Convert.ToInt32(sss.TotalDays)}天前";
                 if (sss.TotalDays <= 30)
                     return $"{Convert.ToInt32(sss.TotalDays / 7)}周前";

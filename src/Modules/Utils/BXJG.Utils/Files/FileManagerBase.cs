@@ -33,7 +33,7 @@ namespace BXJG.Utils.Files
             //base.LocalizationSourceName = 
             //_webRootDir = env.WebRoot; // d:\app\wwwroot
             //未考虑并发冲突，也基本不需要
-            _uploadDir = Configuration["Upload:SaveDir"];
+            _uploadDir = Path.GetFullPath(Configuration["Upload:SaveDir"]);
             if (string.IsNullOrWhiteSpace(_uploadDir))
                 throw new InvalidOperationException("Upload:SaveDir 配置项未设置，请检查 appsettings.json。");
             if (!Directory.Exists(_uploadDir))
@@ -51,8 +51,9 @@ namespace BXJG.Utils.Files
         /// <returns></returns>
         public string AbsoluteToRelativePath(string path)
         {
-            if (path.StartsWith(_uploadDir))
-                return path.Substring(_uploadDir.Length);
+            var normalizedPath = Path.GetFullPath(path);
+            if (normalizedPath.StartsWith(_uploadDir, StringComparison.OrdinalIgnoreCase))
+                return normalizedPath.Substring(_uploadDir.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
             return path;
         }
 
@@ -65,7 +66,13 @@ namespace BXJG.Utils.Files
         public string RelativeToAbsolutePath(string path)
         {
             if (!path.StartsWith(_uploadDir))
-                return Path.Combine(_uploadDir, path);
+            {
+                var fullPath = Path.GetFullPath(Path.Combine(_uploadDir, path));
+                var normalizedUploadDir = Path.GetFullPath(_uploadDir);
+                if (!fullPath.StartsWith(normalizedUploadDir, StringComparison.OrdinalIgnoreCase))
+                    throw new Abp.UI.UserFriendlyException("非法的文件路径");
+                return fullPath;
+            }
             return path;
         }
     }

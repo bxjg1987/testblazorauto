@@ -1,4 +1,4 @@
-﻿using Abp.Dependency;
+using Abp.Dependency;
 using Castle.Core.Logging;
 using Rougamo;
 using Rougamo.Context;
@@ -37,6 +37,7 @@ namespace BXJG.Utils.Interceptor
         protected override void ExOnExit(MethodContext context)
         {
             (context.Datas[loggerKey] as ILogger)!.Dispose();
+            (context.Datas[scopedServicesKey] as IDisposable)?.Dispose();
         }
     }
 }

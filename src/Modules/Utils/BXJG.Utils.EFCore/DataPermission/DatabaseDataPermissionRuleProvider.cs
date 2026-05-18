@@ -69,6 +69,8 @@ namespace BXJG.Utils.EFCore.DataPermission
         /// </summary>
         public DataPermissionDto GetRules(string entityTypeFullName)
         {
+            if (!_abpSession.UserId.HasValue)
+                return null;
             var userId = _abpSession.UserId.Value;
             var tenantId = _abpSession.TenantId;
 
@@ -100,6 +102,8 @@ namespace BXJG.Utils.EFCore.DataPermission
         /// </summary>
         public async Task<DataPermissionDto> GetRulesAsync(string entityTypeFullName)
         {
+            if (!_abpSession.UserId.HasValue)
+                return null;
             var userId = _abpSession.UserId.Value;
             var tenantId = _abpSession.TenantId;
 

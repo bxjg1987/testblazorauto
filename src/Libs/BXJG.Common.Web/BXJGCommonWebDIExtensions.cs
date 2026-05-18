@@ -1,4 +1,4 @@
-﻿using BXJG.Common.Contracts;
+using BXJG.Common.Contracts;
 using BXJG.Common.Events;
 using BXJG.Common.Session;
 using BXJG.Common.Web;
@@ -19,11 +19,11 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddBXJGCommonWeb(this IServiceCollection services)
         {
-            services.AddHttpContextAccessor()
-                    .TryAddScoped<BXJG.Common.Session.ISession, ReqSession>();
+            services.AddHttpContextAccessor();
             services.AddBXJGCommon()
                      //这里别try，因为要替换common中的空实现
-                     .AddSingleton<IEnv, AspNetEnv>();
+                     .AddSingleton<IEnv, AspNetEnv>()
+                     .AddScoped<BXJG.Common.Session.ISession, ReqSession>();
             return services;
         }
     }
