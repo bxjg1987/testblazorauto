@@ -14,7 +14,7 @@
 	
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.Http" Version="10.*" />
-		<PackageReference Include="Abp.Web.Common" Version="10.*" />
+		<PackageReference Include="Abp.Web.Common" Version="10.4.0" />
 		<PackageReference Include="Polly.Core" Version="8.6.6" />
 	</ItemGroup>
 	
