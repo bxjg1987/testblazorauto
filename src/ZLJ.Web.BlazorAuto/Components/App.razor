@@ -1,4 +1,4 @@
-﻿@using AntDesign
+@using AntDesign
 @using ZLJ.Admin.CoreRCL.Share
 <!DOCTYPE html>
 <html lang="zh-cn">
@@ -52,25 +52,6 @@
     @* <script src="_content/AntDesign/js/ant-design-blazor.js"></script> *@
     @* <script src="_content/AntDesign.Charts/ant-design-charts-blazor.js"></script> *@
    
-
-   @*  <script>
-        //.net10 bug https://github.com/dotnet/aspnetcore/issues/64009#issuecomment-3534259401
-        (function() {
-            const originalFetch = window.fetch;
-            window.fetch = function(resource, options = {}) {
-                // Check if the resource is a .wasm file
-                const url = typeof resource === 'string' ? resource : resource.url;
-                if (url && url.toLowerCase().endsWith('.wasm')) {
-                    // Force cache mode for .wasm files
-                    options = {
-                        ...options,
-                        cache: 'force-cache'
-                    };
-                }
-                return originalFetch.call(this, resource, options);
-            };
-        })();
-    </script> *@
 
     <script src="@Assets["_framework/blazor.web.js"]"></script>
     <script src="@Assets["app.js"]"></script>
