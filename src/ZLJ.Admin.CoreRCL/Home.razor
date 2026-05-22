@@ -1,21 +1,137 @@
-﻿@page "/main"
+@page "/main"
 @attribute [ReuseTabsPage(Title = "控制台", Pin = true, Closable = false)]
 @attribute [Authorize(PermissionNames.Administrator)]
 @inherits BaseComponent
+@using Blazor.ECharts.Components
 
-
-<br />
-<a href="https://gitee.com/bxjg1987_admin/abp" target="_blank" style="color:red; font-weight:bold;">源码</a>
-<br />
-<Button OnClick="TestException">点击测试全局异常拦截</Button>
-<br />
-
-
-<Card Title="后端触发前端事件演示" Style="width:300px;">
-   
+@* 欢迎头部 *@
+<Card Bordered="true" Style="margin-bottom:16px;">
     <Body>
-      
-        <Button OnClick="cfqdsj">让服务端触发前端GetAll事件</Button>
-        <TreeSelectDataDictionary ParentName="pinpai" />
+        <Row Justify="RowJustify.Start" Align="RowAlign.Middle">
+            <AntDesign.Col Span="3">
+                <Avatar Size="@AvatarSize.Large" Style="background-color:#1890ff; font-size:24px;">
+                    @UserInitial
+                </Avatar>
+            </AntDesign.Col>
+            <AntDesign.Col Span="21">
+                <div style="font-size:20px; font-weight:500; margin-bottom:4px;">
+                    @Greeting，@UserName！
+                </div>
+                <div style="color:#888;">
+                    @TodayInfo
+                </div>
+            </AntDesign.Col>
+        </Row>
     </Body>
 </Card>
+
+@* 概览统计卡片 *@
+<Row Gutter="16" Style="margin-bottom:16px;">
+    <AntDesign.Col Xs="24" Sm="12" Md="6">
+        <Card>
+            <Statistic Title="员工总数" Value="128" Prefix="user" />
+            <div style="font-size:12px; color:#999; margin-top:4px;">本月新增 12</div>
+        </Card>
+    </AntDesign.Col>
+    <AntDesign.Col Xs="24" Sm="12" Md="6">
+        <Card>
+            <Statistic Title="组织机构" Value="15" Prefix="apartment" />
+            <div style="font-size:12px; color:#999; margin-top:4px;">岗位 23</div>
+        </Card>
+    </AntDesign.Col>
+    <AntDesign.Col Xs="24" Sm="12" Md="6">
+        <Card>
+            <Statistic Title="来往单位" Value="56" Prefix="bank" />
+            <div style="font-size:12px; color:#999; margin-top:4px;">本月新增 5</div>
+        </Card>
+    </AntDesign.Col>
+    <AntDesign.Col Xs="24" Sm="12" Md="6">
+        <Card>
+            <Statistic Title="系统操作" Value="1024" Prefix="cloud-server" />
+            <div style="font-size:12px; color:#999; margin-top:4px;">近30天</div>
+        </Card>
+    </AntDesign.Col>
+</Row>
+
+@* 快捷导航 *@
+<Card Title="快捷导航" Style="margin-bottom:16px;">
+    <Body>
+        <Row Gutter="16">
+            @foreach (var nav in QuickNavItems)
+            {
+                <AntDesign.Col Xs="12" Sm="8" Md="6" Lg="3">
+                    <div style="text-align:center; padding:12px 0; cursor:pointer;" @onclick="() => NavTo(nav.Url)">
+                        <Icon Type="@nav.Icon" Style="@($"font-size:24px; color:{nav.Color};")" />
+                        <div style="margin-top:8px; font-size:13px; color:#333;">@nav.Title</div>
+                    </div>
+                </AntDesign.Col>
+            }
+        </Row>
+    </Body>
+</Card>
+
+@* 图表和动态区域 *@
+<Row Gutter="16">
+    @* 左侧图表区域 *@
+    <AntDesign.Col Xs="24" Lg="14">
+        <Card Title="操作趋势" Style="margin-bottom:16px;">
+            <Extra>
+                <RadioGroup TValue="string" @bind-Value="currentTrendTab" OnChange="OnTrendTabChanged">
+                    <RadioButton Value="daily">按日</RadioButton>
+                    <RadioButton Value="monthly">按月</RadioButton>
+                </RadioGroup>
+            </Extra>
+            <Body>
+                <ELine Style="height:300px; width:100%;" OptionRaw="@TrendOptionRaw" />
+            </Body>
+        </Card>
+        <Row Gutter="16">
+            <AntDesign.Col Span="12">
+                <Card Title="操作类型分布">
+                    <Body>
+                        <EPie Style="height:250px; width:100%;" OptionRaw="@TypeOptionRaw" />
+                    </Body>
+                </Card>
+            </AntDesign.Col>
+            <AntDesign.Col Span="12">
+                <Card Title="活跃用户排行">
+                    <Body>
+                        <EBar Style="height:250px; width:100%;" OptionRaw="@UserOptionRaw" />
+                    </Body>
+                </Card>
+            </AntDesign.Col>
+        </Row>
+    </AntDesign.Col>
+
+    @* 右侧待办和动态区域 *@
+    <AntDesign.Col Xs="24" Lg="10">
+        <Card Title="待办事项" Style="margin-bottom:16px;">
+            <Body>
+                @foreach (var item in TodoItems)
+                {
+                    <div style="padding:8px 0; border-bottom:1px solid #f0f0f0; display:flex; align-items:center;">
+                        <Checkbox Checked="@item.Completed" OnChange="@(e => item.Completed = !item.Completed)" />
+                        <span style="@($"margin-left:8px; {(item.Completed ? "text-decoration:line-through; color:#999;" : "")}")">@item.Title</span>
+                        <span style="margin-left:auto; color:#999; font-size:12px;">@item.Time</span>
+                    </div>
+                }
+            </Body>
+        </Card>
+        <Card Title="最新动态">
+            <Body>
+                <Timeline>
+                    @foreach (var activity in RecentActivities)
+                    {
+                        <TimelineItem Color="@("blue")">
+                            <div>
+                                <strong>@activity.UserName</strong>
+                                <span style="color:#666; margin-left:8px;">@activity.Content</span>
+                            </div>
+                            <div style="color:#999; font-size:12px;">@activity.Time</div>
+                        </TimelineItem>
+                    }
+                </Timeline>
+            </Body>
+        </Card>
+    </AntDesign.Col>
+</Row>

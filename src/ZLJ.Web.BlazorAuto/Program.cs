@@ -137,7 +137,7 @@ else
 }
 
 //app.UseAntiforgery();
-//app.UseStaticFiles();
+app.UseStaticFiles();//确保html能被访问
 
 
 
