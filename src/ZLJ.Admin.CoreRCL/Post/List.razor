@@ -52,7 +52,7 @@
             @bind-SelectedRows="SelectedItems"
             OnChange="OnQuery"
             DataSource="Items"
-            PageIndex="PageIndex"
+            PageIndex="PageIndex" 
             PageSize="PageSize"
             Loading="IsLoading"
             HidePagination=false
@@ -62,7 +62,7 @@
             OnRow="OnRow"
             Size="TableSize.Small"
             Bordered="true"
-           ScrollY="71.5vh">
+           AutoHeight>
 
          <Selection Key="@(context.Id.ToString())" />
          <Column TData="PostDto" Title="行号" Width="60">

@@ -70,8 +70,9 @@
            RowClassName="@@(r=>r.RowIndex%2==0?"even":"odd")"
            RemoteDataSource="true"
            OnRow="Row"
-           RowKey="x=>x.Id"
-           Size="TableSize.Small" AutoHeight
+           RowKey="x=> x.Id"
+           Size="TableSize.Small" 
+           AutoHeight
            Bordered="true">
         <Selection />
         @@*表格树起码在antblazor0.19前不支持 Fixed="ColumnFixPlacement.Left" 另外树不支持排序 *@@

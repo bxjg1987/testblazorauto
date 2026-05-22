@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <localizationDictionary culture="zh-Hans">
 	<texts>
 		<!--通用树相关-->
@@ -159,5 +159,24 @@
 		<text name="CaptchaOptions" value="验证码" />
 		<text name="CaptchaOptions:ImageOption:FontFamily" value="字体" />
 		<text name="CaptchaOptions:IgnoreCase" value="忽略大小写"/>
+
+		<!--设置分组名称-->
+		<text name="用户管理" value="用户管理" />
+		<text name="邮件设置" value="邮件设置" />
+
+		<!--用户管理设置项-->
+		<text name="登录需要邮箱确认" value="登录需要邮箱确认" />
+		<text name="启用账户锁定" value="启用账户锁定" />
+		<text name="锁定前最大失败尝试次数" value="锁定前最大失败尝试次数" />
+		<text name="默认账户锁定时间(秒)" value="默认账户锁定时间(秒)" />
+		<text name="密码最小长度" value="密码最小长度" />
+		<text name="要求非字母数字字符" value="要求非字母数字字符" />
+		<text name="要求小写字母" value="要求小写字母" />
+		<text name="要求大写字母" value="要求大写字母" />
+		<text name="要求数字" value="要求数字" />
+		<text name="启用双因素登录" value="启用双因素登录" />
+		<text name="启用邮箱验证" value="启用邮箱验证" />
+		<text name="启用短信验证" value="启用短信验证" />
+		<text name="启用记住浏览器" value="启用记住浏览器" />
 	</texts>
 </localizationDictionary>

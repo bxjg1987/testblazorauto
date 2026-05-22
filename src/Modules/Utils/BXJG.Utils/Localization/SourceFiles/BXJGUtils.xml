@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <localizationDictionary culture="en">
 	<texts>
 		<!--通用树相关-->
@@ -145,5 +145,24 @@
 		<text name="RoleDeleteWarningMessage">Role {0} will be deleted and unassigned from all assigned users.</text>
 		<text name="TenantDeleteWarningMessage">Tenant {0} will be deleted.</text>
 		<text name="SearchWithThreeDot">Search...</text>
+
+		<!--Setting group names-->
+		<text name="用户管理" value="User Management" />
+		<text name="邮件设置" value="Email Settings" />
+
+		<!--User management settings-->
+		<text name="登录需要邮箱确认" value="Email confirmation required for login" />
+		<text name="启用账户锁定" value="Enable account lockout" />
+		<text name="锁定前最大失败尝试次数" value="Max failed attempts before lockout" />
+		<text name="默认账户锁定时间(秒)" value="Default account lockout time (seconds)" />
+		<text name="密码最小长度" value="Minimum password length" />
+		<text name="要求非字母数字字符" value="Require non-alphanumeric character" />
+		<text name="要求小写字母" value="Require lowercase letter" />
+		<text name="要求大写字母" value="Require uppercase letter" />
+		<text name="要求数字" value="Require digit" />
+		<text name="启用双因素登录" value="Enable two-factor login" />
+		<text name="启用邮箱验证" value="Enable email verification" />
+		<text name="启用短信验证" value="Enable SMS verification" />
+		<text name="启用记住浏览器" value="Enable remember browser" />
 	</texts>
 </localizationDictionary>
