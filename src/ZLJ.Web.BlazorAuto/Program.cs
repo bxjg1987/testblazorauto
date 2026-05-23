@@ -137,9 +137,7 @@ else
 }
 
 //app.UseAntiforgery();
-app.UseStaticFiles();//确保html能被访问
-
-
+//app.UseStaticFiles();//确保html能被访问,但会导致下载wasm出问题，缓存失效，压缩失效
 
 app.MapStaticAssets();//.ShortCircuit();
 
